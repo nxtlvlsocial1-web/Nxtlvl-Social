@@ -1086,6 +1086,119 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
   .mpanel p{font-size:15px}
 }
 
+/* ================= motion pass 2 ================= */
+/* named curves (from the ui-animation skill), alongside the tokens above */
+:root{--enter:cubic-bezier(.22,1,.36,1); --move:cubic-bezier(.25,1,.5,1); --expo:cubic-bezier(.19,1,.22,1)}
+.btn,.obtn,.chip,.spine,.copy,.dock-i,.burger,summary{touch-action:manipulation}
+
+/* ---------- cursor follower: a soft ring that trails the pointer and reacts to what is under it ---------- */
+.cursor{
+  position:fixed; left:0; top:0; z-index:250; pointer-events:none; width:34px; height:34px; margin:-17px 0 0 -17px;
+  border-radius:50%; border:1.5px solid rgba(216,187,255,.7);
+  display:grid; place-items:center; opacity:0;
+  transition:opacity .25s ease, width .3s var(--enter), height .3s var(--enter), margin .3s var(--enter), background .3s ease, border-color .3s ease;
+}
+.cursor-dot{position:fixed; left:0; top:0; z-index:251; pointer-events:none; width:6px; height:6px; margin:-3px 0 0 -3px; border-radius:50%; background:var(--violet-pale); opacity:0; transition:opacity .25s ease}
+.cursor.on,.cursor-dot.on{opacity:1}
+.cursor.link{width:54px; height:54px; margin:-27px 0 0 -27px; background:rgba(125,24,252,.16); border-color:var(--violet-lift)}
+.cursor.drag{width:76px; height:76px; margin:-38px 0 0 -38px; background:rgba(125,24,252,.24); border-color:var(--violet-lift)}
+.cursor.press{scale:.82}
+.cursor span{font-size:11px; font-weight:700; letter-spacing:.02em; color:#fff; opacity:0; transition:opacity .2s ease}
+.cursor.drag span{opacity:1}
+.cursor.drag+.cursor-dot,.cursor.link+.cursor-dot{opacity:0}
+@media(hover:none),(pointer:coarse){ .cursor,.cursor-dot{display:none} }
+
+/* ---------- hero: the grid lights up around the pointer ---------- */
+.gridlit{
+  position:absolute; inset:0; z-index:0; pointer-events:none; opacity:0; transition:opacity .5s ease;
+  background-image:linear-gradient(rgba(216,187,255,.55) 1px,transparent 1px),linear-gradient(90deg,rgba(216,187,255,.55) 1px,transparent 1px);
+  background-size:72px 72px;
+  -webkit-mask-image:radial-gradient(220px circle at var(--gx,50%) var(--gy,40%),#000,transparent 75%);
+  mask-image:radial-gradient(220px circle at var(--gx,50%) var(--gy,40%),#000,transparent 75%);
+}
+.hero:hover .gridlit{opacity:.5}
+
+/* ---------- 3D tilt with a moving glare on cards ---------- */
+.tilt{transform:perspective(1000px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0px)); transform-style:preserve-3d}
+.tilt.tilting{transition:transform 90ms linear, border-color var(--t2)}
+@media(hover:hover) and (pointer:fine){
+  .svc.tilt:hover,.plan.tilt:hover,.why-card.tilt:hover{transform:perspective(1000px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-6px)}
+}
+.glare{
+  position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:3; opacity:0; transition:opacity .4s ease;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.09),transparent 45%);
+  mix-blend-mode:screen;
+}
+.tilt:hover .glare{opacity:1}
+
+/* ---------- peripheral de-emphasis: the chip you point at stays bright ---------- */
+@media(hover:hover) and (pointer:fine){
+  .chips .chip{transition:transform var(--t2) var(--out), border-color var(--t2), background var(--t2), opacity .25s ease, scale var(--t1) var(--out)}
+  .chips:hover .chip:not(:hover){opacity:.45}
+  .incl:hover .in-i:not(:hover){opacity:.5}
+  .in-i{transition:border-color .22s, transform .22s var(--out), opacity .25s ease}
+}
+
+/* ---------- scrubbed reading: words light up as the paragraph passes the reading line ---------- */
+.scrub-read .sw{opacity:.18; transition:opacity .35s ease, color .35s ease}
+.scrub-read .sw.lit{opacity:1}
+.scrub-read .sw.lit.hot{color:var(--fg)}
+.no-scrub .scrub-read .sw{opacity:1}
+
+/* ---------- scroll-driven (CSS timelines where supported; the static state is the fallback) ---------- */
+@supports (animation-timeline: view()){
+  @media(prefers-reduced-motion:no-preference){
+    /* the phone tips up from the page as it scrolls in */
+    .phone-stage{animation:phone-tip linear both; animation-timeline:view(); animation-range:entry 0% cover 45%}
+    @keyframes phone-tip{from{transform:perspective(1200px) rotateX(24deg) translateY(60px) scale(.9); opacity:.2}to{transform:none; opacity:1}}
+    /* the orbit ring opens up as you arrive */
+    .stage{animation:stage-open linear both; animation-timeline:view(); animation-range:entry 0% cover 40%}
+    @keyframes stage-open{from{transform:scale(.82) rotateX(14deg); opacity:.2}to{transform:none; opacity:1}}
+    /* the dither logo drifts against the scroll for depth */
+    #dither{animation:drift linear both; animation-timeline:view()}
+    @keyframes drift{from{transform:translateY(40px)}to{transform:translateY(-40px)}}
+    /* the shelf board lifts the spines in as it enters */
+    .spines{animation:spines-up linear both; animation-timeline:view(); animation-range:entry 0% cover 35%}
+    @keyframes spines-up{from{transform:translateY(46px); opacity:.25}to{transform:none; opacity:1}}
+  }
+}
+
+/* ---------- calendar panels slide in the direction you moved ---------- */
+@media(prefers-reduced-motion:no-preference){
+  .mpanel.on.fwd{animation:panel-fwd .5s var(--enter) both}
+  .mpanel.on.back{animation:panel-back .5s var(--enter) both}
+}
+@keyframes panel-fwd{from{opacity:0; transform:translateX(34px); filter:blur(4px)}to{opacity:1; transform:none; filter:blur(0)}}
+@keyframes panel-back{from{opacity:0; transform:translateX(-34px); filter:blur(4px)}to{opacity:1; transform:none; filter:blur(0)}}
+.mp-tags span{display:inline-block}
+@media(prefers-reduced-motion:no-preference){
+  .mpanel.on .mp-tags span{animation:tag-in .45s var(--enter) both}
+  .mpanel.on .mp-tags span:nth-child(2){animation-delay:.05s}
+  .mpanel.on .mp-tags span:nth-child(3){animation-delay:.1s}
+  .mpanel.on .mp-tags span:nth-child(4){animation-delay:.15s}
+}
+@keyframes tag-in{from{opacity:0; transform:translateY(8px) scale(.94)}to{opacity:1; transform:none}}
+
+/* ---------- FAQ answers grow open and shut instead of snapping ---------- */
+details .ans{overflow:hidden}
+
+/* ---------- click burst on primary calls to action ---------- */
+.burst{position:fixed; z-index:240; pointer-events:none; width:7px; height:7px; margin:-3.5px 0 0 -3.5px; border-radius:2px; background:var(--violet-pale)}
+
+/* ---------- footer wordmark: letters lift under the pointer ---------- */
+.wordmark{
+  display:flex; justify-content:center; flex-wrap:nowrap; gap:0; margin:6px 0 26px; width:100%;
+  font-family:var(--d); font-weight:900; font-variation-settings:'wdth' 125,'wght' 900; letter-spacing:-.045em; line-height:.8;
+  font-size:clamp(34px,9.6vw,122px); user-select:none; overflow:hidden; padding-top:.12em; padding-bottom:.04em;
+}
+.wordmark span{
+  display:inline-block; color:transparent; -webkit-text-stroke:1.5px rgba(169,124,255,.35);
+  transition:transform .55s var(--expo), color .4s ease, -webkit-text-stroke-color .4s ease;
+}
+.wordmark span.sp{width:.22em}
+.wordmark span.up{transform:translateY(-.1em); color:var(--violet-lift); -webkit-text-stroke-color:transparent}
+.wordmark span.up2{transform:translateY(-.05em); color:rgba(169,92,255,.45); -webkit-text-stroke-color:transparent}
+
 /* ---------- reveal (JS-gated so the page is complete without it) ---------- */
 .js .rv{opacity:0; transform:translateY(28px); filter:blur(8px)}
 .js .rv.in{opacity:1; transform:none; filter:blur(0); transition:opacity .8s ease, transform var(--t3) var(--out), filter .8s ease}
@@ -1186,6 +1299,7 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
 <section class="hero" id="top">
   <canvas id="aurora" aria-hidden="true"></canvas>
   <div class="gridlines"></div>
+  <div class="gridlit" aria-hidden="true"></div>
   <canvas id="dust" aria-hidden="true"></canvas>
   <div class="aura hero-aura-b"></div>
   <div class="aura hero-aura-c"></div>
@@ -1631,7 +1745,7 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
     <div class="head rv">
       <span class="eyebrow">Why we can charge this</span>
       <h2>AI does the first 80%.<br><span class="it">A designer does the part that matters.</span></h2>
-      <p>We're not cheap because we cut corners. We're cheap because the slow, repetitive half of creative work doesn't need a human any more — and we stopped charging you for it.</p>
+      <p class="scrub-read">We're not cheap because we cut corners. We're cheap because the slow, repetitive half of creative work doesn't need a human any more — and we stopped charging you for it.</p>
     </div>
     <div class="why-grid">
       <div class="why-card why-dial rv">
@@ -1851,6 +1965,9 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
 </main>
 
 <footer>
+  <div class="wrap">
+    <div class="wordmark" id="wordmark" aria-hidden="true">Nxtlvl Social</div>
+  </div>
   <div class="wrap foot-in">
     <a class="brand" href="#top" aria-label="Nxtlvl Social home">
       <img src="data:image/png;base64,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" alt="Nxtlvl" width="74">
@@ -1863,6 +1980,8 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
     <div class="copyright">© <span id="yr">2026</span> Nxtlvl Social — AI-driven creative studio. Design, video and social media for small businesses.</div>
   </div>
 </footer>
+
+<div class="cursor" id="cursor" aria-hidden="true"><span>Drag</span></div><div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
 <div class="mobcta" id="mobcta">
   <div><strong>From $5 / month</strong><span>No contract · cancel any month</span></div>
@@ -2286,11 +2405,33 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
     stage.addEventListener('mouseleave', function(){ phone.style.transform = ''; });
   }
 
-  /* ---- FAQ opens one answer at a time ---- */
-  var dets = document.querySelectorAll('.faq details');
+  /* ---- FAQ: one answer at a time, and answers grow open and shut ---- */
+  var dets = Array.prototype.slice.call(document.querySelectorAll('.faq details'));
   dets.forEach(function(d){
-    d.addEventListener('toggle', function(){
-      if(d.open) dets.forEach(function(o){ if(o !== d) o.open = false; });
+    var p = d.querySelector('p'), ans = document.createElement('div');
+    ans.className = 'ans'; d.insertBefore(ans, p); ans.appendChild(p);
+  });
+  function setFaq(d, open){
+    var ans = d.querySelector('.ans');
+    if(reduce || !ans.animate){ d.open = open; return; }
+    /* read the live height first, so an interrupted animation turns around from where it is */
+    var from = d.open ? ans.offsetHeight : 0;
+    if(d._anim) d._anim.cancel();
+    if(open) d.open = true;
+    var to = open ? ans.scrollHeight : 0;
+    d._anim = ans.animate(
+      [{height:from + 'px', opacity:open ? 0 : 1}, {height:to + 'px', opacity:open ? 1 : 0}],
+      {duration:open ? 380 : 260, easing:open ? 'cubic-bezier(.22,1,.36,1)' : 'cubic-bezier(.25,1,.5,1)'}
+    );
+    d._anim.onfinish = function(){ d._anim = null; if(!open) d.open = false; };
+  }
+  dets.forEach(function(d){
+    d.querySelector('summary').addEventListener('click', function(ev){
+      ev.preventDefault();
+      var opening = !d.open || (d._anim && d.classList.contains('closing'));
+      d.classList.toggle('closing', !opening);
+      if(opening) dets.forEach(function(o){ if(o !== d && o.open){ o.classList.add('closing'); setFaq(o, false); } });
+      setFaq(d, opening);
     });
   });
 
@@ -2499,7 +2640,12 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
         b.setAttribute('aria-selected', on ? 'true' : 'false');
         b.tabIndex = on ? 0 : -1;
       });
-      mpanels.forEach(function(pn, k){ pn.classList.toggle('on', k === i); });
+      var prev = mpanels.findIndex(function(pn){ return pn.classList.contains('on'); });
+      mpanels.forEach(function(pn, k){
+        pn.classList.remove('fwd', 'back');
+        pn.classList.toggle('on', k === i);
+        if(k === i && prev > -1 && prev !== i) pn.classList.add(i > prev ? 'fwd' : 'back');
+      });
       if(focus) spineBtns[i].focus();
     }
     spineBtns.forEach(function(b, i){
@@ -2554,6 +2700,153 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
       if(mOn && !mRaf){ mLastY = window.scrollY; mRaf = requestAnimationFrame(mFrame); }
     });
     window.addEventListener('resize', function(){ mrows.forEach(function(r){ r.w = 0; }); }, {passive:true});
+  }
+
+  var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+  /* ---- cursor follower: dot is locked to the pointer, ring follows with a little lag ---- */
+  var cur = document.getElementById('cursor'), curDot = document.getElementById('cursorDot');
+  if(cur && fine && !reduce){
+    var cx2 = -100, cy2 = -100, rx2 = -100, ry2 = -100, cRaf = null;
+    var cLoop = function(){
+      rx2 += (cx2 - rx2) * .2; ry2 += (cy2 - ry2) * .2;
+      cur.style.transform = 'translate3d(' + rx2.toFixed(1) + 'px,' + ry2.toFixed(1) + 'px,0)';
+      cRaf = (Math.abs(cx2 - rx2) > .1 || Math.abs(cy2 - ry2) > .1) ? requestAnimationFrame(cLoop) : null;
+    };
+    window.addEventListener('pointermove', function(ev){
+      if(ev.pointerType !== 'mouse') return;
+      cx2 = ev.clientX; cy2 = ev.clientY;
+      curDot.style.transform = 'translate3d(' + cx2 + 'px,' + cy2 + 'px,0)';
+      cur.classList.add('on'); curDot.classList.add('on');
+      var t = ev.target;
+      cur.classList.toggle('drag', !!(t.closest && t.closest('#stage')));
+      cur.classList.toggle('link', !!(t.closest && t.closest('a, button, summary, .spine, .chip')) && !cur.classList.contains('drag'));
+      if(!cRaf) cRaf = requestAnimationFrame(cLoop);
+    }, {passive:true});
+    document.addEventListener('pointerdown', function(){ cur.classList.add('press'); });
+    document.addEventListener('pointerup', function(){ cur.classList.remove('press'); });
+    document.documentElement.addEventListener('mouseleave', function(){ cur.classList.remove('on'); curDot.classList.remove('on'); });
+  }
+
+  /* ---- hero grid lights up around the pointer ---- */
+  var gridlit = document.querySelector('.gridlit');
+  if(gridlit && fine && !reduce){
+    hero.addEventListener('pointermove', function(ev){
+      var r = hero.getBoundingClientRect();
+      gridlit.style.setProperty('--gx', (ev.clientX - r.left) + 'px');
+      gridlit.style.setProperty('--gy', (ev.clientY - r.top) + 'px');
+    }, {passive:true});
+  }
+
+  /* ---- cards tilt toward the pointer, with a glare that follows it ---- */
+  if(fine && !reduce){
+    document.querySelectorAll('.svc, .plan, .why-card').forEach(function(c){
+      c.classList.add('tilt');
+      var g = document.createElement('span'); g.className = 'glare'; g.setAttribute('aria-hidden', 'true'); c.appendChild(g);
+      var MAX = c.classList.contains('plan') ? 5 : 4;
+      c.addEventListener('pointermove', function(ev){
+        var r = c.getBoundingClientRect();
+        var px = (ev.clientX - r.left) / r.width - .5, py = (ev.clientY - r.top) / r.height - .5;
+        c.classList.add('tilting');
+        c.style.setProperty('--ry', (px * MAX * 2).toFixed(2) + 'deg');
+        c.style.setProperty('--rx', (-py * MAX * 2).toFixed(2) + 'deg');
+      }, {passive:true});
+      c.addEventListener('pointerleave', function(){
+        c.classList.remove('tilting');
+        c.style.setProperty('--ry', '0deg'); c.style.setProperty('--rx', '0deg');
+      });
+    });
+  }
+
+  /* ---- magnetic pull on the secondary round buttons too ---- */
+  if(fine && !reduce){
+    document.querySelectorAll('.obtn, .btn-ghost').forEach(function(b){
+      b.addEventListener('mousemove', function(ev){
+        var r = b.getBoundingClientRect();
+        var dx = (ev.clientX - (r.left + r.width / 2)) / (r.width / 2);
+        var dy = (ev.clientY - (r.top + r.height / 2)) / (r.height / 2);
+        b.style.transform = 'translate(' + (dx * 4).toFixed(1) + 'px,' + (dy * 3).toFixed(1) + 'px)';
+      }, {passive:true});
+      b.addEventListener('mouseleave', function(){ b.style.transform = ''; });
+    });
+  }
+
+  /* ---- a small burst from primary calls to action when pressed ---- */
+  if(!reduce && document.body.animate){
+    document.querySelectorAll('.btn-primary, .dock-cta').forEach(function(b){
+      b.addEventListener('pointerdown', function(ev){
+        for(var i = 0; i < 12; i++){
+          var d = document.createElement('i'); d.className = 'burst';
+          d.style.left = ev.clientX + 'px'; d.style.top = ev.clientY + 'px';
+          if(i % 3 === 0) d.style.background = '#A95CFF';
+          if(i % 4 === 1) d.style.borderRadius = '50%';
+          document.body.appendChild(d);
+          var a = (i / 12) * Math.PI * 2 + Math.random() * .4, dist = 34 + Math.random() * 30;
+          d.animate([
+            {transform:'translate(0,0) rotate(0deg) scale(1)', opacity:1},
+            {transform:'translate(' + (Math.cos(a) * dist).toFixed(1) + 'px,' + (Math.sin(a) * dist).toFixed(1) + 'px) rotate(' + (Math.random() * 180) + 'deg) scale(.3)', opacity:0}
+          ], {duration:620 + Math.random() * 200, easing:'cubic-bezier(.19,1,.22,1)'}).onfinish = (function(el){ return function(){ el.remove(); }; })(d);
+        }
+      });
+    });
+  }
+
+  /* ---- reading scrub: the paragraph lights up word by word as it crosses the reading line ---- */
+  var reads = Array.prototype.slice.call(document.querySelectorAll('.scrub-read'));
+  var readWords = reads.map(function(el){
+    var words = el.textContent.split(/(\s+)/);
+    el.textContent = '';
+    var spans = [];
+    words.forEach(function(w){
+      if(/^\s*$/.test(w)){ el.appendChild(document.createTextNode(w)); return; }
+      var sp = document.createElement('span'); sp.className = 'sw'; sp.textContent = w;
+      if(/cheap|human|charging/i.test(w)) sp.classList.add('hot');
+      el.appendChild(sp); spans.push(sp);
+    });
+    return {el:el, spans:spans};
+  });
+  function scrubRead(){
+    if(reduce) return;
+    var vh = window.innerHeight;
+    readWords.forEach(function(r){
+      var b = r.el.getBoundingClientRect();
+      var k = Math.max(0, Math.min(1, (vh * .78 - b.top) / (b.height + vh * .3)));
+      var n = Math.round(k * r.spans.length);
+      for(var i = 0; i < r.spans.length; i++) r.spans[i].classList.toggle('lit', i < n);
+    });
+  }
+  window.addEventListener('scroll', function(){ requestAnimationFrame(scrubRead); }, {passive:true});
+  scrubRead();
+
+  /* ---- footer wordmark: letters near the pointer lift ---- */
+  var wm = document.getElementById('wordmark');
+  if(wm){
+    var txt = wm.textContent; wm.textContent = '';
+    var letters = [];
+    txt.split('').forEach(function(ch){
+      var sp = document.createElement('span');
+      if(ch === ' '){ sp.className = 'sp'; sp.innerHTML = '&nbsp;'; }
+      else sp.textContent = ch;
+      wm.appendChild(sp); letters.push(sp);
+    });
+    var lit = function(i){
+      letters.forEach(function(l, k){
+        var d = Math.abs(k - i);
+        l.classList.toggle('up', d === 0);
+        l.classList.toggle('up2', d === 1);
+      });
+    };
+    letters.forEach(function(l, i){ l.addEventListener('pointerenter', function(){ lit(i); }); });
+    wm.addEventListener('pointerleave', function(){ lit(-9); });
+    /* on touch, a slow wave runs once when the footer arrives */
+    if(!fine && !reduce && 'IntersectionObserver' in window){
+      var wo = new IntersectionObserver(function(es){
+        if(!es[0].isIntersecting) return; wo.disconnect();
+        letters.forEach(function(l, i){ setTimeout(function(){ lit(i); }, i * 70); });
+        setTimeout(function(){ lit(-9); }, letters.length * 70 + 300);
+      }, {threshold:.6});
+      wo.observe(wm);
+    }
   }
 
   /* ---- smooth in-page nav ---- */
