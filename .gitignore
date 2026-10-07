@@ -1,0 +1,8 @@
+# Rendered video output
+*.mp4
+*.mov
+*.webm
+renders/
+
+node_modules/
+.DS_Store
