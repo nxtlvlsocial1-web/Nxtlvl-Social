@@ -1,3 +1,6 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Design, video, posting and automation for small businesses, from $5 a month.">
 <title>Nxtlvl Social</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -748,7 +751,7 @@ details p{padding:0 54px 24px 4px; font-size:15px; color:var(--muted); max-width
 
 /* ---------- close ---------- */
 .close{text-align:center; overflow:hidden}
-.close-aura{width:min(760px,120vw); height:420px; background:rgba(125,24,252,.3); bottom:-190px; left:50%; transform:translateX(-50%)}
+.close-aura{width:min(760px,120vw); height:420px; background:rgba(125,24,252,.3); bottom:-190px; left:50%; translate:-50% 0}
 .close-in{position:relative; z-index:2}
 /* a slow halo turns behind the closing call to action */
 .halo{
@@ -1145,23 +1148,55 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
 .scrub-read .sw.lit.hot{color:var(--fg)}
 .no-scrub .scrub-read .sw{opacity:1}
 
-/* ---------- scroll-driven (CSS timelines where supported; the static state is the fallback) ---------- */
-@supports (animation-timeline: view()){
-  @media(prefers-reduced-motion:no-preference){
-    /* the phone tips up from the page as it scrolls in */
-    .phone-stage{animation:phone-tip linear both; animation-timeline:view(); animation-range:entry 0% cover 45%}
-    @keyframes phone-tip{from{transform:perspective(1200px) rotateX(24deg) translateY(60px) scale(.9); opacity:.2}to{transform:none; opacity:1}}
-    /* the orbit ring opens up as you arrive */
-    .stage{animation:stage-open linear both; animation-timeline:view(); animation-range:entry 0% cover 40%}
-    @keyframes stage-open{from{transform:scale(.82) rotateX(14deg); opacity:.2}to{transform:none; opacity:1}}
-    /* the dither logo drifts against the scroll for depth */
-    #dither{animation:drift linear both; animation-timeline:view()}
-    @keyframes drift{from{transform:translateY(40px)}to{transform:translateY(-40px)}}
-    /* the shelf board lifts the spines in as it enters */
-    .spines{animation:spines-up linear both; animation-timeline:view(); animation-range:entry 0% cover 35%}
-    @keyframes spines-up{from{transform:translateY(46px); opacity:.25}to{transform:none; opacity:1}}
-  }
+/* ---------- scroll-scrubbed elements (driven from JS so they work in every browser) ---------- */
+[data-scrub]{will-change:transform}
+
+/* ---------- big type band: two rows slide in opposite directions as you scroll ---------- */
+.bigband{overflow:hidden; padding-block:clamp(40px,7vw,90px); border-block:1px solid var(--line); background:var(--ink-2); position:relative}
+.bb-row{
+  display:flex; align-items:center; gap:.35em; width:max-content; white-space:nowrap;
+  font-family:var(--d); font-weight:900; font-variation-settings:'wdth' 120,'wght' 900;
+  font-size:clamp(52px,10.5vw,150px); letter-spacing:-.04em; line-height:1;
 }
+.bb-row + .bb-row{margin-top:.08em}
+.bb-row.outline{color:transparent; -webkit-text-stroke:1.5px rgba(169,124,255,.55)}
+.bb-row .it{font-family:var(--s); font-style:italic; font-weight:400; font-variation-settings:normal; letter-spacing:-.01em; color:var(--violet-lift); -webkit-text-stroke:0}
+.bb-s{display:inline-block; width:.42em; height:.42em; flex:none; background:var(--violet-lift);
+  clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%)}
+@media(prefers-reduced-motion:no-preference){ .bb-s{animation:spin 9s linear infinite} }
+
+/* ---------- touch: cards answer a press too ---------- */
+.svc:active,.plan:active,.why-card:active,.step:active,.q:active{scale:.985; transition:scale 120ms var(--enter)}
+
+/* ---------- small screens: steps stack on top of each other as you scroll ---------- */
+@media(max-width:859px){
+  .steps{gap:22px; padding-bottom:20px}
+  .step{position:sticky; box-shadow:0 -24px 40px -24px rgba(0,0,0,.95)}
+  .step:nth-child(1){top:96px} .step:nth-child(2){top:112px} .step:nth-child(3){top:128px}
+}
+
+/* ---------- hero cards: below 1300px they float gently in their grid too ---------- */
+@media(max-width:1299px) and (prefers-reduced-motion:no-preference){
+  .field .jc{animation:jcIn .9s var(--out) backwards, bob-sm 6s ease-in-out infinite}
+  .field .jc:nth-child(2){animation-delay:.7s, -1.5s} .field .jc:nth-child(4){animation-delay:.8s, -3s}
+  .field .jc:nth-child(5){animation-delay:.9s, -2s} .field .jc:nth-child(7){animation-delay:1s, -4s}
+  .field .jc:nth-child(8){animation-delay:1.1s, -1s} .field .jc:nth-child(1){animation-delay:.6s, 0s}
+}
+@keyframes bob-sm{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}
+
+/* ---------- without JS the orbit still turns ---------- */
+.orbit .ocard:nth-child(1){transform:rotateY(0deg) translateZ(var(--r))}
+.orbit .ocard:nth-child(2){transform:rotateY(36deg) translateZ(var(--r))}
+.orbit .ocard:nth-child(3){transform:rotateY(72deg) translateZ(var(--r))}
+.orbit .ocard:nth-child(4){transform:rotateY(108deg) translateZ(var(--r))}
+.orbit .ocard:nth-child(5){transform:rotateY(144deg) translateZ(var(--r))}
+.orbit .ocard:nth-child(6){transform:rotateY(180deg) translateZ(var(--r))}
+.orbit .ocard:nth-child(7){transform:rotateY(216deg) translateZ(var(--r))}
+.orbit .ocard:nth-child(8){transform:rotateY(252deg) translateZ(var(--r))}
+.orbit .ocard:nth-child(9){transform:rotateY(288deg) translateZ(var(--r))}
+.orbit .ocard:nth-child(10){transform:rotateY(324deg) translateZ(var(--r))}
+@media(prefers-reduced-motion:no-preference){ html:not(.js) .orbit{animation:orbitspin 40s linear infinite} }
+@keyframes orbitspin{from{transform:rotateY(0)}to{transform:rotateY(-360deg)}}
 
 /* ---------- calendar panels slide in the direction you moved ---------- */
 @media(prefers-reduced-motion:no-preference){
@@ -1301,8 +1336,8 @@ details .ans{overflow:hidden}
   <div class="gridlines"></div>
   <div class="gridlit" aria-hidden="true"></div>
   <canvas id="dust" aria-hidden="true"></canvas>
-  <div class="aura hero-aura-b"></div>
-  <div class="aura hero-aura-c"></div>
+  <div class="aura hero-aura-b" data-scrub="aura"></div>
+  <div class="aura hero-aura-c" data-scrub="aura-r"></div>
 
   <div class="wrap hero-col">
     <div class="field" id="field">
@@ -1458,7 +1493,7 @@ details .ans{overflow:hidden}
           <p>Social posts, carousels, story sets, posters, menus, price lists, festival creatives and ad banners — all built on a brand kit so your feed looks like one business, not twelve.</p>
           <span class="tag">from $5/month</span>
         </div>
-        <div class="viz viz-stack" aria-hidden="true"><i class="g5"></i><i class="g6"></i><i class="g1"></i></div>
+        <div class="viz viz-stack" data-scrub="grow" aria-hidden="true"><i class="g5"></i><i class="g6"></i><i class="g1"></i></div>
       </article>
       <article class="svc s-video rv">
         <div class="svc-ic"><svg class="ic" aria-hidden="true"><use href="#i-video"/></svg></div>
@@ -1510,6 +1545,11 @@ details .ans{overflow:hidden}
   </div>
 </section>
 
+<div class="bigband" aria-hidden="true">
+  <div class="bb-row" data-scrub="band" data-dir="1">Design <i class="bb-s"></i> <span class="it">Video</span> <i class="bb-s"></i> Automation <i class="bb-s"></i> Design <i class="bb-s"></i> <span class="it">Video</span> <i class="bb-s"></i> Automation <i class="bb-s"></i> Design</div>
+  <div class="bb-row outline" data-scrub="band" data-dir="-1">Reels <i class="bb-s"></i> Posters <i class="bb-s"></i> Carousels <i class="bb-s"></i> Reports <i class="bb-s"></i> Reels <i class="bb-s"></i> Posters <i class="bb-s"></i> Carousels</div>
+</div>
+
 <section class="band orbit-sec" id="make">
   <div class="wrap">
     <div class="head mid rv">
@@ -1528,7 +1568,7 @@ details .ans{overflow:hidden}
       </button>
     </div>
 
-    <div class="stage" id="stage">
+    <div class="stage" id="stage" data-scrub="open">
       <div class="orbit" id="orbit">
         <article class="ocard">
           <div class="ocard-art g1"><svg class="ic" aria-hidden="true"><use href="#i-video"/></svg></div>
@@ -1604,7 +1644,7 @@ details .ans{overflow:hidden}
         </div>
       </div>
 
-      <div class="phone-stage rv" aria-hidden="true">
+      <div class="phone-stage" data-scrub="tip" aria-hidden="true">
       <div class="toast t1"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><div><b>Reel published</b><span>Today, 6:00 PM · on schedule</span></div></div>
       <div class="toast t2 t-win"><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg><div><b>New enquiry</b><span>“Are you open Sunday?” · sent to WhatsApp</span></div></div>
       <div class="toast t3"><svg class="ic" aria-hidden="true"><use href="#i-bolt"/></svg><div><b>Reply sent</b><span>Timings and location, answered for you</span></div></div>
@@ -1749,7 +1789,7 @@ details .ans{overflow:hidden}
     </div>
     <div class="why-grid">
       <div class="why-card why-dial rv">
-        <div class="dial" aria-hidden="true">
+        <div class="dial" data-scrub="grow" aria-hidden="true">
           <svg viewBox="0 0 120 120">
             <defs><linearGradient id="dialgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7D18FC"/><stop offset="1" stop-color="#A95CFF"/></linearGradient></defs>
             <circle class="d-track" cx="60" cy="60" r="50" pathLength="100"/>
@@ -1831,7 +1871,7 @@ details .ans{overflow:hidden}
     </div>
 
     <div class="shelf rv">
-      <div class="spines" id="spines" role="tablist" aria-label="Months of the year">
+      <div class="spines" data-scrub="rise" id="spines" role="tablist" aria-label="Months of the year">
         <button class="spine" type="button" role="tab" data-m="0" id="sp0" aria-selected="false" aria-controls="mp0" tabindex="-1"><span class="spine-t">JAN</span><span class="spine-n">4</span></button>
         <button class="spine" type="button" role="tab" data-m="1" id="sp1" aria-selected="false" aria-controls="mp1" tabindex="-1"><span class="spine-t">FEB</span><span class="spine-n">2</span></button>
         <button class="spine" type="button" role="tab" data-m="2" id="sp2" aria-selected="false" aria-controls="mp2" tabindex="-1"><span class="spine-t">MAR</span><span class="spine-n">4</span></button>
@@ -1922,7 +1962,7 @@ details .ans{overflow:hidden}
       <h2>Every piece starts<br>as <span class="it">noise</span></h2>
     </div>
     <div class="dither-wrap rv">
-      <canvas id="dither"></canvas>
+      <canvas id="dither" data-scrub="drift"></canvas>
       <span class="sr-only">Nxtlvl Social</span>
       <p class="dither-cap">
         <span class="d-desk">Move your cursor across it.</span>
@@ -1934,7 +1974,7 @@ details .ans{overflow:hidden}
 </section>
 
 <section class="band close" id="contact">
-  <div class="aura close-aura"></div>
+  <div class="aura close-aura" data-scrub="aura"></div>
   <div class="halo" aria-hidden="true"></div>
   <div class="wrap close-in">
     <h2>Your competition posted<br>three times <span class="it">this week</span>.</h2>
@@ -2025,6 +2065,34 @@ details .ans{overflow:hidden}
       tws[i].classList.toggle('lit', tws[i].getBoundingClientRect().top + 12 < line);
     }
   }
+  /* scroll-scrubbed motion: position is the clock, so no easing and no duration */
+  var scrubEls = Array.prototype.slice.call(document.querySelectorAll('[data-scrub]'));
+  var clamp01 = function(v){ return v < 0 ? 0 : v > 1 ? 1 : v; };
+  function scrubAll(vh){
+    if(reduce) return;
+    for(var i = 0; i < scrubEls.length; i++){
+      var el = scrubEls[i], r = el.getBoundingClientRect();
+      if(r.bottom < -200 || r.top > vh + 200) continue;
+      var through = clamp01((vh - r.top) / (vh + r.height));       /* 0 entering at the bottom, 1 leaving at the top */
+      var enter = clamp01((vh - r.top) / (vh * .6));                /* 0 → 1 over the first 60% of the screen */
+      var e = 1 - enter, t = '';
+      switch(el.dataset.scrub){
+        case 'tip':  t = 'perspective(1200px) rotateX(' + (26 * e).toFixed(2) + 'deg) translateY(' + (70 * e).toFixed(1) + 'px) scale(' + (1 - .12 * e).toFixed(3) + ')'; el.style.opacity = (.15 + .85 * enter).toFixed(3); break;
+        case 'open': t = 'scale(' + (1 - .2 * e).toFixed(3) + ') rotateX(' + (16 * e).toFixed(2) + 'deg)'; el.style.opacity = (.2 + .8 * enter).toFixed(3); break;
+        case 'grow': t = 'scale(' + (1 - .16 * e).toFixed(3) + ') rotate(' + (-6 * e).toFixed(2) + 'deg)'; break;
+        case 'rise': t = 'translateY(' + (60 * e).toFixed(1) + 'px)'; el.style.opacity = (.2 + .8 * enter).toFixed(3); break;
+        case 'drift': t = 'translateY(' + (50 - 100 * through).toFixed(1) + 'px)'; break;
+        case 'aura': t = 'translateY(' + (-160 * through).toFixed(1) + 'px)'; break;
+        case 'aura-r': t = 'translateY(' + (-90 * through).toFixed(1) + 'px) translateX(' + (60 * through).toFixed(1) + 'px)'; break;
+        case 'band':
+          /* travel at most ~80% of a screen width while the band crosses the viewport */
+          var dirn = parseFloat(el.dataset.dir || 1), cw = el.parentNode.clientWidth;
+          var span = Math.max(0, el.scrollWidth - cw), travel = Math.min(span, cw * .8), base = (span - travel) / 2;
+          t = 'translate3d(' + (-(base + travel * (dirn > 0 ? through : 1 - through))).toFixed(1) + 'px,0,0)'; break;
+      }
+      el.style.transform = t;
+    }
+  }
   function onScroll(){
     if(ticking) return;
     ticking = true;
@@ -2036,6 +2104,7 @@ details .ans{overflow:hidden}
       if(dock) dock.classList.toggle('show', y > vh * .6);
       if(navBar) navBar.classList.toggle('scrolled', y > 40);
       scrubTimeline(vh);
+      scrubAll(vh);
       /* the hero copy drifts up and dims as you leave it */
       if(heroIn && !reduce){
         if(y < vh){
@@ -2049,7 +2118,7 @@ details .ans{overflow:hidden}
       ticking = false;
     });
   }
-  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  window.addEventListener('scroll', onScroll, {passive:true}); window.addEventListener('resize', onScroll, {passive:true}); onScroll();
 
   /* ---- scroll reveals, staggered within each group ---- */
   ['.chips', '.incl', '.quotes', '.feed-points'].forEach(function(sel){
