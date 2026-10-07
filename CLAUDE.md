@@ -20,6 +20,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Graphic overlays on interview / podcast footage         | `talking-head-recut`                          |
 | Beat-synced video from a music track                    | `music-to-video`                              |
 | Product or brand promo from a URL or brief              | `product-launch-video`                        |
+| Ad creatives and performance marketing: ad copy, hooks, formats, creative testing, iterating on ad data | `ad-creative` |
 | Explainer / listicle / how-to with no footage           | `faceless-explainer`                          |
 | Longer, multi-scene or freeform video                   | `general-video`                               |
 | Presentation or pitch deck                              | `slideshow`                                   |
@@ -36,6 +37,13 @@ The HyperFrames skills are third-party (from `heygen-com/hyperframes`); their ve
 
 ```bash
 npx skills add heygen-com/hyperframes --skill <name> --agent claude-code -y
+```
+
+`ad-creative` is also third-party (from `coreyhaines31/marketingskills`), pinned in the same lock file.
+Don't edit it by hand either; update it with:
+
+```bash
+npx skills add coreyhaines31/marketingskills --skill ad-creative --agent claude-code -y
 ```
 
 Our own skills (currently `nxtlvl-social-video`) are ours to edit.
