@@ -31,6 +31,7 @@
   --b:'Instrument Sans',system-ui,-apple-system,sans-serif;
   --s:'Instrument Serif',Georgia,serif;
   --wrap:1140px;
+  --ground:rgba(10,7,23,.5);   /* section bands: ink-2, translucent so the starfield reads through */
   /* motion identity: one signature curve, three durations, one entrance */
   --out:cubic-bezier(.16,1,.3,1);          /* entrances: fast start, long soft landing */
   --io:cubic-bezier(.65,0,.35,1);          /* on-screen moves */
@@ -57,6 +58,9 @@ img{max-width:100%; display:block}
 section{position:relative}
 .band{padding-block:clamp(72px,10vw,132px)}
 
+/* the cosmos: one fixed starfield behind every section (painted from JS) */
+#cosmos{position:fixed; inset:0; width:100%; height:100%; z-index:-1; pointer-events:none; display:block}
+
 /* film grain over the whole page */
 body::after{
   content:''; position:fixed; inset:0; z-index:200; pointer-events:none; opacity:.05;
@@ -76,14 +80,6 @@ body::after{
 #aurora{
   position:absolute; inset:-12%; width:124%; height:124%; z-index:0;
   filter:blur(46px) saturate(130%); opacity:.5; pointer-events:none;
-}
-#dust{position:absolute; inset:0; width:100%; height:100%; z-index:1; pointer-events:none}
-.gridlines{
-  position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.4;
-  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
-  background-size:72px 72px;
-  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 20%,transparent 75%);
-  mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 20%,transparent 75%);
 }
 
 /* ---------- skip link ---------- */
@@ -292,11 +288,11 @@ h1 .it{
 @keyframes bob{0%,100%{transform:translateY(-7px)}50%{transform:translateY(7px)}}
 
 /* ---------- marquees ---------- */
-.marq{border-block:1px solid var(--line); background:var(--ink-2); overflow:hidden; padding-block:14px; position:relative}
+.marq{border-block:1px solid var(--line); background:var(--ground); overflow:hidden; padding-block:14px; position:relative}
 .marq+.marq{border-top:none}
 .marq::before,.marq::after{content:''; position:absolute; top:0; bottom:0; width:90px; z-index:2; pointer-events:none}
-.marq::before{left:0; background:linear-gradient(90deg,var(--ink-2),transparent)}
-.marq::after{right:0; background:linear-gradient(270deg,var(--ink-2),transparent)}
+.marq::before{left:0; background:linear-gradient(90deg,var(--ink),transparent)}
+.marq::after{right:0; background:linear-gradient(270deg,var(--ink),transparent)}
 .marq-row{display:flex; width:max-content}
 @media all{
   .marq-row{animation:slide 42s linear infinite}
@@ -344,7 +340,7 @@ h1 .it{
 .chip:hover .ic{transform:rotate(-10deg) scale(1.15)}
 
 /* ---------- the maths ---------- */
-.maths{background:var(--ink-2); border-block:1px solid var(--line); overflow:hidden}
+.maths{background:var(--ground); border-block:1px solid var(--line); overflow:hidden}
 .bars{margin-top:46px; display:flex; flex-direction:column; gap:14px}
 .bar-row{
   display:grid; grid-template-columns:1fr; gap:7px;
@@ -519,7 +515,7 @@ h1 .it{
 }
 
 /* ---------- the feed mockup ---------- */
-.feed-sec{background:var(--ink-2); border-block:1px solid var(--line); overflow:hidden}
+.feed-sec{background:var(--ground); border-block:1px solid var(--line); overflow:hidden}
 .feed-wrap{display:grid; grid-template-columns:1fr; gap:46px; align-items:start; margin-top:34px}
 @media(min-width:900px){.feed-wrap{grid-template-columns:1fr 330px; gap:56px; align-items:center}}
 @keyframes feedscroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
@@ -659,7 +655,7 @@ h1 .it{
 @media(min-width:820px){ .tw:nth-child(odd) p{margin-left:auto} }
 
 /* ---------- why ai: the 80/20 split as a dial ---------- */
-.why{background:var(--ink-2); border-block:1px solid var(--line)}
+.why{background:var(--ground); border-block:1px solid var(--line)}
 .why-grid{display:grid; grid-template-columns:1fr; gap:14px; margin-top:52px}
 @media(min-width:820px){
   .why-grid{grid-template-columns:1.1fr 1fr; grid-template-rows:auto auto}
@@ -774,7 +770,7 @@ details p{padding:0 54px 24px 4px; font-size:15px; color:var(--muted); max-width
   border:1px dashed rgba(255,138,107,.45); background:rgba(255,138,107,.07);
   font-size:12.5px; color:#FFC4B3;
 }
-footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:34px}
+footer{border-top:1px solid var(--line); background:var(--ground); padding-block:34px}
 .foot-in{display:flex; flex-wrap:wrap; gap:18px; align-items:center; justify-content:space-between}
 .foot-in img{width:74px}
 .foot-links{display:flex; flex-wrap:wrap; gap:20px; font-size:13.5px; color:var(--faint)}
@@ -953,7 +949,7 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
   position:absolute; width:1px; height:1px; padding:0; margin:-1px;
   overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
 }
-.dither-sec{overflow:hidden; background:var(--ink-2); border-block:1px solid var(--line)}
+.dither-sec{overflow:hidden; background:var(--ground); border-block:1px solid var(--line)}
 .dither-wrap{position:relative; margin-top:48px; text-align:center}
 #dither{
   display:block; width:100%; max-width:820px; margin-inline:auto; height:auto;
@@ -1051,15 +1047,6 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
 :root{--enter:cubic-bezier(.22,1,.36,1); --move:cubic-bezier(.25,1,.5,1); --expo:cubic-bezier(.19,1,.22,1)}
 .btn,.obtn,.chip,.spine,.copy,.dock-i,.burger,summary{touch-action:manipulation}
 
-/* ---------- hero: the grid lights up around the pointer ---------- */
-.gridlit{
-  position:absolute; inset:0; z-index:0; pointer-events:none; opacity:0; transition:opacity .5s ease;
-  background-image:linear-gradient(rgba(216,187,255,.55) 1px,transparent 1px),linear-gradient(90deg,rgba(216,187,255,.55) 1px,transparent 1px);
-  background-size:72px 72px;
-  -webkit-mask-image:radial-gradient(220px circle at var(--gx,50%) var(--gy,40%),#000,transparent 75%);
-  mask-image:radial-gradient(220px circle at var(--gx,50%) var(--gy,40%),#000,transparent 75%);
-}
-.hero:hover .gridlit{opacity:.5}
 
 /* ---------- 3D tilt with a moving glare on cards ---------- */
 .tilt{transform:perspective(1000px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0px)); transform-style:preserve-3d}
@@ -1092,7 +1079,7 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
 [data-scrub]{will-change:transform}
 
 /* ---------- big type band: two rows slide in opposite directions as you scroll ---------- */
-.bigband{overflow:hidden; padding-block:clamp(40px,7vw,90px); border-block:1px solid var(--line); background:var(--ink-2); position:relative}
+.bigband{overflow:hidden; padding-block:clamp(40px,7vw,90px); border-block:1px solid var(--line); background:var(--ground); position:relative}
 .bb-row{
   display:flex; align-items:center; gap:.35em; width:max-content; white-space:nowrap;
   font-family:var(--d); font-weight:900; font-variation-settings:'wdth' 120,'wght' 900;
@@ -1675,6 +1662,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 <div class="prog" id="prog"></div>
 
 <a class="skip" href="#main">Skip to content</a>
+<canvas id="cosmos" aria-hidden="true"></canvas>
 
 <nav class="nav" id="nav">
   <div class="wrap nav-in">
@@ -1712,9 +1700,6 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 <main id="main">
 <section class="hero" id="top">
   <canvas id="aurora" aria-hidden="true"></canvas>
-  <div class="gridlines"></div>
-  <div class="gridlit" aria-hidden="true"></div>
-  <canvas id="dust" aria-hidden="true"></canvas>
   <div class="aura hero-aura-b" data-scrub="aura"></div>
   <div class="aura hero-aura-c" data-scrub="aura-r"></div>
 
@@ -1733,10 +1718,10 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     <div class="hero-in">
       <span class="pill"><span class="dot"></span>Creative + automation studio · built for small businesses</span>
       <h1><span class="w" style="animation-delay:.06s">Your</span> <span class="w" style="animation-delay:.14s">entire</span> <span class="w" style="animation-delay:.22s">creative</span> <span class="w" style="animation-delay:.3s">team,</span><br><span class="w it" style="animation-delay:.4s">for less than one reel</span></h1>
-      <p class="sub">A freelancer charges <b>$35 for a single reel</b>. A social media manager costs you a salary. Nxtlvl Social runs your design, video, posting and the automation behind it — <b style="white-space:nowrap">from $5 a month</b>.</p>
+      <p class="sub">Design, video, posting and the automation behind it, run for you by Nxtlvl Social <b style="white-space:nowrap">from $5 a month</b>.</p>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="#pricing">See the packages<span class="bi"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
-        <a class="btn btn-ghost" href="#maths">Do the maths first</a>
+        <a class="btn btn-primary" href="#contact">Book a free call<span class="bi"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
+        <a class="btn btn-ghost" href="#pricing">See the packages</a>
       </div>
       <p class="hero-note">No contracts · Cancel any month · You own every file</p>
     </div>
@@ -2123,11 +2108,11 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   </div>
 </section>
 
-<section class="band" id="pricing" style="background:var(--ink-2); border-block:1px solid var(--line)">
+<section class="band" id="pricing" style="background:var(--ground); border-block:1px solid var(--line)">
   <div class="wrap">
     <div class="head rv">
       <span class="eyebrow">Pricing</span>
-      <h2>Three ways in.<br><span class="it">All of them cheaper than hiring.</span></h2>
+      <h2>Three ways in.<br><span class="it">Pick the one that fits.</span></h2>
       <p>Monthly. No contract, no setup fee, no notice period. Change plan or stop at the end of any month.</p>
     </div>
 
@@ -2143,7 +2128,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
           <li><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" stroke="#A95CFF" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Source files are yours to keep</span></li>
         </ul>
         <a class="btn btn-ghost" href="#contact">Start with design<span class="bi"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
-        <p class="plan-foot">Less than one coffee, for a month of content</p>
+        <p class="plan-foot">For a steady, good-looking feed</p>
       </div>
 
       <div class="plan feat rv" id="featplan">
@@ -2157,7 +2142,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
           <li><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" stroke="#D8BBFF" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Everything in <b>Content &amp; Design</b></span></li>
         </ul>
         <a class="btn btn-primary" href="#contact">Start with video<span class="bi"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
-        <p class="plan-foot">One freelance reel costs twice this whole plan</p>
+        <p class="plan-foot">For brands that live on reels</p>
       </div>
 
       <div class="plan rv">
@@ -2172,7 +2157,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
           <li><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8.5l4 4 8-9" stroke="#A95CFF" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Everything in the plans above</span></li>
         </ul>
         <a class="btn btn-ghost" href="#contact">Hand us the account<span class="bi"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
-        <p class="plan-foot">Two per cent of a junior marketer’s salary</p>
+        <p class="plan-foot">For when you want it fully handled</p>
       </div>
     </div>
 
@@ -2214,7 +2199,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   </div>
 </section>
 
-<section class="band" id="month" style="background:var(--ink-2); border-block:1px solid var(--line)">
+<section class="band" id="month" style="background:var(--ground); border-block:1px solid var(--line)">
   <div class="wrap">
     <div class="head mid rv">
       <span class="eyebrow">Your first month</span>
@@ -2285,7 +2270,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   </div>
 </section>
 
-<section class="band" id="faq" style="background:var(--ink-2); border-block:1px solid var(--line)">
+<section class="band" id="faq" style="background:var(--ground); border-block:1px solid var(--line)">
   <div class="wrap">
     <div class="faq-grid">
     <div class="head rv">
@@ -2416,7 +2401,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       <p class="dither-cap">
         <span class="d-desk">Move your cursor across it.</span>
         <span class="d-touch">Watch it resolve.</span>
-        A machine roughs it in, a designer brings it into focus. That is the whole model — and the reason this costs $5 instead of $2,500.
+        A machine roughs it in, and a designer brings it into focus. That is the whole model.
       </p>
     </div>
   </div>
@@ -2427,10 +2412,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   <div class="halo" aria-hidden="true"></div>
   <div class="wrap close-in">
     <h2>Your competition posted<br>three times <span class="it">this week</span>.</h2>
-    <p>Start at $5. See a month of work before you commit to anything bigger.</p>
-    <div class="hero-cta">
-      <a class="btn btn-primary btn-xl" href="#pricing">See the packages<span class="bi"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
-    </div>
+    <p>Tell us about your business on a 15-minute call. You see the first month's plan before anything is made.</p>
     <ol class="next rv" aria-label="What happens after you get in touch">
       <li><b>1</b>A 15-minute call</li>
       <li><b>2</b>Brand kit in week one</li>
@@ -2504,6 +2486,121 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 <script>
 (function(){
   var reduce = document.documentElement.classList.contains('rm');
+
+  /* ---- cosmic stardust: three depths of stars that twinkle and drift with scroll, a faint
+         dust lane, and a rare shooting star. Ambient only: it never follows the pointer. ---- */
+  (function(){
+    var cv = document.getElementById('cosmos');
+    if(!cv || !cv.getContext) return;
+    var cx = cv.getContext('2d'), dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    var W = 0, H = 0, stars = [], lane = null, shoot = null, nextShoot = 0, raf = null, on = true;
+    var TINTS = ['245,242,255', '245,242,255', '245,242,255', '216,187,255', '216,187,255', '169,124,255'];
+    var DEPTH = [.012, .035, .075];                     /* scroll parallax per layer: far, mid, near */
+    /* a fixed seed, so the sky looks the same on every visit */
+    var seed = 7;
+    function rnd(){ seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+    function gauss(){ return (rnd() + rnd() + rnd() - 1.5) / 1.5; }
+
+    function build(){
+      W = window.innerWidth; H = window.innerHeight; seed = 7;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.round(W * H / 4300);
+      stars = [];
+      for(var i = 0; i < n; i++){
+        var layer = i < n * .62 ? 0 : i < n * .9 ? 1 : 2;
+        stars.push({
+          x: rnd() * W, y: rnd() * H, l: layer,
+          r: layer === 0 ? .35 + rnd() * .45 : layer === 1 ? .6 + rnd() * .55 : 1 + rnd() * .8,
+          a: layer === 0 ? .25 + rnd() * .3 : layer === 1 ? .4 + rnd() * .35 : .6 + rnd() * .35,
+          sp: .0004 + rnd() * .0016, ph: rnd() * 6.283, c: TINTS[Math.floor(rnd() * TINTS.length)]
+        });
+      }
+      /* the dust lane: a soft diagonal band of violet haze and fine specks, painted once */
+      lane = document.createElement('canvas');
+      lane.width = cv.width; lane.height = cv.height;
+      var lc = lane.getContext('2d'); lc.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var x0 = -.1 * W, y0 = .92 * H, x1 = 1.1 * W, y1 = .05 * H;
+      var glows = [[.18, 'rgba(125,24,252,.09)'], [.42, 'rgba(169,92,255,.065)'], [.66, 'rgba(61,7,137,.12)'], [.86, 'rgba(169,124,255,.06)']];
+      glows.forEach(function(g){
+        var gx = x0 + (x1 - x0) * g[0], gy = y0 + (y1 - y0) * g[0], rad = Math.max(W, H) * .32;
+        var gr = lc.createRadialGradient(gx, gy, 0, gx, gy, rad);
+        gr.addColorStop(0, g[1]); gr.addColorStop(1, 'rgba(5,3,12,0)');
+        lc.fillStyle = gr; lc.fillRect(0, 0, W, H);
+      });
+      var specks = Math.round(W * H / 420), nx = -(y1 - y0), ny = x1 - x0, nl = Math.hypot(nx, ny);
+      nx /= nl; ny /= nl;
+      for(var k = 0; k < specks; k++){
+        var t = rnd(), off = gauss() * H * .13;
+        var sx = x0 + (x1 - x0) * t + nx * off, sy = y0 + (y1 - y0) * t + ny * off;
+        lc.fillStyle = 'rgba(216,187,255,' + (.04 + rnd() * .14).toFixed(3) + ')';
+        lc.fillRect(sx, sy, .5 + rnd() * .6, .5 + rnd() * .6);
+      }
+    }
+
+    function draw(t){
+      var sy = reduce ? 0 : window.scrollY;
+      cx.clearRect(0, 0, W, H);
+      cx.globalAlpha = reduce ? 1 : .88 + .12 * Math.sin(t / 7000);
+      cx.drawImage(lane, 0, 0, W, H);
+      cx.globalAlpha = 1;
+      for(var i = 0; i < stars.length; i++){
+        var s = stars[i];
+        var y = ((s.y - sy * DEPTH[s.l]) % H + H) % H;
+        var a = reduce ? s.a : s.a * (.6 + .4 * Math.sin(t * s.sp + s.ph));
+        cx.fillStyle = 'rgba(' + s.c + ',' + a.toFixed(3) + ')';
+        if(s.r < .8){ cx.fillRect(s.x, y, s.r * 1.6, s.r * 1.6); continue; }
+        cx.beginPath(); cx.arc(s.x, y, s.r, 0, 6.2832); cx.fill();
+        /* the brightest near stars get a faint four-point glint */
+        if(s.l === 2 && s.r > 1.5){
+          cx.strokeStyle = 'rgba(' + s.c + ',' + (a * .35).toFixed(3) + ')'; cx.lineWidth = .6;
+          cx.beginPath(); cx.moveTo(s.x - s.r * 4, y); cx.lineTo(s.x + s.r * 4, y);
+          cx.moveTo(s.x, y - s.r * 4); cx.lineTo(s.x, y + s.r * 4); cx.stroke();
+        }
+      }
+      /* a shooting star every 9 to 18 seconds */
+      if(!reduce){
+        if(!shoot && t > nextShoot){
+          var ang = .5 + Math.random() * .35;
+          shoot = {x: W * (.15 + Math.random() * .7), y: H * (.05 + Math.random() * .35), vx: Math.cos(ang) * 9, vy: Math.sin(ang) * 9, life: 0};
+          nextShoot = t + 9000 + Math.random() * 9000;
+        }
+        if(shoot){
+          shoot.life += 1; shoot.x += shoot.vx; shoot.y += shoot.vy;
+          var fade = Math.sin(Math.min(shoot.life / 46, 1) * Math.PI);
+          var gr = cx.createLinearGradient(shoot.x, shoot.y, shoot.x - shoot.vx * 14, shoot.y - shoot.vy * 14);
+          gr.addColorStop(0, 'rgba(245,242,255,' + (.85 * fade).toFixed(3) + ')'); gr.addColorStop(1, 'rgba(169,124,255,0)');
+          cx.strokeStyle = gr; cx.lineWidth = 1.3; cx.lineCap = 'round';
+          cx.beginPath(); cx.moveTo(shoot.x, shoot.y); cx.lineTo(shoot.x - shoot.vx * 14, shoot.y - shoot.vy * 14); cx.stroke();
+          if(shoot.life > 46) shoot = null;
+        }
+      }
+    }
+    function frame(t){
+      if(!on){ raf = null; return; }
+      draw(t);
+      raf = requestAnimationFrame(frame);
+    }
+    build();
+    if(reduce){ draw(0); }
+    else {
+      nextShoot = 4000;
+      raf = requestAnimationFrame(frame);
+      document.addEventListener('visibilitychange', function(){
+        on = !document.hidden;
+        if(on && !raf) raf = requestAnimationFrame(frame);
+      });
+    }
+    var rz = null;
+    window.addEventListener('resize', function(){
+      clearTimeout(rz);
+      /* phones resize as the address bar hides; only rebuild the sky for a real size change */
+      rz = setTimeout(function(){
+        if(window.innerWidth === W && Math.abs(window.innerHeight - H) < 140) return;
+        build(); if(reduce) draw(0);
+      }, 160);
+    }, {passive:true});
+  })();
   document.documentElement.classList.add('js');
   try{ document.getElementById('yr').textContent = new Date().getFullYear(); }catch(e){}
 
@@ -2678,9 +2775,9 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 
   /* ---- hero canvas: aurora blobs drawn small and blurred up, plus drifting motes ---- */
   var hero = document.getElementById('top');
-  var au = document.getElementById('aurora'), du = document.getElementById('dust');
-  if(au.getContext && du.getContext){
-    var ac = au.getContext('2d'), dc = du.getContext('2d');
+  var au = document.getElementById('aurora');
+  if(au && au.getContext){
+    var ac = au.getContext('2d');
     var W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2), motes = [], pmx = 0, pmy = 0;
     var blobs = [
       {h:'125,24,252', r:.46, ax:.26, ay:.17, sx:.00011, sy:.00017, px:.30, py:.30},
@@ -2692,17 +2789,6 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       var r = hero.getBoundingClientRect();
       W = Math.max(r.width, 1); H = Math.max(r.height, 1);
       au.width = Math.max(Math.round(W / 7), 1); au.height = Math.max(Math.round(H / 7), 1);
-      du.width = Math.round(W * dpr); du.height = Math.round(H * dpr);
-      dc.setTransform(dpr, 0, 0, dpr, 0, 0);
-      var n = Math.round(Math.min(W, 1600) / 20);
-      motes = [];
-      for(var i = 0; i < n; i++){
-        motes.push({
-          x: Math.random() * W, y: Math.random() * H,
-          r: Math.random() * 1.7 + .5, v: Math.random() * .22 + .06,
-          a: Math.random() * .5 + .18, tw: Math.random() * 6.28, sp: Math.random() * .9 + .35
-        });
-      }
     };
     var drawAurora = function(t){
       var w = au.width, h = au.height;
@@ -2722,22 +2808,10 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       }
       ac.globalCompositeOperation = 'source-over';
     };
-    var drawDust = function(t){
-      dc.clearRect(0, 0, W, H);
-      for(var i = 0; i < motes.length; i++){
-        var m = motes[i];
-        m.y -= m.v; if(m.y < -6){ m.y = H + 6; m.x = Math.random() * W; }
-        var tw = .55 + .45 * Math.sin(t * .0012 * m.sp + m.tw);
-        dc.beginPath();
-        dc.arc(m.x, m.y, m.r, 0, 6.2832);
-        dc.fillStyle = 'rgba(206,176,255,' + (m.a * tw).toFixed(3) + ')';
-        dc.fill();
-      }
-    };
     var running = true, raf0 = null;
     var frame = function(t){
       if(!running){ raf0 = null; return; }
-      drawAurora(t); drawDust(t);
+      drawAurora(t);
       raf0 = requestAnimationFrame(frame);
     };
     if(!reduce){
@@ -2747,7 +2821,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       }, {passive:true});
     }
     size();
-    if(reduce){ drawAurora(0); drawDust(0); }
+    if(reduce){ drawAurora(0); }
     else {
       raf0 = requestAnimationFrame(frame);
       if('IntersectionObserver' in window){
@@ -2764,7 +2838,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     var rt = null;
     window.addEventListener('resize', function(){
       clearTimeout(rt);
-      rt = setTimeout(function(){ size(); if(reduce){ drawAurora(0); drawDust(0); } }, 180);
+      rt = setTimeout(function(){ size(); if(reduce){ drawAurora(0); } }, 180);
     }, {passive:true});
   }
 
@@ -3276,16 +3350,6 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   }
 
   var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-
-  /* ---- hero grid lights up around the pointer ---- */
-  var gridlit = document.querySelector('.gridlit');
-  if(gridlit && fine && !reduce){
-    hero.addEventListener('pointermove', function(ev){
-      var r = hero.getBoundingClientRect();
-      gridlit.style.setProperty('--gx', (ev.clientX - r.left) + 'px');
-      gridlit.style.setProperty('--gy', (ev.clientY - r.top) + 'px');
-    }, {passive:true});
-  }
 
   /* ---- cards tilt toward the pointer, with a glare that follows it ---- */
   if(fine && !reduce){
