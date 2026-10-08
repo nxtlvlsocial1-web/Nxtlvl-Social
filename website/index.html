@@ -2480,62 +2480,64 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 (function(){
   var reduce = document.documentElement.classList.contains('rm');
 
-  /* ---- cursor stardust: a few tiny stars shed wherever the pointer travels, drifting and fading ---- */
+  /* ---- cursor pixel trail: square pixels snapped to a grid follow the pointer's path.
+         The newest pixel is the largest and brightest; toward the tail they shrink and fade,
+         and the tail retracts from its end as points age out. ---- */
   (function(){
     var tc = document.getElementById('trail');
     if(!tc || !tc.getContext || reduce || !window.matchMedia('(hover:hover) and (pointer:fine)').matches){ if(tc) tc.style.display = 'none'; return; }
     var c = tc.getContext('2d'), dpr = Math.min(window.devicePixelRatio || 1, 2), W = 0, H = 0;
-    var parts = [], raf = null, lx = null, ly = null, MAX = 160, GAP = 7;
-    var TINT = ['245,242,255', '245,242,255', '216,187,255', '169,124,255'];
+    var pts = [], raf = null, lx = null, ly = null;
+    var CELL = 4, STEP = 5, LIFE = 650, MAXPTS = 56, HEAD = 9;
+    /* tail to head: violet, lilac, white */
+    var C0 = [125, 24, 252], C1 = [169, 124, 255], C2 = [245, 242, 255];
+    function mix(a, b, k){ return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k]; }
     function size(){
       W = window.innerWidth; H = window.innerHeight;
       tc.width = Math.round(W * dpr); tc.height = Math.round(H * dpr);
       c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      c.imageSmoothingEnabled = false;
     }
-    function spawn(x, y, vx, vy){
-      if(parts.length >= MAX) parts.shift();
-      parts.push({
-        x: x + (Math.random() - .5) * 6, y: y + (Math.random() - .5) * 6,
-        vx: vx * .04 + (Math.random() - .5) * .35, vy: vy * .04 + (Math.random() - .5) * .35 + .06,
-        r: .6 + Math.random() * 1.3, born: performance.now(), max: 1000 + Math.random() * 700,
-        c: TINT[Math.floor(Math.random() * TINT.length)], glint: Math.random() < .18
-      });
-    }
-    /* lifetimes are in milliseconds and motion is scaled by frame time, so a slow device fades on time too */
-    var last = 0;
     function frame(now){
-      var dt = last ? Math.min((now - last) / 16.7, 4) : 1; last = now;
+      /* age out from the end: the oldest points expire first, so the tail shortens */
+      while(pts.length && now - pts[0].t > LIFE) pts.shift();
       c.clearRect(0, 0, W, H);
-      for(var i = parts.length - 1; i >= 0; i--){
-        var p = parts[i];
-        p.x += p.vx * dt; p.y += p.vy * dt;
-        var drag = Math.pow(.985, dt); p.vx *= drag; p.vy = p.vy * drag + .004 * dt;
-        var k = (now - p.born) / p.max;
-        if(k >= 1){ parts.splice(i, 1); continue; }
-        var a = Math.min(1, Math.sin(k * Math.PI) * 1.05), r = p.r * (1 - k * .5);
-        c.fillStyle = 'rgba(' + p.c + ',' + a.toFixed(3) + ')';
-        c.beginPath(); c.arc(p.x, p.y, r, 0, 6.2832); c.fill();
-        if(p.glint){
-          c.strokeStyle = 'rgba(' + p.c + ',' + (a * .5).toFixed(3) + ')'; c.lineWidth = .6;
-          c.beginPath(); c.moveTo(p.x - r * 4, p.y); c.lineTo(p.x + r * 4, p.y);
-          c.moveTo(p.x, p.y - r * 4); c.lineTo(p.x, p.y + r * 4); c.stroke();
+      var n = pts.length, seen = {};
+      for(var i = 0; i < n; i++){
+        var p = pts[i];
+        var pos = n > 1 ? i / (n - 1) : 1;                    /* 0 at the tail, 1 at the head */
+        var age = 1 - (now - p.t) / LIFE;
+        var sz = Math.max(2, Math.round(2 + (HEAD - 2) * Math.pow(pos, 1.5)));
+        var gx = Math.round(p.x / CELL) * CELL, gy = Math.round(p.y / CELL) * CELL;
+        var key = gx + ',' + gy + ',' + sz;
+        if(seen[key]) continue; seen[key] = 1;
+        var col = pos < .5 ? mix(C0, C1, pos * 2) : mix(C1, C2, (pos - .5) * 2);
+        var a = Math.max(0, Math.min(1, (.45 + .55 * pos) * age * 1.2));
+        c.fillStyle = 'rgba(' + (col[0] | 0) + ',' + (col[1] | 0) + ',' + (col[2] | 0) + ',' + a.toFixed(3) + ')';
+        c.fillRect(gx - sz / 2, gy - sz / 2, sz, sz);
+        /* a few loose pixels scatter off the middle of the trail */
+        if(p.s && pos > .25 && pos < .85){
+          c.fillRect(gx + p.s[0] * CELL - 1, gy + p.s[1] * CELL - 1, 2, 2);
         }
       }
-      raf = parts.length ? requestAnimationFrame(frame) : null;
-      if(!raf){ c.clearRect(0, 0, W, H); last = 0; }
+      raf = pts.length ? requestAnimationFrame(frame) : null;
+      if(!raf) c.clearRect(0, 0, W, H);
     }
     window.addEventListener('pointermove', function(ev){
       if(ev.pointerType !== 'mouse') return;
-      var x = ev.clientX, y = ev.clientY;
-      if(lx === null){ lx = x; ly = y; return; }
+      var x = ev.clientX, y = ev.clientY, now = performance.now();
+      if(lx === null){ lx = x; ly = y; pts.push({x: x, y: y, t: now}); return; }
       var dx = x - lx, dy = y - ly, d = Math.hypot(dx, dy);
-      if(d < GAP) return;
-      /* one speck every GAP pixels of travel, so slow and fast moves leave the same density */
-      var steps = Math.min(Math.floor(d / GAP), 8);
-      for(var s = 1; s <= steps; s++){
-        spawn(lx + dx * s / steps, ly + dy * s / steps, dx, dy);
-        if(Math.random() < .5) spawn(lx + dx * s / steps, ly + dy * s / steps, dx, dy);
+      if(d < STEP) return;
+      /* lay points along the path every STEP px, so fast moves draw a continuous line */
+      var k = Math.min(Math.floor(d / STEP), 24);
+      for(var i = 1; i <= k; i++){
+        pts.push({
+          x: lx + dx * i / k, y: ly + dy * i / k, t: now,
+          s: Math.random() < .18 ? [Math.round((Math.random() - .5) * 4), Math.round((Math.random() - .5) * 4)] : null
+        });
       }
+      if(pts.length > MAXPTS) pts.splice(0, pts.length - MAXPTS);
       lx = x; ly = y;
       if(!raf) raf = requestAnimationFrame(frame);
     }, {passive:true});
