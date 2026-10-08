@@ -31,9 +31,10 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Working with a person in Studio, storyboards            | `hyperframes-studio`                          |
 | CLI: init, check, preview, render, troubleshooting      | `hyperframes-cli`                             |
 | Still images: social graphics, banners, mockups, OG     | `image`                                       |
+| AI product photos, lifestyle shots, ad packs (Higgsfield) | `higgsfield-product-photoshoot`             |
 
-The HyperFrames skills are third-party (from `heygen-com/hyperframes`), as is `image` (from
-`coreyhaines31/marketingskills`); their versions are pinned in `skills-lock.json`. Don't edit them by hand. Update them with:
+The HyperFrames skills are third-party (from `heygen-com/hyperframes`), as are `image` (from
+`coreyhaines31/marketingskills`) and `higgsfield-product-photoshoot` (from `higgsfield-ai/skills`); their versions are pinned in `skills-lock.json`. Don't edit them by hand. Update them with:
 
 ```bash
 npx skills add heygen-com/hyperframes --skill <name> --agent claude-code -y
@@ -46,6 +47,7 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 - Node.js 22 or newer and FFmpeg.
 - Run the CLI as `npx hyperframes ...`.
 - Voiceover and generated music need a HeyGen account (`npx hyperframes auth`) or a Gemini API key.
+- Product photoshoots need the `higgsfield` CLI and a Higgsfield account (`higgsfield auth login`).
 - Telemetry: set `HYPERFRAMES_NO_TELEMETRY=1` to turn it off.
 
 ## Repo layout
