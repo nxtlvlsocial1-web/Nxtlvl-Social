@@ -2485,7 +2485,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     var tc = document.getElementById('trail');
     if(!tc || !tc.getContext || reduce || !window.matchMedia('(hover:hover) and (pointer:fine)').matches){ if(tc) tc.style.display = 'none'; return; }
     var c = tc.getContext('2d'), dpr = Math.min(window.devicePixelRatio || 1, 2), W = 0, H = 0;
-    var parts = [], raf = null, lx = null, ly = null, MAX = 70, GAP = 12;
+    var parts = [], raf = null, lx = null, ly = null, MAX = 160, GAP = 7;
     var TINT = ['245,242,255', '245,242,255', '216,187,255', '169,124,255'];
     function size(){
       W = window.innerWidth; H = window.innerHeight;
@@ -2497,8 +2497,8 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       parts.push({
         x: x + (Math.random() - .5) * 6, y: y + (Math.random() - .5) * 6,
         vx: vx * .04 + (Math.random() - .5) * .35, vy: vy * .04 + (Math.random() - .5) * .35 + .06,
-        r: .5 + Math.random() * 1.1, born: performance.now(), max: 700 + Math.random() * 500,
-        c: TINT[Math.floor(Math.random() * TINT.length)], glint: Math.random() < .12
+        r: .6 + Math.random() * 1.3, born: performance.now(), max: 1000 + Math.random() * 700,
+        c: TINT[Math.floor(Math.random() * TINT.length)], glint: Math.random() < .18
       });
     }
     /* lifetimes are in milliseconds and motion is scaled by frame time, so a slow device fades on time too */
@@ -2512,7 +2512,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
         var drag = Math.pow(.985, dt); p.vx *= drag; p.vy = p.vy * drag + .004 * dt;
         var k = (now - p.born) / p.max;
         if(k >= 1){ parts.splice(i, 1); continue; }
-        var a = Math.sin(k * Math.PI) * .9, r = p.r * (1 - k * .5);
+        var a = Math.min(1, Math.sin(k * Math.PI) * 1.05), r = p.r * (1 - k * .5);
         c.fillStyle = 'rgba(' + p.c + ',' + a.toFixed(3) + ')';
         c.beginPath(); c.arc(p.x, p.y, r, 0, 6.2832); c.fill();
         if(p.glint){
@@ -2531,8 +2531,11 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       var dx = x - lx, dy = y - ly, d = Math.hypot(dx, dy);
       if(d < GAP) return;
       /* one speck every GAP pixels of travel, so slow and fast moves leave the same density */
-      var steps = Math.min(Math.floor(d / GAP), 4);
-      for(var s = 1; s <= steps; s++) spawn(lx + dx * s / steps, ly + dy * s / steps, dx, dy);
+      var steps = Math.min(Math.floor(d / GAP), 8);
+      for(var s = 1; s <= steps; s++){
+        spawn(lx + dx * s / steps, ly + dy * s / steps, dx, dy);
+        if(Math.random() < .5) spawn(lx + dx * s / steps, ly + dy * s / steps, dx, dy);
+      }
       lx = x; ly = y;
       if(!raf) raf = requestAnimationFrame(frame);
     }, {passive:true});
