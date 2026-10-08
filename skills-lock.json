@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "characteristic-voice": {
+      "source": "noizai/skills",
+      "sourceType": "github",
+      "skillPath": "skills/characteristic-voice/SKILL.md",
+      "computedHash": "519d6d8a92069eb9e05385a2902762457459981940f78d2ac679959c87749d0e"
+    },
     "embedded-captions": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",

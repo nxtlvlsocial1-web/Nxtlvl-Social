@@ -26,6 +26,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Bringing in a Figma design                              | `figma`                                       |
 | Music, SFX, voiceover, images, logos, colour grade      | `media-use`                                   |
 | Lip-sync a face to audio (via RunComfy)                 | `lipsync`                                     |
+| Expressive, emotional voice lines (Noiz or Kokoro TTS)  | `characteristic-voice`                        |
 | Building blocks, effects, transitions                   | `hyperframes-registry`                        |
 | Composition HTML, animation, audio mix, camera moves    | `hyperframes-core`, `-animation`, `-audio`, `-keyframes` |
 | Design direction: palette, type, pacing                 | `hyperframes-creative`                        |
@@ -45,6 +46,16 @@ is paid. Only lip-sync people who have consented to it, for both their face and 
 
 ```bash
 npx skills add prime-skills/runcomfy-agent-skills --skill lipsync --agent claude-code -y
+```
+
+`characteristic-voice` is also third-party (from `noizai/skills`, pinned in `skills-lock.json`). Its script
+is `.claude/skills/characteristic-voice/scripts/speak.sh` (the skill's own docs say `skills/...`). It uses
+the Noiz API (`NOIZ_API_KEY`; sends the text and any reference audio to noiz.ai) or Kokoro, which runs
+locally. Only clone a voice from a recording the speaker gave us permission to use. Never pull reference
+audio from films, TV or YouTube, even though the skill shows how. Update it with:
+
+```bash
+npx skills add noizai/skills --skill characteristic-voice --agent claude-code -y
 ```
 
 Our own skills (currently `nxtlvl-social-video`) are ours to edit.
