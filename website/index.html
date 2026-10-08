@@ -30,12 +30,13 @@
   --r-xs:8px; --r-sm:12px; --r-md:18px; --r-lg:24px; --r-xl:32px;
   color-scheme:dark;
 }
-html{scroll-padding-top:96px}
+html{scroll-padding-top:96px; overflow-x:clip}
+p{text-wrap:pretty}
 *{box-sizing:border-box}
 body{
   margin:0; background:var(--ink); color:var(--fg);
   font-family:var(--b); font-size:16px; line-height:1.6;
-  -webkit-font-smoothing:antialiased; overflow-x:hidden; position:relative;
+  -webkit-font-smoothing:antialiased; overflow-x:clip; position:relative;
 }
 .ic{width:1em; height:1em; flex:none; display:inline-block; vertical-align:-.14em; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; overflow:visible}
 h1,h2,h3{font-family:var(--d); margin:0; text-wrap:balance; letter-spacing:-.02em; line-height:1.02}
@@ -198,7 +199,7 @@ h1 .w{display:inline-block}
 }
 @keyframes flex{0%{font-variation-settings:'wdth' 125,'wght' 900}100%{font-variation-settings:'wdth' 112,'wght' 800}}
 h1 .it{
-  font-family:var(--s); font-style:italic; font-weight:400;
+  font-family:var(--s); font-style:normal; font-weight:400;
   font-variation-settings:normal; letter-spacing:-.015em;
   background:linear-gradient(96deg,var(--violet-lift),#F0E2FF 55%,var(--violet-lift));
   background-size:220% 100%;
@@ -310,7 +311,7 @@ h1 .it{
   font-size:clamp(32px,5.2vw,60px); font-weight:800; font-variation-settings:'wdth' 108,'wght' 800;
   margin-top:18px; letter-spacing:-.03em; line-height:.98;
 }
-.head h2 .it{font-family:var(--s); font-style:italic; font-weight:400; font-variation-settings:normal; color:var(--violet-lift); letter-spacing:-.01em}
+.head h2 .it{font-family:var(--s); font-style:normal; font-weight:400; font-variation-settings:normal; color:var(--violet-lift); letter-spacing:-.01em}
 .head p{margin-top:20px; color:var(--muted); font-size:17px; max-width:36em; text-wrap:pretty}
 .head.mid{margin-inline:auto; text-align:center}
 
@@ -765,7 +766,7 @@ details p{padding:0 54px 24px 4px; font-size:15px; color:var(--muted); max-width
 .btn-xl{padding:17px 30px; font-size:17px}
 .btn-xl .bi{width:32px; height:32px; margin-right:-18px}
 .close h2{font-size:clamp(36px,7.4vw,84px); font-weight:800; font-variation-settings:'wdth' 110,'wght' 800; letter-spacing:-.035em; line-height:.96}
-.close h2 .it{font-family:var(--s); font-style:italic; font-weight:400; font-variation-settings:normal; color:var(--violet-lift)}
+.close h2 .it{font-family:var(--s); font-style:normal; font-weight:400; font-variation-settings:normal; color:var(--violet-lift)}
 .close p{margin-top:20px; color:var(--muted); font-size:17px; max-width:30em; margin-inline:auto}
 .close .hero-cta{margin-top:30px}
 
@@ -1160,7 +1161,7 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
 }
 .bb-row + .bb-row{margin-top:.08em}
 .bb-row.outline{color:transparent; -webkit-text-stroke:1.5px rgba(169,124,255,.55)}
-.bb-row .it{font-family:var(--s); font-style:italic; font-weight:400; font-variation-settings:normal; letter-spacing:-.01em; color:var(--violet-lift); -webkit-text-stroke:0}
+.bb-row .it{font-family:var(--s); font-style:normal; font-weight:400; font-variation-settings:normal; letter-spacing:-.01em; color:var(--violet-lift); -webkit-text-stroke:0}
 .bb-s{display:inline-block; width:.42em; height:.42em; flex:none; background:var(--violet-lift);
   clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%)}
 @media(prefers-reduced-motion:no-preference){ .bb-s{animation:spin 9s linear infinite} }
@@ -1233,6 +1234,118 @@ details .ans{overflow:hidden}
 .wordmark span.sp{width:.22em}
 .wordmark span.up{transform:translateY(-.1em); color:var(--violet-lift); -webkit-text-stroke-color:transparent}
 .wordmark span.up2{transform:translateY(-.05em); color:rgba(169,92,255,.45); -webkit-text-stroke-color:transparent}
+
+/* ================= pass 3: proof, fit and finish ================= */
+/* headline emphasis: upright serif with a hand-drawn underline that draws in, not italics */
+.head h2 .it,.close h2 .it{
+  padding-bottom:.1em;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6.5C22 2.5 42 2.8 61 5.4S101 8.6 118 3.6' fill='none' stroke='%23A95CFF' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat 0 100%/0% .2em;
+  -webkit-box-decoration-break:clone; box-decoration-break:clone;
+  transition:background-size 1.1s var(--out) .5s;
+}
+.split.in .it,html:not(.js) .head h2 .it,html:not(.js) .close h2 .it,.no-scrub .head h2 .it,.no-scrub .close h2 .it{background-size:100% .2em}
+
+/* ---------- savings calculator ---------- */
+.calc{margin-top:26px; border-radius:var(--r-lg); padding:6px; background:rgba(169,124,255,.06); box-shadow:0 0 0 1px var(--line-2)}
+.calc-in{border-radius:calc(var(--r-lg) - 6px); padding:26px 24px; background:linear-gradient(160deg,rgba(125,24,252,.16),rgba(17,12,34,.9) 55%); box-shadow:0 1px 0 rgba(255,255,255,.06) inset}
+.calc-q{display:block; font-family:var(--d); font-size:clamp(19px,2.4vw,24px); font-weight:700; font-variation-settings:'wdth' 104,'wght' 700; letter-spacing:-.015em}
+.calc-row{display:flex; align-items:center; gap:18px; margin-top:20px}
+.calc-n{flex:none; min-width:3.2ch; text-align:right; font-family:var(--d); font-size:30px; font-weight:800; font-variant-numeric:tabular-nums; color:var(--violet-pale)}
+.calc input[type=range]{
+  --p:40%; flex:1; min-width:0; height:44px; margin:0; background:transparent; cursor:pointer; touch-action:manipulation;
+  -webkit-appearance:none; appearance:none;
+}
+.calc input[type=range]::-webkit-slider-runnable-track{height:8px; border-radius:99px; background:linear-gradient(90deg,var(--violet),var(--violet-lift)) 0/var(--p) 100% no-repeat,rgba(255,255,255,.09)}
+.calc input[type=range]::-moz-range-track{height:8px; border-radius:99px; background:linear-gradient(90deg,var(--violet),var(--violet-lift)) 0/var(--p) 100% no-repeat,rgba(255,255,255,.09)}
+.calc input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; width:26px; height:26px; margin-top:-9px; border-radius:50%;
+  background:#fff; box-shadow:0 0 0 5px rgba(169,92,255,.35), 0 6px 18px rgba(125,24,252,.9);
+  transition:transform var(--t1) var(--enter), box-shadow var(--t2);
+}
+.calc input[type=range]::-moz-range-thumb{width:26px; height:26px; border:0; border-radius:50%; background:#fff; box-shadow:0 0 0 5px rgba(169,92,255,.35), 0 6px 18px rgba(125,24,252,.9)}
+.calc input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15); box-shadow:0 0 0 9px rgba(169,92,255,.25), 0 6px 22px rgba(125,24,252,1)}
+.calc input[type=range]:focus-visible{outline:2px solid var(--violet-lift); outline-offset:4px; border-radius:12px}
+.calc-res{display:grid; grid-template-columns:1fr; gap:12px; margin-top:22px}
+@media(min-width:640px){.calc-res{grid-template-columns:1fr 1fr}}
+.calc-col{padding:16px 18px; border-radius:var(--r-md); background:rgba(5,3,12,.55); box-shadow:0 0 0 1px var(--line)}
+.calc-col.us{box-shadow:0 0 0 1px rgba(125,24,252,.55), 0 14px 34px -18px rgba(125,24,252,.9)}
+.calc-col>span{display:block; font-size:13.5px; color:var(--muted)}
+.calc-col b{display:flex; align-items:baseline; margin-top:6px; font-family:var(--d); font-size:clamp(34px,5vw,48px); font-weight:800; line-height:1; letter-spacing:-.03em; font-variation-settings:'wdth' 110,'wght' 800; font-variant-numeric:tabular-nums}
+.calc-col.us b{color:var(--violet-pale)}
+.calc-col b small{font-size:.4em; font-weight:600; color:var(--muted); margin-right:.3em; letter-spacing:0; font-family:var(--b)}
+.calc-note{margin-top:16px; font-size:14px; color:var(--muted); max-width:48em}
+.calc-note b{color:var(--win); font-variant-numeric:tabular-nums; display:inline-flex; line-height:1; vertical-align:-.12em}
+/* odometer: each digit is a column of 0-9 that rolls to its value */
+.odo-d{display:inline-block; height:1em; overflow:hidden; vertical-align:top}
+.odo-d>span{display:flex; flex-direction:column; transition:transform .7s var(--expo)}
+.odo-d>span>i{display:block; height:1em; line-height:1; font-style:normal}
+.odo-s{display:inline-block; line-height:1}
+
+/* ---------- "who it's for": pick your business, see a sample week ---------- */
+.chips .chip{cursor:pointer; color:var(--fg); font-family:var(--b)}
+.chip[aria-pressed="true"]{background:linear-gradient(180deg,rgba(169,92,255,.35),rgba(125,24,252,.22)); border-color:var(--violet-lift); box-shadow:0 10px 28px -14px rgba(125,24,252,1)}
+.chip[aria-pressed="true"] .ic{color:#fff}
+@media(hover:hover) and (pointer:fine){ .chips:hover .chip[aria-pressed="true"]:not(:hover){opacity:.8} }
+.peek{max-width:900px; margin:30px auto 0; border-radius:var(--r-lg); padding:6px; background:rgba(169,124,255,.06); box-shadow:0 0 0 1px var(--line-2)}
+.peek-in{border-radius:calc(var(--r-lg) - 6px); padding:22px; background:var(--ink-3)}
+.peek-h{display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:8px 16px}
+.peek-h p{font-size:15px; color:var(--muted)}
+.peek-h p b{color:var(--fg); font-weight:650}
+.peek-h small{font-size:12.5px; color:var(--faint)}
+.peek-days{display:grid; grid-template-columns:1fr; gap:10px; margin-top:16px}
+@media(min-width:700px){.peek-days{grid-template-columns:repeat(3,1fr)}}
+.pday{position:relative; padding:14px 16px 16px; border-radius:var(--r-sm); background:rgba(255,255,255,.035); box-shadow:0 0 0 1px var(--line); min-height:104px}
+.pday-top{display:flex; align-items:center; justify-content:space-between; gap:8px}
+.pday-d{font-size:12px; font-weight:600; color:var(--faint)}
+.pday-k{font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(125,24,252,.25); color:var(--violet-pale)}
+.pday-t{margin-top:10px; font-size:15px; font-weight:600; line-height:1.4; letter-spacing:-.01em}
+@media(prefers-reduced-motion:no-preference){
+  .pday.swap{animation:pswap .5s var(--enter) both}
+  .pday:nth-child(2).swap{animation-delay:.06s} .pday:nth-child(3).swap{animation-delay:.12s}
+}
+@keyframes pswap{from{opacity:0; transform:translateY(8px); filter:blur(4px)}to{opacity:1; transform:none; filter:blur(0)}}
+
+/* ---------- phone: stories row and tap-to-like ---------- */
+.stories{position:absolute; top:46px; left:0; right:0; z-index:3; display:flex; gap:8px; padding:4px 10px 8px; background:var(--ink)}
+.story{flex:none; width:40px; height:40px; border-radius:50%; padding:2px; position:relative; display:grid; place-items:center}
+.story::before{content:''; position:absolute; inset:0; border-radius:50%; background:conic-gradient(var(--violet),var(--violet-lift),var(--violet-pale),var(--violet))}
+@media(prefers-reduced-motion:no-preference){ .story::before{animation:spin 6s linear infinite} .story:nth-child(2n)::before{animation-duration:8s; animation-direction:reverse} }
+.story span{position:relative; width:100%; height:100%; border-radius:50%; display:grid; place-items:center; background:var(--ink-3); box-shadow:0 0 0 2px var(--ink); color:var(--violet-pale)}
+.story .ic{font-size:15px}
+.story.seen::before{background:rgba(169,124,255,.25)}
+.feed-track{top:100px !important}
+.post{position:relative; cursor:pointer}
+.post-like{display:inline-flex; align-items:center; gap:3px; font-size:9.5px; color:var(--faint); font-variant-numeric:tabular-nums}
+.post-like svg{width:11px; height:11px; fill:none; stroke:currentColor; stroke-width:2; transition:fill .2s ease, stroke .2s ease, scale .3s cubic-bezier(.175,.885,.32,1.275)}
+.post.liked .post-like{color:#fff}
+.post.liked .post-like svg{fill:var(--violet-lift); stroke:var(--violet-lift); scale:1.25}
+.heart{position:absolute; left:50%; top:42%; z-index:5; width:52px; height:52px; margin:-26px 0 0 -26px; pointer-events:none; fill:#fff; filter:drop-shadow(0 6px 18px rgba(125,24,252,.9))}
+
+/* ---------- copy buttons: the icon swaps to a check ---------- */
+.copy{position:relative; display:inline-flex; align-items:center; gap:6px; min-height:34px}
+.copy::before{content:''; position:absolute; inset:-6px -4px}
+.copy .cico{position:relative; width:13px; height:13px; flex:none}
+.copy .cico .ic{position:absolute; inset:0; font-size:13px; stroke-width:2; transition:opacity .2s ease, scale .25s var(--enter), filter .2s ease}
+.copy .cico .c-ok{opacity:0; scale:.25; filter:blur(4px)}
+.copy.ok .cico .c-cp{opacity:0; scale:.25; filter:blur(4px)}
+.copy.ok .cico .c-ok{opacity:1; scale:1; filter:blur(0)}
+
+/* ---------- what happens after you book ---------- */
+.next{list-style:none; margin:34px auto 0; padding:0; max-width:620px; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; position:relative}
+.next::before,.next::after{content:''; position:absolute; top:17px; left:16.6%; right:16.6%; height:2px; border-radius:2px}
+.next::before{background:rgba(169,124,255,.18)}
+.next::after{background:linear-gradient(90deg,var(--violet),var(--violet-lift)); transform-origin:left; transform:scaleX(0); transition:transform 1.4s var(--out) .3s}
+.next.in::after,html:not(.js) .next::after,.no-scrub .next::after{transform:none}
+.next li{position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; font-size:13.5px; font-weight:600; color:var(--muted); line-height:1.35}
+.next li b{
+  width:36px; height:36px; border-radius:50%; display:grid; place-items:center; font-family:var(--d); font-size:14px; color:#fff;
+  background:var(--ink-3); box-shadow:0 0 0 1px var(--line-2); transition:background .4s ease, box-shadow .4s ease;
+}
+.next.in li b{background:linear-gradient(180deg,var(--violet-lift),var(--violet)); box-shadow:0 0 0 4px rgba(169,92,255,.16), 0 8px 20px -6px rgba(125,24,252,.9)}
+.next.in li:nth-child(2) b{transition-delay:.75s} .next.in li:nth-child(3) b{transition-delay:1.4s}
+
+/* ---------- bigger targets where controls were small ---------- */
+.obtn{width:44px; height:44px}
 
 /* ---------- reveal (JS-gated so the page is complete without it) ---------- */
 .js .rv{opacity:0; transform:translateY(28px); filter:blur(8px)}
@@ -1397,21 +1510,31 @@ details .ans{overflow:hidden}
     <div class="head mid rv">
       <span class="eyebrow">Who it's for</span>
       <h2>Built for the businesses<br>agencies <span class="it">won't call back</span></h2>
-      <p style="margin-inline:auto">If you run a place people walk into, you need a feed. You don't need a marketing department to get one.</p>
+      <p style="margin-inline:auto">If you run a place people walk into, you need a feed. You don't need a marketing department to get one. Pick your business to see what a week could look like.</p>
     </div>
-    <div class="chips rv">
-      <span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-cup"/></svg>Cafés &amp; restaurants</span>
-      <span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-scissors"/></svg>Salons &amp; spas</span>
-      <span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-dumbbell"/></svg>Gyms &amp; studios</span>
-      <span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-bag"/></svg>Boutiques &amp; retail</span>
-      <span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-tooth"/></svg>Clinics &amp; dentists</span>
-      <span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-home"/></svg>Real estate</span>
-      <span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-cap"/></svg>Coaching centres</span>
-      <span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-car"/></svg>Auto &amp; services</span>
-      <span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-cake"/></svg>Home bakers</span>
-      <span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-camera"/></svg>Photographers</span>
-      <span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-bed"/></svg>Hotels &amp; stays</span>
-      <span class="chip"><svg class="ic" aria-hidden="true"><use href="#i-leaf"/></svg>Yoga &amp; wellness</span>
+    <div class="chips rv" role="group" aria-label="Pick your business to see a sample week">
+      <button class="chip" type="button" data-k="cafe" aria-pressed="true" aria-controls="peek"><svg class="ic" aria-hidden="true"><use href="#i-cup"/></svg>Cafés &amp; restaurants</button>
+      <button class="chip" type="button" data-k="salon" aria-pressed="false" aria-controls="peek"><svg class="ic" aria-hidden="true"><use href="#i-scissors"/></svg>Salons &amp; spas</button>
+      <button class="chip" type="button" data-k="gym" aria-pressed="false" aria-controls="peek"><svg class="ic" aria-hidden="true"><use href="#i-dumbbell"/></svg>Gyms &amp; studios</button>
+      <button class="chip" type="button" data-k="boutique" aria-pressed="false" aria-controls="peek"><svg class="ic" aria-hidden="true"><use href="#i-bag"/></svg>Boutiques &amp; retail</button>
+      <button class="chip" type="button" data-k="clinic" aria-pressed="false" aria-controls="peek"><svg class="ic" aria-hidden="true"><use href="#i-tooth"/></svg>Clinics &amp; dentists</button>
+      <button class="chip" type="button" data-k="realestate" aria-pressed="false" aria-controls="peek"><svg class="ic" aria-hidden="true"><use href="#i-home"/></svg>Real estate</button>
+      <button class="chip" type="button" data-k="coaching" aria-pressed="false" aria-controls="peek"><svg class="ic" aria-hidden="true"><use href="#i-cap"/></svg>Coaching centres</button>
+      <button class="chip" type="button" data-k="auto" aria-pressed="false" aria-controls="peek"><svg class="ic" aria-hidden="true"><use href="#i-car"/></svg>Auto &amp; services</button>
+      <button class="chip" type="button" data-k="baker" aria-pressed="false" aria-controls="peek"><svg class="ic" aria-hidden="true"><use href="#i-cake"/></svg>Home bakers</button>
+      <button class="chip" type="button" data-k="photo" aria-pressed="false" aria-controls="peek"><svg class="ic" aria-hidden="true"><use href="#i-camera"/></svg>Photographers</button>
+      <button class="chip" type="button" data-k="hotel" aria-pressed="false" aria-controls="peek"><svg class="ic" aria-hidden="true"><use href="#i-bed"/></svg>Hotels &amp; stays</button>
+      <button class="chip" type="button" data-k="yoga" aria-pressed="false" aria-controls="peek"><svg class="ic" aria-hidden="true"><use href="#i-leaf"/></svg>Yoga &amp; wellness</button>
+    </div>
+    <div class="peek rv" id="peek" aria-live="polite">
+      <div class="peek-in">
+        <div class="peek-h"><p>A sample week for <b id="peekName">cafés &amp; restaurants</b></p><small>Ideas only. Yours are planned on the call.</small></div>
+        <div class="peek-days" id="peekDays">
+          <div class="pday"><div class="pday-top"><span class="pday-d">Mon</span><span class="pday-k">Reel</span></div><p class="pday-t">Morning rush: 15 seconds behind the coffee bar</p></div>
+          <div class="pday"><div class="pday-top"><span class="pday-d">Wed</span><span class="pday-k">Carousel</span></div><p class="pday-t">This week's new menu, dish by dish</p></div>
+          <div class="pday"><div class="pday-top"><span class="pday-d">Fri</span><span class="pday-k">Story</span></div><p class="pday-t">Rainy-day chai offer, with a poll: masala or ginger?</p></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1466,6 +1589,21 @@ details .ans{overflow:hidden}
           <div class="bar-val" data-to="5">$5</div>
         </div>
         <div class="bar-track"><div class="bar-fill f-us" data-w="1"></div></div>
+      </div>
+    </div>
+
+    <div class="calc rv" id="calc">
+      <div class="calc-in">
+        <label class="calc-q" for="reels">How many reels do you need a month?</label>
+        <div class="calc-row">
+          <input type="range" id="reels" min="1" max="30" value="12" aria-describedby="calcNote">
+          <output class="calc-n" id="reelsOut" for="reels">12</output>
+        </div>
+        <div class="calc-res">
+          <div class="calc-col"><span>A freelancer at $35 a reel</span><b id="calcFree">$420</b></div>
+          <div class="calc-col us"><span>Our Video &amp; Editing plan</span><b><small>from</small>$15</b></div>
+        </div>
+        <p class="calc-note" id="calcNote">That's <b id="calcSave">$405</b> a month left in your pocket at our starting price. Higher volumes can move you up a plan, and we quote the exact number on the call.</p>
       </div>
     </div>
 
@@ -1652,19 +1790,22 @@ details .ans{overflow:hidden}
         <div class="phone-screen">
           <div class="phone-notch"></div>
           <div class="phone-bar">Your feed · this month</div>
+          <div class="stories">
+            <span class="story"><span><svg class="ic" aria-hidden="true"><use href="#i-spark"/></svg></span></span><span class="story"><span><svg class="ic" aria-hidden="true"><use href="#i-bowl"/></svg></span></span><span class="story"><span><svg class="ic" aria-hidden="true"><use href="#i-cake"/></svg></span></span><span class="story seen"><span><svg class="ic" aria-hidden="true"><use href="#i-scissors"/></svg></span></span><span class="story seen"><span><svg class="ic" aria-hidden="true"><use href="#i-dumbbell"/></svg></span></span>
+          </div>
           <div class="feed-track">
-            <div class="post"><div class="post-img g1"><svg class="ic" aria-hidden="true"><use href="#i-bowl"/></svg><span class="post-kind">Reel</span></div><div class="post-meta"><b>New menu drop</b><span>Mon</span></div></div>
-            <div class="post"><div class="post-img g2"><svg class="ic" aria-hidden="true"><use href="#i-scissors"/></svg><span class="post-kind">Before/after</span></div><div class="post-meta"><b>Monsoon hair care</b><span>Tue</span></div></div>
-            <div class="post"><div class="post-img g3"><svg class="ic" aria-hidden="true"><use href="#i-confetti"/></svg><span class="post-kind">Carousel</span></div><div class="post-meta"><b>Festival offer</b><span>Thu</span></div></div>
-            <div class="post"><div class="post-img g4"><svg class="ic" aria-hidden="true"><use href="#i-dumbbell"/></svg><span class="post-kind">Story</span></div><div class="post-meta"><b>6am batch open</b><span>Fri</span></div></div>
-            <div class="post"><div class="post-img g5"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg><span class="post-kind">Reel</span></div><div class="post-meta"><b>Store tour</b><span>Sat</span></div></div>
-            <div class="post"><div class="post-img g6"><svg class="ic" aria-hidden="true"><use href="#i-cake"/></svg><span class="post-kind">Post</span></div><div class="post-meta"><b>Custom orders</b><span>Sun</span></div></div>
-            <div class="post"><div class="post-img g1"><svg class="ic" aria-hidden="true"><use href="#i-bowl"/></svg><span class="post-kind">Reel</span></div><div class="post-meta"><b>New menu drop</b><span>Mon</span></div></div>
-            <div class="post"><div class="post-img g2"><svg class="ic" aria-hidden="true"><use href="#i-scissors"/></svg><span class="post-kind">Before/after</span></div><div class="post-meta"><b>Monsoon hair care</b><span>Tue</span></div></div>
-            <div class="post"><div class="post-img g3"><svg class="ic" aria-hidden="true"><use href="#i-confetti"/></svg><span class="post-kind">Carousel</span></div><div class="post-meta"><b>Festival offer</b><span>Thu</span></div></div>
-            <div class="post"><div class="post-img g4"><svg class="ic" aria-hidden="true"><use href="#i-dumbbell"/></svg><span class="post-kind">Story</span></div><div class="post-meta"><b>6am batch open</b><span>Fri</span></div></div>
-            <div class="post"><div class="post-img g5"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg><span class="post-kind">Reel</span></div><div class="post-meta"><b>Store tour</b><span>Sat</span></div></div>
-            <div class="post"><div class="post-img g6"><svg class="ic" aria-hidden="true"><use href="#i-cake"/></svg><span class="post-kind">Post</span></div><div class="post-meta"><b>Custom orders</b><span>Sun</span></div></div>
+            <div class="post"><div class="post-img g1"><svg class="ic" aria-hidden="true"><use href="#i-bowl"/></svg><span class="post-kind">Reel</span></div><div class="post-meta"><b>New menu drop</b><span class="post-like" data-n="128"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>128</em></span></div></div>
+            <div class="post"><div class="post-img g2"><svg class="ic" aria-hidden="true"><use href="#i-scissors"/></svg><span class="post-kind">Before/after</span></div><div class="post-meta"><b>Monsoon hair care</b><span class="post-like" data-n="94"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>94</em></span></div></div>
+            <div class="post"><div class="post-img g3"><svg class="ic" aria-hidden="true"><use href="#i-confetti"/></svg><span class="post-kind">Carousel</span></div><div class="post-meta"><b>Festival offer</b><span class="post-like" data-n="212"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>212</em></span></div></div>
+            <div class="post"><div class="post-img g4"><svg class="ic" aria-hidden="true"><use href="#i-dumbbell"/></svg><span class="post-kind">Story</span></div><div class="post-meta"><b>6am batch open</b><span class="post-like" data-n="67"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>67</em></span></div></div>
+            <div class="post"><div class="post-img g5"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg><span class="post-kind">Reel</span></div><div class="post-meta"><b>Store tour</b><span class="post-like" data-n="153"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>153</em></span></div></div>
+            <div class="post"><div class="post-img g6"><svg class="ic" aria-hidden="true"><use href="#i-cake"/></svg><span class="post-kind">Post</span></div><div class="post-meta"><b>Custom orders</b><span class="post-like" data-n="88"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>88</em></span></div></div>
+            <div class="post"><div class="post-img g1"><svg class="ic" aria-hidden="true"><use href="#i-bowl"/></svg><span class="post-kind">Reel</span></div><div class="post-meta"><b>New menu drop</b><span class="post-like" data-n="128"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>128</em></span></div></div>
+            <div class="post"><div class="post-img g2"><svg class="ic" aria-hidden="true"><use href="#i-scissors"/></svg><span class="post-kind">Before/after</span></div><div class="post-meta"><b>Monsoon hair care</b><span class="post-like" data-n="94"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>94</em></span></div></div>
+            <div class="post"><div class="post-img g3"><svg class="ic" aria-hidden="true"><use href="#i-confetti"/></svg><span class="post-kind">Carousel</span></div><div class="post-meta"><b>Festival offer</b><span class="post-like" data-n="212"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>212</em></span></div></div>
+            <div class="post"><div class="post-img g4"><svg class="ic" aria-hidden="true"><use href="#i-dumbbell"/></svg><span class="post-kind">Story</span></div><div class="post-meta"><b>6am batch open</b><span class="post-like" data-n="67"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>67</em></span></div></div>
+            <div class="post"><div class="post-img g5"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg><span class="post-kind">Reel</span></div><div class="post-meta"><b>Store tour</b><span class="post-like" data-n="153"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>153</em></span></div></div>
+            <div class="post"><div class="post-img g6"><svg class="ic" aria-hidden="true"><use href="#i-cake"/></svg><span class="post-kind">Post</span></div><div class="post-meta"><b>Custom orders</b><span class="post-like" data-n="88"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>88</em></span></div></div>
           </div>
           <div class="phone-fade"></div>
         </div>
@@ -1982,17 +2123,22 @@ details .ans{overflow:hidden}
     <div class="hero-cta">
       <a class="btn btn-primary btn-xl" href="#pricing">See the packages<span class="bi"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
     </div>
+    <ol class="next rv" aria-label="What happens after you get in touch">
+      <li><b>1</b>A 15-minute call</li>
+      <li><b>2</b>Brand kit in week one</li>
+      <li><b>3</b>First drafts in 48 hours</li>
+    </ol>
 
     <div class="contact">
       <div class="ct">
         <svg class="ic" aria-hidden="true"><use href="#i-mail"/></svg>
         <div style="min-width:0"><div class="ct-k">Email</div><div class="ct-v" id="mail">hello@nxtlvlsocial.in</div></div>
-        <button class="copy" type="button" data-copy="mail">Copy</button>
+        <button class="copy" type="button" data-copy="mail"><span class="cico" aria-hidden="true"><svg class="ic c-cp"><use href="#i-list"/></svg><svg class="ic c-ok"><use href="#i-check"/></svg></span><span class="clab">Copy</span></button>
       </div>
       <div class="ct">
         <svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg>
         <div style="min-width:0"><div class="ct-k">WhatsApp</div><div class="ct-v" id="phone">+91 00000 00000</div></div>
-        <button class="copy" type="button" data-copy="phone">Copy</button>
+        <button class="copy" type="button" data-copy="phone"><span class="cico" aria-hidden="true"><svg class="ic c-cp"><use href="#i-list"/></svg><svg class="ic c-ok"><use href="#i-check"/></svg></span><span class="clab">Copy</span></button>
       </div>
     </div>
 
@@ -2363,19 +2509,26 @@ details .ans{overflow:hidden}
     btn.addEventListener('click', function(){
       var el = document.getElementById(btn.dataset.copy), txt = el.textContent.trim();
       function done(){
-        var old = btn.textContent; btn.textContent = 'Copied'; btn.classList.add('ok');
-        setTimeout(function(){ btn.textContent = old; btn.classList.remove('ok'); }, 1600);
+        /* confirm in place: the icon swaps to a check and the label says so */
+        var lab = btn.querySelector('.clab') || btn;
+        lab.textContent = 'Copied'; btn.classList.add('ok');
+        clearTimeout(btn._t);
+        btn._t = setTimeout(function(){ lab.textContent = 'Copy'; btn.classList.remove('ok'); }, 1600);
       }
       if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(txt).then(done, function(){ select(el); });
-      } else { select(el); }
+        navigator.clipboard.writeText(txt).then(done, function(){ if(select(el)) done(); });
+      } else if(select(el)){ done(); }
     });
   });
+  /* fallback when the clipboard API is unavailable: select the text and try the legacy copy */
   function select(el){
     try{
       var r = document.createRange(); r.selectNodeContents(el);
       var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-    }catch(e){}
+      var ok = document.execCommand && document.execCommand('copy');
+      if(ok) s.removeAllRanges();
+      return ok;
+    }catch(e){ return false; }
   }
 
 
@@ -2917,6 +3070,100 @@ details .ans{overflow:hidden}
       wo.observe(wm);
     }
   }
+
+  /* ---- odometer: each digit rolls to its new value ---- */
+  function odo(el, text){
+    if(reduce){ el.textContent = text; return; }
+    if(el._len !== text.length){
+      el.textContent = ''; el._len = text.length;
+      text.split('').forEach(function(ch){
+        if(/\d/.test(ch)){
+          var d = document.createElement('span'); d.className = 'odo-d';
+          var col = document.createElement('span');
+          for(var k = 0; k < 10; k++){ var it = document.createElement('i'); it.textContent = k; col.appendChild(it); }
+          d.appendChild(col); el.appendChild(d);
+        } else {
+          var sp = document.createElement('span'); sp.className = 'odo-s'; sp.textContent = ch; el.appendChild(sp);
+        }
+      });
+    }
+    el.setAttribute('aria-label', text);
+    var cols = el.querySelectorAll('.odo-d>span'), di = 0;
+    text.split('').forEach(function(ch){
+      if(/\d/.test(ch)){ cols[di++].style.transform = 'translateY(-' + ch + 'em)'; }
+    });
+  }
+
+  /* ---- savings calculator ---- */
+  var reels = document.getElementById('reels');
+  if(reels){
+    var rOut = document.getElementById('reelsOut'), rFree = document.getElementById('calcFree'), rSave = document.getElementById('calcSave');
+    var money = function(v){ return '$' + v.toLocaleString('en-US'); };
+    var calc = function(){
+      var n = parseInt(reels.value, 10);
+      reels.style.setProperty('--p', ((n - reels.min) / (reels.max - reels.min) * 100).toFixed(1) + '%');
+      rOut.textContent = n;
+      odo(rFree, money(n * 35));
+      odo(rSave, money(n * 35 - 15));
+    };
+    reels.addEventListener('input', calc);
+    calc();
+  }
+
+  /* ---- who it's for: pick a business, see a sample week ---- */
+  var WEEKS = {
+    cafe:['Reel','Morning rush: 15 seconds behind the coffee bar','Carousel',"This week's new menu, dish by dish",'Story','Rainy-day chai offer, with a poll: masala or ginger?'],
+    salon:['Before / after','A balayage transformation, start to finish','Reel','Bridal trial in 20 seconds','Story','Open slots this Saturday'],
+    gym:['Reel','The 6am batch, with real members','Carousel','5 moves for desk-job backs','Story','Trial-week offer countdown'],
+    boutique:['Reel','New drop, tried on','Carousel','3 ways to style one kurta','Story','Last sizes left'],
+    clinic:['Carousel','What happens at your first visit','Reel','Meet the doctor in 20 seconds','Story','Timings and a booking link'],
+    realestate:['Reel','A 2BHK walkthrough in 30 seconds','Carousel','Price, size and location at a glance','Story','Site-visit slots this weekend'],
+    coaching:['Carousel','Topper tips for board exams','Reel','Inside a doubt-clearing class','Story','New batch starts Monday'],
+    auto:['Before / after','Ceramic coat, before and after','Carousel','The monsoon car checklist','Story','Free check-up this week'],
+    baker:['Reel','A cake, from frosting to finish','Carousel','Custom-order price guide','Story','Weekend slots left'],
+    photo:['Carousel','Wedding highlights from Saturday','Reel','Behind the shoot','Story',"Next month's open dates"],
+    hotel:['Reel','Room tour at golden hour','Carousel','Things to do nearby','Story','This weekend\'s rate'],
+    yoga:['Reel','A 30-second morning flow','Carousel','Breathing basics for beginners','Story','New sunrise batch']
+  };
+  var chipBtns = Array.prototype.slice.call(document.querySelectorAll('.chips .chip[data-k]'));
+  var peekName = document.getElementById('peekName'), peekDays = document.getElementById('peekDays');
+  if(chipBtns.length && peekDays){
+    var pdays = Array.prototype.slice.call(peekDays.querySelectorAll('.pday'));
+    chipBtns.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if(btn.getAttribute('aria-pressed') === 'true') return;
+        chipBtns.forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+        var w = WEEKS[btn.dataset.k];
+        peekName.textContent = btn.textContent.trim().replace(/^./, function(c){ return c.toLowerCase(); });
+        pdays.forEach(function(d, i){
+          d.querySelector('.pday-k').textContent = w[i * 2];
+          d.querySelector('.pday-t').textContent = w[i * 2 + 1];
+          d.classList.remove('swap'); void d.offsetWidth; d.classList.add('swap');
+        });
+      });
+    });
+  }
+
+  /* ---- phone feed: tap a post to like it ---- */
+  document.querySelectorAll('.post').forEach(function(post){
+    post.addEventListener('click', function(){
+      var like = post.querySelector('.post-like'), num = like.querySelector('em'), base = parseInt(like.dataset.n, 10);
+      var on = post.classList.toggle('liked');
+      num.textContent = on ? base + 1 : base;
+      if(!on || reduce || !post.animate) return;
+      var img = post.querySelector('.post-img');
+      var h = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      h.setAttribute('viewBox', '0 0 24 24'); h.setAttribute('class', 'heart');
+      h.innerHTML = '<path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/>';
+      img.appendChild(h);
+      h.animate([
+        {transform:'scale(.2)', opacity:0},
+        {transform:'scale(1.15)', opacity:1, offset:.35},
+        {transform:'scale(1)', opacity:1, offset:.6},
+        {transform:'scale(1.05) translateY(-14px)', opacity:0}
+      ], {duration:900, easing:'cubic-bezier(.22,1,.36,1)'}).onfinish = function(){ h.remove(); };
+    });
+  });
 
   /* ---- smooth in-page nav ---- */
   document.querySelectorAll('a[href^="#"]').forEach(function(a){
