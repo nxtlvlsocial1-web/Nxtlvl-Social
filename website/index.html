@@ -521,30 +521,7 @@ h1 .it{
 /* ---------- the feed mockup ---------- */
 .feed-sec{background:var(--ink-2); border-block:1px solid var(--line); overflow:hidden}
 .feed-wrap{display:grid; grid-template-columns:1fr; gap:46px; align-items:start; margin-top:34px}
-@media(min-width:900px){.feed-wrap{grid-template-columns:1fr 310px; gap:60px}}
-.phone{
-  position:relative; width:270px; height:540px; margin-inline:auto;
-  border-radius:40px; padding:10px; flex:none;
-  background:linear-gradient(170deg,#2A2140,#0B0816);
-  box-shadow:0 0 0 1px rgba(169,124,255,.28), 0 50px 90px -40px rgba(125,24,252,.75), 0 0 70px -20px rgba(125,24,252,.35);
-}
-.phone-screen{
-  position:relative; height:100%; border-radius:31px; overflow:hidden;
-  background:var(--ink); border:1px solid rgba(255,255,255,.07);
-}
-.phone-notch{position:absolute; top:9px; left:50%; transform:translateX(-50%); z-index:4; width:78px; height:20px; border-radius:99px; background:#000}
-.phone-bar{
-  position:absolute; top:0; left:0; right:0; z-index:3; height:46px;
-  display:flex; align-items:flex-end; padding:0 13px 7px;
-  background:linear-gradient(180deg,var(--ink) 0 56%,rgba(5,3,12,.8) 80%,rgba(5,3,12,0));
-  font-size:11px; font-weight:700; color:var(--violet-pale); letter-spacing:.02em;
-}
-.phone-fade{
-  position:absolute; left:0; right:0; bottom:0; height:70px; z-index:3; pointer-events:none;
-  background:linear-gradient(0deg,var(--ink),transparent);
-}
-.feed-track{position:absolute; top:46px; left:0; right:0; display:flex; flex-direction:column; gap:9px; padding:0 10px}
-@media all{ .feed-track{animation:feedscroll 26s linear infinite} }
+@media(min-width:900px){.feed-wrap{grid-template-columns:1fr 330px; gap:56px; align-items:center}}
 @keyframes feedscroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
 .post{border-radius:14px; border:1px solid var(--line); overflow:hidden; flex:none; background:var(--ink-3)}
 .post-img{height:104px; display:flex; align-items:center; justify-content:center; position:relative}
@@ -563,12 +540,6 @@ h1 .it{
 .g4{background:linear-gradient(140deg,#15803D,#0D9488)}
 .g5{background:linear-gradient(140deg,#7C3AED,#2563EB)}
 .g6{background:linear-gradient(140deg,#BE185D,#F59E0B)}
-.feed-points{display:flex; flex-direction:column; gap:22px; margin-top:34px}
-.fp{display:flex; gap:14px; align-items:flex-start}
-.fp-ic{flex:none; width:40px; height:40px; border-radius:12px; display:grid; place-items:center; background:rgba(125,24,252,.16); border:1px solid var(--line-2)}
-.fp-ic .ic{font-size:19px; color:var(--violet-pale)}
-.fp h3{font-size:16.5px; font-weight:700; font-variation-settings:'wdth' 100,'wght' 700}
-.fp p{margin-top:5px; font-size:14.5px; color:var(--muted)}
 
 /* ---------- pricing ---------- */
 .plans{display:grid; grid-template-columns:1fr; gap:18px; margin-top:52px; align-items:stretch}
@@ -927,31 +898,6 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
 
 /* ---------- phone leans toward the pointer ---------- */
 .phone-stage{perspective:1200px; position:relative}
-/* notifications pop beside the phone: the automation, working while you don't */
-.toast{
-  position:absolute; z-index:5; display:flex; align-items:center; gap:10px; width:max-content; max-width:230px;
-  padding:9px 14px 9px 9px; border-radius:var(--r-sm); text-align:left;
-  background:rgba(17,12,34,.94); border:1px solid var(--line-2);
-  box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 18px 40px -18px rgba(0,0,0,.95), 0 0 30px -16px rgba(125,24,252,.9);
-  opacity:0;
-}
-.toast>.ic{box-sizing:content-box; font-size:15px; padding:7px; border-radius:9px; color:#fff; background:linear-gradient(160deg,var(--violet-lift),var(--violet))}
-.toast.t-win>.ic{background:linear-gradient(160deg,#2FBE7C,#116B45)}
-.toast b{display:block; font-size:12px; font-weight:650; letter-spacing:-.01em; line-height:1.3}
-.toast span{display:block; font-size:10.5px; color:var(--faint); line-height:1.3}
-.t1{top:64px; left:calc(50% - 175px)}
-.t2{top:236px; left:calc(50% + 40px)}
-.t3{bottom:70px; left:calc(50% - 165px)}
-@media all{
-  .toast{animation:toast 12s var(--out) infinite}
-  .t2{animation-delay:4s} .t3{animation-delay:8s}
-}
-@media(max-width:600px){ .toast{max-width:200px} .t1,.t3{left:0} .t2{left:auto; right:0} }
-@keyframes toast{
-  0%{opacity:0; transform:translateY(14px) scale(.92)}
-  4%,27%{opacity:1; transform:none}
-  33%,100%{opacity:0; transform:translateY(-10px) scale(.97)}
-}
 .phone{transition:transform .55s cubic-bezier(.2,.8,.3,1)}
 
 /* ---------- corner brackets on the chart ---------- */
@@ -1104,23 +1050,6 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
 /* named curves (from the ui-animation skill), alongside the tokens above */
 :root{--enter:cubic-bezier(.22,1,.36,1); --move:cubic-bezier(.25,1,.5,1); --expo:cubic-bezier(.19,1,.22,1)}
 .btn,.obtn,.chip,.spine,.copy,.dock-i,.burger,summary{touch-action:manipulation}
-
-/* ---------- cursor follower: a soft ring that trails the pointer and reacts to what is under it ---------- */
-.cursor{
-  position:fixed; left:0; top:0; z-index:250; pointer-events:none; width:34px; height:34px; margin:-17px 0 0 -17px;
-  border-radius:50%; border:1.5px solid rgba(216,187,255,.7);
-  display:grid; place-items:center; opacity:0;
-  transition:opacity .25s ease, width .3s var(--enter), height .3s var(--enter), margin .3s var(--enter), background .3s ease, border-color .3s ease;
-}
-.cursor-dot{position:fixed; left:0; top:0; z-index:251; pointer-events:none; width:6px; height:6px; margin:-3px 0 0 -3px; border-radius:50%; background:var(--violet-pale); opacity:0; transition:opacity .25s ease}
-.cursor.on,.cursor-dot.on{opacity:1}
-.cursor.link{width:54px; height:54px; margin:-27px 0 0 -27px; background:rgba(125,24,252,.16); border-color:var(--violet-lift)}
-.cursor.drag{width:76px; height:76px; margin:-38px 0 0 -38px; background:rgba(125,24,252,.24); border-color:var(--violet-lift)}
-.cursor.press{scale:.82}
-.cursor span{font-size:11px; font-weight:700; letter-spacing:.02em; color:#fff; opacity:0; transition:opacity .2s ease}
-.cursor.drag span{opacity:1}
-.cursor.drag+.cursor-dot,.cursor.link+.cursor-dot{opacity:0}
-@media(hover:none),(pointer:coarse){ .cursor,.cursor-dot{display:none} }
 
 /* ---------- hero: the grid lights up around the pointer ---------- */
 .gridlit{
@@ -1316,14 +1245,6 @@ details .ans{overflow:hidden}
 @keyframes pswap{from{opacity:0; transform:translateY(8px); filter:blur(4px)}to{opacity:1; transform:none; filter:blur(0)}}
 
 /* ---------- phone: stories row and tap-to-like ---------- */
-.stories{position:absolute; top:46px; left:0; right:0; z-index:3; display:flex; gap:8px; padding:4px 10px 8px; background:var(--ink)}
-.story{flex:none; width:40px; height:40px; border-radius:50%; padding:2px; position:relative; display:grid; place-items:center}
-.story::before{content:''; position:absolute; inset:0; border-radius:50%; background:conic-gradient(var(--violet),var(--violet-lift),var(--violet-pale),var(--violet))}
-@media all{ .story::before{animation:spin 6s linear infinite} .story:nth-child(2n)::before{animation-duration:8s; animation-direction:reverse} }
-.story span{position:relative; width:100%; height:100%; border-radius:50%; display:grid; place-items:center; background:var(--ink-3); box-shadow:0 0 0 2px var(--ink); color:var(--violet-pale)}
-.story .ic{font-size:15px}
-.story.seen::before{background:rgba(169,124,255,.25)}
-.feed-track{top:100px !important}
 .post{position:relative; cursor:pointer}
 .post-like{display:inline-flex; align-items:center; gap:3px; font-size:9.5px; color:var(--faint); font-variant-numeric:tabular-nums}
 .post-like svg{width:11px; height:11px; fill:none; stroke:currentColor; stroke-width:2; transition:fill .2s ease, stroke .2s ease, scale .3s cubic-bezier(.175,.885,.32,1.275)}
@@ -1356,6 +1277,314 @@ details .ans{overflow:hidden}
 
 /* ---------- bigger targets where controls were small ---------- */
 .obtn{width:44px; height:44px}
+
+/* ================= pass 4: premium icons, a working phone, folder artefacts ================= */
+
+/* ---------- icon tiles: machined glass with a lit top edge; icons stroke in a white-to-lilac gradient ---------- */
+.svc-ic,.fp-ic,.flow-n span,.q-av{
+  border:1px solid transparent !important;
+  background:
+    radial-gradient(120% 120% at 28% 0%,rgba(216,187,255,.26),transparent 55%) padding-box,
+    linear-gradient(160deg,#2A2140,#110C22) padding-box,
+    linear-gradient(160deg,rgba(216,187,255,.75),rgba(125,24,252,.28) 45%,rgba(169,124,255,.06)) border-box !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16), inset 0 -10px 18px rgba(5,3,12,.55), 0 12px 26px -14px rgba(125,24,252,.95) !important;
+}
+.svc-ic .ic,.fp-ic .ic,.flow-n span .ic,.q-av .ic,.in-i .ic,.why-card>.ic,.jc>.ic,.ct>.ic,.plan-top .ic,.dock-i .ic,.chip .ic{stroke:url(#ig)}
+/* icons draw themselves in when their card arrives, and again on hover */
+.js [data-draw] .ic{stroke-dasharray:1 1; stroke-dashoffset:1}
+.js [data-draw].in .ic{stroke-dashoffset:0; transition:stroke-dashoffset 1.3s var(--out) .25s}
+@media(hover:hover) and (pointer:fine){
+  [data-draw]:hover .ic{animation:redraw 1s var(--out)}
+}
+@keyframes redraw{0%{stroke-dashoffset:1}100%{stroke-dashoffset:0}}
+
+/* ---------- feed points become tabs that drive the phone ---------- */
+.feed-points{display:flex; flex-direction:column; gap:8px; margin-top:30px}
+.fp{
+  position:relative; display:grid; grid-template-columns:46px minmax(0,1fr); gap:16px; align-items:start; width:100%;
+  padding:18px 18px 18px 20px; border-radius:var(--r-md); border:1px solid transparent; background:transparent;
+  color:inherit; font:inherit; text-align:left; cursor:pointer; overflow:hidden; touch-action:manipulation;
+  transition:background .35s ease, border-color .35s ease;
+}
+.fp:hover{background:rgba(255,255,255,.025)}
+.fp.on{background:linear-gradient(100deg,rgba(125,24,252,.16),rgba(125,24,252,.03) 70%); border-color:var(--line-2)}
+.fp-ic{width:46px; height:46px; border-radius:var(--r-sm); display:grid; place-items:center; color:var(--violet-pale); transition:transform .4s var(--enter)}
+.fp-ic .ic{font-size:21px}
+.fp.on .fp-ic{transform:scale(1.06)}
+.fp-tx{display:flex; flex-direction:column; gap:5px; min-width:0}
+.fp-h{font-family:var(--d); font-size:17.5px; font-weight:700; font-variation-settings:'wdth' 102,'wght' 700; letter-spacing:-.015em; color:var(--muted); transition:color .3s ease}
+.fp-p{font-size:14.5px; color:var(--faint); line-height:1.6; transition:color .3s ease}
+.fp.on .fp-h{color:var(--fg)} .fp.on .fp-p{color:var(--muted)}
+.fp-bar{position:absolute; left:0; top:16px; bottom:16px; width:2px; border-radius:2px; background:rgba(169,124,255,.12); opacity:0; transition:opacity .3s ease}
+.fp-bar i{position:absolute; inset:0; border-radius:2px; background:linear-gradient(180deg,var(--violet-pale),var(--violet-lift)); transform:scaleY(0); transform-origin:top}
+.fp.on .fp-bar{opacity:1}
+.fp.on.run .fp-bar i{animation:fpfill var(--dur,6s) linear forwards}
+.fp.on:not(.run) .fp-bar i{transform:none}
+.feed-wrap:hover .fp.run .fp-bar i{animation-play-state:paused}
+@keyframes fpfill{to{transform:scaleY(1)}}
+@keyframes fpfillx{to{transform:scaleX(1)}}
+.fp-mdesc{display:none}
+.motion-note[hidden]{display:none}
+/* phones: the tabs become a row of pills right above the phone, so a tap shows its screen in view */
+@media(max-width:899px){
+  .feed-points{position:relative; flex-direction:row; gap:8px; margin:26px -20px 0; padding:2px 20px 6px; overflow-x:auto; scrollbar-width:none; scroll-snap-type:x proximity}
+  .feed-points::-webkit-scrollbar{display:none}
+  .fp{flex:none; width:auto; grid-template-columns:auto auto; align-items:center; gap:9px; padding:7px 16px 7px 7px; border-radius:999px; scroll-snap-align:start; border-color:var(--line)}
+  .fp-ic{width:32px; height:32px; border-radius:50%}
+  .fp-ic .ic{font-size:16px}
+  .fp-h{font-size:14px; white-space:nowrap}
+  .fp-p{display:none}
+  .fp-bar{left:18px; right:18px; top:auto; bottom:3px; width:auto; height:2px}
+  .fp-bar i{transform:scaleX(0); transform-origin:left}
+  .fp.on.run .fp-bar i{animation-name:fpfillx}
+  .fp-mdesc{display:block; margin-top:10px; min-height:3.2em; font-size:14.5px; color:var(--muted); line-height:1.55}
+  .fp-mdesc.swap{animation:capin .45s var(--enter) both}
+  .feed-wrap{gap:22px; margin-top:0}
+}
+
+/* ---------- the phone: a real device silhouette ---------- */
+.phone{
+  position:relative; width:282px; height:580px; margin-inline:auto; flex:none; border-radius:48px; padding:10px;
+  background:linear-gradient(145deg,#2A2140 0%,#17102C 22%,#2A2140 52%,#0B0816 80%,#2A2140 100%);
+  box-shadow:inset 0 0 0 1.5px rgba(216,187,255,.24), inset 0 0 0 5px rgba(5,3,12,.92), inset 0 0 0 6px rgba(216,187,255,.08),
+    0 60px 100px -44px rgba(125,24,252,.8), 0 0 90px -26px rgba(125,24,252,.45), 0 34px 60px -30px rgba(0,0,0,.95);
+}
+.ph-btn{position:absolute; width:3px; border-radius:2px; background:linear-gradient(180deg,#2A2140,#17102C); box-shadow:inset 0 0 0 1px rgba(216,187,255,.2)}
+.ph-btn.b1{left:-2px; top:112px; height:26px} .ph-btn.b2{left:-2px; top:152px; height:48px} .ph-btn.b3{right:-2px; top:168px; height:72px}
+.phone-screen{
+  position:relative; height:100%; border-radius:38px; overflow:hidden;
+  background:radial-gradient(130% 60% at 50% 0%,rgba(125,24,252,.24),transparent 62%),var(--ink);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+}
+.ph-island{position:absolute; top:10px; left:50%; width:88px; height:25px; margin-left:-44px; border-radius:99px; background:#000; z-index:8; box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.ph-island::after{content:''; position:absolute; right:12px; top:8px; width:9px; height:9px; border-radius:50%; background:radial-gradient(circle at 35% 35%,rgba(169,124,255,.55),#0B0816 60%)}
+.ph-status{position:absolute; top:14px; left:26px; right:22px; z-index:7; display:flex; align-items:center; justify-content:space-between; font-size:11.5px; font-weight:650; font-variant-numeric:tabular-nums}
+.ph-sys{display:flex; align-items:center; gap:5px}
+.sig{display:flex; align-items:flex-end; gap:1.5px; height:9px}
+.sig b{width:2.5px; border-radius:1px; background:var(--fg)}
+.sig b:nth-child(1){height:3px} .sig b:nth-child(2){height:5px} .sig b:nth-child(3){height:7px} .sig b:nth-child(4){height:9px}
+.bat{position:relative; width:20px; height:10px; border-radius:3px; box-shadow:inset 0 0 0 1px rgba(245,242,255,.55)}
+.bat::before{content:''; position:absolute; left:2px; top:2px; bottom:2px; width:12px; border-radius:1.5px; background:var(--fg)}
+.bat::after{content:''; position:absolute; right:-3px; top:3px; width:1.5px; height:4px; border-radius:1px; background:rgba(245,242,255,.55)}
+.ph-glare{position:absolute; inset:0; z-index:9; pointer-events:none;
+  background:linear-gradient(118deg,rgba(255,255,255,.08) 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,0) 70%,rgba(255,255,255,.035) 100%)}
+.phone-stage{padding-block:10px}
+
+/* screens cross-fade with a small lift and a blur bridge */
+.scr{
+  position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; gap:12px; padding:52px 16px 18px;
+  opacity:0; transform:scale(.965) translateY(12px); filter:blur(8px); pointer-events:none;
+  transition:opacity .45s ease, transform .65s var(--enter), filter .45s ease;
+}
+.scr.on{opacity:1; transform:none; filter:blur(0); pointer-events:auto}
+.scr-h{display:flex; flex-direction:column; gap:2px}
+.scr-k{font-size:10.5px; font-weight:650; color:var(--violet-lift)}
+.scr-h b{font-family:var(--d); font-size:19px; font-weight:800; font-variation-settings:'wdth' 106,'wght' 800; letter-spacing:-.02em; line-height:1.1}
+
+/* calendar screen */
+.cal-w,.cal-g{display:grid; grid-template-columns:repeat(7,1fr); gap:4px}
+.cal-w i{font-style:normal; font-size:9.5px; font-weight:600; color:var(--faint); text-align:center}
+.cd{position:relative; aspect-ratio:1; border-radius:8px; display:grid; place-items:center; font-size:10px; font-style:normal; color:var(--muted); background:rgba(255,255,255,.035); font-variant-numeric:tabular-nums}
+.cd.off{background:none}
+.cd.has{color:var(--fg); background:rgba(125,24,252,.12)}
+.cd.today{color:#fff; box-shadow:0 0 0 1.5px var(--violet-lift), 0 0 14px -2px rgba(169,92,255,.8)}
+.cd b{position:absolute; bottom:3px; left:50%; width:5px; height:5px; margin-left:-2.5px; border-radius:50%}
+.k-r{background:var(--violet-lift)} .k-c{background:var(--violet-pale)} .k-s{background:var(--fg)}
+.scr-cal.on .cd b{animation:dotpop .5s cubic-bezier(.175,.885,.32,1.275) both; animation-delay:calc(var(--d) * 22ms + .2s)}
+@keyframes dotpop{from{transform:scale(0)}to{transform:scale(1)}}
+.cal-key{display:flex; gap:12px; font-size:10px; color:var(--faint)}
+.cal-key span{display:inline-flex; align-items:center; gap:5px}
+.cal-key b{width:6px; height:6px; border-radius:50%}
+.cal-next{display:flex; flex-direction:column; gap:6px; margin-top:auto}
+.cn{display:flex; align-items:center; gap:8px; padding:9px 11px; border-radius:11px; background:rgba(255,255,255,.045); box-shadow:inset 0 0 0 1px var(--line); font-size:11.5px; font-weight:600}
+.cn b{width:7px; height:7px; border-radius:50%; flex:none}
+.cn em{margin-left:auto; font-style:normal; font-size:10px; color:var(--faint); font-weight:500}
+.scr-cal.on .cn{animation:rise .6s var(--out) both} .scr-cal.on .cn:nth-child(2){animation-delay:.1s}
+
+/* publish screen */
+.pub-post{border-radius:16px; overflow:hidden; background:var(--ink-3); box-shadow:inset 0 0 0 1px var(--line), 0 18px 34px -20px rgba(0,0,0,.9)}
+.pub-art{height:150px; overflow:hidden}
+.pub-art::after{content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 50%,rgba(5,3,12,.45))}
+.pa-sun{position:absolute; top:-24px; right:-18px; width:110px; height:110px; border-radius:50%; background:radial-gradient(circle,rgba(255,255,255,.5),rgba(255,255,255,0) 68%)}
+.pa-cup{position:absolute; left:50%; bottom:26px; width:62px; height:46px; margin-left:-36px; z-index:1; border-radius:5px 5px 24px 24px;
+  background:linear-gradient(180deg,#F5F2FF,#D8BBFF); box-shadow:0 14px 26px -6px rgba(5,3,12,.55), inset 0 -6px 10px rgba(61,7,137,.25)}
+.pa-cup::before{content:''; position:absolute; left:-16px; right:-16px; bottom:-9px; height:9px; border-radius:50%; background:rgba(245,242,255,.85)}
+.pa-cup::after{content:''; position:absolute; right:-15px; top:8px; width:20px; height:20px; border-radius:50%; border:5px solid #D8BBFF; border-left-color:transparent}
+.pa-steam{position:absolute; left:50%; bottom:76px; width:44px; height:44px; margin-left:-27px; z-index:1}
+.pa-steam i{position:absolute; bottom:0; width:5px; height:32px; border-radius:6px; background:linear-gradient(0deg,rgba(255,255,255,0),rgba(255,255,255,.75),rgba(255,255,255,0)); animation:steam 2.6s ease-in-out infinite}
+.pa-steam i:nth-child(1){left:8px} .pa-steam i:nth-child(2){left:19px; animation-delay:.6s} .pa-steam i:nth-child(3){left:30px; animation-delay:1.2s}
+@keyframes steam{0%{transform:translateY(8px) scaleY(.6); opacity:0}40%{opacity:1}100%{transform:translateY(-16px) scaleY(1) skewX(-10deg); opacity:0}}
+.pub-steps{display:flex; flex-direction:column; gap:9px; padding:2px 2px 0}
+.ps{display:flex; align-items:center; gap:10px; font-size:11.5px; font-weight:600; color:var(--faint); opacity:.55; transition:opacity .35s ease, color .35s ease}
+.ps i{position:relative; flex:none; width:17px; height:17px; border-radius:50%; box-shadow:inset 0 0 0 1.5px var(--line-2); transition:background .3s ease, box-shadow .3s ease}
+.ps.cur{opacity:1; color:var(--muted)}
+.ps.cur i{box-shadow:inset 0 0 0 1.5px var(--violet-lift)}
+.ps.cur i::before{content:''; position:absolute; inset:-1px; border-radius:50%; border:2px solid transparent; border-top-color:var(--violet-pale); animation:spin .8s linear infinite}
+.ps.done{opacity:1; color:var(--fg)}
+.ps.done i{background:linear-gradient(180deg,var(--violet-lift),var(--violet)); box-shadow:0 0 12px -2px rgba(169,92,255,.9)}
+.ps.done i::after{content:''; position:absolute; left:6px; top:3px; width:4px; height:8px; border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg)}
+.ps.done:last-child i{background:linear-gradient(180deg,#2FBE7C,#116B45)}
+.tap-hint{margin-top:auto; text-align:center; font-size:10px; color:var(--faint)}
+
+/* caption screen */
+.cap-post{display:flex; align-items:center; gap:9px}
+.cap-av{width:30px; height:30px; border-radius:50%; padding:2px; background:conic-gradient(var(--violet),var(--violet-lift),var(--violet-pale),var(--violet))}
+.cap-av::after{content:''; display:block; width:100%; height:100%; border-radius:50%; background:radial-gradient(circle at 40% 35%,#A95CFF,#3D0789); box-shadow:0 0 0 2px var(--ink)}
+.cap-who b{display:block; font-size:12px} .cap-who span{display:block; font-size:10px; color:var(--faint)}
+.cap-art{height:118px; border-radius:14px; position:relative; overflow:hidden; display:flex; align-items:flex-end; padding:12px 14px; box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.cap-art::before{content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 30%,rgba(5,3,12,.55))}
+.ca-t{position:relative; font-family:var(--s); font-size:30px; line-height:.95; color:#fff; letter-spacing:-.01em}
+.cap-txt{font-size:12px; line-height:1.55; color:var(--fg); min-height:5.6em}
+.caret{display:inline-block; width:1.5px; height:1.05em; margin-left:1px; vertical-align:-.15em; background:var(--violet-lift); animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.cap-tags{display:flex; flex-wrap:wrap; gap:6px}
+.cap-tags span{font-size:10.5px; font-weight:650; padding:4px 9px; border-radius:99px; background:rgba(125,24,252,.22); color:var(--violet-pale); opacity:0; transform:translateY(6px) scale(.9); transition:opacity .35s ease, transform .45s cubic-bezier(.175,.885,.32,1.275)}
+.cap-tags.show span{opacity:1; transform:none}
+.cap-tags.show span:nth-child(2){transition-delay:.08s} .cap-tags.show span:nth-child(3){transition-delay:.16s}
+
+/* report screen */
+.rep-chart{position:relative; padding:12px 10px 6px; border-radius:14px; background:rgba(255,255,255,.035); box-shadow:inset 0 0 0 1px var(--line)}
+.rep-chart svg{display:block; width:100%; height:110px; overflow:visible}
+.rp-line{stroke-dasharray:1 1; stroke-dashoffset:1}
+.rp-area{opacity:0; transition:opacity .8s ease .9s}
+.rp-dot{opacity:0; transform-box:fill-box; transform-origin:center}
+.scr-rep.on .rp-line{animation:drawline 1.4s var(--out) .25s forwards}
+.scr-rep.on .rp-area{opacity:1}
+.scr-rep.on .rp-dot{animation:dotpop .45s cubic-bezier(.175,.885,.32,1.275) 1.5s forwards; opacity:1}
+@keyframes drawline{to{stroke-dashoffset:0}}
+.rp-wk{display:flex; justify-content:space-between; margin-top:6px}
+.rp-wk i{font-style:normal; font-size:9px; color:var(--faint)}
+.rep-kpi{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+.rep-kpi div{padding:11px 12px; border-radius:12px; background:rgba(255,255,255,.04); box-shadow:inset 0 0 0 1px var(--line)}
+.rep-kpi span{display:block; font-size:10px; color:var(--faint)}
+.rep-kpi b{display:block; margin-top:3px; font-family:var(--d); font-size:26px; font-weight:800; letter-spacing:-.03em; font-variant-numeric:tabular-nums}
+.rep-note{font-size:11.5px; line-height:1.55; color:var(--muted)}
+.rep-note b{color:var(--fg)}
+
+/* ---------- "the things that land in your folder": each card is a tiny version of the real file ---------- */
+.ocard{font-size:10px}
+@media(max-width:760px){ .ocard{font-size:6.75px} }
+.ocard-art{place-items:stretch; overflow:hidden}
+.ocard-art::before{content:''; position:absolute; inset:0; z-index:0;
+  background:radial-gradient(120% 80% at 30% 0%,rgba(255,255,255,.18),transparent 55%),linear-gradient(180deg,rgba(5,3,12,.1),rgba(5,3,12,.5))}
+.ocard-art::after{z-index:3}
+.mini{position:absolute; inset:0; z-index:1; display:grid; place-items:center}
+.mini *{box-sizing:border-box}
+.m-glass{background:rgba(5,3,12,.5); box-shadow:inset 0 0 0 1px rgba(255,255,255,.22), 0 1.2em 2.2em -1em rgba(0,0,0,.85); border-radius:.9em; position:relative; overflow:hidden}
+.m-bar{display:block; height:.45em; border-radius:.3em; background:rgba(255,255,255,.75)}
+.m-bar.dim{background:rgba(255,255,255,.35)}
+/* reel */
+.m-reel{width:6.6em; height:11.6em}
+.m-prog{position:absolute; top:.6em; left:.6em; right:.6em; display:flex; gap:.25em}
+.m-prog i{flex:1; height:.22em; border-radius:.2em; background:rgba(255,255,255,.3); overflow:hidden; position:relative}
+.m-prog i:first-child{background:#fff}
+.m-prog i:nth-child(2)::after{content:''; position:absolute; inset:0; background:#fff; transform-origin:left; animation:reelprog 3s linear infinite}
+@keyframes reelprog{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.m-play{position:absolute; left:50%; top:44%; width:2.4em; height:2.4em; margin:-1.2em 0 0 -1.2em; border-radius:50%; background:rgba(255,255,255,.18); box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
+.m-play::after{content:''; position:absolute; left:.95em; top:.68em; border-left:.8em solid #fff; border-top:.52em solid transparent; border-bottom:.52em solid transparent}
+.m-act{position:absolute; right:.45em; bottom:2.6em; display:flex; flex-direction:column; gap:.45em}
+.m-act i{width:.75em; height:.75em; border-radius:50%; background:rgba(255,255,255,.7)}
+.m-caps{position:absolute; left:.6em; right:1.8em; bottom:.7em; display:flex; flex-direction:column; gap:.3em}
+/* carousel */
+.m-car{position:relative; width:10em; height:10em}
+.m-sl{position:absolute; inset:0; border-radius:.8em; padding:1em; display:flex; flex-direction:column; justify-content:flex-end; gap:.35em}
+.m-sl:nth-child(1){transform:translate(1.4em,-.9em) rotate(7deg); opacity:.45}
+.m-sl:nth-child(2){transform:translate(.7em,-.45em) rotate(3.5deg); opacity:.7}
+.m-sl:nth-child(3){animation:carswipe 4.5s var(--io) infinite}
+.m-sl b{font-family:var(--d); font-size:1.6em; font-weight:900; color:#fff; letter-spacing:-.03em; line-height:1}
+.m-sl small{position:absolute; top:.8em; right:.9em; font-size:.85em; font-weight:700; color:rgba(255,255,255,.7)}
+@keyframes carswipe{0%,55%{transform:none; opacity:1}70%{transform:translateX(-120%) rotate(-8deg); opacity:0}71%{transform:translate(1.4em,-.9em) rotate(7deg); opacity:0}100%{transform:none; opacity:1}}
+.m-dots{position:absolute; bottom:-1.8em; left:0; right:0; display:flex; justify-content:center; gap:.3em}
+.m-dots i{width:.45em; height:.45em; border-radius:50%; background:rgba(255,255,255,.35)}
+.m-dots i:first-child{background:#fff; width:1.1em; border-radius:.3em}
+/* festival poster */
+.m-poster{width:9.4em; height:12.6em; border-radius:.6em; display:flex; flex-direction:column; align-items:center; padding:1.2em .9em; gap:.5em;
+  background:linear-gradient(175deg,rgba(5,3,12,.75),rgba(61,7,137,.65)); box-shadow:inset 0 0 0 1px rgba(255,196,107,.35), 0 1.2em 2.2em -1em rgba(0,0,0,.85)}
+.m-diya{position:relative; width:5em; height:4.6em; margin-top:.3em}
+.m-diya::before{content:''; position:absolute; left:50%; top:-.6em; width:5em; height:5em; margin-left:-2.5em; border-radius:50%; background:radial-gradient(circle,rgba(255,196,107,.55),rgba(255,196,107,0) 65%); animation:glow 2.4s ease-in-out infinite}
+.m-flame{position:absolute; left:50%; top:.4em; width:1.3em; height:2em; margin-left:-.65em; border-radius:50% 50% 50% 50%/62% 62% 38% 38%; background:linear-gradient(180deg,#FFC46B,#FF8A6B); animation:flicker 1.6s ease-in-out infinite; transform-origin:50% 100%}
+.m-bowl{position:absolute; left:50%; bottom:.2em; width:4.4em; height:1.7em; margin-left:-2.2em; border-radius:0 0 2.2em 2.2em; background:linear-gradient(180deg,#FFC46B,#E08A2A)}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg)}30%{transform:scale(1.08,.94) rotate(3deg)}60%{transform:scale(.94,1.06) rotate(-1deg)}}
+@keyframes glow{0%,100%{opacity:.75; transform:scale(1)}50%{opacity:1; transform:scale(1.12)}}
+.m-poster b{font-family:var(--s); font-weight:400; font-size:2.1em; line-height:1; color:#FFC46B}
+.m-poster .m-bar{width:70%; background:rgba(255,196,107,.6)} .m-poster .m-bar.dim{width:48%; background:rgba(255,196,107,.3)}
+/* menu */
+.m-menu{width:10.4em; height:12.6em; border-radius:.5em; padding:1em .9em; display:flex; flex-direction:column; gap:.55em; position:relative; overflow:hidden;
+  background:linear-gradient(180deg,#F5F2FF,#D8BBFF); box-shadow:0 1.2em 2.2em -1em rgba(0,0,0,.85)}
+.m-menu b{font-family:var(--s); font-weight:400; font-size:1.9em; line-height:1; color:#110C22; text-align:center; margin-bottom:.2em}
+.m-row{display:flex; align-items:center; gap:.3em}
+.m-row i{height:.42em; border-radius:.2em; background:#3D0789; opacity:.75}
+.m-row i:first-child{width:3.6em} .m-row i:nth-child(2){flex:1; height:0; border-top:.12em dotted rgba(61,7,137,.45); background:none}
+.m-row i:last-child{width:1.3em}
+.m-menu::after{content:''; position:absolute; left:.5em; right:.5em; top:3.6em; height:1.2em; border-radius:.3em; background:rgba(125,24,252,.18); animation:menuscan 4s var(--io) infinite}
+@keyframes menuscan{0%,100%{transform:translateY(0)}50%{transform:translateY(5.6em)}}
+/* automation */
+.m-flow{position:relative; display:flex; flex-direction:column; gap:1.3em; padding-left:.2em}
+.m-flow::before{content:''; position:absolute; left:1.15em; top:1em; bottom:1em; width:.15em; background:rgba(255,255,255,.3)}
+.m-flow::after{content:''; position:absolute; left:.95em; top:.6em; width:.55em; height:.55em; border-radius:50%; background:#fff; box-shadow:0 0 .8em #fff; animation:flowdown 3s var(--io) infinite}
+@keyframes flowdown{0%{transform:translateY(0)}100%{transform:translateY(8.6em)}}
+.m-node{position:relative; display:flex; align-items:center; gap:.7em}
+.m-node i{width:2.1em; height:2.1em; border-radius:.6em; background:rgba(5,3,12,.55); box-shadow:inset 0 0 0 1px rgba(255,255,255,.35); flex:none}
+.m-node .m-bar{width:5.5em}
+/* store tour viewfinder */
+.m-vf{width:13em; height:10.5em; position:relative}
+.m-vf>i{position:absolute; width:1.6em; height:1.6em; border:.18em solid #fff}
+.m-vf>i:nth-child(1){left:0; top:0; border-right:0; border-bottom:0} .m-vf>i:nth-child(2){right:0; top:0; border-left:0; border-bottom:0}
+.m-vf>i:nth-child(3){left:0; bottom:0; border-right:0; border-top:0} .m-vf>i:nth-child(4){right:0; bottom:0; border-left:0; border-top:0}
+.m-rec{position:absolute; top:.6em; left:2.2em; display:flex; align-items:center; gap:.35em; font-size:.95em; font-weight:800; color:#fff; letter-spacing:.06em}
+.m-rec::before{content:''; width:.7em; height:.7em; border-radius:50%; background:#FF8A6B; animation:blinkrec 1.2s steps(1) infinite}
+@keyframes blinkrec{50%{opacity:.2}}
+.m-tc{position:absolute; top:.6em; right:2.2em; font-size:.95em; font-weight:700; color:#fff; font-variant-numeric:tabular-nums}
+.m-cross{position:absolute; left:50%; top:50%; width:2.4em; height:2.4em; margin:-1.2em 0 0 -1.2em; border-radius:50%; box-shadow:inset 0 0 0 .12em rgba(255,255,255,.7); animation:focus 3s ease-in-out infinite}
+@keyframes focus{0%,100%{transform:scale(1)}50%{transform:scale(.8)}}
+/* before / after */
+.m-ba{width:13em; height:10.4em; border-radius:.8em; position:relative; overflow:hidden; box-shadow:inset 0 0 0 1px rgba(255,255,255,.25), 0 1.2em 2.2em -1em rgba(0,0,0,.85);
+  background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.55) 0 1.8em,transparent 1.9em),radial-gradient(ellipse at 50% 105%,rgba(255,255,255,.4) 0 4em,transparent 4.1em),linear-gradient(160deg,#A95CFF,#DB2777)}
+.m-before{position:absolute; inset:0; background:linear-gradient(160deg,#2A2140,#110C22); clip-path:inset(0 50% 0 0); animation:baclip 4s var(--io) infinite}
+.m-before::before{content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.25) 0 1.8em,transparent 1.9em),radial-gradient(ellipse at 50% 105%,rgba(255,255,255,.2) 0 4em,transparent 4.1em)}
+.m-handle{position:absolute; top:0; bottom:0; left:0; width:.18em; margin-left:-.09em; background:#fff; animation:bahandle 4s var(--io) infinite}
+.m-handle::after{content:''; position:absolute; left:50%; top:50%; width:1.8em; height:1.8em; margin:-.9em 0 0 -.9em; border-radius:50%; background:#fff; box-shadow:0 .3em .8em rgba(0,0,0,.4)}
+@keyframes baclip{0%,100%{clip-path:inset(0 72% 0 0)}50%{clip-path:inset(0 28% 0 0)}}
+@keyframes bahandle{0%,100%{transform:translateX(3.64em)}50%{transform:translateX(9.36em)}}
+.m-lab{position:absolute; bottom:.6em; font-size:.85em; font-weight:800; color:#fff; padding:.2em .5em; border-radius:.3em; background:rgba(5,3,12,.55)}
+.m-lab.l{left:.6em} .m-lab.r{right:.6em}
+/* ad hooks */
+.m-hooks{display:flex; flex-direction:column; gap:.45em; width:11em}
+.m-hook{display:flex; align-items:center; gap:.55em; padding:.45em .6em; border-radius:.55em; background:rgba(5,3,12,.45); box-shadow:inset 0 0 0 1px rgba(255,255,255,.15); animation:hookwin 5s ease-in-out infinite}
+.m-hook b{font-size:.95em; font-weight:800; color:#fff; width:1.4em}
+.m-hook .m-bar{flex:1}
+.m-hook:nth-child(2){animation-delay:1s} .m-hook:nth-child(3){animation-delay:2s} .m-hook:nth-child(4){animation-delay:3s} .m-hook:nth-child(5){animation-delay:4s}
+@keyframes hookwin{0%,16%{background:rgba(255,255,255,.92); transform:scale(1.04)}20%,100%{background:rgba(5,3,12,.45); transform:none}}
+.m-hook{transition:none}
+/* thumbnail */
+.m-thumb{width:14em; height:7.9em; border-radius:.6em; position:relative; overflow:hidden; padding:.8em; box-shadow:inset 0 0 0 1px rgba(255,255,255,.25), 0 1.2em 2.2em -1em rgba(0,0,0,.85);
+  background:linear-gradient(110deg,rgba(5,3,12,.85) 45%,rgba(5,3,12,.15)),linear-gradient(160deg,#7D18FC,#DB2777)}
+.m-thumb b{position:relative; display:block; font-family:var(--d); font-weight:900; font-size:1.75em; line-height:.95; letter-spacing:-.03em; color:#fff; font-variation-settings:'wdth' 118,'wght' 900}
+.m-thumb b span{color:#FFC46B}
+.m-face{position:absolute; right:.8em; bottom:-1em; width:5.6em; height:6.6em; border-radius:2.8em 2.8em 0 0; background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.85) 0 1.6em,rgba(255,255,255,.45) 1.65em 2.4em,transparent 2.45em)}
+.m-dur{position:absolute; right:.5em; bottom:.5em; font-size:.8em; font-weight:700; padding:.15em .4em; border-radius:.25em; background:rgba(0,0,0,.75); color:#fff}
+.m-arrow{position:absolute; left:6.6em; bottom:1.1em; width:2.4em; height:.25em; background:#FFC46B; border-radius:.2em; transform-origin:left; animation:arrowpoke 1.6s ease-in-out infinite}
+.m-arrow::after{content:''; position:absolute; right:-.2em; top:-.35em; border-left:.6em solid #FFC46B; border-top:.47em solid transparent; border-bottom:.47em solid transparent}
+@keyframes arrowpoke{0%,100%{transform:translateX(0)}50%{transform:translateX(.6em)}}
+/* report */
+.m-rep{width:12.6em; height:9.6em; padding:.9em; display:flex; flex-direction:column; gap:.5em}
+.m-rep svg{width:100%; height:5em; overflow:visible}
+.m-rep path{stroke-dasharray:1 1; animation:repdraw 3.5s var(--out) infinite}
+@keyframes repdraw{0%{stroke-dashoffset:1}50%,100%{stroke-dashoffset:0}}
+.m-kpis{display:flex; gap:.4em}
+.m-kpis span{flex:1; padding:.35em .45em; border-radius:.4em; background:rgba(255,255,255,.12); font-size:.85em; font-weight:800; color:#fff}
+.m-kpis span em{display:block; font-style:normal; font-weight:600; font-size:.8em; color:rgba(255,255,255,.65)}
+/* pause the folder animations while the section is off screen */
+.orbit-sec:not(.vis) .mini *,.orbit-sec:not(.vis) .mini *::before,.orbit-sec:not(.vis) .mini *::after{animation-play-state:paused}
+/* caption under the ring names the card facing you */
+.orbit-cap{max-width:520px; margin:6px auto 0; min-height:4.6em; text-align:center}
+.orbit-cap b{display:block; font-family:var(--d); font-size:21px; font-weight:800; font-variation-settings:'wdth' 106,'wght' 800; letter-spacing:-.02em}
+.orbit-cap span{display:block; margin-top:6px; font-size:15px; color:var(--muted); line-height:1.55}
+.orbit-cap.swap b,.orbit-cap.swap span{animation:capin .45s var(--enter) both}
+.orbit-cap.swap span{animation-delay:.05s}
+@keyframes capin{from{opacity:0; transform:translateY(6px); filter:blur(3px)}to{opacity:1; transform:none; filter:blur(0)}}
+.ocard{cursor:pointer; transition:filter .3s ease}
+@media(hover:hover) and (pointer:fine){ .ocard:hover{filter:brightness(1.15) !important} }
 
 /* ---------- reveal (JS-gated so the page is complete without it) ---------- */
 .js .rv{opacity:0; transform:translateY(28px); filter:blur(8px)}
@@ -1396,50 +1625,51 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-camera" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M8.5 7l1.6-2.5h3.8L15.5 7"/><circle cx="12" cy="13.5" r="3.6" fill="currentColor" fill-opacity=".2" stroke="none"/><circle cx="12" cy="13.5" r="3.6"/></symbol>
-  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 3.5V17H6.5A2.5 2.5 0 0 1 4 14.5z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 3.5V17H6.5A2.5 2.5 0 0 1 4 14.5z"/><path d="M9 10.5h.01M12 10.5h.01M15 10.5h.01" stroke-width="2.4"/></symbol>
-  <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6.5" cy="17.5" r="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><circle cx="6.5" cy="6.5" r="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="6.5" cy="6.5" r="2.5"/><path d="M8.6 8L20 18M8.6 16L20 6"/></symbol>
-  <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-1 2-2 0-1.4-1.1-1.7-1.1-3 0-1.1.9-2 2-2H17a4 4 0 0 0 4-4c0-3.9-4-7-9-7z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-1 2-2 0-1.4-1.1-1.7-1.1-3 0-1.1.9-2 2-2H17a4 4 0 0 0 4-4c0-3.9-4-7-9-7z"/><circle cx="7.5" cy="11.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="9.8" cy="7.3" r="1.2" fill="currentColor" stroke="none"/><circle cx="14.6" cy="7.3" r="1.2" fill="currentColor" stroke="none"/></symbol>
-  <symbol id="i-flow" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><circle cx="18" cy="6" r="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><circle cx="12" cy="18" r="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8.5 6h7M7.2 8.2l3.6 7.6M16.8 8.2l-3.6 7.6"/></symbol>
-  <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="currentColor" fill-opacity=".2" stroke="none"/><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9.2v5.6l4.8-2.8z" fill="currentColor"/></symbol>
-  <symbol id="i-cake" viewBox="0 0 24 24"><path d="M5 20v-6.5A1.5 1.5 0 0 1 6.5 12h11a1.5 1.5 0 0 1 1.5 1.5V20z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M4 20h16M5 20v-6.5A1.5 1.5 0 0 1 6.5 12h11a1.5 1.5 0 0 1 1.5 1.5V20"/><path d="M5 16c1.2 0 1.8-1 3.5-1s2.3 1 3.5 1 1.8-1 3.5-1 2.3 1 3.5 1M12 12V8.8"/><path d="M12 4.3c.9 1 1.3 1.8 1.3 2.4a1.3 1.3 0 0 1-2.6 0c0-.6.4-1.4 1.3-2.4z" fill="currentColor"/></symbol>
-  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01" stroke-width="2.4"/></symbol>
-  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.8" fill="currentColor" fill-opacity=".2" stroke="none"/><rect x="6.5" y="2.5" width="11" height="19" rx="2.8"/><path d="M10.5 18.5h3"/></symbol>
-  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></symbol>
-  <symbol id="i-bars" viewBox="0 0 24 24"><rect x="5.5" y="11" width="3" height="6.5" rx="1" fill="currentColor" fill-opacity=".2" stroke="none"/><rect x="10.5" y="6.5" width="3" height="11" rx="1" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M4 20.5h16"/><rect x="5.5" y="11" width="3" height="6.5" rx="1"/><rect x="10.5" y="6.5" width="3" height="11" rx="1"/><rect x="15.5" y="13.5" width="3" height="4" rx="1"/></symbol>
-  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3.5 17.5l5.5-5.5 4 4 7.5-7.5"/><path d="M15 8.5h5.5V14"/></symbol>
-  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="4" y="8" width="16.5" height="11.5" rx="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18v3"/><rect x="4" y="8" width="16.5" height="11.5" rx="2.5"/><path d="M16 13.8h.01" stroke-width="2.6"/></symbol>
-  <symbol id="i-dumbbell" viewBox="0 0 24 24"><path d="M6.5 7v10M17.5 7v10M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/></symbol>
-  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="currentColor" fill-opacity=".2" stroke="none"/><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/></symbol>
-  <symbol id="i-confetti" viewBox="0 0 24 24"><path d="M4 20l4.5-12 7.5 7.5z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M4 20l4.5-12 7.5 7.5z"/><path d="M13 4.5c.5 1.5.3 2.6-.6 3.4M18.5 9.5c1.3-.5 2.4-.3 3 .3M16 3.5v1M20.5 5.5h1M19 13.5h.01"/></symbol>
-  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3.5 11.5h17a8.5 8.5 0 0 1-17 0z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M3.5 11.5h17a8.5 8.5 0 0 1-17 0z"/><path d="M8 20h8M14.5 11.5L19 4M11.5 11.5L17 5"/></symbol>
-  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.5 7l8.5 6 8.5-6"/></symbol>
-  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4L2.8 19.5h18.4z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M12 4L2.8 19.5h18.4z"/><path d="M12 10v4.2M12 16.8h.01"/></symbol>
-  <symbol id="i-cup" viewBox="0 0 24 24"><path d="M4.5 9h12v5.5a4.5 4.5 0 0 1-4.5 4.5H9a4.5 4.5 0 0 1-4.5-4.5z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M4.5 9h12v5.5a4.5 4.5 0 0 1-4.5 4.5H9a4.5 4.5 0 0 1-4.5-4.5z"/><path d="M16.5 10.5h1.2a2.3 2.3 0 0 1 0 4.6h-1.5M8.5 3.5c-.6.8-.6 1.6 0 2.4M12 3.5c-.6.8-.6 1.6 0 2.4"/></symbol>
-  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M3.5 14h17c-.6 3.6-4.2 6-8.5 6s-7.9-2.4-8.5-6z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M12 3c2.5 3 3.5 5 3.5 6.8a3.5 3.5 0 0 1-7 0C8.5 8 9.5 6 12 3z"/><path d="M3.5 14h17c-.6 3.6-4.2 6-8.5 6s-7.9-2.4-8.5-6z"/></symbol>
-  <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-2.5-1.5-2 1.5-1.5-1.5-1.5 1.5-2-1.5L6 20.5z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M6 3.5h12v17l-2.5-1.5-2 1.5-1.5-1.5-1.5 1.5-2-1.5L6 20.5z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/></symbol>
-  <symbol id="i-wand" viewBox="0 0 24 24"><path d="M4 20L15.5 8.5M13.5 6.5l4 4"/><path d="M17 2.5v3M15.5 4h3M20.5 9v2M19.5 10h2M8.5 3.5v2M7.5 4.5h2"/></symbol>
-  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19c0-8 5-13.5 14.5-14-.5 9.5-6 14.5-14 14z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M5 19c0-8 5-13.5 14.5-14-.5 9.5-6 14.5-14 14z"/><path d="M5 19l7.5-7.5"/></symbol>
-  <symbol id="i-tooth" viewBox="0 0 24 24"><path d="M7.5 3.5c-2.4 0-4 1.8-4 4.4 0 2.6 1.3 4 1.8 6.6.5 2.6.8 5.9 2.4 5.9 1.8 0 1.6-5.2 4.3-5.2s2.5 5.2 4.3 5.2c1.6 0 1.9-3.3 2.4-5.9.5-2.6 1.8-4 1.8-6.6 0-2.6-1.6-4.4-4-4.4-1.9 0-2.7 1.1-4.5 1.1S9.4 3.5 7.5 3.5z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M7.5 3.5c-2.4 0-4 1.8-4 4.4 0 2.6 1.3 4 1.8 6.6.5 2.6.8 5.9 2.4 5.9 1.8 0 1.6-5.2 4.3-5.2s2.5 5.2 4.3 5.2c1.6 0 1.9-3.3 2.4-5.9.5-2.6 1.8-4 1.8-6.6 0-2.6-1.6-4.4-4-4.4-1.9 0-2.7 1.1-4.5 1.1S9.4 3.5 7.5 3.5z"/></symbol>
-  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12.5H6z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M5 8h14l-1 12.5H6z"/><path d="M9 10.5V7a3 3 0 0 1 6 0v3.5"/></symbol>
-  <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 7.6-1.7M12 14.5v2.5"/></symbol>
-  <symbol id="i-car" viewBox="0 0 24 24"><path d="M4 16.5v-3.2l1.8-4.6A2 2 0 0 1 7.7 7.5h8.6a2 2 0 0 1 1.9 1.2l1.8 4.6v3.2z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M4 16.5v-3.2l1.8-4.6A2 2 0 0 1 7.7 7.5h8.6a2 2 0 0 1 1.9 1.2l1.8 4.6v3.2zM4 13.5h16"/><circle cx="7.5" cy="17.5" r="1.7"/><circle cx="16.5" cy="17.5" r="1.7"/></symbol>
-  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="9.5" r="1.7"/><path d="M4 17l4.5-4.5 3.5 3.5 3-3 5 5"/></symbol>
-  <symbol id="i-type" viewBox="0 0 24 24"><path d="M4 18l4.5-12L13 18M5.7 13.5h5.6M15.5 12.5a2.6 2.6 0 0 1 5 1V18M20.5 15c-3.5-.2-5 .5-5 1.7 0 1.9 3.4 1.9 5-.4"/></symbol>
-  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 0 1-13 5.1M4.5 12a7.5 7.5 0 0 1 13-5.1"/><path d="M17.5 3v4h-4M6.5 21v-4h4"/></symbol>
-  <symbol id="i-list" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 3h6v2.5H9zM8.5 10h7M8.5 13.5h7M8.5 17h4"/></symbol>
-  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></symbol>
-  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3a1.5 1.5 0 0 1 0 2.1l-6.3 6.3a1.5 1.5 0 0 1-2.1 0z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3a1.5 1.5 0 0 1 0 2.1l-6.3 6.3a1.5 1.5 0 0 1-2.1 0z"/><circle cx="8" cy="8" r="1.5"/></symbol>
-  <symbol id="i-store" viewBox="0 0 24 24"><path d="M5.5 12v8.5h13V12" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M4 9.5L5.5 4h13L20 9.5M4 9.5c0 1.5 1.3 2.5 2.7 2.5s2.6-1 2.6-2.5c0 1.5 1.2 2.5 2.7 2.5s2.7-1 2.7-2.5c0 1.5 1.2 2.5 2.6 2.5S20 11 20 9.5M5.5 12v8.5h13V12M10 20.5v-5h4v5"/></symbol>
-  <symbol id="i-bed" viewBox="0 0 24 24"><path d="M3 19.5v-14M3 15h18v4.5M21 15v-3.5a3 3 0 0 0-3-3h-7V15"/><circle cx="7" cy="11" r="2"/></symbol>
-  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.5L12 4l8 6.5V20H4z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M4 10.5L12 4l8 6.5V20H4z"/><path d="M10 20v-5.5h4V20"/></symbol>
-  <symbol id="i-cap" viewBox="0 0 24 24"><path d="M2.5 9.5L12 5l9.5 4.5L12 14z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M2.5 9.5L12 5l9.5 4.5L12 14z"/><path d="M6.5 11.6V16c0 1.4 2.5 2.8 5.5 2.8s5.5-1.4 5.5-2.8v-4.4M21.5 9.5v5"/></symbol>
-  <symbol id="i-gift" viewBox="0 0 24 24"><path d="M5 12.5v8h14v-8z" fill="currentColor" fill-opacity=".2" stroke="none"/><rect x="3.5" y="8.5" width="17" height="4" rx="1"/><path d="M5 12.5v8h14v-8M12 8.5v12M12 8.5C10.5 5 7 4.5 7 6.6 7 8.3 10 8.5 12 8.5zM12 8.5c1.5-3.5 5-4 5-1.9 0 1.7-3 1.9-5 1.9z"/></symbol>
-  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.5 2.5L5 13.5h6.5l-1 8 8.5-11h-6.5z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M13.5 2.5L5 13.5h6.5l-1 8 8.5-11h-6.5z"/></symbol>
-  <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor" fill-opacity=".2" stroke="none"/><circle cx="12" cy="12" r="9"/><path d="M10 8.6v6.8l5.6-3.4z" fill="currentColor"/></symbol>
-  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3c.6 4.6 3.4 7.4 8 8-4.6.6-7.4 3.4-8 8-.6-4.6-3.4-7.4-8-8 4.6-.6 7.4-3.4 8-8z" fill="currentColor" fill-opacity=".2" stroke="none"/><path d="M12 3c.6 4.6 3.4 7.4 8 8-4.6.6-7.4 3.4-8 8-.6-4.6-3.4-7.4-8-8 4.6-.6 7.4-3.4 8-8z"/></symbol>
-  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></symbol>
-  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <defs><linearGradient id="ig" gradientUnits="userSpaceOnUse" x1="4" y1="2" x2="20" y2="22"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#D8BBFF"/></linearGradient></defs>
+  <symbol id="i-camera" viewBox="0 0 24 24"><rect pathLength="1" x="3" y="7" width="18" height="13" rx="3"/><path pathLength="1" d="M8.5 7l1.6-2.5h3.8L15.5 7"/><circle cx="12" cy="13.5" r="3.6" fill="currentColor" fill-opacity=".2" stroke="none"/><circle pathLength="1" cx="12" cy="13.5" r="3.6"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 3.5V17H6.5A2.5 2.5 0 0 1 4 14.5z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 3.5V17H6.5A2.5 2.5 0 0 1 4 14.5z"/><path pathLength="1" d="M9 10.5h.01M12 10.5h.01M15 10.5h.01" stroke-width="2.4"/></symbol>
+  <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6.5" cy="17.5" r="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><circle cx="6.5" cy="6.5" r="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><circle pathLength="1" cx="6.5" cy="17.5" r="2.5"/><circle pathLength="1" cx="6.5" cy="6.5" r="2.5"/><path pathLength="1" d="M8.6 8L20 18M8.6 16L20 6"/></symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-1 2-2 0-1.4-1.1-1.7-1.1-3 0-1.1.9-2 2-2H17a4 4 0 0 0 4-4c0-3.9-4-7-9-7z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M12 3a9 9 0 1 0 0 18c1.4 0 2-1 2-2 0-1.4-1.1-1.7-1.1-3 0-1.1.9-2 2-2H17a4 4 0 0 0 4-4c0-3.9-4-7-9-7z"/><circle cx="7.5" cy="11.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="9.8" cy="7.3" r="1.2" fill="currentColor" stroke="none"/><circle cx="14.6" cy="7.3" r="1.2" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-flow" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><circle cx="18" cy="6" r="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><circle cx="12" cy="18" r="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><circle pathLength="1" cx="6" cy="6" r="2.5"/><circle pathLength="1" cx="18" cy="6" r="2.5"/><circle pathLength="1" cx="12" cy="18" r="2.5"/><path pathLength="1" d="M8.5 6h7M7.2 8.2l3.6 7.6M16.8 8.2l-3.6 7.6"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="currentColor" fill-opacity=".2" stroke="none"/><rect pathLength="1" x="3" y="5" width="18" height="14" rx="3"/><path pathLength="1" d="M10 9.2v5.6l4.8-2.8z" fill="currentColor"/></symbol>
+  <symbol id="i-cake" viewBox="0 0 24 24"><path d="M5 20v-6.5A1.5 1.5 0 0 1 6.5 12h11a1.5 1.5 0 0 1 1.5 1.5V20z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M4 20h16M5 20v-6.5A1.5 1.5 0 0 1 6.5 12h11a1.5 1.5 0 0 1 1.5 1.5V20"/><path pathLength="1" d="M5 16c1.2 0 1.8-1 3.5-1s2.3 1 3.5 1 1.8-1 3.5-1 2.3 1 3.5 1M12 12V8.8"/><path pathLength="1" d="M12 4.3c.9 1 1.3 1.8 1.3 2.4a1.3 1.3 0 0 1-2.6 0c0-.6.4-1.4 1.3-2.4z" fill="currentColor"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><rect pathLength="1" x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path pathLength="1" d="M3.5 10h17M8 3v4M16 3v4"/><path pathLength="1" d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01" stroke-width="2.4"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.8" fill="currentColor" fill-opacity=".2" stroke="none"/><rect pathLength="1" x="6.5" y="2.5" width="11" height="19" rx="2.8"/><path pathLength="1" d="M10.5 18.5h3"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle pathLength="1" cx="12" cy="10" r="2.4"/></symbol>
+  <symbol id="i-bars" viewBox="0 0 24 24"><rect x="5.5" y="11" width="3" height="6.5" rx="1" fill="currentColor" fill-opacity=".2" stroke="none"/><rect x="10.5" y="6.5" width="3" height="11" rx="1" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M4 20.5h16"/><rect pathLength="1" x="5.5" y="11" width="3" height="6.5" rx="1"/><rect pathLength="1" x="10.5" y="6.5" width="3" height="11" rx="1"/><rect pathLength="1" x="15.5" y="13.5" width="3" height="4" rx="1"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path pathLength="1" d="M3.5 17.5l5.5-5.5 4 4 7.5-7.5"/><path pathLength="1" d="M15 8.5h5.5V14"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="4" y="8" width="16.5" height="11.5" rx="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18v3"/><rect pathLength="1" x="4" y="8" width="16.5" height="11.5" rx="2.5"/><path pathLength="1" d="M16 13.8h.01" stroke-width="2.6"/></symbol>
+  <symbol id="i-dumbbell" viewBox="0 0 24 24"><path pathLength="1" d="M6.5 7v10M17.5 7v10M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="currentColor" fill-opacity=".2" stroke="none"/><circle pathLength="1" cx="12" cy="12" r="8.5"/><circle pathLength="1" cx="12" cy="12" r="5"/><circle pathLength="1" cx="12" cy="12" r="1.6" fill="currentColor"/></symbol>
+  <symbol id="i-confetti" viewBox="0 0 24 24"><path d="M4 20l4.5-12 7.5 7.5z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M4 20l4.5-12 7.5 7.5z"/><path pathLength="1" d="M13 4.5c.5 1.5.3 2.6-.6 3.4M18.5 9.5c1.3-.5 2.4-.3 3 .3M16 3.5v1M20.5 5.5h1M19 13.5h.01"/></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3.5 11.5h17a8.5 8.5 0 0 1-17 0z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M3.5 11.5h17a8.5 8.5 0 0 1-17 0z"/><path pathLength="1" d="M8 20h8M14.5 11.5L19 4M11.5 11.5L17 5"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><rect pathLength="1" x="3" y="5.5" width="18" height="13" rx="2.5"/><path pathLength="1" d="M3.5 7l8.5 6 8.5-6"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4L2.8 19.5h18.4z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M12 4L2.8 19.5h18.4z"/><path pathLength="1" d="M12 10v4.2M12 16.8h.01"/></symbol>
+  <symbol id="i-cup" viewBox="0 0 24 24"><path d="M4.5 9h12v5.5a4.5 4.5 0 0 1-4.5 4.5H9a4.5 4.5 0 0 1-4.5-4.5z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M4.5 9h12v5.5a4.5 4.5 0 0 1-4.5 4.5H9a4.5 4.5 0 0 1-4.5-4.5z"/><path pathLength="1" d="M16.5 10.5h1.2a2.3 2.3 0 0 1 0 4.6h-1.5M8.5 3.5c-.6.8-.6 1.6 0 2.4M12 3.5c-.6.8-.6 1.6 0 2.4"/></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M3.5 14h17c-.6 3.6-4.2 6-8.5 6s-7.9-2.4-8.5-6z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M12 3c2.5 3 3.5 5 3.5 6.8a3.5 3.5 0 0 1-7 0C8.5 8 9.5 6 12 3z"/><path pathLength="1" d="M3.5 14h17c-.6 3.6-4.2 6-8.5 6s-7.9-2.4-8.5-6z"/></symbol>
+  <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-2.5-1.5-2 1.5-1.5-1.5-1.5 1.5-2-1.5L6 20.5z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M6 3.5h12v17l-2.5-1.5-2 1.5-1.5-1.5-1.5 1.5-2-1.5L6 20.5z"/><path pathLength="1" d="M9 8h6M9 11.5h6M9 15h3.5"/></symbol>
+  <symbol id="i-wand" viewBox="0 0 24 24"><path pathLength="1" d="M4 20L15.5 8.5M13.5 6.5l4 4"/><path pathLength="1" d="M17 2.5v3M15.5 4h3M20.5 9v2M19.5 10h2M8.5 3.5v2M7.5 4.5h2"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19c0-8 5-13.5 14.5-14-.5 9.5-6 14.5-14 14z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M5 19c0-8 5-13.5 14.5-14-.5 9.5-6 14.5-14 14z"/><path pathLength="1" d="M5 19l7.5-7.5"/></symbol>
+  <symbol id="i-tooth" viewBox="0 0 24 24"><path d="M7.5 3.5c-2.4 0-4 1.8-4 4.4 0 2.6 1.3 4 1.8 6.6.5 2.6.8 5.9 2.4 5.9 1.8 0 1.6-5.2 4.3-5.2s2.5 5.2 4.3 5.2c1.6 0 1.9-3.3 2.4-5.9.5-2.6 1.8-4 1.8-6.6 0-2.6-1.6-4.4-4-4.4-1.9 0-2.7 1.1-4.5 1.1S9.4 3.5 7.5 3.5z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M7.5 3.5c-2.4 0-4 1.8-4 4.4 0 2.6 1.3 4 1.8 6.6.5 2.6.8 5.9 2.4 5.9 1.8 0 1.6-5.2 4.3-5.2s2.5 5.2 4.3 5.2c1.6 0 1.9-3.3 2.4-5.9.5-2.6 1.8-4 1.8-6.6 0-2.6-1.6-4.4-4-4.4-1.9 0-2.7 1.1-4.5 1.1S9.4 3.5 7.5 3.5z"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12.5H6z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M5 8h14l-1 12.5H6z"/><path pathLength="1" d="M9 10.5V7a3 3 0 0 1 6 0v3.5"/></symbol>
+  <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><rect pathLength="1" x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path pathLength="1" d="M8 10.5V7.5a4 4 0 0 1 7.6-1.7M12 14.5v2.5"/></symbol>
+  <symbol id="i-car" viewBox="0 0 24 24"><path d="M4 16.5v-3.2l1.8-4.6A2 2 0 0 1 7.7 7.5h8.6a2 2 0 0 1 1.9 1.2l1.8 4.6v3.2z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M4 16.5v-3.2l1.8-4.6A2 2 0 0 1 7.7 7.5h8.6a2 2 0 0 1 1.9 1.2l1.8 4.6v3.2zM4 13.5h16"/><circle pathLength="1" cx="7.5" cy="17.5" r="1.7"/><circle pathLength="1" cx="16.5" cy="17.5" r="1.7"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><rect pathLength="1" x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle pathLength="1" cx="9" cy="9.5" r="1.7"/><path pathLength="1" d="M4 17l4.5-4.5 3.5 3.5 3-3 5 5"/></symbol>
+  <symbol id="i-type" viewBox="0 0 24 24"><path pathLength="1" d="M4 18l4.5-12L13 18M5.7 13.5h5.6M15.5 12.5a2.6 2.6 0 0 1 5 1V18M20.5 15c-3.5-.2-5 .5-5 1.7 0 1.9 3.4 1.9 5-.4"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path pathLength="1" d="M19.5 12a7.5 7.5 0 0 1-13 5.1M4.5 12a7.5 7.5 0 0 1 13-5.1"/><path pathLength="1" d="M17.5 3v4h-4M6.5 21v-4h4"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2.5" fill="currentColor" fill-opacity=".2" stroke="none"/><rect pathLength="1" x="5" y="4" width="14" height="17" rx="2.5"/><path pathLength="1" d="M9 3h6v2.5H9zM8.5 10h7M8.5 13.5h7M8.5 17h4"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3a1.5 1.5 0 0 1 0 2.1l-6.3 6.3a1.5 1.5 0 0 1-2.1 0z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3a1.5 1.5 0 0 1 0 2.1l-6.3 6.3a1.5 1.5 0 0 1-2.1 0z"/><circle pathLength="1" cx="8" cy="8" r="1.5"/></symbol>
+  <symbol id="i-store" viewBox="0 0 24 24"><path d="M5.5 12v8.5h13V12" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M4 9.5L5.5 4h13L20 9.5M4 9.5c0 1.5 1.3 2.5 2.7 2.5s2.6-1 2.6-2.5c0 1.5 1.2 2.5 2.7 2.5s2.7-1 2.7-2.5c0 1.5 1.2 2.5 2.6 2.5S20 11 20 9.5M5.5 12v8.5h13V12M10 20.5v-5h4v5"/></symbol>
+  <symbol id="i-bed" viewBox="0 0 24 24"><path pathLength="1" d="M3 19.5v-14M3 15h18v4.5M21 15v-3.5a3 3 0 0 0-3-3h-7V15"/><circle pathLength="1" cx="7" cy="11" r="2"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.5L12 4l8 6.5V20H4z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M4 10.5L12 4l8 6.5V20H4z"/><path pathLength="1" d="M10 20v-5.5h4V20"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24"><path d="M2.5 9.5L12 5l9.5 4.5L12 14z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M2.5 9.5L12 5l9.5 4.5L12 14z"/><path pathLength="1" d="M6.5 11.6V16c0 1.4 2.5 2.8 5.5 2.8s5.5-1.4 5.5-2.8v-4.4M21.5 9.5v5"/></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24"><path d="M5 12.5v8h14v-8z" fill="currentColor" fill-opacity=".2" stroke="none"/><rect pathLength="1" x="3.5" y="8.5" width="17" height="4" rx="1"/><path pathLength="1" d="M5 12.5v8h14v-8M12 8.5v12M12 8.5C10.5 5 7 4.5 7 6.6 7 8.3 10 8.5 12 8.5zM12 8.5c1.5-3.5 5-4 5-1.9 0 1.7-3 1.9-5 1.9z"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.5 2.5L5 13.5h6.5l-1 8 8.5-11h-6.5z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M13.5 2.5L5 13.5h6.5l-1 8 8.5-11h-6.5z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor" fill-opacity=".2" stroke="none"/><circle pathLength="1" cx="12" cy="12" r="9"/><path pathLength="1" d="M10 8.6v6.8l5.6-3.4z" fill="currentColor"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3c.6 4.6 3.4 7.4 8 8-4.6.6-7.4 3.4-8 8-.6-4.6-3.4-7.4-8-8 4.6-.6 7.4-3.4 8-8z" fill="currentColor" fill-opacity=".2" stroke="none"/><path pathLength="1" d="M12 3c.6 4.6 3.4 7.4 8 8-4.6.6-7.4 3.4-8 8-.6-4.6-3.4-7.4-8-8 4.6-.6 7.4-3.4 8-8z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path pathLength="1" d="M7 17L17 7M9 7h8v8"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
 </svg>
 
 <div class="prog" id="prog"></div>
@@ -1736,7 +1966,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       <button class="obtn" id="oprev" type="button" aria-label="Spin left">
         <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 13L5 8l5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <span class="orbit-hint">Drag, or use the arrows</span>
+      <span class="orbit-hint">Drag, tap a card, or use the arrows</span>
       <button class="obtn" id="onext" type="button" aria-label="Spin right">
         <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
@@ -1744,49 +1974,50 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 
     <div class="stage" id="stage" data-scrub="open">
       <div class="orbit" id="orbit">
-        <article class="ocard">
-          <div class="ocard-art g1"><svg class="ic" aria-hidden="true"><use href="#i-video"/></svg></div>
+        <article class="ocard" data-t="Reel" data-d="15 to 30 seconds, cut to a hook in the first second and captioned for sound-off viewing.">
+          <div class="ocard-art g1"><div class="mini"><div class="m-glass m-reel"><div class="m-prog"><i></i><i></i><i></i></div><span class="m-play"></span><div class="m-act"><i></i><i></i><i></i></div><div class="m-caps"><i class="m-bar"></i><i class="m-bar dim"></i></div></div></div></div>
           <div class="ocard-b"><b>Reel</b><span>15–30s, hook + captions</span></div>
         </article>
-        <article class="ocard">
-          <div class="ocard-art g5"><svg class="ic" aria-hidden="true"><use href="#i-image"/></svg></div>
+        <article class="ocard" data-t="Carousel" data-d="6 to 10 swipeable slides that teach, compare or walk through a menu.">
+          <div class="ocard-art g5"><div class="mini"><div class="m-car"><div class="m-sl m-glass"></div><div class="m-sl m-glass"></div><div class="m-sl m-glass"><small>1/6</small><b>5 ways</b><i class="m-bar dim"></i></div><div class="m-dots"><i></i><i></i><i></i><i></i></div></div></div></div>
           <div class="ocard-b"><b>Carousel</b><span>6–10 slides, swipeable</span></div>
         </article>
-        <article class="ocard">
-          <div class="ocard-art g3"><svg class="ic" aria-hidden="true"><use href="#i-flame"/></svg></div>
+        <article class="ocard" data-t="Festival creative" data-d="Posters, posts and stories for Diwali, Eid, Holi, Pongal and your local dates.">
+          <div class="ocard-art g3"><div class="mini"><div class="m-poster"><div class="m-diya"><span class="m-flame"></span><span class="m-bowl"></span></div><b>Diwali</b><i class="m-bar"></i><i class="m-bar dim"></i></div></div></div>
           <div class="ocard-b"><b>Festival creative</b><span>Diwali, Eid, Holi, Pongal</span></div>
         </article>
-        <article class="ocard">
-          <div class="ocard-art g4"><svg class="ic" aria-hidden="true"><use href="#i-list"/></svg></div>
+        <article class="ocard" data-t="Menu &amp; price list" data-d="Print-ready and phone-ready, in your brand kit, updated when prices change.">
+          <div class="ocard-art g4"><div class="mini"><div class="m-menu"><b>Menu</b><span class="m-row"><i></i><i></i><i></i></span><span class="m-row"><i></i><i></i><i></i></span><span class="m-row"><i></i><i></i><i></i></span><span class="m-row"><i></i><i></i><i></i></span><span class="m-row"><i></i><i></i><i></i></span><span class="m-row"><i></i><i></i><i></i></span></div></div></div>
           <div class="ocard-b"><b>Menu &amp; price list</b><span>Print and digital</span></div>
         </article>
-        <article class="ocard">
-          <div class="ocard-art g6"><svg class="ic" aria-hidden="true"><use href="#i-flow"/></svg></div>
+        <article class="ocard" data-t="Automation flow" data-d="Scheduling, auto-replies, lead capture and the monthly report, set up once.">
+          <div class="ocard-art g6"><div class="mini"><div class="m-flow"><span class="m-node"><i></i><i class="m-bar"></i></span><span class="m-node"><i></i><i class="m-bar"></i></span><span class="m-node"><i></i><i class="m-bar"></i></span><span class="m-node"><i></i><i class="m-bar"></i></span></div></div></div>
           <div class="ocard-b"><b>Automation flow</b><span>Schedule, reply, capture, report</span></div>
         </article>
-        <article class="ocard">
-          <div class="ocard-art g2"><svg class="ic" aria-hidden="true"><use href="#i-camera"/></svg></div>
+        <article class="ocard" data-t="Store tour" data-d="A walk through your place, shot properly in a single visit.">
+          <div class="ocard-art g2"><div class="mini"><div class="m-vf"><i></i><i></i><i></i><i></i><span class="m-rec">REC</span><span class="m-tc">00:14</span><span class="m-cross"></span></div></div></div>
           <div class="ocard-b"><b>Store tour</b><span>Shot at your place</span></div>
         </article>
-        <article class="ocard">
-          <div class="ocard-art g5"><svg class="ic" aria-hidden="true"><use href="#i-spark"/></svg></div>
+        <article class="ocard" data-t="Before / after" data-d="Transformations for salons, clinics and studios, shown side by side.">
+          <div class="ocard-art g5"><div class="mini"><div class="m-ba"><div class="m-before"></div><span class="m-handle"></span><span class="m-lab l">Before</span><span class="m-lab r">After</span></div></div></div>
           <div class="ocard-b"><b>Before / after</b><span>Salons, clinics, studios</span></div>
         </article>
-        <article class="ocard">
-          <div class="ocard-art g3"><svg class="ic" aria-hidden="true"><use href="#i-target"/></svg></div>
+        <article class="ocard" data-t="Ad creative" data-d="5 hooks per campaign, made to be tested against each other until one wins.">
+          <div class="ocard-art g3"><div class="mini"><div class="m-hooks"><span class="m-hook"><b>A</b><i class="m-bar"></i></span><span class="m-hook"><b>B</b><i class="m-bar"></i></span><span class="m-hook"><b>C</b><i class="m-bar"></i></span><span class="m-hook"><b>D</b><i class="m-bar"></i></span><span class="m-hook"><b>E</b><i class="m-bar"></i></span></div></div></div>
           <div class="ocard-b"><b>Ad creative</b><span>5 hooks per campaign</span></div>
         </article>
-        <article class="ocard">
-          <div class="ocard-art g1"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></div>
+        <article class="ocard" data-t="Thumbnail" data-d="Covers for Shorts and YouTube with a title you can read at a glance.">
+          <div class="ocard-art g1"><div class="mini"><div class="m-thumb"><b>3 <span>mistakes</span><br>new cafés<br>make</b><span class="m-face"></span><span class="m-arrow"></span><span class="m-dur">0:42</span></div></div></div>
           <div class="ocard-b"><b>Thumbnail</b><span>Shorts and YouTube covers</span></div>
         </article>
-        <article class="ocard">
-          <div class="ocard-art g4"><svg class="ic" aria-hidden="true"><use href="#i-bars"/></svg></div>
+        <article class="ocard" data-t="Monthly report" data-d="What ran, what people watched and what comes next, in plain language on the 1st.">
+          <div class="ocard-art g4"><div class="mini"><div class="m-glass m-rep"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 34 C12 31 18 28 28 27 S45 20 55 18 S75 10 85 8 S95 4 100 3" pathLength="1" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><div class="m-kpis"><span><em>Posts</em>24</span><span><em>Enquiries</em>31</span></div></div></div></div>
           <div class="ocard-b"><b>Monthly report</b><span>Plain language, on the 1st</span></div>
         </article>
       </div>
     </div>
 
+    <div class="orbit-cap" id="orbitCap" aria-live="polite"><b>Reel</b><span>15 to 30 seconds, cut to a hook in the first second and captioned for sound-off viewing.</span></div>
   </div>
 </section>
 
@@ -1799,53 +2030,94 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     </div>
 
     <div class="feed-wrap">
-      <div class="feed-points rv">
-        <div class="fp">
-          <div class="fp-ic"><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg></div>
-          <div><h3>A calendar you can see</h3><p>Every post for the month laid out before it goes live. Move it, kill it, swap it — one message.</p></div>
-        </div>
-        <div class="fp">
-          <div class="fp-ic"><svg class="ic" aria-hidden="true"><use href="#i-flow"/></svg></div>
-          <div><h3>It posts itself</h3><p>Approve from WhatsApp, then the automation schedules it, publishes it, answers the usual questions and logs every enquiry.</p></div>
-        </div>
-        <div class="fp">
-          <div class="fp-ic"><svg class="ic" aria-hidden="true"><use href="#i-type"/></svg></div>
-          <div><h3>Captions written for you</h3><p>In your voice, with hashtags that suit your city and category — not a generic block of thirty.</p></div>
-        </div>
-        <div class="fp">
-          <div class="fp-ic"><svg class="ic" aria-hidden="true"><use href="#i-bars"/></svg></div>
-          <div><h3>A report you can read</h3><p>On the 1st, in plain language. What ran, what people watched, what we're doing next month.</p></div>
-        </div>
+      <div class="feed-points rv" role="tablist" aria-label="What you get each month">
+        <button class="fp on" type="button" role="tab" id="fpt0" aria-selected="true" aria-controls="scr0" data-s="0">
+          <span class="fp-ic"><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg></span>
+          <span class="fp-tx"><span class="fp-h">A calendar you can see</span><span class="fp-p">Every post for the month laid out before it goes live. Move it, kill it or swap it with one message.</span></span>
+          <span class="fp-bar" aria-hidden="true"><i></i></span>
+        </button>
+        <button class="fp" type="button" role="tab" id="fpt1" aria-selected="false" aria-controls="scr1" data-s="1">
+          <span class="fp-ic"><svg class="ic" aria-hidden="true"><use href="#i-flow"/></svg></span>
+          <span class="fp-tx"><span class="fp-h">It posts itself</span><span class="fp-p">Approve from WhatsApp, then the automation schedules it, publishes it, answers the usual questions and logs every enquiry.</span></span>
+          <span class="fp-bar" aria-hidden="true"><i></i></span>
+        </button>
+        <button class="fp" type="button" role="tab" id="fpt2" aria-selected="false" aria-controls="scr2" data-s="2">
+          <span class="fp-ic"><svg class="ic" aria-hidden="true"><use href="#i-type"/></svg></span>
+          <span class="fp-tx"><span class="fp-h">Captions written for you</span><span class="fp-p">In your voice, with hashtags that suit your city and category, not a generic block of thirty.</span></span>
+          <span class="fp-bar" aria-hidden="true"><i></i></span>
+        </button>
+        <button class="fp" type="button" role="tab" id="fpt3" aria-selected="false" aria-controls="scr3" data-s="3">
+          <span class="fp-ic"><svg class="ic" aria-hidden="true"><use href="#i-bars"/></svg></span>
+          <span class="fp-tx"><span class="fp-h">A report you can read</span><span class="fp-p">On the 1st, in plain language. What ran, what people watched, what we are doing next month.</span></span>
+          <span class="fp-bar" aria-hidden="true"><i></i></span>
+        </button>
       </div>
+      <p class="fp-mdesc" id="fpDesc" aria-hidden="true">Every post for the month laid out before it goes live. Move it, kill it or swap it with one message.</p>
 
-      <div class="phone-stage" data-scrub="tip" aria-hidden="true">
-      <div class="toast t1"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><div><b>Reel published</b><span>Today, 6:00 PM · on schedule</span></div></div>
-      <div class="toast t2 t-win"><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg><div><b>New enquiry</b><span>“Are you open Sunday?” · sent to WhatsApp</span></div></div>
-      <div class="toast t3"><svg class="ic" aria-hidden="true"><use href="#i-bolt"/></svg><div><b>Reply sent</b><span>Timings and location, answered for you</span></div></div>
-      <div class="phone">
-        <div class="phone-screen">
-          <div class="phone-notch"></div>
-          <div class="phone-bar">Your feed · this month</div>
-          <div class="stories">
-            <span class="story"><span><svg class="ic" aria-hidden="true"><use href="#i-spark"/></svg></span></span><span class="story"><span><svg class="ic" aria-hidden="true"><use href="#i-bowl"/></svg></span></span><span class="story"><span><svg class="ic" aria-hidden="true"><use href="#i-cake"/></svg></span></span><span class="story seen"><span><svg class="ic" aria-hidden="true"><use href="#i-scissors"/></svg></span></span><span class="story seen"><span><svg class="ic" aria-hidden="true"><use href="#i-dumbbell"/></svg></span></span>
+      <div class="phone-stage" data-scrub="tip">
+        <div class="phone">
+          <span class="ph-btn b1" aria-hidden="true"></span><span class="ph-btn b2" aria-hidden="true"></span><span class="ph-btn b3" aria-hidden="true"></span>
+          <div class="phone-screen">
+            <div class="ph-island" aria-hidden="true"></div>
+            <div class="ph-status" aria-hidden="true"><span>9:41</span><span class="ph-sys"><i class="sig"><b></b><b></b><b></b><b></b></i><i class="bat"></i></span></div>
+
+            <div class="scr scr-cal on" id="scr0" role="tabpanel" aria-labelledby="fpt0">
+              <div class="scr-h"><span class="scr-k">Content calendar</span><b class="cal-m" id="calMonth">October</b></div>
+              <div class="cal-w" aria-hidden="true"><i>M</i><i>T</i><i>W</i><i>T</i><i>F</i><i>S</i><i>S</i></div>
+              <div class="cal-g" aria-hidden="true"><i class="cd" style="--d:1">1</i><i class="cd has" style="--d:2">2<b class="k-r"></b></i><i class="cd" style="--d:3">3</i><i class="cd has" style="--d:4">4<b class="k-c"></b></i><i class="cd" style="--d:5">5</i><i class="cd has" style="--d:6">6<b class="k-s"></b></i><i class="cd" style="--d:7">7</i><i class="cd" style="--d:8">8</i><i class="cd today has" style="--d:9">9<b class="k-r"></b></i><i class="cd" style="--d:10">10</i><i class="cd has" style="--d:11">11<b class="k-c"></b></i><i class="cd" style="--d:12">12</i><i class="cd has" style="--d:13">13<b class="k-s"></b></i><i class="cd" style="--d:14">14</i><i class="cd" style="--d:15">15</i><i class="cd has" style="--d:16">16<b class="k-r"></b></i><i class="cd" style="--d:17">17</i><i class="cd has" style="--d:18">18<b class="k-c"></b></i><i class="cd" style="--d:19">19</i><i class="cd has" style="--d:20">20<b class="k-s"></b></i><i class="cd" style="--d:21">21</i><i class="cd" style="--d:22">22</i><i class="cd has" style="--d:23">23<b class="k-r"></b></i><i class="cd" style="--d:24">24</i><i class="cd has" style="--d:25">25<b class="k-c"></b></i><i class="cd" style="--d:26">26</i><i class="cd has" style="--d:27">27<b class="k-s"></b></i><i class="cd" style="--d:28">28</i><i class="cd" style="--d:29">29</i><i class="cd has" style="--d:30">30<b class="k-r"></b></i><i class="cd" style="--d:31">31</i><i class="cd off"></i><i class="cd off"></i><i class="cd off"></i><i class="cd off"></i></div>
+              <div class="cal-key" aria-hidden="true"><span><b class="k-r"></b>Reel</span><span><b class="k-c"></b>Carousel</span><span><b class="k-s"></b>Story</span></div>
+              <div class="cal-next">
+                <div class="cn"><b class="k-r"></b><span>Store tour reel</span><em>Mon, 6 PM</em></div>
+                <div class="cn"><b class="k-c"></b><span>New menu carousel</span><em>Wed, 1 PM</em></div>
+              </div>
+            </div>
+
+            <div class="scr scr-pub" id="scr1" role="tabpanel" aria-labelledby="fpt1">
+              <div class="scr-h"><span class="scr-k">Today</span><b>Going out on time</b></div>
+              <div class="pub-post post">
+                <div class="post-img pub-art g1"><span class="pa-sun" aria-hidden="true"></span><span class="pa-steam" aria-hidden="true"><i></i><i></i><i></i></span><span class="pa-cup" aria-hidden="true"></span><span class="post-kind">Reel</span></div>
+                <div class="post-meta"><b>Monsoon chai is back</b><span class="post-like" data-n="128"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>128</em></span></div>
+              </div>
+              <div class="pub-steps" aria-live="polite">
+                <div class="ps" data-i="0"><i></i><span>Approved on WhatsApp</span></div>
+                <div class="ps" data-i="1"><i></i><span>Scheduled for 6:00 PM</span></div>
+                <div class="ps" data-i="2"><i></i><span>Published to Instagram and Facebook</span></div>
+                <div class="ps" data-i="3"><i></i><span>3 enquiries sent to WhatsApp</span></div>
+              </div>
+              <p class="tap-hint">Tap the post to like it</p>
+            </div>
+
+            <div class="scr scr-cap" id="scr2" role="tabpanel" aria-labelledby="fpt2">
+              <div class="scr-h"><span class="scr-k">Caption draft</span><b>In your voice</b></div>
+              <div class="cap-post">
+                <div class="cap-av" aria-hidden="true"></div>
+                <div class="cap-who"><b>yourbusiness</b><span>Your city</span></div>
+              </div>
+              <div class="cap-art g3" aria-hidden="true"><span class="ca-t">Monsoon<br>special</span></div>
+              <p class="cap-txt"><span id="capType"></span><i class="caret" aria-hidden="true"></i></p>
+              <div class="cap-tags" id="capTags"><span>#yourcity</span><span>#chailovers</span><span>#monsoonspecial</span></div>
+            </div>
+
+            <div class="scr scr-rep" id="scr3" role="tabpanel" aria-labelledby="fpt3">
+              <div class="scr-h"><span class="scr-k">Sample report</span><b>Your month, in plain words</b></div>
+              <div class="rep-chart" aria-hidden="true">
+                <svg viewBox="0 0 220 90" preserveAspectRatio="none">
+                  <defs><linearGradient id="repfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A95CFF" stop-opacity=".45"/><stop offset="1" stop-color="#A95CFF" stop-opacity="0"/></linearGradient></defs>
+                  <path class="rp-area" d="M0 78 C20 74 30 70 45 66 S75 58 90 60 S120 46 135 40 S165 30 180 22 S205 12 220 8 L220 90 L0 90Z" fill="url(#repfill)"/>
+                  <path class="rp-line" d="M0 78 C20 74 30 70 45 66 S75 58 90 60 S120 46 135 40 S165 30 180 22 S205 12 220 8" pathLength="1" fill="none" stroke="#D8BBFF" stroke-width="2.4" stroke-linecap="round"/>
+                  <circle class="rp-dot" cx="220" cy="8" r="4" fill="#fff"/>
+                </svg>
+                <span class="rp-wk"><i>Wk 1</i><i>Wk 2</i><i>Wk 3</i><i>Wk 4</i></span>
+              </div>
+              <div class="rep-kpi">
+                <div><span>Posts out</span><b>24</b></div>
+                <div><span>Enquiries</span><b>31</b></div>
+              </div>
+              <div class="rep-note"><b>Best post:</b> the monsoon chai reel. <b>Next month:</b> two more reels at 6 PM.</div>
+            </div>
+            <div class="ph-glare" aria-hidden="true"></div>
           </div>
-          <div class="feed-track">
-            <div class="post"><div class="post-img g1"><svg class="ic" aria-hidden="true"><use href="#i-bowl"/></svg><span class="post-kind">Reel</span></div><div class="post-meta"><b>New menu drop</b><span class="post-like" data-n="128"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>128</em></span></div></div>
-            <div class="post"><div class="post-img g2"><svg class="ic" aria-hidden="true"><use href="#i-scissors"/></svg><span class="post-kind">Before/after</span></div><div class="post-meta"><b>Monsoon hair care</b><span class="post-like" data-n="94"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>94</em></span></div></div>
-            <div class="post"><div class="post-img g3"><svg class="ic" aria-hidden="true"><use href="#i-confetti"/></svg><span class="post-kind">Carousel</span></div><div class="post-meta"><b>Festival offer</b><span class="post-like" data-n="212"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>212</em></span></div></div>
-            <div class="post"><div class="post-img g4"><svg class="ic" aria-hidden="true"><use href="#i-dumbbell"/></svg><span class="post-kind">Story</span></div><div class="post-meta"><b>6am batch open</b><span class="post-like" data-n="67"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>67</em></span></div></div>
-            <div class="post"><div class="post-img g5"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg><span class="post-kind">Reel</span></div><div class="post-meta"><b>Store tour</b><span class="post-like" data-n="153"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>153</em></span></div></div>
-            <div class="post"><div class="post-img g6"><svg class="ic" aria-hidden="true"><use href="#i-cake"/></svg><span class="post-kind">Post</span></div><div class="post-meta"><b>Custom orders</b><span class="post-like" data-n="88"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>88</em></span></div></div>
-            <div class="post"><div class="post-img g1"><svg class="ic" aria-hidden="true"><use href="#i-bowl"/></svg><span class="post-kind">Reel</span></div><div class="post-meta"><b>New menu drop</b><span class="post-like" data-n="128"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>128</em></span></div></div>
-            <div class="post"><div class="post-img g2"><svg class="ic" aria-hidden="true"><use href="#i-scissors"/></svg><span class="post-kind">Before/after</span></div><div class="post-meta"><b>Monsoon hair care</b><span class="post-like" data-n="94"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>94</em></span></div></div>
-            <div class="post"><div class="post-img g3"><svg class="ic" aria-hidden="true"><use href="#i-confetti"/></svg><span class="post-kind">Carousel</span></div><div class="post-meta"><b>Festival offer</b><span class="post-like" data-n="212"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>212</em></span></div></div>
-            <div class="post"><div class="post-img g4"><svg class="ic" aria-hidden="true"><use href="#i-dumbbell"/></svg><span class="post-kind">Story</span></div><div class="post-meta"><b>6am batch open</b><span class="post-like" data-n="67"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>67</em></span></div></div>
-            <div class="post"><div class="post-img g5"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg><span class="post-kind">Reel</span></div><div class="post-meta"><b>Store tour</b><span class="post-like" data-n="153"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>153</em></span></div></div>
-            <div class="post"><div class="post-img g6"><svg class="ic" aria-hidden="true"><use href="#i-cake"/></svg><span class="post-kind">Post</span></div><div class="post-meta"><b>Custom orders</b><span class="post-like" data-n="88"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><em>88</em></span></div></div>
-          </div>
-          <div class="phone-fade"></div>
         </div>
-      </div>
       </div>
     </div>
   </div>
@@ -2204,8 +2476,6 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   </div>
 </footer>
 
-<div class="cursor" id="cursor" aria-hidden="true"><span>Drag</span></div><div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
-
 <div class="motion-note" id="motionNote" role="status" hidden>
   <span><b>Animations are off</b> because your device is set to reduce motion.</span>
   <button class="btn btn-primary btn-sm" type="button" data-motion-on>Turn on</button>
@@ -2369,6 +2639,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       setTimeout(function(){ el.classList.remove('rv'); el.style.transitionDelay = ''; }, wait);
     }
   }
+  document.querySelectorAll('.svc, .fp, .in-i, .why-card, .plan').forEach(function(el){ el.setAttribute('data-draw', ''); });
   var rv = Array.prototype.slice.call(document.querySelectorAll('.rv, .split'));
   if(reduce || !('IntersectionObserver' in window)){
     rv.forEach(arrive);
@@ -2730,9 +3001,36 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     });
 
     var spin = 0, vel = 0, hovering = false, dragging = false, lastX = 0, oRaf = null, oVisible = false;
-    var AUTO = reduce ? 0 : .085;
+    var AUTO = reduce ? 0 : .085, goal = null, front = -1, downX = 0, downCard = null;
+    var oCap = document.getElementById('orbitCap'), oSec = stage.closest('.orbit-sec');
+
+    function frontIndex(){
+      var best = 0, bestFace = -2;
+      for(var i = 0; i < N; i++){
+        var f = Math.cos((i * STEP + spin) * RAD);
+        if(f > bestFace){ bestFace = f; best = i; }
+      }
+      return best;
+    }
+    function caption(i){
+      if(!oCap || i === front) return;
+      front = i;
+      oCap.querySelector('b').innerHTML = ocards[i].dataset.t;
+      oCap.querySelector('span').textContent = ocards[i].dataset.d;
+      oCap.classList.remove('swap'); void oCap.offsetWidth; oCap.classList.add('swap');
+    }
+    /* bring card i to the front by the shortest way round */
+    function goTo(i){
+      i = (i % N + N) % N;
+      var base = -i * STEP;
+      goal = base + 360 * Math.round((spin - base) / 360);
+      vel = 0;
+      if(reduce){ spin = goal; goal = null; orbit.style.transform = 'rotateY(' + spin + 'deg)'; shade(); }
+      wake();
+    }
 
     function shade(){
+      caption(frontIndex());
       for(var i = 0; i < N; i++){
         /* cos is 1 when a card faces us, -1 when it is round the back */
         var face = Math.cos((i * STEP + spin) * RAD);
@@ -2744,7 +3042,10 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     }
     function oFrame(){
       if(!oVisible){ oRaf = null; return; }
-      if(!dragging){
+      if(!dragging && goal !== null){
+        spin += (goal - spin) * .12;
+        if(Math.abs(goal - spin) < .05){ spin = goal; goal = null; }
+      } else if(!dragging){
         if(!hovering) spin += AUTO;
         spin += vel;
         vel *= .93;
@@ -2759,7 +3060,8 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     stage.addEventListener('pointerenter', function(){ hovering = true; }, {passive:true});
     stage.addEventListener('pointerleave', function(){ hovering = false; }, {passive:true});
     stage.addEventListener('pointerdown', function(ev){
-      dragging = true; lastX = ev.clientX; vel = 0;
+      dragging = true; lastX = ev.clientX; vel = 0; goal = null;
+      downX = ev.clientX; downCard = ev.target.closest ? ev.target.closest('.ocard') : null;
       stage.classList.add('dragging');
       if(stage.setPointerCapture) { try{ stage.setPointerCapture(ev.pointerId); }catch(e){} }
       wake();
@@ -2771,18 +3073,24 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       spin += dx; vel = dx;
     }, {passive:true});
     function endDrag(){ dragging = false; stage.classList.remove('dragging'); }
-    stage.addEventListener('pointerup', endDrag);
+    stage.addEventListener('pointerup', function(ev){
+      var tapped = downCard && Math.abs(ev.clientX - downX) < 6;
+      endDrag();
+      if(tapped) goTo(ocards.indexOf(downCard));
+      downCard = null;
+    });
     stage.addEventListener('pointercancel', endDrag);
 
     var oprev = document.getElementById('oprev'), onext = document.getElementById('onext');
-    if(oprev) oprev.addEventListener('click', function(){ vel -= 2.6; wake(); });
-    if(onext) onext.addEventListener('click', function(){ vel += 2.6; wake(); });
+    if(oprev) oprev.addEventListener('click', function(){ goTo(frontIndex() + 1); });
+    if(onext) onext.addEventListener('click', function(){ goTo(frontIndex() - 1); });
 
     shade();
     orbit.style.transform = 'rotateY(0deg)';
     if('IntersectionObserver' in window){
       new IntersectionObserver(function(es){
         oVisible = es[0].isIntersecting && !document.hidden;
+        if(oSec) oSec.classList.toggle('vis', oVisible);
         wake();
       }, {threshold:0}).observe(stage);
       document.addEventListener('visibilitychange', function(){
@@ -2968,30 +3276,6 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   }
 
   var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-
-  /* ---- cursor follower: dot is locked to the pointer, ring follows with a little lag ---- */
-  var cur = document.getElementById('cursor'), curDot = document.getElementById('cursorDot');
-  if(cur && fine && !reduce){
-    var cx2 = -100, cy2 = -100, rx2 = -100, ry2 = -100, cRaf = null;
-    var cLoop = function(){
-      rx2 += (cx2 - rx2) * .2; ry2 += (cy2 - ry2) * .2;
-      cur.style.transform = 'translate3d(' + rx2.toFixed(1) + 'px,' + ry2.toFixed(1) + 'px,0)';
-      cRaf = (Math.abs(cx2 - rx2) > .1 || Math.abs(cy2 - ry2) > .1) ? requestAnimationFrame(cLoop) : null;
-    };
-    window.addEventListener('pointermove', function(ev){
-      if(ev.pointerType !== 'mouse') return;
-      cx2 = ev.clientX; cy2 = ev.clientY;
-      curDot.style.transform = 'translate3d(' + cx2 + 'px,' + cy2 + 'px,0)';
-      cur.classList.add('on'); curDot.classList.add('on');
-      var t = ev.target;
-      cur.classList.toggle('drag', !!(t.closest && t.closest('#stage')));
-      cur.classList.toggle('link', !!(t.closest && t.closest('a, button, summary, .spine, .chip')) && !cur.classList.contains('drag'));
-      if(!cRaf) cRaf = requestAnimationFrame(cLoop);
-    }, {passive:true});
-    document.addEventListener('pointerdown', function(){ cur.classList.add('press'); });
-    document.addEventListener('pointerup', function(){ cur.classList.remove('press'); });
-    document.documentElement.addEventListener('mouseleave', function(){ cur.classList.remove('on'); curDot.classList.remove('on'); });
-  }
 
   /* ---- hero grid lights up around the pointer ---- */
   var gridlit = document.querySelector('.gridlit');
@@ -3233,6 +3517,89 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       mNote.hidden = true;
       try{ sessionStorage.setItem('nx-motion-note', '1'); }catch(e){}
     });
+  }
+
+  /* ---- "a month of posts": four tabs, four phone screens, autoplay while in view ---- */
+  var fps = Array.prototype.slice.call(document.querySelectorAll('.fp[data-s]'));
+  var scrs = Array.prototype.slice.call(document.querySelectorAll('.phone .scr'));
+  if(fps.length && scrs.length){
+    var fCur = 0, fVisible = false, fTimers = [];
+    var calM = document.getElementById('calMonth');
+    if(calM) calM.textContent = new Date().toLocaleString('en-US', {month:'long'});
+    var CAPTION = 'Monsoon special is back. Masala chai and fresh pakoras, every evening from 5. Tag someone you would share a plate with.';
+    var capType = document.getElementById('capType'), capTags = document.getElementById('capTags');
+    function clearT(){ fTimers.forEach(clearTimeout); fTimers = []; }
+    function later(fn, ms){ fTimers.push(setTimeout(fn, ms)); }
+    function enterScreen(i){
+      clearT();
+      if(i === 1){
+        var steps = Array.prototype.slice.call(scrs[1].querySelectorAll('.ps'));
+        steps.forEach(function(st){ st.classList.remove('cur', 'done'); });
+        if(reduce){ steps.forEach(function(st){ st.classList.add('done'); }); return; }
+        steps.forEach(function(st, k){
+          later(function(){ st.classList.add('cur'); }, 300 + k * 1100);
+          later(function(){ st.classList.remove('cur'); st.classList.add('done'); }, 1000 + k * 1100);
+        });
+      } else if(i === 2){
+        capTags.classList.remove('show');
+        if(reduce){ capType.textContent = CAPTION; capTags.classList.add('show'); return; }
+        capType.textContent = '';
+        var n = 0;
+        (function type(){
+          n++;
+          capType.textContent = CAPTION.slice(0, n);
+          if(n < CAPTION.length) later(type, CAPTION[n - 1] === '.' ? 260 : 26);
+          else later(function(){ capTags.classList.add('show'); }, 200);
+        })();
+      } else if(i === 3){
+        scrs[3].querySelectorAll('.rep-kpi b').forEach(function(b){
+          var to = parseInt(b.dataset.to || b.textContent, 10); b.dataset.to = to;
+          if(reduce) b.textContent = to; else countUp(b, to, 1200, function(v){ return v; });
+        });
+      }
+    }
+    function showFeed(i, focus){
+      fCur = i;
+      fps.forEach(function(b, k){
+        var on = k === i;
+        b.classList.toggle('on', on); b.classList.remove('run');
+        b.setAttribute('aria-selected', on ? 'true' : 'false'); b.tabIndex = on ? 0 : -1;
+      });
+      scrs.forEach(function(sc, k){ sc.classList.toggle('on', k === i); });
+      var fDesc = document.getElementById('fpDesc'), fRow = fps[i].parentNode;
+      if(fDesc){ fDesc.textContent = fps[i].querySelector('.fp-p').textContent; fDesc.classList.remove('swap'); void fDesc.offsetWidth; fDesc.classList.add('swap'); }
+      /* keep the active pill in view inside the row, without moving the page */
+      if(fRow.scrollWidth > fRow.clientWidth){
+        fRow.scrollTo({left: Math.max(0, fps[i].offsetLeft - 20), behavior: reduce ? 'auto' : 'smooth'});
+      }
+      enterScreen(i);
+      if(focus) fps[i].focus();
+      run();
+    }
+    function run(){
+      var b = fps[fCur];
+      b.classList.remove('run');
+      if(reduce || !fVisible) return;
+      void b.offsetWidth; b.classList.add('run');
+    }
+    fps.forEach(function(b, i){
+      b.style.setProperty('--dur', i === 2 ? '8s' : '6.5s');
+      b.addEventListener('click', function(){ showFeed(i); });
+      b.querySelector('.fp-bar i').addEventListener('animationend', function(){ if(b.classList.contains('run')) showFeed((i + 1) % fps.length); });
+    });
+    document.querySelector('.feed-points').addEventListener('keydown', function(ev){
+      var d = ev.key === 'ArrowDown' || ev.key === 'ArrowRight' ? 1 : ev.key === 'ArrowUp' || ev.key === 'ArrowLeft' ? -1 : 0;
+      if(!d) return;
+      ev.preventDefault(); showFeed((fCur + d + fps.length) % fps.length, true);
+    });
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        var was = fVisible; fVisible = es[0].isIntersecting;
+        if(fVisible && !was){ enterScreen(fCur); run(); }
+        if(!fVisible){ fps[fCur].classList.remove('run'); clearT(); }
+      }, {threshold:.35}).observe(document.querySelector('.feed-wrap'));
+    } else { fVisible = true; }
+    enterScreen(0);
   }
 
   /* ---- smooth in-page nav ---- */
