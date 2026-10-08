@@ -60,8 +60,8 @@ section{position:relative}
 
 /* the cosmos: one fixed starfield behind every section (painted from JS) */
 #fluid{position:fixed; inset:0; width:100%; height:100%; z-index:150; pointer-events:none; display:block}
-/* dithered waves: the deepest layer, rendered small and scaled up so each pixel is a 3px block */
-#dither-bg{position:fixed; inset:0; width:100%; height:100%; z-index:-2; pointer-events:none; display:block; opacity:.4; image-rendering:pixelated; image-rendering:crisp-edges}
+/* glossy nebula: the deepest layer, smooth violet ribbons under the starfield */
+#nebula{position:fixed; inset:0; width:100%; height:100%; z-index:-2; pointer-events:none; display:block; opacity:.62}
 #cosmos{position:fixed; inset:0; width:100%; height:100%; z-index:-1; pointer-events:none; display:block}
 
 /* film grain over the whole page */
@@ -1656,7 +1656,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 <div class="prog" id="prog"></div>
 
 <a class="skip" href="#main">Skip to content</a>
-<canvas id="dither-bg" aria-hidden="true"></canvas>
+<canvas id="nebula" aria-hidden="true"></canvas>
 <canvas id="cosmos" aria-hidden="true"></canvas>
 <canvas id="fluid" aria-hidden="true"></canvas>
 
@@ -3491,53 +3491,55 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     document.addEventListener('visibilitychange', function(){ if(!document.hidden && Date.now() - lastMove < IDLE_MS && !fluidRaf){ lastUpdateTime = Date.now(); fluidRaf = requestAnimationFrame(updateFrame); } });
   })();
 
-  /* ---- dithered waves: domain-warped noise, quantised to four tones with an 8x8 Bayer pattern.
-         Effect idea from Dither by David Haz (React Bits, MIT + Commons Clause); rewritten here as a
-         single WebGL shader in the site's violet palette, kept dim and slow so it sits behind the content. ---- */
+  /* ---- glossy nebula: silky violet ribbons that slowly wave, each with a soft sheen along its
+         upper edge, over a faint smooth haze. Rendered at half resolution; the content is soft,
+         so the browser's smooth upscale keeps it glossy rather than grainy. ---- */
   (function(){
-    var cv = document.getElementById('dither-bg');
+    var cv = document.getElementById('nebula');
     if(!cv) return;
     var gl = null;
     try{ gl = cv.getContext('webgl', { alpha: false, antialias: false, depth: false, stencil: false, preserveDrawingBuffer: false }); }catch(e){}
     if(!gl){ cv.style.display = 'none'; return; }
-    var PX = 3;                                   /* CSS pixels per dither pixel */
+    var SCALE = 2;                                 /* CSS pixels per rendered pixel */
     var VS = 'attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }';
     var FS = [
       'precision mediump float;',
       'uniform vec2 res; uniform float t;',
-      'vec4 mod289(vec4 x){ return x - floor(x * (1.0/289.0)) * 289.0; }',
-      'vec4 permute(vec4 x){ return mod289(((x * 34.0) + 1.0) * x); }',
-      'vec4 taylorInvSqrt(vec4 r){ return 1.79284291400159 - 0.85373472095314 * r; }',
-      'vec2 fade(vec2 t){ return t*t*t*(t*(t*6.0-15.0)+10.0); }',
-      'float cnoise(vec2 P){',
-      '  vec4 Pi = floor(P.xyxy) + vec4(0.0,0.0,1.0,1.0); vec4 Pf = fract(P.xyxy) - vec4(0.0,0.0,1.0,1.0);',
-      '  Pi = mod289(Pi); vec4 ix = Pi.xzxz; vec4 iy = Pi.yyww; vec4 fx = Pf.xzxz; vec4 fy = Pf.yyww;',
-      '  vec4 i = permute(permute(ix) + iy); vec4 gx = fract(i * (1.0/41.0)) * 2.0 - 1.0; vec4 gy = abs(gx) - 0.5;',
-      '  vec4 tx = floor(gx + 0.5); gx = gx - tx;',
-      '  vec2 g00 = vec2(gx.x, gy.x); vec2 g10 = vec2(gx.y, gy.y); vec2 g01 = vec2(gx.z, gy.z); vec2 g11 = vec2(gx.w, gy.w);',
-      '  vec4 norm = taylorInvSqrt(vec4(dot(g00,g00), dot(g01,g01), dot(g10,g10), dot(g11,g11)));',
-      '  g00 *= norm.x; g01 *= norm.y; g10 *= norm.z; g11 *= norm.w;',
-      '  float n00 = dot(g00, vec2(fx.x, fy.x)); float n10 = dot(g10, vec2(fx.y, fy.y));',
-      '  float n01 = dot(g01, vec2(fx.z, fy.z)); float n11 = dot(g11, vec2(fx.w, fy.w));',
-      '  vec2 fxy = fade(Pf.xy); vec2 nx = mix(vec2(n00, n01), vec2(n10, n11), fxy.x);',
-      '  return 2.3 * mix(nx.x, nx.y, fxy.y);',
-      '}',
-      'float fbm(vec2 p){ float v = 0.0; float a = 1.0; for(int i = 0; i < 4; i++){ v += a * abs(cnoise(p)); p *= 3.0; a *= 0.3; } return v; }',
-      'float pattern(vec2 p){ vec2 p2 = p - t * 0.03; return fbm(p + fbm(p2)); }',
-      /* 8x8 ordered dither threshold, built from nested 2x2 Bayer steps */
-      'float bayer2(vec2 a){ a = floor(a); return fract(a.x / 2.0 + a.y * a.y * 0.75); }',
-      'float bayer4(vec2 a){ return bayer2(0.5 * a) * 0.25 + bayer2(a); }',
-      'float bayer8(vec2 a){ return bayer4(0.5 * a) * 0.25 + bayer2(a); }',
+      'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
+      'float noise(vec2 p){ vec2 i = floor(p), f = fract(p); vec2 u = f * f * (3.0 - 2.0 * f);',
+      '  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y); }',
+      'float fbm(vec2 p){ float v = 0.0, a = 0.5; for(int i = 0; i < 4; i++){ v += a * noise(p); p = p * 2.03 + 7.1; a *= 0.5; } return v; }',
       'void main(){',
-      '  vec2 uv = gl_FragCoord.xy / res - 0.5; uv.x *= res.x / res.y;',
-      '  float f = clamp(pattern(uv * 0.9) * 0.55, 0.0, 1.0);',
-      '  float levels = 4.0;',
-      '  float q = floor(clamp(f + (bayer8(gl_FragCoord.xy) - 0.5) / (levels - 1.0), 0.0, 1.0) * (levels - 1.0) + 0.5) / (levels - 1.0);',
-      /* tone ramp from the palette: ink, deep violet, violet, lilac */
-      '  vec3 ink = vec3(5.0, 3.0, 12.0) / 255.0; vec3 deep = vec3(61.0, 7.0, 137.0) / 255.0;',
-      '  vec3 vio = vec3(125.0, 24.0, 252.0) / 255.0; vec3 lil = vec3(169.0, 92.0, 255.0) / 255.0;',
-      '  vec3 c = mix(ink, deep, smoothstep(0.0, 0.34, q)); c = mix(c, vio, smoothstep(0.34, 0.67, q)); c = mix(c, lil, smoothstep(0.67, 1.0, q));',
-      '  gl_FragColor = vec4(c, 1.0);',
+      '  vec2 uv = (gl_FragCoord.xy - 0.5 * res) / res.y;',
+      '  vec3 ink  = vec3(5.0, 3.0, 12.0) / 255.0;',
+      '  vec3 deep = vec3(61.0, 7.0, 137.0) / 255.0;',
+      '  vec3 vio  = vec3(125.0, 24.0, 252.0) / 255.0;',
+      '  vec3 lil  = vec3(169.0, 92.0, 255.0) / 255.0;',
+      '  vec3 pale = vec3(216.0, 187.0, 255.0) / 255.0;',
+      /* a slow, smooth haze so the ribbons sit in something */
+      '  float n = fbm(uv * 1.1 + vec2(t * 0.018, -t * 0.012));',
+      '  vec3 col = mix(ink, deep, smoothstep(0.38, 0.95, n) * 0.5);',
+      /* three ribbons: wavy centre lines, a soft body, and a thin glossy highlight on the top edge */
+      '  for(int i = 0; i < 3; i++){',
+      '    float fi = float(i);',
+      '    float wave = 0.13 * sin(uv.x * (1.25 + fi * 0.35) + t * (0.11 + fi * 0.025) + fi * 2.1)',
+      '               + 0.05 * sin(uv.x * 3.2 - t * (0.17 + fi * 0.02) + fi * 4.0)',
+      '               + (n - 0.5) * 0.12;',
+      '    float yc = -0.34 + fi * 0.3 + wave;',
+      '    float d = uv.y - yc;',
+      '    float w = 0.12 + fi * 0.03;',
+      '    float body = exp(-(d * d) / (w * w));',
+      '    float edge = exp(-pow((d - w * 0.55) / (w * 0.13), 2.0));',
+      '    float along = 0.55 + 0.45 * sin(uv.x * 0.9 + t * 0.07 + fi * 1.7);',
+      '    vec3 tint = i == 1 ? lil : vio;',
+      '    col += deep * body * 0.55 * along;',
+      '    col += tint * body * body * 0.32 * along;',
+      '    col += pale * edge * 0.30 * along;',
+      '    col += vec3(1.0) * pow(edge, 3.0) * 0.07 * along;',
+      '  }',
+      /* soft vignette keeps the edges deep */
+      '  col *= 1.0 - 0.35 * smoothstep(0.55, 1.25, length(uv * vec2(0.8, 1.0)));',
+      '  gl_FragColor = vec4(col, 1.0);',
       '}'
     ].join('\n');
     function sh(type, src){ var o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); if(!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; }
@@ -3554,14 +3556,13 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     var loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     var uRes = gl.getUniformLocation(prog, 'res'), uT = gl.getUniformLocation(prog, 't');
     function size(){
-      cv.width = Math.max(1, Math.ceil(window.innerWidth / PX)); cv.height = Math.max(1, Math.ceil(window.innerHeight / PX));
+      cv.width = Math.max(1, Math.ceil(window.innerWidth / SCALE)); cv.height = Math.max(1, Math.ceil(window.innerHeight / SCALE));
       gl.viewport(0, 0, cv.width, cv.height); gl.uniform2f(uRes, cv.width, cv.height);
     }
     function draw(sec){ gl.uniform1f(uT, sec); gl.drawArrays(gl.TRIANGLES, 0, 3); }
     size();
-    if(reduce){ draw(0); window.addEventListener('resize', function(){ size(); draw(0); }, {passive:true}); return; }
-    /* about 30 frames a second is plenty for a slow drift */
-    var raf = null, lastDraw = 0, t0 = performance.now();
+    if(reduce){ draw(8); window.addEventListener('resize', function(){ size(); draw(8); }, {passive:true}); return; }
+    var raf = null, lastDraw = 0, t0 = performance.now() - 8000;
     function frame(now){
       if(document.hidden){ raf = null; return; }
       if(now - lastDraw > 33){ lastDraw = now; draw((now - t0) / 1000); }
@@ -3573,8 +3574,8 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     window.addEventListener('resize', function(){
       clearTimeout(rz);
       rz = setTimeout(function(){
-        var w = Math.ceil(window.innerWidth / PX), h = Math.ceil(window.innerHeight / PX);
-        if(w !== cv.width || Math.abs(h - cv.height) > 40) size();
+        var w = Math.ceil(window.innerWidth / SCALE), h = Math.ceil(window.innerHeight / SCALE);
+        if(w !== cv.width || Math.abs(h - cv.height) > 60) size();
       }, 150);
     }, {passive:true});
   })();
