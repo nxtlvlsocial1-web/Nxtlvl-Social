@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "characteristic-voice": {
+      "source": "noizai/skills",
+      "sourceType": "github",
+      "skillPath": "skills/characteristic-voice/SKILL.md",
+      "computedHash": "519d6d8a92069eb9e05385a2902762457459981940f78d2ac679959c87749d0e"
+    },
     "embedded-captions": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
@@ -78,6 +84,12 @@
       "sourceType": "github",
       "skillPath": "skills/hyperframes-studio/SKILL.md",
       "computedHash": "3ac6b0019626b0cfa0d067c52ae3e46b5d98722784b1ef103ac301a1815dfd7a"
+    },
+    "lipsync": {
+      "source": "prime-skills/runcomfy-agent-skills",
+      "sourceType": "github",
+      "skillPath": "lipsync/SKILL.md",
+      "computedHash": "f8d47a2f1cbe9620acd012d796f0149d8858f77996883e23d0433a3e5d539fe6"
     },
     "media-use": {
       "source": "heygen-com/hyperframes",
