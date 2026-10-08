@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "competitive-landscape": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "skillPath": "plugins/startup-business-analyst/skills/competitive-landscape/SKILL.md",
+      "computedHash": "b312307bc16b8dd98b9ff9657a95d69d51870030179e60066004fd2399cdb69a"
+    },
     "embedded-captions": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
@@ -78,6 +84,12 @@
       "sourceType": "github",
       "skillPath": "skills/hyperframes-studio/SKILL.md",
       "computedHash": "3ac6b0019626b0cfa0d067c52ae3e46b5d98722784b1ef103ac301a1815dfd7a"
+    },
+    "last30days": {
+      "source": "mvanhorn/last30days-skill",
+      "sourceType": "github",
+      "skillPath": "skills/last30days/SKILL.md",
+      "computedHash": "59bb14deef8578620fdf530266a1ab66060b6e88576633fb98bd3af63a075d16"
     },
     "media-use": {
       "source": "heygen-com/hyperframes",
