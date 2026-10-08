@@ -30,9 +30,10 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Design direction: palette, type, pacing                 | `hyperframes-creative`                        |
 | Working with a person in Studio, storyboards            | `hyperframes-studio`                          |
 | CLI: init, check, preview, render, troubleshooting      | `hyperframes-cli`                             |
+| Still images: social graphics, banners, mockups, OG     | `image`                                       |
 
-The HyperFrames skills are third-party (from `heygen-com/hyperframes`); their versions are pinned in
-`skills-lock.json`. Don't edit them by hand. Update them with:
+The HyperFrames skills are third-party (from `heygen-com/hyperframes`), as is `image` (from
+`coreyhaines31/marketingskills`); their versions are pinned in `skills-lock.json`. Don't edit them by hand. Update them with:
 
 ```bash
 npx skills add heygen-com/hyperframes --skill <name> --agent claude-code -y
