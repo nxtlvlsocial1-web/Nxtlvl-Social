@@ -7,6 +7,24 @@
       "skillPath": "skills/ad-creative/SKILL.md",
       "computedHash": "dd25996e6ef7d682e66b3af66244561fa07fae36c51f3b4841f7684a736160a3"
     },
+    "campaign-plan": {
+      "source": "anthropics/knowledge-work-plugins",
+      "sourceType": "github",
+      "skillPath": "marketing/skills/campaign-plan/SKILL.md",
+      "computedHash": "2335b5e87cc366b7cd6113dac41387a56e0fbf2102e3fe67fe4a2bdead60fd7d"
+    },
+    "content-creation": {
+      "source": "anthropics/knowledge-work-plugins",
+      "sourceType": "github",
+      "skillPath": "marketing/skills/content-creation/SKILL.md",
+      "computedHash": "012ed09d491de22ef3d2697e7f268597353711b8c17d72ce013c4a6e396df970"
+    },
+    "cro-methodology": {
+      "source": "wondelai/skills",
+      "sourceType": "github",
+      "skillPath": "cro-methodology/SKILL.md",
+      "computedHash": "4c8b86029d16a16a3a62c45a0bdde2b45caa20e73a26b4e5ef46129615cc1a9c"
+    },
     "embedded-captions": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
@@ -85,6 +103,18 @@
       "skillPath": "skills/hyperframes-studio/SKILL.md",
       "computedHash": "3ac6b0019626b0cfa0d067c52ae3e46b5d98722784b1ef103ac301a1815dfd7a"
     },
+    "lead-research-assistant": {
+      "source": "composiohq/awesome-claude-skills",
+      "sourceType": "github",
+      "skillPath": "lead-research-assistant/SKILL.md",
+      "computedHash": "08cf5477dfdcbefa0758fad431c226efb9f09e108c8c6477b4a14db2d6810889"
+    },
+    "marketing-campaign": {
+      "source": "affaan-m/ecc",
+      "sourceType": "github",
+      "skillPath": "skills/marketing-campaign/SKILL.md",
+      "computedHash": "235c4ee2050594e7de2835dc810c38dafc7d044f71b6cee261f6b0e13e988ce8"
+    },
     "media-use": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
@@ -102,6 +132,12 @@
       "sourceType": "github",
       "skillPath": "skills/music-to-video/SKILL.md",
       "computedHash": "66793a5bc8dfb9ce03b7721fe42f4a685d8a95bc727602e6d661ec1f4aa9711d"
+    },
+    "negotiation": {
+      "source": "wondelai/skills",
+      "sourceType": "github",
+      "skillPath": "negotiation/SKILL.md",
+      "computedHash": "0455504db949beb0ee17088b9315a614ac2b6764b8011ee19e8ffa7d6abf4baa"
     },
     "product-launch-video": {
       "source": "heygen-com/hyperframes",
