@@ -59,6 +59,7 @@ section{position:relative}
 .band{padding-block:clamp(72px,10vw,132px)}
 
 /* the cosmos: one fixed starfield behind every section (painted from JS) */
+#trail{position:fixed; inset:0; width:100%; height:100%; z-index:150; pointer-events:none; display:block}
 #cosmos{position:fixed; inset:0; width:100%; height:100%; z-index:-1; pointer-events:none; display:block}
 
 /* film grain over the whole page */
@@ -148,19 +149,9 @@ body::after{
 .btn .bi .ic{font-size:14px; stroke-width:2}
 .btn:hover .bi{transform:translate(2px,-1px) scale(1.08); background:rgba(255,255,255,.26)}
 .btn-sm .bi{width:22px; height:22px; margin:-3px -9px -3px 0}
-.btn-primary{
-  background:linear-gradient(180deg,var(--violet-lift),var(--violet));
-  color:#fff; box-shadow:0 1px 0 rgba(255,255,255,.26) inset, 0 10px 30px -10px rgba(125,24,252,.9);
-}
-.btn-primary:hover{transform:translateY(-2px); box-shadow:0 1px 0 rgba(255,255,255,.3) inset, 0 16px 42px -12px rgba(125,24,252,1)}
-/* a shine sweeps across the primary button */
-.btn-primary::before{
-  content:''; position:absolute; top:0; bottom:0; width:42%; left:-60%;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.42),transparent);
-  transform:skewX(-18deg); pointer-events:none;
-}
-@media all{ .btn-primary::before{animation:sweep 4.6s ease-in-out infinite} }
-@keyframes sweep{0%,62%{left:-60%}88%,100%{left:120%}}
+/* primary buttons: one flat fill, no gradient, no glow */
+.btn-primary{background:var(--violet); color:#fff; box-shadow:none}
+.btn-primary:hover{transform:translateY(-2px); background:var(--violet-lift)}
 .btn-ghost{background:var(--card); color:var(--fg); border-color:var(--line-2)}
 .btn-ghost:hover{transform:translateY(-2px); background:rgba(255,255,255,.08); border-color:var(--violet-lift)}
 .btn-sm{padding:10px 17px; font-size:14px}
@@ -253,8 +244,9 @@ h1 .it{
 .jc-badge{display:block; text-align:center; padding:13px 17px; border-radius:16px; border:none; font-family:var(--d); line-height:1.1}
 .jc-badge .big{display:block; font-size:19px; font-weight:800; font-variation-settings:'wdth' 108,'wght' 800}
 .jc-badge .small{display:block; font-size:9.5px; letter-spacing:.11em; text-transform:uppercase; opacity:.84; margin-top:3px; font-family:var(--b); font-weight:600}
-.b-violet{background:linear-gradient(170deg,var(--violet-lift),var(--violet-deep)); color:#fff; box-shadow:0 16px 36px -16px rgba(125,24,252,.95)}
-.b-win{background:linear-gradient(170deg,#2FBE7C,#116B45); color:#fff; box-shadow:0 16px 36px -16px rgba(47,190,124,.8)}
+.b-violet{background:var(--violet); color:#fff}
+.b-win{background:#116B45; color:#fff}
+.jc-badge{box-shadow:none}
 
 @media(min-width:1300px){
   .field{
@@ -567,7 +559,7 @@ h1 .it{
 .plan-top{display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:30px}
 .plan-top .ic{font-size:22px; color:var(--violet-lift)}
 .plan h3{font-size:17px; font-weight:700; font-variation-settings:'wdth' 100,'wght' 700}
-.plan .flag{font-size:12px; font-weight:700; padding:4px 10px; border-radius:var(--r-xs); color:#fff; background:linear-gradient(180deg,var(--violet-lift),var(--violet)); box-shadow:0 6px 18px -6px rgba(125,24,252,.9)}
+.plan .flag{font-size:12px; font-weight:700; padding:4px 10px; border-radius:var(--r-xs); color:#fff; background:var(--violet)}
 .price{display:flex; align-items:flex-end; gap:7px; margin-top:20px; flex-wrap:wrap}
 .price .amt{
   font-family:var(--d); font-size:56px; font-weight:800; line-height:.92; letter-spacing:-.03em;
@@ -853,8 +845,8 @@ footer{border-top:1px solid var(--line); background:var(--ground); padding-block
   content:''; position:absolute; bottom:-7px; left:50%; margin-left:-2px;
   width:4px; height:4px; border-radius:50%; background:var(--violet-lift);
 }
-.dock-cta{background:linear-gradient(180deg,var(--violet-lift),var(--violet)); box-shadow:0 8px 22px -8px rgba(125,24,252,1)}
-.dock-cta:hover{background:linear-gradient(180deg,#C089FF,var(--violet-lift))}
+.dock-cta{background:var(--violet)}
+.dock-cta:hover{background:var(--violet-lift)}
 .dock-sep{width:1px; align-self:stretch; margin:5px 3px; background:var(--line-2); flex:none}
 /* label rides above whichever icon you are on */
 .dock-i::before{
@@ -1259,7 +1251,7 @@ details .ans{overflow:hidden}
   width:36px; height:36px; border-radius:50%; display:grid; place-items:center; font-family:var(--d); font-size:14px; color:#fff;
   background:var(--ink-3); box-shadow:0 0 0 1px var(--line-2); transition:background .4s ease, box-shadow .4s ease;
 }
-.next.in li b{background:linear-gradient(180deg,var(--violet-lift),var(--violet)); box-shadow:0 0 0 4px rgba(169,92,255,.16), 0 8px 20px -6px rgba(125,24,252,.9)}
+.next.in li b{background:var(--violet); box-shadow:0 0 0 4px rgba(169,92,255,.16)}
 .next.in li:nth-child(2) b{transition-delay:.75s} .next.in li:nth-child(3) b{transition-delay:1.4s}
 
 /* ---------- bigger targets where controls were small ---------- */
@@ -1663,6 +1655,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 
 <a class="skip" href="#main">Skip to content</a>
 <canvas id="cosmos" aria-hidden="true"></canvas>
+<canvas id="trail" aria-hidden="true"></canvas>
 
 <nav class="nav" id="nav">
   <div class="wrap nav-in">
@@ -2486,6 +2479,67 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 <script>
 (function(){
   var reduce = document.documentElement.classList.contains('rm');
+
+  /* ---- cursor stardust: a few tiny stars shed wherever the pointer travels, drifting and fading ---- */
+  (function(){
+    var tc = document.getElementById('trail');
+    if(!tc || !tc.getContext || reduce || !window.matchMedia('(hover:hover) and (pointer:fine)').matches){ if(tc) tc.style.display = 'none'; return; }
+    var c = tc.getContext('2d'), dpr = Math.min(window.devicePixelRatio || 1, 2), W = 0, H = 0;
+    var parts = [], raf = null, lx = null, ly = null, MAX = 70, GAP = 12;
+    var TINT = ['245,242,255', '245,242,255', '216,187,255', '169,124,255'];
+    function size(){
+      W = window.innerWidth; H = window.innerHeight;
+      tc.width = Math.round(W * dpr); tc.height = Math.round(H * dpr);
+      c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function spawn(x, y, vx, vy){
+      if(parts.length >= MAX) parts.shift();
+      parts.push({
+        x: x + (Math.random() - .5) * 6, y: y + (Math.random() - .5) * 6,
+        vx: vx * .04 + (Math.random() - .5) * .35, vy: vy * .04 + (Math.random() - .5) * .35 + .06,
+        r: .5 + Math.random() * 1.1, born: performance.now(), max: 700 + Math.random() * 500,
+        c: TINT[Math.floor(Math.random() * TINT.length)], glint: Math.random() < .12
+      });
+    }
+    /* lifetimes are in milliseconds and motion is scaled by frame time, so a slow device fades on time too */
+    var last = 0;
+    function frame(now){
+      var dt = last ? Math.min((now - last) / 16.7, 4) : 1; last = now;
+      c.clearRect(0, 0, W, H);
+      for(var i = parts.length - 1; i >= 0; i--){
+        var p = parts[i];
+        p.x += p.vx * dt; p.y += p.vy * dt;
+        var drag = Math.pow(.985, dt); p.vx *= drag; p.vy = p.vy * drag + .004 * dt;
+        var k = (now - p.born) / p.max;
+        if(k >= 1){ parts.splice(i, 1); continue; }
+        var a = Math.sin(k * Math.PI) * .9, r = p.r * (1 - k * .5);
+        c.fillStyle = 'rgba(' + p.c + ',' + a.toFixed(3) + ')';
+        c.beginPath(); c.arc(p.x, p.y, r, 0, 6.2832); c.fill();
+        if(p.glint){
+          c.strokeStyle = 'rgba(' + p.c + ',' + (a * .5).toFixed(3) + ')'; c.lineWidth = .6;
+          c.beginPath(); c.moveTo(p.x - r * 4, p.y); c.lineTo(p.x + r * 4, p.y);
+          c.moveTo(p.x, p.y - r * 4); c.lineTo(p.x, p.y + r * 4); c.stroke();
+        }
+      }
+      raf = parts.length ? requestAnimationFrame(frame) : null;
+      if(!raf){ c.clearRect(0, 0, W, H); last = 0; }
+    }
+    window.addEventListener('pointermove', function(ev){
+      if(ev.pointerType !== 'mouse') return;
+      var x = ev.clientX, y = ev.clientY;
+      if(lx === null){ lx = x; ly = y; return; }
+      var dx = x - lx, dy = y - ly, d = Math.hypot(dx, dy);
+      if(d < GAP) return;
+      /* one speck every GAP pixels of travel, so slow and fast moves leave the same density */
+      var steps = Math.min(Math.floor(d / GAP), 4);
+      for(var s = 1; s <= steps; s++) spawn(lx + dx * s / steps, ly + dy * s / steps, dx, dy);
+      lx = x; ly = y;
+      if(!raf) raf = requestAnimationFrame(frame);
+    }, {passive:true});
+    document.documentElement.addEventListener('mouseleave', function(){ lx = ly = null; });
+    size();
+    window.addEventListener('resize', size, {passive:true});
+  })();
 
   /* ---- cosmic stardust: three depths of stars that twinkle and drift with scroll, a faint
          dust lane, and a rare shooting star. Ambient only: it never follows the pointer. ---- */
