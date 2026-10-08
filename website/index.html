@@ -2,6 +2,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Design, video, posting and automation for small businesses, from $5 a month.">
 <title>Nxtlvl Social</title>
+<script>
+/* motion mode: the visitor's saved choice wins; otherwise follow the device's reduced-motion setting */
+(function(){
+  var d = document.documentElement, pref = null;
+  try{ pref = localStorage.getItem('nx-motion'); }catch(e){}
+  var os = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  if(os) d.classList.add('os-rm');
+  if(pref === 'reduced' || (pref !== 'full' && os)) d.classList.add('rm');
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Instrument+Sans:wght@400..700&family=Instrument+Serif:ital@0;1&display=swap">
@@ -104,7 +114,7 @@ body::after{
 .brand{display:flex; align-items:center; gap:7px; text-decoration:none; flex:none}
 .brand img{width:86px; height:auto}
 .spark{width:14px; height:14px; flex:none; margin-top:-13px}
-@media(prefers-reduced-motion:no-preference){ .spark{animation:twinkle 3.4s ease-in-out infinite} }
+@media all{ .spark{animation:twinkle 3.4s ease-in-out infinite} }
 @keyframes twinkle{0%,100%{transform:scale(1) rotate(0deg); opacity:1}50%{transform:scale(1.22) rotate(28deg); opacity:.75}}
 .brand-word{
   font-family:var(--d); font-size:16px; font-weight:700; letter-spacing:.01em;
@@ -153,7 +163,7 @@ body::after{
   background:linear-gradient(100deg,transparent,rgba(255,255,255,.42),transparent);
   transform:skewX(-18deg); pointer-events:none;
 }
-@media(prefers-reduced-motion:no-preference){ .btn-primary::before{animation:sweep 4.6s ease-in-out infinite} }
+@media all{ .btn-primary::before{animation:sweep 4.6s ease-in-out infinite} }
 @keyframes sweep{0%,62%{left:-60%}88%,100%{left:120%}}
 .btn-ghost{background:var(--card); color:var(--fg); border-color:var(--line-2)}
 .btn-ghost:hover{transform:translateY(-2px); background:rgba(255,255,255,.08); border-color:var(--violet-lift)}
@@ -167,7 +177,7 @@ body::after{
   font-size:13px; color:#D8CCFF; font-weight:500; backdrop-filter:blur(8px);
 }
 .dot{width:6px; height:6px; border-radius:50%; background:var(--win)}
-@media(prefers-reduced-motion:no-preference){ .dot{animation:ping 2.2s ease-out infinite} }
+@media all{ .dot{animation:ping 2.2s ease-out infinite} }
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(82,227,155,.55)}70%,100%{box-shadow:0 0 0 9px rgba(82,227,155,0)}}
 /* section labels: sentence case in a small chip, not tracked-out caps */
 .eyebrow{
@@ -194,7 +204,7 @@ h1{
 }
 h1 .w{display:inline-block}
 /* the headline weight breathes once the words have landed */
-@media(prefers-reduced-motion:no-preference){
+@media all{
   h1 .w:not(.it){animation:rise .95s var(--out) both, flex 1.6s var(--io) 1.1s both}
 }
 @keyframes flex{0%{font-variation-settings:'wdth' 125,'wght' 900}100%{font-variation-settings:'wdth' 112,'wght' 800}}
@@ -205,7 +215,7 @@ h1 .it{
   background-size:220% 100%;
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
-@media(prefers-reduced-motion:no-preference){ h1 .it{animation:shimmer 7s ease-in-out infinite} }
+@media all{ h1 .it{animation:shimmer 7s ease-in-out infinite} }
 @keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .sub{
   margin-top:24px; font-size:clamp(16px,2.1vw,19px); color:var(--muted);
@@ -215,7 +225,7 @@ h1 .it{
 .hero-cta{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:32px}
 .hero-note{margin-top:18px; font-size:13.5px; color:var(--faint)}
 /* headline words rise on load — pure CSS so it finishes even if JS never runs */
-@media(prefers-reduced-motion:no-preference){
+@media all{
   h1 .w.it{animation:rise .95s var(--out) both, shimmer 7s ease-in-out 1.4s infinite}
   .hero-in>.pill{animation:rise .8s var(--out) both}
   .sub{animation:rise .9s var(--out) .5s both}
@@ -266,7 +276,7 @@ h1 .it{
   .jc-7{top:80%;  left:6%}
   .jc-8{top:83%;  right:6%}
 }
-@media(min-width:1300px) and (prefers-reduced-motion:no-preference){
+@media(min-width:1300px){
   /* cards drift in after the headline, then float; the pointer adds depth through `translate` */
   .jc{animation:jcIn 1.1s var(--out) backwards, bob 7s ease-in-out infinite; will-change:transform}
   .jc-1{animation-delay:.55s, 0s}
@@ -288,7 +298,7 @@ h1 .it{
 .marq::before{left:0; background:linear-gradient(90deg,var(--ink-2),transparent)}
 .marq::after{right:0; background:linear-gradient(270deg,var(--ink-2),transparent)}
 .marq-row{display:flex; width:max-content}
-@media(prefers-reduced-motion:no-preference){
+@media all{
   .marq-row{animation:slide 42s linear infinite}
   .marq.rev .marq-row{animation-duration:54s; animation-direction:reverse}
 }
@@ -369,7 +379,7 @@ h1 .it{
   content:''; position:absolute; inset:0; left:-100%;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);
 }
-@media(prefers-reduced-motion:no-preference){ .bar-fill::after{animation:barshine 3.2s ease-in-out infinite} }
+@media all{ .bar-fill::after{animation:barshine 3.2s ease-in-out infinite} }
 @keyframes barshine{0%,55%{left:-100%}100%{left:100%}}
 .f-warn{background:linear-gradient(90deg,#FF8A6B,#E0452A)}
 .f-mid{background:linear-gradient(90deg,#FFC46B,#E08A2A)}
@@ -458,7 +468,7 @@ h1 .it{
 .svc:hover .viz-stack i:nth-child(1){transform:translate(-92px,14px) rotate(-17deg)}
 .svc:hover .viz-stack i:nth-child(2){transform:translate(92px,14px) rotate(17deg)}
 .svc:hover .viz-stack i:nth-child(3){transform:translateY(-14px) scale(1.04)}
-@media(prefers-reduced-motion:no-preference){
+@media all{
   .viz-stack i:nth-child(3){animation:hover-y 5s ease-in-out infinite}
   .svc:hover .viz-stack i:nth-child(3){animation-play-state:paused}
 }
@@ -475,7 +485,7 @@ h1 .it{
   content:''; position:absolute; top:0; bottom:0; left:0; width:2px; border-radius:2px; background:#fff;
   box-shadow:0 0 10px rgba(216,187,255,.95);
 }
-@media(prefers-reduced-motion:no-preference){
+@media all{
   .scrub-head{animation:playhead 6s linear infinite}
 }
 @keyframes playhead{from{transform:translateX(0)}to{transform:translateX(100%)}}
@@ -488,7 +498,7 @@ h1 .it{
   content:''; position:absolute; top:0; bottom:0; left:-30%; width:30%;
   background:linear-gradient(90deg,transparent,var(--violet-lift),#F0E2FF);
 }
-@media(prefers-reduced-motion:no-preference){ .flow-line::after{animation:flowrun 4s var(--io) infinite} }
+@media all{ .flow-line::after{animation:flowrun 4s var(--io) infinite} }
 @keyframes flowrun{from{transform:translateX(0)}to{transform:translateX(433%)}}
 .flow-n{position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:9px; width:74px; text-align:center}
 .flow-n span{
@@ -497,7 +507,7 @@ h1 .it{
 }
 .flow-n span .ic{font-size:20px}
 .flow-n b{font-size:12px; font-weight:600; color:var(--muted); line-height:1.25}
-@media(prefers-reduced-motion:no-preference){
+@media all{
   .flow-n span{animation:nodelit 4s var(--io) infinite}
   .flow-n:nth-child(3) span{animation-delay:.9s}
   .flow-n:nth-child(4) span{animation-delay:1.85s}
@@ -534,7 +544,7 @@ h1 .it{
   background:linear-gradient(0deg,var(--ink),transparent);
 }
 .feed-track{position:absolute; top:46px; left:0; right:0; display:flex; flex-direction:column; gap:9px; padding:0 10px}
-@media(prefers-reduced-motion:no-preference){ .feed-track{animation:feedscroll 26s linear infinite} }
+@media all{ .feed-track{animation:feedscroll 26s linear infinite} }
 @keyframes feedscroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
 .post{border-radius:14px; border:1px solid var(--line); overflow:hidden; flex:none; background:var(--ink-3)}
 .post-img{height:104px; display:flex; align-items:center; justify-content:center; position:relative}
@@ -666,7 +676,7 @@ h1 .it{
 .tw-dot::after{content:''; position:absolute; inset:3px; border-radius:50%; background:rgba(169,124,255,.35); transition:background .4s ease}
 .tw.lit .tw-dot,.no-scrub .tw-dot{border-color:var(--violet-lift); box-shadow:0 0 0 5px rgba(169,92,255,.14), 0 0 18px rgba(169,92,255,.8); scale:1.12}
 .tw.lit .tw-dot::after,.no-scrub .tw-dot::after{background:var(--violet-lift)}
-@media(prefers-reduced-motion:no-preference){ .tw.lit .tw-dot::after{animation:pulse 2.6s ease-in-out infinite} }
+@media all{ .tw.lit .tw-dot::after{animation:pulse 2.6s ease-in-out infinite} }
 @keyframes pulse{0%,100%{transform:scale(1); opacity:1}50%{transform:scale(.55); opacity:.6}}
 @media(min-width:820px){
   .tw:nth-child(odd) .tw-dot{left:auto; right:-9px}
@@ -748,7 +758,7 @@ details[open] summary::after{transform:rotate(0deg); opacity:0}
 details[open] summary::before{transform:rotate(180deg)}
 details[open] summary{color:var(--fg)}
 details p{padding:0 54px 24px 4px; font-size:15px; color:var(--muted); max-width:58em; line-height:1.7}
-@media(prefers-reduced-motion:no-preference){ details[open] p{animation:rise .6s var(--out) both} }
+@media all{ details[open] p{animation:rise .6s var(--out) both} }
 
 /* ---------- close ---------- */
 .close{text-align:center; overflow:hidden}
@@ -761,7 +771,7 @@ details p{padding:0 54px 24px 4px; font-size:15px; color:var(--muted); max-width
   -webkit-mask:radial-gradient(closest-side,transparent 52%,#000 62%,transparent 100%); mask:radial-gradient(closest-side,transparent 52%,#000 62%,transparent 100%);
   filter:blur(18px); opacity:.9;
 }
-@media(prefers-reduced-motion:no-preference){ .halo{animation:spin 38s linear infinite} }
+@media all{ .halo{animation:spin 38s linear infinite} }
 @keyframes spin{to{rotate:360deg}}
 .btn-xl{padding:17px 30px; font-size:17px}
 .btn-xl .bi{width:32px; height:32px; margin-right:-18px}
@@ -785,7 +795,7 @@ details p{padding:0 54px 24px 4px; font-size:15px; color:var(--muted); max-width
 }
 .copy:hover{color:var(--fg); border-color:var(--violet-lift)}
 .copy.ok{color:var(--win); border-color:rgba(82,227,155,.5)}
-@media(prefers-reduced-motion:no-preference){ .copy.ok{animation:pop .45s cubic-bezier(.175,.885,.32,1.275)} }
+@media all{ .copy.ok{animation:pop .45s cubic-bezier(.175,.885,.32,1.275)} }
 @keyframes pop{0%{scale:.86}100%{scale:1}}
 .placeholder-note{
   margin:26px auto 0; max-width:560px; display:flex; gap:10px; align-items:flex-start;
@@ -932,7 +942,7 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
 .t1{top:64px; left:calc(50% - 175px)}
 .t2{top:236px; left:calc(50% + 40px)}
 .t3{bottom:70px; left:calc(50% - 165px)}
-@media(prefers-reduced-motion:no-preference){
+@media all{
   .toast{animation:toast 12s var(--out) infinite}
   .t2{animation-delay:4s} .t3{animation-delay:8s}
 }
@@ -1066,7 +1076,7 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
 .shelf-panels{margin-top:34px; min-height:190px}
 .mpanel{display:none}
 .mpanel.on{display:block}
-@media(prefers-reduced-motion:no-preference){ .mpanel.on{animation:rise .5s cubic-bezier(.2,.9,.3,1) both} }
+@media all{ .mpanel.on{animation:rise .5s cubic-bezier(.2,.9,.3,1) both} }
 .mp-head{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap}
 .mp-m{font-family:var(--d); font-size:clamp(26px,4vw,38px); font-weight:800; font-variation-settings:'wdth' 108,'wght' 800}
 .mp-c{font-size:14px; font-weight:600; color:var(--violet-lift)}
@@ -1164,7 +1174,7 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
 .bb-row .it{font-family:var(--s); font-style:normal; font-weight:400; font-variation-settings:normal; letter-spacing:-.01em; color:var(--violet-lift); -webkit-text-stroke:0}
 .bb-s{display:inline-block; width:.42em; height:.42em; flex:none; background:var(--violet-lift);
   clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%)}
-@media(prefers-reduced-motion:no-preference){ .bb-s{animation:spin 9s linear infinite} }
+@media all{ .bb-s{animation:spin 9s linear infinite} }
 
 /* ---------- touch: cards answer a press too ---------- */
 .svc:active,.plan:active,.why-card:active,.step:active,.q:active{scale:.985; transition:scale 120ms var(--enter)}
@@ -1177,7 +1187,7 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
 }
 
 /* ---------- hero cards: below 1300px they float gently in their grid too ---------- */
-@media(max-width:1299px) and (prefers-reduced-motion:no-preference){
+@media(max-width:1299px){
   .field .jc{animation:jcIn .9s var(--out) backwards, bob-sm 6s ease-in-out infinite}
   .field .jc:nth-child(2){animation-delay:.7s, -1.5s} .field .jc:nth-child(4){animation-delay:.8s, -3s}
   .field .jc:nth-child(5){animation-delay:.9s, -2s} .field .jc:nth-child(7){animation-delay:1s, -4s}
@@ -1196,18 +1206,18 @@ footer{border-top:1px solid var(--line); background:var(--ink-2); padding-block:
 .orbit .ocard:nth-child(8){transform:rotateY(252deg) translateZ(var(--r))}
 .orbit .ocard:nth-child(9){transform:rotateY(288deg) translateZ(var(--r))}
 .orbit .ocard:nth-child(10){transform:rotateY(324deg) translateZ(var(--r))}
-@media(prefers-reduced-motion:no-preference){ html:not(.js) .orbit{animation:orbitspin 40s linear infinite} }
+@media all{ html:not(.js) .orbit{animation:orbitspin 40s linear infinite} }
 @keyframes orbitspin{from{transform:rotateY(0)}to{transform:rotateY(-360deg)}}
 
 /* ---------- calendar panels slide in the direction you moved ---------- */
-@media(prefers-reduced-motion:no-preference){
+@media all{
   .mpanel.on.fwd{animation:panel-fwd .5s var(--enter) both}
   .mpanel.on.back{animation:panel-back .5s var(--enter) both}
 }
 @keyframes panel-fwd{from{opacity:0; transform:translateX(34px); filter:blur(4px)}to{opacity:1; transform:none; filter:blur(0)}}
 @keyframes panel-back{from{opacity:0; transform:translateX(-34px); filter:blur(4px)}to{opacity:1; transform:none; filter:blur(0)}}
 .mp-tags span{display:inline-block}
-@media(prefers-reduced-motion:no-preference){
+@media all{
   .mpanel.on .mp-tags span{animation:tag-in .45s var(--enter) both}
   .mpanel.on .mp-tags span:nth-child(2){animation-delay:.05s}
   .mpanel.on .mp-tags span:nth-child(3){animation-delay:.1s}
@@ -1299,7 +1309,7 @@ details .ans{overflow:hidden}
 .pday-d{font-size:12px; font-weight:600; color:var(--faint)}
 .pday-k{font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(125,24,252,.25); color:var(--violet-pale)}
 .pday-t{margin-top:10px; font-size:15px; font-weight:600; line-height:1.4; letter-spacing:-.01em}
-@media(prefers-reduced-motion:no-preference){
+@media all{
   .pday.swap{animation:pswap .5s var(--enter) both}
   .pday:nth-child(2).swap{animation-delay:.06s} .pday:nth-child(3).swap{animation-delay:.12s}
 }
@@ -1309,7 +1319,7 @@ details .ans{overflow:hidden}
 .stories{position:absolute; top:46px; left:0; right:0; z-index:3; display:flex; gap:8px; padding:4px 10px 8px; background:var(--ink)}
 .story{flex:none; width:40px; height:40px; border-radius:50%; padding:2px; position:relative; display:grid; place-items:center}
 .story::before{content:''; position:absolute; inset:0; border-radius:50%; background:conic-gradient(var(--violet),var(--violet-lift),var(--violet-pale),var(--violet))}
-@media(prefers-reduced-motion:no-preference){ .story::before{animation:spin 6s linear infinite} .story:nth-child(2n)::before{animation-duration:8s; animation-direction:reverse} }
+@media all{ .story::before{animation:spin 6s linear infinite} .story:nth-child(2n)::before{animation-duration:8s; animation-direction:reverse} }
 .story span{position:relative; width:100%; height:100%; border-radius:50%; display:grid; place-items:center; background:var(--ink-3); box-shadow:0 0 0 2px var(--ink); color:var(--violet-pale)}
 .story .ic{font-size:15px}
 .story.seen::before{background:rgba(169,124,255,.25)}
@@ -1353,11 +1363,36 @@ details .ans{overflow:hidden}
 @media(prefers-reduced-transparency:reduce){
   .nav,.dock-in,.mobcta{background:var(--ink-2); backdrop-filter:none; -webkit-backdrop-filter:none}
 }
-@media(prefers-reduced-motion:reduce){
-  .js .rv{opacity:1; transform:none; filter:none}
-  .js .split .wi{transform:none}
-  *{animation-duration:.001ms !important; transition-duration:.001ms !important}
+/* reduced motion: no travel, no loops, no parallax; soft fades and colour changes stay */
+html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms !important; animation-iteration-count:1 !important; animation-delay:0s !important; transition-duration:.001ms !important; scroll-behavior:auto !important}
+html.rm.js .rv{transform:none; filter:none}
+html.rm.js .rv,html.rm .btn,html.rm .chip,html.rm .copy,html.rm .nav-links a,html.rm details,html.rm .pday,html.rm .spine,html.rm .in-i{
+  transition-property:opacity,color,background-color,border-color,box-shadow !important; transition-duration:.45s !important; transition-delay:0s !important;
 }
+html.rm .js .split .wi,html.rm.js .split .wi{transform:none}
+html.rm .dot{animation-duration:2.2s !important; animation-iteration-count:infinite !important}
+html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
+
+/* ---------- motion switch ---------- */
+.motion-sw{
+  display:inline-flex; align-items:center; gap:8px; min-height:36px; padding:6px 12px 6px 8px; border-radius:999px; cursor:pointer;
+  background:var(--card); border:1px solid var(--line-2); color:var(--muted); font:600 12.5px/1 var(--b); touch-action:manipulation;
+}
+.motion-sw:hover{color:var(--fg); border-color:var(--violet-lift)}
+.motion-sw i{position:relative; width:30px; height:18px; border-radius:99px; background:rgba(255,255,255,.12); flex:none; transition:background .25s ease}
+.motion-sw i::after{content:''; position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:#fff; transition:transform .25s var(--enter)}
+.motion-sw[aria-checked="true"] i{background:linear-gradient(90deg,var(--violet),var(--violet-lift))}
+.motion-sw[aria-checked="true"] i::after{transform:translateX(12px)}
+/* a one-time note when the device asked for reduced motion */
+.motion-note{
+  position:fixed; z-index:117; left:16px; bottom:calc(16px + env(safe-area-inset-bottom,0px)); max-width:min(360px, calc(100% - 32px));
+  display:flex; align-items:center; gap:12px; padding:12px 12px 12px 16px; border-radius:var(--r-md);
+  background:rgba(17,12,34,.96); border:1px solid var(--line-2); box-shadow:0 18px 40px -18px rgba(0,0,0,.95), 0 0 30px -16px rgba(125,24,252,.9);
+  font-size:13px; color:var(--muted); line-height:1.45;
+}
+.motion-note b{color:var(--fg)}
+.motion-note .x{flex:none; width:32px; height:32px; border-radius:50%; border:1px solid var(--line-2); background:none; color:var(--muted); cursor:pointer; font-size:16px; line-height:1}
+@media(max-width:979px){ .motion-note{bottom:calc(84px + env(safe-area-inset-bottom,0px))} }
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1439,6 +1474,7 @@ details .ans{overflow:hidden}
       <a href="#calendar">The calendar</a>
       <a href="#faq">FAQ</a>
       <a class="btn btn-primary" href="#contact">Book a free call</a>
+      <button class="motion-sw" type="button" role="switch" aria-checked="true" data-motion style="align-self:flex-start; margin-top:16px"><i aria-hidden="true"></i>Animations</button>
     </div>
   </div>
 </nav>
@@ -2163,11 +2199,18 @@ details .ans{overflow:hidden}
     <div class="foot-links">
       <a href="#who">Who it's for</a><a href="#maths">The maths</a><a href="#services">Services</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
     </div>
+    <button class="motion-sw" type="button" role="switch" aria-checked="true" data-motion><i aria-hidden="true"></i>Animations</button>
     <div class="copyright">© <span id="yr">2026</span> Nxtlvl Social — AI-driven creative studio. Design, video and social media for small businesses.</div>
   </div>
 </footer>
 
 <div class="cursor" id="cursor" aria-hidden="true"><span>Drag</span></div><div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+<div class="motion-note" id="motionNote" role="status" hidden>
+  <span><b>Animations are off</b> because your device is set to reduce motion.</span>
+  <button class="btn btn-primary btn-sm" type="button" data-motion-on>Turn on</button>
+  <button class="x" type="button" aria-label="Dismiss" data-motion-x>&times;</button>
+</div>
 
 <div class="mobcta" id="mobcta">
   <div><strong>From $5 / month</strong><span>No contract · cancel any month</span></div>
@@ -2190,7 +2233,7 @@ details .ans{overflow:hidden}
 
 <script>
 (function(){
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reduce = document.documentElement.classList.contains('rm');
   document.documentElement.classList.add('js');
   try{ document.getElementById('yr').textContent = new Date().getFullYear(); }catch(e){}
 
@@ -3164,6 +3207,33 @@ details .ans{overflow:hidden}
       ], {duration:900, easing:'cubic-bezier(.22,1,.36,1)'}).onfinish = function(){ h.remove(); };
     });
   });
+
+  /* ---- motion switch: saved per visitor, applied on reload so every effect starts cleanly ---- */
+  var root = document.documentElement;
+  function setMotion(on){
+    var saved = false;
+    try{ localStorage.setItem('nx-motion', on ? 'full' : 'reduced'); saved = true; }catch(e){}
+    if(saved){ location.reload(); return; }
+    root.classList.toggle('rm', !on); syncMotion();
+  }
+  function syncMotion(){
+    var on = !root.classList.contains('rm');
+    document.querySelectorAll('[data-motion]').forEach(function(b){ b.setAttribute('aria-checked', on ? 'true' : 'false'); });
+  }
+  document.querySelectorAll('[data-motion]').forEach(function(b){
+    b.addEventListener('click', function(){ setMotion(b.getAttribute('aria-checked') !== 'true'); });
+  });
+  syncMotion();
+  var mNote = document.getElementById('motionNote'), seenNote = null;
+  try{ seenNote = localStorage.getItem('nx-motion') || sessionStorage.getItem('nx-motion-note'); }catch(e){}
+  if(mNote && root.classList.contains('os-rm') && root.classList.contains('rm') && !seenNote){
+    mNote.hidden = false;
+    mNote.querySelector('[data-motion-on]').addEventListener('click', function(){ setMotion(true); });
+    mNote.querySelector('[data-motion-x]').addEventListener('click', function(){
+      mNote.hidden = true;
+      try{ sessionStorage.setItem('nx-motion-note', '1'); }catch(e){}
+    });
+  }
 
   /* ---- smooth in-page nav ---- */
   document.querySelectorAll('a[href^="#"]').forEach(function(a){
