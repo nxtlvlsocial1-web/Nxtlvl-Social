@@ -248,7 +248,18 @@ h1 .it{
 .jc-badge .small{display:block; font-size:9.5px; letter-spacing:.11em; text-transform:uppercase; opacity:.84; margin-top:3px; font-family:var(--b); font-weight:600}
 .b-violet{background:var(--violet); color:#fff}
 .b-win{background:#116B45; color:#fff}
-.jc-badge{box-shadow:none}
+.jc-badge{box-shadow:none; overflow:hidden; isolation:isolate; position:relative}
+@media(min-width:1300px){ .jc-badge{position:absolute} }
+.jc-badge .big,.jc-badge .small{position:relative; z-index:1}
+/* a minimal liquid: two slow rotating rounded shapes make a gently sloshing surface, the level breathes */
+.liq{position:absolute; inset:0; z-index:0; pointer-events:none; animation:tide 6s ease-in-out infinite alternate}
+.liq i{position:absolute; left:50%; top:52%; width:260%; aspect-ratio:1; margin-left:-130%; border-radius:43%; background:rgba(255,255,255,.13); animation:slosh 9s linear infinite}
+.liq i:nth-child(2){top:58%; border-radius:39%; background:rgba(255,255,255,.08); animation-duration:13s; animation-direction:reverse}
+.liq b{position:absolute; bottom:-6px; width:4px; height:4px; border-radius:50%; background:rgba(255,255,255,.55); animation:bubble 3.6s ease-in infinite}
+.liq b:nth-of-type(1){left:28%} .liq b:nth-of-type(2){left:68%; width:3px; height:3px; animation-delay:1.8s; animation-duration:4.4s}
+@keyframes slosh{to{transform:rotate(360deg)}}
+@keyframes tide{from{transform:translateY(8%)}to{transform:translateY(-8%)}}
+@keyframes bubble{0%{transform:translateY(0); opacity:0}15%{opacity:.9}75%{opacity:.6}100%{transform:translateY(-46px); opacity:0}}
 
 @media(min-width:1300px){
   .field{
@@ -441,28 +452,40 @@ h1 .it{
   .s-visuals .viz,.s-auto .viz{flex:1 1 48%}
 }
 
-/* visuals: three posts fanned like a hand of cards */
-.viz-stack{min-height:190px; margin-top:24px}
-.viz-stack i{
-  position:absolute; left:50%; top:50%; width:118px; height:148px; margin:-74px 0 0 -59px;
-  border-radius:var(--r-md); border:1px solid rgba(255,255,255,.14);
-  box-shadow:0 24px 40px -22px rgba(0,0,0,.95), 0 1px 0 rgba(255,255,255,.2) inset;
-  transition:transform .7s var(--out);
+/* visuals: three finished posts that sweep along a diagonal orbit, then settle into a slow revolve around the centre */
+.viz-stack{min-height:210px; margin-top:24px}
+.vcard{
+  position:absolute; left:50%; top:50%; width:118px; height:148px; margin:-74px 0 0 -59px; overflow:hidden;
+  border-radius:var(--r-md); border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 24px 40px -22px rgba(0,0,0,.95), 0 1px 0 rgba(255,255,255,.22) inset;
+  will-change:transform; font-size:10px; color:#fff;
 }
-.viz-stack i::before,.viz-stack i::after{content:''; position:absolute; left:12px; right:12px; border-radius:4px; background:rgba(255,255,255,.55)}
-.viz-stack i::before{bottom:26px; height:7px; right:34px}
-.viz-stack i::after{bottom:14px; height:5px; background:rgba(255,255,255,.3)}
-.viz-stack i:nth-child(1){transform:translate(-58px,10px) rotate(-12deg)}
-.viz-stack i:nth-child(2){transform:translate(58px,10px) rotate(12deg)}
-.viz-stack i:nth-child(3){transform:translateY(-6px); z-index:2}
-.svc:hover .viz-stack i:nth-child(1){transform:translate(-92px,14px) rotate(-17deg)}
-.svc:hover .viz-stack i:nth-child(2){transform:translate(92px,14px) rotate(17deg)}
-.svc:hover .viz-stack i:nth-child(3){transform:translateY(-14px) scale(1.04)}
-@media all{
-  .viz-stack i:nth-child(3){animation:hover-y 5s ease-in-out infinite}
-  .svc:hover .viz-stack i:nth-child(3){animation-play-state:paused}
-}
-@keyframes hover-y{0%,100%{translate:0 0}50%{translate:0 -6px}}
+.vcard::after{content:''; position:absolute; inset:0; background:radial-gradient(120% 70% at 25% 0%,rgba(255,255,255,.22),transparent 55%); pointer-events:none}
+/* static fan for reduced motion or before the script runs */
+.vcard:nth-child(1){transform:translate(-58px,10px) rotate(-12deg)}
+.vcard:nth-child(2){transform:translate(58px,10px) rotate(12deg)}
+.vcard:nth-child(3){transform:translateY(-6px); z-index:2}
+/* carousel slide */
+.vc-car{padding:.9em; display:flex; flex-direction:column; justify-content:flex-end; gap:.45em}
+.vc-car small{position:absolute; top:.8em; right:.8em; font-size:.85em; font-weight:700; padding:.15em .5em; border-radius:99px; background:rgba(5,3,12,.4)}
+.vc-car b{font-family:var(--d); font-size:1.9em; line-height:.92; font-weight:900; letter-spacing:-.03em; font-variation-settings:'wdth' 118,'wght' 900}
+.vc-dots{display:flex; gap:.3em} .vc-dots s{width:.45em; height:.45em; border-radius:50%; background:rgba(255,255,255,.4); text-decoration:none}
+.vc-dots s:first-child{width:1.1em; border-radius:.3em; background:#fff}
+/* festival poster */
+.vc-pos{display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding:1em .8em; gap:.35em; text-align:center}
+.vc-sun{position:absolute; top:1.2em; left:50%; width:4.4em; height:4.4em; margin-left:-2.2em; border-radius:50%; background:radial-gradient(circle,#FFC46B 0 38%,rgba(255,196,107,.35) 40%,rgba(255,196,107,0) 70%)}
+.vc-pos b{font-family:var(--s); font-weight:400; font-size:2em; line-height:.95}
+.vc-pos em{font-style:normal; font-size:.9em; font-weight:700; padding:.2em .6em; border-radius:.3em; background:rgba(5,3,12,.45)}
+/* story */
+.vc-sto{padding:.7em}
+.vc-prog{display:flex; gap:.25em} .vc-prog s{flex:1; height:.2em; border-radius:.2em; background:rgba(255,255,255,.35); text-decoration:none}
+.vc-prog s:first-child{background:#fff}
+.vc-who{display:flex; align-items:center; gap:.4em; margin-top:.6em; font-size:.9em; font-weight:700}
+.vc-who i{width:1.7em; height:1.7em; border-radius:50%; background:conic-gradient(#FFC46B,#fff,#FFC46B); box-shadow:0 0 0 .15em rgba(5,3,12,.5)}
+.vc-sto b{position:absolute; left:.7em; right:.7em; bottom:1.1em; font-family:var(--d); font-size:1.45em; line-height:1; font-weight:800; letter-spacing:-.02em}
+.vc-heart{position:absolute; right:.7em; bottom:3.4em; width:1.5em; height:1.5em; fill:#fff}
+@media all{ .vc-heart{animation:beat 2.4s ease-in-out infinite; transform-origin:center} }
+@keyframes beat{0%,60%,100%{transform:scale(1)}70%{transform:scale(1.25)}80%{transform:scale(.95)}}
 
 /* video: a timeline with a playhead running across the clips */
 .viz-scrub{margin-top:22px; padding:12px; border-radius:var(--r-sm); background:rgba(5,3,12,.55); border:1px solid var(--line)}
@@ -1707,8 +1730,8 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       <div class="jc jc-4"><svg class="ic" aria-hidden="true"><use href="#i-camera"/></svg><div><div class="jc-t">On-site shoot · Saturday</div><div class="jc-s">One visit, a month of content</div></div></div>
       <div class="jc jc-5"><svg class="ic" aria-hidden="true"><use href="#i-receipt"/></svg><div><div class="jc-t">No retainer, no lock-in</div><div class="jc-s">Monthly. Stop whenever you want</div></div></div>
       <div class="jc jc-6"><svg class="ic" aria-hidden="true"><use href="#i-trend"/></svg><div><div class="jc-t">Report on the 1st</div><div class="jc-s">What ran, what worked, what's next</div></div></div>
-      <div class="jc jc-7 jc-badge b-violet"><span class="big">$5</span><span class="small">per month</span></div>
-      <div class="jc jc-8 jc-badge b-win"><span class="big">48 hrs</span><span class="small">first drafts</span></div>
+      <div class="jc jc-7 jc-badge b-violet"><span class="liq" aria-hidden="true"><i></i><i></i><b></b><b></b></span><span class="big">$5</span><span class="small">per month</span></div>
+      <div class="jc jc-8 jc-badge b-win"><span class="liq" aria-hidden="true"><i></i><i></i><b></b><b></b></span><span class="big">48 hrs</span><span class="small">first drafts</span></div>
     </div>
 
     <div class="hero-in">
@@ -1751,6 +1774,24 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     </div>
   </div>
 </div>
+
+<section class="band dither-sec" id="brand">
+  <div class="wrap">
+    <div class="head mid rv">
+      <span class="eyebrow">The method</span>
+      <h2>Every piece starts<br>as <span class="it">noise</span></h2>
+    </div>
+    <div class="dither-wrap rv">
+      <canvas id="dither" data-scrub="drift"></canvas>
+      <span class="sr-only">Nxtlvl Social</span>
+      <p class="dither-cap">
+        <span class="d-desk">Move your cursor across it.</span>
+        <span class="d-touch">Watch it resolve.</span>
+        A machine roughs it in, and a designer brings it into focus. That is the whole model.
+      </p>
+    </div>
+  </div>
+</section>
 
 <section class="band" id="who">
   <div class="wrap">
@@ -1878,7 +1919,11 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
           <p>Social posts, carousels, story sets, posters, menus, price lists, festival creatives and ad banners — all built on a brand kit so your feed looks like one business, not twelve.</p>
           <span class="tag">from $5/month</span>
         </div>
-        <div class="viz viz-stack" data-scrub="grow" aria-hidden="true"><i class="g5"></i><i class="g6"></i><i class="g1"></i></div>
+        <div class="viz viz-stack" data-scrub="grow" aria-hidden="true">
+          <div class="vcard vc-car g5"><small>1/6</small><b>5 ways<br>to style<br>it</b><span class="vc-dots"><s></s><s></s><s></s><s></s></span></div>
+          <div class="vcard vc-pos g6"><span class="vc-sun"></span><b>Diwali<br>offer</b><em>This weekend</em></div>
+          <div class="vcard vc-sto g1"><span class="vc-prog"><s></s><s></s><s></s></span><span class="vc-who"><i></i>yourbusiness</span><svg class="vc-heart" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg><b>New menu,<br>out now</b></div>
+        </div>
       </article>
       <article class="svc s-video rv">
         <div class="svc-ic"><svg class="ic" aria-hidden="true"><use href="#i-video"/></svg></div>
@@ -2385,23 +2430,6 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   </div>
 </section>
 
-<section class="band dither-sec" id="brand">
-  <div class="wrap">
-    <div class="head mid rv">
-      <span class="eyebrow">The method</span>
-      <h2>Every piece starts<br>as <span class="it">noise</span></h2>
-    </div>
-    <div class="dither-wrap rv">
-      <canvas id="dither" data-scrub="drift"></canvas>
-      <span class="sr-only">Nxtlvl Social</span>
-      <p class="dither-cap">
-        <span class="d-desk">Move your cursor across it.</span>
-        <span class="d-touch">Watch it resolve.</span>
-        A machine roughs it in, and a designer brings it into focus. That is the whole model.
-      </p>
-    </div>
-  </div>
-</section>
 
 <section class="band close" id="contact">
   <div class="aura close-aura" data-scrub="aura"></div>
@@ -4758,6 +4786,52 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     } else { fVisible = true; }
     enterScreen(0);
   }
+
+  /* ---- visuals card: the three posts sweep a tilted diagonal orbit, then ease into a calm
+         revolve around the centre. Depth comes from scale, tilt, brightness and stacking order. ---- */
+  (function(){
+    var stack = document.querySelector('.viz-stack');
+    if(!stack || reduce) return;
+    var cards = Array.prototype.slice.call(stack.querySelectorAll('.vcard'));
+    var host = stack.closest('.svc'), started = false, t0 = 0, last = 0, theta = -1.2, slow = 1, hover = false, raf = null, vis = false;
+    var INTRO = 1900, TAU = Math.PI * 2;
+    function ease(k){ return 1 - Math.pow(1 - k, 3); }
+    function frame(now){
+      if(!vis){ raf = null; return; }
+      if(!started){ started = true; t0 = now; last = now; }
+      var dt = Math.min(now - last, 50) / 1000; last = now;
+      var k = ease(Math.min((now - t0) / INTRO, 1));             /* 0 = diagonal sweep, 1 = centre revolve */
+      var tilt = (-36 + 36 * k) * Math.PI / 180;                  /* the orbit plane straightens from a diagonal */
+      var w = stack.clientWidth;
+      var rx = (Math.min(150, w * .42)) * (1 - k) + Math.min(78, w * .24) * k;
+      var ry = 38 * (1 - k) + 18 * k;
+      var speed = 2.6 * (1 - k) + .5 * k;                          /* fast sweep that slows into a calm turn */
+      slow += ((hover ? .15 : 1) - slow) * .06;
+      theta += speed * slow * dt;
+      var ct = Math.cos(tilt), st = Math.sin(tilt);
+      for(var i = 0; i < cards.length; i++){
+        var a = theta + i * TAU / cards.length;
+        var lx = Math.cos(a) * rx, ly = Math.sin(a) * ry;
+        var x = lx * ct - ly * st, y = lx * st + ly * ct;
+        var depth = (Math.sin(a) + 1) / 2;                          /* 1 = front, 0 = back */
+        var sc = .8 + .22 * depth, rot = -Math.cos(a) * 12 * (1 - .4 * k);
+        cards[i].style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
+        cards[i].style.zIndex = Math.round(depth * 10) + 1;
+        cards[i].style.filter = 'brightness(' + (.68 + .32 * depth).toFixed(3) + ')';
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    if(host){
+      host.addEventListener('pointerenter', function(){ hover = true; });
+      host.addEventListener('pointerleave', function(){ hover = false; });
+    }
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        vis = es[0].isIntersecting && !document.hidden;
+        if(vis && !raf){ last = performance.now(); raf = requestAnimationFrame(frame); }
+      }, {threshold:.25}).observe(stack);
+    } else { vis = true; raf = requestAnimationFrame(frame); }
+  })();
 
   /* ---- smooth in-page nav ---- */
   document.querySelectorAll('a[href^="#"]').forEach(function(a){
