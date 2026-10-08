@@ -2488,7 +2488,8 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     if(!tc || !tc.getContext || reduce || !window.matchMedia('(hover:hover) and (pointer:fine)').matches){ if(tc) tc.style.display = 'none'; return; }
     var c = tc.getContext('2d'), dpr = Math.min(window.devicePixelRatio || 1, 2), W = 0, H = 0;
     var pts = [], raf = null, lx = null, ly = null;
-    var CELL = 4, STEP = 5, LIFE = 650, MAXPTS = 56, HEAD = 9;
+    var CELL = 4, STEP = 5, LIFE = 650, MAXPTS = 56, HEAD = 5;
+    var AL = 7, AW = 4, dirX = 1, dirY = 0;          /* arrowhead: length and half-width at its base, in cells */
     /* tail to head: violet, lilac, white */
     var C0 = [125, 24, 252], C1 = [169, 124, 255], C2 = [245, 242, 255];
     function mix(a, b, k){ return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k]; }
@@ -2502,12 +2503,14 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       /* age out from the end: the oldest points expire first, so the tail shortens */
       while(pts.length && now - pts[0].t > LIFE) pts.shift();
       c.clearRect(0, 0, W, H);
-      var n = pts.length, seen = {};
+      var n = pts.length, seen = {}, last = n ? pts[n - 1] : null, clear = (AL - .5) * CELL;
       for(var i = 0; i < n; i++){
         var p = pts[i];
+        /* the shaft stops at the arrowhead's base, so the head reads as one solid shape */
+        if(last && Math.hypot(p.x - last.x, p.y - last.y) < clear) continue;
         var pos = n > 1 ? i / (n - 1) : 1;                    /* 0 at the tail, 1 at the head */
         var age = 1 - (now - p.t) / LIFE;
-        var sz = Math.max(2, Math.round(2 + (HEAD - 2) * Math.pow(pos, 1.5)));
+        var sz = Math.max(2, Math.round(2 + (HEAD - 2) * Math.pow(pos, 1.5))) - 1;
         var gx = Math.round(p.x / CELL) * CELL, gy = Math.round(p.y / CELL) * CELL;
         var key = gx + ',' + gy + ',' + sz;
         if(seen[key]) continue; seen[key] = 1;
@@ -2518,6 +2521,28 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
         /* a few loose pixels scatter off the middle of the trail */
         if(p.s && pos > .25 && pos < .85){
           c.fillRect(gx + p.s[0] * CELL - 1, gy + p.s[1] * CELL - 1, 2, 2);
+        }
+      }
+      /* the arrowhead: a pixel triangle whose tip sits on the newest point, aimed along the recent path */
+      if(n){
+        var tip = pts[n - 1], back = pts[Math.max(0, n - 7)];
+        var vx = tip.x - back.x, vy = tip.y - back.y, vl = Math.hypot(vx, vy);
+        if(vl > 3){ dirX = vx / vl; dirY = vy / vl; }
+        var fade = Math.max(0, 1 - Math.pow((now - tip.t) / LIFE, 2));
+        var tx = Math.round(tip.x / CELL) * CELL, ty = Math.round(tip.y / CELL) * CELL;
+        var px = -dirY, py = dirX, len = AL * CELL, half = AW * CELL, reach = len + CELL;
+        for(var gy2 = ty - reach; gy2 <= ty + reach; gy2 += CELL){
+          for(var gx2 = tx - reach; gx2 <= tx + reach; gx2 += CELL){
+            var rx = gx2 - tx, ry = gy2 - ty;
+            var u = -(rx * dirX + ry * dirY);                  /* distance behind the tip */
+            var v = rx * px + ry * py;                          /* sideways from the centre line */
+            if(u < -CELL * .5 || u > len) continue;
+            if(Math.abs(v) > (Math.max(u, 0) / len) * half + CELL * .5) continue;
+            var kk = Math.max(0, u) / len;                      /* 0 at the tip, 1 at the base */
+            var hc = mix(C2, C1, kk);
+            c.fillStyle = 'rgba(' + (hc[0] | 0) + ',' + (hc[1] | 0) + ',' + (hc[2] | 0) + ',' + (fade * (1 - kk * .2)).toFixed(3) + ')';
+            c.fillRect(gx2 - CELL / 2, gy2 - CELL / 2, CELL - 1, CELL - 1);
+          }
         }
       }
       raf = pts.length ? requestAnimationFrame(frame) : null;
