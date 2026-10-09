@@ -45,6 +45,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Persuasive copy, social proof, urgency and trust signals          | `influence-psychology`    |
 | Picking competitors / benchmark accounts worth copying            | `dbs-benchmark`           |
 | Quiz / scorecard funnels and lead magnets that qualify leads      | `scorecard-marketing`     |
+| Guided plan to turn lumpy revenue into a repeatable growth engine | `grow-business`           |
 
 ### Third-party skills
 
@@ -68,6 +69,7 @@ update one by re-running its install command:
 | `negotiation`             | `wondelai/skills`                     |
 | `influence-psychology`    | `wondelai/skills`                     |
 | `scorecard-marketing`     | `wondelai/skills`                     |
+| `grow-business`           | `wondelai/skills`                     |
 | `lead-research-assistant` | `composiohq/awesome-claude-skills`    |
 | `dbs-benchmark`           | `dontbesilent2025/dbskill`            |
 
