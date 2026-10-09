@@ -30,9 +30,10 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Design direction: palette, type, pacing                 | `hyperframes-creative`                        |
 | Working with a person in Studio, storyboards            | `hyperframes-studio`                          |
 | CLI: init, check, preview, render, troubleshooting      | `hyperframes-cli`                             |
-| Diagnose and rewrite a short video's opening hook (Chinese) | `dbs-hook`                                |
+| Titles, cover text and video openings (Chinese)         | `dbs-title-cover-intro`                       |
+| Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
-The HyperFrames skills (from `heygen-com/hyperframes`) and `dbs-hook` (from `dontbesilent2025/dbskill`) are third-party; their versions are pinned in
+The HyperFrames skills (from `heygen-com/hyperframes`) and the `dbs-*` skills (from `dontbesilent2025/dbskill`) are third-party; their versions are pinned in
 `skills-lock.json`. Don't edit them by hand. Update them with:
 
 ```bash
