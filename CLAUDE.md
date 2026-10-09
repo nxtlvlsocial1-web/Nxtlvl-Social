@@ -35,9 +35,10 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Visual style for music videos and moody edits (angelcore / hyperpop) | `taste`                    |
 | iOS apps: control motorized camera docks / subject tracking (Swift) | `dockkit`                 |
 | Talking-head / lip-sync videos via fal.ai (stub, see note) | `fal-lip-sync`                       |
+| Remotion (React) video, only when explicitly asked (stub, see note) | `remotion`                   |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
-The HyperFrames skills (from `heygen-com/hyperframes`) the `dbs-*` skills (from `dontbesilent2025/dbskill`) `transitions-polish` (from `jakubantalik/transitions.dev`) `taste` (from `affaan-m/ecc`) `dockkit` (from `dpearson2699/swift-ios-skills`) and `fal-lip-sync` (from `nexu-io/open-design`) are third-party; their versions are pinned in
+The HyperFrames skills (from `heygen-com/hyperframes`) the `dbs-*` skills (from `dontbesilent2025/dbskill`) `transitions-polish` (from `jakubantalik/transitions.dev`) `taste` (from `affaan-m/ecc`) `dockkit` (from `dpearson2699/swift-ios-skills`) `fal-lip-sync` and `remotion` (from `nexu-io/open-design`) are third-party; their versions are pinned in
 `skills-lock.json`. Don't edit them by hand. Update them with:
 
 ```bash

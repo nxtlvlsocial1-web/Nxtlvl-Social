@@ -127,6 +127,12 @@
       "skillPath": "skills/product-launch-video/SKILL.md",
       "computedHash": "824bec3729b135798d20fb0dda7ad7315b0623ccec685c736e6872d5f0b726a7"
     },
+    "remotion": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/remotion/SKILL.md",
+      "computedHash": "db69d2dab8ea4ab60751058bd60ce4549d02505a14b67bd38d6b26710102eb8c"
+    },
     "slideshow": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
