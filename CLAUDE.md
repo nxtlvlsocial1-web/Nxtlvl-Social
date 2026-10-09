@@ -54,6 +54,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Network effects, marketplaces, getting first users                | `cold-start-problem`      |
 | Picking the one metric that matters, growth analytics             | `lean-analytics`          |
 | New client brand strategy: questionnaire, then full report       | `brand-strategy`          |
+| Choosing where to grow next: segment, region, channel or product  | `organic-growth-advisor`  |
 
 ### Third-party skills
 
@@ -88,6 +89,7 @@ update one by re-running its install command:
 | `lead-research-assistant` | `composiohq/awesome-claude-skills`    |
 | `dbs-benchmark`           | `dontbesilent2025/dbskill`            |
 | `brand-strategy`          | `arnabbagxd/brand-building-skills`    |
+| `organic-growth-advisor`  | `deanpeters/Product-Manager-Skills`   |
 
 ```bash
 npx skills add <source> --skill <name> --agent claude-code -y
