@@ -32,9 +32,10 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | CLI: init, check, preview, render, troubleshooting      | `hyperframes-cli`                             |
 | Titles, cover text and video openings (Chinese)         | `dbs-title-cover-intro`                       |
 | Polish/tune existing UI motion: durations, easing, stagger | `transitions-polish`                 |
+| Visual style for music videos and moody edits (angelcore / hyperpop) | `taste`                    |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
-The HyperFrames skills (from `heygen-com/hyperframes`) the `dbs-*` skills (from `dontbesilent2025/dbskill`) and `transitions-polish` (from `jakubantalik/transitions.dev`) are third-party; their versions are pinned in
+The HyperFrames skills (from `heygen-com/hyperframes`) the `dbs-*` skills (from `dontbesilent2025/dbskill`) `transitions-polish` (from `jakubantalik/transitions.dev`) and `taste` (from `affaan-m/ecc`) are third-party; their versions are pinned in
 `skills-lock.json`. Don't edit them by hand. Update them with:
 
 ```bash

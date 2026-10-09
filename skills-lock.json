@@ -127,6 +127,12 @@
       "skillPath": "skills/talking-head-recut/SKILL.md",
       "computedHash": "991315e8803089b6b0d008026c9b42c2c83f6ea95c44b26956cd6ff6197f5305"
     },
+    "taste": {
+      "source": "affaan-m/ecc",
+      "sourceType": "github",
+      "skillPath": "skills/taste/SKILL.md",
+      "computedHash": "74bd7ffcd8231d77b752d0cfca1daf264b50d182259945f89a077e16f4e1aae0"
+    },
     "transitions-polish": {
       "source": "jakubantalik/transitions.dev",
       "sourceType": "github",
