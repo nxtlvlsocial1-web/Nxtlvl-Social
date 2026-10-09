@@ -36,6 +36,8 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Need                                                    | Skill                                         |
 | ------------------------------------------------------- | --------------------------------------------- |
 | Carousel structure, slide-by-slide copy, post captions  | `social`                                      |
+| Website and landing-page copy, headlines, CTAs         | `copywriting`                                 |
+| Content pillars, calendars, what to post and where      | `content-strategy`                            |
 | Designing posters, slides and graphics as PNG / PDF     | `canvas-design`                               |
 | Still images: social graphics, banners, mockups, OG     | `image`                                       |
 | Paid-social ad statics, hooks, ad copy variations       | `ad-creative`                                 |
@@ -45,7 +47,8 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | YouTube thumbnails, Reel / Shorts covers                | `higgsfield-youtube-thumbnail`                |
 
 All skills except our own are third-party, and their versions are pinned in `skills-lock.json`:
-HyperFrames skills from `heygen-com/hyperframes`; `image`, `social` and `ad-creative` from
+HyperFrames skills from `heygen-com/hyperframes`; `image`, `social`, `ad-creative`,
+`copywriting` and `content-strategy` from
 `coreyhaines31/marketingskills`; `higgsfield-*` from `higgsfield-ai/skills`; `canvas-design` from
 `anthropics/skills`. Don't edit them by hand. Update one with:
 
