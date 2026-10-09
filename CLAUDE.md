@@ -47,11 +47,40 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Frame-sequence video (HyperFrames / Remotion style)     | `video-hyperframes`                           |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
-The HyperFrames skills (from `heygen-com/hyperframes`) the `dbs-*` skills (from `dontbesilent2025/dbskill`) `transitions-polish` (from `jakubantalik/transitions.dev`) `taste` (from `affaan-m/ecc`) `dockkit` (from `dpearson2699/swift-ios-skills`) `fal-lip-sync` and `remotion` (from `nexu-io/open-design`), `video-motion-graphics` (from `dylantarre/animation-principles`), the fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`, `model-routing`, from `fal-ai-community/skills`) and the `frame-*` / `video-hyperframes` skills (from `nexu-io/open-design`) are third-party; their versions are pinned in
-`skills-lock.json`. Don't edit them by hand. Update them with:
+**Carousels and static graphics:**
+
+| Need                                                    | Skill                                         |
+| ------------------------------------------------------- | --------------------------------------------- |
+| Carousel structure, slide-by-slide copy, post captions  | `social`                                      |
+| Website and landing-page copy, headlines, CTAs         | `copywriting`                                 |
+| Content pillars, calendars, what to post and where      | `content-strategy`                            |
+| Designing posters, slides and graphics as PNG / PDF     | `canvas-design`                               |
+| Still images: social graphics, banners, mockups, OG     | `image`                                       |
+| Paid-social ad statics, hooks, ad copy variations       | `ad-creative`                                 |
+| AI product photos, lifestyle shots, ad packs (Higgsfield) | `higgsfield-product-photoshoot`             |
+| General AI image / video generation (Higgsfield)        | `higgsfield-generate`                         |
+| Client brand systems: palette, logo, social templates   | `higgsfield-brandkit`                         |
+| YouTube thumbnails, Reel / Shorts covers                | `higgsfield-youtube-thumbnail`                |
+
+All skills except our own are third-party, and their versions are pinned in `skills-lock.json`:
+
+- HyperFrames skills: `heygen-com/hyperframes`
+- `image`, `social`, `ad-creative`, `copywriting`, `content-strategy`: `coreyhaines31/marketingskills`
+- `higgsfield-*`: `higgsfield-ai/skills`
+- `canvas-design`: `anthropics/skills`
+- `dbs-*`: `dontbesilent2025/dbskill`
+- `transitions-polish`: `jakubantalik/transitions.dev`
+- `taste`: `affaan-m/ecc`
+- `dockkit`: `dpearson2699/swift-ios-skills`
+- `fal-lip-sync`, `remotion`, `frame-*`, `video-hyperframes`: `nexu-io/open-design`
+- `video-motion-graphics`: `dylantarre/animation-principles`
+- fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`,
+  `model-routing`): `fal-ai-community/skills`
+
+Don't edit them by hand. Update one with:
 
 ```bash
-npx skills add heygen-com/hyperframes --skill <name> --agent claude-code -y
+npx skills add <source-repo> --skill <name> --agent claude-code -y
 ```
 
 Our own skills (currently `nxtlvl-social-video`) are ours to edit.
@@ -62,6 +91,8 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 - Run the CLI as `npx hyperframes ...`.
 - The fal skills call the `genmedia` CLI and need a fal.ai account and API key; they spend credits, so confirm the cost before generating.
 - Voiceover and generated music need a HeyGen account (`npx hyperframes auth`) or a Gemini API key.
+- The `higgsfield-*` skills need the `higgsfield` CLI and a Higgsfield account (`higgsfield auth login`);
+  each generation spends Higgsfield credits.
 - Telemetry: set `HYPERFRAMES_NO_TELEMETRY=1` to turn it off.
 
 ## Repo layout
