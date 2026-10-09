@@ -30,6 +30,11 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Design direction: palette, type, pacing                 | `hyperframes-creative`                        |
 | Working with a person in Studio, storyboards            | `hyperframes-studio`                          |
 | CLI: init, check, preview, render, troubleshooting      | `hyperframes-cli`                             |
+| Titles, cover text and video openings (Chinese)         | `dbs-title-cover-intro`                       |
+| Polish/tune existing UI motion: durations, easing, stagger | `transitions-polish`                 |
+| Visual style for music videos and moody edits (angelcore / hyperpop) | `taste`                    |
+| iOS apps: control motorized camera docks / subject tracking (Swift) | `dockkit`                 |
+| Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
 **Carousels and static graphics:**
 
@@ -47,10 +52,17 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | YouTube thumbnails, Reel / Shorts covers                | `higgsfield-youtube-thumbnail`                |
 
 All skills except our own are third-party, and their versions are pinned in `skills-lock.json`:
-HyperFrames skills from `heygen-com/hyperframes`; `image`, `social`, `ad-creative`,
-`copywriting` and `content-strategy` from
-`coreyhaines31/marketingskills`; `higgsfield-*` from `higgsfield-ai/skills`; `canvas-design` from
-`anthropics/skills`. Don't edit them by hand. Update one with:
+
+- HyperFrames skills: `heygen-com/hyperframes`
+- `image`, `social`, `ad-creative`, `copywriting`, `content-strategy`: `coreyhaines31/marketingskills`
+- `higgsfield-*`: `higgsfield-ai/skills`
+- `canvas-design`: `anthropics/skills`
+- `dbs-*`: `dontbesilent2025/dbskill`
+- `transitions-polish`: `jakubantalik/transitions.dev`
+- `taste`: `affaan-m/ecc`
+- `dockkit`: `dpearson2699/swift-ios-skills`
+
+Don't edit them by hand. Update one with:
 
 ```bash
 npx skills add <source-repo> --skill <name> --agent claude-code -y
