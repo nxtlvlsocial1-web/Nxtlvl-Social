@@ -115,6 +115,12 @@
       "skillPath": "skills/product-launch-video/SKILL.md",
       "computedHash": "824bec3729b135798d20fb0dda7ad7315b0623ccec685c736e6872d5f0b726a7"
     },
+    "recipe-create-expense-tracker": {
+      "source": "googleworkspace/cli",
+      "sourceType": "github",
+      "skillPath": "skills/recipe-create-expense-tracker/SKILL.md",
+      "computedHash": "e96639dbaa30920c019ac1db63ff1e427a1e8f22725968d7cd56763b82b5c939"
+    },
     "slideshow": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
