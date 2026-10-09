@@ -31,11 +31,76 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Working with a person in Studio, storyboards            | `hyperframes-studio`                          |
 | CLI: init, check, preview, render, troubleshooting      | `hyperframes-cli`                             |
 
+### Marketing, sales and growth
+
+| Need                                                              | Skill                     |
+| ----------------------------------------------------------------- | ------------------------- |
+| Ad creatives and performance marketing: copy, hooks, ad testing   | `ad-creative`             |
+| Full campaign brief: goals, audience, channels, content calendar  | `campaign-plan`           |
+| Running a multi-channel campaign or launch end to end             | `marketing-campaign`      |
+| Captions, posts, emails, blogs, landing pages, press releases     | `content-creation`        |
+| Landing page / conversion audits and A/B test ideas               | `cro-methodology`         |
+| Quick CRO checklist: funnels, forms, checkout, A/B test basics    | `conversion-optimization` |
+| Finding and qualifying new client leads                           | `lead-research-assistant` |
+| Deciding which prospects are worth chasing: qualification, scoring | `qualifying-leads`        |
+| Preparing for client pricing, contract or vendor negotiations     | `negotiation`             |
+| Persuasive copy, social proof, urgency and trust signals          | `influence-psychology`    |
+| Picking competitors / benchmark accounts worth copying            | `dbs-benchmark`           |
+| Quiz / scorecard funnels and lead magnets that qualify leads      | `scorecard-marketing`     |
+| Guided plan to turn lumpy revenue into a repeatable growth engine | `grow-business`           |
+| Full marketing plan, stranger to raving fan (one page)            | `one-page-marketing`      |
+| Irresistible offers: bonuses, guarantees, pricing packaging       | `hundred-million-offers`  |
+| Outbound B2B sales: cold email, pipeline, qualification           | `predictable-revenue`     |
+| Word-of-mouth, shareable content, referral programs               | `contagious`              |
+| Going from early adopters to mainstream buyers                    | `crossing-the-chasm`      |
+| Network effects, marketplaces, getting first users                | `cold-start-problem`      |
+| Picking the one metric that matters, growth analytics             | `lean-analytics`          |
+| New client brand strategy: questionnaire, then full report       | `brand-strategy`          |
+| Choosing where to grow next: segment, region, channel or product  | `organic-growth-advisor`  |
+| Affiliate programs: commissions, recruiting partners, tracking    | `affiliate-marketing`     |
+| Influencer / creator campaigns, outreach and deals                | `influencer-marketing`    |
+
+### Third-party skills
+
 The HyperFrames skills are third-party (from `heygen-com/hyperframes`); their versions are pinned in
 `skills-lock.json`. Don't edit them by hand. Update them with:
 
 ```bash
 npx skills add heygen-com/hyperframes --skill <name> --agent claude-code -y
+```
+
+The marketing skills are third-party too, pinned in the same lock file. Don't edit them by hand either;
+update one by re-running its install command:
+
+| Skill                     | Source                                |
+| ------------------------- | ------------------------------------- |
+| `ad-creative`             | `coreyhaines31/marketingskills`       |
+| `campaign-plan`           | `anthropics/knowledge-work-plugins`   |
+| `content-creation`        | `anthropics/knowledge-work-plugins`   |
+| `marketing-campaign`      | `affaan-m/ecc`                        |
+| `cro-methodology`         | `wondelai/skills`                     |
+| `negotiation`             | `wondelai/skills`                     |
+| `influence-psychology`    | `wondelai/skills`                     |
+| `scorecard-marketing`     | `wondelai/skills`                     |
+| `grow-business`           | `wondelai/skills`                     |
+| `one-page-marketing`      | `wondelai/skills`                     |
+| `hundred-million-offers`  | `wondelai/skills`                     |
+| `predictable-revenue`     | `wondelai/skills`                     |
+| `contagious`              | `wondelai/skills`                     |
+| `crossing-the-chasm`      | `wondelai/skills`                     |
+| `cold-start-problem`      | `wondelai/skills`                     |
+| `lean-analytics`          | `wondelai/skills`                     |
+| `lead-research-assistant` | `composiohq/awesome-claude-skills`    |
+| `dbs-benchmark`           | `dontbesilent2025/dbskill`            |
+| `brand-strategy`          | `arnabbagxd/brand-building-skills`    |
+| `organic-growth-advisor`  | `deanpeters/Product-Manager-Skills`   |
+| `conversion-optimization` | `kostja94/marketing-skills`           |
+| `affiliate-marketing`     | `kostja94/marketing-skills`           |
+| `influencer-marketing`    | `kostja94/marketing-skills`           |
+| `qualifying-leads`        | `louisblythe/Sales-Skills`            |
+
+```bash
+npx skills add <source> --skill <name> --agent claude-code -y
 ```
 
 Our own skills (currently `nxtlvl-social-video`) are ours to edit.
