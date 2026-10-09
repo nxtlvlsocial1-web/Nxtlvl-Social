@@ -157,6 +157,12 @@
       "skillPath": "skills/product-launch-video/SKILL.md",
       "computedHash": "824bec3729b135798d20fb0dda7ad7315b0623ccec685c736e6872d5f0b726a7"
     },
+    "scorecard-marketing": {
+      "source": "wondelai/skills",
+      "sourceType": "github",
+      "skillPath": "scorecard-marketing/SKILL.md",
+      "computedHash": "a7fea37b6ac442c20dd9b43e5bc32847a0a24f0a38eeaadcc813241426f96355"
+    },
     "slideshow": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",

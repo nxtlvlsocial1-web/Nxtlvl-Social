@@ -44,6 +44,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Preparing for client pricing, contract or vendor negotiations     | `negotiation`             |
 | Persuasive copy, social proof, urgency and trust signals          | `influence-psychology`    |
 | Picking competitors / benchmark accounts worth copying            | `dbs-benchmark`           |
+| Quiz / scorecard funnels and lead magnets that qualify leads      | `scorecard-marketing`     |
 
 ### Third-party skills
 
@@ -66,6 +67,7 @@ update one by re-running its install command:
 | `cro-methodology`         | `wondelai/skills`                     |
 | `negotiation`             | `wondelai/skills`                     |
 | `influence-psychology`    | `wondelai/skills`                     |
+| `scorecard-marketing`     | `wondelai/skills`                     |
 | `lead-research-assistant` | `composiohq/awesome-claude-skills`    |
 | `dbs-benchmark`           | `dontbesilent2025/dbskill`            |
 
