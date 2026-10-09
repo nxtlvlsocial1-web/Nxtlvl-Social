@@ -34,6 +34,17 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Polish/tune existing UI motion: durations, easing, stagger | `transitions-polish`                 |
 | Visual style for music videos and moody edits (angelcore / hyperpop) | `taste`                    |
 | iOS apps: control motorized camera docks / subject tracking (Swift) | `dockkit`                 |
+| Talking-head / lip-sync videos via fal.ai (stub, see note) | `fal-lip-sync`                       |
+| Remotion (React) video, only when explicitly asked (stub, see note) | `remotion`                   |
+| Animation-principles guidance for After Effects / Premiere motion | `video-motion-graphics`      |
+| Ad / product / e-commerce video production via fal.ai   | `commercial`                                  |
+| UGC-style creator ads, testimonials, founder clips      | `ugc`                                         |
+| Campaign kits and paid-social variants                  | `marketing`                                   |
+| Multi-shot stories, storyboards, shot lists             | `storytelling`                                |
+| Shot language, camera, lighting, colour grade prompts   | `cinematography`                              |
+| Prompting a specific fal model / choosing a default one | `fal-prompting`, `model-routing`              |
+| Title and outro frames: glitch, light-leak, logo outro  | `frame-glitch-title`, `frame-light-leak-cinema`, `frame-logo-outro` |
+| Frame-sequence video (HyperFrames / Remotion style)     | `video-hyperframes`                           |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
 **Carousels and static graphics:**
@@ -61,6 +72,10 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `transitions-polish`: `jakubantalik/transitions.dev`
 - `taste`: `affaan-m/ecc`
 - `dockkit`: `dpearson2699/swift-ios-skills`
+- `fal-lip-sync`, `remotion`, `frame-*`, `video-hyperframes`: `nexu-io/open-design`
+- `video-motion-graphics`: `dylantarre/animation-principles`
+- fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`,
+  `model-routing`): `fal-ai-community/skills`
 
 Don't edit them by hand. Update one with:
 
@@ -74,6 +89,7 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 
 - Node.js 22 or newer and FFmpeg.
 - Run the CLI as `npx hyperframes ...`.
+- The fal skills call the `genmedia` CLI and need a fal.ai account and API key; they spend credits, so confirm the cost before generating.
 - Voiceover and generated music need a HeyGen account (`npx hyperframes auth`) or a Gemini API key.
 - The `higgsfield-*` skills need the `higgsfield` CLI and a Higgsfield account (`higgsfield auth login`);
   each generation spends Higgsfield credits.
