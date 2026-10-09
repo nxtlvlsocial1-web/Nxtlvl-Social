@@ -37,9 +37,17 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Talking-head / lip-sync videos via fal.ai (stub, see note) | `fal-lip-sync`                       |
 | Remotion (React) video, only when explicitly asked (stub, see note) | `remotion`                   |
 | Animation-principles guidance for After Effects / Premiere motion | `video-motion-graphics`      |
+| Ad / product / e-commerce video production via fal.ai   | `commercial`                                  |
+| UGC-style creator ads, testimonials, founder clips      | `ugc`                                         |
+| Campaign kits and paid-social variants                  | `marketing`                                   |
+| Multi-shot stories, storyboards, shot lists             | `storytelling`                                |
+| Shot language, camera, lighting, colour grade prompts   | `cinematography`                              |
+| Prompting a specific fal model / choosing a default one | `fal-prompting`, `model-routing`              |
+| Title and outro frames: glitch, light-leak, logo outro  | `frame-glitch-title`, `frame-light-leak-cinema`, `frame-logo-outro` |
+| Frame-sequence video (HyperFrames / Remotion style)     | `video-hyperframes`                           |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
-The HyperFrames skills (from `heygen-com/hyperframes`) the `dbs-*` skills (from `dontbesilent2025/dbskill`) `transitions-polish` (from `jakubantalik/transitions.dev`) `taste` (from `affaan-m/ecc`) `dockkit` (from `dpearson2699/swift-ios-skills`) `fal-lip-sync` and `remotion` (from `nexu-io/open-design`), and `video-motion-graphics` (from `dylantarre/animation-principles`) are third-party; their versions are pinned in
+The HyperFrames skills (from `heygen-com/hyperframes`) the `dbs-*` skills (from `dontbesilent2025/dbskill`) `transitions-polish` (from `jakubantalik/transitions.dev`) `taste` (from `affaan-m/ecc`) `dockkit` (from `dpearson2699/swift-ios-skills`) `fal-lip-sync` and `remotion` (from `nexu-io/open-design`), `video-motion-graphics` (from `dylantarre/animation-principles`), the fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`, `model-routing`, from `fal-ai-community/skills`) and the `frame-*` / `video-hyperframes` skills (from `nexu-io/open-design`) are third-party; their versions are pinned in
 `skills-lock.json`. Don't edit them by hand. Update them with:
 
 ```bash
@@ -52,6 +60,7 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 
 - Node.js 22 or newer and FFmpeg.
 - Run the CLI as `npx hyperframes ...`.
+- The fal skills call the `genmedia` CLI and need a fal.ai account and API key; they spend credits, so confirm the cost before generating.
 - Voiceover and generated music need a HeyGen account (`npx hyperframes auth`) or a Gemini API key.
 - Telemetry: set `HYPERFRAMES_NO_TELEMETRY=1` to turn it off.
 
