@@ -31,6 +31,12 @@
       "skillPath": "skills/faceless-explainer/SKILL.md",
       "computedHash": "10984627b1aed2c89cda04e7f6fd46c0d39cc5978338f985149ee9ab905db220"
     },
+    "fal-lip-sync": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/fal-lip-sync/SKILL.md",
+      "computedHash": "c3c7cfb837b46dcdd34053a8ce08e1ae859a35f1a40cfd07615af59d0e66a2c8"
+    },
     "figma": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
