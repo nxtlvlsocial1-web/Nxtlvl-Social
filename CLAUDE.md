@@ -42,6 +42,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Landing page / conversion audits and A/B test ideas               | `cro-methodology`         |
 | Finding and qualifying new client leads                           | `lead-research-assistant` |
 | Preparing for client pricing, contract or vendor negotiations     | `negotiation`             |
+| Persuasive copy, social proof, urgency and trust signals          | `influence-psychology`    |
 
 ### Third-party skills
 
@@ -63,6 +64,7 @@ update one by re-running its install command:
 | `marketing-campaign`      | `affaan-m/ecc`                        |
 | `cro-methodology`         | `wondelai/skills`                     |
 | `negotiation`             | `wondelai/skills`                     |
+| `influence-psychology`    | `wondelai/skills`                     |
 | `lead-research-assistant` | `composiohq/awesome-claude-skills`    |
 
 ```bash
