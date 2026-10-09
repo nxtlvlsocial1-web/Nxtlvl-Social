@@ -13,6 +13,18 @@
       "skillPath": "marketing/skills/campaign-plan/SKILL.md",
       "computedHash": "2335b5e87cc366b7cd6113dac41387a56e0fbf2102e3fe67fe4a2bdead60fd7d"
     },
+    "cold-start-problem": {
+      "source": "wondelai/skills",
+      "sourceType": "github",
+      "skillPath": "cold-start-problem/SKILL.md",
+      "computedHash": "f76cefa4fb1c1cb70d2fa34359993647b6bf57c5365f628ad1693b2ca26dc47d"
+    },
+    "contagious": {
+      "source": "wondelai/skills",
+      "sourceType": "github",
+      "skillPath": "contagious/SKILL.md",
+      "computedHash": "e804f739e7e9ca15fa264824a8371a0a7a07a91beb1af91546f49bde3e251ae7"
+    },
     "content-creation": {
       "source": "anthropics/knowledge-work-plugins",
       "sourceType": "github",
@@ -24,6 +36,12 @@
       "sourceType": "github",
       "skillPath": "cro-methodology/SKILL.md",
       "computedHash": "4c8b86029d16a16a3a62c45a0bdde2b45caa20e73a26b4e5ef46129615cc1a9c"
+    },
+    "crossing-the-chasm": {
+      "source": "wondelai/skills",
+      "sourceType": "github",
+      "skillPath": "crossing-the-chasm/SKILL.md",
+      "computedHash": "ef1038aae15dcc497517165e14d4d2c69f6b633127e67824a92e74121309eb94"
     },
     "dbs-benchmark": {
       "source": "dontbesilent2025/dbskill",
@@ -60,6 +78,12 @@
       "sourceType": "github",
       "skillPath": "grow-business/SKILL.md",
       "computedHash": "3520638cb1fde02589c2dff6dd9cdf53a548d2030e961b2516b0683ed0c4e53a"
+    },
+    "hundred-million-offers": {
+      "source": "wondelai/skills",
+      "sourceType": "github",
+      "skillPath": "hundred-million-offers/SKILL.md",
+      "computedHash": "eab55c351d55c5797747d7d6a9258d2f76ef2f9d579fcfbedc4b7f31e48009e8"
     },
     "hyperframes": {
       "source": "heygen-com/hyperframes",
@@ -127,6 +151,12 @@
       "skillPath": "lead-research-assistant/SKILL.md",
       "computedHash": "08cf5477dfdcbefa0758fad431c226efb9f09e108c8c6477b4a14db2d6810889"
     },
+    "lean-analytics": {
+      "source": "wondelai/skills",
+      "sourceType": "github",
+      "skillPath": "lean-analytics/SKILL.md",
+      "computedHash": "209cf1686f687f2ba36f4e725cd2fc292c624623a65b61b558c17410e8ffd7cb"
+    },
     "marketing-campaign": {
       "source": "affaan-m/ecc",
       "sourceType": "github",
@@ -156,6 +186,18 @@
       "sourceType": "github",
       "skillPath": "negotiation/SKILL.md",
       "computedHash": "0455504db949beb0ee17088b9315a614ac2b6764b8011ee19e8ffa7d6abf4baa"
+    },
+    "one-page-marketing": {
+      "source": "wondelai/skills",
+      "sourceType": "github",
+      "skillPath": "one-page-marketing/SKILL.md",
+      "computedHash": "cbc08098c36bf7c2f5ed67eebf6730ecac03ddca71861878ac20bd202b8a802a"
+    },
+    "predictable-revenue": {
+      "source": "wondelai/skills",
+      "sourceType": "github",
+      "skillPath": "predictable-revenue/SKILL.md",
+      "computedHash": "757d7c15ff3ff83b720bd19beccc78e5af9c88524eedb93f8605f2259563657e"
     },
     "product-launch-video": {
       "source": "heygen-com/hyperframes",

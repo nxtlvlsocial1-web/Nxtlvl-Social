@@ -46,6 +46,13 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Picking competitors / benchmark accounts worth copying            | `dbs-benchmark`           |
 | Quiz / scorecard funnels and lead magnets that qualify leads      | `scorecard-marketing`     |
 | Guided plan to turn lumpy revenue into a repeatable growth engine | `grow-business`           |
+| Full marketing plan, stranger to raving fan (one page)            | `one-page-marketing`      |
+| Irresistible offers: bonuses, guarantees, pricing packaging       | `hundred-million-offers`  |
+| Outbound B2B sales: cold email, pipeline, qualification           | `predictable-revenue`     |
+| Word-of-mouth, shareable content, referral programs               | `contagious`              |
+| Going from early adopters to mainstream buyers                    | `crossing-the-chasm`      |
+| Network effects, marketplaces, getting first users                | `cold-start-problem`      |
+| Picking the one metric that matters, growth analytics             | `lean-analytics`          |
 
 ### Third-party skills
 
@@ -70,6 +77,13 @@ update one by re-running its install command:
 | `influence-psychology`    | `wondelai/skills`                     |
 | `scorecard-marketing`     | `wondelai/skills`                     |
 | `grow-business`           | `wondelai/skills`                     |
+| `one-page-marketing`      | `wondelai/skills`                     |
+| `hundred-million-offers`  | `wondelai/skills`                     |
+| `predictable-revenue`     | `wondelai/skills`                     |
+| `contagious`              | `wondelai/skills`                     |
+| `crossing-the-chasm`      | `wondelai/skills`                     |
+| `cold-start-problem`      | `wondelai/skills`                     |
+| `lean-analytics`          | `wondelai/skills`                     |
 | `lead-research-assistant` | `composiohq/awesome-claude-skills`    |
 | `dbs-benchmark`           | `dontbesilent2025/dbskill`            |
 
