@@ -40,6 +40,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Running a multi-channel campaign or launch end to end             | `marketing-campaign`      |
 | Captions, posts, emails, blogs, landing pages, press releases     | `content-creation`        |
 | Landing page / conversion audits and A/B test ideas               | `cro-methodology`         |
+| Quick CRO checklist: funnels, forms, checkout, A/B test basics    | `conversion-optimization` |
 | Finding and qualifying new client leads                           | `lead-research-assistant` |
 | Preparing for client pricing, contract or vendor negotiations     | `negotiation`             |
 | Persuasive copy, social proof, urgency and trust signals          | `influence-psychology`    |
@@ -90,6 +91,7 @@ update one by re-running its install command:
 | `dbs-benchmark`           | `dontbesilent2025/dbskill`            |
 | `brand-strategy`          | `arnabbagxd/brand-building-skills`    |
 | `organic-growth-advisor`  | `deanpeters/Product-Manager-Skills`   |
+| `conversion-optimization` | `kostja94/marketing-skills`           |
 
 ```bash
 npx skills add <source> --skill <name> --agent claude-code -y
