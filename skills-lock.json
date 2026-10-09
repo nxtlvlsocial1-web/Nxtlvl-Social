@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "dbs-hook": {
+      "source": "dontbesilent2025/dbskill",
+      "sourceType": "github",
+      "skillPath": "skills/dbs-hook/SKILL.md",
+      "computedHash": "7765c7375d224ecff8064e40b4f77ff43ed285bcd06f506913c44fb93d9dcafc"
+    },
     "embedded-captions": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
