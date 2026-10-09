@@ -31,9 +31,10 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Working with a person in Studio, storyboards            | `hyperframes-studio`                          |
 | CLI: init, check, preview, render, troubleshooting      | `hyperframes-cli`                             |
 | Titles, cover text and video openings (Chinese)         | `dbs-title-cover-intro`                       |
+| Polish/tune existing UI motion: durations, easing, stagger | `transitions-polish`                 |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
-The HyperFrames skills (from `heygen-com/hyperframes`) and the `dbs-*` skills (from `dontbesilent2025/dbskill`) are third-party; their versions are pinned in
+The HyperFrames skills (from `heygen-com/hyperframes`) the `dbs-*` skills (from `dontbesilent2025/dbskill`) and `transitions-polish` (from `jakubantalik/transitions.dev`) are third-party; their versions are pinned in
 `skills-lock.json`. Don't edit them by hand. Update them with:
 
 ```bash

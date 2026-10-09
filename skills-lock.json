@@ -126,6 +126,12 @@
       "sourceType": "github",
       "skillPath": "skills/talking-head-recut/SKILL.md",
       "computedHash": "991315e8803089b6b0d008026c9b42c2c83f6ea95c44b26956cd6ff6197f5305"
+    },
+    "transitions-polish": {
+      "source": "jakubantalik/transitions.dev",
+      "sourceType": "github",
+      "skillPath": "skills/transitions-polish/SKILL.md",
+      "computedHash": "3f0630020cdfd0ea3d582ac45201c1ad4bced2ef7d0a0145d4cc81ad25f57ec3"
     }
   }
 }
