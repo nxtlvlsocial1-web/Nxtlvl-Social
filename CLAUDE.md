@@ -56,6 +56,8 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Picking the one metric that matters, growth analytics             | `lean-analytics`          |
 | New client brand strategy: questionnaire, then full report       | `brand-strategy`          |
 | Choosing where to grow next: segment, region, channel or product  | `organic-growth-advisor`  |
+| Affiliate programs: commissions, recruiting partners, tracking    | `affiliate-marketing`     |
+| Influencer / creator campaigns, outreach and deals                | `influencer-marketing`    |
 
 ### Third-party skills
 
@@ -92,6 +94,8 @@ update one by re-running its install command:
 | `brand-strategy`          | `arnabbagxd/brand-building-skills`    |
 | `organic-growth-advisor`  | `deanpeters/Product-Manager-Skills`   |
 | `conversion-optimization` | `kostja94/marketing-skills`           |
+| `affiliate-marketing`     | `kostja94/marketing-skills`           |
+| `influencer-marketing`    | `kostja94/marketing-skills`           |
 
 ```bash
 npx skills add <source> --skill <name> --agent claude-code -y

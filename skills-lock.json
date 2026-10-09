@@ -7,6 +7,12 @@
       "skillPath": "skills/ad-creative/SKILL.md",
       "computedHash": "dd25996e6ef7d682e66b3af66244561fa07fae36c51f3b4841f7684a736160a3"
     },
+    "affiliate-marketing": {
+      "source": "kostja94/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/channels/partnerships/affiliate-marketing/SKILL.md",
+      "computedHash": "8f71c1e59dfca5b6d4149457d1bb8cf1d429a58175081efbe5bf064a89ee6d66"
+    },
     "brand-strategy": {
       "source": "arnabbagxd/brand-building-skills",
       "sourceType": "github",
@@ -156,6 +162,12 @@
       "sourceType": "github",
       "skillPath": "influence-psychology/SKILL.md",
       "computedHash": "a67347ebd874191d1e72e8afb5b59d6507090f34dcc744627322cb29cd4e36f5"
+    },
+    "influencer-marketing": {
+      "source": "kostja94/marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/channels/partnerships/influencer-marketing/SKILL.md",
+      "computedHash": "26a017afd48648c7be42d72b2eda3a3678bb96709fb3e34ea21e0c3a5af9cf66"
     },
     "lead-research-assistant": {
       "source": "composiohq/awesome-claude-skills",
