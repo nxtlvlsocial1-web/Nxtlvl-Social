@@ -42,6 +42,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Landing page / conversion audits and A/B test ideas               | `cro-methodology`         |
 | Quick CRO checklist: funnels, forms, checkout, A/B test basics    | `conversion-optimization` |
 | Finding and qualifying new client leads                           | `lead-research-assistant` |
+| Deciding which prospects are worth chasing: qualification, scoring | `qualifying-leads`        |
 | Preparing for client pricing, contract or vendor negotiations     | `negotiation`             |
 | Persuasive copy, social proof, urgency and trust signals          | `influence-psychology`    |
 | Picking competitors / benchmark accounts worth copying            | `dbs-benchmark`           |
@@ -96,6 +97,7 @@ update one by re-running its install command:
 | `conversion-optimization` | `kostja94/marketing-skills`           |
 | `affiliate-marketing`     | `kostja94/marketing-skills`           |
 | `influencer-marketing`    | `kostja94/marketing-skills`           |
+| `qualifying-leads`        | `louisblythe/Sales-Skills`            |
 
 ```bash
 npx skills add <source> --skill <name> --agent claude-code -y
