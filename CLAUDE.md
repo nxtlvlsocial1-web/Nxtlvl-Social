@@ -46,6 +46,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Title and outro frames: glitch, light-leak, logo outro  | `frame-glitch-title`, `frame-light-leak-cinema`, `frame-logo-outro` |
 | Frame-sequence video (HyperFrames / Remotion style)     | `video-hyperframes`                           |
 | Edit existing footage by conversation: transcribe, cut, grade, subtitles, overlays | `video-use` |
+| Trim silence and speed up raw screen recordings (FFmpeg) | `raw-video-processing`                |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
 **Carousels and static graphics:**
