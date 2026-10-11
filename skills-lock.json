@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "8-bit-orbit-video-template": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/8-bit-orbit-video-template/SKILL.md",
+      "computedHash": "4dc23e4efd92f081d3f12f45b2d1131b05832ac4d659e6676e548a7ca716ed06"
+    },
     "ad-creative": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
