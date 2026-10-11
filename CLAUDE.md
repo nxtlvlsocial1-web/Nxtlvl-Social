@@ -45,6 +45,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Prompting a specific fal model / choosing a default one | `fal-prompting`, `model-routing`              |
 | Title and outro frames: glitch, light-leak, logo outro  | `frame-glitch-title`, `frame-light-leak-cinema`, `frame-logo-outro` |
 | Frame-sequence video (HyperFrames / Remotion style)     | `video-hyperframes`                           |
+| Edit existing footage by conversation: transcribe, cut, grade, subtitles, overlays | `video-use` |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
 **Carousels and static graphics:**
@@ -90,6 +91,7 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 - Node.js 22 or newer and FFmpeg.
 - Run the CLI as `npx hyperframes ...`.
 - The fal skills call the `genmedia` CLI and need a fal.ai account and API key; they spend credits, so confirm the cost before generating.
+- `video-use` transcribes with ElevenLabs Scribe: put `ELEVENLABS_API_KEY` in a `.env`, and note that footage audio is uploaded to ElevenLabs. Its Python helpers need `ffmpeg`.
 - Voiceover and generated music need a HeyGen account (`npx hyperframes auth`) or a Gemini API key.
 - The `higgsfield-*` skills need the `higgsfield` CLI and a Higgsfield account (`higgsfield auth login`);
   each generation spends Higgsfield credits.

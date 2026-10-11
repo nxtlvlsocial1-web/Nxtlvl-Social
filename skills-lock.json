@@ -288,6 +288,12 @@
       "sourceType": "github",
       "skillPath": "skills/01-by-domain/video-motion-graphics/SKILL.md",
       "computedHash": "6b82db9dbef273739ac97bd34657fcd2d92420905dad40823e676671c0c85c01"
+    },
+    "video-use": {
+      "source": "browser-use/video-use",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "896d55ce2c26c3d0f6d5598c34eb882f7d5c6e98fc09aa44b55d4c7e2ac357a5"
     }
   }
 }
