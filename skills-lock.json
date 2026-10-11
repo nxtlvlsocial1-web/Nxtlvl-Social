@@ -229,6 +229,12 @@
       "skillPath": ".opencode/skills/muapi-cinema-director/SKILL.md",
       "computedHash": "7110c94428b7e949a49d9a22e7d0ad6dcf219e7d181ab96e9902ed7edc667534"
     },
+    "muapi-product-video-ad-maker": {
+      "source": "samuraigpt/generative-media-skills",
+      "sourceType": "github",
+      "skillPath": ".opencode/skills/muapi-product-video-ad-maker/SKILL.md",
+      "computedHash": "1e13ffaff81ec1b835ee869f5d2eb780ede64f9c3dffd099446234ac80acafb2"
+    },
     "music-to-video": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
