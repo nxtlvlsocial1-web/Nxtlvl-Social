@@ -47,6 +47,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Frame-sequence video (HyperFrames / Remotion style)     | `video-hyperframes`                           |
 | Edit existing footage by conversation: transcribe, cut, grade, subtitles, overlays | `video-use` |
 | Trim silence and speed up raw screen recordings (FFmpeg) | `raw-video-processing`                |
+| Cinematic shot direction for AI video (Veo3 / Kling / Luma via muapi.ai) | `muapi-cinema-director`   |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
 **Carousels and static graphics:**
