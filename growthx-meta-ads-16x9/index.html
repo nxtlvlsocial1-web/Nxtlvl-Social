@@ -112,6 +112,16 @@
       .f-a, .f-b { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
             .cursor { position:absolute; left:1080px; top:780px; width:0; height:0; border-left:28px solid transparent; border-right:28px solid transparent; border-bottom:70px solid #fff; transform-origin:center; rotate:-30deg; filter:drop-shadow(0 6px 10px rgba(0,0,0,.6)); }
 
+      .cmt { display:flex; align-items:center; gap:22px; width:1100px; padding:22px 26px; border-radius:26px; background:rgba(255,255,255,.06); border:2px solid rgba(166,92,255,.5); box-shadow:0 0 60px rgba(139,47,232,.35); }
+      .cmt-av { width:84px; height:84px; border-radius:50%; overflow:hidden; border:3px solid var(--pur2); flex:none; }
+      .cmt-av img { width:100%; height:100%; object-fit:cover; }
+      .cmt-in { position:relative; flex:1; height:84px; border-radius:42px; background:rgba(4,2,6,.8); display:flex; align-items:center; padding:0 34px; font-size:44px; }
+      .cmt-ph { position:absolute; left:34px; color:var(--dim); font-weight:600; }
+      .cmt-txt b { display:inline-block; font-weight:900; color:#fff; letter-spacing:.04em; }
+      .cmt-send { flex:none; font-size:40px; font-weight:900; padding:18px 34px; border-radius:20px; color:var(--acc); border:2px solid var(--pur2); }
+      #s13 .huge { font-size:290px; margin-top:34px; }
+      .dm { font-size:58px; font-weight:700; }
+      .dm span { color:var(--acc); font-weight:900; }
       .cta { display:flex; flex-direction:column; align-items:center; gap:30px; margin-top:30px; }
       .pill { background:linear-gradient(90deg,var(--pur),var(--pur2)); color:#fff; box-shadow:0 0 50px rgba(139,47,232,.6); font-size:64px; font-weight:900; padding:22px 56px; border-radius:999px; }
       .mail { font-size:46px; font-weight:700; padding:18px 40px; border-radius:20px; background:rgba(255,255,255,.06); border:2px solid rgba(255,255,255,.2); }
@@ -137,7 +147,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="42.4" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="41.6" data-width="1920" data-height="1080">
       <div class="bg"></div>
       <div class="grid"></div>
       <div id="glow"></div>
@@ -286,31 +296,28 @@
       </div>
     </section>
 
-    <section id="s13" class="clip scene center" data-start="36.3" data-duration="2.00" data-track-index="2">
+    <section id="s13" class="clip scene center" data-start="36.3" data-duration="2.60" data-track-index="2">
       <div class="stage" id="s13-stage">
-        <div class="text"><div class="line"><span class="w md" id="w71"><span class="wi">aur</span></span><span class="w md" id="w72"><span class="wi">meri</span></span></div>
-<div class="line"><span class="w xl wa" id="w73"><span class="wi">WhatsApp</span></span><span class="w xl wa" id="w74"><span class="wi">Community</span></span></div>
-<div class="line"><span class="w md" id="w75"><span class="wi">join</span></span><span class="w md" id="w76"><span class="wi">karo</span></span></div></div>
+        <div class="text"><div class="line"><span class="w lg" id="w71"><span class="wi">Comment</span></span><span class="w lg" id="w72"><span class="wi">karo</span></span></div>
+<div class="line"><span class="w huge acc" id="w73"><span class="wi">“META”</span></span></div></div>
         
+      <div class="cmt" id="s13-cmt">
+        <div class="cmt-av"><img src="brand/logo-mark.png" alt="" /></div>
+        <div class="cmt-in"><span class="cmt-ph">Add a comment…</span><span class="cmt-txt"><b id="s13-k0">M</b><b id="s13-k1">E</b><b id="s13-k2">T</b><b id="s13-k3">A</b></span></div>
+        <div class="cmt-send" id="s13-send">Post</div>
+      </div>
+      <div class="dm" id="s13-dm">PDF seedha aapke <span>DM</span> mein ✉</div>
       </div>
     </section>
 
-    <section id="s14" class="clip scene center" data-start="38.3" data-duration="1.45" data-track-index="3">
-      <div class="stage" id="s14-stage">
-        <div class="text"><div class="line"><span class="w md" id="w77"><span class="wi">jiska</span></span><span class="w md" id="w78"><span class="wi">link</span></span><span class="w md" id="w79"><span class="wi">apko</span></span></div>
-<div class="line"><span class="w xl acc" id="w80"><span class="wi">BIO</span></span><span class="w lg" id="w81"><span class="wi">mei</span></span><span class="w lg" id="w82"><span class="wi">mil</span></span><span class="w lg" id="w83"><span class="wi">jayega</span></span></div></div>
-        
-      </div>
-    </section>
-
-    <section id="s15" class="clip scene center" data-start="39.75" data-duration="2.65" data-track-index="2">
+    <section id="s15" class="clip scene center" data-start="38.9" data-duration="2.70" data-track-index="3">
       <div class="stage" id="s15-stage">
         <div class="text"></div>
         
       <div class="outro">
         <div class="logo-wrap" id="s15-logo"><div class="logo-ring" id="s15-ring"></div><img class="logo-big" src="brand/logo.png" alt="The GrowthX Studio" /></div>
         <div class="outro-r">
-          <div class="pill" id="s15-pill">LINK IN BIO ↗</div>
+          <div class="pill" id="s15-pill">COMMENT “META” 💬</div>
           <div class="mail" id="s15-mail"><span class="mail-ico">✉</span> thegrowthxstudio@gmail.com</div>
           <div class="tagline" id="s15-tag">BUILD <i>•</i> GROW <i>•</i> SCALE</div>
         </div>
@@ -320,13 +327,13 @@
 
       <video id="website" src="assets/website.mp4" muted playsinline data-start="22.85" data-duration="2.4" data-track-index="5"></video>
 
-      <div id="wipe" class="clip" data-start="0" data-duration="42.4" data-track-index="6"><div class="wp"></div></div>
-      <div id="flash" class="clip" data-start="0" data-duration="42.4" data-track-index="7"></div>
-      <div id="brand" class="clip" data-start="0" data-duration="39.75" data-track-index="8"><div class="bi"><img src="brand/logo-mark.png" alt="GX" /><span>THE GROWTH<b>X</b> STUDIO</span></div></div>
-      <div id="progress" class="clip" data-start="0" data-duration="42.4" data-track-index="9"><i></i></div>
+      <div id="wipe" class="clip" data-start="0" data-duration="41.6" data-track-index="6"><div class="wp"></div></div>
+      <div id="flash" class="clip" data-start="0" data-duration="41.6" data-track-index="7"></div>
+      <div id="brand" class="clip" data-start="0" data-duration="38.9" data-track-index="8"><div class="bi"><img src="brand/logo-mark.png" alt="GX" /><span>THE GROWTH<b>X</b> STUDIO</span></div></div>
+      <div id="progress" class="clip" data-start="0" data-duration="41.6" data-track-index="9"><i></i></div>
 
-      <audio id="vo" src="assets/voiceover.m4a" data-start="0" data-duration="40.29" data-track-index="10" data-volume="1"></audio>
-      <audio id="sfx" src="assets/sfx.wav" data-start="0" data-duration="42.4" data-track-index="11" data-volume="0.6"></audio>
+      <audio id="vo" src="assets/voiceover.m4a" data-start="0" data-duration="36.2" data-track-index="10" data-volume="1"></audio>
+      <audio id="sfx" src="assets/sfx.wav" data-start="0" data-duration="41.6" data-track-index="11" data-volume="0.6"></audio>
     </div>
     <script>
       const tl = gsap.timeline({ paused: true });
@@ -418,22 +425,10 @@
       tl.fromTo("#w69 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},34.45);
       tl.fromTo("#w69",{scale:1.25},{scale:1,duration:.35,ease:"power3.out"},34.45);
       tl.fromTo("#w70 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},34.65);
-      tl.fromTo("#w71 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},36.5);
-      tl.fromTo("#w72 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},36.65);
+      tl.fromTo("#w71 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},36.4);
+      tl.fromTo("#w72 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},36.6);
       tl.fromTo("#w73 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},36.8);
       tl.fromTo("#w73",{scale:1.25},{scale:1,duration:.35,ease:"power3.out"},36.8);
-      tl.fromTo("#w74 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},37.05);
-      tl.fromTo("#w74",{scale:1.25},{scale:1,duration:.35,ease:"power3.out"},37.05);
-      tl.fromTo("#w75 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},37.5);
-      tl.fromTo("#w76 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},37.68);
-      tl.fromTo("#w77 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},38.5);
-      tl.fromTo("#w78 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},38.65);
-      tl.fromTo("#w79 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},38.8);
-      tl.fromTo("#w80 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},39);
-      tl.fromTo("#w80",{scale:1.25},{scale:1,duration:.35,ease:"power3.out"},39);
-      tl.fromTo("#w81 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},39.15);
-      tl.fromTo("#w82 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},39.3);
-      tl.fromTo("#w83 .wi",{opacity:0,yPercent:70,scale:.8},{opacity:1,yPercent:0,scale:1,duration:.26,ease:"back.out(2.2)"},39.48);
       tl.fromTo("#s1-stage",{scale:1},{scale:1.05,duration:2.15,ease:"none"},6.35);
       tl.fromTo("#s2-stage",{scale:1},{scale:1.05,duration:3.50,ease:"none"},8.5);
       tl.fromTo("#s3-stage",{scale:1},{scale:1.05,duration:0.90,ease:"none"},12);
@@ -479,14 +474,23 @@
       tl.to("#s12-btn",{backgroundColor:"#8B2FE8",borderColor:"#B57BFF",color:"#FFFFFF",duration:.1},35.6);
       tl.fromTo("#s12-done",{yPercent:100},{yPercent:0,duration:.2,ease:"power2.out"},35.6);
       tl.to("#s12-btn .f-a",{yPercent:-100,opacity:0,duration:.2},35.6);
-      tl.fromTo("#s13-stage",{scale:1},{scale:1.05,duration:2.00,ease:"none"},36.3);
-      tl.fromTo("#s14-stage",{scale:1},{scale:1.05,duration:1.45,ease:"none"},38.3);
-      tl.fromTo("#s15-logo",{opacity:0,scale:.5,rotation:-25},{opacity:1,scale:1,rotation:0,duration:.7,ease:"back.out(1.7)"},39.8);
-      tl.fromTo("#s15-ring",{opacity:.9,scale:1},{opacity:0,scale:1.6,duration:.9,ease:"power2.out"},39.95);
-      tl.to("#s15-logo",{scale:1.04,duration:2,ease:"sine.inOut"},40.5);
-      tl.fromTo("#s15-pill",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.45,ease:"back.out(2)"},40.25);
-      tl.fromTo("#s15-mail",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.45,ease:"back.out(2)"},40.5);
-      tl.fromTo("#s15-tag",{opacity:0,x:-40},{opacity:1,x:0,duration:.6,ease:"power3.out"},40.75);
+      tl.fromTo("#s13-stage",{scale:1},{scale:1.05,duration:2.60,ease:"none"},36.3);
+      tl.fromTo("#s13-stage",{x:-14},{x:0,duration:.35,ease:"elastic.out(1.4,.3)",immediateRender:false},36.85);
+      tl.fromTo("#s13-cmt",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.4,ease:"back.out(2)"},37);
+      tl.fromTo("#s13-cmt .cmt-ph",{opacity:1},{opacity:0,duration:.05,immediateRender:false},37.25);
+      tl.fromTo("#s13-k0",{opacity:0,scale:.4},{opacity:1,scale:1,duration:.12,ease:"back.out(3)"},37.3);
+      tl.fromTo("#s13-k1",{opacity:0,scale:.4},{opacity:1,scale:1,duration:.12,ease:"back.out(3)"},37.4);
+      tl.fromTo("#s13-k2",{opacity:0,scale:.4},{opacity:1,scale:1,duration:.12,ease:"back.out(3)"},37.5);
+      tl.fromTo("#s13-k3",{opacity:0,scale:.4},{opacity:1,scale:1,duration:.12,ease:"back.out(3)"},37.6);
+      tl.to("#s13-send",{scale:.88,duration:.07,yoyo:true,repeat:1},37.8);
+      tl.to("#s13-send",{backgroundColor:"#8B2FE8",color:"#FFFFFF",duration:.1},37.86);
+      tl.fromTo("#s13-dm",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.4,ease:"back.out(2)"},38.05);
+      tl.fromTo("#s15-logo",{opacity:0,scale:.5,rotation:-25},{opacity:1,scale:1,rotation:0,duration:.7,ease:"back.out(1.7)"},38.95);
+      tl.fromTo("#s15-ring",{opacity:.9,scale:1},{opacity:0,scale:1.6,duration:.9,ease:"power2.out"},39.1);
+      tl.to("#s15-logo",{scale:1.04,duration:2,ease:"sine.inOut"},39.65);
+      tl.fromTo("#s15-pill",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.45,ease:"back.out(2)"},39.4);
+      tl.fromTo("#s15-mail",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.45,ease:"back.out(2)"},39.65);
+      tl.fromTo("#s15-tag",{opacity:0,x:-40},{opacity:1,x:0,duration:.6,ease:"power3.out"},39.9);
       tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut"},6.14);
       tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut",immediateRender:false},12.69);
       tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut",immediateRender:false},18.19);
@@ -494,13 +498,14 @@
       tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut",immediateRender:false},25.24);
       tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut",immediateRender:false},29.39);
       tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut",immediateRender:false},33.39);
-      tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut",immediateRender:false},38.09);
+      tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut",immediateRender:false},36.09);
+      tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut",immediateRender:false},38.69);
       tl.fromTo("#flash",{opacity:.85},{opacity:0,duration:.25,ease:"power2.out",immediateRender:false},6.35);
-      tl.fromTo("#bg-ring1",{rotation:0},{rotation:120,duration:42.4,ease:"none"},0);
-      tl.fromTo("#bg-ring2",{rotation:0},{rotation:-90,duration:42.4,ease:"none"},0);
+      tl.fromTo("#bg-ring1",{rotation:0},{rotation:120,duration:41.6,ease:"none"},0);
+      tl.fromTo("#bg-ring2",{rotation:0},{rotation:-90,duration:41.6,ease:"none"},0);
       tl.fromTo("#brand .bi",{opacity:0,y:-20},{opacity:1,y:0,duration:.4,ease:"power3.out"},0.2);
-      tl.fromTo("#glow",{xPercent:-20,yPercent:-10},{xPercent:20,yPercent:10,duration:42.4,ease:"sine.inOut"},0);
-      tl.fromTo("#progress i",{scaleX:0},{scaleX:1,duration:42.4,ease:"none"},0);
+      tl.fromTo("#glow",{xPercent:-20,yPercent:-10},{xPercent:20,yPercent:10,duration:41.6,ease:"sine.inOut"},0);
+      tl.fromTo("#progress i",{scaleX:0},{scaleX:1,duration:41.6,ease:"none"},0);
       window.__timelines["main"] = tl;
     </script>
   </body>

@@ -2,7 +2,7 @@
 // Generates growthx-meta-ads-16x9/index.html (static clips, one paused GSAP timeline).
 const fs = require("fs");
 const out = process.argv[2] || require("path").join(__dirname, "index.html");
-const DUR = 42.4;
+const DUR = 41.6;
 const sfx = [];
 const S = (t, type, vol = 1) => sfx.push({ t: +t.toFixed(3), type, vol });
 
@@ -115,35 +115,46 @@ const scenes = [
       <div class="follow" id="s12-btn"><span class="f-a">+ FOLLOW</span><span class="f-b" id="s12-done">✓ FOLLOWING</span></div>
       <div class="cursor" id="s12-cur"></div>`,
     tweens: (A) => { A.follow(34.9); } },
-  { id: "s13", start: 36.3, end: 38.3, lines: [
-      [w("aur", 36.5, "md"), w("meri", 36.65, "md")],
-      [w("WhatsApp", 36.8, "xl wa"), w("Community", 37.05, "xl wa")],
-      [w("join", 37.5, "md"), w("karo", 37.68, "md")],
-    ] },
-  { id: "s14", start: 38.3, end: 39.75, lines: [
-      [w("jiska", 38.5, "md"), w("link", 38.65, "md"), w("apko", 38.8, "md")],
-      [w("BIO", 39.0, "xl acc"), w("mei", 39.15, "lg"), w("mil", 39.3, "lg"), w("jayega", 39.48, "lg")],
-    ] },
-  { id: "s15", start: 39.75, end: DUR, lines: [], noDrift: true, extra: `
+  // Voiceover ends after "PDF chahiye" (assets/voiceover.m4a is cut at 36.2s); this CTA is on-screen only.
+  { id: "s13", start: 36.3, end: 38.9, lines: [
+      [w("Comment", 36.4, "lg"), w("karo", 36.6, "lg")],
+      [w("“META”", 36.8, "huge acc")],
+    ], shake: 36.85, extra: `
+      <div class="cmt" id="s13-cmt">
+        <div class="cmt-av"><img src="brand/logo-mark.png" alt="" /></div>
+        <div class="cmt-in"><span class="cmt-ph">Add a comment…</span><span class="cmt-txt">${["M", "E", "T", "A"].map((c, i) => `<b id="s13-k${i}">${c}</b>`).join("")}</span></div>
+        <div class="cmt-send" id="s13-send">Post</div>
+      </div>
+      <div class="dm" id="s13-dm">PDF seedha aapke <span>DM</span> mein ✉</div>`,
+    tweens: (A) => {
+      A.pop("#s13-cmt", 37.0, 0.4);
+      T(`tl.fromTo("#s13-cmt .cmt-ph",{opacity:1},{opacity:0,duration:.05,immediateRender:false},37.25);`);
+      [37.3, 37.4, 37.5, 37.6].forEach((t, i) => { S(t, "tick", .5); T(`tl.fromTo("#s13-k${i}",{opacity:0,scale:.4},{opacity:1,scale:1,duration:.12,ease:"back.out(3)"},${t});`); });
+      S(37.8, "click", .9); S(37.86, "ding", .55);
+      T(`tl.to("#s13-send",{scale:.88,duration:.07,yoyo:true,repeat:1},37.8);`);
+      T(`tl.to("#s13-send",{backgroundColor:"#8B2FE8",color:"#FFFFFF",duration:.1},37.86);`);
+      A.pop("#s13-dm", 38.05, 0.4);
+    } },
+  { id: "s15", start: 38.9, end: DUR, lines: [], noDrift: true, extra: `
       <div class="outro">
         <div class="logo-wrap" id="s15-logo"><div class="logo-ring" id="s15-ring"></div><img class="logo-big" src="brand/logo.png" alt="The GrowthX Studio" /></div>
         <div class="outro-r">
-          <div class="pill" id="s15-pill">LINK IN BIO ↗</div>
+          <div class="pill" id="s15-pill">COMMENT “META” 💬</div>
           <div class="mail" id="s15-mail"><span class="mail-ico">✉</span> thegrowthxstudio@gmail.com</div>
           <div class="tagline" id="s15-tag">BUILD <i>•</i> GROW <i>•</i> SCALE</div>
         </div>
       </div>`,
     tweens: (A) => {
-      T(`tl.fromTo("#s15-logo",{opacity:0,scale:.5,rotation:-25},{opacity:1,scale:1,rotation:0,duration:.7,ease:"back.out(1.7)"},39.8);`);
-      T(`tl.fromTo("#s15-ring",{opacity:.9,scale:1},{opacity:0,scale:1.6,duration:.9,ease:"power2.out"},39.95);`);
-      T(`tl.to("#s15-logo",{scale:1.04,duration:2,ease:"sine.inOut"},40.5);`);
-      A.pop("#s15-pill", 40.25, 0.45); A.pop("#s15-mail", 40.5, 0.45);
-      T(`tl.fromTo("#s15-tag",{opacity:0,x:-40},{opacity:1,x:0,duration:.6,ease:"power3.out"},40.75);`);
-      S(39.8, "impact", .8); S(39.85, "shimmer", .55);
+      T(`tl.fromTo("#s15-logo",{opacity:0,scale:.5,rotation:-25},{opacity:1,scale:1,rotation:0,duration:.7,ease:"back.out(1.7)"},38.95);`);
+      T(`tl.fromTo("#s15-ring",{opacity:.9,scale:1},{opacity:0,scale:1.6,duration:.9,ease:"power2.out"},39.1);`);
+      T(`tl.to("#s15-logo",{scale:1.04,duration:2,ease:"sine.inOut"},39.65);`);
+      A.pop("#s15-pill", 39.4, 0.45); A.pop("#s15-mail", 39.65, 0.45);
+      T(`tl.fromTo("#s15-tag",{opacity:0,x:-40},{opacity:1,x:0,duration:.6,ease:"power3.out"},39.9);`);
+      S(38.95, "impact", .8); S(39.0, "shimmer", .55);
     } },
 ];
 
-const wipes = [6.35, 12.9, 18.4, 22.8, 25.45, 29.6, 33.6, 38.3];
+const wipes = [6.35, 12.9, 18.4, 22.8, 25.45, 29.6, 33.6, 36.3, 38.9];
 
 let wordId = 0;
 const words = [];
@@ -344,6 +355,16 @@ const html = `<!doctype html>
       .f-a, .f-b { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
             .cursor { position:absolute; left:1080px; top:780px; width:0; height:0; border-left:28px solid transparent; border-right:28px solid transparent; border-bottom:70px solid #fff; transform-origin:center; rotate:-30deg; filter:drop-shadow(0 6px 10px rgba(0,0,0,.6)); }
 
+      .cmt { display:flex; align-items:center; gap:22px; width:1100px; padding:22px 26px; border-radius:26px; background:rgba(255,255,255,.06); border:2px solid rgba(166,92,255,.5); box-shadow:0 0 60px rgba(139,47,232,.35); }
+      .cmt-av { width:84px; height:84px; border-radius:50%; overflow:hidden; border:3px solid var(--pur2); flex:none; }
+      .cmt-av img { width:100%; height:100%; object-fit:cover; }
+      .cmt-in { position:relative; flex:1; height:84px; border-radius:42px; background:rgba(4,2,6,.8); display:flex; align-items:center; padding:0 34px; font-size:44px; }
+      .cmt-ph { position:absolute; left:34px; color:var(--dim); font-weight:600; }
+      .cmt-txt b { display:inline-block; font-weight:900; color:#fff; letter-spacing:.04em; }
+      .cmt-send { flex:none; font-size:40px; font-weight:900; padding:18px 34px; border-radius:20px; color:var(--acc); border:2px solid var(--pur2); }
+      #s13 .huge { font-size:290px; margin-top:34px; }
+      .dm { font-size:58px; font-weight:700; }
+      .dm span { color:var(--acc); font-weight:900; }
       .cta { display:flex; flex-direction:column; align-items:center; gap:30px; margin-top:30px; }
       .pill { background:linear-gradient(90deg,var(--pur),var(--pur2)); color:#fff; box-shadow:0 0 50px rgba(139,47,232,.6); font-size:64px; font-weight:900; padding:22px 56px; border-radius:999px; }
       .mail { font-size:46px; font-weight:700; padding:18px 40px; border-radius:20px; background:rgba(255,255,255,.06); border:2px solid rgba(255,255,255,.2); }
@@ -391,10 +412,10 @@ const html = `<!doctype html>
 
       <div id="wipe" class="clip" data-start="0" data-duration="${DUR}" data-track-index="6"><div class="wp"></div></div>
       <div id="flash" class="clip" data-start="0" data-duration="${DUR}" data-track-index="7"></div>
-      <div id="brand" class="clip" data-start="0" data-duration="39.75" data-track-index="8"><div class="bi"><img src="brand/logo-mark.png" alt="GX" /><span>THE GROWTH<b>X</b> STUDIO</span></div></div>
+      <div id="brand" class="clip" data-start="0" data-duration="38.9" data-track-index="8"><div class="bi"><img src="brand/logo-mark.png" alt="GX" /><span>THE GROWTH<b>X</b> STUDIO</span></div></div>
       <div id="progress" class="clip" data-start="0" data-duration="${DUR}" data-track-index="9"><i></i></div>
 
-      <audio id="vo" src="assets/voiceover.m4a" data-start="0" data-duration="40.29" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo" src="assets/voiceover.m4a" data-start="0" data-duration="36.2" data-track-index="10" data-volume="1"></audio>
       <audio id="sfx" src="assets/sfx.wav" data-start="0" data-duration="${DUR}" data-track-index="11" data-volume="0.6"></audio>
     </div>
     <script>
