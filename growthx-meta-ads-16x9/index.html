@@ -9,20 +9,23 @@
       @font-face { font-family: "Display"; src: url("fonts/InterDisplay-Black.otf"); font-weight: 900; }
       @font-face { font-family: "Display"; src: url("fonts/InterDisplay-Bold.otf"); font-weight: 700; }
       @font-face { font-family: "Display"; src: url("fonts/InterDisplay-SemiBold.otf"); font-weight: 600; }
-      :root { --bg:#07080C; --ink:#F5F5F0; --lime:#C8FF2E; --dim:#8A8F98; --red:#FF3D3D; --wa:#25D366; }
+      :root { --bg:#040206; --ink:#F7F4FF; --acc:#B57BFF; --pur:#8B2FE8; --pur2:#A65CFF; --dim:#9C94B0; --red:#FF3D3D; --wa:#25D366; }
       * { margin:0; padding:0; box-sizing:border-box; }
       html, body { width:1920px; height:1080px; overflow:hidden; background:var(--bg); }
       #root { position:relative; width:100%; height:100%; overflow:hidden; font-family:"Display", sans-serif; color:var(--ink); }
       .bg { position:absolute; inset:0; background:var(--bg); }
-      .grid { position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px); background-size:80px 80px; }
-      #glow { position:absolute; left:460px; top:140px; width:1000px; height:800px; border-radius:50%; background:radial-gradient(closest-side,rgba(200,255,46,.16),rgba(200,255,46,0)); }
+      .grid { position:absolute; inset:0; background-image:linear-gradient(rgba(181,123,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(181,123,255,.045) 1px,transparent 1px); background-size:80px 80px; }
+      #glow { position:absolute; left:360px; top:90px; width:1200px; height:900px; border-radius:50%; background:radial-gradient(closest-side,rgba(139,47,232,.30),rgba(139,47,232,0)); }
+      .bg-ring { position:absolute; left:50%; top:50%; border-radius:50%; border:2px solid rgba(166,92,255,.35); box-shadow:0 0 40px rgba(139,47,232,.25), inset 0 0 40px rgba(139,47,232,.15); }
+      #bg-ring1 { width:1300px; height:1300px; margin:-650px 0 0 -650px; border-top-color:rgba(200,160,255,.85); border-right-color:transparent; }
+      #bg-ring2 { width:980px; height:980px; margin:-490px 0 0 -490px; border-color:rgba(166,92,255,.18); border-left-color:rgba(200,160,255,.6); border-bottom-color:transparent; }
       .vignette { position:absolute; inset:0; background:radial-gradient(ellipse at center,rgba(0,0,0,0) 55%,rgba(0,0,0,.6) 100%); }
 
       #hook-wrap { position:absolute; inset:0; overflow:hidden; }
       #hook { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
       .hook-ui { position:absolute; inset:0; }
-      #hook-tag { position:absolute; left:80px; top:70px; background:var(--lime); color:#07080C; font-weight:900; font-size:40px; padding:14px 28px; border-radius:14px; letter-spacing:.02em; }
-      #hook-tag2 { position:absolute; left:80px; top:160px; background:rgba(7,8,12,.94); color:var(--ink); font-weight:700; font-size:34px; padding:12px 24px; border-radius:12px; border:2px solid rgba(200,255,46,.6); }
+      #hook-tag { position:absolute; left:80px; top:70px; background:linear-gradient(90deg,var(--pur),var(--pur2)); color:#fff; box-shadow:0 0 40px rgba(139,47,232,.6); font-weight:900; font-size:40px; padding:14px 28px; border-radius:14px; letter-spacing:.02em; }
+      #hook-tag2 { position:absolute; left:80px; top:160px; background:rgba(7,8,12,.94); color:var(--ink); font-weight:700; font-size:34px; padding:12px 24px; border-radius:12px; border:2px solid rgba(139,47,232,.6); }
 
       .scene { position:absolute; inset:0; }
       .stage { position:absolute; inset:0; isolation:isolate; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:40px; }
@@ -39,43 +42,43 @@
       .lg { font-size:128px; font-weight:900; letter-spacing:-.02em; }
       .xl { font-size:200px; font-weight:900; letter-spacing:-.035em; line-height:.95; }
       .huge { font-size:340px; font-weight:900; line-height:.9; }
-      .lime { color:var(--lime); }
+      .acc { color:var(--acc); text-shadow:0 0 50px rgba(139,47,232,.75), 0 0 12px rgba(181,123,255,.35); }
       .red { color:var(--red); }
       .dim { color:var(--dim); letter-spacing:.2em; }
       .wa { color:var(--wa); font-size:150px; }
       .ig .wi { background:linear-gradient(90deg,#FEDA75,#FA7E1E,#D62976,#962FBF,#4F5BD5); -webkit-background-clip:text; background-clip:text; color:transparent; padding:0 6px; }
-      .hl { --hl:0; color:#07080C; }
-      .hl::before { content:""; position:absolute; left:-12px; right:-12px; top:8%; bottom:4%; background:var(--lime); border-radius:14px; transform-origin:left center; transform:scaleX(var(--hl)); }
-      .hl.lg { color:#07080C; }
+      .hl { --hl:0; color:#fff; }
+      .hl::before { content:""; position:absolute; left:-12px; right:-12px; top:8%; bottom:4%; background:linear-gradient(90deg,var(--pur),var(--pur2)); box-shadow:0 0 40px rgba(139,47,232,.55); border-radius:14px; z-index:-1; transform-origin:left center; transform:scaleX(var(--hl)); }
+      .hl .wi { z-index:1; }
 
       .ui-card { width:900px; padding:44px 50px; border-radius:28px; background:rgba(255,255,255,.05); border:2px solid rgba(255,255,255,.14); display:flex; flex-direction:column; gap:30px; }
       .ui-label { font-size:28px; font-weight:700; color:var(--dim); letter-spacing:.2em; }
       .chips { display:flex; gap:20px; }
       .chip { font-size:40px; font-weight:700; padding:16px 30px; border-radius:999px; border:2px solid rgba(255,255,255,.2); color:var(--dim); }
-      .chip.on { background:var(--lime); color:#07080C; border-color:var(--lime); }
+      .chip.on { background:var(--pur); color:#fff; border-color:var(--pur2); }
       .tick { font-weight:900; }
       .ui-row { display:flex; justify-content:space-between; align-items:center; font-size:48px; padding-top:22px; border-top:2px solid rgba(255,255,255,.1); }
       .ui-k { color:var(--dim); font-weight:600; }
-      .ui-v { color:var(--lime); font-weight:900; font-size:64px; display:inline-block; }
+      .ui-v { color:var(--acc); font-weight:900; font-size:64px; display:inline-block; }
       .ui-foot { font-size:56px; font-weight:700; text-align:center; }
       .w-inline { display:inline-block; }
 
       .sets { display:flex; gap:44px; margin-top:40px; }
       .set { width:500px; height:520px; border-radius:32px; border:3px solid rgba(255,255,255,.14); background:rgba(255,255,255,.04); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:36px; position:relative; }
-      .set-n { position:absolute; top:28px; left:34px; font-size:40px; font-weight:900; color:var(--lime); }
+      .set-n { position:absolute; top:28px; left:34px; font-size:40px; font-weight:900; color:var(--acc); }
       .set-name { font-size:58px; font-weight:900; text-align:center; line-height:1.05; padding:0 30px; }
       .ico { width:150px; height:150px; position:relative; }
-      .ico-globe { border:10px solid var(--lime); border-radius:50%; }
-      .ico-globe::before { content:""; position:absolute; inset:0 38px; border:8px solid var(--lime); border-radius:50%; }
-      .ico-globe::after { content:""; position:absolute; left:0; right:0; top:61px; height:8px; background:var(--lime); }
-      .ico-target { border:10px solid var(--lime); border-radius:50%; }
-      .ico-target::before { content:""; position:absolute; inset:24px; border:10px solid var(--lime); border-radius:50%; }
-      .ico-target::after { content:""; position:absolute; inset:54px; background:var(--lime); border-radius:50%; }
-      .ico-people::before, .ico-people::after { content:""; position:absolute; width:62px; height:62px; border-radius:50%; background:var(--lime); top:14px; box-shadow:0 78px 0 18px var(--lime); }
+      .ico-globe { border:10px solid var(--acc); border-radius:50%; }
+      .ico-globe::before { content:""; position:absolute; inset:0 38px; border:8px solid var(--acc); border-radius:50%; }
+      .ico-globe::after { content:""; position:absolute; left:0; right:0; top:61px; height:8px; background:var(--acc); }
+      .ico-target { border:10px solid var(--acc); border-radius:50%; }
+      .ico-target::before { content:""; position:absolute; inset:24px; border:10px solid var(--acc); border-radius:50%; }
+      .ico-target::after { content:""; position:absolute; inset:54px; background:var(--acc); border-radius:50%; }
+      .ico-people::before, .ico-people::after { content:""; position:absolute; width:62px; height:62px; border-radius:50%; background:var(--acc); top:14px; box-shadow:0 78px 0 18px var(--acc); }
       .ico-people::before { left:10px; opacity:.45; }
       .ico-people::after { right:22px; }
 
-      .browser { position:absolute; left:110px; top:234px; width:900px; border-radius:22px; overflow:hidden; background:#fff; box-shadow:0 40px 120px rgba(0,0,0,.6), 0 0 0 3px rgba(200,255,46,.5); order:1; }
+      .browser { position:absolute; left:110px; top:234px; width:900px; border-radius:22px; overflow:hidden; background:#fff; box-shadow:0 40px 120px rgba(0,0,0,.6), 0 0 0 3px rgba(139,47,232,.5); order:1; }
       .bar { height:56px; background:#1A1D24; display:flex; align-items:center; gap:12px; padding:0 22px; }
       .bar i { width:16px; height:16px; border-radius:50%; background:#3A3F4A; }
       .bar i:first-child { background:#FF5F57; } .bar i:nth-child(2) { background:#FEBC2E; } .bar i:nth-child(3) { background:#28C840; }
@@ -86,47 +89,60 @@
       .float { position:absolute; font-size:44px; font-weight:900; padding:16px 28px; border-radius:20px; background:rgba(255,255,255,.08); border:2px solid rgba(255,255,255,.18); }
       .f1 { left:170px; top:230px; color:#FF4D79; }
       .f2 { right:180px; top:280px; }
-      .f3 { right:300px; bottom:170px; color:var(--lime); }
+      .f3 { right:300px; bottom:170px; color:var(--acc); }
+      .ad1 .ad-img { background:linear-gradient(135deg,#B57BFF,#4B0F94) !important; }
 
       .dots { position:absolute; left:50%; bottom:110px; width:720px; margin-left:-360px; display:flex; flex-wrap:wrap; gap:18px; justify-content:center; }
-      .dot { display:block; width:42px; height:42px; border-radius:50%; background:var(--lime); }
+      .dot { display:block; width:42px; height:42px; border-radius:50%; background:var(--acc); }
       .dot:nth-child(-n+6) { background:var(--ink); }
 
       .cards { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:-1; }
       .ad { position:absolute; width:400px; height:560px; border-radius:28px; background:#151821; border:2px solid rgba(255,255,255,.12); padding:24px; display:flex; flex-direction:column; gap:18px; }
       .ad-img { height:380px; border-radius:18px; background:linear-gradient(135deg,#2A3140,#11141B); }
-      .ad1 .ad-img { background:linear-gradient(135deg,#C8FF2E,#4E7A00); }
+      .ad1 .ad-img { background:linear-gradient(135deg,#B57BFF,#4E7A00); }
       .ad3 .ad-img { background:linear-gradient(135deg,#FA7E1E,#962FBF); }
       .ad-l { height:22px; border-radius:11px; background:rgba(255,255,255,.18); }
       .ad-l.s { width:60%; }
       #s10 .text { position:relative; z-index:2; background:rgba(7,8,12,.78); padding:30px 60px; border-radius:30px; }
 
       .chart { position:absolute; left:160px; bottom:120px; width:1600px; height:600px; z-index:-1; }
-      .chart path { fill:none; stroke:var(--lime); stroke-width:14; stroke-linecap:round; stroke-linejoin:round; opacity:.55; }
+      .chart path { fill:none; stroke:var(--pur2); stroke-width:14; stroke-linecap:round; stroke-linejoin:round; opacity:.8; filter:drop-shadow(0 0 18px rgba(139,47,232,.9)); }
 
       .follow { position:relative; overflow:hidden; height:110px; width:520px; border-radius:24px; background:#2F6BFF; border:4px solid #2F6BFF; color:#fff; font-size:50px; font-weight:900; }
       .f-a, .f-b { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
             .cursor { position:absolute; left:1080px; top:780px; width:0; height:0; border-left:28px solid transparent; border-right:28px solid transparent; border-bottom:70px solid #fff; transform-origin:center; rotate:-30deg; filter:drop-shadow(0 6px 10px rgba(0,0,0,.6)); }
 
       .cta { display:flex; flex-direction:column; align-items:center; gap:30px; margin-top:30px; }
-      .pill { background:var(--lime); color:#07080C; font-size:64px; font-weight:900; padding:22px 56px; border-radius:999px; }
+      .pill { background:linear-gradient(90deg,var(--pur),var(--pur2)); color:#fff; box-shadow:0 0 50px rgba(139,47,232,.6); font-size:64px; font-weight:900; padding:22px 56px; border-radius:999px; }
       .mail { font-size:46px; font-weight:700; padding:18px 40px; border-radius:20px; background:rgba(255,255,255,.06); border:2px solid rgba(255,255,255,.2); }
-      .mail-ico { color:var(--lime); }
+      .mail-ico { color:var(--acc); }
 
       #wipe { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
-      #wipe .wp { position:absolute; top:-20%; bottom:-20%; left:0; width:100%; background:var(--lime); transform:skewX(-18deg); }
+      #wipe .wp { position:absolute; top:-20%; bottom:-20%; left:0; width:100%; background:linear-gradient(90deg,#5B12B0,var(--pur) 40%,var(--pur2) 85%,#fff 100%); transform:skewX(-18deg); }
       #flash { position:absolute; inset:0; background:#fff; opacity:0; }
       #progress { position:absolute; left:0; right:0; bottom:0; height:10px; background:rgba(255,255,255,.08); }
-      #progress i { display:block; height:100%; background:var(--lime); transform-origin:left center; }
-      #brand { position:absolute; right:60px; top:50px; font-size:30px; font-weight:900; letter-spacing:.06em; color:rgba(245,245,240,.75); }
-      #brand b { color:var(--lime); }
+      #progress i { display:block; height:100%; background:linear-gradient(90deg,var(--pur),var(--pur2)); box-shadow:0 0 16px var(--pur); transform-origin:left center; }
+      #brand { position:absolute; right:50px; top:36px; }
+      #brand .bi { display:flex; align-items:center; gap:16px; padding:8px 22px 8px 8px; border-radius:999px; background:rgba(4,2,6,.82); border:2px solid rgba(166,92,255,.45); }
+      #brand img { width:72px; height:72px; border-radius:50%; object-fit:cover; }
+      #brand span { font-size:26px; font-weight:900; letter-spacing:.14em; color:#fff; }
+      #brand b { color:var(--acc); }
+      .outro { display:flex; align-items:center; gap:90px; }
+      .logo-wrap { position:relative; width:560px; height:560px; }
+      .logo-big { width:100%; height:100%; border-radius:50%; box-shadow:0 0 120px rgba(139,47,232,.55); }
+      .logo-ring { position:absolute; inset:0; border-radius:50%; border:6px solid var(--acc); }
+      .outro-r { display:flex; flex-direction:column; align-items:flex-start; gap:36px; }
+      .tagline { font-size:34px; font-weight:700; letter-spacing:.35em; color:var(--ink); }
+      .tagline i { font-style:normal; color:var(--acc); }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="41.2" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="42.4" data-width="1920" data-height="1080">
       <div class="bg"></div>
       <div class="grid"></div>
       <div id="glow"></div>
+      <div class="bg-ring" id="bg-ring1"></div>
+      <div class="bg-ring" id="bg-ring2"></div>
       <div class="vignette"></div>
 
       <div id="hook-wrap">
@@ -141,7 +157,7 @@
     <section id="s1" class="clip scene center" data-start="6.35" data-duration="2.15" data-track-index="2">
       <div class="stage" id="s1-stage">
         <div class="text"><div class="line"><span class="w sm" id="w0"><span class="wi">agar</span></span><span class="w sm" id="w1"><span class="wi">apne</span></span></div>
-<div class="line"><span class="w xl lime" id="w2"><span class="wi">D2C</span></span><span class="w xl lime" id="w3"><span class="wi">BRAND</span></span></div>
+<div class="line"><span class="w xl acc" id="w2"><span class="wi">D2C</span></span><span class="w xl acc" id="w3"><span class="wi">BRAND</span></span></div>
 <div class="line"><span class="w md" id="w4"><span class="wi">abhi</span></span><span class="w md" id="w5"><span class="wi">start</span></span><span class="w md" id="w6"><span class="wi">kiya</span></span><span class="w md" id="w7"><span class="wi">hai</span></span></div></div>
         
       </div>
@@ -152,7 +168,7 @@
         <div class="text"><div class="line"><span class="w sm" id="w8"><span class="wi">to</span></span><span class="w sm" id="w9"><span class="wi">yeh</span></span></div>
 <div class="line"><span class="w lg hl" id="w10"><span class="wi">META</span></span><span class="w lg hl" id="w11"><span class="wi">AD</span></span><span class="w lg hl" id="w12"><span class="wi">STRATEGY</span></span></div>
 <div class="line"><span class="w md" id="w13"><span class="wi">apko</span></span><span class="w md" id="w14"><span class="wi">direct</span></span></div>
-<div class="line"><span class="w lg lime" id="w15"><span class="wi">CUSTOMER</span></span><span class="w md" id="w16"><span class="wi">lake</span></span><span class="w md" id="w17"><span class="wi">degi</span></span></div></div>
+<div class="line"><span class="w lg acc" id="w15"><span class="wi">CUSTOMER</span></span><span class="w md" id="w16"><span class="wi">lake</span></span><span class="w md" id="w17"><span class="wi">degi</span></span></div></div>
         
       </div>
     </section>
@@ -167,7 +183,7 @@
 
     <section id="s4" class="clip scene top" data-start="12.9" data-duration="3.30" data-track-index="3">
       <div class="stage" id="s4-stage">
-        <div class="text"><div class="line"><span class="w md" id="w22"><span class="wi">bss</span></span><span class="w lg lime" id="w23"><span class="wi">EK</span></span><span class="w md" id="w24"><span class="wi">campaign</span></span><span class="w md" id="w25"><span class="wi">bnao</span></span></div></div>
+        <div class="text"><div class="line"><span class="w md" id="w22"><span class="wi">bss</span></span><span class="w lg acc" id="w23"><span class="wi">EK</span></span><span class="w md" id="w24"><span class="wi">campaign</span></span><span class="w md" id="w25"><span class="wi">bnao</span></span></div></div>
         
       <div class="ui-card" id="s4-card">
         <div class="ui-label">CAMPAIGN OBJECTIVE</div>
@@ -185,7 +201,7 @@
     <section id="s5" class="clip scene center" data-start="16.2" data-duration="2.20" data-track-index="2">
       <div class="stage" id="s5-stage">
         <div class="text"><div class="line"><span class="w md" id="w26"><span class="wi">aur</span></span><span class="w md" id="w27"><span class="wi">usmei</span></span></div>
-<div class="line"><span class="w huge lime" id="w28"><span class="wi">3</span></span><span class="w lg" id="w29"><span class="wi">AD SETS</span></span></div>
+<div class="line"><span class="w huge acc" id="w28"><span class="wi">3</span></span><span class="w lg" id="w29"><span class="wi">AD SETS</span></span></div>
 <div class="line"><span class="w md" id="w30"><span class="wi">add</span></span><span class="w md" id="w31"><span class="wi">karo</span></span></div></div>
         
       </div>
@@ -204,7 +220,7 @@
     <section id="s7" class="clip scene split" data-start="22.8" data-duration="2.65" data-track-index="2">
       <div class="stage" id="s7-stage">
         <div class="text"><div class="line"><span class="w md" id="w33"><span class="wi">jo</span></span><span class="w md" id="w34"><span class="wi">apki</span></span></div>
-<div class="line"><span class="w lg lime" id="w35"><span class="wi">WEBSITE</span></span><span class="w lg lime" id="w36"><span class="wi">VISIT</span></span></div>
+<div class="line"><span class="w lg acc" id="w35"><span class="wi">WEBSITE</span></span><span class="w lg acc" id="w36"><span class="wi">VISIT</span></span></div>
 <div class="line"><span class="w md" id="w37"><span class="wi">ya</span></span><span class="w lg" id="w38"><span class="wi">VIDEO</span></span><span class="w lg" id="w39"><span class="wi">VIEWS</span></span></div>
 <div class="line"><span class="w md" id="w40"><span class="wi">pe</span></span><span class="w md" id="w41"><span class="wi">based</span></span><span class="w md" id="w42"><span class="wi">ho</span></span></div></div>
         
@@ -219,7 +235,7 @@
       <div class="stage" id="s8-stage">
         <div class="text"><div class="line"><span class="w md" id="w43"><span class="wi">aur</span></span><span class="w md" id="w44"><span class="wi">jisne</span></span><span class="w md" id="w45"><span class="wi">apke</span></span></div>
 <div class="line"><span class="w xl ig" id="w46"><span class="wi">INSTAGRAM</span></span></div>
-<div class="line"><span class="w md" id="w47"><span class="wi">pe</span></span><span class="w md lime" id="w48"><span class="wi">engage</span></span><span class="w md" id="w49"><span class="wi">kiya</span></span><span class="w md" id="w50"><span class="wi">hai</span></span></div></div>
+<div class="line"><span class="w md" id="w47"><span class="wi">pe</span></span><span class="w md acc" id="w48"><span class="wi">engage</span></span><span class="w md" id="w49"><span class="wi">kiya</span></span><span class="w md" id="w50"><span class="wi">hai</span></span></div></div>
         
       <div class="float f1" id="s8-f1">♥ 2.4K</div>
       <div class="float f2" id="s8-f2">💬 318</div>
@@ -230,7 +246,7 @@
     <section id="s9" class="clip scene center" data-start="28.1" data-duration="1.50" data-track-index="2">
       <div class="stage" id="s9-stage">
         <div class="text"><div class="line"><span class="w md" id="w51"><span class="wi">usko</span></span></div>
-<div class="line"><span class="w xl lime" id="w52"><span class="wi">LOOKALIKE</span></span></div>
+<div class="line"><span class="w xl acc" id="w52"><span class="wi">LOOKALIKE</span></span></div>
 <div class="line"><span class="w md" id="w53"><span class="wi">mei</span></span><span class="w md" id="w54"><span class="wi">daldo</span></span></div></div>
         <div class="dots" id="s9-dots"><b class="dot" style="--i:0"></b><b class="dot" style="--i:1"></b><b class="dot" style="--i:2"></b><b class="dot" style="--i:3"></b><b class="dot" style="--i:4"></b><b class="dot" style="--i:5"></b><b class="dot" style="--i:6"></b><b class="dot" style="--i:7"></b><b class="dot" style="--i:8"></b><b class="dot" style="--i:9"></b><b class="dot" style="--i:10"></b><b class="dot" style="--i:11"></b><b class="dot" style="--i:12"></b><b class="dot" style="--i:13"></b><b class="dot" style="--i:14"></b><b class="dot" style="--i:15"></b><b class="dot" style="--i:16"></b><b class="dot" style="--i:17"></b><b class="dot" style="--i:18"></b><b class="dot" style="--i:19"></b><b class="dot" style="--i:20"></b><b class="dot" style="--i:21"></b><b class="dot" style="--i:22"></b><b class="dot" style="--i:23"></b></div>
       </div>
@@ -239,7 +255,7 @@
     <section id="s10" class="clip scene center" data-start="29.6" data-duration="2.30" data-track-index="3">
       <div class="stage" id="s10-stage">
         <div class="text"><div class="line"><span class="w md" id="w55"><span class="wi">aur</span></span></div>
-<div class="line"><span class="w xl lime" id="w56"><span class="wi">CREATIVE</span></span></div>
+<div class="line"><span class="w xl acc" id="w56"><span class="wi">CREATIVE</span></span></div>
 <div class="line"><span class="w md" id="w57"><span class="wi">jo</span></span><span class="w md" id="w58"><span class="wi">sabse</span></span></div>
 <div class="line"><span class="w lg hl" id="w59"><span class="wi">IMPORTANT</span></span><span class="w md" id="w60"><span class="wi">hai</span></span></div></div>
         
@@ -253,17 +269,17 @@
 
     <section id="s11" class="clip scene center" data-start="31.9" data-duration="1.70" data-track-index="2">
       <div class="stage" id="s11-stage">
-        <div class="text"><div class="line"><span class="w xl lime" id="w61"><span class="wi">SALES</span></span></div>
+        <div class="text"><div class="line"><span class="w xl acc" id="w61"><span class="wi">SALES</span></span></div>
 <div class="line"><span class="w md" id="w62"><span class="wi">ko</span></span><span class="w md" id="w63"><span class="wi">scale</span></span><span class="w md" id="w64"><span class="wi">karne</span></span><span class="w md" id="w65"><span class="wi">ke</span></span><span class="w md" id="w66"><span class="wi">liye</span></span></div></div>
         
-      <svg class="chart" viewBox="0 0 1600 600" id="s11-chart"><path id="s11-line" d="M0 560 L260 500 L480 520 L720 380 L960 400 L1200 210 L1420 120 L1600 30" /></svg>
+      <svg class="chart" viewBox="0 0 1600 600" id="s11-chart"><path id="s11-line" d="M0 560 L260 500 L480 520 L720 380 L960 400 L1200 210 L1420 120 L1600 30" /><path id="s11-arrow" d="M1530 20 L1610 26 L1585 100" /></svg>
       </div>
     </section>
 
     <section id="s12" class="clip scene center" data-start="33.6" data-duration="2.70" data-track-index="3">
       <div class="stage" id="s12-stage">
         <div class="text"><div class="line"><span class="w lg" id="w67"><span class="wi">Full</span></span><span class="w lg" id="w68"><span class="wi">Detailed</span></span></div>
-<div class="line"><span class="w xl lime" id="w69"><span class="wi">PDF</span></span><span class="w lg" id="w70"><span class="wi">chahiye?</span></span></div></div>
+<div class="line"><span class="w xl acc" id="w69"><span class="wi">PDF</span></span><span class="w lg" id="w70"><span class="wi">chahiye?</span></span></div></div>
         
       <div class="follow" id="s12-btn"><span class="f-a">+ FOLLOW</span><span class="f-b" id="s12-done">✓ FOLLOWING</span></div>
       <div class="cursor" id="s12-cur"></div>
@@ -279,26 +295,38 @@
       </div>
     </section>
 
-    <section id="s14" class="clip scene top" data-start="38.3" data-duration="2.90" data-track-index="3">
+    <section id="s14" class="clip scene center" data-start="38.3" data-duration="1.45" data-track-index="3">
       <div class="stage" id="s14-stage">
         <div class="text"><div class="line"><span class="w md" id="w77"><span class="wi">jiska</span></span><span class="w md" id="w78"><span class="wi">link</span></span><span class="w md" id="w79"><span class="wi">apko</span></span></div>
-<div class="line"><span class="w xl lime" id="w80"><span class="wi">BIO</span></span><span class="w lg" id="w81"><span class="wi">mei</span></span><span class="w lg" id="w82"><span class="wi">mil</span></span><span class="w lg" id="w83"><span class="wi">jayega</span></span></div></div>
+<div class="line"><span class="w xl acc" id="w80"><span class="wi">BIO</span></span><span class="w lg" id="w81"><span class="wi">mei</span></span><span class="w lg" id="w82"><span class="wi">mil</span></span><span class="w lg" id="w83"><span class="wi">jayega</span></span></div></div>
         
-      <div class="cta" id="s14-cta">
-        <div class="pill" id="s14-pill">LINK IN BIO ↗</div>
-        <div class="mail" id="s14-mail"><span class="mail-ico">✉</span> thegrowthxstudio@gmail.com</div>
+      </div>
+    </section>
+
+    <section id="s15" class="clip scene center" data-start="39.75" data-duration="2.65" data-track-index="2">
+      <div class="stage" id="s15-stage">
+        <div class="text"></div>
+        
+      <div class="outro">
+        <div class="logo-wrap" id="s15-logo"><div class="logo-ring" id="s15-ring"></div><img class="logo-big" src="brand/logo.png" alt="The GrowthX Studio" /></div>
+        <div class="outro-r">
+          <div class="pill" id="s15-pill">LINK IN BIO ↗</div>
+          <div class="mail" id="s15-mail"><span class="mail-ico">✉</span> thegrowthxstudio@gmail.com</div>
+          <div class="tagline" id="s15-tag">BUILD <i>•</i> GROW <i>•</i> SCALE</div>
+        </div>
       </div>
       </div>
     </section>
 
       <video id="website" src="assets/website.mp4" muted playsinline data-start="22.85" data-duration="2.4" data-track-index="5"></video>
 
-      <div id="wipe" class="clip" data-start="0" data-duration="41.2" data-track-index="6"><div class="wp"></div></div>
-      <div id="flash" class="clip" data-start="0" data-duration="41.2" data-track-index="7"></div>
-      <div id="brand" class="clip" data-start="6.35" data-duration="34.85" data-track-index="8">GROWTH<b>X</b> STUDIO</div>
-      <div id="progress" class="clip" data-start="0" data-duration="41.2" data-track-index="9"><i></i></div>
+      <div id="wipe" class="clip" data-start="0" data-duration="42.4" data-track-index="6"><div class="wp"></div></div>
+      <div id="flash" class="clip" data-start="0" data-duration="42.4" data-track-index="7"></div>
+      <div id="brand" class="clip" data-start="0" data-duration="39.75" data-track-index="8"><div class="bi"><img src="brand/logo-mark.png" alt="GX" /><span>THE GROWTH<b>X</b> STUDIO</span></div></div>
+      <div id="progress" class="clip" data-start="0" data-duration="42.4" data-track-index="9"><i></i></div>
 
       <audio id="vo" src="assets/voiceover.m4a" data-start="0" data-duration="40.29" data-track-index="10" data-volume="1"></audio>
+      <audio id="sfx" src="assets/sfx.wav" data-start="0" data-duration="42.4" data-track-index="11" data-volume="0.6"></audio>
     </div>
     <script>
       const tl = gsap.timeline({ paused: true });
@@ -415,7 +443,7 @@
       tl.fromTo("#s4-c1",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.35,ease:"back.out(2)"},13.9);
       tl.fromTo("#s4-c2",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.35,ease:"back.out(2)"},13.95);
       tl.fromTo("#s4-c3",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.35,ease:"back.out(2)"},14);
-      tl.fromTo("#s4-c3",{boxShadow:"0 0 0 0 rgba(200,255,46,.9)"},{boxShadow:"0 0 0 18px rgba(200,255,46,0)",duration:.6,ease:"power2.out",immediateRender:false},14.05);
+      tl.fromTo("#s4-c3",{boxShadow:"0 0 0 0 rgba(139,47,232,.9)"},{boxShadow:"0 0 0 18px rgba(139,47,232,0)",duration:.6,ease:"power2.out",immediateRender:false},14.05);
       tl.fromTo("#s4-conv",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.35,ease:"back.out(2)"},14.4);
       tl.fromTo("#s4-ob",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.35,ease:"back.out(2)"},14.9);
       tl.fromTo("#s4-ke",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.35,ease:"back.out(2)"},15.4);
@@ -423,13 +451,13 @@
       tl.fromTo("#s5-stage",{x:-14},{x:0,duration:.35,ease:"elastic.out(1.4,.3)",immediateRender:false},17.05);
       tl.fromTo("#s6-stage",{scale:1},{scale:1.05,duration:4.40,ease:"none"},18.4);
       tl.fromTo("#s6-set0",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.45,ease:"back.out(2)"},18.5);
-      tl.to("#s6-set0",{borderColor:"#C8FF2E",backgroundColor:"rgba(200,255,46,.12)",duration:.2},18.5);
+      tl.to("#s6-set0",{borderColor:"#B57BFF",backgroundColor:"rgba(139,47,232,.12)",duration:.2},18.5);
       tl.to("#s6-set0",{borderColor:"rgba(255,255,255,.14)",backgroundColor:"rgba(255,255,255,.04)",duration:.2},20);
       tl.fromTo("#s6-set1",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.45,ease:"back.out(2)"},20);
-      tl.to("#s6-set1",{borderColor:"#C8FF2E",backgroundColor:"rgba(200,255,46,.12)",duration:.2},20);
+      tl.to("#s6-set1",{borderColor:"#B57BFF",backgroundColor:"rgba(139,47,232,.12)",duration:.2},20);
       tl.to("#s6-set1",{borderColor:"rgba(255,255,255,.14)",backgroundColor:"rgba(255,255,255,.04)",duration:.2},21);
       tl.fromTo("#s6-set2",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.45,ease:"back.out(2)"},21);
-      tl.to("#s6-set2",{borderColor:"#C8FF2E",backgroundColor:"rgba(200,255,46,.12)",duration:.2},21);
+      tl.to("#s6-set2",{borderColor:"#B57BFF",backgroundColor:"rgba(139,47,232,.12)",duration:.2},21);
       tl.fromTo("#s7-browser",{opacity:0},{opacity:1,duration:.15},22.8);
       tl.fromTo("#s8-stage",{scale:1},{scale:1.05,duration:2.65,ease:"none"},25.45);
       tl.fromTo("#s8-f1",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.35,ease:"back.out(2)"},26.95);
@@ -443,17 +471,22 @@
       tl.fromTo("#s10-a3",{opacity:0,x:0,y:200,rotation:0},{opacity:.9,x:520,y:40,rotation:14,duration:.55,ease:"back.out(1.6)"},30.16);
       tl.fromTo("#s11-stage",{scale:1},{scale:1.05,duration:1.70,ease:"none"},31.9);
       (function(){const p=document.querySelector("#s11-line");const L=p.getTotalLength();tl.fromTo(p,{strokeDasharray:L,strokeDashoffset:L},{strokeDashoffset:0,duration:1.4,ease:"power2.inOut"},32);})();
+      tl.fromTo("#s11-arrow",{opacity:0},{opacity:1,duration:.15},33.35);
       tl.fromTo("#s12-stage",{scale:1},{scale:1.05,duration:2.70,ease:"none"},33.6);
       tl.fromTo("#s12-btn",{opacity:0,y:60,scale:.8},{opacity:1,y:0,scale:1,duration:.4,ease:"back.out(2)"},34.9);
       tl.fromTo("#s12-cur",{opacity:0,x:260,y:200},{opacity:1,x:0,y:0,duration:.45,ease:"power3.out"},35.1);
       tl.to("#s12-btn",{scale:.92,duration:.08,yoyo:true,repeat:1},35.55);
-      tl.to("#s12-btn",{backgroundColor:"#0B0D12",borderColor:"#C8FF2E",color:"#C8FF2E",duration:.1},35.6);
+      tl.to("#s12-btn",{backgroundColor:"#8B2FE8",borderColor:"#B57BFF",color:"#FFFFFF",duration:.1},35.6);
       tl.fromTo("#s12-done",{yPercent:100},{yPercent:0,duration:.2,ease:"power2.out"},35.6);
       tl.to("#s12-btn .f-a",{yPercent:-100,opacity:0,duration:.2},35.6);
       tl.fromTo("#s13-stage",{scale:1},{scale:1.05,duration:2.00,ease:"none"},36.3);
-      tl.fromTo("#s14-stage",{scale:1},{scale:1.05,duration:2.90,ease:"none"},38.3);
-      tl.fromTo("#s14-pill",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.45,ease:"back.out(2)"},39.8);
-      tl.fromTo("#s14-mail",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.45,ease:"back.out(2)"},40.05);
+      tl.fromTo("#s14-stage",{scale:1},{scale:1.05,duration:1.45,ease:"none"},38.3);
+      tl.fromTo("#s15-logo",{opacity:0,scale:.5,rotation:-25},{opacity:1,scale:1,rotation:0,duration:.7,ease:"back.out(1.7)"},39.8);
+      tl.fromTo("#s15-ring",{opacity:.9,scale:1},{opacity:0,scale:1.6,duration:.9,ease:"power2.out"},39.95);
+      tl.to("#s15-logo",{scale:1.04,duration:2,ease:"sine.inOut"},40.5);
+      tl.fromTo("#s15-pill",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.45,ease:"back.out(2)"},40.25);
+      tl.fromTo("#s15-mail",{opacity:0,y:50,scale:.85},{opacity:1,y:0,scale:1,duration:0.45,ease:"back.out(2)"},40.5);
+      tl.fromTo("#s15-tag",{opacity:0,x:-40},{opacity:1,x:0,duration:.6,ease:"power3.out"},40.75);
       tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut"},6.14);
       tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut",immediateRender:false},12.69);
       tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut",immediateRender:false},18.19);
@@ -463,8 +496,11 @@
       tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut",immediateRender:false},33.39);
       tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut",immediateRender:false},38.09);
       tl.fromTo("#flash",{opacity:.85},{opacity:0,duration:.25,ease:"power2.out",immediateRender:false},6.35);
-      tl.fromTo("#glow",{xPercent:-20,yPercent:-10},{xPercent:20,yPercent:10,duration:41.2,ease:"sine.inOut"},0);
-      tl.fromTo("#progress i",{scaleX:0},{scaleX:1,duration:41.2,ease:"none"},0);
+      tl.fromTo("#bg-ring1",{rotation:0},{rotation:120,duration:42.4,ease:"none"},0);
+      tl.fromTo("#bg-ring2",{rotation:0},{rotation:-90,duration:42.4,ease:"none"},0);
+      tl.fromTo("#brand .bi",{opacity:0,y:-20},{opacity:1,y:0,duration:.4,ease:"power3.out"},0.2);
+      tl.fromTo("#glow",{xPercent:-20,yPercent:-10},{xPercent:20,yPercent:10,duration:42.4,ease:"sine.inOut"},0);
+      tl.fromTo("#progress i",{scaleX:0},{scaleX:1,duration:42.4,ease:"none"},0);
       window.__timelines["main"] = tl;
     </script>
   </body>
