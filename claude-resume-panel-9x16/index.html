@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>7 Claudes rejected my resume</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Anton"; src: url("assets/fonts/anton-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/inter-latin-500-normal.woff2") format("woff2"); font-weight: 500; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/inter-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/inter-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/inter-latin-900-normal.woff2") format("woff2"); font-weight: 900; }
+      @font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2"); font-weight: 500; }
+      @font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/jetbrains-mono-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Caveat"; src: url("assets/fonts/caveat-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+
+      :root {
+        --ink: #141413;
+        --night: #0f0e0d;
+        --paper: #f5f0e6;
+        --coral: #d97757;
+        --coral-hi: #ff9b73;
+        --red: #ff4545;
+        --green: #2fd27a;
+        --yellow: #ffd54a;
+        --muted: #8a857c;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--night); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Inter", sans-serif; color: #fff; background: var(--night); }
+      .clip { position: absolute; inset: 0; }
+      .inner { position: absolute; inset: 0; }
+
+      /* ---------- background ---------- */
+      #bg-dots { position: absolute; inset: -40px; background-image: radial-gradient(rgba(255,255,255,0.07) 2px, transparent 2.5px); background-size: 44px 44px; }
+      #bg-glow { position: absolute; width: 1400px; height: 1400px; left: -500px; top: -420px; border-radius: 50%; background: radial-gradient(circle, rgba(217,119,87,0.30), rgba(217,119,87,0) 62%); }
+      #bg-glow2 { position: absolute; width: 1200px; height: 1200px; left: 380px; top: 1100px; border-radius: 50%; background: radial-gradient(circle, rgba(255,69,69,0.16), rgba(255,69,69,0) 60%); }
+      #bg-vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 45%, rgba(0,0,0,0.65) 100%); }
+
+      /* ---------- shared pieces ---------- */
+      .tape { position: absolute; top: 272px; left: 0; right: 0; display: flex; justify-content: center; }
+      .tape span { display: block; background: var(--paper); color: var(--ink); font-family: "Anton"; font-size: 66px; line-height: 1.05; letter-spacing: 0.5px; text-transform: uppercase; padding: 14px 34px 12px; max-width: 960px; text-align: center; box-shadow: 0 14px 0 rgba(0,0,0,0.35); }
+      .tape span em { font-style: normal; color: #b0502e; }
+
+      .stamp { position: absolute; display: block; font-family: "Anton"; text-transform: uppercase; letter-spacing: 4px; border: 10px solid currentColor; border-radius: 18px; padding: 6px 30px 2px; mix-blend-mode: normal; }
+      .stamp.red { color: var(--red); background: rgba(255,69,69,0.10); }
+      .stamp.green { color: var(--green); background: rgba(47,210,122,0.10); }
+
+      .bot { position: relative; width: 120px; height: 120px; border-radius: 34px; background: var(--coral); box-shadow: inset 0 -10px 0 rgba(0,0,0,0.18), 0 10px 24px rgba(0,0,0,0.35); }
+      .bot::before, .bot::after { content: ""; position: absolute; top: 38%; width: 18%; height: 26%; border-radius: 50%; background: var(--ink); }
+      .bot::before { left: 26%; }
+      .bot::after { right: 26%; }
+      .bot i { position: absolute; left: 50%; top: -16%; width: 8%; height: 18%; margin-left: -4%; background: var(--ink); border-radius: 4px; }
+      .bot i::after { content: ""; position: absolute; left: 50%; top: -60%; width: 180%; height: 60%; margin-left: -90%; border-radius: 50%; background: var(--yellow); }
+
+      .resume { position: absolute; background: var(--paper); color: var(--ink); border-radius: 14px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); overflow: hidden; }
+      .r-tag { position: absolute; top: 18px; right: 18px; font-family: "JetBrains Mono"; font-weight: 700; font-size: 20px; color: #fff; background: var(--ink); padding: 6px 12px; border-radius: 8px; letter-spacing: 1px; }
+      .r-name { font-family: "Anton"; font-size: 54px; letter-spacing: 1px; line-height: 1; }
+      .r-role { font-weight: 700; font-size: 26px; color: #6b655b; margin-top: 8px; }
+      .r-sec { font-family: "JetBrains Mono"; font-weight: 700; font-size: 22px; letter-spacing: 3px; color: #b0502e; margin: 26px 0 10px; border-bottom: 3px solid #e3dccd; padding-bottom: 8px; }
+      .r-line { height: 14px; border-radius: 7px; background: #d9d1c0; margin: 14px 0; }
+      .r-line.dark { background: #b9b09d; }
+
+      /* skeleton mini resume (scenes 1, 4, 5) */
+      .mini { width: 100%; height: 100%; padding: 38px 36px; }
+      .mini .bar-h { height: 36px; width: 62%; border-radius: 8px; background: var(--ink); }
+      .mini .bar-s { height: 16px; width: 44%; border-radius: 8px; background: var(--coral); margin-top: 14px; }
+
+      /* full resume with bullets (scenes 2, 7) */
+      .full { padding: 36px 44px; }
+      .bul { position: relative; list-style: none; font-weight: 700; font-size: 33px; line-height: 1.15; height: 62px; display: flex; align-items: center; padding-left: 34px; white-space: nowrap; }
+      .bul::before { content: ""; position: absolute; left: 4px; top: 25px; width: 12px; height: 12px; border-radius: 50%; background: var(--ink); }
+      .bul .num { color: #1f7a4a; }
+      .ring { position: absolute; left: -14px; top: 2px; width: calc(100% + 10px); height: 58px; overflow: visible; }
+      .ring path { fill: none; stroke: var(--red); stroke-width: 6; stroke-linecap: round; }
+      .old, .new { position: absolute; left: 34px; top: 0; height: 62px; display: block; line-height: 62px; white-space: nowrap; }
+      .new { color: #136b3d; }
+      .strike { position: absolute; left: 30px; top: 30px; height: 5px; width: 0; background: var(--red); border-radius: 3px; }
+      .check { position: absolute; right: 6px; top: 9px; width: 44px; height: 44px; border-radius: 50%; background: var(--green); color: var(--ink); font-weight: 900; font-size: 30px; display: grid; place-items: center; }
+
+      /* captions */
+      #cap-layer { position: absolute; left: 60px; right: 60px; top: 1330px; height: 170px; }
+      .cap { position: absolute; left: 0; right: 0; top: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 0 18px; opacity: 0; }
+      .cw { display: inline-block; font-family: "Inter"; font-weight: 900; font-size: 74px; line-height: 1.12; color: #fff; text-transform: uppercase; letter-spacing: -1px; padding: 2px 12px; border-radius: 14px; background-color: rgba(0,0,0,0);
+            text-shadow: 0 5px 0 rgba(0,0,0,0.55), 0 0 18px rgba(0,0,0,0.6); }
+      
+      /* ---------- scene 1 ---------- */
+      #s1-resume { left: 300px; top: 560px; width: 480px; height: 640px; transform-origin: 50% 50%; }
+      #s1-timer { position: absolute; left: 700px; top: 470px; width: 250px; height: 250px; }
+      #s1-timer svg { position: absolute; inset: 0; }
+      #s1-timer .t-num { position: absolute; inset: 0; display: grid; place-items: center; font-family: "JetBrains Mono"; font-weight: 700; font-size: 70px; color: #fff; }
+      #s1-timer .t-num small { font-size: 34px; color: var(--muted); }
+      #s1-timer .t-face { position: absolute; inset: 18px; border-radius: 50%; background: var(--ink); box-shadow: 0 16px 40px rgba(0,0,0,0.5); }
+      .qm { position: absolute; font-family: "Anton"; font-size: 170px; color: var(--coral); text-shadow: 0 8px 0 rgba(0,0,0,0.4); }
+      #s1-stamp { left: 250px; top: 800px; font-size: 120px; transform-origin: 50% 50%; }
+      #s1-bots { position: absolute; left: 90px; right: 90px; top: 560px; display: flex; flex-wrap: wrap; justify-content: center; gap: 46px 54px; }
+      .botcell { width: 170px; display: flex; flex-direction: column; align-items: center; }
+      .botcell .bot { width: 150px; height: 150px; }
+      .botcell b { margin-top: 18px; font-family: "JetBrains Mono"; font-weight: 700; font-size: 25px; letter-spacing: 1px; color: var(--paper); }
+      #s1-x7 { position: absolute; left: 0; right: 0; top: 1150px; text-align: center; font-family: "Anton"; font-size: 120px; color: var(--coral); letter-spacing: 2px; }
+
+      /* ---------- scene 2 ---------- */
+      #s2-resume, #s7-resume { left: 70px; top: 470px; width: 940px; height: 640px; }
+      #s2-note { position: absolute; left: 70px; right: 70px; top: 1132px; height: 150px; display: flex; align-items: center; gap: 24px; background: #1d1b19; border: 3px solid #3a352f; border-radius: 26px; padding: 0 28px; }
+      #s2-note .bot { width: 92px; height: 92px; border-radius: 26px; flex: none; }
+      #s2-note .note-text { font-family: "Caveat"; font-weight: 700; font-size: 62px; color: var(--red); white-space: nowrap; }
+      #s2-stamp { left: 210px; top: 640px; font-size: 150px; }
+
+      /* ---------- scene 3 ---------- */
+      #s3-words { position: absolute; left: 60px; right: 60px; top: 560px; display: flex; flex-direction: column; align-items: center; gap: 6px; transform-origin: 50% 40%; }
+      #s3-words div { font-family: "Anton"; font-size: 150px; line-height: 1.02; text-transform: uppercase; color: #fff; }
+      #s3-words .after { color: var(--coral); font-size: 210px; }
+
+      /* ---------- scene 4 ---------- */
+      #s4-panel { position: absolute; left: 70px; top: 470px; width: 940px; height: 800px; border-radius: 34px; background: #171513; border: 4px solid #2c2824; overflow: hidden; }
+      #s4-resume { left: 300px; top: 60px; width: 340px; height: 450px; }
+      #s4-laser { position: absolute; left: 270px; top: 60px; width: 400px; height: 10px; border-radius: 5px; background: var(--green); box-shadow: 0 0 30px 10px rgba(47,210,122,0.55); }
+      #s4-belt { position: absolute; left: 0; right: 0; top: 540px; height: 24px; background: repeating-linear-gradient(90deg, #3a352f 0 40px, #24211e 40px 80px); }
+      #s4-log { position: absolute; left: 44px; top: 600px; font-family: "JetBrains Mono"; font-weight: 700; font-size: 30px; line-height: 1.6; color: #cfc8bb; }
+      #s4-log .bad { color: var(--red); }
+      #s4-human { position: absolute; right: 40px; top: 616px; width: 250px; height: 140px; border-radius: 22px; border: 5px solid var(--yellow); display: grid; place-items: center; font-family: "Anton"; font-size: 66px; color: var(--yellow); background: rgba(255,213,74,0.08); }
+
+      /* ---------- scene 5 ---------- */
+      #s5-boss { position: absolute; left: 0; right: 0; top: 470px; display: flex; justify-content: center; }
+      #s5-boss .bot { width: 190px; height: 190px; border-radius: 52px; }
+      #s5-think { position: absolute; left: 640px; top: 450px; font-family: "Anton"; font-size: 110px; color: var(--paper); }
+      #s5-resume { left: 380px; top: 720px; width: 320px; height: 400px; transform-origin: 50% 80%; }
+      .btn { position: absolute; top: 1150px; width: 420px; height: 140px; border-radius: 30px; display: grid; place-items: center; font-family: "Anton"; font-size: 70px; letter-spacing: 2px; }
+      #s5-int { left: 70px; border: 6px solid var(--green); color: var(--green); }
+      #s5-bin { left: 590px; border: 6px solid var(--red); color: var(--red); }
+
+      /* ---------- scene 6 ---------- */
+      #s6-list { position: absolute; left: 70px; right: 70px; top: 460px; }
+      .card { position: relative; height: 148px; margin-bottom: 18px; border-radius: 28px; background: #1b1916; border: 4px solid #2f2a25; display: flex; align-items: center; padding: 0 26px; gap: 24px; transform-origin: 50% 50%; }
+      .card .bot { width: 96px; height: 96px; border-radius: 28px; flex: none; }
+      .card .who { font-family: "JetBrains Mono"; font-weight: 700; font-size: 30px; color: var(--paper); letter-spacing: 1px; }
+      .card .say { font-weight: 700; font-size: 31px; color: #b5ada0; margin-top: 6px; }
+      .card .x { position: absolute; right: 26px; top: 36px; width: 76px; height: 76px; border-radius: 50%; background: var(--red); display: grid; place-items: center; font-family: "Anton"; font-size: 50px; color: #fff; }
+      #s6-stamp { left: 150px; top: 760px; font-size: 140px; }
+
+      /* ---------- scene 7 ---------- */
+      #s7-flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+      #s7-twist { position: absolute; left: 0; right: 0; top: 560px; text-align: center; font-family: "Anton"; font-size: 250px; line-height: 0.95; color: var(--coral); text-shadow: 0 14px 0 rgba(0,0,0,0.4); transform-origin: 50% 50%; }
+      #s7-counter { position: absolute; left: 0; right: 0; top: 420px; display: flex; justify-content: center; align-items: baseline; gap: 22px; font-family: "Anton"; }
+      #s7-counter .lbl { font-size: 64px; color: var(--paper); letter-spacing: 2px; }
+      #s7-counter .val { display: inline-block; font-size: 96px; color: var(--red); min-width: 70px; text-align: center; transform-origin: 50% 60%; }
+      #s7-resume { top: 540px; }
+      #s7-fix { position: absolute; left: 70px; right: 70px; top: 1200px; height: 104px; display: flex; align-items: center; gap: 20px; }
+      #s7-fix .bot { width: 84px; height: 84px; border-radius: 24px; flex: none; }
+      #s7-fix .fx { font-family: "JetBrains Mono"; font-weight: 700; font-size: 36px; color: var(--paper); white-space: nowrap; }
+      #s7-stamp { left: 560px; top: 560px; font-size: 92px; }
+      .conf { position: absolute; width: 18px; height: 30px; border-radius: 4px; opacity: 0; }
+
+      /* ---------- scene 8 ---------- */
+      #s8-dim { position: absolute; inset: 0; background: rgba(0,0,0,0.55); }
+      #s8-a, #s8-b { position: absolute; left: 60px; right: 60px; text-align: center; font-weight: 900; letter-spacing: -2px; }
+      #s8-a { top: 720px; font-size: 96px; color: #fff; }
+      #s8-b { top: 900px; font-size: 104px; color: var(--coral); }
+
+      /* ---------- scene 9 ---------- */
+      #s9-comment { position: absolute; left: 0; right: 0; top: 450px; text-align: center; font-family: "Anton"; font-size: 170px; line-height: 1; color: #fff; }
+      #s9-pill { position: absolute; left: 0; right: 0; top: 650px; display: flex; justify-content: center; }
+      #s9-pill span { display: block; font-family: "Anton"; font-size: 180px; line-height: 1; color: #fff; background: var(--coral); padding: 18px 54px 10px; border-radius: 36px; letter-spacing: 6px; box-shadow: 0 18px 0 rgba(0,0,0,0.4); transform-origin: 50% 50%; }
+      #s9-box { position: absolute; left: 70px; right: 70px; top: 960px; height: 120px; border-radius: 60px; background: #1d1b19; border: 3px solid #3a352f; display: flex; align-items: center; padding: 0 22px; gap: 22px; }
+      .avatar { width: 76px; height: 76px; border-radius: 50%; background: linear-gradient(135deg, #f9ce34, #ee2a7b 55%, #6228d7); flex: none; }
+      #s9-input { position: relative; flex: 1; height: 60px; }
+      #s9-ph, #s9-typed { position: absolute; left: 0; top: 0; height: 60px; display: flex; align-items: center; font-size: 40px; font-weight: 700; }
+      #s9-ph { color: #6f685e; }
+      #s9-typed { color: #fff; letter-spacing: 2px; font-family: "JetBrains Mono"; }
+      #s9-post { font-weight: 800; font-size: 40px; color: #4d9bff; padding: 0 16px; border-radius: 20px; }
+      #s9-posted { position: absolute; left: 70px; right: 70px; top: 1110px; height: 190px; display: flex; gap: 22px; }
+      #s9-posted .meta { font-size: 30px; font-weight: 800; color: #fff; }
+      #s9-posted .meta span { color: #8a857c; font-weight: 500; margin-left: 10px; }
+      #s9-posted .kw { font-size: 40px; font-weight: 900; letter-spacing: 1px; margin-top: 2px; }
+      #s9-dm { margin-top: 14px; display: inline-flex; align-items: center; gap: 14px; background: var(--green); color: #062b16; font-weight: 800; font-size: 30px; padding: 10px 22px; border-radius: 30px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="35.6">
+      <!-- background -->
+      <div id="bg" class="clip" data-start="0" data-duration="35.6" data-track-index="0">
+        <div id="bg-glow"></div>
+        <div id="bg-glow2"></div>
+        <div id="bg-dots"></div>
+        <div id="bg-vignette"></div>
+      </div>
+
+      <!-- S1 hook -->
+      <section id="s1" class="clip" data-start="0" data-duration="6.0" data-track-index="1">
+        <div id="s1-in" class="inner">
+          <div class="tape"><span id="s1-tape">7 Claudes <em>rejected</em> my resume</span></div>
+          <div id="s1-resume" class="resume">
+            <div class="mini">
+              <div class="bar-h"></div><div class="bar-s"></div>
+              <div class="r-sec">EXPERIENCE</div>
+              <div class="r-line dark" style="width: 92%"></div><div class="r-line" style="width: 80%"></div>
+              <div class="r-line dark" style="width: 88%"></div><div class="r-line" style="width: 70%"></div>
+              <div class="r-sec">SKILLS</div>
+              <div class="r-line" style="width: 76%"></div><div class="r-line" style="width: 60%"></div>
+            </div>
+          </div>
+          <div id="s1-timer">
+            <div class="t-face"></div>
+            <svg viewBox="0 0 250 250"><circle cx="125" cy="125" r="112" fill="none" stroke="#2c2824" stroke-width="14" />
+              <circle id="s1-ring" cx="125" cy="125" r="112" fill="none" stroke="#ff4545" stroke-width="14" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="0" transform="rotate(-90 125 125)" /></svg>
+            <div class="t-num"><div><span id="s1-sec">7.4</span><small>s</small></div></div>
+          </div>
+          <div id="s1-q1" class="qm" style="left: 140px; top: 560px">?</div>
+          <div id="s1-q2" class="qm" style="left: 830px; top: 860px">?</div>
+          <div id="s1-q3" class="qm" style="left: 200px; top: 1060px">?</div>
+          <div id="s1-stamp" data-layout-allow-overlap data-layout-allow-occlusion class="stamp red">Rejected</div>
+          <div id="s1-bots">
+            <div class="botcell"><div class="bot"><i></i></div><b>FILTER</b></div>
+            <div class="botcell"><div class="bot"><i></i></div><b>MANAGER</b></div>
+            <div class="botcell"><div class="bot"><i></i></div><b>RECRUITER</b></div>
+            <div class="botcell"><div class="bot"><i></i></div><b>LEAD</b></div>
+            <div class="botcell"><div class="bot"><i></i></div><b>PEER</b></div>
+            <div class="botcell"><div class="bot"><i></i></div><b>RIVAL</b></div>
+            <div class="botcell"><div class="bot"><i></i></div><b>CEO</b></div>
+          </div>
+          <div id="s1-x7">× 7 CLAUDES</div>
+        </div>
+      </section>
+
+      <!-- S2 proof -->
+      <section id="s2" class="clip" data-start="6.0" data-duration="3.45" data-track-index="1">
+        <div id="s2-in" class="inner">
+          <div class="tape"><span>The proof <em>·</em> sample resume</span></div>
+          <div id="s2-resume" class="resume full">
+            <div class="r-tag">SAMPLE</div>
+            <div class="r-name">ALEX MORGAN</div>
+            <div class="r-role">Product Marketing Manager</div>
+            <div class="r-sec">EXPERIENCE</div>
+            <ul>
+              <li class="bul">Managed social campaigns for launches<svg class="ring" viewBox="0 0 900 58" preserveAspectRatio="none"><path id="s2-r1" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" d="M30 30 C 30 4, 860 2, 885 26 C 905 50, 120 60, 22 40 C 8 32, 40 10, 90 8" /></svg></li>
+              <li class="bul">Grew newsletter list <span class="num">&nbsp;38%&nbsp;</span> in <span class="num">&nbsp;6&nbsp;</span> months</li>
+              <li class="bul">Worked with sales on product messaging<svg class="ring" viewBox="0 0 900 58" preserveAspectRatio="none"><path id="s2-r3" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" d="M30 30 C 30 4, 860 2, 885 26 C 905 50, 120 60, 22 40 C 8 32, 40 10, 90 8" /></svg></li>
+              <li class="bul">Responsible for blog content and SEO<svg class="ring" viewBox="0 0 900 58" preserveAspectRatio="none"><path id="s2-r4" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" d="M30 30 C 30 4, 860 2, 885 26 C 905 50, 120 60, 22 40 C 8 32, 40 10, 90 8" /></svg></li>
+              <li class="bul">Led a <span class="num">&nbsp;4-person&nbsp;</span> team to ship v2.0</li>
+              <li class="bul">Helped improve website conversion<svg class="ring" viewBox="0 0 900 58" preserveAspectRatio="none"><path id="s2-r6" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" d="M30 30 C 30 4, 860 2, 885 26 C 905 50, 120 60, 22 40 C 8 32, 40 10, 90 8" /></svg></li>
+            </ul>
+          </div>
+          <div id="s2-note"><div class="bot"><i></i></div><div class="note-text" id="s2-text">4 of 6 bullets have no numbers.</div></div>
+          <div id="s2-stamp" data-layout-allow-overlap data-layout-allow-occlusion class="stamp red">Rejected</div>
+        </div>
+      </section>
+
+      <!-- S3 open loop -->
+      <section id="s3" class="clip" data-start="9.45" data-duration="1.7" data-track-index="1">
+        <div id="s3-in" class="inner">
+          <div class="tape"><span>But wait<em>…</em></span></div>
+          <div id="s3-words">
+            <div id="s3-w1">Wait till</div>
+            <div id="s3-w2">you see</div>
+            <div id="s3-w3">what happens</div>
+            <div id="s3-w4" class="after">after…</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- S4 robot filter -->
+      <section id="s4" class="clip" data-start="11.15" data-duration="2.8" data-track-index="1">
+        <div id="s4-in" class="inner">
+          <div class="tape"><span><em>#1</em> The robot filter</span></div>
+          <div id="s4-panel">
+            <div id="s4-resume" class="resume">
+              <div class="mini">
+                <div class="bar-h"></div><div class="bar-s"></div>
+                <div class="r-sec">EXPERIENCE</div>
+                <div class="r-line dark" style="width: 92%"></div><div class="r-line" style="width: 80%"></div>
+                <div class="r-line dark" style="width: 88%"></div><div class="r-line" style="width: 70%"></div>
+                <div class="r-line" style="width: 64%"></div>
+              </div>
+            </div>
+            <div id="s4-laser"></div>
+            <div id="s4-belt"></div>
+            <div id="s4-log">
+              <div id="s4-l1">&gt; parsing resume.pdf</div>
+              <div id="s4-l2">&gt; keywords: 3/12</div>
+              <div id="s4-l3" class="bad">&gt; ATS score: 41%</div>
+            </div>
+            <div id="s4-human">HUMAN?</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- S5 hiring manager -->
+      <section id="s5" class="clip" data-start="13.95" data-duration="3.1" data-track-index="1">
+        <div id="s5-in" class="inner">
+          <div class="tape"><span><em>#2</em> The hiring manager</span></div>
+          <div id="s5-boss"><div class="bot"><i></i></div></div>
+          <div id="s5-think">?</div>
+          <div id="s5-resume" class="resume">
+            <div class="mini">
+              <div class="bar-h"></div><div class="bar-s"></div>
+              <div class="r-sec">EXP.</div>
+              <div class="r-line dark" style="width: 92%"></div><div class="r-line" style="width: 80%"></div>
+              <div class="r-line dark" style="width: 88%"></div><div class="r-line" style="width: 66%"></div>
+            </div>
+          </div>
+          <div id="s5-int" class="btn">INTERVIEW</div>
+          <div id="s5-bin" class="btn">BIN</div>
+        </div>
+      </section>
+
+      <!-- S6 five readers -->
+      <section id="s6" class="clip" data-start="17.05" data-duration="4.65" data-track-index="1">
+        <div id="s6-in" class="inner">
+          <div class="tape"><span><em>#3–7</em> Five more readers</span></div>
+          <div id="s6-list">
+            <div class="card" id="s6-c1"><div class="bot"><i></i></div><div><div class="who">RECRUITER</div><div class="say">"Reads like a job description."</div></div><div class="x">✕</div></div>
+            <div class="card" id="s6-c2"><div class="bot"><i></i></div><div><div class="who">TEAM LEAD</div><div class="say">"Where's the impact?"</div></div><div class="x">✕</div></div>
+            <div class="card" id="s6-c3"><div class="bot"><i></i></div><div><div class="who">PEER</div><div class="say">"Buzzwords, no proof."</div></div><div class="x">✕</div></div>
+            <div class="card" id="s6-c4"><div class="bot"><i></i></div><div><div class="who">RIVAL APPLICANT</div><div class="say">"Mine's easier to say yes to."</div></div><div class="x">✕</div></div>
+            <div class="card" id="s6-c5"><div class="bot"><i></i></div><div><div class="who">CEO</div><div class="say">"Why should I care?"</div></div><div class="x">✕</div></div>
+          </div>
+          <div id="s6-stamp" data-layout-allow-overlap data-layout-allow-occlusion class="stamp red">7/7 Rejected</div>
+        </div>
+      </section>
+
+      <!-- S7 twist -->
+      <section id="s7" class="clip" data-start="21.7" data-duration="6.75" data-track-index="1">
+        <div id="s7-in" class="inner">
+          <div id="s7-head" class="tape"><span>Then Claude <em>fixes it</em></span></div>
+          <div id="s7-counter"><span class="lbl">REJECTIONS</span><span class="val" id="s7-val">7</span></div>
+          <div id="s7-resume" class="resume full">
+            <div class="r-tag">SAMPLE</div>
+            <div class="r-name">ALEX MORGAN</div>
+            <div class="r-role">Product Marketing Manager</div>
+            <div class="r-sec">EXPERIENCE</div>
+            <ul>
+              <li class="bul"><span class="old" id="s7-o1">Managed social campaigns for launches</span><span class="new" id="s7-n1">Ran <b>12</b> launch campaigns, <b>2.1M</b> reach</span><span class="strike" id="s7-k1"></span><svg class="ring" viewBox="0 0 900 58" preserveAspectRatio="none"><path id="s7-r1" d="M30 30 C 30 4, 860 2, 885 26 C 905 50, 120 60, 22 40 C 8 32, 40 10, 90 8" /></svg><span class="check" id="s7-c1">✓</span></li>
+              <li class="bul">Grew newsletter list <span class="num">&nbsp;38%&nbsp;</span> in <span class="num">&nbsp;6&nbsp;</span> months</li>
+              <li class="bul"><span class="old" id="s7-o3">Worked with sales on product messaging</span><span class="new" id="s7-n3">Sales deck lifted win rate <b>18%</b></span><span class="strike" id="s7-k3"></span><svg class="ring" viewBox="0 0 900 58" preserveAspectRatio="none"><path id="s7-r3" d="M30 30 C 30 4, 860 2, 885 26 C 905 50, 120 60, 22 40 C 8 32, 40 10, 90 8" /></svg><span class="check" id="s7-c3">✓</span></li>
+              <li class="bul"><span class="old" id="s7-o4">Responsible for blog content and SEO</span><span class="new" id="s7-n4"><b>40</b> SEO posts, organic traffic <b>+64%</b></span><span class="strike" id="s7-k4"></span><svg class="ring" viewBox="0 0 900 58" preserveAspectRatio="none"><path id="s7-r4" d="M30 30 C 30 4, 860 2, 885 26 C 905 50, 120 60, 22 40 C 8 32, 40 10, 90 8" /></svg><span class="check" id="s7-c4">✓</span></li>
+              <li class="bul">Led a <span class="num">&nbsp;4-person&nbsp;</span> team to ship v2.0</li>
+              <li class="bul"><span class="old" id="s7-o6">Helped improve website conversion</span><span class="new" id="s7-n6">Site conversion <b>1.9% → 3.2%</b></span><span class="strike" id="s7-k6"></span><svg class="ring" viewBox="0 0 900 58" preserveAspectRatio="none"><path id="s7-r6" d="M30 30 C 30 4, 860 2, 885 26 C 905 50, 120 60, 22 40 C 8 32, 40 10, 90 8" /></svg><span class="check" id="s7-c6">✓</span></li>
+            </ul>
+          </div>
+          <div id="s7-fix"><div class="bot"><i></i></div><div class="fx" id="s7-fx">rewriting every bullet…</div></div>
+          <div id="s7-stamp" data-layout-allow-overlap data-layout-allow-occlusion class="stamp green">Fixed</div>
+          <div id="s7-conf" data-layout-allow-overlap data-layout-allow-occlusion></div>
+          <div id="s7-twist"><div>THE</div><div>TWIST</div></div>
+          <div id="s7-flash"></div>
+        </div>
+      </section>
+
+      <!-- S8 honesty -->
+      <section id="s8" class="clip" data-start="28.45" data-duration="2.65" data-track-index="1">
+        <div id="s8-in" class="inner">
+          <div id="s8-dim"></div>
+          <div id="s8-a">No guaranteed job.</div>
+          <div id="s8-b">Just no more guessing.</div>
+        </div>
+      </section>
+
+      <!-- S9 CTA -->
+      <section id="s9" class="clip" data-start="31.1" data-duration="4.5" data-track-index="1">
+        <div id="s9-in" class="inner">
+          <div class="tape"><span>Free <em>Claude</em> setup</span></div>
+          <div id="s9-comment">COMMENT</div>
+          <div id="s9-pill"><span id="s9-kw">RESUME</span></div>
+          <div id="s9-box">
+            <div class="avatar"></div>
+            <div id="s9-input"><div id="s9-ph">Add a comment…</div><div id="s9-typed">RESUME</div></div>
+            <div id="s9-post">Post</div>
+          </div>
+          <div id="s9-posted">
+            <div class="avatar"></div>
+            <div>
+              <div class="meta">you<span>now</span></div>
+              <div class="kw">RESUME</div>
+              <div id="s9-dm">
+                <svg width="30" height="30" viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z" fill="#062b16" /></svg>
+                Setup sent. Check your DMs
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- captions -->
+      <div id="captions" class="clip" data-start="0" data-duration="35.6" data-track-index="2">
+        <div id="cap-layer"></div>
+      </div>
+
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="35.6" data-track-index="5"></audio>
+    </div>
+
+    <script>
+      // Word timings from the processed voiceover (tools/vo_words.json).
+      const WORDS = [{"text":"Recruiters","start":0.113,"end":0.467},{"text":"spend","start":0.511,"end":0.733},{"text":"seven","start":0.789,"end":1.067},{"text":"seconds","start":1.117,"end":1.467},{"text":"on","start":1.511,"end":1.6},{"text":"your","start":1.613,"end":1.667},{"text":"resume,","start":1.733,"end":2.267},{"text":"and","start":2.317,"end":2.467},{"text":"never","start":2.511,"end":2.733},{"text":"say","start":2.817,"end":3.067},{"text":"why","start":3.117,"end":3.267},{"text":"they","start":3.293,"end":3.4},{"text":"rejected","start":3.452,"end":3.867},{"text":"you...","start":3.9,"end":4.141},{"text":"so","start":4.185,"end":4.318},{"text":"I","start":4.452,"end":4.585},{"text":"made","start":4.638,"end":4.852},{"text":"seven","start":4.896,"end":5.118},{"text":"Claudes","start":5.162,"end":5.518},{"text":"tell","start":5.558,"end":5.718},{"text":"me.","start":5.762,"end":5.918},{"text":"One","start":6.03,"end":6.466},{"text":"wrote:","start":6.5,"end":6.733},{"text":"\"Four","start":6.836,"end":7.044},{"text":"of","start":7.088,"end":7.178},{"text":"six","start":7.244,"end":7.444},{"text":"bullets","start":7.486,"end":7.778},{"text":"have","start":7.804,"end":7.911},{"text":"no","start":8.0,"end":8.178},{"text":"numbers.","start":8.228,"end":8.644},{"text":"Rejected.\"","start":8.755,"end":9.311},{"text":"But","start":9.557,"end":9.582},{"text":"wait","start":9.622,"end":9.782},{"text":"till","start":9.822,"end":9.982},{"text":"you","start":9.999,"end":10.049},{"text":"see","start":10.099,"end":10.249},{"text":"what","start":10.275,"end":10.382},{"text":"happens","start":10.424,"end":10.715},{"text":"after.","start":10.771,"end":11.115},{"text":"One:","start":11.238,"end":11.658},{"text":"the","start":11.692,"end":11.792},{"text":"robot","start":11.858,"end":12.192},{"text":"filter.","start":12.249,"end":12.658},{"text":"Does","start":12.752,"end":12.848},{"text":"a","start":12.881,"end":12.914},{"text":"human","start":12.97,"end":13.248},{"text":"even","start":13.301,"end":13.514},{"text":"see","start":13.581,"end":13.781},{"text":"it?","start":13.803,"end":13.914},{"text":"Two:","start":14.021,"end":14.379},{"text":"the","start":14.395,"end":14.445},{"text":"hiring","start":14.503,"end":14.845},{"text":"manager.","start":14.887,"end":15.312},{"text":"Interview...","start":15.405,"end":16.314},{"text":"or","start":16.381,"end":16.514},{"text":"bin?","start":16.614,"end":17.047},{"text":"Then","start":17.148,"end":17.378},{"text":"five","start":17.472,"end":17.845},{"text":"more","start":17.898,"end":18.112},{"text":"judge","start":18.168,"end":18.445},{"text":"it,","start":18.489,"end":18.721},{"text":"even","start":18.755,"end":18.915},{"text":"a","start":18.982,"end":19.049},{"text":"rival","start":19.115,"end":19.449},{"text":"applicant,","start":19.502,"end":20.049},{"text":"and","start":20.135,"end":20.681},{"text":"the","start":20.731,"end":20.881},{"text":"CEO.","start":21.014,"end":21.681},{"text":"Then","start":21.766,"end":22.053},{"text":"the","start":22.12,"end":22.32},{"text":"twist.","start":22.386,"end":22.786},{"text":"Claude","start":22.876,"end":23.395},{"text":"rewrites","start":23.484,"end":23.995},{"text":"your","start":24.008,"end":24.062},{"text":"resume,","start":24.128,"end":24.662},{"text":"and","start":24.678,"end":24.728},{"text":"fixes","start":24.806,"end":25.195},{"text":"every","start":25.251,"end":25.528},{"text":"mistake","start":25.578,"end":25.928},{"text":"they","start":25.955,"end":26.062},{"text":"found.","start":26.128,"end":26.6},{"text":"Seven","start":26.6,"end":26.932},{"text":"rejections...","start":26.976,"end":27.836},{"text":"zero.","start":27.903,"end":28.236},{"text":"No","start":28.622,"end":28.637},{"text":"guaranteed","start":28.685,"end":29.17},{"text":"job.","start":29.253,"end":29.57},{"text":"Just","start":29.65,"end":29.915},{"text":"no","start":30.026,"end":30.248},{"text":"more","start":30.288,"end":30.448},{"text":"guessing.","start":30.492,"end":30.915},{"text":"Comment","start":31.248,"end":31.32},{"text":"RESUME,","start":31.387,"end":31.92},{"text":"and","start":31.937,"end":31.987},{"text":"I'll","start":32.054,"end":32.187},{"text":"DM","start":32.287,"end":32.52},{"text":"you","start":32.554,"end":32.654},{"text":"the","start":32.687,"end":32.787},{"text":"free","start":32.854,"end":33.12},{"text":"Claude","start":33.168,"end":33.454},{"text":"setup.","start":33.51,"end":33.987}];
+      // Caption groups are hidden where the scene itself prints the line.
+      const CAPTION_OFF = [[9.45, 11.15], [28.45, 31.1]];
+      const HOT = new Set(["SEVEN", "7", "REJECTED", "NUMBERS", "HUMAN", "BIN", "CEO", "TWIST", "ZERO", "RESUME", "FREE", "CLAUDES"]);
+
+      const tl = gsap.timeline({ paused: true });
+      const $ = (s) => document.querySelector(s);
+
+      // ---------- helpers ----------
+      function shake(sel, t, amp = 18, n = 8) {
+        const keys = [];
+        let seed = Math.floor(t * 1000) % 9973;
+        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647) - 0.5;
+        for (let i = 0; i < n; i++) {
+          const k = amp * (1 - i / n);
+          keys.push({ x: rnd() * 2 * k, y: rnd() * 2 * k, duration: 0.035 });
+        }
+        keys.push({ x: 0, y: 0, duration: 0.05 });
+        tl.to(sel, { keyframes: keys }, t);
+      }
+      function slam(sel, t, rot = -10) {
+        tl.fromTo(sel, { scale: 2.6, rotation: rot - 8, opacity: 0 }, { scale: 1, rotation: rot, opacity: 1, duration: 0.16, ease: "power4.in" }, t);
+      }
+      function popIn(sel, t, from = 0.4) {
+        tl.fromTo(sel, { scale: from, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.32, ease: "back.out(2.2)" }, t);
+      }
+      function riseIn(sel, t, y = 60, d = 0.4) {
+        tl.fromTo(sel, { y: y, opacity: 0 }, { y: 0, opacity: 1, duration: d, ease: "power3.out" }, t);
+      }
+
+      // ---------- background drift ----------
+      tl.fromTo("#bg-glow", { x: 0, y: 0 }, { x: 260, y: 180, duration: 35.6, ease: "sine.inOut" }, 0);
+      tl.fromTo("#bg-glow2", { x: 0, y: 0 }, { x: -320, y: -260, duration: 35.6, ease: "sine.inOut" }, 0);
+      tl.fromTo("#bg-dots", { y: 0 }, { y: 44 * 6, duration: 35.6, ease: "none" }, 0);
+
+      // ---------- S1 hook (0 – 6.0) ----------
+      tl.fromTo("#s1 .tape span", { scale: 1.12, rotation: -3 }, { scale: 1, rotation: -1.5, duration: 0.5, ease: "back.out(2)" }, 0);
+      tl.fromTo("#s1-resume", { y: 30, rotation: -4 }, { y: 0, rotation: -3, duration: 0.6, ease: "power3.out" }, 0);
+      popIn("#s1-timer", 0.55);
+      tl.fromTo("#s1-sec", { innerText: 7.4 }, { innerText: 0, duration: 2.6, ease: "none", snap: { innerText: 0.1 },
+        modifiers: { innerText: (v) => Number(v).toFixed(1) } }, 0.8);
+      tl.fromTo("#s1-ring", { attr: { "stroke-dashoffset": 0 } }, { attr: { "stroke-dashoffset": 1 }, duration: 2.6, ease: "none" }, 0.8);
+      popIn("#s1-q1", 2.5); popIn("#s1-q2", 2.75); popIn("#s1-q3", 3.0);
+      tl.to(["#s1-q1", "#s1-q2", "#s1-q3"], { opacity: 0, scale: 0.6, duration: 0.2 }, 3.4);
+      slam("#s1-stamp", 3.32, -12);
+      shake("#s1-in", 3.48, 22);
+      tl.to(["#s1-resume", "#s1-timer", "#s1-stamp"], { opacity: 0, y: -60, scale: 0.85, duration: 0.35, ease: "power2.in" }, 4.3);
+      gsap.utils.toArray("#s1-bots .botcell").forEach((el, i) => {
+        tl.fromTo(el, { scale: 0, opacity: 0, y: 40 }, { scale: 1, opacity: 1, y: 0, duration: 0.35, ease: "back.out(2.6)" }, 4.85 + i * 0.1);
+      });
+      gsap.utils.toArray("#s1-bots .bot").forEach((el, i) => {
+        tl.to(el, { y: -10, duration: 0.25, ease: "sine.inOut", yoyo: true, repeat: 1 }, 5.55 + i * 0.05);
+      });
+      popIn("#s1-x7", 5.2, 0.6);
+
+      // ---------- S2 proof (6.0 – 9.45) ----------
+      riseIn("#s2 .tape span", 6.0, -30, 0.3);
+      tl.fromTo("#s2-resume", { y: 140, opacity: 0, rotation: 2 }, { y: 0, opacity: 1, rotation: 0, duration: 0.45, ease: "power3.out" }, 6.0);
+      ["#s2-r1", "#s2-r3", "#s2-r4", "#s2-r6"].forEach((sel, i) => {
+        tl.fromTo(sel, { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.28, ease: "power1.inOut" }, 6.6 + i * 0.25);
+      });
+      riseIn("#s2-note", 6.5, 50, 0.35);
+      tl.fromTo("#s2-text", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.5, ease: "none" }, 6.82);
+      slam("#s2-stamp", 8.62, -8);
+      shake("#s2-in", 8.78, 24);
+
+      // ---------- S3 open loop (9.45 – 11.15) ----------
+      riseIn("#s3 .tape span", 9.45, -30, 0.3);
+      [["#s3-w1", 9.6], ["#s3-w2", 9.98], ["#s3-w3", 10.26], ["#s3-w4", 10.74]].forEach(([s, t]) => {
+        tl.fromTo(s, { y: 80, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.22, ease: "back.out(2)" }, t);
+      });
+      tl.to("#s3-words", { scale: 3.2, opacity: 0, duration: 0.25, ease: "power3.in" }, 10.93);
+
+      // ---------- S4 robot filter (11.15 – 13.95) ----------
+      riseIn("#s4 .tape span", 11.15, -30, 0.3);
+      tl.fromTo("#s4-panel", { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 11.15);
+      tl.fromTo("#s4-belt", { backgroundPositionX: "0px" }, { backgroundPositionX: "240px", duration: 2.8, ease: "none" }, 11.15);
+      tl.fromTo("#s4-resume", { x: -500 }, { x: 0, duration: 0.6, ease: "power3.out" }, 11.3);
+      tl.fromTo("#s4-laser", { opacity: 0 }, { opacity: 1, duration: 0.1 }, 12.1);
+      tl.to("#s4-laser", { y: 440, duration: 0.55, ease: "sine.inOut", yoyo: true, repeat: 1 }, 12.2);
+      riseIn("#s4-l1", 11.45, 20, 0.2);
+      riseIn("#s4-l2", 12.3, 20, 0.2);
+      riseIn("#s4-l3", 12.8, 20, 0.2);
+      popIn("#s4-human", 12.9, 0.5);
+      tl.to("#s4-human", { opacity: 0.25, duration: 0.12, yoyo: true, repeat: 5, ease: "none" }, 13.25);
+
+      // ---------- S5 hiring manager (13.95 – 17.05) ----------
+      riseIn("#s5 .tape span", 13.95, -30, 0.3);
+      popIn("#s5-boss .bot", 14.05);
+      popIn("#s5-think", 14.4);
+      tl.fromTo("#s5-resume", { y: 120, opacity: 0, rotation: 0 }, { y: 0, opacity: 1, rotation: 0, duration: 0.4, ease: "power3.out" }, 14.15);
+      riseIn("#s5-int", 14.3, 60, 0.35);
+      riseIn("#s5-bin", 14.4, 60, 0.35);
+      tl.to("#s5-resume", { x: -150, rotation: -8, duration: 0.35, ease: "power2.out" }, 15.4);
+      tl.to("#s5-int", { scale: 1.08, boxShadow: "0 0 50px rgba(47,210,122,0.7)", duration: 0.25, yoyo: true, repeat: 1 }, 15.4);
+      tl.to("#s5-resume", { x: 300, y: 260, rotation: 28, scale: 0.55, duration: 0.45, ease: "power3.in" }, 16.55);
+      tl.to("#s5-bin", { scale: 0.92, backgroundColor: "rgba(255,69,69,0.25)", duration: 0.05, yoyo: true, repeat: 1 }, 16.93);
+
+      // ---------- S6 five readers (17.05 – 21.7) ----------
+      riseIn("#s6 .tape span", 17.05, -30, 0.3);
+      [1, 2, 3, 4, 5].forEach((n, i) => {
+        tl.fromTo("#s6-c" + n, { x: 140, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "back.out(1.6)" }, 17.45 + i * 0.16);
+        popIn("#s6-c" + n + " .x", 17.75 + i * 0.16, 0.2);
+      });
+      tl.to("#s6-c4", { scale: 1.05, borderColor: "#d97757", backgroundColor: "#2a1d17", duration: 0.25, ease: "back.out(2)" }, 19.1);
+      tl.to("#s6-c4", { scale: 1, borderColor: "#2f2a25", backgroundColor: "#1b1916", duration: 0.3 }, 20.5);
+      tl.to("#s6-c5", { scale: 1.05, borderColor: "#d97757", backgroundColor: "#2a1d17", duration: 0.25, ease: "back.out(2)" }, 21.0);
+      slam("#s6-stamp", 21.15, -9);
+      shake("#s6-in", 21.3, 20);
+
+      // ---------- S7 twist (21.7 – 28.45) ----------
+      tl.fromTo("#s7-flash", { opacity: 0.95 }, { opacity: 0, duration: 0.35, ease: "power2.out" }, 21.75);
+      tl.fromTo("#s7-twist", { scale: 2.2, opacity: 0, skewX: -12 }, { scale: 1, opacity: 1, skewX: -6, duration: 0.18, ease: "power4.in" }, 21.72);
+      shake("#s7-in", 21.9, 26);
+      tl.to("#s7-twist", { scale: 1.12, duration: 0.7, ease: "none" }, 21.9);
+      tl.to("#s7-twist", { opacity: 0, scale: 2.4, duration: 0.25, ease: "power3.in" }, 22.62);
+      riseIn("#s7-head span", 22.85, -30, 0.3);
+      riseIn("#s7-counter", 22.9, -20, 0.3);
+      tl.fromTo("#s7-resume", { y: 160, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 22.85);
+      riseIn("#s7-fix", 23.4, 40, 0.3);
+      tl.fromTo("#s7-fx", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.9, ease: "steps(22)" }, 23.5);
+      [1, 3, 4, 6].forEach((n, i) => {
+        const t = 24.75 + i * 0.3;
+        tl.fromTo("#s7-r" + n, { opacity: 1, stroke: "#ff4545" }, { opacity: 1, stroke: "#ff4545", duration: 0.01 }, 22.85);
+        tl.fromTo("#s7-k" + n, { width: 0 }, { width: 640, duration: 0.14, ease: "power2.in" }, t);
+        tl.to("#s7-o" + n, { opacity: 0, y: -26, duration: 0.16, ease: "power2.in" }, t + 0.12);
+        tl.to("#s7-k" + n, { opacity: 0, duration: 0.1 }, t + 0.2);
+        tl.fromTo("#s7-n" + n, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.2, ease: "back.out(2)" }, t + 0.2);
+        tl.to("#s7-r" + n, { stroke: "#2fd27a", opacity: 0, duration: 0.3 }, t + 0.15);
+        tl.fromTo("#s7-c" + n, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "back.out(3)" }, t + 0.25);
+      });
+      tl.fromTo("#s7-val", { innerText: 7 }, { innerText: 0, duration: 1.26, ease: "none", snap: { innerText: 1 } }, 26.6);
+      tl.to("#s7-val", { color: "#2fd27a", duration: 0.05 }, 27.86);
+      tl.fromTo("#s7-val", { scale: 1 }, { scale: 1.6, immediateRender: false, duration: 0.14, ease: "power2.out", yoyo: true, repeat: 1 }, 27.88);
+      tl.to("#s7-fx", { color: "#2fd27a", duration: 0.1 }, 27.9);
+      slam("#s7-stamp", 27.84, 8);
+      shake("#s7-in", 27.95, 20);
+      // deterministic confetti burst on "zero"
+      (function () {
+        let seed = 42;
+        const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+        const colors = ["#2fd27a", "#ffd54a", "#d97757", "#f5f0e6", "#4d9bff"];
+        const host = $("#s7-conf");
+        for (let i = 0; i < 70; i++) {
+          const p = document.createElement("div");
+          p.className = "conf";
+          p.style.left = "540px";
+          p.style.top = "470px";
+          p.style.background = colors[i % colors.length];
+          host.appendChild(p);
+          const ang = rnd() * Math.PI * 2;
+          const sp = 260 + rnd() * 520;
+          const dx = Math.cos(ang) * sp;
+          const dy = Math.sin(ang) * sp * 0.8;
+          tl.fromTo(p, { x: 0, y: 0, rotation: 0, opacity: 1, scale: 0.6 + rnd() * 0.8 },
+            { x: dx, y: dy + 700, rotation: (rnd() - 0.5) * 900, opacity: 0, immediateRender: false, duration: 1.4 + rnd() * 0.5, ease: "power2.out" }, 27.9);
+        }
+      })();
+
+      // ---------- S8 honesty (28.45 – 31.1) ----------
+      tl.fromTo("#s8-dim", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 28.45);
+      riseIn("#s8-a", 28.6, 40, 0.4);
+      riseIn("#s8-b", 29.62, 40, 0.4);
+
+      // ---------- S9 CTA (31.1 – 35.6) ----------
+      riseIn("#s9 .tape span", 31.1, -30, 0.3);
+      tl.fromTo("#s9-comment", { scale: 1.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "power3.out" }, 31.2);
+      tl.fromTo("#s9-kw", { scale: 0.3, opacity: 0, rotation: -6 }, { scale: 1, opacity: 1, rotation: -3, duration: 0.35, ease: "back.out(2.4)" }, 31.38);
+      riseIn("#s9-box", 31.3, 40, 0.3);
+      tl.to("#s9-ph", { opacity: 0, duration: 0.05 }, 31.42);
+      tl.fromTo("#s9-typed", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.5, ease: "steps(6)" }, 31.42);
+      tl.to("#s9-post", { backgroundColor: "rgba(77,155,255,0.25)", scale: 0.92, duration: 0.1, yoyo: true, repeat: 1 }, 32.25);
+      tl.fromTo("#s9-posted", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(1.8)" }, 32.4);
+      tl.fromTo("#s9-dm", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.4)" }, 33.55);
+      tl.to("#s9-kw", { scale: 1.08, duration: 0.3, yoyo: true, repeat: 3, ease: "sine.inOut" }, 34.0);
+
+      // ---------- captions ----------
+      (function () {
+        const layer = $("#cap-layer");
+        const off = (t) => CAPTION_OFF.some(([a, b]) => t >= a && t < b);
+        const groups = [];
+        let cur = [];
+        WORDS.forEach((w, i) => {
+          const txt = w.text.replace(/["“”]/g, "").replace(/\.\.\.|…/g, "");
+          cur.push({ ...w, txt });
+          const brk = /[.,?:!…]|\.\.\.$/.test(w.text) || cur.length >= 3;
+          const next = WORDS[i + 1];
+          const gap = next ? next.start - w.end : 1;
+          if (brk || gap > 0.35 || !next) { groups.push(cur); cur = []; }
+        });
+        groups.forEach((g, gi) => {
+          const start = g[0].start - 0.04;
+          if (off(start)) return;
+          const nextG = groups[gi + 1];
+          let end = g[g.length - 1].end + 0.25;
+          if (nextG) end = Math.min(Math.max(end, g[g.length - 1].end + 0.05), nextG[0].start - 0.04);
+          CAPTION_OFF.forEach(([a]) => { if (start < a && end > a) end = a; });
+          const box = document.createElement("div");
+          box.className = "cap";
+          box.id = "cap-" + gi;
+          g.forEach((w, wi) => {
+            const s = document.createElement("span");
+            s.className = "cw" + (HOT.has(w.txt.toUpperCase().replace(/[^A-Z0-9]/g, "")) ? " hot" : "");
+            s.id = "cap-" + gi + "-" + wi;
+            s.textContent = w.txt;
+            box.appendChild(s);
+          });
+          layer.appendChild(box);
+          tl.fromTo(box, { opacity: 0, scale: 0.86, y: 18 }, { opacity: 1, scale: 1, y: 0, duration: 0.12, ease: "back.out(2)" }, start);
+          tl.to(box, { opacity: 0, duration: 0.06 }, end);
+          g.forEach((w, wi) => {
+            const el = "#cap-" + gi + "-" + wi;
+            const hot = box.children[wi].classList.contains("hot");
+            const at = Math.max(start, w.start);
+            tl.set(el, { backgroundColor: hot ? "#ffd54a" : "#d97757", color: hot ? "#141413" : "#ffffff" }, at);
+            tl.fromTo(el, { scale: 1 }, { scale: 1.08, duration: 0.08, yoyo: true, repeat: 1, ease: "power1.out" }, at);
+            const nextW = g[wi + 1];
+            if (nextW) tl.set(el, { backgroundColor: "rgba(0,0,0,0)", color: "#ffffff" }, nextW.start);
+          });
+        });
+      })();
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
