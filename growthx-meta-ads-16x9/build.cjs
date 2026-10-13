@@ -2,33 +2,54 @@
 // Generates growthx-meta-ads-16x9/index.html (static clips, one paused GSAP timeline).
 const fs = require("fs");
 const out = process.argv[2] || require("path").join(__dirname, "index.html");
-const DUR = 41.6;
+const DUR = 41.2;
 const sfx = [];
 const S = (t, type, vol = 1) => sfx.push({ t: +t.toFixed(3), type, vol });
 
 // w(text, t, cls) — one spoken word, revealed at global time t.
 const w = (text, t, cls = "") => ({ text, t, cls });
 
+// Voiceover (Bunty, ElevenLabs) starts after the Shark Tank hook.
+const VO = 6.5;
+// Phrase spans in the voiceover file (seconds), from its pauses + a local ASR check.
+// seg(start, end, tokens): spreads the words across the phrase by character count.
+const seg = (s, e, toks) => {
+  const total = toks.reduce((n, [t]) => n + t.length + 1, 0);
+  let cum = 0;
+  return toks.map(([text, cls]) => {
+    const t = VO + s + (cum / total) * (e - s) - 0.03;
+    cum += text.length + 1;
+    return w(text, +Math.max(t, VO + s - 0.03).toFixed(2), cls);
+  });
+};
+const g = (t) => +(VO + t).toFixed(2); // VO-file time → global time
+
+const A_ = seg(0, 2.67, [["agar", "sm"], ["apne", "sm"], ["D2C", "xl acc"], ["BRAND", "xl acc"], ["abhi", "md"], ["start", "md"], ["kiya", "md"], ["hai", "md"]]);
+const B_ = seg(2.87, 5.83, [["to", "sm"], ["yeh", "sm"], ["META", "lg hl"], ["AD", "lg hl"], ["STRATEGY", "lg hl"], ["apko", "md"], ["direct", "md"], ["CUSTOMER", "lg acc"], ["lake", "md"], ["degi", "md"]]);
+const C_ = seg(6.2, 6.9, [["karna", "md"], ["kuch", "md"], ["NAHI", "xl red"], ["HAI", "xl red"]]);
+const D_ = seg(7.4, 8.45, [["bss", "md"], ["EK", "lg acc"], ["campaign", "md"], ["bnao", "md"]]);
+const E_ = seg(8.65, 10.07, [["Sales"], ["Conversion"], ["objective"], ["ke"]]).map((x) => x.t);
+const F_ = seg(10.39, 10.76, [["aur", "md"], ["usmei", "md"]]);
+const G_ = seg(10.96, 12.05, [["3", "huge acc"], ["AD SETS", "lg"], ["add", "md"], ["karo", "md"]]);
+const SETS = [g(12.51), g(13.56), g(14.61)];
+const K_ = seg(16.03, 18.69, [["jo", "md"], ["apki", "md"], ["WEBSITE", "lg acc"], ["VISIT", "lg acc"], ["ya", "md"], ["VIDEO", "lg"], ["VIEWS", "lg"], ["pe", "md"], ["based", "md"], ["ho", "md"]]);
+const L_ = seg(19.13, 21.36, [["aur", "md"], ["jisne", "md"], ["apke", "md"], ["INSTAGRAM", "xl ig"], ["pe", "md"], ["engage", "md acc"], ["kiya", "md"], ["hai", "md"]]);
+const M_ = seg(21.56, 22.63, [["usko", "md"], ["LOOKALIKE", "xl acc"], ["mei", "md"], ["daldo", "md"]]);
+const N_ = seg(23.05, 23.75, [["aur", "md"], ["CREATIVE", "xl acc"]]);
+const O_ = seg(23.97, 26.63, [["jo", "md"], ["sabse", "md"], ["IMPORTANT", "lg hl"], ["hai", "md"], ["SALES", "xl acc"], ["ko", "md"], ["scale", "md"], ["karne", "md"], ["ke", "md"], ["liye", "md"]]);
+const P_ = seg(27.16, 28.41, [["Full", "lg"], ["Detailed", "lg"], ["PDF", "xl acc"], ["chahiye?", "lg"]]);
+const Q_ = seg(28.82, 29.88, [["Comment", "lg"], ["karo", "lg"], ["“META”", "huge acc"]]);
+const R_ = seg(30.14, 31.83, [["aur"], ["PDF"], ["seedha"], ["aapke"], ["DM"], ["mein"]]).map((x) => x.t);
+
+// Scene cuts sit in the pauses between phrases.
+const CUT = { s1: 6.35, s2: g(2.77), s3: g(6.05), s4: g(7.15), s5: g(10.25), s6: g(12.3), s7: g(15.9), s8: g(18.95), s9: g(21.46), s10: g(22.85), s11: O_[4].t - 0.12, s12: g(26.9), s13: g(28.62), s15: g(32.1) };
+
 // Scenes: start, end, lines of words, plus optional extra HTML + extra tweens.
 const scenes = [
-  { id: "s1", start: 6.35, end: 8.5, lines: [
-      [w("agar", 6.6, "sm"), w("apne", 6.78, "sm")],
-      [w("D2C", 7.0, "xl acc"), w("BRAND", 7.15, "xl acc")],
-      [w("abhi", 7.6, "md"), w("start", 7.75, "md"), w("kiya", 7.92, "md"), w("hai", 8.05, "md")],
-    ] },
-  { id: "s2", start: 8.5, end: 12.0, lines: [
-      [w("to", 8.6, "sm"), w("yeh", 8.78, "sm")],
-      [w("META", 9.4, "lg hl"), w("AD", 9.58, "lg hl"), w("STRATEGY", 9.76, "lg hl")],
-      [w("apko", 10.3, "md"), w("direct", 10.5, "md")],
-      [w("CUSTOMER", 11.0, "lg acc"), w("lake", 11.3, "md"), w("degi", 11.48, "md")],
-    ] },
-  { id: "s3", start: 12.0, end: 12.9, lines: [
-      [w("karna", 12.0, "md"), w("kuch", 12.15, "md")],
-      [w("NAHI", 12.32, "xl red"), w("HAI", 12.5, "xl red")],
-    ], shake: 12.4 },
-  { id: "s4", start: 12.9, end: 16.2, top: true, lines: [
-      [w("bss", 13.0, "md"), w("EK", 13.18, "lg acc"), w("campaign", 13.42, "md"), w("bnao", 13.65, "md")],
-    ], extra: `
+  { id: "s1", start: CUT.s1, end: CUT.s2, lines: [A_.slice(0, 2), A_.slice(2, 4), A_.slice(4)] },
+  { id: "s2", start: CUT.s2, end: CUT.s3, lines: [B_.slice(0, 2), B_.slice(2, 5), B_.slice(5, 7), B_.slice(7)] },
+  { id: "s3", start: CUT.s3, end: CUT.s4, lines: [C_.slice(0, 2), C_.slice(2)], shake: C_[2].t + 0.05 },
+  { id: "s4", start: CUT.s4, end: CUT.s5, top: true, lines: [D_], extra: `
       <div class="ui-card" id="s4-card">
         <div class="ui-label">CAMPAIGN OBJECTIVE</div>
         <div class="chips">
@@ -40,20 +61,14 @@ const scenes = [
         <div class="ui-foot" id="s4-foot"><span class="w-inline" id="s4-ob">objective</span> <span class="w-inline" id="s4-ke">ke</span></div>
       </div>`,
     tweens: (A) => {
-      A.pop("#s4-card", 13.8, 0.45);
-      A.pop("#s4-c1", 13.9); A.pop("#s4-c2", 13.95); A.pop("#s4-c3", 14.0);
-      A.flash("#s4-c3", 14.05);
-      A.pop("#s4-conv", 14.4);
-      A.pop("#s4-ob", 14.9); A.pop("#s4-ke", 15.4);
+      A.pop("#s4-card", D_[3].t + 0.15, 0.45);
+      A.pop("#s4-c1", E_[0] - 0.2); A.pop("#s4-c2", E_[0] - 0.1); A.pop("#s4-c3", E_[0]);
+      A.flash("#s4-c3", E_[0] + 0.05);
+      A.pop("#s4-conv", E_[1]);
+      A.pop("#s4-ob", E_[2]); A.pop("#s4-ke", E_[3]);
     } },
-  { id: "s5", start: 16.2, end: 18.4, lines: [
-      [w("aur", 16.4, "md"), w("usmei", 16.58, "md")],
-      [w("3", 17.0, "huge acc", "s5-num"), w("AD SETS", 17.18, "lg")],
-      [w("add", 17.5, "md"), w("karo", 17.68, "md")],
-    ], shake: 17.05 },
-  { id: "s6", start: 18.4, end: 22.8, top: true, lines: [
-      [w("3 AD SETS", 18.45, "sm dim")],
-    ], extra: `
+  { id: "s5", start: CUT.s5, end: CUT.s6, lines: [F_, G_.slice(0, 2), G_.slice(2)], shake: G_[0].t + 0.05 },
+  { id: "s6", start: CUT.s6, end: CUT.s7, top: true, lines: [[w("3 AD SETS", CUT.s6 + 0.05, "sm dim")]], extra: `
       <div class="sets">
         ${["Broad Audience|globe|01", "Interest Targeting|target|02", "Lookalike Audience|people|03"].map((s, i) => {
           const [name, icon, n] = s.split("|");
@@ -61,81 +76,53 @@ const scenes = [
         }).join("")}
       </div>`,
     tweens: (A) => {
-      [18.5, 20.0, 21.0].forEach((t, i) => { A.pop(`#s6-set${i}`, t, 0.45); A.activate(`#s6-set${i}`, t, [18.5, 20.0, 21.0][i + 1]); });
+      SETS.forEach((t, i) => { A.pop(`#s6-set${i}`, t, 0.45); A.activate(`#s6-set${i}`, t, SETS[i + 1]); });
     } },
-  { id: "s7", start: 22.8, end: 25.45, split: true, lines: [
-      [w("jo", 22.75, "md"), w("apki", 22.85, "md")],
-      [w("WEBSITE", 22.95, "lg acc"), w("VISIT", 23.1, "lg acc")],
-      [w("ya", 23.2, "md"), w("VIDEO", 23.3, "lg"), w("VIEWS", 23.45, "lg")],
-      [w("pe", 23.55, "md"), w("based", 23.65, "md"), w("ho", 23.8, "md")],
-    ], extra: `
+  { id: "s7", start: CUT.s7, end: CUT.s8, split: true, lines: [K_.slice(0, 2), K_.slice(2, 4), K_.slice(4, 7), K_.slice(7)], extra: `
       <div class="browser" id="s7-browser">
         <div class="bar"><i></i><i></i><i></i><div class="url">yourbrand.com</div></div>
         <div class="viewport"></div>
       </div>`,
     noDrift: true,
-    tweens: (A) => { T(`tl.fromTo("#s7-browser",{opacity:0},{opacity:1,duration:.15},22.8);`); } },
-  { id: "s8", start: 25.45, end: 28.1, lines: [
-      [w("aur", 25.5, "md"), w("jisne", 25.75, "md"), w("apke", 26.0, "md")],
-      [w("INSTAGRAM", 26.2, "xl ig")],
-      [w("pe", 26.9, "md"), w("engage", 27.05, "md acc"), w("kiya", 27.5, "md"), w("hai", 27.65, "md")],
-    ], extra: `
+    tweens: (A) => { T(`tl.fromTo("#s7-browser",{opacity:0},{opacity:1,duration:.15},${CUT.s7});`); } },
+  { id: "s8", start: CUT.s8, end: CUT.s9, lines: [L_.slice(0, 3), L_.slice(3, 4), L_.slice(4)], extra: `
       <div class="float f1" id="s8-f1">♥ 2.4K</div>
       <div class="float f2" id="s8-f2">💬 318</div>
       <div class="float f3" id="s8-f3">↗ 1.1K</div>`,
-    tweens: (A) => { A.pop("#s8-f1", 26.95); A.pop("#s8-f2", 27.15); A.pop("#s8-f3", 27.35); } },
-  { id: "s9", start: 28.1, end: 29.6, lines: [
-      [w("usko", 28.2, "md")],
-      [w("LOOKALIKE", 28.4, "xl acc")],
-      [w("mei", 28.9, "md"), w("daldo", 29.05, "md")],
-    ], extra: `<div class="dots" id="s9-dots">${Array.from({ length: 24 }, (_, i) => `<b class="dot" style="--i:${i}"></b>`).join("")}</div>`,
-    tweens: (A) => { A.dots("#s9-dots .dot", 28.3); } },
-  { id: "s10", start: 29.6, end: 31.9, lines: [
-      [w("aur", 29.85, "md")],
-      [w("CREATIVE", 30.0, "xl acc")],
-      [w("jo", 30.5, "md"), w("sabse", 30.65, "md")],
-      [w("IMPORTANT", 31.0, "lg hl"), w("hai", 31.3, "md")],
-    ], extra: `
+    tweens: (A) => { A.pop("#s8-f1", L_[5].t - 0.1); A.pop("#s8-f2", L_[5].t + 0.1); A.pop("#s8-f3", L_[5].t + 0.3); } },
+  { id: "s9", start: CUT.s9, end: CUT.s10, lines: [M_.slice(0, 1), M_.slice(1, 2), M_.slice(2)],
+    extra: `<div class="dots" id="s9-dots">${Array.from({ length: 24 }, (_, i) => `<b class="dot" style="--i:${i}"></b>`).join("")}</div>`,
+    tweens: (A) => { A.dots("#s9-dots .dot", M_[1].t - 0.1); } },
+  { id: "s10", start: CUT.s10, end: CUT.s11, lines: [N_.slice(0, 1), N_.slice(1), O_.slice(0, 2), O_.slice(2, 4)], extra: `
       <div class="cards">
         <div class="ad ad1" id="s10-a1"><div class="ad-img"></div><div class="ad-l"></div><div class="ad-l s"></div></div>
         <div class="ad ad2" id="s10-a2"><div class="ad-img"></div><div class="ad-l"></div><div class="ad-l s"></div></div>
         <div class="ad ad3" id="s10-a3"><div class="ad-img"></div><div class="ad-l"></div><div class="ad-l s"></div></div>
       </div>`,
-    tweens: (A) => { A.fan(["#s10-a1", "#s10-a2", "#s10-a3"], 30.0); } },
-  { id: "s11", start: 31.9, end: 33.6, lines: [
-      [w("SALES", 32.0, "xl acc")],
-      [w("ko", 32.45, "md"), w("scale", 32.55, "md"), w("karne", 32.7, "md"), w("ke", 32.82, "md"), w("liye", 32.92, "md")],
-    ], extra: `
+    tweens: (A) => { A.fan(["#s10-a1", "#s10-a2", "#s10-a3"], N_[1].t); } },
+  { id: "s11", start: CUT.s11, end: CUT.s12, lines: [O_.slice(4, 5), O_.slice(5)], extra: `
       <svg class="chart" viewBox="0 0 1600 600" id="s11-chart"><path id="s11-line" d="M0 560 L260 500 L480 520 L720 380 L960 400 L1200 210 L1420 120 L1600 30" /><path id="s11-arrow" d="M1530 20 L1610 26 L1585 100" /></svg>`,
-    tweens: (A) => { A.draw("#s11-line", 32.0, 1.4); T(`tl.fromTo("#s11-arrow",{opacity:0},{opacity:1,duration:.15},33.35);`); } },
-  { id: "s12", start: 33.6, end: 36.3, lines: [
-      [w("Full", 34.0, "lg"), w("Detailed", 34.2, "lg")],
-      [w("PDF", 34.45, "xl acc"), w("chahiye?", 34.65, "lg")],
-    ], extra: `
-      <div class="follow" id="s12-btn"><span class="f-a">+ FOLLOW</span><span class="f-b" id="s12-done">✓ FOLLOWING</span></div>
-      <div class="cursor" id="s12-cur"></div>`,
-    tweens: (A) => { A.follow(34.9); } },
-  // Voiceover ends after "PDF chahiye" (assets/voiceover.m4a is cut at 36.2s); this CTA is on-screen only.
-  { id: "s13", start: 36.3, end: 38.9, lines: [
-      [w("Comment", 36.4, "lg"), w("karo", 36.6, "lg")],
-      [w("“META”", 36.8, "huge acc")],
-    ], shake: 36.85, extra: `
+    tweens: (A) => { A.draw("#s11-line", O_[4].t, 1.2); T(`tl.fromTo("#s11-arrow",{opacity:0},{opacity:1,duration:.15},${(O_[4].t + 1.15).toFixed(2)});`); S(O_[4].t, "cash", .5); } },
+  { id: "s12", start: CUT.s12, end: CUT.s13, lines: [P_.slice(0, 2), P_.slice(2)] },
+  { id: "s13", start: CUT.s13, end: CUT.s15, lines: [Q_.slice(0, 2), Q_.slice(2)], shake: Q_[2].t + 0.05, extra: `
       <div class="cmt" id="s13-cmt">
         <div class="cmt-av"><img src="brand/logo-mark.png" alt="" /></div>
         <div class="cmt-in"><span class="cmt-ph">Add a comment…</span><span class="cmt-txt">${["M", "E", "T", "A"].map((c, i) => `<b id="s13-k${i}">${c}</b>`).join("")}</span></div>
         <div class="cmt-send" id="s13-send">Post</div>
       </div>
-      <div class="dm" id="s13-dm">PDF seedha aapke <span>DM</span> mein ✉</div>`,
+      <div class="dm"><span class="w-inline" id="s13-d0">aur</span> <span class="w-inline" id="s13-d1">PDF</span> <span class="w-inline" id="s13-d2">seedha</span> <span class="w-inline" id="s13-d3">aapke</span> <span class="w-inline dmk" id="s13-d4">DM</span> <span class="w-inline" id="s13-d5">mein ✉</span></div>`,
     tweens: (A) => {
-      A.pop("#s13-cmt", 37.0, 0.4);
-      T(`tl.fromTo("#s13-cmt .cmt-ph",{opacity:1},{opacity:0,duration:.05,immediateRender:false},37.25);`);
-      [37.3, 37.4, 37.5, 37.6].forEach((t, i) => { S(t, "tick", .5); T(`tl.fromTo("#s13-k${i}",{opacity:0,scale:.4},{opacity:1,scale:1,duration:.12,ease:"back.out(3)"},${t});`); });
-      S(37.8, "click", .9); S(37.86, "ding", .55);
-      T(`tl.to("#s13-send",{scale:.88,duration:.07,yoyo:true,repeat:1},37.8);`);
-      T(`tl.to("#s13-send",{backgroundColor:"#8B2FE8",color:"#FFFFFF",duration:.1},37.86);`);
-      A.pop("#s13-dm", 38.05, 0.4);
+      const c0 = Q_[2].t + 0.3;
+      A.pop("#s13-cmt", c0 - 0.05, 0.35);
+      T(`tl.fromTo("#s13-cmt .cmt-ph",{opacity:1},{opacity:0,duration:.05,immediateRender:false},${(c0 + 0.2).toFixed(2)});`);
+      [0, 1, 2, 3].forEach((i) => { const t = +(c0 + 0.25 + i * 0.08).toFixed(2); S(t, "tick", .5); T(`tl.fromTo("#s13-k${i}",{opacity:0,scale:.4},{opacity:1,scale:1,duration:.12,ease:"back.out(3)"},${t});`); });
+      const post = R_[1];
+      S(post, "click", .9); S(post + 0.06, "ding", .55);
+      T(`tl.to("#s13-send",{scale:.88,duration:.07,yoyo:true,repeat:1},${post});`);
+      T(`tl.to("#s13-send",{backgroundColor:"#8B2FE8",color:"#FFFFFF",duration:.1},${(post + 0.06).toFixed(2)});`);
+      R_.forEach((t, i) => T(`tl.fromTo("#s13-d${i}",{opacity:0,y:30},{opacity:1,y:0,duration:.22,ease:"back.out(2)"},${t});`));
     } },
-  { id: "s15", start: 38.9, end: DUR, lines: [], noDrift: true, extra: `
+  { id: "s15", start: CUT.s15, end: DUR, lines: [], noDrift: true, extra: `
       <div class="outro">
         <div class="logo-wrap" id="s15-logo"><div class="logo-ring" id="s15-ring"></div><img class="logo-big" src="brand/logo.png" alt="The GrowthX Studio" /></div>
         <div class="outro-r">
@@ -145,16 +132,17 @@ const scenes = [
         </div>
       </div>`,
     tweens: (A) => {
-      T(`tl.fromTo("#s15-logo",{opacity:0,scale:.5,rotation:-25},{opacity:1,scale:1,rotation:0,duration:.7,ease:"back.out(1.7)"},38.95);`);
-      T(`tl.fromTo("#s15-ring",{opacity:.9,scale:1},{opacity:0,scale:1.6,duration:.9,ease:"power2.out"},39.1);`);
-      T(`tl.to("#s15-logo",{scale:1.04,duration:2,ease:"sine.inOut"},39.65);`);
-      A.pop("#s15-pill", 39.4, 0.45); A.pop("#s15-mail", 39.65, 0.45);
-      T(`tl.fromTo("#s15-tag",{opacity:0,x:-40},{opacity:1,x:0,duration:.6,ease:"power3.out"},39.9);`);
-      S(38.95, "impact", .8); S(39.0, "shimmer", .55);
+      const o = CUT.s15;
+      T(`tl.fromTo("#s15-logo",{opacity:0,scale:.5,rotation:-25},{opacity:1,scale:1,rotation:0,duration:.7,ease:"back.out(1.7)"},${o + 0.05});`);
+      T(`tl.fromTo("#s15-ring",{opacity:.9,scale:1},{opacity:0,scale:1.6,duration:.9,ease:"power2.out"},${o + 0.2});`);
+      T(`tl.to("#s15-logo",{scale:1.04,duration:2,ease:"sine.inOut"},${o + 0.75});`);
+      A.pop("#s15-pill", +(o + 0.5).toFixed(2), 0.45); A.pop("#s15-mail", +(o + 0.75).toFixed(2), 0.45);
+      T(`tl.fromTo("#s15-tag",{opacity:0,x:-40},{opacity:1,x:0,duration:.6,ease:"power3.out"},${(o + 1.0).toFixed(2)});`);
+      S(o + 0.05, "impact", .8); S(o + 0.1, "shimmer", .55);
     } },
 ];
 
-const wipes = [6.35, 12.9, 18.4, 22.8, 25.45, 29.6, 33.6, 36.3, 38.9];
+const wipes = [CUT.s1, CUT.s4, CUT.s6, CUT.s7, CUT.s8, CUT.s10, CUT.s12, CUT.s13, CUT.s15];
 
 let wordId = 0;
 const words = [];
@@ -231,7 +219,7 @@ wipes.forEach((t, i) => {
 });
 T(`tl.fromTo("#flash",{opacity:.85},{opacity:0,duration:.25,ease:"power2.out",immediateRender:false},6.35);`);
 
-S(5.45, "riser", .6); S(6.35, "impact", .9); S(32.0, "cash", .5);
+S(5.45, "riser", .6); S(6.35, "impact", .9); 
 S(0.15, "pop", .4);
 T(`tl.fromTo("#bg-ring1",{rotation:0},{rotation:120,duration:${DUR},ease:"none"},0);`);
 T(`tl.fromTo("#bg-ring2",{rotation:0},{rotation:-90,duration:${DUR},ease:"none"},0);`);
@@ -364,7 +352,7 @@ const html = `<!doctype html>
       .cmt-send { flex:none; font-size:40px; font-weight:900; padding:18px 34px; border-radius:20px; color:var(--acc); border:2px solid var(--pur2); }
       #s13 .huge { font-size:290px; margin-top:34px; }
       .dm { font-size:58px; font-weight:700; }
-      .dm span { color:var(--acc); font-weight:900; }
+      .dm .dmk { color:var(--acc); font-weight:900; }
       .cta { display:flex; flex-direction:column; align-items:center; gap:30px; margin-top:30px; }
       .pill { background:linear-gradient(90deg,var(--pur),var(--pur2)); color:#fff; box-shadow:0 0 50px rgba(139,47,232,.6); font-size:64px; font-weight:900; padding:22px 56px; border-radius:999px; }
       .mail { font-size:46px; font-weight:700; padding:18px 40px; border-radius:20px; background:rgba(255,255,255,.06); border:2px solid rgba(255,255,255,.2); }
@@ -408,14 +396,15 @@ const html = `<!doctype html>
 
       ${sceneHtml}
 
-      <video id="website" src="assets/website.mp4" muted playsinline data-start="22.85" data-duration="2.4" data-track-index="5"></video>
+      <video id="website" src="assets/website.mp4" muted playsinline data-start="${(CUT.s7 + 0.05).toFixed(2)}" data-duration="${(CUT.s8 - CUT.s7 - 0.05).toFixed(2)}" data-playback-rate="${(2.4 / (CUT.s8 - CUT.s7 - 0.05)).toFixed(3)}" data-track-index="5"></video>
 
       <div id="wipe" class="clip" data-start="0" data-duration="${DUR}" data-track-index="6"><div class="wp"></div></div>
       <div id="flash" class="clip" data-start="0" data-duration="${DUR}" data-track-index="7"></div>
-      <div id="brand" class="clip" data-start="0" data-duration="38.9" data-track-index="8"><div class="bi"><img src="brand/logo-mark.png" alt="GX" /><span>THE GROWTH<b>X</b> STUDIO</span></div></div>
+      <div id="brand" class="clip" data-start="0" data-duration="${CUT.s15}" data-track-index="8"><div class="bi"><img src="brand/logo-mark.png" alt="GX" /><span>THE GROWTH<b>X</b> STUDIO</span></div></div>
       <div id="progress" class="clip" data-start="0" data-duration="${DUR}" data-track-index="9"><i></i></div>
 
-      <audio id="vo" src="assets/voiceover.m4a" data-start="0" data-duration="36.2" data-track-index="10" data-volume="1"></audio>
+      <audio id="hook-audio" src="assets/hook-audio.m4a" data-start="0" data-duration="6.35" data-track-index="10" data-volume="1"></audio>
+      <audio id="vo" src="assets/voiceover.m4a" data-start="${VO}" data-duration="32.03" data-track-index="12" data-volume="1"></audio>
       <audio id="sfx" src="assets/sfx.wav" data-start="0" data-duration="${DUR}" data-track-index="11" data-volume="0.6"></audio>
     </div>
     <script>
