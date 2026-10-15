@@ -50,6 +50,21 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Cinematic shot direction for AI video (Veo3 / Kling / Luma via muapi.ai) | `muapi-cinema-director`   |
 | Retro pixel-art multi-scene video template (HyperFrames) | `8-bit-orbit-video-template`             |
 | Product photo to cinematic video ad via muapi.ai (paid, needs key) | `muapi-product-video-ad-maker`      |
+| Set up brand for motion: brand.md + MOTION.md (read first by the others) | `brand-intake`                    |
+| Turn a rough idea into a precise motion build brief     | `motion-brief-writer`                         |
+| Break down a reference video or website into a Motion prompt | `reference-to-motion`                    |
+| Full 8-part Claude Motion prompt for one short loop     | `motion-prompt-writer`                        |
+| 30-45 s product launch video in code                    | `launch-video`                                |
+| Mac-style keynote launch film (menu bar, notch, widgets) | `apple-launch-film`                          |
+| 30-60 s Vox-style documentary explainer in code         | `vox-explainer`                               |
+| Looping animated chart; values stay exactly as given    | `animated-chart`                              |
+| Looping milestone count-up (followers, customers, revenue) | `milestone-reveal`                         |
+| 16 premium 8-second UI / data / type motion effects     | `motion-effects`                              |
+| 8-15 s cinematic 3D title sequence (Three.js)           | `title-sequence-3d`                           |
+| Same brief to three AI models, stacked comparison       | `model-showdown`                              |
+| 12-20 s promo that drives readers to a newsletter edition | `newsletter-promo`                          |
+| Newsletter cover as a seamless looping GIF              | `loop-cover`                                  |
+| Any horizontal or square video to 1080x1920 Reel / TikTok | `reel-export`                               |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
 **Carousels and static graphics:**
@@ -79,6 +94,7 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `dockkit`: `dpearson2699/swift-ios-skills`
 - `fal-lip-sync`, `remotion`, `frame-*`, `video-hyperframes`: `nexu-io/open-design`
 - `video-motion-graphics`: `dylantarre/animation-principles`
+- `brand-intake`, `motion-brief-writer`, `reference-to-motion`, `motion-prompt-writer`, `launch-video`, `apple-launch-film`, `vox-explainer`, `animated-chart`, `milestone-reveal`, `motion-effects`, `title-sequence-3d`, `model-showdown`, `newsletter-promo`, `loop-cover`, `reel-export`: `charlie947/motion-graphics-skills`
 - fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`,
   `model-routing`): `fal-ai-community/skills`
 
@@ -99,6 +115,7 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 - Voiceover and generated music need a HeyGen account (`npx hyperframes auth`) or a Gemini API key.
 - The `higgsfield-*` skills need the `higgsfield` CLI and a Higgsfield account (`higgsfield auth login`);
   each generation spends Higgsfield credits.
+- `brand-intake` writes `brand.md` and `MOTION.md` into the project. The other `charlie947` motion skills read them first, so run `brand-intake` before any of them.
 - Telemetry: set `HYPERFRAMES_NO_TELEMETRY=1` to turn it off.
 
 ## Repo layout
