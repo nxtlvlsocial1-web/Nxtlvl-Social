@@ -1,8 +1,10 @@
-# GrowthX: 3 free e-com tools reel, script (v1 draft, 34 s)
+# GrowthX: 3 free e-com tools reel, script (v2: Comment META CTA)
 
 Same script as the reference reel, Hinglish. Use this paragraph to generate the GrowthX voiceover (e.g. the ElevenLabs "Bunty" voice).
 
-Kya he E-Commerce brand banaoge? Agar yeh 3 extensions hi use nahi ki, kyuki yeh tools tumhe beginner se pro bana denge, aur tumhare competitors ka sara data tumhare samne rakh denge. Pehla hai Free Trendtrack Chrome Extension. Yeh competitors ke saare best sellers, traffic source aur theme ki saari information tumhe de dega. Dusra hai E-Commerce Profit Calculator. Yeh tumhe product add karne se pehle hi bata dega ki kitna profit margin banega. Aur 3rd hai — is tool ki help se tum apne competitor ke winning ads spy kar sakte ho. Aur iska link meri WhatsApp Community mai mil jayega, jiska link meri bio mei hai.
+Kya aap E-Commerce brand banaoge? Agar yeh 3 extensions hi use nahi ki? Kyunki yeh tools tumhe beginner se pro bana denge, aur tumhare competitors ka saara data tumhare saamne rakh denge. Pehla hai, Free Trendtrack Chrome Extension. Yeh competitors ke saare best sellers, traffic source aur theme ki saari information tumhe de dega. Doosra hai, E-Commerce Profit Calculator. Yeh tumhe product add karne se pehle hi bata dega ki kitna profit margin banega. Aur teesra hai, is tool ki help se tum apne competitor ke winning ads spy kar sakte ho. Aur in teeno tools ka link chahiye? Toh comment karo META, aur link seedha aapke DM mein.
+
+Voice: ElevenLabs "Bunty – Fun Podcast Host" (voice id 3OUAuH7CeDSQhCCijs1Y), model Eleven v4, same as the Meta Ads reel.
 
 ## Scenes
 
@@ -18,5 +20,5 @@ Kya he E-Commerce brand banaoge? Agar yeh 3 extensions hi use nahi ki, kyuki yeh
 | 0:19 | "product add karne se PEHLE HI batadega ki kitna PROFIT MARGIN bnega" |
 | 0:23 | "Aur 3RD hai, is tool ki help se" + card #3 (name not said in the reel) |
 | 0:25 | "Tum apne COMPETITOR ke WINNING ADS SPY kar skte ho" + ad cards |
-| 0:28 | "Aur iska link meri WhatsApp Community mai mil jayegi, jiska link meri BIO mei hai" |
-| 0:31 | Logo outro: LINK IN BIO · thegrowthxstudio@gmail.com · BUILD • GROW • SCALE |
+| 0:28 | "Aur in teeno tools ka link chahiye? Toh comment karo META, aur link seedha aapke DM mein" + comment box |
+| 0:31 | Logo outro: COMMENT "META" · thegrowthxstudio@gmail.com · BUILD • GROW • SCALE |
