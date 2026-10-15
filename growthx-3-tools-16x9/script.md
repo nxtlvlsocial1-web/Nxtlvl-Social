@@ -1,8 +1,8 @@
-# GrowthX: 3 free e-com tools reel, script (v2: Comment META CTA)
+# GrowthX: 3 free e-com tools reel, script (v3: hook "Kya hi…", Comment TOOLS CTA)
 
 Same script as the reference reel, Hinglish. Use this paragraph to generate the GrowthX voiceover (e.g. the ElevenLabs "Bunty" voice).
 
-Kya aap E-Commerce brand banaoge? Agar yeh 3 extensions hi use nahi ki? Kyunki yeh tools tumhe beginner se pro bana denge, aur tumhare competitors ka saara data tumhare saamne rakh denge. Pehla hai, Free Trendtrack Chrome Extension. Yeh competitors ke saare best sellers, traffic source aur theme ki saari information tumhe de dega. Doosra hai, E-Commerce Profit Calculator. Yeh tumhe product add karne se pehle hi bata dega ki kitna profit margin banega. Aur teesra hai, is tool ki help se tum apne competitor ke winning ads spy kar sakte ho. Aur in teeno tools ka link chahiye? Toh comment karo META, aur link seedha aapke DM mein.
+Kya hi E-Commerce brand banaoge? Agar yeh 3 extensions hi use nahi ki? Kyunki yeh tools tumhe beginner se pro bana denge, aur tumhare competitors ka saara data tumhare saamne rakh denge. Pehla hai, Free Trendtrack Chrome Extension. Yeh competitors ke saare best sellers, traffic source aur theme ki saari information tumhe de dega. Doosra hai, E-Commerce Profit Calculator. Yeh tumhe product add karne se pehle hi bata dega ki kitna profit margin banega. Aur teesra hai, is tool ki help se tum apne competitor ke winning ads spy kar sakte ho. Aur in teeno tools ka link chahiye? Toh comment karo TOOLS, aur link seedha aapke DM mein.
 
 Voice: ElevenLabs "Bunty – Fun Podcast Host" (voice id 3OUAuH7CeDSQhCCijs1Y), model Eleven v4, same as the Meta Ads reel.
 
@@ -20,5 +20,5 @@ Voice: ElevenLabs "Bunty – Fun Podcast Host" (voice id 3OUAuH7CeDSQhCCijs1Y), 
 | 0:19 | "product add karne se PEHLE HI batadega ki kitna PROFIT MARGIN bnega" |
 | 0:23 | "Aur 3RD hai, is tool ki help se" + card #3 (name not said in the reel) |
 | 0:25 | "Tum apne COMPETITOR ke WINNING ADS SPY kar skte ho" + ad cards |
-| 0:28 | "Aur in teeno tools ka link chahiye? Toh comment karo META, aur link seedha aapke DM mein" + comment box |
-| 0:31 | Logo outro: COMMENT "META" · thegrowthxstudio@gmail.com · BUILD • GROW • SCALE |
+| 0:28 | "Aur in teeno tools ka link chahiye? Toh comment karo TOOLS, aur link seedha aapke DM mein" + comment box |
+| 0:31 | Logo outro: COMMENT "TOOLS" · thegrowthxstudio@gmail.com · BUILD • GROW • SCALE |

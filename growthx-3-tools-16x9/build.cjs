@@ -29,7 +29,7 @@ const toolCard = (id, n, icon, name, tag) => `
         <div class="tool-b"><div class="tool-t">${name}</div><div class="tool-s">${tag}</div></div>
       </div>`;
 
-const A_ = seg(0.02, 1.9, [["kya", "md"], ["aap", "md"], ["E-COMMERCE", "xl acc"], ["brand", "lg"], ["banaoge?", "lg"]]);
+const A_ = seg(0.02, 1.9, [["kya", "md"], ["hi", "md"], ["E-COMMERCE", "xl acc"], ["brand", "lg"], ["banaoge?", "lg"]]);
 const B_ = seg(2.23, 4.1, [["Agar", "md"], ["yeh", "md"], ["3", "huge acc"], ["EXTENSIONS", "lg"], ["hi", "md"], ["use", "md"], ["nahi", "md"], ["ki?", "md"]]);
 const D_ = seg(4.66, 6.53, [["kyunki", "md acc"], ["yeh", "md"], ["tools", "md"], ["tumhe", "md"], ["BEGINNER", "lg"], ["se", "md"]]);
 const E_ = seg(6.68, 7.37, [["PRO", "xl acc"], ["bana", "md"], ["denge", "md"]]);
@@ -46,7 +46,7 @@ const O_ = seg(27.44, 28.21, [["Aur", "md"], ["3RD", "xl acc"], ["hai", "lg"]]);
 const PQ = seg(28.47, 32.23, [["is", "md"], ["tool", "md"], ["ki", "md"], ["help", "md"], ["se", "md"], ["tum", "md"], ["apne", "md"], ["COMPETITOR", "xl acc"], ["ke", "md"], ["WINNING", "lg hl"], ["ADS", "lg hl"], ["SPY", "lg acc"], ["kar", "md"], ["sakte", "md"], ["ho", "md"]]);
 const P_ = PQ.slice(0, 12), Q_ = PQ.slice(12);
 const R_ = seg(32.67, 34.11, [["Aur", "md"], ["in", "md"], ["teeno", "md"], ["TOOLS", "lg acc"], ["ka", "md"], ["LINK", "lg hl"], ["chahiye?", "lg"]]);
-const S_ = seg(34.48, 35.55, [["Toh", "md"], ["comment", "lg"], ["karo", "lg"], ["“META”", "huge acc"]]);
+const S_ = seg(34.48, 35.55, [["Toh", "md"], ["comment", "lg"], ["karo", "lg"], ["“TOOLS”", "huge acc"]]);
 const T_ = [...seg(35.81, 36.3, [["aur"], ["link"]]), ...seg(36.45, 37.54, [["seedha"], ["aapke"], ["DM"], ["mein"]])].map((x) => x.t);
 
 const CUT = { c1: 0, c2: 2.07, c3: 4.38, c4: 7.58, c5: 11.29, c6: 14.27, c7: 20.0, c8: 22.82, c9: 27.22, c10: P_[5].t - 0.1, c11: 32.45, c12: 34.3, out: 37.65 };
@@ -105,7 +105,7 @@ const scenes = [
   { id: "c12", start: CUT.c12, end: CUT.out, lines: [S_.slice(0, 3), S_.slice(3)], shake: S_[3].t + 0.05, extra: `
       <div class="cmt" id="c12-cmt">
         <div class="cmt-av"><img src="brand/logo-mark.png" alt="" /></div>
-        <div class="cmt-in"><span class="cmt-ph">Add a comment…</span><span class="cmt-txt">${["M", "E", "T", "A"].map((c, i) => `<b id="c12-k${i}">${c}</b>`).join("")}</span></div>
+        <div class="cmt-in"><span class="cmt-ph">Add a comment…</span><span class="cmt-txt">${["T", "O", "O", "L", "S"].map((c, i) => `<b id="c12-k${i}">${c}</b>`).join("")}</span></div>
         <div class="cmt-send" id="c12-send">Post</div>
       </div>
       <div class="dm">${["aur", "link", "seedha", "aapke", "DM", "mein ✉"].map((x, i) => `<span class="w-inline${x === "DM" ? " dmk" : ""}" id="c12-d${i}">${x}</span>`).join(" ")}</div>`,
@@ -113,7 +113,7 @@ const scenes = [
       const c0 = S_[3].t + 0.3;
       A.pop("#c12-cmt", +(c0 - 0.05).toFixed(2), 0.35);
       T(`tl.fromTo("#c12-cmt .cmt-ph",{opacity:1},{opacity:0,duration:.05,immediateRender:false},${(c0 + 0.2).toFixed(2)});`);
-      [0, 1, 2, 3].forEach((i) => { const t = +(c0 + 0.25 + i * 0.08).toFixed(2); S(t, "tick", .5); T(`tl.fromTo("#c12-k${i}",{opacity:0,scale:.4},{opacity:1,scale:1,duration:.12,ease:"back.out(3)"},${t});`); });
+      [0, 1, 2, 3, 4].forEach((i) => { const t = +(c0 + 0.25 + i * 0.07).toFixed(2); S(t, "tick", .5); T(`tl.fromTo("#c12-k${i}",{opacity:0,scale:.4},{opacity:1,scale:1,duration:.12,ease:"back.out(3)"},${t});`); });
       const post = T_[1];
       S(post, "click", .9); S(post + 0.06, "ding", .55);
       T(`tl.to("#c12-send",{scale:.88,duration:.07,yoyo:true,repeat:1},${post});`);
@@ -124,7 +124,7 @@ const scenes = [
       <div class="outro">
         <div class="logo-wrap" id="out-logo"><div class="logo-ring" id="out-ring"></div><img class="logo-big" src="brand/logo.png" alt="The GrowthX Studio" /></div>
         <div class="outro-r">
-          <div class="pill" id="out-pill">COMMENT “META” 💬</div>
+          <div class="pill" id="out-pill">COMMENT “TOOLS” 💬</div>
           <div class="mail" id="out-mail"><span class="mail-ico">✉</span> thegrowthxstudio@gmail.com</div>
           <div class="tagline" id="out-tag">BUILD <i>•</i> GROW <i>•</i> SCALE</div>
         </div>
