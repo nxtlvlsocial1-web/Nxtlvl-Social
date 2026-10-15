@@ -16,6 +16,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Our rules: formats, safe zones, captions, naming        | `nxtlvl-social-video`                         |
 | Routing any video request                               | `hyperframes`                                 |
 | Short motion graphic, kinetic text, stat, logo sting    | `motion-graphics`                             |
+| Writing a reusable 8-part brand brief + scene prompt for a looping motion graphic | `motion-prompt-writer` |
 | Captions on talking-head footage                        | `embedded-captions`                           |
 | Graphic overlays on interview / podcast footage         | `talking-head-recut`                          |
 | Beat-synced video from a music track                    | `music-to-video`                              |
@@ -74,6 +75,7 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `dockkit`: `dpearson2699/swift-ios-skills`
 - `fal-lip-sync`, `remotion`, `frame-*`, `video-hyperframes`: `nexu-io/open-design`
 - `video-motion-graphics`: `dylantarre/animation-principles`
+- `motion-prompt-writer`: `charlie947/motion-graphics-skills`
 - fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`,
   `model-routing`): `fal-ai-community/skills`
 

@@ -217,6 +217,12 @@
       "skillPath": "skills/motion-graphics/SKILL.md",
       "computedHash": "73420963bea97e1008257c32f89b172486e87b87132ee4ebc83d21e1805ffd25"
     },
+    "motion-prompt-writer": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/motion-prompt-writer/SKILL.md",
+      "computedHash": "bf3405e5a1c570a78cda9892bec8c75d6a25aec7110ef50517d93a9278c6f2a8"
+    },
     "music-to-video": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
