@@ -13,6 +13,24 @@
       "skillPath": "skills/ad-creative/SKILL.md",
       "computedHash": "7c2beab672f7f50542c40472fe45ad4a1920f2395ccf14f79bb54cf58a004b22"
     },
+    "animated-chart": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/animated-chart/SKILL.md",
+      "computedHash": "d4ea17e2a117e1acb413f0a89e95f4e466f21eab7b7ac84ce69fe2fa646af8a8"
+    },
+    "apple-launch-film": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/apple-launch-film/SKILL.md",
+      "computedHash": "39333ca47fc5962e3dfcaeaefbdff22ede83c266b21eeb983c9a5237d3398a39"
+    },
+    "brand-intake": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/brand-intake/SKILL.md",
+      "computedHash": "636c86ad7439dea668d21898e6391a6dc66d2d2ce9c3654d4a4cf95d138abbc2"
+    },
     "canvas-design": {
       "source": "anthropics/skills",
       "sourceType": "github",
@@ -199,6 +217,18 @@
       "skillPath": "skills/image/SKILL.md",
       "computedHash": "c0f8c9af68113a4ae53a0e816d6f4573a3bb9f3d26e7400ff5fb3c9348d2e510"
     },
+    "launch-video": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/launch-video/SKILL.md",
+      "computedHash": "f3ea76b69c8e50c2c1d840d02326320225fdf576eb4cb809eec36cfdebc5cf26"
+    },
+    "loop-cover": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/loop-cover/SKILL.md",
+      "computedHash": "ecafcd261543ebe63a160f4ba71b453b93bbe22ab3acfca7f63d095027745278"
+    },
     "marketing": {
       "source": "fal-ai-community/skills",
       "sourceType": "github",
@@ -211,17 +241,47 @@
       "skillPath": "skills/media-use/SKILL.md",
       "computedHash": "f6875c3ad46d7661a0e8675984b35d29de50e4b7e73600803347d0c0877c4de7"
     },
+    "milestone-reveal": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/milestone-reveal/SKILL.md",
+      "computedHash": "8543d8b6849a3ff2829bfd89e32c779d869c73114d02fe5aaf045358ed77e77d"
+    },
     "model-routing": {
       "source": "fal-ai-community/skills",
       "sourceType": "github",
       "skillPath": "skills/model-routing/SKILL.md",
       "computedHash": "b1e4e2e6caa563eca92069f3f2bd5051dc33d2425406d1bf0c8a3c74d193bd44"
     },
+    "model-showdown": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/model-showdown/SKILL.md",
+      "computedHash": "64efb0a15009cd14766292c7bc253ada065e79e50b8fc015ea0dc27292a0c16a"
+    },
+    "motion-brief-writer": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/motion-brief-writer/SKILL.md",
+      "computedHash": "a32cfd5d6a6905591866d4a5b1636d748d067ec7f2ab4c37a13df7eba503ddb3"
+    },
+    "motion-effects": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/motion-effects/SKILL.md",
+      "computedHash": "0cfeae81a82ddf8f17d88d3031f973402324b2c92418972cd5acdee5f3cdc573"
+    },
     "motion-graphics": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
       "skillPath": "skills/motion-graphics/SKILL.md",
       "computedHash": "73420963bea97e1008257c32f89b172486e87b87132ee4ebc83d21e1805ffd25"
+    },
+    "motion-prompt-writer": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/motion-prompt-writer/SKILL.md",
+      "computedHash": "bf3405e5a1c570a78cda9892bec8c75d6a25aec7110ef50517d93a9278c6f2a8"
     },
     "muapi-cinema-director": {
       "source": "samuraigpt/generative-media-skills",
@@ -241,6 +301,12 @@
       "skillPath": "skills/music-to-video/SKILL.md",
       "computedHash": "66793a5bc8dfb9ce03b7721fe42f4a685d8a95bc727602e6d661ec1f4aa9711d"
     },
+    "newsletter-promo": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/newsletter-promo/SKILL.md",
+      "computedHash": "f2461df853e664cf2eed2c8eaa13a5adf518b531b864b4174b02ed813d818f0a"
+    },
     "product-launch-video": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
@@ -252,6 +318,18 @@
       "sourceType": "github",
       "skillPath": "skills/raw-video-processing/SKILL.md",
       "computedHash": "109bbd733ef5011dc8e519b802fde44173216c64a71fccbb4894ffabd96185ce"
+    },
+    "reel-export": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/reel-export/SKILL.md",
+      "computedHash": "12b32239a9061aec3f81e487149142848146020521c464fafaee28af89cfcb3e"
+    },
+    "reference-to-motion": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/reference-to-motion/SKILL.md",
+      "computedHash": "0c8179d8a8610a86fef6cf6a243b98ebe579e9215ef38f637c02d8eb5be400db"
     },
     "remotion": {
       "source": "nexu-io/open-design",
@@ -289,6 +367,12 @@
       "skillPath": "skills/taste/SKILL.md",
       "computedHash": "74bd7ffcd8231d77b752d0cfca1daf264b50d182259945f89a077e16f4e1aae0"
     },
+    "title-sequence-3d": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/title-sequence-3d/SKILL.md",
+      "computedHash": "594ea034b629602842a62b9f200c0bdc776c39ebcf19e6736ffb4c50d9da515f"
+    },
     "transitions-polish": {
       "source": "jakubantalik/transitions.dev",
       "sourceType": "github",
@@ -318,6 +402,12 @@
       "sourceType": "github",
       "skillPath": "SKILL.md",
       "computedHash": "896d55ce2c26c3d0f6d5598c34eb882f7d5c6e98fc09aa44b55d4c7e2ac357a5"
+    },
+    "vox-explainer": {
+      "source": "charlie947/motion-graphics-skills",
+      "sourceType": "github",
+      "skillPath": "skills/vox-explainer/SKILL.md",
+      "computedHash": "3fd9f8fc9f8f190a53bc5ca31b434bb7e2a32b11f2c43aa20d6a88c596d57a50"
     }
   }
 }

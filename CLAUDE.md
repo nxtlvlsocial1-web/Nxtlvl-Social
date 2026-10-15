@@ -52,6 +52,29 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Product photo to cinematic video ad via muapi.ai (paid, needs key) | `muapi-product-video-ad-maker`      |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
+**Code-built motion pack** (`charlie947/motion-graphics-skills`; each builds one HTML file with
+`window.seek()` and exports through HyperFrames):
+
+| Need                                                    | Skill                                         |
+| ------------------------------------------------------- | --------------------------------------------- |
+| Brand interview + reference frames into `MOTION.md` (see note) | `brand-intake`                         |
+| Rough idea into a build brief / 8-part Motion prompt    | `motion-brief-writer`, `motion-prompt-writer` |
+| Reference reel or ad broken down into a Motion prompt   | `reference-to-motion`                         |
+| 16 named UI / data / type motion effects, 8 s loops     | `motion-effects`                              |
+| Looping animated chart, count-up, before / after        | `animated-chart`                              |
+| Follower / revenue milestone particle reveal            | `milestone-reveal`                            |
+| 30–45 s SaaS / offer launch video                       | `launch-video`                                |
+| Apple-keynote-style Mac launch film                     | `apple-launch-film`                           |
+| Vox-style documentary explainer, 30–60 s                | `vox-explainer`                               |
+| Cinematic 3D title sequence (Three.js)                  | `title-sequence-3d`                           |
+| Newsletter edition promo clip / looping cover GIF       | `newsletter-promo`, `loop-cover`              |
+| Same brief to three AI models, side-by-side comparison  | `model-showdown`                              |
+| 16:9 or square video into an upload-ready 9:16 Reel     | `reel-export`                                 |
+
+Note on `brand-intake`: it saves `brand.md` and `MOTION.md` to the project root and adds a
+"read MOTION.md first" rule to CLAUDE.md. We work across many clients, so save both files in
+`brands/<client>/` instead and don't add that rule here.
+
 **Carousels and static graphics:**
 
 | Need                                                    | Skill                                         |
@@ -79,6 +102,10 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `dockkit`: `dpearson2699/swift-ios-skills`
 - `fal-lip-sync`, `remotion`, `frame-*`, `video-hyperframes`: `nexu-io/open-design`
 - `video-motion-graphics`: `dylantarre/animation-principles`
+- code-built motion pack (`brand-intake`, `motion-brief-writer`, `motion-prompt-writer`,
+  `motion-effects`, `animated-chart`, `milestone-reveal`,
+  `launch-video`, `apple-launch-film`, `vox-explainer`, `title-sequence-3d`, `newsletter-promo`,
+  `loop-cover`, `model-showdown`, `reel-export`, `reference-to-motion`): `charlie947/motion-graphics-skills`
 - fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`,
   `model-routing`): `fal-ai-community/skills`
 
