@@ -2,7 +2,7 @@
 // Generates growthx-3-tools-16x9/index.html (static clips, one paused GSAP timeline).
 const fs = require("fs");
 const out = process.argv[2] || require("path").join(__dirname, "index.html");
-const DUR = 40.4;
+const DUR = 39.0;
 const sfx = [];
 const S = (t, type, vol = 1) => sfx.push({ t: +t.toFixed(3), type, vol });
 
@@ -29,27 +29,26 @@ const toolCard = (id, n, icon, name, tag) => `
         <div class="tool-b"><div class="tool-t">${name}</div><div class="tool-s">${tag}</div></div>
       </div>`;
 
-const A_ = seg(0.02, 1.9, [["kya", "md"], ["hi", "md"], ["E-COMMERCE", "xl acc"], ["brand", "lg"], ["banaoge?", "lg"]]);
-const B_ = seg(2.23, 4.1, [["Agar", "md"], ["yeh", "md"], ["3", "huge acc"], ["EXTENSIONS", "lg"], ["hi", "md"], ["use", "md"], ["nahi", "md"], ["ki?", "md"]]);
-const D_ = seg(4.66, 6.53, [["kyunki", "md acc"], ["yeh", "md"], ["tools", "md"], ["tumhe", "md"], ["BEGINNER", "lg"], ["se", "md"]]);
-const E_ = seg(6.68, 7.37, [["PRO", "xl acc"], ["bana", "md"], ["denge", "md"]]);
-const F_ = seg(7.8, 11.01, [["aur", "md"], ["tumhare", "md"], ["COMPETITORS", "xl acc"], ["ka", "md"], ["saara", "md"], ["DATA", "lg hl"], ["tumhare", "md"], ["saamne", "md"], ["rakh", "md"], ["denge", "md"]]);
-const G_ = seg(11.57, 12.07, [["Pehla", "lg"], ["hai", "lg acc"]]);
-const TOOL1 = 12.23;
-const J_ = [...seg(14.5, 16.64, [["Yeh"], ["competitors"], ["ke"], ["saare"], ["best"], ["sellers,"]]), ...seg(16.77, 19.74, [["traffic"], ["source"], ["aur"], ["theme"], ["ki"], ["saari"], ["information"], ["tumhe"], ["de"], ["dega"]])].map((x) => x.t);
-const K_ = seg(20.25, 20.89, [["Doosra", "lg"], ["hai", "lg acc"]]);
-const TOOL2 = 21.08;
-const M2 = seg(24.53, 27.01, [["PEHLE", "lg hl"], ["HI", "lg hl"], ["bata", "md"], ["dega", "md"], ["ki", "md"], ["kitna", "md"], ["PROFIT", "lg acc"], ["MARGIN", "lg acc"], ["banega", "md"]]);
-const M_ = [...seg(23.04, 24.4, [["Yeh", "md"], ["tumhe", "md"], ["product", "lg acc"], ["add", "md"], ["karne", "md"], ["se", "md"]]), ...M2.slice(0, 4)];
-const N_ = M2.slice(4);
-const O_ = seg(27.44, 28.21, [["Aur", "md"], ["3RD", "xl acc"], ["hai", "lg"]]);
-const PQ = seg(28.47, 32.23, [["is", "md"], ["tool", "md"], ["ki", "md"], ["help", "md"], ["se", "md"], ["tum", "md"], ["apne", "md"], ["COMPETITOR", "xl acc"], ["ke", "md"], ["WINNING", "lg hl"], ["ADS", "lg hl"], ["SPY", "lg acc"], ["kar", "md"], ["sakte", "md"], ["ho", "md"]]);
+const A_ = seg(0.02, 1.67, [["kya", "md"], ["hi", "md"], ["E-COMMERCE", "xl acc"], ["brand", "lg"], ["banaoge?", "lg"]]);
+const B_ = seg(1.97, 3.79, [["Agar", "md"], ["yeh", "md"], ["3", "huge acc"], ["EXTENSIONS", "lg"], ["hi", "md"], ["use", "md"], ["nahi", "md"], ["ki?", "md"]]);
+const D_ = seg(4.34, 6.28, [["kyunki", "md acc"], ["yeh", "md"], ["tools", "md"], ["tumhe", "md"], ["BEGINNER", "lg"], ["se", "md"]]);
+const E_ = seg(6.42, 7.08, [["PRO", "xl acc"], ["bana", "md"], ["denge", "md"]]);
+const F_ = seg(7.46, 10.56, [["aur", "md"], ["tumhare", "md"], ["COMPETITORS", "xl acc"], ["ka", "md"], ["saara", "md"], ["DATA", "lg hl"], ["tumhare", "md"], ["saamne", "md"], ["rakh", "md"], ["denge", "md"]]);
+const G_ = seg(11.07, 11.57, [["Pehla", "lg"], ["hai", "lg acc"]]);
+const TOOL1 = 11.78;
+const J_ = seg(13.97, 19.04, [["Yeh"], ["competitors"], ["ke"], ["saare"], ["best"], ["sellers,"], ["traffic"], ["source"], ["aur"], ["theme"], ["ki"], ["saari"], ["information"], ["tumhe"], ["de"], ["dega"]]).map((x) => x.t);
+const K_ = seg(19.47, 20.08, [["Doosra", "lg"], ["hai", "lg acc"]]);
+const TOOL2 = 20.28;
+const MN = seg(22.04, 26.05, [["Yeh", "md"], ["tumhe", "md"], ["product", "lg acc"], ["add", "md"], ["karne", "md"], ["se", "md"], ["PEHLE", "lg hl"], ["HI", "lg hl"], ["bata", "md"], ["dega", "md"], ["ki", "md"], ["kitna", "md"], ["PROFIT", "lg acc"], ["MARGIN", "lg acc"], ["banega", "md"]]);
+const M_ = MN.slice(0, 10), N_ = MN.slice(10);
+const O_ = seg(26.43, 27.17, [["Aur", "md"], ["3RD", "xl acc"], ["hai", "lg"]]);
+const PQ = seg(27.42, 31.14, [["is", "md"], ["tool", "md"], ["ki", "md"], ["help", "md"], ["se", "md"], ["tum", "md"], ["apne", "md"], ["COMPETITOR", "xl acc"], ["ke", "md"], ["WINNING", "lg hl"], ["ADS", "lg hl"], ["SPY", "lg acc"], ["kar", "md"], ["sakte", "md"], ["ho", "md"]]);
 const P_ = PQ.slice(0, 12), Q_ = PQ.slice(12);
-const R_ = seg(32.67, 34.11, [["Aur", "md"], ["in", "md"], ["teeno", "md"], ["TOOLS", "lg acc"], ["ka", "md"], ["LINK", "lg hl"], ["chahiye?", "lg"]]);
-const S_ = seg(34.48, 35.55, [["Toh", "md"], ["comment", "lg"], ["karo", "lg"], ["“TOOLS”", "huge acc"]]);
-const T_ = [...seg(35.81, 36.3, [["aur"], ["link"]]), ...seg(36.45, 37.54, [["seedha"], ["aapke"], ["DM"], ["mein"]])].map((x) => x.t);
+const R_ = seg(31.52, 32.95, [["Aur", "md"], ["in", "md"], ["teeno", "md"], ["TOOLS", "lg acc"], ["ka", "md"], ["LINK", "lg hl"], ["chahiye?", "lg"]]);
+const S_ = [...seg(33.25, 33.89, [["Toh", "md"], ["comment", "lg"], ["karo", "lg"]]), w("“TOOLS”", 34.0, "huge acc")];
+const T_ = seg(34.65, 36.19, [["aur"], ["link"], ["seedha"], ["aapke"], ["DM"], ["mein"]]).map((x) => x.t);
 
-const CUT = { c1: 0, c2: 2.07, c3: 4.38, c4: 7.58, c5: 11.29, c6: 14.27, c7: 20.0, c8: 22.82, c9: 27.22, c10: P_[5].t - 0.1, c11: 32.45, c12: 34.3, out: 37.65 };
+const CUT = { c1: 0, c2: 1.82, c3: 4.06, c4: 7.27, c5: 10.81, c6: 13.76, c7: 19.25, c8: 21.86, c9: 26.24, c10: P_[5].t - 0.1, c11: 31.33, c12: 33.1, out: 36.3 };
 
 const scenes = [
   { id: "c1", start: CUT.c1, end: CUT.c2, lines: [A_.slice(0, 2), A_.slice(2, 3), A_.slice(3)] },
@@ -425,7 +424,7 @@ const html = `<!doctype html>
       <div id="brand" class="clip" data-start="0" data-duration="${CUT.out}" data-track-index="8"><div class="bi"><img src="brand/logo-mark.png" alt="GX" /><span>THE GROWTH<b>X</b> STUDIO</span></div></div>
       <div id="progress" class="clip" data-start="0" data-duration="${DUR}" data-track-index="9"><i></i></div>
 
-      <audio id="vo" src="assets/voiceover.m4a" data-start="0" data-duration="37.72" data-track-index="12" data-volume="1"></audio>
+      <audio id="vo" src="assets/voiceover.m4a" data-start="0" data-duration="36.44" data-track-index="12" data-volume="1"></audio>
       <audio id="sfx" src="assets/sfx.wav" data-start="0" data-duration="${DUR}" data-track-index="11" data-volume="0.55"></audio>
     </div>
     <script>
