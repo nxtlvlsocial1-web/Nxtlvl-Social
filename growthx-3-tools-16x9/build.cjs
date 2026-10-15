@@ -2,13 +2,25 @@
 // Generates growthx-3-tools-16x9/index.html (static clips, one paused GSAP timeline).
 const fs = require("fs");
 const out = process.argv[2] || require("path").join(__dirname, "index.html");
-const DUR = 34.0;
+const DUR = 40.8;
 const sfx = [];
 const S = (t, type, vol = 1) => sfx.push({ t: +t.toFixed(3), type, vol });
 
-// w(text, t, cls) — one spoken word, revealed at global time t (timed to the source reel's word-by-word captions).
+// w(text, t, cls) — one spoken word, revealed at global time t.
 const w = (text, t, cls = "") => ({ text, t, cls });
+// Voiceover: ElevenLabs "Bunty – Fun Podcast Host" (assets/voiceover.m4a), starts at 0.
 const VO = 0;
+// seg(start, end, tokens): phrase span in the voiceover (from its pauses, checked with local ASR);
+// words are spread across the span by character count.
+const seg = (s, e, toks) => {
+  const total = toks.reduce((n, [t]) => n + t.length + 1, 0);
+  let cum = 0;
+  return toks.map(([text, cls]) => {
+    const t = VO + s + (cum / total) * (e - s) - 0.03;
+    cum += text.length + 1;
+    return w(text, +Math.max(t, 0).toFixed(2), cls);
+  });
+};
 
 const toolCard = (id, n, icon, name, tag) => `
       <div class="tool" id="${id}">
@@ -17,56 +29,54 @@ const toolCard = (id, n, icon, name, tag) => `
         <div class="tool-b"><div class="tool-t">${name}</div><div class="tool-s">${tag}</div></div>
       </div>`;
 
-const CUT = { c1: 0, c2: 1.95, c3: 3.4, c4: 6.35, c5: 9.35, c6: 11.3, c7: 16.35, c8: 18.95, c9: 22.95, c10: 24.95, c11: 27.85, out: 31.3 };
+const A_ = seg(0.02, 1.84, [["kya", "md"], ["aap", "md"], ["E-COMMERCE", "xl acc"], ["brand", "lg"], ["banaoge?", "lg"]]);
+const B_ = seg(2.16, 4.11, [["Agar", "md"], ["yeh", "md"], ["3", "huge acc"], ["EXTENSIONS", "lg"], ["hi", "md"], ["use", "md"], ["nahi", "md"], ["ki?", "md"]]);
+const D_ = seg(4.63, 6.57, [["kyunki", "md acc"], ["yeh", "md"], ["tools", "md"], ["tumhe", "md"], ["BEGINNER", "lg"], ["se", "md"]]);
+const E_ = seg(6.72, 7.43, [["PRO", "xl acc"], ["bana", "md"], ["denge", "md"]]);
+const F_ = seg(7.75, 11.21, [["aur", "md"], ["tumhare", "md"], ["COMPETITORS", "xl acc"], ["ka", "md"], ["saara", "md"], ["DATA", "lg hl"], ["tumhare", "md"], ["saamne", "md"], ["rakh", "md"], ["denge", "md"]]);
+const G_ = seg(11.73, 12.25, [["Pehla", "lg"], ["hai", "lg acc"]]);
+const TOOL1 = 12.39;
+const J_ = seg(14.69, 19.99, [["Yeh", "md"], ["competitors", "md acc"], ["ke", "md"], ["saare", "md"], ["best", ""], ["sellers,", ""], ["traffic", ""], ["source", ""], ["aur", ""], ["theme", ""], ["ki", ""], ["saari", ""], ["information", ""], ["tumhe", ""], ["de", ""], ["dega", ""]]).map((x) => x.t);
+const K_ = seg(20.43, 21.08, [["Doosra", "lg"], ["hai", "lg acc"]]);
+const TOOL2 = 21.26;
+const M_ = seg(23.21, 25.8, [["Yeh", "md"], ["tumhe", "md"], ["product", "lg acc"], ["add", "md"], ["karne", "md"], ["se", "md"], ["PEHLE", "lg hl"], ["HI", "lg hl"], ["bata", "md"], ["dega", "md"]]);
+const N_ = seg(25.92, 27.26, [["ki", "md"], ["kitna", "md"], ["PROFIT", "lg acc"], ["MARGIN", "lg acc"], ["banega", "md"]]);
+const O_ = seg(27.67, 28.38, [["Aur", "md"], ["3RD", "xl acc"], ["hai", "lg"]]);
+const P_ = seg(28.73, 31.76, [["is", "md"], ["tool", "md"], ["ki", "md"], ["help", "md"], ["se", "md"], ["tum", "md"], ["apne", "md"], ["COMPETITOR", "xl acc"], ["ke", "md"], ["WINNING", "lg hl"], ["ADS", "lg hl"], ["SPY", "lg acc"]]);
+const Q_ = seg(31.88, 32.63, [["kar", "md"], ["sakte", "md"], ["ho", "md"]]);
+const R_ = seg(33.07, 34.56, [["Aur", "md"], ["in", "md"], ["teeno", "md"], ["TOOLS", "lg acc"], ["ka", "md"], ["LINK", "lg hl"], ["chahiye?", "lg"]]);
+const S_ = seg(34.91, 35.89, [["Toh", "md"], ["comment", "lg"], ["karo", "lg"], ["“META”", "huge acc"]]);
+const T_ = seg(36.24, 37.88, [["aur"], ["link"], ["seedha"], ["aapke"], ["DM"], ["mein"]]).map((x) => x.t);
+
+const CUT = { c1: 0, c2: 2.0, c3: 4.37, c4: 7.59, c5: 11.47, c6: 14.45, c7: 20.21, c8: 22.98, c9: 27.47, c10: P_[5].t - 0.1, c11: 32.85, c12: 34.73, out: 38.0 };
 
 const scenes = [
-  { id: "c1", start: CUT.c1, end: CUT.c2, lines: [
-      [w("kya", 0.05, "md"), w("he", 0.35, "md")],
-      [w("E-COMMERCE", 0.55, "xl acc")],
-      [w("brand", 1.0, "lg"), w("banaoge?", 1.4, "lg")],
-    ] },
-  { id: "c2", start: CUT.c2, end: CUT.c3, lines: [
-      [w("Agar", 2.0, "md"), w("yeh", 2.3, "md")],
-      [w("3", 2.5, "huge acc"), w("EXTENSIONS", 2.65, "lg")],
-      [w("hi", 3.0, "md"), w("use", 3.06, "md"), w("nahi", 3.13, "md"), w("ki", 3.2, "md")],
-    ], shake: 2.55, extra: `
+  { id: "c1", start: CUT.c1, end: CUT.c2, lines: [A_.slice(0, 2), A_.slice(2, 3), A_.slice(3)] },
+  { id: "c2", start: CUT.c2, end: CUT.c3, lines: [B_.slice(0, 2), B_.slice(2, 4), B_.slice(4)], shake: B_[2].t + 0.05, extra: `
       <div class="exts">${["🧩", "🧮", "🔍"].map((e, i) => `<div class="ext" id="c2-e${i}">${e}</div>`).join("")}</div>`,
-    tweens: (A) => { [2.6, 2.7, 2.8].forEach((t, i) => A.pop(`#c2-e${i}`, t)); } },
-  { id: "c3", start: CUT.c3, end: CUT.c4, lines: [
-      [w("kyuki", 3.5, "md acc"), w("yeh", 3.9, "md"), w("tools", 4.1, "md"), w("tumhe", 4.5, "md")],
-      [w("BEGINNER", 5.0, "lg"), w("se", 5.45, "md"), w("PRO", 5.6, "xl acc")],
-      [w("banadenge", 6.0, "md")],
-    ], extra: `
+    tweens: (A) => { [0, 0.1, 0.2].forEach((d, i) => A.pop(`#c2-e${i}`, +(B_[3].t + d).toFixed(2))); } },
+  { id: "c3", start: CUT.c3, end: CUT.c4, lines: [D_.slice(0, 4), [D_[4], D_[5], E_[0]], E_.slice(1)], extra: `
       <div class="lvl"><span class="lvl-a">BEGINNER</span><div class="lvl-bar"><i id="c3-fill"></i></div><span class="lvl-b">PRO</span></div>`,
-    tweens: (A) => { T(`tl.fromTo("#c3-fill",{scaleX:0},{scaleX:1,duration:.75,ease:"power2.inOut"},5.05);`); S(5.0, "riser", .35); } },
-  { id: "c4", start: CUT.c4, end: CUT.c5, lines: [
-      [w("Aur", 6.5, "md"), w("tumhare", 6.7, "md")],
-      [w("COMPETITORS", 7.0, "xl acc")],
-      [w("ka", 7.5, "md"), w("sara", 7.6, "md"), w("DATA", 7.75, "lg hl")],
-      [w("tumhare", 8.3, "md"), w("samne", 8.55, "md"), w("rakh", 8.75, "md"), w("denge", 8.9, "md")],
-    ], extra: `
+    tweens: (A) => { T(`tl.fromTo("#c3-fill",{scaleX:0},{scaleX:1,duration:${(E_[0].t - D_[4].t + 0.1).toFixed(2)},ease:"power2.inOut"},${D_[4].t});`); S(D_[4].t, "riser", .35); } },
+  { id: "c4", start: CUT.c4, end: CUT.c5, lines: [F_.slice(0, 2), F_.slice(2, 3), F_.slice(3, 6), F_.slice(6)], extra: `
       <div class="dash" id="c4-dash">${[38, 62, 48, 80, 66, 95].map((h, i) => `<b id="c4-b${i}" style="height:${h}%"></b>`).join("")}</div>`,
-    tweens: (A) => { T(`tl.fromTo("#c4-dash b",{scaleY:0},{scaleY:1,duration:.45,ease:"back.out(1.6)",stagger:.06},7.75);`); } },
-  { id: "c5", start: CUT.c5, end: CUT.c6, lines: [
-      [w("Pehla", 9.5, "lg"), w("hai", 9.75, "lg acc")],
-    ], extra: toolCard("c5-tool", 1, "🧩", "Free Trendtrack Chrome Extension", "FREE · CHROME EXTENSION"),
-    tweens: (A) => { A.pop("#c5-tool", 10.35, 0.5); S(10.35, "impact_lite", .5); } },
-  { id: "c6", start: CUT.c6, end: CUT.c7, top: true, lines: [
-      [w("Yeh", 11.5, "md"), w("competitors", 11.75, "md acc"), w("ke", 12.4, "md"), w("saare", 12.55, "md")],
-    ], extra: `
+    tweens: (A) => { T(`tl.fromTo("#c4-dash b",{scaleY:0},{scaleY:1,duration:.45,ease:"back.out(1.6)",stagger:.06},${F_[5].t});`); } },
+  { id: "c5", start: CUT.c5, end: CUT.c6, lines: [G_], extra: toolCard("c5-tool", 1, "🧩", "Free Trendtrack Chrome Extension", "FREE · CHROME EXTENSION"),
+    tweens: (A) => { A.pop("#c5-tool", TOOL1, 0.5); S(TOOL1, "impact_lite", .5); } },
+  { id: "c6", start: CUT.c6, end: CUT.c7, top: true, lines: [[w("Yeh", J_[0], "md"), w("competitors", J_[1], "md acc"), w("ke", J_[2], "md"), w("saare", J_[3], "md")]], extra: `
       <div class="chips2">
         <div class="chip2" id="c6-k0"><span>01</span>BEST SELLERS</div>
         <div class="chip2" id="c6-k1"><span>02</span>TRAFFIC SOURCE</div>
         <div class="chip2" id="c6-k2"><span>03</span>THEME</div>
       </div>
-      <div class="line c6-end"><span class="w-inline hlw" id="c6-info">INFORMATION</span> <span class="w-inline" id="c6-t">tumhe</span> <span class="w-inline" id="c6-d">dedega</span></div>`,
+      <div class="line c6-end"><span class="w-inline hlw" id="c6-info">INFORMATION</span> <span class="w-inline" id="c6-t">tumhe</span> <span class="w-inline" id="c6-d">de dega</span></div>`,
     tweens: (A) => {
-      [13.0, 13.5, 14.2].forEach((t, i) => { A.pop(`#c6-k${i}`, t, 0.4); A.activate(`#c6-k${i}`, t, [13.5, 14.2, 15.0][i]); });
-      A.pop("#c6-info", 15.0); T(`tl.fromTo("#c6-t",{opacity:0,y:30},{opacity:1,y:0,duration:.22},15.5);`); T(`tl.fromTo("#c6-d",{opacity:0,y:30},{opacity:1,y:0,duration:.22},15.9);`);
+      const k = [J_[4], J_[6], J_[9]], nxt = [J_[6], J_[9], J_[12]];
+      k.forEach((t, i) => { A.pop(`#c6-k${i}`, t, 0.4); A.activate(`#c6-k${i}`, t, nxt[i]); });
+      A.pop("#c6-info", J_[12]);
+      T(`tl.fromTo("#c6-t",{opacity:0,y:30},{opacity:1,y:0,duration:.22},${J_[13]});`); T(`tl.fromTo("#c6-d",{opacity:0,y:30},{opacity:1,y:0,duration:.22},${J_[14]});`);
     } },
-  { id: "c7", start: CUT.c7, end: CUT.c8, lines: [
-      [w("Dusra", 16.5, "lg"), w("hai", 16.8, "lg acc")],
-    ], extra: toolCard("c7-tool", 2, "🧮", "E-Commerce Profit Calculator", "COST → PRICE → PROFIT") + `
+  { id: "c7", start: CUT.c7, end: CUT.c8, lines: [K_], extra: toolCard("c7-tool", 2, "🧮", "E-Commerce Profit Calculator", "COST → PRICE → PROFIT") + `
       <div class="calc" id="c7-calc">
         <div class="cr"><span>Product cost</span><b>₹ 450</b></div>
         <div class="cr"><span>Selling price</span><b>₹ 1,199</b></div>
@@ -74,45 +84,46 @@ const scenes = [
         <div class="cr tot"><span>Profit</span><b>₹ 489</b></div>
       </div>`,
     tweens: (A) => {
-      A.pop("#c7-tool", 17.5, 0.5); S(17.5, "impact_lite", .5);
-      T(`tl.fromTo("#c7-calc .cr",{opacity:0,x:40},{opacity:1,x:0,duration:.3,ease:"power3.out",stagger:.15},18.0);`);
+      A.pop("#c7-tool", TOOL2, 0.5); S(TOOL2, "impact_lite", .5);
+      T(`tl.fromTo("#c7-calc .cr",{opacity:0,x:40},{opacity:1,x:0,duration:.3,ease:"power3.out",stagger:.15},${TOOL2 + 0.5});`);
     } },
-  { id: "c8", start: CUT.c8, end: CUT.c9, lines: [
-      [w("Yeh", 19.1, "md"), w("tumhe", 19.45, "md"), w("product", 19.65, "lg acc")],
-      [w("add", 20.0, "md"), w("karne", 20.15, "md"), w("se", 20.3, "md")],
-      [w("PEHLE", 20.5, "lg hl"), w("HI", 20.7, "lg hl"), w("batadega", 21.0, "md")],
-      [w("ki", 21.5, "md"), w("kitna", 21.8, "md"), w("PROFIT", 22.0, "lg acc"), w("MARGIN", 22.15, "lg acc"), w("bnega", 22.5, "md")],
-    ], extra: `<div class="margin"><div class="m-bar"><i id="c8-fill"></i></div><span id="c8-pct">MARGIN ✓</span></div>`,
-    tweens: (A) => { T(`tl.fromTo("#c8-fill",{scaleX:0},{scaleX:.72,duration:.6,ease:"power2.out"},22.05);`); A.pop("#c8-pct", 22.4); S(22.5, "cash", .45); } },
-  { id: "c9", start: CUT.c9, end: CUT.c10, lines: [
-      [w("Aur", 23.1, "md")],
-      [w("3RD", 23.5, "xl acc"), w("hai", 23.75, "lg")],
-      [w("is", 24.0, "md"), w("tool", 24.1, "md"), w("ki", 24.45, "md"), w("help", 24.55, "md"), w("se", 24.75, "md")],
-    ], shake: 23.55, extra: toolCard("c9-tool", 3, "🔍", "Winning-ads spy tool", "SEE WHAT YOUR COMPETITORS RUN"),
-    tweens: (A) => { A.pop("#c9-tool", 24.0, 0.45); } },
-  { id: "c10", start: CUT.c10, end: CUT.c11, lines: [
-      [w("Tum", 25.1, "md"), w("apne", 25.45, "md")],
-      [w("COMPETITOR", 25.7, "xl acc"), w("ke", 26.05, "md")],
-      [w("WINNING", 26.35, "lg hl"), w("ADS", 26.55, "lg hl")],
-      [w("SPY", 26.75, "lg acc"), w("kar", 27.0, "md"), w("skte", 27.15, "md"), w("ho", 27.3, "md")],
-    ], extra: `
+  { id: "c8", start: CUT.c8, end: CUT.c9, lines: [M_.slice(0, 3), M_.slice(3, 6), M_.slice(6), N_], extra: `<div class="margin"><div class="m-bar"><i id="c8-fill"></i></div><span id="c8-pct">MARGIN ✓</span></div>`,
+    tweens: (A) => { T(`tl.fromTo("#c8-fill",{scaleX:0},{scaleX:.72,duration:.6,ease:"power2.out"},${N_[2].t});`); A.pop("#c8-pct", N_[4].t); S(N_[4].t, "cash", .45); } },
+  { id: "c9", start: CUT.c9, end: CUT.c10, lines: [O_.slice(0, 1), O_.slice(1), P_.slice(0, 5)], shake: O_[1].t + 0.05, extra: toolCard("c9-tool", 3, "🔍", "Winning-ads spy tool", "SEE WHAT YOUR COMPETITORS RUN"),
+    tweens: (A) => { A.pop("#c9-tool", P_[0].t, 0.45); } },
+  { id: "c10", start: CUT.c10, end: CUT.c11, lines: [P_.slice(5, 7), P_.slice(7, 9), P_.slice(9, 11), [P_[11], ...Q_]], extra: `
       <div class="cards">
         <div class="ad ad1" id="c10-a1"><div class="ad-img"></div><div class="ad-l"></div><div class="ad-l s"></div></div>
         <div class="ad ad2" id="c10-a2"><div class="ad-img"></div><div class="ad-l"></div><div class="ad-l s"></div></div>
         <div class="ad ad3" id="c10-a3"><div class="ad-img"></div><div class="ad-l"></div><div class="ad-l s"></div></div>
       </div>`,
-    tweens: (A) => { A.fan(["#c10-a1", "#c10-a2", "#c10-a3"], 26.35); } },
-  { id: "c11", start: CUT.c11, end: CUT.out, lines: [
-      [w("Aur", 28.0, "md"), w("iska", 28.15, "md"), w("link", 28.45, "md"), w("meri", 28.6, "md")],
-      [w("WhatsApp", 29.0, "xl wa"), w("Community", 29.25, "xl wa")],
-      [w("mai", 30.0, "md"), w("mil", 30.1, "md"), w("jayegi,", 30.25, "md")],
-      [w("jiska", 30.5, "md"), w("link", 30.65, "md"), w("meri", 30.8, "md"), w("BIO", 31.0, "lg acc"), w("mei", 31.12, "md"), w("hai", 31.22, "md")],
-    ] },
+    tweens: (A) => { A.fan(["#c10-a1", "#c10-a2", "#c10-a3"], P_[9].t); } },
+  { id: "c11", start: CUT.c11, end: CUT.c12, lines: [R_.slice(0, 3), R_.slice(3, 6), R_.slice(6)], extra: `
+      <div class="exts">${["🧩", "🧮", "🔍"].map((e, i) => `<div class="ext" id="c11-e${i}">${e}</div>`).join("")}</div>`,
+    tweens: (A) => { [0, 0.1, 0.2].forEach((d, i) => A.pop(`#c11-e${i}`, +(R_[3].t + d).toFixed(2))); } },
+  { id: "c12", start: CUT.c12, end: CUT.out, lines: [S_.slice(0, 3), S_.slice(3)], shake: S_[3].t + 0.05, extra: `
+      <div class="cmt" id="c12-cmt">
+        <div class="cmt-av"><img src="brand/logo-mark.png" alt="" /></div>
+        <div class="cmt-in"><span class="cmt-ph">Add a comment…</span><span class="cmt-txt">${["M", "E", "T", "A"].map((c, i) => `<b id="c12-k${i}">${c}</b>`).join("")}</span></div>
+        <div class="cmt-send" id="c12-send">Post</div>
+      </div>
+      <div class="dm">${["aur", "link", "seedha", "aapke", "DM", "mein ✉"].map((x, i) => `<span class="w-inline${x === "DM" ? " dmk" : ""}" id="c12-d${i}">${x}</span>`).join(" ")}</div>`,
+    tweens: (A) => {
+      const c0 = S_[3].t + 0.3;
+      A.pop("#c12-cmt", +(c0 - 0.05).toFixed(2), 0.35);
+      T(`tl.fromTo("#c12-cmt .cmt-ph",{opacity:1},{opacity:0,duration:.05,immediateRender:false},${(c0 + 0.2).toFixed(2)});`);
+      [0, 1, 2, 3].forEach((i) => { const t = +(c0 + 0.25 + i * 0.08).toFixed(2); S(t, "tick", .5); T(`tl.fromTo("#c12-k${i}",{opacity:0,scale:.4},{opacity:1,scale:1,duration:.12,ease:"back.out(3)"},${t});`); });
+      const post = T_[1];
+      S(post, "click", .9); S(post + 0.06, "ding", .55);
+      T(`tl.to("#c12-send",{scale:.88,duration:.07,yoyo:true,repeat:1},${post});`);
+      T(`tl.to("#c12-send",{backgroundColor:"#8B2FE8",color:"#FFFFFF",duration:.1},${(post + 0.06).toFixed(2)});`);
+      T_.forEach((t, i) => T(`tl.fromTo("#c12-d${i}",{opacity:0,y:30},{opacity:1,y:0,duration:.22,ease:"back.out(2)"},${t});`));
+    } },
   { id: "out", start: CUT.out, end: DUR, lines: [], noDrift: true, extra: `
       <div class="outro">
         <div class="logo-wrap" id="out-logo"><div class="logo-ring" id="out-ring"></div><img class="logo-big" src="brand/logo.png" alt="The GrowthX Studio" /></div>
         <div class="outro-r">
-          <div class="pill" id="out-pill">LINK IN BIO ↗</div>
+          <div class="pill" id="out-pill">COMMENT “META” 💬</div>
           <div class="mail" id="out-mail"><span class="mail-ico">✉</span> thegrowthxstudio@gmail.com</div>
           <div class="tagline" id="out-tag">BUILD <i>•</i> GROW <i>•</i> SCALE</div>
         </div>
@@ -128,7 +139,7 @@ const scenes = [
     } },
 ];
 
-const wipes = [CUT.c2, CUT.c3, CUT.c4, CUT.c5, CUT.c6, CUT.c7, CUT.c8, CUT.c9, CUT.c10, CUT.c11, CUT.out];
+const wipes = [CUT.c2, CUT.c3, CUT.c4, CUT.c5, CUT.c6, CUT.c7, CUT.c8, CUT.c9, CUT.c10, CUT.c11, CUT.c12, CUT.out];
 
 let wordId = 0;
 const words = [];
@@ -364,7 +375,8 @@ const html = `<!doctype html>
       .margin { display:flex; align-items:center; gap:30px; margin-top:20px; }
       .m-bar { width:700px; height:30px; border-radius:15px; background:rgba(255,255,255,.08); overflow:hidden; }
       #c8-pct { font-size:40px; font-weight:900; color:var(--acc); letter-spacing:.1em; }
-      #c8 .stage, #c11 .stage { gap:10px; }
+      #c8 .stage { gap:10px; }
+      #c12 .huge { font-size:290px; margin-top:20px; }
       #c11 .wa { font-size:128px; }
       #c10 .text { position:relative; z-index:2; background:rgba(4,2,6,.78); padding:24px 56px; border-radius:30px; }
       #c4 .dash { right:50px; width:340px; height:260px; }
@@ -412,8 +424,8 @@ const html = `<!doctype html>
       <div id="brand" class="clip" data-start="0" data-duration="${CUT.out}" data-track-index="8"><div class="bi"><img src="brand/logo-mark.png" alt="GX" /><span>THE GROWTH<b>X</b> STUDIO</span></div></div>
       <div id="progress" class="clip" data-start="0" data-duration="${DUR}" data-track-index="9"><i></i></div>
 
-      <audio id="vo" src="assets/voiceover.m4a" data-start="0" data-duration="31.7" data-track-index="12" data-volume="1"></audio>
-      <audio id="sfx" src="assets/sfx.wav" data-start="0" data-duration="${DUR}" data-track-index="11" data-volume="0.45"></audio>
+      <audio id="vo" src="assets/voiceover.m4a" data-start="0" data-duration="38.11" data-track-index="12" data-volume="1"></audio>
+      <audio id="sfx" src="assets/sfx.wav" data-start="0" data-duration="${DUR}" data-track-index="11" data-volume="0.55"></audio>
     </div>
     <script>
       const tl = gsap.timeline({ paused: true });
