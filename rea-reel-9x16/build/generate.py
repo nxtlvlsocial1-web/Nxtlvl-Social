@@ -1,7 +1,8 @@
-"""Build the REA reel composition.
+"""Build the REA reel composition: dual screen, visuals on top, talking head below.
 
-  python3 -I build/generate.py            -> index.html (avatar video + stage + graphics)
-  python3 -I build/generate.py overlay    -> overlay/index.html (graphics only, transparent)
+  python3 -I build/generate.py    -> index.html, assets/audio/music.wav, assets/audio/sfx.wav
+
+Needs assets/audio/voice.wav (the avatar audio from 0.30 s, levelled; see README note in TIMING.md).
 
 Timing comes from build/scribe_words.json (ElevenLabs Scribe on the avatar clip). The clip
 is started 0.30 s in (leading silence only) so the last word ends at 29.94 s and the reel is
@@ -11,11 +12,12 @@ import html
 import json
 import os
 import re
-import shutil
 import sys
+import wave
+
+import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OVERLAY = len(sys.argv) > 1 and sys.argv[1] == "overlay"
 DUR = 30.0
 OFF = 0.30  # seconds trimmed from the head of the avatar clip
 
@@ -120,10 +122,10 @@ def stamp(sid, text):
             f'<span>{text}</span></div></div>')
 
 
-def clip(sid, inner, track=2, cls=""):
+def clip(sid, inner, track=2, cls="", bg=""):
     a, b = T[sid]
     return (f'<section id="{sid}" class="clip scene {cls}" data-start="{a:.3f}" data-duration="{b - a:.3f}" '
-            f'data-track-index="{track}">{inner}</section>')
+            f'data-track-index="{track}">{bg}<div class="stagebox" data-layout-allow-overflow><div id="{sid}-in" class="sbin" data-layout-allow-overflow>{inner}</div></div></section>')
 
 
 CODE = [
@@ -146,7 +148,7 @@ s1 = (
     '<div class="hl-wrap top"><div id="s1-h1" class="hl">LOVE A <span class="acc">FEATURE?</span></div></div>'
     '<div class="hl-wrap top"><div id="s1-h2" class="hl">REBUILD <span class="acc">IT.</span></div></div>'
     '<div class="app-stage" data-layout-allow-overlap data-layout-allow-occlusion data-layout-allow-overflow><div id="app" class="app" data-layout-allow-overlap data-layout-allow-occlusion>'
-    '<div class="app-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="app-name">Any app</span></div>'
+    '<div class="app-top" data-layout-allow-occlusion><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="app-name" data-layout-allow-occlusion>Any app</span></div>'
     '<div class="flip-wrap" data-layout-allow-overlap data-layout-allow-occlusion data-layout-allow-overflow><div id="flip" class="flip" data-layout-allow-overlap data-layout-allow-overflow>'
     '<div id="sbar" class="face front"><span class="sb-ic">⌕</span><span class="sb-tx">Search notes…</span><span class="sb-k">⌘K</span></div>'
     '<div class="face back"><pre class="code sm"><span class="tag">&lt;SearchBar</span>\n  placeholder=<span class="str">"Search…"</span>\n  onChange={filter}\n  autoFocus <span class="tag">/&gt;</span></pre></div>'
@@ -172,16 +174,15 @@ s2 = ('<div class="card-stage"><div id="repo" class="repo">'
 parts.append(clip("s2", s2))
 
 # S3 open loop: dino runner speeding up
-stars_bg = "".join(f'<span class="sky-dot" style="left:{(i * 137) % 900 + 40}px;top:{(i * 89) % 330 + 300}px"></span>' for i in range(26))
-s3 = ('<div class="night"></div>' + stars_bg +
-      '<div class="moon"></div>'
-      '<div class="chip-wrap q"><div id="s3-chip" class="chip ghost">Ask your agent:</div></div>'
+stars_bg = "".join(f'<span class="sky-dot" style="left:{(i * 137) % 1000 + 40}px;top:{(i * 89) % 420 + 120}px"></span>' for i in range(30))
+s3_bg = '<div class="night">' + stars_bg + '<div class="moon"></div></div>'
+s3 = ('<div class="chip-wrap q"><div id="s3-chip" class="chip ghost">Ask your agent:</div></div>'
       '<div class="q-wrap"><div id="s3-q" class="question"></div></div>'
       '<div id="s3-lines" class="speedlines" data-layout-allow-overflow>' + "".join(f'<span class="sl" style="top:{740 + (i * 53) % 260}px;width:{120 + (i * 41) % 220}px"></span>' for i in range(9)) + '</div>'
       '<div class="run-stage">' + runner("d3", 900, 7, [700, 1400, 1950, 2700, 3300, 4100, 4700, 5500, 6200, 7000, 7700, 8500], 9000) + '</div>'
       '<div class="meter"><span class="m-lab">SPEED</span><div class="m-bar"><div id="s3-fill" class="m-fill"></div></div>'
       '<span id="s3-spd" class="m-num">6.0</span></div>')
-parts.append(clip("s3", s3, cls="dark"))
+parts.append(clip("s3", s3, cls="dark", bg=s3_bg))
 
 # S4 evidence: the rule in the code
 code_lines = "".join(f'<div class="ln"><span class="ln-n">{i + 1}</span><span class="ln-t">{l or "&nbsp;"}</span></div>'
@@ -218,8 +219,8 @@ parts.append(clip("s6", s6))
 # S7 local
 s7 = ('<div class="local-stage">'
       f'<div class="cloud-wrap"><div id="cloud" class="cloud">{icon("cloud", "big-ic")}</div></div>'
-      '<svg class="arrow-svg" width="200" height="300" viewBox="0 0 200 300"><path id="arrow" class="arrow" d="M100 290 L100 40" pathLength="1"/>'
-      '<path id="arrow-head" class="arrow-h" d="M70 75 L100 40 L130 75"/></svg>'
+      '<svg class="arrow-svg" width="200" height="300" viewBox="0 0 200 300"><g id="arrow-g"><path class="arrow" d="M100 230 L100 62"/>'
+      '<path class="arrow-h" d="M70 95 L100 60 L130 95"/></g></svg>'
       '<div class="xmark-wrap"><div id="xmark" class="xmark">✕</div></div>'
       f'<div class="laptop-wrap"><div id="laptop" class="laptop">{icon("laptop", "big-ic")}<span id="lock" class="lock">{icon("lock", "lock-ic")}</span></div></div>'
       '<div class="local-tx"><div id="s7-t1" class="lt1">RUNS LOCALLY</div><div id="s7-t2" class="lt2">NOTHING UPLOADED</div></div>'
@@ -227,11 +228,11 @@ s7 = ('<div class="local-stage">'
 parts.append(clip("s7", s7))
 
 # S8 CTA: avatar full frame; graphics in the top band and below the captions
-s8 = ('<div class="cta-top"><div id="bubble" class="bubble"><span class="b-user">You</span>'
+s8 = ('<div class="cta-stack"><div class="cta-row"><div id="bubble" class="bubble"><span class="b-user">You</span>'
       '<span id="b-text" class="b-text"></span><span id="caret" class="caret"></span></div>'
       '<div class="chip-wrap"><div id="repo-chip" class="chip key">REPO</div></div></div>'
-      '<div class="cta-bottom"><div id="dm" class="dm"><span class="dm-av">R</span><span class="dm-col"><span class="dm-from">DM</span>'
-      '<span class="dm-tx">REA repo link</span></span></div>'
+      '<div id="dm" class="dm"><span class="dm-av">R</span><span class="dm-col"><span class="dm-from">DM</span>'
+      '<span class="dm-tx">REA repo link</span></span><span class="dm-dot"></span></div>'
       '<div id="url" class="url"><span class="rea-mark">R</span>github.com/morluto/rea</div></div>')
 parts.append(clip("s8", s8, cls="cta"))
 
@@ -264,21 +265,23 @@ for gi, g in enumerate(groups):
                 f'<div id="capi{gi}" class="cap-in">{spans}</div></div>')
     js_caps.append(f'tl.fromTo("#capi{gi}",{{opacity:0,y:14}},{{opacity:1,y:0,duration:0.12,ease:"power2.out"}},{a:.3f});')
     for k, x in enumerate(g):
-        js_caps.append(f'tl.set("#w{gi}_{k}",{{color:"#2EE6A6"}},{x["s"]:.3f});')
+        js_caps.append(f'tl.set("#w{gi}_{k}",{{color:"#C6FF3D"}},{x["s"]:.3f});')
         js_caps.append(f'tl.set("#w{gi}_{k}",{{color:"#ffffff"}},{max(x["e"], x["s"] + 0.05):.3f});')
 
 # ------------------------------------------------------------- timeline
 J = []
 A = J.append
+SFX = []  # (kind, time, gain)
 
 
-def pop(sel, t, d=0.3, frm="scale:0.6,opacity:0", ease="back.out(2.2)"):
+def pop(sel, t, d=0.18, frm="scale:0.6,opacity:0", ease="back.out(2.6)"):
     A(f'tl.fromTo("{sel}",{{{frm}}},{{scale:1,opacity:1,x:0,y:0,rotation:0,duration:{d},ease:"{ease}"}},{t:.3f});')
 
 
 def stamp_in(sel, t):
-    A(f'tl.fromTo("{sel}",{{scale:1.4,opacity:0,rotation:-8}},{{scale:1,opacity:1,rotation:-8,duration:0.2,ease:"back.out(3)"}},{t:.3f});')
-    A(f'tl.fromTo("{sel}",{{x:0}},{{x:4,duration:0.04,repeat:3,yoyo:true,ease:"none"}},{t + 0.2:.3f});')
+    A(f'tl.fromTo("{sel}",{{scale:1.4,opacity:0,rotation:-8}},{{scale:1,opacity:1,rotation:-8,duration:0.14,ease:"back.out(3)"}},{t:.3f});')
+    A(f'tl.fromTo("{sel}",{{x:0}},{{x:5,duration:0.035,repeat:3,yoyo:true,ease:"none"}},{t + 0.14:.3f});')
+    SFX.append(("thud", t + 0.1, 0.9))
 
 
 def run_cycle(prefix, a, b, step):
@@ -289,51 +292,59 @@ def run_cycle(prefix, a, b, step):
         t += step(t); k += 1
 
 
-# avatar: full frame (S1) -> circle (S2-S7) -> full frame (S8)
-# The face sits near (540, 700) in the full frame. The circle state scales the frame by
-# S_C around (0,0) and moves the face to the circle centre (200, 1370), clipped to radius 150.
-FX, FY, R_FULL = 540, 700, 330
-S_C = 150 / R_FULL
-CX, CY = 200 - S_C * FX, 1370 - S_C * FY
-CLIP_FULL = f"circle(2400px at {FX}px {FY}px)"
-CLIP_CIRC = f"circle({R_FULL}px at {FX}px {FY}px)"
-A(f'tl.fromTo("#avatar",{{scale:1,x:0,y:0,clipPath:"{CLIP_FULL}",transformOrigin:"0px 0px"}},'
-  f'{{scale:{S_C:.4f},x:{CX:.1f},y:{CY:.1f},clipPath:"{CLIP_CIRC}",duration:0.35,ease:"power2.inOut"}},{S2:.3f});')
-A(f'tl.to("#avatar",{{scale:1,x:0,y:0,clipPath:"{CLIP_FULL}",duration:0.4,ease:"power2.inOut"}},{S8:.3f});')
-A(f'tl.fromTo("#avatar-in",{{scale:1}},{{scale:1.06,duration:{S2:.3f},ease:"none"}},0);')
-A(f'tl.to("#avatar-in",{{scale:1,duration:0.35,ease:"power2.inOut"}},{S2:.3f});')
-A(f'tl.fromTo("#ring",{{opacity:0}},{{opacity:1,duration:0.3}},{S2 + 0.1:.3f});')
-A(f'tl.to("#ring",{{opacity:0,duration:0.2}},{S8:.3f});')
-A(f'tl.fromTo("#stage",{{opacity:0}},{{opacity:1,duration:0.3}},{S2:.3f});')
-A(f'tl.to("#stage",{{opacity:0,duration:0.35}},{S8:.3f});')
+# avatar: bottom half, punch-ins on key words
+A(f'tl.fromTo("#avatar-in",{{scale:1}},{{scale:1.08,duration:0.12,ease:"power2.out"}},{t_free - 0.02:.3f});')
+A('tl.to("#avatar-in",{scale:1,duration:0.2,ease:"power2.inOut"},4.6);')
+A(f'tl.to("#avatar-in",{{scale:1.08,duration:0.12,ease:"power2.out"}},{t_two:.3f});')
+A(f'tl.to("#avatar-in",{{scale:1,duration:0.2,ease:"power2.inOut"}},{t_stars + 0.4:.3f});')
+A(f'tl.to("#avatar-in",{{scale:1.1,duration:0.12,ease:"power2.out"}},{t_nothing:.3f});')
+A(f'tl.to("#avatar-in",{{scale:1,duration:0.2,ease:"power2.inOut"}},{t_nothing + 1.0:.3f});')
+A(f'tl.to("#avatar-in",{{scale:1.07,duration:0.15,ease:"power2.out"}},{S8:.3f});')
+# top screen: drifting glows; flash + snap-in on every cut
+A(f'tl.fromTo("#blob1",{{x:-120,y:0}},{{x:260,y:120,duration:{DUR},ease:"sine.inOut"}},0);')
+A(f'tl.fromTo("#blob2",{{x:140,y:0}},{{x:-220,y:-90,duration:{DUR},ease:"sine.inOut"}},0);')
+A('tl.set("#flash",{opacity:0},0);')
+A('tl.fromTo("#s1-in",{scale:1.12},{scale:1,duration:0.25,ease:"power3.out"},0);')
+for sid, a, _ in SC[1:]:
+    A(f'tl.fromTo("#{sid}-in",{{x:180,opacity:0,scale:0.94}},{{x:0,opacity:1,scale:1,duration:0.2,ease:"power3.out"}},{a:.3f});')
+    A(f'tl.fromTo("#flash",{{opacity:0.45}},{{opacity:0,duration:0.16,ease:"power1.out"}},{a:.3f});')
+    SFX.append(("whoosh", a - 0.1, 0.8))
 
 # S1
-A('tl.fromTo("#s1-h1",{scale:1.15,opacity:0},{scale:1,opacity:1,duration:0.35,ease:"back.out(2)"},0.0);')
-A('tl.fromTo("#app",{y:700,opacity:0},{y:0,opacity:1,duration:0.45,ease:"power3.out"},1.2);')
-A('tl.fromTo("#sbar",{boxShadow:"0 0 0 0 rgba(46,230,166,0)"},{boxShadow:"0 0 0 8px rgba(46,230,166,0.55)",duration:0.25},1.45);')
-A('tl.fromTo("#flip",{y:0,scale:1},{y:-150,scale:1.12,duration:0.3,ease:"power2.out"},1.6);')
-A('tl.fromTo("#flip",{rotationY:0},{rotationY:180,duration:0.45,ease:"power2.inOut"},1.9);')
+A('tl.fromTo("#s1-h1",{scale:1.3,opacity:0},{scale:1,opacity:1,duration:0.22,ease:"back.out(2.4)"},0.0);')
+SFX.append(("slam", 0.02, 0.9))
+A('tl.fromTo("#app",{y:700,opacity:0},{y:0,opacity:1,duration:0.26,ease:"power3.out"},0.75);')
+SFX.append(("whoosh", 0.7, 0.7))
+A('tl.fromTo("#sbar",{boxShadow:"0 0 0 0 rgba(198,255,61,0)"},{boxShadow:"0 0 0 10px rgba(198,255,61,0.8)",duration:0.15},1.0);')
+A('tl.fromTo("#flip",{y:0,scale:1},{y:-150,scale:1.12,duration:0.16,ease:"power2.out"},1.15);')
+SFX.append(("pop", 1.15, 0.6))
+A('tl.fromTo("#flip",{rotationY:0},{rotationY:180,duration:0.28,ease:"power2.inOut"},1.35);')
+SFX.append(("swish", 1.35, 0.7))
 stamp_in("#s1-free", t_free - 0.05)
-A('tl.to("#s1-h1",{opacity:0,y:-30,duration:0.2},3.2);')
-A('tl.fromTo("#s1-h2",{scale:1.15,opacity:0},{scale:1,opacity:1,duration:0.3,ease:"back.out(2)"},3.25);')
+A('tl.to("#s1-h1",{opacity:0,y:-30,duration:0.12},3.2);')
+A('tl.fromTo("#s1-h2",{scale:1.3,opacity:0},{scale:1,opacity:1,duration:0.2,ease:"back.out(2.4)"},3.25);')
+SFX.append(("slam", 3.27, 0.8))
 stamp_in("#s1-rebuilt", t_rebuild)
 
 # S2
-pop("#repo", S2 + 0.15, 0.3, "scale:0.8,opacity:0")
-A(f'(function(){{var o={{v:0}};tl.to(o,{{v:286,duration:1.6,ease:"expo.out",onUpdate:function(){{document.getElementById("stars").textContent=Math.round(o.v)+"K";}}}},{t_two:.3f});}})();')
+pop("#repo", S2 + 0.05, 0.2, "scale:0.8,opacity:0")
+A(f'(function(){{var o={{v:0}};tl.to(o,{{v:286,duration:1.0,ease:"expo.out",onUpdate:function(){{document.getElementById("stars").textContent=Math.round(o.v)+"K";}}}},{t_two:.3f});}})();')
 for i in range(12):
-    tb = t_two + 1.6
+    tb = t_two + 1.0
     A(f'tl.fromTo("#bs{i}",{{opacity:0}},{{opacity:1,duration:0.08}},{tb:.3f});')
-    A(f'tl.fromTo("#bs{i}",{{y:0,scale:0.4}},{{y:-150,scale:1,duration:0.5,ease:"power2.out"}},{tb:.3f});')
-    A(f'tl.to("#bs{i}",{{opacity:0,duration:0.2}},{tb + 0.3:.3f});')
+    A(f'tl.fromTo("#bs{i}",{{y:0,scale:0.4}},{{y:-170,scale:1,duration:0.35,ease:"power2.out"}},{tb:.3f});')
+    A(f'tl.to("#bs{i}",{{opacity:0,duration:0.15}},{tb + 0.25:.3f});')
+SFX += [("tick", t_two + k * 0.05, 0.5) for k in range(20)] + [("sparkle", t_two + 1.0, 0.8)]
 
 # S3
 a3, b3 = T["s3"]
 pop("#s3-chip", a3 + 0.05, 0.3, "opacity:0,y:20")
 Q = "WHY DOES IT GET FASTER?"
 qt = t_why
+SFX += [("key", qt + k / 40, 0.35) for k in range(len(Q)) if Q[k] != " "]
+SFX.append(("riser", a3, 0.5))
 for k in range(len(Q) + 1):
-    A(f'tl.set("#s3-q",{{textContent:{json.dumps(Q[:k])}}},{qt + k / 25:.3f});')
+    A(f'tl.set("#s3-q",{{textContent:{json.dumps(Q[:k])}}},{qt + k / 40:.3f});')
 A(f'tl.fromTo("#d3-world",{{x:0}},{{x:-7600,duration:{b3 - a3:.3f},ease:"power2.in"}},{a3:.3f});')
 run_cycle("d3", a3, b3, lambda t: max(0.06, 0.14 - (t - a3) * 0.02))
 A(f'tl.fromTo("#s3-lines",{{opacity:0}},{{opacity:1,duration:{b3 - a3:.3f},ease:"power1.in"}},{a3:.3f});')
@@ -346,85 +357,90 @@ a4, b4 = T["s4"]
 pop("#s4-thumb", a4, 0.3, "scale:1.6,opacity:0")
 A(f'tl.fromTo("#d4-world",{{x:0}},{{x:-900,duration:{b4 - a4:.3f},ease:"none"}},{a4:.3f});')
 run_cycle("d4", a4, b4, lambda t: 0.1)
-A(f'tl.fromTo("#code",{{y:500,opacity:0}},{{y:0,opacity:1,duration:0.35,ease:"power3.out"}},{a4 + 0.05:.3f});')
+A(f'tl.fromTo("#code",{{y:500,opacity:0}},{{y:0,opacity:1,duration:0.22,ease:"power3.out"}},{a4 + 0.05:.3f});')
 t_finds = at("finds")
-A(f'tl.fromTo("#hl-sweep",{{scaleX:0}},{{scaleX:1,duration:0.5,ease:"power2.inOut"}},{t_finds:.3f});')
+A(f'tl.fromTo("#hl-sweep",{{scaleX:0}},{{scaleX:1,duration:0.3,ease:"power2.inOut"}},{t_finds:.3f});')
 for i, k in enumerate(("c1", "c2", "c3")):
-    pop(f"#{k}", t_finds + 0.6 + i * 0.3, 0.3)
+    pop(f"#{k}", t_finds + 0.35 + i * 0.16)
+    SFX.append(("pop", t_finds + 0.35 + i * 0.16, 0.7))
 stamp_in("#s4-ev", t_rule + 0.05)
 
 # S5
 a5, b5 = T["s5"]
-pop("#slider", a5, 0.3, "y:80,opacity:0")
-pop("#mini", a5 + 0.05, 0.3, "scale:0.9,opacity:0")
-d0, d1 = a5 + 0.4, t_slider - 0.05
+pop("#slider", a5, 0.2, "y:80,opacity:0")
+pop("#mini", a5 + 0.05, 0.2, "scale:0.9,opacity:0")
+d0, d1 = a5 + 0.25, t_slider - 0.05
+SFX.append(("sweep", d0, 0.5))
 A(f'tl.fromTo("#knob",{{x:0}},{{x:620,duration:{d1 - d0:.3f},ease:"power2.inOut"}},{d0:.3f});')
 A(f'tl.fromTo("#s5-fill",{{scaleX:0}},{{scaleX:1,duration:{d1 - d0:.3f},ease:"power2.inOut"}},{d0:.3f});')
 A(f'(function(){{var o={{v:6}};tl.to(o,{{v:13,duration:{d1 - d0:.3f},ease:"power2.inOut",onUpdate:function(){{document.getElementById("s5-spd").textContent=o.v.toFixed(1);}}}},{d0:.3f});}})();')
 A(f'tl.fromTo("#d5-world",{{x:0}},{{x:-5400,duration:{b5 - a5:.3f},ease:"power2.in"}},{a5:.3f});')
 run_cycle("d5", a5, b5, lambda t: 0.13 if t < d0 + 0.6 else (0.09 if t < d0 + 1.4 else 0.06))
 stamp_in("#s5-rebuilt", d1 + 0.1)
+SFX.append(("ding", d1 + 0.2, 0.7))
 
 # S6
 for i, t in enumerate((t_and2 + 0.05, t_android - 0.05, t_web - 0.05)):
-    pop(f"#r{i}", t, 0.25, "scale:0.6,opacity:0")
+    pop(f"#r{i}", t, 0.16, "scale:0.6,opacity:0,x:-80")
+    SFX.append(("pop", t, 0.8))
 
 # S7
 a7, b7 = T["s7"]
-pop("#laptop", a7 + 0.05, 0.3)
-pop("#lock", a7 + 0.25, 0.3)
-pop("#cloud", a7 + 0.2, 0.3, "opacity:0,y:-30")
-pop("#s7-t1", a7 + 0.3, 0.3, "opacity:0,y:30")
-A(f'tl.fromTo("#arrow",{{strokeDashoffset:1}},{{strokeDashoffset:0.35,duration:{t_nothing - a7 - 0.7:.3f},ease:"power1.out"}},{a7 + 0.6:.3f});')
-A(f'tl.fromTo("#arrow-head",{{opacity:0}},{{opacity:1,duration:0.2}},{a7 + 0.6:.3f});')
-A(f'tl.fromTo("#arrow-head",{{y:250}},{{y:250 - 250 * 0.65,duration:{t_nothing - a7 - 0.7:.3f},ease:"power1.out"}},{a7 + 0.6:.3f});')
+pop("#laptop", a7 + 0.05)
+pop("#lock", a7 + 0.2)
+SFX.append(("click", a7 + 0.22, 0.7))
+pop("#cloud", a7 + 0.15, 0.18, "opacity:0,y:-30")
+pop("#s7-t1", a7 + 0.25, 0.18, "opacity:0,y:30")
+A(f'tl.fromTo("#arrow-g",{{y:150,opacity:0}},{{y:0,opacity:1,duration:{t_nothing - a7 - 0.7:.3f},ease:"power1.out"}},{a7 + 0.6:.3f});')
+SFX.append(("buzz", t_nothing, 0.8))
 stamp_in("#xmark", t_nothing - 0.05)
-pop("#s7-t2", t_nothing + 0.2, 0.3, "opacity:0,y:30")
+pop("#s7-t2", t_nothing + 0.15, 0.18, "opacity:0,y:30")
 
 # S8
 a8 = T["s8"][0]
-pop("#bubble", a8 + 0.3, 0.3, "opacity:0,y:-30")
+pop("#bubble", a8 + 0.1, 0.18, "opacity:0,y:-30")
+SFX.append(("pop", a8 + 0.1, 0.6))
 for k, ch in enumerate("REPO"):
     A(f'tl.set("#b-text",{{textContent:"{"REPO"[:k + 1]}"}},{t_repo + k * 0.07:.3f});')
-A(f'tl.fromTo("#caret",{{opacity:1}},{{opacity:0,duration:0.25,repeat:7,yoyo:true,ease:"steps(1)"}},{a8 + 0.3:.3f});')
-pop("#repo-chip", t_repo + 0.35, 0.3)
-A(f'tl.to("#repo-chip",{{scale:1.06,duration:0.6,repeat:{max(0, int((DUR - t_repo - 0.7) / 0.6) - 1)},yoyo:true,ease:"sine.inOut"}},{t_repo + 0.7:.3f});')
-pop("#dm", t_dm - 0.1, 0.35, "opacity:0,x:-120")
-pop("#url", t_link - 0.55, 0.35, "opacity:0,y:20")
+    SFX.append(("key", t_repo + k * 0.07, 0.5))
+A(f'tl.fromTo("#caret",{{opacity:1}},{{opacity:0,duration:0.25,repeat:7,yoyo:true,ease:"steps(1)"}},{a8 + 0.1:.3f});')
+pop("#repo-chip", t_repo + 0.3)
+SFX.append(("pop", t_repo + 0.3, 0.8))
+A(f'tl.to("#repo-chip",{{scale:1.08,duration:0.4,repeat:{max(0, int((DUR - t_repo - 0.6) / 0.4) - 1)},yoyo:true,ease:"sine.inOut"}},{t_repo + 0.6:.3f});')
+pop("#dm", t_dm - 0.1, 0.2, "opacity:0,x:-160")
+SFX.append(("notify", t_dm - 0.05, 0.8))
+pop("#url", t_link - 0.55, 0.2, "opacity:0,y:20")
+SFX.append(("pop", t_link - 0.55, 0.6))
 
 J += js_caps
 
 # ------------------------------------------------------------- document
 css = open(os.path.join(ROOT, "build", "style.css")).read()
-avatar = "" if OVERLAY else (
-    '<div id="avatar" class="avatar"><div id="avatar-in" class="avatar-in">'
-    f'<video id="avatar-video" src="assets/video/avatar.mp4" data-start="0" data-duration="{DUR}" '
-    f'data-media-start="{OFF}" data-has-audio="true" data-track-index="0" playsinline></video></div></div>')
-ring = '<div id="ring" class="ring"></div>'
-if OVERLAY:  # keep the timeline targets the avatar tweens use, but draw nothing
-    avatar = '<div id="avatar" class="avatar ghost"><div id="avatar-in" class="avatar-in"></div></div>'
-stage = "" if OVERLAY else '<div id="stage" class="stage"></div>'
-if OVERLAY:
-    stage = '<div id="stage" class="stage ghost"></div>'
+avatar = ('<div id="avatar" class="avatar"><div id="avatar-in" class="avatar-in">'
+          f'<video id="avatar-video" src="assets/video/avatar.mp4" data-start="0" data-duration="{DUR}" '
+          f'data-media-start="{OFF}" muted data-track-index="0" playsinline></video></div></div>')
+top = ('<div id="topscreen" class="topscreen" data-layout-allow-overflow><div id="blob1" class="blob b1" data-layout-allow-overflow></div><div id="blob2" class="blob b2" data-layout-allow-overflow></div>'
+       '<div class="grid"></div></div><div id="flash" class="flash"></div><div class="divider"></div>')
 doc = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>REA reel 9x16{' overlay' if OVERLAY else ''}</title>
+    <title>REA reel 9x16</title>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
 {css}
-{'#root, html, body { background: transparent !important; }' if OVERLAY else ''}
     </style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="1080" data-height="1920">
-      {stage}
+      {top}
       {avatar}
-      {ring}
       {"".join(parts)}
       {"".join(caps)}
+      <audio id="voice" src="assets/audio/voice.wav" data-start="0" data-duration="{DUR}" data-track-index="6" data-volume="1"></audio>
+      <audio id="music" src="assets/audio/music.wav" data-start="0" data-duration="{DUR}" data-track-index="7" data-volume="1"></audio>
+      <audio id="sfx" src="assets/audio/sfx.wav" data-start="0" data-duration="{DUR}" data-track-index="8" data-volume="1"></audio>
     </div>
     <script>
       const tl = gsap.timeline({{ paused: true }});
@@ -434,17 +450,160 @@ doc = f"""<!doctype html>
   </body>
 </html>
 """
-if OVERLAY:
-    out = os.path.join(ROOT, "overlay")
-    os.makedirs(out, exist_ok=True)
-    for sub in ("assets/fonts", "assets/vendor"):
-        shutil.copytree(os.path.join(ROOT, sub), os.path.join(out, sub), dirs_exist_ok=True)
-    for f in ("hyperframes.json", "meta.json", "package.json"):
-        shutil.copy(os.path.join(ROOT, f), out)
-    open(os.path.join(out, "index.html"), "w").write(doc)
-else:
-    open(os.path.join(ROOT, "index.html"), "w").write(doc)
-json.dump({"offset": OFF, "scenes": SC, "captions": [[x["w"] for x in g] for g in groups]},
+open(os.path.join(ROOT, "index.html"), "w").write(doc)
+
+# ------------------------------------------------------------- audio (synthesized, rights-free)
+SR = 44100
+N = int(DUR * SR)
+rng = np.random.default_rng(11)
+
+
+def lp(x, fc):
+    a = np.exp(-2 * np.pi * fc / SR)
+    from scipy.signal import lfilter  # noqa: E402
+    return lfilter([1 - a], [1, -a], x)
+
+
+def hp(x, fc):
+    return x - lp(x, fc)
+
+
+def env(n, att, dec):
+    t = np.arange(n) / SR
+    return np.minimum(t / max(att, 1e-4), 1) * np.exp(-t / dec)
+
+
+def put(buf, t, x, g=1.0):
+    s0 = int(t * SR)
+    if s0 < 0:
+        x = x[-s0:]; s0 = 0
+    n = min(len(x), len(buf) - s0)
+    if n > 0:
+        buf[s0:s0 + n] += g * x[:n]
+
+
+hz = lambda m: 440 * 2 ** ((m - 69) / 12)  # noqa: E731
+# 120 bpm, A minor: Am F C G, one bar each
+beat = 0.5
+bar = 4 * beat
+prog = [(57, [57, 60, 64]), (53, [53, 57, 60]), (48, [48, 52, 55]), (55, [55, 59, 62])]
+music = np.zeros(N)
+drums = np.zeros(N)
+nbars = int(np.ceil(DUR / bar))
+for bi in range(nbars):
+    t0 = bi * bar
+    root, chord = prog[bi % 4]
+    for k in range(4):  # kick on every beat
+        n = int(0.35 * SR); t = np.arange(n) / SR
+        put(drums, t0 + k * beat, 0.9 * np.sin(2 * np.pi * (48 + 110 * np.exp(-t / 0.025)) * t) * np.exp(-t / 0.14))
+    for k in (1, 3):  # clap
+        n = int(0.22 * SR)
+        put(drums, t0 + k * beat, 0.35 * hp(rng.standard_normal(n), 900) * env(n, 0.002, 0.06))
+    for k in range(16):  # 16th hats, open hat on the off-beat
+        n = int((0.18 if k % 4 == 2 else 0.04) * SR)
+        g = 0.12 if k % 4 == 2 else (0.07 if k % 2 == 0 else 0.045)
+        put(drums, t0 + k * beat / 4, g * hp(rng.standard_normal(n), 6000) * env(n, 0.001, 0.05 if k % 4 == 2 else 0.012))
+    for k in range(8):  # driving 8th-note bass
+        n = int(0.24 * SR); t = np.arange(n) / SR; f = hz(root - 24)
+        saw = 2 * ((f * t) % 1) - 1
+        put(music, t0 + k * beat / 2, 0.22 * lp(saw, 500) * env(n, 0.004, 0.16))
+    arp = chord + [chord[0] + 12]
+    for k in range(16):  # pluck arpeggio
+        n = int(0.22 * SR); t = np.arange(n) / SR; f = hz(arp[k % 4] + 12)
+        tone = np.sign(np.sin(2 * np.pi * f * t)) * 0.4 + np.sin(2 * np.pi * f * t)
+        put(music, t0 + k * beat / 4, 0.06 * lp(tone, 3200) * env(n, 0.002, 0.08))
+    for note in chord:  # soft pad
+        n = int(bar * SR); t = np.arange(n) / SR; f = hz(note)
+        pad = np.sin(2 * np.pi * f * t) + 0.5 * np.sin(2 * np.pi * f * 1.004 * t)
+        put(music, t0, 0.03 * pad * np.minimum(t / 0.2, 1) * np.minimum((bar - t) / 0.2, 1))
+music = music + drums
+# duck the music under the voice
+with wave.open(os.path.join(ROOT, "assets/audio/voice.wav")) as f:
+    v = np.frombuffer(f.readframes(f.getnframes()), dtype="<i2").astype(float) / 32768
+    if f.getnchannels() == 2:
+        v = v.reshape(-1, 2).mean(1)
+v = np.pad(v, (0, max(0, N - len(v))))[:N]
+venv = lp(np.abs(v), 6)
+venv = np.clip(venv / (np.percentile(venv, 95) + 1e-9), 0, 1)
+music *= 1 - 0.5 * venv
+fade = np.ones(N); fo = int(1.2 * SR); fade[-fo:] = np.linspace(1, 0, fo)
+music *= fade
+music *= 10 ** (-23 / 20) / np.sqrt(np.mean(music ** 2))
+
+sfx = np.zeros(N)
+
+
+def make(kind):
+    if kind == "whoosh":
+        n = int(0.32 * SR); t = np.arange(n) / SR; x = rng.standard_normal(n)
+        return (lp(x, 2500) - lp(x, 300)) * np.sin(np.pi * t / 0.32) ** 2 * 0.9
+    if kind == "swish":
+        n = int(0.25 * SR); t = np.arange(n) / SR; x = rng.standard_normal(n)
+        return hp(x, 2000) * np.sin(np.pi * t / 0.25) ** 3 * 0.5
+    if kind == "pop":
+        n = int(0.08 * SR); t = np.arange(n) / SR
+        f = 1200 * (1 - 0.5 * t / 0.08)
+        return 0.6 * np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t / 0.025)
+    if kind == "slam":
+        n = int(0.4 * SR); t = np.arange(n) / SR
+        boom = np.sin(2 * np.pi * (40 + 80 * np.exp(-t / 0.04)) * t) * np.exp(-t / 0.18)
+        return 0.9 * boom + 0.25 * lp(rng.standard_normal(n), 3000) * np.exp(-t / 0.05)
+    if kind == "thud":
+        n = int(0.25 * SR); t = np.arange(n) / SR
+        return 0.8 * np.sin(2 * np.pi * (70 + 60 * np.exp(-t / 0.02)) * t) * np.exp(-t / 0.08) + 0.2 * lp(rng.standard_normal(n), 1800) * np.exp(-t / 0.03)
+    if kind == "tick":
+        n = int(0.02 * SR); t = np.arange(n) / SR
+        return 0.4 * np.sin(2 * np.pi * 3000 * t) * np.exp(-t / 0.004)
+    if kind == "key":
+        n = int(0.04 * SR); t = np.arange(n) / SR
+        return 0.5 * hp(rng.standard_normal(n), 2500) * np.exp(-t / 0.006) + 0.2 * np.sin(2 * np.pi * 1800 * t) * np.exp(-t / 0.004)
+    if kind == "click":
+        n = int(0.05 * SR); t = np.arange(n) / SR
+        return 0.6 * np.sin(2 * np.pi * 900 * t) * np.exp(-t / 0.01)
+    if kind == "ding":
+        n = int(0.8 * SR); t = np.arange(n) / SR
+        return 0.35 * (np.sin(2 * np.pi * 1568 * t) + 0.6 * np.sin(2 * np.pi * 2349 * t)) * np.exp(-t / 0.3)
+    if kind == "sparkle":
+        out = np.zeros(int(0.7 * SR))
+        for k, m in enumerate((84, 88, 91, 96)):
+            n = int(0.4 * SR); t = np.arange(n) / SR
+            put(out, k * 0.06, 0.25 * np.sin(2 * np.pi * hz(m) * t) * np.exp(-t / 0.12))
+        return out
+    if kind == "notify":
+        out = np.zeros(int(0.6 * SR))
+        for k, m in enumerate((83, 88)):
+            n = int(0.35 * SR); t = np.arange(n) / SR
+            put(out, k * 0.11, 0.35 * np.sin(2 * np.pi * hz(m) * t) * np.exp(-t / 0.1))
+        return out
+    if kind == "buzz":
+        n = int(0.35 * SR); t = np.arange(n) / SR
+        return 0.35 * lp(np.sign(np.sin(2 * np.pi * 110 * t)), 1500) * np.exp(-t / 0.2)
+    if kind == "sweep":
+        n = int(1.4 * SR); t = np.arange(n) / SR
+        f = 300 + 900 * (t / 1.4) ** 2
+        return 0.12 * np.sin(2 * np.pi * np.cumsum(f) / SR) * np.minimum(t / 0.1, 1) * np.minimum((1.4 - t) / 0.1, 1)
+    if kind == "riser":
+        n = int(3.6 * SR); t = np.arange(n) / SR
+        x = rng.standard_normal(n)
+        return 0.16 * (lp(x, 2400) - lp(x, 200)) * (t / 3.6) ** 1.5
+    raise KeyError(kind)
+
+
+for kind, t, g in SFX:
+    put(sfx, t, make(kind), g)
+sfx *= 0.55
+
+
+def write_wav(path, x):
+    x = np.clip(x, -1, 1)
+    with wave.open(path, "wb") as f:
+        f.setnchannels(1); f.setsampwidth(2); f.setframerate(SR)
+        f.writeframes((x * 32767).astype("<i2").tobytes())
+
+
+write_wav(os.path.join(ROOT, "assets/audio/music.wav"), music)
+write_wav(os.path.join(ROOT, "assets/audio/sfx.wav"), sfx)
+json.dump({"offset": OFF, "scenes": SC, "captions": [[x["w"] for x in g] for g in groups], "sfx": SFX},
           open(os.path.join(ROOT, "build", "timing.json"), "w"), indent=1)
 print("scenes", [(k, round(a, 2), round(b, 2)) for k, a, b in SC])
-print("captions", len(groups), "tweens", len(J))
+print("captions", len(groups), "tweens", len(J), "sfx", len(SFX))
