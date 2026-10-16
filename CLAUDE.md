@@ -65,6 +65,9 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | 12-20 s promo that drives readers to a newsletter edition | `newsletter-promo`                          |
 | Newsletter cover as a seamless looping GIF              | `loop-cover`                                  |
 | Any horizontal or square video to 1080x1920 Reel / TikTok | `reel-export`                               |
+| Turn screenshots, URLs or "make it feel like this" into a DESIGN.md visual direction | `reference-design-contract` |
+| Research and profile competitors from their URLs (messaging, positioning, look) | `competitor-profiling`   |
+| Drive a browser: open pages, take screenshots, pull page content for references | `agent-browser`          |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
 **Carousels and static graphics:**
@@ -95,6 +98,7 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `fal-lip-sync`, `remotion`, `frame-*`, `video-hyperframes`: `nexu-io/open-design`
 - `video-motion-graphics`: `dylantarre/animation-principles`
 - `brand-intake`, `motion-brief-writer`, `reference-to-motion`, `motion-prompt-writer`, `launch-video`, `apple-launch-film`, `vox-explainer`, `animated-chart`, `milestone-reveal`, `motion-effects`, `title-sequence-3d`, `model-showdown`, `newsletter-promo`, `loop-cover`, `reel-export`: `charlie947/motion-graphics-skills`
+- `reference-design-contract`, `agent-browser`: `nexu-io/open-design`; `competitor-profiling`: `coreyhaines31/marketingskills`
 - fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`,
   `model-routing`): `fal-ai-community/skills`
 
@@ -116,6 +120,7 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 - The `higgsfield-*` skills need the `higgsfield` CLI and a Higgsfield account (`higgsfield auth login`);
   each generation spends Higgsfield credits.
 - `brand-intake` writes `brand.md` and `MOTION.md` into the project. The other `charlie947` motion skills read them first, so run `brand-intake` before any of them.
+- Caption timing: local speech models can't download in cloud sessions, so get word timestamps from ElevenLabs Scribe through the ElevenLabs connector (transcription spends credits), then map the approved script words onto them. `agent-browser` needs `npm i -g agent-browser`.
 - Telemetry: set `HYPERFRAMES_NO_TELEMETRY=1` to turn it off.
 
 ## Repo layout

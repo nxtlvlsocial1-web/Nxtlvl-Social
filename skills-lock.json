@@ -13,6 +13,12 @@
       "skillPath": "skills/ad-creative/SKILL.md",
       "computedHash": "7c2beab672f7f50542c40472fe45ad4a1920f2395ccf14f79bb54cf58a004b22"
     },
+    "agent-browser": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/agent-browser/SKILL.md",
+      "computedHash": "31799ef729da132963a913b47784d0d5f9beef2348977663aaf3ab6b079583c5"
+    },
     "animated-chart": {
       "source": "charlie947/motion-graphics-skills",
       "sourceType": "github",
@@ -48,6 +54,12 @@
       "sourceType": "github",
       "skillPath": "skills/commercial/SKILL.md",
       "computedHash": "f64268b63857a9b8a76706298169ef2780c3a9e9cb21547be6aec1d793230766"
+    },
+    "competitor-profiling": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/competitor-profiling/SKILL.md",
+      "computedHash": "cfae4d2a5b6a4b08784aa63784147d8baad61eb9696840b96e182ef4893fd736"
     },
     "content-strategy": {
       "source": "coreyhaines31/marketingskills",
@@ -324,6 +336,12 @@
       "sourceType": "github",
       "skillPath": "skills/reel-export/SKILL.md",
       "computedHash": "12b32239a9061aec3f81e487149142848146020521c464fafaee28af89cfcb3e"
+    },
+    "reference-design-contract": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/reference-design-contract/SKILL.md",
+      "computedHash": "3f3910d6a6663a8f5696db5ea1cadf1f2d9cf55bbba4fc9480061a12eaf8a74b"
     },
     "reference-to-motion": {
       "source": "charlie947/motion-graphics-skills",
