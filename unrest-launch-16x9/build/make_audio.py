@@ -258,53 +258,113 @@ music *= (0.55 + 0.45 * duck)[:, None]
 
 # ---------------------------------------------------------------- sfx
 
+def beep(f=1000, d=0.09):
+    t = t_axis(d)
+    return np.sin(2 * np.pi * f * t) * np.minimum(1, t / 0.004) * np.minimum(1, (d - t) / 0.01) * 0.5
+
+
+def zip_up(d=0.16, f0=300, f1=2400):
+    t = t_axis(d)
+    f = f0 * (f1 / f0) ** (t / d)
+    return np.sin(2 * np.pi * np.cumsum(f) / SR) * np.sin(np.pi * t / d) * 0.35
+
+
+def sparkle(d, density=60):
+    out = np.zeros(int(SR * d))
+    for k in range(int(d * density)):
+        i = int(rng.uniform(0, d - 0.03) * SR)
+        b = tick() * rng.uniform(0.2, 0.8)
+        out[i:i + len(b)] += b[: len(out) - i]
+    return out * np.linspace(1, 0.2, len(out))
+
+
 sfx = buf()
-# hook
-place(sfx, pop(1500, 600, 0.12) * 0.7, 0.05)                     # dot pulse
-place(sfx, whoosh(0.4, 600, 6000, 0.35) * 0.5, 0.2)              # ring expands
+# hook: dot boing, double ripple, flatline monitor, words, "BORING?" bouncing in, heartbeat, iris
+place(sfx, pop(1500, 500, 0.14) * 0.8, 0.02)
+place(sfx, whoosh(0.4, 600, 6000, 0.35) * 0.45, 0.18)
+place(sfx, whoosh(0.35, 900, 7000, 0.3) * 0.3, 0.27)
+tone = np.sin(2 * np.pi * 1000 * t_axis(1.12)) * 0.06
+tone *= np.minimum(1, t_axis(1.12) / 0.05) * np.minimum(1, (1.12 - t_axis(1.12)) / 0.05)
+place(sfx, tone, 0.34)                                             # flatline "beeeep", quiet
 for w in [0.40, 0.58, 0.76, 0.98, 1.18]:
-    place(sfx, click(3000) * 0.9, w)                               # word slams
-place(sfx, thud(0.45) * 0.9, 1.5)                                 # "boring?" lands
+    place(sfx, click(3000) * 0.8, w)
+    place(sfx, thud(0.2) * 0.35, w + 0.06)                          # springy landing
+for k in range(7):                                                  # letters bounce: impact + two rebounds
+    t0 = 1.33 + k * 0.025 + 0.18
+    place(sfx, thud(0.25) * 0.55, t0, pan=(k - 3) / 5)
+    place(sfx, thud(0.15) * 0.22, t0 + 0.14, pan=(k - 3) / 5)
+    place(sfx, tick() * 0.6, t0 + 0.23, pan=(k - 3) / 5)
 for f in [1.70, 1.80]:
-    place(sfx, tick() * 1.2, f)                                    # solid/outline flicker
-place(sfx, whoosh(0.3, 3000, 400, 0.8) * 0.5, 1.72)               # suck-in before the drop
-# discover: icon pops and morphs
-for k, b in enumerate([2.0, 2.5, 3.0, 3.5]):
-    place(sfx, pop(1300 - 120 * k, 380, 0.1) * 0.75, b, pan=-0.1 + 0.07 * k)
-    place(sfx, whoosh(0.22, 2500, 900, 0.4) * 0.25, b + 0.3)
-place(sfx, tick() * 1.3, 4.0)                                      # outline flip
-place(sfx, whoosh(0.35, 400, 5000, 0.85) * 0.6, 4.68)             # out to connect
-# connect: dots pop, lines tick, collapse, bubbles, doors
+    place(sfx, tick() * 1.1, f)
+place(sfx, beep(1000, 0.08) * 0.9, 1.78)                            # heartbeat jolt
+place(sfx, beep(1000, 0.08) * 0.7, 1.88)
+place(sfx, whoosh(0.18, 500, 6000, 0.9) * 0.7, 1.84)                # iris opens
+# discover
+for k in range(9):
+    place(sfx, tick() * 0.7, 2.0 + k * 0.03 + 0.12, pan=(k - 4) / 6)    # letters land
+place(sfx, whoosh(0.45, 300, 2500, 0.3) * 0.5, 2.06)                # phone springs up
+for n, t in enumerate([2.5, 2.75, 3.0, 3.25]):
+    place(sfx, zip_up(0.2, 500, 2600) * 0.5, t, pan=-0.6 if n < 2 else 0.6)
+    place(sfx, pop(1300 - 100 * n, 380, 0.11) * 0.8, t + 0.24, pan=-0.6 if n < 2 else 0.6)
+for k in range(9):
+    place(sfx, tick() * 0.6, 4.0 + k * 0.03, pan=(k - 4) / 6)       # outline wave
+place(sfx, thud(0.25) * 0.5, 4.0)
+for k in range(9):
+    place(sfx, pop(1800, 900, 0.04) * 0.25, 4.45 + k * 0.02 + 0.11)  # hop ripple
+place(sfx, whoosh(0.32, 300, 5000, 0.85) * 0.8, 4.7)                # everything launches up
+# connect
 for i in range(12):
     place(sfx, pop(2400 + 90 * (i % 5), 1300, 0.04) * 0.3, 5.0 + i * 0.025, pan=((i * 37) % 11 - 5) / 6)
-for i in range(16):
-    place(sfx, tick() * 0.8, 5.30 + i * 0.045, pan=((i * 53) % 9 - 4) / 5)
-place(sfx, whoosh(0.3, 4000, 500, 0.7) * 0.6, 5.95)               # network collapses
-place(sfx, pop(900, 300, 0.12) * 0.8, 6.25, pan=-0.4)
-place(sfx, pop(1100, 350, 0.12) * 0.8, 6.30, pan=0.4)
-place(sfx, thud(0.25) * 0.7, 6.5)                                  # doors shut
-place(sfx, whoosh(0.4, 300, 3000, 0.25) * 0.7, 6.75)              # doors slide open
+for i in range(14):
+    place(sfx, tick() * 0.7, 5.24 + i * 0.045, pan=((i * 53) % 9 - 4) / 5)
+for k in range(16):
+    place(sfx, beep(2600 + 150 * (k % 4), 0.03) * 0.18, 5.5 + k * 0.028, pan=((k * 31) % 9 - 4) / 5)
+place(sfx, whoosh(0.3, 4000, 500, 0.7) * 0.6, 5.96)                 # network collapses
+place(sfx, whoosh(0.25, 600, 3000, 0.5) * 0.45, 6.08)               # bubbles fly in
+place(sfx, pop(700, 260, 0.14) * 0.85, 6.24)                        # bump
+for k in range(6):
+    place(sfx, tick() * 0.5, 6.26 + k * 0.05)                         # typing dots
+place(sfx, pop(1500, 600, 0.1) * 0.6, 6.3)                          # "hey!"
+place(sfx, thud(0.35) * 0.95, 6.5)                                  # doors slam
+place(sfx, thud(0.15) * 0.4, 6.57)                                  # rebound knock
+place(sfx, whoosh(0.45, 300, 3200, 0.25) * 0.7, 6.75)               # doors slide open
+for k in range(8):
+    place(sfx, pop(1100 + 60 * abs(k - 3.5), 380, 0.07) * 0.35, 6.75 + abs(k - 3.5) * 0.035, pan=(k - 3.5) / 5)
+for k in range(8):
+    place(sfx, pop(1800, 900, 0.04) * 0.25, 7.25 + k * 0.025 + 0.11)
+for k in range(8):
+    place(sfx, tick() * 0.6, 7.5 + k * 0.03)
+place(sfx, whoosh(0.22, 400, 5000, 0.9) * 0.75, 7.8)                # scene pushes up
 # experience
-for i in range(8):
-    place(sfx, pop(700 + 40 * i, 250, 0.06) * 0.35, 8.0 + i * 0.05, pan=(i - 3.5) / 4)
-place(sfx, whoosh(0.4, 300, 2500, 0.5) * 0.5, 8.45)               # stage rises
-place(sfx, boom(0.9, 110, 45) * 0.6, 9.0)                          # burst
+place(sfx, whoosh(0.35, 5000, 600, 0.2) * 0.6, 8.0)                 # rises in
+for i in range(15):
+    place(sfx, pop(700 + 30 * i, 250, 0.06) * 0.3, 8.04 + abs(i - 7) * 0.02, pan=(i - 7) / 8)
+place(sfx, whoosh(0.4, 300, 2500, 0.4) * 0.4, 8.12)                 # stage builds
+place(sfx, boom(0.9, 110, 45) * 0.6, 9.0)                           # burst
 place(sfx, whoosh(0.5, 800, 9000, 0.15) * 0.6, 9.0)
-place(sfx, thud(0.4) * 1.0, 10.0)                                   # ticket stamp
+place(sfx, sparkle(1.6, 70) * 0.7, 9.02)                            # confetti
+place(sfx, thud(0.45) * 1.0, 10.0)                                  # ticket stamp
 place(sfx, click(1500) * 0.8, 10.0)
-place(sfx, tick() * 1.2, 10.5)
-# recap slams
+place(sfx, whoosh(0.25, 3000, 800, 0.2) * 0.4, 10.0)                # shock lines
+for k in range(11):
+    place(sfx, tick() * 0.55, 10.5 + k * 0.025)
+# recap slams + speed-line swishes
 for k, b in enumerate([11.0, 11.5, 12.0, 12.5]):
     place(sfx, thud(0.3) * 0.85, b)
     place(sfx, click(2500) * 0.8, b)
-    place(sfx, tick() * 1.1, b + 0.25)
-place(sfx, whoosh(0.4, 7000, 300, 0.9) * 0.8, 12.6)               # everything collapses to the dot
+    place(sfx, whoosh(0.22, 1500, 7000, 0.4) * 0.45, b, pan=0.5 if k % 2 == 0 else -0.5)
+    place(sfx, tick() * 1.0, b + 0.25)
+place(sfx, whoosh(0.3, 7000, 300, 0.9) * 0.8, 12.66)                # letters sucked into the dot
+place(sfx, pop(1900, 800, 0.08) * 0.5, 12.86)
 # reveal
 place(sfx, pop(1800, 700, 0.12) * 0.6, 13.0)
-for i in range(18):                                                 # tagline types
-    place(sfx, click(4000 + 200 * (i % 4)) * 0.45, 13.40 + i * 0.025, pan=((i * 29) % 7 - 3) / 6)
-place(sfx, pop(1400, 500, 0.08) * 0.5, 13.5)                        # url line
-place(sfx, whoosh(0.3, 500, 2000, 0.3) * 0.25, 14.4)                # logo pulse
+place(sfx, zip_up(0.18, 400, 3000) * 0.6, 13.22)                    # baseline shoots out
+for k in range(6):
+    place(sfx, pop(900 + 90 * k, 320, 0.08) * 0.4, 13.36 + k * 0.045, pan=(k - 2.5) / 4)
+for i in range(18):
+    place(sfx, click(4000 + 200 * (i % 4)) * 0.4, 13.42 + i * 0.025, pan=((i * 29) % 7 - 3) / 6)
+place(sfx, pop(1400, 500, 0.08) * 0.5, 13.5)
+place(sfx, whoosh(0.35, 500, 2400, 0.25) * 0.3, 14.48)              # logo pulse
 
 # ---------------------------------------------------------------- master + write
 

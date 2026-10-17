@@ -8,20 +8,22 @@
         @font-face { font-family: "Space Grotesk"; font-weight: 500; src: url("../assets/fonts/space-grotesk-latin-500-normal.woff2") format("woff2"); }
         #root { position: absolute; inset: 0; overflow: hidden; }
         #rec-bg { position: absolute; inset: 0; background: #ffffff; }
+        #rec-speed { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+        #rec-speed rect { fill: #000000; }
         #rec-stage { position: absolute; inset: 0; font-family: "Space Grotesk", sans-serif; }
-        .rec-meta { position: absolute; left: 96px; top: 80px; display: block; font-weight: 500; font-size: 24px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; opacity: 0; }
-        .rec-row { position: absolute; left: 0; right: 0; top: 380px; display: flex; justify-content: center; }
+        .rec-meta { position: absolute; left: 96px; top: 80px; display: block; font-weight: 500; font-size: 24px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; color: #000000; opacity: 0; }
+        .rec-row { position: absolute; left: 0; right: 0; top: 380px; display: flex; justify-content: center; transform-origin: 50% 50%; }
         .rec-sub { position: absolute; left: 0; right: 0; top: 700px; display: flex; justify-content: center; }
-        .rec-stack { position: relative; display: block; opacity: 0; }
-        .rec-word { display: block; font-weight: 700; font-size: 300px; letter-spacing: -0.045em; line-height: 0.86; text-transform: uppercase; white-space: nowrap; }
-        .rec-solid { color: #000000; }
-        .rec-outline { position: absolute; left: 0; top: 0; color: #000000; -webkit-text-stroke: 5px #ffffff; opacity: 0; }
-        .rec-kicker { display: block; font-weight: 500; font-size: 30px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; opacity: 0; }
-        .rec-ink { color: #000000; } .rec-paper { color: #ffffff; }
+        .rec-stack { display: block; opacity: 0; transform-origin: 50% 50%; --f: #000000; --s: #000000; }
+        .rec-word { display: block; font-weight: 700; font-size: 300px; letter-spacing: -0.045em; line-height: 0.86; text-transform: uppercase; white-space: nowrap; color: var(--f); -webkit-text-stroke: 5px var(--s); }
+        .ch { display: inline-block; transform-origin: 50% 100%; }
+        .ci { display: inline-block; transform-origin: 50% 50%; }
+        .rec-kicker { display: block; font-weight: 500; font-size: 30px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; color: #000000; opacity: 0; }
         #rec-dot { position: absolute; left: 945px; top: 525px; width: 30px; height: 30px; border-radius: 50%; background: #ffffff; opacity: 0; }
       </style>
       <div data-hf-id="hf-j4xe" id="root" data-composition-id="recap" data-width="1920" data-height="1080">
         <div data-hf-id="hf-6q2r" id="rec-bg"></div>
+        <svg data-hf-id="hf-pff0" id="rec-speed" viewBox="0 0 1920 1080"></svg>
         <div data-hf-id="hf-nyg8" id="rec-stage"></div>
         <div data-hf-id="hf-epsn" id="rec-dot"></div>
       </div>
@@ -30,11 +32,27 @@
           const F = 1 / 30;
           const tl = gsap.timeline({ paused: true });
           const $ = (s) => document.querySelector(s);
+          const NS = "http://www.w3.org/2000/svg";
           const show = (el, t) => tl.set(el, { opacity: 1 }, t);
           const hide = (el, t) => tl.set(el, { opacity: 0 }, t);
           function shake(el, t, amp = 1) {
             [[14, -7], [-10, 8], [6, -4], [-3, 2], [0, 0]].forEach(([x, y], i) => tl.set(el, { x: x * amp, y: y * amp }, t + i * F));
           }
+          function spring(response, z) {
+            const w = (2 * Math.PI) / response, wd = w * Math.sqrt(1 - z * z);
+            const pos = (t) => 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + ((z * w) / wd) * Math.sin(wd * t));
+            const T = Math.log(1000) / (z * w), xT = pos(T);
+            return { duration: T, ease: (p) => pos(p * T) + p * (1 - xT) };
+          }
+          function split(el) {
+            const txt = el.textContent; el.textContent = "";
+            return [...txt].map((c) => {
+              const o = document.createElement("span"), i = document.createElement("span");
+              o.className = "ch"; i.className = "ci"; i.textContent = c === " " ? " " : c;
+              o.appendChild(i); el.appendChild(o); return { o, i };
+            });
+          }
+          const BOUNCY = spring(0.32, 0.58), POP = spring(0.26, 0.62);
 
           const REC = [
             ["Feed", "Posts · polls · updates"],
@@ -42,38 +60,63 @@
             ["Hangout", "Fests · meetups · experiences"],
             ["Central", "Spots · roommates · sports"],
           ];
-          REC.forEach(([w, sub], i) => {
+          const words = REC.map(([w, sub], n) => {
             const wrap = document.createElement("div");
             wrap.innerHTML =
-              `<span class="rec-meta rec-ink" id="rec-ia${i}">0${i + 1} / 04</span>` +
-              `<span class="rec-meta rec-paper" id="rec-ib${i}">0${i + 1} / 04</span>` +
-              `<div class="rec-row"><span class="rec-stack" id="rec-w${i}"><span class="rec-word rec-solid" id="rec-s${i}">${w}</span><span class="rec-word rec-outline" id="rec-o${i}">${w}</span></span></div>` +
-              `<div class="rec-sub"><span class="rec-kicker rec-ink" id="rec-ka${i}">${sub}</span></div>` +
-              `<div class="rec-sub"><span class="rec-kicker rec-paper" id="rec-kb${i}">${sub}</span></div>`;
+              `<span class="rec-meta" id="rec-meta${n}">0${n + 1} / 04</span>` +
+              `<div class="rec-row" id="rec-row${n}" data-layout-allow-overlap><span class="rec-stack" id="rec-w${n}"><span class="rec-word" id="rec-t${n}">${w}</span></span></div>` +
+              `<div class="rec-sub" data-layout-allow-overlap><span class="rec-kicker" id="rec-k${n}">${sub}</span></div>`;
             while (wrap.firstChild) $("#rec-stage").appendChild(wrap.firstChild);
+            return split($("#rec-t" + n));
           });
+          // speed lines that streak behind every slam
+          const lines = [];
+          for (let k = 0; k < 7; k++) {
+            const r = document.createElementNS(NS, "rect");
+            const h = [8, 14, 6, 18, 10, 6, 12][k];
+            r.setAttribute("x", 0); r.setAttribute("y", 150 + k * 125); r.setAttribute("width", 700 + (k % 3) * 260); r.setAttribute("height", h);
+            r.setAttribute("opacity", "0");
+            $("#rec-speed").appendChild(r);
+            lines.push(r);
+          }
 
-          // 0.25 s flash cuts: white frame + solid word, then black frame + outlined word
-          REC.forEach((_, i) => {
-            const a = i * 0.5, b = a + 0.25;
+          words.forEach((chars, n) => {
+            const a = n * 0.5, b = a + 0.25, w = "#rec-w" + n, dir = n % 2 ? -1 : 1;
+            // slot A: white frame, solid black word
             tl.set("#rec-bg", { backgroundColor: "#ffffff" }, a);
-            show("#rec-w" + i, a); show("#rec-ia" + i, a); show("#rec-ka" + i, a);
-            show("#rec-s" + i, a); hide("#rec-o" + i, a);
-            tl.fromTo("#rec-w" + i, { scale: 1.4 }, { scale: 1, duration: 0.14, ease: "expo.out" }, a);
+            tl.set(w, { "--f": "#000000", "--s": "#000000" }, a);
+            show(w, a); show("#rec-meta" + n, a); show("#rec-k" + n, a);
+            tl.set(["#rec-meta" + n, "#rec-k" + n], { color: "#000000" }, a);
             shake("#rec-stage", a, 1.2);
+            lines.forEach((r, k) => {
+              tl.set(r, { attr: { opacity: 1 } }, a);
+              tl.fromTo(r, { x: dir > 0 ? -1700 : 2000 }, { x: dir > 0 ? 2000 : -1700, duration: 0.2, ease: "power2.inOut", immediateRender: n === 0 }, a + k * 0.006);
+              tl.set(r, { attr: { opacity: 0 } }, b);
+            });
+            // four words, four entrances
+            if (n === 0) {
+              chars.forEach(({ i }, k) => tl.fromTo(i, { scale: 3, y: -60 }, { scale: 1, y: 0, duration: BOUNCY.duration, ease: BOUNCY.ease }, a + k * 0.02));
+            } else if (n === 1) {
+              tl.fromTo(w, { x: 1150, skewX: -32 }, { x: 0, skewX: 0, duration: POP.duration, ease: POP.ease }, a);
+              chars.forEach(({ i }, k) => tl.fromTo(i, { y: k % 2 ? 70 : -70 }, { y: 0, duration: BOUNCY.duration, ease: BOUNCY.ease }, a + k * 0.012));
+            } else if (n === 2) {
+              chars.forEach(({ i }, k) => tl.fromTo(i, { y: 320, rotation: 28 }, { y: 0, rotation: 0, duration: BOUNCY.duration, ease: BOUNCY.ease }, a + k * 0.02));
+            } else {
+              tl.fromTo(w, { scale: 0.12, rotation: -10 }, { scale: 1, rotation: 0, duration: BOUNCY.duration, ease: BOUNCY.ease }, a);
+            }
+            // slot B: black frame, the same word outlined in white
             tl.set("#rec-bg", { backgroundColor: "#000000" }, b);
-            hide("#rec-ia" + i, b); hide("#rec-ka" + i, b);
-            show("#rec-ib" + i, b); show("#rec-kb" + i, b);
-            hide("#rec-s" + i, b); show("#rec-o" + i, b);
-            tl.fromTo("#rec-w" + i, { scale: 1.07 }, { scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, b);
-            if (i < 3) { hide("#rec-w" + i, a + 0.5); hide("#rec-ib" + i, a + 0.5); hide("#rec-kb" + i, a + 0.5); }
+            tl.set(w, { "--f": "#000000", "--s": "#ffffff" }, b);
+            tl.set(["#rec-meta" + n, "#rec-k" + n], { color: "#ffffff" }, b);
+            tl.fromTo("#rec-row" + n, { scale: 1.08 }, { scale: 1, duration: 0.2, ease: "power3.out" }, b);
+            if (n < 3) { hide(w, a + 0.5); hide("#rec-meta" + n, a + 0.5); hide("#rec-k" + n, a + 0.5); }
           });
 
           // everything collapses into the white dot
-          tl.to("#rec-w3", { scale: 0, duration: 0.18, ease: "power3.in" }, 1.76);
-          hide("#rec-kb3", 1.76); hide("#rec-ib3", 1.76);
+          words[3].forEach(({ o }, k) => tl.fromTo(o, { x: 0, scale: 1 }, { x: -(k - 3) * 185, scale: 0, duration: 0.18, ease: "power3.in", immediateRender: false }, 1.74 + Math.abs(k - 3) * 0.012));
+          hide("#rec-k3", 1.76); hide("#rec-meta3", 1.76);
           show("#rec-dot", 1.86);
-          tl.fromTo("#rec-dot", { scale: 0 }, { scale: 1, duration: 0.1, ease: "back.out(3)" }, 1.86);
+          tl.fromTo("#rec-dot", { scale: 0 }, { scale: 1, duration: POP.duration, ease: POP.ease }, 1.86);
 
           window.__timelines["recap"] = tl;
         })();

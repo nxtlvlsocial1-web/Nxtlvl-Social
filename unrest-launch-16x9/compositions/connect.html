@@ -8,27 +8,29 @@
         @font-face { font-family: "Space Grotesk"; font-weight: 500; src: url("../assets/fonts/space-grotesk-latin-500-normal.woff2") format("woff2"); }
         #root { position: absolute; inset: 0; overflow: hidden; }
         #con-bg { position: absolute; inset: 0; background: #000000; }
-        #con-stage { position: absolute; inset: 0; font-family: "Space Grotesk", sans-serif; color: #ffffff; }
+        #con-cam, #con-punch, #con-stage { position: absolute; inset: 0; transform-origin: 50% 50%; }
+        #con-stage { font-family: "Space Grotesk", sans-serif; color: #ffffff; }
         .con-meta { position: absolute; display: block; font-weight: 500; font-size: 24px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; }
         #con-meta-tl { left: 96px; top: 80px; } #con-meta-tr { right: 96px; top: 80px; } #con-meta-br { right: 96px; bottom: 64px; }
-        #con-rule { position: absolute; left: 96px; right: 96px; bottom: 110px; height: 3px; background: #ffffff; transform-origin: 0 50%; }
         #con-net { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
         #con-net line { stroke: #ffffff; stroke-width: 3; stroke-dasharray: 1; }
-        #con-net circle { fill: #ffffff; }
+        #con-net .dot { fill: #ffffff; }
+        #con-net .pulse { fill: #ffffff; }
         .con-bubble { position: absolute; top: 230px; width: 300px; height: 200px; opacity: 0; }
+        .con-bub-in { position: absolute; inset: 0; transform-origin: 50% 80%; }
         .con-bubble svg { display: block; width: 100%; height: 100%; overflow: visible; }
         #con-bub-l { left: 640px; } #con-bub-r { left: 980px; }
         .con-row { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
-        #con-word { top: 630px; opacity: 0; }
-        #con-stack { position: relative; display: block; }
-        .con-word { display: block; font-weight: 700; font-size: 300px; letter-spacing: -0.045em; line-height: 0.86; text-transform: uppercase; white-space: nowrap; color: #ffffff; }
-        #con-outline { position: absolute; left: 0; top: 0; color: #000000; -webkit-text-stroke: 5px #ffffff; opacity: 0; }
-        #con-under { position: absolute; left: 330px; width: 1260px; top: 880px; height: 3px; background: #ffffff; transform-origin: 50% 50%; opacity: 0; }
-        #con-kicker { top: 914px; }
-        .con-kicker { display: block; font-weight: 500; font-size: 30px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; opacity: 0; }
+        #con-word { top: 632px; }
+        #con-title { display: block; font-weight: 700; font-size: 290px; letter-spacing: -0.045em; line-height: 0.86; text-transform: uppercase; white-space: nowrap; color: #ffffff; -webkit-text-stroke: 5px #ffffff; }
+        .ch { display: inline-block; transform-origin: 50% 100%; }
+        .ci { display: inline-block; transform-origin: 50% 100%; opacity: 0; }
+        #con-under { position: absolute; left: 330px; width: 1260px; top: 900px; height: 4px; background: #ffffff; transform-origin: 50% 50%; opacity: 0; }
+        #con-kicker { top: 930px; }
+        #con-kick { display: block; font-weight: 500; font-size: 30px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; opacity: 0; }
         .con-door { position: absolute; top: 0; width: 960px; height: 1080px; background: #ffffff; color: #000000; opacity: 0; }
         #con-door-l { left: 0; } #con-door-r { left: 960px; }
-        .con-handle { position: absolute; top: 470px; width: 12px; height: 140px; background: #000000; }
+        .con-handle { position: absolute; top: 470px; width: 14px; height: 150px; border-radius: 7px; background: #000000; }
         #con-door-l .con-handle { right: 44px; } #con-door-r .con-handle { left: 44px; }
         .con-tag { position: absolute; display: block; white-space: nowrap; text-transform: uppercase; }
         #con-door-l .con-tag { right: 96px; top: 500px; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; }
@@ -36,31 +38,25 @@
       </style>
       <div data-hf-id="hf-yrmj" id="root" data-composition-id="connect" data-width="1920" data-height="1080">
         <div data-hf-id="hf-ghkh" id="con-bg"></div>
-        <div data-hf-id="hf-3b9e" id="con-stage">
+        <div data-hf-id="hf-0td1" id="con-cam"><div data-hf-id="hf-tomo" id="con-punch"><div data-hf-id="hf-3b9e" id="con-stage">
           <span data-hf-id="hf-gadk" class="con-meta" id="con-meta-tl">02 — Connect</span>
           <span data-hf-id="hf-r3ex" class="con-meta" id="con-meta-tr">Unrest / DU</span>
           <span data-hf-id="hf-c9hn" class="con-meta" id="con-meta-br">unrestdu.in</span>
-          <div data-hf-id="hf-yv2i" id="con-rule"></div>
-          <svg data-hf-id="hf-c6oa" id="con-net" viewBox="0 0 1920 1080"><g data-hf-id="hf-ey27" id="con-net-g"><g data-hf-id="hf-7p0p" id="con-net-lines"></g><g data-hf-id="hf-1iks" id="con-net-dots"></g></g></svg>
-          <div data-hf-id="hf-1r6w" class="con-bubble" id="con-bub-l">
+          <svg data-hf-id="hf-c6oa" id="con-net" viewBox="0 0 1920 1080"><g data-hf-id="hf-ey27" id="con-net-g"><g data-hf-id="hf-7p0p" id="con-net-lines"></g><g data-hf-id="hf-3dt6" id="con-net-pulses"></g><g data-hf-id="hf-1iks" id="con-net-dots"></g></g></svg>
+          <div data-hf-id="hf-1r6w" class="con-bubble" id="con-bub-l"><div data-hf-id="hf-2dvv" class="con-bub-in" id="con-bub-l-in">
             <svg data-hf-id="hf-6d7c" viewBox="0 0 300 200"><path data-hf-id="hf-i1ij" d="M24 0 H276 Q300 0 300 24 V136 Q300 160 276 160 H92 L40 200 L52 160 H24 Q0 160 0 136 V24 Q0 0 24 0 Z" fill="#ffffff" />
-              <circle data-hf-id="hf-gevx" cx="100" cy="80" r="14" fill="#000000" /><circle data-hf-id="hf-mxzi" cx="150" cy="80" r="14" fill="#000000" /><circle data-hf-id="hf-qdfa" cx="200" cy="80" r="14" fill="#000000" /></svg>
-          </div>
-          <div data-hf-id="hf-j2ym" class="con-bubble" id="con-bub-r">
+              <circle data-hf-id="hf-8cu4" id="con-td0" cx="100" cy="80" r="14" fill="#000000" /><circle data-hf-id="hf-vwzy" id="con-td1" cx="150" cy="80" r="14" fill="#000000" /><circle data-hf-id="hf-wjiz" id="con-td2" cx="200" cy="80" r="14" fill="#000000" /></svg>
+          </div></div>
+          <div data-hf-id="hf-j2ym" class="con-bubble" id="con-bub-r"><div data-hf-id="hf-qjxl" class="con-bub-in" id="con-bub-r-in">
             <svg data-hf-id="hf-ssds" viewBox="0 0 300 200"><path data-hf-id="hf-lx86" d="M24 3 H276 Q297 3 297 24 V136 Q297 157 276 157 H248 L256 197 L208 157 H24 Q3 157 3 136 V24 Q3 3 24 3 Z" fill="none" stroke="#ffffff" stroke-width="6" />
-              <text data-hf-id="hf-6150" x="150" y="104" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="62" fill="#ffffff">hey!</text></svg>
-          </div>
-          <div data-hf-id="hf-5z9s" id="con-word" class="con-row">
-            <span data-hf-id="hf-nafl" id="con-stack">
-              <span data-hf-id="hf-3i20" class="con-word" id="con-solid">Connect.</span>
-              <span data-hf-id="hf-k3hf" class="con-word" id="con-outline">Connect.</span>
-            </span>
-          </div>
+              <text data-hf-id="hf-2gop" id="con-hey" x="150" y="104" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="62" fill="#ffffff">hey!</text></svg>
+          </div></div>
+          <div data-hf-id="hf-5z9s" id="con-word" class="con-row"><span data-hf-id="hf-xjn3" id="con-title">Connect.</span></div>
           <div data-hf-id="hf-4ug2" id="con-under"></div>
-          <div data-hf-id="hf-6riz" id="con-kicker" class="con-row"><span data-hf-id="hf-irxj" class="con-kicker" id="con-kick">Who can I meet?</span></div>
+          <div data-hf-id="hf-6riz" id="con-kicker" class="con-row"><span data-hf-id="hf-dede" id="con-kick">Who can I meet?</span></div>
           <div data-hf-id="hf-50fc" class="con-door" id="con-door-l" data-layout-allow-overflow><div data-hf-id="hf-z2nr" class="con-handle"></div><span data-hf-id="hf-jbiy" class="con-tag">Corridor</span></div>
           <div data-hf-id="hf-mc72" class="con-door" id="con-door-r" data-layout-allow-overflow><div data-hf-id="hf-v19z" class="con-handle"></div><span data-hf-id="hf-zf5h" class="con-tag">Door 01 · Music</span></div>
-        </div>
+        </div></div></div>
       </div>
       <script>
         (() => {
@@ -73,8 +69,23 @@
           function shake(el, t, amp = 1) {
             [[14, -7], [-10, 8], [6, -4], [-3, 2], [0, 0]].forEach(([x, y], i) => tl.set(el, { x: x * amp, y: y * amp }, t + i * F));
           }
+          function spring(response, z) {
+            const w = (2 * Math.PI) / response, wd = w * Math.sqrt(1 - z * z);
+            const pos = (t) => 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + ((z * w) / wd) * Math.sin(wd * t));
+            const T = Math.log(1000) / (z * w), xT = pos(T);
+            return { duration: T, ease: (p) => pos(p * T) + p * (1 - xT) };
+          }
+          function split(el) {
+            const txt = el.textContent; el.textContent = "";
+            return [...txt].map((c) => {
+              const o = document.createElement("span"), i = document.createElement("span");
+              o.className = "ch"; i.className = "ci"; i.textContent = c === " " ? " " : c;
+              o.appendChild(i); el.appendChild(o); return { o, i };
+            });
+          }
           function mulberry32(a) { return function () { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
           const rand = mulberry32(20261017);
+          const BOUNCY = spring(0.36, 0.58), POP = spring(0.3, 0.62), LAND = spring(0.42, 0.62);
 
           // seeded scatter of 36 dots, each joined to its two nearest neighbours
           const pts = [];
@@ -100,42 +111,84 @@
           });
           pts.forEach((p, i) => {
             const c = document.createElementNS(NS, "circle");
-            c.setAttribute("cx", p.x); c.setAttribute("cy", p.y); c.setAttribute("r", i % 5 === 0 ? 12 : 7);
-            c.id = "con-dot-" + i;
+            c.setAttribute("cx", p.x); c.setAttribute("cy", p.y); c.setAttribute("r", i % 5 === 0 ? 13 : 8);
+            c.setAttribute("class", "dot"); c.id = "con-dot-" + i;
             $("#con-net-dots").appendChild(c);
           });
 
+          // camera: slow push, punch on the hits
+          tl.fromTo("#con-cam", { scale: 1 }, { scale: 1.05, duration: 3, ease: "sine.inOut" }, 0);
+          [0, 0.5, 1.5, 2.0, 2.5].forEach((b) => tl.fromTo("#con-punch", { scale: b === 1.5 ? 1.06 : 1.03 }, { scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, b));
           shake("#con-stage", 0, 0.6);
-          tl.fromTo("#con-rule", { scaleX: 0 }, { scaleX: 1, duration: 2.95, ease: "none" }, 0);
+
+          // dots spring in from the centre outward; lines draw between them; the whole web drifts
           pts.map((p, i) => ({ i, d: Math.hypot(p.x - 960, p.y - 540) })).sort((a, b) => a.d - b.d).forEach(({ i }, n) => {
             const o = pts[i].x + " " + pts[i].y;
-            tl.fromTo("#con-dot-" + i, { scale: 0, svgOrigin: o }, { scale: 1, svgOrigin: o, duration: 0.22, ease: "back.out(3)" }, n * 0.009);
+            tl.fromTo("#con-dot-" + i, { scale: 0, svgOrigin: o }, { scale: 1, svgOrigin: o, duration: BOUNCY.duration, ease: BOUNCY.ease }, n * 0.009);
           });
           edgeList.forEach((_, n) => {
-            tl.fromTo("#con-edge-" + n, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.14, ease: "power1.out" }, 0.26 + (n / edgeList.length) * 0.62);
+            tl.fromTo("#con-edge-" + n, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.16, ease: "power2.out" }, 0.22 + (n / edgeList.length) * 0.6);
           });
+          tl.fromTo("#con-net-g", { scale: 1, rotation: 0, svgOrigin: "960 330" }, { scale: 1.07, rotation: 5, svgOrigin: "960 330", duration: 0.98, ease: "sine.inOut" }, 0);
+          // signals race along the connections
+          for (let k = 0; k < 16; k++) {
+            const [a, b] = edgeList[(k * 7) % edgeList.length];
+            const c = document.createElementNS(NS, "circle");
+            c.setAttribute("r", 7); c.setAttribute("class", "pulse"); c.setAttribute("opacity", "0");
+            c.setAttribute("cx", pts[a].x); c.setAttribute("cy", pts[a].y);
+            $("#con-net-pulses").appendChild(c);
+            const t = 0.5 + k * 0.028;
+            tl.set(c, { attr: { opacity: 1 } }, t);
+            tl.fromTo(c, { attr: { cx: pts[a].x, cy: pts[a].y } }, { attr: { cx: pts[b].x, cy: pts[b].y }, duration: 0.28, ease: "power1.inOut" }, t);
+            tl.set(c, { attr: { opacity: 0 } }, t + 0.28);
+          }
 
           // the network collapses into the spot where two people meet
-          tl.fromTo("#con-net-g", { scale: 1, rotation: 0, svgOrigin: "960 330" }, { scale: 0, rotation: 24, svgOrigin: "960 330", duration: 0.24, ease: "power3.in", immediateRender: false }, 0.98);
-          show("#con-bub-l", 1.12); show("#con-bub-r", 1.12);
-          tl.fromTo("#con-bub-l", { x: -900, rotation: -10 }, { x: 0, rotation: 0, duration: 0.2, ease: "back.out(1.6)" }, 1.12);
-          tl.fromTo("#con-bub-r", { x: 900, rotation: 10 }, { x: 0, rotation: 0, duration: 0.2, ease: "back.out(1.6)" }, 1.14);
-          tl.fromTo(["#con-bub-l", "#con-bub-r"], { scale: 1.14 }, { scale: 1, duration: 0.18, ease: "power2.out", immediateRender: false }, 1.32);
+          tl.to("#con-net-g", { scale: 0, rotation: 34, svgOrigin: "960 330", duration: 0.24, ease: "power3.in" }, 0.98);
+          show("#con-bub-l", 1.1); show("#con-bub-r", 1.1);
+          tl.fromTo("#con-bub-l", { x: -900, rotation: -16 }, { x: 0, rotation: 0, duration: LAND.duration, ease: LAND.ease }, 1.1);
+          tl.fromTo("#con-bub-r", { x: 900, rotation: 16 }, { x: 0, rotation: 0, duration: LAND.duration, ease: LAND.ease }, 1.12);
+          // they bump: squash and spring back
+          tl.fromTo(["#con-bub-l-in", "#con-bub-r-in"], { scaleX: 0.82, scaleY: 1.14 }, { scaleX: 1, scaleY: 1, duration: BOUNCY.duration, ease: BOUNCY.ease }, 1.24);
+          // typing dots bounce, then "hey!" pops
+          [0, 1, 2].forEach((k) => tl.fromTo("#con-td" + k, { y: 0 }, { y: -18, duration: 0.1, ease: "sine.inOut", repeat: 3, yoyo: true }, 1.26 + k * 0.05));
+          tl.fromTo("#con-hey", { scale: 0, svgOrigin: "150 84" }, { scale: 1, svgOrigin: "150 84", duration: BOUNCY.duration, ease: BOUNCY.ease }, 1.3);
 
-          // Corridor doors slam shut, then slide open on CONNECT.
+          // Corridor doors slam shut, rebound, then slide open on CONNECT.
           show("#con-door-l", 1.38); show("#con-door-r", 1.38);
           tl.fromTo("#con-door-l", { x: -960 }, { x: 0, duration: 0.12, ease: "power4.in" }, 1.38);
           tl.fromTo("#con-door-r", { x: 960 }, { x: 0, duration: 0.12, ease: "power4.in" }, 1.38);
+          tl.to("#con-door-l", { x: -28, duration: 0.07, ease: "power2.out" }, 1.5);
+          tl.to("#con-door-r", { x: 28, duration: 0.07, ease: "power2.out" }, 1.5);
+          tl.to("#con-door-l", { x: 0, duration: 0.12, ease: "bounce.out" }, 1.57);
+          tl.to("#con-door-r", { x: 0, duration: 0.12, ease: "bounce.out" }, 1.57);
           shake("#con-stage", 1.5, 0.9);
-          show("#con-word", 1.75);
-          tl.to("#con-door-l", { x: -980, duration: 0.42, ease: "expo.out" }, 1.75);
-          tl.to("#con-door-r", { x: 980, duration: 0.42, ease: "expo.out" }, 1.75);
-          tl.fromTo("#con-stack", { scale: 0.86 }, { scale: 1, duration: 0.45, ease: "expo.out" }, 1.75);
+          tl.to("#con-door-l", { x: -990, duration: 0.45, ease: "expo.out" }, 1.75);
+          tl.to("#con-door-r", { x: 990, duration: 0.45, ease: "expo.out" }, 1.75);
+
+          // CONNECT. pops letter by letter from the centre outward
+          const title = split($("#con-title"));
+          const mid = (title.length - 1) / 2;
+          title.forEach(({ i }, k) => {
+            const t = 1.75 + Math.abs(k - mid) * 0.035;
+            show(i, t);
+            tl.fromTo(i, { scale: 0, y: 90, rotation: (k - mid) * 6 }, { scale: 1, y: 0, rotation: 0, duration: BOUNCY.duration, ease: BOUNCY.ease }, t);
+          });
           show("#con-under", 2.0);
-          tl.fromTo("#con-under", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "expo.out" }, 2.0);
+          tl.fromTo("#con-under", { scaleX: 0 }, { scaleX: 1, duration: LAND.duration, ease: LAND.ease }, 2.0);
           show("#con-kick", 2.0);
-          tl.fromTo("#con-kick", { y: 18 }, { y: 0, duration: 0.25, ease: "expo.out" }, 2.0);
-          show("#con-outline", 2.5); hide("#con-solid", 2.5);
+          tl.fromTo("#con-kick", { y: 30 }, { y: 0, duration: POP.duration, ease: POP.ease }, 2.0);
+          tl.fromTo(["#con-bub-l-in", "#con-bub-r-in"], { y: 0 }, { y: -22, duration: 0.12, ease: "power2.out", yoyo: true, repeat: 1 }, 2.0);
+          // a bouncing hop rolls across the word, then it flips to outline in a wave
+          title.forEach(({ o }, k) => {
+            const t = 2.25 + k * 0.025;
+            tl.fromTo(o, { y: 0 }, { y: -40, duration: 0.11, ease: "power2.out", immediateRender: false }, t);
+            tl.to(o, { y: 0, duration: 0.26, ease: "bounce.out" }, t + 0.11);
+          });
+          title.forEach(({ i }, k) => tl.set(i, { color: "#000000" }, 2.5 + k * 0.03));
+
+          // exit: the whole scene pushes up and out; Experience rises in underneath
+          tl.fromTo("#con-cam", { y: 0 }, { y: -1080, duration: 0.16, ease: "power3.in", immediateRender: false }, 2.84);
 
           window.__timelines["connect"] = tl;
         })();

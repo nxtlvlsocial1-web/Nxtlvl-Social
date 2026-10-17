@@ -7,71 +7,107 @@
         @font-face { font-family: "Space Grotesk"; font-weight: 700; src: url("../assets/fonts/space-grotesk-latin-700-normal.woff2") format("woff2"); }
         #root { position: absolute; inset: 0; overflow: hidden; }
         #hook-bg { position: absolute; inset: 0; background: #000000; }
-        #hook-stage { position: absolute; inset: 0; }
-        #hook-ring-svg { position: absolute; left: 0; top: 0; overflow: visible; }
+        #hook-cam, #hook-punch, #hook-stage { position: absolute; inset: 0; transform-origin: 50% 50%; }
+        #hook-svg { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
         #hook-dot { position: absolute; left: 945px; top: 525px; width: 30px; height: 30px; border-radius: 50%; background: #ffffff; }
         .hook-row { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
-        .hook-word { display: block; font-family: "Space Grotesk", sans-serif; font-weight: 700; line-height: 0.86; text-transform: uppercase; white-space: nowrap; color: #ffffff; }
-        #hook-line1 { top: 318px; gap: 30px; }
-        #hook-line1 .hook-word { font-size: 96px; letter-spacing: -0.03em; }
-        #hook-line2 { top: 440px; }
-        #hook-boring { position: relative; display: block; opacity: 0; }
-        #hook-boring .hook-word { font-size: 330px; letter-spacing: -0.045em; }
-        #hb-outline { position: absolute; left: 0; top: 0; color: #000000; -webkit-text-stroke: 5px #ffffff; opacity: 0; }
-        .hook-later { opacity: 0; }
+        .hook-word { display: block; font-family: "Space Grotesk", sans-serif; font-weight: 700; line-height: 0.86; text-transform: uppercase; white-space: nowrap; color: #ffffff; -webkit-text-stroke: 5px #ffffff; }
+        #hook-line1 { top: 292px; gap: 30px; }
+        #hook-line1 .hook-word { font-size: 96px; letter-spacing: -0.03em; -webkit-text-stroke: 2px #ffffff; opacity: 0; }
+        #hook-line2 { top: 418px; }
+        #hook-boring { font-size: 330px; letter-spacing: -0.045em; }
+        .ch { display: inline-block; transform-origin: 50% 100%; opacity: 0; }
+        .ci { display: inline-block; transform-origin: 50% 100%; }
+        #hook-iris { position: absolute; left: -240px; top: -660px; width: 2400px; height: 2400px; border-radius: 50%; background: #ffffff; opacity: 0; }
       </style>
       <div data-hf-id="hf-ktv8" id="root" data-composition-id="hook" data-width="1920" data-height="1080">
         <div data-hf-id="hf-qdn4" id="hook-bg"></div>
-        <div data-hf-id="hf-be7t" id="hook-stage">
-          <svg data-hf-id="hf-bf2d" id="hook-ring-svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+        <div data-hf-id="hf-7xtu" id="hook-cam"><div data-hf-id="hf-huoj" id="hook-punch"><div data-hf-id="hf-be7t" id="hook-stage">
+          <svg data-hf-id="hf-dvb0" id="hook-svg" viewBox="0 0 1920 1080">
             <circle data-hf-id="hf-u0uf" id="hook-ring" cx="960" cy="540" r="450" fill="none" stroke="#ffffff" stroke-width="6" vector-effect="non-scaling-stroke" opacity="0" />
+            <circle data-hf-id="hf-tqs4" id="hook-ring2" cx="960" cy="540" r="450" fill="none" stroke="#ffffff" stroke-width="3" vector-effect="non-scaling-stroke" opacity="0" />
+            <path data-hf-id="hf-wlvl" id="hook-ekg" d="M160 842 L820 842 L860 842 L890 842 L930 842 L970 842 L1010 842 L1040 842 L1760 842" fill="none" stroke="#ffffff" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" />
+            <circle data-hf-id="hf-m9bs" id="hook-cursor" cx="160" cy="842" r="11" fill="#ffffff" opacity="0" />
           </svg>
           <div data-hf-id="hf-veie" id="hook-dot"></div>
           <div data-hf-id="hf-50bv" id="hook-line1" class="hook-row" data-layout-allow-overlap>
-            <span data-hf-id="hf-3yzy" class="hook-word hook-later" id="hw0">Is</span>
-            <span data-hf-id="hf-gv7s" class="hook-word hook-later" id="hw1">your</span>
-            <span data-hf-id="hf-z9k9" class="hook-word hook-later" id="hw2">college</span>
-            <span data-hf-id="hf-qdnv" class="hook-word hook-later" id="hw3">life</span>
-            <span data-hf-id="hf-69dw" class="hook-word hook-later" id="hw4">too</span>
+            <span data-hf-id="hf-82g4" class="hook-word" id="hw0">Is</span>
+            <span data-hf-id="hf-vjju" class="hook-word" id="hw1">your</span>
+            <span data-hf-id="hf-q8bz" class="hook-word" id="hw2">college</span>
+            <span data-hf-id="hf-ppf1" class="hook-word" id="hw3">life</span>
+            <span data-hf-id="hf-s73e" class="hook-word" id="hw4">too</span>
           </div>
-          <div data-hf-id="hf-lwui" id="hook-line2" class="hook-row">
-            <span data-hf-id="hf-8o47" id="hook-boring">
-              <span data-hf-id="hf-1n73" class="hook-word" id="hb-solid">Boring?</span>
-              <span data-hf-id="hf-ojfm" class="hook-word" id="hb-outline">Boring?</span>
-            </span>
-          </div>
-        </div>
+          <div data-hf-id="hf-u4u8" id="hook-line2" class="hook-row" data-layout-allow-overlap><span data-hf-id="hf-tn12" class="hook-word" id="hook-boring">Boring?</span></div>
+        </div></div></div>
+        <div data-hf-id="hf-kww0" id="hook-iris"></div>
       </div>
       <script>
         (() => {
           const F = 1 / 30;
           const tl = gsap.timeline({ paused: true });
+          const $ = (s) => document.querySelector(s);
           const show = (el, t) => tl.set(el, { opacity: 1 }, t);
-          const hide = (el, t) => tl.set(el, { opacity: 0 }, t);
           function shake(el, t, amp = 1) {
             [[14, -7], [-10, 8], [6, -4], [-3, 2], [0, 0]].forEach(([x, y], i) => tl.set(el, { x: x * amp, y: y * amp }, t + i * F));
           }
+          // closed-form damped spring as a seek-safe ease (hyperframes-animation → springEase)
+          function spring(response, z) {
+            const w = (2 * Math.PI) / response, wd = w * Math.sqrt(1 - z * z);
+            const pos = (t) => 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + ((z * w) / wd) * Math.sin(wd * t));
+            const T = Math.log(1000) / (z * w), xT = pos(T);
+            return { duration: T, ease: (p) => pos(p * T) + p * (1 - xT) };
+          }
+          function split(el) {
+            const txt = el.textContent; el.textContent = "";
+            return [...txt].map((c) => {
+              const o = document.createElement("span"), i = document.createElement("span");
+              o.className = "ch"; i.className = "ci"; i.textContent = c === " " ? " " : c;
+              o.appendChild(i); el.appendChild(o); return { o, i };
+            });
+          }
+          const BOUNCY = spring(0.36, 0.58), POP = spring(0.3, 0.62);
 
-          // the dot pulses once, then becomes a ring that sweeps off-frame
-          tl.fromTo("#hook-dot", { scale: 1 }, { scale: 1.9, duration: 0.12, ease: "power2.out" }, 0.04);
-          tl.to("#hook-dot", { scale: 0, duration: 0.1, ease: "power3.in" }, 0.17);
-          tl.set("#hook-ring", { attr: { opacity: 1 } }, 0.22);
-          tl.fromTo("#hook-ring", { scale: 0.033, svgOrigin: "960 540" }, { scale: 2.7, svgOrigin: "960 540", duration: 0.62, ease: "expo.out" }, 0.22);
-          tl.set("#hook-ring", { attr: { opacity: 0 } }, 0.84);
+          // slow push-in keeps the frame alive; punch-zoom on the hit
+          tl.fromTo("#hook-cam", { scale: 1 }, { scale: 1.06, duration: 2, ease: "sine.inOut" }, 0);
 
-          // the question slams in word by word
+          // the dot boings once and throws a double ripple
+          tl.fromTo("#hook-dot", { scale: 1 }, { scale: 2.2, duration: 0.1, ease: "power2.out" }, 0.02);
+          tl.to("#hook-dot", { scale: 0, duration: 0.12, ease: "power3.in" }, 0.14);
+          tl.set("#hook-ring", { attr: { opacity: 1 } }, 0.2);
+          tl.fromTo("#hook-ring", { scale: 0.033, svgOrigin: "960 540" }, { scale: 2.7, svgOrigin: "960 540", duration: 0.7, ease: "expo.out" }, 0.2);
+          tl.set("#hook-ring", { attr: { opacity: 0 } }, 0.9);
+          tl.set("#hook-ring2", { attr: { opacity: 1 } }, 0.28);
+          tl.fromTo("#hook-ring2", { scale: 0.033, svgOrigin: "960 540" }, { scale: 2.2, svgOrigin: "960 540", duration: 0.7, ease: "expo.out" }, 0.28);
+          tl.set("#hook-ring2", { attr: { opacity: 0 } }, 0.98);
+
+          // a heart monitor runs flat while the question builds: college life is flatlining
+          tl.set("#hook-cursor", { attr: { opacity: 1 } }, 0.34);
+          tl.fromTo("#hook-cursor", { attr: { cx: 160 } }, { attr: { cx: 1760 }, duration: 1.12, ease: "none" }, 0.34);
+          tl.fromTo("#hook-ekg", { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 1.12, ease: "none" }, 0.34);
+
+          // the question drops in word by word with a springy landing
           [0.40, 0.58, 0.76, 0.98, 1.18].forEach((t, i) => {
             show("#hw" + i, t);
-            tl.fromTo("#hw" + i, { scale: 1.7, y: -18 }, { scale: 1, y: 0, duration: 0.22, ease: "expo.out" }, t);
+            tl.fromTo("#hw" + i, { y: -130, rotation: i % 2 ? 9 : -9, scaleY: 1.3, scaleX: 0.85 }, { y: 0, rotation: 0, scaleY: 1, scaleX: 1, duration: BOUNCY.duration, ease: BOUNCY.ease }, t);
           });
 
-          // "BORING?" lands last, oversized, then flickers solid → outline → solid
-          show("#hook-boring", 1.5);
-          tl.fromTo("#hook-boring", { scale: 1.9 }, { scale: 1, duration: 0.3, ease: "expo.out" }, 1.5);
+          // "BORING?" letters fall and bounce off the floor, last and biggest
+          const boring = split($("#hook-boring"));
+          boring.forEach(({ o }, k) => {
+            const t = 1.33 + k * 0.025;
+            show(o, t);
+            tl.fromTo(o, { y: -560, rotation: (k % 2 ? 1 : -1) * 14 }, { y: 0, rotation: 0, duration: 0.5, ease: "bounce.out" }, t);
+          });
           shake("#hook-stage", 1.5, 1.4);
-          show("#hb-outline", 1.70); hide("#hb-solid", 1.70);
-          hide("#hb-outline", 1.80); show("#hb-solid", 1.80);
-          tl.fromTo("#hook-line2", { scale: 1 }, { scale: 1.08, duration: 0.14, ease: "power2.in" }, 1.86);
+          tl.fromTo("#hook-punch", { scale: 1.07 }, { scale: 1, duration: POP.duration, ease: POP.ease }, 1.5);
+          // flicker solid → outline → solid
+          boring.forEach(({ i }) => { tl.set(i, { color: "#000000" }, 1.70); tl.set(i, { color: "#ffffff" }, 1.80); });
+
+          // the flatline jolts into a heartbeat on the drop, then a white iris opens into Discover
+          tl.to("#hook-ekg", { attr: { d: "M160 842 L820 842 L860 842 L890 690 L930 992 L970 628 L1010 912 L1040 842 L1760 842" }, duration: 0.16, ease: "power4.out" }, 1.78);
+          tl.fromTo("#hook-cursor", { scale: 1, svgOrigin: "1760 842" }, { scale: 2.2, svgOrigin: "1760 842", duration: 0.1, ease: "power2.out", immediateRender: false }, 1.78);
+          show("#hook-iris", 1.86);
+          tl.fromTo("#hook-iris", { scale: 0 }, { scale: 1, duration: 0.14, ease: "power3.in" }, 1.86);
 
           window.__timelines["hook"] = tl;
         })();

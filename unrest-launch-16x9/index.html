@@ -41,10 +41,9 @@
 
       flash(1.5);            // "BORING?" lands
       flash(4.0);            // DISCOVER. flips to outline
-      show("#wipe", 4.84);   // black whip into Connect
-      tl.fromTo("#wipe", { x: 1920 }, { x: 0, duration: 0.16, ease: "power3.in" }, 4.84);
+      show("#wipe", 4.72);   // black panel pushes up from below into Connect
+      tl.fromTo("#wipe", { y: 1080 }, { y: 0, duration: 0.28, ease: "power3.in" }, 4.72);
       hide("#wipe", 5.0);
-      flash(7.5);            // CONNECT. flips to outline
       flash(9.0, 30);        // Experience burst: frame stays inverted for a bar
       flash(10.5);           // EXPERIENCE. flips to outline
       flash(13.0);           // logo impact

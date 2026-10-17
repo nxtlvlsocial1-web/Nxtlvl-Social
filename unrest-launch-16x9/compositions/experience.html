@@ -8,15 +8,16 @@
         @font-face { font-family: "Space Grotesk"; font-weight: 500; src: url("../assets/fonts/space-grotesk-latin-500-normal.woff2") format("woff2"); }
         #root { position: absolute; inset: 0; overflow: hidden; }
         #exp-bg { position: absolute; inset: 0; background: #000000; }
-        #exp-stage { position: absolute; inset: 0; font-family: "Space Grotesk", sans-serif; color: #ffffff; }
+        #exp-cam, #exp-punch, #exp-stage { position: absolute; inset: 0; transform-origin: 50% 50%; }
+        #exp-stage { font-family: "Space Grotesk", sans-serif; color: #ffffff; }
         .exp-meta { position: absolute; display: block; font-weight: 500; font-size: 24px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; }
         #exp-meta-tl { left: 96px; top: 80px; } #exp-meta-tr { right: 96px; top: 80px; }
-        #exp-burst, #exp-art { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
-        #exp-burst .s { fill: #ffffff; }
+        #exp-burst, #exp-art, #exp-confetti { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+        #exp-burst .s, #exp-confetti rect { fill: #ffffff; }
         #exp-burst .o { fill: none; stroke: #ffffff; stroke-width: 6; }
         #exp-art .ln { fill: none; stroke: #ffffff; stroke-width: 6; stroke-dasharray: 1; }
         #exp-art .beam { fill: none; stroke: #ffffff; stroke-width: 4; }
-        #exp-art .fill { fill: #ffffff; }
+        #exp-art .fill, #exp-art .eq { fill: #ffffff; }
         #exp-art .cone { fill: #000000; }
         .exp-later { opacity: 0; }
         #exp-crowd { position: absolute; left: 0; right: 0; bottom: 0; height: 240px; }
@@ -25,22 +26,26 @@
         .exp-person .body { position: absolute; left: 0; top: 72px; width: 124px; height: 134px; border-radius: 62px 62px 0 0; background: #ffffff; }
         .exp-person .arm { position: absolute; top: 34px; width: 16px; height: 96px; border-radius: 8px; background: #ffffff; transform-origin: 50% 100%; }
         .exp-row { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
-        #exp-word { top: 652px; opacity: 0; }
-        #exp-stack { position: relative; display: block; }
-        .exp-word { display: block; font-weight: 700; font-size: 228px; letter-spacing: -0.045em; line-height: 0.86; text-transform: uppercase; white-space: nowrap; color: #ffffff; }
-        #exp-outline { position: absolute; left: 0; top: 0; color: #000000; -webkit-text-stroke: 5px #ffffff; opacity: 0; }
+        #exp-word { top: 650px; }
+        #exp-title { display: block; font-weight: 700; font-size: 222px; letter-spacing: -0.045em; line-height: 0.86; text-transform: uppercase; white-space: nowrap; color: #ffffff; -webkit-text-stroke: 5px #ffffff; }
+        .ch { display: inline-block; transform-origin: 50% 100%; }
+        .ci { display: inline-block; transform-origin: 50% 50%; opacity: 0; }
         #exp-ticket { position: absolute; left: 1290px; top: 168px; width: 500px; height: 230px; opacity: 0; }
+        #exp-ticket-in { position: absolute; inset: 0; transform-origin: 50% 50%; }
         #exp-ticket svg { display: block; width: 100%; height: 100%; overflow: visible; }
         #exp-ticket .t1 { position: absolute; left: 70px; top: 52px; display: block; font-weight: 700; font-size: 50px; letter-spacing: -0.02em; color: #000000; white-space: nowrap; }
         #exp-ticket .t2 { position: absolute; left: 72px; top: 124px; display: block; font-weight: 500; font-size: 22px; letter-spacing: 0.2em; text-transform: uppercase; color: #000000; white-space: nowrap; }
+        #exp-impact { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+        #exp-impact line { stroke: #ffffff; stroke-width: 6; stroke-linecap: round; }
       </style>
       <div data-hf-id="hf-51ff" id="root" data-composition-id="experience" data-width="1920" data-height="1080">
         <div data-hf-id="hf-50dq" id="exp-bg"></div>
-        <div data-hf-id="hf-gn7n" id="exp-stage">
+        <div data-hf-id="hf-6xyo" id="exp-cam"><div data-hf-id="hf-eeq5" id="exp-punch"><div data-hf-id="hf-gn7n" id="exp-stage">
           <span data-hf-id="hf-sl5v" class="exp-meta" id="exp-meta-tl">03 — Experience</span>
           <span data-hf-id="hf-lljl" class="exp-meta" id="exp-meta-tr">Unrest / DU</span>
           <svg data-hf-id="hf-9k1o" id="exp-burst" viewBox="0 0 1920 1080"></svg>
           <svg data-hf-id="hf-m66h" id="exp-art" viewBox="0 0 1920 1080">
+            <g data-hf-id="hf-h8j3" id="exp-eq"></g>
             <g data-hf-id="hf-nwxi" id="exp-truss">
               <rect data-hf-id="hf-pfa0" class="ln" x="560" y="150" width="800" height="430" pathLength="1" />
               <rect data-hf-id="hf-5qpl" class="ln" x="560" y="150" width="800" height="44" pathLength="1" />
@@ -48,28 +53,21 @@
             </g>
             <g data-hf-id="hf-nhvk" id="exp-beam-l" class="exp-later"><path data-hf-id="hf-jrb8" class="beam" d="M720 194 L620 560 M720 194 L800 560" /></g>
             <g data-hf-id="hf-lyg6" id="exp-beam-r" class="exp-later"><path data-hf-id="hf-3sew" class="beam" d="M1200 194 L1120 560 M1200 194 L1300 560" /></g>
-            <g data-hf-id="hf-y4ds" id="exp-platform">
-              <path data-hf-id="hf-hv9a" class="fill" d="M560 580 H1360 L1420 630 H500 Z" />
-              <rect data-hf-id="hf-uh4h" class="fill" x="420" y="420" width="110" height="210" />
-              <rect data-hf-id="hf-9ipe" class="fill" x="1390" y="420" width="110" height="210" />
-              <circle data-hf-id="hf-vo1g" class="cone" cx="475" cy="480" r="26" /><circle data-hf-id="hf-2d08" class="cone" cx="475" cy="568" r="34" />
-              <circle data-hf-id="hf-8na6" class="cone" cx="1445" cy="480" r="26" /><circle data-hf-id="hf-w2gi" class="cone" cx="1445" cy="568" r="34" />
-            </g>
+            <g data-hf-id="hf-y4ds" id="exp-platform"><path data-hf-id="hf-hv9a" class="fill" d="M560 580 H1360 L1420 630 H500 Z" /></g>
+            <g data-hf-id="hf-k7rg" id="exp-spk-l"><rect data-hf-id="hf-59zu" class="fill" x="420" y="420" width="110" height="210" rx="6" /><circle data-hf-id="hf-vo1g" class="cone" cx="475" cy="480" r="26" /><circle data-hf-id="hf-2d08" class="cone" cx="475" cy="568" r="34" /></g>
+            <g data-hf-id="hf-xeca" id="exp-spk-r"><rect data-hf-id="hf-hu5n" class="fill" x="1390" y="420" width="110" height="210" rx="6" /><circle data-hf-id="hf-8na6" class="cone" cx="1445" cy="480" r="26" /><circle data-hf-id="hf-w2gi" class="cone" cx="1445" cy="568" r="34" /></g>
           </svg>
-          <div data-hf-id="hf-zho2" id="exp-word" class="exp-row">
-            <span data-hf-id="hf-krfk" id="exp-stack">
-              <span data-hf-id="hf-fgda" class="exp-word" id="exp-solid">Experience.</span>
-              <span data-hf-id="hf-39nb" class="exp-word" id="exp-outline">Experience.</span>
-            </span>
-          </div>
+          <div data-hf-id="hf-zho2" id="exp-word" class="exp-row"><span data-hf-id="hf-a97g" id="exp-title">Experience.</span></div>
           <div data-hf-id="hf-jbue" id="exp-crowd"></div>
-          <div data-hf-id="hf-rj4v" id="exp-ticket" data-layout-allow-overlap>
+          <svg data-hf-id="hf-th9a" id="exp-confetti" viewBox="0 0 1920 1080"></svg>
+          <svg data-hf-id="hf-04fk" id="exp-impact" viewBox="0 0 1920 1080"></svg>
+          <div data-hf-id="hf-rj4v" id="exp-ticket" data-layout-allow-overlap><div data-hf-id="hf-djtd" id="exp-ticket-in">
             <svg data-hf-id="hf-cq3v" viewBox="0 0 500 230"><path data-hf-id="hf-uui9" d="M0 0 H500 V88 A27 27 0 0 0 500 142 V230 H0 V142 A27 27 0 0 0 0 88 Z" fill="#ffffff" />
               <line data-hf-id="hf-wur3" x1="420" y1="18" x2="420" y2="212" stroke="#000000" stroke-width="4" stroke-dasharray="12 10" /></svg>
             <span data-hf-id="hf-y081" class="t1">Unrest House</span>
             <span data-hf-id="hf-wvl4" class="t2">Admit one · Invite only</span>
-          </div>
-        </div>
+          </div></div>
+        </div></div></div>
       </div>
       <script>
         (() => {
@@ -78,44 +76,92 @@
           const $ = (s) => document.querySelector(s);
           const NS = "http://www.w3.org/2000/svg";
           const show = (el, t) => tl.set(el, { opacity: 1 }, t);
-          const hide = (el, t) => tl.set(el, { opacity: 0 }, t);
           function shake(el, t, amp = 1) {
             [[14, -7], [-10, 8], [6, -4], [-3, 2], [0, 0]].forEach(([x, y], i) => tl.set(el, { x: x * amp, y: y * amp }, t + i * F));
           }
+          function spring(response, z) {
+            const w = (2 * Math.PI) / response, wd = w * Math.sqrt(1 - z * z);
+            const pos = (t) => 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + ((z * w) / wd) * Math.sin(wd * t));
+            const T = Math.log(1000) / (z * w), xT = pos(T);
+            return { duration: T, ease: (p) => pos(p * T) + p * (1 - xT) };
+          }
+          function split(el) {
+            const txt = el.textContent; el.textContent = "";
+            return [...txt].map((c) => {
+              const o = document.createElement("span"), i = document.createElement("span");
+              o.className = "ch"; i.className = "ci"; i.textContent = c === " " ? " " : c;
+              o.appendChild(i); el.appendChild(o); return { o, i };
+            });
+          }
           function mulberry32(a) { return function () { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
           const rand = mulberry32(8080);
+          const BOUNCY = spring(0.36, 0.58), POP = spring(0.3, 0.62), LAND = spring(0.45, 0.62);
+          const BEATS = [0.5, 1.0, 1.5, 2.0, 2.5];
 
-          // dots drop in as heads, bodies rise: a crowd of 15
+          // the scene rises in from below (continues Connect's push), then the camera drifts in
+          tl.fromTo("#exp-cam", { y: 760 }, { y: 0, duration: 0.32, ease: "power3.out" }, 0);
+          tl.fromTo("#exp-cam", { scale: 1 }, { scale: 1.05, duration: 3, ease: "sine.inOut" }, 0);
+          [0.5, 1.0, 1.5, 2.0, 2.5].forEach((b) => tl.fromTo("#exp-punch", { scale: b === 1.0 || b === 2.0 ? 1.06 : 1.025 }, { scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, b));
+
+          // the fest stage: truss draws, platform springs up, speakers thump on every beat
+          tl.fromTo("#exp-truss .ln", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.4, ease: "power2.out", stagger: 0.04 }, 0.05);
+          tl.fromTo("#exp-platform", { scaleY: 0, svgOrigin: "960 630" }, { scaleY: 1, svgOrigin: "960 630", duration: LAND.duration, ease: LAND.ease }, 0.12);
+          [["#exp-spk-l", "475 630"], ["#exp-spk-r", "1445 630"]].forEach(([s, o], n) => {
+            tl.fromTo(s, { scale: 0, svgOrigin: o }, { scale: 1, svgOrigin: o, duration: BOUNCY.duration, ease: BOUNCY.ease }, 0.16 + n * 0.05);
+            [1.0, 1.5, 2.0, 2.5].forEach((b) => tl.fromTo(s, { scale: 1.12, svgOrigin: o }, { scale: 1, svgOrigin: o, duration: 0.36, ease: "power3.out", immediateRender: false }, b + 0.02));
+          });
+
+          // a live equalizer on the stage screen, stepping on 16ths with accents on the beat
+          const BARS = 18;
+          for (let b = 0; b < BARS; b++) {
+            const r = document.createElementNS(NS, "rect");
+            const x = 606 + b * 40;
+            r.setAttribute("x", x); r.setAttribute("y", 242); r.setAttribute("width", 28); r.setAttribute("height", 330); r.setAttribute("rx", 6);
+            r.setAttribute("class", "eq"); r.id = "exp-eq-" + b;
+            $("#exp-eq").appendChild(r);
+            const o = x + 14 + " 572", shape = 0.45 + 0.55 * Math.sin((b / (BARS - 1)) * Math.PI);
+            let prev = 0.04;
+            for (let s = 0; s < 21; s++) {
+              const t = 0.35 + s * 0.125, accent = s % 4 === 1 ? 1 : s % 2 ? 0.75 : 0.5;
+              const h = Math.max(0.06, Math.min(1, shape * accent * (0.55 + 0.45 * rand())));
+              tl.fromTo(r, { scaleY: prev, svgOrigin: o }, { scaleY: h, svgOrigin: o, duration: 0.11, ease: "power2.out", immediateRender: s === 0 }, t);
+              prev = h;
+            }
+          }
+          show("#exp-beam-l", 0.5); show("#exp-beam-r", 0.5);
+          tl.fromTo("#exp-beam-l", { rotation: -14, svgOrigin: "720 194" }, { rotation: 12, svgOrigin: "720 194", duration: 0.5, ease: "power2.inOut", repeat: 4, yoyo: true }, 0.5);
+          tl.fromTo("#exp-beam-r", { rotation: 14, svgOrigin: "1200 194" }, { rotation: -12, svgOrigin: "1200 194", duration: 0.5, ease: "power2.inOut", repeat: 4, yoyo: true }, 0.5);
+
+          // dots drop in as heads, bodies rise; the crowd sways and jumps on the beat
           for (let i = 0; i < 15; i++) {
             const p = document.createElement("div");
             p.className = "exp-person"; p.id = "exp-person-" + i;
             p.style.left = 70 + i * 122 + (rand() - 0.5) * 30 + "px";
             let arms = "";
-            if (i % 3 === 1) arms += '<div class="arm" style="left:4px;transform:rotate(-24deg)"></div>';
-            if (i % 4 === 2) arms += '<div class="arm" style="left:104px;transform:rotate(22deg)"></div>';
+            if (i % 3 === 1) arms += '<div class="arm" style="left:4px"></div>';
+            if (i % 4 === 2) arms += '<div class="arm" style="left:104px"></div>';
             p.innerHTML = arms + '<div class="body"></div><div class="head"></div>';
             $("#exp-crowd").appendChild(p);
             const s = 0.82 + rand() * 0.3, t = Math.abs(i - 7) * 0.02;
-            tl.fromTo(p, { y: 220, scale: s }, { y: 0, scale: s, duration: 0.34, ease: "expo.out" }, t);
-            tl.fromTo(p.querySelector(".head"), { scale: 0.3, y: -60 }, { scale: 1, y: 0, duration: 0.3, ease: "back.out(2.5)" }, t);
-            // the crowd jumps on alternate beats
-            [0.5, 1.0, 1.5, 2.0, 2.5].forEach((b, k) => {
-              if ((i + k) % 2 === 0) tl.fromTo(p, { y: -26 }, { y: 0, duration: 0.3, ease: "power2.out", immediateRender: false }, b);
+            tl.fromTo(p, { y: 240, scale: s }, { y: 0, scale: s, duration: 0.34, ease: "power3.out" }, t);
+            tl.fromTo(p.querySelector(".head"), { scale: 0, y: -80 }, { scale: 1, y: 0, duration: BOUNCY.duration, ease: BOUNCY.ease }, t + 0.04);
+            tl.fromTo(p, { rotation: -3 }, { rotation: 3, duration: 0.5, ease: "sine.inOut", repeat: 4, yoyo: true }, 0.4 + (i % 2) * 0.25);
+            p.querySelectorAll(".arm").forEach((a, n) => {
+              const base = a.style.left === "4px" ? -24 : 24;
+              tl.fromTo(a, { rotation: base - 14 }, { rotation: base + 14, duration: 0.25, ease: "sine.inOut", repeat: 9, yoyo: true }, 0.3);
+            });
+            BEATS.forEach((b, k) => {
+              if ((i + k) % 2 === 0) {
+                tl.fromTo(p, { y: 0 }, { y: -44, duration: 0.13, ease: "power2.out", immediateRender: false }, b);
+                tl.to(p, { y: 0, duration: 0.3, ease: "bounce.out" }, b + 0.13);
+              }
             });
           }
 
-          // the fest stage builds: truss draws, platform rises, beams sweep
-          tl.fromTo("#exp-truss .ln", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.4, ease: "power2.out", stagger: 0.04 }, 0.1);
-          tl.fromTo("#exp-platform", { scaleY: 0, svgOrigin: "960 630" }, { scaleY: 1, svgOrigin: "960 630", duration: 0.32, ease: "back.out(1.8)" }, 0.2);
-          show("#exp-beam-l", 0.5); show("#exp-beam-r", 0.5);
-          // beams sweep side to side on every beat (finite yoyo, ends with the scene)
-          tl.fromTo("#exp-beam-l", { rotation: -14, svgOrigin: "720 194" }, { rotation: 12, svgOrigin: "720 194", duration: 0.5, ease: "power2.inOut", repeat: 4, yoyo: true }, 0.5);
-          tl.fromTo("#exp-beam-r", { rotation: 14, svgOrigin: "1200 194" }, { rotation: -12, svgOrigin: "1200 194", duration: 0.5, ease: "power2.inOut", repeat: 4, yoyo: true }, 0.5);
-
-          // burst: geometric shapes fire up and out of the stage (the root inverts the frame here)
+          // burst: shapes fire up out of the stage and tumble back down (the root inverts the frame)
           const kinds = ["circle", "square", "tri", "ring", "plus"];
           for (let i = 0; i < 26; i++) {
-            const k = kinds[i % 5], sz = 20 + rand() * 46;
+            const k = kinds[i % 5], sz = 22 + rand() * 46;
             const a = -Math.PI - 0.25 + (i / 25) * (Math.PI + 0.5) + (rand() - 0.5) * 0.2;
             const dist = 480 + rand() * 520, tx = 960 + Math.cos(a) * dist, ty = 380 + Math.sin(a) * dist * 0.62;
             let el;
@@ -124,23 +170,54 @@
             else if (k === "tri") { el = document.createElementNS(NS, "path"); el.setAttribute("d", `M0 ${-sz / 1.7} L${sz / 2} ${sz / 2.9} L${-sz / 2} ${sz / 2.9} Z`); }
             else { el = document.createElementNS(NS, "path"); el.setAttribute("d", `M${-sz / 2} -5 H${sz / 2} V5 H${-sz / 2} Z M-5 ${-sz / 2} H5 V${sz / 2} H-5 Z`); }
             el.setAttribute("class", k === "ring" ? "o" : "s");
-            el.setAttribute("id", "exp-shape-" + i);
             el.setAttribute("opacity", "0");
             $("#exp-burst").appendChild(el);
-            const spin = (rand() - 0.5) * 300;
+            const spin = (rand() - 0.5) * 360;
             tl.set(el, { attr: { opacity: 1 } }, 1.0);
-            tl.fromTo(el, { x: 960, y: 380, scale: 0.2, rotation: 0 }, { x: tx, y: ty, scale: 1, rotation: spin, duration: 0.7, ease: "expo.out" }, 1.0);
-            tl.to(el, { x: tx + (tx - 960) * 0.14, y: ty + (ty - 380) * 0.14, rotation: spin * 1.3, duration: 1.25, ease: "none" }, 1.7);
+            tl.fromTo(el, { x: 960, y: 380, scale: 0.2, rotation: 0 }, { x: tx, y: ty, scale: 1, rotation: spin, duration: 0.5, ease: "expo.out" }, 1.0);
+            tl.to(el, { x: tx + (tx - 960) * 0.2, y: ty + 760, rotation: spin * 2.2, duration: 1.45, ease: "power2.in" }, 1.5);
           }
-          shake("#exp-stage", 1.0, 1.3);
-          show("#exp-word", 1.0);
-          tl.fromTo("#exp-stack", { scale: 1.45 }, { scale: 1, duration: 0.3, ease: "expo.out" }, 1.0);
+          // confetti streams down across the frame
+          for (let i = 0; i < 44; i++) {
+            const r = document.createElementNS(NS, "rect");
+            const w = 10 + rand() * 10, h = 20 + rand() * 18, x0 = 60 + rand() * 1800;
+            r.setAttribute("x", -w / 2); r.setAttribute("y", -h / 2); r.setAttribute("width", w); r.setAttribute("height", h); r.setAttribute("opacity", "0");
+            $("#exp-confetti").appendChild(r);
+            const t = 1.0 + rand() * 0.5, dur = 1.3 + rand() * 0.6;
+            tl.set(r, { attr: { opacity: 1 } }, t);
+            tl.fromTo(r, { x: x0, y: -60 - rand() * 200, rotation: rand() * 180 }, { x: x0 + (rand() - 0.5) * 260, y: 1160, rotation: 540 + rand() * 540, duration: dur, ease: "none" }, t);
+            tl.fromTo(r, { scaleX: 1 }, { scaleX: -1, duration: 0.18 + rand() * 0.1, ease: "sine.inOut", repeat: Math.floor(dur / 0.3), yoyo: true }, t);
+          }
 
-          // Unrest House ticket stamps in
+          // EXPERIENCE. slams in from the centre outward
+          const title = split($("#exp-title"));
+          const mid = (title.length - 1) / 2;
+          title.forEach(({ i }, k) => {
+            const t = 1.0 + Math.abs(k - mid) * 0.025;
+            show(i, t);
+            tl.fromTo(i, { scale: 2.6, y: -40, rotation: (k - mid) * 4 }, { scale: 1, y: 0, rotation: 0, duration: BOUNCY.duration, ease: BOUNCY.ease }, t);
+          });
+          shake("#exp-stage", 1.0, 1.3);
+
+          // the Unrest House ticket stamps in: squash on impact, shock lines fly out
           show("#exp-ticket", 1.86);
-          tl.fromTo("#exp-ticket", { scale: 2.3, rotation: -22 }, { scale: 1, rotation: -9, duration: 0.14, ease: "power4.in" }, 1.86);
+          tl.fromTo("#exp-ticket", { scale: 2.4, rotation: -24 }, { scale: 1, rotation: -9, duration: 0.14, ease: "power4.in" }, 1.86);
+          tl.fromTo("#exp-ticket-in", { scaleX: 1.12, scaleY: 0.86 }, { scaleX: 1, scaleY: 1, duration: BOUNCY.duration, ease: BOUNCY.ease, immediateRender: false }, 2.0);
+          for (let k = 0; k < 10; k++) {
+            const a = (k / 10) * Math.PI * 2, cx = 1540, cy = 283;
+            const l = document.createElementNS(NS, "line");
+            const r0 = 210, r1 = 300;
+            l.setAttribute("x1", cx + Math.cos(a) * r0); l.setAttribute("y1", cy + Math.sin(a) * r0 * 0.7);
+            l.setAttribute("x2", cx + Math.cos(a) * r1); l.setAttribute("y2", cy + Math.sin(a) * r1 * 0.7);
+            l.setAttribute("pathLength", "1"); l.setAttribute("stroke-dasharray", "1"); l.setAttribute("stroke-dashoffset", "1");
+            $("#exp-impact").appendChild(l);
+            tl.fromTo(l, { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.12, ease: "power2.out" }, 2.0);
+            tl.to(l, { attr: { "stroke-dashoffset": -1 }, duration: 0.16, ease: "power2.in" }, 2.12);
+          }
           shake("#exp-stage", 2.0, 1.1);
-          show("#exp-outline", 2.5); hide("#exp-solid", 2.5);
+
+          // the word flips to outline in a wave
+          title.forEach(({ i }, k) => tl.set(i, { color: "#000000" }, 2.5 + k * 0.025));
 
           window.__timelines["experience"] = tl;
         })();

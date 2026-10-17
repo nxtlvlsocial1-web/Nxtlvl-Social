@@ -8,30 +8,37 @@
         @font-face { font-family: "Liberation Serif"; font-weight: 400; src: url("../assets/fonts/LiberationSerif-Regular.ttf") format("truetype"); }
         #root { position: absolute; inset: 0; overflow: hidden; }
         #rev-bg { position: absolute; inset: 0; background: #000000; }
-        #rev-stage { position: absolute; inset: 0; }
+        #rev-cam, #rev-stage { position: absolute; inset: 0; transform-origin: 50% 50%; }
         #rev-dot { position: absolute; left: 945px; top: 525px; width: 30px; height: 30px; border-radius: 50%; background: #ffffff; }
         .rev-ring { position: absolute; left: 660px; top: 240px; width: 600px; height: 600px; border-radius: 50%; border: 3px solid #ffffff; opacity: 0; }
-        #rev-line { position: absolute; left: 520px; top: 476px; width: 880px; height: 8px; border-radius: 4px; background: #ffffff; transform-origin: 50% 50%; opacity: 0; }
-        #rev-logo { position: absolute; left: 520px; top: 333px; width: 880px; height: 293px; transform-origin: 50% 60%; opacity: 0; }
-        #rev-mark { display: block; width: 880px; height: 293px; }
+        #rev-line { position: absolute; left: 520px; top: 600px; width: 880px; height: 8px; border-radius: 4px; background: #ffffff; transform-origin: 50% 50%; opacity: 0; }
+        #rev-logo { position: absolute; left: 520px; top: 333px; width: 880px; height: 293px; transform-origin: 50% 60%; }
+        #rev-svg { display: block; width: 880px; height: 293px; overflow: visible; }
+        #rev-svg .rev-l { fill: #ffffff; }
         .rev-row { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
         #rev-tag { top: 640px; }
         #rev-tagline { display: block; font-family: "Liberation Serif", serif; font-size: 58px; white-space: nowrap; color: #ffffff; }
-        #rev-tagline span { opacity: 0; }
+        #rev-tagline span { display: inline-block; opacity: 0; }
         #rev-url { top: 892px; }
         #rev-urltext { display: block; font-family: "Space Grotesk", sans-serif; font-weight: 500; font-size: 30px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; color: #ffffff; opacity: 0; }
       </style>
       <div data-hf-id="hf-yqoq" id="root" data-composition-id="reveal" data-width="1920" data-height="1080">
         <div data-hf-id="hf-lne8" id="rev-bg"></div>
-        <div data-hf-id="hf-u7h5" id="rev-stage">
+        <div data-hf-id="hf-qkyq" id="rev-cam"><div data-hf-id="hf-u7h5" id="rev-stage">
           <div data-hf-id="hf-dy96" class="rev-ring" id="rev-ring"></div>
           <div data-hf-id="hf-rez8" class="rev-ring" id="rev-ring2"></div>
+          <div data-hf-id="hf-s6n1" class="rev-ring" id="rev-ring3"></div>
           <div data-hf-id="hf-e1na" id="rev-dot"></div>
+          <div data-hf-id="hf-d8zc" id="rev-logo">
+            <svg data-hf-id="hf-yf23" id="rev-svg" viewBox="370 258 420 140" role="img" aria-label="Unrest">
+              <defs data-hf-id="hf-mh0t"><clipPath data-hf-id="hf-rtcv" id="rev-clip"><rect data-hf-id="hf-2q4y" x="350" y="230" width="460" height="160" /></clipPath></defs>
+              <g data-hf-id="hf-9yg3" clip-path="url(#rev-clip)"><path data-hf-id="hf-231t" class="rev-l" id="rev-l-0-U" d="M462.8194544149318 274.46546656869947 449.3808327351041 272.1730345334313V267.5H483.5V272.1730345334313L470.6586503948313 274.46546656869947V345.0900073475386Q470.6586503948313 366.3390889052167 460.76633165829145 376.91954445260836Q450.8740129217516 387.5 432.0599425699928 387.5Q412.1259870782484 387.5 402.23366834170855 376.8754592211609Q392.3413496051687 366.2509184423218 392.3413496051687 346.76524614254225V274.46546656869947L379.5 272.1730345334313V267.5H419.5172290021536V272.1730345334313L406.6758793969849 274.46546656869947V345.44268919911826Q406.6758793969849 377.6249081557678 433.17982770997844 377.6249081557678Q447.5143575017947 377.6249081557678 455.16690595836326 369.60139603232915Q462.8194544149318 361.5778839088905 462.8194544149318 345.795371050698Z"/><path data-hf-id="hf-bgr6" class="rev-l" id="rev-l-1-n" d="M510.9968287526427 311.9777202072539Q516.6945031712473 308.28445595854924 523.1321353065539 305.8922279792746Q529.5697674418604 303.5 533.8615221987316 303.5Q542.8890063424948 303.5 547.4767441860465 309.459585492228Q552.0644820295984 315.41917098445595 552.0644820295984 326.7507772020725V378.62435233160625L560.5 380.72279792746116V384.5H530.531712473573V380.72279792746116L539.7811839323467 378.62435233160625V328.2616580310881Q539.7811839323467 321.29481865284976 536.7843551797041 317.3077720207254Q533.7875264270614 313.32072538860103 527.4978858350952 313.32072538860103Q520.8382663847781 313.32072538860103 511.1448202959831 315.75492227979277V378.62435233160625L520.5422832980972 380.72279792746116V384.5H490.5V380.72279792746116L498.8615221987315 378.62435233160625V311.4740932642487L490.5 309.37564766839375V305.5984455958549H510.330866807611Z"/><path data-hf-id="hf-vkb2" class="rev-l" id="rev-l-2-r" d="M614.1236111111111 306.5Q617.5263888888888 306.5 619.5 307.1466321243523L616.5055555555556 327.03056994818655H613.5791666666667L610.9930555555555 316.7652849740933Q605.5486111111111 316.7652849740933 599.7298611111112 321.6958549222798Q593.9111111111112 326.62642487046634 589.0791666666667 334.7093264248705L581.7972222222222 384.5H570.5L580.9125 314.17875647668393L572.8819444444445 312.1580310880829L573.4263888888889 308.520725388601H592.2777777777778L590.1680555555556 325.6564766839378Q595.2722222222222 316.52279792746117 601.567361111111 311.5113989637306Q607.8625 306.5 614.1236111111111 306.5Z"/><path data-hf-id="hf-f4g0" class="rev-l" id="rev-l-3-e" d="M674.5 322.14974619289336Q674.5 333.19543147208117 663.5799999999999 340.99238578680195Q652.66 348.7893401015228 634.265 350.33248730964465L634.005 356.2614213197969Q634.005 366.5761421319797 637.4825 371.8147208121827Q640.9599999999999 377.05329949238575 647.785 377.05329949238575Q653.635 377.05329949238575 658.575 374.5761421319796Q663.515 372.09898477157356 667.805 368.93147208121826L669.6899999999999 372.3426395939086Q663.7099999999999 378.67766497461923 657.0474999999999 382.08883248730956Q650.385 385.49999999999994 644.405 385.49999999999994Q633.875 385.49999999999994 628.1875 378.14974619289336Q622.5 370.7994923857868 622.5 357.0736040609137Q622.5 343.51015228426394 627.0825 331.77411167512685Q631.665 320.0380710659898 639.79 312.7690355329949Q647.915 305.5 656.8199999999999 305.5Q664.8149999999999 305.5 669.6575 310.0888324873096Q674.5 314.67766497461923 674.5 322.14974619289336ZM634.785 345.2157360406091Q647.655 343.99746192893394 655.39 337.6624365482233Q663.125 331.32741116751265 663.125 322.14974619289336Q663.125 317.60152284263955 661.1424999999999 314.67766497461923Q659.16 311.75380710659897 655.39 311.75380710659897Q650.8399999999999 311.75380710659897 646.55 316.38324873096445Q642.26 321.01269035532994 639.14 328.8096446700507Q636.02 336.60659898477155 634.785 345.2157360406091Z"/><path data-hf-id="hf-hio6" class="rev-l" id="rev-l-4-s" d="M727.2901408450704 361.45939086294413Q727.2901408450704 373.72335025380704 720.1239436619718 379.6116751269035Q712.9577464788732 385.49999999999994 698.4014084507041 385.49999999999994Q688.1 385.49999999999994 677.5 380.46446700507613L680.5605633802817 362.10913705583755H683.9197183098591L685.1887323943662 373.23604060913704Q687.1295774647887 375.51015228426394 690.675352112676 377.2969543147208Q694.2211267605634 379.0837563451776 698.6999999999999 379.0837563451776Q715.0478873239437 379.0837563451776 715.0478873239437 364.54568527918775Q715.0478873239437 359.75380710659897 711.5767605633803 356.01776649746193Q708.1056338028169 352.28172588832484 700.2676056338028 348.1395939086294Q692.7281690140845 344.1598984771573 689.0704225352113 339.32741116751265Q685.412676056338 334.494923857868 685.412676056338 327.99746192893394Q685.412676056338 317.27664974619285 692.056338028169 311.3883248730964Q698.6999999999999 305.5 710.4943661971831 305.5Q718.9295774647887 305.5 730.5 308.3426395939086L727.738028169014 325.3172588832487H724.2295774647887L723.1845070422535 316.54568527918775Q718.481690140845 311.99746192893394 710.7929577464788 311.99746192893394Q704.6718309859154 311.99746192893394 701.0140845070423 315.0431472081218Q697.356338028169 318.0888324873096 697.356338028169 324.50507614213194Q697.356338028169 328.8908629441624 700.4915492957746 332.22081218274104Q703.6267605633802 335.55076142131975 712.3605633802816 340.42385786802026Q720.1239436619718 344.8096446700507 723.7070422535211 349.8451776649746Q727.2901408450704 354.88071065989845 727.2901408450704 361.45939086294413Z"/><path data-hf-id="hf-p0m4" class="rev-l" id="rev-l-5-t" d="M752.8846153846154 369.12659846547314Q752.8846153846154 372.92455242966753 754.6153846153845 374.8235294117647Q756.3461538461538 376.72250639386186 759.0384615384615 376.72250639386186Q764.6538461538462 376.72250639386186 770.7307692307693 374.19053708439895L772.3461538461538 378.15728900255755Q762.8846153846154 385.5 753.1923076923077 385.5Q747.1153846153846 385.5 743.6153846153846 381.44884910485933Q740.1153846153846 377.39769820971867 740.1153846153846 370.1393861892583Q740.1153846153846 367.69181585677745 740.5384615384615 364.3580562659846Q740.9615384615385 361.0242966751918 748.9615384615385 311.56649616368287H739.5L740.1153846153846 307.7685421994885L750.3461538461538 304.4769820971867L760.8846153846154 286.5H765.8076923076924L762.9615384615385 304.4769820971867H779.5L778.2692307692308 311.56649616368287H761.7307692307693L754.2692307692308 357.9015345268542Q752.8846153846154 365.66624040920715 752.8846153846154 369.12659846547314Z"/></g>
+            </svg>
+          </div>
           <div data-hf-id="hf-v6fz" id="rev-line"></div>
-          <div data-hf-id="hf-d8zc" id="rev-logo"><img data-hf-id="hf-tchx" id="rev-mark" src="../assets/brand/wordmark-light.svg" alt="Unrest" /></div>
           <div data-hf-id="hf-bvhm" id="rev-tag" class="rev-row"><span data-hf-id="hf-qak0" id="rev-tagline"></span></div>
           <div data-hf-id="hf-bzr1" id="rev-url" class="rev-row"><span data-hf-id="hf-u3sm" id="rev-urltext">unrestdu.in&nbsp;&nbsp;·&nbsp;&nbsp;@unrest.du</span></div>
-        </div>
+        </div></div>
       </div>
       <script>
         (() => {
@@ -43,40 +50,54 @@
           function shake(el, t, amp = 1) {
             [[14, -7], [-10, 8], [6, -4], [-3, 2], [0, 0]].forEach(([x, y], i) => tl.set(el, { x: x * amp, y: y * amp }, t + i * F));
           }
+          function spring(response, z) {
+            const w = (2 * Math.PI) / response, wd = w * Math.sqrt(1 - z * z);
+            const pos = (t) => 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + ((z * w) / wd) * Math.sin(wd * t));
+            const T = Math.log(1000) / (z * w), xT = pos(T);
+            return { duration: T, ease: (p) => pos(p * T) + p * (1 - xT) };
+          }
+          const RISE = spring(0.42, 0.62), POP = spring(0.3, 0.65), WOBBLE = spring(0.34, 0.5), LINE = spring(0.36, 0.8);
 
-          // impact: the dot fires a shockwave, condenses, and shoots out into a line
+          // slow push-in through the whole hold
+          tl.fromTo("#rev-cam", { scale: 1 }, { scale: 1.045, duration: 2, ease: "sine.inOut" }, 0);
+
+          // impact: the dot fires a triple shockwave, condenses, and shoots out into a baseline
           shake("#rev-stage", 0, 1.0);
-          show("#rev-ring", 0);
-          tl.fromTo("#rev-ring", { scale: 0.05 }, { scale: 3.4, duration: 0.5, ease: "expo.out" }, 0);
-          hide("#rev-ring", 0.5);
-          tl.fromTo("#rev-dot", { scale: 1 }, { scale: 2.1, duration: 0.12, ease: "expo.out" }, 0);
-          tl.to("#rev-dot", { scale: 0.27, duration: 0.1, ease: "power3.in" }, 0.12);
+          [["#rev-ring", 0, 3.4], ["#rev-ring2", 0.06, 2.6], ["#rev-ring3", 0.12, 1.9]].forEach(([r, d, s]) => {
+            show(r, d);
+            tl.fromTo(r, { scale: 0.05 }, { scale: s, duration: 0.55, ease: "expo.out" }, d);
+            hide(r, d + 0.55);
+          });
+          tl.fromTo("#rev-dot", { scale: 1 }, { scale: 2.2, duration: 0.1, ease: "expo.out" }, 0);
+          tl.to("#rev-dot", { scale: 0.27, y: 64, duration: 0.12, ease: "power3.in" }, 0.1);
           hide("#rev-dot", 0.22);
           show("#rev-line", 0.22);
-          tl.fromTo("#rev-line", { scaleX: 0.01, y: 64 }, { scaleX: 1, y: 0, duration: 0.18, ease: "expo.out" }, 0.2);
+          tl.fromTo("#rev-line", { scaleX: 0.01 }, { scaleX: 1, duration: LINE.duration, ease: LINE.ease }, 0.22);
 
-          // the line opens into the wordmark from the centre
-          show("#rev-logo", 0.3);
-          tl.fromTo("#rev-logo", { clipPath: "inset(0% 50% 0% 50%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.24, ease: "expo.out" }, 0.3);
-          tl.to("#rev-line", { scaleY: 0, duration: 0.08, ease: "power2.in" }, 0.42);
-          hide("#rev-line", 0.5);
+          // the wordmark's letters spring up out of the baseline, left to right
+          [...document.querySelectorAll("#rev-svg .rev-l")].forEach((l, k) => {
+            tl.fromTo(l, { y: 150 }, { y: 0, duration: RISE.duration, ease: RISE.ease }, 0.3 + k * 0.045);
+          });
+          tl.to("#rev-line", { scaleX: 0, duration: 0.18, ease: "power3.in" }, 0.72);
+          hide("#rev-line", 0.9);
 
-          // tagline types in; handles snap in and hold for 1.5 s
-          [..."Your Campus. Your Network."].forEach((ch, i) => {
+          // tagline types in with a tiny pop per character
+          [..."Your Campus. Your Network."].forEach((ch, k) => {
             const s = document.createElement("span");
-            s.id = "rev-ch-" + i;
             s.textContent = ch === " " ? " " : ch;
             $("#rev-tagline").appendChild(s);
-            show(s, 0.42 + i * 0.018);
+            const t = 0.42 + k * 0.018;
+            show(s, t);
+            tl.fromTo(s, { y: 22 }, { y: 0, duration: POP.duration, ease: POP.ease }, t);
           });
+          // handles spring up and hold for 1.5 s
           show("#rev-urltext", 0.5);
-          tl.fromTo("#rev-urltext", { y: 22 }, { y: 0, duration: 0.3, ease: "expo.out" }, 0.5);
+          tl.fromTo("#rev-urltext", { y: 40 }, { y: 0, duration: POP.duration, ease: POP.ease }, 0.5);
 
           // one confident pulse on the beat, then hold
-          tl.fromTo("#rev-logo", { scale: 1 }, { scale: 1.05, duration: 0.1, ease: "power2.out", immediateRender: false }, 1.5);
-          tl.to("#rev-logo", { scale: 1, duration: 0.4, ease: "power3.out" }, 1.6);
+          tl.fromTo("#rev-logo", { scale: 1.08 }, { scale: 1, duration: WOBBLE.duration, ease: WOBBLE.ease, immediateRender: false }, 1.5);
           show("#rev-ring2", 1.5);
-          tl.fromTo("#rev-ring2", { scale: 0.6 }, { scale: 2.6, duration: 0.45, ease: "expo.out" }, 1.5);
+          tl.fromTo("#rev-ring2", { scale: 0.6 }, { scale: 2.6, duration: 0.45, ease: "expo.out", immediateRender: false }, 1.5);
           hide("#rev-ring2", 1.95);
 
           window.__timelines["reveal"] = tl;
