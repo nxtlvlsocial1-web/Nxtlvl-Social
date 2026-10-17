@@ -67,6 +67,31 @@ const P19 = seg(31.15, 32.15, [["Kya", "lg"], ["mast", "xl acc"], ["trick", "xl 
 const P20 = seg(32.63, 33.58, [["Comment", "lg"], ["karo", "lg"], ["“STEAL”", "huge acc"]]);
 const P21 = [...seg(33.81, 33.93, [["aur"]]), ...seg(34.05, 36.33, [["poora"], ["step-by-step"], ["guide"], ["main"], ["tumhe"], ["DM"], ["kar"], ["dunga"]])].map((x) => x.t);
 
+// Real Ads Manager screenshots (rebranded by patch_shots.py), framed in the GrowthX style.
+// Children of .zoom use native screenshot pixel coordinates; the wrapper is scaled to fit.
+const SHOT = { "2": [1572, 974], "3": [1522, 973], "4": [1500, 962], "5": [1418, 916] };
+const FRAME_H = 740, FRAME_TOP = 90;
+const shotBox = (file) => { const [w, h] = SHOT[file]; const k = FRAME_H / h; const W = Math.round(w * k); return { w, h, k, W, L: Math.round((1920 - W) / 2) }; };
+const shotHTML = (id, files, inner = "") => {
+  const b = shotBox(files[0]);
+  return `<div class="shot" id="${id}" style="left:${b.L}px;top:${FRAME_TOP}px;width:${b.W}px;height:${FRAME_H}px">
+        <div class="zoom" id="${id}-z" style="width:${b.w}px;height:${b.h}px">
+          ${files.map((f, i) => `<img class="simg" id="${id}-i${i}" src="shots/${f}.png" alt="" style="width:${SHOT[f][0]}px;height:${SHOT[f][1]}px${i ? ";opacity:0" : ""}" />`).join("")}
+          ${inner}
+        </div>
+      </div>`;
+};
+// Zoom the screenshot so native point (fx, fy) is centred at scale s (relative to fit).
+const zoomTo = (id, file, fx, fy, s, t, d = 0.6) => {
+  const b = shotBox(file); const S2 = b.k * s;
+  const x = Math.min(0, Math.max(b.W - b.w * S2, b.W / 2 - fx * S2));
+  const y = Math.min(0, Math.max(FRAME_H - b.h * S2, FRAME_H / 2 - fy * S2));
+  T(`tl.to("#${id}-z",{scale:${S2.toFixed(4)},x:${x.toFixed(1)},y:${y.toFixed(1)},duration:${d},ease:"power2.inOut"},${t.toFixed(2)});`);
+};
+const zoomInit = (id, file, t) => { const b = shotBox(file); T(`tl.set("#${id}-z",{scale:${b.k.toFixed(4)},x:0,y:0,transformOrigin:"0 0"},${t.toFixed(2)});`); };
+const ringEl = (id, x, y, w, h) => `<div class="ring" id="${id}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px"></div>`;
+const ringOn = (id, t) => T(`tl.fromTo("#${id}",{opacity:0,scale:1.25},{opacity:1,scale:1,duration:.25,ease:"back.out(2)"},${t.toFixed(2)});`);
+
 const CUT = { s1: 0, s2: 4.1, s3: 9.0, s4: 14.85, s5: 18.85, s6: 25.6, s7: 30.95, s8: 32.42, out: 36.45 };
 const at = (ws, i) => ws[i].t;
 
@@ -78,72 +103,61 @@ const capD = capBar([P14, P1516]);
 const scenes = [
   { id: "s1", start: CUT.s1, end: CUT.s2, lines: [P1, P2.slice(0, 2), P2.slice(2), P3], shake: P2[0].t + 0.05 },
 
-  { id: "s2", start: CUT.s2, end: CUT.s3, noDrift: true, lines: [], extra: `
-      <div class="app" id="s2-app">
-        <div class="side"><div class="logo-s">Ads Manager</div><div class="si">Campaigns</div><div class="si">Ad sets</div><div class="si" id="s2-aud">👥 Audiences</div><div class="si">Billing</div></div>
-        <div class="main">
-          <div class="mh"><span class="mt">Audiences</span><div class="btn" id="s2-create">+ Create audience</div></div>
-          <div class="rows"><i></i><i></i><i></i><i></i></div>
-          <div class="menu" id="s2-menu"><div class="mi" id="s2-m0">⚙️ Custom audience</div><div class="mi">👥 Lookalike audience</div><div class="mi">💾 Saved audience</div></div>
-        </div>
-      </div>
-      <div class="cursor2" id="s2-cur"></div>${capA.html}`,
+  { id: "s2", start: CUT.s2, end: CUT.s3, noDrift: true, lines: [], extra: shotHTML("s2-shot", ["2", "3"], `
+          ${ringEl("s2-r0", 105, 214, 192, 50)}${ringEl("s2-r1", 112, 272, 192, 46)}
+          <div class="cursor3" id="s2-cur"></div>`) + capA.html,
     tweens: (A) => {
       capA.tweens();
-      T(`tl.fromTo("#s2-app",{opacity:0,y:60,scale:.94},{opacity:1,y:0,scale:1,duration:.45,ease:"power3.out"},${CUT.s2});`);
-      T(`tl.set("#s2-cur",{x:1100,y:700},${CUT.s2});`);
-      curTo("s2-cur", 300, 315, at(P4, 0) - 0.1); click("s2-cur", "#s2-aud", at(P4, 0) + 0.35); on("#s2-aud", at(P4, 0) + 0.38);
-      curTo("s2-cur", 1520, 160, at(P5, 0) - 0.05); click("s2-cur", "#s2-create", at(P5, 3)); on("#s2-create", at(P5, 3) + 0.03, "#B57BFF", "#040206");
-      T(`tl.fromTo("#s2-menu",{opacity:0,y:-20},{opacity:1,y:0,duration:.25,ease:"power2.out"},${(at(P5, 3) + 0.12).toFixed(2)});`); S(at(P5, 3) + 0.12, "pop", .45);
-      curTo("s2-cur", 1450, 262, at(P67, 1) - 0.05); click("s2-cur", "#s2-m0", at(P67, 3)); on("#s2-m0", at(P67, 3) + 0.03);
+      zoomInit("s2-shot", "2", CUT.s2);
+      T(`tl.fromTo("#s2-shot",{opacity:0,y:60,scale:.95},{opacity:1,y:0,scale:1,duration:.45,ease:"power3.out"},${CUT.s2});`);
+      T(`tl.set("#s2-cur",{x:820,y:620},${CUT.s2});`);
+      zoomTo("s2-shot", "2", 330, 300, 1.55, at(P4, 0));
+      T(`tl.to("#s2-cur",{x:210,y:250,duration:.45,ease:"power3.inOut"},${(at(P5, 0) - 0.1).toFixed(2)});`);
+      ringOn("s2-r0", at(P5, 0) + 0.25);
+      const c1 = at(P5, 3); click("s2-cur", null, c1);
+      T(`tl.to("#s2-r0",{opacity:0,duration:.15},${(c1 + 0.1).toFixed(2)});`);
+      T(`tl.fromTo("#s2-shot-i1",{opacity:0},{opacity:1,duration:.12,immediateRender:false},${(c1 + 0.05).toFixed(2)});`); S(c1 + 0.08, "pop", .45);
+      T(`tl.to("#s2-cur",{x:225,y:303,duration:.4,ease:"power3.inOut"},${(at(P67, 1) - 0.1).toFixed(2)});`);
+      ringOn("s2-r1", at(P67, 1) + 0.2);
+      click("s2-cur", "#s2-r1", at(P67, 3));
     } },
 
-  { id: "s3", start: CUT.s3, end: CUT.s4, noDrift: true, lines: [], extra: `
-      <div class="app" id="s3-app">
-        <div class="mh full"><span class="mt">Create a custom audience</span><span class="step">STEP 1 · SOURCE</span></div>
-        <div class="grid" id="s3-grid">
-          <div class="src">🌐 Website</div><div class="src">📋 Customer list</div>
-          <div class="src">📱 App activity</div><div class="src" id="s3-ig"><b>📸 Instagram account</b><span>Meta source</span></div>
-        </div>
-        <div class="evs" id="s3-evs">
-          <div class="ev" id="s3-e0"><span class="box" id="s3-x0"></span>Everyone who engaged with your profile</div>
-          <div class="ev"><span class="box"></span>Anyone who visited your profile</div>
-          <div class="ev"><span class="box"></span>People who sent a message to your account</div>
-          <div class="ev"><span class="box"></span>People who saved any post or ad</div>
-        </div>
-      </div>
-      <div class="cursor2" id="s3-cur"></div>${capB.html}`,
+  { id: "s3", start: CUT.s3, end: CUT.s4, noDrift: true, lines: [], extra: shotHTML("s3-shot", ["4"], `
+          ${ringEl("s3-r0", 936, 428, 320, 58)}${ringEl("s3-r1", 1254, 663, 84, 52)}
+          <div class="cursor3" id="s3-cur"></div>`) + `
+      <div class="evcard" id="s3-ev">
+        <div class="evh">Events</div>
+        <div class="ev2" id="s3-e0"><span class="box" id="s3-x0"></span>Everyone who engaged with your professional account</div>
+        <div class="ev2 dim"><span class="box"></span>Anyone who visited your professional account</div>
+        <div class="ev2 dim"><span class="box"></span>People who sent a message to your account</div>
+      </div>` + capB.html,
     tweens: (A) => {
       capB.tweens();
-      T(`tl.fromTo("#s3-app",{opacity:0,y:60},{opacity:1,y:0,duration:.4,ease:"power3.out"},${CUT.s3});`);
-      T(`tl.fromTo("#s3-grid .src",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.3,ease:"back.out(2)",stagger:.08},${(CUT.s3 + 0.15).toFixed(2)});`);
-      T(`tl.set("#s3-cur",{x:700,y:900},${CUT.s3});`);
-      curTo("s3-cur", 1320, 590, at(P8, 3) - 0.35); click("s3-cur", "#s3-ig", at(P8, 3)); on("#s3-ig", at(P8, 3) + 0.03);
-      T(`tl.to("#s3-grid",{opacity:0,y:-30,duration:.25},${(at(P10, 0) - 0.15).toFixed(2)});`);
-      T(`tl.fromTo("#s3-evs .ev",{opacity:0,x:60},{opacity:1,x:0,duration:.3,ease:"power3.out",stagger:.07},${at(P10, 0).toFixed(2)});`);
-      curTo("s3-cur", 340, 285, at(P10, 2)); const sel = at(P10, P10.length - 2);
-      click("s3-cur", "#s3-e0", sel); on("#s3-e0", sel + 0.03); T(`tl.fromTo("#s3-x0",{"--ck":0},{"--ck":1,duration:.15},${(sel + 0.03).toFixed(2)});`); S(sel + 0.06, "ding", .45);
+      zoomInit("s3-shot", "4", CUT.s3);
+      T(`tl.fromTo("#s3-shot",{opacity:0,y:60},{opacity:1,y:0,duration:.4,ease:"power3.out"},${CUT.s3});`);
+      T(`tl.set("#s3-cur",{x:700,y:820},${CUT.s3});`);
+      zoomTo("s3-shot", "4", 960, 420, 1.35, CUT.s3 + 0.3, 0.8);
+      T(`tl.to("#s3-cur",{x:975,y:465,duration:.45,ease:"power3.inOut"},${(at(P8, 3) - 0.5).toFixed(2)});`);
+      ringOn("s3-r0", at(P8, 3)); click("s3-cur", null, at(P8, 3) + 0.05);
+      T(`tl.to("#s3-cur",{x:1300,y:700,duration:.35,ease:"power3.inOut"},${(at(P8, 5)).toFixed(2)});`);
+      ringOn("s3-r1", at(P8, 6)); click("s3-cur", null, at(P8, 6) + 0.1);
+      T(`tl.fromTo("#s3-ev",{opacity:0,y:80},{opacity:1,y:0,duration:.35,ease:"power3.out"},${(at(P10, 0) - 0.1).toFixed(2)});`);
+      const sel = at(P10, P10.length - 2);
+      on("#s3-e0", sel + 0.03); T(`tl.fromTo("#s3-x0",{"--ck":0},{"--ck":1,duration:.15},${(sel + 0.03).toFixed(2)});`); S(sel + 0.03, "click", .8); S(sel + 0.08, "ding", .45);
     } },
 
-  { id: "s4", start: CUT.s4, end: CUT.s5, noDrift: true, lines: [], extra: `
-      <div class="card" id="s4-card">
-        <div class="ch">Create a lookalike audience</div>
-        <div class="row"><span class="k">Source</span><span class="v">📸 IG profile engagers</span></div>
-        <div class="row"><span class="k">Location</span><span class="pill2" id="s4-in">🇮🇳 India</span></div>
-        <div class="row col"><span class="k">Audience size</span>
-          <div class="slider"><div class="track"><i id="s4-fill"></i></div><div class="knob" id="s4-knob"></div></div>
-          <div class="ticks"><span>1%</span><span>5%</span><span>10%</span></div>
-        </div>
-      </div>
-      <div class="big1" id="s4-big">1%</div>${capC.html}`,
+  { id: "s4", start: CUT.s4, end: CUT.s5, noDrift: true, lines: [], extra: shotHTML("s4-shot", ["5"], `
+          ${ringEl("s4-r0", 490, 552, 112, 64)}`) + `
+      <div class="locchip" id="s4-in">📍 India <span>· ad set location</span></div>
+      <div class="big1 b1l" id="s4-big">1%</div>` + capC.html,
     tweens: (A) => {
       capC.tweens();
-      T(`tl.fromTo("#s4-card",{opacity:0,y:60},{opacity:1,y:0,duration:.4,ease:"power3.out"},${CUT.s4});`);
-      T(`tl.fromTo("#s4-knob",{x:900},{x:900,duration:.01},${CUT.s4});`);
-      A.pop("#s4-in", at(P1213, 0)); 
-      T(`tl.to("#s4-knob",{x:0,duration:.45,ease:"power3.inOut"},${at(P1213, 1).toFixed(2)});`);
-      T(`tl.fromTo("#s4-fill",{scaleX:1},{scaleX:0.02,duration:.45,ease:"power3.inOut",immediateRender:false},${at(P1213, 1).toFixed(2)});`);
-      T(`tl.fromTo("#s4-big",{opacity:0,scale:1.6},{opacity:1,scale:1,duration:.35,ease:"back.out(2)"},${(at(P1213, 1) + 0.35).toFixed(2)});`); S(at(P1213, 1) + 0.35, "impact_lite", .55);
+      zoomInit("s4-shot", "5", CUT.s4);
+      T(`tl.fromTo("#s4-shot",{opacity:0,y:60},{opacity:1,y:0,duration:.4,ease:"power3.out"},${CUT.s4});`);
+      zoomTo("s4-shot", "5", 640, 520, 1.3, CUT.s4 + 0.4, 0.9);
+      A.pop("#s4-in", at(P1213, 0));
+      ringOn("s4-r0", at(P1213, 1)); S(at(P1213, 1), "pop", .5);
+      T(`tl.fromTo("#s4-big",{opacity:0,scale:1.6},{opacity:1,scale:1,duration:.35,ease:"back.out(2)"},${(at(P1213, 1) + 0.25).toFixed(2)});`); S(at(P1213, 1) + 0.25, "impact_lite", .55);
     } },
 
   { id: "s5", start: CUT.s5, end: CUT.s6, noDrift: true, lines: [], extra: `
@@ -535,6 +549,18 @@ const html = `<!doctype html>
       .sh-p { left:880px; top:40px; } .sh-p2 { right:520px; bottom:20px; width:64px; height:64px; }
       .pill, .hlw, .tool, .logo-big, .ext, .cmt, #hook-tag, #progress i, .chart path { box-shadow:none !important; filter:none !important; }
       .hl::before { box-shadow:none !important; }
+      .shot { position:absolute; border-radius:24px; overflow:hidden; border:5px solid var(--pur); background:#fff; }
+      .zoom { position:absolute; left:0; top:0; transform-origin:0 0; }
+      .simg { position:absolute; left:0; top:0; }
+      .ring { position:absolute; border:6px solid var(--pur); border-radius:14px; opacity:0; }
+      .cursor3 { position:absolute; left:0; top:0; width:44px; height:56px; background:#111; border:0; clip-path:polygon(0 0,0 80%,22% 62%,40% 100%,55% 94%,38% 58%,70% 58%); }
+      .evcard { position:absolute; right:150px; bottom:250px; width:860px; padding:26px 30px; border-radius:22px; background:#0E0A14; border:3px solid var(--pur2); display:flex; flex-direction:column; gap:14px; }
+      .evh { font-size:30px; font-weight:900; color:var(--acc); letter-spacing:.1em; }
+      .ev2 { display:flex; align-items:center; gap:20px; padding:14px 18px; border-radius:14px; border:2px solid rgba(255,255,255,.12); font-size:28px; font-weight:700; }
+      .ev2.dim { opacity:.55; }
+      .big1.b1l { right:auto; left:150px; top:470px; font-size:180px; }
+      .locchip { position:absolute; left:150px; top:700px; padding:16px 28px; border-radius:999px; background:var(--pur); font-size:36px; font-weight:900; }
+      .locchip span { font-weight:600; font-size:28px; opacity:.85; }
       .cta { display:flex; flex-direction:column; align-items:center; gap:30px; margin-top:30px; }
       .pill { background:linear-gradient(90deg,var(--pur),var(--pur2)); color:#fff; box-shadow:0 0 50px rgba(139,47,232,.6); font-size:64px; font-weight:900; padding:22px 56px; border-radius:999px; }
       .mail { font-size:46px; font-weight:700; padding:18px 40px; border-radius:20px; background:rgba(255,255,255,.06); border:2px solid rgba(255,255,255,.2); }
