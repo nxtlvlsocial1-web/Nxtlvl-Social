@@ -85,6 +85,19 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Client brand systems: palette, logo, social templates   | `higgsfield-brandkit`                         |
 | YouTube thumbnails, Reel / Shorts covers                | `higgsfield-youtube-thumbnail`                |
 
+**Web pages and UI code:**
+
+| Need                                                    | Skill                                         |
+| ------------------------------------------------------- | --------------------------------------------- |
+| Pick the right UI skill before UI work                  | `ui-skills-root`                              |
+| Quick polish pass: spacing, hierarchy, typography       | `baseline-ui`                                 |
+| Audit an interface and write fix plans (read-only)      | `improve-ui`                                  |
+| Write a DESIGN.md from a repo or live website           | `create-design-md`                            |
+| Pan-and-zoom canvas of existing components / variants   | `component-canvas`                            |
+| Accessibility: ARIA, keyboard, focus, contrast          | `fixing-accessibility`                        |
+| Page metadata: titles, Open Graph, share previews       | `fixing-metadata`                             |
+| Janky or stuttering CSS / JS animation                  | `fixing-motion-performance`                   |
+
 All skills except our own are third-party, and their versions are pinned in `skills-lock.json`:
 
 - HyperFrames skills: `heygen-com/hyperframes`
@@ -97,6 +110,7 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `dockkit`: `dpearson2699/swift-ios-skills`
 - `fal-lip-sync`, `remotion`, `frame-*`, `video-hyperframes`: `nexu-io/open-design`
 - `video-motion-graphics`: `dylantarre/animation-principles`
+- `ui-skills-root`, `baseline-ui`, `improve-ui`, `create-design-md`, `component-canvas`, `fixing-*`: `ibelick/ui-skills`
 - `brand-intake`, `motion-brief-writer`, `reference-to-motion`, `motion-prompt-writer`, `launch-video`, `apple-launch-film`, `vox-explainer`, `animated-chart`, `milestone-reveal`, `motion-effects`, `title-sequence-3d`, `model-showdown`, `newsletter-promo`, `loop-cover`, `reel-export`: `charlie947/motion-graphics-skills`
 - `reference-design-contract`, `agent-browser`: `nexu-io/open-design`; `competitor-profiling`: `coreyhaines31/marketingskills`
 - fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`,
