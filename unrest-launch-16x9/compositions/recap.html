@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>Unrest · recap</title></head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "Space Grotesk"; font-weight: 700; src: url("../assets/fonts/space-grotesk-latin-700-normal.woff2") format("woff2"); }
+        @font-face { font-family: "Space Grotesk"; font-weight: 500; src: url("../assets/fonts/space-grotesk-latin-500-normal.woff2") format("woff2"); }
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        #rec-bg { position: absolute; inset: 0; background: #ffffff; }
+        #rec-stage { position: absolute; inset: 0; font-family: "Space Grotesk", sans-serif; }
+        .rec-meta { position: absolute; left: 96px; top: 80px; display: block; font-weight: 500; font-size: 24px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; opacity: 0; }
+        .rec-row { position: absolute; left: 0; right: 0; top: 380px; display: flex; justify-content: center; }
+        .rec-sub { position: absolute; left: 0; right: 0; top: 700px; display: flex; justify-content: center; }
+        .rec-stack { position: relative; display: block; opacity: 0; }
+        .rec-word { display: block; font-weight: 700; font-size: 300px; letter-spacing: -0.045em; line-height: 0.86; text-transform: uppercase; white-space: nowrap; }
+        .rec-solid { color: #000000; }
+        .rec-outline { position: absolute; left: 0; top: 0; color: #000000; -webkit-text-stroke: 5px #ffffff; opacity: 0; }
+        .rec-kicker { display: block; font-weight: 500; font-size: 30px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; opacity: 0; }
+        .rec-ink { color: #000000; } .rec-paper { color: #ffffff; }
+        #rec-dot { position: absolute; left: 945px; top: 525px; width: 30px; height: 30px; border-radius: 50%; background: #ffffff; opacity: 0; }
+      </style>
+      <div data-hf-id="hf-j4xe" id="root" data-composition-id="recap" data-width="1920" data-height="1080">
+        <div data-hf-id="hf-6q2r" id="rec-bg"></div>
+        <div data-hf-id="hf-nyg8" id="rec-stage"></div>
+        <div data-hf-id="hf-epsn" id="rec-dot"></div>
+      </div>
+      <script>
+        (() => {
+          const F = 1 / 30;
+          const tl = gsap.timeline({ paused: true });
+          const $ = (s) => document.querySelector(s);
+          const show = (el, t) => tl.set(el, { opacity: 1 }, t);
+          const hide = (el, t) => tl.set(el, { opacity: 0 }, t);
+          function shake(el, t, amp = 1) {
+            [[14, -7], [-10, 8], [6, -4], [-3, 2], [0, 0]].forEach(([x, y], i) => tl.set(el, { x: x * amp, y: y * amp }, t + i * F));
+          }
+
+          const REC = [
+            ["Feed", "Posts · polls · updates"],
+            ["Corridor", "Meet your people"],
+            ["Hangout", "Fests · meetups · experiences"],
+            ["Central", "Spots · roommates · sports"],
+          ];
+          REC.forEach(([w, sub], i) => {
+            const wrap = document.createElement("div");
+            wrap.innerHTML =
+              `<span class="rec-meta rec-ink" id="rec-ia${i}">0${i + 1} / 04</span>` +
+              `<span class="rec-meta rec-paper" id="rec-ib${i}">0${i + 1} / 04</span>` +
+              `<div class="rec-row"><span class="rec-stack" id="rec-w${i}"><span class="rec-word rec-solid" id="rec-s${i}">${w}</span><span class="rec-word rec-outline" id="rec-o${i}">${w}</span></span></div>` +
+              `<div class="rec-sub"><span class="rec-kicker rec-ink" id="rec-ka${i}">${sub}</span></div>` +
+              `<div class="rec-sub"><span class="rec-kicker rec-paper" id="rec-kb${i}">${sub}</span></div>`;
+            while (wrap.firstChild) $("#rec-stage").appendChild(wrap.firstChild);
+          });
+
+          // 0.25 s flash cuts: white frame + solid word, then black frame + outlined word
+          REC.forEach((_, i) => {
+            const a = i * 0.5, b = a + 0.25;
+            tl.set("#rec-bg", { backgroundColor: "#ffffff" }, a);
+            show("#rec-w" + i, a); show("#rec-ia" + i, a); show("#rec-ka" + i, a);
+            show("#rec-s" + i, a); hide("#rec-o" + i, a);
+            tl.fromTo("#rec-w" + i, { scale: 1.4 }, { scale: 1, duration: 0.14, ease: "expo.out" }, a);
+            shake("#rec-stage", a, 1.2);
+            tl.set("#rec-bg", { backgroundColor: "#000000" }, b);
+            hide("#rec-ia" + i, b); hide("#rec-ka" + i, b);
+            show("#rec-ib" + i, b); show("#rec-kb" + i, b);
+            hide("#rec-s" + i, b); show("#rec-o" + i, b);
+            tl.fromTo("#rec-w" + i, { scale: 1.07 }, { scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, b);
+            if (i < 3) { hide("#rec-w" + i, a + 0.5); hide("#rec-ib" + i, a + 0.5); hide("#rec-kb" + i, a + 0.5); }
+          });
+
+          // everything collapses into the white dot
+          tl.to("#rec-w3", { scale: 0, duration: 0.18, ease: "power3.in" }, 1.76);
+          hide("#rec-kb3", 1.76); hide("#rec-ib3", 1.76);
+          show("#rec-dot", 1.86);
+          tl.fromTo("#rec-dot", { scale: 0 }, { scale: 1, duration: 0.1, ease: "back.out(3)" }, 1.86);
+
+          window.__timelines["recap"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>Unrest · discover</title></head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "Space Grotesk"; font-weight: 700; src: url("../assets/fonts/space-grotesk-latin-700-normal.woff2") format("woff2"); }
+        @font-face { font-family: "Space Grotesk"; font-weight: 500; src: url("../assets/fonts/space-grotesk-latin-500-normal.woff2") format("woff2"); }
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        #disc-bg { position: absolute; inset: 0; background: #ffffff; }
+        #disc-stage { position: absolute; inset: 0; font-family: "Space Grotesk", sans-serif; color: #000000; }
+        .disc-meta { position: absolute; display: block; font-weight: 500; font-size: 24px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; }
+        #disc-meta-tl { left: 96px; top: 80px; } #disc-meta-tr { right: 96px; top: 80px; } #disc-meta-br { right: 96px; bottom: 64px; }
+        #disc-rule { position: absolute; left: 96px; right: 96px; bottom: 110px; height: 3px; background: #000000; transform-origin: 0 50%; }
+        .disc-row { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+        .disc-kicker { display: block; font-weight: 500; font-size: 30px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; opacity: 0; }
+        .disc-icon { position: absolute; left: 810px; top: 150px; width: 300px; height: 300px; opacity: 0; }
+        .disc-mini { position: absolute; top: 210px; width: 170px; height: 170px; opacity: 0; }
+        .disc-icon svg, .disc-mini svg { display: block; width: 100%; height: 100%; overflow: visible; }
+        .disc-icon .ln, .disc-mini .ln { fill: none; stroke: #000000; stroke-width: 4; stroke-linecap: square; stroke-dasharray: 1; }
+        .disc-icon .fill, .disc-mini .fill { fill: #000000; }
+        #disc-morph { position: absolute; left: 930px; top: 270px; width: 60px; height: 60px; border-radius: 50%; background: #000000; opacity: 0; }
+        #disc-labels { top: 486px; }
+        #disc-labels .disc-kicker { position: absolute; }
+        #disc-word { top: 630px; }
+        #disc-stack { position: relative; display: block; }
+        .disc-word { display: block; font-weight: 700; font-size: 262px; letter-spacing: -0.045em; line-height: 0.86; text-transform: uppercase; white-space: nowrap; color: #000000; }
+        #disc-outline { position: absolute; left: 0; top: 0; color: #ffffff; -webkit-text-stroke: 5px #000000; opacity: 0; }
+        #disc-kicker { top: 892px; }
+      </style>
+      <div data-hf-id="hf-7swg" id="root" data-composition-id="discover" data-width="1920" data-height="1080">
+        <div data-hf-id="hf-tasm" id="disc-bg"></div>
+        <div data-hf-id="hf-tfkb" id="disc-stage">
+          <span data-hf-id="hf-paio" class="disc-meta" id="disc-meta-tl">01 — Discover</span>
+          <span data-hf-id="hf-0lq7" class="disc-meta" id="disc-meta-tr">Unrest / DU</span>
+          <span data-hf-id="hf-psuh" class="disc-meta" id="disc-meta-br">unrestdu.in</span>
+          <div data-hf-id="hf-g5l1" id="disc-rule"></div>
+          <div data-hf-id="hf-nvsn" id="disc-icons"></div>
+          <div data-hf-id="hf-snbn" id="disc-morph"></div>
+          <div data-hf-id="hf-4ae5" id="disc-minis"></div>
+          <div data-hf-id="hf-ofoz" id="disc-labels" class="disc-row"></div>
+          <div data-hf-id="hf-weze" id="disc-word" class="disc-row">
+            <span data-hf-id="hf-q6te" id="disc-stack">
+              <span data-hf-id="hf-k7p7" class="disc-word" id="disc-solid">Discover.</span>
+              <span data-hf-id="hf-fvq2" class="disc-word" id="disc-outline">Discover.</span>
+            </span>
+          </div>
+          <div data-hf-id="hf-snwx" id="disc-kicker" class="disc-row"><span data-hf-id="hf-hq3v" class="disc-kicker" id="disc-kick">What's happening on campus?</span></div>
+        </div>
+      </div>
+      <script>
+        (() => {
+          const F = 1 / 30;
+          const tl = gsap.timeline({ paused: true });
+          const $ = (s) => document.querySelector(s);
+          const show = (el, t) => tl.set(el, { opacity: 1 }, t);
+          const hide = (el, t) => tl.set(el, { opacity: 0 }, t);
+          function shake(el, t, amp = 1) {
+            [[14, -7], [-10, 8], [6, -4], [-3, 2], [0, 0]].forEach(([x, y], i) => tl.set(el, { x: x * amp, y: y * amp }, t + i * F));
+          }
+
+          // black line icons, 120-unit grid, 10 px stroke at 300 px
+          const ICONS = {
+            feed: '<rect class="ln" pathLength="1" x="14" y="16" width="92" height="88" rx="6"/><circle class="fill" cx="32" cy="34" r="8"/><path class="ln" pathLength="1" d="M48 30 H90 M48 40 H74"/><path class="ln" pathLength="1" d="M26 58 H94 M26 72 H94 M26 86 H64"/>',
+            poll: '<path class="ln" pathLength="1" d="M18 14 H102 V82 H52 L30 104 L34 82 H18 Z"/><rect class="fill" x="30" y="28" width="56" height="10"/><rect class="fill" x="30" y="44" width="34" height="10"/><rect class="fill" x="30" y="60" width="46" height="10"/>',
+            ticket: '<path class="ln" pathLength="1" d="M10 30 H110 V50 A10 10 0 0 0 110 70 V90 H10 V70 A10 10 0 0 0 10 50 Z"/><path class="ln" pathLength="1" d="M82 34 V86"/><path class="fill" d="M46 40 L50 52 L62 52 L52 59 L56 71 L46 63 L36 71 L40 59 L30 52 L42 52 Z"/>',
+            pin: '<path class="ln" pathLength="1" d="M60 108 C60 108 24 70 24 46 A36 36 0 0 1 96 46 C96 70 60 108 60 108 Z"/><circle class="ln" pathLength="1" cx="60" cy="46" r="13"/>',
+          };
+          const ORDER = ["feed", "poll", "ticket", "pin"];
+          const LABELS = ["Feed", "Polls", "Fests", "Spots"];
+          ORDER.forEach((k, i) => {
+            const d = document.createElement("div");
+            d.className = "disc-icon"; d.id = "disc-icon-" + k;
+            d.innerHTML = '<svg viewBox="0 0 120 120">' + ICONS[k] + "</svg>";
+            $("#disc-icons").appendChild(d);
+            const lab = document.createElement("span");
+            lab.className = "disc-kicker"; lab.id = "disc-lab-" + k; lab.textContent = LABELS[i];
+            $("#disc-labels").appendChild(lab);
+            const m = document.createElement("div");
+            m.className = "disc-mini"; m.id = "disc-mini-" + k; m.style.left = 960 - 85 + (i - 1.5) * 250 + "px";
+            m.innerHTML = '<svg viewBox="0 0 120 120">' + ICONS[k] + "</svg>";
+            $("#disc-minis").appendChild(m);
+          });
+          const all = document.createElement("span");
+          all.className = "disc-kicker"; all.id = "disc-lab-all"; all.textContent = "Feed · Polls · Fests · Spots";
+          $("#disc-labels").appendChild(all);
+
+          // DISCOVER. slams in on the drop; progress rule runs the length of the scene
+          show("#disc-stack", 0);
+          tl.fromTo("#disc-stack", { scale: 1.3 }, { scale: 1, duration: 0.3, ease: "expo.out" }, 0);
+          tl.fromTo("#disc-rule", { scaleX: 0 }, { scaleX: 1, duration: 2.95, ease: "none" }, 0);
+          show("#disc-kick", 0.5);
+          tl.fromTo("#disc-kick", { y: 18 }, { y: 0, duration: 0.25, ease: "expo.out" }, 0.5);
+
+          // one icon per beat; each collapses into a dot that becomes the next
+          ORDER.forEach((k, i) => {
+            const b = i * 0.5, icon = "#disc-icon-" + k, lab = "#disc-lab-" + k, next = b + 0.5;
+            show(icon, b); show(lab, b);
+            tl.fromTo(icon, { scale: 0.2, rotation: -14 }, { scale: 1, rotation: 0, duration: 0.34, ease: "back.out(2.4)" }, b);
+            tl.fromTo(icon + " .ln", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, b);
+            tl.fromTo(lab, { y: 14 }, { y: 0, duration: 0.2, ease: "expo.out" }, b);
+            tl.fromTo(icon, { scale: 1, rotation: 0 }, { scale: 0, rotation: 10, duration: 0.08, ease: "power2.in", immediateRender: false }, next - 0.08);
+            hide(icon, next); hide(lab, next);
+            show("#disc-morph", next - 0.08);
+            tl.fromTo("#disc-morph", { scale: 0 }, { scale: 1, duration: 0.08, ease: "power2.out", immediateRender: false }, next - 0.08);
+            tl.to("#disc-morph", { scale: 0, duration: 0.07, ease: "power2.in" }, next);
+            hide("#disc-morph", next + 0.07);
+          });
+
+          // bar downbeat: all four discoveries line up, the word flips to outline
+          ORDER.forEach((k, i) => {
+            const t = 2.0 + i * 0.06, m = "#disc-mini-" + k;
+            show(m, t);
+            tl.fromTo(m, { scale: 0, y: 30 }, { scale: 1, y: 0, duration: 0.3, ease: "back.out(2.2)" }, t);
+            tl.fromTo(m + " .ln", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.25, ease: "power2.out" }, t);
+          });
+          show("#disc-lab-all", 2.1);
+          tl.fromTo("#disc-lab-all", { y: 14 }, { y: 0, duration: 0.2, ease: "expo.out" }, 2.1);
+          show("#disc-outline", 2.0); hide("#disc-solid", 2.0);
+          shake("#disc-stage", 2.0, 0.7);
+
+          window.__timelines["discover"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

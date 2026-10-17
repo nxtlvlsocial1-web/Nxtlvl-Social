@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>Unrest · hook</title></head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "Space Grotesk"; font-weight: 700; src: url("../assets/fonts/space-grotesk-latin-700-normal.woff2") format("woff2"); }
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        #hook-bg { position: absolute; inset: 0; background: #000000; }
+        #hook-stage { position: absolute; inset: 0; }
+        #hook-ring-svg { position: absolute; left: 0; top: 0; overflow: visible; }
+        #hook-dot { position: absolute; left: 945px; top: 525px; width: 30px; height: 30px; border-radius: 50%; background: #ffffff; }
+        .hook-row { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+        .hook-word { display: block; font-family: "Space Grotesk", sans-serif; font-weight: 700; line-height: 0.86; text-transform: uppercase; white-space: nowrap; color: #ffffff; }
+        #hook-line1 { top: 318px; gap: 30px; }
+        #hook-line1 .hook-word { font-size: 96px; letter-spacing: -0.03em; }
+        #hook-line2 { top: 440px; }
+        #hook-boring { position: relative; display: block; opacity: 0; }
+        #hook-boring .hook-word { font-size: 330px; letter-spacing: -0.045em; }
+        #hb-outline { position: absolute; left: 0; top: 0; color: #000000; -webkit-text-stroke: 5px #ffffff; opacity: 0; }
+        .hook-later { opacity: 0; }
+      </style>
+      <div data-hf-id="hf-ktv8" id="root" data-composition-id="hook" data-width="1920" data-height="1080">
+        <div data-hf-id="hf-qdn4" id="hook-bg"></div>
+        <div data-hf-id="hf-be7t" id="hook-stage">
+          <svg data-hf-id="hf-bf2d" id="hook-ring-svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+            <circle data-hf-id="hf-u0uf" id="hook-ring" cx="960" cy="540" r="450" fill="none" stroke="#ffffff" stroke-width="6" vector-effect="non-scaling-stroke" opacity="0" />
+          </svg>
+          <div data-hf-id="hf-veie" id="hook-dot"></div>
+          <div data-hf-id="hf-50bv" id="hook-line1" class="hook-row" data-layout-allow-overlap>
+            <span data-hf-id="hf-3yzy" class="hook-word hook-later" id="hw0">Is</span>
+            <span data-hf-id="hf-gv7s" class="hook-word hook-later" id="hw1">your</span>
+            <span data-hf-id="hf-z9k9" class="hook-word hook-later" id="hw2">college</span>
+            <span data-hf-id="hf-qdnv" class="hook-word hook-later" id="hw3">life</span>
+            <span data-hf-id="hf-69dw" class="hook-word hook-later" id="hw4">too</span>
+          </div>
+          <div data-hf-id="hf-lwui" id="hook-line2" class="hook-row">
+            <span data-hf-id="hf-8o47" id="hook-boring">
+              <span data-hf-id="hf-1n73" class="hook-word" id="hb-solid">Boring?</span>
+              <span data-hf-id="hf-ojfm" class="hook-word" id="hb-outline">Boring?</span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <script>
+        (() => {
+          const F = 1 / 30;
+          const tl = gsap.timeline({ paused: true });
+          const show = (el, t) => tl.set(el, { opacity: 1 }, t);
+          const hide = (el, t) => tl.set(el, { opacity: 0 }, t);
+          function shake(el, t, amp = 1) {
+            [[14, -7], [-10, 8], [6, -4], [-3, 2], [0, 0]].forEach(([x, y], i) => tl.set(el, { x: x * amp, y: y * amp }, t + i * F));
+          }
+
+          // the dot pulses once, then becomes a ring that sweeps off-frame
+          tl.fromTo("#hook-dot", { scale: 1 }, { scale: 1.9, duration: 0.12, ease: "power2.out" }, 0.04);
+          tl.to("#hook-dot", { scale: 0, duration: 0.1, ease: "power3.in" }, 0.17);
+          tl.set("#hook-ring", { attr: { opacity: 1 } }, 0.22);
+          tl.fromTo("#hook-ring", { scale: 0.033, svgOrigin: "960 540" }, { scale: 2.7, svgOrigin: "960 540", duration: 0.62, ease: "expo.out" }, 0.22);
+          tl.set("#hook-ring", { attr: { opacity: 0 } }, 0.84);
+
+          // the question slams in word by word
+          [0.40, 0.58, 0.76, 0.98, 1.18].forEach((t, i) => {
+            show("#hw" + i, t);
+            tl.fromTo("#hw" + i, { scale: 1.7, y: -18 }, { scale: 1, y: 0, duration: 0.22, ease: "expo.out" }, t);
+          });
+
+          // "BORING?" lands last, oversized, then flickers solid → outline → solid
+          show("#hook-boring", 1.5);
+          tl.fromTo("#hook-boring", { scale: 1.9 }, { scale: 1, duration: 0.3, ease: "expo.out" }, 1.5);
+          shake("#hook-stage", 1.5, 1.4);
+          show("#hb-outline", 1.70); hide("#hb-solid", 1.70);
+          hide("#hb-outline", 1.80); show("#hb-solid", 1.80);
+          tl.fromTo("#hook-line2", { scale: 1 }, { scale: 1.08, duration: 0.14, ease: "power2.in" }, 1.86);
+
+          window.__timelines["hook"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

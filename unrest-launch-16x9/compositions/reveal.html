@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="UTF-8" /><title>Unrest · reveal</title></head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "Space Grotesk"; font-weight: 500; src: url("../assets/fonts/space-grotesk-latin-500-normal.woff2") format("woff2"); }
+        @font-face { font-family: "Liberation Serif"; font-weight: 400; src: url("../assets/fonts/LiberationSerif-Regular.ttf") format("truetype"); }
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        #rev-bg { position: absolute; inset: 0; background: #000000; }
+        #rev-stage { position: absolute; inset: 0; }
+        #rev-dot { position: absolute; left: 945px; top: 525px; width: 30px; height: 30px; border-radius: 50%; background: #ffffff; }
+        .rev-ring { position: absolute; left: 660px; top: 240px; width: 600px; height: 600px; border-radius: 50%; border: 3px solid #ffffff; opacity: 0; }
+        #rev-line { position: absolute; left: 520px; top: 476px; width: 880px; height: 8px; border-radius: 4px; background: #ffffff; transform-origin: 50% 50%; opacity: 0; }
+        #rev-logo { position: absolute; left: 520px; top: 333px; width: 880px; height: 293px; transform-origin: 50% 60%; opacity: 0; }
+        #rev-mark { display: block; width: 880px; height: 293px; }
+        .rev-row { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+        #rev-tag { top: 640px; }
+        #rev-tagline { display: block; font-family: "Liberation Serif", serif; font-size: 58px; white-space: nowrap; color: #ffffff; }
+        #rev-tagline span { opacity: 0; }
+        #rev-url { top: 892px; }
+        #rev-urltext { display: block; font-family: "Space Grotesk", sans-serif; font-weight: 500; font-size: 30px; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; color: #ffffff; opacity: 0; }
+      </style>
+      <div data-hf-id="hf-yqoq" id="root" data-composition-id="reveal" data-width="1920" data-height="1080">
+        <div data-hf-id="hf-lne8" id="rev-bg"></div>
+        <div data-hf-id="hf-u7h5" id="rev-stage">
+          <div data-hf-id="hf-dy96" class="rev-ring" id="rev-ring"></div>
+          <div data-hf-id="hf-rez8" class="rev-ring" id="rev-ring2"></div>
+          <div data-hf-id="hf-e1na" id="rev-dot"></div>
+          <div data-hf-id="hf-v6fz" id="rev-line"></div>
+          <div data-hf-id="hf-d8zc" id="rev-logo"><img data-hf-id="hf-tchx" id="rev-mark" src="../assets/brand/wordmark-light.svg" alt="Unrest" /></div>
+          <div data-hf-id="hf-bvhm" id="rev-tag" class="rev-row"><span data-hf-id="hf-qak0" id="rev-tagline"></span></div>
+          <div data-hf-id="hf-bzr1" id="rev-url" class="rev-row"><span data-hf-id="hf-u3sm" id="rev-urltext">unrestdu.in&nbsp;&nbsp;·&nbsp;&nbsp;@unrest.du</span></div>
+        </div>
+      </div>
+      <script>
+        (() => {
+          const F = 1 / 30;
+          const tl = gsap.timeline({ paused: true });
+          const $ = (s) => document.querySelector(s);
+          const show = (el, t) => tl.set(el, { opacity: 1 }, t);
+          const hide = (el, t) => tl.set(el, { opacity: 0 }, t);
+          function shake(el, t, amp = 1) {
+            [[14, -7], [-10, 8], [6, -4], [-3, 2], [0, 0]].forEach(([x, y], i) => tl.set(el, { x: x * amp, y: y * amp }, t + i * F));
+          }
+
+          // impact: the dot fires a shockwave, condenses, and shoots out into a line
+          shake("#rev-stage", 0, 1.0);
+          show("#rev-ring", 0);
+          tl.fromTo("#rev-ring", { scale: 0.05 }, { scale: 3.4, duration: 0.5, ease: "expo.out" }, 0);
+          hide("#rev-ring", 0.5);
+          tl.fromTo("#rev-dot", { scale: 1 }, { scale: 2.1, duration: 0.12, ease: "expo.out" }, 0);
+          tl.to("#rev-dot", { scale: 0.27, duration: 0.1, ease: "power3.in" }, 0.12);
+          hide("#rev-dot", 0.22);
+          show("#rev-line", 0.22);
+          tl.fromTo("#rev-line", { scaleX: 0.01, y: 64 }, { scaleX: 1, y: 0, duration: 0.18, ease: "expo.out" }, 0.2);
+
+          // the line opens into the wordmark from the centre
+          show("#rev-logo", 0.3);
+          tl.fromTo("#rev-logo", { clipPath: "inset(0% 50% 0% 50%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.24, ease: "expo.out" }, 0.3);
+          tl.to("#rev-line", { scaleY: 0, duration: 0.08, ease: "power2.in" }, 0.42);
+          hide("#rev-line", 0.5);
+
+          // tagline types in; handles snap in and hold for 1.5 s
+          [..."Your Campus. Your Network."].forEach((ch, i) => {
+            const s = document.createElement("span");
+            s.id = "rev-ch-" + i;
+            s.textContent = ch === " " ? " " : ch;
+            $("#rev-tagline").appendChild(s);
+            show(s, 0.42 + i * 0.018);
+          });
+          show("#rev-urltext", 0.5);
+          tl.fromTo("#rev-urltext", { y: 22 }, { y: 0, duration: 0.3, ease: "expo.out" }, 0.5);
+
+          // one confident pulse on the beat, then hold
+          tl.fromTo("#rev-logo", { scale: 1 }, { scale: 1.05, duration: 0.1, ease: "power2.out", immediateRender: false }, 1.5);
+          tl.to("#rev-logo", { scale: 1, duration: 0.4, ease: "power3.out" }, 1.6);
+          show("#rev-ring2", 1.5);
+          tl.fromTo("#rev-ring2", { scale: 0.6 }, { scale: 2.6, duration: 0.45, ease: "expo.out" }, 1.5);
+          hide("#rev-ring2", 1.95);
+
+          window.__timelines["reveal"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

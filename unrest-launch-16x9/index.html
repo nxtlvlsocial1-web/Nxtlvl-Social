@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Unrest launch 16x9</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000000; }
+      [data-composition-id="main"] > div[data-composition-src] { position: absolute; inset: 0; }
+      /* whip panel and full-frame inversion sit above every scene */
+      #wipe { position: absolute; inset: 0; background: #000000; opacity: 0; }
+      #invert { position: absolute; inset: 0; background: #ffffff; mix-blend-mode: difference; opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-zopc" id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="15" data-fps="30">
+      <div data-hf-id="hf-3knm" id="el-hook" data-composition-id="hook" data-composition-src="compositions/hook.html" data-start="0" data-duration="2" data-track-index="0" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-g941" id="el-discover" data-composition-id="discover" data-composition-src="compositions/discover.html" data-start="2" data-duration="3" data-track-index="0" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-tkyz" id="el-connect" data-composition-id="connect" data-composition-src="compositions/connect.html" data-start="5" data-duration="3" data-track-index="0" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-mh3k" id="el-experience" data-composition-id="experience" data-composition-src="compositions/experience.html" data-start="8" data-duration="3" data-track-index="0" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-igvc" id="el-recap" data-composition-id="recap" data-composition-src="compositions/recap.html" data-start="11" data-duration="2" data-track-index="0" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-1bgq" id="el-reveal" data-composition-id="reveal" data-composition-src="compositions/reveal.html" data-start="13" data-duration="2" data-track-index="0" data-width="1920" data-height="1080"></div>
+
+      <div data-hf-id="hf-r0i1" id="wipe" data-layout-ignore></div>
+      <div data-hf-id="hf-hlgc" id="invert" data-layout-ignore></div>
+
+      <audio data-hf-id="hf-ywoy" id="music" src="assets/audio/music.wav" data-start="0" data-duration="15" data-track-index="10" data-volume="1"></audio>
+      <audio data-hf-id="hf-q53o" id="sfx" src="assets/audio/sfx.wav" data-start="0" data-duration="15" data-track-index="11" data-volume="0.8"></audio>
+    </div>
+
+    <script>
+      const F = 1 / 30;
+      const tl = gsap.timeline({ paused: true });
+      const show = (el, t) => tl.set(el, { opacity: 1 }, t);
+      const hide = (el, t) => tl.set(el, { opacity: 0 }, t);
+      // one-frame (or longer) inversion of the whole frame, on beat hits
+      function flash(t, frames = 1) { show("#invert", t); hide("#invert", t + frames * F); }
+
+      flash(1.5);            // "BORING?" lands
+      flash(4.0);            // DISCOVER. flips to outline
+      show("#wipe", 4.84);   // black whip into Connect
+      tl.fromTo("#wipe", { x: 1920 }, { x: 0, duration: 0.16, ease: "power3.in" }, 4.84);
+      hide("#wipe", 5.0);
+      flash(7.5);            // CONNECT. flips to outline
+      flash(9.0, 30);        // Experience burst: frame stays inverted for a bar
+      flash(10.5);           // EXPERIENCE. flips to outline
+      flash(13.0);           // logo impact
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
