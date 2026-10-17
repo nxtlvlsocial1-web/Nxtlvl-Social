@@ -210,7 +210,24 @@
       #s8 .huge { font-size:290px; margin-top:20px; }
       /* No glow anywhere */
       #root * { text-shadow:none !important; }
-      #glow, .bg-ring { display:none !important; }
+      #glow { display:none !important; }
+      .bg-ring { box-shadow:none !important; }
+      #bg-ring1 { border-color:rgba(166,92,255,.28); border-top-color:rgba(181,123,255,.75); border-right-color:transparent; }
+      #bg-ring2 { border-color:rgba(166,92,255,.16); border-left-color:rgba(181,123,255,.55); border-bottom-color:transparent; }
+      .wash { position:absolute; inset:0; background:linear-gradient(135deg,rgba(139,47,232,.22) 0%,rgba(139,47,232,0) 38%,rgba(139,47,232,0) 62%,rgba(139,47,232,.26) 100%); }
+      .dots-bg { position:absolute; width:420px; height:300px; background-image:radial-gradient(rgba(181,123,255,.55) 3px,transparent 3.5px); background-size:34px 34px; }
+      .dots-bg.dl { left:40px; bottom:60px; } .dots-bg.dr { right:40px; top:140px; }
+      .stripe { position:absolute; left:-200px; top:930px; width:2400px; height:70px; background:repeating-linear-gradient(-45deg,rgba(139,47,232,.35) 0 18px,transparent 18px 40px); transform-origin:center; rotate:-4deg; }
+      .shp { position:absolute; }
+      .sh-c { left:140px; top:180px; width:120px; height:120px; border-radius:50%; border:8px solid rgba(166,92,255,.55); }
+      .sh-c2 { right:220px; bottom:200px; width:70px; height:70px; border-radius:50%; background:rgba(139,47,232,.55); }
+      .sh-s { right:120px; top:420px; width:90px; height:90px; border-radius:18px; border:8px solid rgba(166,92,255,.45); }
+      .sh-t { left:260px; bottom:260px; width:0; height:0; border-left:55px solid transparent; border-right:55px solid transparent; border-bottom:95px solid rgba(139,47,232,.45); }
+      .sh-p, .sh-p2 { width:90px; height:90px; }
+      .sh-p::before, .sh-p::after, .sh-p2::before, .sh-p2::after { content:""; position:absolute; background:rgba(181,123,255,.6); border-radius:6px; }
+      .sh-p::before, .sh-p2::before { left:36%; top:0; width:28%; height:100%; }
+      .sh-p::after, .sh-p2::after { left:0; top:36%; width:100%; height:28%; }
+      .sh-p { left:880px; top:40px; } .sh-p2 { right:520px; bottom:20px; width:64px; height:64px; }
       .pill, .hlw, .tool, .logo-big, .ext, .cmt, #hook-tag, #progress i, .chart path { box-shadow:none !important; filter:none !important; }
       .hl::before { box-shadow:none !important; }
       .cta { display:flex; flex-direction:column; align-items:center; gap:30px; margin-top:30px; }
@@ -242,6 +259,11 @@
       <div class="bg"></div>
       <div class="grid"></div>
       <div id="glow"></div>
+      <div class="wash"></div>
+      <div class="dots-bg dl"></div><div class="dots-bg dr"></div>
+      <div class="stripe" id="bg-stripe"></div>
+      <div class="shp sh-c" id="sh0"></div><div class="shp sh-s" id="sh1"></div><div class="shp sh-p" id="sh2"></div>
+      <div class="shp sh-c2" id="sh3"></div><div class="shp sh-t" id="sh4"></div><div class="shp sh-p2" id="sh5"></div>
       <div class="bg-ring" id="bg-ring1"></div>
       <div class="bg-ring" id="bg-ring2"></div>
       <div class="vignette"></div>
@@ -611,6 +633,13 @@
       tl.fromTo("#wipe .wp",{xPercent:-130},{xPercent:130,duration:.42,ease:"power3.inOut",immediateRender:false},36.24);
       tl.fromTo("#bg-ring1",{rotation:0},{rotation:120,duration:39.2,ease:"none"},0);
       tl.fromTo("#bg-ring2",{rotation:0},{rotation:-90,duration:39.2,ease:"none"},0);
+      tl.fromTo("#sh0",{x:0,y:0,rotation:0},{x:40,y:60,rotation:180,duration:39.2,ease:"sine.inOut"},0);
+      tl.fromTo("#sh1",{x:0,y:0,rotation:0},{x:-50,y:40,rotation:-200,duration:39.2,ease:"sine.inOut"},0);
+      tl.fromTo("#sh2",{x:0,y:0,rotation:0},{x:30,y:-40,rotation:90,duration:39.2,ease:"sine.inOut"},0);
+      tl.fromTo("#sh3",{x:0,y:0,rotation:0},{x:-60,y:-30,rotation:0,duration:39.2,ease:"sine.inOut"},0);
+      tl.fromTo("#sh4",{x:0,y:0,rotation:0},{x:50,y:-50,rotation:160,duration:39.2,ease:"sine.inOut"},0);
+      tl.fromTo("#sh5",{x:0,y:0,rotation:0},{x:-40,y:30,rotation:-120,duration:39.2,ease:"sine.inOut"},0);
+      tl.fromTo("#bg-stripe",{x:-120},{x:120,duration:39.2,ease:"none"},0);
       tl.fromTo("#glow",{xPercent:-20,yPercent:-10},{xPercent:20,yPercent:10,duration:39.2,ease:"sine.inOut"},0);
       tl.fromTo("#progress i",{scaleX:0},{scaleX:1,duration:39.2,ease:"none"},0);
       window.__timelines["main"] = tl;
