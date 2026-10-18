@@ -23,6 +23,8 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Explainer / listicle / how-to with no footage           | `faceless-explainer`                          |
 | Longer, multi-scene or freeform video                   | `general-video`                               |
 | Presentation or pitch deck                              | `slideshow`                                   |
+| Explainer video from a GitHub pull request              | `pr-to-video`                                 |
+| Port an existing Remotion project to HyperFrames        | `remotion-to-hyperframes`                     |
 | Bringing in a Figma design                              | `figma`                                       |
 | Music, SFX, voiceover, images, logos, colour grade      | `media-use`                                   |
 | Building blocks, effects, transitions                   | `hyperframes-registry`                        |
@@ -80,6 +82,11 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | GSAP scroll animation and framework use                 | `gsap-scrolltrigger`, `gsap-react`, `gsap-frameworks` |
 | Copy a reference site's style into a design-DNA JSON and check the rebuild | `design-dna` |
 | Timing, easing and Disney's 12 principles before writing motion code | `motion-design` |
+| Build an animation the right way: should it animate, curve, duration, exit (Emil Kowalski) | `animate`, `animate-expo` (React Native) |
+| Review, audit or find spots for motion in UI code       | `review-animations`, `improve-animations`, `find-animation-opportunities` |
+| Janky animation, name an effect, Apple-style motion     | `animation-performance`, `animation-vocabulary`, `apple-design` |
+| UI polish and stress tests                              | `emil-design-eng`, `break-ui`, `mobile-native`, `prototype`, `pick-ui-library` |
+| Library-specific: Sonner toasts, modern Swift           | `ask-sonner`, `write-swift`                   |
 | Motion and micro-interactions on an existing UI (Genjutsu) | `cast`                                     |
 | Art direction, design system and build for a new look (Genjutsu) | `paint`                             |
 | Whole website or app with parallel agents (Genjutsu; announces its cost first) | `bunshin`              |
@@ -118,6 +125,7 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `reference-design-contract`, `agent-browser`: `nexu-io/open-design`; `competitor-profiling`: `coreyhaines31/marketingskills`
 - `threejs-*`: `CloudAI-X/threejs-skills`; `gsap-*`: `greensock/gsap-skills`; `design-dna`: `zanwei/design-dna`;
   `motion-design`: `LottieFiles/motion-design-skill`; `cast`, `paint`, `bunshin`: `AThevon/genjutsu`
+- `animate`, `review-animations` and the other Emil Kowalski skills: `emilkowalski/skills`
 - fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`,
   `model-routing`): `fal-ai-community/skills`
 
@@ -143,6 +151,8 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 - Genjutsu (`cast`, `paint`, `bunshin`) needs its modules in `.claude/skills/_jutsu/` (copied from the
   repo's `skills/_jutsu`; `npx skills add` does not install them). Update both together. `bunshin`
   spawns subagents and spends a lot of tokens; it states the cost and asks before starting.
+- `media-use` can now search Openverse for sound effects. Openverse items carry Creative Commons licences;
+  check each one allows commercial use (and credit it if required) before it goes in a client video.
 - Telemetry: set `HYPERFRAMES_NO_TELEMETRY=1` to turn it off.
 
 ## Repo layout
