@@ -70,6 +70,23 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Drive a browser: open pages, take screenshots, pull page content for references | `agent-browser`          |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
+**3D, animation code and web design:**
+
+| Need                                                    | Skill                                         |
+| ------------------------------------------------------- | --------------------------------------------- |
+| Three.js scenes: setup, geometry, materials, lighting, textures | `threejs-fundamentals`, `-geometry`, `-materials`, `-lighting`, `-textures` |
+| Three.js models, animation, input, shaders, post effects | `threejs-loaders`, `-animation`, `-interaction`, `-shaders`, `-postprocessing` |
+| GSAP (official): tweens, timelines, plugins, utils, performance | `gsap-core`, `gsap-timeline`, `gsap-plugins`, `gsap-utils`, `gsap-performance` |
+| GSAP scroll animation and framework use                 | `gsap-scrolltrigger`, `gsap-react`, `gsap-frameworks` |
+| Copy a reference site's style into a design-DNA JSON and check the rebuild | `design-dna` |
+| Timing, easing and Disney's 12 principles before writing motion code | `motion-design` |
+| Motion and micro-interactions on an existing UI (Genjutsu) | `cast`                                     |
+| Art direction, design system and build for a new look (Genjutsu) | `paint`                             |
+| Whole website or app with parallel agents (Genjutsu; announces its cost first) | `bunshin`              |
+
+HyperFrames compositions already use GSAP, so the `gsap-*` skills apply there too; keep HyperFrames'
+own rules (one paused timeline, no `left`/`top` motion) when they differ.
+
 **Carousels and static graphics:**
 
 | Need                                                    | Skill                                         |
@@ -99,6 +116,8 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `video-motion-graphics`: `dylantarre/animation-principles`
 - `brand-intake`, `motion-brief-writer`, `reference-to-motion`, `motion-prompt-writer`, `launch-video`, `apple-launch-film`, `vox-explainer`, `animated-chart`, `milestone-reveal`, `motion-effects`, `title-sequence-3d`, `model-showdown`, `newsletter-promo`, `loop-cover`, `reel-export`: `charlie947/motion-graphics-skills`
 - `reference-design-contract`, `agent-browser`: `nexu-io/open-design`; `competitor-profiling`: `coreyhaines31/marketingskills`
+- `threejs-*`: `CloudAI-X/threejs-skills`; `gsap-*`: `greensock/gsap-skills`; `design-dna`: `zanwei/design-dna`;
+  `motion-design`: `LottieFiles/motion-design-skill`; `cast`, `paint`, `bunshin`: `AThevon/genjutsu`
 - fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`,
   `model-routing`): `fal-ai-community/skills`
 
@@ -121,6 +140,9 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
   each generation spends Higgsfield credits.
 - `brand-intake` writes `brand.md` and `MOTION.md` into the project. The other `charlie947` motion skills read them first, so run `brand-intake` before any of them.
 - Caption timing: local speech models can't download in cloud sessions, so get word timestamps from ElevenLabs Scribe through the ElevenLabs connector (transcription spends credits), then map the approved script words onto them. `agent-browser` needs `npm i -g agent-browser`.
+- Genjutsu (`cast`, `paint`, `bunshin`) needs its modules in `.claude/skills/_jutsu/` (copied from the
+  repo's `skills/_jutsu`; `npx skills add` does not install them). Update both together. `bunshin`
+  spawns subagents and spends a lot of tokens; it states the cost and asks before starting.
 - Telemetry: set `HYPERFRAMES_NO_TELEMETRY=1` to turn it off.
 
 ## Repo layout

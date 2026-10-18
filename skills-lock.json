@@ -37,11 +37,23 @@
       "skillPath": "skills/brand-intake/SKILL.md",
       "computedHash": "636c86ad7439dea668d21898e6391a6dc66d2d2ce9c3654d4a4cf95d138abbc2"
     },
+    "bunshin": {
+      "source": "AThevon/genjutsu",
+      "sourceType": "github",
+      "skillPath": "skills/bunshin/SKILL.md",
+      "computedHash": "8095923eb8614a0ef3c27535fc791f2c1daf4cf4d062ad7e9f66eadc707c7dc1"
+    },
     "canvas-design": {
       "source": "anthropics/skills",
       "sourceType": "github",
       "skillPath": "skills/canvas-design/SKILL.md",
       "computedHash": "3fa7ea60170023ad8268bf9fd734ea75dd404279a2ef8ddf5abaa1102ad8e5f4"
+    },
+    "cast": {
+      "source": "AThevon/genjutsu",
+      "sourceType": "github",
+      "skillPath": "skills/cast/SKILL.md",
+      "computedHash": "d0e729b7d492a328682119bbf5b343cff3006f47f9e76748deb1889e3af70842"
     },
     "cinematography": {
       "source": "fal-ai-community/skills",
@@ -84,6 +96,12 @@
       "sourceType": "github",
       "skillPath": "skills/dbs-title-cover-intro/SKILL.md",
       "computedHash": "17d8ed83e228f0038b6fb75410de7281b8a1e604c1541c0bebbc5f858f6b3070"
+    },
+    "design-dna": {
+      "source": "zanwei/design-dna",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "241a98aa785985e55b966fb16312e84cc533574e3b14b981689d17ea867aa1cc"
     },
     "dockkit": {
       "source": "dpearson2699/swift-ios-skills",
@@ -144,6 +162,54 @@
       "sourceType": "github",
       "skillPath": "skills/general-video/SKILL.md",
       "computedHash": "d6deba70181518a3e4b6d82706b8d47c2bce80132599ecb711232928a1895b3b"
+    },
+    "gsap-core": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-core/SKILL.md",
+      "computedHash": "c4a01101d9e1aafbf4b49f75d74f9349790d8741981ba0237c990093863035a6"
+    },
+    "gsap-frameworks": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-frameworks/SKILL.md",
+      "computedHash": "4852e85a48088d9044b08ebd1db607915b628c0c3ec7e04300713f546728fbdf"
+    },
+    "gsap-performance": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-performance/SKILL.md",
+      "computedHash": "863842ac2d7aee53fd4f0025c960173d7ad3e658a5715b89b2211fa280213c1f"
+    },
+    "gsap-plugins": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-plugins/SKILL.md",
+      "computedHash": "791bda0e6e460511fe82a78e745db519b88ffaeeab4d04a74879a03ca4f41740"
+    },
+    "gsap-react": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-react/SKILL.md",
+      "computedHash": "7d3b52822681a4158e371f895c58fb7030ecaf33f585a534b7162f9e92c5d893"
+    },
+    "gsap-scrolltrigger": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-scrolltrigger/SKILL.md",
+      "computedHash": "1cdc5647693783cb7a662d84a5de434c88a051ed56b4d33597c9b5782b5973e6"
+    },
+    "gsap-timeline": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-timeline/SKILL.md",
+      "computedHash": "54981c2feec5a9c0d57988aeb32315af32bdeadd261550d5e9db7a7b1f08b487"
+    },
+    "gsap-utils": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-utils/SKILL.md",
+      "computedHash": "1ab2387f6e694718a4f1b5acf2a4ab16e1b884c3428adf5f6b26d830f00826cf"
     },
     "higgsfield-brandkit": {
       "source": "higgsfield-ai/skills",
@@ -277,6 +343,12 @@
       "skillPath": "skills/motion-brief-writer/SKILL.md",
       "computedHash": "a32cfd5d6a6905591866d4a5b1636d748d067ec7f2ab4c37a13df7eba503ddb3"
     },
+    "motion-design": {
+      "source": "LottieFiles/motion-design-skill",
+      "sourceType": "github",
+      "skillPath": "skills/motion-design/SKILL.md",
+      "computedHash": "9fcf9130cc46ee8fd1d8e09a9263347a9d76efbcbfa46591cc4cefaf19bbb453"
+    },
     "motion-effects": {
       "source": "charlie947/motion-graphics-skills",
       "sourceType": "github",
@@ -318,6 +390,12 @@
       "sourceType": "github",
       "skillPath": "skills/newsletter-promo/SKILL.md",
       "computedHash": "f2461df853e664cf2eed2c8eaa13a5adf518b531b864b4174b02ed813d818f0a"
+    },
+    "paint": {
+      "source": "AThevon/genjutsu",
+      "sourceType": "github",
+      "skillPath": "skills/paint/SKILL.md",
+      "computedHash": "224379a9961c5f912ce32f6cd7dd0e87b8cddca89a7c24ce97a503b2345566cc"
     },
     "product-launch-video": {
       "source": "heygen-com/hyperframes",
@@ -384,6 +462,66 @@
       "sourceType": "github",
       "skillPath": "skills/taste/SKILL.md",
       "computedHash": "74bd7ffcd8231d77b752d0cfca1daf264b50d182259945f89a077e16f4e1aae0"
+    },
+    "threejs-animation": {
+      "source": "CloudAI-X/threejs-skills",
+      "sourceType": "github",
+      "skillPath": "skills/threejs-animation/SKILL.md",
+      "computedHash": "8c50b1493812bd88f3ed0637c0c3c5d846afdb322157b67b2ffba4ce8e552835"
+    },
+    "threejs-fundamentals": {
+      "source": "CloudAI-X/threejs-skills",
+      "sourceType": "github",
+      "skillPath": "skills/threejs-fundamentals/SKILL.md",
+      "computedHash": "e08d49571071f0f54ef2a76fdfcb96c16673e4fda478067727def4659feb80ca"
+    },
+    "threejs-geometry": {
+      "source": "CloudAI-X/threejs-skills",
+      "sourceType": "github",
+      "skillPath": "skills/threejs-geometry/SKILL.md",
+      "computedHash": "4e5757bf80a329810545c237e557e362fa14fd3a3e6a567ec1d75435be6b2dda"
+    },
+    "threejs-interaction": {
+      "source": "CloudAI-X/threejs-skills",
+      "sourceType": "github",
+      "skillPath": "skills/threejs-interaction/SKILL.md",
+      "computedHash": "19b5796930dbf52c1eb44cf035b37f74ac7c46ae81ca731638ddceccc1c1eb36"
+    },
+    "threejs-lighting": {
+      "source": "CloudAI-X/threejs-skills",
+      "sourceType": "github",
+      "skillPath": "skills/threejs-lighting/SKILL.md",
+      "computedHash": "c535d855b9b51a87451bcdbb6e41b2be20ca707e6c25dc3b2309b8f2a16a2e13"
+    },
+    "threejs-loaders": {
+      "source": "CloudAI-X/threejs-skills",
+      "sourceType": "github",
+      "skillPath": "skills/threejs-loaders/SKILL.md",
+      "computedHash": "f2cceed635fd7a2119acf6e5b1a2fcba63a0e52cf2514c1830a69e4744554fcc"
+    },
+    "threejs-materials": {
+      "source": "CloudAI-X/threejs-skills",
+      "sourceType": "github",
+      "skillPath": "skills/threejs-materials/SKILL.md",
+      "computedHash": "201cf0f3720c0ea9e415e6376b8ad389aa86b483875e87ca0e51aa2770c856aa"
+    },
+    "threejs-postprocessing": {
+      "source": "CloudAI-X/threejs-skills",
+      "sourceType": "github",
+      "skillPath": "skills/threejs-postprocessing/SKILL.md",
+      "computedHash": "592d7f622f51ea4be98da600df73a6da06676102251b7f7bc6945df15620aa30"
+    },
+    "threejs-shaders": {
+      "source": "CloudAI-X/threejs-skills",
+      "sourceType": "github",
+      "skillPath": "skills/threejs-shaders/SKILL.md",
+      "computedHash": "649ceb058edfb5cfd51e80fb3a6c57aca9bab4a9d3a03f6077aa9502be0c0771"
+    },
+    "threejs-textures": {
+      "source": "CloudAI-X/threejs-skills",
+      "sourceType": "github",
+      "skillPath": "skills/threejs-textures/SKILL.md",
+      "computedHash": "772a0bfc1d64cfcbc5347d206584a8fa412983201ad7a2cfb8766097b4936db9"
     },
     "title-sequence-3d": {
       "source": "charlie947/motion-graphics-skills",
