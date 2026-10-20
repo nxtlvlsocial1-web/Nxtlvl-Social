@@ -130,7 +130,7 @@ Scene 3 (6.0–8.0s): last bar — "We make" hard-cuts to "We post" and the slot
 - duration: 6s
 - poster: 4s
 - transition_in: cut
-- status: built
+- status: animated
 - src: compositions/frames/04-every-business.html
 - type: benefit_highlight
 - persuasion: Belonging / social fit

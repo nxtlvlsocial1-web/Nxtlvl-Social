@@ -125,13 +125,13 @@
 .nx-p-menu::after { content: ""; position: absolute; left: 10px; right: 26px; top: 56px; height: 34px;
   background: linear-gradient(#C7B49A,#C7B49A) 0 0/100% 3px no-repeat, linear-gradient(#C7B49A,#C7B49A) 0 13px/80% 3px no-repeat, linear-gradient(#C7B49A,#C7B49A) 0 26px/90% 3px no-repeat; }
 /* 4 · salon carousel */
-.nx-p-salon { background: linear-gradient(150deg, #FFB8A0, #FF7AC6); }
+.nx-p-salon { background: linear-gradient(150deg, #D9466F, #8E1F6A); }
 .nx-p-salon .nx-cap { font-weight: 800; font-variation-settings: "wdth" 100, "wght" 800; font-size: 17px; color: #fff; }
 /* 5 · gym */
 .nx-p-gym { background: repeating-linear-gradient(-35deg, #0B0B0B 0 12px, #141414 12px 24px); }
 .nx-p-gym .nx-cap { font-weight: 900; font-variation-settings: "wdth" 70, "wght" 900; font-size: 26px; color: var(--nx-win); text-transform: uppercase; }
 /* 6 · weekend offer */
-.nx-p-offer { background: #FF6B57; }
+.nx-p-offer { background: #D93A25; }
 .nx-p-offer .nx-cap { font-weight: 900; font-variation-settings: "wdth" 115, "wght" 900; font-size: 30px; color: #fff; }
 .nx-p-offer .nx-cap small { display: block; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 11px; margin-top: 3px; letter-spacing: 0; }
 /* 7 · bakery */
@@ -148,7 +148,7 @@
 .nx-p-thali { background: radial-gradient(circle at 50% 45%, #F7D27A 0 10%, #E85D2A 11% 18%, #FFF0D6 19% 34%, #8C2F12 35% 39%, #3A1408 40%); }
 .nx-p-thali .nx-cap { font-weight: 800; font-variation-settings: "wdth" 100, "wght" 800; font-size: 15px; color: #FFE7C2; }
 /* 11 · Navratri */
-.nx-p-navratri { background: linear-gradient(135deg, #E0218A, #FF8A3D); }
+.nx-p-navratri { background: linear-gradient(135deg, #B8126F, #C8501A); }
 .nx-p-navratri .nx-cap { font-family: "Instrument Serif", serif; font-size: 20px; color: #fff; }
 /* 12 · hours */
 .nx-p-hours { background: var(--nx-violet); }

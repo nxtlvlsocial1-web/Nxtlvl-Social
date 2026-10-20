@@ -38,7 +38,7 @@
           <div class="nx-screen">
             <div class="nx-island"></div>
             <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
-            <div class="nx-feed" id="f1-feed" style="top:52px">
+            <div class="nx-feed" data-layout-allow-overlap id="f1-feed" style="top:52px">
               <div class="nx-prof">
                 <div class="nx-handle">the.corner.cafe<i class="nx-chev"></i></div>
                 <div class="nx-row"><div class="nx-ava"><b></b></div>
@@ -103,7 +103,7 @@
       // Faint glint top-right of the phone on beat 4, settling to a quiet rest.
       tl.fromTo("#f1-spark",
         { scale: 0, rotation: -90, opacity: 0 },
-        { scale: 1.2, rotation: 0, opacity: 0.85, duration: 0.3, ease: "back.out(2)" }, B[3]);
+        { scale: 1.2, rotation: 0, opacity: 0.85, duration: 0.3, ease: "expo.out" }, B[3]);
       tl.fromTo("#f1-spark",
         { scale: 1.2, opacity: 0.85 },
         { scale: 1, opacity: 0.4, duration: 0.6, ease: "sine.out", immediateRender: false }, B[3] + 0.3);
