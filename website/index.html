@@ -14,6 +14,12 @@
   var seen = false;
   try{ seen = !!sessionStorage.getItem('nx-intro'); sessionStorage.setItem('nx-intro', '1'); }catch(e){}
   if(!seen && !location.hash && !d.classList.contains('rm')) d.classList.add('intro-on');
+  /* the headline waits, hidden, for GSAP to assemble it; if that never happens it shows anyway */
+  window.__nxT0 = (window.performance && performance.now()) || 0;
+  if(!d.classList.contains('rm')){
+    d.classList.add('h1-wait');
+    setTimeout(function(){ d.classList.remove('h1-wait'); }, 3000);
+  }
 })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -232,9 +238,9 @@ h1 .it{
 @media all{
   h1 .w.it{animation:rise .95s var(--out) calc(var(--d0) + var(--wd,0s)) both, shimmer 7s ease-in-out calc(var(--d0) + 1.4s) infinite}
   .hero-in>.pill{animation:rise .8s var(--out) var(--d0) both}
-  .sub{animation:rise .9s var(--out) calc(var(--d0) + .5s) both}
-  .hero-cta{animation:rise .9s var(--out) calc(var(--d0) + .62s) both}
-  .hero-note{animation:rise .9s var(--out) calc(var(--d0) + .72s) both}
+  .sub{animation:rise .9s var(--out) calc(var(--d0) + 1s) both}
+  .hero-cta{animation:rise .9s var(--out) calc(var(--d0) + 1.12s) both}
+  .hero-note{animation:rise .9s var(--out) calc(var(--d0) + 1.22s) both}
 }
 /* words arrive out of focus and settle — the one orchestrated moment on load */
 @keyframes rise{from{opacity:0; transform:translateY(.45em); filter:blur(10px)}to{opacity:1; transform:none; filter:blur(0)}}
@@ -1839,6 +1845,37 @@ html.gs .manifesto.live .mf-k{
 .star3d canvas{position:absolute; inset:0; width:100%; height:100%; display:block}
 .close .halo{top:calc(clamp(72px,10vw,132px) * .65 + clamp(100px,15vw,170px))}
 
+/* ================= first impression ================= */
+/* the opening burst canvas sits above the reveal */
+.intro-fx{position:fixed; inset:0; width:100%; height:100%; z-index:401; pointer-events:none}
+
+/* the headline is held back until GSAP assembles it letter by letter (a timer in the head shows it regardless) */
+html.h1-wait .hero h1{visibility:hidden}
+html.h1-gs .hero h1 .w:not(.it){animation:none !important; background:none; color:var(--fg); opacity:1; transform:none; filter:none}
+html.h1-gs .hero h1 .w.it{animation:shimmer 7s ease-in-out infinite !important}
+html.h1-gs .hero h1 .hc{will-change:transform,opacity}
+.hero h1{transform-style:preserve-3d}
+/* a ripple of light spreads out behind the headline as the last letters lock in */
+.h1-wave{
+  position:absolute; left:50%; width:140px; height:140px; margin:-70px 0 0 -70px; border-radius:50%; z-index:-1; pointer-events:none; opacity:0;
+  box-shadow:0 0 0 1.5px rgba(216,187,255,.7), 0 0 34px 6px rgba(169,92,255,.45), inset 0 0 34px 6px rgba(125,24,252,.35);
+}
+
+/* the floating cards shoot out from behind the headline to their places */
+@media(min-width:1300px){
+  .jc{animation-name:jcFly, bob; animation-duration:1.35s, 7s}
+  .jc-1{--fx:calc(50vw - 150px); --fy:30vh}  .jc-2{--fx:calc(50vw - 130px); --fy:10vh}  .jc-3{--fx:calc(50vw - 150px); --fy:-10vh}
+  .jc-4{--fx:calc(-50vw + 150px); --fy:27vh} .jc-5{--fx:calc(-50vw + 130px); --fy:7vh}  .jc-6{--fx:calc(-50vw + 150px); --fy:-13vh}
+  .jc-7{--fx:calc(50vw - 200px); --fy:-28vh} .jc-8{--fx:calc(-50vw + 200px); --fy:-30vh}
+  .jc-2,.jc-3,.jc-4,.jc-5,.jc-6,.jc-7,.jc-8{animation-duration:1.35s, var(--bob,7s)}
+  .jc-2{--bob:8.4s} .jc-3{--bob:6.4s} .jc-4{--bob:7.8s} .jc-5{--bob:9s} .jc-6{--bob:6.9s} .jc-7{--bob:8.1s} .jc-8{--bob:7.3s}
+}
+@keyframes jcFly{
+  0%{opacity:0; scale:.3; translate:var(--fx,0) var(--fy,0); filter:blur(14px)}
+  35%{opacity:1}
+  100%{opacity:1; scale:1; translate:0 0; filter:blur(0)}
+}
+
 /* ---------- reveal (JS-gated so the page is complete without it) ---------- */
 .js .rv{opacity:0; transform:translateY(28px); filter:blur(8px)}
 .js .rv.in{opacity:1; transform:none; filter:blur(0); transition:opacity .8s ease, transform var(--t3) var(--out), filter .8s ease}
@@ -1932,6 +1969,74 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     <span class="intro-word">Nxtlvl Social</span>
   </div>
 </div>
+<script>
+/* opening burst: stardust pulls into the spark, it flashes, and light streaks fly out over the page */
+(function(){
+  var d = document.documentElement;
+  if(!d.classList.contains('intro-on')) return;
+  var cv = document.createElement('canvas'), ctx = cv.getContext && cv.getContext('2d');
+  if(!ctx) return;
+  cv.className = 'intro-fx'; cv.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(cv);
+  var W = window.innerWidth, H = window.innerHeight, dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  var cx = W / 2, cy = H / 2, R = Math.sqrt(W * W + H * H) / 2, small = W < 700, TAU = Math.PI * 2;
+  var tint = ['216,187,255', '169,92,255', '255,255,255', '125,24,252'];
+  var motes = [], sparks = [], i;
+  for(i = 0; i < (small ? 150 : 300); i++){
+    motes.push({a:Math.random() * TAU, r:R * (.3 + Math.random() * .8), t0:Math.random() * .24, dur:.3 + Math.random() * .12,
+      c:tint[i % 3], w:.6 + Math.random() * 1.1, sw:(Math.random() < .5 ? -1 : 1) * (.6 + Math.random() * .9)});
+  }
+  for(i = 0; i < (small ? 110 : 220); i++){
+    var hot = Math.random() < .3;
+    sparks.push({a:Math.random() * TAU, v:(hot ? 900 : 260) + Math.random() * (hot ? 900 : 700), drag:2.4 + Math.random() * 2,
+      life:.6 + Math.random() * .8, c:tint[i % 4], w:hot ? 1.6 : .6 + Math.random() * .9, oy:.82 + Math.random() * .18});
+  }
+  var BURST = .6, END = 2.2, t0 = performance.now();
+  var where = function(s, age){ var dist = s.v * (1 - Math.exp(-s.drag * age)) / s.drag; return [cx + Math.cos(s.a) * dist, cy + Math.sin(s.a) * dist * s.oy]; };
+  var frame = function(now){
+    var t = (now - t0) / 1000, intro = document.getElementById('intro');
+    if(!intro || intro.classList.contains('skip-now')){
+      cv.style.transition = 'opacity .3s'; cv.style.opacity = '0';
+      setTimeout(function(){ cv.remove(); }, 320); return;
+    }
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter'; ctx.lineCap = 'round';
+    /* motes spiral in, accelerating, each leaving a short trail */
+    for(var i = 0; i < motes.length; i++){
+      var m = motes[i], k = (t - m.t0) / m.dur;
+      if(k <= 0 || k >= 1) continue;
+      var e = k * k * k, e0 = Math.pow(Math.max(0, k - .14), 3);
+      var r1 = m.r * (1 - e), r0 = m.r * (1 - e0), a1 = m.a + e * m.sw, a0 = m.a + e0 * m.sw;
+      ctx.strokeStyle = 'rgba(' + m.c + ',' + (.25 + .75 * k).toFixed(3) + ')'; ctx.lineWidth = m.w;
+      ctx.beginPath(); ctx.moveTo(cx + Math.cos(a0) * r0, cy + Math.sin(a0) * r0); ctx.lineTo(cx + Math.cos(a1) * r1, cy + Math.sin(a1) * r1); ctx.stroke();
+    }
+    var age = t - BURST;
+    if(age > 0){
+      /* the flash */
+      var f = Math.max(0, 1 - age / .4);
+      if(f > 0){
+        var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * .55);
+        g.addColorStop(0, 'rgba(255,255,255,' + (.85 * f).toFixed(3) + ')');
+        g.addColorStop(.12, 'rgba(216,187,255,' + (.5 * f).toFixed(3) + ')');
+        g.addColorStop(1, 'rgba(125,24,252,0)');
+        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      }
+      /* the streaks */
+      for(var j = 0; j < sparks.length; j++){
+        var s = sparks[j];
+        if(age > s.life) continue;
+        var p1 = where(s, age), p0 = where(s, Math.max(0, age - .05)), fade = Math.pow(1 - age / s.life, 1.6);
+        ctx.strokeStyle = 'rgba(' + s.c + ',' + fade.toFixed(3) + ')'; ctx.lineWidth = s.w;
+        ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
+      }
+    }
+    if(t < END) requestAnimationFrame(frame); else cv.remove();
+  };
+  requestAnimationFrame(frame);
+})();
+</script>
 
 <div class="prog" id="prog"></div>
 
@@ -5213,10 +5318,78 @@ document.addEventListener('DOMContentLoaded', function(){
 
   starFinale(reduce);
 
-  if(!window.gsap || !window.ScrollTrigger) return;
+  if(!window.gsap || !window.ScrollTrigger || !window.SplitText){ root.classList.remove('h1-wait'); return; }
   gsap.registerPlugin.apply(gsap, [ScrollTrigger, window.SplitText, window.ScrambleTextPlugin, window.DrawSVGPlugin, window.MotionPathPlugin].filter(Boolean));
   root.classList.add('gs');
   if(reduce) return;
+
+  /* ---- first impression: the headline's letters fly in from scattered 3D positions and lock into place ---- */
+  var h1 = document.querySelector('.hero h1'), heroCopy = document.querySelector('.hero-in');
+  if(h1 && heroCopy){
+    root.classList.add('h1-gs');
+    var hWords = gsap.utils.toArray('.w:not(.it)', h1), itLine = h1.querySelector('.w.it');
+    var hs = SplitText.create(hWords, {type:'chars', charsClass:'hc'});
+    var vw = window.innerWidth, vh = window.innerHeight, R = gsap.utils.random;
+    /* line up with the opening reveal when it plays (the iris is half open at ~.8s) */
+    var wait = Math.max(0, (root.classList.contains('intro-on') ? .78 : .08) - (performance.now() - (window.__nxT0 || 0)) / 1000);
+    var wave = document.createElement('div');
+    wave.className = 'h1-wave'; wave.setAttribute('aria-hidden', 'true');
+    heroCopy.insertBefore(wave, heroCopy.firstChild);
+    var placeWave = function(){ wave.style.top = (h1.offsetTop + h1.offsetHeight * .42) + 'px'; };
+    placeWave();
+    var ht = gsap.timeline({delay:wait});
+    ht.from(hs.chars, {
+      x:function(){ return R(-.42, .42) * vw; }, y:function(){ return R(-.38, .38) * vh; }, z:function(){ return R(-900, 320); },
+      rotationX:function(){ return R(-200, 200); }, rotationY:function(){ return R(-200, 200); }, rotationZ:function(){ return R(-80, 80); },
+      scale:function(){ return R(.3, 1.8); }, autoAlpha:0, transformPerspective:900,
+      duration:1.7, ease:'expo.out', stagger:{amount:.45, from:'random'}
+    }, 0);
+    ht.from(itLine, {autoAlpha:0, y:26, letterSpacing:'.38em', filter:'blur(14px)', duration:1.5, ease:'expo.out'}, .55);
+    ht.fromTo(wave, {scaleX:.4, scaleY:.25, autoAlpha:.95}, {scaleX:10, scaleY:4.2, autoAlpha:0, duration:1.7, ease:'power2.out', immediateRender:false}, .78);
+    ht.fromTo(hs.chars, {textShadow:'0 0 0px rgba(216,187,255,0)'}, {textShadow:'0 0 34px rgba(216,187,255,.9)', duration:.22, yoyo:true, repeat:1, ease:'sine.inOut', stagger:{amount:.3, from:'center'}, immediateRender:false}, .8);
+    root.classList.remove('h1-wait');
+
+    /* afterwards a slow band of light crosses the letters every few seconds */
+    var gleam = gsap.timeline({paused:true, repeat:-1, repeatDelay:6.5});
+    gleam.to(hs.chars, {keyframes:[
+      {color:'#D8BBFF', textShadow:'0 0 18px rgba(216,187,255,.8)', duration:.22},
+      {color:'#F5F2FF', textShadow:'0 0 0px rgba(216,187,255,0)', duration:.55}
+    ], stagger:.035, ease:'sine.inOut'});
+    ht.call(function(){ gleam.play(); }, null, 3.2);
+
+    /* on a fine pointer the headline tilts toward the cursor and letters near it lift */
+    if(window.matchMedia('(hover:hover) and (pointer:fine) and (min-width:900px)').matches){
+      var tiltX = gsap.quickTo(h1, 'rotationX', {duration:1, ease:'power3.out'}), tiltY = gsap.quickTo(h1, 'rotationY', {duration:1, ease:'power3.out'});
+      gsap.set(h1, {transformPerspective:1100});
+      var lifts = [], home = [], live = false, px = -1e4, py = -1e4, pend = false;
+      var measure = function(){
+        var b = heroCopy.getBoundingClientRect();
+        home = hs.chars.map(function(c){ var r = c.getBoundingClientRect(); return [r.left + r.width / 2 - b.left, r.top + r.height / 2 - b.top]; });
+      };
+      var lift = function(){
+        pend = false;
+        var b = heroCopy.getBoundingClientRect();
+        for(var i = 0; i < hs.chars.length; i++){
+          var dx = px - (b.left + home[i][0]), dy = py - (b.top + home[i][1]), f = Math.max(0, 1 - Math.sqrt(dx * dx + dy * dy) / 170);
+          f = f * f * (3 - 2 * f);
+          lifts[i].y(-16 * f); lifts[i].s(1 + .16 * f);
+        }
+      };
+      ht.call(function(){
+        lifts = hs.chars.map(function(c){ return {y:gsap.quickTo(c, 'y', {duration:.5, ease:'power3.out'}), s:gsap.quickTo(c, 'scale', {duration:.5, ease:'power3.out'})}; });
+        measure(); live = true;
+      }, null, 2.4);
+      window.addEventListener('resize', function(){ if(live) measure(); placeWave(); }, {passive:true});
+      window.addEventListener('pointermove', function(e){
+        tiltY((e.clientX / window.innerWidth - .5) * 9);
+        tiltX((e.clientY / window.innerHeight - .5) * -6);
+        if(!live) return;
+        px = e.clientX; py = e.clientY;
+        if(!pend){ pend = true; requestAnimationFrame(lift); }
+      }, {passive:true});
+      document.documentElement.addEventListener('pointerleave', function(){ if(!live) return; px = py = -1e4; requestAnimationFrame(lift); });
+    }
+  } else { root.classList.remove('h1-wait'); }
 
   /* ---- manifesto: each line's letters swing up out of the floor, hold, then rush past the viewer ---- */
   var mf = document.getElementById('manifesto');
