@@ -187,7 +187,7 @@ Scene 3 (1.6–3.0s): hold still — the breather before the close.
 - duration: 3s
 - poster: 2s
 - transition_in: crossfade
-- status: built
+- status: animated
 - src: compositions/frames/06-book-a-call.html
 - type: cta
 - persuasion: Friction reduction
