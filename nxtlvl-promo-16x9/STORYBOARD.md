@@ -71,7 +71,7 @@ Scene 4 (2.5–4.0s): with the riser, the stage pushes in toward the phone, acce
 - duration: 6s
 - poster: 5s
 - transition_in: cut
-- status: built
+- status: animated
 - src: compositions/frames/02-meet-the-team.html
 - type: product_intro
 - persuasion: Show-don't-tell proof
