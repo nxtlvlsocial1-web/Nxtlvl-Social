@@ -160,7 +160,7 @@ Scene 4 (3.5–6.0s): hold the wall and headline still while the music builds; s
 - duration: 3s
 - poster: 1.5s
 - transition_in: zoom-through
-- status: built
+- status: animated
 - src: compositions/frames/05-five-dollars.html
 - type: benefit_highlight
 - persuasion: Price anchoring + risk reversal

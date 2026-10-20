@@ -1,18 +1,36 @@
 <template>
   <link rel="stylesheet" href="assets/css/kit.css" />
   <style>
-    #root { position: absolute; inset: 0; overflow: hidden; }
-    #05-five-dollars-bg { position: absolute; inset: 0; }
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-400.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-500.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
 
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #f5-bg { position: absolute; inset: 0; }
+    #f5-stage { position: absolute; inset: 0; }
+
+    /* background: the blurred, dimmed wall of feeds (blur stays static; only transform + opacity move) */
+    #f5-wall { position: absolute; inset: 0; filter: blur(16px) saturate(1.1); opacity: .32; transform-origin: 50% 40%; }
+    #f5-veil { position: absolute; inset: 0; background: radial-gradient(60% 55% at 50% 48%, rgba(5,3,12,.35), rgba(5,3,12,.92)); }
+
+    /* violet glow bloom behind the $5 (centred on the glyphs, margin-centred so GSAP owns the transform) */
+    #f5-bloom { position: absolute; left: 884px; top: 430px; width: 1000px; height: 640px; margin: -320px 0 0 -500px; border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(125,24,252,.95), rgba(61,7,137,.55) 50%, rgba(61,7,137,0) 100%); }
+
+    #f5-five { transform-origin: 50% 50%; }
+    #f5-terms .nx-pill { transform-origin: 50% 50%; }
   </style>
   <script src="assets/vendor/gsap.min.js"></script>
   <div id="root" data-composition-id="05-five-dollars" data-width="1920" data-height="1080" data-duration="3">
-    <div id="05-five-dollars-bg" class="clip nx-ground" data-start="0" data-duration="3" data-track-index="0">
+    <div id="f5-bg" class="clip nx-ground" data-start="0" data-duration="3" data-track-index="0">
       <i class="nx-glow a"></i><i class="nx-glow b"></i><i class="nx-glow c"></i><i class="nx-ribbon"></i><i class="nx-stars"></i>
     </div>
-    <div id="05-five-dollars-stage" class="clip" data-start="0" data-duration="3" data-track-index="1" style="position:absolute; inset:0">
+    <div id="f5-stage" class="clip" data-start="0" data-duration="3" data-track-index="1">
 
-      <div id="f5-wall" style="position:absolute; inset:0; filter:blur(16px) saturate(1.1); opacity:.32"><div class="nx-phone" id="f5p1-phone" style="left:96.0px; top:96px; transform:scale(0.6); transform-origin:0 0">
+      <div id="f5-wall"><div class="nx-phone" id="f5p1-phone" style="left:96.0px; top:96px">
   <div class="nx-screen">
     <div class="nx-island"></div>
     <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
@@ -30,7 +48,7 @@
     
   </div>
 </div>
-<div class="nx-phone" id="f5p2-phone" style="left:346.0px; top:96px; transform:scale(0.6); transform-origin:0 0">
+<div class="nx-phone" id="f5p2-phone" style="left:346.0px; top:96px">
   <div class="nx-screen">
     <div class="nx-island"></div>
     <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
@@ -48,7 +66,7 @@
     
   </div>
 </div>
-<div class="nx-phone" id="f5p3-phone" style="left:596.0px; top:96px; transform:scale(0.6); transform-origin:0 0">
+<div class="nx-phone" id="f5p3-phone" style="left:596.0px; top:96px">
   <div class="nx-screen">
     <div class="nx-island"></div>
     <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
@@ -66,7 +84,7 @@
     
   </div>
 </div>
-<div class="nx-phone" id="f5p4-phone" style="left:846.0px; top:96px; transform:scale(0.6); transform-origin:0 0">
+<div class="nx-phone" id="f5p4-phone" style="left:846.0px; top:96px">
   <div class="nx-screen">
     <div class="nx-island"></div>
     <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
@@ -84,7 +102,7 @@
     
   </div>
 </div>
-<div class="nx-phone" id="f5p5-phone" style="left:1096.0px; top:96px; transform:scale(0.6); transform-origin:0 0">
+<div class="nx-phone" id="f5p5-phone" style="left:1096.0px; top:96px">
   <div class="nx-screen">
     <div class="nx-island"></div>
     <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
@@ -102,7 +120,7 @@
     
   </div>
 </div>
-<div class="nx-phone" id="f5p6-phone" style="left:1346.0px; top:96px; transform:scale(0.6); transform-origin:0 0">
+<div class="nx-phone" id="f5p6-phone" style="left:1346.0px; top:96px">
   <div class="nx-screen">
     <div class="nx-island"></div>
     <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
@@ -120,7 +138,7 @@
     
   </div>
 </div>
-<div class="nx-phone" id="f5p7-phone" style="left:1596.0px; top:96px; transform:scale(0.6); transform-origin:0 0">
+<div class="nx-phone" id="f5p7-phone" style="left:1596.0px; top:96px">
   <div class="nx-screen">
     <div class="nx-island"></div>
     <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
@@ -138,21 +156,57 @@
     
   </div>
 </div></div>
-      <div id="f5-veil" style="position:absolute; inset:0; background:radial-gradient(60% 55% at 50% 48%, rgba(5,3,12,.35), rgba(5,3,12,.92))"></div>
+
+      <div id="f5-veil"></div>
+      <div id="f5-bloom"></div>
       <div class="nx-display" id="f5-team" style="position:absolute; left:0; right:0; top:178px; text-align:center; font-size:60px; color:var(--nx-muted)">Your entire creative team,</div>
       <div id="f5-price" style="position:absolute; left:0; right:0; top:260px; display:flex; justify-content:center; align-items:baseline; gap:30px">
-        <span class="nx-serif" style="font-size:120px; color:var(--nx-fg)">from</span>
+        <span class="nx-serif" id="f5-from" style="font-size:120px; color:var(--nx-fg)">from</span>
         <span class="nx-display" id="f5-five" style="font-size:380px; line-height:.9; font-variation-settings:'wdth' 118,'wght' 900; background:linear-gradient(180deg,#FFFFFF 10%,#D8BBFF 45%,#A95CFF 100%); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 0 60px rgba(125,24,252,.75))">$5</span>
-        <span class="nx-serif" style="font-size:120px; color:var(--nx-fg)">a month.</span>
+        <span class="nx-serif" id="f5-month" style="font-size:120px; color:var(--nx-fg)">a month.</span>
       </div>
       <div id="f5-terms" style="position:absolute; left:0; right:0; top:760px; display:flex; justify-content:center; gap:14px">
-        <span class="nx-pill">No contracts</span><span class="nx-pill">Cancel any month</span><span class="nx-pill">You own every file</span>
+        <span class="nx-pill" id="f5-t1">No contracts</span><span class="nx-pill" id="f5-t2">Cancel any month</span><span class="nx-pill" id="f5-t3">You own every file</span>
       </div>
 
     </div>
   </div>
   <script>
-    const tl = gsap.timeline({ paused: true });
-    window.__timelines["05-five-dollars"] = tl;
+    (function () {
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["05-five-dollars"] = tl;
+
+      // Static layout: the wall phones sit at 60% (placed here, not in inline CSS, so no element mixes a CSS transform with GSAP).
+      gsap.set("#f5-wall .nx-phone", { scale: 0.6, transformOrigin: "0 0" });
+
+      // t = 0 is the payoff hit (impact SFX). 120 BPM, beat = 0.5 s.
+
+      // Scene 1 (0.0-0.6) - background: the wall dims and pushes back, one finite settle (still by ~1.6 s).
+      tl.fromTo("#f5-wall", { scale: 1.05, opacity: 0.5 }, { scale: 1, opacity: 0.32, duration: 1.6, ease: "power3.out" }, 0);
+      tl.fromTo("#f5-veil", { opacity: 0.45 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 0);
+
+      // Scene 1 - hero: "$5" spring-pops on the hit (scale 0 -> 1, one smooth expo settle, no overshoot; ~98% by 0.35 s).
+      tl.fromTo("#f5-five", { scale: 0 }, { scale: 1, duration: 0.6, ease: "expo.out" }, 0);
+      tl.fromTo("#f5-five", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 0);
+
+      // Scene 1 - glow bloom behind it: pulse on arrival (peak on the hero's settle), then ease down to a quiet hold.
+      tl.fromTo("#f5-bloom", { opacity: 0, scale: 0.55 }, { opacity: 0.45, scale: 1.06, duration: 0.4, ease: "power2.out" }, 0);
+      tl.fromTo("#f5-bloom", { opacity: 0.45, scale: 1.06 }, { opacity: 0.26, scale: 1, duration: 1.0, ease: "power2.inOut", immediateRender: false }, 0.4);
+
+      // Scene 1 - lead line settles down into place above.
+      tl.fromTo("#f5-team", { y: -36, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 0.04);
+
+      // Scene 1 - "from" / "a month." slide in toward the $5 from either side at 0.1.
+      tl.fromTo("#f5-from", { x: -110, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 0.1);
+      tl.fromTo("#f5-month", { x: 110, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 0.1);
+
+      // Scene 2 (1.0-1.6) - terms pills spring-pop on 1.0, 1.25, 1.5.
+      ["#f5-t1", "#f5-t2", "#f5-t3"].forEach(function (sel, i) {
+        tl.fromTo(sel, { scale: 0, opacity: 0, y: 18 }, { scale: 1, opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 1.0 + i * 0.25);
+      });
+
+      // Scene 3 (1.6-3.0) - hold still: the breather before the close. No tweens; no exit.
+    })();
   </script>
 </template>
