@@ -1780,6 +1780,65 @@ html.intro-on .intro.skip-now{animation:introFade .32s var(--in) both}
   28%{box-shadow:0 0 0 8px rgba(169,92,255,.26), 0 0 30px 6px rgba(216,187,255,.95); background:#fff}
 }
 
+/* ================= pass 6: GSAP + three.js set pieces ================= */
+/* Everything here reads as finished static content first; GSAP adds the motion on top
+   (html.gs is set once the library has loaded), so a blocked CDN costs motion, not content. */
+
+/* ---------- manifesto: three lines, played one at a time while the stage is pinned ---------- */
+.manifesto{position:relative; padding-block:clamp(72px,10vw,132px)}
+.mf-stage{position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding-inline:20px; overflow:hidden}
+.mf-lines{display:flex; flex-direction:column; gap:clamp(30px,5vw,60px)}
+.mf-line{
+  margin:0; font-family:var(--d); font-size:clamp(38px,11vw,120px); font-weight:850;
+  font-variation-settings:'wdth' 114,'wght' 850; letter-spacing:-.035em; line-height:.95; color:var(--fg);
+}
+.mf-line .nw{white-space:nowrap}
+.mf-line .it{font-family:var(--s); font-weight:400; font-variation-settings:normal; letter-spacing:-.01em; color:var(--violet-lift); text-shadow:0 0 40px rgba(125,24,252,.55)}
+.mf-glow,.mf-ring,.mf-meter,.mf-k{display:none}
+html.gs .manifesto.live{padding-block:0}
+html.gs .manifesto.live .mf-stage{display:block; height:100vh; height:100svh}
+html.gs .manifesto.live .mf-lines{position:absolute; inset:0; display:grid; place-items:center; padding-inline:20px}
+html.gs .manifesto.live .mf-line{grid-area:1/1; perspective:900px; will-change:transform,opacity,filter}
+html.gs .manifesto.live .mf-c{will-change:transform,opacity}
+html.gs .manifesto.live .mf-glow{
+  display:block; position:absolute; left:50%; top:50%; width:min(1000px,130vw); aspect-ratio:1.5; translate:-50% -50%; pointer-events:none;
+  background:radial-gradient(closest-side,rgba(125,24,252,.34),rgba(61,7,137,.16) 55%,transparent); filter:blur(24px);
+}
+html.gs .manifesto.live .mf-ring{
+  display:block; position:absolute; left:50%; top:50%; width:min(78vmin,700px); aspect-ratio:1; margin:calc(min(78vmin,700px) / -2) 0 0 calc(min(78vmin,700px) / -2);
+  border-radius:50%; pointer-events:none; opacity:0;
+  box-shadow:0 0 0 1px rgba(216,187,255,.55), 0 0 40px 6px rgba(169,92,255,.35), inset 0 0 40px 6px rgba(125,24,252,.28);
+}
+html.gs .manifesto.live .mf-meter{display:flex; gap:8px; position:absolute; left:50%; top:calc(max(13vh,96px) + 24px); translate:-50% 0}
+.mf-meter i{display:block; width:44px; height:2px; border-radius:2px; background:rgba(169,124,255,.18); overflow:hidden}
+.mf-meter b{display:block; height:100%; background:linear-gradient(90deg,var(--violet),var(--violet-pale)); transform-origin:0 50%; transform:scaleX(0); box-shadow:0 0 10px rgba(169,92,255,.9)}
+html.gs .manifesto.live .mf-k{
+  display:block; position:absolute; left:50%; top:max(13vh,96px); translate:-50% 0; font:600 11px/1 var(--b); letter-spacing:.3em; text-transform:uppercase; color:var(--faint);
+}
+
+/* ---------- section labels decode as they arrive: hold the chip's width while the letters settle ---------- */
+.eyebrow.scrambling{white-space:nowrap; justify-content:flex-start}
+
+/* ---------- how it works: a thread of light runs through the three steps as you scroll ---------- */
+.thread{display:none}
+@media(min-width:860px){
+  .thread{display:block; position:absolute; left:0; top:-48px; width:100%; height:44px; overflow:visible; pointer-events:none; z-index:2}
+  .thread .t-base{fill:none; stroke:rgba(169,124,255,.16); stroke-width:1.5}
+  .thread .t-lit{fill:none; stroke:url(#threadgrad); stroke-width:2; stroke-linecap:round; filter:drop-shadow(0 0 5px rgba(169,92,255,.9))}
+  .thread .t-node{fill:var(--ink-3); stroke:rgba(169,124,255,.45); stroke-width:1.5; transition:fill .4s ease, stroke .4s ease}
+  .thread .t-node.on{fill:#fff; stroke:var(--violet-pale); filter:drop-shadow(0 0 6px rgba(216,187,255,1))}
+  .thread .t-comet{fill:#fff; filter:drop-shadow(0 0 6px #fff) drop-shadow(0 0 14px rgba(169,92,255,1))}
+}
+
+/* ---------- big type band and marquee words lean into fast scrolling, then spring back ---------- */
+.bb-sk{transform:skewX(var(--skew,0deg)); will-change:transform}
+.marq-set{transform:skewX(var(--skew,0deg))}
+
+/* ---------- finale: stardust gathers into the Nxtlvl star (three.js) ---------- */
+.star3d{position:relative; height:clamp(200px,30vw,340px); margin:calc(clamp(72px,10vw,132px) * -.35) auto 6px; max-width:760px; pointer-events:none}
+.star3d canvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+.close .halo{top:calc(clamp(72px,10vw,132px) * .65 + clamp(100px,15vw,170px))}
+
 /* ---------- reveal (JS-gated so the page is complete without it) ---------- */
 .js .rv{opacity:0; transform:translateY(28px); filter:blur(8px)}
 .js .rv.in{opacity:1; transform:none; filter:blur(0); transition:opacity .8s ease, transform var(--t3) var(--out), filter .8s ease}
@@ -2028,6 +2087,20 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   </div>
 </section>
 
+<section class="manifesto" id="manifesto" aria-label="What you actually want">
+  <div class="mf-stage">
+    <div class="mf-glow" aria-hidden="true"></div>
+    <div class="mf-ring" aria-hidden="true"></div>
+    <span class="mf-k" aria-hidden="true">Be honest</span>
+    <div class="mf-lines">
+      <p class="mf-line">Agencies want<br>a retainer.</p>
+      <p class="mf-line">Freelancers want<br>a brief.</p>
+      <p class="mf-line">You want <span class="nw">a feed</span><br>that <span class="it">runs itself.</span></p>
+    </div>
+    <div class="mf-meter" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i></div>
+  </div>
+</section>
+
 <section class="band maths" id="maths">
   <div class="wrap">
     <div class="head rv">
@@ -2177,8 +2250,10 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 </section>
 
 <div class="bigband" aria-hidden="true">
+ <div class="bb-sk">
   <div class="bb-row" data-scrub="band" data-dir="1">Design <i class="bb-s"></i> <span class="it">Video</span> <i class="bb-s"></i> Automation <i class="bb-s"></i> Design <i class="bb-s"></i> <span class="it">Video</span> <i class="bb-s"></i> Automation <i class="bb-s"></i> Design</div>
   <div class="bb-row outline" data-scrub="band" data-dir="-1">Reels <i class="bb-s"></i> Posters <i class="bb-s"></i> Carousels <i class="bb-s"></i> Reports <i class="bb-s"></i> Reels <i class="bb-s"></i> Posters <i class="bb-s"></i> Carousels</div>
+ </div>
 </div>
 
 <section class="band orbit-sec" id="make">
@@ -2638,6 +2713,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   <div class="aura close-aura" data-scrub="aura"></div>
   <div class="halo" aria-hidden="true"></div>
   <div class="wrap close-in">
+    <div class="star3d" id="star3d" aria-hidden="true"></div>
     <h2>Your competition posted<br>three times <span class="it">this week</span>.</h2>
     <p>Tell us about your business on a 15-minute call. You see the first month's plan before anything is made.</p>
     <ol class="next rv" aria-label="What happens after you get in touch">
@@ -5120,4 +5196,262 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     });
   });
 })();
+</script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/SplitText.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrambleTextPlugin.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/DrawSVGPlugin.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+<script>
+/* ================= pass 6: GSAP set pieces and the three.js finale =================
+   Deferred libraries run before DOMContentLoaded, so everything starts there. If the CDN
+   is unreachable the page keeps its static layout and the earlier motion passes. */
+document.addEventListener('DOMContentLoaded', function(){
+  var root = document.documentElement, reduce = root.classList.contains('rm');
+
+  starFinale(reduce);
+
+  if(!window.gsap || !window.ScrollTrigger) return;
+  gsap.registerPlugin.apply(gsap, [ScrollTrigger, window.SplitText, window.ScrambleTextPlugin, window.DrawSVGPlugin, window.MotionPathPlugin].filter(Boolean));
+  root.classList.add('gs');
+  if(reduce) return;
+
+  /* ---- manifesto: each line's letters swing up out of the floor, hold, then rush past the viewer ---- */
+  var mf = document.getElementById('manifesto');
+  if(mf && window.SplitText){
+    mf.classList.add('live');
+    var stage = mf.querySelector('.mf-stage'), lines = gsap.utils.toArray('.mf-line', mf);
+    var ring = mf.querySelector('.mf-ring'), glow = mf.querySelector('.mf-glow'), kicker = mf.querySelector('.mf-k');
+    var bars = gsap.utils.toArray('.mf-meter b', mf);
+    var splits = lines.map(function(l){ return SplitText.create(l, {type:'words,chars', wordsClass:'mf-w', charsClass:'mf-c'}); });
+    gsap.set(ring, {autoAlpha:0, scale:.55});
+    var tl = gsap.timeline({
+      defaults:{ease:'power3.out'},
+      scrollTrigger:{trigger:mf, start:'top top', end:function(){ return '+=' + Math.round(window.innerHeight * 3.4); }, pin:stage, scrub:.8, anticipatePin:1, invalidateOnRefresh:true}
+    });
+    tl.from(kicker, {autoAlpha:0, y:14, duration:.6}, 0);
+    splits.forEach(function(sp, i){
+      var t = i * 2.7;   /* enter ~1.5, hold, then leave before the next line starts */
+      tl.from(sp.chars, {yPercent:115, rotationX:-95, autoAlpha:0, transformPerspective:700, transformOrigin:'50% 100% -30px', duration:.9, stagger:.028}, t);
+      /* a ring of light opens behind each line as it lands */
+      tl.set(ring, {scale:.55}, t + .45)
+        .to(ring, {autoAlpha:.95, duration:.15, ease:'none'}, t + .45)
+        .to(ring, {scale:1.4, duration:1.3, ease:'power2.out'}, t + .45)
+        .to(ring, {autoAlpha:0, duration:1.1, ease:'power1.in'}, t + .62);
+      tl.to(glow, {scale:1.16, duration:.6, ease:'sine.out'}, t + .3).to(glow, {scale:1, duration:.9, ease:'sine.inOut'}, t + .9);
+      tl.to(bars[i], {scaleX:1, duration:2.1, ease:'none'}, t);
+      if(i < lines.length - 1) tl.to(lines[i], {scale:1.45, autoAlpha:0, filter:'blur(14px)', duration:.65, ease:'power2.in'}, t + 2.1);
+    });
+    /* the last line's emphasis catches the light, letter by letter */
+    var itChars = splits[splits.length - 1].chars.filter(function(c){ return c.closest('.it'); });
+    tl.to(itChars, {keyframes:[{color:'#FFFFFF', textShadow:'0 0 26px rgba(216,187,255,.95)', duration:.25}, {color:'#A95CFF', textShadow:'0 0 40px rgba(125,24,252,.55)', duration:.5}], stagger:.05, ease:'sine.inOut'}, 6.7);
+    tl.to({}, {duration:.7});
+  }
+
+  /* ---- section labels decode as they arrive ---- */
+  if(window.ScrambleTextPlugin){
+    gsap.utils.toArray('.head .eyebrow').forEach(function(el){
+      var txt = el.textContent;
+      ScrollTrigger.create({trigger:el, start:'top 92%', once:true, onEnter:function(){
+        el.style.width = el.getBoundingClientRect().width + 'px';
+        el.classList.add('scrambling');
+        gsap.to(el, {duration:1.2, scrambleText:{text:txt, chars:'abcdefghijklmnopqrstuvwxyz0123456789', revealDelay:.35, speed:.55}, ease:'none',
+          onComplete:function(){ el.style.width = ''; el.classList.remove('scrambling'); }});
+      }});
+    });
+  }
+
+  /* ---- how it works: a thread of light draws through the steps, a comet leads it, each node lights as it passes ---- */
+  var steps = document.querySelector('.steps');
+  if(steps && window.DrawSVGPlugin && window.MotionPathPlugin){
+    gsap.matchMedia().add('(min-width:860px)', function(){
+      var NS = 'http://www.w3.org/2000/svg';
+      var mk = function(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for(var k in attrs) e.setAttribute(k, attrs[k]); (parent || svg).appendChild(e); return e; };
+      var svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('class', 'thread'); svg.setAttribute('aria-hidden', 'true');
+      var grad = mk('linearGradient', {id:'threadgrad', gradientUnits:'userSpaceOnUse', x1:0, y1:0, x2:1000, y2:0}, mk('defs', {}));
+      mk('stop', {offset:0, 'stop-color':'#7D18FC'}, grad); mk('stop', {offset:.6, 'stop-color':'#A95CFF'}, grad); mk('stop', {offset:1, 'stop-color':'#F0E2FF'}, grad);
+      var base = mk('path', {'class':'t-base'}), lit = mk('path', {'class':'t-lit'});
+      var cards = gsap.utils.toArray('.step', steps);
+      var nodes = cards.map(function(){ return mk('circle', {'class':'t-node', r:5}); });
+      var comet = mk('circle', {'class':'t-comet', r:3.5, cx:0, cy:0});
+      steps.appendChild(svg);
+      var xs = [];
+      var build = function(){
+        var W = steps.clientWidth, y = 22, pts = [{x:0, y:y}];
+        xs = cards.map(function(c){ return c.offsetLeft + c.offsetWidth / 2; });
+        xs.forEach(function(x){ pts.push({x:x, y:y}); });
+        pts.push({x:W, y:y});
+        var d = 'M0 ' + y;
+        for(var i = 1; i < pts.length; i++){
+          var p = pts[i - 1], q = pts[i], mx = p.x + (q.x - p.x) / 2, a = i % 2 ? -15 : 15;
+          d += ' C' + mx.toFixed(1) + ' ' + (p.y + a) + ' ' + mx.toFixed(1) + ' ' + (q.y - a) + ' ' + q.x.toFixed(1) + ' ' + q.y;
+        }
+        svg.setAttribute('viewBox', '0 0 ' + W + ' 44');
+        grad.setAttribute('x2', W);
+        base.setAttribute('d', d); lit.setAttribute('d', d);
+        nodes.forEach(function(n, i){ n.setAttribute('cx', xs[i].toFixed(1)); n.setAttribute('cy', y); });
+      };
+      build();
+      ScrollTrigger.addEventListener('refreshInit', build);
+      var tt = gsap.timeline({
+        scrollTrigger:{trigger:steps, start:'top 82%', end:'bottom 58%', scrub:.7, invalidateOnRefresh:true},
+        onUpdate:function(){
+          var cx = gsap.getProperty(comet, 'x'), p = tt.progress();
+          nodes.forEach(function(n, i){ n.classList.toggle('on', cx >= xs[i] - 3); });
+          comet.style.opacity = p > .002 && p < .998 ? 1 : 0;
+        }
+      });
+      tt.fromTo(lit, {drawSVG:'0% 0%'}, {drawSVG:'0% 100%', ease:'none', duration:1}, 0)
+        .to(comet, {motionPath:{path:lit, align:lit, alignOrigin:[.5, .5]}, ease:'none', duration:1}, 0);
+      return function(){ ScrollTrigger.removeEventListener('refreshInit', build); svg.remove(); };
+    });
+  }
+
+  /* ---- the big type band and the marquee words lean into fast scrolling, then spring back ---- */
+  var leaners = gsap.utils.toArray('.bb-sk, .marq');
+  if(leaners.length){
+    var sk = {v:0}, skT = null;
+    var skTo = gsap.quickTo(sk, 'v', {duration:.55, ease:'power3.out', onUpdate:function(){
+      var v = sk.v.toFixed(2) + 'deg';
+      for(var i = 0; i < leaners.length; i++) leaners[i].style.setProperty('--skew', v);
+    }});
+    ScrollTrigger.create({start:0, end:'max', onUpdate:function(self){
+      skTo(gsap.utils.clamp(-8, 8, self.getVelocity() / -300));
+      clearTimeout(skT); skT = setTimeout(function(){ skTo(0); }, 90);
+    }});
+  }
+
+  /* triggers depend on layout; measure again once the web fonts are in */
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ ScrollTrigger.refresh(); });
+});
+
+/* ---- finale (three.js): stardust swirls in and gathers into the four-point Nxtlvl star.
+   The library is fetched only when the closing section is near, and it renders only while visible. ---- */
+function starFinale(reduce){
+  var host = document.getElementById('star3d');
+  if(!host || !window.WebGLRenderingContext) return;
+  var started = false;
+  var go = function(){
+    if(started) return;
+    started = true;
+    import('https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.min.js')
+      .then(function(THREE){ buildStar(THREE, host, reduce); })
+      .catch(function(){});
+  };
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){ if(es[0].isIntersecting){ io.disconnect(); go(); } }, {rootMargin:'150% 0px'});
+    io.observe(host);
+  } else go();
+}
+
+function buildStar(THREE, host, reduce){
+  var small = window.matchMedia('(max-width:700px), (pointer:coarse)').matches;
+  var N = small ? 2600 : 5200;
+  var renderer;
+  try{ renderer = new THREE.WebGLRenderer({alpha:true, antialias:false, powerPreference:'high-performance'}); }catch(e){ return; }
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  renderer.setPixelRatio(dpr);
+  renderer.setClearColor(0x000000, 0);
+  host.appendChild(renderer.domElement);
+  var scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(35, 1, .1, 100);
+  camera.position.set(0, 0, 6.2);
+
+  /* the star is an astroid, |x|^(2/3) + |y|^(2/3) = 1: four concave arms, like the brand spark */
+  var target = new Float32Array(N * 3), start = new Float32Array(N * 3), seed = new Float32Array(N * 4), R = 1.62;
+  for(var i = 0; i < N; i++){
+    var u = Math.random(), t = Math.random() * Math.PI * 2, c = Math.cos(t), s = Math.sin(t), x, y, w = Math.random() * .85;
+    if(u < .55){ var j = 1 + (Math.random() - .5) * .06; x = c * c * c * j; y = s * s * s * j; }
+    else if(u < .9){ var r = Math.pow(Math.random(), 1.5); x = c * c * c * r; y = s * s * s * r; }
+    else { var g = .13 * Math.sqrt(-2 * Math.log(Math.random() + 1e-6)); x = c * g; y = s * g; w = .9 + Math.random() * .1; }
+    var thick = Math.max(0, 1 - Math.pow(Math.abs(x), 2 / 3) - Math.pow(Math.abs(y), 2 / 3));
+    target[i * 3] = x * R; target[i * 3 + 1] = y * R; target[i * 3 + 2] = (Math.random() - .5) * .5 * thick;
+    /* scattered dust on a wide shell around it */
+    var th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1), rr = 2.6 + Math.random() * 3.4;
+    start[i * 3] = rr * Math.sin(ph) * Math.cos(th) * 1.6; start[i * 3 + 1] = rr * Math.sin(ph) * Math.sin(th) * .8; start[i * 3 + 2] = rr * Math.cos(ph) * .7;
+    seed[i * 4] = Math.random(); seed[i * 4 + 1] = Math.random(); seed[i * 4 + 2] = Math.random(); seed[i * 4 + 3] = w;
+  }
+  var geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(target, 3));
+  geo.setAttribute('aStart', new THREE.BufferAttribute(start, 3));
+  geo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 4));
+  var uni = {uP:{value:reduce ? 1 : 0}, uT:{value:0}, uPx:{value:dpr}, uF:{value:0}};
+  var mat = new THREE.ShaderMaterial({
+    uniforms:uni, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+    vertexShader:[
+      'uniform float uP; uniform float uT; uniform float uPx; uniform float uF;',
+      'attribute vec3 aStart; attribute vec4 aSeed;',
+      'varying float vA; varying vec3 vC;',
+      'mat2 rot(float a){ float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }',
+      'void main(){',
+      '  float k = clamp((uP - aSeed.x * .45) / .55, 0., 1.);',
+      '  k = 1. - pow(1. - k, 3.);',
+      '  vec3 s = aStart; s.xy = rot(uT * .04 + aSeed.z * .3) * s.xy;',
+      '  vec3 p = mix(s, position, k);',
+      '  p.xy = rot((1. - k) * 2.6) * p.xy;',
+      '  p += .012 * vec3(sin(uT * 1.3 + aSeed.z * 6.28), cos(uT * 1.1 + aSeed.z * 9.), 0.) * k;',
+      '  vec4 mv = modelViewMatrix * vec4(p, 1.);',
+      '  gl_Position = projectionMatrix * mv;',
+      '  float tw = .62 + .38 * sin(uT * (1.4 + aSeed.y * 2.2) + aSeed.z * 31.);',
+      '  gl_PointSize = (1.3 + aSeed.y * 2.4 + step(.9, aSeed.w) * 1.6) * uPx * (.8 + .4 * tw) * (6.2 / -mv.z) * (1. + uF * .6);',
+      '  vA = (.28 + .72 * k) * tw * (1. + uF * 1.4);',
+      '  vC = mix(vec3(.49, .094, .988), vec3(.847, .733, 1.), aSeed.w);',
+      '  vC = mix(vC, vec3(1.), step(.9, aSeed.w) * .75);',
+      '}'
+    ].join('\n'),
+    fragmentShader:[
+      'varying float vA; varying vec3 vC;',
+      'void main(){',
+      '  float r = length(gl_PointCoord - .5);',
+      '  float a = smoothstep(.5, 0., r); a *= a;',
+      '  gl_FragColor = vec4(vC, a * min(vA, 1.6));',
+      '}'
+    ].join('\n')
+  });
+  var star = new THREE.Points(geo, mat);
+  var group = new THREE.Group();
+  group.add(star); scene.add(group);
+
+  var size = function(){
+    var w = host.clientWidth, h = host.clientHeight;
+    if(!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+    uni.uPx.value = dpr * Math.max(.75, h / 340);
+  };
+  size();
+  if('ResizeObserver' in window) new ResizeObserver(size).observe(host);
+
+  if(reduce){ renderer.render(scene, camera); return; }
+
+  var mx = 0, my = 0, tmx = 0, tmy = 0, pS = 0, lit = false, visible = false, raf = null, t0 = performance.now();
+  window.addEventListener('pointermove', function(e){ tmx = e.clientX / window.innerWidth - .5; tmy = e.clientY / window.innerHeight - .5; }, {passive:true});
+  var frame = function(now){
+    raf = null;
+    if(!visible || document.hidden) return;
+    var t = (now - t0) / 1000, vh = window.innerHeight, r = host.getBoundingClientRect();
+    /* gathers as the section rises from the bottom of the screen to about a third of the way up */
+    var p = Math.max(0, Math.min(1, (vh * .98 - r.top) / (vh * .62)));
+    pS += (p - pS) * .055;
+    if(pS > .985 && !lit){ lit = true; uni.uF.value = 1; }
+    if(pS < .6) lit = false;
+    uni.uF.value *= .94;
+    uni.uP.value = pS; uni.uT.value = t;
+    mx += (tmx - mx) * .05; my += (tmy - my) * .05;
+    group.rotation.y = Math.sin(t * .32) * .5 + mx * .5;
+    group.rotation.x = Math.sin(t * .21) * .08 + my * .3;
+    group.rotation.z = (1 - pS) * .6;
+    renderer.render(scene, camera);
+    raf = requestAnimationFrame(frame);
+  };
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      visible = es[0].isIntersecting;
+      if(visible && !raf) raf = requestAnimationFrame(frame);
+    }, {threshold:0}).observe(host);
+  } else { visible = true; raf = requestAnimationFrame(frame); }
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden && visible && !raf) raf = requestAnimationFrame(frame); });
+}
 </script>
