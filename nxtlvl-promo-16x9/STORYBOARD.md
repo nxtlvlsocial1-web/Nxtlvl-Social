@@ -101,7 +101,7 @@ Scene 4 (5.0–6.0s): "by nxtlvl ✦" reveals under "creative team."; the spark 
 - duration: 8s
 - poster: 3s
 - transition_in: cut
-- status: built
+- status: animated
 - src: compositions/frames/03-what-lands.html
 - type: feature_showcase
 - persuasion: Value stacking
