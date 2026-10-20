@@ -52,6 +52,7 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 ```
 .claude/skills/       Claude Code skills
 brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-video § 4)
+motion-canvas/        Motion Canvas project (code-driven animation in TypeScript): npm install, npm start
 <project>/            One HyperFrames project per video and aspect ratio, e.g. spring-drop-9x16/
 ```
 
