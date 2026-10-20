@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nxtlvl Promo Storyboard</title>
+<style>
+  :root { --bg: #F6F5FA; --card: #FFFFFF; --ink: #17121F; --muted: #6A6478; --line: #E4E0EC; --accent: #7D18FC; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0D0A14; --card: #17121F; --ink: #F3F0FA; --muted: #A39CB5; --line: #2A2436; } }
+  :root[data-theme="dark"] { --bg: #0D0A14; --card: #17121F; --ink: #F3F0FA; --muted: #A39CB5; --line: #2A2436; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { max-width: 1240px; margin: 0 auto; padding: 40px 16px 8px; }
+  h1 { margin: 0; font-size: 26px; letter-spacing: -0.01em; }
+  header p { margin: 8px 0 0; color: var(--muted); font-size: 15px; line-height: 1.5; max-width: 70ch; }
+  main { max-width: 1240px; margin: 0 auto; padding: 16px 16px 56px; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 20px; }
+  .act { grid-column: 1 / -1; margin: 18px 0 -6px; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+  .frame { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .frame img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #05030C; }
+  .title { padding: 14px 16px 0; font-weight: 600; font-size: 16px; }
+  .time { padding: 2px 16px 0; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .words { margin: 8px 16px 16px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Nxtlvl Social promo: sketch sheet</h1>
+  <p>Six frames, 30 s, 1920×1080. Each still is the frame's layout at its key moment, in the final fonts and colours; motion comes in the build. Music: original track at 120 BPM, cuts on bar lines.</p>
+</header>
+<main>
+  <section class="act">Act 1: The problem and the promise</section>
+  <div class="frame">
+    <img src="stills/frame-00-at-2.6s.png" alt="An empty profile on a phone between the words Still and 0 posts?" />
+    <div class="title">01: Still 0 posts?</div>
+    <div class="time">0.0 to 4.0s</div>
+    <p class="words">"Still" · "0 posts?" · "You're busy running the place." Riser into the drop.</p>
+  </div>
+  <div class="frame">
+    <img src="stills/frame-01-at-9s.png" alt="The grid filled with nine posts; Meet your entire creative team" />
+    <div class="title">02: Meet your entire creative team</div>
+    <div class="time">4.0 to 10.0s</div>
+    <p class="words">The drop: a post lands on every beat. "Meet your entire creative team." · Design · Video · Posting · Automation · by nxtlvl.</p>
+  </div>
+  <section class="act">Act 2: The proof</section>
+  <div class="frame">
+    <img src="stills/frame-02-at-13s.png" alt="The feed scrolled with a Posted toast; We make the posters." />
+    <div class="title">03: What lands in your feed</div>
+    <div class="time">10.0 to 18.0s</div>
+    <p class="words">"We make" holds while the last words swap on the beat: the reels, the posters, the carousels, the menus, the festival drops, the captions, the ads. "Posted" pop-ups, then "We post it too."</p>
+  </div>
+  <div class="frame">
+    <img src="stills/frame-03-at-22s.png" alt="A wall of seven phones for different businesses" />
+    <div class="title">04: For every kind of business</div>
+    <div class="time">18.0 to 24.0s</div>
+    <p class="words">The phone pulls back into seven feeds filling at once. Cafés. Salons. Gyms. Shops. "Built for the businesses agencies won't call back."</p>
+  </div>
+  <section class="act">Act 3: The offer</section>
+  <div class="frame">
+    <img src="stills/frame-04-at-25.5s.png" alt="Your entire creative team, from $5 a month" />
+    <div class="title">05: From $5 a month</div>
+    <div class="time">24.0 to 27.0s</div>
+    <p class="words">The hit lands the price. No contracts · Cancel any month · You own every file.</p>
+  </div>
+  <div class="frame">
+    <img src="stills/frame-05-at-29s.png" alt="The nxtlvl logo with its spark and a Book a free call button" />
+    <div class="title">06: Book a free call</div>
+    <div class="time">27.0 to 30.0s</div>
+    <p class="words">The spark flashes, the logo assembles, the button presses in. Held to the end.</p>
+  </div>
+</main>
+</body>
+</html>

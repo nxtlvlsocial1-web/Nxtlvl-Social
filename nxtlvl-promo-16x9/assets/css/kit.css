@@ -1,0 +1,163 @@
+/* Nxtlvl promo — shared component kit. Every frame links this file so the phone, the posts and the
+   ground are pixel-identical across cuts. Tokens mirror frame.md (and the website's :root). Frames add
+   only their own layout and motion. Class names are prefixed `nx-` so frame-local names never collide. */
+
+@font-face { font-family: "Archivo"; src: url("../fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+@font-face { font-family: "Instrument Sans"; src: url("../fonts/instrument-sans-400.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Instrument Sans"; src: url("../fonts/instrument-sans-500.woff2") format("woff2"); font-weight: 500; }
+@font-face { font-family: "Instrument Sans"; src: url("../fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+@font-face { font-family: "Instrument Sans"; src: url("../fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
+@font-face { font-family: "Instrument Serif"; src: url("../fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+
+:root {
+  --nx-ink: #05030C; --nx-ink-2: #0A0717; --nx-ink-3: #110C22;
+  --nx-fg: #F5F2FF; --nx-muted: #9F97BE; --nx-faint: #6B6391;
+  --nx-violet: #7D18FC; --nx-lift: #A95CFF; --nx-deep: #3D0789; --nx-pale: #D8BBFF;
+  --nx-line: rgba(169,124,255,.16); --nx-line-2: rgba(169,124,255,.32);
+  --nx-win: #52E39B; --nx-gold: #FFC46B;
+}
+
+/* ---------- ground: ink, violet light, a still star field ---------- */
+.nx-ground { position: absolute; inset: 0; background: var(--nx-ink); overflow: hidden; }
+.nx-ground .nx-glow { position: absolute; border-radius: 50%; filter: blur(90px); }
+.nx-ground .nx-glow.a { width: 1100px; height: 760px; left: -260px; top: -320px; background: rgba(61,7,137,.55); }
+.nx-ground .nx-glow.b { width: 1200px; height: 720px; right: -300px; bottom: -380px; background: rgba(125,24,252,.38); }
+.nx-ground .nx-glow.c { width: 760px; height: 520px; left: 50%; top: 50%; margin: -260px 0 0 -380px; background: rgba(169,92,255,.14); }
+.nx-ground .nx-ribbon { position: absolute; left: -10%; width: 120%; height: 260px; top: 560px; border-radius: 50%;
+  background: linear-gradient(90deg, transparent, rgba(125,24,252,.32) 30%, rgba(216,187,255,.18) 55%, rgba(125,24,252,.28) 75%, transparent);
+  filter: blur(46px); transform: rotate(-7deg); }
+.nx-ground .nx-stars { position: absolute; inset: 0;
+  background-image:
+    radial-gradient(1.6px 1.6px at 6% 12%, rgba(255,255,255,.9), transparent 60%),
+    radial-gradient(1.2px 1.2px at 14% 64%, rgba(216,187,255,.8), transparent 60%),
+    radial-gradient(1.4px 1.4px at 23% 31%, rgba(255,255,255,.7), transparent 60%),
+    radial-gradient(1px 1px at 31% 82%, rgba(255,255,255,.6), transparent 60%),
+    radial-gradient(1.8px 1.8px at 38% 9%, rgba(216,187,255,.9), transparent 60%),
+    radial-gradient(1.1px 1.1px at 46% 47%, rgba(255,255,255,.5), transparent 60%),
+    radial-gradient(1.5px 1.5px at 57% 18%, rgba(255,255,255,.8), transparent 60%),
+    radial-gradient(1.2px 1.2px at 63% 74%, rgba(216,187,255,.7), transparent 60%),
+    radial-gradient(1.6px 1.6px at 71% 38%, rgba(255,255,255,.85), transparent 60%),
+    radial-gradient(1px 1px at 78% 88%, rgba(255,255,255,.6), transparent 60%),
+    radial-gradient(1.4px 1.4px at 86% 22%, rgba(216,187,255,.85), transparent 60%),
+    radial-gradient(1.2px 1.2px at 93% 57%, rgba(255,255,255,.7), transparent 60%),
+    radial-gradient(1px 1px at 97% 7%, rgba(255,255,255,.6), transparent 60%),
+    radial-gradient(1.3px 1.3px at 3% 93%, rgba(216,187,255,.6), transparent 60%),
+    radial-gradient(1.1px 1.1px at 52% 96%, rgba(255,255,255,.5), transparent 60%);
+}
+
+/* ---------- type ---------- */
+.nx-display { font-family: "Archivo", sans-serif; font-weight: 800; font-variation-settings: "wdth" 112, "wght" 800;
+  letter-spacing: -0.035em; line-height: .96; color: var(--nx-fg); }
+.nx-serif { font-family: "Instrument Serif", serif; font-weight: 400; letter-spacing: -0.01em; color: var(--nx-lift); }
+.nx-body { font-family: "Instrument Sans", sans-serif; color: var(--nx-muted); }
+.nx-pill { display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px; border-radius: 100px;
+  font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 24px; color: var(--nx-pale);
+  background: rgba(125,24,252,.12); border: 1.5px solid var(--nx-line-2); white-space: nowrap; }
+.nx-pill .nx-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--nx-lift); box-shadow: 0 0 12px rgba(169,92,255,.9); }
+
+/* ---------- the phone (380 × 780 at scale 1) ---------- */
+.nx-phone { position: absolute; width: 380px; height: 780px; border-radius: 58px; background: #000;
+  box-shadow: 0 0 0 2px #2A2440, 0 0 0 3px rgba(255,255,255,.05), 0 50px 140px -30px rgba(125,24,252,.6), 0 0 90px -10px rgba(125,24,252,.25); }
+.nx-screen { position: absolute; inset: 12px; border-radius: 46px; background: var(--nx-ink-2); overflow: hidden; }
+.nx-screen::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 52px; background: var(--nx-ink-2); z-index: 3; }
+.nx-island { position: absolute; top: 12px; left: 50%; width: 112px; height: 32px; margin-left: -56px; border-radius: 20px; background: #000; z-index: 5; }
+.nx-status { position: absolute; top: 16px; left: 30px; right: 26px; height: 24px; display: flex; justify-content: space-between; align-items: center;
+  font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 15px; color: var(--nx-fg); z-index: 4; }
+.nx-status .nx-sig { display: flex; gap: 3px; align-items: flex-end; }
+.nx-status .nx-sig i { display: block; width: 3.5px; background: var(--nx-fg); border-radius: 1px; }
+.nx-status .nx-bat { width: 24px; height: 11px; border: 1.5px solid rgba(255,255,255,.8); border-radius: 3px; position: relative; margin-left: 6px; }
+.nx-status .nx-bat::after { content: ""; position: absolute; inset: 1.5px; right: 4px; background: var(--nx-fg); border-radius: 1px; }
+
+/* scrolling body of the profile (frames move this element to scroll) */
+.nx-feed { position: absolute; left: 0; right: 0; top: 52px; }
+.nx-prof { padding: 8px 18px 0; font-family: "Instrument Sans", sans-serif; color: var(--nx-fg); }
+.nx-handle { font-weight: 700; font-size: 18px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 6px; }
+.nx-handle .nx-chev { width: 7px; height: 7px; border-right: 2px solid var(--nx-fg); border-bottom: 2px solid var(--nx-fg); transform: rotate(45deg); margin-top: -4px; }
+.nx-row { display: flex; align-items: center; gap: 18px; margin-top: 14px; }
+.nx-ava { width: 78px; height: 78px; border-radius: 50%; padding: 3px; background: conic-gradient(var(--nx-violet), var(--nx-lift), #FF7AC6, var(--nx-gold), var(--nx-violet)); flex: none; }
+.nx-ava b { display: block; width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--nx-ink-2);
+  background: radial-gradient(circle at 50% 38%, #E9C9A0 0 22%, #6B3F22 23% 48%, #2B1A10 49%); }
+.nx-stats { display: flex; flex: 1; justify-content: space-around; text-align: center; }
+.nx-stats b { display: block; font-family: "Archivo", sans-serif; font-weight: 700; font-size: 19px; }
+.nx-stats span { display: block; font-size: 12.5px; color: var(--nx-muted); margin-top: 1px; }
+.nx-name { font-weight: 600; font-size: 14.5px; margin-top: 10px; }
+.nx-bio { font-size: 13px; color: var(--nx-muted); margin-top: 2px; }
+.nx-btns { display: flex; gap: 7px; margin-top: 12px; }
+.nx-btns span { flex: 1; text-align: center; font-weight: 600; font-size: 13.5px; padding: 8px 0; border-radius: 9px; background: rgba(255,255,255,.09); }
+.nx-tabs { display: flex; margin-top: 14px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.nx-tabs i { flex: 1; height: 38px; position: relative; }
+.nx-tabs i::before { content: ""; position: absolute; left: 50%; top: 11px; width: 16px; height: 16px; margin-left: -8px; border: 2px solid var(--nx-faint); border-radius: 3px; }
+.nx-tabs i.on { border-bottom: 1.5px solid var(--nx-fg); }
+.nx-tabs i.on::before { border-color: var(--nx-fg);
+  background: linear-gradient(var(--nx-fg),var(--nx-fg)) 50% 0/2px 100% no-repeat, linear-gradient(var(--nx-fg),var(--nx-fg)) 0 50%/100% 2px no-repeat; }
+
+/* empty state */
+.nx-empty { text-align: center; padding-top: 54px; font-family: "Instrument Sans", sans-serif; }
+.nx-empty .nx-cam { width: 74px; height: 74px; border-radius: 50%; border: 2.5px solid var(--nx-fg); margin: 0 auto; position: relative; }
+.nx-empty .nx-cam::before { content: ""; position: absolute; left: 17px; top: 22px; width: 36px; height: 26px; border: 2.5px solid var(--nx-fg); border-radius: 6px; }
+.nx-empty .nx-cam::after { content: ""; position: absolute; left: 29px; top: 29px; width: 12px; height: 12px; border: 2.5px solid var(--nx-fg); border-radius: 50%; }
+.nx-empty h4 { margin: 16px 0 0; font-family: "Archivo", sans-serif; font-weight: 800; font-size: 25px; color: var(--nx-fg); letter-spacing: -0.02em; }
+.nx-empty p { margin: 6px 0 0; font-size: 14px; color: var(--nx-muted); }
+
+/* ---------- the grid and the posts ---------- */
+.nx-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-top: 3px; }
+.nx-post { position: relative; aspect-ratio: 1 / 1; overflow: hidden; font-family: "Archivo", sans-serif; }
+.nx-post .nx-tag { position: absolute; top: 7px; right: 7px; width: 14px; height: 14px; }
+.nx-post .nx-tag.reel { border: 2px solid #fff; border-radius: 4px; }
+.nx-post .nx-tag.reel::after { content: ""; position: absolute; left: 4px; top: 2.5px; border-left: 6px solid #fff; border-top: 3.5px solid transparent; border-bottom: 3.5px solid transparent; }
+.nx-post .nx-tag.multi::before, .nx-post .nx-tag.multi::after { content: ""; position: absolute; width: 10px; height: 10px; border: 2px solid #fff; border-radius: 2px; }
+.nx-post .nx-tag.multi::before { left: 0; top: 4px; } .nx-post .nx-tag.multi::after { left: 4px; top: 0; background: rgba(0,0,0,.25); }
+.nx-post .nx-cap { position: absolute; left: 9px; right: 9px; bottom: 9px; line-height: .95; }
+.nx-empty-tile { aspect-ratio: 1 / 1; background: rgba(255,255,255,.04); }
+
+/* 1 · café reel: latte, warm */
+.nx-p-latte { background: radial-gradient(circle at 50% 46%, #F4E3C8 0 15%, #C79A6B 16% 24%, #6E4327 25% 40%, #2C1A10 41%); }
+.nx-p-latte .nx-cap { font-family: "Instrument Serif", serif; font-size: 20px; color: #FFF4E2; }
+/* 2 · Diwali poster: deep violet, gold diya */
+.nx-p-diwali { background: radial-gradient(circle at 50% 62%, rgba(255,196,107,.55), transparent 42%), linear-gradient(160deg, #3D0789, #12051F); }
+.nx-p-diwali::before { content: ""; position: absolute; left: 50%; top: 30%; width: 16px; height: 24px; margin-left: -8px; border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: radial-gradient(circle at 50% 70%, #FFF3C4, #FFC46B 45%, #FF8A3D); box-shadow: 0 0 18px 6px rgba(255,170,60,.55); }
+.nx-p-diwali::after { content: ""; position: absolute; left: 50%; top: 52%; width: 40px; height: 14px; margin-left: -20px; border-radius: 0 0 22px 22px; background: linear-gradient(#E0893A, #9C4A1C); }
+.nx-p-diwali .nx-cap { font-family: "Instrument Serif", serif; font-size: 19px; color: #FFC46B; text-align: center; }
+/* 3 · new menu card */
+.nx-p-menu { background: #F3EAD8; }
+.nx-p-menu .nx-cap { top: 12px; bottom: auto; font-weight: 900; font-variation-settings: "wdth" 110, "wght" 900; font-size: 17px; color: #4A2A17; }
+.nx-p-menu::after { content: ""; position: absolute; left: 10px; right: 26px; top: 56px; height: 34px;
+  background: linear-gradient(#C7B49A,#C7B49A) 0 0/100% 3px no-repeat, linear-gradient(#C7B49A,#C7B49A) 0 13px/80% 3px no-repeat, linear-gradient(#C7B49A,#C7B49A) 0 26px/90% 3px no-repeat; }
+/* 4 · salon carousel */
+.nx-p-salon { background: linear-gradient(150deg, #FFB8A0, #FF7AC6); }
+.nx-p-salon .nx-cap { font-weight: 800; font-variation-settings: "wdth" 100, "wght" 800; font-size: 17px; color: #fff; }
+/* 5 · gym */
+.nx-p-gym { background: repeating-linear-gradient(-35deg, #0B0B0B 0 12px, #141414 12px 24px); }
+.nx-p-gym .nx-cap { font-weight: 900; font-variation-settings: "wdth" 70, "wght" 900; font-size: 26px; color: var(--nx-win); text-transform: uppercase; }
+/* 6 · weekend offer */
+.nx-p-offer { background: #FF6B57; }
+.nx-p-offer .nx-cap { font-weight: 900; font-variation-settings: "wdth" 115, "wght" 900; font-size: 30px; color: #fff; }
+.nx-p-offer .nx-cap small { display: block; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 11px; margin-top: 3px; letter-spacing: 0; }
+/* 7 · bakery */
+.nx-p-bake { background: radial-gradient(circle at 70% 30%, #FFE3A8 0 18%, transparent 19%), #FFC46B; }
+.nx-p-bake .nx-cap { font-family: "Instrument Serif", serif; font-size: 20px; color: #5A3210; }
+/* 8 · boutique drop */
+.nx-p-drop { background: linear-gradient(180deg, #D8BBFF, #B48CFF); }
+.nx-p-drop .nx-cap { font-weight: 800; font-variation-settings: "wdth" 120, "wght" 800; font-size: 19px; color: var(--nx-ink); }
+/* 9 · review card */
+.nx-p-review { background: var(--nx-ink-3); box-shadow: inset 0 0 0 1.5px var(--nx-line-2); }
+.nx-p-review::before { content: "\201C"; position: absolute; left: 9px; top: -2px; font-family: "Instrument Serif", serif; font-size: 54px; color: var(--nx-lift); }
+.nx-p-review .nx-cap { font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 13px; color: var(--nx-fg); line-height: 1.2; }
+/* 10 · thali reel */
+.nx-p-thali { background: radial-gradient(circle at 50% 45%, #F7D27A 0 10%, #E85D2A 11% 18%, #FFF0D6 19% 34%, #8C2F12 35% 39%, #3A1408 40%); }
+.nx-p-thali .nx-cap { font-weight: 800; font-variation-settings: "wdth" 100, "wght" 800; font-size: 15px; color: #FFE7C2; }
+/* 11 · Navratri */
+.nx-p-navratri { background: linear-gradient(135deg, #E0218A, #FF8A3D); }
+.nx-p-navratri .nx-cap { font-family: "Instrument Serif", serif; font-size: 20px; color: #fff; }
+/* 12 · hours */
+.nx-p-hours { background: var(--nx-violet); }
+.nx-p-hours .nx-cap { font-weight: 800; font-variation-settings: "wdth" 110, "wght" 800; font-size: 18px; color: #fff; }
+
+/* in-phone toast */
+.nx-toast { position: absolute; left: 14px; right: 14px; display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 14px;
+  background: rgba(23,16,44,.94); border: 1px solid var(--nx-line-2); box-shadow: 0 14px 30px -10px rgba(0,0,0,.8);
+  font-family: "Instrument Sans", sans-serif; color: var(--nx-fg); font-size: 13.5px; font-weight: 600; z-index: 6; }
+.nx-toast .nx-ok { width: 22px; height: 22px; border-radius: 50%; background: var(--nx-win); flex: none; position: relative; }
+.nx-toast .nx-ok::after { content: ""; position: absolute; left: 8px; top: 4px; width: 5px; height: 10px; border-right: 2.5px solid var(--nx-ink); border-bottom: 2.5px solid var(--nx-ink); transform: rotate(45deg); }
+.nx-toast small { margin-left: auto; color: var(--nx-muted); font-weight: 500; font-size: 12px; }

@@ -1,0 +1,43 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #01-zero-posts-bg { position: absolute; inset: 0; }
+
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="01-zero-posts" data-width="1920" data-height="1080" data-duration="4">
+    <div id="01-zero-posts-bg" class="clip nx-ground" data-start="0" data-duration="4" data-track-index="0">
+      <i class="nx-glow a"></i><i class="nx-glow b"></i><i class="nx-glow c"></i><i class="nx-ribbon"></i><i class="nx-stars"></i>
+    </div>
+    <div id="01-zero-posts-stage" class="clip" data-start="0" data-duration="4" data-track-index="1" style="position:absolute; inset:0">
+
+      <div class="nx-display" id="f1-still" style="position:absolute; right:1200px; top:372px; font-size:132px; text-align:right">Still</div>
+      <div class="nx-phone" id="f1-phone" style="left:770px; top:80px; transform:scale(1.0); transform-origin:0 0">
+  <div class="nx-screen">
+    <div class="nx-island"></div>
+    <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
+    <div class="nx-feed" id="f1-feed" style="top:52px">
+      <div class="nx-prof">
+        <div class="nx-handle">the.corner.cafe<i class="nx-chev"></i></div>
+        <div class="nx-row"><div class="nx-ava"><b></b></div>
+          <div class="nx-stats"><div><b id="f1-count">0</b><span>posts</span></div><div><b>412</b><span>followers</span></div><div><b>180</b><span>following</span></div></div></div>
+        <div class="nx-name">The Corner Café</div><div class="nx-bio">Coffee · brunch · open 7–10</div>
+        <div class="nx-btns"><span>Edit profile</span><span>Share profile</span></div>
+      </div>
+      <div class="nx-tabs"><i class="on"></i><i></i><i></i></div>
+      <div class="nx-empty"><div class="nx-cam"></div><h4>No posts yet</h4><p>When you share photos, they will appear here.</p></div>
+    </div>
+    
+  </div>
+</div>
+      <div class="nx-display" id="f1-zero" style="position:absolute; left:1200px; top:372px; font-size:132px; white-space:nowrap"><span style="color:var(--nx-lift); text-shadow:0 0 60px rgba(169,92,255,.7)">0</span> posts?</div>
+      <div class="nx-serif" id="f1-busy" style="position:absolute; left:1204px; top:530px; font-size:58px; line-height:1.02; width:600px">You're busy running the place.</div>
+
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    window.__timelines["01-zero-posts"] = tl;
+  </script>
+</template>

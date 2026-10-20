@@ -1,0 +1,51 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #02-meet-the-team-bg { position: absolute; inset: 0; }
+
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="02-meet-the-team" data-width="1920" data-height="1080" data-duration="6">
+    <div id="02-meet-the-team-bg" class="clip nx-ground" data-start="0" data-duration="6" data-track-index="0">
+      <i class="nx-glow a"></i><i class="nx-glow b"></i><i class="nx-glow c"></i><i class="nx-ribbon"></i><i class="nx-stars"></i>
+    </div>
+    <div id="02-meet-the-team-stage" class="clip" data-start="0" data-duration="6" data-track-index="1" style="position:absolute; inset:0">
+
+      <div class="nx-display" id="f2-meet" style="position:absolute; right:1200px; top:300px; font-size:112px; text-align:right; white-space:nowrap">Meet your<br/>entire</div>
+      <div class="nx-phone" id="f2-phone" style="left:770px; top:80px; transform:scale(1.0); transform-origin:0 0">
+  <div class="nx-screen">
+    <div class="nx-island"></div>
+    <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
+    <div class="nx-feed" id="f2-feed" style="top:52px">
+      <div class="nx-prof">
+        <div class="nx-handle">the.corner.cafe<i class="nx-chev"></i></div>
+        <div class="nx-row"><div class="nx-ava"><b></b></div>
+          <div class="nx-stats"><div><b id="f2-count">9</b><span>posts</span></div><div><b>412</b><span>followers</span></div><div><b>180</b><span>following</span></div></div></div>
+        <div class="nx-name">The Corner Café</div><div class="nx-bio">Coffee · brunch · open 7–10</div>
+        <div class="nx-btns"><span>Edit profile</span><span>Share profile</span></div>
+      </div>
+      <div class="nx-tabs"><i class="on"></i><i></i><i></i></div>
+      <div class="nx-grid" id="f2-grid"><div class="nx-post nx-p-latte" id="f2-t1"><i class="nx-tag reel"></i><div class="nx-cap">Monday<br/>Mocha</div></div><div class="nx-post nx-p-diwali" id="f2-t2"><div class="nx-cap">Happy Diwali</div></div><div class="nx-post nx-p-menu" id="f2-t3"><div class="nx-cap">NEW<br/>MENU</div></div><div class="nx-post nx-p-salon" id="f2-t4"><i class="nx-tag multi"></i><div class="nx-cap">5 looks<br/>for fall</div></div><div class="nx-post nx-p-offer" id="f2-t5"><div class="nx-cap">20% OFF<small>this weekend</small></div></div><div class="nx-post nx-p-review" id="f2-t6"><div class="nx-cap">Best coffee<br/>in town</div></div><div class="nx-post nx-p-thali" id="f2-t7"><i class="nx-tag reel"></i><div class="nx-cap">Thali<br/>Tuesday</div></div><div class="nx-post nx-p-navratri" id="f2-t8"><div class="nx-cap">Navratri<br/>nights</div></div><div class="nx-post nx-p-hours" id="f2-t9"><div class="nx-cap">Open<br/>till 10</div></div><div class="nx-empty-tile"></div><div class="nx-empty-tile"></div><div class="nx-empty-tile"></div></div>
+    </div>
+    
+  </div>
+</div>
+      <div class="nx-serif" id="f2-team" style="position:absolute; left:1200px; top:286px; font-size:150px; line-height:.9; white-space:nowrap">creative<br/>team.</div>
+      <div id="f2-pills" style="position:absolute; right:1200px; top:560px; width:600px; display:flex; flex-wrap:wrap; gap:12px; justify-content:flex-end">
+        <span class="nx-pill"><i class="nx-dot"></i>Design</span><span class="nx-pill"><i class="nx-dot"></i>Video</span>
+        <span class="nx-pill"><i class="nx-dot"></i>Posting</span><span class="nx-pill"><i class="nx-dot"></i>Automation</span>
+      </div>
+      <div id="f2-by" style="position:absolute; left:1206px; top:600px; display:flex; align-items:center; gap:14px">
+        <span class="nx-body" style="font-size:26px">by</span>
+        <img src="assets/nxtlvl-wordmark.png" alt="nxtlvl" style="width:190px; height:auto" />
+        <svg viewBox="0 0 24 24" style="width:22px; height:22px; margin:-26px 0 0 -8px"><path d="M12 0c.5 6.4 5.1 11 11.5 11.5C17.1 12 12.5 16.6 12 23c-.5-6.4-5.1-11-11.5-11.5C6.9 11 11.5 6.4 12 0z" fill="#A95CFF"/></svg>
+      </div>
+
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    window.__timelines["02-meet-the-team"] = tl;
+  </script>
+</template>

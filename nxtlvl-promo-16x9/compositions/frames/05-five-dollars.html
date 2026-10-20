@@ -1,0 +1,158 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #05-five-dollars-bg { position: absolute; inset: 0; }
+
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="05-five-dollars" data-width="1920" data-height="1080" data-duration="3">
+    <div id="05-five-dollars-bg" class="clip nx-ground" data-start="0" data-duration="3" data-track-index="0">
+      <i class="nx-glow a"></i><i class="nx-glow b"></i><i class="nx-glow c"></i><i class="nx-ribbon"></i><i class="nx-stars"></i>
+    </div>
+    <div id="05-five-dollars-stage" class="clip" data-start="0" data-duration="3" data-track-index="1" style="position:absolute; inset:0">
+
+      <div id="f5-wall" style="position:absolute; inset:0; filter:blur(16px) saturate(1.1); opacity:.32"><div class="nx-phone" id="f5p1-phone" style="left:96.0px; top:96px; transform:scale(0.6); transform-origin:0 0">
+  <div class="nx-screen">
+    <div class="nx-island"></div>
+    <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
+    <div class="nx-feed" id="f5p1-feed" style="top:52px">
+      <div class="nx-prof">
+        <div class="nx-handle">glow.salon<i class="nx-chev"></i></div>
+        <div class="nx-row"><div class="nx-ava"><b></b></div>
+          <div class="nx-stats"><div><b id="f5p1-count">0</b><span>posts</span></div><div><b>0</b><span>followers</span></div><div><b>0</b><span>following</span></div></div></div>
+        <div class="nx-name">Glow Salon</div><div class="nx-bio">Hair · nails · bridal</div>
+        <div class="nx-btns"><span>Edit profile</span><span>Share profile</span></div>
+      </div>
+      <div class="nx-tabs"><i class="on"></i><i></i><i></i></div>
+      <div class="nx-grid" id="f5p1-grid"><div class="nx-post nx-p-salon" id="f5p1-t1"><i class="nx-tag multi"></i><div class="nx-cap">5 looks<br/>for fall</div></div><div class="nx-post nx-p-drop" id="f5p1-t2"><i class="nx-tag multi"></i><div class="nx-cap">NEW<br/>DROP</div></div><div class="nx-post nx-p-offer" id="f5p1-t3"><div class="nx-cap">20% OFF<small>this weekend</small></div></div><div class="nx-post nx-p-navratri" id="f5p1-t4"><div class="nx-cap">Navratri<br/>nights</div></div><div class="nx-post nx-p-review" id="f5p1-t5"><div class="nx-cap">Best coffee<br/>in town</div></div><div class="nx-post nx-p-hours" id="f5p1-t6"><div class="nx-cap">Open<br/>till 10</div></div><div class="nx-post nx-p-salon" id="f5p1-t7"><i class="nx-tag multi"></i><div class="nx-cap">5 looks<br/>for fall</div></div><div class="nx-post nx-p-drop" id="f5p1-t8"><i class="nx-tag multi"></i><div class="nx-cap">NEW<br/>DROP</div></div><div class="nx-post nx-p-offer" id="f5p1-t9"><div class="nx-cap">20% OFF<small>this weekend</small></div></div></div>
+    </div>
+    
+  </div>
+</div>
+<div class="nx-phone" id="f5p2-phone" style="left:346.0px; top:96px; transform:scale(0.6); transform-origin:0 0">
+  <div class="nx-screen">
+    <div class="nx-island"></div>
+    <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
+    <div class="nx-feed" id="f5p2-feed" style="top:52px">
+      <div class="nx-prof">
+        <div class="nx-handle">ironworks.gym<i class="nx-chev"></i></div>
+        <div class="nx-row"><div class="nx-ava"><b></b></div>
+          <div class="nx-stats"><div><b id="f5p2-count">0</b><span>posts</span></div><div><b>0</b><span>followers</span></div><div><b>0</b><span>following</span></div></div></div>
+        <div class="nx-name">Ironworks Gym</div><div class="nx-bio">Strength · HIIT · 5am–11pm</div>
+        <div class="nx-btns"><span>Edit profile</span><span>Share profile</span></div>
+      </div>
+      <div class="nx-tabs"><i class="on"></i><i></i><i></i></div>
+      <div class="nx-grid" id="f5p2-grid"><div class="nx-post nx-p-gym" id="f5p2-t1"><i class="nx-tag reel"></i><div class="nx-cap">Summer<br/>shred</div></div><div class="nx-post nx-p-offer" id="f5p2-t2"><div class="nx-cap">20% OFF<small>this weekend</small></div></div><div class="nx-post nx-p-hours" id="f5p2-t3"><div class="nx-cap">Open<br/>till 10</div></div><div class="nx-post nx-p-review" id="f5p2-t4"><div class="nx-cap">Best coffee<br/>in town</div></div><div class="nx-post nx-p-gym" id="f5p2-t5"><i class="nx-tag reel"></i><div class="nx-cap">Summer<br/>shred</div></div><div class="nx-post nx-p-drop" id="f5p2-t6"><i class="nx-tag multi"></i><div class="nx-cap">NEW<br/>DROP</div></div><div class="nx-post nx-p-gym" id="f5p2-t7"><i class="nx-tag reel"></i><div class="nx-cap">Summer<br/>shred</div></div><div class="nx-post nx-p-offer" id="f5p2-t8"><div class="nx-cap">20% OFF<small>this weekend</small></div></div><div class="nx-post nx-p-hours" id="f5p2-t9"><div class="nx-cap">Open<br/>till 10</div></div></div>
+    </div>
+    
+  </div>
+</div>
+<div class="nx-phone" id="f5p3-phone" style="left:596.0px; top:96px; transform:scale(0.6); transform-origin:0 0">
+  <div class="nx-screen">
+    <div class="nx-island"></div>
+    <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
+    <div class="nx-feed" id="f5p3-feed" style="top:52px">
+      <div class="nx-prof">
+        <div class="nx-handle">maya.boutique<i class="nx-chev"></i></div>
+        <div class="nx-row"><div class="nx-ava"><b></b></div>
+          <div class="nx-stats"><div><b id="f5p3-count">0</b><span>posts</span></div><div><b>0</b><span>followers</span></div><div><b>0</b><span>following</span></div></div></div>
+        <div class="nx-name">Maya Boutique</div><div class="nx-bio">Ethnic & fusion wear</div>
+        <div class="nx-btns"><span>Edit profile</span><span>Share profile</span></div>
+      </div>
+      <div class="nx-tabs"><i class="on"></i><i></i><i></i></div>
+      <div class="nx-grid" id="f5p3-grid"><div class="nx-post nx-p-drop" id="f5p3-t1"><i class="nx-tag multi"></i><div class="nx-cap">NEW<br/>DROP</div></div><div class="nx-post nx-p-navratri" id="f5p3-t2"><div class="nx-cap">Navratri<br/>nights</div></div><div class="nx-post nx-p-salon" id="f5p3-t3"><i class="nx-tag multi"></i><div class="nx-cap">5 looks<br/>for fall</div></div><div class="nx-post nx-p-diwali" id="f5p3-t4"><div class="nx-cap">Happy Diwali</div></div><div class="nx-post nx-p-offer" id="f5p3-t5"><div class="nx-cap">20% OFF<small>this weekend</small></div></div><div class="nx-post nx-p-review" id="f5p3-t6"><div class="nx-cap">Best coffee<br/>in town</div></div><div class="nx-post nx-p-drop" id="f5p3-t7"><i class="nx-tag multi"></i><div class="nx-cap">NEW<br/>DROP</div></div><div class="nx-post nx-p-navratri" id="f5p3-t8"><div class="nx-cap">Navratri<br/>nights</div></div><div class="nx-post nx-p-salon" id="f5p3-t9"><i class="nx-tag multi"></i><div class="nx-cap">5 looks<br/>for fall</div></div></div>
+    </div>
+    
+  </div>
+</div>
+<div class="nx-phone" id="f5p4-phone" style="left:846.0px; top:96px; transform:scale(0.6); transform-origin:0 0">
+  <div class="nx-screen">
+    <div class="nx-island"></div>
+    <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
+    <div class="nx-feed" id="f5p4-feed" style="top:52px">
+      <div class="nx-prof">
+        <div class="nx-handle">the.corner.cafe<i class="nx-chev"></i></div>
+        <div class="nx-row"><div class="nx-ava"><b></b></div>
+          <div class="nx-stats"><div><b id="f5p4-count">0</b><span>posts</span></div><div><b>0</b><span>followers</span></div><div><b>0</b><span>following</span></div></div></div>
+        <div class="nx-name">The Corner Café</div><div class="nx-bio">Coffee · brunch · open 7–10</div>
+        <div class="nx-btns"><span>Edit profile</span><span>Share profile</span></div>
+      </div>
+      <div class="nx-tabs"><i class="on"></i><i></i><i></i></div>
+      <div class="nx-grid" id="f5p4-grid"><div class="nx-post nx-p-latte" id="f5p4-t1"><i class="nx-tag reel"></i><div class="nx-cap">Monday<br/>Mocha</div></div><div class="nx-post nx-p-diwali" id="f5p4-t2"><div class="nx-cap">Happy Diwali</div></div><div class="nx-post nx-p-menu" id="f5p4-t3"><div class="nx-cap">NEW<br/>MENU</div></div><div class="nx-post nx-p-salon" id="f5p4-t4"><i class="nx-tag multi"></i><div class="nx-cap">5 looks<br/>for fall</div></div><div class="nx-post nx-p-offer" id="f5p4-t5"><div class="nx-cap">20% OFF<small>this weekend</small></div></div><div class="nx-post nx-p-review" id="f5p4-t6"><div class="nx-cap">Best coffee<br/>in town</div></div><div class="nx-post nx-p-latte" id="f5p4-t7"><i class="nx-tag reel"></i><div class="nx-cap">Monday<br/>Mocha</div></div><div class="nx-post nx-p-diwali" id="f5p4-t8"><div class="nx-cap">Happy Diwali</div></div><div class="nx-post nx-p-menu" id="f5p4-t9"><div class="nx-cap">NEW<br/>MENU</div></div></div>
+    </div>
+    
+  </div>
+</div>
+<div class="nx-phone" id="f5p5-phone" style="left:1096.0px; top:96px; transform:scale(0.6); transform-origin:0 0">
+  <div class="nx-screen">
+    <div class="nx-island"></div>
+    <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
+    <div class="nx-feed" id="f5p5-feed" style="top:52px">
+      <div class="nx-prof">
+        <div class="nx-handle">rise.bakery<i class="nx-chev"></i></div>
+        <div class="nx-row"><div class="nx-ava"><b></b></div>
+          <div class="nx-stats"><div><b id="f5p5-count">0</b><span>posts</span></div><div><b>0</b><span>followers</span></div><div><b>0</b><span>following</span></div></div></div>
+        <div class="nx-name">Rise Bakery</div><div class="nx-bio">Sourdough from 7am</div>
+        <div class="nx-btns"><span>Edit profile</span><span>Share profile</span></div>
+      </div>
+      <div class="nx-tabs"><i class="on"></i><i></i><i></i></div>
+      <div class="nx-grid" id="f5p5-grid"><div class="nx-post nx-p-bake" id="f5p5-t1"><div class="nx-cap">Fresh<br/>at 7am</div></div><div class="nx-post nx-p-menu" id="f5p5-t2"><div class="nx-cap">NEW<br/>MENU</div></div><div class="nx-post nx-p-diwali" id="f5p5-t3"><div class="nx-cap">Happy Diwali</div></div><div class="nx-post nx-p-latte" id="f5p5-t4"><i class="nx-tag reel"></i><div class="nx-cap">Monday<br/>Mocha</div></div><div class="nx-post nx-p-hours" id="f5p5-t5"><div class="nx-cap">Open<br/>till 10</div></div><div class="nx-post nx-p-review" id="f5p5-t6"><div class="nx-cap">Best coffee<br/>in town</div></div><div class="nx-post nx-p-bake" id="f5p5-t7"><div class="nx-cap">Fresh<br/>at 7am</div></div><div class="nx-post nx-p-menu" id="f5p5-t8"><div class="nx-cap">NEW<br/>MENU</div></div><div class="nx-post nx-p-diwali" id="f5p5-t9"><div class="nx-cap">Happy Diwali</div></div></div>
+    </div>
+    
+  </div>
+</div>
+<div class="nx-phone" id="f5p6-phone" style="left:1346.0px; top:96px; transform:scale(0.6); transform-origin:0 0">
+  <div class="nx-screen">
+    <div class="nx-island"></div>
+    <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
+    <div class="nx-feed" id="f5p6-feed" style="top:52px">
+      <div class="nx-prof">
+        <div class="nx-handle">smile.dental<i class="nx-chev"></i></div>
+        <div class="nx-row"><div class="nx-ava"><b></b></div>
+          <div class="nx-stats"><div><b id="f5p6-count">0</b><span>posts</span></div><div><b>0</b><span>followers</span></div><div><b>0</b><span>following</span></div></div></div>
+        <div class="nx-name">Smile Dental</div><div class="nx-bio">Family dentistry</div>
+        <div class="nx-btns"><span>Edit profile</span><span>Share profile</span></div>
+      </div>
+      <div class="nx-tabs"><i class="on"></i><i></i><i></i></div>
+      <div class="nx-grid" id="f5p6-grid"><div class="nx-post nx-p-review" id="f5p6-t1"><div class="nx-cap">Best coffee<br/>in town</div></div><div class="nx-post nx-p-hours" id="f5p6-t2"><div class="nx-cap">Open<br/>till 10</div></div><div class="nx-post nx-p-offer" id="f5p6-t3"><div class="nx-cap">20% OFF<small>this weekend</small></div></div><div class="nx-post nx-p-menu" id="f5p6-t4"><div class="nx-cap">NEW<br/>MENU</div></div><div class="nx-post nx-p-drop" id="f5p6-t5"><i class="nx-tag multi"></i><div class="nx-cap">NEW<br/>DROP</div></div><div class="nx-post nx-p-bake" id="f5p6-t6"><div class="nx-cap">Fresh<br/>at 7am</div></div><div class="nx-post nx-p-review" id="f5p6-t7"><div class="nx-cap">Best coffee<br/>in town</div></div><div class="nx-post nx-p-hours" id="f5p6-t8"><div class="nx-cap">Open<br/>till 10</div></div><div class="nx-post nx-p-offer" id="f5p6-t9"><div class="nx-cap">20% OFF<small>this weekend</small></div></div></div>
+    </div>
+    
+  </div>
+</div>
+<div class="nx-phone" id="f5p7-phone" style="left:1596.0px; top:96px; transform:scale(0.6); transform-origin:0 0">
+  <div class="nx-screen">
+    <div class="nx-island"></div>
+    <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
+    <div class="nx-feed" id="f5p7-feed" style="top:52px">
+      <div class="nx-prof">
+        <div class="nx-handle">flow.studio<i class="nx-chev"></i></div>
+        <div class="nx-row"><div class="nx-ava"><b></b></div>
+          <div class="nx-stats"><div><b id="f5p7-count">0</b><span>posts</span></div><div><b>0</b><span>followers</span></div><div><b>0</b><span>following</span></div></div></div>
+        <div class="nx-name">Flow Yoga Studio</div><div class="nx-bio">Classes daily · all levels</div>
+        <div class="nx-btns"><span>Edit profile</span><span>Share profile</span></div>
+      </div>
+      <div class="nx-tabs"><i class="on"></i><i></i><i></i></div>
+      <div class="nx-grid" id="f5p7-grid"><div class="nx-post nx-p-navratri" id="f5p7-t1"><div class="nx-cap">Navratri<br/>nights</div></div><div class="nx-post nx-p-hours" id="f5p7-t2"><div class="nx-cap">Open<br/>till 10</div></div><div class="nx-post nx-p-review" id="f5p7-t3"><div class="nx-cap">Best coffee<br/>in town</div></div><div class="nx-post nx-p-gym" id="f5p7-t4"><i class="nx-tag reel"></i><div class="nx-cap">Summer<br/>shred</div></div><div class="nx-post nx-p-salon" id="f5p7-t5"><i class="nx-tag multi"></i><div class="nx-cap">5 looks<br/>for fall</div></div><div class="nx-post nx-p-drop" id="f5p7-t6"><i class="nx-tag multi"></i><div class="nx-cap">NEW<br/>DROP</div></div><div class="nx-post nx-p-navratri" id="f5p7-t7"><div class="nx-cap">Navratri<br/>nights</div></div><div class="nx-post nx-p-hours" id="f5p7-t8"><div class="nx-cap">Open<br/>till 10</div></div><div class="nx-post nx-p-review" id="f5p7-t9"><div class="nx-cap">Best coffee<br/>in town</div></div></div>
+    </div>
+    
+  </div>
+</div></div>
+      <div id="f5-veil" style="position:absolute; inset:0; background:radial-gradient(60% 55% at 50% 48%, rgba(5,3,12,.35), rgba(5,3,12,.92))"></div>
+      <div class="nx-display" id="f5-team" style="position:absolute; left:0; right:0; top:178px; text-align:center; font-size:60px; color:var(--nx-muted)">Your entire creative team,</div>
+      <div id="f5-price" style="position:absolute; left:0; right:0; top:260px; display:flex; justify-content:center; align-items:baseline; gap:30px">
+        <span class="nx-serif" style="font-size:120px; color:var(--nx-fg)">from</span>
+        <span class="nx-display" id="f5-five" style="font-size:380px; line-height:.9; font-variation-settings:'wdth' 118,'wght' 900; background:linear-gradient(180deg,#FFFFFF 10%,#D8BBFF 45%,#A95CFF 100%); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 0 60px rgba(125,24,252,.75))">$5</span>
+        <span class="nx-serif" style="font-size:120px; color:var(--nx-fg)">a month.</span>
+      </div>
+      <div id="f5-terms" style="position:absolute; left:0; right:0; top:760px; display:flex; justify-content:center; gap:14px">
+        <span class="nx-pill">No contracts</span><span class="nx-pill">Cancel any month</span><span class="nx-pill">You own every file</span>
+      </div>
+
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    window.__timelines["05-five-dollars"] = tl;
+  </script>
+</template>

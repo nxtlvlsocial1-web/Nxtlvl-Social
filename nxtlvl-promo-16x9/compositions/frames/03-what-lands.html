@@ -1,0 +1,42 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #03-what-lands-bg { position: absolute; inset: 0; }
+
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="03-what-lands" data-width="1920" data-height="1080" data-duration="8">
+    <div id="03-what-lands-bg" class="clip nx-ground" data-start="0" data-duration="8" data-track-index="0">
+      <i class="nx-glow a"></i><i class="nx-glow b"></i><i class="nx-glow c"></i><i class="nx-ribbon"></i><i class="nx-stars"></i>
+    </div>
+    <div id="03-what-lands-stage" class="clip" data-start="0" data-duration="8" data-track-index="1" style="position:absolute; inset:0">
+
+      <div class="nx-display" id="f3-make" style="position:absolute; right:1200px; top:388px; font-size:120px; text-align:right; white-space:nowrap">We make</div>
+      <div class="nx-phone" id="f3-phone" style="left:770px; top:80px; transform:scale(1.0); transform-origin:0 0">
+  <div class="nx-screen">
+    <div class="nx-island"></div>
+    <div class="nx-status"><span>9:41</span><span class="nx-sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i><b class="nx-bat"></b></span></div>
+    <div class="nx-feed" id="f3-feed" style="top:-118px">
+      <div class="nx-prof">
+        <div class="nx-handle">the.corner.cafe<i class="nx-chev"></i></div>
+        <div class="nx-row"><div class="nx-ava"><b></b></div>
+          <div class="nx-stats"><div><b id="f3-count">15</b><span>posts</span></div><div><b>412</b><span>followers</span></div><div><b>180</b><span>following</span></div></div></div>
+        <div class="nx-name">The Corner Café</div><div class="nx-bio">Coffee · brunch · open 7–10</div>
+        <div class="nx-btns"><span>Edit profile</span><span>Share profile</span></div>
+      </div>
+      <div class="nx-tabs"><i class="on"></i><i></i><i></i></div>
+      <div class="nx-grid" id="f3-grid"><div class="nx-post nx-p-latte" id="f3-t1"><i class="nx-tag reel"></i><div class="nx-cap">Monday<br/>Mocha</div></div><div class="nx-post nx-p-diwali" id="f3-t2"><div class="nx-cap">Happy Diwali</div></div><div class="nx-post nx-p-menu" id="f3-t3"><div class="nx-cap">NEW<br/>MENU</div></div><div class="nx-post nx-p-salon" id="f3-t4"><i class="nx-tag multi"></i><div class="nx-cap">5 looks<br/>for fall</div></div><div class="nx-post nx-p-offer" id="f3-t5"><div class="nx-cap">20% OFF<small>this weekend</small></div></div><div class="nx-post nx-p-review" id="f3-t6"><div class="nx-cap">Best coffee<br/>in town</div></div><div class="nx-post nx-p-thali" id="f3-t7"><i class="nx-tag reel"></i><div class="nx-cap">Thali<br/>Tuesday</div></div><div class="nx-post nx-p-navratri" id="f3-t8"><div class="nx-cap">Navratri<br/>nights</div></div><div class="nx-post nx-p-hours" id="f3-t9"><div class="nx-cap">Open<br/>till 10</div></div><div class="nx-post nx-p-gym" id="f3-t10"><i class="nx-tag reel"></i><div class="nx-cap">Summer<br/>shred</div></div><div class="nx-post nx-p-drop" id="f3-t11"><i class="nx-tag multi"></i><div class="nx-cap">NEW<br/>DROP</div></div><div class="nx-post nx-p-bake" id="f3-t12"><div class="nx-cap">Fresh<br/>at 7am</div></div><div class="nx-post nx-p-latte" id="f3-t13"><i class="nx-tag reel"></i><div class="nx-cap">Monday<br/>Mocha</div></div><div class="nx-post nx-p-diwali" id="f3-t14"><div class="nx-cap">Happy Diwali</div></div><div class="nx-post nx-p-salon" id="f3-t15"><i class="nx-tag multi"></i><div class="nx-cap">5 looks<br/>for fall</div></div></div>
+    </div>
+    <div class="nx-toast" id="f3-toast" style="top:640px"><i class="nx-ok"></i>Posted · Diwali poster<small>Tue 6 PM</small></div>
+  </div>
+</div>
+      <div class="nx-serif" id="f3-word" style="position:absolute; left:1200px; top:374px; font-size:132px; line-height:.92; width:660px">the posters.</div>
+
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    window.__timelines["03-what-lands"] = tl;
+  </script>
+</template>
