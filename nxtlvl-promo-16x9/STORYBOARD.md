@@ -42,7 +42,7 @@ tempo: 120 bpm · 4/4 · 1 beat = 0.5 s · 1 bar = 2 s · cuts land on bar lines
 - duration: 4s
 - poster: 2.6s
 - transition_in: cut
-- status: built
+- status: animated
 - src: compositions/frames/01-zero-posts.html
 - type: hook
 - persuasion: Pain validation
