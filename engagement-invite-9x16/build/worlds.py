@@ -321,14 +321,24 @@ def swing_couple(pal_g, pal_b):
         f'<rect x="-190" y="-6" width="380" height="7" rx="3" fill="#c9a15b"/>')
 
 
-def dance_couple(pal_g, pal_b):
-    """Sangeet: he lifts her hand, she twirls. Origin at their feet."""
-    g = fg.groom(pal_g)
-    b = fg.bride(pal_b, flip=False)
-    sk = fg.SKIN
-    return (f'<g class="dg"><g transform="translate(-150 0)">{g}</g></g>'
-            f'<g class="db"><g class="db-skirt"><g transform="translate(150 0) scale(1.18 1)">{b}</g></g></g>'
-            f'<path d="M-104 -430 C-76 -510 -30 -570 6 -606" stroke="{pal_g[0]}" stroke-width="22" stroke-linecap="round" '
-            f'fill="none"/>'
-            f'<path d="M112 -380 C96 -480 56 -560 16 -606" stroke="{sk}" stroke-width="14" stroke-linecap="round" fill="none"/>'
-            f'<circle cx="10" cy="-610" r="13" fill="{sk}"/>')
+def dholak(x, y, s=1.0):
+    """Barrel drum lying on its side, with lacing."""
+    laces = "".join(f'<path d="M{-52 + k * 15} -30 L{-44 + k * 15} 30" stroke="#f5e6c8" stroke-width="2"/>' for k in range(7))
+    return (f'<g transform="translate({x} {y}) scale({s})">'
+            f'<path d="M-60 -34 C-20 -46 20 -46 60 -34 L60 34 C20 46 -20 46 -60 34 Z" fill="#8a3b12"/>'
+            f'<path d="M-60 -6 C-20 4 20 4 60 -6" stroke="#c2410c" stroke-width="6" fill="none"/>{laces}'
+            f'<ellipse cx="-60" cy="0" rx="14" ry="34" fill="#f3e3c3"/><ellipse cx="60" cy="0" rx="14" ry="34" fill="#e9d3a8"/>'
+            f'<ellipse cx="-60" cy="0" rx="14" ry="34" fill="none" stroke="#5b2509" stroke-width="3"/>'
+            f'<ellipse cx="60" cy="0" rx="14" ry="34" fill="none" stroke="#5b2509" stroke-width="3"/></g>')
+
+
+def sangeet_couple(pal_g, pal_b):
+    """The same hand-holding couple as the other scenes, with dholaks and music notes around them.
+    Origin at their feet."""
+    notes = "".join(f'<text class="note" x="{x}" y="{y}" font-size="{fs}" fill="{c}" font-family="serif">{t}</text>'
+                    for x, y, fs, c, t in [(-230, -430, 64, "#f5d58a", "♪"), (210, -470, 56, "#fde68a", "♫"),
+                                           (-170, -560, 48, "#fbcfe8", "♫"), (250, -330, 52, "#f5d58a", "♪"),
+                                           (0, -640, 44, "#fde68a", "♪")])
+    return (f'<g class="sg-notes">{notes}</g>'
+            f'<g class="dsway">{fg.couple({"groom": pal_g, "bride": pal_b}, "cs")}</g>'
+            f'{dholak(-205, -36, .95)}{dholak(300, -36, 1.0)}')

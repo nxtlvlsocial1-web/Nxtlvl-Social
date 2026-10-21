@@ -97,7 +97,7 @@ def build_scenes():
              f'<g class="swing">{"<g transform=" + chr(34) + "translate(540 1395) scale(1.12)" + chr(34) + ">"}'
              f'{wd.swing_couple(HALDI_G, HALDI_B)}</g></g>'),
             (2, "Harsh Aswal", "Shalu",
-             f'<g transform="translate(540 1530) scale(1.0)">{wd.dance_couple(SANGEET_G, SANGEET_B)}</g>')):
+             f'<g transform="translate(540 1530) scale(1.0)">{wd.sangeet_couple(SANGEET_G, SANGEET_B)}</g>')):
         out.append(scene(f"c{n}", (
             stage(f"c{n}-stage", figure) +
             at(500, letters("THE ENGAGEMENT OF"), f"cap lts c{n}-cap") +
@@ -289,9 +289,11 @@ def timeline():
     add(f'tl.fromTo(".swing",{{rotation:-3}},{{rotation:3,duration:1.6,ease:"sine.inOut",yoyo:true,repeat:5}},{a + .3:.2f});')
     a, b = S["c2"]
     add(f'tl.fromTo(".c2-stage",{{opacity:0,y:120}},{{opacity:1,y:0,duration:1.2,ease:"power3.out"}},{a + .3:.2f});')
-    add(f'tl.fromTo(".db",{{rotation:-4}},{{rotation:4,duration:.9,ease:"sine.inOut",yoyo:true,repeat:8}},{a + .5:.2f});')
-    add(f'tl.fromTo(".db-skirt",{{scaleX:1}},{{scaleX:.9,duration:.45,ease:"sine.inOut",yoyo:true,repeat:16}},{a + .5:.2f});')
-    add(f'tl.fromTo(".dg",{{y:0}},{{y:-8,duration:.45,ease:"sine.inOut",yoyo:true,repeat:16}},{a + .5:.2f});')
+    # sangeet: they sway together to the beat while music notes drift up
+    add(f'tl.fromTo(".dsway",{{rotation:-2}},{{rotation:2,duration:.8,ease:"sine.inOut",yoyo:true,repeat:9}},{a + .5:.2f});')
+    add(f'tl.fromTo(".cs-g",{{y:0}},{{y:-10,duration:.4,ease:"sine.inOut",yoyo:true,repeat:17}},{a + .5:.2f});')
+    add(f'tl.fromTo(".cs-b",{{y:-10}},{{y:0,duration:.4,ease:"sine.inOut",yoyo:true,repeat:17}},{a + .5:.2f});')
+    add(f'tl.fromTo(".note",{{y:40,opacity:0}},{{y:-60,opacity:1,duration:2.4,stagger:.5,ease:"sine.out"}},{a + 1.0:.2f});')
 
     # both couples
     a = S["both"][0]
@@ -436,7 +438,7 @@ def main():
       document.querySelectorAll(".hang").forEach(e => gsap.set(e, {{ svgOrigin: e.dataset.o }}));
       gsap.set(".w-pea", {{ svgOrigin: "215 1560" }});
       gsap.set(".swing", {{ svgOrigin: "540 0" }});
-      gsap.set(".db, .db-skirt", {{ svgOrigin: "690 1530" }});
+      gsap.set(".dsway", {{ svgOrigin: "540 1530" }});
 {timeline()}
 {petal_tl}
       tl.set({{}}, {{}}, {DUR});
