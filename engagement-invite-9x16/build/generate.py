@@ -1,58 +1,155 @@
-"""Builds index.html for the engagement invite (two couples), 1080x1920, 50 s.
+"""Builds index.html for the engagement invite (two couples), 1080x1920, 50 s. Version 3.
 
 python3 -I build/generate.py      (run from the project root)
 
-Scenes follow the client's track: vocals enter at 7.13 s and phrases turn over every ~3.76 s, so
-scene changes sit on that grid (10.89, 18.41, 25.93, 33.45, 40.97 ...).
+Each scene is its own illustrated world (palace arch over a lotus lake in a scene palette, or an
+ivory watercolour garden page). Scenes are joined by a camera pan with a marble pillar sweeping
+past in the foreground. Scene changes sit on the song's phrase grid (vocals at 7.13 s, ~3.76 s
+phrases).
 """
-import math
 import os
 import random
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import art  # noqa: E402
-import figures as fg  # noqa: E402
 import elements as el  # noqa: E402
+import figures as fg  # noqa: E402
+import worlds as wd  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DUR = 50.0
-PH = 3.76
+X = 0.55                     # half of a pillar transition
+CUTS = [10.89, 18.41, 25.93, 33.45, 40.97, 44.9]
 
-
-def g(k):
-    return round(7.13 + PH * k, 2)
-
-
-S = {
-    "doors": (0.0, 3.4),
-    "ganesh": (1.9, g(1)),      # -> 10.89
-    "invite": (g(1), g(3)),     # -> 18.41
-    "c1": (g(3), g(5)),         # -> 25.93
-    "c2": (g(5), g(7)),         # -> 33.45
-    "both": (g(7), g(9)),       # -> 40.97
-    "date": (g(9), 44.9),
-    "close": (44.9, DUR),
+S = {                        # nominal scene windows (start, end)
+    "ganesh": (0.0, CUTS[0]),
+    "invite": (CUTS[0], CUTS[1]),
+    "c1": (CUTS[1], CUTS[2]),
+    "c2": (CUTS[2], CUTS[3]),
+    "both": (CUTS[3], CUTS[4]),
+    "date": (CUTS[4], CUTS[5]),
+    "close": (CUTS[5], DUR),
 }
+KIND = {"ganesh": ("palace", "mint"), "invite": ("garden", "gazebo"), "c1": ("palace", "haldi"),
+        "c2": ("palace", "sangeet"), "both": ("palace", "wedding"), "date": ("garden", "fountain"),
+        "close": ("palace", "mint")}
+
+HALDI_G = ("#f5c542", "#b45309", "#fde68a", "#fff7e0", "#a16207")
+HALDI_B = ("#facc15", "#db2777", "#f472b6", "#86efac", "#d4a24c")
+SANGEET_G = ("#cfe3d2", "#c9973f", "#f6ead2", "#efe9dc", "#7a5a2a")
+SANGEET_B = ("#15803d", "#facc15", "#be185d", "#fbcfe8", "#d4a24c")
 
 
 # ------------------------------------------------------------------ markup helpers
 def scene(sid, inner):
     a, b = S[sid]
-    return (f'<div id="sc-{sid}" class="clip scene" data-start="{a}" data-duration="{round(b - a, 2)}" '
-            f'data-track-index="3">{inner}</div>')
+    a0, b0 = max(0.0, a - X), min(DUR, b + X)
+    kind, sub = KIND[sid]
+    world = wd.palace(sub, sid, fl_seed=len(sid) * 3) if kind == "palace" else wd.garden_vignette(sub, sid)
+    tone = "light" if sub == "sangeet" else "dark"
+    return (f'<div id="sc-{sid}" class="clip scene {tone}" data-start="{a0}" data-duration="{round(b0 - a0, 2)}" '
+            f'data-track-index="{2 + list(S).index(sid) % 2}"><div class="pan">{world}{inner}</div></div>')
 
 
 def at(y, inner, cls=""):
     return f'<div class="row {cls}" style="top:{y}px"><span class="t">{inner}</span></div>'
 
 
-def chars(text, cls):
-    return "".join(f'<span class="{cls}">{"&nbsp;" if c == " " else c}</span>' for c in text)
+def letters(text):
+    return "".join(f'<span class="lt">{"&nbsp;" if c == " " else c}</span>' for c in text)
 
 
 def box(cls, x, y, w, h, inner):
     return f'<div class="box {cls}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px">{inner}</div>'
+
+
+def stage(cls, inner):
+    """A full-frame SVG layer for figures (frame coordinates)."""
+    return f'<svg class="stage {cls}" viewBox="0 0 1080 1920" width="1080" height="1920">{inner}</svg>'
+
+
+def build_scenes():
+    out = []
+    out.append(scene("ganesh", (
+        box("gwrap", 290, 360, 500, 507, '<img src="assets/img/ganesh.png" width="500" height="507" alt="">') +
+        at(900, "॥ श्री गणेशाय नमः ॥", "deva g-deva") +
+        at(982, "Shree Ganeshaya Namah", "script g-en") +
+        at(1092, art.divider(440), "g-div") +
+        at(1140, "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।", "shloka g-sh1") +
+        at(1194, "निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥", "shloka g-sh2")
+    )))
+    out.append(scene("invite", (
+        at(296, letters("With the divine blessings of"), "ital lts i-1") +
+        at(352, letters("LORD GANESHA & OUR ELDERS"), "cap2 lts i-2") +
+        box("medal i-hands", 395, 418, 290, 290, el.hands_medallion(290)) +
+        "".join(f'<div class="spark i-sp" style="transform:translate({x}px,{y}px)">{art.sparkle()}</div>'
+                for x, y in [(540, 530), (585, 555), (500, 570)]) +
+        at(734, letters("we joyfully invite you to celebrate the"), "body lts i-3") +
+        at(782, '<span class="wipe i-eng">Engagement</span>', "big i-4") +
+        at(952, letters("CEREMONY"), "cap3 lts i-5") +
+        at(1030, art.divider(440), "i-div") +
+        at(1076, letters("of our two beautiful couples"), "ital lts i-6") +
+        at(1136, letters("two families · two love stories · one celebration"), "small lts i-7")
+    )))
+    for n, him, her, figure in (
+            (1, "Manish Tamboli", "Jyoti",
+             f'<g class="swing">{"<g transform=" + chr(34) + "translate(540 1395) scale(1.12)" + chr(34) + ">"}'
+             f'{wd.swing_couple(HALDI_G, HALDI_B)}</g></g>'),
+            (2, "Harsh Aswal", "Shalu",
+             f'<g transform="translate(540 1530) scale(1.0)">{wd.dance_couple(SANGEET_G, SANGEET_B)}</g>')):
+        out.append(scene(f"c{n}", (
+            stage(f"c{n}-stage", figure) +
+            at(500, letters("THE ENGAGEMENT OF"), f"cap lts c{n}-cap") +
+            at(546, f'<span class="wipe c{n}-him">{him}</span>', "name") +
+            at(656, "&amp;", f"amp c{n}-amp") +
+            at(694, f'<span class="wipe c{n}-her">{her}</span>', "name") +
+            at(812, art.divider(380), f"c{n}-div") +
+            "".join(f'<div class="spark c{n}-sp" style="transform:translate({x}px,{y}px)">{art.sparkle()}</div>'
+                    for x, y in [(270, 580), (810, 570), (340, 740), (740, 750), (540, 520)])
+        )))
+    out.append(scene("both", (
+        stage("b-stage",
+              f'<g class="bp1"><g transform="translate(310 1535) scale(.76)">{fg.couple(fg.COUPLE1, "bq1")}</g></g>'
+              f'<g class="bp2"><g transform="translate(770 1535) scale(.76)">{fg.couple(fg.COUPLE2, "bq2")}</g></g>') +
+        at(500, letters("TWICE THE JOY"), "cap lts b-cap") +
+        at(546, '<span class="wipe b-s1">Two love stories,</span>', "script2") +
+        at(636, '<span class="wipe b-s2">one joyous celebration</span>', "script2") +
+        at(768, letters("Please join us as they exchange rings"), "ital sm lts b-t1") +
+        at(816, letters("and begin a bright new chapter together"), "ital sm lts b-t2") +
+        box("heart b-heart", 505, 1240, 70, 63, heart(70))
+    )))
+    out.append(scene("date", (
+        at(320, letters("SAVE THE DATE"), "cap4 lts d-cap") +
+        at(400, art.divider(440), "d-div") +
+        at(462, "OCTOBER", "cap2 d-mon") +
+        f'<div class="daterow" style="top:515px"><div class="side d-day">FRIDAY</div>'
+        f'<div class="num d-num">30</div><div class="side d-yr">2026</div></div>' +
+        at(780, art.pin(60), "d-pin") +
+        at(872, "VENUE", "cap2 d-ven") +
+        at(930, letters("Near 2 Petrol Pump,"), "addr lts d-a1") +
+        at(994, letters("Industrial Area Phase 1,"), "addr lts d-a2") +
+        at(1058, letters("Mangolpuri, New Delhi – 110083"), "addr lts d-a3") +
+        at(1160, art.divider(440), "d-div2")
+    )))
+    out.append(scene("close", (
+        at(470, letters("Awaiting your"), "ital lts x-1") +
+        at(518, '<span class="wipe x-2">gracious presence</span>', "script2") +
+        box("pav x-pav", 364, 640, 352, 448, el.pavilion()) +
+        box("pea x-pea", 352, 742, 170, 200,
+            f'<svg viewBox="-85 -60 170 200" width="170" height="200">{art.peacock(10, 20, .34)}</svg>') +
+        at(908, "शुभ सगाई", "deva2 x-ss") +
+        box("ele x-el1", 140, 920, 250, 161, f'<svg viewBox="-150 -255 420 270" width="250" height="161">'
+            f'{el.elephant()}</svg>') +
+        box("ele x-el2", 690, 920, 250, 161, f'<svg viewBox="-270 -255 420 270" width="250" height="161">'
+            f'{el.elephant(True)}</svg>') +
+        box("bq x-bq", 340, 975, 400, 175, f'<svg viewBox="-200 -150 400 175" width="400" height="175">'
+            f'{el.bouquet()}</svg>') +
+        at(1162, '<span class="wipe x-3">Happily ever after begins</span>', "script3") +
+        at(1252, "30 · 10 · 2026", "cap2 x-date") +
+        at(1300, letters("With love & warm wishes"), "ital lts x-5")
+    )))
+    return "".join(out)
 
 
 def heart(size=90, col=art.ROSE):
@@ -61,123 +158,12 @@ def heart(size=90, col=art.ROSE):
             f'fill="{col}"/></svg>')
 
 
-def rays():
-    n = 28
-    paths = "".join(
-        f'<path d="M0 0 L{math.cos(i / n * math.tau - .045) * 520:.0f} {math.sin(i / n * math.tau - .045) * 520:.0f} '
-        f'L{math.cos(i / n * math.tau + .045) * 520:.0f} {math.sin(i / n * math.tau + .045) * 520:.0f} Z"/>'
-        for i in range(n))
-    return (f'<svg viewBox="-520 -520 1040 1040" width="1040" height="1040"><defs><radialGradient id="rayf">'
-            f'<stop offset="0" stop-color="#ffd98a" stop-opacity=".7"/><stop offset="1" stop-color="#ffd98a" '
-            f'stop-opacity="0"/></radialGradient></defs><g fill="url(#rayf)">{paths}</g></svg>')
-
-
-def couple_window(n, pal):
-    """Arch window with palace and hills; the couple stands on the terrace holding hands."""
-    w, h = 600, 660
-    feet = h * .78 + 34
-    hearts = "".join(f'<g class="hf c{n}-hf" transform="translate({x} {feet - 330})"><path d="M0 18 C-6 13 -10 9 -10 5 '
-                     f'C-10 2 -8 0 -5 0 C-3 0 -1 1 0 3 C1 1 3 0 5 0 C8 0 10 2 10 5 C10 9 6 13 0 18 Z" '
-                     f'fill="{art.ROSE}"/></g>' for x in (270, 290, 305, 282))
-    inner = (f'<g transform="translate(285 {feet:.0f}) scale(.76)">{fg.couple(pal, f"cp{n}")}</g>{hearts}'
-             f'<g class="vbird c{n}-vb" transform="translate(-60 120)">{art.bird("b", .8)}'
-             f'<g transform="translate(40 -18)">{art.bird("b", .6)}</g></g>')
-    return box(f"win c{n}-win", 240, 785, w, h, art.vignette(f"c{n}", w, h, inner))
-
-
-def both_window():
-    w, h = 700, 580
-    feet = h * .78 + 30
-    inner = (f'<g transform="translate(200 {feet:.0f}) scale(.56)">{fg.couple(fg.COUPLE1, "bp1")}</g>'
-             f'<g transform="translate(500 {feet:.0f}) scale(.56)">{fg.couple(fg.COUPLE2, "bp2")}</g>'
-             f'<g class="vbird b-vb" transform="translate(-60 110)">{art.bird("b", .8)}'
-             f'<g transform="translate(40 -18)">{art.bird("b", .6)}</g></g>')
-    return box("win b-win", 190, 668, w, h, art.vignette("both", w, h, inner))
-
-
-def build_scenes():
-    out = []
-    # Ganesh ji, presented like the reference: soft fade-in of the line art, title below
-    out.append(scene("ganesh", (
-        f'<div class="rayclip"><div class="rays">{rays()}</div></div>' +
-        box("gwrap", 290, 405, 500, 507, '<img src="assets/img/ganesh.png" width="500" height="507" alt="">') +
-        at(975, "॥ श्री गणेशाय नमः ॥", "deva g-deva") +
-        at(1060, "Shree Ganeshaya Namah", "script g-en") +
-        at(1180, art.divider(440), "g-div") +
-        at(1235, "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।", "shloka g-sh1") +
-        at(1292, "निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥", "shloka g-sh2")
-    )))
-    out.append(scene("invite", (
-        at(450, "With the divine blessings of", "ital i-1") +
-        at(508, "LORD GANESHA &amp; OUR ELDERS", "cap2 i-2") +
-        box("medal i-hands", 390, 568, 300, 300, el.hands_medallion(300)) +
-        "".join(f'<div class="spark i-sp" style="transform:translate({x}px,{y}px)">{art.sparkle()}</div>'
-                for x, y in [(540, 690), (585, 720), (500, 735)]) +
-        at(895, "we joyfully invite you to celebrate the", "body i-3") +
-        at(945, '<span class="wipe i-eng">Engagement</span>', "big i-4") +
-        at(1112, chars("CEREMONY", "ic"), "cap3 i-5") +
-        at(1192, art.divider(440), "i-div") +
-        at(1238, "of our two beautiful couples", "ital i-6") +
-        at(1300, "two families · two love stories · one celebration", "small i-7")
-    )))
-    for n, him, her, pal in ((1, "Manish Tamboli", "Jyoti", fg.COUPLE1), (2, "Harsh Aswal", "Shalu", fg.COUPLE2)):
-        out.append(scene(f"c{n}", (
-            at(440, "THE ENGAGEMENT OF", f"cap c{n}-cap") +
-            at(488, f'<span class="wipe c{n}-him">{him}</span>', "name") +
-            at(598, "&amp;", f"amp c{n}-amp") +
-            at(640, f'<span class="wipe c{n}-her">{her}</span>', "name") +
-            at(752, art.divider(380), f"c{n}-div") +
-            couple_window(n, pal) +
-            "".join(f'<div class="spark c{n}-sp" style="transform:translate({x}px,{y}px)">{art.sparkle()}</div>'
-                    for x, y in [(290, 520), (790, 510), (360, 690), (720, 700), (540, 470)])
-        )))
-    out.append(scene("both", (
-        at(440, "TWICE THE JOY", "cap b-cap") +
-        at(490, '<span class="wipe b-s1">Two love stories,</span>', "script2") +
-        at(580, '<span class="wipe b-s2">one joyous celebration</span>', "script2") +
-        both_window() +
-        at(1268, "Please join us as they exchange rings", "ital sm b-t1") +
-        at(1316, "and begin a bright new chapter together", "ital sm b-t2")
-    )))
-    out.append(scene("date", (
-        at(470, chars("SAVE THE DATE", "dc"), "cap4 d-cap") +
-        at(548, art.divider(440), "d-div") +
-        at(610, "OCTOBER", "cap2 d-mon") +
-        f'<div class="daterow" style="top:665px"><div class="side d-day">FRIDAY</div>'
-        f'<div class="num d-num">30</div><div class="side d-yr">2026</div></div>' +
-        at(930, art.pin(60), "d-pin") +
-        at(1025, "VENUE", "cap2 d-ven") +
-        at(1085, "Near 2 Petrol Pump,", "addr d-a1") +
-        at(1150, "Industrial Area Phase 1,", "addr d-a2") +
-        at(1215, "Mangolpuri, New Delhi – 110083", "addr d-a3") +
-        at(1320, art.divider(440), "d-div2")
-    )))
-    out.append(scene("close", (
-        at(440, "Awaiting your", "ital x-1") +
-        at(488, '<span class="wipe x-2">gracious presence</span>', "script2") +
-        box("pav x-pav", 364, 588, 352, 448, el.pavilion()) +
-        box("pea x-pea", 352, 690, 170, 200,
-            f'<svg viewBox="-85 -60 170 200" width="170" height="200">{art.peacock(10, 20, .34)}</svg>') +
-        at(858, "शुभ सगाई", "deva2 x-ss") +
-        box("ele x-el1", 140, 870, 250, 161, f'<svg viewBox="-150 -255 420 270" width="250" height="161">'
-            f'{el.elephant()}</svg>') +
-        box("ele x-el2", 690, 870, 250, 161, f'<svg viewBox="-270 -255 420 270" width="250" height="161">'
-            f'{el.elephant(True)}</svg>') +
-        box("bq x-bq", 340, 925, 400, 175, f'<svg viewBox="-200 -150 400 175" width="400" height="175">'
-            f'{el.bouquet()}</svg>') +
-        at(1092, '<span class="wipe x-3">Happily ever after begins</span>', "script3") +
-        at(1205, "30 · 10 · 2026", "cap2 x-date") +
-        at(1258, "With love &amp; warm wishes", "ital x-5")
-    )))
-    return "".join(out)
-
-
 # ------------------------------------------------------------------ petals (deterministic)
 def petals():
     rnd = random.Random(7)
     shapes = art.petal_shapes()
     els, tw = [], []
-    for i in range(34):
+    for i in range(30):
         els.append(f'<div class="petal" id="pt{i}">{shapes[i % len(shapes)]}</div>')
         t = 2.0 + rnd.uniform(0, 7)
         while t < DUR:
@@ -204,6 +190,12 @@ def rise(sel, t, d=.6):
     add(f'tl.fromTo("{sel}",{{opacity:0,y:30}},{{opacity:1,y:0,duration:{d},ease:"power3.out"}},{t:.2f});')
 
 
+def write(sel, t, per=.035):
+    """WedMeGood-style reveal: letters fade up out of a soft blur, one after another."""
+    add(f'tl.fromTo("{sel} .lt",{{opacity:0,y:10,filter:"blur(6px)"}},{{opacity:1,y:0,filter:"blur(0px)",'
+        f'duration:.45,stagger:{per},ease:"power2.out"}},{t:.2f});')
+
+
 def wipe(sel, t, d):
     add(f'tl.fromTo("{sel}",{{clipPath:"inset(-30% 100% -40% 0%)"}},{{clipPath:"inset(-30% 0% -40% 0%)",'
         f'duration:{d},ease:"power1.inOut"}},{t:.2f});')
@@ -219,138 +211,129 @@ def pop(sel, t, d=.55, frm="scale:0,opacity:0", ease="back.out(2)"):
     add(f'tl.fromTo("{sel}",{{{frm}}},{{scale:1,opacity:1,duration:{d},ease:"{ease}"}},{t:.2f});')
 
 
-def fade_out(sel, t):
-    add(f'tl.to("{sel}",{{opacity:0,y:-24,duration:.4,ease:"power2.in"}},{t:.2f});')
+def sparks(sel, t):
+    add(f'tl.fromTo("{sel}",{{scale:0,opacity:0,rotation:0}},{{scale:1.1,opacity:1,rotation:90,duration:.4,'
+        f'stagger:.1,ease:"back.out(3)"}},{t:.2f});')
+    add(f'tl.to("{sel}",{{scale:0,opacity:0,rotation:180,duration:.5,stagger:.1,ease:"power2.in"}},{t + .7:.2f});')
 
 
 def timeline():
-    # background life
-    add(f'tl.fromTo("#bg",{{scale:1.0}},{{scale:1.06,duration:{DUR},ease:"none"}},0);')
-    add(f'tl.fromTo("#clouds",{{x:-40}},{{x:70,duration:{DUR},ease:"none"}},0);')
-    add('tl.fromTo("#sunglow",{opacity:.6},{opacity:1,duration:4,ease:"sine.inOut",yoyo:true,repeat:11},0);')
-    for sel, amp, per in [("#trees-l", 1.2, 3.1), ("#trees-r", -1.2, 3.4), ("#bananas", 1.6, 2.6),
-                          ("#pea-l", 1.5, 1.9), ("#pea-r", -1.5, 2.1), ("#toran", 0.6, 2.9)]:
-        n = int(DUR / per)
-        add(f'tl.fromTo("{sel}",{{rotation:{-amp}}},{{rotation:{amp},duration:{per},ease:"sine.inOut",'
-            f'yoyo:true,repeat:{n - 1}}},0);')
-    for k, (t0, y0) in enumerate([(5.0, 520), (19.0, 380), (42.0, 600)]):
-        add(f'tl.fromTo(".flock{k}",{{x:-200,y:{y0}}},{{x:1240,y:{y0 - 160},duration:7,ease:"none"}},{t0});')
+    # camera pans between scenes, with the marble pillar sweeping past in the foreground
+    ids = list(S)
+    for k, c in enumerate(CUTS):
+        out_id, in_id = ids[k], ids[k + 1]
+        add(f'tl.fromTo("#sc-{out_id} .pan",{{x:0}},{{x:-1080,duration:{2 * X},ease:"power2.inOut"}},{c - X:.2f});')
+        add(f'tl.fromTo("#sc-{in_id} .pan",{{x:1080}},{{x:0,duration:{2 * X},ease:"power2.inOut"}},{c - X:.2f});')
+        add(f'tl.fromTo("#pillar",{{x:1240}},{{x:-480,duration:{2 * X + .1:.2f},ease:"power2.inOut"}},{c - X - .05:.2f});')
+    # slow camera push and living details in every world
+    for sid, (a, b) in S.items():
+        a0, b0 = max(0, a - X), min(DUR, b + X)
+        add(f'tl.fromTo("#sc-{sid} .world",{{scale:1}},{{scale:1.035,duration:{b0 - a0:.2f},ease:"none"}},{a0:.2f});')
+        if KIND[sid][0] == "palace":
+            n = max(1, int((b0 - a0) / 2.2))
+            add(f'tl.fromTo("#sc-{sid} .hang",{{rotation:-2.5}},{{rotation:2.5,duration:2.2,ease:"sine.inOut",'
+                f'yoyo:true,repeat:{n},stagger:.06}},{a0:.2f});')
+            add(f'tl.fromTo("#sc-{sid} .w-pea",{{rotation:-1.5}},{{rotation:1.5,duration:1.9,ease:"sine.inOut",'
+                f'yoyo:true,repeat:{n}}},{a0:.2f});')
+        else:
+            add(f'tl.fromTo("#sc-{sid} .wisteria",{{y:-30}},{{y:0,duration:2.2,ease:"power2.out"}},{a0:.2f});')
+            add(f'tl.fromTo("#sc-{sid} .gv-centre",{{y:220,opacity:0}},{{y:0,opacity:1,duration:2.0,'
+                f'ease:"power3.out"}},{a + .1:.2f});')
+            add(f'tl.fromTo("#sc-{sid} .gv-back",{{y:120}},{{y:0,duration:2.4,ease:"power3.out"}},{a:.2f});')
+            add(f'tl.fromTo("#sc-{sid} .swan",{{x:-20}},{{x:30,duration:{b0 - a0:.2f},ease:"sine.inOut"}},{a0:.2f});')
 
-    # doors
+    # doors open onto the mint palace
     add('tl.fromTo(".door-medal",{scale:.92,opacity:.9},{scale:1.04,opacity:1,duration:.5,ease:"sine.inOut"},0);')
     add('tl.to(".door-medal",{scale:.6,opacity:0,duration:.45,ease:"power2.in"},.55);')
     add('tl.fromTo("#door-l",{rotationY:0},{rotationY:-104,duration:1.6,ease:"power2.inOut"},.6);')
     add('tl.fromTo("#door-r",{rotationY:0},{rotationY:104,duration:1.6,ease:"power2.inOut"},.6);')
     add('tl.fromTo("#doorframe",{scale:1,opacity:1},{scale:1.5,opacity:0,duration:1.2,ease:"power2.in"},1.7);')
-    add('tl.fromTo("#arch",{opacity:0,scale:.92},{opacity:1,scale:1,duration:.9,ease:"power2.out"},2.0);')
 
-    # Ganesh ji: soft fade-in with a little focus pull, then a warm glow (as in the reference)
-    a, b = S["ganesh"]
-    add(f'tl.fromTo("#sc-ganesh .rays",{{rotation:0}},{{rotation:30,duration:{b - 2.3:.2f},ease:"none"}},2.3);')
-    add('tl.fromTo("#sc-ganesh .rays",{opacity:0,scale:.6},{opacity:1,scale:1,duration:1.6,ease:"power2.out"},2.6);')
-    add('tl.fromTo(".gwrap",{opacity:0,scale:.94,filter:"blur(10px)"},{opacity:1,scale:1,filter:"blur(0px)",'
-        'duration:1.7,ease:"power2.out"},3.0);')
-    add('tl.fromTo(".gwrap img",{scale:1},{scale:1.03,duration:2.6,ease:"sine.inOut",yoyo:true,repeat:1},4.7);')
-    rise(".g-deva", 4.3)
-    rise(".g-en", 4.9)
+    # Ganesh ji
+    add('tl.fromTo(".gwrap",{opacity:0,scale:.9,filter:"blur(10px)"},{opacity:1,scale:1,filter:"blur(0px)",'
+        'duration:1.7,ease:"power2.out"},2.4);')
+    add('tl.fromTo(".gwrap img",{scale:1},{scale:1.03,duration:2.6,ease:"sine.inOut",yoyo:true,repeat:1},4.2);')
+    rise(".g-deva", 3.9)
+    wipe(".g-en", 4.5, 1.2)
     draw_div(".g-div", 5.6)
     rise(".g-sh1", 7.13)
     rise(".g-sh2", 7.6)
-    fade_out("#sc-ganesh .gwrap, #sc-ganesh .row", b - .45)
-    add(f'tl.to("#sc-ganesh .rays",{{opacity:0,duration:.45}},{b - .45:.2f});')
 
-    # invite
-    a, b = S["invite"]
-    rise(".i-1", a + .15)
-    rise(".i-2", a + .5)
-    pop(".i-hands", a + .7, .7, "scale:.6,opacity:0", "back.out(1.6)")
-    add(f'tl.fromTo(".i-hands .hm-his",{{x:-90,opacity:0}},{{x:0,opacity:1,duration:.9,ease:"power2.out"}},{a + 1.0:.2f});')
-    add(f'tl.fromTo(".i-hands .hm-her",{{x:110,opacity:0}},{{x:0,opacity:1,duration:.9,ease:"power2.out"}},{a + 1.3:.2f});')
-    pop(".i-hands .hm-ring", a + 2.2, .45, 'scale:0,opacity:0,transformOrigin:"50% 50%"', "back.out(3)")
-    add(f'tl.fromTo(".i-sp",{{scale:0,opacity:0,rotation:0}},{{scale:1,opacity:1,rotation:90,duration:.35,stagger:.08,'
-        f'ease:"back.out(3)"}},{a + 2.4:.2f});')
-    add(f'tl.to(".i-sp",{{scale:0,opacity:0,rotation:180,duration:.45,stagger:.08,ease:"power2.in"}},{a + 3.0:.2f});')
-    rise(".i-3", a + 2.6)
-    wipe(".i-eng", a + 3.0, 1.2)
-    add(f'tl.fromTo(".i-5 .ic",{{opacity:0,y:24}},{{opacity:1,y:0,duration:.35,stagger:.06,ease:"power2.out"}},'
-        f'{a + 3.9:.2f});')
-    draw_div(".i-div", a + 4.4)
-    rise(".i-6", a + 4.7)
-    rise(".i-7", a + 5.2)
-    fade_out("#sc-invite .row, #sc-invite .medal", b - .45)
+    # invitation (ivory garden page)
+    a = S["invite"][0]
+    write(".i-1", a + .3)
+    write(".i-2", a + .9, .03)
+    pop(".i-hands", a + 1.4, .7, "scale:.6,opacity:0", "back.out(1.6)")
+    add(f'tl.fromTo(".i-hands .hm-his",{{x:-90,opacity:0}},{{x:0,opacity:1,duration:.9,ease:"power2.out"}},{a + 1.6:.2f});')
+    add(f'tl.fromTo(".i-hands .hm-her",{{x:110,opacity:0}},{{x:0,opacity:1,duration:.9,ease:"power2.out"}},{a + 1.9:.2f});')
+    pop(".i-hands .hm-ring", a + 2.7, .45, 'scale:0,opacity:0,transformOrigin:"50% 50%"', "back.out(3)")
+    sparks(".i-sp", a + 2.85)
+    write(".i-3", a + 3.0, .025)
+    wipe(".i-eng", a + 3.9, 1.2)
+    write(".i-5", a + 4.8, .07)
+    draw_div(".i-div", a + 5.3)
+    write(".i-6", a + 5.5, .03)
+    write(".i-7", a + 6.1, .02)
 
-    # each couple: names, then the palace window with the couple walking in and joining hands
+    # couples
     for n in (1, 2):
-        a, b = S[f"c{n}"]
-        rise(f".c{n}-cap", a + .15)
-        wipe(f".c{n}-him", a + .45, 1.0)
-        pop(f".c{n}-amp", a + 1.35, .4, "scale:.4,opacity:0", "back.out(3)")
-        wipe(f".c{n}-her", a + 1.55, .8)
-        draw_div(f".c{n}-div", a + 2.2)
-        add(f'tl.fromTo(".c{n}-win",{{opacity:0,scale:.86,y:40}},{{opacity:1,scale:1,y:0,duration:.9,'
-            f'ease:"power3.out"}},{a + 1.2:.2f});')
-        add(f'tl.fromTo(".cp{n}-g",{{x:-170,opacity:0}},{{x:0,opacity:1,duration:1.3,ease:"power2.out"}},{a + 1.8:.2f});')
-        add(f'tl.fromTo(".cp{n}-b",{{x:170,opacity:0}},{{x:0,opacity:1,duration:1.3,ease:"power2.out"}},{a + 1.8:.2f});')
-        pop(f".cp{n}-h", a + 3.05, .35, 'scale:0,opacity:0,transformOrigin:"50% 50%"', "back.out(3)")
-        add(f'tl.fromTo(".cp{n}-g",{{rotation:-1.2,transformOrigin:"50% 100%"}},{{rotation:1.2,duration:1.6,'
-            f'ease:"sine.inOut",yoyo:true,repeat:1}},{a + 3.2:.2f});')
-        add(f'tl.fromTo(".cp{n}-b",{{rotation:1.2,transformOrigin:"50% 100%"}},{{rotation:-1.2,duration:1.6,'
-            f'ease:"sine.inOut",yoyo:true,repeat:1}},{a + 3.2:.2f});')
-        add(f'tl.to(".c{n}-hf",{{keyframes:[{{opacity:1,y:-40,scale:.9,duration:.5,ease:"sine.out"}},'
-            f'{{opacity:0,y:-160,scale:1.3,duration:1.6,ease:"sine.in"}}],stagger:.45}},{a + 3.3:.2f});')
-        add(f'tl.fromTo(".c{n}-vb",{{x:-60}},{{x:680,duration:5,ease:"none"}},{a + 1.6:.2f});')
-        add(f'tl.fromTo(".c{n}-sp",{{scale:0,opacity:0,rotation:0}},{{scale:1.1,opacity:1,rotation:90,duration:.4,'
-            f'stagger:.1,ease:"back.out(3)"}},{a + 2.4:.2f});')
-        add(f'tl.to(".c{n}-sp",{{scale:0,opacity:0,rotation:180,duration:.5,stagger:.1,ease:"power2.in"}},'
-            f'{a + 3.1:.2f});')
-        fade_out(f"#sc-c{n} .row, #sc-c{n} .win", b - .45)
+        a = S[f"c{n}"][0]
+        write(f".c{n}-cap", a + .4, .04)
+        wipe(f".c{n}-him", a + 1.0, 1.0)
+        pop(f".c{n}-amp", a + 1.9, .4, "scale:.4,opacity:0", "back.out(3)")
+        wipe(f".c{n}-her", a + 2.1, .8)
+        draw_div(f".c{n}-div", a + 2.8)
+        sparks(f".c{n}-sp", a + 3.0)
+    a, b = S["c1"]
+    add(f'tl.fromTo(".c1-stage",{{y:260,opacity:0}},{{y:0,opacity:1,duration:1.4,ease:"power3.out"}},{a + .3:.2f});')
+    add(f'tl.fromTo(".swing",{{rotation:-3}},{{rotation:3,duration:1.6,ease:"sine.inOut",yoyo:true,repeat:5}},{a + .3:.2f});')
+    a, b = S["c2"]
+    add(f'tl.fromTo(".c2-stage",{{opacity:0,y:120}},{{opacity:1,y:0,duration:1.2,ease:"power3.out"}},{a + .3:.2f});')
+    add(f'tl.fromTo(".db",{{rotation:-4}},{{rotation:4,duration:.9,ease:"sine.inOut",yoyo:true,repeat:8}},{a + .5:.2f});')
+    add(f'tl.fromTo(".db-skirt",{{scaleX:1}},{{scaleX:.9,duration:.45,ease:"sine.inOut",yoyo:true,repeat:16}},{a + .5:.2f});')
+    add(f'tl.fromTo(".dg",{{y:0}},{{y:-8,duration:.45,ease:"sine.inOut",yoyo:true,repeat:16}},{a + .5:.2f});')
 
-    # both couples together
-    a, b = S["both"]
-    rise(".b-cap", a + .15)
-    wipe(".b-s1", a + .45, 1.0)
-    wipe(".b-s2", a + 1.35, 1.2)
-    add(f'tl.fromTo(".b-win",{{opacity:0,scale:.86,y:40}},{{opacity:1,scale:1,y:0,duration:.9,ease:"power3.out"}},'
-        f'{a + 1.6:.2f});')
-    for k, dx in ((1, -200), (2, 200)):
-        add(f'tl.fromTo(".bp{k}",{{x:{dx},opacity:0}},{{x:0,opacity:1,duration:1.3,ease:"power2.out"}},{a + 2.1:.2f});')
-    add(f'tl.fromTo(".b-vb",{{x:-60}},{{x:780,duration:5.5,ease:"none"}},{a + 1.8:.2f});')
-    rise(".b-t1", a + 3.4)
-    rise(".b-t2", a + 3.7)
-    fade_out("#sc-both .row, #sc-both .win", b - .45)
+    # both couples
+    a = S["both"][0]
+    write(".b-cap", a + .4, .05)
+    wipe(".b-s1", a + .9, 1.0)
+    wipe(".b-s2", a + 1.8, 1.2)
+    add(f'tl.fromTo(".bp1",{{x:-320,opacity:0}},{{x:0,opacity:1,duration:1.5,ease:"power2.out"}},{a + .6:.2f});')
+    add(f'tl.fromTo(".bp2",{{x:320,opacity:0}},{{x:0,opacity:1,duration:1.5,ease:"power2.out"}},{a + .6:.2f});')
+    write(".b-t1", a + 3.1, .025)
+    write(".b-t2", a + 4.0, .025)
+    pop(".b-heart", a + 2.4, .5, "scale:0,opacity:0", "back.out(3)")
+    add(f'tl.to(".b-heart",{{scale:1.15,duration:.36,ease:"sine.inOut",yoyo:true,repeat:9}},{a + 2.9:.2f});')
 
     # date and venue
-    a, b = S["date"]
-    add(f'tl.fromTo(".d-cap .dc",{{opacity:0,y:-30}},{{opacity:1,y:0,duration:.35,stagger:.04,ease:"back.out(2)"}},'
-        f'{a + .1:.2f});')
-    draw_div(".d-div", a + .45)
-    rise(".d-mon", a + .55)
-    pop(".d-num", a + .7, .6, "scale:2.2,opacity:0", "back.out(1.6)")
-    add(f'tl.fromTo(".d-day",{{x:-110,opacity:0}},{{x:0,opacity:1,duration:.5,ease:"power3.out"}},{a + .9:.2f});')
-    add(f'tl.fromTo(".d-yr",{{x:110,opacity:0}},{{x:0,opacity:1,duration:.5,ease:"power3.out"}},{a + .9:.2f});')
-    add(f'tl.fromTo(".d-pin",{{y:-240,opacity:0}},{{y:0,opacity:1,duration:.7,ease:"bounce.out"}},{a + 1.2:.2f});')
-    rise(".d-ven", a + 1.5)
-    rise(".d-a1", a + 1.65)
-    rise(".d-a2", a + 1.8)
-    rise(".d-a3", a + 1.95)
-    draw_div(".d-div2", a + 2.2)
-    fade_out("#sc-date .row, #sc-date .daterow", b - .4)
+    a = S["date"][0]
+    write(".d-cap", a + .3, .04)
+    draw_div(".d-div", a + .7)
+    rise(".d-mon", a + .8)
+    pop(".d-num", a + .9, .6, "scale:2.2,opacity:0", "back.out(1.6)")
+    add(f'tl.fromTo(".d-day",{{x:-110,opacity:0}},{{x:0,opacity:1,duration:.5,ease:"power3.out"}},{a + 1.1:.2f});')
+    add(f'tl.fromTo(".d-yr",{{x:110,opacity:0}},{{x:0,opacity:1,duration:.5,ease:"power3.out"}},{a + 1.1:.2f});')
+    add(f'tl.fromTo(".d-pin",{{y:-240,opacity:0}},{{y:0,opacity:1,duration:.7,ease:"bounce.out"}},{a + 1.4:.2f});')
+    rise(".d-ven", a + 1.8)
+    write(".d-a1", a + 1.95, .02)
+    write(".d-a2", a + 2.25, .02)
+    write(".d-a3", a + 2.55, .02)
+    draw_div(".d-div2", a + 3.0)
 
-    # closing card: pavilion builds up, elephants walk in, bouquet blooms
-    a, b = S["close"]
-    rise(".x-1", a + .15)
-    wipe(".x-2", a + .4, 1.0)
+    # closing: pavilion, elephants, bouquet
+    a = S["close"][0]
+    write(".x-1", a + .3, .04)
+    wipe(".x-2", a + .7, 1.0)
     add(f'tl.fromTo(".x-pav",{{clipPath:"inset(100% 0% 0% 0%)"}},{{clipPath:"inset(0% 0% 0% 0%)",duration:1.2,'
-        f'ease:"power2.out"}},{a + .5:.2f});')
-    add(f'tl.fromTo(".x-el1",{{x:-260,opacity:0}},{{x:0,opacity:1,duration:1.2,ease:"power2.out"}},{a + .8:.2f});')
-    add(f'tl.fromTo(".x-el2",{{x:260,opacity:0}},{{x:0,opacity:1,duration:1.2,ease:"power2.out"}},{a + .8:.2f});')
-    add(f'tl.fromTo(".x-el1, .x-el2",{{y:0}},{{y:-6,duration:.3,ease:"sine.inOut",yoyo:true,repeat:3}},{a + .8:.2f});')
-    pop(".x-bq", a + 1.6, .6, 'scale:0,opacity:0,transformOrigin:"50% 100%"', "back.out(1.8)")
-    pop(".x-ss", a + 1.7, .5, "scale:.6,opacity:0", "back.out(2)")
-    add(f'tl.fromTo(".x-pea",{{opacity:0,y:-30}},{{opacity:1,y:0,duration:.6,ease:"power2.out"}},{a + 1.8:.2f});')
-    wipe(".x-3", a + 2.1, 1.1)
-    rise(".x-date", a + 2.8)
-    rise(".x-5", a + 3.0)
+        f'ease:"power2.out"}},{a + .8:.2f});')
+    add(f'tl.fromTo(".x-el1",{{x:-260,opacity:0}},{{x:0,opacity:1,duration:1.2,ease:"power2.out"}},{a + 1.0:.2f});')
+    add(f'tl.fromTo(".x-el2",{{x:260,opacity:0}},{{x:0,opacity:1,duration:1.2,ease:"power2.out"}},{a + 1.0:.2f});')
+    pop(".x-bq", a + 1.8, .6, 'scale:0,opacity:0,transformOrigin:"50% 100%"', "back.out(1.8)")
+    pop(".x-ss", a + 1.9, .5, "scale:.6,opacity:0", "back.out(2)")
+    add(f'tl.fromTo(".x-pea",{{opacity:0,y:-30}},{{opacity:1,y:0,duration:.6,ease:"power2.out"}},{a + 2.0:.2f});')
+    wipe(".x-3", a + 2.3, 1.1)
+    rise(".x-date", a + 3.0)
+    write(".x-5", a + 3.2, .03)
     return "\n".join(T)
 
 
@@ -361,67 +344,54 @@ CSS = """
 @font-face { font-family: "Playfair"; font-style: italic; font-weight: 400 900; src: url("assets/fonts/playfair-italic.ttf"); }
 @font-face { font-family: "Yatra"; src: url("assets/fonts/yatra.ttf"); }
 @font-face { font-family: "NotoDeva"; font-weight: 100 900; src: url("assets/fonts/notoserifdeva.ttf"); }
-:root { --maroon: #7d1d3f; --rose: #b0365f; --gold: #9c6f24; --ink: #4a2a3a; --teal: #1d5566; }
+:root { --maroon: #7d1d3f; --rose: #b0365f; --gold: #8a5f1c; --ink: #3f2533; --teal: #1d5566; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 1080px; height: 1920px; overflow: hidden; background: #cfe9f1; }
-#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #cfe9f1; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #bfe3d9; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #bfe3d9; }
 .clip { position: absolute; inset: 0; }
-#bg, #fg { position: absolute; inset: 0; }
-#bg { transform-origin: 50% 70%; }
-#bg svg, #fg svg { display: block; }
-#trees-l, #trees-l2 { transform-origin: 110px 1740px; transform-box: view-box; }
-#trees-r { transform-origin: 970px 1740px; transform-box: view-box; }
-#bananas { transform-origin: 540px 1600px; transform-box: view-box; }
-#pea-l { transform-origin: 215px 1635px; transform-box: view-box; }
-#pea-r { transform-origin: 870px 1640px; transform-box: view-box; }
-#toran { transform-origin: 540px 0px; transform-box: view-box; }
-.flock { position: absolute; left: 0; top: 0; }
-#arch svg { overflow: visible; }
-#arch { position: absolute; left: 110px; top: 250px; width: 860px; height: 1260px; transform-origin: 50% 60%; }
-.scene { z-index: 5; }
+.scene { overflow: hidden; }
+.pan { position: absolute; inset: 0; }
+.world { position: absolute; left: 0; top: 0; transform-origin: 50% 60%; }
+.stage { position: absolute; left: 0; top: 0; }
 .row { position: absolute; left: 0; width: 1080px; text-align: center; white-space: nowrap; }
 .row svg { display: inline-block; vertical-align: top; }
 .t { display: inline-block; }
+.lt { display: inline-block; }
 .box { position: absolute; }
-.box > svg { display: block; }
-.cap { font: 28px "Marcellus"; letter-spacing: 5px; color: var(--gold); }
+.box > svg, .box > img { display: block; }
+.cap { font: 30px "Marcellus"; letter-spacing: 6px; color: var(--gold); }
 .cap2 { font: 34px "Marcellus"; letter-spacing: 4px; color: var(--teal); }
 .cap3 { font: 54px "Marcellus"; letter-spacing: 14px; color: var(--maroon); }
-.cap4 { font: 54px "Marcellus"; letter-spacing: 6px; color: var(--maroon); }
+.cap4 { font: 56px "Marcellus"; letter-spacing: 6px; color: var(--maroon); }
 .ital { font: italic 400 40px "Playfair"; color: var(--ink); }
 .ital.sm { font-size: 34px; }
 .body { font: 400 38px "Playfair"; color: var(--ink); }
 .small { font: italic 400 30px "Playfair"; color: var(--gold); }
 .addr { font: 500 42px "Playfair"; color: var(--ink); }
 .deva { font: 62px "Yatra"; color: #c2410c; }
+.deva2 { font: 38px "Yatra"; color: #a3123f; }
 .shloka { font: 500 34px "NotoDeva"; color: var(--teal); }
 .script { font: 72px "Pinyon"; color: var(--rose); line-height: 1.25; }
 .script2 { font: 74px "Pinyon"; color: var(--rose); line-height: 1.25; }
-.pav svg { width: 100%; height: 100%; }
-.deva2 { font: 38px "Yatra"; color: #a3123f; }
-.script3 { font: 62px "Pinyon"; color: var(--maroon); line-height: 1.25; }
+.script3 { font: 56px "Pinyon"; color: var(--maroon); line-height: 1.25; }
 .big { font: 132px "Pinyon"; color: var(--rose); line-height: 1.25; }
-.name { font: 88px "Pinyon"; color: var(--maroon); line-height: 1.25; }
+.name { font: 90px "Pinyon"; color: var(--maroon); line-height: 1.25; }
 .amp { font: italic 400 46px "Playfair"; color: var(--gold); }
+.light .cap { color: #f5d58a; } .light .name { color: #fff4e6; } .light .amp { color: #f5d58a; }
+.light .name, .light .cap { text-shadow: 0 2px 14px rgba(40, 10, 60, .45); }
 .wipe { display: inline-block; padding: 0 24px; }
-.ch, .ic, .dc { display: inline-block; }
 .gwrap { transform-origin: 50% 50%; }
-.gwrap img { display: block; width: 500px; height: 507px; }
-.rayclip { position: absolute; inset: 0; clip-path: path('M134 1488 L134 588 C134 456 384 382 540 276 C696 382 946 456 946 588 L946 1488 Z'); }
-.rays { position: absolute; left: 20px; top: 140px; width: 1040px; height: 1040px; transform-origin: 50% 50%; }
-.win { transform-origin: 50% 60%; }
+.gwrap img { width: 500px; height: 507px; }
 .spark { position: absolute; left: -20px; top: -20px; }
-.mini svg { width: 290px; height: 290px; }
-.mini-t { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font: 84px "Pinyon"; color: var(--rose); padding-top: 6px; }
-.mini-t i { font: italic 400 40px "Playfair"; color: var(--gold); margin: 0 4px; }
 .heart { transform-origin: 50% 50%; }
+.pav svg { width: 100%; height: 100%; }
 .daterow { position: absolute; left: 0; width: 1080px; display: flex; align-items: center; justify-content: center; gap: 22px; }
 .side { font: 34px "Marcellus"; letter-spacing: 4px; color: var(--teal); border-top: 2px solid #c9973f;
   border-bottom: 2px solid #c9973f; padding: 12px 4px; width: 190px; text-align: center; }
 .num { font: 700 200px "Playfair"; color: var(--rose); line-height: 1.05; width: 250px; text-align: center; }
-.petal { position: absolute; left: 0; top: 0; z-index: 8; }
-#doors { z-index: 20; perspective: 2200px; }
+.petal { position: absolute; left: 0; top: 0; z-index: 25; }
+#pillar { position: absolute; left: 0; top: 0; width: 260px; height: 1920px; filter: blur(3px); z-index: 30; }
+#doors { z-index: 40; perspective: 2200px; }
 #door-l, #door-r { position: absolute; top: 0; width: 540px; height: 1920px; }
 #door-l { left: 0; transform-origin: 0% 50%; } #door-r { left: 540px; transform-origin: 100% 50%; }
 #doorframe { position: absolute; inset: 0; transform-origin: 50% 45%; }
@@ -432,33 +402,8 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #cfe9f
 """
 
 
-def arch_svg():
-    shape = "M0 1260 L0 330 C0 190 260 110 430 0 C600 110 860 190 860 330 L860 1260 Z"
-    return ('<svg viewBox="0 0 860 1260" width="860" height="1260" style="overflow:visible">'
-            '<defs><linearGradient id="card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffaf4"/>'
-            '<stop offset=".55" stop-color="#fff4f1"/><stop offset="1" stop-color="#fde9ee"/></linearGradient>'
-            '<radialGradient id="wash1" cx=".15" cy=".85" r=".5"><stop offset="0" stop-color="#f7c9d6" stop-opacity=".55"/>'
-            '<stop offset="1" stop-color="#f7c9d6" stop-opacity="0"/></radialGradient>'
-            '<radialGradient id="wash2" cx=".9" cy=".25" r=".45"><stop offset="0" stop-color="#cfe0f0" stop-opacity=".5"/>'
-            '<stop offset="1" stop-color="#cfe0f0" stop-opacity="0"/></radialGradient>'
-            '<radialGradient id="wash3" cx=".85" cy=".95" r=".4"><stop offset="0" stop-color="#fbd9c4" stop-opacity=".6"/>'
-            '<stop offset="1" stop-color="#fbd9c4" stop-opacity="0"/></radialGradient>'
-            f'<clipPath id="cardclip"><path d="{shape}"/></clipPath></defs>'
-            f'<path d="{shape}" fill="url(#card)" fill-opacity=".97"/>'
-            '<g clip-path="url(#cardclip)"><rect width="860" height="1260" fill="url(#wash1)"/>'
-            '<rect width="860" height="1260" fill="url(#wash2)"/><rect width="860" height="1260" fill="url(#wash3)"/></g>'
-            f'<path d="{shape}" fill="none" stroke="#c9973f" stroke-width="6"/>'
-            '<path d="M22 1238 L22 338 C22 206 274 132 430 26 C586 132 838 206 838 338 L838 1238 Z" '
-            'fill="none" stroke="#d98aa0" stroke-width="2" opacity=".8"/>'
-            f'<g id="afl">{el.arch_florals()}</g></svg>')
-
-
 def main():
     petal_html, petal_tl = petals()
-    flocks = "".join(
-        f'<div class="flock flock{k}" data-layout-allow-overflow><svg width="200" height="90" viewBox="0 0 200 90">'
-        f'<g transform="translate(0 30)">{art.bird("b", 1.0)}</g><g transform="translate(70 0)">{art.bird("b", .8)}</g>'
-        f'<g transform="translate(120 50)">{art.bird("b", .7)}</g></svg></div>' for k in range(3))
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
   <head>
@@ -470,14 +415,12 @@ def main():
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="1080" data-height="1920">
-      <div id="bgclip" class="clip" data-start="0" data-duration="{DUR}" data-track-index="0">
-        <div id="bg">{art.background()}</div>{flocks}
-        <div id="arch">{arch_svg()}</div>
-        <div id="fg">{art.foreground()}</div>
-      </div>
       {build_scenes()}
       <div id="petals" class="clip" data-start="0" data-duration="{DUR}" data-track-index="4" data-layout-allow-overflow>{petal_html}</div>
-      <div id="doors" class="clip" data-start="0" data-duration="{S["doors"][1]}" data-track-index="5">
+      <div id="pillarclip" class="clip" data-start="{CUTS[0] - X - .1:.2f}" data-duration="{CUTS[-1] - CUTS[0] + 2 * X + .3:.2f}" data-track-index="5" data-layout-allow-overflow>
+        <div id="pillar">{wd.pillar()}</div>
+      </div>
+      <div id="doors" class="clip" data-start="0" data-duration="3.4" data-track-index="6">
         <div id="door-l">{art.door_panel("l")}</div><div id="door-r">{art.door_panel("r")}</div>
         <div id="doorframe">{art.door_frame()}</div>
         <div class="door-medal"><img src="assets/img/ganesh.png" width="190" height="193" alt=""></div>
@@ -487,9 +430,13 @@ def main():
     <script>
       window.__timelines = window.__timelines || {{}};
       const tl = gsap.timeline({{ paused: true }});
-      gsap.set(".wr, .rg, .dv", {{ strokeDasharray: 1, strokeDashoffset: 1, opacity: 0 }});
+      gsap.set(".rg, .dv", {{ strokeDasharray: 1, strokeDashoffset: 1, opacity: 0 }});
       gsap.set(".petal", {{ x: -100, y: -80, opacity: 0 }});
-      gsap.set(".hf", {{ opacity: 0, scale: .4, transformOrigin: "50% 50%" }});
+      gsap.set("#pillar", {{ x: 1300 }});
+      document.querySelectorAll(".hang").forEach(e => gsap.set(e, {{ svgOrigin: e.dataset.o }}));
+      gsap.set(".w-pea", {{ svgOrigin: "215 1560" }});
+      gsap.set(".swing", {{ svgOrigin: "540 0" }});
+      gsap.set(".db, .db-skirt", {{ svgOrigin: "690 1530" }});
 {timeline()}
 {petal_tl}
       tl.set({{}}, {{}}, {DUR});

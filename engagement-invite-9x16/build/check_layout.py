@@ -14,27 +14,40 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "build"))
 import generate  # noqa: E402
 
-AX, AY = 110, 250          # arch position in the frame
-INSET, MARGIN = 22, 18     # inner gold line, and breathing room inside it
+sys.path.insert(0, os.path.join(ROOT, "build"))
+import worlds  # noqa: E402
+
+MARGIN = 30
+_PTS = worlds._arch_points(400)
 
 
-def arch_edge(y):
-    """Left edge x of the inner arch line at frame height y (the arch is symmetric)."""
-    ay = y - AY
-    p0, p1, p2, p3 = (INSET, 338), (INSET, 206), (274, 132), (430, 26)
-    if ay >= 338:
-        return AX + INSET
-    if ay <= 26:
+def opening(y):
+    """Inner x-range of the palace arch opening at frame height y, or None above the apex."""
+    if y >= 560:
+        return 92, 988
+    left = [p for p in _PTS if p[0] <= 540]
+    best = min(left, key=lambda p: abs(p[1] - y))
+    if y < best[1] - 4:
         return None
-    best = None
-    for i in range(2001):
-        t = i / 2000
-        u = 1 - t
-        by = u ** 3 * p0[1] + 3 * u * u * t * p1[1] + 3 * u * t * t * p2[1] + t ** 3 * p3[1]
-        bx = u ** 3 * p0[0] + 3 * u * u * t * p1[0] + 3 * u * t * t * p2[0] + t ** 3 * p3[0]
-        if best is None or abs(by - ay) < best[0]:
-            best = (abs(by - ay), bx)
-    return AX + best[1]
+    return best[0], 1080 - best[0]
+
+
+def region_fail(kind, theme, bx):
+    if kind == "garden":
+        if bx["l"] < 80 or bx["r"] > 1000 or bx["t"] < 240 or bx["b"] > 1300:
+            return f"outside the garden text area: {bx['l']:.0f}-{bx['r']:.0f} x {bx['t']:.0f}-{bx['b']:.0f}"
+        return None
+    for y in (bx["t"], bx["b"]):
+        o = opening(y)
+        if o is None:
+            return f"above the arch at y={y:.0f}"
+        if bx["l"] < o[0] + MARGIN or bx["r"] > o[1] - MARGIN:
+            return f"x {bx['l']:.0f}-{bx['r']:.0f} outside {o[0] + MARGIN:.0f}-{o[1] - MARGIN:.0f} at y={y:.0f}"
+    if worlds.THEMES[theme]["hang"] and bx["t"] < 470 and bx["r"] > 250 and bx["l"] < 830:
+        return f"under the hanging flowers (top {bx['t']:.0f})"
+    if bx["b"] > 1380:
+        return f"bottom {bx['b']:.0f} reaches the shrubs"
+    return None
 
 
 JS = """() => {
@@ -74,13 +87,13 @@ def main():
         pg.evaluate("document.fonts.ready.then(() => 1)")
         results = []
         for sid, (a, b) in generate.S.items():
-            if sid == "doors":
-                continue
-            pg.evaluate(f"window.__timelines.main.seek({b - 0.55}) && 0")
+            pg.evaluate(f"window.__timelines.main.seek({b - 0.6}) && 0")
             results += [r for r in pg.evaluate(JS) if r["scene"] == f"sc-{sid}"]
         br.close()
     for r in results:
         bx = r["box"]
+        sid = r["scene"][3:]
+        kind, sub = generate.KIND[sid]
         msg = None
         if r["kind"] == "ring":
             ring = r["ring"]
@@ -88,17 +101,7 @@ def main():
             if half > ring["r"] - 6:
                 msg = f"text half-width {half:.0f} > ring radius {ring['r'] - 6:.0f}"
         else:
-            for y in (bx["t"], bx["b"]):
-                e = arch_edge(y)
-                if e is None:
-                    msg = f"above the arch apex at y={y:.0f}"
-                    break
-                lo, hi = e + MARGIN, 1080 - e - MARGIN
-                if bx["l"] < lo or bx["r"] > hi:
-                    msg = (f"x {bx['l']:.0f}-{bx['r']:.0f} outside {lo:.0f}-{hi:.0f} at y={y:.0f}")
-                    break
-            if bx["b"] > AY + 1260 - INSET - MARGIN:
-                msg = f"bottom {bx['b']:.0f} below the arch floor"
+            msg = region_fail(kind, sub, bx)
         if msg:
             bad += 1
             print(f"FAIL {r['scene']:10s} {r['text']!r:44s} {msg}")
