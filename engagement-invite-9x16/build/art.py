@@ -385,3 +385,54 @@ def petal_shapes():
 def sparkle(col="#fff8dc"):
     return (f'<svg viewBox="0 0 40 40" width="40" height="40"><path d="M20 0 L24 16 L40 20 L24 24 L20 40 L16 24 '
             f'L0 20 L16 16 Z" fill="{col}"/></svg>')
+
+
+# ------------------------------------------------------------------ palace and hill vignettes
+def palace(x, y, s):
+    """Palace facade: arcaded base, a big central dome and corner chhatris."""
+    arches = "".join(f'<path d="M{ax} 0 L{ax} -70 C{ax} -96 {ax + 44} -96 {ax + 44} -70 L{ax + 44} 0 Z" fill="#e7d6bd"/>'
+                     for ax in range(-170, 171, 68))
+    upper = "".join(f'<path d="M{ax} -150 L{ax} -186 C{ax} -202 {ax + 28} -202 {ax + 28} -186 L{ax + 28} -150 Z" '
+                    f'fill="#e7d6bd"/>' for ax in range(-120, 121, 52))
+    return (f'<g transform="translate({x} {y}) scale({s})">'
+            f'<rect x="-200" y="-130" width="400" height="130" fill="{CREAM}"/>{arches}'
+            f'<rect x="-210" y="-138" width="420" height="14" fill="{CREAM_D}"/>'
+            f'<rect x="-150" y="-215" width="300" height="80" fill="{CREAM}"/>{upper}'
+            f'<rect x="-160" y="-222" width="320" height="12" fill="{CREAM_D}"/>'
+            f'<path d="M-80 -222 C-90 -320 90 -320 80 -222 Z" fill="{CREAM}"/>'
+            f'<path d="M-40 -232 C-44 -290 44 -290 40 -232" stroke="{CREAM_D}" stroke-width="4" fill="none"/>'
+            f'<path d="M0 -300 L0 -336" stroke="{GOLD}" stroke-width="5"/><circle cy="-338" r="7" fill="{GOLD}"/>'
+            f'{chhatri(-185, -135, .42)}{chhatri(185, -135, .42)}</g>')
+
+
+def vignette(vid, w, h, inner, sun=True):
+    """A Mughal-arch window (w x h, origin top-left) painted with sky, hills, palace and a garden floor.
+    `inner` is drawn on top, in the same coordinates, clipped to the window."""
+    cx = w / 2
+    arch = (f'M0 {h} L0 {h * .28:.0f} C0 {h * .13:.0f} {w * .3:.0f} {h * .07:.0f} {cx:.0f} 0 '
+            f'C{w * .7:.0f} {h * .07:.0f} {w} {h * .13:.0f} {w} {h * .28:.0f} L{w} {h} Z')
+    gy = h * .78
+    sunel = (f'<circle cx="{cx:.0f}" cy="{h * .38:.0f}" r="{w * .45:.0f}" fill="url(#vsun-{vid})"/>' if sun else "")
+    return (f'<svg viewBox="0 0 {w} {h}" width="{w}" height="{h}">'
+            f'<defs><clipPath id="vclip-{vid}"><path d="{arch}"/></clipPath>'
+            f'<linearGradient id="vsky-{vid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe2ee"/>'
+            f'<stop offset=".7" stop-color="#fbeedd"/></linearGradient>'
+            f'<radialGradient id="vsun-{vid}"><stop offset="0" stop-color="#fff3cf"/><stop offset="1" '
+            f'stop-color="#fff3cf" stop-opacity="0"/></radialGradient></defs>'
+            f'<g clip-path="url(#vclip-{vid})">'
+            f'<rect width="{w}" height="{h}" fill="url(#vsky-{vid})"/>{sunel}'
+            f'<path d="M0 {gy - 120:.0f} C{w * .2:.0f} {gy - 190:.0f} {w * .4:.0f} {gy - 140:.0f} {w * .55:.0f} '
+            f'{gy - 200:.0f} C{w * .7:.0f} {gy - 250:.0f} {w * .85:.0f} {gy - 160:.0f} {w} {gy - 190:.0f} L{w} {h} L0 {h} Z" '
+            f'fill="{HILL1}"/>'
+            f'<path d="M0 {gy - 60:.0f} C{w * .25:.0f} {gy - 120:.0f} {w * .5:.0f} {gy - 70:.0f} {w * .7:.0f} '
+            f'{gy - 110:.0f} C{w * .85:.0f} {gy - 135:.0f} {w * .95:.0f} {gy - 90:.0f} {w} {gy - 100:.0f} L{w} {h} '
+            f'L0 {h} Z" fill="{HILL2}"/>'
+            f'{palace(cx, gy - 30, w / 900)}'
+            f'<rect x="0" y="{gy - 34:.0f}" width="{w}" height="18" fill="{CREAM_D}"/>'
+            f'<rect x="0" y="{gy - 16:.0f}" width="{w}" height="{h - gy + 16:.0f}" fill="#f3e6cf"/>'
+            f'<path d="M0 {gy + 40:.0f} L{w} {gy + 40:.0f}" stroke="{SAND2}" stroke-width="3" opacity=".6"/>'
+            f'{tree(40, gy - 10, .42, 21)}{tree(w - 40, gy - 10, .42, 22)}'
+            f'{inner}</g>'
+            f'<path d="{arch}" fill="none" stroke="{GOLD}" stroke-width="6"/>'
+            f'<path d="{arch}" fill="none" stroke="#fff6e4" stroke-width="2" transform="translate({w * .02:.1f} '
+            f'{h * .015:.1f}) scale(.96 .97)"/></svg>')
