@@ -13,11 +13,12 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import art  # noqa: E402
 import elements as el  # noqa: E402
+import romance as ro  # noqa: E402
 import royal as ry  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DUR = 50.0
-CUTS = [9.01, 15.74, 22.2, 27.86, 34.6, 41.03]
+DUR = 40.0
+CUTS = [7.13, 12.79, 18.44, 23.27, 27.86, 33.45]
 S = {
     "ganesh": (0.0, CUTS[0]),
     "invite": (CUTS[0], CUTS[1]),
@@ -27,11 +28,11 @@ S = {
     "date": (CUTS[4], CUTS[5]),
     "close": (CUTS[5], DUR),
 }
-KIND = {"ganesh": "card", "invite": "card", "c1": "walk", "c2": "walk", "both": "walk", "date": "card",
+KIND = {"ganesh": "card", "invite": "card", "c1": "night", "c2": "night", "both": "walk", "date": "card",
         "close": "card"}
 # how far each clip reaches past its cut so the transitions can overlap
-PAD_IN = {"invite": 0.0, "c1": 0.6, "c2": 0.25, "both": 0.0, "date": 0.0, "close": 0.3}
-PAD_OUT = {"ganesh": 0.0, "invite": 0.0, "c1": 0.15, "c2": 0.0, "both": 0.0, "date": 0.5}
+PAD_IN = {"invite": 0.0, "c1": 0.6, "c2": 0.0, "both": 0.7, "date": 0.0, "close": 0.0}
+PAD_OUT = {"ganesh": 0.0, "invite": 0.15, "c1": 0.0, "c2": 0.0, "both": 0.0, "date": 0.0}
 RING = (540, 600)          # centre of the hands medallion: the zoom-through target
 PIN = (540, 830)           # the location pin: the iris target
 
@@ -43,7 +44,7 @@ def scene(sid, inner):
     if KIND[sid] == "card":
         world = ry.card_bg() + ry.card_frame(sid)
     else:
-        space = {"c1": ry.corridor, "c2": ry.courtyard, "both": ry.hall}[sid](sid)
+        space = {"c1": ro.rooftop, "c2": ro.pond, "both": ry.hall}[sid](sid)
         world = ry.card_bg() + space + ry.card_frame(sid)
     return (f'<div id="sc-{sid}" class="clip scene {KIND[sid]}" data-start="{a0}" data-duration="{round(b0 - a0, 2)}" '
             f'data-track-index="{2 + list(S).index(sid) % 2}" style="z-index:{5 + list(S).index(sid)}">'
@@ -109,9 +110,13 @@ def build_scenes():
         at(1046, words("with the divine blessings of"), "ital i-6") +
         at(1100, words("Lord Ganesha & our beloved elders"), "ital i-7")
     )))
-    for n, him, her, pal in ((1, "Manish Tamboli", "Jyoti", ry.C1), (2, "Harsh Aswal", "Shalu", ry.C2)):
+    for n, him, her, pose in (
+            (1, "Manish Tamboli", "Jyoti",
+             f'<g class="pose1"><g transform="translate(540 1450) scale(1.25)">{ro.back_seated(ry.C1)}</g></g>'),
+            (2, "Harsh Aswal", "Shalu",
+             f'<g class="pose2"><g transform="translate(760 1520) scale(1.05)">{ro.side_seated(ry.C2)}</g></g>')):
         out.append(scene(f"c{n}", (
-            stage(f"c{n}-stage", ry.walkers(pal, f"w{n}", 540, 1655, 1.05)) +
+            stage(f"c{n}-stage", pose) +
             at(286, letters("THE ENGAGEMENT OF"), f"caps c{n}-cap") +
             at(330, f'<span class="wipe c{n}-him">{him}</span>', "name") +
             at(452, "&amp;", f"amp c{n}-amp") +
@@ -121,7 +126,11 @@ def build_scenes():
                     for x, y in [(250, 380), (830, 370), (330, 560), (750, 570), (540, 300)])
         )))
     out.append(scene("both", (
-        stage("b-stage", ry.walkers(ry.C1, "w3", 300, 1655, .82) + ry.walkers(ry.C2, "w4", 780, 1655, .82)) +
+        stage("b-stage", f'<g class="hug1"><g transform="translate(300 1660) scale(.86)">{ro.embrace(ry.C1)}</g></g>'
+              f'<g class="hug2"><g transform="translate(790 1660) scale(.86)">{ro.embrace(ry.C2)}</g></g>'
+              + "".join(f'<g class="bh" transform="translate({x} {y})"><path d="M0 18 C-6 13 -10 9 -10 5 C-10 2 -8 0 -5 0 '
+                        f'C-3 0 -1 1 0 3 C1 1 3 0 5 0 C8 0 10 2 10 5 C10 9 6 13 0 18 Z" fill="#f43f5e"/></g>'
+                        for x, y in [(290, 1240), (310, 1200), (780, 1240), (800, 1200), (300, 1180), (790, 1170)])) +
         at(286, letters("TWICE THE JOY"), "caps b-cap") +
         at(328, '<span class="wipe b-s1">Two love stories,</span>', "script2") +
         at(420, '<span class="wipe foil-txt b-s2">one joyous celebration</span>', "script2") +
@@ -225,91 +234,133 @@ def walk_cycle(cls, t0, t1, step=.5):
 
 def timeline():
     # ---- doors: burst open fast with a gold flash
-    add('tl.fromTo(".door-medal",{scale:1,opacity:1},{scale:.5,opacity:0,duration:.25,ease:"power2.in"},.1);')
-    add('tl.fromTo("#door-l",{rotationY:0},{rotationY:-110,duration:.7,ease:"power3.in"},.12);')
-    add('tl.fromTo("#door-r",{rotationY:0},{rotationY:110,duration:.7,ease:"power3.in"},.12);')
-    add('tl.fromTo("#doorframe",{scale:1,opacity:1},{scale:1.7,opacity:0,duration:.6,ease:"power3.in"},.35);')
-    add('tl.fromTo("#flare",{opacity:0,scale:.3},{opacity:.9,scale:2.2,duration:.35,ease:"power2.out"},.5);')
-    add('tl.to("#flare",{opacity:0,scale:3,duration:.5,ease:"power2.in"},.85);')
+    add('tl.fromTo(".door-medal",{scale:1,opacity:1},{scale:.5,opacity:0,duration:.22,ease:"power2.in"},.08);')
+    add('tl.fromTo("#door-l",{rotationY:0},{rotationY:-110,duration:.6,ease:"power3.in"},.1);')
+    add('tl.fromTo("#door-r",{rotationY:0},{rotationY:110,duration:.6,ease:"power3.in"},.1);')
+    add('tl.fromTo("#doorframe",{scale:1,opacity:1},{scale:1.7,opacity:0,duration:.5,ease:"power3.in"},.3);')
+    add('tl.fromTo("#flare",{opacity:0,scale:.3},{opacity:.8,scale:2.2,duration:.3,ease:"power2.out"},.42);')
+    add('tl.to("#flare",{opacity:0,scale:3,duration:.45,ease:"power2.in"},.72);')
 
     # ---- Ganesh ji
-    frame_in("ganesh", .7)
-    add('tl.fromTo(".gring",{scale:.4,opacity:0,rotation:-90},{scale:1,opacity:1,rotation:0,duration:1.2,'
-        'ease:"expo.out"},.8);')
-    add(f'tl.fromTo(".gring",{{rotation:0}},{{rotation:40,duration:{CUTS[0] - 2:.2f},ease:"none"}},2.0);')
+    frame_in("ganesh", .6)
+    add('tl.fromTo(".gring",{scale:.4,opacity:0,rotation:-90},{scale:1,opacity:1,rotation:0,duration:1.1,'
+        'ease:"expo.out"},.65);')
+    add(f'tl.fromTo(".gring",{{rotation:0}},{{rotation:35,duration:{CUTS[0] - 1.8:.2f},ease:"none"}},1.8);')
     add('tl.fromTo(".gwrap",{opacity:0,scale:.5,filter:"blur(14px)"},{opacity:1,scale:1,filter:"blur(0px)",'
-        'duration:1.1,ease:"expo.out"},.95);')
-    add('tl.fromTo(".gglow",{opacity:0,scale:.6},{opacity:1,scale:1.1,duration:1.6,ease:"sine.out"},1.2);')
-    add('tl.to(".gwrap",{scale:1.04,duration:2.4,ease:"sine.inOut",yoyo:true,repeat:1},3.0);')
+        'duration:1.0,ease:"expo.out"},.8);')
+    add('tl.fromTo(".gglow",{opacity:0,scale:.6},{opacity:1,scale:1.1,duration:1.4,ease:"sine.out"},1.0);')
+    add('tl.to(".gwrap",{scale:1.04,duration:2,ease:"sine.inOut",yoyo:true,repeat:1},2.6);')
     add('tl.fromTo(".g-deva",{opacity:0,scale:2,filter:"blur(12px)"},{opacity:1,scale:1,filter:"blur(0px)",'
-        'duration:.5,ease:"expo.out"},2.2);')
-    glint(".g-deva .foil-txt", 2.9)
-    wipe(".g-en", 3.1, 1.2)
-    draw_div(".g-div", 4.2)
-    wordsin(".g-sh1", 5.2, .12)
-    wordsin(".g-sh2", 6.2, .12)
-    glint(".g-deva .foil-txt", 7.4)
+        'duration:.5,ease:"expo.out"},1.8);')
+    glint(".g-deva .foil-txt", 2.4)
+    wipe(".g-en", 2.5, 1.0)
+    draw_div(".g-div", 3.4)
+    wordsin(".g-sh1", 4.0, .1)
+    wordsin(".g-sh2", 4.7, .1)
+    glint(".g-deva .foil-txt", 5.8)
 
-    # ---- T0 light flare into the invitation
-    add(f'tl.fromTo("#flare",{{opacity:0,scale:.2}},{{opacity:1,scale:3,duration:.3,ease:"power2.in"}},{CUTS[0] - .3:.2f});')
-    add(f'tl.to("#flare",{{opacity:0,scale:4,duration:.55,ease:"power2.out"}},{CUTS[0]:.2f});')
+    # ---- T0 flare + zoom-blur into the invitation
+    c = CUTS[0]
+    add(f'tl.to("#sc-ganesh .pan",{{scale:1.25,filter:"blur(10px)",duration:.4,ease:"power2.in"}},{c - .4:.2f});')
+    add(f'tl.fromTo("#flare",{{opacity:0,scale:.2}},{{opacity:1,scale:3,duration:.35,ease:"power2.in"}},{c - .35:.2f});')
+    add(f'tl.to("#flare",{{opacity:0,scale:4,duration:.5,ease:"power2.out"}},{c:.2f});')
+    add(f'tl.fromTo("#sc-invite .pan",{{scale:1.2,filter:"blur(10px)"}},{{scale:1,filter:"blur(0px)",duration:.6,'
+        f'ease:"power3.out"}},{c:.2f});')
 
     # ---- invitation
     a = S["invite"][0]
     frame_in("invite", a + .05)
-    slam(".i-1", a + .25, .025)
-    slam(".i-2", a + .8, .03)
-    pop(".i-hands", a + 1.3, .7, "scale:.3,opacity:0,rotation:-30", "back.out(1.6)")
-    add(f'tl.fromTo(".i-hands .hm-his",{{x:-90,opacity:0}},{{x:0,opacity:1,duration:.8,ease:"power2.out"}},{a + 1.6:.2f});')
-    add(f'tl.fromTo(".i-hands .hm-her",{{x:110,opacity:0}},{{x:0,opacity:1,duration:.8,ease:"power2.out"}},{a + 1.85:.2f});')
-    pop(".i-hands .hm-ring", a + 2.55, .4, 'scale:0,opacity:0,transformOrigin:"50% 50%"', "back.out(3)")
-    sparks(".i-sp", a + 2.7)
-    wipe(".i-eng", a + 2.9, 1.2)
-    glint(".i-eng", a + 4.0)
-    slam(".i-5", a + 3.9, .03)
-    draw_div(".i-div", a + 4.5)
-    wordsin(".i-6", a + 4.7)
-    wordsin(".i-7", a + 5.2)
+    slam(".i-1", a + .2, .022)
+    slam(".i-2", a + .6, .028)
+    pop(".i-hands", a + 1.0, .6, "scale:.3,opacity:0,rotation:-30", "back.out(1.6)")
+    add(f'tl.fromTo(".i-hands .hm-his",{{x:-90,opacity:0}},{{x:0,opacity:1,duration:.7,ease:"power2.out"}},{a + 1.2:.2f});')
+    add(f'tl.fromTo(".i-hands .hm-her",{{x:110,opacity:0}},{{x:0,opacity:1,duration:.7,ease:"power2.out"}},{a + 1.4:.2f});')
+    pop(".i-hands .hm-ring", a + 2.0, .4, 'scale:0,opacity:0,transformOrigin:"50% 50%"', "back.out(3)")
+    sparks(".i-sp", a + 2.1)
+    wipe(".i-eng", a + 2.2, 1.0)
+    glint(".i-eng", a + 3.2)
+    slam(".i-5", a + 3.0, .025)
+    draw_div(".i-div", a + 3.5)
+    wordsin(".i-6", a + 3.6, .07)
+    wordsin(".i-7", a + 4.0, .07)
 
-    # ---- T1 zoom through the ring into the corridor
+    # ---- T1 spin-zoom through the ring onto the starlit rooftop
     c = CUTS[1]
-    add(f'tl.to("#sc-invite .pan",{{scale:9,duration:.75,ease:"power3.in",transformOrigin:"{RING[0]}px {RING[1]}px"}},'
-        f'{c - .6:.2f});')
+    add(f'tl.to("#sc-invite .pan",{{scale:9,rotation:25,duration:.75,ease:"power3.in",'
+        f'transformOrigin:"{RING[0]}px {RING[1]}px"}},{c - .6:.2f});')
     add(f'tl.fromTo("#sc-c1",{{clipPath:"circle(0px at {RING[0]}px {RING[1]}px)"}},'
         f'{{clipPath:"circle(1500px at {RING[0]}px {RING[1]}px)",duration:.85,ease:"power2.in"}},{c - .55:.2f});')
+    add(f'tl.fromTo("#sc-c1 .pan",{{scale:1.3,rotation:-8}},{{scale:1,rotation:0,duration:1.2,ease:"power3.out",'
+        f'transformOrigin:"{RING[0]}px {RING[1]}px"}},{c - .55:.2f});')
 
-    # ---- couples walking through the palace
-    for n, sid in ((1, "c1"), (2, "c2")):
-        a, b = S[sid]
-        a0, b0 = a - PAD_IN[sid], b + PAD_OUT.get(sid, 0)
-        add(f'tl.fromTo("#sc-{sid} .mid",{{x:0}},{{x:-1100,duration:{b0 - a0:.2f},ease:"none"}},{a0:.2f});')
-        if sid == "c1":
-            add(f'tl.fromTo("#sc-{sid} .fore",{{x:200}},{{x:-2400,duration:{b0 - a0:.2f},ease:"none"}},{a0:.2f});')
-        walk_cycle(f"w{n}", a0, b0)
-        slam(f".c{n}-cap", a + .35, .03)
-        wipe(f".c{n}-him", a + .8, .9)
-        glint(f".c{n}-him", a + 1.8)
-        pop(f".c{n}-amp", a + 1.6, .35, "scale:.3,opacity:0", "back.out(3)")
-        wipe(f".c{n}-her", a + 1.8, .7)
-        draw_div(f".c{n}-div", a + 2.5)
-        sparks(f".c{n}-sp", a + 2.6)
+    # ---- the two couples, at night
+    for n in (1, 2):
+        a, b = S[f"c{n}"]
+        slam(f".c{n}-cap", a + .3, .028)
+        wipe(f".c{n}-him", a + .65, .8)
+        glint(f".c{n}-him", a + 1.6)
+        pop(f".c{n}-amp", a + 1.35, .3, "scale:.3,opacity:0", "back.out(3)")
+        wipe(f".c{n}-her", a + 1.5, .65)
+        draw_div(f".c{n}-div", a + 2.1)
+        sparks(f".c{n}-sp", a + 2.2)
+        add(f'tl.fromTo("#sc-c{n} .star",{{opacity:.3,scale:.6}},{{opacity:1,scale:1.15,duration:.6,ease:"sine.inOut",'
+            f'yoyo:true,repeat:{int((b - a) / .6) + 1},stagger:{{each:.05,from:"random"}}}},{a - .6:.2f});')
+        add(f'tl.fromTo("#sc-c{n} .moon",{{opacity:.75}},{{opacity:1,duration:1.4,ease:"sine.inOut",yoyo:true,'
+            f'repeat:3}},{a:.2f});')
+        add(f'tl.fromTo("#sc-c{n} .world",{{scale:1.08}},{{scale:1,duration:{b - a + .6:.2f},ease:"none"}},{a - .6:.2f});')
+    a, b = S["c1"]
+    # rooftop: she nestles in, a shooting star crosses
+    add(f'tl.fromTo(".pose1",{{y:240,opacity:0}},{{y:0,opacity:1,duration:1.1,ease:"power3.out"}},{a - .2:.2f});')
+    add(f'tl.fromTo(".pose1",{{rotation:-.6}},{{rotation:.6,duration:1.4,ease:"sine.inOut",yoyo:true,repeat:3,'
+        f'transformOrigin:"50% 100%"}},{a + .9:.2f});')
+    add(f'tl.fromTo("#sc-c1 .shoot",{{x:200,y:-80,opacity:0}},{{x:-420,y:200,opacity:1,duration:.9,ease:"power2.in",'
+        f'keyframes:{{opacity:[0,1,1,0]}}}},{a + 2.8:.2f});')
+    a, b = S["c2"]
+    add(f'tl.fromTo(".pose2",{{x:160,opacity:0}},{{x:0,opacity:1,duration:1.0,ease:"power3.out"}},{a:.2f});')
+    add(f'tl.fromTo("#sc-c2 .fly",{{x:0,y:0,opacity:.2}},{{x:40,y:-60,opacity:1,duration:1.2,ease:"sine.inOut",yoyo:true,'
+        f'repeat:3,stagger:{{each:.08,from:"random"}}}},{a:.2f});')
+    add(f'tl.fromTo("#sc-c2 .ripple",{{x:-20,opacity:.2}},{{x:20,opacity:.6,duration:1.2,ease:"sine.inOut",yoyo:true,'
+        f'repeat:3,stagger:.15}},{a:.2f});')
+    add(f'tl.fromTo("#sc-c2 .reflect",{{scaleX:.9,opacity:.35}},{{scaleX:1.1,opacity:.6,duration:.9,ease:"sine.inOut",'
+        f'yoyo:true,repeat:5,transformOrigin:"50% 50%"}},{a:.2f});')
+    add(f'tl.fromTo("#sc-c2 .fdiya",{{y:0}},{{y:-8,duration:.8,ease:"sine.inOut",yoyo:true,repeat:5,stagger:.2}},{a:.2f});')
 
-    # ---- T2 whip pan c1 -> c2
+    # ---- T2 comet sweep: a shooting star streaks across, its bloom covers the cut
     c = CUTS[2]
-    add(f'tl.fromTo("#sc-c1 .pan",{{x:0}},{{x:-1080,duration:.4,ease:"power3.in"}},{c - .25:.2f});')
-    add(f'tl.fromTo("#sc-c2 .pan",{{x:1080}},{{x:0,duration:.45,ease:"power3.out"}},{c - .1:.2f});')
-    add(f'tl.set("#sc-c1 .pan, #sc-c2 .pan",{{filter:"url(#whip)"}},{c - .2:.2f});')
-    add(f'tl.set("#sc-c1 .pan, #sc-c2 .pan",{{filter:"none"}},{c + .35:.2f});')
-    add(f'tl.fromTo("#streaks",{{opacity:0,x:600}},{{opacity:.8,x:-600,duration:.45,ease:"none"}},{c - .2:.2f});')
-    add(f'tl.set("#streaks",{{opacity:0}},{c + .3:.2f});')
-    add(f'tl.fromTo("#sc-c2 .sundisc",{{scale:.8,opacity:.6}},{{scale:1.15,opacity:1,duration:4,ease:"sine.inOut",'
-        f'transformOrigin:"50% 50%"}},{c:.2f});')
+    add(f'tl.fromTo("#comet",{{x:1200,y:-200,rotation:-30,opacity:0}},{{x:-1700,y:1500,rotation:-30,opacity:1,duration:.75,'
+        f'ease:"power2.inOut",keyframes:{{opacity:[0,1,1,0]}}}},{c - .4:.2f});')
+    add(f'tl.fromTo("#flare",{{opacity:0,scale:.4}},{{opacity:.85,scale:3.2,duration:.32,ease:"power2.in"}},{c - .3:.2f});')
+    add(f'tl.to("#flare",{{opacity:0,scale:4,duration:.45,ease:"power2.out"}},{c + .02:.2f});')
+    add(f'tl.to("#sc-c1 .pan",{{x:-140,duration:.4,ease:"power2.in"}},{c - .4:.2f});')
+    add(f'tl.fromTo("#sc-c2 .pan",{{x:160}},{{x:0,duration:.6,ease:"power3.out"}},{c:.2f});')
 
-    # ---- T3 diamond shatter c2 -> both
+    # ---- T3 heart reveal into the embrace
     c = CUTS[3]
-    add(f'tl.fromTo("#diamond",{{scale:0,opacity:0,rotation:-40}},{{scale:1,opacity:1,rotation:0,duration:.45,'
-        f'ease:"back.out(2)"}},{c - .7:.2f});')
-    add(f'tl.to("#diamond",{{scale:1.15,duration:.2,ease:"power2.in"}},{c - .22:.2f});')
+    add(f'tl.fromTo("#sc-both",{{webkitMaskSize:"0px 0px",maskSize:"0px 0px"}},{{webkitMaskSize:"4400px 3960px",'
+        f'maskSize:"4400px 3960px",duration:1.0,ease:"power2.in"}},{c - .7:.2f});')
+    add(f'tl.set("#sc-both",{{webkitMaskImage:"none",maskImage:"none"}},{c + .32:.2f});')
+    add(f'tl.to("#sc-c2 .pan",{{scale:1.12,duration:.7,ease:"power2.in"}},{c - .7:.2f});')
+
+    # ---- both couples embrace in the durbar hall
+    a, b = S["both"]
+    add(f'tl.fromTo("#sc-both .mid",{{x:0}},{{x:-260,duration:{b - a + .7:.2f},ease:"none"}},{a - .7:.2f});')
+    add(f'tl.fromTo(".hug1, .hug2",{{rotation:-1.2}},{{rotation:1.2,duration:1.1,ease:"sine.inOut",yoyo:true,repeat:4,'
+        f'transformOrigin:"50% 100%"}},{a - .7:.2f});')
+    add(f'tl.fromTo(".bh",{{y:0,opacity:0,scale:.5}},{{y:-260,opacity:0,scale:1.4,duration:2,stagger:.35,ease:"sine.out",'
+        f'keyframes:{{opacity:[0,1,1,0]}}}},{a + .6:.2f});')
+    add(f'tl.fromTo(".chand",{{rotation:-2}},{{rotation:2,duration:1.5,ease:"sine.inOut",yoyo:true,repeat:3}},{a - .7:.2f});')
+    slam(".b-cap", a + .25, .04)
+    wipe(".b-s1", a + .55, .8)
+    wipe(".b-s2", a + 1.25, .9)
+    glint(".b-s2", a + 2.2)
+    wordsin(".b-t1", a + 2.1, .06)
+    wordsin(".b-t2", a + 2.5, .06)
+
+    # ---- T4 diamond shatter into the save-the-date
+    c = CUTS[4]
+    add(f'tl.fromTo("#diamond",{{scale:0,opacity:0,rotation:-40}},{{scale:1,opacity:1,rotation:0,duration:.4,'
+        f'ease:"back.out(2)"}},{c - .6:.2f});')
+    add(f'tl.to("#diamond",{{scale:1.15,duration:.18,ease:"power2.in"}},{c - .2:.2f});')
     add(f'tl.set("#diamond",{{opacity:0}},{c:.2f});')
     add(f'tl.fromTo("#shardset",{{opacity:0}},{{opacity:1,duration:.01}},{c:.2f});')
     add(f'document.querySelectorAll(".shard").forEach(e => tl.fromTo(e,{{x:0,y:0,rotation:0,opacity:1}},'
@@ -317,66 +368,50 @@ def timeline():
     add(f'tl.set("#flash",{{opacity:.9}},{c:.2f});')
     add(f'tl.to("#flash",{{opacity:0,duration:.45,ease:"power2.out"}},{c + .01:.2f});')
 
-    # ---- both couples walk into the durbar hall
-    a, b = S["both"]
-    add(f'tl.fromTo("#sc-both .mid",{{x:0}},{{x:-700,duration:{b - a:.2f},ease:"none"}},{a:.2f});')
-    walk_cycle("w3", a, b)
-    walk_cycle("w4", a + .1, b)
-    add(f'tl.fromTo(".chand",{{rotation:-2}},{{rotation:2,duration:1.8,ease:"sine.inOut",yoyo:true,repeat:3}},{a:.2f});')
-    slam(".b-cap", a + .4, .04)
-    wipe(".b-s1", a + .8, .9)
-    wipe(".b-s2", a + 1.6, 1.1)
-    glint(".b-s2", a + 2.7)
-    wordsin(".b-t1", a + 2.8)
-    wordsin(".b-t2", a + 3.3)
-
-    # ---- T4 rose-petal burst both -> date
-    c = CUTS[4]
-    add(f'document.querySelectorAll(".bp").forEach(e => tl.fromTo(e,{{x:-200,y:+e.dataset.y + 300,rotation:0}},'
-        f'{{x:1300,y:+e.dataset.y - 300,rotation:+e.dataset.rot,duration:1.1,ease:"power1.inOut"}},'
-        f'{c - .55:.2f} + +e.dataset.d));')
-
     # ---- save the date
     a = S["date"][0]
     frame_in("date", a + .05)
-    slam(".d-cap", a + .3, .045)
-    draw_div(".d-div", a + .8)
-    slam(".d-day", a + .9, .05)
-    add(f'tl.fromTo(".d-b1, .d-b2",{{scaleY:0}},{{scaleY:1,duration:.4,ease:"power3.out"}},{a + 1.0:.2f});')
-    pop(".d-num", a + 1.1, .55, "scale:3,opacity:0", "expo.out")
-    add(f'tl.fromTo(".d-mon",{{x:-90,opacity:0}},{{x:0,opacity:1,duration:.45,ease:"power3.out"}},{a + 1.3:.2f});')
-    add(f'tl.fromTo(".d-yr",{{x:90,opacity:0}},{{x:0,opacity:1,duration:.45,ease:"power3.out"}},{a + 1.3:.2f});')
-    add(f'tl.fromTo(".d-pin",{{y:-260,opacity:0}},{{y:0,opacity:1,duration:.7,ease:"bounce.out"}},{a + 1.7:.2f});')
-    slam(".d-ven", a + 2.2, .05)
-    slam(".d-a1", a + 2.45, .02)
-    slam(".d-a2", a + 2.8, .02)
-    slam(".d-a3", a + 3.15, .02)
-    slam(".d-a4", a + 3.5, .04)
-    draw_div(".d-div2", a + 3.8)
+    slam(".d-cap", a + .25, .04)
+    draw_div(".d-div", a + .65)
+    slam(".d-day", a + .7, .05)
+    add(f'tl.fromTo(".d-b1, .d-b2",{{scaleY:0}},{{scaleY:1,duration:.4,ease:"power3.out"}},{a + .8:.2f});')
+    pop(".d-num", a + .9, .5, "scale:3,opacity:0", "expo.out")
+    add(f'tl.fromTo(".d-mon",{{x:-90,opacity:0}},{{x:0,opacity:1,duration:.4,ease:"power3.out"}},{a + 1.05:.2f});')
+    add(f'tl.fromTo(".d-yr",{{x:90,opacity:0}},{{x:0,opacity:1,duration:.4,ease:"power3.out"}},{a + 1.05:.2f});')
+    add(f'tl.fromTo(".d-pin",{{y:-260,opacity:0}},{{y:0,opacity:1,duration:.6,ease:"bounce.out"}},{a + 1.4:.2f});')
+    slam(".d-ven", a + 1.8, .05)
+    slam(".d-a1", a + 2.0, .018)
+    slam(".d-a2", a + 2.3, .018)
+    slam(".d-a3", a + 2.6, .018)
+    slam(".d-a4", a + 2.9, .04)
+    draw_div(".d-div2", a + 3.2)
 
-    # ---- T5 iris from the pin into the closing card
+    # ---- T5 rose-petal burst into the closing card
     c = CUTS[5]
-    add(f'tl.fromTo("#sc-close",{{clipPath:"circle(0px at {PIN[0]}px {PIN[1]}px)"}},'
-        f'{{clipPath:"circle(1500px at {PIN[0]}px {PIN[1]}px)",duration:.8,ease:"power2.in"}},{c - .3:.2f});')
+    add(f'document.querySelectorAll(".bp").forEach(e => tl.fromTo(e,{{x:-200,y:+e.dataset.y + 300,rotation:0}},'
+        f'{{x:1300,y:+e.dataset.y - 300,rotation:+e.dataset.rot,duration:1.0,ease:"power1.inOut"}},'
+        f'{c - .5:.2f} + +e.dataset.d));')
+    add(f'tl.fromTo("#sc-close .pan",{{scale:1.15,filter:"blur(8px)"}},{{scale:1,filter:"blur(0px)",duration:.7,'
+        f'ease:"power3.out"}},{c:.2f});')
 
     # ---- closing
     a = S["close"][0]
-    frame_in("close", a + .3)
-    slam(".x-1", a + .5, .04)
-    wipe(".x-2", a + .9, 1.0)
-    glint(".x-2", a + 2.0)
-    add(f'tl.fromTo(".x-pav",{{clipPath:"inset(100% 0% 0% 0%)"}},{{clipPath:"inset(0% 0% 0% 0%)",duration:1.1,'
-        f'ease:"power2.out"}},{a + 1.1:.2f});')
-    add(f'tl.fromTo(".x-el1",{{x:-280,opacity:0}},{{x:0,opacity:1,duration:1.1,ease:"power2.out"}},{a + 1.3:.2f});')
-    add(f'tl.fromTo(".x-el2",{{x:280,opacity:0}},{{x:0,opacity:1,duration:1.1,ease:"power2.out"}},{a + 1.3:.2f});')
-    pop(".x-bq", a + 2.0, .6, 'scale:0,opacity:0,transformOrigin:"50% 100%"', "back.out(1.8)")
+    frame_in("close", a + .2)
+    slam(".x-1", a + .4, .04)
+    wipe(".x-2", a + .7, .9)
+    glint(".x-2", a + 1.7)
+    add(f'tl.fromTo(".x-pav",{{clipPath:"inset(100% 0% 0% 0%)"}},{{clipPath:"inset(0% 0% 0% 0%)",duration:1.0,'
+        f'ease:"power2.out"}},{a + .9:.2f});')
+    add(f'tl.fromTo(".x-el1",{{x:-280,opacity:0}},{{x:0,opacity:1,duration:1.0,ease:"power2.out"}},{a + 1.1:.2f});')
+    add(f'tl.fromTo(".x-el2",{{x:280,opacity:0}},{{x:0,opacity:1,duration:1.0,ease:"power2.out"}},{a + 1.1:.2f});')
+    pop(".x-bq", a + 1.7, .55, 'scale:0,opacity:0,transformOrigin:"50% 100%"', "back.out(1.8)")
     add(f'tl.fromTo(".x-ss",{{opacity:0,scale:2,filter:"blur(10px)"}},{{opacity:1,scale:1,filter:"blur(0px)",'
-        f'duration:.5,ease:"expo.out"}},{a + 2.2:.2f});')
-    glint(".x-ss .foil-txt", a + 2.8)
-    wipe(".x-3", a + 2.6, 1.1)
-    slam(".x-date", a + 3.5, .04)
-    wordsin(".x-5", a + 3.9)
-    glint(".x-2", a + 5.5)
+        f'duration:.5,ease:"expo.out"}},{a + 1.9:.2f});')
+    glint(".x-ss .foil-txt", a + 2.5)
+    wipe(".x-3", a + 2.3, 1.0)
+    slam(".x-date", a + 3.1, .04)
+    wordsin(".x-5", a + 3.5)
+    glint(".x-2", a + 4.8)
 
     # ---- always on: grain, light leaks, gold dust, slow push on card scenes
     add(f'tl.fromTo("#grain",{{backgroundPosition:"0px 0px"}},{{backgroundPosition:"-2560px 1280px",duration:{DUR},'
@@ -417,7 +452,13 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #3f071
 .pan { position: absolute; inset: 0; }
 .leather { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 50% 50%; }
 .world, .frame, .stage { position: absolute; left: 0; top: 0; }
-.walk .frame .fr-c3, .walk .frame .fr-c4, .walk .frame .fr-s1, .walk .frame .fr-s2, .walk .frame .band-b { display: none; }
+.walk .frame .fr-c3, .walk .frame .fr-c4, .walk .frame .fr-s1, .walk .frame .fr-s2, .walk .frame .band-b,
+.night .frame .fr-c3, .night .frame .fr-c4, .night .frame .fr-s1, .night .frame .fr-s2, .night .frame .band-b,
+.night .frame .band-t, .night .leather { display: none; }
+#sc-both { -webkit-mask-image: url("MASK"); mask-image: url("MASK"); -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: 50% 52%; mask-position: 50% 52%; -webkit-mask-size: 0px 0px; mask-size: 0px 0px; }
+#comet { position: absolute; left: 0; top: 0; width: 1600px; height: 140px; z-index: 46; opacity: 0;
+  transform-origin: 100% 50%; }
 .row { position: absolute; left: 0; width: 1080px; text-align: center; white-space: nowrap; }
 .row svg { display: inline-block; vertical-align: top; }
 .t, .lt, .wd { display: inline-block; }
@@ -493,7 +534,7 @@ def main():
     <meta name="viewport" content="width=1080, height=1920" />
     <title>Engagement invite 9x16</title>
     <script src="assets/vendor/gsap.min.js"></script>
-    <style>{CSS}</style>
+    <style>{CSS.replace("MASK", ro.heart_mask_svg())}</style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="1080" data-height="1920">
@@ -507,6 +548,7 @@ def main():
         <div id="leak1" class="leak"></div><div id="leak2" class="leak"></div>
         {dust_html}
         <div id="flare"></div><div id="flash"></div>
+        <svg id="comet" viewBox="0 0 1600 140" width="1600" height="140"><defs><linearGradient id="cometg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".85" stop-color="#fff1b8" stop-opacity=".7"/><stop offset="1" stop-color="#fff"/></linearGradient><filter id="cblur"><feGaussianBlur stdDeviation="6"/></filter></defs><path d="M0 70 L1540 40 L1540 100 Z" fill="url(#cometg)" filter="url(#cblur)"/><circle cx="1540" cy="70" r="34" fill="#fff" filter="url(#cblur)"/><circle cx="1540" cy="70" r="16" fill="#fff"/></svg>
         <svg id="streaks" viewBox="0 0 1080 1920" width="1080" height="1920">{streaks}</svg>
         <svg id="diamond" viewBox="-200 -200 400 400" width="400" height="400">{ry.diamond_heart()}</svg>
         <svg id="shardset" viewBox="-200 -200 400 400" width="400" height="400" style="overflow:visible">{"".join(ry.shards())}</svg>
