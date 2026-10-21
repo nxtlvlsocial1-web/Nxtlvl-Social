@@ -1,28 +1,24 @@
-"""Builds index.html for the engagement invite (two couples), 1080x1920, 50 s. Version 3.
+"""Builds index.html for the engagement invite (two couples), 1080x1920, 50 s. Version 4: royal maroon & gold.
 
 python3 -I build/generate.py      (run from the project root)
 
-Each scene is its own illustrated world (palace arch over a lotus lake in a scene palette, or an
-ivory watercolour garden page). Scenes are joined by a camera pan with a marble pillar sweeping
-past in the foreground. Scene changes sit on the song's phrase grid (vocals at 7.13 s, ~3.76 s
-phrases).
+Look: the client's maroon leather card with gold filigree. Motion: kinetic type that slams in out
+of a blur, gold-foil shimmer, film grain and light leaks, and a different transition at every cut
+(light flare, zoom through the ring, whip pan, diamond shatter, petal burst, iris). Both couples
+hold hands and walk through palace spaces. Cuts sit on strong beats of the song.
 """
 import os
-import random
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import art  # noqa: E402
 import elements as el  # noqa: E402
-import figures as fg  # noqa: E402
-import worlds as wd  # noqa: E402
+import royal as ry  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DUR = 50.0
-X = 0.55                     # half of a pillar transition
-CUTS = [10.89, 18.41, 25.93, 33.45, 40.97, 44.9]
-
-S = {                        # nominal scene windows (start, end)
+CUTS = [9.01, 15.74, 22.2, 27.86, 34.6, 41.03]
+S = {
     "ganesh": (0.0, CUTS[0]),
     "invite": (CUTS[0], CUTS[1]),
     "c1": (CUTS[1], CUTS[2]),
@@ -31,25 +27,27 @@ S = {                        # nominal scene windows (start, end)
     "date": (CUTS[4], CUTS[5]),
     "close": (CUTS[5], DUR),
 }
-KIND = {"ganesh": ("palace", "mint"), "invite": ("garden", "gazebo"), "c1": ("palace", "haldi"),
-        "c2": ("palace", "sangeet"), "both": ("palace", "wedding"), "date": ("garden", "fountain"),
-        "close": ("palace", "mint")}
-
-HALDI_G = ("#f5c542", "#b45309", "#fde68a", "#fff7e0", "#a16207")
-HALDI_B = ("#facc15", "#db2777", "#f472b6", "#86efac", "#d4a24c")
-SANGEET_G = ("#cfe3d2", "#c9973f", "#f6ead2", "#efe9dc", "#7a5a2a")
-SANGEET_B = ("#15803d", "#facc15", "#be185d", "#fbcfe8", "#d4a24c")
+KIND = {"ganesh": "card", "invite": "card", "c1": "walk", "c2": "walk", "both": "walk", "date": "card",
+        "close": "card"}
+# how far each clip reaches past its cut so the transitions can overlap
+PAD_IN = {"invite": 0.0, "c1": 0.6, "c2": 0.25, "both": 0.0, "date": 0.0, "close": 0.3}
+PAD_OUT = {"ganesh": 0.0, "invite": 0.0, "c1": 0.15, "c2": 0.0, "both": 0.0, "date": 0.5}
+RING = (540, 600)          # centre of the hands medallion: the zoom-through target
+PIN = (540, 830)           # the location pin: the iris target
 
 
 # ------------------------------------------------------------------ markup helpers
 def scene(sid, inner):
     a, b = S[sid]
-    a0, b0 = max(0.0, a - X), min(DUR, b + X)
-    kind, sub = KIND[sid]
-    world = wd.palace(sub, sid, fl_seed=len(sid) * 3) if kind == "palace" else wd.garden_vignette(sub, sid)
-    tone = "light" if sub == "sangeet" else "dark"
-    return (f'<div id="sc-{sid}" class="clip scene {tone}" data-start="{a0}" data-duration="{round(b0 - a0, 2)}" '
-            f'data-track-index="{2 + list(S).index(sid) % 2}"><div class="pan">{world}{inner}</div></div>')
+    a0, b0 = max(0.0, a - PAD_IN.get(sid, 0)), min(DUR, b + PAD_OUT.get(sid, 0))
+    if KIND[sid] == "card":
+        world = ry.card_bg() + ry.card_frame(sid)
+    else:
+        space = {"c1": ry.corridor, "c2": ry.courtyard, "both": ry.hall}[sid](sid)
+        world = ry.card_bg() + space + ry.card_frame(sid)
+    return (f'<div id="sc-{sid}" class="clip scene {KIND[sid]}" data-start="{a0}" data-duration="{round(b0 - a0, 2)}" '
+            f'data-track-index="{2 + list(S).index(sid) % 2}" style="z-index:{5 + list(S).index(sid)}">'
+            f'<div class="pan">{world}{inner}</div></div>')
 
 
 def at(y, inner, cls=""):
@@ -60,122 +58,106 @@ def letters(text):
     return "".join(f'<span class="lt">{"&nbsp;" if c == " " else c}</span>' for c in text)
 
 
+def words(text):
+    return " ".join(f'<span class="wd">{w}</span>' for w in text.split())
+
+
 def box(cls, x, y, w, h, inner):
     return f'<div class="box {cls}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px">{inner}</div>'
 
 
 def stage(cls, inner):
-    """A full-frame SVG layer for figures (frame coordinates)."""
     return f'<svg class="stage {cls}" viewBox="0 0 1080 1920" width="1080" height="1920">{inner}</svg>'
+
+
+def divider(w=420):
+    return art.divider(w, col="#e9c46a")
+
+
+def mandala_ring():
+    dots = "".join(f'<circle cx="{270 + 250 * __import__("math").cos(i / 48 * 6.283):.1f}" '
+                   f'cy="{270 + 250 * __import__("math").sin(i / 48 * 6.283):.1f}" r="{5 if i % 2 else 3}" fill="#e9c46a"/>'
+                   for i in range(48))
+    petals = "".join(f'<path d="M270 30 C290 60 290 90 270 110 C250 90 250 60 270 30 Z" fill="none" stroke="#e9c46a" '
+                     f'stroke-width="2" transform="rotate({i * 22.5} 270 270)"/>' for i in range(16))
+    return (f'<svg viewBox="0 0 540 540" width="540" height="540"><circle cx="270" cy="270" r="262" fill="none" '
+            f'stroke="#e9c46a" stroke-width="3"/><circle cx="270" cy="270" r="238" fill="none" stroke="#e9c46a" '
+            f'stroke-width="1.5" opacity=".7"/>{dots}{petals}</svg>')
 
 
 def build_scenes():
     out = []
     out.append(scene("ganesh", (
-        box("gwrap", 290, 360, 500, 507, '<img src="assets/img/ganesh.png" width="500" height="507" alt="">') +
-        at(900, "॥ श्री गणेशाय नमः ॥", "deva g-deva") +
-        at(982, "Shree Ganeshaya Namah", "script g-en") +
-        at(1092, art.divider(440), "g-div") +
-        at(1140, "वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।", "shloka g-sh1") +
-        at(1194, "निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥", "shloka g-sh2")
+        box("gring", 270, 330, 540, 540, mandala_ring()) +
+        box("gglow", 270, 330, 540, 540, "") +
+        box("gwrap", 320, 380, 440, 446, '<img src="assets/img/ganesh.png" width="440" height="446" alt="">') +
+        at(915, '<span class="foil-txt">॥ श्री गणेशाय नमः ॥</span>', "deva g-deva") +
+        at(1000, '<span class="wipe g-en">Shree Ganeshaya Namah</span>', "script g-en-row") +
+        at(1112, divider(), "g-div") +
+        at(1160, words("वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ।"), "shloka g-sh1") +
+        at(1214, words("निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥"), "shloka g-sh2")
     )))
     out.append(scene("invite", (
-        at(296, letters("With the divine blessings of"), "ital lts i-1") +
-        at(352, letters("LORD GANESHA & OUR ELDERS"), "cap2 lts i-2") +
-        box("medal i-hands", 395, 418, 290, 290, el.hands_medallion(290)) +
-        "".join(f'<div class="spark i-sp" style="transform:translate({x}px,{y}px)">{art.sparkle()}</div>'
-                for x, y in [(540, 530), (585, 555), (500, 570)]) +
-        at(734, letters("we joyfully invite you to celebrate the"), "body lts i-3") +
-        at(782, '<span class="wipe i-eng">Engagement</span>', "big i-4") +
-        at(952, letters("CEREMONY"), "cap3 lts i-5") +
-        at(1030, art.divider(440), "i-div") +
-        at(1076, letters("of our two beautiful couples"), "ital lts i-6") +
-        at(1136, letters("two families · two love stories · one celebration"), "small lts i-7")
+        at(318, letters("YOU ARE CORDIALLY INVITED"), "caps i-1") +
+        at(368, letters("TO THE ENGAGEMENT OF"), "caps i-2") +
+        box("medal i-hands", 390, 450, 300, 300, ry.hands_royal(300)) +
+        "".join(f'<div class="spark i-sp" style="transform:translate({x}px,{y}px)">{art.sparkle("#fff1b8")}</div>'
+                for x, y in [(540, 560), (590, 590), (495, 605)]) +
+        at(782, '<span class="wipe foil-txt i-eng">Two Beautiful Couples</span>', "script i-4") +
+        at(930, letters("ENGAGEMENT CEREMONY"), "caps2 i-5") +
+        at(1000, divider(), "i-div") +
+        at(1046, words("with the divine blessings of"), "ital i-6") +
+        at(1100, words("Lord Ganesha & our beloved elders"), "ital i-7")
     )))
-    for n, him, her, figure in (
-            (1, "Manish Tamboli", "Jyoti",
-             f'<g class="swing">{"<g transform=" + chr(34) + "translate(540 1395) scale(1.12)" + chr(34) + ">"}'
-             f'{wd.swing_couple(HALDI_G, HALDI_B)}</g></g>'),
-            (2, "Harsh Aswal", "Shalu",
-             f'<g transform="translate(540 1530) scale(1.0)">{wd.sangeet_couple(SANGEET_G, SANGEET_B)}</g>')):
+    for n, him, her, pal in ((1, "Manish Tamboli", "Jyoti", ry.C1), (2, "Harsh Aswal", "Shalu", ry.C2)):
         out.append(scene(f"c{n}", (
-            stage(f"c{n}-stage", figure) +
-            at(500, letters("THE ENGAGEMENT OF"), f"cap lts c{n}-cap") +
-            at(546, f'<span class="wipe c{n}-him">{him}</span>', "name") +
-            at(656, "&amp;", f"amp c{n}-amp") +
-            at(694, f'<span class="wipe c{n}-her">{her}</span>', "name") +
-            at(812, art.divider(380), f"c{n}-div") +
-            "".join(f'<div class="spark c{n}-sp" style="transform:translate({x}px,{y}px)">{art.sparkle()}</div>'
-                    for x, y in [(270, 580), (810, 570), (340, 740), (740, 750), (540, 520)])
+            stage(f"c{n}-stage", ry.walkers(pal, f"w{n}", 540, 1655, 1.05)) +
+            at(286, letters("THE ENGAGEMENT OF"), f"caps c{n}-cap") +
+            at(330, f'<span class="wipe c{n}-him">{him}</span>', "name") +
+            at(452, "&amp;", f"amp c{n}-amp") +
+            at(488, f'<span class="wipe c{n}-her">{her}</span>', "name") +
+            at(616, divider(360), f"c{n}-div") +
+            "".join(f'<div class="spark c{n}-sp" style="transform:translate({x}px,{y}px)">{art.sparkle("#fff1b8")}</div>'
+                    for x, y in [(250, 380), (830, 370), (330, 560), (750, 570), (540, 300)])
         )))
     out.append(scene("both", (
-        stage("b-stage",
-              f'<g class="bp1"><g transform="translate(310 1535) scale(.76)">{fg.couple(fg.COUPLE1, "bq1")}</g></g>'
-              f'<g class="bp2"><g transform="translate(770 1535) scale(.76)">{fg.couple(fg.COUPLE2, "bq2")}</g></g>') +
-        at(500, letters("TWICE THE JOY"), "cap lts b-cap") +
-        at(546, '<span class="wipe b-s1">Two love stories,</span>', "script2") +
-        at(636, '<span class="wipe b-s2">one joyous celebration</span>', "script2") +
-        at(768, letters("Please join us as they exchange rings"), "ital sm lts b-t1") +
-        at(816, letters("and begin a bright new chapter together"), "ital sm lts b-t2") +
-        box("heart b-heart", 505, 1240, 70, 63, heart(70))
+        stage("b-stage", ry.walkers(ry.C1, "w3", 300, 1655, .82) + ry.walkers(ry.C2, "w4", 780, 1655, .82)) +
+        at(286, letters("TWICE THE JOY"), "caps b-cap") +
+        at(328, '<span class="wipe b-s1">Two love stories,</span>', "script2") +
+        at(420, '<span class="wipe foil-txt b-s2">one joyous celebration</span>', "script2") +
+        at(552, words("Please join us as they exchange rings"), "ital sm b-t1") +
+        at(600, words("and begin a bright new chapter together"), "ital sm b-t2")
     )))
     out.append(scene("date", (
-        at(320, letters("SAVE THE DATE"), "cap4 lts d-cap") +
-        at(400, art.divider(440), "d-div") +
-        at(462, "OCTOBER", "cap2 d-mon") +
-        f'<div class="daterow" style="top:515px"><div class="side d-day">FRIDAY</div>'
-        f'<div class="num d-num">30</div><div class="side d-yr">2026</div></div>' +
-        at(780, art.pin(60), "d-pin") +
-        at(872, "VENUE", "cap2 d-ven") +
-        at(930, letters("Near 2 Petrol Pump,"), "addr lts d-a1") +
-        at(994, letters("Industrial Area Phase 1,"), "addr lts d-a2") +
-        at(1058, letters("Mangolpuri, New Delhi – 110083"), "addr lts d-a3") +
-        at(1160, art.divider(440), "d-div2")
+        at(350, letters("SAVE THE DATE"), "caps3 d-cap") +
+        at(436, divider(), "d-div") +
+        at(492, letters("FRIDAY"), "caps gold d-day") +
+        f'<div class="daterow" style="top:540px"><div class="side d-mon">OCT</div><div class="bar d-b1"></div>'
+        f'<div class="num d-num">30</div><div class="bar d-b2"></div><div class="side d-yr">2026</div></div>' +
+        at(800, art.pin(56).replace(art.ROSE_D, "#ffffff").replace('fill="#fff"', 'fill="#7a1022"'), "d-pin") +
+        at(888, letters("VENUE"), "caps gold d-ven") +
+        at(938, letters("NEAR 2 PETROL PUMP,"), "addr d-a1") +
+        at(988, letters("INDUSTRIAL AREA PHASE 1,"), "addr d-a2") +
+        at(1038, letters("MANGOLPURI, NEW DELHI"), "addr d-a3") +
+        at(1088, letters("110083"), "addr d-a4") +
+        at(1170, divider(), "d-div2")
     )))
     out.append(scene("close", (
-        at(470, letters("Awaiting your"), "ital lts x-1") +
-        at(518, '<span class="wipe x-2">gracious presence</span>', "script2") +
-        box("pav x-pav", 364, 640, 352, 448, el.pavilion()) +
-        box("pea x-pea", 352, 742, 170, 200,
-            f'<svg viewBox="-85 -60 170 200" width="170" height="200">{art.peacock(10, 20, .34)}</svg>') +
-        at(908, "शुभ सगाई", "deva2 x-ss") +
-        box("ele x-el1", 140, 920, 250, 161, f'<svg viewBox="-150 -255 420 270" width="250" height="161">'
-            f'{el.elephant()}</svg>') +
-        box("ele x-el2", 690, 920, 250, 161, f'<svg viewBox="-270 -255 420 270" width="250" height="161">'
-            f'{el.elephant(True)}</svg>') +
-        box("bq x-bq", 340, 975, 400, 175, f'<svg viewBox="-200 -150 400 175" width="400" height="175">'
-            f'{el.bouquet()}</svg>') +
-        at(1162, '<span class="wipe x-3">Happily ever after begins</span>', "script3") +
-        at(1252, "30 · 10 · 2026", "cap2 x-date") +
-        at(1300, letters("With love & warm wishes"), "ital lts x-5")
+        at(318, letters("AWAITING YOUR"), "caps x-1") +
+        at(360, '<span class="wipe foil-txt x-2">gracious presence</span>', "script") +
+        box("pav x-pav", 364, 520, 352, 448, el.pavilion().replace("#c9973f", "#e9c46a")) +
+        at(790, '<span class="foil-txt">शुभ सगाई</span>', "deva2 x-ss") +
+        box("ele x-el1", 140, 800, 250, 161, f'<svg viewBox="-150 -255 420 270" width="250" height="161">'
+            f'{ry.elephant_royal()}</svg>') +
+        box("ele x-el2", 690, 800, 250, 161, f'<svg viewBox="-270 -255 420 270" width="250" height="161">'
+            f'{ry.elephant_royal(True)}</svg>') +
+        box("bq x-bq", 340, 860, 400, 175, f'<svg viewBox="-200 -150 400 175" width="400" height="175">'
+            f'{ry.bouquet_royal()}</svg>') +
+        at(1060, '<span class="wipe x-3">Happily ever after begins</span>', "script3") +
+        at(1166, letters("30 · 10 · 2026"), "caps gold x-date") +
+        at(1214, words("With love & warm wishes"), "ital x-5")
     )))
     return "".join(out)
-
-
-def heart(size=90, col=art.ROSE):
-    return (f'<svg viewBox="0 0 100 90" width="{size}" height="{size * .9:.0f}"><path d="M50 88 C20 64 0 46 0 26 '
-            f'C0 10 12 0 27 0 C38 0 46 6 50 14 C54 6 62 0 73 0 C88 0 100 10 100 26 C100 46 80 64 50 88 Z" '
-            f'fill="{col}"/></svg>')
-
-
-# ------------------------------------------------------------------ petals (deterministic)
-def petals():
-    rnd = random.Random(7)
-    shapes = art.petal_shapes()
-    els, tw = [], []
-    for i in range(30):
-        els.append(f'<div class="petal" id="pt{i}">{shapes[i % len(shapes)]}</div>')
-        t = 2.0 + rnd.uniform(0, 7)
-        while t < DUR:
-            d = rnd.uniform(7.5, 11)
-            x0 = rnd.uniform(-20, 1080)
-            dx = rnd.uniform(-160, 160)
-            s = rnd.uniform(0.6, 1.25)
-            r0, r1 = rnd.uniform(0, 360), rnd.uniform(200, 700) * rnd.choice((1, -1))
-            tw.append(f'tl.fromTo("#pt{i}",{{x:{x0:.0f},y:-60,rotation:{r0:.0f},scale:{s:.2f},opacity:.95}},'
-                      f'{{x:{x0 + dx:.0f},y:1980,rotation:{r0 + r1:.0f},duration:{d:.2f},ease:"none"}},{t:.2f});')
-            t += d + rnd.uniform(0, 1.5)
-    return "".join(els), "\n".join(tw)
 
 
 # ------------------------------------------------------------------ timeline
@@ -186,14 +168,15 @@ def add(s):
     T.append(s)
 
 
-def rise(sel, t, d=.6):
-    add(f'tl.fromTo("{sel}",{{opacity:0,y:30}},{{opacity:1,y:0,duration:{d},ease:"power3.out"}},{t:.2f});')
+def slam(sel, t, per=.03):
+    """Letters punch in from big and blurred (the reference's kinetic type)."""
+    add(f'tl.fromTo("{sel} .lt",{{opacity:0,scale:2.4,filter:"blur(10px)"}},{{opacity:1,scale:1,filter:"blur(0px)",'
+        f'duration:.42,stagger:{per},ease:"expo.out"}},{t:.2f});')
 
 
-def write(sel, t, per=.035):
-    """WedMeGood-style reveal: letters fade up out of a soft blur, one after another."""
-    add(f'tl.fromTo("{sel} .lt",{{opacity:0,y:10,filter:"blur(6px)"}},{{opacity:1,y:0,filter:"blur(0px)",'
-        f'duration:.45,stagger:{per},ease:"power2.out"}},{t:.2f});')
+def wordsin(sel, t, per=.08):
+    add(f'tl.fromTo("{sel} .wd",{{opacity:0,y:26,filter:"blur(6px)"}},{{opacity:1,y:0,filter:"blur(0px)",'
+        f'duration:.5,stagger:{per},ease:"power3.out"}},{t:.2f});')
 
 
 def wipe(sel, t, d):
@@ -201,10 +184,15 @@ def wipe(sel, t, d):
         f'duration:{d},ease:"power1.inOut"}},{t:.2f});')
 
 
+def glint(sel, t, d=1.1):
+    add(f'tl.fromTo("{sel}",{{backgroundPosition:"120% 0"}},{{backgroundPosition:"-20% 0",duration:{d},'
+        f'ease:"power1.inOut"}},{t:.2f});')
+
+
 def draw_div(sel, t):
-    add(f'tl.fromTo("{sel} .dv",{{strokeDashoffset:1,opacity:0}},{{strokeDashoffset:0,opacity:1,duration:.7,'
+    add(f'tl.fromTo("{sel} .dv",{{strokeDashoffset:1,opacity:0}},{{strokeDashoffset:0,opacity:1,duration:.6,'
         f'ease:"power2.out"}},{t:.2f});')
-    add(f'tl.fromTo("{sel}",{{opacity:0}},{{opacity:1,duration:.3}},{t:.2f});')
+    add(f'tl.fromTo("{sel}",{{opacity:0}},{{opacity:1,duration:.25}},{t:.2f});')
 
 
 def pop(sel, t, d=.55, frm="scale:0,opacity:0", ease="back.out(2)"):
@@ -212,200 +200,292 @@ def pop(sel, t, d=.55, frm="scale:0,opacity:0", ease="back.out(2)"):
 
 
 def sparks(sel, t):
-    add(f'tl.fromTo("{sel}",{{scale:0,opacity:0,rotation:0}},{{scale:1.1,opacity:1,rotation:90,duration:.4,'
-        f'stagger:.1,ease:"back.out(3)"}},{t:.2f});')
-    add(f'tl.to("{sel}",{{scale:0,opacity:0,rotation:180,duration:.5,stagger:.1,ease:"power2.in"}},{t + .7:.2f});')
+    add(f'tl.fromTo("{sel}",{{scale:0,opacity:0,rotation:0}},{{scale:1.1,opacity:1,rotation:90,duration:.35,'
+        f'stagger:.08,ease:"back.out(3)"}},{t:.2f});')
+    add(f'tl.to("{sel}",{{scale:0,opacity:0,rotation:180,duration:.45,stagger:.08,ease:"power2.in"}},{t + .6:.2f});')
+
+
+def frame_in(sid, t):
+    """Gold filigree draws in from the corners."""
+    add(f'tl.fromTo("#sc-{sid} .frame g[class^=fr-]",{{opacity:0,scale:.7,transformOrigin:"50% 50%"}},'
+        f'{{opacity:1,scale:1,duration:.7,stagger:.06,ease:"power3.out"}},{t:.2f});')
+
+
+def walk_cycle(cls, t0, t1, step=.5):
+    n = int((t1 - t0) / step)
+    add(f'tl.fromTo(".{cls} .lg1",{{rotation:-14}},{{rotation:14,duration:{step},ease:"sine.inOut",yoyo:true,'
+        f'repeat:{n},transformOrigin:"50% 0%"}},{t0:.2f});')
+    add(f'tl.fromTo(".{cls} .lg2",{{rotation:14}},{{rotation:-14,duration:{step},ease:"sine.inOut",yoyo:true,'
+        f'repeat:{n},transformOrigin:"50% 0%"}},{t0:.2f});')
+    add(f'tl.fromTo(".{cls} .skirt",{{skewX:-4}},{{skewX:4,duration:{step},ease:"sine.inOut",yoyo:true,'
+        f'repeat:{n},transformOrigin:"50% 0%"}},{t0:.2f});')
+    add(f'tl.fromTo(".{cls}",{{y:0}},{{y:-9,duration:{step / 2},ease:"sine.inOut",yoyo:true,repeat:{2 * n + 1}}},'
+        f'{t0:.2f});')
 
 
 def timeline():
-    # camera pans between scenes, with the marble pillar sweeping past in the foreground
-    ids = list(S)
-    for k, c in enumerate(CUTS):
-        out_id, in_id = ids[k], ids[k + 1]
-        add(f'tl.fromTo("#sc-{out_id} .pan",{{x:0}},{{x:-1080,duration:{2 * X},ease:"power2.inOut"}},{c - X:.2f});')
-        add(f'tl.fromTo("#sc-{in_id} .pan",{{x:1080}},{{x:0,duration:{2 * X},ease:"power2.inOut"}},{c - X:.2f});')
-        add(f'tl.fromTo("#pillar",{{x:1240}},{{x:-480,duration:{2 * X + .1:.2f},ease:"power2.inOut"}},{c - X - .05:.2f});')
-    # slow camera push and living details in every world
-    for sid, (a, b) in S.items():
-        a0, b0 = max(0, a - X), min(DUR, b + X)
-        add(f'tl.fromTo("#sc-{sid} .world",{{scale:1}},{{scale:1.035,duration:{b0 - a0:.2f},ease:"none"}},{a0:.2f});')
-        if KIND[sid][0] == "palace":
-            n = max(1, int((b0 - a0) / 2.2))
-            add(f'tl.fromTo("#sc-{sid} .hang",{{rotation:-2.5}},{{rotation:2.5,duration:2.2,ease:"sine.inOut",'
-                f'yoyo:true,repeat:{n},stagger:.06}},{a0:.2f});')
-            add(f'tl.fromTo("#sc-{sid} .w-pea",{{rotation:-1.5}},{{rotation:1.5,duration:1.9,ease:"sine.inOut",'
-                f'yoyo:true,repeat:{n}}},{a0:.2f});')
-        else:
-            add(f'tl.fromTo("#sc-{sid} .wisteria",{{y:-30}},{{y:0,duration:2.2,ease:"power2.out"}},{a0:.2f});')
-            add(f'tl.fromTo("#sc-{sid} .gv-centre",{{y:220,opacity:0}},{{y:0,opacity:1,duration:2.0,'
-                f'ease:"power3.out"}},{a + .1:.2f});')
-            add(f'tl.fromTo("#sc-{sid} .gv-back",{{y:120}},{{y:0,duration:2.4,ease:"power3.out"}},{a:.2f});')
-            add(f'tl.fromTo("#sc-{sid} .swan",{{x:-20}},{{x:30,duration:{b0 - a0:.2f},ease:"sine.inOut"}},{a0:.2f});')
+    # ---- doors: burst open fast with a gold flash
+    add('tl.fromTo(".door-medal",{scale:1,opacity:1},{scale:.5,opacity:0,duration:.25,ease:"power2.in"},.1);')
+    add('tl.fromTo("#door-l",{rotationY:0},{rotationY:-110,duration:.7,ease:"power3.in"},.12);')
+    add('tl.fromTo("#door-r",{rotationY:0},{rotationY:110,duration:.7,ease:"power3.in"},.12);')
+    add('tl.fromTo("#doorframe",{scale:1,opacity:1},{scale:1.7,opacity:0,duration:.6,ease:"power3.in"},.35);')
+    add('tl.fromTo("#flare",{opacity:0,scale:.3},{opacity:.9,scale:2.2,duration:.35,ease:"power2.out"},.5);')
+    add('tl.to("#flare",{opacity:0,scale:3,duration:.5,ease:"power2.in"},.85);')
 
-    # doors open onto the mint palace
-    add('tl.fromTo(".door-medal",{scale:.92,opacity:.9},{scale:1.04,opacity:1,duration:.5,ease:"sine.inOut"},0);')
-    add('tl.to(".door-medal",{scale:.6,opacity:0,duration:.45,ease:"power2.in"},.55);')
-    add('tl.fromTo("#door-l",{rotationY:0},{rotationY:-104,duration:1.6,ease:"power2.inOut"},.6);')
-    add('tl.fromTo("#door-r",{rotationY:0},{rotationY:104,duration:1.6,ease:"power2.inOut"},.6);')
-    add('tl.fromTo("#doorframe",{scale:1,opacity:1},{scale:1.5,opacity:0,duration:1.2,ease:"power2.in"},1.7);')
+    # ---- Ganesh ji
+    frame_in("ganesh", .7)
+    add('tl.fromTo(".gring",{scale:.4,opacity:0,rotation:-90},{scale:1,opacity:1,rotation:0,duration:1.2,'
+        'ease:"expo.out"},.8);')
+    add(f'tl.fromTo(".gring",{{rotation:0}},{{rotation:40,duration:{CUTS[0] - 2:.2f},ease:"none"}},2.0);')
+    add('tl.fromTo(".gwrap",{opacity:0,scale:.5,filter:"blur(14px)"},{opacity:1,scale:1,filter:"blur(0px)",'
+        'duration:1.1,ease:"expo.out"},.95);')
+    add('tl.fromTo(".gglow",{opacity:0,scale:.6},{opacity:1,scale:1.1,duration:1.6,ease:"sine.out"},1.2);')
+    add('tl.to(".gwrap",{scale:1.04,duration:2.4,ease:"sine.inOut",yoyo:true,repeat:1},3.0);')
+    add('tl.fromTo(".g-deva",{opacity:0,scale:2,filter:"blur(12px)"},{opacity:1,scale:1,filter:"blur(0px)",'
+        'duration:.5,ease:"expo.out"},2.2);')
+    glint(".g-deva .foil-txt", 2.9)
+    wipe(".g-en", 3.1, 1.2)
+    draw_div(".g-div", 4.2)
+    wordsin(".g-sh1", 5.2, .12)
+    wordsin(".g-sh2", 6.2, .12)
+    glint(".g-deva .foil-txt", 7.4)
 
-    # Ganesh ji
-    add('tl.fromTo(".gwrap",{opacity:0,scale:.9,filter:"blur(10px)"},{opacity:1,scale:1,filter:"blur(0px)",'
-        'duration:1.7,ease:"power2.out"},2.4);')
-    add('tl.fromTo(".gwrap img",{scale:1},{scale:1.03,duration:2.6,ease:"sine.inOut",yoyo:true,repeat:1},4.2);')
-    rise(".g-deva", 3.9)
-    wipe(".g-en", 4.5, 1.2)
-    draw_div(".g-div", 5.6)
-    rise(".g-sh1", 7.13)
-    rise(".g-sh2", 7.6)
+    # ---- T0 light flare into the invitation
+    add(f'tl.fromTo("#flare",{{opacity:0,scale:.2}},{{opacity:1,scale:3,duration:.3,ease:"power2.in"}},{CUTS[0] - .3:.2f});')
+    add(f'tl.to("#flare",{{opacity:0,scale:4,duration:.55,ease:"power2.out"}},{CUTS[0]:.2f});')
 
-    # invitation (ivory garden page)
+    # ---- invitation
     a = S["invite"][0]
-    write(".i-1", a + .3)
-    write(".i-2", a + .9, .03)
-    pop(".i-hands", a + 1.4, .7, "scale:.6,opacity:0", "back.out(1.6)")
-    add(f'tl.fromTo(".i-hands .hm-his",{{x:-90,opacity:0}},{{x:0,opacity:1,duration:.9,ease:"power2.out"}},{a + 1.6:.2f});')
-    add(f'tl.fromTo(".i-hands .hm-her",{{x:110,opacity:0}},{{x:0,opacity:1,duration:.9,ease:"power2.out"}},{a + 1.9:.2f});')
-    pop(".i-hands .hm-ring", a + 2.7, .45, 'scale:0,opacity:0,transformOrigin:"50% 50%"', "back.out(3)")
-    sparks(".i-sp", a + 2.85)
-    write(".i-3", a + 3.0, .025)
-    wipe(".i-eng", a + 3.9, 1.2)
-    write(".i-5", a + 4.8, .07)
-    draw_div(".i-div", a + 5.3)
-    write(".i-6", a + 5.5, .03)
-    write(".i-7", a + 6.1, .02)
+    frame_in("invite", a + .05)
+    slam(".i-1", a + .25, .025)
+    slam(".i-2", a + .8, .03)
+    pop(".i-hands", a + 1.3, .7, "scale:.3,opacity:0,rotation:-30", "back.out(1.6)")
+    add(f'tl.fromTo(".i-hands .hm-his",{{x:-90,opacity:0}},{{x:0,opacity:1,duration:.8,ease:"power2.out"}},{a + 1.6:.2f});')
+    add(f'tl.fromTo(".i-hands .hm-her",{{x:110,opacity:0}},{{x:0,opacity:1,duration:.8,ease:"power2.out"}},{a + 1.85:.2f});')
+    pop(".i-hands .hm-ring", a + 2.55, .4, 'scale:0,opacity:0,transformOrigin:"50% 50%"', "back.out(3)")
+    sparks(".i-sp", a + 2.7)
+    wipe(".i-eng", a + 2.9, 1.2)
+    glint(".i-eng", a + 4.0)
+    slam(".i-5", a + 3.9, .03)
+    draw_div(".i-div", a + 4.5)
+    wordsin(".i-6", a + 4.7)
+    wordsin(".i-7", a + 5.2)
 
-    # couples
-    for n in (1, 2):
-        a = S[f"c{n}"][0]
-        write(f".c{n}-cap", a + .4, .04)
-        wipe(f".c{n}-him", a + 1.0, 1.0)
-        pop(f".c{n}-amp", a + 1.9, .4, "scale:.4,opacity:0", "back.out(3)")
-        wipe(f".c{n}-her", a + 2.1, .8)
-        draw_div(f".c{n}-div", a + 2.8)
-        sparks(f".c{n}-sp", a + 3.0)
-    a, b = S["c1"]
-    add(f'tl.fromTo(".c1-stage",{{y:260,opacity:0}},{{y:0,opacity:1,duration:1.4,ease:"power3.out"}},{a + .3:.2f});')
-    add(f'tl.fromTo(".swing",{{rotation:-3}},{{rotation:3,duration:1.6,ease:"sine.inOut",yoyo:true,repeat:5}},{a + .3:.2f});')
-    a, b = S["c2"]
-    add(f'tl.fromTo(".c2-stage",{{opacity:0,y:120}},{{opacity:1,y:0,duration:1.2,ease:"power3.out"}},{a + .3:.2f});')
-    # sangeet: they sway together to the beat while music notes drift up
-    add(f'tl.fromTo(".dsway",{{rotation:-2}},{{rotation:2,duration:.8,ease:"sine.inOut",yoyo:true,repeat:9}},{a + .5:.2f});')
-    add(f'tl.fromTo(".cs-g",{{y:0}},{{y:-10,duration:.4,ease:"sine.inOut",yoyo:true,repeat:17}},{a + .5:.2f});')
-    add(f'tl.fromTo(".cs-b",{{y:-10}},{{y:0,duration:.4,ease:"sine.inOut",yoyo:true,repeat:17}},{a + .5:.2f});')
-    add(f'tl.fromTo(".note",{{y:40,opacity:0}},{{y:-60,opacity:1,duration:2.4,stagger:.5,ease:"sine.out"}},{a + 1.0:.2f});')
+    # ---- T1 zoom through the ring into the corridor
+    c = CUTS[1]
+    add(f'tl.to("#sc-invite .pan",{{scale:9,duration:.75,ease:"power3.in",transformOrigin:"{RING[0]}px {RING[1]}px"}},'
+        f'{c - .6:.2f});')
+    add(f'tl.fromTo("#sc-c1",{{clipPath:"circle(0px at {RING[0]}px {RING[1]}px)"}},'
+        f'{{clipPath:"circle(1500px at {RING[0]}px {RING[1]}px)",duration:.85,ease:"power2.in"}},{c - .55:.2f});')
 
-    # both couples
-    a = S["both"][0]
-    write(".b-cap", a + .4, .05)
-    wipe(".b-s1", a + .9, 1.0)
-    wipe(".b-s2", a + 1.8, 1.2)
-    add(f'tl.fromTo(".bp1",{{x:-320,opacity:0}},{{x:0,opacity:1,duration:1.5,ease:"power2.out"}},{a + .6:.2f});')
-    add(f'tl.fromTo(".bp2",{{x:320,opacity:0}},{{x:0,opacity:1,duration:1.5,ease:"power2.out"}},{a + .6:.2f});')
-    write(".b-t1", a + 3.1, .025)
-    write(".b-t2", a + 4.0, .025)
-    pop(".b-heart", a + 2.4, .5, "scale:0,opacity:0", "back.out(3)")
-    add(f'tl.to(".b-heart",{{scale:1.15,duration:.36,ease:"sine.inOut",yoyo:true,repeat:9}},{a + 2.9:.2f});')
+    # ---- couples walking through the palace
+    for n, sid in ((1, "c1"), (2, "c2")):
+        a, b = S[sid]
+        a0, b0 = a - PAD_IN[sid], b + PAD_OUT.get(sid, 0)
+        add(f'tl.fromTo("#sc-{sid} .mid",{{x:0}},{{x:-1100,duration:{b0 - a0:.2f},ease:"none"}},{a0:.2f});')
+        if sid == "c1":
+            add(f'tl.fromTo("#sc-{sid} .fore",{{x:200}},{{x:-2400,duration:{b0 - a0:.2f},ease:"none"}},{a0:.2f});')
+        walk_cycle(f"w{n}", a0, b0)
+        slam(f".c{n}-cap", a + .35, .03)
+        wipe(f".c{n}-him", a + .8, .9)
+        glint(f".c{n}-him", a + 1.8)
+        pop(f".c{n}-amp", a + 1.6, .35, "scale:.3,opacity:0", "back.out(3)")
+        wipe(f".c{n}-her", a + 1.8, .7)
+        draw_div(f".c{n}-div", a + 2.5)
+        sparks(f".c{n}-sp", a + 2.6)
 
-    # date and venue
+    # ---- T2 whip pan c1 -> c2
+    c = CUTS[2]
+    add(f'tl.fromTo("#sc-c1 .pan",{{x:0}},{{x:-1080,duration:.4,ease:"power3.in"}},{c - .25:.2f});')
+    add(f'tl.fromTo("#sc-c2 .pan",{{x:1080}},{{x:0,duration:.45,ease:"power3.out"}},{c - .1:.2f});')
+    add(f'tl.set("#sc-c1 .pan, #sc-c2 .pan",{{filter:"url(#whip)"}},{c - .2:.2f});')
+    add(f'tl.set("#sc-c1 .pan, #sc-c2 .pan",{{filter:"none"}},{c + .35:.2f});')
+    add(f'tl.fromTo("#streaks",{{opacity:0,x:600}},{{opacity:.8,x:-600,duration:.45,ease:"none"}},{c - .2:.2f});')
+    add(f'tl.set("#streaks",{{opacity:0}},{c + .3:.2f});')
+    add(f'tl.fromTo("#sc-c2 .sundisc",{{scale:.8,opacity:.6}},{{scale:1.15,opacity:1,duration:4,ease:"sine.inOut",'
+        f'transformOrigin:"50% 50%"}},{c:.2f});')
+
+    # ---- T3 diamond shatter c2 -> both
+    c = CUTS[3]
+    add(f'tl.fromTo("#diamond",{{scale:0,opacity:0,rotation:-40}},{{scale:1,opacity:1,rotation:0,duration:.45,'
+        f'ease:"back.out(2)"}},{c - .7:.2f});')
+    add(f'tl.to("#diamond",{{scale:1.15,duration:.2,ease:"power2.in"}},{c - .22:.2f});')
+    add(f'tl.set("#diamond",{{opacity:0}},{c:.2f});')
+    add(f'tl.fromTo("#shardset",{{opacity:0}},{{opacity:1,duration:.01}},{c:.2f});')
+    add(f'document.querySelectorAll(".shard").forEach(e => tl.fromTo(e,{{x:0,y:0,rotation:0,opacity:1}},'
+        f'{{x:+e.dataset.tx,y:+e.dataset.ty,rotation:+e.dataset.r,opacity:0,duration:.9,ease:"power3.out"}},{c:.2f}));')
+    add(f'tl.set("#flash",{{opacity:.9}},{c:.2f});')
+    add(f'tl.to("#flash",{{opacity:0,duration:.45,ease:"power2.out"}},{c + .01:.2f});')
+
+    # ---- both couples walk into the durbar hall
+    a, b = S["both"]
+    add(f'tl.fromTo("#sc-both .mid",{{x:0}},{{x:-700,duration:{b - a:.2f},ease:"none"}},{a:.2f});')
+    walk_cycle("w3", a, b)
+    walk_cycle("w4", a + .1, b)
+    add(f'tl.fromTo(".chand",{{rotation:-2}},{{rotation:2,duration:1.8,ease:"sine.inOut",yoyo:true,repeat:3}},{a:.2f});')
+    slam(".b-cap", a + .4, .04)
+    wipe(".b-s1", a + .8, .9)
+    wipe(".b-s2", a + 1.6, 1.1)
+    glint(".b-s2", a + 2.7)
+    wordsin(".b-t1", a + 2.8)
+    wordsin(".b-t2", a + 3.3)
+
+    # ---- T4 rose-petal burst both -> date
+    c = CUTS[4]
+    add(f'document.querySelectorAll(".bp").forEach(e => tl.fromTo(e,{{x:-200,y:+e.dataset.y + 300,rotation:0}},'
+        f'{{x:1300,y:+e.dataset.y - 300,rotation:+e.dataset.rot,duration:1.1,ease:"power1.inOut"}},'
+        f'{c - .55:.2f} + +e.dataset.d));')
+
+    # ---- save the date
     a = S["date"][0]
-    write(".d-cap", a + .3, .04)
-    draw_div(".d-div", a + .7)
-    rise(".d-mon", a + .8)
-    pop(".d-num", a + .9, .6, "scale:2.2,opacity:0", "back.out(1.6)")
-    add(f'tl.fromTo(".d-day",{{x:-110,opacity:0}},{{x:0,opacity:1,duration:.5,ease:"power3.out"}},{a + 1.1:.2f});')
-    add(f'tl.fromTo(".d-yr",{{x:110,opacity:0}},{{x:0,opacity:1,duration:.5,ease:"power3.out"}},{a + 1.1:.2f});')
-    add(f'tl.fromTo(".d-pin",{{y:-240,opacity:0}},{{y:0,opacity:1,duration:.7,ease:"bounce.out"}},{a + 1.4:.2f});')
-    rise(".d-ven", a + 1.8)
-    write(".d-a1", a + 1.95, .02)
-    write(".d-a2", a + 2.25, .02)
-    write(".d-a3", a + 2.55, .02)
-    draw_div(".d-div2", a + 3.0)
+    frame_in("date", a + .05)
+    slam(".d-cap", a + .3, .045)
+    draw_div(".d-div", a + .8)
+    slam(".d-day", a + .9, .05)
+    add(f'tl.fromTo(".d-b1, .d-b2",{{scaleY:0}},{{scaleY:1,duration:.4,ease:"power3.out"}},{a + 1.0:.2f});')
+    pop(".d-num", a + 1.1, .55, "scale:3,opacity:0", "expo.out")
+    add(f'tl.fromTo(".d-mon",{{x:-90,opacity:0}},{{x:0,opacity:1,duration:.45,ease:"power3.out"}},{a + 1.3:.2f});')
+    add(f'tl.fromTo(".d-yr",{{x:90,opacity:0}},{{x:0,opacity:1,duration:.45,ease:"power3.out"}},{a + 1.3:.2f});')
+    add(f'tl.fromTo(".d-pin",{{y:-260,opacity:0}},{{y:0,opacity:1,duration:.7,ease:"bounce.out"}},{a + 1.7:.2f});')
+    slam(".d-ven", a + 2.2, .05)
+    slam(".d-a1", a + 2.45, .02)
+    slam(".d-a2", a + 2.8, .02)
+    slam(".d-a3", a + 3.15, .02)
+    slam(".d-a4", a + 3.5, .04)
+    draw_div(".d-div2", a + 3.8)
 
-    # closing: pavilion, elephants, bouquet
+    # ---- T5 iris from the pin into the closing card
+    c = CUTS[5]
+    add(f'tl.fromTo("#sc-close",{{clipPath:"circle(0px at {PIN[0]}px {PIN[1]}px)"}},'
+        f'{{clipPath:"circle(1500px at {PIN[0]}px {PIN[1]}px)",duration:.8,ease:"power2.in"}},{c - .3:.2f});')
+
+    # ---- closing
     a = S["close"][0]
-    write(".x-1", a + .3, .04)
-    wipe(".x-2", a + .7, 1.0)
-    add(f'tl.fromTo(".x-pav",{{clipPath:"inset(100% 0% 0% 0%)"}},{{clipPath:"inset(0% 0% 0% 0%)",duration:1.2,'
-        f'ease:"power2.out"}},{a + .8:.2f});')
-    add(f'tl.fromTo(".x-el1",{{x:-260,opacity:0}},{{x:0,opacity:1,duration:1.2,ease:"power2.out"}},{a + 1.0:.2f});')
-    add(f'tl.fromTo(".x-el2",{{x:260,opacity:0}},{{x:0,opacity:1,duration:1.2,ease:"power2.out"}},{a + 1.0:.2f});')
-    pop(".x-bq", a + 1.8, .6, 'scale:0,opacity:0,transformOrigin:"50% 100%"', "back.out(1.8)")
-    pop(".x-ss", a + 1.9, .5, "scale:.6,opacity:0", "back.out(2)")
-    add(f'tl.fromTo(".x-pea",{{opacity:0,y:-30}},{{opacity:1,y:0,duration:.6,ease:"power2.out"}},{a + 2.0:.2f});')
-    wipe(".x-3", a + 2.3, 1.1)
-    rise(".x-date", a + 3.0)
-    write(".x-5", a + 3.2, .03)
+    frame_in("close", a + .3)
+    slam(".x-1", a + .5, .04)
+    wipe(".x-2", a + .9, 1.0)
+    glint(".x-2", a + 2.0)
+    add(f'tl.fromTo(".x-pav",{{clipPath:"inset(100% 0% 0% 0%)"}},{{clipPath:"inset(0% 0% 0% 0%)",duration:1.1,'
+        f'ease:"power2.out"}},{a + 1.1:.2f});')
+    add(f'tl.fromTo(".x-el1",{{x:-280,opacity:0}},{{x:0,opacity:1,duration:1.1,ease:"power2.out"}},{a + 1.3:.2f});')
+    add(f'tl.fromTo(".x-el2",{{x:280,opacity:0}},{{x:0,opacity:1,duration:1.1,ease:"power2.out"}},{a + 1.3:.2f});')
+    pop(".x-bq", a + 2.0, .6, 'scale:0,opacity:0,transformOrigin:"50% 100%"', "back.out(1.8)")
+    add(f'tl.fromTo(".x-ss",{{opacity:0,scale:2,filter:"blur(10px)"}},{{opacity:1,scale:1,filter:"blur(0px)",'
+        f'duration:.5,ease:"expo.out"}},{a + 2.2:.2f});')
+    glint(".x-ss .foil-txt", a + 2.8)
+    wipe(".x-3", a + 2.6, 1.1)
+    slam(".x-date", a + 3.5, .04)
+    wordsin(".x-5", a + 3.9)
+    glint(".x-2", a + 5.5)
+
+    # ---- always on: grain, light leaks, gold dust, slow push on card scenes
+    add(f'tl.fromTo("#grain",{{backgroundPosition:"0px 0px"}},{{backgroundPosition:"-2560px 1280px",duration:{DUR},'
+        f'ease:"steps(600)"}},0);')
+    add(f'tl.fromTo("#leak1",{{x:-300,y:-200,opacity:.35}},{{x:300,y:300,opacity:.6,duration:{DUR / 2},ease:"sine.inOut",'
+        f'yoyo:true,repeat:1}},0);')
+    add(f'tl.fromTo("#leak2",{{x:250,y:400,opacity:.25}},{{x:-250,y:-100,opacity:.5,duration:{DUR / 3},'
+        f'ease:"sine.inOut",yoyo:true,repeat:2}},0);')
+    for sid, (a, b) in S.items():
+        if KIND[sid] == "card":
+            add(f'tl.fromTo("#sc-{sid} .leather",{{scale:1}},{{scale:1.06,duration:{b - a + .5:.2f},ease:"none"}},{a:.2f});')
     return "\n".join(T)
+
+
+def dust_timeline(specs):
+    out = []
+    for i, delay, dur, dy, dx in specs:
+        t = delay
+        while t < DUR:
+            out.append(f'tl.fromTo("#gd{i}",{{y:0,x:0,opacity:0}},{{y:{dy:.0f},x:{dx:.0f},opacity:0,duration:{dur:.2f},'
+                       f'ease:"sine.inOut",keyframes:{{opacity:[0,1,.8,0]}}}},{t:.2f});')
+            t += dur + 1.0
+    return "\n".join(out)
 
 
 CSS = """
 @font-face { font-family: "Pinyon"; src: url("assets/fonts/pinyon.ttf"); }
-@font-face { font-family: "Marcellus"; src: url("assets/fonts/marcellus.ttf"); }
-@font-face { font-family: "Playfair"; font-weight: 400 900; src: url("assets/fonts/playfair.ttf"); }
+@font-face { font-family: "Cinzel"; font-weight: 400 900; src: url("assets/fonts/cinzel.ttf"); }
 @font-face { font-family: "Playfair"; font-style: italic; font-weight: 400 900; src: url("assets/fonts/playfair-italic.ttf"); }
 @font-face { font-family: "Yatra"; src: url("assets/fonts/yatra.ttf"); }
 @font-face { font-family: "NotoDeva"; font-weight: 100 900; src: url("assets/fonts/notoserifdeva.ttf"); }
-:root { --maroon: #7d1d3f; --rose: #b0365f; --gold: #8a5f1c; --ink: #3f2533; --teal: #1d5566; }
+:root { --gold: #e9c46a; --cream: #fff4e0; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 1080px; height: 1920px; overflow: hidden; background: #bfe3d9; }
-#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #bfe3d9; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #3f0712; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #3f0712; }
 .clip { position: absolute; inset: 0; }
 .scene { overflow: hidden; }
 .pan { position: absolute; inset: 0; }
-.world { position: absolute; left: 0; top: 0; transform-origin: 50% 60%; }
-.stage { position: absolute; left: 0; top: 0; }
+.leather { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 50% 50%; }
+.world, .frame, .stage { position: absolute; left: 0; top: 0; }
+.walk .frame .fr-c3, .walk .frame .fr-c4, .walk .frame .fr-s1, .walk .frame .fr-s2, .walk .frame .band-b { display: none; }
 .row { position: absolute; left: 0; width: 1080px; text-align: center; white-space: nowrap; }
 .row svg { display: inline-block; vertical-align: top; }
-.t { display: inline-block; }
-.lt { display: inline-block; }
+.t, .lt, .wd { display: inline-block; }
 .box { position: absolute; }
 .box > svg, .box > img { display: block; }
-.cap { font: 30px "Marcellus"; letter-spacing: 6px; color: var(--gold); }
-.cap2 { font: 34px "Marcellus"; letter-spacing: 4px; color: var(--teal); }
-.cap3 { font: 54px "Marcellus"; letter-spacing: 14px; color: var(--maroon); }
-.cap4 { font: 56px "Marcellus"; letter-spacing: 6px; color: var(--maroon); }
-.ital { font: italic 400 40px "Playfair"; color: var(--ink); }
+.caps { font: 600 32px "Cinzel"; letter-spacing: 5px; color: #ffffff; }
+.caps.gold { color: var(--gold); }
+.caps2 { font: 700 34px "Cinzel"; letter-spacing: 7px; color: #ffffff; }
+.caps3 { font: 700 56px "Cinzel"; letter-spacing: 8px; color: #ffffff; }
+.addr { font: 600 34px "Cinzel"; letter-spacing: 3px; color: #ffffff; }
+.ital { font: italic 400 38px "Playfair"; color: var(--cream); }
 .ital.sm { font-size: 34px; }
-.body { font: 400 38px "Playfair"; color: var(--ink); }
-.small { font: italic 400 30px "Playfair"; color: var(--gold); }
-.addr { font: 500 42px "Playfair"; color: var(--ink); }
-.deva { font: 62px "Yatra"; color: #c2410c; }
-.deva2 { font: 38px "Yatra"; color: #a3123f; }
-.shloka { font: 500 34px "NotoDeva"; color: var(--teal); }
-.script { font: 72px "Pinyon"; color: var(--rose); line-height: 1.25; }
-.script2 { font: 74px "Pinyon"; color: var(--rose); line-height: 1.25; }
-.script3 { font: 56px "Pinyon"; color: var(--maroon); line-height: 1.25; }
-.big { font: 132px "Pinyon"; color: var(--rose); line-height: 1.25; }
-.name { font: 90px "Pinyon"; color: var(--maroon); line-height: 1.25; }
+.deva { font: 64px "Yatra"; }
+.deva2 { font: 40px "Yatra"; }
+.shloka { font: 500 32px "NotoDeva"; color: var(--cream); }
+.script { font: 70px "Pinyon"; color: #ffffff; line-height: 1.3; }
+.script2 { font: 76px "Pinyon"; color: #ffffff; line-height: 1.3; }
+.g-en-row { font-size: 64px; }
+.script3 { font: 64px "Pinyon"; color: #ffffff; line-height: 1.3; }
+.name { font: 96px "Pinyon"; color: #ffffff; line-height: 1.3; text-shadow: 0 4px 18px rgba(0,0,0,.35); }
 .amp { font: italic 400 46px "Playfair"; color: var(--gold); }
-.light .cap { color: #f5d58a; } .light .name { color: #fff4e6; } .light .amp { color: #f5d58a; }
-.light .name, .light .cap { text-shadow: 0 2px 14px rgba(40, 10, 60, .45); }
+.foil-txt {
+  background: linear-gradient(100deg, #b8862b 0%, #e9c46a 35%, #fff6d5 48%, #fff 50%, #fff6d5 52%, #e9c46a 65%, #b8862b 100%);
+  background-size: 300% 100%; background-position: 120% 0; -webkit-background-clip: text; background-clip: text;
+  color: transparent; }
+.name .wipe { background: linear-gradient(100deg, #fff 40%, #fff6d5 48%, #e9c46a 50%, #fff6d5 52%, #fff 60%);
+  background-size: 300% 100%; background-position: 120% 0; -webkit-background-clip: text; background-clip: text; color: transparent; }
 .wipe { display: inline-block; padding: 0 24px; }
-.gwrap { transform-origin: 50% 50%; }
-.gwrap img { width: 500px; height: 507px; }
+.gwrap, .gring, .gglow { transform-origin: 50% 50%; }
+.gglow { border-radius: 50%; background: radial-gradient(circle, rgba(255,214,120,.55) 0%, rgba(255,214,120,0) 65%); }
+.gwrap img { width: 440px; height: 446px; }
 .spark { position: absolute; left: -20px; top: -20px; }
-.heart { transform-origin: 50% 50%; }
 .pav svg { width: 100%; height: 100%; }
-.daterow { position: absolute; left: 0; width: 1080px; display: flex; align-items: center; justify-content: center; gap: 22px; }
-.side { font: 34px "Marcellus"; letter-spacing: 4px; color: var(--teal); border-top: 2px solid #c9973f;
-  border-bottom: 2px solid #c9973f; padding: 12px 4px; width: 190px; text-align: center; }
-.num { font: 700 200px "Playfair"; color: var(--rose); line-height: 1.05; width: 250px; text-align: center; }
-.petal { position: absolute; left: 0; top: 0; z-index: 25; }
-#pillar { position: absolute; left: 0; top: 0; width: 260px; height: 1920px; filter: blur(3px); z-index: 30; }
-#doors { z-index: 40; perspective: 2200px; }
+.daterow { position: absolute; left: 0; width: 1080px; display: flex; align-items: center; justify-content: center; gap: 26px; }
+.side { font: 700 46px "Cinzel"; letter-spacing: 3px; color: #ffffff; width: 160px; text-align: center; }
+.bar { width: 4px; height: 150px; background: linear-gradient(#b8862b, #fff1b8, #b8862b); transform-origin: 50% 50%; }
+.num { font: 700 180px "Cinzel"; color: #ffffff; line-height: 1; width: 240px; text-align: center; }
+#flare { position: absolute; left: 140px; top: 560px; width: 800px; height: 800px; border-radius: 50%; z-index: 45;
+  background: radial-gradient(circle, #ffffff 0%, #fff1b8 25%, rgba(233,196,106,.6) 50%, rgba(233,196,106,0) 70%); opacity: 0; }
+#flash { position: absolute; inset: 0; background: #fff6e0; opacity: 0; z-index: 44; }
+#streaks { position: absolute; inset: 0; z-index: 43; opacity: 0; }
+#diamond { position: absolute; left: 340px; top: 760px; width: 400px; height: 400px; z-index: 42; opacity: 0; }
+#shardset { position: absolute; left: 340px; top: 760px; width: 400px; height: 400px; z-index: 42; opacity: 0; }
+.bp { position: absolute; left: 0; top: 0; z-index: 41; }
+.gd { position: absolute; border-radius: 50%; background: radial-gradient(circle, #fff6d5, #e9c46a 60%, rgba(233,196,106,0)); z-index: 30; }
+#grain { position: absolute; inset: 0; z-index: 50; background-image: url("assets/img/grain.png"); opacity: .09;
+  mix-blend-mode: overlay; pointer-events: none; }
+.leak { position: absolute; width: 900px; height: 900px; border-radius: 50%; mix-blend-mode: screen; z-index: 31; }
+#leak1 { left: -200px; top: 100px; background: radial-gradient(circle, rgba(255,170,80,.35), rgba(255,170,80,0) 65%); }
+#leak2 { left: 400px; top: 1000px; background: radial-gradient(circle, rgba(255,90,90,.28), rgba(255,90,90,0) 65%); }
+#doors { z-index: 60; perspective: 1600px; }
 #door-l, #door-r { position: absolute; top: 0; width: 540px; height: 1920px; }
 #door-l { left: 0; transform-origin: 0% 50%; } #door-r { left: 540px; transform-origin: 100% 50%; }
 #doorframe { position: absolute; inset: 0; transform-origin: 50% 45%; }
 .door-medal { position: absolute; left: 430px; top: 320px; width: 220px; height: 220px; border-radius: 50%;
-  background: #fbf0dc; border: 6px solid #c9973f; display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 0 10px rgba(201,151,63,.25); }
+  background: #4a0912; border: 6px solid #e9c46a; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 10px rgba(233,196,106,.25); }
 .door-medal img { display: block; width: 190px; height: 193px; }
 """
 
 
 def main():
-    petal_html, petal_tl = petals()
+    import random
+    rr = random.Random(4)
+    streaks = "".join(f'<rect x="{rr.uniform(-200, 900):.0f}" y="{rr.uniform(0, 1920):.0f}" width="{rr.uniform(300, 900):.0f}" '
+                      f'height="{rr.uniform(2, 8):.0f}" fill="#fff6d5" opacity="{rr.uniform(.2, .7):.2f}"/>' for _ in range(40))
+    dust_html, dust_specs = ry.gold_dust()
+    dl, dr, dframe = ry.doors_royal()
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
   <head>
@@ -417,30 +497,37 @@ def main():
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="1080" data-height="1920">
+      <svg width="0" height="0" style="position:absolute"><defs>
+        <filter id="whip" x="-20%" y="0" width="140%" height="100%"><feGaussianBlur stdDeviation="70 0"/></filter>
+        <linearGradient id="dia" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/>
+          <stop offset=".4" stop-color="#e6f4ff"/><stop offset=".6" stop-color="#b9dcf2"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+      </defs></svg>
       {build_scenes()}
-      <div id="petals" class="clip" data-start="0" data-duration="{DUR}" data-track-index="4" data-layout-allow-overflow>{petal_html}</div>
-      <div id="pillarclip" class="clip" data-start="{CUTS[0] - X - .1:.2f}" data-duration="{CUTS[-1] - CUTS[0] + 2 * X + .3:.2f}" data-track-index="5" data-layout-allow-overflow>
-        <div id="pillar">{wd.pillar()}</div>
+      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8" data-layout-allow-overflow>
+        <div id="leak1" class="leak"></div><div id="leak2" class="leak"></div>
+        {dust_html}
+        <div id="flare"></div><div id="flash"></div>
+        <svg id="streaks" viewBox="0 0 1080 1920" width="1080" height="1920">{streaks}</svg>
+        <svg id="diamond" viewBox="-200 -200 400 400" width="400" height="400">{ry.diamond_heart()}</svg>
+        <svg id="shardset" viewBox="-200 -200 400 400" width="400" height="400" style="overflow:visible">{"".join(ry.shards())}</svg>
+        {ry.burst_petals()}
+        <div id="grain"></div>
       </div>
-      <div id="doors" class="clip" data-start="0" data-duration="3.4" data-track-index="6">
-        <div id="door-l">{art.door_panel("l")}</div><div id="door-r">{art.door_panel("r")}</div>
-        <div id="doorframe">{art.door_frame()}</div>
+      <div id="doors" class="clip" data-start="0" data-duration="1.3" data-track-index="9">
+        <div id="door-l">{dl}</div><div id="door-r">{dr}</div>
+        <div id="doorframe">{dframe}</div>
         <div class="door-medal"><img src="assets/img/ganesh.png" width="190" height="193" alt=""></div>
       </div>
-      <audio id="music" src="assets/audio/music.wav" data-start="0" data-duration="{DUR}" data-track-index="7" data-volume="1"></audio>
+      <audio id="music" src="assets/audio/music.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
     </div>
     <script>
       window.__timelines = window.__timelines || {{}};
       const tl = gsap.timeline({{ paused: true }});
       gsap.set(".rg, .dv", {{ strokeDasharray: 1, strokeDashoffset: 1, opacity: 0 }});
-      gsap.set(".petal", {{ x: -100, y: -80, opacity: 0 }});
-      gsap.set("#pillar", {{ x: 1300 }});
-      document.querySelectorAll(".hang").forEach(e => gsap.set(e, {{ svgOrigin: e.dataset.o }}));
-      gsap.set(".w-pea", {{ svgOrigin: "215 1560" }});
-      gsap.set(".swing", {{ svgOrigin: "540 0" }});
-      gsap.set(".dsway", {{ svgOrigin: "540 1530" }});
+      gsap.set(".bp", {{ x: -300, y: -300 }});
+      document.querySelectorAll(".lantern, .chand").forEach(e => gsap.set(e, {{ svgOrigin: e.dataset.o }}));
 {timeline()}
-{petal_tl}
+{dust_timeline(dust_specs)}
       tl.set({{}}, {{}}, {DUR});
       window.__timelines["main"] = tl;
     </script>

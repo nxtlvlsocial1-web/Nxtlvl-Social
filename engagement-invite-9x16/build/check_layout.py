@@ -33,20 +33,14 @@ def opening(y):
 
 
 def region_fail(kind, theme, bx):
-    if kind == "garden":
-        if bx["l"] < 80 or bx["r"] > 1000 or bx["t"] < 240 or bx["b"] > 1300:
-            return f"outside the garden text area: {bx['l']:.0f}-{bx['r']:.0f} x {bx['t']:.0f}-{bx['b']:.0f}"
-        return None
-    for y in (bx["t"], bx["b"]):
-        o = opening(y)
-        if o is None:
-            return f"above the arch at y={y:.0f}"
-        if bx["l"] < o[0] + MARGIN or bx["r"] > o[1] - MARGIN:
-            return f"x {bx['l']:.0f}-{bx['r']:.0f} outside {o[0] + MARGIN:.0f}-{o[1] - MARGIN:.0f} at y={y:.0f}"
-    if worlds.THEMES[theme]["hang"] and bx["t"] < 470 and bx["r"] > 250 and bx["l"] < 830:
-        return f"under the hanging flowers (top {bx['t']:.0f})"
-    if bx["b"] > 1380:
-        return f"bottom {bx['b']:.0f} reaches the shrubs"
+    if kind == "card":
+        x0, x1, y0, y1 = 160, 920, 220, 1660
+    else:
+        x0, x1, y0, y1 = 120, 960, 230, 760
+    if kind == "card" and bx["b"] > 740 and bx["t"] < 1180:
+        x0, x1 = 200, 880          # keep clear of the side ornaments
+    if bx["l"] < x0 or bx["r"] > x1 or bx["t"] < y0 or bx["b"] > y1:
+        return f"outside the {kind} text area: {bx['l']:.0f}-{bx['r']:.0f} x {bx['t']:.0f}-{bx['b']:.0f}"
     return None
 
 
@@ -93,7 +87,7 @@ def main():
     for r in results:
         bx = r["box"]
         sid = r["scene"][3:]
-        kind, sub = generate.KIND[sid]
+        kind, sub = generate.KIND[sid], None
         msg = None
         if r["kind"] == "ring":
             ring = r["ring"]

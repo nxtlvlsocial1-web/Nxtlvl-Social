@@ -100,11 +100,11 @@ def groom(pal, flip=False):
     s = -1 if flip else 1
     buttons = "".join(f'<circle cx="{4 * s}" cy="{-420 + i * 26}" r="3.2" fill="{trim}"/>' for i in range(8))
     return (f'<g transform="scale({s} 1)">'
-            # legs
-            f'<path d="M-30 -150 L-34 -12 L-14 -12 L-6 -150 Z" fill="{pants}"/>'
-            f'<path d="M6 -150 L14 -12 L34 -12 L30 -150 Z" fill="{pants}"/>'
-            f'<path d="M-40 -14 C-40 -2 -10 0 -10 -8 L-12 -16 Z" fill="{shoe}"/>'
-            f'<path d="M12 -16 L10 -8 C10 0 44 -2 42 -14 Z" fill="{shoe}"/>'
+            # legs (each its own group so a walk cycle can swing them)
+            f'<g class="lg1"><path d="M-30 -150 L-34 -12 L-14 -12 L-6 -150 Z" fill="{pants}"/>'
+            f'<path d="M-40 -14 C-40 -2 -10 0 -10 -8 L-12 -16 Z" fill="{shoe}"/></g>'
+            f'<g class="lg2"><path d="M6 -150 L14 -12 L34 -12 L30 -150 Z" fill="{pants}"/>'
+            f'<path d="M12 -16 L10 -8 C10 0 44 -2 42 -14 Z" fill="{shoe}"/></g>'
             # coat (knee length, slight flare)
             f'<path d="M-48 -430 C-60 -330 -66 -230 -64 -150 L64 -150 C66 -230 60 -330 48 -430 '
             f'C30 -446 -30 -446 -48 -430 Z" fill="{coat}"/>'
@@ -137,10 +137,10 @@ def bride(pal, flip=False):
                      for row in (0, 1) for x in range(-108, 112, 24))
     return (f'<g transform="scale({s} 1)">'
             # lehenga: flared skirt to the ground with a border
-            f'<path d="M-40 -270 C-70 -200 -112 -90 -130 -4 C-60 8 60 8 130 -4 C112 -90 70 -200 40 -270 Z" '
+            f'<g class="skirt"><path d="M-40 -270 C-70 -200 -112 -90 -130 -4 C-60 8 60 8 130 -4 C112 -90 70 -200 40 -270 Z" '
             f'fill="{skirt}"/>'
             f'<path d="M-130 -4 C-60 8 60 8 130 -4 L126 -34 C60 -24 -60 -24 -126 -34 Z" fill="{border}"/>'
-            f'{motifs}'
+            f'{motifs}</g>'
             f'<path d="M-40 -270 C-20 -262 20 -262 40 -270 L40 -258 C20 -250 -20 -250 -40 -258 Z" fill="{border}"/>'
             # blouse and midriff
             f'<path d="M-34 -380 C-44 -330 -44 -300 -40 -270 L40 -270 C44 -300 44 -330 34 -380 Z" fill="{SKIN}"/>'
