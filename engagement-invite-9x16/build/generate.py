@@ -19,7 +19,7 @@ import royal as ry  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DUR = 46.0
-CUTS = [7.13, 12.79, 18.44, 23.27, 27.86, 33.45, 38.4]
+CUTS = [7.13, 12.79, 18.44, 23.27, 27.86, 33.45, 39.5]
 S = {
     "ganesh": (0.0, CUTS[0]),
     "invite": (CUTS[0], CUTS[1]),
@@ -113,9 +113,9 @@ def build_scenes():
         at(1100, words("Lord Ganesha & our beloved elders"), "ital i-7")
     )))
     for n, him, her, pose in (
-            (1, "Manish Tamboli", "Jyoti",
+            (1, "Jyoti", "Manish Tamboli",
              f'<g class="pose1"><g transform="translate(540 1450) scale(1.25)">{ro.back_seated(ry.C1)}</g></g>'),
-            (2, "Harsh Aswal", "Shalu",
+            (2, "Shalu", "Harsh Aswal",
              f'<g class="pose2"><g transform="translate(760 1520) scale(1.05)">{ro.side_seated(ry.C2)}</g></g>')):
         out.append(scene(f"c{n}", (
             stage(f"c{n}-stage", pose) +
@@ -152,13 +152,16 @@ def build_scenes():
         at(492, letters("FRIDAY"), "caps gold d-day") +
         f'<div class="daterow" style="top:540px"><div class="side d-mon">OCT</div><div class="bar d-b1"></div>'
         f'<div class="num d-num">30</div><div class="bar d-b2"></div><div class="side d-yr">2026</div></div>' +
-        at(800, art.pin(56).replace(art.ROSE_D, "#ffffff").replace('fill="#fff"', 'fill="#7a1022"'), "d-pin") +
-        at(888, letters("VENUE"), "caps gold d-ven") +
-        at(938, letters("NEAR 2 PETROL PUMP,"), "addr d-a1") +
-        at(988, letters("INDUSTRIAL AREA PHASE 1,"), "addr d-a2") +
-        at(1038, letters("MANGOLPURI, NEW DELHI"), "addr d-a3") +
-        at(1088, letters("110083"), "addr d-a4") +
-        at(1170, divider(), "d-div2")
+        at(764, letters("SH. RAJENDER KUMAR"), "host d-host") +
+        at(818, letters("9312634827  ·  9654569022"), "caps gold d-ph") +
+        at(880, art.pin(48).replace(art.ROSE_D, "#ffffff").replace('fill="#fff"', 'fill="#7a1022"'), "d-pin") +
+        at(952, letters("VENUE"), "caps gold d-ven") +
+        at(1000, letters("DDA MARKET,"), "addr d-a1") +
+        at(1048, letters("NEAR 2 PETROL PUMP,"), "addr d-a2") +
+        at(1096, letters("INDUSTRIAL AREA PHASE 1,"), "addr d-a3") +
+        at(1144, letters("MANGOLPURI, NEW DELHI"), "addr d-a4") +
+        at(1192, letters("110083"), "addr d-a5") +
+        at(1270, divider(), "d-div2")
     )))
     out.append(scene("close", (
         at(318, letters("AWAITING YOUR"), "caps x-1") +
@@ -309,7 +312,7 @@ def timeline():
         wipe(f".c{n}-him", a + .65, .8)
         glint(f".c{n}-him", a + 1.6)
         pop(f".c{n}-amp", a + 1.35, .3, "scale:.3,opacity:0", "back.out(3)")
-        wipe(f".c{n}-her", a + 1.5, .65)
+        wipe(f".c{n}-her", a + 1.5, .9)
         draw_div(f".c{n}-div", a + 2.1)
         sparks(f".c{n}-sp", a + 2.2)
         # golden afternoon -> sunset -> night
@@ -425,13 +428,16 @@ def timeline():
     pop(".d-num", a + .9, .5, "scale:3,opacity:0", "expo.out")
     add(f'tl.fromTo(".d-mon",{{x:-90,opacity:0}},{{x:0,opacity:1,duration:.4,ease:"power3.out"}},{a + 1.05:.2f});')
     add(f'tl.fromTo(".d-yr",{{x:90,opacity:0}},{{x:0,opacity:1,duration:.4,ease:"power3.out"}},{a + 1.05:.2f});')
-    add(f'tl.fromTo(".d-pin",{{y:-260,opacity:0}},{{y:0,opacity:1,duration:.6,ease:"bounce.out"}},{a + 1.4:.2f});')
-    slam(".d-ven", a + 1.8, .05)
-    slam(".d-a1", a + 2.0, .018)
-    slam(".d-a2", a + 2.3, .018)
-    slam(".d-a3", a + 2.6, .018)
-    slam(".d-a4", a + 2.9, .04)
-    draw_div(".d-div2", a + 3.2)
+    slam(".d-host", a + 1.4, .03)
+    slam(".d-ph", a + 1.8, .02)
+    add(f'tl.fromTo(".d-pin",{{y:-200,opacity:0}},{{y:0,opacity:1,duration:.6,ease:"bounce.out"}},{a + 2.2:.2f});')
+    slam(".d-ven", a + 2.5, .05)
+    slam(".d-a1", a + 2.7, .025)
+    slam(".d-a2", a + 2.9, .018)
+    slam(".d-a3", a + 3.15, .018)
+    slam(".d-a4", a + 3.4, .018)
+    slam(".d-a5", a + 3.65, .04)
+    draw_div(".d-div2", a + 3.9)
 
     # ---- T6 rose-petal burst into the closing card
     c = CUTS[6]
@@ -515,6 +521,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #3f071
 .caps.gold { color: var(--gold); }
 .caps2 { font: 700 34px "Cinzel"; letter-spacing: 7px; color: #ffffff; }
 .caps3 { font: 700 56px "Cinzel"; letter-spacing: 8px; color: #ffffff; }
+.host { font: 700 40px "Cinzel"; letter-spacing: 4px; color: #ffffff; }
 .addr { font: 600 34px "Cinzel"; letter-spacing: 3px; color: #ffffff; }
 .ital { font: italic 400 38px "Playfair"; color: var(--cream); }
 .ital.sm { font-size: 34px; }
