@@ -13,25 +13,27 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import art  # noqa: E402
 import elements as el  # noqa: E402
+import figures as fg  # noqa: E402
 import romance as ro  # noqa: E402
 import royal as ry  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DUR = 40.0
-CUTS = [7.13, 12.79, 18.44, 23.27, 27.86, 33.45]
+DUR = 46.0
+CUTS = [7.13, 12.79, 18.44, 23.27, 27.86, 33.45, 38.4]
 S = {
     "ganesh": (0.0, CUTS[0]),
     "invite": (CUTS[0], CUTS[1]),
     "c1": (CUTS[1], CUTS[2]),
     "c2": (CUTS[2], CUTS[3]),
-    "both": (CUTS[3], CUTS[4]),
-    "date": (CUTS[4], CUTS[5]),
-    "close": (CUTS[5], DUR),
+    "walk": (CUTS[3], CUTS[4]),
+    "both": (CUTS[4], CUTS[5]),
+    "date": (CUTS[5], CUTS[6]),
+    "close": (CUTS[6], DUR),
 }
-KIND = {"ganesh": "card", "invite": "card", "c1": "night", "c2": "night", "both": "walk", "date": "card",
+KIND = {"ganesh": "card", "invite": "card", "c1": "night", "c2": "night", "walk": "night", "both": "walk", "date": "card",
         "close": "card"}
 # how far each clip reaches past its cut so the transitions can overlap
-PAD_IN = {"invite": 0.0, "c1": 0.6, "c2": 0.0, "both": 0.7, "date": 0.0, "close": 0.0}
+PAD_IN = {"invite": 0.0, "c1": 0.6, "c2": 0.0, "walk": 0.7, "both": 0.7, "date": 0.0, "close": 0.0}
 PAD_OUT = {"ganesh": 0.0, "invite": 0.15, "c1": 0.0, "c2": 0.0, "both": 0.0, "date": 0.0}
 RING = (540, 600)          # centre of the hands medallion: the zoom-through target
 PIN = (540, 830)           # the location pin: the iris target
@@ -44,7 +46,7 @@ def scene(sid, inner):
     if KIND[sid] == "card":
         world = ry.card_bg() + ry.card_frame(sid)
     else:
-        space = {"c1": ro.rooftop, "c2": ro.pond, "both": ry.hall}[sid](sid)
+        space = {"c1": ro.rooftop, "c2": ro.pond, "walk": ro.walkway, "both": ry.hall}[sid](sid)
         world = ry.card_bg() + space + ry.card_frame(sid)
     return (f'<div id="sc-{sid}" class="clip scene {KIND[sid]}" data-start="{a0}" data-duration="{round(b0 - a0, 2)}" '
             f'data-track-index="{2 + list(S).index(sid) % 2}" style="z-index:{5 + list(S).index(sid)}">'
@@ -125,6 +127,13 @@ def build_scenes():
             "".join(f'<div class="spark c{n}-sp" style="transform:translate({x}px,{y}px)">{art.sparkle("#fff1b8")}</div>'
                     for x, y in [(250, 380), (830, 370), (330, 560), (750, 570), (540, 300)])
         )))
+    out.append(scene("walk", (
+        stage("wk-stage",
+              f'<g class="wk1"><g class="wkm1" transform="translate(478 1292) scale(0.4)">{fg.couple(ry.C1, "k1")}</g></g>'
+              f'<g class="wk2"><g class="wkm2" transform="translate(602 1292) scale(0.4)">{fg.couple(ry.C2, "k2")}</g></g>') +
+        at(300, letters("HAND IN HAND"), "caps k-cap") +
+        at(344, '<span class="wipe foil-txt k-s1">into forever</span>', "script2")
+    )))
     out.append(scene("both", (
         stage("b-stage", f'<g class="hug1"><g transform="translate(300 1660) scale(.86)">{ro.embrace(ry.C1)}</g></g>'
               f'<g class="hug2"><g transform="translate(790 1660) scale(.86)">{ro.embrace(ry.C2)}</g></g>'
@@ -303,22 +312,29 @@ def timeline():
         wipe(f".c{n}-her", a + 1.5, .65)
         draw_div(f".c{n}-div", a + 2.1)
         sparks(f".c{n}-sp", a + 2.2)
-        add(f'tl.fromTo("#sc-c{n} .star",{{opacity:.3,scale:.6}},{{opacity:1,scale:1.15,duration:.6,ease:"sine.inOut",'
-            f'yoyo:true,repeat:{int((b - a) / .6) + 1},stagger:{{each:.05,from:"random"}}}},{a - .6:.2f});')
-        add(f'tl.fromTo("#sc-c{n} .moon",{{opacity:.75}},{{opacity:1,duration:1.4,ease:"sine.inOut",yoyo:true,'
-            f'repeat:3}},{a:.2f});')
+        # golden afternoon -> sunset -> night
+        a0 = a - PAD_IN.get(f"c{n}", 0)
+        add(f'tl.fromTo("#sc-c{n} .sun",{{y:0,opacity:1}},{{y:640,opacity:.2,duration:{a + 2.9 - a0:.2f},ease:"sine.in"}},{a0:.2f});')
+        add(f'tl.fromTo("#sc-c{n} .day",{{opacity:1}},{{opacity:0,duration:1.4,ease:"sine.inOut"}},{a + .9:.2f});')
+        add(f'tl.fromTo("#sc-c{n} .dusk",{{opacity:1}},{{opacity:0,duration:1.3,ease:"sine.inOut"}},{a + 2.3:.2f});')
+        add(f'tl.fromTo("#sc-c{n} .moon",{{opacity:0,y:90}},{{opacity:1,y:0,duration:1.3,ease:"power2.out"}},{a + 2.5:.2f});')
+        add(f'tl.fromTo("#sc-c{n} .star",{{opacity:0,scale:.4}},{{opacity:1,scale:1,duration:.5,ease:"power2.out",'
+            f'stagger:{{each:.02,from:"random"}}}},{a + 2.8:.2f});')
+        add(f'tl.to("#sc-c{n} .star",{{opacity:.45,duration:.5,ease:"sine.inOut",yoyo:true,repeat:3,'
+            f'stagger:{{each:.04,from:"random"}}}},{a + 4.0:.2f});')
+        add(f'tl.fromTo("#sc-c{n} .lglow",{{opacity:.03}},{{opacity:.4,duration:.8,ease:"power2.out"}},{a + 3.0:.2f});')
         add(f'tl.fromTo("#sc-c{n} .world",{{scale:1.08}},{{scale:1,duration:{b - a + .6:.2f},ease:"none"}},{a - .6:.2f});')
     a, b = S["c1"]
     # rooftop: she nestles in, a shooting star crosses
     add(f'tl.fromTo(".pose1",{{y:240,opacity:0}},{{y:0,opacity:1,duration:1.1,ease:"power3.out"}},{a - .2:.2f});')
     add(f'tl.fromTo(".pose1",{{rotation:-.6}},{{rotation:.6,duration:1.4,ease:"sine.inOut",yoyo:true,repeat:3,'
         f'transformOrigin:"50% 100%"}},{a + .9:.2f});')
-    add(f'tl.fromTo("#sc-c1 .shoot",{{x:200,y:-80,opacity:0}},{{x:-420,y:200,opacity:1,duration:.9,ease:"power2.in",'
-        f'keyframes:{{opacity:[0,1,1,0]}}}},{a + 2.8:.2f});')
+    add(f'tl.fromTo("#sc-c1 .shoot",{{x:200,y:-80,opacity:0}},{{x:-420,y:200,opacity:1,duration:.8,ease:"power2.in",'
+        f'keyframes:{{opacity:[0,1,1,0]}}}},{a + 4.2:.2f});')
     a, b = S["c2"]
     add(f'tl.fromTo(".pose2",{{x:160,opacity:0}},{{x:0,opacity:1,duration:1.0,ease:"power3.out"}},{a:.2f});')
-    add(f'tl.fromTo("#sc-c2 .fly",{{x:0,y:0,opacity:.2}},{{x:40,y:-60,opacity:1,duration:1.2,ease:"sine.inOut",yoyo:true,'
-        f'repeat:3,stagger:{{each:.08,from:"random"}}}},{a:.2f});')
+    add(f'tl.fromTo("#sc-c2 .fly",{{x:0,y:0,opacity:0}},{{x:40,y:-60,opacity:1,duration:1.0,ease:"sine.inOut",yoyo:true,'
+        f'repeat:1,stagger:{{each:.04,from:"random"}}}},{a + 2.9:.2f});')
     add(f'tl.fromTo("#sc-c2 .ripple",{{x:-20,opacity:.2}},{{x:20,opacity:.6,duration:1.2,ease:"sine.inOut",yoyo:true,'
         f'repeat:3,stagger:.15}},{a:.2f});')
     add(f'tl.fromTo("#sc-c2 .reflect",{{scaleX:.9,opacity:.35}},{{scaleX:1.1,opacity:.6,duration:.9,ease:"sine.inOut",'
@@ -334,12 +350,43 @@ def timeline():
     add(f'tl.to("#sc-c1 .pan",{{x:-140,duration:.4,ease:"power2.in"}},{c - .4:.2f});')
     add(f'tl.fromTo("#sc-c2 .pan",{{x:160}},{{x:0,duration:.6,ease:"power3.out"}},{c:.2f});')
 
-    # ---- T3 heart reveal into the embrace
+    # ---- T3 dolly dissolve from the pond onto the palace path
     c = CUTS[3]
+    add(f'tl.to("#sc-c2 .pan",{{scale:1.12,duration:.8,ease:"power2.in"}},{c - .7:.2f});')
+    add(f'tl.fromTo("#sc-walk",{{opacity:0}},{{opacity:1,duration:.8,ease:"sine.inOut"}},{c - .7:.2f});')
+    add(f'tl.fromTo("#sc-walk .pan",{{scale:1.12}},{{scale:1,duration:1.2,ease:"power2.out"}},{c - .7:.2f});')
+
+    # ---- both couples walk hand in hand towards the screen, unhurried
+    a, b = S["walk"]
+    a0 = a - PAD_IN["walk"]
+    walk_t = b - a0
+    for cls, (x0, x1) in (("wkm1", (478, 318)), ("wkm2", (602, 772))):
+        add(f'tl.fromTo(".{cls}",{{attr:{{transform:"translate({x0} 1292) scale(0.4)"}}}},'
+            f'{{attr:{{transform:"translate({x1} 1800) scale(0.9)"}},duration:{walk_t:.2f},ease:"sine.inOut"}},{a0:.2f});')
+    step = .58
+    n = int(walk_t / step)
+    add(f'tl.fromTo(".wk1 .lg1, .wk2 .lg2",{{y:0,scaleY:1}},{{y:-12,scaleY:.93,duration:{step},ease:"sine.inOut",yoyo:true,'
+        f'repeat:{n},transformOrigin:"50% 0%"}},{a0:.2f});')
+    add(f'tl.fromTo(".wk1 .lg2, .wk2 .lg1",{{y:-12,scaleY:.93}},{{y:0,scaleY:1,duration:{step},ease:"sine.inOut",yoyo:true,'
+        f'repeat:{n},transformOrigin:"50% 0%"}},{a0:.2f});')
+    add(f'tl.fromTo(".k1-g, .k2-g",{{rotation:-1.4}},{{rotation:1.4,duration:{step},ease:"sine.inOut",yoyo:true,'
+        f'repeat:{n},transformOrigin:"50% 100%"}},{a0:.2f});')
+    add(f'tl.fromTo(".k1-b, .k2-b",{{rotation:1.4}},{{rotation:-1.4,duration:{step},ease:"sine.inOut",yoyo:true,'
+        f'repeat:{n},transformOrigin:"50% 100%"}},{a0:.2f});')
+    add(f'tl.fromTo(".wk1 .skirt, .wk2 .skirt",{{skewX:-2.5}},{{skewX:2.5,duration:{step},ease:"sine.inOut",yoyo:true,'
+        f'repeat:{n},transformOrigin:"50% 0%"}},{a0:.2f});')
+    add(f'tl.fromTo("#sc-walk .lglow",{{opacity:.15}},{{opacity:.4,duration:.9,ease:"sine.inOut",yoyo:true,repeat:5,'
+        f'stagger:.1}},{a0:.2f});')
+    slam(".k-cap", a + .2, .05)
+    wipe(".k-s1", a + .6, 1.0)
+    glint(".k-s1", a + 1.7)
+
+    # ---- T4 heart reveal into the embrace
+    c = CUTS[4]
     add(f'tl.fromTo("#sc-both",{{webkitMaskSize:"0px 0px",maskSize:"0px 0px"}},{{webkitMaskSize:"4400px 3960px",'
         f'maskSize:"4400px 3960px",duration:1.0,ease:"power2.in"}},{c - .7:.2f});')
     add(f'tl.set("#sc-both",{{webkitMaskImage:"none",maskImage:"none"}},{c + .32:.2f});')
-    add(f'tl.to("#sc-c2 .pan",{{scale:1.12,duration:.7,ease:"power2.in"}},{c - .7:.2f});')
+    add(f'tl.to("#sc-walk .pan",{{scale:1.1,duration:.7,ease:"power2.in"}},{c - .7:.2f});')
 
     # ---- both couples embrace in the durbar hall
     a, b = S["both"]
@@ -356,8 +403,8 @@ def timeline():
     wordsin(".b-t1", a + 2.1, .06)
     wordsin(".b-t2", a + 2.5, .06)
 
-    # ---- T4 diamond shatter into the save-the-date
-    c = CUTS[4]
+    # ---- T5 diamond shatter into the save-the-date
+    c = CUTS[5]
     add(f'tl.fromTo("#diamond",{{scale:0,opacity:0,rotation:-40}},{{scale:1,opacity:1,rotation:0,duration:.4,'
         f'ease:"back.out(2)"}},{c - .6:.2f});')
     add(f'tl.to("#diamond",{{scale:1.15,duration:.18,ease:"power2.in"}},{c - .2:.2f});')
@@ -386,8 +433,8 @@ def timeline():
     slam(".d-a4", a + 2.9, .04)
     draw_div(".d-div2", a + 3.2)
 
-    # ---- T5 rose-petal burst into the closing card
-    c = CUTS[5]
+    # ---- T6 rose-petal burst into the closing card
+    c = CUTS[6]
     add(f'document.querySelectorAll(".bp").forEach(e => tl.fromTo(e,{{x:-200,y:+e.dataset.y + 300,rotation:0}},'
         f'{{x:1300,y:+e.dataset.y - 300,rotation:+e.dataset.rot,duration:1.0,ease:"power1.inOut"}},'
         f'{c - .5:.2f} + +e.dataset.d));')

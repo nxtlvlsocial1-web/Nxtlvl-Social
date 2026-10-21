@@ -116,17 +116,18 @@ def groom(pal, flip=False):
             # arms: back arm down, front arm reaching forward to hold hands
             f'<path d="M-50 -420 C-70 -360 -74 -300 -70 -250 L-52 -248 C-52 -300 -44 -360 -36 -410 Z" fill="{coat}"/>'
             f'<circle cx="-61" cy="-242" r="11" fill="{SKIN}"/>'
-            f'<path d="M44 -424 C66 -380 78 -330 88 -286 L106 -270 L92 -262 L72 -290 C60 -330 46 -370 34 -404 Z" '
-            f'fill="{coat}"/>'
-            f'<circle cx="100" cy="-268" r="11" fill="{SKIN}"/>'
+            f'<path d="M36 -426 C56 -400 66 -350 68 -306 C70 -290 74 -278 80 -268 L64 -262 C58 -276 54 -292 52 -308 '
+            f'C50 -350 42 -390 28 -412 Z" fill="{coat}"/>'
+            f'<path d="M64 -262 L80 -268" stroke="{trim}" stroke-width="4"/>'
+            f'<ellipse cx="76" cy="-256" rx="11" ry="13" fill="{SKIN}"/>'
             # neck, collar, head, hair (no face drawn)
             f'<rect x="-11" y="-470" width="22" height="34" fill="{SKIN_D}"/>'
             f'<path d="M-22 -440 L0 -428 L22 -440 L22 -432 L0 -420 L-22 -432 Z" fill="{trim}"/>'
             f'<ellipse cx="2" cy="-498" rx="34" ry="40" fill="{SKIN}"/>'
-            f'<path d="M-34 -500 C-38 -546 10 -556 34 -530 C42 -520 40 -506 36 -498 C30 -520 0 -526 -20 -514 '
-            f'C-28 -508 -32 -502 -34 -500 Z" fill="{HAIR}"/>'
-            f'<path d="M-34 -500 C-36 -486 -34 -474 -28 -466 L-26 -496 Z" fill="{HAIR}"/>'
-            f'<ellipse cx="-30" cy="-494" rx="6" ry="10" fill="{SKIN_D}"/></g>')
+            f'<path d="M-33 -486 C-42 -528 -22 -548 6 -548 C30 -548 44 -532 38 -490 C36 -508 28 -520 14 -522 '
+            f'C-2 -526 -22 -518 -30 -500 Z" fill="{HAIR}"/>'
+            f'<path d="M-33 -486 C-35 -478 -34 -470 -31 -464 L-28 -490 Z" fill="{HAIR}"/>'
+            f'<path d="M38 -490 C40 -482 39 -474 36 -468 L33 -494 Z" fill="{HAIR}"/></g>')
 
 
 def bride(pal, flip=False):
@@ -147,8 +148,9 @@ def bride(pal, flip=False):
             f'<path d="M-36 -386 C-44 -350 -42 -326 -38 -310 L38 -310 C42 -326 44 -350 36 -386 '
             f'C20 -398 -20 -398 -36 -386 Z" fill="{blouse}"/>'
             # arms: front arm reaching towards the groom
-            f'<path d="M-34 -380 C-56 -340 -72 -300 -86 -270 L-74 -262 C-60 -292 -44 -326 -26 -360 Z" fill="{SKIN}"/>'
-            f'<path d="M-82 -280 L-70 -272" stroke="{jewel}" stroke-width="6"/>'
+            f'<path d="M-30 -382 C-46 -356 -52 -322 -54 -296 C-55 -284 -56 -274 -56 -266 L-44 -264 C-43 -274 -42 -286 -41 -298 '
+            f'C-38 -322 -32 -352 -20 -372 Z" fill="{SKIN}"/>'
+            f'<path d="M-57 -282 L-42 -280" stroke="{jewel}" stroke-width="6"/>'
             f'<path d="M34 -380 C46 -330 50 -290 46 -250 L34 -250 C36 -290 32 -330 24 -364 Z" fill="{SKIN}"/>'
             f'<path d="M34 -262 L47 -262" stroke="{jewel}" stroke-width="6"/>'
             # neck, head, hair bun with flowers, maang tikka (no face drawn)
@@ -178,6 +180,7 @@ COUPLE2 = {"groom": ("#a9c8b0", "#c9973f", "#f6ead2", "#efe9dc", "#7a5a2a"),
 def couple(pal, cls):
     """Groom on the left, bride on the right, holding hands between them. Origin at their feet."""
     return (f'<g class="{cls}">'
-            f'<g class="{cls}-g"><g transform="translate(-95 0)">{groom(pal["groom"])}</g></g>'
-            f'<g class="{cls}-b"><g transform="translate(95 0)">{bride(pal["bride"])}</g></g>'
-            f'<circle class="{cls}-h" cx="10" cy="-268" r="13" fill="{SKIN}"/></g>')
+            f'<g class="{cls}-g"><g transform="translate(-74 0)">{groom(pal["groom"])}</g></g>'
+            f'<g class="{cls}-b"><g transform="translate(74 0)">{bride(pal["bride"])}</g></g>'
+            f'<ellipse class="{cls}-h" cx="10" cy="-258" rx="16" ry="14" fill="{SKIN}"/>'
+            f'<path d="M-2 -262 C4 -268 14 -268 22 -262" stroke="{SKIN_D}" stroke-width="2" fill="none"/></g>')
