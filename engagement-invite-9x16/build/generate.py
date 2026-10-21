@@ -13,6 +13,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import art  # noqa: E402
 import figures as fg  # noqa: E402
+import elements as el  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DUR = 50.0
@@ -30,8 +31,8 @@ S = {
     "c1": (g(3), g(5)),         # -> 25.93
     "c2": (g(5), g(7)),         # -> 33.45
     "both": (g(7), g(9)),       # -> 40.97
-    "date": (g(9), 45.6),
-    "close": (45.6, DUR),
+    "date": (g(9), 44.9),
+    "close": (44.9, DUR),
 }
 
 
@@ -99,7 +100,7 @@ def build_scenes():
     # Ganesh ji, presented like the reference: soft fade-in of the line art, title below
     out.append(scene("ganesh", (
         f'<div class="rayclip"><div class="rays">{rays()}</div></div>' +
-        box("gwrap", 330, 400, 420, 525, fg.ganesh_brush()) +
+        box("gwrap", 290, 405, 500, 507, '<img src="assets/img/ganesh.png" width="500" height="507" alt="">') +
         at(975, "॥ श्री गणेशाय नमः ॥", "deva g-deva") +
         at(1060, "Shree Ganeshaya Namah", "script g-en") +
         at(1180, art.divider(440), "g-div") +
@@ -107,15 +108,17 @@ def build_scenes():
         at(1292, "निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥", "shloka g-sh2")
     )))
     out.append(scene("invite", (
-        at(470, "With the divine blessings of", "ital i-1") +
-        at(532, "LORD GANESHA &amp; OUR ELDERS", "cap2 i-2") +
-        at(615, art.rings(170), "i-rings") +
-        at(790, "we joyfully invite you to celebrate the", "body i-3") +
-        at(860, '<span class="wipe i-eng">Engagement</span>', "big i-4") +
-        at(1045, chars("CEREMONY", "ic"), "cap3 i-5") +
-        at(1135, art.divider(440), "i-div") +
-        at(1185, "of our two beautiful couples", "ital i-6") +
-        at(1265, "two families · two love stories · one celebration", "small i-7")
+        at(450, "With the divine blessings of", "ital i-1") +
+        at(508, "LORD GANESHA &amp; OUR ELDERS", "cap2 i-2") +
+        box("medal i-hands", 390, 568, 300, 300, el.hands_medallion(300)) +
+        "".join(f'<div class="spark i-sp" style="transform:translate({x}px,{y}px)">{art.sparkle()}</div>'
+                for x, y in [(540, 690), (585, 720), (500, 735)]) +
+        at(895, "we joyfully invite you to celebrate the", "body i-3") +
+        at(945, '<span class="wipe i-eng">Engagement</span>', "big i-4") +
+        at(1112, chars("CEREMONY", "ic"), "cap3 i-5") +
+        at(1192, art.divider(440), "i-div") +
+        at(1238, "of our two beautiful couples", "ital i-6") +
+        at(1300, "two families · two love stories · one celebration", "small i-7")
     )))
     for n, him, her, pal in ((1, "Manish Tamboli", "Jyoti", fg.COUPLE1), (2, "Harsh Aswal", "Shalu", fg.COUPLE2)):
         out.append(scene(f"c{n}", (
@@ -150,17 +153,21 @@ def build_scenes():
         at(1320, art.divider(440), "d-div2")
     )))
     out.append(scene("close", (
-        box("diya dy-l", 175, 470, 110, 101, art.diya()) + box("diya dy-r", 795, 470, 110, 101, art.diya()) +
-        at(470, "Awaiting your", "ital x-1") +
-        at(522, '<span class="wipe x-2">gracious presence</span>', "script2") +
-        at(660, "Come, bless the couples as they begin", "body x-3") +
-        at(716, "their beautiful journey together", "body x-4") +
-        at(800, art.divider(380), "x-div") +
-        box("mini x-m1", 200, 860, 290, 290, art.wreath(31, 290) + '<div class="mini-t">M<i>&amp;</i>J</div>') +
-        box("mini x-m2", 590, 860, 290, 290, art.wreath(32, 290) + '<div class="mini-t">H<i>&amp;</i>S</div>') +
-        box("heart x-heart", 505, 975, 70, 63, heart(70)) +
-        at(1190, "30 · 10 · 2026", "cap2 x-date") +
-        at(1250, "With love &amp; warm wishes", "ital x-5")
+        at(440, "Awaiting your", "ital x-1") +
+        at(488, '<span class="wipe x-2">gracious presence</span>', "script2") +
+        box("pav x-pav", 364, 588, 352, 448, el.pavilion()) +
+        box("pea x-pea", 352, 690, 170, 200,
+            f'<svg viewBox="-85 -60 170 200" width="170" height="200">{art.peacock(10, 20, .34)}</svg>') +
+        at(858, "शुभ सगाई", "deva2 x-ss") +
+        box("ele x-el1", 140, 870, 250, 161, f'<svg viewBox="-150 -255 420 270" width="250" height="161">'
+            f'{el.elephant()}</svg>') +
+        box("ele x-el2", 690, 870, 250, 161, f'<svg viewBox="-270 -255 420 270" width="250" height="161">'
+            f'{el.elephant(True)}</svg>') +
+        box("bq x-bq", 340, 925, 400, 175, f'<svg viewBox="-200 -150 400 175" width="400" height="175">'
+            f'{el.bouquet()}</svg>') +
+        at(1092, '<span class="wipe x-3">Happily ever after begins</span>', "script3") +
+        at(1205, "30 · 10 · 2026", "cap2 x-date") +
+        at(1258, "With love &amp; warm wishes", "ital x-5")
     )))
     return "".join(out)
 
@@ -243,8 +250,7 @@ def timeline():
     add('tl.fromTo("#sc-ganesh .rays",{opacity:0,scale:.6},{opacity:1,scale:1,duration:1.6,ease:"power2.out"},2.6);')
     add('tl.fromTo(".gwrap",{opacity:0,scale:.94,filter:"blur(10px)"},{opacity:1,scale:1,filter:"blur(0px)",'
         'duration:1.7,ease:"power2.out"},3.0);')
-    add('tl.fromTo(".gwrap svg",{filter:"drop-shadow(0 0 0px rgba(255,170,70,0))"},{filter:'
-        '"drop-shadow(0 0 18px rgba(255,170,70,.85))",duration:1.4,ease:"sine.inOut",yoyo:true,repeat:1},4.7);')
+    add('tl.fromTo(".gwrap img",{scale:1},{scale:1.03,duration:2.6,ease:"sine.inOut",yoyo:true,repeat:1},4.7);')
     rise(".g-deva", 4.3)
     rise(".g-en", 4.9)
     draw_div(".g-div", 5.6)
@@ -257,17 +263,21 @@ def timeline():
     a, b = S["invite"]
     rise(".i-1", a + .15)
     rise(".i-2", a + .5)
-    add(f'tl.fromTo(".i-rings .rg",{{strokeDashoffset:1,opacity:0}},{{strokeDashoffset:0,opacity:1,duration:.9,'
-        f'stagger:.25,ease:"power2.inOut"}},{a + .8:.2f});')
-    pop(".i-rings .rg-gem", a + 1.8, .4, 'scale:0,opacity:0,transformOrigin:"50% 50%"', "back.out(3)")
-    rise(".i-3", a + 1.9)
-    wipe(".i-eng", a + 2.5, 1.2)
+    pop(".i-hands", a + .7, .7, "scale:.6,opacity:0", "back.out(1.6)")
+    add(f'tl.fromTo(".i-hands .hm-his",{{x:-90,opacity:0}},{{x:0,opacity:1,duration:.9,ease:"power2.out"}},{a + 1.0:.2f});')
+    add(f'tl.fromTo(".i-hands .hm-her",{{x:110,opacity:0}},{{x:0,opacity:1,duration:.9,ease:"power2.out"}},{a + 1.3:.2f});')
+    pop(".i-hands .hm-ring", a + 2.2, .45, 'scale:0,opacity:0,transformOrigin:"50% 50%"', "back.out(3)")
+    add(f'tl.fromTo(".i-sp",{{scale:0,opacity:0,rotation:0}},{{scale:1,opacity:1,rotation:90,duration:.35,stagger:.08,'
+        f'ease:"back.out(3)"}},{a + 2.4:.2f});')
+    add(f'tl.to(".i-sp",{{scale:0,opacity:0,rotation:180,duration:.45,stagger:.08,ease:"power2.in"}},{a + 3.0:.2f});')
+    rise(".i-3", a + 2.6)
+    wipe(".i-eng", a + 3.0, 1.2)
     add(f'tl.fromTo(".i-5 .ic",{{opacity:0,y:24}},{{opacity:1,y:0,duration:.35,stagger:.06,ease:"power2.out"}},'
-        f'{a + 3.5:.2f});')
-    draw_div(".i-div", a + 4.1)
-    rise(".i-6", a + 4.4)
-    rise(".i-7", a + 5.0)
-    fade_out("#sc-invite .row", b - .45)
+        f'{a + 3.9:.2f});')
+    draw_div(".i-div", a + 4.4)
+    rise(".i-6", a + 4.7)
+    rise(".i-7", a + 5.2)
+    fade_out("#sc-invite .row, #sc-invite .medal", b - .45)
 
     # each couple: names, then the palace window with the couple walking in and joining hands
     for n in (1, 2):
@@ -313,37 +323,34 @@ def timeline():
     a, b = S["date"]
     add(f'tl.fromTo(".d-cap .dc",{{opacity:0,y:-30}},{{opacity:1,y:0,duration:.35,stagger:.04,ease:"back.out(2)"}},'
         f'{a + .1:.2f});')
-    draw_div(".d-div", a + .55)
-    rise(".d-mon", a + .7)
-    pop(".d-num", a + .85, .6, "scale:2.2,opacity:0", "back.out(1.6)")
-    add(f'tl.fromTo(".d-day",{{x:-110,opacity:0}},{{x:0,opacity:1,duration:.5,ease:"power3.out"}},{a + 1.1:.2f});')
-    add(f'tl.fromTo(".d-yr",{{x:110,opacity:0}},{{x:0,opacity:1,duration:.5,ease:"power3.out"}},{a + 1.1:.2f});')
-    add(f'tl.fromTo(".d-pin",{{y:-240,opacity:0}},{{y:0,opacity:1,duration:.7,ease:"bounce.out"}},{a + 1.6:.2f});')
-    rise(".d-ven", a + 2.0)
-    rise(".d-a1", a + 2.2)
-    rise(".d-a2", a + 2.4)
-    rise(".d-a3", a + 2.6)
-    draw_div(".d-div2", a + 2.9)
+    draw_div(".d-div", a + .45)
+    rise(".d-mon", a + .55)
+    pop(".d-num", a + .7, .6, "scale:2.2,opacity:0", "back.out(1.6)")
+    add(f'tl.fromTo(".d-day",{{x:-110,opacity:0}},{{x:0,opacity:1,duration:.5,ease:"power3.out"}},{a + .9:.2f});')
+    add(f'tl.fromTo(".d-yr",{{x:110,opacity:0}},{{x:0,opacity:1,duration:.5,ease:"power3.out"}},{a + .9:.2f});')
+    add(f'tl.fromTo(".d-pin",{{y:-240,opacity:0}},{{y:0,opacity:1,duration:.7,ease:"bounce.out"}},{a + 1.2:.2f});')
+    rise(".d-ven", a + 1.5)
+    rise(".d-a1", a + 1.65)
+    rise(".d-a2", a + 1.8)
+    rise(".d-a3", a + 1.95)
+    draw_div(".d-div2", a + 2.2)
     fade_out("#sc-date .row, #sc-date .daterow", b - .4)
 
-    # closing card
+    # closing card: pavilion builds up, elephants walk in, bouquet blooms
     a, b = S["close"]
-    pop(".diya", a + .1, .6)
-    add(f'tl.fromTo(".diya .flame",{{scaleY:.9,transformOrigin:"50% 100%"}},{{scaleY:1.12,duration:.25,'
-        f'ease:"sine.inOut",yoyo:true,repeat:15}},{a + .2:.2f});')
-    rise(".x-1", a + .2)
-    wipe(".x-2", a + .45, 1.0)
-    rise(".x-3", a + 1.2)
-    rise(".x-4", a + 1.4)
-    draw_div(".x-div", a + 1.6)
-    pop(".x-m1", a + 1.7, .6, "scale:0,opacity:0", "back.out(1.8)")
-    pop(".x-m2", a + 1.85, .6, "scale:0,opacity:0", "back.out(1.8)")
-    add(f'tl.fromTo(".mini .wr",{{strokeDashoffset:1,opacity:0}},{{strokeDashoffset:0,opacity:1,duration:.9,'
-        f'ease:"power2.inOut"}},{a + 1.8:.2f});')
-    pop(".x-heart", a + 2.1, .5, "scale:0,opacity:0", "back.out(3)")
-    add(f'tl.to(".x-heart",{{scale:1.15,duration:.36,ease:"sine.inOut",yoyo:true,repeat:3}},{a + 2.6:.2f});')
-    rise(".x-date", a + 2.3)
-    rise(".x-5", a + 2.5)
+    rise(".x-1", a + .15)
+    wipe(".x-2", a + .4, 1.0)
+    add(f'tl.fromTo(".x-pav",{{clipPath:"inset(100% 0% 0% 0%)"}},{{clipPath:"inset(0% 0% 0% 0%)",duration:1.2,'
+        f'ease:"power2.out"}},{a + .5:.2f});')
+    add(f'tl.fromTo(".x-el1",{{x:-260,opacity:0}},{{x:0,opacity:1,duration:1.2,ease:"power2.out"}},{a + .8:.2f});')
+    add(f'tl.fromTo(".x-el2",{{x:260,opacity:0}},{{x:0,opacity:1,duration:1.2,ease:"power2.out"}},{a + .8:.2f});')
+    add(f'tl.fromTo(".x-el1, .x-el2",{{y:0}},{{y:-6,duration:.3,ease:"sine.inOut",yoyo:true,repeat:3}},{a + .8:.2f});')
+    pop(".x-bq", a + 1.6, .6, 'scale:0,opacity:0,transformOrigin:"50% 100%"', "back.out(1.8)")
+    pop(".x-ss", a + 1.7, .5, "scale:.6,opacity:0", "back.out(2)")
+    add(f'tl.fromTo(".x-pea",{{opacity:0,y:-30}},{{opacity:1,y:0,duration:.6,ease:"power2.out"}},{a + 1.8:.2f});')
+    wipe(".x-3", a + 2.1, 1.1)
+    rise(".x-date", a + 2.8)
+    rise(".x-5", a + 3.0)
     return "\n".join(T)
 
 
@@ -369,6 +376,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #cfe9f
 #pea-r { transform-origin: 870px 1640px; transform-box: view-box; }
 #toran { transform-origin: 540px 0px; transform-box: view-box; }
 .flock { position: absolute; left: 0; top: 0; }
+#arch svg { overflow: visible; }
 #arch { position: absolute; left: 110px; top: 250px; width: 860px; height: 1260px; transform-origin: 50% 60%; }
 .scene { z-index: 5; }
 .row { position: absolute; left: 0; width: 1080px; text-align: center; white-space: nowrap; }
@@ -389,13 +397,16 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #cfe9f
 .shloka { font: 500 34px "NotoDeva"; color: var(--teal); }
 .script { font: 72px "Pinyon"; color: var(--rose); line-height: 1.25; }
 .script2 { font: 74px "Pinyon"; color: var(--rose); line-height: 1.25; }
+.pav svg { width: 100%; height: 100%; }
+.deva2 { font: 38px "Yatra"; color: #a3123f; }
+.script3 { font: 62px "Pinyon"; color: var(--maroon); line-height: 1.25; }
 .big { font: 132px "Pinyon"; color: var(--rose); line-height: 1.25; }
 .name { font: 88px "Pinyon"; color: var(--maroon); line-height: 1.25; }
 .amp { font: italic 400 46px "Playfair"; color: var(--gold); }
 .wipe { display: inline-block; padding: 0 24px; }
 .ch, .ic, .dc { display: inline-block; }
 .gwrap { transform-origin: 50% 50%; }
-.gwrap svg { width: 420px; height: 525px; }
+.gwrap img { display: block; width: 500px; height: 507px; }
 .rayclip { position: absolute; inset: 0; clip-path: path('M134 1488 L134 588 C134 456 384 382 540 276 C696 382 946 456 946 588 L946 1488 Z'); }
 .rays { position: absolute; left: 20px; top: 140px; width: 1040px; height: 1040px; transform-origin: 50% 50%; }
 .win { transform-origin: 50% 60%; }
@@ -417,16 +428,29 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #cfe9f
 .door-medal { position: absolute; left: 430px; top: 320px; width: 220px; height: 220px; border-radius: 50%;
   background: #fbf0dc; border: 6px solid #c9973f; display: flex; align-items: center; justify-content: center;
   box-shadow: 0 0 0 10px rgba(201,151,63,.25); }
-.door-medal svg { width: 150px; height: 188px; }
+.door-medal img { display: block; width: 190px; height: 193px; }
 """
 
 
 def arch_svg():
-    return ('<svg viewBox="0 0 860 1260" width="860" height="1260">'
-            '<path d="M0 1260 L0 330 C0 190 260 110 430 0 C600 110 860 190 860 330 L860 1260 Z" '
-            'fill="#fffaf1" fill-opacity=".95" stroke="#c9973f" stroke-width="5"/>'
+    shape = "M0 1260 L0 330 C0 190 260 110 430 0 C600 110 860 190 860 330 L860 1260 Z"
+    return ('<svg viewBox="0 0 860 1260" width="860" height="1260" style="overflow:visible">'
+            '<defs><linearGradient id="card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffaf4"/>'
+            '<stop offset=".55" stop-color="#fff4f1"/><stop offset="1" stop-color="#fde9ee"/></linearGradient>'
+            '<radialGradient id="wash1" cx=".15" cy=".85" r=".5"><stop offset="0" stop-color="#f7c9d6" stop-opacity=".55"/>'
+            '<stop offset="1" stop-color="#f7c9d6" stop-opacity="0"/></radialGradient>'
+            '<radialGradient id="wash2" cx=".9" cy=".25" r=".45"><stop offset="0" stop-color="#cfe0f0" stop-opacity=".5"/>'
+            '<stop offset="1" stop-color="#cfe0f0" stop-opacity="0"/></radialGradient>'
+            '<radialGradient id="wash3" cx=".85" cy=".95" r=".4"><stop offset="0" stop-color="#fbd9c4" stop-opacity=".6"/>'
+            '<stop offset="1" stop-color="#fbd9c4" stop-opacity="0"/></radialGradient>'
+            f'<clipPath id="cardclip"><path d="{shape}"/></clipPath></defs>'
+            f'<path d="{shape}" fill="url(#card)" fill-opacity=".97"/>'
+            '<g clip-path="url(#cardclip)"><rect width="860" height="1260" fill="url(#wash1)"/>'
+            '<rect width="860" height="1260" fill="url(#wash2)"/><rect width="860" height="1260" fill="url(#wash3)"/></g>'
+            f'<path d="{shape}" fill="none" stroke="#c9973f" stroke-width="6"/>'
             '<path d="M22 1238 L22 338 C22 206 274 132 430 26 C586 132 838 206 838 338 L838 1238 Z" '
-            'fill="none" stroke="#c9973f" stroke-width="1.6" opacity=".7"/></svg>')
+            'fill="none" stroke="#d98aa0" stroke-width="2" opacity=".8"/>'
+            f'<g id="afl">{el.arch_florals()}</g></svg>')
 
 
 def main():
@@ -456,7 +480,7 @@ def main():
       <div id="doors" class="clip" data-start="0" data-duration="{S["doors"][1]}" data-track-index="5">
         <div id="door-l">{art.door_panel("l")}</div><div id="door-r">{art.door_panel("r")}</div>
         <div id="doorframe">{art.door_frame()}</div>
-        <div class="door-medal">{fg.ganesh_brush(cls="gm")}</div>
+        <div class="door-medal"><img src="assets/img/ganesh.png" width="190" height="193" alt=""></div>
       </div>
       <audio id="music" src="assets/audio/music.wav" data-start="0" data-duration="{DUR}" data-track-index="7" data-volume="1"></audio>
     </div>

@@ -6,7 +6,7 @@ import math
 import random
 
 # palette: pastel sky, sandstone, leaf greens, peacock blues, rose and marigold accents
-SKY1, SKY2, SKY3 = "#cfe9f1", "#e9f5f3", "#fbf3e6"
+SKY1, SKY2, SKY3 = "#bfe0ef", "#f6e6ee", "#fde9dc"
 HILL1, HILL2, HILL3 = "#a9d3d6", "#8fc3c4", "#7fb5ad"
 SAND, SAND2, SAND_D = "#f1dcc0", "#e5c39b", "#c99a6b"
 CREAM, CREAM_D = "#fbf4e8", "#e8dcc6"
@@ -223,9 +223,10 @@ def clouds():
     out = []
     for cx, cy, s, o in [(200, 520, 1.0, .75), (860, 430, 1.25, .7), (560, 760, .8, .55), (120, 940, .9, .5),
                          (930, 1010, .85, .5)]:
+        tint = "#fff" if cx % 2 == 0 else "#fde4ec"
         out.append(f'<g class="cloud" transform="translate({cx} {cy}) scale({s})" opacity="{o}">'
-                   f'<ellipse rx="120" ry="30" fill="#fff"/><ellipse cx="-40" cy="-20" rx="60" ry="34" fill="#fff"/>'
-                   f'<ellipse cx="35" cy="-26" rx="70" ry="40" fill="#fff"/></g>')
+                   f'<ellipse rx="120" ry="30" fill="{tint}"/><ellipse cx="-40" cy="-20" rx="60" ry="34" fill="{tint}"/>'
+                   f'<ellipse cx="35" cy="-26" rx="70" ry="40" fill="{tint}"/></g>')
     return "".join(out)
 
 
