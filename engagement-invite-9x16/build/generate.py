@@ -113,7 +113,7 @@ def build_scenes():
         at(1100, words("Lord Ganesha & our beloved elders"), "ital i-7")
     )))
     for n, him, her, pose in (
-            (1, "Jyoti", "Manish Tamboli",
+            (1, "Jyoti", "Manish Tamoli",
              f'<g class="pose1"><g transform="translate(540 1450) scale(1.25)">{ro.back_seated(ry.C1)}</g></g>'),
             (2, "Shalu", "Harsh Aswal",
              f'<g class="pose2"><g transform="translate(760 1520) scale(1.05)">{ro.side_seated(ry.C2)}</g></g>')):
@@ -532,7 +532,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #3f071
 .script2 { font: 76px "Pinyon"; color: #ffffff; line-height: 1.3; }
 .g-en-row { font-size: 64px; }
 .script3 { font: 64px "Pinyon"; color: #ffffff; line-height: 1.3; }
-.name { font: 96px "Pinyon"; color: #ffffff; line-height: 1.3; text-shadow: 0 4px 18px rgba(0,0,0,.35); }
+.name { font: italic 600 74px "Playfair"; letter-spacing: .5px; color: #ffffff; line-height: 1.3; text-shadow: 0 4px 18px rgba(0,0,0,.35); }
 .amp { font: italic 400 46px "Playfair"; color: var(--gold); }
 .foil-txt {
   background: linear-gradient(100deg, #b8862b 0%, #e9c46a 35%, #fff6d5 48%, #fff 50%, #fff6d5 52%, #e9c46a 65%, #b8862b 100%);
