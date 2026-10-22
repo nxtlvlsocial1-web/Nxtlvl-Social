@@ -1,5 +1,5 @@
 """Night scenes and closer couple poses for v5 (our own drawing): stargazing on a palace rooftop,
-sitting by a moonlit pond, and an embrace. Faces are left blank, as in the rest of the invite.
+sitting by a moonlit pond, and an embrace. Faces are drawn in profile: closed, smiling eyes and a blush.
 """
 import math
 import random
@@ -16,10 +16,27 @@ def _arm(d, w, col, wmin=None):
     return f'<path d="{fg.brush(d, w, wmin or w * .7, shape="taper")}" fill="{col}"/>'
 
 
+def _profile_face(cx, cy, f, her=False):
+    """Content, in-love profile: a closed smiling eye, a blush on the cheek and a soft smile near the front."""
+    line = fg.LINE
+    ex, ey = cx + 17 * f, cy - 4
+    out = (f'<path d="M{ex - 7 * f} {ey} C{ex - 3 * f} {ey + 5} {ex + 3 * f} {ey + 5} {ex + 7 * f} {ey}" stroke="{line}" '
+           f'stroke-width="3.2" stroke-linecap="round" fill="none"/>'
+           f'<path d="M{ex - 6 * f} {ey - 12} Q{ex} {ey - 16} {ex + 7 * f} {ey - 12}" stroke="{HAIR}" '
+           f'stroke-width="{2.4 if her else 3.4}" stroke-linecap="round" fill="none"/>'
+           f'<ellipse cx="{cx + 14 * f}" cy="{cy + 11}" rx="8" ry="5" fill="{fg.BLUSH}" opacity="{.6 if her else .45}"/>'
+           f'<path d="M{cx + 18 * f} {cy + 19} Q{cx + 24 * f} {cy + 24} {cx + 29 * f} {cy + 17}" '
+           f'stroke="{"#c2385b" if her else "#7a2e2a"}" stroke-width="3" stroke-linecap="round" fill="none"/>')
+    if her:
+        out += (f'<path d="M{ex + 7 * f} {ey} L{ex + 11 * f} {ey + 3} M{ex + 4 * f} {ey + 3} L{ex + 6 * f} {ey + 7}" '
+                f'stroke="{line}" stroke-width="2" stroke-linecap="round"/>')
+    return out
+
+
 def _groom_profile_head(cx, cy, facing=1):
     """Head in profile with short, neat hair covering the back and top; no ear."""
     f = facing
-    return (f'<ellipse cx="{cx}" cy="{cy}" rx="34" ry="38" fill="{SK}"/>'
+    return (f'<ellipse cx="{cx}" cy="{cy}" rx="34" ry="38" fill="{SK}"/>{_profile_face(cx, cy, f)}'
             f'<path d="M{cx + 6 * f} {cy - 37} C{cx - 30 * f} {cy - 44} {cx - 42 * f} {cy - 10} {cx - 34 * f} {cy + 18} '
             f'C{cx - 28 * f} {cy + 30} {cx - 18 * f} {cy + 32} {cx - 12 * f} {cy + 26} C{cx - 18 * f} {cy + 8} '
             f'{cx - 14 * f} {cy - 12} {cx + 2 * f} {cy - 20} C{cx + 16 * f} {cy - 26} {cx + 30 * f} {cy - 22} '
@@ -29,7 +46,7 @@ def _groom_profile_head(cx, cy, facing=1):
 
 def _bride_profile_head(cx, cy, facing, jewel):
     f = facing
-    return (f'<ellipse cx="{cx}" cy="{cy}" rx="30" ry="34" fill="{SK}"/>'
+    return (f'<ellipse cx="{cx}" cy="{cy}" rx="30" ry="34" fill="{SK}"/>{_profile_face(cx, cy, f, True)}'
             f'<path d="M{cx + 4 * f} {cy - 33} C{cx - 30 * f} {cy - 40} {cx - 40 * f} {cy - 8} {cx - 30 * f} {cy + 16} '
             f'C{cx - 18 * f} {cy + 8} {cx - 12 * f} {cy - 10} {cx + 2 * f} {cy - 18} C{cx + 18 * f} {cy - 26} '
             f'{cx + 28 * f} {cy - 18} {cx + 30 * f} {cy - 8} C{cx + 26 * f} {cy - 28} {cx + 16 * f} {cy - 34} '

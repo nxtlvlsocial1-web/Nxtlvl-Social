@@ -1,4 +1,4 @@
-"""Calligraphic Ganesh ji and the faceless couple illustrations (our own drawing).
+"""Calligraphic Ganesh ji and the couple illustrations (our own drawing).
 
 Brush strokes are filled outlines built from a centre line and a width profile, so they taper like
 a pen stroke instead of having a constant SVG stroke width.
@@ -89,9 +89,48 @@ def ganesh_brush(col="#e8701a", cls="gb"):
             f'<circle cx="224" cy="131" r="2.6"/></g></svg>')
 
 
-# ------------------------------------------------------------------ faceless couples
+# ------------------------------------------------------------------ couples
 SKIN, SKIN_D = "#e2a988", "#c98b6b"
 HAIR = "#2b1d1a"
+LINE = "#4a2620"
+BLUSH = "#f08a8a"
+
+
+def _happy_eye(x, y, w=7, lash=False):
+    """A smiling, closed eye (an upward arc), with two little lashes for her."""
+    out = f'<path d="M{x - w} {y} C{x - w * .5} {y - w * .9} {x + w * .5} {y - w * .9} {x + w} {y}" stroke="{LINE}" ' \
+          f'stroke-width="3.4" stroke-linecap="round" fill="none"/>'
+    if lash:
+        out += (f'<path d="M{x + w} {y} L{x + w + 4} {y - 3} M{x + w - 2} {y - 3} L{x + w + 2} {y - 7}" stroke="{LINE}" '
+                f'stroke-width="2" stroke-linecap="round"/>')
+    return out
+
+
+def groom_face(cx, cy):
+    """Warm front face: soft brows, smiling eyes, rosy cheeks and a happy grin, turned a little towards her."""
+    return (f'<g class="face">'
+            f'<path d="M{cx - 18} {cy - 17} Q{cx - 11} {cy - 21} {cx - 4} {cy - 17} M{cx + 8} {cy - 17} '
+            f'Q{cx + 15} {cy - 21} {cx + 22} {cy - 17}" stroke="{HAIR}" stroke-width="3.6" stroke-linecap="round" fill="none"/>'
+            f'{_happy_eye(cx - 11, cy - 4)}{_happy_eye(cx + 15, cy - 4)}'
+            f'<ellipse cx="{cx - 17}" cy="{cy + 9}" rx="8" ry="5" fill="{BLUSH}" opacity=".45"/>'
+            f'<ellipse cx="{cx + 21}" cy="{cy + 9}" rx="8" ry="5" fill="{BLUSH}" opacity=".45"/>'
+            f'<path d="M{cx - 7} {cy + 15} Q{cx + 2} {cy + 26} {cx + 11} {cy + 15} Z" fill="#7a2e2a"/>'
+            f'<path d="M{cx - 4} {cy + 16} Q{cx + 2} {cy + 19} {cx + 8} {cy + 16}" stroke="#fff" stroke-width="2.4" '
+            f'fill="none" stroke-linecap="round"/></g>')
+
+
+def bride_face(cx, cy):
+    """Sweet front face: arched brows, lashed smiling eyes, blush, a bindi and a rosy smile."""
+    return (f'<g class="face">'
+            f'<path d="M{cx - 17} {cy - 15} Q{cx - 11} {cy - 20} {cx - 5} {cy - 16} M{cx + 5} {cy - 16} '
+            f'Q{cx + 11} {cy - 20} {cx + 17} {cy - 15}" stroke="{HAIR}" stroke-width="2.4" stroke-linecap="round" fill="none"/>'
+            f'<g transform="translate({2 * cx} 0) scale(-1 1)">{_happy_eye(cx + 11, cy - 3, 6.5, True)}</g>'
+            f'{_happy_eye(cx + 11, cy - 3, 6.5, True)}'
+            f'<circle cx="{cx}" cy="{cy - 23}" r="2.6" fill="#c81d4a"/>'
+            f'<ellipse cx="{cx - 16}" cy="{cy + 8}" rx="7.5" ry="4.8" fill="{BLUSH}" opacity=".55"/>'
+            f'<ellipse cx="{cx + 16}" cy="{cy + 8}" rx="7.5" ry="4.8" fill="{BLUSH}" opacity=".55"/>'
+            f'<path d="M{cx - 7} {cy + 13} Q{cx} {cy + 22} {cx + 7} {cy + 13} Q{cx} {cy + 16} {cx - 7} {cy + 13} Z" '
+            f'fill="#d9466b"/></g>')
 
 
 def groom(pal, flip=False):
@@ -120,10 +159,10 @@ def groom(pal, flip=False):
             f'C50 -350 42 -390 28 -412 Z" fill="{coat}"/>'
             f'<path d="M64 -262 L80 -268" stroke="{trim}" stroke-width="4"/>'
             f'<ellipse cx="76" cy="-256" rx="11" ry="13" fill="{SKIN}"/>'
-            # neck, collar, head, hair (no face drawn)
+            # neck, collar, head with a happy face, hair
             f'<rect x="-11" y="-470" width="22" height="34" fill="{SKIN_D}"/>'
             f'<path d="M-22 -440 L0 -428 L22 -440 L22 -432 L0 -420 L-22 -432 Z" fill="{trim}"/>'
-            f'<ellipse cx="2" cy="-498" rx="34" ry="40" fill="{SKIN}"/>'
+            f'<ellipse cx="2" cy="-498" rx="34" ry="40" fill="{SKIN}"/>{groom_face(5, -494)}'
             f'<path d="M-33 -486 C-42 -528 -22 -548 6 -548 C30 -548 44 -532 38 -490 C36 -508 28 -520 14 -522 '
             f'C-2 -526 -22 -518 -30 -500 Z" fill="{HAIR}"/>'
             f'<path d="M-33 -486 C-35 -478 -34 -470 -31 -464 L-28 -490 Z" fill="{HAIR}"/>'
@@ -153,10 +192,10 @@ def bride(pal, flip=False):
             f'<path d="M-57 -282 L-42 -280" stroke="{jewel}" stroke-width="6"/>'
             f'<path d="M34 -380 C46 -330 50 -290 46 -250 L34 -250 C36 -290 32 -330 24 -364 Z" fill="{SKIN}"/>'
             f'<path d="M34 -262 L47 -262" stroke="{jewel}" stroke-width="6"/>'
-            # neck, head, hair bun with flowers, maang tikka (no face drawn)
+            # neck, head with a sweet face, hair bun with flowers, maang tikka
             f'<rect x="-10" y="-418" width="20" height="34" fill="{SKIN_D}"/>'
             f'<path d="M-24 -392 Q0 -372 24 -392" stroke="{jewel}" stroke-width="5" fill="none"/>'
-            f'<ellipse cx="-2" cy="-446" rx="30" ry="36" fill="{SKIN}"/>'
+            f'<ellipse cx="-2" cy="-446" rx="30" ry="36" fill="{SKIN}"/>{bride_face(-4, -442)}'
             f'<path d="M30 -446 C34 -488 -6 -500 -28 -476 C-36 -466 -34 -454 -32 -446 C-22 -466 6 -472 24 -458 Z" '
             f'fill="{HAIR}"/>'
             f'<circle cx="34" cy="-450" r="20" fill="{HAIR}"/>'
