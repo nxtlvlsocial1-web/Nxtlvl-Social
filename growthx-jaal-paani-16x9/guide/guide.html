@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Jaal aur Paani – The GrowthX Studio</title>
+<style>
+@font-face { font-family:"D"; src:url("../fonts/InterDisplay-Black.otf"); font-weight:900; }
+@font-face { font-family:"D"; src:url("../fonts/InterDisplay-Bold.otf"); font-weight:700; }
+@font-face { font-family:"D"; src:url("../fonts/InterDisplay-SemiBold.otf"); font-weight:600; }
+@page { size:A4; margin:0; }
+* { box-sizing:border-box; margin:0; padding:0; }
+:root { --bg:#040206; --pur:#8B2FE8; --pur2:#A65CFF; --acc:#B57BFF; --ink:#16121C; --dim:#5E566B; --soft:#F4EEFC; }
+body { font-family:"D",sans-serif; color:var(--ink); -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.page { width:210mm; height:297mm; position:relative; overflow:hidden; page-break-after:always; padding:22mm 18mm 20mm; background:#fff; }
+.page:last-child { page-break-after:auto; }
+.top { position:absolute; left:18mm; right:18mm; top:9mm; display:flex; justify-content:space-between; align-items:center; font-size:9pt; font-weight:700; color:var(--dim); letter-spacing:.08em; }
+.top img { height:9mm; border-radius:2mm; }
+.top b { color:var(--pur); }
+.foot { position:absolute; left:18mm; right:18mm; bottom:8mm; display:flex; justify-content:space-between; font-size:8.5pt; color:var(--dim); border-top:.4mm solid #E6DDF5; padding-top:2.5mm; }
+h1 { font-size:30pt; font-weight:900; line-height:1.05; letter-spacing:-.01em; }
+h2 { font-size:21pt; font-weight:900; line-height:1.1; margin-bottom:4mm; }
+h3 { font-size:12.5pt; font-weight:900; margin:5mm 0 2mm; }
+p, li { font-size:11pt; line-height:1.5; font-weight:600; color:#2A2433; }
+ul, ol { padding-left:6mm; } li { margin:1.4mm 0; }
+.kicker { display:inline-block; font-size:9.5pt; font-weight:900; letter-spacing:.14em; color:#fff; background:var(--pur); padding:1.6mm 3.6mm; border-radius:99mm; margin-bottom:5mm; }
+.step { display:flex; gap:4mm; align-items:flex-start; margin:4mm 0; }
+.num { flex:none; width:10mm; height:10mm; border-radius:50%; background:var(--pur); color:#fff; font-weight:900; font-size:12pt; display:flex; align-items:center; justify-content:center; }
+.step p { padding-top:1.5mm; }
+.shot { width:100%; border:.8mm solid var(--pur); border-radius:3mm; display:block; margin:3mm 0 2mm; }
+.cap { font-size:9pt; color:var(--dim); font-weight:600; }
+.box { background:var(--soft); border-left:1.6mm solid var(--pur); border-radius:2mm; padding:4mm 5mm; margin:4mm 0; }
+.box p, .box li { font-size:10.5pt; }
+.warn { background:#FFF4F2; border-left-color:#E5484D; }
+.tag { display:inline-block; background:var(--soft); color:var(--pur); font-weight:900; padding:.5mm 2.2mm; border-radius:1.5mm; }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:5mm; }
+.card { border:.5mm solid #E6DDF5; border-radius:3mm; padding:4mm; }
+.card h3 { margin-top:0; }
+/* cover */
+.cover { background:var(--bg); color:#fff; padding:0; }
+.cover .wash { position:absolute; inset:0; background:linear-gradient(135deg,rgba(139,47,232,.45),rgba(139,47,232,0) 45%,rgba(139,47,232,0) 60%,rgba(139,47,232,.5)); }
+.cover .ring { position:absolute; border-radius:50%; border:.6mm solid rgba(181,123,255,.45); }
+.cover .dots { position:absolute; width:70mm; height:50mm; background-image:radial-gradient(rgba(181,123,255,.6) .7mm,transparent .8mm); background-size:6mm 6mm; }
+.cover .in { position:absolute; left:18mm; right:18mm; top:30mm; }
+.cover img.logo { width:52mm; border-radius:50%; }
+.cover h1 { font-size:40pt; color:#fff; margin-top:14mm; }
+.cover h1 em { font-style:normal; color:var(--acc); }
+.cover .sub { margin-top:6mm; font-size:14pt; font-weight:700; color:#D9CCF0; line-height:1.4; }
+.cover .pill { display:inline-block; margin-top:10mm; background:var(--pur); color:#fff; font-weight:900; font-size:12pt; padding:3mm 6mm; border-radius:99mm; }
+.cover .bottom { position:absolute; left:18mm; right:18mm; bottom:16mm; display:flex; justify-content:space-between; font-size:10pt; font-weight:700; color:#C9BBE3; letter-spacing:.1em; }
+.cta { background:var(--bg); color:#fff; }
+.cta h2, .cta p, .cta li { color:#fff; }
+.cta .big { font-size:34pt; font-weight:900; color:var(--acc); margin:6mm 0; }
+.tbl { width:100%; border-collapse:collapse; margin:4mm 0; }
+.tbl th { background:var(--pur); color:#fff; font-size:10pt; font-weight:900; text-align:left; padding:2.6mm 3mm; }
+.tbl td { font-size:10.2pt; font-weight:600; color:#2A2433; padding:2.6mm 3mm; border-bottom:.4mm solid #E6DDF5; vertical-align:top; }
+.tbl tr:nth-child(even) td { background:#FBF8FF; }
+.chk li { list-style:none; position:relative; padding-left:7mm; } .chk { padding-left:0; }
+.chk li::before { content:"☐"; position:absolute; left:0; top:-.2mm; color:var(--pur); font-weight:900; font-size:12pt; }
+.mono { font-family:ui-monospace,Menlo,monospace; font-size:9.6pt; background:#16121C; color:#E9DDFF; border-radius:2mm; padding:3.5mm 4mm; margin:3mm 0; word-break:break-all; line-height:1.5; }
+.mono b { color:#B57BFF; }
+.big2 { font-size:15pt; font-weight:900; color:var(--pur); }
+</style></head><body>
+
+<!-- 1 COVER -->
+<section class="page cover">
+  <div class="wash"></div>
+  <div class="ring" style="width:150mm;height:150mm;right:-50mm;top:-40mm"></div>
+  <div class="ring" style="width:100mm;height:100mm;right:-20mm;top:-15mm"></div>
+  <div class="dots" style="left:10mm;bottom:40mm"></div>
+  <div class="in">
+    <img class="logo" src="../brand/logo.png" alt="The GrowthX Studio">
+    <h1>Jaal aur Paani: <em>where do your website visitors come from?</em></h1>
+    <p class="sub">Your website is the net. Traffic is the water. This guide shows you how to find out where your visitors come from, fix the net so it catches customers, and pick the right water to put it in.</p>
+    <span class="pill">⏱ 15-minute check · Free tools only</span>
+  </div>
+  <div class="bottom"><span>THE GROWTHX STUDIO</span><span>BUILD • GROW • SCALE</span></div>
+</section>
+
+<!-- 2 THE IDEA -->
+<section class="page">
+  <div class="top"><span><b>GROWTHX</b> · WEBSITE + TRAFFIC PLAYBOOK</span><img src="../brand/logo-mark.png" alt=""></div>
+  <span class="kicker">THE IDEA</span>
+  <h2>Website = jaal. Traffic = paani.</h2>
+  <p>A beautiful website with no traffic is a beautiful net lying on dry land. And traffic sent to a weak website is ad money poured into the water. You need both, working together.</p>
+  <h3>Paani teen jagah hai: the 3 sources of traffic</h3>
+  <table class="tbl">
+    <tr><th style="width:22%">Source</th><th style="width:18%">It costs</th><th style="width:22%">Speed</th><th>Best for</th></tr>
+    <tr><td><b>📣 Ads</b><br>Meta, Google Ads</td><td>Paisa (money)</td><td>Fast: visitors from day 1</td><td>Launches, offers, testing what sells, steady daily leads</td></tr>
+    <tr><td><b>🔍 Google</b><br>SEO + Google Business Profile</td><td>Time</td><td>Slow: usually 2–6 months</td><td>People already searching for what you sell; free traffic that compounds</td></tr>
+    <tr><td><b>📱 Social media</b><br>Reels, posts, DMs</td><td>Mehnat (consistent effort)</td><td>Medium: builds week by week</td><td>Trust, a following, and warm audiences you can retarget with ads</td></tr>
+  </table>
+  <div class="box"><p><b>The rule:</b> start with the one source you can afford in money or time, measure it properly, and only then add the next one.</p></div>
+  <h3>What a working website does (from the reel)</h3>
+  <div class="grid2">
+    <div class="card"><h3>💰 Shows the rate</h3><p>Price or "starting from" visible without hunting for it.</p></div>
+    <div class="card"><h3>⭐ Builds bharosa</h3><p>Reviews, ratings, client logos, real photos, guarantees.</p></div>
+    <div class="card"><h3>📞 Gives one button</h3><p>One clear next step: Buy, Book a call or WhatsApp us.</p></div>
+    <div class="card"><h3>🎉 Turns visits into customers</h3><p>Visitor → trust → click → customer. That's the whole job.</p></div>
+  </div>
+  <div class="foot"><span>The GrowthX Studio · Jaal aur Paani</span><span>2</span></div>
+</section>
+
+<!-- 3 STEP 1 -->
+<section class="page">
+  <div class="top"><span><b>GROWTHX</b> · WEBSITE + TRAFFIC PLAYBOOK</span><img src="../brand/logo-mark.png" alt=""></div>
+  <span class="kicker">STEP 1</span>
+  <h2>Find out where your visitors come from</h2>
+  <p>If you said "pata nahi", start here. You need analytics before you spend another rupee on traffic.</p>
+  <h3>If you have Google Analytics 4 (GA4)</h3>
+  <div class="step"><div class="num">1</div><p>Open <b>analytics.google.com</b> and choose your website's property.</p></div>
+  <div class="step"><div class="num">2</div><p>Go to <b>Reports → Acquisition → Traffic acquisition</b>.</p></div>
+  <div class="step"><div class="num">3</div><p>Set the date range to the <b>last 28 days</b> and look at the <span class="tag">Session default channel group</span> column.</p></div>
+  <div class="step"><div class="num">4</div><p>Read the channels: <b>Paid Social</b> = ads on Meta, <b>Paid Search</b> = Google Ads, <b>Organic Search</b> = Google SEO, <b>Organic Social</b> = your posts and bio link, <b>Direct</b> = typed URL or untracked links, <b>Referral</b> = other websites.</p></div>
+  <h3>If you're on Shopify</h3>
+  <p>Go to <b>Analytics → Reports</b> and open <b>Sessions by referrer</b> (and <b>Sessions by social referrer</b>) to see which sites and apps send you visitors.</p>
+  <h3>If you have no analytics yet</h3>
+  <ul>
+    <li>Create a free GA4 property at analytics.google.com and add the tag to your site. On WordPress, the free <b>Site Kit by Google</b> plugin does this; Shopify and Wix have a Google channel or integration.</li>
+    <li>If you run Meta ads, set up the <b>Meta Pixel</b> in Events Manager so you can see which ads bring visitors and leads.</li>
+    <li>Wait 7 days for data, then come back to this step.</li>
+  </ul>
+  <div class="box warn"><p><b>Big "Direct" number?</b> That usually means your links aren't tagged, so visits from WhatsApp, your bio link or emails get lumped together. Step 2 fixes this.</p></div>
+  <div class="foot"><span>The GrowthX Studio · Jaal aur Paani</span><span>3</span></div>
+</section>
+
+<!-- 4 STEP 2 -->
+<section class="page">
+  <div class="top"><span><b>GROWTHX</b> · WEBSITE + TRAFFIC PLAYBOOK</span><img src="../brand/logo-mark.png" alt=""></div>
+  <span class="kicker">STEP 2</span>
+  <h2>Tag every link you share (UTMs)</h2>
+  <p>A UTM is a small tag at the end of a link that tells your analytics exactly where a visitor came from. It's free and takes a minute per link.</p>
+  <h3>The format</h3>
+  <div class="mono">yourbrand.com/?<b>utm_source</b>=instagram&amp;<b>utm_medium</b>=social&amp;<b>utm_campaign</b>=bio_link</div>
+  <table class="tbl">
+    <tr><th style="width:30%">Where you share it</th><th>utm_source / utm_medium / utm_campaign</th></tr>
+    <tr><td>Instagram bio link</td><td>instagram / social / bio_link</td></tr>
+    <tr><td>Instagram story link</td><td>instagram / social / story_<i>offername</i></td></tr>
+    <tr><td>WhatsApp broadcast</td><td>whatsapp / message / <i>campaign_name</i></td></tr>
+    <tr><td>Meta ads (in the ad's URL parameters)</td><td>facebook / paid_social / <i>campaign_name</i></td></tr>
+    <tr><td>Google Business Profile website button</td><td>google / organic / gbp</td></tr>
+    <tr><td>Email newsletter</td><td>newsletter / email / <i>issue_name</i></td></tr>
+  </table>
+  <h3>How to build them</h3>
+  <ul>
+    <li>Use Google's free <b>Campaign URL Builder</b> (search "GA4 campaign URL builder").</li>
+    <li>Keep everything lowercase and use the same names every time, or your reports will split.</li>
+    <li>Paste the long link into a short-link tool if it looks messy in your bio.</li>
+  </ul>
+  <div class="box"><p>After a week, check <b>Reports → Acquisition → Traffic acquisition</b> again and switch the column to <span class="tag">Session source / medium</span>. You'll now see every link you tagged, by name.</p></div>
+  <div class="foot"><span>The GrowthX Studio · Jaal aur Paani</span><span>4</span></div>
+</section>
+
+<!-- 5 STEP 3 -->
+<section class="page">
+  <div class="top"><span><b>GROWTHX</b> · WEBSITE + TRAFFIC PLAYBOOK</span><img src="../brand/logo-mark.png" alt=""></div>
+  <span class="kicker">STEP 3</span>
+  <h2>Fix the jaal so it holds customers</h2>
+  <p>Open your website on your phone, the way most visitors see it, and tick every point you can.</p>
+  <h3>💰 Rate dikhaya: price and offer</h3>
+  <ul class="chk">
+    <li>Price, or "starting from ₹…", is visible on the main product or service page.</li>
+    <li>What's included is clear in 3–5 bullet points.</li>
+    <li>Any offer has a clear deadline or reason to act now.</li>
+  </ul>
+  <h3>⭐ Bharosa diya: trust</h3>
+  <ul class="chk">
+    <li>At least 3 real reviews or testimonials, with names and photos where possible.</li>
+    <li>Real photos of your product, team or work (not only stock images).</li>
+    <li>Address, phone or WhatsApp number, and return or refund policy are easy to find.</li>
+    <li>Ratings, client logos, media mentions or certifications, if you have them.</li>
+  </ul>
+  <h3>📞 Button diya: one clear next step</h3>
+  <ul class="chk">
+    <li>One main button above the fold: Buy now, Book a call or WhatsApp us.</li>
+    <li>The same button repeats after every section, so visitors never have to scroll back.</li>
+    <li>Forms ask for 3 fields or fewer (name, phone, need).</li>
+  </ul>
+  <h3>⚡ Basics</h3>
+  <ul class="chk">
+    <li>The page loads in under 3 seconds on mobile data (test it at <b>pagespeed.web.dev</b>).</li>
+    <li>Text is readable and buttons are easy to tap on a phone.</li>
+    <li>Each ad or link goes to the page that matches it, not just the homepage.</li>
+  </ul>
+  <div class="foot"><span>The GrowthX Studio · Jaal aur Paani</span><span>5</span></div>
+</section>
+
+<!-- 6 STEP 4 -->
+<section class="page">
+  <div class="top"><span><b>GROWTHX</b> · WEBSITE + TRAFFIC PLAYBOOK</span><img src="../brand/logo-mark.png" alt=""></div>
+  <span class="kicker">STEP 4</span>
+  <h2>Pick your paani and run a 30-day plan</h2>
+  <table class="tbl">
+    <tr><th style="width:38%">If you have…</th><th>Start with</th></tr>
+    <tr><td>Budget, and you need leads now</td><td><b>Ads.</b> One Meta campaign to your best page, with a small daily budget you can sustain for 2 weeks.</td></tr>
+    <tr><td>Time, and customers search for what you sell</td><td><b>Google.</b> Complete your Google Business Profile and write 1 helpful page a week answering real customer questions.</td></tr>
+    <tr><td>Little budget, but you can create content</td><td><b>Social media.</b> 3 reels a week, with a tagged link in your bio and stories.</td></tr>
+  </table>
+  <h3>Your 30 days</h3>
+  <div class="step"><div class="num">1</div><p><b>Week 1: measure.</b> Analytics set up (Step 1), all your links tagged (Step 2). Note your current visitors and enquiries.</p></div>
+  <div class="step"><div class="num">2</div><p><b>Week 2: fix the net.</b> Work through the Step 3 checklist, starting with price, reviews and the main button.</p></div>
+  <div class="step"><div class="num">3</div><p><b>Week 3: add water.</b> Start one traffic source from the table above and keep it running every day.</p></div>
+  <div class="step"><div class="num">4</div><p><b>Week 4: review.</b> Compare visitors and enquiries by source. Keep what brings customers, cut what doesn't, then add the next source.</p></div>
+  <div class="box"><p><b>The number to watch:</b> enquiries or sales ÷ visitors, by source. Traffic alone is just water; this number tells you whether the net is catching anything.</p></div>
+  <div class="foot"><span>The GrowthX Studio · Jaal aur Paani</span><span>6</span></div>
+</section>
+
+<!-- 7 CTA -->
+<section class="page cover cta">
+  <div class="wash"></div>
+  <div class="ring" style="width:140mm;height:140mm;left:-50mm;bottom:-40mm"></div>
+  <div class="dots" style="right:12mm;top:30mm"></div>
+  <div class="in" style="top:40mm">
+    <img class="logo" src="../brand/logo.png" alt="The GrowthX Studio" style="width:42mm">
+    <h2 style="font-size:28pt;margin-top:12mm">Jaal aur paani dono chahiye.</h2>
+    <p style="font-size:13pt;color:#D9CCF0;margin-top:4mm">Want us to check yours? Send us your website link and we'll tell you where your traffic is coming from, where the net is leaking, and which source to start with.</p>
+    <div class="big">DM karo, baat karte hain.</div>
+    <p style="font-size:13pt">📩 <b>thegrowthxstudio@gmail.com</b></p>
+    <p style="font-size:13pt;margin-top:2mm">📲 Follow <b>@thegrowthxstudio</b> for more website, ads &amp; growth breakdowns</p>
+  </div>
+  <div class="bottom"><span>THE GROWTHX STUDIO</span><span>BUILD • GROW • SCALE</span></div>
+</section>
+
+</body></html>
