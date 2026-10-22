@@ -99,22 +99,21 @@ const net = (id, cls = "") => `
         <ellipse class="nr" cx="175" cy="150" rx="125" ry="34" />
       </svg>`;
 const water = (id) => `<div class="water" id="${id}"><svg viewBox="0 0 1920 80" preserveAspectRatio="none"><path d="M0 40 Q120 0 240 40 T480 40 T720 40 T960 40 T1200 40 T1440 40 T1680 40 T1920 40 V80 H0 Z" /></svg></div>`;
-const site = (id, url) => `
-      <div class="site" id="${id}">
+// Browser frame around the client's site screen recording (assets/site.mp4: trimmed, letterbox cropped,
+// nav logo swapped for GrowthX). start/dur/from are seconds on the root timeline / in the file.
+const site = (id, url, start, dur, from = 0) => `
+      <div class="site siteabs" id="${id}">
         <div class="wbar"><i></i><i></i><i></i><span>${url}</span></div>
-        <div class="site-body">
-          <div class="site-nav"><b>✦ yourbrand</b><span>Home</span><span>Shop</span><span>About</span></div>
-          <div class="site-hero"><b>Your brand,</b><b class="acc2">beautifully built.</b><span class="site-btn">Shop now →</span></div>
-          <div class="site-grid"><i></i><i></i><i></i></div>
-        </div>
+        <video class="clip site-vid" id="${id}-v" src="assets/site.mp4" data-start="${start}" data-duration="${dur}" data-media-start="${from}" muted playsinline></video>
       </div>`;
 
 const scenes = [
-  { id: "a", start: CUT.a, end: CUT.b, split: true, lines: [P0, P1, P2.slice(0, 2), P2.slice(2)], extra: `
-      <div class="rcol">${site("a-site", "yourbrand.com")}
+  { id: "a", start: CUT.a, end: CUT.b, split: true, noDrift: true, lines: [P0, P1, P2.slice(0, 2), P2.slice(2)], extra: `
+      <div class="rcol abs"><div class="site-spacer"></div>
         <div class="visitors" id="a-vis">👥 Customers today: <b>0</b></div>
       </div>`,
     tweens: (A) => {
+      T(`tl.set("#a-site",{opacity:0},${CUT.b});`);
       T(`tl.fromTo("#a-site",{opacity:0,x:120,rotation:3},{opacity:1,x:0,rotation:0,duration:.6,ease:"power3.out"},${at(P0, 1)});`);
       A.pop("#a-vis", at(P2, 3), 0.4); S(at(P2, 3), "impact_lite", .6);
       T(`tl.fromTo("#a-vis",{x:-12},{x:0,duration:.4,ease:"elastic.out(1.4,.3)",immediateRender:false},${(at(P2, 3) + 0.3).toFixed(2)});`);
@@ -151,11 +150,12 @@ const scenes = [
       S(at(P7, 2), "cash", .45);
     } },
 
-  { id: "d", start: CUT.d, end: CUT.d2, split: true, lines: [P10.slice(0, 4), P10.slice(4), P11.slice(0, 3), P11.slice(3)], extra: `
-      <div class="rcol">${site("d-site", "yourbrand.com")}
+  { id: "d", start: CUT.d, end: CUT.d2, split: true, noDrift: true, lines: [P10.slice(0, 4), P10.slice(4), P11.slice(0, 3), P11.slice(3)], extra: `
+      <div class="rcol abs"><div class="site-spacer"></div>
         <div class="visitors" id="d-wait">😴 Waiting for customers…</div>
       </div>`,
     tweens: (A) => {
+      T(`tl.set("#d-site",{opacity:0},${CUT.d2});`);
       T(`tl.fromTo("#d-site",{opacity:0,y:60},{opacity:1,y:0,duration:.5,ease:"power3.out"},${CUT.d});`);
       A.pop("#d-wait", at(P10, 5), 0.4);
       T(`tl.fromTo("#d-site",{boxShadow:"0 0 0 0 rgba(181,123,255,0)"},{boxShadow:"0 0 0 10px rgba(181,123,255,.55)",duration:.3,immediateRender:false},${at(P11, 3)});`); S(at(P11, 3), "shimmer", .4);
@@ -264,6 +264,11 @@ const scenes = [
       S(o + 0.05, "impact", .8); S(o + 0.1, "shimmer", .55);
     } },
 ];
+
+// The site recordings sit at the root (a <video> may not be nested in a timed scene),
+// over the .site-spacer in scenes a and d, and are hidden outside those scenes.
+const siteLayers = site("a-site", "yourbrand.com", at(P0, 1), +(CUT.b - at(P0, 1)).toFixed(2)) +
+  site("d-site", "yourbrand.com", CUT.d, +(CUT.d2 - CUT.d).toFixed(2), 0.4);
 
 const wipes = [CUT.b, CUT.c, CUT.d, CUT.e, CUT.f, CUT.g, CUT.h, CUT.out];
 
@@ -664,6 +669,10 @@ const html = `<!doctype html>
       .cmt { width:1100px; } .dm { font-size:54px; text-align:center; }
       /* ---- Jaal aur Paani visuals ---- */
       .rcol { position:relative; width:860px; display:flex; flex-direction:column; align-items:center; gap:30px; }
+      .rcol.abs { position:absolute; left:960px; top:200px; }
+      .site-spacer { width:820px; height:470px; }
+      .siteabs { position:absolute; left:980px; top:200px; }
+      .site-vid { position:relative; display:block; width:100%; aspect-ratio:1280/622; object-fit:cover; background:#080618; }
       .site { width:820px; border-radius:26px; background:#0E0A14; border:3px solid rgba(166,92,255,.55); overflow:hidden; }
       .site-body { padding:26px 32px 32px; display:flex; flex-direction:column; gap:24px; background:linear-gradient(160deg,#1B0F2B,#0B0710); }
       .site-nav { display:flex; gap:30px; align-items:center; font-size:24px; color:var(--dim); font-weight:700; } .site-nav b { color:#fff; font-size:28px; margin-right:auto; }
@@ -755,6 +764,7 @@ const html = `<!doctype html>
       </div>
 
       ${sceneHtml}
+      ${siteLayers}
 
 
       <div id="wipe" class="clip" data-start="0" data-duration="${DUR}" data-track-index="6"><div class="wp"></div></div>
