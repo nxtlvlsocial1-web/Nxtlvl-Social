@@ -65,14 +65,14 @@ def side_ornament(gid):
 
 
 def card_frame(sid):
-    """The card dressing: crimson bands top and bottom, four filigree corners, side ornaments."""
+    """The card dressing: gold bands top and bottom, four filigree corners, side ornaments."""
     gid = f"gold-{sid}"
     c = corner(gid)
     so = side_ornament(gid)
     return (f'<svg class="frame" viewBox="0 0 1080 1920" width="1080" height="1920">'
             f'<defs>{GOLD_GRAD.format(id=gid)}<clipPath id="lc-{gid}"><path d="M0 0 H300 C200 40 120 120 0 300 Z"/>'
             f'</clipPath><linearGradient id="band-{sid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" '
-            f'stop-color="#9b1028"/><stop offset="1" stop-color="#5a0b17"/></linearGradient></defs>'
+            f'stop-color="#e9c46a"/><stop offset="1" stop-color="#b8862b"/></linearGradient></defs>'
             f'<rect class="band-t" x="250" y="0" width="580" height="78" fill="url(#band-{sid})"/>'
             f'<rect class="band-b" x="250" y="1842" width="580" height="78" fill="url(#band-{sid})" transform="rotate(180 540 1881)"/>'
             f'<g class="fr-c1"><g>{c}</g></g>'
@@ -84,7 +84,7 @@ def card_frame(sid):
 
 
 def card_bg():
-    return '<img class="leather" src="assets/img/leather.jpg" width="1080" height="1920" alt="">'
+    return '<img class="leather" src="assets/img/paper.jpg" width="1080" height="1920" alt="">'
 
 
 # ------------------------------------------------------------------ palace spaces
@@ -189,9 +189,9 @@ def chandelier(x, y, s=1.0):
 
 
 def hall(sid):
-    """Durbar hall: maroon walls with gold niches, chandeliers, a crimson carpet."""
+    """Durbar hall: ivory walls with gold niches, chandeliers, a crimson carpet."""
     gid = f"gc-{sid}"
-    niches = "".join(_cusped_arch(x, 200, 860, 1520, "#3a0812", f"url(#{gid})", 5) +
+    niches = "".join(_cusped_arch(x, 200, 860, 1520, "#f1e2c8", f"url(#{gid})", 5) +
                      f'<path d="M{x + 100} 1180 m-30 0 a30 30 0 1 0 60 0 a30 30 0 1 0 -60 0" fill="#ffcf6b" opacity=".25"/>'
                      for x in range(-60, 2500, 280))
     return (f'<svg class="world" viewBox="0 0 1080 1920" width="1080" height="1920">'

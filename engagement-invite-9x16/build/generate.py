@@ -2,7 +2,7 @@
 
 python3 -I build/generate.py      (run from the project root)
 
-Look: the client's maroon leather card with gold filigree. Motion: kinetic type that slams in out
+Look: a bright ivory card with gold filigree and maroon type. Motion: kinetic type that slams in out
 of a blur, gold-foil shimmer, film grain and light leaks, and a different transition at every cut
 (light flare, zoom through the ring, whip pan, diamond shatter, petal burst, iris). Both couples
 hold hands and walk through palace spaces. Cuts sit on strong beats of the song.
@@ -152,11 +152,11 @@ def build_scenes():
         at(492, letters("FRIDAY"), "caps gold d-day") +
         f'<div class="daterow" style="top:540px"><div class="side d-mon">OCT</div><div class="bar d-b1"></div>'
         f'<div class="num d-num">30</div><div class="bar d-b2"></div><div class="side d-yr">2026</div></div>' +
-        at(764, letters("SH. RAJENDER KUMAR"), "host d-host") +
+        at(764, letters("SH. RAJENDER BADGUJAR"), "host d-host") +
         at(818, letters("9312634827  ·  9654569022"), "caps gold d-ph") +
-        at(880, art.pin(48).replace(art.ROSE_D, "#ffffff").replace('fill="#fff"', 'fill="#7a1022"'), "d-pin") +
+        at(880, art.pin(48).replace(art.ROSE_D, "#7a1022"), "d-pin") +
         at(952, letters("VENUE"), "caps gold d-ven") +
-        at(1000, letters("DDA MARKET,"), "addr d-a1") +
+        at(1000, letters("DDA PARK,"), "addr d-a1") +
         at(1048, letters("NEAR 2 PETROL PUMP,"), "addr d-a2") +
         at(1096, letters("INDUSTRIAL AREA PHASE 1,"), "addr d-a3") +
         at(1144, letters("MANGOLPURI, NEW DELHI"), "addr d-a4") +
@@ -498,8 +498,8 @@ CSS = """
 @font-face { font-family: "NotoDeva"; font-weight: 100 900; src: url("assets/fonts/notoserifdeva.ttf"); }
 :root { --gold: #e9c46a; --cream: #fff4e0; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 1080px; height: 1920px; overflow: hidden; background: #3f0712; }
-#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #3f0712; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fbf6ec; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #fbf6ec; }
 .clip { position: absolute; inset: 0; }
 .scene { overflow: hidden; }
 .pan { position: absolute; inset: 0; }
@@ -534,6 +534,13 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #3f071
 .script3 { font: 64px "Pinyon"; color: #ffffff; line-height: 1.3; }
 .name { font: italic 600 74px "Playfair"; letter-spacing: .5px; color: #ffffff; line-height: 1.3; text-shadow: 0 4px 18px rgba(0,0,0,.35); }
 .amp { font: italic 400 46px "Playfair"; color: var(--gold); }
+/* bright ivory scenes: maroon type, deeper gold (the night scenes keep white type) */
+.card .caps, .card .caps2, .card .caps3, .card .host, .card .addr, .card .script, .card .script2, .card .script3,
+.card .side, .card .num, .walk .caps, .walk .script2 { color: #6b0f1f; }
+.card .ital, .card .shloka, .walk .ital { color: #7a3b1e; }
+.card .caps.gold, .card .amp { color: #a8741a; }
+.card .foil-txt, .walk .foil-txt {
+  background-image: linear-gradient(100deg, #7a4b0c 0%, #a8741a 35%, #d4a017 48%, #f0c75e 50%, #d4a017 52%, #a8741a 65%, #7a4b0c 100%); }
 .foil-txt {
   background: linear-gradient(100deg, #b8862b 0%, #e9c46a 35%, #fff6d5 48%, #fff 50%, #fff6d5 52%, #e9c46a 65%, #b8862b 100%);
   background-size: 300% 100%; background-position: 120% 0; -webkit-background-clip: text; background-clip: text;
