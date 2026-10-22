@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Jaal aur Paani – cover</title>
+<!-- 9:16 cover. Render: chrome --headless --screenshot --window-size=1080,2140 (headless viewport is shorter than the window), then crop to 1080x1920. -->
+<style>
+@font-face { font-family:"D"; src:url("../fonts/InterDisplay-Black.otf"); font-weight:900; }
+@font-face { font-family:"D"; src:url("../fonts/InterDisplay-Bold.otf"); font-weight:700; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --bg:#040206; --pur:#8B2FE8; --pur2:#A65CFF; --acc:#B57BFF; --red:#FF3D3D; }
+html, body { width:1080px; height:1920px; overflow:hidden; background:var(--bg); font-family:"D",sans-serif; color:#F7F4FF; }
+#c { position:relative; width:1080px; height:1920px; overflow:hidden; isolation:isolate; }
+.grid { position:absolute; inset:0; background-image:linear-gradient(rgba(181,123,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(181,123,255,.05) 1px,transparent 1px); background-size:80px 80px; }
+.wash { position:absolute; inset:0; background:linear-gradient(135deg,rgba(139,47,232,.28) 0%,rgba(139,47,232,0) 40%,rgba(139,47,232,0) 60%,rgba(139,47,232,.3) 100%); }
+.ring { position:absolute; border-radius:50%; border:3px solid rgba(166,92,255,.3); }
+.dots { position:absolute; width:420px; height:300px; background-image:radial-gradient(rgba(181,123,255,.55) 3px,transparent 3.5px); background-size:34px 34px; }
+.water { position:absolute; left:0; right:0; bottom:0; height:300px; background:linear-gradient(180deg,#7B2FE0 0%,#3A1275 50%,#12051F 100%); }
+.water svg { position:absolute; left:0; top:-58px; width:100%; height:60px; } .water path { fill:#7B2FE0; }
+.brand { position:absolute; right:60px; top:50px; display:flex; align-items:center; gap:18px; padding:10px 28px 10px 10px; border-radius:999px; background:rgba(4,2,6,.85); border:3px solid rgba(166,92,255,.5); }
+.brand img { width:84px; height:84px; border-radius:50%; } .brand span { font-size:30px; font-weight:900; letter-spacing:.14em; } .brand b { color:var(--acc); }
+.tag { position:absolute; left:110px; top:70px; padding:16px 30px; border-radius:16px; background:linear-gradient(90deg,var(--pur),var(--pur2)); font-size:40px; font-weight:900; }
+.copy { position:absolute; left:110px; top:220px; width:1050px; }
+.l1 { font-size:110px; font-weight:900; line-height:1; letter-spacing:-.02em; }
+.l1 .hl { position:relative; z-index:0; color:#fff; padding:0 18px; margin-right:6px; display:inline-block; } .l1 .hl::before { content:""; position:absolute; inset:6% -4px 2% -4px; background:var(--pur); border-radius:18px; z-index:-1; }
+.l2 { font-size:110px; font-weight:900; line-height:1.05; letter-spacing:-.02em; margin-top:16px; }
+.l2 em { font-style:normal; color:var(--acc); }
+.sub { margin-top:34px; font-size:48px; font-weight:700; color:#D9CCF0; }
+.sub b { color:var(--red); }
+.net { position:absolute; right:250px; top:230px; width:520px; height:570px; transform:rotate(10deg); }
+.net .nh { stroke:#E9DDFF; stroke-width:14; stroke-linecap:round; fill:none; }
+.net .nbo { stroke:var(--acc); stroke-width:5; fill:none; } .net .nr { stroke:var(--acc); stroke-width:10; fill:none; }
+.fish { position:absolute; font-size:90px; }
+.cmt { position:absolute; left:110px; bottom:70px; display:flex; align-items:center; gap:18px; padding:16px 34px; border-radius:999px; background:rgba(4,2,6,.9); border:3px solid var(--acc); font-size:40px; font-weight:900; }
+.cmt b { color:var(--acc); }
+/* 9:16 layout: key content kept inside the centre 1080x1440 (profile-grid crop) */
+.brand { right:auto; left:50%; transform:translateX(-50%); top:150px; white-space:nowrap; }
+.tag { left:50%; transform:translateX(-50%); top:330px; white-space:nowrap; }
+.copy { left:0; right:0; width:auto; top:470px; text-align:center; }
+.l1, .l2 { font-size:128px; }
+.sub { font-size:52px; margin-top:40px; }
+.net { right:auto; left:300px; top:930px; width:470px; height:515px; }
+.water { height:560px; } .water svg { top:-58px; }
+.cmt { left:50%; transform:translateX(-50%); bottom:330px; white-space:nowrap; font-size:46px; }
+</style></head><body><div id="c">
+<div class="grid"></div><div class="wash"></div>
+<div class="ring" style="width:1300px;height:1300px;left:-110px;top:380px"></div>
+<div class="ring" style="width:900px;height:900px;left:90px;top:580px;border-color:rgba(166,92,255,.18)"></div>
+<div class="dots" style="right:40px;top:860px"></div>
+<div class="dots" style="left:40px;top:250px;width:300px;height:200px"></div>
+<div class="water"><svg viewBox="0 0 1080 60" preserveAspectRatio="none"><path d="M0 30 Q90 0 180 30 T360 30 T540 30 T720 30 T900 30 T1080 30 V60 H0 Z"/></svg></div>
+<svg class="net" viewBox="0 0 420 460">
+  <defs><pattern id="m" width="26" height="26" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V26M0 0H26" stroke="#B57BFF" stroke-width="3" fill="none"/></pattern></defs>
+  <path class="nh" d="M300 150 L400 20"/>
+  <path d="M50 150 Q70 360 175 420 Q280 360 300 150 Z" fill="url(#m)"/>
+  <path class="nbo" d="M50 150 Q70 360 175 420 Q280 360 300 150"/>
+  <ellipse class="nr" cx="175" cy="150" rx="125" ry="34"/>
+</svg>
+<div class="fish" style="left:150px;bottom:470px">🐠</div>
+<div class="fish" style="right:130px;bottom:520px;font-size:80px">🐟</div>
+<div class="brand"><img src="../brand/logo-mark.png" alt=""><span>THE GROWTH<b>X</b> STUDIO</span></div>
+<div class="tag">🎣 WEBSITE vs TRAFFIC</div>
+<div class="copy">
+  <div class="l1"><span class="hl">Website</span> = Jaal</div>
+  <div class="l2">Traffic = <em>Paani</em></div>
+  <div class="sub">Website hai, par customers<br><b>kyun nahi?</b></div>
+</div>
+<div class="cmt">💬 Comment <b>“PATA NAHI”</b></div>
+</div></body></html>
