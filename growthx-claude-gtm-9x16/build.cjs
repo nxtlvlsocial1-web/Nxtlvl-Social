@@ -8,7 +8,7 @@ const S = (t, type, vol = 1) => sfx.push({ t: +t.toFixed(3), type, vol });
 
 // w(text, t, cls) — one spoken word, revealed at global time t.
 const w = (text, t, cls = "") => ({ text, t, cls });
-// Voiceover: ElevenLabs "Bunty – Fun Podcast Host" (assets/voiceover.m4a), starts at 0.
+// Voiceover: ElevenLabs "Rohit – Warm Professional Narrator" (assets/voiceover.wav), starts at 0.
 const VO = 0;
 // seg(start, end, tokens): phrase span in the voiceover (from its pauses, checked with local ASR);
 // words are spread across the span by character count.
@@ -55,23 +55,23 @@ const SP = JSON.parse(fs.readFileSync(require("path").join(__dirname, "phrases.j
 const ph = (i, toks) => seg(SP[i][0], SP[i][1], toks);
 const tw = (str, cls = "md") => str.split(" ").map((x) => [x, cls]);
 
-const A0 = ph(0, [["Ab", "md"], ["tum", "md"], ["apni", "md"], ["POORI", "lg"], ["MARKETING", "xl acc"], ["TEAM", "xl acc"]]);
-const A1 = ph(1, [["CLAUDE", "lg hl"], ["ke", "md"], ["andar", "md"], ["chala", "md"], ["sakte", "md"], ["ho!", "md"]]);
-const B2 = ph(2, tw("Yeh tumhari brand strategy banayega,"));
+const A0 = ph(0, [["Ab", "md"], ["aap", "md"], ["apni", "md"], ["POORI", "lg"], ["MARKETING", "xl acc"], ["TEAM", "xl acc"]]);
+const A1 = ph(1, [["CLAUDE", "lg hl"], ["ke", "md"], ["andar", "md"], ["chala", "md"], ["sakte", "md"], ["hain!", "md"]]);
+const B2 = ph(2, tw("Ye aapki brand strategy banayega,"));
 const B3 = ph(3, tw("SEO blogs likhega,"));
 const B4 = ph(4, tw("LinkedIn posts banayega,"));
 const B5 = ph(5, tw("aur product videos bhi generate karega."));
-const C6 = ph(6, [["Setup", "xl"], ["SIMPLE", "xl acc"], ["hai.", "lg"]]);
-const D7 = ph(7, tw("Pehle, ek naya Claude project banao"));
-const D8 = ph(8, tw("aur starter prompt use karo, taaki Claude tumhara business samjhe."));
-const E9 = ph(9, tw("Phir Firecrawl MCP connect karo,"));
+const C6 = ph(6, [["Setup", "lg"], ["bilkul", "md"], ["SIMPLE", "xl acc"], ["hai.", "lg"]]);
+const D7 = ph(7, tw("Pehle, ek naya Claude project banaiye,"));
+const D8 = ph(8, tw("aur starter prompt use kijiye, taaki Claude aapka business samajh sake."));
+const E9 = ph(9, tw("Phir Firecrawl MCP connect kijiye,"));
 const E10 = ph(10, tw("competitors analyse karne aur apni brand voice banane ke liye."));
-const F11 = ph(11, tw("Uske baad, Writer se SEO content generate karo."));
-const G12 = ph(12, tw("Phir Higgsfield MCP aur Remotion se product videos banao."));
-const H13 = ph(13, tw("Aur last mein, Typefully se sab publish karo,"));
-const H14 = ph(14, tw("aur sab kuch ek GTM Command Center se manage karo."));
-const I15 = ph(15, [["Comment", "lg"], ["karo", "lg"], ["“GTM”", "huge acc"]]);
-const I16 = ph(16, [["aur"], ["poora"], ["setup"], ["guide"], ["main"], ["tumhe"], ["DM"], ["kar"], ["dunga"]]).map((x) => x.t);
+const F11 = ph(11, tw("Uske baad, Writer se SEO content generate kijiye."));
+const G12 = ph(12, tw("Phir Higgsfield MCP aur Remotion se product videos banaiye."));
+const H13 = ph(13, tw("Aur aakhir mein, Typefully se sab publish kijiye,"));
+const H14 = ph(14, tw("aur sab kuch ek GTM Command Center se manage kijiye."));
+const I15 = ph(15, [["Comment", "lg"], ["kijiye", "lg"], ["“GTM”", "huge acc"]]);
+const I16 = ph(16, [["aur"], ["poora"], ["setup"], ["guide"], ["main"], ["aapko"], ["DM"], ["kar"], ["dunga"]]).map((x) => x.t);
 const at = (ws, i) => ws[i].t;
 
 const capB = capBar([B2, B3, B4, B5]);
@@ -108,9 +108,9 @@ const scenes = [
       </div>` + capB.html,
     tweens: (A) => { capB.tweens(); [at(B2, 2), at(B3, 0), at(B4, 0), at(B5, 1)].forEach((t, i) => { A.pop(`#b-j${i}`, t, 0.4); A.activate(`#b-j${i}`, t, [at(B3, 0), at(B4, 0), at(B5, 1), null][i]); }); } },
 
-  { id: "c", start: CUT.c, end: CUT.d, lines: [C6.slice(0, 1), C6.slice(1, 2), C6.slice(2)], shake: at(C6, 1) + 0.05, extra: `
+  { id: "c", start: CUT.c, end: CUT.d, lines: [C6.slice(0, 2), C6.slice(2, 3), C6.slice(3)], shake: at(C6, 2) + 0.05, extra: `
       <div class="steps5">${[1, 2, 3, 4, 5].map((n) => `<b id="c-s${n}">${n}</b>`).join("")}</div>`,
-    tweens: (A) => { T(`tl.fromTo("#c .steps5 b",{opacity:0,scale:0},{opacity:1,scale:1,duration:.25,ease:"back.out(3)",stagger:.07},${(at(C6, 2)).toFixed(2)});`); } },
+    tweens: (A) => { T(`tl.fromTo("#c .steps5 b",{opacity:0,scale:0},{opacity:1,scale:1,duration:.25,ease:"back.out(3)",stagger:.07},${(at(C6, 3)).toFixed(2)});`); } },
 
   { id: "d", start: CUT.d, end: CUT.e, noDrift: true, lines: [], extra: stepPill(1, "Claude Project") + `
       <div class="win" id="d-win">
@@ -119,7 +119,7 @@ const scenes = [
           <div class="btnp" id="d-new">+ New project</div>
           <div class="pname" id="d-name"><span>Project name</span><b>GTM Command Center</b></div>
           <div class="prompt" id="d-prompt"><span class="plabel">Starter prompt</span><p id="d-ptxt">“Interview me about my business, my customers and my competitors. Ask one question at a time, then save everything to memory.”</p></div>
-          <div class="chip4" id="d-mem">🧠 Claude ab tumhara business jaanta hai</div>
+          <div class="chip4" id="d-mem">🧠 Claude ab aapka business jaanta hai</div>
         </div>
       </div>
       <div class="cursor2" id="d-cur"></div>` + capD.html,
@@ -226,7 +226,7 @@ const scenes = [
         <div class="cmt-in"><span class="cmt-ph">Add a comment…</span><span class="cmt-txt">${["G", "T", "M"].map((c, i) => `<b id="i-k${i}">${c}</b>`).join("")}</span></div>
         <div class="cmt-send" id="i-send">Post</div>
       </div>
-      <div class="dm">${["aur", "poora", "setup", "guide", "main", "tumhe", "DM", "kar", "dunga 📩"].map((x, i) => `<span class="w-inline${x === "DM" || x === "setup" || x === "guide" ? " dmk" : ""}" id="i-d${i}">${x}</span>`).join(" ")}</div>`,
+      <div class="dm">${["aur", "poora", "setup", "guide", "main", "aapko", "DM", "kar", "dunga 📩"].map((x, i) => `<span class="w-inline${x === "DM" || x === "setup" || x === "guide" ? " dmk" : ""}" id="i-d${i}">${x}</span>`).join(" ")}</div>`,
     tweens: (A) => {
       const c0 = at(I15, 2) + 0.25;
       A.pop("#i-cmt", +(c0 - 0.05).toFixed(2), 0.35);
