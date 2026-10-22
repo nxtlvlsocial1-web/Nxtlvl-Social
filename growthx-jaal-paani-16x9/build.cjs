@@ -99,8 +99,8 @@ const net = (id, cls = "") => `
         <ellipse class="nr" cx="175" cy="150" rx="125" ry="34" />
       </svg>`;
 const water = (id) => `<div class="water" id="${id}"><svg viewBox="0 0 1920 80" preserveAspectRatio="none"><path d="M0 40 Q120 0 240 40 T480 40 T720 40 T960 40 T1200 40 T1440 40 T1680 40 T1920 40 V80 H0 Z" /></svg></div>`;
-// Browser frame around the client's site screen recording (assets/site.mp4: trimmed, letterbox cropped,
-// nav logo swapped for GrowthX). start/dur/from are seconds on the root timeline / in the file.
+// Browser frame around the website screen recording (assets/site.mp4, built by prep_site.sh).
+// start/dur/from are seconds on the root timeline / in the file.
 const site = (id, url, start, dur, from = 0) => `
       <div class="site siteabs" id="${id}">
         <div class="wbar"><i></i><i></i><i></i><span>${url}</span></div>
@@ -268,7 +268,7 @@ const scenes = [
 // The site recordings sit at the root (a <video> may not be nested in a timed scene),
 // over the .site-spacer in scenes a and d, and are hidden outside those scenes.
 const siteLayers = site("a-site", "yourbrand.com", at(P0, 1), +(CUT.b - at(P0, 1)).toFixed(2)) +
-  site("d-site", "yourbrand.com", CUT.d, +(CUT.d2 - CUT.d).toFixed(2), 0.4);
+  site("d-site", "yourbrand.com", CUT.d, +(CUT.d2 - CUT.d).toFixed(2), 4.6);
 
 const wipes = [CUT.b, CUT.c, CUT.d, CUT.e, CUT.f, CUT.g, CUT.h, CUT.out];
 
@@ -672,7 +672,7 @@ const html = `<!doctype html>
       .rcol.abs { position:absolute; left:960px; top:200px; }
       .site-spacer { width:820px; height:470px; }
       .siteabs { position:absolute; left:980px; top:200px; }
-      .site-vid { position:relative; display:block; width:100%; aspect-ratio:1280/622; object-fit:cover; background:#080618; }
+      .site-vid { position:relative; display:block; width:100%; aspect-ratio:1280/616; object-fit:cover; background:#080618; }
       .site { width:820px; border-radius:26px; background:#0E0A14; border:3px solid rgba(166,92,255,.55); overflow:hidden; }
       .site-body { padding:26px 32px 32px; display:flex; flex-direction:column; gap:24px; background:linear-gradient(160deg,#1B0F2B,#0B0710); }
       .site-nav { display:flex; gap:30px; align-items:center; font-size:24px; color:var(--dim); font-weight:700; } .site-nav b { color:#fff; font-size:28px; margin-right:auto; }
