@@ -475,6 +475,12 @@
       "skillPath": "skills/pr-to-video/SKILL.md",
       "computedHash": "ddafcd230d006042bda6aeec7156261531e5d1762850a246ab60a6c754e4841c"
     },
+    "product-film": {
+      "source": "Rieranthony/product-film-skill",
+      "sourceType": "github",
+      "skillPath": "plugins/product-film/skills/product-film/SKILL.md",
+      "computedHash": "d459357d3986dfe674ff858638b1851f7ac24270fb329762e1a74effcd046c68"
+    },
     "product-launch-video": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",

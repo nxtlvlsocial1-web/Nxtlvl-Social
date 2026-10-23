@@ -57,6 +57,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Break down a reference video or website into a Motion prompt | `reference-to-motion`                    |
 | Full 8-part Claude Motion prompt for one short loop     | `motion-prompt-writer`                        |
 | 30-45 s product launch video in code                    | `launch-video`                                |
+| Showreel-grade product film from an app's own codebase and design system (Remotion) | `product-film`  |
 | Mac-style keynote launch film (menu bar, notch, widgets) | `apple-launch-film`                          |
 | 30-60 s Vox-style documentary explainer in code         | `vox-explainer`                               |
 | Looping animated chart; values stay exactly as given    | `animated-chart`                              |
@@ -122,6 +123,7 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `fal-lip-sync`, `remotion`, `frame-*`, `video-hyperframes`: `nexu-io/open-design`
 - `video-motion-graphics`: `dylantarre/animation-principles`
 - `brand-intake`, `motion-brief-writer`, `reference-to-motion`, `motion-prompt-writer`, `launch-video`, `apple-launch-film`, `vox-explainer`, `animated-chart`, `milestone-reveal`, `motion-effects`, `title-sequence-3d`, `model-showdown`, `newsletter-promo`, `loop-cover`, `reel-export`: `charlie947/motion-graphics-skills`
+- `product-film`: `Rieranthony/product-film-skill`
 - `reference-design-contract`, `agent-browser`: `nexu-io/open-design`; `competitor-profiling`: `coreyhaines31/marketingskills`
 - `threejs-*`: `CloudAI-X/threejs-skills`; `gsap-*`: `greensock/gsap-skills`; `design-dna`: `zanwei/design-dna`;
   `motion-design`: `LottieFiles/motion-design-skill`; `cast`, `paint`, `bunshin`: `AThevon/genjutsu`
