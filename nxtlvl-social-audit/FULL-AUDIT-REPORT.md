@@ -1,338 +1,271 @@
 # Nxtlvl Social: SEO Audit
 
 **Page:** `website/index.html` (the landing page; served locally because it is not deployed yet)  
-**Date:** 23 October 2026  
+**Date:** 23 October 2026 (first audit, then re-checked the same day after fixes)  
 **Business type:** Agency (creative + automation studio for small businesses), with local service-area signals (India, on-site shoots)
 
-## SEO Health Score: 50/100
+## SEO Health Score: 72/100 (was 50)
 
-| Category | Weight | Score |
-|---|---|---|
-| Technical SEO | 22% | 48/100 |
-| Content Quality | 23% | 60/100 |
-| On-Page SEO | 20% | 50/100 |
-| Schema / Structured Data | 10% | 5/100 |
-| Performance (CWV) | 10% | 62/100 |
-| Images | 5% | 85/100 |
-| AI Search Readiness | 10% | 45/100 |
+| Category | Weight | Before | After |
+|---|---|---|---|
+| Technical SEO | 22% | 48 | 68 |
+| Content Quality | 23% | 60 | 66 |
+| On-Page SEO | 20% | 50 | 78 |
+| Schema / Structured Data | 10% | 5 | 80 |
+| Performance (CWV) | 10% | 62 | 72 |
+| Images | 5% | 85 | 92 |
+| AI Search Readiness | 10% | 45 | 65 |
 
-The page itself is well written and works without JavaScript. The score is held down by launch blockers and missing metadata, not by the copy. The site isn't live yet; the contact details and testimonials are placeholders; and there is no title keyword, social card or structured data. Most of the fixes are small.
+The page now has the metadata, structured data, share card and crawl files it was missing. Its text is visible to search-engine renderers, and the headline paints sooner. The colours and motion are unchanged. What is left needs facts from the business or a live site: real contact details, the confirmed domain, a city, team and client proof, and deployment.
 
-## Top 5 issues
+## What was fixed
+
+- Complete document: `<!doctype html>`, `<html lang="en-IN">`, `<head>`, `<body>`.
+- New title, meta description and canonical tag.
+- Open Graph and Twitter card tags, with a new 1200×630 share image (website/og-image.png).
+- Favicon (SVG and PNG), apple-touch-icon and theme-color.
+- Organization and WebSite JSON-LD, including the three plans and their prices.
+- robots.txt and sitemap.xml.
+- Testimonial placeholders moved off the live page into a `<template>`.
+- "Book on WhatsApp" and "Email us" buttons in the contact section; the email, number and FAQ WhatsApp mention are now links.
+- Text stays visible for search-engine renderers: no manifesto pin, intro, letter flight or label scramble in a viewport taller than any screen.
+- Headline waits at most 1.5 s for the animation library; GSAP is self-hosted.
+- The savings odometer exposes its real value as text.
+- A space before each `<br>` inside headings.
+
+## Corrections to the first audit
+
+- The first audit called the testimonials "made-up quotes". On closer reading they were openly labelled empty cards ("real quotes from real clients go here"), not invented reviews. Keeping them off a live page was still right.
+- The first audit said headings ran words together at line breaks. That came from the parse_html.py extractor, which joins text without spaces; browsers and Google read the words correctly. A space before each `<br>` was added anyway.
+- The first audit said the cost comparison had no label. The page already labels it as illustrative "typical market rates"; only the source is missing (now Low).
+
+## Top open issues
 
 1. **Critical:** The site is not live, so nothing can be indexed (Technical SEO)
-2. **Critical:** Placeholder testimonials are on the page (Content Quality)
-3. **High:** The file has no <!doctype>, <html lang> or <head>/<body> wrapper (Technical SEO)
-4. **High:** 56% of text blocks stay invisible when the page is rendered without scrolling (Technical SEO)
-5. **High:** Weak experience and trust signals (E-E-A-T) (Content Quality)
-
-## Top 5 quick wins
-
-1. Replace the title tag with "Social Media Content & Automation from $5/mo | Nxtlvl Social" (5 min).
-2. Add Open Graph and Twitter card tags plus a 1200×630 share image (1 h).
-3. Turn "Book a free call" into a wa.me WhatsApp link with a pre-filled message, once the real number is in (15 min).
-4. Add Organization + WebSite JSON-LD from the template in findings/schema.md (30 min).
-5. Add a favicon, apple-touch-icon and theme-color (20 min).
+2. **Critical:** The contact details are still placeholders (Search Experience)
+3. **High:** Weak experience and trust signals (E-E-A-T) (Content Quality)
+4. **High:** One page has to rank for everything (Content Quality)
+5. **High:** No city or service area anywhere on the page (On-Page SEO)
 
 ## Screenshots
 
-| Desktop, above the fold | Mobile, above the fold |
+| Before | After |
 |---|---|
-| ![Desktop](screenshots/desktop-above-fold.jpg) | ![Mobile](screenshots/mobile-above-fold.jpg) |
+| ![Desktop before](screenshots/desktop-above-fold.jpg) | ![Desktop after](screenshots/after/desktop-above-fold.jpg) |
+| ![Mobile before](screenshots/mobile-above-fold.jpg) | ![Mobile after](screenshots/after/mobile-above-fold.jpg) |
 
-Full-page desktop capture: `screenshots/desktop-full.jpg`.
-
-## Technical SEO: 48/100
+## Technical SEO: 68/100 (was 48)
 
 **What works**
 
-- All page copy is in the HTML itself: 2,996 words read without JavaScript, so any crawler sees it.
-- Mobile viewport tag is set; no sideways scroll at 390 px or 1440 px.
-- No JavaScript errors on load (desktop, mobile, first visit).
-- Skip link, a single h1, and a reduced-motion mode that shows everything without animation.
-- If the animation library fails to load, the page still shows its content (the h1 has a 3 s safety timeout).
+- All page copy is in the HTML itself, so any crawler sees it without running JavaScript.
+- Fixed: the file is now a complete document: `<!doctype html>`, `<html lang="en-IN">`, `<head>` and `<body>`.
+- Fixed: canonical tag, robots.txt (welcomes search and AI crawlers, links the sitemap) and sitemap.xml are ready in website/.
+- Fixed: favicon (SVG and 48 px PNG), apple-touch-icon and theme-color.
+- Fixed: in a Googlebot-style render (viewport stretched to the page, no scrolling) 121 of 122 text blocks are visible, up from 61 of 139. The pinned manifesto no longer stretches the page to 128,000 px; renderers get it as plain text, and visitors still get the full animation.
+- Fixed: GSAP is served from the site itself (website/vendor/gsap-3.14.2/), not a third-party CDN.
+- Mobile viewport set, no sideways scroll at 390 px or 1440 px, no JavaScript errors, skip link, single h1, reduced-motion mode.
 
 ### Critical: The site is not live, so nothing can be indexed
 
-The page only exists as website/index.html and a private claude.ai artifact. There is no public domain, so Google cannot crawl it. Because of this, robots.txt, sitemap.xml, HTTPS, redirects, security headers and real-user Core Web Vitals could not be tested.
+The page only exists in the repo and as a private claude.ai artifact. HTTPS, redirects, security headers and real-user Core Web Vitals can only be checked once it is on a public domain.
 
-**Fix:** Deploy to the business domain (the page uses nxtlvlsocial.in in its placeholder email; confirm the real one) over HTTPS, then re-run this audit against the live URL.
+**Fix:** Deploy the whole website/ folder (index.html, vendor/, the icons, og-image.png, logo.png, robots.txt, sitemap.xml) to the domain root over HTTPS with gzip or brotli on, then re-run this audit against the live URL.
 
-### High: The file has no <!doctype>, <html lang> or <head>/<body> wrapper
+### Medium: The domain is assumed, not confirmed
 
-index.html starts at <meta charset>. The artifact host adds a wrapper, but a normal web host serves the file as-is. Browsers then use quirks mode, and search engines get no language declaration.
+The canonical tag, og:url, og:image, the JSON-LD, robots.txt and sitemap.xml all use https://nxtlvlsocial.in/, the domain from the page's placeholder email.
 
-**Fix:** Wrap the file in <!doctype html><html lang="en-IN"> (or "en" if you target other countries), with <head> and <body>, before hosting it anywhere else.
+**Fix:** If the real domain is different, replace nxtlvlsocial.in in those places before launch. A comment at the top of index.html lists them.
 
-### High: 56% of text blocks stay invisible when the page is rendered without scrolling
+### Low: three.js still loads from a third-party CDN
 
-In a Googlebot-style render (tall viewport, no scrolling), 78 of 139 headings and paragraphs were still at opacity 0. These include "Every piece starts as noise", "Built for the businesses agencies won't call back" and the services cards. The text is in the HTML, so it can still be indexed. However, Google's rendered snapshot shows a mostly empty page, and text Google sees as hidden can be given less weight.
+The finale's three.js module is imported from cdn.jsdelivr.net, but only when the visitor reaches the end of the page, so it does not affect loading.
 
-**Fix:** Show any element that is already on screen when the page loads straight away. Also add a timed fallback that reveals all remaining content a few seconds after load if the visitor has not scrolled. Every visitor gets the same page, so this is not cloaking. After launch, check the result with the URL Inspection rendered screenshot in Search Console.
+**Fix:** Optional: self-host it next to GSAP when the site is deployed.
 
-### Medium: No canonical tag
-
-There is no <link rel="canonical">. Without it, copies of the page under other URLs (www/non-www, query strings, the artifact URL) can split ranking signals.
-
-**Fix:** Add <link rel="canonical" href="https://YOUR-DOMAIN/"> once the domain is final.
-
-### Medium: No robots.txt or sitemap.xml
-
-Both return 404 on the local server. Without robots.txt, all crawlers are allowed and you have not stated a preference for AI crawlers.
-
-**Fix:** Publish a robots.txt that allows search crawlers and links the sitemap. Publish a sitemap.xml listing the page (and future pages).
-
-### Medium: No favicon, apple-touch-icon or theme-color
-
-Google shows the favicon next to your result on mobile. Without one, it shows a generic globe.
-
-**Fix:** Add a 48×48 multiple favicon (SVG + ICO/PNG), a 180×180 apple-touch-icon and <meta name="theme-color" content="#05030C">.
-
-### Low: Six scripts load from a third-party CDN
-
-GSAP core and five plugins load from cdn.jsdelivr.net. That adds a DNS lookup and connection, and the hero headline waits for them (see Performance).
-
-**Fix:** Self-host the GSAP files on the same domain, or bundle the plugins into one file.
-
-## Content Quality: 60/100
+## Content Quality: 66/100 (was 60)
 
 **What works**
 
-- 2,937 words of plain, specific copy. The content checker found no filler and no AI-writing patterns (quality 95/100).
-- A 12-question FAQ that answers the real objections (price, contracts, ownership, "will it look AI-made").
-- Transparent pricing and a clear process: three steps, then a week-by-week first month.
-- Industry examples (cafés, salons, gyms, clinics, real estate) show who it is for.
-
-### Critical: Placeholder testimonials are on the page
-
-The "What your customers will say here" section has made-up quotes, flagged in the page itself as placeholders. Publishing invented reviews breaks consumer-protection rules in many markets and destroys trust if spotted.
-
-**Fix:** Before launch, either remove the section or replace it with real quotes from clients (with permission, name and business). Never mark up placeholder or self-written reviews with Review schema.
+- 2,848 words of plain, specific copy; no filler and no AI-writing patterns (quality 95/100).
+- A 12-question FAQ that answers the real objections, transparent pricing and a clear week-by-week first month.
+- Fixed: the empty testimonial cards are off the live page. They sit in a `<template>` in index.html, ready to restore once there are real quotes.
+- The cost comparison is already labelled on the page as illustrative "typical market rates".
 
 ### High: Weak experience and trust signals (E-E-A-T)
 
-The page names no founder or team, has no About section, shows no real client work or results, and gives no location. For an agency, the portfolio is the main proof of experience.
+No founder or team, no About section, no real client work or results, and no location.
 
-**Fix:** Add a short "Who makes this" block with names and faces, two or three real before/after client examples with numbers (reach, bookings, time saved), and the city you work from.
+**Fix:** Add a short "Who makes this" block with names and faces, two or three real client examples with numbers, and the city you work from. Then restore the testimonials with real quotes.
 
 ### High: One page has to rank for everything
 
-All services, industries and prices sit on a single URL with anchor links only. That page cannot rank well for "reels for cafés", "salon social media", "Instagram automation" and "poster design" all at once.
+All services, industries and prices sit on one URL.
 
-**Fix:** After launch, add one page per core service and per main industry, each with its own examples and FAQ. Link them from the home page sections that already exist.
+**Fix:** After launch, add one page per core service and per main industry (cafés, salons, gyms, clinics), linked from the home page sections that already exist.
 
-### Medium: The cost comparison figures have no source
+### Low: Say where the "typical market rates" come from
 
-"One freelance reel costs $35" and the savings calculator use "typical market rates" with no source. These are the claims searchers and AI answers are most likely to quote.
+The comparison ($35 per freelance reel) is labelled as illustrative but names no source.
 
-**Fix:** Cite where the rates come from (your own quotes from N freelancers, a published rate survey), or label them as your own estimate.
+**Fix:** Add one line on the source, for example "from quotes we collected from N freelancers in 2026".
 
 ### Low: Repetition flag from the content checker
 
-Repetition score 32 ("repetitive"), driven by words like post, reel and month. This is normal for a services page and not a quality problem.
+Repetition score 32, driven by words like post, reel and month. Normal for a services page.
 
-**Fix:** No action needed. When writing new service pages, vary the wording rather than reusing the home page lines.
+**Fix:** No action needed.
 
-## On-Page SEO: 50/100
+## On-Page SEO: 78/100 (was 50)
 
 **What works**
 
-- Exactly one h1 and a logical outline of 34 headings. The h2s map to real search topics (pricing, services, FAQ).
-- Clear anchor navigation (Who it's for, The maths, Services, Pricing, FAQ).
-- Meta description is present and accurate.
-
-### High: The title tag is just the brand name
-
-<title>Nxtlvl Social</title> is 13 characters and has no service words. Searchers who don't already know the brand get no reason to click.
-
-**Fix:** Use something like "Social Media Content & Automation from $5/mo | Nxtlvl Social" (60 characters).
-
-### High: No Open Graph or Twitter card tags
-
-Links shared on WhatsApp, Instagram DMs, LinkedIn or X show no image and a bare title. For a social media agency whose main contact channel is WhatsApp, this is the first impression many prospects get.
-
-**Fix:** Add og:title, og:description, og:url, og:type=website, og:image (1200×630, the violet hero with the headline) and twitter:card=summary_large_image.
+- Fixed: title "Social Media Content & Automation from $5/mo | Nxtlvl Social" (60 characters).
+- Fixed: meta description with who, what, price and a call to action (153 characters).
+- Fixed: Open Graph and Twitter card tags with a 1200×630 share image, so links shared on WhatsApp, Instagram and LinkedIn show a proper card.
+- One h1, a logical outline of headings, clear anchor navigation.
 
 ### High: No city or service area anywhere on the page
 
-The page signals India (+91 number, .in email, Diwali, chai) and offers on-site shoots "within our service area", but never names a city. You cannot rank for "social media agency in <city>" or appear in local results.
+The page signals India (+91, .in, Diwali, Ganpati) and offers on-site shoots "within our service area", but never names a city, so it cannot rank for "social media agency in `<city>`" or show in local results.
 
-**Fix:** Name the city and the area you shoot in (hero trust line, FAQ answer about shoots, footer), and set up a Google Business Profile as a service-area business.
-
-### Medium: The meta description is short
-
-At 77 characters it uses about half the space Google shows, and it has no call to action.
-
-**Fix:** For example: "Design, reels, posting and DM automation for cafés, salons, gyms and shops. Your whole social media team from $5 a month. No contracts. Book a free call." (153 characters).
-
-### Low: Headings run words together where a <br> splits the line
-
-Text extractors read "team,for less than one reel", "starts as noise" as "startsas noise", and "businessesagencies". Google usually handles <br>, but other crawlers and AI tools may not.
-
-**Fix:** Put a space before each <br> inside headings.
+**Fix:** Name the city and shoot area (hero trust line, the FAQ answer about shoots, footer), add it to the JSON-LD areaServed, and set up a Google Business Profile as a service-area business.
 
 ### Low: No links to the business's social profiles
 
-A social media agency with no link to its own Instagram is a missed proof point and a missed entity signal.
+A social media agency with no link to its own Instagram misses a proof point and an entity signal.
 
-**Fix:** Link Instagram (and any other active profiles) from the footer and the contact section, and list them in schema sameAs.
+**Fix:** Link Instagram (and other active profiles) from the footer and contact section, and add them to the JSON-LD as sameAs.
 
-## Schema / Structured Data: 5/100
+## Schema / Structured Data: 80/100 (was 5)
 
 **What works**
 
-- The FAQ is already written as clean question-and-answer pairs, which makes Q&A content easy for parsers to extract.
+- Fixed: Organization and WebSite JSON-LD (valid JSON) with name, URL, logo, image, description, slogan, areaServed (India) and knowsAbout.
+- Fixed: an OfferCatalog of the three plans (Content & Design, Video & Editing, Social + Automation) with their monthly starting prices in USD.
 
-### High: No structured data at all
+### Medium: Add contact details and profiles to the schema once they are real
 
-There is no JSON-LD block on the page. Search engines and AI systems have to guess the business name, logo, offer and prices.
+email, telephone and sameAs are left out on purpose while the contact details are placeholders.
 
-**Fix:** Add Organization (or ProfessionalService) and WebSite JSON-LD with name, url, logo, description, areaServed, contactPoint and sameAs. Add Service with Offer for the three plans once prices are final. A template is in findings/schema.md.
+**Fix:** When the real email, WhatsApp number and Instagram handle are in, add "email", "telephone" and "sameAs" to the Organization block, then test with the Rich Results Test and validator.schema.org.
 
 ### Info: Do not add FAQPage or Review markup yet
 
-Google retired FAQ rich results for all sites on 7 May 2026, so FAQPage markup brings no search-result feature. Review or AggregateRating markup on the current placeholder testimonials would be fake reviews.
+Google retired FAQ rich results for all sites on 7 May 2026, and there are no real reviews yet.
 
-**Fix:** Skip FAQPage for Google benefit. Add Review markup only for real, attributable client reviews.
+**Fix:** Add Review markup only for real, attributable client reviews.
 
-## Performance (CWV): 62/100
+## Performance (CWV): 72/100 (was 62)
 
 **What works**
 
-- Layout is stable: CLS 0.009 on desktop and 0.002 on mobile (good is under 0.1).
-- Mobile lab LCP 1.05 s.
-- three.js loads only when the finale is reached (dynamic import), and GSAP is deferred.
-- Fonts use display=swap. Images total about 13 KB.
+- Fixed: the headline no longer waits on a third-party CDN, and never waits more than 1.5 s for GSAP. Lab LCP is now 1.47 s on desktop (was 2.64 s) and 0.94–1.07 s on mobile.
+- Fixed: GSAP is self-hosted; the page is ready (DOMContentLoaded) in 936 ms on desktop, down from 1624 ms.
+- Layout stays stable: CLS 0.0005 desktop, 0.003 mobile.
+- The 3D headline, manifesto and every other animation still play for visitors.
 
-### High: The hero headline waits for the animation library before it shows
+### Medium: First visits measure slower because of the opening intro
 
-The largest element on screen is the h1, and it stays hidden until GSAP loads from jsdelivr and assembles the letters. Lab LCP was 2.64 s on desktop and 2.83 s on a first visit with the intro, measured on a local server with no network delay. That is already over the 2.5 s "good" limit before any real-world latency.
+On a first visit the intro plays and the headline letters fly in, and LCP counts that flight. Lab LCP for first visits was 1.36–2.76 s across runs. That is within the 2.5 s limit at best and just over it at worst. The sandbox uses a software GPU, so real devices should be faster.
 
-**Fix:** Paint the h1 immediately and let the 3D assembly play over visible text (e.g. start from a soft, already-legible state), or shorten the gate. Self-host GSAP so it arrives with the page.
+**Fix:** After launch, watch LCP in Search Console. If the 75th percentile is over 2.5 s, start the letters closer to their place or shorten the flight from 1.7 s.
 
 ### Medium: One very large HTML file
 
-index.html is 357 KB (97 KB gzipped): 127 KB inline CSS and 128 KB inline JS. All of it is parsed before first paint, and none of it can be cached separately.
+index.html is about 365 KB (about 100 KB gzipped) with the CSS and JS inline.
 
-**Fix:** When the site grows past one page, move the CSS and JS into cached files. Until then, make sure the host serves it with gzip or brotli.
+**Fix:** Serve it with gzip or brotli; move CSS and JS into cached files once there is more than one page.
 
-### Medium: Large DOM: 2,256 elements
+### Medium: Large DOM: 2,230 elements
 
-Lighthouse warns above about 1,400 elements. Much of it is decorative: odometer digit columns, the sample feed, and the particle and glint layers.
+Mostly decorative layers (odometer columns, the sample feed, particles and glints).
 
-**Fix:** Build the decorative parts on demand (when scrolled into view) rather than in the initial HTML.
+**Fix:** Build the decorative parts when they scroll into view.
 
 ### Medium: Render-blocking Google Fonts stylesheet
 
-Three families with variable axes (Archivo wdth+wght, Instrument Sans, Instrument Serif) load from fonts.googleapis.com before first paint.
+Three font families load from fonts.googleapis.com before first paint.
 
-**Fix:** Self-host Latin subsets as WOFF2 and preload the two used above the fold.
+**Fix:** Self-host Latin WOFF2 subsets and preload the two used above the fold.
 
 ### Low: Interaction responsiveness (INP) not measured
 
-There is no field data before launch. The page runs several continuous animations (burst canvas, rays, glints, the three.js finale), which can slow taps on low-end Android phones.
+No field data before launch; several continuous animations run.
 
-**Fix:** After launch, test on a mid-range Android phone and watch INP in Search Console (target under 200 ms).
+**Fix:** Test on a mid-range Android phone after launch; target INP under 200 ms.
 
-### Low: No fetchpriority or speculation rules
-
-Preload score 50/100. This matters little for a one-page site.
-
-**Fix:** Revisit when there are more pages to navigate to.
-
-## Images: 85/100
+## Images: 92/100 (was 85)
 
 **What works**
 
-- Both images have alt text.
-- Total image weight is about 13 KB; the sample posts are built in HTML/CSS, not heavy images.
-
-### Medium: No social share image
-
-There is no og:image, so shared links have no preview picture.
-
-**Fix:** Create a 1200×630 share image in the brand violet with the headline and logo.
+- Fixed: og-image.png (1200×630) in the brand violet with the headline, plus logo.png for the schema.
+- Both inline images have alt text; total image weight on the page is about 13 KB.
 
 ### Low: The logo is embedded twice as base64 PNG
 
-Two copies of a 6.4 KB PNG are inlined as data URIs. They can't be cached and are blurry on high-DPI screens compared with vector.
+Two inline copies of a 6.4 KB PNG; they can't be cached.
 
-**Fix:** Use one SVG logo file, referenced twice.
+**Fix:** Reference website/logo.png (or an SVG version) instead when the site is deployed.
 
 ### Info: No real work in image form
 
-The page shows mock posts, not real client work, so it has no image-search presence and no visual proof.
+The page shows mock posts, not real client work.
 
-**Fix:** When real client work is approved for use, add it as WebP/AVIF with descriptive alt text and file names (e.g. cafe-diwali-carousel.webp).
+**Fix:** Add approved client work as WebP/AVIF with descriptive alt text and file names.
 
-## AI Search Readiness: 45/100
+## AI Search Readiness: 65/100 (was 45)
 
 **What works**
 
-- Content is server-rendered: AI crawlers that do not run JavaScript still get the full text.
-- FAQ answers are short, direct and self-contained, so they are easy to quote.
-- Concrete facts (prices, turnaround in 48 hours, month-to-month terms) are stated in plain text.
+- Server-rendered content and short, quotable FAQ answers.
+- Fixed: the Organization schema states who the business is, what it offers and at what price.
+- Fixed: robots.txt explicitly welcomes AI search crawlers.
+- Fixed: the savings number now reads "$405" as text (the rolling digits are drawn by CSS), for crawlers and screen readers alike.
 
-### High: No entity signals
+### Medium: Entity signals are still thin
 
-There is no Organization schema, no sameAs links, no address or city, and no named people. AI answer engines can't tie "Nxtlvl Social" to a known business, so they are unlikely to recommend it by name.
+No sameAs links, no city, no named people, so AI answers have little to connect "Nxtlvl Social" to.
 
-**Fix:** Add the Organization schema and profile links (see Schema), name the city, and keep the business name, description and contact details identical across Instagram, Google Business Profile and directories.
-
-### Medium: Animated numbers become digit strips in the rendered text
-
-The odometer replaces values like "$405" with ten-digit columns, so the rendered text reads "$012345678901234567890123456789". The aria-label it adds sits on a plain <b>, where screen readers don't reliably announce it.
-
-**Fix:** Mark the digit columns aria-hidden="true" and keep the real value next to them in a visually hidden span.
-
-### Medium: No stated AI-crawler policy
-
-With no robots.txt, there is no deliberate choice for OAI-SearchBot, PerplexityBot, ClaudeBot or Google-Extended.
-
-**Fix:** Decide whether you want to appear in AI answers (for a lead-gen agency, usually yes) and say so in robots.txt.
+**Fix:** Add profile links and the city (see On-Page and Schema), and keep the business name and description identical on Instagram, Google Business Profile and directories.
 
 ### Low: No llms.txt
 
-/llms.txt returns 404. It is listed for completeness only: no major AI search system is confirmed to use it, so it carries no weight in this score.
+Listed for completeness only; it carries no weight in this score.
 
-**Fix:** Optional. Add one only if it costs nothing to maintain.
+**Fix:** Optional.
 
 ## Search Experience (not weighted)
 
 **What works**
 
-- The mobile first screen shows the headline, the subhead, both buttons and the "No contracts · Cancel any month" trust line.
-- The price ("from $5 a month") is in the hero, which matches what price-sensitive searchers are looking for.
-- The FAQ handles the main objections before the contact section.
+- Fixed: "Book a free call" now lands on a "Book on WhatsApp" button (opens WhatsApp with a pre-filled message) and an "Email us" button; the email and number are links too.
+- The mobile first screen shows the headline, subhead, both buttons and the trust line.
+- The price is in the hero and the FAQ handles the main objections.
 
-### High: "Book a free call" leads to a dead end
+### Critical: The contact details are still placeholders
 
-All nine "Book a free call" links jump to #contact. That section only shows a placeholder email and a +91 00000 00000 number to copy. There is no form, booking link, WhatsApp link (wa.me), mailto or tel link.
+The new buttons and links point to +91 00000 00000 (wa.me/910000000000) and hello@nxtlvlsocial.in, which the page itself flags as placeholders.
 
-**Fix:** Make the main button open WhatsApp with a pre-filled message (wa.me/91XXXXXXXXXX?text=…). Make the email a mailto: link, and add a booking link (Calendly, Cal.com or Google Calendar) if you take scheduled calls.
+**Fix:** Replace the number and email everywhere they appear in index.html (the comment at the top lists the places), then remove the "Placeholder contact details" note.
 
 ### Medium: Prices in dollars, everything else says India
 
-Prices are in USD ($5, $49) while the contact details, festivals and examples point to India. Indian searchers comparing agencies expect ₹.
+USD prices ($5, $15, $49) next to Indian contact details, festivals and examples.
 
-**Fix:** Confirm the target market. If it is India, show ₹ prices (optionally with $ for overseas clients).
+**Fix:** Confirm the target market; if it is India, show ₹ (optionally with $ for overseas clients) and update priceCurrency in the JSON-LD.
 
 ### Low: Many small tap targets
 
-38 of 61 tappable elements on mobile are smaller than 44×44 px, mostly the industry chips and inline links.
+40 of 66 tappable elements on mobile are under 44×44 px, mostly industry chips and inline links.
 
-**Fix:** Give chips and footer links at least 44 px of tappable height (padding, not larger text).
-
-### Info: On desktop the headline is still assembling at 2 s
-
-The above-the-fold screenshot at 2 s shows the h1 letters mid-flight. The rest of the hero (subhead, buttons, trust line) is readable.
-
-**Fix:** See the Performance finding: show legible text first and animate on top of it.
+**Fix:** Give chips and footer links at least 44 px of tappable height.
 
 ## Limitations
 
-- Not deployed: robots.txt, sitemap, HTTPS, redirects, security headers and field Core Web Vitals could not be tested.
+- Not deployed: HTTPS, redirects, security headers and field Core Web Vitals could not be tested.
 - No Google Search Console, GA4, CrUX, Matomo, Moz or DataForSEO access: no rankings, traffic, backlinks or field data.
-- Lab timings come from a sandboxed headless Chromium with a software GPU and the font CDN stubbed; treat them as indicative.
+- Lab timings come from a sandboxed headless Chromium with a software GPU and the font CDN stubbed; they vary between runs, so ranges are given.
 
-Raw tool output is in `raw/`; per-category detail is in `findings/`; the prioritised plan is in `ACTION-PLAN.md`.
+Raw tool output: `raw/` (first audit) and `raw/after/` (re-check). Per-category detail: `findings/`. Plan: `ACTION-PLAN.md`.

@@ -1,0 +1,131 @@
+{
+ "desktop": {
+  "vw": 1440,
+  "scrollW": 1440,
+  "horizOverflow": false,
+  "tapTargets": 68,
+  "smallTapTargets": 30,
+  "smallTapSample": [
+   "Skip to content",
+   "",
+   "Who it's for",
+   "The maths",
+   "Services",
+   "Pricing",
+   "FAQ",
+   "Cafés & restaurants",
+   "Salons & spas",
+   "Gyms & studios",
+   "Boutiques & retail",
+   "Clinics & dentists"
+  ],
+  "tinyTextEls": 70,
+  "domNodes": 2230,
+  "lcp": {
+   "t": 1472,
+   "el": "H1",
+   "size": 159952
+  },
+  "cls": 0.0005,
+  "domContentLoaded": 936,
+  "load": 984,
+  "transferBytes": 365176,
+  "decodedBytes": 364876,
+  "h1Visible": true,
+  "ctaAboveFold": [
+   "",
+   "Who it's for",
+   "The maths",
+   "Services",
+   "Pricing",
+   "FAQ"
+  ],
+  "errs": []
+ },
+ "mobile": {
+  "vw": 390,
+  "scrollW": 390,
+  "horizOverflow": false,
+  "tapTargets": 66,
+  "smallTapTargets": 40,
+  "smallTapSample": [
+   "Skip to content",
+   "",
+   "Open menu",
+   "Animations",
+   "Cafés & restaurants",
+   "Salons & spas",
+   "Gyms & studios",
+   "Boutiques & retail",
+   "Clinics & dentists",
+   "Real estate",
+   "Coaching centres",
+   "Auto & services"
+  ],
+  "tinyTextEls": 70,
+  "domNodes": 2206,
+  "lcp": {
+   "t": 944,
+   "el": "H1",
+   "size": 30667
+  },
+  "cls": 0.003,
+  "domContentLoaded": 547,
+  "load": 586,
+  "transferBytes": 365176,
+  "decodedBytes": 364876,
+  "h1Visible": true,
+  "ctaAboveFold": [
+   "",
+   "Who it's for",
+   "The maths",
+   "Services",
+   "What we make",
+   "What lands"
+  ],
+  "errs": []
+ },
+ "desktop-first-visit": {
+  "vw": 1440,
+  "scrollW": 1440,
+  "horizOverflow": false,
+  "tapTargets": 68,
+  "smallTapTargets": 30,
+  "smallTapSample": [
+   "Skip to content",
+   "",
+   "Who it's for",
+   "The maths",
+   "Services",
+   "Pricing",
+   "FAQ",
+   "Cafés & restaurants",
+   "Salons & spas",
+   "Gyms & studios",
+   "Boutiques & retail",
+   "Clinics & dentists"
+  ],
+  "tinyTextEls": 70,
+  "domNodes": 2230,
+  "lcp": {
+   "t": 2760,
+   "el": "H1",
+   "size": 159952
+  },
+  "cls": 0.0013,
+  "domContentLoaded": 1426,
+  "load": 1479,
+  "transferBytes": 365176,
+  "decodedBytes": 364876,
+  "h1Visible": true,
+  "ctaAboveFold": [
+   "",
+   "Who it's for",
+   "The maths",
+   "Services",
+   "Pricing",
+   "FAQ"
+  ],
+  "errs": []
+ }
+}

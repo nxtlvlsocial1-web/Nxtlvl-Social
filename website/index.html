@@ -1,7 +1,86 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Design, video, posting and automation for small businesses, from $5 a month.">
-<title>Nxtlvl Social</title>
+<!-- Before launch: this page assumes the domain https://nxtlvlsocial.in/ and uses the placeholder WhatsApp number
+     +91 00000 00000 (910000000000). Replace both everywhere they appear: the tags below, the JSON-LD, the contact
+     section and FAQ links, robots.txt and sitemap.xml. -->
+<title>Social Media Content &amp; Automation from $5/mo | Nxtlvl Social</title>
+<meta name="description" content="Design, reels, posting and DM automation for cafés, salons, gyms and shops. Your whole social media team from $5 a month. No contracts. Book a free call.">
+<link rel="canonical" href="https://nxtlvlsocial.in/">
+<meta name="theme-color" content="#05030C">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Nxtlvl Social">
+<meta property="og:locale" content="en_IN">
+<meta property="og:url" content="https://nxtlvlsocial.in/">
+<meta property="og:title" content="Your entire creative team, for less than one reel">
+<meta property="og:description" content="Design, video, posting and the automation behind it, run for you by Nxtlvl Social from $5 a month. No contracts, cancel any month.">
+<meta property="og:image" content="https://nxtlvlsocial.in/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Nxtlvl Social: your entire creative team, for less than one reel. From $5 a month.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Your entire creative team, for less than one reel">
+<meta name="twitter:description" content="Design, video, posting and the automation behind it, from $5 a month. No contracts, cancel any month.">
+<meta name="twitter:image" content="https://nxtlvlsocial.in/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://nxtlvlsocial.in/#org",
+      "name": "Nxtlvl Social",
+      "url": "https://nxtlvlsocial.in/",
+      "logo": "https://nxtlvlsocial.in/logo.png",
+      "image": "https://nxtlvlsocial.in/og-image.png",
+      "description": "Creative and automation studio for small businesses: social media design, reels and video editing, posting and the automation behind it, from $5 a month.",
+      "slogan": "Your entire creative team, for less than one reel",
+      "areaServed": {"@type": "Country", "name": "India"},
+      "knowsAbout": ["Social media management", "Social media design", "Reels and short-form video editing", "Ad creatives", "Social media automation"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Monthly plans",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "name": "Content & Design",
+            "description": "Social posts, carousels, story sets, posters, menus and festival creatives, with a brand kit set up in week one.",
+            "priceSpecification": {"@type": "UnitPriceSpecification", "minPrice": 5, "priceCurrency": "USD", "unitText": "MONTH"},
+            "itemOffered": {"@type": "Service", "name": "Content & Design", "serviceType": "Social media design"}
+          },
+          {
+            "@type": "Offer",
+            "name": "Video & Editing",
+            "description": "Reels and shorts cut and captioned, product and talking-head videos, motion graphics, hooks and thumbnails, plus everything in Content & Design.",
+            "priceSpecification": {"@type": "UnitPriceSpecification", "minPrice": 15, "priceCurrency": "USD", "unitText": "MONTH"},
+            "itemOffered": {"@type": "Service", "name": "Video & Editing", "serviceType": "Short-form video editing"}
+          },
+          {
+            "@type": "Offer",
+            "name": "Social + Automation",
+            "description": "Automated posting and replies, an on-site shoot, a full scheduled calendar, enquiries routed to WhatsApp and a monthly report, plus everything in the other plans.",
+            "priceSpecification": {"@type": "UnitPriceSpecification", "minPrice": 49, "priceCurrency": "USD", "unitText": "MONTH"},
+            "itemOffered": {"@type": "Service", "name": "Social + Automation", "serviceType": "Social media management"}
+          }
+        ]
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://nxtlvlsocial.in/#website",
+      "url": "https://nxtlvlsocial.in/",
+      "name": "Nxtlvl Social",
+      "inLanguage": "en-IN",
+      "publisher": {"@id": "https://nxtlvlsocial.in/#org"}
+    }
+  ]
+}
+</script>
 <script>
 /* motion mode: the visitor's saved choice wins; otherwise follow the device's reduced-motion setting */
 (function(){
@@ -10,16 +89,26 @@
   var os = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
   if(os) d.classList.add('os-rm');
   if(pref === 'reduced' || (pref !== 'full' && os)) d.classList.add('rm');
-  /* the opening reveal plays once per visit, and never for deep links or reduced motion */
+  /* the opening reveal plays once per visit, and never for deep links, reduced motion or renderers (see below) */
   var seen = false;
   try{ seen = !!sessionStorage.getItem('nx-intro'); sessionStorage.setItem('nx-intro', '1'); }catch(e){}
-  if(!seen && !location.hash && !d.classList.contains('rm')) d.classList.add('intro-on');
-  /* the headline waits, hidden, for GSAP to assemble it; if that never happens it shows anyway */
+  if(!seen && !location.hash && !d.classList.contains('rm') && window.innerHeight <= 3000) d.classList.add('intro-on');
+  /* the headline waits, hidden, for GSAP to assemble it, but never longer than 1.5 s: past that it shows with its
+     CSS rise and the 3D assembly is skipped, so a slow connection never holds back the largest paint */
   window.__nxT0 = (window.performance && performance.now()) || 0;
   if(!d.classList.contains('rm')){
     d.classList.add('h1-wait');
-    setTimeout(function(){ d.classList.remove('h1-wait'); }, 3000);
+    setTimeout(function(){ if(d.classList.contains('h1-wait')){ d.classList.remove('h1-wait'); window.__nxH1Late = true; } }, 1500);
   }
+  /* renderers (search engines, full-page screenshot tools) use a viewport taller than any screen and never scroll:
+     give them the finished page, with nothing pinned and nothing waiting for a scroll */
+  var tall = function(){ return window.innerHeight > 3000; };
+  if(tall()) d.classList.add('tall', 'no-scrub');
+  window.addEventListener('resize', function(){
+    if(!tall() || d.classList.contains('tall')) return;
+    d.classList.add('tall', 'no-scrub');
+    document.dispatchEvent(new Event('nx:tall'));
+  });
 })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -793,6 +882,8 @@ details p{padding:0 54px 24px 4px; font-size:15px; color:var(--muted); max-width
 .ct>.ic{box-sizing:content-box; font-size:19px; padding:9px; border-radius:var(--r-sm); background:rgba(125,24,252,.18); border:1px solid var(--line-2); color:var(--violet-pale)}
 .ct-k{font-size:12px; color:var(--faint); font-weight:500}
 .ct-v{font-size:14.5px; font-weight:600; overflow-wrap:anywhere}
+a.ct-v{display:block; text-decoration:none; text-underline-offset:3px}
+a.ct-v:hover,a.ct-v:focus-visible{text-decoration:underline; text-decoration-color:var(--violet-lift)}
 .copy{
   margin-left:auto; flex:none; background:none; border:1px solid var(--line-2); color:var(--muted);
   border-radius:9px; padding:5px 10px; font-size:11.5px; font-weight:600; cursor:pointer;
@@ -1244,6 +1335,7 @@ details .ans{overflow:hidden}
 .odo-d>span{display:flex; flex-direction:column; transition:transform .7s var(--expo)}
 .odo-d>span>i{display:block; height:1em; line-height:1; font-style:normal}
 .odo-s{display:inline-block; line-height:1}
+.odo-d>span>i::before,.odo-s::before{content:attr(data-n)}
 
 /* ---------- "who it's for": pick your business, see a sample week ---------- */
 .chips .chip{cursor:pointer; color:var(--fg); font-family:var(--b)}
@@ -1879,6 +1971,8 @@ html.h1-gs .hero h1 .hc{will-change:transform,opacity}
 /* ---------- reveal (JS-gated so the page is complete without it) ---------- */
 .js .rv{opacity:0; transform:translateY(28px); filter:blur(8px)}
 .js .rv.in{opacity:1; transform:none; filter:blur(0); transition:opacity .8s ease, transform var(--t3) var(--out), filter .8s ease}
+/* a renderer's viewport, taller than any screen (head script): every element is already in its final place */
+html.tall.js .rv,html.tall.js .split .wi{opacity:1; transform:none; filter:none; transition:none}
 @media(prefers-reduced-transparency:reduce){
   .nav,.dock-in,.mobcta{background:var(--ink-2); backdrop-filter:none; -webkit-backdrop-filter:none}
 }
@@ -1913,6 +2007,8 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 .motion-note .x{flex:none; width:32px; height:32px; border-radius:50%; border:1px solid var(--line-2); background:none; color:var(--muted); cursor:pointer; font-size:16px; line-height:1}
 @media(max-width:979px){ .motion-note{bottom:calc(84px + env(safe-area-inset-bottom,0px))} }
 </style>
+</head>
+<body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs><linearGradient id="ig" gradientUnits="userSpaceOnUse" x1="4" y1="2" x2="20" y2="22"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#D8BBFF"/></linearGradient></defs>
@@ -2100,7 +2196,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 
     <div class="hero-in">
       <span class="pill"><span class="dot"></span>Creative + automation studio · built for small businesses</span>
-      <h1><span class="w" style="--wd:.06s">Your</span> <span class="w" style="--wd:.14s">entire</span> <span class="w" style="--wd:.22s">creative</span> <span class="w" style="--wd:.3s">team,</span><br><span class="w it" style="--wd:.4s">for less than one reel</span></h1>
+      <h1><span class="w" style="--wd:.06s">Your</span> <span class="w" style="--wd:.14s">entire</span> <span class="w" style="--wd:.22s">creative</span> <span class="w" style="--wd:.3s">team,</span> <br><span class="w it" style="--wd:.4s">for less than one reel</span></h1>
       <p class="sub">Design, video, posting and the automation behind it, run for you by Nxtlvl Social <b style="white-space:nowrap">from $5 a month</b>.</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#contact">Book a free call<span class="bi"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
@@ -2144,7 +2240,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   <div class="wrap">
     <div class="head mid rv">
       <span class="eyebrow">The method</span>
-      <h2>Every piece starts<br>as <span class="it">noise</span></h2>
+      <h2>Every piece starts <br>as <span class="it">noise</span></h2>
     </div>
     <div class="dither-wrap rv">
       <canvas id="dither" data-scrub="drift"></canvas>
@@ -2162,7 +2258,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   <div class="wrap">
     <div class="head mid rv">
       <span class="eyebrow">Who it's for</span>
-      <h2>Built for the businesses<br>agencies <span class="it">won't call back</span></h2>
+      <h2>Built for the businesses <br>agencies <span class="it">won't call back</span></h2>
       <p style="margin-inline:auto">If you run a place people walk into, you need a feed. You don't need a marketing department to get one. Pick your business to see what a week could look like.</p>
     </div>
     <div class="chips rv" role="group" aria-label="Pick your business to see a sample week">
@@ -2210,7 +2306,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   <div class="wrap">
     <div class="head rv">
       <span class="eyebrow">The maths</span>
-      <h2>One freelance reel costs $35.<br><span class="it">Our whole design plan costs $5.</span></h2>
+      <h2>One freelance reel costs $35. <br><span class="it">Our whole design plan costs $5.</span></h2>
       <p>Most small businesses don't drop social media because they don't see the point. They drop it because the quote comes back at $400 a month when the shop is turning over $2,000.</p>
     </div>
 
@@ -2286,7 +2382,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   <div class="wrap">
     <div class="head rv">
       <span class="eyebrow">What you get</span>
-      <h2>Everything a marketing team does.<br><span class="it">Without hiring one.</span></h2>
+      <h2>Everything a marketing team does. <br><span class="it">Without hiring one.</span></h2>
       <p>Pick one service or let us run the whole thing. Most shops start with design, add video in month two, and hand us the account by month three.</p>
     </div>
 
@@ -2365,7 +2461,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   <div class="wrap">
     <div class="head mid rv">
       <span class="eyebrow">What we make</span>
-      <h2>The things that land<br>in <span class="it">your folder</span></h2>
+      <h2>The things that land <br>in <span class="it">your folder</span></h2>
       <p style="margin-inline:auto">Not a strategy deck — files you can post, print, and hand to a customer. Drag the ring to look around.</p>
     </div>
 
@@ -2432,7 +2528,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   <div class="wrap">
     <div class="head rv">
       <span class="eyebrow">What lands</span>
-      <h2>A month of posts,<br><span class="it">already approved</span></h2>
+      <h2>A month of posts, <br><span class="it">already approved</span></h2>
       <p>You don't get a strategy deck. You get the actual posts — scheduled, captioned and ready to go out while you run the shop.</p>
     </div>
 
@@ -2536,7 +2632,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   <div class="wrap">
     <div class="head rv">
       <span class="eyebrow">Pricing</span>
-      <h2>Three ways in.<br><span class="it">Pick the one that fits.</span></h2>
+      <h2>Three ways in. <br><span class="it">Pick the one that fits.</span></h2>
       <p>Monthly. No contract, no setup fee, no notice period. Change plan or stop at the end of any month.</p>
     </div>
 
@@ -2627,7 +2723,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   <div class="wrap">
     <div class="head mid rv">
       <span class="eyebrow">Your first month</span>
-      <h2>Week by week,<br>here's <span class="it">what happens</span></h2>
+      <h2>Week by week, <br>here's <span class="it">what happens</span></h2>
     </div>
     <div class="tl">
       <div class="tw rv"><div class="tw-dot"></div><div class="tw-k">Week 1</div><h3>Brand kit &amp; plan</h3><p>We learn the business on a short call, then build your colours, type and templates. You see the month's content plan before anything is made.</p></div>
@@ -2642,7 +2738,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   <div class="wrap">
     <div class="head rv">
       <span class="eyebrow">Why we can charge this</span>
-      <h2>AI does the first 80%.<br><span class="it">A designer does the part that matters.</span></h2>
+      <h2>AI does the first 80%. <br><span class="it">A designer does the part that matters.</span></h2>
       <p class="scrub-read">We're not cheap because we cut corners. We're cheap because the slow, repetitive half of creative work doesn't need a human any more — and we stopped charging you for it.</p>
     </div>
     <div class="why-grid">
@@ -2675,11 +2771,15 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   </div>
 </section>
 
+<!-- Client words: kept out of the live page until there are real quotes (name, business, permission).
+     To show it, replace the three empty cards with real ones, delete the placeholder note, and move the
+     <section> out of this <template>. Never add Review schema for quotes you wrote yourself. -->
+<template id="client-words">
 <section class="band" id="words">
   <div class="wrap">
     <div class="head mid rv">
       <span class="eyebrow">Client words</span>
-      <h2>What your customers<br>will <span class="it">say here</span></h2>
+      <h2>What your customers <br>will <span class="it">say here</span></h2>
       <p style="margin-inline:auto">These three cards are empty on purpose — real quotes from real clients go here, with their name and business.</p>
     </div>
     <div class="quotes rv">
@@ -2693,6 +2793,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     </div>
   </div>
 </section>
+</template>
 
 <section class="band" id="faq" style="background:var(--ground); border-block:1px solid var(--line)">
   <div class="wrap">
@@ -2700,7 +2801,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     <div class="head rv">
       <span class="eyebrow">Questions</span>
       <h2>The things people ask <span class="it">before saying yes</span></h2>
-      <p>Not answered here? Message us on WhatsApp and a person replies.</p>
+      <p>Not answered here? <a href="https://wa.me/910000000000" target="_blank" rel="noopener">Message us on WhatsApp</a> and a person replies.</p>
     </div>
     <div class="faq rv">
       <details><summary>Is $5 really the whole price?</summary><p>It is the starting price for the Content &amp; Design plan, billed monthly. Higher volumes and extra services move you up a plan — we tell you the number before anything starts, and it does not change mid-month.</p></details>
@@ -2724,7 +2825,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   <div class="wrap">
     <div class="head mid rv">
       <span class="eyebrow">The calendar</span>
-      <h2>The year your shop<br><span class="it">runs on</span></h2>
+      <h2>The year your shop <br><span class="it">runs on</span></h2>
       <p style="margin-inline:auto">Every month has a reason to post. Pull a spine off the shelf and see what we would be making for you that month.</p>
     </div>
 
@@ -2819,23 +2920,27 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   <div class="halo" aria-hidden="true"></div>
   <div class="wrap close-in">
     <div class="star3d" id="star3d" aria-hidden="true"></div>
-    <h2>Your competition posted<br>three times <span class="it">this week</span>.</h2>
+    <h2>Your competition posted <br>three times <span class="it">this week</span>.</h2>
     <p>Tell us about your business on a 15-minute call. You see the first month's plan before anything is made.</p>
     <ol class="next rv" aria-label="What happens after you get in touch">
       <li><b>1</b>A 15-minute call</li>
       <li><b>2</b>Brand kit in week one</li>
       <li><b>3</b>First drafts in 48 hours</li>
     </ol>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="https://wa.me/910000000000?text=Hi%20Nxtlvl%20Social!%20I%27d%20like%20to%20book%20a%20free%2015-minute%20call%20about%20my%20business." target="_blank" rel="noopener">Book on WhatsApp<span class="bi"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
+      <a class="btn btn-ghost" href="mailto:hello@nxtlvlsocial.in?subject=Free%2015-minute%20call">Email us</a>
+    </div>
 
     <div class="contact">
       <div class="ct">
         <svg class="ic" aria-hidden="true"><use href="#i-mail"/></svg>
-        <div style="min-width:0"><div class="ct-k">Email</div><div class="ct-v" id="mail">hello@nxtlvlsocial.in</div></div>
+        <div style="min-width:0"><div class="ct-k">Email</div><a class="ct-v" id="mail" href="mailto:hello@nxtlvlsocial.in?subject=Free%2015-minute%20call">hello@nxtlvlsocial.in</a></div>
         <button class="copy" type="button" data-copy="mail"><span class="cico" aria-hidden="true"><svg class="ic c-cp"><use href="#i-list"/></svg><svg class="ic c-ok"><use href="#i-check"/></svg></span><span class="clab">Copy</span></button>
       </div>
       <div class="ct">
         <svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg>
-        <div style="min-width:0"><div class="ct-k">WhatsApp</div><div class="ct-v" id="phone">+91 00000 00000</div></div>
+        <div style="min-width:0"><div class="ct-k">WhatsApp</div><a class="ct-v" id="phone" href="https://wa.me/910000000000" target="_blank" rel="noopener">+91 00000 00000</a></div>
         <button class="copy" type="button" data-copy="phone"><span class="cico" aria-hidden="true"><svg class="ic c-cp"><use href="#i-list"/></svg><svg class="ic c-ok"><use href="#i-check"/></svg></span><span class="clab">Copy</span></button>
       </div>
     </div>
@@ -4265,7 +4370,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   }
   document.querySelectorAll('.svc, .fp, .in-i, .why-card, .plan').forEach(function(el){ el.setAttribute('data-draw', ''); });
   var rv = Array.prototype.slice.call(document.querySelectorAll('.rv, .split'));
-  if(reduce || !('IntersectionObserver' in window)){
+  if(reduce || document.documentElement.classList.contains('tall') || !('IntersectionObserver' in window)){
     rv.forEach(arrive);
   } else {
     var io = new IntersectionObserver(function(es){
@@ -4274,6 +4379,10 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       });
     }, {rootMargin:'0px 0px -8% 0px', threshold:.08});
     rv.forEach(function(el){ io.observe(el); });
+    /* the viewport became taller than any screen (see the head script): everything arrives now */
+    document.addEventListener('nx:tall', function(){
+      rv.forEach(function(el){ if(!el.classList.contains('in')){ io.unobserve(el); arrive(el); } });
+    });
   }
 
   /* ---- cost bars ---- */
@@ -4994,18 +5103,20 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     if(reduce){ el.textContent = text; return; }
     if(el._len !== text.length){
       el.textContent = ''; el._len = text.length;
+      /* the rolling glyphs are drawn by CSS (data-n), so the element's text is only the real value, kept beside them */
+      el._sr = document.createElement('span'); el._sr.className = 'sr-only'; el.appendChild(el._sr);
       text.split('').forEach(function(ch){
         if(/\d/.test(ch)){
-          var d = document.createElement('span'); d.className = 'odo-d';
+          var d = document.createElement('span'); d.className = 'odo-d'; d.setAttribute('aria-hidden', 'true');
           var col = document.createElement('span');
-          for(var k = 0; k < 10; k++){ var it = document.createElement('i'); it.textContent = k; col.appendChild(it); }
+          for(var k = 0; k < 10; k++){ var it = document.createElement('i'); it.setAttribute('data-n', k); col.appendChild(it); }
           d.appendChild(col); el.appendChild(d);
         } else {
-          var sp = document.createElement('span'); sp.className = 'odo-s'; sp.textContent = ch; el.appendChild(sp);
+          var sp = document.createElement('span'); sp.className = 'odo-s'; sp.setAttribute('data-n', ch); sp.setAttribute('aria-hidden', 'true'); el.appendChild(sp);
         }
       });
     }
-    el.setAttribute('aria-label', text);
+    el._sr.textContent = text;
     var cols = el.querySelectorAll('.odo-d>span'), di = 0;
     text.split('').forEach(function(ch){
       if(/\d/.test(ch)){ cols[di++].style.transform = 'translateY(-' + ch + 'em)'; }
@@ -5303,16 +5414,16 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 })();
 </script>
 
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/SplitText.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrambleTextPlugin.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/DrawSVGPlugin.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+<script defer src="vendor/gsap-3.14.2/gsap.min.js"></script>
+<script defer src="vendor/gsap-3.14.2/ScrollTrigger.min.js"></script>
+<script defer src="vendor/gsap-3.14.2/SplitText.min.js"></script>
+<script defer src="vendor/gsap-3.14.2/ScrambleTextPlugin.min.js"></script>
+<script defer src="vendor/gsap-3.14.2/DrawSVGPlugin.min.js"></script>
+<script defer src="vendor/gsap-3.14.2/MotionPathPlugin.min.js"></script>
 <script>
 /* ================= pass 6: GSAP set pieces and the three.js finale =================
-   Deferred libraries run before DOMContentLoaded, so everything starts there. If the CDN
-   is unreachable the page keeps its static layout and the earlier motion passes. */
+   Deferred libraries run before DOMContentLoaded, so everything starts there. If they fail to load,
+   the page keeps its static layout and the earlier motion passes. */
 document.addEventListener('DOMContentLoaded', function(){
   var root = document.documentElement, reduce = root.classList.contains('rm');
 
@@ -5325,7 +5436,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
   /* ---- first impression: the headline's letters fly in from scattered 3D positions and lock into place ---- */
   var h1 = document.querySelector('.hero h1'), heroCopy = document.querySelector('.hero-in');
-  if(h1 && heroCopy){
+  /* skipped when the headline already showed itself because GSAP was slow to arrive, and for renderers (head script) */
+  if(h1 && heroCopy && !window.__nxH1Late && !root.classList.contains('tall')){
     root.classList.add('h1-gs');
     var hWords = gsap.utils.toArray('.w:not(.it)', h1), itLine = h1.querySelector('.w.it');
     var hs = SplitText.create(hWords, {type:'chars', charsClass:'hc'});
@@ -5393,34 +5505,39 @@ document.addEventListener('DOMContentLoaded', function(){
 
   /* ---- manifesto: each line's letters swing up out of the floor, hold, then rush past the viewer ---- */
   var mf = document.getElementById('manifesto');
-  if(mf && window.SplitText){
+  if(mf && window.SplitText && !root.classList.contains('tall')){
     mf.classList.add('live');
-    var stage = mf.querySelector('.mf-stage'), lines = gsap.utils.toArray('.mf-line', mf);
-    var ring = mf.querySelector('.mf-ring'), glow = mf.querySelector('.mf-glow'), kicker = mf.querySelector('.mf-k');
-    var bars = gsap.utils.toArray('.mf-meter b', mf);
-    var splits = lines.map(function(l){ return SplitText.create(l, {type:'words,chars', wordsClass:'mf-w', charsClass:'mf-c'}); });
-    gsap.set(ring, {autoAlpha:0, scale:.55});
-    var tl = gsap.timeline({
-      defaults:{ease:'power3.out'},
-      scrollTrigger:{trigger:mf, start:'top top', end:function(){ return '+=' + Math.round(window.innerHeight * 3.4); }, pin:stage, scrub:.8, anticipatePin:1, invalidateOnRefresh:true}
+    var mfCtx = gsap.context(function(){
+      var stage = mf.querySelector('.mf-stage'), lines = gsap.utils.toArray('.mf-line', mf);
+      var ring = mf.querySelector('.mf-ring'), glow = mf.querySelector('.mf-glow'), kicker = mf.querySelector('.mf-k');
+      var bars = gsap.utils.toArray('.mf-meter b', mf);
+      var splits = lines.map(function(l){ return SplitText.create(l, {type:'words,chars', wordsClass:'mf-w', charsClass:'mf-c'}); });
+      gsap.set(ring, {autoAlpha:0, scale:.55});
+      var tl = gsap.timeline({
+        defaults:{ease:'power3.out'},
+        scrollTrigger:{trigger:mf, start:'top top', end:function(){ return '+=' + Math.round(window.innerHeight * 3.4); }, pin:stage, scrub:.8, anticipatePin:1, invalidateOnRefresh:true}
+      });
+      tl.from(kicker, {autoAlpha:0, y:14, duration:.6}, 0);
+      splits.forEach(function(sp, i){
+        var t = i * 2.7;   /* enter ~1.5, hold, then leave before the next line starts */
+        tl.from(sp.chars, {yPercent:115, rotationX:-95, autoAlpha:0, transformPerspective:700, transformOrigin:'50% 100% -30px', duration:.9, stagger:.028}, t);
+        /* a ring of light opens behind each line as it lands */
+        tl.set(ring, {scale:.55}, t + .45)
+          .to(ring, {autoAlpha:.95, duration:.15, ease:'none'}, t + .45)
+          .to(ring, {scale:1.4, duration:1.3, ease:'power2.out'}, t + .45)
+          .to(ring, {autoAlpha:0, duration:1.1, ease:'power1.in'}, t + .62);
+        tl.to(glow, {scale:1.16, duration:.6, ease:'sine.out'}, t + .3).to(glow, {scale:1, duration:.9, ease:'sine.inOut'}, t + .9);
+        tl.to(bars[i], {scaleX:1, duration:2.1, ease:'none'}, t);
+        if(i < lines.length - 1) tl.to(lines[i], {scale:1.45, autoAlpha:0, filter:'blur(14px)', duration:.65, ease:'power2.in'}, t + 2.1);
+      });
+      /* the last line's emphasis catches the light, letter by letter */
+      var itChars = splits[splits.length - 1].chars.filter(function(c){ return c.closest('.it'); });
+      tl.to(itChars, {keyframes:[{color:'#FFFFFF', textShadow:'0 0 26px rgba(216,187,255,.95)', duration:.25}, {color:'#A95CFF', textShadow:'0 0 40px rgba(125,24,252,.55)', duration:.5}], stagger:.05, ease:'sine.inOut'}, 6.7);
+      tl.to({}, {duration:.7});
     });
-    tl.from(kicker, {autoAlpha:0, y:14, duration:.6}, 0);
-    splits.forEach(function(sp, i){
-      var t = i * 2.7;   /* enter ~1.5, hold, then leave before the next line starts */
-      tl.from(sp.chars, {yPercent:115, rotationX:-95, autoAlpha:0, transformPerspective:700, transformOrigin:'50% 100% -30px', duration:.9, stagger:.028}, t);
-      /* a ring of light opens behind each line as it lands */
-      tl.set(ring, {scale:.55}, t + .45)
-        .to(ring, {autoAlpha:.95, duration:.15, ease:'none'}, t + .45)
-        .to(ring, {scale:1.4, duration:1.3, ease:'power2.out'}, t + .45)
-        .to(ring, {autoAlpha:0, duration:1.1, ease:'power1.in'}, t + .62);
-      tl.to(glow, {scale:1.16, duration:.6, ease:'sine.out'}, t + .3).to(glow, {scale:1, duration:.9, ease:'sine.inOut'}, t + .9);
-      tl.to(bars[i], {scaleX:1, duration:2.1, ease:'none'}, t);
-      if(i < lines.length - 1) tl.to(lines[i], {scale:1.45, autoAlpha:0, filter:'blur(14px)', duration:.65, ease:'power2.in'}, t + 2.1);
-    });
-    /* the last line's emphasis catches the light, letter by letter */
-    var itChars = splits[splits.length - 1].chars.filter(function(c){ return c.closest('.it'); });
-    tl.to(itChars, {keyframes:[{color:'#FFFFFF', textShadow:'0 0 26px rgba(216,187,255,.95)', duration:.25}, {color:'#A95CFF', textShadow:'0 0 40px rgba(125,24,252,.55)', duration:.5}], stagger:.05, ease:'sine.inOut'}, 6.7);
-    tl.to({}, {duration:.7});
+    /* in a renderer's tall viewport the pin would stretch to tens of thousands of pixels and push the rest of the
+       page out of view: undo it and let the lines sit as plain text */
+    document.addEventListener('nx:tall', function(){ mfCtx.revert(); mf.classList.remove('live'); ScrollTrigger.refresh(); });
   }
 
   /* ---- section labels decode as they arrive ---- */
@@ -5428,6 +5545,7 @@ document.addEventListener('DOMContentLoaded', function(){
     gsap.utils.toArray('.head .eyebrow').forEach(function(el){
       var txt = el.textContent;
       ScrollTrigger.create({trigger:el, start:'top 92%', once:true, onEnter:function(){
+        if(root.classList.contains('tall')) return;   /* a renderer gets the label as written */
         el.style.width = el.getBoundingClientRect().width + 'px';
         el.classList.add('scrambling');
         gsap.to(el, {duration:1.2, scrambleText:{text:txt, chars:'abcdefghijklmnopqrstuvwxyz0123456789', revealDelay:.35, speed:.55}, ease:'none',
@@ -5628,3 +5746,5 @@ function buildStar(THREE, host, reduce){
   document.addEventListener('visibilitychange', function(){ if(!document.hidden && visible && !raf) raf = requestAnimationFrame(frame); });
 }
 </script>
+</body>
+</html>

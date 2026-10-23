@@ -1,26 +1,20 @@
-# Images: 85/100
+# Images: 92/100 (was 85)
 
 ## What works
 
-- Both images have alt text.
-- Total image weight is about 13 KB; the sample posts are built in HTML/CSS, not heavy images.
+- Fixed: og-image.png (1200×630) in the brand violet with the headline, plus logo.png for the schema.
+- Both inline images have alt text; total image weight on the page is about 13 KB.
 
-## Findings
-
-### Medium: No social share image
-
-There is no og:image, so shared links have no preview picture.
-
-**Fix:** Create a 1200×630 share image in the brand violet with the headline and logo.
+## Open findings
 
 ### Low: The logo is embedded twice as base64 PNG
 
-Two copies of a 6.4 KB PNG are inlined as data URIs. They can't be cached and are blurry on high-DPI screens compared with vector.
+Two inline copies of a 6.4 KB PNG; they can't be cached.
 
-**Fix:** Use one SVG logo file, referenced twice.
+**Fix:** Reference website/logo.png (or an SVG version) instead when the site is deployed.
 
 ### Info: No real work in image form
 
-The page shows mock posts, not real client work, so it has no image-search presence and no visual proof.
+The page shows mock posts, not real client work.
 
-**Fix:** When real client work is approved for use, add it as WebP/AVIF with descriptive alt text and file names (e.g. cafe-diwali-carousel.webp).
+**Fix:** Add approved client work as WebP/AVIF with descriptive alt text and file names.
