@@ -30,6 +30,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Design direction: palette, type, pacing                 | `hyperframes-creative`                        |
 | Working with a person in Studio, storyboards            | `hyperframes-studio`                          |
 | CLI: init, check, preview, render, troubleshooting      | `hyperframes-cli`                             |
+| SEO audit or fixes for a site we build                  | `seo` (routes to `seo-audit`, `seo-page`, …)  |
 
 The HyperFrames skills are third-party (from `heygen-com/hyperframes`); their versions are pinned in
 `skills-lock.json`. Don't edit them by hand. Update them with:
@@ -37,6 +38,10 @@ The HyperFrames skills are third-party (from `heygen-com/hyperframes`); their ve
 ```bash
 npx skills add heygen-com/hyperframes --skill <name> --agent claude-code -y
 ```
+
+The `seo*` skills and `.claude/agents/seo-*.md` are third-party too ([claude-seo](https://github.com/AgriciDaniel/claude-seo)
+v2.5.0, copied in with `${CLAUDE_PLUGIN_ROOT}` paths rewritten to `.claude/skills/...`). Build its Python runtime once per
+machine with `.claude/skills/seo/scripts/claude-seo setup`; run its scripts with `.claude/skills/seo/scripts/claude-seo run <script>.py`.
 
 Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 
@@ -52,6 +57,7 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 ```
 .claude/skills/       Claude Code skills
 brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-video § 4)
+nxtlvl-social-audit/  SEO audit of website/index.html: FULL-AUDIT-REPORT.md, ACTION-PLAN.md, PDF, findings/
 motion-canvas/        Motion Canvas project (code-driven animation in TypeScript): npm install, npm start
 <project>/            One HyperFrames project per video and aspect ratio, e.g. spring-drop-9x16/
 ```
