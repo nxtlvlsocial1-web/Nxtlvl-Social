@@ -92,41 +92,64 @@
     .w {
       display: inline-block;
     }
+    .trk {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #3a3f4d;
+    }
   </style>
   <div id="root" data-composition-id="hud" data-width="1080" data-height="1920">
     <!-- hook -->
-    <div id="hook" class="clip plate" data-start="0" data-duration="3.1" data-track-index="1" style="top: 966px">
+    <div id="hook" class="clip plate" data-start="0.0" data-duration="2.818" data-track-index="1" style="top: 966px">
       <div id="hook-a" class="plate-sm">YOUR TV IS A</div>
       <div id="hook-b" class="plate-lg">BILLBOARD?</div>
     </div>
 
+    <!-- teaser chips over the split TV on frame 0 -->
+    <div id="tease" class="clip" data-start="0" data-duration="0.7" data-track-index="4" style="position: absolute; left: 0; top: 0; width: 1080px; height: 1920px">
+      <div id="tease-before" style="position: absolute; left: 112px; top: 402px; padding: 10px 12px 8px; background: #e8463c; font-size: 30px; line-height: 1">BEFORE</div>
+      <div id="tease-after" style="position: absolute; left: 788px; top: 402px; padding: 10px 12px 8px; background: #2e9e5b; font-size: 30px; line-height: 1">AFTER</div>
+    </div>
+
+    <!-- base tracker inside the commentator box: lights up as each base is reached -->
+    <div id="tracker" class="clip" data-start="7.0" data-duration="24.1" data-track-index="5" style="position: absolute; left: 948px; top: 214px; width: 48px; height: 48px">
+      <div id="trk-2" class="trk" style="left: 17px; top: 0px"></div>
+      <div id="trk-3" class="trk" style="left: 0px; top: 17px"></div>
+      <div id="trk-1" class="trk" style="left: 34px; top: 17px"></div>
+      <div id="trk-4" class="trk" style="left: 17px; top: 34px"></div>
+    </div>
+
     <!-- sky titles while the ball flies and before the first base -->
-    <div id="sky-steps" class="clip sky" data-start="5.3" data-duration="1.95" data-track-index="2" style="top: 760px">
+    <div id="sky-steps" class="clip sky" data-start="4.818" data-duration="1.773" data-track-index="2" style="top: 760px">
       <div id="sky-steps-a" class="s-xl">4 STEPS</div>
       <div id="sky-steps-b" class="s-md">MVP: CLAUDE</div>
     </div>
-    <div id="sky-run" class="clip sky" data-start="7.75" data-duration="2.5" data-track-index="2" style="top: 470px">
+    <div id="sky-run" class="clip sky" data-start="7.045" data-duration="2.273" data-track-index="2" style="top: 470px">
       <div id="sky-run-a" class="s-lg">STEP 4 =</div>
       <div id="sky-run-b" class="s-xl">HOME RUN!</div>
     </div>
-    <div id="sky-hr" class="clip sky" data-start="24.02" data-duration="0.55" data-track-index="2" style="top: 470px">
+    <div id="sky-hr" class="clip sky" data-start="21.836" data-duration="0.5" data-track-index="2" style="top: 470px">
       <div id="sky-hr-a" class="s-hr">HOME<br />RUN!</div>
     </div>
 
     <!-- step labels on the TV's chin -->
-    <div id="lab-1" class="clip label" data-start="10.4" data-duration="3.8" data-track-index="3"><span><b>1ST BASE:</b> NEW HOME APP</span></div>
-    <div id="lab-2" class="clip label" data-start="14.2" data-duration="5.1" data-track-index="3"><span><b>2ND BASE:</b> CLEAN TILES</span></div>
-    <div id="lab-3" class="clip label" data-start="19.3" data-duration="3.9" data-track-index="3"><span><b>3RD BASE:</b> DRONE SCREENSAVER</span></div>
-    <div id="lab-4" class="clip label" data-start="25.07" data-duration="5.93" data-track-index="3"><span><b>HOME:</b> DELETE THE JUNK</span></div>
+    <div id="lab-1" class="clip label" data-start="9.455" data-duration="3.455" data-track-index="3"><span><b>1ST BASE:</b> NEW HOME APP</span></div>
+    <div id="lab-2" class="clip label" data-start="12.909" data-duration="4.636" data-track-index="3"><span><b>2ND BASE:</b> CLEAN TILES</span></div>
+    <div id="lab-3" class="clip label" data-start="17.545" data-duration="3.545" data-track-index="3"><span><b>3RD BASE:</b> DRONE SCREENSAVER</span></div>
+    <div id="lab-4" class="clip label" data-start="22.791" data-duration="5.391" data-track-index="3"><span><b>HOME:</b> DELETE THE JUNK</span></div>
 
     <!-- call to action, above the cheering family -->
-    <div id="cta" class="clip plate" data-start="31.0" data-duration="3.19" data-track-index="1" style="top: 560px">
+    <div id="cta" class="clip plate" data-start="28.182" data-duration="2.9" data-track-index="1" style="top: 560px">
       <div id="cta-a" class="plate-cta"><span class="w">COMMENT</span> <span class="w">"TV"</span></div>
       <div id="cta-b" class="plate-sub">FOR THE FULL GUIDE</div>
     </div>
   </div>
   <script>
-    const tl = gsap.timeline({ paused: true });
+    // tweens are placed on the voiceover's own clock and played SPEED x faster
+    const SPEED = 1.1;
+    const story = gsap.timeline();
+    const tl = story;
     const pop = (sel, at, from = 1.3) =>
       tl.fromTo(sel, { opacity: 0, scale: from }, { opacity: 1, scale: 1, duration: 0.14, ease: "power3.out" }, at);
 
@@ -146,6 +169,17 @@
     pop("#cta-a .w:nth-child(2)", 31.2, 1.6);
     pop("#cta-b", 31.9, 1.2);
 
-    window.__timelines["hud"] = tl;
+    // BILLBOARD punch on the word, BEFORE/AFTER teaser chips, base tracker
+    tl.fromTo("#hook-b", { scale: 1 }, { scale: 1.18, duration: 0.08, ease: "power3.out", yoyo: true, repeat: 1 }, 2.3);
+    tl.fromTo("#tease-before, #tease-after", { opacity: 1 }, { opacity: 0, duration: 0.1 }, 0.62);
+    [["#trk-1", 10.3], ["#trk-2", 14.2], ["#trk-3", 19.3], ["#trk-4", 24.0]].forEach(([sel, at]) => {
+      tl.fromTo(sel, { backgroundColor: "#3a3f4d", scale: 1 }, { backgroundColor: "#ffd447", scale: 1.5, duration: 0.1, ease: "power3.out" }, at);
+      tl.to(sel, { scale: 1, duration: 0.2, ease: "power2.out" }, at + 0.1);
+    });
+    tl.set(".trk", { rotation: 45 }, 0);
+    story.timeScale(SPEED);
+    const film = gsap.timeline({ paused: true });
+    film.add(story, 0);
+    window.__timelines["hud"] = film;
   </script>
 </template>

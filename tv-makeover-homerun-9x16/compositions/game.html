@@ -21,6 +21,8 @@
     (function () {
       // Pixel world: 180 x 320 logical pixels, each drawn as 6 x 6 on the 1080 x 1920 canvas.
       const W = 180, H = 320, S = 6, DUR = 34.19;
+      // The voiceover plays at SPEED x; all story times below are voiceover-clock seconds.
+      const SPEED = 1.1;
       // Voiceover-locked moments
       const T = {
         click: 2.65, dive: 3.05, diveEnd: 3.45, hit: 4.08, sky: 5.2, tiltDown: 7.2, run: 7.7, go: 8.0,
@@ -1047,8 +1049,42 @@
         else if (t < T.run) drawSky(t);
         else drawRunScene(t, false);
       }
+      const POPS = [[0.8, 8, 12, "WIN!"], [1.08, 82, 30, "SALE"], [1.36, 26, 46, "AD"], [1.64, 92, 6, "FREE"], [1.92, 46, 24, "HOT!"], [2.2, 6, 52, "BUY"]];
+      function hookPopups(c, t) {
+        POPS.forEach(([t0, x, y, word], i) => {
+          if (t < t0) return;
+          const s = clamp(back(prog(t, t0, t0 + 0.14)), 0, 1.2);
+          const w = 52 * s, h = 26 * s, cx = x + 26, cy = y + 13;
+          const x0 = cx - w / 2, y0 = cy - h / 2;
+          r(c, x0 + 2, y0 + 2, w, h, "rgba(0,0,0,0.5)");
+          r(c, x0, y0, w, h, "#f4f4f4");
+          r(c, x0, y0, w, 7 * s, ["#2f6fd6", "#e8463c", "#f08a1c"][i % 3]);
+          if (s > 0.9) {
+            tiny(c, word, x0 + 2, y0 + 1, "#ffffff");
+            r(c, x0 + w - 7, y0 + 1, 6, 5, "#e8463c");
+            tiny(c, "X", x0 + w - 6, y0 + 1, "#ffffff");
+            tiny2(c, word, x0 + 26 - Math.floor(word.length * 4), y0 + 11, i % 2 ? "#e8463c" : "#1f6fe0");
+          }
+        });
+      }
+      function hookShake(t) {
+        for (const [t0] of POPS) if (t >= t0 && t < t0 + 0.12) return Math.round(Math.sin((t - t0) * 140) * 2);
+        return 0;
+      }
       function screenInRoom(t) {
-        if (t < T.click) { drawScreen(t, "panel"); return; }
+        if (t < 0.8 + 0.001 && t < T.click) {
+          // teaser: BEFORE | AFTER split, then the divider wipes the AFTER away
+          drawScreen(t, "panel");
+          const div = Math.round(lerp(75, 150, eio(prog(t, 0.55, 0.78))));
+          if (div < 150) {
+            Sc.save(); Sc.beginPath(); Sc.rect(div, 0, 150 - div, 84); Sc.clip();
+            cleanUI(Sc, t, { ...FINAL, focus: 1 });
+            Sc.restore();
+            r(Sc, div - 1, 0, 2, 84, "#ffffff");
+          }
+          return;
+        }
+        if (t < T.click) { drawScreen(t, "panel"); hookPopups(Sc, t); return; }
         if (t < T.dive) { crtStatic(Sc, t); return; }
         if (t < 24.95) {
           drawBroadcast(t);
@@ -1059,16 +1095,26 @@
         if (t < 25.07) { crtStatic(Sc, t); return; }
         drawScreen(t, "junk");
       }
+      // draw a full-frame canvas zoomed about (cx, cy); returns the zoomed rect of `track` for the scanlines
+      function cam(src, z, cx, cy, dx, dy, track) {
+        F.save();
+        F.translate(cx + dx, cy + dy); F.scale(z, z); F.translate(-cx, -cy);
+        F.drawImage(src, 0, 0);
+        F.restore();
+        if (!track) return null;
+        return [cx + dx + (track[0] - cx) * z, cy + dy + (track[1] - cy) * z, track[2] * z, track[3] * z].map(Math.round);
+      }
       function renderAt(t) {
         t = clamp(t, 0, DUR);
         F.clearRect(0, 0, W, H);
         let scan = null;
         if (t < T.dive) {
+          // constant push-in on the TV, with a jolt on every pop-up
           screenInRoom(t);
           drawRoom(t);
-          F.drawImage(roomC, 0, 0);
-          F.drawImage(scrC, TV[0], TV[1]);
-          scan = TV;
+          R.drawImage(scrC, TV[0], TV[1]);
+          const z = lerp(1, 1.14, eo(prog(t, 0, T.dive))), sh = hookShake(t);
+          scan = cam(roomC, z, 90, 106, sh, 0, TV);
         } else if (t < T.diveEnd || (t >= T.zoomOut && t < T.zoomOutEnd)) {
           // dive into the broadcast, or pull back out of it into the family's TV
           const p = t < T.diveEnd ? ei(prog(t, T.dive, T.diveEnd)) : 1 - eio(prog(t, T.zoomOut, T.zoomOutEnd));
@@ -1082,16 +1128,20 @@
           F.drawImage(worldC, cr[0], cr[1], cr[2], cr[3], sr[0], sr[1], sr[2], sr[3]);
           scan = sr.map(Math.round);
         } else if (t < T.zoomOut) {
+          // punch-in on every base touch, centred on the runner
           drawBroadcast(t);
-          F.drawImage(worldC, 0, 0);
+          let z = 1;
+          for (const tt of [T.b1, T.b2, T.b3, T.home]) if (t >= tt && t < tt + 0.45) z = 1 + 0.08 * (1 - eo((t - tt) / 0.45));
+          scan = cam(worldC, z, RX, GROUND - 40, 0, 0, null);
           scan = [0, 0, 180, 320];
         } else if (t < T.front) {
+          // push into the family's TV while the junk gets zapped, then back out to the cheering family
           screenInRoom(t);
           drawRoom(t);
-          F.drawImage(roomC, 0, 0);
-          F.drawImage(scrC, TV[0], TV[1]);
-          confetti(F, t, 24.6, 90, 41);
-          scan = TV;
+          R.drawImage(scrC, TV[0], TV[1]);
+          confetti(R, t, 24.6, 90, 41);
+          const z = 1 + 0.3 * eio(prog(t, 25.05, 25.5)) - 0.3 * eio(prog(t, 27.35, 27.8));
+          scan = cam(roomC, z, 90, 106, 0, 0, TV);
         } else {
           drawFront(t);
           F.drawImage(roomC, 0, 0);
@@ -1101,10 +1151,10 @@
         if (scan) scanlines(scan[0] * S, scan[1] * S, scan[2] * S, scan[3] * S);
       }
 
-      window.addEventListener("hf-seek", (e) => renderAt(e.detail.time));
+      window.addEventListener("hf-seek", (e) => renderAt(e.detail.time * SPEED));
       const state = { t: 0 };
       const tl = gsap.timeline({ paused: true });
-      tl.to(state, { t: DUR, duration: DUR, ease: "none", onUpdate: () => renderAt(state.t) }, 0);
+      tl.to(state, { t: DUR, duration: DUR / SPEED, ease: "none", onUpdate: () => renderAt(state.t) }, 0);
       renderAt(0);
       window.__timelines["game"] = tl;
     })();
