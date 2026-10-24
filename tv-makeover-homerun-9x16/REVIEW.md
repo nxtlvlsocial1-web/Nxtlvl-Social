@@ -1,4 +1,4 @@
-# Review — draft 5
+# Review — draft 6
 
 - Structure: after the hit and the "4 STEPS" sky beat, the camera locks on the runner in a side-scrolling
   tracking shot; he never stops. Bases are placed so he touches each one on its call (10.3, 14.2, 19.3,
@@ -20,3 +20,8 @@
   measured -15.1 LUFS, -1.2 dBTP, no clipping. Nobody has listened to the generated audio yet.
 - Draft 5: constant elegant minimal bed (job 4307111c) from 0 to 34.19 s, levelled to within a few dB
   and looped with a crossfade; crowd and bat sounds unchanged. -15.5 LUFS, -1.3 dBTP, no silence gaps.
+- Draft 6: voiceover at 1.1x (pitch kept), film 31.08 s; story clock mapped in game/hud, captions and
+  audio retimed. Hook: BEFORE/AFTER split teaser on frame 0, wipe, six pop-up ads slamming in with pops
+  and shakes, constant push-in, BILLBOARD punch. Base tracker in the commentator box. Punch zooms on base
+  touches, push into the TV during the clean-up. Faster runner. Upbeat sports/tech bed (job 77913ff9)
+  started past its soft intro. -16.2 LUFS, -1.8 dBTP, no clipping, no silence. Not listened to.
