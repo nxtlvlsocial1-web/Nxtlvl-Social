@@ -1,65 +1,49 @@
-# Creedom Reel Analyser: script v1 (modern story arc)
+# Creedom Reel Analyser: script v2 (modern story arc, max 35 s)
 
 TITLE / ANGLE: "My reel did 85x my usual. I had no idea why." Creedom's reel analyser finds the reason, second by second.
-LENGTH: ~38s · LANGUAGE: English · FORMAT: faceless motion graphics, AI or recorded voiceover · CTA KEYWORD: CREEDOM
+LENGTH: 32–35s · ~76 spoken words · LANGUAGE: English · VOICE: ElevenLabs "Nota 3" (rTMkoe3NzNrEOgFeBwY2), Eleven v3
+FORMAT: faceless motion graphics · CTA KEYWORD: CREEDOM
 
-Arc: Hook (the mystery) → Stakes (the relatable pain) → Turn (meet Creedom) → Journey (the audit, then the reel analysis)
-→ Twist (the fix I'd never have spotted) → Resolution (what changes) → CTA.
+Arc: Hook (the mystery) → Stakes → Turn (meet Creedom) → Journey (score, then reel analysis) → Twist (the buried hook)
+→ Resolution → CTA.
 
-## Script (readable)
+v2 vs v1: cut from ~95 to ~76 words to fit 35 s. Dropped the "4.2 out of 5" line and "public data only";
+merged the two journey lines; shortened the CTA.
 
-| Beat | Time | Line |
-|---|---|---|
-| HOOK | 0–3s | One reel did 85x my usual views... and I had no idea why. |
-| STAKES | 3–9s | Next reel? A few thousand plays. Instagram shows you the numbers. Never the reason. |
-| TURN | 9–13s | So I handed my page to Creedom. Twenty seconds. Public data only. |
-| JOURNEY 1 | 13–19s | It read my last six posts and scored my content: 82 out of 100. |
-| JOURNEY 2 | 19–26s | Then I dropped in a reel. Its reel analyser watches the whole video... and breaks it down second by second. |
-| TWIST | 26–32s | 4.2 out of 5, and one fix I'd never have spotted: my best hook was buried at 0:34. |
-| RESOLUTION | 32–35s | Now I edit with reasons, not guesses. |
-| CTA | 35–38s | Comment CREEDOM and I'll DM you the link to audit your own page. |
+## Voiceover for Nota 3 (paste into ElevenLabs, Eleven v3)
 
-Spoken words: ~95.
+```
+[curious] One reel did eighty-five times my usual views... [softly] and I had no idea why.
+[thoughtful] The next one? A few thousand. [softly] Numbers... never reasons.
+[warmly] So I gave my page to Creedom. [smiling] Twenty seconds.
+[impressed] Content score: eighty-two out of a hundred.
+[intrigued] Then its reel analyser watched my reel... second by second.
+[whispers] And found what I'd missed... [amazed] my best hook was buried at thirty-four seconds.
+[confident] Now I edit with reasons. [smiling] Not guesses.
+[playful] Comment CREEDOM... [warmly] and I'll DM you the link.
+```
 
-## Voiceover (paste-ready for ElevenLabs)
+Settings: Stability "Natural" · make 3–4 takes · if a take still runs over 35 s, speed it up 1.05–1.1x in the edit
+(the voice stays natural at that rate).
 
-One reel did eighty-five times my usual views... and I had no idea why.
-Next reel? A few thousand plays. Instagram shows you the numbers. Never the reason.
-So I handed my page to Creedom. Twenty seconds. Public data only.
-It read my last six posts... and scored my content. Eighty-two out of a hundred.
-Then I dropped in a reel. Its reel analyser watches the whole video... and breaks it down, second by second.
-Four point two out of five. And one fix I'd never have spotted... my best hook was buried at thirty-four seconds.
-Now I edit with reasons. Not guesses.
-Comment CREEDOM... and I'll DM you the link to audit your own page.
+## Script with timing, visuals and on-screen text
+
+| Time | Beat | Voiceover | On screen | Text |
+|---|---|---|---|---|
+| 0–4s | Hook | One reel did 85x my usual views... and I had no idea why. | Play counter rockets to 126,000+, freezes; a "?" drops in, Creedom mascot tilts its head | **85x** → **...why?** |
+| 4–8s | Stakes | The next one? A few thousand. Numbers... never reasons. | Second reel card stalls at ~3K; analytics dashboard blurs out | ~3K → **Numbers ≠ reasons** |
+| 8–11s | Turn | So I gave my page to Creedom. Twenty seconds. | Creedom logo + mascot with magnifier, "READING @AI.NXTLVL", pink bar fills, three ticks | **Give me 20 seconds.** |
+| 11–14s | Journey 1 | Content score: 82 out of 100. | Six thumbnails fly into a grid, dark score card counts 0 → **82**/100 | **82/100** |
+| 14–19s | Journey 2 | Then its reel analyser watched my reel... second by second. | Chat UI, "CREEDOM · ON IT" ticks, second-by-second timeline draws down | **Second by second** |
+| 19–26s | Twist | And found what I'd missed... my best hook was buried at 0:34. | Timeline zooms to **0:34**; that segment glows and slides up to 0:00 | Best hook: buried at **0:34** |
+| 26–30s | Resolution | Now I edit with reasons. Not guesses. | Before/after: hook moved to the front, mascot waves | **Reasons > guesses** |
+| 30–34s | CTA | Comment CREEDOM and I'll DM you the link. | Big keyword card, mascot pointing, "CREEDOM" typed into a comment box | Comment **CREEDOM** |
 
 ## Alt hooks
 
 1. "126,000 plays on one reel. The next one? Barely three thousand."
 2. "Your reel didn't flop. Your hook was just in the wrong second."
 3. "I let an AI watch my reel... it found the mistake in 34 seconds."
-
-## Beat sheet (one new visual every ~2s; recreate the app UI from the screenshots, don't screen-record)
-
-| Time | Visual | On-screen text |
-|---|---|---|
-| 0–1.5s | A play counter rockets up to 126,000+ and pulses pink | **85x** |
-| 1.5–3s | Counter freezes, a big "?" drops in, the Creedom mascot (pink bird) tilts its head | **...why?** |
-| 3–6s | A second reel card: its counter crawls to "low thousands" and stalls | Next reel: ~3K |
-| 6–9s | Generic analytics dashboard, numbers everywhere, then they blur out | Numbers ≠ reasons |
-| 9–11s | Creedom logo + the Creedom mascot with magnifying glass; "READING @AI.NXTLVL" | Give me 20 seconds. |
-| 11–13s | Pink progress bar fills; three green ticks pop in one by one | Public data only |
-| 13–16s | The six post thumbnails fly into a grid | Scanned 6 posts |
-| 16–19s | Dark score card: 0 counts up to **82**/100, "YOUR TOP INSIGHT" types in | 82/100 |
-| 19–22s | Chat UI: user bubble "Check 'Comment TRADE...'" slides up, CREEDOM · ON IT ticks | Reel analyser |
-| 22–26s | "Second by second" timeline draws down: Hook, Skills grid, Time machine, Safety, Close | Second by second |
-| 26–29s | Score card **4.2/5 · Very good**, green bar fills | 4.2/5 |
-| 29–32s | Timeline zooms to **0:34**, the Congress-tracker segment glows and slides up to 0:00 | Best hook: buried at 0:34 |
-| 32–35s | Before/after: the hook moves to the front, the Creedom mascot waves | Reasons > guesses |
-| 35–38s | Big keyword card, the Creedom mascot pointing at it, comment-box mockup | Comment **CREEDOM** |
-
-Style: Creedom's own look from the app. Off-white #F6F5F2 background, near-black cards, pink accent (#E85D8A-ish,
-to be colour-picked from the app), serif headings (score numerals and "Give me 20 seconds."), clean sans body,
-the 3D Creedom mascot as the guide character.
 
 ## Caption
 
@@ -76,49 +60,20 @@ Save this for the next time a reel flops.
 
 COVER TEXT: "Why did this reel hit 85x?"
 
+## Look
+
+Creedom's own style from the app: off-white #F6F5F2 background, near-black cards, pink accent (colour-pick from the app),
+serif numerals and headings, clean sans body, the 3D pink-bird mascot as the guide. App screens rebuilt in motion from
+the screenshots, not screen-recorded.
+
 ## Claims and sources
 
-- 85x / 126,000+ plays / "low thousands" typical, 82/100, 6 posts, 20 seconds, "public data only",
-  4.2/5, buried hook at 0:34: all from the user's own Creedom screenshots of @ai.nxtlvl (Oct 2026).
-- Creedom (its AI companion) explains why posts performed well or poorly; Creedom is an
-  Official Meta Business Partner (Dec 2025): reported by Indian Startup Times / Ascendants (seed-round coverage).
-- Not used: funding, valuation and user-count figures (sources conflict; not relevant to the viewer).
+- 85x / 126,000+ plays, "low thousands" typical, 82/100, 6 posts, 20 seconds, buried hook at 0:34: the user's own
+  Creedom screenshots of @ai.nxtlvl (Oct 2026).
+- Creedom's AI companion explains why posts performed well or poorly; Creedom is an Official Meta Business Partner
+  (Dec 2025): Indian Startup Times / Ascendants seed-round coverage.
 
 ## Self-rating: 8/10
 
-- Likely drop-offs: 6–9s (the "pain" beat is familiar); 19–22s (the switch from audit to reel analysis).
-- Fixes applied: stakes cut to two short lines with a concrete number; the twist is held to 26s and named
-  with a timestamp ("0:34") so it reads as a real finding, not a feature list.
-- Open question: if this is a paid partnership, the CTA should switch to Creedom's approved line
-  (e.g. "Link in bio") and the reel needs a "Paid partnership" label.
-
-## Voiceover with mood tags (ElevenLabs v3 audio tags)
-
-```
-[excited] One reel did eighty-five times my usual views... [pause] [confused] and I had no idea why.
-[deadpan] Next reel? [sighs] A few thousand plays. [frustrated] Instagram shows you the numbers. [emphatic] Never the reason.
-[curious] So I handed my page to Creedom. [quick] Twenty seconds. Public data only.
-[intrigued] It read my last six posts... and scored my content. [impressed] Eighty-two out of a hundred.
-[excited] Then I dropped in a reel. [amazed] Its reel analyser watches the whole video... [pause] and breaks it down, second by second.
-[impressed] Four point two out of five. [whispers] And one fix I'd never have spotted... [shocked] my best hook was buried at thirty-four seconds.
-[confident] Now I edit with reasons. [smiling] Not guesses.
-[excited] Comment CREEDOM... [warm] and I'll DM you the link to audit your own page.
-```
-
-## Voiceover with mood tags tuned for Nota 3 (ElevenLabs v3, voice rTMkoe3NzNrEOgFeBwY2)
-
-Nota 3 is warm, soothing and quietly impressed, never hyped, so the tags stay soft: curiosity, a smile, small pauses
-before reveals. No [excited], [shocked] or [shouting]; they fight the voice's prompt.
-
-```
-[curious] One reel did eighty-five times my usual views... [pause] [softly] and I had no idea why.
-[thoughtful] Next reel? [sighs] A few thousand plays. [matter-of-fact] Instagram shows you the numbers... [softly] never the reason.
-[warmly] So I handed my page to Creedom. [smiling] Twenty seconds. Public data only.
-[curious] It read my last six posts... and scored my content. [impressed] Eighty-two out of a hundred.
-[intrigued] Then I dropped in a reel. [impressed] Its reel analyser watches the whole video... [pause] and breaks it down, second by second.
-[pleased] Four point two out of five. [whispers] And one fix I'd never have spotted... [pause] [amazed] my best hook was buried at thirty-four seconds.
-[confident] Now I edit with reasons. [smiling] Not guesses.
-[playful] Comment CREEDOM... [warmly] and I'll DM you the link to audit your own page.
-```
-
-Settings: Eleven v3 · Stability "Natural" · generate 3–4 takes and keep the one where the 0:34 reveal lands softly.
+- Likely drop-off: 4–8s (familiar pain). Kept to two short lines.
+- If this is a paid partnership: use Creedom's approved CTA and add Instagram's paid-partnership label.
