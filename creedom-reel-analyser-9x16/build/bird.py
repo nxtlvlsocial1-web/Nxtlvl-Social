@@ -132,11 +132,15 @@ def rig(star):
     sp = "".join(f'<div class="bsp bsp{i}" style="left:{x}px;top:{y}px">{star(s, c)}</div>'
                  for i, (x, y, s, c) in enumerate([(-40, 40, 54, PINK), (270, -10, 44, "#f2b134"),
                                                    (290, 170, 36, PINK), (-20, 210, 34, "#f2b134")]))
+
+    def lay(i, src, extra=""):
+        return f'<div id="{i}" class="lay"{extra}><div id="{i}i" class="lay"><img src="assets/img/{src}" width="300" height="318" alt=""></div></div>'
     return (f'<div id="birdpos"><div id="bshadow"></div><div id="bflip"><div id="bpose"><div id="bwig"><div id="bidle">'
             f'<div id="bbreath">'
-            f'<div id="wingL"><div id="wingLi"><img src="assets/img/bird_wingl.png" width="300" height="318" alt=""></div></div>'
-            f'<img id="bimg" src="assets/img/bird_body.png" width="300" height="318" alt="">{face_svg()}'
-            f'<div id="wingR"><div id="wingRi"><img src="assets/img/bird_wing.png" width="300" height="318" alt=""></div></div>'
+            + lay("wingL", "bird_wingl.png") + lay("wingD", "bird_wingr_dn.png") +
+            f'<img id="bimg" src="assets/img/bird_core.png" width="300" height="318" alt="">'
+            + lay("footL", "bird_footl.png") + lay("footR", "bird_footr.png") + lay("footK", "bird_footr_up.png") +
+            f'{face_svg()}' + lay("wingR", "bird_wing.png") +
             f'<div id="sweat"><svg viewBox="0 0 30 44" width="30" height="44"><path d="M15 0 C22 14 30 22 30 30 '
             f'C30 38 23 44 15 44 C7 44 0 38 0 30 C0 22 8 14 15 0 Z" fill="#7cc8ff"/></svg></div>'
             f'<div id="mag">{magnifier(150)}</div></div></div></div></div></div>'
@@ -147,21 +151,27 @@ def rig(star):
 CSS = """
 #birdlayer { z-index: 20; }
 #birdpos { position: absolute; left: 0; top: 0; width: 300px; height: 318px; transform-origin: 50% 100%; }
-#bshadow { position: absolute; left: 40px; top: 300px; width: 220px; height: 40px; border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(243,67,162,.35), rgba(243,67,162,0)); }
+#bshadow { position: absolute; left: 40px; top: 296px; width: 220px; height: 40px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(226,53,160,.35), rgba(226,53,160,0)); }
 #bflip, #bpose, #bwig, #bidle, #bbreath { position: absolute; inset: 0; transform-origin: 50% 100%; }
 #bflip { transform-origin: 50% 60%; }
 #bimg, #face { position: absolute; left: 0; top: 0; }
 #bimg { filter: drop-shadow(0 18px 24px rgba(160,20,90,.25)); }
-#wingR, #wingRi { position: absolute; inset: 0; transform-origin: 266px 154px; }
-#wingL, #wingLi { position: absolute; inset: 0; transform-origin: 47px 209px; }
-#wingR img, #wingL img { position: absolute; left: 0; top: 0; }
+.lay { position: absolute; inset: 0; }
+.lay img { position: absolute; left: 0; top: 0; }
+#wingR, #wingRi { transform-origin: 266px 154px; }
+#wingL, #wingLi { transform-origin: 47px 209px; }
+#wingD, #wingDi { transform-origin: 267px 209px; }
+#footL, #footLi { transform-origin: 112px 290px; }
+#footR, #footRi { transform-origin: 202px 290px; }
+#footK, #footKi { transform-origin: 236px 240px; }
 #sweat { position: absolute; left: 250px; top: 30px; }
 #mag { position: absolute; left: 150px; top: 140px; transform-origin: 30% 30%; }
 .bub { position: absolute; left: 190px; top: -130px; background: #fff; border: 4px solid #0B0B0B; border-radius: 50px;
   display: flex; align-items: center; justify-content: center; font: 800 80px "Manrope"; color: #C93A6D; }
 .bub .tail { position: absolute; left: 6px; bottom: -48px; }
-.bub i { font: 800 52px "JBMono"; font-style: normal; letter-spacing: 2px; }
+.bub i { font: 700 52px "Outfit"; font-style: normal; letter-spacing: 1px; background: linear-gradient(90deg, #E235DD, #E34CB7 45%, #E68B70);
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
 .bc { left: -200px; top: -150px; }
 .bsp { position: absolute; }
 #cloud { position: absolute; left: 60px; top: -150px; width: 180px; height: 200px; }
@@ -195,11 +205,16 @@ class Bird:
         self.add(f'tl.to("#bwig",{{y:-{h},duration:.18,ease:"power2.out",yoyo:true,repeat:1}},{t:.2f});')
         self.add(f'tl.to("#bwig",{{scaleY:.86,scaleX:1.1,duration:.08,yoyo:true,repeat:1}},{t + .36:.2f});')
 
-    def walk(self, t, d, step=.2):
+    def walk(self, t, d, step=.24):
+        """A real walk: feet step alternately, body rocks and bobs."""
         n = max(2, int(d / step))
-        self.add(f'tl.to("#bwig",{{rotation:7,y:-14,duration:{step / 2:.3f},ease:"sine.inOut",yoyo:true,repeat:{n - 1}}},{t:.2f});')
+        self.legs(t, "stand", .05)
+        self.add(f'tl.to("#bwig",{{rotation:6,y:-12,duration:{step / 2:.3f},ease:"sine.inOut",yoyo:true,repeat:{n - 1}}},{t:.2f});')
         self.add(f'tl.to("#bwig",{{rotation:0,y:0,duration:.1}},{t + n * step / 2 + .01:.2f});')
-
+        for f, off in (("#footLi", 0), ("#footRi", step / 2)):
+            m = max(1, int((d - off) / step))
+            self.add(f'tl.to("{f}",{{y:-22,rotation:-12,duration:{step / 2:.3f},ease:"sine.inOut",yoyo:true,repeat:{m * 2 - 1},'
+                     f'repeatDelay:0}},{t + off:.2f});')
     def shake(self, t, n=3, a=10):
         """Head shake 'no'."""
         self.add(f'tl.fromTo("#bwig",{{rotation:-{a}}},{{rotation:{a},duration:.11,ease:"sine.inOut",yoyo:true,repeat:{n * 2 - 1},'
@@ -217,25 +232,59 @@ class Bird:
     def startle(self, t):
         self.add(f'tl.to("#bwig",{{scaleY:1.18,scaleX:.88,y:-60,duration:.13,yoyo:true,repeat:1}},{t:.2f});')
 
-    # ---------------------------------------------------------------- wings
-    def wings(self, t, r, l, d=.25):
-        self.add(f'tl.to("#wingR",{{rotation:{r},duration:{d},ease:"back.out(2)"}},{t:.2f});')
-        self.add(f'tl.to("#wingL",{{rotation:{l},duration:{d},ease:"back.out(2)"}},{t:.2f});')
+    # ---------------------------------------------------------------- limbs
+    def arms(self, t, state, d=.12):
+        """'down' = both wings hanging (resting), 'up' = the right wing raised (waving / pointing / scratching)."""
+        up = 1 if state == "up" else 0
+        self.add(f'tl.to("#wingR",{{opacity:{up},duration:{d}}},{t:.2f});tl.to("#wingD",{{opacity:{1 - up},duration:{d}}},{t:.2f});')
 
-    def flap(self, t, n=4, a=28):
-        self.add(f'tl.to("#wingR",{{rotation:{a},duration:.07,ease:"sine.inOut",yoyo:true,repeat:{n * 2 - 1}}},{t:.2f});')
-        self.add(f'tl.to("#wingL",{{rotation:-{a},duration:.07,ease:"sine.inOut",yoyo:true,repeat:{n * 2 - 1}}},{t:.2f});')
+    def legs(self, t, state, d=.12):
+        """'stand' = both feet on the ground, 'kick' = right foot lifted (the original pose)."""
+        k = 1 if state == "kick" else 0
+        self.add(f'tl.to("#footK",{{opacity:{k},duration:{d}}},{t:.2f});tl.to("#footR",{{opacity:{1 - k},duration:{d}}},{t:.2f});')
+
+    def spread(self, t, a, d=.25, ease="back.out(2)"):
+        """Both resting wings out sideways by a degrees (0 = back at the sides, negative = tucked in)."""
+        self.add(f'tl.to("#wingL",{{rotation:{a},duration:{d},ease:"{ease}"}},{t:.2f});')
+        self.add(f'tl.to("#wingD",{{rotation:{-a},duration:{d},ease:"{ease}"}},{t:.2f});')
+
+    def flap(self, t, n=4, a=40):
+        self.add(f'tl.to("#wingL",{{rotation:{a},duration:.07,ease:"sine.inOut",yoyo:true,repeat:{n * 2 - 1}}},{t:.2f});')
+        self.add(f'tl.to("#wingD",{{rotation:-{a},duration:.07,ease:"sine.inOut",yoyo:true,repeat:{n * 2 - 1}}},{t:.2f});')
 
     def wave(self, t, n=3):
+        self.arms(t, "up")
         self.add(f'tl.fromTo("#wingR",{{rotation:-12}},{{rotation:24,duration:.16,ease:"sine.inOut",yoyo:true,repeat:{n * 2 - 1},'
                  f'immediateRender:false}},{t:.2f});tl.to("#wingR",{{rotation:0,duration:.12}},{t + n * .32 + .01:.2f});')
+        self.arms(t + n * .32 + .1, "down")
 
     def point(self, t, d=1.0):
         """Raise the front wing towards what it faces and jab it a few times."""
         n = max(1, int((d - .3) / .3))
+        self.arms(t, "up", .08)
         self.add(f'tl.to("#wingR",{{rotation:42,duration:.22,ease:"back.out(2)"}},{t:.2f});')
         self.add(f'tl.to("#wingR",{{rotation:30,duration:.15,yoyo:true,repeat:{n * 2 - 1}}},{t + .25:.2f});')
         self.add(f'tl.to("#wingR",{{rotation:0,duration:.2}},{t + .25 + n * .3 + .02:.2f});')
+        self.arms(t + .25 + n * .3 + .2, "down")
+
+    def scratch(self, t, d=1.2):
+        """Right wing up to the head, rubbing."""
+        n = max(1, int(d / .24))
+        self.arms(t, "up", .08)
+        self.add(f'tl.to("#wingR",{{rotation:-38,duration:.25,ease:"back.out(2)"}},{t:.2f});')
+        self.add(f'tl.to("#wingR",{{rotation:-26,duration:.12,yoyo:true,repeat:{n * 2 - 1}}},{t + .27:.2f});')
+        self.add(f'tl.to("#wingR",{{rotation:0,duration:.2}},{t + .27 + n * .24 + .02:.2f});')
+        self.arms(t + .27 + n * .24 + .2, "down")
+
+    def kick(self, t, d=.8):
+        self.legs(t, "kick", .06)
+        self.add(f'tl.fromTo("#footKi",{{rotation:-8}},{{rotation:10,duration:.14,yoyo:true,repeat:{max(1, int(d / .28)) * 2 - 1},'
+                 f'immediateRender:false}},{t:.2f});')
+        self.legs(t + d, "stand", .06)
+
+    def tap(self, t, n=4):
+        """Impatient / excited foot tap."""
+        self.add(f'tl.to("#footRi",{{rotation:-16,y:-6,duration:.09,yoyo:true,repeat:{n * 2 - 1}}},{t:.2f});')
 
     # ---------------------------------------------------------------- face
     def look(self, t, dx, dy, d=.14):
@@ -293,23 +342,24 @@ class Bird:
 
 
 def perform(add, dur):
-    """The bird's performance, line by line with the voiceover."""
+    """The bird's performance, line by line with the voiceover. Resting pose: on both feet, wings at the sides."""
     b = Bird(add)
     add('tl.set("#birdpos",{x:1160,y:1010,scale:.85},0);tl.set("#bflip",{scaleX:-1},0);')
-    add('tl.set("#sweat,#mag,.bub,.bsp,#cloud",{opacity:0,scale:.5},0);')
+    add('tl.set("#sweat,#mag,.bub,.bsp,#cloud",{opacity:0,scale:.5},0);tl.set("#wingR,#footK",{opacity:0},0);')
     for k in "LR":
         cx, cy, r = EYES[k][:3]
         add(f'tl.set("#lu{k}",{{scaleY:0,svgOrigin:"{cx} {cy - r - 6}"}},0);tl.set("#ld{k}",{{scaleY:0,svgOrigin:"{cx} {cy + r + 6}"}},0);')
     b.facing = -1
     # always alive under every gesture
-    add(f'tl.to("#bidle",{{y:-8,duration:.42,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .42) - 1}}},0);')
-    add(f'tl.fromTo("#bidle",{{rotation:-3}},{{rotation:3,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(dur / 1.3) - 1}}},0);')
+    add(f'tl.to("#bidle",{{y:-7,duration:.42,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .42) - 1}}},0);')
+    add(f'tl.fromTo("#bidle",{{rotation:-2.5}},{{rotation:2.5,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(dur / 1.3) - 1}}},0);')
     add(f'tl.to("#bbreath",{{scaleY:1.025,scaleX:.985,duration:.8,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .8) - 1}}},0);')
-    add(f'tl.fromTo("#wingRi",{{rotation:-4}},{{rotation:9,duration:.45,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .45) - 1}}},0);')
-    add(f'tl.fromTo("#wingLi",{{rotation:4}},{{rotation:-7,duration:.5,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .5) - 1}}},0);')
+    add(f'tl.fromTo("#wingLi",{{rotation:3}},{{rotation:-4,duration:.6,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .6) - 1}}},0);')
+    add(f'tl.fromTo("#wingDi",{{rotation:-3}},{{rotation:4,duration:.6,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .6) - 1}}},.3);')
+    add(f'tl.fromTo("#wingRi",{{rotation:-4}},{{rotation:8,duration:.45,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .45) - 1}}},0);')
     add('tl.set("#bshadow",{opacity:0},0);tl.to("#bshadow",{opacity:1,duration:.3},.6);')
 
-    # "One reel did 85x my usual views" — waddles in curious, sees the counter, explodes with joy on 85x
+    # "One reel did 85x my usual views" — walks in curious, stops on both feet, sees the counter, explodes on 85x
     b.expr(0, "curious", .01)
     b.at(.1, 660, 1010, .85, 1.0, "power1.out")
     b.walk(.1, 1.0)
@@ -319,28 +369,29 @@ def perform(add, dur):
     b.expr(1.3, "excited", .14)
     b.pose(1.25, "tall", .15)
     b.hop(1.3, 120)
-    b.flap(1.3, 5, 30)
+    b.kick(1.3, .7)
+    b.flap(1.3, 5, 50)
     b.pulse_overlay(1.45, "str", 4)
     b.show(".bsp", 1.4)
     add('tl.to(".bsp",{rotation:120,duration:1.2,ease:"none"},1.4);')
     b.show(".bsp", 2.6, False)
-    b.pose(2.3, "neutral", .25)
-    b.expr(2.45, "joy", .15)
-    b.bounce(2.45, 3, 18)
-    # "and I had no idea why." — stops, confused, head tilt, scratches head, looks up thinking
+    b.pose(2.2, "neutral", .25)
+    b.expr(2.35, "joy", .15)
+    b.bounce(2.35, 3, 16)
+    b.spread(2.35, 20)
+    b.spread(3.1, 0)
+    # "and I had no idea why." — stands still, confused, head tilt, scratches its head, looks up thinking
     b.expr(3.6, "confused", .2)
     b.look(3.6, -10, -14)
     b.pose(3.6, "leanback", .3)
     add('tl.to("#bwig",{rotation:-12,duration:.35,ease:"back.out(2)"},3.7);')
-    b.wings(3.7, -38, 0)
-    add('tl.to("#wingR",{rotation:-28,duration:.12,yoyo:true,repeat:7},3.95);')
+    b.scratch(3.75, 1.1)
     b.show(".bq", 3.9)
     b.look(4.5, 14, -12)
     b.blink(4.9)
     b.show(".bq", 5.4, False)
     add('tl.to("#bwig",{rotation:0,duration:.2},5.3);')
-    b.wings(5.3, 0, 0, .2)
-    # "The next one?" — hops over hopefully, leans in to the new cover, big eyes
+    # "The next one?" — walks over hopefully, stands tall on tiptoe, leans in to the new cover
     b.face(5.55, -1)
     b.expr(5.55, "hopeful", .2)
     b.at(5.6, 760, 1000, .82, .55, "power2.inOut")
@@ -348,11 +399,12 @@ def perform(add, dur):
     b.face(6.2, 1)
     b.pose(6.2, "leanin", .25)
     b.look(6.2, -18, -6)
-    # "A few thousand." — deflates: sad eyes, slouch, wings hang, a tear and a rain cloud
+    b.spread(6.2, -8)
+    # "A few thousand." — deflates: sad eyes, slouch, wings hang limp, a tear and a rain cloud
     b.expr(6.95, "sad", .3)
     b.pose(6.95, "slouch", .4, "power2.out")
     b.look(6.95, -6, 14)
-    b.wings(6.95, 22, -18, .4)
+    b.spread(6.95, -14, .4, "power2.out")
     b.show("#sweat", 7.0)
     add('tl.to("#sweat",{y:40,duration:.9,ease:"power1.in"},7.1);')
     b.tear(7.2)
@@ -360,53 +412,54 @@ def perform(add, dur):
     add('tl.fromTo("#cloud .drop",{y:0,opacity:1},{y:90,opacity:0,duration:.35,stagger:.07,repeat:2,ease:"power1.in"},7.05);')
     b.show("#sweat", 7.95, False)
     b.show("#cloud", 7.95, False)
-    # "Numbers..." — jolted upright by the tiles slamming in
+    # "Numbers..." — jolted upright by the tiles slamming in, wings fly out
     b.pose(8.05, "neutral", .15)
-    b.wings(8.05, 0, 0, .15)
+    b.spread(8.05, 0, .15)
     b.at(8.1, 400, 1080, .78, .45)
     b.expr(8.35, "shock", .1)
     b.startle(8.35)
     b.look(8.4, 0, -18)
-    b.wings(8.35, 40, -36, .12)
-    b.wings(8.75, 0, 0, .2)
-    # "...never reasons." — unimpressed: skeptical squint, shrug, head shake
+    b.spread(8.35, 55, .12)
+    b.spread(8.75, 0, .2)
+    # "...never reasons." — unimpressed: skeptical squint, big shrug, head shake
     b.expr(9.1, "skeptical", .2)
     b.look(9.1, 12, 0)
-    b.wings(9.3, 45, -40, .2)
+    b.spread(9.25, 60, .18)
     b.shake(9.35, 3, 9)
-    b.wings(10.0, 0, 0, .2)
-    # "So I gave my page to Creedom." — perks up, smiles, takes the magnifier and scans the card, nodding
+    b.spread(10.0, 0, .2)
+    # "So I gave my page to Creedom." — perks up and smiles, stands tall, takes the magnifier, walks along scanning
     b.at(10.45, 800, 1130, .72, .5)
     b.expr(10.6, "smile", .2)
     b.pose(10.6, "tall", .25)
     b.show("#mag", 10.8)
     b.face(11.0, -1)
     b.at(11.0, 520, 1130, .72, 1.6, "sine.inOut")
-    b.walk(11.0, 1.6, .26)
+    b.walk(11.0, 1.6, .28)
     b.expr(11.1, "focused", .2)
     b.look(11.1, 14, -14)
     add('tl.to("#mag",{rotation:-14,y:-20,duration:.4,ease:"sine.inOut",yoyo:true,repeat:3},11.0);')
     b.look(11.9, 6, -18)
-    # "Twenty seconds." — turns to the stopwatch, impressed, hops
+    # "Twenty seconds." — turns to the stopwatch, impressed, jumps with a kick
     b.face(12.7, 1)
     b.expr(12.75, "excited", .15)
     b.look(12.75, 14, -10)
     b.hop(12.85, 70)
+    b.kick(12.85, .5)
     b.show("#mag", 13.6, False)
     b.pose(13.6, "neutral", .2)
-    # "Content score:" — leans in, anticipation, little drum-roll bounce
+    # "Content score:" — stands still on both feet, leans in, taps a foot in anticipation
     b.at(13.9, 730, 1100, .7, .45)
     b.expr(14.1, "curious", .2)
     b.pose(14.2, "leanin", .3)
     b.look(14.2, -18, -16)
     b.face(14.2, -1)
-    b.bounce(14.45, 3, 10)
+    b.tap(14.45, 4)
     # "82 out of 100." — heart eyes, blush, jump, spin, flap
     b.expr(15.35, "love", .15)
     b.pose(15.35, "tall", .15)
     b.hop(15.35, 140)
     b.spin(15.35)
-    b.flap(15.35, 5, 34)
+    b.flap(15.35, 5, 55)
     b.pulse_overlay(15.5, "hrt", 4)
     b.show(".bsp", 15.45)
     add('tl.to(".bsp",{rotation:220,duration:1.3,ease:"none"},15.45);')
@@ -414,72 +467,75 @@ def perform(add, dur):
     b.expr(16.3, "joy", .15)
     b.wave(16.3, 2)
     b.pose(16.9, "neutral", .2)
-    # "Then its reel analyser watched my reel..." — curious, points at the chat, nods along, watches the scan
+    # "Then its reel analyser watched my reel..." — curious, points at the chat, then stands and nods along
     b.at(17.05, 760, 1060, .6, .45)
     b.face(17.3, -1)
     b.expr(17.3, "curious", .2)
     b.look(17.3, 14, -18)
-    b.point(17.4, 1.2)
-    b.nod(18.0, 2)
+    b.point(17.4, 1.0)
+    b.nod(18.3, 2)
     b.expr(18.6, "focused", .2)
     b.face(18.6, 1)
     b.look(18.6, 16, 4)
     b.blink(19.3)
-    # "second by second." — surfs the playhead down the timeline, wings out, determined
+    # "second by second." — surfs the playhead down the timeline, wings out for balance
     b.face(19.6, 1)
     b.at(19.85, -60, 330, .42, .4)
     b.pose(20.15, "leanin", .2)
-    b.wings(20.2, 35, -30, .2)
+    b.spread(20.2, 50, .2)
+    b.kick(20.2, 1.0)
     b.expr(20.2, "excited", .15)
     b.look(20.2, 10, 16)
     add('tl.to("#birdpos",{y:960,duration:1.05,ease:"power1.inOut"},20.25);')
     b.pose(21.25, "neutral", .2)
-    b.wings(21.25, 0, 0, .2)
-    # "And found what I'd missed..." — suspense: squints, magnifier, slow lean in
+    b.spread(21.25, 0, .2)
+    # "And found what I'd missed..." — suspense: stands still, squints, slow lean in with the magnifier
     b.at(21.35, -60, 822, .45, .4)
     b.expr(21.45, "focused", .3)
     b.show("#mag", 21.6)
     b.look(21.6, 16, 6)
     b.pose(21.7, "leanin", .8, "power1.inOut")
     add('tl.to("#mag",{x:40,duration:.4,ease:"sine.inOut",yoyo:true,repeat:3},21.8);')
-    # "my best hook was buried at 34 seconds." — shock "!", jumps back, then excited flap up after it
+    # "my best hook was buried at 34 seconds." — shock "!", jumps back, then flaps up after it with star eyes
     b.expr(23.35, "shock", .1)
     b.pose(23.35, "leanback", .12)
     b.show(".bx", 23.4)
     b.startle(23.35)
-    b.wings(23.35, 45, -42, .15)
+    b.spread(23.35, 60, .12)
     b.show("#mag", 24.3, False)
     b.show(".bx", 24.5, False)
     b.expr(24.6, "excited", .15)
     b.pose(24.6, "tall", .2)
-    b.flap(24.65, 5, 32)
+    b.flap(24.65, 5, 55)
     b.at(24.7, -60, 372, .45, .55, "power3.inOut")
     b.look(24.7, 14, -16)
     b.pulse_overlay(24.9, "str", 3)
-    b.wings(25.4, 0, 0, .2)
+    b.spread(25.4, 0, .2)
     b.expr(25.5, "joy", .15)
     b.wave(25.62, 2)
-    # "Now I edit with reasons." — stands tall and proud, nods, jumps over to the reasons card
+    # "Now I edit with reasons." — stands tall and proud on both feet, nods, then jumps to the reasons card
     b.at(26.3, 150, 332, .5, .45)
     b.face(26.4, 1)
     b.expr(26.5, "proud", .2)
     b.pose(26.5, "tall", .3)
     b.look(26.5, 0, 0)
+    b.spread(26.5, -10, .25)
     b.nod(26.6, 1)
     add('tl.to("#birdpos",{x:700,duration:.6,ease:"power2.inOut"},27.0);')
     add('tl.to("#birdpos",{y:200,duration:.3,ease:"power2.out",yoyo:true,repeat:1},27.0);')
-    b.flap(27.0, 4)
+    b.flap(27.0, 4, 45)
     add('tl.to("#birdpos",{y:282,duration:.15,ease:"power2.out"},27.62);')
     b.expr(27.6, "smile", .15)
-    # "Not guesses." — looks back at the guesses card, frowns, shakes its head no
+    # "Not guesses." — turns back to the guesses card, frowns, shakes its head and wags a wing "no"
     b.face(28.25, -1)
     b.look(28.25, 18, 10)
     b.expr(28.3, "annoyed", .15)
     b.pose(28.3, "neutral", .2)
     b.shake(28.35, 3, 11)
-    b.wings(28.4, 30, 0, .15)
-    add('tl.to("#wingR",{rotation:10,duration:.1,yoyo:true,repeat:5},28.55);')
-    b.wings(29.15, 0, 0, .15)
+    b.arms(28.4, "up", .08)
+    add('tl.to("#wingR",{rotation:30,duration:.15},28.4);tl.to("#wingR",{rotation:10,duration:.1,yoyo:true,repeat:5},28.55);')
+    add('tl.to("#wingR",{rotation:0,duration:.12},29.15);')
+    b.arms(29.25, "down")
     # "Comment CREEDOM..." — excited, points at the box, chatters, winks
     b.at(29.4, 730, 1080, .7, .45)
     b.expr(29.5, "excited", .12)
@@ -489,13 +545,14 @@ def perform(add, dur):
     b.point(30.1, .9)
     b.talk(29.62, .9)
     b.expr(30.5, "wink", .15)
-    # "and I'll DM you the link." — watches the paper plane fly off, smiling
+    # "and I'll DM you the link." — stands, watches the paper plane fly off, smiling, taps a happy foot
     b.expr(30.9, "smile", .15)
     b.look(31.05, -16, -18)
     b.pose(31.05, "leanback", .3)
     b.talk(31.0, .9)
+    b.tap(31.2, 3)
     b.show(".bc", 32.0, False)
-    # end card: centre stage, joyful, waves goodbye, final wink
+    # end card: centre stage on both feet, joyful, waves goodbye, final wink
     b.face(32.0, 1)
     b.pose(32.0, "tall", .2)
     b.at(32.1, 390, 900, 1.05, .5, "back.out(1.4)")

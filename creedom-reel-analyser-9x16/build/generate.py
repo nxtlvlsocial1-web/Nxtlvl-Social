@@ -18,10 +18,14 @@ import bird  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 S = {k: (a, z) for k, a, z in SCENES}
+CGD = "linear-gradient(90deg, #C82BC4, #D23C93 50%, #CF6448)"
 PINK, PINKT, INK, PAPER, GREEN = "#E2557D", "#C93A6D", "#0B0B0B", "#F6F6F4", "#3E8E62"
 TWIST = S["twist"]
 # the hook clip also carries the "why" line, and "next" carries "numbers ≠ reasons"
 SPAN = {"hook": (S["hook"][0], S["why"][1]), "next": (S["next"][0], S["nums"][1])}
+# giant words behind the action: (start, hold)
+KIN_WORDS = ["85x", "WHY?", "~4K", "≠", "20s", "82", "0:34", "CREEDOM"]
+KIN = [(1.3, 1.6), (4.6, .9), (7.1, .8), (9.5, .8), (12.8, 1.0), (15.35, 1.4), (23.35, 1.2), (29.7, 2.0)]
 CUTS = [S[k][0] for k in ("next", "read", "score", "analyse", "twist", "reasons", "cta")]
 
 T = []
@@ -59,7 +63,7 @@ def hl_in(sid, t):
 
 
 def pop(sel, t, frm="scale:.6,opacity:0,y:40", d=.45, ease="back.out(2)"):
-    add(f'tl.fromTo("{sel}",{{{frm}}},{{scale:1,opacity:1,x:0,y:0,rotation:0,rotationY:0,duration:{d},ease:"{ease}"}},{t:.2f});')
+    add(f'tl.fromTo("{sel}",{{{frm}}},{{scale:1,opacity:1,x:0,y:0,rotation:0,rotationY:0,rotationX:0,duration:{d},ease:"{ease}"}},{t:.2f});')
 
 
 def out(sel, t, to="opacity:0,y:-30", d=.25):
@@ -133,7 +137,7 @@ def scenes():
     burst = "".join(f'<div class="bst" data-x="{r.uniform(-360, 360):.0f}" data-y="{r.uniform(-460, -120):.0f}" '
                     f'data-r="{r.uniform(-90, 90):.0f}">{heart(r.choice([34, 44, 56])) if i % 3 else play(36, PINK)}</div>'
                     for i in range(18))
-    ticker = " • ".join(["126,000 PLAYS", "85x YOUR USUAL", "+1 VIRAL REEL", "WHY?"] * 4)
+    ticker = " • ".join(["366K PLAYS", "85x YOUR USUAL", "+1 VIRAL REEL", "WHY?"] * 4)
     qrain = "".join(f'<div class="qr" style="left:{x}px;top:{y}px;font-size:{s}px">?</div>'
                     for x, y, s in [(110, 560, 120), (420, 470, 90), (900, 520, 110), (640, 900, 80), (150, 980, 70)])
     out_ = []
@@ -152,11 +156,11 @@ def scenes():
         '<div class="sticker st-eyes" data-layout-ignore>👀</div><div class="sticker st-fire" data-layout-ignore>🔥</div>'
         f'<div class="qrain" data-layout-ignore>{qrain}</div>'
     )))
-    tiles = [("PLAYS", "126K"), ("PLAYS", "4.3K"), ("REACH", "↑ ↓"), ("SAVES", "?"), ("SHARES", "?"), ("WATCH TIME", "?")]
+    tiles = [("PLAYS", "366K"), ("PLAYS", "4.3K"), ("REACH", "↑ ↓"), ("SAVES", "?"), ("SHARES", "?"), ("WATCH TIME", "?")]
     out_.append(clip("next", (
         '<div class="ghost" data-layout-ignore>4K</div>' +
         hl("next", "The next one?", "~4K.") + hl("nums", "Numbers ≠", "reasons.") +
-        '<div class="mini card"><img src="assets/img/cover_yt.jpg" alt=""><div class="mono">126K plays</div></div>' +
+        '<div class="mini card"><img src="assets/img/cover_yt.jpg" alt=""><div class="mono">366K plays</div></div>' +
         cover("cv-b", "cover_adobe.jpg", "cnt-b", "plays") +
         '<div class="chip redchip lowk">↓ low thousands</div><div class="arrowdn" data-layout-ignore>↓</div>'
         '<div class="grid6">' + "".join(f'<div class="tile card t{i}"><div class="mono">{a}</div><div class="tv tv{i}">{b}</div>'
@@ -171,7 +175,7 @@ def scenes():
         'stroke-width="5" stroke-dasharray="14 12" fill="none"/></svg>'
         '<div class="lpill">◉ Public data only</div>'
         '<div class="appic cr"><img src="assets/img/bird.png" alt=""></div></div>'
-        '<div class="reading mono">READING YOUR PAGE</div>'
+        '<div class="crlogo"><img src="assets/img/creedom_logo.png" alt="Creedom"></div><div class="reading mono">READING YOUR PAGE</div>'
         '<div class="give">Give me <i>20 seconds.</i></div>'
         '<div class="rbar"><div class="rfill"></div></div>'
         '<div class="ticks card">' + "".join(f'<div class="trow {c}">{tick(46)}<span>{t}</span></div>' for t, c in rows) +
@@ -239,7 +243,7 @@ def scenes():
         '<div class="plane" data-layout-ignore><svg viewBox="0 0 60 60" width="70" height="70"><path d="M4 30 L56 6 L44 54 '
         f'L30 36 Z" fill="{PINK}"/><path d="M30 36 L56 6" stroke="#fff" stroke-width="3"/></svg></div>' +
         confetti("cfkw", 40, 11) +
-        '<div class="endlock"><img src="assets/img/bird.png" alt=""><span>creedom</span></div>'
+        '<div class="endlock"><img src="assets/img/creedom_logo.png" alt="Creedom"></div>'
         '<div class="endsub">Comment <b>CREEDOM</b> for the link</div>'
     )))
     return "".join(out_)
@@ -281,29 +285,64 @@ def caption_tl():
             sel = f".cw{ci}_{wi}"
             add(f'tl.fromTo("{sel}",{{opacity:0,y:18,scale:.85}},{{opacity:1,y:0,scale:1,duration:.16,ease:"back.out(3)",'
                 f'immediateRender:false}},{s:.3f});')
-            add(f'tl.set("{sel}",{{backgroundColor:"{PINK}",color:"#ffffff"}},{s:.3f});')
-            add(f'tl.set("{sel}",{{backgroundColor:"rgba(226,85,125,0)",color:"{past}"}},{e:.3f});')
+            add(f'tl.set("{sel}",{{backgroundImage:"{CGD}",color:"#ffffff"}},{s:.3f});')
+            add(f'tl.set("{sel}",{{backgroundImage:"none",color:"{past}"}},{e:.3f});')
 
 
 # ------------------------------------------------------------------ scene timelines
 def timeline():
-    add('tl.set("#wipe",{scale:0},0);')
-    # whip pan on every cut: blur out to the left, in from the right
-    for t in CUTS:
-        add(f'tl.to("#cam",{{x:-140,filter:"blur(10px)",duration:.12,ease:"power2.in"}},{t - .12:.2f});')
-        add(f'tl.fromTo("#cam",{{x:160,filter:"blur(12px)"}},{{x:0,filter:"blur(0px)",duration:.3,ease:"power3.out",'
-            f'immediateRender:false}},{t:.2f});')
-        add(f'tl.fromTo("#whip",{{opacity:.9,x:300}},{{opacity:0,x:-300,duration:.28,ease:"power2.out",immediateRender:false}},'
-            f'{t - .08:.2f});')
+    add('tl.set("#wipe",{scale:0},0);tl.set("#speed, #flash",{opacity:0},0);')
+    # a different transition on every cut: whips (left / up), zoom-throughs and a spin
+    for t, kind in zip(CUTS, ["whipx", "whipx", "zoom", "whipy", "zoom", "spin", "whipy"]):
+        if kind == "whipx":
+            add(f'tl.to("#cam",{{x:-160,filter:"blur(12px)",duration:.12,ease:"power2.in"}},{t - .12:.2f});')
+            add(f'tl.fromTo("#cam",{{x:180,filter:"blur(14px)"}},{{x:0,filter:"blur(0px)",duration:.3,ease:"power3.out",immediateRender:false}},{t:.2f});')
+        elif kind == "whipy":
+            add(f'tl.to("#cam",{{y:-200,filter:"blur(12px)",duration:.12,ease:"power2.in"}},{t - .12:.2f});')
+            add(f'tl.fromTo("#cam",{{y:240,filter:"blur(14px)"}},{{y:0,filter:"blur(0px)",duration:.32,ease:"power3.out",immediateRender:false}},{t:.2f});')
+        elif kind == "zoom":
+            add(f'tl.to("#cam",{{scale:1.7,filter:"blur(16px)",opacity:.4,duration:.14,ease:"power2.in"}},{t - .14:.2f});')
+            add(f'tl.fromTo("#cam",{{scale:.7,filter:"blur(14px)",opacity:.4}},{{scale:1,filter:"blur(0px)",opacity:1,duration:.34,'
+                f'ease:"power3.out",immediateRender:false}},{t:.2f});')
+        else:
+            add(f'tl.to("#cam",{{rotation:8,scale:1.25,filter:"blur(12px)",duration:.13,ease:"power2.in"}},{t - .13:.2f});')
+            add(f'tl.fromTo("#cam",{{rotation:-8,scale:.8,filter:"blur(12px)"}},{{rotation:0,scale:1,filter:"blur(0px)",duration:.34,'
+                f'ease:"back.out(1.6)",immediateRender:false}},{t:.2f});')
+        add(f'tl.fromTo("#whip",{{opacity:.9,x:300}},{{opacity:0,x:-300,duration:.28,ease:"power2.out",immediateRender:false}},{t - .08:.2f});')
+    # impacts on the big beats: punch-in, camera shake, white flash, speed-line burst
+    for t, k in [(1.35, 1), (7.25, .6), (8.35, .8), (12.85, .7), (15.4, 1), (23.4, 1), (24.75, .7), (29.8, 1), (32.2, .6)]:
+        add(f'tl.fromTo("#shake",{{x:0,y:0,rotation:0}},{{x:{14 * k:.0f},y:{-10 * k:.0f},rotation:{1.4 * k:.1f},duration:.04,'
+            f'ease:"none",yoyo:true,repeat:5,immediateRender:false}},{t:.2f});')
+        add(f'tl.set("#flash",{{opacity:{.55 * k:.2f}}},{t:.2f});tl.to("#flash",{{opacity:0,duration:.25,ease:"power2.out"}},{t + .01:.2f});')
+        add(f'tl.set("#speed",{{scale:.5,opacity:{.9 * k:.2f},rotation:0}},{t:.2f});tl.to("#speed",{{scale:1.5,opacity:0,rotation:8,'
+            f'duration:.45,ease:"power2.out"}},{t + .01:.2f});')
+    # giant kinetic words racing past behind the content on the key lines
+    for i, (t, d) in enumerate(KIN):
+        add(f'tl.fromTo(".kin{i}",{{scale:2.6,opacity:0,rotation:-6}},{{scale:1,opacity:1,rotation:0,duration:.35,ease:"expo.out"}},{t:.2f});')
+        add(f'tl.to(".kin{i}",{{scale:.85,opacity:0,duration:.35,ease:"power2.in"}},{t + d:.2f});')
+    # a tiny kick on every highlighted word
+    hits = [t for t, _ in [(1.33, 0), (15.4, 0), (23.4, 0), (29.8, 0)]]
+    for (st, en, w) in words():
+        if w in KEY and all(abs(st - h) > .45 for h in hits):
+            add(f'tl.to("#punch",{{scale:1.025,duration:.08,ease:"power2.out",yoyo:true,repeat:1}},{st:.2f});')
+    # cards float in 3D so the frame never sits still (each starts once its entrance has landed)
+    for sel, a, t0, t1 in ((".cv-a", 6, 1.0, 5.6), (".chart", 6, 1.1, 5.6), (".cv-b", 6, 6.45, 8.1), (".scard", 4, 15.85, 17.1),
+                           (".tl-a", 3, 20.35, 21.3), (".rcard", 5, 27.15, 29.4), (".gcard", 5, 26.95, 28.4), (".cbox", 3, 30.5, 32.0)):
+        n = max(1, int((t1 - t0) / 1.2))
+        add(f'tl.fromTo("{sel}",{{rotationY:{-a}}},{{rotationY:{a},duration:1.2,ease:"sine.inOut",yoyo:true,repeat:{n - 1},'
+            f'immediateRender:false}},{t0:.2f});')
+    # rising particles
+    add(f'document.querySelectorAll(".pt").forEach((e,i)=>tl.fromTo(e,{{y:0,opacity:0}},{{y:-900,opacity:.8,duration:{{}},'
+        f'ease:"none",repeat:4}},i*.37));'.replace("{{}}", "4.2"))
     # slow push-in inside each scene so nothing is ever static
     for k, a, z in SCENES:
-        add(f'tl.fromTo("#cam",{{scale:1}},{{scale:1.035,duration:{z - a - .05:.2f},ease:"none",immediateRender:false}},{a:.2f});')
+        add(f'tl.fromTo("#shake",{{scale:1}},{{scale:1.035,duration:{z - a - .05:.2f},ease:"none",immediateRender:false}},{a:.2f});')
     # 1 hook
     hl_in("hook", .05)
     pop(".cv-a", .15, "y:260,opacity:0,rotation:-8,rotationY:40,scale:.8", .6)
     shine(".cv-a", .7)
     pop(".cv-a-v", .5, "y:40,opacity:0,scale:.8", .35)
-    counter(".cnt-a", 0, 126000, .4, 2.6, "comma", "expo.out")
+    counter(".cnt-a", 0, 366000, .4, 2.6, "comma", "expo.out")
     pop(".chart", .55, "x:200,opacity:0,scale:.8,rotationY:-40", .5)
     shine(".chart", 1.0)
     add('tl.fromTo(".spk",{strokeDasharray:1,strokeDashoffset:1},{strokeDashoffset:0,duration:1.1,ease:"power3.in"},.75);')
@@ -359,6 +398,7 @@ def timeline():
     add(f'tl.fromTo(".dash",{{scaleX:0}},{{scaleX:1,duration:.4,ease:"power2.out"}},{t + .3:.2f});')
     add(f'tl.fromTo(".dash path",{{strokeDashoffset:0}},{{strokeDashoffset:-260,duration:3.2,ease:"none"}},{t + .3:.2f});')
     pop(".lpill", t + .55, "scale:.3,opacity:0", .4, "back.out(3)")
+    pop(".crlogo", t + .2, "opacity:0,scale:.6", .4, "back.out(2.4)")
     pop(".reading", t + .3, "opacity:0,y:20", .35)
     pop(".give", t + .4, "opacity:0,y:40,scale:.9", .5)
     pop(".rbar", t + .6, "opacity:0,scaleX:.6", .3)
@@ -466,7 +506,7 @@ def timeline():
     pop(".endsub", 32.45, "opacity:0,y:30", .4)
     # background and always-on pieces
     add(f'tl.fromTo(".pfill",{{scaleX:0}},{{scaleX:1,duration:{DUR},ease:"none"}},0);')
-    add(f'tl.fromTo("#gridl",{{backgroundPosition:"0px 0px"}},{{backgroundPosition:"0px -324px",duration:{DUR},ease:"none"}},0);')
+    add(f'tl.fromTo("#gridl",{{backgroundPosition:"0px 0px"}},{{backgroundPosition:"0px -1080px",duration:{DUR},ease:"none"}},0);')
     for i, (dx, dy, d) in enumerate([(220, 160, 7), (-200, 220, 9), (160, -240, 8)]):
         add(f'tl.fromTo(".blob{i}",{{x:0,y:0}},{{x:{dx},y:{dy},duration:{d},ease:"sine.inOut",yoyo:true,repeat:{int(DUR / d)}}},0);')
     add(f'document.querySelectorAll(".tw").forEach((e,i)=>tl.fromTo(e,{{scale:.3,opacity:.15}},{{scale:1,opacity:.9,'
@@ -476,6 +516,19 @@ def timeline():
     return "\n".join(T)
 
 
+def kin_html():
+    return "".join(f'<div class="kin kin{i}">{w}</div>' for i, w in enumerate(KIN_WORDS))
+
+
+def speed_html():
+    import math
+    lines = "".join(f'<line x1="{math.cos(a) * 260:.0f}" y1="{math.sin(a) * 260:.0f}" x2="{math.cos(a) * 1300:.0f}" '
+                    f'y2="{math.sin(a) * 1300:.0f}" stroke="#E235DD" stroke-width="{3 + (i % 3) * 2}" opacity=".5"/>'
+                    for i, a in enumerate(k / 40 * math.tau for k in range(40)))
+    return (f'<svg id="speed" viewBox="-1300 -1300 2600 2600" width="2600" height="2600" data-layout-ignore>'
+            f'<g>{lines}</g></svg>')
+
+
 def background():
     r = random.Random(6)
     blobs = "".join(f'<div class="blob blob{i}" style="left:{x}px;top:{y}px;width:{s}px;height:{s}px;background:{c}"></div>'
@@ -483,7 +536,9 @@ def background():
                                                       (420, -200, 760, "#DAD6F6")]))
     twinkles = "".join(f'<div class="tw" style="left:{r.uniform(40, 1000):.0f}px;top:{r.uniform(150, 1750):.0f}px">'
                        f'{star(r.choice([18, 24, 30]), r.choice([PINK, "#F2B134", "#B39DDB"]))}</div>' for _ in range(14))
-    return (f'<div id="paper"></div><div id="blobs">{blobs}</div><div id="gridl"></div>'
+    pts = "".join(f'<i class="pt" style="left:{r.uniform(20, 1060):.0f}px;top:{r.uniform(1000, 1950):.0f}px;'
+                  f'width:{r.choice([6, 8, 10, 14])}px;height:{r.choice([6, 8, 10, 14])}px"></i>' for _ in range(26))
+    return (f'<div id="paper"></div><div id="blobs">{blobs}</div><div id="gridl"></div><div id="pts" data-layout-ignore>{pts}</div>'
             f'<div id="twk" data-layout-ignore>{twinkles}</div><div id="dark"></div>')
 
 
@@ -491,14 +546,15 @@ CSS = """
 @font-face { font-family: "Fraunces"; font-weight: 100 900; src: url("assets/fonts/fraunces.ttf"); }
 @font-face { font-family: "Fraunces"; font-style: italic; font-weight: 100 900; src: url("assets/fonts/fraunces-italic.ttf"); }
 @font-face { font-family: "Manrope"; font-weight: 200 800; src: url("assets/fonts/manrope.ttf"); }
+@font-face { font-family: "Outfit"; font-weight: 100 900; src: url("assets/fonts/outfit.ttf"); }
 @font-face { font-family: "JBMono"; font-weight: 100 800; src: url("assets/fonts/jbmono.ttf"); }
-:root { --pink: #E2557D; --pinkt: #C93A6D; --ink: #0B0B0B; --paper: #F6F6F4; }
+:root { --cg: linear-gradient(90deg, #E235DD, #E34CB7 45%, #E68B70); --cgd: linear-gradient(90deg, #C82BC4, #D23C93 50%, #CF6448); --pink: #E2557D; --pinkt: #C93A6D; --ink: #0B0B0B; --paper: #F6F6F4; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); }
 body { font-family: "Manrope", sans-serif; color: var(--ink); }
 #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); }
 .clip { position: absolute; inset: 0; }
-#cam { position: absolute; inset: 0; transform-origin: 50% 45%; }
+#cam { position: absolute; inset: 0; transform-origin: 50% 45%; z-index: 2; }
 #punch { position: absolute; inset: 0; transform-origin: 50% 45%; perspective: 1400px; }
 .mono { font: 600 24px "JBMono"; letter-spacing: 5px; color: #6b6b66; }
 /* background: the reference covers' soft pastel glow on a fine grid */
@@ -513,6 +569,13 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
 .ghost { position: absolute; left: 0; width: 1080px; top: 560px; text-align: center; font: italic 600 520px/1 "Fraunces";
   color: rgba(11,11,11,.045); letter-spacing: -20px; white-space: nowrap; }
 .ghost.gw { color: rgba(255,255,255,.05); font-size: 400px; }
+#shake { position: absolute; inset: 0; }
+#flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 42; }
+#speed { position: absolute; left: -760px; top: -340px; opacity: 0; z-index: 39; }
+#kin { z-index: 1; }
+.kin { position: absolute; left: -200px; width: 1480px; top: 760px; text-align: center; font: 800 360px/1 "Outfit"; letter-spacing: -10px;
+  color: transparent; -webkit-text-stroke: 5px rgba(226,53,160,.28); white-space: nowrap; opacity: 0; }
+.pt { position: absolute; border-radius: 50%; background: radial-gradient(circle, #ffffff, rgba(226,53,160,.5)); opacity: 0; }
 #whip { position: absolute; inset: 0; opacity: 0; z-index: 41; background: repeating-linear-gradient(0deg,
   rgba(255,255,255,0) 0 22px, rgba(255,255,255,.55) 22px 26px, rgba(255,255,255,0) 26px 70px); }
 /* progress pill */
@@ -520,12 +583,14 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
   box-shadow: 0 6px 24px rgba(0,0,0,.08); display: flex; align-items: center; gap: 14px; padding: 0 18px; }
 .pill img { width: 36px; height: 38px; }
 .ptrack { flex: 1; height: 10px; border-radius: 5px; background: #ebe8e4; overflow: hidden; }
-.pfill { width: 100%; height: 100%; background: var(--pink); transform-origin: 0 50%; }
+.pfill { width: 100%; height: 100%; background: var(--cg); transform-origin: 0 50%; }
 /* headline */
 .hl { position: absolute; left: 0; width: 1080px; text-align: center; z-index: 6; }
 .l1 { font: 800 84px/1.05 "Manrope"; letter-spacing: -3px; }
 .l2 { font: italic 600 112px/1.05 "Fraunces"; letter-spacing: -3px; color: var(--pinkt); }
 .hw, .acc { display: inline-block; }
+.acc { background: var(--cgd); -webkit-background-clip: text; background-clip: text; color: transparent; padding: 0 10px; }
+.dark .acc { background: var(--cg); -webkit-background-clip: text; background-clip: text; }
 .acc { position: relative; }
 .sw { position: absolute; left: 4%; bottom: -14px; width: 92%; height: 34px; overflow: visible; }
 .dark .l1, .dark .hl { color: #fff; }
@@ -538,7 +603,7 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
 .chip { position: absolute; border-radius: 40px; font: 800 34px "Manrope"; padding: 14px 28px; white-space: nowrap; }
 .pinkchip { background: var(--pink); color: #fff; }
 .redchip { background: #fde8e8; color: #c43c3c; }
-.pring { position: absolute; width: 220px; height: 220px; border-radius: 50%; border: 8px solid var(--pink); opacity: 0; }
+.pring { position: absolute; width: 220px; height: 220px; border-radius: 50%; border: 8px solid #E235DD; opacity: 0; }
 .conf { position: absolute; left: 540px; top: 900px; }
 .conf i { position: absolute; left: 0; top: 0; opacity: 0; }
 .sticker { position: absolute; font-size: 96px; }
@@ -583,13 +648,15 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
 .appic.cr { left: 760px; background: #fff; }
 .appic.cr img { width: 112px; height: 119px; }
 .dash { position: absolute; left: 330px; top: 85px; transform-origin: 0 50%; }
-.lpill { position: absolute; left: 395px; top: 70px; background: var(--ink); color: #fff; font: 700 30px "Manrope"; padding: 10px 26px;
+.lpill { position: absolute; left: 395px; top: 70px; background: var(--ink); color: #fff; font: 600 30px "Outfit"; padding: 10px 26px;
   border-radius: 30px; white-space: nowrap; }
-.reading { position: absolute; left: 0; width: 1080px; top: 382px; text-align: center; font-size: 30px; letter-spacing: 8px; color: #555; }
-.give { position: absolute; left: 0; width: 1080px; top: 430px; text-align: center; font: 700 96px "Fraunces"; letter-spacing: -2px; }
+.crlogo { position: absolute; left: 0; width: 1080px; top: 345px; text-align: center; }
+.crlogo img { width: 230px; height: auto; }
+.reading { position: absolute; left: 0; width: 1080px; top: 400px; text-align: center; font-size: 30px; letter-spacing: 8px; color: #555; }
+.give { position: absolute; left: 0; width: 1080px; top: 445px; text-align: center; font: 700 96px "Fraunces"; letter-spacing: -2px; }
 .give i { color: var(--pinkt); }
 .rbar { position: absolute; left: 120px; top: 600px; width: 840px; height: 14px; border-radius: 7px; background: #ebe8e4; overflow: hidden; }
-.rfill { width: 100%; height: 100%; background: var(--pink); transform-origin: 0 50%; }
+.rfill { width: 100%; height: 100%; background: var(--cg); transform-origin: 0 50%; }
 .ticks { position: absolute; left: 100px; top: 680px; width: 880px; padding: 34px 40px; }
 .trow { display: flex; align-items: center; gap: 24px; font: 500 40px "Manrope"; color: #444; padding: 20px 0; }
 .stopw { left: 720px; top: 990px; background: var(--ink); color: #fff; }
@@ -655,8 +722,8 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
 /* cta */
 .cmt { position: absolute; left: 270px; top: 300px; display: flex; align-items: center; gap: 18px; background: var(--ink); color: #fff;
   font: 800 70px "Manrope"; letter-spacing: -1px; padding: 22px 46px; border-radius: 26px; transform: rotate(-3deg); }
-.kw { position: absolute; left: 90px; top: 450px; width: 900px; text-align: center; background: var(--pink); color: #fff;
-  font: 800 150px "Manrope"; letter-spacing: -5px; border-radius: 40px; padding: 18px 0; box-shadow: 0 30px 70px rgba(226,85,125,.45); }
+.kw { position: absolute; left: 90px; top: 450px; width: 900px; text-align: center; background: var(--cgd); color: #fff;
+  font: 700 160px "Outfit"; letter-spacing: -3px; border-radius: 40px; padding: 18px 0; box-shadow: 0 30px 70px rgba(226,85,125,.45); }
 .rgkw { left: 430px; top: 450px; }
 .cfkw { left: 540px; top: 560px; }
 .kc { position: absolute; background: #fff; border-radius: 30px; padding: 10px 22px; font: 700 26px "Manrope";
@@ -669,11 +736,10 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
   display: flex; align-items: center; justify-content: center; }
 .dm { margin-top: 22px; font: 600 30px "Manrope"; color: var(--pinkt); }
 .plane { position: absolute; left: 860px; top: 880px; opacity: 0; }
-.endlock { position: absolute; left: 0; width: 1080px; top: 330px; display: flex; justify-content: center; align-items: center; gap: 24px;
-  font: 600 130px "Fraunces"; letter-spacing: -3px; }
-.endlock img { width: 150px; height: 159px; }
+.endlock { position: absolute; left: 0; width: 1080px; top: 340px; display: flex; justify-content: center; align-items: center; }
+.endlock img { width: 760px; height: auto; }
 .endsub { position: absolute; left: 0; width: 1080px; top: 560px; text-align: center; font: 700 46px "Manrope"; color: #333; }
-.endsub b { color: #fff; background: var(--pink); padding: 4px 18px; border-radius: 16px; }
+.endsub b { color: #fff; background: var(--cgd); font-family: "Outfit"; font-weight: 700; padding: 4px 18px; border-radius: 16px; }
 /* captions */
 #caps { z-index: 30; }
 .cap { position: absolute; left: 0; width: 1080px; top: 1400px; text-align: center; opacity: 0; white-space: nowrap; }
@@ -695,15 +761,16 @@ def main():
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="1080" data-height="1920">
       <div id="bg" class="clip" data-start="0" data-duration="{DUR}" data-track-index="0" data-layout-allow-overflow>{background()}</div>
+      <div id="kin" class="clip" data-start="0" data-duration="{DUR}" data-track-index="9" data-layout-ignore>{kin_html()}</div>
       <div id="cam" class="clip" data-start="0" data-duration="{DUR}" data-track-index="1" data-layout-allow-overflow>
-        <div id="punch">{scenes()}</div>
+        <div id="punch"><div id="shake">{scenes()}</div></div>
       </div>
       <div id="hud" class="clip" data-start="0" data-duration="{DUR}" data-track-index="5">
         <div class="pill"><img src="assets/img/bird.png" alt=""><div class="ptrack"><div class="pfill"></div></div></div>
       </div>
       <div id="birdlayer" class="clip" data-start="0" data-duration="{DUR}" data-track-index="6" data-layout-allow-overflow>{bird.rig(star)}</div>
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="7">{captions()}</div>
-      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8" data-layout-allow-overflow><div id="wipe"></div><div id="whip"></div></div>
+      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8" data-layout-allow-overflow><div id="wipe"></div><div id="whip"></div><div id="flash"></div>{speed_html()}</div>
       <audio id="vo" src="assets/audio/vo.wav" data-start="0" data-duration="32.13" data-track-index="10" data-volume="1"></audio>
       <audio id="music" src="assets/audio/music.wav" data-start="0" data-duration="{DUR}" data-track-index="11" data-volume="1"></audio>
     </div>
