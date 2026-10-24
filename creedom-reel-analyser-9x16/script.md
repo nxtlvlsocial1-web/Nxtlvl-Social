@@ -80,7 +80,7 @@ COVER TEXT: "Why did this reel hit 85x?"
 
 - 85x / 126,000+ plays / "low thousands" typical, 82/100, 6 posts, 20 seconds, "public data only",
   4.2/5, buried hook at 0:34: all from the user's own Creedom screenshots of @ai.nxtlvl (Oct 2026).
-- Creedom (its AI companion)  explains why posts performed well or poorly; Creedom is an
+- Creedom (its AI companion) explains why posts performed well or poorly; Creedom is an
   Official Meta Business Partner (Dec 2025): reported by Indian Startup Times / Ascendants (seed-round coverage).
 - Not used: funding, valuation and user-count figures (sources conflict; not relevant to the viewer).
 
