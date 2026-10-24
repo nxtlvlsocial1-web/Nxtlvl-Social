@@ -1,0 +1,68 @@
+<!doctype html>
+<html><head><meta charset="UTF-8"><style>
+@font-face { font-family: "PS2"; src: url("../assets/fonts/press-start-2p.woff2") format("woff2"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { width: 1080px; height: 1920px; overflow: hidden; background: #0d1633; font-family: "PS2", monospace; color: #fff; position: relative; }
+canvas { position: absolute; inset: 0; width: 1080px; height: 1920px; image-rendering: pixelated; }
+.abs { position: absolute; left: 0; width: 1080px; text-align: center; }
+.tag { top: 236px; }
+.tag span { display: inline-block; background: #d23a32; font-size: 30px; padding: 14px 20px; box-shadow: 0 0 0 5px #0b0e14; }
+.h1 { top: 318px; font-size: 104px; line-height: 1.1; color: #ffd447; text-shadow: 8px 8px 0 #0b0e14; }
+.h2 { top: 488px; font-size: 64px; color: #fff; text-shadow: 6px 6px 0 #0b0e14; }
+.h2 b { color: #3fd07a; font-weight: 400; }
+.tv { position: absolute; left: 230px; width: 640px; background: #111318; padding: 12px; box-shadow: 0 0 0 6px #0b0e14, 0 24px 50px rgba(0,0,0,.6); }
+.tv img { display: block; width: 100%; }
+.lbl { position: absolute; left: -6px; top: -48px; font-size: 24px; padding: 12px 16px; box-shadow: 0 0 0 5px #0b0e14; }
+.before { top: 740px; transform: rotate(-2.5deg); }
+.before .lbl { background: #d23a32; }
+.after { top: 1262px; transform: rotate(2deg); border: 6px solid #3fd07a; padding: 6px; }
+.after .lbl { background: #157a45; }
+.x { position: absolute; right: -26px; top: -34px; width: 96px; height: 96px; background: #d23a32; font-size: 60px; line-height: 96px; text-align: center; box-shadow: 0 0 0 5px #0b0e14; }
+.tick { position: absolute; right: -26px; top: -34px; width: 96px; height: 96px; background: #157a45; font-size: 54px; line-height: 96px; text-align: center; box-shadow: 0 0 0 5px #0b0e14; }
+.arrow { top: 1150px; font-size: 40px; color: #ffd447; text-shadow: 4px 4px 0 #0b0e14; }
+.foot { top: 1752px; font-size: 25px; }
+.foot span { display: inline-block; background: #0b0e14; padding: 16px 22px; box-shadow: 0 0 0 5px #ffd447; }
+</style></head><body>
+<canvas id="c" width="180" height="320"></canvas>
+<div class="abs tag"><span>ANDROID TV · GOOGLE TV</span></div>
+<div class="abs h1">CLEAN<br>YOUR TV</div>
+<div class="abs h2" style="top:566px">IN <b>4 BALLS</b></div>
+<div class="tv before"><img src="before.png"><div class="lbl">BEFORE: ADS + JUNK</div><div class="x">✕</div></div>
+<div class="abs arrow">▼ ▼ ▼</div>
+<div class="tv after"><img src="after.png"><div class="lbl">AFTER: CLEAN HOME</div><div class="tick">✓</div></div>
+<div class="abs foot"><span>NO ADS · NO BLOATWARE · NO NEW TV</span></div>
+<script>
+const c = document.getElementById("c").getContext("2d");
+const r = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
+// night sky with dither and stars
+for (let y = 0; y < 320; y++) r(0, y, 180, 1, y < 120 ? "#0d1633" : y < 220 ? "#152350" : "#1b2a55");
+let s = 7; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+for (let k = 0; k < 70; k++) r(Math.floor(rnd() * 180), Math.floor(rnd() * 240), 1, 1, k % 4 ? "#c9d6ff" : "#ffffff");
+// floodlights
+for (const x of [6, 168]) { r(x + 2, 40, 2, 230, "#3a3f4d"); for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) r(x + i * 2, 34 + j * 2, 1, 1, "#fff6c8"); }
+// crowd and grass at the bottom
+const cols = ["#d23a32", "#2563d9", "#ffd447", "#ffffff", "#3fa34d", "#e8e8e8"];
+for (let y = 262; y < 282; y += 2) for (let x = 0; x < 180; x += 2) if (rnd() > 0.35) r(x, y, 1, 1, cols[Math.floor(rnd() * cols.length)]);
+r(0, 282, 180, 4, "#1d3f9e");
+for (let y = 286; y < 320; y += 4) r(0, y, 180, 4, (y / 4) % 2 ? "#2f8f3a" : "#37a043");
+// Claude batting, blue kit, bat raised (front view)
+const BLUE = "#2563d9", BLUE_D = "#1a47a3", HELMET = "#1d3f9e", HELMET_HI = "#3c63c9";
+const CL = { body: "#d97757", hi: "#eb9a7f", eye: "#1f140f" };
+function claude(ox, oy, sc) {
+  const P = (x, y, w, h, col) => r(ox + x * sc, oy + y * sc, w * sc, h * sc, col);
+  P(5, 15, 2, 2, BLUE_D); P(4, 17, 4, 1, "#f4f4f4"); P(9, 15, 2, 2, BLUE_D); P(8, 17, 4, 1, "#f4f4f4");
+  P(0, 2, 2, 7, BLUE); P(14, 2, 2, 7, BLUE);
+  P(2, 5, 12, 10, CL.body); P(2, 10, 12, 5, BLUE); P(2, 14, 12, 1, BLUE_D); P(7, 11, 2, 3, "#ffffff");
+  P(3, 6, 1, 3, CL.hi); P(5, 7, 1, 2, CL.eye); P(10, 7, 1, 2, CL.eye);
+  P(4, 1, 8, 1, HELMET); P(3, 2, 10, 3, HELMET); P(5, 2, 3, 1, HELMET_HI); P(3, 5, 10, 1, "#0f2459");
+  P(2, 4, 1, 3, HELMET); P(13, 4, 1, 3, HELMET);
+  // bat held up in the right hand
+  P(14, -2, 1, 4, "#2a2a30"); P(13, -12, 3, 10, "#e6c58f"); P(15, -12, 1, 10, "#c9a46a");
+}
+claude(6, 247, 2);
+// the ball flying off
+r(160, 236, 3, 3, "#c8261d"); r(161, 236, 1, 1, "#ffffff");
+for (let k = 1; k < 7; k++) r(160 - k * 4, 238 + k * 2, 2, 1, "rgba(255,255,255,0.45)");
+document.fonts.ready.then(() => { document.body.dataset.ready = "1"; });
+</script>
+</body></html>

@@ -23,6 +23,8 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Explainer / listicle / how-to with no footage           | `faceless-explainer`                          |
 | Longer, multi-scene or freeform video                   | `general-video`                               |
 | Presentation or pitch deck                              | `slideshow`                                   |
+| Explainer video from a GitHub pull request              | `pr-to-video`                                 |
+| Port an existing Remotion project to HyperFrames        | `remotion-to-hyperframes`                     |
 | Bringing in a Figma design                              | `figma`                                       |
 | Music, SFX, voiceover, images, logos, colour grade      | `media-use`                                   |
 | Building blocks, effects, transitions                   | `hyperframes-registry`                        |
@@ -45,7 +47,53 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Prompting a specific fal model / choosing a default one | `fal-prompting`, `model-routing`              |
 | Title and outro frames: glitch, light-leak, logo outro  | `frame-glitch-title`, `frame-light-leak-cinema`, `frame-logo-outro` |
 | Frame-sequence video (HyperFrames / Remotion style)     | `video-hyperframes`                           |
+| Edit existing footage by conversation: transcribe, cut, grade, subtitles, overlays | `video-use` |
+| Trim silence and speed up raw screen recordings (FFmpeg) | `raw-video-processing`                |
+| Cinematic shot direction for AI video (Veo3 / Kling / Luma via muapi.ai) | `muapi-cinema-director`   |
+| Retro pixel-art multi-scene video template (HyperFrames) | `8-bit-orbit-video-template`             |
+| Product photo to cinematic video ad via muapi.ai (paid, needs key) | `muapi-product-video-ad-maker`      |
+| Set up brand for motion: brand.md + MOTION.md (read first by the others) | `brand-intake`                    |
+| Turn a rough idea into a precise motion build brief     | `motion-brief-writer`                         |
+| Break down a reference video or website into a Motion prompt | `reference-to-motion`                    |
+| Full 8-part Claude Motion prompt for one short loop     | `motion-prompt-writer`                        |
+| 30-45 s product launch video in code                    | `launch-video`                                |
+| Showreel-grade product film from an app's own codebase and design system (Remotion) | `product-film`  |
+| Mac-style keynote launch film (menu bar, notch, widgets) | `apple-launch-film`                          |
+| 30-60 s Vox-style documentary explainer in code         | `vox-explainer`                               |
+| Looping animated chart; values stay exactly as given    | `animated-chart`                              |
+| Looping milestone count-up (followers, customers, revenue) | `milestone-reveal`                         |
+| 16 premium 8-second UI / data / type motion effects     | `motion-effects`                              |
+| 8-15 s cinematic 3D title sequence (Three.js)           | `title-sequence-3d`                           |
+| Same brief to three AI models, stacked comparison       | `model-showdown`                              |
+| 12-20 s promo that drives readers to a newsletter edition | `newsletter-promo`                          |
+| Newsletter cover as a seamless looping GIF              | `loop-cover`                                  |
+| Any horizontal or square video to 1080x1920 Reel / TikTok | `reel-export`                               |
+| Turn screenshots, URLs or "make it feel like this" into a DESIGN.md visual direction | `reference-design-contract` |
+| Research and profile competitors from their URLs (messaging, positioning, look) | `competitor-profiling`   |
+| Drive a browser: open pages, take screenshots, pull page content for references | `agent-browser`          |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
+
+**3D, animation code and web design:**
+
+| Need                                                    | Skill                                         |
+| ------------------------------------------------------- | --------------------------------------------- |
+| Three.js scenes: setup, geometry, materials, lighting, textures | `threejs-fundamentals`, `-geometry`, `-materials`, `-lighting`, `-textures` |
+| Three.js models, animation, input, shaders, post effects | `threejs-loaders`, `-animation`, `-interaction`, `-shaders`, `-postprocessing` |
+| GSAP (official): tweens, timelines, plugins, utils, performance | `gsap-core`, `gsap-timeline`, `gsap-plugins`, `gsap-utils`, `gsap-performance` |
+| GSAP scroll animation and framework use                 | `gsap-scrolltrigger`, `gsap-react`, `gsap-frameworks` |
+| Copy a reference site's style into a design-DNA JSON and check the rebuild | `design-dna` |
+| Timing, easing and Disney's 12 principles before writing motion code | `motion-design` |
+| Build an animation the right way: should it animate, curve, duration, exit (Emil Kowalski) | `animate`, `animate-expo` (React Native) |
+| Review, audit or find spots for motion in UI code       | `review-animations`, `improve-animations`, `find-animation-opportunities` |
+| Janky animation, name an effect, Apple-style motion     | `animation-performance`, `animation-vocabulary`, `apple-design` |
+| UI polish and stress tests                              | `emil-design-eng`, `break-ui`, `mobile-native`, `prototype`, `pick-ui-library` |
+| Library-specific: Sonner toasts, modern Swift           | `ask-sonner`, `write-swift`                   |
+| Motion and micro-interactions on an existing UI (Genjutsu) | `cast`                                     |
+| Art direction, design system and build for a new look (Genjutsu) | `paint`                             |
+| Whole website or app with parallel agents (Genjutsu; announces its cost first) | `bunshin`              |
+
+HyperFrames compositions already use GSAP, so the `gsap-*` skills apply there too; keep HyperFrames'
+own rules (one paused timeline, no `left`/`top` motion) when they differ.
 
 **Carousels and static graphics:**
 
@@ -74,6 +122,12 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `dockkit`: `dpearson2699/swift-ios-skills`
 - `fal-lip-sync`, `remotion`, `frame-*`, `video-hyperframes`: `nexu-io/open-design`
 - `video-motion-graphics`: `dylantarre/animation-principles`
+- `brand-intake`, `motion-brief-writer`, `reference-to-motion`, `motion-prompt-writer`, `launch-video`, `apple-launch-film`, `vox-explainer`, `animated-chart`, `milestone-reveal`, `motion-effects`, `title-sequence-3d`, `model-showdown`, `newsletter-promo`, `loop-cover`, `reel-export`: `charlie947/motion-graphics-skills`
+- `product-film`: `Rieranthony/product-film-skill`
+- `reference-design-contract`, `agent-browser`: `nexu-io/open-design`; `competitor-profiling`: `coreyhaines31/marketingskills`
+- `threejs-*`: `CloudAI-X/threejs-skills`; `gsap-*`: `greensock/gsap-skills`; `design-dna`: `zanwei/design-dna`;
+  `motion-design`: `LottieFiles/motion-design-skill`; `cast`, `paint`, `bunshin`: `AThevon/genjutsu`
+- `animate`, `review-animations` and the other Emil Kowalski skills: `emilkowalski/skills`
 - fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`,
   `model-routing`): `fal-ai-community/skills`
 
@@ -90,9 +144,17 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 - Node.js 22 or newer and FFmpeg.
 - Run the CLI as `npx hyperframes ...`.
 - The fal skills call the `genmedia` CLI and need a fal.ai account and API key; they spend credits, so confirm the cost before generating.
+- `video-use` transcribes with ElevenLabs Scribe: put `ELEVENLABS_API_KEY` in a `.env`, and note that footage audio is uploaded to ElevenLabs. Its Python helpers need `ffmpeg`.
 - Voiceover and generated music need a HeyGen account (`npx hyperframes auth`) or a Gemini API key.
 - The `higgsfield-*` skills need the `higgsfield` CLI and a Higgsfield account (`higgsfield auth login`);
   each generation spends Higgsfield credits.
+- `brand-intake` writes `brand.md` and `MOTION.md` into the project. The other `charlie947` motion skills read them first, so run `brand-intake` before any of them.
+- Caption timing: local speech models can't download in cloud sessions, so get word timestamps from ElevenLabs Scribe through the ElevenLabs connector (transcription spends credits), then map the approved script words onto them. `agent-browser` needs `npm i -g agent-browser`.
+- Genjutsu (`cast`, `paint`, `bunshin`) needs its modules in `.claude/skills/_jutsu/` (copied from the
+  repo's `skills/_jutsu`; `npx skills add` does not install them). Update both together. `bunshin`
+  spawns subagents and spends a lot of tokens; it states the cost and asks before starting.
+- `media-use` can now search Openverse for sound effects. Openverse items carry Creative Commons licences;
+  check each one allows commercial use (and credit it if required) before it goes in a client video.
 - Telemetry: set `HYPERFRAMES_NO_TELEMETRY=1` to turn it off.
 
 ## Repo layout

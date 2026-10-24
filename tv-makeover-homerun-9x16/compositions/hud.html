@@ -1,0 +1,238 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Press Start 2P";
+      src: url("assets/fonts/press-start-2p.woff2") format("woff2");
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      font-family: "Press Start 2P", monospace;
+      color: #ffffff;
+    }
+    .plate {
+      position: absolute;
+      left: 72px;
+      width: 936px;
+      height: 216px;
+      background: #0b0e14;
+      box-shadow: 0 0 0 6px #ffd447, 0 0 0 12px #0b0e14;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 26px;
+      text-align: center;
+    }
+    .plate-sm {
+      font-size: 44px;
+      line-height: 1;
+    }
+    .plate-lg {
+      font-size: 72px;
+      line-height: 1;
+      color: #ffd447;
+    }
+    .plate-cta {
+      font-size: 64px;
+      line-height: 1;
+      color: #ffd447;
+    }
+    .plate-sub {
+      font-size: 32px;
+      line-height: 1;
+    }
+    /* step label printed on the TV's chin (888..942) */
+    .label {
+      position: absolute;
+      left: 90px;
+      top: 896px;
+      width: 900px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      line-height: 1;
+    }
+    .label b {
+      color: #ffd447;
+      font-weight: 400;
+    }
+    /* big titles in the night sky */
+    .sky {
+      position: absolute;
+      left: 0;
+      width: 1080px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 36px;
+      text-align: center;
+      text-shadow: 6px 6px 0 #0b0e14;
+    }
+    .s-xl {
+      font-size: 104px;
+      line-height: 1;
+      color: #ffd447;
+    }
+    .s-md {
+      font-size: 44px;
+      line-height: 1;
+    }
+    .s-lg {
+      font-size: 60px;
+      line-height: 1;
+    }
+    .s-hr {
+      font-size: 120px;
+      line-height: 1.1;
+      color: #ffd447;
+    }
+    .w {
+      display: inline-block;
+    }
+    .l3 {
+      position: absolute;
+      left: 60px;
+      display: flex;
+      align-items: stretch;
+      font-family: "Inter", Arial, sans-serif;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    }
+    .l3-tag {
+      background: #d97757;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 28px;
+      padding: 18px 20px;
+    }
+    .l3-name {
+      background: #ffffff;
+      color: #111318;
+      font-weight: 900;
+      font-size: 44px;
+      padding: 10px 24px;
+      letter-spacing: 1px;
+    }
+    .l3-stat {
+      background: #111318;
+      color: #ffd447;
+      font-weight: 700;
+      font-size: 28px;
+      padding: 18px 20px;
+    }
+    .readout {
+      position: absolute;
+      font-family: "Inter", Arial, sans-serif;
+      font-weight: 900;
+      font-size: 40px;
+      color: #111318;
+      background: #ffffff;
+      padding: 12px 18px;
+      border-left: 10px solid #ff3b30;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+    }
+    .rd-k {
+      font-weight: 700;
+      font-size: 28px;
+      color: #4a4f5a;
+      margin-right: 8px;
+    }
+    .trk {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #3a3f4d;
+    }
+  </style>
+  <div id="root" data-composition-id="hud" data-width="1080" data-height="1920">
+    <!-- hook -->
+    <div id="hook" class="clip plate" data-start="0.0" data-duration="2.818" data-track-index="1" style="top: 966px">
+      <div id="hook-a" class="plate-sm">YOUR TV IS A</div>
+      <div id="hook-b" class="plate-lg">BILLBOARD?</div>
+    </div>
+
+    <!-- base tracker inside the commentator box: lights up as each base is reached -->
+    <div id="tracker" class="clip" data-start="7.0" data-duration="24.1" data-track-index="5" style="position: absolute; left: 948px; top: 214px; width: 48px; height: 48px">
+      <div id="trk-2" class="trk" style="left: 17px; top: 0px"></div>
+      <div id="trk-3" class="trk" style="left: 0px; top: 17px"></div>
+      <div id="trk-1" class="trk" style="left: 34px; top: 17px"></div>
+      <div id="trk-4" class="trk" style="left: 17px; top: 34px"></div>
+    </div>
+
+
+    <!-- broadcast graphics over the pitch: who's batting, pitch speed, exit velocity, distance -->
+    <div id="bat-l3" class="clip l3" data-start="3.136" data-duration="1.045" data-hold="broadcast lower-third, cut by the hit" data-track-index="6" style="top: 1236px">
+      <div class="l3-tag">AT BAT</div><div class="l3-name">CLAUDE</div><div class="l3-stat">.999 AVG · 4 STEPS</div>
+    </div>
+    <div id="rd-pitch" data-hold="pitch-speed flash, read with the tracer" class="clip readout" data-start="3.455" data-duration="0.273" data-track-index="7" style="left: 640px; top: 820px"><span class="rd-k">PITCH</span> 94 MPH</div>
+    <div id="rd-exit" class="clip readout" data-start="3.745" data-duration="1.164" data-track-index="7" style="left: 560px; top: 560px"><span class="rd-k">EXIT VELO</span> 112 MPH</div>
+    <div id="rd-dist" class="clip readout" data-start="4.909" data-duration="1.682" data-track-index="7" style="left: 60px; top: 380px"><span class="rd-k">HOME RUN</span> 452 FT</div>
+
+    <!-- sky titles while the ball flies and before the first base -->
+    <div id="sky-steps" class="clip sky" data-start="4.818" data-duration="1.773" data-track-index="2" style="top: 760px">
+      <div id="sky-steps-a" class="s-xl">4 STEPS</div>
+      <div id="sky-steps-b" class="s-md">MVP: CLAUDE</div>
+    </div>
+    <div id="sky-run" class="clip sky" data-start="7.045" data-duration="2.273" data-track-index="2" style="top: 470px">
+      <div id="sky-run-a" class="s-lg">STEP 4 =</div>
+      <div id="sky-run-b" class="s-xl">HOME RUN!</div>
+    </div>
+    <div id="sky-hr" class="clip sky" data-start="21.836" data-duration="0.5" data-track-index="2" style="top: 470px">
+      <div id="sky-hr-a" class="s-hr">HOME<br />RUN!</div>
+    </div>
+
+    <!-- step labels on the TV's chin -->
+    <div id="lab-1" class="clip label" data-start="9.455" data-duration="3.455" data-track-index="3"><span><b>1ST BASE:</b> NEW HOME APP</span></div>
+    <div id="lab-2" class="clip label" data-start="12.909" data-duration="4.636" data-track-index="3"><span><b>2ND BASE:</b> CLEAN TILES</span></div>
+    <div id="lab-3" class="clip label" data-start="17.545" data-duration="3.545" data-track-index="3"><span><b>3RD BASE:</b> DRONE SCREENSAVER</span></div>
+    <div id="lab-4" class="clip label" data-start="22.791" data-duration="5.391" data-track-index="3"><span><b>HOME:</b> DELETE THE JUNK</span></div>
+
+    <!-- call to action, above the cheering family -->
+    <div id="cta" class="clip plate" data-start="28.182" data-duration="2.9" data-track-index="1" style="top: 560px">
+      <div id="cta-a" class="plate-cta"><span class="w">COMMENT</span> <span class="w">"TV"</span></div>
+      <div id="cta-b" class="plate-sub">FOR THE FULL GUIDE</div>
+    </div>
+  </div>
+  <script>
+    // tweens are placed on the voiceover's own clock and played SPEED x faster
+    const SPEED = 1.1;
+    const story = gsap.timeline();
+    const tl = story;
+    const pop = (sel, at, from = 1.3) =>
+      tl.fromTo(sel, { opacity: 0, scale: from }, { opacity: 1, scale: 1, duration: 0.14, ease: "power3.out" }, at);
+
+    tl.fromTo("#hook-a, #hook-b", { opacity: 1 }, { opacity: 0, duration: 0.15, ease: "power2.in" }, 2.95);
+
+    pop("#sky-steps-a", 5.3, 1.6);
+    pop("#sky-steps-b", 6.2);
+    tl.to("#sky-steps-a, #sky-steps-b", { opacity: 0, y: -60, duration: 0.25, ease: "power3.in" }, 6.95);
+    pop("#sky-run-a", 7.75);
+    pop("#sky-run-b", 8.75, 1.6);
+    tl.to("#sky-run-a, #sky-run-b", { opacity: 0, scale: 0.6, duration: 0.18, ease: "power3.in" }, 10.05);
+    tl.fromTo("#sky-hr-a", { opacity: 0, scale: 2.2, rotation: -8 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.16, ease: "back.out(2)" }, 24.02);
+
+    [["#lab-1 span", 10.42], ["#lab-2 span", 14.25], ["#lab-3 span", 19.35], ["#lab-4 span", 25.1]].forEach(([s, at]) => pop(s, at, 1.15));
+
+    pop("#cta-a .w:nth-child(1)", 31.05, 1.4);
+    pop("#cta-a .w:nth-child(2)", 31.2, 1.6);
+    pop("#cta-b", 31.9, 1.2);
+
+    // BILLBOARD punch on the word, base tracker
+    tl.fromTo("#hook-b", { scale: 1 }, { scale: 1.18, duration: 0.08, ease: "power3.out", yoyo: true, repeat: 1 }, 2.3);
+    [["#trk-1", 10.3], ["#trk-2", 14.2], ["#trk-3", 19.3], ["#trk-4", 24.0]].forEach(([sel, at]) => {
+      tl.fromTo(sel, { backgroundColor: "#3a3f4d", scale: 1 }, { backgroundColor: "#ffd447", scale: 1.5, duration: 0.1, ease: "power3.out" }, at);
+      tl.to(sel, { scale: 1, duration: 0.2, ease: "power2.out" }, at + 0.1);
+    });
+    tl.set(".trk", { rotation: 45 }, 0);
+    tl.fromTo("#bat-l3 > div", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.18, ease: "power3.out", stagger: 0.06 }, 3.47);
+    pop("#rd-pitch", 3.8, 1.25);
+    pop("#rd-exit", 4.12, 1.4);
+    pop("#rd-dist", 5.4, 1.4);
+    story.timeScale(SPEED);
+    const film = gsap.timeline({ paused: true });
+    film.add(story, 0);
+    window.__timelines["hud"] = film;
+  </script>
+</template>
