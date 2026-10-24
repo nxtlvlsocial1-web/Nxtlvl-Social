@@ -104,3 +104,21 @@ COVER TEXT: "Why did this reel hit 85x?"
 [confident] Now I edit with reasons. [smiling] Not guesses.
 [excited] Comment CREEDOM... [warm] and I'll DM you the link to audit your own page.
 ```
+
+## Voiceover with mood tags tuned for Nota 3 (ElevenLabs v3, voice rTMkoe3NzNrEOgFeBwY2)
+
+Nota 3 is warm, soothing and quietly impressed, never hyped, so the tags stay soft: curiosity, a smile, small pauses
+before reveals. No [excited], [shocked] or [shouting]; they fight the voice's prompt.
+
+```
+[curious] One reel did eighty-five times my usual views... [pause] [softly] and I had no idea why.
+[thoughtful] Next reel? [sighs] A few thousand plays. [matter-of-fact] Instagram shows you the numbers... [softly] never the reason.
+[warmly] So I handed my page to Creedom. [smiling] Twenty seconds. Public data only.
+[curious] It read my last six posts... and scored my content. [impressed] Eighty-two out of a hundred.
+[intrigued] Then I dropped in a reel. [impressed] Its reel analyser watches the whole video... [pause] and breaks it down, second by second.
+[pleased] Four point two out of five. [whispers] And one fix I'd never have spotted... [pause] [amazed] my best hook was buried at thirty-four seconds.
+[confident] Now I edit with reasons. [smiling] Not guesses.
+[playful] Comment CREEDOM... [warmly] and I'll DM you the link to audit your own page.
+```
+
+Settings: Eleven v3 · Stability "Natural" · generate 3–4 takes and keep the one where the 0:34 reveal lands softly.
