@@ -1,4 +1,4 @@
-# Review — draft 4
+# Review — draft 5
 
 - Structure: after the hit and the "4 STEPS" sky beat, the camera locks on the runner in a side-scrolling
   tracking shot; he never stops. Bases are placed so he touches each one on its call (10.3, 14.2, 19.3,
@@ -18,3 +18,5 @@
   crowd cheers on each base, the home run and the CTA (sources in assets/audio/SOURCES.md). The 10 s
   "running crowd" clip was left out: its spectrum read as tonal (possible chanting/voices). Draft 4
   measured -15.1 LUFS, -1.2 dBTP, no clipping. Nobody has listened to the generated audio yet.
+- Draft 5: constant elegant minimal bed (job 4307111c) from 0 to 34.19 s, levelled to within a few dB
+  and looped with a crossfade; crowd and bat sounds unchanged. -15.5 LUFS, -1.3 dBTP, no silence gaps.
