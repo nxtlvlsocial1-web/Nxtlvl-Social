@@ -147,6 +147,8 @@
         skier: "assets/images/skier.jpg", robot: "assets/images/robot.jpg", hero: "assets/images/poster-hero.jpg",
         bold: "assets/images/poster-bold.jpg", heist: "assets/images/poster-heist.jpg", road: "assets/images/poster-road.jpg",
         coast: "assets/images/coast.jpg",
+        netflix: "assets/images/apps/netflix.jpg", prime: "assets/images/apps/prime.jpg",
+        youtube: "assets/images/apps/youtube.jpg", jiohotstar: "assets/images/apps/jiohotstar.jpg",
       };
       const assetsReady = Promise.all([
         ...Object.entries(IMG_SRC).map(([k, src]) => new Promise((res) => {
@@ -194,7 +196,7 @@
 
       // ===== BEFORE: cluttered stock home screen =====
       const FAVH = [
-        ["Cinema", "#ffffff", "#e50914"], ["Vista", "#1aa3e0", "#ffffff"], ["Tube", "#ffffff", "#e8463c"], ["Kids+", "#1638a8", "#ffffff"],
+        ["Netflix", "#ffffff", "#e50914"], ["Prime Video", "#2a72f0", "#ffffff"], ["YouTube", "#f4f4f4", "#e8463c"], ["JioHotstar", "#5b4ef0", "#ffffff"],
         ["Cone", "#f28a1c", "#ffffff"], ["Max", "#5b2bd6", "#ffffff"], ["Store", "#f1f3f4", "#1e8e3e"], ["+", "#3f5f8f", "#ffffff"],
       ];
       const FAVR_H = (i) => (i === 0 ? [74, 300, 124, 74] : [74 + 132 + (i - 1) * 90, 306, 82, 62]);
@@ -253,10 +255,11 @@
           if (i === 0) shadow(c, 18, 6, 0.45);
           c.fillStyle = bg; rr(c, x, y, w, h, 6); c.fill();
           noShadow(c);
-          txt(c, name, x + w / 2, y + h / 2 + (i === 0 ? 10 : 8), font(800, name === "+" ? 34 : i === 0 ? 26 : 19), fg, "center");
           c.restore();
+          appTile(c, i, x, y, w, h, 6);
+          if (i === 0) { c.strokeStyle = "#ffffff"; c.lineWidth = 3; rr(c, x - 3, y - 3, w + 6, h + 6, 8); c.stroke(); }
         });
-        txt(c, "Cinema", 136, 396, font(600, 17), "#ffffff", "center");
+        txt(c, "Netflix", 136, 396, font(600, 17), "#ffffff", "center");
         if (o.gone) return;
         c.save();
         c.translate(dx, 0);
@@ -354,73 +357,97 @@
         }
       }
 
-      // ===== AFTER: clean premium-style home screen =====
-      const POST = [["hero", "Neon Leap"], ["bold", "BOLD"], ["heist", "Heist 7"], ["road", "Long Road"]];
-      const POSTR = (i) => [70 + i * 196, 352, 180, 102];
+      // ===== AFTER: clean, minimal home screen (layout from the person's reference) =====
+      const DOCK = [["netflix", "Netflix", "robot"], ["prime", "Prime Video", "road"], ["youtube", "YouTube", "coast"], ["jiohotstar", "JioHotstar", "hero"]];
+      const DOCKR = (i) => [66 + i * 196, 352, 178, 96];
+      function appTile(c, i, x, y, w, h, rad) {
+        const key = i < 4 ? DOCK[i][0] : null;
+        c.save();
+        rr(c, x, y, w, h, rad); c.clip();
+        c.fillStyle = FAVH[i][1]; c.fillRect(x, y, w, h);
+        if (key && IMG[key]) {
+          const im = IMG[key];
+          const ix = im.width * 0.05, iy = im.height * 0.07;
+          c.drawImage(im, ix, iy, im.width - 2 * ix, im.height - 2 * iy, x, y, w, h);
+        } else {
+          txt(c, FAVH[i][0], x + w / 2, y + h / 2 + 8, font(800, FAVH[i][0] === "+" ? 34 : 19), FAVH[i][2], "center");
+        }
+        c.restore();
+      }
+      function chip(c, x, y, label, icon) {
+        c.font = font(600, 17);
+        const w = c.measureText(label).width + 62;
+        c.fillStyle = "rgba(255,255,255,0.12)"; rr(c, x - w, y, w, 40, 20); c.fill();
+        c.strokeStyle = "rgba(255,255,255,0.18)"; c.lineWidth = 1.5; rr(c, x - w, y, w, 40, 20); c.stroke();
+        const ix = x - w + 24, iy = y + 20;
+        c.fillStyle = "#ffffff"; c.strokeStyle = "#ffffff"; c.lineWidth = 2.5;
+        if (icon === 0) { rr(c, ix - 5, iy - 9, 10, 12, 2); c.fill(); c.fillRect(ix - 2, iy + 3, 4, 6); }
+        if (icon === 1) { for (const rad of [4, 9, 14]) { c.beginPath(); c.arc(ix, iy + 7, rad, Math.PI * 1.25, Math.PI * 1.75); c.stroke(); } }
+        if (icon === 2) { c.beginPath(); c.arc(ix, iy, 8, 0, Math.PI * 2); c.stroke(); c.beginPath(); c.arc(ix, iy, 3, 0, Math.PI * 2); c.fill(); }
+        txt(c, label, x - w + 44, y + 26, font(600, 17), "#ffffff");
+        return w;
+      }
       function cleanHi(c, t, o) {
-        c.fillStyle = "#1b1b1f";
+        c.fillStyle = "#0e0e11";
         c.fillRect(0, 0, HW, HH);
-        if (o.wall > 0 && IMG.robot) {
+        // minimal backdrop: the focused app's artwork, softened and darkened, crossfading with focus
+        const f = o.focus >= 0 ? o.focus : 0;
+        if (o.wall > 0) {
           c.save();
-          c.globalAlpha = 0.55 * o.wall;
-          c.filter = "blur(40px)";
-          cover(c, IMG.robot, -60, -60, HW + 120, HH + 120);
+          c.globalAlpha = o.wall;
+          c.filter = "blur(6px) saturate(1.1)";
+          cover(c, IMG[DOCK[f][2]], -20, -20, HW + 40, HH + 40);
           c.filter = "none";
           c.restore();
-          c.fillStyle = `rgba(16,16,20,${0.35 * o.wall})`;
-          c.fillRect(0, 0, HW, HH);
+          const g = c.createLinearGradient(0, 0, 0, HH);
+          g.addColorStop(0, `rgba(8,8,10,${0.55 * o.wall})`);
+          g.addColorStop(0.45, `rgba(8,8,10,${0.35 * o.wall})`);
+          g.addColorStop(1, `rgba(8,8,10,${0.92 * o.wall})`);
+          c.fillStyle = g; c.fillRect(0, 0, HW, HH);
+          const g2 = c.createLinearGradient(0, 0, HW * 0.6, 0);
+          g2.addColorStop(0, `rgba(8,8,10,${0.5 * o.wall})`); g2.addColorStop(1, "rgba(8,8,10,0)");
+          c.fillStyle = g2; c.fillRect(0, 0, HW, HH);
+        }
+        // header: greeting, clock, date, quick chips
+        if (o.tabs > 0) {
+          c.save();
+          c.globalAlpha = o.tabs;
+          c.translate(0, (1 - o.tabs) * -30);
+          c.letterSpacing = "3px";
+          txt(c, "GOOD EVENING", 62, 58, font(600, 13), "rgba(255,255,255,0.75)");
+          txt(c, "SUNDAY  18 OCTOBER", 262, 116, font(500, 16), "rgba(255,255,255,0.8)");
+          c.letterSpacing = "0px";
+          txt(c, "8:30", 58, 122, font(300, 66), "#ffffff");
+          txt(c, "PM", 196, 120, font(600, 16), "rgba(255,255,255,0.85)");
+          c.fillStyle = "rgba(255,255,255,0.3)"; c.fillRect(242, 92, 1.5, 34);
+          let x = HW - 48;
+          x -= chip(c, x, 84, "Settings", 2) + 12;
+          x -= chip(c, x, 84, "Ethernet", 1) + 12;
+          chip(c, x, 84, "Inputs", 0);
+          c.restore();
+        }
+        // the focused app's name
+        if (o.hero > 0) {
+          c.save();
+          c.globalAlpha = o.hero;
+          txt(c, DOCK[f][1], 62, 322 - (1 - o.hero) * 12, font(400, 46), "#ffffff");
+          c.restore();
+        }
+        // the dock
+        const dockA = clamp(o.post(0) * 1.5);
+        if (dockA > 0) {
+          c.save();
+          c.globalAlpha = dockA;
+          c.fillStyle = "rgba(255,255,255,0.07)"; rr(c, 50, 340, 800, 120, 26); c.fill();
+          c.strokeStyle = "rgba(255,255,255,0.1)"; c.lineWidth = 1.5; rr(c, 50, 340, 800, 120, 26); c.stroke();
+          c.restore();
         }
         if (o.peek > 0) {
-          const off = (1 - eo(o.peek)) * 60;
-          c.save(); rr(c, -40 - off, 74, 90, 226, 14); c.clip(); cover(c, IMG.coast, -40 - off, 74, 90, 226, 0.8); c.fillStyle = "rgba(0,0,0,0.35)"; c.fillRect(-40 - off, 74, 90, 226); c.restore();
-          c.save(); rr(c, 850 + off, 74, 90, 226, 14); c.clip(); cover(c, IMG.skier, 850 + off, 74, 90, 226, 0.2); c.fillStyle = "rgba(0,0,0,0.35)"; c.fillRect(850 + off, 74, 90, 226); c.restore();
-        }
-        if (o.hero > 0) {
-          const s = clamp(back(o.hero), 0, 1.12);
-          const w = 760 * s, h = 226 * s, x = HW / 2 - w / 2, y = 187 - h / 2;
-          c.save();
-          shadow(c, 30, 10, 0.5);
-          c.fillStyle = "#000"; rr(c, x, y, w, h, 16); c.fill();
-          noShadow(c);
-          rr(c, x, y, w, h, 16); c.clip();
-          cover(c, IMG.robot, x, y, w, h, 0.5, 0.45);
-          const g = c.createLinearGradient(x, 0, x + w * 0.6, 0);
-          g.addColorStop(0, "rgba(0,0,0,0.55)"); g.addColorStop(1, "rgba(0,0,0,0)");
-          c.fillStyle = g; c.fillRect(x, y, w, h);
-          c.fillStyle = "rgba(0,0,0,0.6)"; rr(c, x + 16, y + 14, 92, 26, 7); c.fill();
-          txt(c, "4K", x + 32, y + 33, font(800, 15), "#ffffff");
-          txt(c, "HDR", x + 56, y + 33, font(800, 15), "#ffb36b");
-          c.save();
-          c.translate(x + 40, y + h * 0.62);
-          c.transform(1, 0, -0.12, 1, 0, 0);
-          txt(c, "MECHA", 0, 0, font(900, 58 * s), "#3a2200");
-          txt(c, "MECHA", -3, -3, font(900, 58 * s), "#ffd447");
-          c.restore();
-          txt(c, "Now streaming", x + 42, y + h * 0.62 + 34, font(600, 18), "#ffffff");
+          const cols = ["#f06a2a", "#f4f4f4", "#5a1414"];
+          c.save(); c.globalAlpha = o.peek;
+          cols.forEach((col, i) => { c.fillStyle = col; rr(c, 66 + i * 196, 486, 178, 60, 14); c.fill(); });
           c.restore();
         }
-        if (o.tabs > 0) {
-          const y = lerp(-60, 22, o.tabs);
-          const tabs = ["Watch Now", "Movies", "TV Shows", "Sports", "Kids", "Library"];
-          c.font = font(600, 19);
-          const widths = tabs.map((s) => c.measureText(s).width);
-          const total = widths.reduce((a, b) => a + b, 0) + tabs.length * 34 + 44;
-          let x = HW / 2 - total / 2;
-          c.save();
-          c.fillStyle = "rgba(58,58,64,0.88)"; rr(c, x, y, total, 44, 22); c.fill();
-          x += 12;
-          tabs.forEach((s, i) => {
-            const w = widths[i] + 34;
-            if (s === "Movies") { c.fillStyle = "#e9e9ee"; rr(c, x, y + 5, w, 34, 17); c.fill(); }
-            txt(c, s, x + w / 2, y + 29, font(600, 19), s === "Movies" ? "#16161a" : "#ffffff", "center");
-            x += w;
-          });
-          c.strokeStyle = "#ffffff"; c.lineWidth = 2.5;
-          c.beginPath(); c.arc(x + 14, y + 20, 7, 0, Math.PI * 2); c.stroke();
-          c.beginPath(); c.moveTo(x + 19, y + 25); c.lineTo(x + 25, y + 31); c.stroke();
-          c.restore();
-        }
-        if (o.post(0) > 0) txt(c, "Top Movies", 70, 338, font(700, 21), "#e4e4ea");
         for (let i = 0; i < 8; i++) {
           const [fx, fy, fw, fh] = FAVR_H(i);
           if (i >= 4) {
@@ -433,31 +460,24 @@
             continue;
           }
           const p = o.post(i);
-          const [px0, py0, pw, ph] = POSTR(i);
-          let x = lerp(fx, px0, p), y = lerp(fy, py0, p), w = lerp(fw, pw, p), h = lerp(fh, ph, p);
-          const f = o.focus === i;
-          if (f) { const k = 1.08; x -= (w * (k - 1)) / 2; y -= (h * (k - 1)) / 2 + 6; w *= k; h *= k; }
+          const [dx, dy, dw, dh] = DOCKR(i);
+          let x = lerp(fx, dx, p), y = lerp(fy, dy, p), w = lerp(fw, dw, p), h = lerp(fh, dh, p);
+          const focused = o.focus === i;
+          if (focused) { const k = 1.07; x -= (w * (k - 1)) / 2; y -= (h * (k - 1)) / 2; w *= k; h *= k; }
           c.save();
-          if (f) shadow(c, 26, 14, 0.6);
-          c.fillStyle = "#000"; rr(c, x, y, w, h, 10); c.fill();
+          shadow(c, focused ? 28 : 10, focused ? 12 : 4, focused ? 0.65 : 0.35);
+          c.fillStyle = "#000"; rr(c, x, y, w, h, lerp(6, 16, p)); c.fill();
           noShadow(c);
-          rr(c, x, y, w, h, 10); c.clip();
-          c.fillStyle = FAVH[i][1]; c.fillRect(x, y, w, h);
-          c.globalAlpha = clamp((p - 0.3) / 0.5);
-          cover(c, IMG[POST[i][0]], x, y, w, h, 0.5, i === 2 ? 0.55 : 0.4);
-          const g = c.createLinearGradient(0, y + h * 0.45, 0, y + h);
-          g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,0.7)");
-          c.fillStyle = g; c.fillRect(x, y, w, h);
-          txt(c, POST[i][1], x + 12, y + h - 12, font(800, 17), "#ffffff");
           c.restore();
+          appTile(c, i, x, y, w, h, lerp(6, 16, p));
+          if (focused) { c.strokeStyle = "#ffffff"; c.lineWidth = 5; rr(c, x - 4, y - 4, w + 8, h + 8, 19); c.stroke(); }
           const st = o.postT(i);
           if (st >= 0 && st < 0.4) {
             const k = st / 0.4;
             c.strokeStyle = `rgba(255,255,255,${1 - k})`; c.lineWidth = 4;
-            rr(c, x - 6 * k, y - 6 * k, w + 12 * k, h + 12 * k, 12); c.stroke();
+            rr(c, x - 6 * k, y - 6 * k, w + 12 * k, h + 12 * k, 18); c.stroke();
           }
         }
-        if (o.post(3) >= 1) { c.save(); rr(c, 854, 352, 120, 102, 10); c.clip(); cover(c, IMG.coast, 854, 352, 120, 102); c.restore(); }
       }
       const FINAL_H = { wall: 1, tabs: 1, hero: 1, peek: 1, post: () => 1, postT: () => -1, favOut: 1 };
       function screensaverHi(c, t) {
@@ -720,71 +740,6 @@
         if (t >= PITCH.contact && t < PITCH.contact + 0.07) r(c, 0, 0, 180, 320, "#ffffff");
       }
 
-      // ---------- the diamond, from above ----------
-      const BASES = { H: [90, 292], B1: [150, 238], B2: [90, 184], B3: [30, 238] };
-      const RUN = [[4.7, "H"], [T.b1, "B1"], [T.b2, "B2"], [T.b3, "B3"], [T.home, "H"]];
-      function runnerPos(t) {
-        if (t < RUN[0][0]) return { x: BASES.H[0] - 6, y: BASES.H[1], flip: false, leg: -1 };
-        for (let i = 0; i < RUN.length - 1; i++) {
-          const [t0, a] = RUN[i], [t1, b] = RUN[i + 1];
-          if (t < t1) {
-            const p = prog(t, t0, t1);
-            const [x0, y0] = BASES[a], [x1, y1] = BASES[b];
-            return { x: lerp(x0, x1, p), y: lerp(y0, y1, p), flip: x1 < x0, leg: i };
-          }
-        }
-        return { x: BASES.H[0], y: BASES.H[1], flip: false, leg: 4 };
-      }
-      function ballOver(t) {
-        // the home run leaving the park, drawn as a tracer from home plate over the left-field stands
-        if (t < PITCH.out || t >= 6.6) return null;
-        const p = eo(prog(t, PITCH.out, 6.4));
-        const q = 1 - p;
-        return [q * q * 90 + 2 * q * p * 70 + p * p * 22, q * q * 292 + 2 * q * p * 40 + p * p * -20];
-      }
-      function drawField(c, t) {
-        // stands
-        r(c, 0, 0, 180, 52, "#0f1530");
-        crowd(c, 4, 46, t, 9, cheer(t) > 0);
-        lightTower(c, 2, 12, 40); lightTower(c, 170, 12, 40);
-        r(c, 0, 46, 180, 4, "#1f5e3a"); r(c, 0, 46, 180, 1, "#ffd447");
-        r(c, 0, 50, 180, 6, "#a8693a");
-        // grass with diagonal mow pattern
-        for (let y = 56; y < 320; y += 2)
-          for (let x = 0; x < 180; x += 2) {
-            const band = (Math.floor((x + y) / 14) + Math.floor((x - y + 400) / 14)) % 2;
-            r(c, x, y, 2, 2, band ? "#2f8f3a" : "#38a145");
-          }
-        // infield dirt, infield grass, mound, home circle
-        for (let y = 170; y < 310; y++)
-          for (let x = 10; x < 170; x++) {
-            const dOut = Math.abs(x - 90) / 74 + Math.abs(y - 238) / 60;
-            const dIn = Math.abs(x - 90) / 50 + Math.abs(y - 238) / 40;
-            if (dOut <= 1 && dIn > 1) px(c, x, y, "#c07d45");
-          }
-        ellipse(c, 90, 292, 12, 9, "#c07d45");
-        ellipse(c, 90, 239, 6, 4, "#d08b52");
-        r(c, 88, 239, 4, 1, "#f4f4f4");
-        // chalk base paths and foul lines
-        pixLine(c, 90, 292, 150, 238, "#f4f4f4");
-        pixLine(c, 150, 238, 90, 184, "#f4f4f4");
-        pixLine(c, 90, 184, 30, 238, "#f4f4f4");
-        pixLine(c, 30, 238, 90, 292, "#f4f4f4");
-        pixLine(c, 150, 238, 180, 211, "#f4f4f4");
-        pixLine(c, 30, 238, 0, 211, "#f4f4f4");
-        // bases; the one just reached flashes yellow
-        for (const [k, tt] of [["B1", T.b1], ["B2", T.b2], ["B3", T.b3]]) {
-          const [bx, by] = BASES[k];
-          const lit = t >= tt && t < tt + 0.6 && Math.floor((t - tt) * 10) % 2 === 0;
-          const col = lit ? "#ffd447" : "#ffffff";
-          r(c, bx - 1, by - 3, 3, 1, col); r(c, bx - 2, by - 2, 5, 3, col); r(c, bx - 1, by + 1, 3, 1, col);
-        }
-        const hlit = t >= T.home && t < T.home + 0.6 && Math.floor((t - T.home) * 10) % 2 === 0;
-        const hc = hlit ? "#ffd447" : "#ffffff";
-        r(c, 87, 289, 7, 3, hc); r(c, 88, 292, 5, 1, hc); r(c, 89, 293, 3, 1, hc);
-        // batter's boxes
-        r(c, 78, 286, 1, 10, "#e9e0d0"); r(c, 101, 286, 1, 10, "#e9e0d0");
-      }
       const FIREWORKS = [[24.05, 30, 20], [24.3, 150, 16], [24.55, 90, 10], [24.75, 50, 30]];
       function fireworks(c, t) {
         FIREWORKS.forEach(([t0, x0, y0], k) => {
@@ -800,46 +755,202 @@
           }
         });
       }
+      // ---------- the run, at ground level: the camera runs backwards just ahead of Claude ----------
+      // field in feet: home (0,0), 1st (90,0), 2nd (90,90), 3rd (0,90)
+      const BASES = { H: [0, 0], B1: [90, 0], B2: [90, 90], B3: [0, 90] };
+      const RUN = [[4.7, "H"], [T.b1, "B1"], [T.b2, "B2"], [T.b3, "B3"], [T.home, "H"]];
+      const TOUCH = [T.b1, T.b2, T.b3, T.home];
+      function legDir(i) {
+        const a = BASES[RUN[Math.max(0, Math.min(3, i))][1]], b = BASES[RUN[Math.max(0, Math.min(3, i)) + 1][1]];
+        const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy);
+        return [dx / l, dy / l];
+      }
+      function runnerPos(t) {
+        if (t < RUN[0][0]) return { x: 0, y: 0, leg: 0 };
+        for (let i = 0; i < RUN.length - 1; i++) {
+          const [t0, a] = RUN[i], [t1, b] = RUN[i + 1];
+          if (t < t1) {
+            const p = prog(t, t0, t1);
+            return { x: lerp(BASES[a][0], BASES[b][0], p), y: lerp(BASES[a][1], BASES[b][1], p), leg: i };
+          }
+        }
+        // overrun past home after the slide, settling
+        const d = legDir(3), u = eo(prog(t, T.home, T.home + 0.4)) * 2;
+        return { x: d[0] * u, y: d[1] * u, leg: 3 };
+      }
+      // the direction Claude is heading, turning smoothly around each bag
+      function headingDir(t) {
+        let d = legDir(0);
+        for (let i = 0; i < 3; i++) {
+          const tt = TOUCH[i];
+          if (t >= tt - 0.35) {
+            const k = eio(prog(t, tt - 0.35, tt + 0.35));
+            const a = legDir(i), b = legDir(i + 1);
+            const x = lerp(a[0], b[0], k), y = lerp(a[1], b[1], k), l = Math.hypot(x, y) || 1;
+            d = [x / l, y / l];
+          }
+        }
+        return d;
+      }
+      const GCAM = { h: 5.2, f: 112, yh: 168, dist: 12 };
+      function camAt(t) {
+        const s = runnerPos(t), d = headingDir(t);
+        const fwd = [-d[0], -d[1]];
+        return { x: s.x + d[0] * GCAM.dist, y: s.y + d[1] * GCAM.dist, fwd, right: [-fwd[1], fwd[0]], ang: Math.atan2(fwd[1], fwd[0]) };
+      }
+      function project(cm, wx, wy) {
+        const rx = wx - cm.x, ry = wy - cm.y;
+        const z = rx * cm.fwd[0] + ry * cm.fwd[1];
+        const xr = rx * cm.right[0] + ry * cm.right[1];
+        if (z <= 0.5) return null;
+        return { x: 90 + (xr * GCAM.f) / z, y: GCAM.yh + (GCAM.h * GCAM.f) / z, s: GCAM.f / z };
+      }
+      const GR = { grassA: [47, 143, 58], grassB: [56, 161, 69], dirt: [192, 125, 69], dirtD: [168, 105, 58], chalk: [244, 244, 244], base: [255, 255, 255], lit: [255, 212, 71], wall: [31, 94, 58], track: [150, 98, 56] };
+      let groundImg = null;
+      function groundColor(wx, wy, t, z) {
+        const d = Math.hypot(wx, wy);
+        if (d > 330) return GR.wall;
+        if (d > 318) return GR.track;
+        for (const [k, tt] of [["B1", T.b1], ["B2", T.b2], ["B3", T.b3], ["H", T.home]]) {
+          const [bx, by] = BASES[k];
+          if (Math.abs(wx - bx) < 1.6 && Math.abs(wy - by) < 1.6) return t >= tt && t < tt + 0.6 && Math.floor((t - tt) * 10) % 2 === 0 ? GR.lit : GR.base;
+        }
+        if ((Math.abs(wy) < 0.45 && wx > 0) || (Math.abs(wx) < 0.45 && wy > 0)) return GR.chalk;
+        const inSq = wx > -6 && wx < 96 && wy > -6 && wy < 96;
+        const inGrass = wx > 7 && wx < 83 && wy > 7 && wy < 83;
+        const nearBase = Math.hypot(wx, wy) < 13 || Math.hypot(wx - 90, wy) < 11 || Math.hypot(wx - 90, wy - 90) < 11 || Math.hypot(wx, wy - 90) < 11;
+        const mound = Math.hypot(wx - 45, wy - 45) < 8;
+        if ((inSq && !inGrass) || nearBase || mound) return ((Math.floor(wx * 1.3) * 7919 + Math.floor(wy * 1.3) * 104729) % 23 === 0) ? GR.dirtD : GR.dirt;
+        return (Math.floor(wx / 12) + Math.floor(wy / 12)) % 2 ? GR.grassA : GR.grassB;
+      }
+      function drawGround(c, t, cm) {
+        const y0 = GCAM.yh + 1, hgt = H - y0;
+        if (!groundImg) groundImg = c.createImageData(W, hgt);
+        const d = groundImg.data;
+        for (let sy = 0; sy < hgt; sy++) {
+          const z = (GCAM.h * GCAM.f) / (sy + 1);
+          const fog = clamp((z - 60) / 200);
+          for (let sx = 0; sx < W; sx++) {
+            const xr = ((sx - 90) * z) / GCAM.f;
+            const wx = cm.x + cm.fwd[0] * z + cm.right[0] * xr, wy = cm.y + cm.fwd[1] * z + cm.right[1] * xr;
+            const col = groundColor(wx, wy, t, z);
+            const i = (sy * W + sx) * 4;
+            d[i] = col[0] + (22 - col[0]) * fog * 0.6;
+            d[i + 1] = col[1] + (60 - col[1]) * fog * 0.6;
+            d[i + 2] = col[2] + (40 - col[2]) * fog * 0.6;
+            d[i + 3] = 255;
+          }
+        }
+        c.putImageData(groundImg, 0, y0);
+      }
+      function drawBackdrop(c, t, cm) {
+        // night sky and the stands all the way round, panning as the camera turns
+        ditherBand(c, 0, 180, 0, 90, "#0d1633", "#1b2a55");
+        ditherBand(c, 0, 180, 90, GCAM.yh - 30, "#1b2a55", "#263a6b");
+        const pan = (cm.ang / (Math.PI * 2)) * 720;
+        const g = rng(21);
+        for (let k = 0; k < 50; k++) {
+          const sx = ((Math.floor(g() * 720) - pan) % 720 + 720) % 720, sy = Math.floor(g() * 120);
+          if (sx < 180 && (k + Math.floor(t * 3)) % 7) px(c, sx, sy, "#c9d6ff");
+        }
+        const top = GCAM.yh - 28, ch = cheer(t) > 0;
+        r(c, 0, top - 4, 180, 32, "#0f1530");
+        for (let y = top; y < GCAM.yh - 3; y += 3)
+          for (let x = 0; x < 180; x += 3) {
+            const wxp = Math.floor(((x + pan) % 720 + 720) % 720 / 3);
+            const col = ["#c94f4f", "#4f7fc9", "#e0c060", "#f4f4f4", "#5aa36a", "#d97757"][(wxp * 7 + y * 13) % 6];
+            r(c, x, y - (ch && (wxp + Math.floor(t * 10)) % 2 ? 1 : 0), 2, 2, col);
+          }
+        for (let k = 0; k < 4; k++) {
+          const lx = ((k * 180 + 60 - pan) % 720 + 720) % 720;
+          if (lx < 190) lightTower(c, lx - 4, top - 34, top);
+        }
+        r(c, 0, GCAM.yh - 3, 180, 4, "#1f5e3a");
+        r(c, 0, GCAM.yh - 3, 180, 1, "#ffd447");
+      }
+      // Claude from the front, running at the camera (pixel grid 16 x 18)
+      function drawClaudeFront(c, ox, oy, t, pose, sc) {
+        const P = (x, y, w, h, col) => r(c, ox + x * sc, oy + y * sc, w * sc, h * sc, col);
+        if (pose === "slide") {
+          P(1, 10, 14, 6, CL.body); P(1, 15, 14, 1, CL.shade); P(2, 10, 4, 1, CL.hi);
+          P(5, 12, 1, 2, CL.eye); P(10, 12, 1, 2, CL.eye);
+          P(2, 7, 12, 3, CL.helmet); P(3, 9, 10, 1, "#16285a");
+          P(3, 16, 4, 2, CL.foot); P(9, 16, 4, 2, CL.foot);
+          return;
+        }
+        let bob = 0, la = 0, lb = 0, aL = 0, aR = 0;
+        if (pose === "run") {
+          const ph = t * Math.PI * 2 * 2.6;
+          bob = Math.round(Math.abs(Math.sin(ph)));
+          la = Math.sin(ph) > 0 ? 2 : 0; lb = Math.sin(ph) > 0 ? 0 : 2;
+          aL = Math.round(2 * Math.sin(ph)); aR = -aL;
+        }
+        const y0 = -bob;
+        // legs, one lifted at a time
+        P(5, 15 + y0 - la, 2, 2 + la, CL.body); P(4, 17 + y0 - la, 4, 1, CL.foot);
+        P(9, 15 + y0 - lb, 2, 2 + lb, CL.body); P(8, 17 + y0 - lb, 4, 1, CL.foot);
+        // arms
+        if (pose === "cheer") { P(0, 2 + y0, 2, 7, CL.body); P(14, 2 + y0, 2, 7, CL.body); }
+        else { P(0, 9 + y0 + aL, 2, 3, CL.shade); P(14, 9 + y0 + aR, 2, 3, CL.shade); }
+        // body
+        P(2, 5 + y0, 12, 10, CL.body);
+        P(2, 14 + y0, 12, 1, CL.shade);
+        P(3, 6 + y0, 1, 4, CL.hi);
+        P(5, 8 + y0, 1, 2, CL.eye);
+        P(10, 8 + y0, 1, 2, CL.eye);
+        // helmet with the visor towards us
+        P(4, 1 + y0, 8, 1, CL.helmet);
+        P(3, 2 + y0, 10, 3, CL.helmet);
+        P(5, 2 + y0, 3, 1, CL.helmetHi);
+        P(3, 5 + y0, 10, 1, "#16285a");
+        P(2, 4 + y0, 1, 3, CL.helmet); P(13, 4 + y0, 1, 3, CL.helmet);
+        if (pose === "bat") { pixLine(c, ox + 14 * sc, oy + (11 + y0) * sc, ox + 17 * sc, oy - 6 * sc, "#c58b4a", sc); P(13, 10 + y0, 3, 2, CL.body); }
+      }
+      // where Claude stands on screen in the ground view
+      const RUNNER_SCREEN = { x: 90, y: GCAM.yh + (GCAM.h * GCAM.f) / GCAM.dist };
       function drawRunScene(t) {
         const c = Wd;
-        drawField(c, t);
+        const cm = camAt(t);
+        drawBackdrop(c, t, cm);
         fireworks(c, t);
-        // dropped bat
-        if (t >= 4.7) pixLine(c, 76, 300, 92, 303, "#c58b4a", 2);
-        const s = runnerPos(t);
+        drawGround(c, t, cm);
+        // dropped bat lying by home plate
+        if (t >= 4.7) {
+          const a = project(cm, -3, 2), b = project(cm, -3, 7);
+          if (a && b) pixLine(c, a.x, a.y, b.x, b.y, "#c58b4a", Math.max(1, Math.round(a.s / 4)));
+        }
         let pose = "run";
         if (t < 4.7) pose = "bat";
         else if (t >= T.slide && t < 24.3) pose = "slide";
         else if (t >= 24.3) pose = "cheer";
-        // dust behind his feet and the slide cloud
+        const fx = RUNNER_SCREEN.x, fy = RUNNER_SCREEN.y;
+        // kicked-up dust behind him
         if (pose === "run") {
-          for (let k = 0; k < 4; k++) {
-            const age = ((t * 10) % 1) + k * 0.35;
-            const dir = s.flip ? 1 : -1;
-            r(c, s.x + dir * (12 + age * 14), s.y - 1 - age * 4, 3, 3, "rgba(233,195,155,0.85)");
+          for (let k = 0; k < 6; k++) {
+            const age = ((t * 9 + k * 0.37) % 1);
+            const side = k % 2 ? 1 : -1;
+            r(c, fx + side * (8 + age * 14), fy - 2 - age * 10, 3, 3, `rgba(233,195,155,${0.9 - age * 0.7})`);
           }
         }
         if (t >= T.slide && t < 25.0) {
           const g = rng(77), dt = t - T.slide;
-          for (let i = 0; i < 26; i++) {
-            const a = Math.PI + (g() - 0.5) * 2.6, sp = 10 + g() * 22;
+          for (let i = 0; i < 30; i++) {
+            const a = -Math.PI * g(), sp = 10 + g() * 26;
             if (dt > 0.8 && i % 2) continue;
-            r(c, s.x + 4 + Math.cos(a) * sp * eo(dt), s.y - 2 + Math.sin(a) * sp * 0.5 * eo(dt), 2, 2, i % 3 ? "#d8a070" : "#e9c39b");
+            r(c, fx + Math.cos(a) * sp * eo(dt), fy - 2 + Math.sin(a) * sp * 0.6 * eo(dt), 3, 3, i % 3 ? "#d8a070" : "#e9c39b");
           }
         }
-        drawClaude(c, Math.round(s.x - 16), Math.round(s.y - 34), t, pose, s.flip, 2);
-        if (pose === "bat") pixLine(c, s.x + 12, s.y - 16, s.x + 2, s.y - 38, "#c58b4a", 2);
-        // touch bursts
-        for (const [k, tt] of [["B1", T.b1], ["B2", T.b2], ["B3", T.b3], ["H", T.home]]) {
+        drawClaudeFront(c, Math.round(fx - 24), Math.round(fy - 54), t, pose, 3);
+        // touch burst around his feet
+        for (const tt of TOUCH) {
           const dt = t - tt;
           if (dt < 0 || dt > 0.5) continue;
-          const [bx, by] = BASES[k];
-          ring(c, bx, by, 4 + dt * 60, 2 + dt * 30, "#ffffff");
-          ring(c, bx, by, 2 + dt * 40, 1 + dt * 20, "#ffd447");
+          ring(c, fx, fy, 6 + dt * 70, 2 + dt * 18, "#ffffff");
+          ring(c, fx, fy, 3 + dt * 50, 1 + dt * 12, "#ffd447");
           const g = rng(60 + Math.round(tt));
-          for (let i = 0; i < 10; i++) {
-            const a = g() * Math.PI * 2, sp = 14 + g() * 20;
-            star4(c, bx + Math.cos(a) * sp * eo(dt / 0.5), by + Math.sin(a) * sp * eo(dt / 0.5) * 0.7, dt < 0.3 ? 2 : 1, i % 2 ? "#ffd447" : "#ffffff");
+          for (let i = 0; i < 12; i++) {
+            const a = -Math.PI * g(), sp = 16 + g() * 26;
+            star4(c, fx + Math.cos(a) * sp * eo(dt / 0.5), fy - 4 + Math.sin(a) * sp * eo(dt / 0.5), dt < 0.3 ? 2 : 1, i % 2 ? "#ffd447" : "#ffffff");
           }
         }
       }
@@ -1078,7 +1189,7 @@
           const s = lerp(1, 2.4, p), cx = 90, cy = 106;
           F.save(); F.translate(cx, cy); F.scale(s, s); F.translate(-cx, -cy); F.drawImage(roomC, 0, 0); F.restore();
           const sr = [lerp(TV[0], 0, p), lerp(TV[1], 0, p), lerp(TV[2], 180, p), lerp(TV[3], 320, p)];
-          const cy0 = into ? 160 : 200;
+          const cy0 = into ? 160 : 130;
           const cr = [0, lerp(cy0, 0, p), 180, lerp(101, 320, p)];
           r(F, sr[0] - 5, sr[1] - 5, sr[2] + 10, sr[3] + 10, "#17171b");
           F.drawImage(worldC, cr[0], cr[1], cr[2], cr[3], sr[0], sr[1], sr[2], sr[3]);
@@ -1088,12 +1199,8 @@
           // the camera follows Claude around the diamond, with a punch-in on every base
           let z = 1, fx = 90, fy = 238, dx = 0, dy = 0;
           if (t >= PITCH.out) {
-            const s = runnerPos(t);
-            fx = s.x; fy = s.y - 16;
-            const ease = eo(prog(t, PITCH.out, PITCH.out + 0.6));
-            z = 1 + 0.18 * ease;
-            dx = (90 - fx) * 0.45 * ease; dy = (246 - fy) * 0.35 * ease;
-            for (const tt of [T.b1, T.b2, T.b3, T.home]) if (t >= tt && t < tt + 0.45) z += 0.1 * (1 - eo((t - tt) / 0.45));
+            fx = RUNNER_SCREEN.x; fy = RUNNER_SCREEN.y - 27;
+            for (const tt of TOUCH) if (t >= tt && t < tt + 0.45) z += 0.1 * (1 - eo((t - tt) / 0.45));
           }
           cam(worldC, z, fx, fy, dx, dy, null);
           camT = { z, fx, fy, dx, dy };
@@ -1137,11 +1244,6 @@
             out.strokeRect(104 * S, 206 * S, 24 * S, 34 * S);
             out.restore();
           }
-        }
-        if (t >= PITCH.out && t < 6.6) {
-          const pts = [];
-          for (let k = PITCH.out; k <= t; k += 0.02) { const b = ballOver(k); if (b) pts.push([camT.fx + camT.dx + (b[0] - camT.fx) * camT.z, camT.fy + camT.dy + (b[1] - camT.fy) * camT.z]); }
-          tracer(pts, "#ffcc00");
         }
       }
 

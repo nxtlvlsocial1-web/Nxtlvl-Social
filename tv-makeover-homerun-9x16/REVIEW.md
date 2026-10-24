@@ -1,4 +1,4 @@
-# Review — draft 6
+# Review — draft 7
 
 - Structure: after the hit and the "4 STEPS" sky beat, the camera locks on the runner in a side-scrolling
   tracking shot; he never stops. Bases are placed so he touches each one on its call (10.3, 14.2, 19.3,
@@ -25,3 +25,8 @@
   and shakes, constant push-in, BILLBOARD punch. Base tracker in the commentator box. Punch zooms on base
   touches, push into the TV during the clean-up. Faster runner. Upbeat sports/tech bed (job 77913ff9)
   started past its soft intro. -16.2 LUFS, -1.8 dBTP, no clipping, no silence. Not listened to.
+- Draft 7: a pixel Claude character bats; broadcast ball tracer from the pitcher's release through the hit,
+  with AT BAT lower-third and pitch / exit-velocity / distance readouts. The run is a ground-level camera
+  leading Claude (pseudo-3D field) that swings round each base. TV screens are realistic full-resolution
+  UIs composited over the pixel world: a cluttered stock home and the person's reference home (greeting,
+  clock, chips, app dock with real app tiles, focused-app artwork backdrop). -16.2 LUFS, -1.8 dBTP.
