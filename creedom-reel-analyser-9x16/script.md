@@ -1,7 +1,7 @@
 # Creedom Reel Analyser: script v1 (modern story arc)
 
 TITLE / ANGLE: "My reel did 85x my usual. I had no idea why." Creedom's reel analyser finds the reason, second by second.
-LENGTH: ~38s · LANGUAGE: English · FORMAT: faceless motion graphics, AI or recorded voiceover · CTA KEYWORD: CREE
+LENGTH: ~38s · LANGUAGE: English · FORMAT: faceless motion graphics, AI or recorded voiceover · CTA KEYWORD: CREEDOM
 
 Arc: Hook (the mystery) → Stakes (the relatable pain) → Turn (meet Cree) → Journey (the audit, then the reel analysis)
 → Twist (the fix I'd never have spotted) → Resolution (what changes) → CTA.
@@ -17,7 +17,7 @@ Arc: Hook (the mystery) → Stakes (the relatable pain) → Turn (meet Cree) →
 | JOURNEY 2 | 19–26s | Then I dropped in a reel. Its reel analyser watches the whole video... and breaks it down second by second. |
 | TWIST | 26–32s | 4.2 out of 5, and one fix I'd never have spotted: my best hook was buried at 0:34. |
 | RESOLUTION | 32–35s | Now I edit with reasons, not guesses. |
-| CTA | 35–38s | Comment CREE and I'll DM you the link to audit your own page. |
+| CTA | 35–38s | Comment CREEDOM and I'll DM you the link to audit your own page. |
 
 Spoken words: ~95.
 
@@ -30,7 +30,7 @@ It read my last six posts... and scored my content. Eighty-two out of a hundred.
 Then I dropped in a reel. Its reel analyser watches the whole video... and breaks it down, second by second.
 Four point two out of five. And one fix I'd never have spotted... my best hook was buried at thirty-four seconds.
 Now I edit with reasons. Not guesses.
-Comment CREE... and I'll DM you the link to audit your own page.
+Comment CREEDOM... and I'll DM you the link to audit your own page.
 
 ## Alt hooks
 
@@ -55,7 +55,7 @@ Comment CREE... and I'll DM you the link to audit your own page.
 | 26–29s | Score card **4.2/5 · Very good**, green bar fills | 4.2/5 |
 | 29–32s | Timeline zooms to **0:34**, the Congress-tracker segment glows and slides up to 0:00 | Best hook: buried at 0:34 |
 | 32–35s | Before/after: the hook moves to the front, Cree waves | Reasons > guesses |
-| 35–38s | Big keyword card, Cree pointing at it, comment-box mockup | Comment **CREE** |
+| 35–38s | Big keyword card, Cree pointing at it, comment-box mockup | Comment **CREEDOM** |
 
 Style: Creedom's own look from the app. Off-white #F6F5F2 background, near-black cards, pink accent (#E85D8A-ish,
 to be colour-picked from the app), serif headings (score numerals and "Give me 20 seconds."), clean sans body,
@@ -64,7 +64,7 @@ the 3D Cree mascot as the guide character.
 ## Caption
 
 One reel did 85x my usual views and I couldn't tell you why. 👀
-Comment CREE and I'll DM you the link to audit your own page.
+Comment CREEDOM and I'll DM you the link to audit your own page.
 
 What Creedom's reel analyser gave me:
 → a content score for my whole page (82/100)
