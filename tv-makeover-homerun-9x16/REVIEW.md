@@ -1,4 +1,4 @@
-# Review — draft 3
+# Review — draft 4
 
 - Structure: after the hit and the "4 STEPS" sky beat, the camera locks on the runner in a side-scrolling
   tracking shot; he never stops. Bases are placed so he touches each one on its call (10.3, 14.2, 19.3,
@@ -14,3 +14,7 @@
 - Draft 3: the TV screens are now pixel versions of the two references the person supplied (a cluttered
   stock Android TV home and a premium tab/hero/poster home). Real app logos and film posters were replaced
   with original pixel art and generic names (PEAK+, ORBIT, MECHA, HERO, BOLD, HEIST, ROAD).
+- Draft 4: chiptune replaced by a Higgsfield-generated instrumental stadium-rock bed; bat crack on "OUT";
+  crowd cheers on each base, the home run and the CTA (sources in assets/audio/SOURCES.md). The 10 s
+  "running crowd" clip was left out: its spectrum read as tonal (possible chanting/voices). Draft 4
+  measured -15.1 LUFS, -1.2 dBTP, no clipping. Nobody has listened to the generated audio yet.
