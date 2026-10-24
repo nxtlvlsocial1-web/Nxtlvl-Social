@@ -157,108 +157,114 @@
         }
         glyph(c, kind, x + Math.floor(w / 2), y + Math.floor(h / 2), "#ffffff");
       }
-      function topBar(c, t, clean) {
-        r(c, 0, 0, 150, 9, clean ? "rgba(0,0,0,0.35)" : "#111317");
-        r(c, 3, 2, 4, 4, "#ffffff");
-        const tabs = ["HOME", "MOVIES", "APPS"];
-        let x = 12;
-        tabs.forEach((s, i) => {
-          tiny(c, s, x, 2, i === 0 ? "#ffffff" : "#8a8f99");
-          if (i === 0) r(c, x, 8, tinyW(s), 1, "#ffd447");
-          x += tinyW(s) + 6;
-        });
-        tiny(c, "20:30", 150 - tinyW("20:30") - 3, 2, "#ffffff");
+      // ---------- shared UI bits ----------
+      function tiny2(c, str, x, y, col) {
+        for (let k = 0; k < str.length; k++) {
+          const g = G[str[k]] || G[" "];
+          for (let j = 0; j < 5; j++) for (let i = 0; i < 3; i++) if (g[j][i] === "#") r(c, x + k * 8 + i * 2, y + j * 2, 2, 2, col);
+        }
       }
-      // sunset wallpaper
-      function wallpaper(c, a, x0 = 0, x1 = 150) {
-        if (a <= 0) return;
-        c.save();
-        c.globalAlpha = a;
+      function roundRect(c, x, y, w, h, col) {
+        x = Math.round(x); y = Math.round(y); w = Math.round(w); h = Math.round(h);
+        for (let j = 0; j < h; j++) {
+          const inset = j === 0 || j === h - 1 ? 2 : j === 1 || j === h - 2 ? 1 : 0;
+          r(c, x + inset, y + j, w - 2 * inset, 1, col);
+        }
+      }
+      function clipRound(c, x, y, w, h) {
+        x = Math.round(x); y = Math.round(y); w = Math.round(w); h = Math.round(h);
         c.beginPath();
-        c.rect(x0, 0, x1 - x0, 84);
+        c.rect(x + 2, y, w - 4, 1); c.rect(x + 1, y + 1, w - 2, 1);
+        c.rect(x, y + 2, w, h - 4);
+        c.rect(x + 1, y + h - 2, w - 2, 1); c.rect(x + 2, y + h - 1, w - 4, 1);
         c.clip();
-        ditherBand(c, 0, 150, 0, 22, "#ffcf8a", "#f6a65e");
-        ditherBand(c, 0, 150, 22, 42, "#f6a65e", "#e9705c");
-        ellipse(c, 112, 44, 11, 11, "#ffe9a8");
-        ditherBand(c, 0, 150, 46, 64, "#3d7ea6", "#245678");
-        r(c, 0, 64, 150, 20, "#1d4664");
-        for (let x = 0; x < 150; x++) {
-          const h = 8 + Math.round(5 * Math.sin(x * 0.08) + 3 * Math.sin(x * 0.21));
-          r(c, x, 46 - h, 1, h, "#4b3b47");
-        }
-        for (let k = 0; k < 8; k++) r(c, 98 + k * 3, 50 + k * 2, 8 - (k % 3) * 2, 1, "#ffe9a8");
-        c.restore();
       }
-      // featured card: night skyline art
-      function heroCard(c, t, p) {
-        if (p <= 0) return;
-        const x = Math.round(lerp(160, 5, back(p))), y = 12, w = 140, h = 31;
-        r(c, x - 1, y - 1, w + 2, h + 2, "#ffffff");
-        ditherBand(c, x, x + w, y, y + h, "#20184a", "#3b2a6b");
-        ellipse(c, x + 112, y + 9, 5, 5, "#fff3c4");
-        const g = rng(91);
-        for (let i = 0; i < 18; i++) {
-          const bw = 5 + Math.floor(g() * 6), bh = 8 + Math.floor(g() * 16), bx = x + i * 8;
-          if (bx + bw > x + w) break;
-          r(c, bx, y + h - bh, bw, bh, "#120d2b");
-          for (let k = 0; k < 4; k++) if (g() > 0.4) px(c, bx + 1 + Math.floor(g() * (bw - 2)), y + h - bh + 2 + Math.floor(g() * (bh - 3)), "#ffd447");
-        }
-        r(c, x + 4, y + 4, 36, 9, "rgba(0,0,0,0.55)");
-        tiny(c, "FEATURED", x + 6, y + 6, "#ffd447");
-        r(c, x + 4, y + h - 10, 21, 7, "#ffffff");
-        tiny(c, "PLAY", x + 6, y + h - 9, "#111317");
-      }
-      const MESSY = (() => {
-        const g = rng(7);
-        return APPS.map((_, i) => ({
-          x: 6 + i * 17 + g() * 6, y: 72 + g() * 2, w: 9 + Math.floor(g() * 4), h: 8 + Math.floor(g() * 3),
-          ux: 10 + g() * 120, uy: 14 + g() * 50,
-        }));
-      })();
-      const GRID = (i) => [5 + (i % 4) * 36, 47 + Math.floor(i / 4) * 19, 32, 15];
-      // ad chaos
-      function adsLayer(c, t, shake) {
-        const blink = Math.floor(t * 4) % 2;
-        const dx = shake ? Math.round((rng(Math.floor(t * 30))() - 0.5) * 4) : 0;
-        r(c, 4 + dx, 11, 142, 24, blink ? "#e8463c" : "#ffcc33");
-        for (let k = 0; k < 8; k++) {
-          const a = (k / 8) * Math.PI * 2 + t * 3;
-          pixLine(c, 22 + dx, 23, 22 + dx + Math.cos(a) * 8, 23 + Math.sin(a) * 8, blink ? "#ffcc33" : "#e8463c");
-        }
-        tiny(c, "MEGA SALE 70%", 40 + dx, 15, blink ? "#ffffff" : "#e8463c");
-        tiny(c, "BUY NOW!!", 52 + dx, 24, blink ? "#ffd447" : "#1b1b1f");
-        r(c, 131 + dx, 12, 13, 7, "#1b1b1f");
-        tiny(c, "AD", 134 + dx, 13, "#ffd447");
-        const cols = ["#ff7a00", "#e8463c", "#ff3d8b", "#ffcc33"];
-        for (let row = 0; row < 2; row++)
-          for (let i = 0; i < 4; i++) {
-            const on = (i + row + Math.floor(t * 3)) % 2;
-            const x = 4 + i * 36 + dx, y = 38 + row * 16;
-            r(c, x, y, 34, 14, on ? cols[i] : cols[(i + 2) % 4]);
-            tiny(c, row ? "BUY" : "AD", x + 3, y + 5, "#ffffff");
-            if (row === 0) tiny(c, "%", x + 26, y + 5, "#ffffff");
+
+      // ===== BEFORE: the cluttered stock home screen, pixelated =====
+      const FAV = [
+        ["#f4f4f4", "play", "#e8463c"], ["#22a6d9", "film", "#ffffff"], ["#eeeeee", "note", "#e8463c"], ["#1d3fb0", "star", "#ffffff"],
+        ["#f08a1c", "cam", "#ffffff"], ["#6a2bd6", "heart", "#ffffff"], ["#e9e9e9", "ball", "#3cb371"], ["#3b5b8f", "game", "#ffffff"],
+      ];
+      const FAVR = (i) => (i === 0 ? [7, 47, 18, 12] : [9 + i * 17, 48, 15, 10]);
+      const SPONSORED = [["#1f6fe0", "PEAK+", "#ffffff"], ["#16161f", "ORBIT", "#ffffff"], ["#2a2d5a", "FREE TV", "#ff4d6d"], ["#f07a1c", "ANIME", "#ffffff"]];
+      function heroSkier(c, t) {
+        // diagonal snow streaks fading into the dark left side
+        for (let y = 10; y < 60; y++)
+          for (let x = 52; x < 150; x++) {
+            const fade = (x - 52) / 40;
+            const th = [0.125, 0.625, 0.875, 0.375][(x & 1) + ((y & 1) << 1)];
+            if (fade < th) continue;
+            const band = Math.floor((x - y * 0.9 + 200) / 7) % 3;
+            px(c, x, y, band === 0 ? "#7fa7dc" : band === 1 ? "#b9d0f0" : "#e3edfa");
           }
-        // pop-up window
-        const pb = Math.round(Math.abs(Math.sin(t * 5)) * 2);
-        const px0 = 52 + dx, py0 = 27 - pb;
-        r(c, px0 + 2, py0 + 2, 52, 26, "rgba(0,0,0,0.5)");
-        r(c, px0, py0, 52, 26, "#f4f4f4");
-        r(c, px0, py0, 52, 7, "#2f6fd6");
-        tiny(c, "WIN!", px0 + 2, py0 + 1, "#ffffff");
-        r(c, px0 + 45, py0 + 1, 6, 5, "#e8463c");
-        tiny(c, "X", px0 + 46, py0 + 1, "#ffffff");
-        tiny(c, "FREE PRIZE", px0 + 6, py0 + 10, "#e8463c");
-        r(c, px0 + 12, py0 + 18, 28, 6, blink ? "#3cb371" : "#2e8b57");
-        tiny(c, "CLICK", px0 + 16, py0 + 19, "#ffffff");
-        // cursor
-        const cx = px0 + 34 + Math.round(Math.sin(t * 2) * 6), cy = py0 + 20;
-        const CUR = ["#....", "##...", "#*#..", "#**#.", "#***#", "#**##", "##.#."];
-        CUR.forEach((row, j) => [...row].forEach((ch, i) => { if (ch !== ".") px(c, cx + i, cy + j, ch === "#" ? "#111317" : "#ffffff"); }));
+        // skis and poles
+        pixLine(c, 84, 40, 140, 58, "#4a4f5a", 2);
+        pixLine(c, 80, 44, 134, 62, "#4a4f5a", 2);
+        pixLine(c, 97, 40, 86, 58, "#9aa0ad", 1);
+        // body in a tuck
+        pixLine(c, 102, 26, 122, 42, "#ffffff", 6);
+        pixLine(c, 104, 28, 120, 41, "#2f5fbf", 2);
+        pixLine(c, 110, 31, 116, 37, "#e8463c", 2);
+        pixLine(c, 122, 42, 130, 52, "#1d2a55", 4);
+        pixLine(c, 116, 44, 120, 54, "#1d2a55", 4);
+        pixLine(c, 104, 30, 97, 40, "#ffffff", 3);
+        r(c, 95, 39, 3, 3, "#1b1b1f");
+        // helmet, goggles, braid
+        pixLine(c, 101, 18, 113, 9, "#6b3b1f", 2);
+        ellipse(c, 99, 23, 5, 5, "#f4f4f4");
+        r(c, 93, 22, 10, 3, "#e0a040");
+        r(c, 94, 23, 7, 1, "#5a3a10");
       }
-      const AD_RECTS = [[4, 11, 142, 24], [4, 38, 142, 14], [4, 54, 142, 14], [52, 25, 52, 28]];
+      function bloatUI(c, t, o) {
+        const blink = Math.floor(t * 4) % 2;
+        const dx = o.shake ? Math.round((rng(Math.floor(t * 30))() - 0.5) * 4) : 0;
+        ditherBand(c, 0, 150, 0, 84, "#1b1d30", "#2c2440");
+        if (!o.gone) {
+          heroSkier(c, t);
+          tiny(c, "PEAKTV", 8 + dx, 15, "#c9c9d6");
+          tiny2(c, "WINTER", 8 + dx, 21, "#ffffff");
+          tiny(c, "GAMES  LIVE NOW", 8 + dx, 33, "#ffffff");
+          r(c, 108 + dx, 13, 30, 7, blink ? "#ffd447" : "#e8463c");
+          tiny(c, "AD", 110 + dx, 14, "#111317");
+          tiny(c, "PROMO", 119 + dx, 14, "#111317");
+        }
+        // nav
+        r(c, 4, 4, 2, 2, "#4285f4"); r(c, 6, 3, 2, 2, "#ea4335"); r(c, 4, 6, 2, 2, "#fbbc05"); r(c, 7, 6, 2, 2, "#34a853");
+        tiny(c, "SEARCH", 11, 3, "#ffffff");
+        tiny(c, "HOME", 38, 3, "#ffffff"); r(c, 40, 9, 11, 1, "#ffffff");
+        tiny(c, "DISCOVER", 57, 3, "#ffffff");
+        tiny(c, "APPS", 92, 3, "#ffffff");
+        ring(c, 113, 5, 2, 2, "#ffffff"); px(c, 113, 4, "#ffffff");
+        ring(c, 119, 5, 2, 2, "#ffffff"); px(c, 119, 5, "#ffffff"); px(c, 120, 5, "#ffffff");
+        ring(c, 125, 5, 2, 2, "#ffffff"); ring(c, 125, 5, 1, 1, "#ffffff");
+        tiny(c, "3:20", 131, 3, "#ffffff");
+        // favourite apps
+        tiny(c, "FAVORITE APPS", 8, 41, "#ffffff");
+        FAV.forEach(([bg, kind, gc], i) => {
+          const [x, y, w, h] = FAVR(i);
+          r(c, x, y, w, h, bg);
+          r(c, x, y + h - 1, w, 1, "rgba(0,0,0,0.3)");
+          glyph(c, kind, x + Math.floor(w / 2), y + Math.floor(h / 2), gc);
+          if (i === 0) { r(c, x - 1, y - 1, w + 2, 1, "#ffffff"); r(c, x - 1, y + h, w + 2, 1, "#ffffff"); r(c, x - 1, y, 1, h, "#ffffff"); r(c, x + w, y, 1, h, "#ffffff"); }
+        });
+        if (o.gone) return;
+        // sponsored row
+        tiny(c, "SPONSORED", 8 + dx, 62, "#ff8a7a");
+        r(c, 46 + dx, 61, 11, 7, blink ? "#ffd447" : "#e8463c");
+        tiny(c, "AD", 48 + dx, 62, "#111317");
+        SPONSORED.forEach(([bg, name, tc], i) => {
+          const x = 8 + i * 35 + dx, y = 69;
+          r(c, x, y, 33, 17, bg);
+          if (i === 0) { for (let k = 0; k < 5; k++) r(c, x + 16 - k, y + 3 + k, 2 * k + 1, 1, "#ffffff"); }
+          tiny(c, name, x + 17 - Math.floor(tinyW(name) / 2), y + (i === 0 ? 10 : 7), tc);
+          if ((i + Math.floor(t * 3)) % 2) { r(c, x + 25, y + 1, 7, 5, "#ffd447"); tiny(c, "AD", x + 25, y + 1, "#111317"); }
+        });
+        r(c, 148 + dx, 69, 2, 17, "#3b3f5a");
+      }
+      const AD_RECTS = [[52, 10, 98, 50], [4, 12, 104, 28], [4, 60, 146, 24]];
       const PARTS = (() => {
         const g = rng(42), list = [];
-        const cols = ["#e8463c", "#ffcc33", "#ff7a00", "#ff3d8b", "#ffffff", "#2f6fd6"];
+        const cols = ["#e3edfa", "#b9d0f0", "#7fa7dc", "#ffffff", "#1f6fe0", "#f07a1c", "#2a2d5a", "#ffd447", "#e8463c"];
         for (const [x, y, w, h] of AD_RECTS)
           for (let j = 0; j < h; j += 3)
             for (let i = 0; i < w; i += 3)
@@ -300,29 +306,136 @@
         r(c, 116, 74, 30, 7, "rgba(0,0,0,0.4)");
         tiny(c, "20:30", 120, 75, "#ffffff");
       }
-      function cleanHome(c, t, o) {
-        r(c, 0, 0, 150, 84, "#15171c");
-        wallpaper(c, o.wall, 0, o.wipe);
-        if (o.wipe < 150 && o.wipe > 0) r(c, o.wipe, 0, 2, 84, "#ffffff");
-        heroCard(c, t, o.hero);
-        APPS.forEach(([col, kind], i) => {
-          const [gx, gy, gw, gh] = GRID(i);
-          let x = gx, y = gy, w = gw, h = gh;
-          const sp = o.snap(i);
-          if (sp < 1) {
-            const m = MESSY[i];
-            x = lerp(m.ux, gx, sp); y = lerp(m.uy, gy, sp); w = lerp(m.w, gw, sp); h = lerp(m.h, gh, sp);
+      // ===== AFTER: the clean, premium-style home screen, pixelated =====
+      function heroArt(c, x, y, w, h, t) {
+        ditherBand(c, x, x + w, y, y + Math.round(h * 0.45), "#2f6fb0", "#7aa6d6");
+        ditherBand(c, x, x + w, y + Math.round(h * 0.45), y + Math.round(h * 0.72), "#e7a36a", "#f3c58a");
+        // distant hills and a bridge
+        for (let k = 0; k < w; k++) {
+          const hh = Math.round(h * 0.12 + 3 * Math.sin((k + x) * 0.12));
+          r(c, x + k, y + Math.round(h * 0.72) - hh, 1, hh, "#4c5f86");
+        }
+        const by = y + Math.round(h * 0.6);
+        r(c, x + Math.round(w * 0.18), by - 8, 2, 12, "#d0603a"); r(c, x + Math.round(w * 0.42), by - 8, 2, 12, "#d0603a");
+        pixLine(c, x + Math.round(w * 0.05), by + 2, x + Math.round(w * 0.55), by + 2, "#d0603a");
+        pixLine(c, x + Math.round(w * 0.18), by - 7, x + Math.round(w * 0.3), by + 1, "#d0603a");
+        pixLine(c, x + Math.round(w * 0.42), by - 7, x + Math.round(w * 0.3), by + 1, "#d0603a");
+        ditherBand(c, x, x + w, y + Math.round(h * 0.72), y + h, "#3e5a7a", "#26394f");
+        // smoke and fire on the right
+        const g = rng(17);
+        for (let k = 0; k < 9; k++) ellipse(c, x + w - 18 + Math.round(g() * 14), y + 4 + Math.round(g() * (h - 10)), 5, 5, k % 3 ? "#6d6a70" : "#e0703a");
+        for (let k = 0; k < 14; k++) px(c, x + w - 30 + Math.round(g() * 26), y + Math.round(g() * h), "#ffd447");
+        // the yellow robot hero with a glowing arm cannon
+        const rx = x + w - 44, ry = y + 5;
+        r(c, rx + 6, ry, 6, 5, "#f2c230"); r(c, rx + 8, ry + 2, 2, 1, "#5fd0ff");
+        r(c, rx + 3, ry + 5, 12, 10, "#f2c230"); r(c, rx + 5, ry + 7, 8, 4, "#2a2a30");
+        r(c, rx + 4, ry + 15, 4, 10, "#3a3a44"); r(c, rx + 10, ry + 15, 4, 10, "#3a3a44");
+        pixLine(c, rx + 3, ry + 7, rx - 10, ry + 9, "#c99a20", 3);
+        r(c, rx - 14, ry + 7, 5, 4, "#9aa0ad");
+        if (Math.floor(t * 6) % 2) r(c, rx - 17, ry + 8, 3, 2, "#5fd0ff");
+        // two people and a yellow car in front
+        r(c, rx + 16, ry + 16, 3, 9, "#2a2a35"); r(c, rx + 16, ry + 14, 3, 2, "#e0a37a");
+        r(c, rx + 20, ry + 17, 3, 8, "#4a3b2a"); r(c, rx + 20, ry + 15, 3, 2, "#c98b62");
+        r(c, x + w - 14, y + h - 7, 12, 4, "#f2c230"); r(c, x + w - 12, y + h - 9, 7, 2, "#f2c230");
+        px(c, x + w - 12, y + h - 3, "#1b1b1f"); px(c, x + w - 5, y + h - 3, "#1b1b1f");
+        // title
+        tiny2(c, "MECHA", x + 22, y + Math.round(h * 0.42) + 1, "#5a3a10");
+        tiny2(c, "MECHA", x + 21, y + Math.round(h * 0.42), "#ffd447");
+        roundRect(c, x + 4, y + 3, 26, 7, "#111317");
+        tiny(c, "4K", x + 6, y + 4, "#ffffff");
+        tiny(c, "HDR", x + 15, y + 4, "#ff8a5a");
+      }
+      function posterArt(c, k, x, y, w, h, t) {
+        if (k === 0) {
+          ditherBand(c, x, x + w, y, y + h, "#2b3f8f", "#d04a7a");
+          for (let i = 0; i < w; i += 4) r(c, x + i, y + h - 4 - ((i * 7) % 6), 3, 6, "#141a3a");
+          pixLine(c, x + w * 0.3, y + h * 0.55, x + w * 0.6, y + h * 0.3, "#e8463c", 2);
+          r(c, x + w * 0.6, y + h * 0.25, 2, 2, "#e8463c");
+          tiny(c, "HERO", x + 2, y + h - 6, "#ffffff");
+        } else if (k === 1) {
+          r(c, x, y, w, h, "#ffd400");
+          ellipse(c, Math.round(x + w * 0.72), Math.round(y + h * 0.38), Math.max(1, Math.round(w * 0.14)), Math.max(1, Math.round(h * 0.22)), "#111111");
+          r(c, x + w * 0.55, y + h * 0.55, w * 0.45, h * 0.45, "#111111");
+          r(c, x + w * 0.62, y + h * 0.3, w * 0.12, 1, "#ffffff");
+          tiny(c, "BOLD", x + 2, y + 2, "#111111");
+        } else if (k === 2) {
+          r(c, x, y, w, h, "#f2f2f2");
+          tiny2(c, "7", Math.round(x + w * 0.62), y + 1, "#e8463c");
+          for (let i = 0; i < 6; i++) r(c, x + 2 + i * Math.max(2, Math.floor(w / 7)), y + h - 6, 2, 5, i % 2 ? "#2a2a35" : "#8a2a3a");
+          tiny(c, "HEIST", x + 2, y + 2, "#111317");
+        } else if (k === 3) {
+          r(c, x, y, w, h, "#4fb7b3");
+          r(c, x + w * 0.3, y + h * 0.55, w * 0.62, h * 0.22, "#eaf6f5");
+          r(c, x + w * 0.42, y + h * 0.42, w * 0.34, h * 0.15, "#bfe3e1");
+          px(c, x + w * 0.38, y + h * 0.78, "#1b1b1f"); px(c, x + w * 0.82, y + h * 0.78, "#1b1b1f");
+          tiny(c, "ROAD", x + 2, y + 2, "#ffffff");
+        } else {
+          ditherBand(c, x, x + w, y, y + h, "#8a5a3a", "#d9a56a");
+        }
+      }
+      const POSTER = (i) => [12 + i * 32, 61, 28, 19];
+      function cleanUI(c, t, o) {
+        r(c, 0, 0, 150, 84, "#232428");
+        // ambient wallpaper bleeding from the hero art
+        if (o.wall > 0) {
+          c.save();
+          c.globalAlpha = o.wall;
+          ditherBand(c, 0, 150, 0, 84, "#3a2e2c", "#1f2a38");
+          for (let y = 0; y < 84; y++) for (let x = 104; x < 150; x++) if (((x + y) & 3) === 0) px(c, x, y, "#2a3a50");
+          c.restore();
+        }
+        // peeking neighbour cards
+        if (o.peek > 0) {
+          const off = Math.round((1 - eo(o.peek)) * 12);
+          c.save(); clipRound(c, -6 - off, 14, 14, 36); ditherBand(c, -6 - off, 8 - off, 14, 50, "#1f4f9f", "#5f8fd6"); c.restore();
+          c.save(); clipRound(c, 142 + off, 14, 14, 36); ditherBand(c, 142 + off, 156 + off, 14, 50, "#9a9a9a", "#d6d0c4"); c.restore();
+        }
+        // hero card
+        if (o.hero > 0) {
+          const s = clamp(back(o.hero), 0, 1.15);
+          const w = 126 * s, h = 36 * s, x = 75 - w / 2, y = 32 - h / 2;
+          c.save(); clipRound(c, x, y, w, h); heroArt(c, Math.round(x), Math.round(y), Math.round(w), Math.round(h), t); c.restore();
+        }
+        // pill tab bar
+        if (o.tabs > 0) {
+          const ty = Math.round(lerp(-12, 3, o.tabs));
+          roundRect(c, 12, ty, 126, 9, "#3c3d42");
+          const tabs = ["WATCH", "MOVIES", "SHOWS", "SPORT", "KIDS"];
+          let x = 17;
+          tabs.forEach((s) => {
+            const tw = tinyW(s);
+            if (s === "MOVIES") { roundRect(c, x - 3, ty + 1, tw + 6, 7, "#e8e8e8"); tiny(c, s, x, ty + 2, "#1b1b1f"); }
+            else tiny(c, s, x, ty + 2, "#ffffff");
+            x += tw + 6;
+          });
+          ring(c, x + 2, ty + 4, 2, 2, "#ffffff"); px(c, x + 4, ty + 6, "#ffffff");
+        }
+        // posters: the first four favourite tiles grow into rounded posters; the rest pop away
+        if (o.post(0) > 0 || o.post(3) >= 1) tiny(c, "TOP MOVIES", 12, 54, "#c9c9cf");
+        for (let i = 0; i < 8; i++) {
+          const [fx, fy, fw, fh] = FAVR(i);
+          if (i >= 4) {
+            const p = o.favOut;
+            if (p >= 1) continue;
+            const s = 1 - eo(p), w = fw * s, h = fh * s;
+            r(c, fx + (fw - w) / 2, fy + (fh - h) / 2, w, h, FAV[i][0]);
+            if (p > 0.6) star4(c, fx + fw / 2, fy + fh / 2, 2, "#ffd447");
+            continue;
           }
+          const p = o.post(i);
+          const [px0, py0, pw, ph] = POSTER(i);
+          const x = lerp(fx, px0, p), y = lerp(fy, py0, p), w = lerp(fw, pw, p), h = lerp(fh, ph, p);
           const f = o.focus === i;
-          if (f) { r(c, x - 2, y - 2, w + 4, h + 4, "#ffffff"); tile(c, x - 1, y - 1, w + 2, h + 2, col, kind, true); }
-          else tile(c, x, y, w, h, col, kind, sp >= 1);
-          const st = o.snapT(i);
-          if (st >= 0 && st < 0.35) {
-            const s = Math.round(lerp(1, 4, st / 0.35));
-            star4(c, x + w - 1, y, s, "#ffd447");
-          }
-        });
-        topBar(c, t, true);
+          const lift = f ? 1 : 0;
+          if (f) roundRect(c, x - 2, y - 2 - lift, w + 4, h + 4, "#ffffff");
+          c.save(); clipRound(c, x, y - lift, w, h);
+          if (p < 0.5) r(c, x, y - lift, w, h, FAV[i][0]);
+          else posterArt(c, i, Math.round(x), Math.round(y - lift), Math.round(w), Math.round(h), t);
+          c.restore();
+          const st = o.postT(i);
+          if (st >= 0 && st < 0.35) star4(c, x + w - 1, y, Math.round(lerp(1, 4, st / 0.35)), "#ffd447");
+        }
+        if (o.post(3) >= 1) { c.save(); clipRound(c, 140, 61, 14, 19); posterArt(c, 4, 140, 61, 14, 19, t); c.restore(); }
       }
       function crtStatic(c, t, a = 1) {
         const g = rng(1000 + Math.floor(t * 30));
@@ -335,10 +448,10 @@
           }
         c.restore();
       }
-      const FINAL = { wall: 1, wipe: 150, hero: 1, snap: () => 1, snapT: () => -1 };
+      const FINAL = { wall: 1, tabs: 1, hero: 1, peek: 1, post: () => 1, postT: () => -1, favOut: 1 };
       // the junk clean-up shown on the living-room TV after the home run
       function junkScreen(c, t) {
-        cleanHome(c, t, { ...FINAL, focus: -1 });
+        cleanUI(c, t, { ...FINAL, focus: -1 });
         r(c, 0, 44, 150, 40, "rgba(10,10,14,0.88)");
         tiny(c, "PREINSTALLED", 4, 46, "#ff5a5a");
         JUNK.forEach(([name, col], i) => {
@@ -392,13 +505,12 @@
         c.clearRect(0, 0, 150, 84);
         if (mode === "junk") {
           if (t < 30.6) junkScreen(c, t);
-          else cleanHome(c, t, { ...FINAL, focus: Math.floor((t - 30.6) * 2.5) % 4 });
+          else cleanUI(c, t, { ...FINAL, focus: Math.floor((t - 30.6) * 2.5) % 4 });
           return;
         }
-        if (t < T.b2) {
-          r(c, 0, 0, 150, 84, "#1d2026");
-          topBar(c, t, false);
-          if (t < 13.55) adsLayer(c, t, t >= 12.6);
+        // before + 1st base: the cluttered stock screen, the stamp, the explosion
+        if (t < 15.3) {
+          bloatUI(c, t, { shake: t >= 12.6 && t < 13.55, gone: t >= 13.55 });
           if (t >= 13.55 && t < 14.4) {
             const dt = t - 13.55;
             if (dt < 0.06) r(c, 0, 0, 150, 84, "#ffffff");
@@ -409,12 +521,6 @@
               r(c, p.x + p.vx * dt, p.y + p.vy * dt + 120 * dt * dt, 2, 2, p.col);
             }
           }
-          APPS.forEach(([col, kind], i) => {
-            const m = MESSY[i];
-            const p = eo(prog(t, 13.7, 14.2));
-            tile(c, lerp(m.x, m.ux, p), lerp(m.y, m.uy, p), m.w, m.h, col, kind, false);
-          });
-          // the new home app stamps down on "swap the home screen app"
           if (t >= 11.75 && t < 12.6) {
             const p = prog(t, 11.75, 12.1);
             const yy = lerp(-30, 26, eo(p));
@@ -429,20 +535,24 @@
           if (t >= 12.1 && t < 12.15) r(c, 0, 0, 150, 84, "#ffffff");
           return;
         }
+        // 2nd base: tabs + hero on "Claude designs", rounded posters on "rounded tiles", wallpaper on "wallpapers"
         if (t < T.b3) {
-          const snap0 = 15.3;
-          cleanHome(c, t, {
-            wall: t >= 17.3 ? 1 : 0,
-            wipe: Math.round(150 * eio(prog(t, 17.3, 17.9))),
-            hero: prog(t, 17.8, 18.25),
-            snap: (i) => eo(prog(t, snap0 + i * 0.13, snap0 + i * 0.13 + 0.3)),
-            snapT: (i) => t - (snap0 + i * 0.13 + 0.3),
-            focus: t >= 16.6 ? Math.floor((t - 16.6) * 3) % 4 : -1,
+          const s0 = 16.0;
+          cleanUI(c, t, {
+            tabs: eo(prog(t, 15.3, 15.6)),
+            hero: prog(t, 15.45, 15.85),
+            post: (i) => eo(prog(t, s0 + i * 0.15, s0 + i * 0.15 + 0.35)),
+            postT: (i) => t - (s0 + i * 0.15 + 0.35),
+            favOut: prog(t, 15.9, 16.2),
+            wall: prog(t, 17.1, 17.7),
+            peek: prog(t, 17.5, 17.9),
+            focus: t >= 18.0 ? Math.floor((t - 18.0) * 2.5) % 4 : -1,
           });
           return;
         }
+        // 3rd base: idle, dim, drone screensaver
         if (t < 20.0) {
-          cleanHome(c, t, { ...FINAL, focus: 0 });
+          cleanUI(c, t, { ...FINAL, focus: 0 });
           const a = prog(t, 19.55, 20.0);
           c.save(); c.globalAlpha = a * 0.75; r(c, 0, 0, 150, 84, "#000000"); c.restore();
           if (t >= 19.6) tiny(c, "Z", 120 + Math.round((t - 19.6) * 10), 30 - Math.round((t - 19.6) * 20), "#ffffff");

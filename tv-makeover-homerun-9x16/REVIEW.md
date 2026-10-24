@@ -1,4 +1,4 @@
-# Review — draft 2
+# Review — draft 3
 
 - Structure: after the hit and the "4 STEPS" sky beat, the camera locks on the runner in a side-scrolling
   tracking shot; he never stops. Bases are placed so he touches each one on its call (10.3, 14.2, 19.3,
@@ -11,3 +11,6 @@
 - Missing: crowd cheering and bat crack. Three Higgsfield clips with that audio are generated (jobs
   6f49d9d1, 08c7f5e1, 3ceb833d) but their host d8j0ntlcm91z4.cloudfront.net is blocked by the session's
   network policy. Caption timing is still estimated from the voiceover's pauses.
+- Draft 3: the TV screens are now pixel versions of the two references the person supplied (a cluttered
+  stock Android TV home and a premium tab/hero/poster home). Real app logos and film posters were replaced
+  with original pixel art and generic names (PEAK+, ORBIT, MECHA, HERO, BOLD, HEIST, ROAD).
