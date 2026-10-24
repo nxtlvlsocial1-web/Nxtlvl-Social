@@ -1027,42 +1027,50 @@
       function drawBoundaryCam(t) {
         const c = Wd, b = CK.b3;
         const sp = 70;
-        const scroll = sp * (Math.min(t, b.rope - 0.3) - b.cut);
+        // world coordinates: the camera pans with the ball, then stops just before the rope so the
+        // ball is seen crossing it; everything on the grass is placed in world x and drawn at x - camX
+        const camStop = b.rope - 0.15;
+        const camX = sp * (Math.min(t, camStop) - b.cut);
+        const ballW = 70 + sp * (Math.min(t, b.rope + 0.4) - b.cut);
+        const ropeW = sp * (camStop - b.cut) + 80;
         skyBand(c, 0, 150, t, 51);
         r(c, 0, 146, 180, 40, "#0f1530");
-        crowdBand(c, 148, 178, t, scroll * 0.3, cheer(t) > 0);
-        // advertising boards beyond the rope
-        const boardsX = 210 - sp * (t - (b.rope - 0.6));
+        crowdBand(c, 148, 178, t, camX * 0.3, cheer(t) > 0);
         for (let y = 188; y < 320; y += 6) {
-          for (let x = 0; x < 186; x += 12) r(c, x - (scroll % 12), y, 12, 6, (Math.floor((x + scroll) / 12) + y / 6) % 2 ? "#2f8f3a" : "#37a043");
+          for (let x = 0; x < 186; x += 12) r(c, x - (camX % 12), y, 12, 6, (Math.floor((x + camX) / 12) + y / 6) % 2 ? "#2f8f3a" : "#37a043");
         }
         r(c, 0, 178, 180, 10, "#1d3f9e");
-        // the rope
-        if (boardsX < 200) {
-          r(c, boardsX, 188, 180, 132, "#2a7f34");
-          for (let y = 188; y < 320; y += 2) r(c, boardsX + ((y / 2) % 2), y, 3, 2, "#ffffff");
-          r(c, boardsX + 14, 220, 160, 30, "#d23a32");
-          tiny(c, "TV MAKEOVER", boardsX + 22, 232, "#ffffff");
+        // the rope and the board beyond it
+        const ropeX = ropeW - camX;
+        if (ropeX < 200) {
+          r(c, ropeX, 188, 180, 132, "#2a7f34");
+          for (let y = 188; y < 320; y += 2) r(c, ropeX + ((y / 2) % 2), y, 3, 2, "#ffffff");
+          r(c, ropeX + 14, 220, 160, 30, "#d23a32");
+          tiny(c, "TV MAKEOVER", ropeX + 22, 232, "#ffffff");
         }
-        // ball keeps rolling at a fixed screen x until the rope comes in, then runs over it
-        let bx = 70;
-        if (t > b.rope - 0.3) bx = 70 + sp * (t - (b.rope - 0.3));
-        if (t > b.rope + 0.25) bx = 70 + sp * 0.55;
-        const by = 272;
-        r(c, bx - 2, by - 2, 4, 4, "#c8261d"); px(c, bx, by - 1, "#ffffff");
-        for (let k = 1; k < 5; k++) r(c, bx - 2 - k * 6, by, 3, 1, "rgba(255,255,255,0.35)");
-        // the fielder sprints in from the right and dives full length, just missing
+        // the fielder chases from behind, dives full length and his hand lands just short of the ball
         if (t >= 23.9) {
           if (t < b.fdive) {
-            const x = lerp(200, 104, prog(t, 23.9, b.fdive));
-            human(c, x, 276 - 54, t, "side", "run", 3, true);
+            const sx = lerp(-26, 16, prog(t, 23.9, b.fdive));
+            human(c, sx, 276 - 54, t, "side", "run", 3);
           } else {
-            const k = eo(prog(t, b.fdive, b.fdive + 0.6));
-            const x = lerp(96, 62, k), y = 276 - 54 + 12 - 10 * Math.sin(Math.PI * Math.min(1, prog(t, b.fdive, b.fdive + 0.45)));
-            human(c, x, y, t, "side", "dive", 3);
+            const fly = prog(t, b.fdive, b.miss);
+            let ox = lerp(185, 222, eo(fly));
+            if (t > b.miss) ox = lerp(222, 227, eo(prog(t, b.miss, b.miss + 0.35)));
+            const y = 232 - 9 * Math.sin(Math.PI * fly);
+            human(c, ox - camX, y, t, "side", "dive", 3, true);
+            // grass kicked up as he lands and slides
+            if (t >= b.miss && t < b.miss + 0.5) {
+              const k = prog(t, b.miss, b.miss + 0.5);
+              for (let j = 0; j < 5; j++) r(c, ox - camX - 20 + j * 9, 274 - Math.round(6 * k * (1 + (j % 2))), 2, 2, `rgba(205,240,170,${0.8 * (1 - k)})`);
+            }
           }
         }
-        if (t >= b.miss && t < b.miss + 0.4) { const k = prog(t, b.miss, b.miss + 0.4); ring(c, 66, 268, 6 + 30 * k, 2 + 8 * k, "#ffffff"); }
+        // the ball, always on top: it rolls past his fingertips and over the rope
+        const bx = ballW - camX, by = 272;
+        r(c, bx - 2, by - 2, 4, 4, "#c8261d"); px(c, bx, by - 1, "#ffffff");
+        if (t < b.rope + 0.4) for (let k = 1; k < 5; k++) r(c, bx - 2 - k * 6, by, 3, 1, "rgba(255,255,255,0.35)");
+        if (t >= b.miss && t < b.miss + 0.4) { const k = prog(t, b.miss, b.miss + 0.4); ring(c, bx, by - 2, 4 + 14 * k, 2 + 5 * k, "#ffffff"); }
       }
 
       // ---------- ball 4: the six, tracking the ball up over the stands and out ----------
