@@ -148,7 +148,7 @@
         bold: "assets/images/poster-bold.jpg", heist: "assets/images/poster-heist.jpg", road: "assets/images/poster-road.jpg",
         coast: "assets/images/coast.jpg",
         netflix: "assets/images/apps/netflix.jpg", prime: "assets/images/apps/prime.jpg",
-        youtube: "assets/images/apps/youtube.jpg", jiohotstar: "assets/images/apps/jiohotstar.jpg",
+        youtube: "assets/images/apps/youtube.jpg", jiohotstar: "assets/images/apps/jiohotstar.jpg", hbomax: "assets/images/apps/hbomax.jpg",
       };
       const assetsReady = Promise.all([
         ...Object.entries(IMG_SRC).map(([k, src]) => new Promise((res) => {
@@ -197,9 +197,9 @@
       // ===== BEFORE: cluttered stock home screen =====
       const FAVH = [
         ["Netflix", "#ffffff", "#e50914"], ["Prime Video", "#2a72f0", "#ffffff"], ["YouTube", "#f4f4f4", "#e8463c"], ["JioHotstar", "#5b4ef0", "#ffffff"],
-        ["Cone", "#f28a1c", "#ffffff"], ["Max", "#5b2bd6", "#ffffff"], ["Store", "#f1f3f4", "#1e8e3e"], ["+", "#3f5f8f", "#ffffff"],
+        ["Cone", "#f28a1c", "#ffffff"], ["HBO Max", "#f7f7f7", "#5b2bd6"], ["Store", "#f1f3f4", "#1e8e3e"], ["+", "#3f5f8f", "#ffffff"],
       ];
-      const FAVR_H = (i) => (i === 0 ? [74, 300, 124, 74] : [74 + 132 + (i - 1) * 90, 306, 82, 62]);
+      const FAVR_H = (i) => (i === 0 ? [74, 302, 124, 67] : [74 + 132 + (i - 1) * 90, 313, 82, 45]);
       const SPON = [["PEAK+", "#1d6fe0", "#0d3f9e"], ["orbit tv", "#20202a", "#0e0e14"], ["FreeTV", "#2c2f66", "#1a1c44"], ["AnimeNow", "#f28a1c", "#d0600a"]];
       function navAndroid(c) {
         const dots = [["#4285f4", 0, 0], ["#ea4335", 9, -4], ["#fbbc05", 2, 9], ["#34a853", 11, 7]];
@@ -358,10 +358,13 @@
       }
 
       // ===== AFTER: clean, minimal home screen (layout from the person's reference) =====
-      const DOCK = [["netflix", "Netflix", "robot"], ["prime", "Prime Video", "road"], ["youtube", "YouTube", "coast"], ["jiohotstar", "JioHotstar", "hero"]];
-      const DOCKR = (i) => [66 + i * 196, 352, 178, 96];
+      const DOCK = [["netflix", "Netflix", "robot"], ["prime", "Prime Video", "road"], ["youtube", "YouTube", "coast"], ["jiohotstar", "JioHotstar", "hero"], ["hbomax", "HBO Max", "heist"]];
+      const DOCKR = (i) => [64 + i * 156, 364, 146, 79];
+      // favourites-row tile -> dock slot (the rest fade away)
+      const SLOT = { 0: 0, 1: 1, 2: 2, 3: 3, 5: 4 };
+      const TILE_KEY = { 0: "netflix", 1: "prime", 2: "youtube", 3: "jiohotstar", 5: "hbomax" };
       function appTile(c, i, x, y, w, h, rad) {
-        const key = i < 4 ? DOCK[i][0] : null;
+        const key = TILE_KEY[i] || null;
         c.save();
         rr(c, x, y, w, h, rad); c.clip();
         c.fillStyle = FAVH[i][1]; c.fillRect(x, y, w, h);
@@ -415,7 +418,7 @@
           c.translate(0, (1 - o.tabs) * -30);
           c.letterSpacing = "3px";
           txt(c, "GOOD EVENING", 62, 58, font(600, 13), "rgba(255,255,255,0.75)");
-          txt(c, "SUNDAY  18 OCTOBER", 262, 116, font(500, 16), "rgba(255,255,255,0.8)");
+          txt(c, "SUN  18 OCT", 262, 116, font(500, 16), "rgba(255,255,255,0.8)");
           c.letterSpacing = "0px";
           txt(c, "8:30", 58, 122, font(300, 66), "#ffffff");
           txt(c, "PM", 196, 120, font(600, 16), "rgba(255,255,255,0.85)");
@@ -438,19 +441,19 @@
         if (dockA > 0) {
           c.save();
           c.globalAlpha = dockA;
-          c.fillStyle = "rgba(255,255,255,0.07)"; rr(c, 50, 340, 800, 120, 26); c.fill();
-          c.strokeStyle = "rgba(255,255,255,0.1)"; c.lineWidth = 1.5; rr(c, 50, 340, 800, 120, 26); c.stroke();
+          c.fillStyle = "rgba(255,255,255,0.07)"; rr(c, 46, 348, 808, 111, 26); c.fill();
+          c.strokeStyle = "rgba(255,255,255,0.1)"; c.lineWidth = 1.5; rr(c, 46, 348, 808, 111, 26); c.stroke();
           c.restore();
         }
         if (o.peek > 0) {
           const cols = ["#f06a2a", "#f4f4f4", "#5a1414"];
           c.save(); c.globalAlpha = o.peek;
-          cols.forEach((col, i) => { c.fillStyle = col; rr(c, 66 + i * 196, 486, 178, 60, 14); c.fill(); });
+          cols.forEach((col, i) => { c.fillStyle = col; rr(c, 64 + i * 156, 480, 146, 60, 14); c.fill(); });
           c.restore();
         }
         for (let i = 0; i < 8; i++) {
           const [fx, fy, fw, fh] = FAVR_H(i);
-          if (i >= 4) {
+          if (SLOT[i] === undefined) {
             const p = o.favOut;
             if (p >= 1) continue;
             const s = 1 - eo(p);
@@ -459,10 +462,11 @@
             c.restore();
             continue;
           }
-          const p = o.post(i);
-          const [dx, dy, dw, dh] = DOCKR(i);
+          const slot = SLOT[i];
+          const p = o.post(slot);
+          const [dx, dy, dw, dh] = DOCKR(slot);
           let x = lerp(fx, dx, p), y = lerp(fy, dy, p), w = lerp(fw, dw, p), h = lerp(fh, dh, p);
-          const focused = o.focus === i;
+          const focused = o.focus === slot;
           if (focused) { const k = 1.07; x -= (w * (k - 1)) / 2; y -= (h * (k - 1)) / 2; w *= k; h *= k; }
           c.save();
           shadow(c, focused ? 28 : 10, focused ? 12 : 4, focused ? 0.65 : 0.35);
@@ -471,7 +475,7 @@
           c.restore();
           appTile(c, i, x, y, w, h, lerp(6, 16, p));
           if (focused) { c.strokeStyle = "#ffffff"; c.lineWidth = 5; rr(c, x - 4, y - 4, w + 8, h + 8, 19); c.stroke(); }
-          const st = o.postT(i);
+          const st = o.postT(slot);
           if (st >= 0 && st < 0.4) {
             const k = st / 0.4;
             c.strokeStyle = `rgba(255,255,255,${1 - k})`; c.lineWidth = 4;
@@ -550,18 +554,7 @@
         X.clearRect(0, 0, HW, HH);
         if (mode === "junk") {
           if (t < 30.6) junkHi(X, t);
-          else cleanHi(X, t, { ...FINAL_H, focus: Math.floor((t - 30.6) * 2.5) % 4 });
-          return;
-        }
-        if (t < 0.8 && t < T.click) {
-          bloatHi(X, t, { shake: false, gone: false });
-          const div = lerp(450, 900, eio(prog(t, 0.55, 0.78)));
-          if (div < 900) {
-            X.save(); X.beginPath(); X.rect(div, 0, HW - div, HH); X.clip();
-            cleanHi(X, t, { ...FINAL_H, focus: 1 });
-            X.restore();
-            X.fillStyle = "#ffffff"; X.fillRect(div - 3, 0, 6, HH);
-          }
+          else cleanHi(X, t, { ...FINAL_H, focus: Math.floor((t - 30.6) * 2.5) % 5 });
           return;
         }
         if (t < T.click) { bloatHi(X, t, { shake: false, gone: false }); popupsHi(X, t); return; }
@@ -581,7 +574,7 @@
             favOut: prog(t, 15.9, 16.2),
             wall: prog(t, 17.1, 17.7),
             peek: prog(t, 17.5, 17.9),
-            focus: t >= 18.0 ? Math.floor((t - 18.0) * 2.5) % 4 : -1,
+            focus: t >= 18.0 ? Math.floor((t - 18.0) * 2.5) % 5 : -1,
           });
           return;
         }

@@ -153,12 +153,6 @@
       <div id="hook-b" class="plate-lg">BILLBOARD?</div>
     </div>
 
-    <!-- teaser chips over the split TV on frame 0 -->
-    <div id="tease" class="clip" data-start="0" data-duration="0.7" data-track-index="4" style="position: absolute; left: 0; top: 0; width: 1080px; height: 1920px">
-      <div id="tease-before" style="position: absolute; left: 112px; top: 402px; padding: 10px 12px 8px; background: #e8463c; font-size: 30px; line-height: 1">BEFORE</div>
-      <div id="tease-after" style="position: absolute; left: 788px; top: 402px; padding: 10px 12px 8px; background: #2e9e5b; font-size: 30px; line-height: 1">AFTER</div>
-    </div>
-
     <!-- base tracker inside the commentator box: lights up as each base is reached -->
     <div id="tracker" class="clip" data-start="7.0" data-duration="24.1" data-track-index="5" style="position: absolute; left: 948px; top: 214px; width: 48px; height: 48px">
       <div id="trk-2" class="trk" style="left: 17px; top: 0px"></div>
@@ -225,9 +219,8 @@
     pop("#cta-a .w:nth-child(2)", 31.2, 1.6);
     pop("#cta-b", 31.9, 1.2);
 
-    // BILLBOARD punch on the word, BEFORE/AFTER teaser chips, base tracker
+    // BILLBOARD punch on the word, base tracker
     tl.fromTo("#hook-b", { scale: 1 }, { scale: 1.18, duration: 0.08, ease: "power3.out", yoyo: true, repeat: 1 }, 2.3);
-    tl.fromTo("#tease-before, #tease-after", { opacity: 1 }, { opacity: 0, duration: 0.1 }, 0.62);
     [["#trk-1", 10.3], ["#trk-2", 14.2], ["#trk-3", 19.3], ["#trk-4", 24.0]].forEach(([sel, at]) => {
       tl.fromTo(sel, { backgroundColor: "#3a3f4d", scale: 1 }, { backgroundColor: "#ffd447", scale: 1.5, duration: 0.1, ease: "power3.out" }, at);
       tl.to(sel, { scale: 1, duration: 0.2, ease: "power2.out" }, at + 0.1);

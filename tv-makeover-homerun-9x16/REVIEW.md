@@ -1,4 +1,4 @@
-# Review — draft 7
+# Review — final v1
 
 - Structure: after the hit and the "4 STEPS" sky beat, the camera locks on the runner in a side-scrolling
   tracking shot; he never stops. Bases are placed so he touches each one on its call (10.3, 14.2, 19.3,
@@ -30,3 +30,6 @@
   leading Claude (pseudo-3D field) that swings round each base. TV screens are realistic full-resolution
   UIs composited over the pixel world: a cluttered stock home and the person's reference home (greeting,
   clock, chips, app dock with real app tiles, focused-app artwork backdrop). -16.2 LUFS, -1.8 dBTP.
+- Final v1: BEFORE/AFTER teaser removed (frame 0 is the cluttered screen); HBO Max added to the dock (logo
+  supplied by the person) as the fifth app; app tiles keep their logo proportions; rendered at delivery
+  quality, 60 fps, 1080x1920, 31.08 s, -16.4 LUFS, -1.9 dBTP, no clipping. Cover = frame 0.

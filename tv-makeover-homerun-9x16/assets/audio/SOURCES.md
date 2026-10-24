@@ -15,5 +15,5 @@
   reel: skier.jpg (5312d74d), coast.jpg (ae3bc502), poster-bold.jpg (6dbcd63c), poster-heist.jpg
   (be968ff6), poster-road.jpg (00de332d), robot.jpg (d0b01c23), poster-hero.jpg (61b81a1f). Two earlier
   attempts were dropped for resembling existing film characters.
-- assets/images/apps/*.jpg: Netflix, Prime Video, YouTube and JioHotstar tiles cropped from a TV home-screen
+- assets/images/apps/*.jpg: Netflix, Prime Video, YouTube, JioHotstar (and HBO Max, from a logo image) cropped from images
   screenshot the person supplied; used at the person's request. These are third-party trademarks.
