@@ -14,6 +14,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from timing import DUR, KEY, SCENES, words  # noqa: E402
+import bird  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 S = {k: (a, z) for k, a, z in SCENES}
@@ -119,45 +120,6 @@ def tick(s=40):
     return (f'<svg viewBox="0 0 40 40" width="{s}" height="{s}"><circle cx="20" cy="20" r="19" fill="#e6f2ea"/>'
             f'<path class="tk" d="M11 20.5 L17.5 27 L29 14" stroke="{GREEN}" stroke-width="3.6" fill="none" '
             f'stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>')
-
-
-def magnifier(s=150):
-    return (f'<svg viewBox="0 0 150 150" width="{s}" height="{s}"><path d="M92 92 L138 138" stroke="#8a5a2b" '
-            f'stroke-width="16" stroke-linecap="round"/><circle cx="62" cy="62" r="44" fill="rgba(220,240,255,.45)" '
-            f'stroke="#f2b134" stroke-width="12"/><path d="M40 48 C46 36 58 30 70 32" stroke="#fff" stroke-width="6" '
-            f'fill="none" stroke-linecap="round" opacity=".9"/></svg>')
-
-
-def bubble(inner, w=150, h=120, cls=""):
-    return (f'<div class="bub {cls}" data-layout-ignore style="width:{w}px;height:{h}px">{inner}'
-            f'<svg class="tail" viewBox="0 0 60 50" width="60" height="50"><circle cx="20" cy="12" r="11" fill="#fff" '
-            f'stroke="{INK}" stroke-width="4"/><circle cx="6" cy="38" r="6" fill="#fff" stroke="{INK}" stroke-width="3"/>'
-            f'</svg></div>')
-
-
-def cloud():
-    drops = "".join(f'<i class="drop" style="left:{x}px"></i>' for x in (40, 80, 120, 60, 100))
-    return (f'<div id="cloud" data-layout-ignore><svg viewBox="0 0 180 90" width="180" height="90"><path d="M30 80 C8 80 4 52 '
-            f'26 46 C24 22 54 12 70 30 C80 6 122 8 126 36 C150 30 170 50 156 70 C152 78 146 80 140 80 Z" fill="#c9ccd6"/>'
-            f'</svg>{drops}</div>')
-
-
-def bird_rig():
-    """The bird split into body + two wings (so it can wave and flap), lids, props and sparkles.
-    Box is 300x318 (the 604x640 cut-out at half size). Bubbles sit outside the flip so their text never mirrors."""
-    sp = "".join(f'<div class="bsp bsp{i}" style="left:{x}px;top:{y}px">{star(s, c)}</div>'
-                 for i, (x, y, s, c) in enumerate([(-40, 40, 54, PINK), (270, -10, 44, "#f2b134"),
-                                                   (290, 170, 36, PINK), (-20, 210, 34, "#f2b134")]))
-    return (f'<div id="birdpos"><div id="bshadow"></div><div id="bflip"><div id="bwig"><div id="bidle"><div id="bbreath">'
-            f'<div id="wingL"><div id="wingLi"><img src="assets/img/bird_wingl.png" width="300" height="318" alt=""></div></div>'
-            f'<img id="bimg" src="assets/img/bird_body.png" width="300" height="318" alt="">'
-            f'<div id="wingR"><div id="wingRi"><img src="assets/img/bird_wing.png" width="300" height="318" alt=""></div></div>'
-            f'<div class="lid lidl"></div><div class="lid lidr"></div>'
-            f'<div id="sweat"><svg viewBox="0 0 30 44" width="30" height="44"><path d="M15 0 C22 14 30 22 30 30 '
-            f'C30 38 23 44 15 44 C7 44 0 38 0 30 C0 22 8 14 15 0 Z" fill="#7cc8ff"/></svg></div>'
-            f'<div id="mag">{magnifier(150)}</div></div></div></div></div>'
-            f'{bubble("<b>?</b>", 130, 120, "bq")}{bubble("<b>!</b>", 120, 120, "bx")}'
-            f'{bubble("<i>CREEDOM</i>", 300, 110, "bc")}{cloud()}{sp}</div>')
 
 
 # ------------------------------------------------------------------ scenes
@@ -323,169 +285,9 @@ def caption_tl():
             add(f'tl.set("{sel}",{{backgroundColor:"rgba(226,85,125,0)",color:"{past}"}},{e:.3f});')
 
 
-# ------------------------------------------------------------------ the bird
-def bird_tl():
-    def mv(t, x, y, s, d=.5, ease="power3.inOut"):
-        add(f'tl.to("#birdpos",{{x:{x},y:{y},scale:{s},duration:{d},ease:"{ease}"}},{t:.2f});')
-
-    def face(t, d):
-        add(f'tl.to("#bflip",{{scaleX:{d},duration:.16,ease:"power2.inOut"}},{t:.2f});')
-
-    def hop(t, h=60):
-        add(f'tl.to("#bwig",{{y:-{h},duration:.18,ease:"power2.out",yoyo:true,repeat:1}},{t:.2f});')
-        add(f'tl.to("#bwig",{{scaleY:.86,scaleX:1.1,duration:.08,yoyo:true,repeat:1}},{t + .36:.2f});')
-
-    def walk(t, d, step=.2):
-        n = max(2, int(d / step))
-        add(f'tl.to("#bwig",{{rotation:7,y:-14,duration:{step / 2:.3f},ease:"sine.inOut",yoyo:true,repeat:{n - 1}}},{t:.2f});')
-        add(f'tl.to("#bwig",{{rotation:0,y:0,duration:.1}},{t + n * step / 2 + .01:.2f});')
-
-    def flap(t, n=4, a=28):
-        add(f'tl.to("#wingR",{{rotation:{a},duration:.07,ease:"sine.inOut",yoyo:true,repeat:{n * 2 - 1}}},{t:.2f});')
-        add(f'tl.to("#wingL",{{rotation:-{a},duration:.07,ease:"sine.inOut",yoyo:true,repeat:{n * 2 - 1}}},{t:.2f});')
-
-    def wave(t, n=3):
-        add(f'tl.fromTo("#wingR",{{rotation:-12}},{{rotation:24,duration:.16,ease:"sine.inOut",yoyo:true,repeat:{n * 2 - 1},'
-            f'immediateRender:false}},{t:.2f});tl.to("#wingR",{{rotation:0,duration:.12}},{t + n * .32 + .01:.2f});')
-
-    def tilt(t, a, d=.3):
-        add(f'tl.to("#bwig",{{rotation:{a},duration:{d},ease:"back.out(2)"}},{t:.2f});')
-
-    def wings(t, r, l, d=.25):
-        add(f'tl.to("#wingR",{{rotation:{r},duration:{d},ease:"back.out(2)"}},{t:.2f});')
-        add(f'tl.to("#wingL",{{rotation:{l},duration:{d},ease:"back.out(2)"}},{t:.2f});')
-
-    def blink(t):
-        add(f'tl.to(".lid",{{scaleY:1,duration:.06,yoyo:true,repeat:1}},{t:.2f});')
-
-    def show(sel, t, on=True, d=.3):
-        if on:
-            add(f'tl.to("{sel}",{{opacity:1,scale:1,duration:{d},ease:"back.out(3)"}},{t:.2f});')
-        else:
-            add(f'tl.to("{sel}",{{opacity:0,scale:.5,duration:.2,ease:"power2.in"}},{t:.2f});')
-
-    add('tl.set("#birdpos",{x:1160,y:1010,scale:.85},0);tl.set(".lid",{scaleY:0},0);tl.set("#wipe",{scale:0},0);')
-    add('tl.set("#sweat,#mag,.bub,.bsp,#cloud",{opacity:0,scale:.5},0);tl.set("#bflip",{scaleX:-1},0);')
-    # always alive: bob, sway, breathing, wing flutter (on their own wrappers, under the gestures)
-    add(f'tl.to("#bidle",{{y:-8,duration:.42,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .42) - 1}}},0);')
-    add(f'tl.fromTo("#bidle",{{rotation:-3}},{{rotation:3,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 1.3) - 1}}},0);')
-    add(f'tl.to("#bbreath",{{scaleY:1.025,scaleX:.985,duration:.8,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .8) - 1}}},0);')
-    add(f'tl.fromTo("#wingRi",{{rotation:-4}},{{rotation:9,duration:.45,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .45) - 1}}},0);')
-    add(f'tl.fromTo("#wingLi",{{rotation:4}},{{rotation:-7,duration:.5,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .5) - 1}}},0);')
-    for t in (2.6, 6.2, 9.0, 13.2, 16.6, 20.6, 25.4, 28.8, 32.4):
-        blink(t)
-    # 1 hook: waddles in from the right, turns to camera, jumps and flaps on "85x"
-    mv(.1, 660, 1010, .85, 1.0, "power1.out")
-    walk(.1, 1.0)
-    face(1.12, 1)
-    hop(1.3, 110)
-    flap(1.3, 4)
-    show(".bsp", 1.4)
-    add('tl.to(".bsp",{rotation:120,duration:1.2,ease:"none"},1.4);')
-    show(".bsp", 2.6, False)
-    wave(2.3, 2)
-    # 2 why: scratches its head with the wing, head tilt, "?" bubble
-    tilt(3.65, -11)
-    wings(3.7, -38, 0)
-    add('tl.to("#wingR",{rotation:-28,duration:.12,yoyo:true,repeat:7},3.95);')
-    show(".bq", 3.9)
-    show(".bq", 5.45, False)
-    tilt(5.3, 0, .25)
-    wings(5.3, 0, 0, .2)
-    # 3 next: walks a little, droops with a rain cloud and sweat, wings hang
-    face(5.6, -1)
-    mv(5.6, 740, 1010, .82, .7, "power1.inOut")
-    walk(5.6, .7)
-    face(6.4, 1)
-    add('tl.to("#bwig",{scaleY:.9,scaleX:1.06,duration:.3,ease:"power2.out"},6.9);')
-    wings(6.9, 22, -18, .4)
-    show("#sweat", 7.0)
-    add('tl.to("#sweat",{y:40,duration:.9,ease:"power1.in"},7.1);')
-    show("#cloud", 6.95)
-    add('tl.fromTo("#cloud .drop",{y:0,opacity:1},{y:90,opacity:0,duration:.35,stagger:.07,repeat:2,ease:"power1.in"},7.05);')
-    show("#sweat", 8.0, False)
-    show("#cloud", 8.0, False)
-    add('tl.to("#bwig",{scaleY:1,scaleX:1,duration:.25},8.05);')
-    wings(8.05, 0, 0, .2)
-    # 4 numbers: startled by the tiles, then a big shrug
-    mv(8.1, 770, 1060, .75, .4)
-    add('tl.to("#bwig",{scaleY:1.14,scaleX:.9,y:-30,duration:.12,yoyo:true,repeat:1},8.4);')
-    wings(9.25, 45, -40, .2)
-    add('tl.to("#bwig",{rotation:8,duration:.09,ease:"sine.inOut",yoyo:true,repeat:5},9.3);')
-    wings(9.95, 0, 0, .2)
-    # 5 read: magnifier, waddles left along the ticks card scanning, turns back and hops at "20 s"
-    mv(10.45, 800, 1130, .72, .5)
-    show("#mag", 10.8)
-    face(11.0, -1)
-    mv(11.0, 520, 1130, .72, 1.6, "sine.inOut")
-    walk(11.0, 1.6, .26)
-    add('tl.to("#mag",{rotation:-14,y:-20,duration:.4,ease:"sine.inOut",yoyo:true,repeat:3},11.0);')
-    face(12.7, 1)
-    hop(12.85, 70)
-    show("#mag", 13.8, False)
-    # 6 score: perched by the black card, jumps, spins and flaps on 82, then waves
-    mv(13.9, 730, 1100, .7, .45)
-    hop(15.35, 140)
-    add('tl.to("#bflip",{rotation:360,duration:.55,ease:"power2.inOut"},15.35);tl.set("#bflip",{rotation:0},15.95);')
-    flap(15.35, 5, 34)
-    show(".bsp", 15.45)
-    add('tl.to(".bsp",{rotation:220,duration:1.3,ease:"none"},15.45);')
-    show(".bsp", 16.8, False)
-    wave(16.1, 2)
-    # 7 analyse: points at the chat with a wing, then surfs the playhead down the timeline
-    mv(17.05, 760, 1060, .6, .45)
-    face(17.3, -1)
-    wings(17.4, 40, 0, .25)
-    add('tl.to("#wingR",{rotation:30,duration:.15,yoyo:true,repeat:5},17.65);')
-    wings(18.9, 0, 0, .2)
-    face(19.6, 1)
-    mv(19.85, -60, 330, .42, .4)
-    tilt(20.2, 12)
-    wings(20.2, 35, -30, .2)
-    add('tl.to("#birdpos",{y:960,duration:1.05,ease:"power1.inOut"},20.25);')
-    tilt(21.25, 0, .2)
-    wings(21.25, 0, 0, .2)
-    # 8 twist: magnifier on the 0:34 row, startled "!", then flaps up after it
-    mv(21.35, -60, 822, .45, .4)
-    show("#mag", 21.6)
-    add('tl.to("#mag",{x:40,duration:.4,ease:"sine.inOut",yoyo:true,repeat:3},21.8);')
-    show(".bx", 23.4)
-    add('tl.to("#bwig",{scaleY:1.18,scaleX:.88,y:-60,duration:.13,yoyo:true,repeat:1},23.35);')
-    wings(23.35, 45, -42, .15)
-    show("#mag", 24.3, False)
-    show(".bx", 24.5, False)
-    flap(24.65, 5, 32)
-    mv(24.7, -60, 372, .45, .55, "power3.inOut")
-    wings(25.4, 0, 0, .2)
-    wave(25.62, 2)
-    # 9 reasons: stands on the guesses card, jumps across to the reasons card, cheers
-    mv(26.3, 150, 332, .5, .45)
-    face(26.6, 1)
-    tilt(26.6, -8, .2)
-    tilt(26.95, 0, .1)
-    add('tl.to("#birdpos",{x:700,duration:.6,ease:"power2.inOut"},27.0);')
-    add('tl.to("#birdpos",{y:200,duration:.3,ease:"power2.out",yoyo:true,repeat:1},27.0);')
-    flap(27.0, 4)
-    add('tl.to("#birdpos",{y:282,duration:.15,ease:"power2.out"},27.62);')
-    hop(28.4, 70)
-    wave(28.75, 2)
-    # 10 cta: thought bubble, points at the comment box, then waves goodbye at the centre
-    mv(29.4, 730, 1080, .7, .45)
-    show(".bc", 29.9)
-    face(30.1, -1)
-    wings(30.15, 42, 0, .25)
-    add('tl.to("#wingR",{rotation:32,duration:.15,yoyo:true,repeat:5},30.4);')
-    show(".bc", 32.0, False)
-    face(32.0, 1)
-    wings(32.0, 0, 0, .15)
-    mv(32.1, 390, 900, 1.05, .5, "back.out(1.4)")
-    hop(32.15, 60)
-    wave(32.55, 3)
-    add('tl.set("#bshadow",{opacity:.0},0);tl.to("#bshadow",{opacity:1,duration:.3},.6);')
-
-
 # ------------------------------------------------------------------ scene timelines
 def timeline():
+    add('tl.set("#wipe",{scale:0},0);')
     # whip pan on every cut: blur out to the left, in from the right
     for t in CUTS:
         add(f'tl.to("#cam",{{x:-140,filter:"blur(10px)",duration:.12,ease:"power2.in"}},{t - .12:.2f});')
@@ -670,7 +472,7 @@ def timeline():
     add(f'document.querySelectorAll(".tw").forEach((e,i)=>tl.fromTo(e,{{scale:.3,opacity:.15}},{{scale:1,opacity:.9,'
         f'duration:.7,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .7) - 2}}},i*.23));')
     caption_tl()
-    bird_tl()
+    bird.perform(add, DUR)
     return "\n".join(T)
 
 
@@ -872,30 +674,6 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
 .endlock img { width: 150px; height: 159px; }
 .endsub { position: absolute; left: 0; width: 1080px; top: 560px; text-align: center; font: 700 46px "Manrope"; color: #333; }
 .endsub b { color: #fff; background: var(--pink); padding: 4px 18px; border-radius: 16px; }
-/* bird */
-#birdlayer { z-index: 20; }
-#birdpos { position: absolute; left: 0; top: 0; width: 300px; height: 318px; transform-origin: 50% 100%; }
-#bshadow { position: absolute; left: 40px; top: 300px; width: 220px; height: 40px; border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(243,67,162,.35), rgba(243,67,162,0)); }
-#bflip, #bwig, #bidle, #bbreath { position: absolute; inset: 0; transform-origin: 50% 100%; }
-#bflip { transform-origin: 50% 60%; }
-#bimg { position: absolute; left: 0; top: 0; filter: drop-shadow(0 18px 24px rgba(160,20,90,.25)); }
-#wingR, #wingRi { position: absolute; inset: 0; transform-origin: 266px 154px; }
-#wingL, #wingLi { position: absolute; inset: 0; transform-origin: 47px 209px; }
-#wingR img, #wingL img { position: absolute; left: 0; top: 0; }
-.lid { position: absolute; background: #f2499f; border-radius: 50%; transform-origin: 50% 0; }
-.lidl { left: 70px; top: 70px; width: 76px; height: 72px; }
-.lidr { left: 170px; top: 54px; width: 72px; height: 70px; }
-#sweat { position: absolute; left: 250px; top: 30px; }
-#mag { position: absolute; left: 150px; top: 140px; transform-origin: 30% 30%; }
-.bub { position: absolute; left: 190px; top: -130px; background: #fff; border: 4px solid var(--ink); border-radius: 50px;
-  display: flex; align-items: center; justify-content: center; font: 800 80px "Manrope"; color: var(--pinkt); }
-.bub .tail { position: absolute; left: 6px; bottom: -48px; }
-.bub i { font: 800 52px "JBMono"; font-style: normal; letter-spacing: 2px; }
-.bc { left: -200px; top: -150px; }
-.bsp { position: absolute; }
-#cloud { position: absolute; left: 60px; top: -150px; width: 180px; height: 200px; }
-.drop { position: absolute; top: 80px; width: 8px; height: 22px; border-radius: 4px; background: #7cc8ff; }
 /* captions */
 #caps { z-index: 30; }
 .cap { position: absolute; left: 0; width: 1080px; top: 1400px; text-align: center; opacity: 0; white-space: nowrap; }
@@ -912,7 +690,7 @@ def main():
     <meta name="viewport" content="width=1080, height=1920" />
     <title>Creedom reel analyser 9x16</title>
     <script src="assets/vendor/gsap.min.js"></script>
-    <style>{CSS}</style>
+    <style>{CSS}{bird.CSS}</style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="1080" data-height="1920">
@@ -923,7 +701,7 @@ def main():
       <div id="hud" class="clip" data-start="0" data-duration="{DUR}" data-track-index="5">
         <div class="pill"><img src="assets/img/bird.png" alt=""><div class="ptrack"><div class="pfill"></div></div></div>
       </div>
-      <div id="birdlayer" class="clip" data-start="0" data-duration="{DUR}" data-track-index="6" data-layout-allow-overflow>{bird_rig()}</div>
+      <div id="birdlayer" class="clip" data-start="0" data-duration="{DUR}" data-track-index="6" data-layout-allow-overflow>{bird.rig(star)}</div>
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="7">{captions()}</div>
       <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8" data-layout-allow-overflow><div id="wipe"></div><div id="whip"></div></div>
       <audio id="vo" src="assets/audio/vo.wav" data-start="0" data-duration="32.13" data-track-index="10" data-volume="1"></audio>
