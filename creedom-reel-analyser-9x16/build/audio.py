@@ -16,7 +16,7 @@ import numpy as np
 from scipy.signal import butter, fftconvolve, sosfilt
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from timing import DUR, S_TWIST  # noqa: E402
+from timing import DUR, SCENES, S_TWIST  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SR = 44100
@@ -26,6 +26,7 @@ BAR = BEAT * 4
 N = int(DUR * SR)
 VO_GAIN_DB = 5.2  # the Nota 3 take measures -20.2 LUFS; lift voice and bed together to about -15
 rng = np.random.default_rng(31)
+CUTS = [a for k, a, z in SCENES if k in ("next", "read", "score", "analyse", "twist", "reasons", "cta")]
 
 
 def hz(m):
@@ -199,6 +200,13 @@ def arrange():
 
 def sfx():
     s = "sfx"
+    for t in CUTS:                                     # whip pan on every cut
+        put(whoosh(.32, 1.1), t - .2, .9, bus=s)
+    for t in (15.45, 25.25, 29.85):                    # confetti
+        for i in range(10):
+            put(pop_(1500 + 140 * (i % 5), .06), t + i * .035, .35, pan=-.5 + .1 * i, bus=s)
+    put(whoosh(.6, 1.0), 31.05, .8, bus=s)             # paper plane
+    put(pop_(600, .2), .5, .7, bus=s)                  # ticker
     for t in (.15, .55, 5.7, 5.85, 10.55, 13.75, 14.15, 17.3, 17.8, 19.85, 26.45, 26.65, 30.0):
         put(pop_(), t, 1.0, bus=s)
     put(rattle(1.4, 22), .45, .8, bus=s)               # play counter rolls
