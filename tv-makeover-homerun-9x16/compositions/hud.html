@@ -10,11 +10,9 @@
       font-family: "Press Start 2P", monospace;
       color: #ffffff;
     }
-    /* title plate under the TV (hook, then CTA) */
     .plate {
       position: absolute;
       left: 72px;
-      top: 966px;
       width: 936px;
       height: 216px;
       background: #0b0e14;
@@ -44,64 +42,52 @@
       font-size: 32px;
       line-height: 1;
     }
-    /* label strip under the jumbotron */
+    /* step label printed on the TV's chin (888..942) */
     .label {
       position: absolute;
-      left: 0;
-      top: 858px;
-      width: 1080px;
-      height: 66px;
+      left: 90px;
+      top: 896px;
+      width: 900px;
+      height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 30px;
+      font-size: 28px;
       line-height: 1;
     }
     .label b {
       color: #ffd447;
       font-weight: 400;
     }
-    /* text on the jumbotron screen (156..924 x 384..816) */
-    .jumbo {
+    /* big titles in the night sky */
+    .sky {
       position: absolute;
-      left: 156px;
-      top: 384px;
-      width: 768px;
-      height: 432px;
+      left: 0;
+      width: 1080px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 40px;
+      gap: 36px;
       text-align: center;
+      text-shadow: 6px 6px 0 #0b0e14;
     }
-    .j-xl {
-      font-size: 96px;
+    .s-xl {
+      font-size: 104px;
       line-height: 1;
       color: #ffd447;
     }
-    .j-md {
-      font-size: 40px;
+    .s-md {
+      font-size: 44px;
       line-height: 1;
     }
-    .j-lg {
-      font-size: 56px;
+    .s-lg {
+      font-size: 60px;
       line-height: 1;
     }
-    .term {
-      position: absolute;
-      left: 156px;
-      top: 384px;
-      width: 768px;
-      height: 432px;
-    }
-    .tl {
-      position: absolute;
-      left: 36px;
-      font-size: 28px;
-      line-height: 1;
-      color: #49d17a;
-      white-space: pre;
+    .s-hr {
+      font-size: 120px;
+      line-height: 1.1;
+      color: #ffd447;
     }
     .w {
       display: inline-block;
@@ -109,42 +95,32 @@
   </style>
   <div id="root" data-composition-id="hud" data-width="1080" data-height="1920">
     <!-- hook -->
-    <div id="hook" class="clip plate" data-start="0" data-duration="3.1" data-track-index="1">
+    <div id="hook" class="clip plate" data-start="0" data-duration="3.1" data-track-index="1" style="top: 966px">
       <div id="hook-a" class="plate-sm">YOUR TV IS A</div>
       <div id="hook-b" class="plate-lg">BILLBOARD?</div>
     </div>
 
-    <!-- labels under the jumbotron -->
-    <div id="lab-0" class="clip label" data-start="5.2" data-duration="5.25" data-track-index="2"><span>BOTTOM 9TH <b>·</b> 2 OUTS</span></div>
-    <div id="lab-1" class="clip label" data-start="10.45" data-duration="3.75" data-track-index="2"><span><b>1ST BASE:</b> NEW HOME APP</span></div>
-    <div id="lab-2" class="clip label" data-start="14.45" data-duration="4.75" data-track-index="2"><span><b>2ND BASE:</b> CLEAN TILES</span></div>
-    <div id="lab-3" class="clip label" data-start="19.4" data-duration="3.8" data-track-index="2"><span><b>3RD:</b> DRONE SCREENSAVER</span></div>
-    <div id="lab-4" class="clip label" data-start="24.05" data-duration="6.85" data-track-index="2"><span><b>HOME:</b> DELETE THE JUNK</span></div>
-
-    <!-- jumbotron text -->
-    <div id="j-steps" class="clip jumbo" data-start="5.35" data-duration="2.35" data-track-index="3">
-      <div id="j-steps-a" class="j-xl">4 STEPS</div>
-      <div id="j-steps-b" class="j-md">MVP: CLAUDE</div>
+    <!-- sky titles while the ball flies and before the first base -->
+    <div id="sky-steps" class="clip sky" data-start="5.3" data-duration="1.95" data-track-index="2" style="top: 760px">
+      <div id="sky-steps-a" class="s-xl">4 STEPS</div>
+      <div id="sky-steps-b" class="s-md">MVP: CLAUDE</div>
     </div>
-    <div id="j-run" class="clip jumbo" data-start="7.75" data-duration="2.7" data-track-index="3">
-      <div id="j-run-a" class="j-lg">STEP 4 =</div>
-      <div id="j-run-b" class="j-xl">HOME RUN!</div>
+    <div id="sky-run" class="clip sky" data-start="7.75" data-duration="2.5" data-track-index="2" style="top: 470px">
+      <div id="sky-run-a" class="s-lg">STEP 4 =</div>
+      <div id="sky-run-b" class="s-xl">HOME RUN!</div>
+    </div>
+    <div id="sky-hr" class="clip sky" data-start="24.02" data-duration="0.55" data-track-index="2" style="top: 470px">
+      <div id="sky-hr-a" class="s-hr">HOME<br />RUN!</div>
     </div>
 
-    <!-- terminal for the home step -->
-    <div id="term" class="clip term" data-start="24.1" data-duration="6.8" data-track-index="3">
-      <div id="tl-0" class="tl" style="top: 34px">&gt; ./clean-up</div>
-      <div id="tl-1" class="tl" style="top: 86px">SHOPZ ....... X</div>
-      <div id="tl-2" class="tl" style="top: 134px">PROMO TV .... X</div>
-      <div id="tl-3" class="tl" style="top: 182px">GAMEHUB ..... X</div>
-      <div id="tl-4" class="tl" style="top: 230px">NEWS+ ....... X</div>
-      <div id="tl-5" class="tl" style="top: 278px">SALE APP .... X</div>
-      <div id="tl-6" class="tl" style="top: 334px">SAFE LIST: OK</div>
-      <div id="tl-7" class="tl" style="top: 382px; color: #ffd447">UNDO: ANYTIME</div>
-    </div>
+    <!-- step labels on the TV's chin -->
+    <div id="lab-1" class="clip label" data-start="10.4" data-duration="3.8" data-track-index="3"><span><b>1ST BASE:</b> NEW HOME APP</span></div>
+    <div id="lab-2" class="clip label" data-start="14.2" data-duration="5.1" data-track-index="3"><span><b>2ND BASE:</b> CLEAN TILES</span></div>
+    <div id="lab-3" class="clip label" data-start="19.3" data-duration="3.9" data-track-index="3"><span><b>3RD BASE:</b> DRONE SCREENSAVER</span></div>
+    <div id="lab-4" class="clip label" data-start="25.07" data-duration="5.93" data-track-index="3"><span><b>HOME:</b> DELETE THE JUNK</span></div>
 
-    <!-- call to action -->
-    <div id="cta" class="clip plate" data-start="31.45" data-duration="2.74" data-track-index="1">
+    <!-- call to action, above the cheering family -->
+    <div id="cta" class="clip plate" data-start="31.0" data-duration="3.19" data-track-index="1" style="top: 560px">
       <div id="cta-a" class="plate-cta"><span class="w">COMMENT</span> <span class="w">"TV"</span></div>
       <div id="cta-b" class="plate-sub">FOR THE FULL GUIDE</div>
     </div>
@@ -154,32 +130,21 @@
     const pop = (sel, at, from = 1.3) =>
       tl.fromTo(sel, { opacity: 0, scale: from }, { opacity: 1, scale: 1, duration: 0.14, ease: "power3.out" }, at);
 
-    // hook: on screen at frame 0, leaves as the camera dives into the TV
     tl.fromTo("#hook-a, #hook-b", { opacity: 1 }, { opacity: 0, duration: 0.15, ease: "power2.in" }, 2.95);
 
-    // labels: printed in, plate stays
-    [["#lab-0 span", 5.25], ["#lab-1 span", 10.5], ["#lab-2 span", 14.5], ["#lab-3 span", 19.45], ["#lab-4 span", 24.1]].forEach(([s, at]) => pop(s, at, 1.15));
+    pop("#sky-steps-a", 5.3, 1.6);
+    pop("#sky-steps-b", 6.2);
+    tl.to("#sky-steps-a, #sky-steps-b", { opacity: 0, y: -60, duration: 0.25, ease: "power3.in" }, 6.95);
+    pop("#sky-run-a", 7.75);
+    pop("#sky-run-b", 8.75, 1.6);
+    tl.to("#sky-run-a, #sky-run-b", { opacity: 0, scale: 0.6, duration: 0.18, ease: "power3.in" }, 10.05);
+    tl.fromTo("#sky-hr-a", { opacity: 0, scale: 2.2, rotation: -8 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.16, ease: "back.out(2)" }, 24.02);
 
-    // jumbotron
-    pop("#j-steps-a", 5.35, 1.6);
-    pop("#j-steps-b", 6.2);
-    pop("#j-run-a", 7.75);
-    pop("#j-run-b", 8.75, 1.6);
+    [["#lab-1 span", 10.42], ["#lab-2 span", 14.25], ["#lab-3 span", 19.35], ["#lab-4 span", 25.1]].forEach(([s, at]) => pop(s, at, 1.15));
 
-    // terminal: command, five junk apps struck one by one, safe list, undo
-    tl.fromTo("#tl-0", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.45, ease: "steps(12)" }, 24.15);
-    for (let i = 1; i <= 5; i++) {
-      tl.fromTo(`#tl-${i}`, { opacity: 0 }, { opacity: 1, duration: 0.05 }, 24.45 + i * 0.12);
-      tl.fromTo(`#tl-${i}`, { color: "#49d17a", textDecoration: "none" }, { color: "#ff5a5a", textDecoration: "line-through", duration: 0.05 }, 24.65 + i * 0.35);
-      tl.to(`#tl-${i}`, { opacity: 0.35, duration: 0.2 }, 24.75 + i * 0.35);
-    }
-    pop("#tl-6", 27.5, 1.2);
-    pop("#tl-7", 29.2, 1.2);
-
-    // call to action
-    pop("#cta-a .w:nth-child(1)", 31.5, 1.4);
-    pop("#cta-a .w:nth-child(2)", 31.62, 1.6);
-    pop("#cta-b", 32.1, 1.2);
+    pop("#cta-a .w:nth-child(1)", 31.05, 1.4);
+    pop("#cta-a .w:nth-child(2)", 31.2, 1.6);
+    pop("#cta-b", 31.9, 1.2);
 
     window.__timelines["hud"] = tl;
   </script>

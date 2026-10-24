@@ -21,6 +21,12 @@
     (function () {
       // Pixel world: 180 x 320 logical pixels, each drawn as 6 x 6 on the 1080 x 1920 canvas.
       const W = 180, H = 320, S = 6, DUR = 34.19;
+      // Voiceover-locked moments
+      const T = {
+        click: 2.65, dive: 3.05, diveEnd: 3.45, hit: 4.08, sky: 5.2, tiltDown: 7.2, run: 7.7, go: 8.0,
+        b1: 10.3, b2: 14.2, b3: 19.3, panelOff: 23.2, slide: 23.72, home: 24.0, zoomOut: 24.55, zoomOutEnd: 24.95,
+        front: 31.0,
+      };
 
       const outC = document.getElementById("game-canvas");
       const out = outC.getContext("2d");
@@ -34,9 +40,10 @@
         return [c, x];
       }
       const [frameC, F] = mk(W, H); // the composed frame
-      const [worldC, Wd] = mk(180, 264); // what the TV broadcast shows
+      const [worldC, Wd] = mk(W, H); // the broadcast, full frame
       const [roomC, R] = mk(W, H); // the living room
-      const [scrC, Sc] = mk(128, 72); // a TV home screen (living-room TV and jumbotron)
+      const [scrC, Sc] = mk(150, 84); // a TV screen
+      const [runC, Rn] = mk(24, 26); // the runner at base resolution, drawn x3
 
       // ---------- helpers ----------
       const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
@@ -45,6 +52,7 @@
       const eio = (p) => (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
       const eo = (p) => 1 - Math.pow(1 - p, 3);
       const ei = (p) => p * p * p;
+      const back = (p) => 1 + 2.70158 * Math.pow(p - 1, 3) + 1.70158 * Math.pow(p - 1, 2);
       function rng(seed) {
         let a = seed | 0;
         return function () {
@@ -73,17 +81,13 @@
           for (let x = -rx; x <= rx; x++)
             if ((x * x) / (rx * rx) + (y * y) / (ry * ry) <= 1) px(c, cx + x, cy + y, col);
       }
-      function spr(c, rows, x, y, pal, flip = false, sc = 1) {
-        for (let j = 0; j < rows.length; j++) {
-          const row = rows[j];
-          for (let i = 0; i < row.length; i++) {
-            const ch = row[flip ? row.length - 1 - i : i];
-            if (ch === "." || !pal[ch]) continue;
-            r(c, Math.round(x) + i * sc, Math.round(y) + j * sc, sc, sc, pal[ch]);
-          }
+      function ring(c, cx, cy, rx, ry, col) {
+        const n = Math.max(12, Math.round((rx + ry) * 3));
+        for (let i = 0; i < n; i++) {
+          const a = (i / n) * Math.PI * 2;
+          px(c, cx + Math.cos(a) * rx, cy + Math.sin(a) * ry, col);
         }
       }
-      // ordered 2-colour dither band between y0 and y1
       function ditherBand(c, x0, x1, y0, y1, colA, colB, off = 0) {
         for (let y = y0; y < y1; y++) {
           const p = (y - y0) / Math.max(1, y1 - y0);
@@ -93,20 +97,28 @@
           }
         }
       }
+      function star4(c, x, y, s, col) {
+        px(c, x, y, "#ffffff");
+        for (let k = 1; k <= s; k++) {
+          px(c, x + k, y, col); px(c, x - k, y, col); px(c, x, y + k, col); px(c, x, y - k, col);
+        }
+      }
 
-      // tiny 3 x 5 font for text that lives inside the pixel world
+      // tiny 3 x 5 font for text inside the pixel world
       const G = {
-        A: ["###", "#.#", "###", "#.#", "#.#"], B: ["##.", "#.#", "##.", "#.#", "##."],
-        D: ["##.", "#.#", "#.#", "#.#", "##."], E: ["###", "#..", "##.", "#..", "###"],
-        H: ["#.#", "#.#", "###", "#.#", "#.#"], L: ["#..", "#..", "#..", "#..", "###"],
-        N: ["#.#", "###", "###", "#.#", "#.#"], O: ["###", "#.#", "#.#", "#.#", "###"],
-        S: ["###", "#..", "###", "..#", "###"], U: ["#.#", "#.#", "#.#", "#.#", "###"],
-        W: ["#.#", "#.#", "###", "###", "#.#"], Y: ["#.#", "#.#", "###", ".#.", ".#."],
-        "0": ["###", "#.#", "#.#", "#.#", "###"], "1": [".#.", "##.", ".#.", ".#.", "###"],
-        "2": ["##.", "..#", ".#.", "#..", "###"], "3": ["##.", "..#", ".#.", "..#", "##."],
-        "4": ["#.#", "#.#", "###", "..#", "..#"], "7": ["###", "..#", ".#.", ".#.", ".#."],
-        "9": ["###", "#.#", "###", "..#", "###"], ":": ["...", ".#.", "...", ".#.", "..."],
-        "%": ["#.#", "..#", ".#.", "#..", "#.#"], "!": [".#.", ".#.", ".#.", "...", ".#."],
+        A: ["###", "#.#", "###", "#.#", "#.#"], B: ["##.", "#.#", "##.", "#.#", "##."], C: ["###", "#..", "#..", "#..", "###"],
+        D: ["##.", "#.#", "#.#", "#.#", "##."], E: ["###", "#..", "##.", "#..", "###"], F: ["###", "#..", "##.", "#..", "#.."],
+        G: ["###", "#..", "#.#", "#.#", "###"], H: ["#.#", "#.#", "###", "#.#", "#.#"], I: ["###", ".#.", ".#.", ".#.", "###"],
+        J: ["..#", "..#", "..#", "#.#", "###"], K: ["#.#", "#.#", "##.", "#.#", "#.#"], L: ["#..", "#..", "#..", "#..", "###"],
+        M: ["#.#", "###", "###", "#.#", "#.#"], N: ["##.", "#.#", "#.#", "#.#", "#.#"], O: ["###", "#.#", "#.#", "#.#", "###"],
+        P: ["###", "#.#", "###", "#..", "#.."], Q: ["###", "#.#", "#.#", "###", "..#"], R: ["##.", "#.#", "##.", "#.#", "#.#"],
+        S: ["###", "#..", "###", "..#", "###"], T: ["###", ".#.", ".#.", ".#.", ".#."], U: ["#.#", "#.#", "#.#", "#.#", "###"],
+        V: ["#.#", "#.#", "#.#", "#.#", ".#."], W: ["#.#", "#.#", "###", "###", "#.#"], X: ["#.#", "#.#", ".#.", "#.#", "#.#"],
+        Y: ["#.#", "#.#", "###", ".#.", ".#."], Z: ["###", "..#", ".#.", "#..", "###"],
+        "0": ["###", "#.#", "#.#", "#.#", "###"], "1": [".#.", "##.", ".#.", ".#.", "###"], "2": ["##.", "..#", ".#.", "#..", "###"],
+        "3": ["##.", "..#", ".#.", "..#", "##."], "4": ["#.#", "#.#", "###", "..#", "..#"], "5": ["###", "#..", "##.", "..#", "##."],
+        "7": ["###", "..#", ".#.", ".#.", ".#."], "9": ["###", "#.#", "###", "..#", "###"], ":": ["...", ".#.", "...", ".#.", "..."],
+        "%": ["#.#", "..#", ".#.", "#..", "#.#"], "!": [".#.", ".#.", ".#.", "...", ".#."], "+": ["...", ".#.", "###", ".#.", "..."],
         " ": ["...", "...", "...", "...", "..."],
       };
       function tiny(c, str, x, y, col) {
@@ -118,248 +130,675 @@
       }
       const tinyW = (s) => s.length * 4 - 1;
 
-      // ---------- sprites ----------
-      const PAL = { R: "#d23a32", D: "#7a1f1a", K: "#e0a37a", W: "#f4f4f4", r: "#d23a32", G: "#b9bcc4", B: "#1b1b1f" };
-      const PIT = { R: "#23408e", D: "#16285a", K: "#c98b62", W: "#e9ecf2", r: "#23408e", G: "#9aa0ad", B: "#1b1b1f" };
-      const STAND = ["..RRR...", ".RRRRD..", "..KKK...", "..KKK...", ".WWrWW..", "KWWrWWK.", ".WWrWW..", "..GGG...", "..G.G...", "..G.G...", "..G.G...", ".BB.BB.."];
-      const RUN1 = ["...RRR..", "..RRRRD.", "...KKK..", "...KKK..", "..WWrW..", ".KWWrWK.", "..WWrW..", "..GGGG..", ".GG..GG.", "GG....GG", "B......B", "........"];
-      const RUN2 = ["...RRR..", "..RRRRD.", "...KKK..", "...KKK..", "..WWrW..", "..WWrWK.", ".KWWrW..", "..GGGG..", "...GG...", "...GG...", "...GB...", "...BB..."];
-      const CHEER = ["K......K", "K.RRR..K", "KRRRRD.K", ".WKKKW..", "..KKK...", ".WWrWW..", "..WrW...", "..GGG...", "..G.G...", "..G.G...", "..G.G...", ".BB.BB.."];
-      const SLIDE = ["............", ".RRR........", "RRRRDKKWWW..", ".KK.WWWrWWG.", "....GGGGGGGB", "...........B"];
-
-      // ---------- the four bases (stadium wide view, world coords) ----------
-      const BASE = { H: [90, 214], B1: [140, 192], B2: [90, 170], B3: [40, 192] };
-      // runner: [t0, t1, from, to]
-      const SPRINTS = [
-        [9.6, 10.45, "H", "B1"],
-        [13.85, 14.45, "B1", "B2"],
-        [18.8, 19.4, "B2", "B3"],
-        [23.2, 24.05, "B3", "H"],
-      ];
-      function runnerState(t) {
-        for (const [a, b, f, to] of SPRINTS) {
-          if (t >= a && t < b) {
-            const p = eio(prog(t, a, b));
-            const [x0, y0] = BASE[f], [x1, y1] = BASE[to];
-            const sliding = to === "H" && p > 0.7;
-            return { x: lerp(x0, x1, p), y: lerp(y0, y1, p), pose: sliding ? "slide" : Math.floor(t * 12) % 2 ? "run1" : "run2", flip: x1 < x0 };
-          }
-        }
-        if (t < 9.6) return { x: BASE.H[0], y: BASE.H[1], pose: t < 9.45 ? "bat" : "stand", flip: false };
-        if (t < 13.85) return { x: BASE.B1[0], y: BASE.B1[1], pose: "stand", flip: true };
-        if (t < 18.8) return { x: BASE.B2[0], y: BASE.B2[1], pose: "stand", flip: true };
-        if (t < 23.2) return { x: BASE.B3[0], y: BASE.B3[1], pose: "stand", flip: false };
-        if (t < 24.35) return { x: BASE.H[0], y: BASE.H[1], pose: "slide", flip: false };
-        return { x: BASE.H[0], y: BASE.H[1], pose: "cheer", flip: false };
-      }
-      function activeBase(t) {
-        if (t >= 10.45 && t < 14.2) return "B1";
-        if (t >= 14.45 && t < 19.2) return "B2";
-        if (t >= 19.4 && t < 23.2) return "B3";
-        if (t >= 24.05 && t < 30.9) return "H";
-        return null;
-      }
-
-      // ---------- crowd / family cheer envelope ----------
-      const CHEERS = [[4.1, 1.6], [5.3, 1.6], [13.55, 1.6], [24.1, 3.2], [31.45, 3.0]];
-      function cheer(t) {
-        let v = 0;
-        for (const [a, d] of CHEERS) if (t >= a && t < a + d) v = Math.max(v, 1 - (t - a) / d);
-        return v;
-      }
-
-      // ---------- app tiles on the TV home screen ----------
+      // ===================================================================
+      // TV SCREEN (150 x 84)
+      // ===================================================================
       const APPS = [
         ["#e8463c", "play"], ["#2f6fd6", "note"], ["#3cb371", "ball"], ["#f2a516", "star"],
-        ["#1fa3a3", "film"], ["#d64f8a", "heart"], ["#5f6b7a", "gear"], ["#e07b39", "cam"],
+        ["#1fa3a3", "film"], ["#d64f8a", "heart"], ["#7a5cff", "game"], ["#e07b39", "cam"],
       ];
-      const MESSY = (() => {
-        const g = rng(7);
-        return APPS.map((_, i) => ({
-          x: 8 + i * 14 + g() * 6, y: 61 + g() * 2, w: 8 + Math.floor(g() * 4), h: 7 + Math.floor(g() * 4),
-          ux: 10 + g() * 100, uy: 18 + g() * 40,
-        }));
-      })();
+      const JUNK = [["SHOP", "#9a9a2a"], ["GAME", "#7a3b8f"], ["NEWS", "#8f3b3b"], ["PROMO", "#3b6a8f"], ["DEALS", "#8f6a3b"]];
       function glyph(c, kind, cx, cy, col) {
         const P = {
-          play: ["#..", "##.", "###", "##.", "#.."], note: [".##", ".#.", ".#.", "##.", "##."],
-          ball: [".#.", "###", "#.#", "###", ".#."], star: [".#.", "###", ".#.", "#.#", "..."],
-          film: ["###", "#.#", "###", "#.#", "###"], heart: ["#.#", "###", "###", ".#.", "..."],
-          gear: ["#.#", ".#.", "###", ".#.", "#.#"], cam: ["...", "###", "#.#", "###", "..."],
+          play: ["#...", "##..", "###.", "##..", "#..."], note: [".###", ".#.#", ".#.#", "##.#", "##.."],
+          ball: [".##.", "#..#", "####", "#..#", ".##."], star: [".#..", "####", ".##.", "#..#", "...."],
+          film: ["####", "#..#", "####", "#..#", "####"], heart: ["#.#.", "####", "####", ".##.", "...."],
+          game: ["####", "#.##", "####", "#..#", "...."], cam: ["....", "####", "#..#", "####", "...."],
         }[kind];
-        for (let j = 0; j < 5; j++) for (let i = 0; i < 3; i++) if (P[j][i] === "#") px(c, cx - 1 + i, cy - 2 + j, col);
+        for (let j = 0; j < 5; j++) for (let i = 0; i < 4; i++) if (P[j][i] === "#") px(c, cx - 2 + i, cy - 2 + j, col);
       }
       function tile(c, x, y, w, h, col, kind, round) {
         x = Math.round(x); y = Math.round(y); w = Math.round(w); h = Math.round(h);
         for (let j = 0; j < h; j++) {
           const inset = round ? (j === 0 || j === h - 1 ? 2 : j === 1 || j === h - 2 ? 1 : 0) : 0;
           r(c, x + inset, y + j, w - 2 * inset, 1, col);
+          if (j === 0 && round) r(c, x + inset, y, w - 2 * inset, 1, "rgba(255,255,255,0.35)");
           if (j === h - 1) r(c, x + inset, y + j, w - 2 * inset, 1, "rgba(0,0,0,0.35)");
         }
         glyph(c, kind, x + Math.floor(w / 2), y + Math.floor(h / 2), "#ffffff");
       }
-
-      // ---------- wallpaper and drone landscape ----------
-      function wallpaper(c, a) {
+      function topBar(c, t, clean) {
+        r(c, 0, 0, 150, 9, clean ? "rgba(0,0,0,0.35)" : "#111317");
+        r(c, 3, 2, 4, 4, "#ffffff");
+        const tabs = ["HOME", "MOVIES", "APPS"];
+        let x = 12;
+        tabs.forEach((s, i) => {
+          tiny(c, s, x, 2, i === 0 ? "#ffffff" : "#8a8f99");
+          if (i === 0) r(c, x, 8, tinyW(s), 1, "#ffd447");
+          x += tinyW(s) + 6;
+        });
+        tiny(c, "20:30", 150 - tinyW("20:30") - 3, 2, "#ffffff");
+      }
+      // sunset wallpaper
+      function wallpaper(c, a, x0 = 0, x1 = 150) {
         if (a <= 0) return;
         c.save();
         c.globalAlpha = a;
-        ditherBand(c, 0, 128, 0, 16, "#f7c27a", "#f6a65e");
-        ditherBand(c, 0, 128, 16, 34, "#f6a65e", "#ee7f5c");
-        ellipse(c, 96, 38, 9, 9, "#ffe08a");
-        ditherBand(c, 0, 128, 40, 56, "#3d7ea6", "#2b5f86");
-        r(c, 0, 56, 128, 16, "#2b5f86");
-        for (let x = 0; x < 128; x++) {
-          const h = 6 + Math.round(4 * Math.sin(x * 0.09) + 2 * Math.sin(x * 0.23));
-          r(c, x, 40 - h, 1, h, "#4b3b47");
+        c.beginPath();
+        c.rect(x0, 0, x1 - x0, 84);
+        c.clip();
+        ditherBand(c, 0, 150, 0, 22, "#ffcf8a", "#f6a65e");
+        ditherBand(c, 0, 150, 22, 42, "#f6a65e", "#e9705c");
+        ellipse(c, 112, 44, 11, 11, "#ffe9a8");
+        ditherBand(c, 0, 150, 46, 64, "#3d7ea6", "#245678");
+        r(c, 0, 64, 150, 20, "#1d4664");
+        for (let x = 0; x < 150; x++) {
+          const h = 8 + Math.round(5 * Math.sin(x * 0.08) + 3 * Math.sin(x * 0.21));
+          r(c, x, 46 - h, 1, h, "#4b3b47");
         }
-        for (let k = 0; k < 7; k++) r(c, 84 + k * 3, 44 + k * 2, 6 - k % 3, 1, "#ffe08a");
+        for (let k = 0; k < 8; k++) r(c, 98 + k * 3, 50 + k * 2, 8 - (k % 3) * 2, 1, "#ffe9a8");
         c.restore();
       }
-      function landscape(c, t) {
-        const u = (t - 20) * 16;
-        ditherBand(c, 0, 128, 0, 20, "#f9c784", "#f4a261");
-        ditherBand(c, 0, 128, 20, 34, "#f4a261", "#9fc5d6", Math.floor(u * 0.1));
-        ellipse(c, 30, 20, 6, 6, "#fff1c2");
-        for (let k = 0; k < 4; k++) {
-          const cx = ((k * 47 + 200 - u * 0.5) % 190 + 190) % 190 - 30;
-          r(c, cx, 8 + k * 5, 14, 3, "#ffffff");
-          r(c, cx + 3, 6 + k * 5, 7, 2, "#ffffff");
+      // featured card: night skyline art
+      function heroCard(c, t, p) {
+        if (p <= 0) return;
+        const x = Math.round(lerp(160, 5, back(p))), y = 12, w = 140, h = 31;
+        r(c, x - 1, y - 1, w + 2, h + 2, "#ffffff");
+        ditherBand(c, x, x + w, y, y + h, "#20184a", "#3b2a6b");
+        ellipse(c, x + 112, y + 9, 5, 5, "#fff3c4");
+        const g = rng(91);
+        for (let i = 0; i < 18; i++) {
+          const bw = 5 + Math.floor(g() * 6), bh = 8 + Math.floor(g() * 16), bx = x + i * 8;
+          if (bx + bw > x + w) break;
+          r(c, bx, y + h - bh, bw, bh, "#120d2b");
+          for (let k = 0; k < 4; k++) if (g() > 0.4) px(c, bx + 1 + Math.floor(g() * (bw - 2)), y + h - bh + 2 + Math.floor(g() * (bh - 3)), "#ffd447");
         }
-        for (let x = 0; x < 128; x++) {
-          const v = x + u * 0.3;
-          const h1 = 22 + Math.round(7 * Math.sin(v * 0.07) + 4 * Math.sin(v * 0.19));
-          r(c, x, 50 - h1, 1, h1, "#6f7f99");
-          r(c, x, 50 - h1, 1, 2, "#e9eef5");
-          const w = x + u * 0.8;
-          const h2 = 12 + Math.round(5 * Math.sin(w * 0.05) + 3 * Math.sin(w * 0.13));
-          r(c, x, 60 - h2, 1, h2, "#3e6b4a");
-          if (Math.floor(w) % 9 === 0) { r(c, x, 60 - h2 - 4, 1, 4, "#2b4d35"); r(c, x - 1, 60 - h2 - 3, 3, 2, "#2b4d35"); }
-        }
-        r(c, 0, 60, 128, 12, "#3d7ea6");
-        for (let k = 0; k < 10; k++) {
-          const sx = ((k * 23 - u * 1.4) % 128 + 128) % 128;
-          r(c, sx, 63 + (k % 4) * 2, 4, 1, "#9fd0ea");
-        }
+        r(c, x + 4, y + 4, 36, 9, "rgba(0,0,0,0.55)");
+        tiny(c, "FEATURED", x + 6, y + 6, "#ffd447");
+        r(c, x + 4, y + h - 10, 21, 7, "#ffffff");
+        tiny(c, "PLAY", x + 6, y + h - 9, "#111317");
       }
-
-      // ---------- explosion particles of the ad rows ----------
-      const AD_RECTS = [[4, 9, 120, 20], [4, 32, 120, 12], [4, 46, 120, 12]];
-      const PARTS = (() => {
-        const g = rng(42), list = [];
-        const cols = ["#e8463c", "#ffcc33", "#ff7a00", "#ff3d8b", "#ffffff"];
-        for (const [x, y, w, h] of AD_RECTS)
-          for (let j = 0; j < h; j += 3)
-            for (let i = 0; i < w; i += 3)
-              list.push({ x: x + i, y: y + j, vx: (g() - 0.5) * 140, vy: -20 - g() * 90, col: cols[Math.floor(g() * cols.length)], life: 0.5 + g() * 0.4 });
-        return list;
+      const MESSY = (() => {
+        const g = rng(7);
+        return APPS.map((_, i) => ({
+          x: 6 + i * 17 + g() * 6, y: 72 + g() * 2, w: 9 + Math.floor(g() * 4), h: 8 + Math.floor(g() * 3),
+          ux: 10 + g() * 120, uy: 14 + g() * 50,
+        }));
       })();
-
-      // ---------- TV home screen (128 x 72) ----------
-      function topBar(c, house) {
-        r(c, 3, 2, 3, 3, "#ffffff");
-        tiny(c, "20:30", 128 - tinyW("20:30") - 3, 1, "#ffffff");
-        if (house) { r(c, 9, 3, 5, 3, "#ffd447"); px(c, 11, 1, "#ffd447"); r(c, 10, 2, 3, 1, "#ffd447"); }
-      }
+      const GRID = (i) => [5 + (i % 4) * 36, 47 + Math.floor(i / 4) * 19, 32, 15];
+      // ad chaos
       function adsLayer(c, t, shake) {
         const blink = Math.floor(t * 4) % 2;
-        const dx = shake ? Math.round((rng(Math.floor(t * 30))() - 0.5) * 3) : 0;
-        r(c, 4 + dx, 9, 120, 20, blink ? "#e8463c" : "#ffcc33");
-        tiny(c, "SALE 70%", 64 - tinyW("SALE 70%") / 2 + dx, 16, blink ? "#ffffff" : "#e8463c");
-        r(c, 112 + dx, 10, 11, 7, "#1b1b1f");
-        tiny(c, "AD", 113 + dx, 11, "#ffd447");
+        const dx = shake ? Math.round((rng(Math.floor(t * 30))() - 0.5) * 4) : 0;
+        r(c, 4 + dx, 11, 142, 24, blink ? "#e8463c" : "#ffcc33");
+        for (let k = 0; k < 8; k++) {
+          const a = (k / 8) * Math.PI * 2 + t * 3;
+          pixLine(c, 22 + dx, 23, 22 + dx + Math.cos(a) * 8, 23 + Math.sin(a) * 8, blink ? "#ffcc33" : "#e8463c");
+        }
+        tiny(c, "MEGA SALE 70%", 40 + dx, 15, blink ? "#ffffff" : "#e8463c");
+        tiny(c, "BUY NOW!!", 52 + dx, 24, blink ? "#ffd447" : "#1b1b1f");
+        r(c, 131 + dx, 12, 13, 7, "#1b1b1f");
+        tiny(c, "AD", 134 + dx, 13, "#ffd447");
         const cols = ["#ff7a00", "#e8463c", "#ff3d8b", "#ffcc33"];
         for (let row = 0; row < 2; row++)
           for (let i = 0; i < 4; i++) {
             const on = (i + row + Math.floor(t * 3)) % 2;
-            const x = 4 + i * 31 + dx, y = 32 + row * 14;
-            r(c, x, y, 28, 12, on ? cols[i] : cols[(i + 2) % 4]);
-            tiny(c, row ? "BUY" : "AD", x + 2, y + 4, "#ffffff");
+            const x = 4 + i * 36 + dx, y = 38 + row * 16;
+            r(c, x, y, 34, 14, on ? cols[i] : cols[(i + 2) % 4]);
+            tiny(c, row ? "BUY" : "AD", x + 3, y + 5, "#ffffff");
+            if (row === 0) tiny(c, "%", x + 26, y + 5, "#ffffff");
           }
+        // pop-up window
+        const pb = Math.round(Math.abs(Math.sin(t * 5)) * 2);
+        const px0 = 52 + dx, py0 = 27 - pb;
+        r(c, px0 + 2, py0 + 2, 52, 26, "rgba(0,0,0,0.5)");
+        r(c, px0, py0, 52, 26, "#f4f4f4");
+        r(c, px0, py0, 52, 7, "#2f6fd6");
+        tiny(c, "WIN!", px0 + 2, py0 + 1, "#ffffff");
+        r(c, px0 + 45, py0 + 1, 6, 5, "#e8463c");
+        tiny(c, "X", px0 + 46, py0 + 1, "#ffffff");
+        tiny(c, "FREE PRIZE", px0 + 6, py0 + 10, "#e8463c");
+        r(c, px0 + 12, py0 + 18, 28, 6, blink ? "#3cb371" : "#2e8b57");
+        tiny(c, "CLICK", px0 + 16, py0 + 19, "#ffffff");
+        // cursor
+        const cx = px0 + 34 + Math.round(Math.sin(t * 2) * 6), cy = py0 + 20;
+        const CUR = ["#....", "##...", "#*#..", "#**#.", "#***#", "#**##", "##.#."];
+        CUR.forEach((row, j) => [...row].forEach((ch, i) => { if (ch !== ".") px(c, cx + i, cy + j, ch === "#" ? "#111317" : "#ffffff"); }));
       }
-      function drawScreen(t) {
-        const c = Sc;
-        c.clearRect(0, 0, 128, 72);
-        // terminal for the home step
-        if (t >= 24.05 && t < 30.9) {
-          r(c, 0, 0, 128, 72, "#0c100c");
-          r(c, 1, 1, 126, 1, "#49d17a"); r(c, 1, 70, 126, 1, "#49d17a");
-          r(c, 1, 1, 1, 70, "#49d17a"); r(c, 126, 1, 1, 70, "#49d17a");
-          return;
+      const AD_RECTS = [[4, 11, 142, 24], [4, 38, 142, 14], [4, 54, 142, 14], [52, 25, 52, 28]];
+      const PARTS = (() => {
+        const g = rng(42), list = [];
+        const cols = ["#e8463c", "#ffcc33", "#ff7a00", "#ff3d8b", "#ffffff", "#2f6fd6"];
+        for (const [x, y, w, h] of AD_RECTS)
+          for (let j = 0; j < h; j += 3)
+            for (let i = 0; i < w; i += 3)
+              list.push({ x: x + i, y: y + j, vx: (x + i - 75) * (1.2 + g() * 1.5), vy: (y + j - 40) * (1.2 + g() * 1.5) - 30, col: cols[Math.floor(g() * cols.length)], life: 0.45 + g() * 0.4 });
+        return list;
+      })();
+      function landscape(c, t) {
+        const u = (t - 20) * 16;
+        ditherBand(c, 0, 150, 0, 22, "#ffd59a", "#f4a261");
+        ditherBand(c, 0, 150, 22, 38, "#f4a261", "#9fc5d6", Math.floor(u * 0.1));
+        ellipse(c, 34, 22, 7, 7, "#fff1c2");
+        for (let k = 0; k < 6; k++) {
+          const a = -0.6 + k * 0.25;
+          pixLine(c, 34, 22, 34 + Math.cos(a) * 30, 22 + Math.sin(a) * 30, "rgba(255,241,194,0.25)");
         }
-        // dark jumbotron while it carries the "4 STEPS" / "HOME RUN" text
-        if (t >= 3.05 && t < 10.45) {
-          r(c, 0, 0, 128, 72, "#0b0e14");
-          return;
+        for (let k = 0; k < 4; k++) {
+          const cx = ((k * 53 + 220 - u * 0.5) % 220 + 220) % 220 - 40;
+          r(c, cx, 8 + k * 5, 16, 3, "#ffffff"); r(c, cx + 3, 6 + k * 5, 8, 2, "#ffffff");
         }
-        // drone screensaver for the 3rd-base step
-        if (t >= 20.15 && t < 23.0) {
-          landscape(c, t);
-          return;
+        for (let x = 0; x < 150; x++) {
+          const v = x + u * 0.3;
+          const h1 = 24 + Math.round(8 * Math.sin(v * 0.07) + 4 * Math.sin(v * 0.19));
+          r(c, x, 52 - h1, 1, h1, "#6f7f99"); r(c, x, 52 - h1, 1, 2, "#e9eef5");
+          const w = x + u * 0.8;
+          const h2 = 12 + Math.round(5 * Math.sin(w * 0.05) + 3 * Math.sin(w * 0.13));
+          r(c, x, 64 - h2, 1, h2, "#3e6b4a");
+          if (Math.floor(w) % 9 === 0) { r(c, x, 64 - h2 - 5, 1, 5, "#2b4d35"); r(c, x - 1, 64 - h2 - 4, 3, 3, "#2b4d35"); }
         }
-        const ads = t < 13.55;
-        r(c, 0, 0, 128, 72, "#1d2026");
-        const wp = t >= 30.9 || t < 0.0 ? 1 : prog(t, 17.3, 18.3);
-        wallpaper(c, t >= 17.3 ? wp : 0);
-        if (ads) adsLayer(c, t, t >= 12.6);
-        // explosion
-        if (t >= 13.55 && t < 14.6) {
-          const dt = t - 13.55;
-          for (const p of PARTS) {
-            if (dt > p.life) continue;
-            r(c, p.x + p.vx * dt, p.y + p.vy * dt + 160 * dt * dt, 2, 2, p.col);
-          }
+        r(c, 0, 64, 150, 20, "#3d7ea6");
+        for (let k = 0; k < 14; k++) {
+          const sx = ((k * 23 - u * 1.4) % 150 + 150) % 150;
+          r(c, sx, 67 + (k % 5) * 3, 5, 1, "#9fd0ea");
         }
-        // the eight app tiles: messy row -> scattered -> neat rounded grid
-        const snapStart = 15.4;
+        for (let k = 0; k < 5; k++) {
+          const bx = ((40 + k * 9 + (t - 20) * 18) % 190) - 20, by = 18 + (k % 3) * 4 + Math.round(Math.sin(t * 6 + k));
+          const flap = Math.floor(t * 8 + k) % 2;
+          px(c, bx - 1, by - flap, "#2a2a35"); px(c, bx, by, "#2a2a35"); px(c, bx + 1, by - flap, "#2a2a35");
+        }
+        r(c, 116, 74, 30, 7, "rgba(0,0,0,0.4)");
+        tiny(c, "20:30", 120, 75, "#ffffff");
+      }
+      function cleanHome(c, t, o) {
+        r(c, 0, 0, 150, 84, "#15171c");
+        wallpaper(c, o.wall, 0, o.wipe);
+        if (o.wipe < 150 && o.wipe > 0) r(c, o.wipe, 0, 2, 84, "#ffffff");
+        heroCard(c, t, o.hero);
         APPS.forEach(([col, kind], i) => {
-          const m = MESSY[i];
-          let x = m.x, y = m.y, w = m.w, h = m.h;
-          if (t >= 13.7) {
-            const p = eo(prog(t, 13.7, 14.3));
-            x = lerp(m.x, m.ux, p); y = lerp(m.y, m.uy, p);
+          const [gx, gy, gw, gh] = GRID(i);
+          let x = gx, y = gy, w = gw, h = gh;
+          const sp = o.snap(i);
+          if (sp < 1) {
+            const m = MESSY[i];
+            x = lerp(m.ux, gx, sp); y = lerp(m.uy, gy, sp); w = lerp(m.w, gw, sp); h = lerp(m.h, gh, sp);
           }
-          const sp = eo(prog(t, snapStart + i * 0.12, snapStart + i * 0.12 + 0.35));
-          const gx = 5 + (i % 4) * 31, gy = 22 + Math.floor(i / 4) * 23;
-          if (sp > 0) { x = lerp(x, gx, sp); y = lerp(y, gy, sp); w = lerp(w, 26, sp); h = lerp(h, 17, sp); }
-          const focus = i === 0 && sp >= 1;
-          if (focus) r(c, x - 2, y - 2, w + 4, h + 4, "#ffffff");
-          tile(c, focus ? x - 1 : x, focus ? y - 1 : y, focus ? w + 2 : w, focus ? h + 2 : h, col, kind, sp >= 1);
+          const f = o.focus === i;
+          if (f) { r(c, x - 2, y - 2, w + 4, h + 4, "#ffffff"); tile(c, x - 1, y - 1, w + 2, h + 2, col, kind, true); }
+          else tile(c, x, y, w, h, col, kind, sp >= 1);
+          const st = o.snapT(i);
+          if (st >= 0 && st < 0.35) {
+            const s = Math.round(lerp(1, 4, st / 0.35));
+            star4(c, x + w - 1, y, s, "#ffd447");
+          }
         });
-        topBar(c, t >= 12.15);
-        // launcher stamp on "swap the home screen app"
-        if (t >= 11.85 && t < 12.5) {
-          const p = prog(t, 11.85, 12.15);
-          const yy = lerp(-20, 22, eo(p));
-          const sq = t >= 12.15 ? 1 + 0.3 * (1 - prog(t, 12.15, 12.35)) : 1;
-          const w = 22 * sq, h = 18 / sq;
-          r(c, 64 - w / 2, yy + 18 - h, w, h, "#ffd447");
-          r(c, 64 - w / 2 - 3, yy + 18 - h - 2, w + 6, 3, "#ffd447");
-          r(c, 61, yy + 18 - 8, 6, 8, "#1d2026");
-        }
-        if (t >= 12.15 && t < 12.22) r(c, 0, 0, 128, 72, "#ffffff");
-        // idle dimming before the screensaver, and the wake-up after it
-        if (t >= 19.5 && t < 20.15) { c.save(); c.globalAlpha = prog(t, 19.5, 20.1) * 0.8; r(c, 0, 0, 128, 72, "#000000"); c.restore(); }
-        if (t >= 23.0 && t < 23.35) { c.save(); c.globalAlpha = 1 - prog(t, 23.0, 23.35); r(c, 0, 0, 128, 72, "#000000"); c.restore(); }
+        topBar(c, t, true);
       }
-      function staticNoise(c, t) {
+      function crtStatic(c, t, a = 1) {
         const g = rng(1000 + Math.floor(t * 30));
-        for (let y = 0; y < 72; y += 2)
-          for (let x = 0; x < 128; x += 2) {
+        c.save();
+        c.globalAlpha = a;
+        for (let y = 0; y < 84; y += 2)
+          for (let x = 0; x < 150; x += 2) {
             const v = Math.floor(g() * 200 + 40);
             r(c, x, y, 2, 2, `rgb(${v},${v},${v})`);
           }
+        c.restore();
+      }
+      const FINAL = { wall: 1, wipe: 150, hero: 1, snap: () => 1, snapT: () => -1 };
+      // the junk clean-up shown on the living-room TV after the home run
+      function junkScreen(c, t) {
+        cleanHome(c, t, { ...FINAL, focus: -1 });
+        r(c, 0, 44, 150, 40, "rgba(10,10,14,0.88)");
+        tiny(c, "PREINSTALLED", 4, 46, "#ff5a5a");
+        JUNK.forEach(([name, col], i) => {
+          const zap = 25.0 + i * 0.36;
+          const x = 4 + i * 29, y = 56;
+          const restored = t >= 29.2 && t < 30.2 && i === 2;
+          if (t < zap || restored) {
+            c.save();
+            if (restored) c.globalAlpha = clamp(0.55 + 0.45 * Math.sin((t - 29.2) * 12));
+            r(c, x, y, 26, 20, col);
+            r(c, x, y, 26, 1, "rgba(255,255,255,0.3)");
+            tiny(c, name, x + 13 - Math.floor(tinyW(name) / 2), y + 8, "#ffffff");
+            r(c, x + 21, y - 2, 6, 6, "#e8463c");
+            tiny(c, "!", x + 22, y - 2, "#ffffff");
+            c.restore();
+          }
+          if (t >= zap - 0.12 && t < zap + 0.05) pixLine(c, x + 13, 0, x + 13, y + 10, "#ffd447", 3);
+          if (t >= zap && t < zap + 0.6) {
+            const g = rng(500 + i), dt = t - zap;
+            for (let k = 0; k < 16; k++) {
+              const a = g() * Math.PI * 2, sp = 10 + g() * 30;
+              if (dt > 0.4 && k % 2) continue;
+              r(c, x + 13 + Math.cos(a) * sp * eo(dt / 0.6), y + 10 + Math.sin(a) * sp * eo(dt / 0.6), 2, 2, k % 3 ? col : "#ffd447");
+            }
+          }
+        });
+        // safe shield
+        if (t >= 27.5 && t < 30.6) {
+          const s = back(prog(t, 27.5, 27.75));
+          const cx = 75, cy = 64;
+          const SH = ["..#######..", ".#########.", "###########", "#####.#####", "####...####", "###.#.#.###", ".#..###..#.", ".##.....##.", "..##...##..", "...##.##...", "....###...."];
+          SH.forEach((row, j) => [...row].forEach((ch, i) => {
+            const xx = cx + (i - 5.5) * 2 * s, yy = cy + (j - 5.5) * 2 * s;
+            r(c, xx, yy, Math.max(1, 2 * s), Math.max(1, 2 * s), ch === "#" ? "#3cb371" : "#eaffef");
+          }));
+          if (s >= 0.99) { r(c, 98, 60, 19, 7, "#3cb371"); tiny(c, "SAFE", 100, 61, "#ffffff"); }
+        }
+        // undo arrow bringing one back
+        if (t >= 29.2 && t < 30.6) {
+          const p = prog(t, 29.2, 29.6);
+          for (let k = 0; k <= 12 * p; k++) {
+            const a = Math.PI * (1 + k / 12);
+            r(c, 75 + Math.cos(a) * 11, 52 + Math.sin(a) * 6, 2, 2, "#ffd447");
+          }
+          r(c, 112, 45, 19, 7, "#ffd447");
+          tiny(c, "UNDO", 114, 46, "#111317");
+        }
+      }
+      function drawScreen(t, mode) {
+        const c = Sc;
+        c.clearRect(0, 0, 150, 84);
+        if (mode === "junk") {
+          if (t < 30.6) junkScreen(c, t);
+          else cleanHome(c, t, { ...FINAL, focus: Math.floor((t - 30.6) * 2.5) % 4 });
+          return;
+        }
+        if (t < T.b2) {
+          r(c, 0, 0, 150, 84, "#1d2026");
+          topBar(c, t, false);
+          if (t < 13.55) adsLayer(c, t, t >= 12.6);
+          if (t >= 13.55 && t < 14.4) {
+            const dt = t - 13.55;
+            if (dt < 0.06) r(c, 0, 0, 150, 84, "#ffffff");
+            ring(c, 75, 42, 8 + dt * 160, 5 + dt * 100, "#ffffff");
+            ring(c, 75, 42, 4 + dt * 120, 3 + dt * 80, "#ffd447");
+            for (const p of PARTS) {
+              if (dt > p.life) continue;
+              r(c, p.x + p.vx * dt, p.y + p.vy * dt + 120 * dt * dt, 2, 2, p.col);
+            }
+          }
+          APPS.forEach(([col, kind], i) => {
+            const m = MESSY[i];
+            const p = eo(prog(t, 13.7, 14.2));
+            tile(c, lerp(m.x, m.ux, p), lerp(m.y, m.uy, p), m.w, m.h, col, kind, false);
+          });
+          // the new home app stamps down on "swap the home screen app"
+          if (t >= 11.75 && t < 12.6) {
+            const p = prog(t, 11.75, 12.1);
+            const yy = lerp(-30, 26, eo(p));
+            const sq = t >= 12.1 ? 1 + 0.35 * (1 - prog(t, 12.1, 12.3)) : 1;
+            const w = 30 * sq, h = 26 / sq, x = 75 - w / 2, y = yy + 26 - h;
+            r(c, x - 4, y + 6, w + 8, 4, "#ffd447");
+            for (let k = 0; k < 7; k++) r(c, 75 - k * 2 - 2, y - 1 + k, k * 4 + 4, 1, "#ffd447");
+            r(c, x, y + 8, w, h - 8, "#ffd447");
+            r(c, 71, y + h - 9, 8, 9, "#1d2026");
+            if (t >= 12.1 && t < 12.45) ring(c, 75, yy + 26, (t - 12.1) * 160, (t - 12.1) * 50, "#ffffff");
+          }
+          if (t >= 12.1 && t < 12.15) r(c, 0, 0, 150, 84, "#ffffff");
+          return;
+        }
+        if (t < T.b3) {
+          const snap0 = 15.3;
+          cleanHome(c, t, {
+            wall: t >= 17.3 ? 1 : 0,
+            wipe: Math.round(150 * eio(prog(t, 17.3, 17.9))),
+            hero: prog(t, 17.8, 18.25),
+            snap: (i) => eo(prog(t, snap0 + i * 0.13, snap0 + i * 0.13 + 0.3)),
+            snapT: (i) => t - (snap0 + i * 0.13 + 0.3),
+            focus: t >= 16.6 ? Math.floor((t - 16.6) * 3) % 4 : -1,
+          });
+          return;
+        }
+        if (t < 20.0) {
+          cleanHome(c, t, { ...FINAL, focus: 0 });
+          const a = prog(t, 19.55, 20.0);
+          c.save(); c.globalAlpha = a * 0.75; r(c, 0, 0, 150, 84, "#000000"); c.restore();
+          if (t >= 19.6) tiny(c, "Z", 120 + Math.round((t - 19.6) * 10), 30 - Math.round((t - 19.6) * 20), "#ffffff");
+          return;
+        }
+        landscape(c, t);
+        if (t < 20.3) { c.save(); c.globalAlpha = 1 - prog(t, 20.0, 20.3); r(c, 0, 0, 150, 84, "#000000"); c.restore(); }
       }
 
-      // ---------- family ----------
-      function person(c, cx, cy, rx, ry, hair, shirt, style, armsUp, remote) {
+      // ===================================================================
+      // RUNNER (procedural run cycle at base resolution, drawn x3)
+      // ===================================================================
+      const RP = { helmet: "#d23a32", helmetHi: "#ef6a5e", brim: "#7a1f1a", skin: "#e0a37a", skinD: "#b97a55", shirt: "#f4f4f4", shirtD: "#cfd3da", stripe: "#d23a32", pants: "#b9bcc4", pantsD: "#8e929c", shoe: "#1b1b1f", belt: "#1b1b1f", sock: "#d23a32" };
+      function limb(c, x0, y0, a1, l1, a2, l2, c1, c2, th) {
+        const x1 = x0 + Math.sin(a1) * l1, y1 = y0 + Math.cos(a1) * l1;
+        const x2 = x1 + Math.sin(a2) * l2, y2 = y1 + Math.cos(a2) * l2;
+        pixLine(c, x0, y0, x1, y1, c1, th);
+        pixLine(c, x1, y1, x2, y2, c2, th);
+        return [x2, y2];
+      }
+      function head(c, hx, hy) {
+        r(c, hx - 1, hy + 4, 3, 2, RP.skin);
+        ellipse(c, hx, hy + 2, 3, 3, RP.skin);
+        px(c, hx + 2, hy + 1, RP.shoe);
+        px(c, hx + 1, hy + 4, RP.skinD);
+        for (let y = -2; y <= 1; y++) for (let x = -4; x <= 3; x++) if ((x * x) / 16 + ((y + 0.5) * (y + 0.5)) / 6 <= 1) px(c, hx + x, hy + y, RP.helmet);
+        px(c, hx - 2, hy - 2, RP.helmetHi); px(c, hx - 1, hy - 2, RP.helmetHi);
+        r(c, hx + 2, hy + 1, 3, 1, RP.brim);
+        r(c, hx - 4, hy + 1, 2, 3, RP.helmet);
+      }
+      function drawRunner(t, pose) {
+        const c = Rn;
+        c.clearRect(0, 0, 24, 26);
+        if (pose === "slide") {
+          pixLine(c, 7, 23, 19, 23, RP.pants, 2);
+          r(c, 19, 21, 3, 3, RP.shoe);
+          pixLine(c, 8, 21, 16, 20, RP.pantsD, 2);
+          r(c, 2, 17, 7, 5, RP.shirt);
+          r(c, 5, 17, 1, 5, RP.stripe);
+          r(c, 2, 21, 7, 1, RP.belt);
+          head(c, 3, 11);
+          pixLine(c, 6, 18, 11, 13, RP.shirt, 2);
+          r(c, 11, 12, 2, 2, RP.skin);
+          return;
+        }
+        if (pose === "cheer" || pose === "stand" || pose === "bat") {
+          const by = pose === "cheer" ? Math.round(Math.abs(Math.sin(t * 8)) * 2) : 0;
+          const hipY = 15 - by;
+          limb(c, 10, hipY, 0.15, 4, 0.05, 5, RP.pantsD, RP.pantsD, 2);
+          limb(c, 13, hipY, -0.1, 4, -0.05, 5, RP.pants, RP.pants, 2);
+          r(c, 9, 24 - by, 4, 2, RP.shoe); r(c, 13, 24 - by, 4, 2, RP.shoe);
+          r(c, 9, hipY - 7, 6, 7, RP.shirt); r(c, 12, hipY - 7, 1, 7, RP.stripe); r(c, 9, hipY - 1, 6, 1, RP.belt);
+          head(c, 12, hipY - 13);
+          if (pose === "cheer") {
+            limb(c, 10, hipY - 6, Math.PI - 0.5, 3, Math.PI - 0.3, 4, RP.shirtD, RP.skin, 2);
+            limb(c, 14, hipY - 6, Math.PI + 0.5, 3, Math.PI + 0.3, 4, RP.shirt, RP.skin, 2);
+          } else if (pose === "bat") {
+            limb(c, 13, hipY - 6, 0.9, 3, 2.4, 3, RP.shirt, RP.skin, 2);
+            pixLine(c, 14, hipY - 8, 7, hipY - 18, "#c58b4a", 2);
+          } else {
+            limb(c, 10, hipY - 6, 0.2, 3, 0.1, 3, RP.shirtD, RP.skin, 2);
+            limb(c, 14, hipY - 6, -0.2, 3, -0.1, 3, RP.shirt, RP.skin, 2);
+          }
+          return;
+        }
+        const ph = t * Math.PI * 2 * 1.6;
+        const bob = Math.round(Math.abs(Math.sin(ph)) * 1.5);
+        const hipX = 11, hipY = 14 - bob;
+        const leg = (p, cThigh, cShin, near) => {
+          const a1 = 0.75 * Math.sin(p);
+          const bend = 0.25 + 1.0 * (0.5 + 0.5 * Math.cos(p));
+          const [fx, fy] = limb(c, hipX, hipY, a1, 5, a1 - bend, 5, cThigh, cShin, 2);
+          r(c, fx - 1, fy, 4, 2, RP.shoe);
+          if (near) px(c, fx, fy - 1, RP.sock);
+        };
+        const arm = (p, cUp, cLow) => {
+          const a = -0.9 * Math.sin(p);
+          limb(c, 12, hipY - 6, a, 3, a + 1.4, 3, cUp, cLow, 2);
+        };
+        leg(ph + Math.PI, RP.pantsD, RP.pantsD, false);
+        arm(ph, RP.shirtD, RP.skinD);
+        for (let k = 0; k < 7; k++) r(c, 9 + Math.round(k * 0.25), hipY - 7 + k, 6, 1, RP.shirt);
+        for (let k = 0; k < 7; k++) px(c, 12 + Math.round(k * 0.25), hipY - 7 + k, RP.stripe);
+        r(c, 10, hipY - 1, 6, 1, RP.belt);
+        leg(ph, RP.pants, RP.pants, true);
+        head(c, 14, hipY - 13);
+        arm(ph + Math.PI, RP.shirt, RP.skin);
+      }
+
+      // ===================================================================
+      // BROADCAST SCENES
+      // ===================================================================
+      function skyBand(c, y0, y1, t, seed) {
+        ditherBand(c, 0, 180, y0, y0 + Math.floor((y1 - y0) / 2), "#0d1633", "#1b2a55");
+        ditherBand(c, 0, 180, y0 + Math.floor((y1 - y0) / 2), y1, "#1b2a55", "#263a6b");
+        const g = rng(seed);
+        for (let k = 0; k < 60; k++) {
+          const x = Math.floor(g() * 180), y = y0 + Math.floor(g() * (y1 - y0) * 0.8);
+          if ((k + Math.floor(t * 3)) % 7) px(c, x, y, k % 5 ? "#c9d6ff" : "#ffffff");
+        }
+      }
+      function lightTower(c, x, top, bot) {
+        r(c, x + 2, top, 2, bot - top, "#4a4f5a");
+        for (let j = 0; j < 3; j++) for (let i = 0; i < 4; i++) r(c, x - 2 + i * 3, top - 8 + j * 3, 2, 2, j === 1 && i % 2 ? "#ffe48a" : "#fff6c8");
+      }
+      function crowd(c, y0, y1, t, seed, cheering) {
+        const g = rng(seed);
+        for (let y = y0; y < y1; y += 3)
+          for (let x = 0; x < 180; x += 3) {
+            const col = ["#c94f4f", "#4f7fc9", "#e0c060", "#f4f4f4", "#5aa36a"][Math.floor(g() * 5)];
+            r(c, x, y - (cheering && (x / 3 + Math.floor(t * 10)) % 2 ? 1 : 0), 2, 2, col);
+          }
+      }
+      function drawBatter(t) {
+        const c = Wd;
+        const tilt = Math.round(eio(prog(t, 4.45, 5.2)) * 200);
+        c.save();
+        c.translate(0, tilt);
+        skyBand(c, -220, 140, t, 11);
+        lightTower(c, 6, 60, 140);
+        lightTower(c, 166, 60, 140);
+        crowd(c, 120, 146, t, 5, t >= 4.1);
+        r(c, 0, 146, 180, 6, "#1f5e3a");
+        r(c, 0, 146, 180, 1, "#ffd447");
+        for (let y = 152; y < 330; y += 6) r(c, 0, y, 180, 6, (y / 6) % 2 ? "#2f8f3a" : "#37a043");
+        ellipse(c, 90, 176, 16, 6, "#c07d45");
+        ellipse(c, 90, 270, 60, 30, "#c07d45");
+        r(c, 85, 266, 11, 4, "#f4f4f4");
+        r(c, 87, 270, 7, 2, "#f4f4f4");
+        const PIT = { R: "#23408e", D: "#16285a", K: "#c98b62", W: "#e9ecf2", r: "#23408e", G: "#9aa0ad", B: "#1b1b1f" };
+        const STAND = ["..RRR...", ".RRRRD..", "..KKK...", "..KKK...", ".WWrWW..", "KWWrWWK.", ".WWrWW..", "..GGG...", "..G.G...", "..G.G...", "..G.G...", ".BB.BB.."];
+        STAND.forEach((row, j) => [...row].reverse().forEach((ch, i) => { if (ch !== ".") r(c, 82 + i * 2, 150 + j * 2, 2, 2, PIT[ch]); }));
+        if (t >= 3.6 && t < 3.85) pixLine(c, 86, 160, 80, 148, "#c98b62", 2);
+        drawRunner(t, "stand");
+        c.drawImage(runC, 0, 0, 24, 26, 20, 172, 96, 104);
+        let ang;
+        if (t < 3.95) ang = -120;
+        else if (t < 4.08) ang = lerp(-120, 0, ei(prog(t, 3.95, 4.08)));
+        else ang = lerp(0, -50, eo(prog(t, 4.08, 4.4)));
+        const hx = 72, hy = 222, len = 40, a = (ang * Math.PI) / 180;
+        pixLine(c, hx, hy, hx + Math.cos(a) * len, hy + Math.sin(a) * len, "#c58b4a", 4);
+        pixLine(c, hx, hy, hx + Math.cos(a) * 10, hy + Math.sin(a) * 10, "#8a5a2b", 3);
+        r(c, hx - 3, hy - 3, 6, 6, "#e0a37a");
+        if (t >= 3.75 && t < 4.08) {
+          const p = prog(t, 3.75, 4.08);
+          const s = Math.round(lerp(1, 5, p));
+          r(c, lerp(88, 106, p), lerp(156, 220, p), s, s, "#f4f4f4");
+        } else if (t >= 4.08 && t < 5.2) {
+          const p = prog(t, 4.08, 5.15);
+          for (let k = 6; k >= 0; k--) {
+            const q = Math.max(0, p - k * 0.02);
+            r(c, lerp(108, 150, q), lerp(220, -210, eo(q)), k ? 2 : 4, k ? 2 : 4, k ? "rgba(255,255,255,0.35)" : "#ffffff");
+          }
+        }
+        if (t >= 4.08 && t < 4.55) {
+          const p = prog(t, 4.08, 4.55), rr = Math.round(lerp(8, 30, eo(p)));
+          for (let k = 0; k < 14; k++) {
+            const aa = (k / 14) * Math.PI * 2;
+            pixLine(c, 108 + Math.cos(aa) * rr * 0.4, 220 + Math.sin(aa) * rr * 0.4, 108 + Math.cos(aa) * rr, 220 + Math.sin(aa) * rr, k % 2 ? "#ffd447" : "#ffffff", 2);
+          }
+        }
+        c.restore();
+        if (t >= 4.08 && t < 4.15) r(c, 0, 0, 180, 320, "#ffffff");
+      }
+      function drawSky(t) {
+        const c = Wd;
+        const tilt = Math.round(eio(prog(t, T.tiltDown, T.run)) * 320);
+        c.save();
+        c.translate(0, -tilt);
+        skyBand(c, 0, 320, t, 33);
+        const g = rng(12);
+        for (let k = 0; k < 24; k++) {
+          const sx = Math.floor(g() * 180), sy = (Math.floor(g() * 320) + Math.round((t - 5.2) * 40)) % 320;
+          pixLine(c, sx, sy, sx, sy - 3, "rgba(201,214,255,0.5)");
+        }
+        const p = prog(t, 5.2, 7.2);
+        const bx = lerp(150, 30, p), by = lerp(300, 30, eo(p));
+        for (let k = 10; k >= 1; k--) {
+          const q = Math.max(0, p - k * 0.012);
+          const tx = lerp(150, 30, q), ty = lerp(300, 30, eo(q));
+          r(c, tx, ty, Math.max(1, 5 - k / 2), Math.max(1, 5 - k / 2), k % 2 ? "#ffd447" : "#fff6c8");
+        }
+        ellipse(c, bx, by, 4, 4, "#f4f4f4");
+        px(c, bx - 2, by - 1, "#e8463c"); px(c, bx + 1, by + 1, "#e8463c");
+        c.translate(0, 320);
+        drawRunScene(t, true);
+        c.restore();
+      }
+
+      // ---------- the tracking shot ----------
+      const RX = 66; // runner's screen x (feet): the camera is locked on him
+      const V = 40; // logical px per second
+      function scrollX(t) {
+        if (t < T.go) return 0;
+        if (t > 24.05) return scrollX(24.05) + V * 0.18 * (1 - Math.exp(-(t - 24.05) / 0.18));
+        const u = t - T.go;
+        return V * (u - 0.2 * (1 - Math.exp(-u / 0.2)));
+      }
+      const PADS = [[T.run, "H0"], [T.b1, "B1"], [T.b2, "B2"], [T.b3, "B3"], [T.home, "H"]].map(([tt, k]) => [k, scrollX(tt) + RX, tt]);
+      const GROUND = 234;
+      function drawField(c, t) {
+        const X = scrollX(t);
+        r(c, 0, 150, 180, 14, "#0f1530");
+        for (let k = 0; k < 6; k++) {
+          const lx = ((k * 70 - X * 0.25) % 420 + 420) % 420 - 40;
+          lightTower(c, lx, 112, 160);
+        }
+        const off = Math.floor(X * 0.4);
+        for (let x = 0; x < 180; x += 2) {
+          const h = 2 + (((x + off) * 7919) % 5);
+          r(c, x, 164 - h, 2, h, Math.floor((x + off) / 2) % 3 ? "#1a2244" : "#222c55");
+        }
+        r(c, 0, 164, 180, 3, "#1f5e3a");
+        r(c, 0, 164, 180, 1, "#ffd447");
+        for (let y = 167; y < 320; y++)
+          for (let x = 0; x < 186; x += 6) {
+            const band = Math.floor((x + X + (y - 167) * 0.6) / 12) % 2;
+            r(c, x - (Math.floor(X) % 6), y, 6, 1, band ? "#2f8f3a" : "#37a043");
+          }
+        r(c, 0, 218, 180, 22, "#c07d45");
+        r(c, 0, 218, 180, 1, "#d9935a");
+        r(c, 0, 239, 180, 1, "#9e6234");
+        for (let k = 0; k < 40; k++) {
+          const gx = ((k * 37 - X) % 200 + 200) % 200 - 10, gy = 221 + (k * 13) % 17;
+          px(c, gx, gy, "#a8693a");
+        }
+        r(c, 0, 228, 180, 1, "#f4f4f4");
+        for (const [k, wx, tt] of PADS) {
+          const sx = Math.round(wx - X);
+          if (sx < -20 || sx > 200) continue;
+          const lit = t >= tt && t < tt + 0.5;
+          const col = lit ? "#ffd447" : "#ffffff";
+          if (k === "H" || k === "H0") {
+            r(c, sx - 8, GROUND - 2, 16, 4, col);
+            r(c, sx - 6, GROUND + 2, 12, 2, col);
+            r(c, sx - 3, GROUND + 4, 6, 1, col);
+          } else {
+            r(c, sx - 8, GROUND - 1, 16, 4, col);
+            r(c, sx - 8, GROUND + 3, 16, 1, "#8a5532");
+          }
+        }
+        if (t >= 7.85) {
+          const bx = Math.round(PADS[0][1] - X) - 16;
+          pixLine(c, bx, GROUND + 2, bx + 18, GROUND - 1, "#c58b4a", 2);
+        }
+      }
+      function drawRunScene(t, noSky) {
+        const c = Wd;
+        if (!noSky) skyBand(c, 0, 160, t, 21);
+        fireworks(c, t);
+        drawField(c, t);
+        if (t > T.go + 0.2 && t < 24.1) {
+          const g = rng(Math.floor(t * 12));
+          for (let k = 0; k < 7; k++) {
+            const y = 172 + Math.floor(g() * 64), x = Math.floor(g() * 180);
+            r(c, x, y, 10 + Math.floor(g() * 14), 1, "rgba(255,255,255,0.55)");
+          }
+        }
+        let pose = "run";
+        if (t < T.go) pose = t < 7.85 ? "bat" : "stand";
+        else if (t >= T.slide && t < 24.3) pose = "slide";
+        else if (t >= 24.3) pose = "cheer";
+        drawRunner(t, pose);
+        const shake = touchShake(t);
+        c.drawImage(runC, 0, 0, 24, 26, RX - 36 + shake, GROUND + 3 - 78, 72, 78);
+        if (pose === "run") {
+          for (let k = 0; k < 3; k++) {
+            const age = ((t * 8) % 1) + k * 0.3;
+            r(c, RX - 14 - age * 16 - k * 4, GROUND - 2 - age * 4, 3, 2, "rgba(233,195,155,0.8)");
+          }
+        }
+        if (t >= T.slide && t < 25.0) {
+          const g = rng(77), dt = t - T.slide;
+          for (let i = 0; i < 30; i++) {
+            const a = Math.PI + (g() - 0.5) * 2.6, sp = 14 + g() * 30;
+            if (dt > 0.8 && i % 2) continue;
+            r(c, RX + 6 + Math.cos(a) * sp * eo(dt), GROUND - 2 + Math.sin(a) * sp * 0.45 * eo(dt), 3, 3, i % 3 ? "#d8a070" : "#e9c39b");
+          }
+        }
+        for (const [k, , tt] of PADS) {
+          if (k === "H0") continue;
+          const dt = t - tt;
+          if (dt < 0 || dt > 0.5) continue;
+          ring(c, RX, GROUND + 1, 6 + dt * 90, 2 + dt * 26, "#ffffff");
+          ring(c, RX, GROUND + 1, 3 + dt * 60, 1 + dt * 18, "#ffd447");
+          const g = rng(60 + Math.round(tt));
+          for (let i = 0; i < 12; i++) {
+            const a = -Math.PI * (0.1 + 0.8 * g()), sp = 20 + g() * 30;
+            star4(c, RX + Math.cos(a) * sp * eo(dt / 0.5), GROUND - 4 + Math.sin(a) * sp * eo(dt / 0.5), dt < 0.3 ? 2 : 1, i % 2 ? "#ffd447" : "#ffffff");
+          }
+        }
+        drawPanel(c, t);
+      }
+      function touchShake(t) {
+        for (const tt of [T.b1, T.b2, T.b3, T.home]) if (t >= tt && t < tt + 0.15) return Math.round(Math.sin((t - tt) * 120) * 2);
+        return 0;
+      }
+      const FIREWORKS = [[24.05, 40, 40], [24.3, 140, 30], [24.55, 90, 18], [24.75, 30, 70]];
+      function fireworks(c, t) {
+        FIREWORKS.forEach(([t0, x0, y0], k) => {
+          const dt = t - t0;
+          if (dt < 0 || dt > 1.3) return;
+          const g = rng(300 + k);
+          const cols = [["#ffd447", "#ffffff"], ["#e8463c", "#ffb0a8"], ["#49d17a", "#d6ffe3"], ["#5fb3ff", "#ffffff"]][k % 4];
+          for (let i = 0; i < 22; i++) {
+            const a = (i / 22) * Math.PI * 2 + g() * 0.2, sp = 26 + g() * 12;
+            const rr = sp * eo(Math.min(1, dt / 0.9));
+            if (dt > 0.9 && (i + Math.floor(t * 20)) % 2) continue;
+            r(c, x0 + Math.cos(a) * rr, y0 + Math.sin(a) * rr + 10 * dt * dt, 2, 2, cols[i % 2]);
+          }
+        });
+      }
+      // a retro CRT that powers on above the runner when he touches a base
+      const PANEL = [15, 64, 150, 84];
+      function drawPanel(c, t) {
+        if (t < T.b1 - 0.02 || t >= T.panelOff + 0.3) return;
+        const [x, y, w, h] = PANEL;
+        const pin = back(prog(t, T.b1, T.b1 + 0.3));
+        const pout = t >= T.panelOff ? prog(t, T.panelOff, T.panelOff + 0.3) : 0;
+        const cx = x + w / 2, cy = y + h / 2;
+        const sc = clamp(0.2 + 0.8 * pin, 0, 1.2) * (1 - 0.15 * pout);
+        c.save();
+        c.translate(cx, cy);
+        c.scale(sc, sc);
+        c.translate(-cx, -cy);
+        r(c, x - 5, y - 5, w + 10, h + 14, "#1b1b22");
+        r(c, x - 5, y - 5, w + 10, 1, "#34343f");
+        r(c, x - 5, y + h + 1, w + 10, 1, "#ffd447");
+        px(c, x + w + 2, y + h + 5, "#e8463c");
+        r(c, x, y, w, h, "#05060a");
+        drawScreen(t, "panel");
+        for (const tt of [T.b2, T.b3]) if (t >= tt && t < tt + 0.12) crtStatic(Sc, t);
+        const on = prog(t, T.b1, T.b1 + 0.22);
+        let vis = h;
+        if (on < 1) vis = Math.max(1, Math.round(h * eo(on)));
+        if (pout > 0) vis = Math.max(1, Math.round(h * (1 - eo(pout))));
+        const sy = Math.round(y + (h - vis) / 2);
+        c.drawImage(scrC, 0, Math.round((h - vis) / 2), w, vis, x, sy, w, vis);
+        if (on < 1 || pout > 0) r(c, x, sy + Math.floor(vis / 2), w, 1, "#ffffff");
+        c.restore();
+      }
+
+      // ===================================================================
+      // LIVING ROOM
+      // ===================================================================
+      function person(c, cx, cy, rx, hair, shirt, style, armsUp, remote, t, i) {
+        const ry = rx;
         const shW = rx * 3;
         r(c, cx - shW / 2, cy + ry - 1, shW, ry * 2, shirt);
         if (armsUp) {
-          r(c, cx - shW / 2 - 1, cy - ry * 2, Math.max(2, rx / 2), ry * 3, shirt);
-          r(c, cx + shW / 2 - Math.max(2, rx / 2) + 1, cy - ry * 2, Math.max(2, rx / 2), ry * 3, shirt);
-          r(c, cx - shW / 2 - 1, cy - ry * 2 - 2, Math.max(2, rx / 2), 2, "#e0a37a");
-          r(c, cx + shW / 2 - Math.max(2, rx / 2) + 1, cy - ry * 2 - 2, Math.max(2, rx / 2), 2, "#e0a37a");
+          const wave = Math.round(Math.sin(t * 10 + i) * 2);
+          const aw = Math.max(2, Math.round(rx / 2));
+          r(c, cx - shW / 2 - 1 + wave, cy - ry * 2, aw, ry * 3, shirt);
+          r(c, cx + shW / 2 - aw + 1 - wave, cy - ry * 2, aw, ry * 3, shirt);
+          r(c, cx - shW / 2 - 1 + wave, cy - ry * 2 - 3, aw, 3, "#e0a37a");
+          r(c, cx + shW / 2 - aw + 1 - wave, cy - ry * 2 - 3, aw, 3, "#e0a37a");
         }
         px(c, cx - rx - 1, cy, "#e0a37a");
         px(c, cx + rx + 1, cy, "#e0a37a");
@@ -376,33 +815,25 @@
         }
       }
       const FAM = [
-        { x: 52, hair: "#2b1d14", shirt: "#3a6ea5", s: "short", adult: 1 },
-        { x: 82, hair: "#6b3b1f", shirt: "#2f9e8f", s: "long", adult: 1 },
-        { x: 112, hair: "#1f1a17", shirt: "#e0b23a", s: "short", adult: 0 },
-        { x: 140, hair: "#8a5a2b", shirt: "#d0567a", s: "tail", adult: 0 },
+        { x: 50, hair: "#2b1d14", shirt: "#3a6ea5", s: "short", adult: 1 },
+        { x: 80, hair: "#6b3b1f", shirt: "#2f9e8f", s: "long", adult: 1 },
+        { x: 110, hair: "#1f1a17", shirt: "#e0b23a", s: "short", adult: 0 },
+        { x: 138, hair: "#8a5a2b", shirt: "#d0567a", s: "tail", adult: 0 },
       ];
-      function familyRoom(c, t) {
-        const ch = t >= 31.45 ? 1 : 0;
-        FAM.forEach((f, i) => {
-          const jump = ch ? Math.round(Math.abs(Math.sin((t - 31.45) * 7 + i * 1.3)) * 3) : 0;
-          const rx = f.adult ? 8 : 6, cy = (f.adult ? 214 : 220) - jump;
-          const remote = i === 0 && t >= 2.3 && t < 3.3 ? eo(prog(t, 2.3, 2.6)) : 0;
-          person(c, f.x, cy, rx, rx, f.hair, f.shirt, f.s, ch && t >= 31.6, remote);
-        });
+      function confetti(c, t, t0, n, seed) {
+        if (t < t0) return;
+        const g = rng(seed), dt = t - t0;
+        const cols = ["#ffd447", "#e8463c", "#49d17a", "#5fb3ff", "#ff6fb5", "#ffffff"];
+        for (let i = 0; i < n; i++) {
+          const x0 = g() * 180, delay = g() * 2.5, sp = 26 + g() * 30, sway = g() * 6.28;
+          const u = dt - delay;
+          if (u < 0) continue;
+          const y = -6 + ((u * sp) % 340);
+          const x = x0 + Math.sin(u * 3 + sway) * 6;
+          const flip = Math.floor(u * 8 + i) % 2;
+          r(c, x, y, flip ? 2 : 1, flip ? 1 : 2, cols[i % cols.length]);
+        }
       }
-      function familyClose(c, t) {
-        const ch = cheer(t);
-        const dark = ["#140d09", "#2c190e", "#0f0c0a", "#3a2513"];
-        const shirt = ["#1d3552", "#1a4f48", "#6b5520", "#6a2c40"];
-        FAM.forEach((f, i) => {
-          const jump = ch > 0 ? Math.round(Math.abs(Math.sin(t * 8 + i * 1.7)) * 5 * ch) : 0;
-          const rx = f.adult ? 13 : 11;
-          const cx = [30, 72, 114, 152][i];
-          person(c, cx, (f.adult ? 292 : 298) - jump, rx, rx, dark[i], shirt[i], f.s, ch > 0.35, 0);
-        });
-      }
-
-      // ---------- living room ----------
       function drawRoom(t) {
         const c = R;
         r(c, 0, 0, W, 196, "#e7b97f");
@@ -410,270 +841,150 @@
         r(c, 0, 196, W, 4, "#7a4a2e");
         r(c, 0, 200, W, 120, "#9b6440");
         for (let y = 206; y < H; y += 8) r(c, 0, y, W, 1, "#8a5636");
-        // plant and lamp
-        r(c, 6, 178, 12, 18, "#a0522d");
-        for (let k = 0; k < 6; k++) r(c, 5 + k * 2, 160 + (k % 3) * 4, 3, 18 - (k % 3) * 4, "#3a8f4a");
-        r(c, 166, 120, 12, 10, "#f3d9a3");
-        r(c, 171, 130, 2, 66, "#333338");
-        r(c, 166, 194, 12, 2, "#333338");
-        // TV stand and TV
-        r(c, 30, 140, 120, 10, "#5a3a26");
-        r(c, 30, 140, 120, 2, "#6e4930");
-        r(c, 34, 150, 4, 6, "#4a2f1f"); r(c, 142, 150, 4, 6, "#4a2f1f");
-        r(c, 22, 60, 136, 80, "#17171b");
-        r(c, 22, 60, 136, 1, "#2c2c33");
-        px(c, 89, 138, "#e8463c");
-        // family behind the couch
-        familyRoom(c, t);
+        r(c, 2, 176, 10, 20, "#a0522d");
+        for (let k = 0; k < 5; k++) r(c, 1 + k * 2, 160 + (k % 3) * 4, 3, 18 - (k % 3) * 4, "#3a8f4a");
+        r(c, 168, 150, 10, 8, "#f3d9a3");
+        r(c, 172, 158, 2, 38, "#333338");
+        r(c, 24, 154, 132, 6, "#5a3a26");
+        r(c, 24, 154, 132, 1, "#6e4930");
+        r(c, 10, 59, 160, 94, "#17171b");
+        r(c, 10, 59, 160, 1, "#2c2c33");
+        px(c, 89, 151, "#e8463c");
+        const cheering = t >= 24.6;
+        FAM.forEach((f, i) => {
+          const jump = cheering ? Math.round(Math.abs(Math.sin((t - 24.6) * 7 + i * 1.3)) * 4) : 0;
+          const rx = f.adult ? 8 : 6, cy = (f.adult ? 214 : 220) - jump;
+          const remote = i === 0 && t >= 2.3 && t < 3.3 ? eo(prog(t, 2.3, 2.6)) : 0;
+          person(c, f.x, cy, rx, f.hair, f.shirt, f.s, cheering, remote, t, i);
+        });
         r(c, 8, 232, 164, 88, "#b5443b");
         r(c, 8, 232, 164, 2, "#c95a4f");
         r(c, 8, 270, 164, 50, "#9e3a32");
         for (let x = 48; x < 172; x += 42) r(c, x, 234, 1, 36, "#9e3a32");
         r(c, 2, 224, 12, 96, "#a33a32"); r(c, 2, 224, 12, 2, "#c95a4f");
         r(c, 166, 224, 12, 96, "#a33a32"); r(c, 166, 224, 12, 2, "#c95a4f");
-      }
-
-      // ---------- broadcast: batter close-up ----------
-      function skyBand(c, y0, y1, t, seed) {
-        ditherBand(c, 0, 180, y0, y0 + Math.floor((y1 - y0) / 2), "#0d1633", "#1b2a55");
-        ditherBand(c, 0, 180, y0 + Math.floor((y1 - y0) / 2), y1, "#1b2a55", "#263a6b");
-        const g = rng(seed);
-        for (let k = 0; k < 40; k++) {
-          const x = Math.floor(g() * 180), y = y0 + Math.floor(g() * (y1 - y0) * 0.7);
-          if ((k + Math.floor(t * 3)) % 7) px(c, x, y, "#c9d6ff");
+        if (cheering) {
+          const g = rng(8);
+          for (let k = 0; k < 10; k++) {
+            const ph = ((t - 24.6) * 1.4 + g()) % 1;
+            r(c, 96 + (g() - 0.5) * 40 * ph, 232 - 40 * Math.sin(Math.PI * ph), 2, 2, "#fff3c4");
+          }
+          r(c, 88, 230, 16, 4, "#e8463c");
         }
       }
-      function lightTower(c, x, top, bot) {
-        r(c, x + 2, top, 2, bot - top, "#4a4f5a");
-        for (let j = 0; j < 3; j++) for (let i = 0; i < 4; i++) r(c, x - 2 + i * 3, top - 8 + j * 3, 2, 2, j === 1 && i % 2 ? "#ffe48a" : "#fff6c8");
-      }
-      function drawBatter(t) {
-        const c = Wd;
-        const tilt = Math.round(eio(prog(t, 4.45, 5.2)) * 150);
-        c.save();
-        c.translate(0, tilt);
-        skyBand(c, -160, 110, t, 11);
-        lightTower(c, 6, 40, 112);
-        lightTower(c, 166, 40, 112);
-        const g = rng(5);
-        for (let y = 96; y < 118; y += 3)
-          for (let x = 0; x < 180; x += 3) r(c, x, y + ((cheer(t) > 0 && (x + Math.floor(t * 10)) % 2) ? -1 : 0), 2, 2, ["#c94f4f", "#4f7fc9", "#e0c060", "#f4f4f4", "#5aa36a"][Math.floor(g() * 5)]);
-        r(c, 0, 118, 180, 6, "#1f5e3a");
-        r(c, 0, 118, 180, 1, "#ffd447");
-        for (let y = 124; y < 264; y += 6) r(c, 0, y, 180, 6, (y / 6) % 2 ? "#2f8f3a" : "#37a043");
-        ellipse(c, 90, 146, 14, 5, "#c07d45");
-        ellipse(c, 90, 228, 46, 22, "#c07d45");
-        r(c, 86, 224, 9, 4, "#f4f4f4");
-        r(c, 88, 228, 5, 2, "#f4f4f4");
-        // pitcher
-        const throwing = t >= 3.6 && t < 3.85;
-        spr(c, STAND, 84, 128, PIT, true, 2);
-        if (throwing) pixLine(c, 88, 136, 82, 124, "#c98b62", 2);
-        // batter, x4 sprite, facing the plate
-        spr(c, STAND, 40, 172, PAL, false, 4);
-        // bat angle: stance -120deg, contact 0deg at 4.08, follow-through -50deg
-        let ang;
-        if (t < 3.95) ang = -120;
-        else if (t < 4.08) ang = lerp(-120, 0, ei(prog(t, 3.95, 4.08)));
-        else ang = lerp(0, -50, eo(prog(t, 4.08, 4.4)));
-        const hx = 70, hy = 194, len = 30, a = (ang * Math.PI) / 180;
-        pixLine(c, hx, hy, hx + Math.cos(a) * len, hy + Math.sin(a) * len, "#c58b4a", 3);
-        pixLine(c, hx, hy, hx + Math.cos(a) * 8, hy + Math.sin(a) * 8, "#8a5a2b", 2);
-        r(c, hx - 2, hy - 2, 4, 4, "#e0a37a");
-        // ball
-        if (t >= 3.75 && t < 4.08) {
-          const p = prog(t, 3.75, 4.08);
-          const s = Math.round(lerp(1, 4, p));
-          r(c, lerp(88, 98, p), lerp(132, 192, p), s, s, "#f4f4f4");
-        } else if (t >= 4.08 && t < 5.2) {
-          const p = prog(t, 4.08, 5.15);
-          for (let k = 5; k >= 0; k--) {
-            const q = Math.max(0, p - k * 0.02);
-            const bx = lerp(100, 150, q), by = lerp(192, -150, eo(q));
-            r(c, bx, by, k ? 2 : 3, k ? 2 : 3, k ? "rgba(255,255,255,0.35)" : "#ffffff");
-          }
-        }
-        // POW burst at contact
-        if (t >= 4.08 && t < 4.5) {
-          const p = prog(t, 4.08, 4.5), rr = Math.round(lerp(6, 22, eo(p)));
-          for (let k = 0; k < 12; k++) {
-            const aa = (k / 12) * Math.PI * 2;
-            pixLine(c, 100 + Math.cos(aa) * rr * 0.4, 192 + Math.sin(aa) * rr * 0.4, 100 + Math.cos(aa) * rr, 192 + Math.sin(aa) * rr, k % 2 ? "#ffd447" : "#ffffff", 2);
-          }
-        }
-        c.restore();
-        if (t >= 4.08 && t < 4.15) r(c, 0, 0, 180, 264, "#ffffff");
-      }
-
-      // ---------- broadcast: stadium wide ----------
-      function inDiamond(x, y, a, b, cy) {
-        return Math.abs(x - 90) / a + Math.abs(y - cy) / b <= 1;
-      }
-      const FIREWORKS = [[24.15, 30, 30], [24.6, 150, 24], [25.1, 90, 14], [25.7, 40, 44], [26.3, 140, 40], [27.0, 70, 26]];
-      function fireworks(c, t) {
-        FIREWORKS.forEach(([t0, x0, y0], k) => {
-          const dt = t - t0;
-          if (dt < 0 || dt > 1.3) return;
-          const g = rng(300 + k);
-          const cols = [["#ffd447", "#ffffff"], ["#e8463c", "#ffb0a8"], ["#49d17a", "#d6ffe3"], ["#5fb3ff", "#ffffff"]][k % 4];
-          for (let i = 0; i < 18; i++) {
-            const a = (i / 18) * Math.PI * 2 + g() * 0.2, sp = 22 + g() * 10;
-            const rr = sp * eo(Math.min(1, dt / 0.9));
-            if (dt > 0.9 && (i + Math.floor(t * 20)) % 2) continue;
-            px(c, x0 + Math.cos(a) * rr, y0 + Math.sin(a) * rr + 10 * dt * dt, cols[i % 2]);
-          }
+      // front view: the family on the couch cheering at the camera
+      function drawFront(t) {
+        const c = R;
+        const u = t - T.front;
+        r(c, 0, 0, W, 320, "#e7b97f");
+        for (let x = 4; x < W; x += 10) r(c, x, 0, 2, 320, "#dcaa70");
+        r(c, 36, 68, 3, 18, "#5a3a26");
+        for (let j = 0; j < 14; j++) r(c, 39, 69 + j, Math.max(1, 56 - j * 4), 1, "#d23a32");
+        tiny(c, "HOME RUN", 42, 72, "#ffffff");
+        c.save(); c.globalAlpha = 0.16 + 0.05 * Math.sin(t * 9); r(c, 0, 0, W, 320, "#9fd0ff"); c.restore();
+        r(c, 6, 206, 168, 40, "#b5443b");
+        r(c, 6, 206, 168, 2, "#c95a4f");
+        const P = [
+          { x: 40, hair: "#2b1d14", shirt: "#3a6ea5", skin: "#e0a37a", h: 12, kid: 0 },
+          { x: 76, hair: "#6b3b1f", shirt: "#2f9e8f", skin: "#d69a72", h: 12, kid: 0, long: 1 },
+          { x: 112, hair: "#1f1a17", shirt: "#e0b23a", skin: "#e0a37a", h: 10, kid: 1 },
+          { x: 144, hair: "#8a5a2b", shirt: "#d0567a", skin: "#e8b48c", h: 10, kid: 1, tail: 1 },
+        ];
+        P.forEach((p, i) => {
+          const jump = p.kid ? Math.round(Math.abs(Math.sin(u * 7 + i)) * 10) : Math.round(Math.abs(Math.sin(u * 6 + i)) * 3);
+          const hy = 214 - p.h - jump;
+          const bw = p.h * 2 + 4;
+          r(c, p.x - bw / 2, hy + p.h * 2 - 2, bw, 40, p.shirt);
+          const wv = Math.round(Math.sin(u * 10 + i) * 3);
+          pixLine(c, p.x - bw / 2, hy + p.h * 2, p.x - bw / 2 - 6 + wv, hy - 4, p.shirt, 3);
+          pixLine(c, p.x + bw / 2, hy + p.h * 2, p.x + bw / 2 + 6 - wv, hy - 4, p.shirt, 3);
+          r(c, p.x - bw / 2 - 8 + wv, hy - 8, 4, 4, p.skin);
+          r(c, p.x + bw / 2 + 4 - wv, hy - 8, 4, 4, p.skin);
+          ellipse(c, p.x, hy + p.h, p.h - 2, p.h, p.skin);
+          for (let y = -p.h; y < -p.h / 3; y++)
+            for (let x = -p.h + 2; x <= p.h - 2; x++)
+              if ((x * x) / ((p.h - 2) * (p.h - 2)) + (y * y) / (p.h * p.h) <= 1) px(c, p.x + x, hy + p.h + y, p.hair);
+          if (p.long) { r(c, p.x - p.h + 1, hy + p.h - 4, 3, p.h + 6, p.hair); r(c, p.x + p.h - 4, hy + p.h - 4, 3, p.h + 6, p.hair); }
+          if (p.tail) r(c, p.x + p.h - 2, hy + 2, 4, 6, p.hair);
+          const ey = hy + p.h - 1;
+          r(c, p.x - 5, ey, 3, 1, "#2a1a12"); px(c, p.x - 5, ey + 1, "#2a1a12");
+          r(c, p.x + 3, ey, 3, 1, "#2a1a12"); px(c, p.x + 5, ey + 1, "#2a1a12");
+          r(c, p.x - 3, ey + 4, 7, 4, "#5a1a1a");
+          r(c, p.x - 2, ey + 4, 5, 1, "#ffffff");
+          r(c, p.x - 1, ey + 7, 3, 1, "#e8463c");
+          px(c, p.x - 7, ey + 3, "#f08a8a"); px(c, p.x + 7, ey + 3, "#f08a8a");
         });
-      }
-      function drawStadium(t) {
-        const c = Wd;
-        skyBand(c, 0, 160, t, 21);
-        fireworks(c, t);
-        lightTower(c, 6, 40, 160);
-        lightTower(c, 166, 40, 160);
-        // home-run ball arcs out over the jumbotron
-        if (t >= 5.2 && t < 6.6) {
-          const p = prog(t, 5.2, 6.6);
-          for (let k = 5; k >= 0; k--) {
-            const q = Math.max(0, p - k * 0.025);
-            const bx = lerp(150, 20, q), by = lerp(150, -6, q) - 30 * Math.sin(Math.PI * q);
-            r(c, bx, by, k ? 1 : 2, k ? 1 : 2, k ? "rgba(255,255,255,0.4)" : "#ffffff");
-          }
-        }
-        // jumbotron
-        r(c, 22, 58, 136, 84, "#23262d");
-        r(c, 24, 62, 132, 76, "#121418");
-        const f8 = Math.floor(t * 8);
-        for (let i = 0; i < 34; i++) {
-          const on = (i + f8) % 3 === 0;
-          px(c, 24 + i * 4, 59, on ? "#ffd447" : "#5a4a1a");
-          px(c, 24 + i * 4, 140, on ? "#ffd447" : "#5a4a1a");
-        }
-        r(c, 80, 142, 4, 2, "#23262d"); r(c, 96, 142, 4, 2, "#23262d");
-        // label plate, crowd, wall
-        r(c, 0, 142, 180, 13, "#121418");
-        r(c, 0, 142, 180, 1, "#ffd447");
-        const g = rng(9), ch = cheer(t);
-        for (let y = 156; y < 162; y += 3)
-          for (let x = 0; x < 180; x += 3) {
-            const col = ["#c94f4f", "#4f7fc9", "#e0c060", "#f4f4f4", "#5aa36a"][Math.floor(g() * 5)];
-            r(c, x, y - (ch > 0 && (x / 3 + Math.floor(t * 10)) % 2 ? 1 : 0), 2, 2, col);
-          }
-        r(c, 0, 155, 180, 1, "#0b0e14");
-        r(c, 0, 162, 180, 3, "#1f5e3a");
-        r(c, 0, 162, 180, 1, "#ffd447");
-        for (let y = 165; y < 264; y += 4) r(c, 0, y, 180, 4, (y / 4) % 2 ? "#2f8f3a" : "#37a043");
-        // infield (shifted down so the runner clears the label plate)
-        c.save();
-        c.translate(0, 8);
-        for (let y = 160; y < 236; y++)
-          for (let x = 20; x < 160; x++) {
-            if (inDiamond(x, y, 62, 30, 193) && !inDiamond(x, y, 40, 16, 193)) px(c, x, y, "#c07d45");
-          }
-        ellipse(c, 90, 193, 4, 2, "#d08b52");
-        pixLine(c, 90, 214, 140, 192, "#f4f4f4");
-        pixLine(c, 140, 192, 90, 170, "#f4f4f4");
-        pixLine(c, 90, 170, 40, 192, "#f4f4f4");
-        pixLine(c, 40, 192, 90, 214, "#f4f4f4");
-        pixLine(c, 140, 192, 178, 175, "#f4f4f4");
-        pixLine(c, 40, 192, 2, 175, "#f4f4f4");
-        const act = activeBase(t);
-        const flash = Math.floor(t * 4) % 2 === 0;
-        for (const k of ["B1", "B2", "B3"]) {
-          const [bx, by] = BASE[k];
-          r(c, bx - 2, by - 1, 4, 2, act === k && flash ? "#ffd447" : "#f4f4f4");
-        }
-        r(c, 88, 213, 5, 2, act === "H" && flash ? "#ffd447" : "#f4f4f4");
-        px(c, 90, 215, act === "H" && flash ? "#ffd447" : "#f4f4f4");
-        // base numbers light up in order around "and step four?"
-        const labels = [["B1", "1", 146, 184], ["B2", "2", 95, 162], ["B3", "3", 30, 184], ["H", "H", 96, 216]];
-        labels.forEach(([k, s, lx, ly], i) => {
-          const lit = (t >= 7.75 + i * 0.18 && t < 10.45) || act === k;
-          if (t >= 7.75 + i * 0.18) tiny(c, s, lx, ly, lit ? "#ffd447" : "#f4f4f4");
-        });
-        // dropped bat
-        if (t >= 9.45) pixLine(c, 76, 219, 94, 222, "#c58b4a", 2);
-        // runner
-        const s = runnerState(t);
-        if (s.pose === "slide") {
-          spr(c, SLIDE, s.x - 12, s.y - 11, PAL, false, 2);
-          if (t >= 23.95 && t < 24.9) {
-            const g2 = rng(77), dt = t - 23.95;
-            for (let i = 0; i < 14; i++) {
-              const a = Math.PI + (g2() - 0.5) * 2.2, sp = 10 + g2() * 16;
-              if (dt > 0.6 && i % 2) continue;
-              r(c, s.x + 4 + Math.cos(a) * sp * eo(dt), s.y - 1 + Math.sin(a) * sp * 0.5 * eo(dt), 2, 2, i % 3 ? "#d8a070" : "#e9c39b");
-            }
-          }
-        } else {
-          const rows = s.pose === "run1" ? RUN1 : s.pose === "run2" ? RUN2 : s.pose === "cheer" ? CHEER : STAND;
-          const by = s.pose === "cheer" ? Math.round(Math.abs(Math.sin(t * 7)) * 3) : 0;
-          spr(c, rows, s.x - 8, s.y - 24 - by, PAL, s.flip, 2);
-          if (s.pose === "bat") pixLine(c, s.x + 2, s.y - 12, s.x - 7, s.y - 30, "#c58b4a", 2);
-        }
-        c.restore();
-        // the screen inside the jumbotron
-        c.drawImage(scrC, 26, 64);
+        r(c, 0, 250, 180, 70, "#a33a32");
+        r(c, 0, 250, 180, 3, "#c95a4f");
+        r(c, 0, 230, 16, 90, "#b5443b"); r(c, 164, 230, 16, 90, "#b5443b");
+        r(c, 0, 230, 16, 2, "#c95a4f"); r(c, 164, 230, 16, 2, "#c95a4f");
+        r(c, 82, 244, 18, 7, "#e8463c"); r(c, 82, 244, 18, 1, "#ff8a7a");
+        for (let k = 0; k < 7; k++) r(c, 84 + k * 2, 241 + (k % 2), 2, 2, "#fff3c4");
+        confetti(c, t, T.front - 0.5, 110, 77);
       }
 
-      // ---------- compose ----------
-      const TV = [26, 64, 128, 72];
-      function drawWorldFrame(t) {
-        Wd.clearRect(0, 0, 180, 264);
-        if (t < 5.2) drawBatter(t);
-        else drawStadium(t);
-      }
-      function bezelAndFamily(c, t) {
-        r(c, 0, 264, 180, 56, "#0b0b0e");
-        r(c, 0, 264, 180, 6, "#17171b");
-        r(c, 0, 264, 180, 1, "#2c2c33");
-        px(c, 89, 267, "#e8463c");
-        familyClose(c, t);
-      }
-      function scanlines(x, y, w, h) {
-        out.fillStyle = "rgba(0,0,0,0.12)";
+      // ===================================================================
+      // COMPOSE
+      // ===================================================================
+      const TV = [15, 64, 150, 84];
+      function scanlines(x, y, w, h, a = 0.12) {
+        out.fillStyle = `rgba(0,0,0,${a})`;
         for (let yy = y; yy < y + h; yy += 6) out.fillRect(x, yy + 4, w, 2);
+      }
+      function drawBroadcast(t) {
+        Wd.clearRect(0, 0, W, H);
+        if (t < T.sky) drawBatter(t);
+        else if (t < T.run) drawSky(t);
+        else drawRunScene(t, false);
+      }
+      function screenInRoom(t) {
+        if (t < T.click) { drawScreen(t, "panel"); return; }
+        if (t < T.dive) { crtStatic(Sc, t); return; }
+        if (t < 24.95) {
+          drawBroadcast(t);
+          Sc.clearRect(0, 0, 150, 84);
+          Sc.drawImage(worldC, 0, 140, 180, 101, 0, 0, 150, 84);
+          return;
+        }
+        if (t < 25.07) { crtStatic(Sc, t); return; }
+        drawScreen(t, "junk");
       }
       function renderAt(t) {
         t = clamp(t, 0, DUR);
-        drawScreen(t);
         F.clearRect(0, 0, W, H);
         let scan = null;
-        if (t < 3.05) {
+        if (t < T.dive) {
+          screenInRoom(t);
           drawRoom(t);
           F.drawImage(roomC, 0, 0);
-          if (t < 2.65) F.drawImage(scrC, TV[0], TV[1]);
-          else { staticNoise(Sc, t); F.drawImage(scrC, TV[0], TV[1]); }
+          F.drawImage(scrC, TV[0], TV[1]);
           scan = TV;
-        } else if (t < 3.45) {
-          // zoom through the TV glass into the broadcast
-          const p = ei(prog(t, 3.05, 3.45));
+        } else if (t < T.diveEnd || (t >= T.zoomOut && t < T.zoomOutEnd)) {
+          // dive into the broadcast, or pull back out of it into the family's TV
+          const p = t < T.diveEnd ? ei(prog(t, T.dive, T.diveEnd)) : 1 - eio(prog(t, T.zoomOut, T.zoomOutEnd));
           drawRoom(t);
-          drawWorldFrame(t);
-          const s = lerp(1, 2.4, p), cx = 90, cy = 100;
-          F.save();
-          F.translate(cx, cy); F.scale(s, s); F.translate(-cx, -cy);
-          F.drawImage(roomC, 0, 0);
-          F.restore();
-          const sr = [lerp(TV[0], 0, p), lerp(TV[1], 0, p), lerp(TV[2], 180, p), lerp(TV[3], 264, p)];
-          const cr = [0, lerp(118, 0, p), 180, lerp(101, 264, p)];
-          r(F, sr[0] - 4, sr[1] - 4, sr[2] + 8, sr[3] + 8, "#17171b");
+          drawBroadcast(t);
+          const s = lerp(1, 2.4, p), cx = 90, cy = 106;
+          F.save(); F.translate(cx, cy); F.scale(s, s); F.translate(-cx, -cy); F.drawImage(roomC, 0, 0); F.restore();
+          const sr = [lerp(TV[0], 0, p), lerp(TV[1], 0, p), lerp(TV[2], 180, p), lerp(TV[3], 320, p)];
+          const cr = [0, lerp(140, 0, p), 180, lerp(101, 320, p)];
+          r(F, sr[0] - 5, sr[1] - 5, sr[2] + 10, sr[3] + 10, "#17171b");
           F.drawImage(worldC, cr[0], cr[1], cr[2], cr[3], sr[0], sr[1], sr[2], sr[3]);
           scan = sr.map(Math.round);
-        } else if (t < 30.95) {
-          drawWorldFrame(t);
+        } else if (t < T.zoomOut) {
+          drawBroadcast(t);
           F.drawImage(worldC, 0, 0);
-          bezelAndFamily(F, t);
-          scan = [0, 0, 180, 264];
-        } else {
-          // the stadium dissolves around the jumbotron screen into the living-room TV
-          const a = eio(prog(t, 30.95, 31.45));
-          drawWorldFrame(t);
-          F.drawImage(worldC, 0, 0);
-          bezelAndFamily(F, t);
+          scan = [0, 0, 180, 320];
+        } else if (t < T.front) {
+          screenInRoom(t);
           drawRoom(t);
-          F.save(); F.globalAlpha = a; F.drawImage(roomC, 0, 0); F.restore();
+          F.drawImage(roomC, 0, 0);
           F.drawImage(scrC, TV[0], TV[1]);
-          scan = a < 0.5 ? [0, 0, 180, 264] : TV;
+          confetti(F, t, 24.6, 90, 41);
+          scan = TV;
+        } else {
+          drawFront(t);
+          F.drawImage(roomC, 0, 0);
         }
         out.clearRect(0, 0, 1080, 1920);
         out.drawImage(frameC, 0, 0, W, H, 0, 0, 1080, 1920);

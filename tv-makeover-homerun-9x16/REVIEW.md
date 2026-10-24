@@ -1,18 +1,13 @@
-# Review — draft 1
+# Review — draft 2
 
-- Creative calls: the whole film stays on the TV. After the opening it zooms into the broadcast
-  and holds a fixed stadium shot; each base drives the jumbotron. The family stays in the
-  foreground as silhouettes that cheer on the hit, "GONE!", the slide and the CTA. The ending
-  dissolves the stadium around the jumbotron screen into the living-room TV, which now shows the
-  clean home screen.
-- Measured: `hyperframes check` passes (one kept warning: the canvas is full-bleed on purpose).
-  Draft render 1080x1920, 30 fps, 34.2 s, -15 LUFS, -1.5 dBTP, no clipping. Sound was measured,
-  not heard.
-- Caption timing is estimated: the 15 pauses in the voiceover were matched to the 15 script
-  phrases and words spread by syllables inside each phrase. ElevenLabs transcription was refused
-  (rate limit, then quota).
-- Missing sound: bat crack, crowd cheer and a music bed. Openverse is blocked by the network
-  policy, ElevenLabs credits are used up, and no HeyGen sign-in is available. Only the bundled
-  SFX are placed.
-- Weakest shot: the 0.5 s dissolve at 31.0 s reads muddy mid-way; a hard iris or a quick
-  channel-flip would be crisper.
+- Structure: after the hit and the "4 STEPS" sky beat, the camera locks on the runner in a side-scrolling
+  tracking shot; he never stops. Bases are placed so he touches each one on its call (10.3, 14.2, 19.3,
+  slide home 24.0). Before 1st base only the runner is on screen; on each touch a retro TV powers on above
+  him with that step. After the slide the shot pulls back into the family's TV: they cheer while the TV
+  zaps the junk apps; the ending is a front-on shot of the family cheering under the CTA.
+- Music: an original chiptune composed in code (build/chiptune.py), timed to the voiceover. Measured, not heard.
+- Measured: check passes (kept: canvas is full-bleed on purpose). Draft 2: 1080x1920, 30 fps, 34.2 s,
+  -15.2 LUFS, -1.3 dBTP, no clipping.
+- Missing: crowd cheering and bat crack. Three Higgsfield clips with that audio are generated (jobs
+  6f49d9d1, 08c7f5e1, 3ceb833d) but their host d8j0ntlcm91z4.cloudfront.net is blocked by the session's
+  network policy. Caption timing is still estimated from the voiceover's pauses.
