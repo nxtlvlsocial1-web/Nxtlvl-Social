@@ -1,0 +1,111 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Press Start 2P";
+      src: url("assets/fonts/press-start-2p.woff2") format("woff2");
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    #cap-box {
+      position: absolute;
+      left: 72px;
+      top: 186px;
+      width: 936px;
+      height: 156px;
+      background: #0b0e14;
+      box-shadow: 0 0 0 6px #f4f4f4, 0 0 0 12px #0b0e14;
+    }
+    #cap-live {
+      position: absolute;
+      left: 96px;
+      top: 162px;
+      padding: 8px 10px 6px;
+      background: #b8261f;
+      color: #ffffff;
+      font-family: "Press Start 2P", monospace;
+      font-size: 22px;
+      line-height: 1;
+    }
+    .cap {
+      position: absolute;
+      left: 72px;
+      top: 186px;
+      width: 936px;
+      height: 156px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+    }
+    .cap-inner {
+      width: 880px;
+      text-align: center;
+      font-family: "Press Start 2P", monospace;
+      font-size: 40px;
+      line-height: 60px;
+      color: #ffffff;
+    }
+    .w {
+      display: inline-block;
+    }
+    .hl {
+      color: #ffd447;
+    }
+  </style>
+  <div id="root" data-composition-id="captions" data-width="1080" data-height="1920">
+    <div id="cap-box" data-layout-ignore></div>
+    <div id="cap-live">LIVE</div>
+      <div id="cap-0" class="clip cap" data-start="0.15" data-duration="0.69" data-track-index="1"><div class="cap-inner"><span class="w">Your</span> <span class="w">TV&#x27;s</span> <span class="w">home</span></div></div>
+      <div id="cap-1" class="clip cap" data-start="0.84" data-duration="1.45" data-track-index="1"><div class="cap-inner"><span class="w">screen</span> <span class="w">is</span> <span class="w">basically</span></div></div>
+      <div id="cap-2" class="clip cap" data-start="2.29" data-duration="0.98" data-track-index="1"><div class="cap-inner"><span class="w">a</span> <span class="w">billboard...</span></div></div>
+      <div id="cap-3" class="clip cap" data-start="3.27" data-duration="0.72" data-track-index="1"><div class="cap-inner"><span class="w">so</span> <span class="w">I</span> <span class="w">knocked</span></div></div>
+      <div id="cap-4" class="clip cap" data-start="3.99" data-duration="0.39" data-track-index="1"><div class="cap-inner"><span class="w">it</span> <span class="w hl">OUT</span></div></div>
+      <div id="cap-5" class="clip cap" data-start="4.38" data-duration="0.82" data-track-index="1"><div class="cap-inner"><span class="w">of</span> <span class="w">the</span> <span class="w">park!</span></div></div>
+      <div id="cap-6" class="clip cap" data-start="5.2" data-duration="0.56" data-track-index="1"><div class="cap-inner"><span class="w">Four</span> <span class="w">steps,</span></div></div>
+      <div id="cap-7" class="clip cap" data-start="5.76" data-duration="0.83" data-track-index="1"><div class="cap-inner"><span class="w">and</span> <span class="w hl">Claude</span> <span class="w">did</span></div></div>
+      <div id="cap-8" class="clip cap" data-start="6.59" data-duration="1.11" data-track-index="1"><div class="cap-inner"><span class="w">the</span> <span class="w">hard</span> <span class="w">part.</span></div></div>
+      <div id="cap-9" class="clip cap" data-start="7.7" data-duration="1.0" data-track-index="1"><div class="cap-inner"><span class="w">And</span> <span class="w">step</span> <span class="w hl">four?</span></div></div>
+      <div id="cap-10" class="clip cap" data-start="8.7" data-duration="1.59" data-track-index="1"><div class="cap-inner"><span class="w">That&#x27;s</span> <span class="w">the</span> <span class="w">home</span> <span class="w hl">run.</span></div></div>
+      <div id="cap-11" class="clip cap" data-start="10.29" data-duration="0.6" data-track-index="1"><div class="cap-inner"><span class="w">First</span> <span class="w">base!</span></div></div>
+      <div id="cap-12" class="clip cap" data-start="10.89" data-duration="0.6" data-track-index="1"><div class="cap-inner"><span class="w">Swap</span> <span class="w">the</span></div></div>
+      <div id="cap-13" class="clip cap" data-start="11.49" data-duration="1.1" data-track-index="1"><div class="cap-inner"><span class="w">home</span> <span class="w">screen</span> <span class="w">app.</span></div></div>
+      <div id="cap-14" class="clip cap" data-start="12.59" data-duration="0.93" data-track-index="1"><div class="cap-inner"><span class="w">The</span> <span class="w">ad</span> <span class="w">rows...</span></div></div>
+      <div id="cap-15" class="clip cap" data-start="13.52" data-duration="0.68" data-track-index="1"><div class="cap-inner"><span class="w hl">GONE!</span></div></div>
+      <div id="cap-16" class="clip cap" data-start="14.2" data-duration="1.1" data-track-index="1"><div class="cap-inner"><span class="w">Second</span> <span class="w">base!</span></div></div>
+      <div id="cap-17" class="clip cap" data-start="15.3" data-duration="0.68" data-track-index="1"><div class="cap-inner"><span class="w hl">Claude</span> <span class="w">designs</span></div></div>
+      <div id="cap-18" class="clip cap" data-start="15.98" data-duration="1.1" data-track-index="1"><div class="cap-inner"><span class="w">clean,</span> <span class="w hl">rounded</span> <span class="w">tiles</span></div></div>
+      <div id="cap-19" class="clip cap" data-start="17.08" data-duration="0.86" data-track-index="1"><div class="cap-inner"><span class="w">and</span> <span class="w">wallpapers</span></div></div>
+      <div id="cap-20" class="clip cap" data-start="17.94" data-duration="1.32" data-track-index="1"><div class="cap-inner"><span class="w">for</span> <span class="w">every</span> <span class="w">app.</span></div></div>
+      <div id="cap-21" class="clip cap" data-start="19.26" data-duration="0.58" data-track-index="1"><div class="cap-inner"><span class="w">Third</span> <span class="w">base!</span></div></div>
+      <div id="cap-22" class="clip cap" data-start="19.84" data-duration="0.88" data-track-index="1"><div class="cap-inner"><span class="w">Slow</span> <span class="w hl">drone</span> <span class="w">shots</span></div></div>
+      <div id="cap-23" class="clip cap" data-start="20.72" data-duration="1.01" data-track-index="1"><div class="cap-inner"><span class="w">play</span> <span class="w">whenever</span></div></div>
+      <div id="cap-24" class="clip cap" data-start="21.73" data-duration="1.42" data-track-index="1"><div class="cap-inner"><span class="w">the</span> <span class="w hl">TV</span> <span class="w">is</span> <span class="w">idle.</span></div></div>
+      <div id="cap-25" class="clip cap" data-start="23.15" data-duration="0.89" data-track-index="1"><div class="cap-inner"><span class="w">And</span> <span class="w">home...</span></div></div>
+      <div id="cap-26" class="clip cap" data-start="24.04" data-duration="1.37" data-track-index="1"><div class="cap-inner"><span class="w">one</span> <span class="w">command</span> <span class="w">deletes</span></div></div>
+      <div id="cap-27" class="clip cap" data-start="25.41" data-duration="0.79" data-track-index="1"><div class="cap-inner"><span class="w">the</span> <span class="w hl">junk</span> <span class="w">apps</span></div></div>
+      <div id="cap-28" class="clip cap" data-start="26.2" data-duration="1.27" data-track-index="1"><div class="cap-inner"><span class="w">your</span> <span class="w hl">TV</span> <span class="w">came</span> <span class="w">with!</span></div></div>
+      <div id="cap-29" class="clip cap" data-start="27.47" data-duration="0.67" data-track-index="1"><div class="cap-inner"><span class="w hl">Claude</span> <span class="w">tells</span> <span class="w">you</span></div></div>
+      <div id="cap-30" class="clip cap" data-start="28.14" data-duration="1.05" data-track-index="1"><div class="cap-inner"><span class="w">which</span> <span class="w">ones</span> <span class="w">are</span> <span class="w hl">safe,</span></div></div>
+      <div id="cap-31" class="clip cap" data-start="29.19" data-duration="1.0" data-track-index="1"><div class="cap-inner"><span class="w">and</span> <span class="w">every</span> <span class="w">one</span></div></div>
+      <div id="cap-32" class="clip cap" data-start="30.19" data-duration="0.88" data-track-index="1"><div class="cap-inner"><span class="w">can</span> <span class="w">come</span> <span class="w hl">back.</span></div></div>
+      <div id="cap-33" class="clip cap" data-start="31.07" data-duration="0.83" data-track-index="1"><div class="cap-inner"><span class="w">Comment</span> <span class="w hl">&quot;TV&quot;</span></div></div>
+      <div id="cap-34" class="clip cap" data-start="31.9" data-duration="1.2" data-track-index="1"><div class="cap-inner"><span class="w">and</span> <span class="w">I&#x27;ll</span> <span class="w">DM</span> <span class="w">you</span></div></div>
+      <div id="cap-35" class="clip cap" data-start="33.1" data-duration="1.05" data-track-index="1"><div class="cap-inner"><span class="w">the</span> <span class="w">full</span> <span class="w">guide!</span></div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#cap-box, #cap-live", { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.1);
+    document.querySelectorAll("#root .cap").forEach((g) => {
+      const s = parseFloat(g.dataset.start), d = parseFloat(g.dataset.duration), end = s + d;
+      const words = g.querySelectorAll(".w");
+      words.forEach((w, i) => {
+        tl.fromTo(w, { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: 0.1, ease: "power3.out" }, s + i * 0.06);
+      });
+      const inner = g.querySelector(".cap-inner");
+      tl.set(inner, { opacity: 0 }, end - 0.001);
+    });
+    window.__timelines["captions"] = tl;
+  </script>
+</template>

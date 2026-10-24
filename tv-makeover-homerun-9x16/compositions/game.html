@@ -1,0 +1,691 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #0d1633;
+    }
+    #game-canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      image-rendering: pixelated;
+    }
+  </style>
+  <div id="root" data-composition-id="game" data-width="1080" data-height="1920">
+    <canvas id="game-canvas" width="1080" height="1920"></canvas>
+  </div>
+  <script>
+    (function () {
+      // Pixel world: 180 x 320 logical pixels, each drawn as 6 x 6 on the 1080 x 1920 canvas.
+      const W = 180, H = 320, S = 6, DUR = 34.19;
+
+      const outC = document.getElementById("game-canvas");
+      const out = outC.getContext("2d");
+      out.imageSmoothingEnabled = false;
+      function mk(w, h) {
+        const c = document.createElement("canvas");
+        c.width = w;
+        c.height = h;
+        const x = c.getContext("2d");
+        x.imageSmoothingEnabled = false;
+        return [c, x];
+      }
+      const [frameC, F] = mk(W, H); // the composed frame
+      const [worldC, Wd] = mk(180, 264); // what the TV broadcast shows
+      const [roomC, R] = mk(W, H); // the living room
+      const [scrC, Sc] = mk(128, 72); // a TV home screen (living-room TV and jumbotron)
+
+      // ---------- helpers ----------
+      const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+      const prog = (t, a, b) => clamp((t - a) / (b - a));
+      const lerp = (a, b, p) => a + (b - a) * p;
+      const eio = (p) => (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+      const eo = (p) => 1 - Math.pow(1 - p, 3);
+      const ei = (p) => p * p * p;
+      function rng(seed) {
+        let a = seed | 0;
+        return function () {
+          a = (a + 0x6d2b79f5) | 0;
+          let t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      function r(c, x, y, w, h, col) {
+        c.fillStyle = col;
+        c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h));
+      }
+      function px(c, x, y, col) {
+        r(c, x, y, 1, 1, col);
+      }
+      function pixLine(c, x0, y0, x1, y1, col, th = 1) {
+        const n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0), 1);
+        for (let i = 0; i <= n; i++) {
+          const x = lerp(x0, x1, i / n), y = lerp(y0, y1, i / n);
+          r(c, x - (th - 1) / 2, y - (th - 1) / 2, th, th, col);
+        }
+      }
+      function ellipse(c, cx, cy, rx, ry, col) {
+        for (let y = -ry; y <= ry; y++)
+          for (let x = -rx; x <= rx; x++)
+            if ((x * x) / (rx * rx) + (y * y) / (ry * ry) <= 1) px(c, cx + x, cy + y, col);
+      }
+      function spr(c, rows, x, y, pal, flip = false, sc = 1) {
+        for (let j = 0; j < rows.length; j++) {
+          const row = rows[j];
+          for (let i = 0; i < row.length; i++) {
+            const ch = row[flip ? row.length - 1 - i : i];
+            if (ch === "." || !pal[ch]) continue;
+            r(c, Math.round(x) + i * sc, Math.round(y) + j * sc, sc, sc, pal[ch]);
+          }
+        }
+      }
+      // ordered 2-colour dither band between y0 and y1
+      function ditherBand(c, x0, x1, y0, y1, colA, colB, off = 0) {
+        for (let y = y0; y < y1; y++) {
+          const p = (y - y0) / Math.max(1, y1 - y0);
+          for (let x = x0; x < x1; x++) {
+            const th = [0.125, 0.625, 0.875, 0.375][((x + off) & 1) + ((y & 1) << 1)];
+            px(c, x, y, p > th ? colB : colA);
+          }
+        }
+      }
+
+      // tiny 3 x 5 font for text that lives inside the pixel world
+      const G = {
+        A: ["###", "#.#", "###", "#.#", "#.#"], B: ["##.", "#.#", "##.", "#.#", "##."],
+        D: ["##.", "#.#", "#.#", "#.#", "##."], E: ["###", "#..", "##.", "#..", "###"],
+        H: ["#.#", "#.#", "###", "#.#", "#.#"], L: ["#..", "#..", "#..", "#..", "###"],
+        N: ["#.#", "###", "###", "#.#", "#.#"], O: ["###", "#.#", "#.#", "#.#", "###"],
+        S: ["###", "#..", "###", "..#", "###"], U: ["#.#", "#.#", "#.#", "#.#", "###"],
+        W: ["#.#", "#.#", "###", "###", "#.#"], Y: ["#.#", "#.#", "###", ".#.", ".#."],
+        "0": ["###", "#.#", "#.#", "#.#", "###"], "1": [".#.", "##.", ".#.", ".#.", "###"],
+        "2": ["##.", "..#", ".#.", "#..", "###"], "3": ["##.", "..#", ".#.", "..#", "##."],
+        "4": ["#.#", "#.#", "###", "..#", "..#"], "7": ["###", "..#", ".#.", ".#.", ".#."],
+        "9": ["###", "#.#", "###", "..#", "###"], ":": ["...", ".#.", "...", ".#.", "..."],
+        "%": ["#.#", "..#", ".#.", "#..", "#.#"], "!": [".#.", ".#.", ".#.", "...", ".#."],
+        " ": ["...", "...", "...", "...", "..."],
+      };
+      function tiny(c, str, x, y, col) {
+        for (let k = 0; k < str.length; k++) {
+          const g = G[str[k]] || G[" "];
+          for (let j = 0; j < 5; j++)
+            for (let i = 0; i < 3; i++) if (g[j][i] === "#") px(c, x + k * 4 + i, y + j, col);
+        }
+      }
+      const tinyW = (s) => s.length * 4 - 1;
+
+      // ---------- sprites ----------
+      const PAL = { R: "#d23a32", D: "#7a1f1a", K: "#e0a37a", W: "#f4f4f4", r: "#d23a32", G: "#b9bcc4", B: "#1b1b1f" };
+      const PIT = { R: "#23408e", D: "#16285a", K: "#c98b62", W: "#e9ecf2", r: "#23408e", G: "#9aa0ad", B: "#1b1b1f" };
+      const STAND = ["..RRR...", ".RRRRD..", "..KKK...", "..KKK...", ".WWrWW..", "KWWrWWK.", ".WWrWW..", "..GGG...", "..G.G...", "..G.G...", "..G.G...", ".BB.BB.."];
+      const RUN1 = ["...RRR..", "..RRRRD.", "...KKK..", "...KKK..", "..WWrW..", ".KWWrWK.", "..WWrW..", "..GGGG..", ".GG..GG.", "GG....GG", "B......B", "........"];
+      const RUN2 = ["...RRR..", "..RRRRD.", "...KKK..", "...KKK..", "..WWrW..", "..WWrWK.", ".KWWrW..", "..GGGG..", "...GG...", "...GG...", "...GB...", "...BB..."];
+      const CHEER = ["K......K", "K.RRR..K", "KRRRRD.K", ".WKKKW..", "..KKK...", ".WWrWW..", "..WrW...", "..GGG...", "..G.G...", "..G.G...", "..G.G...", ".BB.BB.."];
+      const SLIDE = ["............", ".RRR........", "RRRRDKKWWW..", ".KK.WWWrWWG.", "....GGGGGGGB", "...........B"];
+
+      // ---------- the four bases (stadium wide view, world coords) ----------
+      const BASE = { H: [90, 214], B1: [140, 192], B2: [90, 170], B3: [40, 192] };
+      // runner: [t0, t1, from, to]
+      const SPRINTS = [
+        [9.6, 10.45, "H", "B1"],
+        [13.85, 14.45, "B1", "B2"],
+        [18.8, 19.4, "B2", "B3"],
+        [23.2, 24.05, "B3", "H"],
+      ];
+      function runnerState(t) {
+        for (const [a, b, f, to] of SPRINTS) {
+          if (t >= a && t < b) {
+            const p = eio(prog(t, a, b));
+            const [x0, y0] = BASE[f], [x1, y1] = BASE[to];
+            const sliding = to === "H" && p > 0.7;
+            return { x: lerp(x0, x1, p), y: lerp(y0, y1, p), pose: sliding ? "slide" : Math.floor(t * 12) % 2 ? "run1" : "run2", flip: x1 < x0 };
+          }
+        }
+        if (t < 9.6) return { x: BASE.H[0], y: BASE.H[1], pose: t < 9.45 ? "bat" : "stand", flip: false };
+        if (t < 13.85) return { x: BASE.B1[0], y: BASE.B1[1], pose: "stand", flip: true };
+        if (t < 18.8) return { x: BASE.B2[0], y: BASE.B2[1], pose: "stand", flip: true };
+        if (t < 23.2) return { x: BASE.B3[0], y: BASE.B3[1], pose: "stand", flip: false };
+        if (t < 24.35) return { x: BASE.H[0], y: BASE.H[1], pose: "slide", flip: false };
+        return { x: BASE.H[0], y: BASE.H[1], pose: "cheer", flip: false };
+      }
+      function activeBase(t) {
+        if (t >= 10.45 && t < 14.2) return "B1";
+        if (t >= 14.45 && t < 19.2) return "B2";
+        if (t >= 19.4 && t < 23.2) return "B3";
+        if (t >= 24.05 && t < 30.9) return "H";
+        return null;
+      }
+
+      // ---------- crowd / family cheer envelope ----------
+      const CHEERS = [[4.1, 1.6], [5.3, 1.6], [13.55, 1.6], [24.1, 3.2], [31.45, 3.0]];
+      function cheer(t) {
+        let v = 0;
+        for (const [a, d] of CHEERS) if (t >= a && t < a + d) v = Math.max(v, 1 - (t - a) / d);
+        return v;
+      }
+
+      // ---------- app tiles on the TV home screen ----------
+      const APPS = [
+        ["#e8463c", "play"], ["#2f6fd6", "note"], ["#3cb371", "ball"], ["#f2a516", "star"],
+        ["#1fa3a3", "film"], ["#d64f8a", "heart"], ["#5f6b7a", "gear"], ["#e07b39", "cam"],
+      ];
+      const MESSY = (() => {
+        const g = rng(7);
+        return APPS.map((_, i) => ({
+          x: 8 + i * 14 + g() * 6, y: 61 + g() * 2, w: 8 + Math.floor(g() * 4), h: 7 + Math.floor(g() * 4),
+          ux: 10 + g() * 100, uy: 18 + g() * 40,
+        }));
+      })();
+      function glyph(c, kind, cx, cy, col) {
+        const P = {
+          play: ["#..", "##.", "###", "##.", "#.."], note: [".##", ".#.", ".#.", "##.", "##."],
+          ball: [".#.", "###", "#.#", "###", ".#."], star: [".#.", "###", ".#.", "#.#", "..."],
+          film: ["###", "#.#", "###", "#.#", "###"], heart: ["#.#", "###", "###", ".#.", "..."],
+          gear: ["#.#", ".#.", "###", ".#.", "#.#"], cam: ["...", "###", "#.#", "###", "..."],
+        }[kind];
+        for (let j = 0; j < 5; j++) for (let i = 0; i < 3; i++) if (P[j][i] === "#") px(c, cx - 1 + i, cy - 2 + j, col);
+      }
+      function tile(c, x, y, w, h, col, kind, round) {
+        x = Math.round(x); y = Math.round(y); w = Math.round(w); h = Math.round(h);
+        for (let j = 0; j < h; j++) {
+          const inset = round ? (j === 0 || j === h - 1 ? 2 : j === 1 || j === h - 2 ? 1 : 0) : 0;
+          r(c, x + inset, y + j, w - 2 * inset, 1, col);
+          if (j === h - 1) r(c, x + inset, y + j, w - 2 * inset, 1, "rgba(0,0,0,0.35)");
+        }
+        glyph(c, kind, x + Math.floor(w / 2), y + Math.floor(h / 2), "#ffffff");
+      }
+
+      // ---------- wallpaper and drone landscape ----------
+      function wallpaper(c, a) {
+        if (a <= 0) return;
+        c.save();
+        c.globalAlpha = a;
+        ditherBand(c, 0, 128, 0, 16, "#f7c27a", "#f6a65e");
+        ditherBand(c, 0, 128, 16, 34, "#f6a65e", "#ee7f5c");
+        ellipse(c, 96, 38, 9, 9, "#ffe08a");
+        ditherBand(c, 0, 128, 40, 56, "#3d7ea6", "#2b5f86");
+        r(c, 0, 56, 128, 16, "#2b5f86");
+        for (let x = 0; x < 128; x++) {
+          const h = 6 + Math.round(4 * Math.sin(x * 0.09) + 2 * Math.sin(x * 0.23));
+          r(c, x, 40 - h, 1, h, "#4b3b47");
+        }
+        for (let k = 0; k < 7; k++) r(c, 84 + k * 3, 44 + k * 2, 6 - k % 3, 1, "#ffe08a");
+        c.restore();
+      }
+      function landscape(c, t) {
+        const u = (t - 20) * 16;
+        ditherBand(c, 0, 128, 0, 20, "#f9c784", "#f4a261");
+        ditherBand(c, 0, 128, 20, 34, "#f4a261", "#9fc5d6", Math.floor(u * 0.1));
+        ellipse(c, 30, 20, 6, 6, "#fff1c2");
+        for (let k = 0; k < 4; k++) {
+          const cx = ((k * 47 + 200 - u * 0.5) % 190 + 190) % 190 - 30;
+          r(c, cx, 8 + k * 5, 14, 3, "#ffffff");
+          r(c, cx + 3, 6 + k * 5, 7, 2, "#ffffff");
+        }
+        for (let x = 0; x < 128; x++) {
+          const v = x + u * 0.3;
+          const h1 = 22 + Math.round(7 * Math.sin(v * 0.07) + 4 * Math.sin(v * 0.19));
+          r(c, x, 50 - h1, 1, h1, "#6f7f99");
+          r(c, x, 50 - h1, 1, 2, "#e9eef5");
+          const w = x + u * 0.8;
+          const h2 = 12 + Math.round(5 * Math.sin(w * 0.05) + 3 * Math.sin(w * 0.13));
+          r(c, x, 60 - h2, 1, h2, "#3e6b4a");
+          if (Math.floor(w) % 9 === 0) { r(c, x, 60 - h2 - 4, 1, 4, "#2b4d35"); r(c, x - 1, 60 - h2 - 3, 3, 2, "#2b4d35"); }
+        }
+        r(c, 0, 60, 128, 12, "#3d7ea6");
+        for (let k = 0; k < 10; k++) {
+          const sx = ((k * 23 - u * 1.4) % 128 + 128) % 128;
+          r(c, sx, 63 + (k % 4) * 2, 4, 1, "#9fd0ea");
+        }
+      }
+
+      // ---------- explosion particles of the ad rows ----------
+      const AD_RECTS = [[4, 9, 120, 20], [4, 32, 120, 12], [4, 46, 120, 12]];
+      const PARTS = (() => {
+        const g = rng(42), list = [];
+        const cols = ["#e8463c", "#ffcc33", "#ff7a00", "#ff3d8b", "#ffffff"];
+        for (const [x, y, w, h] of AD_RECTS)
+          for (let j = 0; j < h; j += 3)
+            for (let i = 0; i < w; i += 3)
+              list.push({ x: x + i, y: y + j, vx: (g() - 0.5) * 140, vy: -20 - g() * 90, col: cols[Math.floor(g() * cols.length)], life: 0.5 + g() * 0.4 });
+        return list;
+      })();
+
+      // ---------- TV home screen (128 x 72) ----------
+      function topBar(c, house) {
+        r(c, 3, 2, 3, 3, "#ffffff");
+        tiny(c, "20:30", 128 - tinyW("20:30") - 3, 1, "#ffffff");
+        if (house) { r(c, 9, 3, 5, 3, "#ffd447"); px(c, 11, 1, "#ffd447"); r(c, 10, 2, 3, 1, "#ffd447"); }
+      }
+      function adsLayer(c, t, shake) {
+        const blink = Math.floor(t * 4) % 2;
+        const dx = shake ? Math.round((rng(Math.floor(t * 30))() - 0.5) * 3) : 0;
+        r(c, 4 + dx, 9, 120, 20, blink ? "#e8463c" : "#ffcc33");
+        tiny(c, "SALE 70%", 64 - tinyW("SALE 70%") / 2 + dx, 16, blink ? "#ffffff" : "#e8463c");
+        r(c, 112 + dx, 10, 11, 7, "#1b1b1f");
+        tiny(c, "AD", 113 + dx, 11, "#ffd447");
+        const cols = ["#ff7a00", "#e8463c", "#ff3d8b", "#ffcc33"];
+        for (let row = 0; row < 2; row++)
+          for (let i = 0; i < 4; i++) {
+            const on = (i + row + Math.floor(t * 3)) % 2;
+            const x = 4 + i * 31 + dx, y = 32 + row * 14;
+            r(c, x, y, 28, 12, on ? cols[i] : cols[(i + 2) % 4]);
+            tiny(c, row ? "BUY" : "AD", x + 2, y + 4, "#ffffff");
+          }
+      }
+      function drawScreen(t) {
+        const c = Sc;
+        c.clearRect(0, 0, 128, 72);
+        // terminal for the home step
+        if (t >= 24.05 && t < 30.9) {
+          r(c, 0, 0, 128, 72, "#0c100c");
+          r(c, 1, 1, 126, 1, "#49d17a"); r(c, 1, 70, 126, 1, "#49d17a");
+          r(c, 1, 1, 1, 70, "#49d17a"); r(c, 126, 1, 1, 70, "#49d17a");
+          return;
+        }
+        // dark jumbotron while it carries the "4 STEPS" / "HOME RUN" text
+        if (t >= 3.05 && t < 10.45) {
+          r(c, 0, 0, 128, 72, "#0b0e14");
+          return;
+        }
+        // drone screensaver for the 3rd-base step
+        if (t >= 20.15 && t < 23.0) {
+          landscape(c, t);
+          return;
+        }
+        const ads = t < 13.55;
+        r(c, 0, 0, 128, 72, "#1d2026");
+        const wp = t >= 30.9 || t < 0.0 ? 1 : prog(t, 17.3, 18.3);
+        wallpaper(c, t >= 17.3 ? wp : 0);
+        if (ads) adsLayer(c, t, t >= 12.6);
+        // explosion
+        if (t >= 13.55 && t < 14.6) {
+          const dt = t - 13.55;
+          for (const p of PARTS) {
+            if (dt > p.life) continue;
+            r(c, p.x + p.vx * dt, p.y + p.vy * dt + 160 * dt * dt, 2, 2, p.col);
+          }
+        }
+        // the eight app tiles: messy row -> scattered -> neat rounded grid
+        const snapStart = 15.4;
+        APPS.forEach(([col, kind], i) => {
+          const m = MESSY[i];
+          let x = m.x, y = m.y, w = m.w, h = m.h;
+          if (t >= 13.7) {
+            const p = eo(prog(t, 13.7, 14.3));
+            x = lerp(m.x, m.ux, p); y = lerp(m.y, m.uy, p);
+          }
+          const sp = eo(prog(t, snapStart + i * 0.12, snapStart + i * 0.12 + 0.35));
+          const gx = 5 + (i % 4) * 31, gy = 22 + Math.floor(i / 4) * 23;
+          if (sp > 0) { x = lerp(x, gx, sp); y = lerp(y, gy, sp); w = lerp(w, 26, sp); h = lerp(h, 17, sp); }
+          const focus = i === 0 && sp >= 1;
+          if (focus) r(c, x - 2, y - 2, w + 4, h + 4, "#ffffff");
+          tile(c, focus ? x - 1 : x, focus ? y - 1 : y, focus ? w + 2 : w, focus ? h + 2 : h, col, kind, sp >= 1);
+        });
+        topBar(c, t >= 12.15);
+        // launcher stamp on "swap the home screen app"
+        if (t >= 11.85 && t < 12.5) {
+          const p = prog(t, 11.85, 12.15);
+          const yy = lerp(-20, 22, eo(p));
+          const sq = t >= 12.15 ? 1 + 0.3 * (1 - prog(t, 12.15, 12.35)) : 1;
+          const w = 22 * sq, h = 18 / sq;
+          r(c, 64 - w / 2, yy + 18 - h, w, h, "#ffd447");
+          r(c, 64 - w / 2 - 3, yy + 18 - h - 2, w + 6, 3, "#ffd447");
+          r(c, 61, yy + 18 - 8, 6, 8, "#1d2026");
+        }
+        if (t >= 12.15 && t < 12.22) r(c, 0, 0, 128, 72, "#ffffff");
+        // idle dimming before the screensaver, and the wake-up after it
+        if (t >= 19.5 && t < 20.15) { c.save(); c.globalAlpha = prog(t, 19.5, 20.1) * 0.8; r(c, 0, 0, 128, 72, "#000000"); c.restore(); }
+        if (t >= 23.0 && t < 23.35) { c.save(); c.globalAlpha = 1 - prog(t, 23.0, 23.35); r(c, 0, 0, 128, 72, "#000000"); c.restore(); }
+      }
+      function staticNoise(c, t) {
+        const g = rng(1000 + Math.floor(t * 30));
+        for (let y = 0; y < 72; y += 2)
+          for (let x = 0; x < 128; x += 2) {
+            const v = Math.floor(g() * 200 + 40);
+            r(c, x, y, 2, 2, `rgb(${v},${v},${v})`);
+          }
+      }
+
+      // ---------- family ----------
+      function person(c, cx, cy, rx, ry, hair, shirt, style, armsUp, remote) {
+        const shW = rx * 3;
+        r(c, cx - shW / 2, cy + ry - 1, shW, ry * 2, shirt);
+        if (armsUp) {
+          r(c, cx - shW / 2 - 1, cy - ry * 2, Math.max(2, rx / 2), ry * 3, shirt);
+          r(c, cx + shW / 2 - Math.max(2, rx / 2) + 1, cy - ry * 2, Math.max(2, rx / 2), ry * 3, shirt);
+          r(c, cx - shW / 2 - 1, cy - ry * 2 - 2, Math.max(2, rx / 2), 2, "#e0a37a");
+          r(c, cx + shW / 2 - Math.max(2, rx / 2) + 1, cy - ry * 2 - 2, Math.max(2, rx / 2), 2, "#e0a37a");
+        }
+        px(c, cx - rx - 1, cy, "#e0a37a");
+        px(c, cx + rx + 1, cy, "#e0a37a");
+        ellipse(c, cx, cy, rx, ry, hair);
+        if (style === "long") r(c, cx - rx, cy, rx * 2 + 1, ry + 4, hair);
+        if (style === "tail") { r(c, cx + rx, cy - 1, 2, 2, hair); r(c, cx + rx + 1, cy + 1, 2, 4, hair); }
+        if (remote) {
+          const p = remote;
+          const hx = cx + rx + 3 + 4 * p, hy = cy + ry + 2 - 14 * p;
+          pixLine(c, cx + rx + 1, cy + ry + 3, hx, hy, shirt, 2);
+          r(c, hx - 1, hy - 5, 3, 6, "#1b1b1f");
+          px(c, hx, hy - 5, "#e8463c");
+          r(c, hx - 1, hy, 3, 2, "#e0a37a");
+        }
+      }
+      const FAM = [
+        { x: 52, hair: "#2b1d14", shirt: "#3a6ea5", s: "short", adult: 1 },
+        { x: 82, hair: "#6b3b1f", shirt: "#2f9e8f", s: "long", adult: 1 },
+        { x: 112, hair: "#1f1a17", shirt: "#e0b23a", s: "short", adult: 0 },
+        { x: 140, hair: "#8a5a2b", shirt: "#d0567a", s: "tail", adult: 0 },
+      ];
+      function familyRoom(c, t) {
+        const ch = t >= 31.45 ? 1 : 0;
+        FAM.forEach((f, i) => {
+          const jump = ch ? Math.round(Math.abs(Math.sin((t - 31.45) * 7 + i * 1.3)) * 3) : 0;
+          const rx = f.adult ? 8 : 6, cy = (f.adult ? 214 : 220) - jump;
+          const remote = i === 0 && t >= 2.3 && t < 3.3 ? eo(prog(t, 2.3, 2.6)) : 0;
+          person(c, f.x, cy, rx, rx, f.hair, f.shirt, f.s, ch && t >= 31.6, remote);
+        });
+      }
+      function familyClose(c, t) {
+        const ch = cheer(t);
+        const dark = ["#140d09", "#2c190e", "#0f0c0a", "#3a2513"];
+        const shirt = ["#1d3552", "#1a4f48", "#6b5520", "#6a2c40"];
+        FAM.forEach((f, i) => {
+          const jump = ch > 0 ? Math.round(Math.abs(Math.sin(t * 8 + i * 1.7)) * 5 * ch) : 0;
+          const rx = f.adult ? 13 : 11;
+          const cx = [30, 72, 114, 152][i];
+          person(c, cx, (f.adult ? 292 : 298) - jump, rx, rx, dark[i], shirt[i], f.s, ch > 0.35, 0);
+        });
+      }
+
+      // ---------- living room ----------
+      function drawRoom(t) {
+        const c = R;
+        r(c, 0, 0, W, 196, "#e7b97f");
+        for (let x = 4; x < W; x += 10) r(c, x, 0, 2, 196, "#dcaa70");
+        r(c, 0, 196, W, 4, "#7a4a2e");
+        r(c, 0, 200, W, 120, "#9b6440");
+        for (let y = 206; y < H; y += 8) r(c, 0, y, W, 1, "#8a5636");
+        // plant and lamp
+        r(c, 6, 178, 12, 18, "#a0522d");
+        for (let k = 0; k < 6; k++) r(c, 5 + k * 2, 160 + (k % 3) * 4, 3, 18 - (k % 3) * 4, "#3a8f4a");
+        r(c, 166, 120, 12, 10, "#f3d9a3");
+        r(c, 171, 130, 2, 66, "#333338");
+        r(c, 166, 194, 12, 2, "#333338");
+        // TV stand and TV
+        r(c, 30, 140, 120, 10, "#5a3a26");
+        r(c, 30, 140, 120, 2, "#6e4930");
+        r(c, 34, 150, 4, 6, "#4a2f1f"); r(c, 142, 150, 4, 6, "#4a2f1f");
+        r(c, 22, 60, 136, 80, "#17171b");
+        r(c, 22, 60, 136, 1, "#2c2c33");
+        px(c, 89, 138, "#e8463c");
+        // family behind the couch
+        familyRoom(c, t);
+        r(c, 8, 232, 164, 88, "#b5443b");
+        r(c, 8, 232, 164, 2, "#c95a4f");
+        r(c, 8, 270, 164, 50, "#9e3a32");
+        for (let x = 48; x < 172; x += 42) r(c, x, 234, 1, 36, "#9e3a32");
+        r(c, 2, 224, 12, 96, "#a33a32"); r(c, 2, 224, 12, 2, "#c95a4f");
+        r(c, 166, 224, 12, 96, "#a33a32"); r(c, 166, 224, 12, 2, "#c95a4f");
+      }
+
+      // ---------- broadcast: batter close-up ----------
+      function skyBand(c, y0, y1, t, seed) {
+        ditherBand(c, 0, 180, y0, y0 + Math.floor((y1 - y0) / 2), "#0d1633", "#1b2a55");
+        ditherBand(c, 0, 180, y0 + Math.floor((y1 - y0) / 2), y1, "#1b2a55", "#263a6b");
+        const g = rng(seed);
+        for (let k = 0; k < 40; k++) {
+          const x = Math.floor(g() * 180), y = y0 + Math.floor(g() * (y1 - y0) * 0.7);
+          if ((k + Math.floor(t * 3)) % 7) px(c, x, y, "#c9d6ff");
+        }
+      }
+      function lightTower(c, x, top, bot) {
+        r(c, x + 2, top, 2, bot - top, "#4a4f5a");
+        for (let j = 0; j < 3; j++) for (let i = 0; i < 4; i++) r(c, x - 2 + i * 3, top - 8 + j * 3, 2, 2, j === 1 && i % 2 ? "#ffe48a" : "#fff6c8");
+      }
+      function drawBatter(t) {
+        const c = Wd;
+        const tilt = Math.round(eio(prog(t, 4.45, 5.2)) * 150);
+        c.save();
+        c.translate(0, tilt);
+        skyBand(c, -160, 110, t, 11);
+        lightTower(c, 6, 40, 112);
+        lightTower(c, 166, 40, 112);
+        const g = rng(5);
+        for (let y = 96; y < 118; y += 3)
+          for (let x = 0; x < 180; x += 3) r(c, x, y + ((cheer(t) > 0 && (x + Math.floor(t * 10)) % 2) ? -1 : 0), 2, 2, ["#c94f4f", "#4f7fc9", "#e0c060", "#f4f4f4", "#5aa36a"][Math.floor(g() * 5)]);
+        r(c, 0, 118, 180, 6, "#1f5e3a");
+        r(c, 0, 118, 180, 1, "#ffd447");
+        for (let y = 124; y < 264; y += 6) r(c, 0, y, 180, 6, (y / 6) % 2 ? "#2f8f3a" : "#37a043");
+        ellipse(c, 90, 146, 14, 5, "#c07d45");
+        ellipse(c, 90, 228, 46, 22, "#c07d45");
+        r(c, 86, 224, 9, 4, "#f4f4f4");
+        r(c, 88, 228, 5, 2, "#f4f4f4");
+        // pitcher
+        const throwing = t >= 3.6 && t < 3.85;
+        spr(c, STAND, 84, 128, PIT, true, 2);
+        if (throwing) pixLine(c, 88, 136, 82, 124, "#c98b62", 2);
+        // batter, x4 sprite, facing the plate
+        spr(c, STAND, 40, 172, PAL, false, 4);
+        // bat angle: stance -120deg, contact 0deg at 4.08, follow-through -50deg
+        let ang;
+        if (t < 3.95) ang = -120;
+        else if (t < 4.08) ang = lerp(-120, 0, ei(prog(t, 3.95, 4.08)));
+        else ang = lerp(0, -50, eo(prog(t, 4.08, 4.4)));
+        const hx = 70, hy = 194, len = 30, a = (ang * Math.PI) / 180;
+        pixLine(c, hx, hy, hx + Math.cos(a) * len, hy + Math.sin(a) * len, "#c58b4a", 3);
+        pixLine(c, hx, hy, hx + Math.cos(a) * 8, hy + Math.sin(a) * 8, "#8a5a2b", 2);
+        r(c, hx - 2, hy - 2, 4, 4, "#e0a37a");
+        // ball
+        if (t >= 3.75 && t < 4.08) {
+          const p = prog(t, 3.75, 4.08);
+          const s = Math.round(lerp(1, 4, p));
+          r(c, lerp(88, 98, p), lerp(132, 192, p), s, s, "#f4f4f4");
+        } else if (t >= 4.08 && t < 5.2) {
+          const p = prog(t, 4.08, 5.15);
+          for (let k = 5; k >= 0; k--) {
+            const q = Math.max(0, p - k * 0.02);
+            const bx = lerp(100, 150, q), by = lerp(192, -150, eo(q));
+            r(c, bx, by, k ? 2 : 3, k ? 2 : 3, k ? "rgba(255,255,255,0.35)" : "#ffffff");
+          }
+        }
+        // POW burst at contact
+        if (t >= 4.08 && t < 4.5) {
+          const p = prog(t, 4.08, 4.5), rr = Math.round(lerp(6, 22, eo(p)));
+          for (let k = 0; k < 12; k++) {
+            const aa = (k / 12) * Math.PI * 2;
+            pixLine(c, 100 + Math.cos(aa) * rr * 0.4, 192 + Math.sin(aa) * rr * 0.4, 100 + Math.cos(aa) * rr, 192 + Math.sin(aa) * rr, k % 2 ? "#ffd447" : "#ffffff", 2);
+          }
+        }
+        c.restore();
+        if (t >= 4.08 && t < 4.15) r(c, 0, 0, 180, 264, "#ffffff");
+      }
+
+      // ---------- broadcast: stadium wide ----------
+      function inDiamond(x, y, a, b, cy) {
+        return Math.abs(x - 90) / a + Math.abs(y - cy) / b <= 1;
+      }
+      const FIREWORKS = [[24.15, 30, 30], [24.6, 150, 24], [25.1, 90, 14], [25.7, 40, 44], [26.3, 140, 40], [27.0, 70, 26]];
+      function fireworks(c, t) {
+        FIREWORKS.forEach(([t0, x0, y0], k) => {
+          const dt = t - t0;
+          if (dt < 0 || dt > 1.3) return;
+          const g = rng(300 + k);
+          const cols = [["#ffd447", "#ffffff"], ["#e8463c", "#ffb0a8"], ["#49d17a", "#d6ffe3"], ["#5fb3ff", "#ffffff"]][k % 4];
+          for (let i = 0; i < 18; i++) {
+            const a = (i / 18) * Math.PI * 2 + g() * 0.2, sp = 22 + g() * 10;
+            const rr = sp * eo(Math.min(1, dt / 0.9));
+            if (dt > 0.9 && (i + Math.floor(t * 20)) % 2) continue;
+            px(c, x0 + Math.cos(a) * rr, y0 + Math.sin(a) * rr + 10 * dt * dt, cols[i % 2]);
+          }
+        });
+      }
+      function drawStadium(t) {
+        const c = Wd;
+        skyBand(c, 0, 160, t, 21);
+        fireworks(c, t);
+        lightTower(c, 6, 40, 160);
+        lightTower(c, 166, 40, 160);
+        // home-run ball arcs out over the jumbotron
+        if (t >= 5.2 && t < 6.6) {
+          const p = prog(t, 5.2, 6.6);
+          for (let k = 5; k >= 0; k--) {
+            const q = Math.max(0, p - k * 0.025);
+            const bx = lerp(150, 20, q), by = lerp(150, -6, q) - 30 * Math.sin(Math.PI * q);
+            r(c, bx, by, k ? 1 : 2, k ? 1 : 2, k ? "rgba(255,255,255,0.4)" : "#ffffff");
+          }
+        }
+        // jumbotron
+        r(c, 22, 58, 136, 84, "#23262d");
+        r(c, 24, 62, 132, 76, "#121418");
+        const f8 = Math.floor(t * 8);
+        for (let i = 0; i < 34; i++) {
+          const on = (i + f8) % 3 === 0;
+          px(c, 24 + i * 4, 59, on ? "#ffd447" : "#5a4a1a");
+          px(c, 24 + i * 4, 140, on ? "#ffd447" : "#5a4a1a");
+        }
+        r(c, 80, 142, 4, 2, "#23262d"); r(c, 96, 142, 4, 2, "#23262d");
+        // label plate, crowd, wall
+        r(c, 0, 142, 180, 13, "#121418");
+        r(c, 0, 142, 180, 1, "#ffd447");
+        const g = rng(9), ch = cheer(t);
+        for (let y = 156; y < 162; y += 3)
+          for (let x = 0; x < 180; x += 3) {
+            const col = ["#c94f4f", "#4f7fc9", "#e0c060", "#f4f4f4", "#5aa36a"][Math.floor(g() * 5)];
+            r(c, x, y - (ch > 0 && (x / 3 + Math.floor(t * 10)) % 2 ? 1 : 0), 2, 2, col);
+          }
+        r(c, 0, 155, 180, 1, "#0b0e14");
+        r(c, 0, 162, 180, 3, "#1f5e3a");
+        r(c, 0, 162, 180, 1, "#ffd447");
+        for (let y = 165; y < 264; y += 4) r(c, 0, y, 180, 4, (y / 4) % 2 ? "#2f8f3a" : "#37a043");
+        // infield (shifted down so the runner clears the label plate)
+        c.save();
+        c.translate(0, 8);
+        for (let y = 160; y < 236; y++)
+          for (let x = 20; x < 160; x++) {
+            if (inDiamond(x, y, 62, 30, 193) && !inDiamond(x, y, 40, 16, 193)) px(c, x, y, "#c07d45");
+          }
+        ellipse(c, 90, 193, 4, 2, "#d08b52");
+        pixLine(c, 90, 214, 140, 192, "#f4f4f4");
+        pixLine(c, 140, 192, 90, 170, "#f4f4f4");
+        pixLine(c, 90, 170, 40, 192, "#f4f4f4");
+        pixLine(c, 40, 192, 90, 214, "#f4f4f4");
+        pixLine(c, 140, 192, 178, 175, "#f4f4f4");
+        pixLine(c, 40, 192, 2, 175, "#f4f4f4");
+        const act = activeBase(t);
+        const flash = Math.floor(t * 4) % 2 === 0;
+        for (const k of ["B1", "B2", "B3"]) {
+          const [bx, by] = BASE[k];
+          r(c, bx - 2, by - 1, 4, 2, act === k && flash ? "#ffd447" : "#f4f4f4");
+        }
+        r(c, 88, 213, 5, 2, act === "H" && flash ? "#ffd447" : "#f4f4f4");
+        px(c, 90, 215, act === "H" && flash ? "#ffd447" : "#f4f4f4");
+        // base numbers light up in order around "and step four?"
+        const labels = [["B1", "1", 146, 184], ["B2", "2", 95, 162], ["B3", "3", 30, 184], ["H", "H", 96, 216]];
+        labels.forEach(([k, s, lx, ly], i) => {
+          const lit = (t >= 7.75 + i * 0.18 && t < 10.45) || act === k;
+          if (t >= 7.75 + i * 0.18) tiny(c, s, lx, ly, lit ? "#ffd447" : "#f4f4f4");
+        });
+        // dropped bat
+        if (t >= 9.45) pixLine(c, 76, 219, 94, 222, "#c58b4a", 2);
+        // runner
+        const s = runnerState(t);
+        if (s.pose === "slide") {
+          spr(c, SLIDE, s.x - 12, s.y - 11, PAL, false, 2);
+          if (t >= 23.95 && t < 24.9) {
+            const g2 = rng(77), dt = t - 23.95;
+            for (let i = 0; i < 14; i++) {
+              const a = Math.PI + (g2() - 0.5) * 2.2, sp = 10 + g2() * 16;
+              if (dt > 0.6 && i % 2) continue;
+              r(c, s.x + 4 + Math.cos(a) * sp * eo(dt), s.y - 1 + Math.sin(a) * sp * 0.5 * eo(dt), 2, 2, i % 3 ? "#d8a070" : "#e9c39b");
+            }
+          }
+        } else {
+          const rows = s.pose === "run1" ? RUN1 : s.pose === "run2" ? RUN2 : s.pose === "cheer" ? CHEER : STAND;
+          const by = s.pose === "cheer" ? Math.round(Math.abs(Math.sin(t * 7)) * 3) : 0;
+          spr(c, rows, s.x - 8, s.y - 24 - by, PAL, s.flip, 2);
+          if (s.pose === "bat") pixLine(c, s.x + 2, s.y - 12, s.x - 7, s.y - 30, "#c58b4a", 2);
+        }
+        c.restore();
+        // the screen inside the jumbotron
+        c.drawImage(scrC, 26, 64);
+      }
+
+      // ---------- compose ----------
+      const TV = [26, 64, 128, 72];
+      function drawWorldFrame(t) {
+        Wd.clearRect(0, 0, 180, 264);
+        if (t < 5.2) drawBatter(t);
+        else drawStadium(t);
+      }
+      function bezelAndFamily(c, t) {
+        r(c, 0, 264, 180, 56, "#0b0b0e");
+        r(c, 0, 264, 180, 6, "#17171b");
+        r(c, 0, 264, 180, 1, "#2c2c33");
+        px(c, 89, 267, "#e8463c");
+        familyClose(c, t);
+      }
+      function scanlines(x, y, w, h) {
+        out.fillStyle = "rgba(0,0,0,0.12)";
+        for (let yy = y; yy < y + h; yy += 6) out.fillRect(x, yy + 4, w, 2);
+      }
+      function renderAt(t) {
+        t = clamp(t, 0, DUR);
+        drawScreen(t);
+        F.clearRect(0, 0, W, H);
+        let scan = null;
+        if (t < 3.05) {
+          drawRoom(t);
+          F.drawImage(roomC, 0, 0);
+          if (t < 2.65) F.drawImage(scrC, TV[0], TV[1]);
+          else { staticNoise(Sc, t); F.drawImage(scrC, TV[0], TV[1]); }
+          scan = TV;
+        } else if (t < 3.45) {
+          // zoom through the TV glass into the broadcast
+          const p = ei(prog(t, 3.05, 3.45));
+          drawRoom(t);
+          drawWorldFrame(t);
+          const s = lerp(1, 2.4, p), cx = 90, cy = 100;
+          F.save();
+          F.translate(cx, cy); F.scale(s, s); F.translate(-cx, -cy);
+          F.drawImage(roomC, 0, 0);
+          F.restore();
+          const sr = [lerp(TV[0], 0, p), lerp(TV[1], 0, p), lerp(TV[2], 180, p), lerp(TV[3], 264, p)];
+          const cr = [0, lerp(118, 0, p), 180, lerp(101, 264, p)];
+          r(F, sr[0] - 4, sr[1] - 4, sr[2] + 8, sr[3] + 8, "#17171b");
+          F.drawImage(worldC, cr[0], cr[1], cr[2], cr[3], sr[0], sr[1], sr[2], sr[3]);
+          scan = sr.map(Math.round);
+        } else if (t < 30.95) {
+          drawWorldFrame(t);
+          F.drawImage(worldC, 0, 0);
+          bezelAndFamily(F, t);
+          scan = [0, 0, 180, 264];
+        } else {
+          // the stadium dissolves around the jumbotron screen into the living-room TV
+          const a = eio(prog(t, 30.95, 31.45));
+          drawWorldFrame(t);
+          F.drawImage(worldC, 0, 0);
+          bezelAndFamily(F, t);
+          drawRoom(t);
+          F.save(); F.globalAlpha = a; F.drawImage(roomC, 0, 0); F.restore();
+          F.drawImage(scrC, TV[0], TV[1]);
+          scan = a < 0.5 ? [0, 0, 180, 264] : TV;
+        }
+        out.clearRect(0, 0, 1080, 1920);
+        out.drawImage(frameC, 0, 0, W, H, 0, 0, 1080, 1920);
+        if (scan) scanlines(scan[0] * S, scan[1] * S, scan[2] * S, scan[3] * S);
+      }
+
+      window.addEventListener("hf-seek", (e) => renderAt(e.detail.time));
+      const state = { t: 0 };
+      const tl = gsap.timeline({ paused: true });
+      tl.to(state, { t: DUR, duration: DUR, ease: "none", onUpdate: () => renderAt(state.t) }, 0);
+      renderAt(0);
+      window.__timelines["game"] = tl;
+    })();
+  </script>
+</template>
