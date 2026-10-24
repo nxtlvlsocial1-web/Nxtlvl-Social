@@ -91,3 +91,16 @@ COVER TEXT: "Why did this reel hit 85x?"
   with a timestamp ("0:34") so it reads as a real finding, not a feature list.
 - Open question: if this is a paid partnership, the CTA should switch to Creedom's approved line
   (e.g. "Link in bio") and the reel needs a "Paid partnership" label.
+
+## Voiceover with mood tags (ElevenLabs v3 audio tags)
+
+```
+[excited] One reel did eighty-five times my usual views... [pause] [confused] and I had no idea why.
+[deadpan] Next reel? [sighs] A few thousand plays. [frustrated] Instagram shows you the numbers. [emphatic] Never the reason.
+[curious] So I handed my page to Creedom. [quick] Twenty seconds. Public data only.
+[intrigued] It read my last six posts... and scored my content. [impressed] Eighty-two out of a hundred.
+[excited] Then I dropped in a reel. [amazed] Its reel analyser watches the whole video... [pause] and breaks it down, second by second.
+[impressed] Four point two out of five. [whispers] And one fix I'd never have spotted... [shocked] my best hook was buried at thirty-four seconds.
+[confident] Now I edit with reasons. [smiling] Not guesses.
+[excited] Comment CREEDOM... [warm] and I'll DM you the link to audit your own page.
+```
