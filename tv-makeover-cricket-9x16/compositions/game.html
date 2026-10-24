@@ -1,0 +1,1414 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #0d1633;
+    }
+    #game-canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      image-rendering: pixelated;
+    }
+  </style>
+  <div id="root" data-composition-id="game" data-width="1080" data-height="1920">
+    <canvas id="game-canvas" width="1080" height="1920"></canvas>
+  </div>
+  <script>
+    (function () {
+      // Pixel world: 180 x 320 logical pixels, each drawn as 6 x 6 on the 1080 x 1920 canvas.
+      const W = 180, H = 320, S = 6, DUR = 40.91;
+      // The voiceover plays at SPEED x; all story times below are voiceover-clock seconds.
+      const SPEED = 1.15;
+      // Voiceover-locked moments
+      const T = {
+        click: 2.65, dive: 3.05, diveEnd: 3.45,
+        zoomOut: 35.25, zoomOutEnd: 35.65, front: 37.92,
+      };
+
+      const outC = document.getElementById("game-canvas");
+      const out = outC.getContext("2d");
+      out.imageSmoothingEnabled = false;
+      function mk(w, h) {
+        const c = document.createElement("canvas");
+        c.width = w;
+        c.height = h;
+        const x = c.getContext("2d");
+        x.imageSmoothingEnabled = false;
+        return [c, x];
+      }
+      const [frameC, F] = mk(W, H); // the composed frame
+      const [worldC, Wd] = mk(W, H); // the broadcast, full frame
+      const [roomC, R] = mk(W, H); // the living room
+      const [scrC, Sc] = mk(150, 84); // a TV screen
+      const [runC, Rn] = mk(24, 26); // the runner at base resolution, drawn x3
+
+      // ---------- helpers ----------
+      const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+      const prog = (t, a, b) => clamp((t - a) / (b - a));
+      const lerp = (a, b, p) => a + (b - a) * p;
+      const eio = (p) => (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+      const eo = (p) => 1 - Math.pow(1 - p, 3);
+      const ei = (p) => p * p * p;
+      const back = (p) => 1 + 2.70158 * Math.pow(p - 1, 3) + 1.70158 * Math.pow(p - 1, 2);
+      function rng(seed) {
+        let a = seed | 0;
+        return function () {
+          a = (a + 0x6d2b79f5) | 0;
+          let t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      function r(c, x, y, w, h, col) {
+        c.fillStyle = col;
+        c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h));
+      }
+      function px(c, x, y, col) {
+        r(c, x, y, 1, 1, col);
+      }
+      function pixLine(c, x0, y0, x1, y1, col, th = 1) {
+        const n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0), 1);
+        for (let i = 0; i <= n; i++) {
+          const x = lerp(x0, x1, i / n), y = lerp(y0, y1, i / n);
+          r(c, x - (th - 1) / 2, y - (th - 1) / 2, th, th, col);
+        }
+      }
+      function ellipse(c, cx, cy, rx, ry, col) {
+        for (let y = -ry; y <= ry; y++)
+          for (let x = -rx; x <= rx; x++)
+            if ((x * x) / (rx * rx) + (y * y) / (ry * ry) <= 1) px(c, cx + x, cy + y, col);
+      }
+      function ring(c, cx, cy, rx, ry, col) {
+        const n = Math.max(12, Math.round((rx + ry) * 3));
+        for (let i = 0; i < n; i++) {
+          const a = (i / n) * Math.PI * 2;
+          px(c, cx + Math.cos(a) * rx, cy + Math.sin(a) * ry, col);
+        }
+      }
+      function ditherBand(c, x0, x1, y0, y1, colA, colB, off = 0) {
+        for (let y = y0; y < y1; y++) {
+          const p = (y - y0) / Math.max(1, y1 - y0);
+          for (let x = x0; x < x1; x++) {
+            const th = [0.125, 0.625, 0.875, 0.375][((x + off) & 1) + ((y & 1) << 1)];
+            px(c, x, y, p > th ? colB : colA);
+          }
+        }
+      }
+      function star4(c, x, y, s, col) {
+        px(c, x, y, "#ffffff");
+        for (let k = 1; k <= s; k++) {
+          px(c, x + k, y, col); px(c, x - k, y, col); px(c, x, y + k, col); px(c, x, y - k, col);
+        }
+      }
+
+      // tiny 3 x 5 font for text inside the pixel world
+      const G = {
+        A: ["###", "#.#", "###", "#.#", "#.#"], B: ["##.", "#.#", "##.", "#.#", "##."], C: ["###", "#..", "#..", "#..", "###"],
+        D: ["##.", "#.#", "#.#", "#.#", "##."], E: ["###", "#..", "##.", "#..", "###"], F: ["###", "#..", "##.", "#..", "#.."],
+        G: ["###", "#..", "#.#", "#.#", "###"], H: ["#.#", "#.#", "###", "#.#", "#.#"], I: ["###", ".#.", ".#.", ".#.", "###"],
+        J: ["..#", "..#", "..#", "#.#", "###"], K: ["#.#", "#.#", "##.", "#.#", "#.#"], L: ["#..", "#..", "#..", "#..", "###"],
+        M: ["#.#", "###", "###", "#.#", "#.#"], N: ["##.", "#.#", "#.#", "#.#", "#.#"], O: ["###", "#.#", "#.#", "#.#", "###"],
+        P: ["###", "#.#", "###", "#..", "#.."], Q: ["###", "#.#", "#.#", "###", "..#"], R: ["##.", "#.#", "##.", "#.#", "#.#"],
+        S: ["###", "#..", "###", "..#", "###"], T: ["###", ".#.", ".#.", ".#.", ".#."], U: ["#.#", "#.#", "#.#", "#.#", "###"],
+        V: ["#.#", "#.#", "#.#", "#.#", ".#."], W: ["#.#", "#.#", "###", "###", "#.#"], X: ["#.#", "#.#", ".#.", "#.#", "#.#"],
+        Y: ["#.#", "#.#", "###", ".#.", ".#."], Z: ["###", "..#", ".#.", "#..", "###"],
+        "0": ["###", "#.#", "#.#", "#.#", "###"], "1": [".#.", "##.", ".#.", ".#.", "###"], "2": ["##.", "..#", ".#.", "#..", "###"],
+        "3": ["##.", "..#", ".#.", "..#", "##."], "4": ["#.#", "#.#", "###", "..#", "..#"], "5": ["###", "#..", "##.", "..#", "##."],
+        "7": ["###", "..#", ".#.", ".#.", ".#."], "9": ["###", "#.#", "###", "..#", "###"], ":": ["...", ".#.", "...", ".#.", "..."],
+        "%": ["#.#", "..#", ".#.", "#..", "#.#"], "!": [".#.", ".#.", ".#.", "...", ".#."], "+": ["...", ".#.", "###", ".#.", "..."],
+        " ": ["...", "...", "...", "...", "..."],
+      };
+      function tiny(c, str, x, y, col) {
+        for (let k = 0; k < str.length; k++) {
+          const g = G[str[k]] || G[" "];
+          for (let j = 0; j < 5; j++)
+            for (let i = 0; i < 3; i++) if (g[j][i] === "#") px(c, x + k * 4 + i, y + j, col);
+        }
+      }
+      const tinyW = (s) => s.length * 4 - 1;
+
+      // ===================================================================
+      // REALISTIC TV SCREEN (900 x 504, smooth, composited over the pixel world)
+      // ===================================================================
+      const HW = 900, HH = 504;
+      const hiC = document.createElement("canvas");
+      hiC.width = HW;
+      hiC.height = HH;
+      const X = hiC.getContext("2d");
+      X.imageSmoothingEnabled = true;
+      X.imageSmoothingQuality = "high";
+      const IMG = {};
+      const IMG_SRC = {
+        skier: "assets/images/skier.jpg", robot: "assets/images/robot.jpg", hero: "assets/images/poster-hero.jpg",
+        bold: "assets/images/poster-bold.jpg", heist: "assets/images/poster-heist.jpg", road: "assets/images/poster-road.jpg",
+        coast: "assets/images/coast.jpg",
+        netflix: "assets/images/apps/netflix.jpg", prime: "assets/images/apps/prime.jpg",
+        youtube: "assets/images/apps/youtube.jpg", jiohotstar: "assets/images/apps/jiohotstar.jpg", hbomax: "assets/images/apps/hbomax.jpg",
+      };
+      const assetsReady = Promise.all([
+        ...Object.entries(IMG_SRC).map(([k, src]) => new Promise((res) => {
+          const im = new Image();
+          im.onload = () => { IMG[k] = im; res(); };
+          im.onerror = () => res();
+          im.src = src;
+        })),
+        document.fonts ? document.fonts.load('700 40px "Inter"').then(() => document.fonts.load('500 20px "Inter"')).catch(() => {}) : Promise.resolve(),
+      ]);
+      const font = (w, s) => `${w} ${s}px "Inter", "Helvetica Neue", Arial, sans-serif`;
+      function rr(c, x, y, w, h, rad) {
+        rad = Math.max(0, Math.min(rad, w / 2, h / 2));
+        c.beginPath();
+        c.moveTo(x + rad, y);
+        c.arcTo(x + w, y, x + w, y + h, rad);
+        c.arcTo(x + w, y + h, x, y + h, rad);
+        c.arcTo(x, y + h, x, y, rad);
+        c.arcTo(x, y, x + w, y, rad);
+        c.closePath();
+      }
+      function cover(c, im, x, y, w, h, fx = 0.5, fy = 0.5) {
+        if (!im) { c.fillStyle = "#333"; c.fillRect(x, y, w, h); return; }
+        const s = Math.max(w / im.width, h / im.height);
+        const sw = w / s, sh = h / s;
+        c.drawImage(im, (im.width - sw) * fx, (im.height - sh) * fy, sw, sh, x, y, w, h);
+      }
+      function txt(c, s, x, y, f, col, align = "left") {
+        c.font = f;
+        c.fillStyle = col;
+        c.textAlign = align;
+        c.textBaseline = "alphabetic";
+        c.fillText(s, x, y);
+      }
+      function shadow(c, blur, oy, a) {
+        c.shadowColor = `rgba(0,0,0,${a})`;
+        c.shadowBlur = blur;
+        c.shadowOffsetY = oy;
+      }
+      function noShadow(c) {
+        c.shadowColor = "transparent";
+        c.shadowBlur = 0;
+        c.shadowOffsetY = 0;
+      }
+
+      // ===== BEFORE: cluttered stock home screen =====
+      const FAVH = [
+        ["Netflix", "#ffffff", "#e50914"], ["Prime Video", "#2a72f0", "#ffffff"], ["YouTube", "#f4f4f4", "#e8463c"], ["JioHotstar", "#5b4ef0", "#ffffff"],
+        ["Cone", "#f28a1c", "#ffffff"], ["HBO Max", "#f7f7f7", "#5b2bd6"], ["Store", "#f1f3f4", "#1e8e3e"], ["+", "#3f5f8f", "#ffffff"],
+      ];
+      const FAVR_H = (i) => (i === 0 ? [74, 302, 124, 67] : [74 + 132 + (i - 1) * 90, 313, 82, 45]);
+      const SPON = [["PEAK+", "#1d6fe0", "#0d3f9e"], ["orbit tv", "#20202a", "#0e0e14"], ["FreeTV", "#2c2f66", "#1a1c44"], ["AnimeNow", "#f28a1c", "#d0600a"]];
+      function navAndroid(c) {
+        const dots = [["#4285f4", 0, 0], ["#ea4335", 9, -4], ["#fbbc05", 2, 9], ["#34a853", 11, 7]];
+        dots.forEach(([col, dx, dy]) => { c.fillStyle = col; c.beginPath(); c.arc(78 + dx, 44 + dy, 5, 0, Math.PI * 2); c.fill(); });
+        txt(c, "Search", 104, 52, font(500, 22), "#ffffff");
+        txt(c, "Home", 210, 52, font(600, 22), "#ffffff");
+        c.fillStyle = "#ffffff"; rr(c, 216, 62, 40, 4, 2); c.fill();
+        txt(c, "Discover", 296, 52, font(500, 22), "#e8e8ee");
+        txt(c, "Apps", 408, 52, font(500, 22), "#e8e8ee");
+        c.strokeStyle = "#ffffff"; c.lineWidth = 2.5;
+        [650, 700, 750].forEach((x, i) => {
+          c.beginPath(); c.arc(x, 44, 12, 0, Math.PI * 2); c.stroke();
+          c.beginPath();
+          if (i === 0) { c.moveTo(x, 37); c.lineTo(x, 46); }
+          if (i === 1) { c.moveTo(x, 44); c.lineTo(x, 36); c.moveTo(x, 44); c.lineTo(x + 6, 48); }
+          if (i === 2) { c.arc(x, 44, 5, 0, Math.PI * 2); }
+          c.stroke();
+        });
+        txt(c, "3:20", 830, 52, font(500, 24), "#ffffff", "right");
+      }
+      function bloatHi(c, t, o) {
+        const blink = Math.floor(t * 4) % 2;
+        const dx = o.shake ? Math.round((rng(Math.floor(t * 30))() - 0.5) * 14) : 0;
+        c.fillStyle = "#14151f";
+        c.fillRect(0, 0, HW, HH);
+        if (!o.gone) {
+          c.save();
+          c.translate(dx, 0);
+          cover(c, IMG.skier, 250, 0, 650, 380, 0.5, 0.35);
+          const g = c.createLinearGradient(250, 0, 560, 0);
+          g.addColorStop(0, "rgba(20,21,31,1)");
+          g.addColorStop(1, "rgba(20,21,31,0)");
+          c.fillStyle = g;
+          c.fillRect(250, 0, 320, 380);
+          const g2 = c.createLinearGradient(0, 250, 0, 380);
+          g2.addColorStop(0, "rgba(20,21,31,0)");
+          g2.addColorStop(1, "rgba(20,21,31,1)");
+          c.fillStyle = g2;
+          c.fillRect(0, 250, HW, 130);
+          txt(c, "peaktv", 74, 136, font(700, 18), "#d0d3dc");
+          txt(c, "The Winter Games", 74, 186, font(700, 46), "#ffffff");
+          txt(c, "Live  |  Watch all the action now", 74, 220, font(500, 21), "#e1e3ea");
+          c.fillStyle = blink ? "#ffd447" : "#ff4d3d";
+          rr(c, 74, 236, 118, 28, 6); c.fill();
+          txt(c, "AD · PROMO", 133, 256, font(800, 15), "#111", "center");
+          c.restore();
+        }
+        navAndroid(c);
+        txt(c, "Favorite Apps", 74, 290, font(600, 19), "#ffffff");
+        FAVH.forEach(([name, bg, fg], i) => {
+          const [x, y, w, h] = FAVR_H(i);
+          c.save();
+          if (i === 0) shadow(c, 18, 6, 0.45);
+          c.fillStyle = bg; rr(c, x, y, w, h, 6); c.fill();
+          noShadow(c);
+          c.restore();
+          appTile(c, i, x, y, w, h, 6);
+          if (i === 0) { c.strokeStyle = "#ffffff"; c.lineWidth = 3; rr(c, x - 3, y - 3, w + 6, h + 6, 8); c.stroke(); }
+        });
+        txt(c, "Netflix", 136, 396, font(600, 17), "#ffffff", "center");
+        if (o.gone) return;
+        c.save();
+        c.translate(dx, 0);
+        txt(c, "Sponsored", 74, 420, font(600, 19), "#ffb4a8");
+        c.fillStyle = blink ? "#ffd447" : "#ff4d3d"; rr(c, 172, 404, 40, 22, 5); c.fill();
+        txt(c, "AD", 192, 420, font(800, 14), "#111", "center");
+        SPON.forEach(([name, a, b], i) => {
+          const x = 74 + i * 196, y = 432, w = 184, h = 100;
+          const g = c.createLinearGradient(x, y, x + w, y + h);
+          g.addColorStop(0, a); g.addColorStop(1, b);
+          c.fillStyle = g; rr(c, x, y, w, h, 8); c.fill();
+          txt(c, name, x + w / 2, y + 52, font(800, 28), i === 2 ? "#ff5a7a" : "#ffffff", "center");
+          if ((i + Math.floor(t * 3)) % 2) { c.fillStyle = "#ffd447"; rr(c, x + w - 40, y + 8, 32, 20, 4); c.fill(); txt(c, "AD", x + w - 24, y + 23, font(800, 13), "#111", "center"); }
+        });
+        c.restore();
+      }
+      const POPS_H = [[0.8, 120, 90, "You WON!", "Claim your free prize", "#2f6fd6"], [1.08, 540, 150, "70% OFF", "Today only. Hurry!", "#e8463c"], [1.36, 200, 250, "Sponsored", "Install this game now", "#f08a1c"],
+        [1.64, 590, 30, "FREE trial", "30 days, no card needed", "#1e9e5a"], [1.92, 330, 150, "HOT deal", "Smart TVs from $99", "#e8463c"], [2.2, 60, 330, "BUY NOW", "Limited stock left", "#5b2bd6"]];
+      function popupsHi(c, t) {
+        POPS_H.forEach(([t0, x, y, title, sub, col]) => {
+          if (t < t0) return;
+          const s = clamp(back(prog(t, t0, t0 + 0.15)), 0, 1.25);
+          const w = 250, h = 130, cx = x + w / 2, cy = y + h / 2;
+          c.save();
+          c.translate(cx, cy); c.scale(s, s); c.translate(-cx, -cy);
+          shadow(c, 30, 12, 0.55);
+          c.fillStyle = "#ffffff"; rr(c, x, y, w, h, 14); c.fill();
+          noShadow(c);
+          c.fillStyle = col; rr(c, x, y, w, 36, 14); c.fill(); c.fillRect(x, y + 20, w, 16);
+          txt(c, "Advertisement", x + 14, y + 24, font(600, 14), "#ffffff");
+          txt(c, "✕", x + w - 16, y + 25, font(700, 16), "#ffffff", "right");
+          txt(c, title, x + 14, y + 74, font(800, 30), "#111318");
+          txt(c, sub, x + 14, y + 98, font(500, 15), "#4a4f5a");
+          c.fillStyle = col; rr(c, x + w - 92, y + h - 34, 80, 24, 12); c.fill();
+          txt(c, "OPEN", x + w - 52, y + h - 17, font(800, 13), "#ffffff", "center");
+          c.restore();
+        });
+      }
+      function stampHi(c, t) {
+        if (t < 10.3 || t >= 11.15) return;
+        const p = prog(t, 10.3, 10.65);
+        const sq = t >= 10.65 ? 1 + 0.3 * (1 - prog(t, 10.65, 10.85)) : 1;
+        const sz = 150, x = HW / 2 - (sz * sq) / 2, y = lerp(-200, 170, eo(p)) + (sz - sz / sq);
+        c.save();
+        shadow(c, 40, 16, 0.5);
+        const g = c.createLinearGradient(x, y, x + sz, y + sz);
+        g.addColorStop(0, "#ffcf4a"); g.addColorStop(1, "#ff8a3d");
+        c.fillStyle = g; rr(c, x, y, sz * sq, sz / sq, 36); c.fill();
+        noShadow(c);
+        c.fillStyle = "#ffffff";
+        const hx = x + (sz * sq) / 2, hy = y + sz / sq / 2;
+        c.beginPath(); c.moveTo(hx - 42, hy); c.lineTo(hx, hy - 38); c.lineTo(hx + 42, hy); c.closePath(); c.fill();
+        c.fillRect(hx - 30, hy, 60, 38);
+        c.fillStyle = "#ff9a3d"; c.fillRect(hx - 9, hy + 12, 18, 26);
+        c.restore();
+        if (t >= 10.65 && t < 11.05) {
+          const k = prog(t, 10.65, 11.05);
+          c.strokeStyle = `rgba(255,255,255,${1 - k})`; c.lineWidth = 6;
+          c.beginPath(); c.ellipse(HW / 2, 330, 80 + k * 380, 20 + k * 120, 0, 0, Math.PI * 2); c.stroke();
+        }
+        if (t >= 10.65 && t < 10.71) { c.fillStyle = "rgba(255,255,255,0.85)"; c.fillRect(0, 0, HW, HH); }
+      }
+      // explosion particles sample the cluttered screen once
+      let SHARDS = null;
+      function buildShards() {
+        const tmp = document.createElement("canvas");
+        tmp.width = HW; tmp.height = HH;
+        const tc = tmp.getContext("2d");
+        bloatHi(tc, 13.5, { shake: false, gone: false });
+        const data = tc.getImageData(0, 0, HW, HH).data;
+        const g = rng(42);
+        SHARDS = [];
+        for (const [x0, y0, w, h] of [[250, 0, 650, 380], [60, 120, 420, 150], [60, 400, 800, 104]])
+          for (let y = y0; y < y0 + h; y += 18)
+            for (let x = x0; x < x0 + w; x += 18) {
+              const i = (Math.min(HH - 1, y + 9) * HW + Math.min(HW - 1, x + 9)) * 4;
+              SHARDS.push({ x, y, vx: (x - 450) * (1.1 + g() * 1.4), vy: (y - 250) * (1.1 + g() * 1.4) - 180, col: `rgb(${data[i]},${data[i + 1]},${data[i + 2]})`, life: 0.45 + g() * 0.4, rot: g() * 6 });
+            }
+      }
+      function explosionHi(c, t) {
+        if (t < 13.62 || t >= 14.52) return;
+        if (!SHARDS) buildShards();
+        const dt = t - 13.62;
+        if (dt < 0.06) { c.fillStyle = "#ffffff"; c.fillRect(0, 0, HW, HH); }
+        c.strokeStyle = `rgba(255,212,71,${1 - dt / 0.9})`; c.lineWidth = 8;
+        c.beginPath(); c.ellipse(450, 250, 40 + dt * 900, 25 + dt * 560, 0, 0, Math.PI * 2); c.stroke();
+        for (const p of SHARDS) {
+          if (dt > p.life) continue;
+          c.save();
+          c.translate(p.x + p.vx * dt, p.y + p.vy * dt + 700 * dt * dt);
+          c.rotate(p.rot * dt * 3);
+          c.fillStyle = p.col;
+          c.fillRect(-8, -8, 16, 16);
+          c.restore();
+        }
+      }
+
+      // ===== AFTER: clean, minimal home screen (layout from the person's reference) =====
+      const DOCK = [["netflix", "Netflix", "robot"], ["prime", "Prime Video", "road"], ["youtube", "YouTube", "coast"], ["jiohotstar", "JioHotstar", "hero"], ["hbomax", "HBO Max", "heist"]];
+      const DOCKR = (i) => [64 + i * 156, 364, 146, 79];
+      // favourites-row tile -> dock slot (the rest fade away)
+      const SLOT = { 0: 0, 1: 1, 2: 2, 3: 3, 5: 4 };
+      const TILE_KEY = { 0: "netflix", 1: "prime", 2: "youtube", 3: "jiohotstar", 5: "hbomax" };
+      function appTile(c, i, x, y, w, h, rad) {
+        const key = TILE_KEY[i] || null;
+        c.save();
+        rr(c, x, y, w, h, rad); c.clip();
+        c.fillStyle = FAVH[i][1]; c.fillRect(x, y, w, h);
+        if (key && IMG[key]) {
+          const im = IMG[key];
+          const ix = im.width * 0.05, iy = im.height * 0.07;
+          c.drawImage(im, ix, iy, im.width - 2 * ix, im.height - 2 * iy, x, y, w, h);
+        } else {
+          txt(c, FAVH[i][0], x + w / 2, y + h / 2 + 8, font(800, FAVH[i][0] === "+" ? 34 : 19), FAVH[i][2], "center");
+        }
+        c.restore();
+      }
+      function chip(c, x, y, label, icon) {
+        c.font = font(600, 17);
+        const w = c.measureText(label).width + 62;
+        c.fillStyle = "rgba(255,255,255,0.12)"; rr(c, x - w, y, w, 40, 20); c.fill();
+        c.strokeStyle = "rgba(255,255,255,0.18)"; c.lineWidth = 1.5; rr(c, x - w, y, w, 40, 20); c.stroke();
+        const ix = x - w + 24, iy = y + 20;
+        c.fillStyle = "#ffffff"; c.strokeStyle = "#ffffff"; c.lineWidth = 2.5;
+        if (icon === 0) { rr(c, ix - 5, iy - 9, 10, 12, 2); c.fill(); c.fillRect(ix - 2, iy + 3, 4, 6); }
+        if (icon === 1) { for (const rad of [4, 9, 14]) { c.beginPath(); c.arc(ix, iy + 7, rad, Math.PI * 1.25, Math.PI * 1.75); c.stroke(); } }
+        if (icon === 2) { c.beginPath(); c.arc(ix, iy, 8, 0, Math.PI * 2); c.stroke(); c.beginPath(); c.arc(ix, iy, 3, 0, Math.PI * 2); c.fill(); }
+        txt(c, label, x - w + 44, y + 26, font(600, 17), "#ffffff");
+        return w;
+      }
+      function cleanHi(c, t, o) {
+        c.fillStyle = "#0e0e11";
+        c.fillRect(0, 0, HW, HH);
+        // minimal backdrop: the focused app's artwork, softened and darkened, crossfading with focus
+        const f = o.focus >= 0 ? o.focus : 0;
+        if (o.wall > 0) {
+          c.save();
+          c.globalAlpha = o.wall;
+          c.filter = "blur(6px) saturate(1.1)";
+          cover(c, IMG[DOCK[f][2]], -20, -20, HW + 40, HH + 40);
+          c.filter = "none";
+          c.restore();
+          const g = c.createLinearGradient(0, 0, 0, HH);
+          g.addColorStop(0, `rgba(8,8,10,${0.55 * o.wall})`);
+          g.addColorStop(0.45, `rgba(8,8,10,${0.35 * o.wall})`);
+          g.addColorStop(1, `rgba(8,8,10,${0.92 * o.wall})`);
+          c.fillStyle = g; c.fillRect(0, 0, HW, HH);
+          const g2 = c.createLinearGradient(0, 0, HW * 0.6, 0);
+          g2.addColorStop(0, `rgba(8,8,10,${0.5 * o.wall})`); g2.addColorStop(1, "rgba(8,8,10,0)");
+          c.fillStyle = g2; c.fillRect(0, 0, HW, HH);
+        }
+        // header: greeting, clock, date, quick chips
+        if (o.tabs > 0) {
+          c.save();
+          c.globalAlpha = o.tabs;
+          c.translate(0, (1 - o.tabs) * -30);
+          c.letterSpacing = "3px";
+          txt(c, "GOOD EVENING", 62, 58, font(600, 13), "rgba(255,255,255,0.75)");
+          txt(c, "SUN  18 OCT", 262, 116, font(500, 16), "rgba(255,255,255,0.8)");
+          c.letterSpacing = "0px";
+          txt(c, "8:30", 58, 122, font(300, 66), "#ffffff");
+          txt(c, "PM", 196, 120, font(600, 16), "rgba(255,255,255,0.85)");
+          c.fillStyle = "rgba(255,255,255,0.3)"; c.fillRect(242, 92, 1.5, 34);
+          let x = HW - 48;
+          x -= chip(c, x, 84, "Settings", 2) + 12;
+          x -= chip(c, x, 84, "Ethernet", 1) + 12;
+          chip(c, x, 84, "Inputs", 0);
+          c.restore();
+        }
+        // the focused app's name
+        if (o.hero > 0) {
+          c.save();
+          c.globalAlpha = o.hero;
+          txt(c, DOCK[f][1], 62, 322 - (1 - o.hero) * 12, font(400, 46), "#ffffff");
+          c.restore();
+        }
+        // the dock
+        const dockA = clamp(o.post(0) * 1.5);
+        if (dockA > 0) {
+          c.save();
+          c.globalAlpha = dockA;
+          c.fillStyle = "rgba(255,255,255,0.07)"; rr(c, 46, 348, 808, 111, 26); c.fill();
+          c.strokeStyle = "rgba(255,255,255,0.1)"; c.lineWidth = 1.5; rr(c, 46, 348, 808, 111, 26); c.stroke();
+          c.restore();
+        }
+        if (o.peek > 0) {
+          const cols = ["#f06a2a", "#f4f4f4", "#5a1414"];
+          c.save(); c.globalAlpha = o.peek;
+          cols.forEach((col, i) => { c.fillStyle = col; rr(c, 64 + i * 156, 480, 146, 60, 14); c.fill(); });
+          c.restore();
+        }
+        for (let i = 0; i < 8; i++) {
+          const [fx, fy, fw, fh] = FAVR_H(i);
+          if (SLOT[i] === undefined) {
+            const p = o.favOut;
+            if (p >= 1) continue;
+            const s = 1 - eo(p);
+            c.save(); c.globalAlpha = s;
+            c.fillStyle = FAVH[i][1]; rr(c, fx + (fw * (1 - s)) / 2, fy + (fh * (1 - s)) / 2, fw * s, fh * s, 6); c.fill();
+            c.restore();
+            continue;
+          }
+          const slot = SLOT[i];
+          const p = o.post(slot);
+          const [dx, dy, dw, dh] = DOCKR(slot);
+          let x = lerp(fx, dx, p), y = lerp(fy, dy, p), w = lerp(fw, dw, p), h = lerp(fh, dh, p);
+          const focused = o.focus === slot;
+          if (focused) { const k = 1.07; x -= (w * (k - 1)) / 2; y -= (h * (k - 1)) / 2; w *= k; h *= k; }
+          c.save();
+          shadow(c, focused ? 28 : 10, focused ? 12 : 4, focused ? 0.65 : 0.35);
+          c.fillStyle = "#000"; rr(c, x, y, w, h, lerp(6, 16, p)); c.fill();
+          noShadow(c);
+          c.restore();
+          appTile(c, i, x, y, w, h, lerp(6, 16, p));
+          if (focused) { c.strokeStyle = "#ffffff"; c.lineWidth = 5; rr(c, x - 4, y - 4, w + 8, h + 8, 19); c.stroke(); }
+          const st = o.postT(slot);
+          if (st >= 0 && st < 0.4) {
+            const k = st / 0.4;
+            c.strokeStyle = `rgba(255,255,255,${1 - k})`; c.lineWidth = 4;
+            rr(c, x - 6 * k, y - 6 * k, w + 12 * k, h + 12 * k, 18); c.stroke();
+          }
+        }
+      }
+      const FINAL_H = { wall: 1, tabs: 1, hero: 1, peek: 1, post: () => 1, postT: () => -1, favOut: 1 };
+      const SS0 = 22.8, SS1 = 27.3;
+      // junk clean-up: zaps on the step TV, the safe shield and undo on the family's TV
+      const JK = { z0: 28.9, gap: 0.45, shield: 35.5, undo: 36.6, fin: 37.6 };
+      function screensaverHi(c, t) {
+        const u = prog(t, SS0, SS1);
+        const s = 1.04 + 0.08 * u;
+        c.save();
+        c.translate(HW / 2, HH / 2); c.scale(s, s); c.translate(-HW / 2 - 30 * u, -HH / 2);
+        cover(c, IMG.coast, 0, 0, HW, HH);
+        c.restore();
+        const g = c.createLinearGradient(0, HH - 140, 0, HH);
+        g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,0.55)");
+        c.fillStyle = g; c.fillRect(0, HH - 140, HW, 140);
+        txt(c, "8:30", HW - 40, HH - 62, font(300, 52), "#ffffff", "right");
+        txt(c, "Coastline at sunrise", HW - 40, HH - 30, font(500, 18), "#ffffffcc", "right");
+        if (t < SS0 + 0.35) { c.fillStyle = `rgba(0,0,0,${1 - prog(t, SS0, SS0 + 0.35)})`; c.fillRect(0, 0, HW, HH); }
+      }
+      const JUNK_H = [["ShopNow", "#7a7a2a", "#b5a72f"], ["GameZone", "#5a2b7a", "#9a3bc2"], ["NewsFeed", "#7a2b2b", "#c0473b"], ["PromoTV", "#2b4f7a", "#3f7fc2"], ["Deals+", "#7a552b", "#c2873b"]];
+      function junkHi(c, t) {
+        cleanHi(c, t, { ...FINAL_H, focus: -1 });
+        c.fillStyle = "rgba(10,10,14,0.9)";
+        c.fillRect(0, 300, HW, HH - 300);
+        txt(c, "Preinstalled apps", 70, 336, font(700, 21), "#ff7a6b");
+        JUNK_H.forEach(([name, a, b], i) => {
+          const zap = JK.z0 + i * JK.gap;
+          const x = 70 + i * 156, y = 356, w = 140, h = 100;
+          const restored = t >= JK.undo && t < JK.undo + 1.0 && i === 2;
+          if (t < zap || restored) {
+            c.save();
+            if (restored) c.globalAlpha = clamp(0.55 + 0.45 * Math.sin((t - JK.undo) * 12));
+            const g = c.createLinearGradient(x, y, x + w, y + h);
+            g.addColorStop(0, b); g.addColorStop(1, a);
+            c.fillStyle = g; rr(c, x, y, w, h, 10); c.fill();
+            txt(c, name, x + w / 2, y + 58, font(800, 20), "#ffffff", "center");
+            c.fillStyle = "#ff3b30"; c.beginPath(); c.arc(x + w - 6, y + 6, 13, 0, Math.PI * 2); c.fill();
+            txt(c, "!", x + w - 6, y + 13, font(900, 18), "#ffffff", "center");
+            c.restore();
+          }
+          if (t >= zap - 0.12 && t < zap + 0.05) { c.fillStyle = "#ffd447"; c.fillRect(x + w / 2 - 6, 0, 12, y + h / 2); }
+          if (t >= zap && t < zap + 0.6) {
+            const g = rng(500 + i), dt = t - zap;
+            for (let k = 0; k < 26; k++) {
+              const a = g() * Math.PI * 2, sp = 60 + g() * 160;
+              c.globalAlpha = 1 - dt / 0.6;
+              c.fillStyle = k % 3 ? b : "#ffd447";
+              c.fillRect(x + w / 2 + Math.cos(a) * sp * eo(dt / 0.6) - 6, y + h / 2 + Math.sin(a) * sp * eo(dt / 0.6) - 6, 12, 12);
+            }
+            c.globalAlpha = 1;
+          }
+        });
+        if (t >= JK.shield && t < JK.fin) {
+          const s = clamp(back(prog(t, JK.shield, JK.shield + 0.25)), 0, 1.2);
+          c.save();
+          c.translate(450, 404); c.scale(s, s);
+          shadow(c, 24, 8, 0.5);
+          c.fillStyle = "#1e9e5a";
+          c.beginPath(); c.moveTo(0, -56); c.lineTo(48, -38); c.lineTo(44, 14); c.quadraticCurveTo(30, 44, 0, 58); c.quadraticCurveTo(-30, 44, -44, 14); c.lineTo(-48, -38); c.closePath(); c.fill();
+          noShadow(c);
+          c.strokeStyle = "#ffffff"; c.lineWidth = 10; c.lineCap = "round"; c.lineJoin = "round";
+          c.beginPath(); c.moveTo(-20, 2); c.lineTo(-4, 18); c.lineTo(24, -14); c.stroke();
+          c.restore();
+          if (s >= 1) { c.fillStyle = "#1e9e5a"; rr(c, 520, 384, 180, 40, 20); c.fill(); txt(c, "Safe to remove", 610, 410, font(700, 17), "#ffffff", "center"); }
+        }
+        if (t >= JK.undo && t < JK.fin) {
+          c.fillStyle = "#ffd447"; rr(c, 650, 318, 170, 36, 18); c.fill();
+          txt(c, "↺  Undo anytime", 735, 342, font(700, 16), "#16161a", "center");
+        }
+      }
+      // what the realistic screen shows at story time t
+      function drawHi(t, mode) {
+        X.clearRect(0, 0, HW, HH);
+        if (mode === "junk") {
+          if (t < JK.fin) junkHi(X, t);
+          else cleanHi(X, t, { ...FINAL_H, focus: Math.floor((t - JK.fin) * 2.5) % 5 });
+          return;
+        }
+        if (t < T.click) { bloatHi(X, t, { shake: false, gone: false }); popupsHi(X, t); return; }
+        // ball one: new home app stamps down, the ad rows explode on "GONE"
+        if (t < 15.2) {
+          bloatHi(X, t, { shake: t >= 12.6 && t < 13.62, gone: t >= 13.62 });
+          explosionHi(X, t);
+          stampHi(X, t);
+          return;
+        }
+        // ball two: the clean home builds itself
+        if (t < 22.3) {
+          const s0 = 15.9;
+          cleanHi(X, t, {
+            tabs: eo(prog(t, 15.2, 15.5)),
+            hero: prog(t, 15.35, 15.75),
+            post: (i) => eo(prog(t, s0 + i * 0.15, s0 + i * 0.15 + 0.35)),
+            postT: (i) => t - (s0 + i * 0.15 + 0.35),
+            favOut: prog(t, 15.8, 16.1),
+            wall: prog(t, 17.1, 17.7),
+            peek: prog(t, 17.5, 17.9),
+            focus: t >= 18.0 ? Math.floor((t - 18.0) * 2.5) % 5 : -1,
+          });
+          return;
+        }
+        // ball three: idle, then the drone screensaver
+        if (t < SS0) {
+          cleanHi(X, t, { ...FINAL_H, focus: 0 });
+          X.fillStyle = `rgba(0,0,0,${prog(t, 22.3, SS0) * 0.8})`;
+          X.fillRect(0, 0, HW, HH);
+          return;
+        }
+        if (t < CK.b4.run) { screensaverHi(X, t); return; }
+        // last ball: one command zaps the junk
+        junkHi(X, t);
+      }
+
+      function crtStatic(c, t, a = 1) {
+        const g = rng(1000 + Math.floor(t * 30));
+        c.save();
+        c.globalAlpha = a;
+        for (let y = 0; y < 84; y += 2)
+          for (let x = 0; x < 150; x += 2) {
+            const v = Math.floor(g() * 200 + 40);
+            r(c, x, y, 2, 2, `rgb(${v},${v},${v})`);
+          }
+        c.restore();
+      }
+
+      // ===================================================================
+      // CLAUDE, the batter: a little coral block with a batting helmet (pixel grid 16 x 18)
+      // ===================================================================
+      const CL = { body: "#d97757", shade: "#b85c3e", hi: "#eb9a7f", eye: "#1f140f", helmet: "#23408e", helmetHi: "#3c5fc0", foot: "#3a2a24" };
+      function drawClaude(c, ox, oy, t, pose, flip, sc = 1) {
+        const P = (x, y, w, h, col) => {
+          const xx = flip ? 16 - x - w : x;
+          r(c, ox + xx * sc, oy + y * sc, w * sc, h * sc, col);
+        };
+        let bob = 0, la = 0, lb = 0, liftA = 0, liftB = 0, arm = 0;
+        if (pose === "run") {
+          const ph = t * Math.PI * 2 * 2.6;
+          bob = Math.round(Math.abs(Math.sin(ph)));
+          la = Math.round(2 * Math.sin(ph)); lb = -la;
+          liftA = Math.sin(ph) > 0.3 ? 1 : 0; liftB = Math.sin(ph) < -0.3 ? 1 : 0;
+          arm = Math.round(2 * Math.sin(ph));
+        }
+        if (pose === "slide") {
+          P(1, 11, 13, 6, CL.body); P(1, 16, 13, 1, CL.shade); P(2, 11, 4, 1, CL.hi);
+          P(9, 13, 1, 2, CL.eye); P(12, 13, 1, 2, CL.eye);
+          P(1, 8, 12, 3, CL.helmet); P(12, 10, 3, 1, CL.helmet);
+          P(13, 15, 3, 2, CL.body); P(15, 16, 1, 1, CL.foot);
+          P(0, 9, 2, 2, CL.body);
+          return;
+        }
+        const y0 = -bob;
+        // legs
+        P(5 + la, 15 + y0 - liftA, 2, 2, CL.body); P(5 + la, 17 + y0 - liftA, 3, 1, CL.foot);
+        P(9 + lb, 15 + y0 - liftB, 2, 2, CL.body); P(9 + lb, 17 + y0 - liftB, 3, 1, CL.foot);
+        // back arm
+        if (pose === "cheer") P(0, 4 + y0, 2, 6, CL.shade);
+        else P(0, 10 + y0 + Math.max(0, -arm), 2, 2, CL.shade);
+        // body
+        P(2, 5 + y0, 12, 10, CL.body);
+        P(2, 14 + y0, 12, 1, CL.shade);
+        P(3, 6 + y0, 4, 1, CL.hi);
+        // eyes
+        P(9, 8 + y0, 1, 2, CL.eye);
+        P(12, 8 + y0, 1, 2, CL.eye);
+        // helmet
+        P(4, 2 + y0, 8, 1, CL.helmet);
+        P(2, 3 + y0, 12, 3, CL.helmet);
+        P(4, 3 + y0, 3, 1, CL.helmetHi);
+        P(13, 5 + y0, 3, 1, CL.helmet);
+        P(2, 6 + y0, 2, 2, CL.helmet);
+        // front arm
+        if (pose === "cheer") P(14, 4 + y0, 2, 6, CL.body);
+        else if (pose !== "bat") P(14, 10 + y0 + Math.max(0, arm), 2, 2, CL.body);
+      }
+
+      // ===================================================================
+      // CRICKET: characters
+      // ===================================================================
+      const BLUE = "#2563d9", BLUE_D = "#1a47a3", HELMET = "#1d3f9e", HELMET_HI = "#3c63c9";
+      const REDKIT = { shirt: "#d23a32", shirtD: "#a82a24", pants: "#b8312a", skin: "#c98b62", hair: "#2a1a12", shoe: "#f4f4f4" };
+      // Claude from the front (pixel grid 16 x 18): coral block, blue jersey, blue helmet
+      function claudeFront(c, ox, oy, t, pose, sc) {
+        const P = (x, y, w, h, col) => r(c, ox + x * sc, oy + y * sc, w * sc, h * sc, col);
+        let bob = 0, la = 0, lb = 0, aL = 0, aR = 0;
+        if (pose === "run") {
+          const ph = t * Math.PI * 2 * 2.8;
+          bob = Math.round(Math.abs(Math.sin(ph)));
+          la = Math.sin(ph) > 0 ? 2 : 0; lb = Math.sin(ph) > 0 ? 0 : 2;
+          aL = Math.round(2 * Math.sin(ph)); aR = -aL;
+        }
+        const y0 = -bob;
+        P(5, 15 + y0 - la, 2, 2 + la, BLUE_D); P(4, 17 + y0 - la, 4, 1, "#f4f4f4");
+        P(9, 15 + y0 - lb, 2, 2 + lb, BLUE_D); P(8, 17 + y0 - lb, 4, 1, "#f4f4f4");
+        if (pose === "cheer") { P(0, 2 + y0, 2, 7, BLUE); P(14, 2 + y0, 2, 7, BLUE); }
+        else if (pose === "run") { P(0, 9 + y0 + aL, 2, 3, BLUE_D); P(14, 9 + y0 + aR, 2, 3, BLUE_D); }
+        P(2, 5 + y0, 12, 10, CL.body);
+        P(2, 10 + y0, 12, 5, BLUE);
+        P(2, 14 + y0, 12, 1, BLUE_D);
+        P(7, 11 + y0, 2, 3, "#ffffff");
+        P(3, 6 + y0, 1, 3, CL.hi);
+        P(5, 7 + y0, 1, 2, CL.eye);
+        P(10, 7 + y0, 1, 2, CL.eye);
+        P(4, 1 + y0, 8, 1, HELMET);
+        P(3, 2 + y0, 10, 3, HELMET);
+        P(5, 2 + y0, 3, 1, HELMET_HI);
+        P(3, 5 + y0, 10, 1, "#0f2459");
+        P(2, 4 + y0, 1, 3, HELMET); P(13, 4 + y0, 1, 3, HELMET);
+      }
+      // Claude from behind
+      function claudeBack(c, ox, oy, t, pose, sc) {
+        const P = (x, y, w, h, col) => r(c, ox + x * sc, oy + y * sc, w * sc, h * sc, col);
+        let bob = 0, la = 0, lb = 0;
+        if (pose === "run") {
+          const ph = t * Math.PI * 2 * 2.8;
+          bob = Math.round(Math.abs(Math.sin(ph)));
+          la = Math.sin(ph) > 0 ? 2 : 0; lb = Math.sin(ph) > 0 ? 0 : 2;
+        }
+        const y0 = -bob;
+        P(5, 15 + y0 - la, 2, 2 + la, BLUE_D); P(4, 17 + y0 - la, 4, 1, "#f4f4f4");
+        P(9, 15 + y0 - lb, 2, 2 + lb, BLUE_D); P(8, 17 + y0 - lb, 4, 1, "#f4f4f4");
+        P(2, 5 + y0, 12, 10, CL.shade);
+        P(2, 9 + y0, 12, 6, BLUE);
+        P(6, 10 + y0, 4, 3, "#ffffff");
+        P(7, 11 + y0, 2, 1, BLUE);
+        P(3, 1 + y0, 10, 5, HELMET);
+        P(4, 1 + y0, 3, 1, HELMET_HI);
+      }
+      // Claude side-on (for the run-out dive); pose "run" or "dive"
+      function claudeSide(c, ox, oy, t, pose, sc) {
+        const P = (x, y, w, h, col) => r(c, ox + x * sc, oy + y * sc, w * sc, h * sc, col);
+        if (pose === "dive") {
+          P(1, 11, 13, 6, CL.body); P(1, 14, 13, 3, BLUE); P(2, 11, 4, 1, CL.hi);
+          P(11, 12, 1, 2, CL.eye);
+          P(1, 8, 12, 3, HELMET); P(12, 10, 3, 1, HELMET);
+          P(0, 15, 2, 2, BLUE_D);
+          return;
+        }
+        const ph = t * Math.PI * 2 * 2.8;
+        const bob = Math.round(Math.abs(Math.sin(ph))), la = Math.round(2 * Math.sin(ph));
+        const y0 = -bob;
+        P(5 + la, 15 + y0, 2, 2, BLUE_D); P(5 + la, 17 + y0, 3, 1, "#f4f4f4");
+        P(9 - la, 15 + y0, 2, 2, BLUE_D); P(9 - la, 17 + y0, 3, 1, "#f4f4f4");
+        P(2, 5 + y0, 12, 10, CL.body);
+        P(2, 10 + y0, 12, 5, BLUE);
+        P(3, 6 + y0, 4, 1, CL.hi);
+        P(9, 7 + y0, 1, 2, CL.eye); P(12, 7 + y0, 1, 2, CL.eye);
+        P(2, 2 + y0, 12, 4, HELMET); P(13, 5 + y0, 3, 1, HELMET);
+      }
+      // a cricket bat: handle at (hx, hy), pointing along angle a (radians), length in logical px
+      function bat(c, hx, hy, a, len, sc) {
+        const hl = len * 0.28;
+        const bx = hx + Math.cos(a) * hl, by = hy + Math.sin(a) * hl;
+        pixLine(c, hx, hy, bx, by, "#2a2a30", Math.max(1, sc));
+        pixLine(c, bx, by, hx + Math.cos(a) * len, hy + Math.sin(a) * len, "#e6c58f", Math.max(2, sc * 1.8));
+        pixLine(c, bx + Math.cos(a + Math.PI / 2) * sc * 0.8, by + Math.sin(a + Math.PI / 2) * sc * 0.8, hx + Math.cos(a) * len + Math.cos(a + Math.PI / 2) * sc * 0.8, hy + Math.sin(a) * len + Math.sin(a + Math.PI / 2) * sc * 0.8, "#c9a46a", Math.max(1, sc * 0.6));
+      }
+      // a fielder / bowler / keeper in red kit (pixel grid 8 x 18)
+      function human(c, ox, oy, t, view, pose, sc, flip = false, kit = REDKIT) {
+        const P = (x, y, w, h, col) => {
+          const xx = flip ? 8 - x - w : x;
+          r(c, ox + xx * sc, oy + y * sc, w * sc, h * sc, col);
+        };
+        if (pose === "dive") {
+          // horizontal, reaching to the left (unflipped)
+          P(0, 12, 2, 2, kit.skin);
+          P(1, 13, 2, 1, kit.shirt);
+          P(2, 12, 4, 2, kit.skin); P(2, 11, 4, 1, kit.hair);
+          P(5, 12, 7, 3, kit.shirt); P(11, 12, 5, 3, kit.pants); P(15, 12, 2, 2, kit.shoe);
+          return;
+        }
+        let la = 0, lb = 0, bob = 0;
+        if (pose === "run") {
+          const ph = t * Math.PI * 2 * 2.6;
+          bob = Math.round(Math.abs(Math.sin(ph)));
+          la = Math.sin(ph) > 0 ? 2 : 0; lb = Math.sin(ph) > 0 ? 0 : 2;
+        }
+        const cr = pose === "crouch" ? 4 : 0;
+        const y0 = -bob + cr;
+        P(2, 12 + y0 - la, 2, 4 - Math.floor(cr / 2) + la, kit.pants); P(1, 16 + y0 - la - Math.floor(cr / 2), 3, 2, kit.shoe);
+        P(4, 12 + y0 - lb, 2, 4 - Math.floor(cr / 2) + lb, kit.pants); P(4, 16 + y0 - lb - Math.floor(cr / 2), 3, 2, kit.shoe);
+        P(1, 5 + y0, 6, 7, kit.shirt);
+        P(1, 11 + y0, 6, 1, kit.shirtD);
+        P(2, 0 + y0, 4, 5, kit.skin);
+        P(2, 0 + y0, 4, 1, kit.hair);
+        if (view === "back") P(2, 0 + y0, 4, 3, kit.hair);
+        if (view === "front") { P(3, 2 + y0, 1, 1, "#1b1b1f"); P(5, 2 + y0, 1, 1, "#1b1b1f"); }
+        if (view === "side") { P(5, 2 + y0, 1, 1, "#1b1b1f"); P(2, 0 + y0, 3, 2, kit.hair); }
+        if (pose === "bowl") { P(5, -5 + y0, 2, 10, kit.shirt); P(5, -6 + y0, 2, 2, kit.skin); P(0, 6 + y0, 2, 5, kit.shirtD); }
+        else if (pose === "throw") { P(6, 3 + y0, 2, 2, kit.shirt); P(7, 1 + y0, 2, 3, kit.skin); P(0, 6 + y0, 2, 5, kit.shirtD); }
+        else if (pose === "hands") { P(0, 9 + y0, 8, 2, kit.skin); }
+        else { P(0, 6 + y0, 1, 5, kit.shirtD); P(7, 6 + y0, 1, 5, kit.shirtD); P(0, 11 + y0, 1, 1, kit.skin); P(7, 11 + y0, 1, 1, kit.skin); }
+      }
+
+      // ===================================================================
+      // CRICKET: the broadcast
+      // ===================================================================
+      function skyBand(c, y0, y1, t, seed) {
+        ditherBand(c, 0, 180, y0, y0 + Math.floor((y1 - y0) / 2), "#0d1633", "#1b2a55");
+        ditherBand(c, 0, 180, y0 + Math.floor((y1 - y0) / 2), y1, "#1b2a55", "#263a6b");
+        const g = rng(seed);
+        for (let k = 0; k < 60; k++) {
+          const x = Math.floor(g() * 180), y = y0 + Math.floor(g() * (y1 - y0) * 0.8);
+          if ((k + Math.floor(t * 3)) % 7) px(c, x, y, k % 5 ? "#c9d6ff" : "#ffffff");
+        }
+      }
+      function lightTower(c, x, top, bot) {
+        r(c, x + 2, top, 2, bot - top, "#4a4f5a");
+        for (let j = 0; j < 3; j++) for (let i = 0; i < 4; i++) r(c, x - 2 + i * 3, top - 8 + j * 3, 2, 2, j === 1 && i % 2 ? "#ffe48a" : "#fff6c8");
+      }
+      // Story-time (voiceover clock) events
+      const CK = {
+        teaser: { run: 3.3, rel: 3.72, hit: 4.08 },
+        b1: { run: 8.85, rel: 9.75, hit: 10.05, cut: 10.4, stop: 11.55, back: 12.45 },
+        b2: { run: 14.4, rel: 15.15, hit: 15.45, r1: 15.65, end1: 16.95, r2: 17.2, cut: 19.15, dive: 19.45, ground: 19.9, bails: 19.98, safe: 20.35, back: 20.95 },
+        b3: { run: 21.1, rel: 21.85, hit: 22.15, cut: 22.7, fdive: 24.95, miss: 25.35, rope: 25.9, four: 26.5, back: 27.25 },
+        b4: { run: 27.3, rel: 28.15, hit: 28.45, cut: 28.85, six: 32.6, back: 33.3 },
+        panelOn: 10.05, panelOff: 31.95, zoomOut: 35.25, zoomOutEnd: 35.65, front: 37.92,
+      };
+      const CHEERS = [[4.1, 1.8], [11.6, 0.8], [16.95, 0.7], [20.35, 1.6], [26.0, 1.4], [30.5, 5.0], [35.65, 5.3]];
+      function cheer(t) {
+        let v = 0;
+        for (const [a, d] of CHEERS) if (t >= a && t < a + d) v = Math.max(v, 1 - (t - a) / d);
+        return v;
+      }
+      function crowdBand(c, y0, y1, t, off, cheering) {
+        for (let y = y0; y < y1; y += 3)
+          for (let x = 0; x < 180; x += 3) {
+            const wx = Math.floor((x + off) / 3);
+            const col = ["#c94f4f", "#4f7fc9", "#e0c060", "#f4f4f4", "#5aa36a", "#2563d9", "#d23a32"][((wx * 7919 + y * 104729) >>> 0) % 7];
+            r(c, x, y - (cheering && (wx + Math.floor(t * 10)) % 2 ? 1 : 0), 2, 2, col);
+          }
+      }
+      const FIREWORKS = [[32.6, 40, 40], [32.85, 140, 30], [33.1, 90, 20], [33.4, 30, 70], [33.7, 150, 60], [34.1, 70, 30]];
+      function fireworks(c, t) {
+        FIREWORKS.forEach(([t0, x0, y0], k) => {
+          const dt = t - t0;
+          if (dt < 0 || dt > 1.3) return;
+          const g = rng(300 + k);
+          const cols = [["#ffd447", "#ffffff"], ["#e8463c", "#ffb0a8"], ["#49d17a", "#d6ffe3"], ["#5fb3ff", "#ffffff"]][k % 4];
+          for (let i = 0; i < 22; i++) {
+            const a = (i / 22) * Math.PI * 2 + g() * 0.2, sp = 22 + g() * 10;
+            const rad = sp * eo(Math.min(1, dt / 0.9));
+            if (dt > 0.9 && (i + Math.floor(t * 20)) % 2) continue;
+            r(c, x0 + Math.cos(a) * rad, y0 + Math.sin(a) * rad + 10 * dt * dt, 2, 2, cols[i % 2]);
+          }
+        });
+      }
+
+      // ---------- end-on camera: behind the bowler, looking down the pitch at Claude ----------
+      const FAR = { y: 230, x: 90 }, NEAR = { y: 318 };
+      function deliveryOf(t) {
+        for (const k of ["teaser", "b1", "b2", "b3", "b4"]) {
+          const d = CK[k];
+          if (t >= d.run && t < d.run + 3.2) return { key: k, ...d };
+        }
+        return null;
+      }
+      // ball position in the end-on view during a delivery and just after the shot
+      function ballEndOn(t, d) {
+        if (!d || t < d.rel) return null;
+        const bounceT = d.rel + (d.hit - d.rel) * 0.68;
+        if (t < bounceT) { const p = prog(t, d.rel, bounceT); return [lerp(100, 92, p), lerp(250, 240, p) - 18 * Math.sin(Math.PI * p * 0.9), lerp(4, 3, p), false]; }
+        if (t < d.hit) { const p = prog(t, bounceT, d.hit); return [lerp(92, 93, p), lerp(240, 214, p), 3, false]; }
+        const q = t - d.hit;
+        if (d.key === "b1") return q < 0.35 ? [lerp(93, 60, q / 0.35), lerp(214, 300, q / 0.35), 3, true] : null;
+        if (d.key === "b2") return q < 0.6 ? [lerp(93, 20, q / 0.6), lerp(216, 250, q / 0.6), 3, true] : null;
+        if (d.key === "b3") return q < 0.55 ? [lerp(93, 190, q / 0.55), lerp(214, 236, q / 0.55), 3, true] : null;
+        return q < 0.4 ? [lerp(93, 100, q / 0.4), lerp(214, -10, eo(q / 0.4)), 3, true] : null;
+      }
+      function bowlerEndOn(c, t, d) {
+        if (!d) return;
+        const run = prog(t, d.run, d.rel);
+        if (t < d.rel) {
+          const y = lerp(380, 322, run), sc = lerp(4.4, 3.6, run);
+          human(c, 98 - 4 * sc, y - 18 * sc, t, "back", "run", sc);
+        } else if (t < d.rel + 0.25) {
+          human(c, 98 - 14, 322 - 65, t, "back", "bowl", 3.6);
+        } else {
+          const f = eo(prog(t, d.rel + 0.25, d.rel + 1.2));
+          human(c, 98 - 14 + 30 * f, 322 - 65 + 4 * f, t, "back", "run", 3.6);
+        }
+      }
+      // where each Claude is in the end-on view: striker (A) and non-striker (B)
+      function batters(t) {
+        const b2 = CK.b2;
+        let A = { x: 92, y: FAR.y, sc: 3, view: "front", pose: "stand" };
+        let B = { x: 38, y: NEAR.y, sc: 4.4, view: "back", pose: "stand" };
+        if (t >= b2.r1 && t < b2.end1) {
+          const p = eio(prog(t, b2.r1, b2.end1));
+          A = { x: lerp(96, 112, p), y: lerp(FAR.y, NEAR.y - 4, p), sc: lerp(3, 4.6, p), view: "front", pose: "run" };
+          B = { x: lerp(38, 78, p), y: lerp(NEAR.y, FAR.y + 2, p), sc: lerp(4.4, 3, p), view: "back", pose: "run" };
+        } else if (t >= b2.end1 && t < b2.r2) {
+          A = { x: 112, y: NEAR.y - 4, sc: 4.6, view: "back", pose: "stand" };
+          B = { x: 78, y: FAR.y + 2, sc: 3, view: "front", pose: "stand" };
+        } else if (t >= b2.r2 && t < b2.back) {
+          const p = eio(prog(t, b2.r2, b2.cut + 0.3));
+          A = { x: lerp(112, 98, p), y: lerp(NEAR.y - 4, FAR.y + 6, p), sc: lerp(4.6, 3.1, p), view: "back", pose: "run" };
+          B = { x: lerp(78, 38, p), y: lerp(FAR.y + 2, NEAR.y, p), sc: lerp(3, 4.4, p), view: "front", pose: "run" };
+        }
+        return { A, B };
+      }
+      function drawEndOn(t) {
+        const c = Wd;
+        skyBand(c, 0, 160, t, 21);
+        fireworks(c, t);
+        // stands, floodlights, sight screen
+        r(c, 0, 150, 180, 40, "#0f1530");
+        crowdBand(c, 152, 186, t, 0, cheer(t) > 0);
+        lightTower(c, 4, 96, 186); lightTower(c, 168, 96, 186);
+        r(c, 66, 160, 48, 28, "#f2f2ee"); r(c, 66, 160, 48, 1, "#ffffff");
+        r(c, 0, 186, 180, 3, "#d23a32"); r(c, 0, 186, 180, 1, "#ffffff");
+        // outfield
+        for (let y = 189; y < 320; y++) {
+          const band = Math.floor(Math.pow((y - 186) / 134, 0.6) * 9) % 2;
+          r(c, 0, y, 180, 1, band ? "#2f8f3a" : "#37a043");
+        }
+        // the pitch, in perspective
+        for (let y = 214; y < 320; y++) {
+          const p = (y - 214) / 106, hw = lerp(13, 40, p);
+          r(c, 90 - hw, y, hw * 2, 1, ((y * 7) % 11) ? "#d9c08a" : "#cdb37c");
+        }
+        r(c, 78, 228, 24, 1, "#ffffff"); r(c, 60, 306, 60, 1, "#ffffff");
+        // far stumps and keeper
+        human(c, 100, 206, t, "front", "crouch", 1.4);
+        for (const sx of [87, 90, 93]) r(c, sx, 212, 1, 16, "#f0d9a8");
+        if (!(t >= CK.b2.bails && t < CK.b2.back)) r(c, 87, 211, 7, 1, "#ffffff");
+        const d = deliveryOf(t);
+        const { A, B } = batters(t);
+        // draw the farther one first
+        const drawBatter = (s, hero) => {
+          const ox = Math.round(s.x - 8 * s.sc), oy = Math.round(s.y - 18 * s.sc);
+          if (s.view === "front") claudeFront(c, ox, oy, t, s.pose === "cheer" ? "cheer" : s.pose, s.sc);
+          else claudeBack(c, ox, oy, t, s.pose, s.sc);
+          // the bat
+          const hx = s.x + 6 * s.sc, hy = s.y - 8 * s.sc;
+          if (hero && d && t >= d.hit - 0.32 && t < d.hit + 0.9 && s.pose === "stand") {
+            let a;
+            if (t < d.hit - 0.12) a = lerp(Math.PI * 0.55, -Math.PI * 0.75, eo(prog(t, d.hit - 0.32, d.hit - 0.12)));
+            else if (t < d.hit) a = lerp(-Math.PI * 0.75, Math.PI * 0.45, ei(prog(t, d.hit - 0.12, d.hit)));
+            else {
+              const hiFollow = d.key === "b4" || d.key === "teaser";
+              a = lerp(Math.PI * 0.45, hiFollow ? -Math.PI * 0.62 : Math.PI * 0.05, eo(prog(t, d.hit, d.hit + 0.3)));
+            }
+            bat(c, hx, hy, a, 9 * s.sc, s.sc / 2);
+          } else if (s.view === "front" && s.pose === "cheer") {
+            bat(c, s.x + 7 * s.sc, s.y - 16 * s.sc, -Math.PI * 0.5, 9 * s.sc, s.sc / 2);
+          } else if (s.view === "front") {
+            bat(c, hx, hy, Math.PI * 0.55, 9 * s.sc, s.sc / 2);
+          } else {
+            bat(c, s.x - 6 * s.sc, s.y - 8 * s.sc, Math.PI * 0.6, 8 * s.sc, s.sc / 2);
+          }
+        };
+        const celebrating = t >= CK.b4.back;
+        const order = A.y < B.y ? [[A, true], [B, false]] : [[B, false], [A, true]];
+        order.forEach(([s, hero]) => drawBatter(celebrating && hero ? { ...s, pose: "cheer" } : s, hero));
+        // near stumps, bowler
+        for (const sx of [84, 90, 96]) r(c, sx, 296, 2, 24, "#f0d9a8");
+        r(c, 84, 295, 14, 1, "#ffffff");
+        bowlerEndOn(c, t, d);
+        // the ball and its bounce mark
+        const b = ballEndOn(t, d);
+        if (d && t >= d.rel + (d.hit - d.rel) * 0.68 && t < d.hit + 0.4) ring(c, 92, 240, 4, 1, "#ffd447");
+        if (b) { const s = Math.round(b[2]); r(c, b[0] - s / 2, b[1] - s / 2, s, s, "#c8261d"); px(c, b[0], b[1], "#ffffff"); }
+        if (d && t >= d.hit && t < d.hit + 0.07) r(c, 0, 0, 180, 320, "rgba(255,255,255,0.85)");
+      }
+
+      // ---------- ball 1: side-on, the ball runs straight to the fielder ----------
+      function drawFielderCam(t) {
+        const c = Wd, b = CK.b1;
+        skyBand(c, 0, 150, t, 31);
+        r(c, 0, 146, 180, 40, "#0f1530");
+        crowdBand(c, 148, 178, t, 40, false);
+        r(c, 0, 178, 180, 10, "#1d3f9e");
+        tiny(c, "CLAUDE XI", 6, 181, "#ffffff"); tiny(c, "TV MAKEOVER", 110, 181, "#ffd447");
+        for (let y = 188; y < 320; y += 6) r(c, 0, y, 180, 6, (y / 6) % 2 ? "#2f8f3a" : "#37a043");
+        // ball rolls in from the left, small hops
+        const p = prog(t, b.cut, b.stop);
+        if (t < b.stop) {
+          const bx = lerp(-6, 116, p), by = 272 - Math.abs(Math.sin(p * Math.PI * 3)) * 10 * (1 - p);
+          r(c, bx - 2, by - 2, 4, 4, "#c8261d"); px(c, bx, by - 1, "#ffffff");
+        }
+        // the fielder crouches, gathers, stands, throws back
+        const fx = 116, fy = 276;
+        if (t < b.stop - 0.25) human(c, fx, fy - 54, t, "side", "stand", 3, true);
+        else if (t < b.stop + 0.35) human(c, fx, fy - 54, t, "side", "crouch", 3, true);
+        else if (t < 12.15) human(c, fx, fy - 54, t, "side", "hands", 3, true);
+        else {
+          human(c, fx, fy - 54, t, "side", "throw", 3, true);
+          const q = prog(t, 12.15, 12.45);
+          r(c, lerp(fx, -10, q), lerp(fy - 50, fy - 90, q) + 60 * q * q, 4, 4, "#c8261d");
+        }
+        if (t >= b.stop && t < b.stop + 0.3) ring(c, fx + 2, fy - 4, 6 + (t - b.stop) * 50, 2 + (t - b.stop) * 14, "#ffffff");
+      }
+
+      // ---------- ball 2: side-on run-out cam, Claude dives to make his ground ----------
+      function drawRunoutCam(t) {
+        const c = Wd, b = CK.b2;
+        skyBand(c, 0, 150, t, 41);
+        r(c, 0, 146, 180, 40, "#0f1530");
+        crowdBand(c, 148, 182, t, 90, cheer(t) > 0);
+        for (let y = 182; y < 320; y += 6) r(c, 0, y, 180, 6, (y / 6) % 2 ? "#2f8f3a" : "#37a043");
+        r(c, 0, 250, 180, 40, "#d9c08a");
+        r(c, 0, 250, 180, 1, "#cdb37c");
+        r(c, 118, 250, 2, 40, "#ffffff");
+        // stumps and keeper
+        const broken = t >= b.bails;
+        for (const sx of [128, 132, 136]) r(c, sx, 236, 2, 34, "#f0d9a8");
+        if (!broken) { r(c, 128, 235, 10, 1, "#ffffff"); }
+        else {
+          const k = prog(t, b.bails, b.bails + 0.7);
+          r(c, 128 - 18 * k, 235 - 26 * k + 40 * k * k, 4, 1, "#ffffff");
+          r(c, 134 + 20 * k, 235 - 30 * k + 46 * k * k, 4, 1, "#ffffff");
+        }
+        human(c, 144, 270 - 54 + (t < b.bails - 0.1 ? 0 : 6), t, "side", t >= b.bails - 0.1 ? "throw" : "crouch", 3, true);
+        // the throw arriving
+        if (t < b.bails) {
+          const q = prog(t, b.cut, b.bails);
+          r(c, lerp(200, 134, q), lerp(150, 238, q) - 40 * Math.sin(Math.PI * q), 3, 3, "#c8261d");
+        }
+        // Claude: running, then the full-length dive with the bat stretched over the line
+        const runX = (u) => lerp(-30, 52, u);
+        if (t < b.dive) {
+          const x = runX(prog(t, b.cut, b.dive));
+          claudeSide(c, x, 270 - 54, t, "run", 3);
+          bat(c, x + 40, 270 - 30, -0.25, 22, 1.5);
+        } else {
+          const k = eo(prog(t, b.dive, b.ground + 0.25));
+          const x = lerp(52, 76, k), y = lerp(270 - 54, 272 - 54, k) - 12 * Math.sin(Math.PI * Math.min(1, prog(t, b.dive, b.ground)));
+          claudeSide(c, x, y, t, "dive", 3);
+          const reach = lerp(0, 1, prog(t, b.dive, b.ground));
+          bat(c, x + 44, y + 40, 0.05, lerp(18, 34, reach), 1.5);
+          if (t >= b.ground) {
+            const g = rng(91), dt = t - b.ground;
+            for (let i = 0; i < 26; i++) {
+              const a = -Math.PI * g(), sp = 10 + g() * 30;
+              if (dt > 0.8 && i % 2) continue;
+              r(c, 100 + Math.cos(a) * sp * eo(Math.min(1, dt)), 268 + Math.sin(a) * sp * 0.6 * eo(Math.min(1, dt)), 3, 3, i % 3 ? "#d8b878" : "#efdcb0");
+            }
+          }
+        }
+      }
+
+      // ---------- ball 3: the camera races the ball to the rope; the fielder dives and misses ----------
+      function drawBoundaryCam(t) {
+        const c = Wd, b = CK.b3;
+        const sp = 70;
+        const scroll = sp * (Math.min(t, b.rope - 0.3) - b.cut);
+        skyBand(c, 0, 150, t, 51);
+        r(c, 0, 146, 180, 40, "#0f1530");
+        crowdBand(c, 148, 178, t, scroll * 0.3, cheer(t) > 0);
+        // advertising boards beyond the rope
+        const boardsX = 210 - sp * (t - (b.rope - 0.6));
+        for (let y = 188; y < 320; y += 6) {
+          for (let x = 0; x < 186; x += 12) r(c, x - (scroll % 12), y, 12, 6, (Math.floor((x + scroll) / 12) + y / 6) % 2 ? "#2f8f3a" : "#37a043");
+        }
+        r(c, 0, 178, 180, 10, "#1d3f9e");
+        // the rope
+        if (boardsX < 200) {
+          r(c, boardsX, 188, 180, 132, "#2a7f34");
+          for (let y = 188; y < 320; y += 2) r(c, boardsX + ((y / 2) % 2), y, 3, 2, "#ffffff");
+          r(c, boardsX + 14, 220, 160, 30, "#d23a32");
+          tiny(c, "TV MAKEOVER", boardsX + 22, 232, "#ffffff");
+        }
+        // ball keeps rolling at a fixed screen x until the rope comes in, then runs over it
+        let bx = 70;
+        if (t > b.rope - 0.3) bx = 70 + sp * (t - (b.rope - 0.3));
+        if (t > b.rope + 0.25) bx = 70 + sp * 0.55;
+        const by = 272;
+        r(c, bx - 2, by - 2, 4, 4, "#c8261d"); px(c, bx, by - 1, "#ffffff");
+        for (let k = 1; k < 5; k++) r(c, bx - 2 - k * 6, by, 3, 1, "rgba(255,255,255,0.35)");
+        // the fielder sprints in from the right and dives full length, just missing
+        if (t >= 23.9) {
+          if (t < b.fdive) {
+            const x = lerp(200, 104, prog(t, 23.9, b.fdive));
+            human(c, x, 276 - 54, t, "side", "run", 3, true);
+          } else {
+            const k = eo(prog(t, b.fdive, b.fdive + 0.6));
+            const x = lerp(96, 62, k), y = 276 - 54 + 12 - 10 * Math.sin(Math.PI * Math.min(1, prog(t, b.fdive, b.fdive + 0.45)));
+            human(c, x, y, t, "side", "dive", 3);
+          }
+        }
+        if (t >= b.miss && t < b.miss + 0.4) { const k = prog(t, b.miss, b.miss + 0.4); ring(c, 66, 268, 6 + 30 * k, 2 + 8 * k, "#ffffff"); }
+      }
+
+      // ---------- ball 4: the six, tracking the ball up over the stands and out ----------
+      function sixBall(t) {
+        const b = CK.b4;
+        if (t < b.cut) return null;
+        if (t < 32.3) { const p = eo(prog(t, b.cut, 32.3)); return [lerp(90, 104, p), lerp(300, 150, p)]; }
+        const q = ei(prog(t, 32.3, 33.1));
+        return [lerp(104, 116, q), lerp(150, -30, q)];
+      }
+      function drawSixCam(t) {
+        const c = Wd, b = CK.b4;
+        const tilt = eio(prog(t, b.cut, 32.7));
+        skyBand(c, 0, 320, t, 61);
+        fireworks(c, t);
+        const st = lerp(150, 340, tilt), roof = st - 30;
+        // the stadium roof with its floodlight rim, then the stands below it
+        r(c, 0, roof, 180, 10, "#1a1f2e");
+        for (let x = 4; x < 180; x += 12) r(c, x, roof - 2, 6, 3, "#fff6c8");
+        r(c, 0, roof + 10, 180, 20, "#121a33");
+        crowdBand(c, st, st + 40, t, 0, true);
+        lightTower(c, 8, roof - 60, roof); lightTower(c, 164, roof - 60, roof);
+        const bp = sixBall(t);
+        if (bp) { ellipse(c, bp[0], bp[1], 3, 3, "#c8261d"); px(c, bp[0] - 1, bp[1] - 1, "#ffffff"); }
+      }
+
+      // ---------- the step TV, switched on with the first ball ----------
+      const PANEL = [15, 64, 150, 84];
+      function drawPanel(c, t) {
+        if (t < CK.panelOn - 0.02 || t >= CK.panelOff + 0.3) return null;
+        const [x, y, w, h] = PANEL;
+        const pin = back(prog(t, CK.panelOn, CK.panelOn + 0.3));
+        const pout = t >= CK.panelOff ? prog(t, CK.panelOff, CK.panelOff + 0.3) : 0;
+        const cx = x + w / 2, cy = y + h / 2;
+        const sc = clamp(0.2 + 0.8 * pin, 0, 1.2) * (1 - 0.15 * pout);
+        c.save();
+        c.translate(cx, cy); c.scale(sc, sc); c.translate(-cx, -cy);
+        r(c, x - 5, y - 5, w + 10, h + 14, "#1b1b22");
+        r(c, x - 5, y - 5, w + 10, 1, "#34343f");
+        r(c, x - 5, y + h + 1, w + 10, 1, "#ffd447");
+        px(c, x + w + 2, y + h + 5, "#e8463c");
+        r(c, x, y, w, h, "#05060a");
+        let flash = false;
+        for (const tt of [CK.b2.run, CK.b3.run, CK.b4.run]) if (t >= tt && t < tt + 0.12) flash = true;
+        if (flash) { crtStatic(Sc, t); c.drawImage(scrC, x, y); }
+        const on = prog(t, CK.panelOn, CK.panelOn + 0.22);
+        let vis = 1;
+        if (on < 1) vis = Math.max(0.02, eo(on));
+        if (pout > 0) vis = Math.max(0.02, 1 - eo(pout));
+        if (vis < 1) r(c, x, y + h / 2, w, 1, "#ffffff");
+        c.restore();
+        if (flash) return null;
+        return { rect: [cx + (x - cx) * sc, cy + (y - cy) * sc, w * sc, h * sc], vis };
+      }
+
+      // which shot the broadcast is on
+      function shotAt(t) {
+        if (t >= CK.b1.cut && t < CK.b1.back) return "fielder";
+        if (t >= CK.b2.cut && t < CK.b2.back) return "runout";
+        if (t >= CK.b3.cut && t < CK.b3.back) return "boundary";
+        if (t >= CK.b4.cut && t < CK.b4.back) return "six";
+        return "endon";
+      }
+
+      // ===================================================================
+      // LIVING ROOM
+      // ===================================================================
+      function person(c, cx, cy, rx, hair, shirt, style, armsUp, remote, t, i) {
+        const ry = rx;
+        const shW = rx * 3;
+        r(c, cx - shW / 2, cy + ry - 1, shW, ry * 2, shirt);
+        if (armsUp) {
+          const wave = Math.round(Math.sin(t * 10 + i) * 2);
+          const aw = Math.max(2, Math.round(rx / 2));
+          r(c, cx - shW / 2 - 1 + wave, cy - ry * 2, aw, ry * 3, shirt);
+          r(c, cx + shW / 2 - aw + 1 - wave, cy - ry * 2, aw, ry * 3, shirt);
+          r(c, cx - shW / 2 - 1 + wave, cy - ry * 2 - 3, aw, 3, "#e0a37a");
+          r(c, cx + shW / 2 - aw + 1 - wave, cy - ry * 2 - 3, aw, 3, "#e0a37a");
+        }
+        px(c, cx - rx - 1, cy, "#e0a37a");
+        px(c, cx + rx + 1, cy, "#e0a37a");
+        ellipse(c, cx, cy, rx, ry, hair);
+        if (style === "long") r(c, cx - rx, cy, rx * 2 + 1, ry + 4, hair);
+        if (style === "tail") { r(c, cx + rx, cy - 1, 2, 2, hair); r(c, cx + rx + 1, cy + 1, 2, 4, hair); }
+        if (remote) {
+          const p = remote;
+          const hx = cx + rx + 3 + 4 * p, hy = cy + ry + 2 - 14 * p;
+          pixLine(c, cx + rx + 1, cy + ry + 3, hx, hy, shirt, 2);
+          r(c, hx - 1, hy - 5, 3, 6, "#1b1b1f");
+          px(c, hx, hy - 5, "#e8463c");
+          r(c, hx - 1, hy, 3, 2, "#e0a37a");
+        }
+      }
+      const FAM = [
+        { x: 50, hair: "#2b1d14", shirt: "#3a6ea5", s: "short", adult: 1 },
+        { x: 80, hair: "#6b3b1f", shirt: "#2f9e8f", s: "long", adult: 1 },
+        { x: 110, hair: "#1f1a17", shirt: "#e0b23a", s: "short", adult: 0 },
+        { x: 138, hair: "#8a5a2b", shirt: "#d0567a", s: "tail", adult: 0 },
+      ];
+      function confetti(c, t, t0, n, seed) {
+        if (t < t0) return;
+        const g = rng(seed), dt = t - t0;
+        const cols = ["#ffd447", "#e8463c", "#49d17a", "#5fb3ff", "#ff6fb5", "#ffffff"];
+        for (let i = 0; i < n; i++) {
+          const x0 = g() * 180, delay = g() * 2.5, sp = 26 + g() * 30, sway = g() * 6.28;
+          const u = dt - delay;
+          if (u < 0) continue;
+          const y = -6 + ((u * sp) % 340);
+          const x = x0 + Math.sin(u * 3 + sway) * 6;
+          const flip = Math.floor(u * 8 + i) % 2;
+          r(c, x, y, flip ? 2 : 1, flip ? 1 : 2, cols[i % cols.length]);
+        }
+      }
+      function drawRoom(t) {
+        const c = R;
+        r(c, 0, 0, W, 196, "#e7b97f");
+        for (let x = 4; x < W; x += 10) r(c, x, 0, 2, 196, "#dcaa70");
+        r(c, 0, 196, W, 4, "#7a4a2e");
+        r(c, 0, 200, W, 120, "#9b6440");
+        for (let y = 206; y < H; y += 8) r(c, 0, y, W, 1, "#8a5636");
+        r(c, 2, 176, 10, 20, "#a0522d");
+        for (let k = 0; k < 5; k++) r(c, 1 + k * 2, 160 + (k % 3) * 4, 3, 18 - (k % 3) * 4, "#3a8f4a");
+        r(c, 168, 150, 10, 8, "#f3d9a3");
+        r(c, 172, 158, 2, 38, "#333338");
+        r(c, 24, 154, 132, 6, "#5a3a26");
+        r(c, 24, 154, 132, 1, "#6e4930");
+        r(c, 10, 59, 160, 94, "#17171b");
+        r(c, 10, 59, 160, 1, "#2c2c33");
+        px(c, 89, 151, "#e8463c");
+        const cheering = t >= T.zoomOutEnd;
+        FAM.forEach((f, i) => {
+          const jump = cheering ? Math.round(Math.abs(Math.sin((t - T.zoomOutEnd) * 7 + i * 1.3)) * 4) : 0;
+          const rx = f.adult ? 8 : 6, cy = (f.adult ? 214 : 220) - jump;
+          const remote = i === 0 && t >= 2.3 && t < 3.3 ? eo(prog(t, 2.3, 2.6)) : 0;
+          person(c, f.x, cy, rx, f.hair, f.shirt, f.s, cheering, remote, t, i);
+        });
+        r(c, 8, 232, 164, 88, "#b5443b");
+        r(c, 8, 232, 164, 2, "#c95a4f");
+        r(c, 8, 270, 164, 50, "#9e3a32");
+        for (let x = 48; x < 172; x += 42) r(c, x, 234, 1, 36, "#9e3a32");
+        r(c, 2, 224, 12, 96, "#a33a32"); r(c, 2, 224, 12, 2, "#c95a4f");
+        r(c, 166, 224, 12, 96, "#a33a32"); r(c, 166, 224, 12, 2, "#c95a4f");
+        if (cheering) {
+          const g = rng(8);
+          for (let k = 0; k < 10; k++) {
+            const ph = ((t - T.zoomOutEnd) * 1.4 + g()) % 1;
+            r(c, 96 + (g() - 0.5) * 40 * ph, 232 - 40 * Math.sin(Math.PI * ph), 2, 2, "#fff3c4");
+          }
+          r(c, 88, 230, 16, 4, "#e8463c");
+        }
+      }
+      // front view: the family on the couch cheering at the camera
+      function drawFront(t) {
+        const c = R;
+        const u = t - T.front;
+        r(c, 0, 0, W, 320, "#e7b97f");
+        for (let x = 4; x < W; x += 10) r(c, x, 0, 2, 320, "#dcaa70");
+        r(c, 36, 68, 3, 18, "#5a3a26");
+        for (let j = 0; j < 14; j++) r(c, 39, 69 + j, Math.max(1, 56 - j * 4), 1, "#d23a32");
+        tiny(c, "HOME RUN", 42, 72, "#ffffff");
+        c.save(); c.globalAlpha = 0.16 + 0.05 * Math.sin(t * 9); r(c, 0, 0, W, 320, "#9fd0ff"); c.restore();
+        r(c, 6, 206, 168, 40, "#b5443b");
+        r(c, 6, 206, 168, 2, "#c95a4f");
+        const P = [
+          { x: 40, hair: "#2b1d14", shirt: "#3a6ea5", skin: "#e0a37a", h: 12, kid: 0 },
+          { x: 76, hair: "#6b3b1f", shirt: "#2f9e8f", skin: "#d69a72", h: 12, kid: 0, long: 1 },
+          { x: 112, hair: "#1f1a17", shirt: "#e0b23a", skin: "#e0a37a", h: 10, kid: 1 },
+          { x: 144, hair: "#8a5a2b", shirt: "#d0567a", skin: "#e8b48c", h: 10, kid: 1, tail: 1 },
+        ];
+        P.forEach((p, i) => {
+          const jump = p.kid ? Math.round(Math.abs(Math.sin(u * 7 + i)) * 10) : Math.round(Math.abs(Math.sin(u * 6 + i)) * 3);
+          const hy = 214 - p.h - jump;
+          const bw = p.h * 2 + 4;
+          r(c, p.x - bw / 2, hy + p.h * 2 - 2, bw, 40, p.shirt);
+          const wv = Math.round(Math.sin(u * 10 + i) * 3);
+          pixLine(c, p.x - bw / 2, hy + p.h * 2, p.x - bw / 2 - 6 + wv, hy - 4, p.shirt, 3);
+          pixLine(c, p.x + bw / 2, hy + p.h * 2, p.x + bw / 2 + 6 - wv, hy - 4, p.shirt, 3);
+          r(c, p.x - bw / 2 - 8 + wv, hy - 8, 4, 4, p.skin);
+          r(c, p.x + bw / 2 + 4 - wv, hy - 8, 4, 4, p.skin);
+          ellipse(c, p.x, hy + p.h, p.h - 2, p.h, p.skin);
+          for (let y = -p.h; y < -p.h / 3; y++)
+            for (let x = -p.h + 2; x <= p.h - 2; x++)
+              if ((x * x) / ((p.h - 2) * (p.h - 2)) + (y * y) / (p.h * p.h) <= 1) px(c, p.x + x, hy + p.h + y, p.hair);
+          if (p.long) { r(c, p.x - p.h + 1, hy + p.h - 4, 3, p.h + 6, p.hair); r(c, p.x + p.h - 4, hy + p.h - 4, 3, p.h + 6, p.hair); }
+          if (p.tail) r(c, p.x + p.h - 2, hy + 2, 4, 6, p.hair);
+          const ey = hy + p.h - 1;
+          r(c, p.x - 5, ey, 3, 1, "#2a1a12"); px(c, p.x - 5, ey + 1, "#2a1a12");
+          r(c, p.x + 3, ey, 3, 1, "#2a1a12"); px(c, p.x + 5, ey + 1, "#2a1a12");
+          r(c, p.x - 3, ey + 4, 7, 4, "#5a1a1a");
+          r(c, p.x - 2, ey + 4, 5, 1, "#ffffff");
+          r(c, p.x - 1, ey + 7, 3, 1, "#e8463c");
+          px(c, p.x - 7, ey + 3, "#f08a8a"); px(c, p.x + 7, ey + 3, "#f08a8a");
+        });
+        r(c, 0, 250, 180, 70, "#a33a32");
+        r(c, 0, 250, 180, 3, "#c95a4f");
+        r(c, 0, 230, 16, 90, "#b5443b"); r(c, 164, 230, 16, 90, "#b5443b");
+        r(c, 0, 230, 16, 2, "#c95a4f"); r(c, 164, 230, 16, 2, "#c95a4f");
+        r(c, 82, 244, 18, 7, "#e8463c"); r(c, 82, 244, 18, 1, "#ff8a7a");
+        for (let k = 0; k < 7; k++) r(c, 84 + k * 2, 241 + (k % 2), 2, 2, "#fff3c4");
+        confetti(c, t, T.front - 0.5, 110, 77);
+      }
+
+      // ===================================================================
+      // COMPOSE
+      // ===================================================================
+      const TV = [15, 64, 150, 84];
+      function scanlines(x, y, w, h, a = 0.12) {
+        out.fillStyle = `rgba(0,0,0,${a})`;
+        for (let yy = y; yy < y + h; yy += 6) out.fillRect(x, yy + 4, w, 2);
+      }
+      function drawBroadcast(t) {
+        Wd.clearRect(0, 0, W, H);
+        const shot = shotAt(t);
+        if (shot === "fielder") drawFielderCam(t);
+        else if (shot === "runout") drawRunoutCam(t);
+        else if (shot === "boundary") drawBoundaryCam(t);
+        else if (shot === "six") drawSixCam(t);
+        else drawEndOn(t);
+      }
+      // what the living-room TV shows: "hi" (realistic screen) or "px" (pixel static / broadcast)
+      function roomScreen(t) {
+        if (t < T.click) return "hi";
+        if (t < T.dive) { crtStatic(Sc, t); return "px"; }
+        if (t < T.zoomOutEnd) return "px";
+        if (t < T.zoomOutEnd + 0.12) { crtStatic(Sc, t); return "px"; }
+        return "hi";
+      }
+      const POPS_T = POPS_H.map((p) => p[0]);
+      function hookShake(t) {
+        for (const t0 of POPS_T) if (t >= t0 && t < t0 + 0.12) return Math.round(Math.sin((t - t0) * 140) * 2);
+        return 0;
+      }
+      function cam(src, z, cx, cy, dx, dy, track) {
+        F.save();
+        F.translate(cx + dx, cy + dy); F.scale(z, z); F.translate(-cx, -cy);
+        F.drawImage(src, 0, 0);
+        F.restore();
+        if (!track) return null;
+        return [cx + dx + (track[0] - cx) * z, cy + dy + (track[1] - cy) * z, track[2] * z, track[3] * z];
+      }
+      // broadcast ball tracking, drawn sharp on the output canvas
+      function tracer(pts, col, camT) {
+        if (pts.length < 2) return;
+        const m = (p) => [(camT.fx + camT.dx + (p[0] - camT.fx) * camT.z) * S, (camT.fy + camT.dy + (p[1] - camT.fy) * camT.z) * S];
+        out.save();
+        out.lineCap = "round"; out.lineJoin = "round";
+        out.strokeStyle = col; out.lineWidth = 16; out.globalAlpha = 0.9;
+        out.beginPath(); pts.forEach((p, i) => { const [x, y] = m(p); i ? out.lineTo(x, y) : out.moveTo(x, y); }); out.stroke();
+        out.strokeStyle = "#ffffff"; out.lineWidth = 5; out.globalAlpha = 1;
+        out.beginPath(); pts.forEach((p, i) => { const [x, y] = m(p); i ? out.lineTo(x, y) : out.moveTo(x, y); }); out.stroke();
+        const [lx, ly] = m(pts[pts.length - 1]);
+        out.fillStyle = "#ffffff"; out.beginPath(); out.arc(lx, ly, 12, 0, Math.PI * 2); out.fill();
+        out.restore();
+      }
+      // a short punch-in on every big moment
+      const PUNCH = [CK.teaser.hit, CK.b1.hit, CK.b1.stop, CK.b2.hit, CK.b2.ground, CK.b2.safe, CK.b3.hit, CK.b3.miss, CK.b3.four, CK.b4.hit, CK.b4.six];
+      function renderAt(t) {
+        t = clamp(t, 0, DUR);
+        F.clearRect(0, 0, W, H);
+        let scan = null, hi = null, hiVis = 1, hiMode = "panel";
+        let camT = { z: 1, fx: 90, fy: 200, dx: 0, dy: 0 };
+        if (t < T.dive) {
+          const m = roomScreen(t);
+          drawRoom(t);
+          if (m === "px") R.drawImage(scrC, TV[0], TV[1]); else r(R, TV[0], TV[1], TV[2], TV[3], "#000000");
+          const z = lerp(1, 1.14, eo(prog(t, 0, T.dive))), sh = hookShake(t);
+          const rect = cam(roomC, z, 90, 106, sh, 0, TV);
+          if (m === "hi") hi = rect; else scan = rect;
+        } else if (t < T.diveEnd || (t >= T.zoomOut && t < T.zoomOutEnd)) {
+          const into = t < T.diveEnd;
+          const p = into ? ei(prog(t, T.dive, T.diveEnd)) : 1 - eio(prog(t, T.zoomOut, T.zoomOutEnd));
+          drawRoom(t);
+          drawBroadcast(t);
+          const s = lerp(1, 2.4, p), cx = 90, cy = 106;
+          F.save(); F.translate(cx, cy); F.scale(s, s); F.translate(-cx, -cy); F.drawImage(roomC, 0, 0); F.restore();
+          const sr = [lerp(TV[0], 0, p), lerp(TV[1], 0, p), lerp(TV[2], 180, p), lerp(TV[3], 320, p)];
+          const cr = [0, lerp(150, 0, p), 180, lerp(101, 320, p)];
+          r(F, sr[0] - 5, sr[1] - 5, sr[2] + 10, sr[3] + 10, "#17171b");
+          F.drawImage(worldC, cr[0], cr[1], cr[2], cr[3], sr[0], sr[1], sr[2], sr[3]);
+          scan = sr;
+        } else if (t < T.zoomOut) {
+          drawBroadcast(t);
+          let z = 1;
+          for (const tt of PUNCH) if (t >= tt && t < tt + 0.45) z += 0.08 * (1 - eo((t - tt) / 0.45));
+          camT = { z, fx: 90, fy: 215, dx: 0, dy: 0 };
+          cam(worldC, z, 90, 215, 0, 0, null);
+          const pnl = drawPanel(F, t);
+          if (pnl) { hi = pnl.rect; hiVis = pnl.vis; }
+        } else if (t < T.front) {
+          const m = roomScreen(t);
+          drawRoom(t);
+          if (m === "px") R.drawImage(scrC, TV[0], TV[1]); else r(R, TV[0], TV[1], TV[2], TV[3], "#000000");
+          confetti(R, t, T.zoomOutEnd, 90, 41);
+          const z = 1 + 0.25 * eio(prog(t, 35.75, 36.2));
+          const rect = cam(roomC, z, 90, 106, 0, 0, TV);
+          if (m === "hi") { hi = rect; hiMode = "junk"; } else scan = rect;
+        } else {
+          drawFront(t);
+          F.drawImage(roomC, 0, 0);
+        }
+        out.imageSmoothingEnabled = false;
+        out.clearRect(0, 0, 1080, 1920);
+        out.drawImage(frameC, 0, 0, W, H, 0, 0, 1080, 1920);
+        if (scan) scanlines(scan[0] * S, scan[1] * S, scan[2] * S, scan[3] * S);
+        // ball tracking: delivery line from release (red) and the shot (yellow), end-on camera only
+        if (t >= T.diveEnd && t < T.zoomOut) {
+          const shot = shotAt(t);
+          const d = deliveryOf(t);
+          if (shot === "endon" && d && t >= d.rel && t < d.hit + 0.45) {
+            const pre = [], post = [];
+            for (let k = d.rel; k <= t; k += 0.008) { const b = ballEndOn(k, d); if (b) (b[3] ? post : pre).push([b[0], b[1]]); }
+            tracer(pre, "#ff3b30", camT);
+            if (post.length) tracer([pre[pre.length - 1], ...post], "#ffcc00", camT);
+          }
+          if (shot === "six") {
+            const pts = [];
+            for (let k = CK.b4.cut; k <= t; k += 0.02) { const b = sixBall(k); if (b) pts.push(b); }
+            tracer(pts, "#ffcc00", camT);
+          }
+        }
+        if (hi) {
+          drawHi(t, hiMode);
+          const [x, y, w, h] = hi.map((v) => v * S);
+          const vh = Math.max(2, h * hiVis), sh = HH * hiVis;
+          out.imageSmoothingEnabled = true;
+          out.imageSmoothingQuality = "high";
+          out.drawImage(hiC, 0, (HH - sh) / 2, HW, sh, x, y + (h - vh) / 2, w, vh);
+          out.imageSmoothingEnabled = false;
+          if (hiVis < 1) { out.fillStyle = "#ffffff"; out.fillRect(x, y + h / 2 - 2, w, 4); }
+        }
+      }
+
+      window.addEventListener("hf-seek", (e) => {
+        const tt = e.detail.time * SPEED;
+        renderAt(tt);
+        if (e.detail.waitUntil) e.detail.waitUntil(assetsReady.then(() => renderAt(tt)));
+      });
+      window.__hf = window.__hf || {};
+      window.__hf.buildReady = window.__hf.buildReady || {};
+      window.__hf.buildReady.game = assetsReady;
+      const state = { t: 0 };
+      const tl = gsap.timeline({ paused: true });
+      tl.to(state, { t: DUR, duration: DUR / SPEED, ease: "none", onUpdate: () => renderAt(state.t) }, 0);
+      renderAt(0);
+      assetsReady.then(() => renderAt(state.t));
+      window.__timelines["game"] = tl;
+    })();
+  </script>
+</template>

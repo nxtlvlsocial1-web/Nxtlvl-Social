@@ -1,0 +1,247 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Press Start 2P";
+      src: url("assets/fonts/press-start-2p.woff2") format("woff2");
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      font-family: "Press Start 2P", monospace;
+      color: #ffffff;
+    }
+    .plate {
+      position: absolute;
+      left: 72px;
+      width: 936px;
+      height: 216px;
+      background: #0b0e14;
+      box-shadow: 0 0 0 6px #ffd447, 0 0 0 12px #0b0e14;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 26px;
+      text-align: center;
+    }
+    .plate-sm {
+      font-size: 44px;
+      line-height: 1;
+    }
+    .plate-lg {
+      font-size: 72px;
+      line-height: 1;
+      color: #ffd447;
+    }
+    .plate-cta {
+      font-size: 64px;
+      line-height: 1;
+      color: #ffd447;
+    }
+    .plate-sub {
+      font-size: 32px;
+      line-height: 1;
+    }
+    /* step label printed on the TV's chin (888..942) */
+    .label {
+      position: absolute;
+      left: 90px;
+      top: 896px;
+      width: 900px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      line-height: 1;
+    }
+    .label b {
+      color: #ffd447;
+      font-weight: 400;
+    }
+    /* big titles in the night sky */
+    .sky {
+      position: absolute;
+      left: 0;
+      width: 1080px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 36px;
+      text-align: center;
+      text-shadow: 6px 6px 0 #0b0e14;
+    }
+    .s-xl {
+      font-size: 104px;
+      line-height: 1;
+      color: #ffd447;
+    }
+    .s-md {
+      font-size: 44px;
+      line-height: 1;
+    }
+    .s-lg {
+      font-size: 60px;
+      line-height: 1;
+    }
+    .s-hr {
+      font-size: 120px;
+      line-height: 1.1;
+      color: #ffd447;
+    }
+    .w {
+      display: inline-block;
+    }
+    .l3 {
+      position: absolute;
+      left: 60px;
+      display: flex;
+      align-items: stretch;
+      font-family: "Inter", Arial, sans-serif;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    }
+    .l3-tag {
+      background: #d97757;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 28px;
+      padding: 18px 20px;
+    }
+    .l3-name {
+      background: #ffffff;
+      color: #111318;
+      font-weight: 900;
+      font-size: 44px;
+      padding: 10px 24px;
+      letter-spacing: 1px;
+    }
+    .l3-stat {
+      background: #111318;
+      color: #ffd447;
+      font-weight: 700;
+      font-size: 28px;
+      padding: 18px 20px;
+    }
+    .readout {
+      position: absolute;
+      font-family: "Inter", Arial, sans-serif;
+      font-weight: 900;
+      font-size: 40px;
+      color: #111318;
+      background: #ffffff;
+      padding: 12px 18px;
+      border-left: 10px solid #ff3b30;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+    }
+    .rd-k {
+      font-weight: 700;
+      font-size: 28px;
+      color: #4a4f5a;
+      margin-right: 8px;
+    }
+    .trk {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #3a3f4d;
+    }
+    .ov {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #3a3f4d;
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 34px;
+      text-align: center;
+    }
+    .call {
+      position: absolute;
+      left: 0;
+      width: 1080px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      text-shadow: 6px 6px 0 #0b0e14;
+    }
+    .c-txt {
+      font-size: 96px;
+      line-height: 1;
+      color: #ffd447;
+    }
+    .c-sub {
+      font-size: 40px;
+      line-height: 1;
+      color: #ffffff;
+    }
+  </style>
+  <div id="root" data-composition-id="hud" data-width="1080" data-height="1920">
+    <div id="hook" class="clip plate" data-start="0.0" data-duration="2.696" data-track-index="1" style="top: 966px">
+      <div id="hook-a" class="plate-sm">YOUR TV IS A</div>
+      <div id="hook-b" class="plate-lg">BILLBOARD?</div>
+    </div>
+    <div id="intro" class="clip sky" data-start="4.87" data-duration="2.695" data-track-index="2" style="top: 430px">
+      <div id="intro-a" class="s-xl">4 BALLS</div>
+      <div id="intro-b" class="s-lg">= 4 STEPS</div>
+      <div id="intro-c" class="s-md">CLAUDE ON STRIKE</div>
+    </div>
+    <div id="lab-1" class="clip label" data-start="8.739" data-duration="3.748" data-track-index="3" style=""><span><b>BALL 1:</b> NEW HOME APP</span></div>
+    <div id="lab-2" class="clip label" data-start="12.487" data-duration="5.809" data-track-index="3" style=""><span><b>BALL 2:</b> CLEAN TILES</span></div>
+    <div id="lab-3" class="clip label" data-start="18.296" data-duration="5.426" data-track-index="3" style=""><span><b>BALL 3:</b> DRONE SCREENSAVER</span></div>
+    <div id="lab-4" class="clip label" data-start="23.722" data-duration="4.104" data-track-index="3" style=""><span><b>BALL 4:</b> DELETE THE JUNK</span></div>
+    <div id="lab-5" class="clip label" data-start="31.104" data-duration="1.87" data-track-index="3" style=""><span><b>SAFE</b> · EVERY APP CAN COME BACK</span></div>
+    <div id="spd-1" class="clip readout" data-start="8.478" data-duration="1.392" data-track-index="7" style="left: 600px; top: 1560px" data-hold="bowling-speed flash"><span class="rd-k">SPEED</span> 138 KM/H</div>
+    <div id="spd-2" class="clip readout" data-start="13.174" data-duration="1.391" data-track-index="7" style="left: 600px; top: 1560px" data-hold="bowling-speed flash"><span class="rd-k">SPEED</span> 142 KM/H</div>
+    <div id="spd-3" class="clip readout" data-start="19.0" data-duration="1.391" data-track-index="7" style="left: 600px; top: 1560px" data-hold="bowling-speed flash"><span class="rd-k">SPEED</span> 145 KM/H</div>
+    <div id="spd-4" class="clip readout" data-start="24.478" data-duration="1.392" data-track-index="7" style="left: 600px; top: 1560px" data-hold="bowling-speed flash"><span class="rd-k">SPEED</span> 151 KM/H</div>
+    <div id="call-dot" class="clip call" data-start="10.087" data-duration="1.13" data-track-index="6" style="top: 1150px"><span class="c-txt" style="color:#ffffff">DOT BALL</span></div>
+    <div id="call-safe" class="clip call" data-start="17.696" data-duration="0.739" data-track-index="6" style="top: 1100px"><span class="c-txt" style="color:#ffffff">NOT OUT!</span><span class="c-sub">+2 RUNS</span></div>
+    <div id="call-four" class="clip call" data-start="23.043" data-duration="0.696" data-track-index="6" style="top: 1100px"><span class="c-txt">FOUR!</span><span class="c-sub">+4 RUNS</span></div>
+    <div id="call-six" class="clip sky" data-start="28.348" data-duration="2.304" data-track-index="2" style="top: 430px">
+      <div id="six-a" class="s-hr">SIX!</div>
+      <div id="six-b" class="s-md">OUT OF THE STADIUM</div>
+      <div id="six-c" class="s-md" style="color:#ffd447">12 RUNS OFF 4 BALLS</div>
+    </div>
+    <div id="cta" class="clip plate" data-start="32.974" data-duration="2.6" data-track-index="1" style="top: 560px">
+      <div id="cta-a" class="plate-cta"><span class="w">COMMENT</span> <span class="w">"TV"</span></div>
+      <div id="cta-b" class="plate-sub">FOR THE FULL GUIDE</div>
+    </div>
+  </div>
+  <script>
+    // tweens sit on the voiceover's own clock and play SPEED x faster
+    const SPEED = 1.15;
+    const tl = gsap.timeline();
+    const pop = (sel, at, from = 1.3) =>
+      tl.fromTo(sel, { opacity: 0, scale: from }, { opacity: 1, scale: 1, duration: 0.14, ease: "power3.out" }, at);
+
+    tl.fromTo("#hook-a, #hook-b", { opacity: 1 }, { opacity: 0, duration: 0.15, ease: "power2.in" }, 2.95);
+    tl.fromTo("#hook-b", { scale: 1 }, { scale: 1.18, duration: 0.08, ease: "power3.out", yoyo: true, repeat: 1 }, 2.3);
+
+    pop("#intro-a", 5.62, 1.6);
+    pop("#intro-b", 6.3, 1.3);
+    pop("#intro-c", 7.3, 1.2);
+
+
+    [["#lab-1 span", 10.1], ["#lab-2 span", 14.4], ["#lab-3 span", 21.1], ["#lab-4 span", 27.3], ["#lab-5 span", 35.8]].forEach(([s, at]) => pop(s, at, 1.15));
+    [9.75, 15.15, 21.85, 28.15].forEach((at, i) => pop(`#spd-${i + 1}`, at, 1.25));
+
+    pop("#call-dot .c-txt", 11.6, 1.6);
+    pop("#call-safe .c-txt", 20.35, 1.8);
+    pop("#call-safe .c-sub", 20.5, 1.3);
+    pop("#call-four .c-txt", 26.5, 1.8);
+    pop("#call-four .c-sub", 26.65, 1.3);
+    tl.fromTo("#six-a", { opacity: 0, scale: 2.4, rotation: -8 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.18, ease: "back.out(2)" }, 32.6);
+    pop("#six-b", 33.0, 1.3);
+    pop("#six-c", 33.5, 1.3);
+
+    pop("#cta-a .w:nth-child(1)", 37.95, 1.4);
+    pop("#cta-a .w:nth-child(2)", 38.1, 1.6);
+    pop("#cta-b", 38.3, 1.2);
+
+    tl.timeScale(SPEED);
+    const film = gsap.timeline({ paused: true });
+    film.add(tl, 0);
+    window.__timelines["hud"] = film;
+  </script>
+</template>
