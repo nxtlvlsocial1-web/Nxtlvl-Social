@@ -265,6 +265,12 @@
       "skillPath": "skills/gsap-utils/SKILL.md",
       "computedHash": "1ab2387f6e694718a4f1b5acf2a4ab16e1b884c3428adf5f6b26d830f00826cf"
     },
+    "google-maps-scraper": {
+      "source": "gosom/google-maps-scraper",
+      "sourceType": "github",
+      "skillPath": "skills/google-maps-scraper/SKILL.md",
+      "computedHash": "cb68d65d2deddc4a65cba6cc8c69dccbcc240231ca4f5493eaa27db87223dc95"
+    },
     "higgsfield-brandkit": {
       "source": "higgsfield-ai/skills",
       "sourceType": "github",
