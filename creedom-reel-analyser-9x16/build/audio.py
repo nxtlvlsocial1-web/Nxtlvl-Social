@@ -4,7 +4,9 @@ python3 -I build/audio.py      (run from the project root; needs numpy and scipy
 
 A light, bouncy 100 bpm pop bed in F major (soft kick, clap on 2 and 4, shaker, warm chords, a marimba-ish pluck),
 kept low under the voice, plus UI sound design on the visual events: pops, ticks, counter rattles, whooshes, a
-sparkle, the dark "twist" drop, keyboard taps and a send ding. Writes assets/audio/music.wav (bed + SFX) and
+sparkle, the dark "twist" drop with a scanner and heartbeat, keyboard taps and a send ding. On top of the hand-placed
+effects, every event generate.py logs (build/sfx_events.json: pops, exits, glints, rings, counters, live reactions,
+data blips) gets its own sound, so nothing appears or leaves in silence. Writes assets/audio/music.wav (bed + SFX) and
 assets/audio/vo.wav (the voiceover, lifted to about -15 LUFS); they play on separate tracks.
 """
 import os
@@ -46,9 +48,12 @@ def bp(x, lo, hi, order=2):
 
 
 BUS = {k: (np.zeros(N), np.zeros(N)) for k in ("music", "sfx")}
+PLACED = []   # start times of the hand-placed sound effects
 
 
 def put(x, t, g=1.0, pan=0.0, bus="music"):
+    if bus == "sfx":
+        PLACED.append(t)
     i = int(t * SR)
     if i >= N or i < 0:
         return
@@ -158,6 +163,26 @@ def ding(d=1.0):
     return (np.sin(2 * np.pi * 1318 * t) + .4 * np.sin(2 * np.pi * 1975 * t) * np.exp(-t * 6)) * np.exp(-t * 4) * .08
 
 
+def ting(d=.7, f=2637):
+    t = tt(d)
+    return (np.sin(2 * np.pi * f * t) + .5 * np.sin(2 * np.pi * f * 1.5 * t)) * np.exp(-t * 7) * np.minimum(1, t / .003) * .05
+
+
+def scan(d=1.4):
+    """A soft scanner hum that rises and falls with the beam."""
+    t = tt(d)
+    f = 500 + 500 * np.sin(np.pi * t / (d / 2)) ** 2
+    x = np.sin(2 * np.pi * np.cumsum(f) / SR) * (.6 + .4 * np.sin(2 * np.pi * 18 * t))
+    return lp(x, 2500) * np.sin(np.pi * t / d) * .05
+
+
+def heartbeat():
+    """Lub-dub."""
+    t = tt(.5)
+    beat = lambda o, g: np.where(t >= o, np.sin(2 * np.pi * 55 * (t - o)) * np.exp(-(t - o) * 22), 0) * g
+    return np.tanh(2 * (beat(0, 1) + beat(.17, .7))) * .4
+
+
 def key_(d=.05):
     t = tt(d)
     return bp(rng.standard_normal(len(t)), 1500, 6000) * np.exp(-t * 120) * .1
@@ -241,6 +266,39 @@ def sfx():
     put(sparkle(1.4), 32.25, 1.0, bus=s)
 
 
+def events():
+    """A sound for every visual event generate.py logged, unless a hand-placed effect already covers that moment."""
+    import json
+    evs = json.load(open(os.path.join(ROOT, "build", "sfx_events.json")))
+    taken = sorted(PLACED)
+    near = lambda t, w=.09: any(abs(t - p) < w for p in taken)
+    r = np.random.default_rng(8)
+    for t, kind, d in evs:
+        if kind in ("pop", "swish", "glint", "ring", "count") and near(t):
+            continue
+        pan = float(r.uniform(-.35, .35))
+        if kind == "pop":
+            put(pop_(float(r.uniform(780, 1250)), .1), t, .55, pan, "sfx")
+        elif kind == "swish":
+            put(whoosh(.22, .7, False), t - .05, .35, pan, "sfx")
+        elif kind == "glint":
+            put(ting(.6, float(r.choice([2349, 2637, 3136]))), t, .9, pan, "sfx")
+        elif kind == "ring":
+            put(ting(.9, 1760), t, .8, pan, "sfx")
+        elif kind == "count":
+            put(rattle(max(.3, d), 20), t, .45, pan, "sfx")
+        elif kind == "bubble":
+            put(pop_(float(r.uniform(1700, 2300)), .05), t + .05, .22, -.6 if r.random() < .5 else .6, "sfx")
+        elif kind == "data":
+            for k in range(3):
+                put(tick_(.03, 3000 + 400 * k), t + k * .07, .55, .1 * k, "sfx")
+        elif kind == "scan":
+            put(scan(d), t, 1.0, 0, "sfx")
+        elif kind == "heart":
+            put(heartbeat(), t, 1.0, 0, "sfx")
+        taken.append(t)
+
+
 def reverb(x, secs=1.4, mix=.18, seed=0):
     r = np.random.default_rng(seed)
     t = np.arange(int(secs * SR)) / SR
@@ -256,6 +314,7 @@ def rms(x):
 def main():
     arrange()
     sfx()
+    events()
     ml, mr = (reverb(BUS["music"][0], seed=1), reverb(BUS["music"][1], seed=2))
     sl, sr = (reverb(BUS["sfx"][0], .8, .12, 3), reverb(BUS["sfx"][1], .8, .12, 4))
     # bed sits about 20 dB under a speech level, SFX around 10 dB under

@@ -2,8 +2,9 @@
 
 python3 -I build/generate.py      (run from the project root)
 
-Look: Creedom's app (paper #F6F6F4, ink #0B0B0B, pink, serif numerals) on the soft grid-and-pastel-glow background
-of the reference covers. Headline with an italic-serif accent, one hero object, word-by-word captions with a pill on
+Look: Creedom's app (paper #F6F6F4, ink #0B0B0B, pink) on the soft grid-and-pastel-glow background of the reference
+covers. All type is Google Sans, the face of the Creedom wordmark; headlines carry one accent in the wordmark's
+magenta-to-coral gradient, one hero object, word-by-word captions with a pill on
 the spoken word, and the pink bird as the lead: it never stands still (bob, sway, breathing, wing flutter) and changes
 gesture on every line (walk, jump, flap, wave, scratch head, shrug, droop, scan, surf, startle, point). Every cut is a
 whip pan; one dark beat for the twist. No account handles on screen.
@@ -29,6 +30,11 @@ KIN = [(1.3, 1.6), (4.6, .9), (7.1, .8), (9.5, .8), (12.8, 1.0), (15.35, 1.4), (
 CUTS = [S[k][0] for k in ("next", "read", "score", "analyse", "twist", "reasons", "cta")]
 
 T = []
+EV = []   # (time, kind[, length]) for every visual event; audio.py gives each one its sound
+
+
+def ev(t, kind, d=0):
+    EV.append((round(t, 3), kind, round(d, 3)))
 
 
 def add(js):
@@ -47,7 +53,7 @@ def swoosh():
 
 
 def hl(sid, l1, l2, y=170):
-    """Headline: heavy sans line, then the italic-serif pink accent with a hand-drawn underline."""
+    """Headline: bold line, then the accent in the wordmark gradient with a hand-drawn underline."""
     w1 = "".join(f'<span class="hw">{w}</span> ' for w in l1.split())
     return (f'<div class="hl hl-{sid}" style="top:{y}px"><div class="l1">{w1}</div>'
             f'<div class="l2"><span class="acc">{l2}{swoosh()}</span></div></div>')
@@ -63,23 +69,28 @@ def hl_in(sid, t):
 
 
 def pop(sel, t, frm="scale:.6,opacity:0,y:40", d=.45, ease="back.out(2)"):
+    ev(t, "pop")
     add(f'tl.fromTo("{sel}",{{{frm}}},{{scale:1,opacity:1,x:0,y:0,rotation:0,rotationY:0,rotationX:0,duration:{d},ease:"{ease}"}},{t:.2f});')
 
 
 def out(sel, t, to="opacity:0,y:-30", d=.25):
+    ev(t, "swish")
     add(f'tl.to("{sel}",{{{to},duration:{d},ease:"power2.in"}},{t:.2f});')
 
 
 def shine(sel, t):
+    ev(t + .15, "glint")
     add(f'tl.fromTo("{sel} > .shine",{{xPercent:-160}},{{xPercent:260,duration:.7,ease:"power2.inOut"}},{t:.2f});')
 
 
 def ring(cls, t, scale=3.2, d=.7):
+    ev(t, "ring")
     add(f'tl.fromTo(".{cls}",{{scale:.2,opacity:.9}},{{scale:{scale},opacity:0,duration:{d},ease:"power2.out"}},{t:.2f});')
 
 
 def counter(sel, a, z, t, d, fmt="comma", ease="power2.out"):
     f = {"comma": "Math.round(o.v).toLocaleString('en-US')", "int": "Math.round(o.v)"}[fmt]
+    ev(t, "count", d * .8)
     add(f'(()=>{{const o={{v:{a}}};tl.to(o,{{v:{z},duration:{d},ease:"{ease}",onUpdate:()=>{{'
         f'document.querySelectorAll("{sel}").forEach(e=>e.textContent={f});}}}},{t:.2f});}})();')
 
@@ -124,6 +135,33 @@ def tick(s=40):
     return (f'<svg viewBox="0 0 40 40" width="{s}" height="{s}"><circle cx="20" cy="20" r="19" fill="#e6f2ea"/>'
             f'<path class="tk" d="M11 20.5 L17.5 27 L29 14" stroke="{GREEN}" stroke-width="3.6" fill="none" '
             f'stroke-linecap="round" stroke-linejoin="round" pathLength="1"/></svg>')
+
+
+def comment_ic(s, col=INK):
+    return (f'<svg viewBox="0 0 40 40" width="{s}" height="{s}"><path d="M4 6 H36 V28 H16 L8 36 V28 H4 Z" fill="{col}"/></svg>')
+
+
+# live reactions drifting up both edges, Instagram-live style: (start time, side)
+REACT_T = [round(.9 + i * .62, 2) for i in range(52) if not (S["twist"][0] - .3 < .9 + i * .62 < S["twist"][1] - .6)]
+
+
+REACT_SW = []
+
+
+def reactions():
+    r = random.Random(12)
+    out_ = []
+    REACT_SW.clear()
+    for i, t in enumerate(REACT_T):
+        side = i % 2
+        x = r.uniform(24, 110) if side == 0 else r.uniform(950, 1010)
+        kind = r.choice(["h", "h", "h", "p", "c", "s"])
+        col = r.choice([PINK, "#E235DD", "#E68B70", "#F343A2"])
+        art = {"h": heart(r.choice([46, 56, 64]), col), "p": play(44, col), "c": comment_ic(44, col),
+               "s": star(48, "#F2B134")}[kind]
+        REACT_SW.append(r.uniform(-60, 60))
+        out_.append(f'<div class="rx rx{i}" style="left:{x:.0f}px">{art}</div>')
+    return "".join(out_)
 
 
 # ------------------------------------------------------------------ scenes
@@ -174,7 +212,10 @@ def scenes():
         '<svg class="dash" viewBox="0 0 420 20" width="420" height="20"><path d="M0 10 H420" stroke="' + PINK + '" '
         'stroke-width="5" stroke-dasharray="14 12" fill="none"/></svg>'
         '<div class="lpill">◉ Public data only</div>'
-        '<div class="appic cr"><img src="assets/img/bird.png" alt=""></div></div>'
+        '<div class="appic cr"><img src="assets/img/bird.png" alt=""></div>'
+        + "".join(f'<i class="ddot dd{i}"></i>' for i in range(6)) +
+        '<div class="orbit">' + "".join(f'<div class="ob ob{i}">{star(42 if i % 2 else 34, "#F2B134" if i % 2 else PINK)}</div>'
+                                        for i in range(4)) + '</div></div>'
         '<div class="crlogo"><img src="assets/img/creedom_logo.png" alt="Creedom"></div><div class="reading mono">READING YOUR PAGE</div>'
         '<div class="give">Give me <i>20 seconds.</i></div>'
         '<div class="rbar"><div class="rfill"></div></div>'
@@ -216,7 +257,7 @@ def scenes():
     )))
     out_.append(clip("twist", (
         '<div class="ghost gw" data-layout-ignore>0:34</div><div class="spot" data-layout-ignore></div>' +
-        hl("twist", "Buried at", "0:34.") + timeline("tl-b") +
+        hl("twist", "Buried at", "0:34.") + timeline("tl-b") + '<div class="laser" data-layout-ignore></div>' +
         '<div class="chip pinkchip besth">★ BEST HOOK</div><div class="rg34 pring" data-layout-ignore></div>' +
         confetti("cf34", 30, 8, 420, -380)
     ), "dark"))
@@ -243,7 +284,10 @@ def scenes():
         '<div class="plane" data-layout-ignore><svg viewBox="0 0 60 60" width="70" height="70"><path d="M4 30 L56 6 L44 54 '
         f'L30 36 Z" fill="{PINK}"/><path d="M30 36 L56 6" stroke="#fff" stroke-width="3"/></svg></div>' +
         confetti("cfkw", 40, 11) +
-        '<div class="endlock"><img src="assets/img/creedom_logo.png" alt="Creedom"></div>'
+        '<div class="endlock"><img src="assets/img/creedom_logo.png" alt="Creedom"><div class="eshine"><i></i></div></div>'
+        + "".join(f'<div class="esp esp{i}" data-layout-ignore style="left:{x}px;top:{y}px">{star(sz, c)}</div>'
+                  for i, (x, y, sz, c) in enumerate([(130, 330, 40, PINK), (930, 350, 34, "#F2B134"), (240, 520, 26, "#E68B70"),
+                                                     (860, 520, 44, "#E235DD"), (540, 300, 24, "#F2B134"), (60, 460, 30, "#E235DD")])) +
         '<div class="endsub">Comment <b>CREEDOM</b> for the link</div>'
     )))
     return "".join(out_)
@@ -296,18 +340,18 @@ def timeline():
     for t, kind in zip(CUTS, ["whipx", "whipx", "zoom", "whipy", "zoom", "spin", "whipy"]):
         if kind == "whipx":
             add(f'tl.to("#cam",{{x:-160,filter:"blur(12px)",duration:.12,ease:"power2.in"}},{t - .12:.2f});')
-            add(f'tl.fromTo("#cam",{{x:180,filter:"blur(14px)"}},{{x:0,filter:"blur(0px)",duration:.3,ease:"power3.out",immediateRender:false}},{t:.2f});')
+            add(f'tl.fromTo("#cam",{{x:180,filter:"blur(14px)"}},{{x:0,filter:"blur(0px)",duration:.44,ease:"expo.out",immediateRender:false}},{t:.2f});')
         elif kind == "whipy":
             add(f'tl.to("#cam",{{y:-200,filter:"blur(12px)",duration:.12,ease:"power2.in"}},{t - .12:.2f});')
-            add(f'tl.fromTo("#cam",{{y:240,filter:"blur(14px)"}},{{y:0,filter:"blur(0px)",duration:.32,ease:"power3.out",immediateRender:false}},{t:.2f});')
+            add(f'tl.fromTo("#cam",{{y:240,filter:"blur(14px)"}},{{y:0,filter:"blur(0px)",duration:.46,ease:"expo.out",immediateRender:false}},{t:.2f});')
         elif kind == "zoom":
             add(f'tl.to("#cam",{{scale:1.7,filter:"blur(16px)",opacity:.4,duration:.14,ease:"power2.in"}},{t - .14:.2f});')
-            add(f'tl.fromTo("#cam",{{scale:.7,filter:"blur(14px)",opacity:.4}},{{scale:1,filter:"blur(0px)",opacity:1,duration:.34,'
-                f'ease:"power3.out",immediateRender:false}},{t:.2f});')
+            add(f'tl.fromTo("#cam",{{scale:.7,filter:"blur(14px)",opacity:.4}},{{scale:1,filter:"blur(0px)",opacity:1,duration:.48,'
+                f'ease:"expo.out",immediateRender:false}},{t:.2f});')
         else:
             add(f'tl.to("#cam",{{rotation:8,scale:1.25,filter:"blur(12px)",duration:.13,ease:"power2.in"}},{t - .13:.2f});')
-            add(f'tl.fromTo("#cam",{{rotation:-8,scale:.8,filter:"blur(12px)"}},{{rotation:0,scale:1,filter:"blur(0px)",duration:.34,'
-                f'ease:"back.out(1.6)",immediateRender:false}},{t:.2f});')
+            add(f'tl.fromTo("#cam",{{rotation:-8,scale:.8,filter:"blur(12px)"}},{{rotation:0,scale:1,filter:"blur(0px)",duration:.5,'
+                f'ease:"back.out(1.4)",immediateRender:false}},{t:.2f});')
         add(f'tl.fromTo("#whip",{{opacity:.9,x:300}},{{opacity:0,x:-300,duration:.28,ease:"power2.out",immediateRender:false}},{t - .08:.2f});')
     # impacts on the big beats: punch-in, camera shake, white flash, speed-line burst
     for t, k in [(1.35, 1), (7.25, .6), (8.35, .8), (12.85, .7), (15.4, 1), (23.4, 1), (24.75, .7), (29.8, 1), (32.2, .6)]:
@@ -511,6 +555,38 @@ def timeline():
         add(f'tl.fromTo(".blob{i}",{{x:0,y:0}},{{x:{dx},y:{dy},duration:{d},ease:"sine.inOut",yoyo:true,repeat:{int(DUR / d)}}},0);')
     add(f'document.querySelectorAll(".tw").forEach((e,i)=>tl.fromTo(e,{{scale:.3,opacity:.15}},{{scale:1,opacity:.9,'
         f'duration:.7,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .7) - 2}}},i*.23));')
+    # ---- extra motion so no second sits still
+    # live reactions rising up the edges
+    for i, t in enumerate(REACT_T):
+        add(f'tl.fromTo(".rx{i}",{{y:0,x:0,scale:.3,rotation:-12}},{{y:-640,x:{REACT_SW[i]:.0f},scale:1,rotation:12,duration:2.4,'
+            f'ease:"power1.out",immediateRender:false}},{t:.2f});')
+        add(f'tl.to(".rx{i}",{{opacity:.92,duration:.22}},{t:.2f});tl.to(".rx{i}",{{opacity:0,duration:.5}},{t + 1.85:.2f});')
+        if i % 2 == 0:
+            ev(t, "bubble")
+    # data streaming from Instagram into Creedom, sparkles orbiting the Creedom icon
+    t = S["read"][0]
+    add(f'tl.fromTo(".ddot",{{x:0,opacity:0,scale:.4}},{{x:560,opacity:1,scale:1,duration:.9,ease:"power1.inOut",stagger:{{each:.15,'
+        f'repeat:3}},immediateRender:false}},{t + .5:.2f});')
+    add(f'tl.to(".ddot",{{opacity:0,duration:.2}},{S["read"][1] - .3:.2f});')
+    for k in range(4):
+        ev(t + .55 + k * .9, "data")
+    add(f'tl.fromTo(".orbit",{{rotation:0,opacity:0}},{{rotation:540,opacity:1,duration:3.4,ease:"none",immediateRender:false}},{t + .3:.2f});')
+    add(f'tl.to(".orbit",{{opacity:0,duration:.2}},{S["read"][1] - .3:.2f});')
+    # the twist: a scanner sweeps the timeline while a heartbeat builds
+    add('tl.set(".laser",{opacity:0},0);')
+    add('tl.fromTo(".laser",{y:0,opacity:1},{y:600,opacity:1,duration:.7,ease:"sine.inOut",yoyo:true,repeat:1,immediateRender:false},21.6);')
+    add('tl.to(".laser",{opacity:0,duration:.2},23.0);')
+    ev(21.6, "scan", 1.4)
+    for hb in (21.85, 22.4, 22.95):
+        add(f'tl.to("#punch",{{scale:1.018,duration:.09,ease:"power2.out",yoyo:true,repeat:1}},{hb:.2f});')
+        ev(hb, "heart")
+    # end card: a shimmer runs across the wordmark and sparkles twinkle round it
+    add('tl.fromTo(".eshine i",{xPercent:-120},{xPercent:420,duration:.8,ease:"power2.inOut",repeat:1,repeatDelay:.15},32.45);')
+    ev(32.5, "glint")
+    add('tl.fromTo(".esp",{scale:0,opacity:0,rotation:-90},{scale:1,opacity:1,rotation:0,duration:.4,stagger:.07,ease:"back.out(3)"},32.3);')
+    add('tl.to(".esp",{scale:.5,opacity:.4,duration:.35,stagger:.05,yoyo:true,repeat:3,ease:"sine.inOut"},32.75);')
+    # headline accents breathe once they have landed
+    add(f'tl.fromTo(".hl .acc",{{y:0}},{{y:-8,duration:.9,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .9) - 2},immediateRender:false}},.9);')
     caption_tl()
     bird.perform(add, DUR)
     return "\n".join(T)
@@ -543,20 +619,17 @@ def background():
 
 
 CSS = """
-@font-face { font-family: "Fraunces"; font-weight: 100 900; src: url("assets/fonts/fraunces.ttf"); }
-@font-face { font-family: "Fraunces"; font-style: italic; font-weight: 100 900; src: url("assets/fonts/fraunces-italic.ttf"); }
-@font-face { font-family: "Manrope"; font-weight: 200 800; src: url("assets/fonts/manrope.ttf"); }
-@font-face { font-family: "Outfit"; font-weight: 100 900; src: url("assets/fonts/outfit.ttf"); }
-@font-face { font-family: "JBMono"; font-weight: 100 800; src: url("assets/fonts/jbmono.ttf"); }
+@font-face { font-family: "Google Sans"; font-weight: 400 700; src: url("assets/fonts/googlesans.ttf"); }
 :root { --cg: linear-gradient(90deg, #E235DD, #E34CB7 45%, #E68B70); --cgd: linear-gradient(90deg, #C82BC4, #D23C93 50%, #CF6448); --pink: #E2557D; --pinkt: #C93A6D; --ink: #0B0B0B; --paper: #F6F6F4; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
+i, em { font-style: normal; }
 html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); }
-body { font-family: "Manrope", sans-serif; color: var(--ink); }
+body { font-family: "Google Sans", sans-serif; color: var(--ink); }
 #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); }
 .clip { position: absolute; inset: 0; }
 #cam { position: absolute; inset: 0; transform-origin: 50% 45%; z-index: 2; }
 #punch { position: absolute; inset: 0; transform-origin: 50% 45%; perspective: 1400px; }
-.mono { font: 600 24px "JBMono"; letter-spacing: 5px; color: #6b6b66; }
+.mono { font: 600 24px "Google Sans"; letter-spacing: 5px; color: #6b6b66; }
 /* background: the reference covers' soft pastel glow on a fine grid */
 #paper { position: absolute; inset: 0; background: var(--paper); }
 #blobs { position: absolute; inset: 0; filter: blur(90px); opacity: .85; }
@@ -566,14 +639,14 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
 .tw { position: absolute; }
 #dark { position: absolute; inset: 0; opacity: 0;
   background: radial-gradient(90% 60% at 50% 45%, #3a1d26 0%, #1b0f14 55%, #0d0709 100%); }
-.ghost { position: absolute; left: 0; width: 1080px; top: 560px; text-align: center; font: italic 600 520px/1 "Fraunces";
+.ghost { position: absolute; left: 0; width: 1080px; top: 560px; text-align: center; font: 600 520px/1 "Google Sans";
   color: rgba(11,11,11,.045); letter-spacing: -20px; white-space: nowrap; }
 .ghost.gw { color: rgba(255,255,255,.05); font-size: 400px; }
 #shake { position: absolute; inset: 0; }
 #flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 42; }
 #speed { position: absolute; left: -760px; top: -340px; opacity: 0; z-index: 39; }
 #kin { z-index: 1; }
-.kin { position: absolute; left: -200px; width: 1480px; top: 760px; text-align: center; font: 800 360px/1 "Outfit"; letter-spacing: -10px;
+.kin { position: absolute; left: -200px; width: 1480px; top: 760px; text-align: center; font: 700 360px/1 "Google Sans"; letter-spacing: -10px;
   color: transparent; -webkit-text-stroke: 5px rgba(226,53,160,.28); white-space: nowrap; opacity: 0; }
 .pt { position: absolute; border-radius: 50%; background: radial-gradient(circle, #ffffff, rgba(226,53,160,.5)); opacity: 0; }
 #whip { position: absolute; inset: 0; opacity: 0; z-index: 41; background: repeating-linear-gradient(0deg,
@@ -586,8 +659,8 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
 .pfill { width: 100%; height: 100%; background: var(--cg); transform-origin: 0 50%; }
 /* headline */
 .hl { position: absolute; left: 0; width: 1080px; text-align: center; z-index: 6; }
-.l1 { font: 800 84px/1.05 "Manrope"; letter-spacing: -3px; }
-.l2 { font: italic 600 112px/1.05 "Fraunces"; letter-spacing: -3px; color: var(--pinkt); }
+.l1 { font: 700 84px/1.05 "Google Sans"; letter-spacing: -3px; }
+.l2 { font: 600 112px/1.05 "Google Sans"; letter-spacing: -3px; color: var(--pinkt); }
 .hw, .acc { display: inline-block; }
 .acc { background: var(--cgd); -webkit-background-clip: text; background-clip: text; color: transparent; padding: 0 10px; }
 .dark .acc { background: var(--cg); -webkit-background-clip: text; background-clip: text; }
@@ -600,7 +673,7 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
   overflow: hidden; }
 .shine { position: absolute; top: -20%; left: 0; width: 38%; height: 140%; transform: rotate(18deg);
   background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.75), rgba(255,255,255,0)); pointer-events: none; }
-.chip { position: absolute; border-radius: 40px; font: 800 34px "Manrope"; padding: 14px 28px; white-space: nowrap; }
+.chip { position: absolute; border-radius: 40px; font: 700 34px "Google Sans"; padding: 14px 28px; white-space: nowrap; }
 .pinkchip { background: var(--pink); color: #fff; }
 .redchip { background: #fde8e8; color: #c43c3c; }
 .pring { position: absolute; width: 220px; height: 220px; border-radius: 50%; border: 8px solid #E235DD; opacity: 0; }
@@ -609,13 +682,13 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
 .sticker { position: absolute; font-size: 96px; }
 /* hook */
 .ticker { position: absolute; left: -40px; top: 420px; width: 1160px; height: 64px; background: var(--ink); color: #fff;
-  overflow: hidden; transform: rotate(-2deg); font: 700 28px "JBMono"; letter-spacing: 3px; white-space: nowrap; }
+  overflow: hidden; transform: rotate(-2deg); font: 700 28px "Google Sans"; letter-spacing: 3px; white-space: nowrap; }
 .tk-in { position: absolute; left: 0; top: 14px; }
 .cover { position: absolute; left: 80px; top: 540px; width: 440px; height: 501px; border-radius: 36px; }
 .cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .vbar { position: absolute; left: 110px; top: 1062px; height: 76px; display: flex; align-items: center; gap: 12px; padding: 0 28px;
-  border-radius: 38px; background: var(--ink); color: #fff; font: 800 44px "Manrope"; }
-.plab { font: 600 24px "Manrope"; opacity: .8; }
+  border-radius: 38px; background: var(--ink); color: #fff; font: 700 44px "Google Sans"; }
+.plab { font: 600 24px "Google Sans"; opacity: .8; }
 .chart { position: absolute; left: 560px; top: 580px; width: 440px; height: 420px; padding: 34px 30px; }
 .chart .mono { font-size: 20px; letter-spacing: 3px; white-space: nowrap; }
 .chart svg { margin-top: 26px; }
@@ -626,7 +699,7 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
 .st-eyes { left: 470px; top: 500px; }
 .st-fire { left: 900px; top: 1000px; }
 .qrain { position: absolute; inset: 0; }
-.qr { position: absolute; font: italic 700 100px "Fraunces"; color: var(--pinkt); opacity: 0; }
+.qr { position: absolute; font: 700 100px "Google Sans"; color: var(--pinkt); opacity: 0; }
 /* next */
 .mini { position: absolute; left: 60px; top: 560px; width: 220px; padding: 14px; transform: rotate(-4deg); }
 .mini img { width: 100%; border-radius: 18px; display: block; }
@@ -634,11 +707,11 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
 .cv-b { left: 330px; top: 520px; width: 440px; height: 495px; }
 .cv-b-v { left: 360px; top: 1040px; }
 .lowk { left: 60px; top: 900px; }
-.arrowdn { position: absolute; left: 140px; top: 990px; font: 800 120px "Manrope"; color: #c43c3c; }
+.arrowdn { position: absolute; left: 140px; top: 990px; font: 700 120px "Google Sans"; color: #c43c3c; }
 .grid6 { position: absolute; left: 90px; top: 520px; width: 900px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
 .tile { height: 170px; padding: 26px 30px; position: relative; }
 .tile .mono { font-size: 22px; }
-.tv { font: italic 700 60px "Fraunces"; margin-top: 4px; }
+.tv { font: 700 60px "Google Sans"; margin-top: 4px; }
 .tb { height: 10px; border-radius: 5px; background: #eee; margin-top: 10px; }
 /* read */
 .link { position: absolute; left: 0; width: 1080px; top: 170px; height: 170px; }
@@ -648,17 +721,17 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
 .appic.cr { left: 760px; background: #fff; }
 .appic.cr img { width: 112px; height: 119px; }
 .dash { position: absolute; left: 330px; top: 85px; transform-origin: 0 50%; }
-.lpill { position: absolute; left: 395px; top: 70px; background: var(--ink); color: #fff; font: 600 30px "Outfit"; padding: 10px 26px;
+.lpill { position: absolute; left: 395px; top: 70px; background: var(--ink); color: #fff; font: 600 30px "Google Sans"; padding: 10px 26px;
   border-radius: 30px; white-space: nowrap; }
 .crlogo { position: absolute; left: 0; width: 1080px; top: 345px; text-align: center; }
 .crlogo img { width: 230px; height: auto; }
 .reading { position: absolute; left: 0; width: 1080px; top: 400px; text-align: center; font-size: 30px; letter-spacing: 8px; color: #555; }
-.give { position: absolute; left: 0; width: 1080px; top: 445px; text-align: center; font: 700 96px "Fraunces"; letter-spacing: -2px; }
+.give { position: absolute; left: 0; width: 1080px; top: 445px; text-align: center; font: 700 96px "Google Sans"; letter-spacing: -2px; }
 .give i { color: var(--pinkt); }
 .rbar { position: absolute; left: 120px; top: 600px; width: 840px; height: 14px; border-radius: 7px; background: #ebe8e4; overflow: hidden; }
 .rfill { width: 100%; height: 100%; background: var(--cg); transform-origin: 0 50%; }
 .ticks { position: absolute; left: 100px; top: 680px; width: 880px; padding: 34px 40px; }
-.trow { display: flex; align-items: center; gap: 24px; font: 500 40px "Manrope"; color: #444; padding: 20px 0; }
+.trow { display: flex; align-items: center; gap: 24px; font: 500 40px "Google Sans"; color: #444; padding: 20px 0; }
 .stopw { left: 720px; top: 990px; background: var(--ink); color: #fff; }
 .rg20 { left: 740px; top: 920px; }
 /* score */
@@ -667,30 +740,30 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
 .scard { position: absolute; left: 90px; top: 450px; width: 900px; height: 640px; border-radius: 44px; background: var(--ink); color: #fff;
   padding: 50px 56px; box-shadow: 0 40px 80px rgba(11,11,11,.3); overflow: hidden; }
 .scard .mono { color: #b9b9b2; }
-.snum { font: 600 230px/1 "Fraunces"; margin-top: 10px; }
+.snum { font: 600 230px/1 "Google Sans"; margin-top: 10px; }
 .snum small { font-size: 74px; color: #9a9a92; margin-left: 10px; }
 .ring { position: absolute; right: 56px; top: 90px; }
 .sl2 { color: #FF8FAE !important; margin-top: 34px; }
-.sins { font: 600 50px/1.2 "Fraunces"; margin-top: 14px; }
+.sins { font: 600 50px/1.2 "Google Sans"; margin-top: 14px; }
 .sins i { color: #ffb3c6; }
 .scard .shine { background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.18), rgba(255,255,255,0)); }
 .rg82 { left: 230px; top: 640px; }
 .cf82 { left: 300px; top: 760px; }
 /* analyse */
 .ubub { position: absolute; right: 70px; top: 470px; width: 760px; background: var(--ink); color: #fff; border-radius: 40px 40px 10px 40px;
-  padding: 34px 40px; font: 600 42px/1.3 "Manrope"; }
+  padding: 34px 40px; font: 600 42px/1.3 "Google Sans"; }
 .ubt { display: block; }
 .onit { position: absolute; left: 70px; top: 760px; width: 760px; padding: 34px 40px; }
 .oh { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
 .oh img { width: 44px; height: 46px; }
-.orow { display: flex; align-items: center; gap: 20px; font: 500 34px "Manrope"; color: #444; padding: 12px 0; }
+.orow { display: flex; align-items: center; gap: 20px; font: 500 34px "Google Sans"; color: #444; padding: 12px 0; }
 .scanph { position: absolute; left: 850px; top: 780px; width: 180px; height: 290px; border-radius: 22px; overflow: hidden;
   box-shadow: 0 18px 40px rgba(11,11,11,.2); }
 .scanph img { width: 100%; height: 100%; object-fit: cover; }
 .scanl { position: absolute; left: 0; right: 0; top: -6px; height: 6px; background: var(--pink); box-shadow: 0 0 20px var(--pink); }
 .tlc { position: absolute; left: 190px; top: 440px; width: 840px; height: 880px; padding: 34px 40px; overflow: visible; }
 .tlh { display: flex; justify-content: space-between; align-items: center; }
-.sc42 { font: 700 32px "Manrope"; color: var(--ink); }
+.sc42 { font: 700 32px "Google Sans"; color: var(--ink); }
 .sc42 small { color: #888; font-size: 24px; }
 .tline { position: absolute; left: 62px; top: 140px; width: 4px; height: 640px; background: #e4e1dc; transform-origin: 50% 0; }
 .phd { position: absolute; left: 52px; top: 140px; width: 24px; height: 24px; border-radius: 50%; background: var(--pink);
@@ -698,9 +771,9 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
 .tr { position: absolute; left: 30px; width: 780px; height: 120px; border-radius: 26px; display: flex; align-items: center; gap: 22px;
   padding: 0 30px; background: #fff; }
 .dot { width: 26px; height: 26px; border-radius: 50%; flex: none; }
-.tr b { font: 800 34px "Manrope"; letter-spacing: -1px; white-space: nowrap; }
-.tt { font: 500 24px "JBMono"; color: #888; white-space: nowrap; }
-.ts { margin-left: auto; font: 700 36px "Fraunces"; color: #555; }
+.tr b { font: 700 34px "Google Sans"; letter-spacing: -1px; white-space: nowrap; }
+.tt { font: 500 24px "Google Sans"; color: #888; white-space: nowrap; }
+.ts { margin-left: auto; font: 700 36px "Google Sans"; color: #555; }
 .besth { left: 640px; top: 978px; z-index: 5; font-size: 26px; padding: 8px 20px; }
 .spot { position: absolute; left: 240px; top: -300px; width: 600px; height: 1800px; transform-origin: 50% 0;
   background: linear-gradient(180deg, rgba(255,214,230,.22), rgba(255,214,230,0) 80%); clip-path: polygon(45% 0, 55% 0, 100% 100%, 0 100%); }
@@ -710,40 +783,55 @@ body { font-family: "Manrope", sans-serif; color: var(--ink); }
 .gcard { position: absolute; left: 70px; top: 640px; width: 440px; height: 520px; padding: 40px; transform: rotate(-3deg); }
 .dice { font-size: 110px; margin-top: 50px; text-align: center; }
 .dice span { display: inline-block; }
-.gq2 { font: italic 700 90px "Fraunces"; color: #bbb; text-align: center; margin-top: 30px; }
+.gq2 { font: 700 90px "Google Sans"; color: #bbb; text-align: center; margin-top: 30px; }
 .gq2 span { display: inline-block; }
 .strike { position: absolute; left: 30px; top: 250px; width: 380px; height: 14px; border-radius: 7px; background: var(--pink);
   transform: rotate(-14deg); transform-origin: 0 50%; }
 .rcard { position: absolute; left: 540px; top: 600px; width: 480px; height: 600px; padding: 40px 34px; transform: rotate(2deg);
   box-shadow: 0 0 0 4px var(--pink), 0 30px 70px rgba(226,85,125,.3); }
 .pk { color: var(--pinkt) !important; font-size: 21px; letter-spacing: 3px; }
-.rr { display: flex; align-items: flex-start; gap: 16px; font: 700 36px/1.25 "Manrope"; margin-top: 34px; }
+.rr { display: flex; align-items: flex-start; gap: 16px; font: 700 36px/1.25 "Google Sans"; margin-top: 34px; }
 .rr svg { flex: none; margin-top: 2px; }
 /* cta */
 .cmt { position: absolute; left: 270px; top: 300px; display: flex; align-items: center; gap: 18px; background: var(--ink); color: #fff;
-  font: 800 70px "Manrope"; letter-spacing: -1px; padding: 22px 46px; border-radius: 26px; transform: rotate(-3deg); }
+  font: 700 70px "Google Sans"; letter-spacing: -1px; padding: 22px 46px; border-radius: 26px; transform: rotate(-3deg); }
 .kw { position: absolute; left: 90px; top: 450px; width: 900px; text-align: center; background: var(--cgd); color: #fff;
-  font: 700 160px "Outfit"; letter-spacing: -3px; border-radius: 40px; padding: 18px 0; box-shadow: 0 30px 70px rgba(226,85,125,.45); }
+  font: 700 160px "Google Sans"; letter-spacing: -3px; border-radius: 40px; padding: 18px 0; box-shadow: 0 30px 70px rgba(226,85,125,.45); }
 .rgkw { left: 430px; top: 450px; }
 .cfkw { left: 540px; top: 560px; }
-.kc { position: absolute; background: #fff; border-radius: 30px; padding: 10px 22px; font: 700 26px "Manrope";
+.kc { position: absolute; background: #fff; border-radius: 30px; padding: 10px 22px; font: 700 26px "Google Sans";
   box-shadow: 0 10px 26px rgba(11,11,11,.1); color: #444; }
 .cbox { position: absolute; left: 90px; top: 760px; width: 900px; height: 300px; padding: 36px 40px; }
 .cin { margin-top: 20px; width: 680px; height: 104px; border-radius: 22px; border: 4px solid var(--pink); display: flex; align-items: center;
-  padding: 0 30px; font: 700 64px "JBMono"; letter-spacing: 6px; }
+  padding: 0 30px; font: 700 64px "Google Sans"; letter-spacing: 6px; }
 .caret { width: 5px; height: 64px; background: var(--ink); margin-left: 6px; }
 .send { position: absolute; right: 40px; top: 100px; width: 120px; height: 104px; border-radius: 22px; background: var(--ink);
   display: flex; align-items: center; justify-content: center; }
-.dm { margin-top: 22px; font: 600 30px "Manrope"; color: var(--pinkt); }
+.dm { margin-top: 22px; font: 600 30px "Google Sans"; color: var(--pinkt); }
 .plane { position: absolute; left: 860px; top: 880px; opacity: 0; }
 .endlock { position: absolute; left: 0; width: 1080px; top: 340px; display: flex; justify-content: center; align-items: center; }
 .endlock img { width: 760px; height: auto; }
-.endsub { position: absolute; left: 0; width: 1080px; top: 560px; text-align: center; font: 700 46px "Manrope"; color: #333; }
-.endsub b { color: #fff; background: var(--cgd); font-family: "Outfit"; font-weight: 700; padding: 4px 18px; border-radius: 16px; }
+.endsub { position: absolute; left: 0; width: 1080px; top: 560px; text-align: center; font: 700 46px "Google Sans"; color: #333; }
+.endsub b { color: #fff; background: var(--cgd); font-family: "Google Sans"; font-weight: 700; padding: 4px 18px; border-radius: 16px; }
+/* live reactions, data dots, orbit, scanner, end shimmer */
+.rx { position: absolute; top: 1290px; opacity: 0; filter: drop-shadow(0 6px 12px rgba(226,53,160,.25)); }
+.ddot { position: absolute; left: 232px; top: 82px; width: 26px; height: 26px; z-index: 3; border-radius: 50%; background: var(--pink);
+  box-shadow: 0 0 14px rgba(226,53,160,.8); opacity: 0; }
+.orbit { position: absolute; left: 835px; top: 95px; width: 0; height: 0; z-index: 3; }
+.ob { position: absolute; }
+.ob0 { left: 100px; top: -20px; } .ob1 { left: -20px; top: 100px; } .ob2 { left: -140px; top: -20px; } .ob3 { left: -20px; top: -140px; }
+.laser { position: absolute; left: 200px; top: 560px; width: 820px; height: 6px; border-radius: 3px; background: #FF8FAE;
+  box-shadow: 0 0 24px 6px rgba(255,92,150,.6); opacity: 0; z-index: 4; }
+.endlock { overflow: visible; }
+.eshine { position: absolute; left: 160px; top: 0; width: 760px; height: 142px; overflow: hidden;
+  -webkit-mask: url("assets/img/creedom_logo.png") center / 100% 100% no-repeat; mask: url("assets/img/creedom_logo.png") center / 100% 100% no-repeat; }
+.eshine i { position: absolute; left: 0; top: -20%; width: 12%; height: 140%; transform: skewX(-18deg);
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.55), rgba(255,255,255,0)); mix-blend-mode: screen; }
+.esp { position: absolute; opacity: 0; }
 /* captions */
 #caps { z-index: 30; }
 .cap { position: absolute; left: 0; width: 1080px; top: 1400px; text-align: center; opacity: 0; white-space: nowrap; }
-.cw { display: inline-block; font: 800 64px "Manrope"; letter-spacing: -1.5px; padding: 2px 14px; border-radius: 16px; opacity: 0; }
+.cw { display: inline-block; font: 700 64px "Google Sans"; letter-spacing: -1.5px; padding: 2px 14px; border-radius: 16px; opacity: 0; }
 #wipe { position: absolute; left: -400px; top: -100px; width: 1880px; height: 1880px; border-radius: 50%; background: var(--pink); z-index: 40; }
 """
 
@@ -759,7 +847,7 @@ def main():
     <style>{CSS}{bird.CSS}</style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="60" data-width="1080" data-height="1920">
       <div id="bg" class="clip" data-start="0" data-duration="{DUR}" data-track-index="0" data-layout-allow-overflow>{background()}</div>
       <div id="kin" class="clip" data-start="0" data-duration="{DUR}" data-track-index="9" data-layout-ignore>{kin_html()}</div>
       <div id="cam" class="clip" data-start="0" data-duration="{DUR}" data-track-index="1" data-layout-allow-overflow>
@@ -768,6 +856,7 @@ def main():
       <div id="hud" class="clip" data-start="0" data-duration="{DUR}" data-track-index="5">
         <div class="pill"><img src="assets/img/bird.png" alt=""><div class="ptrack"><div class="pfill"></div></div></div>
       </div>
+      <div id="react" class="clip" data-start="0" data-duration="{DUR}" data-track-index="4" data-layout-ignore>{reactions()}</div>
       <div id="birdlayer" class="clip" data-start="0" data-duration="{DUR}" data-track-index="6" data-layout-allow-overflow>{bird.rig(star)}</div>
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="7">{captions()}</div>
       <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8" data-layout-allow-overflow><div id="wipe"></div><div id="whip"></div><div id="flash"></div>{speed_html()}</div>
@@ -785,6 +874,8 @@ def main():
 </html>
 """
     open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8").write(html)
+    import json
+    json.dump(sorted(EV), open(os.path.join(ROOT, "build", "sfx_events.json"), "w"))
     print("wrote index.html", len(html) // 1024, "KB")
 
 

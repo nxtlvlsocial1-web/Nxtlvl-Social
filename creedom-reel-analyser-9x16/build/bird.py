@@ -15,6 +15,8 @@ PINK = "#E2557D"
 
 # socket centre, radius, default pupil centre and radius (measured on bird.png)
 EYES = {"L": (207, 219, 74, 219, 222, 53), "R": (411, 173, 69, 400, 180, 51)}
+# upper-lid colours sampled from the body just above each eye, so a closing lid matches the skin around it
+LIDCOL = {"L": ("#f45ca3", "#ee4a99"), "R": ("#f467ae", "#f055a6")}
 BROWS = {"L": ("M160 128 Q206 104 252 124", "206 118"), "R": ("M368 84 Q410 62 448 78", "408 74")}
 
 # expression = lids up (L, R), lids down (L, R), brows (dy, rot) L and R, cheeks, beak, pupil scale, overlays
@@ -61,9 +63,9 @@ def face_svg():
             '<stop offset=".8" stop-color="#f7eef3"/><stop offset="1" stop-color="#ead2df"/></radialGradient>'
             '<radialGradient id="pup" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#2c2c34"/>'
             '<stop offset="1" stop-color="#030305"/></radialGradient>'
-            '<linearGradient id="lidg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f673b8"/>'
-            '<stop offset=".93" stop-color="#ef55a6"/><stop offset=".965" stop-color="#b8226f"/><stop offset="1" '
-            'stop-color="#b8226f"/></linearGradient>'
+            + "".join(f'<linearGradient id="lidg{k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{a}"/>'
+                      f'<stop offset=".93" stop-color="{b}"/><stop offset=".965" stop-color="#b8226f"/><stop offset="1" '
+                      f'stop-color="#b8226f"/></linearGradient>' for k, (a, b) in LIDCOL.items()) +
             '<linearGradient id="lidb" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#f25aab"/>'
             '<stop offset=".9" stop-color="#f46db5"/><stop offset=".95" stop-color="#c42f80"/><stop offset="1" '
             'stop-color="#c42f80"/></linearGradient>'
@@ -74,7 +76,7 @@ def face_svg():
             '<linearGradient id="bky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe066"/>'
             '<stop offset="1" stop-color="#f2a516"/></linearGradient>' +
             "".join(f'<clipPath id="c{k}"><ellipse cx="{e[0]}" cy="{e[1]}" rx="{e[2]}" ry="{e[2]}"/></clipPath>'
-                    f'<clipPath id="cl{k}"><ellipse cx="{e[0]}" cy="{e[1]}" rx="{e[2] + 6}" ry="{e[2] + 6}"/></clipPath>'
+                    f'<clipPath id="cl{k}"><ellipse cx="{e[0]}" cy="{e[1]}" rx="{e[2] + 4}" ry="{e[2] + 4}"/></clipPath>'
                     for k, e in EYES.items()) + '</defs>')
     eyes = []
     for k, (cx, cy, r, px, py, pr) in EYES.items():
@@ -87,7 +89,7 @@ def face_svg():
             f'<circle cx="{px}" cy="{py}" r="{pr - 7}" fill="none" stroke="#24243a" stroke-width="4" opacity=".6"/>'
             f'<circle cx="{hx:.0f}" cy="{hy:.0f}" r="{pr * .27:.0f}" fill="#fff"/>'
             f'<circle cx="{px - pr * .38:.0f}" cy="{py + pr * .4:.0f}" r="{pr * .11:.0f}" fill="#fff" opacity=".9"/></g></g></g>'
-            f'<g clip-path="url(#cl{k})"><rect id="lu{k}" x="{cx - r - 6}" y="{cy - r - 6}" width="{2 * r + 12}" height="{2 * r + 12}" fill="url(#lidg)"/>'
+            f'<g clip-path="url(#cl{k})"><rect id="lu{k}" x="{cx - r - 6}" y="{cy - r - 6}" width="{2 * r + 12}" height="{2 * r + 12}" fill="url(#lidg{k})"/>'
             f'<rect id="ld{k}" x="{cx - r - 6}" y="{cy - r - 6}" width="{2 * r + 12}" height="{2 * r + 12}" fill="url(#lidb)"/>'
             f'</g><path id="ha{k}" d="{arc}" stroke="#6d1a43" stroke-width="11" fill="none" stroke-linecap="round" opacity="0"/>'
             f'<g id="hrt{k}" opacity="0">{_heart(cx, cy + 4, 1.55, "hp")}</g>'
@@ -137,9 +139,11 @@ def rig(star):
         return f'<div id="{i}" class="lay"{extra}><div id="{i}i" class="lay"><img src="assets/img/{src}" width="300" height="318" alt=""></div></div>'
     return (f'<div id="birdpos"><div id="bshadow"></div><div id="bflip"><div id="bpose"><div id="bwig"><div id="bidle">'
             f'<div id="bbreath">'
-            + lay("wingL", "bird_wingl.png") + lay("wingD", "bird_wingr_dn.png") +
+            + lay("wingL", "bird_wingl.png") + lay("wingD", "bird_wingl.png") +
+            '<div id="footL" class="foot"><div id="footLi" class="foot"><img src="assets/img/bird_foot.png" alt=""></div></div>'
+            '<div id="footR" class="foot"><div id="footRi" class="foot"><img src="assets/img/bird_foot.png" alt=""></div></div>'
             f'<img id="bimg" src="assets/img/bird_core.png" width="300" height="318" alt="">'
-            + lay("footL", "bird_footl.png") + lay("footR", "bird_footr.png") + lay("footK", "bird_footr_up.png") +
+            '<div id="footK" class="foot"><div id="footKi" class="foot"><img src="assets/img/bird_foot_up.png" alt=""></div></div>' +
             f'{face_svg()}' + lay("wingR", "bird_wing.png") +
             f'<div id="sweat"><svg viewBox="0 0 30 44" width="30" height="44"><path d="M15 0 C22 14 30 22 30 30 '
             f'C30 38 23 44 15 44 C7 44 0 38 0 30 C0 22 8 14 15 0 Z" fill="#7cc8ff"/></svg></div>'
@@ -162,15 +166,22 @@ CSS = """
 #wingR, #wingRi { transform-origin: 266px 154px; }
 #wingL, #wingLi { transform-origin: 47px 209px; }
 #wingD, #wingDi { transform-origin: 267px 209px; }
-#footL, #footLi { transform-origin: 112px 290px; }
-#footR, #footRi { transform-origin: 202px 290px; }
-#footK, #footKi { transform-origin: 236px 240px; }
+/* the right wing is the left one mirrored about the body's centre line (the original right wing was cropped) */
+#wingD img { transform: scaleX(-1); transform-origin: 157px 0; }
+/* feet sit behind the body so its round bottom tucks over them; the kicked foot is in front, as in the art */
+.foot { position: absolute; }
+.foot img { display: block; width: 100%; height: 100%; }
+#footL { left: 60px; top: 264px; width: 84px; height: 53px; transform: rotate(-8deg); }
+#footR { left: 160px; top: 262px; width: 84px; height: 53px; transform: scaleX(-1) rotate(-8deg); }
+#footLi, #footRi { inset: 0; transform-origin: 70% 20%; }
+#footK { left: 218px; top: 214px; width: 73px; height: 63px; }
+#footKi { inset: 0; transform-origin: 20% 60%; }
 #sweat { position: absolute; left: 250px; top: 30px; }
 #mag { position: absolute; left: 150px; top: 140px; transform-origin: 30% 30%; }
 .bub { position: absolute; left: 190px; top: -130px; background: #fff; border: 4px solid #0B0B0B; border-radius: 50px;
-  display: flex; align-items: center; justify-content: center; font: 800 80px "Manrope"; color: #C93A6D; }
+  display: flex; align-items: center; justify-content: center; font: 700 80px "Google Sans"; color: #C93A6D; }
 .bub .tail { position: absolute; left: 6px; bottom: -48px; }
-.bub i { font: 700 52px "Outfit"; font-style: normal; letter-spacing: 1px; background: linear-gradient(90deg, #E235DD, #E34CB7 45%, #E68B70);
+.bub i { font: 700 52px "Google Sans"; font-style: normal; letter-spacing: 1px; background: linear-gradient(90deg, #E235DD, #E34CB7 45%, #E68B70);
   -webkit-background-clip: text; background-clip: text; color: transparent; }
 .bc { left: -200px; top: -150px; }
 .bsp { position: absolute; }
@@ -202,8 +213,13 @@ class Bird:
                  f'duration:{d},ease:"{ease}"}},{t:.2f});')
 
     def hop(self, t, h=60):
-        self.add(f'tl.to("#bwig",{{y:-{h},duration:.18,ease:"power2.out",yoyo:true,repeat:1}},{t:.2f});')
-        self.add(f'tl.to("#bwig",{{scaleY:.86,scaleX:1.1,duration:.08,yoyo:true,repeat:1}},{t + .36:.2f});')
+        """Crouch to load, spring up stretched, fall, squash on landing; the feet tuck while airborne."""
+        a = max(0, t - .1)
+        self.add(f'tl.to("#bwig",{{scaleY:.87,scaleX:1.09,y:4,duration:.1,ease:"power2.out"}},{a:.2f});')
+        self.add(f'tl.to("#bwig",{{y:-{h},scaleY:1.1,scaleX:.93,duration:.2,ease:"power2.out"}},{t:.2f});')
+        self.add(f'tl.to("#bwig",{{y:0,scaleY:1,scaleX:1,duration:.17,ease:"power2.in"}},{t + .2:.2f});')
+        self.add(f'tl.to("#bwig",{{scaleY:.86,scaleX:1.12,duration:.07,ease:"power1.out",yoyo:true,repeat:1}},{t + .37:.2f});')
+        self.add(f'tl.to("#footLi, #footRi",{{y:-10,rotation:20,duration:.16,ease:"power2.out",yoyo:true,repeat:1}},{t:.2f});')
 
     def walk(self, t, d, step=.24):
         """A real walk: feet step alternately, body rocks and bobs."""
@@ -213,7 +229,7 @@ class Bird:
         self.add(f'tl.to("#bwig",{{rotation:0,y:0,duration:.1}},{t + n * step / 2 + .01:.2f});')
         for f, off in (("#footLi", 0), ("#footRi", step / 2)):
             m = max(1, int((d - off) / step))
-            self.add(f'tl.to("{f}",{{y:-22,rotation:-12,duration:{step / 2:.3f},ease:"sine.inOut",yoyo:true,repeat:{m * 2 - 1},'
+            self.add(f'tl.to("{f}",{{y:-13,x:6,rotation:-16,duration:{step / 2:.3f},ease:"sine.inOut",yoyo:true,repeat:{m * 2 - 1},'
                      f'repeatDelay:0}},{t + off:.2f});')
     def shake(self, t, n=3, a=10):
         """Head shake 'no'."""
@@ -356,6 +372,9 @@ def perform(add, dur):
     add(f'tl.to("#bbreath",{{scaleY:1.025,scaleX:.985,duration:.8,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .8) - 1}}},0);')
     add(f'tl.fromTo("#wingLi",{{rotation:3}},{{rotation:-4,duration:.6,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .6) - 1}}},0);')
     add(f'tl.fromTo("#wingDi",{{rotation:-3}},{{rotation:4,duration:.6,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .6) - 1}}},.3);')
+    # weight shifts from foot to foot with the body's sway, so the feet are never frozen
+    add(f'tl.fromTo("#footLi",{{rotation:0,y:0}},{{rotation:-7,y:-4,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(dur / 1.3) - 1}}},0);')
+    add(f'tl.fromTo("#footRi",{{rotation:-7,y:-4}},{{rotation:0,y:0,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(dur / 1.3) - 1}}},0);')
     add(f'tl.fromTo("#wingRi",{{rotation:-4}},{{rotation:8,duration:.45,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .45) - 1}}},0);')
     add('tl.set("#bshadow",{opacity:0},0);tl.to("#bshadow",{opacity:1,duration:.3},.6);')
 
@@ -562,5 +581,5 @@ def perform(add, dur):
     b.wave(32.55, 3)
     b.expr(33.0, "wink", .12)
     b.hist.sort(key=lambda h: h[0])
-    for t in (2.0, 6.6, 9.8, 13.3, 17.0, 19.8, 22.6, 27.2, 31.7):
+    for t in (2.0, 4.2, 6.6, 9.8, 11.6, 13.3, 17.0, 18.2, 19.8, 22.6, 26.0, 27.2, 29.1, 31.7):
         b.blink(t)
