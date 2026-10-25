@@ -25,8 +25,8 @@ TWIST = S["twist"]
 # the hook clip also carries the "why" line, and "next" carries "numbers ≠ reasons"
 SPAN = {"hook": (S["hook"][0], S["why"][1]), "next": (S["next"][0], S["nums"][1])}
 # giant words behind the action: (start, hold)
-KIN_WORDS = ["85x", "WHY?", "~4K", "≠", "20s", "82", "0:34", "CREEDOM"]
-KIN = [(1.3, 1.6), (4.6, .9), (7.1, .8), (9.5, .8), (12.8, 1.0), (15.35, 1.4), (23.35, 1.2), (29.7, 2.0)]
+KIN_WORDS = ["85x", "WHY?", "~4K", "≠", "20s", "82", "0:34"]
+KIN = [(1.3, 1.6), (4.6, .9), (7.1, .8), (9.5, .8), (12.8, 1.0), (15.35, 1.4), (23.35, 1.2)]
 CUTS = [S[k][0] for k in ("next", "read", "score", "analyse", "twist", "reasons", "cta")]
 
 T = []
@@ -141,6 +141,68 @@ def comment_ic(s, col=INK):
     return (f'<svg viewBox="0 0 40 40" width="{s}" height="{s}"><path d="M4 6 H36 V28 H16 L8 36 V28 H4 Z" fill="{col}"/></svg>')
 
 
+# ------------------------------------------------------------------ depth fields: things flying past the camera
+LATER = []   # timeline code registered while the HTML is built; timeline() adds it
+
+
+def depth(cls, items, seed, t0, t1, life=1.3, rev=False, spread=(760, 1150), vp=(540, 900), zmax=2.3, sound_every=3):
+    """Fake 3D fly-through: each item starts tiny at the vanishing point and accelerates out past the camera
+    (or, with rev, streams in from the edges and shrinks into the point)."""
+    import math
+    r = random.Random(seed)
+    html = [f'<div class="df {cls}" data-layout-ignore style="left:{vp[0]}px;top:{vp[1]}px">']
+    n = len(items)
+    for i, it in enumerate(items):
+        a = (i * 2.399 + r.uniform(-.3, .3)) % math.tau          # golden-angle spread so items never bunch up
+        k = r.uniform(.6, 1.0)
+        dx, dy = math.cos(a) * spread[0] * k, math.sin(a) * spread[1] * k
+        ts = t0 + (t1 - t0 - life) * i / max(1, n - 1)
+        html.append(f'<div class="dfi dfi{i}">{it}</div>')
+        sel = f".{cls} .dfi{i}"
+        near = f'x:{dx * 1.5:.0f},y:{dy * 1.5:.0f},scale:{zmax}'
+        far = f'x:{dx * .05:.0f},y:{dy * .05:.0f},scale:.05'
+        a_, b_ = (near, far) if rev else (far, near)
+        LATER.append(f'tl.fromTo("{sel}",{{{a_},xPercent:-50,yPercent:-50}},{{{b_},xPercent:-50,yPercent:-50,duration:{life},'
+                     f'ease:"{"power2.out" if rev else "power2.in"}",immediateRender:false}},{ts:.2f});')
+        LATER.append(f'tl.to("{sel}",{{opacity:1,duration:{life * .25:.2f}}},{ts:.2f});'
+                     f'tl.to("{sel}",{{opacity:0,duration:{life * .22:.2f}}},{ts + life * .78:.2f});')
+        if i % sound_every == 0:
+            ev(ts + life * (.25 if rev else .7), "fly")
+    return "".join(html) + "</div>"
+
+
+def mini_reel(img):
+    return f'<div class="mreel"><img src="assets/img/{img}" alt=""></div>'
+
+
+# ------------------------------------------------------------------ the film strip (inside the reel)
+# (time, icon, label, score out of 5, segment colour)
+FRAMES = [("0:00", "⚡", "Hook", 3, "#3E8E62"), ("0:05", "🧩", "Skills grid", 2, "#C8902E"), ("0:10", "🧩", "Skills grid", 2, "#C8902E"),
+          ("0:15", "🗂️", "Tool tour", 3, "#C8902E"), ("0:19", "⏳", "Time machine", 3, "#3E8E62"),
+          ("0:24", "⏳", "Simulation", 3, "#3E8E62"), ("0:29", "📈", "Simulation", 3, "#3E8E62"),
+          ("0:34", "🏛️", "Congress tracker", 5, "#F2B134"), ("0:41", "👋", "Close", 2, "#3E8E62")]
+FR_W, FR_GAP, FR_PAD = 230, 40, 40
+FR_X0 = 540 - (FR_PAD + FR_W / 2)       # strip x that puts frame 0 under the lens
+
+
+def frame_html(i, cls="fr"):
+    ts, ic, lab, sc, col = FRAMES[i]
+    dots = "".join(f'<i class="{"on" if k < sc else ""}"></i>' for k in range(5))
+    return (f'<div class="{cls} {cls}{i}" style="--c:{col}"><div class="frt">{ts}</div><div class="fri">{ic}</div>'
+            f'<div class="frl">{lab}</div><div class="frs">{dots}</div></div>')
+
+
+def strip():
+    w = FR_PAD * 2 + len(FRAMES) * FR_W + (len(FRAMES) - 1) * FR_GAP
+    att = [.5, .32, .28, .36, .42, .4, .48, .97, .3]
+    pts = " ".join(f'{FR_PAD + FR_W / 2 + i * (FR_W + FR_GAP):.0f},{70 - v * 62:.0f}' for i, v in enumerate(att))
+    frames = "".join(f'<div class="frw" style="left:{FR_PAD + i * (FR_W + FR_GAP)}px">{frame_html(i)}</div>' for i in range(len(FRAMES)))
+    return (f'<div class="fsw"><div class="fs3d"><div class="fsr" style="width:{w}px">{frames}'
+            f'<svg class="attw" viewBox="0 0 {w} 80" width="{w}" height="80"><polyline class="att" points="{pts}" '
+            f'fill="none" stroke="#FF5FA2" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" pathLength="1"/></svg>'
+            f'</div></div></div>')
+
+
 # live reactions drifting up both edges, Instagram-live style: (start time, side)
 REACT_T = [round(.9 + i * .62, 2) for i in range(52) if not (S["twist"][0] - .3 < .9 + i * .62 < S["twist"][1] - .6)]
 
@@ -170,14 +232,18 @@ def cover(cls, img, cnt_cls, label):
             f'<div class="vbar {cls}-v">{play(26, "#fff")}<span class="{cnt_cls}">0</span><span class="plab">{label}</span></div>')
 
 
+# the analysed reel's segments (label, width, colour): before, the best part sits at 0:34
+SEGS = [("Hook", 120, "#3E8E62"), ("Skills", 230, "#C8902E"), ("Time machine", 250, "#3E8E62"), ("★ Congress", 160, "#E2557D"),
+        ("Close", 80, "#7a7a74")]
+SEG_AFTER = [3, 0, 1, 2, 4]
+
+
 def scenes():
     r = random.Random(4)
     burst = "".join(f'<div class="bst" data-x="{r.uniform(-360, 360):.0f}" data-y="{r.uniform(-460, -120):.0f}" '
                     f'data-r="{r.uniform(-90, 90):.0f}">{heart(r.choice([34, 44, 56])) if i % 3 else play(36, PINK)}</div>'
                     for i in range(18))
     ticker = " • ".join(["366K PLAYS", "85x YOUR USUAL", "+1 VIRAL REEL", "WHY?"] * 4)
-    qrain = "".join(f'<div class="qr" style="left:{x}px;top:{y}px;font-size:{s}px">?</div>'
-                    for x, y, s in [(110, 560, 120), (420, 470, 90), (900, 520, 110), (640, 900, 80), (150, 980, 70)])
     out_ = []
     out_.append(clip("hook", (
         '<div class="ghost" data-layout-ignore>85x</div>'
@@ -192,7 +258,6 @@ def scenes():
         f'<circle class="spkdot" cx="360" cy="8" r="11" fill="{PINK}"/></svg>'
         f'<div class="chip pinkchip c85">85x your usual</div><i class="shine"></i></div>'
         '<div class="sticker st-eyes" data-layout-ignore>👀</div><div class="sticker st-fire" data-layout-ignore>🔥</div>'
-        f'<div class="qrain" data-layout-ignore>{qrain}</div>'
     )))
     tiles = [("PLAYS", "366K"), ("PLAYS", "4.3K"), ("REACH", "↑ ↓"), ("SAVES", "?"), ("SHARES", "?"), ("WATCH TIME", "?")]
     out_.append(clip("next", (
@@ -212,6 +277,7 @@ def scenes():
         '<svg class="dash" viewBox="0 0 420 20" width="420" height="20"><path d="M0 10 H420" stroke="' + PINK + '" '
         'stroke-width="5" stroke-dasharray="14 12" fill="none"/></svg>'
         '<div class="lpill">◉ Public data only</div>'
+        '<div class="radar"></div><div class="rpulse rp0"></div><div class="rpulse rp1"></div><div class="rpulse rp2"></div>'
         '<div class="appic cr"><img src="assets/img/bird.png" alt=""></div>'
         + "".join(f'<i class="ddot dd{i}"></i>' for i in range(6)) +
         '<div class="orbit">' + "".join(f'<div class="ob ob{i}">{star(42 if i % 2 else 34, "#F2B134" if i % 2 else PINK)}</div>'
@@ -223,8 +289,9 @@ def scenes():
         '<i class="shine"></i></div><div class="chip stopw">⏱ <span class="cnt-s">0</span>s</div><div class="rg20 pring" '
         'data-layout-ignore></div>'
     )))
-    thumbs = "".join(f'<div class="th th{i}" style="left:{120 + (i % 3) * 290}px;top:{450 + (i // 3) * 340}px">'
-                     f'<img src="assets/img/post{i + 1}.jpg" alt=""></div>' for i in range(6))
+    thumbs = ('<div class="orb3d"><div class="orbr">' + "".join(
+        f'<div class="th th{i}" style="transform:rotateY({i * 60}deg) translateZ(400px)"><img src="assets/img/post{i + 1}.jpg" alt=""></div>'
+        for i in range(6)) + '</div></div><div class="rays rays82" data-layout-ignore></div>')
     out_.append(clip("score", (
         '<div class="ghost" data-layout-ignore>82</div>' + hl("score", "Content", "score.") + thumbs +
         '<div class="scard"><div class="mono sl">YOUR CONTENT SCORE</div>'
@@ -253,16 +320,24 @@ def scenes():
         "".join(f'<div class="orow o{i}">{tick(40)}<span>{t}</span></div>' for i, t in enumerate(
             ["Working out what you need…", "Sending the reel to the feedback engine…", "Watching the whole video…"])) +
         '<i class="shine"></i></div><div class="scanph"><img src="assets/img/post2.jpg" alt=""><div class="scanl"></div></div>' +
+        depth("dfa", [f'<div class="mfr" style="--c:{FRAMES[i % 9][4]}">{FRAMES[i % 9][1]}</div>' for i in range(10)], 24, 18.1,
+              19.75, .75, rev=True, spread=(620, 700), vp=(940, 925), zmax=1.6, sound_every=2) +
         timeline("tl-a")
     )))
     out_.append(clip("twist", (
-        '<div class="ghost gw" data-layout-ignore>0:34</div><div class="spot" data-layout-ignore></div>' +
-        hl("twist", "Buried at", "0:34.") + timeline("tl-b") + '<div class="laser" data-layout-ignore></div>' +
-        '<div class="chip pinkchip besth">★ BEST HOOK</div><div class="rg34 pring" data-layout-ignore></div>' +
-        confetti("cf34", 30, 8, 420, -380)
+        '<div class="ghost gw" data-layout-ignore>0:34</div><div class="rays rays34" data-layout-ignore></div>' + strip() +
+        '<div class="fdim" data-layout-ignore></div>'
+        '<div class="lensg"><div class="lens"><div class="lensin">' + strip() + '</div><div class="lglint"></div></div>'
+        '<div class="lring"></div><div class="lhandle"></div></div>' +
+        hl("twist", "Buried at", "0:34.") + '<div class="scanlab">◉ SCANNING FRAME BY FRAME…</div>' +
+        f'<div class="flycard">{frame_html(7, "fc")}</div>'
+        '<div class="chip pinkchip besth">★ BEST HOOK</div><div class="chip newh">✓ NOW AT 0:00</div>'
+        '<div class="rg34 pring" data-layout-ignore></div>' + confetti("cf34", 34, 8, 460, -420)
     ), "dark"))
     out_.append(clip("reasons", (
         '<div class="ghost" data-layout-ignore>✓</div>' + hl("reasons", "Now I edit with", "reasons.") +
+        '<div class="segbar">' + "".join(f'<div class="seg sg{i}" style="width:{w}px;background:{c}">{lab}</div>' for i, (lab, w, c) in
+                                         enumerate(SEGS)) + '</div>' +
         '<div class="gcard card"><div class="mono">GUESSES</div><div class="dice"><span class="d1">🎲</span> '
         '<span class="d2">🎲</span></div><div class="gq2"><span>?</span> <span>?</span> <span>?</span></div>'
         '<div class="strike"></div></div>'
@@ -271,24 +346,22 @@ def scenes():
         f'<div class="rr rr1">{tick(40)}<span>Trim two tool cards (0:10–0:19)</span></div>'
         f'<div class="rr rr2">{tick(40)}<span>Keep the 0:03 simulation proof</span></div><i class="shine"></i></div>'
     )))
-    chips = "".join(f'<div class="kc kc{i}" data-layout-ignore style="left:{x}px;top:{y}px">{w}</div>' for i, (x, y, w) in enumerate(
-        [(70, 330, "CREEDOM"), (820, 300, "creedom 🙏"), (60, 700, "CREEDOM"), (840, 690, "CREEDOM!"),
-         (110, 1120, "creedom"), (60, 1250, "CREEDOM 🔥")]))
     out_.append(clip("cta", (
-        chips + '<div class="cmt"><svg viewBox="0 0 40 40" width="48" height="48"><path d="M4 6 H36 V28 H16 L8 36 V28 H4 Z" '
-        'fill="#fff"/></svg>COMMENT</div><div class="kw">CREEDOM</div><div class="rgkw pring" data-layout-ignore></div>'
-        '<div class="cbox card"><div class="mono">COMMENT TO GET THE LINK</div><div class="cin"><span class="typed"></span>'
-        '<span class="caret"></span></div><div class="send"><svg viewBox="0 0 40 40" width="40" height="40"><path d="M4 20 '
+        '<div class="cmt"><svg viewBox="0 0 40 40" width="48" height="48"><path d="M4 6 H36 V28 H16 L8 36 V28 H4 Z" '
+        'fill="#fff"/></svg>COMMENT</div>'
+        '<div class="cbox card"><div class="mono">TYPE THIS UNDER THE REEL</div><div class="cin"><span class="typed"></span>'
+        '<span class="caret"></span></div><div class="send"><svg viewBox="0 0 40 40" width="48" height="48"><path d="M4 20 '
         'L36 6 L28 36 L19 23 Z" fill="none" stroke="#fff" stroke-width="3.4" stroke-linejoin="round"/></svg></div>'
-        '<div class="dm">✓ Link lands in your DMs</div><i class="shine"></i></div>'
+        '<div class="dm">✓ The link lands in your DMs</div><i class="shine"></i></div><div class="rgkw pring" data-layout-ignore></div>'
         '<div class="plane" data-layout-ignore><svg viewBox="0 0 60 60" width="70" height="70"><path d="M4 30 L56 6 L44 54 '
         f'L30 36 Z" fill="{PINK}"/><path d="M30 36 L56 6" stroke="#fff" stroke-width="3"/></svg></div>' +
-        confetti("cfkw", 40, 11) +
+        confetti("cfkw", 40, 11) + depth("dfh", [heart(r.choice([50, 64, 80]), r.choice([PINK, "#E235DD", "#E68B70"])) for _ in range(10)],
+                                         25, 32.0, DUR, 1.3, zmax=2.2, sound_every=4) +
         '<div class="endlock"><img src="assets/img/creedom_logo.png" alt="Creedom"><div class="eshine"><i></i></div></div>'
         + "".join(f'<div class="esp esp{i}" data-layout-ignore style="left:{x}px;top:{y}px">{star(sz, c)}</div>'
                   for i, (x, y, sz, c) in enumerate([(130, 330, 40, PINK), (930, 350, 34, "#F2B134"), (240, 520, 26, "#E68B70"),
                                                      (860, 520, 44, "#E235DD"), (540, 300, 24, "#F2B134"), (60, 460, 30, "#E235DD")])) +
-        '<div class="endsub">Comment <b>CREEDOM</b> for the link</div>'
+        '<div class="endsub">Your reels, <b>explained.</b></div>'
     )))
     return "".join(out_)
 
@@ -354,7 +427,7 @@ def timeline():
                 f'ease:"back.out(1.4)",immediateRender:false}},{t:.2f});')
         add(f'tl.fromTo("#whip",{{opacity:.9,x:300}},{{opacity:0,x:-300,duration:.28,ease:"power2.out",immediateRender:false}},{t - .08:.2f});')
     # impacts on the big beats: punch-in, camera shake, white flash, speed-line burst
-    for t, k in [(1.35, 1), (7.25, .6), (8.35, .8), (12.85, .7), (15.4, 1), (23.4, 1), (24.75, .7), (29.8, 1), (32.2, .6)]:
+    for t, k in [(1.35, 1), (7.25, .6), (8.35, .8), (12.85, .7), (15.4, 1), (23.4, 1), (24.75, .7), (25.3, .8), (30.72, 1), (32.2, .6)]:
         add(f'tl.fromTo("#shake",{{x:0,y:0,rotation:0}},{{x:{14 * k:.0f},y:{-10 * k:.0f},rotation:{1.4 * k:.1f},duration:.04,'
             f'ease:"none",yoyo:true,repeat:5,immediateRender:false}},{t:.2f});')
         add(f'tl.set("#flash",{{opacity:{.55 * k:.2f}}},{t:.2f});tl.to("#flash",{{opacity:0,duration:.25,ease:"power2.out"}},{t + .01:.2f});')
@@ -408,9 +481,6 @@ def timeline():
     add('tl.to(".cv-a, .cv-a-v, .chart",{filter:"grayscale(1) brightness(1.05)",opacity:.5,rotation:(i)=>[-4,-4,5][i],'
         'y:30,duration:.5},3.6);')
     add('tl.to("#sc-hook .ghost",{opacity:0,duration:.3},3.5);')
-    add('tl.fromTo(".qr",{opacity:0,scale:.2,rotation:-30},{opacity:1,scale:1,rotation:(i)=>[-12,10,-8,14,-6][i],duration:.45,'
-        'stagger:.12,ease:"back.out(2.5)"},3.75);')
-    add('tl.to(".qr",{y:-40,duration:.8,ease:"sine.inOut",yoyo:true,repeat:1},4.4);')
     # 3 next
     hl_in("next", S["next"][0] + .05)
     pop(".mini", 5.7, "x:-200,opacity:0,scale:.8,rotation:-20", .45)
@@ -435,6 +505,15 @@ def timeline():
         'duration:.5,stagger:.03,ease:"power2.in"},9.5);')
     # 5 read
     t = S["read"][0]
+    for k in range(6):
+        tk = t - .55 + k * .07
+        add(f'tl.fromTo(".prg{k}",{{scale:.05,opacity:0}},{{scale:6,opacity:1,duration:.5,ease:"power2.in",immediateRender:false}},{tk:.2f});'
+            f'tl.to(".prg{k}",{{opacity:0,duration:.12}},{tk + .42:.2f});')
+    ev(t - .55, "portal")
+    add(f'tl.fromTo(".radar",{{rotation:0,opacity:0}},{{rotation:900,opacity:1,duration:3.3,ease:"none",immediateRender:false}},{t + .3:.2f});')
+    for k in range(3):
+        add(f'tl.fromTo(".rp{k}",{{scale:.6,opacity:.9}},{{scale:2.6,opacity:0,duration:1.1,repeat:2,ease:"power2.out",immediateRender:false}},'
+            f'{t + .4 + k * .37:.2f});')
     add(f'tl.fromTo("#wipe",{{scale:0}},{{scale:1,duration:.38,ease:"power3.in",immediateRender:false}},{t - .35:.2f});')
     add(f'tl.to("#wipe",{{opacity:0,duration:.3}},{t + .05:.2f});tl.set("#wipe",{{scale:0,opacity:1}},{t + .4:.2f});')
     pop(".appic.ig", t + .05, "scale:0,opacity:0,rotation:-30", .45, "back.out(2.6)")
@@ -459,10 +538,12 @@ def timeline():
     # 6 score
     t = S["score"][0]
     hl_in("score", t + .05)
-    add(f'tl.fromTo(".th",{{opacity:0,y:300,rotation:(i)=>(i%2?14:-14),scale:.5}},{{opacity:1,y:0,rotation:(i)=>(i%2?2:-2),'
-        f'scale:1,duration:.4,stagger:.07,ease:"back.out(1.8)"}},{t + .15:.2f});')
-    add(f'tl.to(".th",{{x:(i)=>[300,10,-280,300,10,-280][i],y:(i)=>(i<3?260:-80),scale:.15,opacity:0,rotation:180,'
-        f'duration:.45,stagger:.03,ease:"power3.in"}},{t + 1.0:.2f});')
+    add(f'tl.fromTo(".orb3d",{{opacity:0,scale:.5}},{{opacity:1,scale:1,duration:.4,ease:"back.out(1.6)",immediateRender:false}},{t + .1:.2f});')
+    add(f'tl.fromTo(".orbr",{{rotationY:0}},{{rotationY:300,duration:1.25,ease:"power1.inOut",immediateRender:false}},{t + .1:.2f});')
+    ev(t + .15, "swirl")
+    add(f'tl.to(".orb3d",{{scale:.15,opacity:0,duration:.3,ease:"power3.in"}},{t + 1.05:.2f});')
+    add('tl.fromTo(".rays82",{opacity:0,rotation:0,scale:.5},{opacity:.85,rotation:60,scale:1,duration:1.6,ease:"power2.out",'
+        'immediateRender:false},15.37);tl.to(".rays82",{opacity:0,duration:.4},16.75);')
     pop(".scard", t + 1.3, "y:300,opacity:0,scale:.85,rotationX:40", .5)
     shine(".scard", 15.5)
     counter(".cnt-sc", 0, 82, 15.37, 1.0, "int", "expo.out")
@@ -489,27 +570,51 @@ def timeline():
     add('tl.fromTo(".tl-a .tline",{scaleY:0},{scaleY:1,duration:1.1,ease:"power1.inOut"},20.0);')
     add('tl.fromTo(".tl-a .phd",{y:0,opacity:1},{y:640,duration:1.05,ease:"power1.inOut"},20.25);')
     add('tl.fromTo(".tl-a .tr",{opacity:0,x:60},{opacity:1,x:0,duration:.3,stagger:.2,ease:"back.out(2)"},20.0);')
-    # 8 twist
+    # 8 twist: inside the reel. The film strip scrolls frame by frame under the giant lens, stops on 0:34, and that
+    # frame lifts out and flies back to 0:00
     t = S["twist"][0]
+    step = FR_W + FR_GAP
     add(f'tl.to("#dark",{{opacity:1,duration:.4,ease:"power2.out"}},{t - .1:.2f});')
     add(f'tl.to("#dark",{{opacity:0,duration:.35,ease:"power2.in"}},{S["twist"][1] - .1:.2f});')
-    add(f'tl.fromTo(".spot",{{rotation:-25,opacity:0}},{{rotation:20,opacity:1,duration:1.6,ease:"sine.inOut"}},{t + .1:.2f});')
-    add('tl.to(".spot",{rotation:0,duration:.5,ease:"power2.out"},23.2);')
-    hl_in("twist", t + .3)
-    add(f'tl.to(".tl-b .tr:not(.tr3)",{{opacity:.28,duration:.4}},{t + .5:.2f});')
-    add(f'tl.to(".tl-b .tr3",{{scale:1.06,backgroundColor:"#FEF0F4",boxShadow:"0 0 0 4px {PINK}, 0 20px 60px rgba(226,85,125,.55)",'
-        f'duration:.45,ease:"back.out(2)"}},23.3);')
-    pop(".besth", 23.45, "scale:.3,opacity:0,rotation:-12", .4, "back.out(3)")
+    pop(".scanlab", t + .25, "opacity:0,y:-20,scale:.9", .35)
+    add('tl.to(".scanlab",{opacity:.45,duration:.25,yoyo:true,repeat:5,ease:"sine.inOut"},21.8);')
+    out(".scanlab", 23.15, "opacity:0,y:-20", .15)
+    hl_in("twist", 23.2)
+    add(f'tl.set(".fsr",{{x:{FR_X0}}},0);')
+    add(f'tl.fromTo(".fsw",{{scale:.35,opacity:0}},{{scale:1,opacity:1,duration:.7,ease:"expo.out",immediateRender:false}},{t:.2f});')
+    add(f'tl.fromTo(".fdim",{{opacity:0}},{{opacity:1,duration:.5,immediateRender:false}},{t + .25:.2f});')
+    add(f'tl.fromTo(".lensg",{{scale:.4,opacity:0,rotation:-25}},{{scale:1,opacity:1,rotation:0,duration:.55,ease:"back.out(1.8)",'
+        f'immediateRender:false}},{t + .2:.2f});')
+    ev(t + .2, "pop")
+    add('tl.fromTo(".lglint",{xPercent:-160},{xPercent:260,duration:.6,ease:"power2.inOut",repeat:2,repeatDelay:.45},21.7);')
+    add('tl.fromTo(".att",{strokeDasharray:1,strokeDashoffset:1},{strokeDashoffset:0,duration:1.9,ease:"none",immediateRender:false},21.5);')
+    for k in range(1, 8):
+        tk = 21.6 + (k - 1) * .235
+        add(f'tl.to(".fsr",{{x:{FR_X0 - k * step:.0f},duration:.15,ease:"power2.inOut"}},{tk:.2f});')
+        ev(tk + .15, "tick")
+    # found it
+    add('tl.to(".fr7",{boxShadow:"0 0 0 7px #F2B134, 0 0 80px 18px rgba(242,177,52,.85)",scale:1.06,duration:.25,ease:"back.out(3)"},23.33);')
+    add('tl.to(".lring",{borderColor:"#FF5FA2",boxShadow:"0 0 0 6px rgba(255,95,162,.35), 0 0 90px rgba(255,95,162,.9)",duration:.2},23.33);')
+    add('tl.fromTo(".lensg",{scale:1},{scale:1.07,duration:.12,yoyo:true,repeat:1,ease:"power2.out",immediateRender:false},23.33);')
+    add('tl.fromTo(".rays34",{opacity:0,rotation:0,scale:.6},{opacity:1,rotation:50,scale:1,duration:1.3,ease:"power2.out",immediateRender:false},23.33);')
+    pop(".besth", 23.45, "scale:.3,opacity:0,y:30", .4, "back.out(3)")
     ring("rg34", 23.4, 3.6)
-    add('tl.to("#punch",{scale:1.09,duration:.25,ease:"power2.out",yoyo:true,repeat:1},23.4);')
-    add('tl.to(".tl-b .tr3",{y:-450,duration:.6,ease:"power3.inOut"},24.7);')
-    add('tl.to(".tl-b .tr0, .tl-b .tr1, .tl-b .tr2",{y:150,duration:.6,ease:"power3.inOut"},24.7);')
-    add('tl.to(".besth",{y:-450,duration:.6,ease:"power3.inOut"},24.7);')
-    add('tl.to(".tl-b .tt3",{opacity:0,duration:.15},24.9);')
-    add('(()=>{const o={v:0};tl.to(o,{v:1,duration:.01,onUpdate:()=>{document.querySelector(".tl-b .tt3").textContent='
-        'o.v>.5?"0:00–0:07":"0:34–0:41";}},25.05);})();')
-    add('tl.to(".tl-b .tt3",{opacity:1,duration:.2},25.06);')
-    confetti_tl("cf34", 25.25)
+    # lift out, rewind underneath, drop into 0:00
+    add('tl.to(".lensg, .fdim, .besth",{opacity:0,duration:.22},24.5);')
+    add('tl.set(".fr7",{opacity:0},24.6);tl.set(".flycard",{opacity:1},24.6);')
+    add('tl.fromTo(".flycard",{scale:.8,y:0,rotation:0},{scale:1.15,y:-170,rotation:-6,duration:.3,ease:"back.out(2)",immediateRender:false},24.6);')
+    ev(24.6, "pop")
+    add(f'tl.to(".fsr",{{x:{FR_X0:.0f},duration:.5,ease:"power3.inOut"}},24.78);')
+    add('tl.to(".rays34",{opacity:0,duration:.3},24.6);')
+    add('tl.fromTo("#whip",{opacity:.4,x:-300},{opacity:0,x:300,duration:.3,ease:"power2.out",immediateRender:false},24.8);')
+    add('tl.to(".flycard",{scale:.8,y:0,rotation:0,duration:.2,ease:"power3.in"},25.1);')
+    add('tl.set(".fr0",{opacity:0},25.3);')
+    add('(()=>{const o={v:0};tl.to(o,{v:1,duration:.01,onUpdate:()=>{document.querySelector(".flycard .frt").textContent='
+        'o.v>.5?"0:00":"0:34";}},25.3);})();')
+    add('tl.to(".flycard .fc",{boxShadow:"0 0 0 7px #FF5FA2, 0 0 70px 14px rgba(255,95,162,.8)",duration:.2},25.3);')
+    pop(".newh", 25.42, "scale:.3,opacity:0,y:-30", .4, "back.out(3)")
+    ring("rg34", 25.3, 3.0)
+    confetti_tl("cf34", 25.3)
     # 9 reasons
     t = S["reasons"][0]
     hl_in("reasons", t + .05)
@@ -519,33 +624,48 @@ def timeline():
         'ease:"power2.out",repeat:2},26.6);')
     add('tl.to(".gq2 span",{y:-16,duration:.3,stagger:.1,yoyo:true,repeat:3,ease:"sine.inOut"},26.6);')
     shine(".rcard", 27.0)
+    gap = 10
+    before, x = [], 0
+    for _, w, _ in SEGS:
+        before.append(x)
+        x += w + gap
+    after, x = [0] * len(SEGS), 0
+    for k in SEG_AFTER:
+        after[k] = x
+        x += SEGS[k][1] + gap
+    for k in range(len(SEGS)):
+        add(f'tl.set(".sg{k}",{{x:{before[k]}}},0);')
+    add(f'tl.fromTo(".seg",{{opacity:0,scaleY:.2,y:-30}},{{opacity:1,scaleY:1,y:0,duration:.3,stagger:.06,ease:"back.out(2.4)"}},{t + .2:.2f});')
+    ev(t + .2, "pop")
+    add('tl.to(".sg3",{y:-46,scale:1.08,duration:.18,ease:"power2.out"},27.0);')
+    for k in range(len(SEGS)):
+        add(f'tl.to(".sg{k}",{{x:{after[k]},duration:.5,ease:"power3.inOut"}},27.15);')
+    ev(27.15, "swish")
+    add('tl.to(".sg3",{y:0,scale:1,duration:.22,ease:"back.out(3)"},27.62);')
+    ev(27.65, "pop")
     for i, tt in enumerate((26.9, 27.35, 27.8)):
         pop(f".rr{i}", tt, "x:40,opacity:0", .3)
         add(f'tl.fromTo(".rr{i} .tk",{{strokeDasharray:1,strokeDashoffset:1}},{{strokeDashoffset:0,duration:.25}},{tt + .1:.2f});')
     add('tl.fromTo(".strike",{scaleX:0},{scaleX:1,duration:.3,ease:"power3.out"},28.4);')
     add('tl.to(".gcard",{opacity:.45,filter:"grayscale(1)",rotation:-8,y:40,duration:.3},28.5);')
     add('tl.to(".rcard",{scale:1.05,duration:.2,yoyo:true,repeat:1},28.5);')
-    # 10 cta
+    # 10 cta: one keyword, typed big into the comment box, sent; then the brand end card
     t = S["cta"][0]
     pop(".cmt", t + .05, "y:-120,opacity:0,rotation:-20,scale:.7", .45, "bounce.out")
-    pop(".kw", 29.75, "scale:2.4,opacity:0,rotation:8", .45, "back.out(1.8)")
-    ring("rgkw", 29.85, 3)
-    confetti_tl("cfkw", 29.85)
-    add('tl.to("#punch",{scale:1.08,duration:.2,ease:"power2.out",yoyo:true,repeat:1},29.8);')
-    add('tl.fromTo(".kc",{opacity:0,scale:.4},{opacity:1,scale:1,duration:.35,stagger:.08,ease:"back.out(2)"},29.9);')
-    add('tl.to(".kc",{y:(i)=>(i%2?-34:34),x:(i)=>(i%3?16:-16),rotation:(i)=>(i%2?6:-6),duration:2.0,ease:"sine.inOut"},30.2);')
-    add('tl.to(".kw",{scale:1.04,duration:.3,yoyo:true,repeat:3,ease:"sine.inOut"},30.4);')
-    pop(".cbox", 30.0, "y:120,opacity:0,scale:.9", .45)
-    shine(".cbox", 30.4)
+    pop(".cbox", 29.75, "y:160,opacity:0,scale:.85", .5, "back.out(1.8)")
+    shine(".cbox", 30.3)
     word = "CREEDOM"
     add(f'(()=>{{const o={{v:0}};tl.to(o,{{v:{len(word)},duration:{len(word) * .1:.2f},ease:"none",onUpdate:()=>{{'
-        f'document.querySelector(".typed").textContent="{word}".slice(0,Math.floor(o.v+.001));}}}},30.25);}})();')
-    add(f'tl.to(".caret",{{opacity:0,duration:.01,yoyo:true,repeat:{int((DUR - 30.2) / .5) * 2 - 1},repeatDelay:.49}},30.2);')
+        f'document.querySelector(".typed").textContent="{word}".slice(0,Math.floor(o.v+.001));}}}},29.95);}})();')
+    add(f'tl.to(".caret",{{opacity:0,duration:.01,yoyo:true,repeat:{int((DUR - 29.9) / .5) * 2 - 1},repeatDelay:.49}},29.9);')
+    ring("rgkw", 30.7, 3)
+    confetti_tl("cfkw", 30.75)
+    add('tl.to("#punch",{scale:1.06,duration:.2,ease:"power2.out",yoyo:true,repeat:1},30.7);')
     add('tl.to(".send",{scale:1.18,duration:.15,yoyo:true,repeat:3},31.0);')
-    add('tl.fromTo(".plane",{x:0,y:0,opacity:0,rotation:0,scale:.6},{x:260,y:-560,opacity:1,rotation:-25,scale:1.1,duration:.8,'
+    add('tl.fromTo(".plane",{x:0,y:0,opacity:0,rotation:0,scale:.6},{x:200,y:-460,opacity:1,rotation:-25,scale:1.1,duration:.8,'
         'ease:"power2.in"},31.05);tl.to(".plane",{opacity:0,duration:.2},31.86);')
     pop(".dm", 31.25, "opacity:0,y:20", .3)
-    out(".cmt, .kw, .kc, .cbox", 32.0, "opacity:0,y:-40,scale:.9", .3)
+    out(".cmt, .cbox", 32.0, "opacity:0,y:-40,scale:.9", .3)
     pop(".endlock", 32.15, "scale:.4,opacity:0,y:60", .5, "back.out(2.4)")
     pop(".endsub", 32.45, "opacity:0,y:30", .4)
     # background and always-on pieces
@@ -555,6 +675,8 @@ def timeline():
         add(f'tl.fromTo(".blob{i}",{{x:0,y:0}},{{x:{dx},y:{dy},duration:{d},ease:"sine.inOut",yoyo:true,repeat:{int(DUR / d)}}},0);')
     add(f'document.querySelectorAll(".tw").forEach((e,i)=>tl.fromTo(e,{{scale:.3,opacity:.15}},{{scale:1,opacity:.9,'
         f'duration:.7,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .7) - 2}}},i*.23));')
+    for js in LATER:
+        add(js)
     # ---- extra motion so no second sits still
     # live reactions rising up the edges
     for i, t in enumerate(REACT_T):
@@ -593,7 +715,14 @@ def timeline():
 
 
 def kin_html():
-    return "".join(f'<div class="kin kin{i}">{w}</div>' for i, w in enumerate(KIN_WORDS))
+    """The backdrop layer, behind every scene: giant outline words and the fly-throughs (a tunnel of reels, a field of
+    question marks, a storm of stats), so they always pass behind the content."""
+    reels = ["post1.jpg", "post3.jpg", "post4.jpg", "post5.jpg", "post6.jpg", "cover_adobe.jpg", "post2.jpg", "cover_yt.jpg"] * 2
+    stats = ["366K", "4.3K", "12%", "0.8s", "↑", "↓", "#", "%", "2.1K", "∞", "38%", "?", "+214", "−9%"]
+    return ("".join(f'<div class="kin kin{i}">{w}</div>' for i, w in enumerate(KIN_WORDS)) +
+            depth("dft", [mini_reel(x) for x in reels[:16]], 21, 0.0, 1.7, .85, spread=(950, 950), vp=(540, 1080), zmax=3.4) +
+            depth("dfq", ['<b class="qm">?</b>'] * 14, 22, S["why"][0] + .05, S["why"][1] + .1, 1.4, zmax=3.2) +
+            depth("dfn", [f'<b class="nm">{x}</b>' for x in stats], 23, S["nums"][0] + .05, S["nums"][1] + .1, 1.2, zmax=2.4))
 
 
 def speed_html():
@@ -735,7 +864,7 @@ body { font-family: "Google Sans", sans-serif; color: var(--ink); }
 .stopw { left: 720px; top: 990px; background: var(--ink); color: #fff; }
 .rg20 { left: 740px; top: 920px; }
 /* score */
-.th { position: absolute; width: 230px; height: 320px; border-radius: 24px; overflow: hidden; box-shadow: 0 18px 40px rgba(11,11,11,.18); }
+.th { position: absolute; left: -115px; top: -160px; width: 230px; height: 320px; border-radius: 24px; overflow: hidden; box-shadow: 0 18px 40px rgba(11,11,11,.18); }
 .th img { width: 100%; height: 100%; object-fit: cover; }
 .scard { position: absolute; left: 90px; top: 450px; width: 900px; height: 640px; border-radius: 44px; background: var(--ink); color: #fff;
   padding: 50px 56px; box-shadow: 0 40px 80px rgba(11,11,11,.3); overflow: hidden; }
@@ -774,11 +903,8 @@ body { font-family: "Google Sans", sans-serif; color: var(--ink); }
 .tr b { font: 700 34px "Google Sans"; letter-spacing: -1px; white-space: nowrap; }
 .tt { font: 500 24px "Google Sans"; color: #888; white-space: nowrap; }
 .ts { margin-left: auto; font: 700 36px "Google Sans"; color: #555; }
-.besth { left: 640px; top: 978px; z-index: 5; font-size: 26px; padding: 8px 20px; }
 .spot { position: absolute; left: 240px; top: -300px; width: 600px; height: 1800px; transform-origin: 50% 0;
   background: linear-gradient(180deg, rgba(255,214,230,.22), rgba(255,214,230,0) 80%); clip-path: polygon(45% 0, 55% 0, 100% 100%, 0 100%); }
-.rg34 { left: 620px; top: 960px; }
-.cf34 { left: 600px; top: 620px; }
 /* reasons */
 .gcard { position: absolute; left: 70px; top: 640px; width: 440px; height: 520px; padding: 40px; transform: rotate(-3deg); }
 .dice { font-size: 110px; margin-top: 50px; text-align: center; }
@@ -797,21 +923,10 @@ body { font-family: "Google Sans", sans-serif; color: var(--ink); }
   font: 700 70px "Google Sans"; letter-spacing: -1px; padding: 22px 46px; border-radius: 26px; transform: rotate(-3deg); }
 .kw { position: absolute; left: 90px; top: 450px; width: 900px; text-align: center; background: var(--cgd); color: #fff;
   font: 700 160px "Google Sans"; letter-spacing: -3px; border-radius: 40px; padding: 18px 0; box-shadow: 0 30px 70px rgba(226,85,125,.45); }
-.rgkw { left: 430px; top: 450px; }
-.cfkw { left: 540px; top: 560px; }
 .kc { position: absolute; background: #fff; border-radius: 30px; padding: 10px 22px; font: 700 26px "Google Sans";
   box-shadow: 0 10px 26px rgba(11,11,11,.1); color: #444; }
-.cbox { position: absolute; left: 90px; top: 760px; width: 900px; height: 300px; padding: 36px 40px; }
-.cin { margin-top: 20px; width: 680px; height: 104px; border-radius: 22px; border: 4px solid var(--pink); display: flex; align-items: center;
-  padding: 0 30px; font: 700 64px "Google Sans"; letter-spacing: 6px; }
-.caret { width: 5px; height: 64px; background: var(--ink); margin-left: 6px; }
-.send { position: absolute; right: 40px; top: 100px; width: 120px; height: 104px; border-radius: 22px; background: var(--ink);
-  display: flex; align-items: center; justify-content: center; }
-.dm { margin-top: 22px; font: 600 30px "Google Sans"; color: var(--pinkt); }
-.plane { position: absolute; left: 860px; top: 880px; opacity: 0; }
 .endlock { position: absolute; left: 0; width: 1080px; top: 340px; display: flex; justify-content: center; align-items: center; }
 .endlock img { width: 760px; height: auto; }
-.endsub { position: absolute; left: 0; width: 1080px; top: 560px; text-align: center; font: 700 46px "Google Sans"; color: #333; }
 .endsub b { color: #fff; background: var(--cgd); font-family: "Google Sans"; font-weight: 700; padding: 4px 18px; border-radius: 16px; }
 /* live reactions, data dots, orbit, scanner, end shimmer */
 .rx { position: absolute; top: 1290px; opacity: 0; filter: drop-shadow(0 6px 12px rgba(226,53,160,.25)); }
@@ -828,6 +943,82 @@ body { font-family: "Google Sans", sans-serif; color: var(--ink); }
 .eshine i { position: absolute; left: 0; top: -20%; width: 12%; height: 140%; transform: skewX(-18deg);
   background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.55), rgba(255,255,255,0)); mix-blend-mode: screen; }
 .esp { position: absolute; opacity: 0; }
+/* depth fields */
+.df { position: absolute; width: 0; height: 0; }
+.dfi { position: absolute; left: 0; top: 0; opacity: 0; }
+.mreel { width: 150px; height: 240px; border-radius: 22px; overflow: hidden; background: #fff; box-shadow: 0 18px 40px rgba(11,11,11,.25); }
+.mreel img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.qm { display: block; font: 700 150px "Google Sans"; background: var(--cg); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.nm { display: block; font: 700 80px "Google Sans"; color: rgba(11,11,11,.62); white-space: nowrap; letter-spacing: -2px; }
+.mfr { width: 70px; height: 110px; border-radius: 12px; background: linear-gradient(160deg, var(--c), #1a1420); display: flex;
+  align-items: center; justify-content: center; font-size: 38px; box-shadow: 0 8px 20px rgba(0,0,0,.25); }
+/* read: portal, radar, pulses */
+.portal { position: absolute; left: 540px; top: 960px; width: 0; height: 0; z-index: 39; }
+.prg { position: absolute; left: -300px; top: -300px; width: 600px; height: 600px; border-radius: 50%; border: 26px solid #E235DD; opacity: 0; }
+.radar { position: absolute; left: 685px; top: -55px; width: 300px; height: 300px; border-radius: 50%; opacity: 0;
+  background: conic-gradient(from 0deg, rgba(226,53,160,0) 0deg, rgba(226,53,160,.45) 70deg, rgba(226,53,160,0) 71deg); }
+.rpulse { position: absolute; left: 760px; top: 20px; width: 150px; height: 150px; border-radius: 40px; border: 5px solid #E235DD; opacity: 0; }
+/* score: orbit and rays */
+.orb3d { position: absolute; left: 0; top: 420px; width: 1080px; height: 700px; perspective: 1100px; }
+.orbr { position: absolute; left: 540px; top: 350px; width: 0; height: 0; transform-style: preserve-3d; }
+.rays { position: absolute; border-radius: 50%; opacity: 0;
+  background: repeating-conic-gradient(from 0deg, rgba(255,205,110,.55) 0deg 7deg, rgba(255,205,110,0) 7deg 20deg);
+  -webkit-mask: radial-gradient(circle, #000 30%, transparent 72%); mask: radial-gradient(circle, #000 30%, transparent 72%); }
+.rays82 { left: -460px; top: -230px; width: 2000px; height: 2000px; }
+.rays34 { left: -160px; top: 200px; width: 1400px; height: 1400px; }
+/* twist: the film strip, the lens, the flying frame */
+.fsw { position: absolute; inset: 0; perspective: 1100px; perspective-origin: 540px 900px; transform-origin: 540px 900px; }
+.fs3d { position: absolute; inset: 0; transform-origin: 540px 900px; transform: rotateY(-18deg) rotateX(6deg); transform-style: preserve-3d; }
+.fsr { position: absolute; left: 0; top: 650px; height: 540px; border-radius: 18px; background: #120d16; border-top: 4px solid #2a2030;
+  border-bottom: 4px solid #2a2030; box-shadow: 0 40px 100px rgba(0,0,0,.6); }
+.fsr::before { content: ""; position: absolute; left: 0; right: 0; top: 14px; height: 20px;
+  background: repeating-linear-gradient(90deg, #3a2e40 0 24px, transparent 24px 46px); }
+.frw { position: absolute; top: 50px; width: 230px; height: 400px; }
+.fr, .fc { position: relative; width: 230px; height: 400px; border-radius: 20px; overflow: hidden; color: #fff;
+  background: linear-gradient(165deg, var(--c) 0%, #2a1c30 58%, #17101b 100%); box-shadow: 0 0 0 2px rgba(255,255,255,.08); }
+.frt { position: absolute; left: 16px; top: 14px; font: 700 30px "Google Sans"; background: rgba(0,0,0,.4); padding: 2px 12px; border-radius: 10px; }
+.fri { position: absolute; left: 0; right: 0; top: 104px; text-align: center; font-size: 120px; line-height: 1; }
+.frl { position: absolute; left: 6px; right: 6px; bottom: 66px; text-align: center; font: 700 28px/1.1 "Google Sans"; }
+.frs { position: absolute; left: 0; right: 0; bottom: 30px; display: flex; justify-content: center; gap: 8px; }
+.frs i { width: 16px; height: 16px; border-radius: 50%; background: rgba(255,255,255,.22); }
+.frs i.on { background: #fff; }
+.attw { position: absolute; left: 0; top: 455px; }
+.fdim { position: absolute; inset: 0; opacity: 0; background: radial-gradient(circle at 540px 900px, rgba(10,5,12,0) 0,
+  rgba(10,5,12,0) 215px, rgba(10,5,12,.55) 330px, rgba(10,5,12,.82) 760px); }
+.lensg { position: absolute; inset: 0; transform-origin: 540px 900px; opacity: 0; }
+.lens { position: absolute; inset: 0; clip-path: circle(205px at 540px 900px); background: #150e19; }
+.lensin { position: absolute; inset: 0; transform: scale(1.3); transform-origin: 540px 900px; }
+.lglint { position: absolute; left: 400px; top: 680px; width: 110px; height: 440px; transform: rotate(25deg);
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.25), rgba(255,255,255,0)); }
+.lring { position: absolute; left: 325px; top: 685px; width: 430px; height: 430px; border-radius: 50%; border: 18px solid #F2B134;
+  box-shadow: 0 0 0 6px rgba(242,177,52,.25), 0 0 60px rgba(242,177,52,.5), inset 0 0 30px rgba(0,0,0,.45); }
+.lhandle { position: absolute; left: 368px; top: 1052px; width: 44px; height: 230px; border-radius: 22px;
+  background: linear-gradient(90deg, #7a4a1f, #b3773a, #7a4a1f); transform-origin: 22px 0; transform: rotate(45deg); }
+.flycard { position: absolute; left: 396px; top: 650px; width: 288px; height: 500px; opacity: 0; z-index: 5; }
+.flycard .fc { transform: scale(1.252); transform-origin: 0 0; }
+.besth { left: 372px; top: 600px; z-index: 6; font-size: 34px; padding: 10px 26px; background: #F2B134; color: #1a1208; opacity: 0; }
+.newh { left: 372px; top: 1185px; z-index: 6; font-size: 34px; padding: 10px 26px; background: #3E8E62; color: #fff; opacity: 0; }
+.rg34 { left: 430px; top: 790px; }
+.cf34 { left: 540px; top: 900px; }
+.scanlab { position: absolute; left: 0; width: 1080px; top: 230px; text-align: center; font: 700 40px "Google Sans"; letter-spacing: 6px;
+  color: #FF8FAE; opacity: 0; }
+/* reasons: segment bar */
+.segbar { position: absolute; left: 100px; top: 1236px; width: 880px; height: 76px; }
+.seg { position: absolute; left: 0; top: 0; height: 76px; border-radius: 18px; color: #fff; font: 700 28px "Google Sans"; display: flex;
+  align-items: center; justify-content: center; white-space: nowrap; box-shadow: 0 10px 24px rgba(11,11,11,.15); }
+/* cta */
+.cbox { position: absolute; left: 70px; top: 440px; width: 940px; height: 380px; padding: 40px 44px; }
+.cin { margin-top: 24px; width: 700px; height: 150px; border-radius: 26px; border: 5px solid var(--pink); display: flex; align-items: center;
+  padding: 0 34px; font: 700 100px "Google Sans"; letter-spacing: 4px; }
+.caret { width: 6px; height: 90px; background: var(--ink); margin-left: 8px; }
+.send { position: absolute; right: 44px; top: 116px; width: 130px; height: 150px; border-radius: 26px; background: var(--ink);
+  display: flex; align-items: center; justify-content: center; }
+.dm { margin-top: 26px; font: 700 34px "Google Sans"; color: var(--pinkt); }
+.plane { position: absolute; left: 870px; top: 580px; opacity: 0; }
+.rgkw { left: 330px; top: 520px; }
+.cfkw { left: 540px; top: 640px; }
+.endsub { position: absolute; left: 0; width: 1080px; top: 560px; text-align: center; font: 700 56px "Google Sans"; color: #333; }
+.endsub b { color: #fff; background: var(--cgd); padding: 4px 22px; border-radius: 18px; }
 /* captions */
 #caps { z-index: 30; }
 .cap { position: absolute; left: 0; width: 1080px; top: 1400px; text-align: center; opacity: 0; white-space: nowrap; }
@@ -859,7 +1050,7 @@ def main():
       <div id="react" class="clip" data-start="0" data-duration="{DUR}" data-track-index="4" data-layout-ignore>{reactions()}</div>
       <div id="birdlayer" class="clip" data-start="0" data-duration="{DUR}" data-track-index="6" data-layout-allow-overflow>{bird.rig(star)}</div>
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="7">{captions()}</div>
-      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8" data-layout-allow-overflow><div id="wipe"></div><div id="whip"></div><div id="flash"></div>{speed_html()}</div>
+      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8" data-layout-allow-overflow><div class="portal" data-layout-ignore>{"".join(f'<i class="prg prg{k}" style="border-color:{c}"></i>' for k, c in enumerate(["#E235DD", "#E68B70", "#F343A2", "#E235DD", "#F7B267", "#E34CB7"]))}</div><div id="wipe"></div><div id="whip"></div><div id="flash"></div>{speed_html()}</div>
       <audio id="vo" src="assets/audio/vo.wav" data-start="0" data-duration="32.13" data-track-index="10" data-volume="1"></audio>
       <audio id="music" src="assets/audio/music.wav" data-start="0" data-duration="{DUR}" data-track-index="11" data-volume="1"></audio>
     </div>

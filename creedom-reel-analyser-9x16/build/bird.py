@@ -38,13 +38,15 @@ EXPR = {
     "wink":      dict(lu=(0, 1), ld=(.3, 0), bl=(-8, 0), br=(2, 0), ck=.6, bk="open", ps=1.0, haR=True),
 }
 
+# postures change the lean and height, never the proportions much: the art is a 3D render and big squash reads as
+# distortion, so scale stays within about 3%
 POSE = {
     "neutral": dict(scaleX=1, scaleY=1, rotation=0, y=0),
-    "tall": dict(scaleX=.95, scaleY=1.08, rotation=0, y=0),
-    "slouch": dict(scaleX=1.07, scaleY=.88, rotation=5, y=6),
+    "tall": dict(scaleX=.985, scaleY=1.03, rotation=0, y=-6),
+    "slouch": dict(scaleX=1.02, scaleY=.97, rotation=6, y=8),
     "leanin": dict(scaleX=1, scaleY=1, rotation=10, y=0),
-    "leanback": dict(scaleX=.96, scaleY=1.05, rotation=-11, y=0),
-    "crouch": dict(scaleX=1.12, scaleY=.84, rotation=0, y=0),
+    "leanback": dict(scaleX=1, scaleY=1.01, rotation=-10, y=0),
+    "crouch": dict(scaleX=1.03, scaleY=.96, rotation=0, y=6),
 }
 
 
@@ -149,7 +151,7 @@ def rig(star):
             f'C30 38 23 44 15 44 C7 44 0 38 0 30 C0 22 8 14 15 0 Z" fill="#7cc8ff"/></svg></div>'
             f'<div id="mag">{magnifier(150)}</div></div></div></div></div></div>'
             f'{bubble("<b>?</b>", 130, 120, "bq")}{bubble("<b>!</b>", 120, 120, "bx")}'
-            f'{bubble("<i>CREEDOM</i>", 300, 110, "bc")}{cloud()}{sp}</div>')
+            f'{cloud()}{sp}</div>')
 
 
 CSS = """
@@ -215,10 +217,10 @@ class Bird:
     def hop(self, t, h=60):
         """Crouch to load, spring up stretched, fall, squash on landing; the feet tuck while airborne."""
         a = max(0, t - .1)
-        self.add(f'tl.to("#bwig",{{scaleY:.87,scaleX:1.09,y:4,duration:.1,ease:"power2.out"}},{a:.2f});')
-        self.add(f'tl.to("#bwig",{{y:-{h},scaleY:1.1,scaleX:.93,duration:.2,ease:"power2.out"}},{t:.2f});')
+        self.add(f'tl.to("#bwig",{{scaleY:.95,scaleX:1.04,y:4,duration:.1,ease:"power2.out"}},{a:.2f});')
+        self.add(f'tl.to("#bwig",{{y:-{h},scaleY:1.04,scaleX:.97,duration:.2,ease:"power2.out"}},{t:.2f});')
         self.add(f'tl.to("#bwig",{{y:0,scaleY:1,scaleX:1,duration:.17,ease:"power2.in"}},{t + .2:.2f});')
-        self.add(f'tl.to("#bwig",{{scaleY:.86,scaleX:1.12,duration:.07,ease:"power1.out",yoyo:true,repeat:1}},{t + .37:.2f});')
+        self.add(f'tl.to("#bwig",{{scaleY:.95,scaleX:1.05,duration:.07,ease:"power1.out",yoyo:true,repeat:1}},{t + .37:.2f});')
         self.add(f'tl.to("#footLi, #footRi",{{y:-10,rotation:20,duration:.16,ease:"power2.out",yoyo:true,repeat:1}},{t:.2f});')
 
     def walk(self, t, d, step=.24):
@@ -246,7 +248,7 @@ class Bird:
         self.add(f'tl.to("#bflip",{{rotation:360,duration:.55,ease:"power2.inOut"}},{t:.2f});tl.set("#bflip",{{rotation:0}},{t + .6:.2f});')
 
     def startle(self, t):
-        self.add(f'tl.to("#bwig",{{scaleY:1.18,scaleX:.88,y:-60,duration:.13,yoyo:true,repeat:1}},{t:.2f});')
+        self.add(f'tl.to("#bwig",{{scaleY:1.05,scaleX:.96,y:-60,duration:.13,yoyo:true,repeat:1}},{t:.2f});')
 
     # ---------------------------------------------------------------- limbs
     def arms(self, t, state, d=.12):
@@ -369,7 +371,7 @@ def perform(add, dur):
     # always alive under every gesture
     add(f'tl.to("#bidle",{{y:-7,duration:.42,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .42) - 1}}},0);')
     add(f'tl.fromTo("#bidle",{{rotation:-2.5}},{{rotation:2.5,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(dur / 1.3) - 1}}},0);')
-    add(f'tl.to("#bbreath",{{scaleY:1.025,scaleX:.985,duration:.8,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .8) - 1}}},0);')
+    add(f'tl.to("#bbreath",{{scaleY:1.012,scaleX:.994,duration:.8,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .8) - 1}}},0);')
     add(f'tl.fromTo("#wingLi",{{rotation:3}},{{rotation:-4,duration:.6,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .6) - 1}}},0);')
     add(f'tl.fromTo("#wingDi",{{rotation:-3}},{{rotation:4,duration:.6,ease:"sine.inOut",yoyo:true,repeat:{int(dur / .6) - 1}}},.3);')
     # weight shifts from foot to foot with the body's sway, so the feet are never frozen
@@ -508,30 +510,36 @@ def perform(add, dur):
     add('tl.to("#birdpos",{y:960,duration:1.05,ease:"power1.inOut"},20.25);')
     b.pose(21.25, "neutral", .2)
     b.spread(21.25, 0, .2)
-    # "And found what I'd missed..." — suspense: stands still, squints, slow lean in with the magnifier
-    b.at(21.35, -60, 822, .45, .4)
-    b.expr(21.45, "focused", .3)
-    b.show("#mag", 21.6)
-    b.look(21.6, 16, 6)
-    b.pose(21.7, "leanin", .8, "power1.inOut")
-    add('tl.to("#mag",{x:40,duration:.4,ease:"sine.inOut",yoyo:true,repeat:3},21.8);')
-    # "my best hook was buried at 34 seconds." — shock "!", jumps back, then flaps up after it with star eyes
-    b.expr(23.35, "shock", .1)
-    b.pose(23.35, "leanback", .12)
+    # "And found what I'd missed..." — inside the reel: it holds the giant magnifier up to the film strip and walks on
+    # the spot while the frames scroll under the lens, stopping on each one
+    b.face(21.3, 1)
+    b.at(21.3, 40, 960, .78, .35, "power3.out")
+    b.pose(21.35, "neutral", .2)
+    b.arms(21.4, "up", .1)
+    add('tl.to("#wingR",{rotation:18,duration:.25,ease:"back.out(2)"},21.4);')
+    b.expr(21.45, "focused", .25)
+    b.look(21.5, 14, -10)
+    b.walk(21.62, 1.62, .27)
+    b.look(22.4, 16, -14)
+    # "my best hook was buried at 0:34." — the lens lands on it: jolt, "!", star eyes, a little victory hop
+    b.expr(23.33, "shock", .1)
+    b.startle(23.33)
     b.show(".bx", 23.4)
-    b.startle(23.35)
-    b.spread(23.35, 60, .12)
-    b.show("#mag", 24.3, False)
-    b.show(".bx", 24.5, False)
-    b.expr(24.6, "excited", .15)
-    b.pose(24.6, "tall", .2)
-    b.flap(24.65, 5, 55)
-    b.at(24.7, -60, 372, .45, .55, "power3.inOut")
-    b.look(24.7, 14, -16)
-    b.pulse_overlay(24.9, "str", 3)
-    b.spread(25.4, 0, .2)
-    b.expr(25.5, "joy", .15)
-    b.wave(25.62, 2)
+    b.look(23.35, 18, -18)
+    b.show(".bx", 24.3, False)
+    b.expr(23.75, "excited", .15)
+    b.pulse_overlay(23.85, "str", 3)
+    b.hop(24.1, 50)
+    # the frame lifts out and flies back to 0:00: it watches it go, then cheers when it lands
+    b.look(24.6, -18, -20)
+    b.pose(24.6, "leanback", .3)
+    add('tl.to("#wingR",{rotation:0,duration:.2},24.6);')
+    b.arms(24.75, "down", .1)
+    b.flap(24.7, 4, 45)
+    b.pose(25.3, "tall", .2)
+    b.expr(25.3, "joy", .15)
+    b.hop(25.35, 70)
+    b.wave(25.75, 1)
     # "Now I edit with reasons." — stands tall and proud on both feet, nods, then jumps to the reasons card
     b.at(26.3, 150, 332, .5, .45)
     b.face(26.4, 1)
@@ -558,7 +566,6 @@ def perform(add, dur):
     # "Comment CREEDOM..." — excited, points at the box, chatters, winks
     b.at(29.4, 730, 1080, .7, .45)
     b.expr(29.5, "excited", .12)
-    b.show(".bc", 29.9)
     b.face(30.05, -1)
     b.look(30.05, 16, 0)
     b.point(30.1, .9)
@@ -570,7 +577,6 @@ def perform(add, dur):
     b.pose(31.05, "leanback", .3)
     b.talk(31.0, .9)
     b.tap(31.2, 3)
-    b.show(".bc", 32.0, False)
     # end card: centre stage on both feet, joyful, waves goodbye, final wink
     b.face(32.0, 1)
     b.pose(32.0, "tall", .2)

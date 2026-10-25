@@ -6,7 +6,7 @@ A light, bouncy 100 bpm pop bed in F major (soft kick, clap on 2 and 4, shaker, 
 kept low under the voice, plus UI sound design on the visual events: pops, ticks, counter rattles, whooshes, a
 sparkle, the dark "twist" drop with a scanner and heartbeat, keyboard taps and a send ding. On top of the hand-placed
 effects, every event generate.py logs (build/sfx_events.json: pops, exits, glints, rings, counters, live reactions,
-data blips) gets its own sound, so nothing appears or leaves in silence. Writes assets/audio/music.wav (bed + SFX) and
+data blips, fly-bys, film-strip stops, the orbit swirl and the portal) gets its own sound, so nothing appears or leaves in silence. Writes assets/audio/music.wav (bed + SFX) and
 assets/audio/vo.wav (the voiceover, lifted to about -15 LUFS); they play on separate tracks.
 """
 import os
@@ -227,7 +227,7 @@ def sfx():
     s = "sfx"
     for t in CUTS:                                     # whip pan on every cut
         put(whoosh(.32, 1.1), t - .2, .9, bus=s)
-    for t in (15.45, 25.25, 29.85):                    # confetti
+    for t in (15.45, 25.3, 30.75):                     # confetti
         for i in range(10):
             put(pop_(1500 + 140 * (i % 5), .06), t + i * .035, .35, pan=-.5 + .1 * i, bus=s)
     put(whoosh(.6, 1.0), 31.05, .8, bus=s)             # paper plane
@@ -258,10 +258,10 @@ def sfx():
     put(sparkle(1.0), 23.45, 1.0, bus=s)
     put(whoosh(.55, 1.4), 24.65, 1.0, bus=s)           # the hook flies to 0:00
     put(whoosh(.35, 1.0, False), 28.35, 1.0, bus=s)    # guesses struck out
-    put(thud(.8), 29.75, .6, bus=s)                    # CREEDOM slams in
-    put(whoosh(.4), 29.6, 1.0, bus=s)
-    for i in range(7):
-        put(key_(), 30.25 + i * .1, 1.2, pan=.2, bus=s)
+    put(whoosh(.4), 29.6, 1.0, bus=s)                 # comment box swings in
+    for i in range(7):                                 # CREEDOM typed
+        put(key_(), 29.95 + i * .1, 1.2, pan=.2, bus=s)
+    put(thud(.6), 30.72, .4, bus=s)
     put(ding(), 31.05, 1.0, bus=s)
     put(sparkle(1.4), 32.25, 1.0, bus=s)
 
@@ -294,6 +294,17 @@ def events():
                 put(tick_(.03, 3000 + 400 * k), t + k * .07, .55, .1 * k, "sfx")
         elif kind == "scan":
             put(scan(d), t, 1.0, 0, "sfx")
+        elif kind == "fly":
+            put(whoosh(.3, .55, True), t - .15, .5, pan, "sfx")
+        elif kind == "tick":
+            put(tick_(.05, 2200), t, 1.2, 0, "sfx")
+            put(pop_(1100, .06), t, .35, 0, "sfx")
+        elif kind == "swirl":
+            put(whoosh(1.1, .9, True), t, .8, 0, "sfx")
+            put(sparkle(.9), t + .6, .5, 0, "sfx")
+        elif kind == "portal":
+            put(whoosh(.7, 1.4, True), t, 1.0, 0, "sfx")
+            put(thud(.5), t + .5, .35, 0, "sfx")
         elif kind == "heart":
             put(heartbeat(), t, 1.0, 0, "sfx")
         taken.append(t)
