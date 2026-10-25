@@ -1,0 +1,45 @@
+# Copy to brands/<client>/dm-automations.yaml and edit.
+# Check it with: npm run check-rules  (from automation/instagram-dm/)
+
+# The client's Instagram username, without the @.
+account: nxtlvl.social
+
+# "Comment KEYWORD and I'll DM you ..." CTAs. One entry per video CTA.
+comment_triggers:
+  - keywords: [FIGHT]              # matched as a whole word, any case, punctuation and emoji ignored
+    project: fight-night-9x16      # the video this CTA is in (for our records)
+    media_ids: []                  # empty = any post; add the post's media id to limit it to that reel
+    dm: "Here's the free /court skill 🥊 {link}"
+    link: https://github.com/alexyc9381/court-skill
+    public_replies:                # optional; one is picked at random and posted under the comment
+      - "Sent! Check your DMs 📩"
+      - "Just DM'd you 🥊"
+
+  - keywords: [CREEDOM]
+    project: creedom-reel-analyser-9x16
+    dm: "Here's the link to audit your own page: {link}"
+    link: https://example.com/creedom
+
+# Replies to DMs that contain one of the keywords. First match wins.
+# (DMs that contain a comment_triggers keyword get that trigger's DM.)
+dm_replies:
+  - keywords: [price, pricing, cost, how much]
+    reply: "Our packages start at ... Want me to send the full price list?"
+
+# Sent to someone messaging the account for the first time, when nothing above matched.
+welcome: "Hey, thanks for reaching out! 👋 Ask me anything, or tap one of the questions above."
+
+# Sent when nothing matched (at most once every 12 hours per person). The team replies by hand.
+fallback: "Thanks for the message! Someone from the team will get back to you soon."
+
+# Up to 4 starter questions shown when someone opens a new chat with the account.
+ice_breakers:
+  - question: "What do you offer?"
+    reply: "We make short-form videos and social content for brands. ..."
+  - question: "How much does it cost?"
+    reply: "Our packages start at ..."
+
+# Replies for ig.me/<username>?ref=<ref> links (bio, stories, ads).
+referrals:
+  - ref: bio
+    reply: "Hey! You came from our bio link. Here's our free guide: https://example.com/guide"

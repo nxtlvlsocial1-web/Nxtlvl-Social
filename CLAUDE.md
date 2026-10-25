@@ -14,6 +14,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Need                                                    | Skill                                         |
 | ------------------------------------------------------- | --------------------------------------------- |
 | Our rules: formats, safe zones, captions, naming        | `nxtlvl-social-video`                         |
+| Instagram comment-to-DM keywords, DM auto-replies       | `nxtlvl-instagram-dm`                         |
 | Routing any video request                               | `hyperframes`                                 |
 | Short motion graphic, kinetic text, stat, logo sting    | `motion-graphics`                             |
 | Captions on talking-head footage                        | `embedded-captions`                           |
@@ -137,7 +138,7 @@ Don't edit them by hand. Update one with:
 npx skills add <source-repo> --skill <name> --agent claude-code -y
 ```
 
-Our own skills (currently `nxtlvl-social-video`) are ours to edit.
+Our own skills (currently `nxtlvl-social-video` and `nxtlvl-instagram-dm`) are ours to edit.
 
 ## Setup
 
@@ -161,7 +162,9 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 
 ```
 .claude/skills/       Claude Code skills
-brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-video § 4)
+brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-video § 4),
+                      dm-automations.yaml (Instagram DM rules)
+automation/instagram-dm/  Instagram DM automation service (official Meta API; see its README)
 <project>/            One HyperFrames project per video and aspect ratio, e.g. spring-drop-9x16/
 ```
 
@@ -170,3 +173,4 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
 - Never render a final until the person has approved the preview.
 - Never use music or images we don't have the rights to; source them through `media-use`.
 - Keep rendered MP4s out of git; deliver them, don't commit them.
+- Instagram automation uses Meta's official API only: never auto-follow or DM people who haven't contacted the account.
