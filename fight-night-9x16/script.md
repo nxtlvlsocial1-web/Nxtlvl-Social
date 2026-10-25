@@ -77,7 +77,7 @@ before KNOCKOUT, calm on the payoff, punchy CTA. Eleven v3, Stability "Creative"
 
 ## Caption
 
-Comment FIGHT and I'll DM you the link. 🥊
+Comment FIGHT and I'll DM you the free skill. 🥊
 
 Two Claudes. One idea. Only one leaves the ring.
 
