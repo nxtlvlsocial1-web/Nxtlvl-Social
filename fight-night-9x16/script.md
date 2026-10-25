@@ -69,12 +69,24 @@ before KNOCKOUT, calm on the payoff, punchy CTA. Eleven v3, Stability "Creative"
 - Candles case, punches and rematch checklist: `examples/candles/VERDICT.md`. That example was a **3-juror run (3–0)**,
   so the scorecard shows "3 judges · 3–0". The 12-judge line describes the default setting, not that run.
 
-## Caption (draft)
+## Cover
+
+`cover.html` reuses the 3D arena (fight.js poses the fighters when `window.FIGHT_COVER` is set). Snapshot it with
+`node build/cover.cjs` → `renders/nxtlvl_fight-night_reels_9x16_cover.png` / `.jpg`. All text sits between y 268 and
+1630, so the 4:5 and 3:4 grid crops keep it.
+
+## Caption
 
 Two Claudes. One idea. Only one leaves the ring. 🥊
-Comment FIGHT and I'll DM you the free skill.
 
-/court puts your idea through a real fight: prosecution vs defense, 12 blind judges, and a referee who tells you
-exactly what to fix.
-Skill by @nocodealex (free, MIT). Not legal, financial or professional advice.
-#claudeai #aitools #claudecode #startupideas #buildinpublic
+Ask one AI about your idea and it'll call it genius. So we made them fight:
+🔴 Red corner argues it'll FAIL
+🔵 Blue corner argues it'll WORK
+⚖️ 12 Claude judges score it blind, then the referee tells you exactly what to fix before the rematch.
+
+It's a free Claude Code skill called /court.
+Comment FIGHT and I'll DM you the link.
+
+Skill by @nocodealex (free, MIT). A second opinion, not legal, financial or professional advice.
+
+#claudeai #claudecode #aitools #startupideas #buildinpublic #founders #ai

@@ -497,13 +497,29 @@ function drawScreens() {
   const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; plateText.material.map = tx; plateText.material.needsUpdate = true;
 }
 
+// ---------------------------------------------------------------- cover still (cover.html sets window.FIGHT_COVER)
+function renderCover(c) {
+  renderAt(T.touch - .4);                 // all lights on, crowd up, idea on the screen
+  for (const [m, side] of [[red, -1], [blue, 1]]) {
+    m.root.position.set(side * c.x, RING_H + .02, c.z); m.root.rotation.y = -side * c.turn;
+    m.hop.position.set(0, 0, 0); m.body.rotation.set(-.08, 0, side * .05);
+    m.arms.forEach((a, i) => { a.position.y = 1.0 + (i === (side < 0 ? 1 : 0) ? .18 : 0); a.position.z = .25; });
+    m.eyes.forEach((e) => (e.scale.y = .7));    // narrowed, staring each other down
+  }
+  frontRopes.forEach((r) => (r.visible = false)); screenGroup.visible = false;
+  redSpot.intensity = blueSpot.intensity = 140; key.intensity = 120;
+  camera.position.set(...c.cam); camera.lookAt(...c.look); camera.fov = c.fov; camera.updateProjectionMatrix();
+  renderer.render(scene, camera);
+}
+
 const ready = (async () => {
   await Promise.all(["800 96px Manrope", "900 260px Manrope", "800 46px JBMono"].map((f) => document.fonts.load(f)));
   drawScreens();
   renderer.compile(scene, camera);
+  if (window.FIGHT_COVER) { renderCover(window.FIGHT_COVER); window.__coverDone = true; return; }
   renderAt(window.__hfThreeTime || 0);
 })();
 window.__hf = window.__hf || {};
 window.__hf.buildReady = window.__hf.buildReady || {};
 window.__hf.buildReady["fight-night"] = ready;
-window.addEventListener("hf-seek", (e) => { if (screenTex.idea) renderAt(e.detail.time); });
+window.addEventListener("hf-seek", (e) => { if (screenTex.idea && !window.FIGHT_COVER) renderAt(e.detail.time); });
