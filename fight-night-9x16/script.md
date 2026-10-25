@@ -5,7 +5,7 @@ Reference: the "I built a courtroom where 12 Claudes put your idea on trial" ree
 3D voxel world with the orange pixel mascot. The README welcomes videos as long as the skill is credited and
 @nocodealex is tagged.
 
-LENGTH: ≤35 s · ~82 words · VOICE: Nota 3 (Eleven v3) · CTA KEYWORD: FIGHT (to confirm)
+LENGTH: ≤35 s · ~90 words (fast commentator pace) · VOICE: male fight commentator / ring announcer (user's own voice, Eleven v3 tags) · CTA KEYWORD: FIGHT (to confirm)
 
 ## How the fight maps to the skill (keeps every claim true)
 
@@ -17,31 +17,37 @@ LENGTH: ≤35 s · ~82 words · VOICE: Nota 3 (Eleven v3) · CTA KEYWORD: FIGHT 
 | 12 jurors with personas, voting independently ("no juror sees another's vote") | 12 ringside judges behind dividers |
 | Judge: verdict, charges that stuck, conditions for acquittal | Referee's decision and the "rematch checklist" |
 
-## Script
+## Script (ring announcer / play-by-play commentator)
 
 | Beat | Time | Voiceover |
 |---|---|---|
-| Hook | 0–3s | Two Claudes fight over your idea... only one leaves the ring. |
-| Problem | 3–6s | Because Claude on its own agrees with everything you say. |
-| Corners | 6–11s | Red corner: a Claude arguing it fails. Blue corner: one arguing it works. |
-| Rounds | 11–14s | Openings. Rebuttals. Every point lands a punch. |
-| Judges | 14–19s | Then twelve Claude judges score it blind, each one a different person. |
-| Example | 19–25s | Test case: quit nursing to sell candles. Knockout. |
-| Payoff | 25–30s | And the referee tells you exactly what to fix before the rematch. |
-| CTA | 30–34s | It's free. Comment FIGHT and I'll DM you the skill. |
+| Hook | 0–3s | Ladies and gentlemen... two Claudes. One idea. Only one leaves the ring! |
+| Problem | 3–6s | See, Claude on its own agrees with everything you say. |
+| Corners | 6–12s | So tonight, in the red corner... a Claude arguing your idea FAILS! And in the blue corner... one arguing it WORKS! |
+| Rounds | 12–15s | Openings! Rebuttals! Every point lands a punch! |
+| Judges | 15–20s | Ringside, twelve Claude judges score it blind... an accountant, a customer, a competitor... |
+| Example | 20–25s | Tonight's challenger: quit nursing to sell candles. OH, it's a knockout! |
+| Payoff | 25–30s | And the referee hands you exactly what to fix... before the rematch. |
+| CTA | 30–34s | It's free! Comment FIGHT... and I'll DM you the skill! |
 
-## Voiceover for Nota 3 (Eleven v3 mood tags)
+## Voiceover with mood tags (Eleven v3)
 
 ```
-[playful] Two Claudes fight over your idea... [pause] [confident] only one leaves the ring.
-[knowing] Because Claude on its own... [smiling] agrees with everything you say.
-[excited] Red corner: a Claude arguing it fails. [excited] Blue corner: one arguing it works.
-[intrigued] Openings. Rebuttals. [impressed] Every point lands a punch.
-[curious] Then twelve Claude judges score it blind... [warmly] each one a different person.
-[playful] Test case: quit nursing to sell candles. [pause] [amazed] Knockout.
-[confident] And the referee tells you exactly what to fix... before the rematch.
-[warmly] It's free. [playful] Comment FIGHT... and I'll DM you the skill.
+[booming announcer voice] Ladies and gentlemen... [dramatic pause] two Claudes. One idea. [shouting] Only one leaves the ring!
+[wry, conversational] See, Claude on its own... agrees with everything you say.
+[hyped] So tonight, in the red corner... [shouting] a Claude arguing your idea FAILS!
+[hyped] And in the blue corner... [shouting] one arguing it WORKS!
+[fast-paced, excited] Openings! Rebuttals! [intense] Every point lands a punch!
+[low, intense commentary] Ringside, twelve Claude judges score it blind... [quick] an accountant, a customer, a competitor...
+[dramatic] Tonight's challenger: quit nursing to sell candles. [pause] [shouting, ecstatic] OHHH, it's a KNOCKOUT!
+[calm, slower] And the referee hands you exactly what to fix... [knowing] before the rematch.
+[hyped] It's free! [booming] Comment FIGHT... [grinning] and I'll DM you the skill!
 ```
+
+Delivery: big ring-announcer energy on the hook and the corner intros, fast play-by-play through the rounds, a hushed
+build before the knockout call, then calm and warm on the payoff so the CTA lands. Settings: Eleven v3, Stability
+"Creative" so the shouts come through; generate 3–4 takes. If it runs past 35 s, cut "an accountant, a customer, a
+competitor" (the judges' props show it anyway).
 
 ## Visual beats (3D voxel world, orange pixel mascot)
 
