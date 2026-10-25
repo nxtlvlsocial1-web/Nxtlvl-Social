@@ -361,6 +361,12 @@
       "skillPath": "skills/launch-video/SKILL.md",
       "computedHash": "f3ea76b69c8e50c2c1d840d02326320225fdf576eb4cb809eec36cfdebc5cf26"
     },
+    "llm-council": {
+      "source": "aiwithremy/claude-skills-llm-council",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "b6b68e15b1622ea5dc7760e6a3c723c62c8140103fde3052c096f7d8fc675a44"
+    },
     "loop-cover": {
       "source": "charlie947/motion-graphics-skills",
       "sourceType": "github",

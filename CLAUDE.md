@@ -102,6 +102,7 @@ own rules (one paused timeline, no `left`/`top` motion) when they differ.
 | Carousel structure, slide-by-slide copy, post captions  | `social`                                      |
 | Website and landing-page copy, headlines, CTAs         | `copywriting`                                 |
 | Content pillars, calendars, what to post and where      | `content-strategy`                            |
+| Pressure-test a decision: 5 advisors, peer review, verdict ("council this") | `llm-council`             |
 | Designing posters, slides and graphics as PNG / PDF     | `canvas-design`                               |
 | Still images: social graphics, banners, mockups, OG     | `image`                                       |
 | Paid-social ad statics, hooks, ad copy variations       | `ad-creative`                                 |
@@ -124,6 +125,7 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `video-motion-graphics`: `dylantarre/animation-principles`
 - `brand-intake`, `motion-brief-writer`, `reference-to-motion`, `motion-prompt-writer`, `launch-video`, `apple-launch-film`, `vox-explainer`, `animated-chart`, `milestone-reveal`, `motion-effects`, `title-sequence-3d`, `model-showdown`, `newsletter-promo`, `loop-cover`, `reel-export`: `charlie947/motion-graphics-skills`
 - `product-film`: `Rieranthony/product-film-skill`
+- `llm-council`: `aiwithremy/claude-skills-llm-council`
 - `reference-design-contract`, `agent-browser`: `nexu-io/open-design`; `competitor-profiling`: `coreyhaines31/marketingskills`
 - `threejs-*`: `CloudAI-X/threejs-skills`; `gsap-*`: `greensock/gsap-skills`; `design-dna`: `zanwei/design-dna`;
   `motion-design`: `LottieFiles/motion-design-skill`; `cast`, `paint`, `bunshin`: `AThevon/genjutsu`
