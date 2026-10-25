@@ -77,7 +77,9 @@ before KNOCKOUT, calm on the payoff, punchy CTA. Eleven v3, Stability "Creative"
 
 ## Caption
 
-Two Claudes. One idea. Only one leaves the ring. 🥊
+Comment FIGHT and I'll DM you the link. 🥊
+
+Two Claudes. One idea. Only one leaves the ring.
 
 Ask one AI about your idea and it'll call it genius. So we made them fight:
 🔴 Red corner argues it'll FAIL
@@ -85,7 +87,6 @@ Ask one AI about your idea and it'll call it genius. So we made them fight:
 ⚖️ 12 Claude judges score it blind, then the referee tells you exactly what to fix before the rematch.
 
 It's a free Claude Code skill called /court.
-Comment FIGHT and I'll DM you the link.
 
 Skill by @nocodealex (free, MIT). A second opinion, not legal, financial or professional advice.
 
