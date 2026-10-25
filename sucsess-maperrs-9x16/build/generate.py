@@ -4,7 +4,7 @@ python3 -I build/generate.py      (run from the project root, after build/edl.py
 
 Format from the reference reel: the presenter switches between three framings, FULL (close, captions on her),
 SPLIT (small and low, with the app's UI up top) and FOCUS (she steps out and the UI fills the frame), and the end is a
-glowing CTA on a dark vignette. Her matte (assets/video/talk_fg.webm, hyperframes remove-background) sits on the app's own
+glowing CTA on a dark vignette. Her matte (assets/video/talk_fg.webm from hyperframes remove-background, edge choked 2 px and feathered into talk_fg_clean.webm so no wall fringe shows) sits on the app's own
 world: near-black #15110E, gold #DAB66A, cream #F2EADD, sage #839172, plum #261F2F; Fraunces (display, gold italic accents),
 Manrope (body), JetBrains Mono (spaced labels). A slowly turning compass rose from the logo, gold dust and a halo behind
 her head keep the backdrop alive; big words can sit behind her (between backdrop and matte). Captions are English
@@ -764,7 +764,7 @@ def main():
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="1080" data-height="1920">
       <div id="bg" class="clip" data-start="0" data-duration="{DUR}" data-track-index="0" data-layout-allow-overflow>{backdrop()}</div>
       <div id="spk" class="clip" data-start="0" data-duration="{DUR}" data-track-index="2" data-layout-allow-overflow><div id="spkcrop"><div id="panelbg"></div><div id="spkw"><div id="halo"></div>
-        <video id="talk" data-color-grading="{GRADE}" src="assets/video/{os.environ.get("SPK_SRC", "talk_fg.webm")}" data-start="0" data-duration="{VO}" data-track-index="2" muted playsinline></video></div></div><div class="seam"></div></div>
+        <video id="talk" data-color-grading="{GRADE}" src="assets/video/{os.environ.get("SPK_SRC", "talk_fg_clean.webm")}" data-start="0" data-duration="{VO}" data-track-index="2" muted playsinline></video></div></div><div class="seam"></div></div>
       {scenes()}
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="7">{captions_html()}</div>
       <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8"><div id="flash"></div></div>
