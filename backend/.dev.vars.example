@@ -1,0 +1,4 @@
+# Copy to .dev.vars for local `npm run dev`. In production set it with: npx wrangler secret put RESEND_API_KEY
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxx
+# local dev: let the form on http://localhost:8787 talk to the API
+ALLOWED_ORIGINS=http://localhost:8787,http://127.0.0.1:8787

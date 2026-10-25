@@ -3,12 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<!-- Before launch: this page assumes the domain https://nxtlvlsocial.in/ and uses the placeholder WhatsApp number
-     +91 00000 00000 (910000000000). Replace both everywhere they appear: the tags below, the JSON-LD, the contact
-     section and FAQ links, robots.txt and sitemap.xml. -->
+<!-- Before launch: the domain is assumed to be https://nxtlvlsocial.ai/ (from the connect@ email). The WhatsApp number
+     +91 00000 00000 (910000000000) is still a placeholder: replace it in the contact section and FAQ links. -->
 <title>Social Media Content &amp; Automation from $5/mo | Nxtlvl Social</title>
 <meta name="description" content="Design, reels, posting and DM automation for cafés, salons, gyms and shops. Your whole social media team from $5 a month. No contracts. Book a free call.">
-<link rel="canonical" href="https://nxtlvlsocial.in/">
+<link rel="canonical" href="https://nxtlvlsocial.ai/">
 <meta name="theme-color" content="#05030C">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <link rel="manifest" href="site.webmanifest">
@@ -18,31 +17,32 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Nxtlvl Social">
 <meta property="og:locale" content="en_IN">
-<meta property="og:url" content="https://nxtlvlsocial.in/">
+<meta property="og:url" content="https://nxtlvlsocial.ai/">
 <meta property="og:title" content="Your entire creative team, for less than one reel">
 <meta property="og:description" content="Design, video, posting and the automation behind it, run for you by Nxtlvl Social from $5 a month. No contracts, cancel any month.">
-<meta property="og:image" content="https://nxtlvlsocial.in/og-image.png">
+<meta property="og:image" content="https://nxtlvlsocial.ai/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Nxtlvl Social: your entire creative team, for less than one reel. From $5 a month.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Your entire creative team, for less than one reel">
 <meta name="twitter:description" content="Design, video, posting and the automation behind it, from $5 a month. No contracts, cancel any month.">
-<meta name="twitter:image" content="https://nxtlvlsocial.in/og-image.png">
+<meta name="twitter:image" content="https://nxtlvlsocial.ai/og-image.png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://nxtlvlsocial.in/#org",
+      "@id": "https://nxtlvlsocial.ai/#org",
       "name": "Nxtlvl Social",
-      "url": "https://nxtlvlsocial.in/",
-      "logo": "https://nxtlvlsocial.in/logo.png",
-      "image": "https://nxtlvlsocial.in/og-image.png",
+      "url": "https://nxtlvlsocial.ai/",
+      "logo": "https://nxtlvlsocial.ai/logo.png",
+      "image": "https://nxtlvlsocial.ai/og-image.png",
       "description": "Creative and automation studio for small businesses: social media design, reels and video editing, posting and the automation behind it, from $5 a month.",
       "slogan": "Your entire creative team, for less than one reel",
       "areaServed": {"@type": "Country", "name": "India"},
+      "email": "connect@nxtlvlsocial.ai",
       "knowsAbout": ["Social media management", "Social media design", "Reels and short-form video editing", "Ad creatives", "Social media automation"],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
@@ -74,11 +74,11 @@
     },
     {
       "@type": "WebSite",
-      "@id": "https://nxtlvlsocial.in/#website",
-      "url": "https://nxtlvlsocial.in/",
+      "@id": "https://nxtlvlsocial.ai/#website",
+      "url": "https://nxtlvlsocial.ai/",
       "name": "Nxtlvl Social",
       "inLanguage": "en-IN",
-      "publisher": {"@id": "https://nxtlvlsocial.in/#org"}
+      "publisher": {"@id": "https://nxtlvlsocial.ai/#org"}
     }
   ]
 }
@@ -886,7 +886,34 @@ details p{padding:0 54px 24px 4px; font-size:15px; color:var(--muted); max-width
 .close .hero-cta{margin-top:30px}
 
 /* ---------- contact + footer ---------- */
-.contact{margin-top:44px; display:grid; grid-template-columns:1fr; gap:12px; max-width:560px; margin-inline:auto; text-align:left}
+/* ---------- booking form ---------- */
+.book{margin:36px auto 0; max-width:640px; text-align:left; padding:26px; border-radius:var(--r-lg); border:1px solid var(--line); background:rgba(10,7,23,.72); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px)}
+.book-h{margin:0 0 18px; font:700 20px/1.2 var(--d); letter-spacing:-.01em}
+.book-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.fld{display:flex; flex-direction:column; gap:6px; min-width:0}
+.fld-wide{grid-column:1 / -1}
+.fld span{font-size:13px; font-weight:600; color:var(--muted)}
+.fld em{font-style:normal; font-weight:400; color:var(--faint)}
+.fld input,.fld select,.fld textarea{
+  width:100%; box-sizing:border-box; min-height:46px; padding:11px 14px; border-radius:12px; border:1px solid var(--line-2); background:var(--ink-3);
+  color:var(--fg); font:500 15px/1.4 var(--b); transition:border-color .18s, box-shadow .18s; appearance:none; -webkit-appearance:none;
+}
+.fld textarea{resize:vertical; min-height:84px}
+.fld select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%239F97BE' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; padding-right:38px}
+.fld input::placeholder,.fld textarea::placeholder{color:var(--faint)}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none; border-color:var(--violet-lift); box-shadow:0 0 0 3px rgba(169,92,255,.22)}
+.fld.bad input,.fld.bad textarea{border-color:#FF6B8A}
+.hp{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden}
+.book-foot{display:flex; flex-wrap:wrap; gap:12px; margin-top:18px}
+.book-foot .btn{flex:1 1 auto; justify-content:center}
+.book-msg{margin:12px 0 0; min-height:1.4em; font-size:14.5px; font-weight:500; color:var(--violet-pale)}
+.book-msg.err{color:#FF8FA6}
+.book-note{margin:6px 0 0; font-size:13px; color:var(--faint)}
+.book.sent .book-grid,.book.sent .book-foot,.book.sent .book-note{display:none}
+.book.sent .book-msg{font-size:17px; color:var(--fg); min-height:0}
+@media(max-width:560px){ .book{padding:20px 16px} .book-grid{grid-template-columns:1fr} }
+.contact{margin-top:28px; display:grid; grid-template-columns:1fr; gap:12px; max-width:560px; margin-inline:auto; text-align:left}
+
 @media(min-width:620px){.contact{grid-template-columns:1fr 1fr}}
 .ct{display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:15px; border:1px solid var(--line); background:var(--ink-3); min-width:0; transition:border-color .22s}
 .ct:hover{border-color:var(--line-2)}
@@ -2938,15 +2965,29 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       <li><b>2</b>Brand kit in week one</li>
       <li><b>3</b>First drafts in 48 hours</li>
     </ol>
-    <div class="hero-cta">
-      <a class="btn btn-primary" href="https://wa.me/910000000000?text=Hi%20Nxtlvl%20Social!%20I%27d%20like%20to%20book%20a%20free%2015-minute%20call%20about%20my%20business." target="_blank" rel="noopener">Book on WhatsApp<span class="bi"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
-      <a class="btn btn-ghost" href="mailto:hello@nxtlvlsocial.in?subject=Free%2015-minute%20call">Email us</a>
-    </div>
+    <form class="book" id="book" data-endpoint="/api/book" novalidate>
+      <h3 class="book-h">Book your free 15-minute call</h3>
+      <div class="book-grid">
+        <label class="fld"><span>Your name</span><input type="text" name="name" autocomplete="name" required maxlength="80" placeholder="Asha Mehta"></label>
+        <label class="fld"><span>Business</span><input type="text" name="business" autocomplete="organization" maxlength="120" placeholder="The Corner Café"></label>
+        <label class="fld"><span>WhatsApp number</span><input type="tel" name="phone" autocomplete="tel" inputmode="tel" maxlength="24" placeholder="+91 98765 43210"></label>
+        <label class="fld"><span>Email <em>(optional)</em></span><input type="email" name="email" autocomplete="email" maxlength="120" placeholder="you@business.com"></label>
+        <label class="fld fld-wide"><span>What do you need?</span><select name="need"><option value="unsure">Not sure yet, let's talk</option><option value="design">Content &amp; Design, from $5/month</option><option value="video">Video &amp; Editing, from $15/month</option><option value="automation">Social + Automation, from $49/month</option></select></label>
+        <label class="fld fld-wide"><span>Anything we should know? <em>(optional)</em></span><textarea name="message" rows="3" maxlength="2000" placeholder="What you sell, where you are, what your feed looks like today"></textarea></label>
+        <label class="hp" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+      </div>
+      <div class="book-foot">
+        <button class="btn btn-primary" type="submit">Book my free call<span class="bi"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></button>
+        <a class="btn btn-ghost" href="https://wa.me/910000000000?text=Hi%20Nxtlvl%20Social!%20I%27d%20like%20to%20book%20a%20free%2015-minute%20call%20about%20my%20business." target="_blank" rel="noopener">Or message on WhatsApp</a>
+      </div>
+      <p class="book-msg" id="bookMsg" role="status" aria-live="polite"></p>
+      <p class="book-note">A person replies within one business day. No spam, no newsletter.</p>
+    </form>
 
     <div class="contact">
       <div class="ct">
         <svg class="ic" aria-hidden="true"><use href="#i-mail"/></svg>
-        <div style="min-width:0"><div class="ct-k">Email</div><a class="ct-v" id="mail" href="mailto:hello@nxtlvlsocial.in?subject=Free%2015-minute%20call">hello@nxtlvlsocial.in</a></div>
+        <div style="min-width:0"><div class="ct-k">Email</div><a class="ct-v" id="mail" href="mailto:connect@nxtlvlsocial.ai?subject=Free%2015-minute%20call">connect@nxtlvlsocial.ai</a></div>
         <button class="copy" type="button" data-copy="mail"><span class="cico" aria-hidden="true"><svg class="ic c-cp"><use href="#i-list"/></svg><svg class="ic c-ok"><use href="#i-check"/></svg></span><span class="clab">Copy</span></button>
       </div>
       <div class="ct">
@@ -2958,7 +2999,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 
     <div class="placeholder-note">
       <svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>
-      <span><b>Placeholder contact details.</b> Replace the email, WhatsApp number and Instagram handle with your real ones before you share this page.</span>
+      <span><b>Placeholder WhatsApp number.</b> Replace +91 00000 00000 (and the wa.me links) with the real number before you share this page.</span>
     </div>
   </div>
 </section>
@@ -4537,6 +4578,33 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
         if(beamOn && !beamRaf) beamRaf = requestAnimationFrame(beam);
       }, {threshold:.1}).observe(feat);
     } else { beamOn = true; beamRaf = requestAnimationFrame(beam); }
+  }
+
+  /* ---- bkForm a call: posts to the backend; if that fails, opens the visitor's email app with the details filled in ---- */
+  var bkForm = document.getElementById('book');
+  if(bkForm){
+    var bkMsg = document.getElementById('bookMsg'), bkT0 = Date.now();
+    var bkField = function(n){ return bkForm.elements[n]; };
+    var bkSay = function(t, bad){ bkMsg.textContent = t; bkMsg.classList.toggle('err', !!bad); };
+    var bkMark = function(n, bad){ var l = bkField(n).closest('.fld'); if(l) l.classList.toggle('bad', !!bad); };
+    bkForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      var d = {name:bkField('name').value.trim(), business:bkField('business').value.trim(), phone:bkField('phone').value.trim(), email:bkField('email').value.trim(),
+               need:bkField('need').value, message:bkField('message').value.trim(), website:bkField('website').value, t:bkT0};
+      bkMark('name', d.name.length < 2); bkMark('phone', !d.phone && !d.email); bkMark('email', !d.phone && !d.email);
+      if(d.name.length < 2) return bkSay('Please tell us your name.', true);
+      if(!d.phone && !d.email) return bkSay('Leave a WhatsApp number or an email so we can reply.', true);
+      var btn = bkForm.querySelector('[type=submit]'); btn.disabled = true; bkSay('Sending…');
+      var mailto = 'mailto:connect@nxtlvlsocial.ai?subject=' + encodeURIComponent('Free 15-minute call: ' + d.name) + '&body=' + encodeURIComponent(
+        'Name: ' + d.name + '\nBusiness: ' + d.business + '\nWhatsApp: ' + d.phone + '\nEmail: ' + d.email + '\nLooking for: ' + bkField('need').options[bkField('need').selectedIndex].text + '\n\n' + d.message);
+      fetch(bkForm.dataset.endpoint, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(d)})
+        .then(function(r){ return r.json().then(function(j){ return {ok:r.ok && j.ok, err:j.error}; }); })
+        .then(function(r){
+          if(r.ok){ bkForm.classList.add('sent'); bkSay('Got it, ' + d.name.split(' ')[0] + '. A person will reply within one business day' + (d.phone ? ' on WhatsApp' : '') + ' to set up your call.'); return; }
+          btn.disabled = false; bkSay(r.err || 'Could not send. Opening your email app instead…', !!r.err); if(!r.err) location.href = mailto;
+        })
+        .catch(function(){ btn.disabled = false; bkSay('Could not reach us. Opening your email app instead…'); location.href = mailto; });
+    });
   }
 
   /* ---- copy buttons ---- */

@@ -1,0 +1,26 @@
+name = "nxtlvl-social"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+# the website itself: every file in ../website, served from the same Worker; /api/* goes to the code first
+[assets]
+directory = "../website"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = ["/api/*"]
+
+[vars]
+LEAD_TO = "connect@nxtlvlsocial.ai"
+LEAD_FROM = "Nxtlvl Social <bookings@nxtlvlsocial.ai>"
+ALLOWED_ORIGINS = "https://nxtlvlsocial.ai,https://www.nxtlvlsocial.ai"
+RATE_LIMIT = "5"
+
+# optional: stores every lead and the per-IP rate counter. Create with `npx wrangler kv namespace create LEADS`
+# and paste the id it prints here; without it the form still emails you.
+# [[kv_namespaces]]
+# binding = "LEADS"
+# id = "paste-the-id-here"
+
+# custom domain: after `npx wrangler deploy`, add the domain in the Cloudflare dashboard (Workers > Settings > Domains)
+# or uncomment:
+# routes = [{ pattern = "nxtlvlsocial.ai", custom_domain = true }, { pattern = "www.nxtlvlsocial.ai", custom_domain = true }]

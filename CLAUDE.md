@@ -59,6 +59,8 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-video § 4)
 website/              Our landing page: index.html plus fonts/, vendor/ (GSAP), icons, og-image.png, manifest, robots.txt, sitemap.xml;
                       deploy the whole folder to the domain root
+backend/              Cloudflare Worker: serves website/ and the Book-a-call API (POST /api/book -> connect@nxtlvlsocial.ai
+                      via Resend); npm test runs it locally, npm run deploy ships it. See backend/README.md
 nxtlvl-social-audit/  SEO audit of website/index.html: FULL-AUDIT-REPORT.md, ACTION-PLAN.md, PDF, findings/
 motion-canvas/        Motion Canvas project (code-driven animation in TypeScript): npm install, npm start
 <project>/            One HyperFrames project per video and aspect ratio, e.g. spring-drop-9x16/

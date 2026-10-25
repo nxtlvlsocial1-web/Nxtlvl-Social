@@ -19,8 +19,9 @@ SEO Health Score: **76/100** (was 50, then 72). Phase 1 must be done before the 
 
 ## Phase 1: Before launch (Critical) (Week 1)
 
-- [ ] Replace the WhatsApp number (910000000000 / +91 00000 00000) and the email in index.html, then remove the placeholder note.
-- [ ] Confirm the domain; if it is not nxtlvlsocial.in, replace it in the head tags, JSON-LD, robots.txt and sitemap.xml.
+- [x] Email is connect@nxtlvlsocial.ai; a booking form posts to the backend (backend/), with a mailto fallback.
+- [ ] Replace the WhatsApp number (910000000000 / +91 00000 00000) in index.html, then remove the placeholder note.
+- [ ] Confirm the domain is nxtlvlsocial.ai (taken from the connect@ email); if not, replace it in the head tags, JSON-LD, robots.txt, sitemap.xml and backend/wrangler.toml.
 - [x] Self-hosted fonts, web manifest, robots meta, keyword-rich hero copy, 44 px tap targets, cached logo, llms.txt (round 2).
 - [ ] Deploy the whole website/ folder to the domain root over HTTPS with gzip or brotli.
 - [ ] Verify the domain in Google Search Console, submit sitemap.xml, and check the URL Inspection rendered screenshot.

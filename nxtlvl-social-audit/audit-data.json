@@ -14,7 +14,7 @@
   ],
   "quick_wins": [
    "Replace the WhatsApp number (910000000000 / +91 00000 00000) and the email in index.html, then remove the placeholder note.",
-   "Confirm the domain; if it is not nxtlvlsocial.in, replace it in the head tags, JSON-LD, robots.txt and sitemap.xml.",
+   "Confirm the domain; if it is not nxtlvlsocial.ai, replace it in the head tags, JSON-LD, robots.txt and sitemap.xml.",
    "Deploy the whole website/ folder to the domain root over HTTPS with gzip or brotli.",
    "Name the city and service area on the page and in areaServed; create a Google Business Profile as a service-area business.",
    "Add email, telephone and sameAs (Instagram and other profiles) to the JSON-LD; link the profiles in the footer."
@@ -45,8 +45,8 @@
     {
      "title": "The domain is assumed, not confirmed",
      "severity": "Medium",
-     "description": "The canonical tag, og:url, og:image, the JSON-LD, robots.txt and sitemap.xml all use https://nxtlvlsocial.in/, the domain from the page's placeholder email.",
-     "recommendation": "If the real domain is different, replace nxtlvlsocial.in in those places before launch. A comment at the top of index.html lists them."
+     "description": "The canonical tag, og:url, og:image, the JSON-LD, robots.txt and sitemap.xml all use https://nxtlvlsocial.ai/, the domain from the page's placeholder email.",
+     "recommendation": "If the real domain is different, replace nxtlvlsocial.ai in those places before launch. A comment at the top of index.html lists them."
     },
     {
      "title": "three.js still loads from a third-party CDN",
@@ -250,7 +250,7 @@
     {
      "title": "The contact details are still placeholders",
      "severity": "Critical",
-     "description": "The new buttons and links point to +91 00000 00000 (wa.me/910000000000) and hello@nxtlvlsocial.in, which the page itself flags as placeholders.",
+     "description": "The new buttons and links point to +91 00000 00000 (wa.me/910000000000) and connect@nxtlvlsocial.ai, which the page itself flags as placeholders.",
      "recommendation": "Replace the number and email everywhere they appear in index.html (the comment at the top lists the places), then remove the \"Placeholder contact details\" note."
     },
     {
@@ -293,7 +293,7 @@
     "timeframe": "Week 1",
     "items": [
      "Replace the WhatsApp number (910000000000 / +91 00000 00000) and the email in index.html, then remove the placeholder note.",
-     "Confirm the domain; if it is not nxtlvlsocial.in, replace it in the head tags, JSON-LD, robots.txt and sitemap.xml.",
+     "Confirm the domain; if it is not nxtlvlsocial.ai, replace it in the head tags, JSON-LD, robots.txt and sitemap.xml.",
      "Deploy the whole website/ folder to the domain root over HTTPS with gzip or brotli.",
      "Verify the domain in Google Search Console, submit sitemap.xml, and check the URL Inspection rendered screenshot.",
      "Test the page with the Rich Results Test and validator.schema.org."

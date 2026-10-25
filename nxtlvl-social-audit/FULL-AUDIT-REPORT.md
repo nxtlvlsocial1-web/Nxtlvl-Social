@@ -86,9 +86,9 @@ The page only exists in the repo and as a private claude.ai artifact. HTTPS, red
 
 ### Medium: The domain is assumed, not confirmed
 
-The canonical tag, og:url, og:image, the JSON-LD, robots.txt and sitemap.xml all use https://nxtlvlsocial.in/, the domain from the page's placeholder email.
+The canonical tag, og:url, og:image, the JSON-LD, robots.txt and sitemap.xml all use https://nxtlvlsocial.ai/, the domain from the page's placeholder email.
 
-**Fix:** If the real domain is different, replace nxtlvlsocial.in in those places before launch. A comment at the top of index.html lists them.
+**Fix:** If the real domain is different, replace nxtlvlsocial.ai in those places before launch. A comment at the top of index.html lists them.
 
 ### Low: three.js still loads from a third-party CDN
 
@@ -258,7 +258,7 @@ Listed for completeness only; it carries no weight in this score.
 
 ### Critical: The contact details are still placeholders
 
-The new buttons and links point to +91 00000 00000 (wa.me/910000000000) and hello@nxtlvlsocial.in, which the page itself flags as placeholders.
+The new buttons and links point to +91 00000 00000 (wa.me/910000000000) and connect@nxtlvlsocial.ai, which the page itself flags as placeholders.
 
 **Fix:** Replace the number and email everywhere they appear in index.html (the comment at the top lists the places), then remove the "Placeholder contact details" note.
 
