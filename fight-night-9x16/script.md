@@ -17,37 +17,37 @@ LENGTH: ≤35 s · ~90 words (fast commentator pace) · VOICE: male fight commen
 | 12 jurors with personas, voting independently ("no juror sees another's vote") | 12 ringside judges behind dividers |
 | Judge: verdict, charges that stuck, conditions for acquittal | Referee's decision and the "rematch checklist" |
 
-## Script (ring announcer / play-by-play commentator)
+## Script v2 (ring announcer, cut to fit 35 s; v1 ran 42 s)
 
 | Beat | Time | Voiceover |
 |---|---|---|
-| Hook | 0–3s | Ladies and gentlemen... two Claudes. One idea. Only one leaves the ring! |
-| Problem | 3–6s | See, Claude on its own agrees with everything you say. |
-| Corners | 6–12s | So tonight, in the red corner... a Claude arguing your idea FAILS! And in the blue corner... one arguing it WORKS! |
-| Rounds | 12–15s | Openings! Rebuttals! Every point lands a punch! |
-| Judges | 15–20s | Ringside, twelve Claude judges score it blind... an accountant, a customer, a competitor... |
-| Example | 20–25s | Tonight's challenger: quit nursing to sell candles. OH, it's a knockout! |
-| Payoff | 25–30s | And the referee hands you exactly what to fix... before the rematch. |
-| CTA | 30–34s | It's free! Comment FIGHT... and I'll DM you the skill! |
+| Hook | 0–4s | Ladies and gentlemen... two Claudes, one idea. Only one leaves the ring! |
+| Problem | 4–6s | Claude alone agrees with everything. |
+| Corners | 6–11s | Red corner: a Claude arguing it FAILS! Blue corner: one arguing it WORKS! |
+| Rounds | 11–14s | Openings! Rebuttals! Every point lands! |
+| Judges | 14–17s | Twelve Claude judges score it blind. |
+| Example | 17–22s | Tonight: quit nursing to sell candles... KNOCKOUT! |
+| Payoff | 22–27s | Then the referee tells you what to fix for the rematch. |
+| CTA | 27–31s | Free! Comment FIGHT for the skill! |
+
+~67 words (v1 was ~90).
 
 ## Voiceover with mood tags (Eleven v3)
 
 ```
-[booming announcer voice] Ladies and gentlemen... [dramatic pause] two Claudes. One idea. [shouting] Only one leaves the ring!
-[wry, conversational] See, Claude on its own... agrees with everything you say.
-[hyped] So tonight, in the red corner... [shouting] a Claude arguing your idea FAILS!
-[hyped] And in the blue corner... [shouting] one arguing it WORKS!
-[fast-paced, excited] Openings! Rebuttals! [intense] Every point lands a punch!
-[low, intense commentary] Ringside, twelve Claude judges score it blind... [quick] an accountant, a customer, a competitor...
-[dramatic] Tonight's challenger: quit nursing to sell candles. [pause] [shouting, ecstatic] OHHH, it's a KNOCKOUT!
-[calm, slower] And the referee hands you exactly what to fix... [knowing] before the rematch.
-[hyped] It's free! [booming] Comment FIGHT... [grinning] and I'll DM you the skill!
+[booming announcer voice] Ladies and gentlemen... two Claudes, one idea. [shouting] Only one leaves the ring!
+[wry] Claude alone agrees with everything.
+[hyped] Red corner: a Claude arguing it FAILS! [hyped] Blue corner: one arguing it WORKS!
+[fast-paced] Openings! Rebuttals! Every point lands!
+[intense] Twelve Claude judges score it blind.
+[dramatic] Tonight: quit nursing to sell candles... [shouting, ecstatic] KNOCKOUT!
+[calm] Then the referee tells you what to fix for the rematch.
+[hyped] Free! [booming] Comment FIGHT for the skill!
 ```
 
-Delivery: big ring-announcer energy on the hook and the corner intros, fast play-by-play through the rounds, a hushed
-build before the knockout call, then calm and warm on the payoff so the CTA lands. Settings: Eleven v3, Stability
-"Creative" so the shouts come through; generate 3–4 takes. If it runs past 35 s, cut "an accountant, a customer, a
-competitor" (the judges' props show it anyway).
+Delivery: big ring-announcer energy on the hook and corners, fast play-by-play through the rounds, one held beat
+before KNOCKOUT, calm on the payoff, punchy CTA. Eleven v3, Stability "Creative", 3–4 takes; any take still over
+35 s can be sped up 1.05–1.1x in the edit.
 
 ## Visual beats (3D voxel world, orange pixel mascot)
 
