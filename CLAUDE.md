@@ -57,7 +57,7 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 ```
 .claude/skills/       Claude Code skills
 brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-video § 4)
-website/              Our landing page: index.html plus vendor/ (GSAP), icons, og-image.png, robots.txt, sitemap.xml;
+website/              Our landing page: index.html plus fonts/, vendor/ (GSAP), icons, og-image.png, manifest, robots.txt, sitemap.xml;
                       deploy the whole folder to the domain root
 nxtlvl-social-audit/  SEO audit of website/index.html: FULL-AUDIT-REPORT.md, ACTION-PLAN.md, PDF, findings/
 motion-canvas/        Motion Canvas project (code-driven animation in TypeScript): npm install, npm start

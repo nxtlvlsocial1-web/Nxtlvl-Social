@@ -1,6 +1,6 @@
 # Nxtlvl Social: SEO Action Plan
 
-SEO Health Score: **72/100** (was 50). Phase 1 must be done before the page is shared publicly.
+SEO Health Score: **76/100** (was 50, then 72). Phase 1 must be done before the page is shared publicly.
 
 ## Done: fixes applied on 23 Oct 2026
 
@@ -21,6 +21,7 @@ SEO Health Score: **72/100** (was 50). Phase 1 must be done before the page is s
 
 - [ ] Replace the WhatsApp number (910000000000 / +91 00000 00000) and the email in index.html, then remove the placeholder note.
 - [ ] Confirm the domain; if it is not nxtlvlsocial.in, replace it in the head tags, JSON-LD, robots.txt and sitemap.xml.
+- [x] Self-hosted fonts, web manifest, robots meta, keyword-rich hero copy, 44 px tap targets, cached logo, llms.txt (round 2).
 - [ ] Deploy the whole website/ folder to the domain root over HTTPS with gzip or brotli.
 - [ ] Verify the domain in Google Search Console, submit sitemap.xml, and check the URL Inspection rendered screenshot.
 - [ ] Test the page with the Rich Results Test and validator.schema.org.

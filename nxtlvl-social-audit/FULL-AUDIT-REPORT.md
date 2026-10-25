@@ -4,7 +4,7 @@
 **Date:** 23 October 2026 (first audit, then re-checked the same day after fixes)  
 **Business type:** Agency (creative + automation studio for small businesses), with local service-area signals (India, on-site shoots)
 
-## SEO Health Score: 72/100 (was 50)
+## SEO Health Score: 76/100 (was 50, then 72)
 
 | Category | Weight | Before | After |
 |---|---|---|---|
@@ -32,6 +32,18 @@ The page now has the metadata, structured data, share card and crawl files it wa
 - Headline waits at most 1.5 s for the animation library; GSAP is self-hosted.
 - The savings odometer exposes its real value as text.
 - A space before each `<br>` inside headings.
+
+## Round 2 fixes (25 October 2026)
+
+- Fonts are served from the site (`website/fonts/`, Open Font License) and the two above-the-fold fonts are preloaded. There is no third-party request before first paint any more.
+- Lab LCP after this round (three runs, local server): desktop 0.95–1.17 s, desktop first visit with the intro 1.61–1.88 s (was 1.36–2.76 s), mobile 0.68–0.84 s. The headline letters now fly for 1.3 s instead of 1.7 s.
+- Web app manifest (`site.webmanifest`) and `robots` meta (`index, follow, max-image-preview:large`).
+- Hero copy now names the service: "Social media + automation studio" and "Social media design, reels, posting and the automation behind it".
+- Industry chips and footer links have a 44 px tap height: small tap targets down from 29 to 14 (desktop) and 38 to 24 (mobile).
+- The logo is one cached `logo.png` with width and height set, instead of two inline copies.
+- `llms.txt` added (listed for completeness; no ranking weight).
+
+Health score after this round: **76/100** (Technical 72, Performance 80, On-Page 80; other categories unchanged).
 
 ## Corrections to the first audit
 
