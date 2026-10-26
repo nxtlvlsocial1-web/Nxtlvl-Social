@@ -1,0 +1,639 @@
+[
+{
+"line": 1,
+"speaker": "creator",
+"w": "Three",
+"s": 0.12,
+"e": 0.98
+},
+{
+"line": 1,
+"speaker": "creator",
+"w": "AM\u2026",
+"s": 0.98,
+"e": 1.84
+},
+{
+"line": 1,
+"speaker": "creator",
+"w": "and",
+"s": 2.02,
+"e": 2.316
+},
+{
+"line": 1,
+"speaker": "creator",
+"w": "I'm",
+"s": 2.316,
+"e": 2.612
+},
+{
+"line": 1,
+"speaker": "creator",
+"w": "still",
+"s": 2.612,
+"e": 2.908
+},
+{
+"line": 1,
+"speaker": "creator",
+"w": "not",
+"s": 2.908,
+"e": 3.204
+},
+{
+"line": 1,
+"speaker": "creator",
+"w": "done.",
+"s": 3.204,
+"e": 3.5
+},
+{
+"line": 2,
+"speaker": "claude",
+"w": "I",
+"s": 3.553,
+"e": 3.741
+},
+{
+"line": 2,
+"speaker": "claude",
+"w": "can",
+"s": 3.741,
+"e": 3.93
+},
+{
+"line": 2,
+"speaker": "claude",
+"w": "run",
+"s": 3.93,
+"e": 4.118
+},
+{
+"line": 2,
+"speaker": "claude",
+"w": "your",
+"s": 4.118,
+"e": 4.306
+},
+{
+"line": 2,
+"speaker": "claude",
+"w": "whole",
+"s": 4.306,
+"e": 4.629
+},
+{
+"line": 2,
+"speaker": "claude",
+"w": "YouTube",
+"s": 4.629,
+"e": 4.952
+},
+{
+"line": 2,
+"speaker": "claude",
+"w": "channel",
+"s": 4.952,
+"e": 5.275
+},
+{
+"line": 2,
+"speaker": "claude",
+"w": "now\u2026",
+"s": 5.275,
+"e": 5.463
+},
+{
+"line": 2,
+"speaker": "claude",
+"w": "for",
+"s": 5.783,
+"e": 6.068
+},
+{
+"line": 2,
+"speaker": "claude",
+"w": "free.",
+"s": 6.068,
+"e": 6.353
+},
+{
+"line": 3,
+"speaker": "claude",
+"w": "Not",
+"s": 6.482,
+"e": 6.789
+},
+{
+"line": 3,
+"speaker": "claude",
+"w": "one",
+"s": 6.789,
+"e": 7.315
+},
+{
+"line": 3,
+"speaker": "claude",
+"w": "skill\u2026",
+"s": 7.315,
+"e": 7.622
+},
+{
+"line": 3,
+"speaker": "claude",
+"w": "eleven.",
+"s": 8.102,
+"e": 8.652
+},
+{
+"line": 4,
+"speaker": "claude",
+"w": "One",
+"s": 8.802,
+"e": 9.183
+},
+{
+"line": 4,
+"speaker": "claude",
+"w": "writes",
+"s": 9.183,
+"e": 9.563
+},
+{
+"line": 4,
+"speaker": "claude",
+"w": "your",
+"s": 9.563,
+"e": 9.786
+},
+{
+"line": 4,
+"speaker": "claude",
+"w": "scripts",
+"s": 9.786,
+"e": 10.008
+},
+{
+"line": 4,
+"speaker": "claude",
+"w": "with",
+"s": 10.008,
+"e": 10.23
+},
+{
+"line": 4,
+"speaker": "claude",
+"w": "twenty-one",
+"s": 10.23,
+"e": 10.611
+},
+{
+"line": 4,
+"speaker": "claude",
+"w": "hook",
+"s": 10.611,
+"e": 10.833
+},
+{
+"line": 4,
+"speaker": "claude",
+"w": "formulas.",
+"s": 10.833,
+"e": 11.372
+},
+{
+"line": 5,
+"speaker": "claude",
+"w": "One",
+"s": 11.477,
+"e": 11.88
+},
+{
+"line": 5,
+"speaker": "claude",
+"w": "tunes",
+"s": 11.88,
+"e": 12.282
+},
+{
+"line": 5,
+"speaker": "claude",
+"w": "your",
+"s": 12.282,
+"e": 12.517
+},
+{
+"line": 5,
+"speaker": "claude",
+"w": "titles",
+"s": 12.517,
+"e": 12.92
+},
+{
+"line": 5,
+"speaker": "claude",
+"w": "and",
+"s": 12.92,
+"e": 13.154
+},
+{
+"line": 5,
+"speaker": "claude",
+"w": "thumbnails.",
+"s": 13.154,
+"e": 13.557
+},
+{
+"line": 6,
+"speaker": "claude",
+"w": "One",
+"s": 13.651,
+"e": 14.039
+},
+{
+"line": 6,
+"speaker": "claude",
+"w": "finds",
+"s": 14.039,
+"e": 14.265
+},
+{
+"line": 6,
+"speaker": "claude",
+"w": "every",
+"s": 14.265,
+"e": 14.814
+},
+{
+"line": 6,
+"speaker": "claude",
+"w": "cut",
+"s": 14.814,
+"e": 15.041
+},
+{
+"line": 6,
+"speaker": "claude",
+"w": "your",
+"s": 15.041,
+"e": 15.267
+},
+{
+"line": 6,
+"speaker": "claude",
+"w": "edit",
+"s": 15.267,
+"e": 15.655
+},
+{
+"line": 6,
+"speaker": "claude",
+"w": "needs.",
+"s": 15.655,
+"e": 15.881
+},
+{
+"line": 7,
+"speaker": "claude",
+"w": "One",
+"s": 15.973,
+"e": 16.333
+},
+{
+"line": 7,
+"speaker": "claude",
+"w": "replies",
+"s": 16.333,
+"e": 16.693
+},
+{
+"line": 7,
+"speaker": "claude",
+"w": "to",
+"s": 16.693,
+"e": 16.903
+},
+{
+"line": 7,
+"speaker": "claude",
+"w": "your",
+"s": 16.903,
+"e": 17.113
+},
+{
+"line": 7,
+"speaker": "claude",
+"w": "comments.",
+"s": 17.113,
+"e": 17.473
+},
+{
+"line": 8,
+"speaker": "claude",
+"w": "And",
+"s": 17.721,
+"e": 17.997
+},
+{
+"line": 8,
+"speaker": "claude",
+"w": "one",
+"s": 17.997,
+"e": 18.47
+},
+{
+"line": 8,
+"speaker": "claude",
+"w": "plans",
+"s": 18.47,
+"e": 18.746
+},
+{
+"line": 8,
+"speaker": "claude",
+"w": "your",
+"s": 18.746,
+"e": 19.022
+},
+{
+"line": 8,
+"speaker": "claude",
+"w": "whole",
+"s": 19.022,
+"e": 19.495
+},
+{
+"line": 8,
+"speaker": "claude",
+"w": "week.",
+"s": 19.495,
+"e": 19.771
+},
+{
+"line": 9,
+"speaker": "claude",
+"w": "But",
+"s": 20.151,
+"e": 20.4
+},
+{
+"line": 9,
+"speaker": "claude",
+"w": "the",
+"s": 20.4,
+"e": 20.648
+},
+{
+"line": 9,
+"speaker": "claude",
+"w": "craziest",
+"s": 20.648,
+"e": 21.075
+},
+{
+"line": 9,
+"speaker": "claude",
+"w": "one?",
+"s": 21.075,
+"e": 21.501
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "Virality.",
+"s": 22.313,
+"e": 23.203
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "It",
+"s": 23.473,
+"e": 23.67
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "finds",
+"s": 23.67,
+"e": 23.868
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "what's",
+"s": 23.868,
+"e": 24.065
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "blowing",
+"s": 24.065,
+"e": 24.403
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "up",
+"s": 24.403,
+"e": 24.601
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "in",
+"s": 24.601,
+"e": 24.798
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "your",
+"s": 24.798,
+"e": 24.996
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "niche\u2026",
+"s": 24.996,
+"e": 25.193
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "then",
+"s": 25.393,
+"e": 25.55
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "writes",
+"s": 25.55,
+"e": 25.819
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "your",
+"s": 25.819,
+"e": 25.977
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "next",
+"s": 25.977,
+"e": 26.134
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "one,",
+"s": 26.134,
+"e": 26.403
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "in",
+"s": 26.583,
+"e": 26.91
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "your",
+"s": 26.91,
+"e": 27.236
+},
+{
+"line": 10,
+"speaker": "claude",
+"w": "voice.",
+"s": 27.236,
+"e": 27.563
+},
+{
+"line": 11,
+"speaker": "claude",
+"w": "No",
+"s": 27.762,
+"e": 28.031
+},
+{
+"line": 11,
+"speaker": "claude",
+"w": "more",
+"s": 28.031,
+"e": 28.3
+},
+{
+"line": 11,
+"speaker": "claude",
+"w": "guessing.",
+"s": 28.3,
+"e": 28.762
+},
+{
+"line": 11,
+"speaker": "claude",
+"w": "Setup?",
+"s": 29.042,
+"e": 29.442
+},
+{
+"line": 11,
+"speaker": "claude",
+"w": "Just",
+"s": 29.672,
+"e": 29.88
+},
+{
+"line": 11,
+"speaker": "claude",
+"w": "paste",
+"s": 29.88,
+"e": 30.088
+},
+{
+"line": 11,
+"speaker": "claude",
+"w": "one",
+"s": 30.088,
+"e": 30.444
+},
+{
+"line": 11,
+"speaker": "claude",
+"w": "link.",
+"s": 30.444,
+"e": 30.652
+},
+{
+"line": 12,
+"speaker": "claude",
+"w": "Comment",
+"s": 30.827,
+"e": 31.262
+},
+{
+"line": 12,
+"speaker": "claude",
+"w": "YOUTUBE,",
+"s": 31.262,
+"e": 31.697
+},
+{
+"line": 12,
+"speaker": "claude",
+"w": "and",
+"s": 31.897,
+"e": 32.117
+},
+{
+"line": 12,
+"speaker": "claude",
+"w": "I'll",
+"s": 32.117,
+"e": 32.337
+},
+{
+"line": 12,
+"speaker": "claude",
+"w": "DM",
+"s": 32.337,
+"e": 32.557
+},
+{
+"line": 12,
+"speaker": "claude",
+"w": "you",
+"s": 32.557,
+"e": 32.777
+},
+{
+"line": 12,
+"speaker": "claude",
+"w": "the",
+"s": 32.777,
+"e": 32.997
+},
+{
+"line": 12,
+"speaker": "claude",
+"w": "full",
+"s": 32.997,
+"e": 33.217
+},
+{
+"line": 12,
+"speaker": "claude",
+"w": "guide.",
+"s": 33.217,
+"e": 33.437
+}
+]
