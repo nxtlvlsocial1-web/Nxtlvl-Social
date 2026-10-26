@@ -1,19 +1,22 @@
-"""Expressive open-source voiceovers for the openGym x Claude reel. Run on a machine with a CUDA GPU.
+"""Expressive open-source voiceovers for the openGym x Claude reel.
 
-Engines (both open source, commercial use allowed):
-  dia         Nari Labs Dia-1.6B (Apache-2.0): dialogue TTS with real non-verbals, e.g. (sighs) (gasps) (laughs).
-              Default engine. Voices come from the seed; a chosen voice is kept with an audio prompt.
-  chatterbox  Resemble AI Chatterbox (MIT): zero-shot cloning from a reference clip, plus an `exaggeration`
-              knob for emotion intensity. Fallback, or for cloning a reference you supply.
+Made for a small GPU (the laptop's RTX 3050 has 4 GB of VRAM); everything also runs on the CPU, only slower.
 
-Steps (from the repo root):
-  pip install git+https://github.com/nari-labs/dia.git          # for dia
-  pip install chatterbox-tts                                     # for chatterbox
-  python opengym-claude-9x16/voice/make_voices.py design --seeds 3 7 11 19 23 31 42 58
-      -> voice/design/{nxt,human}_seed<N>.wav: one sample per seed per character. Listen, pick one per character.
-  python opengym-claude-9x16/voice/make_voices.py lines --nxt-seed 23 --human-seed 42 [--takes 3]
-      -> voice/lines/<nn>_<speaker>_t<k>.wav: every line, `takes` versions each, cloned from the picked voices.
-         --human-ref my_voice.wav (with --human-ref-text "...") clones a supplied clip instead (only with consent).
+Engines (all open source, commercial use allowed):
+  kokoro            hexgrad Kokoro-82M (Apache-2.0): small and fast, with natural American male voices
+                    (am_adam, am_echo, am_eric, am_fenrir, am_liam, am_michael, am_onyx, am_puck). Designs the two voices.
+  chatterbox        Resemble AI Chatterbox (MIT): clones a designed voice and acts each line, with an `exaggeration`
+                    knob for emotion intensity. Default for the lines.
+  chatterbox-turbo  Chatterbox Turbo (MIT), if the installed chatterbox-tts ships it: smaller and faster, and it reads
+                    sound tags such as [laugh] and [sigh]. Check the tag list in its model card before relying on it.
+  dia               Nari Labs Dia-1.6B (Apache-2.0): dialogue with real non-verbals, but it needs far more than 4 GB of
+                    VRAM. Only for a bigger GPU.
+
+Steps (from the repo root, inside the voice venv):
+  python opengym-claude-9x16/voice/make_voices.py design
+      -> voice/design/{nxt,human}_<voice>.wav, one sample per Kokoro voice. Listen and pick one per character.
+  python opengym-claude-9x16/voice/make_voices.py lines --nxt am_puck --human am_liam [--takes 3] [--device cpu]
+      -> voice/lines/<nn>_<speaker>_t<k>.wav: every line, `takes` versions each, acted in the picked voices.
   python opengym-claude-9x16/voice/make_voices.py assemble [--pick 03=2 07=1]
       -> assets/audio/voice_nxt.wav, voice_human.wav, voice.wav (both, timed) and voice/lines.json (start/end per line).
          By default take 1 of each line; --pick chooses another take for a line.
@@ -32,8 +35,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PROJ = os.path.dirname(HERE)
 SR = 48000
 
-# (speaker, Dia text with non-verbals, chatterbox exaggeration, chatterbox cfg_weight, gap after in seconds)
-# Lower cfg_weight = faster, looser pacing; higher exaggeration = more emotion.
+# (speaker, line with non-verbals in parentheses, chatterbox exaggeration, chatterbox cfg_weight, gap after in seconds)
+# Higher exaggeration = more emotion; lower cfg_weight = faster, looser pacing (keep it low when exaggeration is high).
 LINES = [
     ("human", "(sighs) Ugh... my gym app wants me to upgrade. Again.", .65, .35, .10),
     ("nxt", "Delete it. This one's free... forever. And Claude helped build it.", .75, .35, .08),
@@ -49,11 +52,12 @@ LINES = [
     ("nxt", "Comment GYM. I'll DM you the official links... and my Claude prompt.", .70, .35, .00),
 ]
 
-# Short reference lines used to design each voice (5-10 s of speech in character).
+# Reference lines used to design each voice (about 8 s of speech in character; Chatterbox clones from these).
 DESIGN = {
-    "nxt": "Relax, I've got this. Your whole week, planned in seconds. Trust me, legs day is coming for you.",
+    "nxt": "Relax, I've got this. Your whole week, planned in seconds. Trust me, leg day is coming for you.",
     "human": "Bro, I'm so tired of these apps. Every week it's upgrade this, premium that. I just want to lift, man.",
 }
+KOKORO_VOICES = ["am_adam", "am_echo", "am_eric", "am_fenrir", "am_liam", "am_michael", "am_onyx", "am_puck"]
 ROBOT_FX = "highpass=f=90,chorus=0.7:0.9:22|34:0.22|0.18:0.30|0.24:1.6|2.1,aecho=0.85:0.5:8:0.12"
 
 
@@ -63,11 +67,20 @@ def seed_all(s):
     random.seed(s)
     np.random.seed(s)
     torch.manual_seed(s)
-    torch.cuda.manual_seed_all(s)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(s)
+
+
+def device(a):
+    import torch
+    return a.device or ("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def ffmpeg(*args):
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", *args], check=True)
+
+
+DIA_ARGS = dict(use_torch_compile=False, verbose=False, cfg_scale=3.0, temperature=1.8, top_p=0.90, cfg_filter_top_k=50)
 
 
 def dia_model():
@@ -75,35 +88,50 @@ def dia_model():
     return Dia.from_pretrained("nari-labs/Dia-1.6B-0626", compute_dtype="float16")
 
 
-DIA_ARGS = dict(use_torch_compile=False, verbose=False, cfg_scale=3.0, temperature=1.8, top_p=0.90, cfg_filter_top_k=50)
-
-
 def design(a):
-    os.makedirs(os.path.join(HERE, "design"), exist_ok=True)
-    m = dia_model()
-    for who, text in DESIGN.items():
+    import numpy as np
+    import soundfile as sf
+    out = os.path.join(HERE, "design")
+    os.makedirs(out, exist_ok=True)
+    if a.engine == "kokoro":
+        from kokoro import KPipeline
+        pipe = KPipeline(lang_code="a", device=device(a))          # "a" = American English
+        for v in a.voices:
+            for who, text in DESIGN.items():
+                audio = np.concatenate([np.asarray(chunk) for _, _, chunk in pipe(text, voice=v, speed=1.0)])
+                p = os.path.join(out, f"{who}_{v}.wav")
+                sf.write(p, audio, 24000)
+                print("wrote", p)
+    else:
+        m = dia_model()
         for s in a.seeds:
-            seed_all(s)
-            out = m.generate(f"[S1] {text}", **DIA_ARGS)
-            p = os.path.join(HERE, "design", f"{who}_seed{s}.wav")
-            m.save_audio(p, out)
-            print("wrote", p)
+            for who, text in DESIGN.items():
+                seed_all(s)
+                p = os.path.join(out, f"{who}_seed{s}.wav")
+                m.save_audio(p, m.generate(f"[S1] {text}", **DIA_ARGS))
+                print("wrote", p)
 
 
 def ref_for(a, who):
-    """The clip and its transcript that every line of this character is cloned from."""
+    """The clip (and its transcript, for Dia) that every line of this character is cloned from."""
     ext = getattr(a, f"{who}_ref")
     if ext:
         return ext, getattr(a, f"{who}_ref_text")
-    s = getattr(a, f"{who}_seed")
-    if s is None:
-        raise SystemExit(f"pick a voice: --{who}-seed N (from design/) or --{who}-ref clip.wav")
-    return os.path.join(HERE, "design", f"{who}_seed{s}.wav"), DESIGN[who]
+    pick = getattr(a, who)
+    if not pick:
+        raise SystemExit(f"pick a voice: --{who} <name from voice/design, e.g. am_puck or seed23> or --{who}-ref clip.wav")
+    p = os.path.join(HERE, "design", f"{who}_{pick}.wav")
+    if not os.path.exists(p):
+        raise SystemExit(f"missing {p}: run design first")
+    return p, DESIGN[who]
 
 
-def chatterbox_text(t):
-    """Chatterbox reads non-verbals aloud, so turn them into speakable sounds."""
-    t = t.replace("(laughs)", "Haha,").replace("(sighs)", "Hhh...").replace("(gasps)", "Oh!")
+def speakable(t, turbo=False):
+    """Chatterbox reads non-verbals aloud, so turn them into sounds (Turbo: into its sound tags)."""
+    if turbo:
+        t = t.replace("(laughs)", "[laugh]").replace("(sighs)", "[sigh]").replace("(gasps)", "[gasp]")
+    else:
+        t = t.replace("(laughs)", "Haha,").replace("(sighs)", "Hhh...").replace("(gasps)", "Oh!")
     return re.sub(r"\([^)]*\)", "", t).strip()
 
 
@@ -111,23 +139,35 @@ def lines(a):
     out_dir = os.path.join(HERE, "lines")
     os.makedirs(out_dir, exist_ok=True)
     refs = {w: ref_for(a, w) for w in ("nxt", "human")}
+    dev = device(a)
     if a.engine == "dia":
         m = dia_model()
+    elif a.engine == "chatterbox-turbo":
+        try:
+            from chatterbox.tts_turbo import ChatterboxTurboTTS
+        except ImportError:
+            raise SystemExit("this chatterbox-tts has no Turbo model; upgrade it (pip install -U chatterbox-tts) "
+                             "or use --engine chatterbox")
+        m = ChatterboxTurboTTS.from_pretrained(device=dev)
     else:
-        import torchaudio
         from chatterbox.tts import ChatterboxTTS
-        m = ChatterboxTTS.from_pretrained(device="cuda")
+        m = ChatterboxTTS.from_pretrained(device=dev)
+    if a.engine != "dia":
+        import torchaudio
     for i, (who, text, ex, cfg, _) in enumerate(LINES, 1):
+        if a.only and i not in a.only:
+            continue
         ref_wav, ref_text = refs[who]
         for k in range(1, a.takes + 1):
             seed_all(1000 * i + k)
             p = os.path.join(out_dir, f"{i:02d}_{who}_t{k}.wav")
             if a.engine == "dia":
                 # clone: the prompt transcript, then the new line, both as the same speaker [S1]
-                out = m.generate(f"[S1] {ref_text} [S1] {text}", audio_prompt=ref_wav, **DIA_ARGS)
-                m.save_audio(p, out)
+                m.save_audio(p, m.generate(f"[S1] {ref_text} [S1] {text}", audio_prompt=ref_wav, **DIA_ARGS))
+            elif a.engine == "chatterbox-turbo":
+                torchaudio.save(p, m.generate(speakable(text, True), audio_prompt_path=ref_wav), m.sr)
             else:
-                wav = m.generate(chatterbox_text(text), audio_prompt_path=ref_wav, exaggeration=ex, cfg_weight=cfg)
+                wav = m.generate(speakable(text), audio_prompt_path=ref_wav, exaggeration=ex, cfg_weight=cfg)
                 torchaudio.save(p, wav, m.sr)
             print("wrote", p)
 
@@ -150,10 +190,10 @@ def assemble(a):
         k = picks.get(f"{i:02d}", "1")
         src = os.path.join(HERE, "lines", f"{i:02d}_{who}_t{k}.wav")
         dst = os.path.join(tmp, f"{i:02d}.wav")
-        fx = ("" if who != "nxt" or a.no_robot else ROBOT_FX + ",")
+        fx = "" if who != "nxt" or a.no_robot else ROBOT_FX + ","
         # trim leading/trailing silence, colour NXT, match loudness, 48 kHz mono
-        ffmpeg("-i", src, "-af", f"silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.02,"
-               f"areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.06,areverse,"
+        ffmpeg("-i", src, "-af", "silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.02,"
+               "areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.06,areverse,"
                f"{fx}loudnorm=I=-16:TP=-1.5:LRA=11", "-ar", str(SR), "-ac", "1", dst)
         d = duration(dst)
         tracks[who].append((t, dst))
@@ -182,14 +222,19 @@ def main():
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
     d = sub.add_parser("design")
+    d.add_argument("--engine", choices=["kokoro", "dia"], default="kokoro")
+    d.add_argument("--voices", nargs="+", default=KOKORO_VOICES)
     d.add_argument("--seeds", type=int, nargs="+", default=[3, 7, 11, 19, 23, 31, 42, 58])
+    d.add_argument("--device")
     ln = sub.add_parser("lines")
-    ln.add_argument("--engine", choices=["dia", "chatterbox"], default="dia")
+    ln.add_argument("--engine", choices=["chatterbox", "chatterbox-turbo", "dia"], default="chatterbox")
     ln.add_argument("--takes", type=int, default=3)
+    ln.add_argument("--only", type=int, nargs="*", help="regenerate just these line numbers")
+    ln.add_argument("--device", help="cuda or cpu (default: cuda if available)")
     for who in ("nxt", "human"):
-        ln.add_argument(f"--{who}-seed", type=int)
-        ln.add_argument(f"--{who}-ref")
-        ln.add_argument(f"--{who}-ref-text")
+        ln.add_argument(f"--{who}", help="voice picked from voice/design, e.g. am_puck")
+        ln.add_argument(f"--{who}-ref", help="or any reference clip to clone (only with the speaker's consent)")
+        ln.add_argument(f"--{who}-ref-text", help="its transcript (Dia only)")
     asm = sub.add_parser("assemble")
     asm.add_argument("--pick", nargs="*", default=[])
     asm.add_argument("--no-robot", action="store_true")
