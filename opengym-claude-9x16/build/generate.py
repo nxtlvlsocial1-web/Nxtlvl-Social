@@ -184,6 +184,8 @@ def endcard_tl():
 
 
 # ---------------------------------------------------------------- captions: 2-3 words at a time, the spoken word lit
+# One fixed place, the lower third (y 1330, above the platform UI), on a dark glass box so no 3D background can wash them
+# out; Montserrat ExtraBold; the spoken word sits on a violet pill. The speaker dot says who talks (grey human, violet NXT).
 def captions():
     html = []
     for ln in LINES:
@@ -199,14 +201,14 @@ def captions():
         for ci, ch in enumerate(chunks):
             cid = f"c{ln['line']}_{ci}"
             spans = "".join(f'<span class="w" id="{cid}_{k}">{w["w"]}</span> ' for k, w in enumerate(ch))
-            html.append(f'<div class="cap {ln["speaker"]}" id="{cid}"><i class="dot"></i>{spans.strip()}</div>')
+            html.append(f'<div class="cap {ln["speaker"]}" id="{cid}"><span class="box"><i class="dot"></i>{spans.strip()}</span></div>')
             a = ch[0]["s"] - .05
             z = chunks[ci + 1][0]["s"] - .05 if ci + 1 < len(chunks) else min(ln["end"] + .35, nxt_line - .06)
-            add(f'tl.fromTo("#{cid}",{{opacity:0,y:14}},{{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false}},{a:.3f});')
+            add(f'tl.fromTo("#{cid}",{{opacity:0,y:18,scale:.94}},{{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false}},{a:.3f});')
             add(f'tl.set("#{cid}",{{opacity:0}},{z:.3f});')
             for k, w in enumerate(ch):
-                add(f'tl.set("#{cid}_{k}",{{color:"#ffffff",backgroundSize:"100% 6px"}},{w["s"]:.3f});')
-                add(f'tl.set("#{cid}_{k}",{{color:"#FFE7A8",backgroundSize:"0% 6px"}},{w["e"] + .02:.3f});')
+                add(f'tl.set("#{cid}_{k}",{{backgroundColor:"#7B2FFB",color:"#ffffff"}},{w["s"]:.3f});')
+                add(f'tl.set("#{cid}_{k}",{{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"}},{w["e"] + .02:.3f});')
     return "".join(html)
 
 
@@ -233,6 +235,7 @@ CSS = """
 @font-face { font-family: "Poppins"; font-weight: 700; src: url("assets/fonts/poppins-700.woff2"); }
 @font-face { font-family: "Poppins"; font-weight: 800; src: url("assets/fonts/poppins-800.woff2"); }
 @font-face { font-family: "Lora"; font-style: italic; font-weight: 400 700; src: url("assets/fonts/lora-italic.ttf"); }
+@font-face { font-family: "Montserrat"; font-weight: 100 900; src: url("assets/fonts/montserrat.ttf"); }
 @font-face { font-family: "JBMono"; font-weight: 700; src: url("assets/fonts/jbmono-bold.ttf"); }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050d; }
@@ -289,12 +292,12 @@ body { font-family: "Poppins", sans-serif; color: #f4f1fa; }
   display: flex; align-items: center; justify-content: center; font: 800 38px "Poppins"; box-shadow: 0 10px 34px rgba(255,68,88,.5); }
 .repo-h { font-size: 30px; color: #a98bff; letter-spacing: 0; }
 .repo-h b { color: #fff; }
-.repo-t { font: 800 96px "Poppins"; letter-spacing: -3px; margin-top: 14px; color: #fff; }
+.repo-t { font: 800 84px/1.05 "Poppins"; letter-spacing: -3px; margin-top: 8px; color: #fff; }
 .repo-d { font: 600 36px "Poppins"; color: #d9ccff; }
-.repo-row { display: flex; gap: 16px; margin-top: 22px; }
-.quote { position: absolute; left: 44px; right: 44px; bottom: 40px; padding: 22px 28px; border-radius: 24px; background: rgba(7,5,13,.45);
-  border-left: 6px solid #3fd69b; font: italic 500 36px/1.3 "Lora"; color: #f4f1fa; opacity: 0; }
-.quote span { display: block; margin-top: 8px; font-size: 28px; letter-spacing: 3px; color: #a98bff; font-style: normal; }
+.repo-row { display: flex; gap: 16px; margin-top: 16px; }
+.quote { position: absolute; left: 44px; right: 44px; bottom: 26px; padding: 16px 26px; border-radius: 24px; background: rgba(7,5,13,.45);
+  border-left: 6px solid #3fd69b; font: italic 500 32px/1.28 "Lora"; color: #f4f1fa; opacity: 0; }
+.quote span { display: block; margin-top: 4px; font-size: 26px; letter-spacing: 3px; color: #a98bff; font-style: normal; }
 .crow { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .clab { font-size: 28px; letter-spacing: 2px; color: #a98bff; }
 .cdesc { margin-top: 16px; font: italic 500 34px/1.25 "Lora"; color: #d9ccff; }
@@ -304,7 +307,7 @@ body { font-family: "Poppins", sans-serif; color: #f4f1fa; }
 .mm { position: absolute; left: 60px; display: flex; align-items: center; gap: 16px; padding: 12px 30px 12px 22px; border-radius: 40px;
   background: rgba(7,5,13,.78); border: 3px solid var(--c); color: var(--c); font: 800 44px "Poppins"; box-shadow: 0 10px 34px rgba(0,0,0,.4); }
 .mm i { width: 22px; height: 22px; border-radius: 50%; background: var(--c); box-shadow: 0 0 16px var(--c); }
-.mm0 { --c: #3fd69b; top: 1150px; } .mm1 { --c: #ffc24a; top: 1250px; } .mm2 { --c: #ff6b6b; top: 1350px; }
+.mm0 { --c: #3fd69b; top: 990px; } .mm1 { --c: #ffc24a; top: 1085px; } .mm2 { --c: #ff6b6b; top: 1180px; }
 .goalbox { margin-top: 12px; min-height: 92px; border-radius: 24px; border: 2px dashed rgba(169,139,255,.5); padding: 14px; display: flex; gap: 14px; }
 .gchip { padding: 12px 24px; border-radius: 30px; background: rgba(63,214,155,.16); border: 2px solid #3fd69b; color: #fff; font: 700 32px "Poppins"; opacity: 0; }
 .cbtn { margin-top: 22px; height: 84px; border-radius: 42px; background: linear-gradient(90deg, #7b2ffb, #a98bff); display: flex; align-items: center;
@@ -332,11 +335,13 @@ body { font-family: "Poppins", sans-serif; color: #f4f1fa; }
   background: #3fd69b; color: #07050d; opacity: 0; box-shadow: 0 10px 34px rgba(63,214,155,.45); }
 .next span { font: 700 28px "Poppins"; } .next b { font: 800 38px "Poppins"; } .next i { font: 800 30px "Poppins"; font-style: normal; }
 #caps { z-index: 6; }
-.cap { position: absolute; left: 60px; right: 60px; top: 972px; text-align: center; font: italic 500 64px/1.2 "Lora"; color: #FFE7A8;
-  text-shadow: 0 2px 10px rgba(7,5,13,.55); opacity: 0; }
-.cap .w { background-image: linear-gradient(#7b2ffb, #7b2ffb); background-repeat: no-repeat; background-position: 0 92%; background-size: 0% 6px; padding: 0 2px; }
-.cap .dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; margin-right: 16px; vertical-align: 12px; background: #9a98a6; }
-.cap.nxt .dot { background: #7b2ffb; box-shadow: 0 0 14px #a98bff; }
+.cap { position: absolute; left: 50px; right: 50px; top: 1330px; text-align: center; opacity: 0; }
+.cap .box { display: inline-block; max-width: 980px; padding: 14px 22px 16px; border-radius: 28px; background: rgba(10,6,20,.84);
+  border: 1px solid rgba(169,139,255,.3);
+  box-shadow: 0 14px 40px rgba(0,0,0,.45); font: 800 60px/1.15 "Montserrat"; letter-spacing: -.5px; color: #EDE8F7; }
+.cap .w { display: inline-block; padding: 2px 12px 4px; border-radius: 16px; }
+.cap .dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; margin: 0 6px 0 4px; vertical-align: 10px; background: #9a98a6; }
+.cap.nxt .dot { background: #a98bff; box-shadow: 0 0 14px #a98bff; }
 #endc { position: absolute; left: 60px; right: 60px; top: 330px; padding: 44px 40px 40px; border-radius: 40px; text-align: center;
   background: linear-gradient(160deg, rgba(42,22,82,.8), rgba(14,8,30,.85)); border: 2px solid rgba(169,139,255,.45);
   -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: 0 30px 80px rgba(0,0,0,.5); opacity: 0; }

@@ -706,7 +706,7 @@ let keyCard, orb, orbGlow, cal, approvedStamp, plateG, plateLbl, cable;
 function buildSlot() {
   // "subscription / ads / account" chips with the red X
   ["SUBSCRIPTION", "ADS", "ACCOUNT"].forEach((s, i) => {
-    const c = textCard(.86, .2, chipTex(s, "#d9ccff", "rgba(123,47,251,.55)")); c.position.set(0, .26 - i * .25, 0); slot.add(c); chips3.push(c);
+    const c = textCard(.86, .2, chipTex(s, "#d9ccff", "rgba(123,47,251,.55)")); c.position.set(0, .56 - i * .2, 0); slot.add(c); chips3.push(c);
     const x = new THREE.Mesh(new THREE.PlaneGeometry(.26, .26), holoBase(xTex, 1.6)); x.position.set(.3, 0, .03); c.add(x); xs3.push(x);
   });
   // key card + orb + cable
@@ -716,7 +716,7 @@ function buildSlot() {
   orb.add(orbGlow);
   // goal chips
   [["4 DAYS", "🗓"], ["DUMBBELLS", "🏋"], ["BUILD MUSCLE", "💪"]].forEach(([s], i) => {
-    const c = textCard(.8, .19, chipTex(s, "#f4f1fa", "rgba(63,214,155,.0)", "#3fd69b")); c.position.set(0, .25 - i * .24, 0); slot.add(c); goals.push(c);
+    const c = textCard(.8, .19, chipTex(s, "#f4f1fa", "rgba(63,214,155,.0)", "#3fd69b")); c.position.set(0, .55 - i * .2, 0); slot.add(c); goals.push(c);
   });
   // week calendar with four routine cards
   cal = new THREE.Group(); slot.add(cal);
@@ -747,7 +747,7 @@ function animSlot(t) {
     show(c, t, a, z + 1);
     const hit = T.x[i];
     const fall = Math.max(0, t - hit - .25);
-    c.position.y = .26 - i * .25 - fall * fall * 3.2;
+    c.position.y = .56 - i * .2 - fall * fall * 3.2;
     c.rotation.z = fall * (i - 1 + .5) * 1.4;
     c.visible = c.visible && t < z;
     const xk = backOut(win(t, hit, hit + .14), 3);
