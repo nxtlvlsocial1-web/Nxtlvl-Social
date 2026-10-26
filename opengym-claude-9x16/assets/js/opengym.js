@@ -564,6 +564,13 @@ function animNxt(t) {
 // ---------------------------------------------------------------- FX: dust ring, shards, puff, sparkles
 const shockwave = new THREE.Mesh(new THREE.RingGeometry(.9, 1, 64), glow(LVIOLET, 3, { transparent: true, depthWrite: false, side: THREE.DoubleSide }));
 shockwave.rotation.x = -Math.PI / 2; scene.add(shockwave);
+// incoming: a violet beam and a target ring on the floor build up before NXT slams down (anticipation in the hook)
+const beam = new THREE.Mesh(new THREE.CylinderGeometry(.34, .62, 6, 32, 1, true),
+  new THREE.MeshBasicMaterial({ color: new THREE.Color(LVIOLET).multiplyScalar(1.6), transparent: true, opacity: 0, depthWrite: false,
+    blending: THREE.AdditiveBlending, side: THREE.DoubleSide, toneMapped: false }));
+scene.add(beam);
+const target = new THREE.Mesh(new THREE.RingGeometry(.5, .56, 64), glow(LVIOLET, 3, { transparent: true, depthWrite: false, side: THREE.DoubleSide }));
+target.rotation.x = -Math.PI / 2; scene.add(target);
 const DUST = 46;
 const dust = new THREE.InstancedMesh(new THREE.SphereGeometry(.05, 8, 6), std(0x6a5a86, { roughness: 1, transparent: true, opacity: .55 }), DUST);
 scene.add(dust);
@@ -583,6 +590,10 @@ function setInst(im, i, x, y, z, s, rx = 0, ry = 0, rz = 0) {
 }
 function animFx(t) {
   const land = L[1] - .12;
+  const inc = easeIn(win(t, land - 1.1, land - .05)) * (1 - win(t, land, land + .25));
+  beam.visible = target.visible = inc > .01;
+  beam.position.set(NX.x, 3 + .05, NX.z); beam.material.opacity = inc * (.32 + Math.sin(t * 40) * .05);
+  target.position.set(NX.x, .015, NX.z); target.scale.setScalar(1.6 - inc * .9); target.material.opacity = inc;
   const k = win(t, land, land + .6);
   shockwave.visible = k > 0 && k < 1;
   shockwave.position.set(NX.x, .02, NX.z); shockwave.scale.setScalar(.2 + easeOut(k) * 2.4); shockwave.material.opacity = (1 - k) * .9;
@@ -649,7 +660,7 @@ function animCard(t) {
   p.lerp(CARD_HIT, drift);
   card.position.copy(p).add(V(0, Math.sin(t * 2.4) * .025, 0));
   card.rotation.set(-.08 + Math.sin(t * 1.7) * .05, .35 - drift * .7 + Math.sin(t * 1.3) * .06, Math.sin(t * 2.1) * .04 + pulse(t, 1.1, .03, .25) * .06);
-  card.scale.setScalar(Math.max(.01, burst * .62));
+  card.scale.setScalar(Math.max(.01, burst * .8));
   locks.forEach((lk, i) => {
     const a = t * 2.2 + i * Math.PI * 2 / 3;
     lk.position.set(Math.cos(a) * .62, Math.sin(a) * .42, .1 + Math.sin(a * 2) * .05);
@@ -938,8 +949,7 @@ function drawTextures() {
 const SHIFT = .2;
 function panelUp(t) {
   const fold = (a, b) => easeIO(win(t, a, b));
-  if (t < L[1]) return 1;
-  if (t < L[3]) return 1 - fold(L[1] - .05, L[1] + .3);
+  if (t < L[3]) return 0;                       // the hook and the gasp are full-bleed 3D (no panel)
   if (t < L[8]) return fold(L[3], L[3] + .35);
   if (t < T.gym) return 1 - fold(L[8] - .05, L[8] + .3);
   return .85;
@@ -948,7 +958,8 @@ function shot(t) {
   const d = (a, b, k) => a.map((x, i) => lerp(x, b[i], k));
   if (t < L[1] - .2) {
     const k = easeIO(win(t, 0, L[1]));
-    return [d([-.15, 1.42, 4.8], [-.3, 1.36, 4.2], k), [-.55, 1.12, .4], 36];
+    const pan = easeIO(win(t, L[1] - 1.25, L[1] - .25));   // swing toward the beam where NXT is about to land
+    return [d(d([-.15, 1.42, 4.8], [-.3, 1.36, 4.2], k), [.1, 1.5, 5.0], pan), d([-.55, 1.12, .4], [.35, 1.3, .4], pan), 36 + pan * 6];
   }
   if (t < T.free + .25) {                       // HERO: the slam and the power-up, wide and low
     const k = easeOut(win(t, L[1] - .2, T.free + .25));
@@ -962,7 +973,7 @@ function shot(t) {
   if (t < L[3]) {                               // whip-pan punch-in on the human
     const k = easeOut(win(t, L[2], L[3]));
     const whip = (1 - easeOut(win(t, L[2], L[2] + .16))) * 1.6;
-    return [d([-.3, 1.45, 3.0], [-.36, 1.45, 2.7], k), [-.86 + whip, 1.74, .4], 30];
+    return [d([-.3, 1.62, 4.6], [-.36, 1.6, 4.25], k), [-.78 + whip, 1.72, .4], 32];
   }
   if (t < L[8]) {                               // two-shot under the panel, a new angle per line
     const bases = { 3: [[.25, 1.55, 6.6], [.1, 1.2, .3]], 4: [[.55, 1.5, 6.3], [.15, 1.2, .3]], 5: [[-.25, 1.45, 5.9], [-.1, 1.2, .3]],

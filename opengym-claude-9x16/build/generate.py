@@ -97,16 +97,25 @@ def screens():
     return "".join(h)
 
 
+TOASTS = ('<div class="toast t1"><div class="ticon"><span class="tlock">🔒</span></div><div class="tbody"><div class="thead"><b>FitPro</b><span>now</span></div>'
+          '<div class="ttext">Your free trial has ended. Upgrade to Pro to keep your workouts.</div></div></div>'
+          '<div class="toast t2"><div class="ticon"><span>%</span></div><div class="tbody"><div class="thead"><b>FitPro</b><span>now</span></div>'
+          '<div class="ttext">Progress charts are locked. Unlock them with Pro.</div></div></div>')
+
+
 def screens_tl():
-    # panel folds: up at 0, folds into 3D at line 2, back at line 4, away at line 9
-    # the panel is up from the first frame (CSS); the hook's paywall is already on it
-    add(f'tl.to("#panel",{{rotationX:-75,opacity:0,y:-80,scale:.9,duration:.32,ease:"power3.in"}},{L[1] - .05:.3f});')
+    # panel: hidden through the hook (two paywall notifications and the 3D card carry it), up with the repo card at
+    # line 4, folds away at line 9
     add(f'tl.fromTo("#panel",{{rotationX:70,opacity:0,y:60,scale:.9}},{{rotationX:0,opacity:1,y:0,scale:1,duration:.38,ease:"back.out(1.6)",immediateRender:false}},{L[3]:.3f});')
     add(f'tl.to("#panel",{{rotationX:-75,opacity:0,y:-80,scale:.9,duration:.32,ease:"power3.in"}},{L[8] - .05:.3f});')
     # initial states live in the CSS: a set at t=0 is reverted when the renderer seeks back to 0 and not replayed
-    add('tl.fromTo("#s-pay",{x:0},{x:9,duration:.035,yoyo:true,repeat:9,immediateRender:false},0.05);')
-    add('tl.fromTo("#s-pay",{x:0},{x:9,duration:.035,yoyo:true,repeat:7,immediateRender:false},1.10);')
-    add('tl.fromTo(".paylock",{rotation:0},{rotation:14,duration:.05,yoyo:true,repeat:11,immediateRender:false},0.05);')
+    # hook: the paywall arrives as phone notifications, buzzing with the phone (0.0 and 1.1 s), swiped away on "Delete it"
+    add('tl.fromTo(".t1",{x:0},{x:10,duration:.035,yoyo:true,repeat:9,immediateRender:false},0.05);')
+    pop(".t2", 1.1, "y:-60,opacity:0,scale:.92", .35, "back.out(1.8)")
+    add('tl.fromTo(".t2",{x:0},{x:10,duration:.035,yoyo:true,repeat:7,immediateRender:false},1.45);')
+    add('tl.fromTo(".tlock",{rotation:0},{rotation:16,duration:.05,yoyo:true,repeat:11,immediateRender:false},0.05);')
+    add(f'tl.to(".t1",{{x:-1150,rotation:-6,duration:.32,ease:"power3.in"}},{L[1] + .02:.3f});')
+    add(f'tl.to(".t2",{{x:-1150,rotation:-6,duration:.32,ease:"power3.in"}},{L[1] + .1:.3f});')
     setv("#s-pay", L[1] + .3, "opacity:0")
     # repo
     setv("#s-repo", L[3] + .01, "opacity:1")
@@ -151,19 +160,27 @@ def screens_tl():
 
 # ---------------------------------------------------------------- end card
 def endcard():
-    return ('<div id="endc"><div class="ec-1">Comment</div><div class="ec-gym">GYM</div><div class="ec-2">for the links + my Claude prompt</div>'
-            '<div class="ec-3">Send this to your gym buddy who still pays for an app</div><div class="ec-h mono">✦ @ai.nxtlvl</div></div>')
+    return ('<div id="endc"><div class="ec-1">Comment</div><div class="ec-gym"><span class="ty ty0">G</span><span class="ty ty1">Y</span>'
+            '<span class="ty ty2">M</span><i class="cur"></i></div><div class="ec-2">for the links + my Claude prompt</div>'
+            '<div class="ec-3">Send this to your gym buddy who still pays for an app</div><div class="ec-h mono">✦ @ai.nxtlvl</div></div>'
+            '<div id="dm"><div class="dmav">✦</div><div class="tbody"><div class="thead"><b>ai.nxtlvl</b><span>now</span></div>'
+            '<div class="ttext">Sent you the openGym links + the Claude prompt</div></div><div class="dmok">✓</div></div>')
 
 
 def endcard_tl():
     a = T["gym"] - .05
     pop("#endc", a - .1, "opacity:0,scale:.9,y:40", .35, "back.out(1.8)")
     pop(".ec-1", a - .05, "y:20,opacity:0", .25)
-    pop(".ec-gym", a, "scale:2.2,opacity:0,rotation:-8", .35, "back.out(2.6)")
+    pop(".ec-gym", a - .02, "scale:.6,opacity:0", .3, "back.out(2.2)")
+    for i in range(3):                                    # typed in, letter by letter
+        pop(f".ty{i}", a + .12 + i * .13, "opacity:0,y:-30,scale:1.4", .16, "back.out(3)")
+    add(f'tl.fromTo(".cur",{{opacity:1}},{{opacity:0,duration:.22,yoyo:true,repeat:{int((DUR - a) / .44)},ease:"steps(1)",immediateRender:false}},{a:.3f});')
     pop(".ec-2", a + .3, "y:20,opacity:0", .3)
     pop(".ec-3", a + .7, "y:20,opacity:0", .35)
     pop(".ec-h", a + 1.0, "y:20,opacity:0", .3)
-    add(f'tl.to(".ec-gym",{{scale:1.08,duration:.18,yoyo:true,repeat:3,ease:"sine.inOut"}},{VOICE_END + .2:.3f});')
+    add(f'tl.to(".ec-gym",{{scale:.94,duration:.09,yoyo:true,repeat:1,ease:"power2.out"}},{VOICE_END - .05:.3f});')   # sent
+    pop("#dm", VOICE_END + .1, "y:60,opacity:0,scale:.9", .38, "back.out(2)")
+    pop(".dmok", VOICE_END + .45, "scale:0,opacity:0", .3, "back.out(3)")
 
 
 # ---------------------------------------------------------------- captions: 2-3 words at a time, the spoken word lit
@@ -239,7 +256,24 @@ body { font-family: "Poppins", sans-serif; color: #f4f1fa; }
 /* everything that pops in later starts hidden here, never through a set at t=0 */
 .repo-t, .repo-row, .cp1, .cp2, .cdesc, .goal-l, .goalbox, .ec-1, .ec-gym, .ec-2, .ec-3, .ec-h, .mm { opacity: 0; }
 .scr { position: absolute; inset: 0; padding: 34px 44px; opacity: 0; }
-#s-pay { opacity: 1; }
+#panel { opacity: 0; }
+.toast, #dm { position: absolute; left: 60px; right: 60px; min-height: 136px; border-radius: 36px; display: flex; align-items: center; gap: 24px;
+  padding: 20px 30px; background: rgba(28,22,40,.88); border: 1px solid rgba(255,255,255,.14); -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px); box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+.t1 { top: 330px; } .t2 { top: 490px; opacity: 0; }
+.ticon, .dmav { flex: none; width: 84px; height: 84px; border-radius: 22px; background: linear-gradient(160deg, #ff5a6a, #c0142d);
+  display: flex; align-items: center; justify-content: center; font: 800 44px "Poppins"; color: #fff; }
+.tbody { flex: 1; min-width: 0; }
+.thead { display: flex; align-items: baseline; justify-content: space-between; }
+.thead b { font: 700 32px "Poppins"; color: #fff; }
+.thead span { font: 600 26px "Poppins"; color: rgba(244,241,250,.55); }
+.ttext { font: 600 30px/1.3 "Poppins"; color: #e4dcf5; margin-top: 4px; }
+#dm { top: 1130px; opacity: 0; }
+.dmav { border-radius: 50%; background: linear-gradient(160deg, #a98bff, #7b2ffb); font-size: 40px; }
+.dmok { flex: none; width: 56px; height: 56px; border-radius: 50%; background: #3fd69b; color: #07050d; display: flex; align-items: center;
+  justify-content: center; font: 800 32px "Poppins"; opacity: 0; }
+.ty { display: inline-block; opacity: 0; }
+.cur { display: inline-block; width: 10px; height: 118px; margin-left: 10px; vertical-align: -10px; border-radius: 5px; background: #fff; }
 .appbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
 .appname { font: 800 40px "Poppins"; letter-spacing: -1px; }
 .pill { display: inline-block; padding: 6px 18px; border-radius: 20px; font: 700 28px "JBMono"; letter-spacing: 1px; }
@@ -345,7 +379,7 @@ def main():
       <div id="ui" class="clip" data-start="0" data-duration="{DUR}" data-track-index="2" data-layout-allow-overflow>
         <div class="top"><span class="brand mono"><b>●</b> AI.NXTLVL</span><span class="prog"><i></i></span></div>
         <div class="step step1">STEP 1/2 · CLAUDE COACH</div><div class="step step2">STEP 2/2 · TRAIN</div>
-        <div id="panel">{scr}</div>{endc}{MM}
+        {TOASTS}<div id="panel">{scr}</div>{endc}{MM}
       </div>
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="3">{caps}</div>
       <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="4" data-layout-ignore><div id="whip"></div><div id="flash"></div></div>
