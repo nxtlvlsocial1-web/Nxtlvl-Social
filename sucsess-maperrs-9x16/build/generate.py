@@ -601,7 +601,7 @@ body { font-family: "Manrope", sans-serif; color: var(--cream); }
 /* layer order: backdrop < things behind her < speaker < visuals < captions */
 #bg { z-index: 0; }
 .behind { z-index: 1; }
-#spk { z-index: 2; }
+#spk { position: absolute; inset: 0; z-index: 2; }
 .scene { z-index: 3; }
 .coins { position: absolute; inset: 0; }
 .cn { position: absolute; top: 0; opacity: 0; }
@@ -763,7 +763,7 @@ def main():
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="1080" data-height="1920">
       <div id="bg" class="clip" data-start="0" data-duration="{DUR}" data-track-index="0" data-layout-allow-overflow>{backdrop()}</div>
-      <div id="spk" class="clip" data-start="0" data-duration="{DUR}" data-track-index="2" data-layout-allow-overflow><div id="spkcrop"><div id="panelbg"></div><div id="spkw"><div id="halo"></div>
+      <div id="spk" data-layout-allow-overflow><div id="spkcrop"><div id="panelbg"></div><div id="spkw"><div id="halo"></div>
         <video id="talk" data-color-grading="{GRADE}" src="assets/video/{os.environ.get("SPK_SRC", "talk_fg_clean.webm")}" data-start="0" data-duration="{VO}" data-track-index="2" muted playsinline></video></div></div><div class="seam"></div></div>
       {scenes()}
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="7">{captions_html()}</div>
