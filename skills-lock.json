@@ -661,6 +661,12 @@
       "skillPath": "SKILL.md",
       "computedHash": "896d55ce2c26c3d0f6d5598c34eb882f7d5c6e98fc09aa44b55d4c7e2ac357a5"
     },
+    "voiceover-narration-studio": {
+      "source": "beatra-ai/ai-voiceover-generator-skill",
+      "sourceType": "github",
+      "skillPath": "skills/voiceover-narration-studio/SKILL.md",
+      "computedHash": "2609a6d7261e7c9d5f4a3022827a5c55c467033e37a453e7aaac3c24fdf4cc67"
+    },
     "vox-explainer": {
       "source": "charlie947/motion-graphics-skills",
       "sourceType": "github",

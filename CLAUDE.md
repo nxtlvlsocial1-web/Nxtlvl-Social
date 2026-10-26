@@ -27,6 +27,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Port an existing Remotion project to HyperFrames        | `remotion-to-hyperframes`                     |
 | Bringing in a Figma design                              | `figma`                                       |
 | Music, SFX, voiceover, images, logos, colour grade      | `media-use`                                   |
+| Voiceover / narration from a script, voice cloning (Beatra, paid) | `voiceover-narration-studio`        |
 | Building blocks, effects, transitions                   | `hyperframes-registry`                        |
 | Composition HTML, animation, audio mix, camera moves    | `hyperframes-core`, `-animation`, `-audio`, `-keyframes` |
 | Design direction: palette, type, pacing                 | `hyperframes-creative`                        |
@@ -124,6 +125,7 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `video-motion-graphics`: `dylantarre/animation-principles`
 - `brand-intake`, `motion-brief-writer`, `reference-to-motion`, `motion-prompt-writer`, `launch-video`, `apple-launch-film`, `vox-explainer`, `animated-chart`, `milestone-reveal`, `motion-effects`, `title-sequence-3d`, `model-showdown`, `newsletter-promo`, `loop-cover`, `reel-export`: `charlie947/motion-graphics-skills`
 - `product-film`: `Rieranthony/product-film-skill`
+- `voiceover-narration-studio`: `beatra-ai/ai-voiceover-generator-skill`
 - `reference-design-contract`, `agent-browser`: `nexu-io/open-design`; `competitor-profiling`: `coreyhaines31/marketingskills`
 - `threejs-*`: `CloudAI-X/threejs-skills`; `gsap-*`: `greensock/gsap-skills`; `design-dna`: `zanwei/design-dna`;
   `motion-design`: `LottieFiles/motion-design-skill`; `cast`, `paint`, `bunshin`: `AThevon/genjutsu`
@@ -146,6 +148,9 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 - The fal skills call the `genmedia` CLI and need a fal.ai account and API key; they spend credits, so confirm the cost before generating.
 - `video-use` transcribes with ElevenLabs Scribe: put `ELEVENLABS_API_KEY` in a `.env`, and note that footage audio is uploaded to ElevenLabs. Its Python helpers need `ffmpeg`.
 - Voiceover and generated music need a HeyGen account (`npx hyperframes auth`) or a Gemini API key.
+- `voiceover-narration-studio` renders on Beatra: it needs a Beatra account (signs in through its bundled
+  `scripts/authorize.py`, credentials in `~/.beatra/credentials.json`) and Python 3.10+. Each render or
+  voice clone spends Beatra credits, so confirm the estimate first; only clone a voice with the speaker's consent.
 - The `higgsfield-*` skills need the `higgsfield` CLI and a Higgsfield account (`higgsfield auth login`);
   each generation spends Higgsfield credits.
 - `brand-intake` writes `brand.md` and `MOTION.md` into the project. The other `charlie947` motion skills read them first, so run `brand-intake` before any of them.
