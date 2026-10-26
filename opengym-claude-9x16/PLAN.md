@@ -46,7 +46,11 @@ Not verified, so kept out: the brief's "no key, nothing leaves the device" AI cl
 
 ---
 
-## 3. Script and voiceover (Eleven v3, mood tags in brackets, about 46 s)
+## 3. Script and voiceover (v1, superseded)
+
+> Superseded by `SCRIPT.md` (v2: under 35 s, Claude-led). The voices are now made with open-source TTS
+> (`voice/make_voices.py`, see `LAPTOP_SETUP.md`), not ElevenLabs.
+
 
 Two voices, as in the brief: **NXT** uses the house voice "Nota2"; the **Human** is a different casual young male voice.
 
