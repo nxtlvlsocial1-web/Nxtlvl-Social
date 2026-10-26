@@ -1041,8 +1041,7 @@ body { font-family: "Manrope", sans-serif; color: var(--cream); }
   border: 6px solid rgba(255,255,255,.4); background-clip: padding-box; box-shadow: 0 10px 30px rgba(0,0,0,.5); opacity: 0; }
 /* captions: the active word on a gold pill */
 .cap { position: absolute; left: 30px; width: 1020px; top: 1330px; text-align: center; opacity: 0; font: 800 58px/1.3 "Manrope"; word-spacing: 2px; }
-.cw { display: inline-block; padding: 0 12px; border-radius: 14px; font: 800 58px/1.2 "Manrope"; letter-spacing: -1px; color: var(--cream);
-  text-shadow: 0 4px 18px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.9); }
+.cw { display: inline-block; padding: 0 12px; border-radius: 14px; font: 800 58px/1.2 "Manrope"; letter-spacing: -1px; color: var(--cream); }
 .cw.em { font: italic 600 66px/1.1 "Fraunces"; color: var(--gold); }
 #flash { position: absolute; inset: 0; background: #fff3d6; opacity: 0; }
 """
