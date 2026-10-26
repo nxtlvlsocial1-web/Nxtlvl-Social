@@ -132,3 +132,17 @@ The 3D world is `assets/js/opengym.js`. The panel screens are mocks (no screen r
    - `build/audio.py` then uses it as the bed, ducked under the voice, with the SFX a little lower.
    - Put the credit line from `build/track.json` in the post caption (required for CC BY).
 3. Re-run `build/timing.py`, `build/audio.py` and `build/generate.py`. Check the mix: the voice should always sit clearly on top. Then re-render the final.
+
+What was run for fix round 1 (26 Oct 2026; approved in advance):
+- Lines 1, 3, 4 and 12 regenerated. Checked with Whisper and no prompt (a prompt containing "GYM" biases it): every
+  kept take says "gym"/"Jim" with a soft J, none spells letters, line 1 starts on "Ugh". Rejected: 01 t3 ("Gem"),
+  04 t1 ("OpenGym" run together), 12 t2 ("Come it"). Picks now
+  `01=2 02=1 03=3 04=3 05=2 06=1 07=2 08=1 09=1 10=3 11=2 12=3 --tempo 1.09`; the last word ends at 31.93 s (reel 33.43 s).
+- Music: "Lucky Number 8 (Original Mix)" by Spencer Newton (CC BY 3.0, Jamendo), electro house, 129 bpm. Of the
+  39 CC0/PD/CC BY results, two had vocals in the stretch the reel uses (Whisper + voice-activity check) and were
+  dropped; this one had the steadiest stretch with a firm four-on-the-floor kick. The bed starts 61.5 s into the track.
+- Mix: music and SFX duck on a speech gate (30 ms on, 150 ms hold), so the voice sits 15.5 dB over the bed at
+  speaking level (never under 7.9 dB). Mastered so the delivered MP4 measures -14.2 LUFS, -1.9 dBTP.
+- Visual review: bigger muscular NXT arms and a double-biceps flex in the hook; the gasp close-up keeps the whole
+  head under the caption; the muscle-map states are on-screen chips; the coach panel is full from its first frame;
+  the violet point light that bloomed on the human's hair in close-ups is gone.

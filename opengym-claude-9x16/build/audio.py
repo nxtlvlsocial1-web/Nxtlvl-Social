@@ -339,7 +339,8 @@ def track_bed():
         st = int(t["start"] * SR)
     else:
         win = int(SR / 2)
-        e = np.sqrt(np.convolve((x ** 2).mean(1), np.ones(win) / win, "valid")[::win])   # energy per 0.5 s
+        p = (x ** 2).mean(1)
+        e = np.sqrt(p[: len(p) // win * win].reshape(-1, win).mean(1))   # energy per 0.5 s (blocks, not a 24k-tap convolution)
         need = int(np.ceil(DUR * 2))
         skip = min(16, max(0, len(e) - need))                     # skip up to 8 s of intro
         cand = [(np.percentile(e[i:i + need], 20), i) for i in range(skip, max(skip + 1, len(e) - need))]
@@ -373,8 +374,17 @@ def main():
     bed = track_bed()
     if bed is not None:
         # a real track sits on a single bus: duck it deeper under the voice, keep the SFX a little lower
-        music = bed * (.07 / rms(bed)) * (1 - .62 * env)[:, None]
-        score = music + sfxb * (.035 / rms(sfxb))
+        # a speech gate: on within 30 ms of a word, held 150 ms past it, smooth ramps. The music and the SFX both
+        # duck on it, so the voice always sits on top, even when a hit lands on the first word of a line.
+        hop = int(.01 * SR)
+        fr = np.sqrt(np.mean(v[: N // hop * hop].reshape(-1, hop) ** 2, axis=1))
+        on = fr > .1 * np.percentile(fr[fr > 1e-4], 90)
+        k = int(.15 / .01)
+        on = np.convolve(on.astype(float), np.ones(2 * k + 1), "same") > 0
+        ramp = np.convolve(on.astype(float), np.ones(3) / 3, "same")
+        talk = np.clip(np.interp(np.arange(N) / hop, np.arange(len(ramp)), ramp), 0, 1)
+        music = bed * (.07 / rms(bed)) * (1 - .55 * talk)[:, None]
+        score = music + sfxb * (.035 / rms(sfxb)) * (1 - .8 * talk)[:, None]
     else:
         music = BUS["drums"] * (.05 / rms(BUS["drums"])) + BUS["bass"] * (.035 / rms(BUS["bass"])) + synth * (.03 / rms(synth))
         music *= duck[:, None]
@@ -391,13 +401,15 @@ def main():
     sf.write(out_m, score.astype(np.float32), SR, subtype="PCM_24")
     raw = os.path.join(ROOT, "assets", "audio", "mix_raw.wav")
     sf.write(raw, mix.astype(np.float32), SR, subtype="FLOAT")
-    # master: two-pass loudnorm to -14 LUFS integrated, -1.5 dBTP
-    o = ffmpeg("-i", raw, "-af", "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json", "-f", "null", "-").stderr
+    # master: two-pass loudnorm to -14 LUFS integrated, -1.5 dBTP in the delivered file. The WAV aims at -2.0 dBTP,
+    # because the AAC encode adds about 0.2 dB of inter-sample peak (v1 measured -1.48 dBTP after encoding at -1.7);
+    # loudnorm aims 0.3 LU high because the limiter after it takes about that back.
+    o = ffmpeg("-i", raw, "-af", "loudnorm=I=-13.7:TP=-2.0:LRA=11:print_format=json", "-f", "null", "-").stderr
     meas = json.loads(o[o.rindex("{"):o.rindex("}") + 1])
-    af = (f"loudnorm=I=-14:TP=-1.5:LRA=11:measured_I={meas['input_i']}:measured_TP={meas['input_tp']}:"
+    af = (f"loudnorm=I=-13.7:TP=-2.0:LRA=11:measured_I={meas['input_i']}:measured_TP={meas['input_tp']}:"
           f"measured_LRA={meas['input_lra']}:measured_thresh={meas['input_thresh']}:offset={meas['target_offset']}:linear=true")
     out = os.path.join(ROOT, "assets", "audio", "mix.wav")
-    ffmpeg("-i", raw, "-af", af + ",alimiter=limit=0.82:level=false:attack=1:release=60", "-ar", str(SR), "-c:a", "pcm_s24le", out)
+    ffmpeg("-i", raw, "-af", af + ",alimiter=limit=0.78:level=false:attack=1:release=60", "-ar", str(SR), "-c:a", "pcm_s24le", out)
     os.remove(raw)
     chk = ffmpeg("-i", out, "-af", "ebur128=peak=true", "-f", "null", "-").stderr
     summ = chk[chk.rindex("Summary:"):]

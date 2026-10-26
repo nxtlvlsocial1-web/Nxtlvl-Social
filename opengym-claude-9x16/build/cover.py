@@ -43,6 +43,10 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050
 .chip { position: absolute; left: 0; right: 0; top: 610px; text-align: center; }
 .chip span { display: inline-block; padding: 12px 34px; border-radius: 40px; background: #3fd69b; color: #07050d; font: 800 44px "Poppins";
   box-shadow: 0 12px 40px rgba(63,214,155,.45); }
+.mm { position: absolute; right: 60px; display: flex; align-items: center; gap: 16px; padding: 12px 30px 12px 22px; border-radius: 40px;
+  background: rgba(7,5,13,.8); border: 3px solid var(--c); color: var(--c); font: 800 44px "Poppins"; box-shadow: 0 10px 34px rgba(0,0,0,.4); }
+.mm i { width: 22px; height: 22px; border-radius: 50%; background: var(--c); box-shadow: 0 0 16px var(--c); }
+.mm0 { --c: #3fd69b; top: 1300px; } .mm1 { --c: #ffc24a; top: 1395px; } .mm2 { --c: #ff6b6b; top: 1490px; }
     </style>
   </head>
   <body>
@@ -53,6 +57,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050
         <div class="brand"><b>●</b> AI.NXTLVL</div>
         <div class="h">Claude wrote<br /><em>my gym plan.</em></div>
         <div class="chip"><span>free app tracks every set</span></div>
+        <div class="mm mm0"><i></i>WORKED</div><div class="mm mm1"><i></i>RECOVERING</div><div class="mm mm2"><i></i>UNTRAINED</div>
       </div>
     </div>
     <script>

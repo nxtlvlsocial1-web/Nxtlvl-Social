@@ -74,7 +74,7 @@ def search():
             rows.append({"id": r["id"], "title": r["title"], "creator": r.get("creator"), "license": r["license"],
                          "license_version": r.get("license_version"), "license_url": r.get("license_url"),
                          "landing": r.get("foreign_landing_url"), "source": r.get("source"), "duration": round(dur, 1),
-                         "file": os.path.relpath(p, ROOT), **a})
+                         "file": os.path.relpath(p, ROOT).replace(os.sep, "/"), **a})
             print(f"{a['score']:6.2f}  {a['tempo']:6.1f} bpm  {r['license']:4}  {r['title'][:50]}  ({r.get('creator')})")
     rows.sort(key=lambda x: -x["score"])
     json.dump(rows, open(os.path.join(ROOT, "build", "music_candidates.json"), "w"), indent=1)
@@ -92,7 +92,7 @@ def use(cid):
     shutil.copy(src, dst)
     lic = {"cc0": "CC0", "pdm": "Public Domain"}.get(r["license"], f"CC {r['license'].upper()} {r.get('license_version') or ''}".strip())
     r["credit"] = f"Music: \"{r['title']}\" by {r['creator']} ({lic})" + (f" {r['landing']}" if r["license"] == "by" else "")
-    r["track"] = os.path.relpath(dst, ROOT)
+    r["track"] = os.path.relpath(dst, ROOT).replace(os.sep, "/")
     json.dump(r, open(os.path.join(ROOT, "build", "track.json"), "w"), indent=1)
     print("using", r["track"], "|", r["credit"])
 

@@ -139,7 +139,6 @@ key.castShadow = true; key.shadow.mapSize.set(1024, 1024); key.shadow.bias = -.0
 scene.add(key, key.target);
 const rim = new THREE.SpotLight(VIOLET, 55, 20, .7, .6, 1.4);
 rim.position.set(2.6, 4.2, -3.2); rim.target.position.set(0, 1, .4); scene.add(rim, rim.target);
-const rim2 = new THREE.PointLight(LVIOLET, 3, 6, 1.5); rim2.position.set(-2.4, 2.2, -1.6); scene.add(rim2);
 const fill = new THREE.PointLight(0xffd7b0, 2.2, 8, 1.6); fill.position.set(.4, 1.6, 3.2); scene.add(fill);
 const fxLight = new THREE.PointLight(LVIOLET, 0, 6, 1.4); scene.add(fxLight);       // flashes on hits
 const redLight = new THREE.PointLight(0xff3344, 0, 4, 1.5); scene.add(redLight);  // the paywall's glow
@@ -412,22 +411,23 @@ function nxtBuild() {
   const chest = grp(bot, 0, -.06, R * .78);
   const chrome = phys(0xd9d6e8, { metalness: 1, roughness: .16, clearcoat: 1, clearcoatRoughness: .05 });
   const vio = phys(VIOLET, { roughness: .25, clearcoat: 1, metalness: .2 });
-  for (const s of [-1, 1]) { const pec = mesh(new THREE.SphereGeometry(.13, 24, 16), chrome); pec.scale.set(1.05, .62, .42); pec.position.set(s * .115, 0, 0); pec.rotation.z = s * .12; chest.add(pec); }
+  for (const s of [-1, 1]) { const pec = mesh(new THREE.SphereGeometry(.15, 24, 16), chrome); pec.scale.set(1.1, .66, .5); pec.position.set(s * .115, 0, 0); pec.rotation.z = s * .12; chest.add(pec); }
   const chestBar = new THREE.Mesh(rb(.03, .12, .03, .01, 1), glow(LVIOLET, 4)); chestBar.position.set(0, -.01, .04); chest.add(chestBar);
   // muscle arms
-  const bicep = new THREE.LatheGeometry([[0, .02], [.07, 0], [.1, -.06], [.122, -.15], [.11, -.24], [.08, -.31], [.06, -.34], [0, -.35]].map(([x, y]) => new THREE.Vector2(x, y)), 28);
-  const fore = new THREE.LatheGeometry([[0, 0], [.065, -.01], [.085, -.07], [.078, -.17], [.06, -.27], [0, -.29]].map(([x, y]) => new THREE.Vector2(x, y)), 24);
+  const bicep = new THREE.LatheGeometry([[0, .03], [.1, 0], [.15, -.06], [.178, -.15], [.16, -.25], [.11, -.32], [.085, -.35], [0, -.36]].map(([x, y]) => new THREE.Vector2(x, y)), 32);
+  const fore = new THREE.LatheGeometry([[0, 0], [.09, -.01], [.122, -.07], [.112, -.16], [.08, -.27], [0, -.29]].map(([x, y]) => new THREE.Vector2(x, y)), 28);
   const arms = [];
   for (const s of [-1, 1]) {
-    const mount = grp(body, s * R * .9, -.04, 0);
+    const mount = grp(body, s * R * .92, -.03, 0);
     const sh = grp(mount);
-    sh.add(mesh(new THREE.SphereGeometry(.12, 24, 16), vio));
-    const up = mesh(bicep, chrome); up.scale.set(1, 1, 1.12); sh.add(up);
-    const band = new THREE.Mesh(new THREE.TorusGeometry(.105, .012, 8, 28), glow(LVIOLET, 4)); band.rotation.x = Math.PI / 2; band.position.y = -.27; sh.add(band);
-    const el = grp(sh, 0, -.33, 0);
-    el.add(mesh(new THREE.SphereGeometry(.07, 16, 12), vio));
+    sh.add(mesh(new THREE.SphereGeometry(.16, 24, 16), vio));
+    const up = mesh(bicep, chrome); up.scale.set(1, 1, 1.18); sh.add(up);
+    const peak = mesh(new THREE.SphereGeometry(.11, 20, 14), chrome); peak.scale.set(1, 1.3, .9); peak.position.set(0, -.15, .07); sh.add(peak);
+    const band = new THREE.Mesh(new THREE.TorusGeometry(.115, .014, 8, 28), glow(LVIOLET, 4)); band.rotation.x = Math.PI / 2; band.position.y = -.27; sh.add(band);
+    const el = grp(sh, 0, -.34, 0);
+    el.add(mesh(new THREE.SphereGeometry(.095, 16, 12), vio));
     el.add(mesh(fore, chrome));
-    const fist = mesh(rb(.15, .14, .15, .05, 3), vio); fist.position.y = -.31; el.add(fist);
+    const fist = mesh(rb(.19, .17, .19, .06, 3), vio); fist.position.y = -.32; el.add(fist);
     const thumb = mesh(new THREE.CapsuleGeometry(.025, .05, 4, 8), vio); thumb.position.set(-s * .06, -.27, .06); thumb.rotation.z = s * .4; el.add(thumb);
     const hand = grp(el, 0, -.33, 0);
     arms.push({ mount, sh, el, hand, thumb });
@@ -491,7 +491,7 @@ const NP = {
   rest: { a0: { x: 0, y: 0, z: -.25, ex: -.3, ez: 0 }, a1: { x: 0, y: 0, z: .25, ex: -.3, ez: 0 }, lean: 0, yaw: -.42 },
 };
 NP.ready = { ...NP.rest, a0: { x: -.2, y: 0, z: -.45, ex: -.9, ez: 0 }, a1: { x: -.2, y: 0, z: .45, ex: -.9, ez: 0 } };
-NP.flex = { ...NP.rest, a0: { x: -.1, y: 0, z: -1.5, ex: 0, ez: -1.95 }, a1: { x: -.1, y: 0, z: 1.5, ex: 0, ez: 1.95 }, lean: -.06, yaw: -.25 };
+NP.flex = { ...NP.rest, a0: { x: -.15, y: 0, z: -2.1, ex: 0, ez: -1.5 }, a1: { x: -.15, y: 0, z: 2.1, ex: 0, ez: 1.5 }, lean: -.06, yaw: -.25 };
 NP.present = { ...NP.rest, a0: { x: -1.1, y: -.3, z: -.35, ex: -.25, ez: 0 }, a1: { x: -.1, y: 0, z: .35, ex: -.5, ez: 0 }, yaw: -.55 };
 NP.stampUp = { ...NP.present, a0: { x: -2.3, y: -.2, z: -.3, ex: -1.0, ez: 0 } };
 NP.stampDown = { ...NP.present, a0: { x: -.95, y: -.35, z: -.45, ex: -.2, ez: 0 }, lean: .12 };
@@ -531,7 +531,7 @@ function animNxt(t) {
   // pose
   const keys = [[0, NP.rest], [land + .45, NP.ready, .25], [T.free - .2, NP.flex, .18], [L[2], NP.ready, .35], [L[3], NP.present, .3],
     [L[4], NP.present, .3], [L[5], NP.look, .4], [L[6], NP.present, .3], [T.approve - .35, NP.stampUp, .2], [T.approve - .05, NP.stampDown, .07],
-    [T.approve + .35, NP.thumbs, .25], [L[7], NP.curl, .3], [L[8], NP.look, .35], [L[9], NP.point, .35], [T.legs + .4, NP.flex, .2],
+    [T.approve + .35, NP.thumbs, .25], [L[7], NP.curl, .3], [L[8], NP.look, .35], [L[9], NP.ready, .35], [T.legs - .15, NP.point, .2], [T.legs + .4, NP.flex, .2],
     [L[10], NP.hips, .3], [L[11], NP.rest, .3], [L[11] + .3, NP.wave, .3], [T.gym + .2, NP.thumbs, .3], [T.end - 1.6, NP.rest, .3]];
   const p = poseAt(keys, t);
   const a0 = { ...p.a0 }, a1 = { ...p.a1 };
@@ -850,7 +850,7 @@ function animHolo(t) {
   const at = [T.worked, T.recovering, T.untrained], ys = [1.32, 1.5, .5], xs = [-.62, .64, -.6];
   HG.labels.forEach((m, i) => {
     const k = backOut(win(t, at[i], at[i] + .2), 2.5) * on;
-    m.visible = k > .01 && t < z - .3; m.scale.setScalar(Math.max(.01, k));
+    m.visible = false; m.scale.setScalar(Math.max(.01, k));
     const ang = -holo.rotation.y;
     m.position.set(Math.cos(ang) * xs[i], ys[i], -Math.sin(ang) * xs[i]);
     m.rotation.y = ang;
@@ -953,16 +953,16 @@ function shot(t) {
   if (t < T.free + .25) {                       // HERO: the slam and the power-up, wide and low
     const k = easeOut(win(t, L[1] - .2, T.free + .25));
     const pk = easeOut(win(t, T.free - .25, T.free + .1));
-    return [d(d([-.1, .95, 6.4], [.3, 1.0, 5.7], k), [.55, 1.25, 3.9], pk), d([.35, 1.25, .4], [.95, 1.4, .5], pk), 40];
+    return [d(d([-.1, .95, 6.4], [.3, 1.0, 5.7], k), [.62, 1.32, 4.5], pk), d([.35, 1.25, .4], [.98, 1.5, .5], pk), 40];
   }
   if (t < L[2]) {                               // code hologram behind NXT
     const k = easeIO(win(t, T.free + .25, L[2]));
-    return [d([.3, 1.4, 4.7], [.5, 1.5, 4.3], k), [1.0, 1.65, -.2], 40];
+    return [d([.72, 1.42, 4.9], [.85, 1.5, 4.5], k), [1.14, 1.58, -.2], 40];
   }
   if (t < L[3]) {                               // whip-pan punch-in on the human
     const k = easeOut(win(t, L[2], L[3]));
     const whip = (1 - easeOut(win(t, L[2], L[2] + .16))) * 1.6;
-    return [d([-.35, 1.52, 2.35], [-.42, 1.5, 2.05], k), [-.88 + whip, 1.6, .4], 30];
+    return [d([-.3, 1.45, 3.0], [-.36, 1.45, 2.7], k), [-.86 + whip, 1.74, .4], 30];
   }
   if (t < L[8]) {                               // two-shot under the panel, a new angle per line
     const bases = { 3: [[.25, 1.55, 6.6], [.1, 1.2, .3]], 4: [[.55, 1.5, 6.3], [.15, 1.2, .3]], 5: [[-.25, 1.45, 5.9], [-.1, 1.2, .3]],
@@ -978,7 +978,7 @@ function shot(t) {
   }
   if (t < T.legs) {                             // HERO orbit around the muscle map
     const k = easeIO(win(t, L[9], T.legs));
-    const a = lerp(-.55, .42, k), r = lerp(3.6, 3.1, k);
+    const a = lerp(-.55, .22, k), r = lerp(3.6, 3.2, k);
     return [[.08 + Math.sin(a) * r, lerp(1.7, 1.35, k), -.45 + Math.cos(a) * r], [.08, lerp(1.1, .85, k), -.45], 40];
   }
   if (t < L[10]) {                              // NXT points at the legs, then flexes its own tiny ones

@@ -79,7 +79,8 @@ def screens():
              '<div class="quote">“No account on someone else’s server, no subscription, no ads, no telemetry.”<span class="mono">README</span></div></div>')
     h.append('<div class="scr" id="s-coach"><div class="appbar"><span class="appname">openGym</span><span class="pill vio">AI COACH</span></div>'
              '<div class="crow"><span class="pill vio cp1">Anthropic · Claude</span><span class="pill gold cp2">🔑 your own key</span></div>'
-             '<div class="clab mono goal-l">YOUR GOAL</div><div class="goalbox">' + "".join(f'<span class="gchip gc{i}">{s}</span>' for i, s in enumerate(["4 days", "dumbbells", "build muscle"])) + '</div>'
+             '<div class="cdesc">Drafts a week of routines. You approve every change.</div>'
+             '<div class="clab mono goal-l">YOUR GOAL</div><div class="goalbox"><span class="ph">Tell your coach your goal…</span>' + "".join(f'<span class="gchip gc{i}">{s}</span>' for i, s in enumerate(["4 days", "dumbbells", "build muscle"])) + '</div>'
              '<div class="cbtn">✦ Draft my week</div>'
              '<div class="week">' + "".join(f'<div class="wr wr{i}"><b>{d}</b><span>{r}</span></div>' for i, (d, r) in enumerate([("MON", "Upper"), ("TUE", "Lower"), ("THU", "Upper"), ("FRI", "Lower")])) + '</div>'
              '<div class="abtn">Approve</div><div class="abtn2">✓ Approved · you approve every change</div></div>')
@@ -115,15 +116,17 @@ def screens_tl():
     setv("#s-repo", L[4] - .05, "opacity:0")
     # coach
     add(f'tl.fromTo("#s-coach",{{opacity:0,x:60}},{{opacity:1,x:0,duration:.3,ease:"power3.out",immediateRender:false}},{L[4] - .05:.3f});')
-    pop(".cp1", L[4] + .25, "scale:.5,opacity:0", .3)
+    pop(".cp1", L[4] + .05, "scale:.5,opacity:0", .25)
     pop(".cp2", T["coachClaude"] + .1, "scale:.5,opacity:0", .3)
-    pop(".goal-l", L[5] - .2, "opacity:0,y:10", .25)
-    pop(".goalbox", L[5] - .2, "opacity:0,y:10", .25)
+    pop(".cdesc", L[4] + .1, "opacity:0,y:10", .25)
+    pop(".goal-l", L[4] + .15, "opacity:0,y:10", .2)
+    pop(".goalbox", L[4] + .15, "opacity:0,y:10", .2)
+    pop(".cbtn", L[4] + .2, "opacity:0,y:20", .25)
+    add(f'tl.to(".goalbox .ph",{{opacity:0,duration:.12}},{T["g"][0] - .08:.3f});')
     for i, t in enumerate(T["g"]):
         pop(f".gc{i}", t, "scale:.3,opacity:0,y:20", .3, "back.out(3)")
-    pop(".cbtn", L[5] + .4, "opacity:0,y:20", .3)
     add(f'tl.to(".cbtn",{{scale:.92,duration:.08,yoyo:true,repeat:1}},{L[6] + .05:.3f});')
-    add(f'tl.to(".goal-l, .goalbox, .cbtn",{{opacity:0,y:-20,duration:.2}},{L[6] + .2:.3f});')
+    add(f'tl.to(".cdesc, .goal-l, .goalbox, .cbtn",{{opacity:0,y:-20,duration:.2}},{L[6] + .2:.3f});')
     for i in range(4):
         pop(f".wr{i}", L[6] + .35 + i * .22, "x:80,opacity:0", .3, "back.out(2)")
     pop(".abtn", L[6] + .9, "opacity:0,y:20", .3)
@@ -190,6 +193,16 @@ def captions():
     return "".join(html)
 
 
+MM = "".join(f'<div class="mm mm{i}"><i></i>{s}</div>' for i, s in enumerate(["WORKED", "RECOVERING", "UNTRAINED"]))
+
+
+def mm_tl():
+    for i, k in enumerate(("worked", "recovering", "untrained")):
+        pop(f".mm{i}", T[k], "x:-80,opacity:0,scale:.7", .3, "back.out(2.4)")
+    add(f'tl.to(".mm2",{{scale:1.08,duration:.18,yoyo:true,repeat:5,ease:"sine.inOut"}},{T["untrained"] + .35:.3f});')
+    out(".mm", L[10] - .05, .2)
+
+
 def fx_tl():
     for t in (L[2], L[8], L[10]):
         add(f'tl.set("#whip",{{opacity:.8,x:300}},{t - .04:.3f});tl.to("#whip",{{opacity:0,x:-300,duration:.22,ease:"power2.out"}},{t - .03:.3f});')
@@ -224,7 +237,7 @@ body { font-family: "Poppins", sans-serif; color: #f4f1fa; }
   -webkit-backdrop-filter: blur(22px) saturate(1.3); backdrop-filter: blur(22px) saturate(1.3);
   box-shadow: 0 30px 80px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.12); transform-origin: 50% 0%; }
 /* everything that pops in later starts hidden here, never through a set at t=0 */
-.repo-t, .repo-row, .cp1, .cp2, .goal-l, .goalbox, .ec-1, .ec-gym, .ec-2, .ec-3, .ec-h { opacity: 0; }
+.repo-t, .repo-row, .cp1, .cp2, .cdesc, .goal-l, .goalbox, .ec-1, .ec-gym, .ec-2, .ec-3, .ec-h, .mm { opacity: 0; }
 .scr { position: absolute; inset: 0; padding: 34px 44px; opacity: 0; }
 #s-pay { opacity: 1; }
 .appbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
@@ -250,7 +263,14 @@ body { font-family: "Poppins", sans-serif; color: #f4f1fa; }
 .quote span { display: block; margin-top: 8px; font-size: 28px; letter-spacing: 3px; color: #a98bff; font-style: normal; }
 .crow { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .clab { font-size: 28px; letter-spacing: 2px; color: #a98bff; }
-.goal-l { margin-top: 26px; }
+.cdesc { margin-top: 16px; font: italic 500 34px/1.25 "Lora"; color: #d9ccff; }
+.goal-l { margin-top: 18px; }
+.goalbox { position: relative; }
+.goalbox .ph { position: absolute; left: 26px; top: 50%; transform: translateY(-50%); color: rgba(217,204,255,.5); font: 600 30px "Poppins"; }
+.mm { position: absolute; left: 60px; display: flex; align-items: center; gap: 16px; padding: 12px 30px 12px 22px; border-radius: 40px;
+  background: rgba(7,5,13,.78); border: 3px solid var(--c); color: var(--c); font: 800 44px "Poppins"; box-shadow: 0 10px 34px rgba(0,0,0,.4); }
+.mm i { width: 22px; height: 22px; border-radius: 50%; background: var(--c); box-shadow: 0 0 16px var(--c); }
+.mm0 { --c: #3fd69b; top: 1150px; } .mm1 { --c: #ffc24a; top: 1250px; } .mm2 { --c: #ff6b6b; top: 1350px; }
 .goalbox { margin-top: 12px; min-height: 92px; border-radius: 24px; border: 2px dashed rgba(169,139,255,.5); padding: 14px; display: flex; gap: 14px; }
 .gchip { padding: 12px 24px; border-radius: 30px; background: rgba(63,214,155,.16); border: 2px solid #3fd69b; color: #fff; font: 700 32px "Poppins"; opacity: 0; }
 .cbtn { margin-top: 22px; height: 84px; border-radius: 42px; background: linear-gradient(90deg, #7b2ffb, #a98bff); display: flex; align-items: center;
@@ -306,6 +326,7 @@ def main():
     endc = endcard()
     endcard_tl()
     caps = captions()
+    mm_tl()
     fx_tl()
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
@@ -324,7 +345,7 @@ def main():
       <div id="ui" class="clip" data-start="0" data-duration="{DUR}" data-track-index="2" data-layout-allow-overflow>
         <div class="top"><span class="brand mono"><b>●</b> AI.NXTLVL</span><span class="prog"><i></i></span></div>
         <div class="step step1">STEP 1/2 · CLAUDE COACH</div><div class="step step2">STEP 2/2 · TRAIN</div>
-        <div id="panel">{scr}</div>{endc}
+        <div id="panel">{scr}</div>{endc}{MM}
       </div>
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="3">{caps}</div>
       <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="4" data-layout-ignore><div id="whip"></div><div id="flash"></div></div>
