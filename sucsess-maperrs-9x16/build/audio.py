@@ -6,10 +6,11 @@ Score: a warm, hopeful 84 bpm bed in D major (D - A - Bm - G): felt-piano arpegg
 a low pulse and light percussion from the brand reveal, a lift into the free scan and the offer, percussion out under the
 disclaimer, and a resolving final chord under the end card. Sound design: every visual event generate.py logs
 (build/sfx_events.json) gets a matching sound: soft whooshes on framing moves, pops and pings for cards, a coin shimmer,
-stamps, ticks, a reveal swell for the logo, a count roll for the price.
+stamps, ticks, a reveal swell for the logo, a count roll for the price, a glassy shimmer with every light sweep, UI taps
+and scroll ticks on the app screens, a ticking timer, and sub-boom impacts on the hook, the reveal, the offer and the CTA.
 
 Mix: the bed is ducked by the voice (envelope follower) and carved: its 1-4 kHz band drops further while she speaks, so
-the words stay clear. Writes assets/audio/music.wav (bed + SFX); the voice is assets/audio/voice.wav.
+the words stay clear. Writes assets/audio/music.wav (bed + SFX) and assets/audio/voice.wav (her voice, cleaned and mastered).
 """
 import json
 import os
@@ -194,6 +195,39 @@ def swell(d=1.6):
     return lp(x, 2400) * (t / d) ** 1.5 * np.clip((d + .3 - t) / .3, 0, 1) * .03
 
 
+def shimmer(d=.7):
+    """The light sweep: a bright airy whoosh with a glassy top."""
+    t = tt(d)
+    x = hp(rng.standard_normal(len(t)), 5000) * np.sin(np.pi * np.clip(t / d, 0, 1)) ** 2 * .05
+    return x + sum(np.sin(2 * np.pi * hz(m) * t) * np.exp(-t * 5) for m in (93, 98)) * .012
+
+
+def click(d=.06):
+    t = tt(d)
+    return (bp(rng.standard_normal(len(t)), 2000, 7000) * np.exp(-t * 160) * .2 + np.sin(2 * np.pi * 1800 * t) * np.exp(-t * 90) * .08)
+
+
+def scroll(d=1.0):
+    out_ = np.zeros(int(d * SR))
+    for k in range(9):
+        x = click(.03) * .35
+        i = int((k * .1 + k * k * .004) * SR)
+        out_[i:i + len(x)] += x[: len(out_) - i]
+    return out_
+
+
+def clock(d=.12):
+    t = tt(d)
+    return np.sin(2 * np.pi * 3200 * t) * np.exp(-t * 120) * .12 + bp(rng.standard_normal(len(t)), 1500, 5000) * np.exp(-t * 200) * .08
+
+
+def boom(d=2.2):
+    t = tt(d)
+    x = np.sin(2 * np.pi * np.cumsum(32 + 46 * np.exp(-t * 7)) / SR) * np.exp(-t * 2.2)
+    x += .25 * lp(rng.standard_normal(len(t)), 300) * np.exp(-t * 5)
+    return np.tanh(1.6 * x) * .45
+
+
 # ------------------------------------------------------------------ arrangement
 PROG = [(62, 66, 69), (57, 61, 64), (59, 62, 66), (55, 59, 62)]     # D, A, Bm, G
 ROOTS = [38, 33, 35, 31]
@@ -269,6 +303,16 @@ def sfx():
         elif kind == "dice":
             for k in range(4):
                 put(stamp(.2) * .4, t + k * .12, .7, -.4 + .25 * k, "sfx")
+        elif kind == "sweep":
+            put(shimmer(), t, .9, 0, "sfx")
+        elif kind == "click":
+            put(click(), t, 1.2, pan, "sfx")
+        elif kind == "scroll":
+            put(scroll(), t, 1.0, pan, "sfx")
+        elif kind == "clock":
+            put(clock(), t, 1.2, 0, "sfx")
+        elif kind == "boom":
+            put(boom(), t, 1.0, 0, "sfx")
         elif kind == "glint":
             put(chime(.8), t, .7, pan, "sfx")
 
@@ -301,7 +345,16 @@ def voice_env():
     return np.pad(env, (0, max(0, N - len(env))))[:N]
 
 
+def make_voice():
+    """Her voice from the cut master: rumble cut, light denoise, gentle compression, mastered to about -14.5 LUFS."""
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", os.path.join(ROOT, "assets", "video", "talk.mp4"), "-vn", "-af",
+                    "highpass=f=75,afftdn=nf=-30,acompressor=threshold=-20dB:ratio=3:attack=8:release=120:makeup=3,"
+                    "loudnorm=I=-14.5:TP=-1.5:LRA=9", "-ar", str(SR), "-ac", "2", os.path.join(ROOT, "assets", "audio", "voice.wav")],
+                   check=True)
+
+
 def main():
+    make_voice()
     arrange()
     sfx()
     ml, mr = reverb(BUS["music"][0], seed=1), reverb(BUS["music"][1], seed=2)
@@ -319,7 +372,7 @@ def main():
     left, right = out_ch[0] * gm + sl * gs, out_ch[1] * gm + sr_ * gs
     fade = np.ones(N)
     fade[-int(1.2 * SR):] = np.linspace(1, 0, int(1.2 * SR)) ** 1.5
-    st = np.stack([left * fade, right * fade], 1) * 1.6
+    st = np.stack([left * fade, right * fade], 1) * 1.9
     pk = np.max(np.abs(st))
     if pk > .95:
         st *= .95 / pk

@@ -63,6 +63,27 @@ def counter(sel, a, z, t, d, prefix="", suffix=""):
         f'document.querySelectorAll("{sel}").forEach(e=>e.textContent="{prefix}"+Math.round(o.v).toLocaleString("en-IN")+"{suffix}");}}}},{t:.2f});}})();')
 
 
+BURSTS = []      # (x, y, t, colour): a ring flashes out from a reveal
+
+
+def burst(x, y, t, col=GOLD):
+    k = len(BURSTS)
+    BURSTS.append((x, y, t, col))
+    add(f'tl.fromTo(".br{k}",{{scale:.2,opacity:.95}},{{scale:2.6,opacity:0,duration:.8,ease:"power2.out",immediateRender:false}},{t:.2f});')
+    add(f'tl.fromTo(".br{k} i",{{scale:0,opacity:1}},{{scale:1.6,opacity:0,duration:.6,ease:"power3.out",immediateRender:false}},{t:.2f});')
+
+
+def bursts_html():
+    return "".join(f'<div class="br br{k}" style="left:{x - 110}px;top:{y - 110}px;border-color:{c}"><i style="background:{c}"></i></div>'
+                   for k, (x, y, _, c) in enumerate(BURSTS))
+
+
+def tap(sel, t):
+    """A finger tap on an app screen: ripple + press."""
+    ev(t, "click")
+    add(f'tl.fromTo("{sel}",{{scale:.3,opacity:.9}},{{scale:2.2,opacity:0,duration:.55,ease:"power2.out",immediateRender:false}},{t:.2f});')
+
+
 def draw(sel, t, d=.8, ease="power2.inOut"):
     add(f'tl.fromTo("{sel}",{{strokeDasharray:1,strokeDashoffset:1}},{{strokeDashoffset:0,duration:{d},ease:"{ease}"}},{t:.2f});')
 
@@ -95,9 +116,10 @@ def compass_dial(size=420):
             f'<circle r="18" fill="#c9b37a" stroke="#7a6a3a" stroke-width="3"/></svg>')
 
 
-def phone(img, cls, w=360):
+def phone(img, cls, w=360, taps=()):
+    tp = "".join(f'<i class="tp tp{k}" style="left:{x}%;top:{y}%"></i>' for k, (x, y) in enumerate(taps))
     return (f'<div class="phone {cls}" style="width:{w}px;height:{w * 2576 / 1186:.0f}px"><div class="scr">'
-            f'<img src="assets/img/{img}" alt=""></div><i class="pglare"></i></div>')
+            f'<img src="assets/img/{img}" alt="">{tp}</div><i class="pglare"></i></div>')
 
 
 def icon(name, s=56, col=GOLD, sw=3):
@@ -166,25 +188,14 @@ def coin(s):
 
 
 # ------------------------------------------------------------------ framings
-# Three framings, as in the reference: FULL (close-up, the whole frame), SPLIT (the frame divides at y 960: visuals on
-# top, her head and shoulders filling the bottom half edge to edge, a gold seam between) and FOCUS (she steps out and
-# the visual fills the frame).
-FACE_X, FACE_Y = 540, 720      # face centre in the source frame
-SEAM = 960
-
-
-def framing(scale, face_y):
-    return dict(x=round(FACE_X - FACE_X * scale), y=round(face_y - FACE_Y * scale), scale=scale)
-
-
-FULL = framing(1.18, 900)
-FULL2 = framing(1.26, 905)
-WIDE = framing(1.0, 720)
-SPLIT = framing(1.04, 1330)
-SHOT = {"full": FULL, "full2": FULL2, "split": SPLIT, "focus": SPLIT, "cta": WIDE}
-# (time, shot): one per line, plus the brand reveal handing over to a split
-SHOTS = sorted([(L[i][0], s) for i, s in enumerate(["full", "split", "focus", "full2", "split", "focus", "focus", "full", "full2",
-                                                    "split", "focus", "split", "focus", "full", "split", "cta"])] +
+# The raw take is never zoomed or cut out: it is cropped from the top (the empty wall above her head) and fitted 1:1,
+# full width, into the lower part of the frame under a gold seam; the visuals live in the band above. Two seam heights
+# give the reference's rhythm: TALK (seam at 560, a tall panel of her with a visual band on top) and SPLIT (seam at 960,
+# the half-and-half of the reference). FOCUS slides her out so a visual fills the frame; CTA shows the whole take, dimmed.
+SRC_TOP = 330                  # source rows above this are bare wall
+SEAMS = {"talk": 560, "split": 960, "focus": 960, "cta": 0}
+SHOTS = sorted([(L[i][0], s) for i, s in enumerate(["talk", "split", "focus", "talk", "split", "focus", "focus", "talk", "talk",
+                                                    "split", "focus", "split", "focus", "talk", "split", "cta"])] +
                [(L[5][0] + 2.6, "split")])
 
 
@@ -192,30 +203,43 @@ def shot_at(t):
     return [s for a, s in SHOTS if a <= t + 1e-6][-1]
 
 
+def place(s):
+    """Video translate and crop for a shot: scale stays 1, the take slides so its row SRC_TOP meets the seam."""
+    seam = SEAMS[s]
+    y = 0 if s == "cta" else seam - SRC_TOP
+    return y, seam
+
+
 def frame_tl():
-    f = SHOT[SHOTS[0][1]]
-    add(f'tl.set("#spkw",{{x:{f["x"]},y:{f["y"]},scale:{f["scale"]},opacity:1}},0);')
-    add('tl.set("#spkcrop",{clipPath:"inset(0px 0px 0px 0px)"},0);tl.set(".seam, #panelbg",{opacity:0},0);')
+    y, seam = place(SHOTS[0][1])
+    add(f'tl.set("#spkw",{{x:0,y:{y},scale:1,opacity:1}},0);')
+    add(f'tl.set("#spkcrop",{{clipPath:"inset({seam}px 0px 0px 0px)"}},0);tl.set(".seamg",{{y:{seam - 960},opacity:1}},0);')
     prev = SHOTS[0][1]
     for t, s in SHOTS[1:]:
-        f = SHOT[s]
         if s == prev:
-            # the same framing across a cut: a small punch-in hides the jump
-            add(f'tl.set("#spkw",{{scale:{f["scale"] * 1.06:.3f},x:{f["x"] - 32},y:{f["y"] - 40}}},{t:.2f});')
             continue
-        st = t - .22
-        vis = 0 if s == "focus" else 1
-        add(f'tl.to("#spkw",{{x:{f["x"]},y:{f["y"]},scale:{f["scale"]},opacity:{vis},duration:.55,ease:"expo.inOut"}},{st:.2f});')
-        crop = f"inset({SEAM}px 0px 0px 0px)" if s == "split" else "inset(0px 0px 0px 0px)"
-        add(f'tl.to("#spkcrop",{{clipPath:"{crop}",duration:.55,ease:"expo.inOut"}},{st:.2f});')
-        add(f'tl.to(".seam, #panelbg",{{opacity:{1 if s == "split" else 0},duration:.4}},{st + .1:.2f});')
+        y, seam = place(s)
+        st = t - .24
+        if s == "focus":
+            # she slides down out of frame; the seam follows her down and fades
+            add(f'tl.to("#spkw",{{y:1920,duration:.6,ease:"expo.inOut"}},{st:.2f});')
+            add(f'tl.to(".seamg",{{y:960,opacity:0,duration:.6,ease:"expo.inOut"}},{st:.2f});')
+        else:
+            if prev == "focus":
+                add(f'tl.set("#spkcrop",{{clipPath:"inset({seam}px 0px 0px 0px)"}},{st:.2f});')
+                add(f'tl.fromTo("#spkw",{{y:1920}},{{y:{y},duration:.6,ease:"expo.out",immediateRender:false}},{st:.2f});')
+            else:
+                add(f'tl.to("#spkw",{{y:{y},duration:.6,ease:"expo.inOut"}},{st:.2f});')
+                add(f'tl.to("#spkcrop",{{clipPath:"inset({seam}px 0px 0px 0px)",duration:.6,ease:"expo.inOut"}},{st:.2f});')
+            add(f'tl.to(".seamg",{{y:{seam - 960},opacity:{0 if s == "cta" else 1},duration:.6,ease:"expo.inOut"}},{st:.2f});')
+        add(f'tl.fromTo("#sweepfx",{{xPercent:-120,opacity:1}},{{xPercent:120,opacity:1,duration:.7,ease:"power2.inOut",immediateRender:false}},{st:.2f});')
         ev(st, "whoosh")
+        ev(st + .25, "sweep")
         prev = s
-    # cuts inside a line keep the framing: punch them
+    # a cut inside a line keeps the framing: a gentle 4% push-in hides the jump
     for c in EDL["cuts"]:
         if not any(abs(c - a) < .05 for a, _ in L):
-            f = SHOT[shot_at(c)]
-            add(f'tl.set("#spkw",{{scale:{f["scale"] * 1.05:.3f},x:{f["x"] - 20},y:{f["y"] - 30}}},{c:.2f});')
+            add(f'tl.set("#spkw",{{scale:1.04,x:-22}},{c:.2f});')
 
 
 # ------------------------------------------------------------------ captions (the only words on screen that echo her)
@@ -311,7 +335,7 @@ def scenes():
     h.append(clip("s5", a, z + .2, (
         '<div class="intro"><div class="halo"></div><img class="logo" src="assets/img/logo.png" alt="">'
         '<div class="wm">Sucsess Maperrs</div></div>' +
-        phone("app1.jpg", "ph5", 220) + f'<div class="dims">{dims}</div>')))
+        phone("app1.jpg", "ph5", 220, [(50, 78)]) + f'<div class="dims">{dims}</div>')))
     # 6 focus — numerology and the cosmic life cycle, an optional lens: orbits, a switch that is optional, the Inner Pattern
     a, z = L[6]
     stars = "".join(f'<i class="cs" style="left:{r.uniform(40, 1040):.0f}px;top:{r.uniform(260, 1500):.0f}px;'
@@ -337,13 +361,13 @@ def scenes():
     # 10 focus — informed decisions and satisfaction: the app's home, two ticks
     a, z = L[10]
     h.append(clip("s10", a, z + .2, (
-        phone("app7.jpg", "ph10", 430) +
+        phone("app7.jpg", "ph10", 430, [(50, 60)]) +
         f'<div class="tick t1">{tile("brain", 130, SAGE)}<div class="tk">{icon("check", 54, SAGE)}</div></div>'
         f'<div class="tick t2">{tile("smile", 130, SAGE)}<div class="tk">{icon("check", 54, SAGE)}</div></div>')))
     # 11 split — the 2-minute scan: two screens and a two-minute timer
     a, z = L[11]
     h.append(clip("s11", a, z + .2, (
-        phone("app2.jpg", "ph11a", 230) + phone("app3.jpg", "ph11b", 230) +
+        phone("app2.jpg", "ph11a", 230, [(50, 91)]) + phone("app3.jpg", "ph11b", 230, [(40, 40)]) +
         '<div class="timer"><svg viewBox="0 0 200 200" width="250" height="250"><circle cx="100" cy="100" r="86" fill="none" '
         f'stroke="{CARD2}" stroke-width="14"/><circle class="tring" cx="100" cy="100" r="86" fill="none" stroke="{GOLD}" '
         'stroke-width="14" stroke-linecap="round" pathLength="1" transform="rotate(-90 100 100)"/></svg><div class="tnum">2:00</div></div>')))
@@ -374,6 +398,8 @@ def scenes_tl():
     # 0
     a, z = L[0]
     pop(".capw .tile", a + .02, "opacity:0,scale:.4,rotation:-20", .6, "back.out(2)")
+    burst(540, 385, a + .1)
+    ev(a, "boom")
     add(f'tl.fromTo(".capglow",{{opacity:0,scale:.5}},{{opacity:1,scale:1.1,duration:1.6,ease:"sine.inOut",yoyo:true,repeat:1}},{a:.2f});')
     add(f'document.querySelectorAll(".cd").forEach((e,i)=>{{tl.fromTo(e,{{x:(i-2)*90,y:-260,opacity:0,scale:.7}},{{x:0,y:20,opacity:1,scale:.5,'
         f'duration:.55,ease:"power2.in",immediateRender:false}},{a + .6:.2f}+i*.45);tl.to(e,{{opacity:0,duration:.08}},{a + 1.15:.2f}+i*.45);}});')
@@ -394,6 +420,7 @@ def scenes_tl():
         add(f'tl.to(".ox{k + 1} .tile",{{filter:"grayscale(0) brightness(1)",boxShadow:"0 0 70px rgba(218,182,106,.7)",duration:.4}},{tk:.2f});')
         add(f'tl.to(".ox{k + 1} .qq",{{opacity:0,scale:.3,duration:.25}},{tk:.2f});')
         ev(tk, "ping")
+        burst(185 if k == 0 else 895, 475, tk)
     add(f'tl.fromTo(".hglass svg",{{rotation:0}},{{rotation:180,duration:.7,ease:"power3.inOut",repeat:3,repeatDelay:.6}},{a + .4:.2f});')
     # 2
     a, z = L[2]
@@ -416,6 +443,7 @@ def scenes_tl():
     ev(a + .2, "ping")
     add(f'tl.fromTo(".mold",{{opacity:0,y:-260}},{{opacity:1,y:0,duration:.35,ease:"power3.in"}},{a + 1.5:.2f});')
     ev(a + 1.85, "thud")
+    burst(540, 395, a + 1.85, "#E07A6A")
     add(f'tl.to(".stu",{{scale:.86,filter:"grayscale(1)",duration:.25}},{a + 1.85:.2f});')
     add(f'tl.to(".stu svg",{{opacity:.35,duration:.25}},{a + 1.85:.2f});')
     # 4
@@ -432,6 +460,7 @@ def scenes_tl():
     add(f'tl.to(".needle",{{rotation:70,duration:1.0,ease:"elastic.out(1,.45)"}},{a + 3.3:.2f});')
     add(f'tl.to(".sb .tile",{{filter:"grayscale(0) brightness(1)",boxShadow:"0 0 70px rgba(218,182,106,.7)",scale:1.08,duration:.4}},{a + 3.5:.2f});')
     ev(a + 3.4, "ping")
+    burst(895, 495, a + 3.5)
     add(f'tl.to(".dialw",{{rotation:6,duration:2.5,ease:"sine.inOut"}},{a + 4:.2f});')
     # 5
     a, z = L[5]
@@ -442,8 +471,12 @@ def scenes_tl():
         f'ease:"power3.out"}},{a + .5:.2f});')
     out("#s5 .intro", a + 2.35, "opacity:0,scale:.8,y:-80", .35)
     pop(".ph5", a + 2.8, "opacity:0,x:-160,rotationY:35", .7)
+    tap(".ph5 .tp0", a + 3.7)
     for k, tk in enumerate((a + 3.2, a + 4.3, a + 5.6, a + 6.6)):
         pop(f".dm{k}", tk, "opacity:0,scale:.4,rotation:-15", .5, "back.out(2.4)", "ping")
+        burst(515 + (k % 2) * 230, 385 + (k // 2) * 210, tk + .1)
+    burst(540, 640, a + .15)
+    ev(a, "boom")
     add(f'tl.to(".dim",{{boxShadow:"0 0 60px rgba(218,182,106,.55)",duration:.5,stagger:.1}},{a + 7.2:.2f});')
     # 6
     a, z = L[6]
@@ -451,6 +484,7 @@ def scenes_tl():
     add(f'tl.fromTo(".cosmos",{{opacity:0}},{{opacity:1,duration:.8}},{a:.2f});')
     add(f'tl.fromTo(".cs",{{opacity:.15}},{{opacity:1,duration:.6,stagger:{{each:.04,repeat:9,yoyo:true}},ease:"sine.inOut"}},{a:.2f});')
     pop(".orbits", a + .1, "opacity:0,scale:.4", 1.0, "expo.out", "reveal")
+    burst(540, 740, a + .2, LAV)
     add(f'tl.fromTo(".orb.o1",{{rotation:0}},{{rotation:200,duration:6.6,ease:"none"}},{a:.2f});')
     add(f'tl.fromTo(".orb.o2",{{rotation:180}},{{rotation:20,duration:6.6,ease:"none"}},{a:.2f});')
     add(f'tl.fromTo(".orb.o1 .och",{{rotation:0}},{{rotation:-200,duration:6.6,ease:"none"}},{a:.2f});')
@@ -478,6 +512,7 @@ def scenes_tl():
     add(f'tl.to(".bigger .tile",{{scale:.6,opacity:.5,duration:.6,ease:"power2.inOut"}},{a + .9:.2f});')
     add(f'tl.fromTo(".bcomp",{{opacity:0,rotation:-90,scale:.5}},{{opacity:1,rotation:0,scale:1,duration:.9,ease:"back.out(2)"}},{a + 1.3:.2f});')
     ev(a + .9, "swell")
+    burst(540, 375, a + 1.3)
     # 9
     a, z = L[9]
     for k, (dx, dy) in enumerate([(-300, -40), (300, -40), (0, 260)]):
@@ -490,10 +525,13 @@ def scenes_tl():
     add(f'tl.fromTo(".vcore",{{opacity:0,scale:.3,rotation:-90}},{{opacity:1,scale:1,rotation:0,duration:.7,ease:"back.out(2.4)"}},{a + 5.6:.2f});')
     add(f'tl.to(".vcore",{{scale:1.15,duration:.5,yoyo:true,repeat:3,ease:"sine.inOut"}},{a + 6.3:.2f});')
     ev(a + 5.6, "reveal")
+    burst(540, 520, a + 5.65, "#fff1c4")
     # 10
     a, z = L[10]
     pop(".ph10", a + .05, "opacity:0,y:260,rotationX:25", .8)
     add(f'tl.fromTo(".ph10 .scr img",{{y:0}},{{y:-260,duration:6,ease:"sine.inOut"}},{a + 1.2:.2f});')
+    ev(a + 1.2, "scroll")
+    tap(".ph10 .tp0", a + 6.6)
     pop(".tick.t1", a + 1.8, "opacity:0,x:-120,scale:.7", .55, "back.out(2)", None)
     pop(".tick.t1 .tk", a + 2.3, "opacity:0,scale:.3", .4, "back.out(3)", "tick")
     pop(".tick.t2", a + 5.0, "opacity:0,x:120,scale:.7", .55, "back.out(2)", None)
@@ -504,16 +542,27 @@ def scenes_tl():
     pop(".ph11b", a + 1.6, "opacity:0,x:200,rotationY:-30", .6)
     pop(".timer", a + .4, "opacity:0,scale:.5", .6, "back.out(2)", None)
     draw(".tring", a + .5, 1.2, "power2.out")
-    ev(a + .5, "count", 1.0)
+    burst(540, 525, a + .45)
+    tap(".ph11a .tp0", a + 1.1)
+    tap(".ph11b .tp0", a + 2.7)
+    # the timer runs: 2:00, 1:59, 1:58 ...
+    for k in range(1, 4):
+        add(f'tl.set(".tnum",{{textContent:"1:{60 - k:02d}"}},{a + 1.6 + k * .7:.2f});')
+        ev(a + 1.6 + k * .7, "clock")
     # 12
     a, z = L[12]
     pop(".ph12", a + .05, "opacity:0,y:300,rotationX:25", .8)
     add(f'tl.fromTo(".ph12 .scr img",{{y:0}},{{y:-500,duration:3.6,ease:"sine.inOut"}},{a + .8:.2f});')
+    ev(a + .8, "scroll")
     out(".ph12", a + 4.4, "opacity:0,scale:.8,y:-80", .4)
     pop(".offer", a + 4.6, "opacity:0,scale:.8,rotationX:30", .7)
     add(f'tl.fromTo(".ostamp",{{opacity:0,scale:2.6,rotation:-18}},{{opacity:1,scale:1,rotation:-6,duration:.45,ease:"back.out(2.4)"}},{a + 5.5:.2f});')
     ev(a + 5.5, "stamp")
+    ev(a + 4.6, "boom")
+    burst(540, 560, a + 5.5)
+    add(f'tl.fromTo("#flash",{{opacity:.35}},{{opacity:0,duration:.5,ease:"power2.out",immediateRender:false}},{a + 4.6:.2f});')
     counter(".cnt-price", 0, 2300, a + 7.0, 1.4, "₹")
+    burst(540, 820, a + 8.4)
     add(f'tl.fromTo(".offer .shine",{{xPercent:-160}},{{xPercent:300,duration:.9,ease:"power2.inOut"}},{a + 8.3:.2f});')
     ev(a + 8.4, "glint")
     # 13
@@ -526,11 +575,13 @@ def scenes_tl():
     add(f'tl.to(".sweep",{{opacity:0,duration:.3}},{a + 2.8:.2f});')
     ev(a + 2.4, "swish")
     pop(".land", a + 2.9, "opacity:0,scale:.3,y:-60", .55, "back.out(2.6)", "reveal")
+    burst(540, 385, a + 3.0)
     # 14
     a, z = L[14]
     add(f'tl.fromTo(".i14 .logo",{{opacity:0,scale:.3,rotation:120}},{{opacity:1,scale:1,rotation:0,duration:1,ease:"expo.out"}},{a + .05:.2f});')
     add(f'tl.fromTo(".i14 .halo",{{opacity:0,scale:.4}},{{opacity:1,scale:1,duration:1.4,ease:"expo.out"}},{a + .05:.2f});')
     ev(a + .05, "reveal")
+    burst(540, 430, a + .15)
     add(f'tl.fromTo(".i14 .wm",{{opacity:0,y:30,clipPath:"inset(0 100% 0 0)"}},{{opacity:1,y:0,clipPath:"inset(0 0% 0 0)",duration:.8,'
         f'ease:"power3.out"}},{a + .4:.2f});')
     # 15
@@ -543,6 +594,10 @@ def scenes_tl():
         f'yoyo:true,repeat:5,ease:"sine.inOut"}},{a + 1.2:.2f});')
     add(f'tl.fromTo(".ctaf",{{opacity:0,scale:2.4}},{{opacity:1,scale:1,duration:.5,ease:"back.out(2.4)"}},{a + 2.4:.2f});')
     ev(a + 2.4, "stamp")
+    ev(a, "boom")
+    burst(540, 690, a + .55)
+    burst(540, 920, a + 2.45)
+    add(f'tl.fromTo("#flash",{{opacity:.4}},{{opacity:0,duration:.6,ease:"power2.out",immediateRender:false}},{a:.2f});')
 
 
 def backdrop():
@@ -551,16 +606,20 @@ def backdrop():
                    f'width:{r.choice([3, 4, 5, 7])}px;height:{r.choice([3, 4, 5, 7])}px"></i>' for i in range(46))
     sparks = "".join(f'<div class="sp4" style="left:{x}px;top:{y}px">{star4(s, c)}</div>'
                      for x, y, s, c in [(120, 330, 26, RED), (930, 420, 20, GOLD), (80, 1180, 18, GOLD), (980, 1290, 24, RED)])
-    return (f'<div id="bgbase"></div><div id="rose">{compass_rose(1500)}</div><div id="dust">{dust}</div>{sparks}'
+    return (f'<div id="bgbase"></div><div class="aur au1"></div><div class="aur au2"></div><div id="rose">{compass_rose(1500)}</div><div id="dust">{dust}</div>{sparks}'
             f'<div id="vig"></div>')
 
 
 def backdrop_tl():
     add(f'tl.fromTo("#rose",{{rotation:0}},{{rotation:40,duration:{DUR},ease:"none"}},0);')
+    add(f'tl.fromTo(".au1",{{x:-120,y:0}},{{x:160,y:120,duration:9,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 9)}}},0);')
+    add(f'tl.fromTo(".au2",{{x:140,y:60}},{{x:-160,y:-80,duration:11,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 11)}}},0);')
+    # sparks running along the seam
+    add(f'document.querySelectorAll(".ssp").forEach((e,i)=>tl.fromTo(e,{{x:-60,opacity:0}},{{x:1140,opacity:1,duration:2.6+(i%3)*.5,ease:"none",'
+        f'repeat:{int(DUR / 2.6)},delay:i*.37}},0));')
     add(f'document.querySelectorAll(".du").forEach((e,i)=>tl.fromTo(e,{{y:0,opacity:0}},{{y:-260-(i%5)*60,opacity:.9,duration:6,'
         f'ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 6)}}},(i%9)*.7));')
     add(f'tl.fromTo(".sp4",{{scale:.6,rotation:0}},{{scale:1.15,rotation:45,duration:2.4,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 2.4)},stagger:.6}},0);')
-    add(f'tl.fromTo("#halo",{{scale:.95,opacity:.8}},{{scale:1.06,opacity:1,duration:3,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 3)}}},0);')
 
 
 CSS = """
@@ -598,6 +657,18 @@ body { font-family: "Manrope", sans-serif; color: var(--cream); }
 .seam { position: absolute; left: 0; top: 957px; width: 1080px; height: 6px; z-index: 4;
   background: linear-gradient(90deg, rgba(218,182,106,0), #DAB66A 20%, #fff1c4 50%, #DAB66A 80%, rgba(218,182,106,0));
   box-shadow: 0 0 30px rgba(218,182,106,.7); }
+.seamg { position: absolute; inset: 0; pointer-events: none; }
+.ssp { position: absolute; left: 0; top: 955px; width: 26px; height: 10px; border-radius: 5px; background: #fff1c4;
+  box-shadow: 0 0 16px 4px rgba(218,182,106,.9); opacity: 0; }
+.aur { position: absolute; border-radius: 50%; opacity: .55; }
+.au1 { left: -200px; top: 80px; width: 900px; height: 700px; background: radial-gradient(closest-side, rgba(218,182,106,.32), rgba(218,182,106,0)); }
+.au2 { left: 380px; top: 420px; width: 900px; height: 800px; background: radial-gradient(closest-side, rgba(46,94,52,.45), rgba(46,94,52,0)); }
+#sweepfx { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0;
+  background: linear-gradient(105deg, rgba(255,241,196,0) 38%, rgba(255,241,196,.22) 47%, rgba(255,255,255,.45) 50%, rgba(255,241,196,.22) 53%, rgba(255,241,196,0) 62%); }
+.br { position: absolute; width: 220px; height: 220px; border-radius: 50%; border: 5px solid; opacity: 0; }
+.br i { position: absolute; left: 90px; top: 90px; width: 40px; height: 40px; border-radius: 50%; filter: blur(6px); }
+.tp { position: absolute; width: 70px; height: 70px; margin: -35px 0 0 -35px; border-radius: 50%; border: 4px solid #fff;
+  background: rgba(255,255,255,.35); opacity: 0; }
 /* layer order: backdrop < things behind her < speaker < visuals < captions */
 #bg { z-index: 0; }
 .behind { z-index: 1; }
@@ -749,7 +820,11 @@ body { font-family: "Manrope", sans-serif; color: var(--cream); }
 GRADE = __import__("html").escape(json.dumps(json.load(open(os.path.join(ROOT, "build", "grade.json"))), separators=(",", ":")), quote=True)
 
 
+SEAMSPARKS = "".join(f'<i class="ssp"></i>' for _ in range(7))
+
+
 def main():
+    tl_js = TL()
     edlv = json.dumps([[a, b] for a, b in L])
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
@@ -763,11 +838,11 @@ def main():
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="1080" data-height="1920">
       <div id="bg" class="clip" data-start="0" data-duration="{DUR}" data-track-index="0" data-layout-allow-overflow>{backdrop()}</div>
-      <div id="spk" data-layout-allow-overflow><div id="spkcrop"><div id="panelbg"></div><div id="spkw"><div id="halo"></div>
-        <video id="talk" data-color-grading="{GRADE}" src="assets/video/{os.environ.get("SPK_SRC", "talk_fg_clean.webm")}" data-start="0" data-duration="{VO}" data-track-index="2" muted playsinline></video></div></div><div class="seam"></div></div>
+      <div id="spk" data-layout-allow-overflow><div id="spkcrop"><div id="panelbg"></div><div id="spkw">
+        <video id="talk" data-color-grading="{GRADE}" src="assets/video/{os.environ.get("SPK_SRC", "talk.mp4")}" data-start="0" data-duration="{VO}" data-track-index="2" muted playsinline></video></div></div><div class="seamg"><div class="seam"></div>{SEAMSPARKS}</div></div>
       {scenes()}
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="7">{captions_html()}</div>
-      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8"><div id="flash"></div></div>
+      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8"><div id="sweepfx"></div>{bursts_html()}<div id="flash"></div></div>
       <audio id="voice" src="assets/audio/voice.wav" data-start="0" data-duration="{VO}" data-track-index="10" data-volume="1"></audio>
       <audio id="music" src="assets/audio/music.wav" data-start="0" data-duration="{DUR}" data-track-index="11" data-volume="1"></audio>
     </div>
@@ -775,7 +850,7 @@ def main():
       window.__timelines = window.__timelines || {{}};
       const tl = gsap.timeline({{ paused: true }});
       // lines on the cut timeline: {edlv}
-{TL()}
+{tl_js}
       tl.set({{}}, {{}}, {DUR});
       window.__timelines["main"] = tl;
     </script>
