@@ -27,7 +27,7 @@ by SCRIPT.md), and `BRIEF_original.md`.
    ```
    python -m venv .venv-voice
    .venv-voice\Scripts\Activate.ps1        # if blocked: Set-ExecutionPolicy -Scope Process RemoteSigned
-   pip install kokoro chatterbox-tts soundfile numpy
+   pip install kokoro chatterbox-tts soundfile numpy "setuptools<81" faster-whisper
    python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
    ```
    - If that prints `False`, chatterbox-tts pulled in a CPU-only torch. Reinstall the **same torch version** with CUDA:
@@ -35,6 +35,10 @@ by SCRIPT.md), and `BRIEF_original.md`.
      If cu124 has no wheel for that version, use cu121 or cu126.
    - Models download from Hugging Face on first use.
    - If Kokoro asks for espeak-ng, install it from the espeak-ng GitHub releases (MSI).
+   - `setuptools<81` keeps `pkg_resources`, which Chatterbox's watermarker (resemble-perth) imports; without it
+     Chatterbox fails with `'NoneType' object is not callable`. `faster-whisper` checks the takes and times the words.
+   - On this laptop torch 2.6.0 came in CPU-only; `--force-reinstall --no-deps torch==2.6.0 torchaudio==2.6.0` from
+     the cu124 index fixed it (`2.6.0+cu124 True`).
 
 ## 2. The two voices (open source, expressive)
 
@@ -76,7 +80,24 @@ Steps:
    - If a line sounds flat, raise its `exaggeration` in `LINES` (up to about 1.0), lower its `cfg_weight` (about 0.3), and regenerate that line.
 4. Send the user `assets/audio/voice.wav` to approve **before** building the 3D.
 
+What was run for v1 (26 Oct 2026; Rishabh approved every step in advance):
+- Voices: NXT `am_fenrir`, HUMAN `am_puck` (both American; picked by Kokoro quality grade, pitch range and a clear
+  pitch gap between the two).
+- `python opengym-claude-9x16/voice/qa_takes.py` transcribes every take with Whisper and scores it (word accuracy,
+  pauses, peaks, pitch movement) -> `voice/qa.json`.
+- `assemble --pick 01=1 02=1 03=3 04=3 05=2 06=1 07=2 08=1 09=1 10=3 11=2 12=3 --tempo 1.09`: the clean takes ran
+  36.4 s, so every line is sped up 9 % (pitch kept); the last word ends at 33.38 s.
+
 ## 3. 3D build and preview (after the voice is approved)
+
+Build order (inside the voice venv, from the repo root):
+```
+python opengym-claude-9x16/build/timing.py     # words.json + env.json from voice.wav
+python opengym-claude-9x16/build/generate.py   # index.html (cues, panel, captions, timeline)
+python opengym-claude-9x16/build/audio.py      # music.wav + mix.wav, mastered to -14 LUFS / -1.5 dBTP
+python opengym-claude-9x16/build/cover.py      # cover/index.html; then: npx hyperframes snapshot cover --at=0.5 --no-end
+```
+The 3D world is `assets/js/opengym.js`. The panel screens are mocks (no screen recordings were supplied).
 
 - Follow `PLAN.md` sections 4–6 with the SCRIPT.md timings. Snap every scene start to the first word of its line: transcribe `voice.wav` to word timestamps, then use them.
 - Three.js inside HyperFrames, seek-driven, with one paused GSAP timeline.

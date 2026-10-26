@@ -25,3 +25,5 @@ opengym-claude-9x16/assets/audio/*.wav
 opengym-claude-9x16/voice/design/
 opengym-claude-9x16/voice/lines/
 opengym-claude-9x16/voice/norm/
+.venv-voice/
+opengym-claude-9x16/cover/assets/

@@ -19,7 +19,8 @@ Steps (from the repo root, inside the voice venv):
       -> voice/lines/<nn>_<speaker>_t<k>.wav: every line, `takes` versions each, acted in the picked voices.
   python opengym-claude-9x16/voice/make_voices.py assemble [--pick 03=2 07=1]
       -> assets/audio/voice_nxt.wav, voice_human.wav, voice.wav (both, timed) and voice/lines.json (start/end per line).
-         By default take 1 of each line; --pick chooses another take for a line.
+         By default take 1 of each line; --pick chooses another take for a line; --tempo 1.06 speeds every line up
+         (pitch kept) when the voice runs over the 33.5 s budget.
 
 NXT gets a light robot colour (a subtle chorus and a short metallic echo) in assemble; --no-robot turns it off.
 Every line is loudness-matched (-16 LUFS) and resampled to 48 kHz, so the mix stays even.
@@ -191,7 +192,11 @@ def assemble(a):
         src = os.path.join(HERE, "lines", f"{i:02d}_{who}_t{k}.wav")
         dst = os.path.join(tmp, f"{i:02d}.wav")
         fx = "" if who != "nxt" or a.no_robot else ROBOT_FX + ","
-        # trim leading/trailing silence, colour NXT, match loudness, 48 kHz mono
+        fx = (f"atempo={a.tempo}," if a.tempo != 1 else "") + fx
+        if a.max_pause:   # shorten long pauses inside the line, keeping max_pause of each
+            fx = (f"silenceremove=stop_periods=-1:stop_duration={a.max_pause}:stop_threshold=-40dB:"
+                  f"stop_silence={a.max_pause}:detection=rms,") + fx
+        # trim leading/trailing silence, (speed up), colour NXT, match loudness, 48 kHz mono
         ffmpeg("-i", src, "-af", "silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.02,"
                "areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.06,areverse,"
                f"{fx}loudnorm=I=-16:TP=-1.5:LRA=11", "-ar", str(SR), "-ac", "1", dst)
@@ -214,7 +219,7 @@ def assemble(a):
     sf.write(os.path.join(PROJ, "assets", "audio", "voice.wav"), mix, SR)
     json.dump({"duration": round(total, 3), "lines": timeline}, open(os.path.join(HERE, "lines.json"), "w"), indent=1)
     print(f"voice.wav {total:.2f} s, {len(timeline)} lines -> voice/lines.json")
-    if total > 33.5:
+    if timeline[-1]["end"] > 33.5:
         print("over budget: the reel must stay under 35 s with the 1.5 s end card; pick faster takes or trim gaps")
 
 
@@ -238,6 +243,8 @@ def main():
     asm = sub.add_parser("assemble")
     asm.add_argument("--pick", nargs="*", default=[])
     asm.add_argument("--no-robot", action="store_true")
+    asm.add_argument("--tempo", type=float, default=1.0, help="speed every line up (pitch kept), e.g. 1.06 to fit the time budget")
+    asm.add_argument("--max-pause", type=float, help="cap pauses inside a line at this many seconds, e.g. 0.4")
     a = ap.parse_args()
     {"design": design, "lines": lines, "assemble": assemble}[a.cmd](a)
 
