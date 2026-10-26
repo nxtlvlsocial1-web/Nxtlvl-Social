@@ -35,7 +35,7 @@ by SCRIPT.md), and `BRIEF_original.md`.
 | Character | Who | Sound |
 |---|---|---|
 | NXT | the violet AI robot in muscle mode | cocky, warm, playful, quick; a light robotic colour added in post |
-| HUMAN | young Delhi guy, about 22 | casual, tired, then surprised, then laughing |
+| HUMAN | young guy, about 22 | **no Indian accent**: a neutral, natural young male voice; casual, tired, then surprised, then laughing |
 
 **Why Dia:** it performs dialogue with real non-verbals, like `(sighs)`, `(gasps)` and `(laughs)`, so it doesn't
 sound like a flat narrator. Chatterbox is the fallback, with an emotion-intensity knob per line.
@@ -46,12 +46,12 @@ Steps:
    ```
    python opengym-claude-9x16/voice/make_voices.py design --seeds 3 7 11 19 23 31 42 58
    ```
-   Listen to `voice/design/`. Pick one seed per character: for NXT, a confident young male; for HUMAN, a different young male. Generate more seeds if none fit.
+   Listen to `voice/design/`. Pick one seed per character: for NXT, a confident young male; for HUMAN, a different young male. No Indian accent for either. Generate more seeds if none fit.
 2. **Generate every line,** 3 takes each, cloned from the picked voices:
    ```
    python opengym-claude-9x16/voice/make_voices.py lines --nxt-seed <N> --human-seed <M>
    ```
-   - For an Indian accent on HUMAN, record a 10 s reference yourself (or use a friend's, with their consent). Then pass `--human-ref ref.wav --human-ref-text "<exact words in the clip>"`.
+   - Both voices must have **no Indian accent**: pick seeds with a neutral (American-leaning) young male sound, and the two must sound clearly different from each other.
    - If Dia misbehaves, add `--engine chatterbox` (the same refs work).
    - **Check:** if a Dia take also contains the reference sentence at its start, trim that part before assembling.
 3. **Pick the best takes and assemble:**

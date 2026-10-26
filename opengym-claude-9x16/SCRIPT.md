@@ -6,7 +6,7 @@ Changes from v1:
 - The open-loop and "catch" beats are cut. The official links live in the DM instead.
 
 Characters:
-- **HUMAN**: young Delhi guy, casual, a little lazy, funny.
+- **HUMAN**: young guy, casual, a little lazy, funny. His voice has no Indian accent: a neutral, natural young male voice.
 - **NXT**: the page's violet robot in muscle mode; cocky, warm, playful.
 
 ## Story arc
