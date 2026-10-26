@@ -15,9 +15,11 @@ angle: talking-head ad
 
 Talking-head ad for Sucsess Maperrs (spelled exactly so, the client's spelling): the presenter speaks in Hindi/Hinglish to
 parents, then introduces the app (Instant Success Scan free, Success Map Pro full assessment at 90% off, Rs. 2,300).
-Edited in the reference's format (Nick Saraev style reel): split layouts with UI up top and the speaker below,
-full-frame speaker beats with short captions, UI focus moments, glowing CTA end. Immersive motion, music and sound effects,
-precise detailing, colour-corrected footage, speech errors and retakes cut out.
+Draft 3 format (after client feedback on draft 2 and the ai.nxtlvl reference reels): the speaker full frame, cropped
+from the top, with punch-ins on jump cuts and icon stickers beside her head; transition screens (iris, gold wipe, push)
+into full-screen motion scenes on the app's dark world, with giant faint background words, a brand label and progress
+bar, cards, step circles, meters, caution tape and count-ups; active-word gold-pill captions; glowing CTA end. Immersive
+motion, music and sound effects, precise detailing, colour-corrected footage, speech errors and retakes cut out.
 
 ## Assets
 

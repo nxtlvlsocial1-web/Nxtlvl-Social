@@ -7,7 +7,7 @@ a low pulse and light percussion from the brand reveal, a lift into the free sca
 disclaimer, and a resolving final chord under the end card. Sound design: every visual event generate.py logs
 (build/sfx_events.json) gets a matching sound: soft whooshes on framing moves, pops and pings for cards, a coin shimmer,
 stamps, ticks, a reveal swell for the logo, a count roll for the price, a glassy shimmer with every light sweep, UI taps
-and scroll ticks on the app screens, a ticking timer, and sub-boom impacts on the hook, the reveal, the offer and the CTA.
+and scroll ticks on the app screens, a ticking timer, a soft punch under every jump-cut punch-in, and sub-boom impacts on the hook, the reveal, the offer and the CTA.
 
 Mix: the bed is ducked by the voice (envelope follower) and carved: its 1-4 kHz band drops further while she speaks, so
 the words stay clear. Writes assets/audio/music.wav (bed + SFX) and assets/audio/voice.wav (her voice, cleaned and mastered).
@@ -315,6 +315,9 @@ def sfx():
             put(boom(), t, 1.0, 0, "sfx")
         elif kind == "glint":
             put(chime(.8), t, .7, pan, "sfx")
+        elif kind == "punch":
+            put(whoosh(.16, .5), t - .08, .45, 0, "sfx")
+            put(thud(.5), t, .35, 0, "sfx")
 
 
 def reverb(x, secs=2.2, mix=.25, seed=0):

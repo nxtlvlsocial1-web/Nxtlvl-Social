@@ -2,14 +2,17 @@
 
 python3 -I build/generate.py      (run from the project root, after build/edl.py)
 
-Format from the reference reel: the presenter switches between three framings, FULL (close, captions on her),
-SPLIT (small and low, with the app's UI up top) and FOCUS (she steps out and the UI fills the frame), and the end is a
-glowing CTA on a dark vignette. Her matte (assets/video/talk_fg.webm from hyperframes remove-background, edge choked 2 px and feathered into talk_fg_clean.webm so no wall fringe shows) sits on the app's own
-world: near-black #15110E, gold #DAB66A, cream #F2EADD, sage #839172, plum #261F2F; Fraunces (display, gold italic accents),
-Manrope (body), JetBrains Mono (spaced labels). A slowly turning compass rose from the logo, gold dust and a halo behind
-her head keep the backdrop alive; big words can sit behind her (between backdrop and matte). Captions are English
-translations of the Hinglish speech (client requirement), in phrase chunks timed across each spoken line. The brand is
-always spelled Sucsess Maperrs.
+Two modes, cut on the rhythm of the speech. TALK: the real take, full frame, cropped from the top (the bare wall above
+her head goes; her face sits high, a slow push-in runs under every beat and each jump cut lands on a punch-in), with app
+icon stickers popping in the free corners beside her head. MOTION: a full-screen scene on the app's own dark world. A
+transition screen carries every change (iris from her face, a gold-edged wipe, or a push), and scene-to-scene changes
+inside a motion run slide across. After the reference reels: a giant faint word drifting behind each scene, a brand label
+and progress bar on top, cards, step circles, meters, caution tape, count-ups and coin bursts; the captions show the
+active word on a gold pill.
+
+Palette from the app UI: near-black #15110E, gold #DAB66A, cream #F2EADD, sage #839172, plum #261F2F; Fraunces (display,
+gold italic accents), Manrope (body), JetBrains Mono (labels). Captions are English translations of the Hinglish speech
+(client requirement) and are the only words that echo her. The brand is always spelled Sucsess Maperrs.
 """
 import json
 import math
@@ -187,65 +190,117 @@ def coin(s):
     return (f'<div class="coin" style="width:{s}px;height:{s}px;font-size:{s * .55:.0f}px">₹</div>')
 
 
-# ------------------------------------------------------------------ framings
-# The raw take is never zoomed or cut out: it is cropped from the top (the empty wall above her head) and fitted 1:1,
-# full width, into the lower part of the frame under a gold seam; the visuals live in the band above. Two seam heights
-# give the reference's rhythm: TALK (seam at 560, a tall panel of her with a visual band on top) and SPLIT (seam at 960,
-# the half-and-half of the reference). FOCUS slides her out so a visual fills the frame; CTA shows the whole take, dimmed.
-SRC_TOP = 330                  # source rows above this are bare wall
-SEAMS = {"talk": 560, "split": 960, "focus": 960, "cta": 0}
-SHOTS = sorted([(L[i][0], s) for i, s in enumerate(["talk", "split", "focus", "talk", "split", "focus", "focus", "talk", "talk",
-                                                    "split", "focus", "split", "focus", "talk", "split", "cta"])] +
-               [(L[5][0] + 2.6, "split")])
+# ------------------------------------------------------------------ the edit: when she is on screen, when a scene is
+# (start, mode). TALK shows her; MOTION opens the stage of full-screen scenes over her through a transition screen.
+STAGE = [(0, "talk"), (L[0][0] + 2.2, "motion"), (L[1][0] + .07, "talk"), (L[1][0] + 2.7, "motion"),
+         (L[3][0], "talk"), (L[3][0] + 1.6, "motion"), (L[4][0], "talk"), (L[4][0] + 2.7, "motion"),
+         (L[6][0], "talk"), (L[6][0] + 2.5, "motion"), (L[6][0] + 7.9, "talk"), (L[6][0] + 9.9, "motion"),
+         (L[8][0], "talk"), (L[9][0] + 1.6, "motion"), (L[10][0], "talk"), (L[10][0] + 2.2, "motion"),
+         (L[11][0], "talk"), (L[11][0] + 1.4, "motion"), (L[12][0], "talk"), (L[12][0] + 1.6, "motion"),
+         (L[14][0] + 2.25, "talk"), (L[15][0], "motion")]
+KINDS = ["iris", "wipe", "push"]
 
 
-def shot_at(t):
-    return [s for a, s in SHOTS if a <= t + 1e-6][-1]
+def runs(mode):
+    out_ = []
+    for k, (t, m) in enumerate(STAGE):
+        if m == mode:
+            out_.append((t, STAGE[k + 1][0] if k + 1 < len(STAGE) else DUR))
+    return out_
 
 
-def place(s):
-    """Video translate and crop for a shot: scale stays 1, the take slides so its row SRC_TOP meets the seam."""
-    seam = SEAMS[s]
-    y = 0 if s == "cta" else seam - SRC_TOP
-    return y, seam
+def mode_at(t):
+    return [m for a, m in STAGE if a <= t + 1e-6][-1]
+
+
+# the take is scaled around her face (source 540, 800) and lifted 100 px: at 1.22 her head top sits near y 310 and her
+# chin near 990, and every edge of the frame stays covered for any scale over 1.09
+WIDE, CLOSE, PUSH = 1.22, 1.36, .05
+TALKSCALE = []   # (start, end, scale at start)
+
+
+def talk_pieces():
+    """Talk runs split at every jump cut inside them; each piece alternates wide / close so a cut lands on a punch-in."""
+    k = 0
+    for a, b in runs("talk"):
+        cuts = [c for c in EDL["cuts"] if a + .3 < c < b - .3]
+        edges = [a] + cuts + [b]
+        for pa, pb in zip(edges, edges[1:]):
+            s = (WIDE, CLOSE)[k % 2]
+            k += 1
+            TALKSCALE.append((pa, pb, s, pa == a, pb == b))
+    return TALKSCALE
+
+
+def to_motion(t, kind, s_end):
+    st = t - .28
+    if kind == "iris":
+        add(f'tl.fromTo("#stage",{{clipPath:"circle(0% at 50% 40%)",x:0}},{{clipPath:"circle(86% at 50% 40%)",duration:.6,'
+            f'ease:"power3.inOut",immediateRender:false}},{st:.2f});')
+        add(f'tl.fromTo("#iring",{{scale:0,opacity:1}},{{scale:1.34,opacity:1,duration:.6,ease:"power3.inOut",immediateRender:false}},{st:.2f});')
+        add(f'tl.set("#iring",{{opacity:0}},{st + .6:.2f});')
+        add(f'tl.to("#spkw",{{scale:{s_end + .25:.3f},duration:.6,ease:"power3.in"}},{st:.2f});')
+    elif kind == "wipe":
+        add(f'tl.fromTo("#stage",{{clipPath:"inset(100% 0% 0% 0%)",x:0}},{{clipPath:"inset(0% 0% 0% 0%)",duration:.6,'
+            f'ease:"power3.inOut",immediateRender:false}},{st:.2f});')
+        add(f'tl.fromTo("#wbar",{{y:1940,opacity:1}},{{y:-40,opacity:1,duration:.6,ease:"power3.inOut",immediateRender:false}},{st:.2f});')
+        add(f'tl.set("#wbar",{{opacity:0}},{st + .6:.2f});')
+    else:
+        add(f'tl.set("#stage",{{clipPath:"inset(0% 0% 0% 0%)"}},{st:.2f});')
+        add(f'tl.fromTo("#stage",{{x:1080}},{{x:0,duration:.6,ease:"expo.inOut",immediateRender:false}},{st:.2f});')
+        add(f'tl.fromTo("#spk",{{x:0}},{{x:-380,duration:.6,ease:"expo.inOut",immediateRender:false}},{st:.2f});')
+        add(f'tl.fromTo("#pedge",{{x:1080,opacity:1}},{{x:0,opacity:1,duration:.6,ease:"expo.inOut",immediateRender:false}},{st:.2f});')
+        add(f'tl.set("#pedge",{{opacity:0}},{st + .6:.2f});')
+    add(f'tl.fromTo("#sweepfx",{{xPercent:-120,opacity:1}},{{xPercent:120,opacity:1,duration:.7,ease:"power2.inOut",immediateRender:false}},{st:.2f});')
+    ev(st, "whoosh")
+    ev(t, "sweep")
+
+
+def to_talk(t, kind):
+    st = t - .28
+    if kind == "iris":
+        add(f'tl.set("#spk",{{x:0}},{st:.2f});')
+        add(f'tl.fromTo("#stage",{{clipPath:"circle(86% at 50% 40%)",x:0}},{{clipPath:"circle(0% at 50% 40%)",duration:.6,'
+            f'ease:"power3.inOut",immediateRender:false}},{st:.2f});')
+        add(f'tl.fromTo("#iring",{{scale:1.34,opacity:1}},{{scale:0,opacity:1,duration:.6,ease:"power3.inOut",immediateRender:false}},{st:.2f});')
+        add(f'tl.set("#iring",{{opacity:0}},{st + .6:.2f});')
+    elif kind == "wipe":
+        add(f'tl.set("#spk",{{x:0}},{st:.2f});')
+        add(f'tl.fromTo("#stage",{{clipPath:"inset(0% 0% 0% 0%)",x:0}},{{clipPath:"inset(0% 0% 100% 0%)",duration:.6,'
+            f'ease:"power3.inOut",immediateRender:false}},{st:.2f});')
+        add(f'tl.fromTo("#wbar",{{y:1940,opacity:1}},{{y:-40,opacity:1,duration:.6,ease:"power3.inOut",immediateRender:false}},{st:.2f});')
+        add(f'tl.set("#wbar",{{opacity:0}},{st + .6:.2f});')
+    else:
+        add(f'tl.fromTo("#stage",{{x:0}},{{x:-1080,duration:.6,ease:"expo.inOut",immediateRender:false}},{st:.2f});')
+        add(f'tl.fromTo("#spk",{{x:380}},{{x:0,duration:.6,ease:"expo.inOut",immediateRender:false}},{st:.2f});')
+    ev(st, "swish")
 
 
 def frame_tl():
-    y, seam = place(SHOTS[0][1])
-    add(f'tl.set("#spkw",{{x:0,y:{y},scale:1,opacity:1}},0);')
-    add(f'tl.set("#spkcrop",{{clipPath:"inset({seam}px 0px 0px 0px)"}},0);tl.set(".seamg",{{y:{seam - 960},opacity:1}},0);')
-    prev = SHOTS[0][1]
-    for t, s in SHOTS[1:]:
-        if s == prev:
-            continue
-        y, seam = place(s)
-        st = t - .24
-        if s == "focus":
-            # she slides down out of frame; the seam follows her down and fades
-            add(f'tl.to("#spkw",{{y:1920,duration:.6,ease:"expo.inOut"}},{st:.2f});')
-            add(f'tl.to(".seamg",{{y:960,opacity:0,duration:.6,ease:"expo.inOut"}},{st:.2f});')
+    add(f'tl.set("#stage",{{clipPath:"inset(0% 0% 100% 0%)",x:0}},0);tl.set("#spk",{{x:0}},0);')
+    add(f'tl.set("#spkw",{{scale:{WIDE},x:0,y:-100}},0);')
+    ends = {}
+    for pa, pb, s, first, last in talk_pieces():
+        a0 = max(0, pa - (.3 if first else 0))
+        b0 = pb + (.3 if last else 0)
+        add(f'tl.fromTo("#spkw",{{scale:{s}}},{{scale:{s + PUSH:.3f},duration:{b0 - a0:.2f},ease:"none",immediateRender:false}},{a0:.2f});')
+        if not first:
+            ev(pa, "punch")
+        ends[round(pb, 3)] = s + PUSH
+    m = 0
+    for k, (t, mode) in enumerate(STAGE[1:], 1):
+        if mode == "motion":
+            to_motion(t, KINDS[m % 3], ends.get(round(t, 3), WIDE))
         else:
-            if prev == "focus":
-                add(f'tl.set("#spkcrop",{{clipPath:"inset({seam}px 0px 0px 0px)"}},{st:.2f});')
-                add(f'tl.fromTo("#spkw",{{y:1920}},{{y:{y},duration:.6,ease:"expo.out",immediateRender:false}},{st:.2f});')
-            else:
-                add(f'tl.to("#spkw",{{y:{y},duration:.6,ease:"expo.inOut"}},{st:.2f});')
-                add(f'tl.to("#spkcrop",{{clipPath:"inset({seam}px 0px 0px 0px)",duration:.6,ease:"expo.inOut"}},{st:.2f});')
-            add(f'tl.to(".seamg",{{y:{seam - 960},opacity:{0 if s == "cta" else 1},duration:.6,ease:"expo.inOut"}},{st:.2f});')
-        add(f'tl.fromTo("#sweepfx",{{xPercent:-120,opacity:1}},{{xPercent:120,opacity:1,duration:.7,ease:"power2.inOut",immediateRender:false}},{st:.2f});')
-        ev(st, "whoosh")
-        ev(st + .25, "sweep")
-        prev = s
-    # a cut inside a line keeps the framing: a gentle 4% push-in hides the jump
-    for c in EDL["cuts"]:
-        if not any(abs(c - a) < .05 for a, _ in L):
-            add(f'tl.set("#spkw",{{scale:1.04,x:-22}},{c:.2f});')
+            to_talk(t, KINDS[m % 3])
+            m += 1
 
 
 # ------------------------------------------------------------------ captions (the only words on screen that echo her)
 EMPH = {"lakhs", "strengths", "interests", "marks.", "family", "one", "direction", "Sucsess", "Maperrs.", "personality,",
         "aptitude", "optional,", "reflective", "not", "guaranteed", "alignment", "informed", "satisfaction.", "2-minute",
         "90%", "2,300.", "guesswork.", "yourself,", "future.", "free."}
+CAPTOP = 1330
 
 
 def chunks(text, n=4):
@@ -283,9 +338,8 @@ def caption_plan():
 def captions_html():
     h = []
     for k, (a, _, c) in enumerate(caption_plan()):
-        top = 832 if shot_at(a + .2) == "split" else 1400     # in a split the caption sits on the seam, above her
-        ws = "".join(f'<span class="cw{" em" if w in EMPH else ""}">{w}</span> ' for w in c)
-        h.append(f'<div class="cap cap{k}" style="top:{top}px">{ws}</div>')
+        ws = "".join(f'<span class="cw w{j}{" em" if w in EMPH else ""}">{w}</span> ' for j, w in enumerate(c))
+        h.append(f'<div class="cap cap{k}" style="top:{CAPTOP}px">{ws}</div>')
     return "".join(h)
 
 
@@ -294,309 +348,441 @@ def captions_tl():
         add(f'tl.fromTo(".cap{k} .cw",{{opacity:0,y:26,scale:.9}},{{opacity:1,y:0,scale:1,duration:.32,stagger:.05,ease:"back.out(2.2)",'
             f'immediateRender:false}},{a:.2f});')
         add(f'tl.set(".cap{k}",{{opacity:1}},{a:.2f});tl.set(".cap{k}",{{opacity:0}},{z:.2f});')
+        # the active word rides a gold pill, word by word through the chunk
+        wts = [len(w) + 2 for w in c]
+        t = a
+        for j, (w, wt) in enumerate(zip(c, wts)):
+            d = (z - a) * wt / sum(wts)
+            col = GOLD if w in EMPH else CREAM
+            add(f'tl.set(".cap{k} .w{j}",{{backgroundColor:"{GOLD}",color:"#1d1812"}},{t:.2f});'
+                f'tl.set(".cap{k} .w{j}",{{backgroundColor:"rgba(218,182,106,0)",color:"{col}"}},{t + d:.2f});')
+            t += d
 
 
-# ------------------------------------------------------------------ scenes: visuals only, no words that repeat her
+# ------------------------------------------------------------------ stickers: app icons beside her head while she talks
+STK = []
+
+
+def sticker(a, z, name, side, col=GOLD, extra=""):
+    k = len(STK)
+    x = 70 if side == "l" else 840
+    STK.append(clip(f"st{k}", a, z, f'<div class="stk" style="left:{x}px;top:250px">{tile(name, 170, col)}{extra}</div>', track=4, cls="ov"))
+    pop(f"#st{k} .stk", a + .12, f"opacity:0,scale:.3,rotation:{-25 if side == 'l' else 25}", .55, "back.out(2.4)")
+    add(f'tl.fromTo("#st{k} .stk .tile",{{y:0}},{{y:-16,duration:.9,ease:"sine.inOut",yoyo:true,repeat:{max(1, int((z - a) / .9))}}},{a + .7:.2f});')
+    out(f"#st{k} .stk", z - .32, "opacity:0,scale:.6", .25)
+    return f"#st{k}"
+
+
+def stickers():
+    r = random.Random(5)
+    coins = "".join(f'<div class="cn cn{i}" style="left:{r.uniform(20, 960):.0f}px">{coin(r.choice([70, 90, 120]))}</div>' for i in range(16))
+    STK.append(clip("ov0", 0, L[0][0] + 2.5, f'<div class="coins">{coins}</div>', track=4, cls="ov"))
+    add('document.querySelectorAll("#ov0 .cn").forEach((e,i)=>{tl.fromTo(e,{y:-260,rotation:-30,opacity:1},{y:2100,rotation:200,opacity:1,'
+        'duration:1.9,ease:"power1.in",immediateRender:false},.05+i*.11);});')
+    ev(0, "boom")
+    ev(.15, "coins")
+    t = runs("talk")
+    hid = sticker(t[1][0], t[1][1], "hour", "r")
+    add(f'tl.fromTo("{hid} svg",{{rotation:0}},{{rotation:180,duration:.6,ease:"power3.inOut",repeat:2,repeatDelay:.5}},{t[1][0] + .6:.2f});')
+    sticker(t[2][0], t[2][1], "calc", "l", CREAM, '<b class="qq">?</b>')
+    sticker(t[3][0], t[3][1], "badge", "l", MUTED)
+    sticker(t[3][0] + 1.3, t[3][1], "route", "r")
+    sticker(t[4][0], t[4][1], "numbers", "l")
+    sticker(t[4][0] + .9, t[4][1], "moon", "r", LAV)
+    sticker(t[5][0], t[5][1], "compass", "r")
+    sticker(t[6][0], t[6][1], "briefcase", "l")
+    sticker(L[9][0] + .1, t[6][1], "route", "r")
+    sticker(t[7][0], t[7][1], "brain", "r", SAGE)
+    sticker(t[8][0], t[8][1], "hour", "r")
+    sticker(t[9][0], t[9][1], "report", "l")
+    sticker(t[10][0], t[10][1], "compass", "l")
+    return "".join(STK)
+
+
+# ------------------------------------------------------------------ scenes: full screen, visuals only
+def ghost(word):
+    return f'<div class="ghost">{word}</div>'
+
+
+SC = {}          # scene id -> (start, end) of the stretch it is on screen
+
+
+def scene(sid, a, z, inner, word=None):
+    SC[sid] = (a, z, bool(word))
+    return clip(sid, a - .35, z + .35, f'<div class="sw">{ghost(word) if word else ""}{inner}</div>')
+
+
+def swap(prev, nxt, t):
+    """Scene to scene inside a motion run: the old one slides out left, the new one in from the right."""
+    add(f'tl.to("#{prev} .sw",{{x:-260,opacity:0,duration:.3,ease:"power2.in"}},{t - .3:.2f});')
+    add(f'tl.fromTo("#{nxt} .sw",{{x:260,opacity:0}},{{x:0,opacity:1,duration:.5,ease:"expo.out"}},{t - .05:.2f});')
+    add(f'tl.fromTo("#sweepfx",{{xPercent:-120,opacity:1}},{{xPercent:120,opacity:1,duration:.7,ease:"power2.inOut",immediateRender:false}},{t - .3:.2f});')
+    ev(t - .3, "whoosh")
+
+
+def M(i):
+    """The i-th motion run (start, end)."""
+    return runs("motion")[i]
+
+
 def scenes():
     r = random.Random(7)
     h = []
-    # 0 full — investing lakhs in education: coins pour into a graduation cap
-    a, z = L[0]
-    coins = "".join(f'<div class="cn cn{i}" style="left:{r.uniform(40, 980):.0f}px">{coin(r.choice([70, 90, 120]))}</div>' for i in range(14))
-    drops = "".join(f'<div class="cd cd{i}">{coin(60)}</div>' for i in range(5))
-    h.append(clip("s0", a, L[1][0] + .3, f'<div class="capw">{tile("cap", 190)}<div class="capglow"></div>{drops}</div>'))
-    h.append(clip("s0b", a, L[1][0] + .3, f'<div class="coins">{coins}</div>', track=1, cls="behind"))
-    # 1 split — have you mapped their strengths and interests? a child, two dim orbs that light up, time turning
-    a, z = L[1]
-    h.append(clip("s1", a, z + .2, (
-        f'<div class="kid"><div class="kring"></div>{icon("user", 170, CREAM, 2.4)}</div>'
-        f'<div class="orbx ox1">{tile("target", 150, GOLD)}<b class="qq">?</b></div>'
-        f'<div class="orbx ox2">{tile("heart", 150, GOLD)}<b class="qq">?</b></div>'
-        f'<div class="hglass">{icon("hour", 96, MUTED)}</div>')))
-    # 2 focus — marks pick the stream, family picks the career
-    a, z = L[2]
-    h.append(clip("s2", a, z + .2, (
-        f'<div class="flow f1"><div class="rep">{tile("report", 170)}<div class="grade">92%</div></div><i class="farr"></i>'
-        f'<div class="fork">{tile("flask", 120, CREAM, "fk fk0")}{tile("calc", 120, CREAM, "fk fk1")}{tile("palette", 120, CREAM, "fk fk2")}</div></div>'
-        f'<div class="flow f2">{tile("family", 170)}<i class="farr"></i>{tile("briefcase", 170, CREAM, "bc")}<div class="lk">{icon("lock", 70, GOLD)}</div></div>')))
-    # 3 full — one formula for every student: five different students, one mould comes down, they all turn the same
-    a, z = L[3]
+    # 0 — lakhs invested in education: coins drop into a graduation cap and stack up
+    a, z = M(0)
+    drops = "".join(f'<div class="cd cd{i}">{coin(70)}</div>' for i in range(5))
+    stacks = "".join(f'<div class="stkc sc{i}"><i></i></div>' for i in range(3))
+    h.append(scene("s0", a, z, f'<div class="capw">{tile("cap", 280)}<div class="capglow"></div>{drops}</div><div class="stacks">{stacks}</div>', "LAKHS"))
+    # 1 — have you discovered their strengths and interests? a child linked to two dim orbs that light up
+    a, z = M(1)
+    h.append(scene("s1", a, L[2][0], (
+        '<svg class="links" viewBox="0 0 1080 1920" width="1080" height="1920"><path class="cl" d="M480 560 C360 700 260 760 225 905" '
+        f'fill="none" stroke="{GOLD}" stroke-width="4" stroke-linecap="round" pathLength="1"/><path class="cl" d="M600 560 C720 700 820 760 855 905" '
+        f'fill="none" stroke="{GOLD}" stroke-width="4" stroke-linecap="round" pathLength="1"/></svg>'
+        f'<div class="kid"><div class="kring"></div>{icon("user", 200, CREAM, 2.4)}</div>'
+        f'<div class="orbx ox1">{tile("target", 190, GOLD)}<b class="qq">?</b></div>'
+        f'<div class="orbx ox2">{tile("heart", 190, GOLD)}<b class="qq">?</b></div>'
+        f'<div class="hglass">{icon("hour", 110, MUTED)}</div>'), "STRENGTHS"))
+    # 2 — marks pick the stream, family picks the career: two numbered cards
+    a = L[2][0]
+    h.append(scene("s2", a, M(1)[1], (
+        f'<div class="card2 ca"><b class="num">1</b><div class="rep">{tile("report", 170)}<div class="grade">92%</div></div><i class="farr"></i>'
+        f'<div class="fork">{tile("flask", 100, CREAM, "fk fk0")}{tile("calc", 100, CREAM, "fk fk1")}{tile("palette", 100, CREAM, "fk fk2")}</div></div>'
+        f'<div class="card2 cb"><b class="num">2</b>{tile("family", 170, GOLD, "fam")}<i class="farr"></i><div class="bcw">{tile("briefcase", 170, CREAM, "bc")}'
+        f'<div class="lk">{icon("lock", 80, GOLD)}</div></div></div>'), "MARKS"))
+    # 3 — one formula for every student: five different students go into one funnel and come out identical
+    a, z = M(2)
     studs = "".join(f'<div class="stu su{i}">{icon("user", 74, c)}</div>' for i, c in enumerate([SAGE, GOLD, LAV, "#E08A6A", "#7FB3C9"]))
-    h.append(clip("s3", a, z + .2, f'<div class="studs">{studs}</div><div class="mold"></div>'))
-    # 4 split — not just a job title, a direction: the compass needle swings from the badge to the path
-    a, z = L[4]
-    h.append(clip("s4", a, z + .2, (
-        f'<div class="dialw">{compass_dial(400)}</div>'
-        f'<div class="side4 sa">{tile("badge", 150, MUTED)}<i class="xline"></i></div>'
-        f'<div class="side4 sb">{tile("route", 150, GOLD)}</div>')))
-    # 5 brand — the logo reveal, then the app and its four dimensions as icon tiles
-    a, z = L[5]
-    dims = "".join(tile(n, 170, GOLD, f"dim dm{i}") for i, n in enumerate(["user", "heart", "brain", "target"]))
-    h.append(clip("s5", a, z + .2, (
-        '<div class="intro"><div class="halo"></div><img class="logo" src="assets/img/logo.png" alt="">'
+    same = "".join(f'<div class="same sm{i}">{icon("user", 60, "#8a8172")}</div>' for i in range(5))
+    h.append(scene("s3", a, z, (
+        f'<div class="studs">{studs}</div>'
+        f'<svg class="funnel" viewBox="0 0 640 400" width="640" height="400"><path d="M20 20 H620 L380 250 V370 H260 V250 Z" fill="rgba(218,182,106,.12)" '
+        f'stroke="{GOLD}" stroke-width="6" stroke-linejoin="round"/><path d="M60 60 H580" stroke="{GOLD}" stroke-width="2" opacity=".5"/></svg>'
+        f'<div class="sames">{same}</div>'), "FORMULA"))
+    # 4 — not a job title, a direction: the compass needle swings from the badge to the path
+    a, z = M(3)
+    h.append(scene("s4", a, L[5][0], (
+        f'<div class="dialw">{compass_dial(580)}</div>'
+        f'<div class="side4 sa">{tile("badge", 180, MUTED)}<i class="xline"></i></div>'
+        f'<div class="side4 sb">{tile("route", 180, GOLD)}</div>'), "DIRECTION"))
+    # 5 — the brand: logo reveal with rays, then the app and its four dimensions as numbered step cards with meters
+    a = L[5][0]
+    steps = "".join(f'<div class="stp sp{i}"><b class="num">{i + 1}</b>{tile(n, 110, GOLD)}<div class="mtr"><i></i></div></div>'
+                    for i, n in enumerate(["user", "heart", "brain", "target"]))
+    h.append(scene("s5", a, M(3)[1], (
+        '<div class="intro"><div class="rays"></div><div class="halo"></div><img class="logo" src="assets/img/logo.png" alt="">'
         '<div class="wm">Sucsess Maperrs</div></div>' +
-        phone("app1.jpg", "ph5", 220, [(50, 78)]) + f'<div class="dims">{dims}</div>')))
-    # 6 focus — numerology and the cosmic life cycle, an optional lens: orbits, a switch that is optional, the Inner Pattern
-    a, z = L[6]
-    stars = "".join(f'<i class="cs" style="left:{r.uniform(40, 1040):.0f}px;top:{r.uniform(260, 1500):.0f}px;'
-                    f'width:{r.choice([3, 4, 6])}px;height:{r.choice([3, 4, 6])}px"></i>' for _ in range(60))
-    h.append(clip("s6", a, z + .2, (
+        phone("app1.jpg", "ph5", 340, [(50, 78)]) + f'<div class="steps">{steps}</div>'), "MAPERRS"))
+    # 6a — numerology and the cosmic life cycle, an optional lens: orbits, and a switch that is optional
+    a, z = M(4)
+    stars = "".join(f'<i class="cs" style="left:{r.uniform(40, 1040):.0f}px;top:{r.uniform(200, 1500):.0f}px;'
+                    f'width:{r.choice([3, 4, 6])}px;height:{r.choice([3, 4, 6])}px"></i>' for _ in range(70))
+    h.append(scene("s6", a, z, (
         f'<div class="cosmos">{stars}</div>'
         f'<div class="orbits"><div class="orb o1"><div class="och">{icon("numbers", 92, GOLD)}</div></div>'
         f'<div class="orb o2"><div class="och lv">{icon("moon", 70, LAV)}</div></div><div class="gem"></div></div>'
-        '<div class="toggle"><i class="knob"></i></div>' + phone("app6.jpg", "ph6", 440))))
-    # 7 full — no prediction, no guarantee: a crystal ball and a seal, both struck through
-    a, z = L[7]
-    h.append(clip("s7", a, z + .2, (
-        f'<div class="nog ng1">{tile("orb", 170, LAV)}<i class="xl"></i></div>'
-        f'<div class="nog ng2">{tile("seal", 170, LAV)}<i class="xl"></i></div>')))
-    # 8 full2 — more than picking a career: the briefcase opens out into the compass
-    a, z = L[8]
-    h.append(clip("s8", a, z + .2, f'<div class="bigger"><div class="bring"></div>{tile("briefcase", 150)}<div class="bcomp">{icon("compass", 120, GOLD)}</div></div>'))
-    # 9 split — strengths, possibilities, direction come into alignment
-    a, z = L[9]
-    h.append(clip("s9", a, z + .2, (
-        f'<div class="venn"><div class="vc v1">{icon("target", 70, CREAM)}</div><div class="vc v2">{icon("spark", 70, CREAM)}</div>'
-        f'<div class="vc v3">{icon("route", 70, CREAM)}</div><div class="vcore">{icon("spark", 110, "#fff6d8")}</div></div>')))
-    # 10 focus — informed decisions and satisfaction: the app's home, two ticks
-    a, z = L[10]
-    h.append(clip("s10", a, z + .2, (
-        phone("app7.jpg", "ph10", 430, [(50, 60)]) +
-        f'<div class="tick t1">{tile("brain", 130, SAGE)}<div class="tk">{icon("check", 54, SAGE)}</div></div>'
-        f'<div class="tick t2">{tile("smile", 130, SAGE)}<div class="tk">{icon("check", 54, SAGE)}</div></div>')))
-    # 11 split — the 2-minute scan: two screens and a two-minute timer
-    a, z = L[11]
-    h.append(clip("s11", a, z + .2, (
+        '<div class="toggle"><i class="knob"></i></div>'), "COSMIC"))
+    # 6b — the Inner Pattern screen, an optional reflective lens
+    a, z = M(5)
+    sp = "".join(f'<div class="lsp ls{i}" style="left:{x}px;top:{y}px">{star4(s, LAV)}</div>'
+                 for i, (x, y, s) in enumerate([(200, 420, 46), (850, 330, 34), (180, 1050, 30), (880, 980, 50)]))
+    h.append(scene("s6b", a, L[7][0], (
+        '<div class="chip lavc"><span>✦ OPTIONAL · REFLECTIVE</span></div>' + phone("app6.jpg", "ph6", 440) + sp), "PATTERN"))
+    # 7 — no prediction, no guarantee: caution tape, a crystal ball and a seal, both struck through
+    a = L[7][0]
+    tape = "REFLECTIVE PERSPECTIVE · NOT A PREDICTION · " * 4
+    h.append(scene("s7", a, M(5)[1], (
+        f'<div class="tape tp1"><div class="tin"><div class="ttrack">{tape}</div></div></div><div class="tape tp2"><div class="tin"><div class="ttrack">{tape}</div></div></div>'
+        f'<div class="nog ng1">{tile("orb", 220, LAV)}<i class="xl"></i></div>'
+        f'<div class="nog ng2">{tile("seal", 220, LAV)}<i class="xl"></i></div>')))
+    # 9 — strengths, possibilities and direction come into alignment
+    a, z = M(6)
+    h.append(scene("s9", a, z, (
+        f'<div class="venn"><div class="vc v1">{icon("target", 80, CREAM)}</div><div class="vc v2">{icon("spark", 80, CREAM)}</div>'
+        f'<div class="vc v3">{icon("route", 80, CREAM)}</div><div class="vcore">{icon("spark", 130, "#fff6d8")}</div></div>'), "ALIGN"))
+    # 10 — informed decisions and real satisfaction: the app's home, two ticks and a satisfaction meter
+    a, z = M(7)
+    h.append(scene("s10", a, z, (
+        phone("app7.jpg", "ph10", 400, [(50, 60)]) +
+        f'<div class="tick t1">{tile("brain", 150, SAGE)}<div class="tk">{icon("check", 60, SAGE)}</div></div>'
+        f'<div class="tick t2">{tile("smile", 150, SAGE)}<div class="tk">{icon("check", 60, SAGE)}</div></div>'
+        '<div class="stars">' + "".join(star4(56, GOLD) for _ in range(5)) + '</div><div class="gauge"><svg viewBox="0 0 440 250" width="440" height="250"><path d="M30 230 A190 190 0 0 1 410 230" fill="none" '
+        f'stroke="{CARD2}" stroke-width="26" stroke-linecap="round"/><path class="garc" d="M30 230 A190 190 0 0 1 410 230" fill="none" '
+        f'stroke="{SAGE}" stroke-width="26" stroke-linecap="round" pathLength="1"/></svg><i class="gneedle"></i><i class="ghub"></i></div>'), "INFORMED"))
+    # 11 — the 2-minute scan: a two-minute timer and two screens
+    a, z = M(8)
+    h.append(scene("s11", a, z, (
         phone("app2.jpg", "ph11a", 230, [(50, 91)]) + phone("app3.jpg", "ph11b", 230, [(40, 40)]) +
-        '<div class="timer"><svg viewBox="0 0 200 200" width="250" height="250"><circle cx="100" cy="100" r="86" fill="none" '
-        f'stroke="{CARD2}" stroke-width="14"/><circle class="tring" cx="100" cy="100" r="86" fill="none" stroke="{GOLD}" '
-        'stroke-width="14" stroke-linecap="round" pathLength="1" transform="rotate(-90 100 100)"/></svg><div class="tnum">2:00</div></div>')))
-    # 12 focus — the full assessment, 90% off, Rs 2,300
-    a, z = L[12]
-    h.append(clip("s12", a, z + .2, (
-        phone("app4.jpg", "ph12", 420) +
+        '<div class="timer"><svg viewBox="0 0 200 200" width="400" height="400"><circle cx="100" cy="100" r="86" fill="none" '
+        f'stroke="{CARD2}" stroke-width="12"/><circle class="tring" cx="100" cy="100" r="86" fill="none" stroke="{GOLD}" '
+        'stroke-width="12" stroke-linecap="round" pathLength="1" transform="rotate(-90 100 100)"/></svg><div class="tnum">2:00</div></div>'), "2 MIN"))
+    # 12a — the full assessment's result screen
+    a, z = M(9)
+    off = L[12][0] + 4.45
+    h.append(scene("s12", a, off, phone("app4.jpg", "ph12", 440) + '<div class="chip"><span>✦ SUCCESS MAP PRO</span></div>', "PRO"))
+    # 12b — 90% off, Rs 2,300, with coins bursting out from behind the card
+    burstc = "".join(f'<div class="ob ob{i}">{coin(80)}</div>' for i in range(10))
+    h.append(scene("s12b", off, L[13][0], (
+        f'<div class="obs">{burstc}</div>'
         '<div class="offer"><img class="ologo" src="assets/img/logo.png" alt=""><div class="ostamp">90% OFF</div>'
-        '<div class="oprice"><span class="cnt-price">₹0</span></div><i class="shine"></i></div>')))
-    # 13 full — not guesswork: dice tumble in and are swept away, a compass lands
-    a, z = L[13]
-    dice = "".join(f'<div class="die dc{i}">{icon("dice", 96, GOLD)}</div>' for i in range(4))
-    h.append(clip("s13", a, z + .2, dice + f'<div class="sweep"></div><div class="land">{tile("compass", 170)}</div>'))
-    # 14 split — the brand, as she says the tagline
-    a, z = L[14]
-    h.append(clip("s14", a, z + .2, (
-        '<div class="intro i14"><div class="halo"></div><img class="logo" src="assets/img/logo.png" alt=""><div class="wm">Sucsess Maperrs</div></div>')))
-    # 15 cta — the end card carries the last line
-    a = L[15][0]
-    h.append(clip("s15", a, DUR, (
-        '<div class="ctav"></div>'
-        '<div class="cta"><img class="logo" src="assets/img/logo.png" alt="">'
-        '<div class="ctab"><span>Instant Success Scan</span></div><div class="ctaf">FREE</div></div>')))
+        '<div class="oprice"><span class="cnt-price">₹0</span></div><i class="shine"></i></div>'), "90%"))
+    # 13 — not guesswork: dice tumble in and are swept away, a compass lands
+    a = L[13][0]
+    dice = "".join(f'<div class="die dc{i}">{icon("dice", 120, GOLD)}</div>' for i in range(4))
+    h.append(scene("s13", a, L[14][0], dice + f'<div class="sweep"></div><div class="land">{tile("compass", 240)}</div>', "GUESSWORK"))
+    # 14 — the brand, as she says the tagline
+    a = L[14][0]
+    h.append(scene("s14", a, M(9)[1], (
+        '<div class="intro i14"><div class="rays"></div><div class="halo"></div><img class="logo" src="assets/img/logo.png" alt=""><div class="wm">Sucsess Maperrs</div></div>'), "FUTURE"))
+    # 15 — the end card carries the last line: a tap on the free scan
+    a = M(10)[0]
+    SC["s15"] = (a, DUR, True)
+    h.append(clip("s15", a - .35, DUR, (
+        '<div class="sw">' + ghost("FREE") + '<div class="cta"><div class="halo"></div><img class="logo" src="assets/img/logo.png" alt="">'
+        '<div class="ctab"><span>Instant Success Scan</span></div><div class="ctaf">FREE</div></div><i class="cursor"></i></div>')))
     return "".join(h)
 
 
 def scenes_tl():
+    for sid, (a, z, g) in SC.items():
+        if g:
+            add(f'tl.fromTo("#{sid} .ghost",{{x:140}},{{x:-300,duration:{z - a + .7:.2f},ease:"none",immediateRender:false}},{a - .35:.2f});')
     # 0
-    a, z = L[0]
-    pop(".capw .tile", a + .02, "opacity:0,scale:.4,rotation:-20", .6, "back.out(2)")
-    burst(540, 385, a + .1)
-    ev(a, "boom")
-    add(f'tl.fromTo(".capglow",{{opacity:0,scale:.5}},{{opacity:1,scale:1.1,duration:1.6,ease:"sine.inOut",yoyo:true,repeat:1}},{a:.2f});')
-    add(f'document.querySelectorAll(".cd").forEach((e,i)=>{{tl.fromTo(e,{{x:(i-2)*90,y:-260,opacity:0,scale:.7}},{{x:0,y:20,opacity:1,scale:.5,'
-        f'duration:.55,ease:"power2.in",immediateRender:false}},{a + .6:.2f}+i*.45);tl.to(e,{{opacity:0,duration:.08}},{a + 1.15:.2f}+i*.45);}});')
-    add(f'tl.to(".capw .tile",{{scale:1.08,duration:.12,yoyo:true,repeat:9,ease:"power1.out"}},{a + 1.1:.2f});')
-    ev(a + .6, "coins")
-    add('document.querySelectorAll(".cn").forEach((e,i)=>{tl.fromTo(e,{y:-200,rotation:-30,opacity:0},{y:2100,rotation:200,opacity:1,'
-        f'duration:2.4,ease:"power1.in",immediateRender:false}},{a + .3:.2f}+i*.16);}});')
-    out(".capw", L[1][0] - .15, "opacity:0,y:-40,scale:.9")
+    a, z = M(0)
+    pop("#s0 .capw .tile", a + .02, "opacity:0,scale:.4,rotation:-20", .6, "back.out(2)")
+    burst(540, 470, a + .1)
+    add(f'tl.fromTo("#s0 .capglow",{{opacity:0,scale:.5}},{{opacity:1,scale:1.1,duration:.8,ease:"sine.inOut",yoyo:true,repeat:1}},{a:.2f});')
+    add(f'document.querySelectorAll("#s0 .cd").forEach((e,i)=>{{tl.fromTo(e,{{x:(i-2)*120,y:-420,opacity:0,scale:.8}},{{x:0,y:40,opacity:1,scale:.5,'
+        f'duration:.42,ease:"power2.in",immediateRender:false}},{a + .2:.2f}+i*.22);tl.to(e,{{opacity:0,duration:.06}},{a + .62:.2f}+i*.22);}});')
+    add(f'tl.to("#s0 .capw .tile",{{scale:1.08,duration:.11,yoyo:true,repeat:7,ease:"power1.out"}},{a + .6:.2f});')
+    ev(a + .3, "coins")
+    for k, hgt in enumerate((.42, .7, 1)):
+        add(f'tl.fromTo("#s0 .sc{k}",{{clipPath:"inset(100% 0% 0% 0%)"}},{{clipPath:"inset({(1 - hgt) * 100:.0f}% 0% 0% 0%)",duration:.7,'
+            f'ease:"expo.out"}},{a + .35 + k * .18:.2f});')
+        ev(a + .35 + k * .18, "tick")
     # 1
-    a, z = L[1]
-    pop(".kid", a + .1, "opacity:0,scale:.5", .6, "back.out(2)")
-    draw(".kring", a + .1, .1)
-    for k, tk in enumerate((a + .5, a + .7)):
-        pop(f".ox{k + 1}", tk, f"opacity:0,x:{-160 if k == 0 else 160},scale:.6", .6, "back.out(2)", None)
-    add(f'tl.set(".orbx .tile",{{filter:"grayscale(1) brightness(.6)"}},{a:.2f});')
-    add(f'tl.fromTo(".qq",{{scale:.6}},{{scale:1.15,duration:.45,ease:"sine.inOut",yoyo:true,repeat:5}},{a + .9:.2f});')
-    for k, tk in enumerate((a + 2.2, a + 3.6)):
-        add(f'tl.to(".ox{k + 1} .tile",{{filter:"grayscale(0) brightness(1)",boxShadow:"0 0 70px rgba(218,182,106,.7)",duration:.4}},{tk:.2f});')
-        add(f'tl.to(".ox{k + 1} .qq",{{opacity:0,scale:.3,duration:.25}},{tk:.2f});')
+    a, _ = M(1)
+    pop("#s1 .kid", a + .05, "opacity:0,scale:.5", .6, "back.out(2)")
+    draw("#s1 .kring", a + .1, .5)
+    draw("#s1 .cl", a + .35, .6)
+    for k, tk in enumerate((a + .5, a + .65)):
+        pop(f"#s1 .ox{k + 1}", tk, f"opacity:0,y:120,scale:.6", .6, "back.out(2)", None)
+    add(f'tl.set("#s1 .orbx .tile",{{filter:"grayscale(1) brightness(.6)"}},{a - .4:.2f});')
+    add(f'tl.fromTo("#s1 .qq",{{scale:.6}},{{scale:1.15,duration:.4,ease:"sine.inOut",yoyo:true,repeat:3}},{a + .9:.2f});')
+    for k, tk in enumerate((a + 1.1, a + 2.0)):
+        add(f'tl.to("#s1 .ox{k + 1} .tile",{{filter:"grayscale(0) brightness(1)",boxShadow:"0 0 80px rgba(218,182,106,.7)",duration:.4}},{tk:.2f});')
+        add(f'tl.to("#s1 .ox{k + 1} .qq",{{opacity:0,scale:.3,duration:.25}},{tk:.2f});')
         ev(tk, "ping")
-        burst(185 if k == 0 else 895, 475, tk)
-    add(f'tl.fromTo(".hglass svg",{{rotation:0}},{{rotation:180,duration:.7,ease:"power3.inOut",repeat:3,repeatDelay:.6}},{a + .4:.2f});')
+        burst(225 if k == 0 else 855, 915, tk)
+    add(f'tl.fromTo("#s1 .hglass svg",{{rotation:0}},{{rotation:180,duration:.6,ease:"power3.inOut",repeat:2,repeatDelay:.4}},{a + .4:.2f});')
     # 2
-    a, z = L[2]
-    pop(".f1 .rep .tile", a + .1, "opacity:0,x:-160,scale:.7", .55, "back.out(2)")
-    add(f'tl.fromTo(".grade",{{opacity:0,scale:2.6,rotation:-16}},{{opacity:1,scale:1,rotation:-8,duration:.4,ease:"back.out(2.6)"}},{a + .7:.2f});')
+    a = L[2][0]
+    swap("s1", "s2", a)
+    pop("#s2 .ca", a + .0, "opacity:0,x:200", .5, "expo.out", None)
+    pop("#s2 .ca .rep .tile", a + .2, "opacity:0,scale:.6", .5, "back.out(2)")
+    add(f'tl.fromTo("#s2 .grade",{{opacity:0,scale:2.6,rotation:-16}},{{opacity:1,scale:1,rotation:-8,duration:.4,ease:"back.out(2.6)"}},{a + .7:.2f});')
     ev(a + .7, "stamp")
-    add(f'tl.fromTo(".f1 .farr",{{scaleX:0}},{{scaleX:1,duration:.35,ease:"power2.out"}},{a + 1.2:.2f});')
-    add(f'tl.fromTo(".fk",{{opacity:0,y:40}},{{opacity:1,y:0,duration:.4,stagger:.1,ease:"back.out(2)"}},{a + 1.4:.2f});')
-    add(f'tl.to(".fk0",{{boxShadow:"0 0 0 4px #DAB66A, 0 0 50px rgba(218,182,106,.6)",scale:1.1,duration:.3}},{a + 1.9:.2f});')
-    add(f'tl.to(".fk1, .fk2",{{opacity:.3,duration:.3}},{a + 1.9:.2f});')
-    ev(a + 1.9, "tick")
-    pop(".f2 > .tile:first-child", a + 2.1, "opacity:0,x:-160,scale:.7", .55, "back.out(2)")
-    add(f'tl.fromTo(".f2 .farr",{{scaleX:0}},{{scaleX:1,duration:.35,ease:"power2.out"}},{a + 2.6:.2f});')
-    pop(".bc", a + 2.8, "opacity:0,x:120,scale:.7", .5, "back.out(2)", None)
-    add(f'tl.fromTo(".lk",{{opacity:0,y:-60,scale:1.6}},{{opacity:1,y:0,scale:1,duration:.4,ease:"bounce.out"}},{a + 3.3:.2f});')
-    ev(a + 3.4, "stamp")
+    add(f'tl.fromTo("#s2 .ca .farr",{{scaleX:0}},{{scaleX:1,duration:.35,ease:"power2.out"}},{a + 1.1:.2f});')
+    add(f'tl.fromTo("#s2 .fk",{{opacity:0,y:40}},{{opacity:1,y:0,duration:.4,stagger:.1,ease:"back.out(2)"}},{a + 1.3:.2f});')
+    add(f'tl.to("#s2 .fk0",{{boxShadow:"0 0 0 4px #DAB66A, 0 0 50px rgba(218,182,106,.6)",scale:1.1,duration:.3}},{a + 1.8:.2f});')
+    add(f'tl.to("#s2 .fk1, #s2 .fk2",{{opacity:.3,duration:.3}},{a + 1.8:.2f});')
+    ev(a + 1.8, "tick")
+    pop("#s2 .cb", a + 1.9, "opacity:0,x:200", .5, "expo.out", "whoosh")
+    pop("#s2 .fam", a + 2.1, "opacity:0,scale:.6", .5, "back.out(2)")
+    add(f'tl.fromTo("#s2 .cb .farr",{{scaleX:0}},{{scaleX:1,duration:.35,ease:"power2.out"}},{a + 2.6:.2f});')
+    pop("#s2 .bc", a + 2.8, "opacity:0,x:120,scale:.7", .5, "back.out(2)", None)
+    add(f'tl.fromTo("#s2 .lk",{{opacity:0,y:-80,scale:1.6}},{{opacity:1,y:0,scale:1,duration:.4,ease:"bounce.out"}},{a + 3.2:.2f});')
+    ev(a + 3.3, "stamp")
+    burst(830, 1000, a + 3.35, "#E07A6A")
     # 3
-    a, z = L[3]
-    add(f'tl.fromTo(".stu",{{opacity:0,y:60}},{{opacity:1,y:0,duration:.4,stagger:.08,ease:"back.out(2)"}},{a + .2:.2f});')
-    ev(a + .2, "ping")
-    add(f'tl.fromTo(".mold",{{opacity:0,y:-260}},{{opacity:1,y:0,duration:.35,ease:"power3.in"}},{a + 1.5:.2f});')
-    ev(a + 1.85, "thud")
-    burst(540, 395, a + 1.85, "#E07A6A")
-    add(f'tl.to(".stu",{{scale:.86,filter:"grayscale(1)",duration:.25}},{a + 1.85:.2f});')
-    add(f'tl.to(".stu svg",{{opacity:.35,duration:.25}},{a + 1.85:.2f});')
+    a, z = M(2)
+    add(f'tl.fromTo("#s3 .stu",{{opacity:0,y:-80}},{{opacity:1,y:0,duration:.35,stagger:.06,ease:"back.out(2)"}},{a + .02:.2f});')
+    ev(a + .05, "ping")
+    pop("#s3 .funnel", a + .1, "opacity:0,scale:.7,y:60", .45, "back.out(1.8)", None)
+    add(f'tl.to("#s3 .stu",{{x:(i)=>340-170*i,y:300,scale:.35,opacity:0,duration:.45,stagger:.07,ease:"power2.in"}},{a + .55:.2f});')
+    ev(a + .6, "swish")
+    add(f'tl.fromTo("#s3 .funnel",{{rotation:0}},{{rotation:3,duration:.07,yoyo:true,repeat:5,ease:"sine.inOut"}},{a + 1.0:.2f});')
+    ev(a + 1.05, "thud")
+    add(f'tl.fromTo("#s3 .same",{{opacity:0,y:-120,scale:.5}},{{opacity:1,y:0,scale:1,duration:.4,stagger:.08,ease:"back.out(2)"}},{a + 1.3:.2f});')
+    ev(a + 1.3, "dice")
+    burst(540, 1020, a + 1.35, "#E07A6A")
     # 4
-    a, z = L[4]
-    pop(".dialw", a + .05, "opacity:0,scale:.5,rotation:-90", .8)
-    draw(".dring", a + .05, .9)
-    add(f'tl.fromTo(".needle",{{rotation:-150}},{{rotation:-70,duration:1.2,ease:"elastic.out(1,.5)"}},{a + .3:.2f});')
-    pop(".sa", a + .5, "opacity:0,x:-120", .5, "back.out(2)", None)
-    pop(".sb", a + .7, "opacity:0,x:120", .5, "back.out(2)", None)
-    add(f'tl.set(".sb .tile",{{filter:"grayscale(1) brightness(.6)"}},{a:.2f});')
-    add(f'tl.fromTo(".sa .xline",{{scaleX:0}},{{scaleX:1,duration:.3,ease:"power3.out"}},{a + 3.0:.2f});')
-    add(f'tl.to(".sa",{{opacity:.4,duration:.3}},{a + 3.0:.2f});')
-    ev(a + 3.0, "swish")
-    add(f'tl.to(".needle",{{rotation:70,duration:1.0,ease:"elastic.out(1,.45)"}},{a + 3.3:.2f});')
-    add(f'tl.to(".sb .tile",{{filter:"grayscale(0) brightness(1)",boxShadow:"0 0 70px rgba(218,182,106,.7)",scale:1.08,duration:.4}},{a + 3.5:.2f});')
-    ev(a + 3.4, "ping")
-    burst(895, 495, a + 3.5)
-    add(f'tl.to(".dialw",{{rotation:6,duration:2.5,ease:"sine.inOut"}},{a + 4:.2f});')
+    a, _ = M(3)
+    pop("#s4 .dialw", a + .02, "opacity:0,scale:.5,rotation:-90", .8, "expo.out")
+    draw("#s4 .dring", a + .05, .9)
+    add(f'tl.fromTo("#s4 .needle",{{rotation:-150}},{{rotation:-70,duration:1.1,ease:"elastic.out(1,.5)"}},{a + .25:.2f});')
+    pop("#s4 .sa", a + .4, "opacity:0,x:-140", .5, "back.out(2)", None)
+    pop("#s4 .sb", a + .55, "opacity:0,x:140", .5, "back.out(2)", None)
+    add(f'tl.set("#s4 .sb .tile",{{filter:"grayscale(1) brightness(.6)"}},{a - .4:.2f});')
+    add(f'tl.fromTo("#s4 .sa .xline",{{scaleX:0}},{{scaleX:1,duration:.3,ease:"power3.out"}},{a + 1.3:.2f});')
+    add(f'tl.to("#s4 .sa",{{opacity:.4,duration:.3}},{a + 1.3:.2f});')
+    ev(a + 1.3, "swish")
+    add(f'tl.to("#s4 .needle",{{rotation:70,duration:1.0,ease:"elastic.out(1,.45)"}},{a + 1.6:.2f});')
+    add(f'tl.to("#s4 .sb .tile",{{filter:"grayscale(0) brightness(1)",boxShadow:"0 0 70px rgba(218,182,106,.7)",scale:1.08,duration:.4}},{a + 1.8:.2f});')
+    ev(a + 1.7, "ping")
+    burst(910, 1050, a + 1.8)
+    add(f'tl.to("#s4 .dialw",{{rotation:8,duration:2.2,ease:"sine.inOut"}},{a + 2.2:.2f});')
     # 5
-    a, z = L[5]
+    a = L[5][0]
+    swap("s4", "s5", a)
     add(f'tl.fromTo("#s5 .intro .logo",{{opacity:0,scale:.3,rotation:-120}},{{opacity:1,scale:1,rotation:0,duration:1.1,ease:"expo.out"}},{a + .05:.2f});')
     ev(a + .05, "reveal")
+    ev(a, "boom")
     add(f'tl.fromTo("#s5 .halo",{{opacity:0,scale:.4}},{{opacity:1,scale:1,duration:1.4,ease:"expo.out"}},{a + .05:.2f});')
+    add(f'tl.fromTo("#s5 .rays",{{opacity:0,rotation:0,scale:.6}},{{opacity:1,rotation:60,scale:1,duration:2.4,ease:"power2.out"}},{a + .05:.2f});')
     add(f'tl.fromTo("#s5 .wm",{{opacity:0,y:30,clipPath:"inset(0 100% 0 0)"}},{{opacity:1,y:0,clipPath:"inset(0 0% 0 0)",duration:.9,'
         f'ease:"power3.out"}},{a + .5:.2f});')
+    burst(540, 560, a + .15)
     out("#s5 .intro", a + 2.35, "opacity:0,scale:.8,y:-80", .35)
-    pop(".ph5", a + 2.8, "opacity:0,x:-160,rotationY:35", .7)
-    tap(".ph5 .tp0", a + 3.7)
+    ev(a + 2.35, "swish")
+    pop("#s5 .ph5", a + 2.6, "opacity:0,x:-200,rotationY:35", .7, "expo.out", "whoosh")
+    add(f'tl.fromTo("#s5 .ph5 .scr img",{{scale:1}},{{scale:1.1,duration:5.6,ease:"sine.inOut"}},{a + 2.8:.2f});')
+    tap("#s5 .ph5 .tp0", a + 3.6)
     for k, tk in enumerate((a + 3.2, a + 4.3, a + 5.6, a + 6.6)):
-        pop(f".dm{k}", tk, "opacity:0,scale:.4,rotation:-15", .5, "back.out(2.4)", "ping")
-        burst(515 + (k % 2) * 230, 385 + (k // 2) * 210, tk + .1)
-    burst(540, 640, a + .15)
-    ev(a, "boom")
-    add(f'tl.to(".dim",{{boxShadow:"0 0 60px rgba(218,182,106,.55)",duration:.5,stagger:.1}},{a + 7.2:.2f});')
-    # 6
-    a, z = L[6]
-    mid = a + 6.4
-    add(f'tl.fromTo(".cosmos",{{opacity:0}},{{opacity:1,duration:.8}},{a:.2f});')
-    add(f'tl.fromTo(".cs",{{opacity:.15}},{{opacity:1,duration:.6,stagger:{{each:.04,repeat:9,yoyo:true}},ease:"sine.inOut"}},{a:.2f});')
-    pop(".orbits", a + .1, "opacity:0,scale:.4", 1.0, "expo.out", "reveal")
-    burst(540, 740, a + .2, LAV)
-    add(f'tl.fromTo(".orb.o1",{{rotation:0}},{{rotation:200,duration:6.6,ease:"none"}},{a:.2f});')
-    add(f'tl.fromTo(".orb.o2",{{rotation:180}},{{rotation:20,duration:6.6,ease:"none"}},{a:.2f});')
-    add(f'tl.fromTo(".orb.o1 .och",{{rotation:0}},{{rotation:-200,duration:6.6,ease:"none"}},{a:.2f});')
-    add(f'tl.fromTo(".orb.o2 .och",{{rotation:-180}},{{rotation:-20,duration:6.6,ease:"none"}},{a:.2f});')
-    # "optional": a switch that flicks on and off
-    pop(".toggle", a + 3.4, "opacity:0,y:40,scale:.8", .5, "back.out(2)")
-    add(f'tl.to(".knob",{{x:76,duration:.3,ease:"power3.inOut",yoyo:true,repeat:3,repeatDelay:.45}},{a + 3.9:.2f});')
-    add(f'tl.to(".toggle",{{backgroundColor:"#4a3f5e",duration:.3,yoyo:true,repeat:3,repeatDelay:.45}},{a + 3.9:.2f});')
-    ev(a + 3.9, "tick")
-    out(".orbits, .toggle", mid - .3, "opacity:0,scale:.85", .4)
-    pop(".ph6", mid, "opacity:0,y:300,rotationX:30", .8)
-    add(f'tl.fromTo(".ph6 .scr img",{{y:0}},{{y:-430,duration:5.6,ease:"sine.inOut"}},{mid + .6:.2f});')
+        pop(f"#s5 .sp{k}", tk, "opacity:0,x:160,scale:.8", .5, "back.out(2)", "ping")
+        add(f'tl.fromTo("#s5 .sp{k} .mtr i",{{scaleX:0}},{{scaleX:{[.82, .64, .9, .74][k]},duration:.8,ease:"expo.out"}},{tk + .3:.2f});')
+        burst(565, 375 + k * 190, tk + .1)
+    add(f'tl.to("#s5 .stp .tile",{{boxShadow:"0 0 50px rgba(218,182,106,.55)",duration:.5,stagger:.1}},{a + 7.2:.2f});')
+    # 6a
+    a, z = M(4)
+    add(f'tl.fromTo("#s6 .cosmos",{{opacity:0}},{{opacity:1,duration:.6}},{a - .3:.2f});')
+    add(f'tl.fromTo("#s6 .cs",{{opacity:.15}},{{opacity:1,duration:.6,stagger:{{each:.04,repeat:7,yoyo:true}},ease:"sine.inOut"}},{a - .3:.2f});')
+    pop("#s6 .orbits", a + .05, "opacity:0,scale:.4", 1.0, "expo.out", "reveal")
+    burst(540, 720, a + .15, LAV)
+    for sel, r0, r1 in (("#s6 .orb.o1", 0, 200), ("#s6 .orb.o2", 180, 20), ("#s6 .orb.o1 .och", 0, -200), ("#s6 .orb.o2 .och", -180, -20)):
+        add(f'tl.fromTo("{sel}",{{rotation:{r0}}},{{rotation:{r1},duration:{z - a + .7:.2f},ease:"none"}},{a - .35:.2f});')
+    pop("#s6 .toggle", a + .7, "opacity:0,y:60,scale:.8", .5, "back.out(2)")
+    add(f'tl.to("#s6 .knob",{{x:76,duration:.3,ease:"power3.inOut",yoyo:true,repeat:5,repeatDelay:.45}},{a + 1.2:.2f});')
+    add(f'tl.to("#s6 .toggle",{{backgroundColor:"#4a3f5e",duration:.3,yoyo:true,repeat:5,repeatDelay:.45}},{a + 1.2:.2f});')
+    for k in range(3):
+        ev(a + 1.2 + k * 1.5, "click")
+    add(f'tl.fromTo("#s6 .gem",{{scale:1}},{{scale:1.12,duration:.9,ease:"sine.inOut",yoyo:true,repeat:5}},{a:.2f});')
+    # 6b
+    a, _ = M(5)
+    pop("#s6b .ph6", a + .02, "opacity:0,y:300,rotationX:30", .8, "expo.out")
+    add(f'tl.fromTo("#s6b .ph6 .scr img",{{scale:1}},{{scale:1.12,duration:{L[7][0] - a + .3:.2f},ease:"sine.inOut"}},{a + .3:.2f});')
+    pop("#s6b .chip", a + .5, "opacity:0,y:-30,scale:.8", .45, "back.out(2)", "tick")
+    add(f'tl.fromTo("#s6b .lsp",{{scale:0,rotation:0}},{{scale:1,rotation:90,duration:.6,stagger:.15,ease:"back.out(2)"}},{a + .4:.2f});')
+    ev(a + .5, "glint")
     # 7
-    a, z = L[7]
-    pop(".ng1", a + .1, "opacity:0,scale:.5,y:-40", .55, "back.out(2)")
-    pop(".ng2", a + .4, "opacity:0,scale:.5,y:-40", .55, "back.out(2)", None)
+    a = L[7][0]
+    swap("s6b", "s7", a)
+    add(f'tl.fromTo("#s7 .tp1 .tin",{{x:-1600}},{{x:0,duration:.5,ease:"expo.out"}},{a + .05:.2f});')
+    add(f'tl.fromTo("#s7 .tp2 .tin",{{x:1600}},{{x:0,duration:.5,ease:"expo.out"}},{a + .2:.2f});')
+    ev(a + .05, "stamp")
+    ev(a + .2, "stamp")
+    add(f'tl.fromTo("#s7 .tp1 .ttrack",{{x:0}},{{x:-900,duration:5,ease:"none"}},{a:.2f});')
+    add(f'tl.fromTo("#s7 .tp2 .ttrack",{{x:-900}},{{x:0,duration:5,ease:"none"}},{a:.2f});')
+    pop("#s7 .ng1", a + .4, "opacity:0,scale:.5,y:-40", .55, "back.out(2)")
+    pop("#s7 .ng2", a + .6, "opacity:0,scale:.5,y:-40", .55, "back.out(2)", None)
     for k, tk in enumerate((a + 1.4, a + 2.8)):
-        add(f'tl.fromTo(".ng{k + 1} .xl",{{scaleX:0}},{{scaleX:1,duration:.3,ease:"power3.out"}},{tk:.2f});')
-        add(f'tl.to(".ng{k + 1} .tile",{{opacity:.45,duration:.3}},{tk:.2f});')
+        add(f'tl.fromTo("#s7 .ng{k + 1} .xl",{{scaleX:0}},{{scaleX:1,duration:.3,ease:"power3.out"}},{tk:.2f});')
+        add(f'tl.to("#s7 .ng{k + 1} .tile",{{opacity:.45,duration:.3}},{tk:.2f});')
         ev(tk, "swish")
-    # 8
-    a, z = L[8]
-    pop(".bigger .tile", a + .05, "opacity:0,scale:.4", .5, "back.out(2)")
-    add(f'tl.fromTo(".bring",{{scale:.3,opacity:0}},{{scale:1,opacity:1,duration:1.2,ease:"expo.out"}},{a + .9:.2f});')
-    add(f'tl.to(".bigger .tile",{{scale:.6,opacity:.5,duration:.6,ease:"power2.inOut"}},{a + .9:.2f});')
-    add(f'tl.fromTo(".bcomp",{{opacity:0,rotation:-90,scale:.5}},{{opacity:1,rotation:0,scale:1,duration:.9,ease:"back.out(2)"}},{a + 1.3:.2f});')
-    ev(a + .9, "swell")
-    burst(540, 375, a + 1.3)
+        burst(360 if k == 0 else 720, 760, tk + .1, "#E07A6A")
     # 9
-    a, z = L[9]
-    for k, (dx, dy) in enumerate([(-300, -40), (300, -40), (0, 260)]):
-        add(f'tl.fromTo(".v{k + 1}",{{opacity:0,x:{dx},y:{dy},scale:.6}},{{opacity:1,x:{dx * .55:.0f},y:{dy * .55:.0f},scale:1,'
-            f'duration:.7,ease:"expo.out"}},{a + .3 + k * 1.3:.2f});')
-        ev(a + .3 + k * 1.3, "ping")
-    for k, (fx, fy) in enumerate([(-95, -45), (95, -45), (0, 80)]):
-        add(f'tl.to(".v{k + 1}",{{x:{fx},y:{fy},duration:1.2,ease:"expo.inOut"}},{a + 4.6:.2f});')
-    ev(a + 4.6, "swell")
-    add(f'tl.fromTo(".vcore",{{opacity:0,scale:.3,rotation:-90}},{{opacity:1,scale:1,rotation:0,duration:.7,ease:"back.out(2.4)"}},{a + 5.6:.2f});')
-    add(f'tl.to(".vcore",{{scale:1.15,duration:.5,yoyo:true,repeat:3,ease:"sine.inOut"}},{a + 6.3:.2f});')
-    ev(a + 5.6, "reveal")
-    burst(540, 520, a + 5.65, "#fff1c4")
+    a, z = M(6)
+    for k, (dx, dy) in enumerate([(-320, -60), (320, -60), (0, 300)]):
+        add(f'tl.fromTo("#s9 .v{k + 1}",{{opacity:0,x:{dx},y:{dy},scale:.6}},{{opacity:1,x:{dx * .55:.0f},y:{dy * .55:.0f},scale:1,'
+            f'duration:.7,ease:"expo.out"}},{a + .1 + k * .9:.2f});')
+        ev(a + .1 + k * .9, "ping")
+    for k, (fx, fy) in enumerate([(-110, -55), (110, -55), (0, 95)]):
+        add(f'tl.to("#s9 .v{k + 1}",{{x:{fx},y:{fy},duration:1.2,ease:"expo.inOut"}},{a + 3.0:.2f});')
+    ev(a + 3.0, "swell")
+    add(f'tl.fromTo("#s9 .vcore",{{opacity:0,scale:.3,rotation:-90}},{{opacity:1,scale:1,rotation:0,duration:.7,ease:"back.out(2.4)"}},{a + 4.0:.2f});')
+    add(f'tl.to("#s9 .vcore",{{scale:1.15,duration:.5,yoyo:true,repeat:3,ease:"sine.inOut"}},{a + 4.7:.2f});')
+    ev(a + 4.0, "reveal")
+    burst(540, 720, a + 4.05, "#fff1c4")
     # 10
-    a, z = L[10]
-    pop(".ph10", a + .05, "opacity:0,y:260,rotationX:25", .8)
-    add(f'tl.fromTo(".ph10 .scr img",{{y:0}},{{y:-260,duration:6,ease:"sine.inOut"}},{a + 1.2:.2f});')
-    ev(a + 1.2, "scroll")
-    tap(".ph10 .tp0", a + 6.6)
-    pop(".tick.t1", a + 1.8, "opacity:0,x:-120,scale:.7", .55, "back.out(2)", None)
-    pop(".tick.t1 .tk", a + 2.3, "opacity:0,scale:.3", .4, "back.out(3)", "tick")
-    pop(".tick.t2", a + 5.0, "opacity:0,x:120,scale:.7", .55, "back.out(2)", None)
-    pop(".tick.t2 .tk", a + 5.5, "opacity:0,scale:.3", .4, "back.out(3)", "tick")
+    a, z = M(7)
+    pop("#s10 .ph10", a + .02, "opacity:0,y:260,rotationX:25", .8, "expo.out")
+    add(f'tl.fromTo("#s10 .ph10 .scr img",{{scale:1}},{{scale:1.1,duration:{z - a:.2f},ease:"sine.inOut"}},{a + .3:.2f});')
+    tap("#s10 .ph10 .tp0", a + 4.4)
+    pop("#s10 .tick.t1", a + .5, "opacity:0,x:160,scale:.7", .55, "back.out(2)", None)
+    pop("#s10 .tick.t1 .tk", a + 1.0, "opacity:0,scale:.3", .4, "back.out(3)", "tick")
+    pop("#s10 .gauge", a + 1.6, "opacity:0,y:80", .5, "expo.out", "whoosh")
+    add(f'tl.fromTo("#s10 .garc",{{strokeDasharray:"0 1"}},{{strokeDasharray:"0.88 1",duration:1.6,ease:"expo.out"}},{a + 2.0:.2f});')
+    add(f'tl.fromTo("#s10 .gneedle",{{rotation:-90}},{{rotation:68,duration:1.6,ease:"expo.out"}},{a + 2.0:.2f});')
+    ev(a + 2.0, "count", 1.2)
+    pop("#s10 .tick.t2", a + 2.8, "opacity:0,x:160,scale:.7", .55, "back.out(2)", None)
+    pop("#s10 .tick.t2 .tk", a + 3.3, "opacity:0,scale:.3", .4, "back.out(3)", "tick")
+    burst(875, 385, a + 3.4, SAGE)
+    add(f'tl.fromTo("#s10 .stars svg",{{opacity:0,scale:0,rotation:-90}},{{opacity:1,scale:1,rotation:0,duration:.45,stagger:.12,ease:"back.out(2.6)"}},{a + 3.8:.2f});')
+    for k in range(5):
+        ev(a + 3.8 + k * .12, "pop")
     # 11
-    a, z = L[11]
-    pop(".ph11a", a + .05, "opacity:0,x:-200,rotationY:30", .6)
-    pop(".ph11b", a + 1.6, "opacity:0,x:200,rotationY:-30", .6)
-    pop(".timer", a + .4, "opacity:0,scale:.5", .6, "back.out(2)", None)
-    draw(".tring", a + .5, 1.2, "power2.out")
-    burst(540, 525, a + .45)
-    tap(".ph11a .tp0", a + 1.1)
-    tap(".ph11b .tp0", a + 2.7)
-    # the timer runs: 2:00, 1:59, 1:58 ...
+    a, z = M(8)
+    pop("#s11 .timer", a + .02, "opacity:0,scale:.5", .6, "back.out(2)", "pop")
+    draw("#s11 .tring", a + .1, 1.0, "power2.out")
+    burst(540, 500, a + .1)
+    pop("#s11 .ph11a", a + .3, "opacity:0,x:-220,rotationY:30", .6, "expo.out", None)
+    pop("#s11 .ph11b", a + .5, "opacity:0,x:220,rotationY:-30", .6, "expo.out", "whoosh")
+    tap("#s11 .ph11a .tp0", a + 1.0)
+    tap("#s11 .ph11b .tp0", a + 1.8)
     for k in range(1, 4):
-        add(f'tl.set(".tnum",{{textContent:"1:{60 - k:02d}"}},{a + 1.6 + k * .7:.2f});')
-        ev(a + 1.6 + k * .7, "clock")
-    # 12
-    a, z = L[12]
-    pop(".ph12", a + .05, "opacity:0,y:300,rotationX:25", .8)
-    add(f'tl.fromTo(".ph12 .scr img",{{y:0}},{{y:-500,duration:3.6,ease:"sine.inOut"}},{a + .8:.2f});')
-    ev(a + .8, "scroll")
-    out(".ph12", a + 4.4, "opacity:0,scale:.8,y:-80", .4)
-    pop(".offer", a + 4.6, "opacity:0,scale:.8,rotationX:30", .7)
-    add(f'tl.fromTo(".ostamp",{{opacity:0,scale:2.6,rotation:-18}},{{opacity:1,scale:1,rotation:-6,duration:.45,ease:"back.out(2.4)"}},{a + 5.5:.2f});')
-    ev(a + 5.5, "stamp")
-    ev(a + 4.6, "boom")
-    burst(540, 560, a + 5.5)
-    add(f'tl.fromTo("#flash",{{opacity:.35}},{{opacity:0,duration:.5,ease:"power2.out",immediateRender:false}},{a + 4.6:.2f});')
-    counter(".cnt-price", 0, 2300, a + 7.0, 1.4, "₹")
-    burst(540, 820, a + 8.4)
-    add(f'tl.fromTo(".offer .shine",{{xPercent:-160}},{{xPercent:300,duration:.9,ease:"power2.inOut"}},{a + 8.3:.2f});')
-    ev(a + 8.4, "glint")
+        add(f'tl.set("#s11 .tnum",{{textContent:"1:{60 - k:02d}"}},{a + .4 + k * .6:.2f});')
+        ev(a + .4 + k * .6, "clock")
+    # 12a
+    a, _ = M(9)
+    pop("#s12 .ph12", a + .02, "opacity:0,y:300,rotationX:25", .8, "expo.out")
+    add(f'tl.fromTo("#s12 .ph12 .scr img",{{scale:1}},{{scale:1.12,duration:3,ease:"sine.inOut"}},{a + .3:.2f});')
+    pop("#s12 .chip", a + .5, "opacity:0,y:-30,scale:.8", .45, "back.out(2)", "tick")
+    # 12b
+    a = SC["s12b"][0]
+    swap("s12", "s12b", a)
+    add(f'tl.fromTo("#flash",{{opacity:.35}},{{opacity:0,duration:.5,ease:"power2.out",immediateRender:false}},{a:.2f});')
+    ev(a, "boom")
+    s = a + 1.05                                     # "90% off"
+    add(f'tl.fromTo("#s12b .ostamp",{{opacity:0,scale:2.6,rotation:-18}},{{opacity:1,scale:1,rotation:-6,duration:.45,ease:"back.out(2.4)"}},{s:.2f});')
+    ev(s, "stamp")
+    burst(540, 660, s)
+    add(f'document.querySelectorAll("#s12b .ob").forEach((e,i)=>{{const g=i/10*Math.PI*2;tl.fromTo(e,{{x:0,y:0,scale:.3,opacity:0}},'
+        f'{{x:Math.cos(g)*520,y:Math.sin(g)*640,scale:1,opacity:1,rotation:220,duration:.9,ease:"expo.out",immediateRender:false}},{s + .05:.2f});'
+        f'tl.to(e,{{opacity:0,duration:.3}},{s + .8:.2f});}});')
+    ev(s + .05, "coins")
+    counter("#s12b .cnt-price", 0, 2300, a + 2.6, 1.4, "₹")
+    burst(540, 960, a + 4.0)
+    add(f'tl.fromTo("#s12b .offer .shine",{{xPercent:-160}},{{xPercent:300,duration:.9,ease:"power2.inOut"}},{a + 3.9:.2f});')
+    ev(a + 4.0, "glint")
     # 13
-    a, z = L[13]
-    add(f'tl.fromTo(".die",{{opacity:0,y:-300,rotation:-120}},{{opacity:1,y:0,rotation:(i)=>[-20,15,-10,25][i],duration:.6,stagger:.12,'
+    a = L[13][0]
+    swap("s12b", "s13", a)
+    add(f'tl.fromTo("#s13 .die",{{opacity:0,y:-360,rotation:-120}},{{opacity:1,y:0,rotation:(i)=>[-20,15,-10,25][i],duration:.6,stagger:.12,'
         f'ease:"bounce.out"}},{a + .1:.2f});')
     ev(a + .3, "dice")
-    add(f'tl.fromTo(".sweep",{{scaleX:0}},{{scaleX:1,duration:.35,ease:"power3.out"}},{a + 2.4:.2f});')
-    add(f'tl.to(".die",{{opacity:0,x:300,rotation:"+=200",scale:.4,duration:.4,stagger:.05,ease:"power2.in"}},{a + 2.5:.2f});')
-    add(f'tl.to(".sweep",{{opacity:0,duration:.3}},{a + 2.8:.2f});')
+    add(f'tl.fromTo("#s13 .sweep",{{scaleX:0}},{{scaleX:1,duration:.35,ease:"power3.out"}},{a + 2.4:.2f});')
+    add(f'tl.to("#s13 .die",{{opacity:0,x:340,rotation:"+=200",scale:.4,duration:.4,stagger:.05,ease:"power2.in"}},{a + 2.5:.2f});')
+    add(f'tl.to("#s13 .sweep",{{opacity:0,duration:.3}},{a + 2.8:.2f});')
     ev(a + 2.4, "swish")
-    pop(".land", a + 2.9, "opacity:0,scale:.3,y:-60", .55, "back.out(2.6)", "reveal")
-    burst(540, 385, a + 3.0)
+    pop("#s13 .land", a + 2.9, "opacity:0,scale:.3,y:-60", .55, "back.out(2.6)", "reveal")
+    burst(540, 620, a + 3.0)
     # 14
-    a, z = L[14]
-    add(f'tl.fromTo(".i14 .logo",{{opacity:0,scale:.3,rotation:120}},{{opacity:1,scale:1,rotation:0,duration:1,ease:"expo.out"}},{a + .05:.2f});')
-    add(f'tl.fromTo(".i14 .halo",{{opacity:0,scale:.4}},{{opacity:1,scale:1,duration:1.4,ease:"expo.out"}},{a + .05:.2f});')
+    a = L[14][0]
+    swap("s13", "s14", a)
+    add(f'tl.fromTo("#s14 .logo",{{opacity:0,scale:.3,rotation:120}},{{opacity:1,scale:1,rotation:0,duration:1,ease:"expo.out"}},{a + .05:.2f});')
+    add(f'tl.fromTo("#s14 .halo",{{opacity:0,scale:.4}},{{opacity:1,scale:1,duration:1.4,ease:"expo.out"}},{a + .05:.2f});')
+    add(f'tl.fromTo("#s14 .rays",{{opacity:0,rotation:0,scale:.6}},{{opacity:1,rotation:-60,scale:1,duration:2.4,ease:"power2.out"}},{a + .05:.2f});')
     ev(a + .05, "reveal")
-    burst(540, 430, a + .15)
-    add(f'tl.fromTo(".i14 .wm",{{opacity:0,y:30,clipPath:"inset(0 100% 0 0)"}},{{opacity:1,y:0,clipPath:"inset(0 0% 0 0)",duration:.8,'
+    burst(540, 560, a + .15)
+    add(f'tl.fromTo("#s14 .wm",{{opacity:0,y:30,clipPath:"inset(0 100% 0 0)"}},{{opacity:1,y:0,clipPath:"inset(0 0% 0 0)",duration:.8,'
         f'ease:"power3.out"}},{a + .4:.2f});')
     # 15
-    a = L[15][0]
-    add(f'tl.fromTo(".ctav",{{opacity:0}},{{opacity:1,duration:.6}},{a:.2f});')
-    add(f'tl.to("#spkw",{{opacity:.3,duration:.8}},{a + 2.4:.2f});')
-    pop(".cta .logo", a + .1, "opacity:0,scale:.4", .7)
-    pop(".ctab", a + .5, "opacity:0,scale:.7,y:40", .7, "back.out(1.8)", "reveal")
-    add(f'tl.fromTo(".ctab",{{boxShadow:"0 0 0px rgba(218,182,106,0)"}},{{boxShadow:"0 0 90px rgba(218,182,106,.75)",duration:.9,'
+    a = SC["s15"][0]
+    pop("#s15 .cta .logo", a + .05, "opacity:0,scale:.4", .7, "expo.out")
+    add(f'tl.fromTo("#s15 .halo",{{opacity:0,scale:.4}},{{opacity:1,scale:1,duration:1.2,ease:"expo.out"}},{a:.2f});')
+    pop("#s15 .ctab", a + .45, "opacity:0,scale:.7,y:40", .7, "back.out(1.8)", "reveal")
+    add(f'tl.fromTo("#s15 .ctab",{{boxShadow:"0 0 0px rgba(218,182,106,0)"}},{{boxShadow:"0 0 90px rgba(218,182,106,.75)",duration:.9,'
         f'yoyo:true,repeat:5,ease:"sine.inOut"}},{a + 1.2:.2f});')
-    add(f'tl.fromTo(".ctaf",{{opacity:0,scale:2.4}},{{opacity:1,scale:1,duration:.5,ease:"back.out(2.4)"}},{a + 2.4:.2f});')
+    # a finger taps the button
+    add(f'tl.fromTo("#s15 .cursor",{{x:300,y:420,opacity:0}},{{x:0,y:0,opacity:1,duration:.7,ease:"expo.out"}},{a + 1.1:.2f});')
+    add(f'tl.to("#s15 .cursor",{{scale:.8,duration:.1,yoyo:true,repeat:1}},{a + 1.85:.2f});')
+    add(f'tl.to("#s15 .ctab",{{scale:.94,duration:.1,yoyo:true,repeat:1}},{a + 1.85:.2f});')
+    ev(a + 1.85, "click")
+    burst(540, 745, a + 1.9)
+    add(f'tl.fromTo("#s15 .ctaf",{{opacity:0,scale:2.4}},{{opacity:1,scale:1,duration:.5,ease:"back.out(2.4)"}},{a + 2.4:.2f});')
     ev(a + 2.4, "stamp")
     ev(a, "boom")
-    burst(540, 690, a + .55)
-    burst(540, 920, a + 2.45)
+    burst(540, 970, a + 2.45)
     add(f'tl.fromTo("#flash",{{opacity:.4}},{{opacity:0,duration:.6,ease:"power2.out",immediateRender:false}},{a:.2f});')
 
 
@@ -606,20 +792,22 @@ def backdrop():
                    f'width:{r.choice([3, 4, 5, 7])}px;height:{r.choice([3, 4, 5, 7])}px"></i>' for i in range(46))
     sparks = "".join(f'<div class="sp4" style="left:{x}px;top:{y}px">{star4(s, c)}</div>'
                      for x, y, s, c in [(120, 330, 26, RED), (930, 420, 20, GOLD), (80, 1180, 18, GOLD), (980, 1290, 24, RED)])
-    return (f'<div id="bgbase"></div><div class="aur au1"></div><div class="aur au2"></div><div id="rose">{compass_rose(1500)}</div><div id="dust">{dust}</div>{sparks}'
-            f'<div id="vig"></div>')
+    return (f'<div id="bgbase"></div><div id="grid"></div><div class="aur au1"></div><div class="aur au2"></div><div id="rose">{compass_rose(1500)}</div>'
+            f'<div id="dust">{dust}</div>{sparks}<div id="vig"></div>')
 
 
 def backdrop_tl():
     add(f'tl.fromTo("#rose",{{rotation:0}},{{rotation:40,duration:{DUR},ease:"none"}},0);')
+    add(f'tl.fromTo("#grid",{{y:0}},{{y:-360,duration:{DUR},ease:"none"}},0);')
     add(f'tl.fromTo(".au1",{{x:-120,y:0}},{{x:160,y:120,duration:9,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 9)}}},0);')
     add(f'tl.fromTo(".au2",{{x:140,y:60}},{{x:-160,y:-80,duration:11,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 11)}}},0);')
-    # sparks running along the seam
-    add(f'document.querySelectorAll(".ssp").forEach((e,i)=>tl.fromTo(e,{{x:-60,opacity:0}},{{x:1140,opacity:1,duration:2.6+(i%3)*.5,ease:"none",'
-        f'repeat:{int(DUR / 2.6)},delay:i*.37}},0));')
     add(f'document.querySelectorAll(".du").forEach((e,i)=>tl.fromTo(e,{{y:0,opacity:0}},{{y:-260-(i%5)*60,opacity:.9,duration:6,'
         f'ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 6)}}},(i%9)*.7));')
     add(f'tl.fromTo(".sp4",{{scale:.6,rotation:0}},{{scale:1.15,rotation:45,duration:2.4,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 2.4)},stagger:.6}},0);')
+    # the warm light leak over her and the progress bar
+    add(f'tl.fromTo("#leak",{{x:-260,opacity:.22}},{{x:260,opacity:.42,duration:7,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 7)}}},0);')
+    add(f'tl.fromTo("#hud .pfill",{{scaleX:0}},{{scaleX:1,duration:{DUR},ease:"none"}},0);')
+    add(f'tl.fromTo("#hud .dot",{{opacity:1}},{{opacity:.25,duration:.6,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .6)}}},0);')
 
 
 CSS = """
@@ -635,192 +823,235 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
 body { font-family: "Manrope", sans-serif; color: var(--cream); }
 #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
 .clip { position: absolute; inset: 0; }
-.mono { font: 600 26px "JBMono"; letter-spacing: 7px; color: var(--muted); }
-.mono.gold { color: var(--gold); }
-.mono.lav { color: var(--lav); }
-/* backdrop: the app's dark world, a gold halo, the logo's compass rose turning slowly, gold dust */
-#bgbase { position: absolute; inset: 0; background: radial-gradient(70% 45% at 50% 42%, #33291a 0%, #1d1812 48%, #15110E 85%); }
+/* layer order: speaker < talk overlays < stage of scenes < transition screens < hud < captions < fx */
+#spk { position: absolute; inset: 0; z-index: 1; }
+.ov { z-index: 2; }
+#stage { position: absolute; inset: 0; z-index: 3; overflow: hidden; }
+#trans { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+#hud { z-index: 5; }
+#caps { z-index: 6; }
+#fx { z-index: 7; }
+/* the speaker: the take scaled around her face, the wall above her head cropped off */
+#spkw { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 540px 800px; }
+#talk { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+#leak { position: absolute; left: -200px; top: -380px; width: 1480px; height: 1300px; mix-blend-mode: screen;
+  background: radial-gradient(closest-side, rgba(255,186,104,.55), rgba(218,140,70,.18) 55%, rgba(218,140,70,0)); }
+.shade { position: absolute; left: 0; width: 1080px; }
+.shade.top { top: 0; height: 420px; background: linear-gradient(rgba(10,8,6,.55), rgba(10,8,6,0)); }
+.shade.bot { bottom: 0; height: 760px; background: linear-gradient(rgba(10,8,6,0), rgba(10,8,6,.62)); }
+.stk { position: absolute; }
+.stk .qq { position: absolute; right: -18px; top: -30px; }
+.coins { position: absolute; inset: 0; }
+.cn { position: absolute; top: 0; opacity: 0; }
+/* transition screens */
+#iring { position: absolute; left: -460px; top: -232px; width: 2000px; height: 2000px; border-radius: 50%; border: 10px solid var(--gold);
+  box-shadow: 0 0 60px rgba(218,182,106,.8), inset 0 0 60px rgba(218,182,106,.6); opacity: 0; }
+#wbar { position: absolute; left: 0; top: 0; width: 1080px; height: 16px; opacity: 0;
+  background: linear-gradient(90deg, #9a7a32, #DAB66A 30%, #fff1c4 50%, #DAB66A 70%, #9a7a32); box-shadow: 0 0 40px 8px rgba(218,182,106,.75); }
+#pedge { position: absolute; left: -8px; top: 0; width: 16px; height: 1920px; opacity: 0;
+  background: linear-gradient(#9a7a32, #DAB66A 30%, #fff1c4 50%, #DAB66A 70%, #9a7a32); box-shadow: 0 0 40px 8px rgba(218,182,106,.75); }
+/* hud: brand label and progress, after the reference */
+.brand { position: absolute; left: 44px; top: 84px; display: flex; align-items: center; gap: 14px; font: 700 28px "JBMono"; letter-spacing: 5px;
+  color: var(--gold); padding: 10px 22px; border-radius: 30px; background: rgba(21,17,14,.78); border: 1px solid rgba(97,82,48,.8); }
+.brand .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 14px rgba(218,182,106,.9); }
+.ptrack { position: absolute; left: 820px; top: 106px; width: 204px; height: 10px; border-radius: 5px; background: rgba(242,234,221,.2); overflow: hidden; }
+.pfill { position: absolute; inset: 0; background: var(--gold); transform-origin: 0 50%; border-radius: 5px; }
+/* backdrop: the app's dark world, a faint gold grid, a gold halo, the logo's compass rose turning slowly, gold dust */
+#bgbase { position: absolute; inset: 0; background: radial-gradient(70% 45% at 50% 40%, #3a2e1b 0%, #1d1812 50%, #120f0c 88%); }
+#grid { position: absolute; left: 0; top: 0; width: 1080px; height: 2400px; opacity: .55;
+  background-image: linear-gradient(rgba(218,182,106,.07) 2px, transparent 2px), linear-gradient(90deg, rgba(218,182,106,.07) 2px, transparent 2px);
+  background-size: 90px 90px; -webkit-mask-image: radial-gradient(70% 50% at 50% 35%, #000, transparent); }
 #rose { position: absolute; left: -210px; top: 10px; width: 1500px; height: 1500px; opacity: .1; }
 #dust { position: absolute; inset: 0; }
 .du { position: absolute; border-radius: 50%; background: var(--gold); box-shadow: 0 0 10px rgba(218,182,106,.8); opacity: 0; }
 .sp4 { position: absolute; opacity: .7; }
 #vig { position: absolute; inset: 0; background: radial-gradient(120% 80% at 50% 45%, rgba(0,0,0,0) 55%, rgba(5,4,3,.65) 100%); }
-/* the speaker */
-#spkw { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; }
-#halo { position: absolute; left: 240px; top: 300px; width: 600px; height: 600px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(218,182,106,.42) 0%, rgba(218,182,106,.12) 45%, rgba(218,182,106,0) 70%); }
-#talk { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
-/* the bottom panel of a split: a slightly lifted warm backdrop under her, a gold seam on top */
-#spkcrop { position: absolute; inset: 0; }
-#panelbg { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px;
-  background: radial-gradient(80% 70% at 50% 45%, #3a2f1c 0%, #221c15 55%, #17130f 100%); }
-.seam { position: absolute; left: 0; top: 957px; width: 1080px; height: 6px; z-index: 4;
-  background: linear-gradient(90deg, rgba(218,182,106,0), #DAB66A 20%, #fff1c4 50%, #DAB66A 80%, rgba(218,182,106,0));
-  box-shadow: 0 0 30px rgba(218,182,106,.7); }
-.seamg { position: absolute; inset: 0; pointer-events: none; }
-.ssp { position: absolute; left: 0; top: 955px; width: 26px; height: 10px; border-radius: 5px; background: #fff1c4;
-  box-shadow: 0 0 16px 4px rgba(218,182,106,.9); opacity: 0; }
 .aur { position: absolute; border-radius: 50%; opacity: .55; }
 .au1 { left: -200px; top: 80px; width: 900px; height: 700px; background: radial-gradient(closest-side, rgba(218,182,106,.32), rgba(218,182,106,0)); }
 .au2 { left: 380px; top: 420px; width: 900px; height: 800px; background: radial-gradient(closest-side, rgba(46,94,52,.45), rgba(46,94,52,0)); }
+.scene { z-index: 1; }
+.sw { position: absolute; inset: 0; }
+.ghost { position: absolute; left: -40px; top: 1080px; white-space: nowrap; font: 800 300px/1 "Manrope"; letter-spacing: -8px; color: transparent;
+  -webkit-text-stroke: 3px rgba(218,182,106,.16); }
 #sweepfx { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: 0;
   background: linear-gradient(105deg, rgba(255,241,196,0) 38%, rgba(255,241,196,.22) 47%, rgba(255,255,255,.45) 50%, rgba(255,241,196,.22) 53%, rgba(255,241,196,0) 62%); }
 .br { position: absolute; width: 220px; height: 220px; border-radius: 50%; border: 5px solid; opacity: 0; }
 .br i { position: absolute; left: 90px; top: 90px; width: 40px; height: 40px; border-radius: 50%; filter: blur(6px); }
 .tp { position: absolute; width: 70px; height: 70px; margin: -35px 0 0 -35px; border-radius: 50%; border: 4px solid #fff;
   background: rgba(255,255,255,.35); opacity: 0; }
-/* layer order: backdrop < things behind her < speaker < visuals < captions */
-#bg { z-index: 0; }
-.behind { z-index: 1; }
-#spk { position: absolute; inset: 0; z-index: 2; }
-.scene { z-index: 3; }
-.coins { position: absolute; inset: 0; }
-.cn { position: absolute; top: 0; opacity: 0; }
 .coin { border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Manrope"; font-weight: 800; color: #6b521d;
   background: radial-gradient(circle at 35% 30%, #fff1c4, #DAB66A 45%, #9a7a32 100%); box-shadow: 0 10px 30px rgba(0,0,0,.4), inset 0 0 0 4px rgba(255,240,200,.4); }
-/* app-style icon tile */
+/* app-style icon tile, cards, chips */
 .tile { position: relative; display: flex; align-items: center; justify-content: center; border-radius: 30%;
   background: linear-gradient(160deg, var(--card2), var(--card) 60%, #241e14); border: 2px solid var(--border);
   box-shadow: 0 24px 60px rgba(0,0,0,.55); }
+.num { display: flex; align-items: center; justify-content: center; width: 76px; height: 76px; border-radius: 50%; flex: none;
+  background: var(--cream); color: #1d1812; font: italic 700 44px/1 "Fraunces"; box-shadow: 0 10px 30px rgba(0,0,0,.5); }
+.chip { position: absolute; left: 0; top: 180px; width: 1080px; text-align: center; }
+.chip span { display: inline-block; padding: 14px 30px; border-radius: 40px; font: 700 26px "JBMono"; letter-spacing: 4px; color: var(--gold);
+  background: rgba(46,39,23,.9); border: 2px solid var(--border); box-shadow: 0 0 40px rgba(218,182,106,.25); }
+.chip.lavc span { color: var(--lav); background: rgba(38,31,47,.92); border-color: #4a3f5e; box-shadow: 0 0 40px rgba(183,168,224,.3); }
+.qq { position: absolute; right: -18px; top: -26px; font: italic 700 80px "Fraunces"; color: var(--gold); text-shadow: 0 0 20px rgba(0,0,0,.8); }
+.phone { position: absolute; border-radius: 40px; padding: 9px; background: #0b0907; box-shadow: 0 0 0 2px #3a3126, 0 40px 90px rgba(0,0,0,.6),
+  0 0 80px rgba(218,182,106,.22); overflow: hidden; }
+.scr { position: relative; width: 100%; height: 100%; border-radius: 32px; overflow: hidden; background: var(--bg); }
+.scr img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; display: block; transform-origin: 50% 0; }
+.pglare { position: absolute; inset: 0; border-radius: 40px; background: linear-gradient(125deg, rgba(255,255,255,.10), rgba(255,255,255,0) 40%); }
 /* 0 */
-.capw { position: absolute; left: 445px; top: 290px; width: 190px; height: 190px; }
-.capglow { position: absolute; left: -90px; top: -90px; width: 370px; height: 370px; border-radius: 50%; z-index: -1;
+.capw { position: absolute; left: 400px; top: 330px; width: 280px; height: 280px; }
+.capglow { position: absolute; left: -110px; top: -110px; width: 500px; height: 500px; border-radius: 50%; z-index: -1;
   background: radial-gradient(circle, rgba(218,182,106,.5), rgba(218,182,106,0) 65%); }
-.cd { position: absolute; left: 65px; top: -10px; opacity: 0; }
+.cd { position: absolute; left: 105px; top: -20px; opacity: 0; }
+.stacks { position: absolute; left: 0; width: 1080px; top: 700px; height: 440px; display: flex; justify-content: center; align-items: flex-end; gap: 70px; }
+.stkc { width: 150px; height: 420px; }
+.stkc i { display: block; width: 100%; height: 100%; border-radius: 18px; box-shadow: 0 0 50px rgba(218,182,106,.35);
+  background: repeating-linear-gradient(0deg, #8a6a28 0 5px, #DAB66A 5px 24px, #fff1c4 24px 27px); }
 /* 1 */
-.kid { position: absolute; left: 400px; top: 330px; width: 280px; height: 280px; display: flex; align-items: center; justify-content: center;
+.links { position: absolute; left: 0; top: 0; }
+.kid { position: absolute; left: 370px; top: 290px; width: 340px; height: 340px; display: flex; align-items: center; justify-content: center;
   border-radius: 50%; background: radial-gradient(circle, #2c2418, #1a1511); }
-.kring { position: absolute; inset: -10px; border-radius: 50%; border: 4px solid var(--gold); box-shadow: 0 0 50px rgba(218,182,106,.4); }
-.orbx { position: absolute; top: 400px; }
-.ox1 { left: 110px; } .ox2 { left: 820px; }
-.qq { position: absolute; right: -18px; top: -26px; font: italic 700 72px "Fraunces"; color: var(--gold); text-shadow: 0 0 20px rgba(0,0,0,.8); }
-.hglass { position: absolute; left: 492px; top: 640px; }
+.kring { position: absolute; inset: -10px; border-radius: 50%; border: 5px solid var(--gold); box-shadow: 0 0 60px rgba(218,182,106,.45); }
+.orbx { position: absolute; top: 820px; }
+.ox1 { left: 130px; } .ox2 { left: 760px; }
+.hglass { position: absolute; left: 485px; top: 1060px; }
 /* 2 */
-.flow { position: absolute; left: 0; width: 1080px; display: flex; align-items: center; justify-content: center; gap: 40px; }
-.f1 { top: 420px; } .f2 { top: 900px; }
-.rep { position: relative; }
+.card2 { position: absolute; left: 80px; width: 920px; height: 400px; border-radius: 40px; display: flex; align-items: center; justify-content: center;
+  gap: 40px; background: linear-gradient(160deg, var(--card2), var(--card) 60%, #241e14); border: 2px solid var(--border);
+  box-shadow: 0 30px 80px rgba(0,0,0,.55); }
+.card2 > .num { position: absolute; left: -22px; top: -22px; }
+.ca { top: 300px; } .cb { top: 790px; }
+.rep, .bcw { position: relative; }
 .grade { position: absolute; left: 110px; top: -34px; font: 800 52px "Manrope"; color: #1d1812; background: var(--gold); padding: 4px 18px; border-radius: 14px; z-index: 2; }
 .farr { display: block; width: 110px; height: 8px; border-radius: 4px; background: var(--gold); transform-origin: 0 50%; position: relative; }
 .farr::after { content: ""; position: absolute; right: -14px; top: -11px; border: 15px solid transparent; border-left-color: var(--gold); }
-.fork { display: flex; flex-direction: column; gap: 22px; }
-.lk { position: absolute; left: 790px; top: -40px; }
+.fork { display: flex; flex-direction: column; gap: 14px; }
+.lk { position: absolute; right: -40px; top: -44px; }
 /* 3 */
-.studs { position: absolute; left: 0; width: 1080px; top: 330px; display: flex; justify-content: center; gap: 40px; }
-.stu { width: 130px; height: 130px; border-radius: 34px; background: rgba(33,28,24,.9); border: 2px solid var(--border); display: flex;
+.studs { position: absolute; left: 0; width: 1080px; top: 260px; display: flex; justify-content: center; gap: 40px; }
+.stu { width: 130px; height: 130px; border-radius: 34px; background: rgba(33,28,24,.95); border: 2px solid var(--border); display: flex;
   align-items: center; justify-content: center; }
-.mold { position: absolute; left: 150px; top: 300px; width: 780px; height: 190px; border-radius: 40px; border: 6px solid var(--gold);
-  box-shadow: 0 0 40px rgba(218,182,106,.45); }
+.funnel { position: absolute; left: 220px; top: 470px; transform-origin: 50% 0; filter: drop-shadow(0 0 30px rgba(218,182,106,.4)); }
+.sames { position: absolute; left: 0; width: 1080px; top: 960px; display: flex; justify-content: center; gap: 30px; }
+.same { width: 110px; height: 110px; border-radius: 30px; background: #26211c; border: 2px solid #4a4238; display: flex; align-items: center; justify-content: center; }
 /* 4 */
-.dialw { position: absolute; left: 340px; top: 290px; width: 400px; height: 400px; filter: drop-shadow(0 0 40px rgba(218,182,106,.35)); }
-.side4 { position: absolute; top: 420px; }
-.sa { left: 110px; } .sb { left: 820px; }
-.xline { position: absolute; left: -10px; top: 70px; width: 170px; height: 8px; background: #E07A6A; transform: rotate(-35deg); transform-origin: 0 50%;
-  border-radius: 4px; }
-.sa .xline { transform-origin: 0 50%; }
+.dialw { position: absolute; left: 250px; top: 290px; width: 580px; height: 580px; filter: drop-shadow(0 0 50px rgba(218,182,106,.4)); }
+.side4 { position: absolute; top: 960px; }
+.sa { left: 100px; } .sb { left: 800px; }
+.xline { position: absolute; left: -10px; top: 86px; width: 200px; height: 9px; background: #E07A6A; transform: rotate(-35deg); transform-origin: 0 50%;
+  border-radius: 5px; }
 /* 5 */
-.intro { position: absolute; left: 0; width: 1080px; top: 460px; text-align: center; z-index: 6; }
-.intro .logo { position: relative; width: 340px; height: auto; z-index: 2; }
-.intro .wm { position: relative; z-index: 2; margin-top: 10px; font: italic 600 124px/1.05 "Fraunces"; color: var(--gold); letter-spacing: -2px;
+.intro { position: absolute; left: 0; width: 1080px; top: 330px; text-align: center; }
+.intro .logo { position: relative; width: 400px; height: auto; z-index: 2; }
+.intro .wm { position: relative; z-index: 2; margin-top: 10px; font: italic 600 130px/1.05 "Fraunces"; color: var(--gold); letter-spacing: -2px;
   text-shadow: 0 0 50px rgba(218,182,106,.35); }
-.intro .halo { position: absolute; left: 190px; top: -150px; width: 700px; height: 700px; border-radius: 50%; z-index: 1;
-  background: radial-gradient(circle, rgba(218,182,106,.38), rgba(218,182,106,0) 65%); }
-.phone { position: absolute; border-radius: 40px; padding: 9px; background: #0b0907; box-shadow: 0 0 0 2px #3a3126, 0 40px 90px rgba(0,0,0,.6),
-  0 0 70px rgba(218,182,106,.18); overflow: hidden; }
-.scr { position: relative; width: 100%; height: 100%; border-radius: 32px; overflow: hidden; background: var(--bg); }
-.scr img { width: 100%; display: block; }
-.pglare { position: absolute; inset: 0; border-radius: 40px; background: linear-gradient(125deg, rgba(255,255,255,.10), rgba(255,255,255,0) 40%); }
-.ph5 { left: 110px; top: 290px; }
-.dims { position: absolute; left: 430px; top: 300px; width: 540px; display: grid; grid-template-columns: 170px 170px; gap: 40px 60px;
-  justify-content: center; }
+.intro .halo { position: absolute; left: 140px; top: -180px; width: 800px; height: 800px; border-radius: 50%; z-index: 1;
+  background: radial-gradient(circle, rgba(218,182,106,.42), rgba(218,182,106,0) 65%); }
+.rays { position: absolute; left: 40px; top: -300px; width: 1000px; height: 1000px; border-radius: 50%; z-index: 0;
+  background: repeating-conic-gradient(rgba(218,182,106,.16) 0deg 6deg, rgba(218,182,106,0) 6deg 18deg);
+  -webkit-mask-image: radial-gradient(closest-side, #000 20%, transparent); }
+.ph5 { left: 60px; top: 300px; }
+.steps { position: absolute; left: 450px; top: 290px; width: 570px; display: flex; flex-direction: column; gap: 30px; }
+.stp { display: flex; align-items: center; gap: 22px; height: 160px; padding: 0 26px; border-radius: 34px;
+  background: linear-gradient(160deg, var(--card2), var(--card) 60%, #241e14); border: 2px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+.stp .num { width: 64px; height: 64px; font-size: 38px; }
+.mtr { flex: 1; height: 14px; border-radius: 7px; background: rgba(0,0,0,.35); overflow: hidden; }
+.mtr i { display: block; width: 100%; height: 100%; background: linear-gradient(90deg, #9a7a32, var(--gold)); transform-origin: 0 50%; border-radius: 7px; }
 /* 6 */
 .cosmos { position: absolute; inset: 0; }
 .cs { position: absolute; border-radius: 50%; background: #fff6d8; box-shadow: 0 0 8px #fff; }
-.orbits { position: absolute; left: 540px; top: 740px; width: 0; height: 0; }
+.orbits { position: absolute; left: 540px; top: 700px; width: 0; height: 0; }
 .orb { position: absolute; border-radius: 50%; border: 2px dashed rgba(218,182,106,.5); }
 .orb.o1 { left: -250px; top: -250px; width: 500px; height: 500px; }
-.orb.o2 { left: -380px; top: -380px; width: 760px; height: 760px; border-color: rgba(183,168,224,.45); }
+.orb.o2 { left: -400px; top: -400px; width: 800px; height: 800px; border-color: rgba(183,168,224,.45); }
 .och { position: absolute; left: 50%; top: -60px; margin-left: -60px; width: 120px; height: 120px; border-radius: 34px; display: flex;
   align-items: center; justify-content: center; background: var(--card); border: 2px solid var(--border); box-shadow: 0 0 40px rgba(218,182,106,.3); }
 .och.lv { background: var(--plum); border-color: #4a3f5e; box-shadow: 0 0 40px rgba(183,168,224,.3); }
-.gem { position: absolute; left: -90px; top: -90px; width: 180px; height: 180px; border-radius: 50%;
+.gem { position: absolute; left: -100px; top: -100px; width: 200px; height: 200px; border-radius: 50%;
   background: radial-gradient(circle at 35% 30%, #8fb0ff, #1e3a8a 55%, #0b1638); box-shadow: 0 0 0 10px rgba(218,182,106,.6), 0 0 90px rgba(80,120,255,.55); }
-.toggle { position: absolute; left: 460px; top: 1190px; width: 160px; height: 84px; border-radius: 42px; background: #2a2333; border: 2px solid #4a3f5e; }
+.toggle { position: absolute; left: 460px; top: 1150px; width: 160px; height: 84px; border-radius: 42px; background: #2a2333; border: 2px solid #4a3f5e; }
 .knob { position: absolute; left: 6px; top: 6px; width: 68px; height: 68px; border-radius: 50%; background: var(--lav); box-shadow: 0 0 24px rgba(183,168,224,.8); }
 .ph6 { left: 320px; top: 270px; }
+.lsp { position: absolute; filter: drop-shadow(0 0 14px rgba(183,168,224,.8)); }
 /* 7 */
-.nog { position: absolute; top: 290px; }
-.ng1 { left: 290px; } .ng2 { left: 620px; }
-.xl { position: absolute; left: -20px; top: 80px; width: 210px; height: 9px; border-radius: 5px; background: #E07A6A; transform: rotate(-40deg);
+.tape { position: absolute; left: -210px; width: 1500px; height: 120px; }
+.tp1 { top: 270px; transform: rotate(-7deg); } .tp2 { top: 1100px; transform: rotate(6deg); }
+.tin { position: absolute; inset: 0; display: flex; align-items: center; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  background: repeating-linear-gradient(-45deg, #DAB66A 0 40px, #1a1511 40px 80px); }
+.ttrack { white-space: nowrap; padding: 6px 0; width: max-content; background: #15110E; font: 700 34px "JBMono"; letter-spacing: 4px; color: var(--gold); }
+.nog { position: absolute; top: 640px; }
+.ng1 { left: 250px; } .ng2 { left: 610px; }
+.xl { position: absolute; left: -20px; top: 110px; width: 270px; height: 10px; border-radius: 5px; background: #E07A6A; transform: rotate(-40deg);
   transform-origin: 0 50%; box-shadow: 0 0 20px rgba(224,122,106,.6); }
-.ng1 .xl, .ng2 .xl { transform-origin: 0 50%; }
-/* 8 */
-.bigger { position: absolute; left: 465px; top: 300px; width: 150px; height: 150px; }
-.bring { position: absolute; left: -80px; top: -80px; width: 310px; height: 310px; border-radius: 50%; border: 4px solid var(--gold);
-  box-shadow: 0 0 60px rgba(218,182,106,.5), inset 0 0 40px rgba(218,182,106,.3); }
-.bcomp { position: absolute; left: 15px; top: 15px; }
 /* 9 */
-.venn { position: absolute; left: 540px; top: 520px; width: 0; height: 0; }
-.vc { position: absolute; left: -170px; top: -170px; width: 340px; height: 340px; border-radius: 50%; display: flex; align-items: center;
+.venn { position: absolute; left: 540px; top: 700px; width: 0; height: 0; }
+.vc { position: absolute; left: -210px; top: -210px; width: 420px; height: 420px; border-radius: 50%; display: flex; align-items: center;
   justify-content: center; mix-blend-mode: screen; }
-.v1 { background: radial-gradient(circle, rgba(131,145,114,.65), rgba(131,145,114,.25)); border: 3px solid var(--sage); justify-content: flex-start; padding-left: 50px; align-items: flex-start; padding-top: 90px; }
-.v2 { background: radial-gradient(circle, rgba(218,182,106,.6), rgba(218,182,106,.22)); border: 3px solid var(--gold); justify-content: flex-end; padding-right: 50px; align-items: flex-start; padding-top: 90px; }
-.v3 { background: radial-gradient(circle, rgba(183,168,224,.55), rgba(183,168,224,.2)); border: 3px solid var(--lav); align-items: flex-end; padding-bottom: 50px; }
-.vcore { position: absolute; left: -55px; top: -45px; filter: drop-shadow(0 0 30px rgba(255,230,160,.95)); }
+.v1 { background: radial-gradient(circle, rgba(131,145,114,.65), rgba(131,145,114,.25)); border: 3px solid var(--sage); justify-content: flex-start; padding-left: 60px; align-items: flex-start; padding-top: 110px; }
+.v2 { background: radial-gradient(circle, rgba(218,182,106,.6), rgba(218,182,106,.22)); border: 3px solid var(--gold); justify-content: flex-end; padding-right: 60px; align-items: flex-start; padding-top: 110px; }
+.v3 { background: radial-gradient(circle, rgba(183,168,224,.55), rgba(183,168,224,.2)); border: 3px solid var(--lav); align-items: flex-end; padding-bottom: 60px; }
+.vcore { position: absolute; left: -65px; top: -65px; filter: drop-shadow(0 0 30px rgba(255,230,160,.95)); }
 /* 10 */
-.ph10 { left: 325px; top: 250px; }
-.tick { position: absolute; }
-.tick.t1 { left: 60px; top: 560px; } .tick.t2 { left: 890px; top: 900px; }
+.ph10 { left: 70px; top: 290px; }
+.tick { position: absolute; top: 310px; }
+.tick.t1 { left: 560px; } .tick.t2 { left: 800px; }
 .tk { position: absolute; right: -16px; bottom: -16px; background: var(--bg); border-radius: 50%; }
+.gauge { position: absolute; left: 545px; top: 600px; width: 440px; height: 250px; }
+.gneedle { position: absolute; left: 216px; top: 70px; width: 8px; height: 160px; border-radius: 4px; background: var(--cream); transform-origin: 50% 100%;
+  box-shadow: 0 0 12px rgba(242,234,221,.6); }
+.ghub { position: absolute; left: 204px; top: 214px; width: 32px; height: 32px; border-radius: 50%; background: var(--gold); }
+.stars { position: absolute; left: 545px; top: 910px; width: 440px; display: flex; justify-content: center; gap: 20px;
+  filter: drop-shadow(0 0 12px rgba(218,182,106,.7)); }
 /* 11 */
-.ph11a { left: 90px; top: 290px; transform: rotate(-4deg); }
-.ph11b { left: 760px; top: 300px; transform: rotate(4deg); }
-.timer { position: absolute; left: 415px; top: 400px; width: 250px; height: 250px; }
+.timer { position: absolute; left: 340px; top: 270px; width: 400px; height: 400px; filter: drop-shadow(0 0 40px rgba(218,182,106,.35)); }
 .timer svg { position: absolute; inset: 0; }
-.tnum { position: absolute; left: 0; width: 250px; top: 82px; text-align: center; font: 700 76px "Manrope"; }
+.tnum { position: absolute; left: 0; width: 400px; top: 130px; text-align: center; font: 700 120px/1 "Manrope"; }
+.ph11a { left: 90px; top: 760px; transform: rotate(-6deg); }
+.ph11b { left: 760px; top: 760px; transform: rotate(6deg); }
 /* 12 */
-.ph12 { left: 330px; top: 260px; }
-.offer { position: absolute; left: 140px; top: 330px; width: 800px; height: 760px; border-radius: 40px; text-align: center; overflow: hidden;
+.ph12 { left: 320px; top: 270px; }
+.obs { position: absolute; left: 540px; top: 700px; width: 0; height: 0; }
+.ob { position: absolute; left: -40px; top: -40px; opacity: 0; }
+.offer { position: absolute; left: 130px; top: 300px; width: 820px; height: 880px; border-radius: 40px; text-align: center; overflow: hidden;
   background: linear-gradient(160deg, var(--card2), var(--card) 60%, #241e14); border: 2px solid var(--border); box-shadow: 0 30px 80px rgba(0,0,0,.55); }
-.ologo { width: 150px; margin-top: 50px; }
-.ostamp { display: block; width: 560px; margin: 40px auto 0; font: 800 120px/1 "Manrope"; color: #1d1812; background: var(--gold); padding: 18px 0;
+.ologo { width: 170px; margin-top: 60px; }
+.ostamp { display: block; width: 580px; margin: 40px auto 0; font: 800 124px/1 "Manrope"; color: #1d1812; background: var(--gold); padding: 20px 0;
   border-radius: 26px; box-shadow: 0 0 60px rgba(218,182,106,.5); }
-.oprice { margin-top: 70px; font: italic 700 190px/1 "Fraunces"; color: var(--cream); }
+.oprice { margin-top: 80px; font: italic 700 200px/1 "Fraunces"; color: var(--cream); }
 .shine { position: absolute; top: -20%; left: 0; width: 30%; height: 140%; transform: rotate(18deg);
   background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,240,200,.28), rgba(255,255,255,0)); }
 /* 13 */
-.die { position: absolute; top: 330px; }
-.dc0 { left: 170px; } .dc1 { left: 390px; top: 360px; } .dc2 { left: 600px; } .dc3 { left: 810px; top: 350px; }
-.sweep { position: absolute; left: 100px; top: 380px; width: 880px; height: 12px; border-radius: 6px; background: var(--gold); transform-origin: 0 50%;
+.die { position: absolute; top: 560px; }
+.dc0 { left: 140px; } .dc1 { left: 370px; top: 600px; } .dc2 { left: 590px; } .dc3 { left: 820px; top: 590px; }
+.sweep { position: absolute; left: 100px; top: 640px; width: 880px; height: 14px; border-radius: 7px; background: var(--gold); transform-origin: 0 50%;
   box-shadow: 0 0 40px rgba(218,182,106,.8); }
-.land { position: absolute; left: 455px; top: 300px; }
+.land { position: absolute; left: 420px; top: 500px; }
 /* 14 */
-.i14 { top: 300px; }
-.i14 .logo { width: 260px; }
-.i14 .wm { font-size: 104px; }
-.i14 .halo { left: 240px; top: -170px; width: 600px; height: 600px; }
+.i14 { top: 360px; }
+.i14 .logo { width: 360px; }
+.i14 .wm { font-size: 120px; }
 /* 15 */
-.ctav { position: absolute; inset: 0; background: radial-gradient(90% 60% at 50% 40%, rgba(21,17,14,.55), rgba(10,8,6,.92)); }
-.cta { position: absolute; left: 0; width: 1080px; top: 380px; text-align: center; }
-.cta .logo { display: block; margin: 0 auto; width: 260px; height: auto; }
-.ctab { display: block; width: max-content; margin: 50px auto 0; padding: 34px 60px; border-radius: 80px; background: var(--gold); color: #1d1812;
+.cta { position: absolute; left: 0; width: 1080px; top: 320px; text-align: center; }
+.cta .halo { position: absolute; left: 190px; top: -200px; width: 700px; height: 700px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(218,182,106,.4), rgba(218,182,106,0) 65%); }
+.cta .logo { position: relative; display: block; margin: 0 auto; width: 300px; height: auto; }
+.ctab { position: relative; display: block; width: max-content; margin: 50px auto 0; padding: 34px 60px; border-radius: 80px; background: var(--gold); color: #1d1812;
   font: 800 62px "Manrope"; letter-spacing: -1px; }
-.ctaf { margin-top: 50px; font: italic 700 210px/1 "Fraunces"; color: var(--gold); text-shadow: 0 0 40px rgba(218,182,106,.9), 0 0 120px rgba(218,182,106,.6); }
-/* captions */
-#caps { z-index: 30; }
-.cap { position: absolute; left: 40px; width: 1000px; top: 1400px; text-align: center; opacity: 0; font: 800 56px/1.15 "Manrope"; word-spacing: 4px; }
-.cw { display: inline-block; font: 800 56px/1.15 "Manrope"; letter-spacing: -1px; color: var(--cream);
+.ctaf { position: relative; margin-top: 50px; font: italic 700 210px/1 "Fraunces"; color: var(--gold); text-shadow: 0 0 40px rgba(218,182,106,.9), 0 0 120px rgba(218,182,106,.6); }
+.cursor { position: absolute; left: 885px; top: 800px; width: 70px; height: 70px; border-radius: 50%; background: rgba(255,255,255,.9);
+  border: 6px solid rgba(255,255,255,.4); background-clip: padding-box; box-shadow: 0 10px 30px rgba(0,0,0,.5); opacity: 0; }
+/* captions: the active word on a gold pill */
+.cap { position: absolute; left: 30px; width: 1020px; top: 1330px; text-align: center; opacity: 0; font: 800 58px/1.3 "Manrope"; word-spacing: 2px; }
+.cw { display: inline-block; padding: 0 12px; border-radius: 14px; font: 800 58px/1.2 "Manrope"; letter-spacing: -1px; color: var(--cream);
   text-shadow: 0 4px 18px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.9); }
 .cw.em { font: italic 600 66px/1.1 "Fraunces"; color: var(--gold); }
 #flash { position: absolute; inset: 0; background: #fff3d6; opacity: 0; }
 """
 
 
-# the speaker's grade: Natural Portrait seed (skin-soft 0.6), a touch of contrast and warmth toward the brand gold,
-# highlights held, the red top tamed; validated with `hyperframes media-treatment` (build/grade.json is its normalized form)
+# the speaker's grade: Natural Portrait seed (skin-soft 0.6) pushed for punch: more contrast and vibrance, deeper blacks,
+# highlights held on the white wall, warmth toward the brand gold, a vignette, light bloom and fine grain; validated with
+# `hyperframes media-treatment --dry-run` (build/grade.json is its normalized form)
 GRADE = __import__("html").escape(json.dumps(json.load(open(os.path.join(ROOT, "build", "grade.json"))), separators=(",", ":")), quote=True)
-
-
-SEAMSPARKS = "".join(f'<i class="ssp"></i>' for _ in range(7))
 
 
 def main():
@@ -837,10 +1068,16 @@ def main():
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="1080" data-height="1920">
-      <div id="bg" class="clip" data-start="0" data-duration="{DUR}" data-track-index="0" data-layout-allow-overflow>{backdrop()}</div>
-      <div id="spk" data-layout-allow-overflow><div id="spkcrop"><div id="panelbg"></div><div id="spkw">
-        <video id="talk" data-color-grading="{GRADE}" src="assets/video/{os.environ.get("SPK_SRC", "talk.mp4")}" data-start="0" data-duration="{VO}" data-track-index="2" muted playsinline></video></div></div><div class="seamg"><div class="seam"></div>{SEAMSPARKS}</div></div>
-      {scenes()}
+      <div id="spk" data-layout-allow-overflow><div id="spkw">
+        <video id="talk" data-color-grading="{GRADE}" src="assets/video/{os.environ.get("SPK_SRC", "talk.mp4")}" data-start="0" data-duration="{VO}" data-track-index="2" muted playsinline></video></div></div>
+      <div id="look" class="clip ov" data-start="0" data-duration="{DUR}" data-track-index="3" data-layout-allow-overflow><div id="leak"></div><div class="shade top"></div><div class="shade bot"></div></div>
+      {STICKERS}
+      <div id="stage" data-layout-allow-overflow>
+        <div id="bg" class="clip" data-start="0" data-duration="{DUR}" data-track-index="0" data-layout-allow-overflow>{backdrop()}</div>
+        {SCENES}
+      </div>
+      <div id="trans"><div id="iring"></div><div id="wbar"></div><div id="pedge"></div></div>
+      <div id="hud" class="clip" data-start="0" data-duration="{DUR}" data-track-index="6"><div class="brand"><i class="dot"></i>SUCSESS MAPERRS</div><div class="ptrack"><i class="pfill"></i></div></div>
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="7">{captions_html()}</div>
       <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8"><div id="sweepfx"></div>{bursts_html()}<div id="flash"></div></div>
       <audio id="voice" src="assets/audio/voice.wav" data-start="0" data-duration="{VO}" data-track-index="10" data-volume="1"></audio>
@@ -862,9 +1099,15 @@ def main():
     print("wrote index.html", len(html) // 1024, "KB,", DUR, "s")
 
 
+STICKERS = SCENES = ""
+
+
 def TL():
+    global STICKERS, SCENES
     backdrop_tl()
     frame_tl()
+    STICKERS = stickers()
+    SCENES = scenes()
     scenes_tl()
     # the flash on the two brand reveals
     for t in (L[5][0], L[14][0]):
