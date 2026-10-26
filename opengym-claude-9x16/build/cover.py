@@ -1,4 +1,5 @@
-"""The reel cover (1080x1920 PNG): the muscle-map hero frame with NXT, under the brief's headline.
+"""The reel cover (1080x1920 PNG): NXT in muscle mode, mid-flex as the paywall shatters, under the hook line.
+Everything that matters sits inside the 3:4 profile-grid crop (y 240-1680).
 
 python opengym-claude-9x16/build/cover.py      (after generate.py)
   -> cover/index.html, a one-frame HyperFrames project that reuses assets/js/opengym.js with window.OG_COVER set.
@@ -15,8 +16,8 @@ OUT = os.path.join(ROOT, "cover")
 T = json.load(open(os.path.join(ROOT, "build", "cues.json")))
 ENV = json.load(open(os.path.join(ROOT, "build", "env.json")))
 
-# legs pulsing red, all three labels up, NXT pointing at the hologram
-COVER = {"t": round(T["untrained"] + .55, 2), "cam": [.12, 1.15, 5.0], "look": [.3, .92, -.15], "fov": 42, "shift": .12, "holoYaw": .2}
+# muscle mode with the code hologram behind it ("Claude helped build it"); camera pulled back so the arms read
+COVER = {"t": round(T["claude"] + .25, 2), "cam": [1.3, 1.36, 4.6], "look": [1.18, 1.5, -.2], "fov": 40, "shift": .1}
 
 HTML = """<!doctype html>
 <html lang="en" data-resolution="portrait">
@@ -34,19 +35,20 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050
 #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #07050d; color: #f4f1fa; font-family: "Poppins", sans-serif; }
 .clip { position: absolute; inset: 0; }
 #gl { width: 1080px; height: 1920px; display: block; }
-.shade { background: linear-gradient(180deg, rgba(7,5,13,.92) 0%, rgba(7,5,13,.75) 22%, rgba(7,5,13,0) 40%, rgba(7,5,13,0) 78%, rgba(7,5,13,.55) 100%); }
+.shade { background: linear-gradient(180deg, rgba(7,5,13,.96) 0%, rgba(7,5,13,.9) 30%, rgba(7,5,13,.55) 38%, rgba(7,5,13,0) 46%, rgba(7,5,13,0) 70%, rgba(7,5,13,.8) 86%, rgba(7,5,13,.92) 100%); }
 .brand { position: absolute; left: 0; right: 0; top: 300px; text-align: center; font: 700 30px "JBMono"; letter-spacing: 6px; }
 .brand b { color: #7b2ffb; }
-.h { position: absolute; left: 60px; right: 60px; top: 352px; text-align: center; font: 800 112px/1.02 "Poppins"; letter-spacing: -3px;
-  text-shadow: 0 8px 40px rgba(0,0,0,.6); }
+.h { position: absolute; left: 50px; right: 50px; top: 340px; text-align: center; font: 800 132px/.98 "Poppins"; letter-spacing: -4px;
+  text-shadow: 0 10px 50px rgba(0,0,0,.7); }
 .h em { font-style: normal; color: #a98bff; }
-.chip { position: absolute; left: 0; right: 0; top: 610px; text-align: center; }
-.chip span { display: inline-block; padding: 12px 34px; border-radius: 40px; background: #3fd69b; color: #07050d; font: 800 44px "Poppins";
-  box-shadow: 0 12px 40px rgba(63,214,155,.45); }
-.mm { position: absolute; right: 60px; display: flex; align-items: center; gap: 16px; padding: 12px 30px 12px 22px; border-radius: 40px;
-  background: rgba(7,5,13,.8); border: 3px solid var(--c); color: var(--c); font: 800 44px "Poppins"; box-shadow: 0 10px 34px rgba(0,0,0,.4); }
-.mm i { width: 22px; height: 22px; border-radius: 50%; background: var(--c); box-shadow: 0 0 16px var(--c); }
-.mm0 { --c: #3fd69b; top: 1300px; } .mm1 { --c: #ffc24a; top: 1395px; } .mm2 { --c: #ff6b6b; top: 1490px; }
+.chip { position: absolute; left: 0; right: 0; top: 640px; text-align: center; }
+.chip span { display: inline-block; padding: 14px 36px; border-radius: 44px; background: #3fd69b; color: #07050d; font: 800 46px "Poppins";
+  box-shadow: 0 12px 44px rgba(63,214,155,.45); }
+.nos { position: absolute; left: 0; right: 0; top: 1545px; display: flex; justify-content: center; gap: 18px; }
+.nos span { display: flex; align-items: center; gap: 12px; padding: 12px 26px 12px 22px; border-radius: 40px; background: rgba(7,5,13,.82);
+  border: 3px solid #ff6b6b; color: #f4f1fa; font: 700 38px "Poppins"; box-shadow: 0 10px 34px rgba(0,0,0,.45); }
+.nos b { color: #ff6b6b; font: 800 40px "Poppins"; }
+.og { position: absolute; left: 0; right: 0; top: 1636px; text-align: center; font: 700 30px "JBMono"; letter-spacing: 5px; color: #d9ccff; }
     </style>
   </head>
   <body>
@@ -55,9 +57,10 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050
       <div class="clip shade" data-start="0" data-duration="1" data-track-index="1" data-layout-ignore></div>
       <div class="clip" data-start="0" data-duration="1" data-track-index="2">
         <div class="brand"><b>●</b> AI.NXTLVL</div>
-        <div class="h">Claude wrote<br /><em>my gym plan.</em></div>
-        <div class="chip"><span>free app tracks every set</span></div>
-        <div class="mm mm0"><i></i>WORKED</div><div class="mm mm1"><i></i>RECOVERING</div><div class="mm mm2"><i></i>UNTRAINED</div>
+        <div class="h">Delete your<br /><em>gym app.</em></div>
+        <div class="chip"><span>Claude helped build a free one</span></div>
+        <div class="nos"><span><b>&#10005;</b>subscription</span><span><b>&#10005;</b>ads</span><span><b>&#10005;</b>account</span></div>
+        <div class="og">OPENGYM &middot; OPEN SOURCE</div>
       </div>
     </div>
     <script>
