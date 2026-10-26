@@ -1,4 +1,7 @@
-"""Original score, sound design and the mastered mix for the openGym x Claude reel (synthesized here: no rights issues).
+"""Music, sound design and the mastered mix for the openGym x Claude reel.
+
+The music bed is a licensed track picked with build/find_music.py (build/track.json; CC0 / CC BY, credit in the
+caption) when one is chosen; otherwise the original score synthesized below.
 
 python opengym-claude-9x16/build/audio.py      (inside the voice venv: numpy, scipy, soundfile; needs ffmpeg)
 
@@ -322,6 +325,34 @@ def ffmpeg(*a):
     return subprocess.run(["ffmpeg", "-y", "-hide_banner", *a], capture_output=True, text=True, check=True)
 
 
+def track_bed():
+    """The licensed track from build/find_music.py (build/track.json), cut to the reel: the loudest steady stretch
+    past the intro, so the hook starts on full energy. None when no track has been chosen."""
+    meta = os.path.join(ROOT, "build", "track.json")
+    if not os.path.exists(meta):
+        return None
+    t = json.load(open(meta))
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(ROOT, t["track"]), "-f", "f32le", "-ac", "2",
+                          "-ar", str(SR), "-"], capture_output=True, check=True).stdout
+    x = np.frombuffer(raw, np.float32).reshape(-1, 2).astype(np.float64)
+    if "start" in t:
+        st = int(t["start"] * SR)
+    else:
+        win = int(SR / 2)
+        e = np.sqrt(np.convolve((x ** 2).mean(1), np.ones(win) / win, "valid")[::win])   # energy per 0.5 s
+        need = int(np.ceil(DUR * 2))
+        skip = min(16, max(0, len(e) - need))                     # skip up to 8 s of intro
+        cand = [(np.percentile(e[i:i + need], 20), i) for i in range(skip, max(skip + 1, len(e) - need))]
+        st = max(cand)[1] * win if cand else 0
+    seg = x[st:st + N]
+    while len(seg) < N:                                           # short track: loop it
+        seg = np.concatenate([seg, x[: N - len(seg)]])
+    fi = int(.02 * SR)
+    seg[:fi] *= np.linspace(0, 1, fi)[:, None]
+    print(f"music bed: {t['title']} by {t['creator']} ({t['license']}), from {st / SR:.1f} s")
+    return seg
+
+
 def main():
     arrange()
     sfx()
@@ -339,9 +370,15 @@ def main():
     synth = np.stack([reverb(BUS["synth"][:, c], 1.8, .25, c) for c in (0, 1)], 1)
     sfxb = np.stack([reverb(BUS["sfx"][:, c], 1.0, .15, c + 2) for c in (0, 1)], 1)
     rms = lambda x: np.sqrt(np.mean(x ** 2) + 1e-12)
-    music = BUS["drums"] * (.05 / rms(BUS["drums"])) + BUS["bass"] * (.035 / rms(BUS["bass"])) + synth * (.03 / rms(synth))
-    music *= duck[:, None]
-    score = music + sfxb * (.05 / rms(sfxb))
+    bed = track_bed()
+    if bed is not None:
+        # a real track sits on a single bus: duck it deeper under the voice, keep the SFX a little lower
+        music = bed * (.07 / rms(bed)) * (1 - .62 * env)[:, None]
+        score = music + sfxb * (.035 / rms(sfxb))
+    else:
+        music = BUS["drums"] * (.05 / rms(BUS["drums"])) + BUS["bass"] * (.035 / rms(BUS["bass"])) + synth * (.03 / rms(synth))
+        music *= duck[:, None]
+        score = music + sfxb * (.05 / rms(sfxb))
     fade = np.ones(N); fade[-int(.25 * SR):] = np.linspace(1, 0, int(.25 * SR))
     score *= fade[:, None]
     vg = .16 / rms(v[v != 0]) if np.any(v) else 1

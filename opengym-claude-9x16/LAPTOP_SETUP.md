@@ -111,3 +111,24 @@ The 3D world is `assets/js/opengym.js`. The panel screens are mocks (no screen r
   ```
   Then master the audio to −14 LUFS and −1.5 dBTP, and make the cover PNG (PLAN.md and the brief, section 8).
 - Keep MP4s and WAV/MP3 renders out of git; deliver them. Commit the source.
+
+## 4. Fix round 1 (the user reviewed v1)
+
+1. **"Gym" pronounced "gim" (hard G), and "GYM" spelled out as letters.**
+   - `voice/make_voices.py` now respells the words for the voice only: "gym" and "GYM" become "jim", and "openGym" becomes "Open jim". Captions keep the script spelling.
+   - The sigh is no longer spoken as "huh, uh, uh". Line 4's take 1 also dropped the "open".
+   - Regenerate the lines that contain these words. Lines 3, 4 and 12 have "gym"; line 1 had the sigh:
+     ```
+     python opengym-claude-9x16/voice/make_voices.py lines --nxt am_fenrir --human am_puck --only 1 3 4 12
+     ```
+   - Check every new take for "jim" (soft J), not "gim" or letters, and for a clean start on line 1. Then re-assemble with the same picks for the other lines and the same `--tempo`. The voice must still end by 33.5 s.
+2. **The synthesized music sounds weird.** Replace it with a real, licensed track:
+   ```
+   python opengym-claude-9x16/build/find_music.py search
+   python opengym-claude-9x16/build/find_music.py use <id>
+   ```
+   - Pick a modern, punchy gym or electronic track that fits a fun tech reel, with steady energy from the first second.
+   - Avoid anything cheesy, chiptune, or with vocals that clash with the dialogue.
+   - `build/audio.py` then uses it as the bed, ducked under the voice, with the SFX a little lower.
+   - Put the credit line from `build/track.json` in the post caption (required for CC BY).
+3. Re-run `build/timing.py`, `build/audio.py` and `build/generate.py`. Check the mix: the voice should always sit clearly on top. Then re-render the final.

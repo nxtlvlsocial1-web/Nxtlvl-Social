@@ -127,13 +127,22 @@ def ref_for(a, who):
     return p, DESIGN[who]
 
 
+# Respellings the voice models need; captions keep the script spelling. "gym" read with a hard G ("gim") and
+# "GYM" in capitals read as letters, so the voice gets "jim"; "openGym" lost its "open" without a space.
+PRONOUNCE = [(r"\bopenGym\b", "Open jim"), (r"\bGYM\b", "jim"), (r"\bgym\b", "jim")]
+
+
 def speakable(t, turbo=False):
-    """Chatterbox reads non-verbals aloud, so turn them into sounds (Turbo: into its sound tags)."""
+    """Text as the voice should say it. Chatterbox reads non-verbals aloud, so turn them into sounds (Turbo: into
+    its sound tags); a sigh has no good spoken form (it came out as "huh, uh, uh"), so it is dropped."""
     if turbo:
         t = t.replace("(laughs)", "[laugh]").replace("(sighs)", "[sigh]").replace("(gasps)", "[gasp]")
     else:
-        t = t.replace("(laughs)", "Haha,").replace("(sighs)", "Hhh...").replace("(gasps)", "Oh!")
-    return re.sub(r"\([^)]*\)", "", t).strip()
+        t = t.replace("(laughs)", "Haha,").replace("(sighs)", "").replace("(gasps)", "Oh!")
+    t = re.sub(r"\([^)]*\)", "", t)
+    for pat, rep in PRONOUNCE:
+        t = re.sub(pat, rep, t)
+    return re.sub(r"\s+", " ", t).strip()
 
 
 def lines(a):
