@@ -1,0 +1,46 @@
+<!doctype html>
+<!-- Cover for the Sora Short (not part of the video). Snapshot with: node build/cover.cjs -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Why OpenAI Killed Sora: cover</title>
+<style>
+@font-face { font-family: "Archivo"; font-weight: 100 900; font-stretch: 62% 125%; src: url("assets/fonts/archivo.woff2") format("woff2"); }
+@font-face { font-family: "Instrument Serif"; font-style: italic; src: url("assets/fonts/instrument-serif-italic.woff2") format("woff2"); }
+@font-face { font-family: "JBMono"; font-weight: 100 800; src: url("assets/fonts/jbmono.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #050B1E; }
+#c { position: relative; width: 1080px; height: 1920px; overflow: hidden; color: #F5F7FF; font-family: "Archivo";
+  background: radial-gradient(120% 70% at 50% 62%, #10276A 0%, #081538 45%, #050B1E 80%); }
+#grid { position: absolute; inset: 0; opacity: .2; background-image: linear-gradient(rgba(120,160,255,.35) 2px, transparent 2px),
+  linear-gradient(90deg, rgba(120,160,255,.35) 2px, transparent 2px); background-size: 120px 120px; }
+#redglow { position: absolute; left: 90px; top: 900px; width: 900px; height: 900px; border-radius: 50%; filter: blur(110px);
+  background: radial-gradient(circle, rgba(255,46,62,.75), transparent 65%); }
+#vig { position: absolute; inset: 0; background: radial-gradient(130% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.75) 100%); }
+#tag { position: absolute; left: 60px; top: 268px; height: 54px; display: flex; align-items: center; gap: 14px; padding: 0 24px 0 18px; border-radius: 27px;
+  background: rgba(8,16,40,.72); border: 2px solid rgba(120,160,255,.35); font-family: "JBMono"; font-weight: 700; font-size: 28px; letter-spacing: .07em; color: #C9D6FF; }
+#tag i { width: 18px; height: 18px; border-radius: 50%; background: #FF2E3E; box-shadow: 0 0 14px #FF2E3E; }
+#why { position: absolute; left: 0; right: 0; top: 400px; text-align: center; font-weight: 900; font-stretch: 125%; font-size: 112px; letter-spacing: -.03em; line-height: 1; }
+#killed { position: absolute; left: 0; right: 0; top: 500px; text-align: center; font-family: "Instrument Serif"; font-style: italic; font-size: 360px; line-height: 1;
+  color: #FF2E3E; text-shadow: 0 0 60px rgba(255,46,62,.7), 0 0 160px rgba(255,46,62,.35); letter-spacing: -.02em; }
+#sora { position: absolute; left: 0; right: 0; top: 860px; text-align: center; font-weight: 900; font-stretch: 125%; font-size: 200px; letter-spacing: -.04em; line-height: 1; }
+#icon { position: absolute; left: 380px; top: 1130px; width: 320px; height: 320px; }
+#icon img { width: 100%; height: 100%; border-radius: 72px; filter: grayscale(1) brightness(.55); }
+#icon svg { position: absolute; left: -24px; top: -24px; width: 368px; height: 368px; overflow: visible; }
+#icon path { fill: none; stroke: #FF2E3E; stroke-width: 40; stroke-linecap: round; filter: drop-shadow(0 0 18px rgba(255,46,62,.85)); }
+#sub { position: absolute; left: 0; right: 0; top: 1488px; text-align: center; font-family: "JBMono"; font-weight: 800; font-size: 34px; letter-spacing: .16em; color: #FFB27A; }
+</style>
+</head>
+<body>
+<div id="c">
+  <div id="grid"></div><div id="redglow"></div><div id="vig"></div>
+  <div id="tag"><i></i>AI CASE FILE &middot; SORA</div>
+  <div id="why">WHY OPENAI</div>
+  <div id="killed">killed</div>
+  <div id="sora">SORA</div>
+  <div id="icon"><img src="assets/img/sora-icon.png" alt="Sora app icon"><svg viewBox="0 0 368 368"><path d="M30 30 L338 338"/><path d="M338 30 L30 338"/></svg></div>
+  <div id="sub">THE GPU BILL NOBODY SAW</div>
+</div>
+<script>document.fonts.ready.then(() => { window.__coverDone = true; });</script>
+</body>
+</html>

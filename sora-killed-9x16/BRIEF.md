@@ -26,13 +26,18 @@ kinetic captions with a red active-word sweep.
 - assets/img/openai-logo.png, openai-mark.png: the OpenAI logo (user upload, made transparent)
 - assets/audio/vo_raw.wav: Kokoro (Apache-2.0) voice am_michael at 1.1x, build/vo.py; vo.wav is the levelled copy
 - assets/audio/music.wav: original trap beat and SFX synthesized by build/audio.py, ducked under the voice
-- fonts: Anton (OFL, fontsource), Manrope, JetBrains Mono
+- fonts (all OFL): Archivo variable (wdth 62-125), Instrument Serif Italic, JetBrains Mono
+- cover.html: the cover still, snapshot by build/cover.cjs
 
 ## Customizations
 
 - No dollar figures and no "$500B" claim; the chart is labelled ILLUSTRATIVE and the invoice shows $$$ only.
 - "#1 ON THE APP STORE" refers to Sora reaching the top of the US App Store after launch (Oct 2025 reporting).
 - Captions are timed from the voiceover's speech runs (silence detection), words spread by length within each run.
+
+- Type (v2 feedback: "premium and cool"): Archivo Expanded 800-900 for statements and captions (the economics
+  voice), Instrument Serif Italic on the key words (viral, killed, loss, hype, cool, follow; the hype voice),
+  JetBrains Mono for labels and data. Captions use a glowing underline on the spoken word instead of a red box.
 
 ## Notes
 

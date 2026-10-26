@@ -6,13 +6,14 @@
     <title>Why OpenAI Killed Sora</title>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
-@font-face { font-family: "Anton"; src: url("assets/fonts/anton.woff2") format("woff2"); }
-@font-face { font-family: "Manrope"; font-weight: 200 800; src: url("assets/fonts/manrope.ttf"); }
+@font-face { font-family: "Archivo"; font-weight: 100 900; font-stretch: 62% 125%; src: url("assets/fonts/archivo.woff2") format("woff2"); }
+@font-face { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; src: url("assets/fonts/instrument-serif-italic.woff2") format("woff2"); }
 @font-face { font-family: "JBMono"; font-weight: 100 800; src: url("assets/fonts/jbmono.ttf"); }
 :root { --navy: #050B1E; --navy2: #0B1A44; --blue: #2F7BFF; --red: #FF2E3E; --orange: #FF8A1F; --ink: #F5F7FF; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--navy); }
-#root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--navy); font-family: "Manrope", sans-serif; color: var(--ink); }
+#root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--navy); font-family: "Archivo", sans-serif; color: var(--ink); }
+.serif { font-family: "Instrument Serif", serif !important; font-style: italic; font-weight: 400 !important; font-stretch: 100% !important; letter-spacing: -.01em !important; text-transform: none; }
 #bg { position: absolute; inset: 0; background: radial-gradient(120% 70% at 50% 38%, #10276A 0%, #081538 45%, #050B1E 80%); }
 #grid { position: absolute; left: -120px; top: -120px; width: 1320px; height: 2160px; opacity: .22;
   background-image: linear-gradient(rgba(120,160,255,.35) 2px, transparent 2px), linear-gradient(90deg, rgba(120,160,255,.35) 2px, transparent 2px);
@@ -40,23 +41,24 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
 .glow.blue { background: radial-gradient(circle, #2F7BFF 0%, transparent 65%); }
 .glow.red { background: radial-gradient(circle, #FF2E3E 0%, transparent 65%); }
 .glow.orange { background: radial-gradient(circle, #FF7A1A 0%, transparent 65%); }
-.kicker { position: absolute; left: 60px; right: 60px; text-align: center; font-weight: 800; font-size: 58px; letter-spacing: .04em; color: #DCE5FF; }
-.mega { position: absolute; left: 40px; right: 40px; text-align: center; font-family: "Anton"; line-height: 1; }
-.grad-orange { color: #FF8A1F; text-shadow: 0 0 40px rgba(255,120,30,.55), 0 10px 0 #7A1E00; }
+.kicker { position: absolute; left: 60px; right: 60px; text-align: center; font-weight: 700; font-stretch: 125%; font-size: 44px; letter-spacing: .12em; color: #DCE5FF; }
+.mega { position: absolute; left: 40px; right: 40px; text-align: center; font-family: "Instrument Serif"; font-style: italic; line-height: .9; letter-spacing: -.02em; }
+.grad-orange { color: #FF9A3D; text-shadow: 0 0 60px rgba(255,120,30,.55), 0 0 18px rgba(255,170,90,.35); }
 .badge { position: absolute; left: 50%; height: 76px; margin-left: -260px; width: 520px; display: flex; align-items: center; justify-content: center; gap: 16px;
   border-radius: 38px; background: rgba(255,255,255,.08); border: 2px solid rgba(255,255,255,.25); font-family: "JBMono"; font-weight: 800; font-size: 32px; letter-spacing: .06em; }
 .badge .dot { width: 18px; height: 18px; border-radius: 50%; background: #3DFF8A; box-shadow: 0 0 12px #3DFF8A; }
 .iconbox { position: absolute; left: 360px; width: 360px; height: 360px; }
 .iconbox img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 80px; }
 .flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
-.stamp { position: absolute; font-family: "Anton"; color: var(--red); border: 12px solid var(--red); border-radius: 22px; padding: 6px 34px 10px;
+.stamp { position: absolute; font-family: "Archivo"; font-weight: 900; font-stretch: 112%; color: var(--red); border: 12px solid var(--red); border-radius: 22px; padding: 6px 34px 10px;
   letter-spacing: .04em; background: rgba(5,11,30,.35); opacity: 0; white-space: nowrap; }
-.hline { position: absolute; left: 50px; right: 50px; text-align: center; font-family: "Anton"; font-size: 118px; line-height: 1.02; color: var(--ink); }
+.hline { position: absolute; left: 50px; right: 50px; text-align: center; font-family: "Archivo"; font-weight: 900; font-stretch: 125%; font-size: 92px; line-height: 1.05; letter-spacing: -.03em; color: var(--ink); }
+.hline .serif { font-size: 1.5em; line-height: .8; }
 .blue-t { color: #5C98FF; } .red-t { color: var(--red); } .orange-t { color: var(--orange); } .green-t { color: #3DFF8A; }
 
 /* S1 */
-#s1-kicker { top: 384px; }
-#s1-viral { top: 452px; font-size: 230px; opacity: 0; }
+#s1-kicker { top: 390px; }
+#s1-viral { top: 440px; font-size: 300px; opacity: 0; }
 #s1-icon { top: 720px; }
 #s1-glow { top: 500px; }
 #s1-trend { position: absolute; left: 60px; top: 640px; width: 960px; height: 520px; opacity: .55; }
@@ -79,7 +81,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
 #s2-x { position: absolute; left: 330px; top: 610px; width: 420px; height: 420px; overflow: visible; }
 #s2-x path { fill: none; stroke: var(--red); stroke-width: 46; stroke-linecap: round; stroke-dasharray: 460; stroke-dashoffset: 460;
   filter: drop-shadow(0 0 18px rgba(255,46,62,.8)); }
-#s2-stamp { left: 150px; top: 1040px; width: 780px; text-align: center; font-size: 120px; }
+#s2-stamp { left: 130px; top: 1050px; width: 820px; text-align: center; font-size: 96px; }
 
 /* S3 */
 #s3-meter { position: absolute; left: 90px; right: 90px; top: 392px; }
@@ -94,12 +96,12 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
   background: linear-gradient(160deg, var(--hue), #0B1020); opacity: 0; display: flex; align-items: center; justify-content: center; }
 .tile-l { left: -150px; } .tile-r { left: 1100px; }
 .tplay { width: 0; height: 0; border-left: 40px solid #fff; border-top: 26px solid transparent; border-bottom: 26px solid transparent; margin-left: 10px; }
-.cash { position: absolute; left: 500px; top: 740px; width: 80px; height: 100px; text-align: center; font-family: "Anton"; font-size: 96px; line-height: 100px;
+.cash { position: absolute; left: 500px; top: 740px; width: 80px; height: 100px; text-align: center; font-family: "Archivo"; font-weight: 900; font-size: 92px; line-height: 100px;
   color: #3DFF8A; -webkit-text-stroke: 8px #062A14; paint-order: stroke fill; text-shadow: 0 0 20px rgba(61,255,138,.6); opacity: 0; }
 #s3-dim { position: absolute; inset: 0; background: rgba(5,11,30,.78); opacity: 0; }
-.slamword { position: absolute; left: 40px; right: 40px; top: 640px; text-align: center; font-family: "Anton"; font-size: 260px; line-height: 1;
+.slamword { position: absolute; left: 40px; right: 40px; top: 680px; text-align: center; font-family: "Archivo"; font-weight: 900; font-stretch: 112%; font-size: 168px; line-height: 1; letter-spacing: -.04em;
   color: var(--red); text-shadow: 0 0 50px rgba(255,46,62,.6), 0 12px 0 #5A0010; opacity: 0; }
-#s3-time { color: #fff; text-shadow: 0 0 50px rgba(255,46,62,.9), 0 12px 0 #5A0010; }
+#s3-time { top: 560px; font-size: 360px; line-height: 1.1; color: #fff; text-shadow: 0 0 60px rgba(255,46,62,.9), 0 0 140px rgba(255,46,62,.5); }
 
 /* S4 */
 #s4-h1 { top: 380px; opacity: 0; }
@@ -116,18 +118,18 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
 /* S5 */
 #s5-card { position: absolute; left: 170px; top: 410px; width: 740px; height: 640px; border-radius: 18px; background: #F4F1EA; color: #1A1D29;
   padding: 44px 50px; box-shadow: 0 40px 80px rgba(0,0,0,.55); }
-.inv-head { display: flex; justify-content: space-between; align-items: baseline; font-family: "Anton"; font-size: 84px; line-height: 1; }
+.inv-head { display: flex; justify-content: space-between; align-items: baseline; font-family: "Archivo"; font-weight: 900; font-stretch: 125%; font-size: 64px; letter-spacing: -.02em; line-height: 1; }
 .inv-no { font-family: "JBMono"; font-size: 32px; font-weight: 700; color: #6A6F80; }
 .inv-sub { margin-top: 14px; padding-bottom: 22px; border-bottom: 4px solid #1A1D29; font-family: "JBMono"; font-weight: 700; font-size: 31px; letter-spacing: .02em; color: #474C5E; }
-.inv-row { display: flex; align-items: baseline; gap: 14px; margin-top: 26px; font-weight: 700; font-size: 38px; opacity: 0; }
+.inv-row { display: flex; align-items: baseline; gap: 14px; margin-top: 26px; font-weight: 500; font-size: 38px; opacity: 0; }
 .inv-row .lead { flex: 1; border-bottom: 4px dotted #9AA0B2; }
 .inv-row span:last-child { font-family: "JBMono"; font-weight: 800; color: #1A1D29; }
-.inv-total { display: flex; justify-content: space-between; margin-top: 34px; padding-top: 22px; border-top: 4px solid #1A1D29; font-family: "Anton";
-  font-size: 64px; color: #D81E2F; opacity: 0; }
+.inv-total { display: flex; justify-content: space-between; margin-top: 34px; padding-top: 22px; border-top: 4px solid #1A1D29; font-family: "Archivo";
+  font-weight: 900; font-stretch: 112%; font-size: 50px; letter-spacing: -.02em; color: #D81E2F; opacity: 0; }
 #s5-coin { position: absolute; left: 480px; top: -150px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #FFE58A, #FFB020 55%, #B86E00);
-  border: 8px solid #8A5200; display: flex; align-items: center; justify-content: center; font-family: "Anton"; font-size: 64px; color: #6A3A00; opacity: 0; }
-#s5-stamp { left: 70px; top: 230px; width: 600px; text-align: center; font-size: 128px; }
-#s5-tag { top: 1090px; font-size: 112px; opacity: 0; }
+  border: 8px solid #8A5200; display: flex; align-items: center; justify-content: center; font-family: "Instrument Serif"; font-style: italic; font-size: 76px; color: #6A3A00; opacity: 0; }
+#s5-stamp { left: 50px; top: 240px; width: 640px; text-align: center; font-size: 88px; font-stretch: 100%; }
+#s5-tag { top: 1080px; font-size: 88px; opacity: 0; }
 
 /* S6 */
 #s6-label { top: 392px; opacity: 0; }
@@ -145,10 +147,11 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
 .pcard.cheap { background: linear-gradient(160deg, #FF8A1F, #B23A00); }
 .pico { width: 110px; height: 110px; position: relative; }
 .pico img { width: 100%; height: 100%; border-radius: 26px; }
-.cheap-ico { border-radius: 50%; background: #FFE3B8; color: #8A3A00; font-family: "Anton"; font-size: 80px; line-height: 110px; text-align: center; }
-.pt { font-family: "Anton"; font-size: 64px; line-height: 1; color: #fff; }
+.cheap-ico { border-radius: 50%; background: #FFE3B8; color: #8A3A00; font-family: "Archivo"; font-weight: 900; font-size: 72px; line-height: 110px; text-align: center; }
+.pt { font-family: "Archivo"; font-weight: 900; font-stretch: 125%; font-size: 46px; letter-spacing: -.02em; line-height: 1; color: #fff; }
+.pt.serif { font-size: 84px; line-height: .85; }
 #s6-crown { position: absolute; left: 90px; top: 14px; width: 120px; height: 90px; opacity: 0; }
-#s6-tag { top: 1092px; opacity: 0; }
+#s6-tag { top: 1090px; opacity: 0; }
 
 /* S7 */
 #s7-glow { top: 420px; }
@@ -159,18 +162,19 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
   background: linear-gradient(90deg, #FF2E3E, #FF8A1F); box-shadow: 0 0 60px rgba(255,80,40,.6); display: flex; align-items: center; justify-content: center; gap: 30px; }
 #s7-ripple { position: absolute; left: 290px; top: -90px; width: 400px; height: 400px; border-radius: 50%; background: rgba(255,255,255,.45); opacity: 0; }
 #s7-bell { width: 100px; height: 100px; position: relative; }
-#s7-follow { position: relative; font-family: "Anton"; font-size: 150px; line-height: 1; color: #fff; text-shadow: 0 4px 0 #8A1020, 0 0 24px rgba(90,0,10,.6); }
-#s7-done { position: absolute; left: 0; right: 0; top: 52px; text-align: center; font-family: "Anton"; font-size: 110px; line-height: 1; color: #fff; opacity: 0; }
+#s7-follow { position: relative; font-family: "Archivo"; font-weight: 900; font-stretch: 125%; font-size: 104px; letter-spacing: -.03em; line-height: 1; color: #fff; text-shadow: 0 4px 0 #8A1020, 0 0 24px rgba(90,0,10,.6); }
+#s7-done { position: absolute; left: 0; right: 0; top: 50px; text-align: center; font-family: "Instrument Serif"; font-style: italic; font-size: 128px; line-height: 1; color: #fff; opacity: 0; }
 #s7-cursor { position: absolute; left: 700px; top: 1120px; width: 90px; height: 117px; opacity: 0; }
 
 /* captions */
 #caps { position: absolute; left: 0; right: 0; top: 0; bottom: 0; pointer-events: none; }
-.cap { position: absolute; left: 70px; right: 70px; bottom: 440px; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end;
-  gap: 4px 18px; opacity: 0; }
-.cw { position: relative; display: inline-block; padding: 4px 14px 8px; font-family: "Anton"; font-size: 96px; line-height: 1.02; transform-origin: 50% 60%; }
-.cbg { position: absolute; inset: 0; border-radius: 14px; background: linear-gradient(135deg, #FF1745, #DF1238); transform-origin: 0 50%; opacity: 0; }
-.ct { position: relative; color: #fff; -webkit-text-stroke: 12px #050B1E; paint-order: stroke fill; text-shadow: 0 8px 18px rgba(0,0,0,.5); }
-.cw.key .ct { color: #FFB020; }
+.cap { position: absolute; left: 70px; right: 70px; bottom: 440px; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline;
+  gap: 0 20px; opacity: 0; }
+.cw { position: relative; display: inline-block; padding: 2px 6px 14px; font-family: "Archivo"; font-weight: 800; font-stretch: 112%; font-size: 72px; letter-spacing: -.02em; line-height: 1.05; transform-origin: 50% 60%; }
+.cw.key { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; font-stretch: 100%; font-size: 108px; letter-spacing: -.01em; line-height: .8; }
+.cbg { position: absolute; left: 6px; right: 6px; bottom: 0; height: 9px; border-radius: 5px; background: linear-gradient(90deg, #FF9A3D, #FF2E3E); box-shadow: 0 0 18px rgba(255,80,50,.7); transform-origin: 0 50%; opacity: 0; }
+.ct { position: relative; color: #fff; text-shadow: 0 4px 10px rgba(0,0,0,.85), 0 10px 40px rgba(0,0,0,.6); }
+.cw.key .ct { color: #FFB25C; text-shadow: 0 0 30px rgba(255,140,60,.45), 0 4px 10px rgba(0,0,0,.85); }
 </style>
   </head>
   <body>
@@ -185,7 +189,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
   <path id="trendHead" d="M860 40 L940 34 L926 112" fill="none" stroke="#FF8A1F" stroke-width="16" stroke-linecap="round"
   stroke-linejoin="round"/></svg></div>
 <div id="s1-kicker" class="kicker">THIS AI APP WENT</div>
-<div id="s1-viral" class="mega grad-orange">VIRAL</div>
+<div id="s1-viral" class="mega grad-orange">viral</div>
 <div id="s1-icon" class="iconbox"><img src="assets/img/sora-icon.png" alt="Sora app icon"></div>
 <div id="s1-badge" class="badge"><span class="dot"></span>#1 ON THE APP STORE</div>
 <div class="react" id="r0" style="left:150px;width:70px;height:70px"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 3 4.5 6.6 4.5c2.1 0 3.6 1.2 5.4 3.2 1.8-2 3.3-3.2 5.4-3.2 3.6 0 5.7 3.7 4.2 7.2C19.5 16.4 12 21 12 21z" fill="#FF3B5C"/></svg></div>
@@ -228,7 +232,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
     </g>
     <rect x="80" y="80" width="240" height="240" rx="28" fill="#141C33" stroke="#2C3A63" stroke-width="6"/>
     <rect id="s3-core" x="125" y="125" width="150" height="150" rx="16" fill="#FF6A1F"/>
-    <text x="200" y="222" text-anchor="middle" font-family="Anton" font-size="78" fill="#0B1020">GPU</text>
+    <text x="200" y="222" text-anchor="middle" font-family="Archivo" font-weight="900" font-size="66" fill="#0B1020">GPU</text>
   </svg>
 </div>
 <div class="tile tile-l" id="tile0" style="--hue:#2F7BFF"><div class="tplay"></div></div>
@@ -246,12 +250,12 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
 <div id="s3-dim"></div>
 <div id="s3-every" class="slamword">EVERY.</div>
 <div id="s3-single" class="slamword">SINGLE.</div>
-<div id="s3-time" class="slamword">TIME.</div>
+<div id="s3-time" class="slamword serif">time.</div>
 <div id="s3-flash" class="flash"></div>
 </div></div>
       <div id="s4" class="clip scene" data-start="11.0" data-duration="5.0" data-track-index="2"><div class="inner" id="in4">
 <div id="s4-h1" class="hline blue-t" data-layout-allow-occlusion>MORE USERS</div>
-<div id="s4-h2" class="hline"><span id="s4-eq">=</span> <span id="s4-loss" class="red-t">MORE LOSS</span></div>
+<div id="s4-h2" class="hline"><span id="s4-eq">=</span> <span id="s4-loss" class="red-t serif">more loss</span></div>
 <div id="s4-card">
   <div id="s4-tag" data-layout-allow-occlusion>ILLUSTRATIVE</div>
   <svg viewBox="0 0 960 580" data-layout-allow-overflow>
@@ -265,9 +269,9 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
       stroke-width="14" stroke-linecap="round"/>
     <circle id="s4-udot" cx="920" cy="60" r="18" fill="#2F7BFF"/>
     <circle id="s4-pdot" cx="920" cy="520" r="18" fill="#FF2E3E"/>
-    <text id="s4-ul" x="900" y="130" text-anchor="end" font-family="Anton" font-size="56" fill="#6FA4FF">USERS &#8593;</text>
-    <text id="s4-pl" x="890" y="470" text-anchor="end" font-family="Anton" font-size="56" fill="#FF6B76">PROFIT &#8595;</text>
-    <text id="s4-ll" x="390" y="522" font-family="Anton" font-size="64" fill="#FF2E3E" letter-spacing="6">LOSS</text>
+    <text id="s4-ul" x="900" y="130" text-anchor="end" font-family="JBMono" font-weight="800" font-size="38" fill="#6FA4FF">USERS &#8593;</text>
+    <text id="s4-pl" x="890" y="470" text-anchor="end" font-family="JBMono" font-weight="800" font-size="38" fill="#FF6B76">PROFIT &#8595;</text>
+    <text id="s4-ll" x="390" y="522" font-family="Instrument Serif" font-style="italic" font-size="96" fill="#FF2E3E">loss</text>
   </svg>
 </div>
 </div></div>
@@ -283,24 +287,24 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
   <div id="s5-coin"><span>HYPE</span></div>
   <div id="s5-stamp" class="stamp">DECLINED</div>
 </div>
-<div id="s5-tag" class="hline"><span class="orange-t">HYPE</span> &#8800; <span class="green-t">PROFIT</span></div>
+<div id="s5-tag" class="hline"><span class="orange-t serif">Hype</span> &#8800; <span class="green-t">PROFIT</span></div>
 </div></div>
       <div id="s6" class="clip scene" data-start="21.0" data-duration="5.0" data-track-index="2"><div class="inner" id="in6">
 <div id="s6-label" class="badge" data-layout-allow-occlusion>THE REAL LESSON</div>
 <div id="s6-scale">
   <div id="s6-post"></div><div id="s6-base"></div>
   <div id="s6-beam"><div class="pin"></div></div>
-  <div id="s6-left" class="pan"><div class="str"></div><div class="pcard cool"><div class="pico"><img src="assets/img/sora-icon.png" alt=""></div><div class="pt" data-layout-allow-occlusion>COOL</div></div></div>
+  <div id="s6-left" class="pan"><div class="str"></div><div class="pcard cool"><div class="pico"><img src="assets/img/sora-icon.png" alt=""></div><div class="pt serif" data-layout-allow-occlusion>cool</div></div></div>
   <div id="s6-right" class="pan"><div class="str"></div><div class="pcard cheap"><div class="pico cheap-ico">$</div><div class="pt">CHEAP</div></div>
     <div id="s6-crown"><svg viewBox="0 0 120 90"><path d="M10 80 L18 20 L44 50 L60 10 L76 50 L102 20 L110 80 Z" fill="#FFC23D"/></svg></div></div>
 </div>
-<div id="s6-tag" class="hline"><span class="orange-t">CHEAP</span> &gt; <span class="blue-t">COOL</span></div>
+<div id="s6-tag" class="hline"><span class="orange-t">CHEAP</span> &gt; <span class="blue-t serif">cool</span></div>
 </div></div>
       <div id="s7" class="clip scene" data-start="26.0" data-duration="4.0" data-track-index="1"><div class="inner" id="in7">
 <div id="s7-glow" class="glow blue"></div>
 <div id="s7-mark"><img src="assets/img/openai-mark.png" alt="OpenAI"></div>
 <div id="s7-kicker" class="kicker">MORE AI CASE FILES</div>
-<div id="s7-btn"><div id="s7-ripple"></div><svg id="s7-bell" viewBox="0 0 24 24"><path d="M12 22a2.5 2.5 0 0 0 2.4-2h-4.8a2.5 2.5 0 0 0 2.4 2zm7-6V11a7 7 0 0 0-5.5-6.8V3.5a1.5 1.5 0 0 0-3 0v.7A7 7 0 0 0 5 11v5l-2 2v1h18v-1z" fill="#fff"/></svg><span id="s7-follow">FOLLOW</span><span id="s7-done">FOLLOWING</span></div>
+<div id="s7-btn"><div id="s7-ripple"></div><svg id="s7-bell" viewBox="0 0 24 24"><path d="M12 22a2.5 2.5 0 0 0 2.4-2h-4.8a2.5 2.5 0 0 0 2.4 2zm7-6V11a7 7 0 0 0-5.5-6.8V3.5a1.5 1.5 0 0 0-3 0v.7A7 7 0 0 0 5 11v5l-2 2v1h18v-1z" fill="#fff"/></svg><span id="s7-follow">FOLLOW</span><span id="s7-done">Following</span></div>
 <div id="s7-cursor"><svg viewBox="0 0 40 52"><path d="M4 2 L4 40 L14 31 L21 48 L28 45 L21 29 L34 29 Z" fill="#fff" stroke="#0B1020" stroke-width="3" stroke-linejoin="round"/></svg></div>
 </div></div>
       <div id="fx" class="clip" data-start="0" data-duration="30.0" data-track-index="7">
@@ -313,25 +317,25 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
       </div>
       <div id="caps" class="clip" data-start="0" data-duration="30.0" data-track-index="9">
 <div class="cap" id="cap0"><span class="cw" id="w0"><span class="cbg"></span><span class="ct">THIS</span></span><span class="cw" id="w1"><span class="cbg"></span><span class="ct">AI</span></span><span class="cw" id="w2"><span class="cbg"></span><span class="ct">APP</span></span></div>
-<div class="cap" id="cap1"><span class="cw" id="w3"><span class="cbg"></span><span class="ct">WENT</span></span><span class="cw key" id="w4"><span class="cbg"></span><span class="ct">VIRAL...</span></span></div>
-<div class="cap" id="cap2"><span class="cw" id="w5"><span class="cbg"></span><span class="ct">...THEN</span></span><span class="cw" id="w6"><span class="cbg"></span><span class="ct">OPENAI</span></span><span class="cw key" id="w7"><span class="cbg"></span><span class="ct">KILLED</span></span></div>
+<div class="cap" id="cap1"><span class="cw" id="w3"><span class="cbg"></span><span class="ct">WENT</span></span><span class="cw key" id="w4"><span class="cbg"></span><span class="ct">Viral...</span></span></div>
+<div class="cap" id="cap2"><span class="cw" id="w5"><span class="cbg"></span><span class="ct">...THEN</span></span><span class="cw" id="w6"><span class="cbg"></span><span class="ct">OPENAI</span></span><span class="cw key" id="w7"><span class="cbg"></span><span class="ct">Killed</span></span></div>
 <div class="cap" id="cap3"><span class="cw" id="w8"><span class="cbg"></span><span class="ct">IT.</span></span></div>
 <div class="cap" id="cap4"><span class="cw" id="w9"><span class="cbg"></span><span class="ct">EVERY</span></span><span class="cw" id="w10"><span class="cbg"></span><span class="ct">VIDEO</span></span><span class="cw" id="w11"><span class="cbg"></span><span class="ct">YOU</span></span></div>
 <div class="cap" id="cap5"><span class="cw" id="w12"><span class="cbg"></span><span class="ct">MADE</span></span><span class="cw" id="w13"><span class="cbg"></span><span class="ct">COST</span></span><span class="cw" id="w14"><span class="cbg"></span><span class="ct">THEM</span></span></div>
-<div class="cap" id="cap6"><span class="cw" id="w15"><span class="cbg"></span><span class="ct">REAL</span></span><span class="cw key" id="w16"><span class="cbg"></span><span class="ct">GPU</span></span><span class="cw" id="w17"><span class="cbg"></span><span class="ct">MONEY.</span></span></div>
-<div class="cap" id="cap7"><span class="cw key" id="w18"><span class="cbg"></span><span class="ct">EVERY.</span></span></div>
-<div class="cap" id="cap8"><span class="cw key" id="w19"><span class="cbg"></span><span class="ct">SINGLE.</span></span></div>
-<div class="cap" id="cap9"><span class="cw key" id="w20"><span class="cbg"></span><span class="ct">TIME.</span></span></div>
+<div class="cap" id="cap6"><span class="cw" id="w15"><span class="cbg"></span><span class="ct">REAL</span></span><span class="cw" id="w16"><span class="cbg"></span><span class="ct">GPU</span></span><span class="cw" id="w17"><span class="cbg"></span><span class="ct">MONEY.</span></span></div>
+<div class="cap" id="cap7"><span class="cw key" id="w18"><span class="cbg"></span><span class="ct">Every.</span></span></div>
+<div class="cap" id="cap8"><span class="cw key" id="w19"><span class="cbg"></span><span class="ct">Single.</span></span></div>
+<div class="cap" id="cap9"><span class="cw key" id="w20"><span class="cbg"></span><span class="ct">Time.</span></span></div>
 <div class="cap" id="cap10"><span class="cw" id="w21"><span class="cbg"></span><span class="ct">MORE</span></span><span class="cw" id="w22"><span class="cbg"></span><span class="ct">USERS</span></span><span class="cw" id="w23"><span class="cbg"></span><span class="ct">DIDN'T</span></span></div>
 <div class="cap" id="cap11"><span class="cw" id="w24"><span class="cbg"></span><span class="ct">MEAN</span></span><span class="cw" id="w25"><span class="cbg"></span><span class="ct">MORE</span></span><span class="cw" id="w26"><span class="cbg"></span><span class="ct">PROFIT.</span></span></div>
 <div class="cap" id="cap12"><span class="cw" id="w27"><span class="cbg"></span><span class="ct">IT</span></span><span class="cw" id="w28"><span class="cbg"></span><span class="ct">MEANT</span></span><span class="cw" id="w29"><span class="cbg"></span><span class="ct">MORE</span></span></div>
-<div class="cap" id="cap13"><span class="cw key" id="w30"><span class="cbg"></span><span class="ct">LOSS.</span></span></div>
-<div class="cap" id="cap14"><span class="cw" id="w31"><span class="cbg"></span><span class="ct">BECAUSE</span></span><span class="cw key" id="w32"><span class="cbg"></span><span class="ct">HYPE</span></span><span class="cw" id="w33"><span class="cbg"></span><span class="ct">DOESN'T</span></span></div>
-<div class="cap" id="cap15"><span class="cw" id="w34"><span class="cbg"></span><span class="ct">PAY</span></span><span class="cw" id="w35"><span class="cbg"></span><span class="ct">THE</span></span><span class="cw key" id="w36"><span class="cbg"></span><span class="ct">BILLS.</span></span></div>
+<div class="cap" id="cap13"><span class="cw key" id="w30"><span class="cbg"></span><span class="ct">Loss.</span></span></div>
+<div class="cap" id="cap14"><span class="cw" id="w31"><span class="cbg"></span><span class="ct">BECAUSE</span></span><span class="cw key" id="w32"><span class="cbg"></span><span class="ct">Hype</span></span><span class="cw" id="w33"><span class="cbg"></span><span class="ct">DOESN'T</span></span></div>
+<div class="cap" id="cap15"><span class="cw" id="w34"><span class="cbg"></span><span class="ct">PAY</span></span><span class="cw" id="w35"><span class="cbg"></span><span class="ct">THE</span></span><span class="cw key" id="w36"><span class="cbg"></span><span class="ct">Bills.</span></span></div>
 <div class="cap" id="cap16"><span class="cw" id="w37"><span class="cbg"></span><span class="ct">THE</span></span><span class="cw" id="w38"><span class="cbg"></span><span class="ct">REAL</span></span><span class="cw" id="w39"><span class="cbg"></span><span class="ct">LESSON?</span></span></div>
-<div class="cap" id="cap17"><span class="cw" id="w40"><span class="cbg"></span><span class="ct">IN</span></span><span class="cw" id="w41"><span class="cbg"></span><span class="ct">AI,</span></span><span class="cw key" id="w42"><span class="cbg"></span><span class="ct">CHEAP</span></span></div>
-<div class="cap" id="cap18"><span class="cw" id="w43"><span class="cbg"></span><span class="ct">BEATS</span></span><span class="cw key" id="w44"><span class="cbg"></span><span class="ct">COOL.</span></span></div>
-<div class="cap" id="cap19"><span class="cw key" id="w45"><span class="cbg"></span><span class="ct">FOLLOW</span></span><span class="cw" id="w46"><span class="cbg"></span><span class="ct">FOR</span></span><span class="cw" id="w47"><span class="cbg"></span><span class="ct">THE</span></span></div>
+<div class="cap" id="cap17"><span class="cw" id="w40"><span class="cbg"></span><span class="ct">IN</span></span><span class="cw" id="w41"><span class="cbg"></span><span class="ct">AI,</span></span><span class="cw key" id="w42"><span class="cbg"></span><span class="ct">Cheap</span></span></div>
+<div class="cap" id="cap18"><span class="cw" id="w43"><span class="cbg"></span><span class="ct">BEATS</span></span><span class="cw key" id="w44"><span class="cbg"></span><span class="ct">Cool.</span></span></div>
+<div class="cap" id="cap19"><span class="cw key" id="w45"><span class="cbg"></span><span class="ct">Follow</span></span><span class="cw" id="w46"><span class="cbg"></span><span class="ct">FOR</span></span><span class="cw" id="w47"><span class="cbg"></span><span class="ct">THE</span></span></div>
 <div class="cap" id="cap20"><span class="cw" id="w48"><span class="cbg"></span><span class="ct">AI</span></span><span class="cw" id="w49"><span class="cbg"></span><span class="ct">STORIES</span></span><span class="cw" id="w50"><span class="cbg"></span><span class="ct">NOBODY</span></span></div>
 <div class="cap" id="cap21"><span class="cw" id="w51"><span class="cbg"></span><span class="ct">EXPLAINS.</span></span></div>
       </div>
