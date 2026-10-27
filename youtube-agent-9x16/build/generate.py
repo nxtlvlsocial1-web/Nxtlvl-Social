@@ -119,8 +119,8 @@ def endcard():
     ty = "".join(f'<span class="ty ty{i}">{c}</span>' for i, c in enumerate("YOUTUBE"))
     return ('<div id="endc"><div class="ec-1">Comment</div><div class="ec-kw">' + ty + '<i class="cur"></i></div>'
             '<div class="ec-2">and I\'ll DM you the free repo + the full guide</div>'
-            '<div class="ec-3">Send this to a creator who\'s still up at 3 AM</div><div class="ec-h mono">✦ @ai.nxtlvl</div></div>'
-            '<div id="dm"><div class="dmav">✦</div><div class="tbody"><div class="thead"><b>ai.nxtlvl</b><span>now</span></div>'
+            '<div class="ec-3">Send this to a creator who\'s still up at 3 AM</div><div class="ec-h mono">✦ @nxtlvlsocial.ai</div></div>'
+            '<div id="dm"><div class="dmav">✦</div><div class="tbody"><div class="thead"><b>nxtlvlsocial.ai</b><span>now</span></div>'
             '<div class="ttext">Sent you the YouTube Agent Skill + the full guide</div></div><div class="dmok">✓</div></div>')
 
 
@@ -288,7 +288,7 @@ def main():
       <canvas id="gl" class="clip" data-start="0" data-duration="{DUR}" data-track-index="0"></canvas>
       <div id="vigl" class="clip" data-start="0" data-duration="{DUR}" data-track-index="1" data-layout-ignore><div id="vig"></div></div>
       <div id="ui" class="clip" data-start="0" data-duration="{DUR}" data-track-index="2" data-layout-allow-overflow>
-        <div class="top"><span class="brand mono"><b>●</b> AI.NXTLVL</span><span class="prog"><i></i></span></div>
+        <div class="top"><span class="brand mono"><b>●</b> NXTLVLSOCIAL.AI</span><span class="prog"><i></i></span></div>
         {HOOK}{TOASTS_HTML}{FREE}{chips()}{endc}
       </div>
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="3">{caps}</div>
