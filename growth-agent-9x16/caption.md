@@ -5,17 +5,17 @@ Files: `renders/nxtlvl_growth-agent_reels_9x16_v1.mp4` (the Reel) and `renders/n
 
 ## Caption (paste as is)
 
-I turned Claude into an Instagram growth agent, and it took my page from 339 to 6,700 followers 📈
+I turned Claude into an Instagram growth agent, and it took my page from 339 to 6,700 followers.
 
 It doesn't just post. It grows your page in 5 moves:
 
-1️⃣ Spots what's blowing up in your niche
-2️⃣ Plans the visuals for every reel
-3️⃣ Writes the script and the caption
-4️⃣ Replies to your comments
-5️⃣ Studies every reel's results and rewrites your next one (the smartest move)
+1. Spots what's blowing up in your niche
+2. Plans the visuals for every reel
+3. Writes the script and the caption
+4. Replies to your comments
+5. Studies every reel's results and rewrites your next one (the smartest move)
 
-Comment "AGENT" and I'll DM you my whole setup 👇
+Comment "AGENT" and I'll DM you my whole setup.
 
 Save this for your next content day, and send it to a creator who's stuck under 1K.
 

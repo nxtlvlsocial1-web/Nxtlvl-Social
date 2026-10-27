@@ -170,3 +170,5 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
 - Never render a final until the person has approved the preview.
 - Never use music or images we don't have the rights to; source them through `media-use`.
 - Keep rendered MP4s out of git; deliver them, don't commit them.
+- Never use emojis in post descriptions, captions or hashtag blocks we write for clients (number lists with "1.", not
+  emoji digits). Plain text only.
