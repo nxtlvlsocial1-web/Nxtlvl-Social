@@ -4,11 +4,11 @@ python3 build/generate.py      (from the project root, after build/voice.py)
 
 The 3D world lives in assets/js/world.js (Three.js, rendered on hf-seek). This file writes the composition: the canvas,
 the cue times world.js reads (from build/words.json) and the HTML layer on one paused GSAP timeline: the hook headline,
-the "Five moves" title, a chip for each move, the bonus chip, the captions and the end card.
+the "Five moves" title, a chip for each move, the captions and the end card.
 
 The claims on screen are the client's own, from their original cut of this reel (01c31278-Video-14931.mp4): the page went
-from 339 to 2,400 followers, the five moves, the free "Proven System for Viral Reels" course by August Alvelund with
-16,000+ downloads, and the AGENT comment keyword. Comment handles, trend names and the script lines inside the phone are
+from 339 to 2,400 followers, the five moves and the AGENT comment keyword (the course offer in the original is left out
+of this cut, at the client's request). Comment handles, trend names and the script lines inside the phone are
 illustrative UI, the same ones the original showed where it showed any.
 
 Audio: assets/audio/mix.wav when build/audio.py has made it, otherwise the bare voice (assets/audio/voice.wav).
@@ -43,13 +43,13 @@ T = {
     "writes": word(7, "writes"), "script": word(7, "script"), "caption": word(7, "caption"),
     "replies": word(8, "replies"), "comments": word(8, "comments"), "five5": word(9, "five"),
     "studies": word(10, "studies"), "results": word(10, "results"), "rewrites": word(10, "rewrites"), "next": word(10, "next"),
-    "free": word(11, "free"), "course": word(11, "course"), "sixteen": word(11, "sixteen"), "downloads": word(11, "downloads"),
-    "agentcta": word(12, "agent"), "setup": word(12, "setup"), "plus": word(12, "plus"), "end": DUR,
+    "agentcta": word(11, "agent"), "setup": word(11, "setup"), "end": DUR,
 }
 L, E = T["l"], T["e"]
 T["in0"] = round(L[4] - .17, 3)          # through the screen into the phone
 T["dark0"] = round(L[8] - .08, 3)        # the lights go out for move five
-T["out1"] = round(L[10] - .1, 3)         # back out through the screen for the bonus
+T["out1"] = round(L[10] - .1, 3)         # back out through the screen for the CTA
+T["portal"] = round(word(1, "instagram") - .02, 3)   # the hook's tunnel ends: out through the screen
 
 A = []
 
@@ -66,7 +66,7 @@ def out(sel, t, d=.18):
     add(f'tl.to("{sel}",{{opacity:0,y:-24,scale:.96,duration:{d},ease:"power2.in"}},{t:.3f});')
 
 
-# ---------------------------------------------------------------- hook headline, "Five moves", move chips, bonus
+# ---------------------------------------------------------------- hook headline, "Five moves", move chips
 HOOK = ('<div id="hook"><div class="hl hl0"><span class="hw" id="hw0">I</span> <span class="hw" id="hw1">turned</span> '
         '<span class="hw serif" id="hw2">Claude</span> <span class="hw" id="hw3">into</span> <span class="hw" id="hw4">an</span></div>'
         '<div class="hl hl1"><span class="pill" id="hw5">Instagram growth agent</span></div></div>')
@@ -86,7 +86,6 @@ def chips():
     return "".join(h)
 
 
-BONUS = '<div id="bonus"><span class="gift"></span>BONUS</div>'
 
 
 def head_tl():
@@ -103,27 +102,25 @@ def head_tl():
     pop(".fv-b", T["last"] - .1, "opacity:0,y:30", .25)
     add(f'tl.fromTo(".fv-b .serif",{{color:"#1d1418"}},{{color:"#b4532f",duration:.15,immediateRender:false}},{T["smartest"]:.3f});')
     add(f'tl.to("#five",{{opacity:0,scale:1.3,duration:.22,ease:"power3.in"}},{T["in0"] - .25:.3f});')
-    # one chip per move, from its line to the next; move five's on the dark until the bonus
+    # one chip per move, from its line to the next; move five's on the dark until the CTA
     starts = [L[4], L[5], L[6], L[7], L[9]]
     ends = [L[5] - .3, L[6] - .3, L[7] - .3, T["dark0"] - .05, T["out1"] - .05]
     for i, (a, z) in enumerate(zip(starts, ends)):
         pop(f".mv{i}", a - .12, "x:-90,opacity:0,scale:.9", .24, "back.out(2)")
         out(f".mv{i}", z, .14)
-    pop("#bonus", L[10] - .02, "scale:1.8,opacity:0,rotation:-8", .3, "back.out(2.8)")
-    out("#bonus", L[11] - .12, .16)
 
 
 # ---------------------------------------------------------------- end card
 def endcard():
     ty = "".join(f'<span class="ty ty{i}">{c}</span>' for i, c in enumerate("AGENT"))
     return ('<div id="endc"><div class="ec-1">Comment</div><div class="ec-kw">' + ty + '<i class="cur"></i></div>'
-            '<div class="ec-2">for my setup <span class="serif">+ the free course</span></div></div>')
+            '<div class="ec-2">and I\'ll DM you my <span class="serif">whole setup</span></div></div>')
 
 
 def endcard_tl():
     a = T["agentcta"] - .1
-    pop("#endc", L[11] - .1, "opacity:0,y:40", .3, "back.out(1.8)")
-    pop(".ec-1", L[11] - .08, "y:20,opacity:0", .22)
+    pop("#endc", L[10] - .1, "opacity:0,y:40", .3, "back.out(1.8)")
+    pop(".ec-1", L[10] - .08, "y:20,opacity:0", .22)
     pop(".ec-kw", a - .05, "scale:.6,opacity:0", .28, "back.out(2.2)")
     for i in range(5):                                   # typed in, letter by letter
         pop(f".ty{i}", a + .04 + i * .075, "opacity:0,y:-30,scale:1.4", .14, "back.out(3)")
@@ -162,7 +159,7 @@ def captions():
             a = ch[0]["s"] - .05
             z = chunks[ci + 1][0]["s"] - .05 if ci + 1 < len(chunks) else min(ln["end"] + .3, nxt_line - .06)
             dark = T["dark0"] <= a < T["out1"]
-            slam = (ln["line"] == 4 and ci == 0) or (ln["line"] == 12 and ci == 0) or (ln["line"] == 9)
+            slam = (ln["line"] == 4 and ci == 0) or (ln["line"] == 11 and ci == 0) or (ln["line"] == 9)
             cls = ("dark " if dark else "") + ("slam" if slam else "")
             html.append(f'<div class="cap {cls}" id="{cid}"><span class="box">{spans.strip()}</span></div>')
             if slam:
@@ -178,8 +175,8 @@ def captions():
 
 def fx_tl():
     # the portal cuts (into the phone, out of it) and the blackout are white / black flashes; ticks on the whip moves
-    for t, o, d in ((T["in0"] - .04, 1.0, .32), (T["out1"] - .04, 1.0, .32), (.38, .35, .1), (T["claude"] - .02, .5, .3),
-                    (T["followers"], .3, .3), (T["rewrites"], .35, .25), (T["next"] + .1, .25, .3), (T["free"], .3, .3)):
+    for t, o, d in ((T["in0"] - .04, 1.0, .32), (T["out1"] - .04, 1.0, .32), (T["claude"] - .02, .35, .2),
+                    (T["followers"], .3, .3), (T["rewrites"], .35, .25), (T["next"] + .1, .25, .3), (T["portal"] - .03, 1.0, .35)):
         add(f'tl.set("#flash",{{opacity:{o}}},{t:.3f});tl.to("#flash",{{opacity:0,duration:{d}}},{t + .03:.3f});')
     for t in (L[5] - .14, L[6] - .14, L[7] - .14, T["grows"] - .1, L[3] - .1):
         add(f'tl.set("#flash",{{opacity:.14}},{t:.3f});tl.to("#flash",{{opacity:0,duration:.14}},{t + .01:.3f});')
@@ -201,12 +198,12 @@ body { font-family: "Montserrat", sans-serif; color: #1d1418; }
 .serif { font-family: "ISerif", serif; font-style: italic; font-weight: 400; letter-spacing: 0; }
 #ui { z-index: 5; }
 .top { position: absolute; left: 60px; right: 60px; top: 262px; display: flex; align-items: center; gap: 24px; }
-.brand { font-size: 30px; letter-spacing: 5px; color: #1d1418; }
+.brand { font-size: 30px; letter-spacing: 5px; color: #1d1418; padding: 6px 18px; border-radius: 22px; background: rgba(255,251,246,.9); }
 .brand b { color: #b4532f; }
 .prog { flex: 1; height: 6px; border-radius: 3px; background: rgba(29,20,24,.12); overflow: hidden; }
 .prog i { display: block; height: 100%; background: #d97757; transform-origin: 0 50%; transform: scaleX(0); }
 /* everything that pops in later starts hidden here, never through a set at t=0 */
-#hook, .hw, #five, .fv-a, .fv-b, .mv, #bonus, #endc, .ec-1, .ec-kw, .ec-2, .ty { opacity: 0; }
+#hook, .hw, #five, .fv-a, .fv-b, .mv, #endc, .ec-1, .ec-kw, .ec-2, .ty { opacity: 0; }
 #hook { position: absolute; left: 40px; right: 40px; top: 316px; text-align: center; }
 .hl { display: block; font: 800 92px/1.05 "Montserrat"; letter-spacing: -3px; color: #1d1418; text-shadow: 0 4px 30px rgba(242,232,220,.9); }
 .hw { display: inline-block; }
@@ -229,8 +226,6 @@ body { font-family: "Montserrat", sans-serif; color: #1d1418; }
 .mv.dark .mv-d b { background: rgba(246,236,226,.2); } .mv.dark .mv-d b.on { background: #f0a07c; }
 .mv.dark .mv-h { color: #f6ece2; text-shadow: 0 4px 30px rgba(0,0,0,.8); }
 .mv.dark .mv-h i { color: #f0a07c; }
-#bonus { position: absolute; left: 50%; top: 318px; width: 420px; margin-left: -210px; padding: 14px 0 18px; border-radius: 40px; text-align: center;
-  background: #c25a37; color: #fff; font: 800 76px/1 "Montserrat"; letter-spacing: 4px; box-shadow: 0 18px 50px rgba(217,119,87,.5); transform: rotate(-3deg); }
 #endc { position: absolute; left: 60px; right: 60px; top: 300px; text-align: center; }
 .ec-1 { display: inline-block; padding: 10px 34px; border-radius: 24px; background: #1d1418; color: #f6ece2; font: 800 60px "Montserrat"; letter-spacing: 2px; }
 .ec-kw { display: block; width: max-content; margin: 16px auto 14px; padding: 4px 54px 14px; border-radius: 34px; background: #c25a37;
@@ -274,7 +269,7 @@ def main():
       <canvas id="gl" class="clip" data-start="0" data-duration="{DUR}" data-track-index="0"></canvas>
       <div id="ui" class="clip" data-start="0" data-duration="{DUR}" data-track-index="2" data-layout-allow-overflow>
         <div class="top"><span class="brand mono"><b>✦</b> AI.NXTLVL</span><span class="prog"><i></i></span></div>
-        {HOOK}{FIVE}{chips()}{BONUS}{endc}
+        {HOOK}{FIVE}{chips()}{endc}
       </div>
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="3">{caps}</div>
       <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="4" data-layout-ignore><div id="flash"></div><div id="black"></div></div>

@@ -3,15 +3,15 @@
 build/audio.py calls compose(cues, n). Nothing here is sampled, so the score needs no licence or credit. It never dips:
 every stretch either drives or builds toward the next hit.
 
-  0 s        HOOK      no intro: the downbeat hits with the phone landing; kick, offbeat hats, sub, chord stabs from bar 1,
-                       claps and a pluck arp join as the count starts, a riser into the 2,400 hit on "followers"
+  0 s        HOOK      no intro: a rushing riser down the tunnel, then the downbeat hits as the camera bursts out of the
+                       screen; kick, offbeat hats, sub, chord stabs, claps and a pluck arp as the count starts, a riser
+                       into the 2,400 hit on "followers"
   "post."    STOP      the beat cuts out under "It doesn't just post." (filtered chords only), then slams back on "grows"
   "Five"     BUILD     claps, a snare roll that speeds up and a riser into the dive through the screen
   dive       MOVES     the drop: a bigger kick, rolling saw bass, wide supersaws, the lead hook; a crash on every move
   "And five?" BREAK    dead stop: a sub boom and a breath of near-silence
   dark lab   HALF-TIME a deep pulse at half time, a minor pad, a ticking arp that builds into "rewrites", then double time
-  bonus      DROP      the brightest section: full drums, open supersaws, the hook an octave up
-  CTA        GROOVE    the groove holds under the CTA and ends on one last chord hit
+  CTA        DROP      the brightest section: full drums, open supersaws, the hook an octave up, one last chord hit
 """
 import numpy as np
 from scipy.signal import butter, fftconvolve, sosfilt
@@ -206,7 +206,7 @@ def compose(cues, n):
     HALF = L[9] - .05
     RW = cues["rewrites"]
     BON = cues["out1"] + .04
-    CTA = L[11] - .1
+    P0 = cues["portal"]
     BUS = {k: np.zeros((n, 2)) for k in ("drums", "bass", "chords", "keys", "fx")}
     kicks = []
 
@@ -257,12 +257,17 @@ def compose(cues, n):
                     put(pluck(notes[(k * 4 + s) % len(notes)] + 12, .3, bright), t + s * BEAT / 4, "keys", .45, np.sin((k * 4 + s) * 1.3) * .5)
 
     # 1. HOOK from frame 0: the downbeat lands with the phone (.38 s), the count builds, 2,400 hits on "followers"
-    put(crash(), .38, "drums", 1.0)
-    put(kick(True) * 1.2, .38, "drums")
-    put(riser(.38, .4), 0, "fx")
+    # the tunnel: a sub pulse on every beat under a rushing riser, no full groove until the burst
+    for t, k in beats(0, P0 - .02, step=BEAT / 2, origin=0):
+        put(kick() * .7, t, "drums", .8 if k % 2 == 0 else .45)
+        put(hat(), t + BEAT / 4, "drums", .5, .3)
+    put(sub(29, P0) * .6, 0, "bass", .7)
+    put(riser(P0, .9), 0, "fx")
+    put(crash(), P0, "drums", 1.2)
+    put(kick(True) * 1.4, P0, "drums")
     COUNT = L[1] - .1
-    groove(.38, COUNT, .38, claps=False, cut=2000)
-    groove(COUNT, STOP0, .38, claps=True, hats16=True, arp=True, cut=2800)
+    groove(P0, COUNT, P0, claps=False, cut=2200)
+    groove(COUNT, STOP0, P0, claps=True, hats16=True, arp=True, cut=2800)
     put(riser(cues["followers"] - cues["three"], .5), cues["three"], "fx")
     put(crash(), cues["followers"], "drums", 1.0)
     # 2. STOP: under "It doesn't just post." only a filtered chord; slams back on "grows"
@@ -314,17 +319,14 @@ def compose(cues, n):
     put(kick(True) * 1.3, RW, "drums")
     groove(RW, BON - .06, RW, big=True, hats16=True, arp=True, chords="stab", cut=3600, bass="saw")
     put(riser(BON - RW - .1, .9), RW + .1, "fx")
-    # 7. BONUS: the brightest drop
+    # 7. CTA: the brightest drop, out of the phone; the button on the last beat
+    last = BON + int((END - .35 - BON) / BEAT) * BEAT
     put(crash(), BON, "drums", 1.3)
     put(kick(True) * 1.4, BON, "drums")
-    groove(BON, CTA, BON, big=True, hats16=True, arp=True, chords="pad", cut=7000, bass="saw", bright=1.6)
+    groove(BON, last, BON, big=True, hats16=True, arp=True, chords="pad", cut=7000, bass="saw", bright=1.6)
     for off, m, d in HOOK:
-        if BON + off * BEAT < CTA - .2:
+        if BON + off * BEAT < last - .2:
             put(lead(m + 12, d * BEAT - .02), BON + off * BEAT, "keys", .6)
-    # 8. CTA: the groove holds, then the button on the last beat
-    last = CTA + int((END - .35 - CTA) / BEAT) * BEAT
-    put(crash(), CTA, "drums", .8)
-    groove(CTA, last, BON, claps=True, hats16=False, arp=True, chords="stab", cut=4200, bright=1.4)
     put(kick(True), last, "drums", 1.1)
     put(crash(), last, "drums", .9)
     put(supersaw(ABM + [68], 1.2, 6000, .003, .3, 1.0), last, "chords", 1.2)

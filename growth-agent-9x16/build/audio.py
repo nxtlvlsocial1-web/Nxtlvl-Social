@@ -186,16 +186,21 @@ def reverb(x, secs=1.2, mix=.16, seed=0):
 # ---------------------------------------------------------------- the sound design, on world.js's cue times
 def sfx():
     s = lambda name, d=None: smp(name)[: int(d * SR)] if d else smp(name)  # noqa: E731
-    # HOOK: the phone whips in and lands, Claude bursts out of the screen
-    put(whoosh(.4, 1.2, 250), 0)
-    put(s("impact-bass-1"), .36, .9)
-    put(slam(.35), .37)
-    put(s("sparkle"), T["claude"] - .02, .7)
-    put(s("pop"), T["claude"], .5)
-    put(swell(1.4, 72), T["claude"], 1.0)
-    # the follows: a soft pop for each pill, the odometer ticking faster as it rolls, the 2,400 hit
-    for i in range(26):
-        put(pop_(900 + (i % 5) * 90, .07), 2.55 + i * .13, 1, ((i * 37) % 11 - 5) / 6)
+    P = T["portal"]
+    # HOOK: the rush down the tunnel, things whipping past, Claude ahead, the burst out through the screen
+    put(rumble(P + .2), 0, .5)
+    put(riser(P, .25), 0)
+    for i in range(10):
+        put(whoosh(.22, .55, 500 + (i % 3) * 300), .05 + i * .11, 1, (i % 2 - .5) * 1.4)
+    put(s("sparkle"), T["claude"] - .02, .5)
+    put(s("impact-bass-2"), P, 1.0)
+    put(slam(.4), P)
+    put(swell(1.4, 72), P + .05, 1.0)
+    put(s("pop"), P + .35, .5)
+    # FOLLOWERS: the vortex swirling, pops for the pills, the odometer ticking faster, the 2,400 hit
+    put(whoosh(2.8, .7, 200), L[1] - .2, .8)
+    for i in range(14):
+        put(pop_(900 + (i % 5) * 90, .08), L[1] + .1 + i * .24, 1, ((i * 37) % 11 - 5) / 6)
     t, gap = T["twenty"] - .2, .09
     while t < T["followers"] + .05:
         put(tick(), t, .8, .2)
@@ -203,47 +208,62 @@ def sfx():
         gap = max(.035, gap * .93)
     put(s("chime"), T["followers"], .5)
     put(s("sparkle"), T["followers"] + .02, .6)
-    # the post: out, stamped, dropped; the page grows
-    put(s("whoosh-short"), L[2] - .08, .5)
-    put(stamp(), T["post"], .9)
+    # POST: out into bullet time (a slowed whoosh), the stamp, flung away; GROWS: the city rises
+    put(s("whoosh-cinematic")[int(1.2 * SR):int(2.4 * SR)], L[2] - .2, .5)
+    put(stamp(), T["post"], 1.0)
     put(s("error", .6), T["post"] + .02, .25)
-    put(whoosh(.35, .8, 600), T["post"] + .3)
-    put(riser(.3, .12), T["grows"] - .3)
+    put(whoosh(.35, .9, 600), T["post"] + .3)
+    put(riser(.35, .14), T["grows"] - .35)
+    put(rumble(.9), T["grows"], .8)
     for i in range(9):
-        put(thud(), T["grows"] - .05 + i * .07, .9, (i % 3 - 1) * .4)
+        put(thud(), T["grows"] - .02 + i * .05, 1.0, (i % 3 - 1) * .4)
+    put(s("whoosh"), T["grows"] + .1, .45)
     put(s("chime"), T["page"], .4)
-    # five icons, the fifth one; the dive through the screen
-    for i in range(5):
-        put(pop_(700 + i * 110, .16), L[3] + i * .07, 1, (i - 2) / 3)
-    put(s("whoosh"), T["last"] - .1, .45)
+    # FIVE: the wheel spins (ticks slowing down), lands, the fifth glows; the dive
+    t, gap = L[3] - .05, .05
+    while t < T["last"]:
+        put(click(.22), t, 1, np.sin(t * 9) * .5)
+        t += gap
+        gap *= 1.09
+    put(thud(), T["last"], 1.0)
     put(s("glitch-1", .4), T["smartest"], .35)
     put(s("whoosh-cinematic")[int(1.6 * SR):int(2.9 * SR)], T["in0"] - .9, .8)
     put(s("impact-bass-2"), T["in0"], 1.0)
-    # inside: a whoosh into every room
+    # inside: a whoosh into every world
     for t0 in (L[5] - .14, L[6] - .14, L[7] - .14):
         put(s("whoosh-short"), t0 - .1, .6)
-    # move 1: the radar sweep and its blips; the hot one shoots up
-    put(scan(1.9), L[4], .9)
+        put(s("impact-bass-1"), t0, .25)
+    # MOVE 1: the swoop over the field, the beam's sweeps, the columns launching
+    put(whoosh(1.2, 1.0, 250), T["in0"])
+    put(scan(2.0), L[4] - .1, .9)
     for i in range(3):
-        put(s("ping", .5), L[4] + .05 + i * .28, .3, (i - 1) * .5)
+        put(s("ping", .5), L[4] + .15 + i * .3, .3, (i - 1) * .5)
     put(riser(.35, .15), T["blowing"] - .3)
-    put(s("impact-bass-1"), T["blowing"] + .05, .4)
-    # move 2: frames snap in, the palette pops
+    put(s("impact-bass-1"), T["blowing"] + .05, .45)
+    # MOVE 2: the corridor's frames flipping past, four snapping in, the palette
+    for i in range(9):
+        put(whoosh(.16, .45, 900), L[5] - .1 + i * .1, 1, (i % 2 - .5) * 1.6)
     for i in range(4):
-        put(s("click", .2), L[5] + .23 + i * .12, .5, (i - 1.5) / 2)
+        put(s("click", .2), T["plans"] + .18 + i * .1, .5, (i - 1.5) / 2)
     for i in range(5):
         put(pop_(1000 + i * 120, .1), T["visuals"] - .05 + i * .06, 1, (i - 2) / 3)
-    # move 3: the keys spell AGENT, the page types, the caption pops
+    # MOVE 3: the keyboard ripples, AGENT hammers, the page types, the caption pops
+    for i in range(14):
+        put(s("key-press", .12), L[6] - .1 + i * .11, .25, np.sin(i * 1.3) * .6)
     for i in range(5):
-        put(s("key-press", .15), L[6] - .05 + i * .25, .45, (i - 2) / 4)
-    put(s("typing", 1.2), L[6], .3)
+        put(s("key-press", .15), L[6] - .05 + i * .25, .6, (i - 2) / 4)
+    put(s("typing", 1.3), L[6], .3)
     put(s("pop"), T["caption"] - .05, .45)
-    # move 4: comments land, replies fly back
+    # MOVE 4: the comment storm rushing past, replies firing back, three landing
+    for i in range(16):
+        put(whoosh(.14, .35, 700 + (i % 4) * 200), L[7] - .1 + i * .09, 1, (i % 2 - .5) * 1.6)
+    for i in range(6):
+        put(s("notification", .5), L[7] + i * .16, .18, (i % 2 - .5))
+    for i in range(6):
+        put(pop_(1300, .09), T["replies"] - .05 + i * .1, 1, .3)
     for i in range(3):
-        put(s("notification", .6), L[7] - .05 + i * .16, .3, -.3)
-        put(whoosh(.25, .5, 900), T["replies"] - .05 + i * .22, 1, .3)
-        put(pop_(1300, .1), T["replies"] + .2 + i * .22, 1, .3)
-    # move 5: the lights go out; the spotlight; the scan; the rebuild; the launch out of the phone
+        put(thud(), T["comments"] - .2 + i * .1, .7)
+    # MOVE 5: the lights go out; the spotlight; the scan; the pieces flying past; v2; the launch out of the phone
     put(sub(1.6), T["dark0"], .9)
     put(s("click"), T["five5"] - .03, .6)
     put(slam(.25), T["five5"])
@@ -251,30 +271,21 @@ def sfx():
     for i in range(10):
         put(tick(), T["studies"] + .3 + i * .17, .5, np.sin(i) * .5)
     put(s("glitch-3", .6), T["rewrites"], .5)
-    put(whoosh(.3, .9, 400), T["rewrites"])
-    put(whoosh(.35, .7, 800), T["rewrites"] + .3)
+    put(whoosh(.4, 1.1, 300), T["rewrites"])
+    for i in range(6):
+        put(whoosh(.12, .5, 1200), T["rewrites"] + .08 + i * .05, 1, (i % 2 - .5) * 1.8)
+    put(whoosh(.35, .7, 800), T["rewrites"] + .32)
     put(s("sparkle"), T["next"] - .02, .7)
     put(s("chime"), T["next"] + .05, .4)
     put(s("whoosh-cinematic")[int(1.8 * SR):int(2.8 * SR)], T["out1"] - .6, .7)
     put(s("impact-bass-2"), T["out1"], .9)
-    # bonus: the gift lands, the lid pops, FREE stamps, the downloads roll
-    put(thud(), L[10] + .15, 1.2)
-    put(s("pop"), T["free"] - .02, .6)
-    put(s("sparkle"), T["free"], .8)
-    put(stamp(), T["course"] - .02, .7)
-    t, gap = T["sixteen"] - .1, .08
-    while t < T["downloads"]:
-        put(tick(), t, .7, -.2)
-        t += gap
-        gap = max(.035, gap * .94)
-    put(s("chime"), T["downloads"] + .05, .45)
-    # CTA: AGENT typed in, sent, the swarm, the DM
+    # CTA: AGENT typed in, sent, the sky of comments, the DM
     for i in range(5):
         put(s("key-press", .15), T["agentcta"] - .06 + i * .075, .5, (i - 2) / 5)
     put(s("whoosh-short"), T["agentcta"] + .48, .4)
-    for i in range(20):
-        put(pop_(1100 + (i % 4) * 140, .06), T["agentcta"] + .05 + i * .11, 1, (i % 2 - .5) * 1.2)
-    put(s("ping"), T["setup"] - .05, .55)
+    for i in range(38):
+        put(pop_(1100 + (i % 4) * 140, .05), T["agentcta"] - .1 + i * .07, 1, (i % 2 - .5) * 1.2)
+    put(s("ping"), T["setup"] - .1, .55)
     put(s("sparkle"), T["end"] - 1.4, .4)
 
 
