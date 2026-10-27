@@ -59,8 +59,8 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-video § 4); brands/nxtlvl/ is our own logo kit
 website/              Our site: index.html, service pages (social-media-design, reel-editing, social-media-automation .html, built
                       from one template with shared pages.css), 404.html, fonts/, vendor/ (GSAP, three.js), icons, og-image.png,
-                      manifest, robots.txt, sitemap.xml, llms.txt;
-                      deploy the whole folder to the domain root
+                      manifest, robots.txt, sitemap.xml, llms.txt, _headers (cache and security headers);
+                      deployed by the Worker in backend/, step by step in DEPLOY.md
 backend/              Cloudflare Worker: serves website/ and the Book-a-call API (POST /api/book -> connect@nxtlvlsocial.ai
                       via Resend); npm test runs it locally, npm run deploy ships it. See backend/README.md
 nxtlvl-social-audit/  SEO audit of website/index.html: FULL-AUDIT-REPORT.md, ACTION-PLAN.md, PDF, findings/
