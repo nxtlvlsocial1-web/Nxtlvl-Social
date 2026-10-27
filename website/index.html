@@ -3,8 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<!-- Before launch: the domain is assumed to be https://nxtlvlsocial.ai/ (from the connect@ email). The WhatsApp number
-     +91 00000 00000 (910000000000) is still a placeholder: replace it in the contact section and FAQ links. -->
+<!-- Before launch: the domain is assumed to be https://nxtlvlsocial.ai/ (from the connect@ email). Contact is email-only for now. -->
 <title>Social Media Content &amp; Automation from $5/mo | Nxtlvl Social</title>
 <meta name="description" content="Design, reels, posting and DM automation for cafés, salons, gyms and shops. Your whole social media team from $5 a month. No contracts. Book a free call.">
 <link rel="canonical" href="https://nxtlvlsocial.ai/">
@@ -125,6 +124,7 @@
 @font-face{font-family:'Instrument Sans'; src:url(fonts/instrument-sans-600.woff2) format('woff2'); font-weight:600; font-display:swap}
 @font-face{font-family:'Instrument Sans'; src:url(fonts/instrument-sans-700.woff2) format('woff2'); font-weight:700; font-display:swap}
 @font-face{font-family:'Instrument Serif'; src:url(fonts/instrument-serif-400.woff2) format('woff2'); font-weight:400; font-display:swap}
+
 </style>
 
 <style>
@@ -928,9 +928,7 @@ details p{padding:0 54px 24px 4px; font-size:15px; color:var(--muted); max-width
 .book.sent .book-grid,.book.sent .book-foot,.book.sent .book-note{display:none}
 .book.sent .book-msg{font-size:17px; color:var(--fg); min-height:0}
 @media(max-width:560px){ .book{padding:20px 16px} .book-grid{grid-template-columns:1fr} }
-.contact{margin-top:28px; display:grid; grid-template-columns:1fr; gap:12px; max-width:560px; margin-inline:auto; text-align:left}
-
-@media(min-width:620px){.contact{grid-template-columns:1fr 1fr}}
+.contact{margin-top:28px; display:grid; grid-template-columns:1fr; gap:12px; max-width:400px; margin-inline:auto; text-align:left}
 .ct{display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:15px; border:1px solid var(--line); background:var(--ink-3); min-width:0; transition:border-color .22s}
 .ct:hover{border-color:var(--line-2)}
 .ct>.ic{box-sizing:content-box; font-size:19px; padding:9px; border-radius:var(--r-sm); background:rgba(125,24,252,.18); border:1px solid var(--line-2); color:var(--violet-pale)}
@@ -1806,9 +1804,9 @@ details .ans{overflow:hidden}
    arrivals and --io for anything that travels on screen. Primary: the reveal and headline.
    Secondary: the horizon rising and the cards. Ambient: rays, crest glow, glints. */
 :root{--d0:0s}                      /* hero choreography starts after the opening reveal, when it plays */
-html.intro-on{--d0:1.12s}
+html.intro-on{--d0:1.42s}
 
-/* ---------- opening: a shooting star streaks in, becomes the logo, and the logo lands in the nav as the page opens ---------- */
+/* ---------- opening: a shooting star strikes, the mark is born from it and flies into the nav as the page opens ---------- */
 @property --iris{syntax:'<length>'; inherits:false; initial-value:0px}
 .intro{display:none}
 html.intro-on .intro{
@@ -1819,24 +1817,26 @@ html.intro-on .intro{
     linear-gradient(160deg,#0A0620,var(--ink) 60%);
   -webkit-mask-image:radial-gradient(circle at 50% 46%,transparent calc(var(--iris) - 7vmax),#000 var(--iris));
           mask-image:radial-gradient(circle at 50% 46%,transparent calc(var(--iris) - 7vmax),#000 var(--iris));
-  animation:iris .82s var(--io) 1.02s both, introGone .01s linear 1.88s both;
+  animation:iris .86s var(--io) 1.36s both, introGone .01s linear 2.24s both;
 }
 html.intro-on .intro.skip-now{animation:introFade .32s var(--in) both}
 @keyframes iris{from{--iris:0px}to{--iris:82vmax}}
 @keyframes introGone{to{visibility:hidden; opacity:0}}
 @keyframes introFade{to{opacity:0; visibility:hidden}}
-/* the logo in the middle of the screen is a copy of the nav logo, scaled up; it flies into the nav's place */
-.intro-lock{position:fixed; left:0; top:0; z-index:402; transform-origin:0 0; pointer-events:none; will-change:transform}
-.intro-lock .nx-mark{transform-origin:80.8% 19.2%}
-/* while it flies, the real nav logo waits; it takes over the moment the copy lands */
-html.intro-on:not(.nx-landed) .nav .brand{opacity:0}
+/* the mark in the middle of the screen is a copy of the nav mark, scaled up; it flies into the nav mark's place */
+.intro-lock{position:fixed; left:0; top:0; z-index:402; width:34px; height:34px; transform-origin:0 0; pointer-events:none; will-change:transform}
+.intro-lock .nx-mark{display:block; margin:0; transform-origin:80.8% 19.2%}
+/* while it flies, the real nav mark waits and the wordmark is hidden; on landing the wordmark slides out from the mark */
+html.intro-on:not(.nx-landed) .nav .brand .nx-mark,html.intro-on:not(.nx-landed) .nav .brand img{opacity:0}
+html.intro-on.nx-landed .nav .brand img{animation:wordOut .7s var(--out) .08s both}
+@keyframes wordOut{from{opacity:0; translate:-14px 0; clip-path:inset(0 100% 0 0); filter:blur(4px)}to{opacity:1; translate:0 0; clip-path:inset(0 0 0 0); filter:none}}
 .nav .nx-mark.nx-land{animation:markLand .8s var(--out)}
 @keyframes markLand{0%{scale:1.3; filter:brightness(1.6) drop-shadow(0 0 8px rgba(216,187,255,.9))}100%{scale:1; filter:none}}
 
 /* ---------- the nav settles in from above once the page is lit ---------- */
 @media all{ .nav{animation:navIn 1s var(--out) calc(var(--d0) + .1s) both} }
 /* during the opening the nav only fades in, so the flying logo can land on its final place */
-@media all{ html.intro-on .nav{animation:navFade .6s var(--out) 1.25s both} }
+@media all{ html.intro-on .nav{animation:navFade .6s var(--out) 1.55s both} }
 @keyframes navFade{from{opacity:0}}
 @keyframes navIn{from{translate:0 -28px; opacity:0}}
 
@@ -2053,6 +2053,145 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 .motion-note b{color:var(--fg)}
 .motion-note .x{flex:none; width:32px; height:32px; border-radius:50%; border:1px solid var(--line-2); background:none; color:var(--muted); cursor:pointer; font-size:16px; line-height:1}
 @media(max-width:979px){ .motion-note{bottom:calc(84px + env(safe-area-inset-bottom,0px))} }
+
+/* ================= the deck: sample post designs that deal in, fan out and flip ================= */
+.deck-sec{overflow:clip}
+.deck-sec .wrap{position:relative; z-index:1}
+.deck-stage{position:relative}
+.deck{display:flex; gap:16px; padding:40px 16px 8px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -webkit-overflow-scrolling:touch}
+.deck::-webkit-scrollbar{display:none}
+@media(min-width:900px){ .deck{flex-wrap:wrap; justify-content:center; overflow:visible; max-width:var(--wrap); margin-inline:auto} }
+.dcard{
+  --cw:min(72vw,232px); flex:none; width:var(--cw); aspect-ratio:4/5; padding:0; border:0; background:none; color:inherit;
+  font:inherit; text-align:left; cursor:pointer; scroll-snap-align:center; perspective:1100px; position:relative;
+}
+.dc-lift{display:block; width:100%; height:100%; transition:transform .5s var(--out)}
+.dc-in{display:block; position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .85s var(--out)}
+.dcard.flip .dc-in{transform:rotateY(180deg)}
+.dc-face{
+  position:absolute; inset:0; border-radius:var(--r-lg); overflow:hidden; -webkit-backface-visibility:hidden; backface-visibility:hidden;
+  display:flex; flex-direction:column; padding:16px; border:1px solid var(--line-2);
+  box-shadow:0 30px 60px -28px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.03) inset;
+}
+.dc-front::after{content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.13) 48%,transparent 60%); background-size:250% 100%; background-position:120% 0;
+  transition:background-position 1s var(--out)}
+@media(hover:hover){ .dcard:hover .dc-front::after{background-position:-30% 0} .dcard:hover .dc-lift{transform:translateY(-22px) scale(1.04)} }
+.dcard:focus-visible{outline:none}
+.dcard:focus-visible .dc-face{outline:2px solid var(--violet-lift); outline-offset:3px}
+.dc-a1{background:radial-gradient(120% 80% at 80% 0%,rgba(255,196,107,.28),transparent 60%),linear-gradient(160deg,#2A1260,#120A2A)}
+.dc-a2{background:radial-gradient(120% 80% at 0% 0%,rgba(216,187,255,.3),transparent 60%),linear-gradient(160deg,#3B1475,#140B2E)}
+.dc-a3{background:radial-gradient(120% 90% at 100% 100%,rgba(125,24,252,.6),transparent 60%),linear-gradient(160deg,#1A0F38,#07040F)}
+.dc-a4{background:radial-gradient(90% 70% at 50% 40%,rgba(255,196,107,.35),transparent 65%),linear-gradient(160deg,#4A1290,#1A0838)}
+.dc-a5{background:radial-gradient(120% 80% at 0% 100%,rgba(169,92,255,.4),transparent 60%),linear-gradient(160deg,#21103F,#0D0820)}
+.dc-a6{background:radial-gradient(120% 80% at 100% 0%,rgba(125,24,252,.5),transparent 60%),linear-gradient(160deg,#2C1158,#0E0722)}
+.dc-tag{display:inline-flex; align-items:center; gap:6px; align-self:flex-start; padding:5px 10px 5px 7px; border-radius:999px; font-size:11px; font-weight:600;
+  color:var(--violet-pale); background:rgba(5,3,12,.45); border:1px solid var(--line-2); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px)}
+.dc-tag .ic{font-size:13px}
+.dc-art{flex:1; position:relative; display:grid; place-items:center; margin:10px 0 8px; border-radius:var(--r-md); min-height:0}
+.dc-big{font-size:64px; color:#fff; filter:drop-shadow(0 8px 24px rgba(125,24,252,.7))}
+.dc-h{font-family:var(--d); font-weight:800; font-size:19px; line-height:1.05; letter-spacing:-.02em; color:#fff}
+.dc-s{margin-top:4px; font-size:12.5px; color:var(--violet-pale); opacity:.85}
+/* café: a ring that breathes and steam that rises */
+.dc-ring{position:absolute; width:118px; height:118px; border-radius:50%; border:1px dashed rgba(255,196,107,.5)}
+.dc-steam{position:absolute; top:12%; display:flex; gap:9px}
+.dc-steam i{width:4px; height:22px; border-radius:4px; background:linear-gradient(transparent,rgba(255,255,255,.7)); opacity:0}
+/* salon: a before/after split whose cut sweeps back and forth */
+.dc-ba{--cut:50%; overflow:hidden; place-items:stretch; grid-template-columns:1fr; border:1px solid var(--line)}
+.dc-ba .ba-l,.dc-ba .ba-r{grid-area:1/1; display:flex; align-items:flex-end; padding:8px 10px; font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase}
+.dc-ba .ba-l{background:repeating-linear-gradient(135deg,#2A2340 0 8px,#231C38 8px 16px); color:var(--muted)}
+.dc-ba .ba-r{justify-content:flex-end; color:#fff; background:radial-gradient(80% 90% at 70% 30%,#D8BBFF,#A95CFF 45%,#5E06F2);
+  clip-path:inset(0 0 0 var(--cut))}
+.dc-ba .ba-cut{grid-area:1/1; justify-self:start; width:2px; margin-left:calc(var(--cut,50%) - 1px); background:#fff; box-shadow:0 0 12px #fff}
+/* gym: a reel that plays */
+.dc-reel{border:1px solid var(--line); background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.5))}
+.reel-play{width:58px; height:58px; border-radius:50%; display:grid; place-items:center; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.35);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); color:#fff; font-size:22px}
+.reel-bar{position:absolute; left:10px; right:10px; bottom:10px; height:3px; border-radius:3px; background:rgba(255,255,255,.2); overflow:hidden}
+.reel-bar i{display:block; height:100%; width:100%; background:linear-gradient(90deg,var(--violet-lift),#fff); transform-origin:0 50%; transform:scaleX(.35)}
+/* festival: a flame with sparks around it */
+.dc-fest .dc-big{color:var(--gold); filter:drop-shadow(0 0 22px rgba(255,196,107,.75))}
+.dc-fest .fs{position:absolute; width:10px; height:10px; background:#fff;
+  clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%)}
+.dc-fest .fs:nth-of-type(1){left:18%; top:20%}.dc-fest .fs:nth-of-type(2){right:16%; top:14%; scale:.7}
+.dc-fest .fs:nth-of-type(3){right:22%; bottom:18%; scale:.9}.dc-fest .fs:nth-of-type(4){left:24%; bottom:14%; scale:.6}.dc-fest .fs:nth-of-type(5){left:50%; top:6%; scale:.5}
+/* menu: lines that write themselves */
+.dc-menu{place-items:stretch; align-content:center; gap:10px; padding:4px 6px}
+.dc-menu span{display:flex; align-items:baseline; gap:8px; font-family:var(--s); font-size:17px; color:#fff}
+.dc-menu i{font-style:normal; white-space:nowrap}
+.dc-menu b{flex:1; border-bottom:1px dotted rgba(216,187,255,.55); transform-origin:0 50%}
+/* review: five stars light up in turn */
+.dc-stars{display:flex; gap:6px; justify-content:center; align-items:center}
+.dc-stars i{width:26px; height:26px; background:rgba(255,255,255,.18);
+  clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+/* the back of each card */
+.dc-back{transform:rotateY(180deg); background:linear-gradient(160deg,#1B1036,#0A0618); gap:10px; justify-content:center}
+.dc-bh{font-family:var(--d); font-weight:800; font-size:20px; color:#fff; margin-bottom:4px}
+.dc-row{display:block; font-size:13px; color:var(--fg); padding-bottom:8px; border-bottom:1px solid var(--line)}
+.dc-row b{display:block; font-size:10.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); margin-bottom:2px}
+.dc-plan{align-self:flex-start; margin-top:6px; padding:5px 10px; border-radius:999px; font-size:11px; font-weight:600; color:#fff;
+  background:linear-gradient(180deg,var(--violet-lift),var(--violet))}
+.deck-hint{text-align:center; margin:22px 16px 0; font-size:12.5px; color:var(--faint)}
+.deck-hint .d-touch{display:none}
+@media(hover:none){ .deck-hint .d-desk{display:none} .deck-hint .d-touch{display:inline} }
+/* micro-motion inside the cards, only while the deck is on screen */
+@media all{
+  .deck-on .dc-ring{animation:dcBreathe 3.2s ease-in-out infinite}
+  .deck-on .dc-steam i{animation:dcSteam 2.4s ease-out infinite}
+  .deck-on .dc-steam i:nth-child(2){animation-delay:.5s}.deck-on .dc-steam i:nth-child(3){animation-delay:1s}
+  .deck-on .dc-ba{animation:dcCut 4.5s var(--io) infinite}
+  .deck-on .reel-bar i{animation:dcReel 5s linear infinite}
+  .deck-on .reel-play{animation:dcPulse 2.5s var(--out) infinite}
+  .deck-on .dc-fest .fs{animation:dcTwinkle 2.2s ease-in-out infinite}
+  .deck-on .dc-fest .fs:nth-of-type(2){animation-delay:.4s}.deck-on .dc-fest .fs:nth-of-type(3){animation-delay:.9s}
+  .deck-on .dc-fest .fs:nth-of-type(4){animation-delay:1.3s}.deck-on .dc-fest .fs:nth-of-type(5){animation-delay:1.7s}
+  .deck-on .dc-menu b{animation:dcWrite 4s var(--out) infinite}
+  .deck-on .dc-menu span:nth-child(2) b{animation-delay:.25s}.deck-on .dc-menu span:nth-child(3) b{animation-delay:.5s}
+  .deck-on .dc-stars i{animation:dcStar 3.6s var(--out) infinite}
+  .deck-on .dc-stars i:nth-child(2){animation-delay:.15s}.deck-on .dc-stars i:nth-child(3){animation-delay:.3s}
+  .deck-on .dc-stars i:nth-child(4){animation-delay:.45s}.deck-on .dc-stars i:nth-child(5){animation-delay:.6s}
+}
+@property --cut{syntax:'<percentage>'; inherits:true; initial-value:50%}
+@keyframes dcBreathe{50%{scale:1.12; rotate:30deg; opacity:.6}}
+@keyframes dcSteam{0%{opacity:0; translate:0 10px}30%{opacity:.8}100%{opacity:0; translate:0 -18px; scale:1 1.3}}
+@keyframes dcCut{0%,100%{--cut:22%}50%{--cut:78%}}
+@keyframes dcReel{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes dcPulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.4)}70%,100%{box-shadow:0 0 0 18px rgba(255,255,255,0)}}
+@keyframes dcTwinkle{0%,100%{opacity:.2; rotate:0deg}50%{opacity:1; rotate:45deg}}
+@keyframes dcWrite{0%{transform:scaleX(0)}35%,100%{transform:scaleX(1)}}
+@keyframes dcStar{0%,8%{background:rgba(255,255,255,.18); scale:.8}22%,80%{background:var(--gold); scale:1}100%{background:rgba(255,255,255,.18); scale:.8}}
+/* live deck (wide screens, motion on): a tall track with a sticky stage; the script deals and fans the cards with the scroll */
+@media(min-width:900px){
+  .deck-live .deck-track{height:250vh; height:250svh}
+  .deck-live .deck-stage{position:sticky; top:0; height:100vh; height:100svh; display:flex; flex-direction:column; justify-content:center; padding-top:64px}
+  .deck-live .deck-stage .head p{margin-top:14px}
+  .deck-live .deck{display:block; position:relative; height:300px; max-width:none; padding:0; margin-top:44px; overflow:visible}
+  .deck-live .dcard{position:absolute; left:50%; top:50%; margin:-135px 0 0 -108px; --cw:216px; will-change:transform}
+  .deck-live .dcard:hover{z-index:20 !important}
+  .deck-live .deck-hint{margin-top:40px}
+}
+@media(min-width:900px) and (max-height:800px){ .deck-live .deck-stage .head p{display:none} }
+/* without the live deck the cards rise in as the section arrives */
+.js .deck-sec:not(.deck-live) .dcard{opacity:0; translate:0 40px; rotate:4deg; transition:opacity .7s ease, translate .9s var(--out), rotate .9s var(--out)}
+.js .deck-sec:not(.deck-live).deck-in .dcard{opacity:1; translate:0 0; rotate:0deg}
+.js .deck-sec.deck-in .dcard:nth-child(2){transition-delay:.08s}.js .deck-sec.deck-in .dcard:nth-child(3){transition-delay:.16s}
+.js .deck-sec.deck-in .dcard:nth-child(4){transition-delay:.24s}.js .deck-sec.deck-in .dcard:nth-child(5){transition-delay:.32s}.js .deck-sec.deck-in .dcard:nth-child(6){transition-delay:.4s}
+html.tall.js .deck-sec .dcard,html.rm.js .deck-sec .dcard{opacity:1; translate:0 0; rotate:0deg; transition:none}
+html.rm .dc-in,html.rm .dc-lift{transition:none}
+
+/* ---------- star dividers: a line draws between sections and a shooting star runs along it ---------- */
+.sdiv{position:relative; height:1px; max-width:var(--wrap); margin:0 auto; overflow:visible; pointer-events:none;
+  background:linear-gradient(90deg,transparent,var(--line-2) 20%,rgba(216,187,255,.5) 50%,var(--line-2) 80%,transparent)}
+.js .sdiv{transform:scaleX(0); transition:transform 1.4s var(--out)}
+.js .sdiv.in{transform:scaleX(1)}
+.sdiv i{position:absolute; top:-5px; left:0; width:11px; height:11px; opacity:0; background:#fff;
+  clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%)}
+.sdiv b{position:absolute; top:-1px; left:0; height:3px; width:120px; opacity:0; border-radius:3px; background:linear-gradient(90deg,transparent,rgba(169,92,255,.9),#fff)}
+@media all{ .sdiv.in i{animation:sdivRun 1.6s var(--io) .25s both} .sdiv.in b{animation:sdivTrail 1.6s var(--io) .25s both} }
+@keyframes sdivRun{0%{left:0; opacity:0}12%{opacity:1}88%{opacity:1}100%{left:calc(100% - 11px); opacity:0; rotate:180deg}}
+@keyframes sdivTrail{0%{left:-120px; opacity:0}12%{opacity:1}88%{opacity:1}100%{left:calc(100% - 124px); opacity:0}}
+html.tall.js .sdiv,html.rm.js .sdiv{transform:none; transition:none}
+html.rm .sdiv i,html.rm .sdiv b{display:none}
 </style>
 </head>
 <body>
@@ -2147,54 +2286,71 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   </div>
 </nav>
 <script>
-/* opening: a shooting star streaks in trailing stardust, strikes, becomes the logo, and the logo flies into the nav */
+/* opening: a shooting star streaks in and strikes; the Shooting Star mark is born from the strike, its trails draw out,
+   a ring of light circles it, and the mark flies into the nav where the wordmark slides out beside it */
 (function(){
   var d = document.documentElement, intro = document.getElementById('intro'), brand = document.querySelector('.nav .brand');
-  if(!d.classList.contains('intro-on') || !intro || !brand) return;
+  var navMark = brand && brand.querySelector('.nx-mark');
+  if(!d.classList.contains('intro-on') || !intro || !navMark) return;
   var W = window.innerWidth, H = window.innerHeight, small = W < 700, TAU = Math.PI * 2;
-  var OUT = 'cubic-bezier(.16,1,.3,1)', IO = 'cubic-bezier(.65,0,.25,1)';
+  var OUT = 'cubic-bezier(.16,1,.3,1)', IO = 'cubic-bezier(.65,0,.25,1)', POP = 'cubic-bezier(.34,1.56,.64,1)';
 
-  /* the logo: a copy of the nav logo, scaled up a little above the middle of the screen */
+  /* the mark alone: a copy of the nav mark, scaled up just above the middle of the screen */
   var lock = document.createElement('div');
-  lock.className = 'brand intro-lock'; lock.setAttribute('aria-hidden', 'true');
-  lock.innerHTML = brand.innerHTML.replace(/nm-/g, 'nxi-');
+  lock.className = 'intro-lock'; lock.setAttribute('aria-hidden', 'true');
+  lock.innerHTML = navMark.outerHTML.replace(/nm-/g, 'nxi-');
   document.body.appendChild(lock);
-  var mk = lock.querySelector('.nx-mark'), wm = lock.querySelector('img');
-  var bw = lock.offsetWidth || 127, bh = lock.offsetHeight || 34;
-  var S = Math.min(4.2, W * .66 / bw), x0 = W / 2 - bw * S / 2, y0 = H * .46 - bh * S / 2;
+  var mk = lock.querySelector('.nx-mark'), paths = mk.querySelectorAll('path');
+  var star = paths[paths.length - 1], trails = Array.prototype.slice.call(paths, 0, paths.length - 1);
+  var M = 34, size = Math.min(small ? W * .46 : 230, H * .34), S = size / M;
+  var x0 = W / 2 - size / 2, y0 = H * .45 - size / 2;
   var from = 'translate(' + x0 + 'px,' + y0 + 'px) scale(' + S + ')';
   lock.style.transform = from;
-  var mr = mk.getBoundingClientRect(), tx = mr.left + mr.width * .808, ty = mr.top + mr.height * .192;
+  var tx = x0 + size * .808, ty = y0 + size * .192, cx = x0 + size / 2, cy = y0 + size / 2;
 
-  var anims = [];
-  /* the star lands first, then its trails draw out behind it */
+  var STRIKE = .6, FLY = 1.34, FLYD = .72, END = 2.15;
+  var anims = [], timers = [];
+  /* born from the strike: the star spins open, then each trail draws out behind it */
+  anims.push(star.animate([
+    {opacity:0, transform:'scale(0) rotate(-135deg)'},
+    {opacity:1, transform:'scale(1.25) rotate(8deg)', offset:.62},
+    {opacity:1, transform:'scale(1) rotate(0deg)'}
+  ], {duration:620, delay:STRIKE * 1000 - 40, easing:OUT, fill:'both'}));
+  trails.forEach(function(p, i){
+    p.style.transformOrigin = '100% 0%';
+    anims.push(p.animate([
+      {opacity:0, transform:'scale(0)'},
+      {opacity:1, transform:'scale(1)'}
+    ], {duration:520, delay:STRIKE * 1000 + 70 + i * 90, easing:OUT, fill:'both'}));
+  });
+  /* while it holds, the mark breathes once with light, then settles to its plain, glowless self */
   anims.push(mk.animate([
-    {opacity:0, scale:.8, clipPath:'polygon(100% 0%,100% 0%,100% 0%)'},
-    {opacity:1, scale:1, clipPath:'polygon(100% 0%,100% 200%,-100% 0%)'}
-  ], {duration:460, delay:470, easing:OUT, fill:'both'}));
-  if(wm) anims.push(wm.animate([
-    {opacity:0, transform:'translateX(-12px)', filter:'blur(6px)'},
-    {opacity:1, transform:'none', filter:'blur(0)'}
-  ], {duration:440, delay:640, easing:OUT, fill:'both'}));
+    {filter:'drop-shadow(0 0 0 rgba(169,92,255,0))'},
+    {filter:'drop-shadow(0 0 3px rgba(216,187,255,.9)) brightness(1.25)', offset:.35},
+    {filter:'drop-shadow(0 0 0 rgba(169,92,255,0))'}
+  ], {duration:900, delay:STRIKE * 1000, easing:'ease-out', fill:'both'}));
 
   var done = false;
   var land = function(){
     if(done) return; done = true;
     d.classList.add('nx-landed');
-    var nm = brand.querySelector('.nx-mark');
-    if(nm){ nm.classList.add('nx-land'); setTimeout(function(){ nm.classList.remove('nx-land'); }, 900); }
+    navMark.classList.add('nx-land'); setTimeout(function(){ navMark.classList.remove('nx-land'); }, 900);
     requestAnimationFrame(function(){ lock.remove(); });
   };
-  /* then it flies into the nav, landing exactly on the real logo */
-  var flyT = setTimeout(function(){
-    var br = brand.getBoundingClientRect();
-    var fly = lock.animate([{transform:from}, {transform:'translate(' + br.left + 'px,' + br.top + 'px) scale(1)'}],
-      {duration:640, easing:IO, fill:'forwards'});
+  /* then it flies into the nav on a slight arc, landing exactly on the real mark */
+  timers.push(setTimeout(function(){
+    var br = navMark.getBoundingClientRect(), ex = br.left, ey = br.top;
+    var mx = (x0 + ex) / 2 + W * .08, my = (y0 + ey) / 2 + H * .06, sm = (S + 1) / 2;
+    var fly = lock.animate([
+      {transform:from},
+      {transform:'translate(' + mx + 'px,' + my + 'px) scale(' + sm + ') rotate(-8deg)', offset:.55},
+      {transform:'translate(' + ex + 'px,' + ey + 'px) scale(1)'}
+    ], {duration:FLYD * 1000, easing:IO, fill:'forwards'});
     anims.push(fly);
     fly.onfinish = land;
-  }, 1120);
+  }, FLY * 1000));
 
-  /* stardust: a canvas above the curtain, below the logo */
+  /* the light show: one canvas above the curtain, below the mark */
   var cv = document.createElement('canvas'), ctx = cv.getContext && cv.getContext('2d');
   if(ctx){
     cv.className = 'intro-fx'; cv.setAttribute('aria-hidden', 'true');
@@ -2202,21 +2358,22 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
-  var dx = Math.SQRT1_2, dy = -Math.SQRT1_2, L = Math.sqrt(W * W + H * H) * .72;
-  var sx = tx - dx * L, sy = ty - dy * L, bend = Math.min(W, H) * .1;
-  var STRIKE = .5, END = 1.6, t0 = performance.now();
-  /* the head eases in fast and settles onto the star; a slight bend makes it feel thrown, not slid */
+  var dx = Math.SQRT1_2, dy = -Math.SQRT1_2, L = Math.sqrt(W * W + H * H) * .74;
+  var sx = tx - dx * L, sy = ty - dy * L, bend = Math.min(W, H) * .1, T0 = .06;
   var head = function(k){
     var e = 1 - Math.pow(1 - Math.min(1, Math.max(0, k)), 3);
     var b = Math.sin(e * Math.PI) * bend;
     return [sx + (tx - sx) * e + (-dy) * b, sy + (ty - sy) * e + dx * b];
   };
   var tint = ['255,255,255', '216,187,255', '169,92,255', '125,24,252'];
-  var dust = [], burst = [], last = 0, i;
-  for(i = 0; i < (small ? 46 : 90); i++){
+  var sky = [], dust = [], burst = [], wake = [], last = 0, i;
+  for(i = 0; i < (small ? 60 : 130); i++){
+    sky.push({x:Math.random() * W, y:Math.random() * H, r:.3 + Math.random() * 1.1, ph:Math.random() * TAU, sp:2 + Math.random() * 4, c:tint[(Math.random() * 3) | 0]});
+  }
+  for(i = 0; i < (small ? 54 : 110); i++){
     var a = Math.random() * TAU, hot = Math.random() < .35;
-    burst.push({a:a, v:(hot ? 520 : 180) + Math.random() * (hot ? 520 : 300), drag:3 + Math.random() * 2, life:.45 + Math.random() * .55,
-      c:tint[i % 4], w:hot ? 1.5 : .6 + Math.random() * .8});
+    burst.push({a:a, v:(hot ? 560 : 180) + Math.random() * (hot ? 560 : 320), drag:3 + Math.random() * 2, life:.45 + Math.random() * .6,
+      c:tint[i % 4], w:hot ? 1.6 : .6 + Math.random() * .8});
   }
   var spark4 = function(x, y, r, a){
     ctx.fillStyle = 'rgba(255,255,255,' + a + ')';
@@ -2225,7 +2382,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     ctx.quadraticCurveTo(x - r * .14, y + r * .14, x - r, y); ctx.quadraticCurveTo(x - r * .14, y - r * .14, x, y - r); ctx.fill();
   };
   var stop = function(fast){
-    clearTimeout(flyT);
+    timers.forEach(clearTimeout);
     if(cv.parentNode){ cv.style.transition = 'opacity .3s'; cv.style.opacity = '0'; setTimeout(function(){ cv.remove(); }, 320); }
     if(fast){
       anims.forEach(function(an){ try{ an.cancel(); }catch(e){} });
@@ -2233,6 +2390,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       d.classList.add('nx-landed'); setTimeout(function(){ lock.remove(); }, 300); done = true;
     }
   };
+  var t0 = performance.now();
   var frame = function(now){
     var t = (now - t0) / 1000;
     if(!intro.isConnected || intro.classList.contains('skip-now')){ stop(true); return; }
@@ -2240,33 +2398,48 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     var dt = Math.min(.05, t - last); last = t;
     ctx.clearRect(0, 0, W, H);
     ctx.globalCompositeOperation = 'lighter'; ctx.lineCap = 'round';
-    var k = t / STRIKE, fade = t < STRIKE ? 1 : Math.max(0, 1 - (t - STRIKE) / .32);
+    /* a quiet sky twinkles in, and leaves as the curtain opens */
+    var skyA = Math.min(1, t / .45) * Math.max(0, 1 - Math.max(0, t - FLY) / .5);
+    if(skyA > 0) for(var z = 0; z < sky.length; z++){
+      var st = sky[z], tw = .35 + .65 * (.5 + .5 * Math.sin(st.ph + t * st.sp));
+      ctx.fillStyle = 'rgba(' + st.c + ',' + (tw * skyA * .8).toFixed(3) + ')';
+      ctx.beginPath(); ctx.arc(st.x, st.y, st.r, 0, TAU); ctx.fill();
+    }
+    var k = (t - T0) / (STRIKE - T0), fade = t < STRIKE ? 1 : Math.max(0, 1 - (t - STRIKE) / .32);
     /* the trail: the path the head has just travelled, tapering and cooling from white to violet */
-    if(fade > 0){
-      var N = 26;
+    if(fade > 0 && k > 0){
+      var N = 28;
       for(var s = 0; s < N; s++){
         var ka = k - s * .03, kb = k - (s + 1) * .03;
         if(kb < 0) break;
         var p0 = head(Math.min(ka, 1)), p1 = head(Math.min(kb, 1)), q = 1 - s / N;
         ctx.strokeStyle = 'rgba(' + tint[Math.min(3, (s / 7) | 0)] + ',' + (q * q * .9 * fade).toFixed(3) + ')';
-        ctx.lineWidth = 1 + q * (small ? 7 : 10);
+        ctx.lineWidth = 1 + q * (small ? 7 : 11);
         ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
-        ctx.strokeStyle = 'rgba(169,92,255,' + (q * .12 * fade).toFixed(3) + ')'; ctx.lineWidth = 6 + q * 26;
+        ctx.strokeStyle = 'rgba(169,92,255,' + (q * .12 * fade).toFixed(3) + ')'; ctx.lineWidth = 6 + q * 28;
         ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
       }
     }
     /* the head sheds stardust as it flies */
-    if(t < STRIKE){
+    if(t < STRIKE && k > 0){
       var hp = head(k), n = small ? 3 : 6;
       for(var j = 0; j < n; j++){
         var sp = 20 + Math.random() * 90, sd = (Math.random() - .5) * 2;
         dust.push({x:hp[0], y:hp[1], vx:-dx * sp + (-dy) * sd * 40, vy:-dy * sp + dx * sd * 40, life:.5 + Math.random() * .7, age:0,
           r:.5 + Math.random() * 1.6, c:tint[(Math.random() * 4) | 0]});
       }
-      var g = ctx.createRadialGradient(hp[0], hp[1], 0, hp[0], hp[1], 26);
+      var g = ctx.createRadialGradient(hp[0], hp[1], 0, hp[0], hp[1], 28);
       g.addColorStop(0, 'rgba(255,255,255,.95)'); g.addColorStop(.3, 'rgba(216,187,255,.45)'); g.addColorStop(1, 'rgba(125,24,252,0)');
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(hp[0], hp[1], 26, 0, TAU); ctx.fill();
-      spark4(hp[0], hp[1], 11, .95);
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(hp[0], hp[1], 28, 0, TAU); ctx.fill();
+      spark4(hp[0], hp[1], 12, .95);
+    }
+    /* while the mark flies, its star leaves a short wake of sparkles */
+    if(t > FLY && t < FLY + FLYD && lock.isConnected){
+      var lr = mk.getBoundingClientRect(), wx = lr.left + lr.width * .808, wy = lr.top + lr.height * .192;
+      for(var w = 0; w < (small ? 2 : 4); w++){
+        dust.push({x:wx + (Math.random() - .5) * 6, y:wy + (Math.random() - .5) * 6, vx:(Math.random() - .5) * 40, vy:(Math.random() - .5) * 40,
+          life:.35 + Math.random() * .4, age:0, r:.5 + Math.random() * 1.3, c:tint[(Math.random() * 3) | 0]});
+      }
     }
     for(var m = dust.length - 1; m >= 0; m--){
       var q2 = dust[m]; q2.age += dt;
@@ -2275,9 +2448,9 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       ctx.fillStyle = 'rgba(' + q2.c + ',' + (1 - q2.age / q2.life).toFixed(3) + ')';
       ctx.beginPath(); ctx.arc(q2.x, q2.y, q2.r, 0, TAU); ctx.fill();
     }
-    /* the strike: a flash, a ring of light and a spray of sparks from where the star lands */
     var age = t - STRIKE;
     if(age > 0){
+      /* the strike: a flash, two rings of light and a spray of sparks from where the star is born */
       var f = Math.max(0, 1 - age / .38);
       if(f > 0){
         var R = Math.max(W, H) * .5, g2 = ctx.createRadialGradient(tx, ty, 0, tx, ty, R);
@@ -2286,10 +2459,11 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
         g2.addColorStop(1, 'rgba(125,24,252,0)');
         ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
       }
-      var rk = Math.min(1, age / .55);
-      if(rk < 1){
-        ctx.strokeStyle = 'rgba(216,187,255,' + (.7 * (1 - rk)).toFixed(3) + ')'; ctx.lineWidth = 2 * (1 - rk) + .5;
-        ctx.beginPath(); ctx.arc(tx, ty, 8 + (1 - Math.pow(1 - rk, 3)) * Math.min(W, H) * .32, 0, TAU); ctx.stroke();
+      for(var rr = 0; rr < 2; rr++){
+        var rk = Math.min(1, (age - rr * .12) / .6);
+        if(rk <= 0 || rk >= 1) continue;
+        ctx.strokeStyle = 'rgba(' + (rr ? '169,92,255' : '216,187,255') + ',' + (.7 * (1 - rk)).toFixed(3) + ')'; ctx.lineWidth = 2.2 * (1 - rk) + .5;
+        ctx.beginPath(); ctx.arc(tx, ty, 8 + (1 - Math.pow(1 - rk, 3)) * Math.min(W, H) * (rr ? .46 : .32), 0, TAU); ctx.stroke();
       }
       for(var b = 0; b < burst.length; b++){
         var u = burst[b];
@@ -2298,6 +2472,25 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
         var r1 = dist(age), r0 = dist(Math.max(0, age - .04)), fd = Math.pow(1 - age / u.life, 1.5);
         ctx.strokeStyle = 'rgba(' + u.c + ',' + fd.toFixed(3) + ')'; ctx.lineWidth = u.w;
         ctx.beginPath(); ctx.moveTo(tx + Math.cos(u.a) * r0, ty + Math.sin(u.a) * r0); ctx.lineTo(tx + Math.cos(u.a) * r1, ty + Math.sin(u.a) * r1); ctx.stroke();
+      }
+      /* the orbit: two comets of light circle the new mark, then fade before it flies */
+      var oa = Math.min(1, (age - .12) / .25) * Math.max(0, 1 - (t - (FLY - .12)) / .22);
+      if(oa > 0){
+        var OR = size * .74, spin = -1.4 + age * 6.2;
+        for(var c2 = 0; c2 < 2; c2++){
+          ctx.lineCap = 'butt';
+          for(var sg = 0; sg < 22; sg++){
+            var a0 = spin + c2 * Math.PI - sg * .06, a1 = a0 - .06, qq = 1 - sg / 22;
+            ctx.strokeStyle = 'rgba(' + tint[Math.min(3, (sg / 6) | 0)] + ',' + (qq * qq * .85 * oa).toFixed(3) + ')';
+            ctx.lineWidth = .6 + qq * 3;
+            ctx.beginPath(); ctx.ellipse(cx, cy, OR, OR * .9, -.6, a1, a0); ctx.stroke();
+          }
+          var ha = spin + c2 * Math.PI;
+          var hx = cx + Math.cos(-.6) * Math.cos(ha) * OR - Math.sin(-.6) * Math.sin(ha) * OR * .9;
+          var hy = cy + Math.sin(-.6) * Math.cos(ha) * OR + Math.cos(-.6) * Math.sin(ha) * OR * .9;
+          spark4(hx, hy, 5 + 2 * oa, .9 * oa);
+        }
+        ctx.lineCap = 'round';
       }
     }
     if(t < END) requestAnimationFrame(frame); else stop(false);
@@ -2420,6 +2613,125 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   </div>
 </section>
 
+<section class="band deck-sec" id="deck" aria-labelledby="deck-h">
+  <div class="deck-track" id="deckTrack">
+    <div class="deck-stage">
+      <div class="wrap">
+        <div class="head mid rv">
+          <span class="eyebrow">Sample designs</span>
+          <h2 id="deck-h">Your feed, <span class="it">next level</span></h2>
+          <p style="margin-inline:auto">Offer posts, before-and-afters, reels, festival creatives, menus and review posts: the six kinds of social media content small businesses post most. Tap a card to see what goes into it.</p>
+        </div>
+      </div>
+      <div class="deck" id="deckCards">
+        <button class="dcard" type="button" aria-pressed="false" aria-label="Offer post for a café. Show details">
+          <span class="dc-lift"><span class="dc-in">
+            <span class="dc-face dc-front dc-a1">
+              <span class="dc-tag"><svg class="ic" aria-hidden="true"><use href="#i-cup"/></svg>Café · Offer post</span>
+              <span class="dc-art"><span class="dc-ring"></span><svg class="ic dc-big" aria-hidden="true"><use href="#i-cup"/></svg><span class="dc-steam"><i></i><i></i><i></i></span></span>
+              <span class="dc-h">Monsoon combo</span>
+              <span class="dc-s">Chai + bun, today only</span>
+            </span>
+            <span class="dc-face dc-back">
+              <span class="dc-bh">Offer post</span>
+              <span class="dc-row"><b>Format</b>Feed post, 4:5</span>
+              <span class="dc-row"><b>Ready</b>Same or next day</span>
+              <span class="dc-row"><b>Includes</b>Copy, caption, hashtags, scheduled</span>
+              <span class="dc-plan">Content &amp; Design plan</span>
+            </span>
+          </span></span>
+        </button>
+        <button class="dcard" type="button" aria-pressed="false" aria-label="Before and after post for a salon. Show details">
+          <span class="dc-lift"><span class="dc-in">
+            <span class="dc-face dc-front dc-a2">
+              <span class="dc-tag"><svg class="ic" aria-hidden="true"><use href="#i-scissors"/></svg>Salon · Before / after</span>
+              <span class="dc-art dc-ba"><span class="ba-l">Before</span><span class="ba-r">After</span><span class="ba-cut"></span></span>
+              <span class="dc-h">Balayage, start to finish</span>
+              <span class="dc-s">Swipe for the reveal</span>
+            </span>
+            <span class="dc-face dc-back">
+              <span class="dc-bh">Before / after</span>
+              <span class="dc-row"><b>Format</b>Carousel or reel</span>
+              <span class="dc-row"><b>Ready</b>Same or next day</span>
+              <span class="dc-row"><b>Includes</b>Retouch, layout, caption, posting</span>
+              <span class="dc-plan">Content &amp; Design plan</span>
+            </span>
+          </span></span>
+        </button>
+        <button class="dcard" type="button" aria-pressed="false" aria-label="Reel for a gym. Show details">
+          <span class="dc-lift"><span class="dc-in">
+            <span class="dc-face dc-front dc-a3">
+              <span class="dc-tag"><svg class="ic" aria-hidden="true"><use href="#i-dumbbell"/></svg>Gym · Reel</span>
+              <span class="dc-art dc-reel"><span class="reel-play"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></span><span class="reel-bar"><i></i></span></span>
+              <span class="dc-h">30-day challenge</span>
+              <span class="dc-s">Day 1: the warm-up</span>
+            </span>
+            <span class="dc-face dc-back">
+              <span class="dc-bh">Reel</span>
+              <span class="dc-row"><b>Format</b>9:16, up to 60 seconds</span>
+              <span class="dc-row"><b>Ready</b>Drafts in 48 hours</span>
+              <span class="dc-row"><b>Includes</b>Edit, subtitles, hook, cover</span>
+              <span class="dc-plan">Video &amp; Editing plan</span>
+            </span>
+          </span></span>
+        </button>
+        <button class="dcard" type="button" aria-pressed="false" aria-label="Diwali festival creative for a shop. Show details">
+          <span class="dc-lift"><span class="dc-in">
+            <span class="dc-face dc-front dc-a4">
+              <span class="dc-tag"><svg class="ic" aria-hidden="true"><use href="#i-flame"/></svg>Shop · Festival</span>
+              <span class="dc-art dc-fest"><svg class="ic dc-big" aria-hidden="true"><use href="#i-flame"/></svg><i class="fs"></i><i class="fs"></i><i class="fs"></i><i class="fs"></i><i class="fs"></i></span>
+              <span class="dc-h">Happy Diwali</span>
+              <span class="dc-s">20% off, all week</span>
+            </span>
+            <span class="dc-face dc-back">
+              <span class="dc-bh">Festival creative</span>
+              <span class="dc-row"><b>Format</b>Post, story and status</span>
+              <span class="dc-row"><b>Ready</b>Planned weeks ahead</span>
+              <span class="dc-row"><b>Includes</b>Offer copy, three sizes, posting</span>
+              <span class="dc-plan">Every plan</span>
+            </span>
+          </span></span>
+        </button>
+        <button class="dcard" type="button" aria-pressed="false" aria-label="Menu post for a restaurant. Show details">
+          <span class="dc-lift"><span class="dc-in">
+            <span class="dc-face dc-front dc-a5">
+              <span class="dc-tag"><svg class="ic" aria-hidden="true"><use href="#i-bowl"/></svg>Restaurant · Menu</span>
+              <span class="dc-art dc-menu"><span><i>Paneer tikka</i><b></b></span><span><i>Veg biryani</i><b></b></span><span><i>Mango lassi</i><b></b></span></span>
+              <span class="dc-h">New on the menu</span>
+              <span class="dc-s">Print-ready and phone-ready</span>
+            </span>
+            <span class="dc-face dc-back">
+              <span class="dc-bh">Menu &amp; price list</span>
+              <span class="dc-row"><b>Format</b>Post, print A4, QR</span>
+              <span class="dc-row"><b>Ready</b>Same or next day</span>
+              <span class="dc-row"><b>Includes</b>Updates when prices change</span>
+              <span class="dc-plan">Content &amp; Design plan</span>
+            </span>
+          </span></span>
+        </button>
+        <button class="dcard" type="button" aria-pressed="false" aria-label="Review post for a clinic. Show details">
+          <span class="dc-lift"><span class="dc-in">
+            <span class="dc-face dc-front dc-a6">
+              <span class="dc-tag"><svg class="ic" aria-hidden="true"><use href="#i-tooth"/></svg>Clinic · Review post</span>
+              <span class="dc-art dc-stars"><i></i><i></i><i></i><i></i><i></i></span>
+              <span class="dc-h">Your best review</span>
+              <span class="dc-s">Turned into a post people trust</span>
+            </span>
+            <span class="dc-face dc-back">
+              <span class="dc-bh">Review post</span>
+              <span class="dc-row"><b>Format</b>Feed post and story</span>
+              <span class="dc-row"><b>Ready</b>Same or next day</span>
+              <span class="dc-row"><b>Includes</b>Your real reviews, designed</span>
+              <span class="dc-plan">Social + Automation plan</span>
+            </span>
+          </span></span>
+        </button>
+      </div>
+      <p class="deck-hint" aria-hidden="true"><span class="d-desk">Scroll to deal the cards · hover to lift · click to flip</span><span class="d-touch">Swipe through · tap a card to flip it</span></p>
+    </div>
+  </div>
+</section>
+
 <section class="manifesto" id="manifesto" aria-label="What you actually want">
   <div class="mf-stage">
     <div class="mf-glow" aria-hidden="true"></div>
@@ -2510,6 +2822,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   </div>
 </section>
 
+<div class="sdiv" aria-hidden="true"><b></b><i></i></div>
 <section class="band" id="services">
   <div class="wrap">
     <div class="head rv">
@@ -2589,6 +2902,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
  </div>
 </div>
 
+<div class="sdiv" aria-hidden="true"><b></b><i></i></div>
 <section class="band orbit-sec" id="make">
   <div class="wrap">
     <div class="head mid rv">
@@ -2825,6 +3139,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   </div>
 </section>
 
+<div class="sdiv" aria-hidden="true"><b></b><i></i></div>
 <section class="band" id="how">
   <div class="wrap">
     <div class="head rv">
@@ -2867,6 +3182,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   </div>
 </section>
 
+<div class="sdiv" aria-hidden="true"><b></b><i></i></div>
 <section class="band why" id="why">
   <div class="wrap">
     <div class="head rv">
@@ -2934,7 +3250,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     <div class="head rv">
       <span class="eyebrow">Questions</span>
       <h2>The things people ask <span class="it">before saying yes</span></h2>
-      <p>Not answered here? <a href="https://wa.me/910000000000" target="_blank" rel="noopener">Message us on WhatsApp</a> and a person replies.</p>
+      <p>Not answered here? <a href="mailto:connect@nxtlvlsocial.ai?subject=A%20question%20for%20Nxtlvl%20Social">Email connect@nxtlvlsocial.ai</a> and a person replies.</p>
     </div>
     <div class="faq rv">
       <details><summary>Is $5 really the whole price?</summary><p>It is the starting price for the Content &amp; Design plan, billed monthly. Higher volumes and extra services move you up a plan — we tell you the number before anything starts, and it does not change mid-month.</p></details>
@@ -2948,12 +3264,13 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       <details><summary>Do you handle ads too?</summary><p>We build the creatives — multiple hooks and thumbnails per campaign, made for testing. Ad spend and account management are quoted separately.</p></details>
       <details><summary>What exactly does the automation do?</summary><p>Four things. It publishes your calendar on schedule so nothing is posted by hand. It answers the repeat questions in DMs and comments — timings, price, location, booking. It drops every new enquiry into your WhatsApp or a spreadsheet so nothing gets lost in a busy inbox. And it builds your monthly report for you. You approve the content; the rest runs without anyone watching it.</p></details>
       <details><summary>Will the automation sound like a robot to my customers?</summary><p>It only answers the questions you have given it answers for, in your words, and it hands anything else straight to you. A real reply from you beats an instant wrong one, so we keep the automated set small and specific.</p></details>
-      <details><summary>How do I send you things?</summary><p>WhatsApp. Photos, voice notes, "post this today" — whatever is easiest. You don't need to learn a tool.</p></details>
+      <details><summary>How do I send you things?</summary><p>Email, or whatever you already use. Photos, voice notes, "post this today" — whatever is easiest. You don't need to learn a tool.</p></details>
     </div>
     </div>
   </div>
 </section>
 
+<div class="sdiv" aria-hidden="true"><b></b><i></i></div>
 <section class="band shelf-sec" id="calendar">
   <div class="wrap">
     <div class="head mid rv">
@@ -3065,15 +3382,14 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       <div class="book-grid">
         <label class="fld"><span>Your name</span><input type="text" name="name" autocomplete="name" required maxlength="80" placeholder="Asha Mehta"></label>
         <label class="fld"><span>Business</span><input type="text" name="business" autocomplete="organization" maxlength="120" placeholder="The Corner Café"></label>
-        <label class="fld"><span>WhatsApp number</span><input type="tel" name="phone" autocomplete="tel" inputmode="tel" maxlength="24" placeholder="+91 98765 43210"></label>
-        <label class="fld"><span>Email <em>(optional)</em></span><input type="email" name="email" autocomplete="email" maxlength="120" placeholder="you@business.com"></label>
+        <label class="fld fld-wide"><span>Email</span><input type="email" name="email" autocomplete="email" required maxlength="120" placeholder="you@business.com"></label>
         <label class="fld fld-wide"><span>What do you need?</span><select name="need"><option value="unsure">Not sure yet, let's talk</option><option value="design">Content &amp; Design, from $5/month</option><option value="video">Video &amp; Editing, from $15/month</option><option value="automation">Social + Automation, from $49/month</option></select></label>
         <label class="fld fld-wide"><span>Anything we should know? <em>(optional)</em></span><textarea name="message" rows="3" maxlength="2000" placeholder="What you sell, where you are, what your feed looks like today"></textarea></label>
         <label class="hp" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
       </div>
       <div class="book-foot">
         <button class="btn btn-primary" type="submit">Book my free call<span class="bi"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></button>
-        <a class="btn btn-ghost" href="https://wa.me/910000000000?text=Hi%20Nxtlvl%20Social!%20I%27d%20like%20to%20book%20a%20free%2015-minute%20call%20about%20my%20business." target="_blank" rel="noopener">Or message on WhatsApp</a>
+        <a class="btn btn-ghost" href="mailto:connect@nxtlvlsocial.ai?subject=Free%2015-minute%20call">Or email us directly</a>
       </div>
       <p class="book-msg" id="bookMsg" role="status" aria-live="polite"></p>
       <p class="book-note">A person replies within one business day. No spam, no newsletter.</p>
@@ -3085,16 +3401,6 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
         <div style="min-width:0"><div class="ct-k">Email</div><a class="ct-v" id="mail" href="mailto:connect@nxtlvlsocial.ai?subject=Free%2015-minute%20call">connect@nxtlvlsocial.ai</a></div>
         <button class="copy" type="button" data-copy="mail"><span class="cico" aria-hidden="true"><svg class="ic c-cp"><use href="#i-list"/></svg><svg class="ic c-ok"><use href="#i-check"/></svg></span><span class="clab">Copy</span></button>
       </div>
-      <div class="ct">
-        <svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg>
-        <div style="min-width:0"><div class="ct-k">WhatsApp</div><a class="ct-v" id="phone" href="https://wa.me/910000000000" target="_blank" rel="noopener">+91 00000 00000</a></div>
-        <button class="copy" type="button" data-copy="phone"><span class="cico" aria-hidden="true"><svg class="ic c-cp"><use href="#i-list"/></svg><svg class="ic c-ok"><use href="#i-check"/></svg></span><span class="clab">Copy</span></button>
-      </div>
-    </div>
-
-    <div class="placeholder-note">
-      <svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>
-      <span><b>Placeholder WhatsApp number.</b> Replace +91 00000 00000 (and the wa.me links) with the real number before you share this page.</span>
     </div>
   </div>
 </section>
@@ -4684,22 +4990,95 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     var bkMark = function(n, bad){ var l = bkField(n).closest('.fld'); if(l) l.classList.toggle('bad', !!bad); };
     bkForm.addEventListener('submit', function(e){
       e.preventDefault();
-      var d = {name:bkField('name').value.trim(), business:bkField('business').value.trim(), phone:bkField('phone').value.trim(), email:bkField('email').value.trim(),
+      var d = {name:bkField('name').value.trim(), business:bkField('business').value.trim(), email:bkField('email').value.trim(),
                need:bkField('need').value, message:bkField('message').value.trim(), website:bkField('website').value, t:bkT0};
-      bkMark('name', d.name.length < 2); bkMark('phone', !d.phone && !d.email); bkMark('email', !d.phone && !d.email);
+      var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email);
+      bkMark('name', d.name.length < 2); bkMark('email', !emailOk);
       if(d.name.length < 2) return bkSay('Please tell us your name.', true);
-      if(!d.phone && !d.email) return bkSay('Leave a WhatsApp number or an email so we can reply.', true);
+      if(!emailOk) return bkSay(d.email ? 'That email does not look right.' : 'Leave your email so we can reply.', true);
       var btn = bkForm.querySelector('[type=submit]'); btn.disabled = true; bkSay('Sending…');
       var mailto = 'mailto:connect@nxtlvlsocial.ai?subject=' + encodeURIComponent('Free 15-minute call: ' + d.name) + '&body=' + encodeURIComponent(
-        'Name: ' + d.name + '\nBusiness: ' + d.business + '\nWhatsApp: ' + d.phone + '\nEmail: ' + d.email + '\nLooking for: ' + bkField('need').options[bkField('need').selectedIndex].text + '\n\n' + d.message);
+        'Name: ' + d.name + '\nBusiness: ' + d.business + '\nEmail: ' + d.email + '\nLooking for: ' + bkField('need').options[bkField('need').selectedIndex].text + '\n\n' + d.message);
       fetch(bkForm.dataset.endpoint, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(d)})
         .then(function(r){ return r.json().then(function(j){ return {ok:r.ok && j.ok, err:j.error}; }); })
         .then(function(r){
-          if(r.ok){ bkForm.classList.add('sent'); bkSay('Got it, ' + d.name.split(' ')[0] + '. A person will reply within one business day' + (d.phone ? ' on WhatsApp' : '') + ' to set up your call.'); return; }
+          if(r.ok){ bkForm.classList.add('sent'); bkSay('Got it, ' + d.name.split(' ')[0] + '. A person will reply by email within one business day to set up your call.'); return; }
           btn.disabled = false; bkSay(r.err || 'Could not send. Opening your email app instead…', !!r.err); if(!r.err) location.href = mailto;
         })
         .catch(function(){ btn.disabled = false; bkSay('Could not reach us. Opening your email app instead…'); location.href = mailto; });
     });
+  }
+
+  /* ---- the deck: on wide screens the cards deal in from below with the scroll, stack, then fan out like a hand;
+         elsewhere they rise in. Any card flips on click or tap. Card micro-motion runs only while the deck is on screen. ---- */
+  var deckSec = document.getElementById('deck'), deckTrack = document.getElementById('deckTrack');
+  if(deckSec && deckTrack){
+    var dcards = Array.prototype.slice.call(deckSec.querySelectorAll('.dcard'));
+    dcards.forEach(function(c){
+      c.addEventListener('click', function(){
+        var on = !c.classList.contains('flip');
+        c.classList.toggle('flip', on); c.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    });
+    var tallPage = document.documentElement.classList.contains('tall');
+    var wideQ = window.matchMedia('(min-width:900px)');
+    var live = false, dRaf = null, dNear = false;
+    var clamp = function(v){ return v < 0 ? 0 : v > 1 ? 1 : v; };
+    var eo = function(v){ return 1 - Math.pow(1 - v, 3); };
+    var eio = function(v){ return v < .5 ? 4 * v * v * v : 1 - Math.pow(-2 * v + 2, 3) / 2; };
+    var place = function(){
+      dRaf = null;
+      if(!live) return;
+      var r = deckTrack.getBoundingClientRect(), vh = window.innerHeight, span = r.height - vh;
+      var p = clamp(-r.top / (span > 0 ? span : 1));
+      var n = dcards.length, mid = (n - 1) / 2, spread = Math.max(110, Math.min((window.innerWidth - 380) / 5, 200));
+      dcards.forEach(function(c, i){
+        var di = eo(clamp((p - i * .055) / .3)), f = eio(clamp((p - .45) / .38)), side = i % 2 ? 1 : -1, o = i - mid;
+        /* dealt from below the stage, to a neat stack, to a fan */
+        var sx = side * 140, sy = vh * .75, sr = side * 28;
+        var kx = (i - mid) * 2, ky = -i * 3, kr = o * 2.2;
+        var fx = o * spread, fy = o * o * 9, fr = o * 6.5;
+        var x = sx + (kx - sx) * di, y = sy + (ky - sy) * di, rot = sr + (kr - sr) * di;
+        x += (fx - x) * f; y += (fy - y) * f; rot += (fr - rot) * f;
+        c.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) rotate(' + rot.toFixed(2) + 'deg)';
+        c.style.opacity = Math.min(1, di * 1.6).toFixed(3);
+        c.style.zIndex = i + 1;
+      });
+    };
+    var queue = function(){ if(live && dNear && !dRaf) dRaf = requestAnimationFrame(place); };
+    var setLive = function(){
+      var want = !reduce && !tallPage && wideQ.matches;
+      if(want === live) return;
+      live = want; deckSec.classList.toggle('deck-live', live);
+      if(!live) dcards.forEach(function(c){ c.style.transform = ''; c.style.opacity = ''; c.style.zIndex = ''; });
+      else queue();
+    };
+    setLive();
+    if(wideQ.addEventListener) wideQ.addEventListener('change', setLive);
+    window.addEventListener('scroll', queue, {passive:true});
+    window.addEventListener('resize', queue, {passive:true});
+    if('IntersectionObserver' in window){
+      /* placement starts well before the deck is on screen, so the cards are never seen out of place */
+      new IntersectionObserver(function(es){ dNear = es[0].isIntersecting; queue(); }, {rootMargin:'300px 0px'}).observe(deckSec);
+      new IntersectionObserver(function(es){
+        var vis = es[0].isIntersecting;
+        deckSec.classList.toggle('deck-on', vis && !reduce);
+        if(vis) deckSec.classList.add('deck-in');
+      }, {rootMargin:'0px 0px -15% 0px'}).observe(deckSec);
+    } else { dNear = true; deckSec.classList.add('deck-in', 'deck-on'); queue(); }
+  }
+
+  /* ---- star dividers draw in, and a shooting star runs along each one, as they come into view ---- */
+  var sdivs = document.querySelectorAll('.sdiv');
+  if(sdivs.length){
+    if(reduce || document.documentElement.classList.contains('tall') || !('IntersectionObserver' in window)){
+      sdivs.forEach(function(s){ s.classList.add('in'); });
+    } else {
+      var sio = new IntersectionObserver(function(es){
+        es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); sio.unobserve(e.target); } });
+      }, {rootMargin:'0px 0px -20% 0px'});
+      sdivs.forEach(function(s){ sio.observe(s); });
+    }
   }
 
   /* ---- copy buttons ---- */
@@ -5539,7 +5918,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       };
       var skipIntro = function(){ intro.classList.add('skip-now'); setTimeout(endIntro, 340); };
       ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function(n){ window.addEventListener(n, skipIntro, {passive:true, once:true}); });
-      setTimeout(endIntro, 1950);
+      setTimeout(endIntro, 2300);
     }
   }
 
@@ -5617,7 +5996,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var hs = SplitText.create(hWords, {type:'chars', charsClass:'hc'});
     var vw = window.innerWidth, vh = window.innerHeight, R = gsap.utils.random;
     /* line up with the opening when it plays (the page starts to open at ~1s) */
-    var wait = Math.max(0, (root.classList.contains('intro-on') ? 1.05 : .08) - (performance.now() - (window.__nxT0 || 0)) / 1000);
+    var wait = Math.max(0, (root.classList.contains('intro-on') ? 1.36 : .08) - (performance.now() - (window.__nxT0 || 0)) / 1000);
     var wave = document.createElement('div');
     wave.className = 'h1-wave'; wave.setAttribute('aria-hidden', 'true');
     heroCopy.insertBefore(wave, heroCopy.firstChild);

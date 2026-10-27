@@ -1,10 +1,10 @@
 /* Nxtlvl Social backend: a Cloudflare Worker that serves the website and takes "Book a call" requests.
  *
- *   POST /api/book    JSON {name, business, phone, email, need, message, website, t}  ->  {ok:true}
+ *   POST /api/book    JSON {name, business, email, need, message, website, t}  ->  {ok:true}
  *   GET  /api/health  ->  {ok:true}
  *
  * Every lead is emailed to LEAD_TO (connect@nxtlvlsocial.ai) through Resend, and the person gets a short
- * confirmation when they left an email address. Static files come from ../website (see wrangler.toml).
+ * confirmation. Static files come from ../website (see wrangler.toml).
  */
 
 const NEEDS = {
@@ -13,7 +13,7 @@ const NEEDS = {
   automation: 'Social + Automation (from $49/mo)',
   unsure: 'Not sure yet',
 };
-const MAX = { name: 80, business: 120, phone: 24, email: 120, message: 2000 };
+const MAX = { name: 80, business: 120, email: 120, message: 2000 };
 
 export default {
   async fetch(request, env, ctx) {
@@ -56,51 +56,48 @@ async function book(request, env, ctx) {
   const from = env.LEAD_FROM || 'Nxtlvl Social <bookings@nxtlvlsocial.ai>';
 
   const sent = await resend(env, {
-    from, to: [to], reply_to: lead.email || undefined,
+    from, to: [to], reply_to: lead.email,
     subject: `New call request: ${lead.name}${lead.business ? ' · ' + lead.business : ''}`,
     text: leadText(lead, ip), html: leadHtml(lead, ip),
   });
   if (!sent.ok) return json({ ok: false, error: 'Could not send right now. Please email ' + to + ' directly.' }, 502, headers);
 
-  if (lead.email) {
-    ctx.waitUntil(resend(env, {
-      from, to: [lead.email], reply_to: to,
-      subject: 'Got it. Your free call with Nxtlvl Social',
-      text: `Hi ${lead.name},\n\nThanks for reaching out. We've got your request and a person will reply within one business day to set up your 15-minute call.\n\nWhat you told us:\n${summary(lead)}\n\nIf anything changes, just reply to this email.\n\nNxtlvl Social\n${to}`,
-    }));
-  }
+  ctx.waitUntil(resend(env, {
+    from, to: [lead.email], reply_to: to,
+    subject: 'Got it. Your free call with Nxtlvl Social',
+    text: `Hi ${lead.name},\n\nThanks for reaching out. We've got your request and a person will reply by email within one business day to set up your 15-minute call.\n\nWhat you told us:\n${summary(lead)}\n\nIf anything changes, just reply to this email.\n\nNxtlvl Social\n${to}`,
+  }));
   return json({ ok: true }, 200, headers);
 }
 
 function clean(b) {
   const s = (v, max) => (typeof v === 'string' ? v.replace(/[\u0000-\u001f\u007f]+/g, ' ').trim().slice(0, max) : '');
   return {
-    name: s(b.name, MAX.name), business: s(b.business, MAX.business), phone: s(b.phone, MAX.phone),
+    name: s(b.name, MAX.name), business: s(b.business, MAX.business),
     email: s(b.email, MAX.email).toLowerCase(), need: NEEDS[b.need] ? b.need : 'unsure', message: s(b.message, MAX.message),
   };
 }
 
 function validate(l) {
   if (l.name.length < 2) return 'Please tell us your name.';
-  if (!l.phone && !l.email) return 'Leave a WhatsApp number or an email so we can reply.';
-  if (l.phone && !/^\+?[0-9 ()-]{7,}$/.test(l.phone)) return 'That phone number does not look right.';
-  if (l.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(l.email)) return 'That email does not look right.';
+  if (!l.email) return 'Leave your email so we can reply.';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(l.email)) return 'That email does not look right.';
   return null;
 }
 
 function summary(l) {
-  return [`Name: ${l.name}`, l.business && `Business: ${l.business}`, l.phone && `WhatsApp: ${l.phone}`, l.email && `Email: ${l.email}`,
+  return [`Name: ${l.name}`, l.business && `Business: ${l.business}`, `Email: ${l.email}`,
     `Looking for: ${NEEDS[l.need]}`, l.message && `Message: ${l.message}`].filter(Boolean).join('\n');
 }
 function leadText(l, ip) { return `${summary(l)}\n\nReceived ${new Date().toUTCString()} from ${ip}`; }
 function leadHtml(l, ip) {
   const esc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const row = (k, v) => v ? `<tr><td style="padding:6px 14px 6px 0;color:#6B6391">${k}</td><td style="padding:6px 0">${esc(v)}</td></tr>` : '';
-  const wa = l.phone ? `<p><a href="https://wa.me/${l.phone.replace(/[^0-9]/g, '')}" style="display:inline-block;padding:10px 18px;border-radius:999px;background:#7D18FC;color:#fff;text-decoration:none;font-weight:600">Reply on WhatsApp</a></p>` : '';
+  const reply = `<p><a href="mailto:${esc(l.email)}" style="display:inline-block;padding:10px 18px;border-radius:999px;background:#7D18FC;color:#fff;text-decoration:none;font-weight:600">Reply by email</a></p>`;
   return `<div style="font-family:Instrument Sans,Segoe UI,Arial,sans-serif;font-size:15px;color:#0B0816">
   <h2 style="margin:0 0 12px;font-size:20px">New call request</h2>
-  <table style="border-collapse:collapse">${row('Name', l.name)}${row('Business', l.business)}${row('WhatsApp', l.phone)}${row('Email', l.email)}${row('Looking for', NEEDS[l.need])}${row('Message', l.message)}</table>
-  ${wa}<p style="color:#9F97BE;font-size:12px">Received ${new Date().toUTCString()} from ${esc(ip)}</p></div>`;
+  <table style="border-collapse:collapse">${row('Name', l.name)}${row('Business', l.business)}${row('Email', l.email)}${row('Looking for', NEEDS[l.need])}${row('Message', l.message)}</table>
+  ${reply}<p style="color:#9F97BE;font-size:12px">Received ${new Date().toUTCString()} from ${esc(ip)}</p></div>`;
 }
 
 async function resend(env, msg) {

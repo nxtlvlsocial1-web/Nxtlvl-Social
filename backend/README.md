@@ -4,7 +4,7 @@ One Cloudflare Worker that serves the website (`../website`) and takes the "Book
 Leads are emailed to **connect@nxtlvlsocial.ai** through [Resend](https://resend.com) (free up to 3,000 emails a month).
 
 ```
-POST /api/book     {name, business, phone, email, need, message}  ->  {ok:true}
+POST /api/book     {name, business, email, need, message}  ->  {ok:true}
 GET  /api/health   ->  {ok:true}
 ```
 
