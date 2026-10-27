@@ -1,0 +1,148 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <link rel="stylesheet" href="assets/css/brand.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-500.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #f3-bg { position: absolute; inset: 0; }
+    #f3-stage { position: absolute; inset: 0; }
+    #f3-world { position: absolute; inset: 0; }
+    #f3-bloom { left: 160px; top: 60px; width: 960px; height: 960px; }
+
+    /* the phone, 1.12× the kit size */
+    #f3-phonewrap { position: absolute; left: 452px; top: 104px; width: 426px; height: 874px; transform-origin: 50% 50%; }
+    #f3-phone { left: 0; top: 0; width: 426px; height: 874px; border-radius: 64px; }
+    #f3-phone .nx-screen { inset: 13px; border-radius: 52px; }
+    #f3-reel { position: absolute; inset: 0; overflow: hidden;
+      background: radial-gradient(circle at 52% 40%, #F4E3C8 0 11%, #C79A6B 12% 20%, #6E4327 21% 36%, #2C1A10 37%), #2C1A10; }
+    #f3-reel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,3,12,.3), rgba(5,3,12,0) 30%, rgba(5,3,12,0) 55%, rgba(5,3,12,.9)); }
+    #f3-caps { position: absolute; left: 0; right: 0; top: 440px; height: 240px; z-index: 2; }
+    .f3-cap { position: absolute; left: 0; right: 0; top: 60px; text-align: center; font-size: 70px; font-variation-settings: "wdth" 100, "wght" 800; color: #fff; line-height: 1; transform-origin: 50% 50%;
+      text-shadow: 0 6px 24px rgba(0,0,0,.6); }
+    .f3-cap.on { color: var(--nx-gold); }
+    #f3-prog { position: absolute; left: 22px; right: 22px; bottom: 28px; height: 5px; border-radius: 5px; background: rgba(255,255,255,.22); z-index: 3; overflow: hidden; }
+    #f3-prog i { position: absolute; inset: 0; background: #fff; transform-origin: 0 50%; }
+    #f3-rail { position: absolute; right: 16px; bottom: 120px; display: flex; flex-direction: column; gap: 26px; z-index: 3; align-items: center; }
+    .f3-ic { display: flex; flex-direction: column; align-items: center; gap: 6px; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 20px; color: #fff; transform-origin: 50% 50%; }
+    .f3-ic svg { width: 44px; height: 44px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.6)); }
+    #f3-handle { position: absolute; left: 22px; bottom: 112px; z-index: 3; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 22px; color: #fff; }
+    #f3-handle small { display: block; font-weight: 500; font-size: 18px; color: rgba(255,255,255,.75); margin-top: 4px; }
+    #f3-cover { position: absolute; left: 870px; top: 740px; width: 150px; height: 190px; border-radius: 18px; overflow: hidden; border: 2px solid var(--nx-line-2);
+      box-shadow: var(--nx-shadow); background: radial-gradient(circle at 50% 42%, #F4E3C8 0 12%, #C79A6B 13% 22%, #6E4327 23% 40%, #2C1A10 41%); transform-origin: 50% 50%; }
+    #f3-cover b { position: absolute; left: 0; right: 0; bottom: 12px; text-align: center; font-family: "Instrument Sans", sans-serif; font-size: 18px; font-weight: 700; color: #fff; }
+    #f3-cover-lab { position: absolute; left: 870px; top: 940px; width: 150px; text-align: center; font-family: "Instrument Sans", sans-serif; font-size: 20px; font-weight: 600; color: var(--nx-muted); }
+
+    /* the right column */
+    #f3-col { position: absolute; left: 1100px; top: 300px; }
+    #f3-title { font-size: 128px; }
+    #f3-chips { margin-top: 44px; width: 720px; }
+    #f3-note { margin-top: 36px; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="03-reels" data-width="1920" data-height="1080" data-duration="6">
+    <div id="f3-bg" class="clip nx-ground" data-start="0" data-duration="6" data-track-index="0">
+      <i class="nx-glow a" data-layout-allow-overflow></i><i class="nx-glow b" data-layout-allow-overflow></i><i class="nx-glow c" data-layout-allow-overflow></i><i class="nx-ribbon" data-layout-allow-overflow></i><i class="nx-stars"></i>
+    </div>
+    <div id="f3-stage" class="clip" data-start="0" data-duration="6" data-track-index="1">
+      <div id="f3-world">
+        <div id="f3-bloom" class="bx-glow"></div>
+
+        <div id="f3-phonewrap">
+          <div id="f3-phone" class="nx-phone">
+            <div class="nx-screen">
+              <div class="nx-island"></div>
+              <div id="f3-reel"></div>
+              <div id="f3-caps">
+                <div class="f3-cap bx-h" id="f3-k0">Monsoon</div>
+                <div class="f3-cap bx-h on" id="f3-k1">combo</div>
+                <div class="f3-cap bx-h" id="f3-k2">today</div>
+                <div class="f3-cap bx-h on" id="f3-k3">only</div>
+              </div>
+              <div id="f3-handle" data-layout-ignore>the.corner.cafe<small>Chai + bun · this week</small></div>
+              <div id="f3-rail" data-layout-ignore>
+                <div class="f3-ic" id="f3-like"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 8.1a4.3 4.3 0 0 1 7.5 2.7C19.5 16.4 12 21 12 21z" fill="#FF4D6D"/></svg><span id="f3-likes">0</span></div>
+                <div class="f3-ic" id="f3-cmt"><svg viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 3.5V17H6.5A2.5 2.5 0 0 1 4 14.5z" fill="#fff"/></svg><span id="f3-cmts">0</span></div>
+                <div class="f3-ic" id="f3-share"><svg viewBox="0 0 24 24"><path d="M3 11.5 21 3l-5 18-4-7-9-2.5z" fill="#fff"/></svg><span>Share</span></div>
+              </div>
+              <div id="f3-prog"><i id="f3-progfill"></i></div>
+            </div>
+          </div>
+        </div>
+        <div id="f3-cover" data-layout-ignore><b>Day 1</b></div>
+        <div id="f3-cover-lab" data-layout-ignore>Cover</div>
+
+        <div id="f3-col">
+          <div id="f3-title" class="bx-h">Reels &amp;<span class="bx-it">shorts</span></div>
+          <div id="f3-chips" class="bx-chips">
+            <span class="bx-chip" id="f3-c0">Subtitles</span><span class="bx-chip" id="f3-c1">Hooks</span><span class="bx-chip" id="f3-c2">Covers</span><span class="bx-chip on" id="f3-c3">9:16</span>
+          </div>
+          <div id="f3-note" class="bx-sub">Shoot on your phone · <b>drafts in 48 h</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var caps = ["#f3-k0", "#f3-k1", "#f3-k2", "#f3-k3"];
+      var HITS = [1.0, 1.5, 2.0, 2.5];                 // every beat from 11.0 s, on the chord stabs
+
+      gsap.set(caps, { opacity: 0 });
+      gsap.set(["#f3-like", "#f3-cmt", "#f3-share", "#f3-cover", "#f3-cover-lab"], { opacity: 0 });
+      gsap.set("#f3-progfill", { scaleX: 0 });
+
+      // 0.0  whip in: the phone arrives from the right, blurred, and sharpens; the bloom follows
+      tl.fromTo("#f3-phonewrap", { x: 760, filter: "blur(14px)", opacity: 0 }, { x: 0, filter: "blur(0px)", opacity: 1, duration: 0.42, ease: "expo.out" }, 0);
+      tl.fromTo("#f3-bloom", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "power3.out" }, 0.05);
+      tl.fromTo("#f3-title", { x: 80, opacity: 0, filter: "blur(8px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.55, ease: "power4.out" }, 0.3);
+      // the reel plays: progress runs the whole scene
+      tl.to("#f3-progfill", { scaleX: 1, duration: 5.2, ease: "none" }, 0.5);
+
+      // 1.0  captions slam in on the beat, each with its own entrance; the previous word docks up small
+      var enters = [
+        [{ scale: 1.6, filter: "blur(14px)", opacity: 0 }, { scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.42, ease: "power4.out" }],
+        [{ x: -260, opacity: 0 }, { x: 0, opacity: 1, duration: 0.38, ease: "expo.out" }],
+        [{ y: 110, rotation: 6, opacity: 0 }, { y: 0, rotation: 0, opacity: 1, duration: 0.42, ease: "circ.out" }],
+        [{ scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" }],
+      ];
+      caps.forEach(function (c, i) {
+        tl.fromTo(c, enters[i][0], enters[i][1], HITS[i]);
+        if (i > 0) tl.to(caps[i - 1], { y: -96, scale: 0.5, opacity: 0.55, duration: 0.35, ease: "power3.out" }, HITS[i]);
+        if (i > 1) tl.to(caps[i - 2], { opacity: 0, y: -150, duration: 0.3, ease: "power2.in" }, HITS[i]);
+      });
+
+      // 3.0  the chips, then the note
+      ["#f3-c0", "#f3-c1", "#f3-c2", "#f3-c3"].forEach(function (c, i) {
+        tl.fromTo(c, { y: 50, opacity: 0, rotation: -3 }, { y: 0, opacity: 1, rotation: 0, duration: 0.45, ease: "circ.out" }, 3.0 + i * 0.12);
+      });
+      tl.fromTo("#f3-note", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 3.5);
+
+      // 4.0  reactions land: like, comment, share pop and the counters count up
+      var likes = { n: 0 }, cmts = { n: 0 };
+      var likeEl = document.getElementById("f3-likes"), cmtEl = document.getElementById("f3-cmts");
+      tl.fromTo("#f3-like", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2)" }, 4.0);
+      tl.to(likes, { n: 2100, duration: 1.1, ease: "power3.out", onUpdate: function () { var v = Math.round(likes.n); likeEl.textContent = v >= 1000 ? (v / 1000).toFixed(1) + "k" : String(v); } }, 4.05);
+      tl.fromTo("#f3-cmt", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2)" }, 4.4);
+      tl.to(cmts, { n: 148, duration: 0.9, ease: "power3.out", onUpdate: function () { cmtEl.textContent = String(Math.round(cmts.n)); } }, 4.45);
+      tl.fromTo("#f3-share", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2)" }, 4.8);
+      // the cover tucks in beside the phone
+      tl.fromTo("#f3-cover", { scale: 0.4, opacity: 0, x: -120, rotation: -10 }, { scale: 1, opacity: 1, x: 0, rotation: 0, duration: 0.55, ease: "back.out(1.4)" }, 3.6);
+      tl.fromTo("#f3-cover-lab", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 3.9);
+
+      // the phone breathes on a sine over each bar (finite)
+      tl.to("#f3-phonewrap", { y: -7, duration: 1.0, ease: "sine.inOut", yoyo: true, repeat: 5 }, 0.4);
+
+      // 5.7  exit: the phone shrinks and blurs away as the browser flies in; the column leaves left
+      tl.to(["#f3-phonewrap", "#f3-cover", "#f3-cover-lab"], { scale: 0.82, filter: "blur(10px)", opacity: 0, duration: 0.3, ease: "power3.in" }, 5.7);
+      tl.to("#f3-col", { x: -160, opacity: 0, filter: "blur(6px)", duration: 0.3, ease: "power3.in" }, 5.7);
+
+      tl.seek(0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["03-reels"] = tl;
+    })();
+  </script>
+</template>

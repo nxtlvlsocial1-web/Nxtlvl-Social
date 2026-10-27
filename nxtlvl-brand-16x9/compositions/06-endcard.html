@@ -1,0 +1,146 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <link rel="stylesheet" href="assets/css/brand.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-500.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #f6-bg { position: absolute; inset: 0; }
+    #f6-stage { position: absolute; inset: 0; }
+    #f6-bloom { left: 480px; top: -40px; width: 960px; height: 960px; }
+
+    /* the streak: a tapered trail with a star head, flying to the strike point (960, 430) */
+    #f6-streak { position: absolute; left: 960px; top: 430px; width: 0; height: 0; }
+    #f6-trail { position: absolute; left: -860px; top: -7px; width: 860px; height: 14px; border-radius: 7px; transform-origin: 100% 50%;
+      background: linear-gradient(90deg, rgba(125,24,252,0), rgba(169,92,255,.7) 55%, #fff); }
+    #f6-head { position: absolute; left: -22px; top: -22px; width: 44px; height: 44px; background: #fff; transform-origin: 50% 50%;
+      clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%); filter: drop-shadow(0 0 18px rgba(216,187,255,1)); }
+    #f6-flash { position: absolute; inset: 0; background: #fff; }
+    #f6-ring { position: absolute; left: 960px; top: 430px; width: 420px; height: 420px; margin: -210px 0 0 -210px; border-radius: 50%; border: 3px solid var(--nx-pale); transform-origin: 50% 50%; }
+    #f6-ring2 { position: absolute; left: 960px; top: 430px; width: 420px; height: 420px; margin: -210px 0 0 -210px; border-radius: 50%; border: 2px solid var(--nx-lift); transform-origin: 50% 50%; }
+    #f6-burst { position: absolute; left: 960px; top: 430px; width: 0; height: 0; }
+    #f6-burst i { position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; border-radius: 50%; background: #fff; transform-origin: 50% 50%; }
+
+    /* the lockup: mark + wordmark, centred */
+    #f6-lock { position: absolute; left: 0; right: 0; top: 330px; display: flex; justify-content: center; align-items: center; gap: 34px; }
+    #f6-mark { width: 200px; height: 200px; transform-origin: 50% 50%; }
+    #f6-mark svg { display: block; width: 100%; height: 100%; overflow: visible; }
+    #f6-wordwrap { position: relative; width: 560px; height: 130px; }
+    #f6-word { position: absolute; left: 0; top: 0; width: 560px; height: auto; display: block; }
+    #f6-line { position: absolute; left: 0; right: 0; top: 580px; text-align: center; font-size: 60px; white-space: normal; }
+    #f6-line span { display: inline-block; margin: 0 .14em; white-space: nowrap; }
+    #f6-line .bx-it { display: inline; font-size: 1.06em; }
+
+    /* the one solid element: the CTA, then the URL */
+    #f6-cta { position: absolute; left: 0; right: 0; top: 720px; display: flex; justify-content: center; }
+    #f6-btn { padding: 22px 30px 22px 44px; font-size: 40px; transform-origin: 50% 50%; }
+    #f6-btn .bx-arrow { width: 54px; height: 54px; }
+    #f6-btn .bx-arrow svg { width: 28px; height: 28px; }
+    #f6-url { position: absolute; left: 0; right: 0; top: 860px; text-align: center; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 34px; color: var(--nx-pale); letter-spacing: 0.01em; }
+
+    #f6-cursor { left: 0; top: 0; }
+    #f6-ripple { left: 0; top: 0; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="06-endcard" data-width="1920" data-height="1080" data-duration="5">
+    <div id="f6-bg" class="clip nx-ground" data-start="0" data-duration="5" data-track-index="0">
+      <i class="nx-glow a" data-layout-allow-overflow></i><i class="nx-glow b" data-layout-allow-overflow></i><i class="nx-glow c" data-layout-allow-overflow></i><i class="nx-ribbon" data-layout-allow-overflow></i><i class="nx-stars"></i>
+    </div>
+    <div id="f6-stage" class="clip" data-start="0" data-duration="5" data-track-index="1">
+      <div id="f6-bloom" class="bx-glow"></div>
+      <div id="f6-ring2"></div>
+      <div id="f6-ring"></div>
+      <div id="f6-burst"></div>
+
+      <div id="f6-lock">
+        <div id="f6-mark"><svg viewBox="20.6 31.6 147.8 147.8"><defs><linearGradient id="f6-g0" gradientUnits="userSpaceOnUse" x1="28.3" y1="171.7" x2="121.6" y2="78.4"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".55" stop-color="#FFFFFF" stop-opacity=".9"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient><linearGradient id="f6-g1" gradientUnits="userSpaceOnUse" x1="69.3" y1="164.7" x2="121.6" y2="112.3"><stop offset="0" stop-color="#A95CFF" stop-opacity="0"/><stop offset=".55" stop-color="#A95CFF" stop-opacity=".9"/><stop offset="1" stop-color="#A95CFF"/></linearGradient><linearGradient id="f6-g2" gradientUnits="userSpaceOnUse" x1="43.8" y1="122.2" x2="82.0" y2="84.0"><stop offset="0" stop-color="#B98AFF" stop-opacity="0"/><stop offset=".55" stop-color="#B98AFF" stop-opacity=".9"/><stop offset="1" stop-color="#B98AFF"/></linearGradient></defs>
+          <path id="f6-t0" d="M125.94 83.55 L125.37 80.68 L123.99 78.09 L122.30 76.31 L119.78 74.81 L116.94 74.09 L114.00 74.24 L111.24 75.23 L109.24 76.64 L22.62 177.38 L122.67 91.45 L124.77 88.76 L125.85 85.51Z" fill="url(#f6-g0)"/>
+          <path id="f6-t1" d="M123.37 116.27 L122.36 113.23 L120.46 111.42 L117.96 110.59 L115.63 110.82 L113.35 112.12 L65.05 168.89 L121.40 121.01 L122.92 118.86Z" fill="url(#f6-g1)"/>
+          <path id="f6-t2" d="M82.77 88.04 L81.79 85.30 L79.69 83.66 L76.80 83.38 L74.42 84.58 L39.59 126.47 L81.14 91.99 L82.40 90.20Z" fill="url(#f6-g2)"/>
+          <path id="f6-star" d="M140 33.62 L141.87 42.15 L146.74 50.4 L154.06 56.37 L166.38 60 L154.06 63.63 L146.74 69.6 L141.87 77.85 L140 86.38 L138.13 77.85 L133.26 69.6 L125.94 63.63 L113.62 60 L125.94 56.37 L133.26 50.4 L138.13 42.15 Z" fill="#FFFFFF"/>
+        </svg></div>
+        <div id="f6-wordwrap"><img id="f6-word" src="assets/nxtlvl-wordmark.png" alt="nxtlvl" width="560" height="130" /></div>
+      </div>
+      <div id="f6-line" class="bx-h"><span id="f6-l0">Your</span><span id="f6-l1">entire</span><span id="f6-l2">creative</span><span id="f6-l3">team,</span><span id="f6-l4" class="bx-it">in one studio</span></div>
+      <div id="f6-cta"><div id="f6-btn" class="bx-btn">Book a free call<span class="bx-arrow"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div>
+      <div id="f6-url">nxtlvlsocial.ai</div>
+
+      <div id="f6-streak"><div id="f6-trail"></div><div id="f6-head"></div></div>
+      <div id="f6-flash"></div>
+      <div id="f6-ripple" class="bx-ripple"></div>
+      <div id="f6-cursor" class="bx-cursor" data-layout-allow-overflow><svg viewBox="0 0 24 24"><path d="M5 3l14 8.5-6.2 1.4 3.6 6.6-2.6 1.4-3.6-6.6L5 19z" fill="#fff" stroke="#7D18FC" stroke-width="1.4" stroke-linejoin="round"/></svg></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var STRIKE = 0.5;                                   // 27.5 s on the film: the bell
+
+      // the burst: 26 sparks on index-derived angles (deterministic)
+      var burst = document.getElementById("f6-burst"), sparks = [];
+      for (var i = 0; i < 26; i++) { var s = document.createElement("i"); s.id = "f6-sp" + i; burst.appendChild(s); sparks.push({ el: s, a: (i / 26) * Math.PI * 2 + (i % 3) * 0.07, r: 260 + (i * 37) % 180, sz: 0.5 + (i % 4) * 0.25 }); }
+
+      gsap.set("#f6-flash", { opacity: 0 });
+      gsap.set(["#f6-ring", "#f6-ring2"], { scale: 0.1, opacity: 0 });
+      gsap.set("#f6-mark", { scale: 0, opacity: 0 });
+      gsap.set(["#f6-t0", "#f6-t1", "#f6-t2"], { scale: 0, transformOrigin: "100% 0%" });
+      gsap.set("#f6-word", { clipPath: "inset(0 100% 0 0)" });
+      gsap.set("#f6-bloom", { scale: 0.3, opacity: 0 });
+      gsap.set(["#f6-l0", "#f6-l1", "#f6-l2", "#f6-l3", "#f6-l4"], { opacity: 0 });
+      gsap.set("#f6-btn", { scale: 0, opacity: 0 });
+      gsap.set("#f6-url", { opacity: 0 });
+      gsap.set("#f6-cursor", { x: 1700, y: 1160 });
+      gsap.set("#f6-ripple", { x: 1700, y: 1160, scale: 0.2, opacity: 0 });
+      gsap.set("#f6-streak", { rotation: -42 });
+      sparks.forEach(function (p) { gsap.set(p.el, { x: 0, y: 0, scale: p.sz, opacity: 0 }); });
+
+      // 0.0 → 0.5  the streak flies in from bottom-left (the stage is rotated -42°, so the trail points back along the path)
+      tl.fromTo("#f6-streak", { x: -1180, y: 1080 }, { x: 0, y: 0, duration: STRIKE, ease: "power2.in" }, 0);
+      tl.fromTo("#f6-trail", { scaleX: 0.2, opacity: 0 }, { scaleX: 1.5, opacity: 1, duration: STRIKE, ease: "power2.in" }, 0);
+      tl.fromTo("#f6-head", { scale: 0.6, rotation: 0 }, { scale: 1.3, rotation: 180, duration: STRIKE, ease: "power2.in" }, 0);
+      // the strike: one white frame, two rings, the burst, the trail gone
+      tl.set("#f6-flash", { opacity: 1 }, STRIKE);
+      tl.to("#f6-flash", { opacity: 0, duration: 0.35, ease: "power3.out" }, STRIKE + 1 / 30);
+      tl.set(["#f6-trail", "#f6-head"], { opacity: 0 }, STRIKE);
+      tl.fromTo("#f6-ring", { scale: 0.1, opacity: 0.95 }, { scale: 3.2, opacity: 0, duration: 0.8, ease: "power3.out" }, STRIKE);
+      tl.fromTo("#f6-ring2", { scale: 0.1, opacity: 0.8 }, { scale: 4.6, opacity: 0, duration: 1.0, ease: "power3.out" }, STRIKE + 0.08);
+      sparks.forEach(function (p, i) {
+        tl.fromTo(p.el, { x: 0, y: 0, opacity: 1 }, { x: Math.cos(p.a) * p.r, y: Math.sin(p.a) * p.r, opacity: 0, duration: 0.55 + (i % 3) * 0.1, ease: "power3.out" }, STRIKE);
+      });
+      tl.to("#f6-bloom", { scale: 1, opacity: 1, duration: 0.8, ease: "power3.out" }, STRIKE);
+
+      // 0.52  the mark is born from the strike: the star springs, the three trails draw out behind it
+      tl.fromTo("#f6-mark", { scale: 0, opacity: 0, rotation: -40 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.9, ease: "elastic.out(1, 0.5)" }, STRIKE + 0.02);
+      ["#f6-t0", "#f6-t1", "#f6-t2"].forEach(function (t, i) {
+        tl.fromTo(t, { scale: 0 }, { scale: 1, duration: 0.5, ease: "power4.out" }, STRIKE + 0.22 + i * 0.08);
+      });
+      // 1.15  the wordmark wipes in beside it
+      tl.to("#f6-word", { clipPath: "inset(0 0% 0 0)", duration: 0.45, ease: "power3.out" }, 1.15);
+
+      // 1.6  the line, word by word, blur in; no translate
+      ["#f6-l0", "#f6-l1", "#f6-l2", "#f6-l3", "#f6-l4"].forEach(function (w, i) {
+        tl.fromTo(w, { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.22, ease: "power2.out" }, 1.6 + i * 0.08);
+      });
+
+      // 2.6  the CTA springs up; the cursor arrives and presses it at 3.0 (30.0 s); the URL lands under it
+      tl.fromTo("#f6-btn", { scale: 0.5, opacity: 0, y: 30 }, { scale: 1, opacity: 1, y: 0, duration: 0.55, ease: "back.out(1.6)" }, 2.4);
+      tl.to("#f6-cursor", { x: 1012, y: 770, duration: 0.55, ease: "power3.out" }, 2.5);
+      tl.to("#f6-cursor", { scale: 0.86, duration: 0.08, ease: "power2.in" }, 3.0);
+      tl.to("#f6-cursor", { scale: 1, duration: 0.3, ease: "back.out(2)" }, 3.08);
+      tl.to("#f6-btn", { scale: 0.93, duration: 0.08, ease: "power2.in" }, 3.0);
+      tl.to("#f6-btn", { scale: 1, duration: 0.36, ease: "back.out(2.2)" }, 3.08);
+      tl.set("#f6-ripple", { x: 1012, y: 770, scale: 0.2, opacity: 0.9 }, 3.0);
+      tl.to("#f6-ripple", { scale: 1.8, opacity: 0, duration: 0.5, ease: "power2.out" }, 3.02);
+      tl.to("#f6-cursor", { x: 1100, y: 860, opacity: 0, duration: 0.4, ease: "power2.in" }, 3.5);
+      tl.fromTo("#f6-url", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 2.75);
+      // hold dead still to the end
+
+      tl.seek(0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["06-endcard"] = tl;
+    })();
+  </script>
+</template>
