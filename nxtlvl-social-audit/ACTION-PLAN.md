@@ -20,7 +20,7 @@ SEO Health Score: **76/100** (was 50, then 72). Phase 1 must be done before the 
 ## Phase 1: Before launch (Critical) (Week 1)
 
 - [x] Email is connect@nxtlvlsocial.ai; a booking form posts to the backend (backend/), with a mailto fallback.
-- [ ] Replace the WhatsApp number (910000000000 / +91 00000 00000) in index.html, then remove the placeholder note.
+- [x] Contact is email-only for now: the WhatsApp placeholder number, links and note were removed (27 Oct 2026).
 - [ ] Confirm the domain is nxtlvlsocial.ai (taken from the connect@ email); if not, replace it in the head tags, JSON-LD, robots.txt, sitemap.xml and backend/wrangler.toml.
 - [x] Self-hosted fonts, web manifest, robots meta, keyword-rich hero copy, 44 px tap targets, cached logo, llms.txt (round 2).
 - [ ] Deploy the whole website/ folder to the domain root over HTTPS with gzip or brotli.
@@ -37,9 +37,18 @@ SEO Health Score: **76/100** (was 50, then 72). Phase 1 must be done before the 
 
 - [ ] Add an About/team block with real names and faces.
 - [ ] Publish two or three case studies of real client work with numbers; restore the testimonials with real quotes.
-- [ ] Add one page per core service and per main industry, linked from the home page.
+- [x] One page per core service, linked from the home page, footer, sitemap and llms.txt (27 Oct 2026).
+- [ ] One page per main industry (cafés, salons, gyms, clinics), each with real examples.
 - [ ] Name the source of the "typical market rates" comparison.
 - [ ] Collect real Google reviews through the Business Profile.
+
+## Done: SEO and AEO round, 27 Oct 2026
+
+- [x] Service pages: /social-media-design, /reel-editing, /social-media-automation, each answer-first with an at-a-glance facts card,
+      question headings with direct answers, Service, WebPage and BreadcrumbList schema, unique title and description.
+- [x] Home page: "At a glance" definition and facts block, WebPage node, contactPoint, service URLs in the offer catalogue.
+- [x] Real 404 page (noindex) and the Worker now returns a 404 status for unknown paths instead of the home page.
+- [x] sitemap.xml lists all four pages; llms.txt rewritten as a facts sheet with links.
 
 ## Phase 4: Monitoring (Ongoing)
 

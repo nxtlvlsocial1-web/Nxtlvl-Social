@@ -24,7 +24,7 @@ export default {
       if (request.method !== 'POST') return json({ ok: false, error: 'Use POST.' }, 405, cors(request, env));
       return book(request, env, ctx);
     }
-    // everything else is the website (Workers static assets); a missing route falls back to the page
+    // everything else is the website (Workers static assets); an unknown path gets 404.html with a 404 status
     if (env.ASSETS) return env.ASSETS.fetch(request);
     return json({ ok: false, error: 'Not found.' }, 404);
   },

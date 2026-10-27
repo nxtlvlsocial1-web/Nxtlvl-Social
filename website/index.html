@@ -43,6 +43,7 @@
       "slogan": "Your entire creative team, for less than one reel",
       "areaServed": {"@type": "Country", "name": "India"},
       "email": "connect@nxtlvlsocial.ai",
+      "contactPoint": {"@type": "ContactPoint", "contactType": "sales", "email": "connect@nxtlvlsocial.ai", "areaServed": "IN", "availableLanguage": "en"},
       "knowsAbout": ["Social media management", "Social media design", "Reels and short-form video editing", "Ad creatives", "Social media automation"],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
@@ -53,21 +54,21 @@
             "name": "Content & Design",
             "description": "Social posts, carousels, story sets, posters, menus and festival creatives, with a brand kit set up in week one.",
             "priceSpecification": {"@type": "UnitPriceSpecification", "minPrice": 5, "priceCurrency": "USD", "unitText": "MONTH"},
-            "itemOffered": {"@type": "Service", "name": "Content & Design", "serviceType": "Social media design"}
+            "itemOffered": {"@type": "Service", "name": "Content & Design", "serviceType": "Social media design", "url": "https://nxtlvlsocial.ai/social-media-design"}
           },
           {
             "@type": "Offer",
             "name": "Video & Editing",
             "description": "Reels and shorts cut and captioned, product and talking-head videos, motion graphics, hooks and thumbnails, plus everything in Content & Design.",
             "priceSpecification": {"@type": "UnitPriceSpecification", "minPrice": 15, "priceCurrency": "USD", "unitText": "MONTH"},
-            "itemOffered": {"@type": "Service", "name": "Video & Editing", "serviceType": "Short-form video editing"}
+            "itemOffered": {"@type": "Service", "name": "Video & Editing", "serviceType": "Short-form video editing", "url": "https://nxtlvlsocial.ai/reel-editing"}
           },
           {
             "@type": "Offer",
             "name": "Social + Automation",
             "description": "Automated posting and replies, an on-site shoot, a full scheduled calendar, enquiries routed to WhatsApp and a monthly report, plus everything in the other plans.",
             "priceSpecification": {"@type": "UnitPriceSpecification", "minPrice": 49, "priceCurrency": "USD", "unitText": "MONTH"},
-            "itemOffered": {"@type": "Service", "name": "Social + Automation", "serviceType": "Social media management"}
+            "itemOffered": {"@type": "Service", "name": "Social + Automation", "serviceType": "Social media management", "url": "https://nxtlvlsocial.ai/social-media-automation"}
           }
         ]
       }
@@ -79,6 +80,23 @@
       "name": "Nxtlvl Social",
       "inLanguage": "en-IN",
       "publisher": {"@id": "https://nxtlvlsocial.ai/#org"}
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://nxtlvlsocial.ai/#webpage",
+      "url": "https://nxtlvlsocial.ai/",
+      "name": "Social Media Content & Automation from $5/mo | Nxtlvl Social",
+      "description": "Design, reels, posting and DM automation for cafés, salons, gyms and shops. Your whole social media team from $5 a month. No contracts.",
+      "inLanguage": "en-IN",
+      "isPartOf": {"@id": "https://nxtlvlsocial.ai/#website"},
+      "about": {"@id": "https://nxtlvlsocial.ai/#org"},
+      "primaryImageOfPage": {"@type": "ImageObject", "url": "https://nxtlvlsocial.ai/og-image.png", "width": 1200, "height": 630},
+      "dateModified": "2026-10-27",
+      "hasPart": [
+        {"@type": "WebPage", "name": "Social media design", "url": "https://nxtlvlsocial.ai/social-media-design"},
+        {"@type": "WebPage", "name": "Reel and video editing", "url": "https://nxtlvlsocial.ai/reel-editing"},
+        {"@type": "WebPage", "name": "Social media automation", "url": "https://nxtlvlsocial.ai/social-media-automation"}
+      ]
     }
   ]
 }
@@ -580,6 +598,14 @@ h1 .it{
 .svc .txt{display:flex; flex-direction:column; flex:1; min-width:0}
 .svc>p,.svc>.viz{margin-bottom:22px}
 .svc .txt .tag{margin-top:18px}
+/* each service card links to its own page */
+.svc-foot{display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; margin-top:auto}
+.svc .txt .svc-foot{margin-top:18px}
+.svc-foot .tag{margin-top:0 !important}
+.svc-more{display:inline-flex; align-items:center; gap:6px; min-height:36px; font-size:13.5px; font-weight:600; color:var(--violet-pale); text-decoration:none; position:relative; z-index:2}
+.svc-more .ic{font-size:14px; transition:transform var(--t2) var(--out)}
+.svc-more:hover{color:#fff}
+.svc-more:hover .ic{transform:translate(3px,-2px)}
 .viz{position:relative; pointer-events:none}
 
 /* wide cards put the picture beside the words */
@@ -2054,6 +2080,19 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 .motion-note .x{flex:none; width:32px; height:32px; border-radius:50%; border:1px solid var(--line-2); background:none; color:var(--muted); cursor:pointer; font-size:16px; line-height:1}
 @media(max-width:979px){ .motion-note{bottom:calc(84px + env(safe-area-inset-bottom,0px))} }
 
+/* ---------- at a glance: the short, quotable answer to "what is Nxtlvl Social?" ---------- */
+.glance-def strong{color:var(--fg); font-weight:600}
+.glance{margin:40px auto 0; max-width:980px; display:grid; gap:12px}
+@media(min-width:720px){ .glance{grid-template-columns:1fr 1fr} }
+.glance div{padding:18px 20px; border-radius:var(--r-md); border:1px solid var(--line); background:var(--card); position:relative; overflow:hidden;
+  transition:border-color var(--t2), transform var(--t3) var(--out), background var(--t2)}
+.glance div::before{content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background:linear-gradient(var(--violet-lift),transparent); opacity:.6}
+.glance div:hover{border-color:var(--line-2); background:rgba(125,24,252,.07); transform:translateY(-3px)}
+.glance dt{font-size:11.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--faint)}
+.glance dd{margin:6px 0 0; font-size:15px; line-height:1.55; color:var(--fg)}
+.glance a{color:var(--violet-pale); text-underline-offset:3px}
+.glance a:hover{color:#fff}
+
 /* ================= the deck: sample post designs that deal in, fan out and flip ================= */
 .deck-sec{overflow:clip}
 .deck-sec .wrap{position:relative; z-index:1}
@@ -2063,9 +2102,22 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 @media(min-width:900px){ .deck{flex-wrap:wrap; justify-content:center; overflow:visible; max-width:var(--wrap); margin-inline:auto} }
 .dcard{
   --cw:min(72vw,232px); flex:none; width:var(--cw); aspect-ratio:4/5; padding:0; border:0; background:none; color:inherit;
-  font:inherit; text-align:left; cursor:pointer; scroll-snap-align:center; perspective:1100px; position:relative;
+  font:inherit; text-align:left; cursor:pointer; scroll-snap-align:center; perspective:1100px; position:relative; transform-style:preserve-3d;
 }
-.dc-lift{display:block; width:100%; height:100%; transition:transform .5s var(--out)}
+.dc-lift{display:block; position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .5s var(--out)}
+.dcard.tilting .dc-lift{transition:transform .2s linear}
+/* a neon edge that runs round the card while it is lifted */
+@property --ang{syntax:'<angle>'; inherits:false; initial-value:0deg}
+.dc-lift::before{content:''; position:absolute; inset:-2px; border-radius:calc(var(--r-lg) + 2px); pointer-events:none; opacity:0; transform:translateZ(-1px);
+  background:conic-gradient(from var(--ang),transparent 0 18%,rgba(125,24,252,.9) 26%,#fff 31%,#A95CFF 36%,transparent 48% 68%,#D8BBFF 78%,transparent 88%);
+  transition:opacity .4s var(--out); animation:dcSpin 3.2s linear infinite paused}
+@keyframes dcSpin{to{--ang:360deg}}
+@keyframes dcFloat{50%{translate:0 -9px}}
+/* holographic foil and a glare that follow the pointer */
+.dc-front::before{content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0; transition:opacity .45s var(--out); mix-blend-mode:color-dodge;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.42),transparent 42%),
+    linear-gradient(115deg,transparent 18%,rgba(169,92,255,.32) 32%,rgba(216,187,255,.42) 44%,rgba(125,24,252,.3) 56%,rgba(255,196,107,.18) 64%,transparent 76%);
+  background-size:100% 100%,220% 220%; background-position:center,var(--mx,50%) var(--my,50%)}
 .dc-in{display:block; position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .85s var(--out)}
 .dcard.flip .dc-in{transform:rotateY(180deg)}
 .dc-face{
@@ -2076,7 +2128,14 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 .dc-front::after{content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
   background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.13) 48%,transparent 60%); background-size:250% 100%; background-position:120% 0;
   transition:background-position 1s var(--out)}
-@media(hover:hover){ .dcard:hover .dc-front::after{background-position:-30% 0} .dcard:hover .dc-lift{transform:translateY(-22px) scale(1.04)} }
+@media(hover:hover){
+  .dcard:hover .dc-front::after{background-position:-30% 0}
+  .dcard:hover .dc-front::before{opacity:1}
+  .dcard:hover .dc-lift{transform:translateY(-24px) scale(1.06) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}
+  .dcard:hover .dc-lift::before{opacity:1; animation-play-state:running}
+  .dcard:hover .dc-face{box-shadow:0 46px 80px -30px rgba(125,24,252,.75), 0 0 0 1px rgba(255,255,255,.06) inset}
+}
+html.rm .dc-lift::before{animation:none}
 .dcard:focus-visible{outline:none}
 .dcard:focus-visible .dc-face{outline:2px solid var(--violet-lift); outline-offset:3px}
 .dc-a1{background:radial-gradient(120% 80% at 80% 0%,rgba(255,196,107,.28),transparent 60%),linear-gradient(160deg,#2A1260,#120A2A)}
@@ -2125,7 +2184,14 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 .dc-stars i{width:26px; height:26px; background:rgba(255,255,255,.18);
   clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
 /* the back of each card */
-.dc-back{transform:rotateY(180deg); background:linear-gradient(160deg,#1B1036,#0A0618); gap:10px; justify-content:center}
+.dc-back{transform:rotateY(180deg); gap:10px; justify-content:center;
+  background:radial-gradient(1px 1px at 18% 22%,rgba(255,255,255,.7),transparent 2px),radial-gradient(1px 1px at 72% 14%,rgba(255,255,255,.5),transparent 2px),
+    radial-gradient(1.5px 1.5px at 86% 62%,rgba(216,187,255,.7),transparent 3px),radial-gradient(1px 1px at 30% 84%,rgba(255,255,255,.45),transparent 2px),
+    radial-gradient(90% 60% at 100% 100%,rgba(125,24,252,.35),transparent 60%),linear-gradient(160deg,#1B1036,#0A0618)}
+/* the back carries the star, so a card dealt face-down still reads as ours */
+.dc-back::after{content:''; position:absolute; right:-22px; bottom:-22px; width:130px; height:130px; pointer-events:none; opacity:.14;
+  background:linear-gradient(135deg,#D8BBFF,#7D18FC); clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%)}
+.dc-back>*{position:relative; z-index:1}
 .dc-bh{font-family:var(--d); font-weight:800; font-size:20px; color:#fff; margin-bottom:4px}
 .dc-row{display:block; font-size:13px; color:var(--fg); padding-bottom:8px; border-bottom:1px solid var(--line)}
 .dc-row b{display:block; font-size:10.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); margin-bottom:2px}
@@ -2165,7 +2231,8 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   .deck-live .deck-track{height:250vh; height:250svh}
   .deck-live .deck-stage{position:sticky; top:0; height:100vh; height:100svh; display:flex; flex-direction:column; justify-content:center; padding-top:64px}
   .deck-live .deck-stage .head p{margin-top:14px}
-  .deck-live .deck{display:block; position:relative; height:300px; max-width:none; padding:0; margin-top:44px; overflow:visible}
+  .deck-live .deck{display:block; position:relative; height:300px; max-width:none; padding:0; margin-top:44px; overflow:visible; perspective:1800px}
+  .deck-live.deck-on .dc-lift{animation:dcFloat 5.5s ease-in-out infinite; animation-delay:calc(var(--i,0) * -.9s)}
   .deck-live .dcard{position:absolute; left:50%; top:50%; margin:-135px 0 0 -108px; --cw:216px; will-change:transform}
   .deck-live .dcard:hover{z-index:20 !important}
   .deck-live .deck-hint{margin-top:40px}
@@ -2837,7 +2904,7 @@ html.rm .sdiv i,html.rm .sdiv b{display:none}
           <div class="svc-ic"><svg class="ic" aria-hidden="true"><use href="#i-palette"/></svg></div>
           <h3>Visuals &amp; design</h3>
           <p>Social posts, carousels, story sets, posters, menus, price lists, festival creatives and ad banners — all built on a brand kit so your feed looks like one business, not twelve.</p>
-          <span class="tag">from $5/month</span>
+          <span class="svc-foot"><span class="tag">from $5/month</span><a class="svc-more" href="/social-media-design" data-file="social-media-design.html">Social media design<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></span>
         </div>
         <div class="viz viz-stack" data-scrub="grow" aria-hidden="true">
           <div class="vcard vc-car g5"><small>1/6</small><b>5 ways<br>to style<br>it</b><span class="vc-dots"><s></s><s></s><s></s><s></s></span></div>
@@ -2854,7 +2921,7 @@ html.rm .sdiv i,html.rm .sdiv b{display:none}
           <div class="scrub-wave"><i style="--h:30%"></i><i style="--h:55%"></i><i style="--h:80%"></i><i style="--h:45%"></i><i style="--h:95%"></i><i style="--h:60%"></i><i style="--h:35%"></i><i style="--h:70%"></i><i style="--h:50%"></i><i style="--h:85%"></i><i style="--h:40%"></i><i style="--h:65%"></i><i style="--h:30%"></i><i style="--h:75%"></i><i style="--h:55%"></i><i style="--h:90%"></i><i style="--h:45%"></i><i style="--h:60%"></i><i style="--h:35%"></i><i style="--h:70%"></i><i style="--h:50%"></i><i style="--h:40%"></i><i style="--h:80%"></i><i style="--h:55%"></i></div>
           <div class="scrub-head"></div>
         </div>
-        <span class="tag">from $15/month</span>
+        <span class="svc-foot"><span class="tag">from $15/month</span><a class="svc-more" href="/reel-editing" data-file="reel-editing.html">Reel editing<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></span>
       </article>
       <article class="svc s-shoot rv">
         <div class="svc-ic"><svg class="ic" aria-hidden="true"><use href="#i-camera"/></svg></div>
@@ -2866,7 +2933,7 @@ html.rm .sdiv i,html.rm .sdiv b{display:none}
         <div class="svc-ic"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></div>
         <h3>Social media management</h3>
         <p>The calendar, the posting, captions, hashtags, replies and a monthly report. You approve from WhatsApp in two minutes a week; we run everything else.</p>
-        <span class="tag">in the $49 plan</span>
+        <span class="svc-foot"><span class="tag">in the $49 plan</span><a class="svc-more" href="/social-media-automation" data-file="social-media-automation.html">Management<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></span>
       </article>
       <article class="svc s-ads rv">
         <div class="svc-ic"><svg class="ic" aria-hidden="true"><use href="#i-target"/></svg></div>
@@ -2879,7 +2946,7 @@ html.rm .sdiv i,html.rm .sdiv b{display:none}
           <div class="svc-ic"><svg class="ic" aria-hidden="true"><use href="#i-flow"/></svg></div>
           <h3>Automation</h3>
           <p>Posts go out on schedule without you. DM and comment replies answer the common questions, new enquiries drop straight into your WhatsApp or sheet, and review requests go out after a sale.</p>
-          <span class="tag">from $49/month</span>
+          <span class="svc-foot"><span class="tag">from $49/month</span><a class="svc-more" href="/social-media-automation" data-file="social-media-automation.html">Social media automation<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></span>
         </div>
         <div class="viz viz-flow" aria-hidden="true">
           <div class="flow-row">
@@ -3244,6 +3311,26 @@ html.rm .sdiv i,html.rm .sdiv b{display:none}
 </section>
 </template>
 
+<section class="band glance-sec" id="glance" aria-labelledby="glance-h">
+  <div class="wrap">
+    <div class="head mid rv">
+      <span class="eyebrow">At a glance</span>
+      <h2 id="glance-h">Nxtlvl Social, <span class="it">in one minute</span></h2>
+      <p class="glance-def" style="margin-inline:auto"><strong>Nxtlvl Social is a creative and automation studio for small businesses.</strong> It designs social media posts, edits reels and short videos, publishes them on schedule and automates the replies, on monthly plans from $5 a month with no contract.</p>
+    </div>
+    <dl class="glance rv">
+      <div><dt>Who it's for</dt><dd>Cafés, restaurants, salons, gyms, clinics, shops, home bakers, coaching centres and other businesses people walk into.</dd></div>
+      <div><dt>Plans</dt><dd><a href="/social-media-design" data-file="social-media-design.html">Content &amp; Design</a> from $5/month · <a href="/reel-editing" data-file="reel-editing.html">Video &amp; Editing</a> from $15/month · <a href="/social-media-automation" data-file="social-media-automation.html">Social + Automation</a> from $49/month</dd></div>
+      <div><dt>First drafts</dt><dd>Designs the same day or next day. Videos within 48 hours.</dd></div>
+      <div><dt>Contract</dt><dd>None. Month to month, no setup fee, no notice period.</dd></div>
+      <div><dt>Your files</dt><dd>Yours to keep, source files and brand kit included.</dd></div>
+      <div><dt>Quality</dt><dd>AI drafts, a designer finishes. Nothing posts until you approve it.</dd></div>
+      <div><dt>Where</dt><dd>Online, for businesses across India. On-site shoots within our service area.</dd></div>
+      <div><dt>How to start</dt><dd>A free 15-minute call: <a href="#contact">book it here</a> or email <a href="mailto:connect@nxtlvlsocial.ai">connect@nxtlvlsocial.ai</a>.</dd></div>
+    </dl>
+  </div>
+</section>
+
 <section class="band" id="faq" style="background:var(--ground); border-block:1px solid var(--line)">
   <div class="wrap">
     <div class="faq-grid">
@@ -3418,9 +3505,10 @@ html.rm .sdiv i,html.rm .sdiv b{display:none}
     </a>
     <div class="foot-links">
       <a href="#who">Who it's for</a><a href="#maths">The maths</a><a href="#services">Services</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
+      <a href="/social-media-design" data-file="social-media-design.html">Social media design</a><a href="/reel-editing" data-file="reel-editing.html">Reel editing</a><a href="/social-media-automation" data-file="social-media-automation.html">Social media automation</a>
     </div>
     <button class="motion-sw" type="button" role="switch" aria-checked="true" data-motion><i aria-hidden="true"></i>Animations</button>
-    <div class="copyright">© <span id="yr">2026</span> Nxtlvl Social — AI-driven creative studio. Design, video and social media for small businesses.</div>
+    <div class="copyright">© <span id="yr">2026</span> Nxtlvl Social — AI-driven creative studio. Design, video and social media for small businesses. Updated <time datetime="2026-10-27">October 2026</time>.</div>
   </div>
 </footer>
 
@@ -5014,7 +5102,23 @@ html.rm .sdiv i,html.rm .sdiv b{display:none}
   var deckSec = document.getElementById('deck'), deckTrack = document.getElementById('deckTrack');
   if(deckSec && deckTrack){
     var dcards = Array.prototype.slice.call(deckSec.querySelectorAll('.dcard'));
-    dcards.forEach(function(c){
+    var hov = -1, push = dcards.map(function(){ return 0; });
+    dcards.forEach(function(c, i){
+      c.style.setProperty('--i', i);
+      /* on a fine pointer the lifted card tilts toward the cursor and its foil follows it */
+      if(!reduce && window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+        c.addEventListener('pointerenter', function(){ hov = i; queue(); });
+        c.addEventListener('pointermove', function(e){
+          var r = c.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+          c.classList.add('tilting');
+          c.style.setProperty('--ry', ((px - .5) * 16).toFixed(2) + 'deg'); c.style.setProperty('--rx', ((.5 - py) * 13).toFixed(2) + 'deg');
+          c.style.setProperty('--mx', (px * 100).toFixed(1) + '%'); c.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+        });
+        c.addEventListener('pointerleave', function(){
+          c.classList.remove('tilting'); c.style.removeProperty('--rx'); c.style.removeProperty('--ry');
+          if(hov === i){ hov = -1; queue(); }
+        });
+      }
       c.addEventListener('click', function(){
         var on = !c.classList.contains('flip');
         c.classList.toggle('flip', on); c.setAttribute('aria-pressed', on ? 'true' : 'false');
@@ -5031,26 +5135,34 @@ html.rm .sdiv i,html.rm .sdiv b{display:none}
       if(!live) return;
       var r = deckTrack.getBoundingClientRect(), vh = window.innerHeight, span = r.height - vh;
       var p = clamp(-r.top / (span > 0 ? span : 1));
-      var n = dcards.length, mid = (n - 1) / 2, spread = Math.max(110, Math.min((window.innerWidth - 380) / 5, 200));
+      var n = dcards.length, mid = (n - 1) / 2, spread = Math.max(110, Math.min((window.innerWidth - 380) / 5, 200)), moving = false;
       dcards.forEach(function(c, i){
         var di = eo(clamp((p - i * .055) / .3)), f = eio(clamp((p - .45) / .38)), side = i % 2 ? 1 : -1, o = i - mid;
         /* dealt from below the stage, to a neat stack, to a fan */
-        var sx = side * 140, sy = vh * .75, sr = side * 28;
+        var sx = side * 160, sy = vh * .85, sr = side * 30;
         var kx = (i - mid) * 2, ky = -i * 3, kr = o * 2.2;
         var fx = o * spread, fy = o * o * 9, fr = o * 6.5;
         var x = sx + (kx - sx) * di, y = sy + (ky - sy) * di, rot = sr + (kr - sr) * di;
         x += (fx - x) * f; y += (fy - y) * f; rot += (fr - rot) * f;
-        c.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) rotate(' + rot.toFixed(2) + 'deg)';
-        c.style.opacity = Math.min(1, di * 1.6).toFixed(3);
+        /* once fanned, the cards beside the one under the pointer lean away to give it room */
+        var want = (hov >= 0 && hov !== i && f > .85) ? (i > hov ? 1 : -1) * Math.max(14, 46 - (Math.abs(i - hov) - 1) * 14) : 0;
+        push[i] += (want - push[i]) * .2;
+        if(Math.abs(want - push[i]) > .3) moving = true;
+        x += push[i];
+        /* dealt face-down: each card turns over as it lands */
+        var flipY = -180 * (1 - di);
+        c.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) rotate(' + rot.toFixed(2) + 'deg) rotateY(' + flipY.toFixed(1) + 'deg)';
+        c.style.visibility = di > 0 ? 'visible' : 'hidden';
         c.style.zIndex = i + 1;
       });
+      if(moving) queue();
     };
     var queue = function(){ if(live && dNear && !dRaf) dRaf = requestAnimationFrame(place); };
     var setLive = function(){
       var want = !reduce && !tallPage && wideQ.matches;
       if(want === live) return;
       live = want; deckSec.classList.toggle('deck-live', live);
-      if(!live) dcards.forEach(function(c){ c.style.transform = ''; c.style.opacity = ''; c.style.zIndex = ''; });
+      if(!live) dcards.forEach(function(c){ c.style.transform = ''; c.style.visibility = ''; c.style.zIndex = ''; });
       else queue();
     };
     setLive();
@@ -6360,6 +6472,13 @@ function buildStar(THREE, host, reduce){
   /* the motion switch can turn it back on later */
   new MutationObserver(wake).observe(d, {attributes:true, attributeFilter:['class']});
   wake();
+})();
+</script>
+<script>
+/* clean links (/social-media-design) on the live site; file links anywhere else (local preview), so every link works */
+(function(){
+  if(/(^|\.)nxtlvlsocial\.ai$/.test(location.hostname) || /workers\.dev$/.test(location.hostname)) return;
+  document.querySelectorAll('a[data-file]').forEach(function(a){ a.setAttribute('href', a.getAttribute('data-file')); });
 })();
 </script>
 </body>
