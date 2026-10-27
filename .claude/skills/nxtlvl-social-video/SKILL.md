@@ -64,6 +64,7 @@ brands/<client-slug>/
   brand.md        # colours (hex), fonts, tone of voice, do / don't
   logo.svg        # primary logo; logo-light.svg for dark backgrounds
   fonts/          # licensed font files, if not on Google Fonts
+  dm-automations.yaml  # Instagram comment-to-DM keywords and auto-replies (/nxtlvl-instagram-dm)
 ```
 
 Use the kit's colours and fonts exactly; pass them to `/hyperframes-creative` as the design spec.
@@ -83,3 +84,5 @@ Nxtlvl Social's own kit is `brands/nxtlvl/` — fill it in before using it as th
 - MP4, H.264, AAC audio, under 100 MB per file.
 - Deliver every requested format plus a 1-frame cover image (`.png`, same size) per format.
 - In the final reply, list each file with its platform, size, duration and path.
+- If the CTA says "Comment KEYWORD and I'll DM you ...", set up the keyword with `/nxtlvl-instagram-dm`
+  before the video is posted, so the DM goes out as soon as people comment.

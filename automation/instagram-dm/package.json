@@ -1,0 +1,22 @@
+{
+  "name": "instagram-dm",
+  "private": true,
+  "type": "module",
+  "description": "Comment-to-DM, DM auto-replies and welcome messages on Meta's official Instagram API",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "start": "node src/server.ts",
+    "test": "node --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc",
+    "check-rules": "node src/check-rules.ts"
+  },
+  "dependencies": {
+    "yaml": "2.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "typescript": "5.9.3"
+  }
+}
