@@ -819,7 +819,7 @@ function animOutside(t) {
       const r0 = 1.0 + hash(i + 1) * 2.4, th = hash(i + 2) * Math.PI * 2 + ph * 5.5 + t * .4, y0 = .1 + hash(i + 3) * 3.0;
       const r = r0 * Math.pow(1 - ph, 1.25);
       tP.set(Math.cos(th) * r, lerp(y0, 1.15, Math.pow(ph, 1.4)), .06 + Math.sin(th) * r * .8 + (1 - ph) * .2);
-      tS.setScalar(gv * (1 - Math.pow(ph, 4)) * (.6 + hash(i + 4) * .9));
+      tS.setScalar(gv * (1 - Math.pow(ph, 4)) * (.6 + hash(i + 4) * .9) * (window.GA_COVER?.galaxy ?? 1));
       galaxy.setMatrixAt(i, tM.compose(tP, tQ.identity(), tS));
     }
     galaxy.instanceMatrix.needsUpdate = true;
@@ -1087,15 +1087,16 @@ function hitsAt(t) {
 // ---------------------------------------------------------------- render
 function renderAt(t) {
   const tun = t < T.portal, inPhone = between(t, T.in0, T.out1), dark = between(t, T.dark0, T.out1);
-  const [p, q, fov] = shot(t);
-  const hits = hitsAt(t), hand = dark ? .006 : .01;
+  const CV = window.GA_COVER;
+  const [p, q, fov] = CV ? [CV.cam, CV.look, CV.fov] : shot(t);
+  const hits = CV ? 0 : hitsAt(t), hand = CV ? 0 : dark ? .006 : .01;
   camera.position.set(p[0] + Math.sin(t * 1.9) * hand + Math.sin(t * 91) * .02 * hits, p[1] + Math.cos(t * 1.6) * hand + Math.cos(t * 77) * .02 * hits, p[2]);
   camera.lookAt(q[0], q[1], q[2]);
   camera.rotateZ((tun ? Math.sin(t * 2.2) * .22 : Math.sin(t * .7) * .012) + Math.sin(t * 61) * .008 * hits
     + (between(t, L[5] - .14, L[6] - .14) ? Math.sin((t - L[5]) * 3) * .08 : 0) + (between(t, T.grows - .12, L[3] - .1) ? -.12 * easeIO(win(t, T.grows, L[3] - .1)) : 0));
   const snaps = [L[5] - .14, L[6] - .14, L[7] - .14, L[3] - .1, T.post + .3];
   const snap = snaps.reduce((a, c) => a + (t >= c ? (1 - easeOut(win(t, c, c + .3))) * 8 : 0), 0);
-  camera.fov = fov + snap + pulse(t, T.in0, .02, .5) * 14 + pulse(t, T.out1, .02, .5) * 10 + pulse(t, T.portal, .02, .5) * 12;
+  camera.fov = CV ? fov : fov + snap + pulse(t, T.in0, .02, .5) * 14 + pulse(t, T.out1, .02, .5) * 10 + pulse(t, T.portal, .02, .5) * 12;
   camera.updateProjectionMatrix(); camera.updateMatrixWorld();
   tunnel.visible = tun; outside.visible = !tun && !inPhone; inside.visible = inPhone;
   // light and air for each world
@@ -1131,11 +1132,21 @@ function renderAt(t) {
   composer.render();
 }
 
+// ---------------------------------------------------------------- cover still (cover.html sets window.GA_COVER)
+// the world as it is at c.t, seen from the cover's own camera; Claude can be moved and the odometer left out
+function renderCover(c) {
+  renderAt(c.t);                                     // renderAt takes its camera from GA_COVER
+  if (c.claude) { cl.root.position.set(...c.claude); cl.root.scale.setScalar(c.claudeScale || .42); cl.root.lookAt(camera.position); }
+  if (c.hideOdo) odo1.g.visible = false;
+  composer.render();
+}
+
 const ready = (async () => {
   await Promise.all(["800 90px Montserrat", "700 30px Montserrat", "500 30px Montserrat", "900 30px Montserrat", "700 34px JBMono", "italic 400 60px ISerif"].map((f) => document.fonts.load(f)));
   drawTextures();
   drawScreen("p|339|");
   renderer.compile(scene, camera);
+  if (window.GA_COVER) { renderCover(window.GA_COVER); window.__coverDone = true; return; }
   renderAt(window.__hfThreeTime || 0);
 })();
 window.__hf = window.__hf || {};
