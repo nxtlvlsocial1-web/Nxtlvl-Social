@@ -30,9 +30,9 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.05;
 
 const scene = new THREE.Scene();
-const BG_STUDIO = new THREE.Color(0x0b0710), BG_CITY = new THREE.Color(0x05030c);
+const BG_STUDIO = new THREE.Color(0x06050b), BG_CITY = new THREE.Color(0x05030c);
 scene.background = BG_STUDIO.clone();
-scene.fog = new THREE.FogExp2(0x120a14, .02);
+scene.fog = new THREE.FogExp2(0x0a0912, .014);
 const camera = new THREE.PerspectiveCamera(38, W / H, .05, 200);
 const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
@@ -147,10 +147,10 @@ const fx = new THREE.PointLight(0xffffff, 0, 7, 1.4); scene.add(fx);            
 
 // ---------------------------------------------------------------- the studio (3 AM bedroom creator setup)
 const studio = grp(scene);
-const floorM = std(0x1a1218, { roughness: .6 });
+const floorM = std(0x13111a, { roughness: .6 });
 const floor = mesh(new THREE.PlaneGeometry(14, 14), floorM, false, true); floor.rotation.x = -Math.PI / 2; studio.add(floor);
 const rug = mesh(new THREE.CircleGeometry(1.6, 48), std(0x2b1d2e, { roughness: .95 }), false, true); rug.rotation.x = -Math.PI / 2; rug.position.set(.1, .005, -.9); studio.add(rug);
-const wallM = std(0x1d1520, { roughness: .92 });
+const wallM = std(0x15131f, { roughness: .92 });
 const backW = mesh(new THREE.PlaneGeometry(14, 8), wallM, false, true); backW.position.set(0, 4, -2.6); studio.add(backW);
 const leftW = mesh(new THREE.PlaneGeometry(10, 8), wallM, false, true); leftW.rotation.y = Math.PI / 2; leftW.position.set(-2.9, 4, 1); studio.add(leftW);
 // acoustic foam: a grid of wedges on the back wall
@@ -469,95 +469,47 @@ const ST = [
   { p: V(1.2, 1.62, -.25), cam: [[.62, 1.45, 2.85], [.75, 1.45, 2.6]], look: [1.15, 1.36, -.25], fov: 40, cl: V(.9, 1.1, .05) },
   { p: V(0, 2.2, -.7), cam: [[-.12, 2.05, 2.5], [.08, 2.05, 2.35]], look: [0, 1.95, -.7], fov: 40, cl: V(.4, 1.64, -.42) },
   { p: V(.75, 2.2, -1.95), cam: [[.45, 2.0, 1.0], [.55, 2.0, .8]], look: [.72, 1.93, -1.95], fov: 40, cl: V(.45, 1.68, -1.65) },
-  { p: V(-.2, 1.88, -2.5), cam: [[-.5, 1.74, .4], [-.48, 1.75, .15]], look: [-.22, 1.62, -2.5], fov: 40, cl: V(-.55, 1.38, -2.1) },
+  { p: V(-.3, 1.8, -2.5), cam: [[-.5, 1.74, .4], [-.48, 1.75, .15]], look: [-.22, 1.62, -2.5], fov: 40, cl: V(-.55, 1.38, -2.1) },
 ];
 for (const s of ST) s.T = [L[3], L[4], L[5], L[6], L[7]][ST.indexOf(s)];
-
-// ---------------------------------------------------------------- the notification swarm (BAD chaos)
-const NOTES = [
-  { i: "S", c: "#ff3b46", h: "Script.doc", b: "0 words · due today", d: "Script · 5 hooks, scored" },
-  { i: "T", c: "#ff8a3d", h: "Thumbnail", b: "thumbnail_FINAL_v7.png", d: "Title + thumbnail · linted" },
-  { i: "E", c: "#ff3b46", h: "Edit", b: "2h 14m of raw footage", d: "Edit list · 4 cuts marked" },
-  { i: "C", c: "#ff5fa2", h: "Comments", b: "99+ unread", d: "Replies drafted · 1 to pin" },
-  { i: "P", c: "#ffb46b", h: "Calendar", b: "Nothing planned this week", d: "Week planned · 5 videos" },
-  { i: "!", c: "#ff3b46", h: "Upload failed", b: "Tap to retry" },
-  { i: "%", c: "#ff8a3d", h: "Render", b: "3% · 4h 12m left" },
-  { i: "@", c: "#ff5fa2", h: "New comment", b: "\"upload when??\"" },
-  { i: "9", c: "#ff3b46", h: "Deadline", b: "Tomorrow, 9:00 AM" },
-  { i: "↓", c: "#ff8a3d", h: "Analytics", b: "Views down this week" },
-];
-// parked spots after Claude's shockwave: the five station ones next to their station, the rest high round the room
-const PARK = [V(-1.05, 2.12, -.2), V(1.38, 2.2, -.1), V(.55, 2.62, -.65), V(1.2, 2.72, -1.8), V(-.62, 2.55, -2.3),
-  V(-1.7, 2.6, -1.2), V(1.75, 2.45, -1.0), V(-.9, 2.9, -.9), V(.2, 2.95, -1.6), V(1.0, .95, .1)];
-const notes = NOTES.map((n, i) => {
-  const g = card2(.5, .125, 1.05); scene.add(g);
-  face(g.userData.front, "note" + i); face(g.userData.back, i < 5 ? "done" + i : "note" + i);
-  g.visible = false;
-  return g;
+const CUT = .15;                                     // each station's hard cut lands this far ahead of its line
+// re-frame each station: distance d, look point cy above/below the panel centre, Claude's corner in panel space
+const FRAME = [{ d: 1.9, cy: -.14, cl: V(.36, -.38, .2), mini: V(-.3, -.3, .18) }, { d: 2.1, cy: -.17, cl: V(.36, -.36, .2), mini: V(-.36, -.34, .16) },
+  { d: 2.4, cy: -.14, cl: V(.4, -.44, .2), mini: null }, { d: 2.25, cy: -.04, cl: V(.34, -.4, .2), mini: V(-.36, .3, .14) },
+  { d: 2.5, cy: -.12, cl: V(.36, -.5, .2), mini: V(-.38, -.46, .16), dir: V(0, .15, 1) }];
+ST.forEach((s, i) => {
+  const f = FRAME[i], look = V(s.p.x, s.p.y + f.cy, s.p.z);
+  const dir = (f.dir ? f.dir.clone() : V(...s.cam[1]).sub(V(...s.look))).normalize();
+  s.cam = [look.clone().addScaledVector(dir, f.d + .28).add(V(.05, .02, 0)).toArray(), look.clone().addScaledVector(dir, f.d).toArray()];
+  s.look = look.toArray();
 });
-const NOTE_IN = (i) => .05 + i * .27;               // they keep coming through the first line
-const ZAP = (i) => T.eleven + .78 + (i - 5) * .07;  // the five extra minis catch the stray ones
-const RESOLVE = (i) => ST[i].T + .35;               // a station's own card flips green as it starts
-function notePos(i, t) {
-  const r = .42 + hash(i) * .42, y = .95 + hash(i + 5) * 1.0;
-  const th = hash(i + 9) * 6.28 + t * (.55 + hash(i + 2) * .6) * (i % 2 ? 1 : -1);
-  const chaos = V(.3 + Math.cos(th) * r, y + Math.sin(t * 2 + i) * .05, -1.05 + Math.sin(th) * r * .62);
-  const k = easeOut(win(t, L[1] - .05, L[1] + .55));
-  return chaos.lerp(PARK[i], k);
-}
-function animNotes(t) {
-  notes.forEach((g, i) => {
-    const a = NOTE_IN(i);
-    let s = backOut(win(t, a, a + .22), 2.2);
-    let p = notePos(i, t), flip = 0;
-    if (i >= 5) s *= 1 - easeIn(win(t, ZAP(i), ZAP(i) + .14));
-    else {
-      flip = easeIO(win(t, RESOLVE(i), RESOLVE(i) + .28));
-      const go = easeIn(win(t, RESOLVE(i) + 1.0, RESOLVE(i) + 1.35));
-      p = p.lerp(ST[i].p, go); s *= 1 - go;
-    }
-    g.visible = s > .002;
-    if (!g.visible) return;
-    // buzz: each card shakes as it lands and with the phone
-    const bz = (pulse(t, a, .02, .35) + (t < L[1] ? pulse((t + i * .13) % 1.1, .05, .02, .25) * .6 : 0));
-    g.position.set(p.x + Math.sin(t * 83 + i) * .012 * bz, p.y + Math.cos(t * 71 + i) * .008 * bz, p.z);
-    g.quaternion.copy(camera.quaternion);
-    g.rotateZ((hash(i + 30) - .5) * .25 * (1 - win(t, L[1], L[1] + .6)) + Math.sin(t * 1.3 + i) * .03);
-    g.rotateY(flip * Math.PI);
-    g.scale.setScalar(Math.max(.001, s) * (t < L[1] ? 1 : .9));
-  });
-}
 
 // ---------------------------------------------------------------- the five stations (ORDER): each one switches off a fire
 const FORMULAS = ["The Statistic", "Someone Else's Result", "The Mistake", "Contrarian Flip", "The Reveal", "The Superlative", "The Clock",
   "I Tried It", "The Question", "Before and After", "The Teardown", "The Stack", "The Warning", "The List", "The Receipt", "The Insider",
   "The Impossible Claim", "The Comparison", "The Origin", "The Deadline", "The Direct Address"];
 const stations = ST.map((s) => { const g = grp(scene, s.p.x, s.p.y, s.p.z); g.lookAt(...s.cam[1]); g.visible = false; return g; });
+const stw = (i, o) => o.clone().applyQuaternion(stations[i].quaternion).add(ST[i].p);
+ST.forEach((s, i) => { s.cl = stw(i, FRAME[i].cl); });
 function holo(parent, w, h, k, x, y, z = 0) { const c = card(w, h, k, 0x140f1e); c.position.set(x, y, z); parent.add(c); return c; }
-const MINI_AT = [V(-.36, -.32, .22), V(.4, -.3, .16), null, V(.38, -.44, .14), V(.44, -.36, .16)];
 
 // 0 /yt-script: the page writes itself while the 21 hook formulas fan out round it
 const s0 = stations[0];
-const page = holo(s0, .5, .66, 1, 0, 0); face(page.userData.face, "page");
+const page = holo(s0, .5, .66, .84, 0, 0); face(page.userData.face, "page");
 const pageLines = [];
 for (let k = 0; k < 9; k++) {
   const w = k === 0 ? .36 : .25 + hash(k + 70) * .15;
   const b = new THREE.Mesh(new THREE.PlaneGeometry(w, .022), new THREE.MeshBasicMaterial({ color: k === 0 ? 0xd97757 : 0x3a3346, toneMapped: false }));
   b.geometry.translate(w / 2, 0, 0); b.position.set(-.2, .14 - k * .052, .006); page.add(b); pageLines.push(b);
 }
-const fcards = FORMULAS.map((f, k) => { const c = holo(s0, .27, .066, 1.1, 0, 0, -.05); face(c.userData.face, "f" + k); return c; });
+const fcard = holo(s0, .48, .115, 1.08, 0, -.24, .06); face(fcard.userData.face, "f0");
 function animS0(t) {
-  pageLines.forEach((b, k) => { b.scale.x = Math.max(.001, easeOut(win(t, L[3] + .12 + k * .14, L[3] + .3 + k * .14))); });
-  fcards.forEach((c, k) => {
-    const a = T.twentyone - .25 + k * .05;
-    const kk = easeOut(win(t, a, a + .32));
-    const th = Math.PI / 2 - k / 21 * Math.PI * 2 + (t - T.twentyone) * .14;
-    const from = MINI_AT[0];
-    c.position.set(lerp(from.x, Math.cos(th) * .42, kk), lerp(from.y, Math.sin(th) * .72, kk), lerp(.2, -.05, kk));
-    c.scale.setScalar(Math.max(.001, backOut(win(t, a, a + .25), 2)));
-    c.rotation.z = (1 - kk) * 1.2;
-    c.visible = t > a;
-  });
+  pageLines.forEach((b, k) => { b.scale.x = Math.max(.001, easeOut(win(t, L[3] - .08 + k * .13, L[3] + .1 + k * .13))); });
+  const a = T.twentyone - .25, z = a + 1.0;
+  fcard.scale.setScalar(Math.max(.001, backOut(win(t, a - .2, a + .05), 2) + pulse(t, z, .04, .25) * .12));
+  const k = t < z ? 1 + Math.floor(easeOut(win(t, a, z)) * 20) % 21 : 0;
+  setMap(fcard.userData.face, "f" + Math.min(20, k));
+  fcard.rotation.x = t < z ? Math.sin(t * 40) * .06 : 0;
 }
 
 // 1 /yt-package: the thumbnail flips from the mess to one bold idea; the title is linted as its pair
@@ -611,7 +563,7 @@ function animS2(t) {
 // 3 /yt-comment: the comments pour in, the replies come back in coral, one gets the pin
 const s3 = stations[3];
 const bubbles = [], replies = [];
-for (let k = 0; k < 4; k++) {
+for (let k = 0; k < 3; k++) {
   const b = holo(s3, .54, .1, 1.05, -.08, .38 - k * .25); face(b.userData.face, "cm" + k); bubbles.push(b);
   const r = holo(s3, .5, .09, 1.1, .1, .38 - k * .25 - .11, .015); face(r.userData.face, "rp" + k); replies.push(r);
 }
@@ -641,8 +593,8 @@ function animS4(t) {
 }
 function animStations(t) {
   stations.forEach((g, i) => {
-    const z = i < 4 ? ST[i + 1].T - .32 : E[7] + .02;
-    const s = backOut(win(t, ST[i].T - .32, ST[i].T + .04), 1.6) * (1 - easeIn(win(t, z, z + .3)));
+    const z = i < 4 ? ST[i + 1].T - CUT - .02 : E[7] + .02;
+    const s = backOut(win(t, ST[i].T - CUT - .02, ST[i].T + .04), 1.6) * (1 - easeIn(win(t, z, z + .3)));
     g.visible = s > .002; g.scale.setScalar(Math.max(.001, s));
   });
   if (stations[0].visible) animS0(t);
@@ -732,8 +684,6 @@ const BURSTS = [];
 function burst(t, p, c, n, sp = 1.2, life = .7, size = 1) { BURSTS.push({ t, p, c: new THREE.Color(c), n, sp, life, size }); }
 burst(L[1] - .06, MONP.clone().add(V(.15, 0, .3)), CORAL_L, 46, 2.2, .8, 1.3);
 burst(T.eleven - .02, HERO, GOLD, 34, 1.6, .7);
-for (let i = 5; i < 10; i++) burst(ZAP(i), PARK[i], GREEN, 12, .9, .5);
-for (let i = 0; i < 5; i++) burst(RESOLVE(i) + 1.33, ST[i].p, GREEN, 16, 1.0, .55);
 burst(T.link + .28, linkC.position.clone(), GREEN, 22, 1.1, .6);
 burst(L[9] + .02, C0.clone().add(V(0, 5.6, 8.2)), VIOLET, 40, 2.4, .8, 1.5);
 burst(T.blowing + .55, C0.clone().add(V(OUT[0][0], OUT[0][2], OUT[0][1])), CYAN, 26, 1.6, .7, 1.5);
@@ -810,11 +760,10 @@ function cityClaude(t) {
 function clPos(t) {
   const bob = V(Math.sin(t * 1.1) * .02, Math.sin(t * Math.PI * 2 / 1.7) * .035, 0);
   if (t < L[1] + .32) { const k = easeOut(win(t, L[1] - .12, L[1] + .32)); const p = MONP.clone().lerp(HERO, k); p.y += Math.sin(k * Math.PI) * .25; return p; }
-  if (t < L[3] - .3) return HERO.clone().add(bob);
+  if (t < L[3] - CUT) return HERO.clone().add(bob);
   if (t < E[7] + .05) {
-    let i = 0; for (let j = 0; j < 5; j++) if (t >= ST[j].T - .3) i = j;
-    const from = i === 0 ? HERO : ST[i - 1].cl, k = easeIO(win(t, ST[i].T - .3, ST[i].T + .1));
-    return from.clone().lerp(ST[i].cl, k).add(bob);
+    let i = 0; for (let j = 0; j < 5; j++) if (t >= ST[j].T - CUT) i = j;
+    return ST[i].cl.clone().add(bob);                // cuts with the camera: no glide through the lens
   }
   if (t < L[9] - .05) { const k = easeIO(win(t, E[7] + .05, E[7] + .65)); return ST[4].cl.clone().lerp(CALM_P, k).add(bob.multiplyScalar(.4)).add(V(0, 0, easeIO(win(t, L[8] - .2, L[8] + .4)) * .16)); }
   if (t < L[10] - .02) return cityClaude(t);
@@ -834,8 +783,9 @@ function animClaude(t) {
   const grow = easeOut(win(t, L[1] - .12, L[1] + .25));
   const sq = pulse(t, L[1] + .3, .03, .3) + pulse(t, T.eleven - .02, .03, .25) * .7;
   const inCity = between(t, L[9] - .05, L[10] - .02);
-  const pres = win(t, L[3] - .3, L[3] + .1) * (1 - win(t, E[7], E[7] + .5));
-  const sc = lerp(.18, 1, grow) * (inCity ? 1.25 : 1) * (1 - pres * .3);
+  const pres = win(t, L[3] - CUT, L[3] + .1) * (1 - win(t, E[7], E[7] + .5));
+  const hop = between(t, L[3] - CUT, E[7]) ? .6 + .4 * backOut(win(t, ST.reduce((a, x) => (t >= x.T - CUT ? x.T - CUT : a), 0), ST.reduce((a, x) => (t >= x.T - CUT ? x.T - CUT : a), 0) + .28), 2.4) : 1;
+  const sc = lerp(.18, 1, grow) * (inCity ? 1.25 : 1) * (1 - pres * .52) * hop;
   cl.body.scale.set(sc * (1 + sq * .2), sc * (1 - sq * .22), sc);
   // face the camera, with a little life
   cl.root.lookAt(camera.position);
@@ -889,37 +839,28 @@ function animClaude(t) {
 }
 
 // ---------------------------------------------------------------- the minis' day
-const stw = (i, o) => o.clone().applyQuaternion(stations[i].quaternion).add(ST[i].p);
 function miniAt(i, t) {
   const th = Math.PI / 2 + i / 11 * Math.PI * 2 + (t - T.eleven) * .6;
-  const ring = HERO.clone().add(V(Math.cos(th) * .8, Math.sin(th) * .76 + .03, .12));
-  const out = easeOut(win(t, T.eleven - .04, T.eleven + .32));
-  let p = clPos(t).lerp(ring, out);
-  let dest = null, d0 = 0, d1 = 0;
-  if (i < 5) {
-    d0 = L[3] - .5 + i * .06; d1 = d0 + .5;
-    dest = i === 2 ? stw(2, V(PH(t), .15, .1)) : stw(i, MINI_AT[i]);
-    dest.y += Math.sin(t * (i === 0 ? 9 : 3) + i) * (between(t, ST[i].T, ST[i].T + 1.5) ? .02 : .03);
-  } else if (i < 10) {
-    d0 = T.eleven + .4 + (i - 5) * .07; d1 = ZAP(i);
-    const idle = V(-1.65 + (i - 5) * .82, 2.78 + Math.sin(t * 1.3 + i) * .08, -2.0 + Math.cos(t * .9 + i) * .15);
-    dest = PARK[i].clone().lerp(idle, easeIO(win(t, ZAP(i) + .12, ZAP(i) + .7)));
-  } else {
-    d0 = T.eleven + .45; d1 = d0 + .6;
-    dest = V(.62 + Math.sin(t * 1.4) * .04, 1.62 + Math.sin(t * 2.2) * .03, -1.45);
-  }
-  p.lerp(dest, easeIO(win(t, d0, d1)));
-  // home again: they all fly back into Claude for the calm
-  p.lerp(clPos(t), easeIn(win(t, E[7] + .05 + i * .02, E[7] + .55 + i * .02)));
+  const zip = 1 + easeIn(win(t, L[3] - .45, L[3] - .17)) * 2.2;
+  const ring = HERO.clone().add(V(Math.cos(th) * .8 * zip, (Math.sin(th) * .76 + .03) * zip, .12));
+  if (t < L[3] - .17 || i > 4) return clPos(t).lerp(ring, easeOut(win(t, T.eleven - .04, T.eleven + .32)));
+  const p = i === 2 ? stw(2, V(PH(t), .15, .1)) : stw(i, FRAME[i].mini);
+  p.y += Math.sin(t * (i === 0 ? 9 : 3) + i) * .02;
   return p;
+}
+function miniScale(i, t) {
+  const ring = backOut(win(t, T.eleven - .04, T.eleven + .3), 2) * (1 - easeIn(win(t, L[3] - .45, L[3] - .17)));
+  if (i > 4) return ring;
+  const z = i < 4 ? ST[i + 1].T - CUT - .02 : E[7] + .02;
+  return Math.max(ring, backOut(win(t, ST[i].T - CUT, ST[i].T - .02), 2.2) * (1 - easeIn(win(t, z, z + .25))));
 }
 function animMinis(t) {
   minis.forEach((m, i) => {
-    const s = backOut(win(t, T.eleven - .04, T.eleven + .3), 2) * (1 - easeIn(win(t, E[7] + .25 + i * .02, E[7] + .55 + i * .02)));
+    const s = miniScale(i, t);
     m.root.visible = s > .002;
     if (!m.root.visible) return;
     m.root.position.copy(miniAt(i, t));
-    m.root.scale.setScalar(.34 * Math.max(.001, s));
+    m.root.scale.setScalar((t < L[3] ? .34 : .3) * Math.max(.001, s));
     m.root.lookAt(camera.position);
     m.body.rotation.z = Math.sin(t * 2.6 + i * 1.3) * .25 + (i === 0 && between(t, L[3], E[3]) ? Math.sin(t * 18) * .12 : 0);
     m.rs.forEach((r, k) => { r.r.scale.y = 1 + Math.sin(t * 5 + k * 2 + i) * .08; });
@@ -933,18 +874,20 @@ const cRed = new THREE.Color(RED), cCoral = new THREE.Color(CORAL), cAmber = new
   cDawn = new THREE.Color(0xff9a5c), tmpC = new THREE.Color();
 function animSet(t) {
   const chaos = t < L[1], calm = between(t, E[7], L[9]), dawn = t >= L[10] - .02;
+  const dim = win(t, L[3] - CUT - .01, L[3] - CUT) * (1 - win(t, E[7], E[7] + .7));
   const toCalm = easeIO(win(t, E[7], E[7] + .8));
   // LED strip: the mood
   if (chaos) tmpC.copy(cRed).multiplyScalar(1.6 + Math.sin(t * 9) * .9 + pulse(t % 1.1, .05, .02, .2) * 1.5);
   else if (t < E[7]) tmpC.copy(cCoral).lerp(cViolet, .5 + .5 * Math.sin(t * 1.2)).multiplyScalar(2.2);
   else if (!dawn) tmpC.copy(cViolet).lerp(cAmber, toCalm).multiplyScalar(lerp(2.2, .9, toCalm));
   else tmpC.copy(cDawn).multiplyScalar(2.2);
+  tmpC.multiplyScalar(1 - dim * .8);
   ledM.color.copy(tmpC); ledHalo.material.color.copy(tmpC).multiplyScalar(.14);
   alarm.intensity = chaos ? 7 * (.55 + .45 * Math.sin(t * 8)) : 0;
   key.color.set(dawn ? 0xffc078 : 0xffb46b);
-  key.intensity = chaos ? 38 : calm ? lerp(70, 34, toCalm) : dawn ? 105 : 70;
-  rim.intensity = chaos ? 50 : calm ? 22 : 40;
-  hemi.intensity = dawn ? .7 : calm ? .28 : .35;
+  key.intensity = (chaos ? 38 : calm ? lerp(70, 34, toCalm) : dawn ? 105 : 70) * (1 - dim * .82);
+  rim.intensity = (chaos ? 50 : calm ? 22 : 40) * (1 - dim * .6);
+  hemi.intensity = (dawn ? .7 : calm ? .28 : .35) * (1 - dim * .7);
   fx.position.copy(MONP).add(V(.2, 0, .4)); fx.intensity = pulse(t, L[1] - .1, .04, .5) * 14;
   // monitor
   let ms = "monWork";
@@ -953,9 +896,9 @@ function animSet(t) {
   else if (t >= E[7] + .3 && !dawn) ms = "monSleep";
   else if (dawn) ms = "monDone";
   setMap(monScreen, ms);
-  monScreen.material.color.setScalar(ms === "monBurst" ? 1.6 : ms === "monSleep" ? .55 : 1.15);
+  monScreen.material.color.setScalar((ms === "monBurst" ? 1.6 : ms === "monSleep" ? .55 : 1.15) * (1 - dim * .75));
   screenLight.color.set(t < L[1] - .15 ? 0xff5a5a : dawn ? 0xbfe8d4 : 0xffb59a);
-  screenLight.intensity = calm ? 1 : 3 + pulse(t, L[1] - .1, .04, .4) * 5;
+  screenLight.intensity = (calm ? 1 : 3 + pulse(t, L[1] - .1, .04, .4) * 5) * (1 - dim * .8);
   lapScreen.material.color.set(chaos ? 0xff4050 : 0x9fc4ff).multiplyScalar(chaos ? 1.4 + Math.sin(t * 15) * .4 : calm ? .5 : 1.2);
   // phone buzzing through the hook
   const buzz = chaos ? pulse(t % 1.1, .05, .02, .3) : 0;
@@ -1038,11 +981,12 @@ function animCity(t) {
 // ---------------------------------------------------------------- camera: one shot list, blended at each cut that isn't hard
 const C = (x, y, z) => [C0.x + x, C0.y + y, C0.z + z];
 const SHOTS = [
-  { a: 0, b: L[1] - .35, p: [[.8, 1.58, 1.4], [.55, 1.5, .9]], q: [[.15, 1.3, -1.5], [.05, 1.28, -1.5]], fov: 40 },
-  { a: L[1] - .35, b: L[1], blend: .22, p: [[.45, 1.48, 1.15], [.3, 1.42, .85]], q: [MONP.toArray(), MONP.toArray()], fov: 38 },
+  { a: 0, b: 1.0, p: [[.6, 1.5, .6], [.48, 1.47, .3]], q: [[.15, 1.3, -1.6], [.15, 1.3, -1.6]], fov: 36 },
+  { a: 1.0, b: 2.0, p: [[-1.15, 1.42, .45], [-1.0, 1.4, .2]], q: [[.05, 1.28, -1.55], [.08, 1.28, -1.55]], fov: 38 },
+  { a: 2.0, b: L[1], p: [[.35, 1.45, .55], [-.05, 1.33, -.45]], q: [MONP.toArray(), MONP.toArray()], fov: 38 },
   { a: L[1] - .02, b: L[2], p: [[.42, 1.12, 2.35], [.25, 1.2, 2.05]], q: [[-.18, 1.32, -.55], [-.15, 1.34, -.5]], fov: 42 },
-  { a: L[2], b: L[3] - .3, blend: .35, p: [[0, 1.66, 3.05], [0, 1.62, 2.75]], q: [[-.1, 1.7, -.5], [-.1, 1.68, -.5]], fov: 42 },
-  ...ST.map((s, i) => ({ a: s.T - .3, b: i < 4 ? ST[i + 1].T - .3 : E[7], blend: .32, p: s.cam, q: [s.look, s.look], fov: s.fov })),
+  { a: L[2], b: L[3] - CUT, p: [[0, 1.66, 3.05], [0, 1.62, 2.75]], q: [[-.1, 1.7, -.5], [-.1, 1.68, -.5]], fov: 42 },
+  ...ST.map((s, i) => ({ a: s.T - CUT, b: i < 4 ? ST[i + 1].T - CUT : E[7], p: s.cam, q: [s.look, s.look], fov: s.fov })),
   { a: E[7], b: L[8] + .55, blend: .6, p: [[.65, 1.52, 1.95], [.6, 1.5, 1.75]], q: [[.45, 1.2, -1.1], [.47, 1.2, -1.1]], fov: 38 },
   { a: L[8] + .55, b: L[9] - .2, blend: .7, p: [[.62, 1.36, .95], [.66, 1.3, .62]], q: [[.7, 1.2, -.75], [.7, 1.2, -.75]], fov: [36, 33] },
   { a: L[9], b: L[9] + 1.1, p: [C(0, 11, 13), C(0, 5.4, 9.6)], q: [C(0, 2.5, 2), C(0, 3.2, 5.6)], fov: 52 },
@@ -1083,13 +1027,14 @@ function renderAt(t) {
   camera.position.set(p[0] + Math.sin(t * 13.1) * hand + Math.sin(t * 91) * .03 * hits, p[1] + Math.cos(t * 11.7) * hand * .8 + Math.cos(t * 77) * .03 * hits, p[2]);
   camera.lookAt(q[0] + Math.sin(t * 7.3) * hand * .5, q[1] + Math.cos(t * 5.9) * hand * .5, q[2]);
   camera.rotateZ((t < L[1] ? Math.sin(t * 1.7) * .05 + .03 : 0) + Math.sin(t * 61) * .01 * hits);
-  camera.fov = fov - pulse(t, L[1] - .02, .04, .5) * 5 - pulse(t, L[9], .04, .6) * 6 + pulse(t, T.youtube, .03, .3) * 2;
+  const snap = [1.0, 2.0, L[2], ...ST.map((x) => x.T - CUT), L[10] - .02].reduce((a, c) => a + (t >= c ? (1 - easeOut(win(t, c, c + .3))) * 7 : 0), 0);
+  camera.fov = fov + snap - pulse(t, L[1] - .02, .04, .5) * 5 - pulse(t, L[9], .04, .6) * 6 + pulse(t, T.youtube, .03, .3) * 2;
   camera.updateProjectionMatrix(); camera.updateMatrixWorld();
   studio.visible = !inCity; hu.root.visible = !inCity; city.visible = inCity;
   scene.background.copy(inCity ? BG_CITY : BG_STUDIO);
-  scene.fog.color.set(inCity ? 0x0c0620 : 0x120a14); scene.fog.density = inCity ? .045 : .02;
+  scene.fog.color.set(inCity ? 0x0c0620 : 0x0a0912); scene.fog.density = inCity ? .04 : .014;
   if (!inCity) animHuman(t);
-  animClaude(t); animMinis(t); animNotes(t); animStations(t); animTitle(t); animSet(t);
+  animClaude(t); animMinis(t); animStations(t); animTitle(t); animSet(t);
   if (inCity) animCity(t); else trail.count = 0;
   if (inCity) trail.count = TRAIL;
   animParticles(t);
@@ -1098,7 +1043,7 @@ function renderAt(t) {
   g.uTime.value = Math.round(t * 30) / 30;
   const toCalm = easeIO(win(t, E[7], E[7] + .8));
   if (t < L[1]) g.uTint.value.set(1.1, .9, .94);
-  else if (t < L[9]) g.uTint.value.set(lerp(1.02, 1.08, toCalm), lerp(.99, .95, toCalm), lerp(1.0, .86, toCalm));
+  else if (t < L[9]) g.uTint.value.set(lerp(1.0, 1.08, toCalm), lerp(1.0, .95, toCalm), lerp(1.02, .86, toCalm));
   else if (inCity) g.uTint.value.set(.96, .98, 1.1);
   else g.uTint.value.set(1.07, 1.0, .92);
   g.uGrain.value = t < L[1] ? .075 : .05;
@@ -1131,25 +1076,15 @@ function drawTextures() {
     write(g, "PRODUCER", w / 2, 82, 44, { w: 800, c: "#1a1028", a: "center", max: w - 24 });
     write(g, "@ai.nxtlvl", w / 2, 128, 22, { f: "JBMono", c: "#7b2ffb", a: "center" });
   });
-  NOTES.forEach((n, i) => {
-    const note = (k, ic, col, head, body, done) => ct(k, 512, 128, (g, w, h) => {
-      panel(g, w, h, { bg: done ? "rgba(14,40,32,.95)" : "rgba(28,20,36,.95)", line: done ? "#3fd69b" : "rgba(255,255,255,.16)", r: 30 });
-      rr(g, 18, 18, 92, 92, 22); g.fillStyle = col; g.fill();
-      if (done) tick(g, 64, 66, 52, "#06140f", 11); else write(g, ic, 64, 66, 54, { w: 800, a: "center" });
-      write(g, head, 128, 44, 32, { w: 700, max: 300 }); write(g, done ? "done" : "now", w - 26, 44, 24, { w: 600, c: "rgba(244,241,250,.55)", a: "right" });
-      write(g, body, 128, 88, 28, { w: 600, c: done ? "#bdf3dc" : "#e4dcf5", max: 360 });
-    });
-    note("note" + i, n.i, n.c, n.h, n.b, false);
-    if (n.d) note("done" + i, "", "#3fd69b", n.h, n.d, true);
-  });
   ct("page", 512, 676, (g, w, h) => {
     panel(g, w, h, { bg: "#f6efe4", r: 26 });
     write(g, "SCRIPT.md", 44, 62, 40, { f: "JBMono", c: "#1a1028" });
     rr(g, 44, 104, 210, 44, 22); g.fillStyle = "#7b2ffb"; g.fill(); write(g, "HOOK · SCORED", 149, 127, 22, { f: "JBMono", a: "center" });
   });
-  FORMULAS.forEach((f, k) => ct("f" + k, 256, 64, (g, w, h) => {
-    panel(g, w, h, { bg: k % 3 === 0 ? "#d97757" : "rgba(30,20,52,.96)", line: "rgba(240,160,124,.8)", r: 30 });
-    write(g, f, w / 2, h / 2 + 1, 25, { w: 700, a: "center", max: w - 26 });
+  FORMULAS.forEach((f, k) => ct("f" + k, 512, 122, (g, w, h) => {
+    panel(g, w, h, { bg: k === 0 ? "#d97757" : "rgba(30,20,52,.97)", line: "#f0a07c", lw: 4, r: 30 });
+    write(g, `HOOK FORMULA ${k + 1}/21`, 28, 32, 22, { f: "JBMono", c: k === 0 ? "#3a140a" : "#f0a07c" });
+    write(g, f, 28, 80, 46, { w: 800, max: w - 56 });
   }));
   ct("thBefore", 640, 360, (g, w, h) => {
     const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, "#5b5560"); gr.addColorStop(1, "#8a7d6a"); g.fillStyle = gr; g.fillRect(0, 0, w, h);
@@ -1275,9 +1210,7 @@ function drawTextures() {
   mon("monBurst", (g, w, h) => { const gr = g.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * .6); gr.addColorStop(0, "#fff8f0"); gr.addColorStop(.5, "#f0a07c"); gr.addColorStop(1, "#d97757"); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
   mon("monWork", (g, w, h) => {
     const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, "#1a0f24"); gr.addColorStop(1, "#2a1410"); g.fillStyle = gr; g.fillRect(0, 0, w, h);
-    sparkGlyph(g, 190, h / 2, 110);
-    write(g, "11 skills", 360, 210, 84, { w: 800 }); write(g, "on it.", 360, 300, 84, { w: 800, c: "#f0a07c" });
-    write(g, "/yt-script  /yt-package  /yt-edit", 360, 390, 28, { f: "JBMono", c: "#a99fbd" });
+    sparkGlyph(g, w / 2, h / 2, 120);
   });
   mon("monSleep", (g, w, h) => { g.fillStyle = "#07050c"; g.fillRect(0, 0, w, h); sparkGlyph(g, w / 2, h / 2, 60, "rgba(217,119,87,.5)"); });
   mon("monDone", (g, w, h) => {

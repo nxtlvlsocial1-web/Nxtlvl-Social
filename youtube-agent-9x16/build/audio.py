@@ -2,18 +2,14 @@
 
 python3 build/audio.py      (from the project root, after build/generate.py; needs numpy, scipy, soundfile, ffmpeg)
 
-The music is a licensed track picked on the laptop with build/find_music.py (CC0, Public Domain or CC BY, credit in the
-caption; it writes build/track.json). It is arranged to the reel's energy curve:
-  BAD CHAOS -> ORDER (0 to the end of "plans your whole week"): a busy, steady stretch of the track, ducked under
-    the voice, with the notification pings, phone buzz and the burst on top;
-  CALM (to 22.3 s): the same music sinks behind a low-pass and dips, a clock ticks, a riser pulls into
-  a beat of silence, then
-  GOOD CHAOS ("Virality."): a hard cut to the track's highest-energy stretch on a sub drop, running to the end with a
-    button on the last frame.
-With no track chosen yet, the mix is the voice and the SFX only (a preview).
+Music: the original score in build/score.py, composed in code to the reel's energy curve (chaos with no beat, the
+groove landing with Claude, a dead stop for the calm, the drop on "Virality.", a brighter landing and a button). If a
+licensed track is ever picked on the laptop with build/find_music.py (build/track.json), it is arranged to the same
+curve instead and credited in the caption.
 
-Every SFX is synthesized here (no samples), so nothing needs a licence. Writes assets/audio/mix.wav (mastered to
--14 LUFS integrated, -1.5 dBTP).
+SFX: recorded hits from HyperFrames' bundled library (Pixabay Content License: commercial use, no credit needed;
+.claude/skills/media-use/audio/assets/sfx/CREDITS.md) plus a few synthesized here. Writes assets/audio/mix.wav,
+mastered to -14 LUFS integrated, -1.5 dBTP.
 """
 import json
 import os
@@ -32,6 +28,18 @@ N = int(DUR * SR)
 DROP = L[9]
 rng = np.random.default_rng(11)
 SFX = np.zeros((N, 2))
+LIB = os.path.join(os.path.dirname(ROOT), ".claude", "skills", "media-use", "audio", "assets", "sfx")
+_S = {}
+
+
+def smp(name):
+    """A bundled SFX file as mono float at 48 kHz."""
+    if name not in _S:
+        raw = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(LIB, name + ".mp3"), "-f", "f32le", "-ac", "1", "-ar", str(SR), "-"],
+                             capture_output=True, check=True).stdout
+        x = np.frombuffer(raw, np.float32).astype(np.float64)
+        _S[name] = x / (np.max(np.abs(x)) + 1e-9) * .5
+    return _S[name]
 
 
 def lp(x, fc, o=2):
@@ -181,81 +189,70 @@ def reverb(x, secs=1.2, mix=.16, seed=0):
 
 # ---------------------------------------------------------------- the sound design, on world.js's cue times
 def sfx():
-    # BAD CHAOS: the notifications keep landing, the phone buzzes, the screen glitches
-    for i in range(10):
-        put(ping(76 + [0, 3, -2, 5, 1, 7, -4, 2, 6, -1][i]), .05 + i * .27, .9, [-.6, .5, -.2, .7, -.5, .3, -.7, .6, -.3, .4][i])
-    for t0 in (.05, 1.15, 2.25, 3.35):
-        if t0 < L[1] - .15:
-            put(buzz(), t0, 1.0, .2)
-    for k in range(8):
-        put(glitch(), .4 + k * .41 + rng.random() * .1, .8, rng.random() - .5)
+    toast_t = [.15, .95, 1.75, 2.5]                       # generate.py's TOAST_T
+    cuts = [L[3] - .15, L[4] - .15, L[5] - .15, L[6] - .15, L[7] - .15]
+    # BAD CHAOS: each notification lands with the phone's buzz; the hard cuts glitch
+    for i, t0 in enumerate(toast_t):
+        put(smp("notification")[: int(.9 * SR)], t0, .55, [-.3, .3, -.2, .25][i])
+        put(buzz(.4), t0 + .22, .9, .2)
+    put(smp("glitch-1")[: int(.6 * SR)], 1.0, .5, -.3)
+    put(smp("glitch-3")[: int(.8 * SR)], 2.0, .5, .3)
+    put(smp("error")[: int(1.0 * SR)], 2.05, .35)
     # Claude bursts out of the monitor
-    put(riser(.5, .14), L[1] - .6)
-    put(whoosh(.4, 1.3, 200), L[1] - .3)
-    put(slam(.55), L[1] - .06)
-    put(sparkle(7, 1.0), L[1] + .05, .8)
-    put(chime(81), T["free"] - .02, .8)
-    put(whoosh(.35), L[2] - .1, .8)
-    put(sparkle(11, 1.4), T["eleven"] - .03, 1.1)
+    put(smp("whoosh-cinematic")[int(2.0 * SR):int(3.4 * SR)], L[1] - 1.0, .7)
+    put(smp("impact-bass-1"), L[1] - .06, .9)
+    put(smp("sparkle"), L[1] + .05, .6)
+    put(smp("chime"), T["free"] - .02, .45)
+    put(smp("whoosh"), L[2] - .2, .5)
+    put(smp("sparkle"), T["eleven"] - .05, .9)
     for i in range(11):
         put(pop_(700 + i * 60, .12), T["eleven"] + i * .025, 1, (i - 5) / 6)
-    for i in range(5, 10):
-        put(pop_(1300, .16), T["eleven"] + .78 + (i - 5) * .07, 1, (i - 7) / 3)
-    # ORDER: a whoosh into each station, and each one's own small sounds
-    for t0 in (L[3], L[4], L[5], L[6], L[7]):
-        put(whoosh(.3, .9), t0 - .34)
+    # ORDER: a whoosh into every hard cut, then each skill's own small sounds
+    for t0 in cuts:
+        put(smp("whoosh-short"), t0 - .12, .55)
     for k in range(9):
-        put(click(.22), L[3] + .12 + k * .14, 1, -.3)
-    for k in range(21):
-        put(pop_(1500 + k * 25, .07), T["twentyone"] - .25 + k * .05, 1, np.sin(k) * .6)
+        put(smp("key-press")[: int(.15 * SR)], L[3] - .08 + k * .13, .35, -.3)
+    put(smp("typing"), T["twentyone"] - .25, .35)
+    put(smp("pop"), T["twentyone"] + .75, .4)
     put(whoosh(.3, .8, 500), L[4] + .5)
-    put(pop_(1100, .2), L[4] + .98)
+    put(smp("pop"), L[4] + .98, .4)
     put(scan(1.3), L[5] + .05)
     for x in (-.5 + .9 * .14, -.5 + .9 * .45, -.5 + .9 * .62, -.5 + .9 * .82):
-        put(stamp(), L[5] + .05 + (x + .5) * 1.3, .6, x)
-    put(pop_(800, .2), L[5] + 1.38)
-    for k in range(4):
-        put(pop_(950 + k * 80, .15), L[6] - .2 + k * .08, 1, -.4)
+        put(stamp(), L[5] + .05 + (x + .5) * 1.3, .5, x)
+    put(smp("pop"), L[5] + 1.38, .35)
+    for k in range(3):
+        put(smp("click-soft")[: int(.2 * SR)], L[6] - .2 + k * .08, .5, -.4)
         put(pop_(600 + k * 70, .15), L[6] + .3 + k * .17, 1, .4)
-    put(stamp(), L[6] + 1.26, .7)
+    put(stamp(), L[6] + 1.26, .6)
     for i in range(5):
         put(thud(), L[7] + .34 + i * .15, 1, (i - 2) / 4)
-    put(chime(85), L[7] + .95, .6)
-    for i in range(5):
-        put(pop_(1600, .1), T["l"][3 + i] + .35 + 1.33, .8)
-    # CALM: the clock, the riser, a breath of silence before the drop
+    put(smp("chime"), L[7] + .95, .35)
+    # CALM: the clock ticks
     for k in range(int(E[7] + 1), int(DROP)):
         put(tick(), k + .0, .9, -.4)
-    put(riser(.75, .2), DROP - .78)
-    # GOOD CHAOS: the drop, the towers, the X-ray, the new one rising out of the voice
-    put(sub(2.2), DROP, 1.0)
-    put(slam(.6), DROP)
-    put(sparkle(9, 1.0), DROP + .05, .7)
-    put(rumble(1.2), DROP, .8)
-    put(whoosh(.5, 1.0, 200), T["blowing"] - .15)
+    # GOOD CHAOS: the drop, the outliers lighting up, the X-ray, the new one completing
+    put(smp("impact-bass-2"), DROP, 1.0)
+    put(rumble(1.2), DROP, .7)
+    put(smp("whoosh"), T["blowing"] - .15, .5)
     for k in range(6):
         put(pop_(1200 + k * 90, .1), T["blowing"] - .07 + k * .12, 1, np.sin(k * 2) * .6)
     put(scan(.9), T["blowing"] + .45, 1.2)
-    put(pop_(900, .18), T["blowing"] + .6)
-    put(riser(T["voice"] + .25 - T["writes"], .16), T["writes"] - .15)
-    put(slam(.4), T["voice"] + .2)
-    put(chime(83), T["voice"] + .2, .8)
+    put(smp("glitch-3")[: int(.5 * SR)], T["blowing"] + .45, .35)
+    put(smp("impact-bass-1"), T["voice"] + .2, .6)
+    put(smp("chime"), T["voice"] + .2, .45)
     # LANDING: sunrise, paste, send, installed
-    put(whoosh(.4, 1.1, 200), L[10] - .3)
-    put(swell(2.6), L[10] - .05, 1.0)
-    put(pop_(700, .16), T["setup"] - .2)
-    put(click(.4), T["paste"] - .02)
-    put(click(.3), T["paste"] + .06)
-    put(whoosh(.25, .8, 800), T["link"] + .02)
-    put(chime(85), T["link"] + .28, .8)
+    put(smp("whoosh-cinematic")[int(2.4 * SR):int(3.6 * SR)], L[10] - .5, .6)
+    put(smp("pop"), T["setup"] - .2, .4)
+    put(smp("click"), T["paste"] - .02, .5)
+    put(smp("whoosh-short"), T["link"] + .02, .45)
+    put(smp("chime"), T["link"] + .28, .45)
     # CTA: confetti, the keyword typed in, the DM landing
-    put(sparkle(11, 1.6), T["youtube"] - .05, 1.0)
-    put(whoosh(.3, .7, 600), T["youtube"] - .05)
+    put(smp("sparkle"), T["youtube"] - .05, .8)
     a = T["youtube"] - .12
     for i in range(7):
-        put(click(.3), a + .1 + i * .07, 1, (i - 3) / 5)
-    put(ping(83), E[11] + .1, 1.0)
-    put(pop_(1400, .2), E[11] + .45)
+        put(smp("key-press")[: int(.15 * SR)], a + .1 + i * .07, .4, (i - 3) / 5)
+    put(smp("ping"), E[11] + .1, .55)
+    put(smp("pop"), E[11] + .45, .35)
 
 
 def ffmpeg(*a):
@@ -319,8 +316,13 @@ def main():
     sfxb = np.stack([reverb(SFX[:, c], 1.0, .15, c + 2) for c in (0, 1)], 1)
     score = sfxb * (.05 / rms(sfxb)) * (1 - .6 * talk)[:, None]
     m, tr = music()
-    if m is not None:
-        score = m * (.075 / rms(m[int(DROP * SR):])) * (1 - .5 * talk)[:, None] + score * .8
+    if m is None:                                         # no licensed track: the original score
+        import sys
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from score import compose
+        m = compose(T, N)
+        sf.write(os.path.join(ROOT, "assets", "audio", "score.wav"), m.astype(np.float32), SR, subtype="PCM_24")
+    score = m * (.08 / rms(m[int(DROP * SR):])) * (1 - .45 * talk)[:, None] + score * .8
     fade = np.ones(N)
     fade[-int(.2 * SR):] = np.linspace(1, 0, int(.2 * SR))
     score *= fade[:, None]
@@ -338,7 +340,7 @@ def main():
     os.remove(raw)
     chk = ffmpeg("-i", out, "-af", "ebur128=peak=true", "-f", "null", "-").stderr
     summ = chk[chk.rindex("Summary:"):]
-    print("wrote", out, "(music: " + (tr["credit"] if tr else "none yet, voice + SFX preview") + ")",
+    print("wrote", out, "(music: " + (tr["credit"] if tr else "original score, build/score.py") + ")",
           " ".join(ln.strip() for ln in summ.splitlines() if ln.strip().startswith(("I:", "Peak:"))))
 
 

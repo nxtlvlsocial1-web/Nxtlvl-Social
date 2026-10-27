@@ -60,7 +60,15 @@ def out(sel, t, d=.2):
 
 
 # ---------------------------------------------------------------- hook stamp, "free" pill, skill chips
-HOOK = '<div id="clock"><span class="dig">03<i class="colon">:</i>00</span><span class="am">AM</span></div>'
+HOOK = ('<div id="hook"><div class="hk-t mono"><i class="rec"></i>03:00 AM</div>'
+        '<div class="hk-h"><span class="hl hl0">This <b>free</b> Claude skill</span><span class="hl hl1">runs your whole</span>'
+        '<span class="hl hl2"><u>YouTube channel</u></span></div></div>')
+# the hook's notifications: a phone's lock-screen stack, the newest on top, each one buzzing in
+TOASTS = [("S", "#ff3b46", "Script.doc", "0 words written · due today"), ("C", "#ff5fa2", "Comments", "99+ unread"),
+          ("!", "#ff3b46", "Upload failed", "Tap to retry"), ("%", "#ff8a3d", "Render", "3% · 4h 12m left")]
+TOAST_T = [.15, .95, 1.75, 2.5]
+TOASTS_HTML = "".join(f'<div class="toast tst{i}"><div class="ticon" style="background:{c}">{ic}</div><div class="tbody"><div class="thead">'
+                      f'<b>{h}</b><span>now</span></div><div class="ttext">{b}</div></div></div>' for i, (ic, c, h, b) in enumerate(TOASTS))
 FREE = '<div id="free"><b>FREE</b><span>open source · MIT licence</span></div>'
 CHIPS = [("/yt-script", "21 hook formulas"), ("/yt-package", "title + thumbnail, linted as a pair"), ("/yt-edit", "marks every cut: an edit list"),
          ("/yt-comment", "replies in your voice"), ("/yt-plan", "1 anchor · 1 cheap one · 3 Shorts"), ("/yt-viral", "beat their own channel, ranked")]
@@ -76,18 +84,31 @@ def chips():
 
 
 def hook_tl():
-    # the 3 AM stamp: slammed in on the first word, the colon blinking, glitched out when Claude arrives
-    pop("#clock", .08, "scale:1.6,opacity:0", .28, "back.out(2.6)")
-    add(f'tl.fromTo(".colon",{{opacity:1}},{{opacity:.15,duration:.25,yoyo:true,repeat:{int(L[1] / .5)},ease:"steps(1)",immediateRender:false}},.1);')
-    add('tl.fromTo("#clock",{x:0},{x:12,duration:.04,yoyo:true,repeat:7,immediateRender:false},1.18);')
-    add(f'tl.to("#clock",{{opacity:0,scale:1.3,duration:.18,ease:"power3.in"}},{L[1] - .2:.3f});')
+    # the hook headline: the promise in words from frame 0, line by line, blown away when Claude bursts out
+    pop("#hook", 0, "opacity:0", .01, "none")
+    pop(".hk-t", 0, "opacity:0,scale:1.4", .2, "back.out(2.6)")
+    for i in range(3):
+        pop(f".hl{i}", .02 + i * .16, "opacity:0,y:40,scale:.8", .26, "back.out(2.4)")
+    add(f'tl.fromTo(".rec",{{opacity:1}},{{opacity:.15,duration:.25,yoyo:true,repeat:{int(L[1] / .5)},ease:"steps(1)",immediateRender:false}},.1);')
+    add(f'tl.to("#hook",{{opacity:0,scale:1.25,duration:.18,ease:"power3.in"}},{L[1] - .14:.3f});')
+    # the notifications stack up, each landing with the phone's buzz; older ones sink behind
+    for i, t0 in enumerate(TOAST_T):
+        pop(f".tst{i}", t0, "opacity:0,y:-90,scale:1.08", .26, "back.out(2)")
+        add(f'tl.fromTo(".tst{i}",{{x:0}},{{x:9,duration:.035,yoyo:true,repeat:9,immediateRender:false}},{t0 + .27:.3f});')
+        if i + 1 < len(TOAST_T):                          # sunk cards keep their edge, not their text
+            add(f'tl.to(".tst{i} .tbody, .tst{i} .ticon",{{opacity:0,duration:.12}},{TOAST_T[i + 1]:.3f});')
+        for k, (dy, sc, op) in enumerate(((26, .94, .6), (50, .88, .3), (66, .84, 0))):
+            if i + 1 + k < len(TOAST_T):
+                add(f'tl.to(".tst{i}",{{y:{dy},scale:{sc},opacity:{op},duration:.2,ease:"power2.out"}},{TOAST_T[i + 1 + k]:.3f});')
+    for i in range(len(TOASTS)):
+        add(f'tl.to(".tst{i}",{{x:{-1200 if i % 2 else 1200},rotation:{-8 if i % 2 else 8},duration:.26,ease:"power3.in"}},{L[1] - .2 + i * .03:.3f});')
     pop("#free", T["free"] - .04, "scale:1.8,opacity:0,rotation:-6", .3, "back.out(2.8)")
     out("#free", L[2] + .3, .2)
     # skill chips: one per station line, and /yt-viral for the city
     starts = [L[3], L[4], L[5], L[6], L[7], T["blowing"] - .1]
     ends = [L[4] - .12, L[5] - .12, L[6] - .12, L[7] - .12, E[7] + .2, L[10] - .15]
     for i, (a, z) in enumerate(zip(starts, ends)):
-        pop(f".ch{i}", a - .1, "x:-80,opacity:0,scale:.9", .3, "back.out(2)")
+        pop(f".ch{i}", a - .15, "x:-80,opacity:0,scale:.9", .25, "back.out(2)")
         out(f".ch{i}", z, .15)
     add('(()=>{const o={v:0};tl.to(o,{v:21,duration:1.0,ease:"power2.out",onUpdate:()=>{document.querySelector(".cnt").textContent=Math.round(o.v);}},%.3f);})();'
         % (T["twentyone"] - .25))
@@ -153,10 +174,10 @@ def captions():
 
 
 def fx_tl():
-    # whips on the station changes, flashes on the burst, the drop and the landing
-    for t in (L[3] - .3, L[4] - .3, L[5] - .3, L[6] - .3, L[7] - .3):
-        add(f'tl.set("#whip",{{opacity:.7,x:300}},{t:.3f});tl.to("#whip",{{opacity:0,x:-300,duration:.22,ease:"power2.out"}},{t + .01:.3f});')
-    for t, o in ((L[1] - .1, .6), (T["free"] - .02, .25), (T["eleven"] - .02, .35), (L[9], .85), (L[10] - .02, .7), (T["youtube"], .25)):
+    # a white tick on every hard cut, flashes on the burst, the drop and the landing
+    for t in (1.0, 2.0, L[2], L[3] - .15, L[4] - .15, L[5] - .15, L[6] - .15, L[7] - .15):
+        add(f'tl.set("#flash",{{opacity:.18}},{t:.3f});tl.to("#flash",{{opacity:0,duration:.16}},{t + .01:.3f});')
+    for t, o in ((L[1] - .1, .4), (T["free"] - .02, .25), (T["eleven"] - .02, .35), (L[9], .85), (L[10] - .02, .7), (T["youtube"], .25)):
         add(f'tl.set("#flash",{{opacity:{o}}},{t:.3f});tl.to("#flash",{{opacity:0,duration:.4}},{t + .02:.3f});')
     add(f'tl.fromTo(".prog i",{{scaleX:0}},{{scaleX:1,duration:{DUR},ease:"none",immediateRender:false}},0);')
 
@@ -181,11 +202,21 @@ body { font-family: "Poppins", sans-serif; color: #f4f1fa; }
 .prog { flex: 1; height: 6px; border-radius: 3px; background: rgba(244,241,250,.18); overflow: hidden; }
 .prog i { display: block; height: 100%; background: linear-gradient(90deg, #7b2ffb, #d97757); transform-origin: 0 50%; transform: scaleX(0); }
 /* everything that pops in later starts hidden here, never through a set at t=0 */
-#clock, #free, .chip, #endc, .ec-1, .ec-kw, .ec-2, .ec-3, .ec-h, #dm, .dmok, .ty { opacity: 0; }
-#clock { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font: 800 150px/1 "JBMono"; color: #ff3b46;
-  text-shadow: 0 0 40px rgba(255,59,70,.75), 0 6px 24px rgba(0,0,0,.6); letter-spacing: 4px; }
-#clock .am { font-size: 64px; margin-left: 18px; vertical-align: 52px; }
-#clock i { font-style: normal; }
+#hook, .hk-t, .hl, .toast, #free, .chip, #endc, .ec-1, .ec-kw, .ec-2, .ec-3, .ec-h, #dm, .dmok, .ty { opacity: 0; }
+#hook { position: absolute; left: 50px; right: 50px; top: 318px; text-align: center; }
+.hk-t { display: inline-flex; align-items: center; gap: 14px; padding: 6px 22px; border-radius: 30px; background: rgba(255,59,70,.16);
+  border: 2px solid rgba(255,59,70,.7); color: #ff5a64; font-size: 36px; letter-spacing: 3px; }
+.rec { width: 18px; height: 18px; border-radius: 50%; background: #ff3b46; box-shadow: 0 0 14px #ff3b46; }
+.hk-h { margin-top: 18px; font: 900 82px/1.04 "Montserrat"; letter-spacing: -2px; color: #fff; text-shadow: 0 6px 30px rgba(0,0,0,.85); }
+.hl { display: block; }
+.hk-h b { color: #ff9a6b; }
+.hk-h u { text-decoration: none; display: inline-block; margin-top: 8px; padding: 0 24px 6px; border-radius: 22px;
+  background: linear-gradient(90deg, #ff3b46, #d97757); box-shadow: 0 12px 40px rgba(255,59,70,.45); }
+.toast { position: absolute; left: 70px; right: 70px; top: 700px; min-height: 128px; border-radius: 34px; display: flex; align-items: center; gap: 22px;
+  padding: 18px 28px; background: rgba(30,24,40,.93); border: 1px solid rgba(255,255,255,.16); box-shadow: 0 24px 60px rgba(0,0,0,.55); }
+.tst0 { z-index: 1; } .tst1 { z-index: 2; } .tst2 { z-index: 3; } .tst3 { z-index: 4; }
+.ticon { flex: none; width: 80px; height: 80px; border-radius: 22px; display: flex; align-items: center; justify-content: center;
+  font: 800 42px "Poppins"; color: #fff; }
 #free { position: absolute; left: 50%; top: 340px; width: 700px; margin-left: -350px; padding: 16px 0 20px; border-radius: 40px; text-align: center;
   background: linear-gradient(90deg, #7b2ffb, #d97757); box-shadow: 0 16px 50px rgba(123,47,251,.55); }
 #free b { display: block; font: 800 96px/1 "Poppins"; letter-spacing: 6px; }
@@ -231,8 +262,6 @@ body { font-family: "Poppins", sans-serif; color: #f4f1fa; }
 .ec-h { margin-top: 16px; font-size: 30px; color: #f0a07c; letter-spacing: 3px; }
 #fx { z-index: 7; }
 #flash { position: absolute; inset: 0; background: #fff3ea; opacity: 0; }
-#whip { position: absolute; inset: 0; opacity: 0; background: repeating-linear-gradient(90deg, rgba(255,255,255,0) 0 22px,
-  rgba(240,160,124,.5) 22px 26px, rgba(255,255,255,0) 26px 70px); }
 #vig { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,5,13,.55) 0%, rgba(7,5,13,0) 18%, rgba(7,5,13,0) 66%, rgba(7,5,13,.5) 100%); }
 """
 
@@ -260,10 +289,10 @@ def main():
       <div id="vigl" class="clip" data-start="0" data-duration="{DUR}" data-track-index="1" data-layout-ignore><div id="vig"></div></div>
       <div id="ui" class="clip" data-start="0" data-duration="{DUR}" data-track-index="2" data-layout-allow-overflow>
         <div class="top"><span class="brand mono"><b>●</b> AI.NXTLVL</span><span class="prog"><i></i></span></div>
-        {HOOK}{FREE}{chips()}{endc}
+        {HOOK}{TOASTS_HTML}{FREE}{chips()}{endc}
       </div>
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="3">{caps}</div>
-      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="4" data-layout-ignore><div id="whip"></div><div id="flash"></div></div>
+      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="4" data-layout-ignore><div id="flash"></div></div>
       <audio id="mix" src="assets/audio/{mix}" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
     </div>
     <script>
