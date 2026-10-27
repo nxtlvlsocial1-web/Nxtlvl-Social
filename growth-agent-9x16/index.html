@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Instagram Growth Agent 9x16</title>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Montserrat"; font-weight: 100 900; src: url("assets/fonts/montserrat.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 700; src: url("assets/fonts/jbmono-bold.ttf"); }
+@font-face { font-family: "ISerif"; font-style: italic; font-weight: 400; src: url("assets/fonts/InstrumentSerif-Italic.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f2e8dc; }
+body { font-family: "Montserrat", sans-serif; color: #1d1418; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #f2e8dc; }
+.clip { position: absolute; inset: 0; }
+#gl { width: 1080px; height: 1920px; display: block; }
+.mono { font-family: "JBMono", monospace; font-weight: 700; }
+.serif { font-family: "ISerif", serif; font-style: italic; font-weight: 400; letter-spacing: 0; }
+#ui { z-index: 5; }
+.top { position: absolute; left: 60px; right: 60px; top: 262px; display: flex; align-items: center; gap: 24px; }
+.brand { font-size: 30px; letter-spacing: 5px; color: #1d1418; padding: 6px 18px; border-radius: 22px; background: rgba(255,251,246,.9); }
+.brand b { color: #b4532f; }
+.prog { flex: 1; height: 6px; border-radius: 3px; background: rgba(29,20,24,.12); overflow: hidden; }
+.prog i { display: block; height: 100%; background: #d97757; transform-origin: 0 50%; transform: scaleX(0); }
+/* everything that pops in later starts hidden here, never through a set at t=0 */
+#hook, .hw, #five, .fv-a, .fv-b, .mv, #endc, .ec-1, .ec-kw, .ec-2, .ty { opacity: 0; }
+#hook { position: absolute; left: 40px; right: 40px; top: 316px; text-align: center; }
+.hl { display: block; font: 800 92px/1.05 "Montserrat"; letter-spacing: -3px; color: #1d1418; text-shadow: 0 4px 30px rgba(242,232,220,.9); }
+.hw { display: inline-block; }
+.hl .serif { font-size: 112px; color: #b4532f; }
+.pill { display: inline-block; margin-top: 14px; padding: 6px 30px 14px; border-radius: 28px; background: #c25a37; color: #fff;
+  font: 800 80px/1.05 "Montserrat"; letter-spacing: -2px; box-shadow: 0 16px 44px rgba(217,119,87,.45); }
+#five { position: absolute; left: 40px; right: 40px; top: 318px; text-align: center; }
+.fv-a { font: 800 140px/1 "Montserrat"; letter-spacing: -5px; color: #1d1418; }
+.fv-a .serif { font-size: 168px; color: #b4532f; }
+.fv-b { margin-top: 18px; font: 700 54px/1.1 "Montserrat"; color: #1d1418; }
+.fv-b .serif { font-size: 70px; }
+.mv { position: absolute; left: 60px; right: 60px; top: 312px; }
+.mv-t { display: inline-block; padding: 8px 22px; border-radius: 30px; background: #1d1418; color: #f6ece2; font-size: 28px; letter-spacing: 3px; }
+.mv-d { display: flex; gap: 10px; margin: 18px 0 10px 6px; }
+.mv-d b { width: 54px; height: 8px; border-radius: 4px; background: rgba(29,20,24,.16); }
+.mv-d b.on { background: #d97757; }
+.mv-h { font: 800 74px/1.05 "Montserrat"; letter-spacing: -2.5px; color: #1d1418; text-shadow: 0 4px 26px rgba(242,232,220,.8); }
+.mv-h i { font-family: "ISerif"; font-weight: 400; font-size: 88px; color: #b4532f; letter-spacing: 0; }
+.mv.dark .mv-t { background: #c25a37; color: #fff; }
+.mv.dark .mv-d b { background: rgba(246,236,226,.2); } .mv.dark .mv-d b.on { background: #f0a07c; }
+.mv.dark .mv-h { color: #f6ece2; text-shadow: 0 4px 30px rgba(0,0,0,.8); }
+.mv.dark .mv-h i { color: #f0a07c; }
+#endc { position: absolute; left: 60px; right: 60px; top: 300px; text-align: center; }
+.ec-1 { display: inline-block; padding: 10px 34px; border-radius: 24px; background: #1d1418; color: #f6ece2; font: 800 60px "Montserrat"; letter-spacing: 2px; }
+.ec-kw { display: block; width: max-content; margin: 16px auto 14px; padding: 4px 54px 14px; border-radius: 34px; background: #c25a37;
+  font: 800 150px/1.05 "Montserrat"; letter-spacing: 6px; color: #fff; box-shadow: 0 20px 60px rgba(217,119,87,.55); transform: rotate(-2deg); }
+.ec-2 { display: inline-block; padding: 8px 26px 12px; border-radius: 22px; background: rgba(255,251,246,.92); font: 700 46px/1.2 "Montserrat"; color: #1d1418; box-shadow: 0 10px 30px rgba(120,70,40,.15); }
+.ec-2 .serif { font-size: 60px; color: #b4532f; }
+.ty { display: inline-block; }
+.cur { display: inline-block; width: 10px; height: 118px; margin-left: 8px; vertical-align: -10px; border-radius: 5px; background: #fff; }
+#caps { z-index: 6; }
+.cap { position: absolute; left: 50px; right: 50px; top: 1330px; text-align: center; opacity: 0; }
+.cap .box { display: inline-block; max-width: 980px; padding: 12px 20px 14px; border-radius: 26px; background: rgba(255,251,246,.92);
+  box-shadow: 0 14px 40px rgba(120,70,40,.18); font: 800 62px/1.15 "Montserrat"; letter-spacing: -1px; color: #1d1418; }
+.cap .w { display: inline-block; padding: 2px 12px 5px; border-radius: 16px; }
+.cap.dark .box { background: rgba(18,10,16,.86); color: #f6ece2; box-shadow: 0 14px 40px rgba(0,0,0,.5); }
+.cap.slam .box { font-size: 92px; letter-spacing: -2px; }
+#fx { z-index: 7; }
+#flash { position: absolute; inset: 0; background: #fff8f1; opacity: 0; }
+#black { position: absolute; inset: 0; background: #07040a; opacity: 0; }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="26.57" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="gl" class="clip" data-start="0" data-duration="26.57" data-track-index="0"></canvas>
+      <div id="ui" class="clip" data-start="0" data-duration="26.57" data-track-index="2" data-layout-allow-overflow>
+        <div class="top"><span class="brand mono"><b>✦</b> NXTLVLSOCIAL.AI</span><span class="prog"><i></i></span></div>
+        <div id="hook"><div class="hl hl0"><span class="hw" id="hw0">I</span> <span class="hw" id="hw1">turned</span> <span class="hw serif" id="hw2">Claude</span> <span class="hw" id="hw3">into</span> <span class="hw" id="hw4">an</span></div><div class="hl hl1"><span class="pill" id="hw5">Instagram growth agent</span></div></div><div id="five"><div class="fv-a">Five <span class="serif">moves.</span></div><div class="fv-b">The last one's the <span class="serif">smartest.</span></div></div><div class="mv mv0"><div class="mv-t mono">MOVE 1/5</div><div class="mv-d"><b class="on"></b><b class=""></b><b class=""></b><b class=""></b><b class=""></b></div><div class="mv-h">Spots what's <i>blowing up</i></div></div><div class="mv mv1"><div class="mv-t mono">MOVE 2/5</div><div class="mv-d"><b class="on"></b><b class="on"></b><b class=""></b><b class=""></b><b class=""></b></div><div class="mv-h">Plans the <i>visuals</i></div></div><div class="mv mv2"><div class="mv-t mono">MOVE 3/5</div><div class="mv-d"><b class="on"></b><b class="on"></b><b class="on"></b><b class=""></b><b class=""></b></div><div class="mv-h">Writes script <i>+ caption</i></div></div><div class="mv mv3"><div class="mv-t mono">MOVE 4/5</div><div class="mv-d"><b class="on"></b><b class="on"></b><b class="on"></b><b class="on"></b><b class=""></b></div><div class="mv-h">Replies to <i>comments</i></div></div><div class="mv mv4 dark"><div class="mv-t mono">MOVE 5/5 · THE SMARTEST</div><div class="mv-d"><b class="on"></b><b class="on"></b><b class="on"></b><b class="on"></b><b class="on"></b></div><div class="mv-h">Studies results, <i>rewrites</i></div></div><div id="endc"><div class="ec-1">Comment</div><div class="ec-kw"><span class="ty ty0">A</span><span class="ty ty1">G</span><span class="ty ty2">E</span><span class="ty ty3">N</span><span class="ty ty4">T</span><i class="cur"></i></div><div class="ec-2">and I'll DM you my <span class="serif">whole setup</span></div></div>
+      </div>
+      <div id="caps" class="clip" data-start="0" data-duration="26.57" data-track-index="3"><div class="cap " id="c1_0"><span class="box"><span class="w" id="c1_0_0">I</span> <span class="w" id="c1_0_1">turned</span> <span class="w" id="c1_0_2">Claude</span> <span class="w" id="c1_0_3">into</span></span></div><div class="cap " id="c1_1"><span class="box"><span class="w" id="c1_1_0">an</span> <span class="w" id="c1_1_1">Instagram</span> <span class="w" id="c1_1_2">growth</span> <span class="w" id="c1_1_3">agent...</span></span></div><div class="cap " id="c2_0"><span class="box"><span class="w" id="c2_0_0">and</span> <span class="w" id="c2_0_1">it</span> <span class="w" id="c2_0_2">took</span> <span class="w" id="c2_0_3">my</span> <span class="w" id="c2_0_4">page</span> <span class="w" id="c2_0_5">from</span></span></div><div class="cap " id="c2_1"><span class="box"><span class="w" id="c2_1_0">three</span> <span class="w" id="c2_1_1">thirty-nine</span> <span class="w" id="c2_1_2">to</span> <span class="w" id="c2_1_3">twenty-four</span> <span class="w" id="c2_1_4">hundred</span> <span class="w" id="c2_1_5">followers.</span></span></div><div class="cap " id="c3_0"><span class="box"><span class="w" id="c3_0_0">It</span> <span class="w" id="c3_0_1">doesn't</span> <span class="w" id="c3_0_2">just</span> <span class="w" id="c3_0_3">post.</span></span></div><div class="cap " id="c3_1"><span class="box"><span class="w" id="c3_1_0">It</span> <span class="w" id="c3_1_1">grows</span> <span class="w" id="c3_1_2">your</span> <span class="w" id="c3_1_3">page.</span></span></div><div class="cap slam" id="c4_0"><span class="box"><span class="w" id="c4_0_0">Five</span> <span class="w" id="c4_0_1">moves.</span></span></div><div class="cap " id="c4_1"><span class="box"><span class="w" id="c4_1_0">The</span> <span class="w" id="c4_1_1">last</span> <span class="w" id="c4_1_2">one's</span> <span class="w" id="c4_1_3">the</span> <span class="w" id="c4_1_4">smartest.</span></span></div><div class="cap " id="c5_0"><span class="box"><span class="w" id="c5_0_0">One:</span></span></div><div class="cap " id="c5_1"><span class="box"><span class="w" id="c5_1_0">it</span> <span class="w" id="c5_1_1">spots</span> <span class="w" id="c5_1_2">what's</span> <span class="w" id="c5_1_3">blowing</span></span></div><div class="cap " id="c5_2"><span class="box"><span class="w" id="c5_2_0">up</span> <span class="w" id="c5_2_1">in</span> <span class="w" id="c5_2_2">your</span> <span class="w" id="c5_2_3">niche.</span></span></div><div class="cap " id="c6_0"><span class="box"><span class="w" id="c6_0_0">Two:</span> <span class="w" id="c6_0_1">it</span> <span class="w" id="c6_0_2">plans</span> <span class="w" id="c6_0_3">the</span> <span class="w" id="c6_0_4">visuals.</span></span></div><div class="cap " id="c7_0"><span class="box"><span class="w" id="c7_0_0">Three:</span></span></div><div class="cap " id="c7_1"><span class="box"><span class="w" id="c7_1_0">it</span> <span class="w" id="c7_1_1">writes</span> <span class="w" id="c7_1_2">the</span> <span class="w" id="c7_1_3">script</span></span></div><div class="cap " id="c7_2"><span class="box"><span class="w" id="c7_2_0">and</span> <span class="w" id="c7_2_1">the</span> <span class="w" id="c7_2_2">caption.</span></span></div><div class="cap " id="c8_0"><span class="box"><span class="w" id="c8_0_0">Four:</span></span></div><div class="cap " id="c8_1"><span class="box"><span class="w" id="c8_1_0">it</span> <span class="w" id="c8_1_1">replies</span> <span class="w" id="c8_1_2">to</span> <span class="w" id="c8_1_3">your</span> <span class="w" id="c8_1_4">comments.</span></span></div><div class="cap dark slam" id="c9_0"><span class="box"><span class="w" id="c9_0_0">And</span> <span class="w" id="c9_0_1">five?</span></span></div><div class="cap dark " id="c10_0"><span class="box"><span class="w" id="c10_0_0">It</span> <span class="w" id="c10_0_1">studies</span> <span class="w" id="c10_0_2">every</span> <span class="w" id="c10_0_3">reel's</span> <span class="w" id="c10_0_4">results...</span></span></div><div class="cap dark " id="c10_1"><span class="box"><span class="w" id="c10_1_0">and</span> <span class="w" id="c10_1_1">rewrites</span> <span class="w" id="c10_1_2">your</span> <span class="w" id="c10_1_3">next</span> <span class="w" id="c10_1_4">one.</span></span></div><div class="cap slam" id="c11_0"><span class="box"><span class="w" id="c11_0_0">Comment</span> <span class="w" id="c11_0_1">AGENT,</span></span></div><div class="cap " id="c11_1"><span class="box"><span class="w" id="c11_1_0">and</span> <span class="w" id="c11_1_1">I'll</span> <span class="w" id="c11_1_2">send</span> <span class="w" id="c11_1_3">you</span></span></div><div class="cap " id="c11_2"><span class="box"><span class="w" id="c11_2_0">my</span> <span class="w" id="c11_2_1">whole</span> <span class="w" id="c11_2_2">setup.</span></span></div></div>
+      <div id="fx" class="clip" data-start="0" data-duration="26.57" data-track-index="4" data-layout-ignore><div id="flash"></div><div id="black"></div></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="26.57" data-track-index="10" data-volume="1"></audio>
+    </div>
+    <script>
+      window.GA_T = {"l": [0.071, 2.489, 6.168, 8.336, 10.593, 12.761, 14.159, 16.053, 17.823, 18.549, 22.451], "e": [2.466, 6.062, 8.301, 10.416, 12.655, 14.018, 15.912, 17.628, 18.478, 21.951, 24.974], "claude": 0.496, "agent": 2.053, "three": 3.496, "twenty": 4.593, "followers": 5.407, "post": 6.681, "grows": 7.425, "page": 8.186, "moves": 8.619, "last": 9.257, "smartest": 9.929, "blowing": 11.566, "niche": 12.239, "plans": 13.23, "visuals": 13.513, "writes": 14.487, "script": 14.841, "caption": 15.531, "replies": 16.478, "comments": 17.115, "five5": 18.053, "studies": 18.761, "results": 19.867, "rewrites": 20.823, "next": 21.531, "agentcta": 22.938, "setup": 24.549, "end": 26.57, "in0": 10.423, "dark0": 17.743, "out1": 22.351, "portal": 1.184};
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#hook",{opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.01,ease:"none",immediateRender:false},0.000);
+      tl.fromTo("#hw0",{opacity:0,y:36,scale:.7},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.22,ease:"back.out(2.6)",immediateRender:false},0.000);
+      tl.fromTo("#hw1",{opacity:0,y:36,scale:.7},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.22,ease:"back.out(2.6)",immediateRender:false},0.000);
+      tl.fromTo("#hw2",{opacity:0,y:36,scale:.7},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.22,ease:"back.out(2.6)",immediateRender:false},0.000);
+      tl.fromTo("#hw3",{opacity:0,y:36,scale:.7},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.22,ease:"back.out(2.6)",immediateRender:false},0.825);
+      tl.fromTo("#hw4",{opacity:0,y:36,scale:.7},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.22,ease:"back.out(2.6)",immediateRender:false},1.002);
+      tl.fromTo("#hw5",{opacity:0,scale:.4,rotation:-4},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.32,ease:"back.out(2.4)",immediateRender:false},1.144);
+      tl.to("#hook",{opacity:0,y:-60,scale:1.08,duration:.2,ease:"power3.in"},2.469);
+      tl.fromTo("#five",{opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.01,ease:"none",immediateRender:false},8.286);
+      tl.fromTo(".fv-a",{opacity:0,scale:1.6},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.28,ease:"expo.out",immediateRender:false},8.286);
+      tl.fromTo(".fv-b",{opacity:0,y:30},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2.2)",immediateRender:false},9.157);
+      tl.fromTo(".fv-b .serif",{color:"#1d1418"},{color:"#b4532f",duration:.15,immediateRender:false},9.929);
+      tl.to("#five",{opacity:0,scale:1.3,duration:.22,ease:"power3.in"},10.173);
+      tl.fromTo(".mv0",{x:-90,opacity:0,scale:.9},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.24,ease:"back.out(2)",immediateRender:false},10.473);
+      tl.to(".mv0",{opacity:0,y:-24,scale:.96,duration:0.14,ease:"power2.in"},12.461);
+      tl.fromTo(".mv1",{x:-90,opacity:0,scale:.9},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.24,ease:"back.out(2)",immediateRender:false},12.641);
+      tl.to(".mv1",{opacity:0,y:-24,scale:.96,duration:0.14,ease:"power2.in"},13.859);
+      tl.fromTo(".mv2",{x:-90,opacity:0,scale:.9},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.24,ease:"back.out(2)",immediateRender:false},14.039);
+      tl.to(".mv2",{opacity:0,y:-24,scale:.96,duration:0.14,ease:"power2.in"},15.753);
+      tl.fromTo(".mv3",{x:-90,opacity:0,scale:.9},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.24,ease:"back.out(2)",immediateRender:false},15.933);
+      tl.to(".mv3",{opacity:0,y:-24,scale:.96,duration:0.14,ease:"power2.in"},17.693);
+      tl.fromTo(".mv4",{x:-90,opacity:0,scale:.9},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.24,ease:"back.out(2)",immediateRender:false},18.429);
+      tl.to(".mv4",{opacity:0,y:-24,scale:.96,duration:0.14,ease:"power2.in"},22.301);
+      tl.fromTo("#endc",{opacity:0,y:40},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},22.351);
+      tl.fromTo(".ec-1",{y:20,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.22,ease:"back.out(2.2)",immediateRender:false},22.371);
+      tl.fromTo(".ec-kw",{scale:.6,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.28,ease:"back.out(2.2)",immediateRender:false},22.788);
+      tl.fromTo(".ty0",{opacity:0,y:-30,scale:1.4},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.14,ease:"back.out(3)",immediateRender:false},22.878);
+      tl.fromTo(".ty1",{opacity:0,y:-30,scale:1.4},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.14,ease:"back.out(3)",immediateRender:false},22.953);
+      tl.fromTo(".ty2",{opacity:0,y:-30,scale:1.4},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.14,ease:"back.out(3)",immediateRender:false},23.028);
+      tl.fromTo(".ty3",{opacity:0,y:-30,scale:1.4},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.14,ease:"back.out(3)",immediateRender:false},23.103);
+      tl.fromTo(".ty4",{opacity:0,y:-30,scale:1.4},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.14,ease:"back.out(3)",immediateRender:false},23.178);
+      tl.fromTo(".cur",{opacity:1},{opacity:0,duration:.22,yoyo:true,repeat:8,ease:"steps(1)",immediateRender:false},22.838);
+      tl.fromTo(".ec-2",{y:20,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.28,ease:"back.out(2.2)",immediateRender:false},24.349);
+      tl.to(".ec-kw",{scale:.93,duration:.09,yoyo:true,repeat:1,ease:"power2.out"},24.924);
+      tl.fromTo("#c1_0",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},0.021);
+      tl.set("#c1_0",{opacity:0},1.012);
+      tl.set("#c1_0_0",{backgroundColor:"#c25a37",color:"#ffffff"},0.071);
+      tl.set("#c1_0_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},0.162);
+      tl.set("#c1_0_1",{backgroundColor:"#c25a37",color:"#ffffff"},0.212);
+      tl.set("#c1_0_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},0.445);
+      tl.set("#c1_0_2",{backgroundColor:"#c25a37",color:"#ffffff"},0.496);
+      tl.set("#c1_0_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},0.799);
+      tl.set("#c1_0_3",{backgroundColor:"#c25a37",color:"#ffffff"},0.885);
+      tl.set("#c1_0_3",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},1.011);
+      tl.fromTo("#c1_1",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},1.012);
+      tl.set("#c1_1",{opacity:0},2.429);
+      tl.set("#c1_1_0",{backgroundColor:"#c25a37",color:"#ffffff"},1.062);
+      tl.set("#c1_1_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},1.153);
+      tl.set("#c1_1_1",{backgroundColor:"#c25a37",color:"#ffffff"},1.204);
+      tl.set("#c1_1_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},1.648);
+      tl.set("#c1_1_2",{backgroundColor:"#c25a37",color:"#ffffff"},1.699);
+      tl.set("#c1_1_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},2.002);
+      tl.set("#c1_1_3",{backgroundColor:"#c25a37",color:"#ffffff"},2.053);
+      tl.set("#c1_1_3",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},2.486);
+      tl.fromTo("#c2_0",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},2.439);
+      tl.set("#c2_0",{opacity:0},3.446);
+      tl.set("#c2_0_0",{backgroundColor:"#c25a37",color:"#ffffff"},2.489);
+      tl.set("#c2_0_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},2.533);
+      tl.set("#c2_0_1",{backgroundColor:"#c25a37",color:"#ffffff"},2.584);
+      tl.set("#c2_0_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},2.675);
+      tl.set("#c2_0_2",{backgroundColor:"#c25a37",color:"#ffffff"},2.726);
+      tl.set("#c2_0_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},2.816);
+      tl.set("#c2_0_3",{backgroundColor:"#c25a37",color:"#ffffff"},2.867);
+      tl.set("#c2_0_3",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},2.958);
+      tl.set("#c2_0_4",{backgroundColor:"#c25a37",color:"#ffffff"},3.009);
+      tl.set("#c2_0_4",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},3.241);
+      tl.set("#c2_0_5",{backgroundColor:"#c25a37",color:"#ffffff"},3.327);
+      tl.set("#c2_0_5",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},3.454);
+      tl.fromTo("#c2_1",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},3.446);
+      tl.set("#c2_1",{opacity:0},6.108);
+      tl.set("#c2_1_0",{backgroundColor:"#c25a37",color:"#ffffff"},3.496);
+      tl.set("#c2_1_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},3.657);
+      tl.set("#c2_1_1",{backgroundColor:"#c25a37",color:"#ffffff"},3.779);
+      tl.set("#c2_1_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},4.224);
+      tl.set("#c2_1_2",{backgroundColor:"#c25a37",color:"#ffffff"},4.274);
+      tl.set("#c2_1_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},4.436);
+      tl.set("#c2_1_3",{backgroundColor:"#c25a37",color:"#ffffff"},4.593);
+      tl.set("#c2_1_3",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},5.002);
+      tl.set("#c2_1_4",{backgroundColor:"#c25a37",color:"#ffffff"},5.053);
+      tl.set("#c2_1_4",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},5.356);
+      tl.set("#c2_1_5",{backgroundColor:"#c25a37",color:"#ffffff"},5.407);
+      tl.set("#c2_1_5",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},6.082);
+      tl.fromTo("#c3_0",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},6.118);
+      tl.set("#c3_0",{opacity:0},7.233);
+      tl.set("#c3_0_0",{backgroundColor:"#c25a37",color:"#ffffff"},6.168);
+      tl.set("#c3_0_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},6.206);
+      tl.set("#c3_0_1",{backgroundColor:"#c25a37",color:"#ffffff"},6.257);
+      tl.set("#c3_0_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},6.418);
+      tl.set("#c3_0_2",{backgroundColor:"#c25a37",color:"#ffffff"},6.469);
+      tl.set("#c3_0_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},6.631);
+      tl.set("#c3_0_3",{backgroundColor:"#c25a37",color:"#ffffff"},6.681);
+      tl.set("#c3_0_3",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},7.232);
+      tl.fromTo("#c3_1",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},7.233);
+      tl.set("#c3_1",{opacity:0},8.276);
+      tl.set("#c3_1_0",{backgroundColor:"#c25a37",color:"#ffffff"},7.283);
+      tl.set("#c3_1_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},7.374);
+      tl.set("#c3_1_1",{backgroundColor:"#c25a37",color:"#ffffff"},7.425);
+      tl.set("#c3_1_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},7.728);
+      tl.set("#c3_1_2",{backgroundColor:"#c25a37",color:"#ffffff"},7.779);
+      tl.set("#c3_1_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},7.940);
+      tl.set("#c3_1_3",{backgroundColor:"#c25a37",color:"#ffffff"},8.186);
+      tl.set("#c3_1_3",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},8.321);
+      tl.fromTo("#c4_0",{opacity:0,scale:1.9},{opacity:1,scale:1,duration:.2,ease:"expo.out",immediateRender:false},8.286);
+      tl.set("#c4_0",{opacity:0},9.077);
+      tl.set("#c4_0_0",{backgroundColor:"#c25a37",color:"#ffffff"},8.336);
+      tl.set("#c4_0_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},8.569);
+      tl.set("#c4_0_1",{backgroundColor:"#c25a37",color:"#ffffff"},8.619);
+      tl.set("#c4_0_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},8.998);
+      tl.fromTo("#c4_1",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},9.077);
+      tl.set("#c4_1",{opacity:0},10.533);
+      tl.set("#c4_1_0",{backgroundColor:"#c25a37",color:"#ffffff"},9.127);
+      tl.set("#c4_1_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},9.170);
+      tl.set("#c4_1_1",{backgroundColor:"#c25a37",color:"#ffffff"},9.257);
+      tl.set("#c4_1_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},9.383);
+      tl.set("#c4_1_2",{backgroundColor:"#c25a37",color:"#ffffff"},9.434);
+      tl.set("#c4_1_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},9.666);
+      tl.set("#c4_1_3",{backgroundColor:"#c25a37",color:"#ffffff"},9.717);
+      tl.set("#c4_1_3",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},9.808);
+      tl.set("#c4_1_4",{backgroundColor:"#c25a37",color:"#ffffff"},9.929);
+      tl.set("#c4_1_4",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},10.436);
+      tl.fromTo("#c5_0",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},10.543);
+      tl.set("#c5_0",{opacity:0},10.844);
+      tl.set("#c5_0_0",{backgroundColor:"#c25a37",color:"#ffffff"},10.593);
+      tl.set("#c5_0_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},10.843);
+      tl.fromTo("#c5_1",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},10.844);
+      tl.set("#c5_1",{opacity:0},11.835);
+      tl.set("#c5_1_0",{backgroundColor:"#c25a37",color:"#ffffff"},10.894);
+      tl.set("#c5_1_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},10.985);
+      tl.set("#c5_1_1",{backgroundColor:"#c25a37",color:"#ffffff"},11.106);
+      tl.set("#c5_1_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},11.268);
+      tl.set("#c5_1_2",{backgroundColor:"#c25a37",color:"#ffffff"},11.319);
+      tl.set("#c5_1_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},11.551);
+      tl.set("#c5_1_3",{backgroundColor:"#c25a37",color:"#ffffff"},11.566);
+      tl.set("#c5_1_3",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},11.834);
+      tl.fromTo("#c5_2",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},11.835);
+      tl.set("#c5_2",{opacity:0},12.701);
+      tl.set("#c5_2_0",{backgroundColor:"#c25a37",color:"#ffffff"},11.885);
+      tl.set("#c5_2_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},11.976);
+      tl.set("#c5_2_1",{backgroundColor:"#c25a37",color:"#ffffff"},11.991);
+      tl.set("#c5_2_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},12.047);
+      tl.set("#c5_2_2",{backgroundColor:"#c25a37",color:"#ffffff"},12.097);
+      tl.set("#c5_2_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},12.188);
+      tl.set("#c5_2_3",{backgroundColor:"#c25a37",color:"#ffffff"},12.239);
+      tl.set("#c5_2_3",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},12.675);
+      tl.fromTo("#c6_0",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},12.711);
+      tl.set("#c6_0",{opacity:0},14.099);
+      tl.set("#c6_0_0",{backgroundColor:"#c25a37",color:"#ffffff"},12.761);
+      tl.set("#c6_0_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},12.967);
+      tl.set("#c6_0_1",{backgroundColor:"#c25a37",color:"#ffffff"},13.018);
+      tl.set("#c6_0_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},13.108);
+      tl.set("#c6_0_2",{backgroundColor:"#c25a37",color:"#ffffff"},13.230);
+      tl.set("#c6_0_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},13.392);
+      tl.set("#c6_0_3",{backgroundColor:"#c25a37",color:"#ffffff"},13.407);
+      tl.set("#c6_0_3",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},13.462);
+      tl.set("#c6_0_4",{backgroundColor:"#c25a37",color:"#ffffff"},13.513);
+      tl.set("#c6_0_4",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},14.038);
+      tl.fromTo("#c7_0",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},14.109);
+      tl.set("#c7_0",{opacity:0},14.331);
+      tl.set("#c7_0_0",{backgroundColor:"#c25a37",color:"#ffffff"},14.159);
+      tl.set("#c7_0_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},14.365);
+      tl.fromTo("#c7_1",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},14.331);
+      tl.set("#c7_1",{opacity:0},15.198);
+      tl.set("#c7_1_0",{backgroundColor:"#c25a37",color:"#ffffff"},14.381);
+      tl.set("#c7_1_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},14.436);
+      tl.set("#c7_1_1",{backgroundColor:"#c25a37",color:"#ffffff"},14.487);
+      tl.set("#c7_1_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},14.719);
+      tl.set("#c7_1_2",{backgroundColor:"#c25a37",color:"#ffffff"},14.735);
+      tl.set("#c7_1_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},14.790);
+      tl.set("#c7_1_3",{backgroundColor:"#c25a37",color:"#ffffff"},14.841);
+      tl.set("#c7_1_3",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},15.210);
+      tl.fromTo("#c7_2",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},15.198);
+      tl.set("#c7_2",{opacity:0},15.993);
+      tl.set("#c7_2_0",{backgroundColor:"#c25a37",color:"#ffffff"},15.248);
+      tl.set("#c7_2_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},15.409);
+      tl.set("#c7_2_1",{backgroundColor:"#c25a37",color:"#ffffff"},15.425);
+      tl.set("#c7_2_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},15.480);
+      tl.set("#c7_2_2",{backgroundColor:"#c25a37",color:"#ffffff"},15.531);
+      tl.set("#c7_2_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},15.932);
+      tl.fromTo("#c8_0",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},16.003);
+      tl.set("#c8_0",{opacity:0},16.322);
+      tl.set("#c8_0_0",{backgroundColor:"#c25a37",color:"#ffffff"},16.053);
+      tl.set("#c8_0_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},16.356);
+      tl.fromTo("#c8_1",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},16.322);
+      tl.set("#c8_1",{opacity:0},17.763);
+      tl.set("#c8_1_0",{backgroundColor:"#c25a37",color:"#ffffff"},16.372);
+      tl.set("#c8_1_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},16.427);
+      tl.set("#c8_1_1",{backgroundColor:"#c25a37",color:"#ffffff"},16.478);
+      tl.set("#c8_1_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},16.852);
+      tl.set("#c8_1_2",{backgroundColor:"#c25a37",color:"#ffffff"},16.903);
+      tl.set("#c8_1_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},16.958);
+      tl.set("#c8_1_3",{backgroundColor:"#c25a37",color:"#ffffff"},16.973);
+      tl.set("#c8_1_3",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},17.064);
+      tl.set("#c8_1_4",{backgroundColor:"#c25a37",color:"#ffffff"},17.115);
+      tl.set("#c8_1_4",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},17.648);
+      tl.fromTo("#c9_0",{opacity:0,scale:1.9},{opacity:1,scale:1,duration:.2,ease:"expo.out",immediateRender:false},17.773);
+      tl.set("#c9_0",{opacity:0},18.489);
+      tl.set("#c9_0_0",{backgroundColor:"#c25a37",color:"#ffffff"},17.823);
+      tl.set("#c9_0_0",{backgroundColor:"rgba(217,119,87,0)",color:"#f6ece2"},17.861);
+      tl.set("#c9_0_1",{backgroundColor:"#c25a37",color:"#ffffff"},18.053);
+      tl.set("#c9_0_1",{backgroundColor:"rgba(217,119,87,0)",color:"#f6ece2"},18.498);
+      tl.fromTo("#c10_0",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},18.499);
+      tl.set("#c10_0",{opacity:0},20.678);
+      tl.set("#c10_0_0",{backgroundColor:"#c25a37",color:"#ffffff"},18.549);
+      tl.set("#c10_0_0",{backgroundColor:"rgba(217,119,87,0)",color:"#f6ece2"},18.710);
+      tl.set("#c10_0_1",{backgroundColor:"#c25a37",color:"#ffffff"},18.761);
+      tl.set("#c10_0_1",{backgroundColor:"rgba(217,119,87,0)",color:"#f6ece2"},19.179);
+      tl.set("#c10_0_2",{backgroundColor:"#c25a37",color:"#ffffff"},19.230);
+      tl.set("#c10_0_2",{backgroundColor:"rgba(217,119,87,0)",color:"#f6ece2"},19.462);
+      tl.set("#c10_0_3",{backgroundColor:"#c25a37",color:"#ffffff"},19.584);
+      tl.set("#c10_0_3",{backgroundColor:"rgba(217,119,87,0)",color:"#f6ece2"},19.816);
+      tl.set("#c10_0_4",{backgroundColor:"#c25a37",color:"#ffffff"},19.867);
+      tl.set("#c10_0_4",{backgroundColor:"rgba(217,119,87,0)",color:"#f6ece2"},20.631);
+      tl.fromTo("#c10_1",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},20.678);
+      tl.set("#c10_1",{opacity:0},22.251);
+      tl.set("#c10_1_0",{backgroundColor:"#c25a37",color:"#ffffff"},20.728);
+      tl.set("#c10_1_0",{backgroundColor:"rgba(217,119,87,0)",color:"#f6ece2"},20.772);
+      tl.set("#c10_1_1",{backgroundColor:"#c25a37",color:"#ffffff"},20.823);
+      tl.set("#c10_1_1",{backgroundColor:"rgba(217,119,87,0)",color:"#f6ece2"},21.268);
+      tl.set("#c10_1_2",{backgroundColor:"#c25a37",color:"#ffffff"},21.319);
+      tl.set("#c10_1_2",{backgroundColor:"rgba(217,119,87,0)",color:"#f6ece2"},21.480);
+      tl.set("#c10_1_3",{backgroundColor:"#c25a37",color:"#ffffff"},21.531);
+      tl.set("#c10_1_3",{backgroundColor:"rgba(217,119,87,0)",color:"#f6ece2"},21.763);
+      tl.set("#c10_1_4",{backgroundColor:"#c25a37",color:"#ffffff"},21.814);
+      tl.set("#c10_1_4",{backgroundColor:"rgba(217,119,87,0)",color:"#f6ece2"},21.971);
+      tl.fromTo("#c11_0",{opacity:0,scale:1.9},{opacity:1,scale:1,duration:.2,ease:"expo.out",immediateRender:false},22.401);
+      tl.set("#c11_0",{opacity:0},23.366);
+      tl.set("#c11_0_0",{backgroundColor:"#c25a37",color:"#ffffff"},22.451);
+      tl.set("#c11_0_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},22.755);
+      tl.set("#c11_0_1",{backgroundColor:"#c25a37",color:"#ffffff"},22.938);
+      tl.set("#c11_0_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},23.418);
+      tl.fromTo("#c11_1",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},23.366);
+      tl.set("#c11_1",{opacity:0},24.039);
+      tl.set("#c11_1_0",{backgroundColor:"#c25a37",color:"#ffffff"},23.416);
+      tl.set("#c11_1_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},23.507);
+      tl.set("#c11_1_1",{backgroundColor:"#c25a37",color:"#ffffff"},23.558);
+      tl.set("#c11_1_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},23.719);
+      tl.set("#c11_1_2",{backgroundColor:"#c25a37",color:"#ffffff"},23.770);
+      tl.set("#c11_1_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},23.861);
+      tl.set("#c11_1_3",{backgroundColor:"#c25a37",color:"#ffffff"},23.912);
+      tl.set("#c11_1_3",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},24.002);
+      tl.fromTo("#c11_2",{opacity:0,y:16,scale:.94},{opacity:1,y:0,scale:1,duration:.13,ease:"back.out(2)",immediateRender:false},24.039);
+      tl.set("#c11_2",{opacity:0},25.274);
+      tl.set("#c11_2_0",{backgroundColor:"#c25a37",color:"#ffffff"},24.089);
+      tl.set("#c11_2_0",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},24.215);
+      tl.set("#c11_2_1",{backgroundColor:"#c25a37",color:"#ffffff"},24.266);
+      tl.set("#c11_2_1",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},24.427);
+      tl.set("#c11_2_2",{backgroundColor:"#c25a37",color:"#ffffff"},24.549);
+      tl.set("#c11_2_2",{backgroundColor:"rgba(217,119,87,0)",color:"#1d1418"},24.994);
+      tl.set("#flash",{opacity:1.0},10.383);tl.to("#flash",{opacity:0,duration:0.32},10.413);
+      tl.set("#flash",{opacity:1.0},22.311);tl.to("#flash",{opacity:0,duration:0.32},22.341);
+      tl.set("#flash",{opacity:0.35},0.476);tl.to("#flash",{opacity:0,duration:0.2},0.506);
+      tl.set("#flash",{opacity:0.3},5.407);tl.to("#flash",{opacity:0,duration:0.3},5.437);
+      tl.set("#flash",{opacity:0.35},20.823);tl.to("#flash",{opacity:0,duration:0.25},20.853);
+      tl.set("#flash",{opacity:0.25},21.631);tl.to("#flash",{opacity:0,duration:0.3},21.661);
+      tl.set("#flash",{opacity:1.0},1.154);tl.to("#flash",{opacity:0,duration:0.35},1.184);
+      tl.set("#flash",{opacity:.14},12.621);tl.to("#flash",{opacity:0,duration:.14},12.631);
+      tl.set("#flash",{opacity:.14},14.019);tl.to("#flash",{opacity:0,duration:.14},14.029);
+      tl.set("#flash",{opacity:.14},15.913);tl.to("#flash",{opacity:0,duration:.14},15.923);
+      tl.set("#flash",{opacity:.14},7.325);tl.to("#flash",{opacity:0,duration:.14},7.335);
+      tl.set("#flash",{opacity:.14},8.236);tl.to("#flash",{opacity:0,duration:.14},8.246);
+      tl.set("#black",{opacity:1},17.743);tl.to("#black",{opacity:0,duration:.18},18.033);
+      tl.fromTo(".prog i",{scaleX:0},{scaleX:1,duration:26.57,ease:"none",immediateRender:false},0);
+      tl.set({}, {}, 26.57);
+      window.__timelines["main"] = tl;
+    </script>
+    <script type="module" src="assets/js/world.js"></script>
+  </body>
+</html>
