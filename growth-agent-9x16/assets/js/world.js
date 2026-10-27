@@ -541,8 +541,9 @@ function drawScreen(k) {
   write(g, "9:41", 60, 46, 30, { w: 700 });
   g.fillStyle = "#1d1418"; rr(g, 610, 34, 52, 24, 7); g.fill();
   if (kind === "p") {                                     // the profile: followers = a, b = "nogrid" while the tiles stand out
-    write(g, "ai.nxtlvl", 48, 150, 46, { w: 800 });
-    g.fillStyle = "#3d8bff"; g.beginPath(); g.arc(282, 150, 14, 0, 7); g.fill(); tick(g, 282, 151, 14, "#fff", 4);
+    write(g, "nxtlvlsocial.ai", 48, 150, 46, { w: 800 });
+    const vx = 48 + g.measureText("nxtlvlsocial.ai").width + 30;
+    g.fillStyle = "#3d8bff"; g.beginPath(); g.arc(vx, 150, 14, 0, 7); g.fill(); tick(g, vx, 151, 14, "#fff", 4);
     g.fillStyle = "#1d1418"; g.beginPath(); g.arc(150, 330, 102, 0, 7); g.fill();
     write(g, "nxtlvl", 150, 332, 44, { w: 800, c: "#fff", a: "center" });
     g.strokeStyle = "#d97757"; g.lineWidth = 8; g.beginPath(); g.arc(150, 330, 116, 0, 7); g.stroke();
@@ -706,7 +707,7 @@ function drawTextures() {
   ct("dm", 780, 200, (g, w, h) => {
     panel(g, w, h, { r: 56 }); g.fillStyle = "#1d1418"; g.beginPath(); g.arc(100, h / 2, 60, 0, 7); g.fill();
     sparkGlyph(g, 100, h / 2, 34, "#d97757");
-    write(g, "ai.nxtlvl · now", 190, 66, 30, { f: "JBMono", c: "#8a7a72" }); write(g, "My whole Claude setup", 190, 130, 44, { w: 800, max: w - 310 });
+    write(g, "nxtlvlsocial.ai · now", 190, 66, 30, { f: "JBMono", c: "#8a7a72" }); write(g, "My whole Claude setup", 190, 130, 44, { w: 800, max: w - 310 });
     g.fillStyle = "#2fbf71"; rr(g, w - 120, h / 2 - 30, 92, 60, 30); g.fill(); write(g, "sent", w - 74, h / 2 + 2, 28, { w: 800, c: "#fff", a: "center" });
   });
   glare.material.map = canvasTex(256, 512, (g, w, h) => {
