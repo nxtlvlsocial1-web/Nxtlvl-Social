@@ -1,0 +1,69 @@
+/* Nxtlvl brand film — UI atoms shared by the scenes (kit.css holds the ground, type and phone).
+   Surfaces are tinted glass; chips are pills; the one solid element per frame is violet. */
+
+:root { --nx-surface: rgba(17,12,34,.86); --nx-shadow: 0 40px 90px -30px rgba(0,0,0,.9); }
+
+/* ---------- surfaces ---------- */
+.bx-card { position: absolute; border-radius: 24px; background: var(--nx-surface); border: 2px solid var(--nx-line-2);
+  box-shadow: var(--nx-shadow); overflow: hidden; }
+.bx-glow { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(169,92,255,.38) 0%, rgba(125,24,252,.16) 40%, rgba(125,24,252,0) 70%); }
+
+/* ---------- type ---------- */
+.bx-h { font-family: "Archivo", sans-serif; font-weight: 800; font-variation-settings: "wdth" 112, "wght" 800;
+  letter-spacing: -0.035em; line-height: .94; color: var(--nx-fg); white-space: nowrap; }
+.bx-h .bx-it { display: block; font-family: "Instrument Serif", serif; font-weight: 400; font-variation-settings: normal;
+  letter-spacing: -0.01em; color: var(--nx-lift); font-size: 1.08em; }
+.bx-eyebrow { display: inline-flex; align-items: center; gap: 12px; padding: 10px 22px 10px 16px; border-radius: 100px;
+  border: 1.5px solid var(--nx-line-2); background: rgba(125,24,252,.12); font-family: "Instrument Sans", sans-serif;
+  font-weight: 600; font-size: 28px; color: var(--nx-pale); white-space: nowrap; }
+.bx-eyebrow .bx-star { width: 16px; height: 16px; background: var(--nx-lift);
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%); }
+.bx-chips { display: flex; flex-wrap: wrap; gap: 14px; }
+.bx-chip { display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; border-radius: 100px;
+  border: 1.5px solid var(--nx-line-2); background: rgba(255,255,255,.05); font-family: "Instrument Sans", sans-serif;
+  font-weight: 600; font-size: 28px; color: var(--nx-fg); white-space: nowrap; }
+.bx-chip.on { background: var(--nx-violet); border-color: var(--nx-violet); color: #fff; }
+.bx-sub { font-family: "Instrument Sans", sans-serif; font-weight: 500; font-size: 28px; color: var(--nx-muted); white-space: nowrap; }
+.bx-sub b { color: var(--nx-fg); font-weight: 600; }
+
+/* ---------- the brand cursor ---------- */
+.bx-cursor { position: absolute; width: 56px; height: 56px; z-index: 50; filter: drop-shadow(0 10px 18px rgba(125,24,252,.6)); }
+.bx-cursor svg { display: block; width: 100%; height: 100%; }
+.bx-ripple { position: absolute; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%;
+  border: 3px solid var(--nx-pale); opacity: 0; pointer-events: none; z-index: 49; }
+
+/* ---------- buttons, tags, badges ---------- */
+.bx-btn { display: inline-flex; align-items: center; gap: 14px; padding: 18px 26px 18px 30px; border-radius: 100px;
+  background: var(--nx-violet); color: #fff; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 30px;
+  white-space: nowrap; box-shadow: 0 24px 60px -18px rgba(125,24,252,.9); }
+.bx-btn .bx-arrow { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.18); }
+.bx-btn .bx-arrow svg { width: 22px; height: 22px; }
+.bx-ghost { display: inline-flex; align-items: center; gap: 12px; padding: 16px 26px; border-radius: 100px;
+  background: rgba(255,255,255,.07); border: 1.5px solid var(--nx-line-2); color: var(--nx-fg);
+  font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 28px; white-space: nowrap; }
+.bx-badge { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 100px;
+  background: var(--nx-win); color: var(--nx-ink); font-family: "Instrument Sans", sans-serif; font-weight: 700; font-size: 28px;
+  white-space: nowrap; box-shadow: 0 16px 40px -14px rgba(82,227,155,.8); }
+.bx-badge .bx-tick { width: 22px; height: 22px; border-radius: 50%; background: var(--nx-ink); position: relative; }
+.bx-badge .bx-tick::after { content: ""; position: absolute; left: 8px; top: 4px; width: 5px; height: 10px;
+  border-right: 2.5px solid var(--nx-win); border-bottom: 2.5px solid var(--nx-win); transform: rotate(45deg); }
+.bx-tag { display: inline-flex; align-items: center; padding: 10px 18px; border-radius: 100px; background: var(--nx-gold);
+  color: #3A1408; font-family: "Instrument Sans", sans-serif; font-weight: 700; font-size: 28px; white-space: nowrap; }
+
+/* ---------- toasts ---------- */
+.bx-toast { display: flex; align-items: center; gap: 16px; padding: 18px 22px; border-radius: 20px; width: 520px;
+  background: var(--nx-surface); border: 1.5px solid var(--nx-line-2); box-shadow: var(--nx-shadow);
+  font-family: "Instrument Sans", sans-serif; color: var(--nx-fg); font-size: 28px; font-weight: 600; width: 600px; }
+.bx-toast .bx-ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex: none; background: rgba(125,24,252,.22); }
+.bx-toast .bx-ic svg { width: 24px; height: 24px; }
+.bx-toast small { margin-left: auto; color: var(--nx-muted); font-weight: 500; font-size: 22px; }
+.bx-toast .bx-ic.ok { background: rgba(82,227,155,.2); }
+
+/* ---------- browser window ---------- */
+.bx-browser { position: absolute; border-radius: 22px; background: #0A0717; border: 2px solid var(--nx-line-2); box-shadow: var(--nx-shadow); overflow: hidden; }
+.bx-bar { height: 62px; display: flex; align-items: center; gap: 10px; padding: 0 22px; background: #110C22; border-bottom: 1.5px solid var(--nx-line); }
+.bx-bar i { width: 14px; height: 14px; border-radius: 50%; background: #3A3352; }
+.bx-bar i:nth-child(1) { background: #FF6B6B; } .bx-bar i:nth-child(2) { background: #FFC46B; } .bx-bar i:nth-child(3) { background: #52E39B; }
+.bx-url { margin-left: 18px; flex: 1; max-width: 520px; height: 36px; border-radius: 100px; background: rgba(255,255,255,.06);
+  display: flex; align-items: center; justify-content: center; font-family: "Instrument Sans", sans-serif; font-size: 20px; color: var(--nx-muted); }
+.bx-url b { color: var(--nx-fg); font-weight: 600; }

@@ -1,0 +1,153 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <link rel="stylesheet" href="assets/css/brand.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-500.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #f4-bg { position: absolute; inset: 0; }
+    #f4-stage { position: absolute; inset: 0; }
+    #f4-world { position: absolute; inset: 0; perspective: 1600px; transform-origin: 62% 50%; }
+    #f4-bloom { left: 760px; top: 60px; width: 960px; height: 960px; }
+
+    /* the browser window */
+    #f4-win { left: 690px; top: 200px; width: 1100px; height: 680px; transform-origin: 50% 50%; transform-style: preserve-3d; }
+    #f4-page { position: absolute; left: 0; right: 0; top: 62px; bottom: 0; background: #05030C; overflow: hidden; }
+    #f4-page .pg-glow { position: absolute; left: -200px; top: -260px; width: 900px; height: 600px; border-radius: 50%; filter: blur(70px); background: rgba(61,7,137,.6); }
+    #f4-page .pg-glow.b { left: auto; right: -300px; top: 200px; background: rgba(125,24,252,.38); }
+    #f4-nav { position: absolute; left: 40px; right: 40px; top: 26px; height: 64px; border-radius: 18px; border: 1.5px solid var(--nx-line-2); background: rgba(5,3,12,.7);
+      display: flex; align-items: center; gap: 28px; padding: 0 14px 0 18px; font-family: "Instrument Sans", sans-serif; font-size: 20px; color: var(--nx-muted); }
+    #f4-nav .pg-mark { width: 40px; height: 40px; }
+    #f4-nav .pg-mark svg { display: block; width: 100%; height: 100%; overflow: visible; }
+    #f4-nav .pg-links { display: flex; gap: 26px; margin-left: auto; }
+    #f4-nav .pg-cta { padding: 10px 18px; border-radius: 100px; background: var(--nx-violet); color: #fff; font-weight: 600; }
+    #f4-hero { position: absolute; left: 0; right: 0; top: 136px; text-align: center; }
+    #f4-pill { display: inline-flex; align-items: center; gap: 10px; padding: 8px 18px 8px 14px; border-radius: 100px; border: 1.5px solid var(--nx-line-2);
+      background: rgba(125,24,252,.12); font-family: "Instrument Sans", sans-serif; font-size: 20px; font-weight: 500; color: #D8CCFF; }
+    #f4-pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--nx-win); }
+    #f4-h1 { margin-top: 24px; font-size: 84px; line-height: .98; text-align: center; white-space: normal; }
+    #f4-h1 span { display: inline-block; white-space: nowrap; }
+    #f4-h1 .pg-w { margin: 0 .12em; }
+    #f4-h1 .pg-it { font-family: "Instrument Serif", serif; font-weight: 400; font-variation-settings: normal; letter-spacing: -0.01em; color: var(--nx-lift); font-size: 1.04em; }
+    #f4-sub { margin-top: 22px; font-family: "Instrument Sans", sans-serif; font-size: 24px; color: var(--nx-muted); }
+    #f4-sub b { color: var(--nx-fg); font-weight: 600; }
+    #f4-btnrow { margin-top: 34px; display: flex; justify-content: center; gap: 16px; }
+    #f4-btn { padding: 16px 24px 16px 28px; font-size: 28px; transform-origin: 50% 50%; }
+    #f4-btn .bx-arrow { width: 38px; height: 38px; }
+    #f4-ghost { padding: 14px 24px; font-size: 24px; }
+
+    /* badges hanging off the window's left edge */
+    .f4-badge { position: absolute; transform-origin: 50% 50%; }
+    #f4-b0 { left: 560px; top: 290px; }
+    #f4-b1 { left: 520px; top: 400px; }
+    #f4-b2 { left: 580px; top: 510px; background: var(--nx-pale); }
+
+    /* the left column */
+    #f4-col { position: absolute; left: 140px; top: 640px; }
+    #f4-title { font-size: 104px; }
+    #f4-note { margin-top: 30px; }
+
+    #f4-cursor { left: 0; top: 0; }
+    #f4-ripple { left: 0; top: 0; }
+    #f4-dip { position: absolute; inset: 0; background: #05030C; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="04-website" data-width="1920" data-height="1080" data-duration="6">
+    <div id="f4-bg" class="clip nx-ground" data-start="0" data-duration="6" data-track-index="0">
+      <i class="nx-glow a" data-layout-allow-overflow></i><i class="nx-glow b" data-layout-allow-overflow></i><i class="nx-glow c" data-layout-allow-overflow></i><i class="nx-ribbon" data-layout-allow-overflow></i><i class="nx-stars"></i>
+    </div>
+    <div id="f4-stage" class="clip" data-start="0" data-duration="6" data-track-index="1">
+      <div id="f4-world">
+        <div id="f4-bloom" class="bx-glow"></div>
+
+        <div id="f4-win" class="bx-browser">
+          <div class="bx-bar"><i></i><i></i><i></i><div class="bx-url" data-layout-ignore><b>nxtlvlsocial.ai</b></div></div>
+          <div id="f4-page">
+            <div class="pg-glow"></div><div class="pg-glow b"></div>
+            <div id="f4-nav" data-layout-ignore>
+              <div class="pg-mark"><svg viewBox="20.6 31.6 147.8 147.8"><path d="M140 33.62 L141.87 42.15 L146.74 50.4 L154.06 56.37 L166.38 60 L154.06 63.63 L146.74 69.6 L141.87 77.85 L140 86.38 L138.13 77.85 L133.26 69.6 L125.94 63.63 L113.62 60 L125.94 56.37 L133.26 50.4 L138.13 42.15 Z" fill="#fff"/><path d="M125.94 83.55 L123.03 76.97 L116.94 74.09 L110.4 75.73 L22.62 177.38 L122.67 91.45 Z" fill="#fff" opacity=".92"/><path d="M123.37 116.27 L120.46 111.42 L114.81 111.14 L65.05 168.89 L121.4 121.01 Z" fill="#A95CFF"/><path d="M82.77 88.04 L80.95 84.42 L76.8 83.38 L74.42 84.58 L39.59 126.47 L81.14 91.99 Z" fill="#B98AFF"/></svg></div>
+              <div class="pg-links"><span>Who it's for</span><span>Services</span><span>Work</span><span>Packages</span><span>FAQ</span></div>
+              <div class="pg-cta">Book a free call</div>
+            </div>
+            <div id="f4-hero">
+              <div id="f4-pill" data-layout-ignore><i></i>Social media + automation studio · built for small businesses</div>
+              <div id="f4-h1" class="bx-h"><span class="pg-w" id="f4-w0">Your</span><span class="pg-w" id="f4-w1">entire</span><span class="pg-w" id="f4-w2">creative</span><span class="pg-w" id="f4-w3">team,</span><span class="pg-w pg-it" id="f4-w4">in one studio</span></div>
+              <div id="f4-sub" data-layout-ignore>Design, reels, websites and automation, <b>finished by a designer</b>.</div>
+              <div id="f4-btnrow"><div id="f4-btn" class="bx-btn">Book a free call<span class="bx-arrow"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><div id="f4-ghost" class="bx-ghost" data-layout-ignore>See the packages</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="f4-b0" class="f4-badge bx-badge"><i class="bx-tick"></i>Fast on phones</div>
+        <div id="f4-b1" class="f4-badge bx-badge"><i class="bx-tick"></i>Found on Google</div>
+        <div id="f4-b2" class="f4-badge bx-badge"><i class="bx-tick"></i>AI-search ready</div>
+
+        <div id="f4-col">
+          <div id="f4-title" class="bx-h">Websites<span class="bx-it">that get found</span></div>
+          <div id="f4-note" class="bx-sub">Mobile-first · <b>booking form to your inbox</b></div>
+        </div>
+
+        <div id="f4-ripple" class="bx-ripple"></div>
+        <div id="f4-cursor" class="bx-cursor" data-layout-allow-overflow><svg viewBox="0 0 24 24"><path d="M5 3l14 8.5-6.2 1.4 3.6 6.6-2.6 1.4-3.6-6.6L5 19z" fill="#fff" stroke="#7D18FC" stroke-width="1.4" stroke-linejoin="round"/></svg></div>
+      </div>
+      <div id="f4-dip"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var words = ["#f4-w0", "#f4-w1", "#f4-w2", "#f4-w3", "#f4-w4"];
+
+      gsap.set("#f4-dip", { opacity: 0 });
+      gsap.set("#f4-cursor", { x: 1980, y: 1000 });
+      gsap.set("#f4-ripple", { x: 1980, y: 1000, scale: 0.2, opacity: 0 });
+      gsap.set([".f4-badge"], { scale: 0, opacity: 0 });
+      gsap.set(["#f4-nav", "#f4-pill", "#f4-sub", "#f4-btn", "#f4-ghost"], { opacity: 0 });
+      gsap.set(words, { opacity: 0 });
+
+      // 0.0  whip in: the window flies in from the right with a 3D turn and flattens; the bloom follows
+      tl.fromTo("#f4-win", { x: 820, rotationY: -22, filter: "blur(12px)", opacity: 0 }, { x: 0, rotationY: 0, filter: "blur(0px)", opacity: 1, duration: 0.55, ease: "expo.out" }, 0);
+      tl.fromTo("#f4-bloom", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.9, ease: "power3.out" }, 0.05);
+      tl.fromTo("#f4-title", { x: -80, opacity: 0, filter: "blur(8px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.55, ease: "power4.out" }, 0.3);
+      tl.fromTo("#f4-note", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 1.2);
+
+      // 0.5  the page builds: nav slides down, the pill, the headline words waterfall, the sub, the buttons
+      tl.fromTo("#f4-nav", { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power4.out" }, 0.5);
+      tl.fromTo("#f4-pill", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power4.out" }, 0.8);
+      words.forEach(function (w, i) {
+        tl.fromTo(w, { y: 70, opacity: 0, filter: "blur(6px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "expo.out" }, 0.85 + i * 0.09);
+      });
+      tl.fromTo("#f4-sub", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 1.6);
+      tl.fromTo("#f4-btn", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" }, 1.9);
+      tl.fromTo("#f4-ghost", { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 2.05);
+
+      // 2.4  the cursor comes in, slows onto the button, presses at 3.0 (19.0 s)
+      tl.to("#f4-cursor", { x: 1118, y: 712, duration: 0.6, ease: "power3.out" }, 2.4);
+      tl.to("#f4-cursor", { scale: 0.86, duration: 0.08, ease: "power2.in" }, 3.0);
+      tl.to("#f4-cursor", { scale: 1, duration: 0.3, ease: "back.out(2)" }, 3.08);
+      tl.to("#f4-btn", { scale: 0.92, duration: 0.08, ease: "power2.in" }, 3.0);
+      tl.to("#f4-btn", { scale: 1, duration: 0.34, ease: "back.out(2.2)" }, 3.08);
+      tl.set("#f4-ripple", { x: 1118, y: 712, scale: 0.2, opacity: 0.9 }, 3.0);
+      tl.to("#f4-ripple", { scale: 1.6, opacity: 0, duration: 0.45, ease: "power2.out" }, 3.02);
+      tl.to("#f4-cursor", { x: 1260, y: 900, opacity: 0, duration: 0.4, ease: "power2.in" }, 3.7);
+
+      // 4.0  the proof badges pop on the beats, hanging off the window's left edge
+      ["#f4-b0", "#f4-b1", "#f4-b2"].forEach(function (b, i) {
+        tl.fromTo(b, { scale: 0, opacity: 0, x: 60, rotation: -6 }, { scale: 1, opacity: 1, x: 0, rotation: 0, duration: 0.5, ease: "back.out(1.7)" }, 3.3 + i * 0.35);
+      });
+
+      // a slow push on the world over the scene, then a dip cut into the impact
+      tl.fromTo("#f4-world", { scale: 1 }, { scale: 1.045, duration: 5.4, ease: "power1.inOut" }, 0.4);
+      tl.to("#f4-world", { filter: "blur(4px)", duration: 0.2, ease: "power2.in" }, 5.8);
+      tl.set("#f4-dip", { opacity: 0.45 }, 5.9);
+
+      tl.seek(0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["04-website"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,9 @@
+# Nxtlvl Social: every crawler is welcome, including AI search and assistant crawlers
+# (OAI-SearchBot, ChatGPT-User, PerplexityBot, Claude-SearchBot, Google-Extended).
+# To stay in AI search but keep AI training crawlers out, add blocks like:
+#   User-agent: GPTBot
+#   Disallow: /
+User-agent: *
+Allow: /
+
+Sitemap: https://nxtlvlsocial.ai/sitemap.xml

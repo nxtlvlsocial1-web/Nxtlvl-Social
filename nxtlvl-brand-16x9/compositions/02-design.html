@@ -1,0 +1,160 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <link rel="stylesheet" href="assets/css/brand.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-500.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #f2-bg { position: absolute; inset: 0; }
+    #f2-stage { position: absolute; inset: 0; }
+    #f2-world { position: absolute; inset: 0; }
+    #f2-bloom { left: 110px; top: 90px; width: 900px; height: 900px; }
+
+    /* the post card (4:5) */
+    #f2-card { left: 300px; top: 215px; width: 520px; height: 650px; transform-origin: 50% 50%; }
+    #f2-photo { position: absolute; inset: 0; transform-origin: 50% 40%;
+      background:
+        radial-gradient(circle at 50% 44%, #F4E3C8 0 13%, #C79A6B 14% 22%, #6E4327 23% 38%, #2C1A10 39%),
+        #2C1A10; }
+    #f2-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,3,12,0) 40%, rgba(5,3,12,.85)); }
+    #f2-flood { position: absolute; left: 0; right: 0; bottom: 0; height: 290px; background: var(--nx-violet); transform-origin: 50% 100%; }
+    #f2-head { position: absolute; left: 36px; bottom: 116px; font-size: 54px; color: #fff; line-height: .96; white-space: nowrap; }
+    #f2-head .bx-caret { display: inline-block; width: 6px; height: .92em; margin-left: 6px; background: #fff; vertical-align: -0.08em; }
+    #f2-tag { position: absolute; left: 36px; bottom: 44px; }
+    #f2-logo { position: absolute; right: 30px; bottom: 36px; width: 54px; height: 54px; }
+    #f2-logo svg { display: block; width: 100%; height: 100%; overflow: visible; }
+    #f2-badge { position: absolute; left: 640px; top: 196px; transform-origin: 50% 50%; }
+
+    /* brand-kit chips floating off the card's right edge */
+    #f2-kit { position: absolute; left: 870px; top: 250px; display: flex; flex-direction: column; gap: 18px; }
+    .f2-sw { width: 62px; height: 62px; border-radius: 18px; border: 2px solid rgba(255,255,255,.18); box-shadow: 0 16px 36px -14px rgba(0,0,0,.9); transform-origin: 50% 50%; }
+    #f2-font { padding: 12px 22px; border-radius: 100px; background: var(--nx-surface); border: 1.5px solid var(--nx-line-2);
+      font-family: "Archivo", sans-serif; font-weight: 800; font-size: 28px; color: var(--nx-fg); white-space: nowrap; transform-origin: 0 50%; }
+
+    /* the approve bar under the card */
+    #f2-bar { position: absolute; left: 300px; top: 900px; width: 520px; height: 84px; border-radius: 100px; display: flex; align-items: center;
+      padding: 0 12px 0 28px; gap: 16px; background: var(--nx-surface); border: 1.5px solid var(--nx-line-2); box-shadow: var(--nx-shadow);
+      font-family: "Instrument Sans", sans-serif; font-size: 24px; color: var(--nx-muted); font-weight: 500; }
+    #f2-approve { margin-left: auto; padding: 14px 26px; font-size: 28px; }
+
+    /* the right column */
+    #f2-col { position: absolute; left: 1040px; top: 300px; }
+    #f2-title { font-size: 128px; }
+    #f2-chips { margin-top: 44px; width: 760px; }
+    #f2-note { margin-top: 36px; }
+
+    #f2-cursor { left: 0; top: 0; }
+    #f2-ripple { left: 0; top: 0; }
+    #f2-dip { position: absolute; inset: 0; background: #05030C; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="02-design" data-width="1920" data-height="1080" data-duration="6">
+    <div id="f2-bg" class="clip nx-ground" data-start="0" data-duration="6" data-track-index="0">
+      <i class="nx-glow a" data-layout-allow-overflow></i><i class="nx-glow b" data-layout-allow-overflow></i><i class="nx-glow c" data-layout-allow-overflow></i><i class="nx-ribbon" data-layout-allow-overflow></i><i class="nx-stars"></i>
+    </div>
+    <div id="f2-stage" class="clip" data-start="0" data-duration="6" data-track-index="1">
+      <div id="f2-world">
+        <div id="f2-bloom" class="bx-glow"></div>
+
+        <div id="f2-card" class="bx-card">
+          <div id="f2-photo"></div>
+          <div id="f2-flood"></div>
+          <div id="f2-head" class="bx-h"><span id="f2-head-txt"></span><i class="bx-caret" id="f2-caret"></i></div>
+          <div id="f2-tag" class="bx-tag">Today only</div>
+          <div id="f2-logo"><svg viewBox="20.6 31.6 147.8 147.8"><path d="M140 33.62 L141.87 42.15 L146.74 50.4 L154.06 56.37 L166.38 60 L154.06 63.63 L146.74 69.6 L141.87 77.85 L140 86.38 L138.13 77.85 L133.26 69.6 L125.94 63.63 L113.62 60 L125.94 56.37 L133.26 50.4 L138.13 42.15 Z" fill="#fff"/><path d="M125.94 83.55 L123.03 76.97 L116.94 74.09 L110.4 75.73 L22.62 177.38 L122.67 91.45 Z" fill="#fff" opacity=".9"/><path d="M123.37 116.27 L120.46 111.42 L114.81 111.14 L65.05 168.89 L121.4 121.01 Z" fill="#D8BBFF"/></svg></div>
+        </div>
+        <div id="f2-badge" class="bx-badge"><i class="bx-tick"></i>Designer-finished</div>
+
+        <div id="f2-kit">
+          <div class="f2-sw" id="f2-sw0" style="background:#7D18FC"></div>
+          <div class="f2-sw" id="f2-sw1" style="background:#A95CFF"></div>
+          <div class="f2-sw" id="f2-sw2" style="background:#FFC46B"></div>
+          <div id="f2-font">Aa Archivo</div>
+        </div>
+
+        <div id="f2-bar"><span data-layout-ignore>Draft 1 · The Corner Café</span><div id="f2-approve" class="bx-btn">Approve</div></div>
+
+        <div id="f2-col">
+          <div id="f2-title" class="bx-h">Social media<span class="bx-it">design</span></div>
+          <div id="f2-chips" class="bx-chips">
+            <span class="bx-chip" id="f2-c0">Posts</span><span class="bx-chip" id="f2-c1">Carousels</span><span class="bx-chip" id="f2-c2">Stories</span><span class="bx-chip" id="f2-c3">Menus</span><span class="bx-chip" id="f2-c4">Festival creatives</span>
+          </div>
+          <div id="f2-note" class="bx-sub"><b>Brand kit</b> in week one · drafts next day</div>
+        </div>
+
+        <div id="f2-ripple" class="bx-ripple"></div>
+        <div id="f2-cursor" class="bx-cursor" data-layout-allow-overflow><svg viewBox="0 0 24 24"><path d="M5 3l14 8.5-6.2 1.4 3.6 6.6-2.6 1.4-3.6-6.6L5 19z" fill="#fff" stroke="#7D18FC" stroke-width="1.4" stroke-linejoin="round"/></svg></div>
+      </div>
+      <div id="f2-dip"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var HEAD = "Monsoon combo";
+      var headTxt = document.getElementById("f2-head-txt");
+
+      gsap.set("#f2-dip", { opacity: 0 });
+      gsap.set("#f2-cursor", { x: 1500, y: 1180 });
+      gsap.set("#f2-ripple", { x: 1500, y: 1180, scale: 0.2, opacity: 0 });
+      gsap.set("#f2-flood", { scaleY: 0 });
+      gsap.set(["#f2-tag", "#f2-badge", "#f2-logo", ".f2-sw", "#f2-font"], { scale: 0, opacity: 0 });
+      gsap.set("#f2-head", { opacity: 0 });
+      gsap.set("#f2-caret", { opacity: 0 });
+
+      // 0.0  the drop: the card is already there; the photo lands into it from above and the bloom blooms
+      tl.fromTo("#f2-card", { scale: 0.96, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "power4.out" }, 0);
+      tl.fromTo("#f2-photo", { yPercent: -70, scale: 1.25, opacity: 0 }, { yPercent: 0, scale: 1, opacity: 1, duration: 0.5, ease: "expo.out" }, 0.02);
+      tl.fromTo("#f2-bloom", { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.9, ease: "power3.out" }, 0);
+      tl.fromTo("#f2-bar", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power4.out" }, 0.35);
+
+      // 0.3  the headline column: title blurs in, chips waterfall, the note
+      tl.fromTo("#f2-title", { x: 60, opacity: 0, filter: "blur(8px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.55, ease: "power4.out" }, 0.3);
+      ["#f2-c0", "#f2-c1", "#f2-c2", "#f2-c3", "#f2-c4"].forEach(function (c, i) {
+        tl.fromTo(c, { y: 50, opacity: 0, rotation: 3 }, { y: 0, opacity: 1, rotation: 0, duration: 0.45, ease: "circ.out" }, 1.0 + i * 0.1);
+      });
+      tl.fromTo("#f2-note", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 1.7);
+
+      // 1.0  brand kit: the swatches pop in (beats), the font chip slides out, and the card takes the brand
+      ["#f2-sw0", "#f2-sw1", "#f2-sw2"].forEach(function (s, i) {
+        tl.fromTo(s, { scale: 0, opacity: 0, rotation: -25 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.45, ease: "back.out(1.6)" }, 1.0 + i * 0.25);
+      });
+      tl.fromTo("#f2-font", { scale: 0.6, opacity: 0, x: -30 }, { scale: 1, opacity: 1, x: 0, duration: 0.5, ease: "back.out(1.4)" }, 1.75);
+      tl.to("#f2-flood", { scaleY: 1, duration: 0.5, ease: "expo.out" }, 1.6);
+      tl.fromTo("#f2-logo", { scale: 0, opacity: 0, rotation: -90 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.5, ease: "back.out(1.6)" }, 1.85);
+
+      // 2.0  the headline types itself (seek-safe: a proxy counter sets the text at every seek)
+      var typed = { n: 0 };
+      tl.set("#f2-head", { opacity: 1 }, 2.0);
+      tl.set("#f2-caret", { opacity: 1 }, 2.0);
+      tl.to(typed, { n: HEAD.length, duration: 1.1, ease: "none", onUpdate: function () { headTxt.textContent = HEAD.slice(0, Math.round(typed.n)); } }, 2.0);
+      // caret blink as a square wave on the timeline clock (finite)
+      for (var k = 0; k < 6; k++) { tl.set("#f2-caret", { opacity: k % 2 ? 1 : 0 }, 3.1 + k * 0.25); }
+      tl.set("#f2-caret", { opacity: 0 }, 4.6);
+      tl.fromTo("#f2-tag", { scale: 0, opacity: 0, rotation: -8 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.5, ease: "back.out(1.8)" }, 3.5);
+
+      // 4.0  the cursor arrives from off-stage, slows into the Approve button, lands a little off centre, presses
+      tl.to("#f2-cursor", { x: 742, y: 936, duration: 0.55, ease: "power3.out" }, 3.95);
+      tl.to("#f2-cursor", { scale: 0.86, duration: 0.08, ease: "power2.in" }, 4.5);
+      tl.to("#f2-cursor", { scale: 1, duration: 0.3, ease: "back.out(2)" }, 4.58);
+      tl.to("#f2-approve", { scale: 0.92, duration: 0.08, ease: "power2.in" }, 4.5);
+      tl.to("#f2-approve", { scale: 1, duration: 0.34, ease: "back.out(2.2)" }, 4.58);
+      tl.set("#f2-ripple", { x: 742, y: 936, scale: 0.2, opacity: 0.9 }, 4.5);
+      tl.to("#f2-ripple", { scale: 1.6, opacity: 0, duration: 0.45, ease: "power2.out" }, 4.52);
+      tl.fromTo("#f2-badge", { scale: 1.8, opacity: 0, rotation: -6 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.42, ease: "back.out(1.5)" }, 4.62);
+      tl.fromTo("#f2-approve", { backgroundColor: "#7D18FC" }, { backgroundColor: "#52E39B", duration: 0.3, ease: "power2.out" }, 4.6);
+      tl.to("#f2-cursor", { x: 820, y: 1010, opacity: 0, duration: 0.4, ease: "power2.in" }, 5.1);
+
+      // 5.72  exit: the whole world whips left and blurs into the reels scene
+      tl.to("#f2-world", { x: -420, filter: "blur(10px)", opacity: 0.7, duration: 0.26, ease: "power3.in" }, 5.76);
+
+      tl.seek(0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["02-design"] = tl;
+    })();
+  </script>
+</template>

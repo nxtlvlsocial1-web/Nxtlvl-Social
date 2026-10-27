@@ -1,0 +1,685 @@
+{
+ "summary": {
+  "health_score": 76,
+  "previous_health_score": 50,
+  "business_type": "Agency (creative + automation studio for small businesses), with local service-area signals (India, on-site shoots)",
+  "audited_url": "website/index.html served locally (not deployed)",
+  "audit_date": "2026-10-23",
+  "top_findings": [
+   "Critical: The site is not live, so nothing can be indexed",
+   "Critical: The contact details are still placeholders",
+   "High: Weak experience and trust signals (E-E-A-T)",
+   "High: One page has to rank for everything",
+   "High: No city or service area anywhere on the page"
+  ],
+  "quick_wins": [
+   "Replace the WhatsApp number (910000000000 / +91 00000 00000) and the email in index.html, then remove the placeholder note.",
+   "Confirm the domain; if it is not nxtlvlsocial.ai, replace it in the head tags, JSON-LD, robots.txt and sitemap.xml.",
+   "Deploy the whole website/ folder to the domain root over HTTPS with gzip or brotli.",
+   "Name the city and service area on the page and in areaServed; create a Google Business Profile as a service-area business.",
+   "Add email, telephone and sameAs (Instagram and other profiles) to the JSON-LD; link the profiles in the footer."
+  ]
+ },
+ "categories": [
+  {
+   "name": "Technical SEO",
+   "score": 72,
+   "previous_score": 48,
+   "weight": 22,
+   "what_works": [
+    "All page copy is in the HTML itself, so any crawler sees it without running JavaScript.",
+    "Fixed: the file is now a complete document: <!doctype html>, <html lang=\"en-IN\">, <head> and <body>.",
+    "Fixed: canonical tag, robots.txt (welcomes search and AI crawlers, links the sitemap) and sitemap.xml are ready in website/.",
+    "Fixed: favicon (SVG and 48 px PNG), apple-touch-icon and theme-color.",
+    "Fixed: in a Googlebot-style render (viewport stretched to the page, no scrolling) 121 of 122 text blocks are visible, up from 61 of 139. The pinned manifesto no longer stretches the page to 128,000 px; renderers get it as plain text, and visitors still get the full animation.",
+    "Fixed: GSAP is served from the site itself (website/vendor/gsap-3.14.2/), not a third-party CDN.",
+    "Mobile viewport set, no sideways scroll at 390 px or 1440 px, no JavaScript errors, skip link, single h1, reduced-motion mode."
+   ],
+   "findings": [
+    {
+     "title": "The site is not live, so nothing can be indexed",
+     "severity": "Critical",
+     "description": "The page only exists in the repo and as a private claude.ai artifact. HTTPS, redirects, security headers and real-user Core Web Vitals can only be checked once it is on a public domain.",
+     "recommendation": "Deploy the whole website/ folder (index.html, vendor/, the icons, og-image.png, logo.png, robots.txt, sitemap.xml) to the domain root over HTTPS with gzip or brotli on, then re-run this audit against the live URL."
+    },
+    {
+     "title": "The domain is assumed, not confirmed",
+     "severity": "Medium",
+     "description": "The canonical tag, og:url, og:image, the JSON-LD, robots.txt and sitemap.xml all use https://nxtlvlsocial.ai/, the domain from the page's placeholder email.",
+     "recommendation": "If the real domain is different, replace nxtlvlsocial.ai in those places before launch. A comment at the top of index.html lists them."
+    },
+    {
+     "title": "three.js still loads from a third-party CDN",
+     "severity": "Low",
+     "description": "The finale's three.js module is imported from cdn.jsdelivr.net, but only when the visitor reaches the end of the page, so it does not affect loading.",
+     "recommendation": "Optional: self-host it next to GSAP when the site is deployed."
+    }
+   ]
+  },
+  {
+   "name": "Content Quality",
+   "score": 66,
+   "previous_score": 60,
+   "weight": 23,
+   "what_works": [
+    "2,848 words of plain, specific copy; no filler and no AI-writing patterns (quality 95/100).",
+    "A 12-question FAQ that answers the real objections, transparent pricing and a clear week-by-week first month.",
+    "Fixed: the empty testimonial cards are off the live page. They sit in a <template> in index.html, ready to restore once there are real quotes.",
+    "The cost comparison is already labelled on the page as illustrative \"typical market rates\"."
+   ],
+   "findings": [
+    {
+     "title": "Weak experience and trust signals (E-E-A-T)",
+     "severity": "High",
+     "description": "No founder or team, no About section, no real client work or results, and no location.",
+     "recommendation": "Add a short \"Who makes this\" block with names and faces, two or three real client examples with numbers, and the city you work from. Then restore the testimonials with real quotes."
+    },
+    {
+     "title": "One page has to rank for everything",
+     "severity": "High",
+     "description": "All services, industries and prices sit on one URL.",
+     "recommendation": "After launch, add one page per core service and per main industry (cafés, salons, gyms, clinics), linked from the home page sections that already exist."
+    },
+    {
+     "title": "Say where the \"typical market rates\" come from",
+     "severity": "Low",
+     "description": "The comparison ($35 per freelance reel) is labelled as illustrative but names no source.",
+     "recommendation": "Add one line on the source, for example \"from quotes we collected from N freelancers in 2026\"."
+    },
+    {
+     "title": "Repetition flag from the content checker",
+     "severity": "Low",
+     "description": "Repetition score 32, driven by words like post, reel and month. Normal for a services page.",
+     "recommendation": "No action needed."
+    }
+   ]
+  },
+  {
+   "name": "On-Page SEO",
+   "score": 80,
+   "previous_score": 50,
+   "weight": 20,
+   "what_works": [
+    "Fixed: title \"Social Media Content & Automation from $5/mo | Nxtlvl Social\" (60 characters).",
+    "Fixed: meta description with who, what, price and a call to action (153 characters).",
+    "Fixed: Open Graph and Twitter card tags with a 1200×630 share image, so links shared on WhatsApp, Instagram and LinkedIn show a proper card.",
+    "One h1, a logical outline of headings, clear anchor navigation."
+   ],
+   "findings": [
+    {
+     "title": "No city or service area anywhere on the page",
+     "severity": "High",
+     "description": "The page signals India (+91, .in, Diwali, Ganpati) and offers on-site shoots \"within our service area\", but never names a city, so it cannot rank for \"social media agency in <city>\" or show in local results.",
+     "recommendation": "Name the city and shoot area (hero trust line, the FAQ answer about shoots, footer), add it to the JSON-LD areaServed, and set up a Google Business Profile as a service-area business."
+    },
+    {
+     "title": "No links to the business's social profiles",
+     "severity": "Low",
+     "description": "A social media agency with no link to its own Instagram misses a proof point and an entity signal.",
+     "recommendation": "Link Instagram (and other active profiles) from the footer and contact section, and add them to the JSON-LD as sameAs."
+    }
+   ]
+  },
+  {
+   "name": "Schema / Structured Data",
+   "score": 80,
+   "previous_score": 5,
+   "weight": 10,
+   "what_works": [
+    "Fixed: Organization and WebSite JSON-LD (valid JSON) with name, URL, logo, image, description, slogan, areaServed (India) and knowsAbout.",
+    "Fixed: an OfferCatalog of the three plans (Content & Design, Video & Editing, Social + Automation) with their monthly starting prices in USD."
+   ],
+   "findings": [
+    {
+     "title": "Add contact details and profiles to the schema once they are real",
+     "severity": "Medium",
+     "description": "email, telephone and sameAs are left out on purpose while the contact details are placeholders.",
+     "recommendation": "When the real email, WhatsApp number and Instagram handle are in, add \"email\", \"telephone\" and \"sameAs\" to the Organization block, then test with the Rich Results Test and validator.schema.org."
+    },
+    {
+     "title": "Do not add FAQPage or Review markup yet",
+     "severity": "Info",
+     "description": "Google retired FAQ rich results for all sites on 7 May 2026, and there are no real reviews yet.",
+     "recommendation": "Add Review markup only for real, attributable client reviews."
+    }
+   ]
+  },
+  {
+   "name": "Performance (CWV)",
+   "score": 80,
+   "previous_score": 62,
+   "weight": 10,
+   "what_works": [
+    "Fixed: the headline no longer waits on a third-party CDN, and never waits more than 1.5 s for GSAP. Lab LCP is now 1.47 s on desktop (was 2.64 s) and 0.94–1.07 s on mobile.",
+    "Fixed: GSAP is self-hosted; the page is ready (DOMContentLoaded) in 936 ms on desktop, down from 1624 ms.",
+    "Layout stays stable: CLS 0.0005 desktop, 0.003 mobile.",
+    "The 3D headline, manifesto and every other animation still play for visitors."
+   ],
+   "findings": [
+    {
+     "title": "First visits measure slower because of the opening intro",
+     "severity": "Medium",
+     "description": "On a first visit the intro plays and the headline letters fly in, and LCP counts that flight. Lab LCP for first visits was 1.36–2.76 s across runs. That is within the 2.5 s limit at best and just over it at worst. The sandbox uses a software GPU, so real devices should be faster.",
+     "recommendation": "After launch, watch LCP in Search Console. If the 75th percentile is over 2.5 s, start the letters closer to their place or shorten the flight from 1.7 s."
+    },
+    {
+     "title": "One very large HTML file",
+     "severity": "Medium",
+     "description": "index.html is about 365 KB (about 100 KB gzipped) with the CSS and JS inline.",
+     "recommendation": "Serve it with gzip or brotli; move CSS and JS into cached files once there is more than one page."
+    },
+    {
+     "title": "Large DOM: 2,230 elements",
+     "severity": "Medium",
+     "description": "Mostly decorative layers (odometer columns, the sample feed, particles and glints).",
+     "recommendation": "Build the decorative parts when they scroll into view."
+    },
+    {
+     "title": "Render-blocking Google Fonts stylesheet",
+     "severity": "Medium",
+     "description": "Three font families load from fonts.googleapis.com before first paint.",
+     "recommendation": "Self-host Latin WOFF2 subsets and preload the two used above the fold."
+    },
+    {
+     "title": "Interaction responsiveness (INP) not measured",
+     "severity": "Low",
+     "description": "No field data before launch; several continuous animations run.",
+     "recommendation": "Test on a mid-range Android phone after launch; target INP under 200 ms."
+    }
+   ]
+  },
+  {
+   "name": "Images",
+   "score": 92,
+   "previous_score": 85,
+   "weight": 5,
+   "what_works": [
+    "Fixed: og-image.png (1200×630) in the brand violet with the headline, plus logo.png for the schema.",
+    "Both inline images have alt text; total image weight on the page is about 13 KB."
+   ],
+   "findings": [
+    {
+     "title": "The logo is embedded twice as base64 PNG",
+     "severity": "Low",
+     "description": "Two inline copies of a 6.4 KB PNG; they can't be cached.",
+     "recommendation": "Reference website/logo.png (or an SVG version) instead when the site is deployed."
+    },
+    {
+     "title": "No real work in image form",
+     "severity": "Info",
+     "description": "The page shows mock posts, not real client work.",
+     "recommendation": "Add approved client work as WebP/AVIF with descriptive alt text and file names."
+    }
+   ]
+  },
+  {
+   "name": "AI Search Readiness",
+   "score": 65,
+   "previous_score": 45,
+   "weight": 10,
+   "what_works": [
+    "Server-rendered content and short, quotable FAQ answers.",
+    "Fixed: the Organization schema states who the business is, what it offers and at what price.",
+    "Fixed: robots.txt explicitly welcomes AI search crawlers.",
+    "Fixed: the savings number now reads \"$405\" as text (the rolling digits are drawn by CSS), for crawlers and screen readers alike."
+   ],
+   "findings": [
+    {
+     "title": "Entity signals are still thin",
+     "severity": "Medium",
+     "description": "No sameAs links, no city, no named people, so AI answers have little to connect \"Nxtlvl Social\" to.",
+     "recommendation": "Add profile links and the city (see On-Page and Schema), and keep the business name and description identical on Instagram, Google Business Profile and directories."
+    },
+    {
+     "title": "No llms.txt",
+     "severity": "Low",
+     "description": "Listed for completeness only; it carries no weight in this score.",
+     "recommendation": "Optional."
+    }
+   ]
+  },
+  {
+   "name": "Search Experience (SXO, not weighted)",
+   "score": null,
+   "what_works": [
+    "Fixed: \"Book a free call\" now lands on a \"Book on WhatsApp\" button (opens WhatsApp with a pre-filled message) and an \"Email us\" button; the email and number are links too.",
+    "The mobile first screen shows the headline, subhead, both buttons and the trust line.",
+    "The price is in the hero and the FAQ handles the main objections."
+   ],
+   "findings": [
+    {
+     "title": "The contact details are still placeholders",
+     "severity": "Critical",
+     "description": "The new buttons and links point to +91 00000 00000 (wa.me/910000000000) and connect@nxtlvlsocial.ai, which the page itself flags as placeholders.",
+     "recommendation": "Replace the number and email everywhere they appear in index.html (the comment at the top lists the places), then remove the \"Placeholder contact details\" note."
+    },
+    {
+     "title": "Prices in dollars, everything else says India",
+     "severity": "Medium",
+     "description": "USD prices ($5, $15, $49) next to Indian contact details, festivals and examples.",
+     "recommendation": "Confirm the target market; if it is India, show ₹ (optionally with $ for overseas clients) and update priceCurrency in the JSON-LD."
+    },
+    {
+     "title": "Many small tap targets",
+     "severity": "Low",
+     "description": "40 of 66 tappable elements on mobile are under 44×44 px, mostly industry chips and inline links.",
+     "recommendation": "Give chips and footer links at least 44 px of tappable height."
+    }
+   ]
+  }
+ ],
+ "action_plan": {
+  "phases": [
+   {
+    "name": "Done: fixes applied on 23 Oct 2026",
+    "timeframe": "Done",
+    "items": [
+     "Complete document: <!doctype html>, <html lang=\"en-IN\">, <head>, <body>.",
+     "New title, meta description and canonical tag.",
+     "Open Graph and Twitter card tags, with a new 1200×630 share image (website/og-image.png).",
+     "Favicon (SVG and PNG), apple-touch-icon and theme-color.",
+     "Organization and WebSite JSON-LD, including the three plans and their prices.",
+     "robots.txt and sitemap.xml.",
+     "Testimonial placeholders moved off the live page into a <template>.",
+     "\"Book on WhatsApp\" and \"Email us\" buttons in the contact section; the email, number and FAQ WhatsApp mention are now links.",
+     "Text stays visible for search-engine renderers: no manifesto pin, intro, letter flight or label scramble in a viewport taller than any screen.",
+     "Headline waits at most 1.5 s for the animation library; GSAP is self-hosted.",
+     "The savings odometer exposes its real value as text.",
+     "A space before each <br> inside headings."
+    ]
+   },
+   {
+    "name": "Phase 1: Before launch (Critical)",
+    "timeframe": "Week 1",
+    "items": [
+     "Replace the WhatsApp number (910000000000 / +91 00000 00000) and the email in index.html, then remove the placeholder note.",
+     "Confirm the domain; if it is not nxtlvlsocial.ai, replace it in the head tags, JSON-LD, robots.txt and sitemap.xml.",
+     "Deploy the whole website/ folder to the domain root over HTTPS with gzip or brotli.",
+     "Verify the domain in Google Search Console, submit sitemap.xml, and check the URL Inspection rendered screenshot.",
+     "Test the page with the Rich Results Test and validator.schema.org."
+    ]
+   },
+   {
+    "name": "Phase 2: High-impact",
+    "timeframe": "Weeks 2-3",
+    "items": [
+     "Name the city and service area on the page and in areaServed; create a Google Business Profile as a service-area business.",
+     "Add email, telephone and sameAs (Instagram and other profiles) to the JSON-LD; link the profiles in the footer.",
+     "Decide between ₹ and $ pricing for the target market."
+    ]
+   },
+   {
+    "name": "Phase 3: Content and authority",
+    "timeframe": "Month 2",
+    "items": [
+     "Add an About/team block with real names and faces.",
+     "Publish two or three case studies of real client work with numbers; restore the testimonials with real quotes.",
+     "Add one page per core service and per main industry, linked from the home page.",
+     "Name the source of the \"typical market rates\" comparison.",
+     "Collect real Google reviews through the Business Profile."
+    ]
+   },
+   {
+    "name": "Phase 4: Monitoring",
+    "timeframe": "Ongoing",
+    "items": [
+     "Watch Search Console coverage, queries and Core Web Vitals monthly, especially first-visit LCP.",
+     "Test INP on a mid-range Android phone after each motion change.",
+     "Re-run the SEO audit against the live URL and store a drift baseline."
+    ]
+   }
+  ]
+ },
+ "corrections": [
+  "The first audit called the testimonials \"made-up quotes\". On closer reading they were openly labelled empty cards (\"real quotes from real clients go here\"), not invented reviews. Keeping them off a live page was still right.",
+  "The first audit said headings ran words together at line breaks. That came from the parse_html.py extractor, which joins text without spaces; browsers and Google read the words correctly. A space before each <br> was added anyway.",
+  "The first audit said the cost comparison had no label. The page already labels it as illustrative \"typical market rates\"; only the source is missing (now Low)."
+ ],
+ "measurements": {
+  "before": {
+   "desktop": {
+    "vw": 1440,
+    "scrollW": 1440,
+    "horizOverflow": false,
+    "tapTargets": 63,
+    "smallTapTargets": 29,
+    "smallTapSample": [
+     "Skip to content",
+     "",
+     "Who it's for",
+     "The maths",
+     "Services",
+     "Pricing",
+     "FAQ",
+     "Cafés & restaurants",
+     "Salons & spas",
+     "Gyms & studios",
+     "Boutiques & retail",
+     "Clinics & dentists"
+    ],
+    "tinyTextEls": 70,
+    "domNodes": 2256,
+    "lcp": {
+     "t": 2640,
+     "el": "H1",
+     "size": 159952
+    },
+    "cls": 0.009,
+    "domContentLoaded": 1624,
+    "load": 1700,
+    "transferBytes": 357102,
+    "decodedBytes": 356802,
+    "h1Visible": true,
+    "ctaAboveFold": [
+     "",
+     "Who it's for",
+     "The maths",
+     "Services",
+     "Pricing",
+     "FAQ"
+    ],
+    "errs": []
+   },
+   "mobile": {
+    "vw": 390,
+    "scrollW": 390,
+    "horizOverflow": false,
+    "tapTargets": 61,
+    "smallTapTargets": 38,
+    "smallTapSample": [
+     "Skip to content",
+     "",
+     "Open menu",
+     "Animations",
+     "Cafés & restaurants",
+     "Salons & spas",
+     "Gyms & studios",
+     "Boutiques & retail",
+     "Clinics & dentists",
+     "Real estate",
+     "Coaching centres",
+     "Auto & services"
+    ],
+    "tinyTextEls": 70,
+    "domNodes": 2232,
+    "lcp": {
+     "t": 1048,
+     "el": "H1",
+     "size": 30667
+    },
+    "cls": 0.002,
+    "domContentLoaded": 615,
+    "load": 677,
+    "transferBytes": 357102,
+    "decodedBytes": 356802,
+    "h1Visible": true,
+    "ctaAboveFold": [
+     "",
+     "Who it's for",
+     "The maths",
+     "Services",
+     "What we make",
+     "What lands"
+    ],
+    "errs": []
+   },
+   "desktop-first-visit": {
+    "vw": 1440,
+    "scrollW": 1440,
+    "horizOverflow": false,
+    "tapTargets": 63,
+    "smallTapTargets": 29,
+    "smallTapSample": [
+     "Skip to content",
+     "",
+     "Who it's for",
+     "The maths",
+     "Services",
+     "Pricing",
+     "FAQ",
+     "Cafés & restaurants",
+     "Salons & spas",
+     "Gyms & studios",
+     "Boutiques & retail",
+     "Clinics & dentists"
+    ],
+    "tinyTextEls": 70,
+    "domNodes": 2255,
+    "lcp": {
+     "t": 2832,
+     "el": "H1",
+     "size": 159952
+    },
+    "cls": 0.0005,
+    "domContentLoaded": 1888,
+    "load": 1968,
+    "transferBytes": 357102,
+    "decodedBytes": 356802,
+    "h1Visible": true,
+    "ctaAboveFold": [
+     "",
+     "Who it's for",
+     "The maths",
+     "Services",
+     "Pricing",
+     "FAQ"
+    ],
+    "errs": []
+   }
+  },
+  "after": {
+   "desktop": {
+    "vw": 1440,
+    "scrollW": 1440,
+    "horizOverflow": false,
+    "tapTargets": 68,
+    "smallTapTargets": 30,
+    "smallTapSample": [
+     "Skip to content",
+     "",
+     "Who it's for",
+     "The maths",
+     "Services",
+     "Pricing",
+     "FAQ",
+     "Cafés & restaurants",
+     "Salons & spas",
+     "Gyms & studios",
+     "Boutiques & retail",
+     "Clinics & dentists"
+    ],
+    "tinyTextEls": 70,
+    "domNodes": 2230,
+    "lcp": {
+     "t": 1472,
+     "el": "H1",
+     "size": 159952
+    },
+    "cls": 0.0005,
+    "domContentLoaded": 936,
+    "load": 984,
+    "transferBytes": 365176,
+    "decodedBytes": 364876,
+    "h1Visible": true,
+    "ctaAboveFold": [
+     "",
+     "Who it's for",
+     "The maths",
+     "Services",
+     "Pricing",
+     "FAQ"
+    ],
+    "errs": []
+   },
+   "mobile": {
+    "vw": 390,
+    "scrollW": 390,
+    "horizOverflow": false,
+    "tapTargets": 66,
+    "smallTapTargets": 40,
+    "smallTapSample": [
+     "Skip to content",
+     "",
+     "Open menu",
+     "Animations",
+     "Cafés & restaurants",
+     "Salons & spas",
+     "Gyms & studios",
+     "Boutiques & retail",
+     "Clinics & dentists",
+     "Real estate",
+     "Coaching centres",
+     "Auto & services"
+    ],
+    "tinyTextEls": 70,
+    "domNodes": 2206,
+    "lcp": {
+     "t": 944,
+     "el": "H1",
+     "size": 30667
+    },
+    "cls": 0.003,
+    "domContentLoaded": 547,
+    "load": 586,
+    "transferBytes": 365176,
+    "decodedBytes": 364876,
+    "h1Visible": true,
+    "ctaAboveFold": [
+     "",
+     "Who it's for",
+     "The maths",
+     "Services",
+     "What we make",
+     "What lands"
+    ],
+    "errs": []
+   },
+   "desktop-first-visit": {
+    "vw": 1440,
+    "scrollW": 1440,
+    "horizOverflow": false,
+    "tapTargets": 68,
+    "smallTapTargets": 30,
+    "smallTapSample": [
+     "Skip to content",
+     "",
+     "Who it's for",
+     "The maths",
+     "Services",
+     "Pricing",
+     "FAQ",
+     "Cafés & restaurants",
+     "Salons & spas",
+     "Gyms & studios",
+     "Boutiques & retail",
+     "Clinics & dentists"
+    ],
+    "tinyTextEls": 70,
+    "domNodes": 2230,
+    "lcp": {
+     "t": 2760,
+     "el": "H1",
+     "size": 159952
+    },
+    "cls": 0.0013,
+    "domContentLoaded": 1426,
+    "load": 1479,
+    "transferBytes": 365176,
+    "decodedBytes": 364876,
+    "h1Visible": true,
+    "ctaAboveFold": [
+     "",
+     "Who it's for",
+     "The maths",
+     "Services",
+     "Pricing",
+     "FAQ"
+    ],
+    "errs": []
+   }
+  },
+  "after_render_checks": {
+   "desktop": {
+    "h1gs": true,
+    "late": false,
+    "lcp": [
+     1468,
+     "H1"
+    ],
+    "dcl": 724,
+    "title": "Social Media Content & Automation from $5/mo | Nxtlvl Social",
+    "words": false,
+    "calc": "$405",
+    "calcAfter": {
+     "inner": "$405",
+     "text": "$405"
+    },
+    "manifesto": {
+     "live": true,
+     "pinned": true
+    },
+    "errs": []
+   },
+   "firstVisit": {
+    "h1gs": true,
+    "late": false,
+    "lcp": [
+     1364,
+     "H1"
+    ],
+    "errs": []
+   },
+   "mobile": {
+    "h1gs": true,
+    "late": false,
+    "lcp": [
+     1068,
+     "H1"
+    ],
+    "errs": []
+   },
+   "rendererResize": {
+    "blocks": 122,
+    "invisible": 1,
+    "sample": [
+     "P: Tap the post to like it"
+    ],
+    "height": 23469,
+    "cls": "intro-on js gs h1-gs tall no-scrub",
+    "before": 23469,
+    "errs": []
+   },
+   "rendererTall": {
+    "blocks": 122,
+    "invisible": 1,
+    "sample": [
+     "P: Tap the post to like it"
+    ],
+    "height": 19973,
+    "cls": "tall no-scrub js gs",
+    "errs": []
+   },
+   "reduced": {
+    "blocks": 122,
+    "invisible": 2,
+    "sample": [
+     "P: Every post for the month laid out before",
+     "P: Tap the post to like it"
+    ],
+    "height": 18180,
+    "cls": "os-rm rm js no-scrub gs",
+    "errs": []
+   }
+  }
+ },
+ "limitations": [
+  "Not deployed: HTTPS, redirects, security headers and field Core Web Vitals could not be tested.",
+  "No Google Search Console, GA4, CrUX, Matomo, Moz or DataForSEO access: no rankings, traffic, backlinks or field data.",
+  "Lab timings come from a sandboxed headless Chromium with a software GPU and the font CDN stubbed; they vary between runs, so ranges are given."
+ ],
+ "artifacts": {
+  "findings_dir": "findings/",
+  "screenshots_dir": "screenshots/",
+  "raw_dir": "raw/"
+ }
+}

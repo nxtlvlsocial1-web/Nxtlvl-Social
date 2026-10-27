@@ -1,0 +1,243 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-400.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-500.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #f3-bg { position: absolute; inset: 0; }
+    #f3-stage { position: absolute; inset: 0; }
+
+    /* the feed is the scroll "world" inside the phone screen (screen clips it) */
+    #f3-feed { will-change: transform; }
+
+    /* slots 10–12: the empty tile waits underneath, the post lands on top of it */
+    .f3-slot { position: relative; aspect-ratio: 1 / 1; }
+    .f3-slot > .nx-empty-tile,
+    .f3-slot > .nx-post { position: absolute; inset: 0; }
+
+    /* landing posts: centred pop + white flash that fades */
+    .f3-land { transform-origin: 50% 50%; }
+    .f3-flash { position: absolute; inset: 0; background: #ffffff; opacity: 0; z-index: 4; pointer-events: none; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div data-hf-id="hf-nvwa" id="root" data-composition-id="03-what-lands" data-width="1920" data-height="1080" data-duration="8">
+    <div data-hf-id="hf-ofc9" id="f3-bg" class="clip nx-ground" data-start="0" data-duration="8" data-track-index="0">
+      <i data-hf-id="hf-d85h" class="nx-glow a"></i><i data-hf-id="hf-jdva" class="nx-glow b"></i><i data-hf-id="hf-nbzb" class="nx-glow c"></i><i data-hf-id="hf-cfaj" class="nx-ribbon"></i><i data-hf-id="hf-gzgq" class="nx-stars"></i>
+    </div>
+    <div data-hf-id="hf-mb29" id="f3-stage" class="clip" data-start="0" data-duration="8" data-track-index="1">
+
+      <div data-hf-id="hf-5osx" class="nx-display" id="f3-make" style="position:absolute; right:1200px; top:388px; font-size:120px; text-align:right; white-space:nowrap">We make</div>
+      <div data-hf-id="hf-mrj8" class="nx-phone" id="f3-phone" style="left:770px; top:80px; transform-origin:0 0">
+        <div data-hf-id="hf-bctj" class="nx-screen">
+          <div data-hf-id="hf-4oo0" class="nx-island"></div>
+          <div data-hf-id="hf-wyop" class="nx-status"><span data-hf-id="hf-zwmt">9:41</span><span data-hf-id="hf-zuqb" class="nx-sig"><i data-hf-id="hf-n0km" style="height:4px"></i><i data-hf-id="hf-sg4c" style="height:6px"></i><i data-hf-id="hf-jylm" style="height:8px"></i><i data-hf-id="hf-xj3t" style="height:10px"></i><b data-hf-id="hf-xe6h" class="nx-bat"></b></span></div>
+          <div data-hf-id="hf-8mpz" class="nx-feed" data-layout-allow-overlap id="f3-feed" style="top:52px">
+            <div data-hf-id="hf-5ale" class="nx-prof">
+              <div data-hf-id="hf-hk9y" class="nx-handle">the.corner.cafe<i data-hf-id="hf-kuhj" class="nx-chev"></i></div>
+              <div data-hf-id="hf-yqet" class="nx-row"><div data-hf-id="hf-kqf7" class="nx-ava"><b data-hf-id="hf-xujp"></b></div>
+                <div data-hf-id="hf-bw68" class="nx-stats"><div data-hf-id="hf-yeow"><b data-hf-id="hf-wnps" id="f3-count">9</b><span data-hf-id="hf-uolc">posts</span></div><div data-hf-id="hf-y7yw"><b data-hf-id="hf-6wgc">412</b><span data-hf-id="hf-0jzs">followers</span></div><div data-hf-id="hf-x11t"><b data-hf-id="hf-s1x0">180</b><span data-hf-id="hf-il1o">following</span></div></div></div>
+              <div data-hf-id="hf-94ez" class="nx-name">The Corner Café</div><div data-hf-id="hf-5rdc" class="nx-bio">Coffee · brunch · open 7–10</div>
+              <div data-hf-id="hf-ludc" class="nx-btns"><span data-hf-id="hf-6140">Edit profile</span><span data-hf-id="hf-knzt">Share profile</span></div>
+            </div>
+            <div data-hf-id="hf-k2s3" class="nx-tabs"><i data-hf-id="hf-l5u7" class="on"></i><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i></div>
+            <div data-hf-id="hf-u885" class="nx-grid" id="f3-grid">
+              <div data-hf-id="hf-qdig" class="nx-post nx-p-latte" id="f3-t1"><i data-hf-id="hf-u48f" class="nx-tag reel"></i><div data-hf-id="hf-k3ih" class="nx-cap">Monday<br data-hf-id="hf-x5px"/>Mocha</div></div>
+              <div data-hf-id="hf-bzh3" class="nx-post nx-p-diwali" id="f3-t2"><div data-hf-id="hf-vjrz" class="nx-cap">Happy Diwali</div></div>
+              <div data-hf-id="hf-snbp" class="nx-post nx-p-menu" id="f3-t3"><div data-hf-id="hf-6aom" class="nx-cap">NEW<br data-hf-id="hf-rsrt"/>MENU</div></div>
+              <div data-hf-id="hf-iuiq" class="nx-post nx-p-salon" id="f3-t4"><i data-hf-id="hf-zmoq" class="nx-tag multi"></i><div data-hf-id="hf-jzc8" class="nx-cap">5 looks<br data-hf-id="hf-szow"/>for fall</div></div>
+              <div data-hf-id="hf-n4rc" class="nx-post nx-p-offer" id="f3-t5"><div data-hf-id="hf-8ujb" class="nx-cap">20% OFF<small data-hf-id="hf-mgg1">this weekend</small></div></div>
+              <div data-hf-id="hf-r6rj" class="nx-post nx-p-review" id="f3-t6"><div data-hf-id="hf-yu26" class="nx-cap">Best coffee<br data-hf-id="hf-sldv"/>in town</div></div>
+              <div data-hf-id="hf-tlbk" class="nx-post nx-p-thali" id="f3-t7"><i data-hf-id="hf-71n3" class="nx-tag reel"></i><div data-hf-id="hf-fwtm" class="nx-cap">Thali<br data-hf-id="hf-qluq"/>Tuesday</div></div>
+              <div data-hf-id="hf-xsuo" class="nx-post nx-p-navratri" id="f3-t8"><div data-hf-id="hf-t72z" class="nx-cap">Navratri<br data-hf-id="hf-q7jp"/>nights</div></div>
+              <div data-hf-id="hf-wpnt" class="nx-post nx-p-hours" id="f3-t9"><div data-hf-id="hf-h2mv" class="nx-cap">Open<br data-hf-id="hf-regs"/>till 10</div></div>
+              <div data-hf-id="hf-2yam" class="f3-slot" id="f3-s10"><div data-hf-id="hf-lqiz" class="nx-empty-tile"></div><div data-hf-id="hf-1lqm" class="nx-post nx-p-gym f3-land" id="f3-t10"><i data-hf-id="hf-6nc2" class="nx-tag reel"></i><div data-hf-id="hf-nd9q" class="nx-cap">Summer<br data-hf-id="hf-r05r"/>shred</div><i data-hf-id="hf-lro4" class="f3-flash"></i></div></div>
+              <div data-hf-id="hf-6wen" class="f3-slot" id="f3-s11"><div data-hf-id="hf-5n1n" class="nx-empty-tile"></div><div data-hf-id="hf-4kvv" class="nx-post nx-p-drop f3-land" id="f3-t11"><i data-hf-id="hf-z5q6" class="nx-tag multi"></i><div data-hf-id="hf-lbe0" class="nx-cap">NEW<br data-hf-id="hf-p0mm"/>DROP</div><i data-hf-id="hf-rkvg" class="f3-flash"></i></div></div>
+              <div data-hf-id="hf-y8is" class="f3-slot" id="f3-s12"><div data-hf-id="hf-58qm" class="nx-empty-tile"></div><div data-hf-id="hf-fxas" class="nx-post nx-p-bake f3-land" id="f3-t12"><div data-hf-id="hf-yibt" class="nx-cap">Fresh<br data-hf-id="hf-ombl"/>at 7am</div><i data-hf-id="hf-qdyd" class="f3-flash"></i></div></div>
+              <div data-hf-id="hf-oy4q" class="nx-post nx-p-latte f3-land" id="f3-t13"><i data-hf-id="hf-6911" class="nx-tag reel"></i><div data-hf-id="hf-5325" class="nx-cap">Monday<br data-hf-id="hf-qsyj"/>Mocha</div><i data-hf-id="hf-qs9e" class="f3-flash"></i></div>
+              <div data-hf-id="hf-zst5" class="nx-post nx-p-diwali f3-land" id="f3-t14"><div data-hf-id="hf-dd9b" class="nx-cap">Happy Diwali</div><i data-hf-id="hf-srsj" class="f3-flash"></i></div>
+              <div data-hf-id="hf-1ydp" class="nx-post nx-p-salon f3-land" id="f3-t15"><i data-hf-id="hf-zk17" class="nx-tag multi"></i><div data-hf-id="hf-hy1s" class="nx-cap">5 looks<br data-hf-id="hf-r79k"/>for fall</div><i data-hf-id="hf-t63k" class="f3-flash"></i></div>
+            </div>
+          </div>
+          <div data-hf-id="hf-9uv2" class="nx-toast" data-layout-allow-overlap id="f3-toast1" style="top:640px"><i data-hf-id="hf-x1st" class="nx-ok"></i>Posted · Diwali poster<small data-hf-id="hf-0a8b">Tue 6 PM</small></div>
+          <div data-hf-id="hf-yy6v" class="nx-toast" data-layout-allow-overlap id="f3-toast2" style="top:640px"><i data-hf-id="hf-g0a9" class="nx-ok"></i>Posted · Navratri reel<small data-hf-id="hf-5jep">Thu 7 PM</small></div>
+          <div data-hf-id="hf-5bm6" class="nx-toast" data-layout-allow-overlap id="f3-toast3" style="top:640px"><i data-hf-id="hf-h77c" class="nx-ok"></i>Posted · Weekend offer<small data-hf-id="hf-k5es">Sat 11 AM</small></div>
+        </div>
+      </div>
+      <div data-hf-id="hf-0b12" class="nx-serif" id="f3-word" style="position:absolute; left:1200px; top:374px; font-size:132px; line-height:.92; width:660px">the reels.</div>
+
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["03-what-lands"] = tl;
+
+      const DURATION = 8;
+      const byId = (id) => document.getElementById(id);
+      const feed = byId("f3-feed");
+      const word = byId("f3-word");
+      const make = byId("f3-make");
+      const count = byId("f3-count");
+
+      // ---------- discrete-text-sequence: hard-cut state swaps on the beat ----------
+      // Each entry shows from its t until the next entry's t (frame-local seconds).
+      const WORDS = [
+        { t: 0.0, text: "the reels." },
+        { t: 1.0, text: "the posters." },
+        { t: 2.0, text: "the carousels." },
+        { t: 3.0, text: "the menus." },
+        { t: 4.0, text: "the festival drops." },
+        { t: 5.0, text: "the captions." },
+        { t: 5.5, text: "the ads." },
+        { t: 6.0, text: "it too." },
+      ];
+      const ANCHOR = [
+        { t: 0.0, text: "We make" },
+        { t: 6.0, text: "We post" },
+      ];
+      // posts stat ticks quietly as each post lands
+      const COUNT = [
+        { t: 0.0, text: "9" },
+        { t: 4.0, text: "10" },
+        { t: 4.5, text: "11" },
+        { t: 5.0, text: "12" },
+        { t: 6.0, text: "13" },
+        { t: 6.5, text: "14" },
+        { t: 7.0, text: "15" },
+      ];
+      function textAt(seq, time) {
+        for (let i = seq.length - 1; i >= 0; i--) {
+          if (time + 1e-6 >= seq[i].t) return seq[i].text;
+        }
+        return seq[0].text;
+      }
+
+      // ---------- asr-keyword-glow on the tile named by each swap: violet ring + slight lift ----------
+      const ATTACK_DUR = 0.12;
+      const RELEASE = 0.35;
+      const REST_LEVEL = 0.15;
+      const MAX_BLUR = 24;
+      const MAX_SCALE_BOOST = 0.07;
+      const MAX_LIFT = 6;
+      const TIMINGS = [
+        { el: byId("f3-t1"), start: 0.0, end: 0.85 }, // reels → latte
+        { el: byId("f3-t2"), start: 1.0, end: 1.85 }, // posters → diwali
+        { el: byId("f3-t4"), start: 2.0, end: 2.85 }, // carousels → salon
+        { el: byId("f3-t3"), start: 3.0, end: 3.85 }, // menus → menu
+        { el: byId("f3-t8"), start: 4.0, end: 4.85 }, // festival drops → navratri
+        { el: byId("f3-t6"), start: 5.0, end: 5.4, inset: true }, // captions → review
+        { el: byId("f3-t5"), start: 5.5, end: 5.95 }, // ads → offer
+      ];
+      function envelope(time, start, end) {
+        if (time < start) return 0;
+        if (time < end) return Math.min((time - start) / ATTACK_DUR, 1);
+        const releaseEnd = end + RELEASE;
+        if (time < releaseEnd) return 1 - ((time - end) / RELEASE) * (1 - REST_LEVEL);
+        return REST_LEVEL;
+      }
+      function paintTile(item, env) {
+        const el = item.el;
+        if (env <= 0.001) {
+          el.style.boxShadow = "";
+          el.style.transform = "";
+          el.style.zIndex = "";
+          return;
+        }
+        // ring + glow follow the envelope (breadcrumb at rest); the lift settles fully back
+        const lift = Math.max(0, (env - REST_LEVEL) / (1 - REST_LEVEL));
+        let shadow =
+          "0 0 0 3px rgba(169,92,255," + env.toFixed(3) + "), " +
+          "0 0 " + (MAX_BLUR * env).toFixed(1) + "px rgba(169,92,255," + (0.6 * env).toFixed(3) + ")";
+        if (item.inset) shadow += ", inset 0 0 0 1.5px rgba(169,124,255,.32)";
+        el.style.boxShadow = shadow;
+        el.style.transform =
+          "translateY(" + (-MAX_LIFT * lift).toFixed(2) + "px) scale(" + (1 + MAX_SCALE_BOOST * lift).toFixed(4) + ")";
+        el.style.zIndex = lift > 0.01 ? "3" : "1";
+      }
+
+      // one linear driver for every discrete swap + the glow envelopes
+      function render(time) {
+        word.textContent = textAt(WORDS, time);
+        make.textContent = textAt(ANCHOR, time);
+        count.textContent = textAt(COUNT, time);
+        for (let i = 0; i < TIMINGS.length; i++) {
+          paintTile(TIMINGS[i], envelope(time, TIMINGS[i].start, TIMINGS[i].end));
+        }
+      }
+      const driver = { t: 0 };
+      render(0);
+      tl.to(
+        driver,
+        { t: DURATION, duration: DURATION, ease: "none", onUpdate: () => render(driver.t) },
+        0,
+      );
+
+      // ---------- viewport-change on the feed: smooth scroll up 170 px to show the new rows ----------
+      const cam = { y: 0 };
+      function applyCamera() {
+        feed.style.transform = "translateY(" + cam.y.toFixed(2) + "px)";
+      }
+      applyCamera();
+      tl.fromTo(
+        cam,
+        { y: 0 },
+        { y: -170, duration: 1.3, ease: "power2.inOut", onUpdate: applyCamera, immediateRender: false },
+        4.0,
+      );
+
+      // ---------- posts 10–15 land on the beat: scale-pop + white flash ----------
+      const LANDS = [
+        ["f3-t10", 4.0],
+        ["f3-t11", 4.5],
+        ["f3-t12", 5.0],
+        ["f3-t13", 6.0],
+        ["f3-t14", 6.5],
+        ["f3-t15", 7.0],
+      ];
+      LANDS.forEach(([id, at]) => {
+        const post = byId(id);
+        const flash = post.querySelector(".f3-flash");
+        tl.fromTo(post, { scale: 0, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.45, ease: "power3.out" }, at);
+        tl.fromTo(flash, { opacity: 0.9 }, { opacity: 0, duration: 0.5, ease: "power2.out" }, at);
+      });
+
+      // ---------- "Posted" toasts slide up inside the phone; each replaces the last ----------
+      const TOAST_IN_FROM = { y: 110, autoAlpha: 0 };
+      const TOAST_IN_TO = { y: 0, autoAlpha: 1, duration: 0.4, ease: "power3.out" };
+      tl.fromTo("#f3-toast1", TOAST_IN_FROM, TOAST_IN_TO, 2.0);
+      tl.fromTo("#f3-toast1", { y: 0, autoAlpha: 1 }, { y: -16, autoAlpha: 0, duration: 0.18, ease: "power2.in", immediateRender: false }, 4.0);
+      tl.fromTo("#f3-toast2", TOAST_IN_FROM, TOAST_IN_TO, 4.0);
+      tl.fromTo("#f3-toast2", { y: 0, autoAlpha: 1 }, { y: -16, autoAlpha: 0, duration: 0.18, ease: "power2.in", immediateRender: false }, 6.0);
+      tl.fromTo("#f3-toast3", TOAST_IN_FROM, TOAST_IN_TO, 6.0);
+      // toast 3 clears by 7.5 — slides back down out of the screen
+      tl.fromTo("#f3-toast3", { y: 0, autoAlpha: 1 }, { y: 110, autoAlpha: 0, duration: 0.3, ease: "power2.in", immediateRender: false }, 7.15);
+
+      // ---------- hold 7.0–8.0: subtle jitter on "it too." (anchor stays pinned) ----------
+      const CYCLES = 0.6;
+      const idle = { p: 0 };
+      tl.fromTo(
+        idle,
+        { p: 0 },
+        {
+          p: Math.PI * 2 * CYCLES,
+          duration: 1.0,
+          ease: "none",
+          immediateRender: false,
+          onUpdate: () => {
+            const k = idle.p / (Math.PI * 2 * CYCLES);
+            const fade = k < 0.8 ? 1 : (1 - k) / 0.2;
+            const y = (Math.sin(idle.p) * 1.6 + Math.sin(idle.p * 2.6) * 0.6) * fade;
+            word.style.transform = "translateY(" + y.toFixed(2) + "px)";
+          },
+        },
+        7.0,
+      );
+    })();
+  </script>
+</template>

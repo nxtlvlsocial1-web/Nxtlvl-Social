@@ -1,0 +1,301 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-400.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-500.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #f4-fx { position: absolute; left: 0; top: 0; width: 0; height: 0; overflow: hidden; }
+    #f4-bg { position: absolute; inset: 0; }
+    #f4-stage { position: absolute; inset: 0; overflow: hidden; }
+
+    /* the camera: one wrapper around all seven phones + their labels (headline stays outside) */
+    #f4-world { position: absolute; inset: 0; transform-origin: 0 0; filter: url(#f4-dblur); }
+    #f4-world .nx-phone { transform-origin: 0 0; }
+
+    /* label pills: a zero-width slot centred on the phone's midline (no CSS transform) */
+    .f4-lab { position: absolute; top: 582px; width: 0; display: flex; justify-content: center; }
+    .f4-lab .nx-pill { position: relative; isolation: isolate; }
+    .f4-lab .f4-flare { position: absolute; inset: -2px; border-radius: 100px; z-index: -1;
+      background: rgba(169,92,255,.42); box-shadow: 0 0 34px 4px rgba(169,92,255,.7); }
+
+    /* post count: the old and the new number stacked, swapped on the beat */
+    .f4-count { position: relative; }
+    .f4-count i { display: block; font-style: normal; }
+    .f4-count .f4-c1 { position: absolute; left: 0; right: 0; top: 0; }
+
+    /* the fresh post and its landing flash */
+    .f4-fresh { z-index: 1; }
+    .f4-fresh .f4-flash { position: absolute; inset: 0; background: #FFFFFF; z-index: 2; }
+
+    /* headline (outside the camera) */
+    #f4-head { position: absolute; left: 0; right: 0; top: 700px; text-align: center; }
+    .f4-w { display: inline-block; }
+    #f4-h2in { position: relative; display: inline-block; }
+    #f4-ul { position: absolute; left: 50%; top: 100%; width: 720px; height: 26px; margin: -6px 0 0 -360px; overflow: visible; }
+    #f4-ul path { fill: none; stroke: var(--nx-lift); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div data-hf-id="hf-bji4" id="root" data-composition-id="04-every-business" data-width="1920" data-height="1080" data-duration="6.4">
+    <svg data-hf-id="hf-e8ps" id="f4-fx" aria-hidden="true"><defs data-hf-id="hf-mh0t"><filter data-hf-id="hf-86jd" id="f4-dblur" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB"><feGaussianBlur data-hf-id="hf-94sl" id="f4-dblur-k" stdDeviation="0.01 0" /></filter></defs></svg>
+    <div data-hf-id="hf-n58w" id="f4-bg" class="clip nx-ground" data-start="0" data-duration="6.4" data-track-index="0">
+      <i data-hf-id="hf-d85h" class="nx-glow a"></i><i data-hf-id="hf-jdva" class="nx-glow b"></i><i data-hf-id="hf-nbzb" class="nx-glow c"></i><i data-hf-id="hf-cfaj" class="nx-ribbon"></i><i data-hf-id="hf-gzgq" class="nx-stars"></i>
+    </div>
+    <div data-hf-id="hf-pxwa" id="f4-stage" class="clip" data-start="0" data-duration="6.4" data-track-index="1">
+      <div data-hf-id="hf-mi9w" id="f4-world">
+      <div data-hf-id="hf-vj0y" class="nx-phone" id="f4p1-phone" style="left:96.0px; top:96px">
+  <div data-hf-id="hf-bctj" class="nx-screen">
+    <div data-hf-id="hf-4oo0" class="nx-island"></div>
+    <div data-hf-id="hf-wyop" class="nx-status"><span data-hf-id="hf-zwmt">9:41</span><span data-hf-id="hf-zuqb" class="nx-sig"><i data-hf-id="hf-n0km" style="height:4px"></i><i data-hf-id="hf-sg4c" style="height:6px"></i><i data-hf-id="hf-jylm" style="height:8px"></i><i data-hf-id="hf-xj3t" style="height:10px"></i><b data-hf-id="hf-xe6h" class="nx-bat"></b></span></div>
+    <div data-hf-id="hf-h9p5" class="nx-feed" data-layout-allow-overlap id="f4p1-feed" style="top:52px">
+      <div data-hf-id="hf-5ale" class="nx-prof">
+        <div data-hf-id="hf-q6ar" class="nx-handle">glow.salon<i data-hf-id="hf-kuhj" class="nx-chev"></i></div>
+        <div data-hf-id="hf-yqet" class="nx-row"><div data-hf-id="hf-kqf7" class="nx-ava"><b data-hf-id="hf-xujp"></b></div>
+          <div data-hf-id="hf-bw68" class="nx-stats"><div data-hf-id="hf-yeow"><b data-hf-id="hf-vwwi" id="f4p1-count" class="f4-count"><i data-hf-id="hf-vv7o" class="f4-c0" id="f4p1-c0">9</i><i data-hf-id="hf-1n9a" class="f4-c1" id="f4p1-c1">10</i></b><span data-hf-id="hf-uolc">posts</span></div><div data-hf-id="hf-y7yw"><b data-hf-id="hf-s9qq">300</b><span data-hf-id="hf-0jzs">followers</span></div><div data-hf-id="hf-x11t"><b data-hf-id="hf-cij2">120</b><span data-hf-id="hf-il1o">following</span></div></div></div>
+        <div data-hf-id="hf-wpme" class="nx-name">Glow Salon</div><div data-hf-id="hf-i2oi" class="nx-bio">Hair · nails · bridal</div>
+        <div data-hf-id="hf-ludc" class="nx-btns"><span data-hf-id="hf-6140">Edit profile</span><span data-hf-id="hf-knzt">Share profile</span></div>
+      </div>
+      <div data-hf-id="hf-k2s3" class="nx-tabs"><i data-hf-id="hf-l5u7" class="on"></i><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i></div>
+      <div data-hf-id="hf-ceav" class="nx-grid" id="f4p1-grid"><div data-hf-id="hf-2y2f" class="nx-post nx-p-salon f4-fresh" id="f4p1-t0"><i data-hf-id="hf-zmoq" class="nx-tag multi"></i><div data-hf-id="hf-m1ux" class="nx-cap">Bridal<br data-hf-id="hf-x5px"/>edit</div><i data-hf-id="hf-pj0x" class="f4-flash" id="f4p1-x"></i></div><div data-hf-id="hf-1twp" class="nx-post nx-p-salon" id="f4p1-t1"><i data-hf-id="hf-z5q6" class="nx-tag multi"></i><div data-hf-id="hf-jzc8" class="nx-cap">5 looks<br data-hf-id="hf-rsrt"/>for fall</div></div><div data-hf-id="hf-31g4" class="nx-post nx-p-drop" id="f4p1-t2"><i data-hf-id="hf-zk17" class="nx-tag multi"></i><div data-hf-id="hf-lbe0" class="nx-cap">NEW<br data-hf-id="hf-szow"/>DROP</div></div><div data-hf-id="hf-n9vo" class="nx-post nx-p-offer" id="f4p1-t3"><div data-hf-id="hf-8ujb" class="nx-cap">20% OFF<small data-hf-id="hf-mgg1">this weekend</small></div></div><div data-hf-id="hf-5btm" class="nx-post nx-p-navratri" id="f4p1-t4"><div data-hf-id="hf-t72z" class="nx-cap">Navratri<br data-hf-id="hf-sldv"/>nights</div></div><div data-hf-id="hf-ifzy" class="nx-post nx-p-review" id="f4p1-t5"><div data-hf-id="hf-yu26" class="nx-cap">Best coffee<br data-hf-id="hf-qluq"/>in town</div></div><div data-hf-id="hf-w31s" class="nx-post nx-p-hours" id="f4p1-t6"><div data-hf-id="hf-h2mv" class="nx-cap">Open<br data-hf-id="hf-q7jp"/>till 10</div></div><div data-hf-id="hf-x44v" class="nx-post nx-p-salon" id="f4p1-t7"><i data-hf-id="hf-zyc8" class="nx-tag multi"></i><div data-hf-id="hf-hy1s" class="nx-cap">5 looks<br data-hf-id="hf-regs"/>for fall</div></div><div data-hf-id="hf-1efa" class="nx-post nx-p-drop" id="f4p1-t8"><i data-hf-id="hf-x671" class="nx-tag multi"></i><div data-hf-id="hf-n200" class="nx-cap">NEW<br data-hf-id="hf-r05r"/>DROP</div></div><div data-hf-id="hf-lmuu" class="nx-post nx-p-offer" id="f4p1-t9"><div data-hf-id="hf-ggbb" class="nx-cap">20% OFF<small data-hf-id="hf-fdn9">this weekend</small></div></div></div>
+    </div>
+  </div>
+</div>
+      <div data-hf-id="hf-4qs2" class="f4-lab" id="f4-l1" style="left:210.0px"><span data-hf-id="hf-5ryy" class="nx-pill" id="f4-l1p"><i data-hf-id="hf-adxb" class="f4-flare" id="f4-l1f"></i><i data-hf-id="hf-dxv4" class="nx-dot"></i>Salon</span></div>
+      <div data-hf-id="hf-yeqz" class="nx-phone" id="f4p2-phone" style="left:346.0px; top:96px">
+  <div data-hf-id="hf-rqkn" class="nx-screen">
+    <div data-hf-id="hf-02xk" class="nx-island"></div>
+    <div data-hf-id="hf-xnql" class="nx-status"><span data-hf-id="hf-rk89">9:41</span><span data-hf-id="hf-f4xf" class="nx-sig"><i data-hf-id="hf-pve2" style="height:4px"></i><i data-hf-id="hf-tgno" style="height:6px"></i><i data-hf-id="hf-9tpq" style="height:8px"></i><i data-hf-id="hf-7ydp" style="height:10px"></i><b data-hf-id="hf-fz0d" class="nx-bat"></b></span></div>
+    <div data-hf-id="hf-awpy" class="nx-feed" data-layout-allow-overlap id="f4p2-feed" style="top:52px">
+      <div data-hf-id="hf-jqo6" class="nx-prof">
+        <div data-hf-id="hf-zrpa" class="nx-handle">ironworks.gym<i data-hf-id="hf-f0wn" class="nx-chev"></i></div>
+        <div data-hf-id="hf-ov3d" class="nx-row"><div data-hf-id="hf-lfer" class="nx-ava"><b data-hf-id="hf-ey49"></b></div>
+          <div data-hf-id="hf-0y3c" class="nx-stats"><div data-hf-id="hf-xfcu"><b data-hf-id="hf-yr3t" id="f4p2-count" class="f4-count"><i data-hf-id="hf-1r3z" class="f4-c0" id="f4p2-c0">12</i><i data-hf-id="hf-eyue" class="f4-c1" id="f4p2-c1">13</i></b><span data-hf-id="hf-6708">posts</span></div><div data-hf-id="hf-w8fr"><b data-hf-id="hf-1sdh">437</b><span data-hf-id="hf-rg28">followers</span></div><div data-hf-id="hf-wmqs"><b data-hf-id="hf-dohw">131</b><span data-hf-id="hf-036s">following</span></div></div></div>
+        <div data-hf-id="hf-5ttd" class="nx-name">Ironworks Gym</div><div data-hf-id="hf-b1bl" class="nx-bio">Strength · HIIT · 5am–11pm</div>
+        <div data-hf-id="hf-vsag" class="nx-btns"><span data-hf-id="hf-5cm0">Edit profile</span><span data-hf-id="hf-xf7x">Share profile</span></div>
+      </div>
+      <div data-hf-id="hf-zjhv" class="nx-tabs"><i data-hf-id="hf-j2zz" class="on"></i><i data-hf-id="hf-y7e5"></i><i data-hf-id="hf-ylp6"></i></div>
+      <div data-hf-id="hf-kuj2" class="nx-grid" id="f4p2-grid"><div data-hf-id="hf-cubg" class="nx-post nx-p-gym f4-fresh" id="f4p2-t0"><i data-hf-id="hf-u48f" class="nx-tag reel"></i><div data-hf-id="hf-j32b" class="nx-cap">Leg<br data-hf-id="hf-p0mm"/>day</div><i data-hf-id="hf-17be" class="f4-flash" id="f4p2-x"></i></div><div data-hf-id="hf-atme" class="nx-post nx-p-gym" id="f4p2-t1"><i data-hf-id="hf-71n3" class="nx-tag reel"></i><div data-hf-id="hf-nd9q" class="nx-cap">Summer<br data-hf-id="hf-ombl"/>shred</div></div><div data-hf-id="hf-xq60" class="nx-post nx-p-offer" id="f4p2-t2"><div data-hf-id="hf-g20a" class="nx-cap">20% OFF<small data-hf-id="hf-gkkc">this weekend</small></div></div><div data-hf-id="hf-sxi8" class="nx-post nx-p-hours" id="f4p2-t3"><div data-hf-id="hf-lztj" class="nx-cap">Open<br data-hf-id="hf-qsyj"/>till 10</div></div><div data-hf-id="hf-0f56" class="nx-post nx-p-review" id="f4p2-t4"><div data-hf-id="hf-8c6q" class="nx-cap">Best coffee<br data-hf-id="hf-r79k"/>in town</div></div><div data-hf-id="hf-nfma" class="nx-post nx-p-gym" id="f4p2-t5"><i data-hf-id="hf-6nc2" class="nx-tag reel"></i><div data-hf-id="hf-h5gy" class="nx-cap">Summer<br data-hf-id="hf-q0ch"/>shred</div></div><div data-hf-id="hf-0nkd" class="nx-post nx-p-drop" id="f4p2-t6"><i data-hf-id="hf-xki2" class="nx-tag multi"></i><div data-hf-id="hf-lv2x" class="nx-cap">NEW<br data-hf-id="hf-qeni"/>DROP</div></div><div data-hf-id="hf-ipug" class="nx-post nx-p-gym" id="f4p2-t7"><i data-hf-id="hf-6911" class="nx-tag reel"></i><div data-hf-id="hf-hjrz" class="nx-cap">Summer<br data-hf-id="hf-p7qf"/>shred</div></div><div data-hf-id="hf-b0ca" class="nx-post nx-p-offer" id="f4p2-t8"><div data-hf-id="hf-fnp9" class="nx-cap">20% OFF<small data-hf-id="hf-g69b">this weekend</small></div></div><div data-hf-id="hf-p2vm" class="nx-post nx-p-hours" id="f4p2-t9"><div data-hf-id="hf-llii" class="nx-cap">Open<br data-hf-id="hf-pm1g"/>till 10</div></div></div>
+    </div>
+  </div>
+</div>
+      <div data-hf-id="hf-2d2c" class="f4-lab" id="f4-l2" style="left:460.0px"><span data-hf-id="hf-3fav" class="nx-pill" id="f4-l2p"><i data-hf-id="hf-deo6" class="f4-flare" id="f4-l2f"></i><i data-hf-id="hf-0fig" class="nx-dot"></i>Gym</span></div>
+      <div data-hf-id="hf-5o0l" class="nx-phone" id="f4p3-phone" style="left:596.0px; top:96px">
+  <div data-hf-id="hf-rc9m" class="nx-screen">
+    <div data-hf-id="hf-yw0h" class="nx-island"></div>
+    <div data-hf-id="hf-yuno" class="nx-status"><span data-hf-id="hf-sr5c">9:41</span><span data-hf-id="hf-eqme" class="nx-sig"><i data-hf-id="hf-q9p3" style="height:4px"></i><i data-hf-id="hf-s9ql" style="height:6px"></i><i data-hf-id="hf-a80r" style="height:8px"></i><i data-hf-id="hf-95as" style="height:10px"></i><b data-hf-id="hf-h5xg" class="nx-bat"></b></span></div>
+    <div data-hf-id="hf-t2ab" class="nx-feed" data-layout-allow-overlap id="f4p3-feed" style="top:52px">
+      <div data-hf-id="hf-k4z7" class="nx-prof">
+        <div data-hf-id="hf-rwgf" class="nx-handle">maya.boutique<i data-hf-id="hf-emlm" class="nx-chev"></i></div>
+        <div data-hf-id="hf-q20g" class="nx-row"><div data-hf-id="hf-l13q" class="nx-ava"><b data-hf-id="hf-g51c"></b></div>
+          <div data-hf-id="hf-zr69" class="nx-stats"><div data-hf-id="hf-vftp"><b data-hf-id="hf-ncu0" id="f4p3-count" class="f4-count"><i data-hf-id="hf-zw9t" class="f4-c0" id="f4p3-c0">15</i><i data-hf-id="hf-3vzy" class="f4-c1" id="f4p3-c1">16</i></b><span data-hf-id="hf-5035">posts</span></div><div data-hf-id="hf-vu4q"><b data-hf-id="hf-iu03">574</b><span data-hf-id="hf-q955">followers</span></div><div data-hf-id="hf-1043"><b data-hf-id="hf-s6ji">142</b><span data-hf-id="hf-yw9p">following</span></div></div></div>
+        <div data-hf-id="hf-z1uo" class="nx-name">Maya Boutique</div><div data-hf-id="hf-8ku5" class="nx-bio">Ethnic & fusion wear</div>
+        <div data-hf-id="hf-uldd" class="nx-btns"><span data-hf-id="hf-45ox">Edit profile</span><span data-hf-id="hf-ym50">Share profile</span></div>
+      </div>
+      <div data-hf-id="hf-z56u" class="nx-tabs"><i data-hf-id="hf-iooy" class="on"></i><i data-hf-id="hf-0l8b"></i><i data-hf-id="hf-0zjc"></i></div>
+      <div data-hf-id="hf-2aft" class="nx-grid" id="f4p3-grid"><div data-hf-id="hf-lmhz" class="nx-post nx-p-drop f4-fresh" id="f4p3-t0"><i data-hf-id="hf-xyt3" class="nx-tag multi"></i><div data-hf-id="hf-0dob" class="nx-cap">Festive<br data-hf-id="hf-of4d"/>edit</div><i data-hf-id="hf-y40v" class="f4-flash" id="f4p3-x"></i></div><div data-hf-id="hf-52i5" class="nx-post nx-p-drop" id="f4p3-t1"><i data-hf-id="hf-yd44" class="nx-tag multi"></i><div data-hf-id="hf-m9dy" class="nx-cap">NEW<br data-hf-id="hf-otfe"/>DROP</div></div><div data-hf-id="hf-vjke" class="nx-post nx-p-navratri" id="f4p3-t2"><div data-hf-id="hf-cme3" class="nx-cap">Navratri<br data-hf-id="hf-tzer"/>nights</div></div><div data-hf-id="hf-y6i1" class="nx-post nx-p-salon" id="f4p3-t3"><i data-hf-id="hf-1xvd" class="nx-tag multi"></i><div data-hf-id="hf-gr4p" class="nx-cap">5 looks<br data-hf-id="hf-udps"/>for fall</div></div><div data-hf-id="hf-v645" class="nx-post nx-p-diwali" id="f4p3-t4"><div data-hf-id="hf-vjrz" class="nx-cap">Happy Diwali</div></div><div data-hf-id="hf-fngc" class="nx-post nx-p-offer" id="f4p3-t5"><div data-hf-id="hf-ifug" class="nx-cap">20% OFF<small data-hf-id="hf-hd6e">this weekend</small></div></div><div data-hf-id="hf-qkrv" class="nx-post nx-p-review" id="f4p3-t6"><div data-hf-id="hf-8qhr" class="nx-cap">Best coffee<br data-hf-id="hf-7f5s"/>in town</div></div><div data-hf-id="hf-pkq3" class="nx-post nx-p-drop" id="f4p3-t7"><i data-hf-id="hf-2c6e" class="nx-tag multi"></i><div data-hf-id="hf-l2gv" class="nx-cap">NEW<br data-hf-id="hf-70ur"/>DROP</div></div><div data-hf-id="hf-i9e4" class="nx-post nx-p-navratri" id="f4p3-t8"><div data-hf-id="hf-c832" class="nx-cap">Navratri<br data-hf-id="hf-2kkm"/>nights</div></div><div data-hf-id="hf-zpxf" class="nx-post nx-p-salon" id="f4p3-t9"><i data-hf-id="hf-s0p6" class="nx-tag multi"></i><div data-hf-id="hf-h5fq" class="nx-cap">5 looks<br data-hf-id="hf-269l"/>for fall</div></div></div>
+    </div>
+  </div>
+</div>
+      <div data-hf-id="hf-l4ux" class="f4-lab" id="f4-l3" style="left:710.0px"><span data-hf-id="hf-xwhh" class="nx-pill" id="f4-l3p"><i data-hf-id="hf-mc5h" class="f4-flare" id="f4-l3f"></i><i data-hf-id="hf-z8ld" class="nx-dot"></i>Boutique</span></div>
+      <div data-hf-id="hf-wjsy" class="nx-phone" id="f4p4-phone" style="left:846.0px; top:96px">
+  <div data-hf-id="hf-qxyl" class="nx-screen">
+    <div data-hf-id="hf-zabi" class="nx-island"></div>
+    <div data-hf-id="hf-ygcn" class="nx-status"><span data-hf-id="hf-scub">9:41</span><span data-hf-id="hf-aac9" class="nx-sig"><i data-hf-id="hf-qo04" style="height:4px"></i><i data-hf-id="hf-so1m" style="height:6px"></i><i data-hf-id="hf-ambs" style="height:8px"></i><i data-hf-id="hf-8qzr" style="height:10px"></i><b data-hf-id="hf-grmf" class="nx-bat"></b></span></div>
+    <div data-hf-id="hf-me28" class="nx-feed" data-layout-allow-overlap id="f4p4-feed" style="top:-118px">
+      <div data-hf-id="hf-kja8" class="nx-prof">
+        <div data-hf-id="hf-hk9y" class="nx-handle">the.corner.cafe<i data-hf-id="hf-e8al" class="nx-chev"></i></div>
+        <div data-hf-id="hf-pnpf" class="nx-row"><div data-hf-id="hf-kmsp" class="nx-ava"><b data-hf-id="hf-fqqb"></b></div>
+          <div data-hf-id="hf-05ha" class="nx-stats"><div data-hf-id="hf-1ef4"><b data-hf-id="hf-tj6n" id="f4p4-count" class="f4-count"><i data-hf-id="hf-sw78" class="f4-c0" id="f4p4-c0">15</i><i data-hf-id="hf-o41b" class="f4-c1" id="f4p4-c1">16</i></b><span data-hf-id="hf-5ee6">posts</span></div><div data-hf-id="hf-c4s8"><b data-hf-id="hf-6wgc">412</b><span data-hf-id="hf-qng6">followers</span></div><div data-hf-id="hf-bqh7"><b data-hf-id="hf-s1x0">180</b><span data-hf-id="hf-zakq">following</span></div></div></div>
+        <div data-hf-id="hf-94ez" class="nx-name">The Corner Café</div><div data-hf-id="hf-5rdc" class="nx-bio">Coffee · brunch · open 7–10</div>
+        <div data-hf-id="hf-uzoe" class="nx-btns"><span data-hf-id="hf-4jzy">Edit profile</span><span data-hf-id="hf-y7tz">Share profile</span></div>
+      </div>
+      <div data-hf-id="hf-yqvt" class="nx-tabs"><i data-hf-id="hf-iadx" class="on"></i><i data-hf-id="hf-zsm9"></i><i data-hf-id="hf-06xa"></i></div>
+      <div data-hf-id="hf-2h9k" class="nx-grid" id="f4p4-grid"><div data-hf-id="hf-a805" class="nx-post nx-p-latte f4-fresh" id="f4p4-t0"><i data-hf-id="hf-9168" class="nx-tag reel"></i><div data-hf-id="hf-h763" class="nx-cap">Cold<br data-hf-id="hf-1ryk"/>brew</div><i data-hf-id="hf-duag" class="f4-flash" id="f4p4-x"></i></div><div data-hf-id="hf-opp5" class="nx-post nx-p-latte" id="f4p4-t1"><i data-hf-id="hf-8mv7" class="nx-tag reel"></i><div data-hf-id="hf-k3ih" class="nx-cap">Monday<br data-hf-id="hf-1dnj"/>Mocha</div></div><div data-hf-id="hf-9zji" class="nx-post nx-p-diwali" id="f4p4-t2"><div data-hf-id="hf-dd9b" class="nx-cap">Happy Diwali</div></div><div data-hf-id="hf-vhjc" class="nx-post nx-p-menu" id="f4p4-t3"><div data-hf-id="hf-6aom" class="nx-cap">NEW<br data-hf-id="hf-0zci"/>MENU</div></div><div data-hf-id="hf-7c53" class="nx-post nx-p-salon" id="f4p4-t4"><i data-hf-id="hf-rme5" class="nx-tag multi"></i><div data-hf-id="hf-fyin" class="nx-cap">5 looks<br data-hf-id="hf-0l1h"/>for fall</div></div><div data-hf-id="hf-9vzd" class="nx-post nx-p-offer" id="f4p4-t5"><div data-hf-id="hf-i1jf" class="nx-cap">20% OFF<small data-hf-id="hf-gyvd">this weekend</small></div></div><div data-hf-id="hf-n1ti" class="nx-post nx-p-review" id="f4p4-t6"><div data-hf-id="hf-94ss" class="nx-cap">Best coffee<br data-hf-id="hf-06qg"/>in town</div></div><div data-hf-id="hf-87n1" class="nx-post nx-p-thali" id="f4p4-t7"><i data-hf-id="hf-88k6" class="nx-tag reel"></i><div data-hf-id="hf-fwtm" class="nx-cap">Thali<br data-hf-id="hf-zsff"/>Tuesday</div></div><div data-hf-id="hf-tpmh" class="nx-post nx-p-navratri" id="f4p4-t8"><div data-hf-id="hf-bts1" class="nx-cap">Navratri<br data-hf-id="hf-p9mx"/>nights</div></div><div data-hf-id="hf-2vgg" class="nx-post nx-p-hours" id="f4p4-t9"><div data-hf-id="hf-l77h" class="nx-cap">Open<br data-hf-id="hf-pnxy"/>till 10</div></div><div data-hf-id="hf-3ofw" class="nx-post nx-p-gym" id="f4p4-t10"><i data-hf-id="hf-7u95" class="nx-tag reel"></i><div data-hf-id="hf-hy30" class="nx-cap">Summer<br data-hf-id="hf-q28z"/>shred</div></div><div data-hf-id="hf-5tbt" class="nx-post nx-p-drop" id="f4p4-t11"><i data-hf-id="hf-stb8" class="nx-tag multi"></i><div data-hf-id="hf-lgrw" class="nx-cap">NEW<br data-hf-id="hf-qgk0"/>DROP</div></div><div data-hf-id="hf-fyba" class="nx-post nx-p-bake" id="f4p4-t12"><div data-hf-id="hf-yibt" class="nx-cap">Fresh<br data-hf-id="hf-noet"/>at 7am</div></div><div data-hf-id="hf-eig8" class="nx-post nx-p-latte" id="f4p4-t13"><i data-hf-id="hf-49hw" class="nx-tag reel"></i><div data-hf-id="hf-5325" class="nx-cap">Monday<br data-hf-id="hf-o2pu"/>Mocha</div></div><div data-hf-id="hf-5vmj" class="nx-post nx-p-diwali" id="f4p4-t14"><div data-hf-id="hf-cyya" class="nx-cap">Happy Diwali</div></div><div data-hf-id="hf-mnkz" class="nx-post nx-p-salon" id="f4p4-t15"><i data-hf-id="hf-sf07" class="nx-tag multi"></i><div data-hf-id="hf-gcto" class="nx-cap">5 looks<br data-hf-id="hf-oh0v"/>for fall</div></div></div>
+    </div>
+  </div>
+</div>
+      <div data-hf-id="hf-hjlv" class="f4-lab" id="f4-l4" style="left:960.0px"><span data-hf-id="hf-p667" class="nx-pill" id="f4-l4p"><i data-hf-id="hf-1zqs" class="f4-flare" id="f4-l4f"></i><i data-hf-id="hf-zmwe" class="nx-dot"></i>Café</span></div>
+      <div data-hf-id="hf-oxt9" class="nx-phone" id="f4p5-phone" style="left:1096.0px; top:96px">
+  <div data-hf-id="hf-tq3s" class="nx-screen">
+    <div data-hf-id="hf-y3ef" class="nx-island"></div>
+    <div data-hf-id="hf-zn9q" class="nx-status"><span data-hf-id="hf-qdb6">9:41</span><span data-hf-id="hf-9w18" class="nx-sig"><i data-hf-id="hf-r2b5" style="height:4px"></i><i data-hf-id="hf-unkr" style="height:6px"></i><i data-hf-id="hf-3s7h" style="height:8px"></i><i data-hf-id="hf-9xwu" style="height:10px"></i><b data-hf-id="hf-hyji" class="nx-bat"></b></span></div>
+    <div data-hf-id="hf-3fdx" class="nx-feed" data-layout-allow-overlap id="f4p5-feed" style="top:52px">
+      <div data-hf-id="hf-hr51" class="nx-prof">
+        <div data-hf-id="hf-ygwi" class="nx-handle">rise.bakery<i data-hf-id="hf-h0fs" class="nx-chev"></i></div>
+        <div data-hf-id="hf-no6a" class="nx-row"><div data-hf-id="hf-k8ho" class="nx-ava"><b data-hf-id="hf-dr76"></b></div>
+          <div data-hf-id="hf-yyk7" class="nx-stats"><div data-hf-id="hf-bc66"><b data-hf-id="hf-wxlq" id="f4p5-count" class="f4-count"><i data-hf-id="hf-yx74" class="f4-c0" id="f4p5-c0">21</i><i data-hf-id="hf-febn" class="f4-c1" id="f4p5-c1">22</i></b><span data-hf-id="hf-47h3">posts</span></div><div data-hf-id="hf-axv5"><b data-hf-id="hf-k2wz">848</b><span data-hf-id="hf-pgj3">followers</span></div><div data-hf-id="hf-ajk4"><b data-hf-id="hf-w3pa">164</b><span data-hf-id="hf-1a3v">following</span></div></div></div>
+        <div data-hf-id="hf-sm75" class="nx-name">Rise Bakery</div><div data-hf-id="hf-mcm8" class="nx-bio">Sourdough from 7am</div>
+        <div data-hf-id="hf-tsrb" class="nx-btns"><span data-hf-id="hf-3d2v">Edit profile</span><span data-hf-id="hf-zer2">Share profile</span></div>
+      </div>
+      <div data-hf-id="hf-ycks" class="nx-tabs"><i data-hf-id="hf-l2j4" class="on"></i><i data-hf-id="hf-26gf"></i><i data-hf-id="hf-2krg"></i></div>
+      <div data-hf-id="hf-uliz" class="nx-grid" id="f4p5-grid"><div data-hf-id="hf-t89l" class="nx-post nx-p-bake f4-fresh" id="f4p5-t0"><div data-hf-id="hf-6ru3" class="nx-cap">Sourdough<br data-hf-id="hf-ovbw"/>Sunday</div><i data-hf-id="hf-p2d9" class="f4-flash" id="f4p5-x"></i></div><div data-hf-id="hf-g55j" class="nx-post nx-p-bake" id="f4p5-t1"><div data-hf-id="hf-3hod" class="nx-cap">Fresh<br data-hf-id="hf-m36p"/>at 7am</div></div><div data-hf-id="hf-2g7a" class="nx-post nx-p-menu" id="f4p5-t2"><div data-hf-id="hf-5kl6" class="nx-cap">NEW<br data-hf-id="hf-mhhq"/>MENU</div></div><div data-hf-id="hf-fofk" class="nx-post nx-p-diwali" id="f4p5-t3"><div data-hf-id="hf-ckn9" class="nx-cap">Happy Diwali</div></div><div data-hf-id="hf-2umb" class="nx-post nx-p-latte" id="f4p5-t4"><i data-hf-id="hf-3v6v" class="nx-tag reel"></i><div data-hf-id="hf-69z8" class="nx-cap">Monday<br data-hf-id="hf-mwk6"/>Mocha</div></div><div data-hf-id="hf-spyf" class="nx-post nx-p-hours" id="f4p5-t5"><div data-hf-id="hf-nzco" class="nx-cap">Open<br data-hf-id="hf-mi95"/>till 10</div></div><div data-hf-id="hf-ywi1" class="nx-post nx-p-review" id="f4p5-t6"><div data-hf-id="hf-9j3t" class="nx-cap">Best coffee<br data-hf-id="hf-np68"/>in town</div></div><div data-hf-id="hf-kuxd" class="nx-post nx-p-bake" id="f4p5-t7"><div data-hf-id="hf-4olg" class="nx-cap">Fresh<br data-hf-id="hf-nav7"/>at 7am</div></div><div data-hf-id="hf-6atw" class="nx-post nx-p-menu" id="f4p5-t8"><div data-hf-id="hf-5yw7" class="nx-cap">NEW<br data-hf-id="hf-lbc2"/>MENU</div></div><div data-hf-id="hf-btsy" class="nx-post nx-p-diwali" id="f4p5-t9"><div data-hf-id="hf-fcsg" class="nx-cap">Happy Diwali</div></div></div>
+    </div>
+  </div>
+</div>
+      <div data-hf-id="hf-chlr" class="f4-lab" id="f4-l5" style="left:1210.0px"><span data-hf-id="hf-jzq1" class="nx-pill" id="f4-l5p"><i data-hf-id="hf-tsf7" class="f4-flare" id="f4-l5f"></i><i data-hf-id="hf-yfzb" class="nx-dot"></i>Bakery</span></div>
+      <div data-hf-id="hf-9i7i" class="nx-phone" id="f4p6-phone" style="left:1346.0px; top:96px">
+  <div data-hf-id="hf-tbsr" class="nx-screen">
+    <div data-hf-id="hf-yhpg" class="nx-island"></div>
+    <div data-hf-id="hf-z8yp" class="nx-status"><span data-hf-id="hf-pz05">9:41</span><span data-hf-id="hf-9hq7" class="nx-sig"><i data-hf-id="hf-rgm6" style="height:4px"></i><i data-hf-id="hf-v1vs" style="height:6px"></i><i data-hf-id="hf-46ii" style="height:8px"></i><i data-hf-id="hf-9jlt" style="height:10px"></i><b data-hf-id="hf-hk8h" class="nx-bat"></b></span></div>
+    <div data-hf-id="hf-c5gi" class="nx-feed" data-layout-allow-overlap id="f4p6-feed" style="top:52px">
+      <div data-hf-id="hf-i5g2" class="nx-prof">
+        <div data-hf-id="hf-jmtr" class="nx-handle">smile.dental<i data-hf-id="hf-gm4r" class="nx-chev"></i></div>
+        <div data-hf-id="hf-n9v9" class="nx-row"><div data-hf-id="hf-ju6n" class="nx-ava"><b data-hf-id="hf-dcw5"></b></div>
+          <div data-hf-id="hf-zcv8" class="nx-stats"><div data-hf-id="hf-a593"><b data-hf-id="hf-orsl" id="f4p6-count" class="f4-count"><i data-hf-id="hf-ffjq" class="f4-c0" id="f4p6-c0">24</i><i data-hf-id="hf-x5jn" class="f4-c1" id="f4p6-c1">25</i></b><span data-hf-id="hf-4ls4">posts</span></div><div data-hf-id="hf-9qy2"><b data-hf-id="hf-3nz7">985</b><span data-hf-id="hf-puu4">followers</span></div><div data-hf-id="hf-9cn1"><b data-hf-id="hf-nvu4">175</b><span data-hf-id="hf-1oew">following</span></div></div></div>
+        <div data-hf-id="hf-az2e" class="nx-name">Smile Dental</div><div data-hf-id="hf-pe95" class="nx-bio">Family dentistry</div>
+        <div data-hf-id="hf-u72c" class="nx-btns"><span data-hf-id="hf-3rdw">Edit profile</span><span data-hf-id="hf-z0g1">Share profile</span></div>
+      </div>
+      <div data-hf-id="hf-xy9r" class="nx-tabs"><i data-hf-id="hf-ko83" class="on"></i><i data-hf-id="hf-oz7w"></i><i data-hf-id="hf-okwv"></i></div>
+      <div data-hf-id="hf-6woi" class="nx-grid" id="f4p6-grid"><div data-hf-id="hf-vkyj" class="nx-post nx-p-review f4-fresh" id="f4p6-t0"><div data-hf-id="hf-82zj" class="nx-cap">Gentle &amp;<br data-hf-id="hf-kx11"/>painless</div><i data-hf-id="hf-gtdi" class="f4-flash" id="f4p6-x"></i></div><div data-hf-id="hf-batf" class="nx-post nx-p-review" id="f4p6-t1"><div data-hf-id="hf-9xeu" class="nx-cap">Best coffee<br data-hf-id="hf-m3y4"/>in town</div></div><div data-hf-id="hf-mo6l" class="nx-post nx-p-hours" id="f4p6-t2"><div data-hf-id="hf-nl1n" class="nx-cap">Open<br data-hf-id="hf-lpn3"/>till 10</div></div><div data-hf-id="hf-8oot" class="nx-post nx-p-offer" id="f4p6-t3"><div data-hf-id="hf-hn8e" class="nx-cap">20% OFF<small data-hf-id="hf-i5sg">this weekend</small></div></div><div data-hf-id="hf-wp9t" class="nx-post nx-p-menu" id="f4p6-t4"><div data-hf-id="hf-6d78" class="nx-cap">NEW<br data-hf-id="hf-jq3y"/>MENU</div></div><div data-hf-id="hf-p0ai" class="nx-post nx-p-drop" id="f4p6-t5"><i data-hf-id="hf-tlxa" class="nx-tag multi"></i><div data-hf-id="hf-k9ut" class="nx-cap">NEW<br data-hf-id="hf-jbsx"/>DROP</div></div><div data-hf-id="hf-vdz9" class="nx-post nx-p-bake" id="f4p6-t6"><div data-hf-id="hf-4aaf" class="nx-cap">Fresh<br data-hf-id="hf-no7z"/>at 7am</div></div><div data-hf-id="hf-okzp" class="nx-post nx-p-review" id="f4p6-t7"><div data-hf-id="hf-abpv" class="nx-cap">Best coffee<br data-hf-id="hf-o2j0"/>in town</div></div><div data-hf-id="hf-m007" class="nx-post nx-p-hours" id="f4p6-t8"><div data-hf-id="hf-n6qm" class="nx-cap">Open<br data-hf-id="hf-mvlx"/>till 10</div></div><div data-hf-id="hf-a847" class="nx-post nx-p-offer" id="f4p6-t9"><div data-hf-id="hf-h8xd" class="nx-cap">20% OFF<small data-hf-id="hf-hrhf">this weekend</small></div></div></div>
+    </div>
+  </div>
+</div>
+      <div data-hf-id="hf-vr23" class="f4-lab" id="f4-l6" style="left:1460.0px"><span data-hf-id="hf-ywsk" class="nx-pill" id="f4-l6p"><i data-hf-id="hf-v6qy" class="f4-flare" id="f4-l6f"></i><i data-hf-id="hf-yuac" class="nx-dot"></i>Clinic</span></div>
+      <div data-hf-id="hf-u03e" class="nx-phone" id="f4p7-phone" style="left:1596.0px; top:96px">
+  <div data-hf-id="hf-sxhq" class="nx-screen">
+    <div data-hf-id="hf-xasd" class="nx-island"></div>
+    <div data-hf-id="hf-0fvs" class="nx-status"><span data-hf-id="hf-r5x8">9:41</span><span data-hf-id="hf-93f6" class="nx-sig"><i data-hf-id="hf-rux7" style="height:4px"></i><i data-hf-id="hf-tuyp" style="height:6px"></i><i data-hf-id="hf-4ktj" style="height:8px"></i><i data-hf-id="hf-aqiw" style="height:10px"></i><b data-hf-id="hf-ir5k" class="nx-bat"></b></span></div>
+    <div data-hf-id="hf-thm7" class="nx-feed" data-layout-allow-overlap id="f4p7-feed" style="top:52px">
+      <div data-hf-id="hf-ijr3" class="nx-prof">
+        <div data-hf-id="hf-o3w7" class="nx-handle">flow.studio<i data-hf-id="hf-g7tq" class="nx-chev"></i></div>
+        <div data-hf-id="hf-ogsc" class="nx-row"><div data-hf-id="hf-fdwi" class="nx-ava"><b data-hf-id="hf-ejt8"></b></div>
+          <div data-hf-id="hf-y5y5" class="nx-stats"><div data-hf-id="hf-fb8g"><b data-hf-id="hf-kmx0" id="f4p7-count" class="f4-count"><i data-hf-id="hf-irpc" class="f4-c0" id="f4p7-c0">27</i><i data-hf-id="hf-nxnv" class="f4-c1" id="f4p7-c1">28</i></b><span data-hf-id="hf-3ev1">posts</span></div><div data-hf-id="hf-ewxf"><b data-hf-id="hf-0c0n">1122</b><span data-hf-id="hf-onx1">followers</span></div><div data-hf-id="hf-88dv"><b data-hf-id="hf-suj2">186</b><span data-hf-id="hf-0hht">following</span></div></div></div>
+        <div data-hf-id="hf-1qrc" class="nx-name">Flow Yoga Studio</div><div data-hf-id="hf-31hl" class="nx-bio">Classes daily · all levels</div>
+        <div data-hf-id="hf-t059" class="nx-btns"><span data-hf-id="hf-2kgt">Edit profile</span><span data-hf-id="hf-07d4">Share profile</span></div>
+      </div>
+      <div data-hf-id="hf-xjyq" class="nx-tabs"><i data-hf-id="hf-k9x2" class="on"></i><i data-hf-id="hf-o6lu"></i><i data-hf-id="hf-jqbp"></i></div>
+      <div data-hf-id="hf-k8sd" class="nx-grid" id="f4p7-grid"><div data-hf-id="hf-3ddv" class="nx-post nx-p-hours f4-fresh" id="f4p7-t0"><div data-hf-id="hf-65kc" class="nx-cap">Sunrise<br data-hf-id="hf-n9wy"/>flow</div><i data-hf-id="hf-ms57" class="f4-flash" id="f4p7-x"></i></div><div data-hf-id="hf-mp01" class="nx-post nx-p-navratri" id="f4p7-t1"><div data-hf-id="hf-bfh0" class="nx-cap">Navratri<br data-hf-id="hf-p9g3"/>nights</div></div><div data-hf-id="hf-6b2q" class="nx-post nx-p-hours" id="f4p7-t2"><div data-hf-id="hf-msfl" class="nx-cap">Open<br data-hf-id="hf-pnr4"/>till 10</div></div><div data-hf-id="hf-ul6a" class="nx-post nx-p-review" id="f4p7-t3"><div data-hf-id="hf-aq0w" class="nx-cap">Best coffee<br data-hf-id="hf-ogu1"/>in town</div></div><div data-hf-id="hf-zzp4" class="nx-post nx-p-gym" id="f4p7-t4"><i data-hf-id="hf-dfl9" class="nx-tag reel"></i><div data-hf-id="hf-ice1" class="nx-cap">Summer<br data-hf-id="hf-ov52"/>shred</div></div><div data-hf-id="hf-4dxf" class="nx-post nx-p-salon" id="f4p7-t5"><i data-hf-id="hf-t7m9" class="nx-tag multi"></i><div data-hf-id="hf-f5wl" class="nx-cap">5 looks<br data-hf-id="hf-khrr"/>for fall</div></div><div data-hf-id="hf-97hy" class="nx-post nx-p-drop" id="f4p7-t6"><i data-hf-id="hf-uejc" class="nx-tag multi"></i><div data-hf-id="hf-ko5u" class="nx-cap">NEW<br data-hf-id="hf-kw2s"/>DROP</div></div><div data-hf-id="hf-hz87" class="nx-post nx-p-navratri" id="f4p7-t7"><div data-hf-id="hf-b15z" class="nx-cap">Navratri<br data-hf-id="hf-rkmc"/>nights</div></div><div data-hf-id="hf-7y3k" class="nx-post nx-p-hours" id="f4p7-t8"><div data-hf-id="hf-pkks" class="nx-cap">Open<br data-hf-id="hf-r6bb"/>till 10</div></div><div data-hf-id="hf-w874" class="nx-post nx-p-review" id="f4p7-t9"><div data-hf-id="hf-4rfh" class="nx-cap">Best coffee<br data-hf-id="hf-qs0a"/>in town</div></div></div>
+    </div>
+  </div>
+</div>
+      <div data-hf-id="hf-24ao" class="f4-lab" id="f4-l7" style="left:1710.0px"><span data-hf-id="hf-3pjd" class="nx-pill" id="f4-l7p"><i data-hf-id="hf-4489" class="f4-flare" id="f4-l7f"></i><i data-hf-id="hf-xnd9" class="nx-dot"></i>Studio</span></div>
+      </div>
+      <div data-hf-id="hf-vpf2" id="f4-head">
+        <div data-hf-id="hf-a8z7" class="nx-display" id="f4-h1" style="font-size:76px"><span data-hf-id="hf-3ix9" class="f4-w">Built</span> <span data-hf-id="hf-623m" class="f4-w">for</span> <span data-hf-id="hf-n0aa" class="f4-w">the</span> <span data-hf-id="hf-rf1p" class="f4-w">businesses</span></div>
+        <div data-hf-id="hf-9ar0" class="nx-serif" id="f4-h2" style="font-size:96px; line-height:1; margin-top:6px"><span data-hf-id="hf-grfh" id="f4-h2in">agencies won't call back.<svg data-hf-id="hf-da5j" id="f4-ul" viewBox="0 0 720 26" aria-hidden="true"><path data-hf-id="hf-o9ar" id="f4-ul-path" d="M 8 15 C 120 8, 250 19, 372 13 S 600 9, 712 12" /></svg></span></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // t = 0 is film 18.0 s. 120 BPM, beat = 0.5 s (assets/music/beatgrid.json).
+      const BEAT = 0.5;
+
+      // Static layout, placed here instead of inline CSS so no element mixes a CSS transform with GSAP.
+      gsap.set("#f4-world .nx-phone", { scale: 0.6, transformOrigin: "0 0" });
+      gsap.set("#f4-world", { transformOrigin: "0 0" });
+
+      // ---- Scene 1 (0.0-1.8): ONE continuous decelerating pull-back on the world (viewport-change) ----
+      // Handoff: frame 3 left the café phone at left 770, top 80, scale 1. Its wall slot is left 846, top 96,
+      // scale 0.6, origin 0 0. With origin 0 0 a world point p lands at S*p + T, so S0 = 1 / 0.6 and
+      // T0 = handoff - S0 * slot. Scale and translate share one tween and one ease (single source of truth).
+      const SLOT = { x: 846, y: 96, s: 0.6 };
+      const HAND = { x: 770, y: 80, s: 1 };
+      const S0 = HAND.s / SLOT.s;
+      const X0 = HAND.x - S0 * SLOT.x; // -640
+      const Y0 = HAND.y - S0 * SLOT.y; // -80
+      tl.fromTo("#f4-world", { x: X0, y: Y0, scale: S0 }, { x: 0, y: 0, scale: 1, duration: 1.8, ease: "expo.out", force3D: false }, 0);
+
+      // Light directional (horizontal) blur on the world through the fastest part of the pull only:
+      // sharp at the handoff frame, peaks at 0.08 s, back to ~0 by 1.0 s, filter removed at 1.2 s.
+      tl.fromTo("#f4-dblur-k", { attr: { stdDeviation: "0.01 0" } }, { attr: { stdDeviation: "3.5 0" }, duration: 0.08, ease: "power1.out" }, 0);
+      tl.fromTo("#f4-dblur-k", { attr: { stdDeviation: "3.5 0" } }, { attr: { stdDeviation: "0.01 0" }, duration: 0.92, ease: "power2.out", immediateRender: false }, 0.08);
+      tl.set("#f4-world", { filter: "none" }, 1.2);
+
+      // The six neighbours (feeds already full) materialise as the camera pulls out, nearest first,
+      // so the cut from frame 3 opens on the café phone alone.
+      [[3, 5], [2, 6], [1, 7]].forEach(function (pair, d) {
+        pair.forEach(function (n) {
+          tl.fromTo("#f4p" + n + "-phone", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power2.out" }, 0.02 + d * 0.06);
+        });
+      });
+      // Label layer arrives behind them, unlit (the pills light on the beat wave below).
+      tl.fromTo(".f4-lab", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.2);
+
+      // ---- Scene 2 (0.5-3.5): the wave - one pill lights per beat, left to right, and at the same instant ----
+      // ---- that phone gets one new post: it lands top-left (pop + flash), the grid shifts one slot along. ----
+      // Grid pitch from the kit geometry (transform-independent): 356 px grid (380 phone - 2 x 12 inset), 3 columns, 3 px gap.
+      const STEP = (356 + 3) / 3;
+      for (let n = 1; n <= 7; n++) {
+        const b = n * BEAT; // 0.5, 1.0 ... 3.5
+
+        // pill: dim -> lit, small pop, a flare that blooms and fades
+        tl.fromTo("#f4-l" + n + "p", { scale: 0.86 }, { scale: 1, duration: 0.5, ease: "power3.out" }, b);
+        tl.fromTo("#f4-l" + n + "p", { opacity: 0.32 }, { opacity: 1, duration: 0.18, ease: "power2.out" }, b);
+        tl.fromTo("#f4-l" + n + "f", { opacity: 0 }, { opacity: 1, duration: 0.07, ease: "power1.out" }, b);
+        tl.fromTo("#f4-l" + n + "f", { opacity: 1 }, { opacity: 0, duration: 0.55, ease: "power2.out", immediateRender: false }, b + 0.07);
+
+        // the new post pops in at slot 0 with a white flash
+        tl.fromTo("#f4p" + n + "-t0", { scale: 0 }, { scale: 1, duration: 0.5, ease: "expo.out" }, b);
+        tl.fromTo("#f4p" + n + "-x", { opacity: 0.85 }, { opacity: 0, duration: 0.55, ease: "power2.out" }, b + 0.06);
+
+        // FLIP: the DOM holds the final grid and each older post starts in the slot it held before. Posts
+        // slide one column right; a post leaving the last column hops to the start of the next row
+        // (shrinks out in place, grows in at its new slot) so nothing slides diagonally across the grid.
+        const tiles = document.querySelectorAll("#f4p" + n + "-grid > .nx-post:not(.f4-fresh)");
+        tiles.forEach(function (tile, k) {
+          const j = k + 1; // final index (the new post is index 0); before it landed this post sat in slot k
+          if (j % 3 !== 0) {
+            tl.fromTo(tile, { x: -STEP }, { x: 0, duration: 0.34, ease: "power3.out" }, b);
+          } else {
+            tl.fromTo(tile, { x: 2 * STEP, y: -STEP, scale: 1 }, { x: 2 * STEP, y: -STEP, scale: 0, duration: 0.15, ease: "power2.in" }, b);
+            tl.fromTo(tile, { x: 0, y: 0, scale: 0 }, { x: 0, y: 0, scale: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, b + 0.15);
+          }
+        });
+
+        // the posts count ticks up by one
+        tl.fromTo("#f4p" + n + "-c0", { opacity: 1, y: 0 }, { opacity: 0, y: -9, duration: 0.22, ease: "power2.in" }, b + 0.04);
+        tl.fromTo("#f4p" + n + "-c1", { opacity: 0, y: 9 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, b + 0.14);
+      }
+
+      // ---- Scene 3 (2.0-3.5): headline under the wall (outside the camera) ----
+      // "Built for the businesses" word by word from 2.0 (dynamic-content-sequencing): each word's slot is
+      // sized by its length, pre-computed once, and normalised so the last word lands on the 2.5 beat.
+      const words = gsap.utils.toArray("#f4-h1 .f4-w");
+      const BASE = 0.08, PER_CHAR = 0.03;
+      const slots = words.map(function (w) { return BASE + w.textContent.length * PER_CHAR; });
+      const lead = slots.slice(0, -1).reduce(function (a, v) { return a + v; }, 0);
+      const fit = (2.5 - 2.0) / lead;
+      let at = 2.0;
+      words.forEach(function (w, i) {
+        tl.fromTo(w, { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, at);
+        at += slots[i] * fit;
+      });
+
+      // "agencies won't call back." lands in the serif at 3.0 ...
+      tl.fromTo("#f4-h2in", { opacity: 0, y: 36, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" }, 3.0);
+      // ... and a hand-drawn underline draws in beneath it (svg-path-draw, measured length).
+      const ul = document.getElementById("f4-ul-path");
+      const len = (ul && ul.getTotalLength ? ul.getTotalLength() : 0) || 720;
+      gsap.set(ul, { strokeDasharray: len + " " + (len + 20) });
+      tl.fromTo(ul, { strokeDashoffset: len + 10 }, { strokeDashoffset: 0, duration: 0.6, ease: "power2.out" }, 3.28);
+
+      // ---- Scene 4 (3.5-6.0): hold the wall and the headline; no push, no camera move. ----
+      // Only the phones buzz: a deterministic micro-jitter (seeded sine hash, nothing random) that grows with the
+      // riser + snare roll (film 22-24 s) to ~2.4 px.
+      function hash(v) { const s = Math.sin(v * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); }
+      const J1 = 6.0, JSTEP = 1 / 12, SEGS = 28, JAMP = 2.4;
+      const J0 = J1 - SEGS * JSTEP; // ~3.67
+      for (let n = 1; n <= 7; n++) {
+        let px = 0, py = 0;
+        for (let s = 1; s <= SEGS; s++) {
+          const t = J0 + s * JSTEP;
+          const a = JAMP * Math.pow((t - J0) / (J1 - J0), 2);
+          const nx = a * (hash(n * 101 + s) * 2 - 1);
+          const ny = a * 0.6 * (hash(n * 211 + s + 0.5) * 2 - 1);
+          tl.fromTo("#f4p" + n + "-phone", { x: px, y: py }, { x: nx, y: ny, duration: JSTEP, ease: "sine.inOut", immediateRender: false }, t - JSTEP);
+          px = nx; py = ny;
+        }
+      }
+
+      window.__timelines["04-every-business"] = tl;
+    })();
+  </script>
+</template>

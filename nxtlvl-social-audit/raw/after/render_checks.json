@@ -1,0 +1,73 @@
+{
+ "desktop": {
+  "h1gs": true,
+  "late": false,
+  "lcp": [
+   1468,
+   "H1"
+  ],
+  "dcl": 724,
+  "title": "Social Media Content & Automation from $5/mo | Nxtlvl Social",
+  "words": false,
+  "calc": "$405",
+  "calcAfter": {
+   "inner": "$405",
+   "text": "$405"
+  },
+  "manifesto": {
+   "live": true,
+   "pinned": true
+  },
+  "errs": []
+ },
+ "firstVisit": {
+  "h1gs": true,
+  "late": false,
+  "lcp": [
+   1364,
+   "H1"
+  ],
+  "errs": []
+ },
+ "mobile": {
+  "h1gs": true,
+  "late": false,
+  "lcp": [
+   1068,
+   "H1"
+  ],
+  "errs": []
+ },
+ "rendererResize": {
+  "blocks": 122,
+  "invisible": 1,
+  "sample": [
+   "P: Tap the post to like it"
+  ],
+  "height": 23469,
+  "cls": "intro-on js gs h1-gs tall no-scrub",
+  "before": 23469,
+  "errs": []
+ },
+ "rendererTall": {
+  "blocks": 122,
+  "invisible": 1,
+  "sample": [
+   "P: Tap the post to like it"
+  ],
+  "height": 19973,
+  "cls": "tall no-scrub js gs",
+  "errs": []
+ },
+ "reduced": {
+  "blocks": 122,
+  "invisible": 2,
+  "sample": [
+   "P: Every post for the month laid out before",
+   "P: Tap the post to like it"
+  ],
+  "height": 18180,
+  "cls": "os-rm rm js no-scrub gs",
+  "errs": []
+ }
+}

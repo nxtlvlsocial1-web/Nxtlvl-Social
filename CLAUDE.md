@@ -30,6 +30,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Design direction: palette, type, pacing                 | `hyperframes-creative`                        |
 | Working with a person in Studio, storyboards            | `hyperframes-studio`                          |
 | CLI: init, check, preview, render, troubleshooting      | `hyperframes-cli`                             |
+| SEO audit or fixes for a site we build                  | `seo` (routes to `seo-audit`, `seo-page`, …)  |
 | Titles, cover text and video openings (Chinese)         | `dbs-title-cover-intro`                       |
 | Polish/tune existing UI motion: durations, easing, stagger | `transitions-polish`                 |
 | Visual style for music videos and moody edits (angelcore / hyperpop) | `taste`                    |
@@ -83,6 +84,17 @@ Don't edit them by hand. Update one with:
 npx skills add <source-repo> --skill <name> --agent claude-code -y
 ```
 
+The `seo*` skills and `.claude/agents/seo-*.md` are third-party too ([claude-seo](https://github.com/AgriciDaniel/claude-seo)
+v2.5.0, copied in with `${CLAUDE_PLUGIN_ROOT}` paths rewritten to `.claude/skills/...`). Build its Python runtime once per
+machine with `.claude/skills/seo/scripts/claude-seo setup`; run its scripts with `.claude/skills/seo/scripts/claude-seo run <script>.py`.
+
+The design and UI skills (`ui-ux-pro-max`, `frontend-design`, `design-taste-frontend`, `web-design-guidelines`, `impeccable`,
+the `plugin87/ux-ui-agent-skills` set such as `critique`, `a11y-audit`, `design-review`, and others listed in `skills-lock.json`)
+are third-party as well. Don't edit them by hand; update them with `npx skills update -p -y`.
+
+The `plugin87/ux-ui-agent-skills` set expects its shared kit (tokens/, workflows/) at the repo root, which `npx skills add` does
+not install; without it those skills only apply their SKILL.md rules.
+
 Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 
 ## Setup
@@ -99,7 +111,16 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 
 ```
 .claude/skills/       Claude Code skills
-brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-video § 4)
+brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-video § 4); brands/nxtlvl/ is our own logo kit
+website/              Our site: index.html, service pages (social-media-design, reel-editing, social-media-automation,
+                      website-development .html, built
+                      from one template with shared pages.css), 404.html, fonts/, vendor/ (GSAP, three.js), icons, og-image.png,
+                      manifest, robots.txt, sitemap.xml, llms.txt, _headers (cache and security headers);
+                      deployed by the Worker in backend/, step by step in DEPLOY.md
+backend/              Cloudflare Worker: serves website/ and the Book-a-call API (POST /api/book -> connect@nxtlvlsocial.ai
+                      via Resend); npm test runs it locally, npm run deploy ships it. See backend/README.md
+nxtlvl-social-audit/  SEO audit of website/index.html: FULL-AUDIT-REPORT.md, ACTION-PLAN.md, PDF, findings/
+motion-canvas/        Motion Canvas project (code-driven animation in TypeScript): npm install, npm start
 <project>/            One HyperFrames project per video and aspect ratio, e.g. spring-drop-9x16/
 ```
 

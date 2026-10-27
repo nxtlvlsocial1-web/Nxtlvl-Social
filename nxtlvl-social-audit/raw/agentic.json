@@ -1,0 +1,307 @@
+{
+  "url": "http://127.0.0.1:8765/website/index.html",
+  "site_root": "http://127.0.0.1:8765",
+  "checked_at": "2026-10-23T19:55:49+00:00",
+  "facts_checked_on": "2026-09-23",
+  "checks": [
+    {
+      "id": "robots-reachable",
+      "title": "robots.txt present",
+      "priority": "P0",
+      "status": "warn",
+      "standard": "RFC 9309",
+      "evidence": {
+        "status": 404
+      },
+      "fix": "No robots.txt means everything is allowed and no AI-usage preference is declared. Publish one deliberately."
+    },
+    {
+      "id": "server-rendered",
+      "title": "Primary content present without JavaScript",
+      "priority": "P0",
+      "status": "pass",
+      "standard": "practice (all fetchers)",
+      "evidence": {
+        "words_without_js": 2996,
+        "js_shell_marker": false
+      },
+      "fix": null
+    },
+    {
+      "id": "llms-txt",
+      "title": "llms.txt follows the Lighthouse rules",
+      "priority": "P1",
+      "status": "info",
+      "standard": "community spec (llmstxt.org); Lighthouse checks it, Google Search ignores it",
+      "evidence": {
+        "status": 404,
+        "content_type": "text/html;charset=utf-8",
+        "bytes": 335,
+        "llms_full_status": 404,
+        "lighthouse": "not-applicable",
+        "errors": [],
+        "notes": [
+          "HTTP 404"
+        ]
+      },
+      "fix": "No /llms.txt. Lighthouse drops the audit from the fraction; publishing a valid one adds a counted pass. Include an H1, a '>' summary and Markdown links."
+    },
+    {
+      "id": "markdown-delivery",
+      "title": "Markdown version of the page",
+      "priority": "P1",
+      "status": "info",
+      "standard": "HTTP content negotiation (RFC 9110) + community practice; no consumer agent is confirmed to request it (checked 2026-09-23)",
+      "evidence": {
+        "negotiation": {
+          "status": 200,
+          "content_type": "text/html",
+          "vary_accept": false,
+          "x_markdown_tokens": null,
+          "content_signal_header": null
+        },
+        "alternates": [],
+        "md_sibling": {
+          "url": "http://127.0.0.1:8765/website/index.html.md",
+          "status": 404,
+          "content_type": "text/html;charset=utf-8",
+          "ok": false
+        }
+      },
+      "fix": "Optional. Offer a content-equivalent Markdown version via 'Accept: text/markdown' (with 'Vary: Accept'), a rel=\"alternate\" type=\"text/markdown\" link, or a .md URL."
+    },
+    {
+      "id": "http-404",
+      "title": "Unknown URLs return a real 404",
+      "priority": "P1",
+      "status": "pass",
+      "standard": "HTTP semantics (RFC 9110); Google soft-404 guidance",
+      "evidence": {
+        "probe_url": "http://127.0.0.1:8765/claude-seo-404-probe-b07c7f2b",
+        "status": 404,
+        "content_type": "text/html;charset=utf-8",
+        "catch_all_200": false
+      },
+      "fix": null
+    },
+    {
+      "id": "webmcp-tools",
+      "title": "WebMCP tools for forms and transactions",
+      "priority": "P2",
+      "status": "info",
+      "standard": "W3C Community Group draft, not a standard; WebKit opposes, Mozilla neutral (checked 2026-09-23)",
+      "evidence": {
+        "registerTool_call_sites": 0,
+        "forms": 0,
+        "forms_annotated": 0,
+        "note": "Static count of registerTool( call sites in inline and same-origin scripts, not the number of tools (a loop registers many). Use lighthouse_agentic.py webmcp-registered-tools for the real list."
+      },
+      "fix": "Optional. If the site has search, booking, checkout or lead forms, register imperative tools bound to the same handlers the UI uses. Static scan only; confirm at runtime with lighthouse_agentic.py (webmcp-registered-tools)."
+    },
+    {
+      "id": "webmcp-entry-point",
+      "title": "WebMCP registered on the current entry point",
+      "priority": "P2",
+      "status": "na",
+      "standard": "W3C Community Group draft",
+      "evidence": {
+        "navigator_modelContext": false,
+        "document_modelContext": false
+      },
+      "fix": null
+    },
+    {
+      "id": "well-known:api-catalog",
+      "title": "API Catalog",
+      "priority": "P2",
+      "status": "na",
+      "standard": "RFC 9727",
+      "evidence": {
+        "status": 404,
+        "content_type": "text/html;charset=utf-8"
+      },
+      "fix": "Only needed if you operate the matching service (API Catalog)."
+    },
+    {
+      "id": "well-known:oauth-protected-resource",
+      "title": "OAuth Protected Resource Metadata",
+      "priority": "P2",
+      "status": "na",
+      "standard": "RFC 9728",
+      "evidence": {
+        "status": 404,
+        "content_type": "text/html;charset=utf-8"
+      },
+      "fix": "Only needed if you operate the matching service (OAuth Protected Resource Metadata)."
+    },
+    {
+      "id": "well-known:oauth-authorization-server",
+      "title": "OAuth Authorization Server Metadata",
+      "priority": "P2",
+      "status": "na",
+      "standard": "RFC 8414",
+      "evidence": {
+        "status": 404,
+        "content_type": "text/html;charset=utf-8"
+      },
+      "fix": "Only needed if you operate the matching service (OAuth Authorization Server Metadata)."
+    },
+    {
+      "id": "webmcp-form-annotations",
+      "title": "Forms annotated for declarative WebMCP (static scan)",
+      "priority": "P3",
+      "status": "na",
+      "standard": "W3C Community Group draft (Chrome only)",
+      "evidence": {
+        "forms": 0,
+        "unannotated": []
+      },
+      "fix": null
+    },
+    {
+      "id": "ard-catalog",
+      "title": "ai-catalog.json (Agentic Resource Discovery)",
+      "priority": "P3",
+      "status": "na",
+      "standard": "Agentic Resource Discovery (ARD) spec 1.0; checked by Lighthouse 13.5 ard-schema (checked 2026-09-23)",
+      "evidence": {
+        "catalog_url": "http://127.0.0.1:8765/.well-known/ai-catalog.json",
+        "signalled": false,
+        "status": 404,
+        "content_type": "text/html;charset=utf-8"
+      },
+      "fix": "Only publish one if you have agent resources to list (MCP server, A2A agent, skills). Lighthouse treats its absence as not applicable."
+    },
+    {
+      "id": "well-known:agent-card.json",
+      "title": "A2A agent card",
+      "priority": "P3",
+      "status": "na",
+      "standard": "A2A protocol",
+      "evidence": {
+        "status": 404,
+        "content_type": "text/html;charset=utf-8"
+      },
+      "fix": "Only needed if you operate the matching service (A2A agent card)."
+    },
+    {
+      "id": "well-known:ucp",
+      "title": "UCP commerce profile",
+      "priority": "P3",
+      "status": "na",
+      "standard": "UCP (Google + Shopify open spec); depth in seo-ecommerce ucp_check.py",
+      "evidence": {
+        "status": 404,
+        "content_type": "text/html;charset=utf-8"
+      },
+      "fix": "Only needed if you operate the matching service (UCP commerce profile)."
+    }
+  ],
+  "data": {
+    "page": {
+      "status": 200,
+      "error": null,
+      "words_without_js": 2996,
+      "js_shell_marker": false,
+      "final_url": "http://127.0.0.1:8765/website/index.html",
+      "headers": {},
+      "webmcp": {
+        "forms": 0,
+        "forms_annotated": 0,
+        "forms_unannotated": [],
+        "registerTool_call_sites": 0,
+        "document_modelContext": false,
+        "navigator_modelContext": false,
+        "same_origin_scripts_scanned": 0
+      }
+    },
+    "robots": {
+      "status": 404,
+      "error": null,
+      "parsed": {
+        "groups": [],
+        "sitemap": [],
+        "agentmap": [],
+        "orphan_content_signal": []
+      }
+    },
+    "llms": {
+      "status": 404,
+      "content_type": "text/html;charset=utf-8",
+      "bytes": 335,
+      "llms_full_status": 404,
+      "lighthouse": "not-applicable",
+      "errors": [],
+      "notes": [
+        "HTTP 404"
+      ]
+    },
+    "markdown": {
+      "negotiation": {
+        "status": 200,
+        "content_type": "text/html",
+        "vary_accept": false,
+        "x_markdown_tokens": null,
+        "content_signal_header": null
+      },
+      "alternates": [],
+      "md_sibling": {
+        "url": "http://127.0.0.1:8765/website/index.html.md",
+        "status": 404,
+        "content_type": "text/html;charset=utf-8",
+        "ok": false
+      }
+    },
+    "ard": {
+      "catalog_url": "http://127.0.0.1:8765/.well-known/ai-catalog.json",
+      "signalled": false,
+      "status": 404,
+      "content_type": "text/html;charset=utf-8"
+    },
+    "well_known": {
+      "/.well-known/api-catalog": {
+        "status": 404,
+        "content_type": "text/html;charset=utf-8"
+      },
+      "/.well-known/oauth-protected-resource": {
+        "status": 404,
+        "content_type": "text/html;charset=utf-8"
+      },
+      "/.well-known/oauth-authorization-server": {
+        "status": 404,
+        "content_type": "text/html;charset=utf-8"
+      },
+      "/.well-known/agent-card.json": {
+        "status": 404,
+        "content_type": "text/html;charset=utf-8"
+      },
+      "/.well-known/ucp": {
+        "status": 404,
+        "content_type": "text/html;charset=utf-8"
+      }
+    },
+    "not_found": {
+      "probe_url": "http://127.0.0.1:8765/claude-seo-404-probe-b07c7f2b",
+      "status": 404,
+      "content_type": "text/html;charset=utf-8",
+      "catch_all_200": false
+    }
+  },
+  "summary": {
+    "P0": {
+      "warn": 1,
+      "pass": 1
+    },
+    "P1": {
+      "info": 2,
+      "pass": 1
+    },
+    "P2": {
+      "info": 1,
+      "na": 4
+    },
+    "P3": {
+      "na": 4
+    }
+  }
+}

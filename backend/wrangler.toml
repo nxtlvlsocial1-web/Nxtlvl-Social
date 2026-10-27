@@ -1,0 +1,32 @@
+name = "nxtlvl-social"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+# the domain: both hostnames are attached as Workers custom domains on deploy. Cloudflare creates the DNS records
+# and the certificate itself, so the domain only has to be on this Cloudflare account (see DEPLOY.md step 2).
+# The Worker redirects www to the bare domain (src/index.js).
+# workers_dev = false: the site lives only on the domain, so a brand-new account needs no workers.dev subdomain to deploy.
+workers_dev = false
+routes = [
+  { pattern = "nxtlvlsocial.ai", custom_domain = true },
+  { pattern = "www.nxtlvlsocial.ai", custom_domain = true },
+]
+
+# the website itself: every file in ../website, served from the same Worker; /api/* goes to the code first
+[assets]
+directory = "../website"
+binding = "ASSETS"
+not_found_handling = "404-page"                   # unknown paths get 404.html with a real 404 status (no soft 404s)
+run_worker_first = ["/api/*"]
+
+[vars]
+LEAD_TO = "connect@nxtlvlsocial.ai"
+LEAD_FROM = "Nxtlvl Social <bookings@nxtlvlsocial.ai>"
+ALLOWED_ORIGINS = "https://nxtlvlsocial.ai,https://www.nxtlvlsocial.ai"
+RATE_LIMIT = "5"
+
+# optional: stores every lead and the per-IP rate counter. Create with `npx wrangler kv namespace create LEADS`
+# and paste the id it prints here; without it the form still emails you.
+# [[kv_namespaces]]
+# binding = "LEADS"
+# id = "paste-the-id-here"

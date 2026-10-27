@@ -1,0 +1,157 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <link rel="stylesheet" href="assets/css/brand.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-500.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #f5-bg { position: absolute; inset: 0; }
+    #f5-stage { position: absolute; inset: 0; }
+    #f5-world { position: absolute; inset: 0; }
+    #f5-bloom { left: 60px; top: 60px; width: 960px; height: 960px; }
+
+    /* the calendar card */
+    #f5-cal { left: 170px; top: 170px; width: 760px; height: 560px; padding: 30px 34px; transform-origin: 50% 50%; }
+    #f5-calhead { display: flex; align-items: baseline; justify-content: space-between; font-family: "Instrument Sans", sans-serif; color: var(--nx-fg); }
+    #f5-calhead b { font-family: "Archivo", sans-serif; font-weight: 800; font-size: 34px; letter-spacing: -0.02em; }
+    #f5-calhead span { font-size: 22px; color: var(--nx-muted); font-weight: 500; }
+    #f5-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-top: 22px; font-family: "Instrument Sans", sans-serif; font-size: 18px; font-weight: 600; color: var(--nx-faint); text-align: center; }
+    #f5-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-top: 12px; }
+    .f5-cell { height: 72px; border-radius: 14px; background: rgba(255,255,255,.04); border: 1px solid rgba(169,124,255,.14); position: relative;
+      font-family: "Instrument Sans", sans-serif; font-size: 18px; color: var(--nx-faint); padding: 8px 10px; }
+    .f5-cell i { position: absolute; left: 10px; bottom: 10px; width: 16px; height: 16px; border-radius: 50%; background: var(--nx-lift); transform-origin: 50% 50%;
+      box-shadow: 0 0 14px rgba(169,92,255,.8); }
+    .f5-cell i.r { background: var(--nx-gold); box-shadow: 0 0 14px rgba(255,196,107,.7); left: 32px; }
+    .f5-cell i.s { background: #FF7AC6; box-shadow: 0 0 14px rgba(255,122,198,.7); left: 54px; }
+
+    /* the flow rail under the card */
+    #f5-rail { position: absolute; left: 170px; top: 790px; width: 760px; height: 120px; }
+    #f5-line { position: absolute; left: 70px; right: 70px; top: 34px; height: 4px; border-radius: 4px; background: rgba(169,124,255,.18); }
+    #f5-line i { position: absolute; inset: 0; border-radius: 4px; background: linear-gradient(90deg, var(--nx-violet), var(--nx-lift)); transform-origin: 0 50%; }
+    .f5-step { position: absolute; top: 0; width: 170px; display: flex; flex-direction: column; align-items: center; gap: 12px; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 28px; color: var(--nx-muted); }
+    .f5-step b { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; background: var(--nx-ink-3); border: 2px solid var(--nx-line-2); position: relative; }
+    .f5-step b svg { width: 32px; height: 32px; }
+    .f5-step em { position: absolute; inset: -2px; border-radius: 50%; background: var(--nx-violet); display: grid; place-items: center; transform-origin: 50% 50%; }
+    .f5-step em svg { width: 32px; height: 32px; }
+    #f5-s0 { left: -14px; } #f5-s1 { left: 183px; } #f5-s2 { left: 380px; } #f5-s3 { left: 577px; }
+
+    /* the right column: title, counter, toasts */
+    #f5-col { position: absolute; left: 1040px; top: 150px; }
+    #f5-title { font-size: 118px; }
+    #f5-count { margin-top: 44px; display: flex; gap: 44px; }
+    .f5-k { font-family: "Instrument Sans", sans-serif; color: var(--nx-muted); font-size: 28px; font-weight: 500; }
+    .f5-k b { display: block; font-family: "Archivo", sans-serif; font-weight: 800; font-size: 84px; line-height: 1; letter-spacing: -0.03em; color: var(--nx-fg); font-variant-numeric: tabular-nums; transform-origin: 0 100%; }
+    #f5-toasts { position: absolute; left: 1040px; top: 600px; display: flex; flex-direction: column; gap: 18px; }
+    #f5-toasts .bx-toast { transform-origin: 100% 50%; }
+
+    #f5-dip { position: absolute; inset: 0; background: #05030C; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="05-automation" data-width="1920" data-height="1080" data-duration="5">
+    <div id="f5-bg" class="clip nx-ground" data-start="0" data-duration="5" data-track-index="0">
+      <i class="nx-glow a" data-layout-allow-overflow></i><i class="nx-glow b" data-layout-allow-overflow></i><i class="nx-glow c" data-layout-allow-overflow></i><i class="nx-ribbon" data-layout-allow-overflow></i><i class="nx-stars"></i>
+    </div>
+    <div id="f5-stage" class="clip" data-start="0" data-duration="5" data-track-index="1">
+      <div id="f5-world">
+        <div id="f5-bloom" class="bx-glow"></div>
+
+        <div id="f5-cal" class="bx-card">
+          <div id="f5-calhead"><b>October</b><span data-layout-ignore>The Corner Café · content calendar</span></div>
+          <div id="f5-days" data-layout-ignore><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+          <div id="f5-grid" data-layout-ignore></div>
+        </div>
+
+        <div id="f5-rail">
+          <div id="f5-line"><i id="f5-linefill"></i></div>
+          <div class="f5-step" id="f5-s0"><b><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3" fill="none" stroke="#9F97BE" stroke-width="1.8"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="#9F97BE" stroke-width="1.8" stroke-linecap="round"/></svg><em><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></em></b>Scheduled</div>
+          <div class="f5-step" id="f5-s1"><b><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5" stroke="#9F97BE" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3h16v-3" stroke="#9F97BE" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg><em><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3h16v-3" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></em></b>Published</div>
+          <div class="f5-step" id="f5-s2"><b><svg viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 3.5V17H6.5A2.5 2.5 0 0 1 4 14.5z" stroke="#9F97BE" stroke-width="1.8" fill="none"/></svg><em><svg viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 3.5V17H6.5A2.5 2.5 0 0 1 4 14.5z" stroke="#fff" stroke-width="1.8" fill="none"/></svg></em></b>Replied</div>
+          <div class="f5-step" id="f5-s3"><b><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="#9F97BE" stroke-width="1.8"/><path d="m4 7 8 6 8-6" stroke="#9F97BE" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><em><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="#fff" stroke-width="1.8"/><path d="m4 7 8 6 8-6" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></em></b>Enquiry</div>
+        </div>
+
+        <div id="f5-col">
+          <div id="f5-title" class="bx-h">Automation<span class="bx-it">runs the week</span></div>
+          <div id="f5-count">
+            <div class="f5-k"><b id="f5-n0">0</b>posts out</div>
+            <div class="f5-k"><b id="f5-n1">0</b>replies sent</div>
+            <div class="f5-k"><b id="f5-n2">0</b>enquiries</div>
+          </div>
+        </div>
+        <div id="f5-toasts">
+          <div class="bx-toast" id="f5-t0"><span class="bx-ic ok"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" stroke="#52E39B" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Posted · Monsoon combo reel<small data-layout-ignore>9:00</small></div>
+          <div class="bx-toast" id="f5-t1"><span class="bx-ic"><svg viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 3.5V17H6.5A2.5 2.5 0 0 1 4 14.5z" stroke="#D8BBFF" stroke-width="1.8" fill="none"/></svg></span>Replied to @priya · timings<small data-layout-ignore>9:14</small></div>
+          <div class="bx-toast" id="f5-t2"><span class="bx-ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="#D8BBFF" stroke-width="1.8"/><path d="m4 7 8 6 8-6" stroke="#D8BBFF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>New enquiry → your inbox<small data-layout-ignore>9:31</small></div>
+        </div>
+      </div>
+      <div id="f5-dip"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+
+      // build the calendar: 35 cells, October-style (starts on a Wednesday), dots on a baked schedule
+      var grid = document.getElementById("f5-grid");
+      var dots = [];
+      var SCHED = {};   // day -> kinds
+      for (var d = 1; d <= 31; d++) { SCHED[d] = ["p"]; if (d % 3 === 0) SCHED[d].push("r"); if (d % 7 === 5) SCHED[d].push("s"); }
+      for (var c = 0; c < 35; c++) {
+        var cell = document.createElement("div"); cell.className = "f5-cell";
+        var day = c - 1;                                   // the 1st sits in the third column
+        if (day >= 1 && day <= 31) {
+          cell.textContent = String(day);
+          SCHED[day].forEach(function (k) { var i = document.createElement("i"); i.className = k; i.id = "f5-d" + day + k; cell.appendChild(i); dots.push("#" + i.id); });
+        } else { cell.style.opacity = "0.35"; }
+        grid.appendChild(cell);
+      }
+
+      gsap.set("#f5-dip", { opacity: 0 });
+      gsap.set(dots, { scale: 0, opacity: 0 });
+      gsap.set(".f5-step em", { scale: 0, opacity: 0 });
+      gsap.set("#f5-linefill", { scaleX: 0 });
+      gsap.set(".bx-toast", { x: 120, opacity: 0 });
+      gsap.set(".f5-k", { opacity: 0 });
+
+      // 0.0  the impact: the calendar lands, the bloom hits, the title arrives
+      tl.fromTo("#f5-cal", { scale: 0.9, y: 50, opacity: 0, filter: "blur(10px)" }, { scale: 1, y: 0, opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "expo.out" }, 0);
+      tl.fromTo("#f5-bloom", { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.7, ease: "power3.out" }, 0);
+      tl.fromTo("#f5-title", { x: 80, opacity: 0, filter: "blur(8px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.55, ease: "power4.out" }, 0.2);
+      tl.fromTo("#f5-rail", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power4.out" }, 0.4);
+      // the month fills in a wave, 1 frame apart (31 days × 1-3 dots)
+      dots.forEach(function (sel, i) {
+        tl.fromTo(sel, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.4)" }, 0.25 + i * 0.028);
+      });
+
+      // 1.0  the rail lights step by step on the beats; the line draws between them
+      ["#f5-s0", "#f5-s1", "#f5-s2", "#f5-s3"].forEach(function (s, i) {
+        tl.fromTo(s + " em", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2)" }, 1.0 + i * 0.5);
+        tl.fromTo(s, { color: "#9F97BE" }, { color: "#F5F2FF", duration: 0.3 }, 1.0 + i * 0.5);
+      });
+      tl.to("#f5-linefill", { scaleX: 1, duration: 1.6, ease: "power1.inOut" }, 1.0);
+
+      // 1.5  toasts stack in from the right, 0.8 s apart
+      ["#f5-t0", "#f5-t1", "#f5-t2"].forEach(function (t, i) {
+        tl.fromTo(t, { x: 120, opacity: 0, scale: 0.94 }, { x: 0, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.4)" }, 1.3 + i * 0.7);
+      });
+
+      // 3.0  the counters land, growing with their value
+      [["#f5-n0", 31], ["#f5-n1", 24], ["#f5-n2", 12]].forEach(function (p, i) {
+        var proxy = { n: 0 }, el = document.querySelector(p[0]);
+        tl.to(proxy, { n: p[1], duration: 1.2, ease: "power3.out", onUpdate: function () { el.textContent = String(Math.round(proxy.n)); } }, 3.0 + i * 0.15);
+        tl.fromTo(p[0], { scale: 0.7 }, { scale: 1, duration: 0.9, ease: "back.out(1.3)" }, 3.0 + i * 0.15);
+        tl.fromTo(".f5-k:nth-child(" + (i + 1) + ")", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 3.0 + i * 0.15);
+      });
+
+      // 4.65  exit: the surfaces fall away and the frame darkens as the star streak begins
+      tl.to("#f5-world", { y: 70, opacity: 0, filter: "blur(10px)", duration: 0.33, ease: "power3.in" }, 4.65);
+      tl.to("#f5-dip", { opacity: 0.55, duration: 0.3, ease: "power2.in" }, 4.7);
+
+      tl.seek(0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["05-automation"] = tl;
+    })();
+  </script>
+</template>

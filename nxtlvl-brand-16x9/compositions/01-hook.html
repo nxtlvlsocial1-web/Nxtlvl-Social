@@ -1,0 +1,86 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <link rel="stylesheet" href="assets/css/brand.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #f1-bg { position: absolute; inset: 0; }
+    #f1-stage { position: absolute; inset: 0; }
+    #f1-cam { position: absolute; inset: 0; transform-origin: 50% 46%; }
+
+    #f1-eyebrow { position: absolute; left: 170px; top: 300px; }
+
+    /* the fixed line: "Your" + a masked slot that rolls; the slot is as wide as its widest word */
+    #f1-line { position: absolute; left: 170px; top: 380px; display: flex; align-items: baseline; gap: 44px; font-size: 190px; }
+    #f1-slot { display: inline-grid; overflow: hidden; height: 1em; line-height: .96; }
+    #f1-slot span { grid-area: 1 / 1; color: var(--nx-lift); white-space: nowrap; will-change: transform; }
+    #f1-under { position: absolute; left: 0; right: 0; bottom: -6px; height: 10px; border-radius: 5px; background: var(--nx-violet); transform-origin: 0 50%; }
+    #f1-slotwrap { position: relative; }
+    #f1-next { position: absolute; left: 174px; top: 620px; font-size: 118px; }
+    #f1-next .bx-it { display: inline; font-size: 1em; }
+
+    /* a meteor crossing the top right */
+    #f1-meteor { position: absolute; left: 1180px; top: 160px; width: 260px; height: 4px; border-radius: 4px;
+      background: linear-gradient(90deg, rgba(169,92,255,0), rgba(216,187,255,.95)); transform-origin: 100% 50%; }
+    #f1-meteor i { position: absolute; right: -8px; top: -7px; width: 18px; height: 18px; background: #fff;
+      clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%); }
+
+    #f1-dip { position: absolute; inset: 0; background: #05030C; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="01-hook" data-width="1920" data-height="1080" data-duration="4">
+    <div id="f1-bg" class="clip nx-ground" data-start="0" data-duration="4" data-track-index="0">
+      <i class="nx-glow a" data-layout-allow-overflow></i><i class="nx-glow b" data-layout-allow-overflow></i><i class="nx-glow c" data-layout-allow-overflow></i><i class="nx-ribbon" data-layout-allow-overflow></i><i class="nx-stars"></i>
+    </div>
+    <div id="f1-stage" class="clip" data-start="0" data-duration="4" data-track-index="1">
+      <div id="f1-cam">
+        <div id="f1-meteor"><i></i></div>
+        <div id="f1-eyebrow" class="bx-eyebrow"><i class="bx-star"></i>Nxtlvl Social · creative + automation studio</div>
+        <div id="f1-line" class="bx-h">
+          <span>Your</span>
+          <span id="f1-slotwrap"><span id="f1-slot"><span id="f1-w0">feed</span><span id="f1-w1">reels</span><span id="f1-w2">website</span><span id="f1-w3">replies</span></span><i id="f1-under"></i></span>
+        </div>
+        <div id="f1-next" class="bx-h"><span class="bx-it">next level, in one studio</span></div>
+      </div>
+      <div id="f1-dip"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var words = ["#f1-w0", "#f1-w1", "#f1-w2", "#f1-w3"];
+      var SWAPS = [1.0, 2.0, 3.0];                       // beats 2, 4, 6 at 120 BPM
+
+      gsap.set("#f1-dip", { opacity: 0 });
+      gsap.set(["#f1-w1", "#f1-w2", "#f1-w3"], { yPercent: 110, opacity: 0 });
+
+      // first beat lands: "Your" and "feed" blur in, the underline draws
+      tl.fromTo("#f1-line", { opacity: 0.7, filter: "blur(10px)", scale: 1.06 }, { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.45, ease: "power4.out" }, 0);
+      tl.fromTo("#f1-under", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "expo.out" }, 0.3);
+      tl.fromTo("#f1-eyebrow", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.5, ease: "power4.out" }, 0.55);
+      tl.fromTo("#f1-next", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power3.out" }, 0.75);
+
+      // the slot rolls on the beat: the old word leaves up, the new one lands from below with a little overshoot
+      SWAPS.forEach(function (t, i) {
+        tl.to(words[i], { yPercent: -110, opacity: 0, filter: "blur(4px)", duration: 0.3, ease: "power3.in" }, t - 0.12);
+        tl.fromTo(words[i + 1], { yPercent: 110, opacity: 0, filter: "blur(4px)" }, { yPercent: 0, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "back.out(1.4)" }, t - 0.04);
+        tl.fromTo("#f1-under", { scaleX: 0.2 }, { scaleX: 1, duration: 0.45, ease: "expo.out" }, t);
+      });
+
+      // the meteor crosses on beat 5 (2.5 s), as the riser starts
+      tl.fromTo("#f1-meteor", { x: 260, y: -150, scaleX: 0.2, opacity: 0 }, { x: -360, y: 210, scaleX: 1.4, opacity: 1, duration: 0.55, ease: "power2.in" }, 2.45);
+      tl.to("#f1-meteor", { opacity: 0, duration: 0.15, ease: "power1.out" }, 3.0);
+
+      // into the drop: the whole stage pushes in and blurs, then a dip cut (frame darkens 40 % for 3 frames)
+      tl.to("#f1-cam", { scale: 1.08, filter: "blur(6px)", duration: 0.4, ease: "power3.in" }, 3.6);
+      tl.set("#f1-dip", { opacity: 0.4 }, 3.9);
+
+      tl.seek(0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["01-hook"] = tl;
+    })();
+  </script>
+</template>

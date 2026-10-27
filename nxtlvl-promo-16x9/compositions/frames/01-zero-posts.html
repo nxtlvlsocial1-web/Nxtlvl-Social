@@ -1,0 +1,125 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-400.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-500.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #f1-bg { position: absolute; inset: 0; }
+    #f1-stage { position: absolute; inset: 0; }
+    /* camera wrapper: phone + type push in about the phone centre (960, 470) */
+    #f1-cam { position: absolute; inset: 0; transform-origin: 960px 470px; }
+
+    #f1-still { position: absolute; right: 1200px; top: 372px; font-size: 132px; text-align: right; transform-origin: 100% 50%; }
+    #f1-phone { left: 770px; top: 80px; }
+    #f1-count { transform-origin: 50% 55%; }
+    #f1-zero { position: absolute; left: 1200px; top: 372px; font-size: 132px; white-space: nowrap; }
+    #f1-zero-num { display: inline-block; color: var(--nx-lift); text-shadow: 0 0 60px rgba(169,92,255,.7); transform-origin: 50% 60%; }
+    #f1-busy { position: absolute; left: 1204px; top: 530px; font-size: 58px; line-height: 1.02; width: 600px; white-space: nowrap; }
+    #f1-busy .f1-word { display: inline-block; }
+    #f1-spark { position: absolute; left: 1140px; top: 44px; width: 44px; height: 44px; transform-origin: 50% 50%;
+      filter: drop-shadow(0 0 12px rgba(169,92,255,.85)); }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div data-hf-id="hf-a35x" id="root" data-composition-id="01-zero-posts" data-width="1920" data-height="1080" data-duration="4">
+    <div data-hf-id="hf-3jxb" id="f1-bg" class="clip nx-ground" data-start="0" data-duration="4" data-track-index="0">
+      <i data-hf-id="hf-d85h" class="nx-glow a"></i><i data-hf-id="hf-jdva" class="nx-glow b"></i><i data-hf-id="hf-nbzb" class="nx-glow c"></i><i data-hf-id="hf-cfaj" class="nx-ribbon"></i><i data-hf-id="hf-gzgq" class="nx-stars"></i>
+    </div>
+    <div data-hf-id="hf-0hcn" id="f1-stage" class="clip" data-start="0" data-duration="4" data-track-index="1">
+      <div data-hf-id="hf-ahg0" id="f1-cam">
+
+        <div data-hf-id="hf-wyw3" class="nx-display" id="f1-still">Still</div>
+
+        <div data-hf-id="hf-snzn" class="nx-phone" id="f1-phone">
+          <div data-hf-id="hf-bctj" class="nx-screen">
+            <div data-hf-id="hf-4oo0" class="nx-island"></div>
+            <div data-hf-id="hf-wyop" class="nx-status"><span data-hf-id="hf-zwmt">9:41</span><span data-hf-id="hf-zuqb" class="nx-sig"><i data-hf-id="hf-n0km" style="height:4px"></i><i data-hf-id="hf-sg4c" style="height:6px"></i><i data-hf-id="hf-jylm" style="height:8px"></i><i data-hf-id="hf-xj3t" style="height:10px"></i><b data-hf-id="hf-xe6h" class="nx-bat"></b></span></div>
+            <div data-hf-id="hf-8af1" class="nx-feed" data-layout-allow-overlap id="f1-feed" style="top:52px">
+              <div data-hf-id="hf-5ale" class="nx-prof">
+                <div data-hf-id="hf-hk9y" class="nx-handle">the.corner.cafe<i data-hf-id="hf-kuhj" class="nx-chev"></i></div>
+                <div data-hf-id="hf-yqet" class="nx-row"><div data-hf-id="hf-kqf7" class="nx-ava"><b data-hf-id="hf-xujp"></b></div>
+                  <div data-hf-id="hf-bw68" class="nx-stats"><div data-hf-id="hf-yeow"><b data-hf-id="hf-s1ax" id="f1-count">0</b><span data-hf-id="hf-uolc">posts</span></div><div data-hf-id="hf-y7yw"><b data-hf-id="hf-6wgc">412</b><span data-hf-id="hf-0jzs">followers</span></div><div data-hf-id="hf-x11t"><b data-hf-id="hf-s1x0">180</b><span data-hf-id="hf-il1o">following</span></div></div></div>
+                <div data-hf-id="hf-94ez" class="nx-name">The Corner Café</div><div data-hf-id="hf-5rdc" class="nx-bio">Coffee · brunch · open 7–10</div>
+                <div data-hf-id="hf-ludc" class="nx-btns"><span data-hf-id="hf-6140">Edit profile</span><span data-hf-id="hf-knzt">Share profile</span></div>
+              </div>
+              <div data-hf-id="hf-k2s3" class="nx-tabs"><i data-hf-id="hf-l5u7" class="on"></i><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i></div>
+              <div data-hf-id="hf-ldt2" class="nx-empty"><div data-hf-id="hf-v71c" class="nx-cam"></div><h4 data-hf-id="hf-i6l7">No posts yet</h4><p data-hf-id="hf-kah7">When you share photos, they will appear here.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <img data-hf-id="hf-7oi9" id="f1-spark" src="assets/nxtlvl-spark.svg" alt="" />
+
+        <div data-hf-id="hf-ex0x" class="nx-display" id="f1-zero"><span data-hf-id="hf-uog1" id="f1-zero-num">0</span> posts?</div>
+        <div data-hf-id="hf-i5kf" class="nx-serif" id="f1-busy"><span data-hf-id="hf-e2b2" class="f1-word">You're</span> <span data-hf-id="hf-b8l2" class="f1-word">busy</span> <span data-hf-id="hf-0xgq" class="f1-word">running</span> <span data-hf-id="hf-loi6" class="f1-word">the</span> <span data-hf-id="hf-1apw" class="f1-word">place.</span></div>
+
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // One beat grid (120 BPM, 0.5 s per beat) drives every reveal.
+      const BEAT = 0.5;
+      const B = [0, BEAT, BEAT * 2, BEAT * 3, BEAT * 4, BEAT * 5, BEAT * 6, BEAT * 7]; // 0.0 … 3.5
+
+      // Scene 1 (0.0–0.5): the phone is already there, settling up on a long-tail ease.
+      tl.fromTo("#f1-phone",
+        { y: 36, scale: 1, opacity: 1 },
+        { y: 0, scale: 1, opacity: 1, duration: 1.4, ease: "expo.out" }, 0);
+
+      // "Still" slams in on the downbeat: scale + blur slam, anchored to its right edge.
+      tl.fromTo("#f1-still",
+        { scale: 1.5, filter: "blur(16px)", opacity: 0 },
+        { scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.45, ease: "power4.out" }, B[0]);
+
+      // Scene 2 (0.5–2.0): "0 posts?" side-snaps in on beat 2 (a different axis from "Still").
+      tl.fromTo("#f1-zero",
+        { x: 140, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.42, ease: "expo.out" }, B[1]);
+
+      // Keyword glow on the big "0": attack → decay to its resting glow (the approved look).
+      tl.fromTo("#f1-zero-num",
+        { scale: 1, textShadow: "0px 0px 0px rgba(169,92,255,0)" },
+        { scale: 1.1, textShadow: "0px 0px 110px rgba(169,92,255,1)", duration: 0.18, ease: "power2.out" }, B[1] + 0.06);
+      tl.fromTo("#f1-zero-num",
+        { scale: 1.1, textShadow: "0px 0px 110px rgba(169,92,255,1)" },
+        { scale: 1, textShadow: "0px 0px 60px rgba(169,92,255,0.7)", duration: 0.5, ease: "sine.out", immediateRender: false }, B[1] + 0.32);
+
+      // The phone's own "0 posts" stat lights with it, then settles back to white.
+      tl.fromTo("#f1-count",
+        { scale: 1, color: "#F5F2FF", textShadow: "0px 0px 0px rgba(169,92,255,0)" },
+        { scale: 1.22, color: "#A95CFF", textShadow: "0px 0px 16px rgba(169,92,255,0.95)", duration: 0.18, ease: "power2.out" }, B[1] + 0.06);
+      tl.fromTo("#f1-count",
+        { scale: 1.22, color: "#A95CFF", textShadow: "0px 0px 16px rgba(169,92,255,0.95)" },
+        { scale: 1, color: "#F5F2FF", textShadow: "0px 0px 8px rgba(169,92,255,0.35)", duration: 0.6, ease: "sine.out", immediateRender: false }, B[1] + 0.32);
+
+      // Faint glint top-right of the phone on beat 4, settling to a quiet rest.
+      tl.fromTo("#f1-spark",
+        { scale: 0, rotation: -90, opacity: 0 },
+        { scale: 1.2, rotation: 0, opacity: 0.85, duration: 0.3, ease: "expo.out" }, B[3]);
+      tl.fromTo("#f1-spark",
+        { scale: 1.2, opacity: 0.85 },
+        { scale: 1, opacity: 0.4, duration: 0.6, ease: "sine.out", immediateRender: false }, B[3] + 0.3);
+
+      // Scene 3 (2.0–3.0): the serif line reveals word by word under "0 posts?".
+      tl.fromTo("#f1-busy .f1-word",
+        { y: 26, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.4, ease: "power3.out", stagger: 0.08 }, B[4]);
+
+      // Scene 4 (2.5–4.0): with the riser, the stage pushes in toward the phone,
+      // accelerating into the cut (scale 1.08 about the phone centre). The type holds.
+      tl.fromTo("#f1-cam",
+        { scale: 1 },
+        { scale: 1.08, duration: 1.5, ease: "power2.in" }, B[5]);
+
+      window.__timelines["01-zero-posts"] = tl;
+    })();
+  </script>
+</template>

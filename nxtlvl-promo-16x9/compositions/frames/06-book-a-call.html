@@ -1,0 +1,167 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-400.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-500.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #f6-bg { position: absolute; inset: 0; }
+    #f6-stage { position: absolute; inset: 0; }
+    #f6-content { position: absolute; inset: 0; }
+
+    /* environmental glow behind the CTA (press-release-spring phase 4) */
+    #f6-env-glow { position: absolute; left: 260px; top: 333px; width: 1400px; height: 560px; border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(125,24,252,.55), rgba(125,24,252,0)); opacity: 0; }
+
+    /* concentric closing rings, centred on the logo */
+    #f6-rings { position: absolute; left: 960px; top: 400px; width: 0; height: 0; }
+    #f6-rings .f6-ring { position: absolute; left: 50%; top: 50%; border-radius: 50%; }
+
+    /* lockup: wordmark + spark top-right */
+    #f6-lock { position: absolute; left: 0; right: 0; top: 300px; display: flex; justify-content: center; }
+    #f6-mark { position: relative; }
+    #f6-word { position: relative; z-index: 1; width: 620px; height: auto; display: block;
+      --f6-wipe: 122%;
+      -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--f6-wipe) - 22%), transparent var(--f6-wipe));
+      mask-image: linear-gradient(90deg, #000 calc(var(--f6-wipe) - 22%), transparent var(--f6-wipe)); }
+    #f6-spark-glow { position: absolute; z-index: 0; left: 534px; top: -124px; width: 240px; height: 240px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(216,187,255,.85) 0%, rgba(169,92,255,.42) 32%, rgba(125,24,252,0) 70%); opacity: .32; }
+    #f6-spark { position: absolute; z-index: 2; right: -70px; top: -40px; width: 72px; height: 72px; }
+    #f6-spark-jit { width: 100%; height: 100%; }
+    #f6-spark-jit svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 0 22px rgba(169,92,255,.95)); }
+
+    /* the one solid element: the CTA pill */
+    #f6-cta { position: absolute; left: 0; right: 0; top: 560px; display: flex; justify-content: center; }
+    #f6-press { position: relative; }
+    #f6-burst { position: absolute; inset: 0; z-index: 1; border-radius: 100px; opacity: 0; filter: blur(34px);
+      background: radial-gradient(closest-side, rgba(61,7,137,.95), rgba(125,24,252,.6) 55%, rgba(125,24,252,0)); }
+    #f6-pill { position: relative; z-index: 2; display: flex; align-items: center; gap: 18px; padding: 24px 28px 24px 44px;
+      border-radius: 100px; background: var(--nx-violet); color: #fff; white-space: nowrap;
+      font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 44px;
+      box-shadow: 0px 30px 80px -20px rgba(125,24,252,0.9); }
+    #f6-arrow { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; background: rgba(255,255,255,.18); }
+    #f6-arrow svg { width: 30px; height: 30px; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div data-hf-id="hf-dwgt" id="root" data-composition-id="06-book-a-call" data-width="1920" data-height="1080" data-duration="3">
+    <div data-hf-id="hf-436b" id="f6-bg" class="clip nx-ground" data-start="0" data-duration="3" data-track-index="0">
+      <i data-hf-id="hf-d85h" class="nx-glow a"></i><i data-hf-id="hf-jdva" class="nx-glow b"></i><i data-hf-id="hf-nbzb" class="nx-glow c"></i><i data-hf-id="hf-cfaj" class="nx-ribbon"></i><i data-hf-id="hf-gzgq" class="nx-stars"></i>
+    </div>
+    <div data-hf-id="hf-rrej" id="f6-stage" class="clip" data-start="0" data-duration="3" data-track-index="1">
+      <div data-hf-id="hf-jt5h" id="f6-content">
+
+        <div data-hf-id="hf-kj2n" id="f6-env-glow"></div>
+
+        <div data-hf-id="hf-vmef" id="f6-rings">
+          <i data-hf-id="hf-8f08" class="f6-ring" style="width:420px; height:420px; margin:-210px 0 0 -210px; border:1px solid rgba(169,124,255,0.32)"></i>
+          <i data-hf-id="hf-ci3d" class="f6-ring" style="width:640px; height:640px; margin:-320px 0 0 -320px; border:1px solid rgba(169,124,255,0.22)"></i>
+          <i data-hf-id="hf-4cxq" class="f6-ring" style="width:880px; height:880px; margin:-440px 0 0 -440px; border:1px solid rgba(169,124,255,0.14)"></i>
+          <i data-hf-id="hf-cpl1" class="f6-ring" style="width:1160px; height:1160px; margin:-580px 0 0 -580px; border:1px solid rgba(169,124,255,0.08)"></i>
+        </div>
+
+        <div data-hf-id="hf-akib" id="f6-lock">
+          <div data-hf-id="hf-9xhx" id="f6-mark">
+            <div data-hf-id="hf-u2zh" id="f6-spark-glow"></div>
+            <img data-hf-id="hf-97r2" id="f6-word" src="assets/nxtlvl-wordmark.png" alt="nxtlvl" />
+            <div data-hf-id="hf-ffkp" id="f6-spark">
+              <div data-hf-id="hf-qvsf" id="f6-spark-jit">
+                <svg data-hf-id="hf-ulu9" viewBox="0 0 24 24"><path data-hf-id="hf-yokp" d="M12 0c.5 6.4 5.1 11 11.5 11.5C17.1 12 12.5 16.6 12 23c-.5-6.4-5.1-11-11.5-11.5C6.9 11 11.5 6.4 12 0z" fill="#A95CFF"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div data-hf-id="hf-n334" id="f6-cta">
+          <div data-hf-id="hf-b107" id="f6-press">
+            <div data-hf-id="hf-va58" id="f6-burst"></div>
+            <span data-hf-id="hf-2uqy" id="f6-pill">Book a free call
+              <b data-hf-id="hf-4c1m" id="f6-arrow"><svg data-hf-id="hf-gmtl" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path data-hf-id="hf-t9fu" d="M7 17L17 7M9 7h8v8"/></svg></b>
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Scene 1 (0.0–0.6) — the spark ignites: grows from nothing with a quarter turn (spring-pop-entrance, smooth settle)
+      tl.fromTo("#f6-spark",
+        { scale: 0, opacity: 0, rotation: -90 },
+        { scale: 1, opacity: 1, rotation: 0, duration: 0.6, ease: "power3.out" }, 0);
+      // glow flash on ignition, decaying to a resting glow
+      tl.fromTo("#f6-spark-glow",
+        { scale: 0.3, opacity: 0 },
+        { scale: 1.3, opacity: 1, duration: 0.18, ease: "power2.out" }, 0.02);
+      tl.to("#f6-spark-glow", { scale: 0.85, opacity: 0.32, duration: 0.5, ease: "power2.inOut" }, 0.2);
+      // concentric rings scale out from the logo centre and settle, staggered by index
+      gsap.utils.toArray("#f6-rings .f6-ring").forEach(function (ring, i) {
+        tl.fromTo(ring,
+          { scale: 0.3, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.7, ease: "power3.out" }, 0.04 + i * 0.07);
+      });
+
+      // Scene 2 (0.1–0.9) — wordmark assembles left to right through a soft mask wipe, blur to sharp
+      tl.fromTo("#f6-word",
+        { "--f6-wipe": "0%", filter: "blur(16px)", x: -18 },
+        { "--f6-wipe": "122%", filter: "blur(0px)", x: 0, duration: 0.8, ease: "power2.out" }, 0.1);
+
+      // Scene 3 (≈0.25–1.0) — the pill rises into place, then one tactile press (press-release-spring) on the 0.5 s click
+      tl.fromTo("#f6-cta",
+        { y: 48, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.26, ease: "expo.out" }, 0.24);
+      const REST = "0px 30px 80px -20px rgba(125,24,252,0.9)";
+      const PRESSED = "0px 10px 26px -12px rgba(125,24,252,0.9)";
+      const PRESS_START = 0.42, PRESS_DUR = 0.1, RELEASE_START = PRESS_START + PRESS_DUR;
+      // phase 1 — press: linear-ish compression, shadow sinks
+      tl.fromTo("#f6-pill",
+        { scale: 1, boxShadow: REST },
+        { scale: 0.92, boxShadow: PRESSED, duration: PRESS_DUR, ease: "power1.in" }, PRESS_START);
+      // phase 2 — release: spring back (start == press end by adjacency)
+      tl.fromTo("#f6-pill",
+        { scale: 0.92, boxShadow: PRESSED },
+        { scale: 1, boxShadow: REST, duration: 0.48, ease: "back.out(1.7)", immediateRender: false }, RELEASE_START);
+      // phase 3 — soft burst glow behind the pill, then fades
+      tl.fromTo("#f6-burst",
+        { scale: 1, opacity: 0 },
+        { scale: 2.6, opacity: 0.6, duration: 0.5, ease: "power2.out" }, RELEASE_START);
+      tl.to("#f6-burst", { opacity: 0, duration: 0.55, ease: "power2.in" }, RELEASE_START + 0.5);
+      // phase 4 — environmental glow settles in
+      tl.fromTo("#f6-env-glow",
+        { opacity: 0 },
+        { opacity: 0.22, duration: 0.7, ease: "power2.out" }, RELEASE_START);
+
+      // Scene 4 (1.0–2.6) — lockup holds still; subtle jitter on the spark only (eighth-note steps at 120 BPM)
+      const JIT = [
+        [1.2, -0.8, 3, 1.04, 0.40],
+        [-1.0, 0.6, -2, 0.97, 0.28],
+        [0.8, 1.0, 4, 1.05, 0.42],
+        [-1.3, -0.5, -3, 0.98, 0.30],
+        [0.9, 0.7, 2, 1.03, 0.38],
+        [0, 0, 0, 1, 0.32]
+      ];
+      JIT.forEach(function (j, k) {
+        const at = 1.0 + k * 0.25;
+        tl.to("#f6-spark-jit", { x: j[0], y: j[1], rotation: j[2], scale: j[3], duration: 0.25, ease: "sine.inOut" }, at);
+        tl.to("#f6-spark-glow", { opacity: j[4], duration: 0.25, ease: "sine.inOut" }, at);
+      });
+
+      // Final 0.4 s (2.6–3.0) — final frame exit: everything fades to the ink ground with the music tail
+      tl.fromTo("#f6-content",
+        { opacity: 1 },
+        { opacity: 0, duration: 0.4, ease: "sine.inOut", immediateRender: false }, 2.6);
+      tl.fromTo("#f6-bg > i",
+        { opacity: 1 },
+        { opacity: 0, duration: 0.4, ease: "sine.inOut", immediateRender: false }, 2.6);
+
+      window.__timelines["06-book-a-call"] = tl;
+    })();
+  </script>
+</template>

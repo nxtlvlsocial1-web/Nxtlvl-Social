@@ -1,0 +1,184 @@
+<template>
+  <link rel="stylesheet" href="assets/css/kit.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-400.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-500.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #f2-bg { position: absolute; inset: 0; }
+    /* bass-impact bloom behind the phone on the drop */
+    #f2-dropglow { position: absolute; left: 510px; top: 20px; width: 900px; height: 900px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(169,92,255,.42) 0%, rgba(125,24,252,.18) 38%, rgba(125,24,252,0) 68%); }
+
+    #f2-stage { position: absolute; inset: 0; }
+    /* camera wrapper: phone + type, pivot at the phone centre (960, 470) */
+    #f2-cam { position: absolute; inset: 0; transform-origin: 960px 470px; }
+
+    #f2-meet { position: absolute; right: 1200px; top: 300px; font-size: 112px; text-align: right; white-space: nowrap; }
+    #f2-meet > div { transform-origin: 100% 50%; }
+
+    #f2-phone { left: 770px; top: 80px; }
+    #f2-feed { top: 52px; }
+    #f2-gridwrap { position: relative; display: flow-root; }
+    #f2-slots { position: absolute; left: 0; right: 0; top: 0; }
+    #f2-grid { position: relative; }
+    #f2-empty { position: absolute; left: 0; right: 0; top: 0; }
+    .f2-flash { position: absolute; inset: 0; background: #fff; z-index: 4; }
+
+    #f2-team { position: absolute; left: 1200px; top: 286px; font-size: 150px; line-height: .9; white-space: nowrap; }
+    #f2-team > div { transform-origin: 0% 100%; }
+
+    #f2-pills { position: absolute; right: 1200px; top: 560px; width: 600px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; }
+    #f2-pills .nx-pill { transform-origin: 50% 50%; }
+
+    #f2-by { position: absolute; left: 1206px; top: 600px; display: flex; align-items: center; gap: 14px; }
+    #f2-by-txt { font-size: 26px; }
+    #f2-mark { width: 190px; height: auto; }
+    #f2-spark { width: 22px; height: 22px; margin: -26px 0 0 -8px; overflow: visible; transform-origin: 50% 50%; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div data-hf-id="hf-sc6p" id="root" data-composition-id="02-meet-the-team" data-width="1920" data-height="1080" data-duration="6">
+    <div data-hf-id="hf-dsf4" id="f2-bg" class="clip nx-ground" data-start="0" data-duration="6" data-track-index="0">
+      <i data-hf-id="hf-d85h" class="nx-glow a"></i><i data-hf-id="hf-jdva" class="nx-glow b"></i><i data-hf-id="hf-nbzb" class="nx-glow c"></i><i data-hf-id="hf-cfaj" class="nx-ribbon"></i><i data-hf-id="hf-gzgq" class="nx-stars"></i>
+      <i data-hf-id="hf-ws6y" id="f2-dropglow"></i>
+    </div>
+    <div data-hf-id="hf-6nka" id="f2-stage" class="clip" data-start="0" data-duration="6" data-track-index="1">
+      <div data-hf-id="hf-5u9f" id="f2-cam">
+
+        <div data-hf-id="hf-lw3f" class="nx-display" id="f2-meet"><div data-hf-id="hf-hxp9" id="f2-meet-a">Meet your</div><div data-hf-id="hf-wcdf" id="f2-meet-b">entire</div></div>
+
+        <div data-hf-id="hf-k25w" class="nx-phone" id="f2-phone">
+          <div data-hf-id="hf-bctj" class="nx-screen">
+            <div data-hf-id="hf-4oo0" class="nx-island"></div>
+            <div data-hf-id="hf-wyop" class="nx-status"><span data-hf-id="hf-zwmt">9:41</span><span data-hf-id="hf-zuqb" class="nx-sig"><i data-hf-id="hf-n0km" style="height:4px"></i><i data-hf-id="hf-sg4c" style="height:6px"></i><i data-hf-id="hf-jylm" style="height:8px"></i><i data-hf-id="hf-xj3t" style="height:10px"></i><b data-hf-id="hf-xe6h" class="nx-bat"></b></span></div>
+            <div data-hf-id="hf-w42q" class="nx-feed" data-layout-allow-overlap id="f2-feed">
+              <div data-hf-id="hf-5ale" class="nx-prof">
+                <div data-hf-id="hf-hk9y" class="nx-handle">the.corner.cafe<i data-hf-id="hf-kuhj" class="nx-chev"></i></div>
+                <div data-hf-id="hf-yqet" class="nx-row"><div data-hf-id="hf-kqf7" class="nx-ava"><b data-hf-id="hf-xujp"></b></div>
+                  <div data-hf-id="hf-bw68" class="nx-stats"><div data-hf-id="hf-yeow"><b data-hf-id="hf-wpt4" id="f2-count">0</b><span data-hf-id="hf-uolc">posts</span></div><div data-hf-id="hf-y7yw"><b data-hf-id="hf-6wgc">412</b><span data-hf-id="hf-0jzs">followers</span></div><div data-hf-id="hf-x11t"><b data-hf-id="hf-s1x0">180</b><span data-hf-id="hf-il1o">following</span></div></div></div>
+                <div data-hf-id="hf-94ez" class="nx-name">The Corner Café</div><div data-hf-id="hf-5rdc" class="nx-bio">Coffee · brunch · open 7–10</div>
+                <div data-hf-id="hf-ludc" class="nx-btns"><span data-hf-id="hf-6140">Edit profile</span><span data-hf-id="hf-knzt">Share profile</span></div>
+              </div>
+              <div data-hf-id="hf-k2s3" class="nx-tabs"><i data-hf-id="hf-l5u7" class="on"></i><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i></div>
+              <div data-hf-id="hf-aa6i" id="f2-gridwrap">
+                <!-- empty slot underlay for the nine post slots -->
+                <div data-hf-id="hf-x05t" class="nx-grid" id="f2-slots"><div data-hf-id="hf-j31q" class="nx-empty-tile f2-slot"></div><div data-hf-id="hf-knqq" class="nx-empty-tile f2-slot"></div><div data-hf-id="hf-l21r" class="nx-empty-tile f2-slot"></div><div data-hf-id="hf-lgcs" class="nx-empty-tile f2-slot"></div><div data-hf-id="hf-lunt" class="nx-empty-tile f2-slot"></div><div data-hf-id="hf-m8yu" class="nx-empty-tile f2-slot"></div><div data-hf-id="hf-mn9v" class="nx-empty-tile f2-slot"></div><div data-hf-id="hf-n1kw" class="nx-empty-tile f2-slot"></div><div data-hf-id="hf-h2zh" class="nx-empty-tile f2-slot"></div></div>
+                <div data-hf-id="hf-t2ka" class="nx-grid" id="f2-grid"><div data-hf-id="hf-s8z7" class="nx-post nx-p-latte" id="f2-t1"><i data-hf-id="hf-u48f" class="nx-tag reel"></i><div data-hf-id="hf-k3ih" class="nx-cap">Monday<br data-hf-id="hf-x5px"/>Mocha</div><i data-hf-id="hf-3gwh" class="f2-flash"></i></div><div data-hf-id="hf-chks" class="nx-post nx-p-diwali" id="f2-t2"><div data-hf-id="hf-vjrz" class="nx-cap">Happy Diwali</div><i data-hf-id="hf-nlxh" class="f2-flash"></i></div><div data-hf-id="hf-4rsm" class="nx-post nx-p-menu" id="f2-t3"><div data-hf-id="hf-6aom" class="nx-cap">NEW<br data-hf-id="hf-rsrt"/>MENU</div><i data-hf-id="hf-osuk" class="f2-flash"></i></div><div data-hf-id="hf-nps1" class="nx-post nx-p-salon" id="f2-t4"><i data-hf-id="hf-zmoq" class="nx-tag multi"></i><div data-hf-id="hf-jzc8" class="nx-cap">5 looks<br data-hf-id="hf-szow"/>for fall</div><i data-hf-id="hf-oejj" class="f2-flash"></i></div><div data-hf-id="hf-jkb7" class="nx-post nx-p-offer" id="f2-t5"><div data-hf-id="hf-8ujb" class="nx-cap">20% OFF<small data-hf-id="hf-mgg1">this weekend</small></div><i data-hf-id="hf-plgm" class="f2-flash"></i></div><div data-hf-id="hf-b3g4" class="nx-post nx-p-review" id="f2-t6"><div data-hf-id="hf-yu26" class="nx-cap">Best coffee<br data-hf-id="hf-sldv"/>in town</div><i data-hf-id="hf-p75l" class="f2-flash"></i></div><div data-hf-id="hf-ixjr" class="nx-post nx-p-thali" id="f2-t7"><i data-hf-id="hf-71n3" class="nx-tag reel"></i><div data-hf-id="hf-fwtm" class="nx-cap">Thali<br data-hf-id="hf-qluq"/>Tuesday</div><i data-hf-id="hf-qe2o" class="f2-flash"></i></div><div data-hf-id="hf-nhkn" class="nx-post nx-p-navratri" id="f2-t8"><div data-hf-id="hf-t72z" class="nx-cap">Navratri<br data-hf-id="hf-q7jp"/>nights</div><i data-hf-id="hf-pzrn" class="f2-flash"></i></div><div data-hf-id="hf-a3rq" class="nx-post nx-p-hours" id="f2-t9"><div data-hf-id="hf-h2mv" class="nx-cap">Open<br data-hf-id="hf-regs"/>till 10</div><i data-hf-id="hf-ktsa" class="f2-flash"></i></div><div data-hf-id="hf-lvf8" class="nx-empty-tile f2-rest"></div><div data-hf-id="hf-99po" class="nx-empty-tile f2-rest"></div><div data-hf-id="hf-82sl" class="nx-empty-tile f2-rest"></div></div>
+                <!-- frame 1's empty profile state, cleared on the drop -->
+                <div data-hf-id="hf-wj40" class="nx-empty" id="f2-empty"><div data-hf-id="hf-v71c" class="nx-cam"></div><h4 data-hf-id="hf-i6l7">No posts yet</h4><p data-hf-id="hf-kah7">When you share photos, they will appear here.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div data-hf-id="hf-cyi6" class="nx-serif" id="f2-team"><div data-hf-id="hf-403m" id="f2-team-a">creative</div><div data-hf-id="hf-y3od" id="f2-team-b">team.</div></div>
+
+        <div data-hf-id="hf-8d4m" id="f2-pills">
+          <span data-hf-id="hf-08kw" class="nx-pill" id="f2-pill1"><i data-hf-id="hf-dxv4" class="nx-dot"></i>Design</span><span data-hf-id="hf-vt90" class="nx-pill" id="f2-pill2"><i data-hf-id="hf-0fig" class="nx-dot"></i>Video</span>
+          <span data-hf-id="hf-3t5e" class="nx-pill" id="f2-pill3"><i data-hf-id="hf-z8ld" class="nx-dot"></i>Posting</span><span data-hf-id="hf-nul8" class="nx-pill" id="f2-pill4"><i data-hf-id="hf-zmwe" class="nx-dot"></i>Automation</span>
+        </div>
+
+        <div data-hf-id="hf-d45d" id="f2-by">
+          <span data-hf-id="hf-x82e" class="nx-body" id="f2-by-txt">by</span>
+          <img data-hf-id="hf-keev" id="f2-mark" src="assets/nxtlvl-wordmark.png" alt="nxtlvl" />
+          <svg data-hf-id="hf-eghb" id="f2-spark" viewBox="0 0 24 24"><path data-hf-id="hf-yokp" d="M12 0c.5 6.4 5.1 11 11.5 11.5C17.1 12 12.5 16.6 12 23c-.5-6.4-5.1-11-11.5-11.5C6.9 11 11.5 6.4 12 0z" fill="#A95CFF"/></svg>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="02-meet-the-team"]') || document;
+      var $ = function (s) { return root.querySelector(s); };
+      var $$ = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
+
+      var BEAT = 0.5;                 // 120 BPM — kicks on every frame-local 0.5 s
+      var POSTS = 9;                  // landings at 0.0, 0.5 … 4.0
+      var DUR = 6;
+      var tl = gsap.timeline({ paused: true });
+
+      // ---- Scene 1 (0.0–0.25): the drop — stage snaps back from the push, empty state clears ----
+      tl.fromTo($("#f2-cam"), { scale: 1.08, transformOrigin: "960px 470px" },
+        { scale: 1, duration: 0.25, ease: "expo.out" }, 0);
+      tl.fromTo($("#f2-dropglow"), { opacity: 0.85 }, { opacity: 0, duration: 0.9, ease: "power2.out" }, 0);
+      tl.fromTo($("#f2-empty"), { opacity: 1, y: 0 }, { opacity: 0, y: -14, duration: 0.18, ease: "power2.out" }, 0);
+      tl.fromTo($$(".f2-slot, .f2-rest"), { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.out" }, 0);
+
+      // ---- Scene 2 (0.0–4.0): one post slams into its slot per kick, with a white flash ----
+      for (var i = 0; i < POSTS; i++) {
+        var at = i * BEAT;
+        var post = $("#f2-t" + (i + 1));
+        tl.fromTo(post, { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.42, ease: "expo.out" }, at);
+        tl.fromTo(post.querySelector(".f2-flash"), { opacity: 0.9 },
+          { opacity: 0, duration: 0.38, ease: "power2.out" }, at);
+      }
+
+      // posts stat ticks quietly just after each landing (driven by one clock — seek-safe)
+      var countEl = $("#f2-count");
+      var clock = { t: 0 };
+      tl.fromTo(clock, { t: 0 }, {
+        t: DUR, duration: DUR, ease: "none",
+        onUpdate: function () {
+          var n = Math.floor((clock.t - 0.08) / BEAT) + 1;
+          n = Math.max(0, Math.min(POSTS, n));
+          if (countEl.textContent !== String(n)) countEl.textContent = String(n);
+        }
+      }, 0);
+
+      // kinetic beat slam — a different entrance per phrase, on the beat grid
+      tl.fromTo($("#f2-meet-a"), { scale: 1.45, opacity: 0, filter: "blur(14px)" },
+        { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "power4.out" }, 0);
+      tl.fromTo($("#f2-meet-b"), { x: -220, opacity: 0, filter: "blur(10px)" },
+        { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "expo.out" }, BEAT * 1);
+
+      // serif words with a glow that blooms then settles
+      var GLOW_0 = "0px 0px 0px rgba(169,92,255,0)";
+      var GLOW_PEAK = "0px 0px 64px rgba(169,92,255,0.95)";
+      var GLOW_REST = "0px 0px 26px rgba(169,92,255,0.22)";
+      tl.fromTo($("#f2-team-a"), { y: 70, opacity: 0, filter: "blur(12px)" },
+        { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.55, ease: "circ.out" }, BEAT * 2);
+      tl.fromTo($("#f2-team-b"), { y: 50, scale: 0.92, opacity: 0, filter: "blur(10px)" },
+        { y: 0, scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power3.out" }, BEAT * 3);
+      [["#f2-team-a", BEAT * 2], ["#f2-team-b", BEAT * 3]].forEach(function (w) {
+        var el = $(w[0]);
+        tl.fromTo(el, { textShadow: GLOW_0 }, { textShadow: GLOW_PEAK, duration: 0.3, ease: "power2.out" }, w[1]);
+        tl.fromTo(el, { textShadow: GLOW_PEAK }, { textShadow: GLOW_REST, duration: 0.9, ease: "sine.out", immediateRender: false }, w[1] + 0.3);
+      });
+
+      // ---- Scene 3 (4.0–5.0): pills pop in one per half-beat, right-aligned ----
+      ["#f2-pill1", "#f2-pill2", "#f2-pill3", "#f2-pill4"].forEach(function (sel, k) {
+        tl.fromTo($(sel), { scale: 0, opacity: 0, y: 18 },
+          { scale: 1, opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 4.0 + k * 0.25);
+      });
+
+      // ---- Scene 4 (5.0–6.0): "by nxtlvl ✦" reveals, the spark twinkles once, then hold ----
+      tl.fromTo($("#f2-by-txt"), { opacity: 0, x: -14 },
+        { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 5.0);
+      tl.fromTo($("#f2-mark"), { clipPath: "inset(0% 100% 0% 0%)" },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: 0.55, ease: "power3.out" }, 5.05);
+      var spark = $("#f2-spark");
+      tl.fromTo(spark, { scale: 0, rotation: -90, opacity: 0 },
+        { scale: 1.35, rotation: 0, opacity: 1, duration: 0.24, ease: "power3.out" }, 5.5);
+      tl.fromTo(spark, { scale: 1.35 },
+        { scale: 1, duration: 0.24, ease: "sine.inOut", immediateRender: false }, 5.74);
+      tl.fromTo(spark, { filter: "drop-shadow(0px 0px 0px rgba(216,187,255,0))" },
+        { filter: "drop-shadow(0px 0px 10px rgba(216,187,255,0.95))", duration: 0.18, ease: "power2.out" }, 5.5);
+      tl.fromTo(spark, { filter: "drop-shadow(0px 0px 10px rgba(216,187,255,0.95))" },
+        { filter: "drop-shadow(0px 0px 0px rgba(216,187,255,0))", duration: 0.3, ease: "sine.out", immediateRender: false }, 5.68);
+
+      // hold — subtle drift on the flanking type only (the phone stays static for the handoff)
+      tl.fromTo($("#f2-meet"), { y: 0 }, { y: -3, duration: 1.0, ease: "sine.inOut" }, 5.0);
+      tl.fromTo($("#f2-pills"), { y: 0 }, { y: -2, duration: 1.0, ease: "sine.inOut" }, 5.0);
+      tl.fromTo($("#f2-team"), { y: 0 }, { y: -3, duration: 1.0, ease: "sine.inOut" }, 5.0);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["02-meet-the-team"] = tl;
+    })();
+  </script>
+</template>
