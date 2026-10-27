@@ -2,8 +2,10 @@
 
 python3 build/voice.py      (from the project root; needs numpy and ffmpeg with rubberband)
 
-Two takes, each with its ElevenLabs Scribe alignment (voice/raw/words_<take>.json, per-word start/end in s):
-  take2  the full script in one read; lines 1-10 are used (the bonus line and the old CTA are cut after "next one.")
+Three takes, each with its ElevenLabs Scribe alignment (voice/raw/words_<take>.json, per-word start/end in s):
+  hook1  lines 1-2 with the new count: "...from three thirty-nine to sixty-seven hundred followers."
+  take2  the full script in one read; lines 3-10 are used (its old lines 1-2 said "twenty-four hundred"; the bonus
+         line and the old CTA are cut after "next one.")
   cta1   the CTA on its own: "Comment AGENT, and I'll send you my whole setup."
 In each take every pause is shortened to KEEP (the "And five?" beat and the "results..." hold keep a little more); the
 pieces are loudness-matched, joined with a GAP, sped up by TEMPO with the pitch kept and normalised to -16 LUFS. Every
@@ -25,11 +27,12 @@ TEMPO = 1.13
 KEEP = .11
 LONG = {"five?": .34, "results...": .18, "smartest.": .2, "followers.": .14}       # pauses after these words keep more
 LEAD = .06
-GAP = .34                                     # between "next one." and the CTA, before the tempo change
+GAP = {"take2": .16, "cta1": .34}             # silence before each take after the first, before the tempo change
+SKIP = {"take2": 20}                          # words to skip at the start of a take (take2's old lines 1-2)
 # the script, one entry per caption line, and the take each line comes from (the words must match the take's, in order)
 LINES = [
-    ("take2", "I turned Claude into an Instagram growth agent..."),
-    ("take2", "and it took my page from three thirty-nine to twenty-four hundred followers."),
+    ("hook1", "I turned Claude into an Instagram growth agent..."),
+    ("hook1", "and it took my page from three thirty-nine to sixty-seven hundred followers."),
     ("take2", "It doesn't just post. It grows your page."),
     ("take2", "Five moves. The last one's the smartest."),
     ("take2", "One: it spots what's blowing up in your niche."),
@@ -50,11 +53,15 @@ def norm(s):
     return re.sub(r"[^a-z0-9']", "", s.lower())
 
 
-def tighten(take, n_words):
-    """The take's first n_words words with every pause shortened: (samples, [(word, start, end)] in the new time)."""
+def tighten(take, n_words, skip=0):
+    """n_words words of the take (after `skip`) with every pause shortened: (samples, [(word, start, end)] in the new time)."""
     raw = run("ffmpeg", "-v", "error", "-i", os.path.join(V, "raw", take + ".mp3"), "-f", "f32le", "-ac", "1", "-ar", str(SR), "-").stdout
     x = np.frombuffer(raw, np.float32).astype(np.float64)
-    words = json.load(open(os.path.join(V, "raw", f"words_{take}.json")))[:n_words]
+    words = json.load(open(os.path.join(V, "raw", f"words_{take}.json")))[skip:skip + n_words]
+    if skip:                                    # start just before the first word kept; times relative to that
+        t0 = max(0, words[0]["start"] - .1)
+        x = x[int(t0 * SR):]
+        words = [{**w, "start": w["start"] - t0, "end": w["end"] - t0} for w in words]
     end = min(len(x) / SR, words[-1]["end"] + .18)
     x = x[:int(end * SR)]
     # silences from the signal (10 ms frames under -38 dBFS for 100 ms or more), not from the aligner's word ends
@@ -105,7 +112,7 @@ def main():
     takes = []
     for take in dict.fromkeys(t for t, _ in LINES):
         n = sum(len(ln.split()) for t, ln in LINES if t == take)
-        y, ws = tighten(take, n)
+        y, ws = tighten(take, n, SKIP.get(take, 0))
         script = [w for t, ln in LINES if t == take for w in ln.split()]
         if [norm(w) for w, _, _ in ws] != [norm(w) for w in script]:
             raise SystemExit(f"{take}: words don't match the script:\n" + " ".join(w for w, _, _ in ws))
@@ -119,7 +126,7 @@ def main():
     for k, (take, y, ws) in enumerate(takes):
         y = y * (ref / vrms(y))
         if k:
-            parts.append(np.zeros(int(GAP * SR))); t0 += GAP
+            parts.append(np.zeros(int(GAP[take] * SR))); t0 += GAP[take]
         offs[take] = t0
         parts.append(y); t0 += len(y) / SR
     tight = os.path.join(V, "tight.f32")
