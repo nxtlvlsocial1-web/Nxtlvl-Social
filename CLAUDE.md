@@ -43,6 +43,10 @@ The `seo*` skills and `.claude/agents/seo-*.md` are third-party too ([claude-seo
 v2.5.0, copied in with `${CLAUDE_PLUGIN_ROOT}` paths rewritten to `.claude/skills/...`). Build its Python runtime once per
 machine with `.claude/skills/seo/scripts/claude-seo setup`; run its scripts with `.claude/skills/seo/scripts/claude-seo run <script>.py`.
 
+The design and UI skills (`ui-ux-pro-max`, `frontend-design`, `design-taste-frontend`, `web-design-guidelines`, `impeccable`,
+the `plugin87/ux-ui-agent-skills` set such as `critique`, `a11y-audit`, `design-review`, and others listed in `skills-lock.json`)
+are third-party as well. Don't edit them by hand; update them with `npx skills update -p -y`.
+
 Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 
 ## Setup
