@@ -7,6 +7,12 @@
       "skillPath": ".claude/skills/a11y-audit/SKILL.md",
       "computedHash": "e87cd64a31c3b28fa51f04f02692147df0ce4e40b6d8d31a023286af3814c669"
     },
+    "ad-creative": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/ad-creative/SKILL.md",
+      "computedHash": "7c2beab672f7f50542c40472fe45ad4a1920f2395ccf14f79bb54cf58a004b22"
+    },
     "aframe-webxr": {
       "source": "freshtechbro/claudedesignskills",
       "sourceType": "github",
@@ -73,6 +79,36 @@
       "skillPath": ".claude/skills/brandkit/SKILL.md",
       "computedHash": "770a917ce249ca490894cb10f3f5c10ed29ce66665b891deb6ca75065e6c4c3f"
     },
+    "canvas-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/canvas-design/SKILL.md",
+      "computedHash": "3fa7ea60170023ad8268bf9fd734ea75dd404279a2ef8ddf5abaa1102ad8e5f4"
+    },
+    "cinematography": {
+      "source": "fal-ai-community/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cinematography/SKILL.md",
+      "computedHash": "c0c5ee6d1b570d61d622f4dfbd8ca55158101cfffcc9bf0819777476927b9dce"
+    },
+    "commercial": {
+      "source": "fal-ai-community/skills",
+      "sourceType": "github",
+      "skillPath": "skills/commercial/SKILL.md",
+      "computedHash": "f64268b63857a9b8a76706298169ef2780c3a9e9cb21547be6aec1d793230766"
+    },
+    "content-strategy": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/content-strategy/SKILL.md",
+      "computedHash": "7677dba18780b18ea2247b44d2cc8be05ec1dbec319da51a21cf297eb3d0fd1b"
+    },
+    "copywriting": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/copywriting/SKILL.md",
+      "computedHash": "34095dc1ba236967c7515c62568591008f8ec795e1a5fd4b018f2b127a36b32c"
+    },
     "critique": {
       "source": "plugin87/ux-ui-agent-skills",
       "sourceType": "github",
@@ -90,6 +126,18 @@
       "sourceType": "github",
       "skillPath": ".claude/skills/data-dashboard/SKILL.md",
       "computedHash": "6efd1273c6f6c6385468366b59834e53d3ec32a67d39d11056114451dff67468"
+    },
+    "dbs-hook": {
+      "source": "dontbesilent2025/dbskill",
+      "sourceType": "github",
+      "skillPath": "skills/dbs-hook/SKILL.md",
+      "computedHash": "7765c7375d224ecff8064e40b4f77ff43ed285bcd06f506913c44fb93d9dcafc"
+    },
+    "dbs-title-cover-intro": {
+      "source": "dontbesilent2025/dbskill",
+      "sourceType": "github",
+      "skillPath": "skills/dbs-title-cover-intro/SKILL.md",
+      "computedHash": "17d8ed83e228f0038b6fb75410de7281b8a1e604c1541c0bebbc5f858f6b3070"
     },
     "design": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
@@ -151,6 +199,12 @@
       "skillPath": ".claude/skills/design-tokens/SKILL.md",
       "computedHash": "bdd0c61d7cd2e2a3c0cf3ec36aed5d7dc3da5ca141bc6b778ce23e643bf92e15"
     },
+    "dockkit": {
+      "source": "dpearson2699/swift-ios-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dockkit/SKILL.md",
+      "computedHash": "cd6854a9eaad69c9ea01f487b3a9d5c68351337f74b07201071821d155d94201"
+    },
     "embedded-captions": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
@@ -162,6 +216,18 @@
       "sourceType": "github",
       "skillPath": "skills/faceless-explainer/SKILL.md",
       "computedHash": "10984627b1aed2c89cda04e7f6fd46c0d39cc5978338f985149ee9ab905db220"
+    },
+    "fal-lip-sync": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/fal-lip-sync/SKILL.md",
+      "computedHash": "c3c7cfb837b46dcdd34053a8ce08e1ae859a35f1a40cfd07615af59d0e66a2c8"
+    },
+    "fal-prompting": {
+      "source": "fal-ai-community/skills",
+      "sourceType": "github",
+      "skillPath": "skills/fal-prompting/SKILL.md",
+      "computedHash": "db18871bfcdb1a5e0162ab6193b1aa90c39d2f7e14ce3e448fcc35dce09ed6e6"
     },
     "figma": {
       "source": "heygen-com/hyperframes",
@@ -180,6 +246,24 @@
       "sourceType": "github",
       "skillPath": "skills/find-animation-opportunities/SKILL.md",
       "computedHash": "465d087c41768e4f14ed640dd049036009f613feb55baaa5831b68b33178f9d2"
+    },
+    "frame-glitch-title": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/frame-glitch-title/SKILL.md",
+      "computedHash": "436b05b57b38f668a61bc8a09a06ce6557490454f8d79afaa2d4ca2bf5a86f8a"
+    },
+    "frame-light-leak-cinema": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/frame-light-leak-cinema/SKILL.md",
+      "computedHash": "c4f8178e61d1d8deac2fe542b42ac85ed86d80d8c03d00a7459041a75b00f422"
+    },
+    "frame-logo-outro": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/frame-logo-outro/SKILL.md",
+      "computedHash": "00ca1673338cefee595368c9123868724686ff7bbea474eaf46d247620e16b3d"
     },
     "frontend-design": {
       "source": "anthropics/skills",
@@ -271,6 +355,30 @@
       "skillPath": "skills/hallmark/SKILL.md",
       "computedHash": "579f86b27cdd7eb972107f7aecedd537f472891c5fd7c7c821bea15f64e0fe86"
     },
+    "higgsfield-brandkit": {
+      "source": "higgsfield-ai/skills",
+      "sourceType": "github",
+      "skillPath": "higgsfield-brandkit/SKILL.md",
+      "computedHash": "ea343415a2301a1338814d9ea621e92eae328a82809b3103ff9233b92b6d7441"
+    },
+    "higgsfield-generate": {
+      "source": "higgsfield-ai/skills",
+      "sourceType": "github",
+      "skillPath": "higgsfield-generate/SKILL.md",
+      "computedHash": "45867a1bfe18423cf8a204f4bdfc049cfc42591b276970efc1686b7c8a14b948"
+    },
+    "higgsfield-product-photoshoot": {
+      "source": "higgsfield-ai/skills",
+      "sourceType": "github",
+      "skillPath": "higgsfield-product-photoshoot/SKILL.md",
+      "computedHash": "931eec95c013842eb0b1fa63d021603e347bc069970d759f3182be1d423747e5"
+    },
+    "higgsfield-youtube-thumbnail": {
+      "source": "higgsfield-ai/skills",
+      "sourceType": "github",
+      "skillPath": "higgsfield-youtube-thumbnail/SKILL.md",
+      "computedHash": "ebd5911481f73c90a3e931a6f7660b0e7a7e80d0d2fac82fe3e8d817239a4975"
+    },
     "high-end-visual-design": {
       "source": "leonxlnx/taste-skill",
       "sourceType": "github",
@@ -331,6 +439,12 @@
       "skillPath": "skills/hyperframes-studio/SKILL.md",
       "computedHash": "3ac6b0019626b0cfa0d067c52ae3e46b5d98722784b1ef103ac301a1815dfd7a"
     },
+    "image": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/image/SKILL.md",
+      "computedHash": "c0f8c9af68113a4ae53a0e816d6f4573a3bb9f3d26e7400ff5fb3c9348d2e510"
+    },
     "image-to-code": {
       "source": "plugin87/ux-ui-agent-skills",
       "sourceType": "github",
@@ -373,6 +487,12 @@
       "skillPath": "skills/make-interfaces-feel-better/SKILL.md",
       "computedHash": "c8b15b529e088a318b2d3c17f0a97e15a7b1ce9ddab8bbdf9209e6ab7315cbde"
     },
+    "marketing": {
+      "source": "fal-ai-community/skills",
+      "sourceType": "github",
+      "skillPath": "skills/marketing/SKILL.md",
+      "computedHash": "bd79b71846fe972a945fd725e643512bd54cae840256d6252250bd0371253886"
+    },
     "media-use": {
       "source": "heygen-com/hyperframes",
       "sourceType": "github",
@@ -396,6 +516,12 @@
       "sourceType": "github",
       "skillPath": "SKILL.md",
       "computedHash": "fbeba4ea8cc5063c9280a0f29af46f05ff66326d49ff7e59b61ee021b4d424c8"
+    },
+    "model-routing": {
+      "source": "fal-ai-community/skills",
+      "sourceType": "github",
+      "skillPath": "skills/model-routing/SKILL.md",
+      "computedHash": "b1e4e2e6caa563eca92069f3f2bd5051dc33d2425406d1bf0c8a3c74d193bd44"
     },
     "modern-web-design": {
       "source": "freshtechbro/claudedesignskills",
@@ -493,6 +619,12 @@
       "skillPath": "skills/redesign-skill/SKILL.md",
       "computedHash": "b405eee0e0e80fc243f731d9aa368bca307e356db7e6157d27101d369dac6726"
     },
+    "remotion": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/remotion/SKILL.md",
+      "computedHash": "db69d2dab8ea4ab60751058bd60ce4549d02505a14b67bd38d6b26710102eb8c"
+    },
     "rive-interactive": {
       "source": "freshtechbro/claudedesignskills",
       "sourceType": "github",
@@ -535,11 +667,23 @@
       "skillPath": "skills/slideshow/SKILL.md",
       "computedHash": "fa178947b4cfe834d416c4d826d50cdd1f92dfb22395569032a40aa5d26819cc"
     },
+    "social": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/social/SKILL.md",
+      "computedHash": "fba7865d9f3b69c23bb43457857ad2423c4c122aad8c16b5ac2cba5e7a7e2986"
+    },
     "spline-interactive": {
       "source": "freshtechbro/claudedesignskills",
       "sourceType": "github",
       "skillPath": ".claude/skills/spline-interactive/SKILL.md",
       "computedHash": "d71ae3bd67c771b81c6757a9b23796a25ff2765bf490912da8ec2fbc16289403"
+    },
+    "storytelling": {
+      "source": "fal-ai-community/skills",
+      "sourceType": "github",
+      "skillPath": "skills/storytelling/SKILL.md",
+      "computedHash": "ddf9f642ce80c133115cab2d8ae9ab9c54c9263ef8fa03872fa98cf61d51c20f"
     },
     "substance-3d-texturing": {
       "source": "freshtechbro/claudedesignskills",
@@ -553,6 +697,12 @@
       "skillPath": "skills/talking-head-recut/SKILL.md",
       "computedHash": "991315e8803089b6b0d008026c9b42c2c83f6ea95c44b26956cd6ff6197f5305"
     },
+    "taste": {
+      "source": "affaan-m/ecc",
+      "sourceType": "github",
+      "skillPath": "skills/taste/SKILL.md",
+      "computedHash": "74bd7ffcd8231d77b752d0cfca1daf264b50d182259945f89a077e16f4e1aae0"
+    },
     "threejs-webgl": {
       "source": "freshtechbro/claudedesignskills",
       "sourceType": "github",
@@ -564,6 +714,18 @@
       "sourceType": "github",
       "skillPath": ".claude/skills/token-build/SKILL.md",
       "computedHash": "5441dfeea55e83b70cf8dde38f6846f93a75ccd5ea3133411ce967f11f416e56"
+    },
+    "transitions-polish": {
+      "source": "jakubantalik/transitions.dev",
+      "sourceType": "github",
+      "skillPath": "skills/transitions-polish/SKILL.md",
+      "computedHash": "3f0630020cdfd0ea3d582ac45201c1ad4bced2ef7d0a0145d4cc81ad25f57ec3"
+    },
+    "ugc": {
+      "source": "fal-ai-community/skills",
+      "sourceType": "github",
+      "skillPath": "skills/ugc/SKILL.md",
+      "computedHash": "5a581eafc4db7c36ac78234e392cb49fc0857662cd72aeacb31f29c7a76a28bd"
     },
     "ui-animation": {
       "source": "mblode/agent-skills",
@@ -594,6 +756,18 @@
       "sourceType": "github",
       "skillPath": ".claude/skills/ux-writing/SKILL.md",
       "computedHash": "f6004885bfec1e63ec7fe930a5c248ca79110246c6228da9ae41cc18f0159710"
+    },
+    "video-hyperframes": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/video-hyperframes/SKILL.md",
+      "computedHash": "d9c7ad59f8be126d10d06fefccff291af4f064d52d48025b742353c4652d00f9"
+    },
+    "video-motion-graphics": {
+      "source": "dylantarre/animation-principles",
+      "sourceType": "github",
+      "skillPath": "skills/01-by-domain/video-motion-graphics/SKILL.md",
+      "computedHash": "6b82db9dbef273739ac97bd34657fcd2d92420905dad40823e676671c0c85c01"
     },
     "visual-design-foundations": {
       "source": "wshobson/agents",
