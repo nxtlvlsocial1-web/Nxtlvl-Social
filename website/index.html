@@ -36,8 +36,9 @@
       "@type": "Organization",
       "@id": "https://nxtlvlsocial.ai/#org",
       "name": "Nxtlvl Social",
+      "alternateName": "Nxtlvl",
       "url": "https://nxtlvlsocial.ai/",
-      "logo": "https://nxtlvlsocial.ai/logo.png",
+      "logo": {"@type": "ImageObject", "url": "https://nxtlvlsocial.ai/logo-mark.png", "width": 512, "height": 512},
       "image": "https://nxtlvlsocial.ai/og-image.png",
       "description": "Creative and automation studio for small businesses: social media design, reels and video editing, posting and the automation behind it, from $5 a month.",
       "slogan": "Your entire creative team, for less than one reel",
@@ -184,8 +185,13 @@ body::after{
 /* ---------- scroll progress ---------- */
 .prog{
   position:fixed; top:env(safe-area-inset-top,0px); left:0; height:2px; width:0; z-index:120;
-  background:linear-gradient(90deg,var(--violet),var(--violet-lift),#E9D5FF);
+  background:linear-gradient(90deg,rgba(125,24,252,0),var(--violet) 30%,var(--violet-lift) 80%,#E9D5FF);
   box-shadow:0 0 12px rgba(169,92,255,.9);
+}
+/* its leading edge is the brand star */
+.prog::after{
+  content:''; position:absolute; right:-7px; top:50%; width:14px; height:14px; margin-top:-7px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 23'%3E%3Cpath d='M12 0c.5 6.4 5.1 11 11.5 11.5C17.1 12 12.5 16.6 12 23c-.5-6.4-5.1-11-11.5-11.5C6.9 11 11.5 6.4 12 0z' fill='%23FFFFFF'/%3E%3C/svg%3E") center/contain no-repeat; filter:drop-shadow(0 0 5px rgba(216,187,255,.95)) drop-shadow(0 0 10px rgba(125,24,252,.9));
 }
 
 /* ---------- atmosphere ---------- */
@@ -223,6 +229,16 @@ body::after{
 .brand{display:flex; align-items:center; gap:7px; text-decoration:none; flex:none}
 .brand img{width:86px; height:auto}
 .spark{width:14px; height:14px; flex:none; margin-top:-13px}
+.nx-mark{width:34px; height:34px; flex:none; margin:-5px 1px 0 -3px; overflow:visible}
+.nx-mark path{transform-box:fill-box; transition:transform .55s var(--out)}
+.nx-mark path:last-child{transform-origin:50% 50%}
+@media all{ .nav .nx-mark path:last-child{animation:starTwinkle 4.6s ease-in-out 3s infinite} }
+@keyframes starTwinkle{0%,82%,100%{scale:1; rotate:0deg}90%{scale:1.22; rotate:45deg}}
+.brand:hover .nx-mark path:last-child{transform:rotate(90deg) scale(1.12)}
+.brand:hover .nx-mark path:not(:last-child){transform:translate(2.5px,-2.5px)}
+html.rm .nav .nx-mark path:last-child{animation:none}
+/* the hero sky: now and then a shooting star rises across it */
+.meteors{position:absolute; inset:0; width:100%; height:100%; z-index:1; pointer-events:none}
 @media all{ .spark{animation:twinkle 3.4s ease-in-out infinite} }
 @keyframes twinkle{0%,100%{transform:scale(1) rotate(0deg); opacity:1}50%{transform:scale(1.22) rotate(28deg); opacity:.75}}
 .brand-word{
@@ -285,8 +301,8 @@ body::after{
   font-family:var(--b); font-size:13px; font-weight:600; letter-spacing:-.005em; color:var(--violet-pale);
 }
 .eyebrow::before{
-  content:''; width:6px; height:6px; border-radius:50%; background:var(--violet-lift);
-  box-shadow:0 0 0 3px rgba(169,92,255,.18), 0 0 12px rgba(169,92,255,.9);
+  content:''; width:11px; height:11px; flex:none; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 23'%3E%3Cpath d='M12 0c.5 6.4 5.1 11 11.5 11.5C17.1 12 12.5 16.6 12 23c-.5-6.4-5.1-11-11.5-11.5C6.9 11 11.5 6.4 12 0z' fill='%23A95CFF'/%3E%3C/svg%3E") center/contain no-repeat;
+  filter:drop-shadow(0 0 4px rgba(169,92,255,.85));
 }
 
 /* ---------- hero ---------- */
@@ -1790,48 +1806,38 @@ details .ans{overflow:hidden}
    arrivals and --io for anything that travels on screen. Primary: the reveal and headline.
    Secondary: the horizon rising and the cards. Ambient: rays, crest glow, glints. */
 :root{--d0:0s}                      /* hero choreography starts after the opening reveal, when it plays */
-html.intro-on{--d0:.85s}
+html.intro-on{--d0:1.12s}
 
-/* ---------- opening reveal: a spark blooms, a ring of light opens the page from the centre ---------- */
+/* ---------- opening: a shooting star streaks in, becomes the logo, and the logo lands in the nav as the page opens ---------- */
 @property --iris{syntax:'<length>'; inherits:false; initial-value:0px}
 .intro{display:none}
 html.intro-on .intro{
-  display:grid; place-items:center; position:fixed; inset:0; z-index:400; pointer-events:none;
-  background:radial-gradient(70% 60% at 50% 50%,#0F0824,var(--ink) 72%);
-  -webkit-mask-image:radial-gradient(circle at 50% 50%,transparent calc(var(--iris) - 7vmax),#000 var(--iris));
-          mask-image:radial-gradient(circle at 50% 50%,transparent calc(var(--iris) - 7vmax),#000 var(--iris));
-  animation:iris 1.05s var(--io) .62s both, introGone .01s linear 1.7s both;
+  display:block; position:fixed; inset:0; z-index:400; pointer-events:none;
+  background:
+    radial-gradient(75% 65% at 0% 0%, rgba(126,26,246,.5), transparent 62%),
+    radial-gradient(75% 65% at 100% 100%, rgba(94,6,242,.5), transparent 62%),
+    linear-gradient(160deg,#0A0620,var(--ink) 60%);
+  -webkit-mask-image:radial-gradient(circle at 50% 46%,transparent calc(var(--iris) - 7vmax),#000 var(--iris));
+          mask-image:radial-gradient(circle at 50% 46%,transparent calc(var(--iris) - 7vmax),#000 var(--iris));
+  animation:iris .82s var(--io) 1.02s both, introGone .01s linear 1.88s both;
 }
 html.intro-on .intro.skip-now{animation:introFade .32s var(--in) both}
 @keyframes iris{from{--iris:0px}to{--iris:82vmax}}
 @keyframes introGone{to{visibility:hidden; opacity:0}}
 @keyframes introFade{to{opacity:0; visibility:hidden}}
-.intro-core{position:relative; display:grid; place-items:center; width:1px; height:1px}
-.intro-spark{
-  position:absolute; width:54px; height:54px; fill:#fff;
-  filter:drop-shadow(0 0 10px rgba(216,187,255,.95)) drop-shadow(0 0 34px rgba(125,24,252,.9));
-  animation:sparkIn .62s var(--out) both, sparkOut .5s var(--in) .62s forwards;
-}
-@keyframes sparkIn{from{scale:0; rotate:-90deg; opacity:0}to{scale:1; rotate:0deg; opacity:1}}
-@keyframes sparkOut{to{scale:2.4; rotate:45deg; opacity:0}}
-/* the ring travels with the iris edge, so the page appears to be lit open */
-.intro-ring{
-  position:absolute; width:164vmax; height:164vmax; border-radius:50%; scale:0; opacity:0;
-  box-shadow:0 0 0 1.5px rgba(216,187,255,.75), 0 0 46px 8px rgba(169,92,255,.5), inset 0 0 46px 8px rgba(125,24,252,.4);
-  animation:ring 1.05s var(--io) .62s both;
-}
-.intro-ring.r2{box-shadow:0 0 0 1px rgba(216,187,255,.35), 0 0 22px 4px rgba(169,92,255,.3); animation:ringSmall .9s var(--out) .26s both}
-@keyframes ring{0%{scale:0; opacity:1}80%{opacity:.9}100%{scale:1; opacity:0}}
-@keyframes ringSmall{0%{scale:0; opacity:0}20%{opacity:1}100%{scale:.09; opacity:0}}
-.intro-word{
-  position:absolute; top:44px; white-space:nowrap; font-family:var(--d); font-size:12px; font-weight:700;
-  text-transform:uppercase; color:var(--violet-pale); font-variation-settings:'wdth' 118,'wght' 700;
-  animation:wordTrack 1s var(--out) .14s both;
-}
-@keyframes wordTrack{0%{letter-spacing:.9em; opacity:0; translate:0 6px}55%{opacity:1}75%{opacity:1}100%{letter-spacing:.42em; opacity:0; translate:0 0}}
+/* the logo in the middle of the screen is a copy of the nav logo, scaled up; it flies into the nav's place */
+.intro-lock{position:fixed; left:0; top:0; z-index:402; transform-origin:0 0; pointer-events:none; will-change:transform}
+.intro-lock .nx-mark{transform-origin:80.8% 19.2%}
+/* while it flies, the real nav logo waits; it takes over the moment the copy lands */
+html.intro-on:not(.nx-landed) .nav .brand{opacity:0}
+.nav .nx-mark.nx-land{animation:markLand .8s var(--out)}
+@keyframes markLand{0%{scale:1.3; filter:brightness(1.6) drop-shadow(0 0 8px rgba(216,187,255,.9))}100%{scale:1; filter:none}}
 
 /* ---------- the nav settles in from above once the page is lit ---------- */
 @media all{ .nav{animation:navIn 1s var(--out) calc(var(--d0) + .1s) both} }
+/* during the opening the nav only fades in, so the flying logo can land on its final place */
+@media all{ html.intro-on .nav{animation:navFade .6s var(--out) 1.25s both} }
+@keyframes navFade{from{opacity:0}}
 @keyframes navIn{from{translate:0 -28px; opacity:0}}
 
 /* ---------- hero: room underneath for the horizon ---------- */
@@ -1904,16 +1910,19 @@ html.intro-on .intro.skip-now{animation:introFade .32s var(--in) both}
 
 /* ---------- section heads: a beam of light falls onto the label as the section arrives ---------- */
 .head .eyebrow{position:relative}
+/* a small shooting star streaks up into the label's star as the section arrives */
 .js .head .eyebrow::after{
-  content:''; position:absolute; left:13px; bottom:100%; width:1px; height:clamp(44px,6vw,76px); margin-left:-.5px; pointer-events:none;
-  background:linear-gradient(rgba(216,187,255,0),rgba(216,187,255,.9)); transform-origin:50% 0; transform:scaleY(0); opacity:0;
+  content:''; position:absolute; right:calc(100% - 15.5px); top:50%; width:clamp(54px,7vw,92px); height:1.5px; margin-top:-.75px; pointer-events:none;
+  border-radius:2px; background:linear-gradient(90deg,rgba(125,24,252,0),rgba(216,187,255,.6) 70%,#fff);
+  transform-origin:100% 50%; transform:rotate(-34deg) translateX(-160%); opacity:0;
 }
-.js .head.in .eyebrow::after{animation:beam 1.5s var(--out) .05s both}
-.js .head.in .eyebrow::before{animation:flare 1.3s var(--out) .5s both}
+.js .head.in .eyebrow::after{animation:meteorIn .95s cubic-bezier(.3,.6,.2,1) .05s both}
+@keyframes meteorIn{0%{transform:rotate(-34deg) translateX(-160%) scaleX(.5); opacity:0}25%{opacity:1}62%{transform:rotate(-34deg) translateX(0) scaleX(1); opacity:1}100%{transform:rotate(-34deg) translateX(0) scaleX(.2); opacity:0}}
+.js .head.in .eyebrow::before{animation:flare 1.2s var(--out) .55s both}
 @keyframes beam{0%{transform:scaleY(0); opacity:1}50%{transform:scaleY(1); opacity:1}100%{transform:scaleY(1); opacity:.28}}
 @keyframes flare{
-  0%,100%{box-shadow:0 0 0 3px rgba(169,92,255,.18), 0 0 12px rgba(169,92,255,.9)}
-  28%{box-shadow:0 0 0 8px rgba(169,92,255,.26), 0 0 30px 6px rgba(216,187,255,.95); background:#fff}
+  0%,100%{filter:drop-shadow(0 0 4px rgba(169,92,255,.85)); scale:1; rotate:0deg}
+  28%{filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 12px rgba(216,187,255,.95)); scale:1.55; rotate:45deg}
 }
 
 /* ================= pass 6: GSAP + three.js set pieces ================= */
@@ -2096,81 +2105,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   <symbol id="i-check" viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
 </svg>
 
-<div class="intro" id="intro" aria-hidden="true">
-  <div class="intro-core">
-    <span class="intro-ring"></span><span class="intro-ring r2"></span>
-    <svg class="intro-spark" viewBox="0 0 24 24"><path d="M12 0c.5 6.4 5.1 11 11.5 11.5C17.1 12 12.5 16.6 12 23c-.5-6.4-5.1-11-11.5-11.5C6.9 11 11.5 6.4 12 0z"/></svg>
-    <span class="intro-word">Nxtlvl Social</span>
-  </div>
-</div>
-<script>
-/* opening burst: stardust pulls into the spark, it flashes, and light streaks fly out over the page */
-(function(){
-  var d = document.documentElement;
-  if(!d.classList.contains('intro-on')) return;
-  var cv = document.createElement('canvas'), ctx = cv.getContext && cv.getContext('2d');
-  if(!ctx) return;
-  cv.className = 'intro-fx'; cv.setAttribute('aria-hidden', 'true');
-  document.body.appendChild(cv);
-  var W = window.innerWidth, H = window.innerHeight, dpr = Math.min(window.devicePixelRatio || 1, 2);
-  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  var cx = W / 2, cy = H / 2, R = Math.sqrt(W * W + H * H) / 2, small = W < 700, TAU = Math.PI * 2;
-  var tint = ['216,187,255', '169,92,255', '255,255,255', '125,24,252'];
-  var motes = [], sparks = [], i;
-  for(i = 0; i < (small ? 150 : 300); i++){
-    motes.push({a:Math.random() * TAU, r:R * (.3 + Math.random() * .8), t0:Math.random() * .24, dur:.3 + Math.random() * .12,
-      c:tint[i % 3], w:.6 + Math.random() * 1.1, sw:(Math.random() < .5 ? -1 : 1) * (.6 + Math.random() * .9)});
-  }
-  for(i = 0; i < (small ? 110 : 220); i++){
-    var hot = Math.random() < .3;
-    sparks.push({a:Math.random() * TAU, v:(hot ? 900 : 260) + Math.random() * (hot ? 900 : 700), drag:2.4 + Math.random() * 2,
-      life:.6 + Math.random() * .8, c:tint[i % 4], w:hot ? 1.6 : .6 + Math.random() * .9, oy:.82 + Math.random() * .18});
-  }
-  var BURST = .6, END = 2.2, t0 = performance.now();
-  var where = function(s, age){ var dist = s.v * (1 - Math.exp(-s.drag * age)) / s.drag; return [cx + Math.cos(s.a) * dist, cy + Math.sin(s.a) * dist * s.oy]; };
-  var frame = function(now){
-    var t = (now - t0) / 1000, intro = document.getElementById('intro');
-    if(!intro || intro.classList.contains('skip-now')){
-      cv.style.transition = 'opacity .3s'; cv.style.opacity = '0';
-      setTimeout(function(){ cv.remove(); }, 320); return;
-    }
-    ctx.clearRect(0, 0, W, H);
-    ctx.globalCompositeOperation = 'lighter'; ctx.lineCap = 'round';
-    /* motes spiral in, accelerating, each leaving a short trail */
-    for(var i = 0; i < motes.length; i++){
-      var m = motes[i], k = (t - m.t0) / m.dur;
-      if(k <= 0 || k >= 1) continue;
-      var e = k * k * k, e0 = Math.pow(Math.max(0, k - .14), 3);
-      var r1 = m.r * (1 - e), r0 = m.r * (1 - e0), a1 = m.a + e * m.sw, a0 = m.a + e0 * m.sw;
-      ctx.strokeStyle = 'rgba(' + m.c + ',' + (.25 + .75 * k).toFixed(3) + ')'; ctx.lineWidth = m.w;
-      ctx.beginPath(); ctx.moveTo(cx + Math.cos(a0) * r0, cy + Math.sin(a0) * r0); ctx.lineTo(cx + Math.cos(a1) * r1, cy + Math.sin(a1) * r1); ctx.stroke();
-    }
-    var age = t - BURST;
-    if(age > 0){
-      /* the flash */
-      var f = Math.max(0, 1 - age / .4);
-      if(f > 0){
-        var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * .55);
-        g.addColorStop(0, 'rgba(255,255,255,' + (.85 * f).toFixed(3) + ')');
-        g.addColorStop(.12, 'rgba(216,187,255,' + (.5 * f).toFixed(3) + ')');
-        g.addColorStop(1, 'rgba(125,24,252,0)');
-        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-      }
-      /* the streaks */
-      for(var j = 0; j < sparks.length; j++){
-        var s = sparks[j];
-        if(age > s.life) continue;
-        var p1 = where(s, age), p0 = where(s, Math.max(0, age - .05)), fade = Math.pow(1 - age / s.life, 1.6);
-        ctx.strokeStyle = 'rgba(' + s.c + ',' + fade.toFixed(3) + ')'; ctx.lineWidth = s.w;
-        ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
-      }
-    }
-    if(t < END) requestAnimationFrame(frame); else cv.remove();
-  };
-  requestAnimationFrame(frame);
-})();
-</script>
+<div class="intro" id="intro" aria-hidden="true"></div>
 
 <div class="prog" id="prog"></div>
 
@@ -2182,8 +2117,8 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 <nav class="nav" id="nav">
   <div class="wrap nav-in">
     <a class="brand" href="#top" aria-label="Nxtlvl Social home">
+      <svg viewBox="20.6 31.6 147.8 147.8" class="nx-mark" aria-hidden="true"><defs><linearGradient id="nm-mt0" gradientUnits="userSpaceOnUse" x1="28.3" y1="171.7" x2="121.6" y2="78.4"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".55" stop-color="#FFFFFF" stop-opacity=".9"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient><linearGradient id="nm-mt1" gradientUnits="userSpaceOnUse" x1="69.3" y1="164.7" x2="121.6" y2="112.3"><stop offset="0" stop-color="#A95CFF" stop-opacity="0"/><stop offset=".55" stop-color="#A95CFF" stop-opacity=".9"/><stop offset="1" stop-color="#A95CFF"/></linearGradient><linearGradient id="nm-mt2" gradientUnits="userSpaceOnUse" x1="43.8" y1="122.2" x2="82.0" y2="84.0"><stop offset="0" stop-color="#B98AFF" stop-opacity="0"/><stop offset=".55" stop-color="#B98AFF" stop-opacity=".9"/><stop offset="1" stop-color="#B98AFF"/></linearGradient></defs><path d="M125.94 83.55 L125.76 82.09 L125.37 80.68 L124.77 79.33 L123.99 78.09 L123.03 76.97 L122.30 76.31 L121.10 75.47 L119.78 74.81 L118.39 74.34 L116.94 74.09 L115.46 74.06 L114.00 74.24 L112.59 74.63 L111.24 75.23 L110.40 75.73 L109.24 76.64 L108.23 77.70 L22.62 177.38 L122.67 91.45 L123.99 90.00 L124.77 88.76 L125.19 87.87 L125.52 86.95 L125.85 85.51Z" fill="url(#nm-mt0)"/><path d="M123.37 116.27 L123.26 115.40 L123.02 114.54 L122.36 113.23 L121.82 112.54 L121.18 111.93 L120.46 111.42 L119.67 111.02 L118.83 110.75 L117.96 110.59 L116.49 110.63 L115.63 110.82 L114.81 111.14 L114.04 111.58 L113.35 112.12 L65.05 168.89 L121.40 121.01 L122.36 119.90 L122.92 118.86 L123.31 117.45Z" fill="url(#nm-mt1)"/><path d="M82.77 88.04 L82.48 86.60 L81.79 85.30 L80.95 84.42 L79.69 83.66 L78.27 83.31 L76.80 83.38 L75.42 83.87 L74.42 84.58 L39.59 126.47 L81.14 91.99 L81.79 91.26 L82.40 90.20 L82.72 89.02Z" fill="url(#nm-mt2)"/><path d="M140.00 33.62 L140.15 35.12 L140.37 36.60 L140.65 38.04 L141.00 39.44 L141.41 40.82 L141.87 42.15 L142.40 43.45 L142.99 44.72 L143.63 45.94 L144.33 47.12 L145.08 48.26 L145.88 49.35 L146.74 50.40 L147.64 51.40 L148.60 52.36 L149.60 53.26 L150.65 54.12 L151.74 54.92 L152.88 55.67 L154.06 56.37 L155.28 57.01 L156.55 57.60 L157.85 58.13 L159.18 58.59 L160.56 59.00 L161.96 59.35 L163.40 59.63 L164.88 59.85 L166.38 60.00 L166.38 60.00 L164.88 60.15 L163.40 60.37 L161.96 60.65 L160.56 61.00 L159.18 61.41 L157.85 61.87 L156.55 62.40 L155.28 62.99 L154.06 63.63 L152.88 64.33 L151.74 65.08 L150.65 65.88 L149.60 66.74 L148.60 67.64 L147.64 68.60 L146.74 69.60 L145.88 70.65 L145.08 71.74 L144.33 72.88 L143.63 74.06 L142.99 75.28 L142.40 76.55 L141.87 77.85 L141.41 79.18 L141.00 80.56 L140.65 81.96 L140.37 83.40 L140.15 84.88 L140.00 86.38 L140.00 86.38 L139.85 84.88 L139.63 83.40 L139.35 81.96 L139.00 80.56 L138.59 79.18 L138.13 77.85 L137.60 76.55 L137.01 75.28 L136.37 74.06 L135.67 72.88 L134.92 71.74 L134.12 70.65 L133.26 69.60 L132.36 68.60 L131.40 67.64 L130.40 66.74 L129.35 65.88 L128.26 65.08 L127.12 64.33 L125.94 63.63 L124.72 62.99 L123.45 62.40 L122.15 61.87 L120.82 61.41 L119.44 61.00 L118.04 60.65 L116.60 60.37 L115.12 60.15 L113.62 60.00 L113.62 60.00 L115.12 59.85 L116.60 59.63 L118.04 59.35 L119.44 59.00 L120.82 58.59 L122.15 58.13 L123.45 57.60 L124.72 57.01 L125.94 56.37 L127.12 55.67 L128.26 54.92 L129.35 54.12 L130.40 53.26 L131.40 52.36 L132.36 51.40 L133.26 50.40 L134.12 49.35 L134.92 48.26 L135.67 47.12 L136.37 45.94 L137.01 44.72 L137.60 43.45 L138.13 42.15 L138.59 40.82 L139.00 39.44 L139.35 38.04 L139.63 36.60 L139.85 35.12Z" fill="#FFFFFF"/></svg>
       <img src="logo.png" alt="Nxtlvl" width="86" height="20">
-      <svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.5 6.4 5.1 11 11.5 11.5C17.1 12 12.5 16.6 12 23c-.5-6.4-5.1-11-11.5-11.5C6.9 11 11.5 6.4 12 0z" fill="#A95CFF"/></svg>
     </a>
     <div class="nav-links">
       <a href="#who">Who it's for</a>
@@ -2211,6 +2146,165 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     </div>
   </div>
 </nav>
+<script>
+/* opening: a shooting star streaks in trailing stardust, strikes, becomes the logo, and the logo flies into the nav */
+(function(){
+  var d = document.documentElement, intro = document.getElementById('intro'), brand = document.querySelector('.nav .brand');
+  if(!d.classList.contains('intro-on') || !intro || !brand) return;
+  var W = window.innerWidth, H = window.innerHeight, small = W < 700, TAU = Math.PI * 2;
+  var OUT = 'cubic-bezier(.16,1,.3,1)', IO = 'cubic-bezier(.65,0,.25,1)';
+
+  /* the logo: a copy of the nav logo, scaled up a little above the middle of the screen */
+  var lock = document.createElement('div');
+  lock.className = 'brand intro-lock'; lock.setAttribute('aria-hidden', 'true');
+  lock.innerHTML = brand.innerHTML.replace(/nm-/g, 'nxi-');
+  document.body.appendChild(lock);
+  var mk = lock.querySelector('.nx-mark'), wm = lock.querySelector('img');
+  var bw = lock.offsetWidth || 127, bh = lock.offsetHeight || 34;
+  var S = Math.min(4.2, W * .66 / bw), x0 = W / 2 - bw * S / 2, y0 = H * .46 - bh * S / 2;
+  var from = 'translate(' + x0 + 'px,' + y0 + 'px) scale(' + S + ')';
+  lock.style.transform = from;
+  var mr = mk.getBoundingClientRect(), tx = mr.left + mr.width * .808, ty = mr.top + mr.height * .192;
+
+  var anims = [];
+  /* the star lands first, then its trails draw out behind it */
+  anims.push(mk.animate([
+    {opacity:0, scale:.8, clipPath:'polygon(100% 0%,100% 0%,100% 0%)'},
+    {opacity:1, scale:1, clipPath:'polygon(100% 0%,100% 200%,-100% 0%)'}
+  ], {duration:460, delay:470, easing:OUT, fill:'both'}));
+  if(wm) anims.push(wm.animate([
+    {opacity:0, transform:'translateX(-12px)', filter:'blur(6px)'},
+    {opacity:1, transform:'none', filter:'blur(0)'}
+  ], {duration:440, delay:640, easing:OUT, fill:'both'}));
+
+  var done = false;
+  var land = function(){
+    if(done) return; done = true;
+    d.classList.add('nx-landed');
+    var nm = brand.querySelector('.nx-mark');
+    if(nm){ nm.classList.add('nx-land'); setTimeout(function(){ nm.classList.remove('nx-land'); }, 900); }
+    requestAnimationFrame(function(){ lock.remove(); });
+  };
+  /* then it flies into the nav, landing exactly on the real logo */
+  var flyT = setTimeout(function(){
+    var br = brand.getBoundingClientRect();
+    var fly = lock.animate([{transform:from}, {transform:'translate(' + br.left + 'px,' + br.top + 'px) scale(1)'}],
+      {duration:640, easing:IO, fill:'forwards'});
+    anims.push(fly);
+    fly.onfinish = land;
+  }, 1120);
+
+  /* stardust: a canvas above the curtain, below the logo */
+  var cv = document.createElement('canvas'), ctx = cv.getContext && cv.getContext('2d');
+  if(ctx){
+    cv.className = 'intro-fx'; cv.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(cv);
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  var dx = Math.SQRT1_2, dy = -Math.SQRT1_2, L = Math.sqrt(W * W + H * H) * .72;
+  var sx = tx - dx * L, sy = ty - dy * L, bend = Math.min(W, H) * .1;
+  var STRIKE = .5, END = 1.6, t0 = performance.now();
+  /* the head eases in fast and settles onto the star; a slight bend makes it feel thrown, not slid */
+  var head = function(k){
+    var e = 1 - Math.pow(1 - Math.min(1, Math.max(0, k)), 3);
+    var b = Math.sin(e * Math.PI) * bend;
+    return [sx + (tx - sx) * e + (-dy) * b, sy + (ty - sy) * e + dx * b];
+  };
+  var tint = ['255,255,255', '216,187,255', '169,92,255', '125,24,252'];
+  var dust = [], burst = [], last = 0, i;
+  for(i = 0; i < (small ? 46 : 90); i++){
+    var a = Math.random() * TAU, hot = Math.random() < .35;
+    burst.push({a:a, v:(hot ? 520 : 180) + Math.random() * (hot ? 520 : 300), drag:3 + Math.random() * 2, life:.45 + Math.random() * .55,
+      c:tint[i % 4], w:hot ? 1.5 : .6 + Math.random() * .8});
+  }
+  var spark4 = function(x, y, r, a){
+    ctx.fillStyle = 'rgba(255,255,255,' + a + ')';
+    ctx.beginPath(); ctx.moveTo(x, y - r);
+    ctx.quadraticCurveTo(x + r * .14, y - r * .14, x + r, y); ctx.quadraticCurveTo(x + r * .14, y + r * .14, x, y + r);
+    ctx.quadraticCurveTo(x - r * .14, y + r * .14, x - r, y); ctx.quadraticCurveTo(x - r * .14, y - r * .14, x, y - r); ctx.fill();
+  };
+  var stop = function(fast){
+    clearTimeout(flyT);
+    if(cv.parentNode){ cv.style.transition = 'opacity .3s'; cv.style.opacity = '0'; setTimeout(function(){ cv.remove(); }, 320); }
+    if(fast){
+      anims.forEach(function(an){ try{ an.cancel(); }catch(e){} });
+      lock.style.transition = 'opacity .28s'; lock.style.opacity = '0';
+      d.classList.add('nx-landed'); setTimeout(function(){ lock.remove(); }, 300); done = true;
+    }
+  };
+  var frame = function(now){
+    var t = (now - t0) / 1000;
+    if(!intro.isConnected || intro.classList.contains('skip-now')){ stop(true); return; }
+    if(!ctx){ if(t < END) requestAnimationFrame(frame); return; }
+    var dt = Math.min(.05, t - last); last = t;
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter'; ctx.lineCap = 'round';
+    var k = t / STRIKE, fade = t < STRIKE ? 1 : Math.max(0, 1 - (t - STRIKE) / .32);
+    /* the trail: the path the head has just travelled, tapering and cooling from white to violet */
+    if(fade > 0){
+      var N = 26;
+      for(var s = 0; s < N; s++){
+        var ka = k - s * .03, kb = k - (s + 1) * .03;
+        if(kb < 0) break;
+        var p0 = head(Math.min(ka, 1)), p1 = head(Math.min(kb, 1)), q = 1 - s / N;
+        ctx.strokeStyle = 'rgba(' + tint[Math.min(3, (s / 7) | 0)] + ',' + (q * q * .9 * fade).toFixed(3) + ')';
+        ctx.lineWidth = 1 + q * (small ? 7 : 10);
+        ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
+        ctx.strokeStyle = 'rgba(169,92,255,' + (q * .12 * fade).toFixed(3) + ')'; ctx.lineWidth = 6 + q * 26;
+        ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
+      }
+    }
+    /* the head sheds stardust as it flies */
+    if(t < STRIKE){
+      var hp = head(k), n = small ? 3 : 6;
+      for(var j = 0; j < n; j++){
+        var sp = 20 + Math.random() * 90, sd = (Math.random() - .5) * 2;
+        dust.push({x:hp[0], y:hp[1], vx:-dx * sp + (-dy) * sd * 40, vy:-dy * sp + dx * sd * 40, life:.5 + Math.random() * .7, age:0,
+          r:.5 + Math.random() * 1.6, c:tint[(Math.random() * 4) | 0]});
+      }
+      var g = ctx.createRadialGradient(hp[0], hp[1], 0, hp[0], hp[1], 26);
+      g.addColorStop(0, 'rgba(255,255,255,.95)'); g.addColorStop(.3, 'rgba(216,187,255,.45)'); g.addColorStop(1, 'rgba(125,24,252,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(hp[0], hp[1], 26, 0, TAU); ctx.fill();
+      spark4(hp[0], hp[1], 11, .95);
+    }
+    for(var m = dust.length - 1; m >= 0; m--){
+      var q2 = dust[m]; q2.age += dt;
+      if(q2.age > q2.life){ dust.splice(m, 1); continue; }
+      q2.x += q2.vx * dt; q2.y += q2.vy * dt; q2.vx *= .97; q2.vy *= .97;
+      ctx.fillStyle = 'rgba(' + q2.c + ',' + (1 - q2.age / q2.life).toFixed(3) + ')';
+      ctx.beginPath(); ctx.arc(q2.x, q2.y, q2.r, 0, TAU); ctx.fill();
+    }
+    /* the strike: a flash, a ring of light and a spray of sparks from where the star lands */
+    var age = t - STRIKE;
+    if(age > 0){
+      var f = Math.max(0, 1 - age / .38);
+      if(f > 0){
+        var R = Math.max(W, H) * .5, g2 = ctx.createRadialGradient(tx, ty, 0, tx, ty, R);
+        g2.addColorStop(0, 'rgba(255,255,255,' + (.8 * f).toFixed(3) + ')');
+        g2.addColorStop(.1, 'rgba(216,187,255,' + (.35 * f).toFixed(3) + ')');
+        g2.addColorStop(1, 'rgba(125,24,252,0)');
+        ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
+      }
+      var rk = Math.min(1, age / .55);
+      if(rk < 1){
+        ctx.strokeStyle = 'rgba(216,187,255,' + (.7 * (1 - rk)).toFixed(3) + ')'; ctx.lineWidth = 2 * (1 - rk) + .5;
+        ctx.beginPath(); ctx.arc(tx, ty, 8 + (1 - Math.pow(1 - rk, 3)) * Math.min(W, H) * .32, 0, TAU); ctx.stroke();
+      }
+      for(var b = 0; b < burst.length; b++){
+        var u = burst[b];
+        if(age > u.life) continue;
+        var dist = function(a2){ return u.v * (1 - Math.exp(-u.drag * a2)) / u.drag; };
+        var r1 = dist(age), r0 = dist(Math.max(0, age - .04)), fd = Math.pow(1 - age / u.life, 1.5);
+        ctx.strokeStyle = 'rgba(' + u.c + ',' + fd.toFixed(3) + ')'; ctx.lineWidth = u.w;
+        ctx.beginPath(); ctx.moveTo(tx + Math.cos(u.a) * r0, ty + Math.sin(u.a) * r0); ctx.lineTo(tx + Math.cos(u.a) * r1, ty + Math.sin(u.a) * r1); ctx.stroke();
+      }
+    }
+    if(t < END) requestAnimationFrame(frame); else stop(false);
+  };
+  requestAnimationFrame(frame);
+})();
+</script>
 
 <main id="main">
 <section class="hero" id="top">
@@ -2297,7 +2391,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     <div class="head mid rv">
       <span class="eyebrow">Who it's for</span>
       <h2>Built for the businesses <br>agencies <span class="it">won't call back</span></h2>
-      <p style="margin-inline:auto">If you run a place people walk into, you need a feed. You don't need a marketing department to get one. Pick your business to see what a week could look like.</p>
+      <p style="margin-inline:auto">If you run a place people walk into, like a café, salon, gym, clinic or shop, you need a feed. You don't need a marketing department to get one. Pick your business to see what a week of social media could look like.</p>
     </div>
     <div class="chips rv" role="group" aria-label="Pick your business to see a sample week">
       <button class="chip" type="button" data-k="cafe" aria-pressed="true" aria-controls="peek"><svg class="ic" aria-hidden="true"><use href="#i-cup"/></svg>Cafés &amp; restaurants</button>
@@ -2345,7 +2439,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     <div class="head rv">
       <span class="eyebrow">The maths</span>
       <h2>One freelance reel costs $35. <br><span class="it">Our whole design plan costs $5.</span></h2>
-      <p>Most small businesses don't drop social media because they don't see the point. They drop it because the quote comes back at $400 a month when the shop is turning over $2,000.</p>
+      <p>Most small businesses don't drop social media because they don't see the point. They drop it because the agency quote comes back at $400 a month when the shop is turning over $2,000.</p>
     </div>
 
     <div class="bars rv framed" id="bars">
@@ -2419,9 +2513,9 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
 <section class="band" id="services">
   <div class="wrap">
     <div class="head rv">
-      <span class="eyebrow">What you get</span>
+      <span class="eyebrow">Services</span>
       <h2>Everything a marketing team does. <br><span class="it">Without hiring one.</span></h2>
-      <p>Pick one service or let us run the whole thing. Most shops start with design, add video in month two, and hand us the account by month three.</p>
+      <p>Social media post design, reel editing, scheduled posting and DM automation. Pick one service or let us run the whole thing. Most shops start with design, add video in month two, and hand us the account by month three.</p>
     </div>
 
     <div class="bento">
@@ -2500,7 +2594,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     <div class="head mid rv">
       <span class="eyebrow">What we make</span>
       <h2>The things that land <br>in <span class="it">your folder</span></h2>
-      <p style="margin-inline:auto">Not a strategy deck — files you can post, print, and hand to a customer. Drag the ring to look around.</p>
+      <p style="margin-inline:auto">Not a strategy deck — Instagram posts, reels, menus, posters and story sets you can post, print, and hand to a customer. Drag the ring to look around.</p>
     </div>
 
     <div class="orbit-ctl rv">
@@ -2567,7 +2661,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     <div class="head rv">
       <span class="eyebrow">What lands</span>
       <h2>A month of posts, <br><span class="it">already approved</span></h2>
-      <p>You don't get a strategy deck. You get the actual posts — scheduled, captioned and ready to go out while you run the shop.</p>
+      <p>You don't get a strategy deck. You get the actual Instagram and Facebook posts — designed, captioned, scheduled and ready to go out while you run the shop.</p>
     </div>
 
     <div class="feed-wrap">
@@ -2671,7 +2765,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     <div class="head rv">
       <span class="eyebrow">Pricing</span>
       <h2>Three ways in. <br><span class="it">Pick the one that fits.</span></h2>
-      <p>Monthly. No contract, no setup fee, no notice period. Change plan or stop at the end of any month.</p>
+      <p>Monthly social media packages. No contract, no setup fee, no notice period. Change plan or stop at the end of any month.</p>
     </div>
 
     <div class="plans">
@@ -2736,6 +2830,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     <div class="head rv">
       <span class="eyebrow">How it works</span>
       <h2>Three steps, then it just <span class="it">runs</span>.</h2>
+      <p>A short call, a plan you approve, then a month of social media content made, posted and reported on for you.</p>
     </div>
     <div class="steps">
       <div class="step rv">
@@ -2864,7 +2959,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
     <div class="head mid rv">
       <span class="eyebrow">The calendar</span>
       <h2>The year your shop <br><span class="it">runs on</span></h2>
-      <p style="margin-inline:auto">Every month has a reason to post. Pull a spine off the shelf and see what we would be making for you that month.</p>
+      <p style="margin-inline:auto">Every month has a reason to post, from Pongal and Holi to Eid, Onam and Diwali. Pull a spine off the shelf and see the festival posts we would be making for you that month.</p>
     </div>
 
     <div class="shelf rv">
@@ -3011,8 +3106,8 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
   </div>
   <div class="wrap foot-in">
     <a class="brand" href="#top" aria-label="Nxtlvl Social home">
+      <svg viewBox="20.6 31.6 147.8 147.8" class="nx-mark" aria-hidden="true" style="width:26px;height:26px"><defs><linearGradient id="fm-mt0" gradientUnits="userSpaceOnUse" x1="28.3" y1="171.7" x2="121.6" y2="78.4"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".55" stop-color="#FFFFFF" stop-opacity=".9"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient><linearGradient id="fm-mt1" gradientUnits="userSpaceOnUse" x1="69.3" y1="164.7" x2="121.6" y2="112.3"><stop offset="0" stop-color="#A95CFF" stop-opacity="0"/><stop offset=".55" stop-color="#A95CFF" stop-opacity=".9"/><stop offset="1" stop-color="#A95CFF"/></linearGradient><linearGradient id="fm-mt2" gradientUnits="userSpaceOnUse" x1="43.8" y1="122.2" x2="82.0" y2="84.0"><stop offset="0" stop-color="#B98AFF" stop-opacity="0"/><stop offset=".55" stop-color="#B98AFF" stop-opacity=".9"/><stop offset="1" stop-color="#B98AFF"/></linearGradient></defs><path d="M125.94 83.55 L125.76 82.09 L125.37 80.68 L124.77 79.33 L123.99 78.09 L123.03 76.97 L122.30 76.31 L121.10 75.47 L119.78 74.81 L118.39 74.34 L116.94 74.09 L115.46 74.06 L114.00 74.24 L112.59 74.63 L111.24 75.23 L110.40 75.73 L109.24 76.64 L108.23 77.70 L22.62 177.38 L122.67 91.45 L123.99 90.00 L124.77 88.76 L125.19 87.87 L125.52 86.95 L125.85 85.51Z" fill="url(#fm-mt0)"/><path d="M123.37 116.27 L123.26 115.40 L123.02 114.54 L122.36 113.23 L121.82 112.54 L121.18 111.93 L120.46 111.42 L119.67 111.02 L118.83 110.75 L117.96 110.59 L116.49 110.63 L115.63 110.82 L114.81 111.14 L114.04 111.58 L113.35 112.12 L65.05 168.89 L121.40 121.01 L122.36 119.90 L122.92 118.86 L123.31 117.45Z" fill="url(#fm-mt1)"/><path d="M82.77 88.04 L82.48 86.60 L81.79 85.30 L80.95 84.42 L79.69 83.66 L78.27 83.31 L76.80 83.38 L75.42 83.87 L74.42 84.58 L39.59 126.47 L81.14 91.99 L81.79 91.26 L82.40 90.20 L82.72 89.02Z" fill="url(#fm-mt2)"/><path d="M140.00 33.62 L140.15 35.12 L140.37 36.60 L140.65 38.04 L141.00 39.44 L141.41 40.82 L141.87 42.15 L142.40 43.45 L142.99 44.72 L143.63 45.94 L144.33 47.12 L145.08 48.26 L145.88 49.35 L146.74 50.40 L147.64 51.40 L148.60 52.36 L149.60 53.26 L150.65 54.12 L151.74 54.92 L152.88 55.67 L154.06 56.37 L155.28 57.01 L156.55 57.60 L157.85 58.13 L159.18 58.59 L160.56 59.00 L161.96 59.35 L163.40 59.63 L164.88 59.85 L166.38 60.00 L166.38 60.00 L164.88 60.15 L163.40 60.37 L161.96 60.65 L160.56 61.00 L159.18 61.41 L157.85 61.87 L156.55 62.40 L155.28 62.99 L154.06 63.63 L152.88 64.33 L151.74 65.08 L150.65 65.88 L149.60 66.74 L148.60 67.64 L147.64 68.60 L146.74 69.60 L145.88 70.65 L145.08 71.74 L144.33 72.88 L143.63 74.06 L142.99 75.28 L142.40 76.55 L141.87 77.85 L141.41 79.18 L141.00 80.56 L140.65 81.96 L140.37 83.40 L140.15 84.88 L140.00 86.38 L140.00 86.38 L139.85 84.88 L139.63 83.40 L139.35 81.96 L139.00 80.56 L138.59 79.18 L138.13 77.85 L137.60 76.55 L137.01 75.28 L136.37 74.06 L135.67 72.88 L134.92 71.74 L134.12 70.65 L133.26 69.60 L132.36 68.60 L131.40 67.64 L130.40 66.74 L129.35 65.88 L128.26 65.08 L127.12 64.33 L125.94 63.63 L124.72 62.99 L123.45 62.40 L122.15 61.87 L120.82 61.41 L119.44 61.00 L118.04 60.65 L116.60 60.37 L115.12 60.15 L113.62 60.00 L113.62 60.00 L115.12 59.85 L116.60 59.63 L118.04 59.35 L119.44 59.00 L120.82 58.59 L122.15 58.13 L123.45 57.60 L124.72 57.01 L125.94 56.37 L127.12 55.67 L128.26 54.92 L129.35 54.12 L130.40 53.26 L131.40 52.36 L132.36 51.40 L133.26 50.40 L134.12 49.35 L134.92 48.26 L135.67 47.12 L136.37 45.94 L137.01 44.72 L137.60 43.45 L138.13 42.15 L138.59 40.82 L139.00 39.44 L139.35 38.04 L139.63 36.60 L139.85 35.12Z" fill="#FFFFFF"/></svg>
       <img src="logo.png" alt="Nxtlvl" width="74" height="17">
-      <svg class="spark" viewBox="0 0 24 24" aria-hidden="true" style="width:12px;height:12px;margin-top:-11px"><path d="M12 0c.5 6.4 5.1 11 11.5 11.5C17.1 12 12.5 16.6 12 23c-.5-6.4-5.1-11-11.5-11.5C6.9 11 11.5 6.4 12 0z" fill="#A95CFF"/></svg>
       <span class="brand-word" style="font-size:14px">Social</span>
     </a>
     <div class="foot-links">
@@ -5444,7 +5539,7 @@ html.rm h1 .it{animation:shimmer 7s ease-in-out infinite !important}
       };
       var skipIntro = function(){ intro.classList.add('skip-now'); setTimeout(endIntro, 340); };
       ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function(n){ window.addEventListener(n, skipIntro, {passive:true, once:true}); });
-      setTimeout(endIntro, 1800);
+      setTimeout(endIntro, 1950);
     }
   }
 
@@ -5521,8 +5616,8 @@ document.addEventListener('DOMContentLoaded', function(){
     var hWords = gsap.utils.toArray('.w:not(.it)', h1), itLine = h1.querySelector('.w.it');
     var hs = SplitText.create(hWords, {type:'chars', charsClass:'hc'});
     var vw = window.innerWidth, vh = window.innerHeight, R = gsap.utils.random;
-    /* line up with the opening reveal when it plays (the iris is half open at ~.8s) */
-    var wait = Math.max(0, (root.classList.contains('intro-on') ? .78 : .08) - (performance.now() - (window.__nxT0 || 0)) / 1000);
+    /* line up with the opening when it plays (the page starts to open at ~1s) */
+    var wait = Math.max(0, (root.classList.contains('intro-on') ? 1.05 : .08) - (performance.now() - (window.__nxT0 || 0)) / 1000);
     var wave = document.createElement('div');
     wave.className = 'h1-wave'; wave.setAttribute('aria-hidden', 'true');
     heroCopy.insertBefore(wave, heroCopy.firstChild);
@@ -5707,7 +5802,7 @@ function starFinale(reduce){
   var go = function(){
     if(started) return;
     started = true;
-    import('https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.min.js')
+    import('./vendor/three-0.180.0/three.module.min.js')
       .then(function(THREE){ buildStar(THREE, host, reduce); })
       .catch(function(){});
   };
@@ -5824,6 +5919,69 @@ function buildStar(THREE, host, reduce){
   } else { visible = true; raf = requestAnimationFrame(frame); }
   document.addEventListener('visibilitychange', function(){ if(!document.hidden && visible && !raf) raf = requestAnimationFrame(frame); });
 }
+</script>
+<script>
+/* brand motion: now and then a shooting star rises across the hero sky, the way the logo's star travels */
+(function(){
+  var d = document.documentElement, hero = document.getElementById('top');
+  if(!hero || d.classList.contains('rm') || d.classList.contains('tall')) return;
+  var cv = document.createElement('canvas'), ctx = cv.getContext && cv.getContext('2d');
+  if(!ctx) return;
+  cv.className = 'meteors'; cv.setAttribute('aria-hidden', 'true');
+  hero.insertBefore(cv, hero.firstChild.nextSibling);
+  var W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2), TAU = Math.PI * 2;
+  var size = function(){
+    W = hero.clientWidth; H = hero.clientHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  size();
+  var rt = null;
+  window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(size, 200); }, {passive:true});
+  var stars = [], dust = [], visible = true, raf = null, last = 0, next = 2.2;
+  var spawn = function(){
+    var a = -(32 + Math.random() * 22) * Math.PI / 180, sp = 900 + Math.random() * 600;
+    stars.push({x:W * (.04 + Math.random() * .55), y:H * (.45 + Math.random() * .45), vx:Math.cos(a) * sp, vy:Math.sin(a) * sp,
+      len:120 + Math.random() * 160, age:0, life:.55 + Math.random() * .35, w:1.2 + Math.random() * 1.2});
+  };
+  var frame = function(now){
+    raf = null;
+    var t = now / 1000, dt = last ? Math.min(.05, t - last) : 0; last = t;
+    next -= dt;
+    if(next <= 0){ spawn(); next = 3.5 + Math.random() * 4; }
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter'; ctx.lineCap = 'round';
+    for(var i = stars.length - 1; i >= 0; i--){
+      var s = stars[i]; s.age += dt;
+      if(s.age > s.life){ stars.splice(i, 1); continue; }
+      s.x += s.vx * dt; s.y += s.vy * dt;
+      var k = s.age / s.life, a = Math.sin(k * Math.PI), m = Math.sqrt(s.vx * s.vx + s.vy * s.vy);
+      var tx = s.x - s.vx / m * s.len * a, ty = s.y - s.vy / m * s.len * a;
+      var g = ctx.createLinearGradient(tx, ty, s.x, s.y);
+      g.addColorStop(0, 'rgba(125,24,252,0)'); g.addColorStop(.7, 'rgba(216,187,255,' + (.55 * a).toFixed(3) + ')'); g.addColorStop(1, 'rgba(255,255,255,' + (.95 * a).toFixed(3) + ')');
+      ctx.strokeStyle = g; ctx.lineWidth = s.w; ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(s.x, s.y); ctx.stroke();
+      var h = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, 9);
+      h.addColorStop(0, 'rgba(255,255,255,' + (.9 * a).toFixed(3) + ')'); h.addColorStop(1, 'rgba(169,92,255,0)');
+      ctx.fillStyle = h; ctx.beginPath(); ctx.arc(s.x, s.y, 9, 0, TAU); ctx.fill();
+      if(Math.random() < .6) dust.push({x:s.x, y:s.y, vx:-s.vx * .04 + (Math.random() - .5) * 30, vy:-s.vy * .04 + (Math.random() - .5) * 30, age:0, life:.4 + Math.random() * .5, r:.4 + Math.random()});
+    }
+    for(var j = dust.length - 1; j >= 0; j--){
+      var p = dust[j]; p.age += dt;
+      if(p.age > p.life){ dust.splice(j, 1); continue; }
+      p.x += p.vx * dt; p.y += p.vy * dt;
+      ctx.fillStyle = 'rgba(216,187,255,' + (1 - p.age / p.life).toFixed(3) + ')';
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, TAU); ctx.fill();
+    }
+    if(visible && !document.hidden && !d.classList.contains('rm')) raf = requestAnimationFrame(frame);
+  };
+  var wake = function(){ if(!raf && visible && !document.hidden && !d.classList.contains('rm')){ last = 0; raf = requestAnimationFrame(frame); } };
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ visible = es[0].isIntersecting; wake(); }, {threshold:.05}).observe(hero);
+  }
+  document.addEventListener('visibilitychange', wake);
+  /* the motion switch can turn it back on later */
+  new MutationObserver(wake).observe(d, {attributes:true, attributeFilter:['class']});
+  wake();
+})();
 </script>
 </body>
 </html>
