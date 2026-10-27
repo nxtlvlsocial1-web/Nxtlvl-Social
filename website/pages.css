@@ -5,7 +5,7 @@
 @font-face{font-family:'Instrument Sans'; src:url(fonts/instrument-sans-600.woff2) format('woff2'); font-weight:600; font-display:swap}
 @font-face{font-family:'Instrument Serif'; src:url(fonts/instrument-serif-400.woff2) format('woff2'); font-weight:400; font-display:swap}
 :root{
-  --ink:#05030C; --ink-2:#0A0717; --ink-3:#110C22; --fg:#F5F2FF; --muted:#9F97BE; --faint:#6B6391;
+  --ink:#05030C; --ink-2:#0A0717; --ink-3:#110C22; --fg:#F5F2FF; --muted:#9F97BE; --faint:#8A82B0;
   --violet:#7D18FC; --violet-lift:#A95CFF; --violet-pale:#D8BBFF;
   --line:rgba(169,124,255,.16); --line-2:rgba(169,124,255,.32); --card:rgba(255,255,255,.045);
   --d:'Archivo','Helvetica Neue',Arial,sans-serif; --b:'Instrument Sans',system-ui,-apple-system,sans-serif; --s:'Instrument Serif',Georgia,serif;
@@ -34,6 +34,7 @@ p{margin:14px 0 0}
 .nav-in{display:flex; align-items:center; gap:18px; height:58px; padding-inline:12px 10px}
 .brand{display:flex; align-items:center; gap:7px; text-decoration:none; flex:none}
 .brand img{width:86px; height:auto}
+.brand-mark .nx-mark{width:38px; height:38px; margin:-4px 0 0 -2px}
 .nx-mark{width:34px; height:34px; flex:none; margin:-5px 1px 0 -3px; overflow:visible}
 .nx-mark path{transform-box:fill-box; transition:transform .55s var(--out)}
 .nx-mark path:last-child{transform-origin:50% 50%}
@@ -47,7 +48,7 @@ p{margin:14px 0 0}
 .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 20px; border-radius:999px; font:600 15px/1 var(--b);
   text-decoration:none; border:1px solid transparent; transition:transform .3s var(--out), background .3s; white-space:nowrap}
 .btn-primary{background:var(--violet); color:#fff}
-.btn-primary:hover{background:var(--violet-lift); transform:translateY(-2px)}
+.btn-primary:hover{background:#9140FF; transform:translateY(-2px)}
 .btn-ghost{background:var(--card); border-color:var(--line-2)}
 .btn-ghost:hover{border-color:var(--violet-lift); transform:translateY(-2px)}
 .nav .btn{margin-left:auto; padding:10px 16px; font-size:14px}

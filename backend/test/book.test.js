@@ -30,6 +30,9 @@ assert.equal(r.status, 400); assert.match((await r.json()).error, /your email/);
 r = await post({ name: 'Ravi', email: 'not-an-email', t: Date.now() - 10000 });
 assert.equal(r.status, 400); assert.match((await r.json()).error, /does not look right/);
 
+r = await post({ name: 'Wes', email: 'wes@example.com', need: 'website', t: Date.now() - 10000 });
+assert.equal(r.status, 200); assert.match(sent[0].text, /Website Development/); sent.length = 0;
+
 r = await post({ name: 'Bot', email: 'bot@example.com', website: 'http://spam', t: Date.now() - 10000 });
 assert.equal(r.status, 200); assert.equal(sent.length, 0, 'honeypot: accepted silently, nothing sent');
 

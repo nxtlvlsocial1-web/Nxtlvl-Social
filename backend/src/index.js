@@ -8,9 +8,10 @@
  */
 
 const NEEDS = {
-  design: 'Content & Design (from $5/mo)',
-  video: 'Video & Editing (from $15/mo)',
-  automation: 'Social + Automation (from $49/mo)',
+  design: 'Content & Design',
+  video: 'Video & Editing',
+  automation: 'Social + Automation',
+  website: 'Website Development',
   unsure: 'Not sure yet',
 };
 const MAX = { name: 80, business: 120, email: 120, message: 2000 };
