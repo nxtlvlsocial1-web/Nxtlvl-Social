@@ -2,6 +2,16 @@ name = "nxtlvl-social"
 main = "src/index.js"
 compatibility_date = "2026-10-01"
 
+# the domain: both hostnames are attached as Workers custom domains on deploy. Cloudflare creates the DNS records
+# and the certificate itself, so the domain only has to be on this Cloudflare account (see DEPLOY.md step 2).
+# The Worker redirects www to the bare domain (src/index.js).
+# workers_dev = false: the site lives only on the domain, so a brand-new account needs no workers.dev subdomain to deploy.
+workers_dev = false
+routes = [
+  { pattern = "nxtlvlsocial.ai", custom_domain = true },
+  { pattern = "www.nxtlvlsocial.ai", custom_domain = true },
+]
+
 # the website itself: every file in ../website, served from the same Worker; /api/* goes to the code first
 [assets]
 directory = "../website"
@@ -20,11 +30,3 @@ RATE_LIMIT = "5"
 # [[kv_namespaces]]
 # binding = "LEADS"
 # id = "paste-the-id-here"
-
-# the domain: both hostnames are attached as Workers custom domains on deploy. Cloudflare creates the DNS records
-# and the certificate itself, so the domain only has to be on this Cloudflare account (see DEPLOY.md step 2).
-# The Worker redirects www to the bare domain (src/index.js).
-routes = [
-  { pattern = "nxtlvlsocial.ai", custom_domain = true },
-  { pattern = "www.nxtlvlsocial.ai", custom_domain = true },
-]
