@@ -38,6 +38,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | iOS apps: control motorized camera docks / subject tracking (Swift) | `dockkit`                 |
 | Talking-head / lip-sync videos via fal.ai (stub, see note) | `fal-lip-sync`                       |
 | Remotion (React) video, only when explicitly asked (stub, see note) | `remotion`                   |
+| Remotion official skills, only when Remotion is asked for: create, markup, captions, maps, render, studio | `remotion-best-practices` (router), `remotion-*` |
 | Animation-principles guidance for After Effects / Premiere motion | `video-motion-graphics`      |
 | Ad / product / e-commerce video production via fal.ai   | `commercial`                                  |
 | UGC-style creator ads, testimonials, founder clips      | `ugc`                                         |
@@ -91,6 +92,8 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Motion and micro-interactions on an existing UI (Genjutsu) | `cast`                                     |
 | Art direction, design system and build for a new look (Genjutsu) | `paint`                             |
 | Whole website or app with parallel agents (Genjutsu; announces its cost first) | `bunshin`              |
+| Premium scroll-driven landing page, layered cinematic hero (kie.ai for generated assets) | `scroll-craft` |
+| Scroll-scrubbed "fly through the world" landing page (Monid / Higgsfield video, paid) | `scroll-world` |
 
 HyperFrames compositions already use GSAP, so the `gsap-*` skills apply there too; keep HyperFrames'
 own rules (one paused timeline, no `left`/`top` motion) when they differ.
@@ -128,6 +131,8 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `threejs-*`: `CloudAI-X/threejs-skills`; `gsap-*`: `greensock/gsap-skills`; `design-dna`: `zanwei/design-dna`;
   `motion-design`: `LottieFiles/motion-design-skill`; `cast`, `paint`, `bunshin`: `AThevon/genjutsu`
 - `animate`, `review-animations` and the other Emil Kowalski skills: `emilkowalski/skills`
+- `remotion-best-practices` and the other `remotion-*` skills: `remotion-dev/skills`
+- `scroll-world`: `oso95/scroll-world`; `scroll-craft`: `nateherkai/scroll-craft`
 - fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`,
   `model-routing`): `fal-ai-community/skills`
 
@@ -155,6 +160,8 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
   spawns subagents and spends a lot of tokens; it states the cost and asks before starting.
 - `media-use` can now search Openverse for sound effects. Openverse items carry Creative Commons licences;
   check each one allows commercial use (and credit it if required) before it goes in a client video.
+- `scroll-craft` generates assets through kie.ai (`KIE_AI_API_KEY`); `scroll-world` renders clips through the
+  `monid` CLI (pay-per-clip) with Higgsfield as fallback. Both spend money, so confirm the cost first.
 - Telemetry: set `HYPERFRAMES_NO_TELEMETRY=1` to turn it off.
 
 ## Repo layout
