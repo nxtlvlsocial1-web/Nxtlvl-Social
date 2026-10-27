@@ -1074,7 +1074,7 @@ function drawTextures() {
     panel(g, w, h, { bg: "#f6efe4", r: 18 }); g.fillStyle = "#d97757"; g.fillRect(2, 2, w - 4, 34);
     write(g, "ALL ACCESS", w / 2, 20, 20, { f: "JBMono", c: "#fff", a: "center" });
     write(g, "PRODUCER", w / 2, 82, 44, { w: 800, c: "#1a1028", a: "center", max: w - 24 });
-    write(g, "@ai.nxtlvl", w / 2, 128, 22, { f: "JBMono", c: "#7b2ffb", a: "center" });
+    write(g, "@nxtlvlsocial.ai", w / 2, 128, 21, { f: "JBMono", c: "#7b2ffb", a: "center", max: w - 24 });
   });
   ct("page", 512, 676, (g, w, h) => {
     panel(g, w, h, { bg: "#f6efe4", r: 26 });
