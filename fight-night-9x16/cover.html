@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Fight Night cover</title>
+    <!-- Reel cover still: the same 3D arena as index.html, posed for a versus card. Snapshot with build/cover.cjs. -->
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js"}}</script>
+    <style>
+@font-face { font-family: "Manrope"; font-weight: 200 800; src: url("assets/fonts/manrope.ttf"); }
+@font-face { font-family: "Fraunces"; font-style: italic; font-weight: 100 900; src: url("assets/fonts/fraunces-italic.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 100 800; src: url("assets/fonts/jbmono.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0814; }
+body { font-family: "Manrope", sans-serif; color: #fff; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+#gl { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+.layer { position: absolute; inset: 0; }
+/* red and blue halves */
+.tint { background:
+  radial-gradient(70% 45% at 0% 62%, rgba(224,49,64,.35), transparent 70%),
+  radial-gradient(70% 45% at 100% 62%, rgba(47,107,255,.35), transparent 70%);
+  mix-blend-mode: screen; }
+.vig { background:
+  linear-gradient(#0b0814 0%, rgba(11,8,20,.92) 14%, rgba(11,8,20,.35) 30%, transparent 40%),
+  linear-gradient(0deg, #0b0814 0%, rgba(11,8,20,.9) 14%, rgba(11,8,20,.3) 30%, transparent 40%); }
+.slash { position: absolute; left: 528px; top: 640px; width: 24px; height: 900px; transform: rotate(14deg);
+  background: linear-gradient(transparent, #fff 20%, #ffd84a 50%, #fff 80%, transparent);
+  box-shadow: 0 0 40px 10px rgba(255,216,74,.55); border-radius: 12px; opacity: .9; }
+.c { position: absolute; left: 0; width: 1080px; text-align: center; }
+.tag { top: 268px; font: 800 30px "JBMono"; letter-spacing: 10px; color: #ffd84a; text-shadow: 0 0 24px rgba(255,216,74,.6); }
+.h1 { top: 318px; font: 800 150px/0.98 "Manrope"; letter-spacing: -5px; text-shadow: 0 10px 40px rgba(0,0,0,.6); }
+.h1 .r { color: #ff4a58; } .h1 .b { color: #5b8cff; }
+.h2 { top: 640px; font: italic 600 74px "Fraunces"; color: #ffb347; letter-spacing: -1px; text-shadow: 0 6px 24px rgba(0,0,0,.7); }
+.vs { position: absolute; left: 0; width: 1080px; top: 905px; text-align: center; font: 800 230px/1 "Manrope"; letter-spacing: -14px;
+  color: #ffd84a; transform: skewX(-10deg); -webkit-text-stroke: 10px #120a1e; paint-order: stroke fill;
+  text-shadow: 0 0 60px rgba(255,216,74,.55), 0 18px 0 #120a1e; }
+.plate { position: absolute; top: 1330px; width: 470px; padding: 22px 28px 26px; border-radius: 24px; background: rgba(10,8,18,.86); }
+.plate.red { left: 40px; border: 4px solid #e03140; box-shadow: 0 0 60px rgba(224,49,64,.55); transform: rotate(-2deg); }
+.plate.blue { right: 40px; border: 4px solid #2f6bff; box-shadow: 0 0 60px rgba(47,107,255,.55); transform: rotate(2deg); text-align: right; }
+.corner { font: 800 22px "JBMono"; letter-spacing: 5px; color: #ff8a92; }
+.blue .corner { color: #8fb0ff; }
+.who { font: 800 50px "Manrope"; letter-spacing: -1px; margin-top: 4px; }
+.says { display: inline-block; margin-top: 10px; font: 800 44px "Manrope"; padding: 6px 20px; border-radius: 14px; background: #e03140; }
+.blue .says { background: #2f6bff; }
+.foot { top: 1578px; font: 700 34px "Manrope"; color: #fff; }
+.foot b { font: 800 34px "JBMono"; color: #111; background: #ffb347; padding: 4px 16px; border-radius: 10px; margin: 0 6px; }
+.foot span { color: rgba(255,255,255,.75); }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <canvas id="gl" width="1080" height="1920"></canvas>
+      <div class="layer tint"></div>
+      <div class="layer vig"></div>
+      <div class="slash"></div>
+      <div class="c tag">TONIGHT'S MAIN EVENT: YOUR IDEA</div>
+      <div class="c h1"><span class="r">2</span> CLAUDES.<br /><span class="b">1</span> IDEA.</div>
+      <div class="c h2">Only one leaves the ring.</div>
+      <div class="vs">VS</div>
+      <div class="plate red"><div class="corner">RED CORNER</div><div class="who">The Prosecution</div><div class="says">IT'LL FAIL</div></div>
+      <div class="plate blue"><div class="corner">BLUE CORNER</div><div class="who">The Defense</div><div class="says">IT'LL WORK</div></div>
+      <div class="c foot"><span>12 judges scoring blind ·</span> <b>/court</b> <span>free skill</span></div>
+    </div>
+    <script>
+      window.FIGHT_T = {"redOn": 1.69, "blueOn": 2.05, "idea": 2.69, "ring": 3.6, "touch": 4.45, "yes": 5.4, "red": 8.65, "blue": 12.85, "fight": 15.8, "judges": 18.8, "named": [21.62, 22.3, 22.95], "screen": 23.7, "verdict": 25.75, "ko": 26.65, "knock": 27.6, "ref": 28.5, "raise": 29.0, "belt": 32.2, "end": 36.0};
+      window.FIGHT_HITS = [[16.0, "r", 0.8], [16.55, "b", 0.8], [17.3, "r", 0.6], [17.6, "b", 0.6], [17.9, "r", 0.7], [18.35, "r", 1.0]];
+      window.FIGHT_COVER = { x: 1.4, z: .6, turn: .6, cam: [0, 2.4, 16.6], look: [0, 2.0, .6], fov: 30 };
+    </script>
+    <script type="module" src="assets/js/fight.js"></script>
+  </body>
+</html>

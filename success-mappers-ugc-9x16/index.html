@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Success Mappers UGC ad 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Poppins"; font-weight: 500; src: url("assets/fonts/poppins-500.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-weight: 600; src: url("assets/fonts/poppins-600.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-weight: 700; src: url("assets/fonts/poppins-700.woff2") format("woff2"); }
+@font-face { font-family: "Poppins"; font-weight: 800; src: url("assets/fonts/poppins-800.woff2") format("woff2"); }
+:root { --deep-orange: #d9480f; --indigo: #4338ca; --deep: #1e1b4b; --orange: #ff8a1f; --amber: #ffb020; --cream: #fff7ed; --ink: #1f2937; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+body { font-family: "Poppins", sans-serif; color: #fff; }
+#root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; }
+.clip { position: absolute; inset: 0; }
+.scene { overflow: hidden; }
+.kb { position: absolute; inset: 0; }
+.kb img, img.bgfill { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.vignette { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 55%, rgba(0,0,0,.55) 100%); }
+.shade { position: absolute; inset: 0; background: rgba(15,12,40,.35); }
+.shade.deep { background: rgba(20,16,60,.62); }
+.shade.indigo { background: linear-gradient(180deg, rgba(30,27,75,.88), rgba(67,56,202,.82)); }
+.cream { position: absolute; inset: 0; background: radial-gradient(circle at 30% 20%, #fff 0%, var(--cream) 55%, #ffe8cc 100%); }
+.indigo-bg { position: absolute; inset: 0; background: radial-gradient(circle at 70% 25%, #5b4ff0 0%, var(--indigo) 40%, var(--deep) 100%); }
+.hot { color: var(--orange); }
+.hl .hot, .stack-title.dark .hot, .end-line .hot { color: var(--deep-orange); }
+
+/* headline sticker, top safe band (y 270+) */
+.hl-wrap { position: absolute; left: 60px; right: 60px; top: 280px; display: flex; justify-content: center; }
+.hl { display: block; max-width: 940px; background: #fff; color: var(--ink); border-radius: 26px; padding: 22px 34px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.35); text-align: center; }
+.hl-text { display: block; font-weight: 700; font-size: 54px; line-height: 1.2; }
+.hl b { color: var(--indigo); font-weight: 800; }
+.hl b.hot { color: var(--deep-orange); }
+.mark-wrap { position: relative; display: inline-block; }
+.mark { position: absolute; left: -8px; right: -8px; top: 12%; bottom: 8%; background: #ffe2c2; border-radius: 10px; z-index: 0; transform-origin: 0 50%; display: block; }
+.mark-wrap b { position: relative; z-index: 1; }
+.hl-text { position: relative; z-index: 0; }
+
+.qm-wrap { position: absolute; width: 90px; height: 110px; }
+.qm { display: block; width: 90px; height: 110px; text-align: center; font-weight: 800; font-size: 96px; line-height: 110px;
+      color: var(--orange); text-shadow: 0 6px 18px rgba(0,0,0,.45); }
+
+/* stream / degree / job title panels */
+.panel-stage { position: absolute; left: 0; right: 0; top: 470px; height: 640px; display: flex; align-items: center; justify-content: center; }
+.panel-card { width: 1000px; height: 590px; border-radius: 34px; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,.5); border: 6px solid #fff; }
+.panel-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.panel-label-wrap { position: absolute; left: 0; right: 0; top: 1080px; display: flex; justify-content: center; }
+.panel-label { display: block; background: var(--deep-orange); color: #fff; font-weight: 800; font-size: 64px; letter-spacing: 2px;
+               padding: 10px 40px; border-radius: 20px; box-shadow: 0 12px 30px rgba(0,0,0,.4); }
+.crumbs-wrap { position: absolute; left: 60px; right: 60px; top: 300px; display: flex; justify-content: center; }
+.crumbs { position: relative; display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,.95); color: var(--ink);
+          border-radius: 22px; padding: 18px 26px; }
+.crumb { display: block; font-weight: 800; font-size: 40px; color: var(--indigo); }
+.arrow { display: block; font-weight: 800; font-size: 40px; color: var(--orange); }
+.crumb-box { position: absolute; inset: -12px; border: 6px solid #ef4444; border-radius: 30px; }
+
+/* mind map */
+.mm-svg { position: absolute; left: 0; top: 0; }
+.mm-line { stroke: rgba(255,255,255,.75); stroke-width: 5; stroke-dasharray: 1; stroke-dashoffset: 1; stroke-linecap: round; }
+.mm-center-wrap { position: absolute; width: 280px; height: 280px; }
+.mm-center { width: 280px; height: 280px; border-radius: 50%; background: var(--deep-orange); display: flex; flex-direction: column;
+             align-items: center; justify-content: center; font-weight: 800; font-size: 46px; box-shadow: 0 0 0 14px rgba(255,138,31,.25); }
+.mm-small { font-weight: 600; font-size: 28px; opacity: .9; }
+.mm-node-wrap { position: absolute; width: 300px; height: 80px; display: flex; align-items: center; justify-content: center; }
+.mm-node { display: block; max-width: 300px; background: #fff; color: var(--indigo); font-weight: 700; font-size: 32px; padding: 12px 22px;
+           border-radius: 40px; white-space: nowrap; box-shadow: 0 10px 26px rgba(0,0,0,.35); }
+
+/* phone stand-in screen */
+.screen { position: absolute; left: 0; top: 0; width: 300px; height: 600px; transform-origin: 0 0; }
+.screen::before { content: ""; position: absolute; inset: -18px; background: linear-gradient(160deg, #5b4ff0, var(--deep)); }
+.screen-in { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; }
+.scr-logo { display: block; font-weight: 800; font-size: 44px; line-height: 1.05; text-align: center; color: #fff; }
+.scr-sub { display: block; font-weight: 600; font-size: 26px; color: var(--amber); }
+.scr-bar { display: block; width: 190px; height: 12px; border-radius: 6px; background: rgba(255,255,255,.25); overflow: hidden; }
+.scr-fill { display: block; width: 100%; height: 100%; background: var(--orange); transform-origin: 0 50%; }
+.keyed { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.brand-chip-wrap { position: absolute; left: 60px; right: 60px; top: 290px; display: flex; justify-content: center; }
+.brand-chip { display: block; background: var(--indigo); color: #fff; font-weight: 800; font-size: 56px; padding: 14px 40px;
+              border-radius: 24px; box-shadow: 0 14px 40px rgba(0,0,0,.4); }
+
+/* factors */
+.stack { position: absolute; left: 90px; right: 90px; top: 290px; display: flex; flex-direction: column; gap: 26px; }
+.stack-title { display: block; font-weight: 800; font-size: 54px; line-height: 1.2; margin-bottom: 14px; color: #fff; }
+.stack-title.dark { color: var(--ink); }
+.stack-title.top { position: absolute; left: 90px; right: 90px; top: 300px; }
+.pill-wrap { display: block; height: 128px; }
+.pill { display: flex; align-items: center; gap: 30px; height: 128px; background: #fff; border-radius: 30px; padding: 0 30px;
+        box-shadow: 0 14px 34px rgba(0,0,0,.3); }
+.pill-ic { display: flex; width: 84px; height: 84px; border-radius: 22px; background: var(--deep-orange); align-items: center; justify-content: center; flex: none; }
+.pill-ic svg { width: 54px; height: 54px; fill: none; stroke: #fff; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.pill-tx { display: block; font-weight: 700; font-size: 50px; color: var(--deep); }
+
+/* priorities */
+.pcards { position: absolute; left: 90px; right: 90px; top: 520px; height: 500px; }
+.pcard { position: absolute; left: 0; right: 0; height: 150px; display: flex; align-items: center; gap: 30px; background: #fff;
+         border-radius: 28px; padding: 0 30px; box-shadow: 0 14px 34px rgba(67,56,202,.18); border: 3px solid #ece9ff; }
+.pbadge { display: flex; width: 92px; height: 92px; border-radius: 50%; background: var(--indigo); color: #fff; font-weight: 800;
+          font-size: 50px; align-items: center; justify-content: center; flex: none; }
+.pcol { display: flex; flex-direction: column; gap: 12px; }
+.ptitle { display: block; font-weight: 700; font-size: 42px; color: var(--deep); }
+.pbar { display: block; height: 14px; border-radius: 7px; background: #e5e7eb; }
+.pbar.thin { height: 10px; background: #f0f0f3; }
+
+/* list */
+.list-stage { position: absolute; left: 0; right: 0; top: 330px; height: 800px; display: flex; align-items: center; justify-content: center; }
+.lcard { position: relative; width: 860px; background: #fff; border-radius: 36px; padding: 50px 56px; box-shadow: 0 20px 50px rgba(0,0,0,.15); }
+.ltitle { display: block; font-weight: 800; font-size: 56px; color: var(--deep); margin-bottom: 26px; }
+.lrow { display: flex; align-items: center; gap: 24px; height: 74px; }
+.ldot { display: block; width: 24px; height: 24px; border-radius: 50%; background: var(--indigo); flex: none; }
+.lbar { display: block; height: 20px; border-radius: 10px; background: #e5e7eb; }
+.lstrike { position: absolute; left: 30px; right: 30px; top: 50%; height: 14px; border-radius: 7px; background: #ef4444; transform-origin: 0 50%; }
+.lx { position: absolute; right: -30px; top: -40px; width: 130px; height: 130px; border-radius: 50%; background: #ef4444; color: #fff;
+      font-weight: 800; font-size: 78px; line-height: 130px; text-align: center; box-shadow: 0 12px 30px rgba(239,68,68,.45); }
+
+/* roadmap */
+.road-svg { position: absolute; left: 0; top: 0; }
+.road { fill: none; stroke: #fff; stroke-width: 70; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: .95; }
+.road-dash { fill: none; stroke: var(--orange); stroke-width: 8; stroke-dasharray: 0.02 0.018; stroke-linecap: round; }
+.mile-wrap { position: absolute; width: 44px; height: 44px; }
+.mile { position: relative; width: 44px; height: 44px; display: block; }
+.mdot { position: absolute; inset: 0; border-radius: 50%; background: var(--orange); border: 7px solid #fff; display: block; }
+.mlabel { position: absolute; left: 64px; top: -6px; display: block; white-space: nowrap; background: rgba(30,27,75,.85); color: #fff;
+          font-weight: 700; font-size: 34px; padding: 4px 18px; border-radius: 14px; }
+.flag { position: absolute; left: 860px; top: 270px; width: 100px; height: 100px; display: block; font-size: 90px; line-height: 100px;
+        color: var(--amber); text-shadow: 0 6px 16px rgba(0,0,0,.4); }
+.road-title-wrap { position: absolute; left: 80px; top: 300px; }
+.road-title { display: flex; align-items: center; gap: 18px; font-weight: 800; font-size: 72px; color: #fff; }
+.tick { display: flex; width: 78px; height: 78px; border-radius: 50%; background: #22c55e; align-items: center; justify-content: center;
+        font-size: 48px; color: #fff; }
+
+/* CTA */
+.cta-stage { position: absolute; left: 60px; right: 60px; top: 290px; height: 860px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+.cta-brand { display: block; font-weight: 800; font-size: 70px; color: #fff; }
+.timer { position: relative; width: 360px; height: 360px; }
+.timer svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.ring-bg { fill: none; stroke: rgba(255,255,255,.18); stroke-width: 14; }
+.ring { fill: none; stroke: var(--orange); stroke-width: 14; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.timer-tx { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.timer-tx .big { display: block; font-weight: 800; font-size: 100px; line-height: 1; }
+.timer-tx .min { display: block; font-weight: 600; font-size: 32px; opacity: .85; }
+.cta-free { display: block; background: #fff; color: var(--deep); font-weight: 800; font-size: 54px; padding: 18px 36px; border-radius: 26px; text-align: center; }
+
+/* end card */
+.end-stage { position: absolute; left: 80px; right: 80px; top: 360px; height: 1180px; display: flex; flex-direction: column; align-items: center; gap: 34px; text-align: center; }
+.end-line { display: block; font-weight: 700; font-size: 62px; line-height: 1.2; color: var(--ink); }
+.end-line b { font-weight: 800; color: var(--indigo); }
+.end-line b.hot { color: var(--deep-orange); }
+.end-brand { display: block; margin-top: 60px; font-weight: 800; font-size: 76px; color: var(--indigo); }
+.end-btn { display: block; background: var(--deep-orange); color: #fff; font-weight: 800; font-size: 50px; padding: 26px 50px; border-radius: 60px;
+           box-shadow: 0 16px 36px rgba(255,138,31,.45); }
+.end-tap { display: block; font-weight: 600; font-size: 38px; color: var(--ink); opacity: .75; }
+
+/* captions: y 1230-1490, inside the safe zone */
+.cap { display: flex; align-items: flex-start; justify-content: center; padding-top: 1250px; }
+.cap-in { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 22px; max-width: 960px; text-align: center; font-weight: 800; font-size: 74px; line-height: 1.15;
+          text-shadow: 0 4px 0 #000, 0 0 18px rgba(0,0,0,.7); -webkit-text-stroke: 3px #000; paint-order: stroke fill; }
+.cw { display: inline-block; color: #fff; }
+
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="62.6" data-width="1080" data-height="1920">
+      <section id="s01" class="clip scene " data-start="0.000" data-duration="2.610" data-track-index="1"><div id="s01-kb" class="kb"><img src="assets/img/study-desk.jpg" alt="" /></div><div class="vignette"></div><div class="hl-wrap" style=""><div id="s01-hl" class="hl"><span class="hl-text">Tumhe pata hai <b>kya banna</b> hai…</span></div></div></section><section id="s02" class="clip scene " data-start="2.610" data-duration="4.640" data-track-index="1"><div id="s02-kb" class="kb"><img src="assets/img/study-desk.jpg" alt="" /></div><div class="vignette"></div><div class="qm-wrap" style="left:700px;top:520px"><div id="s02-q0" class="qm">?</div></div><div class="qm-wrap" style="left:860px;top:700px"><div id="s02-q1" class="qm">?</div></div><div class="qm-wrap" style="left:640px;top:860px"><div id="s02-q2" class="qm">?</div></div><div class="hl-wrap" style=""><div id="s02-hl" class="hl"><span class="hl-text">But <b class="hot">BEST</b> options kaun-se hain?</span></div></div></section><section id="s03" class="clip scene " data-start="7.250" data-duration="1.979" data-track-index="1"><img class="bgfill" src="assets/img/panel-form-blur.jpg" alt="" /><div class="shade"></div><div class="panel-stage"><div id="s03-card" class="panel-card"><img src="assets/img/panel-form.jpg" alt="" /></div></div><div class="panel-label-wrap"><div id="s03-lab" class="panel-label">STREAM</div></div></section><section id="s04" class="clip scene " data-start="9.229" data-duration="0.835" data-track-index="1"><img class="bgfill" src="assets/img/panel-prospectus-blur.jpg" alt="" /><div class="shade"></div><div class="panel-stage"><div id="s04-card" class="panel-card"><img src="assets/img/panel-prospectus.jpg" alt="" /></div></div><div class="panel-label-wrap"><div id="s04-lab" class="panel-label">DEGREE</div></div></section><section id="s05" class="clip scene " data-start="10.064" data-duration="2.276" data-track-index="1"><img class="bgfill" src="assets/img/panel-laptop-blur.jpg" alt="" /><div class="shade"></div><div class="panel-stage"><div id="s05-card" class="panel-card"><img src="assets/img/panel-laptop.jpg" alt="" /></div></div><div class="panel-label-wrap"><div id="s05-lab" class="panel-label">JOB TITLE</div></div></section><section id="s06" class="clip scene " data-start="12.340" data-duration="2.433" data-track-index="1"><div id="s06-kb" class="kb"><img src="assets/img/whiteboard.jpg" alt="" /></div><div class="vignette"></div><div class="hl-wrap" style=""><div id="s06-hl" class="hl"><span class="hl-text">But <b>ek direction</b> ke andar…</span></div></div></section><section id="s07" class="clip scene " data-start="14.773" data-duration="4.607" data-track-index="1"><img class="bgfill" src="assets/img/whiteboard-blur.jpg" alt="" /><div class="shade deep"></div><svg class="mm-svg" width="1080" height="1920" viewBox="0 0 1080 1920"><line id="mm-l0" class="mm-line" x1="540" y1="770" x2="540" y2="470" pathLength="1" /><line id="mm-l1" class="mm-line" x1="540" y1="770" x2="780" y2="558" pathLength="1" /><line id="mm-l2" class="mm-line" x1="540" y1="770" x2="880" y2="770" pathLength="1" /><line id="mm-l3" class="mm-line" x1="540" y1="770" x2="780" y2="982" pathLength="1" /><line id="mm-l4" class="mm-line" x1="540" y1="770" x2="540" y2="1070" pathLength="1" /><line id="mm-l5" class="mm-line" x1="540" y1="770" x2="300" y2="982" pathLength="1" /><line id="mm-l6" class="mm-line" x1="540" y1="770" x2="200" y2="770" pathLength="1" /><line id="mm-l7" class="mm-line" x1="540" y1="770" x2="300" y2="558" pathLength="1" /></svg><div class="mm-center-wrap" style="left:400px;top:630px"><div id="mm-c" class="mm-center"><span class="mm-small">1 direction</span><span>Healthcare</span></div></div><div class="mm-node-wrap" style="left:390px;top:430px"><div id="mm-n0" class="mm-node">Doctor</div></div><div class="mm-node-wrap" style="left:630px;top:518px"><div id="mm-n1" class="mm-node">Surgeon</div></div><div class="mm-node-wrap" style="left:730px;top:730px"><div id="mm-n2" class="mm-node">Psychologist</div></div><div class="mm-node-wrap" style="left:630px;top:942px"><div id="mm-n3" class="mm-node">Researcher</div></div><div class="mm-node-wrap" style="left:390px;top:1030px"><div id="mm-n4" class="mm-node">Public Health</div></div><div class="mm-node-wrap" style="left:150px;top:942px"><div id="mm-n5" class="mm-node">Biotech</div></div><div class="mm-node-wrap" style="left:50px;top:730px"><div id="mm-n6" class="mm-node">Pharmacist</div></div><div class="mm-node-wrap" style="left:150px;top:518px"><div id="mm-n7" class="mm-node">Nutritionist</div></div><div class="hl-wrap" style=""><div id="s07-hl" class="hl"><span class="hl-text">1 direction = <b class="hot">many possibilities</b></span></div></div></section><section id="s08" class="clip scene " data-start="19.380" data-duration="4.920" data-track-index="1"><div id="s08-kb" class="kb"><img src="assets/img/parent-talk.jpg" alt="" /></div><div class="vignette"></div><div class="hl-wrap" style=""><div id="s08-hl" class="hl"><span class="hl-text">Sirf <b>“kya banna hai”</b> nahi…</span></div></div></section><section id="s09" class="clip scene " data-start="24.300" data-duration="4.450" data-track-index="1"><div id="s09-kb" class="kb"><img src="assets/img/parent-talk.jpg" alt="" /></div><div class="vignette"></div><div class="hl-wrap" style=""><div id="s09-hl" class="hl"><span class="hl-text">Which paths deserve your attention <span class="mark-wrap"><span id="s09-mark" class="mark"></span><b>FIRST?</b></span></span></div></div></section><section id="s10" class="clip scene " data-start="28.750" data-duration="3.610" data-track-index="1"><div id="s10-kb" class="kb"><div class="screen" style="transform:matrix3d(0.40686322,-0.02979487,0.00000000,-0.00015947,-0.15823491,0.61529439,0.00000000,0.00000110,0.00000000,0.00000000,1.00000000,0.00000000,758.76978797,710.13758673,0.00000000,1.00000000)"><div class="screen-in"><div id="scr-logo" class="scr-logo">Success<br />Mappers</div><div id="scr-sub" class="scr-sub">Career Scan</div><div id="scr-bar" class="scr-bar"><div id="scr-fill" class="scr-fill"></div></div></div></div><img class="keyed" src="assets/img/phone-keyed.png" alt="" /></div><div class="vignette"></div><div class="brand-chip-wrap"><div id="s10-chip" class="brand-chip">Success Mappers</div></div></section><section id="s11" class="clip scene " data-start="32.360" data-duration="7.510" data-track-index="1"><img class="bgfill" src="assets/img/phone-blur.jpg" alt="" /><div class="shade indigo"></div><div class="stack"><div id="s11-title" class="stack-title">Kya-kya consider karta hai?</div><div class="pill-wrap"><div id="f-personality" class="pill"><span class="pill-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/><path d="M19 3l.8 1.7L21.5 5.5l-1.7.8L19 8l-.8-1.7L16.5 5.5l1.7-.8z"/></svg></span><span class="pill-tx">Personality</span></div></div><div class="pill-wrap"><div id="f-interests" class="pill"><span class="pill-ic"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.3-9.2C1.4 8.4 3.6 5 7 5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.6 3.4 4.3 6.8C19.5 16.4 12 21 12 21z"/></svg></span><span class="pill-tx">Interests</span></div></div><div class="pill-wrap"><div id="f-aptitude" class="pill"><span class="pill-ic"><svg viewBox="0 0 24 24"><path d="M9.5 3A3 3 0 0 0 6.5 6 3 3 0 0 0 4 9.2a3.2 3.2 0 0 0 .6 5.3A3 3 0 0 0 8 19a2.5 2.5 0 0 0 4 1V5a2.5 2.5 0 0 0-2.5-2z"/><path d="M14.5 3A3 3 0 0 1 17.5 6 3 3 0 0 1 20 9.2a3.2 3.2 0 0 1-.6 5.3A3 3 0 0 1 16 19a2.5 2.5 0 0 1-4 1"/></svg></span><span class="pill-tx">Aptitude</span></div></div><div class="pill-wrap"><div id="f-skills" class="pill"><span class="pill-ic"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></span><span class="pill-tx">Skills confidence</span></div></div><div class="pill-wrap"><div id="f-values" class="pill"><span class="pill-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></span><span class="pill-tx">Work values</span></div></div></div></section><section id="s12" class="clip scene " data-start="39.870" data-duration="4.570" data-track-index="1"><div class="cream"></div><div class="stack-title dark top">Career directions + <b class="hot">priorities</b></div><div class="pcards"><div id="pc0" class="pcard" style="top:0px"><span class="pbadge">1</span><span class="pcol"><span class="ptitle">Explore first</span><span class="pbar" style="width:420px"></span><span class="pbar thin" style="width:300px"></span></span></div><div id="pc1" class="pcard" style="top:170px"><span class="pbadge">2</span><span class="pcol"><span class="ptitle">Explore next</span><span class="pbar" style="width:380px"></span><span class="pbar thin" style="width:260px"></span></span></div><div id="pc2" class="pcard" style="top:340px"><span class="pbadge">3</span><span class="pcol"><span class="ptitle">Keep in view</span><span class="pbar" style="width:340px"></span><span class="pbar thin" style="width:220px"></span></span></div></div></section><section id="s13" class="clip scene " data-start="44.440" data-duration="2.670" data-track-index="1"><div class="cream"></div><div class="list-stage"><div id="lcard" class="lcard"><div class="ltitle">Options ki list</div><div class="lrow"><span class="ldot"></span><span class="lbar" style="width:520px"></span></div><div class="lrow"><span class="ldot"></span><span class="lbar" style="width:440px"></span></div><div class="lrow"><span class="ldot"></span><span class="lbar" style="width:560px"></span></div><div class="lrow"><span class="ldot"></span><span class="lbar" style="width:380px"></span></div><div class="lrow"><span class="ldot"></span><span class="lbar" style="width:480px"></span></div><div id="lstrike" class="lstrike"></div><div id="lx" class="lx">✕</div></div></div></section><section id="s14" class="clip scene " data-start="47.110" data-duration="4.860" data-track-index="1"><div class="indigo-bg"></div><svg class="road-svg" width="1080" height="1920" viewBox="0 0 1080 1920"><path id="road" class="road" d="M 170 1080 C 170 900, 520 960, 560 820 S 280 640, 420 540 S 860 520, 880 380" pathLength="1" /><path id="road-dash" class="road-dash" d="M 170 1080 C 170 900, 520 960, 560 820 S 280 640, 420 540 S 860 520, 880 380" pathLength="1" /></svg><div class="mile-wrap" style="left:326px;top:914px"><div id="mile0" class="mile"><span class="mdot"></span><span class="mlabel">Explore</span></div></div><div class="mile-wrap" style="left:441px;top:650px"><div id="mile1" class="mile"><span class="mdot"></span><span class="mlabel">Shortlist</span></div></div><div class="mile-wrap" style="left:594px;top:461px"><div id="mile2" class="mile"><span class="mdot"></span><span class="mlabel">Next steps</span></div></div><div id="flag" class="flag">⚑</div><div class="road-title-wrap"><div id="road-title" class="road-title">Roadmap <span id="road-tick" class="tick">✓</span></div></div></section><section id="s15" class="clip scene " data-start="51.970" data-duration="2.020" data-track-index="1"><div id="s15-kb" class="kb"><img src="assets/img/parent-talk.jpg" alt="" /></div><div class="vignette"></div><div class="hl-wrap" style=""><div id="s15-hl" class="hl"><span class="hl-text">Student ho <b>ya parent?</b></span></div></div></section><section id="s16" class="clip scene " data-start="53.990" data-duration="3.000" data-track-index="1"><div class="indigo-bg"></div><div class="cta-stage"><div id="cta-brand" class="cta-brand">Success Mappers</div><div class="timer"><svg viewBox="0 0 200 200" width="360" height="360"><circle class="ring-bg" cx="100" cy="100" r="86"/><circle id="ring" class="ring" cx="100" cy="100" r="86" pathLength="1"/></svg><div class="timer-tx"><span class="big">2:00</span><span class="min">minutes</span></div></div><div id="cta-free" class="cta-free"><b class="hot">FREE</b> 2-min Career Scan</div></div></section><section id="s17" class="clip scene " data-start="56.990" data-duration="5.610" data-track-index="1"><div class="cream"></div><div class="end-stage"><div id="end1" class="end-line">Choosing a career is <b>important.</b></div><div id="end2" class="end-line">Understanding your <b class="hot">options</b> matters too.</div><div id="end-brand" class="end-brand">Success Mappers</div><div id="end-btn" class="end-btn">Take the FREE 2-min scan</div><div id="end-tap" class="end-tap">Tap Learn More</div></div></section>
+      <div id="crumb-layer" class="clip" data-start="7.250" data-duration="5.090" data-track-index="2"><div class="crumbs-wrap"><div id="crumbs" class="crumbs"><span id="cr1" class="crumb">STREAM</span><span id="ca1" class="arrow">→</span><span id="cr2" class="crumb">DEGREE</span><span id="ca2" class="arrow">→</span><span id="cr3" class="crumb">JOB TITLE</span><div id="crumb-box" class="crumb-box"></div></div></div></div>
+      <div id="cap0" class="clip cap" data-start="0.110" data-duration="0.861" data-track-index="4"><div id="capi0" class="cap-in"><span id="w0_0" class="cw">Tumhe</span> <span id="w0_1" class="cw">pata</span> <span id="w0_2" class="cw">hai</span></div></div><div id="cap1" class="clip cap" data-start="0.971" data-duration="0.913" data-track-index="4"><div id="capi1" class="cap-in"><span id="w1_0" class="cw">tumhe</span> <span id="w1_1" class="cw">kya</span> <span id="w1_2" class="cw">banna</span></div></div><div id="cap2" class="clip cap" data-start="1.884" data-duration="0.726" data-track-index="4"><div id="capi2" class="cap-in"><span id="w2_0" class="cw">hai...</span></div></div><div id="cap3" class="clip cap" data-start="2.610" data-duration="0.780" data-track-index="4"><div id="capi3" class="cap-in"><span id="w3_0" class="cw">but</span></div></div><div id="cap4" class="clip cap" data-start="3.390" data-duration="0.783" data-track-index="4"><div id="capi4" class="cap-in"><span id="w4_0" class="cw">kya</span> <span id="w4_1" class="cw">tumhe</span> <span id="w4_2" class="cw">pata</span></div></div><div id="cap5" class="clip cap" data-start="4.173" data-duration="0.876" data-track-index="4"><div id="capi5" class="cap-in"><span id="w5_0" class="cw">hai</span> <span id="w5_1" class="cw">tumhare</span> <span id="w5_2" class="cw">liye</span></div></div><div id="cap6" class="clip cap" data-start="5.049" data-duration="1.016" data-track-index="4"><div id="capi6" class="cap-in"><span id="w6_0" class="cw">best</span> <span id="w6_1" class="cw">career</span> <span id="w6_2" class="cw">options</span></div></div><div id="cap7" class="clip cap" data-start="6.065" data-duration="1.185" data-track-index="4"><div id="capi7" class="cap-in"><span id="w7_0" class="cw">kaun-se</span> <span id="w7_1" class="cw">hain?</span></div></div><div id="cap8" class="clip cap" data-start="7.250" data-duration="0.892" data-track-index="4"><div id="capi8" class="cap-in"><span id="w8_0" class="cw">Hum</span> <span id="w8_1" class="cw">career</span> <span id="w8_2" class="cw">ko</span></div></div><div id="cap9" class="clip cap" data-start="8.142" data-duration="1.004" data-track-index="4"><div id="capi9" class="cap-in"><span id="w9_0" class="cw">aksar</span> <span id="w9_1" class="cw">ek</span> <span id="w9_2" class="cw">stream,</span></div></div><div id="cap10" class="clip cap" data-start="9.146" data-duration="0.835" data-track-index="4"><div id="capi10" class="cap-in"><span id="w10_0" class="cw">ek</span> <span id="w10_1" class="cw">degree</span> <span id="w10_2" class="cw">ya</span></div></div><div id="cap11" class="clip cap" data-start="9.981" data-duration="0.835" data-track-index="4"><div id="capi11" class="cap-in"><span id="w11_0" class="cw">ek</span> <span id="w11_1" class="cw">job</span> <span id="w11_2" class="cw">title</span></div></div><div id="cap12" class="clip cap" data-start="10.816" data-duration="0.892" data-track-index="4"><div id="capi12" class="cap-in"><span id="w12_0" class="cw">tak</span> <span id="w12_1" class="cw">limit</span> <span id="w12_2" class="cw">kar</span></div></div><div id="cap13" class="clip cap" data-start="11.708" data-duration="1.092" data-track-index="4"><div id="capi13" class="cap-in"><span id="w13_0" class="cw">dete</span> <span id="w13_1" class="cw">hain.</span></div></div><div id="cap14" class="clip cap" data-start="12.800" data-duration="0.690" data-track-index="4"><div id="capi14" class="cap-in"><span id="w14_0" class="cw">But</span></div></div><div id="cap15" class="clip cap" data-start="13.490" data-duration="0.879" data-track-index="4"><div id="capi15" class="cap-in"><span id="w15_0" class="cw">ek</span> <span id="w15_1" class="cw">hi</span> <span id="w15_2" class="cw">direction</span></div></div><div id="cap16" class="clip cap" data-start="14.369" data-duration="0.830" data-track-index="4"><div id="capi16" class="cap-in"><span id="w16_0" class="cw">ke</span> <span id="w16_1" class="cw">andar</span> <span id="w16_2" class="cw">kitne</span></div></div><div id="cap17" class="clip cap" data-start="15.199" data-duration="1.048" data-track-index="4"><div id="capi17" class="cap-in"><span id="w17_0" class="cw">saare</span> <span id="w17_1" class="cw">possibilities</span></div></div><div id="cap18" class="clip cap" data-start="16.247" data-duration="1.053" data-track-index="4"><div id="capi18" class="cap-in"><span id="w18_0" class="cw">hoti</span> <span id="w18_1" class="cw">hain,</span></div></div><div id="cap19" class="clip cap" data-start="17.300" data-duration="0.664" data-track-index="4"><div id="capi19" class="cap-in"><span id="w19_0" class="cw">hum</span> <span id="w19_1" class="cw">unke</span> <span id="w19_2" class="cw">baare</span></div></div><div id="cap20" class="clip cap" data-start="17.964" data-duration="0.705" data-track-index="4"><div id="capi20" class="cap-in"><span id="w20_0" class="cw">mein</span> <span id="w20_1" class="cw">sochte</span> <span id="w20_2" class="cw">bhi</span></div></div><div id="cap21" class="clip cap" data-start="18.669" data-duration="0.711" data-track-index="4"><div id="capi21" class="cap-in"><span id="w21_0" class="cw">nahi.</span></div></div><div id="cap22" class="clip cap" data-start="19.380" data-duration="0.801" data-track-index="4"><div id="capi22" class="cap-in"><span id="w22_0" class="cw">Because</span> <span id="w22_1" class="cw">career</span></div></div><div id="cap23" class="clip cap" data-start="20.181" data-duration="0.979" data-track-index="4"><div id="capi23" class="cap-in"><span id="w23_0" class="cw">choose</span> <span id="w23_1" class="cw">karna</span> <span id="w23_2" class="cw">sirf</span></div></div><div id="cap24" class="clip cap" data-start="21.160" data-duration="0.880" data-track-index="4"><div id="capi24" class="cap-in"><span id="w24_0" class="cw">ye</span> <span id="w24_1" class="cw">decide</span> <span id="w24_2" class="cw">karna</span></div></div><div id="cap25" class="clip cap" data-start="22.040" data-duration="0.682" data-track-index="4"><div id="capi25" class="cap-in"><span id="w25_0" class="cw">nahi</span> <span id="w25_1" class="cw">hai</span> <span id="w25_2" class="cw">ki</span></div></div><div id="cap26" class="clip cap" data-start="22.722" data-duration="0.881" data-track-index="4"><div id="capi26" class="cap-in"><span id="w26_0" class="cw">tumhe</span> <span id="w26_1" class="cw">kya</span> <span id="w26_2" class="cw">banna</span></div></div><div id="cap27" class="clip cap" data-start="23.603" data-duration="0.697" data-track-index="4"><div id="capi27" class="cap-in"><span id="w27_0" class="cw">hai.</span></div></div><div id="cap28" class="clip cap" data-start="24.300" data-duration="0.814" data-track-index="4"><div id="capi28" class="cap-in"><span id="w28_0" class="cw">It&#x27;s</span> <span id="w28_1" class="cw">also</span> <span id="w28_2" class="cw">about</span></div></div><div id="cap29" class="clip cap" data-start="25.114" data-duration="1.027" data-track-index="4"><div id="capi29" class="cap-in"><span id="w29_0" class="cw">understanding</span> <span id="w29_1" class="cw">which</span></div></div><div id="cap30" class="clip cap" data-start="26.141" data-duration="1.104" data-track-index="4"><div id="capi30" class="cap-in"><span id="w30_0" class="cw">career</span> <span id="w30_1" class="cw">paths</span> <span id="w30_2" class="cw">deserve</span></div></div><div id="cap31" class="clip cap" data-start="27.245" data-duration="0.785" data-track-index="4"><div id="capi31" class="cap-in"><span id="w31_0" class="cw">your</span> <span id="w31_1" class="cw">attention</span></div></div><div id="cap32" class="clip cap" data-start="28.030" data-duration="0.720" data-track-index="4"><div id="capi32" class="cap-in"><span id="w32_0" class="cw">first.</span></div></div><div id="cap33" class="clip cap" data-start="28.750" data-duration="0.840" data-track-index="4"><div id="capi33" class="cap-in"><span id="w33_0" class="cw">Yahi</span> <span id="w33_1" class="cw">wajah</span> <span id="w33_2" class="cw">hai</span></div></div><div id="cap34" class="clip cap" data-start="29.590" data-duration="1.040" data-track-index="4"><div id="capi34" class="cap-in"><span id="w34_0" class="cw">ki</span> <span id="w34_1" class="cw">Success</span> <span id="w34_2" class="cw">Mappers</span></div></div><div id="cap35" class="clip cap" data-start="30.630" data-duration="0.610" data-track-index="4"><div id="capi35" class="cap-in"><span id="w35_0" class="cw">ka</span> <span id="w35_1" class="cw">concept</span></div></div><div id="cap36" class="clip cap" data-start="31.240" data-duration="1.300" data-track-index="4"><div id="capi36" class="cap-in"><span id="w36_0" class="cw">interesting</span> <span id="w36_1" class="cw">hai.</span></div></div><div id="cap37" class="clip cap" data-start="32.540" data-duration="0.220" data-track-index="4"><div id="capi37" class="cap-in"><span id="w37_0" class="cw">Ye</span></div></div><div id="cap38" class="clip cap" data-start="32.760" data-duration="0.970" data-track-index="4"><div id="capi38" class="cap-in"><span id="w38_0" class="cw">personality,</span></div></div><div id="cap39" class="clip cap" data-start="33.730" data-duration="0.830" data-track-index="4"><div id="capi39" class="cap-in"><span id="w39_0" class="cw">interests,</span></div></div><div id="cap40" class="clip cap" data-start="34.560" data-duration="0.780" data-track-index="4"><div id="capi40" class="cap-in"><span id="w40_0" class="cw">aptitude,</span></div></div><div id="cap41" class="clip cap" data-start="35.340" data-duration="0.810" data-track-index="4"><div id="capi41" class="cap-in"><span id="w41_0" class="cw">skills</span> <span id="w41_1" class="cw">confidence</span></div></div><div id="cap42" class="clip cap" data-start="36.150" data-duration="0.720" data-track-index="4"><div id="capi42" class="cap-in"><span id="w42_0" class="cw">aur</span></div></div><div id="cap43" class="clip cap" data-start="36.870" data-duration="1.101" data-track-index="4"><div id="capi43" class="cap-in"><span id="w43_0" class="cw">work</span> <span id="w43_1" class="cw">values</span> <span id="w43_2" class="cw">jaise</span></div></div><div id="cap44" class="clip cap" data-start="37.971" data-duration="1.212" data-track-index="4"><div id="capi44" class="cap-in"><span id="w44_0" class="cw">aspects</span> <span id="w44_1" class="cw">ko</span> <span id="w44_2" class="cw">consider</span></div></div><div id="cap45" class="clip cap" data-start="39.183" data-duration="0.687" data-track-index="4"><div id="capi45" class="cap-in"><span id="w45_0" class="cw">karke</span></div></div><div id="cap46" class="clip cap" data-start="39.870" data-duration="0.789" data-track-index="4"><div id="capi46" class="cap-in"><span id="w46_0" class="cw">tumhe</span> <span id="w46_1" class="cw">different</span></div></div><div id="cap47" class="clip cap" data-start="40.659" data-duration="0.882" data-track-index="4"><div id="capi47" class="cap-in"><span id="w47_0" class="cw">career</span> <span id="w47_1" class="cw">directions</span></div></div><div id="cap48" class="clip cap" data-start="41.541" data-duration="1.000" data-track-index="4"><div id="capi48" class="cap-in"><span id="w48_0" class="cw">aur</span> <span id="w48_1" class="cw">unki</span> <span id="w48_2" class="cw">priorities</span></div></div><div id="cap49" class="clip cap" data-start="42.541" data-duration="0.955" data-track-index="4"><div id="capi49" class="cap-in"><span id="w49_0" class="cw">samajhne</span> <span id="w49_1" class="cw">mein</span> <span id="w49_2" class="cw">help</span></div></div><div id="cap50" class="clip cap" data-start="43.496" data-duration="0.944" data-track-index="4"><div id="capi50" class="cap-in"><span id="w50_0" class="cw">karta</span> <span id="w50_1" class="cw">hai.</span></div></div><div id="cap51" class="clip cap" data-start="44.440" data-duration="0.956" data-track-index="4"><div id="capi51" class="cap-in"><span id="w51_0" class="cw">Taaki</span> <span id="w51_1" class="cw">tumhare</span> <span id="w51_2" class="cw">paas</span></div></div><div id="cap52" class="clip cap" data-start="45.396" data-duration="0.819" data-track-index="4"><div id="capi52" class="cap-in"><span id="w52_0" class="cw">sirf</span> <span id="w52_1" class="cw">options</span> <span id="w52_2" class="cw">ki</span></div></div><div id="cap53" class="clip cap" data-start="46.215" data-duration="0.895" data-track-index="4"><div id="capi53" class="cap-in"><span id="w53_0" class="cw">list</span> <span id="w53_1" class="cw">nahi,</span></div></div><div id="cap54" class="clip cap" data-start="47.110" data-duration="1.035" data-track-index="4"><div id="capi54" class="cap-in"><span id="w54_0" class="cw">balki</span> <span id="w54_1" class="cw">apne</span> <span id="w54_2" class="cw">career</span></div></div><div id="cap55" class="clip cap" data-start="48.145" data-duration="0.982" data-track-index="4"><div id="capi55" class="cap-in"><span id="w55_0" class="cw">ko</span> <span id="w55_1" class="cw">explore</span> <span id="w55_2" class="cw">karne</span></div></div><div id="cap56" class="clip cap" data-start="49.127" data-duration="0.878" data-track-index="4"><div id="capi56" class="cap-in"><span id="w56_0" class="cw">aur</span> <span id="w56_1" class="cw">next</span> <span id="w56_2" class="cw">steps</span></div></div><div id="cap57" class="clip cap" data-start="50.005" data-duration="0.878" data-track-index="4"><div id="capi57" class="cap-in"><span id="w57_0" class="cw">samajhne</span> <span id="w57_1" class="cw">ka</span> <span id="w57_2" class="cw">ek</span></div></div><div id="cap58" class="clip cap" data-start="50.883" data-duration="1.087" data-track-index="4"><div id="capi58" class="cap-in"><span id="w58_0" class="cw">roadmap</span> <span id="w58_1" class="cw">ho.</span></div></div><div id="cap59" class="clip cap" data-start="51.970" data-duration="0.985" data-track-index="4"><div id="capi59" class="cap-in"><span id="w59_0" class="cw">Agar</span> <span id="w59_1" class="cw">tum</span> <span id="w59_2" class="cw">student</span></div></div><div id="cap60" class="clip cap" data-start="52.955" data-duration="1.035" data-track-index="4"><div id="capi60" class="cap-in"><span id="w60_0" class="cw">ho</span> <span id="w60_1" class="cw">ya</span> <span id="w60_2" class="cw">parent,</span></div></div><div id="cap61" class="clip cap" data-start="53.990" data-duration="1.077" data-track-index="4"><div id="capi61" class="cap-in"><span id="w61_0" class="cw">Success</span> <span id="w61_1" class="cw">Mappers</span> <span id="w61_2" class="cw">ka</span></div></div><div id="cap62" class="clip cap" data-start="55.067" data-duration="1.025" data-track-index="4"><div id="capi62" class="cap-in"><span id="w62_0" class="cw">2-minute</span> <span id="w62_1" class="cw">free</span> <span id="w62_2" class="cw">scan</span></div></div><div id="cap63" class="clip cap" data-start="56.092" data-duration="0.878" data-track-index="4"><div id="capi63" class="cap-in"><span id="w63_0" class="cw">try</span> <span id="w63_1" class="cw">karo.</span></div></div>
+      <audio id="vo" src="voiceover.mp3" data-start="0" data-duration="61.65" data-track-index="5" data-volume="1"></audio>
+      <audio id="music" src="assets/audio/music.wav" data-start="0" data-duration="62.6" data-track-index="6" data-volume="0.6"></audio>
+      <audio id="sfx" src="assets/audio/sfx.wav" data-start="0" data-duration="62.6" data-track-index="7" data-volume="1"></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#s01-kb",{scale:1.0,x:0,y:0,transformOrigin:"600px 700px"},{scale:1.1,x:0,y:0,duration:2.610,ease:"none"},0.000);
+      tl.fromTo("#s01-hl",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},0.120);
+      tl.fromTo("#s02-kb",{scale:1.32,x:20,y:0,transformOrigin:"600px 720px"},{scale:1.42,x:-10,y:0,duration:4.640,ease:"none"},2.610);
+      tl.fromTo("#s02-hl",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},3.390);
+      tl.fromTo("#s02-hl .hot",{color:"#1f2937"},{color:"#d9480f",duration:0.2},5.049);
+      tl.fromTo("#s02-q0",{scale:0,opacity:0,y:20,rotation:-25},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},4.300);
+      tl.fromTo("#s02-q1",{scale:0,opacity:0,y:20,rotation:-25},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},4.900);
+      tl.fromTo("#s02-q2",{scale:0,opacity:0,y:20,rotation:-25},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},5.500);
+      tl.fromTo("#s03-card",{scale:0.9,opacity:0,y:40},{scale:1,opacity:1,y:0,duration:0.35,ease:"power3.out"},7.250);
+      tl.to("#s03-card",{scale:1.06,duration:1.629,ease:"none"},7.600);
+      tl.fromTo("#s03-lab",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},7.370);
+      tl.fromTo("#s04-card",{scale:0.9,opacity:0,y:40},{scale:1,opacity:1,y:0,duration:0.35,ease:"power3.out"},9.229);
+      tl.to("#s04-card",{scale:1.06,duration:0.485,ease:"none"},9.579);
+      tl.fromTo("#s04-lab",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},9.349);
+      tl.fromTo("#s05-card",{scale:0.9,opacity:0,y:40},{scale:1,opacity:1,y:0,duration:0.35,ease:"power3.out"},10.064);
+      tl.to("#s05-card",{scale:1.06,duration:1.926,ease:"none"},10.414);
+      tl.fromTo("#s05-lab",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},10.184);
+      tl.fromTo("#cr1",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.35,ease:"back.out(2)"},7.300);
+      tl.fromTo("#ca1",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.3,ease:"back.out(2)"},9.279);
+      tl.fromTo("#cr2",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.35,ease:"back.out(2)"},9.329);
+      tl.fromTo("#ca2",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.3,ease:"back.out(2)"},10.114);
+      tl.fromTo("#cr3",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.35,ease:"back.out(2)"},10.164);
+      tl.fromTo("#crumb-box",{opacity:0,scale:1.15},{opacity:1,scale:1,duration:0.35,ease:"power2.out"},11.076);
+      tl.fromTo("#s06-kb",{scale:1.0,x:0,y:0,transformOrigin:"800px 820px"},{scale:1.14,x:0,y:0,duration:2.433,ease:"none"},12.340);
+      tl.fromTo("#s06-hl",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},12.850);
+      tl.fromTo("#s07-hl",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},14.873);
+      tl.fromTo("#mm-c",{scale:0,opacity:0,y:0},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},14.923);
+      tl.fromTo("#mm-l0",{strokeDashoffset:1},{strokeDashoffset:0,duration:0.3,ease:"power2.out"},15.323);
+      tl.fromTo("#mm-n0",{scale:0.3,opacity:0,y:0},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},15.503);
+      tl.fromTo("#mm-l1",{strokeDashoffset:1},{strokeDashoffset:0,duration:0.3,ease:"power2.out"},15.743);
+      tl.fromTo("#mm-n1",{scale:0.3,opacity:0,y:0},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},15.923);
+      tl.fromTo("#mm-l2",{strokeDashoffset:1},{strokeDashoffset:0,duration:0.3,ease:"power2.out"},16.163);
+      tl.fromTo("#mm-n2",{scale:0.3,opacity:0,y:0},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},16.343);
+      tl.fromTo("#mm-l3",{strokeDashoffset:1},{strokeDashoffset:0,duration:0.3,ease:"power2.out"},16.583);
+      tl.fromTo("#mm-n3",{scale:0.3,opacity:0,y:0},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},16.763);
+      tl.fromTo("#mm-l4",{strokeDashoffset:1},{strokeDashoffset:0,duration:0.3,ease:"power2.out"},17.003);
+      tl.fromTo("#mm-n4",{scale:0.3,opacity:0,y:0},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},17.183);
+      tl.fromTo("#mm-l5",{strokeDashoffset:1},{strokeDashoffset:0,duration:0.3,ease:"power2.out"},17.423);
+      tl.fromTo("#mm-n5",{scale:0.3,opacity:0,y:0},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},17.603);
+      tl.fromTo("#mm-l6",{strokeDashoffset:1},{strokeDashoffset:0,duration:0.3,ease:"power2.out"},17.843);
+      tl.fromTo("#mm-n6",{scale:0.3,opacity:0,y:0},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},18.023);
+      tl.fromTo("#mm-l7",{strokeDashoffset:1},{strokeDashoffset:0,duration:0.3,ease:"power2.out"},18.263);
+      tl.fromTo("#mm-n7",{scale:0.3,opacity:0,y:0},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},18.443);
+      tl.fromTo("#s08-kb",{scale:1.04,transformOrigin:"540px 760px"},{scale:1.1,duration:2.52,ease:"none"},19.38);
+      tl.to("#s08-kb",{scale:1.3,duration:0.25,ease:"power2.out"},21.9);
+      tl.to("#s08-kb",{scale:1.36,duration:2.15,ease:"none"},22.15);
+      tl.fromTo("#s08-hl",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},19.500);
+      tl.fromTo("#s09-kb",{scale:1.5,x:0,y:0,transformOrigin:"700px 640px"},{scale:1.6,x:0,y:0,duration:4.450,ease:"none"},24.300);
+      tl.fromTo("#s09-hl",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},24.420);
+      tl.fromTo("#s09-mark",{scaleX:0},{scaleX:1,duration:0.3,ease:"power2.out"},27.980);
+      tl.fromTo("#s10-kb",{scale:1.0,x:0,y:0,transformOrigin:"780px 930px"},{scale:1.28,x:0,y:0,duration:3.610,ease:"none"},28.750);
+      tl.fromTo("#scr-logo",{opacity:0,y:20},{opacity:1,y:0,duration:0.4},28.95);
+      tl.fromTo("#scr-sub",{opacity:0},{opacity:1,duration:0.4},29.3);
+      tl.fromTo("#scr-fill",{scaleX:0},{scaleX:1,duration:2.6,ease:"power1.inOut"},29.5);
+      tl.fromTo("#s10-chip",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},29.770);
+      tl.fromTo("#s11-title",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},32.410);
+      tl.fromTo("#f-personality",{scale:0.7,opacity:0,x:-80},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},32.710);
+      tl.fromTo("#f-interests",{scale:0.7,opacity:0,x:-80},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},33.680);
+      tl.fromTo("#f-aptitude",{scale:0.7,opacity:0,x:-80},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},34.510);
+      tl.fromTo("#f-skills",{scale:0.7,opacity:0,x:-80},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},35.290);
+      tl.fromTo("#f-values",{scale:0.7,opacity:0,x:-80},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},36.820);
+      tl.to(".pill",{scale:1.04,duration:0.18,yoyo:true,repeat:1,stagger:0.08},38.200);
+      tl.fromTo("#pc0",{opacity:0,x:-60,y:340},{opacity:1,x:0,y:340,duration:0.35,ease:"power2.out"},39.950);
+      tl.to("#pc0",{y:0,duration:0.5,ease:"power3.inOut"},42.009);
+      tl.fromTo("#pc1",{opacity:0,x:-60,y:-170},{opacity:1,x:0,y:-170,duration:0.35,ease:"power2.out"},40.200);
+      tl.to("#pc1",{y:0,duration:0.5,ease:"power3.inOut"},42.009);
+      tl.fromTo("#pc2",{opacity:0,x:-60,y:-170},{opacity:1,x:0,y:-170,duration:0.35,ease:"power2.out"},40.450);
+      tl.to("#pc2",{y:0,duration:0.5,ease:"power3.inOut"},42.009);
+      tl.fromTo("#lcard",{scale:0.85,opacity:0,y:40},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},44.500);
+      tl.fromTo("#lstrike",{scaleX:0},{scaleX:1,duration:0.3,ease:"power2.in"},46.422);
+      tl.fromTo("#lx",{scale:2,opacity:0,y:0},{scale:1,opacity:1,y:0,x:0,duration:0.35,ease:"power3.out"},46.722);
+      tl.fromTo("#road",{strokeDashoffset:1},{strokeDashoffset:0,duration:3.2,ease:"power1.inOut"},47.25);
+      tl.fromTo("#road-dash",{opacity:0},{opacity:1,duration:0.6},47.6);
+      tl.fromTo("#mile0",{scale:0,opacity:0,y:0},{scale:1,opacity:1,y:0,x:0,duration:0.35,ease:"back.out(2)"},47.826);
+      tl.fromTo("#mile1",{scale:0,opacity:0,y:0},{scale:1,opacity:1,y:0,x:0,duration:0.35,ease:"back.out(2)"},48.850);
+      tl.fromTo("#mile2",{scale:0,opacity:0,y:0},{scale:1,opacity:1,y:0,x:0,duration:0.35,ease:"back.out(2)"},49.746);
+      tl.fromTo("#flag",{scale:0,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},50.400);
+      tl.fromTo("#road-title",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},50.633);
+      tl.fromTo("#road-tick",{scale:0,opacity:0,y:0},{scale:1,opacity:1,y:0,x:0,duration:0.35,ease:"back.out(2)"},51.033);
+      tl.fromTo("#s15-kb",{scale:1.0,x:0,y:0,transformOrigin:"540px 760px"},{scale:1.08,x:0,y:0,duration:2.020,ease:"none"},51.970);
+      tl.fromTo("#s15-hl",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},52.050);
+      tl.fromTo("#cta-brand",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},54.050);
+      tl.fromTo("#ring",{strokeDashoffset:1},{strokeDashoffset:0,duration:2.6,ease:"none"},54.2);
+      tl.fromTo("#cta-free",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},55.067);
+      tl.fromTo("#end1",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},57.050);
+      tl.fromTo("#end2",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},59.400);
+      tl.fromTo("#end-brand",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},60.200);
+      tl.fromTo("#end-btn",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.45,ease:"back.out(2)"},60.600);
+      tl.fromTo("#end-tap",{scale:0.6,opacity:0,y:30},{scale:1,opacity:1,y:0,x:0,duration:0.4,ease:"back.out(2)"},61.000);
+      tl.to("#end-btn",{scale:1.06,duration:0.35,yoyo:true,repeat:1,ease:"sine.inOut"},61.5);
+      tl.fromTo("#s02 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},2.610);
+      tl.fromTo("#s03 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},7.250);
+      tl.fromTo("#s04 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},9.229);
+      tl.fromTo("#s05 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},10.064);
+      tl.fromTo("#s06 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},12.340);
+      tl.fromTo("#s07 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},14.773);
+      tl.fromTo("#s08 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},19.380);
+      tl.fromTo("#s09 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},24.300);
+      tl.fromTo("#s10 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},28.750);
+      tl.fromTo("#s11 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},32.360);
+      tl.fromTo("#s12 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},39.870);
+      tl.fromTo("#s13 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},44.440);
+      tl.fromTo("#s14 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},47.110);
+      tl.fromTo("#s15 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},51.970);
+      tl.fromTo("#s16 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},53.990);
+      tl.fromTo("#s17 > *:first-child",{opacity:0.0},{opacity:1,duration:0.18,ease:"power1.out"},56.990);
+      tl.fromTo("#w0_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},0.110);
+      tl.to("#w0_0",{color:"#ffffff",scale:1,duration:0.08},0.448);
+      tl.fromTo("#w0_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},0.448);
+      tl.to("#w0_1",{color:"#ffffff",scale:1,duration:0.08},0.736);
+      tl.fromTo("#w0_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},0.736);
+      tl.to("#w0_2",{color:"#ffffff",scale:1,duration:0.08},0.971);
+      tl.fromTo("#capi0",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},0.110);
+      tl.fromTo("#w1_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},0.971);
+      tl.to("#w1_0",{color:"#ffffff",scale:1,duration:0.08},1.310);
+      tl.fromTo("#w1_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},1.310);
+      tl.to("#w1_1",{color:"#ffffff",scale:1,duration:0.08},1.546);
+      tl.fromTo("#w1_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},1.546);
+      tl.to("#w1_2",{color:"#ffffff",scale:1,duration:0.08},1.884);
+      tl.fromTo("#capi1",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},0.971);
+      tl.fromTo("#w2_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},1.884);
+      tl.to("#w2_0",{color:"#ffffff",scale:1,duration:0.08},2.120);
+      tl.fromTo("#capi2",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},1.884);
+      tl.fromTo("#w3_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},2.610);
+      tl.to("#w3_0",{color:"#ffffff",scale:1,duration:0.08},3.120);
+      tl.fromTo("#capi3",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},2.610);
+      tl.fromTo("#w4_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},3.390);
+      tl.to("#w4_0",{color:"#ffffff",scale:1,duration:0.08},3.604);
+      tl.fromTo("#w4_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},3.604);
+      tl.to("#w4_1",{color:"#ffffff",scale:1,duration:0.08},3.912);
+      tl.fromTo("#w4_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},3.912);
+      tl.to("#w4_2",{color:"#ffffff",scale:1,duration:0.08},4.173);
+      tl.fromTo("#capi4",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},3.390);
+      tl.fromTo("#w5_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},4.173);
+      tl.to("#w5_0",{color:"#ffffff",scale:1,duration:0.08},4.387);
+      tl.fromTo("#w5_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},4.387);
+      tl.to("#w5_1",{color:"#ffffff",scale:1,duration:0.08},4.788);
+      tl.fromTo("#w5_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},4.788);
+      tl.to("#w5_2",{color:"#ffffff",scale:1,duration:0.08},5.049);
+      tl.fromTo("#capi5",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},4.173);
+      tl.fromTo("#w6_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},5.049);
+      tl.to("#w6_0",{color:"#ffffff",scale:1,duration:0.08},5.310);
+      tl.fromTo("#w6_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},5.310);
+      tl.to("#w6_1",{color:"#ffffff",scale:1,duration:0.08},5.664);
+      tl.fromTo("#w6_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},5.664);
+      tl.to("#w6_2",{color:"#ffffff",scale:1,duration:0.08},6.065);
+      tl.fromTo("#capi6",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},5.049);
+      tl.fromTo("#w7_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},6.065);
+      tl.to("#w7_0",{color:"#ffffff",scale:1,duration:0.08},6.419);
+      tl.fromTo("#w7_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},6.419);
+      tl.to("#w7_1",{color:"#ffffff",scale:1,duration:0.08},6.680);
+      tl.fromTo("#capi7",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},6.065);
+      tl.fromTo("#w8_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},7.250);
+      tl.to("#w8_0",{color:"#ffffff",scale:1,duration:0.08},7.510);
+      tl.fromTo("#w8_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},7.510);
+      tl.to("#w8_1",{color:"#ffffff",scale:1,duration:0.08},7.938);
+      tl.fromTo("#w8_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},7.938);
+      tl.to("#w8_2",{color:"#ffffff",scale:1,duration:0.08},8.142);
+      tl.fromTo("#capi8",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},7.250);
+      tl.fromTo("#w9_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},8.142);
+      tl.to("#w9_0",{color:"#ffffff",scale:1,duration:0.08},8.514);
+      tl.fromTo("#w9_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},8.514);
+      tl.to("#w9_1",{color:"#ffffff",scale:1,duration:0.08},8.717);
+      tl.fromTo("#w9_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},8.717);
+      tl.to("#w9_2",{color:"#ffffff",scale:1,duration:0.08},9.146);
+      tl.fromTo("#capi9",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},8.142);
+      tl.fromTo("#w10_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},9.146);
+      tl.to("#w10_0",{color:"#ffffff",scale:1,duration:0.08},9.349);
+      tl.fromTo("#w10_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},9.349);
+      tl.to("#w10_1",{color:"#ffffff",scale:1,duration:0.08},9.778);
+      tl.fromTo("#w10_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},9.778);
+      tl.to("#w10_2",{color:"#ffffff",scale:1,duration:0.08},9.981);
+      tl.fromTo("#capi10",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},9.146);
+      tl.fromTo("#w11_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},9.981);
+      tl.to("#w11_0",{color:"#ffffff",scale:1,duration:0.08},10.184);
+      tl.fromTo("#w11_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},10.184);
+      tl.to("#w11_1",{color:"#ffffff",scale:1,duration:0.08},10.444);
+      tl.fromTo("#w11_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},10.444);
+      tl.to("#w11_2",{color:"#ffffff",scale:1,duration:0.08},10.816);
+      tl.fromTo("#capi11",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},9.981);
+      tl.fromTo("#w12_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},10.816);
+      tl.to("#w12_0",{color:"#ffffff",scale:1,duration:0.08},11.076);
+      tl.fromTo("#w12_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},11.076);
+      tl.to("#w12_1",{color:"#ffffff",scale:1,duration:0.08},11.448);
+      tl.fromTo("#w12_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},11.448);
+      tl.to("#w12_2",{color:"#ffffff",scale:1,duration:0.08},11.708);
+      tl.fromTo("#capi12",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},10.816);
+      tl.fromTo("#w13_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},11.708);
+      tl.to("#w13_0",{color:"#ffffff",scale:1,duration:0.08},12.024);
+      tl.fromTo("#w13_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},12.024);
+      tl.to("#w13_1",{color:"#ffffff",scale:1,duration:0.08},12.340);
+      tl.fromTo("#capi13",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},11.708);
+      tl.fromTo("#w14_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},12.800);
+      tl.to("#w14_0",{color:"#ffffff",scale:1,duration:0.08},13.300);
+      tl.fromTo("#capi14",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},12.800);
+      tl.fromTo("#w15_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},13.490);
+      tl.to("#w15_0",{color:"#ffffff",scale:1,duration:0.08},13.668);
+      tl.fromTo("#w15_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},13.668);
+      tl.to("#w15_1",{color:"#ffffff",scale:1,duration:0.08},13.846);
+      tl.fromTo("#w15_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},13.846);
+      tl.to("#w15_2",{color:"#ffffff",scale:1,duration:0.08},14.369);
+      tl.fromTo("#capi15",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},13.490);
+      tl.fromTo("#w16_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},14.369);
+      tl.to("#w16_0",{color:"#ffffff",scale:1,duration:0.08},14.547);
+      tl.fromTo("#w16_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},14.547);
+      tl.to("#w16_1",{color:"#ffffff",scale:1,duration:0.08},14.873);
+      tl.fromTo("#w16_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},14.873);
+      tl.to("#w16_2",{color:"#ffffff",scale:1,duration:0.08},15.199);
+      tl.fromTo("#capi16",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},14.369);
+      tl.fromTo("#w17_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},15.199);
+      tl.to("#w17_0",{color:"#ffffff",scale:1,duration:0.08},15.525);
+      tl.fromTo("#w17_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},15.525);
+      tl.to("#w17_1",{color:"#ffffff",scale:1,duration:0.08},16.247);
+      tl.fromTo("#capi17",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},15.199);
+      tl.fromTo("#w18_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},16.247);
+      tl.to("#w18_0",{color:"#ffffff",scale:1,duration:0.08},16.523);
+      tl.fromTo("#w18_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},16.523);
+      tl.to("#w18_1",{color:"#ffffff",scale:1,duration:0.08},16.800);
+      tl.fromTo("#capi18",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},16.247);
+      tl.fromTo("#w19_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},17.300);
+      tl.to("#w19_0",{color:"#ffffff",scale:1,duration:0.08},17.482);
+      tl.fromTo("#w19_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},17.482);
+      tl.to("#w19_1",{color:"#ffffff",scale:1,duration:0.08},17.703);
+      tl.fromTo("#w19_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},17.703);
+      tl.to("#w19_2",{color:"#ffffff",scale:1,duration:0.08},17.964);
+      tl.fromTo("#capi19",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},17.300);
+      tl.fromTo("#w20_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},17.964);
+      tl.to("#w20_0",{color:"#ffffff",scale:1,duration:0.08},18.186);
+      tl.fromTo("#w20_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},18.186);
+      tl.to("#w20_1",{color:"#ffffff",scale:1,duration:0.08},18.487);
+      tl.fromTo("#w20_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},18.487);
+      tl.to("#w20_2",{color:"#ffffff",scale:1,duration:0.08},18.669);
+      tl.fromTo("#capi20",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},17.964);
+      tl.fromTo("#w21_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},18.669);
+      tl.to("#w21_0",{color:"#ffffff",scale:1,duration:0.08},18.890);
+      tl.fromTo("#capi21",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},18.669);
+      tl.fromTo("#w22_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},19.380);
+      tl.to("#w22_0",{color:"#ffffff",scale:1,duration:0.08},19.805);
+      tl.fromTo("#w22_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},19.805);
+      tl.to("#w22_1",{color:"#ffffff",scale:1,duration:0.08},20.181);
+      tl.fromTo("#capi22",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},19.380);
+      tl.fromTo("#w23_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},20.181);
+      tl.to("#w23_0",{color:"#ffffff",scale:1,duration:0.08},20.557);
+      tl.fromTo("#w23_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},20.557);
+      tl.to("#w23_1",{color:"#ffffff",scale:1,duration:0.08},20.883);
+      tl.fromTo("#w23_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},20.883);
+      tl.to("#w23_2",{color:"#ffffff",scale:1,duration:0.08},21.160);
+      tl.fromTo("#capi23",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},20.181);
+      tl.fromTo("#w24_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},21.160);
+      tl.to("#w24_0",{color:"#ffffff",scale:1,duration:0.08},21.338);
+      tl.fromTo("#w24_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},21.338);
+      tl.to("#w24_1",{color:"#ffffff",scale:1,duration:0.08},21.714);
+      tl.fromTo("#w24_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},21.714);
+      tl.to("#w24_2",{color:"#ffffff",scale:1,duration:0.08},22.040);
+      tl.fromTo("#capi24",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},21.160);
+      tl.fromTo("#w25_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},22.040);
+      tl.to("#w25_0",{color:"#ffffff",scale:1,duration:0.08},22.317);
+      tl.fromTo("#w25_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},22.317);
+      tl.to("#w25_1",{color:"#ffffff",scale:1,duration:0.08},22.544);
+      tl.fromTo("#w25_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},22.544);
+      tl.to("#w25_2",{color:"#ffffff",scale:1,duration:0.08},22.722);
+      tl.fromTo("#capi25",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},22.040);
+      tl.fromTo("#w26_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},22.722);
+      tl.to("#w26_0",{color:"#ffffff",scale:1,duration:0.08},23.049);
+      tl.fromTo("#w26_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},23.049);
+      tl.to("#w26_1",{color:"#ffffff",scale:1,duration:0.08},23.276);
+      tl.fromTo("#w26_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},23.276);
+      tl.to("#w26_2",{color:"#ffffff",scale:1,duration:0.08},23.603);
+      tl.fromTo("#capi26",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},22.722);
+      tl.fromTo("#w27_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},23.603);
+      tl.to("#w27_0",{color:"#ffffff",scale:1,duration:0.08},23.830);
+      tl.fromTo("#capi27",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},23.603);
+      tl.fromTo("#w28_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},24.300);
+      tl.to("#w28_0",{color:"#ffffff",scale:1,duration:0.08},24.523);
+      tl.fromTo("#w28_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},24.523);
+      tl.to("#w28_1",{color:"#ffffff",scale:1,duration:0.08},24.794);
+      tl.fromTo("#w28_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},24.794);
+      tl.to("#w28_2",{color:"#ffffff",scale:1,duration:0.08},25.114);
+      tl.fromTo("#capi28",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},24.300);
+      tl.fromTo("#w29_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},25.114);
+      tl.to("#w29_0",{color:"#ffffff",scale:1,duration:0.08},25.821);
+      tl.fromTo("#w29_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},25.821);
+      tl.to("#w29_1",{color:"#ffffff",scale:1,duration:0.08},26.141);
+      tl.fromTo("#capi29",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},25.114);
+      tl.fromTo("#w30_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},26.141);
+      tl.to("#w30_0",{color:"#ffffff",scale:1,duration:0.08},26.509);
+      tl.fromTo("#w30_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},26.509);
+      tl.to("#w30_1",{color:"#ffffff",scale:1,duration:0.08},26.829);
+      tl.fromTo("#w30_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},26.829);
+      tl.to("#w30_2",{color:"#ffffff",scale:1,duration:0.08},27.245);
+      tl.fromTo("#capi30",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},26.141);
+      tl.fromTo("#w31_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},27.245);
+      tl.to("#w31_0",{color:"#ffffff",scale:1,duration:0.08},27.517);
+      tl.fromTo("#w31_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},27.517);
+      tl.to("#w31_1",{color:"#ffffff",scale:1,duration:0.08},28.030);
+      tl.fromTo("#capi31",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},27.245);
+      tl.fromTo("#w32_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},28.030);
+      tl.to("#w32_0",{color:"#ffffff",scale:1,duration:0.08},28.350);
+      tl.fromTo("#capi32",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},28.030);
+      tl.fromTo("#w33_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},28.750);
+      tl.to("#w33_0",{color:"#ffffff",scale:1,duration:0.08},29.030);
+      tl.fromTo("#w33_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},29.030);
+      tl.to("#w33_1",{color:"#ffffff",scale:1,duration:0.08},29.360);
+      tl.fromTo("#w33_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},29.360);
+      tl.to("#w33_2",{color:"#ffffff",scale:1,duration:0.08},29.590);
+      tl.fromTo("#capi33",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},28.750);
+      tl.fromTo("#w34_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},29.590);
+      tl.to("#w34_0",{color:"#ffffff",scale:1,duration:0.08},29.770);
+      tl.fromTo("#w34_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},29.770);
+      tl.to("#w34_1",{color:"#ffffff",scale:1,duration:0.08},30.200);
+      tl.fromTo("#w34_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},30.200);
+      tl.to("#w34_2",{color:"#ffffff",scale:1,duration:0.08},30.630);
+      tl.fromTo("#capi34",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},29.590);
+      tl.fromTo("#w35_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},30.630);
+      tl.to("#w35_0",{color:"#ffffff",scale:1,duration:0.08},30.810);
+      tl.fromTo("#w35_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},30.810);
+      tl.to("#w35_1",{color:"#ffffff",scale:1,duration:0.08},31.240);
+      tl.fromTo("#capi35",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},30.630);
+      tl.fromTo("#w36_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},31.240);
+      tl.to("#w36_0",{color:"#ffffff",scale:1,duration:0.08},31.870);
+      tl.fromTo("#w36_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},31.870);
+      tl.to("#w36_1",{color:"#ffffff",scale:1,duration:0.08},32.100);
+      tl.fromTo("#capi36",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},31.240);
+      tl.fromTo("#w37_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},32.540);
+      tl.to("#w37_0",{color:"#ffffff",scale:1,duration:0.08},32.670);
+      tl.fromTo("#capi37",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},32.540);
+      tl.fromTo("#w38_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},32.760);
+      tl.to("#w38_0",{color:"#ffffff",scale:1,duration:0.08},33.600);
+      tl.fromTo("#capi38",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},32.760);
+      tl.fromTo("#w39_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},33.730);
+      tl.to("#w39_0",{color:"#ffffff",scale:1,duration:0.08},34.410);
+      tl.fromTo("#capi39",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},33.730);
+      tl.fromTo("#w40_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},34.560);
+      tl.to("#w40_0",{color:"#ffffff",scale:1,duration:0.08},35.240);
+      tl.fromTo("#capi40",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},34.560);
+      tl.fromTo("#w41_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},35.340);
+      tl.to("#w41_0",{color:"#ffffff",scale:1,duration:0.08},35.585);
+      tl.fromTo("#w41_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},35.585);
+      tl.to("#w41_1",{color:"#ffffff",scale:1,duration:0.08},35.960);
+      tl.fromTo("#capi41",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},35.340);
+      tl.fromTo("#w42_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},36.150);
+      tl.to("#w42_0",{color:"#ffffff",scale:1,duration:0.08},36.770);
+      tl.fromTo("#capi42",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},36.150);
+      tl.fromTo("#w43_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},36.870);
+      tl.to("#w43_0",{color:"#ffffff",scale:1,duration:0.08},37.181);
+      tl.fromTo("#w43_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},37.181);
+      tl.to("#w43_1",{color:"#ffffff",scale:1,duration:0.08},37.604);
+      tl.fromTo("#w43_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},37.604);
+      tl.to("#w43_2",{color:"#ffffff",scale:1,duration:0.08},37.971);
+      tl.fromTo("#capi43",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},36.870);
+      tl.fromTo("#w44_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},37.971);
+      tl.to("#w44_0",{color:"#ffffff",scale:1,duration:0.08},38.449);
+      tl.fromTo("#w44_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},38.449);
+      tl.to("#w44_1",{color:"#ffffff",scale:1,duration:0.08},38.649);
+      tl.fromTo("#w44_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},38.649);
+      tl.to("#w44_2",{color:"#ffffff",scale:1,duration:0.08},39.183);
+      tl.fromTo("#capi44",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},37.971);
+      tl.fromTo("#w45_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},39.183);
+      tl.to("#w45_0",{color:"#ffffff",scale:1,duration:0.08},39.550);
+      tl.fromTo("#capi45",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},39.183);
+      tl.fromTo("#w46_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},39.870);
+      tl.to("#w46_0",{color:"#ffffff",scale:1,duration:0.08},40.173);
+      tl.fromTo("#w46_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},40.173);
+      tl.to("#w46_1",{color:"#ffffff",scale:1,duration:0.08},40.659);
+      tl.fromTo("#capi46",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},39.870);
+      tl.fromTo("#w47_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},40.659);
+      tl.to("#w47_0",{color:"#ffffff",scale:1,duration:0.08},41.008);
+      tl.fromTo("#w47_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},41.008);
+      tl.to("#w47_1",{color:"#ffffff",scale:1,duration:0.08},41.541);
+      tl.fromTo("#capi47",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},40.659);
+      tl.fromTo("#w48_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},41.541);
+      tl.to("#w48_0",{color:"#ffffff",scale:1,duration:0.08},41.752);
+      tl.fromTo("#w48_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},41.752);
+      tl.to("#w48_1",{color:"#ffffff",scale:1,duration:0.08},42.009);
+      tl.fromTo("#w48_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},42.009);
+      tl.to("#w48_2",{color:"#ffffff",scale:1,duration:0.08},42.541);
+      tl.fromTo("#capi48",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},41.541);
+      tl.fromTo("#w49_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},42.541);
+      tl.to("#w49_0",{color:"#ffffff",scale:1,duration:0.08},42.982);
+      tl.fromTo("#w49_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},42.982);
+      tl.to("#w49_1",{color:"#ffffff",scale:1,duration:0.08},43.239);
+      tl.fromTo("#w49_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},43.239);
+      tl.to("#w49_2",{color:"#ffffff",scale:1,duration:0.08},43.496);
+      tl.fromTo("#capi49",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},42.541);
+      tl.fromTo("#w50_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},43.496);
+      tl.to("#w50_0",{color:"#ffffff",scale:1,duration:0.08},43.799);
+      tl.fromTo("#w50_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},43.799);
+      tl.to("#w50_1",{color:"#ffffff",scale:1,duration:0.08},44.010);
+      tl.fromTo("#capi50",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},43.496);
+      tl.fromTo("#w51_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},44.440);
+      tl.to("#w51_0",{color:"#ffffff",scale:1,duration:0.08},44.743);
+      tl.fromTo("#w51_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},44.743);
+      tl.to("#w51_1",{color:"#ffffff",scale:1,duration:0.08},45.139);
+      tl.fromTo("#w51_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},45.139);
+      tl.to("#w51_2",{color:"#ffffff",scale:1,duration:0.08},45.396);
+      tl.fromTo("#capi51",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},44.440);
+      tl.fromTo("#w52_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},45.396);
+      tl.to("#w52_0",{color:"#ffffff",scale:1,duration:0.08},45.654);
+      tl.fromTo("#w52_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},45.654);
+      tl.to("#w52_1",{color:"#ffffff",scale:1,duration:0.08},46.049);
+      tl.fromTo("#w52_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},46.049);
+      tl.to("#w52_2",{color:"#ffffff",scale:1,duration:0.08},46.215);
+      tl.fromTo("#capi52",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},45.396);
+      tl.fromTo("#w53_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},46.215);
+      tl.to("#w53_0",{color:"#ffffff",scale:1,duration:0.08},46.472);
+      tl.fromTo("#w53_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},46.472);
+      tl.to("#w53_1",{color:"#ffffff",scale:1,duration:0.08},46.730);
+      tl.fromTo("#capi53",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},46.215);
+      tl.fromTo("#w54_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},47.110);
+      tl.to("#w54_0",{color:"#ffffff",scale:1,duration:0.08},47.455);
+      tl.fromTo("#w54_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},47.455);
+      tl.to("#w54_1",{color:"#ffffff",scale:1,duration:0.08},47.747);
+      tl.fromTo("#w54_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},47.747);
+      tl.to("#w54_2",{color:"#ffffff",scale:1,duration:0.08},48.145);
+      tl.fromTo("#capi54",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},47.110);
+      tl.fromTo("#w55_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},48.145);
+      tl.to("#w55_0",{color:"#ffffff",scale:1,duration:0.08},48.333);
+      tl.fromTo("#w55_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},48.333);
+      tl.to("#w55_1",{color:"#ffffff",scale:1,duration:0.08},48.782);
+      tl.fromTo("#w55_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},48.782);
+      tl.to("#w55_2",{color:"#ffffff",scale:1,duration:0.08},49.127);
+      tl.fromTo("#capi55",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},48.145);
+      tl.fromTo("#w56_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},49.127);
+      tl.to("#w56_0",{color:"#ffffff",scale:1,duration:0.08},49.367);
+      tl.fromTo("#w56_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},49.367);
+      tl.to("#w56_1",{color:"#ffffff",scale:1,duration:0.08},49.660);
+      tl.fromTo("#w56_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},49.660);
+      tl.to("#w56_2",{color:"#ffffff",scale:1,duration:0.08},50.005);
+      tl.fromTo("#capi56",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},49.127);
+      tl.fromTo("#w57_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},50.005);
+      tl.to("#w57_0",{color:"#ffffff",scale:1,duration:0.08},50.506);
+      tl.fromTo("#w57_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},50.506);
+      tl.to("#w57_1",{color:"#ffffff",scale:1,duration:0.08},50.694);
+      tl.fromTo("#w57_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},50.694);
+      tl.to("#w57_2",{color:"#ffffff",scale:1,duration:0.08},50.883);
+      tl.fromTo("#capi57",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},50.005);
+      tl.fromTo("#w58_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},50.883);
+      tl.to("#w58_0",{color:"#ffffff",scale:1,duration:0.08},51.332);
+      tl.fromTo("#w58_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},51.332);
+      tl.to("#w58_1",{color:"#ffffff",scale:1,duration:0.08},51.520);
+      tl.fromTo("#capi58",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},50.883);
+      tl.fromTo("#w59_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},51.970);
+      tl.to("#w59_0",{color:"#ffffff",scale:1,duration:0.08},52.263);
+      tl.fromTo("#w59_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},52.263);
+      tl.to("#w59_1",{color:"#ffffff",scale:1,duration:0.08},52.504);
+      tl.fromTo("#w59_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},52.504);
+      tl.to("#w59_2",{color:"#ffffff",scale:1,duration:0.08},52.955);
+      tl.fromTo("#capi59",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},51.970);
+      tl.fromTo("#w60_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},52.955);
+      tl.to("#w60_0",{color:"#ffffff",scale:1,duration:0.08},53.143);
+      tl.fromTo("#w60_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},53.143);
+      tl.to("#w60_1",{color:"#ffffff",scale:1,duration:0.08},53.332);
+      tl.fromTo("#w60_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},53.332);
+      tl.to("#w60_2",{color:"#ffffff",scale:1,duration:0.08},53.730);
+      tl.fromTo("#capi60",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},52.955);
+      tl.fromTo("#w61_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},53.990);
+      tl.to("#w61_0",{color:"#ffffff",scale:1,duration:0.08},54.435);
+      tl.fromTo("#w61_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},54.435);
+      tl.to("#w61_1",{color:"#ffffff",scale:1,duration:0.08},54.880);
+      tl.fromTo("#w61_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},54.880);
+      tl.to("#w61_2",{color:"#ffffff",scale:1,duration:0.08},55.067);
+      tl.fromTo("#capi61",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},53.990);
+      tl.fromTo("#w62_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},55.067);
+      tl.to("#w62_0",{color:"#ffffff",scale:1,duration:0.08},55.512);
+      tl.fromTo("#w62_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},55.512);
+      tl.to("#w62_1",{color:"#ffffff",scale:1,duration:0.08},55.802);
+      tl.fromTo("#w62_2",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},55.802);
+      tl.to("#w62_2",{color:"#ffffff",scale:1,duration:0.08},56.092);
+      tl.fromTo("#capi62",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},55.067);
+      tl.fromTo("#w63_0",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},56.092);
+      tl.to("#w63_0",{color:"#ffffff",scale:1,duration:0.08},56.330);
+      tl.fromTo("#w63_1",{color:"#ffffff",scale:1},{color:"#FFB020",scale:1.08,duration:0.08},56.330);
+      tl.to("#w63_1",{color:"#ffffff",scale:1,duration:0.08},56.620);
+      tl.fromTo("#capi63",{opacity:0,y:18,scale:0.94},{opacity:1,y:0,scale:1,duration:0.16,ease:"power2.out"},56.092);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

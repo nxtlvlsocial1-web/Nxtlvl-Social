@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>openGym x Claude 9x16</title>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Poppins"; font-weight: 600; src: url("assets/fonts/poppins-600.woff2"); }
+@font-face { font-family: "Poppins"; font-weight: 700; src: url("assets/fonts/poppins-700.woff2"); }
+@font-face { font-family: "Poppins"; font-weight: 800; src: url("assets/fonts/poppins-800.woff2"); }
+@font-face { font-family: "Lora"; font-style: italic; font-weight: 400 700; src: url("assets/fonts/lora-italic.ttf"); }
+@font-face { font-family: "Montserrat"; font-weight: 100 900; src: url("assets/fonts/montserrat.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 700; src: url("assets/fonts/jbmono-bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050d; }
+body { font-family: "Poppins", sans-serif; color: #f4f1fa; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #07050d; }
+.clip { position: absolute; inset: 0; }
+#gl { width: 1080px; height: 1920px; display: block; }
+.mono { font-family: "JBMono", monospace; font-weight: 700; }
+#ui { z-index: 5; perspective: 1400px; }
+.top { position: absolute; left: 60px; right: 60px; top: 262px; display: flex; align-items: center; gap: 24px; }
+.brand { font-size: 28px; letter-spacing: 5px; color: #f4f1fa; text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+.brand b { color: #7b2ffb; }
+.prog { flex: 1; height: 6px; border-radius: 3px; background: rgba(244,241,250,.18); overflow: hidden; }
+.prog i { display: block; height: 100%; background: linear-gradient(90deg, #7b2ffb, #a98bff); transform-origin: 0 50%; transform: scaleX(0); }
+.step { position: absolute; left: 60px; top: 316px; padding: 6px 22px; border-radius: 22px; font: 700 28px "JBMono"; letter-spacing: 3px;
+  background: #7b2ffb; color: #fff; box-shadow: 0 8px 28px rgba(123,47,251,.55); opacity: 0; }
+#panel { position: absolute; left: 60px; top: 380px; width: 960px; height: 560px; border-radius: 36px; overflow: hidden;
+  background: linear-gradient(160deg, rgba(42,22,82,.72), rgba(14,8,30,.78)); border: 2px solid rgba(169,139,255,.38);
+  -webkit-backdrop-filter: blur(22px) saturate(1.3); backdrop-filter: blur(22px) saturate(1.3);
+  box-shadow: 0 30px 80px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.12); transform-origin: 50% 0%; }
+/* everything that pops in later starts hidden here, never through a set at t=0 */
+.repo-t, .repo-row, .cp1, .cp2, .cdesc, .goal-l, .goalbox, .ec-1, .ec-gym, .ec-2, .ec-3, .ec-h, .mm { opacity: 0; }
+.scr { position: absolute; inset: 0; padding: 34px 44px; opacity: 0; }
+#panel { opacity: 0; }
+.toast, #dm { position: absolute; left: 60px; right: 60px; min-height: 136px; border-radius: 36px; display: flex; align-items: center; gap: 24px;
+  padding: 20px 30px; background: rgba(28,22,40,.88); border: 1px solid rgba(255,255,255,.14); -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px); box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+.t1 { top: 330px; } .t2 { top: 490px; opacity: 0; }
+.ticon, .dmav { flex: none; width: 84px; height: 84px; border-radius: 22px; background: linear-gradient(160deg, #ff5a6a, #c0142d);
+  display: flex; align-items: center; justify-content: center; font: 800 44px "Poppins"; color: #fff; }
+.tbody { flex: 1; min-width: 0; }
+.thead { display: flex; align-items: baseline; justify-content: space-between; }
+.thead b { font: 700 32px "Poppins"; color: #fff; }
+.thead span { font: 600 26px "Poppins"; color: rgba(244,241,250,.55); }
+.ttext { font: 600 30px/1.3 "Poppins"; color: #e4dcf5; margin-top: 4px; }
+#dm { top: 1130px; opacity: 0; }
+.dmav { border-radius: 50%; background: linear-gradient(160deg, #a98bff, #7b2ffb); font-size: 40px; }
+.dmok { flex: none; width: 56px; height: 56px; border-radius: 50%; background: #3fd69b; color: #07050d; display: flex; align-items: center;
+  justify-content: center; font: 800 32px "Poppins"; opacity: 0; }
+.ty { display: inline-block; opacity: 0; }
+.cur { display: inline-block; width: 10px; height: 118px; margin-left: 10px; vertical-align: -10px; border-radius: 5px; background: #fff; }
+.appbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.appname { font: 800 40px "Poppins"; letter-spacing: -1px; }
+.pill { display: inline-block; padding: 6px 18px; border-radius: 20px; font: 700 28px "JBMono"; letter-spacing: 1px; }
+.pill.red { background: #ff4458; color: #fff; }
+.pill.vio { background: rgba(123,47,251,.85); color: #fff; }
+.pill.grn { background: rgba(63,214,155,.18); color: #3fd69b; border: 2px solid #3fd69b; }
+.pill.gold { background: rgba(255,194,74,.16); color: #ffc24a; border: 2px solid #ffc24a; }
+.paylock { position: absolute; right: 60px; top: 110px; font-size: 110px; }
+.ptitle { font: 800 72px/1.05 "Poppins"; color: #fff; letter-spacing: -2px; margin-top: 10px; }
+.psub { font: 600 32px "Poppins"; color: #ffb3bb; margin: 4px 0 12px; }
+.pl { font: 600 30px "Poppins"; color: rgba(244,241,250,.7); padding: 3px 0; }
+.pbtn { position: absolute; left: 44px; right: 44px; bottom: 36px; height: 84px; border-radius: 42px; background: linear-gradient(90deg, #ff4458, #c0142d);
+  display: flex; align-items: center; justify-content: center; font: 800 38px "Poppins"; box-shadow: 0 10px 34px rgba(255,68,88,.5); }
+.repo-h { font-size: 30px; color: #a98bff; letter-spacing: 0; }
+.repo-h b { color: #fff; }
+.repo-t { font: 800 84px/1.05 "Poppins"; letter-spacing: -3px; margin-top: 8px; color: #fff; }
+.repo-d { font: 600 36px "Poppins"; color: #d9ccff; }
+.repo-row { display: flex; gap: 16px; margin-top: 16px; }
+.quote { position: absolute; left: 44px; right: 44px; bottom: 26px; padding: 16px 26px; border-radius: 24px; background: rgba(7,5,13,.45);
+  border-left: 6px solid #3fd69b; font: italic 500 32px/1.28 "Lora"; color: #f4f1fa; opacity: 0; }
+.quote span { display: block; margin-top: 4px; font-size: 26px; letter-spacing: 3px; color: #a98bff; font-style: normal; }
+.crow { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.clab { font-size: 28px; letter-spacing: 2px; color: #a98bff; }
+.cdesc { margin-top: 16px; font: italic 500 34px/1.25 "Lora"; color: #d9ccff; }
+.goal-l { margin-top: 18px; }
+.goalbox { position: relative; }
+.goalbox .ph { position: absolute; left: 26px; top: 50%; transform: translateY(-50%); color: rgba(217,204,255,.5); font: 600 30px "Poppins"; }
+.mm { position: absolute; left: 60px; display: flex; align-items: center; gap: 16px; padding: 12px 30px 12px 22px; border-radius: 40px;
+  background: rgba(7,5,13,.78); border: 3px solid var(--c); color: var(--c); font: 800 44px "Poppins"; box-shadow: 0 10px 34px rgba(0,0,0,.4); }
+.mm i { width: 22px; height: 22px; border-radius: 50%; background: var(--c); box-shadow: 0 0 16px var(--c); }
+.mm0 { --c: #3fd69b; top: 990px; } .mm1 { --c: #ffc24a; top: 1085px; } .mm2 { --c: #ff6b6b; top: 1180px; }
+.goalbox { margin-top: 12px; min-height: 92px; border-radius: 24px; border: 2px dashed rgba(169,139,255,.5); padding: 14px; display: flex; gap: 14px; }
+.gchip { padding: 12px 24px; border-radius: 30px; background: rgba(63,214,155,.16); border: 2px solid #3fd69b; color: #fff; font: 700 32px "Poppins"; opacity: 0; }
+.cbtn { margin-top: 22px; height: 84px; border-radius: 42px; background: linear-gradient(90deg, #7b2ffb, #a98bff); display: flex; align-items: center;
+  justify-content: center; font: 800 38px "Poppins"; box-shadow: 0 10px 34px rgba(123,47,251,.5); opacity: 0; }
+.week { position: absolute; left: 44px; right: 44px; top: 170px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.wr { height: 92px; border-radius: 22px; background: rgba(244,241,250,.08); border: 2px solid rgba(169,139,255,.45); display: flex; align-items: center;
+  gap: 18px; padding: 0 24px; font: 700 36px "Poppins"; opacity: 0; }
+.wr b { font: 700 28px "JBMono"; color: #a98bff; letter-spacing: 2px; }
+.abtn, .abtn2 { position: absolute; left: 44px; right: 44px; bottom: 40px; height: 84px; border-radius: 42px; display: flex; align-items: center;
+  justify-content: center; font: 800 36px "Poppins"; opacity: 0; }
+.abtn { background: rgba(244,241,250,.12); border: 2px solid rgba(244,241,250,.4); }
+.abtn2 { background: #3fd69b; color: #07050d; font-size: 32px; box-shadow: 0 10px 34px rgba(63,214,155,.45); }
+.tx { display: flex; gap: 30px; align-items: center; }
+.demo { position: relative; width: 170px; height: 170px; border-radius: 28px; background: rgba(7,5,13,.55); border: 2px solid rgba(169,139,255,.35);
+  display: flex; align-items: center; justify-content: center; }
+.ename { font: 800 50px "Poppins"; letter-spacing: -1px; }
+.lib { font: 600 30px "Poppins"; color: #d9ccff; margin-top: 6px; }
+.lib b { font: 800 44px "Poppins"; color: #fff; }
+.sets { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
+.srow { display: flex; align-items: center; gap: 22px; height: 64px; border-radius: 20px; padding: 0 24px; background: rgba(244,241,250,.08); opacity: 0; }
+.srow span { font: 700 28px "JBMono"; color: #a98bff; letter-spacing: 2px; }
+.srow b { font: 800 34px "Poppins"; }
+.srow em { margin-left: auto; font: 700 28px "Poppins"; font-style: normal; color: #3fd69b; }
+.next { position: absolute; right: 44px; bottom: 22px; display: flex; align-items: center; gap: 16px; padding: 6px 26px; border-radius: 30px;
+  background: #3fd69b; color: #07050d; opacity: 0; box-shadow: 0 10px 34px rgba(63,214,155,.45); }
+.next span { font: 700 28px "Poppins"; } .next b { font: 800 38px "Poppins"; } .next i { font: 800 30px "Poppins"; font-style: normal; }
+#caps { z-index: 6; }
+.cap { position: absolute; left: 50px; right: 50px; top: 1330px; text-align: center; opacity: 0; }
+.cap .box { display: inline-block; max-width: 980px; padding: 14px 22px 16px; border-radius: 28px; background: rgba(10,6,20,.84);
+  border: 1px solid rgba(169,139,255,.3);
+  box-shadow: 0 14px 40px rgba(0,0,0,.45); font: 800 60px/1.15 "Montserrat"; letter-spacing: -.5px; color: #EDE8F7; }
+.cap .w { display: inline-block; padding: 2px 12px 4px; border-radius: 16px; }
+.cap .dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; margin: 0 6px 0 4px; vertical-align: 10px; background: #9a98a6; }
+.cap.nxt .dot { background: #a98bff; box-shadow: 0 0 14px #a98bff; }
+#endc { position: absolute; left: 60px; right: 60px; top: 330px; padding: 44px 40px 40px; border-radius: 40px; text-align: center;
+  background: linear-gradient(160deg, rgba(42,22,82,.8), rgba(14,8,30,.85)); border: 2px solid rgba(169,139,255,.45);
+  -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: 0 30px 80px rgba(0,0,0,.5); opacity: 0; }
+.ec-1 { font: 700 52px "Poppins"; }
+.ec-gym { display: inline-block; margin: 12px 0 8px; padding: 6px 60px; border-radius: 40px; background: linear-gradient(90deg, #7b2ffb, #a98bff);
+  font: 800 150px/1.1 "Poppins"; letter-spacing: 4px; color: #fff; box-shadow: 0 16px 50px rgba(123,47,251,.6); }
+.ec-2 { font: 700 46px "Poppins"; color: #f4f1fa; }
+.ec-3 { margin-top: 22px; font: italic 500 35px "Lora"; color: #d9ccff; }
+.ec-h { margin-top: 18px; font-size: 30px; color: #a98bff; letter-spacing: 3px; }
+#fx { z-index: 7; }
+#flash { position: absolute; inset: 0; background: #efe6ff; opacity: 0; }
+#whip { position: absolute; inset: 0; opacity: 0; background: repeating-linear-gradient(90deg, rgba(255,255,255,0) 0 22px,
+  rgba(217,204,255,.5) 22px 26px, rgba(255,255,255,0) 26px 70px); }
+#vig { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,5,13,.55) 0%, rgba(7,5,13,0) 18%, rgba(7,5,13,0) 70%, rgba(7,5,13,.5) 100%); }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="33.43" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="gl" class="clip" data-start="0" data-duration="33.43" data-track-index="0"></canvas>
+      <div id="vigl" class="clip" data-start="0" data-duration="33.43" data-track-index="1" data-layout-ignore><div id="vig"></div></div>
+      <div id="ui" class="clip" data-start="0" data-duration="33.43" data-track-index="2" data-layout-allow-overflow>
+        <div class="top"><span class="brand mono"><b>●</b> AI.NXTLVL</span><span class="prog"><i></i></span></div>
+        <div class="step step1">STEP 1/2 · CLAUDE COACH</div><div class="step step2">STEP 2/2 · TRAIN</div>
+        <div class="toast t1"><div class="ticon"><span class="tlock">🔒</span></div><div class="tbody"><div class="thead"><b>FitPro</b><span>now</span></div><div class="ttext">Your free trial has ended. Upgrade to Pro to keep your workouts.</div></div></div><div class="toast t2"><div class="ticon"><span>%</span></div><div class="tbody"><div class="thead"><b>FitPro</b><span>now</span></div><div class="ttext">Progress charts are locked. Unlock them with Pro.</div></div></div><div id="panel"><div class="scr" id="s-pay"><div class="appbar"><span class="appname">FitPro</span><span class="pill red">PREMIUM</span></div><div class="paylock">🔒</div><div class="ptitle">Upgrade to Pro</div><div class="psub">Your free trial has ended.</div><div class="plist"><div class="pl">🔒 Workout history</div><div class="pl">🔒 Custom routines</div><div class="pl">🔒 Progress charts</div></div><div class="pbtn">Upgrade now</div></div><div class="scr" id="s-repo"><div class="repo-h mono">github.com/DuarteSantos8/<b>openGym</b></div><div class="repo-t">openGym</div><div class="repo-d">Free, open-source gym tracker.</div><div class="repo-row"><span class="pill vio">AGPL-3.0</span><span class="pill grn">free · no paid tier</span></div><div class="quote">“No account on someone else’s server, no subscription, no ads, no telemetry.”<span class="mono">README</span></div></div><div class="scr" id="s-coach"><div class="appbar"><span class="appname">openGym</span><span class="pill vio">AI COACH</span></div><div class="crow"><span class="pill vio cp1">Anthropic · Claude</span><span class="pill gold cp2">🔑 your own key</span></div><div class="cdesc">Drafts a week of routines. You approve every change.</div><div class="clab mono goal-l">YOUR GOAL</div><div class="goalbox"><span class="ph">Tell your coach your goal…</span><span class="gchip gc0">4 days</span><span class="gchip gc1">dumbbells</span><span class="gchip gc2">build muscle</span></div><div class="cbtn">✦ Draft my week</div><div class="week"><div class="wr wr0"><b>MON</b><span>Upper</span></div><div class="wr wr1"><b>TUE</b><span>Lower</span></div><div class="wr wr2"><b>THU</b><span>Upper</span></div><div class="wr wr3"><b>FRI</b><span>Lower</span></div></div><div class="abtn">Approve</div><div class="abtn2">✓ Approved · you approve every change</div></div><div class="scr" id="s-train"><div class="appbar"><span class="appname">Guided workout</span><span class="pill vio">TRAIN</span></div><div class="tx"><div class="demo"><svg viewBox="0 0 200 200" width="150" height="150"><circle cx="100" cy="40" r="20" fill="#d9ccff"/><path d="M100 62 L100 130 M100 130 L80 190 M100 130 L120 190" stroke="#d9ccff" stroke-width="12" stroke-linecap="round" fill="none"/><path d="M100 72 L78 110" stroke="#d9ccff" stroke-width="11" stroke-linecap="round"/><g class="fa" style="transform-origin:78px 110px"><path d="M78 110 L78 150" stroke="#a98bff" stroke-width="11" stroke-linecap="round"/><rect x="62" y="146" width="32" height="12" rx="5" fill="#7b2ffb"/></g></svg></div><div class="tinfo"><div class="ename">Dumbbell Curl</div><div class="lib"><b class="cnt">0</b> exercises with demos</div></div></div><div class="sets"><div class="srow sr0"><span>SET 1</span><b>12.5 kg × 10</b><em>pre-filled ✓</em></div><div class="srow sr1"><span>SET 2</span><b>12.5 kg × 10</b><em>pre-filled ✓</em></div></div><div class="next"><span>Next session</span><b>15 kg</b><i>↑ +2.5 kg</i></div></div></div><div id="endc"><div class="ec-1">Comment</div><div class="ec-gym"><span class="ty ty0">G</span><span class="ty ty1">Y</span><span class="ty ty2">M</span><i class="cur"></i></div><div class="ec-2">for the links + my Claude prompt</div><div class="ec-3">Send this to your gym buddy who still pays for an app</div><div class="ec-h mono">✦ @ai.nxtlvl</div></div><div id="dm"><div class="dmav">✦</div><div class="tbody"><div class="thead"><b>ai.nxtlvl</b><span>now</span></div><div class="ttext">Sent you the openGym links + the Claude prompt</div></div><div class="dmok">✓</div></div><div class="mm mm0"><i></i>WORKED</div><div class="mm mm1"><i></i>RECOVERING</div><div class="mm mm2"><i></i>UNTRAINED</div>
+      </div>
+      <div id="caps" class="clip" data-start="0" data-duration="33.43" data-track-index="3"><div class="cap human" id="c1_0"><span class="box"><i class="dot"></i><span class="w" id="c1_0_0">Ugh…</span></span></div><div class="cap human" id="c1_1"><span class="box"><i class="dot"></i><span class="w" id="c1_1_0">my</span> <span class="w" id="c1_1_1">gym</span> <span class="w" id="c1_1_2">app</span></span></div><div class="cap human" id="c1_2"><span class="box"><i class="dot"></i><span class="w" id="c1_2_0">wants</span> <span class="w" id="c1_2_1">me</span> <span class="w" id="c1_2_2">to</span></span></div><div class="cap human" id="c1_3"><span class="box"><i class="dot"></i><span class="w" id="c1_3_0">upgrade.</span></span></div><div class="cap human" id="c1_4"><span class="box"><i class="dot"></i><span class="w" id="c1_4_0">Again.</span></span></div><div class="cap nxt" id="c2_0"><span class="box"><i class="dot"></i><span class="w" id="c2_0_0">Delete</span> <span class="w" id="c2_0_1">it.</span></span></div><div class="cap nxt" id="c2_1"><span class="box"><i class="dot"></i><span class="w" id="c2_1_0">This</span> <span class="w" id="c2_1_1">one's</span> <span class="w" id="c2_1_2">free…</span></span></div><div class="cap nxt" id="c2_2"><span class="box"><i class="dot"></i><span class="w" id="c2_2_0">forever.</span></span></div><div class="cap nxt" id="c2_3"><span class="box"><i class="dot"></i><span class="w" id="c2_3_0">And</span> <span class="w" id="c2_3_1">Claude</span> <span class="w" id="c2_3_2">helped</span></span></div><div class="cap nxt" id="c2_4"><span class="box"><i class="dot"></i><span class="w" id="c2_4_0">build</span> <span class="w" id="c2_4_1">it.</span></span></div><div class="cap human" id="c3_0"><span class="box"><i class="dot"></i><span class="w" id="c3_0_0">Wait.</span></span></div><div class="cap human" id="c3_1"><span class="box"><i class="dot"></i><span class="w" id="c3_1_0">Claude</span> <span class="w" id="c3_1_1">built</span> <span class="w" id="c3_1_2">a</span></span></div><div class="cap human" id="c3_2"><span class="box"><i class="dot"></i><span class="w" id="c3_2_0">gym</span> <span class="w" id="c3_2_1">app?</span></span></div><div class="cap nxt" id="c4_0"><span class="box"><i class="dot"></i><span class="w" id="c4_0_0">openGym.</span></span></div><div class="cap nxt" id="c4_1"><span class="box"><i class="dot"></i><span class="w" id="c4_1_0">Open</span> <span class="w" id="c4_1_1">source.</span></span></div><div class="cap nxt" id="c4_2"><span class="box"><i class="dot"></i><span class="w" id="c4_2_0">No</span> <span class="w" id="c4_2_1">subscription,</span></span></div><div class="cap nxt" id="c4_3"><span class="box"><i class="dot"></i><span class="w" id="c4_3_0">no</span> <span class="w" id="c4_3_1">ads,</span></span></div><div class="cap nxt" id="c4_4"><span class="box"><i class="dot"></i><span class="w" id="c4_4_0">no</span> <span class="w" id="c4_4_1">account.</span></span></div><div class="cap nxt" id="c5_0"><span class="box"><i class="dot"></i><span class="w" id="c5_0_0">Plug</span> <span class="w" id="c5_0_1">in</span> <span class="w" id="c5_0_2">Claude</span></span></div><div class="cap nxt" id="c5_1"><span class="box"><i class="dot"></i><span class="w" id="c5_1_0">as</span> <span class="w" id="c5_1_1">your</span> <span class="w" id="c5_1_2">coach…</span></span></div><div class="cap human" id="c6_0"><span class="box"><i class="dot"></i><span class="w" id="c6_0_0">Four</span> <span class="w" id="c6_0_1">days.</span></span></div><div class="cap human" id="c6_1"><span class="box"><i class="dot"></i><span class="w" id="c6_1_0">Dumbbells.</span></span></div><div class="cap human" id="c6_2"><span class="box"><i class="dot"></i><span class="w" id="c6_2_0">Build</span> <span class="w" id="c6_2_1">muscle.</span></span></div><div class="cap nxt" id="c7_0"><span class="box"><i class="dot"></i><span class="w" id="c7_0_0">and</span> <span class="w" id="c7_0_1">it</span> <span class="w" id="c7_0_2">plans</span></span></div><div class="cap nxt" id="c7_1"><span class="box"><i class="dot"></i><span class="w" id="c7_1_0">your</span> <span class="w" id="c7_1_1">whole</span> <span class="w" id="c7_1_2">week.</span></span></div><div class="cap nxt" id="c7_2"><span class="box"><i class="dot"></i><span class="w" id="c7_2_0">You</span> <span class="w" id="c7_2_1">just</span> <span class="w" id="c7_2_2">approve</span></span></div><div class="cap nxt" id="c7_3"><span class="box"><i class="dot"></i><span class="w" id="c7_3_0">it.</span></span></div><div class="cap nxt" id="c8_0"><span class="box"><i class="dot"></i><span class="w" id="c8_0_0">Fifty-six</span> <span class="w" id="c8_0_1">hundred</span> <span class="w" id="c8_0_2">exercises</span></span></div><div class="cap nxt" id="c8_1"><span class="box"><i class="dot"></i><span class="w" id="c8_1_0">with</span> <span class="w" id="c8_1_1">demos.</span></span></div><div class="cap nxt" id="c8_2"><span class="box"><i class="dot"></i><span class="w" id="c8_2_0">Weights</span> <span class="w" id="c8_2_1">pre-filled.</span></span></div><div class="cap nxt" id="c8_3"><span class="box"><i class="dot"></i><span class="w" id="c8_3_0">It</span> <span class="w" id="c8_3_1">even</span> <span class="w" id="c8_3_2">adds</span></span></div><div class="cap nxt" id="c8_4"><span class="box"><i class="dot"></i><span class="w" id="c8_4_0">weight</span> <span class="w" id="c8_4_1">when</span> <span class="w" id="c8_4_2">you're</span></span></div><div class="cap nxt" id="c8_5"><span class="box"><i class="dot"></i><span class="w" id="c8_5_0">ready.</span></span></div><div class="cap human" id="c9_0"><span class="box"><i class="dot"></i><span class="w" id="c9_0_0">And</span> <span class="w" id="c9_0_1">that</span> <span class="w" id="c9_0_2">muscle</span></span></div><div class="cap human" id="c9_1"><span class="box"><i class="dot"></i><span class="w" id="c9_1_0">map?</span></span></div><div class="cap nxt" id="c10_0"><span class="box"><i class="dot"></i><span class="w" id="c10_0_0">Worked.</span></span></div><div class="cap nxt" id="c10_1"><span class="box"><i class="dot"></i><span class="w" id="c10_1_0">Recovering.</span></span></div><div class="cap nxt" id="c10_2"><span class="box"><i class="dot"></i><span class="w" id="c10_2_0">Untrained…</span></span></div><div class="cap nxt" id="c10_3"><span class="box"><i class="dot"></i><span class="w" id="c10_3_0">Legs,</span></span></div><div class="cap nxt" id="c10_4"><span class="box"><i class="dot"></i><span class="w" id="c10_4_0">bro.</span></span></div><div class="cap human" id="c11_0"><span class="box"><i class="dot"></i><span class="w" id="c11_0_0">Fair.</span></span></div><div class="cap nxt" id="c12_0"><span class="box"><i class="dot"></i><span class="w" id="c12_0_0">Comment</span> <span class="w" id="c12_0_1">GYM.</span></span></div><div class="cap nxt" id="c12_1"><span class="box"><i class="dot"></i><span class="w" id="c12_1_0">I'll</span> <span class="w" id="c12_1_1">DM</span> <span class="w" id="c12_1_2">you</span></span></div><div class="cap nxt" id="c12_2"><span class="box"><i class="dot"></i><span class="w" id="c12_2_0">the</span> <span class="w" id="c12_2_1">official</span> <span class="w" id="c12_2_2">links…</span></span></div><div class="cap nxt" id="c12_3"><span class="box"><i class="dot"></i><span class="w" id="c12_3_0">and</span> <span class="w" id="c12_3_1">my</span> <span class="w" id="c12_3_2">Claude</span></span></div><div class="cap nxt" id="c12_4"><span class="box"><i class="dot"></i><span class="w" id="c12_4_0">prompt.</span></span></div></div>
+      <div id="fx" class="clip" data-start="0" data-duration="33.43" data-track-index="4" data-layout-ignore><div id="whip"></div><div id="flash"></div></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="33.43" data-track-index="10" data-volume="1"></audio>
+    </div>
+    <script>
+      window.OG_T = {"l": [0.15, 2.892, 6.637, 9.178, 12.686, 14.148, 16.334, 18.502, 23.137, 24.067, 27.135, 28.16], "e": [2.792, 6.557, 9.098, 12.586, 14.088, 16.274, 18.402, 23.037, 24.007, 27.095, 28.02, 31.932], "free": 4.26, "claude": 5.42, "x": [10.96, 11.68, 12.2], "coachClaude": 13.04, "g": [14.148, 15.06, 15.62], "approve": 17.92, "demos": 18.78, "demosEnd": 19.94, "weights": 20.68, "ready": 22.16, "worked": 24.2, "recovering": 24.98, "untrained": 25.74, "legs": 26.44, "gym": 28.48, "prompt": 31.48, "beat0": 0.0, "end": 33.43};
+      window.OG_ENV = {"fps":30,"nxt":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.31,0.66,0.76,0.7,0.66,0.7,0.75,0.67,0.51,0.44,0.47,0.4,0.22,0.07,0.05,0.09,0.09,0.05,0.02,0.0,0.0,0.0,0.0,0.0,0.0,0.02,0.23,0.65,0.78,0.48,0.21,0.16,0.37,0.68,0.69,0.47,0.29,0.19,0.11,0.04,0.14,0.42,0.62,0.6,0.48,0.36,0.28,0.22,0.11,0.03,0.02,0.02,0.05,0.23,0.56,0.76,0.86,0.96,0.9,0.61,0.3,0.21,0.26,0.23,0.13,0.06,0.03,0.01,0.0,0.0,0.09,0.34,0.59,0.61,0.38,0.18,0.11,0.27,0.68,0.96,0.99,0.91,0.69,0.43,0.33,0.43,0.67,0.84,0.63,0.24,0.06,0.07,0.13,0.16,0.29,0.64,0.93,0.94,0.68,0.34,0.23,0.24,0.18,0.09,0.05,0.07,0.06,0.02,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.03,0.05,0.06,0.04,0.01,0.0,0.11,0.34,0.46,0.36,0.2,0.28,0.55,0.69,0.69,0.62,0.44,0.31,0.51,0.86,1.0,0.91,0.64,0.35,0.18,0.09,0.04,0.03,0.22,0.53,0.55,0.26,0.21,0.48,0.64,0.56,0.37,0.23,0.32,0.63,0.91,0.99,0.9,0.63,0.31,0.15,0.14,0.18,0.32,0.54,0.66,0.54,0.3,0.28,0.38,0.31,0.19,0.13,0.21,0.56,0.76,0.51,0.24,0.21,0.25,0.33,0.5,0.56,0.45,0.44,0.61,0.77,0.86,0.9,0.87,0.8,0.71,0.62,0.63,0.68,0.6,0.41,0.28,0.26,0.36,0.6,0.8,0.88,0.96,0.96,0.79,0.47,0.2,0.1,0.17,0.37,0.51,0.43,0.26,0.13,0.05,0.01,0.0,0.0,0.0,0.01,0.06,0.31,0.67,0.73,0.43,0.25,0.3,0.33,0.3,0.2,0.11,0.09,0.15,0.4,0.67,0.72,0.66,0.58,0.47,0.38,0.31,0.19,0.15,0.22,0.25,0.14,0.06,0.07,0.17,0.3,0.32,0.27,0.24,0.17,0.09,0.09,0.14,0.12,0.07,0.02,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.09,0.38,0.67,0.74,0.68,0.54,0.3,0.09,0.04,0.14,0.37,0.56,0.57,0.54,0.55,0.53,0.45,0.32,0.32,0.48,0.5,0.33,0.3,0.57,0.79,0.62,0.31,0.19,0.19,0.16,0.09,0.03,0.02,0.03,0.03,0.02,0.0,0.0,0.05,0.2,0.33,0.31,0.23,0.26,0.41,0.42,0.25,0.14,0.21,0.28,0.16,0.05,0.1,0.27,0.39,0.31,0.15,0.09,0.12,0.13,0.06,0.01,0.0,0.0,0.0,0.03,0.3,0.72,0.68,0.28,0.22,0.46,0.49,0.34,0.27,0.4,0.48,0.27,0.13,0.15,0.17,0.33,0.68,0.82,0.65,0.65,0.81,0.84,0.88,0.87,0.56,0.24,0.25,0.4,0.41,0.28,0.37,0.73,0.84,0.62,0.36,0.25,0.24,0.19,0.2,0.36,0.42,0.21,0.04,0.24,0.66,0.73,0.54,0.44,0.4,0.38,0.29,0.2,0.16,0.14,0.11,0.06,0.02,0.0,0.01,0.01,0.05,0.19,0.4,0.65,0.9,1.0,0.92,0.62,0.28,0.17,0.17,0.09,0.05,0.26,0.67,0.86,0.68,0.38,0.13,0.2,0.6,0.87,0.8,0.63,0.48,0.33,0.17,0.06,0.02,0.01,0.01,0.01,0.06,0.29,0.59,0.67,0.61,0.55,0.55,0.73,0.84,0.64,0.35,0.31,0.56,0.79,0.79,0.63,0.4,0.34,0.44,0.59,0.83,0.94,0.78,0.49,0.31,0.38,0.63,0.81,0.81,0.75,0.71,0.6,0.46,0.6,0.88,0.93,0.65,0.34,0.21,0.15,0.09,0.05,0.02,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.02,0.08,0.19,0.45,0.81,0.96,0.82,0.51,0.2,0.06,0.05,0.05,0.06,0.12,0.12,0.06,0.01,0.0,0.0,0.0,0.0,0.0,0.02,0.14,0.43,0.52,0.29,0.15,0.18,0.4,0.75,0.7,0.37,0.29,0.4,0.44,0.34,0.2,0.11,0.06,0.03,0.02,0.01,0.0,0.0,0.0,0.14,0.53,0.87,0.87,0.69,0.55,0.5,0.4,0.29,0.27,0.26,0.4,0.69,0.78,0.72,0.7,0.66,0.5,0.29,0.14,0.09,0.12,0.26,0.47,0.73,0.93,0.95,0.86,0.77,0.57,0.34,0.24,0.21,0.18,0.35,0.77,0.98,0.9,0.71,0.53,0.41,0.28,0.14,0.04,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,0.09,0.27,0.63,0.92,0.92,0.71,0.5,0.38,0.26,0.16,0.09,0.11,0.21,0.26,0.23,0.18,0.14,0.1,0.07,0.04,0.03,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.08,0.39,0.79,0.98,0.83,0.47,0.23,0.21,0.3,0.42,0.62,0.76,0.65,0.54,0.56,0.6,0.64,0.61,0.45,0.37,0.48,0.64,0.67,0.44,0.15,0.19,0.49,0.58,0.5,0.45,0.5,0.62,0.59,0.55,0.65,0.7,0.59,0.44,0.3,0.17,0.11,0.11,0.12,0.09,0.05,0.02,0.08,0.37,0.77,0.97,0.94,0.84,0.8,0.79,0.77,0.81,0.91,0.92,0.76,0.52,0.27,0.12,0.08,0.2,0.55,0.82,0.82,0.66,0.35,0.11,0.06,0.16,0.35,0.39,0.28,0.16,0.07,0.03,0.05,0.06,0.04,0.01,0.0,0.0,0.0,0.0,0.0,0.0],"human":[0.0,0.0,0.0,0.0,0.09,0.35,0.71,0.93,0.87,0.58,0.27,0.13,0.07,0.04,0.02,0.06,0.23,0.46,0.58,0.53,0.35,0.19,0.17,0.33,0.64,0.86,0.84,0.78,0.79,0.77,0.71,0.53,0.2,0.05,0.15,0.32,0.48,0.55,0.49,0.32,0.17,0.16,0.3,0.48,0.5,0.47,0.47,0.32,0.19,0.31,0.36,0.19,0.06,0.08,0.23,0.35,0.37,0.31,0.23,0.14,0.06,0.02,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,0.15,0.29,0.28,0.24,0.38,0.48,0.41,0.29,0.19,0.1,0.03,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.06,0.33,0.73,0.96,1.0,1.0,0.98,0.84,0.57,0.32,0.15,0.07,0.04,0.02,0.01,0.02,0.13,0.41,0.72,0.85,0.78,0.52,0.23,0.08,0.02,0.03,0.06,0.06,0.02,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.04,0.07,0.23,0.58,0.86,0.96,0.94,0.8,0.53,0.26,0.26,0.58,0.8,0.73,0.48,0.25,0.28,0.35,0.24,0.15,0.17,0.28,0.4,0.47,0.5,0.57,0.65,0.7,0.73,0.77,0.79,0.67,0.36,0.1,0.05,0.05,0.03,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.18,0.59,0.92,1.0,0.98,0.77,0.47,0.44,0.54,0.45,0.29,0.21,0.16,0.1,0.09,0.11,0.11,0.07,0.02,0.01,0.03,0.28,0.73,0.96,0.91,0.8,0.63,0.45,0.43,0.45,0.38,0.29,0.19,0.14,0.16,0.18,0.16,0.13,0.06,0.01,0.01,0.0,0.0,0.0,0.13,0.48,0.77,0.8,0.72,0.54,0.33,0.33,0.47,0.53,0.47,0.34,0.2,0.16,0.21,0.25,0.22,0.15,0.09,0.04,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.06,0.23,0.41,0.48,0.53,0.67,0.86,0.85,0.53,0.27,0.33,0.6,0.69,0.49,0.28,0.39,0.69,0.8,0.77,0.78,0.87,0.92,0.75,0.37,0.12,0.09,0.05,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.04,0.28,0.74,0.9,0.67,0.39,0.38,0.54,0.48,0.26,0.12,0.04,0.01,0.01,0.01,0.01,0.27,0.76,1.0,1.0,0.92,0.72,0.48,0.28,0.13,0.04,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]};
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#panel",{rotationX:70,opacity:0,y:60,scale:.9},{rotationX:0,opacity:1,y:0,scale:1,duration:.38,ease:"back.out(1.6)",immediateRender:false},9.178);
+      tl.to("#panel",{rotationX:-75,opacity:0,y:-80,scale:.9,duration:.32,ease:"power3.in"},23.087);
+      tl.fromTo(".t1",{x:0},{x:10,duration:.035,yoyo:true,repeat:9,immediateRender:false},0.05);
+      tl.fromTo(".t2",{y:-60,opacity:0,scale:.92},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.35,ease:"back.out(1.8)",immediateRender:false},1.100);
+      tl.fromTo(".t2",{x:0},{x:10,duration:.035,yoyo:true,repeat:7,immediateRender:false},1.45);
+      tl.fromTo(".tlock",{rotation:0},{rotation:16,duration:.05,yoyo:true,repeat:11,immediateRender:false},0.05);
+      tl.to(".t1",{x:-1150,rotation:-6,duration:.32,ease:"power3.in"},2.912);
+      tl.to(".t2",{x:-1150,rotation:-6,duration:.32,ease:"power3.in"},2.992);
+      tl.set("#s-pay",{opacity:0},3.192);
+      tl.set("#s-repo",{opacity:1},9.188);
+      tl.fromTo(".repo-t",{y:30,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},9.178);
+      tl.fromTo(".repo-row",{y:20,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},9.428);
+      tl.fromTo(".quote",{y:30,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.35,ease:"back.out(2.2)",immediateRender:false},10.860);
+      tl.set("#s-repo",{opacity:0},12.636);
+      tl.fromTo("#s-coach",{opacity:0,x:60},{opacity:1,x:0,duration:.3,ease:"power3.out",immediateRender:false},12.636);
+      tl.fromTo(".cp1",{scale:.5,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.25,ease:"back.out(2.2)",immediateRender:false},12.736);
+      tl.fromTo(".cp2",{scale:.5,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},13.140);
+      tl.fromTo(".cdesc",{opacity:0,y:10},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.25,ease:"back.out(2.2)",immediateRender:false},12.786);
+      tl.fromTo(".goal-l",{opacity:0,y:10},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.2,ease:"back.out(2.2)",immediateRender:false},12.836);
+      tl.fromTo(".goalbox",{opacity:0,y:10},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.2,ease:"back.out(2.2)",immediateRender:false},12.836);
+      tl.fromTo(".cbtn",{opacity:0,y:20},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.25,ease:"back.out(2.2)",immediateRender:false},12.886);
+      tl.to(".goalbox .ph",{opacity:0,duration:.12},14.068);
+      tl.fromTo(".gc0",{scale:.3,opacity:0,y:20},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(3)",immediateRender:false},14.148);
+      tl.fromTo(".gc1",{scale:.3,opacity:0,y:20},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(3)",immediateRender:false},15.060);
+      tl.fromTo(".gc2",{scale:.3,opacity:0,y:20},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(3)",immediateRender:false},15.620);
+      tl.to(".cbtn",{scale:.92,duration:.08,yoyo:true,repeat:1},16.384);
+      tl.to(".cdesc, .goal-l, .goalbox, .cbtn",{opacity:0,y:-20,duration:.2},16.534);
+      tl.fromTo(".wr0",{x:80,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2)",immediateRender:false},16.684);
+      tl.fromTo(".wr1",{x:80,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2)",immediateRender:false},16.904);
+      tl.fromTo(".wr2",{x:80,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2)",immediateRender:false},17.124);
+      tl.fromTo(".wr3",{x:80,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2)",immediateRender:false},17.344);
+      tl.fromTo(".abtn",{opacity:0,y:20},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},17.234);
+      tl.to(".abtn",{opacity:0,scale:.9,duration:.1},17.900);
+      tl.fromTo(".abtn2",{scale:1.6,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.25,ease:"back.out(2.5)",immediateRender:false},17.920);
+      tl.set("#s-coach",{opacity:0},18.452);
+      tl.fromTo("#s-train",{opacity:0,x:60},{opacity:1,x:0,duration:.3,ease:"power3.out",immediateRender:false},18.452);
+      tl.fromTo(".fa",{rotation:0},{rotation:130,duration:.5,yoyo:true,repeat:10,ease:"sine.inOut",immediateRender:false},18.502);
+      (()=>{const o={v:0};tl.to(o,{v:5632,duration:1.36,ease:"power2.out",onUpdate:()=>{document.querySelector(".cnt").textContent=Math.round(o.v).toLocaleString("en-US");}},18.780);})();
+      tl.fromTo(".sr0",{x:-60,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},20.680);
+      tl.fromTo(".sr1",{x:-60,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},20.860);
+      tl.fromTo(".next",{scale:.5,opacity:0,y:30},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.35,ease:"back.out(2.6)",immediateRender:false},22.060);
+      tl.fromTo(".step1",{opacity:0,y:-20},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},12.636);
+      tl.to(".step1",{opacity:0,y:-20,duration:0.15,ease:"power2.in"},18.302);
+      tl.fromTo(".step2",{opacity:0,y:-20},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},18.452);
+      tl.to(".step2",{opacity:0,y:-20,duration:0.15,ease:"power2.in"},23.037);
+      tl.fromTo("#endc",{opacity:0,scale:.9,y:40},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.35,ease:"back.out(1.8)",immediateRender:false},28.330);
+      tl.fromTo(".ec-1",{y:20,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.25,ease:"back.out(2.2)",immediateRender:false},28.380);
+      tl.fromTo(".ec-gym",{scale:.6,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},28.410);
+      tl.fromTo(".ty0",{opacity:0,y:-30,scale:1.4},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.16,ease:"back.out(3)",immediateRender:false},28.550);
+      tl.fromTo(".ty1",{opacity:0,y:-30,scale:1.4},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.16,ease:"back.out(3)",immediateRender:false},28.680);
+      tl.fromTo(".ty2",{opacity:0,y:-30,scale:1.4},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.16,ease:"back.out(3)",immediateRender:false},28.810);
+      tl.fromTo(".cur",{opacity:1},{opacity:0,duration:.22,yoyo:true,repeat:11,ease:"steps(1)",immediateRender:false},28.430);
+      tl.fromTo(".ec-2",{y:20,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},28.730);
+      tl.fromTo(".ec-3",{y:20,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.35,ease:"back.out(2.2)",immediateRender:false},29.130);
+      tl.fromTo(".ec-h",{y:20,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},29.430);
+      tl.to(".ec-gym",{scale:.94,duration:.09,yoyo:true,repeat:1,ease:"power2.out"},31.882);
+      tl.fromTo("#dm",{y:60,opacity:0,scale:.9},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.38,ease:"back.out(2)",immediateRender:false},32.032);
+      tl.fromTo(".dmok",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(3)",immediateRender:false},32.382);
+      tl.fromTo("#c1_0",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},0.100);
+      tl.set("#c1_0",{opacity:0},0.530);
+      tl.set("#c1_0_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},0.150);
+      tl.set("#c1_0_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},0.440);
+      tl.fromTo("#c1_1",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},0.530);
+      tl.set("#c1_1",{opacity:0},1.070);
+      tl.set("#c1_1_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},0.580);
+      tl.set("#c1_1_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},0.800);
+      tl.set("#c1_1_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},0.780);
+      tl.set("#c1_1_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},1.000);
+      tl.set("#c1_1_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},0.980);
+      tl.set("#c1_1_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},1.140);
+      tl.fromTo("#c1_2",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},1.070);
+      tl.set("#c1_2",{opacity:0},1.610);
+      tl.set("#c1_2_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},1.120);
+      tl.set("#c1_2_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},1.380);
+      tl.set("#c1_2_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},1.360);
+      tl.set("#c1_2_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},1.540);
+      tl.set("#c1_2_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},1.520);
+      tl.set("#c1_2_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},1.680);
+      tl.fromTo("#c1_3",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},1.610);
+      tl.set("#c1_3",{opacity:0},2.370);
+      tl.set("#c1_3_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},1.660);
+      tl.set("#c1_3_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},1.980);
+      tl.fromTo("#c1_4",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},2.370);
+      tl.set("#c1_4",{opacity:0},2.832);
+      tl.set("#c1_4_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},2.420);
+      tl.set("#c1_4_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},2.740);
+      tl.fromTo("#c2_0",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},3.010);
+      tl.set("#c2_0",{opacity:0},3.750);
+      tl.set("#c2_0_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},3.060);
+      tl.set("#c2_0_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},3.160);
+      tl.set("#c2_0_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},3.140);
+      tl.set("#c2_0_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},3.500);
+      tl.fromTo("#c2_1",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},3.750);
+      tl.set("#c2_1",{opacity:0},4.610);
+      tl.set("#c2_1_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},3.800);
+      tl.set("#c2_1_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},3.980);
+      tl.set("#c2_1_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},3.960);
+      tl.set("#c2_1_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},4.280);
+      tl.set("#c2_1_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},4.260);
+      tl.set("#c2_1_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},4.500);
+      tl.fromTo("#c2_2",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},4.610);
+      tl.set("#c2_2",{opacity:0},5.250);
+      tl.set("#c2_2_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},4.660);
+      tl.set("#c2_2_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},5.000);
+      tl.fromTo("#c2_3",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},5.250);
+      tl.set("#c2_3",{opacity:0},5.910);
+      tl.set("#c2_3_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},5.300);
+      tl.set("#c2_3_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},5.440);
+      tl.set("#c2_3_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},5.420);
+      tl.set("#c2_3_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},5.720);
+      tl.set("#c2_3_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},5.700);
+      tl.set("#c2_3_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},5.980);
+      tl.fromTo("#c2_4",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},5.910);
+      tl.set("#c2_4",{opacity:0},6.577);
+      tl.set("#c2_4_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},5.960);
+      tl.set("#c2_4_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},6.220);
+      tl.set("#c2_4_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},6.200);
+      tl.set("#c2_4_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},6.520);
+      tl.fromTo("#c3_0",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},7.170);
+      tl.set("#c3_0",{opacity:0},7.810);
+      tl.set("#c3_0_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},7.220);
+      tl.set("#c3_0_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},7.420);
+      tl.fromTo("#c3_1",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},7.810);
+      tl.set("#c3_1",{opacity:0},8.510);
+      tl.set("#c3_1_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},7.860);
+      tl.set("#c3_1_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},8.160);
+      tl.set("#c3_1_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},8.140);
+      tl.set("#c3_1_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},8.360);
+      tl.set("#c3_1_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},8.340);
+      tl.set("#c3_1_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},8.580);
+      tl.fromTo("#c3_2",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},8.510);
+      tl.set("#c3_2",{opacity:0},9.118);
+      tl.set("#c3_2_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},8.560);
+      tl.set("#c3_2_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},8.800);
+      tl.set("#c3_2_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},8.780);
+      tl.set("#c3_2_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},9.000);
+      tl.fromTo("#c4_0",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},9.170);
+      tl.set("#c4_0",{opacity:0},10.150);
+      tl.set("#c4_0_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},9.220);
+      tl.set("#c4_0_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},9.680);
+      tl.fromTo("#c4_1",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},10.150);
+      tl.set("#c4_1",{opacity:0},10.750);
+      tl.set("#c4_1_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},10.200);
+      tl.set("#c4_1_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},10.420);
+      tl.set("#c4_1_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},10.400);
+      tl.set("#c4_1_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},10.680);
+      tl.fromTo("#c4_2",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},10.750);
+      tl.set("#c4_2",{opacity:0},11.490);
+      tl.set("#c4_2_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},10.800);
+      tl.set("#c4_2_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},10.980);
+      tl.set("#c4_2_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},10.960);
+      tl.set("#c4_2_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},11.360);
+      tl.fromTo("#c4_3",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},11.490);
+      tl.set("#c4_3",{opacity:0},12.010);
+      tl.set("#c4_3_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},11.540);
+      tl.set("#c4_3_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},11.700);
+      tl.set("#c4_3_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},11.680);
+      tl.set("#c4_3_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},11.940);
+      tl.fromTo("#c4_4",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},12.010);
+      tl.set("#c4_4",{opacity:0},12.626);
+      tl.set("#c4_4_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},12.060);
+      tl.set("#c4_4_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},12.220);
+      tl.set("#c4_4_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},12.200);
+      tl.set("#c4_4_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},12.520);
+      tl.fromTo("#c5_0",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},12.670);
+      tl.set("#c5_0",{opacity:0},13.270);
+      tl.set("#c5_0_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},12.720);
+      tl.set("#c5_0_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},12.900);
+      tl.set("#c5_0_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},12.880);
+      tl.set("#c5_0_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},13.060);
+      tl.set("#c5_0_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},13.040);
+      tl.set("#c5_0_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},13.340);
+      tl.fromTo("#c5_1",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},13.270);
+      tl.set("#c5_1",{opacity:0},14.088);
+      tl.set("#c5_1_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},13.320);
+      tl.set("#c5_1_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},13.500);
+      tl.set("#c5_1_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},13.480);
+      tl.set("#c5_1_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},13.680);
+      tl.set("#c5_1_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},13.660);
+      tl.set("#c5_1_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},13.940);
+      tl.fromTo("#c6_0",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},14.098);
+      tl.set("#c6_0",{opacity:0},15.010);
+      tl.set("#c6_0_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},14.148);
+      tl.set("#c6_0_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},14.360);
+      tl.set("#c6_0_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},14.340);
+      tl.set("#c6_0_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},14.640);
+      tl.fromTo("#c6_1",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},15.010);
+      tl.set("#c6_1",{opacity:0},15.570);
+      tl.set("#c6_1_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},15.060);
+      tl.set("#c6_1_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},15.520);
+      tl.fromTo("#c6_2",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},15.570);
+      tl.set("#c6_2",{opacity:0},16.274);
+      tl.set("#c6_2_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},15.620);
+      tl.set("#c6_2_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},15.860);
+      tl.set("#c6_2_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},15.840);
+      tl.set("#c6_2_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},16.180);
+      tl.fromTo("#c7_0",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},16.310);
+      tl.set("#c7_0",{opacity:0},16.810);
+      tl.set("#c7_0_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},16.360);
+      tl.set("#c7_0_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},16.480);
+      tl.set("#c7_0_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},16.460);
+      tl.set("#c7_0_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},16.620);
+      tl.set("#c7_0_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},16.600);
+      tl.set("#c7_0_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},16.880);
+      tl.fromTo("#c7_1",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},16.810);
+      tl.set("#c7_1",{opacity:0},17.570);
+      tl.set("#c7_1_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},16.860);
+      tl.set("#c7_1_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},17.060);
+      tl.set("#c7_1_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},17.040);
+      tl.set("#c7_1_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},17.200);
+      tl.set("#c7_1_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},17.180);
+      tl.set("#c7_1_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},17.440);
+      tl.fromTo("#c7_2",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},17.570);
+      tl.set("#c7_2",{opacity:0},18.110);
+      tl.set("#c7_2_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},17.620);
+      tl.set("#c7_2_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},17.740);
+      tl.set("#c7_2_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},17.720);
+      tl.set("#c7_2_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},17.940);
+      tl.set("#c7_2_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},17.920);
+      tl.set("#c7_2_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},18.180);
+      tl.fromTo("#c7_3",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},18.110);
+      tl.set("#c7_3",{opacity:0},18.442);
+      tl.set("#c7_3_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},18.160);
+      tl.set("#c7_3_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},18.422);
+      tl.fromTo("#c8_0",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},18.730);
+      tl.set("#c8_0",{opacity:0},19.650);
+      tl.set("#c8_0_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},18.780);
+      tl.set("#c8_0_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},19.240);
+      tl.set("#c8_0_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},19.220);
+      tl.set("#c8_0_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},19.290);
+      tl.set("#c8_0_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},19.220);
+      tl.set("#c8_0_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},19.720);
+      tl.fromTo("#c8_1",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},19.650);
+      tl.set("#c8_1",{opacity:0},20.630);
+      tl.set("#c8_1_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},19.700);
+      tl.set("#c8_1_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},19.960);
+      tl.set("#c8_1_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},19.940);
+      tl.set("#c8_1_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},20.280);
+      tl.fromTo("#c8_2",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},20.630);
+      tl.set("#c8_2",{opacity:0},21.550);
+      tl.set("#c8_2_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},20.680);
+      tl.set("#c8_2_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},20.900);
+      tl.set("#c8_2_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},20.880);
+      tl.set("#c8_2_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},21.120);
+      tl.fromTo("#c8_3",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},21.550);
+      tl.set("#c8_3",{opacity:0},22.110);
+      tl.set("#c8_3_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},21.600);
+      tl.set("#c8_3_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},21.760);
+      tl.set("#c8_3_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},21.740);
+      tl.set("#c8_3_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},21.900);
+      tl.set("#c8_3_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},21.880);
+      tl.set("#c8_3_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},22.180);
+      tl.fromTo("#c8_4",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},22.110);
+      tl.set("#c8_4",{opacity:0},22.650);
+      tl.set("#c8_4_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},22.160);
+      tl.set("#c8_4_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},22.400);
+      tl.set("#c8_4_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},22.380);
+      tl.set("#c8_4_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},22.560);
+      tl.set("#c8_4_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},22.540);
+      tl.set("#c8_4_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},22.720);
+      tl.fromTo("#c8_5",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},22.650);
+      tl.set("#c8_5",{opacity:0},23.077);
+      tl.set("#c8_5_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},22.700);
+      tl.set("#c8_5_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},22.940);
+      tl.fromTo("#c9_0",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},23.087);
+      tl.set("#c9_0",{opacity:0},23.630);
+      tl.set("#c9_0_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},23.137);
+      tl.set("#c9_0_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},23.300);
+      tl.set("#c9_0_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},23.280);
+      tl.set("#c9_0_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},23.480);
+      tl.set("#c9_0_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},23.460);
+      tl.set("#c9_0_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},23.700);
+      tl.fromTo("#c9_1",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},23.630);
+      tl.set("#c9_1",{opacity:0},24.007);
+      tl.set("#c9_1_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},23.680);
+      tl.set("#c9_1_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},23.960);
+      tl.fromTo("#c10_0",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},24.150);
+      tl.set("#c10_0",{opacity:0},24.930);
+      tl.set("#c10_0_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},24.200);
+      tl.set("#c10_0_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},24.660);
+      tl.fromTo("#c10_1",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},24.930);
+      tl.set("#c10_1",{opacity:0},25.690);
+      tl.set("#c10_1_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},24.980);
+      tl.set("#c10_1_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},25.440);
+      tl.fromTo("#c10_2",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},25.690);
+      tl.set("#c10_2",{opacity:0},26.390);
+      tl.set("#c10_2_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},25.740);
+      tl.set("#c10_2_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},26.200);
+      tl.fromTo("#c10_3",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},26.390);
+      tl.set("#c10_3",{opacity:0},26.890);
+      tl.set("#c10_3_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},26.440);
+      tl.set("#c10_3_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},26.680);
+      tl.fromTo("#c10_4",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},26.890);
+      tl.set("#c10_4",{opacity:0},27.075);
+      tl.set("#c10_4_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},26.940);
+      tl.set("#c10_4_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},27.010);
+      tl.fromTo("#c11_0",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},27.350);
+      tl.set("#c11_0",{opacity:0},28.100);
+      tl.set("#c11_0_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},27.400);
+      tl.set("#c11_0_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},27.860);
+      tl.fromTo("#c12_0",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},28.190);
+      tl.set("#c12_0",{opacity:0},28.810);
+      tl.set("#c12_0_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},28.240);
+      tl.set("#c12_0_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},28.500);
+      tl.set("#c12_0_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},28.480);
+      tl.set("#c12_0_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},28.880);
+      tl.fromTo("#c12_1",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},28.810);
+      tl.set("#c12_1",{opacity:0},29.770);
+      tl.set("#c12_1_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},28.860);
+      tl.set("#c12_1_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},29.460);
+      tl.set("#c12_1_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},29.440);
+      tl.set("#c12_1_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},29.620);
+      tl.set("#c12_1_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},29.600);
+      tl.set("#c12_1_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},29.840);
+      tl.fromTo("#c12_2",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},29.770);
+      tl.set("#c12_2",{opacity:0},30.530);
+      tl.set("#c12_2_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},29.820);
+      tl.set("#c12_2_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},30.000);
+      tl.set("#c12_2_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},29.980);
+      tl.set("#c12_2_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},30.240);
+      tl.set("#c12_2_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},30.220);
+      tl.set("#c12_2_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},30.600);
+      tl.fromTo("#c12_3",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},30.530);
+      tl.set("#c12_3",{opacity:0},31.430);
+      tl.set("#c12_3_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},30.580);
+      tl.set("#c12_3_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},31.040);
+      tl.set("#c12_3_1",{backgroundColor:"#7B2FFB",color:"#ffffff"},31.020);
+      tl.set("#c12_3_1",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},31.240);
+      tl.set("#c12_3_2",{backgroundColor:"#7B2FFB",color:"#ffffff"},31.220);
+      tl.set("#c12_3_2",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},31.500);
+      tl.fromTo("#c12_4",{opacity:0,y:18,scale:.94},{opacity:1,y:0,scale:1,duration:.14,ease:"back.out(2)",immediateRender:false},31.430);
+      tl.set("#c12_4",{opacity:0},32.282);
+      tl.set("#c12_4_0",{backgroundColor:"#7B2FFB",color:"#ffffff"},31.480);
+      tl.set("#c12_4_0",{backgroundColor:"rgba(123,47,251,0)",color:"#EDE8F7"},31.760);
+      tl.fromTo(".mm0",{x:-80,opacity:0,scale:.7},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2.4)",immediateRender:false},24.200);
+      tl.fromTo(".mm1",{x:-80,opacity:0,scale:.7},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2.4)",immediateRender:false},24.980);
+      tl.fromTo(".mm2",{x:-80,opacity:0,scale:.7},{scale:1,opacity:1,x:0,y:0,rotation:0,rotationX:0,duration:0.3,ease:"back.out(2.4)",immediateRender:false},25.740);
+      tl.to(".mm2",{scale:1.08,duration:.18,yoyo:true,repeat:5,ease:"sine.inOut"},26.090);
+      tl.to(".mm",{opacity:0,y:-20,duration:0.2,ease:"power2.in"},27.085);
+      tl.set("#whip",{opacity:.8,x:300},6.597);tl.to("#whip",{opacity:0,x:-300,duration:.22,ease:"power2.out"},6.607);
+      tl.set("#whip",{opacity:.8,x:300},23.097);tl.to("#whip",{opacity:0,x:-300,duration:.22,ease:"power2.out"},23.107);
+      tl.set("#whip",{opacity:.8,x:300},27.095);tl.to("#whip",{opacity:0,x:-300,duration:.22,ease:"power2.out"},27.105);
+      tl.set("#flash",{opacity:0.4},2.772);tl.to("#flash",{opacity:0,duration:.35},2.792);
+      tl.set("#flash",{opacity:0.35},4.240);tl.to("#flash",{opacity:0,duration:.35},4.260);
+      tl.set("#flash",{opacity:0.2},17.920);tl.to("#flash",{opacity:0,duration:.35},17.940);
+      tl.set("#flash",{opacity:0.15},25.740);tl.to("#flash",{opacity:0,duration:.35},25.760);
+      tl.fromTo(".prog i",{scaleX:0},{scaleX:1,duration:33.43,ease:"none",immediateRender:false},0);
+      tl.set({}, {}, 33.43);
+      window.__timelines["main"] = tl;
+    </script>
+    <script type="module" src="assets/js/opengym.js"></script>
+  </body>
+</html>
