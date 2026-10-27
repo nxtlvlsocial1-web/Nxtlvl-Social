@@ -19,6 +19,11 @@ const MAX = { name: 80, business: 120, email: 120, message: 2000 };
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    // one address for search engines: www goes to the bare domain, permanently
+    if (url.hostname.startsWith('www.')) {
+      url.hostname = url.hostname.slice(4);
+      return Response.redirect(url.toString(), 301);
+    }
     if (url.pathname === '/api/health') return json({ ok: true });
     if (url.pathname === '/api/book') {
       if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(request, env) });

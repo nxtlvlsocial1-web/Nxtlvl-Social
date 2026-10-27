@@ -45,6 +45,9 @@ assert.equal(r.status, 200); assert.match(sent[0].text, /Not sure yet/); assert.
 r = await post({ name: 'X', email: 'x@example.com' }, 'https://evil.example');
 assert.equal(r.headers.get('Access-Control-Allow-Origin'), null, 'unknown origin gets no CORS header');
 
+r = await worker.fetch(new Request('https://www.nxtlvlsocial.ai/social-media-design?x=1'), env, ctx);
+assert.equal(r.status, 301); assert.equal(r.headers.get('location'), 'https://nxtlvlsocial.ai/social-media-design?x=1');
+
 r = await worker.fetch(new Request('https://nxtlvlsocial.ai/api/health'), env, ctx);
 assert.deepEqual(await r.json(), { ok: true });
 

@@ -1,0 +1,54 @@
+# Deploys the website and the Book-a-call API to Cloudflare, and attaches nxtlvlsocial.ai, on every push
+# to main (and by hand from the Actions tab). Needs three repository secrets (Settings → Secrets and
+# variables → Actions): CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, RESEND_API_KEY. See DEPLOY.md.
+name: Deploy to Cloudflare
+
+on:
+  push:
+    branches: [main]
+    paths: ["website/**", "backend/**", ".github/workflows/deploy.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-nxtlvlsocial
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        working-directory: backend
+        run: npm ci || npm install
+
+      - name: Test the API
+        working-directory: backend
+        run: npm test
+
+      - name: Deploy the Worker, the site and the domain
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: backend
+          command: deploy
+          secrets: |
+            RESEND_API_KEY
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+
+      - name: Check the live site
+        run: |
+          sleep 20
+          for url in https://nxtlvlsocial.ai/ https://nxtlvlsocial.ai/api/health https://nxtlvlsocial.ai/social-media-design; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" -L "$url")
+            echo "$code  $url"
+            [ "$code" = "200" ] || exit 1
+          done

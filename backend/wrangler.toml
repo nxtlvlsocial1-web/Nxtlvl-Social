@@ -21,6 +21,10 @@ RATE_LIMIT = "5"
 # binding = "LEADS"
 # id = "paste-the-id-here"
 
-# custom domain: after `npx wrangler deploy`, add the domain in the Cloudflare dashboard (Workers > Settings > Domains)
-# or uncomment:
-# routes = [{ pattern = "nxtlvlsocial.ai", custom_domain = true }, { pattern = "www.nxtlvlsocial.ai", custom_domain = true }]
+# the domain: both hostnames are attached as Workers custom domains on deploy. Cloudflare creates the DNS records
+# and the certificate itself, so the domain only has to be on this Cloudflare account (see DEPLOY.md step 2).
+# The Worker redirects www to the bare domain (src/index.js).
+routes = [
+  { pattern = "nxtlvlsocial.ai", custom_domain = true },
+  { pattern = "www.nxtlvlsocial.ai", custom_domain = true },
+]

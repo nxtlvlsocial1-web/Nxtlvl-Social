@@ -22,8 +22,9 @@ npx wrangler secret put RESEND_API_KEY     # paste the Resend key
 npm run deploy
 ```
 
-Then add the custom domain in the Cloudflare dashboard (Workers & Pages → nxtlvl-social → Settings → Domains),
-or uncomment the `routes` line in `wrangler.toml` and deploy again.
+The deploy attaches `nxtlvlsocial.ai` and `www.nxtlvlsocial.ai` (the `routes` in `wrangler.toml`) once the domain is on
+the Cloudflare account; `www` is redirected to the bare domain by the Worker. The GitHub Actions workflow in
+`.github/workflows/deploy.yml` does the same from GitHub; see DEPLOY.md.
 
 Optional: `npx wrangler kv namespace create LEADS`, paste the id into `wrangler.toml`, and every lead is also stored
 (and the form is rate-limited to 5 requests per IP per hour).

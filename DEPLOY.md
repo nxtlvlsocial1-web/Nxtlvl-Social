@@ -35,7 +35,27 @@ git checkout claude/vibrant-feynman-gaxg7b    # or main, once this branch is mer
 
 Without a verified domain, booking emails come from an unverified sender and land in spam.
 
-## 4. Deploy the Worker
+## 4. Connect the domain (the automatic way, recommended)
+
+The repository has a deploy workflow (`.github/workflows/deploy.yml`). Once three secrets are in GitHub, every
+push to `main` deploys the site and the API and attaches `nxtlvlsocial.ai` and `www.nxtlvlsocial.ai` to it:
+Cloudflare creates the DNS records and the HTTPS certificate on its own.
+
+1. In Cloudflare, make an API token: **My Profile → API Tokens → Create Token → "Edit Cloudflare Workers"**
+   template. Add the **Zone → DNS → Edit** permission for `nxtlvlsocial.ai` so the deploy can attach the domain.
+   Copy the token. Your **Account ID** is on the right of the Workers & Pages overview page.
+2. In GitHub: **Settings → Secrets and variables → Actions → New repository secret**, three times:
+   - `CLOUDFLARE_API_TOKEN` — the token from step 1
+   - `CLOUDFLARE_ACCOUNT_ID` — the account ID
+   - `RESEND_API_KEY` — the key from step 3 (Resend)
+3. Run it: **Actions → Deploy to Cloudflare → Run workflow**, pick the branch, Run. (It also runs by itself on
+   every later push to `main`.) The last step opens the live site and fails loudly if any page is not a 200.
+
+`www` is redirected to the bare domain by the Worker itself, so no dashboard redirect rule is needed.
+
+## 4b. Deploy from your own computer instead
+
+### Deploy the Worker
 
 ```bash
 cd backend
@@ -49,15 +69,11 @@ npm run deploy
 `npm run deploy` prints a test address like `https://nxtlvl-social.<your-name>.workers.dev`. Open it: the full
 site should load, and the form should send you an email.
 
-## 5. Connect the domain
+## 5. The domain is attached on deploy
 
-In Cloudflare: **Workers & Pages → nxtlvl-social → Settings → Domains & Routes → Add → Custom domain**.
-Add `nxtlvlsocial.ai`, then add `www.nxtlvlsocial.ai` too.
-
-Then send `www` to the main address so Google only sees one version:
-**Rules → Redirect Rules → Create rule**:
-- When the hostname equals `www.nxtlvlsocial.ai`
-- Redirect, **301**, to the dynamic URL `concat("https://nxtlvlsocial.ai", http.request.uri.path)`, and keep the query string.
+`backend/wrangler.toml` lists both hostnames as custom domains, so `npm run deploy` (or the workflow) attaches
+them and creates the DNS records. If Cloudflare refuses because the zone is not active yet, finish step 2 and
+deploy again. The Worker answers `www` with a permanent redirect to `nxtlvlsocial.ai`.
 
 ## 6. Check it is live
 
