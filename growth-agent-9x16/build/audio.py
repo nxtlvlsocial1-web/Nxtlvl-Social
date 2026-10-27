@@ -197,11 +197,11 @@ def sfx():
     put(slam(.4), P)
     put(swell(1.4, 72), P + .05, 1.0)
     put(s("pop"), P + .35, .5)
-    # FOLLOWERS: the vortex swirling, pops for the pills, the odometer ticking faster, the 2,400 hit
+    # FOLLOWERS: the vortex swirling, pops for the pills, the odometer ticking faster, the 6,700 hit
     put(whoosh(2.8, .7, 200), L[1] - .2, .8)
     for i in range(14):
         put(pop_(900 + (i % 5) * 90, .08), L[1] + .1 + i * .24, 1, ((i * 37) % 11 - 5) / 6)
-    t, gap = T["twenty"] - .2, .09
+    t, gap = T["count"] - .2, .09
     while t < T["followers"] + .05:
         put(tick(), t, .8, .2)
         t += gap

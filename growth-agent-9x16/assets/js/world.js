@@ -2,7 +2,7 @@
 // hf-seek. Story (Option A, "inside the phone"), built to keep the camera travelling through things:
 //   HOOK      an FPV flight down a tunnel of reels, hearts and comments behind Claude, out through the phone's screen
 //   FOLLOWERS a vortex of follower avatars pours into the phone while the camera orbits through it; the odometer rolls
-//             339 -> 2,400
+//             339 -> 6,700
 //   POST      bullet time round the post as it is stamped "just posting"
 //   GROWS     the phone falls flat and its grid shoots up as a city; the camera dives between the towers
 //   FIVE      a wheel of the five moves spins in 3D and stops on the dark fifth one; the camera dives into it
@@ -247,7 +247,7 @@ const cl = claudeBuild();
 const TRAIL_N = 26;
 const trail = new THREE.InstancedMesh(new THREE.PlaneGeometry(.22, .22), add(CORAL_L, .7, { map: glowTex }), TRAIL_N); trail.frustumCulled = false; scene.add(trail);
 
-// ---------------------------------------------------------------- the 3D odometer (339 -> 2,400)
+// ---------------------------------------------------------------- the 3D odometer (339 -> 6,700)
 // each drum is a cylinder lying on its side; its texture strip holds 0-9 and a blank (slot 10), and turning the drum is
 // shifting the strip, so a number rolls the way a mechanical counter does; a mask leaves one digit per drum in view
 const DRUMS = [];
@@ -541,8 +541,8 @@ function drawScreen(k) {
   write(g, "9:41", 60, 46, 30, { w: 700 });
   g.fillStyle = "#1d1418"; rr(g, 610, 34, 52, 24, 7); g.fill();
   if (kind === "p") {                                     // the profile: followers = a, b = "nogrid" while the tiles stand out
-    write(g, "nxtlvlsocial.ai", 48, 150, 46, { w: 800 });
-    const vx = 48 + g.measureText("nxtlvlsocial.ai").width + 30;
+    write(g, "ai.nxtlvl", 48, 150, 46, { w: 800 });
+    const vx = 48 + g.measureText("ai.nxtlvl").width + 30;
     g.fillStyle = "#3d8bff"; g.beginPath(); g.arc(vx, 150, 14, 0, 7); g.fill(); tick(g, vx, 151, 14, "#fff", 4);
     g.fillStyle = "#1d1418"; g.beginPath(); g.arc(150, 330, 102, 0, 7); g.fill();
     write(g, "nxtlvl", 150, 332, 44, { w: 800, c: "#fff", a: "center" });
@@ -647,7 +647,7 @@ function drawTextures() {
     write(g, "BLOWING UP", 290, h / 2 + 3, 58, { w: 900, c: "#fff", a: "center" });
   });
   ct("boardHead", 900, 100, (g, w, h) => write(g, "SHOT LIST · VISUALS", w / 2, h / 2, 54, { f: "JBMono", c: "#1d1418", a: "center" }));
-  [["HOOK", "#d97757", "text pop"], ["PROOF", "#1d1418", "339 → 2,400"], ["LIST", "#f0a07c", "5 moves"], ["CTA", "#2fbf71", "comment"]].forEach(([s, c, d], i) => ct("frame" + i, 360, 620, (g, w, h) => {
+  [["HOOK", "#d97757", "text pop"], ["PROOF", "#1d1418", "339 → 6,700"], ["LIST", "#f0a07c", "5 moves"], ["CTA", "#2fbf71", "comment"]].forEach(([s, c, d], i) => ct("frame" + i, 360, 620, (g, w, h) => {
     const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, c); gr.addColorStop(1, i === 1 ? "#4a2c30" : "#fffaf5");
     rr(g, 0, 0, w, h, 26); g.fillStyle = gr; g.fill();
     g.fillStyle = "rgba(255,255,255,.85)"; rr(g, 40, 230, w - 80, 120, 20); g.fill();
@@ -662,7 +662,7 @@ function drawTextures() {
     write(g, "script.md", 190, 66, 36, { f: "JBMono", c: "#8a7a72" });
     g.fillStyle = "#f1e7dc"; g.fillRect(40, 110, w - 80, 3);
   });
-  [["HOOK:", " I turned Claude into an agent"], ["PROOF:", " 339 → 2,400 followers"], ["LIST:", " five moves, best one last"],
+  [["HOOK:", " I turned Claude into an agent"], ["PROOF:", " 339 → 6,700 followers"], ["LIST:", " five moves, best one last"],
     ["SHOW:", " a world for every move"], ["CTA:", " comment AGENT"]].forEach(([a, b], i) => ct("pl" + i, 840, 85, (g, w, h) => {
     write(g, a, 0, h / 2, 46, { f: "JBMono", c: "#d97757" }); const aw = g.measureText(a).width;
     write(g, b, aw, h / 2, 46, { w: 700 });
@@ -707,7 +707,7 @@ function drawTextures() {
   ct("dm", 780, 200, (g, w, h) => {
     panel(g, w, h, { r: 56 }); g.fillStyle = "#1d1418"; g.beginPath(); g.arc(100, h / 2, 60, 0, 7); g.fill();
     sparkGlyph(g, 100, h / 2, 34, "#d97757");
-    write(g, "nxtlvlsocial.ai · now", 190, 66, 30, { f: "JBMono", c: "#8a7a72" }); write(g, "My whole Claude setup", 190, 130, 44, { w: 800, max: w - 310 });
+    write(g, "ai.nxtlvl · now", 190, 66, 30, { f: "JBMono", c: "#8a7a72" }); write(g, "My whole Claude setup", 190, 130, 44, { w: 800, max: w - 310 });
     g.fillStyle = "#2fbf71"; rr(g, w - 120, h / 2 - 30, 92, 60, 30); g.fill(); write(g, "sent", w - 74, h / 2 + 2, 28, { w: 800, c: "#fff", a: "center" });
   });
   glare.material.map = canvasTex(256, 512, (g, w, h) => {
@@ -792,9 +792,9 @@ function animOutside(t) {
   phone.rotation.set(-flat * Math.PI / 2 + Math.sin(t * .9) * .02 * (1 - flat), Math.sin(t * .7) * .035 * (1 - flat), 0);
   const sq = pulse(t, T.portal, .02, .25); phone.scale.set(1 + sq * .03, 1 - sq * .04, 1);
   // what the screen shows
-  const v1 = lerp(339, 2400, easeIO(win(t, T.twenty - .2, T.followers + .1)));
+  const v1 = lerp(339, 6700, easeIO(win(t, T.count - .2, T.followers + .1)));
   if (t < T.in0) drawScreen(`p|${fmt(v1)}|${between(t, T.grows - .1, L[3] + .3) ? "nogrid" : ""}`);
-  else if (t < L[10] - .1) drawScreen("p|2,400|");
+  else if (t < L[10] - .1) drawScreen("p|6,700|");
   else {
     const typed = "AGENT".slice(0, clamp(Math.floor((t - T.agentcta + .06) / .075) + 1, 0, 5));
     drawScreen(`c|${t < T.agentcta - .06 ? "" : typed}|${t > T.agentcta + .5 ? "sent" : ""}`);
@@ -809,7 +809,7 @@ function animOutside(t) {
   show(odo1.g, o1 * (1 + pulse(t, T.followers, .05, .3) * .12));
   odo1.g.rotation.y = Math.sin(t * .8) * .1; odo1.g.position.y = 2.3 + Math.sin(t * 1.7) * .015;
   odo1.g.quaternion.setFromEuler(tE.set(0, Math.atan2(camera.position.x, camera.position.z) * .7, 0));
-  setOdo(odo1, t < T.twenty - .2 ? 339 : v1);
+  setOdo(odo1, t < T.count - .2 ? 339 : v1);
   burst(confA, t, T.followers, V(0, 2.3, .35));
   const gv = win(t, L[1] - .3, L[1] + .3) * (1 - win(t, L[2] - .2, L[2] + .1));
   galaxy.visible = gv > 0;

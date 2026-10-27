@@ -5,7 +5,7 @@ every stretch either drives or builds toward the next hit.
 
   0 s        HOOK      no intro: a rushing riser down the tunnel, then the downbeat hits as the camera bursts out of the
                        screen; kick, offbeat hats, sub, chord stabs, claps and a pluck arp as the count starts, a riser
-                       into the 2,400 hit on "followers"
+                       into the 6,700 hit on "followers"
   "post."    STOP      the beat cuts out under "It doesn't just post." (filtered chords only), then slams back on "grows"
   "Five"     BUILD     claps, a snare roll that speeds up and a riser into the dive through the screen
   dive       MOVES     the drop: a bigger kick, rolling saw bass, wide supersaws, the lead hook; a crash on every move
@@ -256,7 +256,7 @@ def compose(cues, n):
                 for s in range(4):
                     put(pluck(notes[(k * 4 + s) % len(notes)] + 12, .3, bright), t + s * BEAT / 4, "keys", .45, np.sin((k * 4 + s) * 1.3) * .5)
 
-    # 1. HOOK from frame 0: the downbeat lands with the phone (.38 s), the count builds, 2,400 hits on "followers"
+    # 1. HOOK from frame 0: the downbeat lands with the phone (.38 s), the count builds, 6,700 hits on "followers"
     # the tunnel: a sub pulse on every beat under a rushing riser, no full groove until the burst
     for t, k in beats(0, P0 - .02, step=BEAT / 2, origin=0):
         put(kick() * .7, t, "drums", .8 if k % 2 == 0 else .45)

@@ -7,7 +7,7 @@ the cue times world.js reads (from build/words.json) and the HTML layer on one p
 the "Five moves" title, a chip for each move, the captions and the end card.
 
 The claims on screen are the client's own, from their original cut of this reel (01c31278-Video-14931.mp4): the page went
-from 339 to 2,400 followers, the five moves and the AGENT comment keyword (the course offer in the original is left out
+from 339 to 6,700 followers, the five moves and the AGENT comment keyword (the course offer in the original is left out
 of this cut, at the client's request). Comment handles, trend names and the script lines inside the phone are
 illustrative UI, the same ones the original showed where it showed any.
 
@@ -36,7 +36,7 @@ def word(line, text, nth=1):
 T = {
     "l": [ln["start"] for ln in LINES], "e": [ln["end"] for ln in LINES],
     "claude": word(1, "claude"), "agent": word(1, "agent"),
-    "three": word(2, "three"), "twenty": word(2, "twenty"), "followers": word(2, "followers"),
+    "three": word(2, "three"), "count": word(2, "sixty"), "followers": word(2, "followers"),
     "post": word(3, "post"), "grows": word(3, "grows"), "page": word(3, "page"),
     "moves": word(4, "moves"), "last": word(4, "last"), "smartest": word(4, "smartest"),
     "blowing": word(5, "blowing"), "niche": word(5, "niche"), "plans": word(6, "plans"), "visuals": word(6, "visuals"),
