@@ -3,6 +3,8 @@
 **Logo: the Smooth N.** One continuous rounded stroke forms an N that ends higher than it starts (the next level), with a
 small spark off the end (the idea). Wordmark: "nxtlvl" in Archivo Bold (width 108%, tracking −3%), "social" in Instrument Sans Regular.
 
+> **Instagram profile picture:** the final choice is the Shooting Star, option B. See `shooting-star/` for the files.
+
 ## Files
 
 | File | Use |
