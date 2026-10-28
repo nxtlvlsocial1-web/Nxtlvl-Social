@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Haunted database explainer 9x16</title>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Manrope"; font-weight: 200 800; src: url("assets/fonts/manrope.ttf"); }
+@font-face { font-family: "ISerif"; font-style: italic; src: url("assets/fonts/InstrumentSerif-Italic.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 400; src: url("assets/fonts/JetBrainsMono-Regular.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 700; src: url("assets/fonts/JetBrainsMono-Bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #070a14; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #070a14; font-family: "Manrope", sans-serif; color: #F1E9DC; }
+.clip { position: absolute; inset: 0; }
+#gl { width: 1080px; height: 1920px; display: block; }
+.mono { font-family: "JBMono", monospace; }
+.scrim { position: absolute; left: 0; right: 0; }
+.scrim.top { top: 0; height: 720px; background: linear-gradient(180deg, rgba(5,6,12,.92) 0%, rgba(5,6,12,.75) 45%, rgba(5,6,12,0) 100%); }
+.scrim.bot { bottom: 0; height: 760px; background: linear-gradient(0deg, rgba(5,6,12,.9) 0%, rgba(5,6,12,.62) 40%, rgba(5,6,12,0) 100%); }
+.top { position: absolute; left: 70px; right: 70px; top: 262px; display: flex; justify-content: space-between; align-items: center; }
+.brand { font: 700 30px "JBMono"; letter-spacing: 4px; color: #F1E9DC; display: flex; align-items: center; gap: 14px; }
+.brand i { width: 18px; height: 18px; border-radius: 50%; background: #E8735A; box-shadow: 0 0 14px #E8735A; }
+.prog { width: 220px; height: 26px; border-radius: 13px; border: 3px solid #F1E9DC; overflow: hidden; }
+.prog i { display: block; width: 100%; height: 100%; background: #E8735A; transform-origin: 0 50%; transform: scaleX(0); }
+.hl { position: absolute; left: 70px; right: 70px; top: 340px; text-shadow: 0 4px 30px rgba(0,0,0,.6); }
+.kick { display: flex; align-items: center; gap: 18px; margin-bottom: 14px; font: 700 28px "JBMono"; letter-spacing: 4px; color: #FF9A7F; }
+.segs { display: flex; gap: 8px; } .segs i { width: 54px; height: 10px; border-radius: 5px; background: rgba(241,233,220,.25); } .segs i.on { background: #E8735A; }
+.l1 { font: 800 76px/1.05 "Manrope"; letter-spacing: -2.5px; color: #F1E9DC; }
+.hw { display: inline-block; }
+.acc { display: inline-block; font: 400 128px/1 "ISerif"; font-style: italic; color: #FF8A6E; letter-spacing: -1px; }
+.card { position: absolute; background: #FFFDF8; border: 3px solid #E2D6C3; border-radius: 28px; box-shadow: 0 24px 60px rgba(0,0,0,.5); color: #1E1B18; }
+.lab { font: 700 28px "JBMono"; letter-spacing: 3px; color: #8A7F70; }
+.chip { display: inline-block; padding: 8px 18px; border-radius: 30px; font: 700 28px "JBMono"; letter-spacing: 2px; color: #fff; }
+.chip.red { background: #D9483B; } .chip.amber { background: #F2B33D; color: #1E1B18; } .chip.green { background: #3FA372; }
+.chip.big { position: absolute; left: 0; right: 0; margin: 0 auto; width: fit-content; top: 1180px; font-size: 32px; padding: 14px 28px; box-shadow: 0 12px 30px rgba(0,0,0,.5); }
+/* S1 */
+.term { position: absolute; left: 110px; top: 1090px; width: 860px; height: 200px; border-radius: 24px; background: #1B1A1F; overflow: hidden;
+  border: 2px solid #3A3842; box-shadow: 0 24px 60px rgba(0,0,0,.6); }
+.bar { height: 58px; display: flex; align-items: center; gap: 12px; padding: 0 24px; background: #26252C; }
+.bar i { width: 16px; height: 16px; border-radius: 50%; background: #4A4852; } .bar i:first-child { background: #D9483B; }
+.bar span { margin-left: 12px; font: 400 28px "JBMono"; color: #A9A4B4; }
+.ptag { margin-left: auto; padding: 4px 14px; border-radius: 10px; background: #D9483B; font: 700 28px "JBMono"; letter-spacing: 2px; color: #fff; }
+.tl { padding: 36px 30px; font: 700 48px "JBMono"; color: #F4EEE6; white-space: nowrap; }
+.ch { opacity: 0; }
+.cur { display: inline-block; width: 24px; height: 50px; margin-left: 4px; vertical-align: -8px; background: #F4EEE6; }
+.stamp { position: absolute; right: 40px; top: 70px; opacity: 0; padding: 4px 24px; border: 8px solid #D9483B; border-radius: 16px; color: #D9483B;
+  font: 800 72px/1.1 "Manrope"; letter-spacing: 2px; transform: rotate(-8deg); background: rgba(255,250,245,.94); }
+.stamp.big { right: auto; left: 0; right: 0; margin: 0 auto; width: fit-content; top: 1080px; font-size: 96px; }
+/* S2 */
+.cnt { left: 210px; top: 1060px; width: 660px; height: 250px; padding: 30px 38px; }
+.num { margin-top: 8px; font: 800 100px/1 "Manrope"; letter-spacing: -4px; }
+.drain { margin-top: 22px; height: 20px; border-radius: 10px; background: #EFE6D8; overflow: hidden; }
+.drain i { display: block; height: 100%; width: 100%; background: #D9483B; transform-origin: 0 50%; }
+/* S3 */
+.snap { left: 110px; top: 1080px; width: 860px; height: 200px; padding: 26px 34px; display: flex; align-items: center; gap: 26px; border: 5px solid #E8735A;
+  box-shadow: 0 0 60px rgba(232,115,90,.55), 0 24px 60px rgba(0,0,0,.5); }
+.dbi { width: 84px; height: 100px; border-radius: 42px / 16px; border: 6px solid #1E1B18; background: #FBE3DD; }
+.big2 { font-size: 42px; font-weight: 700; }
+.sub { margin-top: 6px; font: 600 32px "Manrope"; color: #6E6458; }
+.ok { margin-left: auto; }
+.steps { position: absolute; left: 0; right: 0; top: 1110px; display: flex; justify-content: center; gap: 60px; }
+.st { width: 130px; height: 130px; border-radius: 50%; background: #F1E9DC; color: #1E1B18; display: flex; align-items: center; justify-content: center;
+  font: 400 96px/1 "ISerif"; font-style: italic; box-shadow: 0 16px 40px rgba(0,0,0,.5); }
+.st:nth-child(1) { background: #D45C40; color: #fff; }
+/* S4 */
+.chipcmd { position: absolute; left: 70px; top: 1250px; padding: 16px 24px; border-radius: 18px; background: #F1E9DC; color: #1E1B18; font: 700 32px "JBMono";
+  white-space: nowrap; box-shadow: 0 12px 30px rgba(0,0,0,.5); }
+.chipcmd b { color: #D45C40; }
+.chipcmd.red { background: #D9483B; color: #fff; top: 1235px; left: 90px; font-size: 34px; }
+.polaroid { position: absolute; left: 600px; top: 960px; width: 340px; padding: 16px 16px 0; background: #FBF8F2; border-radius: 8px; box-shadow: 0 24px 60px rgba(0,0,0,.6);
+  transform: rotate(4deg); }
+.pimg { position: relative; height: 200px; border-radius: 4px; background: linear-gradient(180deg, #2a3a30, #1a2420); overflow: hidden; }
+.pimg i { position: absolute; width: 10px; height: 16px; border-radius: 50% 50% 40% 40%; background: #FFC070; box-shadow: 0 0 10px #FFB050, 0 0 22px rgba(255,170,80,.6); }
+.pcap { display: flex; align-items: center; justify-content: center; gap: 10px; height: 64px; font: 700 28px "JBMono"; color: #1E1B18; }
+/* S6 */
+.sess { left: 70px; top: 1060px; width: 940px; height: 230px; padding: 28px 36px; }
+.shead { display: flex; align-items: center; gap: 14px; font: 700 28px "JBMono"; letter-spacing: 3px; color: #8A7F70; }
+.shead i { width: 16px; height: 16px; border-radius: 50%; background: #E8735A; }
+.srow { position: absolute; left: 36px; right: 36px; top: 110px; display: flex; align-items: center; gap: 22px; font: 700 44px "Manrope"; letter-spacing: -1px; }
+.srow .chip { font-size: 30px; padding: 10px 20px; }
+/* S7 */
+.denied { position: absolute; left: 70px; padding: 12px 22px; border-radius: 14px; background: #D9483B; color: #fff; font: 700 32px "JBMono";
+  box-shadow: 0 12px 30px rgba(0,0,0,.5); }
+#d0 { top: 1060px; } #d1 { top: 1150px; left: 300px; } #d2 { top: 1240px; left: 160px; }
+/* S8 */
+.cta { position: absolute; left: 0; right: 0; top: 340px; text-align: center; }
+.cchip { display: inline-block; padding: 12px 30px; border-radius: 40px; background: #F1E9DC; color: #1E1B18; font: 700 34px "JBMono"; letter-spacing: 8px; }
+.cword { margin: 22px auto 0; display: table; padding: 10px 48px 22px; border-radius: 40px; background: #D45C40; color: #fff; font: 800 150px/1.05 "Manrope"; letter-spacing: -3px;
+  box-shadow: 0 18px 0 #B9523D, 0 0 80px rgba(232,115,90,.5); }
+.cbox { left: 70px; top: 700px; width: 940px; height: 132px; padding: 0 26px; display: flex; align-items: center; gap: 22px; border-radius: 66px; }
+.av { width: 76px; height: 76px; border-radius: 50%; background: linear-gradient(135deg, #E8735A, #F2B33D); }
+.ctext { flex: 1; font: 800 54px "Manrope"; letter-spacing: 2px; }
+.cc { opacity: 0; }
+.ccur { display: inline-block; width: 4px; height: 52px; background: #E8735A; vertical-align: -6px; margin-left: 4px; }
+.send { width: 88px; height: 88px; border-radius: 50%; background: #D45C40; display: flex; align-items: center; justify-content: center; }
+.pdf { position: absolute; left: 110px; top: 880px; width: 300px; }
+.pdf img { width: 300px; height: 424px; display: block; border-radius: 14px; box-shadow: 0 26px 60px rgba(0,0,0,.6); }
+.pdftag { position: absolute; left: 120px; top: -30px; padding: 10px 20px; border-radius: 30px; background: #3FA372; color: #fff; font: 700 28px "JBMono"; letter-spacing: 2px;
+  white-space: nowrap; transform: rotate(4deg); }
+/* captions */
+.cap { position: absolute; left: 60px; right: 60px; top: 1330px; text-align: center; opacity: 0; font: 800 60px/1.25 "Manrope"; letter-spacing: -1px; color: #F1E9DC;
+  text-shadow: 0 3px 16px rgba(0,0,0,.7); }
+.cw { display: inline-block; padding: 2px 12px 6px; border-radius: 16px; }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="38.65" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="gl" class="clip" data-start="0" data-duration="38.65" data-track-index="0"></canvas>
+      <div id="scrims" class="clip" data-start="0" data-duration="38.65" data-track-index="1" data-layout-ignore><div class="scrim top"></div><div class="scrim bot"></div></div>
+      <div id="s1" class="clip scene" data-start="0" data-duration="4.9" data-track-index="3" data-layout-allow-overflow><div class="inner"><div class="hl"><div class="l1"><span class="hw">He</span> <span class="hw">just</span> <span class="hw">deleted</span></div><div class="l2"><span class="acc">production.</span></div></div><div class="term" id="term"><div class="bar"><i></i><i></i><i></i><span>prod-db-01</span><b class="ptag">PRODUCTION</b></div><div class="tl">prod=# <span class="ch" id="ch0">D</span><span class="ch" id="ch1">R</span><span class="ch" id="ch2">O</span><span class="ch" id="ch3">P</span><span class="ch" id="ch4">&nbsp;</span><span class="ch" id="ch5">D</span><span class="ch" id="ch6">A</span><span class="ch" id="ch7">T</span><span class="ch" id="ch8">A</span><span class="ch" id="ch9">B</span><span class="ch" id="ch10">A</span><span class="ch" id="ch11">S</span><span class="ch" id="ch12">E</span><span class="ch" id="ch13">&nbsp;</span><span class="ch" id="ch14">a</span><span class="ch" id="ch15">p</span><span class="ch" id="ch16">p</span><span class="ch" id="ch17">;</span><span class="cur" id="cur"></span></div><div class="stamp" id="stamp1">DELETED</div></div></div></div><div id="s2" class="clip scene" data-start="4.9" data-duration="5.29" data-track-index="4" data-layout-allow-overflow><div class="inner"><div class="hl"><div class="l1"><span class="hw">1.2</span> <span class="hw">million</span> <span class="hw">rows.</span></div><div class="l2"><span class="acc">Gone.</span></div></div><div class="card cnt" id="cnt"><div class="lab">ROWS IN PRODUCTION</div><div class="num" id="num">1,204,883</div><div class="drain"><i id="drainbar"></i></div></div><div class="chip red big" id="dead">DEAD · 239 DAYS · NOBODY CHECKED</div></div></div><div id="s3" class="clip scene" data-start="10.19" data-duration="3.39" data-track-index="3" data-layout-allow-overflow><div class="inner"><div class="hl"><div class="l1"><span class="hw">But</span> <span class="hw">his</span> <span class="hw">AI</span> <span class="hw">had</span> <span class="hw">a</span></div><div class="l2"><span class="acc">copy.</span></div></div><div class="card snap" id="snap"><div class="dbi"></div><div><div class="mono big2">snapshot_0306.dump</div><div class="sub">1,204,883 rows · all of them</div></div><div class="ok"><svg viewBox="0 0 44 44" width="44" height="44"><circle cx="22" cy="22" r="22" fill="#3FA372"/><path d="M12 23 L19 30 L32 15" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="steps" id="steps3"><div class="st" id="st0">1</div><div class="st" id="st1">2</div><div class="st" id="st2">3</div></div></div></div><div id="s4" class="clip scene" data-start="13.58" data-duration="5.91" data-track-index="4" data-layout-allow-overflow><div class="inner"><div class="hl"><div class="kick"><span>STEP 1/3</span><b class="segs"><i class="on"></i><i class=""></i><i class=""></i></b></div><div class="l1"><span class="hw">One:</span> <span class="hw">a</span> <span class="hw">snapshot</span></div><div class="l2"><span class="acc">hook.</span></div></div><div class="chipcmd" id="cmd4">DROP TABLE orders <b>→ prod-guard.sh</b></div><div class="polaroid" id="pol"><div class="pimg"><i style="left:14px;top:30px"></i><i style="left:44px;top:30px"></i><i style="left:74px;top:30px"></i><i style="left:104px;top:30px"></i><i style="left:134px;top:30px"></i><i style="left:164px;top:30px"></i><i style="left:194px;top:30px"></i><i style="left:224px;top:30px"></i><i style="left:254px;top:30px"></i><i style="left:14px;top:76px"></i><i style="left:44px;top:76px"></i><i style="left:74px;top:76px"></i><i style="left:104px;top:76px"></i><i style="left:134px;top:76px"></i><i style="left:164px;top:76px"></i><i style="left:194px;top:76px"></i><i style="left:224px;top:76px"></i><i style="left:254px;top:76px"></i><i style="left:14px;top:122px"></i><i style="left:44px;top:122px"></i><i style="left:74px;top:122px"></i><i style="left:104px;top:122px"></i><i style="left:134px;top:122px"></i><i style="left:164px;top:122px"></i><i style="left:194px;top:122px"></i><i style="left:224px;top:122px"></i><i style="left:254px;top:122px"></i></div><div class="pcap">orders · snapshot saved <svg viewBox="0 0 44 44" width="34" height="34"><circle cx="22" cy="22" r="22" fill="#3FA372"/><path d="M12 23 L19 30 L32 15" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div></div><div id="s5" class="clip scene" data-start="19.49" data-duration="4.54" data-track-index="3" data-layout-allow-overflow><div class="inner"><div class="hl"><div class="kick"><span>STEP 2/3</span><b class="segs"><i class="on"></i><i class="on"></i><i class=""></i></b></div><div class="l1"><span class="hw">Two:</span> <span class="hw">production</span></div><div class="l2"><span class="acc">blocked.</span></div></div><div class="chipcmd red" id="cmd5">DROP DATABASE</div><div class="stamp big" id="stamp5">DENIED</div></div></div><div id="s6" class="clip scene" data-start="24.03" data-duration="4.54" data-track-index="4" data-layout-allow-overflow><div class="inner"><div class="hl"><div class="kick"><span>STEP 3/3</span><b class="segs"><i class="on"></i><i class="on"></i><i class="on"></i></b></div><div class="l1"><span class="hw">Three:</span> <span class="hw">a</span> <span class="hw">backup</span></div><div class="l2"><span class="acc">alarm.</span></div></div><div class="card sess" id="sess"><div class="shead"><i></i>CLAUDE CODE · SESSION START</div><div class="srow" id="warn"><b class="chip amber">WARNING</b><span>No backup newer than 26h</span></div><div class="srow" id="okrow"><b class="chip green">OK</b><span>Backup 3 hours old</span></div></div></div></div><div id="s7" class="clip scene" data-start="28.57" data-duration="6.29" data-track-index="3" data-layout-allow-overflow><div class="inner"><div class="hl"><div class="l1"><span class="hw">Read-only</span></div><div class="l2"><span class="acc">production.</span></div></div><div class="denied" id="d0">DELETE · permission denied</div><div class="denied" id="d1">DROP · permission denied</div><div class="denied" id="d2">TRUNCATE · permission denied</div></div></div><div id="s8" class="clip scene" data-start="34.86" data-duration="3.79" data-track-index="4" data-layout-allow-overflow><div class="inner"><div class="cta"><div class="cchip" id="cchip">COMMENT</div><div class="cword" id="cword">BACKUP</div></div><div class="card cbox" id="cbox"><i class="av"></i><div class="ctext"><span class="cc" id="cc0">B</span><span class="cc" id="cc1">A</span><span class="cc" id="cc2">C</span><span class="cc" id="cc3">K</span><span class="cc" id="cc4">U</span><span class="cc" id="cc5">P</span><span class="ccur" id="ccur"></span></div><div class="send" id="send"><svg viewBox="0 0 40 40" width="40" height="40"><path d="M8 20 H30 M21 11 L30 20 L21 29" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="pdf" id="pdf"><img src="assets/img/pdf-cover-1.png" alt=""><div class="pdftag">FREE PDF · 6 PAGES</div></div></div></div>
+      <div id="chrome" class="clip" data-start="0" data-duration="38.65" data-track-index="6"><div class="top"><div class="brand"><i></i>AI.NXTLVL</div><div class="prog"><i></i></div></div></div>
+      <div id="caps" class="clip" data-start="0" data-duration="38.65" data-track-index="7"><div class="cap" id="cap0"><span class="cw" id="w0_0">At</span> <span class="cw" id="w0_1">three</span> <span class="cw" id="w0_2">A.M.,</span></div><div class="cap" id="cap1"><span class="cw" id="w1_0">a</span> <span class="cw" id="w1_1">developer</span> <span class="cw" id="w1_2">deleted</span> <span class="cw" id="w1_3">his</span></div><div class="cap" id="cap2"><span class="cw" id="w2_0">entire</span> <span class="cw" id="w2_1">production</span> <span class="cw" id="w2_2">database.</span></div><div class="cap" id="cap3"><span class="cw" id="w3_0">One</span> <span class="cw" id="w3_1">point</span> <span class="cw" id="w3_2">two</span> <span class="cw" id="w3_3">million</span></div><div class="cap" id="cap4"><span class="cw" id="w4_0">rows.</span></div><div class="cap" id="cap5"><span class="cw" id="w5_0">Gone.</span></div><div class="cap" id="cap6"><span class="cw" id="w6_0">And</span> <span class="cw" id="w6_1">the</span> <span class="cw" id="w6_2">backups?</span></div><div class="cap" id="cap7"><span class="cw" id="w7_0">Dead</span> <span class="cw" id="w7_1">since</span> <span class="cw" id="w7_2">March.</span></div><div class="cap" id="cap8"><span class="cw" id="w8_0">But</span> <span class="cw" id="w8_1">his</span> <span class="cw" id="w8_2">AI</span> <span class="cw" id="w8_3">had</span></div><div class="cap" id="cap9"><span class="cw" id="w9_0">a</span> <span class="cw" id="w9_1">copy.</span></div><div class="cap" id="cap10"><span class="cw" id="w10_0">Here's</span> <span class="cw" id="w10_1">the</span> <span class="cw" id="w10_2">setup</span> <span class="cw" id="w10_3">that</span></div><div class="cap" id="cap11"><span class="cw" id="w11_0">saved</span> <span class="cw" id="w11_1">him.</span></div><div class="cap" id="cap12"><span class="cw" id="w12_0">One:</span></div><div class="cap" id="cap13"><span class="cw" id="w13_0">a</span> <span class="cw" id="w13_1">snapshot</span> <span class="cw" id="w13_2">hook.</span></div><div class="cap" id="cap14"><span class="cw" id="w14_0">Before</span> <span class="cw" id="w14_1">any</span> <span class="cw" id="w14_2">DROP</span> <span class="cw" id="w14_3">or</span></div><div class="cap" id="cap15"><span class="cw" id="w15_0">DELETE</span> <span class="cw" id="w15_1">runs,</span></div><div class="cap" id="cap16"><span class="cw" id="w16_0">Claude</span> <span class="cw" id="w16_1">backs</span> <span class="cw" id="w16_2">up</span> <span class="cw" id="w16_3">the</span></div><div class="cap" id="cap17"><span class="cw" id="w17_0">database</span> <span class="cw" id="w17_1">first.</span></div><div class="cap" id="cap18"><span class="cw" id="w18_0">Two:</span></div><div class="cap" id="cap19"><span class="cw" id="w19_0">a</span> <span class="cw" id="w19_1">production</span> <span class="cw" id="w19_2">block.</span></div><div class="cap" id="cap20"><span class="cw" id="w20_0">Destructive</span> <span class="cw" id="w20_1">commands</span> <span class="cw" id="w20_2">on</span> <span class="cw" id="w20_3">prod?</span></div><div class="cap" id="cap21"><span class="cw" id="w21_0">Refused.</span></div><div class="cap" id="cap22"><span class="cw" id="w22_0">Three:</span></div><div class="cap" id="cap23"><span class="cw" id="w23_0">a</span> <span class="cw" id="w23_1">backup</span> <span class="cw" id="w23_2">alarm.</span></div><div class="cap" id="cap24"><span class="cw" id="w24_0">Every</span> <span class="cw" id="w24_1">session</span> <span class="cw" id="w24_2">checks</span> <span class="cw" id="w24_3">your</span></div><div class="cap" id="cap25"><span class="cw" id="w25_0">backups</span> <span class="cw" id="w25_1">are</span> <span class="cw" id="w25_2">fresh.</span></div><div class="cap" id="cap26"><span class="cw" id="w26_0">And</span> <span class="cw" id="w26_1">the</span> <span class="cw" id="w26_2">part</span> <span class="cw" id="w26_3">nobody</span></div><div class="cap" id="cap27"><span class="cw" id="w27_0">does...</span></div><div class="cap" id="cap28"><span class="cw" id="w28_0">a</span> <span class="cw" id="w28_1">read-only</span> <span class="cw" id="w28_2">login</span> <span class="cw" id="w28_3">for</span></div><div class="cap" id="cap29"><span class="cw" id="w29_0">production.</span></div><div class="cap" id="cap30"><span class="cw" id="w30_0">You</span> <span class="cw" id="w30_1">can't</span> <span class="cw" id="w30_2">drop</span> <span class="cw" id="w30_3">what</span></div><div class="cap" id="cap31"><span class="cw" id="w31_0">you</span> <span class="cw" id="w31_1">can't</span> <span class="cw" id="w31_2">touch.</span></div><div class="cap" id="cap32"><span class="cw" id="w32_0">Comment</span> <span class="cw" id="w32_1">BACKUP,</span></div><div class="cap" id="cap33"><span class="cw" id="w33_0">and</span> <span class="cw" id="w33_1">I'll</span> <span class="cw" id="w33_2">send</span> <span class="cw" id="w33_3">you</span></div><div class="cap" id="cap34"><span class="cw" id="w34_0">the</span> <span class="cw" id="w34_1">whole</span> <span class="cw" id="w34_2">setup.</span></div></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="38.65" data-track-index="10" data-volume="1"></audio>
+    </div>
+    <script>
+      window.HH_T = {"l": [0.35, 5.02, 10.31, 13.7, 19.61, 24.15, 28.69, 34.98], "e": [4.46, 9.72, 13.06, 19.05, 23.59, 27.9, 34.29, 37.05], "end": 38.65, "scenes": [[0, 4.9], [4.9, 10.19], [10.19, 13.58], [13.58, 19.49], [19.49, 24.03], [24.03, 28.57], [28.57, 34.86], [34.86, 38.65]], "press": 2.402, "rows": 6.54, "gone": 7.1, "backups": 8.11, "dead": 8.75, "copy": 11.241, "heres": 11.84, "before": 15.41, "backs": 17.527, "first": 18.813, "destructive": 21.31, "prod": 22.423, "refused": 22.92, "alarm": 25.246, "fresh": 27.037, "nobody": 29.362, "readonly": 30.627, "cant": 32.799, "touch": 34.041, "comment": 34.98, "backup": 35.335, "send": 36.203};
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      gsap.set(["#stamp1", "#s2 .hw", "#s2 .acc", "#cnt", "#dead", "#s3 .hw", "#s3 .acc", "#snap", "#st0", "#st1", "#st2", "#s4 .kick", "#s4 .hw", "#s4 .acc", "#pol", "#s5 .kick", "#s5 .hw", "#s5 .acc", "#stamp5", "#s6 .kick", "#s6 .hw", "#s6 .acc", "#sess", "#warn", "#okrow", "#s7 .hw", "#s7 .acc", "#d0", "#d1", "#d2", "#cchip", "#cword", "#cbox", "#cc0", "#cc1", "#cc2", "#cc3", "#cc4", "#cc5", "#pdf"],{opacity:0});
+      tl.fromTo("#s1 .acc",{scale:1.12},{scale:1,duration:.5,ease:"back.out(2)",immediateRender:false},0);
+      tl.set("#ch0",{opacity:1},0.300);
+      tl.set("#ch1",{opacity:1},0.392);
+      tl.set("#ch2",{opacity:1},0.484);
+      tl.set("#ch3",{opacity:1},0.575);
+      tl.set("#ch4",{opacity:1},0.667);
+      tl.set("#ch5",{opacity:1},0.759);
+      tl.set("#ch6",{opacity:1},0.851);
+      tl.set("#ch7",{opacity:1},0.942);
+      tl.set("#ch8",{opacity:1},1.034);
+      tl.set("#ch9",{opacity:1},1.126);
+      tl.set("#ch10",{opacity:1},1.218);
+      tl.set("#ch11",{opacity:1},1.310);
+      tl.set("#ch12",{opacity:1},1.401);
+      tl.set("#ch13",{opacity:1},1.493);
+      tl.set("#ch14",{opacity:1},1.585);
+      tl.set("#ch15",{opacity:1},1.677);
+      tl.set("#ch16",{opacity:1},1.768);
+      tl.set("#ch17",{opacity:1},1.860);
+      tl.fromTo("#cur",{opacity:1},{opacity:0,duration:.25,yoyo:true,repeat:9,ease:"steps(1)",immediateRender:false},0.000);
+      tl.set("#cur",{opacity:0},2.402);
+      tl.to("#term .tl",{opacity:0,duration:0.08,ease:"power2.out"},2.462);
+      tl.to("#term",{backgroundColor:"#3A1513",duration:.08},2.402);
+      tl.to("#term",{x:"+=10",duration:0.05,yoyo:true,repeat:7,ease:"sine.inOut"},2.422);
+      tl.fromTo("#stamp1",{opacity:0,scale:2.4,rotation:-20},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.25,ease:"power4.out",immediateRender:false},2.522);
+      tl.fromTo("#s2 .hw",{opacity:0,y:40},{opacity:1,y:0,duration:.32,stagger:.06,ease:"back.out(2)",immediateRender:false},4.950);
+      tl.fromTo("#s2 .acc",{opacity:0,scale:.6,rotation:-6},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.45,ease:"back.out(2.4)",immediateRender:false},5.200);
+      tl.fromTo("#cnt",{opacity:0,y:50},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.35,ease:"power3.out",immediateRender:false},4.950);
+      (()=>{const o={v:1204883};tl.to(o,{v:0,duration:1.900,ease:"power1.in",onUpdate:()=>{document.getElementById("num").textContent=Math.round(o.v).toLocaleString("en-US");}},5.200);})();
+      tl.fromTo("#drainbar",{scaleX:1},{scaleX:0,duration:1.900,ease:"power1.in",immediateRender:false},5.200);
+      tl.to("#num",{color:"#D9483B",duration:.1},7.050);
+      tl.to("#cnt",{x:"+=8",duration:0.05,yoyo:true,repeat:5,ease:"sine.inOut"},7.100);
+      tl.to("#cnt",{opacity:0,y:40,duration:0.15,ease:"power2.out"},7.910);
+      tl.fromTo("#dead",{opacity:0,scale:2,rotation:-10},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.3,ease:"power4.out",immediateRender:false},8.750);
+      tl.fromTo("#s3 .hw",{opacity:0,y:40},{opacity:1,y:0,duration:.32,stagger:.06,ease:"back.out(2)",immediateRender:false},10.240);
+      tl.fromTo("#s3 .acc",{opacity:0,scale:.6,rotation:-6},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.45,ease:"back.out(2.4)",immediateRender:false},10.490);
+      tl.fromTo("#snap",{opacity:0,y:120,scale:.6,rotation:8},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.5,ease:"back.out(1.6)",immediateRender:false},11.191);
+      tl.to("#snap",{opacity:0,y:-40,duration:0.25,ease:"power2.in"},11.790);
+      tl.fromTo("#st0",{opacity:0,scale:0},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.3,ease:"back.out(3)",immediateRender:false},11.940);
+      tl.fromTo("#st1",{opacity:0,scale:0},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.3,ease:"back.out(3)",immediateRender:false},12.080);
+      tl.fromTo("#st2",{opacity:0,scale:0},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.3,ease:"back.out(3)",immediateRender:false},12.220);
+      tl.fromTo("#s4 .kick",{opacity:0,x:-30},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.3,ease:"power3.out",immediateRender:false},13.600);
+      tl.fromTo("#s4 .hw",{opacity:0,y:40},{opacity:1,y:0,duration:.32,stagger:.06,ease:"back.out(2)",immediateRender:false},13.630);
+      tl.fromTo("#s4 .acc",{opacity:0,scale:.6,rotation:-6},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.45,ease:"back.out(2.4)",immediateRender:false},13.880);
+      tl.fromTo("#cmd4",{opacity:0,x:-420},{opacity:1,x:0,duration:.45,ease:"power3.out",immediateRender:false},15.310);
+      tl.fromTo("#pol",{opacity:0,y:120,rotation:-20,scale:.6},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.45,ease:"back.out(1.6)",immediateRender:false},17.477);
+      tl.set("#pol",{rotation:4},17.927);
+      tl.to("#cmd4",{opacity:0,x:300,duration:0.3,ease:"power2.in"},18.713);
+      tl.fromTo("#s5 .kick",{opacity:0,x:-30},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.3,ease:"power3.out",immediateRender:false},19.510);
+      tl.fromTo("#s5 .hw",{opacity:0,y:40},{opacity:1,y:0,duration:.32,stagger:.06,ease:"back.out(2)",immediateRender:false},19.540);
+      tl.fromTo("#s5 .acc",{opacity:0,scale:.6,rotation:-6},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.45,ease:"back.out(2.4)",immediateRender:false},19.790);
+      tl.fromTo("#cmd5",{opacity:0,x:-420},{opacity:1,x:0,duration:.4,ease:"power3.out",immediateRender:false},21.210);
+      tl.to("#cmd5",{x:-60,rotation:-10,duration:.4,ease:"back.out(2)"},22.820);
+      tl.fromTo("#stamp5",{opacity:0,scale:2.4,rotation:-24},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.25,ease:"power4.out",immediateRender:false},22.940);
+      tl.fromTo("#s6 .kick",{opacity:0,x:-30},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.3,ease:"power3.out",immediateRender:false},24.050);
+      tl.fromTo("#s6 .hw",{opacity:0,y:40},{opacity:1,y:0,duration:.32,stagger:.06,ease:"back.out(2)",immediateRender:false},24.080);
+      tl.fromTo("#s6 .acc",{opacity:0,scale:.6,rotation:-6},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.45,ease:"back.out(2.4)",immediateRender:false},24.330);
+      tl.fromTo("#sess",{opacity:0,y:50},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.35,ease:"power3.out",immediateRender:false},24.130);
+      tl.fromTo("#warn",{opacity:0,x:-30},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},25.196);
+      tl.to("#warn",{opacity:0,x:40,duration:0.2,ease:"power2.out"},26.937);
+      tl.fromTo("#okrow",{opacity:0,x:-30},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},27.037);
+      tl.fromTo("#s7 .hw",{opacity:0,y:40},{opacity:1,y:0,duration:.32,stagger:.06,ease:"back.out(2)",immediateRender:false},28.620);
+      tl.fromTo("#s7 .acc",{opacity:0,scale:.6,rotation:-6},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.45,ease:"back.out(2.4)",immediateRender:false},28.870);
+      tl.fromTo("#d0",{opacity:0,scale:.6,x:-40},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},32.699);
+      tl.fromTo("#d1",{opacity:0,scale:.6,x:-40},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},32.999);
+      tl.fromTo("#d2",{opacity:0,scale:.6,x:-40},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},33.299);
+      tl.fromTo("#cchip",{opacity:0,y:-30},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},34.880);
+      tl.fromTo("#cword",{opacity:0,scale:2.2,rotation:-8},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.32,ease:"power4.out",immediateRender:false},35.285);
+      tl.fromTo("#cbox",{opacity:0,y:50},{opacity:1,x:0,y:0,scale:1,rotation:0,duration:0.35,ease:"power3.out",immediateRender:false},34.960);
+      tl.set("#cc0",{opacity:1},35.385);
+      tl.set("#cc1",{opacity:1},35.475);
+      tl.set("#cc2",{opacity:1},35.565);
+      tl.set("#cc3",{opacity:1},35.655);
+      tl.set("#cc4",{opacity:1},35.745);
+      tl.set("#cc5",{opacity:1},35.835);
+      tl.to("#send",{scale:.85,duration:.08,yoyo:true,repeat:1,ease:"power2.inOut"},36.103);
+      tl.fromTo("#pdf",{opacity:0,y:200,rotation:18,scale:.6},{opacity:1,y:0,rotation:-5,scale:1,duration:.6,ease:"back.out(1.5)",immediateRender:false},36.253);
+      tl.to("#pdf",{y:-10,duration:.8,yoyo:true,repeat:2,ease:"sine.inOut"},36.903);
+      tl.to("#s1 .inner",{opacity:0,duration:.14,ease:"power2.in"},4.760);
+      tl.fromTo("#s2 .inner",{opacity:0},{opacity:1,duration:.2,ease:"power2.out",immediateRender:false},4.900);
+      tl.to("#s2 .inner",{opacity:0,duration:.14,ease:"power2.in"},10.050);
+      tl.fromTo("#s3 .inner",{opacity:0},{opacity:1,duration:.2,ease:"power2.out",immediateRender:false},10.190);
+      tl.to("#s3 .inner",{opacity:0,duration:.14,ease:"power2.in"},13.440);
+      tl.fromTo("#s4 .inner",{opacity:0},{opacity:1,duration:.2,ease:"power2.out",immediateRender:false},13.580);
+      tl.to("#s4 .inner",{opacity:0,duration:.14,ease:"power2.in"},19.350);
+      tl.fromTo("#s5 .inner",{opacity:0},{opacity:1,duration:.2,ease:"power2.out",immediateRender:false},19.490);
+      tl.to("#s5 .inner",{opacity:0,duration:.14,ease:"power2.in"},23.890);
+      tl.fromTo("#s6 .inner",{opacity:0},{opacity:1,duration:.2,ease:"power2.out",immediateRender:false},24.030);
+      tl.to("#s6 .inner",{opacity:0,duration:.14,ease:"power2.in"},28.430);
+      tl.fromTo("#s7 .inner",{opacity:0},{opacity:1,duration:.2,ease:"power2.out",immediateRender:false},28.570);
+      tl.to("#s7 .inner",{opacity:0,duration:.14,ease:"power2.in"},34.720);
+      tl.fromTo("#s8 .inner",{opacity:0},{opacity:1,duration:.2,ease:"power2.out",immediateRender:false},34.860);
+      tl.fromTo("#cap0",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},0.290);
+      tl.set("#cap0",{opacity:0},1.560);
+      tl.set("#w0_0",{backgroundColor:"#D45C40",color:"#fff"},0.330);tl.set("#w0_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},0.677);
+      tl.set("#w0_1",{backgroundColor:"#D45C40",color:"#fff"},0.677);tl.set("#w0_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},1.023);
+      tl.set("#w0_2",{backgroundColor:"#D45C40",color:"#fff"},1.023);tl.set("#w0_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},1.540);
+      tl.fromTo("#cap1",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},1.560);
+      tl.set("#cap1",{opacity:0},3.080);
+      tl.set("#w1_0",{backgroundColor:"#D45C40",color:"#fff"},1.600);tl.set("#w1_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},1.801);
+      tl.set("#w1_1",{backgroundColor:"#D45C40",color:"#fff"},1.801);tl.set("#w1_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},2.432);
+      tl.set("#w1_2",{backgroundColor:"#D45C40",color:"#fff"},2.432);tl.set("#w1_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},2.920);
+      tl.set("#w1_3",{backgroundColor:"#D45C40",color:"#fff"},2.920);tl.set("#w1_3",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},3.060);
+      tl.fromTo("#cap2",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},3.080);
+      tl.set("#cap2",{opacity:0},4.960);
+      tl.set("#w2_0",{backgroundColor:"#D45C40",color:"#fff"},3.120);tl.set("#w2_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},3.465);
+      tl.set("#w2_1",{backgroundColor:"#D45C40",color:"#fff"},3.465);tl.set("#w2_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},3.952);
+      tl.set("#w2_2",{backgroundColor:"#D45C40",color:"#fff"},3.952);tl.set("#w2_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},4.690);
+      tl.fromTo("#cap3",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},4.960);
+      tl.set("#cap3",{opacity:0},6.480);
+      tl.set("#w3_0",{backgroundColor:"#D45C40",color:"#fff"},5.000);tl.set("#w3_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},5.480);
+      tl.set("#w3_1",{backgroundColor:"#D45C40",color:"#fff"},5.480);tl.set("#w3_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},5.760);
+      tl.set("#w3_2",{backgroundColor:"#D45C40",color:"#fff"},5.760);tl.set("#w3_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},6.040);
+      tl.set("#w3_3",{backgroundColor:"#D45C40",color:"#fff"},6.040);tl.set("#w3_3",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},6.460);
+      tl.fromTo("#cap4",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},6.480);
+      tl.set("#cap4",{opacity:0},7.040);
+      tl.set("#w4_0",{backgroundColor:"#D45C40",color:"#fff"},6.520);tl.set("#w4_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},7.020);
+      tl.fromTo("#cap5",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},7.040);
+      tl.set("#cap5",{opacity:0},7.630);
+      tl.set("#w5_0",{backgroundColor:"#D45C40",color:"#fff"},7.080);tl.set("#w5_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},7.610);
+      tl.fromTo("#cap6",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},7.630);
+      tl.set("#cap6",{opacity:0},8.690);
+      tl.set("#w6_0",{backgroundColor:"#D45C40",color:"#fff"},7.670);tl.set("#w6_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},7.880);
+      tl.set("#w6_1",{backgroundColor:"#D45C40",color:"#fff"},7.880);tl.set("#w6_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},8.090);
+      tl.set("#w6_2",{backgroundColor:"#D45C40",color:"#fff"},8.090);tl.set("#w6_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},8.670);
+      tl.fromTo("#cap7",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},8.690);
+      tl.set("#cap7",{opacity:0},10.250);
+      tl.set("#w7_0",{backgroundColor:"#D45C40",color:"#fff"},8.730);tl.set("#w7_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},9.053);
+      tl.set("#w7_1",{backgroundColor:"#D45C40",color:"#fff"},9.053);tl.set("#w7_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},9.377);
+      tl.set("#w7_2",{backgroundColor:"#D45C40",color:"#fff"},9.377);tl.set("#w7_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},9.950);
+      tl.fromTo("#cap8",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},10.250);
+      tl.set("#cap8",{opacity:0},10.995);
+      tl.set("#w8_0",{backgroundColor:"#D45C40",color:"#fff"},10.290);tl.set("#w8_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},10.476);
+      tl.set("#w8_1",{backgroundColor:"#D45C40",color:"#fff"},10.476);tl.set("#w8_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},10.662);
+      tl.set("#w8_2",{backgroundColor:"#D45C40",color:"#fff"},10.662);tl.set("#w8_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},10.848);
+      tl.set("#w8_3",{backgroundColor:"#D45C40",color:"#fff"},10.848);tl.set("#w8_3",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},10.975);
+      tl.fromTo("#cap9",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},10.995);
+      tl.set("#cap9",{opacity:0},11.780);
+      tl.set("#w9_0",{backgroundColor:"#D45C40",color:"#fff"},11.035);tl.set("#w9_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},11.221);
+      tl.set("#w9_1",{backgroundColor:"#D45C40",color:"#fff"},11.221);tl.set("#w9_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},11.760);
+      tl.fromTo("#cap10",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},11.780);
+      tl.set("#cap10",{opacity:0},12.593);
+      tl.set("#w10_0",{backgroundColor:"#D45C40",color:"#fff"},11.820);tl.set("#w10_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},12.077);
+      tl.set("#w10_1",{backgroundColor:"#D45C40",color:"#fff"},12.077);tl.set("#w10_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},12.227);
+      tl.set("#w10_2",{backgroundColor:"#D45C40",color:"#fff"},12.227);tl.set("#w10_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},12.483);
+      tl.set("#w10_3",{backgroundColor:"#D45C40",color:"#fff"},12.483);tl.set("#w10_3",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},12.573);
+      tl.fromTo("#cap11",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},12.593);
+      tl.set("#cap11",{opacity:0},13.640);
+      tl.set("#w11_0",{backgroundColor:"#D45C40",color:"#fff"},12.633);tl.set("#w11_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},12.890);
+      tl.set("#w11_1",{backgroundColor:"#D45C40",color:"#fff"},12.890);tl.set("#w11_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},13.290);
+      tl.fromTo("#cap12",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},13.640);
+      tl.set("#cap12",{opacity:0},14.280);
+      tl.set("#w12_0",{backgroundColor:"#D45C40",color:"#fff"},13.680);tl.set("#w12_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},14.260);
+      tl.fromTo("#cap13",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},14.280);
+      tl.set("#cap13",{opacity:0},15.350);
+      tl.set("#w13_0",{backgroundColor:"#D45C40",color:"#fff"},14.320);tl.set("#w13_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},14.557);
+      tl.set("#w13_1",{backgroundColor:"#D45C40",color:"#fff"},14.557);tl.set("#w13_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},14.963);
+      tl.set("#w13_2",{backgroundColor:"#D45C40",color:"#fff"},14.963);tl.set("#w13_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},15.330);
+      tl.fromTo("#cap14",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},15.350);
+      tl.set("#cap14",{opacity:0},16.503);
+      tl.set("#w14_0",{backgroundColor:"#D45C40",color:"#fff"},15.390);tl.set("#w14_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},15.754);
+      tl.set("#w14_1",{backgroundColor:"#D45C40",color:"#fff"},15.754);tl.set("#w14_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},16.118);
+      tl.set("#w14_2",{backgroundColor:"#D45C40",color:"#fff"},16.118);tl.set("#w14_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},16.331);
+      tl.set("#w14_3",{backgroundColor:"#D45C40",color:"#fff"},16.331);tl.set("#w14_3",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},16.483);
+      tl.fromTo("#cap15",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},16.503);
+      tl.set("#cap15",{opacity:0},17.230);
+      tl.set("#w15_0",{backgroundColor:"#D45C40",color:"#fff"},16.543);tl.set("#w15_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},16.907);
+      tl.set("#w15_1",{backgroundColor:"#D45C40",color:"#fff"},16.907);tl.set("#w15_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},17.210);
+      tl.fromTo("#cap16",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},17.230);
+      tl.set("#cap16",{opacity:0},18.178);
+      tl.set("#w16_0",{backgroundColor:"#D45C40",color:"#fff"},17.270);tl.set("#w16_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},17.507);
+      tl.set("#w16_1",{backgroundColor:"#D45C40",color:"#fff"},17.507);tl.set("#w16_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},17.744);
+      tl.set("#w16_2",{backgroundColor:"#D45C40",color:"#fff"},17.744);tl.set("#w16_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},17.981);
+      tl.set("#w16_3",{backgroundColor:"#D45C40",color:"#fff"},17.981);tl.set("#w16_3",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},18.158);
+      tl.fromTo("#cap17",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},18.178);
+      tl.set("#cap17",{opacity:0},19.550);
+      tl.set("#w17_0",{backgroundColor:"#D45C40",color:"#fff"},18.218);tl.set("#w17_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},18.793);
+      tl.set("#w17_1",{backgroundColor:"#D45C40",color:"#fff"},18.793);tl.set("#w17_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},19.280);
+      tl.fromTo("#cap18",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},19.550);
+      tl.set("#cap18",{opacity:0},20.170);
+      tl.set("#w18_0",{backgroundColor:"#D45C40",color:"#fff"},19.590);tl.set("#w18_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},20.150);
+      tl.fromTo("#cap19",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},20.170);
+      tl.set("#cap19",{opacity:0},21.250);
+      tl.set("#w19_0",{backgroundColor:"#D45C40",color:"#fff"},20.210);tl.set("#w19_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},20.409);
+      tl.set("#w19_1",{backgroundColor:"#D45C40",color:"#fff"},20.409);tl.set("#w19_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},20.891);
+      tl.set("#w19_2",{backgroundColor:"#D45C40",color:"#fff"},20.891);tl.set("#w19_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},21.230);
+      tl.fromTo("#cap20",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},21.250);
+      tl.set("#cap20",{opacity:0},22.860);
+      tl.set("#w20_0",{backgroundColor:"#D45C40",color:"#fff"},21.290);tl.set("#w20_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},21.816);
+      tl.set("#w20_1",{backgroundColor:"#D45C40",color:"#fff"},21.816);tl.set("#w20_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},22.187);
+      tl.set("#w20_2",{backgroundColor:"#D45C40",color:"#fff"},22.187);tl.set("#w20_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},22.403);
+      tl.set("#w20_3",{backgroundColor:"#D45C40",color:"#fff"},22.403);tl.set("#w20_3",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},22.840);
+      tl.fromTo("#cap21",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},22.860);
+      tl.set("#cap21",{opacity:0},24.090);
+      tl.set("#w21_0",{backgroundColor:"#D45C40",color:"#fff"},22.900);tl.set("#w21_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},23.820);
+      tl.fromTo("#cap22",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},24.090);
+      tl.set("#cap22",{opacity:0},24.690);
+      tl.set("#w22_0",{backgroundColor:"#D45C40",color:"#fff"},24.130);tl.set("#w22_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},24.670);
+      tl.fromTo("#cap23",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},24.690);
+      tl.set("#cap23",{opacity:0},25.780);
+      tl.set("#w23_0",{backgroundColor:"#D45C40",color:"#fff"},24.730);tl.set("#w23_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},24.913);
+      tl.set("#w23_1",{backgroundColor:"#D45C40",color:"#fff"},24.913);tl.set("#w23_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},25.226);
+      tl.set("#w23_2",{backgroundColor:"#D45C40",color:"#fff"},25.226);tl.set("#w23_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},25.760);
+      tl.fromTo("#cap24",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},25.780);
+      tl.set("#cap24",{opacity:0},26.977);
+      tl.set("#w24_0",{backgroundColor:"#D45C40",color:"#fff"},25.820);tl.set("#w24_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},26.293);
+      tl.set("#w24_1",{backgroundColor:"#D45C40",color:"#fff"},26.293);tl.set("#w24_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},26.627);
+      tl.set("#w24_2",{backgroundColor:"#D45C40",color:"#fff"},26.627);tl.set("#w24_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},26.822);
+      tl.set("#w24_3",{backgroundColor:"#D45C40",color:"#fff"},26.822);tl.set("#w24_3",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},26.957);
+      tl.fromTo("#cap25",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},26.977);
+      tl.set("#cap25",{opacity:0},28.630);
+      tl.set("#w25_0",{backgroundColor:"#D45C40",color:"#fff"},27.017);tl.set("#w25_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},27.351);
+      tl.set("#w25_1",{backgroundColor:"#D45C40",color:"#fff"},27.351);tl.set("#w25_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},27.685);
+      tl.set("#w25_2",{backgroundColor:"#D45C40",color:"#fff"},27.685);tl.set("#w25_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},28.130);
+      tl.fromTo("#cap26",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},28.630);
+      tl.set("#cap26",{opacity:0},29.846);
+      tl.set("#w26_0",{backgroundColor:"#D45C40",color:"#fff"},28.670);tl.set("#w26_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},28.894);
+      tl.set("#w26_1",{backgroundColor:"#D45C40",color:"#fff"},28.894);tl.set("#w26_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},29.118);
+      tl.set("#w26_2",{backgroundColor:"#D45C40",color:"#fff"},29.118);tl.set("#w26_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},29.342);
+      tl.set("#w26_3",{backgroundColor:"#D45C40",color:"#fff"},29.342);tl.set("#w26_3",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},29.826);
+      tl.fromTo("#cap27",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},29.846);
+      tl.set("#cap27",{opacity:0},30.350);
+      tl.set("#w27_0",{backgroundColor:"#D45C40",color:"#fff"},29.886);tl.set("#w27_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},30.330);
+      tl.fromTo("#cap28",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},30.350);
+      tl.set("#cap28",{opacity:0},31.683);
+      tl.set("#w28_0",{backgroundColor:"#D45C40",color:"#fff"},30.390);tl.set("#w28_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},30.607);
+      tl.set("#w28_1",{backgroundColor:"#D45C40",color:"#fff"},30.607);tl.set("#w28_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},31.134);
+      tl.set("#w28_2",{backgroundColor:"#D45C40",color:"#fff"},31.134);tl.set("#w28_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},31.506);
+      tl.set("#w28_3",{backgroundColor:"#D45C40",color:"#fff"},31.506);tl.set("#w28_3",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},31.663);
+      tl.fromTo("#cap29",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},31.683);
+      tl.set("#cap29",{opacity:0},32.490);
+      tl.set("#w29_0",{backgroundColor:"#D45C40",color:"#fff"},31.723);tl.set("#w29_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},32.470);
+      tl.fromTo("#cap30",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},32.490);
+      tl.set("#cap30",{opacity:0},33.484);
+      tl.set("#w30_0",{backgroundColor:"#D45C40",color:"#fff"},32.530);tl.set("#w30_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},32.779);
+      tl.set("#w30_1",{backgroundColor:"#D45C40",color:"#fff"},32.779);tl.set("#w30_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},33.027);
+      tl.set("#w30_2",{backgroundColor:"#D45C40",color:"#fff"},33.027);tl.set("#w30_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},33.276);
+      tl.set("#w30_3",{backgroundColor:"#D45C40",color:"#fff"},33.276);tl.set("#w30_3",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},33.464);
+      tl.fromTo("#cap31",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},33.484);
+      tl.set("#cap31",{opacity:0},34.920);
+      tl.set("#w31_0",{backgroundColor:"#D45C40",color:"#fff"},33.524);tl.set("#w31_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},33.773);
+      tl.set("#w31_1",{backgroundColor:"#D45C40",color:"#fff"},33.773);tl.set("#w31_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},34.021);
+      tl.set("#w31_2",{backgroundColor:"#D45C40",color:"#fff"},34.021);tl.set("#w31_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},34.520);
+      tl.fromTo("#cap32",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},34.920);
+      tl.set("#cap32",{opacity:0},35.880);
+      tl.set("#w32_0",{backgroundColor:"#D45C40",color:"#fff"},34.960);tl.set("#w32_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},35.315);
+      tl.set("#w32_1",{backgroundColor:"#D45C40",color:"#fff"},35.315);tl.set("#w32_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},35.860);
+      tl.fromTo("#cap33",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},35.880);
+      tl.set("#cap33",{opacity:0},36.407);
+      tl.set("#w33_0",{backgroundColor:"#D45C40",color:"#fff"},35.920);tl.set("#w33_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},36.052);
+      tl.set("#w33_1",{backgroundColor:"#D45C40",color:"#fff"},36.052);tl.set("#w33_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},36.183);
+      tl.set("#w33_2",{backgroundColor:"#D45C40",color:"#fff"},36.183);tl.set("#w33_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},36.315);
+      tl.set("#w33_3",{backgroundColor:"#D45C40",color:"#fff"},36.315);tl.set("#w33_3",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},36.387);
+      tl.fromTo("#cap34",{opacity:0,y:16},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},36.407);
+      tl.set("#cap34",{opacity:0},37.950);
+      tl.set("#w34_0",{backgroundColor:"#D45C40",color:"#fff"},36.447);tl.set("#w34_0",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},36.578);
+      tl.set("#w34_1",{backgroundColor:"#D45C40",color:"#fff"},36.578);tl.set("#w34_1",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},36.804);
+      tl.set("#w34_2",{backgroundColor:"#D45C40",color:"#fff"},36.804);tl.set("#w34_2",{backgroundColor:"rgba(212,92,64,0)",color:"#F1E9DC"},37.280);
+      tl.to(".prog i",{scaleX:1,duration:38.65,ease:"none"},0);
+      tl.set({}, {}, 38.65);
+      window.__timelines["main"] = tl;
+    </script>
+    <script type="module" src="assets/js/world.js"></script>
+  </body>
+</html>
