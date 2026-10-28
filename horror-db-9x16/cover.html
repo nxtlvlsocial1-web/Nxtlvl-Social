@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>3 AM database horror cover</title>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <style>
+@font-face { font-family: "Montserrat"; font-weight: 100 900; src: url("assets/fonts/montserrat.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 700; src: url("assets/fonts/jbmono-bold.ttf"); }
+@font-face { font-family: "ISerif"; font-style: italic; font-weight: 400; src: url("assets/fonts/InstrumentSerif-Italic.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #050508; font-family: "Montserrat", sans-serif; color: #ece6dc; }
+#gl { position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; }
+#scan { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0px, rgba(0,0,0,.18) 2px, rgba(0,0,0,0) 3px, rgba(0,0,0,0) 5px);
+  mix-blend-mode: multiply; }
+.fade { position: absolute; left: 0; right: 0; top: 0; height: 820px;
+  background: linear-gradient(180deg, rgba(5,5,8,.96) 0%, rgba(5,5,8,.86) 62%, rgba(5,5,8,0) 100%); }
+.fadeb { position: absolute; left: 0; right: 0; bottom: 0; height: 760px;
+  background: linear-gradient(0deg, rgba(5,5,8,.97) 0%, rgba(5,5,8,.85) 55%, rgba(5,5,8,0) 100%); }
+.hud { position: absolute; left: 64px; right: 64px; top: 262px; display: flex; justify-content: space-between; align-items: center; }
+.rec { display: flex; align-items: center; gap: 14px; font: 800 36px "Montserrat"; letter-spacing: 3px; color: #ff4d4d; text-shadow: 0 0 12px rgba(255,60,60,.6); }
+.rec i { width: 22px; height: 22px; border-radius: 50%; background: #ff3b3b; box-shadow: 0 0 16px #ff3b3b; }
+.cam { font: 700 30px "JBMono"; letter-spacing: 3px; color: rgba(236,230,220,.85); }
+.head { position: absolute; left: 50px; right: 50px; top: 360px; text-align: center; }
+.time { font: 800 150px/1 "Montserrat"; letter-spacing: -5px; color: #f2ede6; text-shadow: 0 0 40px rgba(255,60,60,.35); }
+.l1 { margin-top: 26px; font: 700 64px/1.1 "Montserrat"; letter-spacing: -1px; color: #ece6dc; }
+.l1 b { color: #ff5a5a; font-weight: 800; }
+.foot { position: absolute; left: 60px; right: 60px; top: 1330px; text-align: center; }
+.l2 { font: 400 112px/1 "ISerif"; font-style: italic; color: #ffb59c; text-shadow: 0 0 30px rgba(255,110,80,.45); }
+.l3 { margin-top: 26px; display: inline-block; padding: 10px 24px; border-radius: 10px; border-left: 6px solid #ff7a59; background: rgba(12,8,8,.8);
+  font: 700 34px "JBMono"; letter-spacing: 2px; color: #ece6dc; }
+.brand { position: absolute; left: 0; right: 0; top: 1620px; text-align: center; font: 700 28px "JBMono"; letter-spacing: 6px; color: rgba(236,230,220,.75); }
+.brand b { color: #ff7a59; }
+</style>
+  </head>
+  <body>
+    <canvas id="gl"></canvas>
+    <div id="scan"></div>
+    <div class="fade"></div>
+    <div class="fadeb"></div>
+    <div class="hud"><div class="rec"><i></i>REC</div><div class="cam">CAM 01 · DESK 12</div></div>
+    <div class="head">
+      <div class="time">03:07 AM.</div>
+      <div class="l1">He just deleted <b>production.</b></div>
+    </div>
+    <div class="foot">
+      <div class="l2">Claude kept a copy.</div>
+      <div class="l3">1.2M rows · backup dead since March</div>
+    </div>
+    <div class="brand"><b>✦</b> NXTLVLSOCIAL.AI</div>
+    <script>
+      window.HR_T = {"l": [1.12, 4.29, 5.81, 8.01, 12.22, 16.72, 21.19, 24.61, 26.64, 30.98, 32.83, 37.31, 39.54, 42.33, 46.79], "e": [3.49, 4.89, 7.19, 11.45, 15.85, 20.32, 23.64, 24.92, 30.16, 31.96, 36.39, 38.17, 41.46, 45.27, 50.02], "who": ["dev", "claude", "dev", "claude", "dev", "claude", "dev", "claude", "claude", "dev", "claude", "claude", "dev", "claude", "claude"], "enter": 0.42, "rows": 11.094, "march": 18.97, "checked": 20.08, "nine": 21.19, "snapshot": 29.815, "friday": 36.095, "revoked": 43.745, "backup": 47.27, "end": 51.82, "eyes": 25.89, "restore": 37.31, "done": 39.19, "cut": 44.295, "cta": 46.29};
+      window.HR_COVER = {"t": 27.49, "cam": [0.78, 2.02, 1.75], "look": [-0.04, 1.1, -0.22], "fov": 36};
+    </script>
+    <script type="module" src="assets/js/world.js"></script>
+  </body>
+</html>

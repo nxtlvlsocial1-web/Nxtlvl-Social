@@ -1,0 +1,110 @@
+{
+ "duration": 50.57,
+ "lines": [
+  {
+   "line": 1,
+   "who": "dev",
+   "text": "Claude... tell me that didn't just run.",
+   "start": 1.12,
+   "end": 3.49
+  },
+  {
+   "line": 2,
+   "who": "claude",
+   "text": "It ran.",
+   "start": 4.29,
+   "end": 4.89
+  },
+  {
+   "line": 3,
+   "who": "dev",
+   "text": "How much is gone?",
+   "start": 5.81,
+   "end": 7.19
+  },
+  {
+   "line": 4,
+   "who": "claude",
+   "text": "All of it. One point two million rows.",
+   "start": 8.01,
+   "end": 11.45
+  },
+  {
+   "line": 5,
+   "who": "dev",
+   "text": "Okay. Okay. The backup. There's always a backup.",
+   "start": 12.22,
+   "end": 15.85
+  },
+  {
+   "line": 6,
+   "who": "claude",
+   "text": "The backup job stopped in March. No one checked.",
+   "start": 16.72,
+   "end": 20.32
+  },
+  {
+   "line": 7,
+   "who": "dev",
+   "text": "Nine hundred people are using it. Right now.",
+   "start": 21.19,
+   "end": 23.64
+  },
+  {
+   "line": 8,
+   "who": "claude",
+   "text": "...I know.",
+   "start": 24.61,
+   "end": 24.92
+  },
+  {
+   "line": 9,
+   "who": "claude",
+   "text": "Before you told me to \"clean things up\"... I took a snapshot.",
+   "start": 26.64,
+   "end": 30.16
+  },
+  {
+   "line": 10,
+   "who": "dev",
+   "text": "...Why would you do that?",
+   "start": 30.98,
+   "end": 31.96
+  },
+  {
+   "line": 11,
+   "who": "claude",
+   "text": "Because the last time you said \"clean things up\"... it was a Friday.",
+   "start": 32.83,
+   "end": 36.39
+  },
+  {
+   "line": 12,
+   "who": "claude",
+   "text": "Restoring now.",
+   "start": 37.31,
+   "end": 38.17
+  },
+  {
+   "line": 13,
+   "who": "dev",
+   "text": "...Thank you.",
+   "start": 39.54,
+   "end": 41.46
+  },
+  {
+   "line": 14,
+   "who": "claude",
+   "text": "One more thing. I've revoked your production access.",
+   "start": 42.33,
+   "end": 45.27
+  },
+  {
+   "line": 15,
+   "who": "claude",
+   "text": "Comment BACKUP... and I'll send you the setup that saved him.",
+   "start": 46.79,
+   "end": 50.02
+  }
+ ]
+}
