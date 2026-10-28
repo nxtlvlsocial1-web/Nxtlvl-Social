@@ -1,0 +1,5 @@
+-- ~/.psqlrc-prod: a red PRODUCTION prompt, and nothing sticks until you type COMMIT
+-- (it can't stop DROP DATABASE: use the read-only role for that)
+\set PROMPT1 '%[%033[1;97;41m%] PRODUCTION %[%033[0m%] %/%R%# '
+\set AUTOCOMMIT off
+\set ON_ERROR_ROLLBACK interactive

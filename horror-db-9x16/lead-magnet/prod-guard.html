@@ -1,0 +1,406 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>The setup that saved him · Prod Guard</title><style>
+@font-face { font-family: "Montserrat"; font-weight: 100 900; src: url("fonts/montserrat.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 400; src: url("fonts/JetBrainsMono-Regular.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 700; src: url("fonts/JetBrainsMono-Bold.ttf"); }
+@font-face { font-family: "ISerif"; font-style: italic; src: url("fonts/InstrumentSerif-Italic.ttf"); }
+@page { size: A4; margin: 0; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { background: #07050f; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { font-family: "Montserrat", sans-serif; color: #cfc8dd; }
+.page { position: relative; width: 210mm; height: 297mm; overflow: hidden; padding: 44px 52px 40px; page-break-after: always;
+  background: radial-gradient(ellipse 60% 45% at 0% 0%, rgba(101,22,199,.55), transparent 70%),
+              radial-gradient(ellipse 55% 40% at 100% 100%, rgba(75,6,193,.5), transparent 70%), #07050f; }
+.page:last-child { page-break-after: auto; }
+svg { display: block; }
+.head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 26px; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand svg { width: 26px; height: 26px; }
+.brand span, .pg, .kicker, .tab { font: 700 10px "JBMono"; letter-spacing: 3px; color: #b687f9; }
+.pg { color: rgba(207,200,221,.55); }
+code { font-variant-ligatures: none; font: 400 .92em "JBMono"; color: #e3d2ff; background: rgba(167,91,252,.14); padding: 1px 5px; border-radius: 4px; }
+b { color: #fff; font-weight: 700; }
+.kicker { margin-bottom: 10px; }
+h1 { font: 800 64px/1.02 "Montserrat"; letter-spacing: -2.5px; color: #fff; }
+h1 em, h2 em { font-family: "ISerif"; font-style: italic; font-weight: 400; color: #b687f9; letter-spacing: 0; }
+h1 em { font-size: 76px; }
+h2 { font: 800 28px/1.1 "Montserrat"; letter-spacing: -.8px; color: #fff; }
+h2 em { font-size: 33px; }
+h3 { font: 700 14px/1.3 "Montserrat"; color: #fff; }
+p { font-size: 12px; line-height: 1.6; }
+/* cover */
+.cover-brand { display: flex; align-items: center; gap: 12px; }
+.cover-brand svg { width: 38px; height: 38px; }
+.cover-brand span { font: 700 13px "JBMono"; letter-spacing: 5px; color: #fff; }
+.cover-body { position: absolute; left: 52px; right: 52px; top: 250px; z-index: 2; }
+.cover-sub { margin-top: 26px; max-width: 470px; font-size: 16px; line-height: 1.55; color: #ddd5ea; }
+.chips { margin-top: 30px; display: flex; gap: 10px; flex-wrap: wrap; }
+.chips span { font: 700 10.5px "JBMono"; letter-spacing: 1.5px; color: #fff; padding: 8px 14px; border-radius: 30px;
+  border: 1px solid rgba(182,135,249,.5); background: rgba(101,22,199,.25); }
+.cover-mark { position: absolute; right: 10px; bottom: 96px; width: 430px; height: 430px; opacity: .95; z-index: 1; }
+.cover-mark svg { width: 100%; height: 100%; }
+.cover-foot { position: absolute; left: 52px; right: 52px; bottom: 44px; z-index: 2; padding-top: 16px; border-top: 1px solid rgba(182,135,249,.25); }
+.cover-foot span { font: 400 italic 20px "ISerif"; color: #cfc8dd; }
+/* page 2 */
+.story { font-size: 14px; line-height: 1.6; color: #ddd5ea; }
+.story.strong { margin-top: 10px; color: #fff; font-weight: 600; }
+.locks { margin: 20px 0 22px; display: grid; gap: 10px; }
+.lock { display: flex; gap: 16px; align-items: center; padding: 13px 18px; border-radius: 14px; background: rgba(20,10,46,.75);
+  border: 1px solid rgba(167,91,252,.22); }
+.lock .ln { flex: none; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font: 400 italic 22px "ISerif"; color: #fff; background: linear-gradient(135deg, #a75bfc, #4b06c1); }
+.lock p { margin-top: 2px; font-size: 11.5px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+.req { list-style: none; margin-bottom: 10px; }
+.req li { font-size: 12px; line-height: 1.8; padding-left: 16px; position: relative; }
+.req li::before { content: ""; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: #a75bfc; }
+/* steps + code */
+.step { display: flex; gap: 18px; align-items: flex-start; margin: 4px 0 14px; }
+.num { flex: none; font: 400 italic 54px/0.9 "ISerif"; color: #a75bfc; }
+.lede { margin-top: 6px; font-size: 12px; }
+.code { margin-bottom: 12px; border-radius: 12px; overflow: hidden; background: #110824; border: 1px solid rgba(167,91,252,.28); }
+.tab { padding: 7px 14px; font-size: 9px; letter-spacing: 1.5px; background: rgba(101,22,199,.3); border-bottom: 1px solid rgba(167,91,252,.22); }
+pre { font-variant-ligatures: none; padding: 12px 14px; font: 400 9.6px/1.5 "JBMono"; color: #eae4f5; white-space: pre-wrap; word-break: break-word; }
+.cm { color: #9a86b8; }
+.note { margin: -2px 0 14px; font-size: 10.5px; color: #b9b0c9; }
+/* last page */
+.check { list-style: none; }
+.check li { position: relative; padding: 0 0 9px 26px; font-size: 11.5px; line-height: 1.45; }
+.check li::before { content: ""; position: absolute; left: 0; top: 1px; width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid #a75bfc; }
+.outro { position: absolute; left: 52px; right: 52px; bottom: 40px; display: flex; gap: 18px; align-items: center; padding: 18px 22px;
+  border-radius: 16px; background: linear-gradient(120deg, rgba(101,22,199,.45), rgba(20,10,46,.85)); border: 1px solid rgba(182,135,249,.35); }
+.outro-mark svg { width: 64px; height: 64px; }
+.outro h3 { font-size: 17px; margin-bottom: 4px; }
+.outro p { font-size: 11.5px; color: #e2daf0; }
+</style></head><body><section class="page cover">
+<div class="cover-brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="270 250 560 560" width="560" height="560">
+  <defs>
+    <linearGradient id="trail" gradientUnits="userSpaceOnUse" x1="625" y1="452" x2="295" y2="782">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e9e4f2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="lav" gradientUnits="userSpaceOnUse" x1="478" y1="470" x2="350" y2="598">
+      <stop offset="0" stop-color="#c39bff"/><stop offset="1" stop-color="#9a5cf0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vio" gradientUnits="userSpaceOnUse" x1="628" y1="578" x2="450" y2="756">
+      <stop offset="0" stop-color="#ad63ff"/><stop offset="1" stop-color="#8a3df5" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M713 268 Q725 353 810 365 Q725 377 713 462 Q701 377 615 365 Q701 353 713 268 Z" fill="#fff"/>
+  <path d="M295 782 L599.5 426.5 A36 36 0 0 1 650.5 477.5 Z" fill="url(#trail)"/>
+  <path d="M350 598 L466.7 458.7 A16 16 0 0 1 489.3 481.3 Z" fill="url(#lav)"/>
+  <path d="M450 756 L613.9 563.9 A20 20 0 0 1 642.1 592.1 Z" fill="url(#vio)"/>
+</svg>
+<span>NXTLVLSOCIAL.AI</span></div>
+<div class="cover-body">
+  <div class="kicker">FROM THE 03:07 AM REEL</div>
+  <h1>The setup that<br><em>saved him.</em></h1>
+  <p class="cover-sub">Prod Guard for Claude Code. Claude snapshots your database before every destructive command,
+  and refuses to touch production at all.</p>
+  <div class="chips"><span>5-minute install</span><span>Tested on PostgreSQL 16</span><span>Free to use</span></div>
+</div>
+<div class="cover-mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="270 250 560 560" width="560" height="560">
+  <defs>
+    <linearGradient id="trail" gradientUnits="userSpaceOnUse" x1="625" y1="452" x2="295" y2="782">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e9e4f2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="lav" gradientUnits="userSpaceOnUse" x1="478" y1="470" x2="350" y2="598">
+      <stop offset="0" stop-color="#c39bff"/><stop offset="1" stop-color="#9a5cf0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vio" gradientUnits="userSpaceOnUse" x1="628" y1="578" x2="450" y2="756">
+      <stop offset="0" stop-color="#ad63ff"/><stop offset="1" stop-color="#8a3df5" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M713 268 Q725 353 810 365 Q725 377 713 462 Q701 377 615 365 Q701 353 713 268 Z" fill="#fff"/>
+  <path d="M295 782 L599.5 426.5 A36 36 0 0 1 650.5 477.5 Z" fill="url(#trail)"/>
+  <path d="M350 598 L466.7 458.7 A16 16 0 0 1 489.3 481.3 Z" fill="url(#lav)"/>
+  <path d="M450 756 L613.9 563.9 A20 20 0 0 1 642.1 592.1 Z" fill="url(#vio)"/>
+</svg>
+</div>
+<div class="cover-foot"><span>A DROP DATABASE at 3 AM should cost you a minute, not your company.</span></div>
+</section><section class="page "><div class="head"><div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="270 250 560 560" width="560" height="560">
+  <defs>
+    <linearGradient id="trail" gradientUnits="userSpaceOnUse" x1="625" y1="452" x2="295" y2="782">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e9e4f2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="lav" gradientUnits="userSpaceOnUse" x1="478" y1="470" x2="350" y2="598">
+      <stop offset="0" stop-color="#c39bff"/><stop offset="1" stop-color="#9a5cf0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vio" gradientUnits="userSpaceOnUse" x1="628" y1="578" x2="450" y2="756">
+      <stop offset="0" stop-color="#ad63ff"/><stop offset="1" stop-color="#8a3df5" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M713 268 Q725 353 810 365 Q725 377 713 462 Q701 377 615 365 Q701 353 713 268 Z" fill="#fff"/>
+  <path d="M295 782 L599.5 426.5 A36 36 0 0 1 650.5 477.5 Z" fill="url(#trail)"/>
+  <path d="M350 598 L466.7 458.7 A16 16 0 0 1 489.3 481.3 Z" fill="url(#lav)"/>
+  <path d="M450 756 L613.9 563.9 A20 20 0 0 1 642.1 592.1 Z" fill="url(#vio)"/>
+</svg>
+<span>NXTLVLSOCIAL.AI</span></div><div class="pg">PROD GUARD · 02 / 06</div></div>
+<div class="intro">
+  <div class="kicker">WHAT HAPPENED AT 03:07</div>
+  <p class="story">He thought he was wiping the test database. He was connected to production. 1.2 million rows,
+  gone, and the nightly backup had quietly died in March. The only copy was a snapshot his AI agent took first.</p>
+  <p class="story strong">This kit makes that snapshot automatic. Five locks, all plain files in your repo:</p>
+</div>
+<div class="locks"><div class="lock"><div class="ln">1</div><div><h3>Snapshot hook</h3><p>Destructive SQL anywhere? Claude takes a snapshot first, then asks you to confirm.</p></div></div><div class="lock"><div class="ln">2</div><div><h3>Production refusal</h3><p>Destructive SQL aimed at production is refused outright. A human runs it, or nobody does.</p></div></div><div class="lock"><div class="ln">3</div><div><h3>House rules</h3><p>CLAUDE.md tells Claude to name the database it is on and never touch production.</p></div></div><div class="lock"><div class="ln">4</div><div><h3>Backup alarm</h3><p>Every session starts by checking your last backup is fresh. No more "stopped in March".</p></div></div><div class="lock"><div class="ln">5</div><div><h3>Production lock</h3><p>A read-only role for everyday access, and a red PRODUCTION prompt in psql.</p></div></div></div>
+<div class="two">
+  <div>
+    <div class="kicker">YOU NEED</div>
+    <ul class="req"><li>Claude Code</li><li>bash and <b>jq</b></li><li>PostgreSQL client tools (<b>pg_dump</b>, <b>psql</b>)</li></ul>
+    <div class="code"><div class="tab">install</div><pre><span class="cm"># macOS</span>
+brew install jq libpq &amp;&amp; brew link --force libpq
+<span class="cm"># Ubuntu / Debian</span>
+sudo apt install jq postgresql-client</pre></div>
+  </div>
+  <div>
+    <div class="kicker">WHERE EVERYTHING GOES</div>
+    <div class="code"><div class="tab">project layout</div><pre>your-project/
+├── CLAUDE.md          rules (3)
+├── .gitignore         (2)
+└── .claude/
+    ├── settings.json  hooks (2)
+    ├── prod-guard.env URLs (2)
+    └── hooks/
+        ├── prod-guard.sh    (1)
+        └── check-backups.sh (4)</pre></div>
+  </div>
+</div>
+</section><section class="page "><div class="head"><div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="270 250 560 560" width="560" height="560">
+  <defs>
+    <linearGradient id="trail" gradientUnits="userSpaceOnUse" x1="625" y1="452" x2="295" y2="782">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e9e4f2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="lav" gradientUnits="userSpaceOnUse" x1="478" y1="470" x2="350" y2="598">
+      <stop offset="0" stop-color="#c39bff"/><stop offset="1" stop-color="#9a5cf0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vio" gradientUnits="userSpaceOnUse" x1="628" y1="578" x2="450" y2="756">
+      <stop offset="0" stop-color="#ad63ff"/><stop offset="1" stop-color="#8a3df5" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M713 268 Q725 353 810 365 Q725 377 713 462 Q701 377 615 365 Q701 353 713 268 Z" fill="#fff"/>
+  <path d="M295 782 L599.5 426.5 A36 36 0 0 1 650.5 477.5 Z" fill="url(#trail)"/>
+  <path d="M350 598 L466.7 458.7 A16 16 0 0 1 489.3 481.3 Z" fill="url(#lav)"/>
+  <path d="M450 756 L613.9 563.9 A20 20 0 0 1 642.1 592.1 Z" fill="url(#vio)"/>
+</svg>
+<span>NXTLVLSOCIAL.AI</span></div><div class="pg">PROD GUARD · 03 / 06</div></div>
+<div class="step"><div class="num">01</div><div><h2>The snapshot <em>hook</em></h2><p class="lede">A PreToolUse hook: Claude Code runs it before every Bash command Claude wants to run. Normal commands pass straight through. Destructive SQL on production is denied. Anywhere else, the database is dumped to <code>.snapshots/</code> first, and you're asked to confirm. If the snapshot fails, the command doesn't run.</p></div></div>
+<div class="code"><div class="tab">.claude/hooks/prod-guard.sh</div><pre>#!/usr/bin/env bash
+<span class="cm"># Prod Guard: a Claude Code PreToolUse hook for the Bash tool.</span>
+<span class="cm">#   destructive SQL on production -&gt; refused</span>
+<span class="cm">#   destructive SQL anywhere else -&gt; snapshot first, then you confirm</span>
+set -uo pipefail
+
+cmd=$(jq -r &#x27;.tool_input.command // &quot;&quot;&#x27;)
+dir=&quot;${CLAUDE_PROJECT_DIR:-.}&quot;
+[ -f &quot;$dir/.claude/prod-guard.env&quot; ] &amp;&amp; . &quot;$dir/.claude/prod-guard.env&quot;
+
+decide() {  # decide allow|ask|deny &quot;reason&quot;
+  jq -n --arg d &quot;$1&quot; --arg r &quot;$2&quot; &#x27;{hookSpecificOutput: {hookEventName: &quot;PreToolUse&quot;,
+    permissionDecision: $d, permissionDecisionReason: $r}}&#x27;
+  exit 0
+}
+
+<span class="cm"># 1. Is it destructive? If not, the normal permission flow applies.</span>
+shopt -s nocasematch
+drop=&#x27;drop[[:space:]]+(database|schema|table|owned)|truncate[[:space:]]|dropdb[[:space:]]&#x27;
+reset=&#x27;migrate[[:space:]]+reset|db:(drop|reset)&#x27;
+wipe=no
+[[ &quot;$cmd&quot; =~ $drop|$reset ]] &amp;&amp; wipe=yes
+[[ &quot;$cmd&quot; =~ delete[[:space:]]+from &amp;&amp; ! &quot;$cmd&quot; =~ where ]] &amp;&amp; wipe=yes
+[ &quot;$wipe&quot; = no ] &amp;&amp; exit 0
+
+<span class="cm"># 2. Production? Claude never runs it.</span>
+prod=&quot;${PROD_PATTERN:-(^|[^a-z])(prod|production)([^a-z]|$)}&quot;
+if [[ &quot;$cmd ${SNAPSHOT_DB_URL:-}&quot; =~ $prod ]]; then
+  decide deny &quot;Prod Guard: destructive command on production. Hand it to a human.&quot;
+fi
+
+<span class="cm"># 3. Anywhere else: snapshot first, or it doesn&#x27;t run.</span>
+if [ -z &quot;${SNAPSHOT_DB_URL:-}&quot; ]; then
+  echo &quot;Prod Guard: no SNAPSHOT_DB_URL in .claude/prod-guard.env. Blocked.&quot; &gt;&amp;2
+  exit 2
+fi
+mkdir -p &quot;$dir/.snapshots&quot;
+file=&quot;$dir/.snapshots/snapshot_$(date +%Y%m%d_%H%M%S)_$$.dump&quot;
+if ! pg_dump -Fc -f &quot;$file&quot; &quot;$SNAPSHOT_DB_URL&quot; 2&gt;&quot;$dir/.snapshots/error.log&quot;; then
+  echo &quot;Prod Guard: snapshot failed (.snapshots/error.log). Blocked.&quot; &gt;&amp;2
+  exit 2
+fi
+decide ask &quot;Prod Guard: snapshot saved to .snapshots/$(basename &quot;$file&quot;). Run it?&quot;</pre></div>
+<div class="code"><div class="tab">terminal</div><pre>mkdir -p .claude/hooks
+<span class="cm"># save the script above as .claude/hooks/prod-guard.sh, then:</span>
+chmod +x .claude/hooks/prod-guard.sh</pre></div>
+</section><section class="page "><div class="head"><div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="270 250 560 560" width="560" height="560">
+  <defs>
+    <linearGradient id="trail" gradientUnits="userSpaceOnUse" x1="625" y1="452" x2="295" y2="782">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e9e4f2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="lav" gradientUnits="userSpaceOnUse" x1="478" y1="470" x2="350" y2="598">
+      <stop offset="0" stop-color="#c39bff"/><stop offset="1" stop-color="#9a5cf0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vio" gradientUnits="userSpaceOnUse" x1="628" y1="578" x2="450" y2="756">
+      <stop offset="0" stop-color="#ad63ff"/><stop offset="1" stop-color="#8a3df5" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M713 268 Q725 353 810 365 Q725 377 713 462 Q701 377 615 365 Q701 353 713 268 Z" fill="#fff"/>
+  <path d="M295 782 L599.5 426.5 A36 36 0 0 1 650.5 477.5 Z" fill="url(#trail)"/>
+  <path d="M350 598 L466.7 458.7 A16 16 0 0 1 489.3 481.3 Z" fill="url(#lav)"/>
+  <path d="M450 756 L613.9 563.9 A20 20 0 0 1 642.1 592.1 Z" fill="url(#vio)"/>
+</svg>
+<span>NXTLVLSOCIAL.AI</span></div><div class="pg">PROD GUARD · 04 / 06</div></div>
+<div class="step"><div class="num">02</div><div><h2>Wire it <em>in</em></h2><p class="lede">Register the hooks and add two permission guard rails. Deny always wins in Claude Code: <code>dropdb</code> is blocked for good, and every <code>psql</code> call asks you first.</p></div></div>
+<div class="code"><div class="tab">.claude/settings.json</div><pre>{
+  &quot;permissions&quot;: {
+    &quot;deny&quot;: [&quot;Bash(dropdb *)&quot;, &quot;Read(./.env.production)&quot;],
+    &quot;ask&quot;: [&quot;Bash(psql *)&quot;, &quot;Bash(pg_restore *)&quot;]
+  },
+  &quot;hooks&quot;: {
+    &quot;PreToolUse&quot;: [{
+      &quot;matcher&quot;: &quot;Bash&quot;,
+      &quot;hooks&quot;: [{
+        &quot;type&quot;: &quot;command&quot;,
+        &quot;command&quot;: &quot;\&quot;${CLAUDE_PROJECT_DIR}\&quot;/.claude/hooks/prod-guard.sh&quot;
+      }]
+    }],
+    &quot;SessionStart&quot;: [{
+      &quot;hooks&quot;: [{
+        &quot;type&quot;: &quot;command&quot;,
+        &quot;command&quot;: &quot;\&quot;${CLAUDE_PROJECT_DIR}\&quot;/.claude/hooks/check-backups.sh&quot;
+      }]
+    }]
+  }
+}</pre></div>
+<div class="two">
+  <div><div class="code"><div class="tab">.claude/prod-guard.env</div><pre><span class="cm"># .claude/prod-guard.env (keep it out of git)</span>
+<span class="cm"># The database Claude works on. Never production.</span>
+SNAPSHOT_DB_URL=&quot;postgres://localhost:5432/app_dev&quot;
+<span class="cm"># Where nightly backups land; how old is too old.</span>
+BACKUP_DIR=&quot;/var/backups/postgres&quot;
+MAX_AGE_HOURS=26</pre></div></div>
+  <div><div class="code"><div class="tab">terminal</div><pre>echo &quot;.claude/prod-guard.env&quot; &gt;&gt; .gitignore
+echo &quot;.snapshots/&quot; &gt;&gt; .gitignore</pre></div>
+  <p class="note">Point <code>SNAPSHOT_DB_URL</code> at the database Claude works on. If it ever contains "prod", the hook refuses every destructive command, which is what you want.</p></div>
+</div>
+<div class="step"><div class="num">03</div><div><h2>The house <em>rules</em></h2><p class="lede">Hooks are the hard stop. These lines in CLAUDE.md make Claude careful before it ever gets there.</p></div></div>
+<div class="code"><div class="tab">CLAUDE.md (add to yours)</div><pre>## Database safety (Prod Guard)
+
+- Before any destructive database change (DROP, TRUNCATE, DELETE without
+  WHERE, migrate reset) a snapshot is taken first. The prod-guard hook does
+  this. Never try to get around it.
+- Say which database you are connected to before you run any SQL.
+- Never run commands against production. If a task needs production, stop
+  and give the exact command to the human.
+- If the session-start message says backups are stale, say so first.</pre></div>
+</section><section class="page "><div class="head"><div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="270 250 560 560" width="560" height="560">
+  <defs>
+    <linearGradient id="trail" gradientUnits="userSpaceOnUse" x1="625" y1="452" x2="295" y2="782">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e9e4f2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="lav" gradientUnits="userSpaceOnUse" x1="478" y1="470" x2="350" y2="598">
+      <stop offset="0" stop-color="#c39bff"/><stop offset="1" stop-color="#9a5cf0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vio" gradientUnits="userSpaceOnUse" x1="628" y1="578" x2="450" y2="756">
+      <stop offset="0" stop-color="#ad63ff"/><stop offset="1" stop-color="#8a3df5" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M713 268 Q725 353 810 365 Q725 377 713 462 Q701 377 615 365 Q701 353 713 268 Z" fill="#fff"/>
+  <path d="M295 782 L599.5 426.5 A36 36 0 0 1 650.5 477.5 Z" fill="url(#trail)"/>
+  <path d="M350 598 L466.7 458.7 A16 16 0 0 1 489.3 481.3 Z" fill="url(#lav)"/>
+  <path d="M450 756 L613.9 563.9 A20 20 0 0 1 642.1 592.1 Z" fill="url(#vio)"/>
+</svg>
+<span>NXTLVLSOCIAL.AI</span></div><div class="pg">PROD GUARD · 05 / 06</div></div>
+<div class="step"><div class="num">04</div><div><h2>The backup <em>alarm</em></h2><p class="lede">His backup job died in March and nobody looked. This runs at the start of every Claude Code session (the SessionStart hook from step 2), and what it prints goes straight into Claude's context: a stale backup is the first thing you hear about.</p></div></div>
+<div class="code"><div class="tab">.claude/hooks/check-backups.sh</div><pre>#!/usr/bin/env bash
+<span class="cm"># Prod Guard: runs when a Claude Code session starts.</span>
+<span class="cm"># What it prints goes into Claude&#x27;s context.</span>
+dir=&quot;${CLAUDE_PROJECT_DIR:-.}&quot;
+[ -f &quot;$dir/.claude/prod-guard.env&quot; ] &amp;&amp; . &quot;$dir/.claude/prod-guard.env&quot;
+backups=&quot;${BACKUP_DIR:-/var/backups/postgres}&quot;
+max=&quot;${MAX_AGE_HOURS:-26}&quot;
+
+if [ -n &quot;$(find &quot;$backups&quot; -type f -mmin &quot;-$((max * 60))&quot; 2&gt;/dev/null | head -n 1)&quot; ]; then
+  echo &quot;Prod Guard: backups OK (one newer than ${max}h in $backups).&quot;
+else
+  echo &quot;Prod Guard WARNING: no backup newer than ${max}h in $backups.&quot;
+  echo &quot;Treat production as having NO backup. Tell the user before anything else.&quot;
+fi
+exit 0</pre></div>
+<div class="code"><div class="tab">terminal</div><pre>chmod +x .claude/hooks/check-backups.sh</pre></div>
+<div class="step"><div class="num">05</div><div><h2>Lock <em>production</em></h2><p class="lede">The last line of defence is the database itself. Everyday production access goes through a read-only role: it can read everything and delete nothing. We tested it: DELETE, TRUNCATE, DROP TABLE and DROP DATABASE are all refused.</p></div></div>
+<div class="code"><div class="tab">readonly-role.sql (run once, as owner)</div><pre><span class="cm">-- Run once on production, as the owner. Day-to-day, connect as dev_readonly.</span>
+CREATE ROLE dev_readonly LOGIN PASSWORD &#x27;change-me&#x27;;
+GRANT CONNECT ON DATABASE app TO dev_readonly;
+GRANT USAGE ON SCHEMA public TO dev_readonly;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO dev_readonly;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO dev_readonly;</pre></div>
+<div class="code"><div class="tab">~/.psqlrc-prod</div><pre><span class="cm">-- ~/.psqlrc-prod: a red PRODUCTION prompt, and nothing sticks until you type COMMIT</span>
+<span class="cm">-- (it can&#x27;t stop DROP DATABASE: use the read-only role for that)</span>
+\set PROMPT1 &#x27;%[%033[1;97;41m%] PRODUCTION %[%033[0m%] %/%R%# &#x27;
+\set AUTOCOMMIT off
+\set ON_ERROR_ROLLBACK interactive</pre></div>
+<div class="code"><div class="tab">~/.zshrc or ~/.bashrc</div><pre>alias psql-prod=&#x27;PSQLRC=~/.psqlrc-prod psql &quot;$PROD_DATABASE_URL&quot;&#x27;</pre></div>
+<p class="note">Use the dev_readonly login in <code>PROD_DATABASE_URL</code>. The red prompt plus <code>AUTOCOMMIT off</code> means a stray DELETE or DROP TABLE is rolled back unless you type COMMIT. It can't stop DROP DATABASE (psql runs that outside a transaction), which is why the read-only role comes first.</p>
+</section><section class="page "><div class="head"><div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="270 250 560 560" width="560" height="560">
+  <defs>
+    <linearGradient id="trail" gradientUnits="userSpaceOnUse" x1="625" y1="452" x2="295" y2="782">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e9e4f2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="lav" gradientUnits="userSpaceOnUse" x1="478" y1="470" x2="350" y2="598">
+      <stop offset="0" stop-color="#c39bff"/><stop offset="1" stop-color="#9a5cf0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vio" gradientUnits="userSpaceOnUse" x1="628" y1="578" x2="450" y2="756">
+      <stop offset="0" stop-color="#ad63ff"/><stop offset="1" stop-color="#8a3df5" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M713 268 Q725 353 810 365 Q725 377 713 462 Q701 377 615 365 Q701 353 713 268 Z" fill="#fff"/>
+  <path d="M295 782 L599.5 426.5 A36 36 0 0 1 650.5 477.5 Z" fill="url(#trail)"/>
+  <path d="M350 598 L466.7 458.7 A16 16 0 0 1 489.3 481.3 Z" fill="url(#lav)"/>
+  <path d="M450 756 L613.9 563.9 A20 20 0 0 1 642.1 592.1 Z" fill="url(#vio)"/>
+</svg>
+<span>NXTLVLSOCIAL.AI</span></div><div class="pg">PROD GUARD · 06 / 06</div></div>
+<div class="step"><div class="num">06</div><div><h2>Test it in <em>60 seconds</em></h2><p class="lede">Feed the hook exactly what Claude Code sends it. You should get <b>ask</b> plus a new file in <code>.snapshots/</code> for the first, and <b>deny</b> for the second.</p></div></div>
+<div class="code"><div class="tab">terminal</div><pre>echo &#x27;{&quot;tool_input&quot;:{&quot;command&quot;:&quot;psql -c \&quot;DROP TABLE users\&quot;&quot;}}&#x27; \
+  | CLAUDE_PROJECT_DIR=$PWD .claude/hooks/prod-guard.sh
+
+echo &#x27;{&quot;tool_input&quot;:{&quot;command&quot;:&quot;psql -h prod-db -c \&quot;DROP TABLE users\&quot;&quot;}}&#x27; \
+  | CLAUDE_PROJECT_DIR=$PWD .claude/hooks/prod-guard.sh</pre></div>
+<div class="two">
+  <div>
+    <div class="kicker">IF IT HAPPENS ANYWAY</div>
+    <div class="code"><div class="tab">restore</div><pre><span class="cm"># rows or a table gone</span>
+pg_restore --clean --if-exists \
+  -d &quot;$SNAPSHOT_DB_URL&quot; .snapshots/&lt;file&gt;.dump
+
+<span class="cm"># the whole database gone</span>
+createdb app_dev
+pg_restore \
+  -d &quot;$SNAPSHOT_DB_URL&quot; .snapshots/&lt;file&gt;.dump</pre></div>
+    <p class="note">Both tested: 1,000 rows deleted, then a dropped database, restored to 1,000 rows each time.</p>
+  </div>
+  <div>
+    <div class="kicker">CHECKLIST</div>
+    <ul class="check"><li>Hook scripts saved in .claude/hooks/ and executable</li><li>settings.json in place</li><li>prod-guard.env filled in, and in .gitignore with .snapshots/</li><li>Rules added to CLAUDE.md</li><li>The test above says &quot;ask&quot; (with a snapshot) and &quot;deny&quot; on prod</li><li>Nightly backups land in BACKUP_DIR</li><li>Everyday production access uses dev_readonly</li></ul>
+  </div>
+</div>
+<div class="outro">
+  <div class="outro-mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="270 250 560 560" width="560" height="560">
+  <defs>
+    <linearGradient id="trail" gradientUnits="userSpaceOnUse" x1="625" y1="452" x2="295" y2="782">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e9e4f2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="lav" gradientUnits="userSpaceOnUse" x1="478" y1="470" x2="350" y2="598">
+      <stop offset="0" stop-color="#c39bff"/><stop offset="1" stop-color="#9a5cf0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vio" gradientUnits="userSpaceOnUse" x1="628" y1="578" x2="450" y2="756">
+      <stop offset="0" stop-color="#ad63ff"/><stop offset="1" stop-color="#8a3df5" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M713 268 Q725 353 810 365 Q725 377 713 462 Q701 377 615 365 Q701 353 713 268 Z" fill="#fff"/>
+  <path d="M295 782 L599.5 426.5 A36 36 0 0 1 650.5 477.5 Z" fill="url(#trail)"/>
+  <path d="M350 598 L466.7 458.7 A16 16 0 0 1 489.3 481.3 Z" fill="url(#lav)"/>
+  <path d="M450 756 L613.9 563.9 A20 20 0 0 1 642.1 592.1 Z" fill="url(#vio)"/>
+</svg>
+</div>
+  <div><h3>A seatbelt, not a backup plan.</h3>
+  <p>Snapshots protect the database Claude works on. Production still needs real, monitored backups, and now you'll
+  know the day they stop. Follow <b>NXTLVLSOCIAL.AI</b> for more Claude setups like this one.</p></div>
+</div>
+</section></body></html>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="270 250 560 560" width="560" height="560">
+  <defs>
+    <linearGradient id="trail" gradientUnits="userSpaceOnUse" x1="625" y1="452" x2="295" y2="782">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e9e4f2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="lav" gradientUnits="userSpaceOnUse" x1="478" y1="470" x2="350" y2="598">
+      <stop offset="0" stop-color="#c39bff"/><stop offset="1" stop-color="#9a5cf0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vio" gradientUnits="userSpaceOnUse" x1="628" y1="578" x2="450" y2="756">
+      <stop offset="0" stop-color="#ad63ff"/><stop offset="1" stop-color="#8a3df5" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M713 268 Q725 353 810 365 Q725 377 713 462 Q701 377 615 365 Q701 353 713 268 Z" fill="#fff"/>
+  <path d="M295 782 L599.5 426.5 A36 36 0 0 1 650.5 477.5 Z" fill="url(#trail)"/>
+  <path d="M350 598 L466.7 458.7 A16 16 0 0 1 489.3 481.3 Z" fill="url(#lav)"/>
+  <path d="M450 756 L613.9 563.9 A20 20 0 0 1 642.1 592.1 Z" fill="url(#vio)"/>
+</svg>
