@@ -29,12 +29,14 @@ For reach tests, add some of these in the first comment:
 
 ## Alt text (Advanced settings → Accessibility)
 
-Animated explainer set in a haunted Victorian house at 3:07 AM. A developer types DROP DATABASE on production and a
-sheet ghost bursts out, drifting room by room and snuffing out the candles that stand for 1.2 million rows. In the yard,
+Animated explainer set in a haunted Victorian house at 3:07 AM, in rain and lightning, with bats crossing the moon and a
+dark figure on the roof that shows only in a flash. A developer types DROP DATABASE on production and a sheet ghost bursts
+out, drifting room by room and snuffing out the candles that stand for 1.2 million rows. In the yard,
 a gravestone reads "Backups, died 3 March". In the attic, a small coral pixel creature with a lantern opens a glowing
-chest: the snapshot. Three steps follow: a polaroid snapshot before the ghost reaches a room, a glowing ward that throws
+chest while a spider drops from the rafters: the snapshot. Three steps follow: a polaroid snapshot before the ghost reaches a room, a glowing ward that throws
 the ghost back from a door marked PRODUCTION, and a grandfather clock that rings when backups are stale. Finally the
-house is boarded up and padlocked: read-only production. Ends with "Comment BACKUP" and the free PDF.
+house is boarded up and padlocked: read-only production. Ends with "Comment BACKUP" and the free PDF, branded with
+the nxtlvl wordmark.
 
 ## Why it's written this way (SEO)
 
