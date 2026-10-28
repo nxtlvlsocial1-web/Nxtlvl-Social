@@ -19,6 +19,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 V = os.path.join(ROOT, "voice", "raw")
 SR, HOP = 16000, 160
 TAKES = {
+    "narr1": ["Three-oh-seven A.M.", "He thought he was wiping the test database.", "He was connected to production."],
     "dev1": ["Claude... tell me that didn't just run.", "How much is gone?", "Okay. Okay. The backup. There's always a backup.",
              "Nine hundred people are using it. Right now.", "...Why would you do that?", "...Thank you."],
     "claude1": ["It ran.", "All of it. One point two million rows.", "The backup job stopped in March. No one checked.", "...I know.",

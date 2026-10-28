@@ -291,6 +291,13 @@ RACKS.forEach((r, k) => { for (let j = 0; j < 24; j++) {
 const rackScreen = new THREE.Mesh(new THREE.PlaneGeometry(.5, .3), new THREE.MeshBasicMaterial({ toneMapped: false }));
 rackScreen.position.set(-1.15 + .353 + .002, 1.55, -1.5); rackScreen.rotation.y = Math.PI / 2; srv.add(rackScreen);
 
+// the same two eyes, far down the dark corridor once the racks die: Claude is already there
+const srvEyes = [-1, 1].map((s) => {
+  const e = new THREE.Mesh(new THREE.CapsuleGeometry(.045, .05, 6, 12), glow(CORAL, 3.2)); e.position.set(s * .2, 1.5, -11); srv.add(e);
+  const h = halo(.9, CORAL, 0); h.position.set(s * .2, 1.5, -10.98); srv.add(h);
+  return { e, h };
+});
+
 // floating dust in the monitor's light
 const DUST_N = 140;
 const dust = new THREE.InstancedMesh(new THREE.PlaneGeometry(.012, .012), add(0xcfe0ff, .6, { map: glowTex }), DUST_N); dust.frustumCulled = false; scene.add(dust);
@@ -311,16 +318,20 @@ function drawScreen(k) {
   const [kind, a] = k.split("|");
   if (kind === "cmd") {
     term(g, w, h);
-    write(g, "nxtlvl@prod-db-01:~$ psql -h prod", 40, 70, 30, { c: "#7f93a6" });
-    write(g, "psql (16.2)  connected: production", 40, 115, 30, { c: "#7f93a6" });
-    write(g, "prod=# DROP DATABASE production;", 40, 200, 40, { c: "#e8f1f8" });
-    if (a === "c") { g.fillStyle = "#e8f1f8"; g.fillRect(40 + g.measureText("prod=# DROP DATABASE production;").width + 8, 178, 22, 44); }
+    // the close-up sees the middle half of the screen: everything that matters sits in x 250..774
+    write(g, "test-db", 330, 50, 30, { c: "#5d6e80", a: "center" });
+    g.fillStyle = "#ff3030"; rr(g, 438, 22, 300, 58, 12); g.fill();
+    write(g, "PRODUCTION", 588, 52, 34, { c: "#fff", a: "center", w: 800 });
+    write(g, "connected to prod-db-01", 512, 128, 30, { c: "#ff8a8a", a: "center" });
+    write(g, "DROP DATABASE", 512, 215, 62, { c: "#e8f1f8", a: "center", w: 800 });
+    write(g, "app;", 512, 290, 62, { c: "#e8f1f8", a: "center", w: 800 });
+    if (a === "c") { g.fillStyle = "#e8f1f8"; g.font = "800 62px JBMono"; g.fillRect(512 + g.measureText("app;").width / 2 + 10, 262, 30, 58); }
   } else if (kind === "deleted") {
     g.fillStyle = "#3a0606"; g.fillRect(0, 0, w, h); g.fillStyle = "rgba(255,40,40,.08)"; for (let y = 0; y < h; y += 4) g.fillRect(0, y, w, 1);
-    write(g, "DROP DATABASE", 40, 80, 34, { c: "#ff8a8a" });
-    write(g, "1,204,883", 40, 250, 150, { w: 800, c: "#ff4040", f: "Montserrat" });
-    write(g, "ROWS DELETED", 46, 380, 64, { c: "#ffd0d0" });
-    write(g, "production: does not exist", 46, 520, 34, { c: "#ff8a8a" });
+    write(g, "PRODUCTION", 512, 80, 40, { c: "#ff8a8a", a: "center", w: 800 });
+    write(g, "1,204,883", 512, 230, 118, { w: 800, c: "#ff4040", f: "Montserrat", a: "center" });
+    write(g, "ROWS DELETED", 512, 350, 60, { c: "#ffd0d0", a: "center" });
+    write(g, "database \"app\" does not exist", 512, 470, 30, { c: "#ff8a8a", a: "center" });
   } else if (kind === "claude") {
     term(g, w, h, "#07050a");
     sparkGlyph(g, 76, 76, 34, "#ff6a4a"); write(g, "claude", 130, 78, 34, { c: "#ff8a6a" });
@@ -422,9 +433,9 @@ function animScene(t) {
   phoneLight.position.set(.42, .9, .02); phoneLight.intensity = nCount ? .8 + buzz * 1.5 : 0;
   // the eyes: open in the blackout, watch through the snapshot and the joke, close for the restore, return at the end
   const eyeK = t < T.eyes ? 0 : t < L[11] - .05 ? 1 : t < T.cut + .2 ? 0 : t < T.end ? 1 : 0;
-  const blinkE = Math.min(easeOut(win(t, T.eyes, T.eyes + .35)), 1 - pulse(t, L[8] + 1.6, .05, .12), 1 - pulse(t, T.friday + .1, .05, .12));
+  const blinkE = Math.min(easeOut(win(t, T.eyes, T.eyes + .35)), 1 - pulse(t, L[8] + 1.6, .05, .12), 1 - pulse(t, T.friday + .1, .05, .12), 1 - pulse(t, T.end - .7, .05, .12));
   eyes.forEach(({ e, h }, i) => {
-    const k = eyeK * (t < L[11] ? blinkE : easeOut(win(t, T.cut + .2, T.cut + .6)));
+    const k = eyeK * (t < L[11] ? blinkE : easeOut(win(t, T.cut + .2, T.cut + .6)) * (1 - pulse(t, T.end - .7, .05, .12)));
     e.visible = k > .01; e.scale.set(1, Math.max(.05, k), 1);
     e.position.x = (i ? 1 : -1) * .085 + (t > L[9] ? Math.sin(t * .7) * .01 : 0);
     h.material.color.set(CORAL).multiplyScalar(.5 * k);
@@ -448,6 +459,8 @@ function animScene(t) {
   }
   leds.instanceColor.needsUpdate = true;
   rackScreen.material.map = t < T.march ? TX.rackOk : TX.rackFail;
+  const se = easeOut(win(t, T.checked + .3, T.checked + .55));
+  srvEyes.forEach(({ e, h }) => { e.visible = se > .01; e.scale.set(1, Math.max(.05, se), 1); h.material.color.set(CORAL).multiplyScalar(.45 * se); });
   srvLights.forEach((l, i) => { l.color.set(bleed > i * .35 ? RED : GREEN); l.intensity = t > T.checked + .25 + i * .2 ? .2 : 2.2; });
   // the enter key goes down
   enterKey.position.y = .808 - pulse(t, T.enter - .04, .04, .12) * .006;
@@ -456,7 +469,8 @@ function animScene(t) {
 // ---------------------------------------------------------------- camera: CCTV angles and close-ups, hard cuts
 const CCTV = [[3.6, 2.75, 4.4], [0, .95, -.6]];
 const SHOTS = [
-  { a: 0, b: L[1] - .05, p: [[0, 1.22, .28], [.42, 1.42, 1.55]], q: [[0, 1.2, -.25], [0, 1.15, -.25]], fov: [34, 42], cctv: 0 },
+  { a: 0, b: T.enter, p: [[0, 1.29, .47], [0, 1.288, .39]], q: [[0, 1.287, -.25], [0, 1.287, -.25]], fov: 55, cctv: 0 },
+  { a: T.enter, b: L[1] - .05, p: [[0, 1.287, .39], [0, 1.27, .34]], q: [[0, 1.287, -.25], [0, 1.25, -.25]], fov: [55, 64], cctv: 0 },
   { a: L[1] - .05, b: L[2] - .05, p: [CCTV[0], [3.5, 2.72, 4.25]], q: [CCTV[1], CCTV[1]], fov: [52, 49], cctv: 1 },
   { a: L[2] - .05, b: L[3] - .05, p: [[1.25, 1.55, -.4], [1.1, 1.52, -.3]], q: [[0, 1.33, .5], [0, 1.35, .5]], fov: [48, 42], cctv: 0 },
   { a: L[3] - .05, b: L[4] - .05, p: [CCTV[0], [3.45, 2.7, 4.1]], q: [CCTV[1], [0, .95, -.8]], fov: [50, 46], cctv: 1 },
@@ -503,7 +517,7 @@ function renderAt(t) {
   g.uRoll.value = cctv >= 1 ? 1 : 0;
   g.uTear.value = pulse(t, L[1] - .05, .02, .2) + pulse(t, L[3] - .05, .02, .2) + pulse(t, L[11] - .05, .02, .2) + pulse(t, T.eyes - .02, .02, .35) * 1.5 +
     (between(t, T.revoked - .05, T.cut) ? .5 : 0) + pulse(t, T.enter, .02, .25);
-  bloom.strength = lerp(.75, .45, relief);
+  bloom.strength = t < L[1] - .05 ? .28 : lerp(.75, .45, relief);           // the opening screen has to stay readable
   composer.render();
 }
 

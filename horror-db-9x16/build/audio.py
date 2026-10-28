@@ -131,6 +131,13 @@ def zap(d):                  # the lights shorting on "revoked"
     return (lp(x, 4000) * (.5 + .5 * (np.sin(2 * np.pi * 13 * t) > 0)) + bp(rng.standard_normal(len(t)), 3000, 9000) * (rng.random(len(t)) > .995) * 3) * .08
 
 
+def swell(d=1.1):            # a reversed reverb tail: the breath before Claude speaks
+    t = tt(d)
+    x = bp(rng.standard_normal(len(t)), 300, 5000) * np.exp(-t * 4.5)
+    x = reverb(np.pad(x, (0, int(.4 * SR))), 1.8, .6, 21)[: len(t)]
+    return x[::-1] * .35 * np.minimum(1, (d - t[::-1]) / .02)
+
+
 def power_down(d=.7):
     t = tt(d)
     return np.sin(2 * np.pi * np.cumsum(400 * np.exp(-t * 4)) / SR) * np.exp(-t * 4) * .2 + np.sin(2 * np.pi * np.cumsum(60 * np.exp(-t * 2)) / SR) * np.exp(-t * 3) * .3
@@ -205,6 +212,10 @@ def sfx():
     put(smp("glitch-1", .5), T["revoked"] - .05, .4)
     put(smp("impact-bass-2"), CUT, .9)
     put(power_down(), CUT, 1.0)
+    # the breath before Claude's first word, and before the eyes open in the dark
+    put(swell(1.0), L[1] - 1.0, .8)
+    put(swell(1.4), EYES - 1.35, 1.0)
+    put(swell(1.2), CTA - 1.1, .6)
     # CTA: the eyes come back, BACKUP slams in letter by letter
     put(smp("glitch-2", .3), CTA - .02, .4)
     for i in range(6):
@@ -247,6 +258,17 @@ def main():
     fade[-int(.3 * SR):] = np.linspace(1, 0, int(.3 * SR))
     score *= fade[:, None]
     vv = reverb(v, .8, .08, 9)
+    # Claude sounds a little wrong: an octave-down shadow of its own voice under every line, and a longer tail
+    lines = json.load(open(os.path.join(ROOT, "voice", "lines.json")))["lines"]
+    cm = curve([(0, 0)] + [p for ln in lines if ln["who"] == "claude" for p in
+                           ((ln["start"] - .2, 0), (ln["start"] - .1, 1), (ln["end"] + .25, 1), (ln["end"] + .4, 0))] + [(DUR, 0)])
+    low = os.path.join(ROOT, "assets", "audio", "voice_low.wav")
+    ffmpeg("-i", os.path.join(ROOT, "assets", "audio", "voice.wav"), "-af", "rubberband=pitch=0.5:formant=shifted", "-ar", str(SR), low)
+    lo, _ = sf.read(low)
+    os.remove(low)
+    shadow = np.zeros(N)
+    shadow[: min(N, len(lo))] = lo[:N]
+    vv = vv + (reverb(shadow, 1.6, .5, 17) * .3 + reverb(v, 2.4, .45, 19) * .25 - v * .25 * .55) * cm
     mix = score + (vv * (.15 / rms(v[v != 0])))[:, None]
     mix *= min(1, .98 / np.max(np.abs(mix)))
     raw = os.path.join(ROOT, "assets", "audio", "mix_raw.wav")

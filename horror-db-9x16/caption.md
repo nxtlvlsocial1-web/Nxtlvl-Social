@@ -7,16 +7,16 @@ Files: `renders/nxtlvl_horror-db_reels_9x16_v1.mp4` (the Reel) and `renders/nxtl
 
 Comment "BACKUP" and I'll send you the setup that saved him.
 
-03:07 AM. A developer ran one command and deleted the entire production database. 1.2 million rows, gone. The backup job had been dead since March, and nobody checked.
+03:07 AM. A developer thought he was wiping the test database. He was connected to production. 1.2 million rows, gone. The backup job had been dead since March, and nobody checked.
 
 Claude had taken a snapshot before he ever asked it to "clean things up".
 
 What actually saved him:
 
 1. Snapshot the database before any destructive command, every time
-2. Check that your backup jobs ran, not just that they exist
-3. Keep production access separate from your everyday account
-4. Make the AI agent confirm before it touches anything it can't undo
+2. Make your terminal scream when you're connected to production
+3. Check that your backup jobs ran, not just that they exist
+4. Keep production access separate from your everyday account
 
 Save this before your next late-night deploy, and send it to the dev on your team who works at 3 AM.
 
@@ -32,11 +32,12 @@ add some of these in the first comment:
 
 ## Alt text (Advanced settings → Accessibility)
 
-3D horror short shot like CCTV footage: at 3:07 AM a developer alone in a dark office presses Enter and deletes the
-production database, 1.2 million rows. The lights die row by row, the server room's lights turn red because the backup
-stopped in March, and his phone fills with alerts. In the blackout two coral eyes open on his monitor: Claude, which
-had taken a snapshot before he said "clean things up". It restores everything, then revokes his production access.
-Ends with "Comment BACKUP".
+3D horror short shot like CCTV footage. A narrator sets the scene: at 3:07 AM a developer alone in a dark office thinks
+he is wiping the test database, but he is connected to production. He presses Enter and deletes 1.2 million rows. The
+lights die row by row, the server room turns red because the backup stopped in March, two coral eyes open at the end of
+the dead corridor, and his phone fills with alerts. In the blackout the eyes open on his monitor: Claude, his AI agent,
+which had taken a snapshot before he said "clean things up". It restores everything, then revokes his production
+access. Ends with "Comment BACKUP".
 
 ## Why it's written this way (SEO)
 

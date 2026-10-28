@@ -4,6 +4,7 @@ python3 build/voice.py      (from the project root; needs numpy and ffmpeg)
 
 voice/raw/dev1.mp3     the developer, every line in one read (voice "Louie the Legend": whispering, panicking)
 voice/raw/claude1.mp3  Claude, every line in one read (voice "Ivy": low, close, unhurried)
+voice/raw/narr1.mp3    the narrator's cold open, three lines (voice "Romulus II": deep, hushed, found-footage)
 voice/raw/words_<take>.json is each take's ElevenLabs Scribe alignment (per-word start/end in s). A line is cut from its
 first word to its last (plus a breath either side); pauses inside a line are held to KEEP so the "..." beats stay but
 don't drag. The lines are laid end to end with the GAP before each: short in the back-and-forth, long where the scene
@@ -23,11 +24,14 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 V = os.path.join(ROOT, "voice")
 SR = 48000
 KEEP = .26
-TEMPO = 1.08                                      # a touch faster, pitch kept (ffmpeg atempo)
-LEAD = .62                                        # the hook's Enter key and "rows deleted" come before the first word
+TEMPO = 1.05                                      # a touch faster, pitch kept (ffmpeg atempo)
+LEAD = 1.05                                       # after the narrator: the Enter key and the red flood before the first line
 # (take, text, gap before[, first word kept]) in story order; each take's lines must appear in its read in this order.
 # Gaps are before the speed-up.
 LINES = [
+    ("narr1", "Three-oh-seven A.M.", .15),
+    ("narr1", "He thought he was wiping the test database.", .32),
+    ("narr1", "He was connected to production.", .3),
     ("dev1", "Claude... tell me that didn't just run.", LEAD),
     ("claude1", "It ran.", .3),
     ("dev1", "How much is gone?", .32),
@@ -36,15 +40,15 @@ LINES = [
     ("claude1", "The backup job stopped in March. No one checked.", .32),
     ("dev1", "Nine hundred people are using it. Right now.", .32),
     ("claude1", "...I know.", .42),
-    ("claude1", "Before you told me to \"clean things up\"... I took a snapshot.", 1.25),
+    ("claude1", "Before you told me to \"clean things up\"... I took a snapshot.", 1.6),
     ("dev1", "...Why would you do that?", .3),
     ("claude1", "Because the last time you said \"clean things up\"... it was a Friday.", .32),
     ("claude1", "Restoring now.", .38),
-    ("dev1", "...Thank you.", .7),
+    ("dev1", "...Thank you.", .8),
     ("claude1", "One more thing. I've revoked your production access.", .38),
     ("claude1", "Comment BACKUP... and I'll send you the setup that saved him.", .85),
 ]
-WHO = {"dev1": "dev", "claude1": "claude"}
+WHO = {"dev1": "dev", "claude1": "claude", "narr1": "narr"}
 
 
 def run(*a, **k):
@@ -105,6 +109,12 @@ def main():
         return np.sqrt(np.mean(fr[fr > .3 * fr.max()] ** 2))
     gain = {t: 1 / vrms(takes[t]) for t in WHO}
     parts, outw, lines, t0 = [], [], [], 0.0
+    num, nd, nn = [], 0, 100
+    for take, *_ in LINES:
+        if WHO[take] == "narr":
+            nn += 1; num.append(nn)
+        else:
+            nd += 1; num.append(nd)
     for li, (take, text, gap, *first) in enumerate(LINES):
         n = len(text.split())
         ws = words[take][idx[take]:idx[take] + n]; idx[take] += n
@@ -117,8 +127,8 @@ def main():
         parts.append(np.zeros(int(gap * SR))); t0 += gap
         parts.append(y * gain[take] * .1)
         for (w, s, e), src in zip(mw, text.split()):
-            outw.append({"line": li + 1, "who": WHO[take], "w": src, "s": round((t0 + s) / TEMPO, 3), "e": round((t0 + e) / TEMPO, 3)})
-        lines.append({"line": li + 1, "who": WHO[take], "text": text, "start": round((t0 + mw[0][1]) / TEMPO, 3), "end": round((t0 + mw[-1][2]) / TEMPO, 3)})
+            outw.append({"line": num[li], "who": WHO[take], "w": src, "s": round((t0 + s) / TEMPO, 3), "e": round((t0 + e) / TEMPO, 3)})
+        lines.append({"line": num[li], "who": WHO[take], "text": text, "start": round((t0 + mw[0][1]) / TEMPO, 3), "end": round((t0 + mw[-1][2]) / TEMPO, 3)})
         t0 += len(y) / SR
     y = np.concatenate(parts + [np.zeros(int(.3 * SR))])
     tight = os.path.join(V, "dialogue.f32")
