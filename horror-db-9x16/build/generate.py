@@ -21,7 +21,7 @@ B = os.path.join(ROOT, "build")
 LINES = json.load(open(os.path.join(ROOT, "voice", "lines.json")))["lines"]
 WORDS = json.load(open(os.path.join(B, "words.json")))
 VOICE_END = LINES[-1]["end"]
-DUR = round(VOICE_END + 1.8, 2)          # the CTA holds 1.8 s after the last word
+DUR = round(VOICE_END + 1.3, 2)          # the CTA holds 1.3 s after the last word
 
 
 def word(line, text, nth=1):
@@ -40,7 +40,7 @@ T = {
     "end": DUR,
 }
 L, E = T["l"], T["e"]
-T["eyes"] = round(L[8] - .75, 3)                  # in the blackout before "Before you told me...", two eyes open
+T["eyes"] = round(L[8] - .6, 3)                   # in the blackout before "Before you told me...", two eyes open
 T["restore"] = round(L[11], 3)                   # "Restoring now."
 T["done"] = round(L[12] - .35, 3)                # the restore hits 100 % just before "Thank you."
 T["cut"] = round(T["revoked"] + .55, 3)          # the lights go out on "revoked"
@@ -151,7 +151,7 @@ body { font-family: "Montserrat", sans-serif; color: #ece6dc; }
 .hk-a { font: 800 150px/1 "Montserrat"; letter-spacing: -4px; color: #f2ede6; text-shadow: 0 0 40px rgba(255,60,60,.35), 0 8px 40px rgba(0,0,0,.9); }
 .hk-b { margin-top: 18px; font: 600 54px/1.1 "Montserrat"; color: #d9d2c8; text-shadow: 0 4px 24px rgba(0,0,0,.95); }
 .hk-b b { color: #ff5a5a; font-weight: 800; }
-#caps { z-index: 6; }
+#caps { z-index: 8; }
 .cap { position: absolute; left: 50px; right: 50px; top: 1300px; text-align: center; opacity: 0; }
 .cap .box { display: inline-block; max-width: 980px; padding: 14px 24px 18px; border-radius: 14px; background: rgba(6,6,10,.72);
   border-left: 6px solid rgba(236,230,220,.7); font: 700 52px/1.25 "JBMono"; color: #ece6dc; text-align: left; text-shadow: 0 2px 10px rgba(0,0,0,.8); }

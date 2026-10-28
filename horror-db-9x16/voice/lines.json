@@ -1,110 +1,110 @@
 {
- "duration": 50.57,
+ "duration": 41.704,
  "lines": [
   {
    "line": 1,
    "who": "dev",
    "text": "Claude... tell me that didn't just run.",
-   "start": 1.12,
-   "end": 3.49
+   "start": 0.685,
+   "end": 2.769
   },
   {
    "line": 2,
    "who": "claude",
    "text": "It ran.",
-   "start": 4.29,
-   "end": 4.89
+   "start": 3.37,
+   "end": 3.926
   },
   {
    "line": 3,
    "who": "dev",
    "text": "How much is gone?",
-   "start": 5.81,
-   "end": 7.19
+   "start": 4.565,
+   "end": 5.731
   },
   {
    "line": 4,
    "who": "claude",
    "text": "All of it. One point two million rows.",
-   "start": 8.01,
-   "end": 11.45
+   "start": 6.352,
+   "end": 9.426
   },
   {
    "line": 5,
    "who": "dev",
-   "text": "Okay. Okay. The backup. There's always a backup.",
-   "start": 12.22,
-   "end": 15.85
+   "text": "The backup. There's always a backup.",
+   "start": 10.028,
+   "end": 11.991
   },
   {
    "line": 6,
    "who": "claude",
    "text": "The backup job stopped in March. No one checked.",
-   "start": 16.72,
-   "end": 20.32
+   "start": 12.63,
+   "end": 15.852
   },
   {
    "line": 7,
    "who": "dev",
    "text": "Nine hundred people are using it. Right now.",
-   "start": 21.19,
-   "end": 23.64
+   "start": 16.491,
+   "end": 18.648
   },
   {
    "line": 8,
    "who": "claude",
    "text": "...I know.",
-   "start": 24.61,
-   "end": 24.92
+   "start": 19.38,
+   "end": 19.667
   },
   {
    "line": 9,
    "who": "claude",
    "text": "Before you told me to \"clean things up\"... I took a snapshot.",
-   "start": 26.64,
-   "end": 30.16
+   "start": 21.167,
+   "end": 24.315
   },
   {
    "line": 10,
    "who": "dev",
    "text": "...Why would you do that?",
-   "start": 30.98,
-   "end": 31.96
+   "start": 24.935,
+   "end": 25.843
   },
   {
    "line": 11,
    "who": "claude",
    "text": "Because the last time you said \"clean things up\"... it was a Friday.",
-   "start": 32.83,
-   "end": 36.39
+   "start": 26.481,
+   "end": 29.667
   },
   {
    "line": 12,
    "who": "claude",
    "text": "Restoring now.",
-   "start": 37.31,
-   "end": 38.17
+   "start": 30.361,
+   "end": 31.157
   },
   {
    "line": 13,
    "who": "dev",
    "text": "...Thank you.",
-   "start": 39.54,
-   "end": 41.46
+   "start": 32.148,
+   "end": 33.815
   },
   {
    "line": 14,
    "who": "claude",
    "text": "One more thing. I've revoked your production access.",
-   "start": 42.33,
-   "end": 45.27
+   "start": 34.463,
+   "end": 37.074
   },
   {
    "line": 15,
    "who": "claude",
    "text": "Comment BACKUP... and I'll send you the setup that saved him.",
-   "start": 46.79,
-   "end": 50.02
+   "start": 38.204,
+   "end": 41.194
   }
  ]
 }

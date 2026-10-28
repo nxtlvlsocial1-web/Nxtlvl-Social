@@ -22,25 +22,27 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 V = os.path.join(ROOT, "voice")
 SR = 48000
-KEEP = .38
-LEAD = 1.0                                        # the hook's Enter key and "rows deleted" come before the first word
-# (take, text, gap before) in story order; each take's lines must appear in its read in this order
+KEEP = .26
+TEMPO = 1.08                                      # a touch faster, pitch kept (ffmpeg atempo)
+LEAD = .62                                        # the hook's Enter key and "rows deleted" come before the first word
+# (take, text, gap before[, first word kept]) in story order; each take's lines must appear in its read in this order.
+# Gaps are before the speed-up.
 LINES = [
     ("dev1", "Claude... tell me that didn't just run.", LEAD),
-    ("claude1", "It ran.", .45),
-    ("dev1", "How much is gone?", .55),
-    ("claude1", "All of it. One point two million rows.", .45),
-    ("dev1", "Okay. Okay. The backup. There's always a backup.", .4),
-    ("claude1", "The backup job stopped in March. No one checked.", .5),
-    ("dev1", "Nine hundred people are using it. Right now.", .5),
-    ("claude1", "...I know.", .6),
-    ("claude1", "Before you told me to \"clean things up\"... I took a snapshot.", 1.35),
-    ("dev1", "...Why would you do that?", .45),
-    ("claude1", "Because the last time you said \"clean things up\"... it was a Friday.", .5),
-    ("claude1", "Restoring now.", .55),
-    ("dev1", "...Thank you.", 1.0),
-    ("claude1", "One more thing. I've revoked your production access.", .55),
-    ("claude1", "Comment BACKUP... and I'll send you the setup that saved him.", 1.15),
+    ("claude1", "It ran.", .3),
+    ("dev1", "How much is gone?", .32),
+    ("claude1", "All of it. One point two million rows.", .3),
+    ("dev1", "Okay. Okay. The backup. There's always a backup.", .28, 2),      # read from "The backup."
+    ("claude1", "The backup job stopped in March. No one checked.", .32),
+    ("dev1", "Nine hundred people are using it. Right now.", .32),
+    ("claude1", "...I know.", .42),
+    ("claude1", "Before you told me to \"clean things up\"... I took a snapshot.", 1.25),
+    ("dev1", "...Why would you do that?", .3),
+    ("claude1", "Because the last time you said \"clean things up\"... it was a Friday.", .32),
+    ("claude1", "Restoring now.", .38),
+    ("dev1", "...Thank you.", .7),
+    ("claude1", "One more thing. I've revoked your production access.", .38),
+    ("claude1", "Comment BACKUP... and I'll send you the setup that saved him.", .85),
 ]
 WHO = {"dev1": "dev", "claude1": "claude"}
 
@@ -103,18 +105,20 @@ def main():
         return np.sqrt(np.mean(fr[fr > .3 * fr.max()] ** 2))
     gain = {t: 1 / vrms(takes[t]) for t in WHO}
     parts, outw, lines, t0 = [], [], [], 0.0
-    for li, (take, text, gap) in enumerate(LINES):
+    for li, (take, text, gap, *first) in enumerate(LINES):
         n = len(text.split())
         ws = words[take][idx[take]:idx[take] + n]; idx[take] += n
         if [norm(w["text"]) for w in ws] != [norm(w) for w in text.split()]:
             raise SystemExit(f"line {li + 1} ({take}) doesn't match its read:\n  {text}\n  " + " ".join(w["text"] for w in ws))
+        k0 = first[0] if first else 0
+        ws, text = ws[k0:], " ".join(text.split()[k0:])
         a, b = max(0, ws[0]["start"] - .12), min(len(takes[take]) / SR, ws[-1]["end"] + .25)
         y, mw = cut(takes[take], a, b, ws)
         parts.append(np.zeros(int(gap * SR))); t0 += gap
         parts.append(y * gain[take] * .1)
         for (w, s, e), src in zip(mw, text.split()):
-            outw.append({"line": li + 1, "who": WHO[take], "w": src, "s": round(t0 + s, 3), "e": round(t0 + e, 3)})
-        lines.append({"line": li + 1, "who": WHO[take], "text": text, "start": round(t0 + mw[0][1], 3), "end": round(t0 + mw[-1][2], 3)})
+            outw.append({"line": li + 1, "who": WHO[take], "w": src, "s": round((t0 + s) / TEMPO, 3), "e": round((t0 + e) / TEMPO, 3)})
+        lines.append({"line": li + 1, "who": WHO[take], "text": text, "start": round((t0 + mw[0][1]) / TEMPO, 3), "end": round((t0 + mw[-1][2]) / TEMPO, 3)})
         t0 += len(y) / SR
     y = np.concatenate(parts + [np.zeros(int(.3 * SR))])
     tight = os.path.join(V, "dialogue.f32")
@@ -122,11 +126,11 @@ def main():
     os.makedirs(os.path.join(ROOT, "assets", "audio"), exist_ok=True)
     out = os.path.join(ROOT, "assets", "audio", "voice.wav")
     run("ffmpeg", "-y", "-v", "error", "-f", "f32le", "-ar", str(SR), "-ac", "1", "-i", tight,
-        "-af", "loudnorm=I=-17:TP=-1.5:LRA=14", "-ar", str(SR), "-ac", "1", out)
+        "-af", f"atempo={TEMPO},loudnorm=I=-17:TP=-1.5:LRA=14", "-ar", str(SR), "-ac", "1", out)
     os.remove(tight)
     json.dump(outw, open(os.path.join(ROOT, "build", "words.json"), "w"), indent=0)
-    json.dump({"duration": round(len(y) / SR, 3), "lines": lines}, open(os.path.join(V, "lines.json"), "w"), indent=1)
-    print(f"voice.wav {len(y) / SR:.2f} s")
+    json.dump({"duration": round(len(y) / SR / TEMPO, 3), "lines": lines}, open(os.path.join(V, "lines.json"), "w"), indent=1)
+    print(f"voice.wav {len(y) / SR / TEMPO:.2f} s")
     for l in lines:
         print(f"  {l['start']:6.2f}-{l['end']:6.2f}  {l['who']:6s} {l['text']}")
 
