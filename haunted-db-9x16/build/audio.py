@@ -4,8 +4,9 @@ python3 build/audio.py      (from the project root, after build/generate.py; nee
 
 Music: original, composed here (no licence or credit needed): a slow music-box waltz in D minor (3/4, 76 bpm) over a
 low drone, wind and the house creaking; a heartbeat under the deletion; near silence for the twist; the music box
-returns, warmer, for the CTA. SFX: every visual event generate.py logs (cues.json "ev") gets a sound, plus thunder on
-every lightning flash world.js draws. Recorded hits come from HyperFrames' bundled library (Pixabay Content License:
+returns, warmer, for the CTA; rain under all of it. SFX: every visual event generate.py logs (cues.json "ev") gets a
+sound, plus thunder on the lightning flashes and a flutter for each flight of bats world.js draws (cues.json
+"lightning", "bats"). Recorded hits come from HyperFrames' bundled library (Pixabay Content License:
 commercial use, no credit needed; .claude/skills/media-use/audio/assets/sfx/CREDITS.md); the rest is synthesized.
 Writes assets/audio/mix.wav, mastered to -14 LUFS integrated, -1.5 dBTP.
 """
@@ -142,6 +143,36 @@ def whooshw(d=.5, g=1.0):
     return bp(rng.standard_normal(len(t)), 300, 2500) * np.sin(np.pi * np.clip(t / d, 0, 1)) ** 2 * .12 * g
 
 
+def flutter(d=2.2, n=9):
+    """A flock of bats: wingbeats (filtered noise at ~18 Hz per bat, drifting) and a few high squeaks."""
+    t = tt(d)
+    x = np.zeros(len(t))
+    for i in range(n):
+        f = 15 + rng.random() * 7
+        env = np.sin(np.pi * np.clip((t - rng.random() * .4) / (d * .8), 0, 1)) ** 2
+        x += bp(rng.standard_normal(len(t)), 500, 3500) * np.maximum(0, np.sin(2 * np.pi * f * t + rng.random() * 6)) ** 4 * env
+    for _ in range(4):
+        u = rng.random() * d * .7
+        sq = tt(.07)
+        chirp = np.sin(2 * np.pi * np.cumsum(7000 - 25000 * sq) / SR) * np.sin(np.pi * sq / .07) ** 2 * .25
+        x[int(u * SR):int(u * SR) + len(chirp)] += chirp[: len(x) - int(u * SR)]
+    return x * .08
+
+
+def stab():
+    """A dissonant string-like stab for the figure on the roof."""
+    t = tt(1.4)
+    x = sum(np.sign(np.sin(2 * np.pi * hz(m) * t + k)) * .3 + np.sin(2 * np.pi * hz(m) * t) for k, m in enumerate((62, 63, 68, 74, 75)))
+    return lp(x, 3500) * np.minimum(1, t / .01) * np.exp(-t * 2.4) * .07
+
+
+def zip_(d=.6, up=False):
+    t = tt(d)
+    f = (2600 - 1800 * t / d) if not up else (900 + 2200 * t / d)
+    x = bp(rng.standard_normal(len(t)), 400, 6000) * (1 + np.sin(2 * np.pi * np.cumsum(f / 40) / SR * 40)) * .5
+    return x * np.sin(np.pi * t / d) * .12
+
+
 def blip(f, d=.06, g=.15):
     t = tt(d)
     return np.sin(2 * np.pi * f * t) * np.exp(-t * 50) * g
@@ -183,9 +214,19 @@ def sfx():
         elif k == "key": put(buf, s("key-press", .12), t, .5, (rng.random() - .5) * .6)
         elif k == "send": put(buf, whooshw(.4), t); put(buf, mbox(86, 1.2), t + .1, 1.4)
         elif k == "flip": put(buf, whooshw(.5, 1.2), t)
-    # thunder on world.js's lightning flashes, and the ghost's burst on Enter
-    for t, g in ((.35, .8), (T["press"], 1.0), (TW0, .9), (T["touch"], .7)):
-        put(buf, thunder(3.2, g), t - .05, 1, .2)
+        elif k == "glitch": put(buf, s("glitch-2", .25), t, .3, (rng.random() - .5) * .6)
+        elif k == "spider": put(buf, zip_(.75), t, 1, .7)
+        elif k == "skitter":
+            put(buf, zip_(.45, True), t, 1, .7)
+            for i in range(10):
+                put(buf, blip(3000 + rng.random() * 2000, .015, .05), t + i * .035, 1, .7)
+    # thunder on world.js's lightning flashes, bats, the figure in the second flash, the ghost's burst on Enter
+    for t, _, g in T["lightning"]:
+        if g:
+            put(buf, thunder(3.2, g), t - .05, 1, .2)
+    for i, t in enumerate(T["bats"]):
+        put(buf, flutter(2.6 if i != 3 else 3.0, 9 if i != 2 else 5), t, (.9, .7, 1.3, .5)[i], (-.4, .1, .5, .3)[i])
+    put(buf, stab(), .62, 1.0)
     put(buf, wail(1.8, 360), T["press"] + .2, 1.2)
     for i, t in enumerate(np.arange(1.2, DUR, 3.3)):
         put(buf, creak(.8 + .4 * hash_(i)), t + hash_(i + 9), .8, hash_(i + 3) - .5)
@@ -212,10 +253,8 @@ def bed():
     out += wind * (.25 + .2 * np.sin(2 * np.pi * .13 * t))[:, None]
     # heartbeat under the deletion
     hb = np.zeros((N, 2))
-    u = T["press"] + .5
-    while u < SC[2][0] - .3:
+    for u in T["hb"]:
         put(hb, thump(.9), u); put(hb, thump(.6), u + .18)
-        u += 60 / (88 + (u - T["press"]) * 4)
     out += hb * .9
     # the music box waltz: from the copy on, quarter = 60/76 s
     q = 60 / 76
@@ -229,8 +268,11 @@ def bed():
                 put(mb, mbox(m - 24, 2.6) * .7, u, 1, 0)
         u += q; i += 1
     out += mb * 1.4
+    rain_ = np.stack([hp(bp(rng.standard_normal(N), 1200, 9000), 900) for _ in range(2)], 1)
+    rain_ *= (1 + .3 * (rng.random((N, 1)) > .9997))
     g = curve([(0, .7), (T["press"], .7), (T["press"] + .2, 1.0), (TW0 - .05, 1.0), (TW0, .35), (TW1 - .1, .35), (TW1, .9), (DUR, .9)])
     out *= g[:, None]
+    out += rain_ * .06
     return np.stack([reverb(out[:, c], 2.6, .3, c + 3) for c in (0, 1)], 1)
 
 

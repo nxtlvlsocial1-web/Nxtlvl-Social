@@ -162,6 +162,8 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 ```
 .claude/skills/       Claude Code skills
 brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-video § 4)
+                      Our own two pages: brands/nxtlvl = NXTLVLSOCIAL.AI (comet-star mark),
+                      brands/ai-nxtlvl = AI.NXTLVL (the "nxtlvl" wordmark with a violet star)
 <project>/            One HyperFrames project per video and aspect ratio, e.g. spring-drop-9x16/
 ```
 

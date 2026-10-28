@@ -4,6 +4,7 @@
 // gravestone in the yard ("d. 3 MARCH"). In the attic, the pixel mascot's lantern finds the copy (a glowing chest).
 // The three steps: a polaroid flash before the ghost reaches a room, a warded front door marked PRODUCTION, a
 // grandfather clock that rings when the backup is stale. The twist boards and padlocks the house: read-only.
+// Around it: rain, bats, lightning (a figure by the tree shows only in the flash), eyes in the windows that went dark.
 // Cue times come from the voiceover (window.HH_T, build/generate.py); the 2D explainer layer sits over this canvas.
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
@@ -17,8 +18,12 @@ const T = window.HH_T;
 const L = T.l, E = T.e, SC = T.scenes;
 const W = 1080, H = 1920;
 
-const canvas = document.getElementById("gl");
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance" });
+// WebGL draws off-screen and each frame is copied into the page's 2D canvas: under HyperFrames' software compositing a
+// WebGL canvas in the page loses a band (the flipped rect of whatever 2D element repainted) in some frames
+const glEl = document.getElementById("gl"); glEl.width = W; glEl.height = H;
+const out2d = glEl.getContext("2d");
+const canvas = document.createElement("canvas"); canvas.width = 1080; canvas.height = 1920;
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance", preserveDrawingBuffer: true });
 renderer.setSize(W, H, false);
 renderer.setPixelRatio(1);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -109,8 +114,9 @@ const ground = mesh(new THREE.PlaneGeometry(120, 120).rotateX(-Math.PI / 2), std
 const moon = mesh(new THREE.SphereGeometry(2.2, 32, 16), glow(0xdfe6ff, 1.6, { fog: false })); moon.position.set(9, 21, -40); scene.add(moon);
 const moonHalo = halo(22, 0x8fa8ff, .45); moonHalo.material.fog = false; moonHalo.position.copy(moon.position).add(new THREE.Vector3(0, 0, .5)); scene.add(moonHalo);
 const barkM = std(0x07080b);
+const TREES = [];
 function tree(x, z, s, seed) {
-  const g = grp(scene, x, 0, z); g.scale.setScalar(s);
+  const g = grp(scene, x, 0, z); g.scale.setScalar(s); TREES.push(g);
   const branch = (parent, len, rad, depth, sd) => {
     const b = mesh(new THREE.CylinderGeometry(rad * .6, rad, len, 5).translate(0, len / 2, 0), barkM); parent.add(b);
     if (depth > 0) for (let i = 0; i < 2 + (depth > 1 ? 1 : 0); i++) {
@@ -145,8 +151,8 @@ const graveLight = new THREE.PointLight(0xb8c8f0, 0, 7, 1.4); graveLight.positio
 const graveTop = mesh(new THREE.CylinderGeometry(.75, .75, .28, 24, 1, false, Math.PI / 2, Math.PI), std(0x5a5e68));
 graveTop.rotation.x = Math.PI / 2; graveTop.position.set(0, 1.6, 0); grave.add(graveTop);
 grave.add(at(mesh(new THREE.BoxGeometry(1.8, .12, 1.1), std(0x15171c)), 0, .06, .5));
-const FOG_N = 26;
-const fogM = addM(0x8ea0c8, .07, { map: glowTex });
+const FOG_N = 34;
+const fogM = addM(0x8ea0c8, .085, { map: glowTex });
 const fogI = new THREE.InstancedMesh(new THREE.PlaneGeometry(1, 1), fogM, FOG_N); fogI.frustumCulled = false; scene.add(fogI);
 
 // ---------------------------------------------------------------- the house: a Victorian cross-section, 3 floors and an attic
@@ -295,9 +301,10 @@ const webTex = canvasTex(256, 256, (g, w) => {
   for (let i = 0; i < 9; i++) { const a = i / 8 * Math.PI / 2; g.beginPath(); g.moveTo(0, 0); g.lineTo(Math.cos(a) * w, Math.sin(a) * w); g.stroke(); }
   for (let r = 30; r < w; r += 34) { g.beginPath(); for (let i = 0; i <= 8; i++) { const a = i / 8 * Math.PI / 2, rr2 = r * (1 - .1 * Math.sin(i * 1.7)); i ? g.lineTo(Math.cos(a) * rr2, Math.sin(a) * rr2) : g.moveTo(Math.cos(a) * rr2, Math.sin(a) * rr2); } g.stroke(); }
 });
+const WEBS = [];
 for (const s of [-1, 1]) {
   const web = mesh(new THREE.PlaneGeometry(1.4, 1.4), new THREE.MeshBasicMaterial({ map: webTex, transparent: true, depthWrite: false, side: THREE.DoubleSide }));
-  web.position.set(s * 1.9, ATT + 1.05, -2.0); web.rotation.z = s > 0 ? Math.PI / 2 : 0; web.scale.x = s; house.add(web);
+  web.position.set(s * 1.9, ATT + 1.05, -2.0); web.rotation.z = s > 0 ? Math.PI / 2 : 0; web.scale.x = s; house.add(web); WEBS.push(web);
 }
 
 // ---------------------------------------------------------------- the hall: the grandfather clock
@@ -372,6 +379,47 @@ const lHalo = halo(1.6, CORAL, .55); lantern.add(lHalo);
 const lLight = new THREE.PointLight(CORAL, 2.2, 4.5, 1.5); lantern.add(lLight);
 const camFlash = new THREE.PointLight(0xffffff, 0, 6, 1.4); mascot.add(camFlash); camFlash.position.set(0, .5, .5);
 
+// ---------------------------------------------------------------- the weather and the things in the dark
+// rain: thin streaks in a box around the house, only outside
+const RAIN_N = 320;
+const rain = new THREE.InstancedMesh(new THREE.PlaneGeometry(.012, .55), addM(0xaabbe0, .55), RAIN_N); rain.frustumCulled = false; scene.add(rain);
+// bats: a body and two scalloped wings each, flapping
+const wingShape = new THREE.Shape();
+[[0, .05], [.22, .13], [.48, .1], [.64, 0], [.5, -.05], [.42, -.01], [.33, -.08], [.24, -.02], [.14, -.08], [0, -.05]].forEach(([x, y], i) => (i ? wingShape.lineTo(x, y) : wingShape.moveTo(x, y)));
+const wingGeo = new THREE.ShapeGeometry(wingShape).rotateX(-Math.PI / 2);
+const batM = new THREE.MeshBasicMaterial({ color: 0x030306, side: THREE.DoubleSide, fog: false });
+const BAT_N = 9, BATS = [];
+for (let i = 0; i < BAT_N; i++) {
+  const b = grp(scene, 0, -50, 0);
+  b.add(at(mesh(new THREE.SphereGeometry(.07, 8, 6), batM), 0, 0, 0)).children[0].scale.set(.8, .7, 1.6);
+  const wl = grp(b, -.04, 0, 0), wr = grp(b, .04, 0, 0);
+  wr.add(mesh(wingGeo, batM)); wl.add(mesh(wingGeo, batM)); wl.scale.x = -1;
+  BATS.push({ b, wl, wr });
+}
+// glowing eyes: a pair of small lights that blink
+function eyes(parent, x, y, z, size, color, k = 3) {
+  const g = grp(parent, x, y, z);
+  for (const s of [-1, 1]) {
+    const e = mesh(new THREE.PlaneGeometry(size * 2.4, size * 2.4), addM(color, k, { map: glowTex })); e.position.x = s * size * 1.1; g.add(e);
+    const core = mesh(new THREE.CircleGeometry(size * .35, 10), glow(color, k * 1.2)); core.position.set(s * size * 1.1, 0, .001); g.add(core);
+  }
+  g.visible = false; return g;
+}
+const roundEyes = eyes(facade, 0, ATT + 1.1, .2, .09, 0xffe9a0, 3.2);
+const yardEyes = eyes(scene, -6.2, .55, 1.0, .07, 0xd8ff70, 3);
+const winEyes = [];
+for (const [r] of winM) { const [cx, cy] = roomC(r); winEyes.push([r, eyes(facade, cx + (hash(cx + cy) - .5) * .3, cy + .3, .2, .07, 0xff3a20, 3.5)]); }
+// the figure by the tree, seen only while the lightning lasts
+const figTex = canvasTex(160, 480, (g, w, h) => {
+  g.fillStyle = "#020205";
+  g.beginPath(); g.arc(w / 2, 62, 34, 0, 7); g.fill();
+  g.beginPath(); g.moveTo(w / 2 - 30, 92); g.quadraticCurveTo(w / 2 - 70, 120, w / 2 - 62, 300); g.lineTo(w / 2 - 48, h); g.lineTo(w / 2 + 48, h);
+  g.lineTo(w / 2 + 62, 300); g.quadraticCurveTo(w / 2 + 70, 120, w / 2 + 30, 92); g.closePath(); g.fill();
+  g.fillStyle = "#fff4d8"; g.fillRect(w / 2 - 16, 58, 9, 5); g.fillRect(w / 2 + 7, 58, 9, 5);
+});
+const figure = mesh(new THREE.PlaneGeometry(.75, 2.25), new THREE.MeshBasicMaterial({ map: figTex, transparent: true, depthWrite: false }));
+figure.position.set(1.4, 9.48 + 1.1, 0); house.add(figure);   // on the roof slope, against the sky
+
 // ---------------------------------------------------------------- the story: when each room's candles live and die
 // the ghost's sweep after Enter: top floor first, zig-zag down; then the step-1 demo relights "orders" and the ghost
 // takes it again after the snapshot; everything relights for the CTA (restored)
@@ -436,15 +484,40 @@ function shot(t) {
   const k = easeIO(win(t, s[0], s[1]));
   return { p: lerpV(s[2], s[3], k), q: lerpV(s[4], s[5], k), fov: s[6], out: s[7] === "out" };
 }
-const lightning = (t) => Math.max(pulse(t, .35, .03, .25), pulse(t, .62, .02, .2) * .6, pulse(t, T.press, .02, .4), pulse(t, SC[6][0], .02, .35),
-  pulse(t, SC[6][0] + .35, .02, .2) * .7, pulse(t, T.touch, .02, .3) * .8);
+const lightning = (t) => Math.max(...T.lightning.map(([at, k]) => pulse(t, at, .02, .22 + .18 * k) * k));
+// bat flights, one per T.bats entry: [from, to, arc] per bat, or a circle round the moon for the CTA
+function batAt(i, t) {
+  for (let f = 0; f < T.bats.length; f++) {
+    const a = T.bats[f] + hash(i * 3 + f) * .5, j = (q) => (hash(i * 11 + f * 5 + q) - .5);
+    if (f === 3) {
+      if (t < a) continue;
+      // round the moon: it sits behind (4.5, 12.7, -10) from the CTA camera
+      const ang = (t - a) * (.6 + hash(i) * .4) + i * .7, r = 2.4 + hash(i + 4) * 1.8;
+      const at2 = (q) => [4.5 + Math.cos(q) * r, 12.4 + Math.sin(q) * r * .55 + j(1), -10 + Math.sin(q) * 1.2];
+      return { p: at2(ang), n: at2(ang + .1), s: .9, flap: 15 };
+    }
+    const d = [3.6, 2.6, 1.6][f], k = (t - a) / d;
+    if (k < 0 || k > 1) continue;
+    const P = [
+      [[14 + j(1) * 3, 15.5 + j(2) * 2, -21 + j(3) * 3], [-11, 13 + j(4) * 3, -9 + j(5) * 4], 1],
+      [[1.7, 11.2, -1.6], [j(1) * 26, 14 + j(2) * 5, 6 + j(3) * 6], 2.5],
+      [[-6, 2.4 + j(1) * 1.4, 3.6 + j(2) * 1.2], [6, 3.4 + j(3) * 1.4, 4.2 + j(4) * 1.4], 1.2],
+    ][f];
+    const pos = (q) => lerpV(P[0], P[1], q).map((v, ax) => v + (ax === 1 ? Math.sin(q * Math.PI) * P[2] : 0) + (ax === 1 ? Math.sin(q * 20 + i) * .12 : 0));
+    return { p: pos(k), n: pos(Math.min(1, k + .02)), s: [1.1, .6, .7][f] + hash(i + 2) * .3, flap: 17 + hash(i) * 6 };
+  }
+  return null;
+}
 
 // ---------------------------------------------------------------- render
 function renderAt(t) {
   const s = shot(t);
   const ln0 = lightning(t);
   const hand = .012;
-  camera.position.set(s.p[0] + Math.sin(t * .9) * hand, s.p[1] + Math.cos(t * .7) * hand, s.p[2]);
+  // shake: Enter, the big flashes, the clang at the ward, the boards
+  let sh = pulse(t, T.press, .02, .6) * .09 + ln0 * .025 + pulse(t, T.refused - .15, .02, .35) * .05;
+  for (let i = 0; i < 6; i++) sh += pulse(t, T.readonly - .15 + i * .09 + .1, .01, .12) * .02;
+  camera.position.set(s.p[0] + Math.sin(t * .9) * hand + Math.sin(t * 83) * sh, s.p[1] + Math.cos(t * .7) * hand + Math.cos(t * 71) * sh, s.p[2]);
   camera.lookAt(s.q[0], s.q[1], s.q[2]);
   camera.fov = s.fov; camera.updateProjectionMatrix(); camera.updateMatrixWorld();
   facade.visible = s.out;
@@ -471,6 +544,7 @@ function renderAt(t) {
   ghost.lookAt(camera.position.x, ghost.position.y, camera.position.z); ghost.rotation.y += g.dx * .25;
   gLight.intensity = ghost.visible ? 2.2 : 0;
   if (ghost.visible) waveGhost(t);
+  ghostM.opacity = .9 * (hash(Math.floor(t * 15)) > .9 ? .35 : 1);
   // the attic chest: opens on "copy"
   const op = easeOut(win(t, T.copy - .4, T.copy + .2)) * (t < SC[3][0] ? 1 : 0);
   lid.rotation.x = -op * 1.7;
@@ -532,13 +606,45 @@ function renderAt(t) {
     fogI.setMatrixAt(i, tM.compose(tP, camera.quaternion, tS.set(3 + hash(i + 4) * 3, 1.2 + hash(i + 5), 1)));
   }
   fogI.instanceMatrix.needsUpdate = true;
+  // rain, swaying trees and webs
+  rain.visible = s.out;
+  for (let i = 0; i < RAIN_N; i++) {
+    const y = 16 - ((hash(i) * 16 + t * (15 + hash(i + 1) * 4)) % 16);
+    tP.set(-12 + hash(i + 2) * 24 - (16 - y) * .12, y, -4 + hash(i + 3) * 6.5);   // stays clear of the close shots (cameras at z 6+)
+    tQ.setFromAxisAngle(new THREE.Vector3(0, 0, 1), -.12);
+    rain.setMatrixAt(i, tM.compose(tP, tQ, tS.setScalar(.8 + hash(i + 4) * .5)));
+  }
+  rain.instanceMatrix.needsUpdate = true;
+  TREES.forEach((g, i) => { g.rotation.z = Math.sin(t * .8 + i * 1.7) * .02 + Math.sin(t * 2.3 + i) * .006 + ln0 * .01; });
+  WEBS.forEach((w, i) => { w.rotation.x = Math.sin(t * 1.4 + i * 2) * .12; });
+  // bats
+  BATS.forEach((bt, i) => {
+    const st = batAt(i, t);
+    bt.b.visible = !!st;
+    if (!st) return;
+    bt.b.position.set(...st.p); bt.b.lookAt(...st.n); bt.b.scale.setScalar(st.s);
+    const fl = Math.sin(t * st.flap + i * 2.1) * .9;
+    bt.wr.rotation.z = fl; bt.wl.rotation.z = -fl;
+  });
+  // eyes: in the attic window before Enter, in every window the ghost has darkened, in the yard by the grave
+  const blink = (t2, ph) => (Math.sin(t2 * 1.3 + ph * 5) > .97 ? .1 : 1);
+  roundEyes.visible = s.out && between(t, 1.0, T.press - .05) && ln0 < .3;
+  roundEyes.scale.set(1, blink(t, 1), 1);
+  for (const [r, e] of winEyes) {
+    e.visible = s.out && t > T.press && t < SC[2][0] && r.lv < .05;
+    e.scale.set(1, blink(t, r.f + r.s), 1);
+  }
+  yardEyes.visible = s.out && between(t, T.backups - .12, SC[2][0]);
+  yardEyes.scale.set(1, blink(t + .5, 3), 1);
+  figure.visible = s.out && ln0 > .25 && between(t, .5, 1.2);   // the first flash shows nothing; the second shows him
+  figure.lookAt(camera.position.x, figure.position.y, camera.position.z);
   const gr = grade.uniforms;
   gr.uTime.value = Math.round(t * 30) / 30;
   gr.uFlash.value = ln * .6 + pulse(t, T.backs - .1, .02, .25) * .8;
   gr.uSat.value = twist ? .6 : .82;
   gr.uTint.value.set(twist ? .95 : .92, twist ? .9 : .98, twist ? 1.05 : 1.1);
   bloom.strength = twist ? .6 : .8;
-  composer.render();
+  composer.render(); out2d.drawImage(canvas, 0, 0);
 }
 
 // ---------------------------------------------------------------- cover still (cover.html sets window.HH_COVER)
@@ -546,7 +652,7 @@ function renderCover(c) {
   renderAt(c.t);
   camera.position.set(...c.cam); camera.lookAt(...c.look); camera.fov = c.fov; camera.updateProjectionMatrix(); camera.updateMatrixWorld();
   facade.visible = c.out !== false;
-  composer.render();
+  composer.render(); out2d.drawImage(canvas, 0, 0);
 }
 
 const ready = (async () => {

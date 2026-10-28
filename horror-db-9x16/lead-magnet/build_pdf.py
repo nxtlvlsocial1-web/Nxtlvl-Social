@@ -3,9 +3,10 @@
 python3 horror-db-9x16/lead-magnet/build_pdf.py      (needs node + the preinstalled Playwright)
 
 Every script in the PDF is read from kit/ (the files that were tested against a real PostgreSQL 16), so the PDF and
-the kit can't drift apart. Brand: brands/nxtlvl (night + violet glows, white star, Montserrat / Instrument Serif /
-JetBrains Mono). Writes prod-guard.html and nxtlvl_prod-guard_setup.pdf next to this file.
+the kit can't drift apart. Brand: brands/ai-nxtlvl (the nxtlvl wordmark with its violet star, night + violet glows,
+Montserrat / Instrument Serif / JetBrains Mono). Writes prod-guard.html and nxtlvl_prod-guard_setup.pdf next to this file.
 """
+import base64
 import html
 import os
 import subprocess
@@ -13,7 +14,14 @@ import subprocess
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 KIT = os.path.join(HERE, "kit")
-MARK = open(os.path.join(ROOT, "brands", "nxtlvl", "logo-mark.svg")).read()
+WORDMARK = "data:image/png;base64," + base64.b64encode(
+    open(os.path.join(ROOT, "brands", "ai-nxtlvl", "logo-wordmark.png"), "rb").read()).decode()
+LOGO = f'<img class="wm" src="{WORDMARK}" alt="nxtlvl">'
+# The wordmark's four-point star on its own, for the big cover art and the outro.
+STAR = ('<svg viewBox="0 0 100 100"><defs><radialGradient id="sg" cx="50%" cy="50%" r="50%">'
+        '<stop offset="0" stop-color="#c9a8ff"/><stop offset=".45" stop-color="#7a2ffb"/><stop offset="1" stop-color="#5a12e0"/>'
+        '</radialGradient></defs><path fill="url(#sg)" d="M50 2 C53 36 62 46 98 50 C62 54 53 64 50 98 '
+        'C47 64 38 54 2 50 C38 46 47 36 50 2Z"/></svg>')
 TOTAL = 6
 
 
@@ -35,7 +43,7 @@ def code(text, label=None, lang="sh"):
 
 
 def page(n, body, cls=""):
-    head = "" if n == 1 else (f'<div class="head"><div class="brand">{MARK}<span>NXTLVLSOCIAL.AI</span></div>'
+    head = "" if n == 1 else (f'<div class="head"><div class="brand">{LOGO}<span>AI.NXTLVL</span></div>'
                               f'<div class="pg">PROD GUARD · {n:02d} / {TOTAL:02d}</div></div>')
     return f'<section class="page {cls}">{head}{body}</section>'
 
@@ -46,7 +54,7 @@ def step(n, title, accent, sub):
 
 
 COVER = f"""
-<div class="cover-brand">{MARK}<span>NXTLVLSOCIAL.AI</span></div>
+<div class="cover-brand">{LOGO}</div>
 <div class="cover-body">
   <div class="kicker">FROM THE 03:07 AM REEL</div>
   <h1>The setup that<br><em>saved him.</em></h1>
@@ -54,7 +62,7 @@ COVER = f"""
   and refuses to touch production at all.</p>
   <div class="chips"><span>5-minute install</span><span>Tested on PostgreSQL 16</span><span>Free to use</span></div>
 </div>
-<div class="cover-mark">{MARK}</div>
+<div class="cover-mark">{STAR}</div>
 <div class="cover-foot"><span>A DROP DATABASE at 3 AM should cost you a minute, not your company.</span></div>
 """
 
@@ -153,10 +161,10 @@ pg_restore \\
   </div>
 </div>
 <div class="outro">
-  <div class="outro-mark">{MARK}</div>
+  <div class="outro-mark">{LOGO}</div>
   <div><h3>A seatbelt, not a backup plan.</h3>
   <p>Snapshots protect the database Claude works on. Production still needs real, monitored backups, and now you'll
-  know the day they stop. Follow <b>NXTLVLSOCIAL.AI</b> for more Claude setups like this one.</p></div>
+  know the day they stop. Follow <b>AI.NXTLVL</b> for more Claude setups like this one.</p></div>
 </div>
 """
 
@@ -170,13 +178,13 @@ CSS = f"""
 html, body {{ background: #07050f; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
 body {{ font-family: "Montserrat", sans-serif; color: #cfc8dd; }}
 .page {{ position: relative; width: 210mm; height: 297mm; overflow: hidden; padding: 44px 52px 40px; page-break-after: always;
-  background: radial-gradient(ellipse 60% 45% at 0% 0%, rgba(101,22,199,.55), transparent 70%),
-              radial-gradient(ellipse 55% 40% at 100% 100%, rgba(75,6,193,.5), transparent 70%), #07050f; }}
+  background: radial-gradient(ellipse 60% 45% at 0% 0%, rgba(127,27,248,.5), transparent 70%),
+              radial-gradient(ellipse 55% 40% at 100% 100%, rgba(96,8,242,.45), transparent 70%), #07050f; }}
 .page:last-child {{ page-break-after: auto; }}
 svg {{ display: block; }}
 .head {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 26px; }}
 .brand {{ display: flex; align-items: center; gap: 10px; }}
-.brand svg {{ width: 26px; height: 26px; }}
+.brand .wm {{ height: 22px; width: auto; display: block; }}
 .brand span, .pg, .kicker, .tab {{ font: 700 10px "JBMono"; letter-spacing: 3px; color: #b687f9; }}
 .pg {{ color: rgba(207,200,221,.55); }}
 code {{ font-variant-ligatures: none; font: 400 .92em "JBMono"; color: #e3d2ff; background: rgba(167,91,252,.14); padding: 1px 5px; border-radius: 4px; }}
@@ -191,14 +199,14 @@ h3 {{ font: 700 14px/1.3 "Montserrat"; color: #fff; }}
 p {{ font-size: 12px; line-height: 1.6; }}
 /* cover */
 .cover-brand {{ display: flex; align-items: center; gap: 12px; }}
-.cover-brand svg {{ width: 38px; height: 38px; }}
-.cover-brand span {{ font: 700 13px "JBMono"; letter-spacing: 5px; color: #fff; }}
+.cover-brand .wm {{ height: 46px; width: auto; display: block; }}
 .cover-body {{ position: absolute; left: 52px; right: 52px; top: 250px; z-index: 2; }}
 .cover-sub {{ margin-top: 26px; max-width: 470px; font-size: 16px; line-height: 1.55; color: #ddd5ea; }}
 .chips {{ margin-top: 30px; display: flex; gap: 10px; flex-wrap: wrap; }}
 .chips span {{ font: 700 10.5px "JBMono"; letter-spacing: 1.5px; color: #fff; padding: 8px 14px; border-radius: 30px;
   border: 1px solid rgba(182,135,249,.5); background: rgba(101,22,199,.25); }}
-.cover-mark {{ position: absolute; right: 10px; bottom: 96px; width: 430px; height: 430px; opacity: .95; z-index: 1; }}
+.cover-mark {{ position: absolute; right: 36px; bottom: 130px; width: 340px; height: 340px; opacity: .95; z-index: 1;
+  filter: drop-shadow(0 0 40px rgba(122,47,251,.75)) drop-shadow(0 0 90px rgba(122,47,251,.45)); }}
 .cover-mark svg {{ width: 100%; height: 100%; }}
 .cover-foot {{ position: absolute; left: 52px; right: 52px; bottom: 44px; z-index: 2; padding-top: 16px; border-top: 1px solid rgba(182,135,249,.25); }}
 .cover-foot span {{ font: 400 italic 20px "ISerif"; color: #cfc8dd; }}
@@ -230,7 +238,7 @@ pre {{ font-variant-ligatures: none; padding: 12px 14px; font: 400 9.6px/1.5 "JB
 .check li::before {{ content: ""; position: absolute; left: 0; top: 1px; width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid #a75bfc; }}
 .outro {{ position: absolute; left: 52px; right: 52px; bottom: 40px; display: flex; gap: 18px; align-items: center; padding: 18px 22px;
   border-radius: 16px; background: linear-gradient(120deg, rgba(101,22,199,.45), rgba(20,10,46,.85)); border: 1px solid rgba(182,135,249,.35); }}
-.outro-mark svg {{ width: 64px; height: 64px; }}
+.outro-mark .wm {{ width: 118px; height: auto; display: block; }}
 .outro h3 {{ font-size: 17px; margin-bottom: 4px; }}
 .outro p {{ font-size: 11.5px; color: #e2daf0; }}
 """

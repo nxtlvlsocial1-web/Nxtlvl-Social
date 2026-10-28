@@ -1,5 +1,8 @@
 # Nxtlvl Social (NXTLVLSOCIAL.AI)
 
+The NXTLVLSOCIAL.AI page. Its logo is the **comet-star mark** (a four-point star with comet trails). Not to be
+confused with AI.NXTLVL, whose logo is the nxtlvl wordmark in `brands/ai-nxtlvl/`.
+
 Draft kit, built from the logo the owner shared (`logo.jpg`). Colours are sampled from it; the fonts are our pick
 until the owner names their own.
 

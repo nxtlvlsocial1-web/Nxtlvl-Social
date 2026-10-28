@@ -12,6 +12,7 @@ cues.json["ev"] so build/audio.py can give it a sound.
 """
 import json
 import os
+import random
 import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -48,6 +49,18 @@ T = {
     "nobody": word(6, "nobody"), "readonly": word(6, "read"), "cant": word(6, "can"), "touch": word(6, "touch"),
     "comment": word(7, "comment"), "backup": word(7, "backup"), "send": word(7, "send"),
 }
+# lightning flashes world.js draws and audio.py answers with thunder: [time, flash, thunder gain]
+T["lightning"] = [[.35, 1, .8], [.62, .6, 0], [T["press"], 1, 1], [round(T["dead"] - .05, 3), .85, .7], [round(SC[4][0] + .25, 3), .7, .55],
+                  [SC[6][0], 1, .9], [round(SC[6][0] + .35, 3), .7, 0], [T["touch"], .8, .7], [round(SC[7][0] + .7, 3), .45, .4]]
+# bat flights (world.js draws one flock per entry, audio.py gives each a flutter): the opening, out of the chimney on
+# Enter, past the camera at the twist, circling the moon in the CTA
+T["bats"] = [.15, round(T["press"] + .15, 3), round(SC[6][0] + .3, 3), round(SC[7][0] + .2, 3)]
+# the heartbeat under the deletion, shared by the vignette here and the thumps in audio.py
+T["hb"] = []
+_u = T["press"] + .5
+while _u < SC[2][0] - .3:
+    T["hb"].append(round(_u, 3))
+    _u += 60 / (88 + (_u - T["press"]) * 4)
 A, EV, HIDE = [], [], []
 
 
@@ -121,7 +134,7 @@ CMD = "DROP DATABASE app;"
 S1 = (hl("He just deleted", "production.") +
       '<div class="term" id="term"><div class="bar"><i></i><i></i><i></i><span>prod-db-01</span><b class="ptag">PRODUCTION</b></div>'
       '<div class="tl">prod=# ' + "".join(f'<span class="ch" id="ch{i}">{c if c != " " else "&nbsp;"}</span>' for i, c in enumerate(CMD)) +
-      '<span class="cur" id="cur"></span></div><div class="stamp" id="stamp1">DELETED</div></div>')
+      '<span class="cur" id="cur"></span></div></div><div class="stamp" id="stamp1">DELETED</div>')
 
 
 def s1_tl():
@@ -136,7 +149,7 @@ def s1_tl():
     add(f'tl.fromTo("#cur",{{opacity:1}},{{opacity:0,duration:.25,yoyo:true,repeat:{int((T["press"] - a) / .25)},ease:"steps(1)",immediateRender:false}},{a:.3f});')
     p = T["press"]
     setp("#cur", p, "opacity:0")
-    to("#term .tl", p + .06, "opacity:0", .08)
+    setp("#term .tl", p + .08, 'visibility:"hidden"')   # the command vanishes under the stamp
     add(f'tl.to("#term",{{backgroundColor:"#3A1513",duration:.08}},{p:.3f});')
     shake("#term", p + .02, 7, 10)
     pop("#stamp1", p + .12, "opacity:0,scale:2.4,rotation:-20", .25, "power4.out")
@@ -290,6 +303,83 @@ def s8_tl():
     ev(s + .15, "flip"); ev(s + .5, "sparkle")
 
 
+def glitch(sel, t, n=7):
+    """A few frames of RGB-split jitter on a headline, then back to rest."""
+    r = random.Random(round(t * 1000))
+    for i in range(n):
+        dx, sk = r.uniform(-16, 16), r.uniform(-9, 9)
+        sp = r.uniform(4, 9)
+        setp(sel, t + i / 30, f'x:{dx:.1f},skewX:{sk:.1f},textShadow:"-{sp:.1f}px 0 rgba(255,40,70,.85), {sp:.1f}px 0 rgba(40,220,255,.8)"')
+    setp(sel, t + n / 30, 'x:0,skewX:0,textShadow:"0 4px 30px rgba(0,0,0,.6)"')
+    ev(t, "glitch")
+
+
+# the film layer: a red vignette that breathes in the hook and beats with the heart after Enter, film flicker,
+# scratches and dust; and a spider that drops on its thread in the attic
+SPIDER_LEGS = "".join(f'<path d="{d}"/>' for d in ("M29 36 Q14 22 5 30", "M28 42 Q10 37 2 46", "M28 48 Q10 54 4 64", "M30 54 Q18 68 12 78"))
+FX = ('<div class="vig" id="vig"></div><div class="flick" id="flick"></div>' +
+      "".join(f'<i class="scr" id="scr{i}"></i>' for i in range(3)) + "".join(f'<i class="dust" id="du{i}"></i>' for i in range(6)) +
+      '<div id="spider"><i class="thr" id="thr"></i><svg id="spb" viewBox="0 0 72 80" width="72" height="80">'
+      f'<g id="lgL" fill="none" stroke="#E8DCCB" stroke-width="3" stroke-linecap="round">{SPIDER_LEGS}</g>'
+      f'<g transform="translate(72 0) scale(-1 1)"><g id="lgR" fill="none" stroke="#E8DCCB" stroke-width="3" stroke-linecap="round">{SPIDER_LEGS}</g></g>'
+      '<ellipse cx="36" cy="48" rx="13" ry="16" fill="#241A20" stroke="#E8DCCB" stroke-width="2.5"/>'
+      '<circle cx="36" cy="28" r="9" fill="#241A20" stroke="#E8DCCB" stroke-width="2.5"/>'
+      '<circle cx="32.5" cy="27" r="2.4" fill="#FF4A3A"/><circle cx="39.5" cy="27" r="2.4" fill="#FF4A3A"/></svg></div>')
+
+
+def fx_tl():
+    r = random.Random(31)
+    p = T["press"]
+    # the vignette: slow breathing before Enter, the heartbeat after it
+    n = max(1, int(p / .9) - 1)
+    add(f'tl.fromTo("#vig",{{opacity:0}},{{opacity:.35,duration:.9,yoyo:true,repeat:{n},ease:"sine.inOut",immediateRender:false}},0);')
+    for u in T["hb"]:
+        add(f'tl.to("#vig",{{opacity:1,duration:.05}},{u:.3f});tl.to("#vig",{{opacity:.55,duration:.12}},{u + .05:.3f});'
+            f'tl.to("#vig",{{opacity:.85,duration:.04}},{u + .18:.3f});tl.to("#vig",{{opacity:.4,duration:.3}},{u + .22:.3f});')
+    to("#vig", SC[2][0] - .25, "opacity:0", .4)
+    # flicker: a dark frame or two every second or so
+    t = .4
+    while t < SC[7][0] + .5:
+        add(f'tl.set("#flick",{{opacity:{r.uniform(.08, .2):.2f}}},{t:.3f});tl.set("#flick",{{opacity:0}},{t + r.choice((1, 2)) / 30:.3f});')
+        t += r.uniform(.7, 1.9)
+    # scratches: short bursts, a new position every few frames
+    for i in range(3):
+        t, on = r.uniform(0, 2), False
+        while t < DUR - .5:
+            if r.random() < .3:
+                add(f'tl.set("#scr{i}",{{x:{r.uniform(40, 1040):.0f},opacity:{r.uniform(.25, .6):.2f},scaleX:{r.choice((1, 1, 2))}}},{t:.3f});')
+                on = True
+            elif on:
+                setp(f"#scr{i}", t, "opacity:0"); on = False
+            t += r.choice((2, 3, 4)) / 30
+        if on:
+            setp(f"#scr{i}", t, "opacity:0")
+    # dust: a speck for two frames
+    for i in range(6):
+        t = r.uniform(0, 1.5)
+        while t < DUR - .3:
+            sz = r.uniform(.6, 2.2)
+            add(f'tl.set("#du{i}",{{x:{r.uniform(20, 1060):.0f},y:{r.uniform(80, 1840):.0f},scale:{sz:.2f},opacity:{r.uniform(.4, .9):.2f}}},{t:.3f});'
+                f'tl.set("#du{i}",{{opacity:0}},{t + 2 / 30:.3f});')
+            t += r.uniform(.5, 1.6)
+    # the spider: drops into the attic scene, sways, climbs back when step 1 starts
+    a, up = SC[2][0] + .35, SC[3][0] + .45
+    add(f'tl.fromTo("#thr",{{scaleY:0}},{{scaleY:.72,duration:.75,ease:"back.out(1.4)",immediateRender:false}},{a:.3f});')
+    add(f'tl.fromTo("#spb",{{y:0}},{{y:720,duration:.75,ease:"back.out(1.4)",immediateRender:false}},{a:.3f});')
+    sway = up - a - .8
+    add(f'tl.fromTo("#spider",{{rotation:-3}},{{rotation:3,duration:.8,yoyo:true,repeat:{max(1, int(sway / .8) - 1)},ease:"sine.inOut",immediateRender:false}},{a + .75:.3f});')
+    for g, k in (("#lgL", 1), ("#lgR", -1)):
+        for t0, d in ((a, .75), (up, .45)):
+            add(f'tl.fromTo("{g}",{{rotation:0}},{{rotation:{8 * k},svgOrigin:"36 44",duration:.07,yoyo:true,repeat:{int(d / .07) // 2 * 2 + 1},ease:"none",immediateRender:false}},{t0:.3f});')
+    add(f'tl.to("#thr",{{scaleY:0,duration:.45,ease:"power3.in"}},{up:.3f});')
+    add(f'tl.to("#spb",{{y:0,duration:.45,ease:"power3.in"}},{up:.3f});')
+    ev(a, "spider"); ev(up, "skitter")
+    # glitches: Enter, the dead backups, the twist
+    glitch("#s1 .hl", p + .03)
+    glitch("#s2 .hl", T["dead"] - .02, 6)
+    glitch("#s7 .hl", SC[6][0] + .55, 6)
+
+
 def captions():
     html, chunks = [], []
     for li in range(len(LINES)):
@@ -358,6 +448,7 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #070a
 .cur {{ display: inline-block; width: 24px; height: 50px; margin-left: 4px; vertical-align: -8px; background: #F4EEE6; }}
 .stamp {{ position: absolute; right: 40px; top: 70px; opacity: 0; padding: 4px 24px; border: 8px solid {RED}; border-radius: 16px; color: {RED};
   font: 800 72px/1.1 "Manrope"; letter-spacing: 2px; transform: rotate(-8deg); background: rgba(255,250,245,.94); }}
+#stamp1 {{ right: 150px; top: 1160px; }}   /* outside the terminal so it can overhang its edge */
 .stamp.big {{ right: auto; left: 0; right: 0; margin: 0 auto; width: fit-content; top: 1080px; font-size: 96px; }}
 /* S2 */
 .cnt {{ left: 210px; top: 1060px; width: 660px; height: 250px; padding: 30px 38px; }}
@@ -410,6 +501,15 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #070a
 .pdf img {{ width: 300px; height: 424px; display: block; border-radius: 14px; box-shadow: 0 26px 60px rgba(0,0,0,.6); }}
 .pdftag {{ position: absolute; left: 120px; top: -30px; padding: 10px 20px; border-radius: 30px; background: {GREEN}; color: #fff; font: 700 28px "JBMono"; letter-spacing: 2px;
   white-space: nowrap; transform: rotate(4deg); }}
+/* film layer */
+.vig {{ position: absolute; inset: 0; opacity: 0; background: radial-gradient(ellipse 80% 62% at 50% 50%, rgba(90,0,0,0) 52%, rgba(120,6,6,.6) 100%); }}
+.flick {{ position: absolute; inset: 0; opacity: 0; background: #000; }}
+.scr {{ position: absolute; left: 0; top: 0; width: 2px; height: 1920px; opacity: 0;
+  background: linear-gradient(180deg, rgba(241,233,220,0), rgba(241,233,220,.5) 15%, rgba(241,233,220,.3) 70%, rgba(241,233,220,0)); }}
+.dust {{ position: absolute; left: 0; top: 0; width: 5px; height: 5px; border-radius: 50%; opacity: 0; background: rgba(241,233,220,.8); }}
+#spider {{ position: absolute; left: 984px; top: 0; width: 72px; height: 1px; transform-origin: 36px 0; }}
+.thr {{ position: absolute; left: 35px; top: 0; width: 2px; height: 1000px; background: rgba(241,233,220,.6); transform-origin: 50% 0; transform: scaleY(0); }}
+#spb {{ position: absolute; left: 0; top: -82px; }}
 /* captions */
 .cap {{ position: absolute; left: 60px; right: 60px; top: 1330px; text-align: center; opacity: 0; font: 800 60px/1.25 "Manrope"; letter-spacing: -1px; color: {CREAM};
   text-shadow: 0 3px 16px rgba(0,0,0,.7); }}
@@ -418,7 +518,7 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #070a
 
 
 def main():
-    s1_tl(); s2_tl(); s3_tl(); s4_tl(); s5_tl(); s6_tl(); s7_tl(); s8_tl()
+    s1_tl(); s2_tl(); s3_tl(); s4_tl(); s5_tl(); s6_tl(); s7_tl(); s8_tl(); fx_tl()
     sids = ["s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8"]
     for k, sid in enumerate(sids):
         scene_tl(k, sid)
@@ -445,6 +545,7 @@ def main():
       <canvas id="gl" class="clip" data-start="0" data-duration="{DUR}" data-track-index="0"></canvas>
       <div id="scrims" class="clip" data-start="0" data-duration="{DUR}" data-track-index="1" data-layout-ignore><div class="scrim top"></div><div class="scrim bot"></div></div>
       {scenes}
+      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="5" data-layout-ignore>{FX}</div>
       <div id="chrome" class="clip" data-start="0" data-duration="{DUR}" data-track-index="6"><div class="top"><div class="brand"><i></i>AI.NXTLVL</div><div class="prog"><i></i></div></div></div>
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="7">{caps}</div>
       {audio}
