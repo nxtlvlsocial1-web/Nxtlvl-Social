@@ -1,0 +1,40 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+</head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script type="module">
+import * as THREE from "three";
+import { detective, client, reach, handQ, setHand, look, express } from "./assets/js/chars.js";
+const q = new URLSearchParams(location.search);
+const r = new THREE.WebGLRenderer({ canvas: document.getElementById("c"), antialias: true });
+r.setSize(1080, 1920, false); r.shadowMap.enabled = true; r.shadowMap.type = THREE.PCFSoftShadowMap;
+r.outputColorSpace = THREE.SRGBColorSpace; r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = 1.0;
+const s = new THREE.Scene(); s.background = new THREE.Color(0x0e0c12);
+s.add(new THREE.HemisphereLight(0x8090b0, 0x201810, .6));
+const key = new THREE.SpotLight(0xffd2a0, 9, 6, .8, .5, 1.6); key.position.set(.6, 1.6, .5); key.target.position.set(0, .9, -.4); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); s.add(key, key.target);
+const rim = new THREE.DirectionalLight(0x9a7cff, 1.6); rim.position.set(-2, 2, -3); s.add(rim);
+const desk = new THREE.Mesh(new THREE.BoxGeometry(1.6, .06, .85), new THREE.MeshStandardMaterial({ color: 0x4a2c1c, roughness: .6, flatShading: true }));
+desk.position.set(0, .73, 0); desk.receiveShadow = desk.castShadow = true; s.add(desk);
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(10, 10).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0x2a1c16 })); floor.receiveShadow = true; s.add(floor);
+const D = detective(); D.root.position.set(0, 0, -.62); s.add(D.root);
+const C = client(); C.root.position.set(-.75, 0, .7); C.root.rotation.y = 2.3; s.add(C.root);
+const mode = q.get("pose") || "desk";
+D.spine.rotation.x = .08;
+if (mode === "desk") {
+  reach(D, "R", new THREE.Vector3(-.22, .79, -.12), new THREE.Vector3(-.6, .4, -.5), handQ(new THREE.Vector3(.1, 0, 1), new THREE.Vector3(0, -1, 0)));
+  reach(D, "L", new THREE.Vector3(.24, .79, -.14), new THREE.Vector3(.6, .4, -.5), handQ(new THREE.Vector3(-.1, 0, 1), new THREE.Vector3(0, -1, 0)));
+  setHand(D.handR, .25); setHand(D.handL, .35);
+} else if (mode === "point") {
+  reach(D, "R", new THREE.Vector3(-.15, 1.05, .1), new THREE.Vector3(-.6, .5, -.4), handQ(new THREE.Vector3(.1, .2, 1), new THREE.Vector3(-1, 0, 0)));
+  setHand(D.handR, .85, { point: true, thumb: .8 });
+  reach(D, "L", new THREE.Vector3(.24, .79, -.14), new THREE.Vector3(.6, .4, -.5), handQ(new THREE.Vector3(-.1, 0, 1), new THREE.Vector3(0, -1, 0)));
+}
+look(D, new THREE.Vector3(...(q.get("look") || "-.6,1.5,.8").split(",").map(Number)));
+express(D, { brow: +(q.get("brow") || -.4), smile: +(q.get("smile") || 0) });
+look(C, new THREE.Vector3(0, 1.2, -.5)); express(C, { smile: .3 });
+reach(C, "L", new THREE.Vector3(-.55, 1.0, .5), new THREE.Vector3(-.4, .7, .9), null);
+reach(C, "R", new THREE.Vector3(-.75, .95, .45), new THREE.Vector3(-1, .7, .9), null);
+const cam = new THREE.PerspectiveCamera(+(q.get("fov") || 30), 1080 / 1920, .05, 50);
+cam.position.set(...(q.get("cam") || ".2,1.25,1.6").split(",").map(Number)); cam.lookAt(...(q.get("at") || "0,1.0,-.4").split(",").map(Number));
+r.render(s, cam); window.__done = true;
+</script></body></html>
