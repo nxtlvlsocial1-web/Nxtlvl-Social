@@ -4,9 +4,12 @@ Three front-of-card designs in the Nxtlvl brand. `all-options-preview.png` shows
 
 | Option | Look |
 |---|---|
-| A · Shooting star | Ink black with violet corner light, a big Shooting Star streaking to the top-right |
-| B · Violet foil | The brand violet gradient with a soft holographic sheen and a watermark star |
-| C · Black edition | Matte black, a fine violet frame, the name in serif, a small star in the corner |
+| A · Shooting star | Deep ink with violet light, a glowing star with lens flare, a sparkle field and fine wave lines; silver wordmark and "CMO" |
+| B · Violet foil | Iridescent violet with glossy light bands, an embossed watermark star and a pearl wordmark |
+| C · Black edition | Brushed graphite metal, a violet edge glow and frame, a chrome wordmark and name, a glowing star |
+
+The "nxtlvl" wordmark is the original logo artwork (`website/logo.png`, kept as `source/nxtlvl-wordmark-mask.png`)
+filled with metal and foil gradients; "social" is set beside it in Archivo at full width to match.
 
 ## Files in each option folder
 
