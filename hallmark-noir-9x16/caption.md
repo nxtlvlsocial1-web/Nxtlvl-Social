@@ -26,6 +26,23 @@ Save this for your next landing page, and send it to the friend whose site looks
 
 Music: "Noire #1" by Music By Pedro
 
+## Auto-DM for the keyword HALLMARK (paste as is)
+
+Here's Hallmark, the free design skill that stops Claude building sites that look AI-generated.
+
+Repo: https://github.com/Nutlope/hallmark
+
+Install it for Claude Code (one line in your terminal):
+npx skills add nutlope/hallmark -g --agent claude-code
+
+Or inside Claude Code:
+/plugin marketplace add nutlope/hallmark
+/plugin install hallmark@hallmark
+
+Then just type: /hallmark build a landing page for (your product)
+
+Follow NXTLVLSOCIAL.AI for more Claude setups like this.
+
 ## Extra hashtags (optional)
 
 For reach tests, add some of these in the first comment:
