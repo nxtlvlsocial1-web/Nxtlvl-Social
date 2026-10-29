@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Hallmark noir 9x16</title>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Montserrat"; font-weight: 100 900; src: url("assets/fonts/montserrat.ttf"); }
+@font-face { font-family: "ISerif"; font-style: italic; src: url("assets/fonts/InstrumentSerif-Italic.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 400; src: url("assets/fonts/JetBrainsMono-Regular.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 700; src: url("assets/fonts/JetBrainsMono-Bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #050608; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #050608; font-family: "Montserrat", sans-serif; color: #F4F1EA; }
+.clip { position: absolute; inset: 0; }
+#gl { width: 1080px; height: 1920px; display: block; }
+.cap { position: absolute; left: 70px; right: 70px; top: 1350px; text-align: center; opacity: 0; font: 700 58px/1.22 "Montserrat"; letter-spacing: -.5px; color: #F4F1EA;
+  text-shadow: 0 3px 14px rgba(0,0,0,.8); }
+.cw { display: inline-block; }
+.box { display: inline; padding: 4px 18px 8px; border-radius: 16px; background: rgba(6,6,8,.66); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+#cta { text-align: center; }
+#cta .cc { position: absolute; left: 0; right: 0; top: 330px; margin: 0 auto; width: fit-content; padding: 12px 34px; border: 3px solid #F4F1EA; border-radius: 40px;
+  font: 700 34px "JBMono"; letter-spacing: 10px; background: rgba(5,6,8,.55); }
+#cta .cw2 { position: absolute; left: 0; right: 0; top: 410px; font: 800 150px/1 "Montserrat"; letter-spacing: 6px; color: #fff;
+  text-shadow: 0 0 30px rgba(167,91,252,.95), 0 0 80px rgba(167,91,252,.6), 0 6px 20px rgba(0,0,0,.8); }
+#cta .cs { position: absolute; left: 0; right: 0; top: 590px; font: 400 64px "ISerif"; font-style: italic; color: #F4F1EA; text-shadow: 0 3px 14px rgba(0,0,0,.9); }
+#cta .handle { position: absolute; left: 0; right: 0; top: 1520px; font: 700 30px "JBMono"; letter-spacing: 8px; color: #B687F9; text-shadow: 0 0 16px rgba(167,91,252,.7); }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="44.39" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="gl" class="clip" data-start="0" data-duration="44.39" data-track-index="0"></canvas>
+      <div id="cta" class="clip" data-start="0" data-duration="44.39" data-track-index="5" data-layout-ignore><div class="cc">COMMENT</div><div class="cw2">HALLMARK</div><div class="cs">and I'll send you the install.</div><div class="handle">NXTLVLSOCIAL.AI</div></div>
+      <div id="caps" class="clip" data-start="0" data-duration="44.39" data-track-index="7"><div class="cap" id="cap0"><span class="box"><span class="cw" id="w0_0">It</span> <span class="cw" id="w0_1">was</span> <span class="cw" id="w0_2">a</span> <span class="cw" id="w0_3">rainy</span></span></div><div class="cap" id="cap1"><span class="box"><span class="cw" id="w1_0">night.</span></span></div><div class="cap" id="cap2"><span class="box"><span class="cw" id="w2_0">She</span> <span class="cw" id="w2_1">walked</span> <span class="cw" id="w2_2">in</span> <span class="cw" id="w2_3">alone,</span></span></div><div class="cap" id="cap3"><span class="box"><span class="cw" id="w3_0">holding</span> <span class="cw" id="w3_1">a</span> <span class="cw" id="w3_2">website</span> <span class="cw" id="w3_3">Claude</span></span></div><div class="cap" id="cap4"><span class="box"><span class="cw" id="w4_0">had</span> <span class="cw" id="w4_1">built</span> <span class="cw" id="w4_2">her.</span></span></div><div class="cap" id="cap5"><span class="box"><span class="cw" id="w5_0">It</span> <span class="cw" id="w5_1">looked</span> <span class="cw" id="w5_2">fine.</span></span></div><div class="cap" id="cap6"><span class="box"><span class="cw" id="w6_0">That</span> <span class="cw" id="w6_1">was</span> <span class="cw" id="w6_2">the</span> <span class="cw" id="w6_3">problem.</span></span></div><div class="cap" id="cap7"><span class="box"><span class="cw" id="w7_0">It</span> <span class="cw" id="w7_1">looked</span> <span class="cw" id="w7_2">like</span> <span class="cw" id="w7_3">every</span></span></div><div class="cap" id="cap8"><span class="box"><span class="cw" id="w8_0">other</span> <span class="cw" id="w8_1">one</span> <span class="cw" id="w8_2">in</span> <span class="cw" id="w8_3">town.</span></span></div><div class="cap" id="cap9"><span class="box"><span class="cw" id="w9_0">Two</span> <span class="cw" id="w9_1">million</span> <span class="cw" id="w9_2">users</span> <span class="cw" id="w9_3">nobody</span></span></div><div class="cap" id="cap10"><span class="box"><span class="cw" id="w10_0">counted.</span></span></div><div class="cap" id="cap11"><span class="box"><span class="cw" id="w11_0">Reviews</span> <span class="cw" id="w11_1">from</span> <span class="cw" id="w11_2">people</span> <span class="cw" id="w11_3">who</span></span></div><div class="cap" id="cap12"><span class="box"><span class="cw" id="w12_0">don't</span> <span class="cw" id="w12_1">exist.</span></span></div><div class="cap" id="cap13"><span class="box"><span class="cw" id="w13_0">Labels</span> <span class="cw" id="w13_1">shouting</span> <span class="cw" id="w13_2">in</span> <span class="cw" id="w13_3">capitals.</span></span></div><div class="cap" id="cap14"><span class="box"><span class="cw" id="w14_0">Claude</span> <span class="cw" id="w14_1">wasn't</span> <span class="cw" id="w14_2">the</span> <span class="cw" id="w14_3">culprit.</span></span></div><div class="cap" id="cap15"><span class="box"><span class="cw" id="w15_0">Its</span> <span class="cw" id="w15_1">defaults</span> <span class="cw" id="w15_2">were.</span></span></div><div class="cap" id="cap16"><span class="box"><span class="cw" id="w16_0">So</span> <span class="cw" id="w16_1">I</span> <span class="cw" id="w16_2">called</span> <span class="cw" id="w16_3">a</span></span></div><div class="cap" id="cap17"><span class="box"><span class="cw" id="w17_0">specialist.</span></span></div><div class="cap" id="cap18"><span class="box"><span class="cw" id="w18_0">Hallmark.</span></span></div><div class="cap" id="cap19"><span class="box"><span class="cw" id="w19_0">A</span> <span class="cw" id="w19_1">free</span> <span class="cw" id="w19_2">design</span> <span class="cw" id="w19_3">skill</span></span></div><div class="cap" id="cap20"><span class="box"><span class="cw" id="w20_0">for</span> <span class="cw" id="w20_1">Claude</span> <span class="cw" id="w20_2">Code.</span></span></div><div class="cap" id="cap21"><span class="box"><span class="cw" id="w21_0">It</span> <span class="cw" id="w21_1">deals</span> <span class="cw" id="w21_2">a</span> <span class="cw" id="w21_3">real</span></span></div><div class="cap" id="cap22"><span class="box"><span class="cw" id="w22_0">design,</span></span></div><div class="cap" id="cap23"><span class="box"><span class="cw" id="w23_0">then</span> <span class="cw" id="w23_1">checks</span> <span class="cw" id="w23_2">it</span> <span class="cw" id="w23_3">against</span></span></div><div class="cap" id="cap24"><span class="box"><span class="cw" id="w24_0">every</span> <span class="cw" id="w24_1">AI</span> <span class="cw" id="w24_2">giveaway</span> <span class="cw" id="w24_3">in</span></span></div><div class="cap" id="cap25"><span class="box"><span class="cw" id="w25_0">the</span> <span class="cw" id="w25_1">book.</span></span></div><div class="cap" id="cap26"><span class="box"><span class="cw" id="w26_0">Same</span> <span class="cw" id="w26_1">prompt.</span></span></div><div class="cap" id="cap27"><span class="box"><span class="cw" id="w27_0">Same</span> <span class="cw" id="w27_1">Claude.</span></span></div><div class="cap" id="cap28"><span class="box"><span class="cw" id="w28_0">No</span> <span class="cw" id="w28_1">fake</span> <span class="cw" id="w28_2">numbers.</span></span></div><div class="cap" id="cap29"><span class="box"><span class="cw" id="w29_0">No</span> <span class="cw" id="w29_1">fake</span> <span class="cw" id="w29_2">reviews.</span></span></div><div class="cap" id="cap30"><span class="box"><span class="cw" id="w30_0">This</span> <span class="cw" id="w30_1">time,</span></span></div><div class="cap" id="cap31"><span class="box"><span class="cw" id="w31_0">it</span> <span class="cw" id="w31_1">looked</span> <span class="cw" id="w31_2">designed.</span></span></div><div class="cap" id="cap32"><span class="box"><span class="cw" id="w32_0">Not</span> <span class="cw" id="w32_1">generated.</span></span></div><div class="cap" id="cap33"><span class="box"><span class="cw" id="w33_0">Comment</span> <span class="cw" id="w33_1">HALLMARK</span> <span class="cw" id="w33_2">and</span> <span class="cw" id="w33_3">I'll</span></span></div><div class="cap" id="cap34"><span class="box"><span class="cw" id="w34_0">send</span> <span class="cw" id="w34_1">you</span> <span class="cw" id="w34_2">the</span> <span class="cw" id="w34_3">install.</span></span></div><div class="cap" id="cap35"><span class="box"><span class="cw" id="w35_0">Case</span> <span class="cw" id="w35_1">closed.</span></span></div></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="44.39" data-track-index="10" data-volume="1"></audio>
+    </div>
+    <script>
+      window.NOIR_T = {"end": 44.39, "enter": 1.704, "arrive": 4.169, "place": 4.319, "fine": 5.993, "two": 10.382, "reviews": 12.824, "labels": 15.164, "culprit": 18.238, "defaults": 19.3, "called": 21.221, "hallmark": 22.666, "deals": 25.512, "checks": 27.232, "every": 27.912, "same": 30.15, "same2": 31.449, "no": 32.583, "designed": 36.533, "comment": 38.666, "closed": 41.677, "cut": [0, 1.554, 5.493, 6.599, 7.775, 9.932, 17.138, 20.751, 22.366, 25.205, 29.8, 32.433, 35.302, 38.416, 42.577], "lightning": [[0.25, 1], [0.55, 0.6], [7.825, 0.7], [17.188, 0.8], [29.9, 0.45], [42.677, 0.6]]};
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      gsap.set(["#cta .cc", "#cta .cw2", "#cta .cs", "#cta .handle"],{opacity:0});
+      tl.fromTo("#cap0",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},0.027);
+      tl.set("#cap0",{opacity:0},0.827);
+      tl.set("#w0_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},0.067);tl.set("#w0_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},0.227);
+      tl.set("#w0_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},0.227);tl.set("#w0_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},0.347);
+      tl.set("#w0_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},0.347);tl.set("#w0_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},0.467);
+      tl.set("#w0_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},0.467);tl.set("#w0_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},0.807);
+      tl.fromTo("#cap1",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},0.827);
+      tl.set("#cap1",{opacity:0},1.644);
+      tl.set("#w1_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},0.867);tl.set("#w1_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},1.624);
+      tl.fromTo("#cap2",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},1.644);
+      tl.set("#cap2",{opacity:0},3.129);
+      tl.set("#w2_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},1.684);tl.set("#w2_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},1.924);
+      tl.set("#w2_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},1.924);tl.set("#w2_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},2.204);
+      tl.set("#w2_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},2.204);tl.set("#w2_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},2.324);
+      tl.set("#w2_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},2.324);tl.set("#w2_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},3.109);
+      tl.fromTo("#cap3",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},3.129);
+      tl.set("#cap3",{opacity:0},4.489);
+      tl.set("#w3_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},3.169);tl.set("#w3_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},3.489);
+      tl.set("#w3_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},3.489);tl.set("#w3_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},3.649);
+      tl.set("#w3_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},3.649);tl.set("#w3_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},4.209);
+      tl.set("#w3_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},4.209);tl.set("#w3_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},4.469);
+      tl.fromTo("#cap4",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},4.489);
+      tl.set("#cap4",{opacity:0},5.533);
+      tl.set("#w4_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},4.529);tl.set("#w4_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},4.689);
+      tl.set("#w4_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},4.689);tl.set("#w4_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},4.929);
+      tl.set("#w4_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},4.929);tl.set("#w4_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},5.513);
+      tl.fromTo("#cap5",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},5.533);
+      tl.set("#cap5",{opacity:0},6.639);
+      tl.set("#w5_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},5.573);tl.set("#w5_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},5.733);
+      tl.set("#w5_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},5.733);tl.set("#w5_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},5.973);
+      tl.set("#w5_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},5.973);tl.set("#w5_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},6.619);
+      tl.fromTo("#cap6",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},6.639);
+      tl.set("#cap6",{opacity:0},7.815);
+      tl.set("#w6_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},6.679);tl.set("#w6_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},6.839);
+      tl.set("#w6_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},6.839);tl.set("#w6_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},6.999);
+      tl.set("#w6_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},6.999);tl.set("#w6_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},7.559);
+      tl.set("#w6_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},7.559);tl.set("#w6_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},7.795);
+      tl.fromTo("#cap7",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},7.815);
+      tl.set("#cap7",{opacity:0},8.775);
+      tl.set("#w7_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},7.855);tl.set("#w7_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},8.015);
+      tl.set("#w7_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},8.015);tl.set("#w7_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},8.175);
+      tl.set("#w7_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},8.175);tl.set("#w7_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},8.495);
+      tl.set("#w7_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},8.495);tl.set("#w7_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},8.755);
+      tl.fromTo("#cap8",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},8.775);
+      tl.set("#cap8",{opacity:0},10.322);
+      tl.set("#w8_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},8.815);tl.set("#w8_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},9.055);
+      tl.set("#w8_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},9.055);tl.set("#w8_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},9.215);
+      tl.set("#w8_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},9.215);tl.set("#w8_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},9.375);
+      tl.set("#w8_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},9.375);tl.set("#w8_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},10.160);
+      tl.fromTo("#cap9",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},10.322);
+      tl.set("#cap9",{opacity:0},12.042);
+      tl.set("#w9_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},10.362);tl.set("#w9_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},10.522);
+      tl.set("#w9_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},10.522);tl.set("#w9_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},11.002);
+      tl.set("#w9_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},11.002);tl.set("#w9_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},11.562);
+      tl.set("#w9_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},11.562);tl.set("#w9_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},12.022);
+      tl.fromTo("#cap10",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},12.042);
+      tl.set("#cap10",{opacity:0},12.764);
+      tl.set("#w10_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},12.082);tl.set("#w10_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},12.744);
+      tl.fromTo("#cap11",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},12.764);
+      tl.set("#cap11",{opacity:0},13.924);
+      tl.set("#w11_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},12.804);tl.set("#w11_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},13.364);
+      tl.set("#w11_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},13.364);tl.set("#w11_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},13.524);
+      tl.set("#w11_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},13.524);tl.set("#w11_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},13.844);
+      tl.set("#w11_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},13.844);tl.set("#w11_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},13.904);
+      tl.fromTo("#cap12",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},13.924);
+      tl.set("#cap12",{opacity:0},15.104);
+      tl.set("#w12_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},13.964);tl.set("#w12_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},14.164);
+      tl.set("#w12_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},14.164);tl.set("#w12_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},15.084);
+      tl.fromTo("#cap13",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},15.104);
+      tl.set("#cap13",{opacity:0},17.378);
+      tl.set("#w13_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},15.144);tl.set("#w13_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},15.704);
+      tl.set("#w13_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},15.704);tl.set("#w13_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},16.104);
+      tl.set("#w13_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},16.104);tl.set("#w13_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},16.264);
+      tl.set("#w13_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},16.264);tl.set("#w13_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},17.358);
+      tl.fromTo("#cap14",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},17.378);
+      tl.set("#cap14",{opacity:0},19.000);
+      tl.set("#w14_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},17.418);tl.set("#w14_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},17.818);
+      tl.set("#w14_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},17.818);tl.set("#w14_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},18.098);
+      tl.set("#w14_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},18.098);tl.set("#w14_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},18.218);
+      tl.set("#w14_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},18.218);tl.set("#w14_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},18.980);
+      tl.fromTo("#cap15",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},19.000);
+      tl.set("#cap15",{opacity:0},20.841);
+      tl.set("#w15_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},19.040);tl.set("#w15_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},19.280);
+      tl.set("#w15_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},19.280);tl.set("#w15_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},19.840);
+      tl.set("#w15_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},19.840);tl.set("#w15_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},20.524);
+      tl.fromTo("#cap16",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},20.841);
+      tl.set("#cap16",{opacity:0},21.481);
+      tl.set("#w16_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},20.881);tl.set("#w16_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},21.121);
+      tl.set("#w16_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},21.121);tl.set("#w16_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},21.201);
+      tl.set("#w16_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},21.201);tl.set("#w16_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},21.401);
+      tl.set("#w16_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},21.401);tl.set("#w16_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},21.461);
+      tl.fromTo("#cap17",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},21.481);
+      tl.set("#cap17",{opacity:0},22.606);
+      tl.set("#w17_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},21.521);tl.set("#w17_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},22.523);
+      tl.fromTo("#cap18",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},22.606);
+      tl.set("#cap18",{opacity:0},23.201);
+      tl.set("#w18_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},22.646);tl.set("#w18_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},23.181);
+      tl.fromTo("#cap19",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},23.201);
+      tl.set("#cap19",{opacity:0},24.241);
+      tl.set("#w19_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},23.241);tl.set("#w19_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},23.321);
+      tl.set("#w19_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},23.321);tl.set("#w19_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},23.561);
+      tl.set("#w19_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},23.561);tl.set("#w19_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},23.961);
+      tl.set("#w19_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},23.961);tl.set("#w19_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},24.221);
+      tl.fromTo("#cap20",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},24.241);
+      tl.set("#cap20",{opacity:0},25.345);
+      tl.set("#w20_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},24.281);tl.set("#w20_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},24.441);
+      tl.set("#w20_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},24.441);tl.set("#w20_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},24.761);
+      tl.set("#w20_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},24.761);tl.set("#w20_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},25.325);
+      tl.fromTo("#cap21",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},25.345);
+      tl.set("#cap21",{opacity:0},26.372);
+      tl.set("#w21_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},25.385);tl.set("#w21_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},25.492);
+      tl.set("#w21_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},25.492);tl.set("#w21_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},25.812);
+      tl.set("#w21_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},25.812);tl.set("#w21_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},26.012);
+      tl.set("#w21_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},26.012);tl.set("#w21_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},26.352);
+      tl.fromTo("#cap22",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},26.372);
+      tl.set("#cap22",{opacity:0},26.932);
+      tl.set("#w22_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},26.412);tl.set("#w22_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},26.912);
+      tl.fromTo("#cap23",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},26.932);
+      tl.set("#cap23",{opacity:0},27.852);
+      tl.set("#w23_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},26.972);tl.set("#w23_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},27.212);
+      tl.set("#w23_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},27.212);tl.set("#w23_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},27.372);
+      tl.set("#w23_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},27.372);tl.set("#w23_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},27.492);
+      tl.set("#w23_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},27.492);tl.set("#w23_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},27.832);
+      tl.fromTo("#cap24",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},27.852);
+      tl.set("#cap24",{opacity:0},29.132);
+      tl.set("#w24_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},27.892);tl.set("#w24_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},28.292);
+      tl.set("#w24_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},28.292);tl.set("#w24_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},28.692);
+      tl.set("#w24_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},28.692);tl.set("#w24_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},29.052);
+      tl.set("#w24_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},29.052);tl.set("#w24_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},29.112);
+      tl.fromTo("#cap25",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},29.132);
+      tl.set("#cap25",{opacity:0},30.090);
+      tl.set("#w25_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},29.172);tl.set("#w25_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},29.492);
+      tl.set("#w25_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},29.492);tl.set("#w25_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},30.070);
+      tl.fromTo("#cap26",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},30.090);
+      tl.set("#cap26",{opacity:0},31.389);
+      tl.set("#w26_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},30.130);tl.set("#w26_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},30.450);
+      tl.set("#w26_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},30.450);tl.set("#w26_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},31.369);
+      tl.fromTo("#cap27",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},31.389);
+      tl.set("#cap27",{opacity:0},32.523);
+      tl.set("#w27_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},31.429);tl.set("#w27_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},31.749);
+      tl.set("#w27_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},31.749);tl.set("#w27_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},32.503);
+      tl.fromTo("#cap28",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},32.523);
+      tl.set("#cap28",{opacity:0},33.843);
+      tl.set("#w28_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},32.563);tl.set("#w28_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},32.723);
+      tl.set("#w28_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},32.723);tl.set("#w28_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},33.043);
+      tl.set("#w28_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},33.043);tl.set("#w28_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},33.823);
+      tl.fromTo("#cap29",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},33.843);
+      tl.set("#cap29",{opacity:0},35.442);
+      tl.set("#w29_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},33.883);tl.set("#w29_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},34.083);
+      tl.set("#w29_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},34.083);tl.set("#w29_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},34.323);
+      tl.set("#w29_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},34.323);tl.set("#w29_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},35.422);
+      tl.fromTo("#cap30",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},35.442);
+      tl.set("#cap30",{opacity:0},36.153);
+      tl.set("#w30_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},35.482);tl.set("#w30_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},35.653);
+      tl.set("#w30_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},35.653);tl.set("#w30_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},36.133);
+      tl.fromTo("#cap31",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},36.153);
+      tl.set("#cap31",{opacity:0},37.639);
+      tl.set("#w31_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},36.193);tl.set("#w31_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},36.353);
+      tl.set("#w31_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},36.353);tl.set("#w31_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},36.513);
+      tl.set("#w31_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},36.513);tl.set("#w31_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},37.619);
+      tl.fromTo("#cap32",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},37.639);
+      tl.set("#cap32",{opacity:0},38.606);
+      tl.set("#w32_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},37.679);tl.set("#w32_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},37.799);
+      tl.set("#w32_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},37.799);tl.set("#w32_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},38.586);
+      tl.fromTo("#cap33",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},38.606);
+      tl.set("#cap33",{opacity:0},40.046);
+      tl.set("#w33_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},38.646);tl.set("#w33_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},39.046);
+      tl.set("#w33_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},39.046);tl.set("#w33_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},39.686);
+      tl.set("#w33_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},39.686);tl.set("#w33_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},39.846);
+      tl.set("#w33_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},39.846);tl.set("#w33_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},40.026);
+      tl.fromTo("#cap34",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},40.046);
+      tl.set("#cap34",{opacity:0},41.297);
+      tl.set("#w34_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},40.086);tl.set("#w34_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},40.246);
+      tl.set("#w34_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},40.246);tl.set("#w34_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},40.366);
+      tl.set("#w34_2",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},40.366);tl.set("#w34_2",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},40.486);
+      tl.set("#w34_3",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},40.486);tl.set("#w34_3",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},41.277);
+      tl.fromTo("#cap35",{opacity:0,y:14},{opacity:1,y:0,duration:.14,ease:"power2.out",immediateRender:false},41.297);
+      tl.set("#cap35",{opacity:0},43.290);
+      tl.set("#w35_0",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},41.337);tl.set("#w35_0",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},41.657);
+      tl.set("#w35_1",{color:"#B687F9",textShadow:"0 0 22px rgba(167,91,252,.75), 0 3px 14px rgba(0,0,0,.8)"},41.657);tl.set("#w35_1",{color:"#F4F1EA",textShadow:"0 3px 14px rgba(0,0,0,.8)"},42.620);
+      tl.fromTo("#cta .cc",{opacity:0,y:-24},{opacity:1,y:0,duration:.35,ease:"power3.out",immediateRender:false},38.566);
+      tl.fromTo("#cta .cw2",{opacity:0,scale:1.6},{opacity:1,scale:1,duration:.45,ease:"power4.out",immediateRender:false},39.016);
+      tl.fromTo("#cta .cs",{opacity:0,y:16},{opacity:1,y:0,duration:.4,ease:"power2.out",immediateRender:false},39.566);
+      tl.fromTo("#cta .handle",{opacity:0},{opacity:1,duration:.5,ease:"power2.out",immediateRender:false},42.577);
+      tl.set({}, {}, 44.39);
+      window.__timelines["main"] = tl;
+    </script>
+    <script type="module" src="assets/js/world.js"></script>
+  </body>
+</html>

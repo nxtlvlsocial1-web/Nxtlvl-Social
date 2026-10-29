@@ -42,7 +42,8 @@ function hand(parent, side, skin, size = 1) {
 export function setHand(h, curl = .15, o = {}) {
   const { spread = .035, thumb = .3, point = false, pinch = false } = o;
   h.fingers.forEach(([k, j], i) => {
-    const c = point && i === 1 ? .05 : pinch && i <= 1 ? curl * .75 : curl;
+    // i = 3 is the index finger (next to the thumb) on both hands, i = 0 the little finger
+    const c = point && i === 3 ? .05 : pinch && i >= 2 ? curl * .75 : curl;
     k.rotation.set(-c * 1.45, 0, (i - 1.5) * spread * h.side);
     j.rotation.set(-c * 1.6, 0, 0);
   });
@@ -164,7 +165,7 @@ export function express(P, { blink = 0, brow = 0, smile = 0, gaze = [0, 0] } = {
   const f = P.face;
   for (const k of ["eyeL", "eyeR"]) {
     const e = f[k];
-    e.lid.rotation.x = -1.35 + Math.max(blink, P.squint || 0) * 1.45;   // the lid comes down over the eye
+    e.lid.rotation.x = -1.2 + Math.max(blink, P.squint || 0) * 2.75;   // the lid comes down over the eye
     e.pu.position.x = gaze[0] * .006; e.pu.position.y = gaze[1] * .005;
     e.br.position.y = .13 + brow * .008;
     e.br.rotation.z = e.s * (brow < 0 ? brow * .35 : brow * .1);
@@ -213,7 +214,7 @@ export function detective() {
   // seated: thighs forward, shins down
   for (const k of ["L", "R"]) { P["thigh" + k].rotation.x = -1.5; P["knee" + k].rotation.x = 1.45; }
   P.root.rotation.order = "YXZ";
-  P.squint = .3;
+  P.squint = .42;
   return P;
 }
 
