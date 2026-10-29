@@ -718,8 +718,17 @@ function renderAt(t) {
   if (DEBUG_RAW) renderer.render(scene, camera); else composer.render();
   out2d.drawImage(canvas, 0, 0);
 }
-let colourScreen = 0;
+let colourScreen = 0, maskEmpty = false;
+const _frustum = new THREE.Frustum(), _pm = new THREE.Matrix4(), _sph = new THREE.Sphere();
 function renderMask() {
+  // nothing coloured in frame (no neon in view, the page not revealed): keep the cleared mask and skip the pass
+  _frustum.setFromProjectionMatrix(_pm.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
+  const neonInView = NEON_PARTS.some((n) => { n.geometry.computeBoundingSphere(); _sph.copy(n.geometry.boundingSphere).applyMatrix4(n.matrixWorld); return _frustum.intersectsSphere(_sph); });
+  if (!neonInView && colourScreen <= 0) {
+    if (!maskEmpty) { renderer.setRenderTarget(maskRT); renderer.setClearColor(0x000000, 1); renderer.clear(); renderer.setRenderTarget(null); maskEmpty = true; }
+    return;
+  }
+  maskEmpty = false;
   const bg = scene.background, fog = scene.fog;
   scene.background = new THREE.Color(0); scene.fog = null; scene.overrideMaterial = maskBlack;
   renderer.setRenderTarget(maskRT); renderer.setClearColor(0x000000, 1); renderer.clear();
