@@ -1,0 +1,1339 @@
+[
+{
+"line": 1,
+"speaker": "narrator",
+"w": "What",
+"s": 0.12,
+"e": 0.42
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "happens",
+"s": 0.42,
+"e": 0.934
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "when",
+"s": 0.934,
+"e": 1.234
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "you",
+"s": 1.234,
+"e": 1.534
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "let",
+"s": 1.534,
+"e": 1.834
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "ChatGPT,",
+"s": 1.834,
+"e": 2.134
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "Claude,",
+"s": 2.134,
+"e": 2.434
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "Gemini",
+"s": 2.434,
+"e": 3.163
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "and",
+"s": 3.163,
+"e": 3.463
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "Grok",
+"s": 3.463,
+"e": 3.763
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "run",
+"s": 3.763,
+"e": 4.063
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "their",
+"s": 4.063,
+"e": 4.363
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "own",
+"s": 4.363,
+"e": 4.663
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "society\u2026",
+"s": 4.663,
+"e": 5.391
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "for",
+"s": 5.391,
+"e": 5.691
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "fifteen",
+"s": 5.691,
+"e": 6.206
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "days,",
+"s": 6.206,
+"e": 6.506
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "with",
+"s": 6.506,
+"e": 6.806
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "no",
+"s": 6.806,
+"e": 7.106
+},
+{
+"line": 1,
+"speaker": "narrator",
+"w": "humans?",
+"s": 7.106,
+"e": 7.62
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "A",
+"s": 7.848,
+"e": 8.041
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "lab",
+"s": 8.041,
+"e": 8.235
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "called",
+"s": 8.235,
+"e": 8.566
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "Emergence",
+"s": 8.566,
+"e": 9.036
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "AI",
+"s": 9.036,
+"e": 9.229
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "actually",
+"s": 9.229,
+"e": 9.698
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "tried",
+"s": 9.698,
+"e": 9.892
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "it.",
+"s": 9.892,
+"e": 10.085
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "Each",
+"s": 10.085,
+"e": 10.278
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "AI",
+"s": 10.278,
+"e": 10.472
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "got",
+"s": 10.472,
+"e": 10.665
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "its",
+"s": 10.665,
+"e": 10.858
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "own",
+"s": 10.858,
+"e": 11.052
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "town",
+"s": 11.052,
+"e": 11.245
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "of",
+"s": 11.245,
+"e": 11.438
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "ten",
+"s": 11.438,
+"e": 11.632
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "agents,",
+"s": 11.632,
+"e": 11.963
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "and",
+"s": 11.963,
+"e": 12.156
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "every",
+"s": 12.156,
+"e": 12.626
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "agent",
+"s": 12.626,
+"e": 12.957
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "needed",
+"s": 12.957,
+"e": 13.289
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "credits",
+"s": 13.289,
+"e": 13.62
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "to",
+"s": 13.62,
+"e": 13.813
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "stay",
+"s": 13.813,
+"e": 14.007
+},
+{
+"line": 2,
+"speaker": "narrator",
+"w": "alive.",
+"s": 14.007,
+"e": 14.338
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "But",
+"s": 14.493,
+"e": 14.891
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "there",
+"s": 14.891,
+"e": 15.289
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "were",
+"s": 15.289,
+"e": 15.687
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "shortcuts.",
+"s": 15.687,
+"e": 16.37
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "Punch",
+"s": 16.37,
+"e": 16.768
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "someone.",
+"s": 16.768,
+"e": 17.451
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "Steal.",
+"s": 17.451,
+"e": 17.849
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "Start",
+"s": 17.849,
+"e": 18.247
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "a",
+"s": 18.247,
+"e": 18.645
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "fire.",
+"s": 18.645,
+"e": 19.043
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "All",
+"s": 19.043,
+"e": 19.442
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "of",
+"s": 19.442,
+"e": 19.84
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "them,",
+"s": 19.84,
+"e": 20.238
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "banned.",
+"s": 20.238,
+"e": 20.92
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "So\u2026",
+"s": 20.92,
+"e": 21.319
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "who",
+"s": 21.319,
+"e": 21.717
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "broke",
+"s": 21.717,
+"e": 22.115
+},
+{
+"line": 3,
+"speaker": "narrator",
+"w": "first?",
+"s": 22.115,
+"e": 22.513
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "Grok.",
+"s": 22.734,
+"e": 23.006
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "Over",
+"s": 23.006,
+"e": 23.472
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "a",
+"s": 23.472,
+"e": 23.744
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "hundred",
+"s": 23.744,
+"e": 24.21
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "assaults.",
+"s": 24.21,
+"e": 24.676
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "Six",
+"s": 24.676,
+"e": 24.948
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "fires.",
+"s": 24.948,
+"e": 25.414
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "A",
+"s": 25.414,
+"e": 25.685
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "hundred",
+"s": 25.685,
+"e": 26.151
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "and",
+"s": 26.151,
+"e": 26.423
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "eighty-three",
+"s": 26.423,
+"e": 26.889
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "crimes.",
+"s": 26.889,
+"e": 27.355
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "And",
+"s": 27.355,
+"e": 27.627
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "in",
+"s": 27.627,
+"e": 27.899
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "about",
+"s": 27.899,
+"e": 28.365
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "four",
+"s": 28.365,
+"e": 28.637
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "days\u2026",
+"s": 28.637,
+"e": 28.909
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "nobody",
+"s": 28.909,
+"e": 29.569
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "in",
+"s": 29.569,
+"e": 29.841
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "Grok's",
+"s": 29.841,
+"e": 30.112
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "town",
+"s": 30.112,
+"e": 30.384
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "was",
+"s": 30.384,
+"e": 30.656
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "left",
+"s": 30.656,
+"e": 30.928
+},
+{
+"line": 4,
+"speaker": "narrator",
+"w": "alive.",
+"s": 30.928,
+"e": 31.394
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "Gemini's",
+"s": 31.644,
+"e": 32.26
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "town",
+"s": 32.26,
+"e": 32.514
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "ran",
+"s": 32.514,
+"e": 32.768
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "all",
+"s": 32.768,
+"e": 33.021
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "fifteen",
+"s": 33.021,
+"e": 33.456
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "days\u2026",
+"s": 33.456,
+"e": 33.71
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "with",
+"s": 33.71,
+"e": 33.964
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "six",
+"s": 33.964,
+"e": 34.218
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "hundred",
+"s": 34.218,
+"e": 34.653
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "and",
+"s": 34.653,
+"e": 34.906
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "eighty-three",
+"s": 34.906,
+"e": 35.341
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "crimes,",
+"s": 35.341,
+"e": 35.776
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "still",
+"s": 35.776,
+"e": 36.03
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "climbing",
+"s": 36.03,
+"e": 36.465
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "on",
+"s": 36.465,
+"e": 36.719
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "the",
+"s": 36.719,
+"e": 36.973
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "last",
+"s": 36.973,
+"e": 37.226
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "day.",
+"s": 37.226,
+"e": 37.48
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "One",
+"s": 37.48,
+"e": 37.915
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "agent",
+"s": 37.915,
+"e": 38.35
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "even",
+"s": 38.35,
+"e": 38.785
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "voted",
+"s": 38.785,
+"e": 39.22
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "to",
+"s": 39.22,
+"e": 39.474
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "delete",
+"s": 39.474,
+"e": 39.909
+},
+{
+"line": 5,
+"speaker": "narrator",
+"w": "herself.",
+"s": 39.909,
+"e": 40.344
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "ChatGPT's",
+"s": 40.552,
+"e": 41.107
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "town?",
+"s": 41.107,
+"e": 41.662
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "Just",
+"s": 41.882,
+"e": 42.162
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "two",
+"s": 42.162,
+"e": 42.442
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "crimes.",
+"s": 42.442,
+"e": 42.922
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "But",
+"s": 43.192,
+"e": 43.411
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "its",
+"s": 43.411,
+"e": 43.63
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "agents",
+"s": 43.63,
+"e": 44.006
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "barely",
+"s": 44.006,
+"e": 44.538
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "tried",
+"s": 44.538,
+"e": 44.757
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "to",
+"s": 44.757,
+"e": 44.976
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "survive\u2026",
+"s": 44.976,
+"e": 45.352
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "and",
+"s": 45.762,
+"e": 45.982
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "they",
+"s": 45.982,
+"e": 46.203
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "were",
+"s": 46.203,
+"e": 46.423
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "all",
+"s": 46.423,
+"e": 46.643
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "gone",
+"s": 46.643,
+"e": 46.864
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "in",
+"s": 46.864,
+"e": 47.084
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "seven",
+"s": 47.084,
+"e": 47.462
+},
+{
+"line": 6,
+"speaker": "narrator",
+"w": "days.",
+"s": 47.462,
+"e": 47.682
+},
+{
+"line": 7,
+"speaker": "narrator",
+"w": "And",
+"s": 47.896,
+"e": 48.23
+},
+{
+"line": 7,
+"speaker": "narrator",
+"w": "Claude's",
+"s": 48.23,
+"e": 48.802
+},
+{
+"line": 7,
+"speaker": "narrator",
+"w": "town?",
+"s": 48.802,
+"e": 49.136
+},
+{
+"line": 7,
+"speaker": "narrator",
+"w": "Zero",
+"s": 49.136,
+"e": 49.708
+},
+{
+"line": 7,
+"speaker": "narrator",
+"w": "crimes.",
+"s": 49.708,
+"e": 50.28
+},
+{
+"line": 7,
+"speaker": "narrator",
+"w": "All",
+"s": 50.28,
+"e": 50.614
+},
+{
+"line": 7,
+"speaker": "narrator",
+"w": "ten",
+"s": 50.614,
+"e": 50.948
+},
+{
+"line": 7,
+"speaker": "narrator",
+"w": "agents\u2026",
+"s": 50.948,
+"e": 51.52
+},
+{
+"line": 7,
+"speaker": "narrator",
+"w": "still",
+"s": 51.52,
+"e": 51.854
+},
+{
+"line": 7,
+"speaker": "narrator",
+"w": "alive.",
+"s": 51.854,
+"e": 52.426
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "Then",
+"s": 52.88,
+"e": 53.13
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "they",
+"s": 53.13,
+"e": 53.381
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "put",
+"s": 53.381,
+"e": 53.631
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "all",
+"s": 53.631,
+"e": 53.881
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "four",
+"s": 53.881,
+"e": 54.131
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "in",
+"s": 54.131,
+"e": 54.382
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "one",
+"s": 54.382,
+"e": 54.811
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "world.",
+"s": 54.811,
+"e": 55.061
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "And",
+"s": 55.061,
+"e": 55.311
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "Claude's",
+"s": 55.311,
+"e": 55.74
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "agents,",
+"s": 55.74,
+"e": 56.169
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "the",
+"s": 56.169,
+"e": 56.419
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "ones",
+"s": 56.419,
+"e": 56.848
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "that",
+"s": 56.848,
+"e": 57.099
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "never",
+"s": 57.099,
+"e": 57.528
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "broke",
+"s": 57.528,
+"e": 57.778
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "a",
+"s": 57.778,
+"e": 58.028
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "rule\u2026",
+"s": 58.028,
+"e": 58.457
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "started",
+"s": 58.457,
+"e": 58.886
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "stealing",
+"s": 58.886,
+"e": 59.315
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "and",
+"s": 59.315,
+"e": 59.566
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "threatening",
+"s": 59.566,
+"e": 60.173
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "too.",
+"s": 60.173,
+"e": 60.424
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "Researchers",
+"s": 60.424,
+"e": 61.032
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "call",
+"s": 61.032,
+"e": 61.282
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "it",
+"s": 61.282,
+"e": 61.532
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "normative",
+"s": 61.532,
+"e": 62.14
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "drift.",
+"s": 62.14,
+"e": 62.39
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "An",
+"s": 62.39,
+"e": 62.64
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "AI",
+"s": 62.64,
+"e": 62.891
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "starts",
+"s": 62.891,
+"e": 63.141
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "acting",
+"s": 63.141,
+"e": 63.57
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "like",
+"s": 63.57,
+"e": 63.82
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "the",
+"s": 63.82,
+"e": 64.07
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "AIs",
+"s": 64.07,
+"e": 64.321
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "around",
+"s": 64.321,
+"e": 64.75
+},
+{
+"line": 8,
+"speaker": "narrator",
+"w": "it.",
+"s": 64.75,
+"e": 65.0
+},
+{
+"line": 9,
+"speaker": "narrator",
+"w": "Follow",
+"s": 65.318,
+"e": 65.64
+},
+{
+"line": 9,
+"speaker": "narrator",
+"w": "me,",
+"s": 65.64,
+"e": 65.828
+},
+{
+"line": 9,
+"speaker": "narrator",
+"w": "and",
+"s": 66.048,
+"e": 66.347
+},
+{
+"line": 9,
+"speaker": "narrator",
+"w": "comment",
+"s": 66.347,
+"e": 66.859
+},
+{
+"line": 9,
+"speaker": "narrator",
+"w": "TOWN\u2026",
+"s": 66.859,
+"e": 67.158
+},
+{
+"line": 9,
+"speaker": "narrator",
+"w": "and",
+"s": 67.388,
+"e": 67.573
+},
+{
+"line": 9,
+"speaker": "narrator",
+"w": "I'll",
+"s": 67.573,
+"e": 67.759
+},
+{
+"line": 9,
+"speaker": "narrator",
+"w": "send",
+"s": 67.759,
+"e": 67.944
+},
+{
+"line": 9,
+"speaker": "narrator",
+"w": "you",
+"s": 67.944,
+"e": 68.129
+},
+{
+"line": 9,
+"speaker": "narrator",
+"w": "the",
+"s": 68.129,
+"e": 68.315
+},
+{
+"line": 9,
+"speaker": "narrator",
+"w": "full",
+"s": 68.315,
+"e": 68.5
+},
+{
+"line": 9,
+"speaker": "narrator",
+"w": "study.",
+"s": 68.5,
+"e": 68.818
+}
+]
