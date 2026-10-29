@@ -172,6 +172,9 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
 ## Rules
 
 - Never render a final until the person has approved the preview.
+- Run every render detached (`setsid nohup bash <script> > /dev/null 2>&1 < /dev/null &`), never as a time-limited
+  background job: 3D renders take hours and a background job is killed at its time limit. When the person asks for the
+  final export directly, render it in delivery quality straight away (no draft first).
 - Never use music or images we don't have the rights to; source them through `media-use`.
 - Keep rendered MP4s out of git; deliver them, don't commit them.
 - Never use emojis in post descriptions, captions or hashtag blocks we write for clients (number lists with "1.", not
