@@ -72,6 +72,19 @@ def sfx():
         put(smp("pop"), T[k], .3, (i - 1.5) / 2)
     put(smp("click"), T["fifteen"] - .05, .5)
     put(smp("impact-bass-1"), T["humans"] - .08, .9)
+    # the hook's added motion: houses going up, the case file typing, the REAL STUDY stamp, the town tour, the coins, the alert
+    for j in range(12):
+        put(smp("click-soft", 0, .15), T["society"] - .25 + j * .1, .22, np.sin(j * 1.3) * .6)
+    for j in range(9):
+        put(smp("key-press", 0, .12), T["emergence"] + .05 + j * .06, .25, (j - 4) / 8)
+    put(smp("impact-bass-2"), T["tried"] - .05, .45)
+    put(smp("click"), T["tried"] - .03, .4)
+    for i in range(4):
+        put(smp("pop"), L[1] + 2.2 + i * .2, .2, (i - 1.5) / 2)
+    for j in range(8):
+        put(smp("pop"), T["credits"] + .78 + (j % 4) * .07, .16, ((j % 4) - 1.5) / 2)
+    put(smp("chime", 0, 1.2), T["credits"] + .85, .25)
+    put(smp("error", 0, .8), T["shortcuts"] - .1, .25)
     # setup and shortcuts
     put(smp("whoosh"), T["emergence"] - .2, .45)
     for j in range(10):

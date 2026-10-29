@@ -47,6 +47,7 @@ T = {
     "oneworld": word(8, "world"), "cagents": word(8, "claude"), "stealing": word(8, "stealing"), "drift": word(8, "normative"),
     "acting": word(8, "acting"),
     "town": word(9, "town"), "end": DUR,
+    "society": word(1, "society"), "tried": word(2, "tried"), "town2": word(2, "town"), "shortcuts": word(3, "shortcuts"),
 }
 A = []
 
@@ -104,9 +105,26 @@ def kingdom(i):
                   f'background:{col}"></i>' for a in range(10))
     pins = "".join(f'<b class="pin pn{i}_{j}" style="left:{cx + (h(j * 3 + i * 91) - .5) * 300 - 10:.0f}px;top:{cy + (h(j * 7 + i * 13) - .5) * 290 - 26:.0f}px"></b>'
                    for j in range(npin))
-    return (f'<div class="kd kd{i}" style="--c:{col}">{svg}{ags}{pins}'
+    hs = "".join(f'<b class="hs hs{i}_{j}" style="left:{cx + math.cos(math.radians(d)) * 94 - 15:.0f}px;top:{cy + math.sin(math.radians(d)) * 90 - 10:.0f}px"></b>'
+                 for j, d in enumerate((160, 200, 240, 280, 320, 0)))   # houses ring the emblem but leave the town label below it clear
+    ring = f'<i class="ring rg{i}" style="left:{cx - 70}px;top:{cy - 70}px;border-color:{col}"></i>'
+    return (f'<div class="kd kd{i}" style="--c:{col}">{svg}{hs}{ags}{pins}{ring}'
             f'<div class="emb" style="left:{cx - 66}px;top:{cy - 66}px;background:{disc};border-color:{col}"><img src="assets/logos/{key}.png" alt=""/></div>'
             f'<div class="kname mono" style="left:{cx - 150}px;top:{cy + 74}px;color:{LABEL[key]}">{name.upper()} TOWN</div></div>')
+
+
+ROUTES = [(0, 1), (1, 3), (3, 2), (2, 0), (0, 3), (1, 2), (1, 0), (2, 3)]   # town pairs the hook's messengers shuttle between
+
+
+def route(j):
+    a, b = (K[n][4] for n in ROUTES[j])
+    dx, dy = b[0] - a[0], b[1] - a[1]
+    u = math.hypot(dx, dy)
+    return (a[0] + dx / u * 92, a[1] + dy / u * 92), (b[0] - dx / u * 92, b[1] - dy / u * 92)
+
+
+def messengers():
+    return "".join(f'<i class="msg ms{j}" style="background:{K[ROUTES[j][0]][2]}"></i>' for j in range(len(ROUTES)))
 
 
 FIRES = {"grok": [(680, 690), (800, 700), (720, 820), (790, 800), (660, 780), (760, 640)], "gemini": [(690, 220), (800, 300)]}
@@ -145,13 +163,16 @@ def hud():
 
 OVER = (
     '<div id="radar"></div>'
-    '<div class="chip c15 mono">15 DAYS</div>'
+    '<div class="chip c15 mono"><span class="n15">1</span> DAYS</div>'
     '<div class="stamp nohum"><svg viewBox="0 0 100 100" width="92" height="92"><circle cx="50" cy="30" r="14" fill="#fff"/>'
     '<path d="M24 86 Q24 52 50 52 Q76 52 76 86 Z" fill="#fff"/><circle cx="50" cy="50" r="44" fill="none" stroke="#ff3b46" stroke-width="9"/>'
     '<path d="M19 81 L81 19" stroke="#ff3b46" stroke-width="9"/></svg><span>NO HUMANS</span></div>'
-    '<div class="dossier"><div class="mono dl">CASE FILE</div><b>Emergence World</b><span>a study by Emergence AI</span>'
-    '<div class="drow mono"><i>4 AI societies</i><i>10 agents each</i><i>15 days</i></div></div>'
-    '<div class="needs"><span class="coin">C</span><div><b>credits = survival</b><span>no credits, no energy, no agent</span></div></div>'
+    '<div class="dossier"><div class="mono dl">CASE FILE</div><b>' + "".join(f'<em class="tl tl{k}">{c}</em>' if c != " " else " " for k, c in enumerate("Emergence World")) + '</b>'
+    '<span>a study by Emergence AI</span>'
+    '<div class="drow mono"><i>4 AI societies</i><i>10 agents each</i><i>15 days</i></div><i class="scan"></i></div>'
+    '<div class="rs">REAL STUDY</div>'
+    '<div class="needs"><span class="coin">C</span><div><b>credits = survival</b><span>no credits, no energy, no agent</span></div><em class="nbar"><i></i></em></div>'
+    + "".join(f'<b class="fc fc{j}">C</b>' for j in range(8)) +
     '<div class="acts"><div class="act a0"><b class="aic">&#9994;</b>PUNCH</div><div class="act a1"><b class="aic">$</b>STEAL</div>'
     '<div class="act a2"><b class="aic flame"></b>ARSON</div><div class="stamp banned">BANNED</div></div>'
     '<div class="q">?</div>'
@@ -178,7 +199,6 @@ def endcard():
 def story():
     # HOOK: the table wakes, the four kingdoms light up as they are named, "no humans"
     add('tl.fromTo("#radar",{rotation:0},{rotation:720,duration:%.2f,ease:"none",immediateRender:false},0);' % (L[2] + 1))
-    pop("#cam", 0, "scale:1.18,opacity:.55", .9, "power3.out", "scale:1,opacity:1")
     to("#radar", L[3] - .3, "opacity:0", .4)
     for k in ("chatgpt", "claude", "gemini", "grok"):
         i = KI[k]
@@ -322,7 +342,102 @@ def story():
         add(f'tl.set("#flash",{{opacity:.14}},{t:.3f});tl.to("#flash",{{opacity:0,duration:.18}},{t + .01:.3f});')
     for t, o in ((T["humans"], .35), (T["banned"], .3), (T["e183"], .3), (T["alive4"], .25), (T["seven"], .2), (T["drift"], .25)):
         add(f'tl.set("#flash",{{opacity:{o}}},{t:.3f});tl.to("#flash",{{opacity:0,duration:.35}},{t + .02:.3f});')
+    hook_fx()
     add(f'tl.fromTo(".prog i",{{scaleX:0}},{{scaleX:1,duration:{DUR},ease:"none",immediateRender:false}},0);')
+
+
+# ---------------------------------------------------------------- the opening 22 s: something moves on every frame
+def camk(t, x, y, sc, d, ease="power2.inOut"):
+    add(f'tl.to("#cam",{{x:{x:.1f},y:{y:.1f},scale:{sc},duration:{d},ease:"{ease}"}},{t:.3f});')
+
+
+def nudge(key, sc, f=.22):
+    cx, cy = K[KI[key]][4]
+    return (500 - cx) * sc * f, (500 - cy) * sc * f + 20
+
+
+def yoyo(sel, t0, t1, props, d, ease="sine.inOut"):
+    """A there-and-back loop from t0 that always lands back on its start values before t1."""
+    rep = max(1, int((t1 - t0) / d))
+    rep -= 1 - rep % 2
+    add(f'tl.fromTo("{sel}",{{x:0,y:0}},{{{props},duration:{d:.2f},yoyo:true,repeat:{rep},ease:"{ease}",immediateRender:false}},{t0:.3f});')
+
+
+def hook_fx():
+    end = L[3] - .3                       # Grok's chapter takes the camera over here
+    # the camera never stops: a push in, a glance at each town as it is named, a pull back, a shake on "no humans"
+    add('tl.fromTo("#cam",{scale:1.38,x:0,y:70,opacity:.6},{scale:1.18,y:30,opacity:1,duration:1.65,ease:"power2.out",immediateRender:false},0);')
+    for k, d in (("chatgpt", .24), ("claude", .24), ("gemini", .8), ("grok", .3)):
+        camk(T[k] - .08, *nudge(k, 1.18), 1.18, d, "power3.out")
+    camk(T["society"] - .9, 0, 0, 1.0, 1.6)
+    camk(T["fifteen"] - .1, 0, 10, 1.07, 1.3, "power1.inOut")
+    for j, (dx, dy) in enumerate(((16, -10), (-18, 12), (12, 14), (-10, -14), (8, 6), (0, 10))):
+        camk(T["humans"] - .02 + j * .045, dx, dy, 1.07, .045, "none")
+    camk(T["humans"] + .3, 0, 0, 1.0, .5, "power2.out")
+    camk(L[1] + .1, 0, 34, 1.05, 2.0)
+    camk(T["town2"] - .95, 0, 0, 1.0, .5)
+    camk(T["ten"] - .15, 0, 20, 1.08, .8, "power2.out")
+    camk(T["credits"] - .95, 0, 0, 1.0, .55)
+    camk(T["shortcuts"] - 1.1, 0, 26, 1.06, end - (T["shortcuts"] - 1.1) - .05, "sine.inOut")
+    # ambient: the grid drifts, the SIMULATION light blinks, the emblems float
+    add(f'tl.fromTo("#grid",{{backgroundPosition:"30px 0px"}},{{backgroundPosition:"30px 600px",duration:{DUR},ease:"none",immediateRender:false}},0);')
+    add(f'tl.fromTo(".live b",{{opacity:1}},{{opacity:.15,duration:.45,yoyo:true,repeat:{int(DUR / .45)},ease:"sine.inOut",immediateRender:false}},0);')
+    for k in ("chatgpt", "claude", "gemini", "grok"):
+        i = KI[k]
+        yoyo(f".kd{i} .emb", T[k] + .4, end, "y:-7", .85 + i * .11)
+    # each town rings out as it is named, and again on "each AI got its own town"
+    for k in ("chatgpt", "claude", "gemini", "grok"):
+        i = KI[k]
+        add(f'tl.fromTo(".rg{i}",{{scale:.6,opacity:.9}},{{scale:2.2,opacity:0,duration:.7,ease:"power2.out",immediateRender:false}},{T[k] - .05:.3f});')
+    for i in range(4):
+        add(f'tl.fromTo(".rg{i}",{{scale:.6,opacity:.9}},{{scale:2.2,opacity:0,duration:.7,ease:"power2.out",immediateRender:false}},{L[1] + 2.2 + i * .2:.3f});')
+        add(f'tl.fromTo(".kd{i} .emb",{{scale:1}},{{scale:1.12,duration:.12,yoyo:true,repeat:1,ease:"sine.out",immediateRender:false}},{L[1] + 2.2 + i * .2:.3f});')
+    # "run their own society": houses go up in every town, messengers start running between them
+    for i in range(4):
+        for j in range(6):
+            pop(f".hs{i}_{j}", T["society"] - .25 + i * .09 + j * .05, "y:-26,scale:0,opacity:0", .28, "back.out(2.6)")
+    for j in range(len(ROUTES)):
+        (ax, ay), (bx, by) = route(j)
+        t0 = T["society"] + .3 + j * .12
+        add(f'tl.fromTo(".ms{j}",{{opacity:0}},{{opacity:1,duration:.2,immediateRender:false}},{t0:.3f});')
+        d = 1.1 + h(j * 5 + 2) * .6
+        rep = max(1, int((end - .3 - t0) / d))
+        rep -= 1 - rep % 2
+        add(f'tl.fromTo(".ms{j}",{{x:{ax - 10:.0f},y:{ay - 10:.0f}}},{{x:{bx - 10:.0f},y:{by - 10:.0f},duration:{d:.2f},yoyo:true,repeat:{rep},ease:"sine.inOut",immediateRender:false}},{t0:.3f});')
+        to(f".ms{j}", end - .3, "opacity:0", .2)
+    # "fifteen days" counts up
+    count(".n15", T["fifteen"] - .05, 1, 15, .55, "power2.out")
+    # the case file types its title, a scan line reads it, a REAL STUDY stamp lands on "actually tried it"
+    for k, c in enumerate("Emergence World"):
+        if c != " ":
+            pop(f".tl{k}", T["emergence"] + .05 + k * .035, "opacity:0,y:12", .12, "power2.out", "opacity:1,y:0")
+    add(f'tl.fromTo(".scan",{{opacity:.8,y:0}},{{opacity:.8,y:250,duration:.7,repeat:1,ease:"none",immediateRender:false}},{T["emergence"] + .1:.3f});')
+    to(".scan", T["emergence"] + 1.5, "opacity:0", .1)
+    pop(".rs", T["tried"] - .05, "scale:2.4,opacity:0,rotation:-24", .26, "back.out(2)", "scale:1,opacity:1,rotation:-10")
+    to(".rs", L[2] + .1, "opacity:0", .25)
+    # ten agents each, and they start milling around their towns
+    for i in range(4):
+        for a in range(10):
+            n = i * 10 + a
+            yoyo(f".ag{i}_{a}", T["ten"] + .65 + h(n) * .3, end, f"x:{(h(n * 3 + 1) - .5) * 22:.1f},y:{(h(n * 7 + 5) - .5) * 20:.1f}", .7 + h(n * 11) * .5)
+    # "credits to stay alive": the energy bar drains, coins fly to each town, the bar refills
+    add(f'tl.fromTo(".nbar i",{{scaleX:1}},{{scaleX:.18,duration:.55,ease:"power2.in",immediateRender:false}},{T["credits"] - .05:.3f});')
+    tgt = [(318, 945), (762, 945), (291, 1383), (789, 1383)]
+    for j in range(8):
+        tx, ty = tgt[j % 4]
+        dx, dy = tx - 207, ty - 1452
+        t0 = T["credits"] + .25 + j * .07
+        add(f'tl.fromTo(".fc{j}",{{x:0,y:0,opacity:0,scale:.6}},{{keyframes:[{{x:{dx * .5:.0f},y:{min(dy * .5, 0) - 160:.0f},opacity:1,scale:1.1,duration:.28,ease:"power1.out"}},'
+            f'{{x:{dx},y:{dy},scale:.5,duration:.28,ease:"power1.in"}},{{opacity:0,duration:.06}}],immediateRender:false}},{t0:.3f});')
+    for i in range(4):
+        add(f'tl.fromTo(".kd{i} .emb",{{scale:1}},{{scale:1.14,duration:.1,yoyo:true,repeat:1,ease:"sine.out",immediateRender:false}},{T["credits"] + .78 + i * .07:.3f});')
+    add(f'tl.to(".nbar i",{{scaleX:1,duration:.4,ease:"back.out(2)"}},{T["credits"] + .85:.3f});')
+    # "but there were shortcuts": the red alert frame pulses
+    add(f'tl.fromTo("#alert",{{opacity:0}},{{opacity:.85,duration:.16,yoyo:true,repeat:3,ease:"sine.inOut",immediateRender:false}},{T["shortcuts"] - .1:.3f});')
+    # the houses burn out or grey with their towns, and come back for the mixed world
+    add(f'tl.to(".kd{KI["grok"]} .hs",{{filter:"grayscale(1) brightness(.45)",duration:.4}},{T["alive4"] - .1:.3f});')
+    add(f'tl.to(".kd{KI["chatgpt"]} .hs",{{filter:"grayscale(1) brightness(.5)",duration:.4}},{T["seven"]:.3f});')
+    add(f'tl.to(".hs",{{filter:"grayscale(0) brightness(1)",duration:.4}},{L[7]:.3f});')
 
 
 # ---------------------------------------------------------------- captions: up to 4 words at a time, the spoken word boxed
@@ -348,6 +463,8 @@ def captions():
             add(f'tl.set("#{cid}",{{opacity:0}},{z:.3f});')
             for k, w in enumerate(ch):
                 add(f'tl.set("#{cid}_{k}",{{attr:{{class:"w on"}}}},{w["s"]:.3f});')
+                if ln["line"] <= 3:   # the opening words punch in as they are spoken
+                    add(f'tl.fromTo("#{cid}_{k}",{{scale:1.22}},{{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false}},{w["s"]:.3f});')
                 add(f'tl.set("#{cid}_{k}",{{attr:{{class:"w"}}}},{w["e"] + .02:.3f});')
     return "".join(html)
 
@@ -466,6 +583,23 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
 .cur { display: inline-block; width: 10px; height: 118px; margin-left: 10px; vertical-align: -10px; border-radius: 5px; background: #fff; }
 .ec-2 { font: italic 54px "Serif"; color: #D45C40; }
 .ec-h { margin-top: 18px; font-size: 32px; letter-spacing: 4px; color: #1E1B18; }
+.ring { position: absolute; width: 140px; height: 140px; border-radius: 50%; border: 6px solid; opacity: 0; }
+.hs { position: absolute; width: 30px; height: 22px; border-radius: 3px; background: #FFFDF8; border: 3px solid #1E1B18; opacity: 0; }
+.hs::before { content: ""; position: absolute; left: -6px; top: -17px; border-left: 18px solid transparent; border-right: 18px solid transparent;
+  border-bottom: 14px solid var(--c); }
+.msg { position: absolute; left: 0; top: 0; width: 20px; height: 20px; border-radius: 50%; border: 3px solid #1E1B18; opacity: 0; }
+.live { display: flex; align-items: center; gap: 10px; font-size: 22px; letter-spacing: 3px; color: #D9483B; }
+.live b { width: 14px; height: 14px; border-radius: 50%; background: #D9483B; }
+.dossier { overflow: hidden; }
+.dossier b em { font-style: normal; display: inline-block; opacity: 0; }
+.scan { position: absolute; left: 0; right: 0; top: 0; height: 4px; background: #E8735A; opacity: 0; }
+.rs { position: absolute; left: 600px; top: 735px; padding: 8px 18px; border: 6px solid #D9483B; border-radius: 14px; color: #D9483B;
+  font: 800 38px/1 "Manrope"; letter-spacing: 1px; background: rgba(255,253,248,.9); opacity: 0; }
+.nbar { flex: none; margin-left: auto; width: 110px; height: 22px; border-radius: 11px; border: 3px solid #1E1B18; overflow: hidden; }
+.nbar i { display: block; height: 100%; background: #3FA372; transform-origin: 0 50%; }
+.fc { position: absolute; left: 190px; top: 1435px; width: 34px; height: 34px; border-radius: 50%; background: #F2B33D; border: 3px solid #1E1B18;
+  display: flex; align-items: center; justify-content: center; font: 800 18px "Manrope"; color: #1E1B18; opacity: 0; }
+#alert { position: absolute; inset: 0; border: 16px solid #D9483B; opacity: 0; }
 #fx { z-index: 7; }
 #flash { position: absolute; inset: 0; background: #FFFDF8; opacity: 0; }
 """
@@ -491,14 +625,14 @@ def main():
       <div id="grid" class="clip" data-start="0" data-duration="{DUR}" data-track-index="0" data-layout-ignore></div>
       <div id="stage" class="clip" data-start="0" data-duration="{DUR}" data-track-index="1" data-layout-allow-overflow>
         <div id="radar"></div>
-        <div id="cam"><div id="tilt">{kds}{fires()}</div></div>
+        <div id="cam"><div id="tilt">{kds}{fires()}{messengers()}</div></div>
       </div>
       <div id="ui" class="clip" data-start="0" data-duration="{DUR}" data-track-index="3" data-layout-allow-overflow>
-        <div class="top"><span class="brand mono"><b>&#9679;</b> AI.NXTLVL</span><span class="prog"><i></i></span></div>
+        <div class="top"><span class="brand mono"><b>&#9679;</b> AI.NXTLVL</span><span class="live mono"><b></b>SIMULATION</span><span class="prog"><i></i></span></div>
         {OVER}{hud()}{endc}
       </div>
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="4">{caps}</div>
-      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="5" data-layout-ignore><div id="flash"></div></div>
+      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="5" data-layout-ignore><div id="flash"></div><div id="alert"></div></div>
       <audio id="mix" src="assets/audio/{mix}" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
     </div>
     <script>
