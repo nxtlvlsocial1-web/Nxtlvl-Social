@@ -1,60 +1,63 @@
-"""Writes index.html (footage, camera moves, scene hosts, music and SFX) and compositions/captions.html.
+"""Writes index.html (split screen: the cut take on top, panels below, camera zooms, music, SFX) and
+compositions/captions.html from transcript-cut.json (made by tools/cut.py).
 
-Film time = source time - TRIM. Word timings come from transcript.json (ElevenLabs Scribe, corrected).
-Run from the project folder:  python3 tools/build.py && npx hyperframes check
+Layout on 1080x1920: the take fills the top half (0-960), cropped to the face; the brand panel fills the bottom half.
+Captions sit just under the seam (y ~990-1080); panel graphics live in y 1100-1490; nothing readable below 1520
+(Meta's caption and Send message button).
+Run from the project folder:  python3 tools/cut.py && python3 tools/build.py && npx hyperframes check
 """
 import html
 import json
 import os
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
-TRIM, SRC_END = 1.2, 24.96            # source seconds kept: [1.2, 24.96] (the whole take after the silent start)
-DUR = round(SRC_END - TRIM, 2)        # 23.76 s
+CUT = json.load(open(os.path.join(ROOT, 'transcript-cut.json')))
+WORDS, SEGS = CUT['words'], CUT['segments']
+DUR = round(CUT['duration'], 2)       # 21.83 s
+END = 19.66                            # the end card takes the whole frame from here
 FPS = 30
-WORDS = [dict(w, start=round(w['start'] - TRIM, 3), end=round(w['end'] - TRIM, 3))
-         for w in json.load(open(os.path.join(ROOT, 'transcript.json')))]
 
 
 def q(t):
-    """Quantise to the frame grid."""
     return round(round(t * FPS) / FPS, 4)
 
 
 # ---------------------------------------------------------------- captions
-# (first word index, word count, group start, group end, keyword indices within the group)
+# (first word index, word count, keyword indices within the group); times come from the words
 GROUPS = [
-    (0, 3, 0.20, 1.16, {2}),       # We took @ai.nxtlvl
-    (3, 3, 1.16, 1.64, {1}),       # from zero to
-    (6, 2, 1.64, 2.76, {0}),       # 7,100 followers
-    (8, 4, 2.76, 3.96, {2, 3}),    # with just 22 posts.
-    (16, 2, 5.38, 5.75, set()),    # and here's
-    (18, 3, 5.75, 6.56, {1}),      # what's inside it.
-    (58, 3, 18.60, 19.10, set()),  # Want this for
-    (61, 3, 19.10, 19.84, {2}),    # your own brand?
-    (64, 4, 19.94, 20.56, set()),  # Reach out to us
-    (68, 4, 20.56, 21.52, {2, 3}), # and tap Send Message.
+    (0, 3, {2}), (3, 3, {1}), (6, 2, {0}), (8, 4, {2, 3}),          # hook
+    (16, 2, set()), (18, 3, {1}),                                    # and here's what's inside it  ("Not luck, a system" is the panel)
+    (21, 3, set()), (24, 4, {3}), (28, 3, set()),                    # designs
+    (31, 3, {1, 2}), (34, 4, {2, 3}),                                # calendar
+    (38, 4, {0}), (42, 5, {2}),                                      # reels
+    (47, 3, set()), (50, 3, {0}), (53, 4, set()), (57, 1, {0}),      # price
+    (58, 3, set()), (61, 3, {2}), (64, 4, set()), (68, 4, {2, 3}),   # CTA
 ]
 
 
 def captions():
-    groups_html, js = [], []
-    for g, (i0, n, gs, ge, kw) in enumerate(GROUPS):
-        words = WORDS[i0:i0 + n]
-        spans = ''.join(
-            f'<span id="cw-{g}-{k}" class="cw{" kw" if k in kw else ""}">{html.escape(w["text"])}</span>'
-            for k, w in enumerate(words))
-        groups_html.append(f'<div id="cg-{g}" class="cg">{spans}</div>')
-        gs, ge = q(gs), q(ge)
+    spans_html, js = [], []
+    bounds = []
+    for g, (i0, n, kw) in enumerate(GROUPS):
+        ws = WORDS[i0:i0 + n]
+        bounds.append((ws[0]['start'] - 0.06, ws[-1]['end'] + 0.06))
+    for g, (i0, n, kw) in enumerate(GROUPS):
+        ws = WORDS[i0:i0 + n]
+        gs = q(max(0.08, bounds[g][0]))
+        nxt = bounds[g + 1][0] if g + 1 < len(bounds) else END
+        ge = q(min(max(bounds[g][1], gs + 0.45), nxt, END))           # never overlaps the next group
+        spans = ''.join(f'<span id="cw-{g}-{k}" class="cw{" kw" if k in kw else ""}">{html.escape(w["text"])}</span>'
+                        for k, w in enumerate(ws))
+        spans_html.append(f'<div id="cg-{g}" class="cg">{spans}</div>')
         js.append(f'tl.set("#cg-{g}", {{ visibility: "visible" }}, {gs});')
-        js.append(f'tl.fromTo("#cg-{g}", {{ opacity: 0, filter: "blur(8px)" }}, '
-                  f'{{ opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power2.out" }}, {gs});')
-        for k, w in enumerate(words):
-            ws, we = q(max(w['start'], gs)), q(min(w['end'] + 0.04, ge - 0.02))
-            js.append(f'tl.to("#cw-{g}-{k}", {{ backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, '
-                      f'duration: 0.06, ease: "power2.out" }}, {ws});')
-            js.append(f'tl.to("#cw-{g}-{k}", {{ backgroundColor: "rgba(125,24,252,0)", scale: 1, '
-                      f'duration: 0.08, ease: "power2.in" }}, {max(ws + 0.07, we)});')
-        js.append(f'tl.to("#cg-{g}", {{ opacity: 0, duration: 0.1, ease: "power2.in" }}, {q(ge - 0.1)});')
+        js.append(f'tl.fromTo("#cg-{g}", {{ opacity: 0, y: 14, filter: "blur(6px)" }}, '
+                  f'{{ opacity: 1, y: 0, filter: "blur(0px)", duration: 0.14, ease: "power2.out" }}, {gs});')
+        for k, w in enumerate(ws):
+            t = q(max(w['start'], gs))
+            lit = '#D3AEFF' if k in kw else '#FFFFFF'
+            js.append(f'tl.to("#cw-{g}-{k}", {{ color: "{lit}", scale: 1.08, duration: 0.07, ease: "power2.out" }}, {t});')
+            js.append(f'tl.to("#cw-{g}-{k}", {{ scale: 1, duration: 0.16, ease: "power3.out" }}, {q(t + 0.1)});')
+        js.append(f'tl.to("#cg-{g}", {{ opacity: 0, duration: 0.08, ease: "power2.in" }}, {q(ge - 0.08)});')
         js.append(f'tl.set("#cg-{g}", {{ opacity: 0, visibility: "hidden" }}, {ge});')
     return f"""<template>
   <link rel="stylesheet" href="assets/css/ad.css" />
@@ -63,17 +66,15 @@ def captions():
     @font-face {{ font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }}
     @font-face {{ font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }}
     #root {{ position: absolute; inset: 0; overflow: visible; pointer-events: none; }}
-    /* one caption line, centred on the chest band (y 1200-1310), under the chin and above Meta's buttons */
-    .cg {{ position: absolute; left: 60px; right: 60px; top: 1196px; text-align: center; visibility: hidden;
-          font-family: "Archivo", sans-serif; font-weight: 800; font-stretch: 104%; font-size: 70px; line-height: 1.18;
-          letter-spacing: -.01em; color: #FFFFFF; white-space: nowrap; }}
-    .cw {{ display: inline-block; margin: 0 .07em; padding: 0 .14em; border-radius: 16px; background: rgba(125,24,252,0);
-          -webkit-text-stroke: 9px rgba(5,3,12,.82); paint-order: stroke fill; text-shadow: 0 6px 22px rgba(5,3,12,.55); }}
-    .cw.kw {{ color: #E2CCFF; }}
+    /* captions in the "Not luck." serif, just under the seam; words light up as they are said */
+    .cg {{ position: absolute; left: 40px; right: 40px; top: 984px; height: 96px; text-align: center; visibility: hidden;
+          font-family: "Instrument Serif", serif; font-style: italic; font-size: 76px; line-height: 96px; white-space: nowrap; }}
+    .cw {{ display: inline-block; margin: 0 .1em; color: rgba(245,242,255,.42); transform-origin: 50% 70%;
+          text-shadow: 0 4px 24px rgba(5,3,12,.8); }}
   </style>
   <script src="assets/vendor/gsap.min.js"></script>
-  <div id="root" data-composition-id="captions" data-width="1080" data-height="1920" data-duration="{DUR}">
-    {chr(10).join('    ' + h for h in groups_html).strip()}
+  <div id="root" data-composition-id="captions" data-width="1080" data-height="1920" data-duration="{END}">
+    {chr(10).join('    ' + h for h in spans_html).strip()}
   </div>
   <script>
     (function () {{
@@ -93,25 +94,28 @@ SFX_PEAK = {  # measured peak (s into the file), file length (s)
     'impact-bass-1': (0.08, 2.12), 'impact-bass-2': (2.04, 2.59), 'notification': (0.24, 2.46), 'click-soft': (0.06, 0.37),
 }
 CUES = [  # (film time the sound should hit, sound, volume)
-    (2.42, 'pop', 0.30), (2.46, 'sparkle', 0.16),          # followers land on 7,100
-    (3.52, 'pop', 0.26),                                   # 22 posts
-    (4.34, 'whoosh-short', 0.20),                          # punch-in on "Not"
-    (4.94, 'impact-bass-1', 0.30),                         # "A system."
-    (6.62, 'whoosh-cinematic', 0.22),                      # the camera pulls back into the window
-    (7.00, 'pop', 0.24), (9.42, 'whoosh-short', 0.16), (9.46, 'pop', 0.22),
-    (11.46, 'whoosh-short', 0.16), (11.50, 'pop', 0.22),   # the three service cards
-    (14.24, 'whoosh-short', 0.18), (15.42, 'pop', 0.22),   # price card, ₹25,000
-    (16.42, 'click-soft', 0.30),                           # strike-through
-    (17.64, 'pop', 0.28), (17.66, 'sparkle', 0.24),        # ₹999
-    (18.52, 'whoosh-cinematic', 0.20),                     # camera opens back to full frame
-    (20.00, 'notification', 0.20),                         # Tap Send Message chip
-    (21.56, 'impact-bass-2', 0.30), (21.58, 'sparkle', 0.22),  # end card
+    (2.30, 'pop', 0.30), (2.32, 'sparkle', 0.16),              # 7,100 lands
+    (3.00, 'pop', 0.24),                                       # 22 posts
+    (3.84, 'whoosh-short', 0.18),                              # cut + punch-in on "Not luck"
+    (4.31, 'click-soft', 0.30),                                # strike
+    (4.51, 'impact-bass-1', 0.30),                             # "A system."
+    (5.55, 'whoosh-short', 0.16),                              # the three rows appear
+    (6.18, 'pop', 0.22), (7.16, 'pop', 0.16), (8.16, 'click-soft', 0.28),
+    (8.31, 'pop', 0.22), (10.09, 'click-soft', 0.28),
+    (10.25, 'pop', 0.22), (12.69, 'click-soft', 0.28),          # rows light up, then tick
+    (12.83, 'whoosh-short', 0.18), (13.92, 'pop', 0.22),       # price tiles, ₹25,000
+    (15.13, 'click-soft', 0.30),                               # strike
+    (15.99, 'pop', 0.28), (16.01, 'sparkle', 0.24),            # ₹999
+    (16.85, 'whoosh-short', 0.16),                             # "your brand"
+    (18.08, 'notification', 0.18),                             # the Send message button
+    (18.88, 'click-soft', 0.34),                               # "tap"
+    (19.68, 'impact-bass-2', 0.30), (19.70, 'sparkle', 0.22),  # end card
 ]
 
 
 def audio():
     tags = [f'<audio id="el-bgm" src="assets/music/nxtlvl-brand.wav" data-start="0" data-duration="{DUR}" '
-            f'data-media-start="4" data-volume="0.14" data-fade-out="1.2" data-track-index="10"></audio>']
+            f'data-media-start="4" data-volume="0.13" data-fade-out="1.2" data-track-index="10"></audio>']
     for i, (hit, name, vol) in enumerate(CUES):
         peak, length = SFX_PEAK[name]
         start = max(0.0, round(hit + 1 / FPS - peak, 3))
@@ -123,13 +127,15 @@ def audio():
 
 # ---------------------------------------------------------------- root
 SCENES = [  # id, start, end, z
-    ('stage', 6.44, 19.06, 1),
-    ('01-hook', 0, 4.40, 5),
-    ('02-system', 4.30, 5.42, 5),
-    ('03-inside', 6.48, 14.26, 6),
-    ('04-price', 14.14, 18.62, 6),
-    ('05-cta', 19.80, DUR, 9),
+    ('panel', 0, END, 3),
+    ('p1-hook', 0, 3.84, 5),
+    ('p2-system', 3.84, 5.6, 5),
+    ('p3-inside', 5.45, 12.8, 5),
+    ('p4-price', 12.77, 16.82, 5),
+    ('p5-cta', 16.8, DUR, 9),
 ]
+# one framing per cut: the jump cuts alternate the zoom so each lands as a new shot
+ZOOMS = [1.0, 1.15, 1.0, 1.1, 1.0, 1.1, 1.22, 1.0, 1.12]
 
 
 def index():
@@ -137,6 +143,10 @@ def index():
         f'<div id="el-{sid}" class="scene clip" data-composition-id="{sid}" data-composition-src="compositions/{sid}.html" '
         f'data-start="{s}" data-duration="{round(e - s, 2)}" data-track-index="{2 + n}" data-track-kind="graphics" '
         f'style="z-index:{z}"></div>' for n, (sid, s, e, z) in enumerate(SCENES))
+    zoom_js = []
+    for seg, s in zip(SEGS, ZOOMS):
+        zoom_js.append(f'tl.set("#cam", frame({s}), {q(seg["film"])});')
+    zoom_js.append('tl.set("#cam", frame(1.26), 4.5);                 // "A system." - tighter, inside the same cut')
     return f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
   <head>
@@ -144,47 +154,41 @@ def index():
     <meta name="viewport" content="width=1080, height=1920" />
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
-      * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-      html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #05030C; }}
       @font-face {{ font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }}
       @font-face {{ font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }}
       @font-face {{ font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }}
+      * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+      html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #05030C; }}
       body {{ font-family: "Archivo", "Instrument Sans", sans-serif; }}
       #root {{ position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #05030C; }}
       .scene {{ position: absolute; inset: 0; width: 100%; height: 100%; }}
-      /* the camera: GSAP scales and moves this wrapper (origin top-left) and crops it with clip-path */
-      #cam {{ position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 2; transform-origin: 0 0; overflow: hidden; }}
+      /* the top half: a fixed window onto the take; the camera inside it zooms per cut */
+      #pane {{ position: absolute; left: 0; top: 0; width: 1080px; height: 960px; overflow: hidden; z-index: 2; background: #05030C; }}
+      #cam {{ position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; }}
       #a-roll {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }}
     </style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-width="1080" data-height="1920">
-      <div id="cam" data-layout-allow-overflow>
-        <video id="a-roll" class="clip" src="assets/video/footage.mp4" playsinline data-has-audio="true"
-          data-start="0" data-duration="{DUR}" data-media-start="{TRIM}" data-track-index="0"></video>
+      <div id="pane" data-layout-allow-overflow>
+        <div id="cam" data-layout-allow-overflow>
+          <video id="a-roll" class="clip" src="assets/video/aroll.mp4" playsinline data-has-audio="true"
+            data-start="0" data-duration="{DUR}" data-track-index="0"></video>
+        </div>
       </div>
 
       {hosts}
       <div id="el-captions" class="scene clip" data-composition-id="captions" data-composition-src="compositions/captions.html"
-        data-start="0" data-duration="{DUR}" data-track-index="1" data-track-kind="captions" style="z-index:8"></div>
+        data-start="0" data-duration="{END}" data-track-index="1" data-track-kind="captions" style="z-index:7"></div>
 
       {audio()}
     </div>
     <script>
       (function () {{
         var tl = gsap.timeline({{ paused: true }});
-        // punch-ins scale about the chin (540, 1150) so the face rises and the caption band stays clear
-        function punch(s) {{ return {{ scale: s, x: 540 * (1 - s), y: 1150 * (1 - s) }}; }}
-        var FULL = "inset(0px 0px 0px 0px round 0px)";
-        // the face window: source rect x 90-990, y 360-1200, shown at 0.72 at (216, 262) -> 648 x 605
-        var WIN = "inset(360px 90px 720px 90px round 56px)";
-        tl.set("#cam", {{ scale: 1, x: 0, y: 0, clipPath: FULL }}, 0);
-        tl.set("#cam", punch(1.16), 4.3333);                       // "Not luck" - hard cut in
-        tl.set("#cam", punch(1.26), 4.9333);                       // "A system." - tighter
-        tl.set("#cam", punch(1), 5.4);                             // "and here's what's inside it" - back out
-        tl.to("#cam", {{ scale: 0.72, x: 151.2, y: 2.8, clipPath: WIN, duration: 0.6, ease: "power3.inOut" }}, 6.5);
-        tl.to("#cam", {{ scale: 1, x: 0, y: 0, clipPath: FULL, duration: 0.6, ease: "power3.inOut" }}, 18.45);
-        tl.set("#cam", punch(1.1), 19.9667);                       // "Reach out to us" - punch in
+        // keep the face centre (source 540, 850) at (540, 550) in the 1080x960 window at any zoom
+        function frame(s) {{ return {{ scale: s, x: 540 * (1 - s), y: 550 - 850 * s }}; }}
+        {chr(10).join('        ' + z for z in zoom_js).strip()}
         window.__timelines = window.__timelines || {{}};
         window.__timelines["main"] = tl;
       }})();

@@ -1,29 +1,43 @@
-# Nxtlvl Social — "Not luck. A system." ad (9:16, 23.3 s)
+# Nxtlvl Social — "Not luck. A system." ad (9:16 split screen, 21.8 s) — v2
 
-Meta click-to-message ad (Reels / Stories placement) built on the selfie take. The footage plays with its own
-sound; the first 1.2 s of silence is trimmed so he speaks at 0.24 s. Times below are film time (source − 1.2 s).
+Meta click-to-message ad (Reels / Stories placement) built on the selfie take.
 
-Safe zones on 1080×1920: nothing readable above y 270 (status bar, ad label) or below y 1330 (Meta's caption,
-"Send message" button). The face sits at y 450–1180 at full frame.
+**v2 changes (from the person's notes):** split screen; captions and statements in the "Not luck." serif
+(Instrument Serif italic), placed under the seam; jump cuts that remove every pause; a cleaned, levelled voice;
+more motion in the panels.
 
-| Time | Speech | Picture | Sound |
-|---|---|---|---|
-| 0.00–4.34 | "We took @ai.nxtlvl from zero to 7,100 followers with just 22 posts." | Full frame. An Instagram-profile card for @ai.nxtlvl sits above his head from frame 0: followers count 0 → 7,100 on "7,100", posts 0 → 22 on "22", a "+7,100" chip pops. Word-by-word captions on the chest. | pop on 7,100, pop on 22 |
-| 4.34–6.50 | "Not luck, a system, and here's what's inside it." | Punch-in on "Not luck" (hard cut to 1.16×), "Not luck." in serif with a strike-through, then "A system." slams in violet (1.26×). Captions return for "and here's what's inside it". | whoosh on punch-in, soft impact on "system" |
-| 6.50–14.20 | the three services | Camera pulls back into a rounded face window at the top; the brand stage fills the frame. Three cards land one by one under it, synced to speech: 01 designs made to be saved (bookmark fills), 02 a content calendar a month ahead (month grid fills), 03 reels edited and posted every week (week chips tick). | whoosh into the window, pop per card |
-| 14.20–18.45 | "Most agencies charge ₹25,000 for this, but we start at ₹999." | Same window. Price card: "Most agencies ₹25,000" is struck through, then "Nxtlvl Social, starts at ₹999" lands with a "96% less" chip. | pop, strike tick, sparkle on ₹999 |
-| 18.45–21.50 | "Want this for your own brand? Reach out to us and tap Send Message." | Camera opens back to full frame. Captions. A "Tap Send Message" chip drops in above his head on "Reach out". | whoosh, notification on the chip |
-| 21.50–23.30 | (end) | End card over the dimmed take: Shooting Star + nxtlvl wordmark, "Your social, on a system.", a big "Tap Send Message" button with an arrow down to Meta's button, "Plans from ₹999". Holds 1.8 s. | soft impact + sparkle |
+## Edit and sound
 
-Music: the Nxtlvl brand bed (our own track from `nxtlvl-brand-16x9`), entered at its 4 s drop, 0.14 under the voice,
-fading out over the last second.
+- `tools/cut.py` cuts the take into nine sentences (each ~80 ms before the first word and after the last), joins
+  them with 12 ms audio fades, and cleans the voice: high-pass 80 Hz, light de-noise, −2.5 dB at 250 Hz, +2.5 dB at
+  3.5 kHz, compression 3.5:1, two-pass loudness normalisation to −16 LUFS / −1.5 dBTP. 23.8 s became 21.8 s; the
+  voice's loudness range went from 7.4 LU to 2.3 LU.
+- Every cut changes the framing (1.0 / 1.15 / 1.0 / 1.1 / 1.0 / 1.1 / 1.22 / 1.0 / 1.12, plus 1.26 on "A system."),
+  so each jump lands as a new shot.
+- Music: the Nxtlvl brand bed at 0.13 under the voice. SFX on the counter, strikes, row ticks, ₹999, the tap and
+  the end card. Final mix measured at −15 LUFS, −1.2 dBTP.
+
+## Layout (1080×1920)
+
+Top half (0–960): the take, cropped to the face. A glowing seam at 960. Captions just under it (y 984–1080),
+word by word in the serif. Panel graphics in y 1100–1500. Below that only decoration (Meta's caption and
+Send message button sit there).
+
+| Film time | Speech | Panel |
+|---|---|---|
+| 0.00–3.84 | "We took @ai.nxtlvl from zero to 7,100 followers with just 22 posts." | @ai.nxtlvl profile row; a giant counter 0 → 7,100 while a growth line draws; posts 0 → 22; "in 22 posts" chip |
+| 3.84–5.60 | "Not luck, a system," | "Not luck." in the serif, struck through; "A system." lands big with a flash (no captions here) |
+| 5.45–12.80 | "and here's what's inside it." + the three services | "Inside the system" checklist: three rows light up as they are named (bookmarks fill, a month fills, four weeks tick) and turn into green ticks |
+| 12.77–16.82 | "Most agencies charge ₹25,000 for this, but we start at ₹999." | Two tiles, VS: ₹25,000 struck through, ₹999 lands with a "96% less" chip |
+| 16.80–18.04 | "Want this for your own brand?" | "@yourbrand" chip and "Your brand, next." |
+| 18.04–19.66 | "Reach out to us and tap Send Message." | A big Send message button; a finger taps it on "tap" |
+| 19.66–21.83 | (end) | Full-frame end card: Shooting Star + nxtlvl social, "Not luck. A system.", Tap Send Message, "Plans from ₹999" (holds 2.2 s) |
 
 ## Rebuilding
 
-- The footage (`assets/video/footage.mp4`) is kept out of git. Recreate it from the original selfie take with dense
-  keyframes (the original has one every 5 s, which freezes on seek):
-  `ffmpeg -i <original>.mp4 -vf scale=1080:1920:flags=lanczos -c:v libx264 -crf 17 -g 30 -keyint_min 30 -pix_fmt yuv420p -movflags +faststart -c:a aac -b:a 192k assets/video/footage.mp4`
-- `transcript.json` is the ElevenLabs Scribe transcript of the take, corrected (handle, figures, prices) with the
-  original word timings. `python3 tools/build.py` writes `index.html` (camera, scene hosts, music, SFX) and
-  `compositions/captions.html` from it; the cards are hand-written scenes in `compositions/`.
-- Check with `npx hyperframes check`, render with `npx hyperframes render --quality draft|delivery`.
+- `assets/video/footage.mp4` and `assets/video/aroll.mp4` are kept out of git. Recreate the footage from the
+  original take: `ffmpeg -i <original>.mp4 -vf scale=1080:1920:flags=lanczos -c:v libx264 -crf 17 -g 30 -keyint_min 30 -pix_fmt yuv420p -movflags +faststart -c:a aac -b:a 192k assets/video/footage.mp4`
+- Then `python3 tools/cut.py` (the cut + `transcript-cut.json`), `python3 tools/build.py` (index.html and the caption
+  track), `npx hyperframes check`, `npx hyperframes render --quality draft|delivery`.
+- `transcript.json` is the ElevenLabs Scribe transcript of the take, corrected (handle, figures, prices) with its
+  original word timings.

@@ -1,0 +1,55 @@
+<template>
+  <link rel="stylesheet" href="assets/css/ad.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    /* the bottom half: brand ground, a faint grid, light from the seam */
+    #pn-ground { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px;
+      background:
+        radial-gradient(700px 360px at 50% 0%, rgba(125,24,252,.42), rgba(125,24,252,0) 70%),
+        radial-gradient(700px 600px at 100% 100%, rgba(94,6,242,.35), rgba(94,6,242,0) 70%),
+        linear-gradient(180deg, #0D0626 0%, #070413 45%, #05030C 100%); }
+    #pn-grid { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px; opacity: .55;
+      background-image: linear-gradient(rgba(216,187,255,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(216,187,255,.055) 1px, transparent 1px);
+      background-size: 60px 60px; background-position: 30px 0;
+      -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%); }
+    /* the seam between the take and the panel */
+    #pn-seam { position: absolute; left: 0; top: 957px; width: 1080px; height: 6px;
+      background: linear-gradient(90deg, rgba(169,92,255,0), #C9A6FF 22%, #FFFFFF 50%, #C9A6FF 78%, rgba(169,92,255,0));
+      box-shadow: 0 0 22px rgba(169,92,255,.9), 0 0 60px rgba(125,24,252,.6); }
+    #pn-fade { position: absolute; left: 0; top: 820px; width: 1080px; height: 140px;
+      background: linear-gradient(180deg, rgba(5,3,12,0), rgba(5,3,12,.55)); }
+    /* decoration only, low in the panel where Meta's caption and button sit */
+    #pn-deco { position: absolute; left: 640px; top: 1500px; width: 460px; height: 460px; opacity: .14; }
+    #pn-deco svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="panel" data-width="1080" data-height="1920" data-duration="19.66">
+    <div id="pn-base" class="clip" data-start="0" data-duration="19.66" data-track-index="0" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <div id="pn-ground"></div>
+      <div id="pn-grid"></div>
+      <div id="pn-deco" data-layout-allow-overflow><svg viewBox="20.6 31.6 147.8 147.8"><defs>
+        <linearGradient id="pn-g0" gradientUnits="userSpaceOnUse" x1="28.3" y1="171.7" x2="121.6" y2="78.4"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".55" stop-color="#FFFFFF" stop-opacity=".9"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+        <linearGradient id="pn-g1" gradientUnits="userSpaceOnUse" x1="69.3" y1="164.7" x2="121.6" y2="112.3"><stop offset="0" stop-color="#A95CFF" stop-opacity="0"/><stop offset=".55" stop-color="#A95CFF" stop-opacity=".9"/><stop offset="1" stop-color="#A95CFF"/></linearGradient>
+        <linearGradient id="pn-g2" gradientUnits="userSpaceOnUse" x1="43.8" y1="122.2" x2="82.0" y2="84.0"><stop offset="0" stop-color="#B98AFF" stop-opacity="0"/><stop offset=".55" stop-color="#B98AFF" stop-opacity=".9"/><stop offset="1" stop-color="#B98AFF"/></linearGradient></defs>
+        <path d="M125.94 83.55 L125.37 80.68 L123.99 78.09 L122.30 76.31 L119.78 74.81 L116.94 74.09 L114.00 74.24 L111.24 75.23 L109.24 76.64 L22.62 177.38 L122.67 91.45 L124.77 88.76 L125.85 85.51Z" fill="url(#pn-g0)"/>
+        <path d="M123.37 116.27 L122.36 113.23 L120.46 111.42 L117.96 110.59 L115.63 110.82 L113.35 112.12 L65.05 168.89 L121.40 121.01 L122.92 118.86Z" fill="url(#pn-g1)"/>
+        <path d="M82.77 88.04 L81.79 85.30 L79.69 83.66 L76.80 83.38 L74.42 84.58 L39.59 126.47 L81.14 91.99 L82.40 90.20Z" fill="url(#pn-g2)"/>
+        <path d="M140 33.62 L141.87 42.15 L146.74 50.4 L154.06 56.37 L166.38 60 L154.06 63.63 L146.74 69.6 L141.87 77.85 L140 86.38 L138.13 77.85 L133.26 69.6 L125.94 63.63 L113.62 60 L125.94 56.37 L133.26 50.4 L138.13 42.15 Z" fill="#FFFFFF"/>
+      </svg></div>
+      <div id="pn-fade"></div>
+      <div id="pn-seam" data-layout-allow-overflow></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      // frame 0 is already the full split; the seam flares once as the film opens
+      tl.fromTo("#pn-seam", { scaleX: 0.55, opacity: 0.6 }, { scaleX: 1, opacity: 1, duration: 0.5, ease: "expo.out" }, 0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["panel"] = tl;
+    })();
+  </script>
+</template>

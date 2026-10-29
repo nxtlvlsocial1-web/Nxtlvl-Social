@@ -1,0 +1,50 @@
+<template>
+  <link rel="stylesheet" href="assets/css/ad.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+    #root { position: absolute; inset: 0; overflow: visible; }
+    /* the statement, in the serif: "Not luck." struck through above, "A system." landing big below */
+    .sy { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; line-height: 1;
+      font-family: "Instrument Serif", serif; font-style: italic; }
+    #sy-luck { opacity: 0; top: 1104px; font-size: 150px; color: #FFFFFF; text-shadow: 0 8px 30px rgba(5,3,12,.8); }
+    #sy-luck span { position: relative; display: inline-block; padding: 0 .08em; }
+    #sy-strike { position: absolute; left: -2%; top: 55%; width: 104%; height: 11px; border-radius: 6px; background: #FF5C7A;
+      transform-origin: 0 50%; box-shadow: 0 0 18px rgba(255,92,122,.7); }
+    #sy-sys { opacity: 0; top: 1268px; font-size: 196px; }
+    #sy-sys span { display: inline-block; padding: 0 .1em .06em;
+      background: linear-gradient(100deg, #FFFFFF 0%, #EAD9FF 28%, #B98AFF 62%, #FFFFFF 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 0 34px rgba(169,92,255,.7)); }
+    #sy-flash { opacity: 0; position: absolute; left: 0; top: 960px; width: 1080px; height: 560px;
+      background: radial-gradient(520px 260px at 50% 60%, rgba(216,187,255,.45), rgba(216,187,255,0) 70%); }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="p2-system" data-width="1080" data-height="1920" data-duration="1.76">
+    <div id="sy-a" class="clip" data-start="0" data-duration="1.76" data-track-index="0" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <div id="sy-flash" data-layout-allow-overflow></div>
+      <div id="sy-luck" class="sy"><span>Not luck.<i id="sy-strike"></i></span></div>
+      <div id="sy-sys" class="sy"><span>A system.</span></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      // local time = film time - 3.84
+      // "Not" (film 3.907): per-word blur in
+      tl.fromTo("#sy-luck", { opacity: 0, filter: "blur(10px)", y: 10 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "power2.out" }, 0.06);
+      // "luck," ends (film 4.31): struck through, then it steps back
+      tl.fromTo("#sy-strike", { scaleX: 0 }, { scaleX: 1, duration: 0.16, ease: "power3.out" }, 0.47);
+      tl.to("#sy-luck", { opacity: 0.4, duration: 0.25, ease: "power2.out" }, 0.62);
+      // "system" (film 4.507): lands big with a flash, then holds dead still
+      tl.fromTo("#sy-sys", { opacity: 0, scale: 1.4, filter: "blur(10px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.34, ease: "expo.out" }, 0.66);
+      tl.fromTo("#sy-flash", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power2.out" }, 0.66);
+      tl.to("#sy-flash", { opacity: 0, duration: 0.5, ease: "power2.out" }, 0.76);
+      // hand over to the checklist (film 5.45-5.60)
+      tl.to("#sy-a", { opacity: 0, y: -30, filter: "blur(8px)", duration: 0.16, ease: "power3.in" }, 1.6);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["p2-system"] = tl;
+    })();
+  </script>
+</template>

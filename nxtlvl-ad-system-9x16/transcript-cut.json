@@ -1,0 +1,412 @@
+{
+ "duration": 21.8333,
+ "segments": [
+  {
+   "film": 0.0,
+   "src_start": 1.3,
+   "src_end": 5.133333333333334
+  },
+  {
+   "film": 3.8333,
+   "src_start": 5.466666666666667,
+   "src_end": 7.733333333333333
+  },
+  {
+   "film": 6.1,
+   "src_start": 8.1,
+   "src_end": 10.233333333333333
+  },
+  {
+   "film": 8.2333,
+   "src_start": 10.566666666666666,
+   "src_end": 12.5
+  },
+  {
+   "film": 10.1667,
+   "src_start": 12.6,
+   "src_end": 15.2
+  },
+  {
+   "film": 12.7667,
+   "src_start": 15.433333333333334,
+   "src_end": 17.866666666666667
+  },
+  {
+   "film": 15.2,
+   "src_start": 18.033333333333335,
+   "src_end": 19.6
+  },
+  {
+   "film": 16.7667,
+   "src_start": 19.733333333333334,
+   "src_end": 20.966666666666665
+  },
+  {
+   "film": 18.0,
+   "src_start": 21.1,
+   "src_end": 24.933333333333334
+  }
+ ],
+ "words": [
+  {
+   "text": "We",
+   "start": 0.14,
+   "end": 0.22
+  },
+  {
+   "text": "took",
+   "start": 0.28,
+   "end": 0.4
+  },
+  {
+   "text": "@ai.nxtlvl",
+   "start": 0.54,
+   "end": 1.04
+  },
+  {
+   "text": "from",
+   "start": 1.08,
+   "end": 1.18
+  },
+  {
+   "text": "zero",
+   "start": 1.24,
+   "end": 1.42
+  },
+  {
+   "text": "to",
+   "start": 1.46,
+   "end": 1.52
+  },
+  {
+   "text": "7,100",
+   "start": 1.56,
+   "end": 2.3
+  },
+  {
+   "text": "followers",
+   "start": 2.36,
+   "end": 2.62
+  },
+  {
+   "text": "with",
+   "start": 2.66,
+   "end": 2.759
+  },
+  {
+   "text": "just",
+   "start": 2.8,
+   "end": 2.96
+  },
+  {
+   "text": "22",
+   "start": 3.0,
+   "end": 3.44
+  },
+  {
+   "text": "posts.",
+   "start": 3.52,
+   "end": 3.74
+  },
+  {
+   "text": "Not",
+   "start": 3.907,
+   "end": 4.087
+  },
+  {
+   "text": "luck,",
+   "start": 4.167,
+   "end": 4.307
+  },
+  {
+   "text": "a",
+   "start": 4.407,
+   "end": 4.427
+  },
+  {
+   "text": "system,",
+   "start": 4.507,
+   "end": 4.827
+  },
+  {
+   "text": "and",
+   "start": 4.967,
+   "end": 5.087
+  },
+  {
+   "text": "here's",
+   "start": 5.127,
+   "end": 5.307
+  },
+  {
+   "text": "what's",
+   "start": 5.327,
+   "end": 5.487
+  },
+  {
+   "text": "inside",
+   "start": 5.547,
+   "end": 5.907
+  },
+  {
+   "text": "it.",
+   "start": 5.947,
+   "end": 6.047
+  },
+  {
+   "text": "Designs",
+   "start": 6.18,
+   "end": 6.46
+  },
+  {
+   "text": "that",
+   "start": 6.48,
+   "end": 6.58
+  },
+  {
+   "text": "are",
+   "start": 6.6,
+   "end": 6.68
+  },
+  {
+   "text": "made",
+   "start": 6.74,
+   "end": 6.9
+  },
+  {
+   "text": "to",
+   "start": 6.94,
+   "end": 7.0
+  },
+  {
+   "text": "be",
+   "start": 7.04,
+   "end": 7.1
+  },
+  {
+   "text": "saved,",
+   "start": 7.14,
+   "end": 7.28
+  },
+  {
+   "text": "not",
+   "start": 7.32,
+   "end": 7.48
+  },
+  {
+   "text": "scrolled",
+   "start": 7.52,
+   "end": 7.84
+  },
+  {
+   "text": "past.",
+   "start": 7.92,
+   "end": 8.16
+  },
+  {
+   "text": "A",
+   "start": 8.307,
+   "end": 8.387
+  },
+  {
+   "text": "content",
+   "start": 8.447,
+   "end": 8.787
+  },
+  {
+   "text": "calendar",
+   "start": 8.847,
+   "end": 9.147
+  },
+  {
+   "text": "planned",
+   "start": 9.227,
+   "end": 9.447
+  },
+  {
+   "text": "a",
+   "start": 9.487,
+   "end": 9.527
+  },
+  {
+   "text": "month",
+   "start": 9.647,
+   "end": 9.867
+  },
+  {
+   "text": "ahead.",
+   "start": 9.887,
+   "end": 10.087
+  },
+  {
+   "text": "Reels",
+   "start": 10.247,
+   "end": 10.447
+  },
+  {
+   "text": "edited",
+   "start": 10.567,
+   "end": 10.787
+  },
+  {
+   "text": "and",
+   "start": 10.827,
+   "end": 10.967
+  },
+  {
+   "text": "posted",
+   "start": 11.067,
+   "end": 11.367
+  },
+  {
+   "text": "every",
+   "start": 11.547,
+   "end": 11.807
+  },
+  {
+   "text": "single",
+   "start": 11.907,
+   "end": 12.127
+  },
+  {
+   "text": "week",
+   "start": 12.207,
+   "end": 12.387
+  },
+  {
+   "text": "for",
+   "start": 12.427,
+   "end": 12.567
+  },
+  {
+   "text": "you.",
+   "start": 12.607,
+   "end": 12.687
+  },
+  {
+   "text": "Most",
+   "start": 12.833,
+   "end": 13.073
+  },
+  {
+   "text": "agencies",
+   "start": 13.113,
+   "end": 13.533
+  },
+  {
+   "text": "charge",
+   "start": 13.613,
+   "end": 13.833
+  },
+  {
+   "text": "\u20b925,000",
+   "start": 13.913,
+   "end": 14.733
+  },
+  {
+   "text": "for",
+   "start": 14.813,
+   "end": 14.953
+  },
+  {
+   "text": "this,",
+   "start": 15.013,
+   "end": 15.133
+  },
+  {
+   "text": "but",
+   "start": 15.267,
+   "end": 15.407
+  },
+  {
+   "text": "we",
+   "start": 15.467,
+   "end": 15.567
+  },
+  {
+   "text": "start",
+   "start": 15.607,
+   "end": 15.767
+  },
+  {
+   "text": "at",
+   "start": 15.807,
+   "end": 15.927
+  },
+  {
+   "text": "\u20b9999.",
+   "start": 15.987,
+   "end": 16.687
+  },
+  {
+   "text": "Want",
+   "start": 16.853,
+   "end": 17.013
+  },
+  {
+   "text": "this",
+   "start": 17.053,
+   "end": 17.193
+  },
+  {
+   "text": "for",
+   "start": 17.213,
+   "end": 17.313
+  },
+  {
+   "text": "your",
+   "start": 17.353,
+   "end": 17.473
+  },
+  {
+   "text": "own",
+   "start": 17.533,
+   "end": 17.673
+  },
+  {
+   "text": "brand?",
+   "start": 17.733,
+   "end": 17.913
+  },
+  {
+   "text": "Reach",
+   "start": 18.08,
+   "end": 18.26
+  },
+  {
+   "text": "out",
+   "start": 18.3,
+   "end": 18.4
+  },
+  {
+   "text": "to",
+   "start": 18.44,
+   "end": 18.5
+  },
+  {
+   "text": "us",
+   "start": 18.56,
+   "end": 18.64
+  },
+  {
+   "text": "and",
+   "start": 18.68,
+   "end": 18.78
+  },
+  {
+   "text": "tap",
+   "start": 18.86,
+   "end": 19.0
+  },
+  {
+   "text": "Send",
+   "start": 19.06,
+   "end": 19.22
+  },
+  {
+   "text": "Message.",
+   "start": 19.26,
+   "end": 19.58
+  }
+ ]
+}

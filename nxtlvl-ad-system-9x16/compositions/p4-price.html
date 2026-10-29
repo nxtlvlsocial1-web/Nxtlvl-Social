@@ -1,0 +1,68 @@
+<template>
+  <link rel="stylesheet" href="assets/css/ad.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+    #root { position: absolute; inset: 0; overflow: visible; }
+    /* two tiles face off: theirs on the left, ours on the right */
+    .tl { position: absolute; top: 1104px; width: 452px; height: 352px; opacity: 0; }
+    #pt-them { left: 60px; }
+    #pt-us { left: 568px; border: 2px solid rgba(201,166,255,.85);
+      background: linear-gradient(160deg, rgba(64,20,140,.92), rgba(14,6,36,.94));
+      box-shadow: 0 0 0 1px rgba(125,24,252,.6), 0 24px 70px rgba(125,24,252,.45); }
+    .who { position: absolute; left: 0; right: 0; top: 44px; text-align: center; font-family: "Instrument Serif", serif; font-style: italic; font-size: 52px; line-height: 1; color: #FFFFFF; }
+    .who small { display: block; margin-top: 10px; font-family: "Instrument Sans", sans-serif; font-style: normal; font-weight: 600; font-size: 31px; color: rgba(245,242,255,.62); }
+    #pt-old-wrap { position: absolute; left: 0; right: 0; top: 196px; text-align: center; }
+    #pt-old { position: relative; display: inline-block; opacity: 0; font-family: "Archivo", sans-serif; font-weight: 800; font-stretch: 104%; font-size: 88px; line-height: 1; color: #FFFFFF; }
+    #pt-strike { position: absolute; left: -5%; top: 50%; width: 110%; height: 10px; margin-top: -5px; border-radius: 5px; background: #FF5C7A;
+      transform-origin: 0 50%; box-shadow: 0 0 16px rgba(255,92,122,.7); }
+    #pt-new { position: absolute; left: 0; right: 0; top: 178px; text-align: center; opacity: 0; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 110%;
+      font-size: 132px; line-height: 1; letter-spacing: -.02em;
+      background: linear-gradient(100deg, #FFFFFF 0%, #EAD9FF 35%, #B98AFF 70%, #FFFFFF 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 0 30px rgba(169,92,255,.65)); }
+    #pt-vs { position: absolute; left: 498px; top: 1238px; width: 84px; height: 84px; border-radius: 50%; opacity: 0;
+      background: #05030C; border: 2px solid rgba(216,187,255,.5); display: flex; align-items: center; justify-content: center;
+      font-family: "Instrument Serif", serif; font-style: italic; font-size: 40px; color: #FFFFFF; box-shadow: 0 8px 26px rgba(5,3,12,.7); }
+    #pt-chip { position: absolute; left: 836px; top: 1082px; height: 50px; padding: 0 20px; border-radius: 25px; opacity: 0;
+      background: #3BE38F; color: #05030C; display: flex; align-items: center; font-family: "Archivo", sans-serif; font-weight: 800; font-size: 30px;
+      box-shadow: 0 10px 26px rgba(59,227,143,.4); }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="p4-price" data-width="1080" data-height="1920" data-duration="4.05">
+    <div id="pt-wrap" class="clip" data-start="0" data-duration="4.05" data-track-index="0" style="position:absolute;inset:0">
+      <div class="tl nx-glass" id="pt-them">
+        <div class="who">Most agencies<small>charge</small></div>
+        <div id="pt-old-wrap"><span id="pt-old">₹25,000<i id="pt-strike"></i></span></div>
+      </div>
+      <div class="tl nx-glass" id="pt-us">
+        <div class="who">Nxtlvl Social<small>starts at</small></div>
+        <div id="pt-new">₹999</div>
+      </div>
+      <div id="pt-vs">vs</div>
+      <div id="pt-chip">96% less</div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      // local time = film time - 12.77
+      // "Most agencies" (12.83): their tile slides in
+      tl.fromTo("#pt-them", { opacity: 0, x: -70, filter: "blur(8px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.45, ease: "expo.out" }, 0.06);
+      tl.fromTo("#pt-vs", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.8)" }, 0.3);
+      // "twenty-five thousand" (13.91)
+      tl.fromTo("#pt-old", { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: 0.35, ease: "expo.out" }, 1.14);
+      // "for this," ends (15.13): struck through, their tile steps back
+      tl.fromTo("#pt-strike", { scaleX: 0 }, { scaleX: 1, duration: 0.18, ease: "power3.out" }, 2.36);
+      tl.to("#pt-them", { opacity: 0.5, scale: 0.96, duration: 0.3, ease: "power2.out" }, 2.5);
+      // "but we start at" (15.27): our tile arrives
+      tl.fromTo("#pt-us", { opacity: 0, x: 70, filter: "blur(8px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.45, ease: "expo.out" }, 2.5);
+      // "nine ninety-nine" (15.99): the payoff lands and holds still
+      tl.fromTo("#pt-new", { opacity: 0, scale: 1.5 }, { opacity: 1, scale: 1, duration: 0.42, ease: "expo.out" }, 3.22);
+      tl.fromTo("#pt-chip", { opacity: 0, scale: 0.4, rotation: -8 }, { opacity: 1, scale: 1, rotation: -4, duration: 0.42, ease: "back.out(1.8)" }, 3.5);
+      tl.to("#pt-wrap", { opacity: 0, y: -24, filter: "blur(8px)", duration: 0.14, ease: "power3.in" }, 3.9);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["p4-price"] = tl;
+    })();
+  </script>
+</template>
