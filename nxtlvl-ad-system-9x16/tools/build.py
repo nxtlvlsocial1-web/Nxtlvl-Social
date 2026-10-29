@@ -1,9 +1,9 @@
 """Writes index.html (split screen: the cut take on top, panels below, camera zooms, music, SFX) and
 compositions/captions.html from transcript-cut.json (made by tools/cut.py).
 
-Layout on 1080x1920: the brand panel fills the top half (graphics in y 300-740, captions just above the seam at
-y 860-956); the take fills the bottom half (960-1920), cropped so the face sits high in it, above Meta's caption and
-Send message button.
+Layout on 1080x1920, one 60 px grid: graphics in y 300-710, captions in their own band (y 726-822), then the take as
+a rounded face card (x 60-1020, y 846-1866) with the whole head and headroom: eyes on its upper third (y ~1295),
+mouth ~1430, above Meta's caption and Send message button.
 Run from the project folder:  python3 tools/cut.py && python3 tools/build.py && npx hyperframes check
 """
 import html
@@ -67,8 +67,8 @@ def captions():
     @font-face {{ font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }}
     #root {{ position: absolute; inset: 0; overflow: visible; pointer-events: none; }}
     /* captions in the "Not luck." serif, just under the seam; words light up as they are said */
-    .cg {{ position: absolute; left: 40px; right: 40px; top: 860px; height: 96px; text-align: center; visibility: hidden;
-          font-family: "Instrument Serif", serif; font-style: italic; font-size: 76px; line-height: 96px; white-space: nowrap; }}
+    .cg {{ position: absolute; left: 40px; right: 40px; top: 726px; height: 96px; text-align: center; visibility: hidden;
+          font-family: "Instrument Serif", serif; font-style: italic; font-size: 74px; line-height: 96px; white-space: nowrap; }}
     .cw {{ display: inline-block; margin: 0 .1em; color: rgba(245,242,255,.42); transform-origin: 50% 70%;
           text-shadow: 0 4px 24px rgba(5,3,12,.8); }}
   </style>
@@ -127,7 +127,7 @@ def audio():
 
 # ---------------------------------------------------------------- root
 SCENES = [  # id, start, end, z
-    ('panel', 0, END, 3),
+    ('panel', 0, END, 1),
     ('p1-hook', 0, 3.84, 5),
     ('p2-system', 3.84, 5.6, 5),
     ('p3-inside', 5.45, 12.8, 5),
@@ -162,8 +162,10 @@ def index():
       body {{ font-family: "Archivo", "Instrument Sans", sans-serif; }}
       #root {{ position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #05030C; }}
       .scene {{ position: absolute; inset: 0; width: 100%; height: 100%; }}
-      /* the bottom half: a fixed window onto the take; the camera inside it zooms per cut */
-      #pane {{ position: absolute; left: 0; top: 960px; width: 1080px; height: 960px; overflow: hidden; z-index: 2; background: #05030C; }}
+      /* the face card: a rounded window on the 60 px grid; the camera inside it zooms per cut */
+      #pane {{ position: absolute; left: 60px; top: 846px; width: 960px; height: 1020px; overflow: hidden; z-index: 2; background: #05030C;
+               border-radius: 44px; border: 2px solid rgba(216,187,255,.55);
+               box-shadow: 0 0 0 1px rgba(125,24,252,.55), 0 0 46px rgba(169,92,255,.45), 0 30px 80px rgba(5,3,12,.7); }}
       #cam {{ position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; }}
       #a-roll {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }}
     </style>
@@ -186,9 +188,9 @@ def index():
     <script>
       (function () {{
         var tl = gsap.timeline({{ paused: true }});
-        // keep the face centre (source 540, 850) at (540, 275) in the bottom window (canvas y 1235): eyes ~y 1300,
-        // mouth ~1450, so the face stays above Meta's caption and button
-        function frame(s) {{ return {{ scale: s, x: 540 * (1 - s), y: 275 - 850 * s }}; }}
+        // base fit 960/1080 = 0.8889 shows the full width with ~36 px headroom over the hair; the face centre
+        // (source 540, 850) stays at (480, 391.6) in the card at every zoom: eyes ~y 1295, mouth ~1430 on canvas
+        function frame(z) {{ var s = 0.8889 * z; return {{ scale: s, x: 480 - 540 * s, y: 391.6 - 850 * s }}; }}
         {chr(10).join('        ' + z for z in zoom_js).strip()}
         window.__timelines = window.__timelines || {{}};
         window.__timelines["main"] = tl;

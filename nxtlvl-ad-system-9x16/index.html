@@ -13,8 +13,10 @@
       body { font-family: "Archivo", "Instrument Sans", sans-serif; }
       #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #05030C; }
       .scene { position: absolute; inset: 0; width: 100%; height: 100%; }
-      /* the bottom half: a fixed window onto the take; the camera inside it zooms per cut */
-      #pane { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px; overflow: hidden; z-index: 2; background: #05030C; }
+      /* the face card: a rounded window on the 60 px grid; the camera inside it zooms per cut */
+      #pane { position: absolute; left: 60px; top: 846px; width: 960px; height: 1020px; overflow: hidden; z-index: 2; background: #05030C;
+               border-radius: 44px; border: 2px solid rgba(216,187,255,.55);
+               box-shadow: 0 0 0 1px rgba(125,24,252,.55), 0 0 46px rgba(169,92,255,.45), 0 30px 80px rgba(5,3,12,.7); }
       #cam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; }
       #a-roll { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     </style>
@@ -28,7 +30,7 @@
         </div>
       </div>
 
-      <div id="el-panel" class="scene clip" data-composition-id="panel" data-composition-src="compositions/panel.html" data-start="0" data-duration="19.66" data-track-index="2" data-track-kind="graphics" style="z-index:3"></div>
+      <div id="el-panel" class="scene clip" data-composition-id="panel" data-composition-src="compositions/panel.html" data-start="0" data-duration="19.66" data-track-index="2" data-track-kind="graphics" style="z-index:1"></div>
       <div id="el-p1-hook" class="scene clip" data-composition-id="p1-hook" data-composition-src="compositions/p1-hook.html" data-start="0" data-duration="3.84" data-track-index="3" data-track-kind="graphics" style="z-index:5"></div>
       <div id="el-p2-system" class="scene clip" data-composition-id="p2-system" data-composition-src="compositions/p2-system.html" data-start="3.84" data-duration="1.76" data-track-index="4" data-track-kind="graphics" style="z-index:5"></div>
       <div id="el-p3-inside" class="scene clip" data-composition-id="p3-inside" data-composition-src="compositions/p3-inside.html" data-start="5.45" data-duration="7.35" data-track-index="5" data-track-kind="graphics" style="z-index:5"></div>
@@ -66,9 +68,9 @@
     <script>
       (function () {
         var tl = gsap.timeline({ paused: true });
-        // keep the face centre (source 540, 850) at (540, 275) in the bottom window (canvas y 1235): eyes ~y 1300,
-        // mouth ~1450, so the face stays above Meta's caption and button
-        function frame(s) { return { scale: s, x: 540 * (1 - s), y: 275 - 850 * s }; }
+        // base fit 960/1080 = 0.8889 shows the full width with ~36 px headroom over the hair; the face centre
+        // (source 540, 850) stays at (480, 391.6) in the card at every zoom: eyes ~y 1295, mouth ~1430 on canvas
+        function frame(z) { var s = 0.8889 * z; return { scale: s, x: 480 - 540 * s, y: 391.6 - 850 * s }; }
         tl.set("#cam", frame(1.0), 0.0);
         tl.set("#cam", frame(1.15), 3.8333);
         tl.set("#cam", frame(1.0), 6.1);

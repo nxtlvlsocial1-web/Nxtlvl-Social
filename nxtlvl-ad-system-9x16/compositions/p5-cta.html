@@ -7,30 +7,30 @@
     @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
     #root { position: absolute; inset: 0; overflow: visible; }
     /* A: "your own brand?" */
-    #yb-chip { position: absolute; left: 0; right: 0; top: 340px; display: flex; justify-content: center; opacity: 0; }
+    #yb-chip { position: absolute; left: 0; right: 0; top: 310px; display: flex; justify-content: center; opacity: 0; }
     #yb-chip > div { display: flex; align-items: center; gap: 18px; height: 88px; padding: 0 34px 0 12px; border-radius: 44px; }
     #yb-ava { width: 64px; height: 64px; border-radius: 50%; padding: 4px; background: conic-gradient(from 210deg, #A95CFF, #7D18FC, #FF6FD8, #FFB35C, #A95CFF); }
     #yb-ava i { display: flex; width: 100%; height: 100%; border-radius: 50%; border: 3px solid #0B0624; background: #1A0C3A; align-items: center; justify-content: center;
       font-family: "Archivo", sans-serif; font-style: normal; font-weight: 800; font-size: 28px; color: #D8BBFF; }
     #yb-handle { font-family: "Archivo", sans-serif; font-weight: 800; font-size: 40px; color: #FFFFFF; letter-spacing: -.01em; }
-    #yb-line { position: absolute; left: 0; right: 0; top: 466px; text-align: center; opacity: 0; font-family: "Instrument Serif", serif; font-style: italic;
+    #yb-line { position: absolute; left: 0; right: 0; top: 436px; text-align: center; opacity: 0; font-family: "Instrument Serif", serif; font-style: italic;
       font-size: 150px; line-height: 1; color: #FFFFFF; text-shadow: 0 8px 30px rgba(5,3,12,.8); white-space: nowrap; }
     #yb-line span { display: inline-block; padding: 0 .06em; background: linear-gradient(100deg, #FFFFFF 0%, #EAD9FF 30%, #B98AFF 68%, #FFFFFF 100%);
       -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 30px rgba(169,92,255,.6)); }
     /* B: the Send message button, tapped */
-    #sm-kick { position: absolute; left: 0; right: 0; top: 336px; text-align: center; opacity: 0; }
-    #sm-row { position: absolute; left: 0; right: 0; top: 400px; display: flex; justify-content: center; }
+    #sm-kick { position: absolute; left: 0; right: 0; top: 306px; text-align: center; opacity: 0; }
+    #sm-row { position: absolute; left: 0; right: 0; top: 370px; display: flex; justify-content: center; }
     .ct-pill { display: flex; align-items: center; justify-content: center; gap: 20px; border-radius: 80px;
       background: linear-gradient(100deg, #8E2BFF, #6A10E6); border: 2px solid rgba(255,255,255,.3);
       box-shadow: 0 18px 46px rgba(94,15,196,.55), 0 0 0 8px rgba(169,92,255,.16);
       font-family: "Archivo", sans-serif; font-weight: 800; font-stretch: 104%; color: #FFFFFF; letter-spacing: -.01em; }
     #sm-btn { width: 820px; height: 150px; font-size: 62px; opacity: 0; }
     #sm-btn svg { width: 60px; height: 60px; display: block; }
-    #sm-ripple { position: absolute; left: 640px; top: 475px; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%;
+    #sm-ripple { position: absolute; left: 640px; top: 445px; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%;
       border: 4px solid #FFFFFF; opacity: 0; }
-    #sm-finger { position: absolute; left: 640px; top: 475px; width: 70px; height: 70px; margin: -12px 0 0 -12px; opacity: 0; }
+    #sm-finger { position: absolute; left: 640px; top: 445px; width: 70px; height: 70px; margin: -12px 0 0 -12px; opacity: 0; }
     #sm-finger svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 6px 14px rgba(5,3,12,.6)); }
-    #sm-arrow { position: absolute; left: 504px; top: 590px; width: 72px; height: 100px; opacity: 0; }
+    #sm-arrow { position: absolute; left: 504px; top: 560px; width: 72px; height: 100px; opacity: 0; }
     #sm-arrow svg { width: 100%; height: 100%; display: block; }
     /* C: the end card over everything */
     #ct-scrim { position: absolute; inset: 0;
@@ -53,7 +53,7 @@
     #ct-btn svg { width: 52px; height: 52px; display: block; }
     #ct-price { position: absolute; left: 0; right: 0; top: 1168px; text-align: center; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 34px; color: #D8BBFF; }
     #ct-price b { color: #FFFFFF; font-weight: 700; }
-    #ct-arrow { position: absolute; left: 504px; top: 1230px; width: 72px; height: 96px; }
+    #ct-arrow { position: absolute; left: 504px; top: 1160px; width: 72px; height: 96px; }
     #ct-arrow svg { width: 100%; height: 100%; display: block; }
   </style>
   <script src="assets/vendor/gsap.min.js"></script>
@@ -83,7 +83,6 @@
         <div id="ct-wordrow"><img id="ct-word" src="assets/nxtlvl-wordmark.png" alt="nxtlvl" width="380" height="87" /><div id="ct-social">social</div></div></div>
       <div id="ct-h"><div id="ct-h1">Not luck.</div><div id="ct-h2"><span>A system.</span></div></div>
       <div id="ct-btnrow"><div class="ct-pill" id="ct-btn"><svg viewBox="0 0 24 24"><path d="M12 3.5c-4.9 0-8.5 3.4-8.5 7.7 0 2.4 1.1 4.5 3 5.9L6 20.5l3.8-1.9c.7.2 1.4.3 2.2.3 4.9 0 8.5-3.4 8.5-7.7S16.9 3.5 12 3.5z" fill="#fff"/></svg>Tap Send Message</div></div>
-      <div id="ct-price">Plans from <b>₹999</b> · Nxtlvl Social</div>
       <div id="ct-arrow"><svg viewBox="0 0 24 32"><path d="M4 6l8 8 8-8M4 17l8 8 8-8" stroke="#D8BBFF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     </div>
   </div>
@@ -113,7 +112,6 @@
       tl.fromTo("#ct-h1", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power2.out" }, 2.9);
       tl.fromTo("#ct-h2", { opacity: 0, scale: 1.3 }, { opacity: 1, scale: 1, duration: 0.35, ease: "expo.out" }, 2.94);
       tl.fromTo("#ct-btn", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.45, ease: "expo.out" }, 2.98);
-      tl.fromTo("#ct-price", { opacity: 0 }, { opacity: 1, duration: 0.22, ease: "power2.out" }, 2.98);
       tl.fromTo("#ct-arrow", { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 0.35, ease: "expo.out" }, 3.02);
       window.__timelines = window.__timelines || {};
       window.__timelines["p5-cta"] = tl;

@@ -5,16 +5,16 @@
     @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
     @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
     #root { position: absolute; inset: 0; overflow: hidden; }
-    /* the top half: brand ground, a faint grid, light from the seam */
-    #pn-ground { position: absolute; left: 0; top: 0; width: 1080px; height: 960px;
+    /* the whole frame: brand ground, a faint grid, light from the seam */
+    #pn-ground { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px;
       background:
-        radial-gradient(700px 360px at 50% 100%, rgba(125,24,252,.42), rgba(125,24,252,0) 70%),
+        radial-gradient(760px 520px at 50% 44%, rgba(125,24,252,.38), rgba(125,24,252,0) 70%),
         radial-gradient(700px 600px at 100% 0%, rgba(94,6,242,.35), rgba(94,6,242,0) 70%),
         linear-gradient(0deg, #0D0626 0%, #070413 45%, #05030C 100%); }
-    #pn-grid { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; opacity: .55;
+    #pn-grid { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; opacity: .5;
       background-image: linear-gradient(rgba(216,187,255,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(216,187,255,.055) 1px, transparent 1px);
       background-size: 60px 60px; background-position: 30px 0px;
-      -webkit-mask-image: linear-gradient(0deg, #000 0%, #000 55%, transparent 100%); mask-image: linear-gradient(0deg, #000 0%, #000 55%, transparent 100%); }
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 60%, transparent 92%); mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 60%, transparent 92%); }
     /* the seam between the take and the panel */
     #pn-seam { position: absolute; left: 0; top: 957px; width: 1080px; height: 6px;
       background: linear-gradient(90deg, rgba(169,92,255,0), #C9A6FF 22%, #FFFFFF 50%, #C9A6FF 78%, rgba(169,92,255,0));
@@ -39,15 +39,13 @@
         <path d="M82.77 88.04 L81.79 85.30 L79.69 83.66 L76.80 83.38 L74.42 84.58 L39.59 126.47 L81.14 91.99 L82.40 90.20Z" fill="url(#pn-g2)"/>
         <path d="M140 33.62 L141.87 42.15 L146.74 50.4 L154.06 56.37 L166.38 60 L154.06 63.63 L146.74 69.6 L141.87 77.85 L140 86.38 L138.13 77.85 L133.26 69.6 L125.94 63.63 L113.62 60 L125.94 56.37 L133.26 50.4 L138.13 42.15 Z" fill="#FFFFFF"/>
       </svg></div>
-      <div id="pn-fade"></div>
-      <div id="pn-seam" data-layout-allow-overflow></div>
     </div>
   </div>
   <script>
     (function () {
       var tl = gsap.timeline({ paused: true });
       // frame 0 is already the full split; the seam flares once as the film opens
-      tl.fromTo("#pn-seam", { scaleX: 0.55, opacity: 0.6 }, { scaleX: 1, opacity: 1, duration: 0.5, ease: "expo.out" }, 0);
+      tl.fromTo("#pn-deco", { opacity: 0 }, { opacity: 0.12, duration: 0.6, ease: "power2.out" }, 0);
       window.__timelines = window.__timelines || {};
       window.__timelines["panel"] = tl;
     })();

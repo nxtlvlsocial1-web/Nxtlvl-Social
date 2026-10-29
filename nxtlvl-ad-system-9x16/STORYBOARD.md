@@ -1,4 +1,4 @@
-# Nxtlvl Social — "Not luck. A system." ad (9:16 split screen, 21.8 s) — v3
+# Nxtlvl Social — "Not luck. A system." ad (9:16, 21.8 s) — v4
 
 Meta click-to-message ad (Reels / Stories placement) built on the selfie take.
 
@@ -19,9 +19,10 @@ more motion in the panels.
 
 ## Layout (1080×1920)
 
-v3: graphics on top, face below (the person's note). Top half (0–960): the brand panel, graphics in y 300–740,
-captions word by word in the serif just above the seam (y 860–956). A glowing seam at 960. Bottom half (960–1920):
-the take, cropped so the eyes sit at y ~1300 and the mouth at ~1450, above Meta's caption and Send message button.
+v4: everything on one 60 px grid, graphics above and the face below (the person's notes). Graphics in y 300–710;
+captions word by word in the serif in their own band (y 726–822); the take as a rounded face card (x 60–1020,
+y 846–1866) with the whole head and headroom: eyes on the card's upper third (y ~1295), mouth ~1430, above Meta's
+caption and Send message button. The end card no longer shows a price.
 
 | Film time | Speech | Panel |
 |---|---|---|
@@ -31,7 +32,7 @@ the take, cropped so the eyes sit at y ~1300 and the mouth at ~1450, above Meta'
 | 12.77–16.82 | "Most agencies charge ₹25,000 for this, but we start at ₹999." | Two tiles, VS: ₹25,000 struck through, ₹999 lands with a "96% less" chip |
 | 16.80–18.04 | "Want this for your own brand?" | "@yourbrand" chip and "Your brand, next." |
 | 18.04–19.66 | "Reach out to us and tap Send Message." | A big Send message button; a finger taps it on "tap" |
-| 19.66–21.83 | (end) | Full-frame end card: Shooting Star + nxtlvl social, "Not luck. A system.", Tap Send Message, "Plans from ₹999" (holds 2.2 s) |
+| 19.66–21.83 | (end) | Full-frame end card: Shooting Star + nxtlvl social, "Not luck. A system.", Tap Send Message (holds 2.2 s) |
 
 ## Rebuilding
 
