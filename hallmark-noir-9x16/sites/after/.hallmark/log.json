@@ -1,0 +1,26 @@
+{
+  "entries": [
+    {
+      "date": "2026-10-29",
+      "prompt": "Build a landing page for Tally, an app that splits group expenses with friends.",
+      "shape": "Narrative Workflow",
+      "theme": "hum",
+      "deal": "manual",
+      "genre": "playful",
+      "job": "try",
+      "axes": { "paper": "light 97 95", "display": "rounded-sans Chillax (Fredoka stand-in)", "accent": "chromatic-yellow 95", "posture": "full-palette" },
+      "hero": "Stage",
+      "nav": "knob bar",
+      "footer": "mast",
+      "imagery": "the product built: trip screen in the hero slot, settled screen in the close slot; no photographs",
+      "photos": [],
+      "entry": "the trip ledger as card-stock tiles on a torn kraft strip, beside the head",
+      "fingerprint": { "heading": "numbered by structure (stage number in the h2)", "body": "asymmetric spans", "divider": "mixed: whitespace, hairline, torn bands", "button": "solid card stock", "image": "the product built, tightly cropped to the grid", "reveal": "none" },
+      "sections": ["hero: Stage, the trip screen", "Friday: Split (mirrored), a working split control", "Saturday: Table, balances with bars", "Sunday: Grid of three payment slips on the pear field", "close: Band, torn ink sheet, download slot beside the settled screen", "footer: mast"],
+      "signature": "the cabin weekend's expenses as pressable card-stock tiles; pressing one lights the friends who shared it",
+      "waived": [],
+      "answered": ["F20"],
+      "sweep": "sloplint not run (blocked); Floor and gates walked by hand; hero and finish reviews in-thread"
+    }
+  ]
+}

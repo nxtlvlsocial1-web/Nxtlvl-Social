@@ -1,0 +1,17 @@
+{
+  "scanned": "2026-10-29",
+  "findings": {
+    "fonts": "none (new folder sites/after, no stylesheet, no package.json)",
+    "palette": "none",
+    "motion": "none",
+    "spacing": "none",
+    "framework": "none, a static page opened straight from disk",
+    "design_md": "none at the repo root or in the project",
+    "brand": "none named in the prompt; Tally is the prompt's own product, not a real brand to look up",
+    "product": "not reachable (no URL, no app, no code): built in HTML, imagery.md section 4",
+    "signal_8": "no Inspo MCP tools in this session",
+    "signal_9": "TOGETHER_API_KEY not used (comps not requested)"
+  },
+  "preserve": [],
+  "introduce": ["shape", "theme", "gates", "hero discipline", "slots"]
+}

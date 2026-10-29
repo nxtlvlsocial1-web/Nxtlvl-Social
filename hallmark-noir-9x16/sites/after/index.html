@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tally: split a trip's costs with friends</title>
+<meta name="description" content="Log who paid for what on a group trip or night out, and Tally works out who owes whom.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tally.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="container">
+    <a class="wordmark" href="#main" aria-label="Tally, home">Tally</a>
+    <div class="nav__right">
+      <nav aria-label="The weekend, day by day">
+        <ul class="knobs">
+          <li><a class="knob" href="#friday">Friday</a></li>
+          <li><a class="knob" href="#saturday">Saturday</a></li>
+          <li><a class="knob" href="#sunday">Sunday</a></li>
+        </ul>
+      </nav>
+      <a class="btn btn--small" href="#get">Get Tally</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="hero-head">
+    <div class="container hero__grid">
+      <div class="hero__text">
+        <h1 id="hero-head">The trip was the easy part.</h1>
+        <p class="lead">Log who paid for what, and Tally works out who owes whom.</p>
+        <div class="actions">
+          <a class="btn btn--primary" href="#get">Get Tally</a>
+          <a class="btn" href="#friday">See a weekend split</a>
+        </div>
+      </div>
+
+      <figure class="shot" data-slot="hero" data-kind="product" data-alt="Tally's trip screen: a group's expenses, who paid each, and the total so far" data-trip>
+        <div class="shot__mat" aria-hidden="true"><i></i></div>
+        <div class="screen">
+          <div class="screen__head">
+            <p class="screen__title">Cabin weekend</p>
+            <p class="label">Friday to Sunday</p>
+          </div>
+          <ul class="people" aria-label="Who is in the group">
+            <li class="person" data-person="maya"><span class="face face--maya" aria-hidden="true">M</span>Maya</li>
+            <li class="person" data-person="sam"><span class="face face--sam" aria-hidden="true">S</span>Sam</li>
+            <li class="person" data-person="jo"><span class="face face--jo" aria-hidden="true">J</span>Jo</li>
+            <li class="person" data-person="priya"><span class="face face--priya" aria-hidden="true">P</span>Priya</li>
+          </ul>
+          <div class="strip">
+            <ul class="tiles">
+              <li><button class="tile" type="button" aria-pressed="false" data-split="maya sam jo priya" data-note="The cabin, $480: Maya paid, shared by all four."><span class="tile__what">Cabin, two nights</span><span class="tile__amt num">$480</span><span class="face face--maya" aria-label="Paid by Maya">M</span></button></li>
+              <li><button class="tile" type="button" aria-pressed="false" data-split="maya sam jo priya" data-note="Groceries, $96: Sam paid, shared by all four."><span class="tile__what">Groceries</span><span class="tile__amt num">$96</span><span class="face face--sam" aria-label="Paid by Sam">S</span></button></li>
+              <li><button class="tile" type="button" aria-pressed="false" data-split="sam jo priya" data-note="Fuel, $60: Jo paid, shared by the three who rode in the car."><span class="tile__what">Fuel</span><span class="tile__amt num">$60</span><span class="face face--jo" aria-label="Paid by Jo">J</span></button></li>
+              <li><button class="tile" type="button" aria-pressed="false" data-split="maya sam jo priya" data-note="Dinner, $120: Priya paid, shared by all four."><span class="tile__what">Saturday dinner</span><span class="tile__amt num">$120</span><span class="face face--priya" aria-label="Paid by Priya">P</span></button></li>
+            </ul>
+          </div>
+          <p class="screen__note" aria-live="polite">Press an expense to see who shared it.</p>
+          <div class="screen__foot">
+            <p class="total"><span class="label">Spent so far</span><b class="num">$756</b></p>
+            <a class="btn btn--small" href="#sunday">Settle up</a>
+          </div>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="stage friday" id="friday" aria-labelledby="friday-head">
+    <div class="container friday__grid">
+      <div class="friday__text">
+        <h2 id="friday-head">1. Friday, Maya books the cabin.</h2>
+        <p class="lead">She adds what she paid and who stayed. Tally does the dividing.</p>
+      </div>
+      <form class="screen expense" aria-label="A sample expense: split the cabin" onsubmit="return false">
+        <p class="screen__title">New expense</p>
+        <dl class="facts">
+          <dt>What</dt><dd>Cabin, two nights</dd>
+          <dt>Amount</dt><dd class="num">$480</dd>
+          <dt>Paid by</dt><dd>Maya</dd>
+        </dl>
+        <fieldset class="split" data-amount="480">
+          <legend>Split between</legend>
+          <div class="pills">
+            <label class="pill"><input type="checkbox" name="split" value="maya" checked><span><span class="face face--maya" aria-hidden="true">M</span>Maya</span></label>
+            <label class="pill"><input type="checkbox" name="split" value="sam" checked><span><span class="face face--sam" aria-hidden="true">S</span>Sam</span></label>
+            <label class="pill"><input type="checkbox" name="split" value="jo" checked><span><span class="face face--jo" aria-hidden="true">J</span>Jo</span></label>
+            <label class="pill"><input type="checkbox" name="split" value="priya" checked><span><span class="face face--priya" aria-hidden="true">P</span>Priya</span></label>
+          </div>
+        </fieldset>
+        <p class="result" aria-live="polite">That comes to <mark>$120</mark> each.</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="saturday" id="saturday" aria-labelledby="saturday-head">
+    <div class="container">
+      <div class="rule">
+        <div class="saturday__head">
+          <h2 id="saturday-head">2. Saturday, everyone pays for something.</h2>
+          <p class="lead">Groceries, fuel and dinner go in. The balances move as each one lands.</p>
+        </div>
+        <div class="ledger-wrap" tabindex="0" role="region" aria-label="Balances after Saturday, scrolls sideways on small screens">
+          <table class="ledger">
+            <caption>A sample weekend: four friends, four expenses, $756 in all.</caption>
+            <thead>
+              <tr><th scope="col">Friend</th><th scope="col">Paid</th><th scope="col">Their share</th><th scope="col" class="col-balance">Balance</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="face face--maya" aria-hidden="true">M</span>Maya</td><td class="num">$480</td><td class="num">$174</td><td><div class="balance"><div class="bar bar--up" aria-hidden="true"><i style="--v: 1"></i></div><span class="num">Gets back $306</span></div></td></tr>
+              <tr><td><span class="face face--sam" aria-hidden="true">S</span>Sam</td><td class="num">$96</td><td class="num">$194</td><td><div class="balance"><div class="bar" aria-hidden="true"><i style="--v: 0.32"></i></div><span class="num">Owes $98</span></div></td></tr>
+              <tr><td><span class="face face--jo" aria-hidden="true">J</span>Jo</td><td class="num">$60</td><td class="num">$194</td><td><div class="balance"><div class="bar" aria-hidden="true"><i style="--v: 0.44"></i></div><span class="num">Owes $134</span></div></td></tr>
+              <tr><td><span class="face face--priya" aria-hidden="true">P</span>Priya</td><td class="num">$120</td><td class="num">$194</td><td><div class="balance"><div class="bar" aria-hidden="true"><i style="--v: 0.24"></i></div><span class="num">Owes $74</span></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sunday" id="sunday" aria-labelledby="sunday-head">
+    <div class="sheet" aria-hidden="true"><i class="fringe"></i><i></i></div>
+    <div class="container">
+      <h2 id="sunday-head">3. Sunday, three payments square it.</h2>
+      <p class="lead">Tally turns the balances into who pays whom.</p>
+      <ol class="slips">
+        <li class="slip"><p class="slip__who"><span class="face face--jo" aria-hidden="true">J</span>Jo pays Maya</p><p class="slip__amt num">$134</p></li>
+        <li class="slip"><p class="slip__who"><span class="face face--sam" aria-hidden="true">S</span>Sam pays Maya</p><p class="slip__amt num">$98</p></li>
+        <li class="slip"><p class="slip__who"><span class="face face--priya" aria-hidden="true">P</span>Priya pays Maya</p><p class="slip__amt num">$74</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="get" id="get" aria-labelledby="get-head">
+    <div class="sheet" aria-hidden="true"><i class="fringe"></i><i></i></div>
+    <div class="container get__grid">
+      <div>
+        <h2 id="get-head">Bring Tally on the next trip.</h2>
+        <p class="lead">Start a group, add the first expense, and let it keep count.</p>
+        <p class="get__links"><span class="fill" data-fill="download-links">Download links to be added</span></p>
+      </div>
+      <figure class="shot" data-slot="settled" data-kind="product" data-alt="Tally's trip screen once every payment is made: the group shows as settled">
+        <div class="shot__mat" aria-hidden="true"><i></i></div>
+        <div class="screen">
+          <div class="screen__head">
+            <p class="screen__title">Cabin weekend</p>
+            <span class="stamp">Settled</span>
+          </div>
+          <p class="settled__big">All square.</p>
+          <ul class="paid">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Jo paid Maya<span class="state">Paid</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Sam paid Maya<span class="state">Paid</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Priya paid Maya<span class="state">Paid</span></li>
+          </ul>
+        </div>
+      </figure>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <a class="footer__mark" href="#main" aria-label="Tally, back to the top">Tally</a>
+    <div class="footer__row">
+      <ul class="footer__links">
+        <li><a href="#friday">Friday</a></li>
+        <li><a href="#saturday">Saturday</a></li>
+        <li><a href="#sunday">Sunday</a></li>
+        <li><a href="#get">Get Tally</a></li>
+      </ul>
+      <p class="footer__note">Tally splits group expenses with friends. The names and amounts on this page are a sample weekend.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const trip = document.querySelector('[data-trip]');
+  if (trip) {
+    const note = trip.querySelector('.screen__note');
+    const people = trip.querySelectorAll('[data-person]');
+    const tiles = trip.querySelectorAll('.tile');
+    tiles.forEach((tile) => tile.addEventListener('click', () => {
+      const on = tile.getAttribute('aria-pressed') !== 'true';
+      tiles.forEach((t) => t.setAttribute('aria-pressed', 'false'));
+      tile.setAttribute('aria-pressed', String(on));
+      const split = on ? tile.dataset.split.split(' ') : [];
+      trip.classList.toggle('is-picking', on);
+      people.forEach((p) => p.classList.toggle('is-on', split.includes(p.dataset.person)));
+      note.textContent = on ? tile.dataset.note : 'Press an expense to see who shared it.';
+    }));
+  }
+  document.querySelectorAll('.split[data-amount]').forEach((set) => {
+    const out = set.closest('form').querySelector('.result');
+    const amount = Number(set.dataset.amount);
+    const sync = () => {
+      const n = set.querySelectorAll('input:checked').length;
+      if (!n) { out.textContent = 'Pick who stayed to split the cabin.'; return; }
+      const each = Math.round((amount / n) * 100) / 100;
+      out.innerHTML = 'That comes to <mark>$' + (Number.isInteger(each) ? each : each.toFixed(2)) + '</mark> each.';
+    };
+    set.addEventListener('change', sync);
+  });
+})();
+window.hallmarkSlots = (m) => { for (const [k, v] of Object.entries(m)) { const s = document.querySelector(`[data-slot="${k}"]`); if (!s) continue; const im = new Image(); im.src = typeof v === 'string' ? v : v.src; im.alt = (typeof v === 'object' && v.alt) || s.dataset.alt || ''; s.querySelectorAll(':scope > img').forEach((o) => o.remove()); s.prepend(im); } };
+document.querySelectorAll('[data-slot] img').forEach((i) => { if (i.complete && !i.naturalWidth) i.remove(); else i.addEventListener('error', () => i.remove(), { once: true }); });
+</script>
+</body>
+</html>
