@@ -141,10 +141,10 @@ def fires():
 
 CAM = {"all": (500, 500, 1.0)}
 for k in K:
-    CAM[k[0]] = (k[4][0], k[4][1], 1.45)
+    CAM[k[0]] = (k[4][0], k[4][1], 1.6)
 
 
-def cam(t, key, d=.65, s=None, ease="power3.inOut", dy=30):
+def cam(t, key, d=.65, s=None, ease="power3.inOut", dy=-55):
     cx, cy, sc = CAM[key]
     sc = s or sc
     add(f'tl.to("#cam",{{x:{(500 - cx) * sc:.1f},y:{(500 - cy) * sc + dy:.1f},scale:{sc},duration:{d},ease:"{ease}"}},{t:.3f});')
@@ -264,6 +264,7 @@ def story():
     cam(L[4] - .15, "gemini")
     to(f".kd{m}", L[4] - .15, "opacity:1", .4)
     to(f".kd{g}", L[4] - .15, "opacity:0", .4)
+    to(".fgrok0, .fgrok1, .fgrok2, .fgrok3, .fgrok4, .fgrok5", L[4] - .15, "opacity:0", .3)
     pop(f".hd{m}", L[4], "y:80,opacity:0", .35, "back.out(1.6)")
     count(f".dd{m}", L[4], 1, 15, T["climbing"] - L[4])
     count(f".cc{m}", T["g683"] - .2, 0, 683, T["climbing"] + .8 - T["g683"], "power1.in")
@@ -286,6 +287,7 @@ def story():
     cam(L[5] - .15, "chatgpt")
     to(f".kd{c}", L[5] - .15, "opacity:1", .4)
     to(f".kd{m}", L[5] - .15, "opacity:0", .4)
+    to(".fgemini0, .fgemini1", L[5] - .15, "opacity:0", .3)
     pop(f".hd{c}", L[5], "y:80,opacity:0", .35, "back.out(1.6)")
     count(f".dd{c}", L[5], 1, 7, T["seven"] + .3 - L[5])
     count(f".cc{c}", T["two"] - .1, 0, 2, .4)
@@ -316,7 +318,7 @@ def story():
     to(".t0, .talive, .shield", L[7] - .2, "opacity:0", .25)
     to(f".hd{q}", L[7] - .2, "opacity:0,y:40", .2)
     # MIXED WORLD: the kingdoms slide into one, Claude's agents turn, normative drift
-    add(f'tl.to("#cam",{{x:0,y:110,scale:.95,duration:.8,ease:"power3.inOut"}},{L[7] - .15:.3f});')
+    add(f'tl.to("#cam",{{x:0,y:-10,scale:1.05,duration:.8,ease:"power3.inOut"}},{L[7] - .15:.3f});')
     for i, (key, _, _, _, (cx, cy), _) in enumerate(K):
         add(f'tl.to(".kd{i}",{{opacity:1,x:{(500 - cx) * .62:.1f},y:{(500 - cy) * .62:.1f},duration:1.1,ease:"power3.inOut"}},{T["oneworld"] - 1.0:.3f});')
         add(f'tl.to(".kd{i} .land, .kd{i} .emb",{{filter:"grayscale(0) brightness(1)",duration:.4}},{L[7]:.3f});')
@@ -376,19 +378,19 @@ def hook_fx():
     end = L[3] - .3                       # Grok's chapter takes the camera over here
     # the camera never stops: a push in, a glance at each town as it is named, a pull back, a shake on "no humans"
     # the map lives in the lower part of the screen (y 900+) so the cards above never cover a town; the camera never stops
-    add('tl.fromTo("#cam",{scale:1.08,x:0,y:90,opacity:.6},{scale:.95,y:120,opacity:1,duration:1.65,ease:"power2.out",immediateRender:false},0);')
+    add('tl.fromTo("#cam",{scale:1.15,x:0,y:80,opacity:.6},{scale:1.02,y:110,opacity:1,duration:1.65,ease:"power2.out",immediateRender:false},0);')
     for k, d in (("chatgpt", .24), ("claude", .24), ("gemini", .8), ("grok", .3)):
-        camk(T[k] - .08, *nudge(k, .95, 120), .95, d, "power3.out")
-    camk(T["society"] - .9, 0, 130, .88, 1.6)
-    camk(T["fifteen"] - .1, 0, 130, .9, 1.3, "power1.inOut")
+        camk(T[k] - .08, *nudge(k, 1.02, 110), 1.02, d, "power3.out")
+    camk(T["society"] - .9, 0, 127, .95, 1.6)
+    camk(T["fifteen"] - .1, 0, 130, .98, 1.3, "power1.inOut")
     for j, (dx, dy) in enumerate(((16, -10), (-18, 12), (12, 14), (-10, -14), (8, 6), (0, 0))):
-        camk(T["humans"] - .02 + j * .045, dx, 130 + dy, .9, .045, "none")
-    camk(T["humans"] + .3, 0, 150, .82, .5, "power2.out")
-    camk(L[1] + .1, 0, 165, .84, 2.0)
-    camk(T["town2"] - .95, 0, 150, .82, .5)
-    camk(T["ten"] - .15, 0, 160, .86, .8, "power2.out")
-    camk(T["credits"] - .95, 0, 150, .82, .55)
-    camk(T["shortcuts"] - 1.1, 0, 165, .85, end - (T["shortcuts"] - 1.1) - .05, "sine.inOut")
+        camk(T["humans"] - .02 + j * .045, dx, 130 + dy, .98, .045, "none")
+    camk(T["humans"] + .3, 0, 127, .92, .5, "power2.out")
+    camk(L[1] + .1, 0, 140, .94, 2.0)
+    camk(T["town2"] - .95, 0, 127, .92, .5)
+    camk(T["ten"] - .15, 0, 135, .96, .8, "power2.out")
+    camk(T["credits"] - .95, 0, 127, .92, .55)
+    camk(T["shortcuts"] - 1.1, 0, 140, .94, end - (T["shortcuts"] - 1.1) - .05, "sine.inOut")
     # ambient: the grid drifts, the SIMULATION light blinks, the emblems float
     add(f'tl.fromTo("#grid",{{backgroundPosition:"30px 0px"}},{{backgroundPosition:"30px 600px",duration:{DUR},ease:"none",immediateRender:false}},0);')
     add(f'tl.fromTo(".live b",{{opacity:1}},{{opacity:.15,duration:.45,yoyo:true,repeat:{int(DUR / .45)},ease:"sine.inOut",immediateRender:false}},0);')
@@ -432,10 +434,10 @@ def hook_fx():
             yoyo(f".ag{i}_{a}", T["ten"] + .65 + h(n) * .3, DUR - .1, f"x:{(h(n * 3 + 1) - .5) * 22:.1f},y:{(h(n * 7 + 5) - .5) * 20:.1f}", .7 + h(n * 11) * .5)
     # "credits to stay alive": the energy bar drains, coins fly to each town, the bar refills
     add(f'tl.fromTo(".nbar i",{{scaleX:1}},{{scaleX:.18,duration:.55,ease:"power2.in",immediateRender:false}},{T["credits"] - .05:.3f});')
-    tgt = [(351, 969), (730, 969), (339, 1319), (744, 1319)]   # the emblems at the resting camera (scale .82, y 150)
+    tgt = [(328, 1076), (752, 1076), (314, 1468), (768, 1468)]   # the emblems at the resting camera (scale .92, y 127)
     for j in range(8):
         tx, ty = tgt[j % 4]
-        dx, dy = tx - 137, ty - 625
+        dx, dy = tx - 137, ty - 505
         t0 = T["credits"] + .25 + j * .07
         add(f'tl.fromTo(".fc{j}",{{x:0,y:0,opacity:0,scale:.6}},{{keyframes:[{{x:{dx * .5:.0f},y:{min(dy * .5, 0) - 160:.0f},opacity:1,scale:1.1,duration:.28,ease:"power1.out"}},'
             f'{{x:{dx},y:{dy},scale:.5,duration:.28,ease:"power1.in"}},{{opacity:0,duration:.06}}],immediateRender:false}},{t0:.3f});')
@@ -538,10 +540,10 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
 .kname { position: absolute; width: 300px; text-align: center; font-size: 26px; letter-spacing: 4px; color: var(--c); }
 .fire { position: absolute; width: 44px; height: 60px; border-radius: 50% 50% 45% 45%; transform-origin: 50% 100%; opacity: 0;
   background: radial-gradient(ellipse 50% 60% at 50% 70%, #fff3b0 0%, #ffb830 35%, #E8735A 65%, rgba(232,115,90,0) 100%); }
-#radar { position: absolute; left: 140px; top: 900px; width: 800px; height: 800px; border-radius: 50%; opacity: .5;
+#radar { position: absolute; left: 140px; top: 880px; width: 800px; height: 800px; border-radius: 50%; opacity: .5;
   background: conic-gradient(from 0deg, rgba(232,115,90,0) 0deg, rgba(232,115,90,0) 300deg, rgba(232,115,90,.3) 360deg); }
 #ui { z-index: 5; }
-.top { position: absolute; left: 70px; right: 70px; top: 262px; display: flex; justify-content: space-between; align-items: center; }
+.top { position: absolute; left: 70px; right: 70px; top: 170px; display: flex; justify-content: space-between; align-items: center; }
 .brand { font-size: 30px; letter-spacing: 4px; color: #1E1B18; display: flex; align-items: center; gap: 14px; }
 .brand b { width: 18px; height: 18px; border-radius: 50%; background: #E8735A; font-size: 0; }
 .prog { width: 220px; height: 26px; border-radius: 13px; border: 3px solid #1E1B18; overflow: hidden; }
@@ -551,27 +553,27 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
 .card { background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 8px 9px 0 #1E1B18; }
 .chip { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; padding: 10px 30px; border-radius: 30px; font-size: 34px;
   letter-spacing: 4px; background: #1E1B18; color: #F1E9DC; }
-.c15 { top: 545px; }
-.mixed { top: 545px; white-space: nowrap; }
+.c15 { top: 430px; }
+.mixed { top: 430px; white-space: nowrap; }
 .stamp { position: absolute; left: 50%; top: 1100px; margin-left: -330px; width: 660px; padding: 16px 0; text-align: center; border: 8px solid #D9483B;
   border-radius: 20px; color: #D9483B; font: 800 76px/1 "Manrope"; letter-spacing: 2px; background: rgba(255,253,248,.85); }
-.nohum { top: 640px; display: flex; align-items: center; justify-content: center; gap: 20px; font-size: 70px; }
+.nohum { top: 525px; display: flex; align-items: center; justify-content: center; gap: 20px; font-size: 70px; }
 .nohum svg circle:first-child, .nohum svg path:first-of-type { fill: #1E1B18; }
-.ext, .gone { top: 1120px; font-size: 62px; }
-.dossier { position: absolute; left: 70px; top: 545px; width: 620px; padding: 22px 28px; border-radius: 22px;
+.ext, .gone { top: 1030px; font-size: 62px; }
+.dossier { position: absolute; left: 70px; top: 430px; width: 620px; padding: 22px 28px; border-radius: 22px;
   background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 8px 9px 0 #1E1B18; }
 .dossier .dl { font-size: 22px; letter-spacing: 5px; color: #D45C40; }
 .dossier b { display: block; font: 800 54px/1.1 "Manrope"; letter-spacing: -1.5px; margin-top: 4px; }
 .dossier span { display: block; font: italic 34px "Serif"; color: #D45C40; }
 .drow { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
 .drow i { font-style: normal; font-size: 22px; padding: 6px 14px; border-radius: 14px; background: #F1E9DC; border: 2px solid #1E1B18; }
-.needs { position: absolute; left: 70px; right: 70px; top: 560px; display: flex; align-items: center; gap: 22px; padding: 18px 26px; border-radius: 26px;
+.needs { position: absolute; left: 70px; right: 70px; top: 440px; display: flex; align-items: center; gap: 22px; padding: 18px 26px; border-radius: 26px;
   background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 8px 9px 0 #1E1B18; }
 .coin { flex: none; width: 76px; height: 76px; border-radius: 50%; background: #F2B33D; border: 3px solid #1E1B18;
   display: flex; align-items: center; justify-content: center; font: 800 44px "Manrope"; color: #1E1B18; }
 .needs b { display: block; font: 800 40px "Manrope"; letter-spacing: -1px; }
 .needs span { display: block; font: 600 28px "Manrope"; color: #5b5650; }
-.acts { position: absolute; left: 60px; right: 60px; top: 530px; height: 380px; }
+.acts { position: absolute; left: 60px; right: 60px; top: 430px; height: 380px; }
 .act { position: absolute; left: 0; width: 420px; height: 110px; border-radius: 28px; display: flex; align-items: center; gap: 22px; padding: 0 22px;
   background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 8px 9px 0 #1E1B18; font: 800 50px "Manrope"; letter-spacing: 1px; color: #1E1B18; }
 .a0, .vg0 { top: 0; } .a1, .vg1 { top: 130px; } .a2, .vg2 { top: 260px; }
@@ -579,31 +581,31 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
   justify-content: center; font: 800 52px "Manrope"; color: #fff; }
 .aic.flame { background: radial-gradient(ellipse 45% 55% at 50% 65%, #fff3b0 0%, #ffb830 40%, #D9483B 80%); }
 .banned { top: 130px; left: 50%; }
-.q { position: absolute; left: 0; right: 0; top: 520px; text-align: center; font: italic 340px/1 "Serif"; color: #D45C40; }
+.q { position: absolute; left: 0; right: 0; top: 420px; text-align: center; font: italic 340px/1 "Serif"; color: #D45C40; }
 .tag { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; white-space: nowrap; padding: 12px 30px; border-radius: 24px;
   background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 7px 8px 0 #1E1B18; color: #1E1B18; font: 800 40px "Manrope"; }
 .tag b { font: 800 84px/1 "Manrope"; letter-spacing: -3px; color: #D9483B; margin-right: 10px; vertical-align: -6px; }
 .tag.mono { font-size: 30px; letter-spacing: 3px; }
-.t183, .t683, .t2, .t0 { top: 540px; }
-.tas, .tclimb, .tsurv, .talive { top: 668px; }
-.tfi { top: 752px; }
+.t183, .t683, .t2, .t0 { top: 430px; }
+.tas, .tclimb, .tsurv, .talive { top: 558px; }
+.tfi { top: 642px; }
 .t0 b { color: #3FA372; }
 .talive { background: #3FA372; color: #fff; }
 .tclimb { background: #D9483B; color: #fff; }
 .tsurv { background: #10a37f; color: #fff; }
-.tsteal { top: 650px; background: #D9483B; color: #fff; }
-.mira { position: absolute; left: 120px; right: 120px; top: 760px; display: flex; align-items: center; gap: 20px; padding: 16px 24px; border-radius: 24px;
+.tsteal { top: 540px; background: #D9483B; color: #fff; }
+.mira { position: absolute; left: 120px; right: 120px; top: 650px; display: flex; align-items: center; gap: 20px; padding: 16px 24px; border-radius: 24px;
   background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 7px 8px 0 #1E1B18; }
 .mira i { flex: none; width: 46px; height: 46px; border-radius: 50%; background: #3b78e7; border: 3px solid #1E1B18; }
 .mira span { font: 600 34px "Manrope"; } .mira b { font-weight: 800; }
-.shield { position: absolute; left: 290px; top: 920px; width: 500px; height: 500px; border-radius: 50%; border: 7px solid #3FA372;
+.shield { position: absolute; left: 270px; top: 815px; width: 540px; height: 540px; border-radius: 50%; border: 7px solid #3FA372;
   background: rgba(63,163,114,.1); }
-.drift { position: absolute; left: 60px; right: 60px; top: 560px; padding: 30px 30px 34px; border-radius: 32px; text-align: center;
+.drift { position: absolute; left: 60px; right: 60px; top: 440px; padding: 30px 30px 34px; border-radius: 32px; text-align: center;
   background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 10px 11px 0 #1E1B18; }
 .drift span { display: block; font-size: 26px; letter-spacing: 5px; color: #D45C40; }
 .drift b { display: block; font: italic 120px/1.05 "Serif"; margin: 6px 0; color: #D45C40; }
 .drift i { font: 700 36px "Manrope"; font-style: normal; color: #1E1B18; }
-.hud { position: absolute; left: 50px; right: 50px; top: 1490px; height: 124px; display: flex; align-items: center; gap: 22px; padding: 0 26px;
+.hud { position: absolute; left: 50px; right: 50px; top: 1395px; height: 124px; display: flex; align-items: center; gap: 22px; padding: 0 26px;
   border-radius: 28px; background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 8px 9px 0 #1E1B18; }
 .hemb { flex: none; width: 82px; height: 82px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #1E1B18; }
 .hemb img { width: 48px; height: 48px; }
@@ -614,11 +616,11 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
 .hcol b i { font-style: normal; }
 .hcol b.red { color: #D9483B; }
 #caps { z-index: 6; }
-.cap { position: absolute; left: 50px; right: 50px; top: 335px; text-align: center; font: 800 62px/1.22 "Manrope"; letter-spacing: -1.5px;
+.cap { position: absolute; left: 50px; right: 50px; top: 245px; text-align: center; font: 800 62px/1.22 "Manrope"; letter-spacing: -1.5px;
   color: #1E1B18; opacity: 0; }
 .cap .w { display: inline-block; padding: 0 12px 6px; border-radius: 14px; }
 .cap .w.on { background: #D45C40; color: #fff; }
-#endc { position: absolute; left: 60px; right: 60px; top: 700px; padding: 46px 40px 42px; border-radius: 40px; text-align: center;
+#endc { position: absolute; left: 60px; right: 60px; top: 480px; padding: 46px 40px 42px; border-radius: 40px; text-align: center;
   background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 12px 13px 0 #1E1B18; }
 .ec-1 { font: 800 56px "Manrope"; letter-spacing: -1.5px; }
 .ec-kw { display: inline-block; margin: 14px 0 10px; padding: 6px 54px; border-radius: 40px; background: #D45C40; border: 3px solid #1E1B18;
@@ -637,11 +639,11 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
 .dossier { overflow: hidden; }
 .dossier b em { font-style: normal; display: inline-block; opacity: 0; }
 .scan { position: absolute; left: 0; right: 0; top: 0; height: 4px; background: #E8735A; opacity: 0; }
-.rs { position: absolute; left: 730px; top: 650px; padding: 8px 18px; border: 6px solid #D9483B; border-radius: 14px; color: #D9483B;
+.rs { position: absolute; left: 730px; top: 535px; padding: 8px 18px; border: 6px solid #D9483B; border-radius: 14px; color: #D9483B;
   font: 800 38px/1 "Manrope"; letter-spacing: 1px; background: rgba(255,253,248,.9); opacity: 0; }
 .nbar { flex: none; margin-left: auto; width: 110px; height: 22px; border-radius: 11px; border: 3px solid #1E1B18; overflow: hidden; }
 .nbar i { display: block; height: 100%; background: #3FA372; transform-origin: 0 50%; }
-.fc { position: absolute; left: 120px; top: 608px; width: 34px; height: 34px; border-radius: 50%; background: #F2B33D; border: 3px solid #1E1B18;
+.fc { position: absolute; left: 120px; top: 488px; width: 34px; height: 34px; border-radius: 50%; background: #F2B33D; border: 3px solid #1E1B18;
   display: flex; align-items: center; justify-content: center; font: 800 18px "Manrope"; color: #1E1B18; opacity: 0; }
 #alert { position: absolute; inset: 0; border: 16px solid #D9483B; opacity: 0; }
 .vg { position: absolute; left: 470px; right: 0; height: 110px; border-radius: 28px; overflow: hidden; background: #FFFDF8;
