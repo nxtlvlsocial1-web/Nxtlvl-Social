@@ -5,37 +5,35 @@
     @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
     @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
     #root { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
-    /* bold captions in their own band between the graphics and the face card; words light up as they are said */
+    /* captions in the "Not luck." serif, just under the seam; words light up as they are said */
     .cg { position: absolute; left: 40px; right: 40px; top: 726px; height: 96px; text-align: center; visibility: hidden;
-          font-family: "Archivo", sans-serif; font-weight: 800; font-stretch: 100%; font-size: 70px; line-height: 96px;
-          letter-spacing: -.015em; white-space: nowrap; }
-    .cw { display: inline-block; margin: 0 .09em; color: rgba(245,242,255,.45); transform-origin: 50% 70%;
-          -webkit-text-stroke: 8px rgba(5,3,12,.85); paint-order: stroke fill;
+          font-family: "Instrument Serif", serif; font-style: italic; font-size: 74px; line-height: 96px; white-space: nowrap; }
+    .cw { display: inline-block; margin: 0 .08em; color: rgba(245,242,255,.42); transform-origin: 50% 70%;
           text-shadow: 0 4px 24px rgba(5,3,12,.8); }
   </style>
   <script src="assets/vendor/gsap.min.js"></script>
   <div id="root" data-composition-id="captions" data-width="1080" data-height="1920" data-duration="19.66">
-    <div id="cg-0" class="cg" style="font-size:70px"><span id="cw-0-0" class="cw">We</span> <span id="cw-0-1" class="cw">took</span> <span id="cw-0-2" class="cw kw">@ai.nxtlvl</span></div>
-    <div id="cg-1" class="cg" style="font-size:70px"><span id="cw-1-0" class="cw">from</span> <span id="cw-1-1" class="cw kw">zero</span> <span id="cw-1-2" class="cw">to</span></div>
-    <div id="cg-2" class="cg" style="font-size:70px"><span id="cw-2-0" class="cw kw">7,100</span> <span id="cw-2-1" class="cw">followers</span></div>
-    <div id="cg-3" class="cg" style="font-size:70px"><span id="cw-3-0" class="cw">with</span> <span id="cw-3-1" class="cw">just</span> <span id="cw-3-2" class="cw kw">22</span> <span id="cw-3-3" class="cw kw">posts.</span></div>
-    <div id="cg-4" class="cg" style="font-size:70px"><span id="cw-4-0" class="cw">and</span> <span id="cw-4-1" class="cw">here&#x27;s</span></div>
-    <div id="cg-5" class="cg" style="font-size:70px"><span id="cw-5-0" class="cw">what&#x27;s</span> <span id="cw-5-1" class="cw kw">inside</span> <span id="cw-5-2" class="cw">it.</span></div>
-    <div id="cg-6" class="cg" style="font-size:70px"><span id="cw-6-0" class="cw">Designs</span> <span id="cw-6-1" class="cw">that</span> <span id="cw-6-2" class="cw">are</span></div>
-    <div id="cg-7" class="cg" style="font-size:70px"><span id="cw-7-0" class="cw">made</span> <span id="cw-7-1" class="cw">to</span> <span id="cw-7-2" class="cw">be</span> <span id="cw-7-3" class="cw kw">saved,</span></div>
-    <div id="cg-8" class="cg" style="font-size:70px"><span id="cw-8-0" class="cw">not</span> <span id="cw-8-1" class="cw">scrolled</span> <span id="cw-8-2" class="cw">past.</span></div>
-    <div id="cg-9" class="cg" style="font-size:70px"><span id="cw-9-0" class="cw">A</span> <span id="cw-9-1" class="cw kw">content</span> <span id="cw-9-2" class="cw kw">calendar</span></div>
-    <div id="cg-10" class="cg" style="font-size:70px"><span id="cw-10-0" class="cw">planned</span> <span id="cw-10-1" class="cw">a</span> <span id="cw-10-2" class="cw kw">month</span> <span id="cw-10-3" class="cw kw">ahead.</span></div>
-    <div id="cg-11" class="cg" style="font-size:67px"><span id="cw-11-0" class="cw kw">Reels</span> <span id="cw-11-1" class="cw">edited</span> <span id="cw-11-2" class="cw">and</span> <span id="cw-11-3" class="cw">posted</span></div>
-    <div id="cg-12" class="cg" style="font-size:59px"><span id="cw-12-0" class="cw">every</span> <span id="cw-12-1" class="cw">single</span> <span id="cw-12-2" class="cw kw">week</span> <span id="cw-12-3" class="cw">for</span> <span id="cw-12-4" class="cw">you.</span></div>
-    <div id="cg-13" class="cg" style="font-size:70px"><span id="cw-13-0" class="cw">Most</span> <span id="cw-13-1" class="cw">agencies</span> <span id="cw-13-2" class="cw">charge</span></div>
-    <div id="cg-14" class="cg" style="font-size:70px"><span id="cw-14-0" class="cw kw">₹25,000</span> <span id="cw-14-1" class="cw">for</span> <span id="cw-14-2" class="cw">this,</span></div>
-    <div id="cg-15" class="cg" style="font-size:70px"><span id="cw-15-0" class="cw">but</span> <span id="cw-15-1" class="cw">we</span> <span id="cw-15-2" class="cw">start</span> <span id="cw-15-3" class="cw">at</span></div>
-    <div id="cg-16" class="cg" style="font-size:70px"><span id="cw-16-0" class="cw kw">₹999.</span></div>
-    <div id="cg-17" class="cg" style="font-size:70px"><span id="cw-17-0" class="cw">Want</span> <span id="cw-17-1" class="cw">this</span> <span id="cw-17-2" class="cw">for</span></div>
-    <div id="cg-18" class="cg" style="font-size:70px"><span id="cw-18-0" class="cw">your</span> <span id="cw-18-1" class="cw">own</span> <span id="cw-18-2" class="cw kw">brand?</span></div>
-    <div id="cg-19" class="cg" style="font-size:70px"><span id="cw-19-0" class="cw">Reach</span> <span id="cw-19-1" class="cw">out</span> <span id="cw-19-2" class="cw">to</span> <span id="cw-19-3" class="cw">us</span></div>
-    <div id="cg-20" class="cg" style="font-size:70px"><span id="cw-20-0" class="cw">and</span> <span id="cw-20-1" class="cw">tap</span> <span id="cw-20-2" class="cw kw">Send</span> <span id="cw-20-3" class="cw kw">Message.</span></div>
+    <div id="cg-0" class="cg"><span id="cw-0-0" class="cw">We</span> <span id="cw-0-1" class="cw">took</span> <span id="cw-0-2" class="cw kw">@ai.nxtlvl</span></div>
+    <div id="cg-1" class="cg"><span id="cw-1-0" class="cw">from</span> <span id="cw-1-1" class="cw kw">zero</span> <span id="cw-1-2" class="cw">to</span></div>
+    <div id="cg-2" class="cg"><span id="cw-2-0" class="cw kw">7,100</span> <span id="cw-2-1" class="cw">followers</span></div>
+    <div id="cg-3" class="cg"><span id="cw-3-0" class="cw">with</span> <span id="cw-3-1" class="cw">just</span> <span id="cw-3-2" class="cw kw">22</span> <span id="cw-3-3" class="cw kw">posts.</span></div>
+    <div id="cg-4" class="cg"><span id="cw-4-0" class="cw">and</span> <span id="cw-4-1" class="cw">here&#x27;s</span></div>
+    <div id="cg-5" class="cg"><span id="cw-5-0" class="cw">what&#x27;s</span> <span id="cw-5-1" class="cw kw">inside</span> <span id="cw-5-2" class="cw">it.</span></div>
+    <div id="cg-6" class="cg"><span id="cw-6-0" class="cw">Designs</span> <span id="cw-6-1" class="cw">that</span> <span id="cw-6-2" class="cw">are</span></div>
+    <div id="cg-7" class="cg"><span id="cw-7-0" class="cw">made</span> <span id="cw-7-1" class="cw">to</span> <span id="cw-7-2" class="cw">be</span> <span id="cw-7-3" class="cw kw">saved,</span></div>
+    <div id="cg-8" class="cg"><span id="cw-8-0" class="cw">not</span> <span id="cw-8-1" class="cw">scrolled</span> <span id="cw-8-2" class="cw">past.</span></div>
+    <div id="cg-9" class="cg"><span id="cw-9-0" class="cw">A</span> <span id="cw-9-1" class="cw kw">content</span> <span id="cw-9-2" class="cw kw">calendar</span></div>
+    <div id="cg-10" class="cg"><span id="cw-10-0" class="cw">planned</span> <span id="cw-10-1" class="cw">a</span> <span id="cw-10-2" class="cw kw">month</span> <span id="cw-10-3" class="cw kw">ahead.</span></div>
+    <div id="cg-11" class="cg"><span id="cw-11-0" class="cw kw">Reels</span> <span id="cw-11-1" class="cw">edited</span> <span id="cw-11-2" class="cw">and</span> <span id="cw-11-3" class="cw">posted</span></div>
+    <div id="cg-12" class="cg"><span id="cw-12-0" class="cw">every</span> <span id="cw-12-1" class="cw">single</span> <span id="cw-12-2" class="cw kw">week</span> <span id="cw-12-3" class="cw">for</span> <span id="cw-12-4" class="cw">you.</span></div>
+    <div id="cg-13" class="cg"><span id="cw-13-0" class="cw">Most</span> <span id="cw-13-1" class="cw">agencies</span> <span id="cw-13-2" class="cw">charge</span></div>
+    <div id="cg-14" class="cg"><span id="cw-14-0" class="cw kw">₹25,000</span> <span id="cw-14-1" class="cw">for</span> <span id="cw-14-2" class="cw">this,</span></div>
+    <div id="cg-15" class="cg"><span id="cw-15-0" class="cw">but</span> <span id="cw-15-1" class="cw">we</span> <span id="cw-15-2" class="cw">start</span> <span id="cw-15-3" class="cw">at</span></div>
+    <div id="cg-16" class="cg"><span id="cw-16-0" class="cw kw">₹999.</span></div>
+    <div id="cg-17" class="cg"><span id="cw-17-0" class="cw">Want</span> <span id="cw-17-1" class="cw">this</span> <span id="cw-17-2" class="cw">for</span></div>
+    <div id="cg-18" class="cg"><span id="cw-18-0" class="cw">your</span> <span id="cw-18-1" class="cw">own</span> <span id="cw-18-2" class="cw kw">brand?</span></div>
+    <div id="cg-19" class="cg"><span id="cw-19-0" class="cw">Reach</span> <span id="cw-19-1" class="cw">out</span> <span id="cw-19-2" class="cw">to</span> <span id="cw-19-3" class="cw">us</span></div>
+    <div id="cg-20" class="cg"><span id="cw-20-0" class="cw">and</span> <span id="cw-20-1" class="cw">tap</span> <span id="cw-20-2" class="cw kw">Send</span> <span id="cw-20-3" class="cw kw">Message.</span></div>
   </div>
   <script>
     (function () {
