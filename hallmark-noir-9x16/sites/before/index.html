@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tally — Split group expenses with friends</title>
+  <meta name="description" content="Tally makes it easy to split bills, track shared expenses, and settle up with friends. No awkward math, no awkward conversations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --primary-light: #d1fae5;
+      --accent: #6366f1;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --bg: #ffffff;
+      --bg-alt: #f8fafc;
+      --border: #e2e8f0;
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 25px 50px rgba(15, 23, 42, 0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(16, 185, 129, 0.35);
+    }
+    .btn-secondary {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--text-muted); transform: translateY(-2px); }
+
+    /* Nav */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: grid;
+      place-items: center;
+    }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { padding: 10px 22px; font-size: 15px; }
+
+    /* Hero */
+    .hero {
+      padding: 96px 0 80px;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.12), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(99, 102, 241, 0.12), transparent 40%);
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(40px, 5.5vw, 64px);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero p.lead {
+      font-size: 20px;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin-bottom: 36px;
+    }
+    .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 36px; }
+    .hero-proof {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+    .avatars { display: flex; }
+    .avatars span {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      margin-left: -10px;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .avatars span:first-child { margin-left: 0; }
+    .stars { color: #f59e0b; letter-spacing: 2px; }
+
+    /* Phone mockup */
+    .phone-wrap { display: flex; justify-content: center; position: relative; }
+    .phone {
+      width: 320px;
+      background: #0f172a;
+      border-radius: 44px;
+      padding: 14px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      z-index: 2;
+    }
+    .screen {
+      background: var(--bg-alt);
+      border-radius: 32px;
+      overflow: hidden;
+      padding: 28px 20px 24px;
+    }
+    .screen-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .screen-header h4 { font-size: 18px; font-weight: 700; }
+    .screen-header small { color: var(--text-muted); font-size: 13px; }
+    .group-emoji {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--primary-light);
+      display: grid; place-items: center;
+    }
+    .balance-card {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+    .balance-card small { opacity: 0.85; font-size: 13px; }
+    .balance-card .amount { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 4px 0 12px; }
+    .balance-card .settle {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .expense-list { display: flex; flex-direction: column; gap: 10px; }
+    .expense {
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.06);
+    }
+    .expense-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .expense-info { flex: 1; }
+    .expense-info strong { display: block; font-size: 14px; }
+    .expense-info small { color: var(--text-muted); font-size: 12px; }
+    .expense-amt { font-weight: 700; font-size: 14px; text-align: right; }
+    .expense-amt small { display: block; font-weight: 500; font-size: 11px; }
+    .owed { color: var(--primary-dark); }
+    .owe { color: #ef4444; }
+
+    .floating-card {
+      position: absolute;
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 16px;
+      box-shadow: var(--shadow);
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 3;
+      animation: float 4s ease-in-out infinite;
+    }
+    .floating-card.one { top: 60px; left: -10px; }
+    .floating-card.two { bottom: 80px; right: -10px; animation-delay: 2s; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary); }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Logos / stats strip */
+    .stats {
+      padding: 48px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      text-align: center;
+    }
+    .stat strong {
+      display: block;
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .stat span { color: var(--text-muted); font-size: 15px; }
+
+    /* Sections */
+    section { padding: 100px 0; }
+    .section-head { text-align: center; max-width: 640px; margin: 0 auto 64px; }
+    .eyebrow {
+      color: var(--primary-dark);
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+    .section-head h2 {
+      font-size: clamp(32px, 4vw, 44px);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    .section-head p { color: var(--text-muted); font-size: 18px; }
+
+    /* Features */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .feature {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .feature:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .feature-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: grid; place-items: center;
+      margin-bottom: 20px;
+    }
+    .feature h3 { font-size: 20px; margin-bottom: 10px; letter-spacing: -0.01em; }
+    .feature p { color: var(--text-muted); font-size: 16px; }
+
+    /* How it works */
+    .how { background: var(--bg-alt); }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      counter-reset: step;
+    }
+    .step { text-align: center; padding: 0 12px; }
+    .step-num {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 800;
+      font-size: 22px;
+      display: grid; place-items: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    }
+    .step h3 { font-size: 20px; margin-bottom: 10px; }
+    .step p { color: var(--text-muted); }
+
+    /* Testimonials */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testimonial {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .testimonial p { font-size: 16px; }
+    .testimonial .who { display: flex; align-items: center; gap: 12px; margin-top: auto; }
+    .testimonial .who span.av {
+      width: 42px; height: 42px; border-radius: 50%;
+      display: grid; place-items: center;
+      font-weight: 700; color: #fff;
+    }
+    .testimonial .who strong { display: block; font-size: 15px; }
+    .testimonial .who small { color: var(--text-muted); }
+
+    /* Pricing */
+    .pricing { background: var(--bg-alt); }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .plan {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px;
+      position: relative;
+    }
+    .plan.featured {
+      border: 2px solid var(--primary);
+      box-shadow: var(--shadow);
+    }
+    .plan .tag {
+      position: absolute;
+      top: -14px;
+      right: 24px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+    .plan h3 { font-size: 22px; margin-bottom: 6px; }
+    .plan .desc { color: var(--text-muted); margin-bottom: 20px; }
+    .plan .price { font-size: 44px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 24px; }
+    .plan .price small { font-size: 16px; font-weight: 500; color: var(--text-muted); }
+    .plan ul { list-style: none; margin-bottom: 28px; display: flex; flex-direction: column; gap: 12px; }
+    .plan li { display: flex; gap: 10px; align-items: flex-start; }
+    .plan li svg { flex-shrink: 0; margin-top: 4px; }
+    .plan .btn { width: 100%; justify-content: center; }
+
+    /* FAQ */
+    .faq-list { max-width: 760px; margin: 0 auto; }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      font: inherit;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      padding: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .faq-q .plus { font-size: 24px; color: var(--primary); transition: transform 0.2s ease; }
+    .faq-item.open .plus { transform: rotate(45deg); }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      color: var(--text-muted);
+    }
+    .faq-a p { padding-bottom: 24px; }
+    .faq-item.open .faq-a { max-height: 200px; }
+
+    /* CTA */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 28px;
+      padding: 72px 48px;
+      text-align: center;
+      color: #fff;
+    }
+    .cta-banner h2 { font-size: clamp(30px, 4vw, 44px); letter-spacing: -0.02em; margin-bottom: 16px; font-weight: 800; }
+    .cta-banner p { font-size: 18px; opacity: 0.9; margin-bottom: 32px; }
+    .store-btns { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #0f172a;
+      color: #fff;
+      padding: 12px 22px;
+      border-radius: 12px;
+      transition: transform 0.15s ease;
+    }
+    .store-btn:hover { transform: translateY(-2px); }
+    .store-btn small { display: block; font-size: 11px; opacity: 0.8; line-height: 1.2; }
+    .store-btn strong { display: block; font-size: 17px; line-height: 1.2; }
+
+    /* Footer */
+    footer {
+      padding: 64px 0 32px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+    .footer-grid p { color: var(--text-muted); margin-top: 14px; max-width: 280px; }
+    .footer-grid h4 { font-size: 15px; margin-bottom: 16px; }
+    .footer-grid ul { list-style: none; display: flex; flex-direction: column; gap: 10px; color: var(--text-muted); }
+    .footer-grid a:hover { color: var(--text); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 14px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero p.lead { margin-left: auto; margin-right: auto; }
+      .hero-ctas, .hero-proof { justify-content: center; }
+      .features-grid, .testimonials-grid { grid-template-columns: 1fr 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+      .hero { padding: 64px 0; }
+      section { padding: 72px 0; }
+      .features-grid, .testimonials-grid, .steps, .pricing-grid { grid-template-columns: 1fr; }
+      .floating-card { display: none; }
+      .phone { width: 280px; }
+      .cta-banner { padding: 56px 24px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-mark">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="4" x2="5" y2="20"/><line x1="10" y1="4" x2="10" y2="20"/><line x1="15" y1="4" x2="15" y2="20"/><line x1="3" y1="16" x2="20" y2="8"/></svg>
+        </span>
+        Tally
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <a href="#download" class="btn btn-primary nav-cta">Get the app</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container hero-inner">
+      <div>
+        <div class="badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5 2 7.5-6.5-4.5L5.5 21l2-7.5L2 9h7z"/></svg>
+          Free for groups of any size
+        </div>
+        <h1>Split expenses, <span>not friendships.</span></h1>
+        <p class="lead">Tally keeps track of who paid for what on trips, in shared apartments, and at dinners out, so everyone pays their fair share without the awkward math.</p>
+        <div class="hero-ctas">
+          <a href="#download" class="btn btn-primary">
+            Get started free
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a href="#how" class="btn btn-secondary">See how it works</a>
+        </div>
+        <div class="hero-proof">
+          <div class="avatars">
+            <span style="background:#10b981">JM</span>
+            <span style="background:#6366f1">AK</span>
+            <span style="background:#f59e0b">RL</span>
+            <span style="background:#ec4899">SP</span>
+          </div>
+          <div>
+            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            Loved by 2M+ friends splitting bills
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="floating-card one"><span class="dot"></span> Sam paid you $42.50</div>
+        <div class="floating-card two">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          All settled up!
+        </div>
+        <div class="phone">
+          <div class="screen">
+            <div class="screen-header">
+              <div>
+                <h4>Lisbon Trip</h4>
+                <small>5 friends &middot; 23 expenses</small>
+              </div>
+              <div class="group-emoji">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+              </div>
+            </div>
+            <div class="balance-card">
+              <small>You are owed</small>
+              <div class="amount">$186.40</div>
+              <span class="settle">Settle up &rarr;</span>
+            </div>
+            <div class="expense-list">
+              <div class="expense">
+                <div class="expense-icon" style="background:#fef3c7">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <div class="expense-info"><strong>Airbnb</strong><small>You paid $640.00</small></div>
+                <div class="expense-amt owed">+$512.00<small>you lent</small></div>
+              </div>
+              <div class="expense">
+                <div class="expense-icon" style="background:#fce7f3">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                </div>
+                <div class="expense-info"><strong>Dinner at Taberna</strong><small>Maya paid $210.00</small></div>
+                <div class="expense-amt owe">-$42.00<small>you owe</small></div>
+              </div>
+              <div class="expense">
+                <div class="expense-icon" style="background:#e0e7ff">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                </div>
+                <div class="expense-info"><strong>Tuk-tuk tour</strong><small>Jake paid $75.00</small></div>
+                <div class="expense-amt owe">-$15.00<small>you owe</small></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="container stats-grid">
+      <div class="stat"><strong>2M+</strong><span>Active users</span></div>
+      <div class="stat"><strong>$1.2B</strong><span>Expenses split</span></div>
+      <div class="stat"><strong>150+</strong><span>Currencies supported</span></div>
+      <div class="stat"><strong>4.9&#9733;</strong><span>App Store rating</span></div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <section id="features">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Features</div>
+        <h2>Everything you need to split costs fairly</h2>
+        <p>From weekend getaways to monthly rent, Tally handles the numbers so you can focus on the fun.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature">
+          <div class="feature-icon" style="background:#d1fae5">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3>Create groups</h3>
+          <p>Set up a group for your trip, house, or team in seconds and invite friends with a link.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon" style="background:#e0e7ff">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h3>Flexible splits</h3>
+          <p>Split equally, by exact amounts, percentages, or shares. Tally does the math either way.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon" style="background:#fef3c7">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+          <h3>Scan receipts</h3>
+          <p>Snap a photo of any receipt and Tally pulls out the items so everyone can claim what they had.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon" style="background:#fce7f3">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          </div>
+          <h3>Simplify debts</h3>
+          <p>Our smart algorithm minimizes the number of payments needed, so settling up takes fewer transfers.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon" style="background:#cffafe">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0891b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <h3>Multi-currency</h3>
+          <p>Traveling abroad? Add expenses in any of 150+ currencies with automatic exchange rates.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon" style="background:#ede9fe">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <h3>Settle instantly</h3>
+          <p>Pay friends back right in the app with Venmo, PayPal, or bank transfer. One tap and you're even.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how" class="how">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">How it works</div>
+        <h2>Split a bill in three easy steps</h2>
+        <p>No spreadsheets. No IOUs on napkins. Just add it and forget it.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Start a group</h3>
+          <p>Create a group and invite your friends, roommates, or travel buddies.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Add expenses</h3>
+          <p>Log what you paid and choose how to split it. Everyone sees updates in real time.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Settle up</h3>
+          <p>Tally shows exactly who owes whom. Pay back in one tap and close the tab.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Testimonials</div>
+        <h2>Friends who split with Tally</h2>
+        <p>Join millions of people who've stopped stressing about shared money.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial">
+          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"Our group trip to Japan had 8 people and over 100 expenses. Tally made settling up at the end take literally two minutes."</p>
+          <div class="who">
+            <span class="av" style="background:#10b981">EM</span>
+            <div><strong>Emily M.</strong><small>Travel enthusiast</small></div>
+          </div>
+        </div>
+        <div class="testimonial">
+          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"Four roommates, one apartment, zero arguments about utilities. I can't imagine sharing a place without it now."</p>
+          <div class="who">
+            <span class="av" style="background:#6366f1">DK</span>
+            <div><strong>David K.</strong><small>Roommate of the year</small></div>
+          </div>
+        </div>
+        <div class="testimonial">
+          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"The receipt scanning is a game changer. Everyone just taps what they ordered and it's done. No more passing the phone around."</p>
+          <div class="who">
+            <span class="av" style="background:#f59e0b">PR</span>
+            <div><strong>Priya R.</strong><small>Dinner club organizer</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="pricing">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Pricing</div>
+        <h2>Free to start. Pro when you need it.</h2>
+        <p>The core features are free forever. Upgrade for power tools.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="plan">
+          <h3>Free</h3>
+          <p class="desc">Everything you need to split with friends.</p>
+          <div class="price">$0 <small>/ forever</small></div>
+          <ul>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Unlimited groups &amp; expenses</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Equal &amp; custom splits</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Debt simplification</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Payment reminders</li>
+          </ul>
+          <a href="#download" class="btn btn-secondary">Get started</a>
+        </div>
+        <div class="plan featured">
+          <span class="tag">Most popular</span>
+          <h3>Tally Pro</h3>
+          <p class="desc">For frequent travelers and busy households.</p>
+          <div class="price">$3.99 <small>/ month</small></div>
+          <ul>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Everything in Free</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Receipt scanning</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Multi-currency with live rates</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Spending charts &amp; CSV export</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>No ads</li>
+          </ul>
+          <a href="#download" class="btn btn-primary">Try Pro free for 14 days</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">FAQ</div>
+        <h2>Frequently asked questions</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q">Do my friends need the app too? <span class="plus">+</span></button>
+          <div class="faq-a"><p>It works best when everyone has it, but you can add friends by name or email and they'll get updates even before they sign up.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Is Tally really free? <span class="plus">+</span></button>
+          <div class="faq-a"><p>Yes. Groups, expenses, splits and settling up are free forever. Tally Pro adds extras like receipt scanning and multi-currency.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Is my financial data secure? <span class="plus">+</span></button>
+          <div class="faq-a"><p>Absolutely. All data is encrypted in transit and at rest. We never store your bank credentials, and payments go through trusted providers.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Can I use Tally on the web? <span class="plus">+</span></button>
+          <div class="faq-a"><p>Yes. Tally is available on iOS, Android and the web, and everything syncs instantly across your devices.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="download" style="padding-top:0">
+    <div class="container">
+      <div class="cta-banner">
+        <h2>Ready to stop doing the math?</h2>
+        <p>Download Tally and split your next bill in seconds.</p>
+        <div class="store-btns">
+          <a href="#" class="store-btn">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.47.83-.72 0-1.82-.81-2.99-.79-1.54.02-2.96.9-3.75 2.27-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.24-.02 2.02-1.12 2.77-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.39-.92-2.41-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+            <span><small>Download on the</small><strong>App Store</strong></span>
+          </a>
+          <a href="#" class="store-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24"><path fill="#34d399" d="M3.6 2.2l10.5 10.3L3.6 22.8c-.4-.2-.6-.6-.6-1.1V3.3c0-.5.2-.9.6-1.1z"/><path fill="#fbbf24" d="M17.6 9l-3.5 3.5 3.5 3.5 3.9-2.2c.9-.5.9-1.8 0-2.3L17.6 9z"/><path fill="#60a5fa" d="M3.6 2.2c.3-.2.8-.2 1.2 0L17.6 9l-3.5 3.5L3.6 2.2z"/><path fill="#f87171" d="M14.1 12.5l3.5 3.5-12.8 6.8c-.4.2-.9.2-1.2 0l10.5-10.3z"/></svg>
+            <span><small>Get it on</small><strong>Google Play</strong></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="#" class="logo">
+            <span class="logo-mark">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="4" x2="5" y2="20"/><line x1="10" y1="4" x2="10" y2="20"/><line x1="15" y1="4" x2="15" y2="20"/><line x1="3" y1="16" x2="20" y2="8"/></svg>
+            </span>
+            Tally
+          </a>
+          <p>The easiest way to share expenses with friends, roommates and travel buddies.</p>
+        </div>
+        <div>
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#download">Download</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#faq">Help center</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Tally, Inc. All rights reserved.</span>
+        <span>Made with care for friends everywhere.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.faq-q').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var item = btn.parentElement;
+        var wasOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(function (i) { i.classList.remove('open'); });
+        if (!wasOpen) item.classList.add('open');
+      });
+    });
+  </script>
+</body>
+</html>
