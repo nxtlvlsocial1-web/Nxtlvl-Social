@@ -1,0 +1,138 @@
+<template>
+  <link rel="stylesheet" href="assets/css/ad.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+    #root { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+    /* one caption line, centred on the chest band (y 1200-1310), under the chin and above Meta's buttons */
+    .cg { position: absolute; left: 60px; right: 60px; top: 1196px; text-align: center; visibility: hidden;
+          font-family: "Archivo", sans-serif; font-weight: 800; font-stretch: 104%; font-size: 70px; line-height: 1.18;
+          letter-spacing: -.01em; color: #FFFFFF; white-space: nowrap; }
+    .cw { display: inline-block; margin: 0 .07em; padding: 0 .14em; border-radius: 16px; background: rgba(125,24,252,0);
+          -webkit-text-stroke: 9px rgba(5,3,12,.82); paint-order: stroke fill; text-shadow: 0 6px 22px rgba(5,3,12,.55); }
+    .cw.kw { color: #E2CCFF; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="captions" data-width="1080" data-height="1920" data-duration="23.76">
+    <div id="cg-0" class="cg"><span id="cw-0-0" class="cw">We</span><span id="cw-0-1" class="cw">took</span><span id="cw-0-2" class="cw kw">@ai.nxtlvl</span></div>
+    <div id="cg-1" class="cg"><span id="cw-1-0" class="cw">from</span><span id="cw-1-1" class="cw kw">zero</span><span id="cw-1-2" class="cw">to</span></div>
+    <div id="cg-2" class="cg"><span id="cw-2-0" class="cw kw">7,100</span><span id="cw-2-1" class="cw">followers</span></div>
+    <div id="cg-3" class="cg"><span id="cw-3-0" class="cw">with</span><span id="cw-3-1" class="cw">just</span><span id="cw-3-2" class="cw kw">22</span><span id="cw-3-3" class="cw kw">posts.</span></div>
+    <div id="cg-4" class="cg"><span id="cw-4-0" class="cw">and</span><span id="cw-4-1" class="cw">here&#x27;s</span></div>
+    <div id="cg-5" class="cg"><span id="cw-5-0" class="cw">what&#x27;s</span><span id="cw-5-1" class="cw kw">inside</span><span id="cw-5-2" class="cw">it.</span></div>
+    <div id="cg-6" class="cg"><span id="cw-6-0" class="cw">Want</span><span id="cw-6-1" class="cw">this</span><span id="cw-6-2" class="cw">for</span></div>
+    <div id="cg-7" class="cg"><span id="cw-7-0" class="cw">your</span><span id="cw-7-1" class="cw">own</span><span id="cw-7-2" class="cw kw">brand?</span></div>
+    <div id="cg-8" class="cg"><span id="cw-8-0" class="cw">Reach</span><span id="cw-8-1" class="cw">out</span><span id="cw-8-2" class="cw">to</span><span id="cw-8-3" class="cw">us</span></div>
+    <div id="cg-9" class="cg"><span id="cw-9-0" class="cw">and</span><span id="cw-9-1" class="cw">tap</span><span id="cw-9-2" class="cw kw">Send</span><span id="cw-9-3" class="cw kw">Message.</span></div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      tl.set("#cg-0", { visibility: "visible" }, 0.2);
+      tl.fromTo("#cg-0", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power2.out" }, 0.2);
+      tl.to("#cw-0-0", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 0.2333);
+      tl.to("#cw-0-0", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 0.3667);
+      tl.to("#cw-0-1", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 0.3667);
+      tl.to("#cw-0-1", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 0.5333);
+      tl.to("#cw-0-2", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 0.6333);
+      tl.to("#cw-0-2", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 1.1333);
+      tl.to("#cg-0", { opacity: 0, duration: 0.1, ease: "power2.in" }, 1.0667);
+      tl.set("#cg-0", { opacity: 0, visibility: "hidden" }, 1.1667);
+      tl.set("#cg-1", { visibility: "visible" }, 1.1667);
+      tl.fromTo("#cg-1", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power2.out" }, 1.1667);
+      tl.to("#cw-1-0", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 1.1667);
+      tl.to("#cw-1-0", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 1.3333);
+      tl.to("#cw-1-1", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 1.3333);
+      tl.to("#cw-1-1", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 1.5667);
+      tl.to("#cw-1-2", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 1.5667);
+      tl.to("#cw-1-2", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 1.6367);
+      tl.to("#cg-1", { opacity: 0, duration: 0.1, ease: "power2.in" }, 1.5333);
+      tl.set("#cg-1", { opacity: 0, visibility: "hidden" }, 1.6333);
+      tl.set("#cg-2", { visibility: "visible" }, 1.6333);
+      tl.fromTo("#cg-2", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power2.out" }, 1.6333);
+      tl.to("#cw-2-0", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 1.6667);
+      tl.to("#cw-2-0", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 2.4333);
+      tl.to("#cw-2-1", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 2.4667);
+      tl.to("#cw-2-1", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 2.7333);
+      tl.to("#cg-2", { opacity: 0, duration: 0.1, ease: "power2.in" }, 2.6667);
+      tl.set("#cg-2", { opacity: 0, visibility: "hidden" }, 2.7667);
+      tl.set("#cg-3", { visibility: "visible" }, 2.7667);
+      tl.fromTo("#cg-3", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power2.out" }, 2.7667);
+      tl.to("#cw-3-0", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 2.7667);
+      tl.to("#cw-3-0", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 2.9);
+      tl.to("#cw-3-1", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 2.9);
+      tl.to("#cw-3-1", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 3.1);
+      tl.to("#cw-3-2", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 3.1);
+      tl.to("#cw-3-2", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 3.5667);
+      tl.to("#cw-3-3", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 3.6333);
+      tl.to("#cw-3-3", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 3.8667);
+      tl.to("#cg-3", { opacity: 0, duration: 0.1, ease: "power2.in" }, 3.8667);
+      tl.set("#cg-3", { opacity: 0, visibility: "hidden" }, 3.9667);
+      tl.set("#cg-4", { visibility: "visible" }, 5.3667);
+      tl.fromTo("#cg-4", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power2.out" }, 5.3667);
+      tl.to("#cw-4-0", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 5.4);
+      tl.to("#cw-4-0", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 5.5667);
+      tl.to("#cw-4-1", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 5.5667);
+      tl.to("#cw-4-1", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 5.7);
+      tl.to("#cg-4", { opacity: 0, duration: 0.1, ease: "power2.in" }, 5.6333);
+      tl.set("#cg-4", { opacity: 0, visibility: "hidden" }, 5.7333);
+      tl.set("#cg-5", { visibility: "visible" }, 5.7333);
+      tl.fromTo("#cg-5", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power2.out" }, 5.7333);
+      tl.to("#cw-5-0", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 5.7667);
+      tl.to("#cw-5-0", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 5.9667);
+      tl.to("#cw-5-1", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 5.9667);
+      tl.to("#cw-5-1", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 6.3667);
+      tl.to("#cw-5-2", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 6.3667);
+      tl.to("#cw-5-2", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 6.5333);
+      tl.to("#cg-5", { opacity: 0, duration: 0.1, ease: "power2.in" }, 6.4667);
+      tl.set("#cg-5", { opacity: 0, visibility: "hidden" }, 6.5667);
+      tl.set("#cg-6", { visibility: "visible" }, 18.6);
+      tl.fromTo("#cg-6", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power2.out" }, 18.6);
+      tl.to("#cw-6-0", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 18.6333);
+      tl.to("#cw-6-0", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 18.8333);
+      tl.to("#cw-6-1", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 18.8333);
+      tl.to("#cw-6-1", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 19.0);
+      tl.to("#cw-6-2", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 18.9667);
+      tl.to("#cw-6-2", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 19.0667);
+      tl.to("#cg-6", { opacity: 0, duration: 0.1, ease: "power2.in" }, 19.0);
+      tl.set("#cg-6", { opacity: 0, visibility: "hidden" }, 19.1);
+      tl.set("#cg-7", { visibility: "visible" }, 19.1);
+      tl.fromTo("#cg-7", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power2.out" }, 19.1);
+      tl.to("#cw-7-0", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 19.1333);
+      tl.to("#cw-7-0", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 19.2667);
+      tl.to("#cw-7-1", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 19.3);
+      tl.to("#cw-7-1", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 19.4667);
+      tl.to("#cw-7-2", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 19.5);
+      tl.to("#cw-7-2", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 19.7333);
+      tl.to("#cg-7", { opacity: 0, duration: 0.1, ease: "power2.in" }, 19.7333);
+      tl.set("#cg-7", { opacity: 0, visibility: "hidden" }, 19.8333);
+      tl.set("#cg-8", { visibility: "visible" }, 19.9333);
+      tl.fromTo("#cg-8", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power2.out" }, 19.9333);
+      tl.to("#cw-8-0", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 19.9667);
+      tl.to("#cw-8-0", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 20.2);
+      tl.to("#cw-8-1", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 20.2);
+      tl.to("#cw-8-1", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 20.3333);
+      tl.to("#cw-8-2", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 20.3333);
+      tl.to("#cw-8-2", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 20.4333);
+      tl.to("#cw-8-3", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 20.4667);
+      tl.to("#cw-8-3", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 20.5367);
+      tl.to("#cg-8", { opacity: 0, duration: 0.1, ease: "power2.in" }, 20.4667);
+      tl.set("#cg-8", { opacity: 0, visibility: "hidden" }, 20.5667);
+      tl.set("#cg-9", { visibility: "visible" }, 20.5667);
+      tl.fromTo("#cg-9", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "power2.out" }, 20.5667);
+      tl.to("#cw-9-0", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 20.5667);
+      tl.to("#cw-9-0", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 20.7333);
+      tl.to("#cw-9-1", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 20.7667);
+      tl.to("#cw-9-1", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 20.9333);
+      tl.to("#cw-9-2", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 20.9667);
+      tl.to("#cw-9-2", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 21.1667);
+      tl.to("#cw-9-3", { backgroundColor: "rgba(125,24,252,0.96)", scale: 1.07, duration: 0.06, ease: "power2.out" }, 21.1667);
+      tl.to("#cw-9-3", { backgroundColor: "rgba(125,24,252,0)", scale: 1, duration: 0.08, ease: "power2.in" }, 21.5);
+      tl.to("#cg-9", { opacity: 0, duration: 0.1, ease: "power2.in" }, 21.4333);
+      tl.set("#cg-9", { opacity: 0, visibility: "hidden" }, 21.5333);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["captions"] = tl;
+    })();
+  </script>
+</template>

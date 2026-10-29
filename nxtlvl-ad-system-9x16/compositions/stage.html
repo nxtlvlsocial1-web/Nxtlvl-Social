@@ -1,0 +1,65 @@
+<template>
+  <link rel="stylesheet" href="assets/css/ad.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-500.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    /* brand ground behind the face window: ink, two violet lights, a faint grid and a few stars */
+    #st-ground { position: absolute; inset: 0;
+      background:
+        radial-gradient(900px 700px at 100% 0%, rgba(126, 26, 246, .55), rgba(126, 26, 246, 0) 70%),
+        radial-gradient(800px 800px at 0% 100%, rgba(94, 6, 242, .45), rgba(94, 6, 242, 0) 70%),
+        linear-gradient(170deg, #0B0624 0%, #05030C 60%, #0A0420 100%); }
+    #st-grid { position: absolute; inset: 0; opacity: .5;
+      background-image: linear-gradient(rgba(216,187,255,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(216,187,255,.06) 1px, transparent 1px);
+      background-size: 72px 72px; background-position: 36px 36px; }
+    .st-star { position: absolute; width: 18px; height: 18px; background: #fff;
+      clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%); }
+    /* decoration only, in the band Meta covers with its caption and button (below y 1330) */
+    #st-deco { position: absolute; left: 430px; top: 1340px; width: 620px; height: 620px; opacity: .16; }
+    #st-deco svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    #st-horizon { position: absolute; left: -10%; right: -10%; top: 1500px; height: 600px; border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(125,24,252,.38), rgba(125,24,252,0)); }
+    .st-dot { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #E6D3FF; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="stage" data-width="1080" data-height="1920" data-duration="12.62">
+    <div id="st-ground" class="clip" data-start="0" data-duration="12.62" data-track-index="0"></div>
+    <div id="st-grid" class="clip" data-start="0" data-duration="12.62" data-track-index="1"></div>
+    <div id="st-low" class="clip" data-start="0" data-duration="12.62" data-track-index="3" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <div id="st-horizon" data-layout-allow-overflow></div>
+      <div id="st-deco" data-layout-allow-overflow><svg viewBox="20.6 31.6 147.8 147.8"><defs>
+          <linearGradient id="st-g0" gradientUnits="userSpaceOnUse" x1="28.3" y1="171.7" x2="121.6" y2="78.4"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".55" stop-color="#FFFFFF" stop-opacity=".9"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+          <linearGradient id="st-g1" gradientUnits="userSpaceOnUse" x1="69.3" y1="164.7" x2="121.6" y2="112.3"><stop offset="0" stop-color="#A95CFF" stop-opacity="0"/><stop offset=".55" stop-color="#A95CFF" stop-opacity=".9"/><stop offset="1" stop-color="#A95CFF"/></linearGradient>
+          <linearGradient id="st-g2" gradientUnits="userSpaceOnUse" x1="43.8" y1="122.2" x2="82.0" y2="84.0"><stop offset="0" stop-color="#B98AFF" stop-opacity="0"/><stop offset=".55" stop-color="#B98AFF" stop-opacity=".9"/><stop offset="1" stop-color="#B98AFF"/></linearGradient></defs>
+          <path d="M125.94 83.55 L125.37 80.68 L123.99 78.09 L122.30 76.31 L119.78 74.81 L116.94 74.09 L114.00 74.24 L111.24 75.23 L109.24 76.64 L22.62 177.38 L122.67 91.45 L124.77 88.76 L125.85 85.51Z" fill="url(#st-g0)"/>
+          <path d="M123.37 116.27 L122.36 113.23 L120.46 111.42 L117.96 110.59 L115.63 110.82 L113.35 112.12 L65.05 168.89 L121.40 121.01 L122.92 118.86Z" fill="url(#st-g1)"/>
+          <path d="M82.77 88.04 L81.79 85.30 L79.69 83.66 L76.80 83.38 L74.42 84.58 L39.59 126.47 L81.14 91.99 L82.40 90.20Z" fill="url(#st-g2)"/>
+          <path d="M140 33.62 L141.87 42.15 L146.74 50.4 L154.06 56.37 L166.38 60 L154.06 63.63 L146.74 69.6 L141.87 77.85 L140 86.38 L138.13 77.85 L133.26 69.6 L125.94 63.63 L113.62 60 L125.94 56.37 L133.26 50.4 L138.13 42.15 Z" fill="#FFFFFF"/>
+        </svg></div>
+    </div>
+    <div id="st-sky" class="clip" data-start="0" data-duration="12.62" data-track-index="2" style="position:absolute;inset:0">
+      <i class="st-star" id="st-s0" style="left:118px;top:300px;transform:scale(1.2)"></i>
+      <i class="st-star" id="st-s1" style="left:930px;top:410px;transform:scale(.8)"></i>
+      <i class="st-star" id="st-s2" style="left:960px;top:820px;transform:scale(1.1)"></i>
+      <i class="st-star" id="st-s3" style="left:90px;top:760px;transform:scale(.7)"></i>
+      <i class="st-dot" style="left:160px;top:520px"></i><i class="st-dot" style="left:880px;top:300px"></i>
+      <i class="st-dot" style="left:1000px;top:640px;opacity:.6"></i><i class="st-dot" style="left:70px;top:420px;opacity:.6"></i>
+      <i class="st-dot" style="left:150px;top:880px"></i><i class="st-dot" style="left:930px;top:1340px;opacity:.5"></i>
+      <i class="st-dot" style="left:120px;top:1400px;opacity:.5"></i><i class="st-dot" style="left:540px;top:1420px;opacity:.4"></i>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      // the sky only arrives; it never loops or breathes
+      tl.fromTo("#st-sky", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 0.3);
+      tl.fromTo("#st-deco", { opacity: 0, x: -60, y: 60 }, { opacity: 0.16, x: 0, y: 0, duration: 1.2, ease: "expo.out" }, 0.35);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["stage"] = tl;
+    })();
+  </script>
+</template>
