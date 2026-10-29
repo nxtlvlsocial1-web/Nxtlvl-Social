@@ -69,6 +69,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Newsletter cover as a seamless looping GIF              | `loop-cover`                                  |
 | Any horizontal or square video to 1080x1920 Reel / TikTok | `reel-export`                               |
 | Turn screenshots, URLs or "make it feel like this" into a DESIGN.md visual direction | `reference-design-contract` |
+| Websites and new pages that look designed, not generated (50 themes, anti-AI-slop checks) | `hallmark`        |
 | Research and profile competitors from their URLs (messaging, positioning, look) | `competitor-profiling`   |
 | Drive a browser: open pages, take screenshots, pull page content for references | `agent-browser`          |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
@@ -124,6 +125,7 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `video-motion-graphics`: `dylantarre/animation-principles`
 - `brand-intake`, `motion-brief-writer`, `reference-to-motion`, `motion-prompt-writer`, `launch-video`, `apple-launch-film`, `vox-explainer`, `animated-chart`, `milestone-reveal`, `motion-effects`, `title-sequence-3d`, `model-showdown`, `newsletter-promo`, `loop-cover`, `reel-export`: `charlie947/motion-graphics-skills`
 - `product-film`: `Rieranthony/product-film-skill`
+- `hallmark`: `nutlope/hallmark` (its bundled Node scripts, e.g. `sloplint.mjs`, are third-party code; this session's safety check blocked running them)
 - `reference-design-contract`, `agent-browser`: `nexu-io/open-design`; `competitor-profiling`: `coreyhaines31/marketingskills`
 - `threejs-*`: `CloudAI-X/threejs-skills`; `gsap-*`: `greensock/gsap-skills`; `design-dna`: `zanwei/design-dna`;
   `motion-design`: `LottieFiles/motion-design-skill`; `cast`, `paint`, `bunshin`: `AThevon/genjutsu`
