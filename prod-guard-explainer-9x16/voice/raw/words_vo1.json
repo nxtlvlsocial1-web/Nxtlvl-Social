@@ -1,0 +1,482 @@
+[
+{
+"text": "At",
+"start": 0.216,
+"end": 0.24
+},
+{
+"text": "three",
+"start": 0.32,
+"end": 0.4
+},
+{
+"text": "A.M.,",
+"start": 0.56,
+"end": 1.0
+},
+{
+"text": "a",
+"start": 1.12,
+"end": 1.2
+},
+{
+"text": "developer",
+"start": 1.44,
+"end": 1.68
+},
+{
+"text": "deleted",
+"start": 1.76,
+"end": 2.08
+},
+{
+"text": "his",
+"start": 2.2,
+"end": 2.32
+},
+{
+"text": "entire",
+"start": 2.52,
+"end": 2.96
+},
+{
+"text": "production",
+"start": 3.16,
+"end": 3.36
+},
+{
+"text": "database.",
+"start": 3.44,
+"end": 4.16
+},
+{
+"text": "One",
+"start": 4.48,
+"end": 4.56
+},
+{
+"text": "point",
+"start": 4.72,
+"end": 4.96
+},
+{
+"text": "two",
+"start": 5.0,
+"end": 5.04
+},
+{
+"text": "million",
+"start": 5.28,
+"end": 5.68
+},
+{
+"text": "rows.",
+"start": 5.76,
+"end": 6.36
+},
+{
+"text": "Gone.",
+"start": 6.56,
+"end": 7.2
+},
+{
+"text": "And",
+"start": 7.507,
+"end": 7.52
+},
+{
+"text": "the",
+"start": 7.6,
+"end": 7.68
+},
+{
+"text": "backups?",
+"start": 7.8,
+"end": 8.613
+},
+{
+"text": "Dead",
+"start": 8.667,
+"end": 8.72
+},
+{
+"text": "since",
+"start": 8.8,
+"end": 9.04
+},
+{
+"text": "March.",
+"start": 9.12,
+"end": 9.72
+},
+{
+"text": "But",
+"start": 10.293,
+"end": 10.32
+},
+{
+"text": "his",
+"start": 10.44,
+"end": 10.56
+},
+{
+"text": "AI",
+"start": 10.64,
+"end": 10.92
+},
+{
+"text": "had",
+"start": 10.96,
+"end": 11.04
+},
+{
+"text": "a",
+"start": 11.12,
+"end": 11.16
+},
+{
+"text": "copy.",
+"start": 11.2,
+"end": 11.88
+},
+{
+"text": "Here's",
+"start": 11.92,
+"end": 12.08
+},
+{
+"text": "the",
+"start": 12.16,
+"end": 12.24
+},
+{
+"text": "setup",
+"start": 12.36,
+"end": 12.48
+},
+{
+"text": "that",
+"start": 12.56,
+"end": 12.64
+},
+{
+"text": "saved",
+"start": 12.72,
+"end": 12.88
+},
+{
+"text": "him.",
+"start": 12.96,
+"end": 13.44
+},
+{
+"text": "One:",
+"start": 13.6,
+"end": 14.107
+},
+{
+"text": "a",
+"start": 14.133,
+"end": 14.16
+},
+{
+"text": "snapshot",
+"start": 14.24,
+"end": 14.72
+},
+{
+"text": "hook.",
+"start": 14.84,
+"end": 15.28
+},
+{
+"text": "Before",
+"start": 15.44,
+"end": 15.6
+},
+{
+"text": "any",
+"start": 15.68,
+"end": 15.84
+},
+{
+"text": "DROP",
+"start": 15.92,
+"end": 16.16
+},
+{
+"text": "or",
+"start": 16.2,
+"end": 16.24
+},
+{
+"text": "DELETE",
+"start": 16.32,
+"end": 16.56
+},
+{
+"text": "runs,",
+"start": 16.72,
+"end": 17.04
+},
+{
+"text": "Claude",
+"start": 17.12,
+"end": 17.36
+},
+{
+"text": "backs",
+"start": 17.44,
+"end": 17.6
+},
+{
+"text": "up",
+"start": 17.68,
+"end": 17.76
+},
+{
+"text": "the",
+"start": 17.8,
+"end": 17.84
+},
+{
+"text": "database",
+"start": 18.08,
+"end": 18.32
+},
+{
+"text": "first.",
+"start": 18.52,
+"end": 19.12
+},
+{
+"text": "Two:",
+"start": 19.2,
+"end": 19.7
+},
+{
+"text": "a",
+"start": 19.72,
+"end": 19.74
+},
+{
+"text": "production",
+"start": 19.76,
+"end": 20.24
+},
+{
+"text": "block.",
+"start": 20.36,
+"end": 20.8
+},
+{
+"text": "Destructive",
+"start": 20.88,
+"end": 21.28
+},
+{
+"text": "commands",
+"start": 21.44,
+"end": 21.6
+},
+{
+"text": "on",
+"start": 21.68,
+"end": 21.76
+},
+{
+"text": "prod?",
+"start": 21.84,
+"end": 22.4
+},
+{
+"text": "Refused.",
+"start": 22.56,
+"end": 23.52
+},
+{
+"text": "Three:",
+"start": 23.6,
+"end": 24.08
+},
+{
+"text": "a",
+"start": 24.12,
+"end": 24.16
+},
+{
+"text": "backup",
+"start": 24.24,
+"end": 24.56
+},
+{
+"text": "alarm.",
+"start": 24.72,
+"end": 25.2
+},
+{
+"text": "Every",
+"start": 25.32,
+"end": 25.44
+},
+{
+"text": "session",
+"start": 25.52,
+"end": 25.84
+},
+{
+"text": "checks",
+"start": 25.92,
+"end": 26.08
+},
+{
+"text": "your",
+"start": 26.16,
+"end": 26.24
+},
+{
+"text": "backups",
+"start": 26.36,
+"end": 26.56
+},
+{
+"text": "are",
+"start": 26.64,
+"end": 26.72
+},
+{
+"text": "fresh.",
+"start": 26.92,
+"end": 27.52
+},
+{
+"text": "And",
+"start": 27.665,
+"end": 27.68
+},
+{
+"text": "the",
+"start": 27.72,
+"end": 27.76
+},
+{
+"text": "part",
+"start": 27.84,
+"end": 28.0
+},
+{
+"text": "nobody",
+"start": 28.16,
+"end": 28.48
+},
+{
+"text": "does...",
+"start": 28.56,
+"end": 29.28
+},
+{
+"text": "a",
+"start": 29.36,
+"end": 29.44
+},
+{
+"text": "read-only",
+"start": 29.52,
+"end": 30.0
+},
+{
+"text": "login",
+"start": 30.08,
+"end": 30.4
+},
+{
+"text": "for",
+"start": 30.48,
+"end": 30.56
+},
+{
+"text": "production.",
+"start": 30.84,
+"end": 31.52
+},
+{
+"text": "You",
+"start": 31.657,
+"end": 31.68
+},
+{
+"text": "can't",
+"start": 31.72,
+"end": 31.92
+},
+{
+"text": "drop",
+"start": 32.04,
+"end": 32.16
+},
+{
+"text": "what",
+"start": 32.24,
+"end": 32.32
+},
+{
+"text": "you",
+"start": 32.36,
+"end": 32.4
+},
+{
+"text": "can't",
+"start": 32.48,
+"end": 32.64
+},
+{
+"text": "touch.",
+"start": 32.72,
+"end": 33.44
+},
+{
+"text": "Comment",
+"start": 33.724,
+"end": 33.76
+},
+{
+"text": "BACKUP,",
+"start": 33.84,
+"end": 34.32
+},
+{
+"text": "and",
+"start": 34.36,
+"end": 34.4
+},
+{
+"text": "I'll",
+"start": 34.48,
+"end": 34.56
+},
+{
+"text": "send",
+"start": 34.64,
+"end": 34.72
+},
+{
+"text": "you",
+"start": 34.76,
+"end": 34.8
+},
+{
+"text": "the",
+"start": 34.88,
+"end": 34.96
+},
+{
+"text": "whole",
+"start": 35.04,
+"end": 35.2
+},
+{
+"text": "setup.",
+"start": 35.28,
+"end": 35.84
+}
+]

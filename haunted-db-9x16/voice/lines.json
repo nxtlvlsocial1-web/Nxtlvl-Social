@@ -1,0 +1,53 @@
+{
+ "duration": 37.47,
+ "lines": [
+  {
+   "line": 1,
+   "text": "At three A.M., a developer deleted his entire production database.",
+   "start": 0.35,
+   "end": 4.46
+  },
+  {
+   "line": 2,
+   "text": "One point two million rows. Gone. And the backups? Dead since March.",
+   "start": 5.02,
+   "end": 9.72
+  },
+  {
+   "line": 3,
+   "text": "But his AI had a copy. Here's the setup that saved him.",
+   "start": 10.31,
+   "end": 13.06
+  },
+  {
+   "line": 4,
+   "text": "One: a snapshot hook. Before any DROP or DELETE runs, Claude backs up the database first.",
+   "start": 13.7,
+   "end": 19.05
+  },
+  {
+   "line": 5,
+   "text": "Two: a production block. Destructive commands on prod? Refused.",
+   "start": 19.61,
+   "end": 23.59
+  },
+  {
+   "line": 6,
+   "text": "Three: a backup alarm. Every session checks your backups are fresh.",
+   "start": 24.15,
+   "end": 27.9
+  },
+  {
+   "line": 7,
+   "text": "And the part nobody does... a read-only login for production. You can't drop what you can't touch.",
+   "start": 28.69,
+   "end": 34.29
+  },
+  {
+   "line": 8,
+   "text": "Comment BACKUP, and I'll send you the whole setup.",
+   "start": 34.98,
+   "end": 37.05
+  }
+ ]
+}
