@@ -383,6 +383,8 @@ mesh(new THREE.PlaneGeometry(.44, .32), new THREE.MeshStandardMaterial({ map: li
 // ---------------------------------------------------------------- the cast
 const D = detective(); scene.add(D.root); D.root.position.set(0, 0, -.7);
 const C = client(); scene.add(C.root);
+// the beauty light: a soft key on her face, as the old films lit their leading lady
+const beauty = new THREE.PointLight(0xfff0e4, .5, 1.0, 1.4); beauty.position.set(.12, .14, .5); C.head.add(beauty);
 
 // ---------------------------------------------------------------- the screens
 let IMG = {};
@@ -547,7 +549,7 @@ function renderAt(t) {
   C.spine.rotation.x = .03; C.hat.rotation.z = -.2 + Math.sin(t * 1.1) * .01;
   // a soft top light keeps her readable as she crosses the dark room
   herLight.position.copy(c.p).add(V(.6, 2.7, .9)); herLight.target.position.copy(c.p).add(V(0, 1.1, 0));
-  herLight.intensity = t < T.arrive + 1.5 ? 14 : 9;
+  herLight.intensity = t < T.arrive + 1.5 ? 14 : 6;
   // her hands: on the laptop while she carries it, then at her sides, then one on her hip
   const L = laptopAt(t);
   laptop.position.copy(L.p); laptop.rotation.set(0, 0, 0); laptop.rotateY(L.ry); laptop.rotateX(L.rx);
@@ -567,7 +569,7 @@ function renderAt(t) {
     const lt = side(1), rt = side(-1).lerp(hip, easeIO(win(t, T.designed, T.designed + .6)));
     reach(C, "L", lt, C.root.localToWorld(V(.5, 1.1, -.35)), null);
     reach(C, "R", rt, C.root.localToWorld(V(-.55, 1.1, -.35)), null);
-    setHand(C.handL, .3 + k * .1); setHand(C.handR, .35);
+    setHand(C.handL, .42 + k * .08, { spread: .015, thumb: .45 }); setHand(C.handR, .5, { spread: .015, thumb: .5 });
   }
   look(C, t < T.arrive - .3 ? V(-.2, 1.25, -.4) : V(0, 1.2, -.7), 1);
   express(C, { blink: (t % 3.7 < .12) ? 1 : 0, smile: easeOut(win(t, T.designed, T.designed + .5)) * .8, brow: t > T.designed ? .3 : -.1 });

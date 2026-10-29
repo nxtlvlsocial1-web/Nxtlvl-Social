@@ -135,27 +135,44 @@ export function look(P, target, k = 1, lim = [1.1, .6]) {
 // ---------------------------------------------------------------- the face: eyes with lids, brows, nose, mouth
 function face(P, o) {
   const H = P.head, f = {};
-  const { skin, dark = 0x1a1210, brow = 0x2a1a12, lip } = o;
-  const eyeM = mat(0xf2ece2, { roughness: .4 }), pupM = mat(0x16100c, { roughness: .3 });
+  const { skin, dark = 0x1a1210, brow = 0x2a1a12, lip, fem = false } = o;
+  const eyeM = mat(0xf2ece2, { roughness: .4 }), pupM = mat(0x16100c, { roughness: .25 });
+  const lidM = fem ? mat(0xb88c7c, { roughness: .5, flatShading: false }) : skin;
+  const ER = fem ? .0255 : .019, EX = fem ? .043 : .045, EY = fem ? .094 : .095;
   for (const s of [1, -1]) {
-    const e = grp(H, s * .045, .095, .118);
-    e.add(mesh(new THREE.SphereGeometry(.019, 8, 6).scale(1, .8, .5), eyeM));
-    const pu = mesh(new THREE.SphereGeometry(.0105, 6, 5).scale(1, 1, .5), pupM); pu.position.z = .008; e.add(pu);
-    const lid = mesh(new THREE.SphereGeometry(.021, 8, 4, 0, Math.PI * 2, 0, Math.PI / 2).scale(1, .85, .62), skin);
+    const e = grp(H, s * EX, EY, .118);
+    e.add(mesh(new THREE.SphereGeometry(ER, 10, 8).scale(1, fem ? .72 : .8, .5), eyeM));
+    const pu = mesh(new THREE.SphereGeometry(ER * .56, 8, 6).scale(1, 1, .5), pupM); pu.position.z = .008; e.add(pu);
+    if (fem) { const glint = mesh(new THREE.SphereGeometry(.0028, 5, 4), mat(0xffffff, { emissive: 0xffffff, emissiveIntensity: .6 })); glint.position.set(.004, .004, .0125); e.add(glint); }
+    const lid = mesh(new THREE.SphereGeometry(ER + .002, 10, 4, 0, Math.PI * 2, 0, Math.PI / 2).scale(1, .85, .62), lidM);
     lid.position.set(0, .001, .001); e.add(lid);
-    const br = mesh(rb(.05, .014, .016, .005, 1), mat(brow));
-    br.position.set(s * .045, .13, .122); H.add(br);
-    f["eye" + (s > 0 ? "L" : "R")] = { e, pu, lid, br, s };
+    let br;
+    if (fem) {   // eyeliner along the upper lid with a small wing, and a softly arched brow
+      const ink = mat(0x0a0707, { roughness: .35, flatShading: false });
+      const liner = mesh(new THREE.TorusGeometry(ER * 1.02, .0028, 5, 16, Math.PI * .95), ink); liner.scale.set(1, .74, 1); liner.rotation.z = Math.PI * .025; liner.position.z = .006; e.add(liner);
+      const wing = mesh(rb(.011, .0034, .005, .0015, 1), ink); wing.position.set(s * (ER + .004), .006, .006); wing.rotation.z = s * .55; e.add(wing);
+      br = mesh(new THREE.TorusGeometry(.03, .0032, 5, 16, Math.PI * .7), mat(brow, { flatShading: false })); br.scale.set(1, .42, 1);
+      br.rotation.z = Math.PI * .15 + (s > 0 ? -.12 : .12); br.position.set(s * .045, .118, .12); H.add(br);
+    } else { br = mesh(rb(.05, .014, .016, .005, 1), mat(brow)); br.position.set(s * .045, .13, .122); H.add(br); }
+    f["eye" + (s > 0 ? "L" : "R")] = { e, pu, lid, br, s, fem };
   }
-  // nose: a faceted wedge
-  const nose = mesh(rb(.034, .062, .04, .012, 2), skin);
-  nose.position.set(0, .064, .135); nose.rotation.x = -.32; H.add(nose);
-  H.add(mesh(rb(.046, .018, .03, .008, 1), skin, 0, .036, .14));
-  // mouth: two halves that tilt up for a smile
-  f.mouth = grp(H, 0, .005, .125);
-  const mm = mat(lip || dark, { roughness: .5 });
-  f.mL = mesh(rb(.03, lip ? .011 : .0065, .008, .003, 1).translate(.014, 0, 0), mm); f.mouth.add(f.mL);
-  f.mR = mesh(rb(.03, lip ? .011 : .0065, .008, .003, 1).translate(-.014, 0, 0), mm); f.mouth.add(f.mR);
+  if (fem) {   // a small button nose
+    const nose = mesh(rb(.015, .034, .018, .007, 2), skin); nose.position.set(0, .062, .126); nose.rotation.x = -.42; H.add(nose);
+    H.add(mesh(new THREE.SphereGeometry(.0105, 10, 8).scale(1.15, .9, 1), skin, 0, .046, .136));
+  } else {   // a faceted wedge
+    const nose = mesh(rb(.034, .062, .04, .012, 2), skin);
+    nose.position.set(0, .064, .135); nose.rotation.x = -.32; H.add(nose);
+    H.add(mesh(rb(.046, .018, .03, .008, 1), skin, 0, .036, .14));
+  }
+  // mouth: two halves that tilt up for a smile (and, for her, a fuller lower lip and a cupid's bow)
+  f.mouth = grp(H, 0, fem ? .016 : .005, .125);
+  const mm = mat(lip || dark, { roughness: fem ? .3 : .5, flatShading: !fem });
+  f.mL = mesh(fem ? new THREE.SphereGeometry(.0095, 10, 8).scale(1.4, .48, .5).translate(.0088, .0, 0) : rb(.03, .0065, .01, .004, 1).translate(.014, 0, 0), mm); f.mouth.add(f.mL);
+  f.mR = mesh(fem ? new THREE.SphereGeometry(.0095, 10, 8).scale(1.4, .48, .5).translate(-.0088, .0, 0) : rb(.03, .0065, .01, .004, 1).translate(-.014, 0, 0), mm); f.mouth.add(f.mR);
+  if (fem) {
+    f.lower = mesh(new THREE.SphereGeometry(.0155, 12, 8).scale(1.1, .42, .42), mm); f.lower.position.set(0, -.0068, .0); f.mouth.add(f.lower);
+    H.add(mesh(new THREE.SphereGeometry(.0028, 5, 4), mat(0x1a0e0c), .038, .032, .124));   // a beauty mark
+  }
   // ears
   for (const s of [1, -1]) { const ear = mesh(new THREE.SphereGeometry(.026, 6, 5).scale(.45, 1, .8), skin); ear.position.set(s * .132, .07, .0); H.add(ear); }
   return f;
@@ -165,13 +182,16 @@ export function express(P, { blink = 0, brow = 0, smile = 0, gaze = [0, 0] } = {
   const f = P.face;
   for (const k of ["eyeL", "eyeR"]) {
     const e = f[k];
-    e.lid.rotation.x = -1.2 + Math.max(blink, P.squint || 0) * 2.75;   // the lid comes down over the eye
+    e.lid.rotation.x = (e.fem ? -1.55 : -1.2) + Math.max(blink, P.squint || 0) * (e.fem ? 3.1 : 2.75);   // the lid comes down over the eye
     e.pu.position.x = gaze[0] * .006; e.pu.position.y = gaze[1] * .005;
+    if (e.fem) { e.br.position.y = .118 + brow * .006; continue; }
     e.br.position.y = .13 + brow * .008;
     e.br.rotation.z = e.s * (brow < 0 ? brow * .35 : brow * .1);
   }
-  f.mL.rotation.z = smile * .32; f.mR.rotation.z = -smile * .32;
-  f.mouth.position.y = .005 + smile * .002;
+  const bow = 0;
+  f.mL.rotation.z = bow + smile * (f.lower ? .22 : .32); f.mR.rotation.z = -bow - smile * (f.lower ? .22 : .32);
+  f.mouth.position.y = (f.lower ? .016 : .005) + smile * .002;
+  if (f.lower) f.lower.scale.set(1 + smile * .15, 1, 1);
 }
 
 // ---------------------------------------------------------------- the detective
@@ -220,7 +240,7 @@ export function detective() {
 
 // ---------------------------------------------------------------- the client
 export function client() {
-  const skin = mat(0xe2b49a), coat = mat(0xa8222c, { roughness: .6 }), coat2 = mat(0x7e1820, { roughness: .6 }), glove = mat(0x18141a, { roughness: .45 });
+  const skin = mat(0xd8a890, { roughness: .55, flatShading: false }), coat = mat(0xa8222c, { roughness: .6 }), coat2 = mat(0x7e1820, { roughness: .6 }), glove = mat(0x18141a, { roughness: .45 });
   const pants = mat(0x1d1a20), shoe = mat(0x120e10, { roughness: .3 });
   const P = rig({ skin: glove, coat, coat2, pants, shoe, hipH: .92, sh: .16, handSize: .9 });
   P.skin = skin;
@@ -233,20 +253,26 @@ export function client() {
   P.chest.add(mesh(new THREE.SphereGeometry(.17, 8, 5, 0, Math.PI * 2, 0, Math.PI / 2).scale(1.02, .42, .72), coat, 0, .2, 0));
   // the coat flares to the knee
   P.skirt = mesh(new THREE.CylinderGeometry(.16, .26, .55, 9, 1, true).translate(0, -.27, 0), coat); P.skirt.material = coat.clone(); P.skirt.material.side = THREE.DoubleSide; P.skirt.scale.set(1, 1, .82); P.hips.add(P.skirt);
-  P.neck.add(mesh(new THREE.CylinderGeometry(.045, .05, .09, 7), skin, 0, .02, 0));
-  P.head.add(mesh(new THREE.IcosahedronGeometry(.12, 1).scale(1, 1.2, 1.02).translate(0, .09, 0), skin));
-  P.head.add(mesh(rb(.16, .08, .16, .04, 2).translate(0, .025, .02), skin));
-  P.face = face(P, { skin, brow: 0x3a1c14, lip: 0xb01c2a });
-  // hair: a dark auburn bob with a side part, falling to the jaw
-  const hair = mat(0x3a1a14, { roughness: .55 });
-  P.head.add(mesh(new THREE.IcosahedronGeometry(.138, 1).scale(1.03, 1.05, 1.04).translate(0, .12, -.012), hair));
-  for (const s of [1, -1]) { const lock = mesh(new THREE.IcosahedronGeometry(.07, 1).scale(.7, 1.5, 1), hair); lock.position.set(s * .115, .04, .01); P.head.add(lock); }
-  const fringe = mesh(new THREE.IcosahedronGeometry(.09, 1).scale(1.4, .5, .7), hair); fringe.position.set(.03, .19, .085); fringe.rotation.z = -.3; P.head.add(fringe);
-  for (const s of [1, -1]) P.head.add(mesh(new THREE.SphereGeometry(.011, 6, 5), mat(0xf4efe4, { roughness: .2 }), s * .13, .03, .02));
-  // a wide-brimmed hat, tilted
-  P.hat = grp(P.head, .02, .225, -.01); P.hat.rotation.set(.12, 0, -.2);
+  P.neck.add(mesh(new THREE.CylinderGeometry(.038, .043, .1, 10), skin, 0, .02, 0));
+  P.head.add(mesh(new THREE.IcosahedronGeometry(.118, 3).scale(.9, 1.17, 1.0).translate(0, .095, 0), skin));
+  const chin = mesh(new THREE.SphereGeometry(.07, 14, 10).scale(1.15, .9, 1.05), skin); chin.position.set(0, .03, .03); P.head.add(chin);
+  P.face = face(P, { skin, brow: 0x1e0e0a, lip: 0x9a1a26, fem: true });
+  // hair: dark, pinned back off the face, side-parted 1940s waves to the shoulders
+  const hair = mat(0x2a1410, { roughness: .45, flatShading: false });
+  const cap = mesh(new THREE.SphereGeometry(.132, 18, 12, 0, Math.PI * 2, 0, 1.3), hair); cap.position.set(0, .115, -.012); cap.rotation.x = -.42; cap.scale.set(1.04, 1.06, 1.06); P.head.add(cap);
+  const wave = mesh(new THREE.SphereGeometry(.06, 14, 10).scale(1.45, .5, .85), hair); wave.position.set(.05, .222, .015); wave.rotation.set(.25, .25, -.3); P.head.add(wave);
+  for (const s of [1, -1]) {
+    const side = mesh(new THREE.SphereGeometry(.062, 14, 10).scale(.62, 1.25, 1.05), hair); side.position.set(s * .118, .07, -.04); P.head.add(side);
+    const fall = mesh(new THREE.SphereGeometry(.06, 14, 10).scale(.7, 1.3, 1.1), hair); fall.position.set(s * .105, -.02, -.055); P.head.add(fall);
+  }
+  P.head.add(mesh(new THREE.SphereGeometry(.105, 16, 10).scale(1.12, 1.05, .85), hair, 0, .03, -.075));
+  // a victory roll at the nape: one smooth curl round the back of the neck
+  const roll = mesh(new THREE.TorusGeometry(.1, .036, 10, 24, Math.PI * 1.15), hair); roll.position.set(0, -.045, -.035); roll.rotation.set(Math.PI / 2 + .25, 0, Math.PI * .92); P.head.add(roll);
+  for (const s of [1, -1]) P.head.add(mesh(new THREE.SphereGeometry(.009, 10, 8), mat(0xf4efe4, { roughness: .15, flatShading: false }), s * .118, .025, .025));
+  // a wide-brimmed hat, tilted back and to the side so it frames her face
+  P.hat = grp(P.head, .035, .245, -.035); P.hat.rotation.set(-.22, 0, -.26);
   const hm = mat(0x1b1518, { roughness: .8 });
-  P.hat.add(mesh(new THREE.CylinderGeometry(.27, .27, .01, 16), hm));
+  P.hat.add(mesh(new THREE.CylinderGeometry(.24, .24, .01, 18), hm));
   P.hat.add(mesh(new THREE.CylinderGeometry(.11, .13, .085, 12).translate(0, .045, 0), hm));
   P.hat.add(mesh(new THREE.CylinderGeometry(.132, .132, .02, 12).translate(0, .015, 0), coat2));
   for (const k of ["L", "R"]) { P["thigh" + k].rotation.x = 0; P["knee" + k].rotation.x = 0; }
