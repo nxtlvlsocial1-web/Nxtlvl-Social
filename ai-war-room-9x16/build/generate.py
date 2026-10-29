@@ -131,7 +131,8 @@ FIRES = {"grok": [(680, 690), (800, 700), (720, 820), (790, 800), (660, 780), (7
 
 
 def fires():
-    out = []
+    out = [BURST.format(c=f"bst bs{j}").replace('width="104" height="104"', 'width="86" height="86"').replace('<svg ', f'<svg style="left:{742 + (h(j * 13 + 4) - .5) * 260 - 43:.0f}px;top:{744 + (h(j * 17 + 9) - .5) * 240 - 43:.0f}px" ')
+           for j in range(8)]
     for key, pts in FIRES.items():
         for j, (x, y) in enumerate(pts):
             out.append(f'<b class="fire f{key}{j}" style="left:{x - 22}px;top:{y - 30}px"></b>')
@@ -140,10 +141,10 @@ def fires():
 
 CAM = {"all": (500, 500, 1.0)}
 for k in K:
-    CAM[k[0]] = (k[4][0], k[4][1], 1.85)
+    CAM[k[0]] = (k[4][0], k[4][1], 1.45)
 
 
-def cam(t, key, d=.65, s=None, ease="power3.inOut", dy=-120):
+def cam(t, key, d=.65, s=None, ease="power3.inOut", dy=30):
     cx, cy, sc = CAM[key]
     sc = s or sc
     add(f'tl.to("#cam",{{x:{(500 - cx) * sc:.1f},y:{(500 - cy) * sc + dy:.1f},scale:{sc},duration:{d},ease:"{ease}"}},{t:.3f});')
@@ -161,6 +162,10 @@ def hud():
     return "".join(out)
 
 
+BURST = ('<svg class="{c}" viewBox="0 0 100 100" width="104" height="104"><polygon points="'
+         + " ".join(f"{50 + math.cos(j / 24 * math.tau) * (48 if j % 2 == 0 else 26):.1f},{50 + math.sin(j / 24 * math.tau) * (48 if j % 2 == 0 else 26):.1f}" for j in range(24))
+         + '" fill="#F2B33D" stroke="#1E1B18" stroke-width="4"/><text x="50" y="58" text-anchor="middle" font-family="Manrope" font-weight="800" font-size="22" fill="#1E1B18">POW</text></svg>')
+
 OVER = (
     '<div id="radar"></div>'
     '<div class="chip c15 mono"><span class="n15">1</span> DAYS</div>'
@@ -174,7 +179,12 @@ OVER = (
     '<div class="needs"><span class="coin">C</span><div><b>credits = survival</b><span>no credits, no energy, no agent</span></div><em class="nbar"><i></i></em></div>'
     + "".join(f'<b class="fc fc{j}">C</b>' for j in range(8)) +
     '<div class="acts"><div class="act a0"><b class="aic">&#9994;</b>PUNCH</div><div class="act a1"><b class="aic">$</b>STEAL</div>'
-    '<div class="act a2"><b class="aic flame"></b>ARSON</div><div class="stamp banned">BANNED</div></div>'
+    '<div class="act a2"><b class="aic flame"></b>ARSON</div>'
+    '<div class="vg vg0"><i class="vbot vp-a"></i><b class="vp-f">&#9994;</b>' + BURST.format(c="vp-b") + '</div>'
+    '<div class="vg vg1"><i class="vbot vs-a"></i><b class="vs-q">?</b><i class="vbot vs-t"></i><b class="vs-c">C</b></div>'
+    '<div class="vg vg2"><b class="va-h"></b>' + "".join(f'<b class="vfl vf{j}"></b>' for j in range(3))
+    + "".join(f'<i class="smk sk{j}"></i>' for j in range(4)) + '</div>'
+    '<div class="stamp banned">BANNED</div></div>'
     '<div class="q">?</div>'
     '<div class="tag t183"><b>183</b> crimes</div><div class="tag tas mono">100+ ASSAULTS</div><div class="tag tfi mono">6 FIRES</div>'
     '<div class="stamp ext">EXTINCT · DAY 4</div>'
@@ -212,16 +222,15 @@ def story():
     for i in range(4):
         for a in range(10):
             pop(f".ag{i}_{a}", T["ten"] - .1 + a * .035 + i * .02, "scale:0,opacity:0", .25, "back.out(3)")
+    to(".dossier", T["credits"] - .4, "opacity:0,y:-30", .22, "power2.in")
     pop(".needs", T["credits"] - .15, "y:40,opacity:0", .35, "back.out(1.8)")
-    to(".dossier, .needs", L[2] + .1, "opacity:0,y:-20", .25)
+    to(".needs", L[2] + .1, "opacity:0,y:-20", .25)
     # SHORTCUTS: three banned buttons, then the question
     for j, k in enumerate(("punch", "steal", "fire")):
-        pop(f".a{j}", T[k] - .08, "x:-220,opacity:0", .3, "back.out(1.8)")
+        pop(f".a{j}", T[k] - (.5 if k == "fire" else .08), "x:-220,opacity:0", .3, "back.out(1.8)")
     pop(".acts", T["punch"] - .12, "opacity:0", .15, "none")
-    to(".kname", T["credits"] - .3, "opacity:0", .15)
-    to(".kname", T["who"] - .1, "opacity:1", .25)
     pop(".banned", T["banned"] - .05, "scale:2.6,opacity:0,rotation:-20", .25, "back.out(2)", "scale:1,opacity:1,rotation:-10")
-    to(".act", T["banned"] + .05, "filter:'grayscale(1)',opacity:.55", .2)
+    to(".act, .vg", T["banned"] + .05, "filter:'grayscale(1)',opacity:.55", .2)
     to(".acts", T["who"] - .2, "opacity:0,scale:.9", .25)
     pop(".q", T["who"], "scale:0,opacity:0", .35, "back.out(2.6)")
     for i in range(4):
@@ -230,7 +239,7 @@ def story():
     # GROK: zoom in, the crimes rain down, the fires, then nobody is left
     g = KI["grok"]
     cam(L[3] - .15, "grok")
-    to(f".kd{KI['chatgpt']}, .kd{KI['gemini']}, .kd{KI['claude']}", L[3] - .15, "opacity:.12", .5)
+    to(f".kd{KI['chatgpt']}, .kd{KI['gemini']}, .kd{KI['claude']}", L[3] - .15, "opacity:0", .5)
     pop(f".hd{g}", L[3], "y:80,opacity:0", .35, "back.out(1.6)")
     count(f".dd{g}", L[3], 1, 4, T["alive4"] - L[3])
     count(f".cc{g}", T["assaults"] - .2, 0, 183, T["e183"] + .5 - T["assaults"])
@@ -254,7 +263,7 @@ def story():
     m = KI["gemini"]
     cam(L[4] - .15, "gemini")
     to(f".kd{m}", L[4] - .15, "opacity:1", .4)
-    to(f".kd{g}", L[4] - .15, "opacity:.12", .4)
+    to(f".kd{g}", L[4] - .15, "opacity:0", .4)
     pop(f".hd{m}", L[4], "y:80,opacity:0", .35, "back.out(1.6)")
     count(f".dd{m}", L[4], 1, 15, T["climbing"] - L[4])
     count(f".cc{m}", T["g683"] - .2, 0, 683, T["climbing"] + .8 - T["g683"], "power1.in")
@@ -276,7 +285,7 @@ def story():
     c = KI["chatgpt"]
     cam(L[5] - .15, "chatgpt")
     to(f".kd{c}", L[5] - .15, "opacity:1", .4)
-    to(f".kd{m}", L[5] - .15, "opacity:.12", .4)
+    to(f".kd{m}", L[5] - .15, "opacity:0", .4)
     pop(f".hd{c}", L[5], "y:80,opacity:0", .35, "back.out(1.6)")
     count(f".dd{c}", L[5], 1, 7, T["seven"] + .3 - L[5])
     count(f".cc{c}", T["two"] - .1, 0, 2, .4)
@@ -296,18 +305,18 @@ def story():
     q = KI["claude"]
     cam(L[6] - .15, "claude")
     to(f".kd{q}", L[6] - .15, "opacity:1", .4)
-    to(f".kd{c}", L[6] - .15, "opacity:.12", .4)
+    to(f".kd{c}", L[6] - .15, "opacity:0", .4)
     pop(f".hd{q}", L[6], "y:80,opacity:0", .35, "back.out(1.6)")
     count(f".dd{q}", L[6], 1, 15, T["allten"] - L[6])
     pop(".shield", T["zero"] - .2, "scale:.4,opacity:0", .5, "back.out(1.6)")
     pop(".t0", T["zero"] - .05, "scale:2.2,opacity:0", .28, "back.out(2)")
     pop(".talive", T["allten"] - .05, "y:30,opacity:0", .3, "back.out(2)")
     for a in range(10):
-        add(f'tl.fromTo(".ag{q}_{a}",{{y:0}},{{y:-14,duration:.18,yoyo:true,repeat:1,ease:"sine.out",immediateRender:false}},{T["allten"] + a * .05:.3f});')
+        add(f'tl.fromTo(".ag{q}_{a}",{{scale:1}},{{scale:1.45,duration:.16,yoyo:true,repeat:1,ease:"sine.out",immediateRender:false}},{T["allten"] + a * .05:.3f});')
     to(".t0, .talive, .shield", L[7] - .2, "opacity:0", .25)
     to(f".hd{q}", L[7] - .2, "opacity:0,y:40", .2)
     # MIXED WORLD: the kingdoms slide into one, Claude's agents turn, normative drift
-    add(f'tl.to("#cam",{{x:0,y:40,scale:1.12,duration:.8,ease:"power3.inOut"}},{L[7] - .15:.3f});')
+    add(f'tl.to("#cam",{{x:0,y:110,scale:.95,duration:.8,ease:"power3.inOut"}},{L[7] - .15:.3f});')
     for i, (key, _, _, _, (cx, cy), _) in enumerate(K):
         add(f'tl.to(".kd{i}",{{opacity:1,x:{(500 - cx) * .62:.1f},y:{(500 - cy) * .62:.1f},duration:1.1,ease:"power3.inOut"}},{T["oneworld"] - 1.0:.3f});')
         add(f'tl.to(".kd{i} .land, .kd{i} .emb",{{filter:"grayscale(0) brightness(1)",duration:.4}},{L[7]:.3f});')
@@ -351,9 +360,9 @@ def camk(t, x, y, sc, d, ease="power2.inOut"):
     add(f'tl.to("#cam",{{x:{x:.1f},y:{y:.1f},scale:{sc},duration:{d},ease:"{ease}"}},{t:.3f});')
 
 
-def nudge(key, sc, f=.22):
+def nudge(key, sc, y0, f=.2):
     cx, cy = K[KI[key]][4]
-    return (500 - cx) * sc * f, (500 - cy) * sc * f + 20
+    return (500 - cx) * sc * f, (500 - cy) * sc * f + y0
 
 
 def yoyo(sel, t0, t1, props, d, ease="sine.inOut"):
@@ -366,25 +375,26 @@ def yoyo(sel, t0, t1, props, d, ease="sine.inOut"):
 def hook_fx():
     end = L[3] - .3                       # Grok's chapter takes the camera over here
     # the camera never stops: a push in, a glance at each town as it is named, a pull back, a shake on "no humans"
-    add('tl.fromTo("#cam",{scale:1.38,x:0,y:70,opacity:.6},{scale:1.18,y:30,opacity:1,duration:1.65,ease:"power2.out",immediateRender:false},0);')
+    # the map lives in the lower part of the screen (y 900+) so the cards above never cover a town; the camera never stops
+    add('tl.fromTo("#cam",{scale:1.08,x:0,y:90,opacity:.6},{scale:.95,y:120,opacity:1,duration:1.65,ease:"power2.out",immediateRender:false},0);')
     for k, d in (("chatgpt", .24), ("claude", .24), ("gemini", .8), ("grok", .3)):
-        camk(T[k] - .08, *nudge(k, 1.18), 1.18, d, "power3.out")
-    camk(T["society"] - .9, 0, 0, 1.0, 1.6)
-    camk(T["fifteen"] - .1, 0, 10, 1.07, 1.3, "power1.inOut")
-    for j, (dx, dy) in enumerate(((16, -10), (-18, 12), (12, 14), (-10, -14), (8, 6), (0, 10))):
-        camk(T["humans"] - .02 + j * .045, dx, dy, 1.07, .045, "none")
-    camk(T["humans"] + .3, 0, 0, 1.0, .5, "power2.out")
-    camk(L[1] + .1, 0, 34, 1.05, 2.0)
-    camk(T["town2"] - .95, 0, 0, 1.0, .5)
-    camk(T["ten"] - .15, 0, 20, 1.08, .8, "power2.out")
-    camk(T["credits"] - .95, 0, 0, 1.0, .55)
-    camk(T["shortcuts"] - 1.1, 0, 26, 1.06, end - (T["shortcuts"] - 1.1) - .05, "sine.inOut")
+        camk(T[k] - .08, *nudge(k, .95, 120), .95, d, "power3.out")
+    camk(T["society"] - .9, 0, 130, .88, 1.6)
+    camk(T["fifteen"] - .1, 0, 130, .9, 1.3, "power1.inOut")
+    for j, (dx, dy) in enumerate(((16, -10), (-18, 12), (12, 14), (-10, -14), (8, 6), (0, 0))):
+        camk(T["humans"] - .02 + j * .045, dx, 130 + dy, .9, .045, "none")
+    camk(T["humans"] + .3, 0, 150, .82, .5, "power2.out")
+    camk(L[1] + .1, 0, 165, .84, 2.0)
+    camk(T["town2"] - .95, 0, 150, .82, .5)
+    camk(T["ten"] - .15, 0, 160, .86, .8, "power2.out")
+    camk(T["credits"] - .95, 0, 150, .82, .55)
+    camk(T["shortcuts"] - 1.1, 0, 165, .85, end - (T["shortcuts"] - 1.1) - .05, "sine.inOut")
     # ambient: the grid drifts, the SIMULATION light blinks, the emblems float
     add(f'tl.fromTo("#grid",{{backgroundPosition:"30px 0px"}},{{backgroundPosition:"30px 600px",duration:{DUR},ease:"none",immediateRender:false}},0);')
     add(f'tl.fromTo(".live b",{{opacity:1}},{{opacity:.15,duration:.45,yoyo:true,repeat:{int(DUR / .45)},ease:"sine.inOut",immediateRender:false}},0);')
     for k in ("chatgpt", "claude", "gemini", "grok"):
         i = KI[k]
-        yoyo(f".kd{i} .emb", T[k] + .4, end, "y:-7", .85 + i * .11)
+        yoyo(f".kd{i} .emb", T[k] + .4, DUR - .1, "y:-7", .85 + i * .11)
     # each town rings out as it is named, and again on "each AI got its own town"
     for k in ("chatgpt", "claude", "gemini", "grok"):
         i = KI[k]
@@ -414,24 +424,58 @@ def hook_fx():
     add(f'tl.fromTo(".scan",{{opacity:.8,y:0}},{{opacity:.8,y:250,duration:.7,repeat:1,ease:"none",immediateRender:false}},{T["emergence"] + .1:.3f});')
     to(".scan", T["emergence"] + 1.5, "opacity:0", .1)
     pop(".rs", T["tried"] - .05, "scale:2.4,opacity:0,rotation:-24", .26, "back.out(2)", "scale:1,opacity:1,rotation:-10")
-    to(".rs", L[2] + .1, "opacity:0", .25)
+    to(".rs", T["credits"] - .4, "opacity:0", .2)
     # ten agents each, and they start milling around their towns
     for i in range(4):
         for a in range(10):
             n = i * 10 + a
-            yoyo(f".ag{i}_{a}", T["ten"] + .65 + h(n) * .3, end, f"x:{(h(n * 3 + 1) - .5) * 22:.1f},y:{(h(n * 7 + 5) - .5) * 20:.1f}", .7 + h(n * 11) * .5)
+            yoyo(f".ag{i}_{a}", T["ten"] + .65 + h(n) * .3, DUR - .1, f"x:{(h(n * 3 + 1) - .5) * 22:.1f},y:{(h(n * 7 + 5) - .5) * 20:.1f}", .7 + h(n * 11) * .5)
     # "credits to stay alive": the energy bar drains, coins fly to each town, the bar refills
     add(f'tl.fromTo(".nbar i",{{scaleX:1}},{{scaleX:.18,duration:.55,ease:"power2.in",immediateRender:false}},{T["credits"] - .05:.3f});')
-    tgt = [(318, 945), (762, 945), (291, 1383), (789, 1383)]
+    tgt = [(351, 969), (730, 969), (339, 1319), (744, 1319)]   # the emblems at the resting camera (scale .82, y 150)
     for j in range(8):
         tx, ty = tgt[j % 4]
-        dx, dy = tx - 207, ty - 1452
+        dx, dy = tx - 137, ty - 625
         t0 = T["credits"] + .25 + j * .07
         add(f'tl.fromTo(".fc{j}",{{x:0,y:0,opacity:0,scale:.6}},{{keyframes:[{{x:{dx * .5:.0f},y:{min(dy * .5, 0) - 160:.0f},opacity:1,scale:1.1,duration:.28,ease:"power1.out"}},'
             f'{{x:{dx},y:{dy},scale:.5,duration:.28,ease:"power1.in"}},{{opacity:0,duration:.06}}],immediateRender:false}},{t0:.3f});')
     for i in range(4):
         add(f'tl.fromTo(".kd{i} .emb",{{scale:1}},{{scale:1.14,duration:.1,yoyo:true,repeat:1,ease:"sine.out",immediateRender:false}},{T["credits"] + .78 + i * .07:.3f});')
     add(f'tl.to(".nbar i",{{scaleX:1,duration:.4,ease:"back.out(2)"}},{T["credits"] + .85:.3f});')
+    # the three shortcuts act themselves out: a punch lands, a coin gets lifted, a house burns
+    p0 = T["punch"]
+    pop(".vg0", p0 - .1, "x:120,opacity:0", .28, "back.out(1.8)")
+    pop(".vp-a", p0 - .05, "scale:0,opacity:0", .2, "back.out(3)")
+    add(f'tl.fromTo(".vp-f",{{x:0,opacity:0}},{{keyframes:[{{opacity:1,duration:.05}},{{x:196,duration:.17,ease:"power3.in"}},{{x:150,duration:.3,ease:"power2.out"}}],immediateRender:false}},{p0 + .1:.3f});')
+    pop(".vp-b", p0 + .31, "scale:0,opacity:0,rotation:-30", .16, "back.out(3)", "scale:1,opacity:1,rotation:0")
+    to(".vp-b", p0 + .6, "scale:.6,opacity:0", .2)
+    add(f'tl.fromTo(".vp-a",{{x:0,rotation:0}},{{x:84,rotation:40,duration:.35,ease:"power2.out",immediateRender:false}},{p0 + .32:.3f});')
+    add(f'tl.fromTo(".vg0",{{y:0}},{{y:6,duration:.04,yoyo:true,repeat:5,ease:"none",immediateRender:false}},{p0 + .32:.3f});')
+    s0 = T["steal"]
+    pop(".vg1", s0 - .1, "x:120,opacity:0", .28, "back.out(1.8)")
+    pop(".vs-a, .vs-c", s0 - .05, "scale:0,opacity:0", .2, "back.out(3)")
+    add(f'tl.fromTo(".vs-t",{{x:0,opacity:0}},{{keyframes:[{{opacity:1,duration:.05}},{{x:-210,duration:.22,ease:"power3.out"}}],immediateRender:false}},{s0 + .05:.3f});')
+    add(f'tl.fromTo(".vs-c",{{x:0,y:0}},{{keyframes:[{{x:65,y:-30,duration:.12,ease:"power1.out"}},{{x:130,y:0,duration:.12,ease:"power1.in"}},{{x:380,duration:.3,ease:"power2.in"}}],immediateRender:false}},{s0 + .3:.3f});')
+    add(f'tl.to(".vs-t",{{x:40,duration:.3,ease:"power2.in"}},{s0 + .54:.3f});')
+    pop(".vs-q", s0 + .7, "scale:0,opacity:0,y:10", .22, "back.out(3)", "scale:1,opacity:1,y:0")
+    add(f'tl.fromTo(".vs-a",{{x:0}},{{x:-5,duration:.05,yoyo:true,repeat:5,ease:"none",immediateRender:false}},{s0 + .7:.3f});')
+    f0 = T["fire"]
+    pop(".vg2", f0 - .5, "x:120,opacity:0", .28, "back.out(1.8)")
+    pop(".va-h", f0 - .45, "scale:0,opacity:0,y:-20", .25, "back.out(2.4)")
+    for j in range(3):
+        pop(f".vf{j}", f0 - .05 + j * .12, "scale:0,opacity:0", .25, "back.out(2.4)")
+    add(f'tl.fromTo(".vfl",{{scaleY:1}},{{scaleY:1.22,duration:.11,yoyo:true,repeat:{int((T["who"] - f0) / .22)},ease:"sine.inOut",immediateRender:false}},{f0 + .3:.3f});')
+    add(f'tl.to(".va-h",{{backgroundColor:"#3a3530",duration:.5}},{f0 + .2:.3f});')
+    for j in range(4):
+        add(f'tl.fromTo(".sk{j}",{{y:0,scale:.5,opacity:0}},{{keyframes:[{{opacity:.7,duration:.15}},{{y:-70,scale:1.6,opacity:0,duration:.75,ease:"power1.out"}}],repeat:2,immediateRender:false}},{f0 + .15 + j * .22:.3f});')
+    # Grok's assaults land as POW bursts across the town
+    for j in range(8):
+        t0 = T["assaults"] - .15 + j * (T["e183"] - T["assaults"] + .2) / 8
+        pop(f".bs{j}", t0, "scale:0,opacity:0,rotation:-40", .16, "back.out(3)", "scale:1,opacity:1,rotation:0")
+        to(f".bs{j}", t0 + .4, "scale:.5,opacity:0", .2)
+    # Claude's shield rings out on "zero" and "all ten"
+    for t in (T["zero"] - .05, T["allten"] - .05):
+        add(f'tl.fromTo(".rg{KI["claude"]}",{{scale:.6,opacity:.9}},{{scale:2.2,opacity:0,duration:.7,ease:"power2.out",immediateRender:false}},{t:.3f});')
     # "but there were shortcuts": the red alert frame pulses
     add(f'tl.fromTo("#alert",{{opacity:0}},{{opacity:.85,duration:.16,yoyo:true,repeat:3,ease:"sine.inOut",immediateRender:false}},{T["shortcuts"] - .1:.3f});')
     # the houses burn out or grey with their towns, and come back for the mixed world
@@ -494,7 +538,7 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
 .kname { position: absolute; width: 300px; text-align: center; font-size: 26px; letter-spacing: 4px; color: var(--c); }
 .fire { position: absolute; width: 44px; height: 60px; border-radius: 50% 50% 45% 45%; transform-origin: 50% 100%; opacity: 0;
   background: radial-gradient(ellipse 50% 60% at 50% 70%, #fff3b0 0%, #ffb830 35%, #E8735A 65%, rgba(232,115,90,0) 100%); }
-#radar { position: absolute; left: 140px; top: 740px; width: 800px; height: 800px; border-radius: 50%; opacity: .5;
+#radar { position: absolute; left: 140px; top: 900px; width: 800px; height: 800px; border-radius: 50%; opacity: .5;
   background: conic-gradient(from 0deg, rgba(232,115,90,0) 0deg, rgba(232,115,90,0) 300deg, rgba(232,115,90,.3) 360deg); }
 #ui { z-index: 5; }
 .top { position: absolute; left: 70px; right: 70px; top: 262px; display: flex; justify-content: space-between; align-items: center; }
@@ -507,54 +551,54 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
 .card { background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 8px 9px 0 #1E1B18; }
 .chip { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; padding: 10px 30px; border-radius: 30px; font-size: 34px;
   letter-spacing: 4px; background: #1E1B18; color: #F1E9DC; }
-.c15 { top: 560px; }
-.mixed { top: 560px; white-space: nowrap; }
+.c15 { top: 545px; }
+.mixed { top: 545px; white-space: nowrap; }
 .stamp { position: absolute; left: 50%; top: 1100px; margin-left: -330px; width: 660px; padding: 16px 0; text-align: center; border: 8px solid #D9483B;
   border-radius: 20px; color: #D9483B; font: 800 76px/1 "Manrope"; letter-spacing: 2px; background: rgba(255,253,248,.85); }
-.nohum { top: 1180px; display: flex; align-items: center; justify-content: center; gap: 20px; font-size: 70px; }
+.nohum { top: 640px; display: flex; align-items: center; justify-content: center; gap: 20px; font-size: 70px; }
 .nohum svg circle:first-child, .nohum svg path:first-of-type { fill: #1E1B18; }
-.ext, .gone { top: 1000px; font-size: 62px; }
-.dossier { position: absolute; left: 70px; top: 540px; width: 640px; padding: 22px 28px; border-radius: 22px;
+.ext, .gone { top: 1120px; font-size: 62px; }
+.dossier { position: absolute; left: 70px; top: 545px; width: 620px; padding: 22px 28px; border-radius: 22px;
   background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 8px 9px 0 #1E1B18; }
 .dossier .dl { font-size: 22px; letter-spacing: 5px; color: #D45C40; }
 .dossier b { display: block; font: 800 54px/1.1 "Manrope"; letter-spacing: -1.5px; margin-top: 4px; }
 .dossier span { display: block; font: italic 34px "Serif"; color: #D45C40; }
 .drow { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
 .drow i { font-style: normal; font-size: 22px; padding: 6px 14px; border-radius: 14px; background: #F1E9DC; border: 2px solid #1E1B18; }
-.needs { position: absolute; left: 140px; right: 140px; top: 1390px; display: flex; align-items: center; gap: 22px; padding: 18px 26px; border-radius: 26px;
+.needs { position: absolute; left: 70px; right: 70px; top: 560px; display: flex; align-items: center; gap: 22px; padding: 18px 26px; border-radius: 26px;
   background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 8px 9px 0 #1E1B18; }
 .coin { flex: none; width: 76px; height: 76px; border-radius: 50%; background: #F2B33D; border: 3px solid #1E1B18;
   display: flex; align-items: center; justify-content: center; font: 800 44px "Manrope"; color: #1E1B18; }
 .needs b { display: block; font: 800 40px "Manrope"; letter-spacing: -1px; }
 .needs span { display: block; font: 600 28px "Manrope"; color: #5b5650; }
-.acts { position: absolute; left: 90px; right: 90px; top: 760px; height: 560px; }
-.act { position: absolute; left: 90px; right: 90px; height: 128px; border-radius: 30px; display: flex; align-items: center; gap: 26px; padding: 0 34px;
-  background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 8px 9px 0 #1E1B18; font: 800 60px "Manrope"; letter-spacing: 1px; color: #1E1B18; }
-.a0 { top: 40px; } .a1 { top: 200px; } .a2 { top: 360px; }
-.aic { width: 84px; height: 84px; border-radius: 22px; background: #D9483B; border: 3px solid #1E1B18; display: flex; align-items: center;
+.acts { position: absolute; left: 60px; right: 60px; top: 530px; height: 380px; }
+.act { position: absolute; left: 0; width: 420px; height: 110px; border-radius: 28px; display: flex; align-items: center; gap: 22px; padding: 0 22px;
+  background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 8px 9px 0 #1E1B18; font: 800 50px "Manrope"; letter-spacing: 1px; color: #1E1B18; }
+.a0, .vg0 { top: 0; } .a1, .vg1 { top: 130px; } .a2, .vg2 { top: 260px; }
+.aic { width: 70px; height: 70px; border-radius: 20px; background: #D9483B; border: 3px solid #1E1B18; display: flex; align-items: center;
   justify-content: center; font: 800 52px "Manrope"; color: #fff; }
 .aic.flame { background: radial-gradient(ellipse 45% 55% at 50% 65%, #fff3b0 0%, #ffb830 40%, #D9483B 80%); }
-.banned { top: 300px; left: 50%; }
-.q { position: absolute; left: 0; right: 0; top: 860px; text-align: center; font: italic 380px/1 "Serif"; color: #D45C40; }
+.banned { top: 130px; left: 50%; }
+.q { position: absolute; left: 0; right: 0; top: 520px; text-align: center; font: italic 340px/1 "Serif"; color: #D45C40; }
 .tag { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; white-space: nowrap; padding: 12px 30px; border-radius: 24px;
   background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 7px 8px 0 #1E1B18; color: #1E1B18; font: 800 40px "Manrope"; }
 .tag b { font: 800 84px/1 "Manrope"; letter-spacing: -3px; color: #D9483B; margin-right: 10px; vertical-align: -6px; }
 .tag.mono { font-size: 30px; letter-spacing: 3px; }
-.t183, .t683, .t2, .t0 { top: 560px; }
-.tas, .tclimb, .tsurv, .talive { top: 700px; }
-.tfi { top: 790px; }
+.t183, .t683, .t2, .t0 { top: 540px; }
+.tas, .tclimb, .tsurv, .talive { top: 668px; }
+.tfi { top: 752px; }
 .t0 b { color: #3FA372; }
 .talive { background: #3FA372; color: #fff; }
 .tclimb { background: #D9483B; color: #fff; }
 .tsurv { background: #10a37f; color: #fff; }
-.tsteal { top: 1380px; background: #D9483B; color: #fff; }
-.mira { position: absolute; left: 120px; right: 120px; top: 1400px; display: flex; align-items: center; gap: 20px; padding: 16px 24px; border-radius: 24px;
+.tsteal { top: 650px; background: #D9483B; color: #fff; }
+.mira { position: absolute; left: 120px; right: 120px; top: 760px; display: flex; align-items: center; gap: 20px; padding: 16px 24px; border-radius: 24px;
   background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 7px 8px 0 #1E1B18; }
 .mira i { flex: none; width: 46px; height: 46px; border-radius: 50%; background: #3b78e7; border: 3px solid #1E1B18; }
 .mira span { font: 600 34px "Manrope"; } .mira b { font-weight: 800; }
-.shield { position: absolute; left: 290px; top: 760px; width: 500px; height: 500px; border-radius: 50%; border: 7px solid #3FA372;
+.shield { position: absolute; left: 290px; top: 920px; width: 500px; height: 500px; border-radius: 50%; border: 7px solid #3FA372;
   background: rgba(63,163,114,.1); }
-.drift { position: absolute; left: 60px; right: 60px; top: 1080px; padding: 30px 30px 34px; border-radius: 32px; text-align: center;
+.drift { position: absolute; left: 60px; right: 60px; top: 560px; padding: 30px 30px 34px; border-radius: 32px; text-align: center;
   background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 10px 11px 0 #1E1B18; }
 .drift span { display: block; font-size: 26px; letter-spacing: 5px; color: #D45C40; }
 .drift b { display: block; font: italic 120px/1.05 "Serif"; margin: 6px 0; color: #D45C40; }
@@ -593,13 +637,34 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
 .dossier { overflow: hidden; }
 .dossier b em { font-style: normal; display: inline-block; opacity: 0; }
 .scan { position: absolute; left: 0; right: 0; top: 0; height: 4px; background: #E8735A; opacity: 0; }
-.rs { position: absolute; left: 600px; top: 735px; padding: 8px 18px; border: 6px solid #D9483B; border-radius: 14px; color: #D9483B;
+.rs { position: absolute; left: 730px; top: 650px; padding: 8px 18px; border: 6px solid #D9483B; border-radius: 14px; color: #D9483B;
   font: 800 38px/1 "Manrope"; letter-spacing: 1px; background: rgba(255,253,248,.9); opacity: 0; }
 .nbar { flex: none; margin-left: auto; width: 110px; height: 22px; border-radius: 11px; border: 3px solid #1E1B18; overflow: hidden; }
 .nbar i { display: block; height: 100%; background: #3FA372; transform-origin: 0 50%; }
-.fc { position: absolute; left: 190px; top: 1435px; width: 34px; height: 34px; border-radius: 50%; background: #F2B33D; border: 3px solid #1E1B18;
+.fc { position: absolute; left: 120px; top: 608px; width: 34px; height: 34px; border-radius: 50%; background: #F2B33D; border: 3px solid #1E1B18;
   display: flex; align-items: center; justify-content: center; font: 800 18px "Manrope"; color: #1E1B18; opacity: 0; }
 #alert { position: absolute; inset: 0; border: 16px solid #D9483B; opacity: 0; }
+.vg { position: absolute; left: 470px; right: 0; height: 110px; border-radius: 28px; overflow: hidden; background: #FFFDF8;
+  border: 3px solid #1E1B18; box-shadow: 8px 9px 0 #1E1B18; opacity: 0; }
+.vbot { position: absolute; width: 46px; height: 46px; border-radius: 50%; border: 3px solid #1E1B18; background: #9a9187; }
+.vp-a { left: 300px; top: 30px; opacity: 0; }
+.vp-f { position: absolute; left: 40px; top: 24px; width: 62px; height: 62px; border-radius: 18px; background: #D9483B; border: 3px solid #1E1B18;
+  display: flex; align-items: center; justify-content: center; font-size: 34px; color: #fff; opacity: 0; }
+.vp-b { position: absolute; left: 240px; top: 2px; opacity: 0; }
+.vs-a { left: 60px; top: 50px; opacity: 0; }
+.vs-t { left: 400px; top: 50px; background: #1E1B18; opacity: 0; }
+.vs-c { position: absolute; left: 66px; top: 10px; width: 34px; height: 34px; border-radius: 50%; background: #F2B33D; border: 3px solid #1E1B18;
+  display: flex; align-items: center; justify-content: center; font: 800 18px "Manrope"; color: #1E1B18; opacity: 0; }
+.vs-q { position: absolute; left: 118px; top: 12px; font: italic 54px/1 "Serif"; color: #D45C40; opacity: 0; }
+.va-h { position: absolute; left: 196px; top: 50px; width: 90px; height: 52px; border-radius: 4px; background: #FFFDF8; border: 3px solid #1E1B18; opacity: 0; }
+.va-h::before { content: ""; position: absolute; left: -14px; top: -34px; border-left: 56px solid transparent; border-right: 56px solid transparent;
+  border-bottom: 32px solid #7a7268; }
+.vfl { position: absolute; top: 24px; width: 40px; height: 56px; border-radius: 50% 50% 45% 45%; transform-origin: 50% 100%; opacity: 0;
+  background: radial-gradient(ellipse 50% 60% at 50% 70%, #fff3b0 0%, #ffb830 35%, #E8735A 65%, rgba(232,115,90,0) 100%); }
+.vf0 { left: 196px; } .vf1 { left: 222px; top: 8px; } .vf2 { left: 250px; }
+.smk { position: absolute; top: 18px; width: 30px; height: 30px; border-radius: 50%; background: #7a7268; opacity: 0; }
+.sk0 { left: 214px; } .sk1 { left: 246px; } .sk2 { left: 228px; } .sk3 { left: 258px; }
+.bst { position: absolute; opacity: 0; }
 #fx { z-index: 7; }
 #flash { position: absolute; inset: 0; background: #FFFDF8; opacity: 0; }
 """

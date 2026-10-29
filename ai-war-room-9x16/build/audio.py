@@ -85,6 +85,12 @@ def sfx():
         put(smp("pop"), T["credits"] + .78 + (j % 4) * .07, .16, ((j % 4) - 1.5) / 2)
     put(smp("chime", 0, 1.2), T["credits"] + .85, .25)
     put(smp("error", 0, .8), T["shortcuts"] - .1, .25)
+    # the shortcut scenes: the punch lands, the thief dashes in and out, the house catches
+    put(smp("impact-bass-1"), T["punch"] + .31, .55)
+    put(smp("whoosh-short"), T["steal"] + .03, .4, .3)
+    put(smp("whoosh-short"), T["steal"] + .52, .4, .6)
+    put(smp("pop"), T["steal"] + .3, .3)
+    put(crackle(2.2), T["fire"] - .05, .6, .2)
     # setup and shortcuts
     put(smp("whoosh"), T["emergence"] - .2, .45)
     for j in range(10):
