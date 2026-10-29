@@ -33,6 +33,7 @@ VOICE_END = LINES[-1]["end"]
 DUR = round(VOICE_END + 2.0, 2)
 FPS = 60
 XF = .32                                  # crossfade overlap between scenes
+M = 76                                    # side margin for every scene; ink of big type lands on it
 AUDIO = "assets/audio/mix.wav" if os.path.exists(os.path.join(ROOT, "assets", "audio", "mix.wav")) else "assets/audio/voice.wav"
 PACK_AR = 284 / 928                       # bottle cutout aspect (w/h)
 HB = json.load(open(os.path.join(ROOT, "assets", "img", "bottle-on-hero.json")))   # bottle box on the hero plate
@@ -345,7 +346,7 @@ for t, outs, inn, style in ((L[2], ("s1", "s-mist1"), "s3", "punch"), (L[3], ("s
         fromTo(f"#{out}-w", {k: REST[k] for k in o}, o, t, XF, "power2.in")
     fromTo(f"#{inn}-w", i, {k: REST[k] for k in i}, t, d, ease)
 for sid, (a, b) in (("s1", W1), ("s3", W3), ("s4", W4), ("s5", W5), ("s6", W6), ("s7", W7), ("s8", W8), ("s9", W9), ("s10", W10)):
-    fromTo(f"#{sid}-c", {"scale": 1}, {"scale": 1.045}, a, b - a, "none")
+    fromTo(f"#{sid}-c", {"scale": 1}, {"scale": 1.03}, a, b - a, "none")
 
 # ------------------------------------------------------------------ captions
 CW = []
@@ -431,10 +432,10 @@ BC = (HB["left"] + HB["width"] / 2, HB["top"] + HB["height"] * .5)      # bottle
 s3_inner = f'''{plate("hero", "transform-origin:" + f"{BC[0] / 10.8:.1f}% {BC[1] / 19.2:.1f}%")}<div class="vtop"></div>
 <div id="orbit" style="left:{BC[0] - 260:.0f}px;top:{BC[1] - 250:.0f}px">{orbit}</div>
 <div id="r-title"><div id="r-brand" class="in">VITONNIX</div><div id="r-name" class="in">Biotin</div></div>
-<div class="cdot in" id="cd0" style="left:418px;top:938px"></div><div class="cline" id="cline0" style="left:60px;top:948px;width:370px;transform-origin:100% 50%"></div>
-<div class="clab in" id="clab0" style="left:60px;top:820px"><span class="ci">Sublingual</span><span class="cs">ORAL SPRAY</span></div>
-<div class="cdot in" id="cd1" style="left:650px;top:1158px"></div><div class="cline" id="cline1" style="left:660px;top:1168px;width:360px;transform-origin:0 50%"></div>
-<div class="clab in r" id="clab1" style="right:60px;top:1040px"><span class="ci">Lychee &amp; mint</span><span class="cs">FLAVOUR</span></div>'''
+<div class="cdot in" id="cd0" style="left:418px;top:938px"></div><div class="cline" id="cline0" style="left:{M}px;top:948px;width:{430 - M}px;transform-origin:100% 50%"></div>
+<div class="clab in" id="clab0" style="left:{M}px;top:820px"><span class="ci">Sublingual</span><span class="cs">ORAL SPRAY</span></div>
+<div class="cdot in" id="cd1" style="left:650px;top:1158px"></div><div class="cline" id="cline1" style="left:660px;top:1168px;width:{1080 - M - 660}px;transform-origin:0 50%"></div>
+<div class="clab in r" id="clab1" style="right:{M}px;top:1040px"><span class="ci">Lychee &amp; mint</span><span class="cs">FLAVOUR</span></div>'''
 
 s4_inner = f'''<div id="mist2" class="photo"><img src="assets/img/mist.jpg" alt="" width="1350" height="1350"></div><div class="vign"></div>
 <div id="spray">{"".join(spray)}</div>
@@ -463,9 +464,9 @@ s7_inner = f'''<div class="halo" style="left:160px;top:420px;width:760px;height:
 <div class="leaf in" id="mi0" style="left:760px;top:560px;width:220px;height:132px">{LEAF}</div>
 <div class="leaf in" id="mi1" style="left:820px;top:820px;width:170px;height:102px">{LEAF}</div>
 <div class="leaf in" id="mi2" style="left:700px;top:1000px;width:140px;height:84px">{LEAF}</div></div>
-<div class="badge in" id="bgmo" style="left:60px;top:700px"><img src="assets/img/b-nongmo.png" alt="" width="270" height="270"></div>
-<div class="badge in" id="bsug" style="left:750px;top:700px"><img src="assets/img/b-sugar.png" alt="" width="270" height="270"></div>
-<div class="blab in" id="nl0" style="left:30px;top:990px">Non-GMO</div><div class="blab in" id="nl1" style="left:720px;top:990px">No added sugar</div>'''
+<div class="badge in" id="bgmo" style="left:{M}px;top:700px"><img src="assets/img/b-nongmo.png" alt="" width="270" height="270"></div>
+<div class="badge in" id="bsug" style="left:{1080 - M - 270}px;top:700px"><img src="assets/img/b-sugar.png" alt="" width="270" height="270"></div>
+<div class="blab sm in" id="nl0" style="left:{M + 135 - 165}px;top:990px">Non-GMO</div><div class="blab sm in" id="nl1" style="left:{1080 - M - 135 - 165}px;top:990px">No added sugar</div>'''
 
 s8_inner = f'''<div class="halo" style="left:90px;top:520px;width:900px;height:900px"></div>
 <div id="cert-h" class="in"><span class="serif-it">Certified</span><svg viewBox="0 0 100 80" width="110" height="88"><path id="tick" d="M8 42 L36 70 L92 10" stroke="{C["PINK"]}" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="120" stroke-dashoffset="120"/></svg></div>
@@ -476,7 +477,7 @@ s8_inner = f'''<div class="halo" style="left:90px;top:520px;width:900px;height:9
 <div class="badge in" id="cb2" style="left:375px;top:900px"><img src="assets/img/b-fssc.png" alt="" width="330" height="330"></div>
 <div class="blab in" id="cl2" style="left:240px;top:1240px;width:600px">ISO FSSC 22000 v6</div>'''
 
-s9_inner = f'''{pack("p9", 120, 730, 560)}
+s9_inner = f'''{pack("p9", M + 91, 750, 540)}
 <div id="doc" class="card in"><span class="k">CREATED BY</span><span class="v">3 doctors</span>
 <span class="drs"><i id="dr0" class="in"></i><i id="dr1" class="in"></i><i id="dr2" class="in"></i></span></div>
 <div id="uk" class="card r in"><div id="flag">{UKFLAG}</div><span class="v small">Developed in the UK</span>
@@ -521,15 +522,15 @@ body { font-family: "Montserrat", sans-serif; color: ${BLUSH}; }
 .star svg { display: block; filter: drop-shadow(0 0 10px rgba(255,180,220,.8)); }
 .grain { position: absolute; inset: 0; opacity: .13; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='240' height='240' filter='url(%23n)' opacity='.9'/></svg>"); }
-.top { position: absolute; left: 60px; right: 60px; top: 262px; display: flex; align-items: center; gap: 22px; }
+.top { position: absolute; left: ${M}px; right: ${M}px; top: 262px; display: flex; align-items: center; gap: 22px; }
 .brand { font-weight: 800; font-size: 28px; letter-spacing: 6px; color: ${PLUM}; padding: 8px 22px; border-radius: 24px; background: ${BLUSH}; box-shadow: 0 10px 30px rgba(20,0,10,.35); }
 .prog { flex: 1; height: 6px; border-radius: 3px; background: rgba(255,240,246,.18); overflow: hidden; }
 .prog i { display: block; height: 100%; background: ${PINK}; transform-origin: 0 50%; }
 /* type system */
-.h1 { position: absolute; left: 70px; font-family: "Fraunces"; font-weight: 900; font-size: 150px; line-height: 1; letter-spacing: -4px; color: ${BLUSH}; text-shadow: 0 10px 40px rgba(30,0,15,.55); }
+.h1 { position: absolute; left: ${H1L}px; font-family: "Fraunces"; font-weight: 900; font-size: 150px; line-height: 1; letter-spacing: -4px; color: ${BLUSH}; text-shadow: 0 10px 40px rgba(30,0,15,.55); }
 #h1a { top: 320px; } #h1b { top: 470px; }
 .script { font-family: "Great Vibes"; font-weight: 400; color: ${PINK}; line-height: 1.1; text-shadow: 0 0 30px rgba(255,95,174,.55); }
-#h1c { position: absolute; left: 90px; top: 650px; font-size: 168px; }
+#h1c { position: absolute; left: ${H1CL}px; top: 650px; font-size: 168px; }
 .script.huge { font-size: 290px; color: ${BLUSH}; text-shadow: 0 6px 30px rgba(51,0,27,.7), 0 0 50px rgba(255,95,174,.9), 0 0 120px rgba(255,95,174,.6); }
 .script.mid { font-size: 150px; }
 .eyebrow { display: inline-block; font-weight: 800; font-size: 38px; letter-spacing: 8px; padding: 10px 28px; border-radius: 40px; background: ${BLUSH}; color: ${PLUM}; }
@@ -575,7 +576,7 @@ body { font-family: "Montserrat", sans-serif; color: ${BLUSH}; }
 .cline { position: absolute; height: 0; border-top: 3px dashed rgba(255,240,246,.85); }
 .clab { position: absolute; display: flex; flex-direction: column; gap: 2px; color: ${BLUSH}; text-shadow: 0 4px 18px rgba(30,0,15,.6); }
 .clab.r { align-items: flex-end; text-align: right; }
-.clab .ci { font-family: "Fraunces"; font-style: italic; font-weight: 700; font-size: 52px; line-height: 1.05; }
+.clab .ci { font-family: "Fraunces"; font-style: italic; font-weight: 700; font-size: 40px; line-height: 1.05; }
 .clab .cs { font-weight: 800; font-size: 28px; letter-spacing: 6px; color: ${PINK}; }
 /* bottle cutout on a pedestal */
 .ped { position: absolute; border-radius: 50%; transform-origin: 50% 50%;
@@ -594,10 +595,10 @@ body { font-family: "Montserrat", sans-serif; color: ${BLUSH}; }
 #r-chip { margin-top: 30px; }
 /* 4 one spray */
 #spray { position: absolute; inset: 0; }
-#one { position: absolute; left: 60px; top: 300px; font-family: "Fraunces"; font-weight: 900; font-size: 560px; line-height: .9; color: ${BLUSH}; text-shadow: 0 20px 80px rgba(30,0,15,.6); transform-origin: 50% 60%; }
+#one { position: absolute; left: ${ONEL}px; top: 300px; font-family: "Fraunces"; font-weight: 900; font-size: 560px; line-height: .9; color: ${BLUSH}; text-shadow: 0 20px 80px rgba(30,0,15,.6); transform-origin: 50% 60%; }
 #onespray { position: absolute; left: 340px; top: 560px; font-size: 230px; color: ${BLUSH}; text-shadow: 0 0 40px rgba(255,95,174,.9); }
-#tongue { position: absolute; left: 70px; top: 860px; }
-#done { position: absolute; left: 80px; top: 1070px; padding: 6px 44px 18px; border-radius: 30px; background: ${PINK}; color: ${DARK};
+#tongue { position: absolute; left: ${M}px; top: 860px; }
+#done { position: absolute; left: ${M}px; top: 1070px; padding: 6px 44px 18px; border-radius: 30px; background: ${PINK}; color: ${DARK};
   font-family: "Fraunces"; font-style: italic; font-weight: 700; font-size: 128px; line-height: 1.1; box-shadow: 0 24px 70px rgba(255,95,174,.55); }
 /* 5 stat */
 #s5in { position: absolute; inset: 0; }
@@ -636,15 +637,16 @@ body { font-family: "Montserrat", sans-serif; color: ${BLUSH}; }
 #nosugar { position: absolute; left: 0; right: 0; width: max-content; margin: 0 auto; top: 1210px; }
 .chip.big { font-size: 40px; background: ${BLUSH}; color: ${PLUM}; border: 0; }
 /* 8 certified */
-#cert-h { position: absolute; left: 70px; top: 320px; display: flex; align-items: center; gap: 24px; font-size: 150px; line-height: 1.05; color: ${BLUSH}; }
+#cert-h { position: absolute; left: 0; right: 0; top: 320px; display: flex; justify-content: center; align-items: center; gap: 24px; font-size: 150px; line-height: 1.05; color: ${BLUSH}; }
 .blab { position: absolute; width: 330px; text-align: center; font-weight: 800; font-size: 40px; letter-spacing: 3px; color: ${BLUSH}; }
+.blab.sm { font-size: 32px; letter-spacing: 2px; }
 /* 9 doctors + UK */
 .card { position: absolute; padding: 28px 44px 34px; border-radius: 40px; background: ${BLUSH}; color: ${INK}; box-shadow: 0 30px 70px rgba(20,0,10,.55); }
-#doc { left: 70px; top: 330px; }
-#uk { right: 70px; top: 700px; text-align: right; display: flex; flex-direction: column; align-items: flex-end; }
+#doc { left: ${M}px; top: 330px; }
+#uk { right: ${M}px; top: 700px; text-align: right; display: flex; flex-direction: column; align-items: flex-end; }
 .card .k { display: block; font-weight: 800; font-size: 30px; letter-spacing: 6px; color: ${PLUM}; }
 .card .v { display: block; font-family: "Fraunces"; font-weight: 900; font-size: 116px; line-height: 1.04; letter-spacing: -3px; color: ${INK}; }
-.card .v.small { font-size: 54px; letter-spacing: -1px; margin: 18px 0 8px; }
+.card .v.small { font-size: 50px; letter-spacing: -1px; margin: 18px 0 8px; }
 #flag { width: 300px; height: 150px; border-radius: 14px; overflow: hidden; transform-origin: 0 50%; box-shadow: 0 10px 24px rgba(20,0,10,.3); }
 #flag svg { display: block; }
 .drs { display: flex; gap: 16px; margin-top: 16px; }
@@ -659,7 +661,7 @@ body { font-family: "Montserrat", sans-serif; color: ${BLUSH}; }
 .ty { display: inline-block; }
 .cur { display: inline-block; width: 12px; height: 132px; margin-left: 10px; vertical-align: -12px; border-radius: 6px; background: ${DARK}; }
 #ctab { display: inline-block; padding: 10px 30px 14px; border-radius: 30px; background: ${BLUSH}; color: ${PLUM}; font-weight: 800; font-size: 46px; }
-#tag { position: absolute; left: 640px; top: 1090px; padding: 18px 34px 24px; border-radius: 28px; background: ${BLUSH}; border: 5px solid ${PLUM};
+#tag { position: absolute; right: ${M}px; top: 1100px; padding: 18px 34px 24px; border-radius: 28px; background: ${BLUSH}; border: 5px solid ${PLUM};
   box-shadow: 0 24px 60px rgba(20,0,10,.5); transform-origin: 20% 0; }
 #tag .k { display: block; font-weight: 800; font-size: 28px; letter-spacing: 5px; color: ${PLUM}; }
 #tag .v { display: block; font-family: "Fraunces"; font-weight: 900; font-size: 70px; line-height: 1.05; color: ${INK}; }
@@ -673,7 +675,7 @@ body { font-family: "Montserrat", sans-serif; color: ${BLUSH}; }
 #fx { z-index: 9; pointer-events: none; }
 #flash { position: absolute; inset: 0; background: #fff6fa; opacity: 0; }
 #flashp { position: absolute; inset: 0; background: ${PINK}; opacity: 0; mix-blend-mode: screen; }
-""").substitute(C)
+""").substitute(C, M=M, H1L=M - 5, H1CL=M - 7, ONEL=round(M - 17.5))
 
 html = f'''<!doctype html>
 <html lang="en" data-resolution="portrait">
