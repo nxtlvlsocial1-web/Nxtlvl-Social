@@ -13,8 +13,8 @@
       body { font-family: "Archivo", "Instrument Sans", sans-serif; }
       #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #05030C; }
       .scene { position: absolute; inset: 0; width: 100%; height: 100%; }
-      /* the top half: a fixed window onto the take; the camera inside it zooms per cut */
-      #pane { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; overflow: hidden; z-index: 2; background: #05030C; }
+      /* the bottom half: a fixed window onto the take; the camera inside it zooms per cut */
+      #pane { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px; overflow: hidden; z-index: 2; background: #05030C; }
       #cam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; }
       #a-roll { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     </style>
@@ -66,8 +66,9 @@
     <script>
       (function () {
         var tl = gsap.timeline({ paused: true });
-        // keep the face centre (source 540, 850) at (540, 550) in the 1080x960 window at any zoom
-        function frame(s) { return { scale: s, x: 540 * (1 - s), y: 550 - 850 * s }; }
+        // keep the face centre (source 540, 850) at (540, 275) in the bottom window (canvas y 1235): eyes ~y 1300,
+        // mouth ~1450, so the face stays above Meta's caption and button
+        function frame(s) { return { scale: s, x: 540 * (1 - s), y: 275 - 850 * s }; }
         tl.set("#cam", frame(1.0), 0.0);
         tl.set("#cam", frame(1.15), 3.8333);
         tl.set("#cam", frame(1.0), 6.1);

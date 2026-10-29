@@ -1,4 +1,4 @@
-# Nxtlvl Social — "Not luck. A system." ad (9:16 split screen, 21.8 s) — v2
+# Nxtlvl Social — "Not luck. A system." ad (9:16 split screen, 21.8 s) — v3
 
 Meta click-to-message ad (Reels / Stories placement) built on the selfie take.
 
@@ -19,9 +19,9 @@ more motion in the panels.
 
 ## Layout (1080×1920)
 
-Top half (0–960): the take, cropped to the face. A glowing seam at 960. Captions just under it (y 984–1080),
-word by word in the serif. Panel graphics in y 1100–1500. Below that only decoration (Meta's caption and
-Send message button sit there).
+v3: graphics on top, face below (the person's note). Top half (0–960): the brand panel, graphics in y 300–740,
+captions word by word in the serif just above the seam (y 860–956). A glowing seam at 960. Bottom half (960–1920):
+the take, cropped so the eyes sit at y ~1300 and the mouth at ~1450, above Meta's caption and Send message button.
 
 | Film time | Speech | Panel |
 |---|---|---|
