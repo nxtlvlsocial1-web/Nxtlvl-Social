@@ -46,9 +46,11 @@ def captions():
         gs = q(max(0.08, bounds[g][0]))
         nxt = bounds[g + 1][0] if g + 1 < len(bounds) else END
         ge = q(min(max(bounds[g][1], gs + 0.45), nxt, END))           # never overlaps the next group
-        spans = ''.join(f'<span id="cw-{g}-{k}" class="cw{" kw" if k in kw else ""}">{html.escape(w["text"])}</span>'
+        spans = ' '.join(f'<span id="cw-{g}-{k}" class="cw{" kw" if k in kw else ""}">{html.escape(w["text"])}</span>'
                         for k, w in enumerate(ws))
-        spans_html.append(f'<div id="cg-{g}" class="cg">{spans}</div>')
+        chars = len(' '.join(w['text'] for w in ws))
+        size = min(70, int(930 / (chars * 0.6)))                      # Archivo 800 runs ~0.6 em a character
+        spans_html.append(f'<div id="cg-{g}" class="cg" style="font-size:{size}px">{spans}</div>')
         js.append(f'tl.set("#cg-{g}", {{ visibility: "visible" }}, {gs});')
         js.append(f'tl.fromTo("#cg-{g}", {{ opacity: 0, y: 14, filter: "blur(6px)" }}, '
                   f'{{ opacity: 1, y: 0, filter: "blur(0px)", duration: 0.14, ease: "power2.out" }}, {gs});')
@@ -66,10 +68,12 @@ def captions():
     @font-face {{ font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-700.woff2") format("woff2"); font-weight: 700; }}
     @font-face {{ font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }}
     #root {{ position: absolute; inset: 0; overflow: visible; pointer-events: none; }}
-    /* captions in the "Not luck." serif, just under the seam; words light up as they are said */
+    /* bold captions in their own band between the graphics and the face card; words light up as they are said */
     .cg {{ position: absolute; left: 40px; right: 40px; top: 726px; height: 96px; text-align: center; visibility: hidden;
-          font-family: "Instrument Serif", serif; font-style: italic; font-size: 74px; line-height: 96px; white-space: nowrap; }}
-    .cw {{ display: inline-block; margin: 0 .1em; color: rgba(245,242,255,.42); transform-origin: 50% 70%;
+          font-family: "Archivo", sans-serif; font-weight: 800; font-stretch: 100%; font-size: 70px; line-height: 96px;
+          letter-spacing: -.015em; white-space: nowrap; }}
+    .cw {{ display: inline-block; margin: 0 .09em; color: rgba(245,242,255,.45); transform-origin: 50% 70%;
+          -webkit-text-stroke: 8px rgba(5,3,12,.85); paint-order: stroke fill;
           text-shadow: 0 4px 24px rgba(5,3,12,.8); }}
   </style>
   <script src="assets/vendor/gsap.min.js"></script>

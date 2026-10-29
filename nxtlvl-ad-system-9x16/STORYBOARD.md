@@ -1,4 +1,4 @@
-# Nxtlvl Social — "Not luck. A system." ad (9:16, 21.8 s) — v4
+# Nxtlvl Social — "Not luck. A system." ad (9:16, 21.8 s) — final (v1, approved)
 
 Meta click-to-message ad (Reels / Stories placement) built on the selfie take.
 
@@ -20,7 +20,7 @@ more motion in the panels.
 ## Layout (1080×1920)
 
 v4: everything on one 60 px grid, graphics above and the face below (the person's notes). Graphics in y 300–710;
-captions word by word in the serif in their own band (y 726–822); the take as a rounded face card (x 60–1020,
+captions word by word in bold Archivo (final; drafts used the serif) in their own band (y 726–822); the take as a rounded face card (x 60–1020,
 y 846–1866) with the whole head and headroom: eyes on the card's upper third (y ~1295), mouth ~1430, above Meta's
 caption and Send message button. The end card no longer shows a price.
 
@@ -42,3 +42,9 @@ caption and Send message button. The end card no longer shows a price.
   track), `npx hyperframes check`, `npx hyperframes render --quality draft|delivery`.
 - `transcript.json` is the ElevenLabs Scribe transcript of the take, corrected (handle, figures, prices) with its
   original word timings.
+
+## Delivered
+
+- `renders/nxtlvl_system-ad_reels_9x16_v1.mp4` — 1080×1920, 30 fps, H.264 + AAC, 21.8 s, 21.6 MB, −15 LUFS, −1.2 dBTP
+- `renders/nxtlvl_system-ad_reels_9x16_v1_cover.png` — 1080×1920 cover (the hook at 3.6 s)
+Renders stay out of git.
