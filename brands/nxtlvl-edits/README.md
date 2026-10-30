@@ -5,7 +5,8 @@ family: the Shooting Star, the Smooth N, the original "nxtlvl" lettering and the
 
 The comparison sheets show each concept as the Instagram profile picture, at full size and at 110 / 56 / 32 px, with
 a lockup: **`concepts-preview.png`** (round 1, A to D), **`concepts-preview-2a.png`** (E to H),
-**`concepts-preview-2b.png`** (I to L), **`concepts-preview-3a.png`** (M to P) and **`concepts-preview-3b.png`** (Q to T).
+**`concepts-preview-2b.png`** (I to L), **`concepts-preview-3a.png`** (M to P), **`concepts-preview-3b.png`** (Q to T)
+and **`concepts-preview-4.png`** (R refined, R1 to R5).
 
 Round 1:
 
@@ -42,6 +43,18 @@ Round 3 (minimal and classy: flat colour, no glow, one violet accent at most):
 | **S · ne Ligature** | "ne" in the serif, set tight on flat night violet. |
 | **T · Cut Line** | A timeline as one line with a single cut, and the star above the cut. |
 
+R refined (the Monoline N, made premium): the N is rebuilt from exact parts (two uprights, two round turns and one
+straight diagonal tangent to both), the right upright climbs past the left and tapers to a needle point with the star
+just above it, and the line has a pearl sheen.
+
+| Version | Look |
+|---|---|
+| **R1 · Pearl** | One fine, even line in pearl on rich black. |
+| **R2 · Medallion** | R1 inside a fine double ring. |
+| **R3 · Night** | R1 on deep night violet. |
+| **R4 · Ivory** | Ink line on ivory with a violet star. |
+| **R5 · Broad Pen** | The same N with thick uprights and diagonal and hairline turns. |
+
 Every concept shares one wordmark: "nxtlvl" in the original logo lettering (traced from `website/logo.png`), then "edits" in
 Instrument Serif Italic with the four-point star over the i.
 
@@ -64,6 +77,7 @@ cd brands/nxtlvl-edits/source
 python3 build.py && python3 sheet.py      # round 1: concepts A-D, concepts-preview.png (needs Playwright)
 python3 build2.py && python3 sheet.py 2   # round 2: concepts E-L, concepts-preview-2a.png and -2b.png
 python3 build3.py && python3 sheet.py 3   # round 3: concepts M-T, concepts-preview-3a.png and -3b.png
+python3 build4.py && python3 sheet.py 4   # R refined: R1-R5, concepts-preview-4.png
 ```
 
 `vector.py` outlines text with fontTools and traces the wordmark (cached in `nxtlvl-wordmark.svgfrag`).

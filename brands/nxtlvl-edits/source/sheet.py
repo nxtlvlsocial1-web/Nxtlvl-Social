@@ -3,6 +3,7 @@
 Run after build.py / build2.py:  python3 sheet.py      (round 1 -> ../concepts-preview.png)
                                  python3 sheet.py 2    (round 2 -> ../concepts-preview-2a.png and -2b.png)
                                  python3 sheet.py 3    (round 3 -> ../concepts-preview-3a.png and -3b.png)
+                                 python3 sheet.py 4    (R refined -> ../concepts-preview-4.png)
 """
 import os
 import re
@@ -67,13 +68,41 @@ ITEMS_3 = [
      'A timeline reduced to one line with a single cut in it, and the star above the cut.'),
 ]
 
+ITEMS_4 = [
+    ('r1-monoline-pearl', 'R1', 'Pearl',
+     'The refined line: exact turns, one straight diagonal, the right stem climbing past the left and tapering to a '
+     'needle point under the star. Pearl sheen on rich black. The pick for the profile picture.'),
+    ('r2-monoline-medallion', 'R2', 'Medallion',
+     'R1 inside a fine double ring, like a hallmark or a watch dial. Most "luxury" of the set.'),
+    ('r3-monoline-night', 'R3', 'Night',
+     'R1 on deep night violet, the same violet world as Nxtlvl Social but quieter.'),
+    ('r4-monoline-ivory', 'R4', 'Ivory',
+     'Ink line on ivory with a violet star, like letterpress on good paper. Stands out in a dark feed.'),
+    ('r5-monoline-pen', 'R5', 'Broad Pen',
+     'The same N drawn with a broad pen: thick uprights and diagonal, hairline turns. Bolder, more fashion-house.'),
+]
+
 ROUNDS = {
     '1': [(ITEMS, 'concepts-preview.png', 'nxtlvl edits · logo concepts', 'Four directions for the edits account')],
     '2': [(ITEMS_2[:4], 'concepts-preview-2a.png', 'nxtlvl edits · more variations (1 of 2)', 'Eight more directions: E to H'),
           (ITEMS_2[4:], 'concepts-preview-2b.png', 'nxtlvl edits · more variations (2 of 2)', 'Eight more directions: I to L')],
     '3': [(ITEMS_3[:4], 'concepts-preview-3a.png', 'nxtlvl edits · minimal and classy (1 of 2)', 'Minimal and classy: M to P'),
           (ITEMS_3[4:], 'concepts-preview-3b.png', 'nxtlvl edits · minimal and classy (2 of 2)', 'Minimal and classy: Q to T')],
+    '4': [(ITEMS_4, 'concepts-preview-4.png', 'nxtlvl edits · R, refined', 'The Monoline N, made premium')],
 }
+
+BEFORE_AFTER = '''
+  <section class="ba">
+    <figure><img src="../concepts/r-monoline-n/profile.svg" alt=""><figcaption>Before</figcaption></figure>
+    <span class="arrow">→</span>
+    <figure><img src="../concepts/r1-monoline-pearl/profile.svg" alt=""><figcaption>After</figcaption></figure>
+    <ul>
+      <li>Rebuilt from exact turns and one straight diagonal, so it reads as an N, not a squiggle</li>
+      <li>Right stem climbs past the left (the next level) and tapers to a point</li>
+      <li>The star sits right on the tip, as if the line ends in a spark</li>
+      <li>Pearl sheen instead of flat white; a richer black</li>
+    </ul>
+  </section>'''
 
 
 def size_of(svg_path):
@@ -104,11 +133,13 @@ def card(slug, letter, name, idea):
 
 LEDE = ("Each one is from the Nxtlvl Social family (the star, the N, the wordmark, the violet), with an editor's cut. "
         "Shown as the Instagram profile picture at full size and at the sizes people actually see it.")
+LEDE_4 = ("R, taken further: a cleaner N, a finer finish and five ways to wear it. "
+          "Shown at full size and at the sizes people actually see it.")
 LEDE_3 = ("Flat colour, no glow, one violet accent at most: Ink, Mist and the serif, with plenty of empty space. "
           "Still the Nxtlvl family, quieter. Shown at full size and at the sizes people actually see it.")
 
 
-def page(items, kicker, title, lede=LEDE):
+def page(items, kicker, title, lede=LEDE, extra=''):
     cards = ''.join(card(*it) for it in items)
     return f'''<!doctype html><html><head><meta charset="utf-8"><style>
 @font-face {{ font-family: "Archivo"; src: url("{FONTS}/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }}
@@ -137,6 +168,14 @@ h2 {{ font-family: "Archivo"; font-weight: 800; font-stretch: 108%; font-size: 4
 .ig span {{ display: block; font-size: 20px; color: #6E6787; margin-top: 4px; }}
 .lockup {{ grid-column: 1 / -1; background: #05030C; border-radius: 22px; display: flex; justify-content: center; align-items: center; }}
 .lockup img {{ display: block; }}
+.ba {{ display: grid; grid-template-columns: 250px 40px 250px 1fr; align-items: center; gap: 24px; background: #fff;
+  border-radius: 36px; padding: 36px 40px; margin-bottom: 32px; box-shadow: 0 18px 50px rgba(40, 10, 90, .08); }}
+.ba figure {{ margin: 0; text-align: center; }}
+.ba img {{ width: 250px; height: 250px; border-radius: 50%; display: block; }}
+.ba figcaption {{ font-weight: 600; font-size: 20px; letter-spacing: .14em; text-transform: uppercase; color: #6E6787; margin-top: 14px; }}
+.ba .arrow {{ font-size: 40px; color: #7D18FC; text-align: center; }}
+.ba ul {{ margin: 0; padding-left: 22px; font-size: 21px; line-height: 1.45; color: #4A4360; }}
+.ba li + li {{ margin-top: 8px; }}
 footer {{ font-size: 21px; line-height: 1.5; color: #4A4360; margin-top: 12px; }}
 footer b {{ color: #0B0816; }}
 </style></head><body>
@@ -144,7 +183,7 @@ footer b {{ color: #0B0816; }}
     <p class="kicker">{kicker}</p>
     <h1>{title}</h1>
     <p class="lede">{lede}</p>
-  </header>{cards}
+  </header>{extra}{cards}
   <footer><b>Every concept uses the same wordmark:</b> "nxtlvl" in the original logo lettering, then "edits" in Instrument Serif
   Italic with the star over the i. Pick one from any round, or mix two (say one mark with another's colours), and I'll make the full kit.</footer>
 </body></html>
@@ -176,7 +215,8 @@ def main(round_):
         subprocess.run(['node', os.path.join(HERE, 'render.js')] + args, check=True, stdout=subprocess.DEVNULL)
         html = os.path.join(HERE, 'sheet.html')
         with open(html, 'w') as f:
-            f.write(page(items, kicker, title, LEDE_3 if round_ == '3' else LEDE))
+            lede = {'3': LEDE_3, '4': LEDE_4}.get(round_, LEDE)
+            f.write(page(items, kicker, title, lede, BEFORE_AFTER if round_ == '4' else ''))
         render_sheet(html, os.path.join(ROOT, out))
         print('sheet ->', os.path.join(ROOT, out))
 
