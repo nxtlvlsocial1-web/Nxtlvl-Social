@@ -7,20 +7,32 @@ The CONSOLE auto-DM sends the repo link github.com/Jakeschincariol/console-skill
 
 Comment "CONSOLE" and I'll DM you the link and the setup.
 
-Your favourite PS2 game is about to time out. Then Player 2 joins: Claude.
+Your old PS2 games can now run as real PC games, rebuilt with Claude Code. Not an emulator.
 
-Console Skill is 11 free Claude skills that rebuild PS2 games you own as real PC games. Not an emulator: the game's code is recompiled to run natively.
+If you have been looking for a way to play PS2 games on PC without a PS2 emulator, this is the most interesting project I have seen. Console Skill is a free pack of 11 Claude Code skills that ports PS2 games you own to PC with static recompilation (PS2Recomp). The game's original code is translated into native PC code, so it runs like a normal PC game on Windows, Mac and Linux, and even on a Steam Deck.
 
-Your power-ups:
-1. Mod it just by asking: sharper graphics, new levels, your own controller
-2. A tester skill for the boss fight, when a game crashes and you need to know why
-3. New Game Plus: play it on Windows, Mac, Linux, even a Steam Deck
+What you can do with it:
+1. Port a PS2 game you own to PC, with Claude guiding every step
+2. Mod it just by asking: sharper graphics, new levels, any controller
+3. Use the tester skill when a game crashes, so Claude finds out why
+4. Play it on Windows, Mac, Linux or Steam Deck
 
-It's still early access, so not every game boots yet. Only use it with games you own.
+Good to know: it is free and open source (MIT licence) but still experimental, so not every game boots yet. Only use it with games you own.
 
-Save this for the next time you miss an old favourite, and send it to your Player 2.
+Save this for later and send it to the friend you used to play PS2 with.
 
-#claudecode #claudeai #ps2 #retrogaming #aitools
+#claudecode #ps2 #retrogaming #pcgaming #steamdeck
+
+## Why it is written this way (SEO notes)
+
+- Instagram search reads the caption, so the first two lines carry the phrases people type: "PS2 games", "real PC
+  games", "Claude Code", "not an emulator". The body adds "play PS2 games on PC", "PS2 emulator", "static
+  recompilation", "PS2Recomp", "Windows, Mac and Linux", "Steam Deck", "open source", "mod".
+- The CTA keyword line comes first (house rule), the hook second, and the CTA is not repeated below.
+- Five hashtags (Instagram's current cap), each a real topic people follow: the tool, the console, the niche, the
+  platform, the device. No emojis anywhere (house rule).
+- The cover says the same thing in one glance: "your old PS2 games now run as REAL PC GAMES", real RE4 gameplay in a
+  GAME.EXE window, "not an emulator", "11 free Claude skills" and the Windows, Mac, Linux and Steam Deck logos.
 
 ## Auto-DM for the keyword CONSOLE (paste as is)
 
@@ -38,27 +50,19 @@ Heads up: it's experimental, so some games won't boot yet, and it's only for gam
 
 Follow AI.NXTLVL for more Claude setups like this.
 
-## Extra hashtags (optional)
-
-For reach tests, add some of these in the first comment:
-
-#playstation2 #pcgaming #steamdeck #gamemods #vibecoding #anthropic #githubrepo #indiegames
-
 ## Alt text (Advanced settings, Accessibility)
 
-A fast, game-styled Reel with an energetic female voiceover and bold kinetic captions that type on letter by letter in
-flashing colours, huge condensed keywords stacked next to small words. It opens on real God of War gameplay that
-shrinks into a paused "Game Over" screen under a glossy purple countdown, with three original pixel mascots (Rook, a
-bronze horned brawler with a hammer; Vesper, a scout in a mustard raincoat with a lantern; Dash, a speedster on roller
-skates) beside it. Giant spinning mascots, a crab stampede and flash silhouettes that burst into pixels carry each cut
-between bold orange, red and dark scenes. "Player 2 has joined": an orange gamepad and Claude's spark mark. A glossy
-"Console Skill" title sits over eleven little orange Claude crabs, and Dash skates through them. A spinning disc streams
-data into a GAME.EXE window that boots into Resident Evil 4, and Rook and Dash high-five on top. Rook and Vesper bonk
-heads grabbing a gold power-up star, then cards show the power-ups: Rook going from blocky to sharp, a level select and
-a row of controllers. The party and a magnifier crab K.O. a voxel crash boss and spin in celebration, then run across a
-New Game Plus map whose flags unlock Windows, Mac, Linux and Steam Deck, Rook tumbling on the way. A stamp marks a build
-card "Early Access" while Vesper hides behind Rook. It ends on a glossy play button, confetti and a comment box with
-CONSOLE typed in, the cast spinning and a crab tossed in the air.
+A fast, game-styled Reel with an energetic female voiceover and bold captions that type on letter by letter in
+flashing colours. It opens on real God of War gameplay that shrinks into a paused "Game Over" screen under a big glossy
+countdown, while three pixel characters (Rook, a horned brawler with a hammer; Vesper, a scout in a yellow raincoat;
+Dash, a speedster on roller skates) turn grey. A sweep of yellow pixel dots brings in an orange screen where a pixel
+Claude crab forms from pixels next to an orange gamepad: Player 2 has joined. A glossy "Console Skill" title sits over
+eleven little crabs, one per skill. A spinning disc streams data into a GAME.EXE window that boots into Resident Evil 4,
+"not an emulator", while Rook and Dash high-five on top. Rook and Vesper bonk heads grabbing a gold star; the crab takes
+the order "make the graphics sharper"; a blocky Rook breaks into pixels and reforms sharp; level and controller cards
+follow. The party fights a voxel crash boss until it explodes, races across a world map whose flags unlock Windows, Mac,
+Linux and Steam Deck, and Vesper hides behind Rook next to an "Early Access" build card. It ends on a glossy play button
+and a comment box with CONSOLE typed in, the cast spinning around it and the crab tossed into the air.
 
 ## Notes
 
@@ -71,3 +75,4 @@ CONSOLE typed in, the cast spinning and a crab tossed in the air.
 - Music: the track the owner supplied (videoplayback_2). Add its credit line here if its licence asks for one.
 - Sound effects were synthesised for this video; no samples were used.
 - Rook, Vesper and Dash are our own original mascots (build/mascots.py), not any game's characters.
+- Cover: renders/nxtlvl_console-continue_reels_9x16_v2_cover.png, made by build/cover.py from the video's own assets.
