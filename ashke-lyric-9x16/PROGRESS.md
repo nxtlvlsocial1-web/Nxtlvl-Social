@@ -1,7 +1,8 @@
 # PROGRESS: ashke-lyric-9x16 (updated 2026-10-30)
-Phase: DONE (final v2 delivered: 1080x1920, 60 s, 108.7 MB, -14.1 LUFS)
-Current version: final v2 (collage + cinema fusion) → renders/nxtlvl_ashke-lyric_reels_9x16_v2.mp4; v1 delivered earlier (1080x1920, 30 fps, 60 s, delivery quality)
-Done: built from the 16x9 v4. Camera and cut grammar measured from the YouMotion reference (phase correlation).
-Next step: owner reviews the final; feedback goes into v2.
+Phase: final render (v3)
+Current version: final v3 (close follow of the second YouMotion reference) → renders/nxtlvl_ashke-lyric_reels_9x16_v3.mp4; v1, v2 delivered earlier
+Done: v3 rebuilt on the second YouMotion reference: nine scene recipes, cut-out stickers (local segmentation), photo prints
+from the estate and tour clips, typed labels, flashes, camera whips and tracking; v2 cinema layer removed.
+Next step: owner reviews the final; feedback goes into v4.
 Approvals: lyrics ✓ (2026-10-30) · owner asked for the final export directly (2026-10-30)
-Key files: build/generate.py (camera(), cinema(), photo_grid()), build/cine.py, build/footage.py, build/paper.py, plan/shots.json
+Key files: build/plan.py (scene recipes), build/generate.py, build/cutouts.py, build/cards.py, build/scraps.py

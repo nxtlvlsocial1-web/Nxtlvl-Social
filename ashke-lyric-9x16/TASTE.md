@@ -1,50 +1,40 @@
 # TASTE: ashke-lyric-9x16
 
-Updated 2026-10-30. Current version: final v2 (collage + cinema fusion), renders/nxtlvl_ashke-lyric_reels_9x16_v2.mp4.
+Updated 2026-10-30. Current version: final v3, renders/nxtlvl_ashke-lyric_reels_9x16_v3.mp4.
 
 ## 1. Brief
-- 9:16 version of the Ashke (Karan Aujla, Mxrci) lyric edit: 60 s from 2:14 of the song, 1080x1920, 30 fps.
-- Look: the 16x9 v4 collage fusion. Cutting and camera: copied from the owner's YouMotion reference.
+- 9:16 Ashke (Karan Aujla, Mxrci) lyric edit: 60 s from 2:14, 1080x1920, 30 fps.
+- v3 follows the owner's second YouMotion reference ("COUNTRY STREETS ... RIDE YOUR OWN ROAD") as closely as we can:
+  every detail, camera move, text style and animation.
+- Footage: the owner's estate clip (1276x718) and Manchester tour clip (1200x720), used at close to native size.
 
-## 2. Cutting and camera (measured from the reference, frame by frame)
-- 15 fps stop-motion: every frame is held twice.
-- One scene per lyric line, each with a hard cut. Footage cuts on the beats inside a line, never closer than about
-  0.55 s; half beats only in the bursts.
-- Virtual camera over one big paper sheet (build/paper.py, 2600x3900). It moves in four ways:
-  - Whip in: about 470 px, expo ease-out over 0.45 s, with a 4 degree rotation that settles.
-  - Word tracking: the camera follows each label as it lands (power3 out, 0.3 s).
-  - Hold: a slow drift or a push-in while the line holds.
-  - Whip out: accelerates about 360 px over the last 0.2 s, along the next scene's direction, so the cut reads as
-    one whip pan.
-- Mostly down the page, sometimes sideways or diagonal.
-- Hit lines zoom through their keyword into the cut.
-- Type-only lines (5): the words run down the page, and the camera tracks them word to word at 1.22x.
-- Cut accents: mostly clean whips. Now and then a white or near-black frame; a red flash into the hit lines.
+## 2. Look (from the reference)
+- Warm crumpled paper under soft diagonal window-blind shadows; sparse hand-drawn grid lines.
+- Torn crumpled paper in red, black, grey and white, with the white core showing along the tear (build/scraps.py).
+- Photocopied cut-out stickers of Karan with a white paper border and a soft shadow (build/cutouts.py, local
+  segmentation with no upload).
+- Black-and-white photo prints with a white border (build/cards.py); a red duotone print.
+- Type: Oswald Bold caps.
+  - Labels: black, white, red-on-white, red, red-and-black.
+  - Stamped grunge words, white and red 3D words, a keyword filled with a photo, a ghosted repeat.
+- Accents: blue marker circles and arcs, black and red stars, a small print paragraph, a flame doodle.
+- End: "Ashke" on white tape between grid lines, circled (the reference's logo beat).
 
-## 2b. Cinema layer (eimantasbitinas23 reference, build/cine.py)
-- On the hit lines (3, 12, 19, 26), the bursts (7, 24), the intro and the ending, the collage gives way to full-bleed
-  footage cropped to 9:16 around Karan.
-- Grades: red monochrome, film colour (teal shadows, warm highlights, heavy grain), one-bit threshold, silver B&W.
-- Motion: smooth at the full frame rate, with a handheld drift and a slow push. The collage stays stepped at 15 fps.
-- Hit lines open with black title cards (Inter Display, white): card, then a threshold footage flash, then the card
-  again. They hold with a red picture-in-picture still, glass shards, torn paper slivers and a VHS scan line, then
-  zoom through the keyword.
-- Bursts are flurries of 4-frame cuts that cycle the grades.
-- Torn paper rips with a photocopied still tear back into the collage. A red iris closes into the red segment.
-- Lines 10 and 17 are a stop-motion photo grid of colour stills on white paper.
+## 3. Motion and pacing (from the reference)
+- 15 fps stepped, cuts on the beat grid (the reference runs at 90 BPM, the song at 89).
+- Labels type on letter by letter behind a grey cursor block; the first label of a scene can slam in big and settle.
+- Camera:
+  - It whips into every scene and tracks each label as it lands.
+  - It pushes in, pulls out, zooms into the photo-filled keyword and back, then whips out.
+- One-step flashes: colour invert, white, and a black/white split.
+- Nine scene recipes in the reference's own order; the hit lines use the photo-filled keyword (build/plan.py).
 
-## 3. Visual system
-- Same as 16x9 v4: photocopied music video in a torn card (on top, below, or full width), red torn shape, texture
-  panels, starbursts, stills with white borders, the barcode ticket, the road-sign arrow, velocity strips.
-- Hard edges and hard shadows, no blur, no caption of the line at the bottom.
-
-## 4. Technical
-- Build order (python3): build/paper.py, build/textures.py, build/footage.py, build/audio.py, build/generate.py.
-- Renders run detached (build/render_final.sh).
-- The song, the music video, its stills and the cover art stay out of git (artist's material).
+## 4. Removed
+- v2's full-bleed 9:16 cinema layer (eimantasbitinas23 reference): it blew the footage up and looked blurry.
 
 ## 5. Feedback rules
 | Date | User said | Rule |
 |---|---|---|
-| 2026-10-30 | 9:16, plan the cutting and motion tracking exactly like the YouMotion reference, final quality | measured camera grammar above; final straight away |
-| 2026-10-30 | add the eimantasbitinas23 style, plan clips and frame pacing like it, combine both | cinema layer above (v2) |
+| 2026-10-30 | 9:16, cut and track like YouMotion, final quality | v1 |
+| 2026-10-30 | add the eimantasbitinas23 style | v2 (then removed) |
+| 2026-10-30 | remove that concept (blurry 9:16 crops), add clips from the two videos, follow the new reference closely, every detail | never blow footage up to full 9:16; follow references closely, not loosely |

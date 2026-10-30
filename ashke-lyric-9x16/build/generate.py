@@ -1,136 +1,80 @@
-"""Ashke (Karan Aujla, Mxrci) lyric edit, 9:16, 60 s from 2:14 of the song: writes index.html.
+"""Ashke (Karan Aujla, Mxrci) lyric edit, 9:16, 60 s from 2:14 of the song, v3: writes index.html.
 
-python3 build/generate.py      (from the project root; after build/paper.py, build/textures.py, build/footage.py and
-build/audio.py)
+python3 build/generate.py      (from the project root; after build/paper.py, scraps.py, cutouts.py, cards.py and
+audio.py)
 
-The 9:16 version of the collage fusion, cut and camera-moved like the owner's YouMotion reference. Measured from that
-reference (phase correlation, frame by frame): it moves at 15 fps; every lyric line is a scene; the camera whips into
-the scene and settles (expo ease-out, roughly 450 px over half a second), tracks each new word as it lands (the
-labels stack along the page and the camera follows them down), drifts or pushes in slowly while the line holds, then
-accelerates out into a hard cut where the next scene picks up the same direction (a whip pan across the cut). Hit lines
-zoom through their keyword. Some lines are type only, laid out down the page with the camera tracking word to word.
-Everything else is the v4 collage: the music video photocopied in a torn card, texture panels, starbursts, stills,
-the barcode ticket, the road-sign arrow, velocity strips; hard edges and hard shadows, no blur.
-Fused with the owner's eimantasbitinas23 reference (cinema()): on the hit lines and the bursts the collage gives way to
-full-bleed colour-graded footage (assets/video/cine.mp4: red monochrome, film colour with grain, one-bit threshold),
-smooth at the full frame rate with a handheld drift, under flickering glass shards, torn paper slivers, a VHS scan line
-and a red picture-in-picture still; black title cards flash in front of the hits, the bursts are flurries of 4-frame
-cuts, two lines are a stop-motion photo grid on white paper, a red iris closes into the red segment, and torn paper
-cards with a photocopied still tear back into the collage.
-Lyric timings: ElevenLabs Scribe word timestamps; the romanized Punjabi is ours (confirmed by the owner).
+Built as closely as we can to the owner's YouMotion reference ("COUNTRY STREETS ... RIDE YOUR OWN ROAD"): warm crumpled
+paper under soft window-blind shadows, hand-drawn grid lines, torn red / black / grey / white paper, photocopied
+cut-out stickers of Karan with a white paper border, black-and-white photo prints, condensed bold labels that type on
+letter by letter behind a cursor block (black, white, red-on-white, red, red-and-black), a label that slams in big and
+settles, huge stamped words, white and red 3D words, a keyword filled with a photo, ghosted repeats, blue marker
+circles, black stars, a small print paragraph; one-frame colour-invert flashes, white flash frames, a black/white split
+frame; the camera whips into every scene, tracks each label as it lands, pushes, pulls out and zooms in, all stepped
+at 15 fps like the reference. The scene recipes and their order are in build/plan.py. Footage: the owner's estate and
+Manchester tour clips (cut-outs, prints); no 9:16 blow-ups. Lyric timings: ElevenLabs Scribe; the romanized Punjabi is
+ours (confirmed by the owner).
 """
 import json
 import math
 import os
 import random
+import sys
+
+from PIL import ImageFont
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from plan import CARD2, CUTOUT, FILL, RECIPE, W, line_times, scenes  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DUR, FW, FH = 60.0, 1080, 1920
-W = json.load(open(os.path.join(ROOT, "plan", "words_scribe.json")))
 BEATS = json.load(open(os.path.join(ROOT, "plan", "beats_raw.json")))
 PERIOD = 60 / BEATS["bpm"]
-R = random.Random(21)
-A, HIDE = [], []
-RED, INK, PAPER, BLUE = "#e3262e", "#141414", "#efece6", "#2aa7d8"
+STEP = 1 / 15
+R = random.Random(23)
+A, HIDE, PAN, SCREEN = [], [], [], []
+RED, INK, BLUE = "#d8232a", "#161616", "#2aa7d8"
+OSW = ImageFont.truetype(os.path.join(ROOT, "assets", "fonts", "Oswald", "Oswald-700.ttf"), 100)
+CAMKEYS = {}          # scene index -> list of (t, fx, fy, scale, rot, dur)
+FLASH = []            # (t, kind)
+NID = [0]
 
-# (first word, last word, romanized words, layout: l = card on top, r = card below, full = big card). * = keyword
 LYRICS = [
-    (3, 6, "Main *seedha turiya jaavan", "l"), (7, 10, "Tu takdi tedi *tedi", "r"), (11, 15, "Tu body kar layi *slim", "l"),
-    (16, 21, "Tere te main karda kamm *shady", "full"), (22, 27, "Saada taan tora fera hai na", "r"), (28, 31, "Main nahi launda *gedi", "l"),
-    (32, 35, "*Kaaran, jutti te *asla", "r"), (36, 40, "Nahi ae tinn ikki *dukki", "l"), (41, 43, "Nahi leeda *latta", "r"),
-    (44, 50, "Top da rakhaan main jaana *chadh ke", "l"), (51, 54, "Kacchi oh *chabb jaa", "r"), (55, 61, "Peene haan *chaa nahi, udda kaadh ke", "l"),
-    (62, 64, "*Jatt khulla *ghummda", "full"), (65, 71, "*Vairi nu rakhaan main udda taad ke", "r"), (72, 75, "Nahi taan full *baggy", "l"),
-    (76, 80, "*Patthraan 'ch aaya munda paadh ke", "r"), (81, 83, "Kardi meri *adeeta", "l"), (84, 88, "Nahi saada khul gaya *chaaka", "r"),
-    (89, 94, "Tu dil kardi ae *chori", "l"), (95, 100, "Nahi taan main maari da *daaka", "full"), (101, 104, "*Bebe kehndi tainu vyahna", "r"),
-    (105, 109, "Te mera *shastar dena thaaka", "l"), (110, 114, "Dass ki kar lena *kaama", "r"), (115, 119, "Nahi mera *baaja yaala raakha", "l"),
-    (120, 122, "Raahan vich *rode", "r"), (123, 128, "Behna ji *yaarana bhena kass ke", "l"), (129, 131, "*Jatt mudhto *zehri", "full"),
-    (132, 137, "*Naagni reha koi saanu dass ke", "r"), (138, 141, "*Baape di saanu bakhshe", "l"), (142, 145, "Chanattiyan *gaani lass ke", "r"),
-    (146, 148, "Nahi *mod te paundi", "l"), (149, 153, "Chhumbar de naale kehki *Ashke", "full"), (154, 156, "Nahi mod te paundi", "full"),
+    (3, 6, "Main *seedha turiya jaavan"), (7, 10, "Tu takdi tedi *tedi"), (11, 15, "Tu body kar layi *slim"),
+    (16, 21, "Tere te main karda kamm *shady"), (22, 27, "Saada taan tora fera hai na"), (28, 31, "Main nahi launda *gedi"),
+    (32, 35, "*Kaaran, jutti te *asla"), (36, 40, "Nahi ae tinn ikki *dukki"), (41, 43, "Nahi leeda *latta"),
+    (44, 50, "Top da rakhaan main jaana *chadh ke"), (51, 54, "Kacchi oh *chabb jaa"), (55, 61, "Peene haan *chaa nahi, udda kaadh ke"),
+    (62, 64, "*Jatt khulla *ghummda"), (65, 71, "*Vairi nu rakhaan main udda taad ke"), (72, 75, "Nahi taan full *baggy"),
+    (76, 80, "*Patthraan 'ch aaya munda paadh ke"), (81, 83, "Kardi meri *adeeta"), (84, 88, "Nahi saada khul gaya *chaaka"),
+    (89, 94, "Tu dil kardi ae *chori"), (95, 100, "Nahi taan main maari da *daaka"), (101, 104, "*Bebe kehndi tainu vyahna"),
+    (105, 109, "Te mera *shastar dena thaaka"), (110, 114, "Dass ki kar lena *kaama"), (115, 119, "Nahi mera *baaja yaala raakha"),
+    (120, 122, "Raahan vich *rode"), (123, 128, "Behna ji *yaarana bhena kass ke"), (129, 131, "*Jatt mudhto *zehri"),
+    (132, 137, "*Naagni reha koi saanu dass ke"), (138, 141, "*Baape di saanu bakhshe"), (142, 145, "Chanattiyan *gaani lass ke"),
+    (146, 148, "Nahi *mod te paundi"), (149, 153, "Chhumbar de naale kehki *Ashke"), (154, 156, "Nahi mod te paundi"),
 ]
-TXT = {4, 30}                      # type-only scenes: no card, the camera tracks the words down the page
-CINE = {3, 7, 12, 19, 24, 26, 31, 32}   # full-bleed cinema (hit lines and bursts), see build/cine.py
-GRID = {10, 17}                    # stop-motion photo grid on white paper
-CARDS = {3: "KAMM\nSHADY", 12: "JATT\nKHULLA\nGHUMMDA", 19: "NAHI TAAN\nDAAKA", 26: "JATT\nMUDHTO\nZEHRI"}
-# whip direction per scene (where the camera travels); mostly down the page like the reference, some sideways
-DIRS = [(0, 1), (0, 1), (1, 0), (0, 1), (-.8, .6), (0, 1), (0, -1), (.7, .7), (0, 1), (-1, 0), (0, 1), (.6, .8)]
-TEX = ["hz", "dots", "lines", "dia", "blocks", "news", "hz2", "dotsb", "grid"]
-NPNL = 6
 
 
 def js(s):
     A.append("      " + s)
 
 
-def line_times(li):
-    a = W[LYRICS[li][0]]["s"] - .06
-    b = (W[LYRICS[li + 1][0]]["s"] - .06) if li + 1 < len(LYRICS) else DUR
-    return a, b
+def nid(p):
+    NID[0] += 1
+    return f"{p}{NID[0]}"
 
 
 def word_slots(li):
-    i0, i1, text, _ = LYRICS[li]
+    i0, i1, text = LYRICS[li]
     toks = text.split()
     n = i1 - i0 + 1
     slots = [i0 + round(k * (n - 1) / max(1, len(toks) - 1)) for k in range(len(toks))] if len(toks) > 1 else [i0]
     return [(tok.lstrip("*"), tok.startswith("*"), W[s]["s"]) for tok, s in zip(toks, slots)]
 
 
-def torn(w, h, jag=10, seed=0):
-    """A torn-paper polygon (CSS clip-path in %): the four edges are jagged at random."""
-    g = random.Random(seed)
-    pts = []
-    for (x0, y0, x1, y1) in [(0, 0, 100, 0), (100, 0, 100, 100), (100, 100, 0, 100), (0, 100, 0, 0)]:
-        for k in range(14):
-            u = k / 14
-            x, y = x0 + (x1 - x0) * u, y0 + (y1 - y0) * u
-            jx = g.uniform(0, jag) * 100 / w if x0 == x1 else 0
-            jy = g.uniform(0, jag) * 100 / h if y0 == y1 else 0
-            x += jx if x0 == 0 and x1 == 0 else -jx if x0 == 100 else 0
-            y += jy if y0 == 0 and y1 == 0 else -jy if y0 == 100 else 0
-            pts.append(f"{x:.2f}% {y:.2f}%")
-    return "polygon(" + ", ".join(pts) + ")"
-
-
-def blob_path(cx, cy, rx, ry, seed, n=22):
-    g = random.Random(seed)
-    pts = []
-    for k in range(n):
-        a = k / n * math.pi * 2
-        r = 1 + g.uniform(-.18, .12)
-        pts.append((cx + math.cos(a) * rx * r, cy + math.sin(a) * ry * r))
-    return "M" + " L".join(f"{x:.0f} {y:.0f}" for x, y in pts) + " Z"
-
-
-def star_path():
-    pts = []
-    for k in range(16):
-        r = 48 if k % 2 == 0 else 20
-        a = k / 16 * math.pi * 2
-        pts.append(f"{math.cos(a) * r:.1f} {math.sin(a) * r:.1f}")
-    return "M" + " L".join(pts) + " Z"
-
-
-def burst_path(seed, n=13):
-    g = random.Random(seed)
-    pts = []
-    for k in range(n * 2):
-        r = g.uniform(40, 50) if k % 2 == 0 else g.uniform(14, 26)
-        a = k / (n * 2) * math.pi * 2 + g.uniform(-.08, .08)
-        pts.append(f"{math.cos(a) * r:.1f} {math.sin(a) * r:.1f}")
-    return "M" + " L".join(pts) + " Z"
-
-
-CIRC = ('<svg class="circ" viewBox="0 0 100 100" preserveAspectRatio="none"><path pathLength="400" '
-        'd="M52 6 C95 4 104 90 50 95 S-6 12 60 9"/></svg>')
-
-
-# ---------------------------------------------------------------------------------------------------- scene layout
 def groups_of(li):
+    """Labels of one or two words, keywords on their own; one- and two-letter words ride with the label before."""
     ws = word_slots(li)
-    if li == len(LYRICS) - 1:
-        return []                       # the last line: the title card owns the screen
-    if li == len(LYRICS) - 2:
-        ws = [w for w in ws if w[0] != "Ashke"]   # "Ashke" becomes the title card itself
+    if li == 31:
+        ws = [w for w in ws if w[0] != "Ashke"]           # "Ashke" is the end title itself
     groups, cur = [], []
     for w in ws:
         if w[1]:
@@ -145,596 +89,552 @@ def groups_of(li):
                 cur = []
     if cur:
         groups.append(cur)
-    return groups
-
-
-def layout(li):
-    """Card rectangle and label positions (board coordinates; the frame is 0..1080 x 0..1920 at rest)."""
-    side = LYRICS[li][3]
-    grps = groups_of(li)
-    big = side == "full"
-    hts = [(235 if big else 165) if g[0][1] else (136 if big else 116) for g in grps]
-    gap = 70 if li in TXT else 26
-    zig = [-120, 130, -70, 150, -140, 60] if li not in TXT else [-170, 160, -110, 190, -160, 120]
-    card = None
-    if li in TXT:
-        y = 330
-    elif li in GRID:
-        y = 1330
-    elif side == "l":
-        card = (60, 190, 960, 800)
-        y = 1070
-    elif side == "r":
-        y = 250
-    else:
-        card = (-50, 110, 1180, 1220)
-        y = 1170
-    labels = []
-    for k, (g, h) in enumerate(zip(grps, hts)):
-        if g[0][1] and k:
-            y += 34                     # room for the keyword's starburst and circle
-        labels.append((540 + zig[k % len(zig)], y, h))
-        y += h + gap
-    if side == "r" and li not in TXT and li not in GRID:
-        card = (60, max(y + 30, 1030), 960, 800)
-    return card, labels, grps
-
-
-def scenes():
-    out = [(0.0, line_times(0)[0], -1)]
-    for li in range(len(LYRICS)):
-        a, b = line_times(li)
-        out.append((a, b, li))
+    out = []
+    for g in groups:
+        txt = " ".join(x[0] for x in g).rstrip(",").upper()
+        if out and len(txt) <= 2:
+            out[-1] = (out[-1][0] + " " + txt, out[-1][1], out[-1][2])
+            continue
+        out.append((txt, g[0][1], g[0][2]))
     return out
 
 
-# ---------------------------------------------------------------------------------------------------- camera
-def ease_out(u, p=4):
-    return 1 - (1 - u) ** p
+def tw(text, size):
+    return OSW.getlength(text) * size / 100
+
+
+def star_path(n=7, r1=48, r2=22, seed=0):
+    g = random.Random(seed)
+    pts = []
+    for k in range(n * 2):
+        r = r1 * g.uniform(.9, 1) if k % 2 == 0 else r2
+        a = k / (n * 2) * math.pi * 2 - math.pi / 2
+        pts.append(f"{math.cos(a) * r:.1f} {math.sin(a) * r:.1f}")
+    return "M" + " L".join(pts) + " Z"
+
+
+CIRC = ('<svg class="circ" viewBox="0 0 100 100" preserveAspectRatio="none"><path pathLength="400" '
+        'd="M50 7 C93 3 106 88 50 94 S-8 14 62 8"/></svg>')
+
+
+# ------------------------------------------------------------------------------------------------ element helpers
+def show(sel, t0, t1):
+    HIDE.append(sel)
+    js(f'tl.set("{sel}", {{opacity: 1}}, {t0:.3f});')
+    if t1 < DUR:
+        js(f'tl.set("{sel}", {{opacity: 0}}, {t1:.3f});')
+
+
+def scrap(kind, k, x, y, w, rot, t0, t1, z=1):
+    i = nid("sc")
+    PAN.append(f'<img class="el" id="{i}" src="assets/img/scrap/{kind}-{k}.png" style="left:{x:.0f}px;top:{y:.0f}px;width:{w:.0f}px;'
+               f'transform:rotate({rot:.1f}deg);z-index:{z}" alt="">')
+    show(f"#{i}", t0, t1)
+    return i
+
+
+def cutout(name, x, y, w, rot, t0, t1, rise=0, red=False, z=3):
+    i = nid("ct")
+    PAN.append(f'<img class="el" id="{i}" src="assets/img/cut/{name}{"-red" if red else ""}.png" style="left:{x:.0f}px;top:{y:.0f}px;'
+               f'width:{w:.0f}px;transform:rotate({rot:.1f}deg);z-index:{z}" alt="">')
+    show(f"#{i}", t0, t1)
+    if rise:
+        js(f'tl.fromTo("#{i}", {{y: {rise}}}, {{y: 0, duration: .4, ease: "steps(6)", immediateRender: false}}, {t0:.3f});')
+    return i
+
+
+def card(n, x, y, w, h, rot, t0, t1, red=False):
+    """Move a footage print (card1 / card2 track) into place for [t0, t1)."""
+    js(f'tl.set("#pr{n}", {{opacity: 1, left: {x:.0f}, top: {y:.0f}, width: {w:.0f}, height: {h:.0f}, rotation: {rot:.1f}}}, {t0:.3f});')
+    js(f'tl.set("#pr{n} i", {{opacity: {.9 if red else 0}}}, {t0:.3f});')
+    js(f'tl.fromTo("#pr{n}", {{x: {R.choice([-120, 120])}}}, {{x: 0, duration: .134, ease: "steps(2)", immediateRender: false}}, {t0:.3f});')
+    if t1 < DUR:
+        js(f'tl.set("#pr{n}", {{opacity: 0}}, {t1:.3f});')
+
+
+def star(x, y, size, t0, t1, color=INK, n=7, seed=0):
+    i = nid("st")
+    PAN.append(f'<svg class="el" id="{i}" viewBox="-50 -50 100 100" style="left:{x:.0f}px;top:{y:.0f}px;width:{size}px;height:{size}px;z-index:4">'
+               f'<path d="{star_path(n, seed=seed)}" fill="{color}"/></svg>')
+    show(f"#{i}", t0, t1)
+    js(f'tl.fromTo("#{i}", {{scale: 0, rotation: -40}}, {{scale: 1, rotation: 0, duration: .134, ease: "steps(2)", immediateRender: false}}, {t0:.3f});')
+
+
+def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor="center", z=5):
+    """A label. mode: type (letter by letter behind a cursor block), slam (big, settles), pop."""
+    i = nid("lb")
+    size = min(size * 1.12, fit(text, 980, 999))          # the reference's labels run big, close to the frame edges
+    w = tw(text, size) + size * .56
+    left = x - w / 2 if anchor == "center" else x
+    letters = "".join(f'<span class="ch">{c if c != " " else "&nbsp;"}</span>' for c in text)
+    cur = '<span class="cur"></span>' if mode == "type" else ""
+    PAN.append(f'<div class="lw" data-layout-allow-overlap style="left:{left:.0f}px;top:{y:.0f}px;transform:rotate({rot:.1f}deg);z-index:{z}">'
+               f'<div class="lb {style}" id="{i}" style="font-size:{size:.0f}px">{letters}{cur}{CIRC if circle else ""}</div></div>')
+    show(f"#{i}", t, t1)
+    if mode == "type":
+        per = 2 if len(text) > 9 else 1
+        js(f'tl.set("#{i} .ch", {{display: "none"}}, {t - .001:.3f});')
+        k = 0
+        while k < len(text):
+            js(f'tl.set("#{i} .ch:nth-child(-n+{min(len(text), k + per)})", {{display: "inline"}}, {t + (k // per) * STEP:.3f});')
+            k += per
+        done = t + (len(text) // per + 1) * STEP
+        js(f'tl.set("#{i} .cur", {{display: "none"}}, {done:.3f});')
+    elif mode == "slam":
+        js(f'tl.fromTo("#{i}", {{scale: 1.65}}, {{scale: 1, duration: .27, ease: "steps(4)", immediateRender: false}}, {t:.3f});')
+        done = t + .27
+    else:
+        js(f'tl.fromTo("#{i}", {{scale: 1.4}}, {{scale: 1, duration: .134, ease: "steps(2)", immediateRender: false}}, {t:.3f});')
+        done = t + .134
+    if circle:
+        js(f'tl.fromTo("#{i} .circ path", {{strokeDashoffset: 400}}, {{strokeDashoffset: 0, duration: .33, ease: "steps(5)", immediateRender: false}}, {done + .05:.3f});')
+    return i, w
+
+
+def ghost(text, x, y, size, t0, t1):
+    i = nid("gh")
+    PAN.append(f'<div class="lw" data-layout-allow-overlap style="left:{x - 700:.0f}px;top:{y:.0f}px;width:1400px;z-index:1;text-align:center"><div class="ghost" id="{i}" '
+               f'style="font-size:{size}px">{text}&nbsp;{text}</div></div>')
+    show(f"#{i}", t0, t1)
+
+
+def para(lines, x, y, t0, t1):
+    i = nid("pa")
+    PAN.append(f'<div class="para el" id="{i}" style="left:{x}px;top:{y:.0f}px">{"<br>".join(lines)}</div>')
+    show(f"#{i}", t0, t1)
+
+
+def rect_outline(x, y, w, h, t0, t1):
+    i = nid("ro")
+    PAN.append(f'<i class="el rline" id="{i}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px"></i>')
+    show(f"#{i}", t0, t1)
+
+
+def arc(x, y, size, t0, t1):
+    i = nid("ar")
+    PAN.append(f'<svg class="el" id="{i}" viewBox="0 0 100 100" style="left:{x}px;top:{y}px;width:{size}px;height:{size}px;z-index:4;overflow:visible">'
+               f'<path pathLength="400" d="M8 70 C4 20 60 -6 96 30" fill="none" stroke="{BLUE}" stroke-width="3.2" stroke-linecap="round" '
+               f'stroke-dasharray="400"/></svg>')
+    show(f"#{i}", t0, t1)
+    js(f'tl.fromTo("#{i} path", {{strokeDashoffset: 400}}, {{strokeDashoffset: 0, duration: .27, ease: "steps(4)", immediateRender: false}}, {t0:.3f});')
+
+
+def block(x, y, w, h, t0, t1, cls="redblk"):
+    i = nid("bk")
+    PAN.append(f'<i class="el {cls}" id="{i}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px"></i>')
+    show(f"#{i}", t0, t1)
+
+
+def flame(x, y, t0, t1):
+    i = nid("fl")
+    PAN.append(f'<svg class="el" id="{i}" viewBox="0 0 100 120" style="left:{x}px;top:{y}px;width:150px;height:180px;z-index:4">'
+               '<path d="M50 4 C62 30 88 42 80 78 C76 100 60 114 46 114 C26 112 12 96 16 74 C20 56 34 52 34 36 C44 46 46 56 46 64 '
+               'C56 52 58 30 50 4 Z M40 112 C30 96 38 84 48 72 C50 86 62 92 56 112" fill="#f4f2ec" stroke="#161616" stroke-width="5" '
+               'stroke-linejoin="round"/></svg>')
+    show(f"#{i}", t0, t1)
+
+
+def cam(si, t, fx, fy, s=1.0, rot=0.0, dur=.35):
+    CAMKEYS.setdefault(si, []).append((t, fx, fy, s, rot, dur))
+
+
+def fit(text, maxw, size):
+    return min(size, maxw / (tw(text, 100) / 100 + .56))
+
+
+# ------------------------------------------------------------------------------------------------ recipes
+def r1(si, a, b, li, gs):
+    scrap("red", 0, 30, 230, 1020, -7, a, b)
+    scrap("black", 3, 600, 40, 560, 14, a, b)
+    cutout(CUTOUT[li], 120, 150, 840, -2, a, b, rise=320)
+    cam(si, a, 540, 700, 1.08, -2, .01)
+    y = 1000
+    for k, (txt, key, t) in enumerate(gs):
+        if k == 0:
+            size = fit(txt, 900, 160)
+            label(txt, "blk", 540, y, size, -2, t, b, mode="slam")
+            y += size * 1.12 + 26
+            cam(si, t, 540, 900, 1.0, -1, .3)
+        else:
+            size = fit(txt, 760, 118)
+            label(txt, "redw", 560, y, size, -1.5, t, b, mode="type", circle=key)
+            y += size * 1.12 + 22
+            cam(si, t, 540, 960 + (y - 1200) * .3, 1.02, 0, .4)
+    para(["ASHKE. KARAN AUJLA, MXRCI.", "A LYRIC EDIT BY", "NXTLVL SOCIAL."], 110, y + 30, gs[min(1, len(gs) - 1)][2], b)
+    star(60, max(1530, y + 190), 230, a + PERIOD, b, seed=si)
+    star(290, max(1700, y + 330), 110, a + PERIOD * 1.5, b, seed=si + 1)
+    if b - a > 1.4:
+        FLASH.append((a + PERIOD * 2, "invert"))
+
+
+def r2(si, a, b, li, gs):
+    kw = next((g for g in reversed(gs) if g[1]), gs[-1])      # the last keyword is the photo-filled one
+    ki = gs.index(kw)
+    if kw[2] - .067 > a + .1:
+        card(1, 60, 580, 960, 1060, 2, a, kw[2] - .067)
+    scrap("black", 1, -80, 1500, 900, -4, a, b)
+    cam(si, a, 540, 860, 1.12, 1.5, .01)
+    y = 520
+    for k, (txt, key, t) in enumerate(gs[:ki]):
+        size = fit(txt, 820, 120)
+        label(txt, "blk", 540 - 60 * k, y, size, -2, t, b)
+        y += size * 1.15 + 18
+        cam(si, t, 540, 760 + 60 * k, 1.1, 1, .3)
+    FLASH.append((kw[2] - .067, "white"))
+    scrap("red", 3, -60, 760, 1200, -5, kw[2], b)
+    cutout(CUTOUT.get(li, "suit_b"), 180, 620, 720, 2, kw[2], b, z=2)
+    size = fit(kw[0], 1060, 330)
+    _, fw = label(kw[0], f"fill f{li}", 540, 860, size, -3, kw[2], b, mode="pop", z=6)
+    cam(si, kw[2], 540, 960, 1.0, 0, .2)
+    zt = kw[2] + .4
+    after = gs[ki + 1:]
+    back = min(b - .1, (after[0][2] - .05) if after else kw[2] + 1.0, zt + .55)
+    if back - zt > .2:
+        cam(si, zt, 540 + fw * .22, 860 + size * .5, 1.85, -2, .27)
+        cam(si, back, 540, 1000, 1.0, 0, .27)
+    y = 860 + size + 20
+    for txt, key, t in after:
+        sz = fit(txt, 820, 120)
+        label(txt, "wht", 560, y, sz, 2, t, b)
+        y += sz * 1.15 + 18
+        cam(si, max(t, back + .05), 540, 1080, 1.0, 0, .35)
+
+
+def r3(si, a, b, li, gs):
+    kw = next((g for g in gs if g[1]), gs[-1])
+    scrap("grey", 0, -80, 880, 1240, 3, a, b)
+    scrap("black", 2, 720, 120, 420, -10, a, b)
+    g0 = gs[0]
+    size = fit(g0[0], 860, 140)
+    label(g0[0], "rb", 520, 520, size, -2, g0[2], b)
+    cam(si, a, 540, 560, 1.45, -2, .01)
+    rest = [g for g in gs[1:] if g is not kw]
+    t_pull = rest[0][2] if rest else (kw[2] if kw is not g0 else a + .6)
+    block(170, 960, 740, 560, t_pull, b)
+    cutout(CUTOUT[li], 150, 640, 780, 1, t_pull, b)
+    cam(si, t_pull, 540, 1000, 1.0, 0, .4)
+    for k, (txt, key, t) in enumerate(rest):
+        label(txt, "blk", 300 + 60 * k, 700 + 130 * k, fit(txt, 600, 100), -4, t, b)
+    if kw is not g0:
+        scrap("white", 1, 140, 1320, 800, -3, kw[2], b, z=4)
+        label(kw[0], "r3d", 540, 1390, fit(kw[0], 760, 200), -3, kw[2], b, z=6)
+        ghost(kw[0], 540, 1640, 250, kw[2], b)
+        cam(si, kw[2], 540, 1090, 1.03, 0, .35)
+
+
+def r4(si, a, b, li, gs):
+    kw = next((g for g in gs if g[1]), gs[-1])
+    g0 = gs[0]
+    FLASH.append((a, "invert"))
+    label(g0[0], "stamp", 540, 260, fit(g0[0], 1000, 300), 0, g0[2], b, z=4)
+    rect_outline(200, 560, 680, 560, a + .134, b)
+    scrap("red", 1, 560, 760, 520, 6, a + .134, b)
+    cam(si, a, 540, 430, 1.3, 0, .01)
+    mids = [g for g in gs[1:] if g is not kw]
+    t_cut = min(mids[0][2] if mids else (kw[2] if kw is not g0 else a + .5), a + .45)
+    cutout(CUTOUT[li], 150, 480, 780, -1, t_cut, b)
+    cam(si, t_cut, 540, 820, 1.18, 0, .35)
+    for k, (txt, key, t) in enumerate(mids):
+        label(txt, "blk", 780, 1180 + 120 * k, fit(txt, 520, 96), 4, t, b, z=6)
+    if kw is not g0:
+        scrap("black", 0, -90, 1300, 1260, -3, kw[2] - .067, b, z=4)
+        label(kw[0], "w3d", 540, 1420, fit(kw[0], 820, 220), -2, kw[2], b, z=6)
+        cam(si, kw[2], 540, 1250, 1.15, 0, .3)
+        if b - kw[2] > .7:
+            cam(si, kw[2] + .45, 540, 960, .92, 0, .4)
+
+
+def r5(si, a, b, li, gs):
+    g0 = gs[0]
+    scrap("red", 2, 20, 600, 700, -9, a, b)
+    card(1, 120, 520, 640, 760, -5, a, b)
+    cam(si, a, 520, 860, 1.05, -1, .01)
+    label(g0[0], "stamp", 540, 260, fit(g0[0], 1000, 270), -1, g0[2], b, z=4)
+    cam(si, g0[2], 540, 620, 1.0, 0, .3)
+    rest = gs[1:]
+    y = 1320
+    for k, (txt, key, t) in enumerate(rest):
+        if k == 0:
+            FLASH.append((t, "invert"))
+        sz = fit(txt, 760, 118)
+        label(txt, "blk" if (key or k % 2 == 0) else "wht", 430 + (k % 2) * 120, y, sz, -3 + 5 * (k % 2), t, b, circle=key, z=6)
+        y += sz * 1.15 + 22
+        cam(si, t, 520, min(1250, 1000 + 70 * k), 1.0, 0, .35)
+    tc = rest[len(rest) // 2][2] if rest else a + .8
+    if li in CARD2:
+        card(2, 500, 700, 560, 700, 6, tc, b, red=True)
+        cam(si, tc + .1, 640, 1100, 1.0, 1, .4)
+
+
+def r6(si, a, b, li, gs):
+    kw = next((g for g in gs if g[1]), gs[-1])
+    card(1, 400, 170, 660, 760, 9, a, b)
+    scrap("black", 1, -120, 820, 700, -6, a, b)
+    arc(60, 160, 360, a + .2, b)
+    cam(si, a, 640, 860, 1.0, 1, .01)
+    rest = [g for g in gs if g is not kw]
+    y = 1040
+    for k, (txt, key, t) in enumerate(rest):
+        sz = fit(txt, 760, 150)
+        label(txt, "wht" if k == 0 else "blk", 400 + 120 * (k % 2), y, sz, -3 + 4 * k, t, b, z=6)
+        y += sz * 1.15 + 20
+        cam(si, t, 480, 1000 + 40 * k, 1.0, 0, .35)
+    label(kw[0], "rlet", 560, y + 20, fit(kw[0], 900, 240), -6, kw[2], b, circle=kw[1], z=6)
+    star(720, y + 240, 90, kw[2] + .2, b, color=RED, n=6, seed=si)
+    star(830, y + 300, 60, kw[2] + .27, b, color=RED, n=6, seed=si + 5)
+    cam(si, kw[2], 540, min(1250, y + 60), 1.08, -1, .35)
+
+
+def r7(si, a, b, li, gs):
+    kw = next((g for g in gs if g[1]), gs[-1])
+    scrap("black", 2, 260, 110, 480, 8, a, b)
+    card(1, 140, 880, 760, 700, -3, a, b)
+    cam(si, a, 540, 1000, 1.0, 0, .01)
+    rest = [g for g in gs if g is not kw]
+    if rest:
+        g0 = rest[0]
+        label(g0[0], "rtyp", 620, 430, fit(g0[0], 700, 112), -6, g0[2], b, z=6)
+        cam(si, g0[2], 600, 620, 1.12, -1, .3)
+    label(kw[0], "wht", 540, 560, fit(kw[0], 900, 180), -2, kw[2], b, z=6)
+    cam(si, kw[2], 540, 800, 1.04, 0, .35)
+    for k, (txt, key, t) in enumerate(rest[1:]):
+        label(txt, "blk", 540, 1600 + 130 * k, fit(txt, 700, 110), 3, t, b, z=6)
+        cam(si, t, 540, 1200, 1.0, 0, .35)
+
+
+def r8(si, a, b, li, gs):
+    kw = next((g for g in reversed(gs) if g[1]), gs[-1])
+    g0 = gs[0]
+    FLASH.append((a, "invert"))
+    t2 = gs[1][2] if len(gs) > 1 else a + .9
+    # phase A: the cut-out over red torn paper, the first label red on white
+    scrap("red", 0, -60, 1080, 960, -8, a, t2)
+    scrap("black", 2, -160, 720, 420, 4, a, t2)
+    cutout(CUTOUT[li], 90, 260, 900, 0, a, t2)
+    flame(800, 1260, a + .2, t2)
+    label(g0[0], "redw", 540, 1270, fit(g0[0], 900, 150), -2, g0[2], t2, z=6)
+    cam(si, a, 540, 960, 1.0, 0, .01)
+    cam(si, g0[2], 540, 1060, 1.05, 0, .3)
+    # phase B: relayout, the cut-out smaller, a big stamped word over a black label with a red block, first label below
+    scrap("red", 3, -40, 1180, 1000, -6, t2, b)
+    cutout(CUTOUT[li], 280, 640, 540, 0, t2, b)
+    flame(760, 1380, t2, b)
+    label(g0[0], "redw", 540, 1460, fit(g0[0], 800, 120), -4, t2, b, mode="pop", z=6)
+    for k, (txt, key, t) in enumerate(g for g in gs[1:] if g is not kw):
+        label(txt, "blkr", 540, 470 + 10 * k, fit(txt, 900, 130), -2, t, b, z=6)
+    if kw is not g0:
+        label(kw[0], "stamp", 540, 220, fit(kw[0], 1000, 250), -3, kw[2], b, z=5)
+    cam(si, t2, 540, 880, 1.0, 0, .01)
+    cam(si, t2 + .3, 540, 920, 1.04, 0, .5)
+
+
+def r9(si, a, b, li, gs):
+    FLASH.append((a, "split"))
+    scrap("grey", 3, -160, -90, 1000, 5, a, b)
+    scrap("grey", 1, 420, 1560, 860, -7, a, b)
+    scrap("white", 2, -120, 880, 760, 3, a, b)
+    kw = next((g for g in gs if g[1]), None)
+    rest = [g for g in gs if g is not kw]
+    pos = [(420, 740, "redw", 175, -2), (680, 960, "red", 140, 3), (520, 1170, "w3d", 210, -2), (440, 1380, "blk", 130, -3)]
+    cam(si, a, 420, 820, 1.25, -1, .01)
+    for k, (txt, key, t) in enumerate(rest):
+        x, y, st, size, rot = pos[k % 4]
+        label(txt, st, x, y, fit(txt, 900, size), rot, t, b, z=6)
+        cam(si, t, (x + 540) / 2, y + 60, 1.22, rot * .3, .3)
+    if kw:
+        label(kw[0], "stamp", 540, 1000, fit(kw[0], 1040, 300), -2, kw[2], b, circle=True, z=5)
+        cam(si, kw[2], 540, 1060, 1.0, 0, .4)
+
+
+def ending(si, a, b, li, gs):
+    """Line 31 runs as type only up to "Ashke", then the end title takes over (end_card)."""
+    t = W[153]["s"]
+    r9(si, a, t, li, gs)
+    FLASH.append((t - .067, "white"))
+
+
+def end_card():
+    """The reference's logo moment: white flash, ASHKE on white tape between grid lines, the blue circle draws round."""
+    t = W[153]["s"]
+    PAN.append('<svg class="el" id="eg" viewBox="0 0 700 300" style="left:190px;top:800px;width:700px;height:300px;z-index:5">' +
+               "".join(f'<line x1="{x}" y1="10" x2="{x + 4}" y2="290" stroke="#2b2724" stroke-width="2.4"/>' for x in range(80, 640, 72)) +
+               '<line x1="10" y1="60" x2="690" y2="56" stroke="#2b2724" stroke-width="2.4"/>'
+               '<line x1="10" y1="246" x2="690" y2="250" stroke="#2b2724" stroke-width="2.4"/></svg>')
+    show("#eg", t, DUR)
+    scrap("black", 0, 160, -160, 760, 4, t, DUR)
+    scrap("white", 3, 280, 1480, 640, -4, t, DUR)
+    PAN.append('<div class="lw" data-layout-allow-overlap style="left:236px;top:870px;z-index:6;transform:rotate(-1.5deg)"><div class="lb logo" id="logo">'
+               + "".join(f'<span class="ch">{c}</span>' for c in "Ashke") + f'<span class="cur"></span>{CIRC}</div></div>')
+    show("#logo", t + .067, DUR)
+    js(f'tl.set("#logo .ch", {{display: "none"}}, {t + .066:.3f});')
+    for k in range(5):
+        js(f'tl.set("#logo .ch:nth-child(-n+{k + 1})", {{display: "inline"}}, {t + .067 + k * STEP:.3f});')
+    js(f'tl.set("#logo .cur", {{display: "none"}}, {t + .067 + 6 * STEP:.3f});')
+    js(f'tl.fromTo("#logo .circ path", {{strokeDashoffset: 400}}, {{strokeDashoffset: 0, duration: .5, ease: "steps(8)", immediateRender: false}}, {t + .55:.3f});')
+    label("KARAN AUJLA · MXRCI", "blk", 540, 1180, 64, 1.5, line_times(32)[0], DUR, z=6)
+    js(f'tl.to("#dim", {{opacity: .55, duration: .3, ease: "steps(3)"}}, {DUR - .3:.3f});')
+
+
+# ------------------------------------------------------------------------------------------------ camera
+def ease_out(u, p=3):
+    return 1 - (1 - max(0, min(1, u))) ** p
+
+
+DIRS = [(0, 1), (0, 1), (1, .3), (0, 1), (-.8, .6), (0, -1), (.7, .7), (0, 1), (-1, 0), (0, 1), (.6, .8), (1, 0)]
 
 
 def camera():
-    """The virtual camera, sampled at 15 fps: focus point (board coordinates at frame centre), scale and rotation.
-    Entry whip (expo out), word tracking (power3 out), slow drift or push-in, exit whip (accelerating) into the cut."""
+    """Sampled at 15 fps: each scene's keys (eased, power3 out), a whip in (expo out), a slow drift along the scene's
+    direction, a whip out along the next scene's direction, a little hand jitter. From the end title on, it rests."""
     plans = []
     for si, (a, b, li) in enumerate(scenes()):
+        keys = sorted(CAMKEYS.get(si, [(a, 540, 960, 1.0, 0, .01)]))
         d = DIRS[si % len(DIRS)]
         n = math.hypot(*d)
-        d = (d[0] / n, d[1] / n)
-        if li < 0 or li in CINE:
-            # cinema: the camera rests (the footage carries its own handheld drift); hit lines still zoom through
-            zoom = None
-            if li >= 0 and li < len(LYRICS) - 2 and LYRICS[li][3] == "full":
-                _, labels, grps = layout(li)
-                kws = [(x, y + h / 2) for (x, y, h), g in zip(labels, grps) if g[0][1]]
-                zoom = kws[-1] if kws else None
-            plans.append(dict(a=a, b=b, d=d, f0=(540, 960), keys=[], s0=1.0, push=0, drift=0, rot=0, zoom=zoom, cine=True,
-                              nozip=zoom is None))
-            continue
-        if li in GRID:
-            plans.append(dict(a=a, b=b, d=d, f0=(540, 960), keys=[], s0=1.0, push=.012, drift=0, rot=R.uniform(-1, 1), zoom=None))
-            continue
-        card, labels, grps = layout(li)
-        side = LYRICS[li][3]
-        if li in TXT:
-            f0, s0 = (labels[0][0] * .5 + 270, labels[0][1] + 60) if labels else (540, 960), 1.22
-        elif card is None:
-            f0, s0 = (540, 960), 1.0
-        elif side == "l":
-            f0, s0 = (540, 900), 1.0
-        elif side == "r":
-            f0, s0 = (540, max(960, labels[0][1] + 700) if labels else 960), 1.0
-        else:
-            f0, s0 = (540, 940), 1.0
-        keys = []
-        for (x, y, h), g in zip(labels, grps):
-            cy = y + h / 2
-            if li in TXT:
-                tgt = (x * .5 + 270, cy)
-            else:
-                tgt = (540 + (x - 540) * .25, f0[1] * .45 + cy * .55)
-            keys.append((g[0][2], tgt))
-        zoom = None
-        if side == "full" and li < len(LYRICS) - 1:
-            kws = [(x, y + h / 2) for (x, y, h), g in zip(labels, grps) if g[0][1]]
-            zoom = kws[-1] if kws else None
-        plans.append(dict(a=a, b=b, d=d, f0=f0, keys=keys, s0=s0, push=R.choice([.02, .05, .03]),
-                          drift=R.choice([40, 0, 60, 30]), rot=R.uniform(-2.5, 2.5), zoom=zoom))
-    E, X = 470, 360
+        plans.append(dict(a=a, b=b, li=li, keys=keys, d=(d[0] / n, d[1] / n)))
+    E, X = 430, 340
+    tend = W[153]["s"] - .067
+    g = random.Random(9)
     for f in range(int(DUR * 15)):
         t = f / 15
+        if t >= tend:
+            u = t - tend
+            js(f'tl.set("#pan", {{x: {g.uniform(-1, 1):.1f}, y: {g.uniform(-1, 1):.1f}}}, {t:.3f});')
+            js(f'tl.set("#cam", {{scale: {1 + .03 * u:.4f}, rotation: 0}}, {t:.3f});')
+            continue
         si = max(i for i, p in enumerate(plans) if p["a"] <= t + 1e-6)
         p = plans[si]
+        k0 = p["keys"][0]
+        fx, fy, s, rot = k0[1], k0[2], k0[3], k0[4]
+        for (tk, kx, ky, ks, kr, kd) in p["keys"][1:]:
+            if t >= tk:
+                v = ease_out((t - tk) / kd)
+                fx, fy, s, rot = fx + (kx - fx) * v, fy + (ky - fy) * v, s + (ks - s) * v, rot + (kr - rot) * v
         u = t - p["a"]
         d = p["d"]
-        # entry whip: arrive from -d*E, expo out over .45 s
-        e = 0 if p.get("cine") else 1 - ease_out(min(1, u / .45), 4)
-        fx, fy = p["f0"][0] - d[0] * E * e, p["f0"][1] - d[1] * E * e
-        rot = p["rot"] + 4 * e * (1 if si % 2 else -1)
-        s = p["s0"] * (1 + .06 * e)
-        # tracking: ease towards each word's target as it lands
-        cur = p["f0"]
-        for tk, tgt in p["keys"]:
-            if t >= tk:
-                v = ease_out(min(1, (t - tk) / .3), 3)
-                cur = (cur[0] + (tgt[0] - cur[0]) * v, cur[1] + (tgt[1] - cur[1]) * v)
-        fx += cur[0] - p["f0"][0]
-        fy += cur[1] - p["f0"][1]
-        # drift and push-in while the line holds
-        fx += d[0] * p["drift"] * u
-        fy += d[1] * p["drift"] * u
-        s *= 1 + p["push"] * u
-        rot += .5 * u * (1 if si % 3 else -1)
-        # exit: accelerate out along the next scene's direction (or zoom through the keyword)
-        if si + 1 < len(plans) and not p.get("nozip"):
+        e = 1 - ease_out(u / .4, 4)
+        fx -= d[0] * E * e
+        fy -= d[1] * E * e
+        rot += 3.5 * e * (1 if si % 2 else -1)
+        fx += d[0] * 22 * u
+        fy += d[1] * 22 * u
+        if si + 1 < len(plans) and p["b"] < tend:
             w = p["b"] - t
             if w < .2:
                 v = ((.2 - w) / .2) ** 2
-                if p["zoom"]:
-                    zx, zy = p["zoom"]
-                    fx, fy = fx + (zx - fx) * v, fy + (zy - fy) * v
-                    s *= 1 + 1.8 * v
-                else:
-                    nd = plans[si + 1]["d"]
-                    nn = math.hypot(*nd)
-                    fx += nd[0] / nn * X * v
-                    fy += nd[1] / nn * X * v
-                    rot += 3 * v * (1 if si % 2 else -1)
+                nd = plans[si + 1]["d"]
+                fx += nd[0] * X * v
+                fy += nd[1] * X * v
+                rot += 2.5 * v * (1 if si % 2 else -1)
+        fx += g.uniform(-1.5, 1.5)
+        fy += g.uniform(-1.5, 1.5)
         js(f'tl.set("#pan", {{x: {540 - fx:.1f}, y: {960 - fy:.1f}}}, {t:.3f});')
-        js(f'tl.set("#cam", {{scale: {s:.4f}, rotation: {rot:.2f}}}, {t:.3f});')
-
-
-# ---------------------------------------------------------------------------------------------------- layers
-def card_track():
-    """The footage card (and the red torn shape behind it) re-laid out on every scene; hidden in type-only scenes."""
-    for i, (a, b, li) in enumerate(scenes()):
-        card = None if li < 0 or li in CINE or li in GRID else layout(li)[0]
-        if card is None:
-            js(f'tl.set(["#cardw", "#redp"], {{opacity: 0}}, {a:.3f});')
-            continue
-        x, y, w, h = card
-        full = w > 1100
-        rot = R.uniform(-2.5, 2.5)
-        clip = torn(w, h, 0 if full else 14, seed=i)
-        js(f'tl.set("#cardw", {{opacity: 1}}, {a:.3f});')
-        js(f'tl.set("#card", {{left: {x}, top: {y}, width: {w}, height: {h}, rotation: {rot:.2f}, clipPath: "{clip}"}}, {a:.3f});')
-        js(f'tl.set("#tint", {{opacity: {.85 if (i % 4 == 2 and not full) else 0}}}, {a:.3f});')
-        if not full:
-            js(f'tl.set("#redp", {{attr: {{d: "{blob_path(x + w * R.uniform(.3, .7), y + h * R.uniform(.3, .7), w * .58, h * .45, i)}"}}, opacity: 1}}, {a:.3f});')
-        else:
-            js(f'tl.set("#redp", {{opacity: 0}}, {a:.3f});')
-    for bt in BEATS["beats"]:
-        if bt < DUR - .2 and all(abs(bt - s[0]) > .1 for s in scenes()):
-            js(f'tl.fromTo("#card", {{scale: 1.035}}, {{scale: 1, duration: .067, ease: "steps(1)", immediateRender: false}}, {bt:.3f});')
-
-
-def scene_builds():
-    """Texture panels, stills, a prop and stars, built up on the half beats in each scene; all clear at the cut."""
-    html = "".join(f'<i class="pnl" id="pn{k}"></i>' for k in range(NPNL))
-    html += "".join(f'<svg class="star" id="sr{k}" viewBox="-50 -50 100 100"><path d="{star_path()}"/></svg>' for k in range(3))
-    bars = "".join(f'<rect x="{x}" y="0" width="{w}" height="60"/>' for x, w in zip(range(0, 230, 9), [3, 5, 2, 7, 3, 2, 6, 3, 4, 2, 5, 3, 7, 2, 3, 6, 2, 4, 3, 5, 2, 6, 3, 2, 5, 3]))
-    html += (f'<div class="prop tick" id="tick" data-layout-ignore><svg viewBox="0 0 232 60" width="232" height="60">{bars}</svg>'
-             '<div><b>ASHKE</b><small>KARAN AUJLA &#183; MXRCI &#183; 0214-0314</small></div></div>')
-    html += ('<div class="prop" id="arrow"><svg viewBox="-50 -50 100 100" width="220" height="220"><circle r="46" fill="#f4f2ec" stroke="#141414" stroke-width="7"/>'
-             '<path d="M-24 18 L14 -20 L2 -20 L2 -30 L30 -30 L30 -2 L20 -2 L20 -14 L-18 24 Z" fill="#141414"/></svg></div>')
-    html += "".join(f'<svg class="prop bstb" id="bst{k}" viewBox="-50 -50 100 100"><path d="{burst_path(90 + k, 11)}"/></svg>' for k in range(2))
-    HIDE.extend([f"#pn{k}" for k in range(NPNL)] + [f"#sr{k}" for k in range(3)] + ["#tick", "#arrow", "#bst0", "#bst1"])
-    sk = 0
-    for si, (a, b, li) in enumerate(scenes()):
-        allx = [f"#pn{k}" for k in range(NPNL)] + [f"#sr{k}" for k in range(3)] + ["#tick", "#arrow", "#bst0", "#bst1"]
-        js(f'tl.set({json.dumps(allx)}, {{opacity: 0}}, {a:.3f});')
-        if li < 0 or li in CINE or li in GRID:
-            continue
-        card, labels, _ = layout(li)
-        ly0 = labels[0][1] if labels else 900
-        ly1 = labels[-1][1] + labels[-1][2] if labels else 1100
-        if card:
-            cx, cy, cw, ch = card
-            slots = [(cx + R.choice([-60, cw - 480]), cy + ch * .3, 540, ch * .85, R.uniform(-4, 4)),     # behind the card
-                     (R.choice([-60, 900]), min(ly0, cy) - 120, 240, 2100, 0),                          # edge strip
-                     (-30, ly0 - 70, 1140, 120, R.uniform(-3, 3)),                                       # band over the lyrics
-                     (cx + cw - 150, cy - 70, 250, 250, R.uniform(-10, 10)),                             # corner square
-                     (-30, ly1 + 20, 1140, 170, R.uniform(-3, 3)),                                       # band under the lyrics
-                     (40, cy + ch - 120, 320, 220, R.uniform(-6, 6))]                                    # lower corner
-        else:
-            slots = [(-60, ly0 - 200, 260, 2000, 0), (880, ly0 - 300, 260, 2100, 0),
-                     (-30, ly0 - 120, 1140, 110, R.uniform(-3, 3)), (700, ly1 + 10, 360, 300, R.uniform(-8, 8)),
-                     (-30, ly1 + 160, 1140, 160, R.uniform(-3, 3)), (60, ly0 + 300, 280, 280, R.uniform(-8, 8))]
-        texs = R.sample(TEX, NPNL)
-        t = a
-        for k, (x, y, w, h, rot) in enumerate(slots):
-            when = a if k < 2 else t
-            t += PERIOD / 2 if k >= 1 else 0
-            if when >= b - .1:
-                continue
-            clip = "none" if k != 0 else R.choice(["none", "polygon(7% 0, 100% 0, 93% 100%, 0 100%)"])
-            js(f'tl.set("#pn{k}", {{opacity: 1, left: {x:.0f}, top: {y:.0f}, width: {w:.0f}, height: {h:.0f}, rotation: {rot:.1f}, '
-               f'className: "pnl {texs[k]}", clipPath: "{clip}"}}, {when:.3f});')
-            js(f'tl.fromTo("#pn{k}", {{x: {R.choice([-160, 160])}}}, {{x: 0, duration: .067, ease: "steps(1)", immediateRender: false}}, {when:.3f});')
-        # stills: one or two, on the side away from the zigzag, a beat in
-        for j in range(2 if b - a > 2 else 1):
-            ts = a + PERIOD * (1 + j * 1.5)
-            if ts >= b - .25:
-                break
-            sid = f"#st{sk}"
-            sx = R.choice([-30, 760])
-            sy = R.randint(int(ly0), int(max(ly0 + 1, ly1 - 150)))
-            html += (f'<div class="still" id="st{sk}" style="left:{sx}px;top:{sy}px;transform:rotate({R.uniform(-9, 9):.1f}deg)">'
-                     f'<img src="assets/img/stills/s{sk % 20:02d}.jpg" alt=""></div>')
-            HIDE.append(sid)
-            js(f'tl.set("{sid}", {{opacity: 1}}, {ts:.3f});')
-            js(f'tl.set("{sid}", {{opacity: 0}}, {b:.3f});')
-            js(f'tl.fromTo("{sid}", {{x: {R.choice([-300, 300])}}}, {{x: 0, duration: .1, ease: "steps(2)", immediateRender: false}}, {ts:.3f});')
-            sk += 1
-        prop = ["#tick", "#arrow", "#bst0", "#tick", "#bst1", "#arrow"][si % 6]
-        tp = a + PERIOD * R.choice([1, 2])
-        if tp < b - .2:
-            px = R.choice([30, 640]) if prop == "#tick" else R.choice([20, 840])
-            py = R.choice([ly0 - 260, ly1 + 40])
-            js(f'tl.set("{prop}", {{opacity: 1, left: {px}, top: {py:.0f}, rotation: {R.randint(-14, 14)}}}, {tp:.3f});')
-            js(f'tl.fromTo("{prop}", {{scale: 1.5}}, {{scale: 1, duration: .067, ease: "steps(1)", immediateRender: false}}, {tp:.3f});')
-        for k in range(2):
-            ts = a + PERIOD * (.5 + k)
-            if ts < b - .15:
-                js(f'tl.set("#sr{k}", {{opacity: 1, left: {R.choice([40, 900])}, top: {R.randint(int(ly0) - 300, int(ly1) + 200)}, '
-                   f'width: {R.choice([90, 130])}, height: {R.choice([90, 130])}, rotation: {R.randint(0, 60)}}}, {ts:.3f});')
-                js(f'tl.fromTo("#sr{k}", {{scale: 0}}, {{scale: 1, duration: .067, ease: "steps(1)", immediateRender: false}}, {ts:.3f});')
-    js('tl.to("#arrow svg", {rotation: 720, duration: 60, ease: "steps(240)"}, 0);')
-    return html
-
-
-def labels():
-    """Tape labels at their own place on the page (the camera tracks them); slam in on the sung word."""
-    out = []
-    styles = ["blk", "wht", "red", "blk", "wht", "wht"]
-    for li, (i0, i1, text, side) in enumerate(LYRICS):
-        a, b = line_times(li)
-        _, pos, grps = layout(li)
-        rows = []
-        for gi, (grp, (x, y, h)) in enumerate(zip(grps, pos)):
-            key = grp[0][1]
-            txt = " ".join(w[0] for w in grp)
-            lid = f"lb{li}_{gi}"
-            rot = R.uniform(-5, 5)
-            big = " big" if side == "full" else ""
-            if key and gi % 2:
-                inner = f'<div class="lb kw kwr{big}" id="{lid}">{txt}{CIRC}</div>'
-            elif key:
-                bst = f'<svg class="bst" viewBox="-50 -50 100 100" preserveAspectRatio="none"><path d="{burst_path(li * 7 + gi)}"/></svg>'
-                inner = f'<div class="lb kw{big}" id="{lid}">{bst}<span>{txt}</span>{CIRC}</div>'
-            else:
-                inner = f'<div class="lb {styles[(li + gi) % len(styles)]}{big}" id="{lid}">{txt}</div>'
-            rows.append(f'<div class="lw" style="left:{x}px;top:{y}px;transform:rotate({rot:.1f}deg)">{inner}</div>')
-            HIDE.append(f"#{lid}")
-            t = grp[0][2]
-            js(f'tl.set("#{lid}", {{opacity: 1}}, {t:.3f});')
-            if key:
-                js(f'tl.fromTo("#{lid}", {{scale: 1.7}}, {{scale: 1, duration: .1, ease: "steps(2)", immediateRender: false}}, {t:.3f});')
-                js(f'tl.fromTo("#{lid} .circ path", {{strokeDashoffset: 400}}, {{strokeDashoffset: 0, duration: .2, ease: "steps(3)", immediateRender: false}}, {t + .1:.3f});')
-            else:
-                js(f'tl.fromTo("#{lid}", {{x: {R.choice([-560, 560])}}}, {{x: 0, duration: .1, ease: "steps(2)", immediateRender: false}}, {t:.3f});')
-        out.append(f'<div class="stack" id="sk{li}">{"".join(rows)}</div>')
-        HIDE.append(f"#sk{li}")
-        js(f'tl.set("#sk{li}", {{opacity: 1}}, {a:.3f});')
-        if b < DUR:
-            js(f'tl.set("#sk{li}", {{opacity: 0}}, {b:.3f});')
-    return "".join(out)
-
-
-def in_cine(t):
-    return any(a <= t < b and (li < 0 or li in CINE) for a, b, li in scenes())
-
-
-def cine_spans():
-    """Merged [a, b) spans where the cinema layer owns the screen, with the scene index that ends each span."""
-    spans = []
-    for a, b, li in scenes():
-        if li < 0 or li in CINE:
-            if spans and abs(spans[-1][1] - a) < 1e-6:
-                spans[-1] = (spans[-1][0], b, li)
-            else:
-                spans.append((a, b, li))
-    return spans
-
-
-def cinema():
-    """The eimantasbitinas23 layer: graded full-bleed footage with handheld drift, glass shards, torn slivers, a red
-    picture-in-picture still, torn paper rips back into the collage. Returns (html inside the camera, screen html)."""
-    g = random.Random(77)
-    shard_pts = ["0,0 60,8 34,90", "0,10 80,0 70,40 10,60", "20,0 44,4 40,120 0,110", "0,0 120,20 100,34", "10,0 30,0 26,70 0,74", "0,30 90,0 60,60"]
-    pan = '<div id="cine"><video id="cinev" class="clip" src="assets/video/cine.mp4" data-start="0" data-duration="60" data-track-index="2" muted playsinline></video>'
-    for k, pts in enumerate(shard_pts):
-        col = ["rgba(10,12,10,.85)", "rgba(40,190,90,.55)", "rgba(10,12,10,.7)"][k % 3]
-        pan += f'<svg class="shard" id="sh{k}" viewBox="0 0 130 130"><polygon points="{pts}" fill="{col}" stroke="rgba(255,255,255,.5)" stroke-width="1.5"/></svg>'
-    for k in range(3):
-        pan += f'<i class="sliver" id="sv{k}" style="clip-path:{torn(60, 400, 26, 300 + k)}"></i>'
-    pan += ('<div id="pip"><img id="pipa" src="assets/img/stills/s03.jpg" alt=""><img id="pipb" src="assets/img/stills/s11.jpg" alt=""><i></i></div>')
-    HIDE.extend(["#cine", "#pip"] + [f"#sh{k}" for k in range(len(shard_pts))] + [f"#sv{k}" for k in range(3)])
-    screen = '<div id="scan"></div>'
-    HIDE.append("#scan")
-    spans = cine_spans()
-    rk = 0
-    for a, b, li_end in spans:
-        js(f'tl.set("#cine", {{opacity: 1}}, {a:.3f});')
-        if b < DUR:
-            js(f'tl.set("#cine", {{opacity: 0}}, {b:.3f});')
-        js(f'tl.fromTo("#cinev", {{scale: 1}}, {{scale: 1.07, duration: {b - a:.3f}, ease: "none", immediateRender: false}}, {a:.3f});')
-        # handheld drift at the full frame rate (the collage is stepped, the cinema is smooth)
-        ph = g.uniform(0, 6)
-        f = round(a * 30)
-        while f < round(b * 30):
-            t = f / 30
-            js(f'tl.set("#cinev", {{x: {math.sin(t * 2.1 + ph) * 7 + g.uniform(-1.5, 1.5):.1f}, y: {math.cos(t * 1.7 + ph) * 9 + g.uniform(-1.5, 1.5):.1f}}}, {t:.3f});')
-            f += 1
-        # shards and slivers flicker every second frame
-        f = round(a * 15)
-        while f < round(b * 15):
-            t = f / 15
-            for k in range(len(shard_pts)):
-                if g.random() < .3:
-                    js(f'tl.set("#sh{k}", {{opacity: 1, left: {g.randint(-40, 1000)}, top: {g.randint(80, 1800)}, rotation: {g.randint(0, 360)}, scale: {g.uniform(.6, 1.8):.2f}}}, {t:.3f});')
-                else:
-                    js(f'tl.set("#sh{k}", {{opacity: 0}}, {t:.3f});')
-            for k in range(3):
-                if g.random() < .22:
-                    js(f'tl.set("#sv{k}", {{opacity: 1, left: {g.randint(200, 840)}, top: {g.randint(500, 1500)}, rotation: {g.randint(-40, 40)}, scaleY: {g.uniform(.5, 1.3):.2f}}}, {t:.3f});')
-                else:
-                    js(f'tl.set("#sv{k}", {{opacity: 0}}, {t:.3f});')
-            f += 1
-        js(f'tl.set({json.dumps([f"#sh{k}" for k in range(len(shard_pts))] + [f"#sv{k}" for k in range(3)])}, {{opacity: 0}}, {b - .001:.3f});')
-        # torn paper rip back into the collage (when the span does not end on a zoom-through)
-        zoom_exit = li_end >= 0 and LYRICS[li_end][3] == "full" and li_end < len(LYRICS) - 2
-        if b < DUR - .1 and not zoom_exit:
-            rid = f"rp{rk}"
-            pan += (f'<div class="rip" id="{rid}" style="clip-path:{torn(700, 900, 40, 700 + rk)}">'
-                    f'<img src="assets/img/stills/s{(rk * 7 + 4) % 20:02d}.jpg" alt=""></div>')
-            HIDE.append(f"#{rid}")
-            for j, sc in enumerate([.45, .8, 1.3]):
-                js(f'tl.set("#{rid}", {{opacity: 1, scale: {sc}, rotation: {(-6, 3, -2)[j]}}}, {b - .27 + j * .09:.3f});')
-            js(f'tl.set("#{rid}", {{opacity: 0}}, {b:.3f});')
-            rk += 1
-    # red picture-in-picture still in the hit-line holds, swapping every 4 frames
-    for li in CARDS:
-        a, b = line_times(li)
-        js(f'tl.set("#pip", {{opacity: 1}}, {a + .9:.3f});')
-        js(f'tl.set("#pip", {{opacity: 0}}, {b - .3:.3f});')
-        t, k = a + .9, 0
-        while t < b - .3:
-            js(f'tl.set("#pipa", {{opacity: {k % 2}}}, {t:.3f});')
-            t, k = t + 4 / 30, k + 1
-    # VHS scan line: mostly in the cinema, now and then over the collage
-    f = 0
-    while f < DUR * 15:
-        t = f / 15
-        p = .32 if in_cine(t) else .05
-        if g.random() < p:
-            js(f'tl.set("#scan", {{opacity: 1, left: {g.randint(40, 1040)}, scaleX: {g.choice([1, 1, 2])}}}, {t:.3f});')
-        else:
-            js(f'tl.set("#scan", {{opacity: 0}}, {t:.3f});')
-        f += 1
-    # black title cards before the hits (card, footage flash, card), and "karan aujla" out of the intro
-    k = 0
-    for li, txt in CARDS.items():
-        a = line_times(li)[0]
-        screen += f'<div class="bcard" id="bc{k}"><b>{"<br>".join(txt.split(chr(10)))}</b></div>'
-        HIDE.append(f"#bc{k}")
-        for t0 in (a, a + .4):
-            js(f'tl.set("#bc{k}", {{opacity: 1}}, {t0:.3f});')
-            js(f'tl.set("#bc{k}", {{opacity: 0}}, {t0 + .2:.3f});')
-        k += 1
-    screen += f'<div class="bcard low" id="bc{k}"><b>karan aujla</b></div>'
-    HIDE.append(f"#bc{k}")
-    a0 = line_times(0)[0]
-    js(f'tl.set("#bc{k}", {{opacity: 1}}, {a0 - .3:.3f});')
-    js(f'tl.set("#bc{k}", {{opacity: 0}}, {a0:.3f});')
-    # red iris closing into the red segment (JATT KHULLA GHUMMDA)
-    a12 = line_times(12)[0]
-    screen += '<div id="iris"></div>'
-    HIDE.append("#iris")
-    js(f'tl.set("#iris", {{opacity: 1}}, {a12 - .3:.3f});')
-    js(f'tl.fromTo("#iris", {{scale: 15}}, {{scale: 0, duration: .3, ease: "steps(4)", immediateRender: false}}, {a12 - .3:.3f});')
-    js(f'tl.set("#iris", {{opacity: 0}}, {a12 + .067:.3f});')
-    return pan + '</div>', screen
-
-
-def photo_grid():
-    """The reference's photo cluster on white paper: colour stills torn to size, two of them stop-motion (a new
-    picture every second frame); the camera holds still while the line is sung under it."""
-    html = ""
-    tiles = [(150, 290, 420, 300), (530, 330, 410, 320), (110, 560, 360, 300), (440, 610, 290, 250), (700, 630, 300, 290),
-             (120, 880, 430, 320), (570, 910, 380, 300)]
-    for n, li in enumerate(sorted(GRID)):
-        a, b = line_times(li)
-        gid = f"pg{n}"
-        inner = ""
-        for k, (x, y, w, h) in enumerate(tiles):
-            if k in (2, 5):
-                imgs = "".join(f'<img class="fr" id="{gid}t{k}f{j}" src="assets/img/stills/c{(n * 5 + k + j * 3) % 14:02d}.jpg" alt="">' for j in range(3))
-                f, j = round(a * 15), 0
-                while f < round(b * 15):
-                    for q in range(3):
-                        js(f'tl.set("#{gid}t{k}f{q}", {{opacity: {1 if q == j % 3 else 0}}}, {f / 15:.3f});')
-                    f, j = f + 1, j + 1
-            else:
-                imgs = f'<img src="assets/img/stills/c{(n * 5 + k) % 14:02d}.jpg" alt="">'
-            inner += f'<div class="tile" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px;clip-path:{torn(w, h, 6, 900 + n * 10 + k)}">{imgs}</div>'
-        html += f'<div class="pgrid" id="{gid}">{inner}</div>'
-        HIDE.append(f"#{gid}")
-        js(f'tl.set("#{gid}", {{opacity: 1}}, {a:.3f});')
-        js(f'tl.set("#{gid}", {{opacity: 0}}, {b:.3f});')
-    return html
-
-
-def velocity():
-    """Velocity strips across the screen (screen space, over the camera): every four beats, every beat in the bursts."""
-    html = "".join(f'<div class="vs" id="vs{k}"><b>{"ASHKE &#9679; KARAN AUJLA &#9679; MXRCI &#9679; " * 6}</b></div>' for k in range(2))
-    HIDE.extend(["#vs0", "#vs1"])
-    times = []
-    for i, bt in enumerate(b for b in BEATS["beats"] if 2.2 < b < 57.5):
-        if i % 4 == 2 and not in_cine(bt):
-            times.append(bt)
-    kinds = ["hz", "type", "dots", "blocks", "type", "lines", "hz2", "news"]
-    for n, t in enumerate(times):
-        vid = f"#vs{n % 2}"
-        d = 1 if n % 2 == 0 else -1
-        h = R.choice([80, 110, 140])
-        y = R.choice([R.randint(120, 420), R.randint(1500, 1760 - h)])
-        rot = R.uniform(-8, 8)
-        js(f'tl.set("{vid}", {{opacity: 1, top: {y}, height: {h}, rotation: {rot:.1f}, className: "vs {kinds[n % len(kinds)]}"}}, {t:.3f});')
-        js(f'tl.fromTo("{vid}", {{x: {-2700 if d > 0 else 1100}}}, {{x: {1100 if d > 0 else -2700}, duration: .3, ease: "steps(5)", immediateRender: false}}, {t:.3f});')
-        js(f'tl.set("{vid}", {{opacity: 0}}, {t + .3:.3f});')
-    return html
+        js(f'tl.set("#cam", {{scale: {s * 1.06:.4f}, rotation: {rot:.2f}}}, {t:.3f});')
 
 
 def flashes():
-    """The reference's cut accents: mostly clean whip cuts; now and then a white or near-black frame, red into hits."""
-    for li in range(1, len(LYRICS)):
-        a = line_times(li)[0]
-        kind = ["", "", "flash", "", "dark", "", "", "flash", "", "dark"][li % 10]
-        if LYRICS[li][3] == "full":
-            kind = "red"
-        if kind == "flash":
-            js(f'tl.set("#flash", {{opacity: .9}}, {a:.3f});')
-            js(f'tl.set("#flash", {{opacity: 0}}, {a + .067:.3f});')
-        elif kind == "dark":
-            js(f'tl.set("#dark", {{opacity: .75}}, {a:.3f});')
-            js(f'tl.set("#dark", {{opacity: 0}}, {a + .067:.3f});')
-        elif kind == "red":
-            js(f'tl.set("#redflash", {{opacity: 1}}, {a - .067:.3f});')
-            js(f'tl.set("#redflash", {{opacity: 0}}, {a + .033:.3f});')
-    g = random.Random(5)
-    for f in range(int(DUR * 15)):
-        t = f / 15
-        hit = any(0 <= t - bt < .07 for bt in BEATS["beats"])
-        amp = 7 if hit else 1.2
-        js(f'tl.set("#collage", {{x: {g.uniform(-amp, amp):.1f}, y: {g.uniform(-amp, amp):.1f}}}, {t:.3f});')
-        js(f'tl.set("#grain", {{x: {g.randint(-40, 0)}, y: {g.randint(-40, 0)}}}, {t:.3f});')
-
-
-def titles():
-    """ASHKE circled + KARAN AUJLA · MXRCI: opens the edit and lands on "Ashke" at the end (screen space)."""
-    t = W[153]["s"]
-    a0 = line_times(0)[0]
-    HIDE.extend(["#endt", "#endk", "#opt", "#opk"])
-    js(f'tl.set("#endt", {{opacity: 1}}, {t:.3f});')
-    js(f'tl.set("#sk{len(LYRICS) - 2}", {{opacity: 0}}, {t:.3f});')        # the title card replaces the line's labels
-    js(f'tl.fromTo("#endt", {{scale: 2.2, rotation: -8}}, {{scale: 1, rotation: -3, duration: .14, ease: "steps(4)", immediateRender: false}}, {t:.3f});')
-    js(f'tl.fromTo("#endt .circ path", {{strokeDashoffset: 400}}, {{strokeDashoffset: 0, duration: .4, ease: "power2.out", immediateRender: false}}, {t + .2:.3f});')
-    js(f'tl.set("#endk", {{opacity: 1}}, {t + .45:.3f});')
-    js(f'tl.fromTo("#endk", {{x: -120}}, {{x: 0, duration: .1, ease: "steps(3)", immediateRender: false}}, {t + .45:.3f});')
-    js('tl.set("#opt", {opacity: 1}, .15);')
-    js('tl.fromTo("#opt", {scale: 2.2, rotation: -8}, {scale: 1, rotation: -3, duration: .14, ease: "steps(4)", immediateRender: false}, .15);')
-    js('tl.fromTo("#opt .circ path", {strokeDashoffset: 400}, {strokeDashoffset: 0, duration: .4, ease: "power2.out", immediateRender: false}, .45);')
-    js('tl.set("#opk", {opacity: 1}, .6);')
-    js('tl.fromTo("#opk", {x: -120}, {x: 0, duration: .1, ease: "steps(3)", immediateRender: false}, .6);')
-    js(f'tl.set(["#opt", "#opk"], {{opacity: 0}}, {a0:.3f});')
-    one = f'<span>ASHKE</span>{CIRC}'
-    return (f'<div id="opt" class="lb kw end">{one}</div><div id="opk" class="lb blk endk">KARAN AUJLA · MXRCI</div>'
-            f'<div id="endt" class="lb kw end">{one}</div><div id="endk" class="lb blk endk">KARAN AUJLA · MXRCI</div>')
+    """One-step accents, as in the reference: colour invert, white, black/white split."""
+    SCREEN.append('<div id="flash"></div><div id="split"><i></i></div>')
+    HIDE.extend(["#flash", "#split"])
+    for t, kind in FLASH:
+        if kind == "invert":
+            js(f'tl.set("#fx", {{filter: "invert(1) hue-rotate(180deg) saturate(1.4)"}}, {t:.3f});')
+            js(f'tl.set("#fx", {{filter: "none"}}, {t + STEP:.3f});')
+        elif kind == "white":
+            js(f'tl.set("#flash", {{opacity: 1}}, {t:.3f});')
+            js(f'tl.set("#flash", {{opacity: 0}}, {t + STEP:.3f});')
+        elif kind == "split":
+            js(f'tl.set("#split", {{opacity: 1}}, {t:.3f});')
+            js(f'tl.set("#split", {{opacity: 0}}, {t + STEP:.3f});')
 
 
 CSS = f"""
-@font-face {{ font-family: "Bebas Neue"; src: url("assets/fonts/BebasNeue/BebasNeue-400.ttf"); }}
 @font-face {{ font-family: "Oswald"; font-weight: 700; src: url("assets/fonts/Oswald/Oswald-700.ttf"); }}
-@font-face {{ font-family: "Inter Display"; font-weight: 500; src: url("assets/fonts/InterDisplay/InterDisplay-Medium.otf"); }}
-@font-face {{ font-family: "Special Elite"; src: url("assets/fonts/SpecialElite/SpecialElite-400.ttf"); }}
+@font-face {{ font-family: "Oswald"; font-weight: 500; src: url("assets/fonts/Oswald/Oswald-500.ttf"); }}
+@font-face {{ font-family: "Outfit"; font-weight: 800; src: url("assets/fonts/Outfit/Outfit-800.ttf"); }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: {PAPER}; }}
-#root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: {PAPER}; }}
+html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #e9e4dc; }}
+#root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: #e9e4dc; }}
+#fx {{ position: absolute; inset: 0; }}
 #cam {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; transform-origin: 540px 960px; }}
 #pan {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; }}
-#paper {{ position: absolute; left: -760px; top: -1000px; width: 2600px; height: 3900px; background: url(assets/img/paper.png); }}
-#grid {{ position: absolute; left: -760px; top: -1000px; width: 2600px; height: 3900px; pointer-events: none; opacity: .5; }}
-#grid line {{ stroke: #3b3835; stroke-width: 1.4; }}
-#collage {{ position: absolute; inset: 0; }}
-#redsvg {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; overflow: visible; }}
-#redp {{ fill: {RED}; filter: drop-shadow(8px 8px 0 {INK}); }}
-#cardw {{ position: absolute; inset: 0; filter: drop-shadow(12px 12px 0 {INK}); }}
-#card {{ position: absolute; left: 60px; top: 190px; width: 960px; height: 800px; overflow: hidden; background: #111; }}
-#card video {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }}
-#tint {{ position: absolute; inset: 0; background: {RED}; mix-blend-mode: multiply; opacity: 0; }}
-.still {{ position: absolute; width: 330px; height: 230px; overflow: hidden; border: 9px solid #f4f2ec; box-shadow: 9px 9px 0 {INK}; z-index: 2; }}
-.still img {{ width: 100%; height: 100%; object-fit: cover; }}
-.pnl {{ position: absolute; left: 0; top: 0; width: 300px; height: 300px; box-shadow: 10px 10px 0 {INK}; }}
-.hz {{ background: repeating-linear-gradient(45deg, {INK} 0 34px, #f2f0ea 34px 68px); }}
-.hz2 {{ background: repeating-linear-gradient(-50deg, #f2f0ea 0 22px, {INK} 22px 64px); }}
-.dots {{ background: #f2f0ea radial-gradient(circle, {INK} 0 37%, transparent 39%) 0 0 / 22px 22px; }}
-.dotsb {{ background: {INK} radial-gradient(circle, #f2f0ea 0 30%, transparent 32%) 0 0 / 18px 18px; }}
-.lines {{ background: repeating-linear-gradient(0deg, {INK} 0 7px, #f2f0ea 7px 20px); }}
-.dia {{ background: url(assets/img/tex/diamond.png) 0 0 / 300px 300px; }}
-.blocks {{ background: url(assets/img/tex/blocks.png) center / cover; }}
-.news {{ background: url(assets/img/tex/news.png) center / cover; }}
-.grid {{ background: #f2f0ea linear-gradient({INK} 0 3px, transparent 3px) 0 0 / 60px 60px, linear-gradient(90deg, {INK} 0 3px, transparent 3px) 0 0 / 60px 60px; }}
-.prop {{ position: absolute; left: 0; top: 0; opacity: 0; z-index: 3; }}
-.tick {{ display: flex; gap: 18px; align-items: center; padding: 16px 26px; background: #f4f2ec; border: 4px solid {INK}; box-shadow: 10px 10px 0 {INK}; }}
-.tick svg rect {{ fill: {INK}; }}
-.tick b {{ display: block; font: 700 64px/1 "Oswald"; color: {INK}; letter-spacing: 1px; }}
-.tick small {{ display: block; font: 400 17px/1.2 "Special Elite"; color: {INK}; margin-top: 4px; }}
-.bstb {{ width: 280px; height: 280px; overflow: visible; }}
-.bstb path {{ fill: {INK}; }}
-.star {{ position: absolute; left: 0; top: 0; opacity: 0; fill: {INK}; z-index: 3; }}
-#lyrics {{ position: absolute; inset: 0; z-index: 5; pointer-events: none; }}
-.stack {{ position: absolute; inset: 0; opacity: 0; }}
-.lw {{ position: absolute; width: 0; display: flex; justify-content: center; transform-origin: 0 50%; }}
-.lb {{ position: relative; display: inline-block; font: 400 100px/1 "Bebas Neue"; letter-spacing: 1px; padding: 10px 26px 4px; white-space: nowrap; filter: url(#rough); }}
-.lb.blk {{ background: {INK}; color: {PAPER}; }}
-.lb.wht {{ background: #f7f5f0; color: {INK}; box-shadow: 8px 8px 0 {INK}; }}
-.lb.red {{ background: {RED}; color: #fff; }}
-.lb.big {{ font-size: 120px; }}
-.lb.kw {{ font: 700 170px/.9 "Oswald"; text-transform: uppercase; color: #d11a22; letter-spacing: -2px; padding: 0 30px; text-shadow: 7px 7px 0 {INK}, -1px -1px 0 {INK}; }}
-.lb.kw.big {{ font-size: 220px; }}
-.lb.kw span {{ position: relative; }}
-.bst {{ position: absolute; left: -14%; top: -40%; width: 128%; height: 180%; z-index: -1; overflow: visible; }}
-.bst path {{ fill: #f7f5f0; stroke: {INK}; stroke-width: 2.4; vector-effect: non-scaling-stroke; }}
-.lb.kw.kwr {{ background: {RED}; color: #fff; text-shadow: none; padding: 8px 34px 0; }}
-.circ {{ position: absolute; left: -12%; top: -24%; width: 124%; height: 148%; overflow: visible; pointer-events: none; }}
-.circ path {{ fill: none; stroke: {BLUE}; stroke-width: 5; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 400; }}
-.vs {{ position: absolute; left: 0; top: 0; width: 2600px; height: 120px; z-index: 6; opacity: 0; overflow: hidden; box-shadow: 0 8px 0 {INK}; }}
-.vs b {{ display: none; }}
-.vs.type {{ background: {INK}; }}
-.vs.type b {{ display: block; white-space: nowrap; font: 400 110px/1 "Bebas Neue"; color: #f4f2ec; letter-spacing: 4px; padding-top: 6px; }}
-#cine {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; overflow: hidden; background: #000; opacity: 0; }}
-#cinev {{ position: absolute; left: -20px; top: -30px; width: 1120px; height: 1980px; object-fit: cover; }}
-.shard {{ position: absolute; left: 0; top: 0; width: 130px; height: 130px; opacity: 0; overflow: visible; }}
-.sliver {{ position: absolute; left: 0; top: 0; width: 60px; height: 400px; background: #f4f2ec; opacity: 0; filter: drop-shadow(3px 0 0 #111); }}
-#pip {{ position: absolute; left: 60px; top: 300px; width: 330px; height: 210px; overflow: hidden; opacity: 0; }}
-#pip img {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.4); }}
-#pip i {{ position: absolute; inset: 0; background: #e01818; mix-blend-mode: multiply; }}
-.rip {{ position: absolute; left: 190px; top: 510px; width: 700px; height: 900px; background: #f4f2ec; padding: 34px; opacity: 0; }}
-.rip img {{ width: 100%; height: 100%; object-fit: cover; }}
-.pgrid {{ position: absolute; left: -200px; top: -200px; width: 1480px; height: 2320px; background: #ecebe8; opacity: 0; }}
-.tile {{ position: absolute; overflow: hidden; background: #111; margin: 200px 0 0 200px; }}
-.tile img {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }}
-#scan {{ position: absolute; left: 0; top: 0; width: 12px; height: {FH}px; z-index: 8; opacity: 0;
-  background: repeating-linear-gradient(0deg, #fff 0 3px, #9fe 3px 5px, #222 5px 7px, #fff 7px 12px, #6cf 12px 13px); }}
-.bcard {{ position: absolute; inset: 0; z-index: 8; background: #050505; opacity: 0; display: flex; align-items: center; justify-content: center; }}
-.bcard b {{ font: 500 132px/1.06 "Inter Display"; color: #f1f1f1; text-align: center; letter-spacing: -1px; }}
-.bcard.low b {{ font-size: 92px; letter-spacing: 0; }}
-#iris {{ position: absolute; left: 440px; top: 860px; width: 200px; height: 200px; border-radius: 50%; z-index: 8; opacity: 0;
-  box-shadow: 0 0 0 4000px {RED}, inset 0 0 30px 10px rgba(0,0,0,.45); }}
-#flash {{ position: absolute; inset: 0; z-index: 9; background: #fff; opacity: 0; }}
-#dark {{ position: absolute; inset: 0; z-index: 9; background: #111; opacity: 0; }}
-#redflash {{ position: absolute; inset: 0; z-index: 9; background: {RED}; opacity: 0; mix-blend-mode: multiply; }}
-#vig {{ position: absolute; inset: 0; z-index: 11; pointer-events: none; background: radial-gradient(ellipse 85% 80% at 50% 50%, rgba(0,0,0,0) 65%, rgba(0,0,0,.16) 100%); }}
-#grain {{ position: absolute; left: 0; top: 0; width: 1120px; height: 1960px; z-index: 12; pointer-events: none; opacity: .05; background: url(assets/img/grain.png); mix-blend-mode: overlay; }}
-#opt, #endt {{ position: absolute; left: 0; right: 0; top: 640px; margin: 0 auto; width: fit-content; z-index: 7; opacity: 0; font-size: 250px; }}
-#opk, #endk {{ position: absolute; left: 0; right: 0; top: 1000px; margin: 0 auto; width: fit-content; z-index: 7; opacity: 0; font-size: 76px; }}
+#paper {{ position: absolute; left: -760px; top: -1000px; width: 2600px; height: 3900px; background: url(assets/img/paper.png);
+  filter: sepia(.18) brightness(.98); }}
+#grid {{ position: absolute; left: -760px; top: -1000px; width: 2600px; height: 3900px; pointer-events: none; opacity: .55; }}
+#grid line {{ stroke: #2f2b28; stroke-width: 1.6; }}
+#board {{ position: absolute; inset: 0; }}
+#blinds {{ position: absolute; left: -1100px; top: -1300px; width: 3300px; height: 4500px; z-index: 9; pointer-events: none; mix-blend-mode: multiply;
+  background: repeating-linear-gradient(-32deg, rgba(70,55,40,0) 0px, rgba(70,55,40,0) 70px, rgba(70,55,40,.30) 150px, rgba(70,55,40,.34) 210px,
+  rgba(70,55,40,0) 290px, rgba(70,55,40,0) 330px); }}
+.el {{ position: absolute; opacity: 0; }}
+img.el {{ display: block; height: auto; }}
+.print {{ position: absolute; left: 0; top: 0; width: 600px; height: 700px; opacity: 0; z-index: 2; background: #f3f1ec; padding: 16px;
+  box-shadow: 0 14px 26px rgba(0,0,0,.32); }}
+.print video {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
+.print i {{ position: absolute; inset: 16px; background: {RED}; mix-blend-mode: multiply; opacity: 0; }}
+.lw {{ position: absolute; transform-origin: 50% 50%; }}
+.lb {{ position: relative; display: inline-block; font: 700 120px/1 "Oswald"; text-transform: uppercase; white-space: nowrap; opacity: 0;
+  padding: .1em .28em .06em; letter-spacing: .5px; }}
+.lb .ch {{ display: inline; }}
+.lb .cur {{ display: inline-block; width: .5em; height: .86em; margin-left: .06em; vertical-align: -.04em; background: rgba(95,92,88,.9); }}
+.blk {{ background: url(assets/img/tex/speckle.png) 0 0 / 300px auto, {INK}; color: #f1eee8; box-shadow: 0 12px 22px rgba(0,0,0,.28); }}
+.wht {{ background: url(assets/img/tex/speckle.png) 0 0 / 300px auto, #f3f1ec; color: {INK}; box-shadow: 0 12px 22px rgba(0,0,0,.25); }}
+.redw {{ background: url(assets/img/tex/speckle.png) 0 0 / 300px auto, #f3f1ec; color: {RED}; box-shadow: 0 12px 22px rgba(0,0,0,.25); }}
+.redw .cur {{ background: {RED}; }}
+.red {{ background: url(assets/img/tex/speckle.png) 0 0 / 300px auto, {RED}; color: #fff; box-shadow: 0 12px 22px rgba(0,0,0,.25); }}
+.rb {{ background: {RED}; color: #fff; text-shadow: 4px 4px 0 {INK}; box-shadow: 18px 16px 0 {INK}; }}
+.blkr {{ background: {INK}; color: #fff; box-shadow: 16px 18px 0 {RED}; }}
+.rtyp {{ background: none; color: {RED}; padding: 0; -webkit-mask-image: url(assets/img/tex/grunge.png); mask-image: url(assets/img/tex/grunge.png); }}
+.stamp {{ background: none; color: #1c1b1a; padding: 0; letter-spacing: -2px; line-height: .92;
+  -webkit-mask-image: url(assets/img/tex/grunge.png); mask-image: url(assets/img/tex/grunge.png); -webkit-mask-size: 520px auto; mask-size: 520px auto; }}
+.stamp .cur {{ background: rgba(60,58,55,.55); }}
+.w3d {{ background: none; color: #f6f4ef; padding: 0; -webkit-text-stroke: 2px #2a2a2a;
+  text-shadow: 1px 1px 0 #cfcac2, 2px 2px 0 #bdb7ae, 3px 3px 0 #a7a097, 4px 4px 0 #8f887f, 5px 5px 0 #77706a, 6px 6px 0 #5e5852, 7px 7px 0 #48433e, 10px 12px 10px rgba(0,0,0,.5); }}
+.r3d {{ background: none; color: {RED}; padding: 0; -webkit-text-stroke: 2px #6e0b0f;
+  text-shadow: 1px 1px 0 #a5121a, 2px 2px 0 #8c0f16, 3px 3px 0 #730c12, 4px 4px 0 #5a090e, 5px 5px 0 #40070a, 6px 6px 0 #2a0507, 9px 11px 10px rgba(0,0,0,.45); }}
+.rlet {{ background: none; color: {RED}; padding: 0; text-shadow: 5px 5px 0 rgba(22,22,22,.85);
+  -webkit-mask-image: url(assets/img/tex/grunge.png); mask-image: url(assets/img/tex/grunge.png); -webkit-mask-size: 700px auto; mask-size: 700px auto; }}
+.fill {{ color: transparent; padding: 0; letter-spacing: -2px; line-height: .95; background-size: cover; background-position: 50% 40%;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-stroke: 3px {INK}; filter: drop-shadow(8px 10px 0 rgba(22,22,22,.85)); }}
+{"".join(f'.f{li} {{ background-image: url(assets/img/photo/fill_{li}.jpg); }}' for li in FILL)}
+.ghost {{ font: 700 250px/1 "Oswald"; text-transform: uppercase; color: rgba(40,36,32,.16); white-space: nowrap; opacity: 0; letter-spacing: -2px; }}
+.para {{ font: 500 34px/1.22 "Oswald"; color: #2a2724; letter-spacing: .3px; z-index: 5; }}
+.rline {{ border: 9px solid {RED}; z-index: 2; }}
+.redblk {{ z-index: 2; background: repeating-linear-gradient(90deg, rgba(0,0,0,.25) 0 3px, rgba(0,0,0,0) 3px 9px),
+  radial-gradient(ellipse at 40% 40%, #a3121a, #4a0609); }}
+.logo {{ font: 800 150px/1 "Outfit"; text-transform: none; color: {RED}; letter-spacing: -2px; padding: .12em .34em .16em;
+  background: url(assets/img/tex/speckle.png) 0 0 / 300px auto, #f5f3ee; box-shadow: 0 16px 26px rgba(0,0,0,.28); }}
+.logo .cur {{ background: rgba(90,88,85,.8); }}
+.circ {{ position: absolute; left: -10%; top: -22%; width: 120%; height: 144%; overflow: visible; pointer-events: none; }}
+.circ path {{ fill: none; stroke: {BLUE}; stroke-width: 5.5; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 400; }}
+#flash {{ position: absolute; inset: 0; z-index: 20; background: #f7f6f2; opacity: 0; }}
+#split {{ position: absolute; inset: 0; z-index: 20; background: #f4f3ef; opacity: 0; }}
+#split i {{ position: absolute; left: 50%; top: 0; width: 50%; height: 100%; background: #111; }}
+#dim {{ position: absolute; inset: 0; z-index: 19; background: #000; opacity: 0; pointer-events: none; }}
+#vig {{ position: absolute; inset: 0; z-index: 18; pointer-events: none; background: radial-gradient(ellipse 80% 75% at 50% 48%, rgba(0,0,0,0) 58%, rgba(30,20,10,.28) 100%); }}
+#grain {{ position: absolute; left: 0; top: 0; width: 1120px; height: 1960px; z-index: 18; pointer-events: none; opacity: .07; background: url(assets/img/grain.png); mix-blend-mode: overlay; }}
 """
 
 
 def main():
-    card_track()
-    sc = scene_builds()
-    lb = labels()
-    vel = velocity()
-    cpan, cscreen = cinema()
-    pg = photo_grid()
-    flashes()
+    builders = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6, "R7": r7, "R8": r8, "R9": r9, "END": ending}
+    for si, (a, b, li) in enumerate(scenes()):
+        if li == 32:
+            continue
+        gs = [("ASHKE", False, .75), ("KARAN AUJLA", True, 1.25)] if li < 0 else groups_of(li)
+        builders[RECIPE[li]](si, a, b, li, gs)
+    end_card()
     camera()
-    tt = titles()
+    flashes()
+    g = random.Random(3)
+    for f in range(int(DUR * 15)):
+        js(f'tl.set("#grain", {{x: {g.randint(-40, 0)}, y: {g.randint(-40, 0)}}}, {f / 15:.3f});')
     gl = random.Random(4)
-    grid = "".join(f'<line x1="{x + gl.uniform(-8, 8):.0f}" y1="-20" x2="{x + gl.uniform(-30, 30):.0f}" y2="3920"/>' for x in range(150, 2600, 250)) + \
-           "".join(f'<line x1="-20" y1="{y + gl.uniform(-8, 8):.0f}" x2="2620" y2="{y + gl.uniform(-25, 25):.0f}"/>' for y in range(140, 3900, 260))
+    grid = "".join(f'<line x1="{x + gl.uniform(-8, 8):.0f}" y1="-20" x2="{x + gl.uniform(-40, 40):.0f}" y2="3920"/>' for x in range(260, 2600, 390)) + \
+           "".join(f'<line x1="-20" y1="{y + gl.uniform(-8, 8):.0f}" x2="2620" y2="{y + gl.uniform(-40, 40):.0f}"/>' for y in range(200, 3900, 420))
+    prints = "".join(f'<div class="print" id="pr{n}"><video id="cv{n}" class="clip" src="assets/video/card{n}.mp4" data-start="0" '
+                     f'data-duration="{DUR}" data-track-index="{n}" muted playsinline></video><i></i></div>' for n in (1, 2))
+    HIDE.extend(["#pr1", "#pr2"])
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
   <head>
@@ -745,27 +645,20 @@ def main():
     <style>{CSS}</style>
   </head>
   <body>
-    <svg width="0" height="0" style="position:absolute"><filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="2"/></filter></svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="{FW}" data-height="{FH}">
-      <div id="cam"><div id="pan">
-        <div id="paper"></div>
-        <svg id="grid" viewBox="0 0 2600 3900">{grid}</svg>
-        <div id="collage">
-          {sc}
-          {pg}
-          <svg id="redsvg" viewBox="0 0 {FW} {FH}"><path id="redp" d="M0 0"/></svg>
-          <div id="cardw"><div id="card"><video id="vid" class="clip" src="assets/video/bw_main.mp4" data-start="0" data-duration="{DUR}" data-track-index="1" muted playsinline></video><i id="tint"></i></div></div>
-        </div>
-        {cpan}
-        <div id="lyrics" class="clip" data-start="0" data-duration="{DUR}" data-track-index="3">{lb}</div>
-      </div></div>
-      {vel}
-      {cscreen}
-      {tt}
-      <div id="flash"></div>
-      <div id="dark"></div>
-      <div id="redflash"></div>
+      <div id="fx">
+        <div id="cam"><div id="pan">
+          <div id="paper"></div>
+          <svg id="grid" viewBox="0 0 2600 3900">{grid}</svg>
+          <div id="board">
+            {prints}
+            {"".join(PAN)}
+          </div>
+          <div id="blinds"></div>
+        </div></div>
+        {"".join(SCREEN)}
+      </div>
+      <div id="dim"></div>
       <div id="vig"></div>
       <div id="grain"></div>
       <audio id="song" src="assets/audio/section.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
@@ -782,7 +675,7 @@ def main():
 </html>
 """
     open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8").write(html)
-    print(f"wrote index.html {len(html) // 1024} KB, {len(A)} timeline lines, {len(LYRICS)} lines, {len(scenes())} scenes")
+    print(f"wrote index.html {len(html) // 1024} KB, {len(A)} timeline lines, {len(scenes())} scenes")
 
 
 if __name__ == "__main__":
