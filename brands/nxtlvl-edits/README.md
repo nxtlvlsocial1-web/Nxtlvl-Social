@@ -29,7 +29,7 @@ Round 2 (more variations):
 | **K · Violet Stack** | D's wordmark without the frame, white on full violet. |
 | **L · Cut Star, Light** | A's Cut Star in violet on a light ground. |
 
-All four share one wordmark: "nxtlvl" in the original logo lettering (traced from `website/logo.png`), then "edits" in
+Every concept shares one wordmark: "nxtlvl" in the original logo lettering (traced from `website/logo.png`), then "edits" in
 Instrument Serif Italic with the four-point star over the i.
 
 ## Files
