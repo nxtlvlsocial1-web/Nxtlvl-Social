@@ -46,7 +46,7 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
 scene.environmentIntensity = 1.0;
 const BG = new THREE.Color("#F1EEF4");
-scene.fog = new THREE.Fog(BG, 12, 34);
+scene.fog = new THREE.Fog(BG, 40, 120);   // effectively off: the colour fields behind are dark/saturated
 
 // the canvas is transparent: the gameplay and the lavender wash behind it are DOM layers (build/generate.py)
 
@@ -73,7 +73,7 @@ scene.add(grid);
 const NP = 70;
 const parts = new THREE.InstancedMesh(new THREE.OctahedronGeometry(.07, 0),
   new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .3, metalness: .2 }), NP);
-const PCOL = ["#b9a2ff", "#9cc9ff", "#ffc2e0", "#ffffff", "#d7ccff"];
+const PCOL = ["#ffb36b", "#ff7a45", "#ffd38a", "#ffffff", "#ff9ad0"];
 for (let i = 0; i < NP; i++) parts.setColorAt(i, new THREE.Color(PCOL[i % PCOL.length]));
 scene.add(parts);
 const _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _e = new THREE.Euler(), _s = new THREE.Vector3(), _p = new THREE.Vector3();
@@ -156,13 +156,18 @@ function loadImg(src) { return new Promise((res) => { const im = new Image(); im
 // ------------------------------------------------------------------ the props
 let P = null;
 async function build() {
-  const [orb, russo, apple, deck] = await Promise.all([loadFont("assets/fonts/Orbitron-Black.ttf"), loadFont("assets/fonts/RussoOne.ttf"),
-    loadImg("assets/img/apple.png"), loadImg("assets/img/deck-logo.png")]);
+  const [lilita, apple, deck, win, tux] = await Promise.all([loadFont("assets/fonts/LilitaOne.ttf"),
+    loadImg("assets/img/apple.png"), loadImg("assets/img/deck-logo.png"), loadImg("assets/img/windows-logo.png"), loadImg("assets/img/linux-logo.png")]);
+  // glossy toy-like type: white or violet faces with deeper violet sides (TextGeometry group 0 = faces, 1 = sides)
+  const gFace = new THREE.MeshPhysicalMaterial({ color: 0xfbfaff, roughness: .16, metalness: .05, clearcoat: 1, clearcoatRoughness: .08 });
+  const gSide = new THREE.MeshPhysicalMaterial({ color: 0x6a22e8, roughness: .3, metalness: .2, clearcoat: .8 });
+  const vface = new THREE.MeshPhysicalMaterial({ color: 0x8a46ff, roughness: .18, metalness: .1, clearcoat: 1, clearcoatRoughness: .08 });
+  const vside = new THREE.MeshPhysicalMaterial({ color: 0x3d1294, roughness: .3, metalness: .2, clearcoat: .8 });
   P = {};
   // countdown digits (scenes A and H)
   P.digits = {};
   for (const d of "123456789") {
-    const m = mesh(textGeo(orb, d, 1.55, .38), M.chrome); m.visible = false; P.digits[d] = m;
+    const m = mesh(textGeo(lilita, d, 1.7, .42), [gFace, gSide]); m.visible = false; P.digits[d] = m;
   }
   // gamepads (B), and a white one for the inventory (D)
   P.p1 = gamepad(M.plastic, pastel(0x8fb8ff)); scene.add(P.p1);
@@ -177,8 +182,8 @@ async function build() {
   mesh(new THREE.SphereGeometry(.09, 24, 16), M.claude, P.spark);
   P.padItem = gamepad(M.plastic, M.violet); scene.add(P.padItem);
   // title (C1)
-  P.t1 = mesh(textGeo(russo, "CONSOLE", .37, .2), M.chrome);
-  P.t2 = mesh(textGeo(russo, "SKILL", .37, .2), M.violet);
+  P.t1 = mesh(textGeo(lilita, "CONSOLE", .44, .22), [gFace, gSide]);
+  P.t2 = mesh(textGeo(lilita, "SKILL", .5, .24), [vface, vside]);
   // disc, monitor, bit stream (C2)
   P.disc = group();
   const dm = mesh(new THREE.CylinderGeometry(.6, .6, .035, 96), M.iri, P.disc); dm.rotation.x = Math.PI / 2;
@@ -219,7 +224,7 @@ async function build() {
   scene.add(P.boss);
   P.shots = [0, 1, 2, 3].map(() => mesh(new THREE.OctahedronGeometry(.13, 0), M.claude));
   // world map (F)
-  const tiles = [[-.65, -.35, .2, .5, 0xbcd6ff], [.65, .05, -1.7, .5, 0xffd9ec], [-.55, .45, -3.6, .5, 0xd9ccff], [.45, .9, -5.6, .62, 0xfff0b8]];
+  const tiles = [[-.65, -.8, .2, .5, 0xbcd6ff], [.65, -.45, -1.6, .5, 0xffd9ec], [-.55, -.1, -3.3, .5, 0xd9ccff], [.45, .2, -4.9, .62, 0xfff0b8]];
   P.tiles = tiles.map(([x, y, z, r, c], i) => {
     const g = group(); g.position.set(x, y, z);
     mesh(new THREE.CylinderGeometry(r, r * .78, .34, 6), pastel(c), g);
@@ -230,10 +235,12 @@ async function build() {
       g2.fillStyle = i === 3 ? "#7a2ffb" : "#ffffff"; g2.fillRect(0, 0, W2, H2);
       g2.strokeStyle = "#1d1a26"; g2.lineWidth = 14; g2.strokeRect(7, 7, W2 - 14, H2 - 14);
       g2.fillStyle = i === 3 ? "#ffffff" : "#1d1a26"; g2.textAlign = "center"; g2.textBaseline = "middle";
+      if (i === 0) g2.drawImage(win, W2 / 2 - 80, 30, 160, 160);
       if (i === 1) g2.drawImage(apple, W2 / 2 - 95, 28, 190, 190);
+      if (i === 2) g2.drawImage(tux, 40, 40, 432, 432 * tux.height / tux.width);
       if (i === 3) g2.drawImage(deck, W2 / 2 - 80, 22, 160, 160);
-      g2.font = `${i === 3 ? 62 : i === 1 ? 64 : 84}px "Russo One"`;
-      g2.fillText(label, W2 / 2, i === 1 ? 255 : i === 3 ? 240 : H2 / 2 + 4);
+      g2.font = `${i === 3 ? 62 : 64}px "Lilita One"`;
+      if (i !== 2) g2.fillText(label, W2 / 2, i === 3 ? 240 : 255);
     });
     const flag = new THREE.Mesh(new THREE.PlaneGeometry(.78, .46), new THREE.MeshStandardMaterial({ map: tx, roughness: .5, side: THREE.DoubleSide }));
     flag.position.set(-r * .45 + .41, .95, 0); flag.castShadow = true; g.add(flag);
@@ -333,6 +340,7 @@ function renderAt(t) {
   let pulse = 0;
   for (const b of T.beats) { if (t >= b && t < b + .4) pulse = Math.max(pulse, Math.exp(-(t - b) * 9)); }
   grid.position.z = (t * 1.1) % 1;
+  grid.visible = t >= T.count[0][1] - .3 && t < S.B[0];   // not over the opening gameplay   // the floor grid only belongs to the lavender GAME OVER stage
   sweep.intensity = 0;
 
   if (inS(t, "A")) {
@@ -366,11 +374,11 @@ function renderAt(t) {
     const a1 = w[19], a2 = w[20];
     if (t >= a1) {
       const e = eOut(lin(t, a1, a1 + .5));
-      place(P.t1, px(540, 665)); P.t1.position.z = -9 * (1 - e); P.t1.rotation.set(1.3 * (1 - e) + .05 * Math.sin(t), .1 * Math.sin(t * .8), 0);
+      place(P.t1, px(540, 690)); P.t1.position.z = -9 * (1 - e); P.t1.rotation.set(1.3 * (1 - e) + .05 * Math.sin(t), .1 * Math.sin(t * .8), 0);
     }
     if (t >= a2) {
       const e = eOut(lin(t, a2, a2 + .45));
-      place(P.t2, px(540, 785)); P.t2.position.z = -9 * (1 - e); P.t2.rotation.set(-1.3 * (1 - e) - .05 * Math.sin(t), -.1 * Math.sin(t * .8), 0);
+      place(P.t2, px(540, 880)); P.t2.position.z = -9 * (1 - e); P.t2.rotation.set(-1.3 * (1 - e) - .05 * Math.sin(t), -.1 * Math.sin(t * .8), 0);
     }
     sweep.intensity = 60 * Math.sin(Math.PI * lin(t, a2 + .2, a2 + 1.4));
     sweep.position.set(-4 + 8 * lin(t, a2 + .2, a2 + 1.4), .9, 2);
@@ -378,7 +386,7 @@ function renderAt(t) {
   }
   if (inS(t, "C2")) {
     // the disc spins above the GAME.EXE window (a DOM layer) and streams bits down into it
-    const d = px(540, 640), m = px(540, 930);
+    const d = px(540, 740), m = px(540, 1040);
     place(P.disc, d, .55); P.disc.rotation.set(-.35, .2 * Math.sin(t), t * 3.5);
     // bits flow from the disc to the screen while the game is rebuilt
     const a = w[25], b = w[33] + .2;
@@ -397,15 +405,15 @@ function renderAt(t) {
   }
   if (inS(t, "D")) {
     tint = .3;
-    const show = px(540, 760);
-    const slots = [px(250, 1080), px(540, 1080), px(830, 1080)];
+    const show = px(540, 900);
+    const slots = [px(250, 1240), px(540, 1240), px(830, 1240)];
     // power-up star: in on "Grab", out when the chat starts
     if (t >= w[37] && t < w[40] + .25) {
       const k = eBack(lin(t, w[37], w[37] + .35)), o = 1 - eIn(lin(t, w[40], w[40] + .25));
       place(P.star, show, .95 * k * o); P.star.rotation.set(.2 * Math.sin(t), t * 2.4, 0);
     }
     // each power-up spins in at the demo card's corner, then drops into its slot
-    const corner = px(900, 520);
+    const corner = px(900, 680);
     const items = [[P.gem, w[45], w[47] - .05, 0, .6], [P.blocks, w[47], w[49] - .05, 1, .6], [P.padItem, w[49], S.D[1] - .55, 2, .42]];
     for (const [o, a, b, si, sc] of items) {
       if (t < a) continue;
@@ -417,7 +425,7 @@ function renderAt(t) {
   }
   if (inS(t, "E")) {
     tint = -.2;
-    const c = px(540, 845);
+    const c = px(540, 930);
     if (t >= w[54]) {
       P.boss.visible = true;
       const rise = eOut(lin(t, w[54], w[54] + .5));
@@ -428,7 +436,7 @@ function renderAt(t) {
       for (let i = 0; i < P.vox.length; i++) {
         const [x, y, z] = P.vox[i];
         const jit = hash(i + Math.floor(t * 12) * 13) < .06 ? .08 : 0;
-        _a.set(c.x + x * .09 + jit, c.y - 3 * (1 - rise) + y * .09 + .05 * Math.sin(t * 3), z * .09);
+        _a.set(c.x + x * .08 + jit, c.y - 3 * (1 - rise) + y * .08 + .05 * Math.sin(t * 3), z * .08);
         let s = 1;
         if (boom >= 0) {
           const dir = _b.set(x + hash(i) - .5, y + 2, z + hash(i + 3)).normalize();
@@ -446,7 +454,7 @@ function renderAt(t) {
       T.hits.forEach((h, i) => {
         if (t >= h && t < h + .22) {
           const k = lin(t, h, h + .2);
-          const from = px(140, 1230);
+          const from = px(140, 1380);
           _a.lerpVectors(from, c, eIn(k)); _a.y += Math.sin(k * Math.PI) * .8;
           place(P.shots[i], _a, 1.4); P.shots[i].rotation.set(t * 9, t * 7, 0);
         }
@@ -462,7 +470,7 @@ function renderAt(t) {
       g.visible = true;
       const a = un[i] - .3, e = eBack(lin(t, a, a + .4)), on = t >= a;
       g.scale.setScalar(on ? .35 + .65 * e : .35);
-      g.position.y = [-.35, .05, .45, .9][i] + (on ? .1 * Math.sin(t * 2 + i) : -.25);
+      g.position.y = [-.8, -.45, -.1, .2][i] + (on ? .1 * Math.sin(t * 2 + i) : -.25);
       g.rotation.y = .25 * Math.sin(t * .7 + i);
       g.userData.flag.visible = t >= un[i];
       g.userData.flag.scale.setScalar(eBack(lin(t, un[i], un[i] + .3)) || .001);
@@ -477,7 +485,7 @@ function renderAt(t) {
     });
   }
   if (inS(t, "G")) {
-    const c = px(540, 800);
+    const c = px(540, 1000);
     place(P.card, c, 1); P.card.rotation.set(-.08, .12 * Math.sin(t * .8), -.03);
     const hit = w[78];
     P.ink.visible = t >= hit;
@@ -490,7 +498,7 @@ function renderAt(t) {
   }
   if (inS(t, "H")) {
     tint = .5;
-    const pos = px(540, 735);
+    const pos = px(540, 900);
     const seq = T.count2;
     seq.forEach(([d, a], i) => digit(t, d, a, i + 1 < seq.length ? seq[i + 1][1] : T.burst, pos, .62));
     if (t >= T.burst) {
@@ -519,7 +527,7 @@ function renderAt(t) {
 }
 
 const ready = (async () => {
-  await Promise.all(['44px "Russo One"', '600 36px "Chakra Petch"'].map((f) => document.fonts.load(f)));
+  await Promise.all(['44px "Russo One"', '64px "Lilita One"', '600 36px "Chakra Petch"'].map((f) => document.fonts.load(f)));
   await build();
   const qt = new URLSearchParams(location.search).get("t");
   renderAt(qt !== null ? +qt : (window.__hfThreeTime || 0));

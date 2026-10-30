@@ -137,10 +137,13 @@ def hop(sel, t0, t1, h=16):
     while t < t1 - .3:
         js(f'tl.to("{sel}", {{y: -{h}, duration: .14, ease: "power2.out", immediateRender: false}}, {t:.3f});')
         js(f'tl.to("{sel}", {{y: 0, duration: .16, ease: "power2.in", immediateRender: false}}, {t + .14:.3f});')
+        # squash on landing, stretch back
+        js(f'tl.to("{sel}", {{scaleY: .8, scaleX: 1.16, duration: .06, ease: "power2.out", immediateRender: false}}, {t + .3:.3f});')
+        js(f'tl.to("{sel}", {{scaleY: 1, scaleX: 1, duration: .12, ease: "back.out(3)", immediateRender: false}}, {t + .36:.3f});')
         t += .5
 
 
-def cast(k, name, x, y, size, t_in, sel=None, enter="drop", hop_h=14, flip=False, grey_at=None):
+def cast(k, name, x, y, size, t_in, sel=None, enter="drop", hop_h=14, flip=False, grey_at=None, spin=True):
     """Place one of the three mascots (or swap its grey copy in at grey_at) and keep it hopping."""
     sel = sel or f"{k}-{name}"
     fl = ' style="transform:scaleX(-1)"' if flip else ""
@@ -163,6 +166,10 @@ def cast(k, name, x, y, size, t_in, sel=None, enter="drop", hop_h=14, flip=False
         hop("#" + sel, t_in + .5, grey_at, hop_h)
     else:
         hop("#" + sel, t_in + .5, S[k][1], hop_h)
+        ts = t_in + 1.1 + R.random() * .6
+        if spin and ts + .5 < S[k][1]:
+            js(f'tl.to("#{sel}", {{rotationY: 360, duration: .45, ease: "power2.inOut", immediateRender: false}}, {ts:.3f});')
+            js(f'tl.set("#{sel}", {{rotationY: 0}}, {ts + .46:.3f});')
     return sel
 
 
@@ -263,7 +270,7 @@ def scene_C1():
     blink("#C1-press", w[20] + .6, w[21] - .05, .6)
     js(f'tl.to("#C1-press", {{opacity: 0, duration: .1}}, {w[21] - .05:.3f});')
     # "Eleven free skills": eleven crabs pop into a grid, one per skill
-    rows = [(6, 1030), (5, 1170)]
+    rows = [(6, 1130), (5, 1270)]
     i = 0
     cells = []
     for n, y in rows:
@@ -278,6 +285,19 @@ def scene_C1():
                 ev(t, "blip")
             i += 1
     add(k, "".join(cells))
+    # Dash skates right through the crab grid, the crabs jump out of the way
+    add(k, f'<div class="mw" id="C1-dash" style="left:-260px;top:1350px">{sprite("dash", 150)}</div>')
+    HIDE.append("#C1-dash")
+    t0 = w[22] + .25
+    js(f'tl.set("#C1-dash", {{opacity: 1, x: 0, rotation: -10}}, {t0:.3f});')
+    js(f'tl.to("#C1-dash", {{x: 1600, duration: 1.3, ease: "power1.inOut"}}, {t0 + .01:.3f});')
+    hop("#C1-dash", t0, t0 + 1.3, 30)
+    ev(t0, "whoosh")
+    for i in range(11):
+        cx = 540 + ((i if i < 6 else i - 6) - ((6 if i < 6 else 5) - 1) / 2) * 162
+        tj = t0 + 1.3 * (cx + 260) / 1860
+        js(f'tl.to("#C1-k{i} > svg", {{y: -70, rotation: {R.choice([-25, 25])}, duration: .14, ease: "power2.out", immediateRender: false}}, {tj:.3f});')
+        js(f'tl.to("#C1-k{i} > svg", {{y: 0, rotation: 0, duration: .3, ease: "bounce.out", immediateRender: false}}, {tj + .14:.3f});')
     add(k, '<div class="stamp2" id="C1-free"><span>FREE</span></div>')
     show("#C1-free", w[22], "slam")
 
@@ -301,8 +321,18 @@ def scene_C2():
     js(f'tl.set("#win", {{opacity: 0}}, {S[k][1]:.3f});')
     for i in range(3):
         js(f'tl.fromTo("#win-comp .dots i:nth-child({i + 1})", {{y: 0}}, {{y: -16, duration: .25, yoyo: true, repeat: {int((w[32] - t0) / .5)}, ease: "sine.inOut"}}, {t0 + i * .12:.3f});')
-    cast(k, "rook", 175, 620, 150, w[32] - .05, hop_h=22)
-    cast(k, "dash", 770, 640, 120, w[32] + .1, hop_h=26, flip=True)
+    cast(k, "rook", 175, 720, 150, w[32] - .05, hop_h=22)
+    cast(k, "dash", 770, 740, 120, w[32] + .1, hop_h=26, flip=True)
+    th = w[34] + .3
+    js(f'tl.to("#C2-rook", {{x: 190, rotation: 12, duration: .16, ease: "power2.in", immediateRender: false}}, {th:.3f});')
+    js(f'tl.to("#C2-dash", {{x: -190, rotation: -12, duration: .16, ease: "power2.in", immediateRender: false}}, {th:.3f});')
+    js(f'tl.to("#C2-rook", {{x: 0, rotation: 0, duration: .4, ease: "back.out(2.5)", immediateRender: false}}, {th + .2:.3f});')
+    js(f'tl.to("#C2-dash", {{x: 0, rotation: 0, duration: .4, ease: "back.out(2.5)", immediateRender: false}}, {th + .2:.3f});')
+    add(k, '<div class="burst cl" id="C2-hi" style="left:520px;top:800px;width:200px;height:200px;margin:-100px 0 0 -100px"></div>')
+    HIDE.append("#C2-hi")
+    js(f'tl.set("#C2-hi", {{opacity: 1, scale: .2}}, {th + .16:.3f});')
+    js(f'tl.to("#C2-hi", {{opacity: 0, scale: 2, duration: .4, ease: "power2.out"}}, {th + .17:.3f});')
+    ev(th + .16, "hit")
     add(k, '<div class="sticker" id="C2-st"><div class="sk"><b>NOT</b> AN EMULATOR</div></div>')
     show("#C2-st", w[34], "slam")
     for t in [w[25] + i * .35 for i in range(9)]:
@@ -363,7 +393,18 @@ def scene_D():
         show(f"#D-ok{i}", a2 + .25 + i * .15, "pop", .25)
         ev(a2 + .25 + i * .15, "blip")
         js(f'tl.fromTo("#D-pd{i}", {{rotation: 0}}, {{rotation: {(-6, 6, -6)[i]}, duration: .25, yoyo: true, repeat: 5, ease: "sine.inOut"}}, {a2 + .2 + i * .1:.3f});')
-    add(k, '<div class="burst" id="D-burst" style="left:540px;top:760px"></div>')
+    tb = w[39] + .1   # they both go for the star and bonk heads
+    for name, x0, x1, sz in [("rook", -320, 170, 170), ("vesper", 1300, 740, 150)]:
+        sel = f"D-{name}"
+        add(k, f'<div class="mw" id="{sel}" style="left:{x0}px;top:{1010 - sz * 1.3:.0f}px"><div{" style=\"transform:scaleX(-1)\"" if name == "vesper" else ""}>{sprite(name, sz)}</div></div>')
+        HIDE.append("#" + sel)
+        js(f'tl.set("#{sel}", {{opacity: 1, x: 0}}, {tb - .4:.3f});')
+        js(f'tl.to("#{sel}", {{x: {x1 - x0}, duration: .38, ease: "power2.in"}}, {tb - .39:.3f});')
+        sgn = -1 if name == "rook" else 1
+        js(f'tl.to("#{sel}", {{x: {x1 - x0 + sgn * 90}, y: -60, rotation: {sgn * 35}, duration: .2, ease: "power2.out", immediateRender: false}}, {tb + .02:.3f});')
+        js(f'tl.to("#{sel}", {{x: {x1 - x0 + sgn * 700}, y: 300, rotation: {sgn * 400}, opacity: 0, duration: .45, ease: "power2.in", immediateRender: false}}, {w[40] - .45:.3f});')
+    ev(tb, "hit")
+    add(k, '<div class="burst" id="D-burst" style="left:540px;top:900px"></div>')
     HIDE.append("#D-burst")
     for a in [w[37], w[45], w[47], w[49]]:
         js(f'tl.set("#D-burst", {{opacity: .85, scale: .3}}, {a:.3f});')
@@ -373,7 +414,7 @@ def scene_D():
 def scene_E():
     k = "E"
     errs = "".join(f'<div class="err" id="E-e{i}" style="left:{x}px;top:{y}px"><div class="et">ERROR<i></i></div><div class="eb"><b>×</b>GAME CRASHED</div></div>'
-                   for i, (x, y) in enumerate([(120, 600), (330, 760), (210, 920)]))
+                   for i, (x, y) in enumerate([(120, 700), (330, 860), (210, 1020)]))
     add(k, f'<div id="E-errs">{errs}</div>')
     for i in range(3):
         show(f"#E-e{i}", w[53] + i * .1, "pop", .25)
@@ -392,17 +433,20 @@ def scene_E():
         ev(h + .2, "hit")
     add(k, f'<span class="move" id="E-move">{claude_mark(34, CL)}CLAUDE USES <b>TESTER SKILL</b></span>')
     show("#E-move", w[56], "left", .3)
-    add(k, f'<div class="crabw" id="E-crab" style="left:760px;top:930px">{crab(230, "mag")}</div>')
+    add(k, f'<div class="crabw" id="E-crab" style="left:780px;top:1080px">{crab(230, "mag")}</div>')
     show("#E-crab", w[56], "pop", .35)
     hop("#E-crab", w[56] + .4, S[k][1], 14)
-    cast(k, "rook", 40, 990, 170, w[54] + .2, enter="side")
-    cast(k, "vesper", 230, 1020, 140, w[54] + .32, enter="side")
-    cast(k, "dash", 560, 1030, 130, w[54] + .44, enter="side", flip=True)
+    cast(k, "rook", 40, 1150, 170, w[54] + .2, enter="side")
+    cast(k, "vesper", 230, 1180, 140, w[54] + .32, enter="side")
+    cast(k, "dash", 560, 1190, 130, w[54] + .44, enter="side", flip=True)
     for sel, h in [("#E-rook", hits[0]), ("#E-vesper", hits[1]), ("#E-dash", hits[2])]:
         js(f'tl.to("{sel}", {{rotation: -18, x: 30, duration: .1, ease: "power2.out", immediateRender: false}}, {h - .08:.3f});')
         js(f'tl.to("{sel}", {{rotation: 0, x: 0, duration: .25, ease: "back.out(3)", immediateRender: false}}, {h + .05:.3f});')
     add(k, '<div class="ko" id="E-ko">K.O.!</div>')
     show("#E-ko", ko, "slam")
+    for n, sel in enumerate(["#E-rook", "#E-vesper", "#E-dash"]):
+        js(f'tl.to("{sel}", {{rotationY: 720, y: -90, duration: .55, ease: "power2.out", immediateRender: false}}, {ko + .1 + n * .06:.3f});')
+        js(f'tl.to("{sel}", {{y: 0, duration: .3, ease: "bounce.out", immediateRender: false}}, {ko + .65 + n * .06:.3f});')
     ev(ko, "boom")
     shake("#E-ko", ko + .28, 6, 10)
 
@@ -421,6 +465,10 @@ def scene_F():
         js(f'tl.set("#{sel}", {{opacity: 1, x: 0}}, {t0:.3f});')
         js(f'tl.to("#{sel}", {{x: 1500, duration: {2.6 - d * 1.4:.2f}, ease: "none"}}, {t0 + .01:.3f});')
         hop("#" + sel, t0, t0 + 2.6, 24)
+        if name == "rook":
+            js(f'tl.to("#{sel} > div", {{rotation: 360, duration: .5, ease: "power1.inOut"}}, {t0 + .9:.3f});')
+            js(f'tl.set("#{sel} > div", {{rotation: 0}}, {t0 + 1.41:.3f});')
+            ev(t0 + .9, "land")
 
 
 def scene_G():
@@ -428,6 +476,9 @@ def scene_G():
     head(k, "HEADS UP", None, S[k][0] + .05)
     cast(k, "rook", 40, 1040, 150, S[k][0] + .3, enter="side")
     cast(k, "vesper", 880, 1060, 130, S[k][0] + .45, enter="side", flip=True)
+    js(f'tl.set("#G-vesper", {{zIndex: 5}}, {w[79]:.3f});')
+    js(f'tl.to("#G-vesper", {{x: -730, duration: .4, ease: "power2.inOut", immediateRender: false}}, {w[79]:.3f});')
+    ev(w[79], "swish")
     js(f'tl.to("#G-vesper", {{y: -120, rotation: 12, duration: .18, ease: "power2.out", immediateRender: false}}, {w[81]:.3f});')
     js(f'tl.to("#G-vesper", {{y: 0, rotation: 0, duration: .35, ease: "bounce.out", immediateRender: false}}, {w[81] + .2:.3f});')
     ev(w[81], "boing")
@@ -438,7 +489,7 @@ def scene_H():
     k = "H"
     add(k, '<div class="hdr" id="H-hdr" style="font-size:124px">CONTINUE?</div>')
     show("#H-hdr", S[k][0] + .02, "slam")
-    n = ring(k, 540, 735, 240)
+    n = ring(k, 540, 900, 240)
     for i in range(n):
         js(f'tl.set("#H-tk{i}", {{opacity: .14}}, {S[k][0]:.3f});')
         js(f'tl.set("#H-tk{i}", {{opacity: 1}}, {w[87] + i * .025:.3f});')
@@ -456,10 +507,22 @@ def scene_H():
     blink("#H-caret", w[86], DUR, .5)
     js(f'tl.fromTo("#H-send", {{scale: 1}}, {{scale: 1.3, duration: .14, yoyo: true, repeat: 1, ease: "power2.out"}}, {w[89]:.3f});')
     ev(w[89], "press")
-    cast(k, "rook", 40, 790, 170, w[87] + .1, enter="pop", hop_h=26)
-    cast(k, "vesper", 70, 520, 130, w[87] + .25, enter="pop", hop_h=30)
-    cast(k, "dash", 880, 520, 130, w[87] + .4, enter="pop", hop_h=34, flip=True)
-    add(k, f'<div class="crabw" id="H-crab" style="left:810px;top:850px">{crab(190, "pad")}</div>')
+    cast(k, "rook", 40, 990, 170, w[87] + .1, enter="pop", hop_h=26, spin=False)
+    cast(k, "vesper", 70, 700, 130, w[87] + .25, enter="pop", hop_h=30, spin=False)
+    cast(k, "dash", 880, 700, 130, w[87] + .4, enter="pop", hop_h=34, flip=True, spin=False)
+    # the party dances: coin spins on the beat
+    for n, sel in enumerate(["#H-rook", "#H-vesper", "#H-dash"]):
+        t = w[89] + .1 + n * .08
+        j = 1
+        while t < DUR - .4:
+            js(f'tl.to("{sel}", {{rotationY: {360 * j}, duration: .4, ease: "power2.inOut", immediateRender: false}}, {t:.3f});')
+            t += 1.0
+            j += 1
+    add(k, f'<div class="crabw" id="H-crab" style="left:810px;top:1030px">{crab(190, "pad")}</div>')
+    tt = w[90] + .1
+    js(f'tl.to("#H-crab > svg", {{y: -380, rotation: 540, duration: .5, ease: "power2.out", immediateRender: false}}, {tt:.3f});')
+    js(f'tl.to("#H-crab > svg", {{y: 0, rotation: 720, duration: .45, ease: "bounce.out", immediateRender: false}}, {tt + .5:.3f});')
+    ev(tt, "boing")
     show("#H-crab", w[87] + .2, "pop", .35)
     hop("#H-crab", w[87] + .6, DUR, 22)
 
@@ -473,20 +536,220 @@ HL = {2, 16, 19, 20, 21, 22, 26, 31, 32, 33, 34, 35, 36, 39, 40, 45, 46, 47, 48,
 SHOW = {"favorite": "favourite", "console": "“CONSOLE”", "powerups.": "power-ups!", "11": "Eleven", "link": "link!"}
 
 
+PAL = {   # per scene: small words, big keywords, keyword shadow
+    "A": ("#ffffff", "#ff9a5c", "#2a0d06"), "B": ("#fff6ec", "#ffffff", "#7a2410"), "C1": ("#ffe9e9", "#ffd36e", "#4a0610"),
+    "C2": ("#ffffff", "#ff9a5c", "#1a0b06"), "D": ("#fff6ec", "#ffffff", "#7a2a0c"), "E": ("#ffffff", "#ff4d5e", "#1a0408"),
+    "F": ("#e8f3ff", "#5ff3ff", "#081236"), "G": ("#ffffff", "#ff9a5c", "#000000"), "H": ("#ffffff", "#ff9a5c", "#1a0b06")}
+
+
+def scene_at(t):
+    return next(k for k, (a, b) in S.items() if a <= t < b + .001)
+
+
+TINY = {"the", "a", "to", "it", "as", "on", "an", "is", "by", "so", "you", "i'll", "and", "it's", "of"}
+FLY = {16, 36, 54, 65, 87}          # keywords that fly in at the camera in 3D, like the reference's "WRONG"
+SKIP = {(19, 20)}                   # "Console Skill": the 3D title says it
+GLITCH = ["#ff7ab8", "#ffd36e", "#7fe7ff", "#b48cff", "#ff8a5c"]
+
+
 def captions():
-    """Short caption labels like the reference: 1-4 words on a dark pill, a new one about every second, keywords in
-    Claude orange, each popping in on its first word."""
+    """Kinetic type after the reference: every word types on letter by letter, each letter flashing a random colour,
+    skewed and oversized before it settles, with a colour smear trailing behind. Phrases stack in a staircase (small
+    connector words, tiny words, huge keywords), alternately left, right or centred, tilted a little. Keywords turn
+    to the scene's accent after they land, one letter going hollow; a few fly in from the camera in 3D. Phrases with
+    no keyword are typed as a plain sentence with a red highlight wiping in behind the last word. Each phrase exits by
+    scattering its letters like pixels."""
     rows = []
+    hl_n = 0
     for ci, (a, b) in enumerate(CHUNKS):
-        spans = " ".join(f'<span{" class=" + chr(34) + "hl" + chr(34) if i in HL else ""}>{SHOW.get(W[i]["w"], W[i]["w"])}</span>' for i in range(a, b + 1))
-        rows.append(f'<div class="cl" id="cc{ci}"><div class="pill2">{spans}</div></div>')
+        if (a, b) in SKIP:
+            continue
+        k = scene_at(w[a])
+        sm, big, sh = PAL[k]
+        plain = not any(i in HL for i in range(a, b + 1))
+        align = ["flex-start", "flex-end", "center"][ci % 3]
+        # build the staircase lines: keywords own a line (two short ones may share), small words pair up
+        lines, cur = [], []
+        for i in range(a, b + 1):
+            txt = SHOW.get(W[i]["w"], W[i]["w"])
+            if plain:
+                cur.append(i)
+                continue
+            if i in HL:
+                if cur and all(j in HL for j in cur) and sum(len(W[j]["w"]) for j in cur) + len(txt) <= 11:
+                    cur.append(i)
+                else:
+                    if cur:
+                        lines.append(cur)
+                    cur = [i]
+            else:
+                if cur and (any(j in HL for j in cur) or len(cur) >= 2):
+                    lines.append(cur)
+                    cur = []
+                cur.append(i)
+        if cur:
+            lines.append(cur)
+        html_lines = []
+        for li, ln in enumerate(lines):
+            is_big = any(j in HL for j in ln)
+            chars = sum(len(SHOW.get(W[j]["w"], W[j]["w"])) for j in ln) + len(ln) - 1
+            words = []
+            for i in ln:
+                txt = SHOW.get(W[i]["w"], W[i]["w"])
+                if plain:
+                    cls, st = "kp", ""
+                elif i in HL:
+                    caps = hl_n % 2 == 0 or i in FLY
+                    hl_n += 1
+                    fs = (170 if chars <= 6 else 140 if chars <= 9 else 116 if chars <= 12 else 96) if caps else \
+                         (124 if chars <= 7 else 104 if chars <= 10 else 88)
+                    cls = "kb" if caps else "km"
+                    st = f'font-size:{fs}px;text-shadow:0 7px 0 {sh}, 0 0 40px rgba(0,0,0,.3)'
+                else:
+                    cls = "kt" if txt.lower() in TINY and len(ln) == 1 and not is_big else "ks"
+                    st = f'text-shadow:0 4px 0 {sh}'
+                hol = 1 if (i in HL and len(txt) >= 4 and i not in FLY) else -1
+                letters = "".join(f'<b class="L{" hol" if n == hol else ""}" style="--hc:{big};--hf:{sh}">{c}</b>' for n, c in enumerate(txt))
+                words.append(f'<span class="kw {cls}" id="kw{i}" style="{st}"><i class="sm" id="sm{i}" style="--sc:{GLITCH[i % 5]}"></i>{letters}</span>')
+                # type the letters on
+                d = min(.3, max(.1, W[i]["e"] - W[i]["s"]))
+                n = len(txt)
+                fly = i in FLY and not plain
+                if fly:
+                    js(f'tl.fromTo("#kw{i}", {{opacity: 0, rotationY: -70, rotationX: 20, scale: 2.6, x: 160, transformPerspective: 700}}, '
+                       f'{{opacity: 1, rotationY: 0, rotationX: 0, scale: 1, x: 0, duration: .3, ease: "power3.out", immediateRender: false}}, {w[i]:.3f});')
+                for m in range(n):
+                    t = w[i] + (0 if fly else d * m / n)
+                    sel = f"#kw{i} .L:nth-of-type({m + 1})"
+                    gc = GLITCH[(i + m) % 5]
+                    if plain:
+                        js(f'tl.set("{sel}", {{opacity: 1}}, {t:.3f});')
+                        continue
+                    js(f'tl.set("{sel}", {{opacity: 1, color: "{gc}", skewX: -16, scale: 1.4, y: -10}}, {t:.3f});')
+                    js(f'tl.to("{sel}", {{color: "{sm if i not in HL else "#ffffff"}", skewX: 0, scale: 1, y: 0, duration: .09, ease: "power2.out"}}, {t + .05:.3f});')
+                if not plain and not fly:
+                    js(f'tl.set("#sm{i}", {{opacity: .9, scaleX: 0}}, {w[i]:.3f});')
+                    js(f'tl.to("#sm{i}", {{scaleX: 1, duration: {d:.3f}, ease: "none"}}, {w[i] + .001:.3f});')
+                    js(f'tl.to("#sm{i}", {{opacity: 0, duration: .18}}, {w[i] + d:.3f});')
+                if i in HL and not plain:
+                    # the keyword turns to the accent, one letter goes hollow, with a little pop
+                    tc = w[i] + d + .1
+                    js(f'tl.to("#kw{i} .L", {{color: "{big}", duration: .12}}, {tc:.3f});')
+                    js(f'tl.to("#kw{i} .hol", {{color: "{sh}", duration: .12}}, {tc:.3f});')
+                    js(f'tl.fromTo("#kw{i}", {{scale: 1}}, {{scale: 1.08, duration: .09, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false}}, {tc:.3f});')
+            if plain:
+                last = ln[-1]
+                tl_ = w[last] + min(.3, max(.1, W[last]["e"] - W[last]["s"]))
+                html_lines.append(f'<div class="kl">{"".join(words)}</div>')
+                js(f'tl.fromTo("#kw{last}", {{"--hl": 0}}, {{"--hl": 1, duration: .16, ease: "power2.out", immediateRender: false}}, {tl_:.3f});')
+            else:
+                off = [0, 46, 14, 70][li % 4]
+                side = "margin-left" if align == "flex-start" else "margin-right" if align == "flex-end" else "margin-left"
+                if align == "center":
+                    off = [0, 50, -30, 30][li % 4]
+                html_lines.append(f'<div class="kl" style="{side}:{off}px">{"".join(words)}</div>')
+        rot = 0 if plain else R.choice([-5, -4, -3, 3, 4])
+        rows.append(f'<div class="kc{" plain" if plain else ""}{" inA" if k == "A" else ""}" id="cc{ci}" style="align-items:{align};transform:rotate({rot}deg)">{"".join(html_lines)}</div>')
         t0 = w[a] - .03
-        t1 = w[CHUNKS[ci + 1][0]] - .04 if ci + 1 < len(CHUNKS) else DUR
+        nxt = next((c for c in CHUNKS[ci + 1:] if c not in SKIP), None)
+        t1 = w[nxt[0]] - .05 if nxt else DUR
+        if (a, b) == (17, 18):
+            t1 = w[19] - .05
         HIDE.append(f"#cc{ci}")
-        js(f'tl.set("#cc{ci}", {{opacity: 1, scale: .55, y: 26}}, {t0:.3f});')
-        js(f'tl.to("#cc{ci}", {{scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}}, {t0 + .01:.3f});')
-        js(f'tl.set("#cc{ci}", {{opacity: 0}}, {t1:.3f});')
+        js(f'tl.set("#cc{ci}", {{opacity: 1}}, {t0:.3f});')
+        if t1 < DUR:
+            # exit: the letters scatter like pixels
+            js(f'tl.to("#cc{ci} .L", {{x: (j) => ((j * 53) % 150) - 75, y: (j) => ((j * 37) % 120) - 90, rotation: (j) => ((j * 29) % 80) - 40, '
+               f'scale: .3, opacity: 0, duration: .14, ease: "power2.in", stagger: .003}}, {t1 - .16:.3f});')
+            js(f'tl.set("#cc{ci}", {{opacity: 0}}, {t1 + .02:.3f});')
     return "".join(rows)
+
+
+def color_fields():
+    """The reference's bold colour fields and soft-focus pixel rooms, one per scene, swapped on the cut (the
+    transitions cover the swap)."""
+    css = {"B": "radial-gradient(circle at 50% 38%, #ff9a4a 0, #e0561f 48%, #8a2a0e 100%)",
+           "C1": "radial-gradient(circle at 50% 40%, #f0414a 0, #b3121f 52%, #4f0610 100%)",
+           "C2": "linear-gradient(rgba(20,10,8,.35), rgba(20,10,8,.55)), url(assets/img/room-pc-monitor-desk.jpg) center/cover",
+           "D": "radial-gradient(circle at 50% 35%, #ffb04a 0, #ec6a26 50%, #922c0c 100%)",
+           "E": "radial-gradient(circle at 50% 45%, #6a0f1e 0, #2a0610 55%, #0c0306 100%)",
+           "F": "linear-gradient(rgba(10,14,40,.45), rgba(10,14,40,.7)), url(assets/img/room-bg-desk-wide.jpg) center/cover",
+           "G": "linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,.45)), url(assets/img/room-bg-spotlight-room.jpg) center/cover",
+           "H": "radial-gradient(circle at 50% 40%, rgba(255,140,60,.35) 0, rgba(20,8,6,.6) 70%)"}
+    out = []
+    for k, bgc in css.items():
+        a_, b_ = S[k]
+        out.append(f'<i class="field" id="fld-{k}" style="background:{bgc}"></i>')
+        HIDE.append(f"#fld-{k}")
+        js(f'tl.set("#fld-{k}", {{opacity: 1}}, {a_:.3f});')
+        if k != "H":
+            js(f'tl.set("#fld-{k}", {{opacity: 0}}, {b_ + .02:.3f});')
+        js(f'tl.fromTo("#fld-{k}", {{scale: 1.12}}, {{scale: 1, duration: {b_ - a_:.3f}, ease: "none"}}, {a_:.3f});')
+    # embers drifting up through every scene
+    em = []
+    rng = random.Random(9)
+    for i in range(26):
+        x, sz = rng.randint(20, 1060), rng.choice([6, 8, 10, 14])
+        c = rng.choice(["#ffb35c", "#ff7a3d", "#ffd36e", "#fff1d6"])
+        em.append(f'<i class="ember" id="em{i}" style="left:{x}px;top:1960px;width:{sz}px;height:{sz}px;background:{c};box-shadow:0 0 {sz * 2}px {c}"></i>')
+        d = rng.uniform(5, 9)
+        t = rng.uniform(-d, 0)
+        while t < DUR:
+            dx = rng.randint(-160, 160)
+            if t < 0:   # already on its way up at the start
+                f = -t / d
+                js(f'tl.fromTo("#em{i}", {{y: {-2100 * f:.0f}, x: {dx * f:.0f}}}, {{y: -2100, x: {dx}, duration: {d + t:.2f}, ease: "none", immediateRender: false}}, 0);')
+            else:
+                js(f'tl.fromTo("#em{i}", {{y: 0, x: 0}}, {{y: -2100, x: {dx}, duration: {d - .01:.2f}, ease: "none", immediateRender: false}}, {t:.3f});')
+            t += d
+    return f'<div id="fields">{"".join(out)}</div><div id="embers">{"".join(em)}</div>'
+
+
+def mascot_fx():
+    """Mascot transitions, as in the reference: on some cuts a giant mascot coin-spins across the frame and covers the
+    cut; on others a white flash leaves the mascot's one-colour silhouette, which then breaks into flying pixels."""
+    out = []
+    rng = random.Random(21)
+    plan = [("C1", "spin", "rook", None), ("D", "sil", "vesper", "#e8344e"), ("E", "spin", "dash", None),
+            ("F", "crabs", None, None), ("G", "sil", "rook", CL), ("H", "spin", "vesper", None)]
+    for n, (k, kind, name, col) in enumerate(plan):
+        a = S[k][0]
+        if kind == "spin":
+            sel = f"mfx{n}"
+            out.append(f'<div class="big" id="{sel}">{sprite(name, 560)}</div>')
+            js(f'tl.set("#{sel}", {{opacity: 1, x: -1150, rotation: -20, rotationY: 0}}, {a - .3:.3f});')
+            js(f'tl.to("#{sel}", {{x: 1150, rotation: 20, rotationY: 720, duration: .6, ease: "power2.inOut"}}, {a - .3:.3f});')
+            js(f'tl.to("#{sel}", {{scaleY: .82, scaleX: 1.15, duration: .15, yoyo: true, repeat: 1, ease: "sine.inOut"}}, {a - .15:.3f});')
+            js(f'tl.set("#{sel}", {{opacity: 0}}, {a + .31:.3f});')
+            ev(a - .3, "whoosh")
+        elif kind == "sil":
+            sel = f"mfx{n}"
+            out.append(f'<div class="big" id="{sel}">{sprite(name, 560, mono=col)}</div>')
+            js(f'tl.set("#flash", {{opacity: 1}}, {a - .06:.3f});')
+            js(f'tl.to("#flash", {{opacity: 0, duration: .3, ease: "power2.out"}}, {a + .02:.3f});')
+            js(f'tl.set("#{sel}", {{opacity: 1, scale: .7}}, {a - .06:.3f});')
+            js(f'tl.to("#{sel}", {{scale: 1.08, duration: .26, ease: "back.out(2)"}}, {a - .05:.3f});')
+            js(f'tl.set("#{sel}", {{opacity: 0}}, {a + .24:.3f});')
+            for i in range(36):
+                x, y = 300 + rng.random() * 480, 680 + rng.random() * 600
+                pid = f"mp{n}_{i}"
+                out.append(f'<i class="pxl" id="{pid}" style="left:{x:.0f}px;top:{y:.0f}px;background:{col}"></i>')
+                js(f'tl.set("#{pid}", {{opacity: 1}}, {a + .24:.3f});')
+                js(f'tl.to("#{pid}", {{x: {(x - 540) * 1.6 + rng.uniform(-120, 120):.0f}, y: {(y - 980) * 1.4 - rng.uniform(80, 300):.0f}, '
+                   f'rotation: {rng.randint(-180, 180)}, scale: 0, duration: {rng.uniform(.35, .6):.2f}, ease: "power2.out"}}, {a + .25:.3f});')
+            ev(a - .06, "glitch")
+        else:
+            # a crab stampede wipes the frame
+            for i in range(10):
+                sel = f"mfx{n}_{i}"
+                y = 80 + i * 180 + rng.randint(-30, 30)
+                out.append(f'<div class="big" id="{sel}" style="left:-420px;top:{y}px">{crab(300)}</div>')
+                d = rng.uniform(0, .12)
+                js(f'tl.set("#{sel}", {{opacity: 1, x: 0}}, {a - .3 + d:.3f});')
+                js(f'tl.to("#{sel}", {{x: 1900, duration: .55, ease: "power1.inOut"}}, {a - .3 + d:.3f});')
+                js(f'tl.set("#{sel}", {{opacity: 0}}, {a + .26 + d:.3f});')
+            ev(a - .3, "whoosh")
+    return f'<div id="mfx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="9" data-layout-ignore>{"".join(out)}</div>'
 
 
 TRANS = {}   # scene -> transition kind
@@ -550,11 +813,13 @@ def transitions():
 
 CSS = f"""
 @font-face {{ font-family: "Russo One"; src: url("assets/fonts/RussoOne.ttf"); }}
+@font-face {{ font-family: "Lilita One"; src: url("assets/fonts/LilitaOne.ttf"); }}
 @font-face {{ font-family: "Chakra Petch"; font-weight: 600; src: url("assets/fonts/ChakraPetch-SemiBold.ttf"); }}
 @font-face {{ font-family: "Chakra Petch"; font-weight: 700; src: url("assets/fonts/ChakraPetch-Bold.ttf"); }}
 @font-face {{ font-family: "Rubik"; font-weight: 700; src: url("assets/fonts/Rubik-Bold.ttf"); }}
 @font-face {{ font-family: "Rubik"; font-weight: 800; src: url("assets/fonts/Rubik-ExtraBold.ttf"); }}
 @font-face {{ font-family: "Orbitron"; font-weight: 900; src: url("assets/fonts/Orbitron-Black.ttf"); }}
+@font-face {{ font-family: "Anton"; src: url("assets/fonts/Anton.ttf"); }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #F1EEF4; }}
 #root {{ position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #F1EEF4; color: {INK}; }}
@@ -730,6 +995,48 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #F1EE
 #flash {{ position: absolute; inset: 0; background: #fff; z-index: 41; opacity: 0; }}
 #glitch {{ position: absolute; inset: 0; z-index: 42; opacity: 0; }}
 #glitch b {{ position: absolute; left: 0; width: 1080px; display: block; }}
+#fields {{ position: absolute; inset: 0; z-index: 2; pointer-events: none; }}
+#fields .field {{ position: absolute; inset: 0; display: block; }}
+#embers {{ position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }}
+#embers .ember {{ position: absolute; display: block; border-radius: 2px; opacity: .85; }}
+#cap .kc {{ position: absolute; left: 70px; right: 70px; top: 270px; height: 400px; display: flex; flex-direction: column; justify-content: center;
+  transform-origin: 50% 50%; perspective: 700px; }}
+#cap .kl {{ display: flex; align-items: baseline; column-gap: 16px; line-height: .98; white-space: nowrap; }}
+#cap .kw {{ position: relative; isolation: isolate; display: inline-block; transform-origin: 50% 70%; }}
+#cap .kw .L {{ display: inline-block; opacity: 0; font-weight: inherit; transform-origin: 50% 80%; }}
+#cap .kw .L.hol {{ -webkit-text-stroke: 4px var(--hc); }}
+#cap .kw .sm {{ position: absolute; left: -10px; right: -10px; top: 30%; height: 46%; display: block; opacity: 0; transform-origin: 0 50%; z-index: -1;
+  background: linear-gradient(90deg, rgba(255,255,255,0), var(--sc)); filter: blur(7px); border-radius: 8px; }}
+#cap .ks {{ font: 800 62px/1.02 "Rubik"; text-transform: lowercase; }}
+#cap .kt {{ font: 800 40px/1 "Rubik"; text-transform: lowercase; }}
+#cap .kb {{ font: 400 140px/.92 "Anton"; text-transform: uppercase; letter-spacing: 1px; }}
+#cap .km {{ font: 400 110px/.95 "Lilita One"; text-transform: lowercase; }}
+#cap .kc.plain {{ align-items: center !important; }}
+#cap .kc.plain .kl {{ flex-wrap: wrap; justify-content: center; white-space: normal; row-gap: 8px; max-width: 900px; }}
+#cap .kp {{ --hl: 0; font: 700 64px/1.15 "Rubik"; color: #fff; text-shadow: 0 4px 18px rgba(0,0,0,.45); padding: 0 6px; }}
+#cap .kp::before {{ content: ""; position: absolute; inset: 4px -4px 0; background: #e8344e; border-radius: 8px; z-index: -1;
+  transform: scaleX(var(--hl)); transform-origin: 0 50%; }}
+.hdr {{ display: none; }}
+.chipwrap {{ top: 238px; }}
+.bar {{ display: none; }}
+.hp {{ top: 650px; }}
+.chip {{ background: rgba(0,0,0,.55); }}
+.stamp2 {{ top: 600px; left: 760px; }}
+#cap .kc {{ gap: 4px; }}
+#cap .kc.inA {{ top: 236px; height: 260px; }}
+#win {{ top: 870px; }}
+.sticker {{ top: 812px; }}
+.demo {{ top: 690px; }}
+.slot {{ top: 1150px; }}
+.chat {{ top: 720px; }}
+.hp {{ top: 668px; }}
+.ko {{ top: 780px; }}
+.cbox {{ top: 1210px; }}
+.move {{ top: 1400px; }}
+.mw, .crabw {{ transform-origin: 50% 100%; }}
+#mfx {{ position: absolute; inset: 0; z-index: 44; pointer-events: none; overflow: hidden; }}
+#mfx .big {{ position: absolute; left: 260px; top: 640px; opacity: 0; transform-origin: 50% 60%; }}
+#mfx .pxl {{ position: absolute; display: block; width: 44px; height: 44px; opacity: 0; }}
 #scan {{ position: absolute; left: 0; right: 0; top: -64px; height: 2048px; z-index: 30; opacity: .05;
   background: repeating-linear-gradient(180deg, {INK} 0 2px, transparent 2px 8px); }}
 """
@@ -862,7 +1169,9 @@ def main():
         f()
     caps = captions()
     bg = background()
+    fields = color_fields()
     transitions()
+    mfx = mascot_fx()
     deco = motion()
     no_immediate()
     A.insert(0, "      gsap.set(" + json.dumps(list(dict.fromkeys(HIDE))) + ", {opacity: 0});")
@@ -891,12 +1200,14 @@ def main():
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="1080" data-height="1920">
       {bg}
+      {fields}
       {"".join(APANEL)}{"".join(WINDOW)}
       <canvas id="gl" class="clip" data-start="0" data-duration="{DUR}" data-track-index="1"></canvas>
       {scenes}
       <div id="cap" class="clip" data-start="0" data-duration="{DUR}" data-track-index="6">{caps}</div>
       {deco}
       <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8" data-layout-ignore><div id="scan"></div><div id="wipe"></div><div id="flash"></div><div id="glitch">{gb}</div><div id="iris"></div><div id="tiles">{tiles}</div><div id="streaks">{streaks}</div></div>
+      {mfx}
       <audio id="mix" src="assets/audio/{src}.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
     </div>
     <script>

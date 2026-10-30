@@ -1,6 +1,6 @@
 # Console skill, "Continue?": caption, auto-DM, alt text
 
-Page: AI.NXTLVL. Files: `renders/nxtlvl_console-continue_reels_9x16_v1.mp4` (the Reel) and its cover.
+Page: AI.NXTLVL. Files: `renders/nxtlvl_console-continue_reels_9x16_v2.mp4` (the Reel) and its cover.
 The CONSOLE auto-DM sends the repo link github.com/Jakeschincariol/console-skill and the install.
 
 ## Caption (paste as is)
@@ -46,17 +46,19 @@ For reach tests, add some of these in the first comment:
 
 ## Alt text (Advanced settings, Accessibility)
 
-A bright, lavender-white Reel styled like an early-2000s video game, with an energetic female voiceover, short caption
-labels and a cast of pixel mascots: Rook (a bronze horned brawler with a hammer), Vesper (a scout in a mustard raincoat
-with a lantern), Dash (a speedster on roller skates) and little orange Claude crabs. It opens on real God of War
-gameplay that shrinks into a paused "Continue?" screen under a chrome 3D countdown; the mascots grey out on "forever".
-"Player 2 has joined": an orange gamepad and Claude's spark mark, and a crab hops in. A chrome "Console Skill" title
-flies in over eleven crabs, one per skill. A spinning disc streams data into a GAME.EXE window that boots into Resident
-Evil 4, stamped "Not an emulator", with Rook and Dash jumping on top. Power-ups are shown on cards: Rook going from
-blocky to sharp, a level select, a row of controllers. The whole party and a magnifier crab K.O. a voxel crash boss,
-then run across a New Game Plus map that unlocks Windows, Mac, Linux and Steam Deck. A rubber stamp marks a build card
-"Early Access" while Vesper jumps. It ends on "Continue?" with a glossy play button, confetti, the game resuming and a
-comment box with CONSOLE typed in, the cast cheering around it.
+A fast, game-styled Reel with an energetic female voiceover and bold kinetic captions that type on letter by letter in
+flashing colours, huge condensed keywords stacked next to small words. It opens on real God of War gameplay that
+shrinks into a paused "Game Over" screen under a glossy purple countdown, with three original pixel mascots (Rook, a
+bronze horned brawler with a hammer; Vesper, a scout in a mustard raincoat with a lantern; Dash, a speedster on roller
+skates) beside it. Giant spinning mascots, a crab stampede and flash silhouettes that burst into pixels carry each cut
+between bold orange, red and dark scenes. "Player 2 has joined": an orange gamepad and Claude's spark mark. A glossy
+"Console Skill" title sits over eleven little orange Claude crabs, and Dash skates through them. A spinning disc streams
+data into a GAME.EXE window that boots into Resident Evil 4, and Rook and Dash high-five on top. Rook and Vesper bonk
+heads grabbing a gold power-up star, then cards show the power-ups: Rook going from blocky to sharp, a level select and
+a row of controllers. The party and a magnifier crab K.O. a voxel crash boss and spin in celebration, then run across a
+New Game Plus map whose flags unlock Windows, Mac, Linux and Steam Deck, Rook tumbling on the way. A stamp marks a build
+card "Early Access" while Vesper hides behind Rook. It ends on a glossy play button, confetti and a comment box with
+CONSOLE typed in, the cast spinning and a crab tossed in the air.
 
 ## Notes
 

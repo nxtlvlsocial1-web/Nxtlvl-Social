@@ -96,14 +96,16 @@ def _cells(m, grey=False):
     return filled, outline
 
 
-def sprite(name, size, cid=None, grey=False, extra=""):
-    """An inline SVG of a mascot, `size` px wide."""
+def sprite(name, size, cid=None, grey=False, extra="", mono=None):
+    """An inline SVG of a mascot, `size` px wide; `mono` paints it as a one-colour silhouette."""
     m = CAST[name]
     filled, outline = _cells(m, grey)
+    if mono:
+        filled = {k: mono for k in filled}
     xs = [x for x, _ in list(filled) + list(outline)]
     ys = [y for _, y in list(filled) + list(outline)]
     x0, y0, x1, y1 = min(xs), min(ys), max(xs) + 1, max(ys) + 1
-    rects = "".join(f'<rect x="{x}" y="{y}" width="1.02" height="1.02" fill="{INK if not grey else "#55525e"}"/>' for x, y in outline)
+    rects = "".join(f'<rect x="{x}" y="{y}" width="1.02" height="1.02" fill="{mono or (INK if not grey else "#55525e")}"/>' for x, y in outline)
     rects += "".join(f'<rect x="{x}" y="{y}" width="1.02" height="1.02" fill="{c}"/>' for (x, y), c in filled.items())
     w, h = x1 - x0, y1 - y0
     ids = f' id="{cid}"' if cid else ""
