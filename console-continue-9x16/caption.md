@@ -47,21 +47,21 @@ For reach tests, add some of these in the first comment:
 ## Alt text (Advanced settings, Accessibility)
 
 A bright, lavender-white Reel styled like an early-2000s video game, with an energetic female voiceover and captions in a
-game dialogue box. Real PS2 gameplay of GTA San Andreas and Resident Evil 4 plays softly in the background throughout.
-It opens on GTA gameplay that shrinks into a paused screen under "Continue?" and a chrome 3D countdown, then greys out.
-"Player 2 has joined": an orange gamepad lands next to a white one and Claude's spark mark pops out above it, tagged
-Claude. A chrome "Console Skill" title flies in; a spinning disc streams data into a GAME.EXE window that boots into
-Resident Evil 4, stamped "Not an emulator". An inventory collects power-ups for sharper graphics, new levels and a
-controller. Claude uses the tester skill to K.O. a voxel crash boss. A New Game Plus world map unlocks Windows, Mac,
+game dialogue box. Real PS2 gameplay of God of War and Resident Evil 4 plays softly in the background throughout.
+It opens on God of War gameplay that shrinks into a paused screen under "Continue?" and a chrome 3D countdown, then greys out.
+"Player 2 has joined": an orange gamepad lands next to a white one, Claude's spark mark pops out above it and a little
+orange pixel crab hops in, tagged Claude. A chrome "Console Skill" title flies in over eleven pixel crabs, one per skill; a spinning disc streams data into a GAME.EXE window that boots into
+Resident Evil 4, stamped "Not an emulator". An inventory collects power-ups, each shown on a card: a God of War frame snapping from blurry to
+sharp, a level select and a row of controllers. Claude uses the tester skill to K.O. a voxel crash boss. A New Game Plus world map unlocks Windows, Mac,
 Linux and Steam Deck. A rubber stamp marks a build status card "Early Access". It ends back on "Continue?" with a
-glossy play button, confetti, the game resuming behind it and "Comment CONSOLE".
+glossy play button, confetti, the game resuming behind it and a comment box with CONSOLE typed in.
 
 ## Notes
 
 - Facts checked against the repo README: 11 skills (reverse, backend, graphics, controller, mod, levels, sound,
   physics, saves, anywhere, tester), static recompilation via PS2Recomp (so not an emulator), MIT licence, for games
   you own, experimental with many games not booting yet.
-- The gameplay is the owner's own PS2 footage (GTA San Andreas on a CRT, Resident Evil 4), cropped to the game screen. The
+- The gameplay is the owner's own PS2 footage (God of War, Resident Evil 4), cropped to the game screen. The
   GAME.EXE window and the build-status card illustrate the idea; they are not captures of a recompiled build.
 - Voice: ElevenLabs "Stacey - Bright, Energetic, Expressive" (Eleven v4).
 - Music: the track the owner supplied (videoplayback_2). Add its credit line here if its licence asks for one.
