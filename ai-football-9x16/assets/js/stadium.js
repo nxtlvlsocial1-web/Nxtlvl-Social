@@ -145,7 +145,7 @@ for (let s = 0; s < NSTEP; s++) {
     }
   }
 }
-const fanM = new THREE.InstancedMesh(new THREE.SphereGeometry(.13, 8, 6), mat(0xffffff, { roughness: .7 }), FANS.length);
+const fanM = new THREE.InstancedMesh(new THREE.SphereGeometry(.13, 14, 10), mat(0xffffff, { roughness: .7 }), FANS.length);
 fanM.castShadow = false;
 scene.add(fanM);
 const fanBase = FANS.map((f, i) => (f.side === 's' ? (hash(i) < .75 ? NAVY : (hash(i * 3) < .5 ? CREAM : 0x8fa3c8)) : (hash(i) < .6 ? CORAL : hash(i * 3) < .55 ? CREAM : INK)));
@@ -158,12 +158,10 @@ for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
   g.add(lamp); towers.push(lampM);
 }
 // dugout and bench on the east side
-// an open dugout: back wall, two side walls, a glass roof; the bench sits in front of the wall
+// an open dugout: back wall and two side walls; the bench sits in front of the wall
 const dugWall = add(new THREE.Mesh(new THREE.BoxGeometry(.2, 1.4, 4.2).translate(0, .7, 0), mat(CREAM)));
 dugWall.position.set(8.55, 0, 0);
 for (const sz of [-2.05, 2.05]) { const w = add(new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.4, .1).translate(0, .7, 0), mat(CREAM))); w.position.set(8.05, 0, sz); }
-const dugRoof = add(new THREE.Mesh(new THREE.BoxGeometry(1.3, .08, 4.3), new THREE.MeshStandardMaterial({ color: 0x8FB8E0, transparent: true, opacity: .55 })), false, false);
-dugRoof.position.set(7.95, 1.42, 0);
 const benchSeat = add(new THREE.Mesh(new THREE.BoxGeometry(.45, .3, 3.8).translate(0, .15, 0), mat(CORAL)));
 benchSeat.position.set(8.15, 0, 0);
 // tunnel (west): a cream frame round a dark opening
@@ -188,13 +186,34 @@ const F442 = [[0, 9.1], [-4.5, 6], [-1.5, 6.6], [1.5, 6.6], [4.5, 6], [-4.5, 2],
 const F343 = [[0, 9.1], [-3, 6.4], [0, 6.9], [3, 6.4], [5, 1.4], [-5, 1.4], [-1.8, 2.4], [1.8, 2.4], [3.6, -2.8], [-3.6, -2.8], [0, -3.4]];
 const N_HOME = 11, N_AWAY = 11, ID17 = 22, IDCAP = 23, IDSTAR = 24, IDSUB = [25, 26];
 const NP = 27;
-const bodyM = new THREE.InstancedMesh(new THREE.CapsuleGeometry(.22, .5, 4, 10).translate(0, .5, 0), mat(0xffffff, { roughness: .6 }), NP);
-const headM = new THREE.InstancedMesh(new THREE.SphereGeometry(.17, 14, 10), mat(0xE7C3A0, { roughness: .7 }), NP);
-bodyM.castShadow = headM.castShadow = true;
-scene.add(bodyM, headM);
-const armband = new THREE.Mesh(new THREE.TorusGeometry(.235, .05, 6, 18), mat(GOLD, { emissive: GOLD, emissiveIntensity: .3 }));
-armband.rotation.x = Math.PI / 2;
+// every player is built from parts (torso, shorts, two legs, two arms, head, hair) plus a face (eyes, brows, a mouth),
+// one instanced mesh per part; legs and arms swing from hip and shoulder pivots as they run
+const IM = (geo, m, n = NP, cast = true) => { const x = new THREE.InstancedMesh(geo, m, n); x.castShadow = cast; scene.add(x); return x; };
+const basic = (c) => new THREE.MeshBasicMaterial({ color: c });
+const torsoM = IM(new THREE.CapsuleGeometry(.19, .26, 6, 16), mat(0xffffff, { roughness: .6 }));
+const shortsM = IM(new RoundedBoxGeometry(.37, .17, .25, 2, .05), mat(0xffffff, { roughness: .7 }));
+const legM = IM(new THREE.CapsuleGeometry(.068, .24, 4, 10), mat(0xffffff, { roughness: .7 }), NP * 2);
+const bootM = IM(new RoundedBoxGeometry(.13, .07, .21, 2, .03), mat(0xffffff, { roughness: .5 }), NP * 2);
+const armM = IM(new THREE.CapsuleGeometry(.054, .2, 4, 10), mat(0xffffff, { roughness: .7 }), NP * 2);
+const headM = IM(new THREE.SphereGeometry(.17, 28, 20), mat(0xffffff, { roughness: .65 }));
+const hairCapM = IM(new THREE.SphereGeometry(.182, 28, 12, 0, Math.PI * 2, 0, Math.PI * .44), mat(0xffffff, { roughness: .95 }));
+const hairAfroM = IM(new THREE.SphereGeometry(.205, 24, 16), mat(0xffffff, { roughness: .97 }));
+const hairMohM = IM(new RoundedBoxGeometry(.07, .1, .3, 2, .03), mat(0xffffff, { roughness: .95 }));
+const eyeM = IM(new THREE.SphereGeometry(.026, 12, 10), basic(INK), NP * 2, false);
+const eyeHiM = IM(new THREE.SphereGeometry(.009, 8, 6), basic(0xffffff), NP * 2, false);
+const browM = IM(new THREE.BoxGeometry(.075, .017, .02), basic(INK), NP * 2, false);
+const mouthArcM = IM(new THREE.TorusGeometry(.046, .012, 6, 16, Math.PI), basic(0x6a2a20), NP, false);
+const mouthOM = IM(new THREE.TorusGeometry(.03, .013, 8, 16), basic(0x6a2a20), NP, false);
+const armband = new THREE.Mesh(new THREE.TorusGeometry(.07, .022, 6, 18), mat(GOLD, { emissive: GOLD, emissiveIntensity: .3 }));
 scene.add(armband);
+// what makes each player look like himself: skin, hair style and colour, height, boots
+const SKIN = [0xF1C9A5, 0xE3B28E, 0xC68863, 0xA06D4B, 0x7A4E34, 0xF6D7BF];
+const HAIRC = [0x1E1B18, 0x4A3222, 0x7A5230, 0xD9B26A, 0xB8572E, 0x8a8580];
+const LOOK = Array.from({ length: NP }, (_, i) => ({ skin: SKIN[Math.floor(hash(i * 7 + 1) * 6)], hair: HAIRC[Math.floor(hash(i * 11 + 3) * 6)],
+  style: Math.floor(hash(i * 13 + 5) * 4), h: .93 + hash(i * 17) * .14, boot: [INK, CREAM, GOLD, 0x3FA372][Math.floor(hash(i * 19) * 4)] }));
+Object.assign(LOOK[IDSTAR], { style: 2, hair: 0xD9B26A, skin: 0xE3B28E, h: 1.06 });     // the star: blonde mohawk
+Object.assign(LOOK[IDCAP], { style: 0, hair: 0x1E1B18, skin: 0xC68863, h: 1.08 });      // the captain
+Object.assign(LOOK[ID17], { style: 1, hair: 0x1E1B18, skin: 0x7A4E34, h: .95 });       // the 17-year-old
 const ringM = new THREE.InstancedMesh(new THREE.RingGeometry(.42, .55, 32).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: .9, toneMapped: false, depthWrite: false }), NP);
 scene.add(ringM);
 const ball = add(new THREE.Mesh(new THREE.SphereGeometry(.14, 18, 12), mat(CREAM, { roughness: .4 })));
@@ -219,7 +238,7 @@ const runM = new THREE.InstancedMesh(new THREE.ConeGeometry(.16, .4, 3).rotateX(
 scene.add(runM);
 // snow
 const SNOW_N = 520;
-const snowM = new THREE.InstancedMesh(new THREE.SphereGeometry(.06, 6, 4), new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false }), SNOW_N);
+const snowM = new THREE.InstancedMesh(new THREE.SphereGeometry(.035, 10, 8), new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false }), SNOW_N);
 scene.add(snowM);
 // goal bursts (confetti cones at the scoring end)
 const CONF_N = 90;
@@ -367,7 +386,41 @@ function camAt(t) {
 }
 
 // ---------------------------------------------------------------- render at time t
-const PS = { x: 0, z: 0, vis: 1, team: "home", sit: 0 };
+const PS = { x: 0, z: 0, vis: 1, team: "home", sit: 0 }, PS0 = { x: 0, z: 0, vis: 1, team: "home", sit: 0 };
+const BP0 = new THREE.Vector3();
+const PARTS = [torsoM, shortsM, legM, bootM, armM, headM, hairCapM, hairAfroM, hairMohM, eyeM, eyeHiM, browM, mouthArcM, mouthOM];
+const MB = new THREE.Matrix4(), MP = new THREE.Matrix4(), MR = new THREE.Matrix4(), MOUT = new THREE.Matrix4(), EU = new THREE.Euler();
+// one part of the current player: the player's base matrix MB, then the part's local position, rotation (about its
+// pivot, dropping by `drop` below it) and scale
+function part(mesh, idx, x, y, z, rx, ry, rz, drop = 0, s = 1, sy = 1) {
+  MP.makeTranslation(x, y, z);
+  MP.multiply(MR.makeRotationFromEuler(EU.set(rx, ry, rz)));
+  if (drop) MP.multiply(MR.makeTranslation(0, -drop, 0));
+  if (s !== 1 || sy !== 1) MP.multiply(MR.makeScale(s, s * sy, s));
+  MOUT.multiplyMatrices(MB, MP);
+  if (mesh) mesh.setMatrixAt(idx, MOUT);
+}
+// the face for player id at time t: mouth (smile / frown / o / flat), brow tilt (+ angry, - worried), brow lift, eye size
+function expression(id, t, team) {
+  let mouth = "flat", brow = 0, lift = 0, eyes = 1;
+  if (id === IDSTAR && t < 9) { mouth = "frown"; brow = .4; }
+  if (IDSUB.includes(id)) mouth = "smile";
+  if (t > 9.4 && t < E[1]) mouth = team === "home" ? "smile" : "frown";
+  if (t > C.rewires - .2 && t < C.three) { mouth = "flat"; brow = team === "home" ? .3 : 0; }
+  if (t > L[4] - .2 && t < E[4] + .3) { mouth = team === "home" ? "smile" : "frown"; brow = team === "home" ? -.15 : .25; }
+  for (const g of GOALS) {
+    if (t < g.t + g.dur - .05 || t > g.t + g.dur + 2.6) continue;
+    const happy = g.team === team;
+    mouth = happy ? (id === g.who ? "o" : "smile") : "frown"; brow = happy ? -.2 : -.35; lift = happy ? .015 : 0; eyes = happy ? 1.1 : 1;
+  }
+  if (id === IDCAP && t > C.sells - .2 && t < C.sells + 2.4) { mouth = "o"; lift = .025; eyes = 1.3; brow = -.3; }
+  if (IDSUB.includes(id) && t > C.sells - .2 && t < C.sells + 2.4) { mouth = "o"; lift = .02; eyes = 1.25; }
+  if (t > C.winner + .3 && t < E[5] + .4) {
+    if (id === IDCAP) { mouth = "smile"; brow = -.2; }
+    else if (team === "home") { mouth = "o"; eyes = 1.3; lift = .02; brow = -.3; }
+  }
+  return { mouth, brow, lift, eyes };
+}
 const BP = new THREE.Vector3();
 const KIT = { home: col(CORAL), away: col(NAVY) };
 function renderAt(t) {
@@ -407,24 +460,64 @@ function renderAt(t) {
   const trackOn = ss(t, C.tracking - .2, C.tracking + .3) * (1 - ss(t, E[1], E[1] + .4));
   const heartOn = ss(t, C.rewires - .2, C.rewires + .3) * (1 - ss(t, C.three, C.three + .4));
   const boo = 1 - ss(t, 7.0, 7.6);
+  ballAt(t - .06, BP0);
   for (let id = 0; id < NP; id++) {
+    playerAt(id, t - .06, BP0, PS0);
     playerAt(id, t, BP, PS);
     let vis = PS.vis;
     if (id === IDSTAR || IDSUB.includes(id)) vis = 1;
-    const y = PS.sit ? .02 : Math.abs(Math.sin(m * 6 + id)) * .06;
     const sc = Math.max(.001, vis);
-    // celebrate: the scorer jumps after his goal
-    let jump = 0;
-    for (const g of GOALS) if (g.who === id) jump += Math.max(0, Math.sin(Math.PI * ramp(t, g.t + g.dur, g.t + g.dur + .6))) * .7;
-    M4.compose(V.set(PS.x, y + jump, PS.z), Q.identity(), S.set(sc, PS.sit ? sc * .72 : sc, sc));
-    bodyM.setMatrixAt(id, M4);
-    M4.compose(V.set(PS.x, y + jump + (PS.sit ? .86 : 1.15), PS.z), Q.identity(), S.setScalar(sc));
-    headM.setMatrixAt(id, M4);
-    tmpC.copy(PS.team === "home" ? KIT.home : KIT.away);
-    if (id === IDSTAR) tmpC.set(CORAL).lerp(tmpC2.set(0x9a8f86), .25);
+    const lk = LOOK[id];
+    // heading: along the run when moving, else towards the ball; benched players face the pitch
+    const vx = (PS.x - PS0.x) / .06, vz = (PS.z - PS0.z) / .06, sp = Math.hypot(vx, vz);
+    let yaw = sp > .6 ? Math.atan2(vx, vz) : Math.atan2(BP.x - PS.x, BP.z - PS.z);
+    if (PS.sit) yaw = -Math.PI / 2;
+    const run = PS.sit ? 0 : clamp(sp / 3, .15, 1);
+    const ph = m * 9 + id * 1.3;
+    let jump = 0, cheer = 0;
+    for (const g of GOALS) if (g.who === id) { const u = ramp(t, g.t + g.dur, g.t + g.dur + .9); jump += Math.max(0, Math.sin(Math.PI * u)) * .6; cheer = Math.max(cheer, u > 0 && u < 1 ? 1 : 0); }
+    const bob = PS.sit ? 0 : Math.abs(Math.sin(ph)) * .05 * run;
+    MB.compose(V.set(PS.x, bob + jump - (PS.sit ? .2 : 0), PS.z), Q.setFromAxisAngle(UP, yaw), S.set(sc * lk.h, sc * lk.h, sc * lk.h));
+    const kit = PS.team === "home" ? KIT.home : KIT.away;
+    tmpC.copy(kit);
+    if (id === IDSTAR) tmpC.lerp(tmpC2.set(0x9a8f86), .2);
+    if (id === 0) tmpC.set(GOLD);                       // goalkeepers in their own kits
+    if (id === N_HOME) tmpC.set(0x3FA372);
     if (IDSUB.includes(id)) tmpC.set(0xF4C9B4);
-    if (id === ID17) tmpC.set(0xF07A5E);
-    bodyM.setColorAt(id, tmpC);
+    // body
+    part(torsoM, id, 0, .82, 0, 0, 0, 0); torsoM.setColorAt(id, tmpC);
+    part(shortsM, id, 0, .52, 0, 0, 0, 0); shortsM.setColorAt(id, tmpC2.set(PS.team === "home" ? CREAM : 0x22335c));
+    for (let side = 0; side < 2; side++) {
+      const sx = side ? .095 : -.095;
+      const swing = PS.sit ? -1.45 : Math.sin(ph + side * Math.PI) * .75 * run;
+      part(legM, id * 2 + side, sx, .45, 0, swing, 0, 0, .2);
+      legM.setColorAt(id * 2 + side, tmpC2.copy(tmpC).multiplyScalar(.82));
+      // boots follow the foot at the end of the leg
+      const fy = .45 - Math.cos(swing) * .4, fz = -Math.sin(swing) * .4;
+      part(bootM, id * 2 + side, sx, Math.max(.035, fy), fz + .04, 0, 0, 0);
+      bootM.setColorAt(id * 2 + side, tmpC2.set(lk.boot));
+      const armSwing = cheer ? -2.8 : PS.sit ? -.5 : -Math.sin(ph + side * Math.PI) * .7 * run;
+      part(armM, id * 2 + side, side ? .232 : -.232, 1.0, 0, armSwing, 0, side ? -.12 : .12, .17);
+      armM.setColorAt(id * 2 + side, tmpC2.set(lk.skin));
+    }
+    // head, hair
+    part(headM, id, 0, 1.27, 0, 0, 0, 0); headM.setColorAt(id, tmpC2.set(lk.skin));
+    part(hairCapM, id, 0, 1.285, -.01, 0, 0, 0, 0, lk.style === 0 || lk.style === 3 ? 1 : .001, lk.style === 3 ? .45 : 1);
+    part(hairAfroM, id, 0, 1.33, -.03, 0, 0, 0, 0, lk.style === 1 ? 1 : .001);
+    part(hairMohM, id, 0, 1.43, -.02, 0, 0, 0, 0, lk.style === 2 ? 1 : .001);
+    for (const hm of [hairCapM, hairAfroM, hairMohM]) hm.setColorAt(id, tmpC2.set(lk.hair));
+    // the face: expression from the story
+    const ex = expression(id, t, PS.team);
+    for (let side = 0; side < 2; side++) {
+      const sx = side ? .062 : -.062;
+      part(eyeM, id * 2 + side, sx, 1.295, .148, 0, 0, 0, 0, 1, ex.eyes);
+      part(eyeHiM, id * 2 + side, sx + .009, 1.304, .171, 0, 0, 0);
+      part(browM, id * 2 + side, sx, 1.35 + ex.lift, .158, 0, 0, (side ? -1 : 1) * ex.brow);
+    }
+    const o = ex.mouth === "o";
+    part(mouthArcM, id, 0, 1.2 + (ex.mouth === "smile" ? .025 : 0), .158, 0, 0, ex.mouth === "smile" ? Math.PI : 0, 0, o ? .001 : 1, ex.mouth === "flat" ? .18 : 1);
+    part(mouthOM, id, 0, 1.205, .158, 0, 0, 0, 0, o ? 1 : .001);
+    if (id === IDCAP) { part(null, 0, -.232, .93, 0, Math.PI / 2, 0, 0); armband.matrix.copy(MOUT); armband.matrixAutoUpdate = false; }
     // rings: tracking (green / red for the star), heart-rate pulses (red), NEW (17), captain gold
     let r = 0; tmpC.set(0x3FA372);
     if (trackOn > 0 && vis > 0) { r = trackOn; }
@@ -436,14 +529,14 @@ function renderAt(t) {
     M4.compose(V.set(PS.x, .08, PS.z), Q.identity(), S.setScalar(Math.max(.001, r * sc * (1 + .15 * Math.sin(t * 6 + id)))));
     ringM.setMatrixAt(id, M4);
     ringM.setColorAt(id, tmpC);
-    if (id === IDCAP) { armband.position.set(PS.x, y + jump + .78, PS.z); armband.scale.setScalar(sc); }
     if (id < N_HOME && id !== 0) {
       beamPos.set([ORB.x, ORB.y - .9, ORB.z, PS.x, 1.1, PS.z], id * 6);
     }
   }
-  for (const m_ of [bodyM, headM, ringM]) m_.instanceMatrix.needsUpdate = true;
-  bodyM.instanceColor.needsUpdate = true; ringM.instanceColor.needsUpdate = true;
+  for (const m_ of PARTS) { m_.instanceMatrix.needsUpdate = true; if (m_.instanceColor) m_.instanceColor.needsUpdate = true; }
+  ringM.instanceMatrix.needsUpdate = true; ringM.instanceColor.needsUpdate = true;
   armband.visible = t < sold() + 1.9 || t > finalOn();
+  armband.matrixWorldNeedsUpdate = true;
   // formation graph and the orb's beams at the rewire
   EDGES.forEach(([a, b], k) => {
     playerAt(a === 10 ? ID17 : a === 6 ? (t < sold() ? IDCAP : 6) : a, t, BP, PS); const ax = PS.x, az = PS.z;
