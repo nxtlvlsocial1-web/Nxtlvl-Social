@@ -50,7 +50,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #F1E9D
     <div id="root" data-composition-id="cover" data-start="0" data-duration="1" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="gl" class="clip" data-start="0" data-duration="1" data-track-index="0"></canvas>
       <div class="clip" data-start="0" data-duration="1" data-track-index="2">
-        <div class="top mono"><span class="b"><i></i>AI.NXTLVL</span><span class="w">WHAT IF</span></div>
+        <div class="top mono"><span class="b"><i></i>NXTLVLSOCIAL.AI</span><span class="w">WHAT IF</span></div>
         <div class="card"><b>One AI runs a city for 24 hours</b><em>what could go wrong?</em></div>
         <div class="chip mono">NO MAYOR &middot; NO COPS &middot; ONE AI</div>
       </div>

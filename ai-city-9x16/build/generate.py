@@ -1,5 +1,5 @@
 """AI City reel ("What if one AI ran a city for 24 hours?"): writes index.html. 1080x1920, 30 fps, about 68 s.
-Account: @ai.nxtlvl.
+Account: @nxtlvlsocial.ai.
 
 python3 build/generate.py      (from the project root, after build/voice.py and build/timing.py)
 
@@ -197,7 +197,7 @@ def captions():
 def endcard():
     ty = "".join(f'<span class="ty ty{i}">{c}</span>' for i, c in enumerate("CITY"))
     return ('<div id="endc"><div class="ec-1">Follow + comment</div><div class="ec-kw">' + ty + '<i class="cur"></i></div>'
-            '<div class="ec-2">and I\'ll send you the cities already testing this</div><div class="ec-h mono">@ai.nxtlvl</div></div>')
+            '<div class="ec-2">and I\'ll send you the cities already testing this</div><div class="ec-h mono">@nxtlvlsocial.ai</div></div>')
 
 
 CSS = """
@@ -214,7 +214,7 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
 #ui { z-index: 5; }
 .top { position: absolute; left: 50px; right: 50px; top: 150px; height: 76px; display: flex; justify-content: space-between; align-items: center;
   padding: 0 26px; border-radius: 38px; background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 6px 7px 0 #1E1B18; }
-.brand { font-size: 26px; letter-spacing: 4px; display: flex; align-items: center; gap: 12px; }
+.brand { font-size: 24px; letter-spacing: 3px; display: flex; align-items: center; gap: 12px; }
 .brand b { width: 16px; height: 16px; border-radius: 50%; background: #E8735A; }
 .live { display: flex; align-items: center; gap: 8px; font-size: 20px; letter-spacing: 2px; color: #A8452F; }
 .live b { width: 12px; height: 12px; border-radius: 50%; background: #D9483B; }
@@ -295,7 +295,7 @@ def main():
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="gl" class="clip" data-start="0" data-duration="{DUR}" data-track-index="0"></canvas>
       <div id="ui" class="clip" data-start="0" data-duration="{DUR}" data-track-index="3" data-layout-allow-overflow>
-        <div class="top"><span class="brand mono"><b></b>AI.NXTLVL</span><span class="clk mono"><span>DAY 1</span><b>05:00</b></span>
+        <div class="top"><span class="brand mono"><b></b>NXTLVLSOCIAL.AI</span><span class="clk mono"><span>DAY 1</span><b>05:00</b></span>
           <span class="live mono"><b></b>WHAT IF</span><span class="prog"><i></i></span></div>
         {CARDS}{endcard()}
       </div>
