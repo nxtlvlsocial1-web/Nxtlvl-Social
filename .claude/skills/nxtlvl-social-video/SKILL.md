@@ -55,6 +55,25 @@ Build the **master** at the first row the request needs, then make the other for
 - **Loopable** when it's a Reel/TikTok under 15 s: the last frame should cut cleanly back to the first.
 - Music: only licensed or generated tracks (`/media-use`). Never pull audio from a random URL.
 
+## 3a. Script arc (every voiceover or talking script)
+
+Write every script on the **modern story arc**, not the school arc (conflict, rising action, climax,
+falling action, resolution): most viewers scroll away before a slow rise pays off. On a 0–100
+attention scale:
+
+1. **Start at 70, not 0 (0–5 s).** The hook drops the viewer into the middle of a story that has
+   already started: no setup, no intro, no "today I'll show you".
+2. **First peak at 90 (by 5–15 s).** A contrast moment, a contrarian statement or a shocking stat:
+   the first hit of dopamine.
+3. **Release, then peak again.** Short release beats (context, the how) between peaks, then "boom",
+   the next peak (a reveal, a twist, a surprising capability). Peak, release, peak, release, until
+   the video is done. No single climax in the middle: stack mini peaks and re-hook as long as you can.
+4. **Close on the CTA** (the keyword line, e.g. Comment "STORY" and I'll send it to you) with the
+   value of what they get, straight after the last peak.
+
+When presenting a script, label each line with its arc beat (hook 70, peak, release, CTA) so the
+person can see the shape.
+
 ## 4. Brand kits
 
 Brand kits live in `brands/<client-slug>/` at the repo root:
