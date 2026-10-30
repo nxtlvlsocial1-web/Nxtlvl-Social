@@ -90,6 +90,11 @@ Nxtlvl Social's own kit is `brands/nxtlvl/` — fill it in before using it as th
 
 ## 5. Review and render
 
+0. Convert HDR footage to SDR before it goes in a composition. Phone and screen captures (`.mov`, HEVC) are often
+   HLG or PQ in BT.2020 (`ffprobe` shows `color_transfer=arib-std-b67` or `smpte2084`). HyperFrames then auto-promotes
+   the whole render to HDR layered compositing: DOM layers lose their stacking (overlays and washes vanish), frames go
+   dark and the output becomes HEVC BT.2020. Tone-map first:
+   `ffmpeg -i in.mov -vf "zscale=t=linear:npl=203,format=gbrpf32le,zscale=p=bt709,tonemap=hable:desat=0:peak=4,zscale=t=bt709:m=bt709:r=tv,format=yuv420p" -color_primaries bt709 -color_trc bt709 -colorspace bt709 -c:v libx264 -crf 17 out.mp4`
 1. `npx hyperframes check` must pass.
 2. Open `npx hyperframes preview --background`, give the person the URL, and wait for approval.
 3. Render with `--quality draft` while iterating and `--quality delivery` for the final.
