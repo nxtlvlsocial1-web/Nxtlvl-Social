@@ -183,3 +183,5 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
   peak (contrast, contrarian take or shocking stat) by 5-15 s, then peak, release, peak, release, ending on the CTA.
 - Start every post description with the video's CTA keyword line (e.g. `Comment "AGENT" and I'll DM you my whole
   setup.`), then the hook and the body; don't repeat the CTA further down.
+- End every post description with up to 5 hashtags and then one plain line of relevant SEO keywords (the phrases
+  people search for the topic, comma separated), and always hand over the full description in one block, ready to paste.

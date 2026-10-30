@@ -107,3 +107,7 @@ Nxtlvl Social's own kit is `brands/nxtlvl/` — fill it in before using it as th
 - MP4, H.264, AAC audio, under 100 MB per file.
 - Deliver every requested format plus a 1-frame cover image (`.png`, same size) per format.
 - In the final reply, list each file with its platform, size, duration and path.
+- Every video ships with its full post description in one paste-ready block, in this order: the CTA keyword line, the
+  hook, the body (numbered lists as "1.", no emojis), up to 5 hashtags, then one plain line of relevant SEO keywords
+  (comma separated: the topic's search phrases, the tools, products or games shown, the platforms). Save it in the
+  project's `caption.md` too.
