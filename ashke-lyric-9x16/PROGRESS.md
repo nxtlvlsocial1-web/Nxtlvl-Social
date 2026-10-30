@@ -1,5 +1,5 @@
 # PROGRESS: ashke-lyric-9x16 (updated 2026-10-30)
-Phase: final render (v2)
+Phase: DONE (final v2 delivered: 1080x1920, 60 s, 108.7 MB, -14.1 LUFS)
 Current version: final v2 (collage + cinema fusion) → renders/nxtlvl_ashke-lyric_reels_9x16_v2.mp4; v1 delivered earlier (1080x1920, 30 fps, 60 s, delivery quality)
 Done: built from the 16x9 v4. Camera and cut grammar measured from the YouMotion reference (phase correlation).
 Next step: owner reviews the final; feedback goes into v2.
