@@ -13,6 +13,9 @@ frame; the camera whips into every scene, tracks each label as it lands, pushes,
 at 15 fps like the reference. The scene recipes and their order are in build/plan.py. Footage: the owner's estate and
 Manchester tour clips (cut-outs, prints); no 9:16 blow-ups. Lyric timings: ElevenLabs Scribe; the romanized Punjabi is
 ours (confirmed by the owner).
+Also, at the owner's request: every print opens on its sharpest frame and then runs into the footage (build/cards.py),
+scene changes get two single-frame stills (a print-sized freeze frame per step) ahead of the cut, and each lyric line
+gets one element drawn from what it says (build/icons.py).
 """
 import json
 import math
@@ -23,6 +26,7 @@ import sys
 from PIL import ImageFont
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from icons import ICON, svg  # noqa: E402
 from plan import CARD2, CUTOUT, FILL, RECIPE, W, line_times, scenes  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -475,6 +479,60 @@ def end_card():
     js(f'tl.to("#dim", {{opacity: .55, duration: .3, ease: "steps(3)"}}, {DUR - .3:.3f});')
 
 
+# one free spot per recipe for the line's element (board coordinates, top-left of a 230 px sticker)
+ICON_AT = {"R1": (800, 1500, 8), "R2": (60, 300, -8), "R3": (790, 330, 10), "R4": (90, 1100, -10), "R5": (810, 1520, 8),
+           "R6": (60, 1540, -6), "R7": (60, 300, -8), "R8": (90, 960, -10), "R9": (780, 1460, 10), "END": (780, 1460, 10)}
+TRANS_POOL = ["E3", "T11", "E4", "T12", "E9", "T8", "E8", "T7", "E10", "T5"]
+
+
+def lyric_icons():
+    """One element per line, popping in on the line's keyword (or its middle word) and staying to the cut."""
+    for si, (a, b, li) in enumerate(scenes()):
+        if li not in ICON:
+            continue
+        gs = groups_of(li)
+        if not gs:
+            continue
+        kws = [g for g in gs if g[1]]
+        t = (kws[-1] if kws else gs[len(gs) // 2])[2]
+        rec = RECIPE[li]
+        if rec == "R8" and len(gs) > 1:
+            t = max(t, gs[1][2])
+        if li == 31:
+            b = W[153]["s"] - .067
+        if t >= b - .15:
+            t = max(a + .2, b - .5)
+        x, y, rot = ICON_AT[rec]
+        i = nid("ic")
+        PAN.append(f'<div class="el" id="{i}" style="left:{x}px;top:{y}px;width:230px;height:230px;z-index:7;transform:rotate({rot}deg)">'
+                   f'{svg(ICON[li])}</div>')
+        show(f"#{i}", t, b)
+        js(f'tl.fromTo("#{i}", {{scale: 1.6, rotation: {rot - 20}}}, {{scale: 1, rotation: {rot}, duration: .2, ease: "steps(3)", immediateRender: false}}, {t:.3f});')
+        # a little stop-motion wobble while it sits there
+        k, tt = 0, t + .27
+        while tt < b - .07:
+            js(f'tl.set("#{i}", {{rotation: {rot + (2.5 if k % 2 else -2.5)}}}, {tt:.3f});')
+            tt, k = tt + PERIOD / 2, k + 1
+
+
+def transition_frames():
+    """Two single-frame stills (one 15 fps step each) right before the cut: the frame pacing of the transitions."""
+    k = 0
+    for si, (a, b, li) in enumerate(scenes()):
+        if si == 0 or li == 32 or RECIPE[li] in ("R4", "R8", "R9"):
+            continue
+        for j in range(2):
+            shot = TRANS_POOL[k % len(TRANS_POOL)]
+            k += 1
+            i = nid("tf")
+            rot = (-4, 5)[j]
+            w = (820, 700)[j]
+            SCREEN.append(f'<div class="tframe" id="{i}" style="left:{540 - w / 2:.0f}px;top:{960 - w * 1.25 / 2:.0f}px;width:{w}px;height:{w * 1.25:.0f}px;'
+                          f'transform:rotate({rot}deg)"><img src="assets/img/photo/frame_{shot}.jpg" alt=""></div>')
+            t0 = a - (2 - j) * STEP
+            show(f"#{i}", t0, t0 + STEP)
+
+
 # ------------------------------------------------------------------------------------------------ camera
 def ease_out(u, p=3):
     return 1 - (1 - max(0, min(1, u))) ** p
@@ -607,6 +665,8 @@ img.el {{ display: block; height: auto; }}
 .logo .cur {{ background: rgba(90,88,85,.8); }}
 .circ {{ position: absolute; left: -10%; top: -22%; width: 120%; height: 144%; overflow: visible; pointer-events: none; }}
 .circ path {{ fill: none; stroke: {BLUE}; stroke-width: 5.5; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 400; }}
+.tframe {{ position: absolute; z-index: 15; opacity: 0; background: #f3f1ec; padding: 18px; box-shadow: 0 18px 40px rgba(0,0,0,.45); }}
+.tframe img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
 #flash {{ position: absolute; inset: 0; z-index: 20; background: #f7f6f2; opacity: 0; }}
 #split {{ position: absolute; inset: 0; z-index: 20; background: #f4f3ef; opacity: 0; }}
 #split i {{ position: absolute; left: 50%; top: 0; width: 50%; height: 100%; background: #111; }}
@@ -624,6 +684,8 @@ def main():
         gs = [("ASHKE", False, .75), ("KARAN AUJLA", True, 1.25)] if li < 0 else groups_of(li)
         builders[RECIPE[li]](si, a, b, li, gs)
     end_card()
+    lyric_icons()
+    transition_frames()
     camera()
     flashes()
     g = random.Random(3)

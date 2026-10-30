@@ -29,6 +29,12 @@ Updated 2026-10-30. Current version: final v3, renders/nxtlvl_ashke-lyric_reels_
 - One-step flashes: colour invert, white, and a black/white split.
 - Nine scene recipes in the reference's own order; the hit lines use the photo-filled keyword (build/plan.py).
 
+## 3b. Owner additions (2026-10-30)
+- Prints open on the sharpest frame of their shot, held 8 frames, then run into the footage.
+- Each scene change gets two single-frame stills (one 15 fps step each) right before the cut.
+- One element per lyric line, drawn from what the line says, as a doodle sticker (build/icons.py), popping on the
+  keyword with a stop-motion wobble.
+
 ## 4. Removed
 - v2's full-bleed 9:16 cinema layer (eimantasbitinas23 reference): it blew the footage up and looked blurry.
 
@@ -38,3 +44,4 @@ Updated 2026-10-30. Current version: final v3, renders/nxtlvl_ashke-lyric_reels_
 | 2026-10-30 | 9:16, cut and track like YouMotion, final quality | v1 |
 | 2026-10-30 | add the eimantasbitinas23 style | v2 (then removed) |
 | 2026-10-30 | remove that concept (blurry 9:16 crops), add clips from the two videos, follow the new reference closely, every detail | never blow footage up to full 9:16; follow references closely, not loosely |
+| 2026-10-30 | best single frame then into the video, focus the transitions' frame pacing, one element per line from the lyrics | 3b above |
