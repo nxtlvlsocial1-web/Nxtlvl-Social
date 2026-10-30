@@ -23,12 +23,11 @@ V = os.path.join(ROOT, "assets", "video")
 SRC = {"estate": os.path.join(V, "src", "estate.mp4"), "tour": os.path.join(V, "src", "tour.mp4"), "mv": os.path.join(V, "music-video-src.mp4")}
 OUT = os.path.join(ROOT, "assets", "img", "cut")
 # name: (source, time s, x of Karan as a fraction of the frame width)
-PICKS = {
-    "suit_a": ("estate", 2.0, .5), "suit_b": ("estate", 0.6, .55), "aim": ("estate", 14.6, .4), "gun_up": ("estate", 21.4, .62),
-    "gun_close": ("estate", 24.6, .55), "suit_man": ("estate", 27.5, .72), "plaid": ("estate", 38.0, .72), "plaid_tea": ("estate", 42.4, .6),
-    "selfie_a": ("tour", 10.6, .55), "selfie_b": ("tour", 11.6, .5), "selfie_c": ("tour", 12.3, .45), "signing": ("tour", 1.5, .5),
-    "arms_up": ("tour", 49.2, .5), "point_up": ("tour", 50.2, .5), "red_jacket": ("tour", 9.0, .5), "red_jacket_b": ("tour", 24.0, .45),
-    "head_hands": ("tour", 56.4, .5), "couch": ("tour", 59.6, .5),
+PICKS = {   # Karan only. (src, time, x of Karan, optional x window that clips away anyone standing next to him)
+    "suit": ("estate", 1.8, .52), "plaid": ("estate", 42.9, .55, (.36, .78)), "poster": ("tour", 2.2, .5),
+    "selfie_a": ("tour", 10.6, .5), "selfie_b": ("tour", 11.4, .52), "selfie_c": ("tour", 12.4, .5), "mic": ("tour", 41.6, .45),
+    "walk": ("tour", 44.8, .5), "walk_b": ("tour", 45.6, .5), "arms": ("tour", 49.2, .5), "back": ("tour", 50.4, .5),
+    "stage": ("tour", 54.2, .5),
 }
 _sess = None
 
@@ -39,7 +38,7 @@ def grab(src, t):
     return Image.open(p).convert("RGB")
 
 
-def person_mask(img, fx):
+def person_mask(img, fx, win=None):
     global _sess
     if _sess is None:
         _sess = ort.InferenceSession(os.path.join(ROOT, "cache", "models", "u2net_human_seg.onnx"))
@@ -58,9 +57,13 @@ def person_mask(img, fx):
             d = abs(xs.mean() / img.size[0] - fx)
             if d < bd:
                 best, bd = k, d
-        keep = ndimage.binary_dilation(lab == best, iterations=6)
+        keep = ndimage.binary_dilation(lab == best, iterations=3)
         m = m * keep
     m = np.maximum(m * (m > .5), ndimage.binary_fill_holes(m > .5).astype(np.float32))   # drop the haze, fill holes
+    if win:                         # clip away anyone touching him
+        w = m.shape[1]
+        m[:, : int(win[0] * w)] = 0
+        m[:, int(win[1] * w):] = 0
     return Image.fromarray((m.clip(0, 1) * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(1.2))
 
 
@@ -78,9 +81,9 @@ def photocopy(img, m, seed):
     return Image.fromarray(a.clip(0, 255).astype(np.uint8))
 
 
-def sticker(name, src, t, fx, seed):
+def sticker(name, src, t, fx, seed, win=None):
     img = grab(src, t)
-    m = person_mask(img, fx)
+    m = person_mask(img, fx, win)
     bbox = m.point(lambda v: 255 if v > 100 else 0).getbbox()
     pad = 40
     box = (max(0, bbox[0] - pad), max(0, bbox[1] - pad), min(img.size[0], bbox[2] + pad), min(img.size[1], bbox[3] + pad))
@@ -114,8 +117,8 @@ def sticker(name, src, t, fx, seed):
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
     made = []
-    for k, (name, (src, t, fx)) in enumerate(PICKS.items()):
-        made.append((name, sticker(name, src, t, fx, k)))
+    for k, (name, pick) in enumerate(PICKS.items()):
+        made.append((name, sticker(name, *pick[:3], k, pick[3] if len(pick) > 3 else None)))
         print(name)
     if "--sheet" in sys.argv:
         th = [im.copy() for _, im in made]

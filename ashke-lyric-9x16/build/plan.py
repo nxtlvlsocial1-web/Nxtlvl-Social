@@ -36,20 +36,20 @@ RECIPE = {-1: "R1", 0: "R2", 1: "R3", 2: "R4", 3: "R5", 4: "R6", 5: "R7", 6: "R8
           11: "R5", 12: "R2", 13: "R6", 14: "R7", 15: "R8", 16: "R9", 17: "R1", 18: "R3", 19: "R2", 20: "R4", 21: "R5",
           22: "R6", 23: "R7", 24: "R8", 25: "R9", 26: "R2", 27: "R1", 28: "R3", 29: "R4", 30: "R6", 31: "END", 32: "END"}
 # cut-out stickers (build/cutouts.py) for the cut-out recipes
-CUTOUT = {-1: "suit_a", 1: "plaid", 2: "selfie_a", 6: "aim", 8: "selfie_b", 9: "signing", 10: "point_up", 15: "suit_man",
-          17: "arms_up", 18: "selfie_c", 20: "couch", 24: "red_jacket_b", 27: "red_jacket", 28: "suit_b", 29: "gun_close",
-          0: "gun_up", 12: "plaid_tea", 19: "selfie_b", 26: "point_up"}   # R2: the cut-out behind the photo-filled keyword
-# card footage (build/cards.py): source, start time, x of the subject (fraction); card 2 is R5's red print
-SHOTS = {"E2": ("estate", 12.6, .5), "E3": ("estate", 18.3, .55), "E4": ("estate", 25.5, .6), "E5": ("estate", 30.5, .5),
-         "E7": ("estate", 36.2, .5), "E9": ("estate", 42.6, .5), "E10": ("estate", 32.2, .3), "E11": ("estate", 40.5, .35),
-         "E8": ("estate", 39.4, .6), "T1": ("tour", 3.5, .5), "T2": ("tour", 5.4, .6), "T3": ("tour", 16.0, .45),
-         "T5": ("tour", 28.0, .45), "T6": ("tour", 31.0, .6), "T8": ("tour", 44.5, .5), "T10": ("tour", 48.0, .4),
-         "T11": ("tour", 51.0, .5), "T12": ("tour", 54.0, .5), "T14": ("tour", 35.5, .45), "T7": ("tour", 42.0, .55)}
-CARD1 = {0: "T8", 3: "E2", 4: "E9", 5: "T3", 11: "E3", 12: "T1", 13: "E7", 14: "T6", 19: "T5", 21: "E10", 22: "E4",
-         23: "T12", 26: "T2", 30: "E5"}
-CARD2 = {3: "T14", 11: "T11", 21: "T10"}
+CUTOUT = {-1: "suit", 0: "stage", 1: "plaid", 2: "selfie_a", 6: "arms", 8: "selfie_b", 9: "poster", 10: "back", 12: "walk",
+          15: "mic", 17: "walk_b", 18: "selfie_c", 19: "suit", 20: "poster", 24: "back", 26: "selfie_a", 27: "arms", 28: "walk",
+          29: "mic"}
+# card footage (build/cards.py): Karan-only shots (source, start time, x of Karan as a fraction)
+SHOTS = {"K1": ("estate", 1.4, .5), "K2": ("estate", 13.0, .5), "K3": ("estate", 15.2, .42), "K4": ("estate", 42.6, .5),
+         "K5": ("tour", 44.4, .5), "K6": ("tour", 41.4, .45), "K7": ("tour", 10.4, .5), "K8": ("tour", 49.0, .5),
+         "K9": ("tour", 2.0, .5), "K10": ("tour", 31.0, .6), "K11": ("tour", 51.0, .5), "K13": ("estate", 13.8, .5),
+         "K14": ("tour", 50.2, .5), "K15": ("tour", 10.3, .5), "K16": ("tour", 16.0, .45)}
+CARD1 = {0: "K5", 3: "K2", 4: "K4", 5: "K11", 11: "K3", 12: "K6", 13: "K1", 14: "K10", 19: "K16", 21: "K13", 22: "K7",
+         23: "K8", 26: "K14", 30: "K9"}
+CARD2 = {3: "K15", 11: "K8", 21: "K11"}
 # the photo that fills the giant keyword in R2 scenes
-FILL = {0: "E8", 12: "T2", 19: "E2", 26: "T11"}
+FILL = {0: "K13", 12: "K11", 19: "K2", 26: "K8"}
+TRANS_POOL = ["K3", "K11", "K1", "K6", "K4", "K5", "K13", "K10", "K7", "K14"]
 
 
 def line_times(li):

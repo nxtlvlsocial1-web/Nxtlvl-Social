@@ -1,6 +1,6 @@
 # TASTE: ashke-lyric-9x16
 
-Updated 2026-10-30. Current version: final v3, renders/nxtlvl_ashke-lyric_reels_9x16_v3.mp4.
+Updated 2026-10-30. Current version: final v4, renders/nxtlvl_ashke-lyric_reels_9x16_v4.mp4 (63 s: 60 s song + logo).
 
 ## 1. Brief
 - 9:16 Ashke (Karan Aujla, Mxrci) lyric edit: 60 s from 2:14, 1080x1920, 30 fps.
@@ -35,6 +35,20 @@ Updated 2026-10-30. Current version: final v3, renders/nxtlvl_ashke-lyric_reels_
 - One element per lyric line, drawn from what the line says, as a doodle sticker (build/icons.py), popping on the
   keyword with a stop-motion wobble.
 
+## 3c. v4 (owner, 2026-10-30)
+- Cut-outs: Karan only. Solo frames, a clipping window when someone stands beside him, and no gun shots as cut-outs
+  (the segmentation drops the gun). Prints, fills and transition frames also use Karan-only shots.
+- Every caption is in Punjabi (Gurmukhi): labels, the paragraph, the title, the end tape, and a word tag on each lyric
+  element. Font: Anek Gurmukhi (Condensed ExtraBold, 600), OFL. Letters type on by grapheme cluster.
+- The Gurmukhi spelling of the lyrics is ours, word for word with the confirmed romanization (generate.py GURMUKHI).
+- Sound (build/sound.py, all synthesized):
+  - Music edit: muffled intro, cut-out gaps with risers and booms on the hit lines, stutters on the bursts, a tape
+    stop into the logo.
+  - Effects on the picture events: typing, slams, stamps, pops, marker, shutter, paper, whooshes, glitch, flash,
+    tear, sparkle.
+- Logo outro (60-63 s): a black torn sheet tears across, the owner's N mark draws on over night-violet, and the star
+  pops and twinkles, framed by torn black paper.
+
 ## 4. Removed
 - v2's full-bleed 9:16 cinema layer (eimantasbitinas23 reference): it blew the footage up and looked blurry.
 
@@ -45,3 +59,4 @@ Updated 2026-10-30. Current version: final v3, renders/nxtlvl_ashke-lyric_reels_
 | 2026-10-30 | add the eimantasbitinas23 style | v2 (then removed) |
 | 2026-10-30 | remove that concept (blurry 9:16 crops), add clips from the two videos, follow the new reference closely, every detail | never blow footage up to full 9:16; follow references closely, not loosely |
 | 2026-10-30 | best single frame then into the video, focus the transitions' frame pacing, one element per line from the lyrics | 3b above |
+| 2026-10-30 | only Karan in cut-outs, crop nicely, dope frames; Punjabi captions; lyric elements; sound effects; edit the music; blend the logo at the end | 3c |

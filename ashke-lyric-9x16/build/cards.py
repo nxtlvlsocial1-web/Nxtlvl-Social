@@ -6,9 +6,9 @@ python3 build/cards.py      (from the project root; needs ffmpeg; reads the shot
 Shots come from the owner's two clips (assets/video/src/estate.mp4, the estate shoot at 1276x718, and tour.mp4, the
 Manchester concert at 1200x720) at close to their own resolution, so the prints stay sharp (no 9:16 blow-ups). Look:
 photocopy black and white (grey, auto-levels, hard curve, sharpened, fine grain), the dark R2 print a stop lower.
-Each print opens on the sharpest frame of its shot (searched over its first 1.5 s), held for 8 frames, then runs into
+Each print opens on the sharpest frame of its shot (searched over its first 0.6 s), held for 8 frames, then runs into
 the moving footage from that frame. Writes assets/video/card1.mp4, card2.mp4, assets/img/photo/fill_<line>.jpg
-(red-and-black threshold photos) and assets/img/photo/frame_<shot>.jpg (each shot's best frame in the print look,
+(black-and-white threshold photos) and assets/img/photo/frame_<shot>.jpg (each shot's best frame in the print look,
 for the single-frame transitions).
 """
 import os
@@ -29,11 +29,12 @@ _BEST = {}
 
 
 def best_time(shot):
-    """The sharpest frame (variance of a Laplacian) in the shot's first 1.5 s."""
+    """The sharpest frame (variance of a Laplacian) in the shot's first 0.6 s (so the print never runs into a
+    neighbouring shot)."""
     if shot in _BEST:
         return _BEST[shot]
     src, st, fx = SHOTS[shot]
-    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{st:.3f}", "-t", "1.5", "-i", SRC[src][0], "-vf", "fps=10,scale=320:-2,format=gray",
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{st:.3f}", "-t", "0.6", "-i", SRC[src][0], "-vf", "fps=10,scale=320:-2,format=gray",
                           "-f", "rawvideo", "-"], capture_output=True, check=True).stdout
     h = 180 if src == "estate" else 192
     fr = np.frombuffer(raw, np.uint8)
@@ -86,7 +87,7 @@ def fills():
         src, st, fx = SHOTS[shot]
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{st + .4:.3f}", "-i", SRC[src][0], "-frames:v", "1", "-vf",
                         "format=gray,normalize=independence=0,eq=contrast=2.4,format=rgb24,"
-                        "lutrgb=r='if(gt(val,118),226,20)':g='if(gt(val,118),34,18)':b='if(gt(val,118),42,18)',scale=1200:-2",
+                        "lutrgb=r='if(gt(val,70),242,20)':g='if(gt(val,70),238,18)':b='if(gt(val,70),230,18)',scale=1200:-2",
                         "-q:v", "2", os.path.join(od, f"fill_{li}.jpg")], check=True)
 
 

@@ -26,18 +26,20 @@ import sys
 from PIL import ImageFont
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from icons import ICON, svg  # noqa: E402
-from plan import CARD2, CUTOUT, FILL, RECIPE, W, line_times, scenes  # noqa: E402
+from icons import ICON, WORD, svg  # noqa: E402
+from plan import CARD2, CUTOUT, FILL, RECIPE, TRANS_POOL, W, line_times, scenes  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DUR, FW, FH = 60.0, 1080, 1920
+DUR, SONG, FW, FH = 63.0, 60.0, 1080, 1920     # 60 s of song, then the logo
+EV = []               # sound events for build/sound.py: (time, kind)
 BEATS = json.load(open(os.path.join(ROOT, "plan", "beats_raw.json")))
 PERIOD = 60 / BEATS["bpm"]
 STEP = 1 / 15
 R = random.Random(23)
 A, HIDE, PAN, SCREEN = [], [], [], []
 RED, INK, BLUE = "#d8232a", "#161616", "#2aa7d8"
-OSW = ImageFont.truetype(os.path.join(ROOT, "assets", "fonts", "Oswald", "Oswald-700.ttf"), 100)
+GUR = ImageFont.truetype(os.path.join(ROOT, "assets", "fonts", "AnekGurmukhi", "AnekGurmukhi-Condensed-800.ttf"), 100,
+                         layout_engine=ImageFont.Layout.RAQM)
 CAMKEYS = {}          # scene index -> list of (t, fx, fy, scale, rot, dur)
 FLASH = []            # (t, kind)
 NID = [0]
@@ -57,6 +59,32 @@ LYRICS = [
 ]
 
 
+GURMUKHI = [
+    "ਮੈਂ *ਸਿੱਧਾ ਤੁਰਿਆ ਜਾਵਾਂ", "ਤੂੰ ਤੱਕਦੀ ਟੇਢੀ *ਟੇਢੀ", "ਤੂੰ ਬਾਡੀ ਕਰ ਲਈ *ਸਲਿੱਮ", "ਤੇਰੇ ਤੇ ਮੈਂ ਕਰਦਾ ਕੰਮ *ਸ਼ੇਡੀ",
+    "ਸਾਡਾ ਤਾਂ ਤੋਰਾ ਫੇਰਾ ਹੈ ਨਾ", "ਮੈਂ ਨਹੀਂ ਲਾਉਂਦਾ *ਗੇੜੀ", "*ਕਾਰਾਂ, ਜੁੱਤੀ ਤੇ *ਅਸਲਾ", "ਨਹੀਂ ਐ ਤਿੰਨ ਇੱਕੀ *ਦੁੱਕੀ",
+    "ਨਹੀਂ ਲੀੜਾ *ਲੱਤਾ", "ਟੌਪ ਦਾ ਰੱਖਾਂ ਮੈਂ ਜਾਣਾ *ਚੜ੍ਹ ਕੇ", "ਕੱਚੀ ਉਹ *ਚੱਬ ਜਾ", "ਪੀਣੇ ਹਾਂ *ਚਾਹ ਨਹੀਂ, ਉੱਡਾ ਕਾੜ੍ਹ ਕੇ",
+    "*ਜੱਟ ਖੁੱਲ੍ਹਾ *ਘੁੰਮਦਾ", "*ਵੈਰੀ ਨੂੰ ਰੱਖਾਂ ਮੈਂ ਉੱਡਾ ਤਾੜ ਕੇ", "ਨਹੀਂ ਤਾਂ ਫੁੱਲ *ਬੈਗੀ", "*ਪੱਥਰਾਂ 'ਚ ਆਇਆ ਮੁੰਡਾ ਪਾੜ ਕੇ",
+    "ਕਰਦੀ ਮੇਰੀ *ਅਡੀਟਾ", "ਨਹੀਂ ਸਾਡਾ ਖੁੱਲ੍ਹ ਗਿਆ *ਚਾਕਾ", "ਤੂੰ ਦਿਲ ਕਰਦੀ ਐ *ਚੋਰੀ", "ਨਹੀਂ ਤਾਂ ਮੈਂ ਮਾਰੀ ਦਾ *ਡਾਕਾ",
+    "*ਬੇਬੇ ਕਹਿੰਦੀ ਤੈਨੂੰ ਵਿਆਹੁਣਾ", "ਤੇ ਮੇਰਾ *ਸ਼ਸਤਰ ਦੇਣਾ ਠਾਕਾ", "ਦੱਸ ਕੀ ਕਰ ਲੈਣਾ *ਕਾਮਾ", "ਨਹੀਂ ਮੇਰਾ *ਬਾਜਾਂ ਵਾਲਾ ਰਾਖਾ",
+    "ਰਾਹਾਂ ਵਿੱਚ *ਰੋੜੇ", "ਬਹਿਣਾ ਜੀ *ਯਾਰਾਨਾ ਭੈਣਾ ਕੱਸ ਕੇ", "*ਜੱਟ ਮੁੱਢੋਂ *ਜ਼ਹਿਰੀ", "*ਨਾਗਣੀ ਰਿਹਾ ਕੋਈ ਸਾਨੂੰ ਡੱਸ ਕੇ",
+    "*ਬਾਪੇ ਦੀ ਸਾਨੂੰ ਬਖ਼ਸ਼ੇ", "ਚਨੱਟੀਆਂ *ਗਾਨੀ ਲੱਸ ਕੇ", "ਨਹੀਂ *ਮੋੜ ਤੇ ਪੌਂਦੀ", "ਛੁੰਬਰ ਦੇ ਨਾਲੇ ਕਹਿਕੀ *ਅਸ਼ਕੇ",
+    "ਨਹੀਂ ਮੋੜ ਤੇ ਪੌਂਦੀ",
+]
+
+
+def clusters(text):
+    """Gurmukhi letters with their vowel signs and marks (and a subjoined letter after a virama) kept together, so
+    typing on letter by letter never shows a loose mark."""
+    import unicodedata
+    out = []
+    for c in text:
+        if out and (unicodedata.category(c) in ("Mn", "Mc") or out[-1].endswith("\u0a4d")):
+            out[-1] += c
+        else:
+            out.append(c)
+    return out
+
+
 def js(s):
     A.append("      " + s)
 
@@ -69,9 +97,11 @@ def nid(p):
 def word_slots(li):
     i0, i1, text = LYRICS[li]
     toks = text.split()
+    gur = [g.lstrip("*") for g in GURMUKHI[li].split()]
+    assert len(gur) == len(toks), (li, toks, gur)
     n = i1 - i0 + 1
     slots = [i0 + round(k * (n - 1) / max(1, len(toks) - 1)) for k in range(len(toks))] if len(toks) > 1 else [i0]
-    return [(tok.lstrip("*"), tok.startswith("*"), W[s]["s"]) for tok, s in zip(toks, slots)]
+    return [(tok.lstrip("*"), tok.startswith("*"), W[s]["s"], g) for tok, s, g in zip(toks, slots, gur)]
 
 
 def groups_of(li):
@@ -95,8 +125,9 @@ def groups_of(li):
         groups.append(cur)
     out = []
     for g in groups:
-        txt = " ".join(x[0] for x in g).rstrip(",").upper()
-        if out and len(txt) <= 2:
+        rom = " ".join(x[0] for x in g)
+        txt = " ".join(x[3] for x in g).rstrip(",")
+        if out and len(rom) <= 2:
             out[-1] = (out[-1][0] + " " + txt, out[-1][1], out[-1][2])
             continue
         out.append((txt, g[0][1], g[0][2]))
@@ -104,7 +135,7 @@ def groups_of(li):
 
 
 def tw(text, size):
-    return OSW.getlength(text) * size / 100
+    return GUR.getlength(text) * size / 100
 
 
 def star_path(n=7, r1=48, r2=22, seed=0):
@@ -139,6 +170,7 @@ def scrap(kind, k, x, y, w, rot, t0, t1, z=1):
 
 def cutout(name, x, y, w, rot, t0, t1, rise=0, red=False, z=3):
     i = nid("ct")
+    EV.append((t0, "paper"))
     PAN.append(f'<img class="el" id="{i}" src="assets/img/cut/{name}{"-red" if red else ""}.png" style="left:{x:.0f}px;top:{y:.0f}px;'
                f'width:{w:.0f}px;transform:rotate({rot:.1f}deg);z-index:{z}" alt="">')
     show(f"#{i}", t0, t1)
@@ -151,6 +183,7 @@ def card(n, x, y, w, h, rot, t0, t1, red=False):
     """Move a footage print (card1 / card2 track) into place for [t0, t1)."""
     js(f'tl.set("#pr{n}", {{opacity: 1, left: {x:.0f}, top: {y:.0f}, width: {w:.0f}, height: {h:.0f}, rotation: {rot:.1f}}}, {t0:.3f});')
     js(f'tl.set("#pr{n} i", {{opacity: {.9 if red else 0}}}, {t0:.3f});')
+    EV.append((t0, "shutter"))
     js(f'tl.fromTo("#pr{n}", {{x: {R.choice([-120, 120])}}}, {{x: 0, duration: .134, ease: "steps(2)", immediateRender: false}}, {t0:.3f});')
     if t1 < DUR:
         js(f'tl.set("#pr{n}", {{opacity: 0}}, {t1:.3f});')
@@ -161,6 +194,7 @@ def star(x, y, size, t0, t1, color=INK, n=7, seed=0):
     PAN.append(f'<svg class="el" id="{i}" viewBox="-50 -50 100 100" style="left:{x:.0f}px;top:{y:.0f}px;width:{size}px;height:{size}px;z-index:4">'
                f'<path d="{star_path(n, seed=seed)}" fill="{color}"/></svg>')
     show(f"#{i}", t0, t1)
+    EV.append((t0, "tick"))
     js(f'tl.fromTo("#{i}", {{scale: 0, rotation: -40}}, {{scale: 1, rotation: 0, duration: .134, ease: "steps(2)", immediateRender: false}}, {t0:.3f});')
 
 
@@ -170,27 +204,35 @@ def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor
     size = min(size * 1.12, fit(text, 980, 999))          # the reference's labels run big, close to the frame edges
     w = tw(text, size) + size * .56
     left = x - w / 2 if anchor == "center" else x
-    letters = "".join(f'<span class="ch">{c if c != " " else "&nbsp;"}</span>' for c in text)
+    cl = clusters(text)
+    letters = "".join(f'<span class="ch">{c if c != " " else "&nbsp;"}</span>' for c in cl)
     cur = '<span class="cur"></span>' if mode == "type" else ""
     PAN.append(f'<div class="lw" data-layout-allow-overlap style="left:{left:.0f}px;top:{y:.0f}px;transform:rotate({rot:.1f}deg);z-index:{z}">'
                f'<div class="lb {style}" id="{i}" style="font-size:{size:.0f}px">{letters}{cur}{CIRC if circle else ""}</div></div>')
     show(f"#{i}", t, t1)
+    if "stamp" in style:
+        EV.append((t, "stamp"))
     if mode == "type":
-        per = 2 if len(text) > 9 else 1
+        n = len(cl)
+        per = 2 if n > 8 else 1
         js(f'tl.set("#{i} .ch", {{display: "none"}}, {t - .001:.3f});')
         k = 0
-        while k < len(text):
-            js(f'tl.set("#{i} .ch:nth-child(-n+{min(len(text), k + per)})", {{display: "inline"}}, {t + (k // per) * STEP:.3f});')
+        while k < n:
+            js(f'tl.set("#{i} .ch:nth-child(-n+{min(n, k + per)})", {{display: "inline"}}, {t + (k // per) * STEP:.3f});')
+            EV.append((t + (k // per) * STEP, "type"))
             k += per
-        done = t + (len(text) // per + 1) * STEP
+        done = t + (n // per + 1) * STEP
         js(f'tl.set("#{i} .cur", {{display: "none"}}, {done:.3f});')
     elif mode == "slam":
+        EV.append((t, "slam"))
         js(f'tl.fromTo("#{i}", {{scale: 1.65}}, {{scale: 1, duration: .27, ease: "steps(4)", immediateRender: false}}, {t:.3f});')
         done = t + .27
     else:
+        EV.append((t, "pop"))
         js(f'tl.fromTo("#{i}", {{scale: 1.4}}, {{scale: 1, duration: .134, ease: "steps(2)", immediateRender: false}}, {t:.3f});')
         done = t + .134
     if circle:
+        EV.append((done + .05, "marker"))
         js(f'tl.fromTo("#{i} .circ path", {{strokeDashoffset: 400}}, {{strokeDashoffset: 0, duration: .33, ease: "steps(5)", immediateRender: false}}, {done + .05:.3f});')
     return i, w
 
@@ -264,7 +306,7 @@ def r1(si, a, b, li, gs):
             label(txt, "redw", 560, y, size, -1.5, t, b, mode="type", circle=key)
             y += size * 1.12 + 22
             cam(si, t, 540, 960 + (y - 1200) * .3, 1.02, 0, .4)
-    para(["ASHKE. KARAN AUJLA, MXRCI.", "A LYRIC EDIT BY", "NXTLVL SOCIAL."], 110, y + 30, gs[min(1, len(gs) - 1)][2], b)
+    para(["ਅਸ਼ਕੇ · ਕਰਨ ਔਜਲਾ, ਮਰਸੀ", "ਲਿਰਿਕ ਐਡਿਟ:", "ਨੈਕਸਟ ਲੈਵਲ ਸੋਸ਼ਲ"], 110, y + 30, gs[min(1, len(gs) - 1)][2], b)
     star(60, max(1530, y + 190), 230, a + PERIOD, b, seed=si)
     star(290, max(1700, y + 330), 110, a + PERIOD * 1.5, b, seed=si + 1)
     if b - a > 1.4:
@@ -457,6 +499,45 @@ def ending(si, a, b, li, gs):
     FLASH.append((t - .067, "white"))
 
 
+LOGO = ('<svg viewBox="0 0 1080 1080" width="1080" height="1080"><defs>'
+        '<linearGradient id="ng" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#c4a6ff"/><stop offset=".45" stop-color="#ffffff"/>'
+        '<stop offset="1" stop-color="#d9c8ff"/></linearGradient>'
+        '<linearGradient id="sp" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#f1eaff"/><stop offset="1" stop-color="#b48cff"/></linearGradient>'
+        '<radialGradient id="gl"><stop offset="0" stop-color="#b48cff" stop-opacity=".55"/><stop offset="1" stop-color="#b48cff" stop-opacity="0"/></radialGradient></defs>'
+        '<circle id="lglow" cx="540" cy="560" r="420" fill="url(#gl)" opacity="0"/>'
+        '<path id="ln" pathLength="1000" d="M357 825 L357 495 A65 65 0 0 1 484 472 L597 772 A66 66 0 0 0 722 756 L722 470" fill="none" '
+        'stroke="url(#ng)" stroke-width="26" stroke-dasharray="1000" stroke-dashoffset="1000"/>'
+        '<path id="lsp" d="M709 470 L722 345 L735 470 Z" fill="url(#sp)" opacity="0"/>'
+        '<path id="lst" d="M722 258 Q727 295 764 300 Q727 305 722 342 Q717 305 681 300 Q717 295 722 258 Z" fill="#fff" '
+        'opacity="0"/></svg>')
+
+
+def logo_outro():
+    """The owner's N logo, blended in with the collage: a black torn sheet tears across the paper, the logo's night
+    violet underneath, the N draws on like the marker circles, the star pops, torn black paper frames it."""
+    t = SONG
+    SCREEN.append('<div id="endcard"><div id="ecglow"></div>' + f'<div id="ecl">{LOGO}</div>' +
+                  '<img class="ecs" src="assets/img/scrap/black-3.png" style="left:-260px;top:-150px;width:900px;transform:rotate(8deg)" alt="">'
+                  '<img class="ecs" src="assets/img/scrap/black-1.png" style="left:420px;top:1580px;width:900px;transform:rotate(-6deg)" alt="">'
+                  '</div><img id="ectear" src="assets/img/scrap/black-0.png" alt="">')
+    HIDE.extend(["#endcard", "#ectear"])
+    js(f'tl.set("#ectear", {{opacity: 1}}, {t - .2:.3f});')
+    js(f'tl.fromTo("#ectear", {{y: 2400, rotation: -8}}, {{y: -2600, rotation: 6, duration: .67, ease: "steps(10)", immediateRender: false}}, {t - .2:.3f});')
+    js(f'tl.set("#endcard", {{opacity: 1}}, {t + .07:.3f});')
+    js(f'tl.set("#ectear", {{opacity: 0}}, {t + .47:.3f});')
+    EV.extend([(t - .2, "tear"), (t + .3, "logo")])
+    js(f'tl.to("#ln", {{strokeDashoffset: 0, duration: .9, ease: "steps(14)"}}, {t + .3:.3f});')
+    js(f'tl.set("#lsp", {{opacity: 1}}, {t + 1.2:.3f});')
+    js(f'tl.fromTo("#lsp", {{scaleY: 0, svgOrigin: "722 470"}}, {{scaleY: 1, duration: .2, ease: "steps(3)", immediateRender: false}}, {t + 1.2:.3f});')
+    js(f'tl.set("#lst", {{opacity: 1}}, {t + 1.36:.3f});')
+    js(f'tl.fromTo("#lst", {{scale: 0, rotation: -90, svgOrigin: "722 300"}}, {{scale: 1, rotation: 0, duration: .27, ease: "steps(4)", immediateRender: false}}, {t + 1.36:.3f});')
+    js(f'tl.to("#lglow", {{opacity: 1, duration: .4, ease: "steps(6)"}}, {t + 1.36:.3f});')
+    EV.append((t + 1.36, "sparkle"))
+    for k in range(6):                                         # the star twinkles
+        js(f'tl.set("#lst", {{scale: {1.12 if k % 2 == 0 else 1}, svgOrigin: "722 300"}}, {t + 1.8 + k * .2:.3f});')
+    js(f'tl.to("#endcard", {{opacity: 0, duration: .4, ease: "steps(6)"}}, {DUR - .45:.3f});')
+
+
 def end_card():
     """The reference's logo moment: white flash, ASHKE on white tape between grid lines, the blue circle draws round."""
     t = W[153]["s"]
@@ -468,21 +549,21 @@ def end_card():
     scrap("black", 0, 160, -160, 760, 4, t, DUR)
     scrap("white", 3, 280, 1480, 640, -4, t, DUR)
     PAN.append('<div class="lw" data-layout-allow-overlap style="left:236px;top:870px;z-index:6;transform:rotate(-1.5deg)"><div class="lb logo" id="logo">'
-               + "".join(f'<span class="ch">{c}</span>' for c in "Ashke") + f'<span class="cur"></span>{CIRC}</div></div>')
+               + "".join(f'<span class="ch">{c}</span>' for c in clusters("ਅਸ਼ਕੇ")) + f'<span class="cur"></span>{CIRC}</div></div>')
     show("#logo", t + .067, DUR)
     js(f'tl.set("#logo .ch", {{display: "none"}}, {t + .066:.3f});')
-    for k in range(5):
+    for k in range(len(clusters("ਅਸ਼ਕੇ"))):
         js(f'tl.set("#logo .ch:nth-child(-n+{k + 1})", {{display: "inline"}}, {t + .067 + k * STEP:.3f});')
+        EV.append((t + .067 + k * STEP, "type"))
+    EV.append((t + .55, "marker"))
     js(f'tl.set("#logo .cur", {{display: "none"}}, {t + .067 + 6 * STEP:.3f});')
     js(f'tl.fromTo("#logo .circ path", {{strokeDashoffset: 400}}, {{strokeDashoffset: 0, duration: .5, ease: "steps(8)", immediateRender: false}}, {t + .55:.3f});')
-    label("KARAN AUJLA · MXRCI", "blk", 540, 1180, 64, 1.5, line_times(32)[0], DUR, z=6)
-    js(f'tl.to("#dim", {{opacity: .55, duration: .3, ease: "steps(3)"}}, {DUR - .3:.3f});')
+    label("ਕਰਨ ਔਜਲਾ · ਮਰਸੀ", "blk", 540, 1180, 70, 1.5, line_times(32)[0], DUR, z=6)
 
 
 # one free spot per recipe for the line's element (board coordinates, top-left of a 230 px sticker)
 ICON_AT = {"R1": (800, 1500, 8), "R2": (60, 300, -8), "R3": (790, 330, 10), "R4": (90, 1100, -10), "R5": (810, 1520, 8),
            "R6": (60, 1540, -6), "R7": (60, 300, -8), "R8": (90, 960, -10), "R9": (780, 1460, 10), "END": (780, 1460, 10)}
-TRANS_POOL = ["E3", "T11", "E4", "T12", "E9", "T8", "E8", "T7", "E10", "T5"]
 
 
 def lyric_icons():
@@ -505,8 +586,9 @@ def lyric_icons():
         x, y, rot = ICON_AT[rec]
         i = nid("ic")
         PAN.append(f'<div class="el" id="{i}" style="left:{x}px;top:{y}px;width:230px;height:230px;z-index:7;transform:rotate({rot}deg)">'
-                   f'{svg(ICON[li])}</div>')
+                   f'{svg(ICON[li])}<b class="itag">{WORD[li]}</b></div>')
         show(f"#{i}", t, b)
+        EV.append((t, "pop"))
         js(f'tl.fromTo("#{i}", {{scale: 1.6, rotation: {rot - 20}}}, {{scale: 1, rotation: {rot}, duration: .2, ease: "steps(3)", immediateRender: false}}, {t:.3f});')
         # a little stop-motion wobble while it sits there
         k, tt = 0, t + .27
@@ -531,6 +613,7 @@ def transition_frames():
                           f'transform:rotate({rot}deg)"><img src="assets/img/photo/frame_{shot}.jpg" alt=""></div>')
             t0 = a - (2 - j) * STEP
             show(f"#{i}", t0, t0 + STEP)
+            EV.append((t0, "shutter"))
 
 
 # ------------------------------------------------------------------------------------------------ camera
@@ -595,6 +678,7 @@ def flashes():
     SCREEN.append('<div id="flash"></div><div id="split"><i></i></div>')
     HIDE.extend(["#flash", "#split"])
     for t, kind in FLASH:
+        EV.append((t, {"invert": "glitch", "white": "flash", "split": "click"}[kind]))
         if kind == "invert":
             js(f'tl.set("#fx", {{filter: "invert(1) hue-rotate(180deg) saturate(1.4)"}}, {t:.3f});')
             js(f'tl.set("#fx", {{filter: "none"}}, {t + STEP:.3f});')
@@ -607,8 +691,8 @@ def flashes():
 
 
 CSS = f"""
-@font-face {{ font-family: "Oswald"; font-weight: 700; src: url("assets/fonts/Oswald/Oswald-700.ttf"); }}
-@font-face {{ font-family: "Oswald"; font-weight: 500; src: url("assets/fonts/Oswald/Oswald-500.ttf"); }}
+@font-face {{ font-family: "Anek C"; font-weight: 800; src: url("assets/fonts/AnekGurmukhi/AnekGurmukhi-Condensed-800.ttf"); }}
+@font-face {{ font-family: "Anek"; font-weight: 600; src: url("assets/fonts/AnekGurmukhi/AnekGurmukhi-600.ttf"); }}
 @font-face {{ font-family: "Outfit"; font-weight: 800; src: url("assets/fonts/Outfit/Outfit-800.ttf"); }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #e9e4dc; }}
@@ -631,10 +715,10 @@ img.el {{ display: block; height: auto; }}
 .print video {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
 .print i {{ position: absolute; inset: 16px; background: {RED}; mix-blend-mode: multiply; opacity: 0; }}
 .lw {{ position: absolute; transform-origin: 50% 50%; }}
-.lb {{ position: relative; display: inline-block; font: 700 120px/1 "Oswald"; text-transform: uppercase; white-space: nowrap; opacity: 0;
-  padding: .1em .28em .06em; letter-spacing: .5px; }}
+.lb {{ position: relative; display: inline-block; font: 800 120px/1.18 "Anek C"; white-space: nowrap; opacity: 0;
+  padding: .06em .28em .02em; }}
 .lb .ch {{ display: inline; }}
-.lb .cur {{ display: inline-block; width: .5em; height: .86em; margin-left: .06em; vertical-align: -.04em; background: rgba(95,92,88,.9); }}
+.lb .cur {{ display: inline-block; width: .45em; height: .8em; margin-left: .06em; vertical-align: -.02em; background: rgba(95,92,88,.9); }}
 .blk {{ background: url(assets/img/tex/speckle.png) 0 0 / 300px auto, {INK}; color: #f1eee8; box-shadow: 0 12px 22px rgba(0,0,0,.28); }}
 .wht {{ background: url(assets/img/tex/speckle.png) 0 0 / 300px auto, #f3f1ec; color: {INK}; box-shadow: 0 12px 22px rgba(0,0,0,.25); }}
 .redw {{ background: url(assets/img/tex/speckle.png) 0 0 / 300px auto, #f3f1ec; color: {RED}; box-shadow: 0 12px 22px rgba(0,0,0,.25); }}
@@ -643,7 +727,7 @@ img.el {{ display: block; height: auto; }}
 .rb {{ background: {RED}; color: #fff; text-shadow: 4px 4px 0 {INK}; box-shadow: 18px 16px 0 {INK}; }}
 .blkr {{ background: {INK}; color: #fff; box-shadow: 16px 18px 0 {RED}; }}
 .rtyp {{ background: none; color: {RED}; padding: 0; -webkit-mask-image: url(assets/img/tex/grunge.png); mask-image: url(assets/img/tex/grunge.png); }}
-.stamp {{ background: none; color: #1c1b1a; padding: 0; letter-spacing: -2px; line-height: .92;
+.stamp {{ background: none; color: #1c1b1a; padding: 0; line-height: 1.12;
   -webkit-mask-image: url(assets/img/tex/grunge.png); mask-image: url(assets/img/tex/grunge.png); -webkit-mask-size: 520px auto; mask-size: 520px auto; }}
 .stamp .cur {{ background: rgba(60,58,55,.55); }}
 .w3d {{ background: none; color: #f6f4ef; padding: 0; -webkit-text-stroke: 2px #2a2a2a;
@@ -652,21 +736,29 @@ img.el {{ display: block; height: auto; }}
   text-shadow: 1px 1px 0 #a5121a, 2px 2px 0 #8c0f16, 3px 3px 0 #730c12, 4px 4px 0 #5a090e, 5px 5px 0 #40070a, 6px 6px 0 #2a0507, 9px 11px 10px rgba(0,0,0,.45); }}
 .rlet {{ background: none; color: {RED}; padding: 0; text-shadow: 5px 5px 0 rgba(22,22,22,.85);
   -webkit-mask-image: url(assets/img/tex/grunge.png); mask-image: url(assets/img/tex/grunge.png); -webkit-mask-size: 700px auto; mask-size: 700px auto; }}
-.fill {{ color: transparent; padding: 0; letter-spacing: -2px; line-height: .95; background-size: cover; background-position: 50% 40%;
-  -webkit-background-clip: text; background-clip: text; -webkit-text-stroke: 3px {INK}; filter: drop-shadow(8px 10px 0 rgba(22,22,22,.85)); }}
+.fill {{ color: transparent; padding: 0; line-height: 1.12; background-size: cover; background-position: 50% 40%;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-stroke: 5px {INK}; filter: drop-shadow(8px 10px 0 rgba(22,22,22,.85)); }}
 {"".join(f'.f{li} {{ background-image: url(assets/img/photo/fill_{li}.jpg); }}' for li in FILL)}
-.ghost {{ font: 700 250px/1 "Oswald"; text-transform: uppercase; color: rgba(40,36,32,.16); white-space: nowrap; opacity: 0; letter-spacing: -2px; }}
-.para {{ font: 500 34px/1.22 "Oswald"; color: #2a2724; letter-spacing: .3px; z-index: 5; }}
+.ghost {{ font: 800 250px/1.15 "Anek C"; color: rgba(40,36,32,.16); white-space: nowrap; opacity: 0; }}
+.para {{ font: 600 36px/1.3 "Anek"; color: #2a2724; z-index: 5; }}
+.itag {{ position: absolute; left: 50%; top: 212px; transform: translateX(-50%) rotate(-3deg); font: 800 52px/1.2 "Anek C"; white-space: nowrap;
+  background: {RED}; color: #fff; padding: 0 .3em; box-shadow: 0 8px 14px rgba(0,0,0,.25); }}
 .rline {{ border: 9px solid {RED}; z-index: 2; }}
 .redblk {{ z-index: 2; background: repeating-linear-gradient(90deg, rgba(0,0,0,.25) 0 3px, rgba(0,0,0,0) 3px 9px),
   radial-gradient(ellipse at 40% 40%, #a3121a, #4a0609); }}
-.logo {{ font: 800 150px/1 "Outfit"; text-transform: none; color: {RED}; letter-spacing: -2px; padding: .12em .34em .16em;
+.logo {{ font: 800 170px/1.15 "Anek C"; color: {RED}; padding: .04em .34em .02em;
   background: url(assets/img/tex/speckle.png) 0 0 / 300px auto, #f5f3ee; box-shadow: 0 16px 26px rgba(0,0,0,.28); }}
 .logo .cur {{ background: rgba(90,88,85,.8); }}
 .circ {{ position: absolute; left: -10%; top: -22%; width: 120%; height: 144%; overflow: visible; pointer-events: none; }}
 .circ path {{ fill: none; stroke: {BLUE}; stroke-width: 5.5; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 400; }}
 .tframe {{ position: absolute; z-index: 15; opacity: 0; background: #f3f1ec; padding: 18px; box-shadow: 0 18px 40px rgba(0,0,0,.45); }}
 .tframe img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
+#endcard {{ position: absolute; inset: 0; z-index: 17; opacity: 0; overflow: hidden;
+  background: radial-gradient(ellipse 70% 45% at 30% 30%, rgba(101,22,199,.35), rgba(0,0,0,0) 70%),
+  radial-gradient(ellipse 70% 45% at 75% 75%, rgba(75,6,193,.3), rgba(0,0,0,0) 70%), #08060f; }}
+#ecl {{ position: absolute; left: 0; top: 420px; width: 1080px; height: 1080px; }}
+.ecs {{ position: absolute; height: auto; filter: brightness(.55); }}
+#ectear {{ position: absolute; left: -760px; top: -200px; width: 2600px; height: auto; z-index: 18; opacity: 0; }}
 #flash {{ position: absolute; inset: 0; z-index: 20; background: #f7f6f2; opacity: 0; }}
 #split {{ position: absolute; inset: 0; z-index: 20; background: #f4f3ef; opacity: 0; }}
 #split i {{ position: absolute; left: 50%; top: 0; width: 50%; height: 100%; background: #111; }}
@@ -681,13 +773,18 @@ def main():
     for si, (a, b, li) in enumerate(scenes()):
         if li == 32:
             continue
-        gs = [("ASHKE", False, .75), ("KARAN AUJLA", True, 1.25)] if li < 0 else groups_of(li)
+        gs = [("ਅਸ਼ਕੇ", False, .75), ("ਕਰਨ ਔਜਲਾ", True, 1.25)] if li < 0 else groups_of(li)
         builders[RECIPE[li]](si, a, b, li, gs)
     end_card()
+    logo_outro()
     lyric_icons()
     transition_frames()
     camera()
     flashes()
+    for si, (a, b, li) in enumerate(scenes()):                  # a whoosh on every camera whip into the next scene
+        if 0 < si and li != 32 and a < SONG:
+            EV.append((a - .2, "whoosh"))
+    json.dump(sorted(EV), open(os.path.join(ROOT, "plan", "events.json"), "w"))
     g = random.Random(3)
     for f in range(int(DUR * 15)):
         js(f'tl.set("#grain", {{x: {g.randint(-40, 0)}, y: {g.randint(-40, 0)}}}, {f / 15:.3f});')
@@ -695,7 +792,7 @@ def main():
     grid = "".join(f'<line x1="{x + gl.uniform(-8, 8):.0f}" y1="-20" x2="{x + gl.uniform(-40, 40):.0f}" y2="3920"/>' for x in range(260, 2600, 390)) + \
            "".join(f'<line x1="-20" y1="{y + gl.uniform(-8, 8):.0f}" x2="2620" y2="{y + gl.uniform(-40, 40):.0f}"/>' for y in range(200, 3900, 420))
     prints = "".join(f'<div class="print" id="pr{n}"><video id="cv{n}" class="clip" src="assets/video/card{n}.mp4" data-start="0" '
-                     f'data-duration="{DUR}" data-track-index="{n}" muted playsinline></video><i></i></div>' for n in (1, 2))
+                     f'data-duration="{SONG}" data-track-index="{n}" muted playsinline></video><i></i></div>' for n in (1, 2))
     HIDE.extend(["#pr1", "#pr2"])
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
@@ -723,7 +820,7 @@ def main():
       <div id="dim"></div>
       <div id="vig"></div>
       <div id="grain"></div>
-      <audio id="song" src="assets/audio/section.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
+      <audio id="song" src="assets/audio/mix.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
     </div>
     <script>
       window.__timelines = window.__timelines || {{}};
