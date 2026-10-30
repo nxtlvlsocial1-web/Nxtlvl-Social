@@ -49,3 +49,11 @@ console-continue-9x16/.hyperframes/
 
 # Licensed single-user skill (Motion Video Director): never commit, the repo is public
 .claude/skills/motion-video-director/
+
+# Ashke lyric edit: the song and its music video are the artist's; keep them (and derived audio) out of git
+ashke-lyric-16x9/assets/audio/*.wav
+ashke-lyric-16x9/assets/video/
+ashke-lyric-16x9/cache/
+ashke-lyric-16x9/renders/
+ashke-lyric-16x9/.hyperframes/
+ashke-lyric-16x9/assets/img/cover-art.jpg
