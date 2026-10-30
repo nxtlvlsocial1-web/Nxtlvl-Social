@@ -719,16 +719,18 @@ function renderAt(t) {
   grade.uniforms.uTime.value = t;
 
   camAt(t);
+  const cv = window.CITY_COVER;   // the cover project pins its own camera
+  if (cv) { camera.position.set(...cv.cam); camera.fov = cv.fov; camera.updateProjectionMatrix(); camera.lookAt(...cv.look); }
   composer.render();
 }
 const tmpV = new THREE.Vector3();
 
 const ready = (async () => {
   renderer.compile(scene, camera);
-  renderAt(window.__hfThreeTime || 0);
+  renderAt(window.CITY_COVER ? window.CITY_COVER.t : (window.__hfThreeTime || 0));
 })();
 window.__hf = window.__hf || {};
 window.__hf.buildReady = window.__hf.buildReady || {};
 window.__hf.buildReady["city"] = ready;
-window.addEventListener("hf-seek", (e) => renderAt(e.detail.time));
+window.addEventListener("hf-seek", (e) => renderAt(window.CITY_COVER ? window.CITY_COVER.t : e.detail.time));
 window.CITY_RENDER = renderAt;

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>AI City cover</title>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Manrope"; font-weight: 200 800; src: url("assets/fonts/manrope.ttf"); }
+@font-face { font-family: "Serif"; font-style: italic; src: url("assets/fonts/InstrumentSerif-Italic.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 700; src: url("assets/fonts/jbmono-bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #F1E9DC; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #F1E9DC; color: #1E1B18; font-family: "Manrope", sans-serif; }
+.clip { position: absolute; inset: 0; }
+#gl { width: 1080px; height: 1920px; display: block; }
+.mono { font-family: "JBMono", monospace; font-weight: 700; }
+.top { position: absolute; left: 60px; right: 60px; top: 270px; display: flex; justify-content: space-between; align-items: center; font-size: 28px; letter-spacing: 4px; }
+.top .b { display: flex; align-items: center; gap: 12px; } .top .b i { width: 16px; height: 16px; border-radius: 50%; background: #E8735A; }
+.top .w { color: #A8452F; }
+.card { position: absolute; left: 60px; right: 60px; top: 330px; padding: 30px 36px 34px; border-radius: 34px; background: #FFFDF8; border: 3px solid #1E1B18;
+  box-shadow: 10px 11px 0 #1E1B18; text-align: center; }
+.card b { display: block; font: 800 98px/1.0 "Manrope"; letter-spacing: -3.5px; }
+.card em { display: block; margin-top: 10px; font: italic 76px/1 "Serif"; color: #D45C40; }
+.chip { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; top: 1530px; padding: 14px 32px; border-radius: 34px;
+  background: #1E1B18; color: #F1E9DC; font-size: 34px; letter-spacing: 4px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="cover" data-start="0" data-duration="1" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="gl" class="clip" data-start="0" data-duration="1" data-track-index="0"></canvas>
+      <div class="clip" data-start="0" data-duration="1" data-track-index="2">
+        <div class="top mono"><span class="b"><i></i>AI.NXTLVL</span><span class="w">WHAT IF</span></div>
+        <div class="card"><b>One AI runs a city for 24 hours</b><em>what could go wrong?</em></div>
+        <div class="chip mono">NO MAYOR &middot; NO COPS &middot; ONE AI</div>
+      </div>
+    </div>
+    <script>
+      window.CT = {"l": [0.12, 9.461, 18.34, 27.628, 35.261, 43.02, 50.484, 61.662], "e": [9.161, 18.12, 27.328, 35.111, 42.62, 50.204, 61.362, 66.288], "entire": 3.934, "mayor": 5.442, "cops": 6.707, "clock": 8.75, "syncs": 12.512, "buses": 13.441, "waiting": 15.368, "rush": 16.131, "disappears": 17.374, "drones": 19.22, "minutes": 20.653, "grid": 21.897, "energy": 22.307, "hospitals": 24.73, "ambulance": 26.259, "sensor": 28.836, "flooded": 30.23, "reroutes": 31.713, "ten": 32.476, "bridge": 34.723, "locks": 35.661, "deliveries": 36.116, "grid2": 37.286, "cuts": 38.131, "tiny": 40.146, "freezes": 42.161, "fixes": 44.59, "seconds": 45.445, "nobody": 48.32, "why": 49.298, "science": 51.27, "google": 52.374, "seattle": 55.342, "real": 56.915, "charge": 59.944, "wrong": 61.011, "comment": 62.737, "citykw": 63.139, "end": 67.89};
+      window.CITY_COVER = {"t": 22.5, "cam": [17, 25, 33], "look": [0, 5.2, -2.5], "fov": 38};
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.set({}, {}, 1);
+      window.__timelines["cover"] = tl;
+    </script>
+    <script type="module" src="assets/js/city.js"></script>
+  </body>
+</html>
