@@ -1,13 +1,14 @@
 # nxtlvl edits brand kit
 
-The editing account of Nxtlvl Social, on Instagram as `@nxtlvlledits`. The logo and display name read "nxtlvl edits".
+The editing account of Nxtlvl Social, on Instagram as `@nxtlvlledits`. The logo is the N on its own; the lettered
+versions (`logo*.svg`, "nxtlvl edits") are kept for later and aren't in use yet.
 
 **Logo: the Monoline N, Pearl** (concept R1, see `README.md` for how it was chosen). One fine line draws an N from two
 uprights, two round turns and a straight diagonal. The right upright climbs past the left (the next level) and tapers
 to a needle point, with the four-point star just above it, as if the line ends in a spark. Wordmark: "nxtlvl" in the
 original Nxtlvl logo lettering, then "edits" in Instrument Serif Italic with the star over the i.
 
-`kit-preview.png` shows the whole kit on one page.
+`kit-preview.png` shows the N kit on one page.
 
 ## Files
 
