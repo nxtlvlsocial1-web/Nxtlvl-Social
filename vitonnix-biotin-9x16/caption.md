@@ -27,12 +27,13 @@ Save this for your next pharmacy run and send it to the friend who hates swallow
 
 ## Alt text (Advanced settings, Accessibility)
 
-Animated ad for Vitonnix Biotin sublingual spray on a plum background. Capsules rain down under the words "Still
-swallowing biotin pills?", then a big capsule cracks into sparkles and the spray mist appears with the words "Here's
-the glow-up". The Vitonnix Biotin bottle is revealed, followed by "1 spray under your tongue, done", a counter that
-rolls up to "9X better absorption", a smiling woman with hair, skin and nails icons, lychee and mint with "No added
-sugar" and "Non-GMO" badges, FSSAI, GMP and ISO FSSC 22000 badges, a "Created by 3 doctors" card and a UK flag
-for Sublispray technology. It ends on "Comment BIOTIN and we'll DM you the link" and "Available on Tata 1mg".
+Animated ad for Vitonnix Biotin sublingual spray in plum and magenta. Capsules rain down under the words "Still
+swallowing biotin pills?", then a big capsule cracks into sparkles and a spray mist appears with "Here's the glow-up".
+The camera pulls back to reveal the Vitonnix Biotin bottle on a glossy plum pedestal, labelled "Sublingual oral spray"
+and "Lychee and mint flavour". Then "1 spray under your tongue, done", a counter rolling up to "9X better absorption",
+a smiling woman with hair, skin and nails icons, the bottle with "No added sugar" and "Non-GMO" badges, FSSAI, GMP and
+ISO FSSC 22000 badges, and cards for "Created by 3 doctors" and "Developed in the UK, Sublispray technology". It ends
+on the bottle with "Comment BIOTIN and we'll DM you the link" and "Available on Tata 1mg".
 
 ## Notes for the client
 
@@ -41,7 +42,7 @@ for Sublispray technology. It ends on "Comment BIOTIN and we'll DM you the link"
   effective". Please confirm which figure is right and that you hold the evidence for it: ASCI can ask for
   substantiation of comparative claims in India. If it changes, the voiceover line needs a re-record.
 - The benefit wording follows your pack ("Supports radiant skin & hair") and creatives ("hair, skin and nails").
-- All imagery is yours (packshot, mist shot, lifestyle photo, icons, badges). Please confirm you hold the rights to
+- All imagery is yours (the pedestal hero shot, packshot, mist shot, lifestyle photo, icons, badges). Please confirm you hold the rights to
   use the lifestyle photo in paid and organic social video.
 - Music is an original track composed for this reel, so there is nothing to license or credit. Sound effects are
   royalty-free (Pixabay licence).

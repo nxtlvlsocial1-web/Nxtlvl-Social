@@ -31,9 +31,12 @@ LINES = json.load(open(os.path.join(ROOT, "voice", "lines.json")))["lines"]
 WORDS = json.load(open(os.path.join(B, "words.json")))
 VOICE_END = LINES[-1]["end"]
 DUR = round(VOICE_END + 2.0, 2)
-FPS = 30
+FPS = 60
+XF = .32                                  # crossfade overlap between scenes
+M = 76                                    # side margin for every scene; ink of big type lands on it
 AUDIO = "assets/audio/mix.wav" if os.path.exists(os.path.join(ROOT, "assets", "audio", "mix.wav")) else "assets/audio/voice.wav"
-PACK_AR = 404 / 1126                      # packshot card aspect (w/h)
+PACK_AR = 284 / 928                       # bottle cutout aspect (w/h)
+HB = json.load(open(os.path.join(ROOT, "assets", "img", "bottle-on-hero.json")))   # bottle box on the hero plate
 rnd = random.Random(42)
 
 C = dict(PLUM="#890045", DEEP="#5a0230", DARK="#33001b", MAG="#c2187a", PINK="#ff5fae", BLUSH="#fff0f6",
@@ -72,15 +75,15 @@ T = {
 json.dump({"l": L, "e": E, **T}, open(os.path.join(B, "cues.json"), "w"), indent=0)
 
 # scene windows; the hook clip runs under the glow-up so the capsule can crack across the cut
-W1 = (0, L[2] + .05)
-W_MIST1 = (L[1] - .06, L[2] + .05)
-W3 = (L[2], L[3])
-W4 = (L[3], L[4])
-W5 = (L[4], L[5])
-W6 = (L[5], L[6])
-W7 = (L[6], L[7])
-W8 = (L[7], L[8])
-W9 = (L[8], L[9])
+W1 = (0, L[2] + XF)
+W_MIST1 = (L[1] - .06, L[2] + XF)
+W3 = (L[2], L[3] + XF)
+W4 = (L[3], L[4] + XF)
+W5 = (L[4], L[5] + XF)
+W6 = (L[5], L[6] + XF)
+W7 = (L[6], L[7] + XF)
+W8 = (L[7], L[8] + XF)
+W9 = (L[8], L[9] + XF)
 W10 = (L[9], DUR)
 
 tw = []
@@ -121,8 +124,21 @@ def star(cls, x, y, size, color):
 
 def pack(id_, x, y, h, extra=""):
     w = round(h * PACK_AR)
-    return (f'<div id="{id_}" class="pack in {extra}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px">'
-            f'<img src="assets/img/packshot.png" alt="" width="{w}" height="{h}"><i class="sheen"></i></div>')
+    pw, ph = round(w * 2.1), round(w * .52)
+    return (f'<div id="{id_}-ped" class="ped in" style="left:{round(x + w / 2 - pw / 2)}px;top:{round(y + h - ph * .55)}px;width:{pw}px;height:{ph}px"></div>'
+            f'<div id="{id_}" class="pack in {extra}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px">'
+            f'<img src="assets/img/bottle.png" alt="" width="{w}" height="{h}"><i class="sheen"></i></div>')
+
+
+def pack_in(id_, t, frm=None):
+    fromTo(f"#{id_}-ped", {"opacity": 0, "scaleX": .3, "scaleY": .3}, {"opacity": 1, "scaleX": 1, "scaleY": 1}, t, .45, "back.out(1.8)")
+    fromTo(f"#{id_}", frm or {"opacity": 0, "y": -260, "scale": .9}, {"opacity": 1, "y": 0, "scale": 1, "rotation": 0}, t + .08, .55, "back.out(1.6)")
+    fromTo(f"#{id_} .sheen", {"x": -200}, {"x": 400}, t + .6, .7, "power2.inOut")
+
+
+def plate(id_, extra_style=""):
+    return (f'<div id="{id_}" class="plate" style="{extra_style}"><img src="assets/img/hero.jpg" alt="" width="1080" height="1920">'
+            f'<div class="sweepbox" style="left:{HB["left"]}px;top:{HB["top"]}px;width:{HB["width"]}px;height:{HB["height"]}px"><i class="sweep" id="{id_}-sw"></i></div></div>')
 
 
 def capsule(id_, x, y, w, h, cls="pl"):
@@ -191,7 +207,7 @@ for i in range(30):
     fromTo(f".bu{i}", {"x": 0, "y": 0, "scale": .2, "opacity": 1, "rotation": 0},
            {"x": round(math.cos(a) * dist), "y": round(math.sin(a) * dist), "scale": rnd.uniform(.8, 1.6), "opacity": 0, "rotation": 180},
            L[1] + .01, rnd.uniform(.6, 1.0), "expo.out")
-flash(L[1] + .01, .9, .35)
+flash(L[1] + .01, .7, .3)
 
 # 2 glow-up (inside the hook clip, over the mist photo)
 fromTo("#mistw", {"opacity": 0, "scale": 1.18}, {"opacity": 1, "scale": 1}, L[1] - .02, .5, "power2.out")
@@ -204,21 +220,21 @@ for i, (x, y, s) in enumerate([(150, 470, 60), (880, 420, 44), (820, 690, 70), (
 to("#glowup", {"opacity": 0, "scale": 1.25}, L[2] - .14, .16, "power2.in")
 
 # ------------------------------------------------------------------ 3 reveal (the drop)
-flash(L[2] - .01, 1.0, .4)
-fromTo("#r-glow", {"opacity": 0, "scale": .4}, {"opacity": 1, "scale": 1}, L[2], .6, "expo.out")
-fromTo("#r-glow", {"rotation": 0}, {"rotation": 40}, L[2], W3[1] - W3[0], "none")
-fromTo("#p3", {"opacity": 1, "y": 900, "rotation": -10}, {"y": 0, "rotation": 0}, L[2], .6, "back.out(1.3)")
-fromTo("#p3 .sheen", {"x": -260}, {"x": 520}, L[2] + .45, .7, "power2.inOut")
-fromTo("#r-brand", {"opacity": 0, "scaleX": 1.6, "x": -30}, {"opacity": 1, "scaleX": 1, "x": 0}, T["vitonnix"], .5, "power3.out")
+flash(L[2] - .01, .6, .32)
+fromTo("#hero", {"scale": 1.5, "filter": "brightness(.45)"}, {"scale": 1.0, "filter": "brightness(1)"}, L[2], .95, "expo.out")
+fromTo("#hero", {"scale": 1.0}, {"scale": 1.05}, L[2] + .95, W3[1] - W3[0] - .95, "none")
+fromTo("#hero-sw", {"x": -220}, {"x": 420}, L[2] + .55, .8, "power2.inOut")
+fromTo("#r-brand", {"opacity": 0, "scaleX": 1.6}, {"opacity": 1, "scaleX": 1}, T["vitonnix"], .5, "power3.out")
 fromTo("#r-name", {"opacity": 0, "scale": 1.5, "filter": "blur(14px)"}, {"opacity": 1, "scale": 1, "filter": "blur(0px)"}, T["biotin2"] - .04, .4, "expo.out")
-fromTo("#r-sub", {"opacity": 0, "x": 60}, {"opacity": 1, "x": 0}, T["biotin2"] + .1, .35, "power3.out")
-fromTo("#r-chip", {"opacity": 0, "y": 40}, {"opacity": 1, "y": 0}, T["biotin2"] + .2, .35, "back.out(2)")
+for k, t in ((0, L[2] + .5), (1, L[2] + .68)):
+    fromTo(f"#cd{k}", {"opacity": 0, "scale": 0}, {"opacity": 1, "scale": 1}, t, .25, "back.out(3)")
+    fromTo(f"#cline{k}", {"scaleX": 0}, {"scaleX": 1}, t + .08, .3, "power3.out")
+    fromTo(f"#clab{k}", {"opacity": 0, "y": 20}, {"opacity": 1, "y": 0}, t + .2, .3, "power3.out")
 for i in range(6):
-    fromTo(f".os{i}", {"opacity": 0, "scale": 0}, {"opacity": 1, "scale": 1}, L[2] + .3 + .07 * i, .3, "back.out(3)")
+    fromTo(f".os{i}", {"opacity": 0, "scale": 0}, {"opacity": 1, "scale": 1}, L[2] + .55 + .07 * i, .3, "back.out(3)")
 fromTo("#orbit", {"rotation": 0}, {"rotation": 60}, L[2], W3[1] - W3[0], "none")
 
 # ------------------------------------------------------------------ 4 one spray
-flash(L[3] - .01, .5, .25, "p")
 fromTo("#mist2", {"scale": 1.0, "x": 0}, {"scale": 1.1, "x": -30}, L[3], W4[1] - W4[0], "power1.out")
 spray = []
 for i in range(26):
@@ -234,11 +250,9 @@ fromTo("#onespray", {"opacity": 0, "x": -40}, {"opacity": 1, "x": 0}, T["spray"]
 fromTo("#onespray", {"clipPath": "inset(0% 100% 0% 0%)"}, {"clipPath": "inset(0% 0% 0% 0%)"}, T["spray"] - .02, .45, "power2.out")
 fromTo("#tongue", {"opacity": 0, "x": -80}, {"opacity": 1, "x": 0}, T["under"] - .02, .3, "back.out(2)")
 fromTo("#done", {"opacity": 0, "scale": 2.6, "rotation": -18}, {"opacity": 1, "scale": 1, "rotation": -7}, T["done"], .26, "expo.out")
-flash(T["done"] + .02, .35, .25)
+flash(T["done"] + .02, .22, .25)
 
 # ------------------------------------------------------------------ 5 stat: 9X
-flash(L[4] - .01, .9, .3)
-fromTo("#s5in", {"clipPath": "circle(0% at 50% 45%)"}, {"clipPath": "circle(80% at 50% 45%)"}, L[4] - .02, .5, "power3.out")
 pop("#finemist", T["fine"] - .04, .3, y=-30, scale=.9)
 roll_start, roll_end = L[4] + .25, T["nine"] + .08
 fromTo("#reel", {"yPercent": 0}, {"yPercent": -88.889}, roll_start, roll_end - roll_start, "power3.inOut")
@@ -248,12 +262,11 @@ fromTo("#ring", {"strokeDashoffset": 2262}, {"strokeDashoffset": 0}, roll_start,
 fromTo("#ringwrap", {"rotation": -90}, {"rotation": 30}, L[4], W5[1] - W5[0], "none")
 fromTo("#bettr", {"opacity": 0, "y": 50}, {"opacity": 1, "y": 0}, T["better"] - .05, .3, "back.out(2)")
 fromTo("#absorb", {"opacity": 0, "scaleX": 1.5}, {"opacity": 1, "scaleX": 1}, T["absorption"] - .04, .4, "power3.out")
-flash(T["nine"] + .08, .45, .3)
+flash(T["nine"] + .08, .3, .3)
 fromTo("#stat", {"scale": 1}, {"scale": 1.06}, T["nine"] + .08, .1, "power2.out")
 fromTo("#stat", {"scale": 1.06}, {"scale": 1}, T["nine"] + .18, .25, "power2.inOut")
 
 # ------------------------------------------------------------------ 6 hair, skin, nails
-flash(L[5] - .01, .7, .3, "p")
 fromTo("#arch", {"opacity": 0, "y": 260, "scale": .9}, {"opacity": 1, "y": 0, "scale": 1}, L[5] - .02, .5, "power3.out")
 fromTo("#arch img", {"scale": 1.18}, {"scale": 1.02}, L[5], W6[1] - W6[0], "power1.out")
 pop("#madefor", T["made"] - .04, .3, y=-30)
@@ -263,9 +276,7 @@ for i, k in enumerate(("hair", "skin", "nails")):
     fromTo(f"#il{i}", {"opacity": 0, "y": 30}, {"opacity": 1, "y": 0}, T[k] + .12, .3, "power3.out")
 
 # ------------------------------------------------------------------ 7 flavour + no added sugar
-flash(L[6] - .01, .6, .3)
-fromTo("#p7", {"opacity": 1, "y": 700, "rotation": 8}, {"y": 0, "rotation": 0}, L[6] - .02, .55, "back.out(1.4)")
-fromTo("#p7 .sheen", {"x": -260}, {"x": 520}, L[6] + .5, .7, "power2.inOut")
+pack_in("p7", L[6] + .02)
 fromTo("#fl-a", {"opacity": 0, "y": -40}, {"opacity": 1, "y": 0}, T["lychee"] - .04, .35, "back.out(2)")
 fromTo("#fl-a", {"clipPath": "inset(0% 100% 0% 0%)"}, {"clipPath": "inset(0% 0% 0% 0%)"}, T["lychee"] - .04, .6, "power2.out")
 pop("#fl-b", T["flavour"] - .04, .3, y=30)
@@ -279,16 +290,14 @@ pop("#nl1", T["no"] + .15, .3, y=24)
 pop("#nl0", T["sugar"] + .05, .3, y=24)
 
 # ------------------------------------------------------------------ 8 certified
-flash(L[7] - .01, .9, .3)
 fromTo("#cert-h", {"opacity": 0, "x": -120}, {"opacity": 1, "x": 0}, L[7], .4, "power3.out")
 fromTo("#tick", {"strokeDashoffset": 120}, {"strokeDashoffset": 0}, T["certified"] + .05, .35, "power2.out")
 for i, t in enumerate((T["fssai"], T["gmp"], T["certified"] - .05)):
     fromTo(f"#cb{i}", {"opacity": 0, "scale": 2.6, "rotation": -30 + 25 * i}, {"opacity": 1, "scale": 1, "rotation": -4 + 4 * i}, t - .02, .26, "expo.out")
     fromTo(f"#cl{i}", {"opacity": 0, "y": 24}, {"opacity": 1, "y": 0}, t + .18, .3, "power3.out")
-    flash(t + .02, .22, .2, "p")
+    flash(t + .02, .14, .2, "p")
 
 # ------------------------------------------------------------------ 9 doctors + UK
-flash(L[8] - .01, .8, .3)
 fromTo("#doc", {"opacity": 0, "x": -300, "rotation": -6}, {"opacity": 1, "x": 0, "rotation": -2}, T["created"] - .05, .45, "back.out(1.6)")
 for i in range(3):
     fromTo(f"#dr{i}", {"opacity": 0, "scale": 0, "y": 40}, {"opacity": 1, "scale": 1, "y": 0}, T["three"] + .1 * i, .3, "back.out(3)")
@@ -296,13 +305,13 @@ fromTo("#uk", {"opacity": 0, "x": 300, "rotation": 6}, {"opacity": 1, "x": 0, "r
 for k in range(4):
     fromTo("#flag", {"skewY": -4 if k % 2 == 0 else 4}, {"skewY": 4 if k % 2 == 0 else -4}, T["uk"] + .3 + .45 * k, .45, "sine.inOut")
 pop("#uk-tech", T["sublispray"] - .02, .32, y=30)
-fromTo("#p9", {"opacity": 1, "y": 700, "rotation": -6}, {"y": 0, "rotation": -4}, L[8] + .15, .6, "back.out(1.3)")
+pack_in("p9", L[8] + .1)
 
 # ------------------------------------------------------------------ 10 CTA
-flash(L[9] - .01, 1.0, .35)
-fromTo("#c-glow", {"opacity": 0, "scale": .4}, {"opacity": 1, "scale": 1}, L[9], .6, "expo.out")
-fromTo("#p10", {"opacity": 1, "y": 800, "rotation": 10}, {"y": 0, "rotation": 4}, L[9] + .05, .6, "back.out(1.3)")
-fromTo("#p10 .sheen", {"x": -260}, {"x": 520}, L[9] + .7, .7, "power2.inOut")
+flash(L[9] - .01, .7, .4)
+fromTo("#hero2", {"scale": 1.06}, {"scale": .78}, L[9], 1.0, "expo.out")
+fromTo("#hero2", {"scale": .78}, {"scale": .8}, L[9] + 1.0, W10[1] - W10[0] - 1.0, "none")
+fromTo("#hero2-sw", {"x": -220}, {"x": 420}, L[9] + .9, .8, "power2.inOut")
 fromTo("#ctaa", {"opacity": 0, "y": 30}, {"opacity": 1, "y": 0}, T["comment"] - .05, .3, "back.out(2)")
 fromTo("#kw", {"opacity": 0, "scale": .5}, {"opacity": 1, "scale": 1}, T["biotin3"] - .06, .3, "back.out(2.2)")
 for i in range(6):
@@ -310,13 +319,34 @@ for i in range(6):
 tw.append(f'tl.fromTo(".cur",{{"opacity":1}},{{"opacity":0,"duration":0.22,"yoyo":true,"repeat":13,"ease":"steps(1)","immediateRender":false}},{T["biotin3"]:.3f});')
 fromTo("#ctab", {"opacity": 0, "y": 30}, {"opacity": 1, "y": 0}, T["dm"] - .12, .3, "back.out(2)")
 fromTo("#tag", {"opacity": 0, "scale": .3, "rotation": 20}, {"opacity": 1, "scale": 1, "rotation": -5}, T["link"] - .1, .4, "back.out(2.4)")
-fromTo("#wm", {"opacity": 0, "y": 40}, {"opacity": 1, "y": 0}, T["link"] - .2, .45, "power3.out")
 fromTo("#kw", {"scale": 1}, {"scale": .94}, VOICE_END + .5, .1, "power2.out")
 fromTo("#kw", {"scale": .94}, {"scale": 1}, VOICE_END + .6, .2, "back.out(3)")
 for i in range(6):
     fromTo(f".cs{i}", {"opacity": 0, "scale": 0}, {"opacity": 1, "scale": 1}, L[9] + .4 + .1 * i, .3, "back.out(3)")
 fromTo("#corbit", {"rotation": 0}, {"rotation": 50}, L[9], W10[1] - W10[0], "none")
 fromTo(".prog i", {"scaleX": 0}, {"scaleX": 1}, 0, DUR, "none")
+for a, b in ((L[2], L[3]), (L[9], None)):          # the brand chip steps aside when the title or CTA owns the top
+    to(".brand", {"opacity": 0}, a - .05, .2, "power2.out")
+    if b:
+        to(".brand", {"opacity": 1}, b, .3, "power2.out")
+
+# ------------------------------------------------------------------ transitions and camera drift
+STYLE = {
+    "zoom": ({"scale": 1.14, "opacity": 0, "filter": "blur(16px)"}, {"scale": .88, "opacity": 0, "filter": "blur(16px)"}, "power3.out", .42),
+    "whip": ({"x": -420, "opacity": 0, "filter": "blur(20px)"}, {"x": 420, "opacity": 0, "filter": "blur(20px)"}, "power3.out", .38),
+    "rise": ({"y": -360, "opacity": 0, "filter": "blur(14px)"}, {"y": 420, "opacity": 0, "filter": "blur(14px)"}, "power3.out", .42),
+    "punch": ({"scale": .86, "opacity": 0, "filter": "blur(18px)"}, {"scale": 1.3, "opacity": 0, "filter": "blur(24px)"}, "expo.out", .5),
+}
+REST = {"x": 0, "y": 0, "scale": 1, "opacity": 1, "filter": "blur(0px)"}
+for t, outs, inn, style in ((L[2], ("s1", "s-mist1"), "s3", "punch"), (L[3], ("s3",), "s4", "whip"), (L[4], ("s4",), "s5", "zoom"),
+                            (L[5], ("s5",), "s6", "rise"), (L[6], ("s6",), "s7", "zoom"), (L[7], ("s7",), "s8", "whip"),
+                            (L[8], ("s8",), "s9", "rise"), (L[9], ("s9",), "s10", "punch")):
+    o, i, ease, d = STYLE[style]
+    for out in outs:
+        fromTo(f"#{out}-w", {k: REST[k] for k in o}, o, t, XF, "power2.in")
+    fromTo(f"#{inn}-w", i, {k: REST[k] for k in i}, t, d, ease)
+for sid, (a, b) in (("s1", W1), ("s3", W3), ("s4", W4), ("s5", W5), ("s6", W6), ("s7", W7), ("s8", W8), ("s9", W9), ("s10", W10)):
+    fromTo(f"#{sid}-c", {"scale": 1}, {"scale": 1.03}, a, b - a, "none")
 
 # ------------------------------------------------------------------ captions
 CW = []
@@ -340,7 +370,7 @@ for w in WORDS:
     CW.append(w)
 caps_html = []
 for ln in LINES:
-    if ln["line"] == 10:                       # the CTA card shows these exact words
+    if ln["line"] in (3, 10):                  # the title (3) and the CTA card (10) show these exact words
         continue
     ws = [w for w in CW if w["line"] == ln["line"]]
     chunks, cur = [], []
@@ -376,8 +406,10 @@ UKFLAG = ('<svg viewBox="0 0 60 30" width="300" height="150"><clipPath id="ukc-s
 LEAF = '<svg viewBox="0 0 100 60" width="100%" height="100%"><path d="M2 30C20 2 70 -4 98 30 70 64 20 58 2 30Z" fill="#3fae6a"/><path d="M6 30C40 26 70 28 96 30" stroke="#bff0cf" stroke-width="3" fill="none"/></svg>'
 
 
-def clip(id_, win, track, inner, z, extra=""):
+def clip(id_, win, track, inner, z, extra="", scene=False):
     s, e = win
+    if scene:
+        inner = f'<div class="scn" id="{id_}-w"><div class="cam" id="{id_}-c">{inner}</div></div>'
     return (f'<div id="{id_}" class="clip" style="z-index:{z}" data-start="{s:.3f}" data-duration="{e - s:.3f}" '
             f'data-track-index="{track}" data-layout-allow-overflow {extra}>{inner}</div>')
 
@@ -387,7 +419,7 @@ bg_inner = f'''<div class="base"></div><div class="glow" id="g1"></div><div clas
 
 s1_inner = f'''<div id="rain">{"".join(rain)}</div>
 <div id="hook"><div class="h1" id="h1a">Still</div><div class="h1" id="h1b">swallowing</div><div class="script in" id="h1c">biotin pills?</div></div>
-<div id="big"><b class="hl"></b><b class="hr"></b><i class="shine"></i>
+<div id="big"><b class="hl" data-hf-motion-blur></b><b class="hr" data-hf-motion-blur></b><i class="shine"></i>
 <svg id="crackw" viewBox="0 0 60 180" width="60" height="180"><path id="crack" d="M30 0 L22 30 L36 58 L20 92 L38 124 L24 152 L32 180" stroke="#2a0016" stroke-width="5" fill="none" stroke-dasharray="300" stroke-dashoffset="300" stroke-linejoin="round"/></svg></div>
 <div id="burst">{"".join(burst)}</div>
 <div id="glowup"><div class="eyebrow light" id="g2a">HERE'S THE</div><div class="script huge" id="g2b">glow-up</div>
@@ -396,15 +428,18 @@ s1_inner = f'''<div id="rain">{"".join(rain)}</div>
 mist1_inner = '<div id="mistw" class="photo in"><img src="assets/img/mist.jpg" alt="" width="1350" height="1350"></div><div class="vign"></div>'
 
 orbit = "".join(star(f"os os{i}", round(260 + 250 * math.cos(i / 6 * 2 * math.pi) - 15), round(250 + 250 * math.sin(i / 6 * 2 * math.pi) - 15), [30, 22, 36, 18, 28, 24][i], [C["GOLD"], C["BLUSH"], C["PINK"]][i % 3]) for i in range(6))
-s3_inner = f'''<div id="r-glow" class="halo" style="left:-40px;top:420px;width:640px;height:640px"></div>
-<div id="orbit" style="left:30px;top:500px">{orbit}</div>
-{pack("p3", 140, 400, 900)}
-<div id="r-title"><div id="r-brand" class="in">VITONNIX</div><div id="r-name" class="in">Biotin</div>
-<div id="r-sub" class="in">Sublingual oral spray</div><div id="r-chip" class="chip in">Lychee &amp; mint</div></div>'''
+BC = (HB["left"] + HB["width"] / 2, HB["top"] + HB["height"] * .5)      # bottle centre on the plate
+s3_inner = f'''{plate("hero", "transform-origin:" + f"{BC[0] / 10.8:.1f}% {BC[1] / 19.2:.1f}%")}<div class="vtop"></div>
+<div id="orbit" style="left:{BC[0] - 260:.0f}px;top:{BC[1] - 250:.0f}px">{orbit}</div>
+<div id="r-title"><div id="r-brand" class="in">VITONNIX</div><div id="r-name" class="in">Biotin</div></div>
+<div class="cdot in" id="cd0" style="left:418px;top:938px"></div><div class="cline" id="cline0" style="left:{M}px;top:948px;width:{430 - M}px;transform-origin:100% 50%"></div>
+<div class="clab in" id="clab0" style="left:{M}px;top:820px"><span class="ci">Sublingual</span><span class="cs">ORAL SPRAY</span></div>
+<div class="cdot in" id="cd1" style="left:650px;top:1158px"></div><div class="cline" id="cline1" style="left:660px;top:1168px;width:{1080 - M - 660}px;transform-origin:0 50%"></div>
+<div class="clab in r" id="clab1" style="right:{M}px;top:1040px"><span class="ci">Lychee &amp; mint</span><span class="cs">FLAVOUR</span></div>'''
 
 s4_inner = f'''<div id="mist2" class="photo"><img src="assets/img/mist.jpg" alt="" width="1350" height="1350"></div><div class="vign"></div>
 <div id="spray">{"".join(spray)}</div>
-<div id="one" class="in">1</div><div id="onespray" class="script in">spray</div>
+<div id="one" class="in" data-hf-motion-blur>1</div><div id="onespray" class="script in">spray</div>
 <div id="tongue" class="eyebrow in">UNDER YOUR TONGUE</div><div id="done" class="in">Done.</div>'''
 
 digits = "".join(f"<b>{d}</b>" for d in range(1, 10))
@@ -412,7 +447,7 @@ s5_inner = f'''<div id="s5in"><div class="halo" style="left:90px;top:380px;width
 <div id="finemist" class="script mid in">A fine mist for</div>
 <div id="ringwrap"><svg viewBox="0 0 760 760" width="760" height="760"><circle cx="380" cy="380" r="360" stroke="rgba(255,240,246,.14)" stroke-width="10" fill="none"/>
 <circle id="ring" cx="380" cy="380" r="360" stroke="{C["PINK"]}" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="2262" stroke-dashoffset="2262"/></svg></div>
-<div id="stat"><span id="digit" class="in"><span id="reel">{digits}</span></span><span id="xmark" class="in">X</span></div>
+<div id="stat"><span id="digit" class="in"><span id="reel" data-hf-motion-blur>{digits}</span></span><span id="xmark" class="in">X</span></div>
 <div id="bettr" class="in">better</div><div id="absorb" class="in">ABSORPTION</div></div>'''
 
 icons = "".join(f'<div class="ic in" id="ic{i}" style="left:{x}px"><img src="assets/img/{n}.png" alt="" width="210" height="210"></div>'
@@ -423,15 +458,15 @@ s6_inner = f'''<div id="arch" class="in"><img src="assets/img/glow.jpg" alt="" w
 
 s7_inner = f'''<div class="halo" style="left:160px;top:420px;width:760px;height:760px"></div>
 <div id="fl-title"><div id="fl-a" class="script mid in">Lychee &amp; mint</div><div id="fl-b" class="eyebrow light in">FLAVOUR</div></div>
-{pack("p7", 410, 560, 660)}
+{pack("p7", 432, 500, 700)}
 <div id="flav"><div class="lychee in" id="ly0" style="left:90px;top:620px;width:190px;height:190px"></div>
 <div class="lychee in" id="ly1" style="left:200px;top:880px;width:130px;height:130px"></div>
 <div class="leaf in" id="mi0" style="left:760px;top:560px;width:220px;height:132px">{LEAF}</div>
 <div class="leaf in" id="mi1" style="left:820px;top:820px;width:170px;height:102px">{LEAF}</div>
 <div class="leaf in" id="mi2" style="left:700px;top:1000px;width:140px;height:84px">{LEAF}</div></div>
-<div class="badge in" id="bgmo" style="left:60px;top:700px"><img src="assets/img/b-nongmo.png" alt="" width="270" height="270"></div>
-<div class="badge in" id="bsug" style="left:750px;top:700px"><img src="assets/img/b-sugar.png" alt="" width="270" height="270"></div>
-<div class="blab in" id="nl0" style="left:30px;top:990px">Non-GMO</div><div class="blab in" id="nl1" style="left:720px;top:990px">No added sugar</div>'''
+<div class="badge in" id="bgmo" style="left:{M}px;top:700px"><img src="assets/img/b-nongmo.png" alt="" width="270" height="270"></div>
+<div class="badge in" id="bsug" style="left:{1080 - M - 270}px;top:700px"><img src="assets/img/b-sugar.png" alt="" width="270" height="270"></div>
+<div class="blab sm in" id="nl0" style="left:{M + 135 - 165}px;top:990px">Non-GMO</div><div class="blab sm in" id="nl1" style="left:{1080 - M - 135 - 165}px;top:990px">No added sugar</div>'''
 
 s8_inner = f'''<div class="halo" style="left:90px;top:520px;width:900px;height:900px"></div>
 <div id="cert-h" class="in"><span class="serif-it">Certified</span><svg viewBox="0 0 100 80" width="110" height="88"><path id="tick" d="M8 42 L36 70 L92 10" stroke="{C["PINK"]}" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="120" stroke-dashoffset="120"/></svg></div>
@@ -442,21 +477,22 @@ s8_inner = f'''<div class="halo" style="left:90px;top:520px;width:900px;height:9
 <div class="badge in" id="cb2" style="left:375px;top:900px"><img src="assets/img/b-fssc.png" alt="" width="330" height="330"></div>
 <div class="blab in" id="cl2" style="left:240px;top:1240px;width:600px">ISO FSSC 22000 v6</div>'''
 
-s9_inner = f'''{pack("p9", 90, 760, 540)}
+s9_inner = f'''{pack("p9", M + 91, 750, 540)}
 <div id="doc" class="card in"><span class="k">CREATED BY</span><span class="v">3 doctors</span>
 <span class="drs"><i id="dr0" class="in"></i><i id="dr1" class="in"></i><i id="dr2" class="in"></i></span></div>
 <div id="uk" class="card r in"><div id="flag">{UKFLAG}</div><span class="v small">Developed in the UK</span>
 <span id="uk-tech" class="k in">SUBLISPRAY® TECHNOLOGY</span></div>'''
 
 cstars = "".join(star(f"cs cs{i}", round(200 + 230 * math.cos(i / 6 * 2 * math.pi) - 14), round(230 + 230 * math.sin(i / 6 * 2 * math.pi) - 14), [28, 20, 34, 18, 26, 22][i], [C["GOLD"], C["BLUSH"], C["PINK"]][i % 3]) for i in range(6))
-s10_inner = f'''<div id="c-glow" class="halo" style="left:180px;top:620px;width:720px;height:720px"></div>
-<div id="corbit" style="left:340px;top:750px">{cstars}</div>
-{pack("p10", 437, 700, 580)}
+s10_inner = f'''{plate("hero2", "transform-origin:50% 100%")}<div class="vtop"></div>
+<div id="corbit" style="left:342px;top:984px">{cstars}</div>
 <div id="cta"><div id="ctaa" class="eyebrow light in">COMMENT</div>
 <div id="kw" class="in"><span class="ty ty0">B</span><span class="ty ty1">I</span><span class="ty ty2">O</span><span class="ty ty3">T</span><span class="ty ty4">I</span><span class="ty ty5">N</span><i class="cur"></i></div>
 <div id="ctab" class="in">and we'll DM you the link</div></div>
-<div id="tag" class="in"><span class="k">AVAILABLE ON</span><span class="v">Tata 1mg</span></div>
-<div id="wm" class="in"><span class="serif-it">Vitonnix</span> <span class="script">Future of Vitamins</span></div>'''
+<div id="tag" class="in"><span class="k">AVAILABLE ON</span><span class="v">Tata 1mg</span></div>'''
+
+_mb = open(os.path.join(ROOT, "compositions", "components", "motion-blur.html")).read()
+MB = _mb[_mb.index("<script>"):_mb.rindex("</script>") + len("</script>")]
 
 CSS = Template(r"""
 @font-face { font-family: "Fraunces"; font-weight: 600; src: url("assets/fonts/fraunces-600.ttf"); }
@@ -486,15 +522,15 @@ body { font-family: "Montserrat", sans-serif; color: ${BLUSH}; }
 .star svg { display: block; filter: drop-shadow(0 0 10px rgba(255,180,220,.8)); }
 .grain { position: absolute; inset: 0; opacity: .13; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='240' height='240' filter='url(%23n)' opacity='.9'/></svg>"); }
-.top { position: absolute; left: 60px; right: 60px; top: 262px; display: flex; align-items: center; gap: 22px; }
+.top { position: absolute; left: ${M}px; right: ${M}px; top: 262px; display: flex; align-items: center; gap: 22px; }
 .brand { font-weight: 800; font-size: 28px; letter-spacing: 6px; color: ${PLUM}; padding: 8px 22px; border-radius: 24px; background: ${BLUSH}; box-shadow: 0 10px 30px rgba(20,0,10,.35); }
 .prog { flex: 1; height: 6px; border-radius: 3px; background: rgba(255,240,246,.18); overflow: hidden; }
 .prog i { display: block; height: 100%; background: ${PINK}; transform-origin: 0 50%; }
 /* type system */
-.h1 { position: absolute; left: 70px; font-family: "Fraunces"; font-weight: 900; font-size: 150px; line-height: 1; letter-spacing: -4px; color: ${BLUSH}; text-shadow: 0 10px 40px rgba(30,0,15,.55); }
+.h1 { position: absolute; left: ${H1L}px; font-family: "Fraunces"; font-weight: 900; font-size: 150px; line-height: 1; letter-spacing: -4px; color: ${BLUSH}; text-shadow: 0 10px 40px rgba(30,0,15,.55); }
 #h1a { top: 320px; } #h1b { top: 470px; }
 .script { font-family: "Great Vibes"; font-weight: 400; color: ${PINK}; line-height: 1.1; text-shadow: 0 0 30px rgba(255,95,174,.55); }
-#h1c { position: absolute; left: 90px; top: 650px; font-size: 168px; }
+#h1c { position: absolute; left: ${H1CL}px; top: 650px; font-size: 168px; }
 .script.huge { font-size: 290px; color: ${BLUSH}; text-shadow: 0 6px 30px rgba(51,0,27,.7), 0 0 50px rgba(255,95,174,.9), 0 0 120px rgba(255,95,174,.6); }
 .script.mid { font-size: 150px; }
 .eyebrow { display: inline-block; font-weight: 800; font-size: 38px; letter-spacing: 8px; padding: 10px 28px; border-radius: 40px; background: ${BLUSH}; color: ${PLUM}; }
@@ -525,23 +561,44 @@ body { font-family: "Montserrat", sans-serif; color: ${BLUSH}; }
 .photo img { display: block; width: 100%; height: 100%;
   -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%); }
 .vign { position: absolute; inset: 0; background: radial-gradient(900px 1300px at 50% 50%, rgba(51,0,27,0) 55%, rgba(51,0,27,.75) 100%); }
-/* packshot */
-.pack { position: absolute; transform-origin: 50% 80%; filter: drop-shadow(0 40px 60px rgba(20,0,10,.55)); overflow: hidden; border-radius: 999px; }
+/* scene wrappers */
+.scn, .cam { position: absolute; inset: 0; }
+.cam { transform-origin: 50% 50%; }
+/* hero plate */
+.plate { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+.plate img { display: block; width: 100%; height: 100%; }
+#hero2 { -webkit-mask-image: radial-gradient(50% 52% at 50% 52%, #000 58%, transparent 100%); mask-image: radial-gradient(50% 52% at 50% 52%, #000 58%, transparent 100%); }
+.sweepbox { position: absolute; overflow: hidden; -webkit-mask-image: url("assets/img/bottle.png"); mask-image: url("assets/img/bottle.png");
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
+.sweep { position: absolute; top: -5%; left: 0; width: 140px; height: 110%; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.7), rgba(255,255,255,0)); }
+.vtop { position: absolute; left: 0; right: 0; top: 0; height: 640px; background: linear-gradient(180deg, rgba(51,0,27,.55), rgba(51,0,27,0)); }
+.cdot { position: absolute; width: 20px; height: 20px; border-radius: 50%; background: ${BLUSH}; box-shadow: 0 0 0 6px rgba(255,240,246,.25); }
+.cline { position: absolute; height: 0; border-top: 3px dashed rgba(255,240,246,.85); }
+.clab { position: absolute; display: flex; flex-direction: column; gap: 2px; color: ${BLUSH}; text-shadow: 0 4px 18px rgba(30,0,15,.6); }
+.clab.r { align-items: flex-end; text-align: right; }
+.clab .ci { font-family: "Fraunces"; font-style: italic; font-weight: 700; font-size: 40px; line-height: 1.05; }
+.clab .cs { font-weight: 800; font-size: 28px; letter-spacing: 6px; color: ${PINK}; }
+/* bottle cutout on a pedestal */
+.ped { position: absolute; border-radius: 50%; transform-origin: 50% 50%;
+  background: radial-gradient(ellipse at 50% 35%, #e0338f 0%, ${PLUM} 45%, #4a0024 100%);
+  box-shadow: inset 0 6px 14px rgba(255,190,225,.55), inset 0 -10px 18px rgba(30,0,15,.6), 0 40px 60px rgba(20,0,10,.55); }
+.pack { position: absolute; transform-origin: 50% 90%; -webkit-mask-image: url("assets/img/bottle.png"); mask-image: url("assets/img/bottle.png");
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
 .pack img { display: block; width: 100%; height: 100%; }
 .sheen { position: absolute; top: -10%; left: 0; width: 120px; height: 120%; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.65), rgba(255,255,255,0)); transform-origin: 50% 50%; }
 /* 3 reveal */
 #orbit, #corbit { position: absolute; width: 0; height: 0; }
-#r-title { position: absolute; left: 510px; right: 50px; top: 520px; }
-#r-brand { transform-origin: 0 50%; font-weight: 700; font-size: 46px; letter-spacing: 12px; color: ${BLUSH}; }
-#r-name { font-family: "Fraunces"; font-style: italic; font-weight: 700; font-size: 165px; line-height: 1; color: ${PINK}; margin-top: 6px; text-shadow: 0 0 40px rgba(255,95,174,.5); transform-origin: 0 50%; }
+#r-title { position: absolute; left: 0; right: 0; top: 300px; text-align: center; }
+#r-brand { transform-origin: 50% 50%; font-weight: 700; font-size: 44px; letter-spacing: 14px; color: ${BLUSH}; }
+#r-name { font-family: "Fraunces"; font-style: italic; font-weight: 700; font-size: 150px; line-height: 1; color: ${PINK}; margin-top: 2px; text-shadow: 0 0 40px rgba(255,95,174,.55), 0 6px 24px rgba(30,0,15,.5); transform-origin: 50% 60%; }
 #r-sub { font-weight: 700; font-size: 40px; color: ${BLUSH}; margin-top: 28px; }
 #r-chip { margin-top: 30px; }
 /* 4 one spray */
 #spray { position: absolute; inset: 0; }
-#one { position: absolute; left: 60px; top: 300px; font-family: "Fraunces"; font-weight: 900; font-size: 560px; line-height: .9; color: ${BLUSH}; text-shadow: 0 20px 80px rgba(30,0,15,.6); transform-origin: 50% 60%; }
+#one { position: absolute; left: ${ONEL}px; top: 300px; font-family: "Fraunces"; font-weight: 900; font-size: 560px; line-height: .9; color: ${BLUSH}; text-shadow: 0 20px 80px rgba(30,0,15,.6); transform-origin: 50% 60%; }
 #onespray { position: absolute; left: 340px; top: 560px; font-size: 230px; color: ${BLUSH}; text-shadow: 0 0 40px rgba(255,95,174,.9); }
-#tongue { position: absolute; left: 70px; top: 860px; }
-#done { position: absolute; left: 80px; top: 1070px; padding: 6px 44px 18px; border-radius: 30px; background: ${PINK}; color: ${DARK};
+#tongue { position: absolute; left: ${M}px; top: 860px; }
+#done { position: absolute; left: ${M}px; top: 1070px; padding: 6px 44px 18px; border-radius: 30px; background: ${PINK}; color: ${DARK};
   font-family: "Fraunces"; font-style: italic; font-weight: 700; font-size: 128px; line-height: 1.1; box-shadow: 0 24px 70px rgba(255,95,174,.55); }
 /* 5 stat */
 #s5in { position: absolute; inset: 0; }
@@ -580,15 +637,16 @@ body { font-family: "Montserrat", sans-serif; color: ${BLUSH}; }
 #nosugar { position: absolute; left: 0; right: 0; width: max-content; margin: 0 auto; top: 1210px; }
 .chip.big { font-size: 40px; background: ${BLUSH}; color: ${PLUM}; border: 0; }
 /* 8 certified */
-#cert-h { position: absolute; left: 70px; top: 320px; display: flex; align-items: center; gap: 24px; font-size: 150px; line-height: 1.05; color: ${BLUSH}; }
+#cert-h { position: absolute; left: 0; right: 0; top: 320px; display: flex; justify-content: center; align-items: center; gap: 24px; font-size: 150px; line-height: 1.05; color: ${BLUSH}; }
 .blab { position: absolute; width: 330px; text-align: center; font-weight: 800; font-size: 40px; letter-spacing: 3px; color: ${BLUSH}; }
+.blab.sm { font-size: 32px; letter-spacing: 2px; }
 /* 9 doctors + UK */
 .card { position: absolute; padding: 28px 44px 34px; border-radius: 40px; background: ${BLUSH}; color: ${INK}; box-shadow: 0 30px 70px rgba(20,0,10,.55); }
-#doc { left: 70px; top: 330px; }
-#uk { right: 70px; top: 700px; text-align: right; display: flex; flex-direction: column; align-items: flex-end; }
+#doc { left: ${M}px; top: 330px; }
+#uk { right: ${M}px; top: 700px; text-align: right; display: flex; flex-direction: column; align-items: flex-end; }
 .card .k { display: block; font-weight: 800; font-size: 30px; letter-spacing: 6px; color: ${PLUM}; }
 .card .v { display: block; font-family: "Fraunces"; font-weight: 900; font-size: 116px; line-height: 1.04; letter-spacing: -3px; color: ${INK}; }
-.card .v.small { font-size: 54px; letter-spacing: -1px; margin: 18px 0 8px; }
+.card .v.small { font-size: 50px; letter-spacing: -1px; margin: 18px 0 8px; }
 #flag { width: 300px; height: 150px; border-radius: 14px; overflow: hidden; transform-origin: 0 50%; box-shadow: 0 10px 24px rgba(20,0,10,.3); }
 #flag svg { display: block; }
 .drs { display: flex; gap: 16px; margin-top: 16px; }
@@ -603,7 +661,7 @@ body { font-family: "Montserrat", sans-serif; color: ${BLUSH}; }
 .ty { display: inline-block; }
 .cur { display: inline-block; width: 12px; height: 132px; margin-left: 10px; vertical-align: -12px; border-radius: 6px; background: ${DARK}; }
 #ctab { display: inline-block; padding: 10px 30px 14px; border-radius: 30px; background: ${BLUSH}; color: ${PLUM}; font-weight: 800; font-size: 46px; }
-#tag { position: absolute; left: 640px; top: 980px; padding: 18px 34px 24px; border-radius: 28px; background: ${BLUSH}; border: 5px solid ${PLUM};
+#tag { position: absolute; right: ${M}px; top: 1100px; padding: 18px 34px 24px; border-radius: 28px; background: ${BLUSH}; border: 5px solid ${PLUM};
   box-shadow: 0 24px 60px rgba(20,0,10,.5); transform-origin: 20% 0; }
 #tag .k { display: block; font-weight: 800; font-size: 28px; letter-spacing: 5px; color: ${PLUM}; }
 #tag .v { display: block; font-family: "Fraunces"; font-weight: 900; font-size: 70px; line-height: 1.05; color: ${INK}; }
@@ -617,7 +675,7 @@ body { font-family: "Montserrat", sans-serif; color: ${BLUSH}; }
 #fx { z-index: 9; pointer-events: none; }
 #flash { position: absolute; inset: 0; background: #fff6fa; opacity: 0; }
 #flashp { position: absolute; inset: 0; background: ${PINK}; opacity: 0; mix-blend-mode: screen; }
-""").substitute(C)
+""").substitute(C, M=M, H1L=M - 5, H1CL=M - 7, ONEL=round(M - 17.5))
 
 html = f'''<!doctype html>
 <html lang="en" data-resolution="portrait">
@@ -626,21 +684,22 @@ html = f'''<!doctype html>
     <meta name="viewport" content="width=1080, height=1920" />
     <title>Vitonnix Biotin 9x16</title>
     <script src="assets/vendor/gsap.min.js"></script>
+    {MB}
     <style>{CSS}</style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="1080" data-height="1920">
       {clip("bg", (0, DUR), 0, bg_inner, 0, "data-layout-ignore")}
-      {clip("s-mist1", W_MIST1, 1, mist1_inner, 1)}
-      {clip("s1", W1, 2, s1_inner, 3)}
-      {clip("s3", W3, 2, s3_inner, 3)}
-      {clip("s4", W4, 2, s4_inner, 3)}
-      {clip("s5", W5, 2, s5_inner, 3)}
-      {clip("s6", W6, 2, s6_inner, 3)}
-      {clip("s7", W7, 2, s7_inner, 3)}
-      {clip("s8", W8, 2, s8_inner, 3)}
-      {clip("s9", W9, 2, s9_inner, 3)}
-      {clip("s10", W10, 2, s10_inner, 3)}
+      {clip("s-mist1", W_MIST1, 1, mist1_inner, 1, scene=True)}
+      {clip("s1", W1, 2, s1_inner, 3, scene=True)}
+      {clip("s3", W3, 2, s3_inner, 3, scene=True)}
+      {clip("s4", W4, 2, s4_inner, 3, scene=True)}
+      {clip("s5", W5, 2, s5_inner, 3, scene=True)}
+      {clip("s6", W6, 2, s6_inner, 3, scene=True)}
+      {clip("s7", W7, 2, s7_inner, 3, scene=True)}
+      {clip("s8", W8, 2, s8_inner, 3, scene=True)}
+      {clip("s9", W9, 2, s9_inner, 3, scene=True)}
+      {clip("s10", W10, 2, s10_inner, 3, scene=True)}
       {clip("ui", (0, DUR), 3, '<div class="top"><span class="brand">VITONNIX</span><span class="prog"><i></i></span></div>', 6)}
       {clip("caps", (0, DUR), 4, "".join(caps_html), 7)}
       {clip("fx", (0, DUR), 5, '<div id="flash"></div><div id="flashp"></div>', 9, "data-layout-ignore")}

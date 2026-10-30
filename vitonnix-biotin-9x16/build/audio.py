@@ -387,6 +387,7 @@ put(SFX, smp("whoosh-short"), L[3] - .08, .4)
 put(SFX, smp("pop"), T["one"], .5)
 put(SFX, hiss(.7, 1.0), T["spray"], .55)
 put(SFX, stamp(), T["done"], .7)
+put(SFX, smp("whoosh-short"), L[4] - .1, .4)
 # 9X roll: one tick per digit as the eased reel passes it (power3.inOut)
 r0, r1 = L[4] + .25, T["nine"] + .08
 ts = np.linspace(0, 1, 2000)

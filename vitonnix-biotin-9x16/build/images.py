@@ -10,6 +10,7 @@ Sources are Vitonnix's own marketing images, supplied by the client on 29 Oct 20
 Baked-in text is removed from the mist shot (normalized-convolution fill) so we can set our own type and drop the
 "hasle-free" typo. Writes assets/img/*.png|jpg.
 """
+import json
 import os
 import sys
 
@@ -89,3 +90,35 @@ for row, cy in enumerate((488, 779)):
     for col, cx in enumerate(cols):
         circle_crop(im5, cx, cy, 98, 260).save(os.path.join(OUT, names[row][col] + ".png"))
 print("images written:", sorted(os.listdir(OUT)))
+
+# --- hero shot (client-generated, 941x1672): full-bleed 1080x1920 plate + a clean cutout of the bottle
+from scipy.ndimage import median_filter  # noqa: E402
+
+hero = Image.open(os.path.join(SRC, "6-hero-pedestal.webp")).convert("RGB")
+plate = hero.resize((1080, round(1080 * hero.height / hero.width)), Image.LANCZOS)
+top = (plate.height - 1920) // 2
+plate = plate.crop((0, top, 1080, top + 1920)).filter(ImageFilter.UnsharpMask(radius=1.4, percent=55, threshold=2))
+plate.save(os.path.join(OUT, "hero.jpg"), quality=94)
+
+a = np.asarray(hero).astype(np.float64) / 255
+sat = (a.max(2) - a.min(2)) / (a.max(2) + 1e-6)
+Y0, Y1, CX = 424, 1345, 472.5                    # cap top, base, vertical axis (measured)
+hw = np.zeros(Y1 - Y0)
+for i, y in enumerate(range(Y0, Y1)):
+    xs = np.where(sat[y, 250:700] < .30)[0] + 250
+    if len(xs):
+        hw[i] = max(CX - xs.min(), xs.max() - CX)   # the bottle is symmetric: trust the wider side
+hw = median_filter(hw, size=7)
+H, W = a.shape[:2]
+yy, xx = np.mgrid[0:H, 0:W]
+m = np.zeros((H, W))
+rows = slice(Y0, Y1)
+m[rows] = (np.abs(xx[rows] - CX) <= hw[:, None] - .5).astype(np.float64)
+m = gaussian_filter(m, .8)
+cut = np.dstack([np.asarray(hero), (m * 255).astype(np.uint8)])
+x0, x1 = int(CX - hw.max()) - 4, int(CX + hw.max()) + 5
+Image.fromarray(cut).crop((x0, Y0 - 4, x1, Y1 + 3)).save(os.path.join(OUT, "bottle.png"))
+k = 1080 / hero.width                             # where the bottle sits on the 1080x1920 plate
+json.dump({"left": round(x0 * k - 0, 1), "top": round((Y0 - 4) * k - top, 1), "width": round((x1 - x0) * k, 1),
+           "height": round((Y1 + 3 - Y0 + 4) * k, 1)}, open(os.path.join(OUT, "bottle-on-hero.json"), "w"))
+print("hero plate and bottle cutout written")
