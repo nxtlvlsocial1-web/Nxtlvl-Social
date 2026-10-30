@@ -5,8 +5,9 @@ python3 build/footage.py      (from the project root; needs ffmpeg, plan/beats_r
 The song section is 2:14 to 3:14; there the music video runs 0.40 s behind the audio, so "sync" shots show
 MV time = edit time + 134.40 and keep the lip-sync. Cutaways come from the rest of the video (the estate, the tea
 party, the Aston Martins, polo). The picture is cropped out of its 2:1 letterbox, upscaled and turned into a high-
-contrast photocopy (grey, auto-levelled per shot so dark rooms keep detail, hard curve, sharpened, grain). Cuts land on every beat, two beats in the calmer bars and
-half beats in the bursts. Writes assets/video/bw_main.mp4 (1920x1080, 30 fps), plan/shots.json (the cut list the
+contrast photocopy (grey, auto-levelled per shot so dark rooms keep detail, hard curve, crisp sharpening, a fixed fine
+grain) stepped to 15 fps like stop-motion (every frame held twice). Cuts land on every half beat, quarter beats in the
+bursts and whole beats in the breathers. Writes assets/video/bw_main.mp4 (1920x1080, 30 fps), plan/shots.json (the cut list the
 collage layout follows) and assets/img/stills/*.jpg (photocopied stills for the secondary collage cards).
 """
 import json
@@ -19,7 +20,7 @@ SECTION_START, DUR, MV_OFFSET = 134.0, 60.0, 0.40
 B = json.load(open(os.path.join(ROOT, "plan", "beats_raw.json")))
 BEAT0, PERIOD = B["beats"][0], 60 / B["bpm"]
 LOOK = ("crop=568:320:36:20,scale=1920:1080:flags=lanczos,setsar=1,format=gray,normalize=smoothing=20:independence=0,"
-        "eq=contrast=1.6:brightness=0.05:gamma=1.15,unsharp=7:7:1.4,noise=alls=14:allf=t+u")
+        "eq=contrast=1.75:brightness=0.04:gamma=1.12,unsharp=5:5:1.9:5:5:0,unsharp=3:3:0.6,noise=alls=4:allf=u")
 
 # cutaways (MV start, end): Karan at the tea party, by the Aston Martins, polo, the manor; no subtitled dialogue
 CUT = {"car_a": (71.5, 75.0), "car_b": (75.2, 77.2), "car_c": (78.8, 80.1), "car_d": (82.7, 85.3), "tea_e": (68.9, 71.3),
@@ -38,11 +39,11 @@ def cut_times():
             break
         ts.append(round(t, 3))
         if t < 1.9 or 36.0 <= t < 37.8 or 57.0 <= t:
-            k += 2                     # breathers: the intro, "daaka", the finale
+            k += 1                     # breathers: the intro, "daaka", the finale
         elif 14.3 <= t < 16.3 or 44.8 <= t < 46.3 or 48.5 <= t < 50.0:
-            k += .5                    # bursts
+            k += .25                   # bursts: 5-frame cuts
         else:
-            k += 1
+            k += .5
     return ts
 
 
@@ -72,7 +73,7 @@ def build(shots):
     for i, s in enumerate(shots):
         out = os.path.join(lst, f"p{i:03d}.mp4")
         n = round(s["b"] * 30) - round(s["a"] * 30)      # frame counts from absolute times: no drift, cuts stay on the beat
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{s['media']:.3f}", "-i", SRC, "-vf", f"{LOOK},fps=30", "-frames:v", str(n),
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{s['media']:.3f}", "-i", SRC, "-vf", f"{LOOK},fps=15,fps=30", "-frames:v", str(n),
                         "-an", "-c:v", "libx264", "-preset", "fast", "-crf", "15", "-pix_fmt", "yuv420p", out], check=True)
         parts.append(out)
     with open(os.path.join(lst, "list.txt"), "w") as f:
@@ -84,7 +85,7 @@ def build(shots):
     os.makedirs(sd, exist_ok=True)
     picks = [72.5, 76.0, 83.5, 70.0, 60.5, 58.0, 9.0, 108.0, 140.5, 144.0, 152.0, 161.5, 163.0, 167.5, 172.0, 176.5, 178.0, 186.0, 190.0, 196.5]
     for k, t in enumerate(picks):
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(t), "-i", SRC, "-frames:v", "1", "-vf", LOOK.replace(",noise=alls=14:allf=t+u", ""),
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(t), "-i", SRC, "-frames:v", "1", "-vf", LOOK.replace(",noise=alls=4:allf=u", ""),
                         "-q:v", "3", os.path.join(sd, f"s{k:02d}.jpg")], check=True)
 
 
