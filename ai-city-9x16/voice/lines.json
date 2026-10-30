@@ -1,0 +1,69 @@
+{
+ "duration": 66.388,
+ "lines": [
+  {
+   "line": 1,
+   "take": "01_hook_a",
+   "speaker": "narrator",
+   "text": "What if, for twenty-four hours, one AI ran an entire city? No mayor. No traffic cops. Just the AI... and a clock.",
+   "start": 0.12,
+   "end": 9.161
+  },
+  {
+   "line": 2,
+   "take": "02_dawn_a",
+   "speaker": "narrator",
+   "text": "Six A.M. Every traffic light in the city syncs at once. Buses only stop where people are actually waiting. Rush hour... just disappears.",
+   "start": 9.461,
+   "end": 18.12
+  },
+  {
+   "line": 3,
+   "take": "03_noon_a",
+   "speaker": "narrator",
+   "text": "Noon. Drones drop deliveries in minutes. The power grid shifts energy before anyone turns on the AC. Hospitals get ready before the ambulance even calls.",
+   "start": 18.34,
+   "end": 27.328
+  },
+  {
+   "line": 4,
+   "take": "04_turn_a",
+   "speaker": "narrator",
+   "text": "Four P.M. One sensor misreads a flooded street. The AI reroutes ten thousand cars... onto one bridge.",
+   "start": 27.628,
+   "end": 35.111
+  },
+  {
+   "line": 5,
+   "take": "05_chaos_a",
+   "speaker": "narrator",
+   "text": "Traffic locks up. Deliveries stall. The grid panics and cuts power to protect itself. One tiny mistake... and the whole city freezes.",
+   "start": 35.261,
+   "end": 42.62
+  },
+  {
+   "line": 6,
+   "take": "06_midnight_a",
+   "speaker": "narrator",
+   "text": "Midnight. The AI fixes it in seconds, faster than any human could. But nobody can explain why it happened.",
+   "start": 43.02,
+   "end": 50.204
+  },
+  {
+   "line": 7,
+   "take": "07_takeaway_a",
+   "speaker": "narrator",
+   "text": "And this isn't science fiction. Google's AI already helps time traffic lights in cities like Seattle and Rio. So the real question isn't whether AI can run a city... it's who's in charge when it gets it wrong.",
+   "start": 50.484,
+   "end": 61.362
+  },
+  {
+   "line": 8,
+   "take": "08_cta_a",
+   "speaker": "narrator",
+   "text": "Follow me, and comment CITY... and I'll send you the cities already testing this.",
+   "start": 61.662,
+   "end": 66.288
+  }
+ ]
+}
