@@ -83,3 +83,28 @@ Nxtlvl Social's own kit is `brands/nxtlvl/` — fill it in before using it as th
 - MP4, H.264, AAC audio, under 100 MB per file.
 - Deliver every requested format plus a 1-frame cover image (`.png`, same size) per format.
 - In the final reply, list each file with its platform, size, duration and path.
+
+## 7. "What if" reels
+
+Every "what if" reel (a hypothetical scenario, e.g. "What if one AI ran a city for 24 hours?") follows these rules.
+
+**No keyword CTA.** No "comment X and I'll send you Y" in the script, on the end card or in the description; there is
+nothing to DM. End instead on the follow prompt (spoken "Follow for more what-ifs" and the `@handle` on the end card)
+and a question that invites comments ("Would you trust it?"). The description opens with the hook, not a CTA line.
+
+**The modern story arc** (from the reference the owner shared): stack peaks, never one slow climb to a mid-video
+climax. Plan every script as a list of beats on this curve before writing a line:
+
+1. **Hook, 0-3 s, start at 70/100.** Drop the viewer into a story already happening: a time stamp and an absurd
+   consequence, not a setup ("3:12 AM. The AI just admitted a patient who hasn't arrived yet."). No "Imagine if..."
+   warm-up, no logo, no question the viewer can answer "no" to.
+2. **First peak, by 5-10 s, spike to 90.** A contrast, a contrarian line or a shocking number that pays off the hook.
+3. **Release, then peak again, every 8-15 s.** Each release is one or two lines of context; each peak is a new turn:
+   a twist, a stat, a reversal, something going wrong. Aim for 4-5 peaks in a 45-70 s reel.
+4. **The final peak is the biggest turn** (the thing nobody can explain, the reversal, the real-world fact that
+   says "this is already happening"), then land on the question and the follow prompt. Leave no flat stretch longer
+   than about 10 s.
+
+On screen, every peak gets a visual event (a stamp, a counter, a camera move, a hit in the score), so the arc is
+visible in the edit as well as the voice. Label the reel `WHAT IF` and keep any real-world claim verified and sourced
+in the description; the scenario's own numbers are illustrative.

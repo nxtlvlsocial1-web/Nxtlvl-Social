@@ -176,3 +176,5 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
   emoji digits). Plain text only.
 - Start every post description with the video's CTA keyword line (e.g. `Comment "AGENT" and I'll DM you my whole
   setup.`), then the hook and the body; don't repeat the CTA further down.
+- Exception, "what if" reels: no comment-keyword CTA anywhere (script, end card or description), because there is
+  nothing to DM. Script them on the modern story arc and end them as `nxtlvl-social-video` § 7 says.
