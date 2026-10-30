@@ -1,6 +1,6 @@
 # TASTE: ashke-lyric-16x9
 
-Updated 2026-10-30. Current version: preview v1 (renders/nxtlvl_ashke-lyric_youtube_16x9_preview.mp4). Status: draft.
+Updated 2026-10-30. Current version: preview v2 (reference style) (renders/nxtlvl_ashke-lyric_youtube_16x9_preview.mp4). Status: draft.
 
 ## 1. Brief and story
 - Lyric video for "Ashke" (Karan Aujla, Mxrci), 60 s from 2:14 of the song, 16:9 1920x1080, 30 fps.
@@ -8,25 +8,27 @@ Updated 2026-10-30. Current version: preview v1 (renders/nxtlvl_ashke-lyric_yout
   polo, tea party, speedboat, luxury watch, chess, gold), NOT built from its footage. Mix of 2D and 3D.
 - Pipeline A (code-drawn): HyperFrames + GSAP for 2D/type, Three.js for 3D (assets/js/world3d.js).
 
-## 2. Theme and feel
-- Mood: luxurious, confident, cinematic, playful-flex.
-- Insane fast transitions + liquid-glass fluid motion; one 3D hero object per lyric section, camera cuts every 2 beats.
-- Must not feel like: the music video re-cut, cheap neon, cluttered.
+## 2. Theme and feel (v2, after the owner's references Video-77393 and Video-7679)
+- Minimal and graphic: cream paper or warm black, one orange accent, one hero per lyric line (about 1.5 s each).
+- Must not feel like: the music video re-cut, colourful gradients, generic 3D props, clutter.
 
 ## 3. Visual system
-- Palette: gold #f1cf7a (keywords, 3D gold, frame), cream #f6efe2 (lyric words), emerald #0f4a35, burgundy #7a1a28,
-  dusk #121833 > #b4643c, champagne #fbf4e4, his-jacket tartan (navy #283c5c lines, mustard #c48c3e on #c9b48d).
-- Type: keywords Playfair Display 900 italic 88 px (hero 150 px), gold with 1.5 px dark outline; other words Inter
-  Display 600 54 px cream. Lyric cards: smoked liquid glass (blur 24, brightness .72), radius 46, sheen sweep.
-- Frame: thin gold art-deco border with corner brackets; corner tag "Ashke / KARAN AUJLA" in glass.
-- Finish: grain 8 %, vignette 45 %, letterbox bars only in the finale.
+- Backgrounds: cream paper radial #f2ede5 > #b9b1a5; warm black radial #2a1d19 > #070505; vignette; grain 10 %.
+- Accent: orange #ff5a1f (#cc3f0a on cream for text contrast). Text cream #efe9df / ink #17110f.
+- Type: Outfit 600 54 px typed lines with a blinking caret; Outfit 800 250 px huge single words between dashed orange
+  guide lines; Outfit 800 132 px keyword with a cream block cursor; Mrs Saint Delafield script accents and signature;
+  Playfair Display 900 italic for the 3D hero words (Ashke, Jatt, Daaka, Zehri).
+- 3D pixel icons (build/icons.py, voxels with a black outline): eye, sunglasses, car, shoe, shield, stones, shirt,
+  teacup, trousers, wheel, heart, diamond, ring, falcon, snake, crown, chain, king, watch; dotted orange halftone halos.
+- Halftone planets (assets/js/halftone.js): orange dot spheres with noise texture and a dotted halo.
 
 ## 4. Motion
-- Words blur in on their sung syllable (blur 14 > 0, y 24, 0.22 s expo.out); keywords type in per letter with a 3D
-  flip (rotationX -80, stagger 35 ms) and a gold glow pulse. Cards grow from a pill (elastic) and melt away.
-- Transitions: zoom-through (stage 1.9x + blur), whip (x 1100 + blur 24), gold slices (9 bars), liquid-gold gooey
-  blobs, iris, flash, glass panes with 3D glass-shard bursts (also on "daaka", where the diamond shatters).
-- 3D: camera cuts every 2 beats + punch-in 1.07x; beat nudges; kick shakes; light sweep on each new hero.
+- Icons assemble from flying voxels, pop with overshoot, sway, beat-pulse; fx: roll, drive, slide (row), fly,
+  orbit ring, explode (stones on "paadh", diamond on "daaka"), get stolen (heart slides off on "chori").
+- Hand-drawn orange scribble circles around keywords; 8-bit cursor clicks keywords; glitch lines; light arcs orbit
+  the 3D hero words.
+- Transitions: pixel mosaic, halftone dot wipe, orange wedge, black hole with orange rim, orange starburst, glitch
+  bars, flash; every shot punches in 1.06x.
 
 ## 5. Sound
 - The song section only (assets/audio/section.wav, -14 LUFS), no added SFX.
@@ -41,3 +43,4 @@ Updated 2026-10-30. Current version: preview v1 (renders/nxtlvl_ashke-lyric_yout
 |---|---|---|
 | 2026-10-30 | the music video is a reference, animate it with our own 2D/3D | never cut the reference footage in; build original scenes in its world |
 | 2026-10-30 | insane fast transitions + glass fluid animations, 2D and 3D mix | transition on every scene change, camera cut every 2 beats, liquid-glass UI |
+| 2026-10-30 | (references Video-77393, Video-7679) "make it like this" | cream/black + one orange accent, typed lines with caret, 3D pixel icons, halftone, scribble circles, script, glitch/mosaic/burst transitions |
