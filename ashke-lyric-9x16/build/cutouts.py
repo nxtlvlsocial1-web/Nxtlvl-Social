@@ -27,6 +27,7 @@ OUT = os.path.join(ROOT, "assets", "img", "cut")
 PICKS = {   # the owner's photos of Karan (assets/img/src/k1-k6.jpg): (src, photo, x of Karan, optional x window)
     "coat": ("photo", "k1", .5), "redmic": ("photo", "k2", .5, (.15, .85)), "crowdmic": ("photo", "k3", .5, (.25, .78)),
     "profile": ("photo", "k4", .45), "bugatti": ("photo", "k5", .4, (.12, .62)), "jet": ("photo", "k6", .52, (.36, .66)),
+    "point": ("photo", "k7", .55),
 }
 _sess = None
 
@@ -39,7 +40,7 @@ def grab(src, t):
     return Image.open(p).convert("RGB")
 
 
-def person_mask(img, fx, win=None):
+def person_mask(img, fx, win=None, cut=()):
     global _sess
     if _sess is None:
         _sess = ort.InferenceSession(os.path.join(ROOT, "cache", "models", "u2net_human_seg.onnx"))
@@ -61,6 +62,9 @@ def person_mask(img, fx, win=None):
         keep = ndimage.binary_dilation(lab == best, iterations=3)
         m = m * keep
     m = np.maximum(m * (m > .5), ndimage.binary_fill_holes(m > .5).astype(np.float32))   # drop the haze, fill holes
+    for x0, y0, x1, y1 in cut:     # boxes (fractions) to drop: stage gear that touches him
+        hh, ww = m.shape
+        m[int(y0 * hh): int(y1 * hh), int(x0 * ww): int(x1 * ww)] = 0
     if win:                         # clip away anyone touching him
         w = m.shape[1]
         m[:, : int(win[0] * w)] = 0
@@ -82,9 +86,9 @@ def photocopy(img, m, seed):
     return Image.fromarray(a.clip(0, 255).astype(np.uint8))
 
 
-def sticker(name, src, t, fx, seed, win=None):
+def sticker(name, src, t, fx, seed, win=None, cut=()):
     img = grab(src, t)
-    m = person_mask(img, fx, win)
+    m = person_mask(img, fx, win, cut)
     bbox = m.point(lambda v: 255 if v > 100 else 0).getbbox()
     pad = 40
     box = (max(0, bbox[0] - pad), max(0, bbox[1] - pad), min(img.size[0], bbox[2] + pad), min(img.size[1], bbox[3] + pad))
@@ -119,7 +123,7 @@ if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
     made = []
     for k, (name, pick) in enumerate(PICKS.items()):
-        made.append((name, sticker(name, *pick[:3], k, pick[3] if len(pick) > 3 else None)))
+        made.append((name, sticker(name, *pick[:3], k, pick[3] if len(pick) > 3 else None, pick[4] if len(pick) > 4 else ())))
         print(name)
     if "--sheet" in sys.argv:
         th = [im.copy() for _, im in made]

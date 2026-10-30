@@ -1,6 +1,6 @@
 # TASTE: ashke-lyric-9x16
 
-Updated 2026-10-30. Current version: final v4, renders/nxtlvl_ashke-lyric_reels_9x16_v4.mp4 (63 s: 60 s song + logo).
+Updated 2026-10-30. Current version: final v5, renders/nxtlvl_ashke-lyric_reels_9x16_v5.mp4 (35 s).
 
 ## 1. Brief
 - 9:16 Ashke (Karan Aujla, Mxrci) lyric edit: 60 s from 2:14, 1080x1920, 30 fps.
@@ -51,6 +51,16 @@ Updated 2026-10-30. Current version: final v4, renders/nxtlvl_ashke-lyric_reels_
 - Logo outro (60-63 s): a black torn sheet tears across, the owner's N mark draws on over night-violet, and the star
   pops and twinkles, framed by torn black paper.
 
+## 3d. v5 (owner, 2026-10-30)
+- 35 s: section 0.74 to 35.74 (song 2:14.74 to 2:49.74), the strongest 35 s of bass in the song. The drop hits
+  at 2:15.3, 0.56 s in, where ASHKE lands; the cut ends where line 18 (ਤੂੰ ਦਿਲ ਕਰਦੀ ਐ ਚੋਰੀ) ends.
+- Music untouched (a 120 ms fade at the very end only). No logo. Sound effects only on the visual elements: slams,
+  stamps, sticker pops, cut-outs landing, prints (59 hits, down from 566).
+- Quicker: camera moves 40% shorter, whip in 0.25 s, whip out 0.13 s, a punch-in on every beat, typing two or
+  three letters a step, three one-frame stills before each cut.
+- Two more of the owner's photos: Karan pointing up (a cut-out) and the fire stage (a still print, because the
+  flames cannot be cut away from his arm). The jet photo was already in.
+
 ## 4. Removed
 - v2's full-bleed 9:16 cinema layer (eimantasbitinas23 reference): it blew the footage up and looked blurry.
 
@@ -63,3 +73,4 @@ Updated 2026-10-30. Current version: final v4, renders/nxtlvl_ashke-lyric_reels_
 | 2026-10-30 | best single frame then into the video, focus the transitions' frame pacing, one element per line from the lyrics | 3b above |
 | 2026-10-30 | only Karan in cut-outs, crop nicely, dope frames; Punjabi captions; lyric elements; sound effects; edit the music; blend the logo at the end | 3c |
 | 2026-10-30 | use these six photos for the image elements, keep the selected videos | cut-outs from the photos only |
+| 2026-10-30 | no logo, most SFX out, music unchanged, 35 s on the strongest drop, quicker transitions, two more photos | 3d |

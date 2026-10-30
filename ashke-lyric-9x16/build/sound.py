@@ -1,5 +1,5 @@
-"""The soundtrack, edited like a video edit: the song section reworked with edit moves, plus synthesized sound effects
-on the picture's events. Everything is generated here (no stock sounds, no licences to check).
+"""The soundtrack. v5 (owner's call): the music plays exactly as the song, no edits; only the visual elements get a
+light synthesized hit (no stock sounds, no licences to check). The v4 music edits (edit_music) are no longer used.
 
 python3 build/sound.py      (from the project root; after build/generate.py, which writes plan/events.json; needs
 numpy, scipy and ffmpeg)
@@ -250,39 +250,34 @@ def edit_music(m):
     return out
 
 
+KEEP = {"slam": .42, "stamp": .38, "pop": .22, "paper": .26, "shutter": .2}     # v5: only the element hits
+
+
 def mix():
-    out = edit_music(load_song())
+    """v5: the song section untouched (35 s from the bass drop, a 120 ms fade at the very end so the cut does not
+    click), plus light hits on the visual elements only: slams, stamps, sticker pops, cut-outs landing, prints."""
+    from plan import DUR as EDIT, OFFSET
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{OFFSET:.3f}", "-t", f"{EDIT:.3f}", "-i",
+                          os.path.join(ROOT, "assets", "audio", "section.wav"), "-f", "f32le", "-ac", "2", "-ar", str(SR), "-"],
+                         capture_output=True, check=True).stdout
+    out = np.frombuffer(raw, np.float32).reshape(-1, 2).astype(np.float64).copy()
+    f = n(.12)
+    out[-f:] *= np.linspace(1, 0, f)[:, None]
     events = json.load(open(os.path.join(ROOT, "plan", "events.json")))
-    cache = {}
     last = {}
     for t, kind in events:
-        if kind == "type" and t - last.get("type", -1) < .05:
-            continue
-        if kind in ("paper", "shutter", "pop") and t - last.get(kind, -1) < .12:
+        if kind not in KEEP or t - last.get(kind, -1) < .15:
             continue
         last[kind] = t
-        fn, gain = SFX[kind]
-        if kind not in cache or kind in ("type", "whoosh", "paper", "glitch"):
-            cache[kind] = fn()
-        x = cache[kind] * gain
-        pan = rng.uniform(-.35, .35) if kind in ("type", "pop", "shutter", "paper", "tick") else 0
+        x = SFX[kind][0]() * KEEP[kind]
         st = n(max(0, t))
         en = min(len(out), st + len(x))
-        out[st:en, 0] += x[: en - st] * (1 - pan)
-        out[st:en, 1] += x[: en - st] * (1 + pan)
-    for li in HITS:                                           # lead-ins and the landing for the hit lines
-        a = line_times(li)[0]
-        for x, start in ((riser(.8) * .55, a - .8), (rev_swell(.6) * .6, a - .6), (sub_boom() * .55, a)):
-            st = n(start)
-            out[st: st + len(x)] += x[:, None]
-    for li in BURSTS:
-        a = line_times(li)[0]
-        x = riser(.6) * .4
-        out[n(a - .6): n(a)] += x[:, None]
+        if en > st:
+            out[st:en] += x[: en - st, None]
     raw = os.path.join(ROOT, "cache", "mix_raw.wav")
-    wavfile.write(raw, SR, (np.clip(out, -4, 4) / 4).astype(np.float32))
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", raw, "-af", "volume=4,alimiter=limit=0.95:level=false,loudnorm=I=-14:TP=-1.0:LRA=11",
-                    "-ar", str(SR), "-ac", "2", "-c:a", "pcm_s16le", os.path.join(ROOT, "assets", "audio", "mix.wav")], check=True)
+    wavfile.write(raw, SR, out.astype(np.float32))
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", raw, "-af", "alimiter=limit=0.95:level=false", "-ar", str(SR), "-ac", "2",
+                    "-c:a", "pcm_s16le", os.path.join(ROOT, "assets", "audio", "mix.wav")], check=True)
 
 
 if __name__ == "__main__":

@@ -27,10 +27,10 @@ from PIL import ImageFont
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from icons import ICON, WORD, svg  # noqa: E402
-from plan import CARD2, CUTOUT, FILL, RECIPE, TRANS_POOL, W, line_times, scenes  # noqa: E402
+from plan import CARD2, CUTOUT, FILL, OFFSET, PRINT, RECIPE, TRANS_POOL, W, line_times, scenes  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DUR, SONG, FW, FH = 63.0, 60.0, 1080, 1920     # 60 s of song, then the logo
+DUR, SONG, FW, FH = 35.0, 35.0, 1080, 1920     # v5: the 35 s from the bass drop (build/plan.py)
 EV = []               # sound events for build/sound.py: (time, kind)
 BEATS = json.load(open(os.path.join(ROOT, "plan", "beats_raw.json")))
 PERIOD = 60 / BEATS["bpm"]
@@ -219,19 +219,18 @@ def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor
         EV.append((t, "stamp"))
     if mode == "type":
         n = len(cl)
-        per = 2 if n > 8 else 1
+        per = 3 if n > 8 else 2
         js(f'tl.set("#{i} .ch", {{display: "none"}}, {t - .001:.3f});')
         k = 0
         while k < n:
             js(f'tl.set("#{i} .ch:nth-child(-n+{min(n, k + per)})", {{display: "inline"}}, {t + (k // per) * STEP:.3f});')
-            EV.append((t + (k // per) * STEP, "type"))
             k += per
         done = t + (n // per + 1) * STEP
         js(f'tl.set("#{i} .cur", {{display: "none"}}, {done:.3f});')
     elif mode == "slam":
         EV.append((t, "slam"))
-        js(f'tl.fromTo("#{i}", {{scale: 1.65}}, {{scale: 1, duration: .27, ease: "steps(4)", immediateRender: false}}, {t:.3f});')
-        done = t + .27
+        js(f'tl.fromTo("#{i}", {{scale: 1.65}}, {{scale: 1, duration: .2, ease: "steps(3)", immediateRender: false}}, {t:.3f});')
+        done = t + .2
     else:
         EV.append((t, "pop"))
         js(f'tl.fromTo("#{i}", {{scale: 1.4}}, {{scale: 1, duration: .134, ease: "steps(2)", immediateRender: false}}, {t:.3f});')
@@ -286,7 +285,7 @@ def flame(x, y, t0, t1):
 
 
 def cam(si, t, fx, fy, s=1.0, rot=0.0, dur=.35):
-    CAMKEYS.setdefault(si, []).append((t, fx, fy, s, rot, dur))
+    CAMKEYS.setdefault(si, []).append((t, fx, fy, s, rot, dur * .6))      # v5: quicker moves
 
 
 def fit(text, maxw, size):
@@ -480,8 +479,19 @@ def r8(si, a, b, li, gs):
     cam(si, t2 + .3, 540, 920, 1.04, 0, .5)
 
 
+def still(name, x, y, w, h, rot, t0, t1):
+    i = nid("sp")
+    PAN.append(f'<div class="print el" id="{i}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px;transform:rotate({rot}deg);z-index:2">'
+               f'<img src="assets/img/photo/{name}.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>')
+    show(f"#{i}", t0, t1)
+    EV.append((t0, "shutter"))
+    js(f'tl.fromTo("#{i}", {{x: 160}}, {{x: 0, duration: .134, ease: "steps(2)", immediateRender: false}}, {t0:.3f});')
+
+
 def r9(si, a, b, li, gs):
     FLASH.append((a, "split"))
+    if li in PRINT:
+        still(PRINT[li], 600, 60, 440, 550, 7, a + .067, b)
     scrap("grey", 3, -160, -90, 1000, 5, a, b)
     scrap("grey", 1, 420, 1560, 860, -7, a, b)
     scrap("white", 2, -120, 880, 760, 3, a, b)
@@ -609,17 +619,16 @@ def transition_frames():
     for si, (a, b, li) in enumerate(scenes()):
         if si == 0 or li == 32 or RECIPE[li] in ("R4", "R8", "R9"):
             continue
-        for j in range(2):
+        for j in range(3):
             shot = TRANS_POOL[k % len(TRANS_POOL)]
             k += 1
             i = nid("tf")
-            rot = (-4, 5)[j]
-            w = (820, 700)[j]
+            rot = (-4, 5, -2)[j]
+            w = (820, 700, 900)[j]
             SCREEN.append(f'<div class="tframe" id="{i}" style="left:{540 - w / 2:.0f}px;top:{960 - w * 1.25 / 2:.0f}px;width:{w}px;height:{w * 1.25:.0f}px;'
                           f'transform:rotate({rot}deg)"><img src="assets/img/photo/frame_{shot}.jpg" alt=""></div>')
-            t0 = a - (2 - j) * STEP
-            show(f"#{i}", t0, t0 + STEP)
-            EV.append((t0, "shutter"))
+            t0 = a - (3 - j) / 30
+            show(f"#{i}", t0, t0 + 1 / 30)
 
 
 # ------------------------------------------------------------------------------------------------ camera
@@ -659,7 +668,7 @@ def camera():
                 fx, fy, s, rot = fx + (kx - fx) * v, fy + (ky - fy) * v, s + (ks - s) * v, rot + (kr - rot) * v
         u = t - p["a"]
         d = p["d"]
-        e = 1 - ease_out(u / .4, 4)
+        e = 1 - ease_out(u / .25, 4)
         fx -= d[0] * E * e
         fy -= d[1] * E * e
         rot += 3.5 * e * (1 if si % 2 else -1)
@@ -667,14 +676,16 @@ def camera():
         fy += d[1] * 22 * u
         if si + 1 < len(plans) and p["b"] < tend:
             w = p["b"] - t
-            if w < .2:
-                v = ((.2 - w) / .2) ** 2
+            if w < .134:
+                v = ((.134 - w) / .134) ** 2
                 nd = plans[si + 1]["d"]
                 fx += nd[0] * X * v
                 fy += nd[1] * X * v
                 rot += 2.5 * v * (1 if si % 2 else -1)
         fx += g.uniform(-1.5, 1.5)
         fy += g.uniform(-1.5, 1.5)
+        lb = max([bt for bt in BEATS["beats"] if bt - OFFSET <= t + 1e-6] or [-9]) - OFFSET
+        s *= 1 + .035 * math.exp(-(t - lb) / .09)                  # a punch-in on every beat
         js(f'tl.set("#pan", {{x: {540 - fx:.1f}, y: {960 - fy:.1f}}}, {t:.3f});')
         js(f'tl.set("#cam", {{scale: {s * 1.06:.4f}, rotation: {rot:.2f}}}, {t:.3f});')
 
@@ -779,10 +790,8 @@ def main():
     for si, (a, b, li) in enumerate(scenes()):
         if li == 32:
             continue
-        gs = [("ਅਸ਼ਕੇ", False, .75), ("ਕਰਨ ਔਜਲਾ", True, 1.25)] if li < 0 else groups_of(li)
+        gs = [("ਅਸ਼ਕੇ", False, .56), ("ਕਰਨ ਔਜਲਾ", True, .8)] if li < 0 else groups_of(li)   # ASHKE lands on the drop
         builders[RECIPE[li]](si, a, b, li, gs)
-    end_card()
-    logo_outro()
     lyric_icons()
     transition_frames()
     camera()

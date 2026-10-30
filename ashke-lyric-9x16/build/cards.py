@@ -18,7 +18,7 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from plan import CARD1, CARD2, FILL, RECIPE, ROOT, SHOTS, scenes  # noqa: E402
+from plan import CARD1, CARD2, DUR, FILL, RECIPE, ROOT, SHOTS, scenes  # noqa: E402
 
 V = os.path.join(ROOT, "assets", "video")
 SRC = {"estate": (os.path.join(V, "src", "estate.mp4"), 1276, 718), "tour": (os.path.join(V, "src", "tour.mp4"), 1200, 720)}
@@ -56,7 +56,7 @@ def track(name, plan):
     os.makedirs(d, exist_ok=True)
     parts, t = [], 0.0
     segs = [(a, b, li) for a, b, li in scenes() if li in plan]
-    for i, (a, b, li) in enumerate(segs + [(60.0, 60.0, None)]):
+    for i, (a, b, li) in enumerate(segs + [(DUR, DUR, None)]):
         if a > t + .001:                                     # black filler
             out = os.path.join(d, f"g{i:03d}.mp4")
             n = round(a * 30) - round(t * 30)
