@@ -36,8 +36,10 @@ Updated 2026-10-30. Current version: final v4, renders/nxtlvl_ashke-lyric_reels_
   keyword with a stop-motion wobble.
 
 ## 3c. v4 (owner, 2026-10-30)
-- Cut-outs: Karan only. Solo frames, a clipping window when someone stands beside him, and no gun shots as cut-outs
-  (the segmentation drops the gun). Prints, fills and transition frames also use Karan-only shots.
+- Cut-outs: only the owner's six photos of Karan (coat by the car, red-wall mic, crowd mic, red profile silhouette,
+  Bugatti, private jet), cut to Karan alone, fitted into each slot by height. The video prints, fills and
+  single-frame transitions keep the Karan-only shots from the estate and tour clips.
+- Hit lines: the photo-filled keyword is red and white on black torn paper, with the sticker below it, so it reads.
 - Every caption is in Punjabi (Gurmukhi): labels, the paragraph, the title, the end tape, and a word tag on each lyric
   element. Font: Anek Gurmukhi (Condensed ExtraBold, 600), OFL. Letters type on by grapheme cluster.
 - The Gurmukhi spelling of the lyrics is ours, word for word with the confirmed romanization (generate.py GURMUKHI).
@@ -60,3 +62,4 @@ Updated 2026-10-30. Current version: final v4, renders/nxtlvl_ashke-lyric_reels_
 | 2026-10-30 | remove that concept (blurry 9:16 crops), add clips from the two videos, follow the new reference closely, every detail | never blow footage up to full 9:16; follow references closely, not loosely |
 | 2026-10-30 | best single frame then into the video, focus the transitions' frame pacing, one element per line from the lyrics | 3b above |
 | 2026-10-30 | only Karan in cut-outs, crop nicely, dope frames; Punjabi captions; lyric elements; sound effects; edit the music; blend the logo at the end | 3c |
+| 2026-10-30 | use these six photos for the image elements, keep the selected videos | cut-outs from the photos only |

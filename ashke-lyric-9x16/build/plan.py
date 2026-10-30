@@ -36,9 +36,9 @@ RECIPE = {-1: "R1", 0: "R2", 1: "R3", 2: "R4", 3: "R5", 4: "R6", 5: "R7", 6: "R8
           11: "R5", 12: "R2", 13: "R6", 14: "R7", 15: "R8", 16: "R9", 17: "R1", 18: "R3", 19: "R2", 20: "R4", 21: "R5",
           22: "R6", 23: "R7", 24: "R8", 25: "R9", 26: "R2", 27: "R1", 28: "R3", 29: "R4", 30: "R6", 31: "END", 32: "END"}
 # cut-out stickers (build/cutouts.py) for the cut-out recipes
-CUTOUT = {-1: "suit", 0: "stage", 1: "plaid", 2: "selfie_a", 6: "arms", 8: "selfie_b", 9: "poster", 10: "back", 12: "walk",
-          15: "mic", 17: "walk_b", 18: "selfie_c", 19: "suit", 20: "poster", 24: "back", 26: "selfie_a", 27: "arms", 28: "walk",
-          29: "mic"}
+CUTOUT = {-1: "coat", 0: "profile", 1: "jet", 2: "crowdmic", 6: "redmic", 8: "bugatti", 9: "coat", 10: "crowdmic", 12: "profile",
+          15: "redmic", 17: "jet", 18: "bugatti", 19: "coat", 20: "crowdmic", 24: "redmic", 26: "profile", 27: "coat", 28: "jet",
+          29: "bugatti"}   # the owner's six photos of Karan (build/cutouts.py)
 # card footage (build/cards.py): Karan-only shots (source, start time, x of Karan as a fraction)
 SHOTS = {"K1": ("estate", 1.4, .5), "K2": ("estate", 13.0, .5), "K3": ("estate", 15.2, .42), "K4": ("estate", 42.6, .5),
          "K5": ("tour", 44.4, .5), "K6": ("tour", 41.4, .45), "K7": ("tour", 10.4, .5), "K8": ("tour", 49.0, .5),

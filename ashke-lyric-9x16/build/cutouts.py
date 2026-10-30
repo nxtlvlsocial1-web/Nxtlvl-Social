@@ -7,7 +7,8 @@ For each pick (source clip, time, where Karan stands across the frame) the frame
 person nearest that point is kept, and the cut-out is photocopied (grey, auto-levels inside the person, hard curve,
 sharpened, fine grain), given a white paper border and a soft baked shadow. Writes assets/img/cut/<name>.png (and
 <name>-red.png, the red duotone variant). --sheet also writes cache/cut_sheet.png to check them.
-Sources stay out of git: assets/video/src/estate.mp4 and tour.mp4 (the owner's clips) and the music video.
+Sources stay out of git: the owner's photos of Karan (assets/img/src/k1-k6.jpg), which v5 uses for every cut-out,
+and the owner's clips (assets/video/src/estate.mp4, tour.mp4).
 """
 import os
 import subprocess
@@ -23,16 +24,16 @@ V = os.path.join(ROOT, "assets", "video")
 SRC = {"estate": os.path.join(V, "src", "estate.mp4"), "tour": os.path.join(V, "src", "tour.mp4"), "mv": os.path.join(V, "music-video-src.mp4")}
 OUT = os.path.join(ROOT, "assets", "img", "cut")
 # name: (source, time s, x of Karan as a fraction of the frame width)
-PICKS = {   # Karan only. (src, time, x of Karan, optional x window that clips away anyone standing next to him)
-    "suit": ("estate", 1.8, .52), "plaid": ("estate", 42.9, .55, (.36, .78)), "poster": ("tour", 2.2, .5),
-    "selfie_a": ("tour", 10.6, .5), "selfie_b": ("tour", 11.4, .52), "selfie_c": ("tour", 12.4, .5), "mic": ("tour", 41.6, .45),
-    "walk": ("tour", 44.8, .5), "walk_b": ("tour", 45.6, .5), "arms": ("tour", 49.2, .5), "back": ("tour", 50.4, .5),
-    "stage": ("tour", 54.2, .5),
+PICKS = {   # the owner's photos of Karan (assets/img/src/k1-k6.jpg): (src, photo, x of Karan, optional x window)
+    "coat": ("photo", "k1", .5), "redmic": ("photo", "k2", .5, (.15, .85)), "crowdmic": ("photo", "k3", .5, (.25, .78)),
+    "profile": ("photo", "k4", .45), "bugatti": ("photo", "k5", .4, (.12, .62)), "jet": ("photo", "k6", .52, (.36, .66)),
 }
 _sess = None
 
 
 def grab(src, t):
+    if src == "photo":
+        return Image.open(os.path.join(ROOT, "assets", "img", "src", f"{t}.jpg")).convert("RGB")
     p = os.path.join(ROOT, "cache", "cut_frame.png")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{t:.3f}", "-i", SRC[src], "-frames:v", "1", p], check=True)
     return Image.open(p).convert("RGB")
@@ -88,7 +89,7 @@ def sticker(name, src, t, fx, seed, win=None):
     pad = 40
     box = (max(0, bbox[0] - pad), max(0, bbox[1] - pad), min(img.size[0], bbox[2] + pad), min(img.size[1], bbox[3] + pad))
     img, m = img.crop(box), m.crop(box)
-    s = min(1.6, 1000 / img.size[1])
+    s = min(1.6, 1100 / img.size[1])
     size = (round(img.size[0] * s), round(img.size[1] * s))
     img, m = img.resize(size, Image.LANCZOS), m.resize(size, Image.LANCZOS)
     pc = photocopy(img, m, seed)

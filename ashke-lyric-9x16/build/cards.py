@@ -87,7 +87,7 @@ def fills():
         src, st, fx = SHOTS[shot]
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{st + .4:.3f}", "-i", SRC[src][0], "-frames:v", "1", "-vf",
                         "format=gray,normalize=independence=0,eq=contrast=2.4,format=rgb24,"
-                        "lutrgb=r='if(gt(val,70),242,20)':g='if(gt(val,70),238,18)':b='if(gt(val,70),230,18)',scale=1200:-2",
+                        "lutrgb=r='if(gt(val,70),246,214)':g='if(gt(val,70),240,30)':b='if(gt(val,70),232,38)',scale=1200:-2",
                         "-q:v", "2", os.path.join(od, f"fill_{li}.jpg")], check=True)
 
 

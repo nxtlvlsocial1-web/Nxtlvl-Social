@@ -169,6 +169,11 @@ def scrap(kind, k, x, y, w, rot, t0, t1, z=1):
 
 
 def cutout(name, x, y, w, rot, t0, t1, rise=0, red=False, z=3):
+    """A cut-out sticker in a slot w wide (and at most 1.15 w tall), centred in the slot."""
+    from PIL import Image
+    iw, ih = Image.open(os.path.join(ROOT, "assets", "img", "cut", f"{name}.png")).size
+    fw = min(w, w * 1.15 * iw / ih)
+    x, w = x + (w - fw) / 2, fw
     i = nid("ct")
     EV.append((t0, "paper"))
     PAN.append(f'<img class="el" id="{i}" src="assets/img/cut/{name}{"-red" if red else ""}.png" style="left:{x:.0f}px;top:{y:.0f}px;'
@@ -327,9 +332,10 @@ def r2(si, a, b, li, gs):
         y += size * 1.15 + 18
         cam(si, t, 540, 760 + 60 * k, 1.1, 1, .3)
     FLASH.append((kw[2] - .067, "white"))
-    scrap("red", 3, -60, 760, 1200, -5, kw[2], b)
-    cutout(CUTOUT.get(li, "suit_b"), 180, 620, 720, 2, kw[2], b, z=2)
+    scrap("black", 3, -60, 760, 1200, -5, kw[2], b)
     size = fit(kw[0], 1060, 330)
+    after_n = len(gs) - ki - 1
+    cutout(CUTOUT[li], 220, 860 + size * 1.25 + 150 * after_n, 640, 2, kw[2], b, z=2)   # under the word and its labels
     _, fw = label(kw[0], f"fill f{li}", 540, 860, size, -3, kw[2], b, mode="pop", z=6)
     cam(si, kw[2], 540, 960, 1.0, 0, .2)
     zt = kw[2] + .4
