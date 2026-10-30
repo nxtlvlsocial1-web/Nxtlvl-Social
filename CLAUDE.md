@@ -185,3 +185,5 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
   setup.`), then the hook and the body; don't repeat the CTA further down.
 - End every post description with up to 5 hashtags and then one plain line of relevant SEO keywords (the phrases
   people search for the topic, comma separated), and always hand over the full description in one block, ready to paste.
+- The keyword auto-DM (automation) is only the resource link and its setup steps, nothing else: no greeting, buttons,
+  comment replies, follow line or caveats. Hand it over as one plain block, or as a PDF when the person asks for one.

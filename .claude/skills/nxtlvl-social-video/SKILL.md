@@ -111,3 +111,5 @@ Nxtlvl Social's own kit is `brands/nxtlvl/` — fill it in before using it as th
   hook, the body (numbered lists as "1.", no emojis), up to 5 hashtags, then one plain line of relevant SEO keywords
   (comma separated: the topic's search phrases, the tools, products or games shown, the platforms). Save it in the
   project's `caption.md` too.
+- The keyword auto-DM is only the resource link plus its setup steps, in one plain block (or a PDF when asked). No
+  greeting, buttons, comment replies, follow line or caveats.

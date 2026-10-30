@@ -38,44 +38,15 @@ PS2 games on PC, play PS2 games on PC, PS2 emulator alternative, PS2 PC port, PS
 - The cover says the same thing in one glance: "your old PS2 games now run as REAL PC GAMES", real RE4 gameplay in a
   GAME.EXE window, "not an emulator", "11 free Claude skills" and the Windows, Mac, Linux and Steam Deck logos.
 
-## Comment-to-DM automation (SuperProfile Auto-DM, ManyChat or similar)
+## Auto-DM for the keyword CONSOLE (paste as is)
 
-Set it up after the Reel is live, on this Reel only.
+https://github.com/Jakeschincariol/console-skill
 
-Trigger
-- Where: comments on this Reel (also turn on story replies if the Reel is shared to Stories)
-- Keyword: CONSOLE (match "contains", not case-sensitive, so "console", "Console!" and "CONSOLE pls" all work)
-- Extra keywords (optional): PS2, LINK
-- Run once per person; ignore replies to other comments
-
-Public comment replies (rotate, so they don't look like spam)
-1. Sent! Check your DMs.
-2. Just sent it to your DMs.
-3. Done, it's in your inbox now.
-4. Check your DMs, the link is there.
-5. Sent you the link and the setup.
-
-DM 1, opening message (with a button, so Instagram lets the link through)
-Hey! Here's the Claude setup that turns PS2 games you own into real PC games. Tap below and I'll send it.
-Button: Send me the link
-
-DM 2, after the tap (button: Open the repo -> https://github.com/Jakeschincariol/console-skill)
-Here's Console Skill: 11 free Claude skills that port PS2 games you own to PC.
-
-Repo: https://github.com/Jakeschincariol/console-skill
-
-Easiest setup: paste that link into Claude Code and ask it to install the skills.
+Setup: paste that link into Claude Code and ask it to install the skills.
 
 Or inside Claude Code:
 /plugin marketplace add Jakeschincariol/console-skill
 /plugin install console-skill@console-skill
-
-Heads up: it's experimental, so some games won't boot yet, and it's only for games you own.
-
-Follow AI.NXTLVL for more Claude setups like this.
-
-Optional follow gate (only if growth matters more than reach)
-If they don't follow yet: "Follow AI.NXTLVL first, then tap the button again and the link is yours." Button: I followed
 
 ## Alt text (Advanced settings, Accessibility)
 
