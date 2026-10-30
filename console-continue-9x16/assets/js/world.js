@@ -96,6 +96,7 @@ const M = {
   plastic: new THREE.MeshPhysicalMaterial({ color: 0xeceaf2, metalness: .05, roughness: .35, clearcoat: .6 }),
   ink: new THREE.MeshPhysicalMaterial({ color: 0x1d1a26, metalness: .2, roughness: .4, clearcoat: .5 }),
   iri: new THREE.MeshPhysicalMaterial({ color: 0xf2f2ff, metalness: .9, roughness: .12, iridescence: 1, iridescenceIOR: 1.6, iridescenceThicknessRange: [200, 900] }),
+  claude: new THREE.MeshPhysicalMaterial({ color: 0xd97757, metalness: .35, roughness: .24, clearcoat: 1, clearcoatRoughness: .12, emissive: 0x8a3216, emissiveIntensity: .2 }),
   gem: new THREE.MeshPhysicalMaterial({ color: 0x9fd4ff, metalness: .2, roughness: .05, transmission: .0, iridescence: 1, iridescenceIOR: 1.8, clearcoat: 1, flatShading: true }),
 };
 const pastel = (c) => new THREE.MeshPhysicalMaterial({ color: c, roughness: .35, metalness: .05, clearcoat: .7 });
@@ -165,7 +166,15 @@ async function build() {
   }
   // gamepads (B), and a white one for the inventory (D)
   P.p1 = gamepad(M.plastic, pastel(0x8fb8ff)); scene.add(P.p1);
-  P.p2 = gamepad(M.violet, pastel(0xffffff)); scene.add(P.p2);
+  P.p2 = gamepad(M.claude, pastel(0xffffff)); scene.add(P.p2);
+  // Claude's spark mark in 3D: twelve rounded rays of uneven length
+  P.spark = group();
+  [1, .78, .95, .72, 1, .82, .9, .7, .98, .8, .88, .74].forEach((r, i) => {
+    const ray = mesh(new RoundedBoxGeometry(.11, .46 * r, .1, 3, .05), M.claude, P.spark);
+    const a = i * Math.PI / 6 + (i % 2 ? .12 : 0);
+    ray.position.set(-Math.sin(a) * .23 * r, Math.cos(a) * .23 * r, 0); ray.rotation.z = a;
+  });
+  mesh(new THREE.SphereGeometry(.09, 24, 16), M.claude, P.spark);
   P.padItem = gamepad(M.plastic, M.violet); scene.add(P.padItem);
   // title (C1)
   P.t1 = mesh(textGeo(russo, "CONSOLE", .37, .2), M.chrome);
@@ -208,7 +217,7 @@ async function build() {
     P.boss.setColorAt(i, new THREE.Color(c));
   });
   scene.add(P.boss);
-  P.shots = [0, 1, 2, 3].map(() => mesh(new THREE.OctahedronGeometry(.13, 0), M.violet));
+  P.shots = [0, 1, 2, 3].map(() => mesh(new THREE.OctahedronGeometry(.13, 0), M.claude));
   // world map (F)
   const tiles = [[-.65, -.35, .2, .5, 0xbcd6ff], [.65, .05, -1.7, .5, 0xffd9ec], [-.55, .45, -3.6, .5, 0xd9ccff], [.45, .9, -5.6, .62, 0xfff0b8]];
   P.tiles = tiles.map(([x, y, z, r, c], i) => {
@@ -279,7 +288,7 @@ async function build() {
 
 function hideAll() {
   for (const d in P.digits) P.digits[d].visible = false;
-  for (const o of [P.p1, P.p2, P.padItem, P.t1, P.t2, P.disc, P.mon, P.bits, P.star, P.gem, P.blocks, P.boss, P.card, P.stamp, P.conf, P.btn, ...P.shots, ...P.tiles, ...P.pearls])
+  for (const o of [P.p1, P.p2, P.padItem, P.t1, P.t2, P.disc, P.mon, P.bits, P.star, P.gem, P.blocks, P.boss, P.card, P.stamp, P.conf, P.btn, P.spark, ...P.shots, ...P.tiles, ...P.pearls])
     o.visible = false;
 }
 
@@ -319,7 +328,10 @@ function renderAt(t) {
   let tint = 0;
   // camera: a slow drift everywhere; scene F flies over the world map
   let cpos = V(Math.sin(t * .37) * .14, Math.cos(t * .29) * .1, 10), look = V(Math.sin(t * .37) * .05, 0, 0);
-  updParticles(t);
+  updParticles(t * 1.6);
+  // the camera pulses on the music's beat
+  let pulse = 0;
+  for (const b of T.beats) { if (t >= b && t < b + .4) pulse = Math.max(pulse, Math.exp(-(t - b) * 9)); }
   grid.position.z = (t * 1.1) % 1;
   sweep.intensity = 0;
 
@@ -342,9 +354,14 @@ function renderAt(t) {
       const land = k >= 1 ? 1 + .1 * Math.exp(-(t - w[14]) * 9) * Math.cos((t - w[14]) * 30) : 1;
       P.p2.scale.setScalar(.62 * pop * land);
       P.p2.rotation.set(.55, -.25 + (1 - e) * Math.PI * 4, (1 - e) * .8);
-      M.violet.emissiveIntensity = t >= w[16] ? .25 + .9 * Math.max(0, 1 - (t - w[16]) / .6) + .15 * Math.sin(t * 8) ** 2 : .25;
+      M.claude.emissiveIntensity = t >= w[16] ? .2 + .9 * Math.max(0, 1 - (t - w[16]) / .6) + .15 * Math.sin(t * 8) ** 2 : .2;
+      // "It's Claude!": the spark mark pops out of the pad and spins above it
+      if (t >= w[16]) {
+        const e = eBack(lin(t, w[16], w[16] + .4));
+        place(P.spark, px(780, 700), 1.15 * e); P.spark.rotation.set(.15 * Math.sin(t * 2), .4 * Math.sin(t * 1.6), -(t - w[16]) * 2.4);
+      }
     }
-  } else M.violet.emissiveIntensity = .25;
+  } else M.claude.emissiveIntensity = .2;
   if (inS(t, "C1")) {
     const a1 = w[19], a2 = w[20];
     if (t >= a1) {
@@ -492,6 +509,7 @@ function renderAt(t) {
       P.conf.instanceMatrix.needsUpdate = true;
     }
   }
+  cpos.z -= .22 * pulse;
   camera.position.copy(cpos); camera.lookAt(look);
   renderer.render(scene, camera);
   out2d.clearRect(0, 0, W, H);

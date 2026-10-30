@@ -20,6 +20,15 @@ w = [x["s"] for x in W]
 DUR = 42.4
 R = random.Random(5)
 INK, VIO, PAPER, RED = "#1d1a26", "#7a2ffb", "#ffffff", "#e0335a"
+CL = "#D97757"   # Claude's orange: everything that is Player 2 (Claude) wears it
+
+
+def claude_mark(size, color="#fff"):
+    """Claude's spark mark: rounded rays of uneven length around a centre."""
+    rays = [1, .78, .95, .72, 1, .82, .9, .7, .98, .8, .88, .74]
+    g = "".join(f'<rect x="-5.5" y="{-46 * r:.1f}" width="11" height="{46 * r - 8:.1f}" rx="5.5" transform="rotate({i * 30 + (7 if i % 2 else 0)})"/>'
+                for i, r in enumerate(rays))
+    return f'<svg class="cm" viewBox="-50 -50 100 100" width="{size}" height="{size}"><g fill="{color}">{g}<circle r="9"/></g></svg>'
 
 A, HIDE, EV = [], [], []
 
@@ -44,7 +53,7 @@ count2 = [["3", S["H"][0]], ["2", w[87] - .2]]
 hits = [w[57], w[59], w[60], w[61]]
 ko = round(w[61] + .32, 3)
 unlock = [w[69], w[70], w[71], w[75]]
-CT = {"S": S, "w": w, "count": count, "count2": count2, "burst": w[87], "press": w[89], "hits": hits, "ko": ko, "unlock": unlock}
+CT = {"S": S, "w": w, "CL": "#D97757", "count": count, "count2": count2, "burst": w[87], "press": w[89], "hits": hits, "ko": ko, "unlock": unlock}
 
 SCENES = {k: [] for k in S}   # html per scene
 APANEL, WINDOW = [], []        # root-level gameplay panels (their videos may not sit inside a timed scene)
@@ -147,18 +156,18 @@ def scene_B():
     k = "B"
     add(k, '<div class="chipwrap"><span class="chip" id="B-pause">PAUSED</span></div>')
     show("#B-pause", S[k][0] + .02, "pop", .25)
-    add(k, f'<div class="hdr vio big" id="B-h1">PLAYER 2</div><div class="hdr sub" id="B-h2">HAS JOINED</div>')
+    add(k, f'<div class="hdr cl big" id="B-h1">PLAYER 2</div><div class="hdr sub" id="B-h2">HAS JOINED</div>')
     hide("#B-pause", w[14] - .15, .15)
     show("#B-h1", w[14], "slam")
     show("#B-h2", w[14] + .12, "up", .35)
     add(k, '<span class="tag" id="B-p1" style="left:300px">P1 · YOU</span>')
     show("#B-p1", S[k][0] + .3, "up", .35)
-    add(k, '<span class="tag vio" id="B-p2" style="left:780px">P2</span>')
+    add(k, '<span class="tag cl" id="B-p2" style="left:780px">P2</span>')
     show("#B-p2", w[14] + .1, "pop")
-    add(k, '<span class="name" id="B-name" style="left:780px">CLAUDE</span>')
+    add(k, f'<span class="name" id="B-name" style="left:780px">{claude_mark(54)}CLAUDE</span>')
     hide("#B-p2", w[16] - .1, .1)
     show("#B-name", w[16], "slam")
-    add(k, '<div class="burst" id="B-burst" style="left:780px;top:880px"></div>')
+    add(k, '<div class="burst cl" id="B-burst" style="left:780px;top:880px"></div>')
     HIDE.append("#B-burst")
     js(f'tl.set("#B-burst", {{opacity: .9, scale: .2}}, {w[14]:.3f});')
     js(f'tl.to("#B-burst", {{opacity: 0, scale: 2.4, duration: .7, ease: "power2.out"}}, {w[14] + .01:.3f});')
@@ -254,7 +263,7 @@ def scene_E():
         js(f'tl.to("#E-hpf", {{scaleX: {v}, duration: .13, ease: "power2.out"}}, {h + .2:.3f});')
         ev(h, "shot")
         ev(h + .2, "hit")
-    add(k, '<span class="move" id="E-move">P2 USES <b>TESTER SKILL</b></span>')
+    add(k, f'<span class="move" id="E-move">{claude_mark(34, CL)}CLAUDE USES <b>TESTER SKILL</b></span>')
     show("#E-move", w[56], "left", .3)
     add(k, '<div class="ko" id="E-ko">K.O.!</div>')
     show("#E-ko", ko, "slam")
@@ -316,7 +325,7 @@ def captions():
             cls = ' class="hl"' if i in HL else ""
             spans.append(f'<span id="cw{i}"{cls}>{txt}</span>')
             HIDE.append(f"#cw{i}")
-            js(f'tl.fromTo("#cw{i}", {{opacity: 0, y: 18}}, {{opacity: 1, y: 0, duration: .16, ease: "back.out(3)"}}, {w[i]:.3f});')
+            js(f'tl.fromTo("#cw{i}", {{opacity: 0, y: 22, scale: .5}}, {{opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}}, {w[i]:.3f});')
         rows.append(f'<div class="cl" id="cc{ci}">{" ".join(spans)}</div>')
         t0 = w[a] - .02
         t1 = w[CHUNKS[ci + 1][0]] - .03 if ci + 1 < len(CHUNKS) else DUR
@@ -337,7 +346,7 @@ def transitions():
     for k, (a, b) in S.items():
         if a == 0:
             continue
-        js(f'tl.fromTo("#wipe", {{x: -1900}}, {{x: 1900, duration: .42, ease: "power2.inOut"}}, {a - .21:.3f});')
+        js(f'tl.fromTo("#wipe", {{x: -1900}}, {{x: 1900, duration: .32, ease: "power2.inOut"}}, {a - .16:.3f});')
         ev(a - .15, "swish")
     # freeze glitch on "Wait" and on the crash
     for t in [w[10], w[53]]:
@@ -348,7 +357,7 @@ def transitions():
                    f'backgroundColor: "{R.choice([VIO, INK, "#ff9ccf", "#8fb8ff"])}"}}, {t + f / 30:.3f});')
         js(f'tl.set("#glitch", {{opacity: 0}}, {t + .1:.3f});')
         ev(t, "glitch")
-    for t, o, d in [(w[10], .85, .35), (ko, .9, .45), (w[87], .7, .4)]:
+    for t, o, d in [(w[10], .85, .35), (ko, .55, .3), (w[87], .6, .35)]:
         js(f'tl.set("#flash", {{opacity: {o}}}, {t:.3f});')
         js(f'tl.to("#flash", {{opacity: 0, duration: {d}, ease: "power2.out"}}, {t + .01:.3f});')
     # scanlines drift all the time
@@ -367,6 +376,10 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #F1EE
 #root {{ position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #F1EEF4; color: {INK}; }}
 #gl {{ position: absolute; inset: 0; width: 1080px; height: 1920px; display: block; z-index: 4; }}
 .scene {{ position: absolute; inset: 0; z-index: 5; }}
+.sw, .pw {{ position: absolute; inset: 0; transform-origin: 540px 880px; }}
+#deco {{ position: absolute; inset: 0; z-index: 5; pointer-events: none; }}
+#deco .d {{ position: absolute; display: block; }}
+#rays {{ position: absolute; left: 0; top: 0; width: 1400px; height: 1400px; margin: -700px 0 0 -700px; z-index: 2; opacity: 0; pointer-events: none; }}
 #bg {{ position: absolute; inset: 0; z-index: 0; overflow: hidden; }}
 #bg video {{ position: absolute; left: -60px; top: -60px; width: 1200px; height: 2040px; object-fit: cover; filter: blur(8px) saturate(1.25); }}
 #wash {{ position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, #F7F6F3 0%, #F1EEF4 55%, #E8E4F1 100%); overflow: hidden; }}
@@ -401,6 +414,10 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #F1EE
 .hdr {{ position: absolute; left: 60px; right: 60px; top: 362px; text-align: center; font: 400 116px/1 "Russo One"; color: {INK};
   text-shadow: 0 7px 0 rgba(122,47,251,.16), 0 0 30px rgba(255,255,255,.85); white-space: nowrap; }}
 .hdr.vio {{ color: {VIO}; text-shadow: 0 8px 0 rgba(29,26,38,.12); }}
+.hdr.cl {{ color: {CL}; text-shadow: 0 8px 0 rgba(29,26,38,.14), 0 0 34px rgba(255,255,255,.9); }}
+.tag.cl {{ background: {CL}; color: #fff; border-color: {CL}; }}
+.burst.cl {{ border-color: {CL}; }}
+.cm {{ display: inline-block; vertical-align: middle; }}
 .hdr.big {{ top: 330px; font-size: 150px; }}
 .hdr.sub {{ top: 486px; font-size: 64px; letter-spacing: 6px; }}
 .ring {{ position: absolute; width: 0; height: 0; }}
@@ -417,8 +434,8 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #F1EE
 .tag {{ position: absolute; top: 1112px; transform: translateX(-50%); font: 700 32px/1 "Chakra Petch"; letter-spacing: 3px; padding: 14px 26px; border-radius: 999px;
   background: {PAPER}; border: 4px solid {INK}; white-space: nowrap; }}
 .tag.vio {{ background: {VIO}; color: #fff; border-color: {VIO}; }}
-.name {{ position: absolute; top: 1096px; transform: translateX(-50%); font: 400 60px/1 "Russo One"; color: #fff; background: {VIO}; padding: 18px 36px; border-radius: 999px;
-  box-shadow: 0 10px 0 rgba(29,26,38,.15), 0 0 40px rgba(122,47,251,.5); }}
+.name {{ position: absolute; top: 1090px; transform: translateX(-50%); font: 400 60px/1 "Russo One"; color: #fff; background: {CL}; padding: 14px 34px 14px 22px; border-radius: 999px;
+  box-shadow: 0 10px 0 rgba(29,26,38,.15), 0 0 40px rgba(217,119,87,.55); display: flex; align-items: center; gap: 14px; white-space: nowrap; }}
 .burst {{ position: absolute; width: 420px; height: 420px; margin: -210px 0 0 -210px; border-radius: 50%; border: 10px solid {VIO}; }}
 .chips {{ position: absolute; left: 0; right: 0; top: 1040px; display: flex; justify-content: center; gap: 18px; }}
 .pill {{ font: 700 34px/1 "Chakra Petch"; letter-spacing: 3px; padding: 14px 26px; border-radius: 999px; background: {PAPER}; border: 4px solid {INK}; }}
@@ -448,7 +465,8 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #F1EE
 .hp span {{ font: 700 28px/1 "Chakra Petch"; letter-spacing: 3px; color: {RED}; }}
 .hp .hb {{ margin-top: 10px; height: 34px; border: 4px solid {INK}; border-radius: 999px; background: {PAPER}; overflow: hidden; position: relative; }}
 .hp .hb i {{ position: absolute; inset: 3px; border-radius: 999px; background: linear-gradient(90deg, {RED}, #ff7a92); transform-origin: 0 50%; }}
-.move {{ position: absolute; left: 70px; top: 1150px; font: 700 32px/1 "Chakra Petch"; letter-spacing: 2px; padding: 16px 26px; border-radius: 999px; background: {PAPER}; border: 4px solid {VIO}; color: {VIO}; }}
+.move {{ position: absolute; left: 70px; top: 1150px; font: 700 32px/1 "Chakra Petch"; letter-spacing: 2px; padding: 12px 26px 12px 16px; border-radius: 999px; background: {PAPER}; border: 4px solid {CL}; color: {CL};
+  display: flex; align-items: center; gap: 12px; }}
 .move b {{ color: {INK}; }}
 .ko {{ position: absolute; left: 0; right: 0; top: 650px; text-align: center; font: 400 230px/1 "Russo One"; color: {VIO};
   text-shadow: 0 0 0 #fff, 8px 8px 0 {INK}; -webkit-text-stroke: 8px #fff; paint-order: stroke fill; }}
@@ -492,6 +510,66 @@ def no_immediate():
                 A[i] = A[i].replace("duration:", "immediateRender: false, duration:", 1)
 
 
+def beats():
+    """The music's kick grid in video time (120 BPM, kicks on every half second), skipped while the music is muffled
+    (before Player 2 joins) and through its breakdown (after "Steam Deck" until "console")."""
+    music_in = 96.35 - w[87]
+    t0 = 88.35 - music_in
+    out, k = [], -200
+    while True:
+        t = t0 + k * .5
+        k += 1
+        if t < 0:
+            continue
+        if t >= DUR - .3:
+            break
+        if t < w[11] or (92.2 - music_in <= t < w[87] - .05):
+            continue
+        out.append((round(t, 3), abs(((t - t0) / 2) - round((t - t0) / 2)) < .01))
+    return out
+
+
+def motion():
+    """Movement on top of every scene: each scene zooms in as it arrives and pulses on the music's beat (harder on the
+    bar), big moments shake, ray bursts flare behind the peaks, headers float, and shapes drift in the margins."""
+    for k, (a, b) in S.items():
+        if a > 0:
+            js(f'tl.fromTo("#sw-{k}", {{scale: 1.12}}, {{scale: 1, duration: .45, ease: "power3.out"}}, {a:.3f});')
+    for t, bar in beats():
+        k = next(k for k, (a, b) in S.items() if a <= t < b)
+        js(f'tl.to("#pw-{k}", {{scale: {1.032 if bar else 1.014}, duration: .05, ease: "power2.out"}}, {t:.3f});')
+        js(f'tl.to("#pw-{k}", {{scale: 1, duration: .3, ease: "power2.out"}}, {t + .05:.3f});')
+    for k, t, amp in [("B", w[14], 18), ("C1", w[20], 12), ("E", w[54], 20), ("E", ko, 28), ("F", w[75], 16), ("H", w[87], 18)]:
+        shake(f"#pw-{k}", t, 9, amp)
+    for hid, k in [("A-hdr", "A"), ("B-h1", "B"), ("C2-hdr", "C2"), ("D-hdr", "D"), ("E-hdr", "E"), ("F-hdr", "F"), ("H-hdr", "H")]:
+        a, b = S[k]
+        n = max(1, int((b - a - .6) / 1.1))
+        js(f'tl.to("#{hid}", {{y: -10, rotation: -1.2, duration: 1.1, yoyo: true, repeat: {n}, ease: "sine.inOut", immediateRender: false}}, {a + .6:.3f});')
+    LV, LC = "#b9a2ff", "#f0a07e"
+    rays_at = [(w[14], 780, 880, LC), (w[20], 540, 840, LV), (w[45], 540, 760, LV), (w[47], 540, 760, LC),
+               (w[49], 540, 760, LV), (ko, 540, 820, LC), (w[75], 700, 760, LV), (w[87], 540, 735, LC)]
+    for t, x, y, c in rays_at:
+        js(f'tl.set("#rays", {{left: {x}, top: {y}, opacity: .3, scale: .25, rotation: 0}}, {t:.3f});')
+        js(f'tl.set("#rays path", {{fill: "{c}"}}, {t:.3f});')
+        js(f'tl.to("#rays", {{scale: 1.5, rotation: 35, opacity: 0, duration: .55, ease: "power2.out"}}, {t + .01:.3f});')
+    wedges = "".join(f'<path d="M0 0 L{700 * __import__("math").cos(a):.1f} {700 * __import__("math").sin(a):.1f} '
+                     f'L{700 * __import__("math").cos(a + .09):.1f} {700 * __import__("math").sin(a + .09):.1f} Z"/>'
+                     for a in [i * 2 * 3.14159 / 24 for i in range(24)])
+    shapes = [("ring", 64, 1180, 54, VIO), ("plus", 1004, 610, 44, CL), ("tri", 48, 650, 46, "#8fb8ff"), ("sq", 1010, 1200, 36, "#ff9ccf"),
+              ("ring", 1000, 300, 40, "#8fb8ff"), ("plus", 70, 300, 36, VIO), ("tri", 990, 940, 40, VIO), ("sq", 60, 930, 30, CL)]
+    svg = {"ring": '<circle cx="50" cy="50" r="36" fill="none" stroke="{c}" stroke-width="12"/>',
+           "plus": '<path d="M38 8h24v30h30v24H62v30H38V62H8V38h30z" fill="{c}"/>',
+           "tri": '<path d="M50 8 L92 86 H8 Z" fill="none" stroke="{c}" stroke-width="11" stroke-linejoin="round"/>',
+           "sq": '<rect x="14" y="14" width="72" height="72" rx="14" fill="{c}"/>'}
+    out = []
+    for i, (kind, x, y, sz, c) in enumerate(shapes):
+        out.append(f'<svg class="d" id="dc{i}" viewBox="0 0 100 100" width="{sz}" height="{sz}" style="left:{x - sz // 2}px;top:{y - sz // 2}px">{svg[kind].format(c=c)}</svg>')
+        js(f'tl.fromTo("#dc{i}", {{rotation: 0}}, {{rotation: {360 * (2 if i % 2 else -2)}, duration: {DUR}, ease: "none"}}, 0);')
+        js(f'tl.fromTo("#dc{i}", {{y: 0}}, {{y: {-26 if i % 2 else 26}, duration: {1.4 + .2 * i:.2f}, yoyo: true, repeat: {int(DUR / (1.4 + .2 * i))}, ease: "sine.inOut"}}, 0);')
+    return (f'<div id="deco">{"".join(out)}</div>'
+            f'<svg id="rays" viewBox="-700 -700 1400 1400"><g>{wedges}</g></svg>')
+
+
 def background():
     """The real PS2 gameplay, full-bleed and softly blurred, under a lavender-white wash: the game keeps moving behind
     every scene. The wash thins on the world map and pulls back on "console", when the game resumes behind the CTA."""
@@ -500,7 +578,7 @@ def background():
             ("gta-game.mp4", S["H"][0], DUR, 9.3)]
     vids = "".join(f'<video id="bg{i}" class="clip" src="assets/video/{src}" data-start="{a:.3f}" data-duration="{b - a:.3f}" '
                    f'data-media-start="{m}" data-track-index="0" muted playsinline></video>' for i, (src, a, b, m) in enumerate(segs))
-    js(f'tl.fromTo("#bg", {{scale: 1.04}}, {{scale: 1.12, duration: {DUR / 2:.2f}, yoyo: true, repeat: 1, ease: "sine.inOut"}}, 0);')
+    js(f'tl.fromTo("#bg", {{scale: 1.04, x: -30}}, {{scale: 1.16, x: 30, duration: 4, yoyo: true, repeat: {int(DUR / 4)}, ease: "sine.inOut"}}, 0);')
     for i, (x, y) in enumerate([(160, 60), (-140, 90), (120, -80)]):
         js(f'tl.fromTo("#blob{i}", {{x: 0, y: 0}}, {{x: {x}, y: {y}, duration: {DUR / 3:.2f}, yoyo: true, repeat: 2, ease: "sine.inOut"}}, 0);')
     js('tl.set("#wash", {opacity: 0}, 0);')
@@ -523,12 +601,15 @@ def main():
     caps = captions()
     bg = background()
     transitions()
+    deco = motion()
     no_immediate()
     A.insert(0, "      gsap.set(" + json.dumps(list(dict.fromkeys(HIDE))) + ", {opacity: 0});")
     A.insert(1, '      gsap.set("#wipe", {x: -1900});')
     scenes = "\n      ".join(
-        f'<div id="sc-{k}" class="clip scene" data-start="{a:.3f}" data-duration="{b - a:.3f}" data-track-index="{2 + i % 2}">{"".join(SCENES[k])}</div>'
+        f'<div id="sc-{k}" class="clip scene" data-start="{a:.3f}" data-duration="{b - a:.3f}" data-track-index="{2 + i % 2}">'
+        f'<div class="sw" id="sw-{k}"><div class="pw" id="pw-{k}">{"".join(SCENES[k])}</div></div></div>'
         for i, (k, (a, b)) in enumerate(S.items()))
+    CT["beats"] = [t for t, _ in beats()]
     has_mix = os.path.exists(os.path.join(ROOT, "assets", "audio", "mix.wav"))
     src = "mix" if has_mix else "voice"
     gb = "".join(f"<b id=\"gb{i}\"></b>" for i in range(5))
@@ -549,6 +630,7 @@ def main():
       <canvas id="gl" class="clip" data-start="0" data-duration="{DUR}" data-track-index="1"></canvas>
       {scenes}
       <div id="cap" class="clip" data-start="0" data-duration="{DUR}" data-track-index="6"><div class="box">{caps}<i class="nx"></i></div></div>
+      {deco}
       <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8" data-layout-ignore><div id="scan"></div><div id="wipe"></div><div id="flash"></div><div id="glitch">{gb}</div></div>
       <audio id="mix" src="assets/audio/{src}.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
     </div>
