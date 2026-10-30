@@ -1,5 +1,8 @@
 # nxtlvl edits: logo concepts
 
+> **Chosen: R1 · Pearl (the refined Monoline N).** The finished kit is in this folder: see `brand.md` and
+> `kit-preview.png`. Everything below is the concept work that led to it.
+
 Logo concepts for the new editing account (Instagram handle given as `nxtlvlledits`). They're built from the Nxtlvl Social
 family: the Shooting Star, the Smooth N, the original "nxtlvl" lettering and the violet palette, with an editor's cut.
 
@@ -78,6 +81,7 @@ python3 build.py && python3 sheet.py      # round 1: concepts A-D, concepts-prev
 python3 build2.py && python3 sheet.py 2   # round 2: concepts E-L, concepts-preview-2a.png and -2b.png
 python3 build3.py && python3 sheet.py 3   # round 3: concepts M-T, concepts-preview-3a.png and -3b.png
 python3 build4.py && python3 sheet.py 4   # R refined: R1-R5, concepts-preview-4.png
+python3 final.py                          # the kit from R1: SVGs, png/, kit-preview.png
 ```
 
 `vector.py` outlines text with fontTools and traces the wordmark (cached in `nxtlvl-wordmark.svgfrag`).

@@ -88,7 +88,7 @@ MONO = dict(thick=8.5, hair=8.5, taper_out=52)        # one even line
 PEN = dict(thick=16, hair=3.0, taper_out=44)          # broad pen: thick uprights and diagonal, hairline turns
 
 
-def refined_n(p, stroke='pearl', star_fill='#FFFFFF', pen=MONO):
+def refined_n(p, stroke='pearl', star_fill='#FFFFFF', pen=MONO, star_r=13.5):
     d = contrast_outline(centreline(), **pen)
     if stroke in ('pearl', 'foil'):
         defs, fill = sheen(f'{p}sh', PEARL if stroke == 'pearl' else FOIL), f'url(#{p}sh)'
@@ -96,7 +96,7 @@ def refined_n(p, stroke='pearl', star_fill='#FFFFFF', pen=MONO):
         defs, fill = '', stroke
     x0, y0, x1, y1 = BOX
     body = (f'<g transform="translate({-x0} {-y0})"><path d="{d}" fill="{fill}"/>'
-            + star4(160, -2, 13.5, star_fill) + '</g>')
+            + star4(160, -2, star_r, star_fill) + '</g>')
     return defs, body, x1 - x0, y1 - y0
 
 
