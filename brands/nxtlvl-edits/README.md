@@ -4,8 +4,8 @@ Logo concepts for the new editing account (Instagram handle given as `nxtlvlledi
 family: the Shooting Star, the Smooth N, the original "nxtlvl" lettering and the violet palette, with an editor's cut.
 
 The comparison sheets show each concept as the Instagram profile picture, at full size and at 110 / 56 / 32 px, with
-a lockup: **`concepts-preview.png`** (round 1, A to D), **`concepts-preview-2a.png`** (E to H) and
-**`concepts-preview-2b.png`** (I to L).
+a lockup: **`concepts-preview.png`** (round 1, A to D), **`concepts-preview-2a.png`** (E to H),
+**`concepts-preview-2b.png`** (I to L), **`concepts-preview-3a.png`** (M to P) and **`concepts-preview-3b.png`** (Q to T).
 
 Round 1:
 
@@ -29,6 +29,19 @@ Round 2 (more variations):
 | **K · Violet Stack** | D's wordmark without the frame, white on full violet. |
 | **L · Cut Star, Light** | A's Cut Star in violet on a light ground. |
 
+Round 3 (minimal and classy: flat colour, no glow, one violet accent at most):
+
+| Concept | Idea |
+|---|---|
+| **M · Serif e** | One italic "e" in the serif, Mist on Ink, with a tiny violet star. |
+| **N · Seal** | A fine double ring with NXTLVL · EDITS set around it and the star at the centre. |
+| **O · Split Star** | The star cut once on the diagonal, its halves slipping along the cut. Ink on Mist. |
+| **P · Editorial Stack** | "nxtlvl" small over "edits" large, Ink on Mist, like a masthead. |
+| **Q · Sliced edits** | The word "edits" with one hairline cut through it, the top half nudged over. |
+| **R · Monoline N** | The Smooth N as a single fine line, with the violet star at its tip. |
+| **S · ne Ligature** | "ne" in the serif, set tight on flat night violet. |
+| **T · Cut Line** | A timeline as one line with a single cut, and the star above the cut. |
+
 Every concept shares one wordmark: "nxtlvl" in the original logo lettering (traced from `website/logo.png`), then "edits" in
 Instrument Serif Italic with the four-point star over the i.
 
@@ -50,6 +63,7 @@ the full kit follows (light and one-colour versions, stacked lockup, favicon and
 cd brands/nxtlvl-edits/source
 python3 build.py && python3 sheet.py      # round 1: concepts A-D, concepts-preview.png (needs Playwright)
 python3 build2.py && python3 sheet.py 2   # round 2: concepts E-L, concepts-preview-2a.png and -2b.png
+python3 build3.py && python3 sheet.py 3   # round 3: concepts M-T, concepts-preview-3a.png and -3b.png
 ```
 
 `vector.py` outlines text with fontTools and traces the wordmark (cached in `nxtlvl-wordmark.svgfrag`).

@@ -2,6 +2,7 @@
 
 Run after build.py / build2.py:  python3 sheet.py      (round 1 -> ../concepts-preview.png)
                                  python3 sheet.py 2    (round 2 -> ../concepts-preview-2a.png and -2b.png)
+                                 python3 sheet.py 3    (round 3 -> ../concepts-preview-3a.png and -3b.png)
 """
 import os
 import re
@@ -47,10 +48,31 @@ ITEMS_2 = [
      'A\'s Cut Star in violet on a light ground, so the edits account looks related to the main one, not identical.'),
 ]
 
+ITEMS_3 = [
+    ('m-serif-e', 'M', 'Serif e',
+     'One italic "e" for edits in the serif, Mist on Ink, with a tiny violet star. Nothing else.'),
+    ('n-seal', 'N', 'Seal',
+     'A fine double ring with NXTLVL · EDITS set around it and the star at the centre, like a maker\'s stamp.'),
+    ('o-split-star', 'O', 'Split Star',
+     'The Nxtlvl star cut once on the diagonal, its halves slipping along the cut. Ink on Mist.'),
+    ('p-editorial-stack', 'P', 'Editorial Stack',
+     'nxtlvl small over edits large in the serif, Ink on Mist, like a magazine masthead.'),
+    ('q-sliced-edits', 'Q', 'Sliced edits',
+     'The word edits with one hairline cut through it, the top half nudged over: the edit, done to the name itself.'),
+    ('r-monoline-n', 'R', 'Monoline N',
+     'The Smooth N from the main logo drawn as a single fine line, with the violet star at its tip.'),
+    ('s-ne-ligature', 'S', 'ne Ligature',
+     'n and e in the serif, set tight like a monogram on flat night violet, with a small star.'),
+    ('t-cut-line', 'T', 'Cut Line',
+     'A timeline reduced to one line with a single cut in it, and the star above the cut.'),
+]
+
 ROUNDS = {
     '1': [(ITEMS, 'concepts-preview.png', 'nxtlvl edits · logo concepts', 'Four directions for the edits account')],
     '2': [(ITEMS_2[:4], 'concepts-preview-2a.png', 'nxtlvl edits · more variations (1 of 2)', 'Eight more directions: E to H'),
           (ITEMS_2[4:], 'concepts-preview-2b.png', 'nxtlvl edits · more variations (2 of 2)', 'Eight more directions: I to L')],
+    '3': [(ITEMS_3[:4], 'concepts-preview-3a.png', 'nxtlvl edits · minimal and classy (1 of 2)', 'Minimal and classy: M to P'),
+          (ITEMS_3[4:], 'concepts-preview-3b.png', 'nxtlvl edits · minimal and classy (2 of 2)', 'Minimal and classy: Q to T')],
 }
 
 
@@ -80,7 +102,13 @@ def card(slug, letter, name, idea):
   </section>'''
 
 
-def page(items, kicker, title):
+LEDE = ("Each one is from the Nxtlvl Social family (the star, the N, the wordmark, the violet), with an editor's cut. "
+        "Shown as the Instagram profile picture at full size and at the sizes people actually see it.")
+LEDE_3 = ("Flat colour, no glow, one violet accent at most: Ink, Mist and the serif, with plenty of empty space. "
+          "Still the Nxtlvl family, quieter. Shown at full size and at the sizes people actually see it.")
+
+
+def page(items, kicker, title, lede=LEDE):
     cards = ''.join(card(*it) for it in items)
     return f'''<!doctype html><html><head><meta charset="utf-8"><style>
 @font-face {{ font-family: "Archivo"; src: url("{FONTS}/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }}
@@ -115,8 +143,7 @@ footer b {{ color: #0B0816; }}
   <header>
     <p class="kicker">{kicker}</p>
     <h1>{title}</h1>
-    <p class="lede">Each one is from the Nxtlvl Social family (the star, the N, the wordmark, the violet), with an editor's cut.
-    Shown as the Instagram profile picture at full size and at the sizes people actually see it.</p>
+    <p class="lede">{lede}</p>
   </header>{cards}
   <footer><b>Every concept uses the same wordmark:</b> "nxtlvl" in the original logo lettering, then "edits" in Instrument Serif
   Italic with the star over the i. Pick one from any round, or mix two (say one mark with another's colours), and I'll make the full kit.</footer>
@@ -149,7 +176,7 @@ def main(round_):
         subprocess.run(['node', os.path.join(HERE, 'render.js')] + args, check=True, stdout=subprocess.DEVNULL)
         html = os.path.join(HERE, 'sheet.html')
         with open(html, 'w') as f:
-            f.write(page(items, kicker, title))
+            f.write(page(items, kicker, title, LEDE_3 if round_ == '3' else LEDE))
         render_sheet(html, os.path.join(ROOT, out))
         print('sheet ->', os.path.join(ROOT, out))
 
