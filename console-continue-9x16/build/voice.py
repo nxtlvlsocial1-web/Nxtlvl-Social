@@ -2,11 +2,12 @@
 
 python3 build/voice.py      (from the project root; needs numpy, soundfile and ffmpeg)
 
-voice/raw/take1.mp3 is one ElevenLabs read (voice "Hallie - Fun, Young & Feminine", Eleven v3, with mood tags) of the
-eight LINES of the "Continue?" script; take2.mp3 is the slower alternative. voice/raw/words_take1.json holds its ElevenLabs Scribe word times.
-Every silence (ffmpeg silencedetect, -40 dB, at least 0.15 s) is held to at most CAP, or LINE_CAP where one line ends
-and the next begins, for the reference's fast Reel pacing; word times move with the audio. Writes
-assets/audio/voice.wav (48 kHz mono, -16 LUFS), build/words.json and voice/lines.json.
+voice/raw/v4_stacey_b.mp3 is the chosen ElevenLabs read: voice "Stacey - Bright, Energetic, Expressive", Eleven v4,
+with emotion tags (dramatic, whispered "forever", a gasp on "Wait", laughs, a shouted "Steam Deck"). It was picked from
+four v4 takes (two Stacey, two Hallie) as the most expressive (pitch range 18 semitones against 6.6 for the first,
+flatter v3 read in take1.mp3). voice/raw/words_v4_stacey_b.json holds its ElevenLabs Scribe word times. Every silence
+is held to at most CAP, or LINE_CAP between lines, with a few dramatic pauses kept longer (KEEP); word times move with
+the audio. Writes assets/audio/voice.wav (48 kHz mono, -16 LUFS), build/words.json and voice/lines.json.
 """
 import json
 import os
@@ -18,19 +19,19 @@ import soundfile as sf
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SR = 48000
-CAP = .26          # longest pause kept inside a line
-LINE_CAP = .44     # longest pause kept between lines
+CAP = .3          # longest pause kept inside a line
+LINE_CAP = .46     # longest pause kept between lines
 LEAD = .08         # silence before the first word
-KEEP = {9: .46, 11: .34}   # dramatic pauses kept longer: before "forever", after "Wait,"
+KEEP = {9: .5, 11: .32, 56: .42}   # dramatic pauses kept longer: before "forever", after "Wait,", after "Boss fight."
 LINES = [
     "Your favorite PS2 game is about to time out forever.",
     "Wait, player two just joined. It's Claude.",
-    "It's called Console Skill. Eleven free skills that rebuild PS2 games you own as real PC games, not an emulator.",
-    "Grab the power ups, mod it just by asking: sharper graphics, new levels, your own controller.",
+    "It's called Console Skill. 11 free skills that rebuild PS2 games you own as real PC games, not an emulator.",
+    "Grab the powerups. Mod it just by asking. Sharper graphics, new levels, your own controller.",
     "Game crashes? Boss fight. The tester skill finds out why.",
     "Then New Game Plus. Play it on Windows, Mac, Linux, even a Steam Deck.",
     "It's still early access, so not every game boots yet.",
-    "Comment \"console\" to continue, and I'll send you the link.",
+    "Comment console to continue, and I'll send you the link",
 ]
 
 
@@ -51,8 +52,8 @@ def gaps(words):
 
 
 def main():
-    raw = os.path.join(ROOT, "voice", "raw", "take1.mp3")
-    words = json.load(open(os.path.join(ROOT, "voice", "raw", "words_take1.json")))
+    raw = os.path.join(ROOT, "voice", "raw", "v4_stacey_b.mp3")
+    words = json.load(open(os.path.join(ROOT, "voice", "raw", "words_v4_stacey_b.json")))
     n = sum(len(ln.split()) for ln in LINES)
     assert len(words) == n, (len(words), n)
     line_of, k = [], 0
@@ -124,7 +125,7 @@ def main():
     for li, ln in enumerate(LINES):
         ws = [w for w in W if w["line"] == li + 1]
         lines.append({"text": ln, "start": ws[0]["s"], "end": ws[-1]["e"]})
-    json.dump({"source": "voice/raw/take1.mp3", "lines": lines}, open(os.path.join(ROOT, "voice", "lines.json"), "w"), indent=1)
+    json.dump({"source": "voice/raw/v4_stacey_b.mp3", "lines": lines}, open(os.path.join(ROOT, "voice", "lines.json"), "w"), indent=1)
     print(f"voice {len(y) / SR:.2f} s (source {len(x) / SR:.2f} s), {len(cuts)} pauses shortened")
     for ln in lines:
         print(f"  {ln['start']:6.2f} {ln['end']:6.2f}  {ln['text'][:70]}")

@@ -30,7 +30,8 @@ const px = (x, y) => V((x - 540) / K, (960 - y) / K, 0);
 const glEl = document.getElementById("gl"); glEl.width = W; glEl.height = H;
 const out2d = glEl.getContext("2d");
 const canvas = document.createElement("canvas"); canvas.width = W; canvas.height = H;
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance", preserveDrawingBuffer: true });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance", preserveDrawingBuffer: true });
+renderer.setClearColor(0x000000, 0);
 renderer.setSize(W, H, false);
 renderer.setPixelRatio(1);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -47,25 +48,7 @@ scene.environmentIntensity = 1.0;
 const BG = new THREE.Color("#F1EEF4");
 scene.fog = new THREE.Fog(BG, 12, 34);
 
-// backdrop: a small canvas redrawn each frame (lavender-white gradient with three soft colour blobs drifting)
-const bgC = document.createElement("canvas"); bgC.width = 270; bgC.height = 480;
-const bgG = bgC.getContext("2d");
-const bgTex = new THREE.CanvasTexture(bgC); bgTex.colorSpace = THREE.SRGBColorSpace;
-scene.background = bgTex;
-function drawBG(t, tint) {
-  const g = bgG.createLinearGradient(0, 0, 0, 480);
-  g.addColorStop(0, "#F7F6F3"); g.addColorStop(.55, "#F1EEF4"); g.addColorStop(1, "#E8E4F1");
-  bgG.fillStyle = g; bgG.fillRect(0, 0, 270, 480);
-  const blobs = [[.25, .22, "rgba(170,140,255,", .32], [.8, .4, "rgba(120,190,255,", .26], [.4, .78, "rgba(255,170,215,", .22]];
-  blobs.forEach(([x, y, c, a], i) => {
-    const cx = 270 * (x + .08 * Math.sin(t * .35 + i * 2)), cy = 480 * (y + .05 * Math.cos(t * .28 + i));
-    const r = 170 + 20 * Math.sin(t * .5 + i);
-    const rg = bgG.createRadialGradient(cx, cy, 0, cx, cy, r);
-    rg.addColorStop(0, c + (a + tint * .2) + ")"); rg.addColorStop(1, c + "0)");
-    bgG.fillStyle = rg; bgG.fillRect(0, 0, 270, 480);
-  });
-  bgTex.needsUpdate = true;
-}
+// the canvas is transparent: the gameplay and the lavender wash behind it are DOM layers (build/generate.py)
 
 // lights
 scene.add(new THREE.HemisphereLight(0xffffff, 0xd9d2ee, .9));
@@ -227,7 +210,7 @@ async function build() {
   scene.add(P.boss);
   P.shots = [0, 1, 2, 3].map(() => mesh(new THREE.OctahedronGeometry(.13, 0), M.violet));
   // world map (F)
-  const tiles = [[-.65, -.7, .4, .5, 0xbcd6ff], [.65, -.3, -1.5, .5, 0xffd9ec], [-.55, .1, -3.4, .5, 0xd9ccff], [.45, .55, -5.4, .62, 0xfff0b8]];
+  const tiles = [[-.65, -.35, .2, .5, 0xbcd6ff], [.65, .05, -1.7, .5, 0xffd9ec], [-.55, .45, -3.6, .5, 0xd9ccff], [.45, .9, -5.6, .62, 0xfff0b8]];
   P.tiles = tiles.map(([x, y, z, r, c], i) => {
     const g = group(); g.position.set(x, y, z);
     mesh(new THREE.CylinderGeometry(r, r * .78, .34, 6), pastel(c), g);
@@ -377,11 +360,9 @@ function renderAt(t) {
     cpos = V(Math.sin(t * .6) * .35, .1 + Math.cos(t * .4) * .1, 10); look = V(0, .3, 0);
   }
   if (inS(t, "C2")) {
-    const d = px(290, 720), m = px(790, 720);
-    place(P.disc, d, 1); P.disc.rotation.set(-.25, .35, t * 3.5);
-    const mo = t >= w[32] ? 1 + .08 * Math.exp(-(t - w[32]) * 8) * Math.cos((t - w[32]) * 28) : 1;
-    place(P.mon, m, mo); P.mon.rotation.set(0, -.3 + .05 * Math.sin(t), 0);
-    drawScreen(t >= w[32] ? 1 : 0);
+    // the disc spins above the GAME.EXE window (a DOM layer) and streams bits down into it
+    const d = px(540, 640), m = px(540, 930);
+    place(P.disc, d, .55); P.disc.rotation.set(-.35, .2 * Math.sin(t), t * 3.5);
     // bits flow from the disc to the screen while the game is rebuilt
     const a = w[25], b = w[33] + .2;
     if (t >= a && t < b + .6) {
@@ -389,7 +370,7 @@ function renderAt(t) {
       for (let i = 0; i < 48; i++) {
         const ph = ((t - a) * .9 + i / 48) % 1;
         const on = t < b || ph > (t - b) / .6;
-        _a.lerpVectors(d, m, ph); _a.y += Math.sin(ph * Math.PI) * .9 + Math.sin(i * 7 + t * 4) * .05; _a.z += Math.sin(ph * Math.PI) * .6;
+        _a.lerpVectors(d, m, ph); _a.x += Math.sin(ph * Math.PI) * (i % 2 ? 1.1 : -1.1) * (.6 + .4 * hash(i)); _a.z += Math.sin(ph * Math.PI) * .6;
         _e.set(t * 3 + i, t * 2 + i, 0); _q.setFromEuler(_e);
         const s = on ? Math.sin(ph * Math.PI) * 1.4 : 0; _s.set(s, s, s);
         P.bits.setMatrixAt(i, _m.compose(_a, _q, _s));
@@ -402,11 +383,11 @@ function renderAt(t) {
     const show = px(540, 760);
     const slots = [px(250, 1080), px(540, 1080), px(830, 1080)];
     // power-up star: in on "Grab", out when the chat starts
-    if (t >= w[37] && t < w[41] + .25) {
-      const k = eBack(lin(t, w[37], w[37] + .35)), o = 1 - eIn(lin(t, w[41], w[41] + .25));
+    if (t >= w[37] && t < w[40] + .25) {
+      const k = eBack(lin(t, w[37], w[37] + .35)), o = 1 - eIn(lin(t, w[40], w[40] + .25));
       place(P.star, show, .95 * k * o); P.star.rotation.set(.2 * Math.sin(t), t * 2.4, 0);
     }
-    const items = [[P.gem, w[46], w[48] - .05, 0, .95], [P.blocks, w[48], w[50] - .05, 1, 1.0], [P.padItem, w[50], S.D[1] - .55, 2, .6]];
+    const items = [[P.gem, w[45], w[47] - .05, 0, .95], [P.blocks, w[47], w[49] - .05, 1, 1.0], [P.padItem, w[49], S.D[1] - .55, 2, .6]];
     for (const [o, a, b, si, sc] of items) {
       if (t < a) continue;
       const k = eBack(lin(t, a, a + .35)), f = eInOut(lin(t, b, b + .3));
@@ -417,10 +398,10 @@ function renderAt(t) {
   }
   if (inS(t, "E")) {
     tint = -.2;
-    const c = px(540, 800);
-    if (t >= w[55]) {
+    const c = px(540, 845);
+    if (t >= w[54]) {
       P.boss.visible = true;
-      const rise = eOut(lin(t, w[55], w[55] + .5));
+      const rise = eOut(lin(t, w[54], w[54] + .5));
       const boom = t >= T.ko ? t - T.ko : -1;
       let flash = 0;
       T.hits.forEach((h) => { if (t >= h + .2 && t < h + .3) flash = 1; });
@@ -462,7 +443,7 @@ function renderAt(t) {
       g.visible = true;
       const a = un[i] - .3, e = eBack(lin(t, a, a + .4)), on = t >= a;
       g.scale.setScalar(on ? .35 + .65 * e : .35);
-      g.position.y = [-.7, -.3, .1, .55][i] + (on ? .1 * Math.sin(t * 2 + i) : -.25);
+      g.position.y = [-.35, .05, .45, .9][i] + (on ? .1 * Math.sin(t * 2 + i) : -.25);
       g.rotation.y = .25 * Math.sin(t * .7 + i);
       g.userData.flag.visible = t >= un[i];
       g.userData.flag.scale.setScalar(eBack(lin(t, un[i], un[i] + .3)) || .001);
@@ -479,7 +460,7 @@ function renderAt(t) {
   if (inS(t, "G")) {
     const c = px(540, 800);
     place(P.card, c, 1); P.card.rotation.set(-.08, .12 * Math.sin(t * .8), -.03);
-    const hit = w[79];
+    const hit = w[78];
     P.ink.visible = t >= hit;
     P.ink.scale.setScalar(t >= hit ? 1 + .25 * Math.exp(-(t - hit) * 14) : 1);
     // the stamp comes down onto the card, then lifts away
@@ -511,7 +492,6 @@ function renderAt(t) {
       P.conf.instanceMatrix.needsUpdate = true;
     }
   }
-  drawBG(t, tint);
   camera.position.copy(cpos); camera.lookAt(look);
   renderer.render(scene, camera);
   out2d.clearRect(0, 0, W, H);

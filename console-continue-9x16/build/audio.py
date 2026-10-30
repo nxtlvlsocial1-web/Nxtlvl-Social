@@ -108,7 +108,7 @@ def main():
     cues = json.load(open(os.path.join(ROOT, "build", "cues.json")))
     words = json.load(open(os.path.join(ROOT, "build", "words.json")))
     dur = cues["dur"]
-    burst = words[88]["s"]          # "console"
+    burst = words[87]["s"]          # "console"
     music_in = 96.35 - burst
     N = int(dur * SR)
     voice = load(os.path.join(ROOT, "assets", "audio", "voice.wav"), 1)[:, 0]
