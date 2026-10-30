@@ -1,5 +1,5 @@
 # PROGRESS: ashke-lyric-9x16 (updated 2026-10-30)
-Phase: final render (v5)
+Phase: DONE (final v5 delivered: 1080x1920, 35 s, 72.9 MB, -13.8 LUFS)
 Current version: final v5 → renders/nxtlvl_ashke-lyric_reels_9x16_v5.mp4 (35 s from the drop); v1-v4 delivered earlier
 Done: v3 rebuilt on the second YouMotion reference: nine scene recipes, cut-out stickers (local segmentation), photo prints
 from the estate and tour clips, typed labels, flashes, camera whips and tracking; v2 cinema layer removed.
