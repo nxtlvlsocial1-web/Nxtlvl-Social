@@ -1,6 +1,6 @@
 # nxtlvl edits brand kit
 
-The editing account of Nxtlvl Social (Instagram handle given as `nxtlvlledits`).
+The editing account of Nxtlvl Social, on Instagram as `@nxtlvlledits`. The logo and display name read "nxtlvl edits".
 
 **Logo: the Monoline N, Pearl** (concept R1, see `README.md` for how it was chosen). One fine line draws an N from two
 uprights, two round turns and a straight diagonal. The right upright climbs past the left (the next level) and tapers

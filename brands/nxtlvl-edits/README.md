@@ -3,7 +3,7 @@
 > **Chosen: R1 · Pearl (the refined Monoline N).** The finished kit is in this folder: see `brand.md` and
 > `kit-preview.png`. Everything below is the concept work that led to it.
 
-Logo concepts for the new editing account (Instagram handle given as `nxtlvlledits`). They're built from the Nxtlvl Social
+Logo concepts for the new editing account (Instagram: `@nxtlvlledits`). They're built from the Nxtlvl Social
 family: the Shooting Star, the Smooth N, the original "nxtlvl" lettering and the violet palette, with an editor's cut.
 
 The comparison sheets show each concept as the Instagram profile picture, at full size and at 110 / 56 / 32 px, with
