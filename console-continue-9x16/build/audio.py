@@ -103,6 +103,8 @@ SFX = {
     "boing": lambda: .25 * tone(220, 660, .18, "tri"),
     "key": lambda: .12 * mixp(noise(.02, .6), tone(2400, 2000, .02, "tri")),
     "glitch": lambda: .3 * mixp(tone(80, 2000, .12, "sq"), noise(.12, .6)),
+    "pix": lambda: .1 * np.concatenate([np.concatenate([tone(f, f * 1.3, .018, "sq"), np.zeros(int(.012 * SR))])
+                                        for f in rng.uniform(1800, 4200, 7)]),
 }
 
 

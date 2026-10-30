@@ -15,7 +15,7 @@ import random
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from mascots import sprite, mosaic  # noqa: E402
+from mascots import sprite, mosaic, pixel_map  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 B = os.path.join(ROOT, "build")
@@ -89,10 +89,40 @@ CT = {"S": S, "w": w, "CL": "#D97757", "count": count, "count2": count2, "burst"
 
 SCENES = {k: [] for k in S}   # html per scene
 APANEL, WINDOW = [], []        # root-level gameplay panels (their videos may not sit inside a timed scene)
+SPRITES, ACTORS = {}, []       # pixel actors drawn by assets/js/actors.js: pose maps and each actor's shots
 
 
 def add(k, html):
     SCENES[k].append(html)
+
+
+def sp(name, pose="stand", prop=None, block=None):
+    """Register a pose map for the actors (block: a deliberately low-res, mosaic version)."""
+    key = f"{name}/{pose}/{prop}/{block}"
+    if key not in SPRITES:
+        m = pixel_map(name, pose, prop)
+        if block:
+            groups = {}
+            for x, y, c in m["cells"]:
+                groups.setdefault((x // block, y // block), []).append(c)
+            dom = {b: max(set(cs), key=cs.count) for b, cs in groups.items()}
+            m = dict(m, cells=[[x, y, dom[(x // block, y // block)]] for x, y, _ in m["cells"]])
+        SPRITES[key] = m
+    return key
+
+
+def actor(shots):
+    """One character: a list of shots {a, b, sp, x, y (feet), s (cell px), flip, enter, exit, mv, hop, spins, kicks,
+    shakes, rolls, hits, grey, mono, tilt}. 'px' entries/exits assemble from and break into pixels."""
+    for sh in shots:
+        sh.setdefault("enter", "px")
+        sh.setdefault("exit", "px")
+        if sh["s"] >= 12 and not sh.get("mono"):
+            if sh["enter"] == "px":
+                ev(sh["a"], "pix")
+            if sh["exit"] == "px" and sh["b"] < DUR - .1:
+                ev(sh["b"] - .3, "pix")
+    ACTORS.append(shots)
 
 
 # ------------------------------------------------------------------ animation helpers
@@ -222,9 +252,9 @@ def scene_A():
            '<span class="warn" id="A-warn">EXPIRING</span></div>')
     show("#A-save", A_IN + .25, "up")
     show("#A-warn", w[9], "pop", .3)
-    cast(k, "rook", 70, 980, 170, A_IN + .35, grey_at=w[9])
-    cast(k, "vesper", 850, 1000, 150, A_IN + .5, grey_at=w[9] + .1)
-    cast(k, "dash", 760, 1010, 130, A_IN + .65, grey_at=w[9] + .2, flip=True)
+    actor([dict(a=A_IN + .35, b=S[k][1], sp=sp("rook"), x=200, y=1490, s=14, grey=w[9])])
+    actor([dict(a=A_IN + .5, b=S[k][1], sp=sp("dash"), x=700, y=1490, s=11, flip=-1, grey=w[9] + .1)])
+    actor([dict(a=A_IN + .62, b=S[k][1], sp=sp("vesper"), x=890, y=1490, s=13, flip=-1, grey=w[9] + .2)])
     shake("#A-save", w[9], 10, 10)
     js(f'tl.to("#A-save .cv", {{opacity: .35, duration: .6}}, {w[9]:.3f});')
 
@@ -237,22 +267,14 @@ def scene_B():
     hide("#B-pause", w[14] - .15, .15)
     show("#B-h1", w[14], "slam")
     show("#B-h2", w[14] + .12, "up", .35)
-    add(k, '<span class="tag" id="B-p1" style="left:300px">P1 · YOU</span>')
-    show("#B-p1", S[k][0] + .3, "up", .35)
     add(k, '<span class="tag cl" id="B-p2" style="left:780px">P2</span>')
     show("#B-p2", w[14] + .1, "pop")
     add(k, f'<span class="name" id="B-name" style="left:780px">{claude_mark(54)}CLAUDE</span>')
     hide("#B-p2", w[16] - .1, .1)
     show("#B-name", w[16], "slam")
-    add(k, '<div class="burst cl" id="B-burst" style="left:780px;top:880px"></div>')
-    HIDE.append("#B-burst")
-    js(f'tl.set("#B-burst", {{opacity: .9, scale: .2}}, {w[14]:.3f});')
-    js(f'tl.to("#B-burst", {{opacity: 0, scale: 2.4, duration: .7, ease: "power2.out"}}, {w[14] + .01:.3f});')
-    add(k, f'<div class="crabw" id="B-crab" style="left:440px;top:930px">{crab(200, "pad")}</div>')
-    HIDE.append("#B-crab")
-    js(f'tl.set("#B-crab", {{opacity: 1, y: 260, scale: .4}}, {w[15]:.3f});')
-    js(f'tl.to("#B-crab", {{y: 0, scale: 1, duration: .45, ease: "back.out(2.4)"}}, {w[15] + .01:.3f});')
-    hop("#B-crab", w[15] + .5, S[k][1])
+    ts = w[16] - .375   # coin spin; the pose swaps while the crab is edge-on
+    actor([dict(a=w[11] - .05, b=w[16], sp=sp("crab"), x=290, y=1330, s=22, exit="cut", spins=[ts]),
+           dict(a=w[16], b=S[k][1], sp=sp("crab", "cheer"), x=290, y=1330, s=22, enter="cut", exit="cut", spins=[ts], hop=[40, .5])])
     ev(w[11], "whoosh")
     ev(w[14], "land")
     ev(w[15], "boing")
@@ -286,12 +308,9 @@ def scene_C1():
             i += 1
     add(k, "".join(cells))
     # Dash skates right through the crab grid, the crabs jump out of the way
-    add(k, f'<div class="mw" id="C1-dash" style="left:-260px;top:1350px">{sprite("dash", 150)}</div>')
-    HIDE.append("#C1-dash")
     t0 = w[22] + .25
-    js(f'tl.set("#C1-dash", {{opacity: 1, x: 0, rotation: -10}}, {t0:.3f});')
-    js(f'tl.to("#C1-dash", {{x: 1600, duration: 1.3, ease: "power1.inOut"}}, {t0 + .01:.3f});')
-    hop("#C1-dash", t0, t0 + 1.3, 30)
+    actor([dict(a=t0, b=t0 + 1.3, sp=sp("dash", "run"), x=-200, y=1520, s=10, mv=[t0, t0 + 1.3, 1300, 1520, "lin"], hop=[34, .3],
+                tilt=-8, enter="cut", exit="cut")])
     ev(t0, "whoosh")
     for i in range(11):
         cx = 540 + ((i if i < 6 else i - 6) - ((6 if i < 6 else 5) - 1) / 2) * 162
@@ -321,14 +340,10 @@ def scene_C2():
     js(f'tl.set("#win", {{opacity: 0}}, {S[k][1]:.3f});')
     for i in range(3):
         js(f'tl.fromTo("#win-comp .dots i:nth-child({i + 1})", {{y: 0}}, {{y: -16, duration: .25, yoyo: true, repeat: {int((w[32] - t0) / .5)}, ease: "sine.inOut"}}, {t0 + i * .12:.3f});')
-    cast(k, "rook", 175, 720, 150, w[32] - .05, hop_h=22)
-    cast(k, "dash", 770, 740, 120, w[32] + .1, hop_h=26, flip=True)
     th = w[34] + .3
-    js(f'tl.to("#C2-rook", {{x: 190, rotation: 12, duration: .16, ease: "power2.in", immediateRender: false}}, {th:.3f});')
-    js(f'tl.to("#C2-dash", {{x: -190, rotation: -12, duration: .16, ease: "power2.in", immediateRender: false}}, {th:.3f});')
-    js(f'tl.to("#C2-rook", {{x: 0, rotation: 0, duration: .4, ease: "back.out(2.5)", immediateRender: false}}, {th + .2:.3f});')
-    js(f'tl.to("#C2-dash", {{x: 0, rotation: 0, duration: .4, ease: "back.out(2.5)", immediateRender: false}}, {th + .2:.3f});')
-    add(k, '<div class="burst cl" id="C2-hi" style="left:520px;top:800px;width:200px;height:200px;margin:-100px 0 0 -100px"></div>')
+    actor([dict(a=w[32] - .05, b=S[k][1], sp=sp("rook", "cheer"), x=290, y=876, s=9, enter="drop", exit="cut", kicks=[[th + .08, 160, -30]])])
+    actor([dict(a=w[32] + .1, b=S[k][1], sp=sp("dash", "cheer"), x=790, y=876, s=9, flip=-1, enter="drop", exit="cut", kicks=[[th + .08, -160, -30]])])
+    add(k, '<div class="burst cl" id="C2-hi" style="left:540px;top:740px;width:200px;height:200px;margin:-100px 0 0 -100px"></div>')
     HIDE.append("#C2-hi")
     js(f'tl.set("#C2-hi", {{opacity: 1, scale: .2}}, {th + .16:.3f});')
     js(f'tl.to("#C2-hi", {{opacity: 0, scale: 2, duration: .4, ease: "power2.out"}}, {th + .17:.3f});')
@@ -394,21 +409,17 @@ def scene_D():
         ev(a2 + .25 + i * .15, "blip")
         js(f'tl.fromTo("#D-pd{i}", {{rotation: 0}}, {{rotation: {(-6, 6, -6)[i]}, duration: .25, yoyo: true, repeat: 5, ease: "sine.inOut"}}, {a2 + .2 + i * .1:.3f});')
     tb = w[39] + .1   # they both go for the star and bonk heads
-    for name, x0, x1, sz in [("rook", -320, 170, 170), ("vesper", 1300, 740, 150)]:
-        sel = f"D-{name}"
-        add(k, f'<div class="mw" id="{sel}" style="left:{x0}px;top:{1010 - sz * 1.3:.0f}px"><div{" style=\"transform:scaleX(-1)\"" if name == "vesper" else ""}>{sprite(name, sz)}</div></div>')
-        HIDE.append("#" + sel)
-        js(f'tl.set("#{sel}", {{opacity: 1, x: 0}}, {tb - .4:.3f});')
-        js(f'tl.to("#{sel}", {{x: {x1 - x0}, duration: .38, ease: "power2.in"}}, {tb - .39:.3f});')
-        sgn = -1 if name == "rook" else 1
-        js(f'tl.to("#{sel}", {{x: {x1 - x0 + sgn * 90}, y: -60, rotation: {sgn * 35}, duration: .2, ease: "power2.out", immediateRender: false}}, {tb + .02:.3f});')
-        js(f'tl.to("#{sel}", {{x: {x1 - x0 + sgn * 700}, y: 300, rotation: {sgn * 400}, opacity: 0, duration: .45, ease: "power2.in", immediateRender: false}}, {w[40] - .45:.3f});')
+    for name, x0, x1, fl in [("rook", -160, 430, 1), ("vesper", 1240, 650, -1)]:
+        actor([dict(a=tb - .42, b=tb, sp=sp(name, "run"), x=x0, y=1260, s=13, flip=fl, mv=[tb - .42, tb, x1, 1260, "lin"], hop=[26, .21], enter="cut", exit="cut"),
+               dict(a=tb, b=w[40] - .12, sp=sp(name), x=x1, y=1260, s=13, flip=fl, kicks=[[tb + .02, -120 * fl, -60]], shakes=[tb], spins=[tb + .3], enter="cut")])
     ev(tb, "hit")
-    add(k, '<div class="burst" id="D-burst" style="left:540px;top:900px"></div>')
-    HIDE.append("#D-burst")
-    for a in [w[37], w[45], w[47], w[49]]:
-        js(f'tl.set("#D-burst", {{opacity: .85, scale: .3}}, {a:.3f});')
-        js(f'tl.to("#D-burst", {{opacity: 0, scale: 2.2, duration: .6, ease: "power2.out"}}, {a + .01:.3f});')
+    # "Mod it just by asking": the crab takes the order, waves on "asking"
+    actor([dict(a=w[40] - .1, b=w[44], sp=sp("crab"), x=540, y=1380, s=22, exit="cut"),
+           dict(a=w[44], b=w[45] - .04, sp=sp("crab", "wave"), x=540, y=1380, s=22, enter="cut", hop=[30, .45])])
+    # "Sharper graphics": blocky Rook breaks into pixels and reforms sharp
+    actor([dict(a=w[45] - .1, b=w[46] + .2, sp=sp("rook", block=3), x=540, y=1390, s=26, enter="cut"),
+           dict(a=w[46] + .08, b=w[47] - .04, sp=sp("rook", "cheer"), x=540, y=1390, s=26, spins=[w[46] + .55])])
+    actor([dict(a=w[49] - .05, b=S[k][1], sp=sp("dash", "cheer"), x=540, y=1450, s=17, exit="cut", hop=[46, .5], spins=[w[51] + .1])])
 
 
 def scene_E():
@@ -421,8 +432,6 @@ def scene_E():
         ev(w[53] + i * .1, "err")
     shake("#E-errs", w[53] + .3, 10, 18)
     js(f'tl.to("#E-errs", {{opacity: 0, scale: .6, duration: .2, ease: "power2.in"}}, {w[54] - .12:.3f});')
-    add(k, '<div class="hdr" id="E-hdr" style="font-size:112px">BOSS FIGHT</div>')
-    show("#E-hdr", w[54], "slam")
     ev(w[54], "roar")
     add(k, '<div class="hp" id="E-hp"><span>CRASH.EXE</span><div class="hb"><i id="E-hpf"></i></div></div>')
     show("#E-hp", w[54] + .15, "up", .3)
@@ -433,54 +442,44 @@ def scene_E():
         ev(h + .2, "hit")
     add(k, f'<span class="move" id="E-move">{claude_mark(34, CL)}CLAUDE USES <b>TESTER SKILL</b></span>')
     show("#E-move", w[56], "left", .3)
-    add(k, f'<div class="crabw" id="E-crab" style="left:780px;top:1080px">{crab(230, "mag")}</div>')
-    show("#E-crab", w[56], "pop", .35)
-    hop("#E-crab", w[56] + .4, S[k][1], 14)
-    cast(k, "rook", 40, 1150, 170, w[54] + .2, enter="side")
-    cast(k, "vesper", 230, 1180, 140, w[54] + .32, enter="side")
-    cast(k, "dash", 560, 1190, 130, w[54] + .44, enter="side", flip=True)
-    for sel, h in [("#E-rook", hits[0]), ("#E-vesper", hits[1]), ("#E-dash", hits[2])]:
-        js(f'tl.to("{sel}", {{rotation: -18, x: 30, duration: .1, ease: "power2.out", immediateRender: false}}, {h - .08:.3f});')
-        js(f'tl.to("{sel}", {{rotation: 0, x: 0, duration: .25, ease: "back.out(3)", immediateRender: false}}, {h + .05:.3f});')
+    # the party fights the boss: each lunges on its hit, everyone coin-spins on the K.O.
+    for name, x, s_, h, fl, d in [("rook", 180, 13, hits[0], 1, .15), ("vesper", 400, 12, hits[1], 1, .25), ("dash", 640, 12, hits[2], -1, .35)]:
+        actor([dict(a=w[54] + d, b=S[k][1], sp=sp(name), x=x, y=1390, s=s_, flip=fl, exit="cut",
+                    kicks=[[h, 60 if x < 540 else -60, -50]], spins=[ko + .1 + d / 3])])
+    actor([dict(a=w[56], b=S[k][1], sp=sp("crab", "stand", "mag"), x=890, y=1390, s=12, flip=-1, exit="cut",
+                kicks=[[hits[3], -70, -50]], spins=[ko + .2])])
     add(k, '<div class="ko" id="E-ko">K.O.!</div>')
     show("#E-ko", ko, "slam")
-    for n, sel in enumerate(["#E-rook", "#E-vesper", "#E-dash"]):
-        js(f'tl.to("{sel}", {{rotationY: 720, y: -90, duration: .55, ease: "power2.out", immediateRender: false}}, {ko + .1 + n * .06:.3f});')
-        js(f'tl.to("{sel}", {{y: 0, duration: .3, ease: "bounce.out", immediateRender: false}}, {ko + .65 + n * .06:.3f});')
     ev(ko, "boom")
     shake("#E-ko", ko + .28, 6, 10)
 
 
 def scene_F():
     k = "F"
-    head(k, "WORLD 2", "NEW GAME +", w[62] + .05)
     ev(w[63], "chime")
     for t in unlock:
         ev(t, "unlock")
-    for i, (name, sz, d) in enumerate([("dash", 120, 0), ("rook", 150, .35), ("vesper", 130, .6)]):
-        sel = f"F-{name}"
-        add(k, f'<div class="mw" id="{sel}" style="left:-200px;top:{1150 - sz * 1.2:.0f}px"><div>{sprite(name, sz)}</div></div>')
-        HIDE.append("#" + sel)
-        t0 = w[66] + d
-        js(f'tl.set("#{sel}", {{opacity: 1, x: 0}}, {t0:.3f});')
-        js(f'tl.to("#{sel}", {{x: 1500, duration: {2.6 - d * 1.4:.2f}, ease: "none"}}, {t0 + .01:.3f});')
-        hop("#" + sel, t0, t0 + 2.6, 24)
+    # the party races across the world map; Rook trips and rolls on the way
+    for name, s_, d in [("dash", 9, 0), ("rook", 10, .35), ("vesper", 9, .6)]:
+        t0, dur = w[66] + d, 2.6 - d * 1.4
+        shot = dict(a=t0, b=t0 + dur, sp=sp(name, "run"), x=-140, y=1180, s=s_, mv=[t0, t0 + dur, 1220, 1180, "lin"],
+                    hop=[24, .3], enter="cut", exit="cut")
         if name == "rook":
-            js(f'tl.to("#{sel} > div", {{rotation: 360, duration: .5, ease: "power1.inOut"}}, {t0 + .9:.3f});')
-            js(f'tl.set("#{sel} > div", {{rotation: 0}}, {t0 + 1.41:.3f});')
+            shot["rolls"] = [t0 + .9]
             ev(t0 + .9, "land")
+        actor([shot])
 
 
 def scene_G():
     k = "G"
-    head(k, "HEADS UP", None, S[k][0] + .05)
-    cast(k, "rook", 40, 1040, 150, S[k][0] + .3, enter="side")
-    cast(k, "vesper", 880, 1060, 130, S[k][0] + .45, enter="side", flip=True)
-    js(f'tl.set("#G-vesper", {{zIndex: 5}}, {w[79]:.3f});')
-    js(f'tl.to("#G-vesper", {{x: -730, duration: .4, ease: "power2.inOut", immediateRender: false}}, {w[79]:.3f});')
+    a = S[k][0]
+    # Vesper is drawn first, so she can hide behind Rook when "not every game boots yet"
+    actor([dict(a=a + .35, b=w[79], sp=sp("vesper"), x=870, y=1490, s=13, flip=-1, exit="cut"),
+           dict(a=w[79], b=w[81], sp=sp("vesper", "run"), x=870, y=1490, s=13, flip=-1, mv=[w[79], w[79] + .4, 300, 1490], hop=[20, .2],
+                enter="cut", exit="cut"),
+           dict(a=w[81], b=S[k][1], sp=sp("vesper", "peek"), x=300, y=1490, s=13, enter="cut", exit="cut", tilt=8)])
+    actor([dict(a=a + .2, b=S[k][1], sp=sp("rook"), x=190, y=1500, s=15, exit="cut", shakes=[w[78]])])
     ev(w[79], "swish")
-    js(f'tl.to("#G-vesper", {{y: -120, rotation: 12, duration: .18, ease: "power2.out", immediateRender: false}}, {w[81]:.3f});')
-    js(f'tl.to("#G-vesper", {{y: 0, rotation: 0, duration: .35, ease: "bounce.out", immediateRender: false}}, {w[81] + .2:.3f});')
     ev(w[81], "boing")
     ev(w[78], "stamp")
 
@@ -507,24 +506,16 @@ def scene_H():
     blink("#H-caret", w[86], DUR, .5)
     js(f'tl.fromTo("#H-send", {{scale: 1}}, {{scale: 1.3, duration: .14, yoyo: true, repeat: 1, ease: "power2.out"}}, {w[89]:.3f});')
     ev(w[89], "press")
-    cast(k, "rook", 40, 990, 170, w[87] + .1, enter="pop", hop_h=26, spin=False)
-    cast(k, "vesper", 70, 700, 130, w[87] + .25, enter="pop", hop_h=30, spin=False)
-    cast(k, "dash", 880, 700, 130, w[87] + .4, enter="pop", hop_h=34, flip=True, spin=False)
-    # the party dances: coin spins on the beat
-    for n, sel in enumerate(["#H-rook", "#H-vesper", "#H-dash"]):
-        t = w[89] + .1 + n * .08
-        j = 1
-        while t < DUR - .4:
-            js(f'tl.to("{sel}", {{rotationY: {360 * j}, duration: .4, ease: "power2.inOut", immediateRender: false}}, {t:.3f});')
-            t += 1.0
-            j += 1
-    add(k, f'<div class="crabw" id="H-crab" style="left:810px;top:1030px">{crab(190, "pad")}</div>')
+    # the cast cheers around the button and dances (coin spins on the beat); a crab gets tossed in the air
+    def dance(off):
+        return [round(w[89] + .1 + off + n, 3) for n in range(int((DUR - .5 - w[89]) // 1))]
+    actor([dict(a=w[87] + .25, b=DUR, sp=sp("vesper", "cheer"), x=150, y=1010, s=9, exit="cut", hop=[26, .5], spins=dance(.08))])
+    actor([dict(a=w[87] + .4, b=DUR, sp=sp("dash", "cheer"), x=930, y=1010, s=9, flip=-1, exit="cut", hop=[30, .5], spins=dance(.16))])
+    actor([dict(a=w[87] + .1, b=DUR, sp=sp("rook"), x=170, y=1200, s=11, exit="cut", spins=dance(0))])
     tt = w[90] + .1
-    js(f'tl.to("#H-crab > svg", {{y: -380, rotation: 540, duration: .5, ease: "power2.out", immediateRender: false}}, {tt:.3f});')
-    js(f'tl.to("#H-crab > svg", {{y: 0, rotation: 720, duration: .45, ease: "bounce.out", immediateRender: false}}, {tt + .5:.3f});')
+    actor([dict(a=w[87] + .2, b=DUR, sp=sp("crab", "cheer"), x=905, y=1200, s=9, flip=-1, exit="cut",
+                kicks=[[tt + .08, 0, -380, 1.0]], rolls=[tt + .1, tt + .55])])
     ev(tt, "boing")
-    show("#H-crab", w[87] + .2, "pop", .35)
-    hop("#H-crab", w[87] + .6, DUR, 22)
 
 
 # ------------------------------------------------------------------ captions: a game dialogue box
@@ -705,83 +696,46 @@ def color_fields():
     return f'<div id="fields">{"".join(out)}</div><div id="embers">{"".join(em)}</div>'
 
 
-def mascot_fx():
-    """Mascot transitions, as in the reference: on some cuts a giant mascot coin-spins across the frame and covers the
-    cut; on others a white flash leaves the mascot's one-colour silhouette, which then breaks into flying pixels."""
-    out = []
-    rng = random.Random(21)
-    plan = [("C1", "spin", "rook", None), ("D", "sil", "vesper", "#e8344e"), ("E", "spin", "dash", None),
-            ("F", "crabs", None, None), ("G", "sil", "rook", CL), ("H", "spin", "vesper", None)]
-    for n, (k, kind, name, col) in enumerate(plan):
-        a = S[k][0]
-        if kind == "spin":
-            sel = f"mfx{n}"
-            out.append(f'<div class="big" id="{sel}">{sprite(name, 560)}</div>')
-            js(f'tl.set("#{sel}", {{opacity: 1, x: -1150, rotation: -20, rotationY: 0}}, {a - .3:.3f});')
-            js(f'tl.to("#{sel}", {{x: 1150, rotation: 20, rotationY: 720, duration: .6, ease: "power2.inOut"}}, {a - .3:.3f});')
-            js(f'tl.to("#{sel}", {{scaleY: .82, scaleX: 1.15, duration: .15, yoyo: true, repeat: 1, ease: "sine.inOut"}}, {a - .15:.3f});')
-            js(f'tl.set("#{sel}", {{opacity: 0}}, {a + .31:.3f});')
-            ev(a - .3, "whoosh")
-        elif kind == "sil":
-            sel = f"mfx{n}"
-            out.append(f'<div class="big" id="{sel}">{sprite(name, 560, mono=col)}</div>')
-            js(f'tl.set("#flash", {{opacity: 1}}, {a - .06:.3f});')
-            js(f'tl.to("#flash", {{opacity: 0, duration: .3, ease: "power2.out"}}, {a + .02:.3f});')
-            js(f'tl.set("#{sel}", {{opacity: 1, scale: .7}}, {a - .06:.3f});')
-            js(f'tl.to("#{sel}", {{scale: 1.08, duration: .26, ease: "back.out(2)"}}, {a - .05:.3f});')
-            js(f'tl.set("#{sel}", {{opacity: 0}}, {a + .24:.3f});')
-            for i in range(36):
-                x, y = 300 + rng.random() * 480, 680 + rng.random() * 600
-                pid = f"mp{n}_{i}"
-                out.append(f'<i class="pxl" id="{pid}" style="left:{x:.0f}px;top:{y:.0f}px;background:{col}"></i>')
-                js(f'tl.set("#{pid}", {{opacity: 1}}, {a + .24:.3f});')
-                js(f'tl.to("#{pid}", {{x: {(x - 540) * 1.6 + rng.uniform(-120, 120):.0f}, y: {(y - 980) * 1.4 - rng.uniform(80, 300):.0f}, '
-                   f'rotation: {rng.randint(-180, 180)}, scale: 0, duration: {rng.uniform(.35, .6):.2f}, ease: "power2.out"}}, {a + .25:.3f});')
-            ev(a - .06, "glitch")
-        else:
-            # a crab stampede wipes the frame
-            for i in range(10):
-                sel = f"mfx{n}_{i}"
-                y = 80 + i * 180 + rng.randint(-30, 30)
-                out.append(f'<div class="big" id="{sel}" style="left:-420px;top:{y}px">{crab(300)}</div>')
-                d = rng.uniform(0, .12)
-                js(f'tl.set("#{sel}", {{opacity: 1, x: 0}}, {a - .3 + d:.3f});')
-                js(f'tl.to("#{sel}", {{x: 1900, duration: .55, ease: "power1.inOut"}}, {a - .3 + d:.3f});')
-                js(f'tl.set("#{sel}", {{opacity: 0}}, {a + .26 + d:.3f});')
-            ev(a - .3, "whoosh")
-    return f'<div id="mfx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="9" data-layout-ignore>{"".join(out)}</div>'
-
-
 TRANS = {}   # scene -> transition kind
+SIL_CUTS = []   # white-flash cuts: actors of the previous scene end there
 
 
 def transitions():
-    """Cuts rotate through five transitions: an iris that closes and reopens, a tile wipe, a zoom-through, a whip pan
-    and the slash wipe."""
-    kinds = ["iris", "tiles", "zoom", "whip", "slash"]
-    i = 0
+    """The reference's cut vocabulary: a sweep of yellow pixel dots, a mosaic of warm blocks popping in and out in
+    random order, a white flash that leaves a one-colour mascot silhouette breaking into pixels, a whip pan and a
+    zoom-through."""
+    plan = {"B": "dots", "C1": "mosaic", "C2": "whip", "D": "sil", "E": "mosaic", "F": "zoom", "G": "mosaic", "H": "sil"}
     keys = list(S)
+    rng = random.Random(33)
     for n, (k, (a, b)) in enumerate(S.items()):
         if a == 0:
             continue
-        kind = kinds[i % len(kinds)]
-        i += 1
+        kind = plan[k]
         TRANS[k] = kind
         prev = keys[n - 1]
-        if kind == "iris":
-            c = (CL, VIO)[i % 2]
-            js(f'tl.set("#iris", {{scale: 0, opacity: 1, backgroundColor: "{c}"}}, {a - .2:.3f});')
-            js(f'tl.to("#iris", {{scale: 1, duration: .2, ease: "power2.in"}}, {a - .2:.3f});')
-            js(f'tl.to("#iris", {{scale: 0, duration: .26, ease: "power2.out"}}, {a + .02:.3f});')
-            js(f'tl.set("#iris", {{opacity: 0}}, {a + .3:.3f});')
-            ev(a - .2, "swish")
-        elif kind == "tiles":
-            for r in range(10):
-                for c_ in range(6):
-                    d = (r + c_) * .012
-                    js(f'tl.fromTo("#tl{r}_{c_}", {{scale: 0}}, {{scale: 1.05, duration: .1, ease: "power2.out", immediateRender: false}}, {a - .22 + d:.3f});')
-                    js(f'tl.to("#tl{r}_{c_}", {{scale: 0, duration: .12, ease: "power2.in"}}, {a + .02 + d:.3f});')
-            ev(a - .2, "swish")
+        if kind == "dots":
+            for c in range(13):
+                t = a - .3 + (12 - c) * .022
+                js(f'tl.set(".dc{c}", {{opacity: 1, scale: 1.4}}, {t:.3f});')
+                js(f'tl.to(".dc{c}", {{scale: .6, duration: .12, ease: "power2.out"}}, {t + .01:.3f});')
+                js(f'tl.set(".dc{c}", {{opacity: 0}}, {t + .2:.3f});')
+            ev(a - .3, "data")
+            ev(a - .15, "data")
+        elif kind == "mosaic":
+            for r in range(18):
+                for c_ in range(10):
+                    d1, d2 = rng.uniform(0, .16), rng.uniform(0, .16)
+                    js(f'tl.set("#tl{r}_{c_}", {{scale: 1}}, {a - .22 + d1:.3f});')
+                    js(f'tl.set("#tl{r}_{c_}", {{scale: 0}}, {a + .02 + d2:.3f});')
+            ev(a - .2, "glitch")
+        elif kind == "sil":
+            SIL_CUTS.append(a - .1)
+            js(f'tl.set("#wflash", {{opacity: 1}}, {a - .1:.3f});')
+            js(f'tl.to("#wflash", {{opacity: 0, duration: .3, ease: "power2.out"}}, {a + .18:.3f});')
+            who = ("vesper", "cheer", None, "#e8344e") if k == "D" else ("crab", "cheer", None, CL)
+            actor([dict(a=a - .1, b=a + .34, sp=sp(who[0], who[1], who[2]), x=540, y=1330, s=30, mono=who[3], enter="cut", bob=0, shadow=False)])
+            ev(a - .1, "glitch")
+            ev(a + .04, "pix")
         elif kind == "zoom":
             js(f'tl.to("#sw-{prev}", {{scale: 1.6, opacity: 0, duration: .2, ease: "power2.in"}}, {a - .2:.3f});')
             js(f'tl.set("#flash", {{opacity: .5}}, {a:.3f});')
@@ -792,23 +746,23 @@ def transitions():
             js(f'tl.set("#streaks", {{opacity: 1, x: 600}}, {a - .12:.3f});')
             js(f'tl.to("#streaks", {{x: -600, opacity: 0, duration: .3, ease: "power2.out"}}, {a - .11:.3f});')
             ev(a - .18, "whoosh")
-        else:
-            js(f'tl.fromTo("#wipe", {{x: -1900}}, {{x: 1900, duration: .32, ease: "power2.inOut", immediateRender: false}}, {a - .16:.3f});')
-            ev(a - .15, "swish")
     # freeze glitch on "Wait" and on the crash
     for t in [w[10], w[53]]:
         for f in range(3):
             js(f'tl.set("#glitch", {{opacity: 1, y: {R.randint(-30, 30)}}}, {t + f / 30:.3f});')
             for i in range(5):
                 js(f'tl.set("#gb{i}", {{y: {R.randint(0, 1880)}, height: {R.choice([10, 22, 40, 70])}, x: {R.randint(-60, 60)}, '
-                   f'backgroundColor: "{R.choice([VIO, INK, "#ff9ccf", "#8fb8ff"])}"}}, {t + f / 30:.3f});')
+                   f'backgroundColor: "{R.choice(["#e8344e", INK, "#ff9ccf", "#ffcf5a"])}"}}, {t + f / 30:.3f});')
         js(f'tl.set("#glitch", {{opacity: 0}}, {t + .1:.3f});')
         ev(t, "glitch")
     for t, o, d in [(w[10], .85, .35), (ko, .55, .3), (w[87], .6, .35)]:
         js(f'tl.set("#flash", {{opacity: {o}}}, {t:.3f});')
         js(f'tl.to("#flash", {{opacity: 0, duration: {d}, ease: "power2.out"}}, {t + .01:.3f});')
-    # scanlines drift all the time
+    # scanlines drift and the film grain flickers all the time
     js(f'tl.fromTo("#scan", {{y: 0}}, {{y: 64, duration: {DUR}, ease: "none"}}, 0);')
+    g = random.Random(4)
+    for f in range(int(DUR * 15)):
+        js(f'tl.set("#grain", {{x: {g.randint(-40, 0)}, y: {g.randint(-40, 0)}}}, {f / 15:.3f});')
 
 
 CSS = f"""
@@ -820,6 +774,8 @@ CSS = f"""
 @font-face {{ font-family: "Rubik"; font-weight: 800; src: url("assets/fonts/Rubik-ExtraBold.ttf"); }}
 @font-face {{ font-family: "Orbitron"; font-weight: 900; src: url("assets/fonts/Orbitron-Black.ttf"); }}
 @font-face {{ font-family: "Anton"; src: url("assets/fonts/Anton.ttf"); }}
+@font-face {{ font-family: "Inter Display"; font-weight: 500; src: url("assets/fonts/InterDisplay/InterDisplay-Medium.otf"); }}
+@font-face {{ font-family: "Inter Display"; font-weight: 600; src: url("assets/fonts/InterDisplay/InterDisplay-SemiBold.otf"); }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #F1EEF4; }}
 #root {{ position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #F1EEF4; color: {INK}; }}
@@ -1021,6 +977,19 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #F1EE
 .bar {{ display: none; }}
 .hp {{ top: 650px; }}
 .chip {{ background: rgba(0,0,0,.55); }}
+/* the reference look: one character, one caption group, nothing else on screen */
+#deco, #rays, .chipwrap, .slot, .stamp2, .sticker, #D-c0, .tag, .mw {{ display: none !important; }}
+#cap {{ z-index: 7; }}
+#actors {{ position: absolute; inset: 0; width: 1080px; height: 1920px; z-index: 6; pointer-events: none; }}
+#wflash {{ position: absolute; inset: 0; z-index: 5; background: #fff; opacity: 0; pointer-events: none; }}
+#tiles i {{ width: 109px; height: 108px; }}
+#dots {{ position: absolute; inset: 0; z-index: 43; pointer-events: none; }}
+#dots i {{ position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; background: #ffcf5a; border-radius: 3px; display: block; opacity: 0;
+  box-shadow: 0 0 12px rgba(255,190,80,.8); }}
+#vig {{ position: absolute; inset: 0; z-index: 29; pointer-events: none; background: radial-gradient(ellipse 80% 70% at 50% 45%, rgba(0,0,0,0) 55%, rgba(0,0,0,.42) 100%); }}
+#grain {{ position: absolute; left: 0; top: 0; width: 1120px; height: 1960px; z-index: 31; pointer-events: none; opacity: .09;
+  background: url(assets/img/grain.png); mix-blend-mode: overlay; }}
+#cap .kp {{ font: 600 62px/1.15 "Inter Display"; letter-spacing: -.5px; }}
 .stamp2 {{ top: 600px; left: 760px; }}
 #cap .kc {{ gap: 4px; }}
 #cap .kc.inA {{ top: 236px; height: 260px; }}
@@ -1171,7 +1140,6 @@ def main():
     bg = background()
     fields = color_fields()
     transitions()
-    mfx = mascot_fx()
     deco = motion()
     no_immediate()
     A.insert(0, "      gsap.set(" + json.dumps(list(dict.fromkeys(HIDE))) + ", {opacity: 0});")
@@ -1183,8 +1151,16 @@ def main():
     CT["beats"] = [t for t, _ in beats()]
     has_mix = os.path.exists(os.path.join(ROOT, "assets", "audio", "mix.wav"))
     src = "mix" if has_mix else "voice"
-    tiles = "".join(f'<i id="tl{r}_{c}" style="left:{c * 180}px;top:{r * 192}px;background:{(CL, VIO, "#8fb8ff", "#ff9ccf")[(r + c) % 4]}"></i>'
-                    for r in range(10) for c in range(6))
+    tr = random.Random(8)
+    tiles = "".join(f'<i id="tl{r}_{c}" style="left:{c * 108}px;top:{r * 107}px;background:{tr.choice(["#e8344e", "#ff6b4a", "#ffffff", "#2a0d12", "#ff9a8a", "#c41a3a", "#ffffff"])}"></i>'
+                    for r in range(18) for c in range(10))
+    dots = "".join(f'<i class="dc{c}" style="left:{30 + c * 84}px;top:{30 + r * 84}px"></i>' for r in range(23) for c in range(13))
+    for shots in ACTORS:
+        for sh in shots:
+            for c in SIL_CUTS:
+                if not sh.get("mono") and sh["a"] < c < sh["b"] <= c + .2:
+                    sh["b"] = c
+    CT["sprites"], CT["actors"] = SPRITES, ACTORS
     streaks = "".join(f'<i style="top:{120 + i * 190}px;width:{R.randint(500, 1100)}px;left:{R.randint(-200, 300)}px"></i>' for i in range(9))
     gb = "".join(f"<b id=\"gb{i}\"></b>" for i in range(5))
     html = f"""<!doctype html>
@@ -1204,10 +1180,11 @@ def main():
       {"".join(APANEL)}{"".join(WINDOW)}
       <canvas id="gl" class="clip" data-start="0" data-duration="{DUR}" data-track-index="1"></canvas>
       {scenes}
+      <div id="wflash"></div>
+      <canvas id="actors" class="clip" data-start="0" data-duration="{DUR}" data-track-index="7"></canvas>
       <div id="cap" class="clip" data-start="0" data-duration="{DUR}" data-track-index="6">{caps}</div>
       {deco}
-      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8" data-layout-ignore><div id="scan"></div><div id="wipe"></div><div id="flash"></div><div id="glitch">{gb}</div><div id="iris"></div><div id="tiles">{tiles}</div><div id="streaks">{streaks}</div></div>
-      {mfx}
+      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8" data-layout-ignore><div id="scan"></div><div id="wipe"></div><div id="flash"></div><div id="glitch">{gb}</div><div id="iris"></div><div id="tiles">{tiles}</div><div id="streaks">{streaks}</div><div id="dots">{dots}</div><div id="vig"></div><div id="grain"></div></div>
       <audio id="mix" src="assets/audio/{src}.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
     </div>
     <script>
@@ -1219,6 +1196,7 @@ def main():
       window.__timelines["main"] = tl;
     </script>
     <script type="module" src="assets/js/world.js"></script>
+    <script type="module" src="assets/js/actors.js"></script>
   </body>
 </html>
 """

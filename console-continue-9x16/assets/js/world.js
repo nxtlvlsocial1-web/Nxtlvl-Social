@@ -335,7 +335,7 @@ function renderAt(t) {
   let tint = 0;
   // camera: a slow drift everywhere; scene F flies over the world map
   let cpos = V(Math.sin(t * .37) * .14, Math.cos(t * .29) * .1, 10), look = V(Math.sin(t * .37) * .05, 0, 0);
-  updParticles(t * 1.6);
+  parts.visible = false;   // the reference keeps the frame clean: no floating confetti
   // the camera pulses on the music's beat
   let pulse = 0;
   for (const b of T.beats) { if (t >= b && t < b + .4) pulse = Math.max(pulse, Math.exp(-(t - b) * 9)); }
@@ -351,8 +351,7 @@ function renderAt(t) {
   }
   if (inS(t, "B")) {
     tint = .6;
-    const l = px(300, 880), r = px(780, 880);
-    place(P.p1, l, .62); P.p1.rotation.set(.55, .25 + .08 * Math.sin(t * 1.4), 0); P.p1.position.y += .05 * Math.sin(t * 2);
+    const r = px(780, 880);
     if (t >= w[11]) {
       const k = lin(t, w[11], w[14]);
       const e = eOut(k);
@@ -406,21 +405,10 @@ function renderAt(t) {
   if (inS(t, "D")) {
     tint = .3;
     const show = px(540, 900);
-    const slots = [px(250, 1240), px(540, 1240), px(830, 1240)];
     // power-up star: in on "Grab", out when the chat starts
     if (t >= w[37] && t < w[40] + .25) {
       const k = eBack(lin(t, w[37], w[37] + .35)), o = 1 - eIn(lin(t, w[40], w[40] + .25));
       place(P.star, show, .95 * k * o); P.star.rotation.set(.2 * Math.sin(t), t * 2.4, 0);
-    }
-    // each power-up spins in at the demo card's corner, then drops into its slot
-    const corner = px(900, 680);
-    const items = [[P.gem, w[45], w[47] - .05, 0, .6], [P.blocks, w[47], w[49] - .05, 1, .6], [P.padItem, w[49], S.D[1] - .55, 2, .42]];
-    for (const [o, a, b, si, sc] of items) {
-      if (t < a) continue;
-      const k = eBack(lin(t, a, a + .35)), f = eInOut(lin(t, b, b + .3));
-      _b.lerpVectors(corner, slots[si], f);
-      place(o, _b, sc * k * (1 - .35 * f));
-      o.rotation.set(.35 + .1 * Math.sin(t), t * (f > .99 ? 1.2 : 2.2) + si, 0);
     }
   }
   if (inS(t, "E")) {
