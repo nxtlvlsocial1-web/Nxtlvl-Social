@@ -366,11 +366,11 @@ function renderAt(t) {
     const a1 = w[19], a2 = w[20];
     if (t >= a1) {
       const e = eOut(lin(t, a1, a1 + .5));
-      place(P.t1, px(540, 770)); P.t1.position.z = -9 * (1 - e); P.t1.rotation.set(1.3 * (1 - e) + .05 * Math.sin(t), .1 * Math.sin(t * .8), 0);
+      place(P.t1, px(540, 665)); P.t1.position.z = -9 * (1 - e); P.t1.rotation.set(1.3 * (1 - e) + .05 * Math.sin(t), .1 * Math.sin(t * .8), 0);
     }
     if (t >= a2) {
       const e = eOut(lin(t, a2, a2 + .45));
-      place(P.t2, px(540, 900)); P.t2.position.z = -9 * (1 - e); P.t2.rotation.set(-1.3 * (1 - e) - .05 * Math.sin(t), -.1 * Math.sin(t * .8), 0);
+      place(P.t2, px(540, 785)); P.t2.position.z = -9 * (1 - e); P.t2.rotation.set(-1.3 * (1 - e) - .05 * Math.sin(t), -.1 * Math.sin(t * .8), 0);
     }
     sweep.intensity = 60 * Math.sin(Math.PI * lin(t, a2 + .2, a2 + 1.4));
     sweep.position.set(-4 + 8 * lin(t, a2 + .2, a2 + 1.4), .9, 2);
@@ -404,12 +404,14 @@ function renderAt(t) {
       const k = eBack(lin(t, w[37], w[37] + .35)), o = 1 - eIn(lin(t, w[40], w[40] + .25));
       place(P.star, show, .95 * k * o); P.star.rotation.set(.2 * Math.sin(t), t * 2.4, 0);
     }
-    const items = [[P.gem, w[45], w[47] - .05, 0, .95], [P.blocks, w[47], w[49] - .05, 1, 1.0], [P.padItem, w[49], S.D[1] - .55, 2, .6]];
+    // each power-up spins in at the demo card's corner, then drops into its slot
+    const corner = px(900, 520);
+    const items = [[P.gem, w[45], w[47] - .05, 0, .6], [P.blocks, w[47], w[49] - .05, 1, .6], [P.padItem, w[49], S.D[1] - .55, 2, .42]];
     for (const [o, a, b, si, sc] of items) {
       if (t < a) continue;
       const k = eBack(lin(t, a, a + .35)), f = eInOut(lin(t, b, b + .3));
-      _b.lerpVectors(show, slots[si], f);
-      place(o, _b, sc * k * (1 - .62 * f));
+      _b.lerpVectors(corner, slots[si], f);
+      place(o, _b, sc * k * (1 - .35 * f));
       o.rotation.set(.35 + .1 * Math.sin(t), t * (f > .99 ? 1.2 : 2.2) + si, 0);
     }
   }

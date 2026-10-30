@@ -100,6 +100,8 @@ SFX = {
     "stamp": lambda: mixp(.8 * np.tanh(3 * tone(100, 40, .25)), .3 * noise(.05, .5)),
     "burst": lambda: mixp(.3 * noise(.5, .25, a=.003), .25 * seq(bell(1047, .1), bell(1319, .1), bell(1568, .1), bell(2093, .5))),
     "press": lambda: mixp(.4 * tone(400, 200, .08, "tri"), .3 * noise(.03, .5)),
+    "boing": lambda: .25 * tone(220, 660, .18, "tri"),
+    "key": lambda: .12 * mixp(noise(.02, .6), tone(2400, 2000, .02, "tri")),
     "glitch": lambda: .3 * mixp(tone(80, 2000, .12, "sq"), noise(.12, .6)),
 }
 

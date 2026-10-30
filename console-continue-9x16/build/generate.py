@@ -33,6 +33,34 @@ def claude_mark(size, color="#fff"):
 A, HIDE, EV = [], [], []
 
 
+PROPS = ["mag", "gear", "brush", "pad", "hat", "flag", "phones", "ball", "card", "globe", "bug"]   # one per skill, in README order
+
+
+def crab(size, prop=None, cid=None):
+    """Player 2's mascot: a little pixel crab in Claude's orange (as in the reference Reel), with an optional prop for
+    its skill. Drawn on a 16-unit grid; the prop sits above or beside it."""
+    o, d = CL, "#2a1d18"
+    r = lambda x, y, w_, h, c: f'<rect x="{x}" y="{y}" width="{w_}" height="{h}" fill="{c}"/>'
+    body = (r(2, 6, 12, 7, o) + r(0, 8, 2, 2, o) + r(14, 8, 2, 2, o) + r(5, 8, 1, 2, d) + r(10, 8, 1, 2, d)
+            + "".join(r(x, 13, 1, 2, o) for x in (3, 5, 10, 12)))
+    pr = {
+        "mag": '<circle cx="15" cy="3" r="2.6" fill="#dff1ff" stroke="#2a1d18" stroke-width="1"/>' + r(12, 5, 1, 2, d),
+        "gear": '<circle cx="8" cy="2.5" r="2.6" fill="#8fb8ff" stroke="#2a1d18" stroke-width=".8"/><circle cx="8" cy="2.5" r=".9" fill="#2a1d18"/>',
+        "brush": r(7, 0, 2, 4, "#8b5a2b") + r(6, 3, 4, 2, "#ff6fae"),
+        "pad": r(4, 9, 8, 3, "#2a1d18") + r(5, 10, 1, 1, "#8fb8ff") + r(10, 10, 1, 1, "#ff9ccf"),
+        "hat": '<path d="M8 -4 L12 5 H4 Z" fill="#7a2ffb"/>' + r(3, 5, 10, 1, "#5a1fc4") + r(8, 0, 1, 1, "#ffd36e"),
+        "flag": r(13, -1, 1, 7, d) + r(14, -1, 3, 2, "#ffd36e"),
+        "phones": '<path d="M3 7 Q8 -1 13 7" fill="none" stroke="#2a1d18" stroke-width="1.4"/>' + r(1, 6, 3, 3, "#7a2ffb") + r(12, 6, 3, 3, "#7a2ffb"),
+        "ball": '<circle cx="8" cy="2.5" r="2.4" fill="#ff6b6b"/>' + r(8, -1, 1, 1, "#3c9a4a"),
+        "card": r(6, 0, 4, 5, "#26222f") + r(7, 1, 2, 1, "#ffd36e"),
+        "globe": '<circle cx="8" cy="2.5" r="2.6" fill="#7fd1a0" stroke="#2a1d18" stroke-width=".8"/>' + r(6, 1, 2, 2, "#3c78d8"),
+        "bug": r(13, 1, 3, 3, "#e0335a") + r(12, 2, 1, 1, d) + r(16, 2, 1, 1, d),
+    }.get(prop, "")
+    ids = f' id="{cid}"' if cid else ""
+    return (f'<svg class="crab"{ids} viewBox="-1 -5 19 21" width="{size}" height="{size * 21 / 19:.0f}" shape-rendering="crispEdges">'
+            f'{body}{pr}</svg>')
+
+
 def js(s):
     A.append("      " + s)
 
@@ -99,6 +127,15 @@ def blink(sel, t0, t1, per=.5):
         k += 1
 
 
+def hop(sel, t0, t1, h=16):
+    """A little crab hop on every half second until t1."""
+    t = t0
+    while t < t1 - .3:
+        js(f'tl.to("{sel}", {{y: -{h}, duration: .14, ease: "power2.out", immediateRender: false}}, {t:.3f});')
+        js(f'tl.to("{sel}", {{y: 0, duration: .16, ease: "power2.in", immediateRender: false}}, {t + .14:.3f});')
+        t += .5
+
+
 def head(k, chip=None, title=None, t=None, chip_cls="", title_cls="", tsize=None):
     if chip:
         add(k, f'<div class="chipwrap"><span class="chip {chip_cls}" id="{k}-chip">{chip}</span></div>')
@@ -122,9 +159,9 @@ def scene_A():
     k = "A"
     # 0 to A_IN: the real game, full screen. Then it shrinks into a paused screen under the countdown, and greys out
     # (a still frame) on "forever".
-    APANEL.append(f'<div id="apanel"><video id="a-v" class="clip" src="assets/video/gta-game.mp4" data-start="0" '
+    APANEL.append(f'<div id="apanel"><video id="a-v" class="clip" src="assets/video/gow-game.mp4" data-start="0" '
                   f'data-duration="{S[k][1]:.3f}" data-media-start="0.3" data-track-index="4" muted playsinline></video>'
-                  '<img id="a-freeze" src="assets/img/gta-freeze.jpg" alt=""><div id="a-dim"></div></div>')
+                  '<img id="a-freeze" src="assets/img/gow-freeze.jpg" alt=""><div id="a-dim"></div></div>')
     js('tl.set("#apanel", {opacity: 1, scale: 1.3, y: 60}, 0);')
     js(f'tl.to("#apanel", {{scale: 1.42, duration: {A_IN - .1:.3f}, ease: "sine.inOut"}}, 0);')
     js(f'tl.to("#apanel", {{scale: 1, y: 0, duration: .55, ease: "power3.inOut"}}, {A_IN - .1:.3f});')
@@ -171,8 +208,14 @@ def scene_B():
     HIDE.append("#B-burst")
     js(f'tl.set("#B-burst", {{opacity: .9, scale: .2}}, {w[14]:.3f});')
     js(f'tl.to("#B-burst", {{opacity: 0, scale: 2.4, duration: .7, ease: "power2.out"}}, {w[14] + .01:.3f});')
+    add(k, f'<div class="crabw" id="B-crab" style="left:440px;top:930px">{crab(200, "pad")}</div>')
+    HIDE.append("#B-crab")
+    js(f'tl.set("#B-crab", {{opacity: 1, y: 260, scale: .4}}, {w[15]:.3f});')
+    js(f'tl.to("#B-crab", {{y: 0, scale: 1, duration: .45, ease: "back.out(2.4)"}}, {w[15] + .01:.3f});')
+    hop("#B-crab", w[15] + .5, S[k][1])
     ev(w[11], "whoosh")
     ev(w[14], "land")
+    ev(w[15], "boing")
     ev(w[16], "chime")
 
 
@@ -182,13 +225,28 @@ def scene_C1():
     ev(w[19], "whoosh")
     ev(w[20], "whoosh")
     ev(w[20] + .1, "slam")
-    add(k, '<div class="chips" id="C1-chips"><span class="pill" id="C1-c0">11 SKILLS</span><span class="pill vio" id="C1-c1">FREE</span><span class="pill" id="C1-c2">OPEN SOURCE</span></div>')
-    show("#C1-c0", w[21], "pop"); ev(w[21], "blip")
-    show("#C1-c1", w[22], "pop"); ev(w[22], "blip")
-    show("#C1-c2", w[23], "pop"); ev(w[23], "blip")
     add(k, '<div class="press" id="C1-press">PRESS START</div>')
     show("#C1-press", w[20] + .3, "fade", .2)
-    blink("#C1-press", w[20] + .6, S[k][1], .6)
+    blink("#C1-press", w[20] + .6, w[21] - .05, .6)
+    js(f'tl.to("#C1-press", {{opacity: 0, duration: .1}}, {w[21] - .05:.3f});')
+    # "Eleven free skills": eleven crabs pop into a grid, one per skill
+    rows = [(6, 1030), (5, 1170)]
+    i = 0
+    cells = []
+    for n, y in rows:
+        for j in range(n):
+            x = 540 + (j - (n - 1) / 2) * 162
+            cells.append(f'<div class="crabw" id="C1-k{i}" style="left:{x - 80:.0f}px;top:{y - 90}px">{crab(160, PROPS[i])}</div>')
+            t = w[21] + i * .055
+            HIDE.append(f"#C1-k{i}")
+            js(f'tl.fromTo("#C1-k{i}", {{opacity: 0, y: 40, scale: .3}}, {{opacity: 1, y: 0, scale: 1, duration: .3, ease: "back.out(3)"}}, {t:.3f});')
+            hop(f"#C1-k{i}", t + .4 + (i % 3) * .1, S[k][1], 10)
+            if i % 2 == 0:
+                ev(t, "blip")
+            i += 1
+    add(k, "".join(cells))
+    add(k, '<div class="stamp2" id="C1-free"><span>FREE</span></div>')
+    show("#C1-free", w[22], "slam")
 
 
 def scene_C2():
@@ -236,6 +294,38 @@ def scene_D():
         js(f'tl.set("#D-s{i}", {{borderColor: "{VIO}"}}, {land:.3f});')
         show(f"#D-p{i}", land, "pop", .3)
         ev(land, "blip")
+    # show, don't tell: a card per power-up
+    pad_svg = ('<svg viewBox="0 0 120 70" width="190" height="111"><path d="M30 8h60c16 0 26 12 28 30l2 14c1 10-9 16-17 9l-11-10H28L17 61c-8 7-18 1-17-9l2-14C4 20 14 8 30 8z" '
+               'fill="{c}" stroke="#1d1a26" stroke-width="4"/><circle cx="38" cy="30" r="7" fill="#1d1a26"/><circle cx="84" cy="26" r="4" fill="#1d1a26"/>'
+               '<circle cx="92" cy="34" r="4" fill="#1d1a26"/></svg>')
+    pads = "".join(f'<div class="pd" id="D-pd{i}">{pad_svg.format(c=c)}<b class="ok" id="D-ok{i}">&#10003;</b></div>'
+                   for i, c in enumerate(["#ffffff", "#2d2a36", CL]))
+    add(k, '<div class="demo" id="D-c0"><img src="assets/img/gow-16.0.jpg" alt=""><img class="blur" id="D-blur" src="assets/img/gow-16.0.jpg" alt="">'
+           '<i class="sweep" id="D-sweep"></i><span class="dtag" id="D-t0">BEFORE</span><span class="dtag on" id="D-t1">AFTER</span></div>'
+           '<div class="demo lv" id="D-c1"><div class="dh">SELECT LEVEL</div><div class="tiles">'
+           + "".join(f'<div class="tile" id="D-tl{i}"><img src="assets/img/gow-{t}.jpg" alt=""><span>{lb}</span></div>'
+                     for i, (t, lb) in enumerate([("2.0", "LEVEL 1"), ("13.2", "LEVEL 2"), ("19.4", "NEW")]))
+           + '</div><i class="sel" id="D-sel"></i></div>'
+           f'<div class="demo pads" id="D-c2"><div class="dh">ANY CONTROLLER</div><div class="pdrow">{pads}</div></div>')
+    a0, a1, a2 = w[45], w[47], w[49]
+    for i, (a, b) in enumerate([(a0, a1), (a1, a2), (a2, S[k][1] + .1)]):
+        HIDE.append(f"#D-c{i}")
+        js(f'tl.fromTo("#D-c{i}", {{opacity: 0, scale: .7, rotation: {(-4, 3, -2)[i]}}}, {{opacity: 1, scale: 1, rotation: 0, duration: .35, ease: "back.out(2)"}}, {a - .02:.3f});')
+        if b < S[k][1]:
+            js(f'tl.to("#D-c{i}", {{opacity: 0, x: -160, duration: .14, ease: "power2.in"}}, {b - .12:.3f});')
+    HIDE.extend(["#D-t1"])
+    js(f'tl.fromTo("#D-sweep", {{x: -60}}, {{x: 880, duration: .45, ease: "power2.inOut"}}, {w[46] + .05:.3f});')
+    js(f'tl.to("#D-blur", {{opacity: 0, duration: .4, ease: "power2.inOut"}}, {w[46] + .05:.3f});')
+    js(f'tl.to("#D-t0", {{opacity: 0, duration: .1}}, {w[46] + .3:.3f});')
+    js(f'tl.fromTo("#D-t1", {{opacity: 0, scale: 1.6}}, {{opacity: 1, scale: 1, duration: .25, ease: "back.out(3)"}}, {w[46] + .3:.3f});')
+    for i, t in enumerate([a1 + .05, a1 + .3, a1 + .55]):
+        js(f'tl.to("#D-sel", {{x: {i * 252}, duration: .14, ease: "power2.out", immediateRender: false}}, {t:.3f});')
+        ev(t, "blip")
+    js(f'tl.fromTo("#D-tl2", {{scale: 1}}, {{scale: 1.08, duration: .15, yoyo: true, repeat: 1}}, {a1 + .55:.3f});')
+    for i in range(3):
+        show(f"#D-ok{i}", a2 + .25 + i * .15, "pop", .25)
+        ev(a2 + .25 + i * .15, "blip")
+        js(f'tl.fromTo("#D-pd{i}", {{rotation: 0}}, {{rotation: {(-6, 6, -6)[i]}, duration: .25, yoyo: true, repeat: 5, ease: "sine.inOut"}}, {a2 + .2 + i * .1:.3f});')
     add(k, '<div class="burst" id="D-burst" style="left:540px;top:760px"></div>')
     HIDE.append("#D-burst")
     for a in [w[37], w[45], w[47], w[49]]:
@@ -265,6 +355,9 @@ def scene_E():
         ev(h + .2, "hit")
     add(k, f'<span class="move" id="E-move">{claude_mark(34, CL)}CLAUDE USES <b>TESTER SKILL</b></span>')
     show("#E-move", w[56], "left", .3)
+    add(k, f'<div class="crabw" id="E-crab" style="left:760px;top:930px">{crab(230, "mag")}</div>')
+    show("#E-crab", w[56], "pop", .35)
+    hop("#E-crab", w[56] + .4, S[k][1], 14)
     add(k, '<div class="ko" id="E-ko">K.O.!</div>')
     show("#E-ko", ko, "slam")
     ev(ko, "boom")
@@ -296,49 +389,44 @@ def scene_H():
     for d, t in count2:
         ev(t, "tick")
     ev(w[87], "burst")
-    add(k, '<div class="cta" id="H-cta"><div class="c1" id="H-c1">COMMENT</div><div class="c2" id="H-c2">“CONSOLE”</div></div>')
-    show("#H-c1", w[86], "up", .35)
-    show("#H-c2", w[87], "slam")
-    js(f'tl.fromTo("#H-c2", {{scale: 1}}, {{scale: 1.08, duration: .16, yoyo: true, repeat: 1, ease: "power2.out"}}, {w[89]:.3f});')
+    letters = "".join(f'<b id="H-L{i}">{c}</b>' for i, c in enumerate("CONSOLE"))
+    add(k, '<div class="cbox" id="H-cbox"><div class="cav">' + claude_mark(40) + '</div><div class="cin"><span class="cl1">Comment</span>'
+           f'<span class="ctx">{letters}<i class="caret" id="H-caret"></i></span></div><div class="csend" id="H-send">&#10148;</div></div>')
+    show("#H-cbox", w[86], "up", .35)
+    for i in range(7):
+        HIDE.append(f"#H-L{i}")
+        js(f'tl.fromTo("#H-L{i}", {{opacity: 0, y: 14}}, {{opacity: 1, y: 0, duration: .1}}, {w[87] + i * .07:.3f});')
+        ev(w[87] + i * .07, "key")
+    blink("#H-caret", w[86], DUR, .5)
+    js(f'tl.fromTo("#H-send", {{scale: 1}}, {{scale: 1.3, duration: .14, yoyo: true, repeat: 1, ease: "power2.out"}}, {w[89]:.3f});')
     ev(w[89], "press")
-    t, kk = w[89] + .6, 0
-    while t < DUR - .2:
-        js(f'tl.to("#H-c2", {{scale: {1.04 if kk % 2 == 0 else 1}, duration: .5, ease: "sine.inOut"}}, {t:.3f});')
-        t += .5
-        kk += 1
+    add(k, f'<div class="crabw" id="H-crab" style="left:810px;top:850px">{crab(190, "pad")}</div>')
+    show("#H-crab", w[87] + .2, "pop", .35)
+    hop("#H-crab", w[87] + .6, DUR, 22)
 
 
 # ------------------------------------------------------------------ captions: a game dialogue box
 
-CHUNKS = [(0, 4), (5, 9), (10, 14), (15, 16), (17, 20), (21, 23), (24, 29), (30, 33), (34, 36), (37, 39), (40, 44), (45, 46),
-          (47, 48), (49, 51), (52, 53), (54, 55), (56, 61), (62, 65), (66, 71), (72, 75), (76, 79), (80, 85), (86, 89), (90, 95)]
+CHUNKS = [(0, 3), (4, 6), (7, 9), (10, 10), (11, 14), (15, 16), (17, 18), (19, 20), (21, 23), (24, 27), (28, 30), (31, 33), (34, 36),
+          (37, 39), (40, 41), (42, 44), (45, 46), (47, 48), (49, 51), (52, 53), (54, 55), (56, 58), (59, 61), (62, 65), (66, 69), (70, 71),
+          (72, 75), (76, 79), (80, 82), (83, 85), (86, 89), (90, 95)]
 HL = {2, 16, 19, 20, 21, 22, 26, 31, 32, 33, 34, 35, 36, 39, 40, 45, 46, 47, 48, 50, 51, 54, 55, 57, 58, 63, 64, 65, 69, 70, 71, 74, 75, 78, 79, 87, 89}
 SHOW = {"favorite": "favourite", "console": "“CONSOLE”", "powerups.": "power-ups!", "11": "Eleven", "link": "link!"}
 
 
 def captions():
+    """Short caption labels like the reference: 1-4 words on a dark pill, a new one about every second, keywords in
+    Claude orange, each popping in on its first word."""
     rows = []
     for ci, (a, b) in enumerate(CHUNKS):
-        spans = []
-        for i in range(a, b + 1):
-            txt = SHOW.get(W[i]["w"], W[i]["w"])
-            cls = ' class="hl"' if i in HL else ""
-            spans.append(f'<span id="cw{i}"{cls}>{txt}</span>')
-            HIDE.append(f"#cw{i}")
-            js(f'tl.fromTo("#cw{i}", {{opacity: 0, y: 22, scale: .5}}, {{opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}}, {w[i]:.3f});')
-        rows.append(f'<div class="cl" id="cc{ci}">{" ".join(spans)}</div>')
-        t0 = w[a] - .02
-        t1 = w[CHUNKS[ci + 1][0]] - .03 if ci + 1 < len(CHUNKS) else DUR
+        spans = " ".join(f'<span{" class=" + chr(34) + "hl" + chr(34) if i in HL else ""}>{SHOW.get(W[i]["w"], W[i]["w"])}</span>' for i in range(a, b + 1))
+        rows.append(f'<div class="cl" id="cc{ci}"><div class="pill2">{spans}</div></div>')
+        t0 = w[a] - .03
+        t1 = w[CHUNKS[ci + 1][0]] - .04 if ci + 1 < len(CHUNKS) else DUR
         HIDE.append(f"#cc{ci}")
-        js(f'tl.set("#cc{ci}", {{opacity: 1}}, {t0:.3f});')
+        js(f'tl.set("#cc{ci}", {{opacity: 1, scale: .55, y: 26}}, {t0:.3f});')
+        js(f'tl.to("#cc{ci}", {{scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}}, {t0 + .01:.3f});')
         js(f'tl.set("#cc{ci}", {{opacity: 0}}, {t1:.3f});')
-    # the dialogue box bobs its little arrow the whole time
-    t, k = 0.0, 0
-    while t < DUR:
-        js(f'tl.to("#cap .nx", {{y: {8 if k % 2 == 0 else 0}, duration: .35, ease: "sine.inOut"}}, {t:.3f});')
-        t += .35
-        k += 1
-    show("#cap .box", 0.0, "up", .35)
     return "".join(rows)
 
 
@@ -478,13 +566,41 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #F1EE
 .cta .c2 {{ display: inline-block; font: 400 104px/1 "Russo One"; color: #fff; background: {VIO}; padding: 18px 44px 22px; border-radius: 36px;
   box-shadow: 0 12px 0 {INK}, 0 0 50px rgba(122,47,251,.45); }}
 #cap {{ position: absolute; left: 0; right: 0; top: 0; height: 1920px; pointer-events: none; z-index: 6; }}
-#cap .box {{ position: absolute; left: 70px; right: 70px; top: 1290px; height: 170px; background: rgba(255,255,255,.94); border: 4px solid {INK};
-  border-radius: 30px; box-shadow: 0 10px 0 rgba(29,26,38,.12); }}
-#cap .cl {{ position: absolute; left: 36px; right: 36px; top: 0; height: 162px; display: flex; flex-wrap: wrap; align-content: center; justify-content: center;
-  column-gap: 14px; row-gap: 4px; font: 800 50px/1.15 "Rubik"; text-align: center; }}
-#cap .cl span {{ display: inline-block; }}
-#cap .hl {{ color: {VIO}; }}
-#cap .nx {{ position: absolute; right: 30px; bottom: 14px; width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 18px solid {VIO}; }}
+#cap .cl {{ position: absolute; left: 60px; right: 60px; top: 1300px; display: flex; justify-content: center; transform-origin: 50% 50%; }}
+#cap .pill2 {{ display: inline-block; max-width: 960px; text-align: center; font: 700 54px/1.15 "Chakra Petch"; text-transform: uppercase; letter-spacing: 1px;
+  color: #fff; background: {INK}; padding: 18px 34px 20px; border-radius: 22px; box-shadow: 0 10px 0 rgba(29,26,38,.18), 0 18px 40px rgba(29,26,38,.25); }}
+#cap .hl {{ color: #ffa27f; }}
+.crabw {{ position: absolute; z-index: 6; }}
+.crab {{ display: block; filter: drop-shadow(0 8px 0 rgba(29,26,38,.18)); }}
+.stamp2 {{ position: absolute; left: 720px; top: 540px; z-index: 7; }}
+.stamp2 span {{ display: inline-block; transform: rotate(-10deg); font: 400 76px/1 "Russo One"; color: #fff; background: {CL}; padding: 12px 30px 16px; border-radius: 18px;
+  border: 5px solid #fff; box-shadow: 0 10px 0 rgba(29,26,38,.2); }}
+.demo {{ position: absolute; left: 130px; width: 820px; top: 540px; height: 420px; background: #fff; border: 5px solid {INK}; border-radius: 28px; overflow: hidden;
+  box-shadow: 0 14px 0 rgba(29,26,38,.12), 0 30px 60px rgba(29,26,38,.2); }}
+.demo > img {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }}
+.demo .blur {{ filter: blur(9px) saturate(.6) brightness(.9); }}
+.demo .sweep {{ position: absolute; left: 0; top: 0; width: 10px; height: 100%; background: #fff; box-shadow: 0 0 30px 10px rgba(255,255,255,.8); display: block; }}
+.demo .dtag {{ position: absolute; left: 22px; top: 22px; font: 700 30px/1 "Chakra Petch"; letter-spacing: 3px; color: #fff; background: {INK}; padding: 10px 18px; border-radius: 999px; }}
+.demo .dtag.on {{ background: {CL}; }}
+.demo .dh {{ height: 70px; background: {INK}; color: #fff; font: 400 40px/70px "Russo One"; text-align: center; letter-spacing: 2px; }}
+.demo .tiles {{ position: absolute; left: 30px; top: 100px; display: flex; gap: 22px; }}
+.demo .tile {{ width: 230px; height: 290px; border-radius: 18px; overflow: hidden; position: relative; border: 4px solid {INK}; }}
+.demo .tile img {{ width: 100%; height: 100%; object-fit: cover; }}
+.demo .tile span {{ position: absolute; left: 10px; bottom: 10px; font: 700 26px/1 "Chakra Petch"; color: #fff; background: rgba(29,26,38,.85); padding: 8px 12px; border-radius: 10px; }}
+.demo .tile:last-child span {{ background: {CL}; }}
+.demo .sel {{ position: absolute; left: 22px; top: 92px; width: 246px; height: 306px; border: 8px solid {CL}; border-radius: 22px; display: block; box-shadow: 0 0 30px rgba(217,119,87,.6); }}
+.demo .pdrow {{ position: absolute; left: 0; right: 0; top: 130px; display: flex; justify-content: center; gap: 40px; }}
+.demo .pd {{ position: relative; }}
+.demo .ok {{ position: absolute; right: -6px; top: -26px; width: 56px; height: 56px; border-radius: 50%; background: {CL}; color: #fff; font: 700 34px/56px "Rubik"; text-align: center; }}
+.cbox {{ position: absolute; left: 110px; width: 860px; top: 1030px; height: 150px; background: #fff; border: 5px solid {INK}; border-radius: 30px; display: flex; align-items: center; gap: 22px;
+  padding: 0 24px; box-shadow: 0 14px 0 rgba(29,26,38,.14), 0 30px 60px rgba(29,26,38,.22); }}
+.cbox .cav {{ width: 92px; height: 92px; border-radius: 50%; background: {CL}; display: flex; align-items: center; justify-content: center; flex: none; }}
+.cbox .cin {{ flex: 1; display: flex; flex-direction: column; gap: 6px; }}
+.cbox .cl1 {{ font: 700 26px/1 "Chakra Petch"; letter-spacing: 2px; color: #6a6480; text-transform: uppercase; }}
+.cbox .ctx {{ display: flex; align-items: center; height: 70px; font: 400 64px/1 "Russo One"; color: {INK}; border: 4px solid {CL}; border-radius: 16px; padding: 0 16px; }}
+.cbox .ctx b {{ font-weight: 400; display: inline-block; }}
+.cbox .caret {{ width: 6px; height: 50px; background: {CL}; margin-left: 6px; display: block; }}
+.cbox .csend {{ width: 92px; height: 92px; border-radius: 50%; background: {CL}; color: #fff; font: 700 48px/92px "Rubik"; text-align: center; flex: none; }}
 #wipe {{ position: absolute; top: -200px; left: -400px; width: 1300px; height: 2400px; transform: skewX(-16deg); background: {VIO}; z-index: 40;
   box-shadow: -60px 0 0 #b9a2ff, 60px 0 0 {INK}; }}
 #flash {{ position: absolute; inset: 0; background: #fff; z-index: 41; opacity: 0; }}
@@ -573,9 +689,10 @@ def motion():
 def background():
     """The real PS2 gameplay, full-bleed and softly blurred, under a lavender-white wash: the game keeps moving behind
     every scene. The wash thins on the world map and pulls back on "console", when the game resumes behind the CTA."""
-    segs = [("gta-game.mp4", 0, S["C2"][0], .3), ("gta-game.mp4", S["C2"][0], S["D"][0], 9.3), ("re4-game.mp4", S["D"][0], S["E"][0], 11.0),
-            ("re4-game.mp4", S["E"][0], S["F"][0], 1.0), ("gta-game.mp4", S["F"][0], S["G"][0], .5), ("re4-game.mp4", S["G"][0], S["H"][0], 5.5),
-            ("gta-game.mp4", S["H"][0], DUR, 9.3)]
+    # God of War (its tutorial banner sits in 6.3-11.7 s of the clip, so those seconds are never used) and Resident Evil 4
+    segs = [("gow-game.mp4", 0, S["B"][0], .3), ("gow-game.mp4", S["B"][0], S["C2"][0], 11.9), ("gow-game.mp4", S["C2"][0], S["D"][0], 16.4),
+            ("re4-game.mp4", S["D"][0], S["E"][0], 11.0), ("re4-game.mp4", S["E"][0], S["F"][0], 1.0), ("gow-game.mp4", S["F"][0], S["G"][0], .5),
+            ("re4-game.mp4", S["G"][0], S["H"][0], 5.5), ("gow-game.mp4", S["H"][0], DUR, 12.4)]
     vids = "".join(f'<video id="bg{i}" class="clip" src="assets/video/{src}" data-start="{a:.3f}" data-duration="{b - a:.3f}" '
                    f'data-media-start="{m}" data-track-index="0" muted playsinline></video>' for i, (src, a, b, m) in enumerate(segs))
     js(f'tl.fromTo("#bg", {{scale: 1.04, x: -30}}, {{scale: 1.16, x: 30, duration: 4, yoyo: true, repeat: {int(DUR / 4)}, ease: "sine.inOut"}}, 0);')
@@ -587,8 +704,8 @@ def background():
     js(f'tl.to("#wash", {{opacity: .8, duration: .4}}, {S["G"][0]:.3f});')
     js(f'tl.to("#wash", {{opacity: .4, duration: .6}}, {w[87]:.3f});')
     a = S["H"][0]
-    resume = (f'<div id="resume"><video id="res-v" class="clip" src="assets/video/gta-game.mp4" data-start="{a:.3f}" data-duration="{DUR - a:.3f}" '
-              f'data-media-start="9.3" data-track-index="3" muted playsinline></video></div>')
+    resume = (f'<div id="resume"><video id="res-v" class="clip" src="assets/video/gow-game.mp4" data-start="{a:.3f}" data-duration="{DUR - a:.3f}" '
+              f'data-media-start="12.4" data-track-index="3" muted playsinline></video></div>')
     HIDE.append("#resume")
     js(f'tl.to("#resume", {{opacity: .55, duration: .6}}, {w[87]:.3f});')
     blobs = "".join(f'<i class="blob" id="blob{i}"></i>' for i in range(3))
@@ -629,7 +746,7 @@ def main():
       {"".join(APANEL)}{"".join(WINDOW)}
       <canvas id="gl" class="clip" data-start="0" data-duration="{DUR}" data-track-index="1"></canvas>
       {scenes}
-      <div id="cap" class="clip" data-start="0" data-duration="{DUR}" data-track-index="6"><div class="box">{caps}<i class="nx"></i></div></div>
+      <div id="cap" class="clip" data-start="0" data-duration="{DUR}" data-track-index="6">{caps}</div>
       {deco}
       <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8" data-layout-ignore><div id="scan"></div><div id="wipe"></div><div id="flash"></div><div id="glitch">{gb}</div></div>
       <audio id="mix" src="assets/audio/{src}.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>

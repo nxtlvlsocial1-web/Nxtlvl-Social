@@ -120,13 +120,41 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #F1EEF
 .cta .c2 { display: inline-block; font: 400 104px/1 "Russo One"; color: #fff; background: #7a2ffb; padding: 18px 44px 22px; border-radius: 36px;
   box-shadow: 0 12px 0 #1d1a26, 0 0 50px rgba(122,47,251,.45); }
 #cap { position: absolute; left: 0; right: 0; top: 0; height: 1920px; pointer-events: none; z-index: 6; }
-#cap .box { position: absolute; left: 70px; right: 70px; top: 1290px; height: 170px; background: rgba(255,255,255,.94); border: 4px solid #1d1a26;
-  border-radius: 30px; box-shadow: 0 10px 0 rgba(29,26,38,.12); }
-#cap .cl { position: absolute; left: 36px; right: 36px; top: 0; height: 162px; display: flex; flex-wrap: wrap; align-content: center; justify-content: center;
-  column-gap: 14px; row-gap: 4px; font: 800 50px/1.15 "Rubik"; text-align: center; }
-#cap .cl span { display: inline-block; }
-#cap .hl { color: #7a2ffb; }
-#cap .nx { position: absolute; right: 30px; bottom: 14px; width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 18px solid #7a2ffb; }
+#cap .cl { position: absolute; left: 60px; right: 60px; top: 1300px; display: flex; justify-content: center; transform-origin: 50% 50%; }
+#cap .pill2 { display: inline-block; max-width: 960px; text-align: center; font: 700 54px/1.15 "Chakra Petch"; text-transform: uppercase; letter-spacing: 1px;
+  color: #fff; background: #1d1a26; padding: 18px 34px 20px; border-radius: 22px; box-shadow: 0 10px 0 rgba(29,26,38,.18), 0 18px 40px rgba(29,26,38,.25); }
+#cap .hl { color: #ffa27f; }
+.crabw { position: absolute; z-index: 6; }
+.crab { display: block; filter: drop-shadow(0 8px 0 rgba(29,26,38,.18)); }
+.stamp2 { position: absolute; left: 720px; top: 540px; z-index: 7; }
+.stamp2 span { display: inline-block; transform: rotate(-10deg); font: 400 76px/1 "Russo One"; color: #fff; background: #D97757; padding: 12px 30px 16px; border-radius: 18px;
+  border: 5px solid #fff; box-shadow: 0 10px 0 rgba(29,26,38,.2); }
+.demo { position: absolute; left: 130px; width: 820px; top: 540px; height: 420px; background: #fff; border: 5px solid #1d1a26; border-radius: 28px; overflow: hidden;
+  box-shadow: 0 14px 0 rgba(29,26,38,.12), 0 30px 60px rgba(29,26,38,.2); }
+.demo > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.demo .blur { filter: blur(9px) saturate(.6) brightness(.9); }
+.demo .sweep { position: absolute; left: 0; top: 0; width: 10px; height: 100%; background: #fff; box-shadow: 0 0 30px 10px rgba(255,255,255,.8); display: block; }
+.demo .dtag { position: absolute; left: 22px; top: 22px; font: 700 30px/1 "Chakra Petch"; letter-spacing: 3px; color: #fff; background: #1d1a26; padding: 10px 18px; border-radius: 999px; }
+.demo .dtag.on { background: #D97757; }
+.demo .dh { height: 70px; background: #1d1a26; color: #fff; font: 400 40px/70px "Russo One"; text-align: center; letter-spacing: 2px; }
+.demo .tiles { position: absolute; left: 30px; top: 100px; display: flex; gap: 22px; }
+.demo .tile { width: 230px; height: 290px; border-radius: 18px; overflow: hidden; position: relative; border: 4px solid #1d1a26; }
+.demo .tile img { width: 100%; height: 100%; object-fit: cover; }
+.demo .tile span { position: absolute; left: 10px; bottom: 10px; font: 700 26px/1 "Chakra Petch"; color: #fff; background: rgba(29,26,38,.85); padding: 8px 12px; border-radius: 10px; }
+.demo .tile:last-child span { background: #D97757; }
+.demo .sel { position: absolute; left: 22px; top: 92px; width: 246px; height: 306px; border: 8px solid #D97757; border-radius: 22px; display: block; box-shadow: 0 0 30px rgba(217,119,87,.6); }
+.demo .pdrow { position: absolute; left: 0; right: 0; top: 130px; display: flex; justify-content: center; gap: 40px; }
+.demo .pd { position: relative; }
+.demo .ok { position: absolute; right: -6px; top: -26px; width: 56px; height: 56px; border-radius: 50%; background: #D97757; color: #fff; font: 700 34px/56px "Rubik"; text-align: center; }
+.cbox { position: absolute; left: 110px; width: 860px; top: 1030px; height: 150px; background: #fff; border: 5px solid #1d1a26; border-radius: 30px; display: flex; align-items: center; gap: 22px;
+  padding: 0 24px; box-shadow: 0 14px 0 rgba(29,26,38,.14), 0 30px 60px rgba(29,26,38,.22); }
+.cbox .cav { width: 92px; height: 92px; border-radius: 50%; background: #D97757; display: flex; align-items: center; justify-content: center; flex: none; }
+.cbox .cin { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.cbox .cl1 { font: 700 26px/1 "Chakra Petch"; letter-spacing: 2px; color: #6a6480; text-transform: uppercase; }
+.cbox .ctx { display: flex; align-items: center; height: 70px; font: 400 64px/1 "Russo One"; color: #1d1a26; border: 4px solid #D97757; border-radius: 16px; padding: 0 16px; }
+.cbox .ctx b { font-weight: 400; display: inline-block; }
+.cbox .caret { width: 6px; height: 50px; background: #D97757; margin-left: 6px; display: block; }
+.cbox .csend { width: 92px; height: 92px; border-radius: 50%; background: #D97757; color: #fff; font: 700 48px/92px "Rubik"; text-align: center; flex: none; }
 #wipe { position: absolute; top: -200px; left: -400px; width: 1300px; height: 2400px; transform: skewX(-16deg); background: #7a2ffb; z-index: 40;
   box-shadow: -60px 0 0 #b9a2ff, 60px 0 0 #1d1a26; }
 #flash { position: absolute; inset: 0; background: #fff; z-index: 41; opacity: 0; }
@@ -138,19 +166,19 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #F1EEF
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="42.4" data-fps="30" data-width="1080" data-height="1920">
-      <div id="bg"><video id="bg0" class="clip" src="assets/video/gta-game.mp4" data-start="0.000" data-duration="11.842" data-media-start="0.3" data-track-index="0" muted playsinline></video><video id="bg1" class="clip" src="assets/video/gta-game.mp4" data-start="11.842" data-duration="5.300" data-media-start="9.3" data-track-index="0" muted playsinline></video><video id="bg2" class="clip" src="assets/video/re4-game.mp4" data-start="17.142" data-duration="6.900" data-media-start="11.0" data-track-index="0" muted playsinline></video><video id="bg3" class="clip" src="assets/video/re4-game.mp4" data-start="24.042" data-duration="4.220" data-media-start="1.0" data-track-index="0" muted playsinline></video><video id="bg4" class="clip" src="assets/video/gta-game.mp4" data-start="28.262" data-duration="5.400" data-media-start="0.5" data-track-index="0" muted playsinline></video><video id="bg5" class="clip" src="assets/video/re4-game.mp4" data-start="33.662" data-duration="3.760" data-media-start="5.5" data-track-index="0" muted playsinline></video><video id="bg6" class="clip" src="assets/video/gta-game.mp4" data-start="37.422" data-duration="4.978" data-media-start="9.3" data-track-index="0" muted playsinline></video></div><div id="wash"><i class="blob" id="blob0"></i><i class="blob" id="blob1"></i><i class="blob" id="blob2"></i></div><div id="resume"><video id="res-v" class="clip" src="assets/video/gta-game.mp4" data-start="37.422" data-duration="4.978" data-media-start="9.3" data-track-index="3" muted playsinline></video></div>
-      <div id="apanel"><video id="a-v" class="clip" src="assets/video/gta-game.mp4" data-start="0" data-duration="5.050" data-media-start="0.3" data-track-index="4" muted playsinline></video><img id="a-freeze" src="assets/img/gta-freeze.jpg" alt=""><div id="a-dim"></div></div><div id="win"><div class="wt">GAME.EXE<span>NATIVE PC BUILD</span><i></i></div><div class="wb"><video id="win-v" class="clip" src="assets/video/re4-game.mp4" data-start="11.782" data-duration="5.360" data-media-start="0.6" data-track-index="5" muted playsinline></video><div id="win-comp"><b>REBUILDING</b><span>PS2 code &gt; PC code</span><div class="dots"><i></i><i></i><i></i></div></div></div></div>
+      <div id="bg"><video id="bg0" class="clip" src="assets/video/gow-game.mp4" data-start="0.000" data-duration="5.050" data-media-start="0.3" data-track-index="0" muted playsinline></video><video id="bg1" class="clip" src="assets/video/gow-game.mp4" data-start="5.050" data-duration="6.792" data-media-start="11.9" data-track-index="0" muted playsinline></video><video id="bg2" class="clip" src="assets/video/gow-game.mp4" data-start="11.842" data-duration="5.300" data-media-start="16.4" data-track-index="0" muted playsinline></video><video id="bg3" class="clip" src="assets/video/re4-game.mp4" data-start="17.142" data-duration="6.900" data-media-start="11.0" data-track-index="0" muted playsinline></video><video id="bg4" class="clip" src="assets/video/re4-game.mp4" data-start="24.042" data-duration="4.220" data-media-start="1.0" data-track-index="0" muted playsinline></video><video id="bg5" class="clip" src="assets/video/gow-game.mp4" data-start="28.262" data-duration="5.400" data-media-start="0.5" data-track-index="0" muted playsinline></video><video id="bg6" class="clip" src="assets/video/re4-game.mp4" data-start="33.662" data-duration="3.760" data-media-start="5.5" data-track-index="0" muted playsinline></video><video id="bg7" class="clip" src="assets/video/gow-game.mp4" data-start="37.422" data-duration="4.978" data-media-start="12.4" data-track-index="0" muted playsinline></video></div><div id="wash"><i class="blob" id="blob0"></i><i class="blob" id="blob1"></i><i class="blob" id="blob2"></i></div><div id="resume"><video id="res-v" class="clip" src="assets/video/gow-game.mp4" data-start="37.422" data-duration="4.978" data-media-start="12.4" data-track-index="3" muted playsinline></video></div>
+      <div id="apanel"><video id="a-v" class="clip" src="assets/video/gow-game.mp4" data-start="0" data-duration="5.050" data-media-start="0.3" data-track-index="4" muted playsinline></video><img id="a-freeze" src="assets/img/gow-freeze.jpg" alt=""><div id="a-dim"></div></div><div id="win"><div class="wt">GAME.EXE<span>NATIVE PC BUILD</span><i></i></div><div class="wb"><video id="win-v" class="clip" src="assets/video/re4-game.mp4" data-start="11.782" data-duration="5.360" data-media-start="0.6" data-track-index="5" muted playsinline></video><div id="win-comp"><b>REBUILDING</b><span>PS2 code &gt; PC code</span><div class="dots"><i></i><i></i><i></i></div></div></div></div>
       <canvas id="gl" class="clip" data-start="0" data-duration="42.4" data-track-index="1"></canvas>
       <div id="sc-A" class="clip scene" data-start="0.000" data-duration="5.050" data-track-index="2"><div class="sw" id="sw-A"><div class="pw" id="pw-A"><div class="chipwrap"><span class="chip " id="A-chip">GAME OVER</span></div><div class="hdr " id="A-hdr" style="font-size:124px">CONTINUE?</div><div class="ring" id="A-ring" style="left:540px;top:820px"><i id="A-tk0" style="transform:rotate(0.00deg) translateY(-285px)"></i><i id="A-tk1" style="transform:rotate(12.86deg) translateY(-285px)"></i><i id="A-tk2" style="transform:rotate(25.71deg) translateY(-285px)"></i><i id="A-tk3" style="transform:rotate(38.57deg) translateY(-285px)"></i><i id="A-tk4" style="transform:rotate(51.43deg) translateY(-285px)"></i><i id="A-tk5" style="transform:rotate(64.29deg) translateY(-285px)"></i><i id="A-tk6" style="transform:rotate(77.14deg) translateY(-285px)"></i><i id="A-tk7" style="transform:rotate(90.00deg) translateY(-285px)"></i><i id="A-tk8" style="transform:rotate(102.86deg) translateY(-285px)"></i><i id="A-tk9" style="transform:rotate(115.71deg) translateY(-285px)"></i><i id="A-tk10" style="transform:rotate(128.57deg) translateY(-285px)"></i><i id="A-tk11" style="transform:rotate(141.43deg) translateY(-285px)"></i><i id="A-tk12" style="transform:rotate(154.29deg) translateY(-285px)"></i><i id="A-tk13" style="transform:rotate(167.14deg) translateY(-285px)"></i><i id="A-tk14" style="transform:rotate(180.00deg) translateY(-285px)"></i><i id="A-tk15" style="transform:rotate(192.86deg) translateY(-285px)"></i><i id="A-tk16" style="transform:rotate(205.71deg) translateY(-285px)"></i><i id="A-tk17" style="transform:rotate(218.57deg) translateY(-285px)"></i><i id="A-tk18" style="transform:rotate(231.43deg) translateY(-285px)"></i><i id="A-tk19" style="transform:rotate(244.29deg) translateY(-285px)"></i><i id="A-tk20" style="transform:rotate(257.14deg) translateY(-285px)"></i><i id="A-tk21" style="transform:rotate(270.00deg) translateY(-285px)"></i><i id="A-tk22" style="transform:rotate(282.86deg) translateY(-285px)"></i><i id="A-tk23" style="transform:rotate(295.71deg) translateY(-285px)"></i><i id="A-tk24" style="transform:rotate(308.57deg) translateY(-285px)"></i><i id="A-tk25" style="transform:rotate(321.43deg) translateY(-285px)"></i><i id="A-tk26" style="transform:rotate(334.29deg) translateY(-285px)"></i><i id="A-tk27" style="transform:rotate(347.14deg) translateY(-285px)"></i></div><div class="save" id="A-save"><img class="cv" src="assets/img/cover-god-of-war-2.png" alt=""><div class="st"><b>SAVE DATA</b><span>SLOT 1</span></div><img class="ps" src="assets/img/ps2-logo.png" alt=""><span class="warn" id="A-warn">EXPIRING</span></div></div></div></div>
-      <div id="sc-B" class="clip scene" data-start="5.050" data-duration="3.260" data-track-index="3"><div class="sw" id="sw-B"><div class="pw" id="pw-B"><div class="chipwrap"><span class="chip" id="B-pause">PAUSED</span></div><div class="hdr cl big" id="B-h1">PLAYER 2</div><div class="hdr sub" id="B-h2">HAS JOINED</div><span class="tag" id="B-p1" style="left:300px">P1 · YOU</span><span class="tag cl" id="B-p2" style="left:780px">P2</span><span class="name" id="B-name" style="left:780px"><svg class="cm" viewBox="-50 -50 100 100" width="54" height="54"><g fill="#fff"><rect x="-5.5" y="-46.0" width="11" height="38.0" rx="5.5" transform="rotate(0)"/><rect x="-5.5" y="-35.9" width="11" height="27.9" rx="5.5" transform="rotate(37)"/><rect x="-5.5" y="-43.7" width="11" height="35.7" rx="5.5" transform="rotate(60)"/><rect x="-5.5" y="-33.1" width="11" height="25.1" rx="5.5" transform="rotate(97)"/><rect x="-5.5" y="-46.0" width="11" height="38.0" rx="5.5" transform="rotate(120)"/><rect x="-5.5" y="-37.7" width="11" height="29.7" rx="5.5" transform="rotate(157)"/><rect x="-5.5" y="-41.4" width="11" height="33.4" rx="5.5" transform="rotate(180)"/><rect x="-5.5" y="-32.2" width="11" height="24.2" rx="5.5" transform="rotate(217)"/><rect x="-5.5" y="-45.1" width="11" height="37.1" rx="5.5" transform="rotate(240)"/><rect x="-5.5" y="-36.8" width="11" height="28.8" rx="5.5" transform="rotate(277)"/><rect x="-5.5" y="-40.5" width="11" height="32.5" rx="5.5" transform="rotate(300)"/><rect x="-5.5" y="-34.0" width="11" height="26.0" rx="5.5" transform="rotate(337)"/><circle r="9"/></g></svg>CLAUDE</span><div class="burst cl" id="B-burst" style="left:780px;top:880px"></div></div></div></div>
-      <div id="sc-C1" class="clip scene" data-start="8.310" data-duration="3.532" data-track-index="2"><div class="sw" id="sw-C1"><div class="pw" id="pw-C1"><div class="chipwrap"><span class="chip " id="C1-chip">FOR CLAUDE CODE</span></div><div class="chips" id="C1-chips"><span class="pill" id="C1-c0">11 SKILLS</span><span class="pill vio" id="C1-c1">FREE</span><span class="pill" id="C1-c2">OPEN SOURCE</span></div><div class="press" id="C1-press">PRESS START</div></div></div></div>
+      <div id="sc-B" class="clip scene" data-start="5.050" data-duration="3.260" data-track-index="3"><div class="sw" id="sw-B"><div class="pw" id="pw-B"><div class="chipwrap"><span class="chip" id="B-pause">PAUSED</span></div><div class="hdr cl big" id="B-h1">PLAYER 2</div><div class="hdr sub" id="B-h2">HAS JOINED</div><span class="tag" id="B-p1" style="left:300px">P1 · YOU</span><span class="tag cl" id="B-p2" style="left:780px">P2</span><span class="name" id="B-name" style="left:780px"><svg class="cm" viewBox="-50 -50 100 100" width="54" height="54"><g fill="#fff"><rect x="-5.5" y="-46.0" width="11" height="38.0" rx="5.5" transform="rotate(0)"/><rect x="-5.5" y="-35.9" width="11" height="27.9" rx="5.5" transform="rotate(37)"/><rect x="-5.5" y="-43.7" width="11" height="35.7" rx="5.5" transform="rotate(60)"/><rect x="-5.5" y="-33.1" width="11" height="25.1" rx="5.5" transform="rotate(97)"/><rect x="-5.5" y="-46.0" width="11" height="38.0" rx="5.5" transform="rotate(120)"/><rect x="-5.5" y="-37.7" width="11" height="29.7" rx="5.5" transform="rotate(157)"/><rect x="-5.5" y="-41.4" width="11" height="33.4" rx="5.5" transform="rotate(180)"/><rect x="-5.5" y="-32.2" width="11" height="24.2" rx="5.5" transform="rotate(217)"/><rect x="-5.5" y="-45.1" width="11" height="37.1" rx="5.5" transform="rotate(240)"/><rect x="-5.5" y="-36.8" width="11" height="28.8" rx="5.5" transform="rotate(277)"/><rect x="-5.5" y="-40.5" width="11" height="32.5" rx="5.5" transform="rotate(300)"/><rect x="-5.5" y="-34.0" width="11" height="26.0" rx="5.5" transform="rotate(337)"/><circle r="9"/></g></svg>CLAUDE</span><div class="burst cl" id="B-burst" style="left:780px;top:880px"></div><div class="crabw" id="B-crab" style="left:440px;top:930px"><svg class="crab" viewBox="-1 -5 19 21" width="200" height="221" shape-rendering="crispEdges"><rect x="2" y="6" width="12" height="7" fill="#D97757"/><rect x="0" y="8" width="2" height="2" fill="#D97757"/><rect x="14" y="8" width="2" height="2" fill="#D97757"/><rect x="5" y="8" width="1" height="2" fill="#2a1d18"/><rect x="10" y="8" width="1" height="2" fill="#2a1d18"/><rect x="3" y="13" width="1" height="2" fill="#D97757"/><rect x="5" y="13" width="1" height="2" fill="#D97757"/><rect x="10" y="13" width="1" height="2" fill="#D97757"/><rect x="12" y="13" width="1" height="2" fill="#D97757"/><rect x="4" y="9" width="8" height="3" fill="#2a1d18"/><rect x="5" y="10" width="1" height="1" fill="#8fb8ff"/><rect x="10" y="10" width="1" height="1" fill="#ff9ccf"/></svg></div></div></div></div>
+      <div id="sc-C1" class="clip scene" data-start="8.310" data-duration="3.532" data-track-index="2"><div class="sw" id="sw-C1"><div class="pw" id="pw-C1"><div class="chipwrap"><span class="chip " id="C1-chip">FOR CLAUDE CODE</span></div><div class="press" id="C1-press">PRESS START</div><div class="crabw" id="C1-k0" style="left:55px;top:940px"><svg class="crab" viewBox="-1 -5 19 21" width="160" height="177" shape-rendering="crispEdges"><rect x="2" y="6" width="12" height="7" fill="#D97757"/><rect x="0" y="8" width="2" height="2" fill="#D97757"/><rect x="14" y="8" width="2" height="2" fill="#D97757"/><rect x="5" y="8" width="1" height="2" fill="#2a1d18"/><rect x="10" y="8" width="1" height="2" fill="#2a1d18"/><rect x="3" y="13" width="1" height="2" fill="#D97757"/><rect x="5" y="13" width="1" height="2" fill="#D97757"/><rect x="10" y="13" width="1" height="2" fill="#D97757"/><rect x="12" y="13" width="1" height="2" fill="#D97757"/><circle cx="15" cy="3" r="2.6" fill="#dff1ff" stroke="#2a1d18" stroke-width="1"/><rect x="12" y="5" width="1" height="2" fill="#2a1d18"/></svg></div><div class="crabw" id="C1-k1" style="left:217px;top:940px"><svg class="crab" viewBox="-1 -5 19 21" width="160" height="177" shape-rendering="crispEdges"><rect x="2" y="6" width="12" height="7" fill="#D97757"/><rect x="0" y="8" width="2" height="2" fill="#D97757"/><rect x="14" y="8" width="2" height="2" fill="#D97757"/><rect x="5" y="8" width="1" height="2" fill="#2a1d18"/><rect x="10" y="8" width="1" height="2" fill="#2a1d18"/><rect x="3" y="13" width="1" height="2" fill="#D97757"/><rect x="5" y="13" width="1" height="2" fill="#D97757"/><rect x="10" y="13" width="1" height="2" fill="#D97757"/><rect x="12" y="13" width="1" height="2" fill="#D97757"/><circle cx="8" cy="2.5" r="2.6" fill="#8fb8ff" stroke="#2a1d18" stroke-width=".8"/><circle cx="8" cy="2.5" r=".9" fill="#2a1d18"/></svg></div><div class="crabw" id="C1-k2" style="left:379px;top:940px"><svg class="crab" viewBox="-1 -5 19 21" width="160" height="177" shape-rendering="crispEdges"><rect x="2" y="6" width="12" height="7" fill="#D97757"/><rect x="0" y="8" width="2" height="2" fill="#D97757"/><rect x="14" y="8" width="2" height="2" fill="#D97757"/><rect x="5" y="8" width="1" height="2" fill="#2a1d18"/><rect x="10" y="8" width="1" height="2" fill="#2a1d18"/><rect x="3" y="13" width="1" height="2" fill="#D97757"/><rect x="5" y="13" width="1" height="2" fill="#D97757"/><rect x="10" y="13" width="1" height="2" fill="#D97757"/><rect x="12" y="13" width="1" height="2" fill="#D97757"/><rect x="7" y="0" width="2" height="4" fill="#8b5a2b"/><rect x="6" y="3" width="4" height="2" fill="#ff6fae"/></svg></div><div class="crabw" id="C1-k3" style="left:541px;top:940px"><svg class="crab" viewBox="-1 -5 19 21" width="160" height="177" shape-rendering="crispEdges"><rect x="2" y="6" width="12" height="7" fill="#D97757"/><rect x="0" y="8" width="2" height="2" fill="#D97757"/><rect x="14" y="8" width="2" height="2" fill="#D97757"/><rect x="5" y="8" width="1" height="2" fill="#2a1d18"/><rect x="10" y="8" width="1" height="2" fill="#2a1d18"/><rect x="3" y="13" width="1" height="2" fill="#D97757"/><rect x="5" y="13" width="1" height="2" fill="#D97757"/><rect x="10" y="13" width="1" height="2" fill="#D97757"/><rect x="12" y="13" width="1" height="2" fill="#D97757"/><rect x="4" y="9" width="8" height="3" fill="#2a1d18"/><rect x="5" y="10" width="1" height="1" fill="#8fb8ff"/><rect x="10" y="10" width="1" height="1" fill="#ff9ccf"/></svg></div><div class="crabw" id="C1-k4" style="left:703px;top:940px"><svg class="crab" viewBox="-1 -5 19 21" width="160" height="177" shape-rendering="crispEdges"><rect x="2" y="6" width="12" height="7" fill="#D97757"/><rect x="0" y="8" width="2" height="2" fill="#D97757"/><rect x="14" y="8" width="2" height="2" fill="#D97757"/><rect x="5" y="8" width="1" height="2" fill="#2a1d18"/><rect x="10" y="8" width="1" height="2" fill="#2a1d18"/><rect x="3" y="13" width="1" height="2" fill="#D97757"/><rect x="5" y="13" width="1" height="2" fill="#D97757"/><rect x="10" y="13" width="1" height="2" fill="#D97757"/><rect x="12" y="13" width="1" height="2" fill="#D97757"/><path d="M8 -4 L12 5 H4 Z" fill="#7a2ffb"/><rect x="3" y="5" width="10" height="1" fill="#5a1fc4"/><rect x="8" y="0" width="1" height="1" fill="#ffd36e"/></svg></div><div class="crabw" id="C1-k5" style="left:865px;top:940px"><svg class="crab" viewBox="-1 -5 19 21" width="160" height="177" shape-rendering="crispEdges"><rect x="2" y="6" width="12" height="7" fill="#D97757"/><rect x="0" y="8" width="2" height="2" fill="#D97757"/><rect x="14" y="8" width="2" height="2" fill="#D97757"/><rect x="5" y="8" width="1" height="2" fill="#2a1d18"/><rect x="10" y="8" width="1" height="2" fill="#2a1d18"/><rect x="3" y="13" width="1" height="2" fill="#D97757"/><rect x="5" y="13" width="1" height="2" fill="#D97757"/><rect x="10" y="13" width="1" height="2" fill="#D97757"/><rect x="12" y="13" width="1" height="2" fill="#D97757"/><rect x="13" y="-1" width="1" height="7" fill="#2a1d18"/><rect x="14" y="-1" width="3" height="2" fill="#ffd36e"/></svg></div><div class="crabw" id="C1-k6" style="left:136px;top:1080px"><svg class="crab" viewBox="-1 -5 19 21" width="160" height="177" shape-rendering="crispEdges"><rect x="2" y="6" width="12" height="7" fill="#D97757"/><rect x="0" y="8" width="2" height="2" fill="#D97757"/><rect x="14" y="8" width="2" height="2" fill="#D97757"/><rect x="5" y="8" width="1" height="2" fill="#2a1d18"/><rect x="10" y="8" width="1" height="2" fill="#2a1d18"/><rect x="3" y="13" width="1" height="2" fill="#D97757"/><rect x="5" y="13" width="1" height="2" fill="#D97757"/><rect x="10" y="13" width="1" height="2" fill="#D97757"/><rect x="12" y="13" width="1" height="2" fill="#D97757"/><path d="M3 7 Q8 -1 13 7" fill="none" stroke="#2a1d18" stroke-width="1.4"/><rect x="1" y="6" width="3" height="3" fill="#7a2ffb"/><rect x="12" y="6" width="3" height="3" fill="#7a2ffb"/></svg></div><div class="crabw" id="C1-k7" style="left:298px;top:1080px"><svg class="crab" viewBox="-1 -5 19 21" width="160" height="177" shape-rendering="crispEdges"><rect x="2" y="6" width="12" height="7" fill="#D97757"/><rect x="0" y="8" width="2" height="2" fill="#D97757"/><rect x="14" y="8" width="2" height="2" fill="#D97757"/><rect x="5" y="8" width="1" height="2" fill="#2a1d18"/><rect x="10" y="8" width="1" height="2" fill="#2a1d18"/><rect x="3" y="13" width="1" height="2" fill="#D97757"/><rect x="5" y="13" width="1" height="2" fill="#D97757"/><rect x="10" y="13" width="1" height="2" fill="#D97757"/><rect x="12" y="13" width="1" height="2" fill="#D97757"/><circle cx="8" cy="2.5" r="2.4" fill="#ff6b6b"/><rect x="8" y="-1" width="1" height="1" fill="#3c9a4a"/></svg></div><div class="crabw" id="C1-k8" style="left:460px;top:1080px"><svg class="crab" viewBox="-1 -5 19 21" width="160" height="177" shape-rendering="crispEdges"><rect x="2" y="6" width="12" height="7" fill="#D97757"/><rect x="0" y="8" width="2" height="2" fill="#D97757"/><rect x="14" y="8" width="2" height="2" fill="#D97757"/><rect x="5" y="8" width="1" height="2" fill="#2a1d18"/><rect x="10" y="8" width="1" height="2" fill="#2a1d18"/><rect x="3" y="13" width="1" height="2" fill="#D97757"/><rect x="5" y="13" width="1" height="2" fill="#D97757"/><rect x="10" y="13" width="1" height="2" fill="#D97757"/><rect x="12" y="13" width="1" height="2" fill="#D97757"/><rect x="6" y="0" width="4" height="5" fill="#26222f"/><rect x="7" y="1" width="2" height="1" fill="#ffd36e"/></svg></div><div class="crabw" id="C1-k9" style="left:622px;top:1080px"><svg class="crab" viewBox="-1 -5 19 21" width="160" height="177" shape-rendering="crispEdges"><rect x="2" y="6" width="12" height="7" fill="#D97757"/><rect x="0" y="8" width="2" height="2" fill="#D97757"/><rect x="14" y="8" width="2" height="2" fill="#D97757"/><rect x="5" y="8" width="1" height="2" fill="#2a1d18"/><rect x="10" y="8" width="1" height="2" fill="#2a1d18"/><rect x="3" y="13" width="1" height="2" fill="#D97757"/><rect x="5" y="13" width="1" height="2" fill="#D97757"/><rect x="10" y="13" width="1" height="2" fill="#D97757"/><rect x="12" y="13" width="1" height="2" fill="#D97757"/><circle cx="8" cy="2.5" r="2.6" fill="#7fd1a0" stroke="#2a1d18" stroke-width=".8"/><rect x="6" y="1" width="2" height="2" fill="#3c78d8"/></svg></div><div class="crabw" id="C1-k10" style="left:784px;top:1080px"><svg class="crab" viewBox="-1 -5 19 21" width="160" height="177" shape-rendering="crispEdges"><rect x="2" y="6" width="12" height="7" fill="#D97757"/><rect x="0" y="8" width="2" height="2" fill="#D97757"/><rect x="14" y="8" width="2" height="2" fill="#D97757"/><rect x="5" y="8" width="1" height="2" fill="#2a1d18"/><rect x="10" y="8" width="1" height="2" fill="#2a1d18"/><rect x="3" y="13" width="1" height="2" fill="#D97757"/><rect x="5" y="13" width="1" height="2" fill="#D97757"/><rect x="10" y="13" width="1" height="2" fill="#D97757"/><rect x="12" y="13" width="1" height="2" fill="#D97757"/><rect x="13" y="1" width="3" height="3" fill="#e0335a"/><rect x="12" y="2" width="1" height="1" fill="#2a1d18"/><rect x="16" y="2" width="1" height="1" fill="#2a1d18"/></svg></div><div class="stamp2" id="C1-free"><span>FREE</span></div></div></div></div>
       <div id="sc-C2" class="clip scene" data-start="11.842" data-duration="5.300" data-track-index="3"><div class="sw" id="sw-C2"><div class="pw" id="pw-C2"><div class="hdr" id="C2-hdr" style="font-size:96px">NOW LOADING</div><div class="bar" id="C2-bar"><i id="C2-fill"></i></div><div class="sticker" id="C2-st"><div class="sk"><b>NOT</b> AN EMULATOR</div></div></div></div></div>
-      <div id="sc-D" class="clip scene" data-start="17.142" data-duration="6.900" data-track-index="2"><div class="sw" id="sw-D"><div class="pw" id="pw-D"><div class="chipwrap"><span class="chip " id="D-chip">POWER-UPS</span></div><div class="hdr " id="D-hdr">INVENTORY</div><div class="slot" id="D-s0" style="left:145px"><span>GRAPHICS</span><b class="plus" id="D-p0">+1</b></div><div class="slot" id="D-s1" style="left:435px"><span>LEVELS</span><b class="plus" id="D-p1">+1</b></div><div class="slot" id="D-s2" style="left:725px"><span>CONTROLLER</span><b class="plus" id="D-p2">+1</b></div><div class="chat" id="D-chat"><div class="bub me" id="D-b0">make the graphics sharper</div><div class="bub ai" id="D-b1">on it!</div></div><div class="burst" id="D-burst" style="left:540px;top:760px"></div></div></div></div>
-      <div id="sc-E" class="clip scene" data-start="24.042" data-duration="4.220" data-track-index="3"><div class="sw" id="sw-E"><div class="pw" id="pw-E"><div id="E-errs"><div class="err" id="E-e0" style="left:120px;top:600px"><div class="et">ERROR<i></i></div><div class="eb"><b>×</b>GAME CRASHED</div></div><div class="err" id="E-e1" style="left:330px;top:760px"><div class="et">ERROR<i></i></div><div class="eb"><b>×</b>GAME CRASHED</div></div><div class="err" id="E-e2" style="left:210px;top:920px"><div class="et">ERROR<i></i></div><div class="eb"><b>×</b>GAME CRASHED</div></div></div><div class="hdr" id="E-hdr" style="font-size:112px">BOSS FIGHT</div><div class="hp" id="E-hp"><span>CRASH.EXE</span><div class="hb"><i id="E-hpf"></i></div></div><span class="move" id="E-move"><svg class="cm" viewBox="-50 -50 100 100" width="34" height="34"><g fill="#D97757"><rect x="-5.5" y="-46.0" width="11" height="38.0" rx="5.5" transform="rotate(0)"/><rect x="-5.5" y="-35.9" width="11" height="27.9" rx="5.5" transform="rotate(37)"/><rect x="-5.5" y="-43.7" width="11" height="35.7" rx="5.5" transform="rotate(60)"/><rect x="-5.5" y="-33.1" width="11" height="25.1" rx="5.5" transform="rotate(97)"/><rect x="-5.5" y="-46.0" width="11" height="38.0" rx="5.5" transform="rotate(120)"/><rect x="-5.5" y="-37.7" width="11" height="29.7" rx="5.5" transform="rotate(157)"/><rect x="-5.5" y="-41.4" width="11" height="33.4" rx="5.5" transform="rotate(180)"/><rect x="-5.5" y="-32.2" width="11" height="24.2" rx="5.5" transform="rotate(217)"/><rect x="-5.5" y="-45.1" width="11" height="37.1" rx="5.5" transform="rotate(240)"/><rect x="-5.5" y="-36.8" width="11" height="28.8" rx="5.5" transform="rotate(277)"/><rect x="-5.5" y="-40.5" width="11" height="32.5" rx="5.5" transform="rotate(300)"/><rect x="-5.5" y="-34.0" width="11" height="26.0" rx="5.5" transform="rotate(337)"/><circle r="9"/></g></svg>CLAUDE USES <b>TESTER SKILL</b></span><div class="ko" id="E-ko">K.O.!</div></div></div></div>
+      <div id="sc-D" class="clip scene" data-start="17.142" data-duration="6.900" data-track-index="2"><div class="sw" id="sw-D"><div class="pw" id="pw-D"><div class="chipwrap"><span class="chip " id="D-chip">POWER-UPS</span></div><div class="hdr " id="D-hdr">INVENTORY</div><div class="slot" id="D-s0" style="left:145px"><span>GRAPHICS</span><b class="plus" id="D-p0">+1</b></div><div class="slot" id="D-s1" style="left:435px"><span>LEVELS</span><b class="plus" id="D-p1">+1</b></div><div class="slot" id="D-s2" style="left:725px"><span>CONTROLLER</span><b class="plus" id="D-p2">+1</b></div><div class="chat" id="D-chat"><div class="bub me" id="D-b0">make the graphics sharper</div><div class="bub ai" id="D-b1">on it!</div></div><div class="demo" id="D-c0"><img src="assets/img/gow-16.0.jpg" alt=""><img class="blur" id="D-blur" src="assets/img/gow-16.0.jpg" alt=""><i class="sweep" id="D-sweep"></i><span class="dtag" id="D-t0">BEFORE</span><span class="dtag on" id="D-t1">AFTER</span></div><div class="demo lv" id="D-c1"><div class="dh">SELECT LEVEL</div><div class="tiles"><div class="tile" id="D-tl0"><img src="assets/img/gow-2.0.jpg" alt=""><span>LEVEL 1</span></div><div class="tile" id="D-tl1"><img src="assets/img/gow-13.2.jpg" alt=""><span>LEVEL 2</span></div><div class="tile" id="D-tl2"><img src="assets/img/gow-19.4.jpg" alt=""><span>NEW</span></div></div><i class="sel" id="D-sel"></i></div><div class="demo pads" id="D-c2"><div class="dh">ANY CONTROLLER</div><div class="pdrow"><div class="pd" id="D-pd0"><svg viewBox="0 0 120 70" width="190" height="111"><path d="M30 8h60c16 0 26 12 28 30l2 14c1 10-9 16-17 9l-11-10H28L17 61c-8 7-18 1-17-9l2-14C4 20 14 8 30 8z" fill="#ffffff" stroke="#1d1a26" stroke-width="4"/><circle cx="38" cy="30" r="7" fill="#1d1a26"/><circle cx="84" cy="26" r="4" fill="#1d1a26"/><circle cx="92" cy="34" r="4" fill="#1d1a26"/></svg><b class="ok" id="D-ok0">&#10003;</b></div><div class="pd" id="D-pd1"><svg viewBox="0 0 120 70" width="190" height="111"><path d="M30 8h60c16 0 26 12 28 30l2 14c1 10-9 16-17 9l-11-10H28L17 61c-8 7-18 1-17-9l2-14C4 20 14 8 30 8z" fill="#2d2a36" stroke="#1d1a26" stroke-width="4"/><circle cx="38" cy="30" r="7" fill="#1d1a26"/><circle cx="84" cy="26" r="4" fill="#1d1a26"/><circle cx="92" cy="34" r="4" fill="#1d1a26"/></svg><b class="ok" id="D-ok1">&#10003;</b></div><div class="pd" id="D-pd2"><svg viewBox="0 0 120 70" width="190" height="111"><path d="M30 8h60c16 0 26 12 28 30l2 14c1 10-9 16-17 9l-11-10H28L17 61c-8 7-18 1-17-9l2-14C4 20 14 8 30 8z" fill="#D97757" stroke="#1d1a26" stroke-width="4"/><circle cx="38" cy="30" r="7" fill="#1d1a26"/><circle cx="84" cy="26" r="4" fill="#1d1a26"/><circle cx="92" cy="34" r="4" fill="#1d1a26"/></svg><b class="ok" id="D-ok2">&#10003;</b></div></div></div><div class="burst" id="D-burst" style="left:540px;top:760px"></div></div></div></div>
+      <div id="sc-E" class="clip scene" data-start="24.042" data-duration="4.220" data-track-index="3"><div class="sw" id="sw-E"><div class="pw" id="pw-E"><div id="E-errs"><div class="err" id="E-e0" style="left:120px;top:600px"><div class="et">ERROR<i></i></div><div class="eb"><b>×</b>GAME CRASHED</div></div><div class="err" id="E-e1" style="left:330px;top:760px"><div class="et">ERROR<i></i></div><div class="eb"><b>×</b>GAME CRASHED</div></div><div class="err" id="E-e2" style="left:210px;top:920px"><div class="et">ERROR<i></i></div><div class="eb"><b>×</b>GAME CRASHED</div></div></div><div class="hdr" id="E-hdr" style="font-size:112px">BOSS FIGHT</div><div class="hp" id="E-hp"><span>CRASH.EXE</span><div class="hb"><i id="E-hpf"></i></div></div><span class="move" id="E-move"><svg class="cm" viewBox="-50 -50 100 100" width="34" height="34"><g fill="#D97757"><rect x="-5.5" y="-46.0" width="11" height="38.0" rx="5.5" transform="rotate(0)"/><rect x="-5.5" y="-35.9" width="11" height="27.9" rx="5.5" transform="rotate(37)"/><rect x="-5.5" y="-43.7" width="11" height="35.7" rx="5.5" transform="rotate(60)"/><rect x="-5.5" y="-33.1" width="11" height="25.1" rx="5.5" transform="rotate(97)"/><rect x="-5.5" y="-46.0" width="11" height="38.0" rx="5.5" transform="rotate(120)"/><rect x="-5.5" y="-37.7" width="11" height="29.7" rx="5.5" transform="rotate(157)"/><rect x="-5.5" y="-41.4" width="11" height="33.4" rx="5.5" transform="rotate(180)"/><rect x="-5.5" y="-32.2" width="11" height="24.2" rx="5.5" transform="rotate(217)"/><rect x="-5.5" y="-45.1" width="11" height="37.1" rx="5.5" transform="rotate(240)"/><rect x="-5.5" y="-36.8" width="11" height="28.8" rx="5.5" transform="rotate(277)"/><rect x="-5.5" y="-40.5" width="11" height="32.5" rx="5.5" transform="rotate(300)"/><rect x="-5.5" y="-34.0" width="11" height="26.0" rx="5.5" transform="rotate(337)"/><circle r="9"/></g></svg>CLAUDE USES <b>TESTER SKILL</b></span><div class="crabw" id="E-crab" style="left:760px;top:930px"><svg class="crab" viewBox="-1 -5 19 21" width="230" height="254" shape-rendering="crispEdges"><rect x="2" y="6" width="12" height="7" fill="#D97757"/><rect x="0" y="8" width="2" height="2" fill="#D97757"/><rect x="14" y="8" width="2" height="2" fill="#D97757"/><rect x="5" y="8" width="1" height="2" fill="#2a1d18"/><rect x="10" y="8" width="1" height="2" fill="#2a1d18"/><rect x="3" y="13" width="1" height="2" fill="#D97757"/><rect x="5" y="13" width="1" height="2" fill="#D97757"/><rect x="10" y="13" width="1" height="2" fill="#D97757"/><rect x="12" y="13" width="1" height="2" fill="#D97757"/><circle cx="15" cy="3" r="2.6" fill="#dff1ff" stroke="#2a1d18" stroke-width="1"/><rect x="12" y="5" width="1" height="2" fill="#2a1d18"/></svg></div><div class="ko" id="E-ko">K.O.!</div></div></div></div>
       <div id="sc-F" class="clip scene" data-start="28.262" data-duration="5.400" data-track-index="2"><div class="sw" id="sw-F"><div class="pw" id="pw-F"><div class="chipwrap"><span class="chip " id="F-chip">WORLD 2</span></div><div class="hdr " id="F-hdr">NEW GAME +</div></div></div></div>
       <div id="sc-G" class="clip scene" data-start="33.662" data-duration="3.760" data-track-index="3"><div class="sw" id="sw-G"><div class="pw" id="pw-G"><div class="chipwrap"><span class="chip " id="G-chip">HEADS UP</span></div></div></div></div>
-      <div id="sc-H" class="clip scene" data-start="37.422" data-duration="4.978" data-track-index="2"><div class="sw" id="sw-H"><div class="pw" id="pw-H"><div class="hdr" id="H-hdr" style="font-size:124px">CONTINUE?</div><div class="ring" id="H-ring" style="left:540px;top:735px"><i id="H-tk0" style="transform:rotate(0.00deg) translateY(-240px)"></i><i id="H-tk1" style="transform:rotate(12.86deg) translateY(-240px)"></i><i id="H-tk2" style="transform:rotate(25.71deg) translateY(-240px)"></i><i id="H-tk3" style="transform:rotate(38.57deg) translateY(-240px)"></i><i id="H-tk4" style="transform:rotate(51.43deg) translateY(-240px)"></i><i id="H-tk5" style="transform:rotate(64.29deg) translateY(-240px)"></i><i id="H-tk6" style="transform:rotate(77.14deg) translateY(-240px)"></i><i id="H-tk7" style="transform:rotate(90.00deg) translateY(-240px)"></i><i id="H-tk8" style="transform:rotate(102.86deg) translateY(-240px)"></i><i id="H-tk9" style="transform:rotate(115.71deg) translateY(-240px)"></i><i id="H-tk10" style="transform:rotate(128.57deg) translateY(-240px)"></i><i id="H-tk11" style="transform:rotate(141.43deg) translateY(-240px)"></i><i id="H-tk12" style="transform:rotate(154.29deg) translateY(-240px)"></i><i id="H-tk13" style="transform:rotate(167.14deg) translateY(-240px)"></i><i id="H-tk14" style="transform:rotate(180.00deg) translateY(-240px)"></i><i id="H-tk15" style="transform:rotate(192.86deg) translateY(-240px)"></i><i id="H-tk16" style="transform:rotate(205.71deg) translateY(-240px)"></i><i id="H-tk17" style="transform:rotate(218.57deg) translateY(-240px)"></i><i id="H-tk18" style="transform:rotate(231.43deg) translateY(-240px)"></i><i id="H-tk19" style="transform:rotate(244.29deg) translateY(-240px)"></i><i id="H-tk20" style="transform:rotate(257.14deg) translateY(-240px)"></i><i id="H-tk21" style="transform:rotate(270.00deg) translateY(-240px)"></i><i id="H-tk22" style="transform:rotate(282.86deg) translateY(-240px)"></i><i id="H-tk23" style="transform:rotate(295.71deg) translateY(-240px)"></i><i id="H-tk24" style="transform:rotate(308.57deg) translateY(-240px)"></i><i id="H-tk25" style="transform:rotate(321.43deg) translateY(-240px)"></i><i id="H-tk26" style="transform:rotate(334.29deg) translateY(-240px)"></i><i id="H-tk27" style="transform:rotate(347.14deg) translateY(-240px)"></i></div><div class="cta" id="H-cta"><div class="c1" id="H-c1">COMMENT</div><div class="c2" id="H-c2">“CONSOLE”</div></div></div></div></div>
-      <div id="cap" class="clip" data-start="0" data-duration="42.4" data-track-index="6"><div class="box"><div class="cl" id="cc0"><span id="cw0">Your</span> <span id="cw1">favourite</span> <span id="cw2" class="hl">PS2</span> <span id="cw3">game</span> <span id="cw4">is</span></div><div class="cl" id="cc1"><span id="cw5">about</span> <span id="cw6">to</span> <span id="cw7">time</span> <span id="cw8">out</span> <span id="cw9">forever.</span></div><div class="cl" id="cc2"><span id="cw10">Wait,</span> <span id="cw11">player</span> <span id="cw12">two</span> <span id="cw13">just</span> <span id="cw14">joined.</span></div><div class="cl" id="cc3"><span id="cw15">It's</span> <span id="cw16" class="hl">Claude.</span></div><div class="cl" id="cc4"><span id="cw17">It's</span> <span id="cw18">called</span> <span id="cw19" class="hl">Console</span> <span id="cw20" class="hl">Skill.</span></div><div class="cl" id="cc5"><span id="cw21" class="hl">Eleven</span> <span id="cw22" class="hl">free</span> <span id="cw23">skills</span></div><div class="cl" id="cc6"><span id="cw24">that</span> <span id="cw25">rebuild</span> <span id="cw26" class="hl">PS2</span> <span id="cw27">games</span> <span id="cw28">you</span> <span id="cw29">own</span></div><div class="cl" id="cc7"><span id="cw30">as</span> <span id="cw31" class="hl">real</span> <span id="cw32" class="hl">PC</span> <span id="cw33" class="hl">games,</span></div><div class="cl" id="cc8"><span id="cw34" class="hl">not</span> <span id="cw35" class="hl">an</span> <span id="cw36" class="hl">emulator.</span></div><div class="cl" id="cc9"><span id="cw37">Grab</span> <span id="cw38">the</span> <span id="cw39" class="hl">power-ups!</span></div><div class="cl" id="cc10"><span id="cw40" class="hl">Mod</span> <span id="cw41">it</span> <span id="cw42">just</span> <span id="cw43">by</span> <span id="cw44">asking.</span></div><div class="cl" id="cc11"><span id="cw45" class="hl">Sharper</span> <span id="cw46" class="hl">graphics,</span></div><div class="cl" id="cc12"><span id="cw47" class="hl">new</span> <span id="cw48" class="hl">levels,</span></div><div class="cl" id="cc13"><span id="cw49">your</span> <span id="cw50" class="hl">own</span> <span id="cw51" class="hl">controller.</span></div><div class="cl" id="cc14"><span id="cw52">Game</span> <span id="cw53">crashes?</span></div><div class="cl" id="cc15"><span id="cw54" class="hl">Boss</span> <span id="cw55" class="hl">fight.</span></div><div class="cl" id="cc16"><span id="cw56">The</span> <span id="cw57" class="hl">tester</span> <span id="cw58" class="hl">skill</span> <span id="cw59">finds</span> <span id="cw60">out</span> <span id="cw61">why.</span></div><div class="cl" id="cc17"><span id="cw62">Then</span> <span id="cw63" class="hl">New</span> <span id="cw64" class="hl">Game</span> <span id="cw65" class="hl">Plus.</span></div><div class="cl" id="cc18"><span id="cw66">Play</span> <span id="cw67">it</span> <span id="cw68">on</span> <span id="cw69" class="hl">Windows,</span> <span id="cw70" class="hl">Mac,</span> <span id="cw71" class="hl">Linux,</span></div><div class="cl" id="cc19"><span id="cw72">even</span> <span id="cw73">a</span> <span id="cw74" class="hl">Steam</span> <span id="cw75" class="hl">Deck.</span></div><div class="cl" id="cc20"><span id="cw76">It's</span> <span id="cw77">still</span> <span id="cw78" class="hl">early</span> <span id="cw79" class="hl">access,</span></div><div class="cl" id="cc21"><span id="cw80">so</span> <span id="cw81">not</span> <span id="cw82">every</span> <span id="cw83">game</span> <span id="cw84">boots</span> <span id="cw85">yet.</span></div><div class="cl" id="cc22"><span id="cw86">Comment</span> <span id="cw87" class="hl">“CONSOLE”</span> <span id="cw88">to</span> <span id="cw89" class="hl">continue,</span></div><div class="cl" id="cc23"><span id="cw90">and</span> <span id="cw91">I'll</span> <span id="cw92">send</span> <span id="cw93">you</span> <span id="cw94">the</span> <span id="cw95">link!</span></div><i class="nx"></i></div></div>
+      <div id="sc-H" class="clip scene" data-start="37.422" data-duration="4.978" data-track-index="2"><div class="sw" id="sw-H"><div class="pw" id="pw-H"><div class="hdr" id="H-hdr" style="font-size:124px">CONTINUE?</div><div class="ring" id="H-ring" style="left:540px;top:735px"><i id="H-tk0" style="transform:rotate(0.00deg) translateY(-240px)"></i><i id="H-tk1" style="transform:rotate(12.86deg) translateY(-240px)"></i><i id="H-tk2" style="transform:rotate(25.71deg) translateY(-240px)"></i><i id="H-tk3" style="transform:rotate(38.57deg) translateY(-240px)"></i><i id="H-tk4" style="transform:rotate(51.43deg) translateY(-240px)"></i><i id="H-tk5" style="transform:rotate(64.29deg) translateY(-240px)"></i><i id="H-tk6" style="transform:rotate(77.14deg) translateY(-240px)"></i><i id="H-tk7" style="transform:rotate(90.00deg) translateY(-240px)"></i><i id="H-tk8" style="transform:rotate(102.86deg) translateY(-240px)"></i><i id="H-tk9" style="transform:rotate(115.71deg) translateY(-240px)"></i><i id="H-tk10" style="transform:rotate(128.57deg) translateY(-240px)"></i><i id="H-tk11" style="transform:rotate(141.43deg) translateY(-240px)"></i><i id="H-tk12" style="transform:rotate(154.29deg) translateY(-240px)"></i><i id="H-tk13" style="transform:rotate(167.14deg) translateY(-240px)"></i><i id="H-tk14" style="transform:rotate(180.00deg) translateY(-240px)"></i><i id="H-tk15" style="transform:rotate(192.86deg) translateY(-240px)"></i><i id="H-tk16" style="transform:rotate(205.71deg) translateY(-240px)"></i><i id="H-tk17" style="transform:rotate(218.57deg) translateY(-240px)"></i><i id="H-tk18" style="transform:rotate(231.43deg) translateY(-240px)"></i><i id="H-tk19" style="transform:rotate(244.29deg) translateY(-240px)"></i><i id="H-tk20" style="transform:rotate(257.14deg) translateY(-240px)"></i><i id="H-tk21" style="transform:rotate(270.00deg) translateY(-240px)"></i><i id="H-tk22" style="transform:rotate(282.86deg) translateY(-240px)"></i><i id="H-tk23" style="transform:rotate(295.71deg) translateY(-240px)"></i><i id="H-tk24" style="transform:rotate(308.57deg) translateY(-240px)"></i><i id="H-tk25" style="transform:rotate(321.43deg) translateY(-240px)"></i><i id="H-tk26" style="transform:rotate(334.29deg) translateY(-240px)"></i><i id="H-tk27" style="transform:rotate(347.14deg) translateY(-240px)"></i></div><div class="cbox" id="H-cbox"><div class="cav"><svg class="cm" viewBox="-50 -50 100 100" width="40" height="40"><g fill="#fff"><rect x="-5.5" y="-46.0" width="11" height="38.0" rx="5.5" transform="rotate(0)"/><rect x="-5.5" y="-35.9" width="11" height="27.9" rx="5.5" transform="rotate(37)"/><rect x="-5.5" y="-43.7" width="11" height="35.7" rx="5.5" transform="rotate(60)"/><rect x="-5.5" y="-33.1" width="11" height="25.1" rx="5.5" transform="rotate(97)"/><rect x="-5.5" y="-46.0" width="11" height="38.0" rx="5.5" transform="rotate(120)"/><rect x="-5.5" y="-37.7" width="11" height="29.7" rx="5.5" transform="rotate(157)"/><rect x="-5.5" y="-41.4" width="11" height="33.4" rx="5.5" transform="rotate(180)"/><rect x="-5.5" y="-32.2" width="11" height="24.2" rx="5.5" transform="rotate(217)"/><rect x="-5.5" y="-45.1" width="11" height="37.1" rx="5.5" transform="rotate(240)"/><rect x="-5.5" y="-36.8" width="11" height="28.8" rx="5.5" transform="rotate(277)"/><rect x="-5.5" y="-40.5" width="11" height="32.5" rx="5.5" transform="rotate(300)"/><rect x="-5.5" y="-34.0" width="11" height="26.0" rx="5.5" transform="rotate(337)"/><circle r="9"/></g></svg></div><div class="cin"><span class="cl1">Comment</span><span class="ctx"><b id="H-L0">C</b><b id="H-L1">O</b><b id="H-L2">N</b><b id="H-L3">S</b><b id="H-L4">O</b><b id="H-L5">L</b><b id="H-L6">E</b><i class="caret" id="H-caret"></i></span></div><div class="csend" id="H-send">&#10148;</div></div><div class="crabw" id="H-crab" style="left:810px;top:850px"><svg class="crab" viewBox="-1 -5 19 21" width="190" height="210" shape-rendering="crispEdges"><rect x="2" y="6" width="12" height="7" fill="#D97757"/><rect x="0" y="8" width="2" height="2" fill="#D97757"/><rect x="14" y="8" width="2" height="2" fill="#D97757"/><rect x="5" y="8" width="1" height="2" fill="#2a1d18"/><rect x="10" y="8" width="1" height="2" fill="#2a1d18"/><rect x="3" y="13" width="1" height="2" fill="#D97757"/><rect x="5" y="13" width="1" height="2" fill="#D97757"/><rect x="10" y="13" width="1" height="2" fill="#D97757"/><rect x="12" y="13" width="1" height="2" fill="#D97757"/><rect x="4" y="9" width="8" height="3" fill="#2a1d18"/><rect x="5" y="10" width="1" height="1" fill="#8fb8ff"/><rect x="10" y="10" width="1" height="1" fill="#ff9ccf"/></svg></div></div></div></div>
+      <div id="cap" class="clip" data-start="0" data-duration="42.4" data-track-index="6"><div class="cl" id="cc0"><div class="pill2"><span>Your</span> <span>favourite</span> <span class="hl">PS2</span> <span>game</span></div></div><div class="cl" id="cc1"><div class="pill2"><span>is</span> <span>about</span> <span>to</span></div></div><div class="cl" id="cc2"><div class="pill2"><span>time</span> <span>out</span> <span>forever.</span></div></div><div class="cl" id="cc3"><div class="pill2"><span>Wait,</span></div></div><div class="cl" id="cc4"><div class="pill2"><span>player</span> <span>two</span> <span>just</span> <span>joined.</span></div></div><div class="cl" id="cc5"><div class="pill2"><span>It's</span> <span class="hl">Claude.</span></div></div><div class="cl" id="cc6"><div class="pill2"><span>It's</span> <span>called</span></div></div><div class="cl" id="cc7"><div class="pill2"><span class="hl">Console</span> <span class="hl">Skill.</span></div></div><div class="cl" id="cc8"><div class="pill2"><span class="hl">Eleven</span> <span class="hl">free</span> <span>skills</span></div></div><div class="cl" id="cc9"><div class="pill2"><span>that</span> <span>rebuild</span> <span class="hl">PS2</span> <span>games</span></div></div><div class="cl" id="cc10"><div class="pill2"><span>you</span> <span>own</span> <span>as</span></div></div><div class="cl" id="cc11"><div class="pill2"><span class="hl">real</span> <span class="hl">PC</span> <span class="hl">games,</span></div></div><div class="cl" id="cc12"><div class="pill2"><span class="hl">not</span> <span class="hl">an</span> <span class="hl">emulator.</span></div></div><div class="cl" id="cc13"><div class="pill2"><span>Grab</span> <span>the</span> <span class="hl">power-ups!</span></div></div><div class="cl" id="cc14"><div class="pill2"><span class="hl">Mod</span> <span>it</span></div></div><div class="cl" id="cc15"><div class="pill2"><span>just</span> <span>by</span> <span>asking.</span></div></div><div class="cl" id="cc16"><div class="pill2"><span class="hl">Sharper</span> <span class="hl">graphics,</span></div></div><div class="cl" id="cc17"><div class="pill2"><span class="hl">new</span> <span class="hl">levels,</span></div></div><div class="cl" id="cc18"><div class="pill2"><span>your</span> <span class="hl">own</span> <span class="hl">controller.</span></div></div><div class="cl" id="cc19"><div class="pill2"><span>Game</span> <span>crashes?</span></div></div><div class="cl" id="cc20"><div class="pill2"><span class="hl">Boss</span> <span class="hl">fight.</span></div></div><div class="cl" id="cc21"><div class="pill2"><span>The</span> <span class="hl">tester</span> <span class="hl">skill</span></div></div><div class="cl" id="cc22"><div class="pill2"><span>finds</span> <span>out</span> <span>why.</span></div></div><div class="cl" id="cc23"><div class="pill2"><span>Then</span> <span class="hl">New</span> <span class="hl">Game</span> <span class="hl">Plus.</span></div></div><div class="cl" id="cc24"><div class="pill2"><span>Play</span> <span>it</span> <span>on</span> <span class="hl">Windows,</span></div></div><div class="cl" id="cc25"><div class="pill2"><span class="hl">Mac,</span> <span class="hl">Linux,</span></div></div><div class="cl" id="cc26"><div class="pill2"><span>even</span> <span>a</span> <span class="hl">Steam</span> <span class="hl">Deck.</span></div></div><div class="cl" id="cc27"><div class="pill2"><span>It's</span> <span>still</span> <span class="hl">early</span> <span class="hl">access,</span></div></div><div class="cl" id="cc28"><div class="pill2"><span>so</span> <span>not</span> <span>every</span></div></div><div class="cl" id="cc29"><div class="pill2"><span>game</span> <span>boots</span> <span>yet.</span></div></div><div class="cl" id="cc30"><div class="pill2"><span>Comment</span> <span class="hl">“CONSOLE”</span> <span>to</span> <span class="hl">continue,</span></div></div><div class="cl" id="cc31"><div class="pill2"><span>and</span> <span>I'll</span> <span>send</span> <span>you</span> <span>the</span> <span>link!</span></div></div></div>
       <div id="deco"><svg class="d" id="dc0" viewBox="0 0 100 100" width="54" height="54" style="left:37px;top:1153px"><circle cx="50" cy="50" r="36" fill="none" stroke="#7a2ffb" stroke-width="12"/></svg><svg class="d" id="dc1" viewBox="0 0 100 100" width="44" height="44" style="left:982px;top:588px"><path d="M38 8h24v30h30v24H62v30H38V62H8V38h30z" fill="#D97757"/></svg><svg class="d" id="dc2" viewBox="0 0 100 100" width="46" height="46" style="left:25px;top:627px"><path d="M50 8 L92 86 H8 Z" fill="none" stroke="#8fb8ff" stroke-width="11" stroke-linejoin="round"/></svg><svg class="d" id="dc3" viewBox="0 0 100 100" width="36" height="36" style="left:992px;top:1182px"><rect x="14" y="14" width="72" height="72" rx="14" fill="#ff9ccf"/></svg><svg class="d" id="dc4" viewBox="0 0 100 100" width="40" height="40" style="left:980px;top:280px"><circle cx="50" cy="50" r="36" fill="none" stroke="#8fb8ff" stroke-width="12"/></svg><svg class="d" id="dc5" viewBox="0 0 100 100" width="36" height="36" style="left:52px;top:282px"><path d="M38 8h24v30h30v24H62v30H38V62H8V38h30z" fill="#7a2ffb"/></svg><svg class="d" id="dc6" viewBox="0 0 100 100" width="40" height="40" style="left:970px;top:920px"><path d="M50 8 L92 86 H8 Z" fill="none" stroke="#7a2ffb" stroke-width="11" stroke-linejoin="round"/></svg><svg class="d" id="dc7" viewBox="0 0 100 100" width="30" height="30" style="left:45px;top:915px"><rect x="14" y="14" width="72" height="72" rx="14" fill="#D97757"/></svg></div><svg id="rays" viewBox="-700 -700 1400 1400"><g><path d="M0 0 L700.0 0.0 L697.2 62.9 Z"/><path d="M0 0 L676.1 181.2 L657.1 241.2 Z"/><path d="M0 0 L606.2 350.0 L572.3 403.1 Z"/><path d="M0 0 L495.0 495.0 L448.5 537.5 Z"/><path d="M0 0 L350.0 606.2 L294.1 635.2 Z"/><path d="M0 0 L181.2 676.1 L119.7 689.7 Z"/><path d="M0 0 L0.0 700.0 L-62.9 697.2 Z"/><path d="M0 0 L-181.2 676.1 L-241.2 657.1 Z"/><path d="M0 0 L-350.0 606.2 L-403.1 572.3 Z"/><path d="M0 0 L-495.0 495.0 L-537.5 448.5 Z"/><path d="M0 0 L-606.2 350.0 L-635.2 294.1 Z"/><path d="M0 0 L-676.1 181.2 L-689.7 119.7 Z"/><path d="M0 0 L-700.0 0.0 L-697.2 -62.9 Z"/><path d="M0 0 L-676.1 -181.2 L-657.1 -241.2 Z"/><path d="M0 0 L-606.2 -350.0 L-572.3 -403.1 Z"/><path d="M0 0 L-495.0 -495.0 L-448.5 -537.5 Z"/><path d="M0 0 L-350.0 -606.2 L-294.1 -635.2 Z"/><path d="M0 0 L-181.2 -676.1 L-119.7 -689.7 Z"/><path d="M0 0 L-0.0 -700.0 L62.9 -697.2 Z"/><path d="M0 0 L181.2 -676.1 L241.2 -657.1 Z"/><path d="M0 0 L350.0 -606.2 L403.1 -572.3 Z"/><path d="M0 0 L495.0 -495.0 L537.5 -448.5 Z"/><path d="M0 0 L606.2 -350.0 L635.2 -294.1 Z"/><path d="M0 0 L676.1 -181.2 L689.7 -119.7 Z"/></g></svg>
       <div id="fx" class="clip" data-start="0" data-duration="42.4" data-track-index="8" data-layout-ignore><div id="scan"></div><div id="wipe"></div><div id="flash"></div><div id="glitch"><b id="gb0"></b><b id="gb1"></b><b id="gb2"></b><b id="gb3"></b><b id="gb4"></b></div></div>
       <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="42.4" data-track-index="10" data-volume="1"></audio>
@@ -159,7 +187,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #F1EEF
       window.CS_T = {"S": {"A": [0, 5.05], "B": [5.05, 8.31], "C1": [8.31, 11.842], "C2": [11.842, 17.142], "D": [17.142, 24.042], "E": [24.042, 28.262], "F": [28.262, 33.662], "G": [33.662, 37.422], "H": [37.422, 42.4]}, "w": [0.08, 0.44, 0.9, 1.5, 2.102, 2.242, 2.622, 2.842, 3.202, 3.962, 5.07, 5.67, 6.01, 6.25, 6.47, 7.23, 7.47, 8.35, 8.63, 9.11, 9.69, 10.402, 11.042, 11.282, 11.642, 11.882, 12.322, 12.822, 13.082, 13.322, 13.962, 14.282, 14.662, 15.081, 15.842, 16.102, 16.242, 17.182, 17.422, 17.562, 18.582, 18.882, 19.122, 19.342, 19.642, 20.542, 20.942, 21.642, 21.902, 22.502, 22.782, 23.042, 24.082, 24.302, 25.142, 25.522, 26.382, 26.542, 26.922, 27.222, 27.462, 27.642, 28.302, 28.762, 28.942, 29.162, 29.802, 30.002, 30.102, 30.302, 30.942, 31.422, 32.142, 32.402, 32.642, 32.982, 33.702, 33.962, 34.222, 34.542, 35.342, 35.802, 36.082, 36.362, 36.602, 36.882, 37.462, 37.882, 38.362, 38.462, 39.262, 39.362, 39.522, 39.722, 39.822, 39.922], "CL": "#D97757", "count": [["9", 2.052], ["8", 2.652], ["7", 3.252], ["6", 3.802], ["5", 3.962], ["4", 4.122], ["3", 4.282], ["2", 4.442], ["1", 4.602]], "count2": [["3", 37.422], ["2", 37.681999999999995]], "burst": 37.882, "press": 38.462, "hits": [26.542, 27.222, 27.462, 27.642], "ko": 27.962, "unlock": [30.302, 30.942, 31.422, 32.982], "beats": [5.882, 6.382, 6.882, 7.382, 7.882, 8.382, 8.882, 9.382, 9.882, 10.382, 10.882, 11.382, 11.882, 12.382, 12.882, 13.382, 13.882, 14.382, 14.882, 15.382, 15.882, 16.382, 16.882, 17.382, 17.882, 18.382, 18.882, 19.382, 19.882, 20.382, 20.882, 21.382, 21.882, 22.382, 22.882, 23.382, 23.882, 24.382, 24.882, 25.382, 25.882, 26.382, 26.882, 27.382, 27.882, 28.382, 28.882, 29.382, 29.882, 30.382, 30.882, 31.382, 31.882, 32.382, 32.882, 33.382, 37.882, 38.382, 38.882, 39.382, 39.882, 40.382, 40.882, 41.382, 41.882]};
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
-      gsap.set(["#a-freeze", "#A-chip", "#A-hdr", "#A-tk0", "#A-tk1", "#A-tk2", "#A-tk3", "#A-tk4", "#A-tk5", "#A-tk6", "#A-tk7", "#A-tk8", "#A-tk9", "#A-tk10", "#A-tk11", "#A-tk12", "#A-tk13", "#A-tk14", "#A-tk15", "#A-tk16", "#A-tk17", "#A-tk18", "#A-tk19", "#A-tk20", "#A-tk21", "#A-tk22", "#A-tk23", "#A-tk24", "#A-tk25", "#A-tk26", "#A-tk27", "#A-save", "#A-warn", "#B-pause", "#B-h1", "#B-h2", "#B-p1", "#B-p2", "#B-name", "#B-burst", "#C1-chip", "#C1-c0", "#C1-c1", "#C1-c2", "#C1-press", "#C2-hdr", "#C2-bar", "#win", "#C2-st", "#D-chip", "#D-hdr", "#D-s0", "#D-s1", "#D-s2", "#D-b0", "#D-b1", "#D-p0", "#D-p1", "#D-p2", "#D-burst", "#E-e0", "#E-e1", "#E-e2", "#E-hdr", "#E-hp", "#E-move", "#E-ko", "#F-chip", "#F-hdr", "#G-chip", "#H-hdr", "#H-c1", "#H-c2", "#cw0", "#cw1", "#cw2", "#cw3", "#cw4", "#cc0", "#cw5", "#cw6", "#cw7", "#cw8", "#cw9", "#cc1", "#cw10", "#cw11", "#cw12", "#cw13", "#cw14", "#cc2", "#cw15", "#cw16", "#cc3", "#cw17", "#cw18", "#cw19", "#cw20", "#cc4", "#cw21", "#cw22", "#cw23", "#cc5", "#cw24", "#cw25", "#cw26", "#cw27", "#cw28", "#cw29", "#cc6", "#cw30", "#cw31", "#cw32", "#cw33", "#cc7", "#cw34", "#cw35", "#cw36", "#cc8", "#cw37", "#cw38", "#cw39", "#cc9", "#cw40", "#cw41", "#cw42", "#cw43", "#cw44", "#cc10", "#cw45", "#cw46", "#cc11", "#cw47", "#cw48", "#cc12", "#cw49", "#cw50", "#cw51", "#cc13", "#cw52", "#cw53", "#cc14", "#cw54", "#cw55", "#cc15", "#cw56", "#cw57", "#cw58", "#cw59", "#cw60", "#cw61", "#cc16", "#cw62", "#cw63", "#cw64", "#cw65", "#cc17", "#cw66", "#cw67", "#cw68", "#cw69", "#cw70", "#cw71", "#cc18", "#cw72", "#cw73", "#cw74", "#cw75", "#cc19", "#cw76", "#cw77", "#cw78", "#cw79", "#cc20", "#cw80", "#cw81", "#cw82", "#cw83", "#cw84", "#cw85", "#cc21", "#cw86", "#cw87", "#cw88", "#cw89", "#cc22", "#cw90", "#cw91", "#cw92", "#cw93", "#cw94", "#cw95", "#cc23", "#cap .box", "#resume"], {opacity: 0});
+      gsap.set(["#a-freeze", "#A-chip", "#A-hdr", "#A-tk0", "#A-tk1", "#A-tk2", "#A-tk3", "#A-tk4", "#A-tk5", "#A-tk6", "#A-tk7", "#A-tk8", "#A-tk9", "#A-tk10", "#A-tk11", "#A-tk12", "#A-tk13", "#A-tk14", "#A-tk15", "#A-tk16", "#A-tk17", "#A-tk18", "#A-tk19", "#A-tk20", "#A-tk21", "#A-tk22", "#A-tk23", "#A-tk24", "#A-tk25", "#A-tk26", "#A-tk27", "#A-save", "#A-warn", "#B-pause", "#B-h1", "#B-h2", "#B-p1", "#B-p2", "#B-name", "#B-burst", "#B-crab", "#C1-chip", "#C1-press", "#C1-k0", "#C1-k1", "#C1-k2", "#C1-k3", "#C1-k4", "#C1-k5", "#C1-k6", "#C1-k7", "#C1-k8", "#C1-k9", "#C1-k10", "#C1-free", "#C2-hdr", "#C2-bar", "#win", "#C2-st", "#D-chip", "#D-hdr", "#D-s0", "#D-s1", "#D-s2", "#D-b0", "#D-b1", "#D-p0", "#D-p1", "#D-p2", "#D-c0", "#D-c1", "#D-c2", "#D-t1", "#D-ok0", "#D-ok1", "#D-ok2", "#D-burst", "#E-e0", "#E-e1", "#E-e2", "#E-hdr", "#E-hp", "#E-move", "#E-crab", "#E-ko", "#F-chip", "#F-hdr", "#G-chip", "#H-hdr", "#H-cbox", "#H-L0", "#H-L1", "#H-L2", "#H-L3", "#H-L4", "#H-L5", "#H-L6", "#H-crab", "#cc0", "#cc1", "#cc2", "#cc3", "#cc4", "#cc5", "#cc6", "#cc7", "#cc8", "#cc9", "#cc10", "#cc11", "#cc12", "#cc13", "#cc14", "#cc15", "#cc16", "#cc17", "#cc18", "#cc19", "#cc20", "#cc21", "#cc22", "#cc23", "#cc24", "#cc25", "#cc26", "#cc27", "#cc28", "#cc29", "#cc30", "#cc31", "#resume"], {opacity: 0});
       gsap.set("#wipe", {x: -1900});
       tl.set("#apanel", {opacity: 1, scale: 1.3, y: 60}, 0);
       tl.to("#apanel", {scale: 1.42, duration: 1.952, ease: "sine.inOut"}, 0);
@@ -250,17 +278,54 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #F1EEF
       tl.fromTo("#B-name", {opacity: 0, scale: 1.7}, {opacity: 1, scale: 1, duration: .28, ease: "power4.out"}, 7.470);
       tl.set("#B-burst", {opacity: .9, scale: .2}, 6.470);
       tl.to("#B-burst", {opacity: 0, scale: 2.4, duration: .7, ease: "power2.out"}, 6.480);
+      tl.set("#B-crab", {opacity: 1, y: 260, scale: .4}, 7.230);
+      tl.to("#B-crab", {y: 0, scale: 1, duration: .45, ease: "back.out(2.4)"}, 7.240);
+      tl.to("#B-crab", {y: -16, duration: .14, ease: "power2.out", immediateRender: false}, 7.730);
+      tl.to("#B-crab", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 7.870);
       tl.fromTo("#C1-chip", {opacity: 0, scale: .4}, {opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.6)"}, 8.360);
-      tl.fromTo("#C1-c0", {opacity: 0, scale: .4}, {opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.6)"}, 10.402);
-      tl.fromTo("#C1-c1", {opacity: 0, scale: .4}, {opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.6)"}, 11.042);
-      tl.fromTo("#C1-c2", {opacity: 0, scale: .4}, {opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.6)"}, 11.282);
       tl.fromTo("#C1-press", {opacity: 0}, {opacity: 1, duration: 0.2, ease: "power1.out"}, 9.990);
       tl.set("#C1-press", {opacity: 1}, 10.290);
-      tl.set("#C1-press", {opacity: 0.15}, 10.590);
-      tl.set("#C1-press", {opacity: 1}, 10.890);
-      tl.set("#C1-press", {opacity: 0.15}, 11.190);
-      tl.set("#C1-press", {opacity: 1}, 11.490);
-      tl.set("#C1-press", {opacity: 0.15}, 11.790);
+      tl.to("#C1-press", {opacity: 0, duration: .1}, 10.352);
+      tl.fromTo("#C1-k0", {opacity: 0, y: 40, scale: .3}, {opacity: 1, y: 0, scale: 1, duration: .3, ease: "back.out(3)"}, 10.402);
+      tl.to("#C1-k0", {y: -10, duration: .14, ease: "power2.out", immediateRender: false}, 10.802);
+      tl.to("#C1-k0", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 10.942);
+      tl.to("#C1-k0", {y: -10, duration: .14, ease: "power2.out", immediateRender: false}, 11.302);
+      tl.to("#C1-k0", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 11.442);
+      tl.fromTo("#C1-k1", {opacity: 0, y: 40, scale: .3}, {opacity: 1, y: 0, scale: 1, duration: .3, ease: "back.out(3)"}, 10.457);
+      tl.to("#C1-k1", {y: -10, duration: .14, ease: "power2.out", immediateRender: false}, 10.957);
+      tl.to("#C1-k1", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 11.097);
+      tl.to("#C1-k1", {y: -10, duration: .14, ease: "power2.out", immediateRender: false}, 11.457);
+      tl.to("#C1-k1", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 11.597);
+      tl.fromTo("#C1-k2", {opacity: 0, y: 40, scale: .3}, {opacity: 1, y: 0, scale: 1, duration: .3, ease: "back.out(3)"}, 10.512);
+      tl.to("#C1-k2", {y: -10, duration: .14, ease: "power2.out", immediateRender: false}, 11.112);
+      tl.to("#C1-k2", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 11.252);
+      tl.fromTo("#C1-k3", {opacity: 0, y: 40, scale: .3}, {opacity: 1, y: 0, scale: 1, duration: .3, ease: "back.out(3)"}, 10.567);
+      tl.to("#C1-k3", {y: -10, duration: .14, ease: "power2.out", immediateRender: false}, 10.967);
+      tl.to("#C1-k3", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 11.107);
+      tl.to("#C1-k3", {y: -10, duration: .14, ease: "power2.out", immediateRender: false}, 11.467);
+      tl.to("#C1-k3", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 11.607);
+      tl.fromTo("#C1-k4", {opacity: 0, y: 40, scale: .3}, {opacity: 1, y: 0, scale: 1, duration: .3, ease: "back.out(3)"}, 10.622);
+      tl.to("#C1-k4", {y: -10, duration: .14, ease: "power2.out", immediateRender: false}, 11.122);
+      tl.to("#C1-k4", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 11.262);
+      tl.fromTo("#C1-k5", {opacity: 0, y: 40, scale: .3}, {opacity: 1, y: 0, scale: 1, duration: .3, ease: "back.out(3)"}, 10.677);
+      tl.to("#C1-k5", {y: -10, duration: .14, ease: "power2.out", immediateRender: false}, 11.277);
+      tl.to("#C1-k5", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 11.417);
+      tl.fromTo("#C1-k6", {opacity: 0, y: 40, scale: .3}, {opacity: 1, y: 0, scale: 1, duration: .3, ease: "back.out(3)"}, 10.732);
+      tl.to("#C1-k6", {y: -10, duration: .14, ease: "power2.out", immediateRender: false}, 11.132);
+      tl.to("#C1-k6", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 11.272);
+      tl.fromTo("#C1-k7", {opacity: 0, y: 40, scale: .3}, {opacity: 1, y: 0, scale: 1, duration: .3, ease: "back.out(3)"}, 10.787);
+      tl.to("#C1-k7", {y: -10, duration: .14, ease: "power2.out", immediateRender: false}, 11.287);
+      tl.to("#C1-k7", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 11.427);
+      tl.fromTo("#C1-k8", {opacity: 0, y: 40, scale: .3}, {opacity: 1, y: 0, scale: 1, duration: .3, ease: "back.out(3)"}, 10.842);
+      tl.to("#C1-k8", {y: -10, duration: .14, ease: "power2.out", immediateRender: false}, 11.442);
+      tl.to("#C1-k8", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 11.582);
+      tl.fromTo("#C1-k9", {opacity: 0, y: 40, scale: .3}, {opacity: 1, y: 0, scale: 1, duration: .3, ease: "back.out(3)"}, 10.897);
+      tl.to("#C1-k9", {y: -10, duration: .14, ease: "power2.out", immediateRender: false}, 11.297);
+      tl.to("#C1-k9", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 11.437);
+      tl.fromTo("#C1-k10", {opacity: 0, y: 40, scale: .3}, {opacity: 1, y: 0, scale: 1, duration: .3, ease: "back.out(3)"}, 10.952);
+      tl.to("#C1-k10", {y: -10, duration: .14, ease: "power2.out", immediateRender: false}, 11.452);
+      tl.to("#C1-k10", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 11.592);
+      tl.fromTo("#C1-free", {opacity: 0, scale: 1.7}, {opacity: 1, scale: 1, duration: .28, ease: "power4.out"}, 11.042);
       tl.fromTo("#C2-hdr", {opacity: 0, scale: 1.7}, {opacity: 1, scale: 1, duration: .28, ease: "power4.out"}, 11.892);
       tl.fromTo("#C2-bar", {opacity: 0, y: 46}, {opacity: 1, y: 0, duration: 0.3, ease: "back.out(2.2)"}, 11.992);
       tl.fromTo("#C2-fill", {scaleX: 0}, {scaleX: 1, duration: 3.199, ease: "power1.inOut"}, 11.882);
@@ -285,6 +350,25 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #F1EEF
       tl.fromTo("#D-p1", {opacity: 0, scale: .4}, {opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.6)"}, 22.752);
       tl.set("#D-s2", {borderColor: "#7a2ffb"}, 23.792);
       tl.fromTo("#D-p2", {opacity: 0, scale: .4}, {opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.6)"}, 23.792);
+      tl.fromTo("#D-c0", {opacity: 0, scale: .7, rotation: -4}, {opacity: 1, scale: 1, rotation: 0, duration: .35, ease: "back.out(2)"}, 20.522);
+      tl.to("#D-c0", {opacity: 0, x: -160, duration: .14, ease: "power2.in"}, 21.522);
+      tl.fromTo("#D-c1", {opacity: 0, scale: .7, rotation: 3}, {opacity: 1, scale: 1, rotation: 0, duration: .35, ease: "back.out(2)"}, 21.622);
+      tl.to("#D-c1", {opacity: 0, x: -160, duration: .14, ease: "power2.in"}, 22.382);
+      tl.fromTo("#D-c2", {opacity: 0, scale: .7, rotation: -2}, {opacity: 1, scale: 1, rotation: 0, duration: .35, ease: "back.out(2)"}, 22.482);
+      tl.fromTo("#D-sweep", {x: -60}, {x: 880, duration: .45, ease: "power2.inOut"}, 20.992);
+      tl.to("#D-blur", {opacity: 0, duration: .4, ease: "power2.inOut"}, 20.992);
+      tl.to("#D-t0", {opacity: 0, duration: .1}, 21.242);
+      tl.fromTo("#D-t1", {opacity: 0, scale: 1.6}, {opacity: 1, scale: 1, duration: .25, ease: "back.out(3)"}, 21.242);
+      tl.to("#D-sel", {x: 0, duration: .14, ease: "power2.out", immediateRender: false}, 21.692);
+      tl.to("#D-sel", {x: 252, duration: .14, ease: "power2.out", immediateRender: false}, 21.942);
+      tl.to("#D-sel", {x: 504, duration: .14, ease: "power2.out", immediateRender: false}, 22.192);
+      tl.fromTo("#D-tl2", {scale: 1}, {scale: 1.08, duration: .15, yoyo: true, repeat: 1}, 22.192);
+      tl.fromTo("#D-ok0", {opacity: 0, scale: .4}, {opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2.6)"}, 22.752);
+      tl.fromTo("#D-pd0", {rotation: 0}, {rotation: -6, duration: .25, yoyo: true, repeat: 5, ease: "sine.inOut"}, 22.702);
+      tl.fromTo("#D-ok1", {opacity: 0, scale: .4}, {opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2.6)"}, 22.902);
+      tl.fromTo("#D-pd1", {rotation: 0}, {rotation: 6, duration: .25, yoyo: true, repeat: 5, ease: "sine.inOut"}, 22.802);
+      tl.fromTo("#D-ok2", {opacity: 0, scale: .4}, {opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2.6)"}, 23.052);
+      tl.fromTo("#D-pd2", {rotation: 0}, {rotation: -6, duration: .25, yoyo: true, repeat: 5, ease: "sine.inOut"}, 22.902);
       tl.set("#D-burst", {opacity: .85, scale: .3}, 17.182);
       tl.to("#D-burst", {opacity: 0, scale: 2.2, duration: .6, ease: "power2.out"}, 17.192);
       tl.set("#D-burst", {opacity: .85, scale: .3}, 20.542);
@@ -315,6 +399,13 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #F1EEF
       tl.to("#E-hpf", {scaleX: 0.18, duration: .13, ease: "power2.out"}, 27.662);
       tl.to("#E-hpf", {scaleX: 0, duration: .13, ease: "power2.out"}, 27.842);
       tl.fromTo("#E-move", {opacity: 0, x: -120}, {opacity: 1, x: 0, duration: 0.3, ease: "power3.out"}, 26.382);
+      tl.fromTo("#E-crab", {opacity: 0, scale: .4}, {opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.6)"}, 26.382);
+      tl.to("#E-crab", {y: -14, duration: .14, ease: "power2.out", immediateRender: false}, 26.782);
+      tl.to("#E-crab", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 26.922);
+      tl.to("#E-crab", {y: -14, duration: .14, ease: "power2.out", immediateRender: false}, 27.282);
+      tl.to("#E-crab", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 27.422);
+      tl.to("#E-crab", {y: -14, duration: .14, ease: "power2.out", immediateRender: false}, 27.782);
+      tl.to("#E-crab", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 27.922);
       tl.fromTo("#E-ko", {opacity: 0, scale: 1.7}, {opacity: 1, scale: 1, duration: .28, ease: "power4.out"}, 27.962);
       tl.set("#E-ko", {x: 7.9, y: -4.0}, 28.242);
       tl.set("#E-ko", {x: -2.3, y: -5.6}, 28.275);
@@ -384,283 +475,148 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #F1EEF
       tl.set("#H-tk26", {opacity: 1}, 38.532);
       tl.set("#H-tk27", {opacity: .14}, 37.422);
       tl.set("#H-tk27", {opacity: 1}, 38.557);
-      tl.fromTo("#H-c1", {opacity: 0, y: 46}, {opacity: 1, y: 0, duration: 0.35, ease: "back.out(2.2)"}, 37.462);
-      tl.fromTo("#H-c2", {opacity: 0, scale: 1.7}, {opacity: 1, scale: 1, duration: .28, ease: "power4.out"}, 37.882);
-      tl.fromTo("#H-c2", {scale: 1}, {scale: 1.08, immediateRender: false, duration: .16, yoyo: true, repeat: 1, ease: "power2.out"}, 38.462);
-      tl.to("#H-c2", {scale: 1.04, duration: .5, ease: "sine.inOut"}, 39.062);
-      tl.to("#H-c2", {scale: 1, duration: .5, ease: "sine.inOut"}, 39.562);
-      tl.to("#H-c2", {scale: 1.04, duration: .5, ease: "sine.inOut"}, 40.062);
-      tl.to("#H-c2", {scale: 1, duration: .5, ease: "sine.inOut"}, 40.562);
-      tl.to("#H-c2", {scale: 1.04, duration: .5, ease: "sine.inOut"}, 41.062);
-      tl.to("#H-c2", {scale: 1, duration: .5, ease: "sine.inOut"}, 41.562);
-      tl.to("#H-c2", {scale: 1.04, duration: .5, ease: "sine.inOut"}, 42.062);
-      tl.fromTo("#cw0", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 0.080);
-      tl.fromTo("#cw1", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 0.440);
-      tl.fromTo("#cw2", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 0.900);
-      tl.fromTo("#cw3", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 1.500);
-      tl.fromTo("#cw4", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 2.102);
-      tl.set("#cc0", {opacity: 1}, 0.060);
-      tl.set("#cc0", {opacity: 0}, 2.212);
-      tl.fromTo("#cw5", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 2.242);
-      tl.fromTo("#cw6", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 2.622);
-      tl.fromTo("#cw7", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 2.842);
-      tl.fromTo("#cw8", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 3.202);
-      tl.fromTo("#cw9", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 3.962);
-      tl.set("#cc1", {opacity: 1}, 2.222);
-      tl.set("#cc1", {opacity: 0}, 5.040);
-      tl.fromTo("#cw10", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 5.070);
-      tl.fromTo("#cw11", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 5.670);
-      tl.fromTo("#cw12", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 6.010);
-      tl.fromTo("#cw13", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 6.250);
-      tl.fromTo("#cw14", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 6.470);
-      tl.set("#cc2", {opacity: 1}, 5.050);
-      tl.set("#cc2", {opacity: 0}, 7.200);
-      tl.fromTo("#cw15", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 7.230);
-      tl.fromTo("#cw16", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 7.470);
-      tl.set("#cc3", {opacity: 1}, 7.210);
-      tl.set("#cc3", {opacity: 0}, 8.320);
-      tl.fromTo("#cw17", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 8.350);
-      tl.fromTo("#cw18", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 8.630);
-      tl.fromTo("#cw19", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 9.110);
-      tl.fromTo("#cw20", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 9.690);
-      tl.set("#cc4", {opacity: 1}, 8.330);
-      tl.set("#cc4", {opacity: 0}, 10.372);
-      tl.fromTo("#cw21", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 10.402);
-      tl.fromTo("#cw22", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 11.042);
-      tl.fromTo("#cw23", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 11.282);
-      tl.set("#cc5", {opacity: 1}, 10.382);
-      tl.set("#cc5", {opacity: 0}, 11.612);
-      tl.fromTo("#cw24", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 11.642);
-      tl.fromTo("#cw25", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 11.882);
-      tl.fromTo("#cw26", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 12.322);
-      tl.fromTo("#cw27", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 12.822);
-      tl.fromTo("#cw28", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 13.082);
-      tl.fromTo("#cw29", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 13.322);
-      tl.set("#cc6", {opacity: 1}, 11.622);
-      tl.set("#cc6", {opacity: 0}, 13.932);
-      tl.fromTo("#cw30", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 13.962);
-      tl.fromTo("#cw31", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 14.282);
-      tl.fromTo("#cw32", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 14.662);
-      tl.fromTo("#cw33", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 15.081);
-      tl.set("#cc7", {opacity: 1}, 13.942);
-      tl.set("#cc7", {opacity: 0}, 15.812);
-      tl.fromTo("#cw34", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 15.842);
-      tl.fromTo("#cw35", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 16.102);
-      tl.fromTo("#cw36", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 16.242);
-      tl.set("#cc8", {opacity: 1}, 15.822);
-      tl.set("#cc8", {opacity: 0}, 17.152);
-      tl.fromTo("#cw37", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 17.182);
-      tl.fromTo("#cw38", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 17.422);
-      tl.fromTo("#cw39", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 17.562);
-      tl.set("#cc9", {opacity: 1}, 17.162);
-      tl.set("#cc9", {opacity: 0}, 18.552);
-      tl.fromTo("#cw40", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 18.582);
-      tl.fromTo("#cw41", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 18.882);
-      tl.fromTo("#cw42", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 19.122);
-      tl.fromTo("#cw43", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 19.342);
-      tl.fromTo("#cw44", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 19.642);
-      tl.set("#cc10", {opacity: 1}, 18.562);
-      tl.set("#cc10", {opacity: 0}, 20.512);
-      tl.fromTo("#cw45", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 20.542);
-      tl.fromTo("#cw46", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 20.942);
-      tl.set("#cc11", {opacity: 1}, 20.522);
-      tl.set("#cc11", {opacity: 0}, 21.612);
-      tl.fromTo("#cw47", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 21.642);
-      tl.fromTo("#cw48", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 21.902);
-      tl.set("#cc12", {opacity: 1}, 21.622);
-      tl.set("#cc12", {opacity: 0}, 22.472);
-      tl.fromTo("#cw49", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 22.502);
-      tl.fromTo("#cw50", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 22.782);
-      tl.fromTo("#cw51", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 23.042);
-      tl.set("#cc13", {opacity: 1}, 22.482);
-      tl.set("#cc13", {opacity: 0}, 24.052);
-      tl.fromTo("#cw52", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 24.082);
-      tl.fromTo("#cw53", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 24.302);
-      tl.set("#cc14", {opacity: 1}, 24.062);
-      tl.set("#cc14", {opacity: 0}, 25.112);
-      tl.fromTo("#cw54", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 25.142);
-      tl.fromTo("#cw55", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 25.522);
-      tl.set("#cc15", {opacity: 1}, 25.122);
-      tl.set("#cc15", {opacity: 0}, 26.352);
-      tl.fromTo("#cw56", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 26.382);
-      tl.fromTo("#cw57", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 26.542);
-      tl.fromTo("#cw58", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 26.922);
-      tl.fromTo("#cw59", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 27.222);
-      tl.fromTo("#cw60", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 27.462);
-      tl.fromTo("#cw61", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 27.642);
-      tl.set("#cc16", {opacity: 1}, 26.362);
-      tl.set("#cc16", {opacity: 0}, 28.272);
-      tl.fromTo("#cw62", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 28.302);
-      tl.fromTo("#cw63", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 28.762);
-      tl.fromTo("#cw64", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 28.942);
-      tl.fromTo("#cw65", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 29.162);
-      tl.set("#cc17", {opacity: 1}, 28.282);
-      tl.set("#cc17", {opacity: 0}, 29.772);
-      tl.fromTo("#cw66", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 29.802);
-      tl.fromTo("#cw67", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 30.002);
-      tl.fromTo("#cw68", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 30.102);
-      tl.fromTo("#cw69", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 30.302);
-      tl.fromTo("#cw70", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 30.942);
-      tl.fromTo("#cw71", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 31.422);
-      tl.set("#cc18", {opacity: 1}, 29.782);
-      tl.set("#cc18", {opacity: 0}, 32.112);
-      tl.fromTo("#cw72", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 32.142);
-      tl.fromTo("#cw73", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 32.402);
-      tl.fromTo("#cw74", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 32.642);
-      tl.fromTo("#cw75", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 32.982);
-      tl.set("#cc19", {opacity: 1}, 32.122);
-      tl.set("#cc19", {opacity: 0}, 33.672);
-      tl.fromTo("#cw76", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 33.702);
-      tl.fromTo("#cw77", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 33.962);
-      tl.fromTo("#cw78", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 34.222);
-      tl.fromTo("#cw79", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 34.542);
-      tl.set("#cc20", {opacity: 1}, 33.682);
-      tl.set("#cc20", {opacity: 0}, 35.312);
-      tl.fromTo("#cw80", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 35.342);
-      tl.fromTo("#cw81", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 35.802);
-      tl.fromTo("#cw82", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 36.082);
-      tl.fromTo("#cw83", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 36.362);
-      tl.fromTo("#cw84", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 36.602);
-      tl.fromTo("#cw85", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 36.882);
-      tl.set("#cc21", {opacity: 1}, 35.322);
-      tl.set("#cc21", {opacity: 0}, 37.432);
-      tl.fromTo("#cw86", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 37.462);
-      tl.fromTo("#cw87", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 37.882);
-      tl.fromTo("#cw88", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 38.362);
-      tl.fromTo("#cw89", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 38.462);
-      tl.set("#cc22", {opacity: 1}, 37.442);
-      tl.set("#cc22", {opacity: 0}, 39.232);
-      tl.fromTo("#cw90", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 39.262);
-      tl.fromTo("#cw91", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 39.362);
-      tl.fromTo("#cw92", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 39.522);
-      tl.fromTo("#cw93", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 39.722);
-      tl.fromTo("#cw94", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 39.822);
-      tl.fromTo("#cw95", {opacity: 0, y: 22, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .22, ease: "back.out(3.5)"}, 39.922);
-      tl.set("#cc23", {opacity: 1}, 39.242);
-      tl.set("#cc23", {opacity: 0}, 42.400);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 0.000);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 0.350);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 0.700);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 1.050);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 1.400);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 1.750);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 2.100);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 2.450);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 2.800);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 3.150);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 3.500);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 3.850);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 4.200);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 4.550);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 4.900);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 5.250);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 5.600);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 5.950);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 6.300);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 6.650);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 7.000);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 7.350);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 7.700);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 8.050);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 8.400);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 8.750);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 9.100);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 9.450);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 9.800);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 10.150);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 10.500);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 10.850);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 11.200);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 11.550);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 11.900);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 12.250);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 12.600);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 12.950);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 13.300);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 13.650);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 14.000);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 14.350);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 14.700);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 15.050);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 15.400);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 15.750);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 16.100);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 16.450);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 16.800);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 17.150);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 17.500);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 17.850);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 18.200);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 18.550);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 18.900);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 19.250);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 19.600);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 19.950);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 20.300);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 20.650);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 21.000);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 21.350);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 21.700);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 22.050);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 22.400);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 22.750);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 23.100);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 23.450);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 23.800);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 24.150);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 24.500);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 24.850);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 25.200);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 25.550);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 25.900);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 26.250);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 26.600);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 26.950);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 27.300);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 27.650);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 28.000);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 28.350);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 28.700);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 29.050);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 29.400);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 29.750);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 30.100);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 30.450);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 30.800);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 31.150);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 31.500);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 31.850);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 32.200);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 32.550);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 32.900);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 33.250);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 33.600);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 33.950);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 34.300);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 34.650);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 35.000);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 35.350);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 35.700);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 36.050);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 36.400);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 36.750);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 37.100);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 37.450);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 37.800);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 38.150);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 38.500);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 38.850);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 39.200);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 39.550);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 39.900);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 40.250);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 40.600);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 40.950);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 41.300);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 41.650);
-      tl.to("#cap .nx", {y: 8, duration: .35, ease: "sine.inOut"}, 42.000);
-      tl.to("#cap .nx", {y: 0, duration: .35, ease: "sine.inOut"}, 42.350);
-      tl.fromTo("#cap .box", {opacity: 0, y: 46}, {opacity: 1, y: 0, duration: 0.35, ease: "back.out(2.2)"}, 0.000);
+      tl.fromTo("#H-cbox", {opacity: 0, y: 46}, {opacity: 1, y: 0, duration: 0.35, ease: "back.out(2.2)"}, 37.462);
+      tl.fromTo("#H-L0", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .1}, 37.882);
+      tl.fromTo("#H-L1", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .1}, 37.952);
+      tl.fromTo("#H-L2", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .1}, 38.022);
+      tl.fromTo("#H-L3", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .1}, 38.092);
+      tl.fromTo("#H-L4", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .1}, 38.162);
+      tl.fromTo("#H-L5", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .1}, 38.232);
+      tl.fromTo("#H-L6", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .1}, 38.302);
+      tl.set("#H-caret", {opacity: 1}, 37.462);
+      tl.set("#H-caret", {opacity: 0.15}, 37.712);
+      tl.set("#H-caret", {opacity: 1}, 37.962);
+      tl.set("#H-caret", {opacity: 0.15}, 38.212);
+      tl.set("#H-caret", {opacity: 1}, 38.462);
+      tl.set("#H-caret", {opacity: 0.15}, 38.712);
+      tl.set("#H-caret", {opacity: 1}, 38.962);
+      tl.set("#H-caret", {opacity: 0.15}, 39.212);
+      tl.set("#H-caret", {opacity: 1}, 39.462);
+      tl.set("#H-caret", {opacity: 0.15}, 39.712);
+      tl.set("#H-caret", {opacity: 1}, 39.962);
+      tl.set("#H-caret", {opacity: 0.15}, 40.212);
+      tl.set("#H-caret", {opacity: 1}, 40.462);
+      tl.set("#H-caret", {opacity: 0.15}, 40.712);
+      tl.set("#H-caret", {opacity: 1}, 40.962);
+      tl.set("#H-caret", {opacity: 0.15}, 41.212);
+      tl.set("#H-caret", {opacity: 1}, 41.462);
+      tl.set("#H-caret", {opacity: 0.15}, 41.712);
+      tl.set("#H-caret", {opacity: 1}, 41.962);
+      tl.set("#H-caret", {opacity: 0.15}, 42.212);
+      tl.fromTo("#H-send", {scale: 1}, {scale: 1.3, duration: .14, yoyo: true, repeat: 1, ease: "power2.out"}, 38.462);
+      tl.fromTo("#H-crab", {opacity: 0, scale: .4}, {opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.6)"}, 38.082);
+      tl.to("#H-crab", {y: -22, duration: .14, ease: "power2.out", immediateRender: false}, 38.482);
+      tl.to("#H-crab", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 38.622);
+      tl.to("#H-crab", {y: -22, duration: .14, ease: "power2.out", immediateRender: false}, 38.982);
+      tl.to("#H-crab", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 39.122);
+      tl.to("#H-crab", {y: -22, duration: .14, ease: "power2.out", immediateRender: false}, 39.482);
+      tl.to("#H-crab", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 39.622);
+      tl.to("#H-crab", {y: -22, duration: .14, ease: "power2.out", immediateRender: false}, 39.982);
+      tl.to("#H-crab", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 40.122);
+      tl.to("#H-crab", {y: -22, duration: .14, ease: "power2.out", immediateRender: false}, 40.482);
+      tl.to("#H-crab", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 40.622);
+      tl.to("#H-crab", {y: -22, duration: .14, ease: "power2.out", immediateRender: false}, 40.982);
+      tl.to("#H-crab", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 41.122);
+      tl.to("#H-crab", {y: -22, duration: .14, ease: "power2.out", immediateRender: false}, 41.482);
+      tl.to("#H-crab", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 41.622);
+      tl.to("#H-crab", {y: -22, duration: .14, ease: "power2.out", immediateRender: false}, 41.982);
+      tl.to("#H-crab", {y: 0, duration: .16, ease: "power2.in", immediateRender: false}, 42.122);
+      tl.set("#cc0", {opacity: 1, scale: .55, y: 26}, 0.050);
+      tl.to("#cc0", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 0.060);
+      tl.set("#cc0", {opacity: 0}, 2.062);
+      tl.set("#cc1", {opacity: 1, scale: .55, y: 26}, 2.072);
+      tl.to("#cc1", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 2.082);
+      tl.set("#cc1", {opacity: 0}, 2.802);
+      tl.set("#cc2", {opacity: 1, scale: .55, y: 26}, 2.812);
+      tl.to("#cc2", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 2.822);
+      tl.set("#cc2", {opacity: 0}, 5.030);
+      tl.set("#cc3", {opacity: 1, scale: .55, y: 26}, 5.040);
+      tl.to("#cc3", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 5.050);
+      tl.set("#cc3", {opacity: 0}, 5.630);
+      tl.set("#cc4", {opacity: 1, scale: .55, y: 26}, 5.640);
+      tl.to("#cc4", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 5.650);
+      tl.set("#cc4", {opacity: 0}, 7.190);
+      tl.set("#cc5", {opacity: 1, scale: .55, y: 26}, 7.200);
+      tl.to("#cc5", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 7.210);
+      tl.set("#cc5", {opacity: 0}, 8.310);
+      tl.set("#cc6", {opacity: 1, scale: .55, y: 26}, 8.320);
+      tl.to("#cc6", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 8.330);
+      tl.set("#cc6", {opacity: 0}, 9.070);
+      tl.set("#cc7", {opacity: 1, scale: .55, y: 26}, 9.080);
+      tl.to("#cc7", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 9.090);
+      tl.set("#cc7", {opacity: 0}, 10.362);
+      tl.set("#cc8", {opacity: 1, scale: .55, y: 26}, 10.372);
+      tl.to("#cc8", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 10.382);
+      tl.set("#cc8", {opacity: 0}, 11.602);
+      tl.set("#cc9", {opacity: 1, scale: .55, y: 26}, 11.612);
+      tl.to("#cc9", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 11.622);
+      tl.set("#cc9", {opacity: 0}, 13.042);
+      tl.set("#cc10", {opacity: 1, scale: .55, y: 26}, 13.052);
+      tl.to("#cc10", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 13.062);
+      tl.set("#cc10", {opacity: 0}, 14.242);
+      tl.set("#cc11", {opacity: 1, scale: .55, y: 26}, 14.252);
+      tl.to("#cc11", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 14.262);
+      tl.set("#cc11", {opacity: 0}, 15.802);
+      tl.set("#cc12", {opacity: 1, scale: .55, y: 26}, 15.812);
+      tl.to("#cc12", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 15.822);
+      tl.set("#cc12", {opacity: 0}, 17.142);
+      tl.set("#cc13", {opacity: 1, scale: .55, y: 26}, 17.152);
+      tl.to("#cc13", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 17.162);
+      tl.set("#cc13", {opacity: 0}, 18.542);
+      tl.set("#cc14", {opacity: 1, scale: .55, y: 26}, 18.552);
+      tl.to("#cc14", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 18.562);
+      tl.set("#cc14", {opacity: 0}, 19.082);
+      tl.set("#cc15", {opacity: 1, scale: .55, y: 26}, 19.092);
+      tl.to("#cc15", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 19.102);
+      tl.set("#cc15", {opacity: 0}, 20.502);
+      tl.set("#cc16", {opacity: 1, scale: .55, y: 26}, 20.512);
+      tl.to("#cc16", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 20.522);
+      tl.set("#cc16", {opacity: 0}, 21.602);
+      tl.set("#cc17", {opacity: 1, scale: .55, y: 26}, 21.612);
+      tl.to("#cc17", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 21.622);
+      tl.set("#cc17", {opacity: 0}, 22.462);
+      tl.set("#cc18", {opacity: 1, scale: .55, y: 26}, 22.472);
+      tl.to("#cc18", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 22.482);
+      tl.set("#cc18", {opacity: 0}, 24.042);
+      tl.set("#cc19", {opacity: 1, scale: .55, y: 26}, 24.052);
+      tl.to("#cc19", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 24.062);
+      tl.set("#cc19", {opacity: 0}, 25.102);
+      tl.set("#cc20", {opacity: 1, scale: .55, y: 26}, 25.112);
+      tl.to("#cc20", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 25.122);
+      tl.set("#cc20", {opacity: 0}, 26.342);
+      tl.set("#cc21", {opacity: 1, scale: .55, y: 26}, 26.352);
+      tl.to("#cc21", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 26.362);
+      tl.set("#cc21", {opacity: 0}, 27.182);
+      tl.set("#cc22", {opacity: 1, scale: .55, y: 26}, 27.192);
+      tl.to("#cc22", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 27.202);
+      tl.set("#cc22", {opacity: 0}, 28.262);
+      tl.set("#cc23", {opacity: 1, scale: .55, y: 26}, 28.272);
+      tl.to("#cc23", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 28.282);
+      tl.set("#cc23", {opacity: 0}, 29.762);
+      tl.set("#cc24", {opacity: 1, scale: .55, y: 26}, 29.772);
+      tl.to("#cc24", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 29.782);
+      tl.set("#cc24", {opacity: 0}, 30.902);
+      tl.set("#cc25", {opacity: 1, scale: .55, y: 26}, 30.912);
+      tl.to("#cc25", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 30.922);
+      tl.set("#cc25", {opacity: 0}, 32.102);
+      tl.set("#cc26", {opacity: 1, scale: .55, y: 26}, 32.112);
+      tl.to("#cc26", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 32.122);
+      tl.set("#cc26", {opacity: 0}, 33.662);
+      tl.set("#cc27", {opacity: 1, scale: .55, y: 26}, 33.672);
+      tl.to("#cc27", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 33.682);
+      tl.set("#cc27", {opacity: 0}, 35.302);
+      tl.set("#cc28", {opacity: 1, scale: .55, y: 26}, 35.312);
+      tl.to("#cc28", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 35.322);
+      tl.set("#cc28", {opacity: 0}, 36.322);
+      tl.set("#cc29", {opacity: 1, scale: .55, y: 26}, 36.332);
+      tl.to("#cc29", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 36.342);
+      tl.set("#cc29", {opacity: 0}, 37.422);
+      tl.set("#cc30", {opacity: 1, scale: .55, y: 26}, 37.432);
+      tl.to("#cc30", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 37.442);
+      tl.set("#cc30", {opacity: 0}, 39.222);
+      tl.set("#cc31", {opacity: 1, scale: .55, y: 26}, 39.232);
+      tl.to("#cc31", {scale: 1, y: 0, duration: .2, ease: "back.out(3.2)"}, 39.242);
+      tl.set("#cc31", {opacity: 0}, 42.400);
       tl.fromTo("#bg", {scale: 1.04, x: -30}, {scale: 1.16, x: 30, duration: 4, yoyo: true, repeat: 10, ease: "sine.inOut"}, 0);
       tl.fromTo("#blob0", {x: 0, y: 0}, {x: 160, y: 60, duration: 14.13, yoyo: true, repeat: 2, ease: "sine.inOut"}, 0);
       tl.fromTo("#blob1", {x: 0, y: 0}, {x: -140, y: 90, duration: 14.13, yoyo: true, repeat: 2, ease: "sine.inOut"}, 0);
