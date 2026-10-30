@@ -11,6 +11,12 @@ accelerates out into a hard cut where the next scene picks up the same direction
 zoom through their keyword. Some lines are type only, laid out down the page with the camera tracking word to word.
 Everything else is the v4 collage: the music video photocopied in a torn card, texture panels, starbursts, stills,
 the barcode ticket, the road-sign arrow, velocity strips; hard edges and hard shadows, no blur.
+Fused with the owner's eimantasbitinas23 reference (cinema()): on the hit lines and the bursts the collage gives way to
+full-bleed colour-graded footage (assets/video/cine.mp4: red monochrome, film colour with grain, one-bit threshold),
+smooth at the full frame rate with a handheld drift, under flickering glass shards, torn paper slivers, a VHS scan line
+and a red picture-in-picture still; black title cards flash in front of the hits, the bursts are flurries of 4-frame
+cuts, two lines are a stop-motion photo grid on white paper, a red iris closes into the red segment, and torn paper
+cards with a photocopied still tear back into the collage.
 Lyric timings: ElevenLabs Scribe word timestamps; the romanized Punjabi is ours (confirmed by the owner).
 """
 import json
@@ -41,7 +47,10 @@ LYRICS = [
     (132, 137, "*Naagni reha koi saanu dass ke", "r"), (138, 141, "*Baape di saanu bakhshe", "l"), (142, 145, "Chanattiyan *gaani lass ke", "r"),
     (146, 148, "Nahi *mod te paundi", "l"), (149, 153, "Chhumbar de naale kehki *Ashke", "full"), (154, 156, "Nahi mod te paundi", "full"),
 ]
-TXT = {4, 10, 17, 24, 30}          # type-only scenes: no card, the camera tracks the words down the page
+TXT = {4, 30}                      # type-only scenes: no card, the camera tracks the words down the page
+CINE = {3, 7, 12, 19, 24, 26, 31, 32}   # full-bleed cinema (hit lines and bursts), see build/cine.py
+GRID = {10, 17}                    # stop-motion photo grid on white paper
+CARDS = {3: "KAMM\nSHADY", 12: "JATT\nKHULLA\nGHUMMDA", 19: "NAHI TAAN\nDAAKA", 26: "JATT\nMUDHTO\nZEHRI"}
 # whip direction per scene (where the camera travels); mostly down the page like the reference, some sideways
 DIRS = [(0, 1), (0, 1), (1, 0), (0, 1), (-.8, .6), (0, 1), (0, -1), (.7, .7), (0, 1), (-1, 0), (0, 1), (.6, .8)]
 TEX = ["hz", "dots", "lines", "dia", "blocks", "news", "hz2", "dotsb", "grid"]
@@ -150,6 +159,8 @@ def layout(li):
     card = None
     if li in TXT:
         y = 330
+    elif li in GRID:
+        y = 1330
     elif side == "l":
         card = (60, 190, 960, 800)
         y = 1070
@@ -164,7 +175,7 @@ def layout(li):
             y += 34                     # room for the keyword's starburst and circle
         labels.append((540 + zig[k % len(zig)], y, h))
         y += h + gap
-    if side == "r" and li not in TXT:
+    if side == "r" and li not in TXT and li not in GRID:
         card = (60, max(y + 30, 1030), 960, 800)
     return card, labels, grps
 
@@ -190,8 +201,18 @@ def camera():
         d = DIRS[si % len(DIRS)]
         n = math.hypot(*d)
         d = (d[0] / n, d[1] / n)
-        if li < 0:
-            plans.append(dict(a=a, b=b, d=d, f0=(540, 960), keys=[], s0=1.0, push=.03, drift=0, rot=-1.5, zoom=None))
+        if li < 0 or li in CINE:
+            # cinema: the camera rests (the footage carries its own handheld drift); hit lines still zoom through
+            zoom = None
+            if li >= 0 and li < len(LYRICS) - 2 and LYRICS[li][3] == "full":
+                _, labels, grps = layout(li)
+                kws = [(x, y + h / 2) for (x, y, h), g in zip(labels, grps) if g[0][1]]
+                zoom = kws[-1] if kws else None
+            plans.append(dict(a=a, b=b, d=d, f0=(540, 960), keys=[], s0=1.0, push=0, drift=0, rot=0, zoom=zoom, cine=True,
+                              nozip=zoom is None))
+            continue
+        if li in GRID:
+            plans.append(dict(a=a, b=b, d=d, f0=(540, 960), keys=[], s0=1.0, push=.012, drift=0, rot=R.uniform(-1, 1), zoom=None))
             continue
         card, labels, grps = layout(li)
         side = LYRICS[li][3]
@@ -227,7 +248,7 @@ def camera():
         u = t - p["a"]
         d = p["d"]
         # entry whip: arrive from -d*E, expo out over .45 s
-        e = 1 - ease_out(min(1, u / .45), 4)
+        e = 0 if p.get("cine") else 1 - ease_out(min(1, u / .45), 4)
         fx, fy = p["f0"][0] - d[0] * E * e, p["f0"][1] - d[1] * E * e
         rot = p["rot"] + 4 * e * (1 if si % 2 else -1)
         s = p["s0"] * (1 + .06 * e)
@@ -245,7 +266,7 @@ def camera():
         s *= 1 + p["push"] * u
         rot += .5 * u * (1 if si % 3 else -1)
         # exit: accelerate out along the next scene's direction (or zoom through the keyword)
-        if si + 1 < len(plans):
+        if si + 1 < len(plans) and not p.get("nozip"):
             w = p["b"] - t
             if w < .2:
                 v = ((.2 - w) / .2) ** 2
@@ -267,10 +288,7 @@ def camera():
 def card_track():
     """The footage card (and the red torn shape behind it) re-laid out on every scene; hidden in type-only scenes."""
     for i, (a, b, li) in enumerate(scenes()):
-        if li < 0:
-            card = (-50, 110, 1180, 1220)
-        else:
-            card = layout(li)[0]
+        card = None if li < 0 or li in CINE or li in GRID else layout(li)[0]
         if card is None:
             js(f'tl.set(["#cardw", "#redp"], {{opacity: 0}}, {a:.3f});')
             continue
@@ -305,7 +323,7 @@ def scene_builds():
     for si, (a, b, li) in enumerate(scenes()):
         allx = [f"#pn{k}" for k in range(NPNL)] + [f"#sr{k}" for k in range(3)] + ["#tick", "#arrow", "#bst0", "#bst1"]
         js(f'tl.set({json.dumps(allx)}, {{opacity: 0}}, {a:.3f});')
-        if li < 0 or LYRICS[li][3] == "full":
+        if li < 0 or li in CINE or li in GRID:
             continue
         card, labels, _ = layout(li)
         ly0 = labels[0][1] if labels else 900
@@ -403,14 +421,157 @@ def labels():
     return "".join(out)
 
 
+def in_cine(t):
+    return any(a <= t < b and (li < 0 or li in CINE) for a, b, li in scenes())
+
+
+def cine_spans():
+    """Merged [a, b) spans where the cinema layer owns the screen, with the scene index that ends each span."""
+    spans = []
+    for a, b, li in scenes():
+        if li < 0 or li in CINE:
+            if spans and abs(spans[-1][1] - a) < 1e-6:
+                spans[-1] = (spans[-1][0], b, li)
+            else:
+                spans.append((a, b, li))
+    return spans
+
+
+def cinema():
+    """The eimantasbitinas23 layer: graded full-bleed footage with handheld drift, glass shards, torn slivers, a red
+    picture-in-picture still, torn paper rips back into the collage. Returns (html inside the camera, screen html)."""
+    g = random.Random(77)
+    shard_pts = ["0,0 60,8 34,90", "0,10 80,0 70,40 10,60", "20,0 44,4 40,120 0,110", "0,0 120,20 100,34", "10,0 30,0 26,70 0,74", "0,30 90,0 60,60"]
+    pan = '<div id="cine"><video id="cinev" class="clip" src="assets/video/cine.mp4" data-start="0" data-duration="60" data-track-index="2" muted playsinline></video>'
+    for k, pts in enumerate(shard_pts):
+        col = ["rgba(10,12,10,.85)", "rgba(40,190,90,.55)", "rgba(10,12,10,.7)"][k % 3]
+        pan += f'<svg class="shard" id="sh{k}" viewBox="0 0 130 130"><polygon points="{pts}" fill="{col}" stroke="rgba(255,255,255,.5)" stroke-width="1.5"/></svg>'
+    for k in range(3):
+        pan += f'<i class="sliver" id="sv{k}" style="clip-path:{torn(60, 400, 26, 300 + k)}"></i>'
+    pan += ('<div id="pip"><img id="pipa" src="assets/img/stills/s03.jpg" alt=""><img id="pipb" src="assets/img/stills/s11.jpg" alt=""><i></i></div>')
+    HIDE.extend(["#cine", "#pip"] + [f"#sh{k}" for k in range(len(shard_pts))] + [f"#sv{k}" for k in range(3)])
+    screen = '<div id="scan"></div>'
+    HIDE.append("#scan")
+    spans = cine_spans()
+    rk = 0
+    for a, b, li_end in spans:
+        js(f'tl.set("#cine", {{opacity: 1}}, {a:.3f});')
+        if b < DUR:
+            js(f'tl.set("#cine", {{opacity: 0}}, {b:.3f});')
+        js(f'tl.fromTo("#cinev", {{scale: 1}}, {{scale: 1.07, duration: {b - a:.3f}, ease: "none", immediateRender: false}}, {a:.3f});')
+        # handheld drift at the full frame rate (the collage is stepped, the cinema is smooth)
+        ph = g.uniform(0, 6)
+        f = round(a * 30)
+        while f < round(b * 30):
+            t = f / 30
+            js(f'tl.set("#cinev", {{x: {math.sin(t * 2.1 + ph) * 7 + g.uniform(-1.5, 1.5):.1f}, y: {math.cos(t * 1.7 + ph) * 9 + g.uniform(-1.5, 1.5):.1f}}}, {t:.3f});')
+            f += 1
+        # shards and slivers flicker every second frame
+        f = round(a * 15)
+        while f < round(b * 15):
+            t = f / 15
+            for k in range(len(shard_pts)):
+                if g.random() < .3:
+                    js(f'tl.set("#sh{k}", {{opacity: 1, left: {g.randint(-40, 1000)}, top: {g.randint(80, 1800)}, rotation: {g.randint(0, 360)}, scale: {g.uniform(.6, 1.8):.2f}}}, {t:.3f});')
+                else:
+                    js(f'tl.set("#sh{k}", {{opacity: 0}}, {t:.3f});')
+            for k in range(3):
+                if g.random() < .22:
+                    js(f'tl.set("#sv{k}", {{opacity: 1, left: {g.randint(200, 840)}, top: {g.randint(500, 1500)}, rotation: {g.randint(-40, 40)}, scaleY: {g.uniform(.5, 1.3):.2f}}}, {t:.3f});')
+                else:
+                    js(f'tl.set("#sv{k}", {{opacity: 0}}, {t:.3f});')
+            f += 1
+        js(f'tl.set({json.dumps([f"#sh{k}" for k in range(len(shard_pts))] + [f"#sv{k}" for k in range(3)])}, {{opacity: 0}}, {b - .001:.3f});')
+        # torn paper rip back into the collage (when the span does not end on a zoom-through)
+        zoom_exit = li_end >= 0 and LYRICS[li_end][3] == "full" and li_end < len(LYRICS) - 2
+        if b < DUR - .1 and not zoom_exit:
+            rid = f"rp{rk}"
+            pan += (f'<div class="rip" id="{rid}" style="clip-path:{torn(700, 900, 40, 700 + rk)}">'
+                    f'<img src="assets/img/stills/s{(rk * 7 + 4) % 20:02d}.jpg" alt=""></div>')
+            HIDE.append(f"#{rid}")
+            for j, sc in enumerate([.45, .8, 1.3]):
+                js(f'tl.set("#{rid}", {{opacity: 1, scale: {sc}, rotation: {(-6, 3, -2)[j]}}}, {b - .27 + j * .09:.3f});')
+            js(f'tl.set("#{rid}", {{opacity: 0}}, {b:.3f});')
+            rk += 1
+    # red picture-in-picture still in the hit-line holds, swapping every 4 frames
+    for li in CARDS:
+        a, b = line_times(li)
+        js(f'tl.set("#pip", {{opacity: 1}}, {a + .9:.3f});')
+        js(f'tl.set("#pip", {{opacity: 0}}, {b - .3:.3f});')
+        t, k = a + .9, 0
+        while t < b - .3:
+            js(f'tl.set("#pipa", {{opacity: {k % 2}}}, {t:.3f});')
+            t, k = t + 4 / 30, k + 1
+    # VHS scan line: mostly in the cinema, now and then over the collage
+    f = 0
+    while f < DUR * 15:
+        t = f / 15
+        p = .32 if in_cine(t) else .05
+        if g.random() < p:
+            js(f'tl.set("#scan", {{opacity: 1, left: {g.randint(40, 1040)}, scaleX: {g.choice([1, 1, 2])}}}, {t:.3f});')
+        else:
+            js(f'tl.set("#scan", {{opacity: 0}}, {t:.3f});')
+        f += 1
+    # black title cards before the hits (card, footage flash, card), and "karan aujla" out of the intro
+    k = 0
+    for li, txt in CARDS.items():
+        a = line_times(li)[0]
+        screen += f'<div class="bcard" id="bc{k}"><b>{"<br>".join(txt.split(chr(10)))}</b></div>'
+        HIDE.append(f"#bc{k}")
+        for t0 in (a, a + .4):
+            js(f'tl.set("#bc{k}", {{opacity: 1}}, {t0:.3f});')
+            js(f'tl.set("#bc{k}", {{opacity: 0}}, {t0 + .2:.3f});')
+        k += 1
+    screen += f'<div class="bcard low" id="bc{k}"><b>karan aujla</b></div>'
+    HIDE.append(f"#bc{k}")
+    a0 = line_times(0)[0]
+    js(f'tl.set("#bc{k}", {{opacity: 1}}, {a0 - .3:.3f});')
+    js(f'tl.set("#bc{k}", {{opacity: 0}}, {a0:.3f});')
+    # red iris closing into the red segment (JATT KHULLA GHUMMDA)
+    a12 = line_times(12)[0]
+    screen += '<div id="iris"></div>'
+    HIDE.append("#iris")
+    js(f'tl.set("#iris", {{opacity: 1}}, {a12 - .3:.3f});')
+    js(f'tl.fromTo("#iris", {{scale: 15}}, {{scale: 0, duration: .3, ease: "steps(4)", immediateRender: false}}, {a12 - .3:.3f});')
+    js(f'tl.set("#iris", {{opacity: 0}}, {a12 + .067:.3f});')
+    return pan + '</div>', screen
+
+
+def photo_grid():
+    """The reference's photo cluster on white paper: colour stills torn to size, two of them stop-motion (a new
+    picture every second frame); the camera holds still while the line is sung under it."""
+    html = ""
+    tiles = [(150, 290, 420, 300), (530, 330, 410, 320), (110, 560, 360, 300), (440, 610, 290, 250), (700, 630, 300, 290),
+             (120, 880, 430, 320), (570, 910, 380, 300)]
+    for n, li in enumerate(sorted(GRID)):
+        a, b = line_times(li)
+        gid = f"pg{n}"
+        inner = ""
+        for k, (x, y, w, h) in enumerate(tiles):
+            if k in (2, 5):
+                imgs = "".join(f'<img class="fr" id="{gid}t{k}f{j}" src="assets/img/stills/c{(n * 5 + k + j * 3) % 14:02d}.jpg" alt="">' for j in range(3))
+                f, j = round(a * 15), 0
+                while f < round(b * 15):
+                    for q in range(3):
+                        js(f'tl.set("#{gid}t{k}f{q}", {{opacity: {1 if q == j % 3 else 0}}}, {f / 15:.3f});')
+                    f, j = f + 1, j + 1
+            else:
+                imgs = f'<img src="assets/img/stills/c{(n * 5 + k) % 14:02d}.jpg" alt="">'
+            inner += f'<div class="tile" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px;clip-path:{torn(w, h, 6, 900 + n * 10 + k)}">{imgs}</div>'
+        html += f'<div class="pgrid" id="{gid}">{inner}</div>'
+        HIDE.append(f"#{gid}")
+        js(f'tl.set("#{gid}", {{opacity: 1}}, {a:.3f});')
+        js(f'tl.set("#{gid}", {{opacity: 0}}, {b:.3f});')
+    return html
+
+
 def velocity():
     """Velocity strips across the screen (screen space, over the camera): every four beats, every beat in the bursts."""
     html = "".join(f'<div class="vs" id="vs{k}"><b>{"ASHKE &#9679; KARAN AUJLA &#9679; MXRCI &#9679; " * 6}</b></div>' for k in range(2))
     HIDE.extend(["#vs0", "#vs1"])
     times = []
     for i, bt in enumerate(b for b in BEATS["beats"] if 2.2 < b < 57.5):
-        burst = 14.3 <= bt < 16.3 or 44.8 <= bt < 46.3 or 48.5 <= bt < 50.0
-        if burst or i % 4 == 2:
+        if i % 4 == 2 and not in_cine(bt):
             times.append(bt)
     kinds = ["hz", "type", "dots", "blocks", "type", "lines", "hz2", "news"]
     for n, t in enumerate(times):
@@ -475,6 +636,7 @@ def titles():
 CSS = f"""
 @font-face {{ font-family: "Bebas Neue"; src: url("assets/fonts/BebasNeue/BebasNeue-400.ttf"); }}
 @font-face {{ font-family: "Oswald"; font-weight: 700; src: url("assets/fonts/Oswald/Oswald-700.ttf"); }}
+@font-face {{ font-family: "Inter Display"; font-weight: 500; src: url("assets/fonts/InterDisplay/InterDisplay-Medium.otf"); }}
 @font-face {{ font-family: "Special Elite"; src: url("assets/fonts/SpecialElite/SpecialElite-400.ttf"); }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: {PAPER}; }}
@@ -531,6 +693,25 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: {PAPE
 .vs b {{ display: none; }}
 .vs.type {{ background: {INK}; }}
 .vs.type b {{ display: block; white-space: nowrap; font: 400 110px/1 "Bebas Neue"; color: #f4f2ec; letter-spacing: 4px; padding-top: 6px; }}
+#cine {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; overflow: hidden; background: #000; opacity: 0; }}
+#cinev {{ position: absolute; left: -20px; top: -30px; width: 1120px; height: 1980px; object-fit: cover; }}
+.shard {{ position: absolute; left: 0; top: 0; width: 130px; height: 130px; opacity: 0; overflow: visible; }}
+.sliver {{ position: absolute; left: 0; top: 0; width: 60px; height: 400px; background: #f4f2ec; opacity: 0; filter: drop-shadow(3px 0 0 #111); }}
+#pip {{ position: absolute; left: 60px; top: 300px; width: 330px; height: 210px; overflow: hidden; opacity: 0; }}
+#pip img {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.4); }}
+#pip i {{ position: absolute; inset: 0; background: #e01818; mix-blend-mode: multiply; }}
+.rip {{ position: absolute; left: 190px; top: 510px; width: 700px; height: 900px; background: #f4f2ec; padding: 34px; opacity: 0; }}
+.rip img {{ width: 100%; height: 100%; object-fit: cover; }}
+.pgrid {{ position: absolute; left: -200px; top: -200px; width: 1480px; height: 2320px; background: #ecebe8; opacity: 0; }}
+.tile {{ position: absolute; overflow: hidden; background: #111; margin: 200px 0 0 200px; }}
+.tile img {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }}
+#scan {{ position: absolute; left: 0; top: 0; width: 12px; height: {FH}px; z-index: 8; opacity: 0;
+  background: repeating-linear-gradient(0deg, #fff 0 3px, #9fe 3px 5px, #222 5px 7px, #fff 7px 12px, #6cf 12px 13px); }}
+.bcard {{ position: absolute; inset: 0; z-index: 8; background: #050505; opacity: 0; display: flex; align-items: center; justify-content: center; }}
+.bcard b {{ font: 500 132px/1.06 "Inter Display"; color: #f1f1f1; text-align: center; letter-spacing: -1px; }}
+.bcard.low b {{ font-size: 92px; letter-spacing: 0; }}
+#iris {{ position: absolute; left: 440px; top: 860px; width: 200px; height: 200px; border-radius: 50%; z-index: 8; opacity: 0;
+  box-shadow: 0 0 0 4000px {RED}, inset 0 0 30px 10px rgba(0,0,0,.45); }}
 #flash {{ position: absolute; inset: 0; z-index: 9; background: #fff; opacity: 0; }}
 #dark {{ position: absolute; inset: 0; z-index: 9; background: #111; opacity: 0; }}
 #redflash {{ position: absolute; inset: 0; z-index: 9; background: {RED}; opacity: 0; mix-blend-mode: multiply; }}
@@ -546,6 +727,8 @@ def main():
     sc = scene_builds()
     lb = labels()
     vel = velocity()
+    cpan, cscreen = cinema()
+    pg = photo_grid()
     flashes()
     camera()
     tt = titles()
@@ -570,12 +753,15 @@ def main():
         <svg id="grid" viewBox="0 0 2600 3900">{grid}</svg>
         <div id="collage">
           {sc}
+          {pg}
           <svg id="redsvg" viewBox="0 0 {FW} {FH}"><path id="redp" d="M0 0"/></svg>
           <div id="cardw"><div id="card"><video id="vid" class="clip" src="assets/video/bw_main.mp4" data-start="0" data-duration="{DUR}" data-track-index="1" muted playsinline></video><i id="tint"></i></div></div>
         </div>
+        {cpan}
         <div id="lyrics" class="clip" data-start="0" data-duration="{DUR}" data-track-index="3">{lb}</div>
       </div></div>
       {vel}
+      {cscreen}
       {tt}
       <div id="flash"></div>
       <div id="dark"></div>

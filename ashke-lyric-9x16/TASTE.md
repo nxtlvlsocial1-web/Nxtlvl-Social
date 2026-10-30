@@ -1,6 +1,6 @@
 # TASTE: ashke-lyric-9x16
 
-Updated 2026-10-30. Current version: final v1, renders/nxtlvl_ashke-lyric_reels_9x16_v1.mp4.
+Updated 2026-10-30. Current version: final v2 (collage + cinema fusion), renders/nxtlvl_ashke-lyric_reels_9x16_v2.mp4.
 
 ## 1. Brief
 - 9:16 version of the Ashke (Karan Aujla, Mxrci) lyric edit: 60 s from 2:14 of the song, 1080x1920, 30 fps.
@@ -21,6 +21,18 @@ Updated 2026-10-30. Current version: final v1, renders/nxtlvl_ashke-lyric_reels_
 - Type-only lines (5): the words run down the page, and the camera tracks them word to word at 1.22x.
 - Cut accents: mostly clean whips. Now and then a white or near-black frame; a red flash into the hit lines.
 
+## 2b. Cinema layer (eimantasbitinas23 reference, build/cine.py)
+- On the hit lines (3, 12, 19, 26), the bursts (7, 24), the intro and the ending, the collage gives way to full-bleed
+  footage cropped to 9:16 around Karan.
+- Grades: red monochrome, film colour (teal shadows, warm highlights, heavy grain), one-bit threshold, silver B&W.
+- Motion: smooth at the full frame rate, with a handheld drift and a slow push. The collage stays stepped at 15 fps.
+- Hit lines open with black title cards (Inter Display, white): card, then a threshold footage flash, then the card
+  again. They hold with a red picture-in-picture still, glass shards, torn paper slivers and a VHS scan line, then
+  zoom through the keyword.
+- Bursts are flurries of 4-frame cuts that cycle the grades.
+- Torn paper rips with a photocopied still tear back into the collage. A red iris closes into the red segment.
+- Lines 10 and 17 are a stop-motion photo grid of colour stills on white paper.
+
 ## 3. Visual system
 - Same as 16x9 v4: photocopied music video in a torn card (on top, below, or full width), red torn shape, texture
   panels, starbursts, stills with white borders, the barcode ticket, the road-sign arrow, velocity strips.
@@ -35,3 +47,4 @@ Updated 2026-10-30. Current version: final v1, renders/nxtlvl_ashke-lyric_reels_
 | Date | User said | Rule |
 |---|---|---|
 | 2026-10-30 | 9:16, plan the cutting and motion tracking exactly like the YouMotion reference, final quality | measured camera grammar above; final straight away |
+| 2026-10-30 | add the eimantasbitinas23 style, plan clips and frame pacing like it, combine both | cinema layer above (v2) |
