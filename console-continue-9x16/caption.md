@@ -46,20 +46,23 @@ For reach tests, add some of these in the first comment:
 
 ## Alt text (Advanced settings, Accessibility)
 
-A bright, lavender-white Reel styled like an early-2000s video game, with a female voiceover and captions in a game
-dialogue box. It opens on a GAME OVER screen: "Continue?" above a chrome 3D countdown and a fading PS2 save slot. The
-countdown freezes, "Player 2 has joined" slams in, and a violet gamepad lands next to a white one, tagged Claude. A
-chrome "Console Skill" title flies in, a loading screen streams data from a spinning disc into a monitor that opens
-"game.exe", with the tip "not an emulator". An inventory collects power-ups for sharper graphics, new levels and a
-controller. A boss fight against a voxel crash monster ends in a K.O. A New Game Plus world map unlocks Windows, Mac,
+A bright, lavender-white Reel styled like an early-2000s video game, with an energetic female voiceover and captions in a
+game dialogue box. Real PS2 gameplay of GTA San Andreas and Resident Evil 4 plays softly in the background throughout.
+It opens on GTA gameplay that shrinks into a paused screen under "Continue?" and a chrome 3D countdown, then greys out.
+"Player 2 has joined": an orange gamepad lands next to a white one and Claude's spark mark pops out above it, tagged
+Claude. A chrome "Console Skill" title flies in; a spinning disc streams data into a GAME.EXE window that boots into
+Resident Evil 4, stamped "Not an emulator". An inventory collects power-ups for sharper graphics, new levels and a
+controller. Claude uses the tester skill to K.O. a voxel crash boss. A New Game Plus world map unlocks Windows, Mac,
 Linux and Steam Deck. A rubber stamp marks a build status card "Early Access". It ends back on "Continue?" with a
-glossy play button, confetti and "Comment CONSOLE".
+glossy play button, confetti, the game resuming behind it and "Comment CONSOLE".
 
 ## Notes
 
 - Facts checked against the repo README: 11 skills (reverse, backend, graphics, controller, mod, levels, sound,
   physics, saves, anywhere, tester), static recompilation via PS2Recomp (so not an emulator), MIT licence, for games
   you own, experimental with many games not booting yet.
-- The game windows, items and the build-status card are illustrations of the idea, not captures of a recompiled build.
+- The gameplay is the owner's own PS2 footage (GTA San Andreas on a CRT, Resident Evil 4), cropped to the game screen. The
+  GAME.EXE window and the build-status card illustrate the idea; they are not captures of a recompiled build.
+- Voice: ElevenLabs "Stacey - Bright, Energetic, Expressive" (Eleven v4).
 - Music: the track the owner supplied (videoplayback_2). Add its credit line here if its licence asks for one.
 - Sound effects were synthesised for this video; no samples were used.
