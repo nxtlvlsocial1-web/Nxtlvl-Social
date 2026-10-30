@@ -12,6 +12,10 @@ Writes build/cues.json (scene cuts and sound events) for build/audio.py.
 import json
 import os
 import random
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from mascots import sprite, mosaic  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 B = os.path.join(ROOT, "build")
@@ -136,6 +140,32 @@ def hop(sel, t0, t1, h=16):
         t += .5
 
 
+def cast(k, name, x, y, size, t_in, sel=None, enter="drop", hop_h=14, flip=False, grey_at=None):
+    """Place one of the three mascots (or swap its grey copy in at grey_at) and keep it hopping."""
+    sel = sel or f"{k}-{name}"
+    fl = ' style="transform:scaleX(-1)"' if flip else ""
+    grey = f'<div class="gry" id="{sel}-g"{fl}>{sprite(name, size, grey=True)}</div>' if grey_at else ""
+    add(k, f'<div class="mw" id="{sel}" style="left:{x}px;top:{y}px"><div{fl}>{sprite(name, size)}</div>{grey}</div>')
+    HIDE.append("#" + sel)
+    if enter == "drop":
+        js(f'tl.set("#{sel}", {{opacity: 1, y: -420}}, {t_in:.3f});')
+        js(f'tl.to("#{sel}", {{y: 0, duration: .45, ease: "bounce.out"}}, {t_in + .01:.3f});')
+    elif enter == "side":
+        js(f'tl.set("#{sel}", {{opacity: 1, x: {-700 if x < 540 else 700}}}, {t_in:.3f});')
+        js(f'tl.to("#{sel}", {{x: 0, duration: .35, ease: "back.out(1.6)"}}, {t_in + .01:.3f});')
+    else:
+        js(f'tl.set("#{sel}", {{opacity: 1, scale: .2}}, {t_in:.3f});')
+        js(f'tl.to("#{sel}", {{scale: 1, duration: .35, ease: "back.out(3)"}}, {t_in + .01:.3f});')
+    if grey_at:
+        HIDE.append(f"#{sel}-g")
+        js(f'tl.to("#{sel}-g", {{opacity: 1, duration: .25}}, {grey_at:.3f});')
+        js(f'tl.to("#{sel}", {{rotation: {-12 if x < 540 else 12}, y: 18, duration: .4, ease: "power2.out"}}, {grey_at:.3f});')
+        hop("#" + sel, t_in + .5, grey_at, hop_h)
+    else:
+        hop("#" + sel, t_in + .5, S[k][1], hop_h)
+    return sel
+
+
 def head(k, chip=None, title=None, t=None, chip_cls="", title_cls="", tsize=None):
     if chip:
         add(k, f'<div class="chipwrap"><span class="chip {chip_cls}" id="{k}-chip">{chip}</span></div>')
@@ -185,6 +215,9 @@ def scene_A():
            '<span class="warn" id="A-warn">EXPIRING</span></div>')
     show("#A-save", A_IN + .25, "up")
     show("#A-warn", w[9], "pop", .3)
+    cast(k, "rook", 70, 980, 170, A_IN + .35, grey_at=w[9])
+    cast(k, "vesper", 850, 1000, 150, A_IN + .5, grey_at=w[9] + .1)
+    cast(k, "dash", 760, 1010, 130, A_IN + .65, grey_at=w[9] + .2, flip=True)
     shake("#A-save", w[9], 10, 10)
     js(f'tl.to("#A-save .cv", {{opacity: .35, duration: .6}}, {w[9]:.3f});')
 
@@ -268,6 +301,8 @@ def scene_C2():
     js(f'tl.set("#win", {{opacity: 0}}, {S[k][1]:.3f});')
     for i in range(3):
         js(f'tl.fromTo("#win-comp .dots i:nth-child({i + 1})", {{y: 0}}, {{y: -16, duration: .25, yoyo: true, repeat: {int((w[32] - t0) / .5)}, ease: "sine.inOut"}}, {t0 + i * .12:.3f});')
+    cast(k, "rook", 175, 620, 150, w[32] - .05, hop_h=22)
+    cast(k, "dash", 770, 640, 120, w[32] + .1, hop_h=26, flip=True)
     add(k, '<div class="sticker" id="C2-st"><div class="sk"><b>NOT</b> AN EMULATOR</div></div>')
     show("#C2-st", w[34], "slam")
     for t in [w[25] + i * .35 for i in range(9)]:
@@ -300,11 +335,11 @@ def scene_D():
                '<circle cx="92" cy="34" r="4" fill="#1d1a26"/></svg>')
     pads = "".join(f'<div class="pd" id="D-pd{i}">{pad_svg.format(c=c)}<b class="ok" id="D-ok{i}">&#10003;</b></div>'
                    for i, c in enumerate(["#ffffff", "#2d2a36", CL]))
-    add(k, '<div class="demo" id="D-c0"><img src="assets/img/gow-16.0.jpg" alt=""><img class="blur" id="D-blur" src="assets/img/gow-16.0.jpg" alt="">'
+    add(k, f'<div class="demo stage" id="D-c0"><div class="mos" id="D-blur">{mosaic("rook", 250, 3)}</div><div class="crisp" id="D-crisp">{sprite("rook", 250)}</div>'
            '<i class="sweep" id="D-sweep"></i><span class="dtag" id="D-t0">BEFORE</span><span class="dtag on" id="D-t1">AFTER</span></div>'
            '<div class="demo lv" id="D-c1"><div class="dh">SELECT LEVEL</div><div class="tiles">'
-           + "".join(f'<div class="tile" id="D-tl{i}"><img src="assets/img/gow-{t}.jpg" alt=""><span>{lb}</span></div>'
-                     for i, (t, lb) in enumerate([("2.0", "LEVEL 1"), ("13.2", "LEVEL 2"), ("19.4", "NEW")]))
+           + "".join(f'<div class="tile t{i}" id="D-tl{i}"><div class="tm">{sprite(n, 120)}</div><span>{lb}</span></div>'
+                     for i, (n, lb) in enumerate([("rook", "TEMPLE"), ("vesper", "MANOR"), ("dash", "NEW CITY")]))
            + '</div><i class="sel" id="D-sel"></i></div>'
            f'<div class="demo pads" id="D-c2"><div class="dh">ANY CONTROLLER</div><div class="pdrow">{pads}</div></div>')
     a0, a1, a2 = w[45], w[47], w[49]
@@ -315,7 +350,9 @@ def scene_D():
             js(f'tl.to("#D-c{i}", {{opacity: 0, x: -160, duration: .14, ease: "power2.in"}}, {b - .12:.3f});')
     HIDE.extend(["#D-t1"])
     js(f'tl.fromTo("#D-sweep", {{x: -60}}, {{x: 880, duration: .45, ease: "power2.inOut"}}, {w[46] + .05:.3f});')
-    js(f'tl.to("#D-blur", {{opacity: 0, duration: .4, ease: "power2.inOut"}}, {w[46] + .05:.3f});')
+    js(f'tl.to("#D-blur", {{opacity: 0, duration: .3, ease: "power2.inOut"}}, {w[46] + .1:.3f});')
+    HIDE.append("#D-crisp")
+    js(f'tl.fromTo("#D-crisp", {{opacity: 0, scale: .9}}, {{opacity: 1, scale: 1, duration: .3, ease: "back.out(3)"}}, {w[46] + .1:.3f});')
     js(f'tl.to("#D-t0", {{opacity: 0, duration: .1}}, {w[46] + .3:.3f});')
     js(f'tl.fromTo("#D-t1", {{opacity: 0, scale: 1.6}}, {{opacity: 1, scale: 1, duration: .25, ease: "back.out(3)"}}, {w[46] + .3:.3f});')
     for i, t in enumerate([a1 + .05, a1 + .3, a1 + .55]):
@@ -358,6 +395,12 @@ def scene_E():
     add(k, f'<div class="crabw" id="E-crab" style="left:760px;top:930px">{crab(230, "mag")}</div>')
     show("#E-crab", w[56], "pop", .35)
     hop("#E-crab", w[56] + .4, S[k][1], 14)
+    cast(k, "rook", 40, 990, 170, w[54] + .2, enter="side")
+    cast(k, "vesper", 230, 1020, 140, w[54] + .32, enter="side")
+    cast(k, "dash", 560, 1030, 130, w[54] + .44, enter="side", flip=True)
+    for sel, h in [("#E-rook", hits[0]), ("#E-vesper", hits[1]), ("#E-dash", hits[2])]:
+        js(f'tl.to("{sel}", {{rotation: -18, x: 30, duration: .1, ease: "power2.out", immediateRender: false}}, {h - .08:.3f});')
+        js(f'tl.to("{sel}", {{rotation: 0, x: 0, duration: .25, ease: "back.out(3)", immediateRender: false}}, {h + .05:.3f});')
     add(k, '<div class="ko" id="E-ko">K.O.!</div>')
     show("#E-ko", ko, "slam")
     ev(ko, "boom")
@@ -370,11 +413,24 @@ def scene_F():
     ev(w[63], "chime")
     for t in unlock:
         ev(t, "unlock")
+    for i, (name, sz, d) in enumerate([("dash", 120, 0), ("rook", 150, .35), ("vesper", 130, .6)]):
+        sel = f"F-{name}"
+        add(k, f'<div class="mw" id="{sel}" style="left:-200px;top:{1150 - sz * 1.2:.0f}px"><div>{sprite(name, sz)}</div></div>')
+        HIDE.append("#" + sel)
+        t0 = w[66] + d
+        js(f'tl.set("#{sel}", {{opacity: 1, x: 0}}, {t0:.3f});')
+        js(f'tl.to("#{sel}", {{x: 1500, duration: {2.6 - d * 1.4:.2f}, ease: "none"}}, {t0 + .01:.3f});')
+        hop("#" + sel, t0, t0 + 2.6, 24)
 
 
 def scene_G():
     k = "G"
     head(k, "HEADS UP", None, S[k][0] + .05)
+    cast(k, "rook", 40, 1040, 150, S[k][0] + .3, enter="side")
+    cast(k, "vesper", 880, 1060, 130, S[k][0] + .45, enter="side", flip=True)
+    js(f'tl.to("#G-vesper", {{y: -120, rotation: 12, duration: .18, ease: "power2.out", immediateRender: false}}, {w[81]:.3f});')
+    js(f'tl.to("#G-vesper", {{y: 0, rotation: 0, duration: .35, ease: "bounce.out", immediateRender: false}}, {w[81] + .2:.3f});')
+    ev(w[81], "boing")
     ev(w[78], "stamp")
 
 
@@ -400,6 +456,9 @@ def scene_H():
     blink("#H-caret", w[86], DUR, .5)
     js(f'tl.fromTo("#H-send", {{scale: 1}}, {{scale: 1.3, duration: .14, yoyo: true, repeat: 1, ease: "power2.out"}}, {w[89]:.3f});')
     ev(w[89], "press")
+    cast(k, "rook", 40, 790, 170, w[87] + .1, enter="pop", hop_h=26)
+    cast(k, "vesper", 70, 520, 130, w[87] + .25, enter="pop", hop_h=30)
+    cast(k, "dash", 880, 520, 130, w[87] + .4, enter="pop", hop_h=34, flip=True)
     add(k, f'<div class="crabw" id="H-crab" style="left:810px;top:850px">{crab(190, "pad")}</div>')
     show("#H-crab", w[87] + .2, "pop", .35)
     hop("#H-crab", w[87] + .6, DUR, 22)
@@ -430,12 +489,49 @@ def captions():
     return "".join(rows)
 
 
+TRANS = {}   # scene -> transition kind
+
+
 def transitions():
-    for k, (a, b) in S.items():
+    """Cuts rotate through five transitions: an iris that closes and reopens, a tile wipe, a zoom-through, a whip pan
+    and the slash wipe."""
+    kinds = ["iris", "tiles", "zoom", "whip", "slash"]
+    i = 0
+    keys = list(S)
+    for n, (k, (a, b)) in enumerate(S.items()):
         if a == 0:
             continue
-        js(f'tl.fromTo("#wipe", {{x: -1900}}, {{x: 1900, duration: .32, ease: "power2.inOut"}}, {a - .16:.3f});')
-        ev(a - .15, "swish")
+        kind = kinds[i % len(kinds)]
+        i += 1
+        TRANS[k] = kind
+        prev = keys[n - 1]
+        if kind == "iris":
+            c = (CL, VIO)[i % 2]
+            js(f'tl.set("#iris", {{scale: 0, opacity: 1, backgroundColor: "{c}"}}, {a - .2:.3f});')
+            js(f'tl.to("#iris", {{scale: 1, duration: .2, ease: "power2.in"}}, {a - .2:.3f});')
+            js(f'tl.to("#iris", {{scale: 0, duration: .26, ease: "power2.out"}}, {a + .02:.3f});')
+            js(f'tl.set("#iris", {{opacity: 0}}, {a + .3:.3f});')
+            ev(a - .2, "swish")
+        elif kind == "tiles":
+            for r in range(10):
+                for c_ in range(6):
+                    d = (r + c_) * .012
+                    js(f'tl.fromTo("#tl{r}_{c_}", {{scale: 0}}, {{scale: 1.05, duration: .1, ease: "power2.out", immediateRender: false}}, {a - .22 + d:.3f});')
+                    js(f'tl.to("#tl{r}_{c_}", {{scale: 0, duration: .12, ease: "power2.in"}}, {a + .02 + d:.3f});')
+            ev(a - .2, "swish")
+        elif kind == "zoom":
+            js(f'tl.to("#sw-{prev}", {{scale: 1.6, opacity: 0, duration: .2, ease: "power2.in"}}, {a - .2:.3f});')
+            js(f'tl.set("#flash", {{opacity: .5}}, {a:.3f});')
+            js(f'tl.to("#flash", {{opacity: 0, duration: .25}}, {a + .01:.3f});')
+            ev(a - .2, "whoosh")
+        elif kind == "whip":
+            js(f'tl.to("#sw-{prev}", {{x: -1200, duration: .18, ease: "power3.in"}}, {a - .18:.3f});')
+            js(f'tl.set("#streaks", {{opacity: 1, x: 600}}, {a - .12:.3f});')
+            js(f'tl.to("#streaks", {{x: -600, opacity: 0, duration: .3, ease: "power2.out"}}, {a - .11:.3f});')
+            ev(a - .18, "whoosh")
+        else:
+            js(f'tl.fromTo("#wipe", {{x: -1900}}, {{x: 1900, duration: .32, ease: "power2.inOut", immediateRender: false}}, {a - .16:.3f});')
+            ev(a - .15, "swish")
     # freeze glitch on "Wait" and on the crash
     for t in [w[10], w[53]]:
         for f in range(3):
@@ -553,7 +649,7 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #F1EE
 .hp span {{ font: 700 28px/1 "Chakra Petch"; letter-spacing: 3px; color: {RED}; }}
 .hp .hb {{ margin-top: 10px; height: 34px; border: 4px solid {INK}; border-radius: 999px; background: {PAPER}; overflow: hidden; position: relative; }}
 .hp .hb i {{ position: absolute; inset: 3px; border-radius: 999px; background: linear-gradient(90deg, {RED}, #ff7a92); transform-origin: 0 50%; }}
-.move {{ position: absolute; left: 70px; top: 1150px; font: 700 32px/1 "Chakra Petch"; letter-spacing: 2px; padding: 12px 26px 12px 16px; border-radius: 999px; background: {PAPER}; border: 4px solid {CL}; color: {CL};
+.move {{ position: absolute; left: 70px; top: 1212px; z-index: 7; font: 700 32px/1 "Chakra Petch"; letter-spacing: 2px; padding: 12px 26px 12px 16px; border-radius: 999px; background: {PAPER}; border: 4px solid {CL}; color: {CL};
   display: flex; align-items: center; gap: 12px; }}
 .move b {{ color: {INK}; }}
 .ko {{ position: absolute; left: 0; right: 0; top: 650px; text-align: center; font: 400 230px/1 "Russo One"; color: {VIO};
@@ -601,6 +697,34 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #F1EE
 .cbox .ctx b {{ font-weight: 400; display: inline-block; }}
 .cbox .caret {{ width: 6px; height: 50px; background: {CL}; margin-left: 6px; display: block; }}
 .cbox .csend {{ width: 92px; height: 92px; border-radius: 50%; background: {CL}; color: #fff; font: 700 48px/92px "Rubik"; text-align: center; flex: none; }}
+#pat {{ position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }}
+#grid {{ position: absolute; left: -96px; top: -96px; width: 1272px; height: 2112px;
+  background-image: linear-gradient(rgba(122,47,251,.10) 3px, transparent 3px), linear-gradient(90deg, rgba(122,47,251,.10) 3px, transparent 3px);
+  background-size: 96px 96px; }}
+#pat .big {{ position: absolute; display: block; border-radius: 40px; }}
+#pat .b0 {{ left: -160px; top: 180px; width: 460px; height: 460px; border: 26px solid rgba(217,119,87,.16); border-radius: 50%; }}
+#pat .b1 {{ left: 760px; top: 420px; width: 420px; height: 420px; border: 26px solid rgba(122,47,251,.13); }}
+#pat .b2 {{ left: 700px; top: 1380px; width: 520px; height: 520px; border: 26px solid rgba(143,184,255,.2); border-radius: 50%; }}
+#pat .b3 {{ left: -120px; top: 1250px; width: 380px; height: 380px; border: 26px solid rgba(255,156,207,.2); }}
+#wash .tint {{ position: absolute; inset: 0; display: block; }}
+#tint0 {{ background: radial-gradient(ellipse at 70% 30%, rgba(217,119,87,.22), transparent 60%), radial-gradient(ellipse at 20% 85%, rgba(255,170,120,.18), transparent 55%); }}
+#tint1 {{ background: radial-gradient(ellipse at 30% 30%, rgba(90,160,255,.22), transparent 60%), radial-gradient(ellipse at 80% 80%, rgba(120,220,255,.18), transparent 55%); }}
+#tint2 {{ background: radial-gradient(ellipse at 70% 25%, rgba(255,120,190,.2), transparent 60%), radial-gradient(ellipse at 20% 80%, rgba(170,120,255,.2), transparent 55%); }}
+#tint3 {{ background: radial-gradient(ellipse at 30% 25%, rgba(255,210,90,.24), transparent 60%), radial-gradient(ellipse at 80% 75%, rgba(255,170,90,.16), transparent 55%); }}
+.mw {{ position: absolute; z-index: 6; }}
+.mw .gry {{ position: absolute; left: 0; top: 0; }}
+.mascot {{ display: block; filter: drop-shadow(0 10px 0 rgba(29,26,38,.16)); }}
+.demo.stage {{ background: radial-gradient(circle at 50% 60%, #fff3e0 0, #f3e6ff 70%); }}
+.demo .mos, .demo .crisp {{ position: absolute; left: 285px; top: 40px; }}
+.demo .tile .tm {{ position: absolute; left: 55px; top: 60px; }}
+.demo .tile.t0 {{ background: linear-gradient(180deg, #ffd9a0, #f08a3c); }}
+.demo .tile.t1 {{ background: linear-gradient(180deg, #8a6bd8, #2d2150); }}
+.demo .tile.t2 {{ background: linear-gradient(180deg, #8ff0ff, #3a6bff); }}
+#iris {{ position: absolute; left: 540px; top: 960px; width: 2400px; height: 2400px; margin: -1200px 0 0 -1200px; border-radius: 50%; z-index: 43; opacity: 0; }}
+#tiles {{ position: absolute; inset: 0; z-index: 43; pointer-events: none; }}
+#tiles i {{ position: absolute; width: 180px; height: 192px; display: block; transform: scale(0); }}
+#streaks {{ position: absolute; inset: 0; z-index: 43; opacity: 0; pointer-events: none; }}
+#streaks i {{ position: absolute; height: 14px; border-radius: 7px; background: rgba(122,47,251,.55); display: block; }}
 #wipe {{ position: absolute; top: -200px; left: -400px; width: 1300px; height: 2400px; transform: skewX(-16deg); background: {VIO}; z-index: 40;
   box-shadow: -60px 0 0 #b9a2ff, 60px 0 0 {INK}; }}
 #flash {{ position: absolute; inset: 0; background: #fff; z-index: 41; opacity: 0; }}
@@ -650,7 +774,13 @@ def motion():
     bar), big moments shake, ray bursts flare behind the peaks, headers float, and shapes drift in the margins."""
     for k, (a, b) in S.items():
         if a > 0:
-            js(f'tl.fromTo("#sw-{k}", {{scale: 1.12}}, {{scale: 1, duration: .45, ease: "power3.out"}}, {a:.3f});')
+            kind = TRANS.get(k)
+            if kind == "whip":
+                js(f'tl.fromTo("#sw-{k}", {{x: 1200}}, {{x: 0, duration: .26, ease: "power3.out"}}, {a:.3f});')
+            elif kind == "zoom":
+                js(f'tl.fromTo("#sw-{k}", {{scale: .55}}, {{scale: 1, duration: .4, ease: "back.out(1.6)"}}, {a:.3f});')
+            else:
+                js(f'tl.fromTo("#sw-{k}", {{scale: 1.15, rotation: {(-2, 2)[len(k) % 2]}}}, {{scale: 1, rotation: 0, duration: .45, ease: "power3.out"}}, {a:.3f});')
     for t, bar in beats():
         k = next(k for k, (a, b) in S.items() if a <= t < b)
         js(f'tl.to("#pw-{k}", {{scale: {1.032 if bar else 1.014}, duration: .05, ease: "power2.out"}}, {t:.3f});')
@@ -687,12 +817,10 @@ def motion():
 
 
 def background():
-    """The real PS2 gameplay, full-bleed and softly blurred, under a lavender-white wash: the game keeps moving behind
-    every scene. The wash thins on the world map and pulls back on "console", when the game resumes behind the CTA."""
-    # God of War (its tutorial banner sits in 6.3-11.7 s of the clip, so those seconds are never used) and Resident Evil 4
-    segs = [("gow-game.mp4", 0, S["B"][0], .3), ("gow-game.mp4", S["B"][0], S["C2"][0], 11.9), ("gow-game.mp4", S["C2"][0], S["D"][0], 16.4),
-            ("re4-game.mp4", S["D"][0], S["E"][0], 11.0), ("re4-game.mp4", S["E"][0], S["F"][0], 1.0), ("gow-game.mp4", S["F"][0], S["G"][0], .5),
-            ("re4-game.mp4", S["G"][0], S["H"][0], 5.5), ("gow-game.mp4", S["H"][0], DUR, 12.4)]
+    """Motion-graphics backdrops on the light theme: a lavender-white wash, a scrolling pixel grid, big drifting outline
+    shapes and a colour tint per scene. Real PS2 gameplay shows only where it matters: blurred behind the opening hook,
+    in the GAME.EXE window, and resuming behind the CTA on "console"."""
+    segs = [("gow-game.mp4", 0, S["B"][0], .3)]
     vids = "".join(f'<video id="bg{i}" class="clip" src="assets/video/{src}" data-start="{a:.3f}" data-duration="{b - a:.3f}" '
                    f'data-media-start="{m}" data-track-index="0" muted playsinline></video>' for i, (src, a, b, m) in enumerate(segs))
     js(f'tl.fromTo("#bg", {{scale: 1.04, x: -30}}, {{scale: 1.16, x: 30, duration: 4, yoyo: true, repeat: {int(DUR / 4)}, ease: "sine.inOut"}}, 0);')
@@ -700,16 +828,33 @@ def background():
         js(f'tl.fromTo("#blob{i}", {{x: 0, y: 0}}, {{x: {x}, y: {y}, duration: {DUR / 3:.2f}, yoyo: true, repeat: 2, ease: "sine.inOut"}}, 0);')
     js('tl.set("#wash", {opacity: 0}, 0);')
     js(f'tl.to("#wash", {{opacity: .8, duration: .5}}, {A_IN - .1:.3f});')
-    js(f'tl.to("#wash", {{opacity: .62, duration: .5}}, {S["F"][0]:.3f});')
-    js(f'tl.to("#wash", {{opacity: .8, duration: .4}}, {S["G"][0]:.3f});')
-    js(f'tl.to("#wash", {{opacity: .4, duration: .6}}, {w[87]:.3f});')
+    js(f'tl.to("#wash", {{opacity: 1, duration: .3}}, {S["B"][0]:.3f});')
+    js(f'tl.to("#wash", {{opacity: .45, duration: .6}}, {w[87]:.3f});')
+    # the pattern: a pixel grid scrolling diagonally and big outline shapes turning slowly
+    js(f'tl.fromTo("#grid", {{x: 0, y: 0}}, {{x: -96, y: -96, duration: 2, repeat: {int(DUR / 2)}, ease: "none"}}, 0);')
+    js('tl.set("#pat", {opacity: 0}, 0);')
+    js(f'tl.to("#pat", {{opacity: 1, duration: .3}}, {S["B"][0]:.3f});')
+    js(f'tl.to("#pat", {{opacity: .3, duration: .5}}, {w[87]:.3f});')
+    for i in range(4):
+        js(f'tl.fromTo("#big{i}", {{rotation: 0}}, {{rotation: {(120, -150, 90, -110)[i]}, duration: {DUR}, ease: "none"}}, 0);')
+        js(f'tl.fromTo("#big{i}", {{y: 0}}, {{y: {(-120, 140, -90, 110)[i]}, duration: {DUR / 2:.2f}, yoyo: true, repeat: 1, ease: "sine.inOut"}}, 0);')
+    # a colour tint per scene
+    tints = {"B": 0, "C1": 2, "C2": 1, "D": 3, "E": 2, "F": 1, "G": 3, "H": 0}
+    for k, ti in tints.items():
+        a_, b_ = S[k]
+        js(f'tl.to("#tint{ti}", {{opacity: 1, duration: .3}}, {a_:.3f});')
+        js(f'tl.to("#tint{ti}", {{opacity: 0, duration: .3}}, {b_ - .05:.3f});')
     a = S["H"][0]
     resume = (f'<div id="resume"><video id="res-v" class="clip" src="assets/video/gow-game.mp4" data-start="{a:.3f}" data-duration="{DUR - a:.3f}" '
               f'data-media-start="12.4" data-track-index="3" muted playsinline></video></div>')
     HIDE.append("#resume")
     js(f'tl.to("#resume", {{opacity: .55, duration: .6}}, {w[87]:.3f});')
     blobs = "".join(f'<i class="blob" id="blob{i}"></i>' for i in range(3))
-    return f'<div id="bg">{vids}</div><div id="wash">{blobs}</div>{resume}'
+    tint = "".join(f'<i class="tint" id="tint{i}"></i>' for i in range(4))
+    HIDE.extend([f"#tint{i}" for i in range(4)])
+    bigs = "".join(f'<i class="big b{i}" id="big{i}"></i>' for i in range(4))
+    return (f'<div id="bg">{vids}</div><div id="wash">{blobs}{tint}</div>'
+            f'<div id="pat"><div id="grid"></div>{bigs}</div>{resume}')
 
 
 def main():
@@ -729,6 +874,9 @@ def main():
     CT["beats"] = [t for t, _ in beats()]
     has_mix = os.path.exists(os.path.join(ROOT, "assets", "audio", "mix.wav"))
     src = "mix" if has_mix else "voice"
+    tiles = "".join(f'<i id="tl{r}_{c}" style="left:{c * 180}px;top:{r * 192}px;background:{(CL, VIO, "#8fb8ff", "#ff9ccf")[(r + c) % 4]}"></i>'
+                    for r in range(10) for c in range(6))
+    streaks = "".join(f'<i style="top:{120 + i * 190}px;width:{R.randint(500, 1100)}px;left:{R.randint(-200, 300)}px"></i>' for i in range(9))
     gb = "".join(f"<b id=\"gb{i}\"></b>" for i in range(5))
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
@@ -748,7 +896,7 @@ def main():
       {scenes}
       <div id="cap" class="clip" data-start="0" data-duration="{DUR}" data-track-index="6">{caps}</div>
       {deco}
-      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8" data-layout-ignore><div id="scan"></div><div id="wipe"></div><div id="flash"></div><div id="glitch">{gb}</div></div>
+      <div id="fx" class="clip" data-start="0" data-duration="{DUR}" data-track-index="8" data-layout-ignore><div id="scan"></div><div id="wipe"></div><div id="flash"></div><div id="glitch">{gb}</div><div id="iris"></div><div id="tiles">{tiles}</div><div id="streaks">{streaks}</div></div>
       <audio id="mix" src="assets/audio/{src}.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
     </div>
     <script>
