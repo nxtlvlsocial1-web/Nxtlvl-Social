@@ -2,7 +2,7 @@
 
 Four profile marks, each with the same wordmark: "nxtlvl" (the original logo artwork, traced) + "edits" in Instrument
 Serif Italic, whose i is dotted with the Nxtlvl star. All files are pure vector (text outlined, no fonts needed).
-Run:  python3 build.py && node render-all.js
+Run:  python3 build.py && python3 sheet.py
 """
 import math
 import os

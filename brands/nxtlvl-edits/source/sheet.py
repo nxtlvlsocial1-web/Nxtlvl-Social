@@ -1,10 +1,12 @@
-"""Renders every concept to PNG and lays them out on one comparison sheet (../concepts-preview.png).
+"""Renders the concepts to PNG and lays them out on comparison sheets.
 
-Run after build.py:  python3 sheet.py
+Run after build.py / build2.py:  python3 sheet.py      (round 1 -> ../concepts-preview.png)
+                                 python3 sheet.py 2    (round 2 -> ../concepts-preview-2a.png and -2b.png)
 """
 import os
 import re
 import subprocess
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..'))
@@ -26,6 +28,31 @@ ITEMS = [
      'corners with a REC dot. Says the name outright.'),
 ]
 
+ITEMS_2 = [
+    ('e-play-star', 'E', 'Play Star',
+     'A rounded play button in the brand gradient with the Nxtlvl star cut out of it. Says "video" from across the room.'),
+    ('f-film-nx', 'F', 'Film nx',
+     'A film frame with sprocket holes, "nx" from the original logo lettering in the window, and a small star.'),
+    ('g-ne-monogram', 'G', 'ne Monogram',
+     'The "n" from the nxtlvl lettering with an "e" for edits in the serif biting into it. Two fonts, one mark.'),
+    ('h-star-frame', 'H', 'Star in Frame',
+     'The Shooting Star, unchanged, inside camera viewfinder corners with a REC dot. Main account\'s star, now on camera.'),
+    ('i-beat-bars', 'I', 'Beat Bars',
+     'Audio levels that climb to the next level; the tallest bar wears the star, so the last bar reads like an "i".'),
+    ('j-clapper', 'J', 'Clapper',
+     'A film clapperboard in the brand violet with the star on the board. The classic "we make videos" sign.'),
+    ('k-violet-stack', 'K', 'Violet Stack',
+     'D\'s wordmark without the frame, white on full violet. Stands out in a dark feed and next to the main account.'),
+    ('l-cut-star-light', 'L', 'Cut Star, Light',
+     'A\'s Cut Star in violet on a light ground, so the edits account looks related to the main one, not identical.'),
+]
+
+ROUNDS = {
+    '1': [(ITEMS, 'concepts-preview.png', 'nxtlvl edits · logo concepts', 'Four directions for the edits account')],
+    '2': [(ITEMS_2[:4], 'concepts-preview-2a.png', 'nxtlvl edits · more variations (1 of 2)', 'Eight more directions: E to H'),
+          (ITEMS_2[4:], 'concepts-preview-2b.png', 'nxtlvl edits · more variations (2 of 2)', 'Eight more directions: I to L')],
+}
+
 
 def size_of(svg_path):
     m = re.search(r'width="(\d+)" height="(\d+)"', open(svg_path).read())
@@ -34,6 +61,7 @@ def size_of(svg_path):
 
 def card(slug, letter, name, idea):
     lw, lh = size_of(os.path.join(CONCEPTS, slug, 'lockup.svg'))
+    bg = re.search(r'</defs><rect width="\d+" height="\d+" fill="([^"]+)"', open(os.path.join(CONCEPTS, slug, 'lockup.svg')).read()).group(1)
     return f'''
   <section class="card">
     <img class="big" src="../concepts/{slug}/profile.svg" alt="">
@@ -48,12 +76,12 @@ def card(slug, letter, name, idea):
         <img class="av32" src="../concepts/{slug}/profile.svg" alt="">
       </div>
     </div>
-    <div class="lockup"><img src="../concepts/{slug}/lockup.svg" style="width:{lw / 1382 * 100:.2f}%;aspect-ratio:{lw}/{lh}" alt=""></div>
+    <div class="lockup" style="background:{bg}"><img src="../concepts/{slug}/lockup.svg" style="width:{lw / 1600 * 100:.2f}%;aspect-ratio:{lw}/{lh}" alt=""></div>
   </section>'''
 
 
-def page():
-    cards = ''.join(card(*it) for it in ITEMS)
+def page(items, kicker, title):
+    cards = ''.join(card(*it) for it in items)
     return f'''<!doctype html><html><head><meta charset="utf-8"><style>
 @font-face {{ font-family: "Archivo"; src: url("{FONTS}/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }}
 @font-face {{ font-family: "Instrument Sans"; src: url("{FONTS}/instrument-sans-400.woff2") format("woff2"); font-weight: 400; }}
@@ -85,29 +113,18 @@ footer {{ font-size: 21px; line-height: 1.5; color: #4A4360; margin-top: 12px; }
 footer b {{ color: #0B0816; }}
 </style></head><body>
   <header>
-    <p class="kicker">nxtlvl edits · logo concepts</p>
-    <h1>Four directions for the edits account</h1>
+    <p class="kicker">{kicker}</p>
+    <h1>{title}</h1>
     <p class="lede">Each one is from the Nxtlvl Social family (the star, the N, the wordmark, the violet), with an editor's cut.
     Shown as the Instagram profile picture at full size and at the sizes people actually see it.</p>
   </header>{cards}
   <footer><b>Every concept uses the same wordmark:</b> "nxtlvl" in the original logo lettering, then "edits" in Instrument Serif
-  Italic with the star over the i. Pick one (or mix, e.g. A's star with D's wordmark) and I'll make the full kit.</footer>
+  Italic with the star over the i. Pick one from any round, or mix two (say one mark with another's colours), and I'll make the full kit.</footer>
 </body></html>
 '''
 
 
-def main():
-    html = os.path.join(HERE, 'sheet.html')
-    with open(html, 'w') as f:
-        f.write(page())
-    args = []
-    for slug, *_ in ITEMS:
-        d = os.path.join(CONCEPTS, slug)
-        args += [os.path.join(d, 'profile.svg'), os.path.join(d, 'profile-1080.png'), '1080', '1080', '1']
-        lw, lh = size_of(os.path.join(d, 'lockup.svg'))
-        args += [os.path.join(d, 'lockup.svg'), os.path.join(d, 'lockup.png'), str(lw), str(lh), '1.5']
-    subprocess.run(['node', os.path.join(HERE, 'render.js')] + args, check=True)
-    # full-page sheet: measure the height first
+def render_sheet(html, png):
     subprocess.run(['node', '-e', f'''
 const {{ chromium }} = require('playwright');
 (async () => {{
@@ -116,11 +133,26 @@ const {{ chromium }} = require('playwright');
   await p.goto('file://{html}');
   await p.evaluate(() => document.fonts.ready);
   await p.waitForTimeout(300);
-  await p.screenshot({{ path: '{os.path.join(ROOT, "concepts-preview.png")}', fullPage: true }});
+  await p.screenshot({{ path: '{png}', fullPage: true }});
   await b.close();
 }})();'''], check=True)
-    print('sheet ->', os.path.join(ROOT, 'concepts-preview.png'))
+
+
+def main(round_):
+    for items, out, kicker, title in ROUNDS[round_]:
+        args = []
+        for slug, *_ in items:
+            d = os.path.join(CONCEPTS, slug)
+            args += [os.path.join(d, 'profile.svg'), os.path.join(d, 'profile-1080.png'), '1080', '1080', '1']
+            lw, lh = size_of(os.path.join(d, 'lockup.svg'))
+            args += [os.path.join(d, 'lockup.svg'), os.path.join(d, 'lockup.png'), str(lw), str(lh), '1.5']
+        subprocess.run(['node', os.path.join(HERE, 'render.js')] + args, check=True, stdout=subprocess.DEVNULL)
+        html = os.path.join(HERE, 'sheet.html')
+        with open(html, 'w') as f:
+            f.write(page(items, kicker, title))
+        render_sheet(html, os.path.join(ROOT, out))
+        print('sheet ->', os.path.join(ROOT, out))
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1] if len(sys.argv) > 1 else '1')
