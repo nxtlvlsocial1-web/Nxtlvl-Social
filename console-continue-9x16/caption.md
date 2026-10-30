@@ -46,15 +46,17 @@ For reach tests, add some of these in the first comment:
 
 ## Alt text (Advanced settings, Accessibility)
 
-A bright, lavender-white Reel styled like an early-2000s video game, with an energetic female voiceover and captions in a
-game dialogue box. Real PS2 gameplay of God of War and Resident Evil 4 plays softly in the background throughout.
-It opens on God of War gameplay that shrinks into a paused screen under "Continue?" and a chrome 3D countdown, then greys out.
-"Player 2 has joined": an orange gamepad lands next to a white one, Claude's spark mark pops out above it and a little
-orange pixel crab hops in, tagged Claude. A chrome "Console Skill" title flies in over eleven pixel crabs, one per skill; a spinning disc streams data into a GAME.EXE window that boots into
-Resident Evil 4, stamped "Not an emulator". An inventory collects power-ups, each shown on a card: a God of War frame snapping from blurry to
-sharp, a level select and a row of controllers. Claude uses the tester skill to K.O. a voxel crash boss. A New Game Plus world map unlocks Windows, Mac,
-Linux and Steam Deck. A rubber stamp marks a build status card "Early Access". It ends back on "Continue?" with a
-glossy play button, confetti, the game resuming behind it and a comment box with CONSOLE typed in.
+A bright, lavender-white Reel styled like an early-2000s video game, with an energetic female voiceover, short caption
+labels and a cast of pixel mascots: Rook (a bronze horned brawler with a hammer), Vesper (a scout in a mustard raincoat
+with a lantern), Dash (a speedster on roller skates) and little orange Claude crabs. It opens on real God of War
+gameplay that shrinks into a paused "Continue?" screen under a chrome 3D countdown; the mascots grey out on "forever".
+"Player 2 has joined": an orange gamepad and Claude's spark mark, and a crab hops in. A chrome "Console Skill" title
+flies in over eleven crabs, one per skill. A spinning disc streams data into a GAME.EXE window that boots into Resident
+Evil 4, stamped "Not an emulator", with Rook and Dash jumping on top. Power-ups are shown on cards: Rook going from
+blocky to sharp, a level select, a row of controllers. The whole party and a magnifier crab K.O. a voxel crash boss,
+then run across a New Game Plus map that unlocks Windows, Mac, Linux and Steam Deck. A rubber stamp marks a build card
+"Early Access" while Vesper jumps. It ends on "Continue?" with a glossy play button, confetti, the game resuming and a
+comment box with CONSOLE typed in, the cast cheering around it.
 
 ## Notes
 
@@ -66,3 +68,4 @@ glossy play button, confetti, the game resuming behind it and a comment box with
 - Voice: ElevenLabs "Stacey - Bright, Energetic, Expressive" (Eleven v4).
 - Music: the track the owner supplied (videoplayback_2). Add its credit line here if its licence asks for one.
 - Sound effects were synthesised for this video; no samples were used.
+- Rook, Vesper and Dash are our own original mascots (build/mascots.py), not any game's characters.
