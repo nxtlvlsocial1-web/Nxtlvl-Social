@@ -46,7 +46,7 @@ PHRASES = {("for", "you"), ("baby", "girl"), ("front", "row"), ("sent", "home"),
            ("make", "me")}
 RECIPE = {-1: "R1", 0: "R2", 1: "R3", 2: "R5", 3: "R4", 4: "R6", 5: "R8", 6: "R2", 7: "R1", 8: "R7", 9: "R3", 10: "R9", 11: "R2",
           12: "R5", 13: "R6", 14: "R4", 15: "R8", 16: "R3", 17: "R1", 18: "R9"}
-CUTOUT = {-1: "drake_back_jacket", 1: "cat_black_collar", 3: "hand_phone_sticker", 5: "drake_chanel_night", 6: "cat_white_dumb",
+CUTOUT = {1: "cat_black_collar", 3: "hand_phone_sticker", 5: "drake_chanel_night", 6: "cat_white_dumb",
           17: "snotty"}
 AF, PR, AV = "assets/img/anime/full/", "assets/img/print/", "assets/video/anime/"
 CL = "assets/video/clips/"                                # the owner's Drake clips, cut by build/clips_drake.py
@@ -55,10 +55,10 @@ CARD1 = {0: AV + "jealous.mp4", 2: PR + "envogue_funky_divas.jpg", 4: CL + "b_ph
 CARD2 = {1: PR + "vogue_cat_cover.jpg", 3: "assets/img/collage/call_vogue.jpg", 9: AF + "jet.jpg", 10: AV + "road.mp4",
          16: CL + "a_close.mp4"}
 CUTPRINT = {14: None, 9: None, 16: None, 7: CL + "b_phone2.mp4", 5: CL + "b_seated.mp4", 15: CL + "a_walk2.mp4"}     # recipes with a cut-out slot that use a picture instead
-FILL = {0: AF + "jealous.jpg", 6: PR + "cat_white_dumb.jpg", 11: AF + "her_blush.jpg"}
+FILL = {6: PR + "cat_white_dumb.jpg", 11: AF + "her_blush.jpg"}
 G3D_AT = {9: ("globe", 120, 620, 860), 15: ("heart", 140, 470, 800),
           16: ("body", 0, 700, 1080), 17: ("tissue", 0, 1200, 360)}
-STILLS = [AF + n + ".jpg" for n in ("jealous", "her_blush", "jet", "road", "finale", "snotty")] + [PR + "vogue_cat_cover.jpg", PR + "rolex_cat_ad.jpg", PR + "envogue_funky_divas.jpg"]
+STILLS = [AF + n + ".jpg" for n in ("her_blush", "jet", "road", "finale", "snotty")] + [PR + "vogue_cat_cover.jpg", PR + "rolex_cat_ad.jpg", PR + "envogue_funky_divas.jpg"]
 A, HIDE, PAN, SCREEN = [], [], [], []
 CAMKEYS, FLASH = {}, []
 LOCKS, CAMSTATE = [], {}
@@ -77,6 +77,10 @@ def js(s):
         m = re.search(r'duration: ([\d.]+)', s)
         d = float(m.group(1)) if m else .3
         s = _STEPS.sub('ease: "expo.out"' if d <= .5 else 'ease: "power2.out"', s)
+    if "ease: \"" in s and "duration:" in s:             # v16: the curve is kept, time steps on twos (15 fps)
+        m = re.search(r'duration: ([\d.]+)', s)
+        d = float(m.group(1)) if m else .3
+        s = re.sub(r'ease: "([^"]+)"', lambda mm: f'ease: SE("{mm.group(1)}", {max(2, round(d * 15))})', s)
     A.append("      " + s)
 
 
@@ -309,7 +313,8 @@ def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor
     left = x - w / 2 if anchor == "center" else x
     letters = "".join(f'<span class="ch{" cz" if c == "*" else ""}">{c if c != " " else "&nbsp;"}</span>' for c in text)
     if mode == "type":
-        mode = "slide" if style == "ser" else "flicker" if style == "stamp" else ("cascade" if NID[0] % 2 else "blur")
+        mode = ("track" if style == "ser" else "flicker" if style == "stamp"
+                else ("slamx", "scramble", "flip3d", "cascade", "blur")[NID[0] % 5])
     smear = '<i class="smear"></i>' if mode == "blur" else ""
     PAN.append(f'<div class="lw" data-layout-allow-overlap style="left:{left:.0f}px;top:{y:.0f}px;transform:rotate({rot:.1f}deg);z-index:{z}">'
                f'<div class="lb {style}" id="{i}" style="font-size:{size:.0f}px">{letters}{smear}{CIRC if circle else ""}</div></div>')
@@ -319,18 +324,41 @@ def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor
     if style in ("blk", "wht", "mag", "magw", "mb", "blkm"):          # the box wipes open first
         js(f'tl.fromTo("#{i}", {{clipPath: "inset(-20% 100% -20% 0%)"}}, {{clipPath: "inset(-20% -10% -20% 0%)", duration: .2, ease: "expo.out", immediateRender: false}}, {t:.3f});')
     if mode == "blur":
-        js(f'tl.fromTo("{sharp}", {{opacity: 0, filter: "blur(16px)", x: {-size * .22:.0f}}}, {{opacity: 1, filter: "blur(0px)", x: 0, duration: .3, ease: "expo.out", stagger: {min(.022, .22 / n):.3f}, immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("{sharp}", {{opacity: 0, filter: "blur(16px)", x: {-size * .22:.0f}}}, {{opacity: 1, filter: "blur(0px)", x: 0, duration: .22, ease: "expo.out", stagger: {min(.016, .16 / n):.3f}, immediateRender: false}}, {t:.3f});')
         js(f'tl.fromTo("#{i} .cz", {{opacity: 0}}, {{opacity: 1, duration: .3, immediateRender: false}}, {t + .1:.3f});')
         js(f'tl.fromTo("#{i} .smear", {{x: {-size * .6:.0f}, opacity: 1}}, {{x: {w:.0f}, opacity: 0, duration: .5, ease: "power2.out", immediateRender: false}}, {t:.3f});')
         done = t + .35
     elif mode == "cascade":
-        js(f'tl.fromTo("#{i} .ch", {{yPercent: 115, opacity: 0, rotation: 10}}, {{yPercent: 0, opacity: 1, rotation: 0, duration: .36, ease: "back.out(2.4)", stagger: {min(.026, .26 / n):.3f}, immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("#{i} .ch", {{yPercent: 115, opacity: 0, rotation: 10}}, {{yPercent: 0, opacity: 1, rotation: 0, duration: .26, ease: "back.out(2.6)", stagger: {min(.018, .18 / n):.3f}, immediateRender: false}}, {t:.3f});')
         done = t + .4
     elif mode == "slide":
         js(f'tl.fromTo("{sharp}", {{y: {size * .55:.0f}, opacity: 0, filter: "blur(10px)"}}, {{y: 0, opacity: 1, filter: "blur(0px)", duration: .4, ease: "expo.out", stagger: {min(.02, .22 / n):.3f}, immediateRender: false}}, {t:.3f});')
         done = t + .4
+    elif mode == "slamx":                                    # letters slam in huge and spun, settle on twos
+        js(f'tl.fromTo("#{i} .ch", {{scale: 2.6, rotation: (k) => [-24, 18, -12, 26, -8][k % 5], opacity: 0}}, '
+           f'{{scale: 1, rotation: 0, opacity: 1, duration: .18, ease: "back.out(2.6)", stagger: {min(.016, .16 / n):.3f}, immediateRender: false}}, {t:.3f});')
+        done = t + .2
+    elif mode == "scramble":                                 # text decodes from random glyphs (AE text scramble)
+        G = "#%&@$*?!/<>XZ0123456789"
+        rr = random.Random(int(t * 1000))
+        for f_ in range(4):
+            js(f'tl.set("#{i} .ch:not(.cz)", {{textContent: (k) => "{"".join(rr.choice(G) for _ in range(40))}"[(k * 7 + {f_ * 3}) % 40]}}, {t + f_ / 15:.3f});')
+        for k, c in enumerate(text):
+            if c != "*":                                     # spaces come back as no-break spaces
+                ch = "\\u00a0" if c == " " else c.replace(chr(34), "")
+                js(f'tl.set("#{i} .ch:nth-child({k + 1})", {{textContent: "{ch}"}}, {t + 4 / 15 + k * .012:.3f});')
+        done = t + .3
+    elif mode == "flip3d":                                   # letters flip up out of the page
+        js(f'tl.fromTo("#{i} .ch", {{rotationX: -95, transformPerspective: 500, transformOrigin: "50% 100%", opacity: 0}}, '
+           f'{{rotationX: 0, opacity: 1, duration: .26, ease: "back.out(1.8)", stagger: {min(.018, .18 / n):.3f}, immediateRender: false}}, {t:.3f});')
+        done = t + .25
+    elif mode == "track":                                    # tracking in: wide and blurred to tight
+        js(f'tl.fromTo("{sharp}", {{x: (k) => (k - {(n - 1) / 2:.1f}) * {size * .32:.0f}, filter: "blur(8px)", opacity: 0}}, '
+           f'{{x: 0, filter: "blur(0px)", opacity: 1, duration: .28, ease: "expo.out", immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("#{i} .cz", {{opacity: 0}}, {{opacity: 1, duration: .2, immediateRender: false}}, {t + .08:.3f});')
+        done = t + .25
     elif mode == "flicker":
-        for k, o in enumerate([1, 0, 1, .2, 0, 1, .45, 1]):
+        for k, o in enumerate([1, 0, 1, .3, 1]):
             js(f'tl.set("#{i}", {{opacity: {o}}}, {t + k / 30:.3f});')
         done = t + .27
     elif mode == "fall":
@@ -342,10 +370,10 @@ def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor
                 js(f'tl.set("#{i} .ch:nth-child({k + 1})", {{y: {py:.0f}}}, {t0 + dt:.3f});')
         done = t + .5
     elif mode == "slam":
-        js(f'tl.fromTo("#{i}", {{scale: 1.65}}, {{scale: 1, duration: .35, ease: "back.out(1.8)", immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("#{i}", {{scale: 1.65}}, {{scale: 1, duration: .22, ease: "back.out(2.2)", immediateRender: false}}, {t:.3f});')
         done = t + .25
     else:
-        js(f'tl.fromTo("#{i}", {{scale: 1.4}}, {{scale: 1, duration: .3, ease: "back.out(2)", immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("#{i}", {{scale: 1.4}}, {{scale: 1, duration: .2, ease: "back.out(2.2)", immediateRender: false}}, {t:.3f});')
         done = t + .2
     if circle:
         js(f'tl.fromTo("#{i} .circ path", {{strokeDashoffset: 400}}, {{strokeDashoffset: 0, duration: .4, ease: "expo.out", immediateRender: false}}, {done + .05:.3f});')
@@ -426,9 +454,15 @@ def cam(si, t, fx, fy, s=1.0, rot=0.0, dur=.35):
 
 # ------------------------------------------------------------------------------------------------ recipes (Ashke)
 def r1(si, a, b, li, gs):
-    scrap("red", 0, 30, 230, 1020, -7, a, b)
-    scrap("black", 3, 600, 40, 560, 14, a, b)
-    cutout(li, 120, 150, 840, -2, a, b, rise=320)
+    if li < 0:                         # v16 intro: the owner's clean photo (black on black) is the whole background
+        i = nid("ib")
+        PAN.append(f'<img class="el" id="{i}" src="assets/img/src/drake_back_black.jpg" style="left:-455px;top:-1264px;'
+                   f'width:1800px;z-index:0" alt="">')
+        show(f"#{i}", a, b)
+    else:
+        scrap("red", 0, 30, 230, 1020, -7, a, b)
+        scrap("black", 3, 600, 40, 560, 14, a, b)
+        cutout(li, 120, 150, 840, -2, a, b, rise=320)
     g3el(li, a, b)
     cam(si, a, 540, 700, 1.08, -2, .01)
     y = 1000
@@ -475,7 +509,7 @@ def r2(si, a, b, li, gs):
         cam(si, td, 640, 1120, 1.05, 2, .25)
     else:
         cutout(li, 540 - 220, 860 + size * 1.25 + 150 * after_n, 440, 2, kw[2], b, z=2)
-    _, fw = label(kw[0], f"fill f{li}", 540, 860, size, -3, kw[2], b, mode="pop", z=6)
+    _, fw = label(kw[0], f"fill f{li}" if li in FILL else "w3d", 540, 860, size, -3, kw[2], b, mode="slamx" if li not in FILL else "pop", z=6)
     cam(si, kw[2], 540, 960, 1.0, 0, .2)
     zt = kw[2] + .4
     after = gs[ki + 1:]
@@ -663,7 +697,7 @@ ICON_AT = {"R1": (800, 1500, 8), "R2": (60, 300, -8), "R3": (790, 330, 10), "R4"
            "R6": (60, 1540, -6), "R7": (60, 300, -8), "R8": (90, 960, -10), "R9": (780, 1460, 10)}
 
 
-ICON_LI = {14: (830, 760, 8), 16: (30, 250, -8), 7: (760, 700, 8)}
+ICON_LI = {14: (830, 760, 8), 16: (30, 250, -8), 7: (760, 700, 8), 0: (800, 1480, 8)}
 
 
 def lyric_icons():
@@ -689,10 +723,6 @@ def lyric_icons():
         for (dt, px, py) in path:
             spin = (rot - 28 * (1 if x_end > 0 else -1)) + 28 * (1 if x_end > 0 else -1) * min(1, dt / .5)
             js(f'tl.set("#{i}", {{x: {px - x_end:.0f}, y: {py:.0f}, rotation: {spin:.1f}}}, {t + dt:.3f});')
-        k, tt = 0, t + 1.0
-        while tt < b - .07:
-            js(f'tl.set("#{i}", {{rotation: {rot + (2.5 if k % 2 else -2.5)}}}, {tt:.3f});')
-            tt, k = tt + PERIOD / 2, k + 1
 
 
 def transition_frames():
@@ -711,6 +741,62 @@ def transition_frames():
                           f'transform:rotate({rot}deg)"><img src="{src}" alt=""></div>')
             t0 = a - (3 - j) / 30
             show(f"#{i}", t0, t0 + 1 / 30)
+
+
+def cut_bursts():
+    """v16: every cut is a short burst instead of one clean cut, rotating the owner's three references:
+    ink (Eimantas: a grunge ink matte eats the frame and recedes off the next shot), tear (YouMotion: a torn paper sheet
+    slides across in stepped frames), stutter (Eimantas / YouMotion: B/W threshold still, invert, duotone still, white
+    blast, one frame each), slam (Jennifer: two stop-motion stills slammed in). Section changes get ink + stutter."""
+    big = {6, 10, 11, 15, 17, 18}
+    SCREEN.append('<svg id="ink" viewBox="0 0 1080 1080" preserveAspectRatio="none"><rect width="1080" height="1080" fill="#0b0608" filter="url(#inkf)"/></svg>')
+    HIDE.append("#ink")
+    order = ["tear", "stutter", "ink", "slam"]
+    k = 0
+    for si, (a, b, li) in enumerate(scenes()):
+        if si == 0:
+            continue
+        styles = ["ink", "stutter"] if li in big else [order[si % 4]]
+        for st in styles:
+            if st == "ink":                                  # coverage 100% -> 0 over 4 frames after the cut
+                js(f'tl.set("#ink", {{opacity: 1}}, {a - 1 / 30:.3f});')
+                for j, ic in enumerate([1.2, .55, -.1, -.6, -1.4]):
+                    js(f'tl.set("#inkA", {{attr: {{intercept: {ic}}}}}, {a - 1 / 30 + j / 15:.3f});')
+                    js(f'tl.set("#inkT", {{attr: {{seed: {si * 7 + j}}}}}, {a - 1 / 30 + j / 15:.3f});')
+                js(f'tl.set("#ink", {{opacity: 0}}, {a + 4 / 15:.3f});')
+            elif st == "tear":
+                i = nid("tr")
+                kind = ("black", "mag", "white")[si % 3]
+                SCREEN.append(f'<img class="tear" id="{i}" src="assets/img/collage/scrap/{kind}-{si % 4}.png" alt="">')
+                HIDE.append(f"#{i}")
+                js(f'tl.set("#{i}", {{opacity: 1}}, {a - 3 / 15:.3f});')
+                for j, x in enumerate([-1900, -1100, -400, 300, 1100]):
+                    js(f'tl.set("#{i}", {{x: {x}, rotation: {(-8, -5, -3, -1, 2)[j]}}}, {a - 3 / 15 + j / 15:.3f});')
+                js(f'tl.set("#{i}", {{opacity: 0}}, {a + 2 / 15:.3f});')
+            elif st == "stutter":
+                for j, kind in enumerate(["thr", "inv", "duo", "white"]):
+                    t0 = a - (4 - j) / 30
+                    if kind in ("thr", "duo"):
+                        src = STILLS[k % len(STILLS)]
+                        k += 1
+                        i = nid("tf")
+                        SCREEN.append(f'<div class="tframe {kind}" id="{i}" style="left:0;top:0;width:1080px;height:1080px;padding:0">'
+                                      f'<img src="{src}" alt=""></div>')
+                        show(f"#{i}", t0, t0 + 1 / 30)
+                    elif kind == "inv":
+                        FLASH.append((t0, "invert"))
+                    else:
+                        FLASH.append((t0, "white"))
+            else:                                            # slam: two stop-motion stills
+                for j in range(2):
+                    src = STILLS[k % len(STILLS)]
+                    k += 1
+                    i = nid("tf")
+                    w = (760, 880)[j]
+                    SCREEN.append(f'<div class="tframe" id="{i}" style="left:{540 - w / 2:.0f}px;top:{540 - w * 1.2 / 2:.0f}px;width:{w}px;'
+                                  f'height:{w * 1.2:.0f}px;transform:rotate({(-6, 4)[j]}deg)"><img src="{src}" alt=""></div>')
+                    t0 = a - (2 - j) * 2 / 30
+                    show(f"#{i}", t0, t0 + 2 / 30)
 
 
 # ------------------------------------------------------------------------------------------------ camera (Ashke)
@@ -770,7 +856,7 @@ def camera():
     DROP = {round(td * 30) + k: y for k, y in enumerate([210, 420, 710, 1000, 120, -760, -480, -200, -75, 50, 11, -28, -8, 12, 0])}
     blurred = False
     for f in range(int(DUR * 30)):
-        t = f / 30
+        t = math.floor(f / 2) / 15                           # v16: the camera holds every other frame (on twos)
         si = max(i for i, p in enumerate(plans) if p["a"] <= t + 1e-6)
         fx, fy, s, rot = focus(si, t)
         px, py, _, _ = focus(si, max(plans[si]["a"], t - STEP)) if t - STEP >= plans[si]["a"] else focus(si, t + STEP)
@@ -778,15 +864,15 @@ def camera():
         if t - STEP < plans[si]["a"]:
             vx, vy = -vx, -vy
         lb = max([bt for bt in BEATS["beats"] if bt <= t + 1e-6] or [-9])
-        s *= 1 + .075 * math.exp(-(t - lb) / .07)
         s *= 1 + .34 * math.exp(-(t - plans[si]["a"]) / .055)         # zoom snap into every scene
         fy = 960 + (fy - 960) * VTRACK
         dy = DROP.get(f, 0)
         if dy:
             fy -= dy / (s * 1.06 * ZOOM)
         CAMSTATE[f] = (fx, fy, s * 1.06 * ZOOM, rot)
-        js(f'tl.set("#pan", {{x: {540 - fx:.1f}, y: {CY - fy:.1f}}}, {t:.3f});')
-        js(f'tl.set("#cam", {{scale: {s * 1.06 * ZOOM:.4f}, rotation: {rot:.2f}}}, {t:.3f});')
+        if f % 2 == 0:
+            js(f'tl.set("#pan", {{x: {540 - fx:.1f}, y: {CY - fy:.1f}}}, {t:.3f});')
+            js(f'tl.set("#cam", {{scale: {s * 1.06 * ZOOM:.4f}, rotation: {rot:.2f}}}, {t:.3f});')
         sp = math.hypot(vx, vy)
         if sp > 90:
             k = min(13, sp * .045)
@@ -851,11 +937,6 @@ def concepts():
         ang += 160 + 70 * k
         CUES.append((t, "tick", 0))
         js(f'tl.to("#{cp} .ndl", {{rotation: {ang}, svgOrigin: "0 0", duration: .2, ease: "back.out(3)"}}, {t:.3f});')
-    # hook 2: rings pulse out of the chrome heart on every other beat
-    a, b = sc[15]
-    for k, t in enumerate([t for t in BEATS["beats"][::2] if a < t < b - .2]):
-        i = conc(f'<i class="el ring" id="ID" style="left:340px;top:670px;width:400px;height:400px;z-index:ZZ"></i>', t, t + .6, z=3)
-        js(f'tl.fromTo("#{i}", {{scale: .5, opacity: 1}}, {{scale: 2.4, opacity: 0, duration: .6, ease: "steps(9)", immediateRender: false}}, {t:.3f});')
     # comin' out my body: glowing wisps rising out of the 3D BODY
     a, b = sc[16]
     g = random.Random(16)
@@ -904,13 +985,6 @@ def finishing():
         if r >= .45:
             js(f'tl.set("#leak", {{opacity: 1}}, {a - STEP:.3f});')
             js(f'tl.fromTo("#leak", {{x: {-900 if si % 2 else 900}, opacity: 1}}, {{x: {900 if si % 2 else -900}, opacity: 0, duration: .5, ease: "steps(8)", immediateRender: false}}, {a - STEP:.3f});')
-        if b - a > 2.6:                       # a smaller bloom pulse mid-scene on a strong beat
-            mb = [t for t in BEATS["beats"][::4] if a + 1 < t < b - .6]
-            if mb:
-                t = mb[0]
-                js(f'tl.set("#glow", {{filter: "url(#bloom)"}}, {t:.3f});')
-                js(f'tl.set("#blg", {{attr: {{stdDeviation: 16}}}}, {t:.3f});')
-                js(f'tl.set("#glow", {{filter: "url(#dglow)"}}, {t + 2 * STEP:.3f});')
 
 
 # ------------------------------------------------------------------------------------------------ full-screen lyric effects
@@ -1077,6 +1151,43 @@ def pixel_shot(a, b, tb):
     CUES.extend([(a + .05, "pixel_walk", .45), (tb, "pixel_shot", 0), (tb + .07, "pixel_hit", 0), (tb + .58, "pixel_fall", 0)])
 
 
+def phone_throw(a, b):
+    """Jealous (owner): two pixel girls, mad, wind up and fling their phones; the phones arc down with the gravity
+    expression and smash on the floor (a white crack burst). Straight on the collage above the keyword."""
+    S, FL, X0, Y0 = 8, 470, 60, 250
+    tj = next(s_ for w, s_ in words_of(0) if w == "jealous")
+    SPR["girl2"] = (28, 40, 7)
+    SPR["girl"] = (28, 40, 7)
+    g1, h1 = sprite("girl", 640, FL - 38 * S, S)
+    g2, h2 = sprite("girl2", 120, FL - 38 * S, S, "transform:scaleX(-1)")
+    ph = [nid("ph"), nid("ph")]
+    ck = [nid("ck"), nid("ck")]
+    starts = [(640 + 4 * S, FL - 38 * S + 6 * S), (120 + 24 * S, FL - 38 * S + 6 * S)]
+    inner = h1 + h2 + "".join(
+        f'<img id="{ph[k]}" class="px" src="{PX}phone.png" style="left:{starts[k][0] - 28:.0f}px;top:{starts[k][1] - 44:.0f}px;width:56px;opacity:0">'
+        f'<img id="{ck[k]}" class="px" src="{PX}crack.png" style="left:{starts[k][0] - 63:.0f}px;top:{FL - 70:.0f}px;width:126px;opacity:0">' for k in range(2))
+    game_box(X0 - 14, Y0 - 14, 988, 560, a, b, inner)
+    for gid, name in ((g1, "girl"), (g2, "girl2")):
+        idle(gid, name, a, tj + .1, S, frames=(6, 6))
+    for k, (gid, name) in enumerate(((g1, "girl"), (g2, "girl2"))):
+        tw = tj + .15 + .22 * k
+        set_frame(gid, name, 4, tw - .2, S)
+        set_frame(gid, name, 5, tw, S)
+        set_frame(gid, name, 6, tw + .4, S)
+        idle(gid, name, tw + .4, b, S, frames=(6, 6))
+        vx = (-420, 420)[k]
+        path = phys(-(FL - 30 - starts[k][1]), -520, vx0=vx, g_m=60, bounce=.3, drag=.1, fric=.6, dur=1.0)
+        land = next(t_ for t_, x_, y_ in path[1:] if y_ >= -1)
+        js(f'tl.set("#{ph[k]}", {{opacity: 1}}, {tw:.3f});')
+        for (t_, x_, y_) in path:
+            js(f'tl.set("#{ph[k]}", {{x: {x_:.0f}, y: {y_ + FL - 30 - starts[k][1]:.0f}, rotation: {min(1, t_ / .5) * (-540, 540)[k]:.0f}}}, {tw + t_:.3f});')
+        xl = path[-1][1]
+        js(f'tl.set("#{ck[k]}", {{x: {xl:.0f}, opacity: 1}}, {tw + land:.3f});')
+        js(f'tl.fromTo("#{ck[k]}", {{scale: .3}}, {{scale: 1.2, duration: .2, ease: "back.out(2)", immediateRender: false}}, {tw + land:.3f});')
+        js(f'tl.to("#{ck[k]}", {{opacity: 0, duration: .3}}, {tw + land + .5:.3f});')
+        CUES.extend([(tw, "phone_throw", 0), (tw + land, "phone_smash", 0)])
+
+
 def diamond_drop(a, b):
     """Somethin' gettin' dropped for you, baby girl: the mascot walks up to the pixel girl and drops a handful of
     diamonds at her feet (they bounce with the owner's gravity expression and twinkle), she cheers, hearts float up,
@@ -1144,6 +1255,7 @@ def context_fx():
     pixel_shot(a, b, tb)
     # burn somebody block: a fire front sweeps up the whole screen and leaves it charred, embers flying
     diamond_drop(*sc[12])
+    phone_throw(*sc[0])
     a, b = sc[14]
     tl_ = lighter_throw(a, b)
     g = random.Random(14)
@@ -1227,6 +1339,11 @@ SMOKE_T = tables([[.96] * 9 + [.96, .94, .9, .78, .66, .74, .88, .96, .86, .72, 
                   [.9] * 9 + [.9, .88, .84, .7, .58, .66, .8, .9, .79, .64, .72, .86],
                   [0] * 8 + [.08, .25, .45, .62, .55, .5, .66, .82, .9, .84, .72, .8, .9]])
 FX_DEFS = f"""
+      <filter id="inkf" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+      <feTurbulence id="inkT" type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="4" seed="1" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.4 0 0 0 0" result="na"/>
+      <feComponentTransfer in="na" result="m"><feFuncA id="inkA" type="linear" slope="9" intercept="1.2"/></feComponentTransfer>
+      <feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
       <filter id="dglow" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
       <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  .3 .59 .11 0 0" result="lum"/>
       <feComponentTransfer in="lum" result="mask"><feFuncA type="linear" slope="3.2" intercept="-2.3"/></feComponentTransfer>
@@ -1269,10 +1386,7 @@ BLOBS = [(300, 300, 480, "#b0194f", 260, 180, 9.0, 0.0), (1100, 380, 400, "#e033
 
 
 def background():
-    for f in range(int(DUR * 15)):           # stepped on the edit's 15 fps grid, smooth curves (no shake)
-        t = f / 15
-        lb = max([bt for bt in BEATS["beats"] if bt <= t + 1e-6] or [-9])
-        js(f'tl.set("#bg", {{filter: "brightness({1 + .1 * math.exp(-(t - lb) / .12):.3f}) saturate(1.1)"}}, {t:.3f});')
+    js('tl.set("#bg", {filter: "saturate(1.1)"}, 0);')     # v16: no beat throb
 
 
 def flicker_hits():
@@ -1447,6 +1561,11 @@ img.el {{ display: block; height: auto; }}
 .pxstars i {{ position: absolute; width: 14px; height: 14px; background: #ffd640; box-shadow: 0 0 0 4px #141213; }}
 .pxground {{ position: absolute; left: 0; right: 0; top: 508px; height: 12px; background: repeating-linear-gradient(90deg, #f2f1ec 0 24px, #b0194f 24px 48px);
   image-rendering: pixelated; opacity: .9; }}
+#ink {{ position: absolute; inset: 0; width: 1080px; height: 1080px; z-index: 19; opacity: 0; pointer-events: none; }}
+.tear {{ position: absolute; left: 0; top: -300px; width: 1900px; height: auto; z-index: 19; opacity: 0; pointer-events: none;
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,.55)); }}
+.tframe.thr img {{ filter: grayscale(1) contrast(5) brightness(1.1); }}
+.tframe.duo img {{ filter: invert(1) sepia(1) saturate(4) hue-rotate(130deg) contrast(1.4); }}
 #vig {{ position: absolute; inset: 0; z-index: 18; pointer-events: none; background: radial-gradient(ellipse 80% 75% at 50% 48%, rgba(0,0,0,0) 55%, rgba(0,0,0,.4) 100%); }}
 #grain {{ position: absolute; left: 0; top: 0; width: 1120px; height: 1120px; z-index: 18; pointer-events: none; opacity: .08; background: url(assets/img/grain.png); mix-blend-mode: overlay; }}
 """
@@ -1458,7 +1577,7 @@ def main():
         gs = [("SPIN BOUT U", False, .3), ("DRAKE", True, 1.1), ("21 SAVAGE", False, 1.6)] if li < 0 else groups_of(li)
         builders[RECIPE[li]](si, a, b, li, gs)
     lyric_icons()
-    transition_frames()
+    cut_bursts()
     concepts()
     camera()
     background()
@@ -1466,7 +1585,6 @@ def main():
     context_fx()
     film_burns()
     pin_locks()
-    flicker_hits()
     flashes()
     ev = sound_cues()
     g = random.Random(3)
@@ -1520,6 +1638,7 @@ def main():
     </div>
     <script>
       window.__timelines = window.__timelines || {{}};
+      const SE = (n, k) => {{ const f = gsap.parseEase(n); return (p) => p >= 1 ? 1 : f(Math.floor(p * k) / k); }};
       const tl = gsap.timeline({{ paused: true }});
       gsap.set({json.dumps(list(dict.fromkeys(HIDE)))}, {{opacity: 0}});
 {chr(10).join(A)}

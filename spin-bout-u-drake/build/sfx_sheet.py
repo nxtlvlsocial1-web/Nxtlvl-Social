@@ -72,6 +72,9 @@ KINDS = {
     "fire": ([f("catching-fire/flame_0.ogg")], "ambience", -4, {"anchor": "start", "fade_out": .3}),
     "smoke": ([f("steam-release-sounds/steam hisses - Marker _2.wav")], "ambience", -1, {"anchor": "start", "fade_out": .5}),
     "throw": (r8("sfx_movement_jump1."), "ui", -6, {}),
+    "phone_throw": (r8("sfx_movement_jump2."), "ui", -14, {}),
+    "phone_smash": ([f("75-cc0-breaking-falling-hit-sfx/bfh1_glass_hit_01.ogg"), f("75-cc0-breaking-falling-hit-sfx/bfh1_glass_hit_02.ogg")],
+                    "glass", -12, {"max_dur": .5}),
     "ghost": ([f("wind-hit-time-morph/qubodup-slomo1.wav")], "whoosh", -6, {"max_dur": 1.2}),
     "pixel_start": (r8("sfx_sounds_powerup1."), "ui", -10, {}),
     "pixel_walk": (r8("sfx_movement_footsteps"), "foley", -9, {"anchor": "start"}),
@@ -83,6 +86,8 @@ KINDS = {
     "heart": (r8("sfx_sounds_powerup2."), "ui", -12, {}),
 }
 SKIP = {"keyword"}
+PIXEL = {"pixel_walk", "pixel_hold", "pixel_shot", "pixel_hit", "pixel_fall", "diamond", "heart", "throw", "pixel_start"}
+PIXEL_TRIM = -6.0   # v16: the owner wants every pixel-illustration sound quieter
 # v15: the owner found the transition whooshes too light. Every cut whoosh is pitched down and gets a low impact
 # under it (a lowpassed explosion / bang / thump, rotated so the sub layer is not one sample on repeat).
 SUBS = ["sci-fi-sounds/Audio__lowFrequency_explosion_000.ogg", "25-cc0-bang-firework-sfx/bang_03.ogg",
@@ -125,6 +130,10 @@ def main():
         if k == "heart":
             if any(c["label"] == "heart" and t - c["t"] < .45 for c in cues):
                 continue
+        if k == "sticker" and any(c["label"] == "sticker" for c in cues):
+            continue                                       # v16: one paper slap in the whole edit (owner)
+        if k == "hit" and any(e2["type"].startswith(("whoosh", "swish")) and abs(e2["t"] - t) < .15 for e2 in ev):
+            continue                                       # a burst's white frame on a cut that already has its whoosh + sub
         if k == "sticker" and any(abs(t - x) < .35 for x in busy):  # a sticker landing under a cut or a hit is lost anyway
             continue
         files, role, gain, extra = KINDS[k]
@@ -133,7 +142,7 @@ def main():
         fn = next(rot[k])
         n = uses.get(fn, 0)
         uses[fn] = n + 1
-        c = {"t": t, "label": k, "file": fn, "role": role, "gain_db": gain + LIFT} | extra
+        c = {"t": t, "label": k, "file": fn, "role": role, "gain_db": gain + LIFT + (PIXEL_TRIM if k in PIXEL else 0)} | extra
         if n and "pitch" not in c and k not in ("phone", "fire", "smoke"):
             c["pitch"] = (0, -1, 1, -2, 2)[n % 5]              # a repeat is a new take, not the same file twice
         if k in WEIGHT:

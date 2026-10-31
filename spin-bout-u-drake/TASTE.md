@@ -159,6 +159,23 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 - Transition sound: every cut whoosh pitched down 2-4 semitones with a lowpassed low impact under it (rotating
   explosions / bangs / a thump): about +9.5 dB in the 30-150 Hz band at the cuts.
 
+## v16 (owner: blend the three reference edits; no pulsing; fix the intro; better text; jealous pixel scene; sound)
+- References (reference/edits: Eimantas, YouMotion, Jennifer) measured: 27-82% held frames (stop-motion on twos),
+  cuts in bursts of 3-8 changes 0.08-0.16 s apart, then holds. So: every tween keeps its curve but plays on twos
+  (SE() stepped eases, 15 fps holds), the camera holds every other frame, and every cut is a burst rotating
+  ink (grunge ink matte recedes off the new shot), tear (torn paper sheet slides across in steps), stutter
+  (B/W threshold still, invert, cyan duotone still, white blast, a frame each) and slam (two stop-motion stills);
+  section changes get ink + stutter.
+- No pulsing anywhere: beat zoom punches, background beat throb (fluid bg re-rendered without it), sticker wobble,
+  keyword flicker, heart rings and mid-scene bloom pulses are gone.
+- Intro: the owner's clean black photo of Drake from the back fills the scene (black on black could not be cut out);
+  the rest keeps the colours.
+- Text: letter slam (huge, spun, back-out), scramble decode, 3D flip-up, tracking-in (per-letter spread, no
+  letterSpacing tween), cascade and blur reveal rotate; stamps flicker in 5 frames; all ~30% faster than v15.
+- Jealous: two pixel girls (second one blonde) wind up and fling their phones, which crack on the floor; the two-girls
+  picture is out (fill and stills).
+- Sound: the paper slap plays once; every pixel-scene sound -6 dB; phone throws / smashes quiet.
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|
@@ -180,3 +197,4 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 | 2026-10-31 | dial animation in the blank phone; texts not aligned with their shapes; smoke needs context (pixel Drake shooting a guy); burn needs Drake throwing a lighter; use the two Drake clips (ending, and the phone one on the one-call lines) with animated elements | v13 above |
 | 2026-10-31 | live animated pixel mascot of Drake (not a pixelated photo); for the diamond line he drops diamonds for a girl; use the reel project; real SFX from Openverse for transitions and elements | v14 above |
 | 2026-10-31 | pixel animations not in boxes; pixel mascot for the burn; a clip on the way lyrics; transitions still slow, make them fast After Effects style; transition sounds not bassy enough | v15 above |
+| 2026-11-01 | paper slaps once only; pixel sounds quieter; jealous as pixel girls throwing phones; transitions to the flow of the three references; no pulsing; fix the intro Drake crop or change its background; better, faster text | v16 above |

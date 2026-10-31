@@ -132,10 +132,12 @@ def drake(pose):
     return c.outline()
 
 
-def girl(pose):
+def girl(pose, look=0):
     c = Canvas(28, 40)
     bob = 1 if pose in ("idle1", "happy1") else 0
     LS, LS2, HR, HR2, TOP, TOP2 = (176, 112, 78), (146, 88, 58), (44, 26, 22), (78, 46, 38), (176, 25, 79), (220, 60, 120)
+    if look == 1:                                           # second girl: blonde, black top, lighter skin
+        LS, LS2, HR, HR2, TOP, TOP2 = (214, 160, 120), (184, 128, 92), (222, 180, 90), (250, 214, 130), (28, 28, 34), (60, 60, 70)
     for x0 in (11, 15):
         c.rect(x0, 31, x0 + 2, 35, LS)
         c.rect(x0 - 1, 36, x0 + 3, 37, W)
@@ -158,15 +160,29 @@ def girl(pose):
     c.px(13, 12 + y, (232, 130, 150))                       # blush
     c.px(19, 12 + y, (232, 130, 150))
     c.rect(14, 17 + y, 16, 17 + y, LS2)                     # neck
-    if pose.startswith("happy"):
+    if pose in ("windup", "throw", "mad"):                  # angry brows for the jealous throw
+        c.px(13, 8 + y, K)
+        c.px(18, 8 + y, K)
+    if pose == "windup":                                    # phone raised back over the head
+        c.rect(20, 19 + y, 21, 27 + y, LS)
+        for k in range(6):
+            c.rect(7 - k // 3, 18 - k + y, 8 - k // 3, 18 - k + y, LS)
+        c.rect(4, 6 + y, 7, 11 + y, K)
+        c.rect(5, 7 + y, 6, 10 + y, (90, 200, 255))
+    elif pose == "throw":                                   # arm flung forward, hand open
+        c.rect(8, 19 + y, 9, 27 + y, LS)
+        for k in range(7):
+            c.rect(20 + k, 19 - k // 2 + y, 21 + k, 20 - k // 2 + y, LS)
+    elif pose.startswith("happy"):
         c.rect(7, 12 + y, 8, 19 + y, LS)                    # arms up
         c.rect(21, 12 + y, 22, 19 + y, LS)
         c.rect(7, 10 + y, 8, 11 + y, LS)
         c.rect(21, 10 + y, 22, 11 + y, LS)
         c.px(16, 15 + y, W)                                 # smile
     else:
-        c.rect(8, 19 + y, 9, 27 + y, LS)
-        c.rect(20, 19 + y, 21, 27 + y, LS)
+        if pose not in ("windup", "throw"):
+            c.rect(8, 19 + y, 9, 27 + y, LS)
+            c.rect(20, 19 + y, 21, 27 + y, LS)
     return c.outline().transpose(Image.FLIP_LEFT_RIGHT)
 
 
@@ -211,6 +227,8 @@ def grid_rows(rows, pal):
 
 DIAMOND = ["..kkkkk..", ".kwcwcck.", "kwwccwcck", "kkkkkkkkk", ".kcwccck.", "..kcwck..", "...kck...", "....k...."]
 SPARKLE = ["..w..", "..w..", "wwyww", "..w..", "..w.."]
+PHONE = ["kkkkkkk", "kssssskk", "kswsssk", "ksssssk", "ksssssk", "ksssssk", "ksssssk", "ksssssk", "ksssssk", "kkkwkkk", "kkkkkkk"]
+CRACK = ["w...w...w", ".w..w..w.", "..wwwww..", "wwwkwkwww", "..wwwww..", ".w..w..w.", "w...w...w"]
 LIGHTER = ["..y..", ".yoy.", ".ooo.", "aaaaa", "awwwa", "aaaaa", "aaaaa", "aaaaa", "aaaaa"]
 HEART = [".kk.kk.", "krrkrrk", "krrrrrk", ".krrrk.", "..krk..", "...k..."]
 
@@ -220,7 +238,11 @@ def main():
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     os.makedirs(OUT, exist_ok=True)
     sheet([drake(p) for p in DRAKE_FRAMES]).save(os.path.join(OUT, "drake_sheet.png"))
-    sheet([girl(p) for p in ("idle0", "idle1", "happy0", "happy1")]).save(os.path.join(OUT, "girl_sheet.png"))
+    GF = ("idle0", "idle1", "happy0", "happy1", "windup", "throw", "mad")
+    sheet([girl(p) for p in GF]).save(os.path.join(OUT, "girl_sheet.png"))
+    sheet([girl(p, 1) for p in GF]).save(os.path.join(OUT, "girl2_sheet.png"))
+    grid_rows(PHONE, {"k": K, "s": (90, 200, 255), "w": W}).save(os.path.join(OUT, "phone.png"))
+    grid_rows(CRACK, {"w": W, "k": K}).save(os.path.join(OUT, "crack.png"))
     sheet([guy(p) for p in ("idle0", "idle1", "hit")]).save(os.path.join(OUT, "guy_sheet.png"))
     pal = {"k": K, "w": W, "c": (127, 216, 255), "y": (255, 214, 64), "r": (230, 40, 100)}
     grid_rows(DIAMOND, pal).save(os.path.join(OUT, "diamond.png"))

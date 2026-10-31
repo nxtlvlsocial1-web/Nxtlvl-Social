@@ -28,7 +28,7 @@ def frame(t, yy, xx):
     wx = xx + .07 * np.sin(yy * 7.0 + t * .55 + np.sin(xx * 5.0 - t * .4)) + .035 * np.sin(yy * 17 + xx * 9 - t * 1.1)
     wy = yy + .07 * np.sin(xx * 6.0 - t * .45 + np.sin(yy * 4.0 + t * .35)) + .035 * np.sin(xx * 15 - yy * 11 + t * .9)
     lb = max([b for b in BEATS if b <= t] or [-9])
-    pulse = 1 + .35 * np.exp(-(t - lb) / .14)
+    pulse = 1.0                                            # v16: no beat throb (owner: no pulsing effects)
     acc = np.zeros(xx.shape + (3,))
     wsum = np.full(xx.shape, .9)                           # the base colour's share
     acc += .9 * BASE
