@@ -607,7 +607,6 @@ def build():
     scene(E[13], E[14], drift=(10, -8), trans="smoke")
     photo("smoke", -40, -40, 1160, 1160, 0, E[13], E[14], kind="afull", how="settle", push=.08, z=1, ly=0,
           punches=((at(li, 3), 1.15), (at(li, 6), 1.0)))
-    particles("smoke", E[13], E[14], 6, 17, z=3, ly=1)
     cap("SMOKE", 40, 40, fit("SMOKE", 700, 300), at(li, 0), E[14], color=RED, sy=1.2, how="blocks")
     cap(text(li, 1, 3), 40, 390, 120, at(li, 1), E[14], color=WHT, skew=-10, how="slide-l")
     cap(text(li, 4, 5), 1030, 760, 110, at(li, 4), E[14], color=WHT, box=RED, align="right", how="pop")
@@ -663,7 +662,7 @@ def build():
     scene(E[17], E[18], bg=WHT, drift=(0, 8), trans="slice")
     panel(0, 0, S, S, RED, E[17], E[18], how="", z=0, extra="clip-path:polygon(0 70%,100% 52%,100% 100%,0 100%)")
     cap("WIPE HIM", 540, 40, fit("WIPE HIM", 1000, 300), at(li, 0), E[18], color=INK, sy=1.15, align="center", how="blocks", ly=1, z=2, outline=False)
-    photo("snotty", 230, 230, 620, None, 0, lt(li), E[18], kind="acut", how="settle", push=.06, outline=False, rim=False)
+    photo("snotty", 380, 260, 580, None, 0, lt(li), E[18], kind="acut", how="settle", push=.06, outline=False, rim=False)
     w_ = panel(-60, 0, 1200, S, RED, at(li, 0), at(li, 0) + .4, how="", z=9, ly=2)
     tween(f"#{w_}", {"x": -1300}, {"x": 1300}, at(li, 0), 6)
     cap(text(li, 2, 3), 60, 380, 110, at(li, 2), E[18], color=INK, skew=-10, how="slide-l")

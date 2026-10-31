@@ -61,9 +61,9 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 - No constant camera shake. Scenes drift in slowly; beats land as punch-ins and single flashes.
 - Pictures: the cats only in the opening (Vogue cover, pearl cat, dumb white cat); Drake photos at most twice
   (title, front row); every later line is an anime illustration that tells the story of one couple.
-- Illustrations must not look like AI art: 1990s hand-painted anime cel style (hand-inked lines, flat two-tone cel
-  shading, no airbrush or gloss, film grain), the same couple kept consistent with a reference image. The first
-  glossy webtoon-style set was rejected as "AI slop".
+- Illustrations must look like real 1990s TV anime frames: simple 90s character design, flat two-tone cel
+  paint, painted backgrounds, VHS softness and grain; the same couple kept consistent with a reference image. Both
+  the glossy webtoon set and the clean modern cel set were rejected as "AI slop" (too detailed and polished).
 
 ## Feedback rules
 | Date | User said | Rule |
@@ -71,3 +71,4 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 | 2026-10-31 | blur all cuss words as ****; unique picture per lyric, 3D renders allowed; match the reference transitions and tracking; fix text hidden on white; no edited-by credits | v2 above |
 | 2026-10-31 | cats only at the start; 3D renders look mid; more motion and story built round the lyrics; don't repeat Drake photos; anime-style illustrations (not fully 3D); transitions up to the MJ reference; remove the constant shaking | v3 above |
 | 2026-10-31 | the first anime images look like AI slop; make them better (owner bought Canva Pro) | 90s hand-painted cel style, consistent couple |
+| 2026-10-31 | the Canva images still look AI slop; make them look like 90s anime | regenerated as 1993 TV-episode frames |
