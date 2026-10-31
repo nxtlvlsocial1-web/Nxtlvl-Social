@@ -114,5 +114,6 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
 - Never render a final until the person has approved the preview.
 - Never use music or images we don't have the rights to; source them through `media-use`.
 - Keep rendered MP4s out of git; deliver them, don't commit them.
-- Cover pages (reel thumbnails) are 9:16, 1080×1920, by default, even when the video itself is 16:9.
+- Reels are 16:9, 1920×1080 (`landscape`), by default, unless the person asks for another ratio.
+- Cover pages (reel thumbnails) are 9:16, 1080×1920, by default, even though the reel itself is 16:9.
   Keep the headline, visual and Comment-keyword pill inside the centre 1080×1440 so the profile-grid crop shows them.

@@ -36,6 +36,10 @@ Build the **master** at the first row the request needs, then make the other for
 | Feed square, LinkedIn                 | 1:1    | 1080×1080  | `square`            | 6–30 s            |
 | YouTube, LinkedIn landscape, X        | 16:9   | 1920×1080  | `landscape`         | 15–90 s           |
 
+- **House default:** we build Reels at **16:9, 1920×1080 (`landscape`)** unless the person asks for
+  another ratio (the table row above is the platform's native spec, not our default). Reel **covers**
+  are **9:16, 1080×1920**, with the headline, visual and Comment-keyword pill inside the centre
+  1080×1440 so the profile-grid crop shows them.
 - 4:5 has no preset: scaffold with `portrait` and set the root composition's `data-width="1080"`
   `data-height="1350"`.
 - 30 fps unless the brief says otherwise.
