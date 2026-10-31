@@ -1,19 +1,22 @@
-"""Spin Bout U (Drake & 21 Savage) lyric edit, 1:1, 60 s from the 2:13 bass drop: writes index.html.
+"""Spin Bout U (Drake & 21 Savage) lyric edit, 1:1, 60 s from the 2:13 bass drop, v2: writes index.html.
 
-python3 build/generate.py      (from the project root; after build/align.py and build/assets.py)
+python3 build/generate.py      (from the project root; after build/align.py, build/assets.py and build/glyphs.py)
 
-Built on the owner's two references: a Spin Bout U edit (square, black / maroon / magenta / off-white, hard halftone
-B&W photos and cut-outs, giant condensed caps layered behind the subject, magenta starburst badges, tag boxes, a script
-accent, a rounded photo card, corner credits typed on, zoom-blur and white-flash cuts, photo collages sliding into a
-grid) and an MJ "Smooth Criminal" edit (red scribble strokes, neon outline on the cut-out, slanted colour bands,
-directional smears, inverted flash frames). Frame pacing as in both: everything moves on a 20 fps step and the video is
-rendered at 20 fps. Captions are the owner's lyrics word for word (two n-words shown as N*GGA), each group appearing on
-its sung word (plan/lines.json). The owner's images map to the lines in plan/assets.md; the globe is drawn here.
+Built on the owner's two references, read frame by frame: a Spin Bout U edit (square; black / maroon / magenta /
+off-white; hard halftone B&W photos and cut-outs; giant condensed caps layered behind the subject; magenta starbursts
+and tag boxes; a script accent; a photo card that tilts in in perspective; cuts by sideways whip-smear with a light
+streak, zoom blur to a white frame, a circle reveal, a vertical drop blur, sliding strips, a small spinning card that
+zooms up to full frame, a white swoosh line) and an MJ "Smooth Criminal" edit (red scribbles, neon outlines, inverted
+frames). Motion tracking: every scene is three depth layers (background, subject with the words attached to it,
+overlay type) moved by one camera path at different rates. Everything steps at 20 fps and renders at 20 fps.
+Each of the owner's photos is used once; every other line has its own 3D render (assets/js/g3d.js, Three.js).
+Captions are the owner's lyrics on their sung words, with every cuss word shown only as a blurred ****.
 """
 import json
 import math
 import os
 import random
+import re
 
 from PIL import Image, ImageFont
 
@@ -22,12 +25,13 @@ S, DUR, FPS = 1080, 60.0, 20
 STEP = 1 / FPS
 L = json.load(open(os.path.join(ROOT, "plan", "lines.json")))
 BEATS = json.load(open(os.path.join(ROOT, "plan", "beats.json")))["beats"]
-INK, MAR, MAG, WHT, GRY = "#191919", "#5f1b30", "#a3214c", "#f0f2f2", "#8a8487"
+INK, MAR, MAG, WHT = "#191919", "#5f1b30", "#a3214c", "#f0f2f2"
 ANTON = ImageFont.truetype(os.path.join(ROOT, "assets", "fonts", "Anton.ttf"), 100)
-A, HIDE, BODY = [], [], []
+CURSE = {"ass", "hoes", "nigga", "niggas", "shitll", "shit"}
+A, HIDE, G3D = [], [], []
 R = random.Random(7)
 NID = [0]
-CUR = [None]
+CUR = {}
 
 
 def js(s):
@@ -40,24 +44,23 @@ def nid(p):
 
 
 def q(t):
-    """Snap a time to the 20 fps grid."""
     return round(t * FPS) / FPS
 
 
-def word(li, k):
-    w, s, e = L[li]["words"][k]
-    return w, s
-
-
 def text(li, i0, i1):
-    t = " ".join(w for w, s, e in L[li]["words"][i0:i1 + 1])
-    for a, b in (("niggas", "n*ggas"), ("nigga", "n*gga")):
-        t = t.replace(a, b)
-    return t
+    out = []
+    for w, s, e in L[li]["words"][i0:i1 + 1]:
+        core = re.sub(r"[^a-z]", "", w.lower())
+        out.append("****" + w[len(w.rstrip(",.")):] if core in CURSE else w)
+    return " ".join(out)
 
 
 def at(li, k):
     return q(L[li]["words"][k][1])
+
+
+def lt(li):
+    return q(L[li]["start"])
 
 
 def tw(t, size):
@@ -69,8 +72,8 @@ def fit(t, maxw, size):
 
 
 # ------------------------------------------------------------------------------------------------ primitives
-def put(html):
-    CUR[0].append(html)
+def put(html, ly=1):
+    CUR["ly"][ly].append(html)
 
 
 def show(sel, t0, t1):
@@ -81,74 +84,75 @@ def show(sel, t0, t1):
 
 
 def enter(sel, t, how, n=3):
-    t = q(t)
-    d = n * STEP
+    t, d = q(t), n * STEP
+    imm = "immediateRender: false"
     if how == "pop":
-        js(f'tl.fromTo("{sel}", {{scale: 1.6}}, {{scale: 1, duration: {d:.3f}, ease: "steps({n})", immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("{sel}", {{scale: 1.6}}, {{scale: 1, duration: {d:.3f}, ease: "steps({n})", {imm}}}, {t:.3f});')
     elif how in ("left", "right", "up", "down"):
-        dx, dy = {"left": (-420, 0), "right": (420, 0), "up": (0, 420), "down": (0, -420)}[how]
-        js(f'tl.fromTo("{sel}", {{x: {dx}, y: {dy}, filter: "blur(10px)"}}, {{x: 0, y: 0, filter: "blur(0px)", duration: {d:.3f}, '
-           f'ease: "steps({n})", immediateRender: false}}, {t:.3f});')
+        dx, dy = {"left": (-460, 0), "right": (460, 0), "up": (0, 460), "down": (0, -460)}[how]
+        js(f'tl.fromTo("{sel}", {{x: {dx}, y: {dy}, filter: "blur(12px)"}}, {{x: 0, y: 0, filter: "blur(0px)", duration: {d:.3f}, '
+           f'ease: "steps({n})", {imm}}}, {t:.3f});')
     elif how == "zoom":
-        js(f'tl.fromTo("{sel}", {{scale: 1.25, filter: "blur(14px)"}}, {{scale: 1, filter: "blur(0px)", duration: {d:.3f}, '
-           f'ease: "steps({n})", immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("{sel}", {{scale: 1.3, filter: "blur(16px)"}}, {{scale: 1, filter: "blur(0px)", duration: {d:.3f}, '
+           f'ease: "steps({n})", {imm}}}, {t:.3f});')
     elif how == "rise":
-        js(f'tl.fromTo("{sel}", {{y: 520}}, {{y: 0, duration: {d * 2:.3f}, ease: "steps({n * 2})", immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("{sel}", {{y: 560}}, {{y: 0, duration: {d * 2:.3f}, ease: "steps({n * 2})", {imm}}}, {t:.3f});')
+    elif how == "tilt":       # perspective tilt-in, like the reference's photo card and block letters
+        js(f'tl.fromTo("{sel}", {{rotationY: 62, rotationX: -14, scale: .72, transformPerspective: 900}}, {{rotationY: 0, rotationX: 0, '
+           f'scale: 1, duration: {(n + 2) * STEP:.3f}, ease: "steps({n + 2})", {imm}}}, {t:.3f});')
+    elif how == "flip":
+        js(f'tl.fromTo("{sel}", {{rotationX: 85, transformPerspective: 700, transformOrigin: "50% 100%"}}, {{rotationX: 0, '
+           f'duration: {d:.3f}, ease: "steps({n})", {imm}}}, {t:.3f});')
 
 
-def drift(sel, t0, t1, s=.06, x=0, y=0):
-    """Slow push while it holds, stepped at 20 fps."""
-    n = max(1, round((q(t1) - q(t0)) * FPS))
-    js(f'tl.fromTo("{sel}", {{scale: 1, xPercent: 0, yPercent: 0}}, {{scale: {1 + s:.3f}, xPercent: {x}, yPercent: {y}, '
-       f'duration: {n * STEP:.3f}, ease: "steps({n})", immediateRender: false}}, {q(t0):.3f});')
-
-
-def photo(src, x, y, w, h=None, rot=0, t0=0, t1=DUR, kind="cut", frame="", how="pop", z=3, glow=False, push=.05, cls="", pos=""):
+def photo(src, x, y, w, h=None, rot=0, t0=0, t1=DUR, kind="cut", frame="", how="pop", z=3, glow=False, push=.04, pos="", ly=1):
     i = nid("ph")
-    path = f"assets/img/{'cut' if kind == 'cut' else 'print'}/{src}.{'png' if kind == 'cut' else 'jpg'}"
+    path = f"assets/img/{'cut' if kind == 'cut' else ('print' if kind == 'print' else 'src')}/{src}.{'png' if kind == 'cut' else 'jpg'}"
     if h is None:
         iw, ih = Image.open(os.path.join(ROOT, path)).size
         h = w * ih / iw
-    style = f"left:{x:.0f}px;top:{y:.0f}px;width:{w:.0f}px;height:{h:.0f}px;transform:rotate({rot}deg);z-index:{z}"
-    c = f"ph {frame} {'glow' if glow else ''} {cls}".strip()
-    put(f'<div class="{c}" id="{i}" style="{style}"><div class="in"><img src="{path}" alt="" style="{pos}"></div></div>')
+    c = f"ph {frame} {'glow' if glow else ''}".strip()
+    put(f'<div class="{c}" id="{i}" style="left:{x:.0f}px;top:{y:.0f}px;width:{w:.0f}px;height:{h:.0f}px;transform:rotate({rot}deg);'
+        f'z-index:{z}"><div class="in"><img src="{path}" alt="" style="{pos}"></div></div>', ly)
     show(f"#{i}", t0, t1)
     if how:
         enter(f"#{i}", t0, how)
     if push:
-        drift(f"#{i} .in", t0, t1, push)
+        n = max(1, round((q(t1) - q(t0)) * FPS))
+        js(f'tl.fromTo("#{i} .in", {{scale: 1}}, {{scale: {1 + push:.3f}, duration: {n * STEP:.3f}, ease: "steps({n})", '
+           f'immediateRender: false}}, {q(t0):.3f});')
     return i
 
 
-def panel(x, y, w, h, color, t0, t1=DUR, rot=0, how="left", z=1, clip=""):
+def panel(x, y, w, h, color, t0, t1=DUR, rot=0, how="left", z=1, clip="", ly=0):
     i = nid("pn")
-    put(f'<i class="pn" id="{i}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px;background:{color};'
-        f'transform:rotate({rot}deg);z-index:{z};{f"clip-path:{clip};" if clip else ""}"></i>')
+    put(f'<i class="pn" id="{i}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px;background:{color};transform:rotate({rot}deg);'
+        f'z-index:{z};{f"clip-path:{clip};" if clip else ""}"></i>', ly)
     show(f"#{i}", t0, t1)
     if how:
         enter(f"#{i}", t0, how, 2)
     return i
 
 
-def cap(t, x, y, size, t0, t1=DUR, font="anton", color=WHT, how="letters", align="left", z=4, rot=0, box=None, stroke=None,
-        upper=True, ls=0):
-    """A caption. how: letters (snap on one per frame), slide-l/r, pop, drop (letters fall), none."""
+def cap(t, x, y, size, t0, t1=DUR, font="anton", color=WHT, how="letters", align="left", z=6, rot=0, box=None, stroke=None,
+        upper=True, ly=2):
+    """A caption; white or magenta type always carries a dark outline so it reads on any background."""
     i = nid("tx")
-    y = max(y, 84)                     # keep clear of the corner credits
     s = t.upper() if upper else t
-    fam = {"anton": "Anton", "script": "Kaushan Script", "marker": "Permanent Marker", "sans": "Inter Display"}[font]
-    sty = (f"left:{x:.0f}px;top:{y:.0f}px;font-family:'{fam}';font-size:{size:.0f}px;color:{color};z-index:{z};"
-           f"transform:rotate({rot}deg);letter-spacing:{ls}px;")
+    fam = {"anton": "Anton", "script": "Kaushan Script", "marker": "Permanent Marker"}[font]
+    sty = f"left:{x:.0f}px;top:{y:.0f}px;font-family:'{fam}';font-size:{size:.0f}px;color:{color};z-index:{z};transform:rotate({rot}deg);"
     if align == "center":
         sty += "translate:-50% 0;"
     elif align == "right":
         sty += "translate:-100% 0;"
     if box:
         sty += f"background:{box};padding:.02em .16em 0;"
-    if stroke:
-        sty += f"-webkit-text-stroke:{stroke};color:{INK};"      # outline type, filled with the background ink
-    chars = "".join(f'<span class="c">{c if c != " " else "&nbsp;"}</span>' for c in s)
-    put(f'<div class="tx" data-layout-allow-overlap id="{i}" style="{sty}">{chars}</div>')
+    elif stroke:
+        sty += f"-webkit-text-stroke:{stroke};color:{INK};"
+    else:                      # an outline in the opposite tone keeps every caption readable on light or dark
+        sty += f"-webkit-text-stroke:{max(4, size * .035):.0f}px {WHT if color == INK else INK};paint-order:stroke fill;"
+    chars = "".join(f'<span class="c{" cz" if c == "*" else ""}">{c if c != " " else "&nbsp;"}</span>' for c in s)
+    put(f'<div class="tx" data-layout-allow-overlap id="{i}" style="{sty}">{chars}</div>', ly)
     show(f"#{i}", t0, t1)
     t0 = q(t0)
     if how == "letters":
@@ -159,39 +163,40 @@ def cap(t, x, y, size, t0, t1=DUR, font="anton", color=WHT, how="letters", align
             js(f'tl.set("#{i} .c:nth-child(-n+{min(n, k + per)})", {{opacity: 1}}, {t0 + (k // per) * STEP:.3f});')
     elif how == "drop":
         for k in range(len(s)):
-            js(f'tl.fromTo("#{i} .c:nth-child({k + 1})", {{y: -620}}, {{y: 0, duration: {3 * STEP:.3f}, ease: "steps(3)", '
+            js(f'tl.fromTo("#{i} .c:nth-child({k + 1})", {{y: -640}}, {{y: 0, duration: {3 * STEP:.3f}, ease: "steps(3)", '
                f'immediateRender: false}}, {t0 + k * STEP:.3f});')
+    elif how == "blocks":     # letters arrive as tilted blocks, one per frame (the reference's PRAY)
+        for k in range(len(s)):
+            js(f'tl.fromTo("#{i} .c:nth-child({k + 1})", {{rotationX: 90, opacity: 0, transformPerspective: 600}}, {{rotationX: 0, opacity: 1, '
+               f'duration: {2 * STEP:.3f}, ease: "steps(2)", immediateRender: false}}, {t0 + k * STEP:.3f});')
     elif how.startswith("slide"):
         enter(f"#{i}", t0, "left" if how.endswith("l") else "right")
-    elif how == "pop":
-        enter(f"#{i}", t0, "pop")
+    elif how in ("pop", "tilt", "flip"):
+        enter(f"#{i}", t0, how)
     return i
 
 
-def burst(lines, x, y, r, t0, t1=DUR, z=5, color=MAG, size=None):
+def burst(lines, x, y, r, t0, t1=DUR, z=7, color=MAG, size=None, ly=2):
     i = nid("bu")
     g = random.Random(int(x * 7 + y))
     pts = []
     for k in range(36):
-        rr = r * (1 if k % 2 == 0 else .82 + g.uniform(-.03, .03))
+        rr = 1 if k % 2 == 0 else .82 + g.uniform(-.03, .03)
         a = k / 36 * math.tau
-        pts.append(f"{50 + 50 * rr / r * math.cos(a):.1f}% {50 + 50 * rr / r * math.sin(a):.1f}%")
+        pts.append(f"{50 + 50 * rr * math.cos(a):.1f}% {50 + 50 * rr * math.sin(a):.1f}%")
     size = size or r * .62 / max(1, len(lines)) * 1.6
-    inner = "<br>".join(lines)
-    put(f'<div class="bu" id="{i}" style="left:{x - r:.0f}px;top:{y - r:.0f}px;width:{2 * r:.0f}px;height:{2 * r:.0f}px;'
-        f'background:{color};clip-path:polygon({",".join(pts)});z-index:{z};font-size:{size:.0f}px">{inner}</div>')
+    put(f'<div class="bu" id="{i}" style="left:{x - r:.0f}px;top:{y - r:.0f}px;width:{2 * r:.0f}px;height:{2 * r:.0f}px;background:{color};'
+        f'clip-path:polygon({",".join(pts)});z-index:{z};font-size:{size:.0f}px">{"<br>".join(lines)}</div>', ly)
     show(f"#{i}", t0, t1)
-    js(f'tl.fromTo("#{i}", {{scale: 0, rotation: -30}}, {{scale: 1, rotation: 0, duration: {3 * STEP:.3f}, ease: "steps(3)", '
+    js(f'tl.fromTo("#{i}", {{scale: 0, rotation: -40}}, {{scale: 1, rotation: 0, duration: {3 * STEP:.3f}, ease: "steps(3)", '
        f'immediateRender: false}}, {q(t0):.3f});')
-    return i
 
 
-def scribble(pts, t0, t1=DUR, color="#e0242f", width=7, dur=.3, z=6):
-    """A hand-drawn stroke tracing round the subject (the MJ reference's red strokes), drawn on in steps."""
+def scribble(pts, t0, t1=DUR, color="#e0242f", width=7, dur=.3, z=8, ly=2):
     i = nid("sb")
     d = "M" + " L".join(f"{x:.0f} {y:.0f}" for x, y in pts)
     put(f'<svg class="sb" id="{i}" viewBox="0 0 {S} {S}" style="z-index:{z}"><path d="{d}" pathLength="1000" '
-        f'style="stroke:{color};stroke-width:{width}"/></svg>')
+        f'style="stroke:{color};stroke-width:{width}"/></svg>', ly)
     show(f"#{i}", t0, t1)
     n = max(2, round(dur * FPS))
     js(f'tl.fromTo("#{i} path", {{strokeDashoffset: 1000}}, {{strokeDashoffset: 0, duration: {n * STEP:.3f}, ease: "steps({n})", '
@@ -204,370 +209,326 @@ def jag(cx, cy, rx, ry, seed, n=16, wob=.22, turns=1.0):
              cy + ry * (1 + g.uniform(-wob, wob)) * math.sin(k / n * math.tau * turns)) for k in range(n + 1)]
 
 
-def phone_card(x, y, w, caller, t0, t1, press=None, accept=True, z=3, how="up"):
-    """The owner's incoming-call screen in a phone frame, the caller's name set on it; press = when a button is hit."""
+def rays(t0, t1, color=MAR, ly=0, z=1):
+    put('<svg class="rays" style="z-index:%d" viewBox="0 0 1080 1080">' % z + "".join(
+        f'<polygon fill="{color}" points="540,540 {540 + 900 * math.cos(a - .05):.0f},{540 + 900 * math.sin(a - .05):.0f} '
+        f'{540 + 900 * math.cos(a + .05):.0f},{540 + 900 * math.sin(a + .05):.0f}"/>' for a in [k * math.tau / 18 for k in range(18)]) + '</svg>', ly)
+
+
+def phone_card(x, y, w, caller, t0, t1, press, z=4, ly=1):
     i = nid("call")
     h = w * 1792 / 828
     put(f'<div class="call" id="{i}" style="left:{x}px;top:{y}px;width:{w:.0f}px;height:{h:.0f}px;z-index:{z}">'
         f'<img src="assets/img/src/incoming_call.jpg" alt=""><b>{caller}</b><small>mobile</small>'
-        f'<i class="hit" style="left:{(79 if accept else 21)}%;top:77%;background:{"#3fd25c" if accept else "#ff3b30"}"></i></div>')
+        f'<i class="hit" style="left:79%;top:77%;background:#3fd25c"></i></div>', ly)
     show(f"#{i}", t0, t1)
-    enter(f"#{i}", t0, how, 3)
-    k = 0
-    tt = q(t0) + .3
-    while tt < (press or t1) - .1:                     # the button pulses until it is hit
+    enter(f"#{i}", t0, "tilt")
+    tt, k = q(t0) + .3, 0
+    while tt < press - .1:
         js(f'tl.set("#{i} .hit", {{opacity: {.5 if k % 2 == 0 else 0}, scale: {1.6 if k % 2 == 0 else 1}}}, {tt:.3f});')
-        tt += .2
-        k += 1
-    if press:
-        js(f'tl.set("#{i} .hit", {{opacity: .95, scale: 1}}, {q(press):.3f});')
-        js(f'tl.to("#{i} .hit", {{scale: 30, opacity: 1, duration: {4 * STEP:.3f}, ease: "steps(4)"}}, {q(press) + STEP:.3f});')
-    return i
+        tt, k = tt + .2, k + 1
+    js(f'tl.set("#{i} .hit", {{opacity: .95, scale: 1}}, {q(press):.3f});')
+    js(f'tl.to("#{i} .hit", {{scale: 30, opacity: 1, duration: {4 * STEP:.3f}, ease: "steps(4)"}}, {q(press) + STEP:.3f});')
 
 
-def globe(cx, cy, r, t0, t1, z=3):
-    """Our own globe (the supplied one carried a stock watermark): a turning wireframe, dashed orbit, three planes."""
-    i = nid("gl")
-    par = "".join(f'<ellipse cx="{cx}" cy="{cy + r * math.sin(a):.0f}" rx="{r * math.cos(a):.0f}" ry="{r * .08 * math.cos(a):.0f}"/>'
-                  for a in (-1.0, -.5, 0, .5, 1.0))
-    mer = "".join(f'<ellipse class="m{k}" cx="{cx}" cy="{cy}" rx="{r}" ry="{r}"/>' for k in range(6))
-    plane = ('<path d="M0 -14 L4 -4 L22 4 L22 8 L4 4 L3 14 L9 18 L9 21 L0 18 L-9 21 L-9 18 L-3 14 L-4 4 L-22 8 L-22 4 L-4 -4 Z" '
-             'fill="#f0f2f2"/>')
-    planes = "".join(f'<g class="pl" id="{i}p{k}">{plane}</g>' for k in range(3))
-    put(f'<svg class="gl" id="{i}" viewBox="0 0 {S} {S}" style="z-index:{z}"><circle cx="{cx}" cy="{cy}" r="{r}" class="rim"/>'
-        f'{par}{mer}<ellipse class="orb" cx="{cx}" cy="{cy}" rx="{r * 1.55:.0f}" ry="{r * .5:.0f}" '
-        f'transform="rotate(-18 {cx} {cy})"/>{planes}</svg>')
-    show(f"#{i}", t0, t1)
-    enter(f"#{i}", t0, "zoom")
-    n = round((q(t1) - q(t0)) * FPS)
-    for f in range(n + 1):
-        tt = q(t0) + f * STEP
-        ph = f * .09
-        for k in range(6):
-            rx = abs(r * math.cos(ph + k * math.pi / 6))
-            js(f'tl.set("#{i} .m{k}", {{attr: {{rx: {rx:.0f}}}}}, {tt:.3f});')
-        for k in range(3):
-            a = ph * .9 + k * math.tau / 3
-            px, py = r * 1.55 * math.cos(a), r * .5 * math.sin(a)
-            c, s_ = math.cos(math.radians(-18)), math.sin(math.radians(-18))
-            X, Y = cx + px * c - py * s_, cy + px * s_ + py * c
-            ang = math.degrees(math.atan2(r * .5 * math.cos(a) * c + r * 1.55 * -math.sin(a) * s_ * 0,
-                                          -r * 1.55 * math.sin(a))) + 90
-            js(f'tl.set("#{i}p{k}", {{attr: {{transform: "translate({X:.0f} {Y:.0f}) rotate({ang:.0f}) scale({.9 + .4 * math.sin(a):.2f})"}}, '
-               f'opacity: {1 if math.sin(a) > -.3 else .35}}}, {tt:.3f});')
-
-
-def road(t0, t1, z=2):
-    """Perspective road lines rushing to a vanishing point (end of the road)."""
-    i = nid("rd")
-    vx, vy = 540, 430
-    lines = "".join(f'<line x1="{vx}" y1="{vy}" x2="{x}" y2="1080"/>' for x in (-300, 180, 900, 1380))
-    dashes = "".join(f'<line class="d{k}" x1="{vx}" y1="{vy}" x2="{vx}" y2="1080"/>' for k in range(1))
-    put(f'<svg class="rd" id="{i}" viewBox="0 0 {S} {S}" style="z-index:{z}">{lines}{dashes}</svg>')
-    show(f"#{i}", t0, t1)
-    n = round((q(t1) - q(t0)) * FPS)
-    for f in range(n):
-        js(f'tl.set("#{i} .d0", {{attr: {{"stroke-dashoffset": {-f * 26}}}}}, {q(t0) + f * STEP:.3f});')
+def g3(kind, t0, t1, z=3, **cues):
+    """A 3D render (assets/js/g3d.js), pre-rendered by build/render3d.cjs to assets/video/g3d/<id>.mp4 on the scene's
+    background colour and played here; cue times are relative to t0."""
+    i = nid("g")
+    t0, t1 = q(t0), q(t1)
+    put(f'<div class="g3" style="z-index:{z}"><video id="v{i}" class="clip" src="assets/video/g3d/{i}.mp4" data-start="{t0:.3f}" '
+        f'data-duration="{t1 - t0:.3f}" data-track-index="{3 + len(G3D)}" muted playsinline></video></div>', 1)
+    G3D.append({"id": i, "kind": kind, "t0": t0, "t1": t1, "bg": CUR["bg"], "cues": cues})
 
 
 # ------------------------------------------------------------------------------------------------ scenes
-SCENES = []        # (t0, t1, id)
+SCENES = []        # [t0, t1, id, bg, layers, camera]
 
 
-def scene(t0, t1, bg=INK):
+def scene(t0, t1, bg=INK, cam=(0, 0, .06)):
+    """cam: (dx, dy, dz) the camera travels over the scene; the background moves at .35, the subject layer at 1, the
+    overlay type at 1.45 of it (the reference's parallax)."""
     i = f"sc{len(SCENES)}"
-    CUR[0] = []
-    SCENES.append([q(t0), q(t1), i, bg, CUR[0]])
-    return i
-
-
-def lt(li):
-    return q(L[li]["start"])
+    CUR["ly"] = [[], [], []]
+    CUR["bg"] = bg
+    SCENES.append([q(t0), q(t1), i, bg, CUR["ly"], cam])
 
 
 def build():
     E = [lt(k) for k in range(len(L))] + [DUR]
 
-    # S0 intro: the drop. Rounded halftone card, tags, script title.
-    scene(0, E[0])
-    panel(0, 0, S, S, INK, 0, E[0], how="")
-    put('<svg class="rays" style="z-index:1" viewBox="0 0 1080 1080">' + "".join(
-        f'<polygon points="540,540 {540 + 900 * math.cos(a - .05):.0f},{540 + 900 * math.sin(a - .05):.0f} '
-        f'{540 + 900 * math.cos(a + .05):.0f},{540 + 900 * math.sin(a + .05):.0f}"/>' for a in [k * math.tau / 18 for k in range(18)]) + '</svg>')
-    photo("drake_back_jacket", 230, 150, 620, 780, 0, 0, E[0], kind="print", frame="round", how="zoom", push=.08,
+    # S0 the drop: Drake from behind on a rounded card that tilts in over starburst rays; DRAKE / 21 SAVAGE tags; title.
+    scene(0, E[0], cam=(0, -18, .1))
+    rays(0, E[0])
+    photo("drake_back_jacket", 230, 150, 620, 780, 0, 0, E[0], kind="print", frame="round", how="tilt", push=.08,
           pos="object-position:50% 100%;transform:scale(1.9);transform-origin:50% 92%")
-    cap("Drake", 170, 210, 96, .25, E[0], box=MAG, rot=-5, how="pop")
-    cap("21 Savage", 650, 800, 80, .6, E[0], box=MAG, rot=-4, how="pop")
-    cap("Spin", 540, 360, 230, 1.05, E[0], font="script", color=MAG, align="center", upper=False, how="pop", rot=-8)
-    cap("Bout U", 540, 560, 190, 1.25, E[0], align="center", how="letters")
-    scribble(jag(540, 520, 400, 190, 3, 24, .05, 1.06), 1.6, E[0], color=WHT, width=6, dur=.35, z=1)
+    cap("Drake", 170, 210, 96, .25, E[0], box=MAG, rot=-5, how="pop", ly=1)
+    cap("21 Savage", 650, 800, 80, .6, E[0], box=MAG, rot=-4, how="pop", ly=1)
+    cap("Spin", 540, 330, 230, 1.05, E[0], font="script", color=MAG, align="center", upper=False, how="pop", rot=-8)
+    cap("Bout U", 540, 540, 190, 1.25, E[0], align="center", how="blocks")
 
-    # S1 Jealous-ass hoes, yeah: maroon field, giant JEALOUS behind him, tag, marker yeah.
+    # S1 Jealous-**** ****, yeah: Drake laughing, JEALOUS behind him (moves with him), a censored tag, marker yeah.
     li = 0
-    scene(E[0], E[1])
-    panel(0, 0, S, S, MAR, E[0], E[1], how="")
+    scene(E[0], E[1], bg=MAR, cam=(20, -12, .08))
     panel(560, 0, 520, S, MAG, E[0], E[1], how="right", clip="polygon(18% 0,100% 0,100% 100%,0 100%)")
-    cap("JEALOUS", 40, 40, fit("JEALOUS", 1000, 360), at(li, 0), E[1], how="letters")
-    photo("drake_laugh_hands", 250, 250, 620, None, 0, at(li, 0), E[1], how="rise", push=.07)
-    cap("ass hoes,", 620, 830, 110, at(li, 1), E[1], box=WHT, color=MAG, rot=-4, how="pop", z=5)
-    cap("yeah", 120, 790, 150, at(li, 3), E[1], font="marker", color=WHT, upper=False, rot=-10, how="pop", z=5)
-    scribble(jag(560, 520, 360, 430, 11, 18, .18), at(li, 3), E[1], dur=.35)
+    cap("JEALOUS", 50, 90, fit("JEALOUS", 940, 350), at(li, 0), E[1], how="blocks", ly=1, z=2)
+    photo("drake_laugh_hands", 250, 260, 620, None, 0, at(li, 0), E[1], how="rise", push=0)
+    cap(text(li, 1, 2) + ",", 560, 830, 120, at(li, 1), E[1], box=WHT, color=MAG, rot=-4, how="pop")
+    cap("yeah", 110, 790, 160, at(li, 3), E[1], font="marker", upper=False, rot=-10, how="pop")
+    scribble(jag(560, 540, 360, 420, 11, 18, .18), at(li, 3), E[1], dur=.35)
 
-    # S2 ...'bout bein' in Vogue: the cat Vogue cover slides in, script VOGUE.
+    # S2 ...'bout bein' in Vogue: the cat Vogue cover tilts in, the words stack, script VOGUE.
     li = 1
-    scene(E[1], E[2])
-    photo("vogue_cat_cover", 330, 70, 640, 905, 4, lt(li), E[2], kind="print", how="right", push=.05, z=2)
-    cap(text(li, 0, 2), 50, 140, 96, at(li, 0), E[2])
-    cap(text(li, 3, 5), 50, 260, 96, at(li, 3), E[2])
-    cap(text(li, 6, 8), 50, 380, 96, at(li, 6), E[2], color=MAG)
-    cap("Vogue", 360, 760, 250, at(li, 9), E[2], font="script", color=MAG, upper=False, rot=-10, how="pop", z=6)
+    scene(E[1], E[2], cam=(-15, 0, .07))
+    photo("vogue_cat_cover", 330, 90, 640, 905, 4, lt(li), E[2], kind="print", how="tilt", z=2)
+    cap(text(li, 0, 2), 50, 150, 96, at(li, 0), E[2], how="slide-l")
+    cap(text(li, 3, 5), 50, 270, 96, at(li, 3), E[2], how="slide-l")
+    cap(text(li, 6, 8), 50, 390, 96, at(li, 6), E[2], color=MAG, how="slide-l")
+    cap("Vogue", 360, 760, 250, at(li, 9), E[2], font="script", color=MAG, upper=False, rot=-10, how="pop")
     scribble(jag(560, 860, 300, 110, 5, 18, .08, 1.08), at(li, 9) + .15, E[2], color=WHT, width=6)
 
-    # S3 like that R&B group from the '90s: En Vogue in a rounded card, R&B GROUP, '90s burst.
+    # S3 that R&B group from the '90s: En Vogue on a rounded card, R&B GROUP, a '90s burst.
     li = 2
-    scene(E[2], E[3])
-    panel(0, 0, S, S, MAR, E[2], E[3], how="")
-    cap(text(li, 0, 3), 540, 40, 92, at(li, 0), E[3], align="center")
-    photo("envogue_funky_divas", 230, 170, 620, 620, -3, lt(li), E[3], kind="print", frame="round", how="zoom", push=.06, z=3)
-    cap("R&B group", 540, 760, fit("R&B GROUP", 1000, 250), at(li, 4), E[3], align="center", z=4)
-    burst(["'90s"], 900, 230, 150, at(li, 8), E[3], size=110)
-    cap("from the", 120, 270, 70, at(li, 6), E[3], box=WHT, color=MAG, rot=-6, how="pop", z=5)
+    scene(E[2], E[3], bg=MAR, cam=(0, 18, .08))
+    cap(text(li, 0, 3), 540, 96, 92, at(li, 0), E[3], align="center", how="flip")
+    photo("envogue_funky_divas", 230, 200, 620, 620, -3, lt(li), E[3], kind="print", frame="round", how="zoom", z=3)
+    cap("R&B group", 540, 760, fit("R&B GROUP", 1000, 250), at(li, 4), E[3], align="center", how="blocks", ly=1, z=4)
+    burst(["'90s"], 900, 260, 150, at(li, 8), E[3], size=110)
+    cap("from the", 120, 300, 70, at(li, 6), E[3], box=WHT, color=MAG, rot=-6, how="pop")
 
-    # S4 Girl, one call, I'll get you in Vogue: hand with phone, the incoming call (VOGUE), accepted on "Vogue".
+    # S4 Girl, one call, I'll get you in Vogue: the hand with the phone, the call screen (Vogue) answered on "Vogue".
     li = 3
-    scene(E[3], E[4])
-    panel(0, 0, S, S, INK, E[3], E[4], how="")
+    scene(E[3], E[4], cam=(-20, 0, .06))
     panel(0, 640, S, 440, MAG, E[3], E[4], how="up", clip="polygon(0 22%,100% 0,100% 100%,0 100%)")
-    cap("Girl,", 60, 60, 150, at(li, 0), E[4], font="marker", upper=False, rot=-8, how="pop")
-    cap("ONE CALL", 60, 230, fit("ONE CALL", 560, 260), at(li, 1), E[4])
-    phone_card(640, 90, 360, "Vogue", lt(li), E[4], press=at(li, 7))
-    photo("hand_phone_sticker", 40, 520, 520, None, -8, at(li, 1), E[4], how="rise", push=.04, z=4)
-    cap(text(li, 3, 6), 560, 880, 86, at(li, 3), E[4], z=6, align="center")
-    cap("Vogue", 820, 640, 170, at(li, 7), E[4], font="script", color=WHT, upper=False, rot=-10, how="pop", z=7)
+    cap("Girl,", 60, 96, 150, at(li, 0), E[4], font="marker", upper=False, rot=-8, how="pop")
+    cap("ONE CALL", 60, 260, fit("ONE CALL", 560, 250), at(li, 1), E[4], how="blocks")
+    phone_card(640, 110, 360, "Vogue", lt(li), E[4], press=at(li, 7))
+    photo("hand_phone_sticker", 40, 520, 520, None, -8, at(li, 1), E[4], how="rise", push=0, z=5)
+    cap(text(li, 3, 6), 560, 880, 86, at(li, 3), E[4], align="center")
+    cap("Vogue", 820, 640, 170, at(li, 7), E[4], font="script", upper=False, rot=-10, how="pop", z=8)
 
-    # S5 One call, you in runway shows: the pearl cat (runway), magenta runway band, RUNWAY / SHOWS.
+    # S5 One call, you in runway shows: the pearl cat on its white page, a magenta runway band.
     li = 4
-    scene(E[4], E[5], bg=WHT)
-    panel(0, 0, S, S, WHT, E[4], E[5], how="")
-    panel(-100, 380, 1300, 260, MAG, E[4], E[5], rot=-12, how="left")
-    photo("rolex_cat_ad", 300, 40, 700, 956, 0, lt(li), E[5], kind="print", how="zoom", push=.05, z=3, cls="mult")
-    cap(text(li, 0, 1), 60, 60, 110, at(li, 0), E[5], color=INK)
-    cap(text(li, 2, 3), 60, 190, 110, at(li, 2), E[5], color=INK)
-    cap("RUNWAY", 30, 600, fit("RUNWAY", 760, 300), at(li, 4), E[5], color=WHT, z=5, rot=-12, how="slide-l")
-    cap("SHOWS", 520, 840, 200, at(li, 5), E[5], color=INK, z=5, how="letters")
+    scene(E[4], E[5], bg=WHT, cam=(0, -24, .06))
+    panel(-100, 380, 1300, 260, MAG, E[4], E[5], rot=-12, how="left", z=2)
+    photo("rolex_cat_ad", 300, 40, 700, 956, 0, lt(li), E[5], kind="print", how="zoom", z=3, ly=1)
+    cap(text(li, 0, 1), 60, 96, 110, at(li, 0), E[5], color=INK, how="slide-l")
+    cap(text(li, 2, 3), 60, 226, 110, at(li, 2), E[5], color=INK, how="slide-l")
+    cap("RUNWAY", 30, 600, fit("RUNWAY", 760, 290), at(li, 4), E[5], rot=-12, how="slide-l")
+    cap("SHOWS", 520, 840, 200, at(li, 5), E[5], color=INK, how="blocks")
 
-    # S6 One call, I'm sittin' front row: Drake in Chanel with a neon outline, FRONT ROW stacked behind.
+    # S6 One call, I'm sittin' front row: Drake in Chanel with a neon outline, FRONT ROW stacked behind (with him).
     li = 5
-    scene(E[5], E[6])
-    panel(0, 0, S, S, INK, E[5], E[6], how="")
+    scene(E[5], E[6], cam=(-25, 0, .07))
     for k in range(4):
-        cap("FRONT ROW", 40, 90 + k * 230, 250, at(li, 4) + k * STEP, E[6], z=2,
+        cap("FRONT ROW", 40, 100 + k * 230, 250, at(li, 4) + k * STEP, E[6], z=2, ly=1,
             stroke=f"3px {WHT}" if k else None, color=MAG if k == 0 else WHT, how="none")
-    photo("drake_chanel_night", 380, 160, 700, None, 0, lt(li), E[6], how="right", glow=True, push=.06, z=3)
-    cap(text(li, 0, 1), 50, 40, 120, at(li, 0), E[6], box=MAG, z=5, how="pop")
-    cap(text(li, 2, 3), 60, 900, 120, at(li, 2), E[6], z=5)
+    photo("drake_chanel_night", 380, 170, 700, None, 0, lt(li), E[6], how="right", glow=True, push=0)
+    cap(text(li, 0, 1), 50, 96, 120, at(li, 0), E[6], box=MAG, how="pop")
+    cap(text(li, 2, 3), 60, 900, 120, at(li, 2), E[6])
 
-    # S7 One wrong call from your ex ... sent home: the EX calls and gets declined, then the dumb cat, SENT HOME.
+    # S7 One wrong call from your ex **** ...: a 3D phone, the ex declined and X-ed; then the dumb cat, SENT HOME.
     li = 6
     mid = at(li, 8)
-    scene(E[6], E[7])
-    panel(0, 0, S, S, MAR, E[6], E[7], how="")
-    cap(text(li, 0, 2), 50, 60, fit(text(li, 0, 2).upper(), 600, 170), at(li, 0), mid)
-    phone_card(660, 80, 340, "Ex", lt(li), mid, press=at(li, 5), accept=False)
-    cap(text(li, 3, 6), 50, 300, 110, at(li, 3), mid, color=WHT, box=MAG, rot=-3)
-    scribble([(640, 60), (1040, 820)], at(li, 5) + .1, mid, color="#ff3b30", width=16, dur=.15, z=8)
-    scribble([(1040, 60), (640, 820)], at(li, 5) + .2, mid, color="#ff3b30", width=16, dur=.15, z=8)
-    photo("cat_white_dumb", 250, 230, 580, 540, 3, mid, E[7], kind="print", frame="round", how="zoom", push=.08, z=3)
-    burst(["DUMB"], 250, 260, 150, mid, E[7], size=96)
-    cap(text(li, 7, 7), 60, 60, 110, at(li, 7), E[7], z=5)
-    cap(text(li, 9, 11), 540, 60, 110, at(li, 9), E[7], z=5, color=MAG, box=WHT)
-    cap("SENT HOME", 540, 770, fit("SENT HOME", 1000, 260), at(li, 12), E[7], align="center", z=5)
+    scene(E[6], E[7], bg=MAR, cam=(0, 0, .06))
+    g3("phone", lt(li), mid, hit=round(at(li, 5) - lt(li), 3))
+    cap(text(li, 0, 2), 50, 96, fit(text(li, 0, 2).upper(), 980, 150), at(li, 0), mid, how="blocks")
+    cap(text(li, 3, 6), 50, 860, 110, at(li, 3), mid, box=MAG)
+    photo("cat_white_dumb", 250, 230, 580, 540, 3, mid, E[7], kind="print", frame="round", how="zoom", push=.08, z=4)
+    burst(["DUMB"], 870, 470, 140, mid, E[7], size=92)
+    cap(text(li, 7, 7), 60, 96, 100, at(li, 7), E[7])
+    cap(text(li, 9, 11), 400, 96, 100, at(li, 9), E[7], color=MAG, box=WHT)
+    cap("SENT HOME", 540, 780, fit("SENT HOME", 1000, 250), at(li, 12), E[7], align="center", how="blocks")
 
-    # S8 One call and my n*ggas ten toes: Drake in Nocta, TEN TOES behind him.
+    # S8 One call and my **** ten toes: Drake in Nocta on white, TEN TOES behind him.
     li = 7
-    scene(E[7], E[8], bg=WHT)
-    panel(0, 0, S, S, WHT, E[7], E[8], how="")
-    cap("TEN", 30, 130, 430, at(li, 5), E[8], color=MAG, z=2)
-    cap("TOES", 30, 560, 340, at(li, 6), E[8], color=INK, z=2)
-    photo("drake_nocta_red", 540, 120, 540, None, 0, lt(li), E[8], how="zoom", push=.05, z=3)
-    cap(text(li, 0, 2), 40, 40, 110, at(li, 0), E[8], color=WHT, box=INK, z=5, how="pop")
-    cap(text(li, 3, 4), 640, 930, 100, at(li, 3), E[8], color=WHT, box=MAG, z=5, rot=-3, how="pop")
+    scene(E[7], E[8], bg=WHT, cam=(15, 0, .06))
+    cap("TEN", 30, 140, 430, at(li, 5), E[8], color=MAG, z=2, ly=1, how="blocks")
+    cap("TOES", 30, 570, 340, at(li, 6), E[8], color=INK, z=2, ly=1, how="blocks")
+    photo("drake_nocta_red", 540, 120, 540, None, 0, lt(li), E[8], how="zoom", push=0)
+    cap(text(li, 0, 2), 40, 96, 110, at(li, 0), E[8], color=WHT, box=INK, how="pop")
+    cap(text(li, 3, 4), 640, 930, 100, at(li, 3), E[8], color=WHT, box=MAG, rot=-3, how="pop")
 
-    # S9 Down to go wherever I say go: Drake points, a stroke and GO burst where he points.
+    # S9 Down to go wherever I say go: Drake points from the boat, a stroke to the GO burst.
     li = 8
-    scene(E[8], E[9])
-    panel(0, 0, S, S, INK, E[8], E[9], how="")
+    scene(E[8], E[9], cam=(30, 0, .06))
     panel(0, 0, S, 360, MAR, E[8], E[9], how="down")
-    photo("drake_boat_sunset", 120, 260, 640, None, 0, lt(li), E[9], how="left", push=.05, z=3)
-    cap(text(li, 0, 2), 60, 60, 120, at(li, 0), E[9], z=4)
-    cap("WHEREVER", 40, 800, fit("WHEREVER", 1000, 250), at(li, 3), E[9], z=5, color=WHT, how="slide-r")
-    scribble([(700, 300), (800, 250), (880, 220), (960, 210)], at(li, 4), E[9], color=WHT, width=8, dur=.2, z=6)
-    burst(["I SAY", "GO"], 900, 230, 170, at(li, 5), E[9], size=84)
+    photo("drake_boat_sunset", 120, 270, 640, None, 0, lt(li), E[9], how="left", push=0)
+    cap(text(li, 0, 2), 60, 96, 120, at(li, 0), E[9], how="flip")
+    cap("WHEREVER", 50, 800, fit("WHEREVER", 940, 250), at(li, 3), E[9], how="slide-r")
+    scribble([(700, 310), (800, 260), (880, 230), (960, 220)], at(li, 4), E[9], color=WHT, width=8, dur=.2)
+    burst(["I SAY", "GO"], 900, 240, 170, at(li, 5), E[9], size=84)
 
-    # S10 Even if we gotta travel 'cross the globe: our globe turning, planes on the orbit.
+    # S10 travel 'cross the globe: the 3D globe, orbit and planes.
     li = 9
-    scene(E[9], E[10])
-    panel(0, 0, S, S, INK, E[9], E[10], how="")
-    globe(540, 560, 300, lt(li), E[10])
-    cap(text(li, 0, 3), 540, 40, 96, at(li, 0), E[10], align="center")
-    cap("TRAVEL", 540, 140, fit("TRAVEL", 900, 240), at(li, 4), E[10], align="center", color=MAG, z=2)
-    cap("'cross the globe", 540, 900, 120, at(li, 5), E[10], align="center", box=MAG, how="pop", z=5)
+    scene(E[9], E[10], cam=(0, 0, .05))
+    g3("globe", lt(li), E[10])
+    cap(text(li, 0, 3), 540, 96, 96, at(li, 0), E[10], align="center", how="flip")
+    cap("TRAVEL", 540, 200, fit("TRAVEL", 900, 230), at(li, 4), E[10], align="center", color=MAG, how="blocks")
+    cap("'cross the globe", 540, 900, 120, at(li, 5), E[10], align="center", box=MAG, how="pop")
 
-    # S11 Down to take you to the end of the road, for real: the boat at sunset, the road rushing, FOR REAL.
+    # S11 to the end of the road, for real: the 3D road at dusk, the sign passing.
     li = 10
-    scene(E[10], E[11])
-    photo("drake_boat_sunset", 0, 0, S, S, 0, lt(li), E[11], kind="print", how="zoom", push=.12, z=1)
-    panel(0, 0, S, S, "rgba(25,25,25,.58)", lt(li), E[11], how="", z=1)
-    road(lt(li), E[11])
-    cap(text(li, 0, 3), 540, 60, 100, at(li, 0), E[11], align="center", z=4, box=INK)
-    cap("TO THE END", 540, 260, 180, at(li, 4), E[11], align="center", z=4)
-    cap("OF THE ROAD", 540, 470, 180, at(li, 7), E[11], align="center", z=4, color=MAG)
-    cap("for real", 540, 760, 220, at(li, 10), E[11], font="marker", upper=False, align="center", rot=-8, how="pop", z=5)
+    scene(E[10], E[11], bg=MAR, cam=(0, 0, .03))
+    g3("road", lt(li), E[11])
+    cap(text(li, 0, 3), 540, 96, 100, at(li, 0), E[11], align="center", box=INK)
+    cap("TO THE END", 540, 230, 170, at(li, 4), E[11], align="center", how="blocks")
+    cap("OF THE ROAD", 540, 420, 170, at(li, 7), E[11], align="center", color=MAG, how="blocks")
+    cap("for real", 540, 760, 220, at(li, 10), E[11], font="marker", upper=False, align="center", rot=-8, how="pop")
 
-    # S12 / S16 hook: The way you make me feel these days (collage builds a panel per word, script THESE DAYS)
-    def hook(li, pics, bgcol):
-        t0, t1 = lt(li), E[li + 1]
-        scene(t0, t1)
-        panel(0, 0, S, S, bgcol, t0, t1, how="")
-        slots = [(30, 30, 500, 500), (550, 30, 500, 500), (30, 550, 500, 500), (550, 550, 500, 500)]
-        words = [(0, 1), (2, 2), (3, 4), (5, 5)]
-        for k, ((x, y, w, h), (i0, i1), (src, kind)) in enumerate(zip(slots, words, pics)):
-            tt = at(li, i0)
-            photo(src, x, y, w, h, R.choice([-2, 2, -1]), tt, t1, kind=kind, frame="tile", how=["left", "down", "up", "right"][k], push=.08, z=2)
-            cap(text(li, i0, i1), x + w / 2, y + h - 190, fit(text(li, i0, i1).upper(), w - 40, 200), tt + STEP, t1, align="center",
-                z=4, color=WHT if k % 2 == 0 else MAG)
-        tdays = at(li, 6)
-        panel(0, 380, S, 320, MAG, tdays, t1, rot=-6, how="left", z=5)
-        cap("these days", 540, 400, 230, tdays, t1, font="script", upper=False, align="center", z=6, rot=-6, how="pop")
-        burst(["THESE", "DAYS"], 880, 230, 120, at(li, 7), t1, z=7, color=INK, size=60)
+    # S12 hook 1: The way you make me feel these days, as 3D words; the black cat for "these days".
+    li = 11
+    scene(E[11], E[12], cam=(0, -18, .06))
+    tl0 = lt(li)
+    ws = [("THE WAY", 1.7, -0.6, 3.0, at(li, 0)), ("YOU", 2.1, 0.9, 0.9, at(li, 2)), ("MAKE ME", 1.7, -0.4, -1.2, at(li, 3)),
+          ("FEEL", 2.4, 0.5, -3.5, at(li, 5))]
+    g3("words", tl0, E[12], words=[{"t": w, "s": s_, "x": x, "y": y, "at": round(a - tl0, 3)} for w, s_, x, y, a in ws])
+    td = at(li, 6)
+    panel(0, 380, S, 320, MAG, td, E[12], rot=-6, how="left", z=5, ly=2)
+    photo("cat_black_collar", 640, 90, 400, None, 6, td, E[12], how="pop", glow=True, push=0, z=6, ly=2)
+    cap("these days", 470, 400, 220, td, E[12], font="script", upper=False, align="center", rot=-6, how="pop", z=7)
 
-    hook(11, [("drake_chanel_night", "print"), ("drake_nocta_red", "print"), ("drake_laugh_hands", "print"),
-              ("drake_back_jacket", "print")], INK)
-
-    # S13 Somethin' gettin' dropped for you, baby girl: the black cat (baby girl), DROPPED falls in.
+    # S13 Somethin' gettin' dropped for you, baby girl: 3D diamonds rain and bounce, DROPPED falls in.
     li = 12
-    scene(E[12], E[13])
-    panel(0, 0, S, S, MAR, E[12], E[13], how="")
-    cap(text(li, 0, 1), 60, 60, 110, at(li, 0), E[13])
-    cap("DROPPED", 40, 200, fit("DROPPED", 1000, 330), at(li, 2), E[13], how="drop", z=2)
-    photo("cat_black_collar", 300, 380, 520, None, 0, lt(li), E[13], how="rise", glow=True, push=.05, z=3)
-    cap(text(li, 3, 4), 60, 880, 110, at(li, 3), E[13], box=WHT, color=MAG, how="pop", z=5)
-    burst(["BABY", "GIRL"], 860, 760, 170, at(li, 5), E[13], size=84)
+    scene(E[12], E[13], bg=MAR, cam=(0, 24, .06))
+    g3("diamonds", lt(li), E[13], drop=round(at(li, 2) - lt(li), 3))
+    cap(text(li, 0, 1), 60, 96, 110, at(li, 0), E[13], how="flip")
+    cap("DROPPED", 40, 210, fit("DROPPED", 1000, 300), at(li, 2), E[13], how="drop", z=2, ly=1)
+    cap(text(li, 3, 4), 60, 880, 110, at(li, 3), E[13], box=WHT, color=MAG, how="pop")
+    burst(["BABY", "GIRL"], 860, 790, 170, at(li, 5), E[13], size=84)
 
-    # S14 Smoke a n*gga top for you, baby girl: Drake in Chanel close up, SMOKE blurs in.
+    # S14 Smoke a **** top for you, baby girl: 3D SMOKE inside rising smoke.
     li = 13
-    scene(E[13], E[14])
-    photo("drake_chanel_night", 0, 0, S, S, 0, lt(li), E[14], kind="print", how="zoom", push=.14, z=1)
-    panel(0, 640, S, 440, INK, E[13], E[14], how="up", z=2, clip="polygon(0 30%,100% 0,100% 100%,0 100%)")
-    sm = cap("SMOKE", 40, 40, fit("SMOKE", 1000, 380), at(li, 0), E[14], how="none", z=3)
-    js(f'tl.fromTo("#{sm}", {{filter: "blur(30px)", opacity: 0}}, {{filter: "blur(0px)", opacity: 1, duration: {6 * STEP:.3f}, '
-       f'ease: "steps(6)", immediateRender: false}}, {at(li, 0):.3f});')
-    cap(text(li, 1, 3), 60, 780, 130, at(li, 1), E[14], z=4)
-    cap(text(li, 4, 5), 640, 640, 110, at(li, 4), E[14], z=4, color=MAG, box=WHT)
-    cap("baby girl", 540, 900, 160, at(li, 6), E[14], font="script", color=WHT, upper=False, align="center", rot=-6, how="pop", z=5)
+    scene(E[13], E[14], cam=(0, -18, .05))
+    g3("smoke", lt(li), E[14])
+    cap(text(li, 1, 3), 60, 760, 130, at(li, 1), E[14], how="slide-l")
+    cap(text(li, 4, 5), 640, 640, 110, at(li, 4), E[14], color=MAG, box=WHT, how="pop")
+    cap("baby girl", 540, 900, 160, at(li, 6), E[14], font="script", upper=False, align="center", rot=-6, how="pop")
 
-    # S15 Burn somebody block for you: Drake from behind, BURN flickers, BLOCK stamps.
+    # S15 Burn somebody block for you: the 3D city block burning, BURN flickering, BLOCK stamped.
     li = 14
-    scene(E[14], E[15])
-    photo("drake_back_jacket", 0, 0, S, S, 0, lt(li), E[15], kind="print", how="zoom", push=.06, z=1,
-          pos="object-position:50% 100%;transform:scale(1.7);transform-origin:50% 95%")
-    b = cap("BURN", 40, 40, fit("BURN", 1000, 420), at(li, 0), E[15], z=3, how="none")
+    scene(E[14], E[15], cam=(0, 0, .04))
+    g3("city", lt(li), E[15])
+    b = cap("BURN", 40, 90, fit("BURN", 1000, 400), at(li, 0), E[15], how="none")
     tt, k = at(li, 0), 0
     while tt < E[15] - STEP:
-        js(f'tl.set("#{b}", {{color: "{[MAG, WHT, "#e0242f"][k % 3]}"}}, {tt:.3f});')
+        js(f'tl.set("#{b}", {{color: "{[MAG, WHT, "#ff7a1a"][k % 3]}"}}, {tt:.3f});')
         tt, k = tt + STEP, k + 1
-    cap(text(li, 1, 1), 60, 520, 130, at(li, 1), E[15], z=3)
-    cap("BLOCK", 540, 640, 300, at(li, 2), E[15], align="center", z=3, box=MAG, how="pop")
-    cap(text(li, 3, 4), 760, 960, 90, at(li, 3), E[15], z=4)
+    cap(text(li, 1, 1), 60, 560, 130, at(li, 1), E[15], how="slide-l")
+    cap("BLOCK", 540, 660, 280, at(li, 2), E[15], align="center", box=MAG, how="pop")
+    cap(text(li, 3, 4), 760, 960, 90, at(li, 3), E[15])
 
-    hook(15, [("cat_black_collar", "print"), ("vogue_cat_cover", "print"), ("envogue_funky_divas", "print"),
-              ("drake_boat_sunset", "print")], MAR)
+    # S16 hook 2: the chrome heart beating, the words around it.
+    li = 15
+    scene(E[15], E[16], bg=MAR, cam=(0, 18, .06))
+    g3("heart", lt(li), E[16], beats=[round(x, 3) for x in BEATS[::2]])
+    cap("THE WAY", 60, 96, 170, at(li, 0), E[16], how="blocks")
+    cap("YOU", 780, 300, 170, at(li, 2), E[16], color=MAG, how="pop")
+    cap("MAKE ME", 60, 700, 150, at(li, 3), E[16], how="slide-l")
+    cap("FEEL", 700, 690, 200, at(li, 5), E[16], color=MAG, how="blocks")
+    cap("these days", 540, 880, 170, at(li, 6), E[16], font="script", upper=False, align="center", rot=-6, how="pop")
 
-    # S17 Comin' out my body for you, baby girl: Drake laughing, neon outline, MY BODY.
+    # S17 Comin' out my body for you, baby girl: BODY in 3D, the letters burst apart on "out".
     li = 16
-    scene(E[16], E[17])
-    panel(0, 0, S, S, MAG, E[16], E[17], how="")
-    cap(text(li, 0, 1), 40, 40, 150, at(li, 0), E[17], z=2)
-    cap("MY BODY", 40, 220, fit("MY BODY", 1000, 330), at(li, 2), E[17], z=2, color=INK)
-    photo("drake_laugh_hands", 260, 300, 600, None, 0, lt(li), E[17], how="rise", glow=True, push=.06, z=3)
-    cap(text(li, 4, 5), 60, 900, 110, at(li, 4), E[17], box=INK, z=5, how="pop")
-    burst(["BABY", "GIRL"], 860, 800, 160, at(li, 6), E[17], color=INK, size=80)
+    scene(E[16], E[17], bg=MAG, cam=(0, 0, .05))
+    g3("body", lt(li), E[17], out=round(at(li, 1) - lt(li), 3))
+    cap(text(li, 0, 1), 60, 96, 150, at(li, 0), E[17], how="blocks")
+    cap("MY", 60, 300, 150, at(li, 2), E[17], color=INK, how="pop")
+    cap(text(li, 4, 5), 60, 900, 110, at(li, 4), E[17], box=INK, how="pop")
+    burst(["BABY", "GIRL"], 860, 820, 160, at(li, 6), E[17], color=INK, size=80)
 
-    # S18 Wipe him like he snotty for you, baby girl: a magenta wipe, the dumb cat, SNOTTY in marker.
+    # S18 Wipe him like he snotty for you, baby girl: a magenta wipe, the 3D tissue box, snotty in marker.
     li = 17
-    scene(E[17], E[18])
-    panel(0, 0, S, S, INK, E[17], E[18], how="")
-    w_ = panel(-60, 0, 1200, S, MAG, at(li, 0), E[18], how="", z=6)
+    scene(E[17], E[18], cam=(0, -12, .05))
+    w_ = panel(-60, 0, 1200, S, MAG, at(li, 0), E[18], how="", z=9, ly=2)
     js(f'tl.fromTo("#{w_}", {{x: -1300}}, {{x: 1300, duration: {6 * STEP:.3f}, ease: "steps(6)", immediateRender: false}}, {at(li, 0):.3f});')
-    photo("cat_white_dumb", 300, 380, 520, 470, -4, at(li, 0) + .1, E[18], kind="print", frame="round", how="zoom", push=.08, z=3)
-    cap(text(li, 0, 1), 60, 40, 180, at(li, 0) + .15, E[18], z=4)
-    cap(text(li, 2, 3), 60, 250, 110, at(li, 2), E[18], z=4, color=MAG)
-    cap("snotty", 540, 770, 210, at(li, 4), E[18], font="marker", upper=False, align="center", rot=-7, how="pop", z=5)
-    cap(text(li, 5, 6), 700, 250, 100, at(li, 5), E[18], box=WHT, color=MAG, z=5, how="pop")
-    burst(["BABY", "GIRL"], 920, 560, 150, at(li, 7), E[18], size=72)
+    g3("tissue", lt(li), E[18], wipe=round(at(li, 0) - lt(li) + .1, 3))
+    cap(text(li, 0, 1), 60, 96, 180, at(li, 0) + .15, E[18], how="blocks")
+    cap(text(li, 2, 3), 60, 290, 110, at(li, 2), E[18], color=MAG, how="slide-l")
+    cap("snotty", 540, 780, 210, at(li, 4), E[18], font="marker", upper=False, align="center", rot=-7, how="pop")
+    cap(text(li, 5, 6), 700, 290, 100, at(li, 5), E[18], box=WHT, color=MAG, how="pop")
+    burst(["BABY", "GIRL"], 900, 560, 140, at(li, 7), E[18], size=70)
 
-    # S19 Comin' out my body for you: Drake in Nocta with a neon outline, mirrored SPIN BOUT U, end card.
+    # S19 Comin' out my body for you: the 3D logo turning over rays, the line around it.
     li = 18
-    scene(E[18], DUR)
-    panel(0, 0, S, S, INK, E[18], DUR, how="")
-    cap("SPIN BOUT U", 540, 610, fit("SPIN BOUT U", 1040, 260), lt(li), DUR, align="center", z=2, color=MAG, how="letters")
-    m = cap("SPIN BOUT U", 540, 800, fit("SPIN BOUT U", 1040, 260), lt(li), DUR, align="center", z=2, stroke=f"3px {WHT}", how="none")
-    js(f'tl.set("#{m}", {{scaleY: -1}}, {lt(li):.3f});')
-    photo("drake_nocta_red", 300, 90, 480, None, 0, lt(li), DUR, how="zoom", glow=True, push=.05, z=3)
-    cap(text(li, 0, 1), 40, 40, 120, at(li, 0), DUR, z=4)
-    cap(text(li, 2, 3), 640, 40, 120, at(li, 2), DUR, z=4, color=MAG, box=WHT)
-    cap(text(li, 4, 5), 60, 420, 110, at(li, 4), DUR, z=4, box=MAG, how="pop")
+    scene(E[18], DUR, cam=(0, 0, .05))
+    g3("logo", lt(li), DUR)
+    cap(text(li, 0, 1), 50, 96, 100, at(li, 0), DUR, how="blocks")
+    cap(text(li, 2, 3), 1030, 96, 100, at(li, 2), DUR, align="right", color=MAG, box=WHT, how="pop")
+    cap(text(li, 4, 5), 540, 880, 110, at(li, 4), DUR, align="center", box=MAG, how="pop")
 
 
-def corners():
-    """Corner credits typed on after the drop (the reference's frame furniture)."""
-    items = [("SPIN\nBOUT U", "left:34px;top:26px;text-align:left"), ("EDITED BY\nNXTLVL SOCIAL", "left:50%;top:26px;translate:-50% 0;text-align:center"),
-             ("DRAKE\n21 SAVAGE", "right:34px;top:26px;text-align:right"), ("HER\nLOSS", "left:34px;bottom:26px;text-align:left"),
-             ("ONE\nCALL", "left:50%;bottom:26px;translate:-50% 0;text-align:center"), ("IN\nVOGUE", "right:34px;bottom:26px;text-align:right")]
-    html = ""
-    for k, (t, pos) in enumerate(items):
-        i = f"cr{k}"
-        chars = "".join(f'<span class="c">{"<br>" if c == chr(10) else c}</span>' for c in t)
-        html += f'<div class="cr" id="{i}" style="{pos}">{chars}</div>'
-        js(f'tl.set("#{i} .c", {{opacity: 0}}, 0);')
-        for j in range(len(t)):
-            js(f'tl.set("#{i} .c:nth-child(-n+{j + 1})", {{opacity: 1}}, {q(.9 + k * .05 + j * STEP):.3f});')
-    return html
+TRANS = ["streak", "zoomwhite", "circle", "tilt", "drop", "strips", "swoosh", "spincard", "streak", "zoomwhite", "circle",
+         "invert", "drop", "strips", "spincard", "swoosh", "zoomwhite", "streak", "circle"]
 
 
 def transitions():
-    """At every scene change, one of the references' cuts: zoom blur, white flash, horizontal smear, invert, magenta sweep."""
-    kinds = ["zoom", "flash", "smear", "zoom", "invert", "sweep", "zoom", "smear", "flash"]
+    """The reference's cuts, one per scene change (2-5 frames each at 20 fps)."""
     for k in range(1, len(SCENES)):
         t = SCENES[k][0]
         prev, cur = SCENES[k - 1][2], SCENES[k][2]
-        kind = kinds[k % len(kinds)]
-        if kind == "zoom":
-            js(f'tl.fromTo("#{cur}", {{scale: 1.3, filter: "blur(16px)"}}, {{scale: 1, filter: "blur(0px)", duration: {3 * STEP:.3f}, '
-               f'ease: "steps(3)", immediateRender: false}}, {t:.3f});')
-            js(f'tl.to("#{prev}", {{scale: 1.35, filter: "blur(16px)", duration: {2 * STEP:.3f}, ease: "steps(2)"}}, {t - 2 * STEP:.3f});')
-        elif kind == "flash":
+        kind = TRANS[(k - 1) % len(TRANS)]
+        p2 = t - 2 * STEP
+        if kind == "streak":       # sideways whip-smear out, a maroon frame with a white light bar sweeping, then the scene
+            js(f'tl.to("#{prev}", {{x: -520, filter: "url(#hblur)", duration: {2 * STEP:.3f}, ease: "steps(2)"}}, {p2:.3f});')
+            js(f'tl.set("#streak", {{opacity: 1}}, {t:.3f});')
+            js(f'tl.fromTo("#streak i", {{x: -200}}, {{x: 1200, duration: {3 * STEP:.3f}, ease: "steps(3)", immediateRender: false}}, {t:.3f});')
+            js(f'tl.set("#streak", {{opacity: 0}}, {t + 3 * STEP:.3f});')
+            js(f'tl.fromTo("#{cur}", {{x: 420, filter: "url(#hblur)"}}, {{x: 0, filter: "none", duration: {3 * STEP:.3f}, ease: "steps(3)", '
+               f'immediateRender: false}}, {t + 2 * STEP:.3f});')
+        elif kind == "zoomwhite":  # zoom blur to a white frame, the next scene out of the blur
+            js(f'tl.to("#{prev}", {{scale: 1.45, filter: "blur(18px)", duration: {2 * STEP:.3f}, ease: "steps(2)"}}, {p2:.3f});')
             js(f'tl.set("#flash", {{opacity: 1}}, {t:.3f});')
-            js(f'tl.set("#flash", {{opacity: .5}}, {t + STEP:.3f});')
-            js(f'tl.set("#flash", {{opacity: 0}}, {t + 2 * STEP:.3f});')
-        elif kind == "smear":
-            js(f'tl.fromTo("#{cur}", {{x: 260, filter: "url(#hblur)"}}, {{x: 0, filter: "none", duration: {3 * STEP:.3f}, ease: "steps(3)", '
+            js(f'tl.set("#flash", {{opacity: 0}}, {t + STEP:.3f});')
+            js(f'tl.fromTo("#{cur}", {{scale: 1.3, filter: "blur(18px)"}}, {{scale: 1, filter: "blur(0px)", duration: {3 * STEP:.3f}, '
+               f'ease: "steps(3)", immediateRender: false}}, {t + STEP:.3f});')
+        elif kind == "circle":     # whip out, the next scene opens from a circle in the corner
+            js(f'tl.to("#{prev}", {{x: -560, filter: "url(#hblur)", duration: {2 * STEP:.3f}, ease: "steps(2)"}}, {p2:.3f});')
+            js(f'tl.fromTo("#{cur}", {{clipPath: "circle(0% at 86% 86%)"}}, {{clipPath: "circle(150% at 86% 86%)", duration: {4 * STEP:.3f}, '
+               f'ease: "steps(4)", immediateRender: false}}, {t:.3f});')
+        elif kind == "tilt":       # the next scene swings in in perspective
+            js(f'tl.to("#{prev}", {{filter: "blur(14px)", duration: {2 * STEP:.3f}, ease: "steps(2)"}}, {p2:.3f});')
+            js(f'tl.fromTo("#{cur}", {{rotationY: 70, scale: .7, transformPerspective: 1100}}, {{rotationY: 0, scale: 1, duration: {4 * STEP:.3f}, '
+               f'ease: "steps(4)", immediateRender: false}}, {t:.3f});')
+        elif kind == "drop":       # vertical blur drop
+            js(f'tl.to("#{prev}", {{y: 560, filter: "url(#vblur)", duration: {2 * STEP:.3f}, ease: "steps(2)"}}, {p2:.3f});')
+            js(f'tl.fromTo("#{cur}", {{y: -460, filter: "url(#vblur)"}}, {{y: 0, filter: "none", duration: {3 * STEP:.3f}, ease: "steps(3)", '
                f'immediateRender: false}}, {t:.3f});')
-            js(f'tl.to("#{prev}", {{x: -300, duration: {2 * STEP:.3f}, ease: "steps(2)"}}, {t - 2 * STEP:.3f});')
-            js(f'tl.set("#{prev}", {{filter: "url(#hblur)"}}, {t - 2 * STEP:.3f});')
+        elif kind == "strips":     # six strips slide across and back off
+            for j in range(6):
+                d = 1 if j % 2 == 0 else -1
+                js(f'tl.set("#st{j}", {{opacity: 1}}, {p2 - STEP:.3f});')
+                js(f'tl.fromTo("#st{j}", {{y: {1100 * d}}}, {{y: 0, duration: {3 * STEP:.3f}, ease: "steps(3)", immediateRender: false}}, {p2 - STEP:.3f});')
+                js(f'tl.to("#st{j}", {{y: {-1100 * d}, duration: {3 * STEP:.3f}, ease: "steps(3)"}}, {t + STEP:.3f});')
+                js(f'tl.set("#st{j}", {{opacity: 0}}, {t + 4 * STEP:.3f});')
+        elif kind == "swoosh":     # a white swoosh line draws across, the scene slides in under it
+            js(f'tl.set("#swoosh", {{opacity: 1}}, {p2:.3f});')
+            js(f'tl.fromTo("#swoosh path", {{strokeDashoffset: 1000}}, {{strokeDashoffset: -1000, duration: {5 * STEP:.3f}, ease: "steps(5)", '
+               f'immediateRender: false}}, {p2:.3f});')
+            js(f'tl.set("#swoosh", {{opacity: 0}}, {t + 3 * STEP:.3f});')
+            js(f'tl.fromTo("#{cur}", {{x: 540, filter: "url(#hblur)"}}, {{x: 0, filter: "none", duration: {3 * STEP:.3f}, ease: "steps(3)", '
+               f'immediateRender: false}}, {t:.3f});')
+        elif kind == "spincard":   # white frame, the next scene starts as a small turned card and zooms up
+            js(f'tl.set("#wbg", {{opacity: 1}}, {t:.3f});')
+            js(f'tl.set("#wbg", {{opacity: 0}}, {t + 5 * STEP:.3f});')
+            js(f'tl.fromTo("#{cur}", {{scale: .28, rotation: -28, filter: "blur(6px)", borderRadius: 60}}, {{scale: 1, rotation: 0, filter: "blur(0px)", '
+               f'borderRadius: 0, duration: {5 * STEP:.3f}, ease: "steps(5)", immediateRender: false}}, {t:.3f});')
         elif kind == "invert":
             js(f'tl.set("#stage", {{filter: "invert(1)"}}, {t:.3f});')
             js(f'tl.set("#stage", {{filter: "none"}}, {t + 2 * STEP:.3f});')
-        elif kind == "sweep":
-            js(f'tl.set("#sweep", {{opacity: 1}}, {t - 2 * STEP:.3f});')
-            js(f'tl.fromTo("#sweep", {{x: -1300}}, {{x: 1300, duration: {4 * STEP:.3f}, ease: "steps(4)", immediateRender: false}}, {t - 2 * STEP:.3f});')
-            js(f'tl.set("#sweep", {{opacity: 0}}, {t + 2 * STEP:.3f});')
-    js(f'tl.set("#flash", {{opacity: 1}}, {q(L[-1]["end"] + .3):.3f});')     # end: white flash out
-    js(f'tl.to("#flash", {{opacity: 0, duration: {4 * STEP:.3f}, ease: "steps(4)"}}, {q(L[-1]["end"] + .35):.3f});')
+    end = q(L[-1]["end"] + .3)
+    js(f'tl.set("#flash", {{opacity: 1}}, {end:.3f});')
+    js(f'tl.to("#flash", {{opacity: 0, duration: {4 * STEP:.3f}, ease: "steps(4)"}}, {end + STEP:.3f});')
 
 
-def camera():
-    """The frame bumps on every beat (half-time) and shakes a little, stepped at 20 fps."""
+def cameras():
+    """Motion tracking: per scene, the three layers ride one camera path at different rates, stepped at 20 fps,
+    plus a bump on every half-time beat across the frame."""
+    for t0, t1, i, bg, lys, (dx, dy, dz) in SCENES:
+        n = max(1, round((t1 - t0) * FPS)) + 3
+        for k, f in enumerate((.35, 1.0, 1.45)):
+            js(f'tl.fromTo("#{i} .ly{k}", {{x: 0, y: 0, scale: 1}}, {{x: {dx * f:.0f}, y: {dy * f:.0f}, scale: {1 + dz * f:.3f}, '
+               f'duration: {n * STEP:.3f}, ease: "steps({n})", immediateRender: false}}, {t0:.3f});')
     g = random.Random(4)
     for f in range(int(DUR * FPS)):
         t = f * STEP
@@ -585,37 +546,40 @@ CSS = f"""
 html, body {{ width: {S}px; height: {S}px; overflow: hidden; background: {INK}; }}
 #root {{ position: relative; width: {S}px; height: {S}px; overflow: hidden; background: {INK}; }}
 #stage, #cam {{ position: absolute; inset: 0; }}
+#wbg {{ position: absolute; inset: 0; background: {WHT}; opacity: 0; z-index: 0; }}
 .sc {{ position: absolute; inset: 0; overflow: hidden; opacity: 0; }}
+.ly0, .ly1, .ly2 {{ position: absolute; inset: 0; }}
+.ly1 {{ z-index: 2; }} .ly2 {{ z-index: 3; }}
 .pn {{ position: absolute; display: block; }}
 .ph {{ position: absolute; }}
 .ph .in {{ width: 100%; height: 100%; overflow: hidden; }}
 .ph img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
 .ph.round .in {{ border-radius: 40px; box-shadow: 0 20px 40px rgba(0,0,0,.45); }}
-.ph.tile .in {{ border: 6px solid {WHT}; box-shadow: 0 14px 30px rgba(0,0,0,.5); }}
 .ph.glow img {{ filter: drop-shadow(0 0 0 #fff) drop-shadow(0 0 3px #fff) drop-shadow(0 0 3px #fff) drop-shadow(0 0 14px rgba(255,255,255,.7)); }}
-.ph.mult img {{ mix-blend-mode: multiply; }}
-.tx {{ position: absolute; white-space: nowrap; line-height: .95; text-transform: none; }}
+.tx {{ position: absolute; white-space: nowrap; line-height: .95; }}
+.tx .c {{ display: inline-block; }}
+.tx .cz {{ filter: blur(5px); }}
 .bu {{ position: absolute; display: flex; align-items: center; justify-content: center; text-align: center; color: {WHT};
   font-family: "Anton"; line-height: .95; }}
 .sb {{ position: absolute; inset: 0; width: {S}px; height: {S}px; overflow: visible; }}
 .sb path {{ fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1000; }}
 .rays {{ position: absolute; inset: 0; width: {S}px; height: {S}px; }}
-.rays polygon {{ fill: {MAR}; }}
+.g3 {{ position: absolute; inset: -80px; }}
+.g3 video {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
+.g3::after {{ content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .18; mix-blend-mode: multiply;
+  background: radial-gradient(circle, #000 0 30%, transparent 33%) 0 0 / 7px 7px; }}
 .call {{ position: absolute; border-radius: 46px; overflow: hidden; border: 9px solid #2b2b2b; box-shadow: 0 20px 40px rgba(0,0,0,.5); }}
 .call img {{ width: 100%; height: 100%; display: block; }}
 .call b {{ position: absolute; left: 0; right: 0; top: 13%; text-align: center; font: 600 54px/1 "Inter Display"; color: #fff; }}
 .call small {{ position: absolute; left: 0; right: 0; top: 21%; text-align: center; font: 600 22px/1 "Inter Display"; color: #bbb; }}
 .call .hit {{ position: absolute; width: 22.5%; aspect-ratio: 1; border-radius: 50%; translate: -50% -50%; opacity: 0; }}
-.gl {{ position: absolute; inset: 0; width: {S}px; height: {S}px; overflow: visible; }}
-.gl circle, .gl ellipse {{ fill: none; stroke: {MAG}; stroke-width: 4; }}
-.gl .rim {{ stroke: {WHT}; stroke-width: 6; }}
-.gl .orb {{ stroke: {WHT}; stroke-width: 3; stroke-dasharray: 14 12; }}
-.rd {{ position: absolute; inset: 0; width: {S}px; height: {S}px; }}
-.rd line {{ stroke: {WHT}; stroke-width: 6; opacity: .85; }}
-.rd .d0 {{ stroke-width: 14; stroke-dasharray: 34 26; }}
-.cr {{ position: absolute; z-index: 30; font: 600 15px/1.15 "Inter Display"; color: {WHT}; letter-spacing: .5px; }}
-#flash {{ position: absolute; inset: 0; z-index: 40; background: {WHT}; opacity: 0; }}
-#sweep {{ position: absolute; left: -60px; top: 0; width: 1200px; height: {S}px; z-index: 39; background: {MAG}; opacity: 0; }}
+#streak {{ position: absolute; inset: 0; z-index: 41; background: {MAR}; opacity: 0; overflow: hidden; }}
+#streak i {{ position: absolute; top: -40px; left: 0; width: 26px; height: 1160px; background: {WHT}; transform: rotate(4deg);
+  box-shadow: 0 0 40px 18px rgba(255,255,255,.55); }}
+.strip {{ position: absolute; top: 0; width: 182px; height: {S}px; z-index: 42; opacity: 0; }}
+#swoosh {{ position: absolute; inset: 0; width: {S}px; height: {S}px; z-index: 43; opacity: 0; overflow: visible; }}
+#swoosh path {{ fill: none; stroke: {WHT}; stroke-width: 10; stroke-linecap: round; stroke-dasharray: 1000; }}
+#flash {{ position: absolute; inset: 0; z-index: 44; background: {WHT}; opacity: 0; }}
 #grain {{ position: absolute; inset: -40px; z-index: 35; pointer-events: none; opacity: .07; mix-blend-mode: overlay;
   background: url(assets/img/grain.png); }}
 """
@@ -623,18 +587,20 @@ html, body {{ width: {S}px; height: {S}px; overflow: hidden; background: {INK}; 
 
 def main():
     build()
-    cr = corners()
     transitions()
-    camera()
+    cameras()
     g = random.Random(2)
     for f in range(int(DUR * FPS)):
         js(f'tl.set("#grain", {{x: {g.randint(-40, 0)}, y: {g.randint(-40, 0)}}}, {f * STEP:.3f});')
     scenes = ""
-    for k, (t0, t1, i, bg, parts) in enumerate(SCENES):
-        scenes += f'<div class="sc" id="{i}" style="z-index:{k + 1};background:{bg}">{"".join(parts)}</div>'
+    for k, (t0, t1, i, bg, lys, cam) in enumerate(SCENES):
+        layers = "".join(f'<div class="ly{j}">{"".join(lys[j])}</div>' for j in range(3))
+        scenes += f'<div class="sc" id="{i}" style="z-index:{k + 1};background:{bg}">{layers}</div>'
         js(f'tl.set("#{i}", {{opacity: 1}}, {t0:.3f});')
         if t1 < DUR:
             js(f'tl.set("#{i}", {{opacity: 0}}, {t1:.3f});')
+    strips = "".join(f'<i class="strip" id="st{j}" style="left:{j * 180}px;background:{[INK, MAG, WHT][j % 3]}"></i>' for j in range(6))
+    HIDE.extend([f"#st{j}" for j in range(6)])
     html = f"""<!doctype html>
 <html lang="en" data-resolution="square">
   <head>
@@ -646,13 +612,15 @@ def main():
   </head>
   <body>
     <svg width="0" height="0" style="position:absolute"><filter id="hblur" x="-20%" y="-5%" width="140%" height="110%">
-      <feGaussianBlur stdDeviation="28 0"/></filter></svg>
+      <feGaussianBlur stdDeviation="30 0"/></filter><filter id="vblur" x="-5%" y="-20%" width="110%" height="140%">
+      <feGaussianBlur stdDeviation="0 30"/></filter></svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{S}" data-height="{S}">
-      <div id="stage"><div id="cam">
-        <div id="scenes" class="clip" data-start="0" data-duration="{DUR}" data-track-index="2">{scenes}</div>
+      <div id="stage"><div id="wbg"></div><div id="cam">
+        <div id="scenes">{scenes}</div>
       </div></div>
-      {cr}
-      <div id="sweep"></div>
+      <div id="streak"><i></i></div>
+      {strips}
+      <svg id="swoosh" viewBox="0 0 1080 1080"><path pathLength="1000" d="M-60 820 C 240 380, 620 980, 1140 260"/></svg>
       <div id="flash"></div>
       <div id="grain"></div>
       <audio id="song" src="assets/audio/section.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
@@ -669,7 +637,8 @@ def main():
 </html>
 """
     open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8").write(html)
-    print(f"wrote index.html {len(html) // 1024} KB, {len(A)} timeline lines, {len(SCENES)} scenes")
+    json.dump(G3D, open(os.path.join(ROOT, "plan", "g3d.json"), "w"), indent=1)
+    print(f"wrote index.html {len(html) // 1024} KB, {len(A)} timeline lines, {len(SCENES)} scenes, {len(G3D)} 3D renders")
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 # TASTE: spin-bout-u-drake
 
-Updated 2026-10-31. Current version: final v1, renders/nxtlvl_spin-bout-u_reels_1x1_v1.mp4 (1080x1080, 20 fps, 60 s).
+Updated 2026-10-31. Current version: final v2, renders/nxtlvl_spin-bout-u_reels_1x1_v2.mp4 (1080x1080, 20 fps, 60 s).
 
 ## Brief
 - Spin Bout U (Drake & 21 Savage): 60 s from the 2:13 bass drop, the owner's lyrics, the owner's images (plan/assets.md).
@@ -37,5 +37,21 @@ Updated 2026-10-31. Current version: final v1, renders/nxtlvl_spin-bout-u_reels_
 ## Sound
 - The song only, no sound effects.
 
-## Notes
-- The two n-words are shown as N*GGA / N*GGAS; switch off in text() if the owner wants them uncensored.
+## v2 (owner, 2026-10-31)
+- Every cuss word (ass, hoes, the n-words, shit'll) is shown only as a blurred ****.
+- No corner credits or "edited by" text.
+- Each owner photo is used once. Every other line has its own 3D render (assets/js/g3d.js): the ex's phone, the
+  globe, the road, 3D hook words, diamonds, smoke, a burning city block, a chrome heart, exploding BODY, a tissue
+  box, and the 3D logo.
+- The 3D is pre-rendered by build/render3d.cjs. Headless SwiftShader WebGL deadlocks with page screenshots, so the
+  frames are read back from the canvas into MP4s on the scene's own colour.
+- Reference cuts: whip-smear with a light streak, zoom blur to white, circle reveal, perspective tilt, vertical drop
+  blur, sliding strips, white swoosh, spinning card zoom-up, invert.
+- Motion tracking: three depth layers per scene ride one camera path (background .35, subject and attached words 1,
+  overlay type 1.45). Text letters arrive as tilted blocks.
+- Every caption has an outline in the opposite tone, so nothing disappears on white.
+
+## Feedback rules
+| Date | User said | Rule |
+|---|---|---|
+| 2026-10-31 | blur all cuss words as ****; unique picture per lyric, 3D renders allowed; match the reference transitions and tracking; fix text hidden on white; no edited-by credits | v2 above |

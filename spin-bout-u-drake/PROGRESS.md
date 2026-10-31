@@ -1,5 +1,4 @@
 # PROGRESS: spin-bout-u-drake (updated 2026-10-31)
-Phase: DONE (final v1 delivered: 1080x1080, 20 fps, 60 s, 62 MB, -14.5 LUFS)
-Current version: final v1 → renders/nxtlvl_spin-bout-u_reels_1x1_v1.mp4 (1080x1080, 20 fps, 60 s)
-Build: python3 build/align.py, build/assets.py, build/generate.py; render detached with build/render_final.sh.
-Open: owner to confirm the censored n-words are wanted.
+Phase: final render (v2)
+Current version: final v2 → renders/nxtlvl_spin-bout-u_reels_1x1_v2.mp4 (censored, 3D renders, reference cuts); v1 delivered earlier
+Build: python3 build/align.py, build/assets.py, build/glyphs.py, build/generate.py, node build/render3d.cjs (3D clips); render detached with build/render_final.sh.
