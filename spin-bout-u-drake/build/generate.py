@@ -144,6 +144,9 @@ def photo(src, x, y, w, h=None, rot=0, t0=0, t1=DUR, kind="cut", how="settle", z
     the picture); flow: 'smoke' or 'fire' (that area flows); breathe: a slow rise and fall; sweeps: times a light
     sweeps across; reveal: arrives as a white glowing silhouette; slices: slice-glitch times; punches: (t, scale)."""
     i = nid("ph")
+    if CUR.get("idx", 0) > 0 and abs(q(t0) - CUR["t0"]) < .16:
+        how, reveal = "", False
+        t0 = CUR["t0"]
     path = {"cut": f"assets/img/cut/{src}.png", "print": f"assets/img/print/{src}.jpg", "src": f"assets/img/src/{src}.jpg",
             "acut": f"assets/img/anime/cut/{src}.png", "afull": f"assets/img/anime/full/{src}.jpg"}[kind]
     if h is None:
@@ -275,6 +278,8 @@ def cap(t, x, y, size, t0, t1=DUR, font="anton", color=WHT, how="pop1", align="l
     how: pop1 (letters pop in one by one, grey then their colour: the reference's signature), letters, blocks, slide-l,
     slide-r, pop, settle, rise, write (script, a light spark rides the pen), drop."""
     i = nid("tx")
+    if style == "giant" and CUR.get("idx", 0) > 0 and 0 < q(t0) - CUR["t0"] < 1.5:
+        t0 = CUR["t0"] + 4 * STEP
     s = t.upper() if upper else t
     pad = .28 if style == "sticker" else 0
     w_ = tw(s, size, font) + size * pad
@@ -437,8 +442,9 @@ def phone_card(x, y, w, caller, t0, t1, press, button="accept", z=4, ly=1):
     while tt < press - .1:
         js(f'tl.set("#{i} .hit", {{opacity: {.5 if k % 2 == 0 else 0}, scale: {1.6 if k % 2 == 0 else 1}}}, {tt:.3f});')
         tt, k = tt + .2, k + 1
-    js(f'tl.set("#{i} .hit", {{opacity: .95, scale: 1}}, {q(press):.3f});')
-    js(f'tl.to("#{i} .hit", {{scale: 30, opacity: 1, duration: {4 * STEP:.3f}, ease: "steps(4)"}}, {q(press) + STEP:.3f});')
+    js(f'tl.set("#{i} .hit", {{opacity: .9, scale: 1.35}}, {q(press):.3f});')     # the press: a flash on the button, then it settles
+    js(f'tl.set("#{i} .hit", {{opacity: .55, scale: 1.1}}, {q(press) + 2 * STEP:.3f});')
+    js(f'tl.set("#{i} .hit", {{opacity: 0, scale: 1}}, {q(press) + 4 * STEP:.3f});')
     return i
 
 
@@ -458,6 +464,7 @@ SCENES = []        # [t0, t1, id, bg, layers, drift, transition-in]
 def scene(t0, t1, bg=INK, drift=(0, 0), trans="whip"):
     i = f"sc{len(SCENES)}"
     CUR["ly"] = [[], [], []]
+    CUR["t0"], CUR["idx"] = q(t0), len(SCENES)
     SCENES.append([q(t0), q(t1), i, bg, CUR["ly"], drift, trans])
 
 
@@ -565,7 +572,7 @@ def build():
     cap("TEN", 540, 10, 430, at(li, 5), E[8], align="center", style="giant", how="pop1", ly=1, z=2, sy=1.12)
     cap("TOES", 540, 420, 400, at(li, 6), E[8], align="center", style="giant", how="pop1", ly=1, z=2, sy=1.12)
     para(250, 380, 580, 600, MAG, E[7], E[8], z=1)
-    photo("crew", 220, 400, 640, None, 0, E[7], E[8], kind="acut", how="", reveal=True, push=.05, wind=.03, breathe=True,
+    photo("crew", 220, 400, 640, None, 0, E[7], E[8], kind="acut", how="", push=.05, wind=.03, breathe=True,
           sweeps=(at(li, 5),), z=3)
     cap(text(li, 0, 4), 540, 990, 56, at(li, 0), E[8], style="sticker", align="center", how="pop")
 
@@ -654,7 +661,7 @@ def build():
     # S15 Burn somebody block for you: he walks out of the burning block, the flames flowing, embers rising.
     li = 14
     scene(E[14], E[15], drift=(0, -10), trans="whip")
-    photo("fire", -40, -40, 1160, 1160, 0, E[14], E[15], kind="afull", how="settle", push=.06, z=1, ly=0, clip="fire")
+    photo("fire", -40, -40, 1160, 1160, 0, E[14], E[15], kind="afull", how="settle", push=.1, z=1, ly=0, flow="fire", wind=.012)
     particles("ember", E[14], E[15], 24, 18, z=3, ly=1)
     b = cap("BURN", 540, 30, fit("BURN", 1000, 380), at(li, 0), E[15], align="center", style="giant", how="pop1", sy=1.15)
     for k, t in enumerate(frames(at(li, 0) + .3, E[15], 2)):
@@ -684,7 +691,7 @@ def build():
     cone(E[16], E[17], cx=540, top=440)
     cap("COMIN' OUT", 540, 40, fit("COMIN' OUT", 1000, 150, "dela"), at(li, 0), E[17], font="dela", align="center", how="pop1")
     cap("MY BODY", 540, 280, fit("MY BODY", 1040, 380), at(li, 2), E[17], align="center", style="giant", how="pop1", ly=1, z=2, sy=1.15)
-    sp = photo("spirit", 170, 220, 740, None, 0, lt(li), E[17], kind="acut", how="", reveal=True, push=.06, wind=.05, breathe=True, z=3)
+    sp = photo("spirit", 170, 220, 740, None, 0, lt(li), E[17], kind="acut", how="", push=.06, wind=.05, breathe=True, z=3)
     js(f'tl.fromTo("#{sp}", {{filter: "drop-shadow(0 0 0px #fff)"}}, {{filter: "drop-shadow(0 0 34px #fff)", duration: {6 * STEP:.3f}, '
        f'ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}}, {at(li, 1):.3f});')
     cap(text(li, 4, 5), 60, 960, 64, at(li, 4), E[17], style="sticker", how="pop")
@@ -709,7 +716,7 @@ def build():
     scene(E[18], DUR, drift=(0, -10), trans="zoomwhite")
     rays(E[18], DUR, cx=1080, cy=0)
     floor_type("MY BODY", 760, at(li, 2), DUR, size=fit("MY BODY", 1040, 300))
-    photo("finale", 290, 250, 500, None, 0, E[18], DUR, kind="acut", how="", reveal=True, push=.05, wind=.035, breathe=True,
+    photo("finale", 290, 250, 500, None, 0, E[18], DUR, kind="acut", how="", push=.05, wind=.035, breathe=True,
           sweeps=(at(li, 3),), z=3)
     cap(text(li, 0, 1), 40, 40, 110, at(li, 0), DUR, font="archivo", style="block", rot=-6, how="pop1")
     cap("for you", 820, 900, 150, at(li, 4), DUR, font="script", color=MAG, style="script", upper=False, rot=-8, how="write", align="center", z=9)
@@ -723,7 +730,7 @@ def transitions():
         prev = SCENES[k - 1][2]
         p1, p2 = t - STEP, t - 2 * STEP
         if kind == "whip":          # smear out; a maroon frame, white light line, speed streaks; next shot slides in as a tilted panel
-            tween(f"#{prev}", {"x": 0, "filter": "blur(0px)"}, {"x": -600, "filter": "url(#hblur)"}, p2, 2)
+            tween(f"#{prev}", {"x": 0, "filter": "blur(0px)"}, {"x": -600, "filter": "url(#hblur)"}, p2, 4)
             js(f'tl.set("#streak", {{opacity: 1}}, {t:.3f});')
             tween("#streak .ln", {"x": -100}, {"x": 1180}, t, 3)
             tween("#streak .sp", {"x": 400}, {"x": -900}, t, 3)
@@ -756,8 +763,8 @@ def transitions():
             tween(f"#{cur}", {"x": 300}, {"x": 0}, t, 3)
         elif kind == "glitchcard":  # a white frame, a stripe glitch, then a small turned card zooms up to full frame
             white(p1)
-            js(f'tl.set("#glitch", {{opacity: 1}}, {t:.3f});')
-            js(f'tl.set("#glitch", {{opacity: 0}}, {t + STEP:.3f});')
+            js(f'tl.set("#stage", {{filter: "url(#gslice) grayscale(1) contrast(1.5)"}}, {t:.3f});')
+            js(f'tl.set("#stage", {{filter: "none"}}, {t + STEP:.3f});')
             js(f'tl.set("#wbg", {{opacity: 1}}, {t + STEP:.3f});')
             js(f'tl.set("#wbg", {{opacity: 0}}, {t + 6 * STEP:.3f});')
             tween(f"#{cur}", {"scale": .3, "rotation": -24, "borderRadius": 60, "filter": "blur(4px)"},
@@ -769,16 +776,18 @@ def transitions():
             tween(f"#{cur}", {"y": 1080, "filter": "url(#vblur)"}, {"y": 0, "filter": "blur(0px)"}, t, 4)
     end = q(59.45)              # the end: a white frame, a stripe glitch, black
     white(end)
-    js(f'tl.set("#glitch", {{opacity: 1}}, {end + STEP:.3f});')
-    js(f'tl.set("#glitch", {{opacity: 0}}, {end + 2 * STEP:.3f});')
+    js(f'tl.set("#stage", {{filter: "url(#gslice) grayscale(1) contrast(1.5)"}}, {end + STEP:.3f});')
+    js(f'tl.set("#flash", {{opacity: 0}}, {end + STEP:.3f});')
     js(f'tl.set("#blk", {{opacity: 1}}, {end + 2 * STEP:.3f});')
 
 
 def drifts():
     """Slow, smooth drift per scene (no shake): background, subject and overlay type at different rates."""
-    for t0, t1, i, bg, lys, (dx, dy), _ in SCENES:
+    for k_, (t0, t1, i, bg, lys, (dx, dy), _) in enumerate(SCENES):
+        if not dx and not dy:          # every scene travels (the reference never sits still)
+            dx = 14 if k_ % 2 else -14
         n = max(1, round((t1 - t0) * FPS)) + 6
-        for k, (f, z) in enumerate(((.4, .02), (1.0, .045), (1.4, .065))):
+        for k, (f, z) in enumerate(((1.2, .03), (3.0, .07), (4.5, .1))):
             js(f'tl.fromTo("#{i} .ly{k}", {{x: 0, y: 0, scale: 1}}, {{x: {dx * f:.0f}, y: {dy * f:.0f}, scale: {1 + z:.3f}, '
                f'duration: {n * STEP:.3f}, ease: "none", immediateRender: false}}, {t0:.3f});')
 
@@ -838,7 +847,7 @@ html, body {{ width: {S}px; height: {S}px; overflow: hidden; background: {INK}; 
 .call small {{ position: absolute; left: 0; right: 0; top: 23%; text-align: center; font: 400 24px/1 "Anton"; color: #bbb; letter-spacing: .1em; }}
 .call .hit {{ position: absolute; width: 22.5%; aspect-ratio: 1; border-radius: 50%; translate: -50% -50%; opacity: 0; }}
 #blk {{ position: absolute; inset: 0; z-index: 40; background: {INK}; opacity: 0; }}
-#streak {{ position: absolute; inset: 0; z-index: 41; background: {MAR}; opacity: 0; overflow: hidden; }}
+#streak {{ position: absolute; inset: 0; z-index: 41; background: rgba(95,27,48,.82); opacity: 0; overflow: hidden; mix-blend-mode: normal; }}
 #streak .ln {{ position: absolute; top: -40px; left: 0; width: 18px; height: 1160px; background: {WHT}; transform: rotate(3deg);
   box-shadow: 0 0 30px 12px rgba(255,255,255,.5); display: block; }}
 #streak .sp {{ position: absolute; inset: 0; display: block;
@@ -880,7 +889,9 @@ def main():
   <body>
     <svg width="0" height="0" style="position:absolute"><filter id="hblur" x="-20%" y="-5%" width="140%" height="110%">
       <feGaussianBlur stdDeviation="34 0"/></filter><filter id="vblur" x="-5%" y="-20%" width="110%" height="140%">
-      <feGaussianBlur stdDeviation="0 34"/></filter>{"".join(FILTERS)}</svg>
+      <feGaussianBlur stdDeviation="0 34"/></filter><filter id="gslice" x="-10%" y="0" width="120%" height="100%" color-interpolation-filters="sRGB">
+      <feImage href="assets/img/glitchmap.png" x="0" y="0" width="1080" height="1080" preserveAspectRatio="none" result="gm"/>
+      <feDisplacementMap in="SourceGraphic" in2="gm" scale="260" xChannelSelector="R" yChannelSelector="G"/></filter>{"".join(FILTERS)}</svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{S}" data-height="{S}">
       <div id="stage"><div id="wbg"></div>
         <div id="scenes">{scenes}</div>
