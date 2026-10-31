@@ -1,5 +1,5 @@
 # PROGRESS: ashke-lyric-1x1 (updated 2026-10-31)
-Phase: final render (v1)
+Phase: DONE (final v1 delivered: 1080x1080, 60 s, 103 MB, -14.1 LUFS)
 Current version: final v1 → renders/nxtlvl_ashke-lyric_reels_1x1_v1.mp4 (1080x1080, 60 s)
 What it is: the 9:16 edit (ashke-lyric-9x16, v9 build) rendered square, like the 1:1 box the owner showed in the
 Reels player. Same build code: `ASHKE_FORMAT=1x1 python3 build/generate.py` in ../ashke-lyric-9x16 writes index.html
