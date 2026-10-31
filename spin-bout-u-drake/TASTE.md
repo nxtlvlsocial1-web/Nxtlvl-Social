@@ -80,6 +80,15 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
   it a 90s broadcast look (soft 480-line picture, colour bleed, faded warm colour, light vignette, live grain). The
   still scenes' wind and breathing step on threes too.
 
+## v9 (owner, 2026-10-31)
+- Structure from the owner's Ashke edit (../ashke-lyric-9x16, square in ../ashke-lyric-1x1), colours from this edit:
+  build/collage.py is the Ashke engine ported (one paper sheet the camera travels over, nine scene recipes per lyric
+  line, typed labels with a cursor block, slammed and stamped words, 3D words, a picture-filled keyword with a 2.6x
+  zoom, torn scraps, cut-out stickers with paper borders, photo prints, a doodle per line, single-frame stills before
+  cuts, invert / white / split flashes, the spline camera with whips, motion blur and beat punches, 15 fps steps).
+- Recoloured: maroon crumpled paper, magenta / black / maroon / off-white scraps, white marker circles, Anton type.
+- Swooshes stay out (owner: they did not look good).
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|
@@ -90,3 +99,5 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 \n| 2026-10-31 | the images are still, animate them so they feel lively; fonts and transitions feel dull, take the Spin Bout U reference | v4 above |\n| 2026-10-31 | his smile in the dance picture looks creepy | redone with a calm closed-mouth smile |\n
 | 2026-10-31 | the art must act live (expressions, interaction), not a warp effect | Canva Image-to-Video clips |
 | 2026-10-31 | the clips look a little AI; lower the frame rate and add a 90s anime filter | clips90.py: on threes, broadcast look |
+| 2026-10-31 | remove the swoosh sounds; transitions still basic; bring the 3D globe and other 3D elements in with the characters | v8: song only, 3D with the art, layered cuts |
+| 2026-10-31 | use the Ashke edit as the reference for the structure, keep the current colour theme | v9: build/collage.py |
