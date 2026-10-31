@@ -9,7 +9,8 @@ family: the Shooting Star, the Smooth N, the original "nxtlvl" lettering and the
 The comparison sheets show each concept as the Instagram profile picture, at full size and at 110 / 56 / 32 px, with
 a lockup: **`concepts-preview.png`** (round 1, A to D), **`concepts-preview-2a.png`** (E to H),
 **`concepts-preview-2b.png`** (I to L), **`concepts-preview-3a.png`** (M to P), **`concepts-preview-3b.png`** (Q to T)
-and **`concepts-preview-4.png`** (R refined, R1 to R5).
+**`concepts-preview-4.png`** (R refined, R1 to R5), **`concepts-preview-5a.png`** (U to W) and
+**`concepts-preview-5b.png`** (X to Z).
 
 Round 1:
 
@@ -58,6 +59,18 @@ just above it, and the line has a pearl sheen.
 | **R4 · Ivory** | Ink line on ivory with a violet star. |
 | **R5 · Broad Pen** | The same N with thick uprights and diagonal and hairline turns. |
 
+Round 5 (new lettermarks, symbol only; each in pearl on black, ink on ivory and white on violet, as `profile.svg`,
+`alt-light.svg` and `alt-violet.svg`):
+
+| Concept | Idea |
+|---|---|
+| **U · Two Pillars** | Two uprights with angled ends on one invisible diagonal; the right one stands higher. |
+| **V · Reel Frame** | The fine N inside a 9:16 Reel frame, its star breaking the top edge. |
+| **W · Folded N** | An N folded from one ribbon: uprights in front, the diagonal its shaded underside. |
+| **X · Editorial N** | A tall, high-contrast serif capital N with the star at its corner. |
+| **Y · N Disc** | A solid disc with the N and the star cut out of it. |
+| **Z · NE Monogram** | N and E sharing one upright, in one even line. |
+
 Every concept shares one wordmark: "nxtlvl" in the original logo lettering (traced from `website/logo.png`), then "edits" in
 Instrument Serif Italic with the four-point star over the i.
 
@@ -81,6 +94,7 @@ python3 build.py && python3 sheet.py      # round 1: concepts A-D, concepts-prev
 python3 build2.py && python3 sheet.py 2   # round 2: concepts E-L, concepts-preview-2a.png and -2b.png
 python3 build3.py && python3 sheet.py 3   # round 3: concepts M-T, concepts-preview-3a.png and -3b.png
 python3 build4.py && python3 sheet.py 4   # R refined: R1-R5, concepts-preview-4.png
+python3 build5.py && python3 sheet.py 5   # round 5: concepts U-Z, concepts-preview-5a.png and -5b.png
 python3 final.py                          # the kit from R1: SVGs, png/, kit-preview.png
 ```
 

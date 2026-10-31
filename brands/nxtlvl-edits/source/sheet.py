@@ -4,6 +4,7 @@ Run after build.py / build2.py:  python3 sheet.py      (round 1 -> ../concepts-p
                                  python3 sheet.py 2    (round 2 -> ../concepts-preview-2a.png and -2b.png)
                                  python3 sheet.py 3    (round 3 -> ../concepts-preview-3a.png and -3b.png)
                                  python3 sheet.py 4    (R refined -> ../concepts-preview-4.png)
+                                 python3 sheet.py 5    (round 5 -> ../concepts-preview-5a.png and -5b.png)
 """
 import os
 import re
@@ -82,6 +83,21 @@ ITEMS_4 = [
      'The same N drawn with a broad pen: thick uprights and diagonal, hairline turns. Bolder, more fashion-house.'),
 ]
 
+ITEMS_5 = [
+    ('u-two-pillars', 'U', 'Two Pillars',
+     'Two uprights with angled ends on one invisible diagonal: your eye draws the N. The right one stands higher.'),
+    ('v-reel-frame', 'V', 'Reel Frame',
+     'The fine N inside a 9:16 Reel frame, its star breaking through the top edge.'),
+    ('w-folded-n', 'W', 'Folded N',
+     'An N folded from a single ribbon: the uprights face you, the diagonal is the ribbon\'s shaded underside.'),
+    ('x-editorial-n', 'X', 'Editorial N',
+     'A tall, high-contrast serif capital N, like a fashion-magazine masthead, with the star at its corner.'),
+    ('y-n-disc', 'Y', 'N Disc',
+     'A solid disc with the N and the star cut out of it, like a coin or a wax seal. The boldest at small sizes.'),
+    ('z-ne-monogram', 'Z', 'NE Monogram',
+     'N and E sharing one upright, drawn in one even line: nxtlvl edits in two letters.'),
+]
+
 ROUNDS = {
     '1': [(ITEMS, 'concepts-preview.png', 'nxtlvl edits · logo concepts', 'Four directions for the edits account')],
     '2': [(ITEMS_2[:4], 'concepts-preview-2a.png', 'nxtlvl edits · more variations (1 of 2)', 'Eight more directions: E to H'),
@@ -89,6 +105,8 @@ ROUNDS = {
     '3': [(ITEMS_3[:4], 'concepts-preview-3a.png', 'nxtlvl edits · minimal and classy (1 of 2)', 'Minimal and classy: M to P'),
           (ITEMS_3[4:], 'concepts-preview-3b.png', 'nxtlvl edits · minimal and classy (2 of 2)', 'Minimal and classy: Q to T')],
     '4': [(ITEMS_4, 'concepts-preview-4.png', 'nxtlvl edits · R, refined', 'The Monoline N, made premium')],
+    '5': [(ITEMS_5[:3], 'concepts-preview-5a.png', '@nxtlvlledits · new lettermarks (1 of 2)', 'Something else: U to W'),
+          (ITEMS_5[3:], 'concepts-preview-5b.png', '@nxtlvlledits · new lettermarks (2 of 2)', 'Something else: X to Z')],
 }
 
 BEFORE_AFTER = '''
@@ -111,6 +129,8 @@ def size_of(svg_path):
 
 
 def card(slug, letter, name, idea):
+    if not os.path.exists(os.path.join(CONCEPTS, slug, 'lockup.svg')):
+        return card_alts(slug, letter, name, idea)
     lw, lh = size_of(os.path.join(CONCEPTS, slug, 'lockup.svg'))
     bg = re.search(r'</defs><rect width="\d+" height="\d+" fill="([^"]+)"', open(os.path.join(CONCEPTS, slug, 'lockup.svg')).read()).group(1)
     return f'''
@@ -135,11 +155,39 @@ LEDE = ("Each one is from the Nxtlvl Social family (the star, the N, the wordmar
         "Shown as the Instagram profile picture at full size and at the sizes people actually see it.")
 LEDE_4 = ("R, taken further: a cleaner N, a finer finish and five ways to wear it. "
           "Shown at full size and at the sizes people actually see it.")
+LEDE_5 = ("New directions, symbol only. Each one on rich black (the profile picture), then on ivory and on violet, "
+          "to show it holds up anywhere.")
 LEDE_3 = ("Flat colour, no glow, one violet accent at most: Ink, Mist and the serif, with plenty of empty space. "
           "Still the Nxtlvl family, quieter. Shown at full size and at the sizes people actually see it.")
 
 
-def page(items, kicker, title, lede=LEDE, extra=''):
+def card_alts(slug, letter, name, idea):
+    """A card for a symbol-only concept: the lockup strip becomes the mark on ivory and on violet."""
+    return f'''
+  <section class="card">
+    <img class="big" src="../concepts/{slug}/profile.svg" alt="">
+    <div class="info">
+      <p class="tag">{letter}</p>
+      <h2>{name}</h2>
+      <p class="idea">{idea}</p>
+      <div class="ig">
+        <img class="av110" src="../concepts/{slug}/profile.svg" alt="">
+        <div><b>{HANDLE}</b><span>profile size</span></div>
+        <img class="av56" src="../concepts/{slug}/profile.svg" alt="">
+        <img class="av32" src="../concepts/{slug}/profile.svg" alt="">
+      </div>
+    </div>
+    <div class="alts"><div style="background:#F5F2FF"><img src="../concepts/{slug}/alt-light.svg" alt=""></div><div style="background:#7D18FC"><img src="../concepts/{slug}/alt-violet.svg" alt=""></div></div>
+  </section>'''
+
+
+FOOTER = ('<b>Every concept uses the same wordmark:</b> "nxtlvl" in the original logo lettering, then "edits" in Instrument Serif '
+          'Italic with the star over the i. Pick one from any round, or mix two (say one mark with another\'s colours), and I\'ll make the full kit.')
+FOOTER_5 = ('<b>Symbol only, no lettering.</b> Pick one, or mix two (say the Disc with the Editorial N inside it), '
+            'and I\'ll make the full kit the way I did for the Pearl N.')
+
+
+def page(items, kicker, title, lede=LEDE, extra='', footer=FOOTER):
     cards = ''.join(card(*it) for it in items)
     return f'''<!doctype html><html><head><meta charset="utf-8"><style>
 @font-face {{ font-family: "Archivo"; src: url("{FONTS}/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }}
@@ -168,6 +216,9 @@ h2 {{ font-family: "Archivo"; font-weight: 800; font-stretch: 108%; font-size: 4
 .ig span {{ display: block; font-size: 20px; color: #6E6787; margin-top: 4px; }}
 .lockup {{ grid-column: 1 / -1; background: #05030C; border-radius: 22px; display: flex; justify-content: center; align-items: center; }}
 .lockup img {{ display: block; }}
+.alts {{ grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }}
+.alts > div {{ border-radius: 22px; overflow: hidden; display: flex; justify-content: center; }}
+.alts img {{ width: 320px; height: 320px; display: block; }}
 .ba {{ display: grid; grid-template-columns: 250px 40px 250px 1fr; align-items: center; gap: 24px; background: #fff;
   border-radius: 36px; padding: 36px 40px; margin-bottom: 32px; box-shadow: 0 18px 50px rgba(40, 10, 90, .08); }}
 .ba figure {{ margin: 0; text-align: center; }}
@@ -184,8 +235,7 @@ footer b {{ color: #0B0816; }}
     <h1>{title}</h1>
     <p class="lede">{lede}</p>
   </header>{extra}{cards}
-  <footer><b>Every concept uses the same wordmark:</b> "nxtlvl" in the original logo lettering, then "edits" in Instrument Serif
-  Italic with the star over the i. Pick one from any round, or mix two (say one mark with another's colours), and I'll make the full kit.</footer>
+  <footer>{footer}</footer>
 </body></html>
 '''
 
@@ -210,13 +260,17 @@ def main(round_):
         for slug, *_ in items:
             d = os.path.join(CONCEPTS, slug)
             args += [os.path.join(d, 'profile.svg'), os.path.join(d, 'profile-1080.png'), '1080', '1080', '1']
-            lw, lh = size_of(os.path.join(d, 'lockup.svg'))
-            args += [os.path.join(d, 'lockup.svg'), os.path.join(d, 'lockup.png'), str(lw), str(lh), '1.5']
+            if os.path.exists(os.path.join(d, 'lockup.svg')):
+                lw, lh = size_of(os.path.join(d, 'lockup.svg'))
+                args += [os.path.join(d, 'lockup.svg'), os.path.join(d, 'lockup.png'), str(lw), str(lh), '1.5']
+            else:
+                for alt in ('alt-light', 'alt-violet'):
+                    args += [os.path.join(d, f'{alt}.svg'), os.path.join(d, f'{alt}-1080.png'), '1080', '1080', '1']
         subprocess.run(['node', os.path.join(HERE, 'render.js')] + args, check=True, stdout=subprocess.DEVNULL)
         html = os.path.join(HERE, 'sheet.html')
         with open(html, 'w') as f:
-            lede = {'3': LEDE_3, '4': LEDE_4}.get(round_, LEDE)
-            f.write(page(items, kicker, title, lede, BEFORE_AFTER if round_ == '4' else ''))
+            lede = {'3': LEDE_3, '4': LEDE_4, '5': LEDE_5}.get(round_, LEDE)
+            f.write(page(items, kicker, title, lede, BEFORE_AFTER if round_ == '4' else '', FOOTER_5 if round_ == '5' else FOOTER))
         render_sheet(html, os.path.join(ROOT, out))
         print('sheet ->', os.path.join(ROOT, out))
 
