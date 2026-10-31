@@ -437,7 +437,8 @@ def phone_card(x, y, w, caller, t0, t1, press, button="accept", z=4, ly=1):
         f'<img src="assets/img/src/incoming_call.jpg" alt=""><b>{caller}</b><small>mobile</small>'
         f'<i class="hit" style="left:{bx};top:77%;background:{col}"></i></div>', ly)
     show(f"#{i}", t0, t1)
-    enter(f"#{i}", t0, "tilt")
+    if not (CUR.get("idx", 0) > 0 and abs(q(t0) - CUR["t0"]) < .16):
+        enter(f"#{i}", t0, "tilt")
     tt, k = q(t0) + .3, 0
     while tt < press - .1:
         js(f'tl.set("#{i} .hit", {{opacity: {.5 if k % 2 == 0 else 0}, scale: {1.6 if k % 2 == 0 else 1}}}, {tt:.3f});')
@@ -735,6 +736,8 @@ def transitions():
             tween("#streak .ln", {"x": -100}, {"x": 1180}, t, 3)
             tween("#streak .sp", {"x": 400}, {"x": -900}, t, 3)
             js(f'tl.set("#streak", {{opacity: 0}}, {t + 3 * STEP:.3f});')
+            js(f'tl.set("#mbg", {{opacity: 1}}, {t:.3f});')        # maroon underneath while the panel slides in
+            js(f'tl.set("#mbg", {{opacity: 0}}, {t + 7 * STEP:.3f});')
             tween(f"#{cur}", {"clipPath": "polygon(100% 0%, 100% 0%, 100% 100%, 92% 100%)", "x": 160},
                   {"clipPath": "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)", "x": 0}, t + 2 * STEP, 4)
         elif kind == "zoomwhite":   # zoom blur into a white frame, the next shot out of a zoom blur
@@ -762,9 +765,9 @@ def transitions():
                 js(f'tl.set("#st{j}", {{opacity: 0}}, {p2 + (j + 5) * STEP:.3f});')
             tween(f"#{cur}", {"x": 300}, {"x": 0}, t, 3)
         elif kind == "glitchcard":  # a white frame, a stripe glitch, then a small turned card zooms up to full frame
-            white(p1)
-            js(f'tl.set("#stage", {{filter: "url(#gslice) grayscale(1) contrast(1.5)"}}, {t:.3f});')
-            js(f'tl.set("#stage", {{filter: "none"}}, {t + STEP:.3f});')
+            white(p2)                                              # white, the old shot sliced, then the card
+            js(f'tl.set("#stage", {{filter: "url(#gslice) grayscale(1) contrast(1.5)"}}, {p1:.3f});')
+            js(f'tl.set("#stage", {{filter: "none"}}, {t:.3f});')
             js(f'tl.set("#wbg", {{opacity: 1}}, {t + STEP:.3f});')
             js(f'tl.set("#wbg", {{opacity: 0}}, {t + 6 * STEP:.3f});')
             tween(f"#{cur}", {"scale": .3, "rotation": -24, "borderRadius": 60, "filter": "blur(4px)"},
@@ -803,6 +806,7 @@ html, body {{ width: {S}px; height: {S}px; overflow: hidden; background: {INK}; 
 #root {{ position: relative; width: {S}px; height: {S}px; overflow: hidden; background: {INK}; }}
 #stage {{ position: absolute; inset: 0; }}
 #wbg {{ position: absolute; inset: 0; background: {WHT}; opacity: 0; z-index: 0; }}
+#mbg {{ position: absolute; inset: 0; background: {MAR}; opacity: 0; z-index: 0; }}
 .sc {{ position: absolute; inset: 0; overflow: hidden; opacity: 0; }}
 .ly0, .ly1, .ly2 {{ position: absolute; inset: 0; }}
 .ly1 {{ z-index: 2; }} .ly2 {{ z-index: 3; }}
@@ -893,7 +897,7 @@ def main():
       <feImage href="assets/img/glitchmap.png" x="0" y="0" width="1080" height="1080" preserveAspectRatio="none" result="gm"/>
       <feDisplacementMap in="SourceGraphic" in2="gm" scale="260" xChannelSelector="R" yChannelSelector="G"/></filter>{"".join(FILTERS)}</svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{S}" data-height="{S}">
-      <div id="stage"><div id="wbg"></div>
+      <div id="stage"><div id="wbg"></div><div id="mbg"></div>
         <div id="scenes">{scenes}</div>
       </div>
       <div id="blk"></div>
