@@ -93,3 +93,5 @@ Updated 2026-10-31. Current version: final v8, renders/nxtlvl_ashke-lyric_reels_
 | 2026-10-31 | 1 min again, no sound effects, more clips and pictures cropped nicely, follow the reference completely, motion tracking on point | 3e |
 | 2026-10-31 | the owner sent the real lyrics: check every caption against them | captions rebuilt from plan/lyrics.md (v7); never trust transcription for lyrics, always ask for the official lyrics |
 | 2026-10-31 | add three more photos (barn with horse, fire stage arm up, purple stage) | cut-outs barn, fireup, purple, replacing repeats (v8) |
+| 2026-10-31 | Bugatti: add the full photo; stop repeating the same clips | Bugatti as a full framed print; every print, fill and flash its own window from a shot-by-shot breakdown, flashes from the MV verse (v9) |
+| 2026-10-31 | make the whole edit in the 1:1 box ratio | square render in ../ashke-lyric-1x1 from the same build (ASHKE_FORMAT=1x1) |

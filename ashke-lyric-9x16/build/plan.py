@@ -44,21 +44,33 @@ CUTOUT = {-1: "coat", 0: "profile", 1: "jet", 2: "selfie_a", 6: "redmic", 8: "po
           12: "stage", 15: "crowdmic", 17: "bugatti", 18: "selfie_b", 19: "fireup", 20: "back", 24: "jet", 26: "selfie_c",
           27: "barn", 28: "coat", 29: "purple"}   # the owner's photos and clean solo frames of Karan (build/cutouts.py)
 PRINT = {7: "fire", 16: "fire", 25: "fire"}   # the fire-stage photo as a still print (its flames cannot be cut away)
-# card footage (build/cards.py): Karan-only shots (source, start time, x of Karan as a fraction)
-SHOTS = {"K1": ("estate", 1.4, .5), "K2": ("estate", 13.0, .5), "K3": ("estate", 15.2, .42), "K4": ("estate", 42.6, .5),
-         "K5": ("tour", 44.4, .5), "K6": ("tour", 41.4, .45), "K7": ("tour", 10.4, .5), "K8": ("tour", 49.0, .5),
-         "K9": ("tour", 2.0, .5), "K10": ("tour", 31.0, .6), "K11": ("tour", 51.0, .5), "K13": ("estate", 13.8, .5),
-         "K14": ("tour", 50.2, .5), "K15": ("tour", 10.3, .5), "K16": ("tour", 16.0, .45),
-         "K17": ("estate", 43.3, .5), "K18": ("tour", 54.0, .5), "K19": ("tour", 31.2, .6), "K20": ("estate", 2.6, .52),
-         "K21": ("tour", 11.6, .5), "K22": ("tour", 45.0, .5)}
-CARD1 = {0: "K5", 3: "K2", 4: "K4", 5: "K11", 11: "K3", 12: "K16", 13: "K1", 14: "K10", 19: "K18", 21: "K13", 22: "K7",
-         23: "K8", 26: "K14", 30: "K9"}
-# second print: R5's red duotone print, plus a small print in the cut-out and type scenes for more footage
-CARD2 = {3: "K15", 11: "K8", 21: "K11", 1: "K17", 2: "K19", 8: "K20", 9: "K21", 10: "K22", 15: "K6", 17: "K17",
-         18: "K19", 20: "K20", 24: "K21", 27: "K22", 28: "K6", 29: "K18"}
-# the photo that fills the giant keyword in R2 scenes
-FILL = {0: "K13", 12: "K11", 19: "K2", 26: "K8"}
-TRANS_POOL = ["K3", "K11", "K1", "K6", "K4", "K5", "K13", "K10", "K7", "K14"]
+# card footage (build/cards.py). v9: every print plays its own window (source, start, x of the subject, end), cut from a
+# shot-by-shot breakdown of the owner's clips; no window is used twice or overlaps another, or the moments the clip-frame
+# cut-outs come from (estate 1-4.6, tour 10.2-12.7, 49.2-51, 53.4-55.1). Playback stops at the window's end and holds.
+SHOTS = {
+    "e_table": ("estate", 5.2, .5, 8.4), "e_aimlow": ("estate", 12.9, .45, 14.2), "e_aim": ("estate", 15.0, .42, 16.8),
+    "e_guns": ("estate", 18.4, .6, 20.0), "e_duo": ("estate", 20.4, .62, 22.0), "e_atcam": ("estate", 24.4, .5, 25.8),
+    "e_pair": ("estate", 27.0, .62, 28.8), "e_polo": ("estate", 29.0, .5, 31.1), "e_teak": ("estate", 33.5, .62, 34.48),
+    "e_tea2": ("estate", 37.2, .6, 38.04), "e_tea3": ("estate", 38.1, .6, 39.04), "e_tea4": ("estate", 40.7, .62, 41.64),
+    "e_teaclose": ("estate", 41.8, .55, 43.36), "e_car": ("estate", 43.9, .3, 45.1),
+    "t_group": ("tour", 0.1, .5, 1.29), "t_sign": ("tour", 1.4, .5, 3.21), "t_crowd": ("tour", 3.3, .5, 5.0),
+    "t_hands": ("tour", 6.7, .5, 8.43), "t_hall": ("tour", 8.5, .55, 10.2), "t_spot": ("tour", 15.7, .45, 17.0),
+    "t_crew": ("tour", 22.9, .5, 24.6), "t_redstage": ("tour", 28.2, .5, 29.8), "t_closemic": ("tour", 30.2, .6, 31.5),
+    "t_corridor": ("tour", 32.4, .5, 33.49), "t_dancers": ("tour", 35.3, .5, 37.0), "t_spot2": ("tour", 37.4, .5, 39.0),
+    "t_crowdk": ("tour", 42.3, .5, 44.0), "t_walk": ("tour", 44.4, .5, 46.4), "t_guitar": ("tour", 47.6, .6, 49.2),
+    "t_spot3": ("tour", 51.1, .5, 52.2),
+    # bright frames for the photo-filled keywords
+    "f_tea": ("estate", 32.6, .5, 33.44), "f_smoke": ("tour", 21.2, .5, 22.7), "f_gun": ("estate", 22.4, .6, 24.0),
+    "f_polo": ("estate", 35.3, .5, 36.7),
+}
+CARD1 = {0: "t_spot", 3: "e_aimlow", 4: "e_table", 5: "t_hall", 11: "e_teaclose", 12: "t_spot2", 13: "e_atcam", 14: "t_closemic",
+         19: "t_crowdk", 21: "e_duo", 22: "t_walk", 23: "t_guitar", 26: "t_spot3", 30: "t_sign"}
+# second print: R5's red duotone print, plus a small print in the cut-out scenes
+CARD2 = {3: "t_group", 11: "e_tea3", 21: "e_guns", 1: "e_teak", 2: "t_crowd", 8: "e_car", 9: "t_hands", 10: "e_polo",
+         15: "t_redstage", 17: "e_tea2", 18: "t_dancers", 20: "e_pair", 24: "t_corridor", 27: "e_tea4", 28: "t_crew", 29: "e_aim"}
+FILL = {0: "f_tea", 12: "f_smoke", 19: "f_gun", 26: "f_polo"}
+# single-frame transition flashes: frames from the music video's own verse (song 2:14-3:14), used nowhere else
+TRANS_POOL = [f"mv_{k:02d}" for k in range(66)]
 
 
 def line_times(li):

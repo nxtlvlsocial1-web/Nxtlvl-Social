@@ -30,8 +30,16 @@ from icons import ICON, WORD, svg  # noqa: E402
 from plan import CARD2, CUTOUT, FILL, OFFSET, PRINT, RECIPE, TRANS_POOL, W, line_times, scenes  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DUR, SONG, FW, FH = 60.0, 60.0, 1080, 1920     # 60 s from 2:14 (build/plan.py)
+DUR, SONG = 60.0, 60.0          # 60 s from 2:14 (build/plan.py)
+# ASHKE_FORMAT=1x1 renders the same edit square (1080x1080) into ../ashke-lyric-1x1: the board stays 1080x1920, the
+# camera centres on the square and pulls back (ZOOM) so the tall layouts still fit.
+SQUARE = os.environ.get("ASHKE_FORMAT") == "1x1"
+FW, FH = 1080, (1080 if SQUARE else 1920)
+CY, ZOOM = FH / 2, (.64 if SQUARE else 1.0)
+VTRACK = .55 if SQUARE else 1.0        # square: vertical tracking stays near the layout's middle so the whole scene fits
+OUT = os.path.join(os.path.dirname(ROOT), "ashke-lyric-1x1") if SQUARE else ROOT
 EV = []               # sound events for build/sound.py: (time, kind)
+PHOTO_PRINTS = {"bugatti"}   # the owner's Bugatti photo: his seat merges with the car, so it goes in whole
 BEATS = json.load(open(os.path.join(ROOT, "plan", "beats_raw.json")))
 PERIOD = 60 / BEATS["bpm"]
 STEP = 1 / 15
@@ -171,6 +179,11 @@ def scrap(kind, k, x, y, w, rot, t0, t1, z=1):
 def cutout(name, x, y, w, rot, t0, t1, rise=0, red=False, z=3):
     """A cut-out sticker in a slot w wide (and at most 1.15 w tall), centred in the slot."""
     from PIL import Image
+    if name in PHOTO_PRINTS:                 # photos that cannot be cut out cleanly go in whole, as a framed print
+        iw, ih = Image.open(os.path.join(ROOT, "assets", "img", "photo", f"{name}.jpg")).size
+        pw = min(w * .8, w * 1.15 * iw / ih)
+        still(name, x + (w - pw) / 2, y, pw, pw * ih / iw, rot, t0, t1)
+        return None
     iw, ih = Image.open(os.path.join(ROOT, "assets", "img", "cut", f"{name}.png")).size
     fw = min(w, w * 1.15 * iw / ih)
     x, w = x + (w - fw) / 2, fw
@@ -341,7 +354,8 @@ def r2(si, a, b, li, gs):
     scrap("black", 3, -60, 760, 1200, -5, kw[2], b)
     size = fit(kw[0], 1060, 330)
     after_n = len(gs) - ki - 1
-    cutout(CUTOUT[li], 220, 860 + size * 1.25 + 150 * after_n, 640, 2, kw[2], b, z=2)   # under the word and its labels
+    cw = 440 if SQUARE else 640                                  # square: smaller, so it stays in frame
+    cutout(CUTOUT[li], 540 - cw / 2, 860 + size * 1.25 + 150 * after_n, cw, 2, kw[2], b, z=2)   # under the word and its labels
     _, fw = label(kw[0], f"fill f{li}", 540, 860, size, -3, kw[2], b, mode="pop", z=6)
     cam(si, kw[2], 540, 960, 1.0, 0, .2)
     zt = kw[2] + .4
@@ -639,7 +653,8 @@ def transition_frames():
             i = nid("tf")
             rot = (-4, 5, -2)[j]
             w = (820, 700, 900)[j]
-            SCREEN.append(f'<div class="tframe" id="{i}" style="left:{540 - w / 2:.0f}px;top:{960 - w * 1.25 / 2:.0f}px;width:{w}px;height:{w * 1.25:.0f}px;'
+            w = w * (.82 if SQUARE else 1)
+            SCREEN.append(f'<div class="tframe" id="{i}" style="left:{540 - w / 2:.0f}px;top:{CY - w * 1.25 / 2:.0f}px;width:{w}px;height:{w * 1.25:.0f}px;'
                           f'transform:rotate({rot}deg)"><img src="assets/img/photo/frame_{shot}.jpg" alt=""></div>')
             t0 = a - (3 - j) / 30
             show(f"#{i}", t0, t0 + 1 / 30)
@@ -713,8 +728,8 @@ def camera():
         t = f / 15
         if t >= tend:
             u = t - tend
-            js(f'tl.set("#pan", {{x: {g.uniform(-1, 1):.1f}, y: {g.uniform(-1, 1):.1f}}}, {t:.3f});')
-            js(f'tl.set("#cam", {{scale: {1 + .03 * u:.4f}, rotation: 0}}, {t:.3f});')
+            js(f'tl.set("#pan", {{x: {g.uniform(-1, 1):.1f}, y: {CY - 960 + g.uniform(-1, 1):.1f}}}, {t:.3f});')
+            js(f'tl.set("#cam", {{scale: {(1 + .03 * u) * ZOOM:.4f}, rotation: 0}}, {t:.3f});')
             if blurred:
                 js(f'tl.set("#cam", {{filter: "none"}}, {t:.3f});')
                 blurred = False
@@ -729,8 +744,9 @@ def camera():
         s *= 1 + .025 * math.exp(-(t - lb) / .09)                  # a punch-in on every beat
         fx += g.uniform(-1, 1)
         fy += g.uniform(-1, 1)
-        js(f'tl.set("#pan", {{x: {540 - fx:.1f}, y: {960 - fy:.1f}}}, {t:.3f});')
-        js(f'tl.set("#cam", {{scale: {s * 1.06:.4f}, rotation: {rot:.2f}}}, {t:.3f});')
+        fy = 960 + (fy - 960) * VTRACK
+        js(f'tl.set("#pan", {{x: {540 - fx:.1f}, y: {CY - fy:.1f}}}, {t:.3f});')
+        js(f'tl.set("#cam", {{scale: {s * 1.06 * ZOOM:.4f}, rotation: {rot:.2f}}}, {t:.3f});')
         sp = math.hypot(vx, vy)
         if sp > 90:                                               # directional motion blur on fast steps
             k = min(13, sp * .045)
@@ -768,7 +784,7 @@ CSS = f"""
 html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #e9e4dc; }}
 #root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: #e9e4dc; }}
 #fx {{ position: absolute; inset: 0; }}
-#cam {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; transform-origin: 540px 960px; }}
+#cam {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; transform-origin: 540px {CY:.0f}px; }}
 #pan {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; }}
 #paper {{ position: absolute; left: -760px; top: -1000px; width: 2600px; height: 3900px; background: url(assets/img/paper.png);
   filter: sepia(.18) brightness(.98); }}
@@ -853,7 +869,8 @@ def main():
     for si, (a, b, li) in enumerate(scenes()):                  # a whoosh on every camera whip into the next scene
         if 0 < si and li != 32 and a < SONG:
             EV.append((a - .2, "whoosh"))
-    json.dump(sorted(EV), open(os.path.join(ROOT, "plan", "events.json"), "w"))
+    if not SQUARE:
+        json.dump(sorted(EV), open(os.path.join(ROOT, "plan", "events.json"), "w"))
     g = random.Random(3)
     for f in range(int(DUR * 15)):
         js(f'tl.set("#grain", {{x: {g.randint(-40, 0)}, y: {g.randint(-40, 0)}}}, {f / 15:.3f});')
@@ -864,7 +881,7 @@ def main():
                      f'data-duration="{SONG}" data-track-index="{n}" muted playsinline></video><i></i></div>' for n in (1, 2))
     HIDE.extend(["#pr1", "#pr2"])
     html = f"""<!doctype html>
-<html lang="en" data-resolution="portrait">
+<html lang="en" data-resolution="{'square' if SQUARE else 'portrait'}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width={FW}, height={FH}" />
@@ -904,7 +921,7 @@ def main():
   </body>
 </html>
 """
-    open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8").write(html)
+    open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(html)
     print(f"wrote index.html {len(html) // 1024} KB, {len(A)} timeline lines, {len(scenes())} scenes")
 
 

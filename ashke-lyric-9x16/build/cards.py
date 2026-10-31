@@ -18,7 +18,7 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from plan import CARD1, CARD2, DUR, FILL, RECIPE, ROOT, SHOTS, scenes  # noqa: E402
+from plan import CARD1, CARD2, DUR, FILL, RECIPE, ROOT, SHOTS, TRANS_POOL, scenes  # noqa: E402
 
 V = os.path.join(ROOT, "assets", "video")
 SRC = {"estate": (os.path.join(V, "src", "estate.mp4"), 1276, 718), "tour": (os.path.join(V, "src", "tour.mp4"), 1200, 720)}
@@ -33,8 +33,8 @@ def best_time(shot):
     neighbouring shot)."""
     if shot in _BEST:
         return _BEST[shot]
-    src, st, fx = SHOTS[shot]
-    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{st:.3f}", "-t", "0.6", "-i", SRC[src][0], "-vf", "fps=10,scale=320:-2,format=gray",
+    src, st, fx, _ = SHOTS[shot]
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{st:.3f}", "-t", "0.4", "-i", SRC[src][0], "-vf", "fps=10,scale=320:-2,format=gray",
                           "-f", "rawvideo", "-"], capture_output=True, check=True).stdout
     h = 180 if src == "estate" else 192
     fr = np.frombuffer(raw, np.uint8)
@@ -65,12 +65,14 @@ def track(name, plan):
             parts.append(out)
         if li is None:
             break
-        src, _, fx = SHOTS[plan[li]]
+        src, _, fx, end = SHOTS[plan[li]]
         st = best_time(plan[li])
+        run = max(.1, end - st - .08)                            # play only inside the window, then hold
         out = os.path.join(d, f"s{i:03d}.mp4")
         n = round(b * 30) - round(a * 30)
         b_ = "-.12" if RECIPE[li] == "R2" else ".03"
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{st:.3f}", "-i", SRC[src][0], "-vf", f"{crop(src, fx)},{LOOK.format(b=b_)}",
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{st:.3f}", "-i", SRC[src][0], "-vf",
+                        f"trim=duration={run:.3f},setpts=PTS-STARTPTS,{crop(src, fx)},{LOOK.format(b=b_)}",
                         "-frames:v", str(n), "-an", "-c:v", "libx264", "-preset", "fast", "-crf", "16", "-pix_fmt", "yuv420p", "-r", "30", out], check=True)
         parts.append(out)
         t = b
@@ -84,8 +86,8 @@ def fills():
     od = os.path.join(ROOT, "assets", "img", "photo")
     os.makedirs(od, exist_ok=True)
     for li, shot in FILL.items():
-        src, st, fx = SHOTS[shot]
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{st + .4:.3f}", "-i", SRC[src][0], "-frames:v", "1", "-vf",
+        src, st, fx, _ = SHOTS[shot]
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{st + .3:.3f}", "-i", SRC[src][0], "-frames:v", "1", "-vf",
                         "format=gray,normalize=independence=0,eq=contrast=2.4,format=rgb24,"
                         "lutrgb=r='if(gt(val,70),246,214)':g='if(gt(val,70),240,30)':b='if(gt(val,70),232,38)',scale=1200:-2",
                         "-q:v", "2", os.path.join(od, f"fill_{li}.jpg")], check=True)
@@ -94,10 +96,12 @@ def fills():
 def frames():
     od = os.path.join(ROOT, "assets", "img", "photo")
     os.makedirs(od, exist_ok=True)
-    for shot, (src, _, fx) in SHOTS.items():
-        t = best_time(shot)
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{t:.3f}", "-i", SRC[src][0], "-frames:v", "1", "-vf",
-                        f"{crop(src, fx)},{LOOK.format(b='.03').split(',tpad')[0]}", "-q:v", "2", os.path.join(od, f"frame_{shot}.jpg")], check=True)
+    mv = os.path.join(V, "music-video-src.mp4")
+    for k in range(len(TRANS_POOL)):                             # one frame per 0.9 s of the music video's verse
+        t = 134.6 + k * .9
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{t:.3f}", "-i", mv, "-frames:v", "1", "-vf",
+                        f"crop=256:320:192:20,scale=720:900:flags=lanczos,setsar=1,{LOOK.format(b='.03').split(',tpad')[0]}",
+                        "-q:v", "2", os.path.join(od, f"frame_{TRANS_POOL[k]}.jpg")], check=True)
 
 
 if __name__ == "__main__":
