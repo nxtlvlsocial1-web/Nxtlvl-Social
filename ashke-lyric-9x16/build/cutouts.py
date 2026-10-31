@@ -28,6 +28,9 @@ PICKS = {   # the owner's photos of Karan (assets/img/src/k1-k6.jpg): (src, phot
     "coat": ("photo", "k1", .5), "redmic": ("photo", "k2", .5, (.15, .85)), "crowdmic": ("photo", "k3", .5, (.25, .78)),
     "profile": ("photo", "k4", .45), "bugatti": ("photo", "k5", .4, (.12, .62)), "jet": ("photo", "k6", .52, (.36, .66)),
     "point": ("photo", "k7", .55),
+    # clean solo frames from the owner's clips (nobody touching him)
+    "suit": ("estate", 1.8, .52), "selfie_a": ("tour", 10.6, .5), "selfie_b": ("tour", 11.4, .52), "selfie_c": ("tour", 12.4, .5),
+    "arms": ("tour", 49.2, .5), "back": ("tour", 50.4, .5), "stage": ("tour", 54.2, .5), "walk": ("tour", 44.8, .5),
 }
 _sess = None
 

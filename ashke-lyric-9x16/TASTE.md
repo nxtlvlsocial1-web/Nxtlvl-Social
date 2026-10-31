@@ -1,6 +1,6 @@
 # TASTE: ashke-lyric-9x16
 
-Updated 2026-10-30. Current version: final v5, renders/nxtlvl_ashke-lyric_reels_9x16_v5.mp4 (35 s).
+Updated 2026-10-31. Current version: final v6, renders/nxtlvl_ashke-lyric_reels_9x16_v6.mp4 (60 s, the song only).
 
 ## 1. Brief
 - 9:16 Ashke (Karan Aujla, Mxrci) lyric edit: 60 s from 2:14, 1080x1920, 30 fps.
@@ -61,6 +61,22 @@ Updated 2026-10-30. Current version: final v5, renders/nxtlvl_ashke-lyric_reels_
 - Two more of the owner's photos: Karan pointing up (a cut-out) and the fire stage (a still print, because the
   flames cannot be cut away from his arm). The jet photo was already in.
 
+## 3e. v6 (owner, 2026-10-31)
+- Back to 60 s (2:14 to 3:14). No sound effects at all: the song section exactly as is. The end title is the
+  "ਅਸ਼ਕੇ" tape, with no nxtlvl logo.
+- More footage: 14 Karan-only cut-outs (8 photos plus 8 clean solo frames from the clips, minus 2 unused) and a
+  second photo print in the cut-out scenes (16 print slots). The fire photo appears as a still print in the 3
+  type scenes.
+- The camera is rebuilt from the reference's measured motion (phase correlation, 15 fps steps):
+  - It never stops: the focus glides through each scene's labels on a time-aware spline, arrives just after each
+    label lands, and drifts past the last one.
+  - Each cut sits at peak speed: it accelerates into the cut along the next direction and decelerates out of it
+    (expo, tau 0.1 s).
+  - Directional motion blur on the fast steps.
+  - The keyword zoom goes to 2.6x.
+- The window-blind shadows are in screen space (a light over the table); the invert flash is plain, so red goes
+  teal, as in the reference.
+
 ## 4. Removed
 - v2's full-bleed 9:16 cinema layer (eimantasbitinas23 reference): it blew the footage up and looked blurry.
 
@@ -74,3 +90,4 @@ Updated 2026-10-30. Current version: final v5, renders/nxtlvl_ashke-lyric_reels_
 | 2026-10-30 | only Karan in cut-outs, crop nicely, dope frames; Punjabi captions; lyric elements; sound effects; edit the music; blend the logo at the end | 3c |
 | 2026-10-30 | use these six photos for the image elements, keep the selected videos | cut-outs from the photos only |
 | 2026-10-30 | no logo, most SFX out, music unchanged, 35 s on the strongest drop, quicker transitions, two more photos | 3d |
+| 2026-10-31 | 1 min again, no sound effects, more clips and pictures cropped nicely, follow the reference completely, motion tracking on point | 3e |

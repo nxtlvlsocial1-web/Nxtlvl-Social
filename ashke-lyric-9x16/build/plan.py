@@ -26,9 +26,8 @@ import json
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# v5: 35 s cut of the section, from the bass drop: section time 0.74 (song 2:14.74, the drop hits at 2:15.3, the
-# strongest 35 s of bass in the song) to 35.74, where line 18 ends. All times below are edit times.
-OFFSET, DUR, NLINES = 0.74, 35.0, 19
+# The edit is the section itself (song 2:14 to 3:14); OFFSET would shift it (v5 used 0.74 for a 35 s cut).
+OFFSET, DUR, NLINES = 0.0, 60.0, 33     # v6: back to the full minute from 2:14
 W = json.load(open(os.path.join(ROOT, "plan", "words_scribe.json")))
 for _w in W:
     _w["s"] -= OFFSET
@@ -41,17 +40,22 @@ RECIPE = {-1: "R1", 0: "R2", 1: "R3", 2: "R4", 3: "R5", 4: "R6", 5: "R7", 6: "R8
           11: "R5", 12: "R2", 13: "R6", 14: "R7", 15: "R8", 16: "R9", 17: "R1", 18: "R3", 19: "R2", 20: "R4", 21: "R5",
           22: "R6", 23: "R7", 24: "R8", 25: "R9", 26: "R2", 27: "R1", 28: "R3", 29: "R4", 30: "R6", 31: "END", 32: "END"}
 # cut-out stickers (build/cutouts.py) for the cut-out recipes
-CUTOUT = {-1: "coat", 0: "profile", 1: "jet", 2: "crowdmic", 6: "redmic", 8: "point", 9: "bugatti", 10: "crowdmic", 12: "point",
-          15: "redmic", 17: "jet", 18: "coat"}
-PRINT = {7: "fire", 16: "fire"}   # the fire-stage photo as a still print (it cannot be cut out cleanly from its flames)   # the owner's photos of Karan (build/cutouts.py)
+CUTOUT = {-1: "coat", 0: "profile", 1: "jet", 2: "selfie_a", 6: "redmic", 8: "point", 9: "suit", 10: "arms",
+          12: "stage", 15: "crowdmic", 17: "bugatti", 18: "selfie_b", 19: "profile", 20: "back", 24: "point", 26: "selfie_c",
+          27: "coat", 28: "suit", 29: "jet"}   # the owner's photos and clean solo frames of Karan (build/cutouts.py)
+PRINT = {7: "fire", 16: "fire", 25: "fire"}   # the fire-stage photo as a still print (its flames cannot be cut away)
 # card footage (build/cards.py): Karan-only shots (source, start time, x of Karan as a fraction)
 SHOTS = {"K1": ("estate", 1.4, .5), "K2": ("estate", 13.0, .5), "K3": ("estate", 15.2, .42), "K4": ("estate", 42.6, .5),
          "K5": ("tour", 44.4, .5), "K6": ("tour", 41.4, .45), "K7": ("tour", 10.4, .5), "K8": ("tour", 49.0, .5),
          "K9": ("tour", 2.0, .5), "K10": ("tour", 31.0, .6), "K11": ("tour", 51.0, .5), "K13": ("estate", 13.8, .5),
-         "K14": ("tour", 50.2, .5), "K15": ("tour", 10.3, .5), "K16": ("tour", 16.0, .45)}
-CARD1 = {0: "K5", 3: "K2", 4: "K4", 5: "K11", 11: "K3", 12: "K16", 13: "K1", 14: "K10", 19: "K16", 21: "K13", 22: "K7",
+         "K14": ("tour", 50.2, .5), "K15": ("tour", 10.3, .5), "K16": ("tour", 16.0, .45),
+         "K17": ("estate", 43.3, .5), "K18": ("tour", 54.0, .5), "K19": ("tour", 31.2, .6), "K20": ("estate", 2.6, .52),
+         "K21": ("tour", 11.6, .5), "K22": ("tour", 45.0, .5)}
+CARD1 = {0: "K5", 3: "K2", 4: "K4", 5: "K11", 11: "K3", 12: "K16", 13: "K1", 14: "K10", 19: "K18", 21: "K13", 22: "K7",
          23: "K8", 26: "K14", 30: "K9"}
-CARD2 = {3: "K15", 11: "K8", 21: "K11"}
+# second print: R5's red duotone print, plus a small print in the cut-out and type scenes for more footage
+CARD2 = {3: "K15", 11: "K8", 21: "K11", 1: "K17", 2: "K19", 8: "K20", 9: "K21", 10: "K22", 15: "K6", 17: "K17",
+         18: "K19", 20: "K20", 24: "K21", 27: "K22", 28: "K6", 29: "K18"}
 # the photo that fills the giant keyword in R2 scenes
 FILL = {0: "K13", 12: "K11", 19: "K2", 26: "K8"}
 TRANS_POOL = ["K3", "K11", "K1", "K6", "K4", "K5", "K13", "K10", "K7", "K14"]

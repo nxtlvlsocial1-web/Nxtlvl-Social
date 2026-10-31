@@ -30,7 +30,7 @@ from icons import ICON, WORD, svg  # noqa: E402
 from plan import CARD2, CUTOUT, FILL, OFFSET, PRINT, RECIPE, TRANS_POOL, W, line_times, scenes  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DUR, SONG, FW, FH = 35.0, 35.0, 1080, 1920     # v5: the 35 s from the bass drop (build/plan.py)
+DUR, SONG, FW, FH = 60.0, 60.0, 1080, 1920     # 60 s from 2:14 (build/plan.py)
 EV = []               # sound events for build/sound.py: (time, kind)
 BEATS = json.load(open(os.path.join(ROOT, "plan", "beats_raw.json")))
 PERIOD = 60 / BEATS["bpm"]
@@ -292,6 +292,12 @@ def fit(text, maxw, size):
     return min(size, maxw / (tw(text, 100) / 100 + .56))
 
 
+def extra_print(li, x, y, w, h, rot, t0, t1):
+    """A second, smaller footage print (card2) in scenes that otherwise only have a cut-out: more of the clips."""
+    if li in CARD2 and RECIPE[li] != "R5" and t0 < t1 - .2:
+        card(2, x, y, w, h, rot, t0, t1)
+
+
 # ------------------------------------------------------------------------------------------------ recipes
 def r1(si, a, b, li, gs):
     scrap("red", 0, 30, 230, 1020, -7, a, b)
@@ -311,6 +317,7 @@ def r1(si, a, b, li, gs):
             y += size * 1.12 + 22
             cam(si, t, 540, 960 + (y - 1200) * .3, 1.02, 0, .4)
     para(["ਅਸ਼ਕੇ · ਕਰਨ ਔਜਲਾ, ਮਰਸੀ", "ਲਿਰਿਕ ਐਡਿਟ:", "ਨੈਕਸਟ ਲੈਵਲ ਸੋਸ਼ਲ"], 110, y + 30, gs[min(1, len(gs) - 1)][2], b)
+    extra_print(li, 620, 1380, 380, 450, 7, a + PERIOD * .5, b)
     star(60, max(1530, y + 190), 230, a + PERIOD, b, seed=si)
     star(290, max(1700, y + 330), 110, a + PERIOD * 1.5, b, seed=si + 1)
     if b - a > 1.4:
@@ -341,7 +348,7 @@ def r2(si, a, b, li, gs):
     after = gs[ki + 1:]
     back = min(b - .1, (after[0][2] - .05) if after else kw[2] + 1.0, zt + .55)
     if back - zt > .2:
-        cam(si, zt, 540 + fw * .22, 860 + size * .5, 1.85, -2, .27)
+        cam(si, zt, 540 + fw * .22, 860 + size * .5, 2.6, -2, .27)
         cam(si, back, 540, 1000, 1.0, 0, .27)
     y = 860 + size + 20
     for txt, key, t in after:
@@ -362,6 +369,7 @@ def r3(si, a, b, li, gs):
     rest = [g for g in gs[1:] if g is not kw]
     t_pull = rest[0][2] if rest else (kw[2] if kw is not g0 else a + .6)
     block(170, 960, 740, 560, t_pull, b)
+    extra_print(li, 700, 70, 340, 400, 8, t_pull, b)
     cutout(CUTOUT[li], 150, 640, 780, 1, t_pull, b)
     cam(si, t_pull, 540, 1000, 1.0, 0, .4)
     for k, (txt, key, t) in enumerate(rest):
@@ -384,6 +392,7 @@ def r4(si, a, b, li, gs):
     mids = [g for g in gs[1:] if g is not kw]
     t_cut = min(mids[0][2] if mids else (kw[2] if kw is not g0 else a + .5), a + .45)
     cutout(CUTOUT[li], 150, 480, 780, -1, t_cut, b)
+    extra_print(li, 30, 560, 300, 360, -8, t_cut + PERIOD / 2, b)
     cam(si, t_cut, 540, 820, 1.18, 0, .35)
     for k, (txt, key, t) in enumerate(mids):
         label(txt, "blk", 780, 1180 + 120 * k, fit(txt, 520, 96), 4, t, b, z=6)
@@ -469,6 +478,7 @@ def r8(si, a, b, li, gs):
     # phase B: relayout, the cut-out smaller, a big stamped word over a black label with a red block, first label below
     scrap("red", 3, -40, 1180, 1000, -6, t2, b)
     cutout(CUTOUT[li], 280, 640, 540, 0, t2, b)
+    extra_print(li, 660, 1060, 360, 430, 8, t2 + .1, b)
     flame(760, 1380, t2, b)
     label(g0[0], "redw", 540, 1460, fit(g0[0], 800, 120), -4, t2, b, mode="pop", z=6)
     for k, (txt, key, t) in enumerate(g for g in gs[1:] if g is not kw):
@@ -640,54 +650,93 @@ DIRS = [(0, 1), (0, 1), (1, .3), (0, 1), (-.8, .6), (0, -1), (.7, .7), (0, 1), (
 
 
 def camera():
-    """Sampled at 15 fps: each scene's keys (eased, power3 out), a whip in (expo out), a slow drift along the scene's
-    direction, a whip out along the next scene's direction, a little hand jitter. From the end title on, it rests."""
+    """Sampled at 15 fps, modelled on the reference's measured camera (phase correlation, frame by frame): it never
+    stops. Inside a scene the focus glides through the scene's keys on a time-aware Hermite spline, arriving at each
+    label just after it lands, and keeps drifting past the last one along the scene's direction (the reference holds
+    at 300-450 px/s). Every cut sits at peak speed: the camera accelerates into it along the next scene's direction
+    and comes out of the next one decelerating (expo, tau 0.1 s), so a cut reads as one whip. Fast steps get a
+    directional motion blur like the reference. A small punch-in on each beat. From the end title on, it rests."""
     plans = []
     for si, (a, b, li) in enumerate(scenes()):
         keys = sorted(CAMKEYS.get(si, [(a, 540, 960, 1.0, 0, .01)]))
         d = DIRS[si % len(DIRS)]
         n = math.hypot(*d)
-        plans.append(dict(a=a, b=b, li=li, keys=keys, d=(d[0] / n, d[1] / n)))
-    E, X = 430, 340
+        d = (d[0] / n, d[1] / n)
+        pts = [(a, keys[0][1], keys[0][2], keys[0][3], keys[0][4])]
+        for (tk, kx, ky, ks, kr, kd) in keys[1:]:
+            tt = min(max(tk + .12, pts[-1][0] + .1), b - .05)
+            if tt > pts[-1][0] + .05:
+                pts.append((tt, kx, ky, ks, kr))
+        lx, ly, ls, lr = pts[-1][1:]
+        run = min(320, 380 * (b - pts[-1][0]))                    # keep drifting to the cut
+        pts.append((b + .001, lx + d[0] * run, ly + d[1] * run, ls, lr))
+        plans.append(dict(a=a, b=b, li=li, d=d, pts=pts))
     tend = W[153]["s"] - .067
+    E, X, TAU = 380, 330, .1
+
+    def herm(pts, t, idx):
+        T = [p[0] for p in pts]
+        k = max(0, min(len(pts) - 2, max(i for i in range(len(pts)) if T[i] <= t + 1e-9)))
+        t0, t1 = T[k], T[k + 1]
+        u = max(0, min(1, (t - t0) / max(1e-6, t1 - t0)))
+        def tan(m):
+            lo, hi = max(0, m - 1), min(len(pts) - 1, m + 1)
+            return (pts[hi][idx] - pts[lo][idx]) / max(1e-6, T[hi] - T[lo])
+        p0, p1 = pts[k][idx], pts[k + 1][idx]
+        m0, m1 = tan(k) * (t1 - t0), tan(k + 1) * (t1 - t0)
+        h00, h10, h01, h11 = 2 * u ** 3 - 3 * u ** 2 + 1, u ** 3 - 2 * u ** 2 + u, -2 * u ** 3 + 3 * u ** 2, u ** 3 - u ** 2
+        return h00 * p0 + h10 * m0 + h01 * p1 + h11 * m1
+
+    def focus(si, t):
+        p = plans[si]
+        fx, fy, s, rot = (herm(p["pts"], t, i) for i in (1, 2, 3, 4))
+        u = max(0, t - p["a"])
+        e = math.exp(-u / TAU)                                    # whip in, decelerating
+        fx -= p["d"][0] * E * e
+        fy -= p["d"][1] * E * e
+        rot += 3 * e * (1 if si % 2 else -1)
+        if si + 1 < len(plans) and p["b"] < tend:                 # whip out, accelerating into the cut
+            nd = plans[si + 1]["d"]
+            x = math.exp(-max(0, p["b"] - t) / TAU)
+            fx += nd[0] * X * x
+            fy += nd[1] * X * x
+            rot += 2 * x * (1 if si % 2 else -1)
+        return fx, fy, s, rot
+
     g = random.Random(9)
+    blurred = False
     for f in range(int(DUR * 15)):
         t = f / 15
         if t >= tend:
             u = t - tend
             js(f'tl.set("#pan", {{x: {g.uniform(-1, 1):.1f}, y: {g.uniform(-1, 1):.1f}}}, {t:.3f});')
             js(f'tl.set("#cam", {{scale: {1 + .03 * u:.4f}, rotation: 0}}, {t:.3f});')
+            if blurred:
+                js(f'tl.set("#cam", {{filter: "none"}}, {t:.3f});')
+                blurred = False
             continue
         si = max(i for i, p in enumerate(plans) if p["a"] <= t + 1e-6)
-        p = plans[si]
-        k0 = p["keys"][0]
-        fx, fy, s, rot = k0[1], k0[2], k0[3], k0[4]
-        for (tk, kx, ky, ks, kr, kd) in p["keys"][1:]:
-            if t >= tk:
-                v = ease_out((t - tk) / kd)
-                fx, fy, s, rot = fx + (kx - fx) * v, fy + (ky - fy) * v, s + (ks - s) * v, rot + (kr - rot) * v
-        u = t - p["a"]
-        d = p["d"]
-        e = 1 - ease_out(u / .25, 4)
-        fx -= d[0] * E * e
-        fy -= d[1] * E * e
-        rot += 3.5 * e * (1 if si % 2 else -1)
-        fx += d[0] * 22 * u
-        fy += d[1] * 22 * u
-        if si + 1 < len(plans) and p["b"] < tend:
-            w = p["b"] - t
-            if w < .134:
-                v = ((.134 - w) / .134) ** 2
-                nd = plans[si + 1]["d"]
-                fx += nd[0] * X * v
-                fy += nd[1] * X * v
-                rot += 2.5 * v * (1 if si % 2 else -1)
-        fx += g.uniform(-1.5, 1.5)
-        fy += g.uniform(-1.5, 1.5)
+        fx, fy, s, rot = focus(si, t)
+        px, py, _, _ = focus(si, max(plans[si]["a"], t - STEP)) if t - STEP >= plans[si]["a"] else focus(si, t + STEP)
+        vx, vy = (fx - px) * s, (fy - py) * s
+        if t - STEP < plans[si]["a"]:
+            vx, vy = -vx, -vy
         lb = max([bt for bt in BEATS["beats"] if bt - OFFSET <= t + 1e-6] or [-9]) - OFFSET
-        s *= 1 + .035 * math.exp(-(t - lb) / .09)                  # a punch-in on every beat
+        s *= 1 + .025 * math.exp(-(t - lb) / .09)                  # a punch-in on every beat
+        fx += g.uniform(-1, 1)
+        fy += g.uniform(-1, 1)
         js(f'tl.set("#pan", {{x: {540 - fx:.1f}, y: {960 - fy:.1f}}}, {t:.3f});')
         js(f'tl.set("#cam", {{scale: {s * 1.06:.4f}, rotation: {rot:.2f}}}, {t:.3f});')
+        sp = math.hypot(vx, vy)
+        if sp > 90:                                               # directional motion blur on fast steps
+            k = min(13, sp * .045)
+            js(f'tl.set("#mbg", {{attr: {{stdDeviation: "{abs(vx) / sp * k:.1f} {abs(vy) / sp * k:.1f}"}}}}, {t:.3f});')
+            if not blurred:
+                js(f'tl.set("#cam", {{filter: "url(#mb)"}}, {t:.3f});')
+                blurred = True
+        elif blurred:
+            js(f'tl.set("#cam", {{filter: "none"}}, {t:.3f});')
+            blurred = False
 
 
 def flashes():
@@ -697,7 +746,7 @@ def flashes():
     for t, kind in FLASH:
         EV.append((t, {"invert": "glitch", "white": "flash", "split": "click"}[kind]))
         if kind == "invert":
-            js(f'tl.set("#fx", {{filter: "invert(1) hue-rotate(180deg) saturate(1.4)"}}, {t:.3f});')
+            js(f'tl.set("#fx", {{filter: "invert(1)"}}, {t:.3f});')            # red goes teal, like the reference
             js(f'tl.set("#fx", {{filter: "none"}}, {t + STEP:.3f});')
         elif kind == "white":
             js(f'tl.set("#flash", {{opacity: 1}}, {t:.3f});')
@@ -792,6 +841,7 @@ def main():
             continue
         gs = [("ਅਸ਼ਕੇ", False, .56), ("ਕਰਨ ਔਜਲਾ", True, .8)] if li < 0 else groups_of(li)   # ASHKE lands on the drop
         builders[RECIPE[li]](si, a, b, li, gs)
+    end_card()
     lyric_icons()
     transition_frames()
     camera()
@@ -819,6 +869,8 @@ def main():
     <style>{CSS}</style>
   </head>
   <body>
+    <svg width="0" height="0" style="position:absolute"><filter id="mb" x="-5%" y="-5%" width="110%" height="110%">
+      <feGaussianBlur id="mbg" stdDeviation="0 0"/></filter></svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="{FW}" data-height="{FH}">
       <div id="fx">
         <div id="cam"><div id="pan">
@@ -828,14 +880,14 @@ def main():
             {prints}
             {"".join(PAN)}
           </div>
-          <div id="blinds"></div>
         </div></div>
+        <div id="blinds"></div>
         {"".join(SCREEN)}
       </div>
       <div id="dim"></div>
       <div id="vig"></div>
       <div id="grain"></div>
-      <audio id="song" src="assets/audio/mix.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
+      <audio id="song" src="assets/audio/section.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
     </div>
     <script>
       window.__timelines = window.__timelines || {{}};
