@@ -96,6 +96,19 @@ CARDS = (
     '<b class="big9"><i class="n9">0</i> / 10</b></div>'
     '<div class="card c-q"><b class="ser big">Would you trust an AI</b><b class="ser big coral">with your club?</b></div>'
 )
+# name tags under the close-ups (same windows as FOCUS in stadium.js), the GOAL slams, the fast-forward badge
+G = T["goals_t"]
+GD = [.3, .3, .3, .3, .6, .3, .3, .38, .38, .38, 1.1]
+IMP = [g + d for g, d in zip(G, GD)]
+TAGS = [("tg-star", 1.75, 4.25, "THE STAR", "best player at the club. benched."),
+        ("tg-17", T["seventeen"] + .2, T["seventeen"] + 1.3, "THE 17-YEAR-OLD", "nobody has heard of him"),
+        ("tg-cap1", T["top"] + 1.15, T["top"] + 2.0, "THE CAPTAIN", "club legend"),
+        ("tg-cap2", T["sells"] + .1, T["sells"] + 1.4, "THE CAPTAIN", "sold. no warning."),
+        ("tg-cap3", IMP[10] + .75, IMP[10] + 1.2, "YOUR OLD CAPTAIN", "now in their kit")]
+SLAMS = [("gl-debut", IMP[4], "home"), ("gl-c1", IMP[7], "home"), ("gl-c2", IMP[8], "home"), ("gl-c3", IMP[9], "home"), ("gl-win", IMP[10], "away")]
+CARDS += "".join(f'<div class="ptag {c}"><span class="mono">{a}</span><b>{b}</b></div>' for c, _, _, a, b in TAGS)
+CARDS += "".join(f'<div class="goal {c} {k}">GOAL!</div>' for c, _, k in SLAMS)
+CARDS += '<div class="ff mono"><b>&#9654;&#9654;</b> FAST FORWARD <i class="ffm">0</i>&rsquo;</div>'
 CTX = ["MATCHDAY 1", "FULL TIME", "WEEK 3", "HALF-TIME", "CHRISTMAS", "JANUARY", "CUP FINAL", "REAL WORLD", "YOUR CALL"]
 
 
@@ -139,7 +152,7 @@ def story():
     add(f'tl.fromTo(".you",{{y:0}},{{y:-290,duration:.7,ease:"power2.in",immediateRender:false}},{T["top"] - .3:.3f});')
     for k in range(4):
         add(f'tl.fromTo(".r{k}",{{y:0}},{{y:58,duration:.7,ease:"power2.in",immediateRender:false}},{T["top"] - .3:.3f});')
-    out(".c-table", T["booed"] + .3)
+    out(".c-table", T["top"] + .85)
     pop(".chant", T["chanting"] - .15, "scale:.6,opacity:0", .3, "back.out(2.4)")
     add(f'tl.fromTo(".chant",{{y:0}},{{y:-10,duration:.16,yoyo:true,repeat:7,ease:"sine.inOut",immediateRender:false}},{T["chanting"] + .2:.3f});')
     out(".chant", E[4] + .2)
@@ -148,8 +161,8 @@ def story():
     out(".st-sold", T["warning"] - .2)
     pop(".c-why", T["warning"] - .05, "scale:.8,opacity:0", .3, "back.out(2)")
     out(".c-why", T["cup"] - .25)
-    pop(".c-final", T["winner"] + .5, "scale:1.6,opacity:0", .25, "back.out(2)")
-    out(".c-final", E[5] + .2)
+    pop(".c-final", IMP[10] - .1, "scale:1.6,opacity:0", .25, "back.out(2)")
+    out(".c-final", IMP[10] + .5, .18)
     # real world: TacticAI, 9 out of 10
     pop(".c-real", T["liverpool"] - .15, "y:40,opacity:0", .35, "back.out(1.8)")
     pop(".big9", T["nine"] - .3, "scale:.6,opacity:0", .3, "back.out(2.4)")
@@ -162,6 +175,18 @@ def story():
     pop(".ec-kw", T["follow"] + .05, "scale:.6,opacity:0", .3, "back.out(2.2)")
     pop(".ec-2", T["follow"] + .25, "y:20,opacity:0", .3)
     pop(".ec-h", T["follow"] + .5, "y:20,opacity:0", .3)
+    # close-up name tags, GOAL slams, the fast-forward badge with the match clock
+    for c, a, b, _, _ in TAGS:
+        pop(f".{c}", a, "y:24,opacity:0", .25, "back.out(2)")
+        out(f".{c}", b, .18)
+    for c, t0, _ in SLAMS:
+        pop(f".{c}", t0 - .02, "scale:2.6,opacity:0,rotation:-14", .22, "back.out(2.2)", "scale:1,opacity:1,rotation:-6")
+        add(f'tl.fromTo(".{c}",{{x:0}},{{x:7,duration:.04,yoyo:true,repeat:5,ease:"none",immediateRender:false}},{t0 + .2:.3f});')
+        out(f".{c}", t0 + (.55 if c == "gl-win" else .75), .15, "opacity:0,scale:1.3")
+    pop(".ff", 7.1, "x:-80,opacity:0", .25, "back.out(2)")
+    count(".ffm", 7.15, 0, 90, 2.0, "Math.round(o.v)", "none")
+    add('tl.fromTo(".ff b",{opacity:1},{opacity:.25,duration:.18,yoyo:true,repeat:11,ease:"steps(1)",immediateRender:false},7.1);')
+    out(".ff", T["tracking"] - .3)
     # top bar: progress, the WHAT IF light, the match context
     add(f'tl.fromTo(".prog i",{{scaleX:0}},{{scaleX:1,duration:{DUR},ease:"none",immediateRender:false}},0);')
     add(f'tl.fromTo(".live b",{{opacity:1}},{{opacity:.15,duration:.45,yoyo:true,repeat:{int(DUR / .45)},ease:"sine.inOut",immediateRender:false}},0);')
@@ -225,7 +250,19 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
 .cx { position: absolute; left: 0; right: 0; top: 0; text-align: center; font-style: normal; font-size: 24px; letter-spacing: 2px; opacity: 0; white-space: nowrap; }
 .prog { width: 120px; height: 20px; border-radius: 10px; border: 3px solid #1E1B18; overflow: hidden; }
 .prog i { display: block; height: 100%; background: #E8735A; transform-origin: 0 50%; transform: scaleX(0); }
-.card, .stamp, #endc, .ec-kw, .ec-2, .ec-h, .chant, .big9 { opacity: 0; }
+.card, .stamp, #endc, .ec-kw, .ec-2, .ec-h, .chant, .big9, .ptag, .goal, .ff { opacity: 0; }
+.ptag { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; top: 1190px; padding: 14px 30px 16px; border-radius: 26px;
+  background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 7px 8px 0 #1E1B18; text-align: center; }
+.ptag::before { content: ""; position: absolute; left: 50%; top: -17px; margin-left: -14px; border-left: 14px solid transparent;
+  border-right: 14px solid transparent; border-bottom: 16px solid #1E1B18; }
+.ptag span { display: block; font-size: 24px; letter-spacing: 5px; color: #D45C40; }
+.ptag b { display: block; font: 800 40px/1.15 "Manrope"; letter-spacing: -1px; }
+.goal { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; top: 1120px; padding: 6px 40px 14px; border-radius: 34px;
+  font: 800 170px/1 "Manrope"; letter-spacing: -6px; color: #fff; border: 4px solid #1E1B18; box-shadow: 10px 11px 0 #1E1B18; }
+.goal.home { background: #D45C40; } .goal.away { background: #34508F; }
+.ff { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; top: 650px; padding: 12px 26px; border-radius: 28px;
+  background: #1E1B18; color: #F1E9DC; font-size: 30px; letter-spacing: 3px; }
+.ff b { color: #E8735A; } .ff i { font-style: normal; color: #F2B33D; }
 .card.score { flex-direction: column; gap: 2px; text-align: center; padding: 22px 60px; }
 .card.score b { font-size: 120px; letter-spacing: -3px; line-height: 1; }
 .bars { display: flex; gap: 8px; align-items: flex-end; height: 56px; margin-top: 6px; }

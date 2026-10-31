@@ -114,12 +114,14 @@ circle.rotation.x = -Math.PI / 2; circle.position.y = .063; scene.add(circle);
 // goals: frame + soft net
 const goalM = mat(CREAM, { roughness: .4 });
 const netM = new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: .35, side: THREE.DoubleSide, roughness: .9 });
+const NETS = {};
 for (const sz of [-1, 1]) {
   const g = new THREE.Group(); g.position.set(0, 0, sz * PZ); scene.add(g);
   for (const sx of [-1.1, 1.1]) { const p = add(new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, .9, 8).translate(0, .45, 0), goalM)); p.position.x = sx; g.add(p); }
   const bar = add(new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, 2.32, 8), goalM)); bar.rotation.z = Math.PI / 2; bar.position.y = .9; g.add(bar);
   const back = new THREE.Mesh(new THREE.PlaneGeometry(2.2, .9), netM); back.position.set(0, .45, sz * .7); g.add(back);
   const top = new THREE.Mesh(new THREE.PlaneGeometry(2.2, .7), netM); top.rotation.x = Math.PI / 2; top.position.set(0, .9, sz * .35); g.add(top);
+  NETS[sz] = { back, top };
 }
 // corner flags
 for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
@@ -204,7 +206,7 @@ const eyeHiM = IM(new THREE.SphereGeometry(.009, 8, 6), basic(0xffffff), NP * 2,
 const browM = IM(new THREE.BoxGeometry(.075, .017, .02), basic(INK), NP * 2, false);
 const mouthArcM = IM(new THREE.TorusGeometry(.046, .012, 6, 16, Math.PI), basic(0x6a2a20), NP, false);
 const mouthOM = IM(new THREE.TorusGeometry(.03, .013, 8, 16), basic(0x6a2a20), NP, false);
-const armband = new THREE.Mesh(new THREE.TorusGeometry(.07, .022, 6, 18), mat(GOLD, { emissive: GOLD, emissiveIntensity: .3 }));
+const armband = new THREE.Mesh(new THREE.TorusGeometry(.068, .024, 8, 20).rotateX(Math.PI / 2), mat(GOLD, { emissive: GOLD, emissiveIntensity: .45 }));
 scene.add(armband);
 // what makes each player look like himself: skin, hair style and colour, height, boots
 const SKIN = [0xF1C9A5, 0xE3B28E, 0xC68863, 0xA06D4B, 0x7A4E34, 0xF6D7BF];
@@ -216,7 +218,19 @@ Object.assign(LOOK[IDCAP], { style: 0, hair: 0x1E1B18, skin: 0xC68863, h: 1.08 }
 Object.assign(LOOK[ID17], { style: 1, hair: 0x1E1B18, skin: 0x7A4E34, h: .95 });       // the 17-year-old
 const ringM = new THREE.InstancedMesh(new THREE.RingGeometry(.42, .55, 32).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: .9, toneMapped: false, depthWrite: false }), NP);
 scene.add(ringM);
-const ball = add(new THREE.Mesh(new THREE.SphereGeometry(.14, 18, 12), mat(CREAM, { roughness: .4 })));
+const ballTex = (() => {             // a panelled ball texture, so its spin reads
+  const c = document.createElement("canvas"); c.width = 256; c.height = 128;
+  const g = c.getContext("2d"); g.fillStyle = "#FFFDF8"; g.fillRect(0, 0, 256, 128); g.fillStyle = "#1E1B18";
+  for (let i = 0; i < 6; i++) for (let j = 0; j < 3; j++) { const x = i * 44 + (j % 2) * 22 + 10, y = j * 44 + 20; g.beginPath();
+    for (let k = 0; k < 5; k++) { const a = k / 5 * Math.PI * 2 - Math.PI / 2; g.lineTo(x + Math.cos(a) * 11, y + Math.sin(a) * 11); } g.fill(); }
+  const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; return tx;
+})();
+const ball = add(new THREE.Mesh(new THREE.SphereGeometry(.14, 28, 20), new THREE.MeshStandardMaterial({ map: ballTex, roughness: .4 })));
+const ballShadowM = new THREE.MeshBasicMaterial({ color: INK, transparent: true, opacity: .3, depthWrite: false });
+const ballShadow = new THREE.Mesh(new THREE.CircleGeometry(.16, 24), ballShadowM);
+ballShadow.rotation.x = -Math.PI / 2; scene.add(ballShadow);
+const focusRing = new THREE.Mesh(new THREE.RingGeometry(.55, .7, 48).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: 0, toneMapped: false, depthWrite: false }));
+scene.add(focusRing);
 const trailM = new THREE.InstancedMesh(new THREE.SphereGeometry(.1, 8, 6), new THREE.MeshBasicMaterial({ color: CREAM, transparent: true, opacity: .5, toneMapped: false }), 8);
 scene.add(trailM);
 // formation graph lines (home)
@@ -248,7 +262,7 @@ scene.add(confM);
 // ---------------------------------------------------------------- the match script
 // goals: shot time, scoring team, shooter id, shot origin, duration of the flight
 const GOALS = [];
-const goal = (t, team, who, from, dur = .45) => GOALS.push({ t, team, who, from, dur });
+const goal = (t, team, who, from, dur = .45) => GOALS.push({ t, team, who, from, dur, nx: (hash(t * 3.7) - .5) * 1.5, curl: hash(t * 5.1) > .5 ? 1 : -1 });
 [7.32, 7.74, 8.16, 8.6].forEach((t, k) => goal(t, "home", [9, 10, 6, 9][k], [[-1, -6.5], [1.5, -6], [-2.2, -5.2], [.8, -6.8]][k], .3));
 goal(C.scores + .05, "home", ID17, [1.2, -6.2], .6);
 goal(C.twonil - .7, "away", 20, [.5, 6.2], .3);
@@ -256,6 +270,19 @@ goal(C.twonil - .25, "away", 21, [-1, 6.6], .3);
 [C.three, C.goals + .3, C.twenty + .3].forEach((t, k) => goal(t, "home", [ID17, 9, 8][k], [[0, -6.4], [-1.8, -6], [2, -6.5]][k], .38));
 goal(C.winner - .35, "away", IDCAP, [1.4, 6.4], 1.1);
 const SLOWMO = [C.winner - .9, C.winner + 1.0];
+// close-ups on the people the story is about: the camera swings in front of the player's face (d ahead of him,
+// h above his eyes, side to his right) and holds; generate.py puts a name tag under the face for the same windows
+const impact = (g) => g.t + g.dur;
+const FOCUS = [
+  { a: 1.45, b: 4.5, id: IDSTAR, d: 2.5, h: .22, side: .3, fov: 30 },                          // the star, benched
+  { a: C.seventeen - .1, b: C.seventeen + 1.5, id: ID17, d: 2.6, h: .25, side: .35, fov: 30 },  // the 17-year-old walks out
+  { a: impact(GOALS[4]) + .05, b: Math.min(L[3] - .05, impact(GOALS[4]) + .85), id: ID17, d: 2.6, h: .6, side: .7, fov: 32 },
+  { a: C.top + .9, b: C.top + 2.2, id: IDCAP, d: 2.6, h: .25, side: .35, fov: 30 },            // meet the captain
+  { a: C.sells - .15, b: C.sells + 1.6, id: IDCAP, d: 2.5, h: .22, side: .3, fov: 30 },         // sold
+  { a: impact(GOALS[10]) + .45, b: impact(GOALS[10]) + 1.35, id: IDCAP, d: 2.6, h: .3, side: .4, fov: 30 },
+];
+window.FOOTBALL_FOCUS = FOCUS;
+const HEADP = Array.from({ length: 27 }, () => new THREE.Vector3()), HEADYAW = new Float32Array(27);
 // the score at time t (home, away) follows the match: one count per match
 function lastGoalBefore(t) { let g = null; for (const x of GOALS) if (x.t + x.dur <= t) g = x; return g; }
 window.FOOTBALL_GOALS = GOALS;
@@ -267,20 +294,56 @@ const speedAt = (t) => (t > 7.1 && t < 9.0 ? 3.2 : t > SLOWMO[0] && t < SLOWMO[1
 for (let i = 1; i <= NS; i++) PROG[i] = PROG[i - 1] + speedAt((i - .5) / FR) / FR;
 const prog = (t) => { const f = clamp(t, 0, DUR) * FR, i = Math.floor(f); return lerp(PROG[i], PROG[Math.min(NS, i + 1)], f - i); };
 
-function ballAt(t, out) {
+// the wandering point players drift towards (keeps their shape alive); the ball itself is passed between players
+function idleBall(t, out) {
   const m = prog(t);
-  // the idle ball: wandering around midfield
-  out.set(Math.sin(m * .61) * 3.6 + Math.sin(m * 1.37) * 1.3, .14 + Math.abs(Math.sin(m * 3.1)) * .25, Math.sin(m * .43 + 1) * 4.5 + Math.sin(m * 1.1) * 1.2);
+  return out.set(Math.sin(m * .61) * 3.6 + Math.sin(m * 1.37) * 1.3, .14, Math.sin(m * .43 + 1) * 4.5 + Math.sin(m * 1.1) * 1.2);
+}
+const IDLE = new THREE.Vector3(), IDLE2 = new THREE.Vector3(), V3 = new THREE.Vector3(), PSF = { x: 0, z: 0 };
+function outfield(team, t) {
+  if (team === "home") return [1, 2, 3, 4, 5, 7, 8, 9, t < C.signs + 1.6 ? 10 : ID17, t < sold() + 1.2 ? IDCAP : 6];
+  return [12, 13, 14, 15, 16, 17, 18, 19, t < finalOn() ? 20 : IDCAP, 21];
+}
+function holderAt(k, t) {
+  const team = Math.floor(k / 5) % 2 ? "away" : "home";
+  const L = outfield(team, t);
+  return L[Math.floor(hash(k * 7.31 + 2) * L.length)];
+}
+function feet(id, t, out) { playerAt(id, t, idleBall(t, IDLE2), PSF); return out.set(PSF.x, .14, PSF.z); }
+const PASS = .85;
+function passBall(t, out) {
+  const m = prog(t), k = Math.floor(m / PASS), u = m / PASS - k;
+  const a = holderAt(k, t), b = holderAt(k + 1, t);
+  feet(a, t, out); feet(b, t, V3);
+  const e = sm(clamp((u - .3) / .7));                 // he holds it for a moment, then plays it
+  const cross = (a < N_HOME || a === ID17 || (a === IDCAP && t < finalOn())) !== (b < N_HOME || b === ID17 || (b === IDCAP && t < finalOn()));
+  out.lerp(V3, e);
+  out.y = .14 + Math.sin(Math.PI * e) * (cross ? .7 : .1);
+  return out;
+}
+const bez = (p0, p1, p2, u, out) => out.set(
+  (1 - u) * (1 - u) * p0.x + 2 * (1 - u) * u * p1.x + u * u * p2.x,
+  (1 - u) * (1 - u) * p0.y + 2 * (1 - u) * u * p1.y + u * u * p2.y,
+  (1 - u) * (1 - u) * p0.z + 2 * (1 - u) * u * p1.z + u * u * p2.z);
+const P0 = new THREE.Vector3(), P1 = new THREE.Vector3(), P2 = new THREE.Vector3();
+function ballAt(t, out) {
+  passBall(t, out);
   for (const g of GOALS) {
     const dir = g.team === "home" ? -1 : 1;
-    const a = g.t - .35, b = g.t, c = g.t + g.dur;
-    if (t < a - .6 || t > c + 1.4) continue;
-    const from = V2.set(g.from[0], .14, g.from[1]);
-    if (t < b) { out.lerp(from, ss(t, a - .6, b)); continue; }
-    const net = new THREE.Vector3((hash(g.t) - .5) * 1.4, .45, dir * (PZ + .45));
-    if (t < c) { const u = ramp(t, b, c); out.lerpVectors(from, net, u); out.y = .14 + Math.sin(Math.PI * u) * (g.dur > .8 ? 1.2 : .6) + u * .25; continue; }
-    out.copy(net); out.y = .2;
-    if (t > c + .7) out.lerp(V2.set(0, .14, 0), ss(t, c + .7, c + 1.4));
+    const b = g.t, c = g.t + g.dur;
+    if (t < b - 1.0 || t > c + 1.7) continue;
+    P0.set(g.from[0], .14, g.from[1] + dir * .3);
+    if (t < b) { out.lerp(P0, ss(t, b - 1.0, b - .35)); continue; }
+    P2.set(g.nx, .5, dir * (PZ + .3));
+    if (t < c) {
+      // the shot: a curling, rising strike into the corner
+      P1.set((P0.x + P2.x) / 2 + g.curl * 1.5, g.dur > .8 ? 1.5 : .95, (P0.z + P2.z) / 2);
+      bez(P0, P1, P2, ramp(t, b, c), out); continue;
+    }
+    // into the back of the net, drop, then back to the centre spot for the restart
+    const u = ramp(t, c, c + .35);
+    out.set(g.nx, lerp(.5, .14, u * u), dir * (PZ + .3 + .32 * Math.sin(Math.PI * .5 * u)));
+    if (t > c + .9) out.lerp(V2.set(0, .14, 0), ss(t, c + .9, c + 1.7));
   }
   return out;
 }
@@ -381,15 +444,15 @@ function camAt(t) {
   sh += .3 * pulse(t, C.booing, .4);
   camera.position.x += Math.sin(t * .37) * .12 + Math.sin(t * 31) * sh * .3;
   camera.position.y += Math.sin(t * .29 + 1) * .08 + Math.sin(t * 27 + 2) * sh * .2;
-  camera.updateProjectionMatrix();
-  camera.lookAt(look);
+  return look;
 }
 
 // ---------------------------------------------------------------- render at time t
 const PS = { x: 0, z: 0, vis: 1, team: "home", sit: 0 }, PS0 = { x: 0, z: 0, vis: 1, team: "home", sit: 0 };
 const BP0 = new THREE.Vector3();
 const PARTS = [torsoM, shortsM, legM, bootM, armM, headM, hairCapM, hairAfroM, hairMohM, eyeM, eyeHiM, browM, mouthArcM, mouthOM];
-const MB = new THREE.Matrix4(), MP = new THREE.Matrix4(), MR = new THREE.Matrix4(), MOUT = new THREE.Matrix4(), EU = new THREE.Euler();
+const MB = new THREE.Matrix4(), MH = new THREE.Matrix4(), MP = new THREE.Matrix4(), MR = new THREE.Matrix4(), MOUT = new THREE.Matrix4(), EU = new THREE.Euler(), EUQ = new THREE.Euler();
+let BASEM = MB;
 // one part of the current player: the player's base matrix MB, then the part's local position, rotation (about its
 // pivot, dropping by `drop` below it) and scale
 function part(mesh, idx, x, y, z, rx, ry, rz, drop = 0, s = 1, sy = 1) {
@@ -397,7 +460,7 @@ function part(mesh, idx, x, y, z, rx, ry, rz, drop = 0, s = 1, sy = 1) {
   MP.multiply(MR.makeRotationFromEuler(EU.set(rx, ry, rz)));
   if (drop) MP.multiply(MR.makeTranslation(0, -drop, 0));
   if (s !== 1 || sy !== 1) MP.multiply(MR.makeScale(s, s * sy, s));
-  MOUT.multiplyMatrices(MB, MP);
+  MOUT.multiplyMatrices(BASEM, MP);
   if (mesh) mesh.setMatrixAt(idx, MOUT);
 }
 // the face for player id at time t: mouth (smile / frown / o / flat), brow tilt (+ angry, - worried), brow lift, eye size
@@ -413,6 +476,8 @@ function expression(id, t, team) {
     const happy = g.team === team;
     mouth = happy ? (id === g.who ? "o" : "smile") : "frown"; brow = happy ? -.2 : -.35; lift = happy ? .015 : 0; eyes = happy ? 1.1 : 1;
   }
+  if (id === ID17 && t > C.signs - .2 && t < C.signs + 2.0) { mouth = t < C.seventeen + .5 ? "flat" : "smile"; brow = t < C.seventeen + .5 ? -.25 : -.1; }
+  if (id === IDCAP && t > C.top + .9 && t < C.top + 2.2) { mouth = "o"; lift = .02; eyes = 1.1; brow = -.2; }
   if (id === IDCAP && t > C.sells - .2 && t < C.sells + 2.4) { mouth = "o"; lift = .025; eyes = 1.3; brow = -.3; }
   if (IDSUB.includes(id) && t > C.sells - .2 && t < C.sells + 2.4) { mouth = "o"; lift = .02; eyes = 1.25; }
   if (t > C.winner + .3 && t < E[5] + .4) {
@@ -448,6 +513,20 @@ function renderAt(t) {
   // ball and trail
   ballAt(t, BP);
   ball.position.copy(BP);
+  ballAt(t - .03, V); const bv = BP.distanceTo(V) / .03;
+  ball.rotation.set(-prog(t) * 7 - (bv > 6 ? t * 40 : 0), t * 2, 0);
+  ballShadow.position.set(BP.x, .07, BP.z);
+  ballShadow.scale.setScalar(1 + BP.y * .6);
+  ballShadowM.opacity = .32 / (1 + BP.y * 1.5);
+  idleBall(t, IDLE);
+  // nets bulge when the ball hits them
+  for (const sz of [-1, 1]) {
+    let bl = 0;
+    for (const g of GOALS) if ((g.team === "home" ? -1 : 1) === sz) bl = Math.max(bl, Math.sin(Math.PI * ramp(t, g.t + g.dur - .02, g.t + g.dur + .55)) * (t > g.t + g.dur - .02 ? 1 : 0));
+    NETS[sz].back.position.z = sz * (.7 + .35 * bl);
+    NETS[sz].back.scale.set(1 + .06 * bl, 1 + .12 * bl, 1);
+    NETS[sz].top.scale.set(1, 1 + .4 * bl, 1);
+  }
   const shot = GOALS.some((g) => t > g.t && t < g.t + g.dur);
   for (let k = 0; k < 8; k++) {
     ballAt(t - (k + 1) * .035, V);
@@ -460,10 +539,10 @@ function renderAt(t) {
   const trackOn = ss(t, C.tracking - .2, C.tracking + .3) * (1 - ss(t, E[1], E[1] + .4));
   const heartOn = ss(t, C.rewires - .2, C.rewires + .3) * (1 - ss(t, C.three, C.three + .4));
   const boo = 1 - ss(t, 7.0, 7.6);
-  ballAt(t - .06, BP0);
+  idleBall(t - .06, BP0);
   for (let id = 0; id < NP; id++) {
     playerAt(id, t - .06, BP0, PS0);
-    playerAt(id, t, BP, PS);
+    playerAt(id, t, IDLE, PS);
     let vis = PS.vis;
     if (id === IDSTAR || IDSUB.includes(id)) vis = 1;
     const sc = Math.max(.001, vis);
@@ -476,8 +555,23 @@ function renderAt(t) {
     const ph = m * 9 + id * 1.3;
     let jump = 0, cheer = 0;
     for (const g of GOALS) if (g.who === id) { const u = ramp(t, g.t + g.dur, g.t + g.dur + .9); jump += Math.max(0, Math.sin(Math.PI * u)) * .6; cheer = Math.max(cheer, u > 0 && u < 1 ? 1 : 0); }
+    if (id === IDCAP && t > C.top + .9 && t < C.top + 2.2) { cheer = 1; jump = Math.abs(Math.sin((t - C.top) * 6)) * .25; }
+    // keepers dive at every shot they face, and are beaten
+    let roll = 0, dive = 0;
+    if (id === 0 || id === N_HOME) {
+      const concedes = id === 0 ? "away" : "home";
+      for (const g of GOALS) if (g.team === concedes && t > g.t - .05 && t < impact(g) + 1.2) {
+        const u = ss(t, g.t + .02, g.t + Math.min(.35, g.dur * .8)), side = g.nx >= 0 ? 1 : -1;
+        PS.x = lerp(PS.x, g.nx * .55 + side * .2, u);
+        PS.z = lerp(PS.z, (id === 0 ? 1 : -1) * (PZ - .4), u);
+        yaw = id === 0 ? Math.PI : 0;
+        roll = (id === 0 ? 1 : -1) * side * 1.25 * u;
+        dive = Math.sin(Math.PI * ramp(t, g.t + .02, g.t + .55)) * .3;
+      }
+    }
     const bob = PS.sit ? 0 : Math.abs(Math.sin(ph)) * .05 * run;
-    MB.compose(V.set(PS.x, bob + jump - (PS.sit ? .2 : 0), PS.z), Q.setFromAxisAngle(UP, yaw), S.set(sc * lk.h, sc * lk.h, sc * lk.h));
+    MB.compose(V.set(PS.x, bob + jump + dive - (PS.sit ? .2 : 0), PS.z), Q.setFromEuler(EUQ.set(0, yaw, roll, "YXZ")), S.set(sc * lk.h, sc * lk.h, sc * lk.h));
+    HEADYAW[id] = yaw;
     const kit = PS.team === "home" ? KIT.home : KIT.away;
     tmpC.copy(kit);
     if (id === IDSTAR) tmpC.lerp(tmpC2.set(0x9a8f86), .2);
@@ -489,18 +583,31 @@ function renderAt(t) {
     part(shortsM, id, 0, .52, 0, 0, 0, 0); shortsM.setColorAt(id, tmpC2.set(PS.team === "home" ? CREAM : 0x22335c));
     for (let side = 0; side < 2; side++) {
       const sx = side ? .095 : -.095;
-      const swing = PS.sit ? -1.45 : Math.sin(ph + side * Math.PI) * .75 * run;
+      let swing = PS.sit ? -1.45 : Math.sin(ph + side * Math.PI) * .75 * run;
+      if (side === 1) for (const g of GOALS) if (g.who === id && t > g.t - .25 && t < g.t + .3)   // the strike
+        swing = t < g.t - .05 ? lerp(0, .9, ramp(t, g.t - .25, g.t - .05)) : lerp(.9, -1.5, ramp(t, g.t - .05, g.t + .08)) * (1 - ramp(t, g.t + .12, g.t + .3));
       part(legM, id * 2 + side, sx, .45, 0, swing, 0, 0, .2);
       legM.setColorAt(id * 2 + side, tmpC2.copy(tmpC).multiplyScalar(.82));
       // boots follow the foot at the end of the leg
       const fy = .45 - Math.cos(swing) * .4, fz = -Math.sin(swing) * .4;
       part(bootM, id * 2 + side, sx, Math.max(.035, fy), fz + .04, 0, 0, 0);
       bootM.setColorAt(id * 2 + side, tmpC2.set(lk.boot));
-      const armSwing = cheer ? -2.8 : PS.sit ? -.5 : -Math.sin(ph + side * Math.PI) * .7 * run;
-      part(armM, id * 2 + side, side ? .232 : -.232, 1.0, 0, armSwing, 0, side ? -.12 : .12, .17);
+      const crossed = id === IDSTAR && t < 7;                  // the benched star sulks, arms folded
+      const armSwing = cheer ? -2.8 : crossed ? -1.25 : PS.sit ? -.5 : -Math.sin(ph + side * Math.PI) * .7 * run;
+      const armRz = crossed ? (side ? -.95 : .95) : side ? -.12 : .12;
+      part(armM, id * 2 + side, side ? .232 : -.232, 1.0, 0, armSwing, 0, armRz, .17);
+      if (side === 0 && id === IDCAP) { part(null, 0, -.232, 1.0, 0, armSwing, 0, armRz, .09); armband.matrix.copy(MOUT); armband.matrixAutoUpdate = false; }   // on his left arm
       armM.setColorAt(id * 2 + side, tmpC2.set(lk.skin));
     }
-    // head, hair
+    // head, hair: the head can shake, nod and look up on its own
+    let hYaw = 0, hPitch = 0;
+    if (id === IDSTAR && t > 2.3 && t < 4.4) hYaw = Math.sin((t - 2.3) * 8) * .32 * (1 - ramp(t, 3.8, 4.4));
+    if (cheer) hPitch = -.35;
+    if (id === IDCAP && t > C.sells - .1 && t < C.sells + 1.5) hPitch = -.18 + Math.sin(t * 22) * .03;
+    if (id === ID17 && t > C.signs - .2 && t < C.signs + 1.9 && !cheer) hPitch = Math.sin(ph * .5) * .06;
+    MH.copy(MB).multiply(MR.makeTranslation(0, 1.27, 0)).multiply(MP.makeRotationFromEuler(EU.set(hPitch, hYaw, 0))).multiply(MR.makeTranslation(0, -1.27, 0));
+    BASEM = MH;
+    HEADP[id].set(0, 1.29, 0).applyMatrix4(MH);
     part(headM, id, 0, 1.27, 0, 0, 0, 0); headM.setColorAt(id, tmpC2.set(lk.skin));
     part(hairCapM, id, 0, 1.285, -.01, 0, 0, 0, 0, lk.style === 0 || lk.style === 3 ? 1 : .001, lk.style === 3 ? .45 : 1);
     part(hairAfroM, id, 0, 1.33, -.03, 0, 0, 0, 0, lk.style === 1 ? 1 : .001);
@@ -517,7 +624,7 @@ function renderAt(t) {
     const o = ex.mouth === "o";
     part(mouthArcM, id, 0, 1.2 + (ex.mouth === "smile" ? .025 : 0), .158, 0, 0, ex.mouth === "smile" ? Math.PI : 0, 0, o ? .001 : 1, ex.mouth === "flat" ? .18 : 1);
     part(mouthOM, id, 0, 1.205, .158, 0, 0, 0, 0, o ? 1 : .001);
-    if (id === IDCAP) { part(null, 0, -.232, .93, 0, Math.PI / 2, 0, 0); armband.matrix.copy(MOUT); armband.matrixAutoUpdate = false; }
+    BASEM = MB;
     // rings: tracking (green / red for the star), heart-rate pulses (red), NEW (17), captain gold
     let r = 0; tmpC.set(0x3FA372);
     if (trackOn > 0 && vis > 0) { r = trackOn; }
@@ -539,8 +646,8 @@ function renderAt(t) {
   armband.matrixWorldNeedsUpdate = true;
   // formation graph and the orb's beams at the rewire
   EDGES.forEach(([a, b], k) => {
-    playerAt(a === 10 ? ID17 : a === 6 ? (t < sold() ? IDCAP : 6) : a, t, BP, PS); const ax = PS.x, az = PS.z;
-    playerAt(b === 10 ? ID17 : b === 6 ? (t < sold() ? IDCAP : 6) : b, t, BP, PS);
+    playerAt(a === 10 ? ID17 : a === 6 ? (t < sold() ? IDCAP : 6) : a, t, IDLE, PS); const ax = PS.x, az = PS.z;
+    playerAt(b === 10 ? ID17 : b === 6 ? (t < sold() ? IDCAP : 6) : b, t, IDLE, PS);
     graphPos.set([ax, .12, az, PS.x, .12, PS.z], k * 6);
   });
   graphG.attributes.position.needsUpdate = true;
@@ -624,7 +731,22 @@ function renderAt(t) {
   grade.uniforms.uFlash.value = fl + .3 * pulse(t, C.sells, .1);
   grade.uniforms.uTime.value = t;
 
-  camAt(t);
+  const look = camAt(t);
+  let fb = 0, fw = null;
+  for (const f of FOCUS) { const w = ss(t, f.a, f.a + .35) * (1 - ss(t, f.b - .3, f.b)); if (w > fb) { fb = w; fw = f; } }
+  if (fw) {
+    const hp = HEADP[fw.id], yw = HEADYAW[fw.id];
+    V.set(hp.x + Math.sin(yw) * fw.d + Math.cos(yw) * fw.side, hp.y + fw.h, hp.z + Math.cos(yw) * fw.d - Math.sin(yw) * fw.side);
+    camera.position.lerp(V, fb);
+    look.lerp(V3.set(hp.x, hp.y - .06, hp.z), fb);
+    camera.fov = lerp(camera.fov, fw.fov, fb);
+    playerAt(fw.id, t, IDLE, PS);
+    focusRing.position.set(PS.x, .09, PS.z);
+  }
+  focusRing.material.opacity = .9 * fb;
+  grade.uniforms.uVig.value = .28 + .6 * fb;
+  camera.updateProjectionMatrix();
+  camera.lookAt(look);
   const cv = window.FOOTBALL_COVER;
   if (cv) { camera.position.set(...cv.cam); camera.fov = cv.fov; camera.updateProjectionMatrix(); camera.lookAt(...cv.look); }
   composer.render();
