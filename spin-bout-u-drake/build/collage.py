@@ -645,6 +645,23 @@ def camera():
             blurred = False
 
 
+# The lively gradient behind the collage (screen space, under the moving paper): big soft colour blobs drifting on
+# slow loops, a little brighter on every beat. (x, y, radius, colour, drift x, drift y, period s, phase)
+BLOBS = [(300, 300, 480, "#b0194f", 260, 180, 9.0, 0.0), (1100, 380, 400, "#e0336f", -240, 220, 11.0, 1.7),
+         (700, 1150, 620, "#2e0818", 200, -260, 13.0, 3.1), (200, 1100, 440, "#5a1660", 220, -160, 10.0, 4.4),
+         (1150, 1200, 460, "#8c1442", -260, -200, 12.0, 2.2), (740, 640, 300, "#ff5c8a", 180, 160, 7.5, 5.0)]
+
+
+def background():
+    for f in range(int(DUR * 15)):           # stepped on the edit's 15 fps grid, smooth curves (no shake)
+        t = f / 15
+        for k, (x, y, r, c, dx, dy, per, ph) in enumerate(BLOBS):
+            u = t / per * math.tau + ph
+            js(f'tl.set("#bl{k}", {{x: {dx * math.sin(u):.0f}, y: {dy * math.cos(u * .8):.0f}, scale: {1 + .18 * math.sin(u * 1.3):.3f}}}, {t:.3f});')
+        lb = max([bt for bt in BEATS["beats"] if bt <= t + 1e-6] or [-9])
+        js(f'tl.set("#bg", {{filter: "brightness({1 + .22 * math.exp(-(t - lb) / .12):.3f}) saturate(1.1)"}}, {t:.3f});')
+
+
 def flashes():
     SCREEN.append('<div id="flash"></div><div id="split"><i></i></div>')
     HIDE.extend(["#flash", "#split"])
@@ -671,7 +688,10 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: {INK}
 #fx {{ position: absolute; inset: 0; }}
 #cam {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; transform-origin: 540px {CY}px; }}
 #pan {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; }}
-#paper {{ position: absolute; left: -760px; top: -1000px; width: 2600px; height: 3900px; background: url(assets/img/collage/paper.png); }}
+#bg {{ position: absolute; inset: -200px; overflow: hidden; background: radial-gradient(ellipse at 50% 50%, #2a0818, #0c0408 75%); }}
+.blob {{ position: absolute; display: block; border-radius: 50%; mix-blend-mode: screen; filter: blur(60px); opacity: .62; }}
+{"".join(f'#bl{k} {{ left: {x}px; top: {y}px; width: {r * 2}px; height: {r * 2}px; margin: -{r}px 0 0 -{r}px; background: radial-gradient(circle, {c} 0%, {c}aa 35%, rgba(0,0,0,0) 70%); }}' for k, (x, y, r, c, *_) in enumerate(BLOBS))}
+#paper {{ position: absolute; left: -760px; top: -1000px; width: 2600px; height: 3900px; background: url(assets/img/collage/shade.png); opacity: .85; }}
 #grid {{ position: absolute; left: -760px; top: -1000px; width: 2600px; height: 3900px; pointer-events: none; opacity: .3; }}
 #grid line {{ stroke: {WHT}; stroke-width: 1.6; }}
 #board {{ position: absolute; inset: 0; }}
@@ -737,6 +757,7 @@ def main():
     lyric_icons()
     transition_frames()
     camera()
+    background()
     flashes()
     g = random.Random(3)
     for f in range(int(DUR * 15)):
@@ -758,9 +779,9 @@ def main():
       <feGaussianBlur id="mbg" stdDeviation="0 0"/></filter></svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
       <div id="fx">
+        <div id="bg">{"".join(f'<i class="blob" id="bl{k}"></i>' for k in range(len(BLOBS)))}</div>
         <div id="cam"><div id="pan">
           <div id="paper"></div>
-          <svg id="grid" viewBox="0 0 2600 3900">{grid}</svg>
           <div id="board">
             {"".join(PAN)}
           </div>

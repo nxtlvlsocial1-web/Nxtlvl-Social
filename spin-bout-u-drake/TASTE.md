@@ -88,6 +88,9 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
   cuts, invert / white / split flashes, the spline camera with whips, motion blur and beat punches, 15 fps steps).
 - Recoloured: maroon crumpled paper, magenta / black / maroon / off-white scraps, white marker circles, Anton type.
 - Swooshes stay out (owner: they did not look good).
+- v10: no grid lines. Behind the collage a lively gradient in screen space (soft magenta, hot pink, plum and maroon
+  blobs drifting on slow loops, a little brighter on each beat) under the paper's crumple shading, which travels with
+  the camera, so the sheet floats over moving colour.
 
 ## Feedback rules
 | Date | User said | Rule |
@@ -101,3 +104,4 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 | 2026-10-31 | the clips look a little AI; lower the frame rate and add a 90s anime filter | clips90.py: on threes, broadcast look |
 | 2026-10-31 | remove the swoosh sounds; transitions still basic; bring the 3D globe and other 3D elements in with the characters | v8: song only, 3D with the art, layered cuts |
 | 2026-10-31 | use the Ashke edit as the reference for the structure, keep the current colour theme | v9: build/collage.py |
+| 2026-10-31 | remove the grids, add a lively gradient background so it feels immersive | v10 above |
