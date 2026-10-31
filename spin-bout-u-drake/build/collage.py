@@ -47,15 +47,17 @@ PHRASES = {("for", "you"), ("baby", "girl"), ("front", "row"), ("sent", "home"),
 RECIPE = {-1: "R1", 0: "R2", 1: "R3", 2: "R5", 3: "R4", 4: "R6", 5: "R8", 6: "R2", 7: "R1", 8: "R7", 9: "R3", 10: "R9", 11: "R2",
           12: "R5", 13: "R6", 14: "R4", 15: "R8", 16: "R3", 17: "R1", 18: "R9"}
 CUTOUT = {-1: "drake_back_jacket", 1: "cat_black_collar", 3: "hand_phone_sticker", 5: "drake_chanel_night", 6: "cat_white_dumb",
-          17: "snotty", 18: "finale"}
+          17: "snotty"}
 AF, PR, AV = "assets/img/anime/full/", "assets/img/print/", "assets/video/anime/"
-CARD1 = {0: AV + "jealous.mp4", 2: PR + "envogue_funky_divas.jpg", 4: PR + "rolex_cat_ad.jpg",
+CL = "assets/video/clips/"                                # the owner's Drake clips, cut by build/clips_drake.py
+CARD1 = {0: AV + "jealous.mp4", 2: PR + "envogue_funky_divas.jpg", 4: CL + "b_phone1.mp4",
          11: AV + "her_blush.mp4"}
-CARD2 = {1: PR + "vogue_cat_cover.jpg", 3: "assets/img/collage/call_vogue.jpg", 9: AF + "jet.jpg", 10: AV + "road.mp4"}
-CUTPRINT = {14: None, 9: None, 16: None, 7: None}     # recipes with a cut-out slot that use a picture instead
+CARD2 = {1: PR + "vogue_cat_cover.jpg", 3: "assets/img/collage/call_vogue.jpg", 9: AF + "jet.jpg", 10: AV + "road.mp4",
+         16: CL + "a_close.mp4"}
+CUTPRINT = {14: None, 9: None, 16: None, 7: CL + "b_phone2.mp4", 5: CL + "b_seated.mp4"}     # recipes with a cut-out slot that use a picture instead
 FILL = {0: AF + "jealous.jpg", 6: PR + "cat_white_dumb.jpg", 11: AF + "her_blush.jpg"}
 G3D_AT = {9: ("globe", 120, 620, 860), 12: ("diamonds", 0, 360, 1080), 15: ("heart", 140, 470, 800),
-          16: ("body", 0, 700, 1080), 17: ("tissue", 40, 1350, 460)}
+          16: ("body", 0, 700, 1080), 17: ("tissue", 0, 1200, 360)}
 STILLS = [AF + n + ".jpg" for n in ("jealous", "her_blush", "jet", "road", "finale", "snotty")] + [PR + "vogue_cat_cover.jpg", PR + "rolex_cat_ad.jpg", PR + "envogue_funky_divas.jpg"]
 A, HIDE, PAN, SCREEN = [], [], [], []
 CAMKEYS, FLASH = {}, []
@@ -189,10 +191,55 @@ def printel(src, x, y, w, h, rot, t0, t1, red=False, z=2):
                  f'data-track-index="{VTR[0]}" muted playsinline></video>')
     else:
         media = f'<img src="{src}" alt="">'
+    live = "/clips/" in src
+    vf = ('<div class="vf"><b class="c1"></b><b class="c2"></b><b class="c3"></b><b class="c4"></b>'
+          '<span class="rec"><i></i>REC</span><span class="tc">00:00:00:00</span><em class="pf"></em><em class="pf"></em></div>') if live else ""
     PAN.append(f'<div class="print el" id="{i}" style="left:{x:.0f}px;top:{y:.0f}px;width:{w:.0f}px;height:{h:.0f}px;'
-               f'transform:rotate({rot:.1f}deg);z-index:{z}">{media}<i style="opacity:{.85 if red else 0}"></i></div>')
+               f'transform:rotate({rot:.1f}deg);z-index:{z}">{media}<i style="opacity:{.85 if red else 0}"></i>{vf}</div>')
     show(f"#{i}", t0, t1)
+    if live:
+        clip_fx(i, w, h, t0, t1)
+    return i
     js(f'tl.fromTo("#{i}", {{x: {R.choice([-120, 120])}}}, {{x: 0, duration: .134, ease: "steps(2)", immediateRender: false}}, {t0:.3f});')
+
+
+def clip_fx(i, w, h, t0, t1):
+    """Camcorder look on the owner's Drake clips: the REC dot blinks, the timecode runs, and paparazzi flashes pop
+    on the beats at random spots."""
+    k, t = 0, t0
+    while t < t1:
+        js(f'tl.set("#{i} .rec i", {{opacity: {k % 2}}}, {t:.3f});')
+        t, k = t + .5, k + 1
+    for f in range(int((t1 - t0) * 15) + 1):
+        tt = t0 + f / 15
+        s_ = f / 15
+        js(f'tl.set("#{i} .tc", {{textContent: "00:00:{int(s_):02d}:{int(s_ * 30) % 30:02d}"}}, {tt:.3f});')
+    g = random.Random(int(t0 * 100))
+    for n_, bt in enumerate([b for b in BEATS["beats"] if t0 + .1 < b < t1 - .1][:6]):
+        sel = f"#{i} .pf:nth-of-type({n_ % 2 + 1})"
+        js(f'tl.set("{sel}", {{left: "{g.uniform(10, 75):.0f}%", top: "{g.uniform(8, 60):.0f}%", opacity: 1, scale: 1}}, {bt:.3f});')
+        js(f'tl.to("{sel}", {{opacity: 0, scale: 1.6, duration: .2, ease: "power2.out"}}, {bt + 1 / 30:.3f});')
+
+
+def phone_screen(t0, t1):
+    """The dialing screen inside the blank phone sticker: Vogue, calling..., pulsing rings round the avatar, a
+    running timer once it connects on VOGUE. Coordinates are the sticker's own pixels (screen 250 x 548, tilted 9 deg)."""
+    i = nid("ps")
+    html = (f'<div class="pscreen" id="{i}"><div class="ps-glow"></div><span class="ps-top">calling</span>'
+            f'<div class="ps-av"><b class="ring"></b><b class="ring"></b><span>V</span></div>'
+            f'<span class="ps-name">Vogue</span><span class="ps-sub">mobile</span>'
+            f'<div class="ps-btns"><i></i><i></i><i class="end"></i></div></div>')
+    kw = next((s_ for w_, s_ in words_of(3) if w_ == "vogue"), t1 - .4)
+    k, t = 0, t0
+    while t < kw:
+        js(f'tl.set("#{i} .ps-top", {{textContent: "calling{"." * (k % 4)}"}}, {t:.3f});')
+        js(f'tl.fromTo("#{i} .ring", {{scale: 1, opacity: .9}}, {{scale: 1.9, opacity: 0, duration: .55, ease: "power2.out", stagger: .18, immediateRender: false}}, {t:.3f});')
+        t, k = t + PERIOD / 2, k + 1
+    for f in range(int((t1 - kw) * 15) + 1):
+        js(f'tl.set("#{i} .ps-top", {{textContent: "00:{f // 15:02d}"}}, {kw + f / 15:.3f});')
+    js(f'tl.set("#{i} .ps-av", {{borderColor: "#36d07a"}}, {kw:.3f});')
+    js(f'tl.fromTo("#{i} .ps-av", {{scale: 1.25}}, {{scale: 1, duration: .35, ease: "back.out(2)", immediateRender: false}}, {kw:.3f});')
+    return html
 
 
 def cutout(li, x, y, w, rot, t0, t1, rise=0, z=3):
@@ -210,8 +257,15 @@ def cutout(li, x, y, w, rot, t0, t1, rise=0, z=3):
     fw = min(w, w * 1.15 * iw / ih)
     x, w = x + (w - fw) / 2, fw
     i = nid("ct")
-    PAN.append(f'<img class="el" id="{i}" src="assets/img/collage/sticker/{name}.png" style="left:{x:.0f}px;top:{y:.0f}px;'
-               f'width:{w:.0f}px;transform:rotate({rot:.1f}deg);z-index:{z}" alt="">')
+    if li == 3:              # the blank phone gets a live dialing screen, scaled with the sticker
+        sc_ = w / iw
+        PAN.append(f'<div class="el" id="{i}" style="left:{x:.0f}px;top:{y:.0f}px;width:{w:.0f}px;height:{ih * sc_:.0f}px;'
+                   f'transform:rotate({rot:.1f}deg);z-index:{z}"><img src="assets/img/collage/sticker/{name}.png" style="width:100%;display:block" alt="">'
+                   f'<div style="position:absolute;left:0;top:0;width:{iw}px;height:{ih}px;transform:scale({sc_:.4f});transform-origin:0 0">'
+                   f'{phone_screen(t0, t1)}</div></div>')
+    else:
+        PAN.append(f'<img class="el" id="{i}" src="assets/img/collage/sticker/{name}.png" style="left:{x:.0f}px;top:{y:.0f}px;'
+                   f'width:{w:.0f}px;transform:rotate({rot:.1f}deg);z-index:{z}" alt="">')
     show(f"#{i}", t0, t1)
     if rise:
         js(f'tl.fromTo("#{i}", {{y: {rise}}}, {{y: 0, duration: .4, ease: "steps(6)", immediateRender: false}}, {t0:.3f});')
@@ -513,8 +567,7 @@ def r5(si, a, b, li, gs):
 def r6(si, a, b, li, gs):
     kw = gs[-1]
     printel(CARD1.get(li), 400, 170, 660, 760, 9, a, b)
-    scrap("black", 1, -120, 820, 700, -6, a, b)
-    arc(60, 160, 360, a + .2, b)
+    scrap("black", 1, 90, 960, 780, -4, a, b)
     cam(si, a, 640, 860, 1.0, 1, .01)
     rest = [g for g in gs if g is not kw]
     y = 1040
@@ -574,14 +627,19 @@ def r8(si, a, b, li, gs):
 
 def r9(si, a, b, li, gs):
     FLASH.append((a, "split"))
-    printel(CARD2.get(li), 600, 60, 440, 550, 7, a + .067, b)
+    if li == 18:
+        hero = printel(CL + "a_walk.mp4", 30, 260, 1020, 1240, -2, a, b, z=2)
+        for k_, (sx, sy, ss) in enumerate([(820, 330, 120), (180, 520, 80), (860, 820, 70)]):
+            star(sx, sy, ss, a + .6 + .12 * k_, b, color=(WHT, MAG, WHT)[k_], seed=si + k_)
+    else:
+        printel(CARD2.get(li), 600, 60, 440, 550, 7, a + .067, b)
     scrap("grey", 3, -160, -90, 1000, 5, a, b)
     scrap("grey", 1, 420, 1560, 860, -7, a, b)
     scrap("black", 2, -120, 880, 760, 3, a, b)            # dark under the stamp: the stamp is off-white here
     kw = next((g for g in reversed(gs) if g[1]), gs[-1]) if gs else None
     rest = [g for g in gs if g is not kw]
     styles = ["magw", "mag", "w3d", "blk"]
-    y = 560 if len(rest) > 2 else 700
+    y = 980 if li == 18 else 560 if len(rest) > 2 else 700
     cam(si, a, 470, y + 120, 1.15, -1, .01)
     for k, (txt, key, t) in enumerate(rest):
         x = 540 + (-80, 80)[k % 2]
@@ -601,6 +659,9 @@ ICON_AT = {"R1": (800, 1500, 8), "R2": (60, 300, -8), "R3": (790, 330, 10), "R4"
            "R6": (60, 1540, -6), "R7": (60, 300, -8), "R8": (90, 960, -10), "R9": (780, 1460, 10)}
 
 
+ICON_LI = {14: (830, 760, 8), 16: (30, 250, -8), 7: (760, 700, 8)}
+
+
 def lyric_icons():
     for si, (a, b, li) in enumerate(scenes()):
         gs = groups_of(li) if li >= 0 else [("", True, a + 1.2)]
@@ -611,7 +672,7 @@ def lyric_icons():
             t = max(t, gs[1][2])
         if t >= b - .15:
             t = max(a + .2, b - .5)
-        x, y, rot = ICON_AT[rec]
+        x, y, rot = ICON_LI.get(li, ICON_AT[rec])
         i = nid("ic")
         PAN.append(f'<div class="el" id="{i}" style="left:{x}px;top:{y}px;width:230px;height:230px;z-index:7;transform:rotate({rot}deg)">'
                    f'{svg(ICON[li])}<b class="itag">{WORD[li]}</b></div>')
@@ -751,11 +812,11 @@ def concepts():
     a, b = sc[7]
     steps = [t for t in BEATS["beats"] if a + .05 < t < b - .1][:10]
     for k, t in enumerate(steps):
-        x, y = (330 if k % 2 == 0 else 520), 820 - k * 62
+        x, y = 60 + k * 92, (1600 if k % 2 == 0 else 1660)
         i = conc(f'<svg class="el" id="ID" viewBox="0 0 120 120" style="left:{x}px;top:{y}px;width:170px;height:170px;z-index:ZZ;'
-                 f'transform:rotate({-12 if k % 2 == 0 else 12}deg)">' + svg_foot(k % 2) + '</svg>', t, b)
+                 f'transform:rotate({78 if k % 2 == 0 else 102}deg)">' + svg_foot(k % 2) + '</svg>', t, b)
         js(f'tl.fromTo("#{i}", {{scale: 1.8}}, {{scale: 1, duration: .134, ease: "steps(2)", immediateRender: false}}, {t:.3f});')
-    cnt = conc(f'<div class="el counter" id="ID" style="left:700px;top:260px;z-index:ZZ">1</div>', steps[0] if steps else a, b, z=6)
+    cnt = conc(f'<div class="el counter" id="ID" style="left:840px;top:1330px;z-index:ZZ;font-size:230px">1</div>', steps[0] if steps else a, b, z=6)
     for k, t in enumerate(steps):
         js(f'tl.set("#{cnt}", {{textContent: "{k + 1}"}}, {t:.3f});')
         js(f'tl.fromTo("#{cnt}", {{scale: 1.5}}, {{scale: 1, duration: .134, ease: "steps(2)", immediateRender: false}}, {t:.3f});')
@@ -887,30 +948,116 @@ def front_layer(gid, fil, t0, t1, y_from, y_to, t_full, L, drift, z=5, extra="")
     return i
 
 
+def lighter_throw(a, b):
+    """Drake (arm-out cut-out) flicks a lit lighter; it arcs with the owner's gravity expression, bounces once and the
+    fire starts where it lands. Drake stays in front of the flames, rim-lit orange. Returns the landing time."""
+    tw = next(s_ for w, s_ in words_of(14) if w == "burn")
+    dx, dy, dw = 0, 560, 560
+    fist = (dx + .93 * dw, dy + .06 * dw * 746 / 691)
+    i = nid("dk")
+    PAN.append(f'<img class="el" id="{i}" src="assets/img/collage/sticker/drake_boat_sunset.png" style="left:{dx}px;top:{dy}px;width:{dw}px;'
+               f'z-index:6;transform-origin:20% 100%" alt="">')
+    show(f"#{i}", a, b)
+    js(f'tl.fromTo("#{i}", {{x: -380, rotation: 0}}, {{x: 0, duration: .25, ease: "expo.out", immediateRender: false}}, {a:.3f});')
+    js(f'tl.fromTo("#{i}", {{rotation: 6}}, {{rotation: -4, duration: .14, ease: "power3.out", immediateRender: false}}, {tw - .06:.3f});')
+    js(f'tl.to("#{i}", {{rotation: 0, duration: .3, ease: "power2.out"}}, {tw + .08:.3f});')
+    floor = 1250
+    path = phys(-(floor - fist[1]), -700, vx0=560, g_m=65, bounce=.28, drag=.1, fric=.5, dur=1.2)
+    land = next(t_ for t_, x_, y_ in path[1:] if y_ >= -1)
+    j = nid("lt")
+    PAN.append(f'<svg class="el" id="{j}" viewBox="0 0 60 100" style="left:{fist[0] - 30:.0f}px;top:{fist[1] - 50:.0f}px;width:66px;height:110px;'
+               f'z-index:7;overflow:visible"><defs><linearGradient id="zg" x1="0" x2="1"><stop offset="0" stop-color="#8d8a86"/>'
+               f'<stop offset=".45" stop-color="#f4f2ee"/><stop offset="1" stop-color="#6d6a67"/></linearGradient></defs>'
+               f'<path class="lf" d="M30 2 C40 16 44 26 38 36 C35 42 25 42 22 36 C16 26 22 16 30 2 Z" fill="#ffb347"/>'
+               f'<path d="M30 14 C35 22 36 28 33 33 C31 36 29 36 27 33 C24 28 26 22 30 14 Z" fill="#fff3c4"/>'
+               f'<rect x="12" y="40" width="36" height="58" rx="6" fill="url(#zg)" stroke="#2a2626" stroke-width="2.5"/>'
+               f'<rect x="12" y="40" width="36" height="16" rx="4" fill="#cfccc7" stroke="#2a2626" stroke-width="2.5"/></svg>')
+    show(f"#{j}", tw, b)
+    x_end = 0
+    for (t_, x_, y_) in path:
+        js(f'tl.set("#{j}", {{x: {x_:.0f}, y: {y_ + (floor - fist[1]):.0f}, rotation: {min(1, t_ / .55) * 610:.0f}}}, {tw + t_:.3f});')
+        x_end = x_
+    for k in range(int((b - tw) * 15)):
+        js(f'tl.set("#{j} .lf", {{scaleY: {.85 + .3 * abs(math.sin(k * 1.7)):.2f}, transformOrigin: "50% 100%"}}, {tw + k / 15:.3f});')
+    k_ = nid("ig")
+    lx, ly = fist[0] + x_end, floor + 30
+    PAN.append(f'<i class="el shock" id="{k_}" style="left:{lx - 160:.0f}px;top:{ly - 60:.0f}px;width:320px;height:120px;z-index:6;border-color:#ffb347"></i>')
+    show(f"#{k_}", tw + land, tw + land + .5)
+    js(f'tl.fromTo("#{k_}", {{scale: .2, opacity: 1}}, {{scale: 3, opacity: 0, duration: .45, ease: "power2.out", immediateRender: false}}, {tw + land:.3f});')
+    js(f'tl.set("#{i}", {{filter: "drop-shadow(0 0 22px rgba(255,120,40,.95)) drop-shadow(0 0 60px rgba(255,60,20,.6)) brightness(1.08)"}}, {tw + land:.3f});')
+    return tw + land
+
+
+def pixel_shot(a, b, tb):
+    """Retro game beat before the smoke: pixel Drake (from the arm-out cut-out) aims, BANG on the beat, the guy drops,
+    then the smoke takes the screen. Pinned to the screen in the upper half, under the lyric labels."""
+    P = "assets/img/collage/pixel/"
+    ids = {k: nid("px") for k in ("dr", "gun", "fl", "bang", "guy", "bul", "st")}
+    stars = "".join(f'<i style="left:{20 + 34 * k}px;top:{(k % 2) * 18}px"></i>' for k in range(4))
+    inner = (f'<div class="pxw">'
+             f'<img id="{ids["dr"]}" class="px" src="{P}drake_px.png" style="left:40px;top:120px;width:360px">'
+             f'<img id="{ids["gun"]}" class="px" src="{P}gun_px.png" style="left:362px;top:126px;width:65px;transform-origin:5px 30px">'
+             f'<img id="{ids["fl"]}" class="px" src="{P}flash_px.png" style="left:424px;top:107px;width:45px;opacity:0">'
+             f'<img id="{ids["bang"]}" class="px" src="{P}bang_px.png" style="left:450px;top:20px;width:228px;opacity:0">'
+             f'<i id="{ids["bul"]}" class="bullet" style="left:430px;top:131px;opacity:0;transform:rotate(6.5deg)"></i>'
+             f'<img id="{ids["guy"]}" class="px" src="{P}guy_px.png" style="left:760px;top:108px;width:240px;transform-origin:120px 400px">'
+             f'<div id="{ids["st"]}" class="pxstars" style="left:790px;top:60px;opacity:0">{stars}</div>'
+             f'<div class="pxground"></div></div>')
+    locked(inner, a, b, z=4)
+    js(f'tl.fromTo("#{ids["dr"]}", {{x: -420}}, {{x: 0, duration: .32, ease: "expo.out", immediateRender: false}}, {a:.3f});')
+    js(f'tl.fromTo("#{ids["gun"]}", {{x: -420, rotation: 50}}, {{x: 0, rotation: 50, duration: .32, ease: "expo.out", immediateRender: false}}, {a:.3f});')
+    js(f'tl.to("#{ids["gun"]}", {{rotation: 6.5, duration: .18, ease: "back.out(2)"}}, {max(a + .3, tb - .3):.3f});')
+    js(f'tl.fromTo("#{ids["guy"]}", {{x: 420}}, {{x: 0, duration: .32, ease: "expo.out", immediateRender: false}}, {a + .06:.3f});')
+    for k, o in enumerate([1, 1, 0, 1, 0]):
+        js(f'tl.set("#{ids["fl"]}", {{opacity: {o}}}, {tb + k / 30:.3f});')
+    js(f'tl.set("#{ids["bang"]}", {{opacity: 1}}, {tb:.3f});')
+    js(f'tl.fromTo("#{ids["bang"]}", {{scale: 0}}, {{scale: 1, duration: .25, ease: "back.out(3)", immediateRender: false}}, {tb:.3f});')
+    js(f'tl.set("#{ids["bang"]}", {{opacity: 0}}, {tb + .55:.3f});')
+    js(f'tl.set("#{ids["bul"]}", {{opacity: 1}}, {tb:.3f});')
+    js(f'tl.fromTo("#{ids["bul"]}", {{x: 0, y: 0, rotation: 6.5}}, {{x: 420, y: 48, rotation: 6.5, duration: .07, ease: "none", immediateRender: false}}, {tb:.3f});')
+    js(f'tl.set("#{ids["bul"]}", {{opacity: 0}}, {tb + .08:.3f});')
+    js(f'tl.fromTo("#{ids["dr"]}", {{rotation: -5}}, {{rotation: 0, duration: .25, ease: "power2.out", immediateRender: false}}, {tb:.3f});')
+    js(f'tl.fromTo("#{ids["gun"]}", {{rotation: -20}}, {{rotation: 6.5, duration: .25, ease: "power2.out", immediateRender: false}}, {tb:.3f});')
+    for k, o in enumerate([0, 1, 0, 1]):
+        js(f'tl.set("#{ids["guy"]}", {{opacity: {o}}}, {tb + .07 + k / 30:.3f});')
+    js(f'tl.to("#{ids["guy"]}", {{rotation: 82, x: 60, duration: .3, ease: "power2.in"}}, {tb + .2:.3f});')
+    js(f'tl.set("#{ids["st"]}", {{opacity: 1}}, {tb + .5:.3f});')
+    js(f'tl.fromTo("#{ids["st"]}", {{x: 0, y: 0}}, {{x: 150, y: 300, duration: .01, immediateRender: false}}, {tb + .5:.3f});')
+    k, t = 0, tb + .5
+    while t < b:
+        js(f'tl.set("#{ids["st"]} i", {{y: {(k % 2) * 8 - 4}}}, {t:.3f});')
+        t, k = t + .1, k + 1
+    FLASH.append((tb, "white"))
+
+
 def context_fx():
     """The lyric lines that say something physical happen to the whole screen: smoke fills it, burn sets it on fire,
     dropped drops the frame, comin' out my body lifts a ghost of the whole picture out of itself."""
     sc = {li: (a, b) for a, b, li in scenes()}
     # smoke a top: smoke billows up from the bottom and swallows the whole frame, swirling until the cut
     a, b = sc[13]
-    front_layer("smg", "smk2", a, b, 1400, -700, a + 1.3, 1100, (140, -520), z=4)
+    tb = next(s_ for w, s_ in words_of(13) if w not in ("smoke", "a"))      # the bang lands on the third word
+    ts = next((s_ for w, s_ in words_of(13) if w == "top"), tb + .45)
+    front_layer("smg", "smk2", ts, b, 1400, -700, ts + 1.1, 1100, (140, -520), z=4)
+    pixel_shot(a, b, tb)
     # burn somebody block: a fire front sweeps up the whole screen and leaves it charred, embers flying
     a, b = sc[14]
+    tl_ = lighter_throw(a, b)
     g = random.Random(14)
     em = "".join(f'<i class="ember" style="position:absolute;left:{g.uniform(0, 1080):.0f}px;top:{g.uniform(700, 1250):.0f}px;'
                  f'width:{g.uniform(7, 16):.0f}px;height:{g.uniform(7, 16):.0f}px"></i>' for _ in range(36))
-    bi = front_layer("fig", "firef", a, b, 1350, -520, b - .2, 900, (0, -620), z=4, extra=f'<div class="embers">{em}</div>')
-    n = max(2, round((b - a) * 15))
-    js(f'tl.fromTo("#{bi} .ember", {{y: 0, x: 0}}, {{y: (k) => -700 - (k * 137) % 600, x: (k) => (k * 53) % 160 - 80, duration: {b - a:.2f}, ease: "steps({n})", '
-       f'stagger: .012, immediateRender: false}}, {a:.3f});')
+    bi = front_layer("fig", "firef", tl_, b, 1350, -520, b - .12, 900, (0, -620), z=4, extra=f'<div class="embers">{em}</div>')
+    n = max(2, round((b - tl_) * 15))
+    js(f'tl.fromTo("#{bi} .ember", {{y: 0, x: 0}}, {{y: (k) => -700 - (k * 137) % 600, x: (k) => (k * 53) % 160 - 80, duration: {b - tl_:.2f}, ease: "steps({n})", '
+       f'stagger: .012, immediateRender: false}}, {tl_:.3f});')
     SCREEN.append('<div id="heat"></div>')
     HIDE.append("#heat")
-    js(f'tl.set("#heat", {{opacity: .55, background: "#ff9a50"}}, {a:.3f});')                  # the ignition flash
-    js(f'tl.set("#heat", {{background: "radial-gradient(ellipse 90% 70% at 50% 100%, rgba(255,120,40,.7), rgba(255,70,40,.18) 50%, rgba(0,0,0,0) 85%)"}}, {a + STEP:.3f});')
+    js(f'tl.set("#heat", {{opacity: .35, background: "#ffb070"}}, {tl_:.3f});')                  # the ignition flash
+    js(f'tl.set("#heat", {{background: "radial-gradient(ellipse 90% 70% at 50% 100%, rgba(255,150,60,.55), rgba(255,110,40,.12) 50%, rgba(0,0,0,0) 85%)"}}, {tl_ + STEP:.3f});')
     for k in range(1, n):
-        t = a + k * STEP
-        js(f'tl.set("#heat", {{opacity: {.18 + .22 * abs(math.sin(k * 2.3)) * abs(math.sin(k * .7 + 1)):.2f}}}, {t:.3f});')
-    for tw in [s_ for w, s_ in words_of(14) if w in ("burn", "block")]:   # bloom hits, not a constant wash
+        t = tl_ + k * STEP
+        js(f'tl.set("#heat", {{opacity: {.1 + .12 * abs(math.sin(k * 2.3)) * abs(math.sin(k * .7 + 1)):.2f}}}, {t:.3f});')
+    for tw in [s_ for w, s_ in words_of(14) if w == "burn"]:   # one bloom hit, not a constant wash
         for k, sd in enumerate([18, 11]):
             js(f'tl.set("#glow", {{filter: "url(#bloom)"}}, {tw + k * STEP + .002:.3f});')
             js(f'tl.set("#blg", {{attr: {{stdDeviation: {sd}}}}}, {tw + k * STEP + .002:.3f});')
@@ -1124,6 +1271,35 @@ img.el {{ display: block; height: auto; }}
 .lock {{ left: 0; top: 0; width: {FW}px; height: {FH}px; transform-origin: 540px 540px; pointer-events: none; }}
 .embers {{ position: absolute; inset: 0; }}
 #heat {{ position: absolute; inset: 0; z-index: 16; opacity: 0; pointer-events: none; mix-blend-mode: screen; }}
+.vf {{ position: absolute; inset: 34px; pointer-events: none; font: 400 22px/1 "Archivo Black"; color: #fff; text-shadow: 0 2px 6px rgba(0,0,0,.7); }}
+.vf b {{ position: absolute; width: 44px; height: 44px; border: 0 solid rgba(255,255,255,.92); }}
+.vf .c1 {{ left: 0; top: 0; border-width: 5px 0 0 5px; }} .vf .c2 {{ right: 0; top: 0; border-width: 5px 5px 0 0; }}
+.vf .c3 {{ left: 0; bottom: 0; border-width: 0 0 5px 5px; }} .vf .c4 {{ right: 0; bottom: 0; border-width: 0 5px 5px 0; }}
+.vf .rec {{ position: absolute; left: 60px; top: 14px; letter-spacing: .06em; }}
+.vf .rec i {{ display: inline-block; width: 16px; height: 16px; border-radius: 50%; background: #ff2b4f; margin-right: 10px; box-shadow: 0 0 12px #ff2b4f; }}
+.vf .tc {{ position: absolute; right: 60px; bottom: 14px; font-size: 18px; letter-spacing: .08em; }}
+.vf .pf {{ position: absolute; width: 230px; height: 230px; margin: -115px 0 0 -115px; opacity: 0; mix-blend-mode: screen;
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,240,250,.7) 18%, rgba(255,200,230,.15) 45%, rgba(0,0,0,0) 70%); }}
+.pscreen {{ position: absolute; left: 292px; top: 82px; width: 250px; height: 548px; transform: rotate(9.3deg); border-radius: 30px; overflow: hidden;
+  background: linear-gradient(180deg, #1d1620, #0b090d 70%); color: #fff; font-family: "Archivo Black"; text-align: center; }}
+.ps-glow {{ position: absolute; left: -40%; top: -10%; width: 180%; height: 60%; background: radial-gradient(ellipse, rgba(176,25,79,.55), rgba(0,0,0,0) 65%); }}
+.ps-top {{ position: absolute; left: 0; right: 0; top: 54px; font-size: 18px; color: #c9c0c6; letter-spacing: .06em; }}
+.ps-av {{ position: absolute; left: 70px; top: 120px; width: 110px; height: 110px; border-radius: 50%; border: 4px solid rgba(255,255,255,.5);
+  background: linear-gradient(135deg, #b0194f, #5f1b30); }}
+.ps-av span {{ position: absolute; left: 0; right: 0; top: 18px; font-size: 56px; }}
+.ps-av .ring {{ position: absolute; inset: -6px; border-radius: 50%; border: 3px solid rgba(255,140,190,.9); }}
+.ps-name {{ position: absolute; left: 0; right: 0; top: 258px; font-size: 44px; line-height: 1; }}
+.ps-sub {{ position: absolute; left: 0; right: 0; top: 318px; font-size: 16px; line-height: 1; color: #b9aeb5; }}
+.ps-btns {{ position: absolute; left: 0; right: 0; bottom: 56px; display: flex; justify-content: space-around; padding: 0 22px; }}
+.ps-btns i {{ width: 54px; height: 54px; border-radius: 50%; background: rgba(255,255,255,.18); }}
+.ps-btns .end {{ background: #ff3b46; box-shadow: 0 0 18px rgba(255,59,70,.7); }}
+.pxw {{ position: absolute; inset: 0; }}
+.px {{ position: absolute; image-rendering: pixelated; display: block; height: auto; }}
+.bullet {{ position: absolute; width: 46px; height: 7px; background: #ffd640; box-shadow: 0 0 10px #ffb000; }}
+.pxstars {{ position: absolute; width: 170px; height: 40px; }}
+.pxstars i {{ position: absolute; width: 14px; height: 14px; background: #ffd640; box-shadow: 0 0 0 4px #141213; }}
+.pxground {{ position: absolute; left: 0; right: 0; top: 508px; height: 12px; background: repeating-linear-gradient(90deg, #f2f1ec 0 24px, #b0194f 24px 48px);
+  image-rendering: pixelated; opacity: .9; }}
 #vig {{ position: absolute; inset: 0; z-index: 18; pointer-events: none; background: radial-gradient(ellipse 80% 75% at 50% 48%, rgba(0,0,0,0) 55%, rgba(0,0,0,.4) 100%); }}
 #grain {{ position: absolute; left: 0; top: 0; width: 1120px; height: 1120px; z-index: 18; pointer-events: none; opacity: .08; background: url(assets/img/grain.png); mix-blend-mode: overlay; }}
 """
@@ -1164,7 +1340,7 @@ def main():
       <feGaussianBlur id="mbg" stdDeviation="0 0"/></filter>
       <filter id="bloom" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
       <feGaussianBlur id="blg" in="SourceGraphic" stdDeviation="20" result="b"/>
-      <feColorMatrix in="b" type="matrix" values="1.7 0 0 0 0  0 1.3 0 0 0  0 0 1.6 0 0  0 0 0 1 0" result="bb"/>
+      <feColorMatrix in="b" type="matrix" values=".95 0 0 0 0  0 .72 0 0 0  0 0 .9 0 0  0 0 0 1 0" result="bb"/>
       <feBlend in="SourceGraphic" in2="bb" mode="screen"/></filter>
       <filter id="rgbsplit" color-interpolation-filters="sRGB">
       <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>

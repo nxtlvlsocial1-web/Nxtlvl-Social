@@ -119,6 +119,20 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 - Film burns from the pack on the hook and outro section changes, static sweeps on two cuts.
 - Grade: MoodyGloss LUT from the pack at 75% in the final mux.
 
+## v13 (owner: dialing phone, aligned texts, story for smoke and burn, the Drake clips)
+- The blank phone sticker dials: a live call screen fitted to the sticker's screen (calling.., Vogue, pulsing rings,
+  connects on VOGUE with a running timer).
+- The owner's Drake clips (build/clips_drake.py): phone close-ups on the "one call" lines, the arena-seat shot on
+  "I'm sittin' front row", the close-up on "comin' out my body" (the ghost lift doubles real footage), the backstage
+  walk filling the last line with the lyrics under his face. Every clip print carries a camcorder viewfinder (REC
+  blinking, running timecode) and paparazzi flashes on the beats.
+- Smoke has its story: a retro pixel scene (pixel Drake from the arm-out cut-out, a pixel guy), BANG on the third word
+  with a white hit, the guy drops, then the smoke rolls in on "top" (build/pixel.py).
+- Burn has its story: Drake flicks a lit lighter, it arcs with the gravity expression, the fire starts where it lands,
+  Drake stays in front of the flames rim-lit orange.
+- Alignment pass: captions sit on their scrap, stray decorative arcs removed, icons moved off people and clips, the
+  tissue box moved clear of the last captions, bloom on cuts halved.
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|
@@ -137,3 +151,4 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 | 2026-10-31 | don't add the 3D city for burn, burn the whole screen; same for all such context lyrics | full-screen smoke, burn, drop, ghost |
 
 | 2026-10-31 | make every element feel premium, as per the After Effects links and packs sent | v12 above |
+| 2026-10-31 | dial animation in the blank phone; texts not aligned with their shapes; smoke needs context (pixel Drake shooting a guy); burn needs Drake throwing a lighter; use the two Drake clips (ending, and the phone one on the one-call lines) with animated elements | v13 above |
