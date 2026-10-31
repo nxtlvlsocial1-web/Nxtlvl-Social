@@ -1,0 +1,116 @@
+{
+ "style": "A still frame from a 1990s Japanese TV anime, hand-painted cel animation; hand-inked thick-and-thin outlines with slight wobble, flat two-tone cel shading with hard-edged shadow shapes, no gradients, no airbrush, no glossy highlights; limited palette black, warm off-white, one crimson red; film grain and cel dust. Not 3D, not digital painting, not semi-realistic. No text, no watermark.",
+ "him": "a confident young man with a short black fade haircut, a neat full beard, a black hoodie and a thin silver chain",
+ "her": "a stylish young woman with long black wavy hair, gold hoop earrings and a black slip dress",
+ "ref_media": "MAHZk4zbb4c",
+ "images": [
+  {
+   "name": "jealous",
+   "line": 0,
+   "media": "MAHZk6fF02g",
+   "bg": "scene",
+   "prompt": "Two stylish young women whispering behind their hands, jealous side-eye glare, plain white background"
+  },
+  {
+   "name": "crew",
+   "line": 7,
+   "media": "MAHZk4G7BUY",
+   "bg": "white",
+   "prompt": "Low angle, four young men shoulder to shoulder, the leader is HIM, plain white background",
+   "key": 95
+  },
+  {
+   "name": "point",
+   "line": 8,
+   "media": "MAHZk4zbb4c",
+   "bg": "scene",
+   "prompt": "HIM points forward at the viewer, HER beside him looks where he points, speed lines, plain white background"
+  },
+  {
+   "name": "her_blush",
+   "line": 11,
+   "media": "MAHZk3SzSdE",
+   "bg": "scene",
+   "prompt": "HER close-up blushing over her shoulder, sparkles, plain white background"
+  },
+  {
+   "name": "jet",
+   "line": 9,
+   "media": "MAHZk9-NYW0",
+   "bg": "scene",
+   "prompt": "Inside a private jet at night, HIM and HER look out of the oval window at the curve of the earth and city lights below the clouds"
+  },
+  {
+   "name": "road",
+   "line": 10,
+   "media": "MAHZk9T7haU",
+   "bg": "scene",
+   "prompt": "From behind, HIM and HER sit on the hood of a car at the end of a long empty highway that ends at a cliff, huge red setting sun"
+  },
+  {
+   "name": "him_smitten",
+   "line": 11,
+   "media": "MAHZkz9Skzs",
+   "bg": "scene",
+   "prompt": "Close-up of HIM, smitten, soft eyes, slight smile, light blush, sparkles and petals, plain white background"
+  },
+  {
+   "name": "diamonds",
+   "line": 12,
+   "media": "MAHZkwjjEhQ",
+   "bg": "scene",
+   "prompt": "HIM drops a diamond necklace into HER cupped hands, diamonds falling like glittering rain, plain white background"
+  },
+  {
+   "name": "smoke",
+   "line": 13,
+   "media": "MAHZkyf287I",
+   "bg": "scene",
+   "prompt": "HIM, face half hidden in thick swirling smoke, glowing red eyes, calm menacing, black background"
+  },
+  {
+   "name": "fire",
+   "line": 14,
+   "media": "MAHZk3mPoL8",
+   "bg": "scene",
+   "prompt": "HIM walks calmly toward the viewer, hands in pockets, a city block behind him in roaring red flames and embers"
+  },
+  {
+   "name": "spin",
+   "line": 15,
+   "media": "MAHZk1NQVSc",
+   "bg": "white",
+   "prompt": "HIM spins HER while dancing, her hair and dress flare in a circle, both smiling, swirl lines, plain white background"
+  },
+  {
+   "name": "spirit",
+   "line": 16,
+   "media": "MAHZk5d7v4E",
+   "bg": "white",
+   "prompt": "HIM eyes closed, his glowing translucent spirit double rises out of his body, white energy outline, crimson aura, plain white background",
+   "holes": false
+  },
+  {
+   "name": "snotty",
+   "line": 17,
+   "media": "MAHZk7hm8aI",
+   "bg": "white",
+   "prompt": "Comedic chibi: a tiny crying rival boy with streams of tears and a giant snot bubble, a hand wipes his face with a tissue, plain white background",
+   "holes": false
+  },
+  {
+   "name": "finale",
+   "line": 18,
+   "media": "MAHZk6gVF28",
+   "bg": "white",
+   "prompt": "HIM and HER back to back looking at the viewer, crimson energy aura flaring like flames, heroic, plain white background"
+  }
+ ],
+ "export_design": "DAHZkxbQbhE",
+ "superseded_v1_glossy": [
+  "MAHZkj5yBdM",
+  "MAHZktyEZxg",
+  "MAHZkgGs4rc",
+  "MAHZkpC-Pnw"
+ ]
+}

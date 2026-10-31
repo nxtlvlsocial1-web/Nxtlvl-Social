@@ -1,6 +1,6 @@
 # TASTE: spin-bout-u-drake
 
-Updated 2026-10-31. Current version: final v2, renders/nxtlvl_spin-bout-u_reels_1x1_v2.mp4 (1080x1080, 20 fps, 60 s).
+Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_1x1_v3.mp4); last final v2.
 
 ## Brief
 - Spin Bout U (Drake & 21 Savage): 60 s from the 2:13 bass drop, the owner's lyrics, the owner's images (plan/assets.md).
@@ -51,7 +51,23 @@ Updated 2026-10-31. Current version: final v2, renders/nxtlvl_spin-bout-u_reels_
   overlay type 1.45). Text letters arrive as tilted blocks.
 - Every caption has an outline in the opposite tone, so nothing disappears on white.
 
+## v3 (owner, 2026-10-31)
+- Follow the MJ "Smooth Criminal" reference (sushiismissing) above all: black / white / red, cream script; subject
+  with a cream outline and red offset rim; red energy slashes boiling round it; condensed red type behind, fat
+  italic type on diagonal bands, cream brush script written on with a light spark; white X marks.
+- Cuts from the reference: smear, zoom-out blur into a red ink burst and an inverted frame, red smear into a white
+  radial burst, slice glitch, red blooms into a white negative and a flare, light burst with a red band, vertical
+  scroll blur, defocus into a washed-out negative, smoke burst, zoom to white at the end. Inverted frames are grey.
+- No constant camera shake. Scenes drift in slowly; beats land as punch-ins and single flashes.
+- Pictures: the cats only in the opening (Vogue cover, pearl cat, dumb white cat); Drake photos at most twice
+  (title, front row); every later line is an anime illustration that tells the story of one couple.
+- Illustrations must not look like AI art: 1990s hand-painted anime cel style (hand-inked lines, flat two-tone cel
+  shading, no airbrush or gloss, film grain), the same couple kept consistent with a reference image. The first
+  glossy webtoon-style set was rejected as "AI slop".
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|
 | 2026-10-31 | blur all cuss words as ****; unique picture per lyric, 3D renders allowed; match the reference transitions and tracking; fix text hidden on white; no edited-by credits | v2 above |
+| 2026-10-31 | cats only at the start; 3D renders look mid; more motion and story built round the lyrics; don't repeat Drake photos; anime-style illustrations (not fully 3D); transitions up to the MJ reference; remove the constant shaking | v3 above |
+| 2026-10-31 | the first anime images look like AI slop; make them better (owner bought Canva Pro) | 90s hand-painted cel style, consistent couple |
