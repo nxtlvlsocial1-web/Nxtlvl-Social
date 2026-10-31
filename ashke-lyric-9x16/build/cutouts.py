@@ -26,7 +26,7 @@ OUT = os.path.join(ROOT, "assets", "img", "cut")
 # name: (source, time s, x of Karan as a fraction of the frame width)
 PICKS = {   # the owner's photos of Karan (assets/img/src/k1-k6.jpg): (src, photo, x of Karan, optional x window)
     "coat": ("photo", "k1", .5), "redmic": ("photo", "k2", .5, (.15, .85)), "crowdmic": ("photo", "k3", .5, (.25, .78)),
-    "profile": ("photo", "k4", .45), "bugatti": ("photo", "k5", .4, (.12, .62)), "jet": ("photo", "k6", .52, (.36, .66)),
+    "profile": ("photo", "k4", .45), "bugatti": ("photo", "k5", .4, (.12, .74)), "jet": ("photo", "k6", .52, (.36, .66)),
     "point": ("photo", "k7", .55),
     "barn": ("photo", "k9", .44, (.24, .62)), "fireup": ("photo", "k10", .45), "purple": ("photo", "k11", .5),
     # clean solo frames from the owner's clips (nobody touching him)
