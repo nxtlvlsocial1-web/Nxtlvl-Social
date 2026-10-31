@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Meta Ads Creative Studio setup guide – The GrowthX Studio</title>
+<style>
+@font-face { font-family:"D"; src:url("../fonts/InterDisplay-Black.otf"); font-weight:900; }
+@font-face { font-family:"D"; src:url("../fonts/InterDisplay-Bold.otf"); font-weight:700; }
+@font-face { font-family:"D"; src:url("../fonts/InterDisplay-SemiBold.otf"); font-weight:600; }
+@page { size:A4; margin:0; }
+* { box-sizing:border-box; margin:0; padding:0; }
+:root { --bg:#040206; --pur:#8B2FE8; --pur2:#A65CFF; --acc:#B57BFF; --ink:#16121C; --dim:#5E566B; --soft:#F4EEFC; }
+body { font-family:"D",sans-serif; color:var(--ink); -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.page { width:210mm; height:297mm; position:relative; overflow:hidden; page-break-after:always; padding:22mm 18mm 20mm; background:#fff; }
+.page:last-child { page-break-after:auto; }
+.top { position:absolute; left:18mm; right:18mm; top:9mm; display:flex; justify-content:space-between; align-items:center; font-size:9pt; font-weight:700; color:var(--dim); letter-spacing:.08em; }
+.top img { height:9mm; border-radius:2mm; }
+.top b { color:var(--pur); }
+.foot { position:absolute; left:18mm; right:18mm; bottom:8mm; display:flex; justify-content:space-between; font-size:8.5pt; color:var(--dim); border-top:.4mm solid #E6DDF5; padding-top:2.5mm; }
+h1 { font-size:30pt; font-weight:900; line-height:1.05; letter-spacing:-.01em; }
+h2 { font-size:21pt; font-weight:900; line-height:1.1; margin-bottom:4mm; }
+h3 { font-size:12.5pt; font-weight:900; margin:5mm 0 2mm; }
+p, li { font-size:11pt; line-height:1.5; font-weight:600; color:#2A2433; }
+ul, ol { padding-left:6mm; } li { margin:1.4mm 0; }
+.kicker { display:inline-block; font-size:9.5pt; font-weight:900; letter-spacing:.14em; color:#fff; background:var(--pur); padding:1.6mm 3.6mm; border-radius:99mm; margin-bottom:5mm; }
+.step { display:flex; gap:4mm; align-items:flex-start; margin:4mm 0; }
+.num { flex:none; width:10mm; height:10mm; border-radius:50%; background:var(--pur); color:#fff; font-weight:900; font-size:12pt; display:flex; align-items:center; justify-content:center; }
+.step p { padding-top:1.5mm; }
+.shot { width:100%; border:.8mm solid var(--pur); border-radius:3mm; display:block; margin:3mm 0 2mm; }
+.cap { font-size:9pt; color:var(--dim); font-weight:600; }
+.box { background:var(--soft); border-left:1.6mm solid var(--pur); border-radius:2mm; padding:4mm 5mm; margin:4mm 0; }
+.box p, .box li { font-size:10.5pt; }
+.warn { background:#FFF4F2; border-left-color:#E5484D; }
+.tag { display:inline-block; background:var(--soft); color:var(--pur); font-weight:900; padding:.5mm 2.2mm; border-radius:1.5mm; }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:5mm; }
+.card { border:.5mm solid #E6DDF5; border-radius:3mm; padding:4mm; }
+.card h3 { margin-top:0; }
+/* cover */
+.cover { background:var(--bg); color:#fff; padding:0; }
+.cover .wash { position:absolute; inset:0; background:linear-gradient(135deg,rgba(139,47,232,.45),rgba(139,47,232,0) 45%,rgba(139,47,232,0) 60%,rgba(139,47,232,.5)); }
+.cover .ring { position:absolute; border-radius:50%; border:.6mm solid rgba(181,123,255,.45); }
+.cover .dots { position:absolute; width:70mm; height:50mm; background-image:radial-gradient(rgba(181,123,255,.6) .7mm,transparent .8mm); background-size:6mm 6mm; }
+.cover .in { position:absolute; left:18mm; right:18mm; top:30mm; }
+.cover img.logo { width:52mm; border-radius:50%; }
+.cover h1 { font-size:40pt; color:#fff; margin-top:14mm; }
+.cover h1 em { font-style:normal; color:var(--acc); }
+.cover .sub { margin-top:6mm; font-size:14pt; font-weight:700; color:#D9CCF0; line-height:1.4; }
+.cover .pill { display:inline-block; margin-top:10mm; background:var(--pur); color:#fff; font-weight:900; font-size:12pt; padding:3mm 6mm; border-radius:99mm; }
+.cover .bottom { position:absolute; left:18mm; right:18mm; bottom:16mm; display:flex; justify-content:space-between; font-size:10pt; font-weight:700; color:#C9BBE3; letter-spacing:.1em; }
+.cta { background:var(--bg); color:#fff; }
+.cta h2, .cta p, .cta li { color:#fff; }
+.cta .big { font-size:34pt; font-weight:900; color:var(--acc); margin:6mm 0; }
+.tbl { width:100%; border-collapse:collapse; margin:4mm 0; }
+.tbl th { background:var(--pur); color:#fff; font-size:10pt; font-weight:900; text-align:left; padding:2.6mm 3mm; }
+.tbl td { font-size:10.2pt; font-weight:600; color:#2A2433; padding:2.6mm 3mm; border-bottom:.4mm solid #E6DDF5; vertical-align:top; }
+.tbl tr:nth-child(even) td { background:#FBF8FF; }
+.chk li { list-style:none; position:relative; padding-left:7mm; } .chk { padding-left:0; }
+.chk li::before { content:"☐"; position:absolute; left:0; top:-.2mm; color:var(--pur); font-weight:900; font-size:12pt; }
+.mono { font-family:ui-monospace,Menlo,monospace; font-size:9.6pt; background:#16121C; color:#E9DDFF; border-radius:2mm; padding:3.5mm 4mm; margin:3mm 0; word-break:break-all; line-height:1.5; }
+.mono b { color:#B57BFF; }
+.big2 { font-size:15pt; font-weight:900; color:var(--pur); }
+.prompt { background:#16121C; color:#E9DDFF; border-radius:2.5mm; padding:4mm 5mm; margin:2.5mm 0; font-size:10.2pt; line-height:1.5; font-weight:600; }
+.prompt b { color:#B57BFF; }
+.loopg { display:grid; grid-template-columns:repeat(4,1fr); gap:3mm; margin:4mm 0; }
+.loopg div { border:.6mm solid var(--pur); border-radius:3mm; padding:3.5mm; text-align:center; }
+.loopg span { display:block; font-size:20pt; } .loopg b { display:block; font-size:11.5pt; margin-top:1mm; } .loopg i { font-style:normal; font-size:9pt; color:var(--dim); font-weight:600; }
+</style></head><body>
+
+<section class="page cover">
+  <div class="wash"></div>
+  <div class="ring" style="width:150mm;height:150mm;right:-50mm;top:-40mm"></div>
+  <div class="ring" style="width:100mm;height:100mm;right:-20mm;top:-15mm"></div>
+  <div class="dots" style="left:10mm;bottom:40mm"></div>
+  <div class="in">
+    <img class="logo" src="../brand/logo.png" alt="The GrowthX Studio">
+    <h1>Meta <em>Ads Creative Studio</em>: the setup guide</h1>
+    <p class="sub">How to prepare your account and brand, read the insights, generate AI ad concepts, test them, and scale the winners, step by step.</p>
+    <span class="pill">🧠 Insights · ✨ Gen AI · 🧪 Testing · 📈 Scale</span>
+  </div>
+  <div class="bottom"><span>THE GROWTHX STUDIO</span><span>BUILD • GROW • SCALE</span></div>
+</section>
+
+<section class="page">
+  <div class="top"><span><b>GROWTHX</b> · META ADS CREATIVE STUDIO</span><img src="../brand/logo-mark.png" alt=""></div>
+  <span class="kicker">THE TOOL</span>
+  <h2>What Ads Creative Studio does</h2>
+  <p>Ads Creative Studio is Meta's end-to-end creative workspace for advertisers. Instead of guessing what to make next, it reads your ad performance, tells you what's working, uses Meta's Gen AI to create new ad concepts in your brand style, and keeps improving them as results come in.</p>
+  <h3>One self-improving loop</h3>
+  <div class="loopg">
+    <div><span>🔍</span><b>Insights</b><i>What's working in your best ads</i></div>
+    <div><span>✨</span><b>Create</b><i>Gen AI concepts on brand</i></div>
+    <div><span>🧪</span><b>Test</b><i>Comment, iterate, A/B test</i></div>
+    <div><span>📈</span><b>Learn</b><i>Optimise and scale winners</i></div>
+  </div>
+  <h3>What makes it different</h3>
+  <ul>
+    <li><b>Benchmarks:</b> it compares your ads with top performers in your niche, not just with your own past ads.</li>
+    <li><b>Specific suggestions:</b> it tells you what to change, such as the hook, the visual or the offer.</li>
+    <li><b>Brand-aware AI:</b> new concepts follow your messaging, branding and creative guidelines.</li>
+    <li><b>You stay in control:</b> nothing publishes without your approval.</li>
+  </ul>
+  <div class="box warn"><p><b>Rolling out gradually.</b> Meta is releasing Ads Creative Studio to advertisers in stages, so it may not be in your account yet, and menu names can differ slightly from this guide. Look for it inside Ads Manager / Meta Business Suite, and use the prep on the next page in the meantime: it makes every Meta campaign better anyway.</p></div>
+  <div class="foot"><span>The GrowthX Studio · Ads Creative Studio setup guide</span><span>2</span></div>
+</section>
+
+<section class="page">
+  <div class="top"><span><b>GROWTHX</b> · META ADS CREATIVE STUDIO</span><img src="../brand/logo-mark.png" alt=""></div>
+  <span class="kicker">BEFORE YOU START</span>
+  <h2>Prepare your account and your brand</h2>
+  <p>The tool is only as good as the data and brand inputs you give it. Tick these off first.</p>
+  <h3>📊 Account and data</h3>
+  <ul class="chk">
+    <li>You have admin or advertiser access to the ad account in Meta Business Suite.</li>
+    <li>The <b>Meta Pixel</b> (and ideally the <b>Conversions API</b>) is installed and tracking purchases or leads.</li>
+    <li>You have run ads recently, so there is real performance data for the insights to read.</li>
+    <li>Your campaigns optimise for the result you actually want (purchases or leads, not just clicks).</li>
+  </ul>
+  <h3>🎨 Brand kit</h3>
+  <ul class="chk">
+    <li>Logo files, brand colours and fonts.</li>
+    <li>Clean product photos and 3–5 of your best existing ads or videos.</li>
+    <li>A one-paragraph brand voice: who you sell to, how you talk (for example "simple, bold, Hinglish"), and words you never use.</li>
+    <li>Your key messages: top 3 benefits, proof (reviews, results), current offer and price.</li>
+  </ul>
+  <h3>📋 Creative guidelines (your do's and don'ts)</h3>
+  <ul class="chk">
+    <li>Claims you can and can't make (for example no "guaranteed results" or medical claims).</li>
+    <li>Must-haves: logo placement, disclaimer text, product shown in the first seconds.</li>
+    <li>Styles that fit your brand (UGC, studio, lifestyle) and styles to avoid.</li>
+  </ul>
+  <div class="box"><p><b>Tip:</b> write all of this in one simple document. You'll paste from it when you set up the brand inputs in Step 2.</p></div>
+  <div class="foot"><span>The GrowthX Studio · Ads Creative Studio setup guide</span><span>3</span></div>
+</section>
+
+<section class="page">
+  <div class="top"><span><b>GROWTHX</b> · META ADS CREATIVE STUDIO</span><img src="../brand/logo-mark.png" alt=""></div>
+  <span class="kicker">STEP 1</span>
+  <h2>Read the insights: what's actually working</h2>
+  <p>Start in the insights view. Your goal here is a short list of things to keep and things to fix.</p>
+  <div class="step"><div class="num">1</div><p><b>Find your best performers.</b> Sort by your main result (cost per purchase or lead, or ROAS), not by likes or clicks.</p></div>
+  <div class="step"><div class="num">2</div><p><b>Spot the pattern.</b> What do the winners share: the hook, the format (UGC, static, carousel), the offer, the length, the first frame?</p></div>
+  <div class="step"><div class="num">3</div><p><b>Compare with the niche benchmark.</b> Where your ads fall behind the top performers in your category is where the quickest gains are.</p></div>
+  <div class="step"><div class="num">4</div><p><b>Turn suggestions into a test list.</b> Write each suggestion as one clear change you can test.</p></div>
+  <h3>Your test list (fill this in)</h3>
+  <table class="tbl">
+    <tr><th style="width:30%">What the insight says</th><th style="width:40%">The one change to test</th><th>Metric to watch</th></tr>
+    <tr><td>Weak first 2 seconds</td><td>Open on the product result or a bold question</td><td>Hook rate / thumb-stop</td></tr>
+    <tr><td>Product shown too late</td><td>Show the product in use within 3 seconds</td><td>CTR</td></tr>
+    <tr><td>Offer unclear</td><td>Put price + offer on screen and in the headline</td><td>Cost per result</td></tr>
+    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+  </table>
+  <div class="foot"><span>The GrowthX Studio · Ads Creative Studio setup guide</span><span>4</span></div>
+</section>
+
+<section class="page">
+  <div class="top"><span><b>GROWTHX</b> · META ADS CREATIVE STUDIO</span><img src="../brand/logo-mark.png" alt=""></div>
+  <span class="kicker">STEP 2</span>
+  <h2>Generate new ad concepts with Gen AI</h2>
+  <p>Meta's Gen AI turns your insights into new ad concepts. Give it your brand inputs first, then guide it like you would brief a designer.</p>
+  <h3>Set up your brand inputs</h3>
+  <ul>
+    <li><b>Messaging:</b> your audience, top benefits, proof and offer (from your brand document).</li>
+    <li><b>Branding:</b> logo, colours, fonts and product images.</li>
+    <li><b>Guidelines:</b> your do's and don'ts, banned claims and required disclaimers.</li>
+  </ul>
+  <h3>Example guidance you can give it</h3>
+  <div class="prompt">Make 3 concepts for <b>[product]</b> aimed at <b>[audience]</b>. Open with the result in the first 2 seconds, show the product in use, and end with <b>[offer]</b>. Keep the tone simple and bold, in Hinglish.</div>
+  <div class="prompt">Take our best ad (<b>[ad name]</b>) and make a version for <b>[new product]</b>, keeping the same hook and structure.</div>
+  <div class="prompt">Make this concept feel more premium: cleaner background, fewer words on screen, close-up product shots.</div>
+  <h3>Review every concept before it goes further</h3>
+  <ul class="chk">
+    <li>Every claim is true and allowed for your category.</li>
+    <li>Product, price and offer are correct.</li>
+    <li>It looks and sounds like your brand.</li>
+    <li>The first frame would stop you scrolling.</li>
+  </ul>
+  <div class="foot"><span>The GrowthX Studio · Ads Creative Studio setup guide</span><span>5</span></div>
+</section>
+
+<section class="page">
+  <div class="top"><span><b>GROWTHX</b> · META ADS CREATIVE STUDIO</span><img src="../brand/logo-mark.png" alt=""></div>
+  <span class="kicker">STEP 3</span>
+  <h2>Iterate, then A/B test</h2>
+  <p>Use <b>Comment</b>, <b>Guide</b> and <b>Iterate</b> to refine a concept until you'd happily run it, then launch a test straight from the studio.</p>
+  <h3>Test rules that keep results honest</h3>
+  <div class="step"><div class="num">1</div><p><b>One variable per test.</b> Change only the hook, or only the visual, or only the offer, so you know what made the difference.</p></div>
+  <div class="step"><div class="num">2</div><p><b>Same audience and budget split.</b> Give each version a fair, equal chance.</p></div>
+  <div class="step"><div class="num">3</div><p><b>Give it time.</b> Let a test run for about a week, or until each version has a meaningful number of results, before you judge it.</p></div>
+  <div class="step"><div class="num">4</div><p><b>Judge on your main result.</b> Cost per purchase or lead (or ROAS) decides the winner, not likes.</p></div>
+  <h3>Let it keep optimising</h3>
+  <p>As performance data comes in, the studio keeps honing the creative. Check it weekly: keep what's improving, pause what isn't, and feed new learnings back into your guidance.</p>
+  <div class="box"><p><b>You stay in control:</b> nothing publishes without your approval, so review each new version before it goes live.</p></div>
+  <div class="foot"><span>The GrowthX Studio · Ads Creative Studio setup guide</span><span>6</span></div>
+</section>
+
+<section class="page">
+  <div class="top"><span><b>GROWTHX</b> · META ADS CREATIVE STUDIO</span><img src="../brand/logo-mark.png" alt=""></div>
+  <span class="kicker">STEP 4</span>
+  <h2>Scale your winners</h2>
+  <p>Once a concept clearly beats the others on your main result, put more behind it and multiply it.</p>
+  <table class="tbl">
+    <tr><th style="width:30%">Do this</th><th>How</th></tr>
+    <tr><td><b>Raise the budget gradually</b></td><td>Increase in steady steps rather than doubling overnight, and watch cost per result as you go.</td></tr>
+    <tr><td><b>New styles</b></td><td>Turn the winning static into a short video or carousel with the same hook and message.</td></tr>
+    <tr><td><b>New products</b></td><td>Apply the winning structure to your other products.</td></tr>
+    <tr><td><b>Fresh hooks</b></td><td>Keep the body, test 3 new openings to fight ad fatigue.</td></tr>
+  </table>
+  <h3>Your weekly 30-minute routine</h3>
+  <ul class="chk">
+    <li><b>Monday:</b> read insights, update your test list.</li>
+    <li><b>Tuesday:</b> generate and review 3–5 new concepts.</li>
+    <li><b>Wednesday:</b> approve and launch one A/B test.</li>
+    <li><b>Friday:</b> check results, pause losers, scale or vary winners.</li>
+  </ul>
+  <div class="box"><p><b>The loop in one line:</b> insights → create → test → learn → repeat. Every week your ads get a little smarter.</p></div>
+  <div class="foot"><span>The GrowthX Studio · Ads Creative Studio setup guide</span><span>7</span></div>
+</section>
+
+<section class="page cover cta">
+  <div class="wash"></div>
+  <div class="ring" style="width:140mm;height:140mm;left:-50mm;bottom:-40mm"></div>
+  <div class="dots" style="right:12mm;top:30mm"></div>
+  <div class="in" style="top:40mm">
+    <img class="logo" src="../brand/logo.png" alt="The GrowthX Studio" style="width:42mm">
+    <h2 style="font-size:28pt;margin-top:12mm">Want us to set this up for your brand?</h2>
+    <p style="font-size:13pt;color:#D9CCF0;margin-top:4mm">The GrowthX Studio builds your brand kit, runs the creative tests and scales your Meta Ads, so you get the AI advantage without the learning curve.</p>
+    <div class="big">DM karo, baat karte hain.</div>
+    <p style="font-size:13pt">📩 <b>thegrowthxstudio@gmail.com</b></p>
+    <p style="font-size:13pt;margin-top:2mm">📲 Follow <b>@thegrowthxstudio</b> for more Meta Ads &amp; AI updates</p>
+  </div>
+  <div class="bottom"><span>THE GROWTHX STUDIO</span><span>BUILD • GROW • SCALE</span></div>
+</section>
+
+</body></html>
