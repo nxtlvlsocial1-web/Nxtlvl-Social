@@ -64,7 +64,16 @@ NID, VTR = [0], [1]
 R = random.Random(23)
 
 
+_STEPS = re.compile(r'ease: "steps\(\d+\)"')
+
+
 def js(s):
+    """Timeline line. v12: every stepped ease becomes a smooth one (expo out for short entrances, power2 out for long
+    moves), the premium After Effects feel the owner asked for instead of the 15 fps steps."""
+    if 'ease: "steps(' in s:
+        m = re.search(r'duration: ([\d.]+)', s)
+        d = float(m.group(1)) if m else .3
+        s = _STEPS.sub('ease: "expo.out"' if d <= .5 else 'ease: "power2.out"', s)
     A.append("      " + s)
 
 
@@ -123,7 +132,13 @@ def groups_of(li):
     return out
 
 
+SERIF_F = ImageFont.truetype(os.path.join(ROOT, "assets", "fonts", "PlayfairDisplay-BoldItalic.woff2"), 100)
+SERIF = {"FOR YOU", "BABY GIRL", "THE WAY", "THESE DAYS", "FOR REAL", "YEAH", "EVEN IF", "BUT JUST", "AND I", "DOWN TO"}
+
+
 def tw(text, size):
+    if text and text == text.lower() and text.upper() in SERIF:
+        return SERIF_F.getlength(text) * size / 100
     return ANTON.getlength(text) * size / 100
 
 
@@ -225,35 +240,84 @@ def star(x, y, size, t0, t1, color=WHT, n=7, seed=0):
 
 
 def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor="center", z=5):
-    """A label. mode: type (letter by letter behind a cursor block), slam (big, settles), pop."""
+    """A label. v12 modes, from the owner's text presets: blur (Blur Reveal: letters sharpen out of a blur behind a
+    glowing smear), cascade (Gold Text: letters pop up one by one with overshoot), slide (Slide Up: words rise out of a
+    blur, used for the serif phrases), flicker (neon flicker, for stamps), fall (letters drop and bounce with the owner's
+    gravity expression), slam and pop. "type" picks one of them."""
     i = nid("lb")
+    if style in ("blk", "wht", "magw") and text in SERIF:
+        style, text = "ser", text.lower()
     size = min(size * 1.12, fit(text, 980, 999))
     w = tw(text, size) + size * .56
     left = x - w / 2 if anchor == "center" else x
     letters = "".join(f'<span class="ch{" cz" if c == "*" else ""}">{c if c != " " else "&nbsp;"}</span>' for c in text)
-    cur = '<span class="cur"></span>' if mode == "type" else ""
-    PAN.append(f'<div class="lw" data-layout-allow-overlap style="left:{left:.0f}px;top:{y:.0f}px;transform:rotate({rot:.1f}deg);z-index:{z}">'
-               f'<div class="lb {style}" id="{i}" style="font-size:{size:.0f}px">{letters}{cur}{CIRC if circle else ""}</div></div>')
-    show(f"#{i}", t, t1)
     if mode == "type":
-        n = len(text)
-        per = 3 if n > 8 else 2
-        js(f'tl.set("#{i} .ch", {{display: "none"}}, {t - .001:.3f});')
-        k = 0
-        while k < n:
-            js(f'tl.set("#{i} .ch:nth-child(-n+{min(n, k + per)})", {{display: "inline"}}, {t + (k // per) * STEP:.3f});')
-            k += per
-        done = t + (n // per + 1) * STEP
-        js(f'tl.set("#{i} .cur", {{display: "none"}}, {done:.3f});')
+        mode = "slide" if style == "ser" else "flicker" if style == "stamp" else ("cascade" if NID[0] % 2 else "blur")
+    smear = '<i class="smear"></i>' if mode == "blur" else ""
+    PAN.append(f'<div class="lw" data-layout-allow-overlap style="left:{left:.0f}px;top:{y:.0f}px;transform:rotate({rot:.1f}deg);z-index:{z}">'
+               f'<div class="lb {style}" id="{i}" style="font-size:{size:.0f}px">{letters}{smear}{CIRC if circle else ""}</div></div>')
+    show(f"#{i}", t, t1)
+    n = max(1, len(text))
+    sharp = f"#{i} .ch:not(.cz)"
+    if style in ("blk", "wht", "mag", "magw", "mb", "blkm"):          # the box wipes open first
+        js(f'tl.fromTo("#{i}", {{clipPath: "inset(-20% 100% -20% 0%)"}}, {{clipPath: "inset(-20% -10% -20% 0%)", duration: .32, ease: "expo.out", immediateRender: false}}, {t:.3f});')
+    if mode == "blur":
+        js(f'tl.fromTo("{sharp}", {{opacity: 0, filter: "blur(16px)", x: {-size * .22:.0f}}}, {{opacity: 1, filter: "blur(0px)", x: 0, duration: .45, ease: "expo.out", stagger: {min(.03, .3 / n):.3f}, immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("#{i} .cz", {{opacity: 0}}, {{opacity: 1, duration: .3, immediateRender: false}}, {t + .1:.3f});')
+        js(f'tl.fromTo("#{i} .smear", {{x: {-size * .6:.0f}, opacity: 1}}, {{x: {w:.0f}, opacity: 0, duration: .5, ease: "power2.out", immediateRender: false}}, {t:.3f});')
+        done = t + .35
+    elif mode == "cascade":
+        js(f'tl.fromTo("#{i} .ch", {{yPercent: 115, opacity: 0, rotation: 10}}, {{yPercent: 0, opacity: 1, rotation: 0, duration: .5, ease: "back.out(2.4)", stagger: {min(.035, .35 / n):.3f}, immediateRender: false}}, {t:.3f});')
+        done = t + .4
+    elif mode == "slide":
+        js(f'tl.fromTo("{sharp}", {{y: {size * .55:.0f}, opacity: 0, filter: "blur(10px)"}}, {{y: 0, opacity: 1, filter: "blur(0px)", duration: .55, ease: "expo.out", stagger: {min(.025, .3 / n):.3f}, immediateRender: false}}, {t:.3f});')
+        done = t + .4
+    elif mode == "flicker":
+        for k, o in enumerate([1, 0, 1, .2, 0, 1, .45, 1]):
+            js(f'tl.set("#{i}", {{opacity: {o}}}, {t + k / 30:.3f});')
+        done = t + .27
+    elif mode == "fall":
+        for k in range(len(text)):
+            path = phys(-(380 + 45 * k), 900, g_m=55, bounce=.42, drag=.1, dur=1.0)
+            t0 = t + .035 * k
+            js(f'tl.set("#{i} .ch:nth-child({k + 1})", {{y: {path[0][2]:.0f}}}, {t - .001:.3f});')
+            for (dt, px, py) in path[1:]:
+                js(f'tl.set("#{i} .ch:nth-child({k + 1})", {{y: {py:.0f}}}, {t0 + dt:.3f});')
+        done = t + .5
     elif mode == "slam":
-        js(f'tl.fromTo("#{i}", {{scale: 1.65}}, {{scale: 1, duration: .2, ease: "steps(3)", immediateRender: false}}, {t:.3f});')
-        done = t + .2
+        js(f'tl.fromTo("#{i}", {{scale: 1.65}}, {{scale: 1, duration: .35, ease: "back.out(1.8)", immediateRender: false}}, {t:.3f});')
+        done = t + .25
     else:
-        js(f'tl.fromTo("#{i}", {{scale: 1.4}}, {{scale: 1, duration: .134, ease: "steps(2)", immediateRender: false}}, {t:.3f});')
-        done = t + .134
+        js(f'tl.fromTo("#{i}", {{scale: 1.4}}, {{scale: 1, duration: .3, ease: "back.out(2)", immediateRender: false}}, {t:.3f});')
+        done = t + .2
     if circle:
-        js(f'tl.fromTo("#{i} .circ path", {{strokeDashoffset: 400}}, {{strokeDashoffset: 0, duration: .33, ease: "steps(5)", immediateRender: false}}, {done + .05:.3f});')
+        js(f'tl.fromTo("#{i} .circ path", {{strokeDashoffset: 400}}, {{strokeDashoffset: 0, duration: .4, ease: "expo.out", immediateRender: false}}, {done + .05:.3f});')
     return i, w
+
+
+def phys(y0, vy0, vx0=0.0, g_m=50.0, bounce=.42, drag=.1, fric=.3, dur=1.0, dt=1 / 30):
+    """The owner's After Effects gravity expression, ported frame for frame: gravity (m/s2 x 100 px), bounce %,
+    air drag % per second, ground friction on each bounce. The floor is y = 0 (the element's resting place).
+    Returns [(t, x, y)] per 30 fps frame; settles to exactly 0 once the bounces die out."""
+    g = g_m * 100
+    x, y, vx, vy = 0.0, float(y0), float(vx0), float(vy0)
+    out = [(0.0, x, y)]
+    for k in range(1, int(dur / dt) + 1):
+        vy += g * dt
+        vx *= 1 - drag * dt
+        vy *= 1 - drag * dt
+        x += vx * dt
+        y += vy * dt
+        if y >= 0:
+            y = -y
+            vy = -vy * bounce
+            vx *= 1 - fric
+            if abs(vy) < 120:
+                y, vy = 0.0, 0.0
+        out.append((k * dt, x, y))
+        if y == 0 and vy == 0:
+            break
+    return out
 
 
 def ghost(text, x, y, size, t0, t1):
@@ -436,7 +500,8 @@ def r5(si, a, b, li, gs):
         if k == 0:
             FLASH.append((t, "invert"))
         sz = fit(txt, 760, 118)
-        label(txt, "blk" if (key or k % 2 == 0) else "wht", 430 + (k % 2) * 120, y, sz, -3 + 5 * (k % 2), t, b, circle=key, z=6)
+        label(txt, "blk" if (key or k % 2 == 0) else "wht", 430 + (k % 2) * 120, y, sz, -3 + 5 * (k % 2), t, b, circle=key, z=6,
+              mode="fall" if (li == 12 and key) else "type")
         y += sz * 1.15 + 22
         cam(si, t, 520, min(1250, 1000 + 70 * k), 1.0, 0, .35)
     tc = rest[len(rest) // 2][2] if rest else a + .8
@@ -551,8 +616,13 @@ def lyric_icons():
         PAN.append(f'<div class="el" id="{i}" style="left:{x}px;top:{y}px;width:230px;height:230px;z-index:7;transform:rotate({rot}deg)">'
                    f'{svg(ICON[li])}<b class="itag">{WORD[li]}</b></div>')
         show(f"#{i}", t, b)
-        js(f'tl.fromTo("#{i}", {{scale: 1.6, rotation: {rot - 20}}}, {{scale: 1, rotation: {rot}, duration: .2, ease: "steps(3)", immediateRender: false}}, {t:.3f});')
-        k, tt = 0, t + .27
+        g = random.Random(si * 7 + 1)
+        path = phys(-420, 1300, vx0=g.choice([-1, 1]) * g.uniform(220, 420), g_m=48, bounce=.45, drag=.15, fric=.35, dur=1.1)
+        x_end = path[-1][1]
+        for (dt, px, py) in path:
+            spin = (rot - 28 * (1 if x_end > 0 else -1)) + 28 * (1 if x_end > 0 else -1) * min(1, dt / .5)
+            js(f'tl.set("#{i}", {{x: {px - x_end:.0f}, y: {py:.0f}, rotation: {spin:.1f}}}, {t + dt:.3f});')
+        k, tt = 0, t + 1.0
         while tt < b - .07:
             js(f'tl.set("#{i}", {{rotation: {rot + (2.5 if k % 2 else -2.5)}}}, {tt:.3f});')
             tt, k = tt + PERIOD / 2, k + 1
@@ -630,10 +700,10 @@ def camera():
         return fx, fy, s, rot
 
     td = next(s_ for w, s_ in words_of(12) if w == "dropped")       # dropped: the frame falls out and slams back in
-    DROP = {round(td * 15) + k: y for k, y in enumerate([420, 1000, -760, -200, 50, -28, 12])}
+    DROP = {round(td * 30) + k: y for k, y in enumerate([210, 420, 710, 1000, 120, -760, -480, -200, -75, 50, 11, -28, -8, 12, 0])}
     blurred = False
-    for f in range(int(DUR * 15)):
-        t = f / 15
+    for f in range(int(DUR * 30)):
+        t = f / 30
         si = max(i for i, p in enumerate(plans) if p["a"] <= t + 1e-6)
         fx, fy, s, rot = focus(si, t)
         px, py, _, _ = focus(si, max(plans[si]["a"], t - STEP)) if t - STEP >= plans[si]["a"] else focus(si, t + STEP)
@@ -759,14 +829,14 @@ def finishing():
                 parts.append("url(#bloom)")
             if k < 2:
                 parts.append("url(#rgbsplit)")
-            fil.append(" ".join(parts) or "none")
+            fil.append(" ".join(parts) or "url(#dglow)")
         for k in range(4):
             t = a - STEP + k * STEP
             js(f'tl.set("#glow", {{filter: "{fil[k]}"}}, {t:.3f});')
             js(f'tl.set("#blg", {{attr: {{stdDeviation: {[26, 20, 13, 7][k]}}}}}, {t:.3f});')
             js(f'tl.set("#rgbR", {{attr: {{dx: {[30, 16, 0, 0][k]}}}}}, {t:.3f});')
             js(f'tl.set("#rgbB", {{attr: {{dx: {[-30, -16, 0, 0][k]}}}}}, {t:.3f});')
-        js(f'tl.set("#glow", {{filter: "none"}}, {a + 3 * STEP:.3f});')
+        js(f'tl.set("#glow", {{filter: "url(#dglow)"}}, {a + 3 * STEP:.3f});')
         if r >= .45:
             js(f'tl.set("#leak", {{opacity: 1}}, {a - STEP:.3f});')
             js(f'tl.fromTo("#leak", {{x: {-900 if si % 2 else 900}, opacity: 1}}, {{x: {900 if si % 2 else -900}, opacity: 0, duration: .5, ease: "steps(8)", immediateRender: false}}, {a - STEP:.3f});')
@@ -776,7 +846,7 @@ def finishing():
                 t = mb[0]
                 js(f'tl.set("#glow", {{filter: "url(#bloom)"}}, {t:.3f});')
                 js(f'tl.set("#blg", {{attr: {{stdDeviation: 16}}}}, {t:.3f});')
-                js(f'tl.set("#glow", {{filter: "none"}}, {t + 2 * STEP:.3f});')
+                js(f'tl.set("#glow", {{filter: "url(#dglow)"}}, {t + 2 * STEP:.3f});')
 
 
 # ------------------------------------------------------------------------------------------------ full-screen lyric effects
@@ -792,10 +862,10 @@ def locked(inner, t0, t1, z=5):
 
 def pin_locks():
     for i, t0, t1 in LOCKS:
-        for f in range(int(t0 * 15) - 1, int(t1 * 15) + 2):
+        for f in range(int(t0 * 30) - 1, int(t1 * 30) + 2):
             if f in CAMSTATE:
                 fx, fy, S, rot = CAMSTATE[f]
-                js(f'tl.set("#{i}", {{x: {fx - 540:.1f}, y: {fy - CY:.1f}, scale: {1 / S:.4f}, rotation: {-rot:.2f}}}, {f / 15:.3f});')
+                js(f'tl.set("#{i}", {{x: {fx - 540:.1f}, y: {fy - CY:.1f}, scale: {1 / S:.4f}, rotation: {-rot:.2f}}}, {f / 30:.3f});')
 
 
 def front_layer(gid, fil, t0, t1, y_from, y_to, t_full, L, drift, z=5, extra=""):
@@ -805,15 +875,15 @@ def front_layer(gid, fil, t0, t1, y_from, y_to, t_full, L, drift, z=5, extra="")
            f'<stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#fff"/></linearGradient></defs>'
            f'<rect x="-80" y="-80" width="1240" height="1240" fill="url(#{gid})" filter="url(#{fil})"/></svg>{extra}')
     i = locked(svg, t0, t1, z)
-    n = max(1, round((t_full - t0) * 15))
+    n = max(1, round((t_full - t0) * 30))
     for k in range(n + 1):
         u = k / n
         yf = y_from + (y_to - y_from) * (1 - (1 - u) ** 1.35)
-        js(f'tl.set("#{gid}", {{attr: {{y1: {yf - L / 2:.0f}, y2: {yf + L / 2:.0f}}}}}, {t0 + k * STEP:.3f});')
+        js(f'tl.set("#{gid}", {{attr: {{y1: {yf - L / 2:.0f}, y2: {yf + L / 2:.0f}}}}}, {t0 + k / 30:.3f});')
     off = {"firef": "fireo", "smk2": "smko"}[fil]
-    m = max(1, round((t1 - t0) * 15))
+    m = max(1, round((t1 - t0) * 30))
     for k in range(m + 1):
-        js(f'tl.set("#{off}", {{attr: {{dx: {drift[0] * k / m:.0f}, dy: {drift[1] * k / m:.0f}}}}}, {t0 + k * STEP:.3f});')
+        js(f'tl.set("#{off}", {{attr: {{dx: {drift[0] * k / m:.0f}, dy: {drift[1] * k / m:.0f}}}}}, {t0 + k / 30:.3f});')
     return i
 
 
@@ -844,7 +914,7 @@ def context_fx():
         for k, sd in enumerate([18, 11]):
             js(f'tl.set("#glow", {{filter: "url(#bloom)"}}, {tw + k * STEP + .002:.3f});')
             js(f'tl.set("#blg", {{attr: {{stdDeviation: {sd}}}}}, {tw + k * STEP + .002:.3f});')
-        js(f'tl.set("#glow", {{filter: "none"}}, {tw + 2 * STEP + .002:.3f});')
+        js(f'tl.set("#glow", {{filter: "url(#dglow)"}}, {tw + 2 * STEP + .002:.3f});')
     js(f'tl.set("#heat", {{opacity: 0}}, {b:.3f});')
     # somethin' gettin' dropped: the whole frame falls out the bottom, slams back in from the top and judders
     a, b = sc[12]
@@ -853,7 +923,7 @@ def context_fx():
         js(f'tl.set("#glow", {{filter: "url(#rgbsplit)"}}, {td + k * STEP:.3f});')
         js(f'tl.set("#rgbR", {{attr: {{dx: 0, dy: {dx}}}}}, {td + k * STEP:.3f});')
         js(f'tl.set("#rgbB", {{attr: {{dx: 0, dy: {-dx}}}}}, {td + k * STEP:.3f});')
-    js(f'tl.set("#glow", {{filter: "none"}}, {td + 4 * STEP:.3f});')
+    js(f'tl.set("#glow", {{filter: "url(#dglow)"}}, {td + 4 * STEP:.3f});')
     js(f'tl.set("#rgbR", {{attr: {{dy: 0}}}}, {td + 4 * STEP:.3f});')
     js(f'tl.set("#rgbB", {{attr: {{dy: 0}}}}, {td + 4 * STEP:.3f});')
     FLASH.append((td + 3 * STEP, "white"))
@@ -874,6 +944,24 @@ def context_fx():
         js(f'tl.set("#fx", {{filter: "none"}}, {tw + (m + 1) * STEP:.3f});')
 
 
+BURNS = {11: "burn5", 15: "burn12", 17: "burn5", 18: "burn12", 6: "burn1", 10: "burn2"}
+
+
+def film_burns():
+    for a, b, li in scenes():
+        if li not in BURNS:
+            continue
+        name = BURNS[li]
+        src = f"assets/video/burn/{name}.mp4"
+        d = {"burn1": .96, "burn2": .84, "burn5": .92, "burn12": .88}[name]
+        t0 = max(0, a - d * .45)
+        i = nid("fb")
+        VTR[0] += 1
+        SCREEN.append(f'<div class="burnv el" id="{i}"><video id="v{i}" src="{src}" data-start="{t0:.3f}" data-duration="{d:.3f}" '
+                      f'data-track-index="{VTR[0]}" muted playsinline></video></div>')
+        show(f"#{i}", t0, t0 + d)
+
+
 def tables(rows):
     return "".join(f'<feFunc{c} type="table" tableValues="{" ".join(f"{v:g}" for v in vals)}"/>' for c, vals in zip("RGBA", rows))
 
@@ -887,6 +975,15 @@ SMOKE_T = tables([[.96] * 9 + [.96, .94, .9, .78, .66, .74, .88, .96, .86, .72, 
                   [.9] * 9 + [.9, .88, .84, .7, .58, .66, .8, .9, .79, .64, .72, .86],
                   [0] * 8 + [.08, .25, .45, .62, .55, .5, .66, .82, .9, .84, .72, .8, .9]])
 FX_DEFS = f"""
+      <filter id="dglow" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  .3 .59 .11 0 0" result="lum"/>
+      <feComponentTransfer in="lum" result="mask"><feFuncA type="linear" slope="3.2" intercept="-2.3"/></feComponentTransfer>
+      <feComposite in="SourceGraphic" in2="mask" operator="in" result="hi"/>
+      <feGaussianBlur in="hi" stdDeviation="4" result="b1"/><feGaussianBlur in="hi" stdDeviation="14" result="b2"/>
+      <feGaussianBlur in="hi" stdDeviation="38" result="b3"/>
+      <feComposite in="b1" in2="b2" operator="arithmetic" k2="0.55" k3="0.45" result="m1"/>
+      <feComposite in="m1" in2="b3" operator="arithmetic" k2="1" k3="0.35" result="gl"/>
+      <feBlend in="SourceGraphic" in2="gl" mode="screen"/></filter>
       <filter id="firef" filterUnits="objectBoundingBox" x="0" y="0" width="1" height="1.6" color-interpolation-filters="sRGB">
       <feTurbulence type="fractalNoise" baseFrequency="0.010 0.004" numOctaves="4" seed="11" result="n0"/>
       <feOffset id="fireo" in="n0" dx="0" dy="0" result="n1"/>
@@ -922,11 +1019,8 @@ BLOBS = [(300, 300, 480, "#b0194f", 260, 180, 9.0, 0.0), (1100, 380, 400, "#e033
 def background():
     for f in range(int(DUR * 15)):           # stepped on the edit's 15 fps grid, smooth curves (no shake)
         t = f / 15
-        for k, (x, y, r, c, dx, dy, per, ph) in enumerate(BLOBS):
-            u = t / per * math.tau + ph
-            js(f'tl.set("#bl{k}", {{x: {dx * math.sin(u):.0f}, y: {dy * math.cos(u * .8):.0f}, scale: {1 + .18 * math.sin(u * 1.3):.3f}}}, {t:.3f});')
         lb = max([bt for bt in BEATS["beats"] if bt <= t + 1e-6] or [-9])
-        js(f'tl.set("#bg", {{filter: "brightness({1 + .22 * math.exp(-(t - lb) / .12):.3f}) saturate(1.1)"}}, {t:.3f});')
+        js(f'tl.set("#bg", {{filter: "brightness({1 + .1 * math.exp(-(t - lb) / .12):.3f}) saturate(1.1)"}}, {t:.3f});')
 
 
 def flashes():
@@ -949,6 +1043,7 @@ GR = "url(assets/img/collage/tex/grunge.png)"
 CSS = f"""
 @font-face {{ font-family: "Anton"; src: url("assets/fonts/Anton.ttf"); }}
 @font-face {{ font-family: "Archivo Black"; src: url("assets/fonts/ArchivoBlack.ttf"); }}
+@font-face {{ font-family: "Playfair"; src: url("assets/fonts/PlayfairDisplay-BoldItalic.woff2"); font-style: italic; font-weight: 800; }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: {INK}; }}
 #root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: {INK}; }}
@@ -974,7 +1069,11 @@ img.el {{ display: block; height: auto; }}
 .lw {{ position: absolute; transform-origin: 50% 50%; }}
 .lb {{ position: relative; display: inline-block; font: 400 120px/1.12 "Anton"; white-space: nowrap; opacity: 0; padding: .04em .28em 0;
   letter-spacing: .01em; }}
-.lb .ch {{ display: inline; }}
+.lb .ch {{ display: inline-block; white-space: pre; }}
+.ser {{ background: none; color: #fff4f7; padding: 0 .12em; font-family: "Playfair"; font-style: italic; font-weight: 800; letter-spacing: 0; line-height: 1.15;
+  text-shadow: 0 2px 12px rgba(10,2,6,.75), 0 0 16px rgba(255,140,180,.8), 0 0 38px rgba(255,60,120,.5), 4px 6px 0 rgba(20,6,12,.6); }}
+.smear {{ position: absolute; left: 0; top: 0; width: 1.3em; height: 100%; opacity: 0; pointer-events: none; mix-blend-mode: screen; filter: blur(12px);
+  background: radial-gradient(ellipse at 50% 50%, rgba(255,214,170,.95), rgba(255,90,140,.7) 40%, rgba(0,0,0,0) 72%); }}
 .lb .cz {{ filter: blur(.08em); }}
 .lb .cur {{ display: inline-block; width: .42em; height: .78em; margin-left: .06em; vertical-align: -.02em; background: rgba(160,150,150,.9); }}
 .blk {{ background: {SP}, {INK}; color: {WHT}; box-shadow: 0 12px 22px rgba(0,0,0,.4); }}
@@ -989,9 +1088,9 @@ img.el {{ display: block; height: auto; }}
   -webkit-mask-image: {GR}; mask-image: {GR}; -webkit-mask-size: 520px auto; mask-size: 520px auto; }}
 .stamp .cur {{ background: rgba(240,236,236,.55); }}
 .w3d {{ background: none; color: {WHT}; padding: 0; -webkit-text-stroke: 2px #2a2a2a;
-  text-shadow: 1px 1px 0 #cfcac2, 2px 2px 0 #bdb7ae, 3px 3px 0 #a7a097, 4px 4px 0 #8f887f, 5px 5px 0 #77706a, 6px 6px 0 #5e5852, 7px 7px 0 #48433e, 10px 12px 10px rgba(0,0,0,.5); }}
+  text-shadow: {", ".join(f"{k}px {k}px 0 rgb({int(214 - 13 * k)},{int(208 - 13.5 * k)},{int(200 - 13.5 * k)})" for k in range(1, 13))}, 14px 18px 18px rgba(0,0,0,.55), 0 0 30px rgba(255,255,255,.18); }}
 .m3d {{ background: none; color: {MAG}; padding: 0; -webkit-text-stroke: 2px #5c0a28;
-  text-shadow: 1px 1px 0 #9a1645, 2px 2px 0 #84123b, 3px 3px 0 #6e0f31, 4px 4px 0 #580c27, 5px 5px 0 #42091d, 6px 6px 0 #2c0613, 9px 11px 10px rgba(0,0,0,.45); }}
+  text-shadow: {", ".join(f"{k}px {k}px 0 rgb({int(160 - 11 * k)},{int(22 - 1.4 * k)},{int(70 - 4.6 * k)})" for k in range(1, 13))}, 14px 18px 18px rgba(0,0,0,.5), 0 0 30px rgba(255,80,140,.25); }}
 .mlet {{ background: none; color: {MAG}; padding: 0; text-shadow: 5px 5px 0 rgba(10,10,10,.85);
   -webkit-mask-image: {GR}; mask-image: {GR}; -webkit-mask-size: 700px auto; mask-size: 700px auto; }}
 .fill {{ color: transparent; padding: 0; line-height: 1.1; background-size: cover; background-position: 50% 40%;
@@ -1011,7 +1110,10 @@ img.el {{ display: block; height: auto; }}
 #flash {{ position: absolute; inset: 0; z-index: 20; background: {WHT}; opacity: 0; }}
 #split {{ position: absolute; inset: 0; z-index: 20; background: {MAG}; opacity: 0; }}
 #split i {{ position: absolute; left: 50%; top: 0; width: 50%; height: 100%; background: {INK}; }}
-#glow {{ position: absolute; inset: 0; }}
+#glow {{ position: absolute; inset: 0; filter: url(#dglow); }}
+#fluid {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }}
+.burnv {{ position: absolute; inset: 0; z-index: 16; mix-blend-mode: screen; pointer-events: none; }}
+.burnv video {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
 #leak {{ position: absolute; inset: -200px; z-index: 17; opacity: 0; pointer-events: none; mix-blend-mode: screen;
   background: radial-gradient(ellipse 35% 60% at 50% 50%, rgba(255,170,120,.85), rgba(255,60,140,.5) 45%, rgba(0,0,0,0) 75%); }}
 .counter {{ font: 400 300px/1 "Anton"; color: {WHT}; -webkit-text-stroke: 6px {INK}; paint-order: stroke fill; text-shadow: 14px 14px 0 {MAG}; }}
@@ -1039,6 +1141,7 @@ def main():
     background()
     finishing()
     context_fx()
+    film_burns()
     pin_locks()
     flashes()
     g = random.Random(3)
@@ -1075,7 +1178,7 @@ def main():
       <feGaussianBlur stdDeviation="3"/></filter>{FX_DEFS}</svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
       <div id="glow"><div id="fx">
-        <div id="bg">{"".join(f'<i class="blob" id="bl{k}"></i>' for k in range(len(BLOBS)))}</div>
+        <div id="bg"><video id="fluid" src="assets/video/fluid_bg.mp4" data-start="0" data-duration="{DUR}" data-track-index="90" muted playsinline></video></div>
         <div id="cam"><div id="pan">
           <div id="paper"></div>
           <div id="board">

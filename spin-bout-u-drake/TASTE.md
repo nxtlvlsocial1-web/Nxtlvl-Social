@@ -104,6 +104,21 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
   back with a white hit, comin' out my body lifts a ghost of the whole picture. These layers are pinned to the
   screen but sit under the lyric labels, so the words stay readable.
 
+## v12 premium pass (owner: everything should feel premium, from the After Effects references they sent)
+- Text motion from the owner's text presets (HuzRashid pack): Blur Reveal (letters sharpen out of a blur behind a
+  warm glowing smear), Gold Text cascade (letters pop up one by one with overshoot), Slide Up (serif phrases rise out
+  of a blur), Flicker (stamps). Boxed labels wipe open first. No cursor typing.
+- Soft phrases (for you, baby girl, the way, these days, for real, yeah...) set in Playfair Display bold italic with a
+  pink glow, next to the Anton caps.
+- Deep Glow look: luminance-keyed glow (only whites and highlights) in three falloffs, on the whole frame.
+- Background: liquid 4-colour gradient warped by turbulence (CreateGradients method), pre-rendered by
+  build/fluidbg.py, pulsing on the beat.
+- Smooth 30 fps camera and expo / back easing everywhere (no 15 fps steps).
+- The owner's gravity expression (ported as phys()) drops every doodle sticker in with real bounces and drops the
+  DROPPED letters. 3D words extruded deeper (3D Extruder look).
+- Film burns from the pack on the hook and outro section changes, static sweeps on two cuts.
+- Grade: MoodyGloss LUT from the pack at 75% in the final mux.
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|
@@ -120,3 +135,4 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 | 2026-10-31 | remove the grids, add a lively gradient background so it feels immersive | v10 above |
 | 2026-10-31 | Vogue name missing on the call screen; dumb cat hidden; more motion tracking and faster transitions; remove the attached anime pictures and build lyric visual concepts; random bloom on transitions; After Effects feel | v11 above |
 | 2026-10-31 | don't add the 3D city for burn, burn the whole screen; same for all such context lyrics | full-screen smoke, burn, drop, ghost |
+\n| 2026-10-31 | make every element feel premium, as per the After Effects links and packs sent | v12 above |\n
