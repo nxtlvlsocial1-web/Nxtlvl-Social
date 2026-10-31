@@ -54,11 +54,12 @@ CARD1 = {0: AV + "jealous.mp4", 2: PR + "envogue_funky_divas.jpg", 4: PR + "role
 CARD2 = {1: PR + "vogue_cat_cover.jpg", 3: "assets/img/collage/call_vogue.jpg", 9: AF + "jet.jpg", 10: AV + "road.mp4"}
 CUTPRINT = {14: None, 9: None, 16: None, 7: None}     # recipes with a cut-out slot that use a picture instead
 FILL = {0: AF + "jealous.jpg", 6: PR + "cat_white_dumb.jpg", 11: AF + "her_blush.jpg"}
-G3D_AT = {9: ("globe", 120, 620, 860), 12: ("diamonds", 0, 360, 1080), 14: ("city", 60, 420, 960), 15: ("heart", 140, 470, 800),
+G3D_AT = {9: ("globe", 120, 620, 860), 12: ("diamonds", 0, 360, 1080), 15: ("heart", 140, 470, 800),
           16: ("body", 0, 700, 1080), 17: ("tissue", 40, 1350, 460)}
 STILLS = [AF + n + ".jpg" for n in ("jealous", "her_blush", "jet", "road", "finale", "snotty")] + [PR + "vogue_cat_cover.jpg", PR + "rolex_cat_ad.jpg", PR + "envogue_funky_divas.jpg"]
 A, HIDE, PAN, SCREEN = [], [], [], []
 CAMKEYS, FLASH = {}, []
+LOCKS, CAMSTATE = [], {}     # screen-pinned layers inside the board; the camera per 15 fps frame (fx, fy, scale, rot)
 NID, VTR = [0], [1]
 R = random.Random(23)
 
@@ -398,7 +399,8 @@ def r4(si, a, b, li, gs):
     g0 = gs[0]
     FLASH.append((a, "invert"))
     label(g0[0], "stamp", 540, 260, fit(g0[0], 1000, 300), 0, g0[2], b, z=4)
-    rect_outline(200, 560, 680, 560, a + .134, b)
+    if li != 14:
+        rect_outline(200, 560, 680, 560, a + .134, b)
     scrap("red", 1, 560, 760, 520, 6, a + .134, b)
     cam(si, a, 540, 430, 1.3, 0, .01)
     mids = [g for g in gs[1:] if g is not kw]
@@ -627,6 +629,8 @@ def camera():
             rot += 2 * x * (1 if si % 2 else -1)
         return fx, fy, s, rot
 
+    td = next(s_ for w, s_ in words_of(12) if w == "dropped")       # dropped: the frame falls out and slams back in
+    DROP = {round(td * 15) + k: y for k, y in enumerate([420, 1000, -760, -200, 50, -28, 12])}
     blurred = False
     for f in range(int(DUR * 15)):
         t = f / 15
@@ -640,6 +644,10 @@ def camera():
         s *= 1 + .05 * math.exp(-(t - lb) / .09)
         s *= 1 + .22 * math.exp(-(t - plans[si]["a"]) / .07)          # zoom snap into every scene
         fy = 960 + (fy - 960) * VTRACK
+        dy = DROP.get(f, 0)
+        if dy:
+            fy -= dy / (s * 1.06 * ZOOM)
+        CAMSTATE[f] = (fx, fy, s * 1.06 * ZOOM, rot)
         js(f'tl.set("#pan", {{x: {540 - fx:.1f}, y: {CY - fy:.1f}}}, {t:.3f});')
         js(f'tl.set("#cam", {{scale: {s * 1.06 * ZOOM:.4f}, rotation: {rot:.2f}}}, {t:.3f});')
         sp = math.hypot(vx, vy)
@@ -709,28 +717,6 @@ def concepts():
     for k in range(3):
         i = conc(f'<i class="el shock" id="ID" style="left:240px;top:1080px;width:600px;height:200px;z-index:ZZ"></i>', td + k * .12, td + .9 + k * .12, z=3)
         js(f'tl.fromTo("#{i}", {{scale: .2, opacity: 1}}, {{scale: 2.2, opacity: 0, duration: .8, ease: "steps(12)", immediateRender: false}}, {td + k * .12:.3f});')
-    # smoke: real billowing smoke rising through the frame (displaced soft puffs), SMOKE ghosted inside it
-    a, b = sc[13]
-    g = random.Random(13)
-    puffs = "".join(f'<circle cx="{g.uniform(180, 900):.0f}" cy="{g.uniform(300, 1300):.0f}" r="{g.uniform(90, 200):.0f}" '
-                    f'fill="{g.choice([WHT, "#d8c8cf", "#f0b5c8", "#9a7f8a"])}" opacity="{g.uniform(.35, .7):.2f}"/>' for _ in range(26))
-    sm = conc(f'<svg class="el" id="ID" viewBox="0 0 1080 1600" style="left:0;top:150px;width:1080px;height:1600px;z-index:ZZ;overflow:visible">'
-              f'<g filter="url(#smokef)"><g class="sp">{puffs}</g></g></svg>', a, b, z=3)
-    n = max(2, round((b - a) * 15))
-    js(f'tl.fromTo("#{sm} .sp", {{y: 260, scale: .9, transformOrigin: "50% 100%"}}, {{y: -260, scale: 1.25, duration: {b - a:.2f}, ease: "steps({n})", immediateRender: false}}, {a:.3f});')
-    js(f'tl.fromTo("#smo", {{attr: {{dx: 0, dy: 0}}}}, {{attr: {{dx: 160, dy: -420}}, duration: {b - a:.2f}, ease: "steps({n})", immediateRender: false}}, {a:.3f});')
-    # burn: embers rising over the burning 3D block
-    a, b = sc[14]
-    g = random.Random(14)
-    for k in range(28):
-        x = g.uniform(80, 1000)
-        i = conc(f'<i class="el ember" id="ID" style="left:{x:.0f}px;top:1400px;width:{g.uniform(8, 18):.0f}px;height:{g.uniform(8, 18):.0f}px;z-index:ZZ"></i>', a, b, z=6)
-        per = g.uniform(.9, 1.6)
-        st = a - g.uniform(0, per)
-        while st < b:
-            nn = max(2, round(per * 15))
-            js(f'tl.fromTo("#{i}", {{y: 0, x: 0}}, {{y: {-g.uniform(700, 1100):.0f}, x: {g.uniform(-120, 120):.0f}, duration: {per:.2f}, ease: "steps({nn})", immediateRender: false}}, {max(a, st):.3f});')
-            st += per
     # hook 2: rings pulse out of the chrome heart on every other beat
     a, b = sc[15]
     for k, t in enumerate([t for t in BEATS["beats"][::2] if a < t < b - .2]):
@@ -791,6 +777,139 @@ def finishing():
                 js(f'tl.set("#glow", {{filter: "url(#bloom)"}}, {t:.3f});')
                 js(f'tl.set("#blg", {{attr: {{stdDeviation: 16}}}}, {t:.3f});')
                 js(f'tl.set("#glow", {{filter: "none"}}, {t + 2 * STEP:.3f});')
+
+
+# ------------------------------------------------------------------------------------------------ full-screen lyric effects
+def locked(inner, t0, t1, z=5):
+    """A full-screen layer pinned to the screen but living in the board under the lyric labels, so the words stay
+    readable while the whole picture burns / fills with smoke. pin_locks() counter-moves it against the camera."""
+    i = nid("lk")
+    PAN.insert(0, f'<div class="el lock" id="{i}" style="z-index:{z}">{inner}</div>')
+    show(f"#{i}", t0, t1)
+    LOCKS.append((i, t0, t1))
+    return i
+
+
+def pin_locks():
+    for i, t0, t1 in LOCKS:
+        for f in range(int(t0 * 15) - 1, int(t1 * 15) + 2):
+            if f in CAMSTATE:
+                fx, fy, S, rot = CAMSTATE[f]
+                js(f'tl.set("#{i}", {{x: {fx - 540:.1f}, y: {fy - CY:.1f}, scale: {1 / S:.4f}, rotation: {-rot:.2f}}}, {f / 15:.3f});')
+
+
+def front_layer(gid, fil, t0, t1, y_from, y_to, t_full, L, drift, z=5, extra=""):
+    """A procedural noise front sweeping up the screen (filter fil maps the swept value to colour)."""
+    svg = (f'<svg viewBox="-80 -80 1240 1240" style="position:absolute;left:-80px;top:-80px;width:1240px;height:1240px;overflow:visible">'
+           f'<defs><linearGradient id="{gid}" gradientUnits="userSpaceOnUse" x1="0" y1="{y_from - L / 2:.0f}" x2="0" y2="{y_from + L / 2:.0f}">'
+           f'<stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#fff"/></linearGradient></defs>'
+           f'<rect x="-80" y="-80" width="1240" height="1240" fill="url(#{gid})" filter="url(#{fil})"/></svg>{extra}')
+    i = locked(svg, t0, t1, z)
+    n = max(1, round((t_full - t0) * 15))
+    for k in range(n + 1):
+        u = k / n
+        yf = y_from + (y_to - y_from) * (1 - (1 - u) ** 1.35)
+        js(f'tl.set("#{gid}", {{attr: {{y1: {yf - L / 2:.0f}, y2: {yf + L / 2:.0f}}}}}, {t0 + k * STEP:.3f});')
+    off = {"firef": "fireo", "smk2": "smko"}[fil]
+    m = max(1, round((t1 - t0) * 15))
+    for k in range(m + 1):
+        js(f'tl.set("#{off}", {{attr: {{dx: {drift[0] * k / m:.0f}, dy: {drift[1] * k / m:.0f}}}}}, {t0 + k * STEP:.3f});')
+    return i
+
+
+def context_fx():
+    """The lyric lines that say something physical happen to the whole screen: smoke fills it, burn sets it on fire,
+    dropped drops the frame, comin' out my body lifts a ghost of the whole picture out of itself."""
+    sc = {li: (a, b) for a, b, li in scenes()}
+    # smoke a top: smoke billows up from the bottom and swallows the whole frame, swirling until the cut
+    a, b = sc[13]
+    front_layer("smg", "smk2", a, b, 1400, -700, a + 1.3, 1100, (140, -520), z=4)
+    # burn somebody block: a fire front sweeps up the whole screen and leaves it charred, embers flying
+    a, b = sc[14]
+    g = random.Random(14)
+    em = "".join(f'<i class="ember" style="position:absolute;left:{g.uniform(0, 1080):.0f}px;top:{g.uniform(700, 1250):.0f}px;'
+                 f'width:{g.uniform(7, 16):.0f}px;height:{g.uniform(7, 16):.0f}px"></i>' for _ in range(36))
+    bi = front_layer("fig", "firef", a, b, 1350, -520, b - .2, 900, (0, -620), z=4, extra=f'<div class="embers">{em}</div>')
+    n = max(2, round((b - a) * 15))
+    js(f'tl.fromTo("#{bi} .ember", {{y: 0, x: 0}}, {{y: (k) => -700 - (k * 137) % 600, x: (k) => (k * 53) % 160 - 80, duration: {b - a:.2f}, ease: "steps({n})", '
+       f'stagger: .012, immediateRender: false}}, {a:.3f});')
+    SCREEN.append('<div id="heat"></div>')
+    HIDE.append("#heat")
+    js(f'tl.set("#heat", {{opacity: .55, background: "#ff9a50"}}, {a:.3f});')                  # the ignition flash
+    js(f'tl.set("#heat", {{background: "radial-gradient(ellipse 90% 70% at 50% 100%, rgba(255,120,40,.7), rgba(255,70,40,.18) 50%, rgba(0,0,0,0) 85%)"}}, {a + STEP:.3f});')
+    for k in range(1, n):
+        t = a + k * STEP
+        js(f'tl.set("#heat", {{opacity: {.18 + .22 * abs(math.sin(k * 2.3)) * abs(math.sin(k * .7 + 1)):.2f}}}, {t:.3f});')
+    for tw in [s_ for w, s_ in words_of(14) if w in ("burn", "block")]:   # bloom hits, not a constant wash
+        for k, sd in enumerate([18, 11]):
+            js(f'tl.set("#glow", {{filter: "url(#bloom)"}}, {tw + k * STEP + .002:.3f});')
+            js(f'tl.set("#blg", {{attr: {{stdDeviation: {sd}}}}}, {tw + k * STEP + .002:.3f});')
+        js(f'tl.set("#glow", {{filter: "none"}}, {tw + 2 * STEP + .002:.3f});')
+    js(f'tl.set("#heat", {{opacity: 0}}, {b:.3f});')
+    # somethin' gettin' dropped: the whole frame falls out the bottom, slams back in from the top and judders
+    a, b = sc[12]
+    td = next(s_ for w, s_ in words_of(12) if w == "dropped")
+    for k, dx in enumerate([22, 26, 16, 8]):
+        js(f'tl.set("#glow", {{filter: "url(#rgbsplit)"}}, {td + k * STEP:.3f});')
+        js(f'tl.set("#rgbR", {{attr: {{dx: 0, dy: {dx}}}}}, {td + k * STEP:.3f});')
+        js(f'tl.set("#rgbB", {{attr: {{dx: 0, dy: {-dx}}}}}, {td + k * STEP:.3f});')
+    js(f'tl.set("#glow", {{filter: "none"}}, {td + 4 * STEP:.3f});')
+    js(f'tl.set("#rgbR", {{attr: {{dy: 0}}}}, {td + 4 * STEP:.3f});')
+    js(f'tl.set("#rgbB", {{attr: {{dy: 0}}}}, {td + 4 * STEP:.3f});')
+    FLASH.append((td + 3 * STEP, "white"))
+    # comin' out my body: a ghost of the whole picture lifts up out of it on "out", again on "body"
+    a, b = sc[16]
+    for tw in [s_ for w, s_ in words_of(16) if w in ("out", "body")]:
+        m = 12
+        for k in range(m + 1):
+            u = k / m
+            t = tw + k * STEP
+            d = 260 * u ** .7
+            al = .6 * (1 - u)
+            js(f'tl.set("#fx", {{filter: "url(#ghostf)"}}, {t:.3f});')
+            js(f'tl.set("#gho1", {{attr: {{dy: {-d:.0f}, dx: {8 * math.sin(k):.0f}}}}}, {t:.3f});')
+            js(f'tl.set("#gho2", {{attr: {{dy: {-d * 1.9:.0f}, dx: {-10 * math.sin(k):.0f}}}}}, {t:.3f});')
+            js(f'tl.set("#ghc1", {{attr: {{values: "0.7 0 0 0 0.25  0 0.6 0 0 0.2  0 0 0.7 0 0.3  0 0 0 {al:.2f} 0"}}}}, {t:.3f});')
+            js(f'tl.set("#ghc2", {{attr: {{values: "0.7 0 0 0 0.25  0 0.6 0 0 0.2  0 0 0.7 0 0.3  0 0 0 {al * .55:.2f} 0"}}}}, {t:.3f});')
+        js(f'tl.set("#fx", {{filter: "none"}}, {tw + (m + 1) * STEP:.3f});')
+
+
+def tables(rows):
+    return "".join(f'<feFunc{c} type="table" tableValues="{" ".join(f"{v:g}" for v in vals)}"/>' for c, vals in zip("RGBA", rows))
+
+
+FIRE_T = tables([[.69] * 9 + [.69, 1, 1, .95, .55, .22, .12, .08, .07, .06, .06, .06],
+                 [.10] * 9 + [.10, .9, .62, .3, .1, .05, .035, .03, .025, .02, .02, .02],
+                 [.31] * 9 + [.31, .55, .15, .06, .06, .05, .04, .035, .03, .03, .03, .03],
+                 [0] * 8 + [0, .55, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])
+SMOKE_T = tables([[.96] * 9 + [.96, .94, .9, .78, .66, .74, .88, .96, .86, .72, .8, .92],
+                  [.86] * 9 + [.86, .84, .79, .64, .52, .6, .76, .86, .74, .58, .66, .82],
+                  [.9] * 9 + [.9, .88, .84, .7, .58, .66, .8, .9, .79, .64, .72, .86],
+                  [0] * 8 + [.08, .25, .45, .62, .55, .5, .66, .82, .9, .84, .72, .8, .9]])
+FX_DEFS = f"""
+      <filter id="firef" filterUnits="objectBoundingBox" x="0" y="0" width="1" height="1.6" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.010 0.004" numOctaves="4" seed="11" result="n0"/>
+      <feOffset id="fireo" in="n0" dx="0" dy="0" result="n1"/>
+      <feColorMatrix in="n1" type="matrix" values="1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1" result="n"/>
+      <feComposite in="SourceGraphic" in2="n" operator="arithmetic" k1="0" k2="0.6" k3="0.4" k4="0" result="v"/>
+      <feComponentTransfer in="v" result="c">{FIRE_T}</feComponentTransfer>
+      <feComposite in="c" in2="SourceAlpha" operator="in"/></filter>
+      <filter id="smk2" filterUnits="objectBoundingBox" x="-0.2" y="0" width="1.4" height="1.6" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.005 0.006" numOctaves="5" seed="3" result="n0"/>
+      <feOffset id="smko" in="n0" dx="0" dy="0" result="n1"/>
+      <feColorMatrix in="n1" type="matrix" values="1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1" result="n"/>
+      <feComposite in="SourceGraphic" in2="n" operator="arithmetic" k1="0" k2="0.6" k3="0.4" k4="0" result="v"/>
+      <feComponentTransfer in="v" result="c">{SMOKE_T}</feComponentTransfer>
+      <feGaussianBlur in="c" stdDeviation="2" result="cb"/>
+      <feComposite in="cb" in2="SourceAlpha" operator="in"/></filter>
+      <filter id="ghostf" x="-5%" y="-60%" width="110%" height="170%" color-interpolation-filters="sRGB">
+      <feOffset id="gho1" in="SourceGraphic" dx="0" dy="0" result="o1"/>
+      <feColorMatrix id="ghc1" in="o1" type="matrix" values="0.7 0 0 0 0.25  0 0.6 0 0 0.2  0 0 0.7 0 0.3  0 0 0 0 0" result="c1"/>
+      <feGaussianBlur in="c1" stdDeviation="3" result="g1"/>
+      <feOffset id="gho2" in="SourceGraphic" dx="0" dy="0" result="o2"/>
+      <feColorMatrix id="ghc2" in="o2" type="matrix" values="0.7 0 0 0 0.25  0 0.6 0 0 0.2  0 0 0.7 0 0.3  0 0 0 0 0" result="c2"/>
+      <feGaussianBlur in="c2" stdDeviation="9" result="g2"/>
+      <feBlend in="g2" in2="SourceGraphic" mode="screen" result="s1"/><feBlend in="g1" in2="s1" mode="screen"/></filter>"""
 
 
 # The lively gradient behind the collage (screen space, under the moving paper): big soft colour blobs drifting on
@@ -900,6 +1019,9 @@ img.el {{ display: block; height: auto; }}
 .ring {{ border-radius: 50%; border: 12px solid {MAG}; box-shadow: 0 0 34px 8px rgba(255,90,150,.7); }}
 .ember {{ border-radius: 50%; background: #ffb36b; box-shadow: 0 0 12px 5px #ff4f7a; }}
 .wisp {{ border-radius: 50%; background: radial-gradient(ellipse, rgba(255,230,240,.9), rgba(255,120,170,.4) 50%, rgba(0,0,0,0) 72%); filter: blur(6px); }}
+.lock {{ left: 0; top: 0; width: {FW}px; height: {FH}px; transform-origin: 540px 540px; pointer-events: none; }}
+.embers {{ position: absolute; inset: 0; }}
+#heat {{ position: absolute; inset: 0; z-index: 16; opacity: 0; pointer-events: none; mix-blend-mode: screen; }}
 #vig {{ position: absolute; inset: 0; z-index: 18; pointer-events: none; background: radial-gradient(ellipse 80% 75% at 50% 48%, rgba(0,0,0,0) 55%, rgba(0,0,0,.4) 100%); }}
 #grain {{ position: absolute; left: 0; top: 0; width: 1120px; height: 1120px; z-index: 18; pointer-events: none; opacity: .08; background: url(assets/img/grain.png); mix-blend-mode: overlay; }}
 """
@@ -916,6 +1038,8 @@ def main():
     camera()
     background()
     finishing()
+    context_fx()
+    pin_locks()
     flashes()
     g = random.Random(3)
     for f in range(int(DUR * 15)):
@@ -948,7 +1072,7 @@ def main():
       <feBlend in="r2" in2="g" mode="screen" result="rg"/><feBlend in="rg" in2="b3" mode="screen"/></filter>
       <filter id="smokef" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".011" numOctaves="4" seed="6"/>
       <feOffset id="smo" dx="0" dy="0" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="140" xChannelSelector="R" yChannelSelector="G"/>
-      <feGaussianBlur stdDeviation="3"/></filter></svg>
+      <feGaussianBlur stdDeviation="3"/></filter>{FX_DEFS}</svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
       <div id="glow"><div id="fx">
         <div id="bg">{"".join(f'<i class="blob" id="bl{k}"></i>' for k in range(len(BLOBS)))}</div>

@@ -95,10 +95,14 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 - v11: the anime pictures the owner sent back are out (crew, point, diamonds, smoke, fire, spin, spirit,
   him_smitten). Lyric concepts take their place: footsteps marching with a 1-10 counter (ten toes), a GPS route with
   pins dropping on each "go" and a snapping compass (wherever I say go), shockwaves under the 3D diamonds (dropped),
-  displaced billowing smoke, a floating burning 3D city island with embers (burn somebody block), rings off the 3D
-  heart, wisps out of the 3D BODY. The Vogue call screen is phone-shaped with the name on it; the dumb cat has its own
+  rings off the 3D heart, wisps out of the 3D BODY. The Vogue call screen is phone-shaped with the name on it; the dumb cat has its own
   spot. After Effects finish: harder whips, a zoom snap into every scene, bigger beat punches, a bloom and RGB split
   on about 60% of cuts, light-leak sweeps, mid-scene bloom pulses.
+- Lines that say something physical happen to the whole screen (owner: no 3D render for burn, burn the whole
+  screen; same for every such line): smoke a top fills the frame with procedural smoke, burn somebody block sends a
+  fire front up the whole screen that leaves it charred with embers, dropped drops the whole frame out and slams it
+  back with a white hit, comin' out my body lifts a ghost of the whole picture. These layers are pinned to the
+  screen but sit under the lyric labels, so the words stay readable.
 
 ## Feedback rules
 | Date | User said | Rule |
@@ -115,3 +119,4 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 | 2026-10-31 | use the Ashke edit as the reference for the structure, keep the current colour theme | v9: build/collage.py |
 | 2026-10-31 | remove the grids, add a lively gradient background so it feels immersive | v10 above |
 | 2026-10-31 | Vogue name missing on the call screen; dumb cat hidden; more motion tracking and faster transitions; remove the attached anime pictures and build lyric visual concepts; random bloom on transitions; After Effects feel | v11 above |
+| 2026-10-31 | don't add the 3D city for burn, burn the whole screen; same for all such context lyrics | full-screen smoke, burn, drop, ghost |
