@@ -332,6 +332,11 @@ def cap(t, x, y, size, t0, t1=DUR, font="anton", color=WHT, how="pop1", align="l
         enter(f"#{i}", t0, "left" if how.endswith("l") else "right")
     elif how in ("pop", "settle", "rise"):
         enter(f"#{i}", t0, how)
+    if style in ("block", "giant") and n > 3:
+        nn = max(2, round((t1 - t0) * FPS))
+        sgn = 1 if (NID[0] % 2) else -1
+        tween(f"#{i}", {"rotationY": sgn * 34, "rotationX": 12, "transformPerspective": 900, "z": -120},
+              {"rotationY": sgn * 8, "rotationX": 3, "z": 0}, t0, min(nn, 16), "power3.out")
     return i
 
 
@@ -363,6 +368,29 @@ def burst(lines, x, y, r, t0, t1=DUR, z=7, color=MAG, size=None, ly=2, spin=True
     if spin:
         tween(f"#{i} b", {"rotation": 0}, {"rotation": 25}, t0, max(1, round((t1 - t0) * FPS)), "none")
     return i
+
+
+def shards(cx, cy, rx, ry, t0, t1, seed, n=9, z=8, ly=2):
+    i = nid("sh")
+    g = random.Random(seed)
+    groups = []
+    for v in range(4):
+        polys = []
+        for _ in range(n):
+            a = g.uniform(0, math.tau)
+            px, py = cx + rx * math.cos(a) * g.uniform(.8, 1.15), cy + ry * math.sin(a) * g.uniform(.8, 1.15)
+            d = a + math.pi / 2 + g.uniform(-.5, .5)
+            ln, wd = g.uniform(50, 150), g.uniform(8, 20)
+            ux, uy = math.cos(d), math.sin(d)
+            pts = [(px - ux * ln / 2, py - uy * ln / 2), (px + uy * wd, py - ux * wd), (px + ux * ln / 2, py + uy * ln / 2)]
+            col = MAG if g.random() < .7 else WHT
+            polys.append(f'<polygon fill="{col}" points="' + " ".join(f"{a_:.0f},{b_:.0f}" for a_, b_ in pts) + '"/>')
+        groups.append(f'<g style="opacity:0">{"".join(polys)}</g>')
+    put(f'<svg class="sls" id="{i}" viewBox="0 0 {S} {S}" style="z-index:{z}">{"".join(groups)}</svg>', ly)
+    show(f"#{i}", t0, t1)
+    for k, t in enumerate(frames(t0, t1, 3)):
+        js(f'tl.set("#{i} g", {{opacity: 0}}, {t:.3f});')
+        js(f'tl.set("#{i} g:nth-child({k % 4 + 1})", {{opacity: 1}}, {t:.3f});')
 
 
 def swoosh_line(pts, t0, t1, width=9, z=8, ly=2, dur=.35):
@@ -573,6 +601,7 @@ def build():
     cap("TEN", 540, 10, 430, at(li, 5), E[8], align="center", style="giant", how="pop1", ly=1, z=2, sy=1.12)
     cap("TOES", 540, 420, 400, at(li, 6), E[8], align="center", style="giant", how="pop1", ly=1, z=2, sy=1.12)
     para(250, 380, 580, 600, MAG, E[7], E[8], z=1)
+    shards(540, 640, 380, 300, at(li, 5), E[8], 21)
     photo("crew", 220, 400, 640, None, 0, E[7], E[8], kind="acut", how="", push=.05, wind=.03, breathe=True,
           sweeps=(at(li, 5),), z=3)
     cap(text(li, 0, 4), 540, 990, 56, at(li, 0), E[8], style="sticker", align="center", how="pop")
@@ -681,6 +710,7 @@ def build():
     photo("spin", 170, 210, 740, 740, -3, E[15], E[16], kind="afull", how="tilt", card=True, round_=True, clip="spin", push=.04,
           punches=[(t, [1.08, 1.0][k % 2]) for k, t in enumerate(pb)], z=4)
     burst(["YOU"], 930, 400, 120, at(li, 2), E[16], size=84)
+    shards(540, 580, 420, 380, at(li, 5), E[16], 25)
     cap("MAKE ME FEEL", 540, 860, fit("MAKE ME FEEL", 1000, 170, "archivo"), at(li, 3), E[16], font="archivo", align="center",
         style="block", rot=-4, how="pop1")
     cap("these days", 720, 680, 130, at(li, 6), E[16], font="script", color=MAG, style="script", upper=False, rot=-7, how="write", align="center", z=9)
@@ -692,6 +722,7 @@ def build():
     cone(E[16], E[17], cx=540, top=440)
     cap("COMIN' OUT", 540, 40, fit("COMIN' OUT", 1000, 150, "dela"), at(li, 0), E[17], font="dela", align="center", how="pop1")
     cap("MY BODY", 540, 280, fit("MY BODY", 1040, 380), at(li, 2), E[17], align="center", style="giant", how="pop1", ly=1, z=2, sy=1.15)
+    shards(540, 560, 400, 420, at(li, 1), E[17], 22)
     sp = photo("spirit", 170, 220, 740, None, 0, lt(li), E[17], kind="acut", how="", push=.06, wind=.05, breathe=True, z=3)
     js(f'tl.fromTo("#{sp}", {{filter: "drop-shadow(0 0 0px #fff)"}}, {{filter: "drop-shadow(0 0 34px #fff)", duration: {6 * STEP:.3f}, '
        f'ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}}, {at(li, 1):.3f});')
@@ -703,6 +734,7 @@ def build():
     scene(E[17], E[18], bg=MAR, drift=(0, 8), trans="slideup")
     cap("WIPE HIM", 540, 40, fit("WIPE HIM", 1040, 330), at(li, 0), E[18], align="center", style="giant", how="pop1", ly=0, z=2, sy=1.12)
     para(330, 300, 600, 700, MAG, E[17], E[18], z=1)
+    shards(670, 560, 320, 320, at(li, 4), E[18], 24)
     photo("snotty", 380, 270, 580, None, 0, lt(li), E[18], kind="acut", how="swing", push=.06, wind=.03, breathe=True, z=3)
     w_ = panel(-60, 0, 1200, S, MAG, at(li, 0), at(li, 0) + .4, how="", z=9, ly=2)
     tween(f"#{w_}", {"x": -1300}, {"x": 1300}, at(li, 0), 6)
@@ -717,71 +749,104 @@ def build():
     scene(E[18], DUR, drift=(0, -10), trans="zoomwhite")
     rays(E[18], DUR, cx=1080, cy=0)
     floor_type("MY BODY", 760, at(li, 2), DUR, size=fit("MY BODY", 1040, 300))
+    shards(540, 500, 330, 340, E[18], DUR, 23)
     photo("finale", 290, 250, 500, None, 0, E[18], DUR, kind="acut", how="", push=.05, wind=.035, breathe=True,
           sweeps=(at(li, 3),), z=3)
     cap(text(li, 0, 1), 40, 40, 110, at(li, 0), DUR, font="archivo", style="block", rot=-6, how="pop1")
     cap("for you", 820, 900, 150, at(li, 4), DUR, font="script", color=MAG, style="script", upper=False, rot=-8, how="write", align="center", z=9)
 
 
+# The anime-edit reference (Video-15991, 12 fps) cuts every 0.7-1 s in 1-2 frames: radial zoom-blur punches, a
+# negative silhouette frame, spin blurs, a white frame with lightning bolts, a zoom into a speed-line tunnel; every
+# cut lands on a whip swoosh. These keep the Spin Bout U reference's whip panel and glitch card in the rotation.
+TRANS = ["zoom", "neg", "spin", "whip", "bolt", "zoom", "glitchcard", "neg", "tunnel", "spin", "zoom", "bolt", "whip", "neg",
+         "spin", "tunnel", "zoom", "bolt", "neg"]
+SFX = []
+
+
+def bolts(t, n=2):
+    """Lightning bolts across the frame for n frames (reference 3.08 s and 7.2 s)."""
+    js(f'tl.set("#bolt", {{opacity: 1}}, {q(t):.3f});')
+    for k in range(n):
+        js(f'tl.set("#bolt g", {{opacity: 0}}, {q(t) + k * STEP:.3f});')
+        js(f'tl.set("#bolt g:nth-child({k % 3 + 1})", {{opacity: 1}}, {q(t) + k * STEP:.3f});')
+    js(f'tl.set("#bolt", {{opacity: 0}}, {q(t) + n * STEP:.3f});')
+
+
+def streaks(t, n=3, op=.9):
+    for k in range(n):            # stepped: bright, then expanding and fading
+        js(f'tl.set("#streaks", {{opacity: {op * (1 - k / n):.2f}, scale: {.8 + .8 * k / max(1, n - 1):.2f}}}, {q(t) + k * STEP:.3f});')
+    js(f'tl.set("#streaks", {{opacity: 0}}, {q(t) + n * STEP:.3f});')
+
+
 def transitions():
-    """The Spin Bout U reference's cuts. t = the cut; the outgoing scene gets the frames before it, the incoming the
-    frames after."""
+    """Fast cuts (2-4 frames at 20 fps). t = the cut: the old scene gets the frames before it, the new one after."""
     for k in range(1, len(SCENES)):
-        t, _, cur, _, _, _, kind = SCENES[k]
+        t, _, cur, _, _, _, _ = SCENES[k]
         prev = SCENES[k - 1][2]
+        kind = TRANS[(k - 1) % len(TRANS)]
         p1, p2 = t - STEP, t - 2 * STEP
-        if kind == "whip":          # smear out; a maroon frame, white light line, speed streaks; next shot slides in as a tilted panel
-            tween(f"#{prev}", {"x": 0, "filter": "blur(0px)"}, {"x": -600, "filter": "url(#hblur)"}, p2, 4)
+        SFX.append({"t": round(t, 3), "kind": "whip", "gain": .34})
+        if kind == "zoom":          # radial zoom-blur punch into the old shot, the new one snaps out of the blur
+            tween(f"#{prev}", {"scale": 1, "filter": "blur(0px)"}, {"scale": 1.7, "filter": "blur(16px)"}, p2, 2, "power2.in")
+            streaks(p1, 4)
+            tween(f"#{cur}", {"scale": 1.55, "filter": "blur(16px) brightness(1.4)"}, {"scale": 1, "filter": "blur(0px) brightness(1)"}, t, 3, "power3.out")
+        elif kind == "neg":         # a punch-in, one negative silhouette frame of the new shot, then the shot
+            tween(f"#{prev}", {"scale": 1}, {"scale": 1.25}, p2, 2, "power2.in")
+            js(f'tl.set("#{cur}", {{filter: "invert(1) grayscale(1) contrast(5) brightness(1.1)"}}, {t:.3f});')
+            js(f'tl.set("#{cur}", {{filter: "invert(1) grayscale(1) contrast(2) blur(3px)"}}, {t + STEP:.3f});')
+            js(f'tl.set("#{cur}", {{filter: "none"}}, {t + 2 * STEP:.3f});')
+            tween(f"#{cur}", {"scale": 1.18}, {"scale": 1}, t, 4, "power3.out")
+        elif kind == "spin":        # spin blur out and back in the other way
+            tween(f"#{prev}", {"rotation": 0, "scale": 1, "filter": "blur(0px)"}, {"rotation": 24, "scale": 1.45, "filter": "blur(14px)"}, p2, 2, "power2.in")
+            tween(f"#{cur}", {"rotation": -24, "scale": 1.45, "filter": "blur(14px)"}, {"rotation": 0, "scale": 1, "filter": "blur(0px)"}, t, 4, "power3.out")
+            streaks(t, 3, .6)
+        elif kind == "whip":        # smear out; maroon streak frame with a light line; the new shot slides in as a tilted panel
+            tween(f"#{prev}", {"x": 0, "filter": "blur(0px)"}, {"x": -700, "filter": "url(#hblur)"}, p2, 2, "power2.in")
             js(f'tl.set("#streak", {{opacity: 1}}, {t:.3f});')
-            tween("#streak .ln", {"x": -100}, {"x": 1180}, t, 3)
-            tween("#streak .sp", {"x": 400}, {"x": -900}, t, 3)
-            js(f'tl.set("#streak", {{opacity: 0}}, {t + 3 * STEP:.3f});')
-            js(f'tl.set("#mbg", {{opacity: 1}}, {t:.3f});')        # maroon underneath while the panel slides in
-            js(f'tl.set("#mbg", {{opacity: 0}}, {t + 7 * STEP:.3f});')
+            tween("#streak .ln", {"x": -100}, {"x": 1180}, t, 2)
+            tween("#streak .sp", {"x": 400}, {"x": -900}, t, 2)
+            js(f'tl.set("#streak", {{opacity: 0}}, {t + 2 * STEP:.3f});')
+            js(f'tl.set("#mbg", {{opacity: 1}}, {t:.3f});')
+            js(f'tl.set("#mbg", {{opacity: 0}}, {t + 5 * STEP:.3f});')
             tween(f"#{cur}", {"clipPath": "polygon(100% 0%, 100% 0%, 100% 100%, 92% 100%)", "x": 160},
-                  {"clipPath": "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)", "x": 0}, t + 2 * STEP, 4)
-        elif kind == "zoomwhite":   # zoom blur into a white frame, the next shot out of a zoom blur
-            tween(f"#{prev}", {"scale": 1, "filter": "blur(0px)"}, {"scale": 1.4, "filter": "blur(18px)"}, p2, 2)
-            white(t)
-            tween(f"#{cur}", {"scale": 1.3, "filter": "blur(16px)"}, {"scale": 1, "filter": "blur(0px)"}, t + STEP, 3)
-        elif kind == "badge":       # smear onto black, the next shot swings in out of a blur
-            tween(f"#{prev}", {"x": 0, "filter": "blur(0px)"}, {"x": -520, "filter": "url(#hblur)"}, p2, 2)
-            js(f'tl.set("#blk", {{opacity: 1}}, {t:.3f});')
-            js(f'tl.set("#blk", {{opacity: 0}}, {t + STEP:.3f});')
-            tween(f"#{cur}", {"rotationY": -40, "scale": .9, "transformPerspective": 1000, "filter": "blur(12px)"},
-                  {"rotationY": 0, "scale": 1, "filter": "blur(0px)"}, t + STEP, 4)
-        elif kind == "push":        # the next shot pushes the last one out sideways
-            tween(f"#{prev}", {"x": 0, "filter": "blur(0px)"}, {"x": -1080, "filter": "url(#hblur)"}, t, 3)
-            tween(f"#{cur}", {"x": 1080, "filter": "url(#hblur)"}, {"x": 0, "filter": "blur(0px)"}, t, 3)
-        elif kind == "drop":        # drop blur down, a dark frame, the next shot comes out of a blur
-            tween(f"#{prev}", {"y": 0, "filter": "blur(0px)"}, {"y": 600, "filter": "url(#vblur)"}, p2, 2)
-            js(f'tl.set("#blk", {{opacity: 1}}, {t:.3f});')
-            js(f'tl.set("#blk", {{opacity: 0}}, {t + STEP:.3f});')
-            tween(f"#{cur}", {"filter": "blur(18px) brightness(.5)", "scale": 1.06}, {"filter": "blur(0px) brightness(1)", "scale": 1}, t + STEP, 4)
-        elif kind == "strips":      # three tilted strips sweep across and reveal the next shot
-            for j in range(3):
-                js(f'tl.set("#st{j}", {{opacity: 1}}, {p2 + j * STEP:.3f});')
-                tween(f"#st{j}", {"x": 1500}, {"x": -1500}, p2 + j * STEP, 5)
-                js(f'tl.set("#st{j}", {{opacity: 0}}, {p2 + (j + 5) * STEP:.3f});')
-            tween(f"#{cur}", {"x": 300}, {"x": 0}, t, 3)
-        elif kind == "glitchcard":  # a white frame, a stripe glitch, then a small turned card zooms up to full frame
-            white(p2)                                              # white, the old shot sliced, then the card
+                  {"clipPath": "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)", "x": 0}, t + STEP, 3, "power3.out")
+        elif kind == "bolt":        # white frame with lightning bolts and the new shot as a black silhouette, then the shot
+            tween(f"#{prev}", {"scale": 1, "filter": "blur(0px)"}, {"scale": 1.3, "filter": "blur(10px)"}, p2, 2, "power2.in")
+            js(f'tl.set("#{cur}", {{filter: "grayscale(1) brightness(2.2) contrast(6)"}}, {t:.3f});')
+            js(f'tl.set("#{cur}", {{filter: "none"}}, {t + 2 * STEP:.3f});')
+            bolts(t, 2)
+            tween(f"#{cur}", {"scale": 1.2}, {"scale": 1}, t, 4, "power3.out")
+            SFX.append({"t": round(t, 3), "kind": "boom", "gain": .3})
+        elif kind == "tunnel":      # the old shot zooms into a speed-line tunnel, the new shot flies out of it
+            tween(f"#{prev}", {"scale": 1, "filter": "blur(0px)"}, {"scale": 2.2, "filter": "blur(20px)"}, t - 3 * STEP, 3, "power2.in")
+            js(f'tl.set("#tunnel", {{opacity: 1}}, {p1:.3f});')
+            tween("#tunnel", {"scale": 1, "rotation": 0}, {"scale": 2.4, "rotation": 14}, p1, 3, "power2.in")
+            js(f'tl.set("#tunnel", {{opacity: 0}}, {t + 2 * STEP:.3f});')
+            tween(f"#{cur}", {"scale": .25, "filter": "blur(10px)"}, {"scale": 1, "filter": "blur(0px)"}, t + STEP, 4, "power3.out")
+            SFX.append({"t": round(t, 3), "kind": "riser", "gain": .26})
+            SFX.append({"t": round(t, 3), "kind": "drop", "len": .14})
+        elif kind == "glitchcard":  # white, the old shot sliced into shifted grey bands, a small turned card zooms up on white
+            white(p2)
             js(f'tl.set("#stage", {{filter: "url(#gslice) grayscale(1) contrast(1.5)"}}, {p1:.3f});')
             js(f'tl.set("#stage", {{filter: "none"}}, {t:.3f});')
+            js(f'tl.set("#{prev}", {{display: "none"}}, {t:.3f});')
             js(f'tl.set("#wbg", {{opacity: 1}}, {t:.3f});')
-            js(f'tl.set("#wbg", {{opacity: 0}}, {t + 6 * STEP:.3f});')
+            js(f'tl.set("#wbg", {{opacity: 0}}, {t + 5 * STEP:.3f});')
             tween(f"#{cur}", {"scale": .3, "rotation": -24, "borderRadius": 60, "filter": "blur(4px)"},
-                  {"scale": 1, "rotation": 0, "borderRadius": 0, "filter": "blur(0px)"}, t, 6)
-        elif kind == "diag":        # a diagonal scroll: the last shot leaves up-left, the next arrives from down-right
-            tween(f"#{prev}", {"x": 0, "y": 0, "rotation": 0}, {"x": -380, "y": -760, "rotation": -6}, p2, 3)
-            tween(f"#{cur}", {"x": 380, "y": 760, "rotation": 6, "filter": "url(#vblur)"}, {"x": 0, "y": 0, "rotation": 0, "filter": "blur(0px)"}, t, 4)
-        elif kind == "slideup":     # the next shot slides up from the bottom
-            tween(f"#{cur}", {"y": 1080, "filter": "url(#vblur)"}, {"y": 0, "filter": "blur(0px)"}, t, 4)
-    end = q(59.45)              # the end: a white frame, a stripe glitch, black
+                  {"scale": 1, "rotation": 0, "borderRadius": 0, "filter": "blur(0px)"}, t, 5, "power3.out")
+        # beat punches inside long scenes: a quick zoom snap with streaks and a tick, every other bar
+        t1 = SCENES[k][1]
+        for b in beats_in(t + .6, t1 - .4, 8, 4):
+            streaks(b, 2, .45)
+            SFX.append({"t": round(b, 3), "kind": "snap", "gain": .16})
+    end = q(59.45)              # the end: a white frame, a slice glitch, black
     white(end)
     js(f'tl.set("#stage", {{filter: "url(#gslice) grayscale(1) contrast(1.5)"}}, {end + STEP:.3f});')
     js(f'tl.set("#flash", {{opacity: 0}}, {end + STEP:.3f});')
     js(f'tl.set("#blk", {{opacity: 1}}, {end + 2 * STEP:.3f});')
+    SFX.append({"t": round(end, 3), "kind": "whip", "gain": .34})
+    json.dump(SFX, open(os.path.join(ROOT, "plan", "sfx.json"), "w"), indent=0)
 
 
 def drifts():
@@ -791,8 +856,27 @@ def drifts():
             dx = 14 if k_ % 2 else -14
         n = max(1, round((t1 - t0) * FPS)) + 6
         for k, (f, z) in enumerate(((1.2, .03), (3.0, .07), (4.5, .1))):
-            js(f'tl.fromTo("#{i} .ly{k}", {{x: 0, y: 0, scale: 1}}, {{x: {dx * f:.0f}, y: {dy * f:.0f}, scale: {1 + z:.3f}, '
+            rr = (2.5 if k_ % 2 else -2.5) * (k / 2)
+            js(f'tl.fromTo("#{i} .ly{k}", {{x: 0, y: 0, scale: 1, rotation: 0}}, {{x: {dx * f:.0f}, y: {dy * f:.0f}, scale: {1 + z:.3f}, rotation: {rr:.2f}, '
                f'duration: {n * STEP:.3f}, ease: "none", immediateRender: false}}, {t0:.3f});')
+
+
+def bolt_svg():
+    g = random.Random(11)
+    out = []
+    for v in range(3):
+        paths = []
+        for k in range(3):
+            x, y = g.uniform(-100, 300), g.uniform(-80, 1080)
+            pts = [(x, y)]
+            for j in range(7):
+                x += g.uniform(110, 190)
+                y += g.uniform(-170, 170)
+                pts.append((x, y))
+            d = "M" + " L".join(f"{a:.0f} {b:.0f}" for a, b in pts)
+            paths.append(f'<path d="{d}" stroke="{INK}" stroke-width="34"/><path d="{d}" stroke="{MAG}" stroke-width="18"/>')
+        out.append(f"<g>{''.join(paths)}</g>")
+    return "".join(out)
 
 
 CSS = f"""
@@ -811,6 +895,7 @@ html, body {{ width: {S}px; height: {S}px; overflow: hidden; background: {INK}; 
 .ly0, .ly1, .ly2 {{ position: absolute; inset: 0; }}
 .ly1 {{ z-index: 2; }} .ly2 {{ z-index: 3; }}
 .pn {{ position: absolute; display: block; }}
+.sls {{ position: absolute; inset: 0; width: {S}px; height: {S}px; overflow: visible; }}
 .rays, .sqg {{ position: absolute; inset: 0; width: {S}px; height: {S}px; }}
 .sqg path {{ fill: none; stroke: {WHT}; stroke-width: 46; stroke-linecap: round; opacity: .9; }}
 .ph {{ position: absolute; }}
@@ -861,6 +946,11 @@ html, body {{ width: {S}px; height: {S}px; overflow: hidden; background: {INK}; 
 #glitch {{ position: absolute; inset: 0; z-index: 45; opacity: 0;
   background: repeating-linear-gradient(0deg, {INK} 0 22px, {WHT} 22px 40px, {GRY} 40px 52px, {INK} 52px 90px); }}
 #flash {{ position: absolute; inset: 0; z-index: 46; background: {WHT}; opacity: 0; }}
+#streaks {{ position: absolute; inset: 0; width: {S}px; height: {S}px; z-index: 44; opacity: 0; pointer-events: none; }}
+#tunnel {{ position: absolute; inset: -200px; width: 1480px; height: 1480px; z-index: 43; opacity: 0; filter: blur(3px); }}
+#bolt {{ position: absolute; inset: 0; width: {S}px; height: {S}px; z-index: 47; opacity: 0; overflow: visible; }}
+#bolt g {{ opacity: 0; }}
+#bolt path {{ fill: none; stroke-linejoin: miter; }}
 #grain {{ position: absolute; inset: -40px; z-index: 35; pointer-events: none; opacity: .09; mix-blend-mode: overlay;
   background: url(assets/img/grain.png); }}
 """
@@ -904,9 +994,12 @@ def main():
       <div id="streak"><i class="sp"></i><i class="ln"></i></div>
       {strips}
       <div id="glitch"></div>
+      <img id="streaks" src="assets/img/streaks.png" alt="">
+      <img id="tunnel" src="assets/img/tunnel.jpg" alt="">
+      <svg id="bolt" viewBox="0 0 1080 1080">{bolt_svg()}</svg>
       <div id="flash"></div>
       <div id="grain"></div>
-      <audio id="song" src="assets/audio/section.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
+      <audio id="song" src="assets/audio/section_sfx.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
     </div>
     <script>
       window.__timelines = window.__timelines || {{}};
