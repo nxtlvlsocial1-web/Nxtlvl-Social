@@ -1,0 +1,69 @@
+{
+ "duration": 62.09,
+ "lines": [
+  {
+   "line": 1,
+   "take": "01_hook_a",
+   "speaker": "narrator",
+   "text": "Lap one. The AI race engineer just called its driver into the pits. On lap one. He drops to last.",
+   "start": 0.1,
+   "end": 7.427
+  },
+  {
+   "line": 2,
+   "take": "02_rain_a",
+   "speaker": "narrator",
+   "text": "Two laps later... rain. Every other car is on slick tyres. He's the only one on wets. Six cars, passed in one lap.",
+   "start": 7.647,
+   "end": 15.779
+  },
+  {
+   "line": 3,
+   "take": "03_listen_a",
+   "speaker": "narrator",
+   "text": "Then it starts listening. It reads tyre wear from the sound of the engine, and tells him exactly which corner to attack.",
+   "start": 16.029,
+   "end": 23.18
+  },
+  {
+   "line": 4,
+   "take": "04_crash_b",
+   "speaker": "narrator",
+   "text": "Lap forty. It sees a crash before it happens, and slows him down one second early. Two cars spin out right in front of him. He drives straight through.",
+   "start": 23.43,
+   "end": 32.325
+  },
+  {
+   "line": 5,
+   "take": "05_final_a",
+   "speaker": "narrator",
+   "text": "Final lap. He's leading. His teammate is right behind him. And the AI says... let him through.",
+   "start": 32.625,
+   "end": 40.858
+  },
+  {
+   "line": 6,
+   "take": "06_reason_a",
+   "speaker": "narrator",
+   "text": "He doesn't understand. But he obeys. His teammate wins the championship... by one point.",
+   "start": 41.158,
+   "end": 48.343
+  },
+  {
+   "line": 7,
+   "take": "07_real_a",
+   "speaker": "narrator",
+   "text": "Sounds far-fetched? Real Formula One teams already run billions of race simulations every weekend, just to decide when to pit.",
+   "start": 48.743,
+   "end": 56.818
+  },
+  {
+   "line": 8,
+   "take": "08_close_a",
+   "speaker": "narrator",
+   "text": "So... would you follow its orders? Follow for more what-ifs.",
+   "start": 57.118,
+   "end": 61.99
+  }
+ ]
+}

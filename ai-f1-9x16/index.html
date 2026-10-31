@@ -1,0 +1,901 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>AI F1 9x16</title>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Manrope"; font-weight: 200 800; src: url("assets/fonts/manrope.ttf"); }
+@font-face { font-family: "Serif"; font-style: italic; src: url("assets/fonts/InstrumentSerif-Italic.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 700; src: url("assets/fonts/jbmono-bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #F1E9DC; }
+body { font-family: "Manrope", sans-serif; color: #1E1B18; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #F1E9DC; }
+.clip { position: absolute; inset: 0; }
+#gl { width: 1080px; height: 1920px; display: block; }
+.mono { font-family: "JBMono", monospace; font-weight: 700; }
+#ui { z-index: 5; }
+.top { position: absolute; left: 50px; right: 50px; top: 150px; height: 76px; display: flex; justify-content: space-between; align-items: center;
+  padding: 0 26px; border-radius: 38px; background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 6px 7px 0 #1E1B18; }
+.brand { font-size: 24px; letter-spacing: 3px; display: flex; align-items: center; gap: 12px; }
+.brand b { width: 16px; height: 16px; border-radius: 50%; background: #E8735A; }
+.live { display: flex; align-items: center; gap: 8px; font-size: 20px; letter-spacing: 2px; color: #A8452F; }
+.live b { width: 12px; height: 12px; border-radius: 50%; background: #D9483B; }
+.ctx { position: relative; width: 250px; height: 30px; }
+.cx { position: absolute; left: 0; right: 0; top: 0; text-align: center; font-style: normal; font-size: 24px; letter-spacing: 2px; opacity: 0; white-space: nowrap; }
+.prog { width: 120px; height: 20px; border-radius: 10px; border: 3px solid #1E1B18; overflow: hidden; }
+.prog i { display: block; height: 100%; background: #E8735A; transform-origin: 0 50%; transform: scaleX(0); }
+.card, .stamp, #endc, .ec-kw, .ec-2, .ec-h, .ptag, .goal, .slam, .hud, .onept { opacity: 0; }
+.card { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; max-width: 960px; top: 440px; padding: 22px 34px;
+  border-radius: 30px; background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 8px 9px 0 #1E1B18; display: flex; flex-direction: column;
+  align-items: flex-start; gap: 4px; }
+.card .lab { display: block; font-size: 22px; letter-spacing: 4px; color: #D45C40; }
+.card b { display: block; font: 800 56px/1.08 "Manrope"; letter-spacing: -1.5px; }
+.card b i, .card .sub i { font-style: normal; }
+.card .sub { display: block; font: 600 28px/1.3 "Manrope"; color: #5b5650; margin-top: 6px; max-width: 760px; }
+.card .big { font-size: 130px; line-height: 1; letter-spacing: -4px; color: #D45C40; }
+.card.alert { border-color: #D9483B; box-shadow: 8px 9px 0 #D9483B; }
+.card.alert .lab, .card.alert b { color: #D9483B; }
+.card.radio { background: #1E1B18; color: #F1E9DC; border-color: #1E1B18; box-shadow: 8px 9px 0 #E8735A; padding: 22px 34px 26px; min-width: 640px; }
+.radio .rtop { display: flex; align-items: center; gap: 22px; width: 100%; justify-content: space-between; }
+.radio .lab { color: #E8735A; }
+.rbars { display: flex; gap: 6px; align-items: center; height: 44px; }
+.rb { display: block; width: 8px; height: 44px; border-radius: 4px; background: #E8735A; transform: scaleY(.2); }
+.radio .msg { font: 700 70px/1.1 "JBMono"; letter-spacing: 1px; color: #FFFDF8; margin-top: 8px; }
+.radio .sub { color: #b9b0a4; }
+.radio .minus { font: 800 64px "Manrope"; color: #F2B33D; margin-top: 4px; }
+.c-let .msg { color: #F2B33D; font-size: 76px; }
+.drops { position: relative; display: block; width: 420px; height: 70px; overflow: hidden; margin-top: 4px; }
+.dr { position: absolute; top: 0; width: 6px; height: 24px; border-radius: 3px; background: #3A7BD5; opacity: 0; }
+.dr0 { left: 18px; }.dr1 { left: 52px; }.dr2 { left: 86px; }.dr3 { left: 120px; }.dr4 { left: 154px; }.dr5 { left: 188px; }.dr6 { left: 222px; }.dr7 { left: 256px; }.dr8 { left: 290px; }.dr9 { left: 324px; }.dr10 { left: 358px; }.dr11 { left: 392px; }
+.tgrid { display: grid; grid-template-columns: repeat(10, 52px); gap: 12px; margin: 10px 0 4px; }
+.td { display: block; width: 52px; height: 52px; border-radius: 50%; border: 9px solid #D9483B; background: #2A2623; opacity: 0; }
+.td.med { border-color: #F2B33D; } .td.wet { border-color: #3A7BD5; box-shadow: 0 0 0 4px #FFFDF8, 0 0 0 7px #3A7BD5; }
+.k { display: inline-block !important; width: 22px; height: 22px; border-radius: 50%; border: 6px solid #D9483B; vertical-align: -3px; }
+.k.wet { border-color: #3A7BD5; } .hl { color: #3A7BD5; font-weight: 800; display: inline-block; }
+.wave { display: flex; gap: 7px; align-items: center; height: 110px; margin-top: 6px; }
+.wv { display: block; width: 14px; height: 110px; border-radius: 7px; background: #E8735A; transform: scaleY(.15); }
+.bar { display: block; width: 560px; height: 26px; border-radius: 13px; border: 3px solid #1E1B18; margin-top: 10px; overflow: hidden; }
+.barf { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #3FA372, #F2B33D 60%, #D9483B); transform-origin: 0 50%; transform: scaleX(0); }
+.tbl { position: relative; width: 640px; height: 124px; margin-top: 8px; overflow: hidden; }
+.row { position: absolute; left: 0; right: 0; height: 56px; display: flex; align-items: center; gap: 18px; padding: 0 16px; border-radius: 14px; font: 700 32px "Manrope"; }
+.row .pos { width: 40px; } .row .tn { flex: 1; } .row i { font-style: normal; }
+.r-riv { top: 0; background: #EFE6D6; } .r-mate { top: 64px; background: #D45C40; color: #fff; }
+.card .coral { color: #D45C40; display: inline; font: inherit; }
+.onept { font-size: 34px !important; }
+.c-real { max-width: 900px; top: 470px; } .c-real .lab.real { color: #3FA372; } .c-real b { font-size: 50px; }
+.bign { font-size: 92px !important; letter-spacing: -3px !important; color: #3FA372; line-height: 1 !important; margin-top: 6px; }
+.c-q { align-items: center; text-align: center; }
+.ser { font-family: "Serif" !important; font-style: italic; font-weight: 400 !important; letter-spacing: 0 !important; }
+.card .ser.big { font-size: 84px; line-height: 1; }
+.stamp { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; top: 480px; padding: 14px 26px; border: 8px solid #D9483B; border-radius: 20px;
+  color: #D9483B; font: 800 84px/1 "Manrope"; letter-spacing: 1px; background: rgba(255,253,248,.92); white-space: nowrap; }
+.st-final { border-color: #1E1B18; color: #1E1B18; }
+.slam { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; top: 470px; padding: 6px 40px 14px; border-radius: 34px;
+  font: 800 150px/1 "Manrope"; letter-spacing: -5px; color: #fff; background: #1E1B18; border: 4px solid #1E1B18; box-shadow: 10px 11px 0 #E8735A; }
+.ptag { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; top: 1190px; padding: 14px 30px 16px; border-radius: 26px;
+  background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 7px 8px 0 #1E1B18; text-align: center; }
+.ptag::before { content: ""; position: absolute; left: 50%; top: -17px; margin-left: -14px; border-left: 14px solid transparent;
+  border-right: 14px solid transparent; border-bottom: 16px solid #1E1B18; }
+.ptag span { display: block; font-size: 24px; letter-spacing: 5px; color: #D45C40; }
+.ptag b { display: block; font: 800 40px/1.15 "Manrope"; letter-spacing: -1px; }
+.goal { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; top: 1120px; padding: 6px 40px 14px; border-radius: 34px;
+  font: 800 150px/1 "Manrope"; letter-spacing: -5px; color: #fff; border: 4px solid #1E1B18; box-shadow: 10px 11px 0 #1E1B18; }
+.goal.home { background: #D45C40; } .goal.away { background: #34508F; }
+.hud { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; top: 1356px; display: flex; align-items: center; gap: 26px;
+  padding: 12px 30px 12px 16px; border-radius: 40px; background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 7px 8px 0 #1E1B18; }
+.hud .pbox { display: flex; align-items: baseline; gap: 2px; padding: 4px 22px 8px; border-radius: 28px; background: #1E1B18; color: #FFFDF8; }
+.hud .pbox span { font: 800 34px "Manrope"; color: #E8735A; } .hud .pbox b { font: 800 60px/1 "Manrope"; letter-spacing: -2px; }
+.hud .car { font-size: 30px; letter-spacing: 3px; display: flex; align-items: center; gap: 12px; }
+.hud .car i { width: 26px; height: 26px; border-radius: 6px; background: #E8735A; border: 3px solid #1E1B18; }
+.hud .ty { display: flex; align-items: center; gap: 12px; font-size: 28px; letter-spacing: 3px; }
+.hud .ty i { display: block; width: 34px; height: 34px; border-radius: 50%; border: 8px solid #D9483B; background: #2A2623; }
+#caps { z-index: 6; }
+.cap { position: absolute; left: 0; right: 0; top: 262px; text-align: center; opacity: 0; }
+.capin { display: inline-block; max-width: 960px; padding: 10px 22px 14px; border-radius: 26px; background: rgba(255,253,248,.94);
+  font: 800 58px/1.2 "Manrope"; letter-spacing: -1.5px; color: #1E1B18; }
+.cap .w { display: inline-block; padding: 0 10px 4px; border-radius: 14px; }
+.cap .w.on { background: #D45C40; color: #fff; }
+#endc { position: absolute; left: 60px; right: 60px; top: 520px; padding: 46px 40px 42px; border-radius: 40px; text-align: center;
+  background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 12px 13px 0 #1E1B18; }
+.ec-1 { font: 800 56px "Manrope"; letter-spacing: -1.5px; }
+.ec-kw { display: inline-block; margin: 12px 0 10px; padding: 4px 54px 14px; border-radius: 40px; background: #D45C40; border: 3px solid #1E1B18;
+  font: italic 130px/1.05 "Serif"; color: #fff; }
+.ec-2 { font: italic 50px "Serif"; color: #D45C40; }
+.ec-h { margin-top: 18px; font-size: 32px; letter-spacing: 4px; color: #1E1B18; }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="63.79" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="gl" class="clip" data-start="0" data-duration="63.79" data-track-index="0"></canvas>
+      <div id="ui" class="clip" data-start="0" data-duration="63.79" data-track-index="3" data-layout-allow-overflow>
+        <div class="top"><span class="brand mono"><b></b>NXTLVLSOCIAL.AI</span><span class="ctx mono"><i class="cx cx0">LAP 1 / 52</i><i class="cx cx1">LAP 3 / 52</i><i class="cx cx2">LAP 12 / 52</i><i class="cx cx3">LAP 40 / 52</i><i class="cx cx4">FINAL LAP</i><i class="cx cx5">TITLE DECIDED</i><i class="cx cx6">REAL WORLD</i><i class="cx cx7">YOUR CALL</i></span>
+          <span class="live mono"><b></b>WHAT IF</span><span class="prog"><i></i></span></div>
+        <div class="hud"><span class="pbox"><span>P</span><b id="pos">5</b></span><span class="car mono"><i></i>#7</span><span class="ty mono"><i id="tdot"></i><span id="tyre">SOFT</span></span></div><div class="slam lap1">LAP 1</div><div class="card radio c-box"><div class="rtop"><span class="mono lab">AI RACE ENGINEER &middot; RADIO</span><em class="rbars"><i class="rb rb0"></i><i class="rb rb1"></i><i class="rb rb2"></i><i class="rb rb3"></i><i class="rb rb4"></i><i class="rb rb5"></i><i class="rb rb6"></i><i class="rb rb7"></i><i class="rb rb8"></i></em></div><b class="mono msg">BOX, BOX. NOW.</b><span class="sub">lap 1 of 52</span></div><div class="stamp st-last">P20 &middot; LAST</div><div class="card c-rain"><span class="mono lab">WEATHER</span><b>RAIN <i class="rpct">0</i>%</b><em class="drops"><i class="dr dr0"></i><i class="dr dr1"></i><i class="dr dr2"></i><i class="dr dr3"></i><i class="dr dr4"></i><i class="dr dr5"></i><i class="dr dr6"></i><i class="dr dr7"></i><i class="dr dr8"></i><i class="dr dr9"></i><i class="dr dr10"></i><i class="dr dr11"></i></em></div><div class="card c-tyres"><span class="mono lab">TYRES ON THE GRID</span><div class="tgrid"><i class="td med td0"></i><i class="td soft td1"></i><i class="td soft td2"></i><i class="td med td3"></i><i class="td soft td4"></i><i class="td soft td5"></i><i class="td med td6"></i><i class="td soft td7"></i><i class="td soft td8"></i><i class="td med td9"></i><i class="td soft td10"></i><i class="td soft td11"></i><i class="td med td12"></i><i class="td soft td13"></i><i class="td soft td14"></i><i class="td med td15"></i><i class="td soft td16"></i><i class="td soft td17"></i><i class="td med td18"></i><i class="td wet td19"></i></div><span class="sub"><b class="k soft"></b> slicks: 19 cars &nbsp; <b class="k wet"></b> wets: <i class="hl">#7 only</i></span></div><div class="card c-ot"><span class="mono lab">OVERTAKES THIS LAP</span><b class="big">+<i class="otn">0</i></b></div><div class="card c-listen"><span class="mono lab">AI &middot; LISTENING TO THE ENGINE</span><em class="wave"><i class="wv wv0"></i><i class="wv wv1"></i><i class="wv wv2"></i><i class="wv wv3"></i><i class="wv wv4"></i><i class="wv wv5"></i><i class="wv wv6"></i><i class="wv wv7"></i><i class="wv wv8"></i><i class="wv wv9"></i><i class="wv wv10"></i><i class="wv wv11"></i><i class="wv wv12"></i><i class="wv wv13"></i><i class="wv wv14"></i><i class="wv wv15"></i><i class="wv wv16"></i><i class="wv wv17"></i><i class="wv wv18"></i><i class="wv wv19"></i><i class="wv wv20"></i><i class="wv wv21"></i><i class="wv wv22"></i><i class="wv wv23"></i></em></div><div class="card c-wear"><span class="mono lab">TYRE WEAR &middot; FROM ENGINE SOUND</span><b>FRONT LEFT <i class="wn">0</i>%</b><span class="bar"><i class="barf"></i></span></div><div class="card radio c-att"><div class="rtop"><span class="mono lab">AI RACE ENGINEER &middot; RADIO</span><em class="rbars"><i class="rb rb0"></i><i class="rb rb1"></i><i class="rb rb2"></i><i class="rb rb3"></i><i class="rb rb4"></i><i class="rb rb5"></i><i class="rb rb6"></i><i class="rb rb7"></i><i class="rb rb8"></i></em></div><b class="mono msg">ATTACK. TURN 9.</b></div><div class="card alert c-pred"><span class="mono lab">PREDICTION &middot; TURN 1</span><b>CRASH AHEAD</b><span class="sub">probability <i class="pp">0</i>%</span></div><div class="card radio c-lift"><div class="rtop"><span class="mono lab">AI RACE ENGINEER &middot; RADIO</span><em class="rbars"><i class="rb rb0"></i><i class="rb rb1"></i><i class="rb rb2"></i><i class="rb rb3"></i><i class="rb rb4"></i><i class="rb rb5"></i><i class="rb rb6"></i><i class="rb rb7"></i><i class="rb rb8"></i></em></div><b class="mono msg">LIFT. NOW.</b><b class="minus">&minus;<i class="mn">0.0</i> s</b></div><div class="stamp st-crash">CRASH</div><div class="stamp st-final">FINAL LAP</div><div class="card radio c-let"><div class="rtop"><span class="mono lab">AI RACE ENGINEER &middot; RADIO</span><em class="rbars"><i class="rb rb0"></i><i class="rb rb1"></i><i class="rb rb2"></i><i class="rb rb3"></i><i class="rb rb4"></i><i class="rb rb5"></i><i class="rb rb6"></i><i class="rb rb7"></i><i class="rb rb8"></i></em></div><b class="mono msg">LET HIM THROUGH.</b></div><div class="card c-champ"><span class="mono lab">DRIVERS&rsquo; CHAMPIONSHIP &middot; FINAL</span><div class="tbl"><div class="row r-mate"><span class="pos mono"><i class="mp">2</i></span><span class="tn">#11 HIS TEAMMATE</span><span class="pts mono"><i class="mpts">400</i></span></div><div class="row r-riv"><span class="pos mono"><i class="rp">1</i></span><span class="tn">#4 RIVAL</span><span class="pts mono">411</span></div></div><span class="sub onept">won by <b class="coral">1 point</b></span></div><div class="card c-real"><span class="mono lab real">REAL WORLD, 2026</span><b>Oracle Red Bull Racing</b><span class="sub">runs this many race simulations before a race weekend, to plan its pit stops</span><b class="bign"><i class="nb">0</i></b></div><div class="card c-q"><b class="ser big">Would you follow</b><b class="ser big coral">its orders?</b></div><div class="ptag tg-ai"><span class="mono">THE AI RACE ENGINEER</span><b>makes every call</b></div><div class="ptag tg-d1"><span class="mono">#7 &middot; THE DRIVER</span><b>called in on lap one</b></div><div class="ptag tg-d2"><span class="mono">#7 &middot; THE DRIVER</span><b>leading the final lap</b></div><div class="ptag tg-m1"><span class="mono">#11 &middot; HIS TEAMMATE</span><b>fighting for the title</b></div><div class="ptag tg-d3"><span class="mono">#7 &middot; THE DRIVER</span><b>gave up the win</b></div><div class="ptag tg-m2"><span class="mono">#11 &middot; HIS TEAMMATE</span><b>world champion by 1 point</b></div><div class="goal sl-p1 home">P1!</div><div class="goal sl-ot home">OVERTAKE!</div><div class="goal sl-p2 away">P2</div><div id="endc"><div class="ec-1">Follow for more</div><div class="ec-kw">what ifs</div><div class="ec-2">new scenario every week</div><div class="ec-h mono">@nxtlvlsocial.ai</div></div>
+      </div>
+      <div id="caps" class="clip" data-start="0" data-duration="63.79" data-track-index="4"><div class="cap" id="c1_0"><div class="capin"><span class="w" id="c1_0_0">Lap</span> <span class="w" id="c1_0_1">one.</span></div></div><div class="cap" id="c1_1"><div class="capin"><span class="w" id="c1_1_0">The</span> <span class="w" id="c1_1_1">AI</span> <span class="w" id="c1_1_2">race</span> <span class="w" id="c1_1_3">engineer</span></div></div><div class="cap" id="c1_2"><div class="capin"><span class="w" id="c1_2_0">just</span> <span class="w" id="c1_2_1">called</span> <span class="w" id="c1_2_2">its</span> <span class="w" id="c1_2_3">driver</span></div></div><div class="cap" id="c1_3"><div class="capin"><span class="w" id="c1_3_0">into</span> <span class="w" id="c1_3_1">the</span> <span class="w" id="c1_3_2">pits.</span></div></div><div class="cap" id="c1_4"><div class="capin"><span class="w" id="c1_4_0">On</span> <span class="w" id="c1_4_1">lap</span> <span class="w" id="c1_4_2">one.</span></div></div><div class="cap" id="c1_5"><div class="capin"><span class="w" id="c1_5_0">He</span> <span class="w" id="c1_5_1">drops</span> <span class="w" id="c1_5_2">to</span> <span class="w" id="c1_5_3">last.</span></div></div><div class="cap" id="c2_0"><div class="capin"><span class="w" id="c2_0_0">Two</span> <span class="w" id="c2_0_1">laps</span> <span class="w" id="c2_0_2">later…</span></div></div><div class="cap" id="c2_1"><div class="capin"><span class="w" id="c2_1_0">rain.</span></div></div><div class="cap" id="c2_2"><div class="capin"><span class="w" id="c2_2_0">Every</span> <span class="w" id="c2_2_1">other</span> <span class="w" id="c2_2_2">car</span> <span class="w" id="c2_2_3">is</span></div></div><div class="cap" id="c2_3"><div class="capin"><span class="w" id="c2_3_0">on</span> <span class="w" id="c2_3_1">slick</span> <span class="w" id="c2_3_2">tyres.</span></div></div><div class="cap" id="c2_4"><div class="capin"><span class="w" id="c2_4_0">He's</span> <span class="w" id="c2_4_1">the</span> <span class="w" id="c2_4_2">only</span> <span class="w" id="c2_4_3">one</span></div></div><div class="cap" id="c2_5"><div class="capin"><span class="w" id="c2_5_0">on</span> <span class="w" id="c2_5_1">wets.</span></div></div><div class="cap" id="c2_6"><div class="capin"><span class="w" id="c2_6_0">Six</span> <span class="w" id="c2_6_1">cars,</span></div></div><div class="cap" id="c2_7"><div class="capin"><span class="w" id="c2_7_0">passed</span> <span class="w" id="c2_7_1">in</span> <span class="w" id="c2_7_2">one</span> <span class="w" id="c2_7_3">lap.</span></div></div><div class="cap" id="c3_0"><div class="capin"><span class="w" id="c3_0_0">Then</span> <span class="w" id="c3_0_1">it</span> <span class="w" id="c3_0_2">starts</span> <span class="w" id="c3_0_3">listening.</span></div></div><div class="cap" id="c3_1"><div class="capin"><span class="w" id="c3_1_0">It</span> <span class="w" id="c3_1_1">reads</span> <span class="w" id="c3_1_2">tyre</span> <span class="w" id="c3_1_3">wear</span></div></div><div class="cap" id="c3_2"><div class="capin"><span class="w" id="c3_2_0">from</span> <span class="w" id="c3_2_1">the</span> <span class="w" id="c3_2_2">sound</span> <span class="w" id="c3_2_3">of</span></div></div><div class="cap" id="c3_3"><div class="capin"><span class="w" id="c3_3_0">the</span> <span class="w" id="c3_3_1">engine,</span></div></div><div class="cap" id="c3_4"><div class="capin"><span class="w" id="c3_4_0">and</span> <span class="w" id="c3_4_1">tells</span> <span class="w" id="c3_4_2">him</span> <span class="w" id="c3_4_3">exactly</span></div></div><div class="cap" id="c3_5"><div class="capin"><span class="w" id="c3_5_0">which</span> <span class="w" id="c3_5_1">corner</span> <span class="w" id="c3_5_2">to</span> <span class="w" id="c3_5_3">attack.</span></div></div><div class="cap" id="c4_0"><div class="capin"><span class="w" id="c4_0_0">Lap</span> <span class="w" id="c4_0_1">forty.</span></div></div><div class="cap" id="c4_1"><div class="capin"><span class="w" id="c4_1_0">It</span> <span class="w" id="c4_1_1">sees</span> <span class="w" id="c4_1_2">a</span> <span class="w" id="c4_1_3">crash</span></div></div><div class="cap" id="c4_2"><div class="capin"><span class="w" id="c4_2_0">before</span> <span class="w" id="c4_2_1">it</span> <span class="w" id="c4_2_2">happens,</span></div></div><div class="cap" id="c4_3"><div class="capin"><span class="w" id="c4_3_0">and</span> <span class="w" id="c4_3_1">slows</span> <span class="w" id="c4_3_2">him</span> <span class="w" id="c4_3_3">down</span></div></div><div class="cap" id="c4_4"><div class="capin"><span class="w" id="c4_4_0">one</span> <span class="w" id="c4_4_1">second</span> <span class="w" id="c4_4_2">early.</span></div></div><div class="cap" id="c4_5"><div class="capin"><span class="w" id="c4_5_0">Two</span> <span class="w" id="c4_5_1">cars</span> <span class="w" id="c4_5_2">spin</span> <span class="w" id="c4_5_3">out</span></div></div><div class="cap" id="c4_6"><div class="capin"><span class="w" id="c4_6_0">right</span> <span class="w" id="c4_6_1">in</span> <span class="w" id="c4_6_2">front</span> <span class="w" id="c4_6_3">of</span></div></div><div class="cap" id="c4_7"><div class="capin"><span class="w" id="c4_7_0">him.</span></div></div><div class="cap" id="c4_8"><div class="capin"><span class="w" id="c4_8_0">He</span> <span class="w" id="c4_8_1">drives</span> <span class="w" id="c4_8_2">straight</span> <span class="w" id="c4_8_3">through.</span></div></div><div class="cap" id="c5_0"><div class="capin"><span class="w" id="c5_0_0">Final</span> <span class="w" id="c5_0_1">lap.</span></div></div><div class="cap" id="c5_1"><div class="capin"><span class="w" id="c5_1_0">He's</span> <span class="w" id="c5_1_1">leading.</span></div></div><div class="cap" id="c5_2"><div class="capin"><span class="w" id="c5_2_0">His</span> <span class="w" id="c5_2_1">teammate</span> <span class="w" id="c5_2_2">is</span> <span class="w" id="c5_2_3">right</span></div></div><div class="cap" id="c5_3"><div class="capin"><span class="w" id="c5_3_0">behind</span> <span class="w" id="c5_3_1">him.</span></div></div><div class="cap" id="c5_4"><div class="capin"><span class="w" id="c5_4_0">And</span> <span class="w" id="c5_4_1">the</span> <span class="w" id="c5_4_2">AI</span> <span class="w" id="c5_4_3">says…</span></div></div><div class="cap" id="c5_5"><div class="capin"><span class="w" id="c5_5_0">let</span> <span class="w" id="c5_5_1">him</span> <span class="w" id="c5_5_2">through.</span></div></div><div class="cap" id="c6_0"><div class="capin"><span class="w" id="c6_0_0">He</span> <span class="w" id="c6_0_1">doesn't</span> <span class="w" id="c6_0_2">understand.</span></div></div><div class="cap" id="c6_1"><div class="capin"><span class="w" id="c6_1_0">But</span> <span class="w" id="c6_1_1">he</span> <span class="w" id="c6_1_2">obeys.</span></div></div><div class="cap" id="c6_2"><div class="capin"><span class="w" id="c6_2_0">His</span> <span class="w" id="c6_2_1">teammate</span> <span class="w" id="c6_2_2">wins</span> <span class="w" id="c6_2_3">the</span></div></div><div class="cap" id="c6_3"><div class="capin"><span class="w" id="c6_3_0">championship…</span></div></div><div class="cap" id="c6_4"><div class="capin"><span class="w" id="c6_4_0">by</span> <span class="w" id="c6_4_1">one</span> <span class="w" id="c6_4_2">point.</span></div></div><div class="cap" id="c7_0"><div class="capin"><span class="w" id="c7_0_0">Sounds</span> <span class="w" id="c7_0_1">far-fetched?</span></div></div><div class="cap" id="c7_1"><div class="capin"><span class="w" id="c7_1_0">Real</span> <span class="w" id="c7_1_1">Formula</span> <span class="w" id="c7_1_2">One</span> <span class="w" id="c7_1_3">teams</span></div></div><div class="cap" id="c7_2"><div class="capin"><span class="w" id="c7_2_0">already</span> <span class="w" id="c7_2_1">run</span> <span class="w" id="c7_2_2">billions</span> <span class="w" id="c7_2_3">of</span></div></div><div class="cap" id="c7_3"><div class="capin"><span class="w" id="c7_3_0">race</span> <span class="w" id="c7_3_1">simulations</span> <span class="w" id="c7_3_2">every</span> <span class="w" id="c7_3_3">weekend,</span></div></div><div class="cap" id="c7_4"><div class="capin"><span class="w" id="c7_4_0">just</span> <span class="w" id="c7_4_1">to</span> <span class="w" id="c7_4_2">decide</span> <span class="w" id="c7_4_3">when</span></div></div><div class="cap" id="c7_5"><div class="capin"><span class="w" id="c7_5_0">to</span> <span class="w" id="c7_5_1">pit.</span></div></div><div class="cap" id="c8_0"><div class="capin"><span class="w" id="c8_0_0">So…</span></div></div><div class="cap" id="c8_1"><div class="capin"><span class="w" id="c8_1_0">would</span> <span class="w" id="c8_1_1">you</span> <span class="w" id="c8_1_2">follow</span> <span class="w" id="c8_1_3">its</span></div></div><div class="cap" id="c8_2"><div class="capin"><span class="w" id="c8_2_0">orders?</span></div></div><div class="cap" id="c8_3"><div class="capin"><span class="w" id="c8_3_0">Follow</span> <span class="w" id="c8_3_1">for</span> <span class="w" id="c8_3_2">more</span> <span class="w" id="c8_3_3">what-ifs.</span></div></div></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="63.79" data-track-index="10" data-volume="1"></audio>
+    </div>
+    <script>
+      window.CT = {"l": [0.1, 7.647, 16.029, 23.43, 32.625, 41.158, 48.743, 57.118], "e": [7.427, 15.779, 23.18, 32.325, 40.858, 48.343, 56.818, 61.99], "ai": 1.36, "called": 2.631, "just": 2.406, "pits": 3.703, "onlap": 4.35, "drops": 6.145, "last": 6.519, "later": 8.145, "rain": 8.976, "every": 9.806, "slick": 10.938, "only": 12.372, "wets": 13.051, "six": 13.806, "passed": 14.485, "lap": 15.164, "listening": 16.905, "tyre": 18.414, "sound": 19.433, "engine": 20.075, "exactly": 21.131, "corner": 21.886, "attack": 22.49, "forty": 23.781, "crash": 25.0, "happens": 25.762, "slows": 26.486, "second": 27.514, "early": 28.124, "two": 28.505, "spin": 29.038, "drives": 30.829, "through": 31.705, "final": 32.77, "leading": 34.479, "teammate": 35.644, "behind": 36.848, "says": 38.751, "let": 39.683, "through2": 40.071, "understand": 41.653, "obeys": 43.439, "wins": 45.342, "championship": 45.653, "one": 47.167, "point": 47.478, "farfetched": 49.105, "formula": 50.526, "billions": 52.32, "simulations": 53.143, "pit": 56.208, "would": 57.98, "orders": 58.921, "follow": 59.941, "end": 63.79, "cuts": [7.5, 15.85, 23.3, 32.5, 48.6], "pb": [13.55, 13.9, 14.25, 14.6, 14.95, 15.3], "att": 22.59, "tc": 28.625, "slowmo": [30.0, 31.9], "finish": 40.75, "radio": [[2.2560000000000002, 4.103], [20.931, 22.79], [26.286, 28.523999999999997], [39.483, 40.671]], "focus": [{"id": 0, "a": 4.25, "b": 5.95}, {"id": 0, "a": 34.029, "b": 35.394}, {"id": 1, "a": 35.444, "b": 37.0}, {"id": 0, "a": 39.583, "b": 40.35}, {"id": 0, "a": 41.108, "b": 44.442}, {"id": 1, "a": 46.467, "b": 48.55}]};
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo(".lap1",{scale:2.6,opacity:0,rotation:-12},{scale:1,opacity:1,rotation:-5,duration:0.22,ease:"back.out(2)",immediateRender:false},0.050);
+      tl.to(".lap1",{opacity:0,y:-24,duration:0.18,ease:"power2.in"},0.950);
+      tl.fromTo(".c-box",{x:-110,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},2.256);
+      tl.fromTo(".c-box .rb0",{scaleY:.2},{scaleY:0.5,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},2.256);
+      tl.fromTo(".c-box .rb1",{scaleY:.2},{scaleY:0.9,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},2.276);
+      tl.fromTo(".c-box .rb2",{scaleY:.2},{scaleY:0.6,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},2.296);
+      tl.fromTo(".c-box .rb3",{scaleY:.2},{scaleY:1,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},2.316);
+      tl.fromTo(".c-box .rb4",{scaleY:.2},{scaleY:0.7,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},2.336);
+      tl.fromTo(".c-box .rb5",{scaleY:.2},{scaleY:0.95,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},2.356);
+      tl.fromTo(".c-box .rb6",{scaleY:.2},{scaleY:0.45,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},2.376);
+      tl.fromTo(".c-box .rb7",{scaleY:.2},{scaleY:0.8,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},2.396);
+      tl.fromTo(".c-box .rb8",{scaleY:.2},{scaleY:0.55,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},2.416);
+      tl.fromTo(".c-box .msg",{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0% 0 0)",duration:.45,ease:"steps(14)",immediateRender:false},2.376);
+      tl.to(".c-box",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},4.150);
+      tl.fromTo(".st-last",{scale:2.4,opacity:0,rotation:-18},{scale:1,opacity:1,rotation:-6,duration:0.25,ease:"back.out(2)",immediateRender:false},6.095);
+      tl.to(".st-last",{opacity:0,y:-24,duration:0.18,ease:"power2.in"},7.527);
+      tl.fromTo(".c-rain",{y:-40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},8.876);
+      (()=>{const o={v:0};tl.to(o,{v:100,duration:0.600,ease:"power2.out",onUpdate:()=>{document.querySelectorAll(".rpct").forEach(e=>e.textContent=Math.round(o.v))}},8.976);})();
+      tl.fromTo(".dr0",{y:-30,opacity:0},{y:40,opacity:1,duration:.45,repeat:4,ease:"none",immediateRender:false},8.976);
+      tl.fromTo(".dr1",{y:-30,opacity:0},{y:40,opacity:1,duration:.45,repeat:4,ease:"none",immediateRender:false},9.036);
+      tl.fromTo(".dr2",{y:-30,opacity:0},{y:40,opacity:1,duration:.45,repeat:4,ease:"none",immediateRender:false},9.096);
+      tl.fromTo(".dr3",{y:-30,opacity:0},{y:40,opacity:1,duration:.45,repeat:4,ease:"none",immediateRender:false},9.156);
+      tl.fromTo(".dr4",{y:-30,opacity:0},{y:40,opacity:1,duration:.45,repeat:4,ease:"none",immediateRender:false},9.216);
+      tl.fromTo(".dr5",{y:-30,opacity:0},{y:40,opacity:1,duration:.45,repeat:4,ease:"none",immediateRender:false},9.276);
+      tl.fromTo(".dr6",{y:-30,opacity:0},{y:40,opacity:1,duration:.45,repeat:4,ease:"none",immediateRender:false},9.336);
+      tl.fromTo(".dr7",{y:-30,opacity:0},{y:40,opacity:1,duration:.45,repeat:4,ease:"none",immediateRender:false},9.396);
+      tl.fromTo(".dr8",{y:-30,opacity:0},{y:40,opacity:1,duration:.45,repeat:4,ease:"none",immediateRender:false},9.456);
+      tl.fromTo(".dr9",{y:-30,opacity:0},{y:40,opacity:1,duration:.45,repeat:4,ease:"none",immediateRender:false},9.516);
+      tl.fromTo(".dr10",{y:-30,opacity:0},{y:40,opacity:1,duration:.45,repeat:4,ease:"none",immediateRender:false},9.576);
+      tl.fromTo(".dr11",{y:-30,opacity:0},{y:40,opacity:1,duration:.45,repeat:4,ease:"none",immediateRender:false},9.636);
+      tl.to(".c-rain",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},10.588);
+      tl.fromTo(".c-tyres",{x:120,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},10.738);
+      tl.fromTo(".td0",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},10.938);
+      tl.fromTo(".td1",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},10.968);
+      tl.fromTo(".td2",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},10.998);
+      tl.fromTo(".td3",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.028);
+      tl.fromTo(".td4",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.058);
+      tl.fromTo(".td5",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.088);
+      tl.fromTo(".td6",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.118);
+      tl.fromTo(".td7",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.148);
+      tl.fromTo(".td8",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.178);
+      tl.fromTo(".td9",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.208);
+      tl.fromTo(".td10",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.238);
+      tl.fromTo(".td11",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.268);
+      tl.fromTo(".td12",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.298);
+      tl.fromTo(".td13",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.328);
+      tl.fromTo(".td14",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.358);
+      tl.fromTo(".td15",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.388);
+      tl.fromTo(".td16",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.418);
+      tl.fromTo(".td17",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.448);
+      tl.fromTo(".td18",{scale:0,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.18,ease:"back.out(3)",immediateRender:false},11.478);
+      tl.fromTo(".td19",{scale:0,opacity:0},{scale:1.35,opacity:1,duration:0.3,ease:"back.out(4)",immediateRender:false},13.001);
+      tl.fromTo(".c-tyres .hl",{scale:1,opacity:1},{scale:1.12,opacity:1,duration:0.25,ease:"back.out(3)",immediateRender:false},13.051);
+      tl.to(".c-tyres",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},13.506);
+      tl.fromTo(".c-ot",{scale:.7,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(2)",immediateRender:false},13.656);
+      (()=>{const o={v:0};tl.to(o,{v:1,duration:0.060,ease:"none",onUpdate:()=>{document.querySelectorAll(".otn").forEach(e=>e.textContent=Math.round(o.v))}},13.550);})();
+      tl.fromTo(".c-ot .big",{scale:1.18},{scale:1,duration:.22,ease:"back.out(3)",immediateRender:false},13.550);
+      (()=>{const o={v:1};tl.to(o,{v:2,duration:0.060,ease:"none",onUpdate:()=>{document.querySelectorAll(".otn").forEach(e=>e.textContent=Math.round(o.v))}},13.900);})();
+      tl.fromTo(".c-ot .big",{scale:1.18},{scale:1,duration:.22,ease:"back.out(3)",immediateRender:false},13.900);
+      (()=>{const o={v:2};tl.to(o,{v:3,duration:0.060,ease:"none",onUpdate:()=>{document.querySelectorAll(".otn").forEach(e=>e.textContent=Math.round(o.v))}},14.250);})();
+      tl.fromTo(".c-ot .big",{scale:1.18},{scale:1,duration:.22,ease:"back.out(3)",immediateRender:false},14.250);
+      (()=>{const o={v:3};tl.to(o,{v:4,duration:0.060,ease:"none",onUpdate:()=>{document.querySelectorAll(".otn").forEach(e=>e.textContent=Math.round(o.v))}},14.600);})();
+      tl.fromTo(".c-ot .big",{scale:1.18},{scale:1,duration:.22,ease:"back.out(3)",immediateRender:false},14.600);
+      (()=>{const o={v:4};tl.to(o,{v:5,duration:0.060,ease:"none",onUpdate:()=>{document.querySelectorAll(".otn").forEach(e=>e.textContent=Math.round(o.v))}},14.950);})();
+      tl.fromTo(".c-ot .big",{scale:1.18},{scale:1,duration:.22,ease:"back.out(3)",immediateRender:false},14.950);
+      (()=>{const o={v:5};tl.to(o,{v:6,duration:0.060,ease:"none",onUpdate:()=>{document.querySelectorAll(".otn").forEach(e=>e.textContent=Math.round(o.v))}},15.300);})();
+      tl.fromTo(".c-ot .big",{scale:1.18},{scale:1,duration:.22,ease:"back.out(3)",immediateRender:false},15.300);
+      tl.to(".c-ot",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},15.979);
+      tl.fromTo(".c-listen",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},16.655);
+      tl.fromTo(".wv0",{scaleY:.15},{scaleY:0.51,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},16.905);
+      tl.fromTo(".wv1",{scaleY:.15},{scaleY:0.58,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},16.920);
+      tl.fromTo(".wv2",{scaleY:.15},{scaleY:0.30,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},16.935);
+      tl.fromTo(".wv3",{scaleY:.15},{scaleY:0.79,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},16.950);
+      tl.fromTo(".wv4",{scaleY:.15},{scaleY:0.51,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},16.965);
+      tl.fromTo(".wv5",{scaleY:.15},{scaleY:0.37,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},16.980);
+      tl.fromTo(".wv6",{scaleY:.15},{scaleY:0.72,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},16.995);
+      tl.fromTo(".wv7",{scaleY:.15},{scaleY:0.44,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.010);
+      tl.fromTo(".wv8",{scaleY:.15},{scaleY:0.44,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.025);
+      tl.fromTo(".wv9",{scaleY:.15},{scaleY:0.65,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.040);
+      tl.fromTo(".wv10",{scaleY:.15},{scaleY:0.37,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.055);
+      tl.fromTo(".wv11",{scaleY:.15},{scaleY:0.51,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.070);
+      tl.fromTo(".wv12",{scaleY:.15},{scaleY:0.58,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.085);
+      tl.fromTo(".wv13",{scaleY:.15},{scaleY:0.30,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.100);
+      tl.fromTo(".wv14",{scaleY:.15},{scaleY:0.79,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.115);
+      tl.fromTo(".wv15",{scaleY:.15},{scaleY:0.51,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.130);
+      tl.fromTo(".wv16",{scaleY:.15},{scaleY:0.37,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.145);
+      tl.fromTo(".wv17",{scaleY:.15},{scaleY:0.72,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.160);
+      tl.fromTo(".wv18",{scaleY:.15},{scaleY:0.44,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.175);
+      tl.fromTo(".wv19",{scaleY:.15},{scaleY:0.44,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.190);
+      tl.fromTo(".wv20",{scaleY:.15},{scaleY:0.65,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.205);
+      tl.fromTo(".wv21",{scaleY:.15},{scaleY:0.37,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.220);
+      tl.fromTo(".wv22",{scaleY:.15},{scaleY:0.51,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.235);
+      tl.fromTo(".wv23",{scaleY:.15},{scaleY:0.58,duration:.09,yoyo:true,repeat:16,ease:"sine.inOut",immediateRender:false},17.250);
+      tl.to(".c-listen",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},18.114);
+      tl.fromTo(".c-wear",{x:120,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},18.264);
+      (()=>{const o={v:0};tl.to(o,{v:62,duration:1.200,ease:"power2.out",onUpdate:()=>{document.querySelectorAll(".wn").forEach(e=>e.textContent=Math.round(o.v))}},18.514);})();
+      tl.fromTo(".barf",{scaleX:0},{scaleX:.62,duration:1.2,ease:"power2.out",immediateRender:false},18.514);
+      tl.to(".c-wear",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},20.781);
+      tl.fromTo(".c-att",{x:-110,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},20.931);
+      tl.fromTo(".c-att .rb0",{scaleY:.2},{scaleY:0.5,duration:.12,yoyo:true,repeat:14,ease:"sine.inOut",immediateRender:false},20.931);
+      tl.fromTo(".c-att .rb1",{scaleY:.2},{scaleY:0.9,duration:.12,yoyo:true,repeat:14,ease:"sine.inOut",immediateRender:false},20.951);
+      tl.fromTo(".c-att .rb2",{scaleY:.2},{scaleY:0.6,duration:.12,yoyo:true,repeat:14,ease:"sine.inOut",immediateRender:false},20.971);
+      tl.fromTo(".c-att .rb3",{scaleY:.2},{scaleY:1,duration:.12,yoyo:true,repeat:14,ease:"sine.inOut",immediateRender:false},20.991);
+      tl.fromTo(".c-att .rb4",{scaleY:.2},{scaleY:0.7,duration:.12,yoyo:true,repeat:14,ease:"sine.inOut",immediateRender:false},21.011);
+      tl.fromTo(".c-att .rb5",{scaleY:.2},{scaleY:0.95,duration:.12,yoyo:true,repeat:14,ease:"sine.inOut",immediateRender:false},21.031);
+      tl.fromTo(".c-att .rb6",{scaleY:.2},{scaleY:0.45,duration:.12,yoyo:true,repeat:14,ease:"sine.inOut",immediateRender:false},21.051);
+      tl.fromTo(".c-att .rb7",{scaleY:.2},{scaleY:0.8,duration:.12,yoyo:true,repeat:14,ease:"sine.inOut",immediateRender:false},21.071);
+      tl.fromTo(".c-att .rb8",{scaleY:.2},{scaleY:0.55,duration:.12,yoyo:true,repeat:14,ease:"sine.inOut",immediateRender:false},21.091);
+      tl.fromTo(".c-att .msg",{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0% 0 0)",duration:.45,ease:"steps(14)",immediateRender:false},21.051);
+      tl.to(".c-att",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},22.690);
+      tl.fromTo(".c-pred",{scale:1.4,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},24.850);
+      (()=>{const o={v:0};tl.to(o,{v:94,duration:0.900,ease:"power2.out",onUpdate:()=>{document.querySelectorAll(".pp").forEach(e=>e.textContent=Math.round(o.v))}},25.000);})();
+      tl.to(".c-pred",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},26.186);
+      tl.fromTo(".c-lift",{x:-110,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},26.286);
+      tl.fromTo(".c-lift .rb0",{scaleY:.2},{scaleY:0.5,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},26.286);
+      tl.fromTo(".c-lift .rb1",{scaleY:.2},{scaleY:0.9,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},26.306);
+      tl.fromTo(".c-lift .rb2",{scaleY:.2},{scaleY:0.6,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},26.326);
+      tl.fromTo(".c-lift .rb3",{scaleY:.2},{scaleY:1,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},26.346);
+      tl.fromTo(".c-lift .rb4",{scaleY:.2},{scaleY:0.7,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},26.366);
+      tl.fromTo(".c-lift .rb5",{scaleY:.2},{scaleY:0.95,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},26.386);
+      tl.fromTo(".c-lift .rb6",{scaleY:.2},{scaleY:0.45,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},26.406);
+      tl.fromTo(".c-lift .rb7",{scaleY:.2},{scaleY:0.8,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},26.426);
+      tl.fromTo(".c-lift .rb8",{scaleY:.2},{scaleY:0.55,duration:.12,yoyo:true,repeat:15,ease:"sine.inOut",immediateRender:false},26.446);
+      tl.fromTo(".c-lift .msg",{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0% 0 0)",duration:.45,ease:"steps(14)",immediateRender:false},26.406);
+      tl.to(".c-lift",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},28.205);
+      (()=>{const o={v:0};tl.to(o,{v:1,duration:0.500,ease:"power2.out",onUpdate:()=>{document.querySelectorAll(".mn").forEach(e=>e.textContent=o.v.toFixed(1))}},27.414);})();
+      tl.fromTo(".st-crash",{scale:2.6,opacity:0,rotation:16},{scale:1,opacity:1,rotation:5,duration:0.22,ease:"back.out(2)",immediateRender:false},28.675);
+      tl.fromTo(".st-crash",{x:0},{x:9,duration:.04,yoyo:true,repeat:7,ease:"none",immediateRender:false},28.875);
+      tl.to(".st-crash",{opacity:0,y:-24,duration:0.18,ease:"power2.in"},30.479);
+      tl.fromTo(".st-final",{scale:2.4,opacity:0,rotation:-14},{scale:1,opacity:1,rotation:-5,duration:0.25,ease:"back.out(2)",immediateRender:false},32.670);
+      tl.to(".st-final",{opacity:0,y:-24,duration:0.18,ease:"power2.in"},34.129);
+      tl.fromTo(".c-let",{x:-110,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},39.533);
+      tl.fromTo(".c-let .rb0",{scaleY:.2},{scaleY:0.5,duration:.12,yoyo:true,repeat:10,ease:"sine.inOut",immediateRender:false},39.533);
+      tl.fromTo(".c-let .rb1",{scaleY:.2},{scaleY:0.9,duration:.12,yoyo:true,repeat:10,ease:"sine.inOut",immediateRender:false},39.553);
+      tl.fromTo(".c-let .rb2",{scaleY:.2},{scaleY:0.6,duration:.12,yoyo:true,repeat:10,ease:"sine.inOut",immediateRender:false},39.573);
+      tl.fromTo(".c-let .rb3",{scaleY:.2},{scaleY:1,duration:.12,yoyo:true,repeat:10,ease:"sine.inOut",immediateRender:false},39.593);
+      tl.fromTo(".c-let .rb4",{scaleY:.2},{scaleY:0.7,duration:.12,yoyo:true,repeat:10,ease:"sine.inOut",immediateRender:false},39.613);
+      tl.fromTo(".c-let .rb5",{scaleY:.2},{scaleY:0.95,duration:.12,yoyo:true,repeat:10,ease:"sine.inOut",immediateRender:false},39.633);
+      tl.fromTo(".c-let .rb6",{scaleY:.2},{scaleY:0.45,duration:.12,yoyo:true,repeat:10,ease:"sine.inOut",immediateRender:false},39.653);
+      tl.fromTo(".c-let .rb7",{scaleY:.2},{scaleY:0.8,duration:.12,yoyo:true,repeat:10,ease:"sine.inOut",immediateRender:false},39.673);
+      tl.fromTo(".c-let .rb8",{scaleY:.2},{scaleY:0.55,duration:.12,yoyo:true,repeat:10,ease:"sine.inOut",immediateRender:false},39.693);
+      tl.fromTo(".c-let .msg",{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0% 0 0)",duration:.45,ease:"steps(14)",immediateRender:false},39.653);
+      tl.to(".c-let",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},40.800);
+      tl.fromTo(".c-champ",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.35,ease:"back.out(1.8)",immediateRender:false},45.192);
+      (()=>{const o={v:400};tl.to(o,{v:412,duration:0.900,ease:"power1.inOut",onUpdate:()=>{document.querySelectorAll(".mpts").forEach(e=>e.textContent=Math.round(o.v))}},45.342);})();
+      tl.fromTo(".r-mate",{y:0},{y:-64,duration:.5,ease:"power2.inOut",immediateRender:false},45.653);
+      tl.fromTo(".r-riv",{y:0},{y:64,duration:.5,ease:"power2.inOut",immediateRender:false},45.653);
+      tl.set(".mp",{textContent:"1"},45.903); tl.set(".rp",{textContent:"2"},45.903);
+      tl.fromTo(".onept",{scale:.6,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(2.4)",immediateRender:false},47.067);
+      tl.to(".c-champ",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},46.517);
+      tl.fromTo(".c-real",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.35,ease:"back.out(1.8)",immediateRender:false},50.326);
+      (()=>{const o={v:0};tl.to(o,{v:8000000000.0,duration:1.600,ease:"power3.out",onUpdate:()=>{document.querySelectorAll(".nb").forEach(e=>e.textContent=Math.round(o.v).toLocaleString('en-US'))}},52.220);})();
+      tl.fromTo(".bign",{scale:1.12},{scale:1,duration:.3,ease:"back.out(3)",immediateRender:false},53.820);
+      tl.to(".c-real",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},56.968);
+      tl.fromTo(".c-q",{scale:.8,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.4,ease:"back.out(1.8)",immediateRender:false},57.680);
+      tl.to(".c-q",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},59.691);
+      tl.fromTo("#endc",{opacity:0,scale:.9,y:40},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.35,ease:"back.out(1.8)",immediateRender:false},59.791);
+      tl.fromTo(".ec-kw",{scale:.6,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},59.991);
+      tl.fromTo(".ec-2",{y:20,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},60.191);
+      tl.fromTo(".ec-h",{y:20,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},60.441);
+      tl.fromTo(".tg-ai",{y:24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},1.260);
+      tl.to(".tg-ai",{opacity:0,y:-24,duration:0.18,ease:"power2.in"},2.831);
+      tl.fromTo(".tg-d1",{y:24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},4.550);
+      tl.to(".tg-d1",{opacity:0,y:-24,duration:0.18,ease:"power2.in"},5.700);
+      tl.fromTo(".tg-d2",{y:24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},34.329);
+      tl.to(".tg-d2",{opacity:0,y:-24,duration:0.18,ease:"power2.in"},35.194);
+      tl.fromTo(".tg-m1",{y:24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},35.744);
+      tl.to(".tg-m1",{opacity:0,y:-24,duration:0.18,ease:"power2.in"},36.750);
+      tl.fromTo(".tg-d3",{y:24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},41.408);
+      tl.to(".tg-d3",{opacity:0,y:-24,duration:0.18,ease:"power2.in"},44.192);
+      tl.fromTo(".tg-m2",{y:24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},46.767);
+      tl.to(".tg-m2",{opacity:0,y:-24,duration:0.18,ease:"power2.in"},48.350);
+      tl.fromTo(".sl-p1",{scale:2.6,opacity:0,rotation:-14},{scale:1,opacity:1,rotation:-6,duration:0.22,ease:"back.out(2.2)",immediateRender:false},31.885);
+      tl.fromTo(".sl-p1",{x:0},{x:7,duration:.04,yoyo:true,repeat:5,ease:"none",immediateRender:false},32.105);
+      tl.to(".sl-p1",{opacity:0,scale:1.3,duration:0.15,ease:"power2.in"},32.605);
+      tl.fromTo(".sl-ot",{scale:2.6,opacity:0,rotation:-14},{scale:1,opacity:1,rotation:-6,duration:0.22,ease:"back.out(2.2)",immediateRender:false},22.720);
+      tl.fromTo(".sl-ot",{x:0},{x:7,duration:.04,yoyo:true,repeat:5,ease:"none",immediateRender:false},22.940);
+      tl.to(".sl-ot",{opacity:0,scale:1.3,duration:0.15,ease:"power2.in"},23.440);
+      tl.fromTo(".sl-p2",{scale:2.6,opacity:0,rotation:-14},{scale:1,opacity:1,rotation:-6,duration:0.22,ease:"back.out(2.2)",immediateRender:false},40.880);
+      tl.fromTo(".sl-p2",{x:0},{x:7,duration:.04,yoyo:true,repeat:5,ease:"none",immediateRender:false},41.100);
+      tl.to(".sl-p2",{opacity:0,scale:1.3,duration:0.15,ease:"power2.in"},41.600);
+      tl.fromTo(".hud",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(2)",immediateRender:false},0.300);
+      tl.fromTo(".hud",{scale:1.12},{scale:1,duration:.3,ease:"back.out(3)",immediateRender:false},7.550);
+      tl.fromTo(".hud",{scale:1.12},{scale:1,duration:.3,ease:"back.out(3)",immediateRender:false},15.900);
+      tl.fromTo(".hud",{scale:1.12},{scale:1,duration:.3,ease:"back.out(3)",immediateRender:false},23.350);
+      tl.fromTo(".hud",{scale:1.12},{scale:1,duration:.3,ease:"back.out(3)",immediateRender:false},32.550);
+      tl.to(".hud",{opacity:0,y:30,duration:0.2,ease:"power2.in"},41.058);
+      tl.fromTo(".prog i",{scaleX:0},{scaleX:1,duration:63.79,ease:"none",immediateRender:false},0);
+      tl.fromTo(".live b",{opacity:1},{opacity:.15,duration:.45,yoyo:true,repeat:141,ease:"sine.inOut",immediateRender:false},0);
+      tl.set(".cx0",{opacity:1},0);
+      tl.to(".cx0",{opacity:0,y:-8,duration:.15},7.350);
+      tl.fromTo(".cx1",{opacity:0,y:8},{opacity:1,y:0,duration:.18,immediateRender:false},7.500);
+      tl.to(".cx1",{opacity:0,y:-8,duration:.15},15.700);
+      tl.fromTo(".cx2",{opacity:0,y:8},{opacity:1,y:0,duration:.18,immediateRender:false},15.850);
+      tl.to(".cx2",{opacity:0,y:-8,duration:.15},23.150);
+      tl.fromTo(".cx3",{opacity:0,y:8},{opacity:1,y:0,duration:.18,immediateRender:false},23.300);
+      tl.to(".cx3",{opacity:0,y:-8,duration:.15},32.350);
+      tl.fromTo(".cx4",{opacity:0,y:8},{opacity:1,y:0,duration:.18,immediateRender:false},32.500);
+      tl.to(".cx4",{opacity:0,y:-8,duration:.15},40.700);
+      tl.fromTo(".cx5",{opacity:0,y:8},{opacity:1,y:0,duration:.18,immediateRender:false},40.850);
+      tl.to(".cx5",{opacity:0,y:-8,duration:.15},48.450);
+      tl.fromTo(".cx6",{opacity:0,y:8},{opacity:1,y:0,duration:.18,immediateRender:false},48.600);
+      tl.to(".cx6",{opacity:0,y:-8,duration:.15},56.868);
+      tl.fromTo(".cx7",{opacity:0,y:8},{opacity:1,y:0,duration:.18,immediateRender:false},57.018);
+      tl.to(".cx7",{opacity:0,y:-8,duration:.15},64.640);
+      tl.fromTo("#c1_0",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},0.113);
+      tl.set("#c1_0",{opacity:0},1.085);
+      tl.set("#c1_0_0",{attr:{class:"w on"}},0.163);
+      tl.fromTo("#c1_0_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},0.163);
+      tl.set("#c1_0_0",{attr:{class:"w"}},0.438);
+      tl.set("#c1_0_1",{attr:{class:"w on"}},0.463);
+      tl.fromTo("#c1_0_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},0.463);
+      tl.set("#c1_0_1",{attr:{class:"w"}},0.999);
+      tl.fromTo("#c1_1",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},1.085);
+      tl.set("#c1_1",{opacity:0},2.356);
+      tl.set("#c1_1_0",{attr:{class:"w on"}},1.135);
+      tl.fromTo("#c1_1_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},1.135);
+      tl.set("#c1_1_0",{attr:{class:"w"}},1.335);
+      tl.set("#c1_1_1",{attr:{class:"w on"}},1.360);
+      tl.fromTo("#c1_1_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},1.360);
+      tl.set("#c1_1_1",{attr:{class:"w"}},1.634);
+      tl.set("#c1_1_2",{attr:{class:"w on"}},1.659);
+      tl.fromTo("#c1_1_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},1.659);
+      tl.set("#c1_1_2",{attr:{class:"w"}},1.933);
+      tl.set("#c1_1_3",{attr:{class:"w on"}},2.033);
+      tl.fromTo("#c1_1_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},2.033);
+      tl.set("#c1_1_3",{attr:{class:"w"}},2.382);
+      tl.fromTo("#c1_2",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},2.356);
+      tl.set("#c1_2",{opacity:0},3.254);
+      tl.set("#c1_2_0",{attr:{class:"w on"}},2.406);
+      tl.fromTo("#c1_2_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},2.406);
+      tl.set("#c1_2_0",{attr:{class:"w"}},2.606);
+      tl.set("#c1_2_1",{attr:{class:"w on"}},2.631);
+      tl.fromTo("#c1_2_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},2.631);
+      tl.set("#c1_2_1",{attr:{class:"w"}},2.830);
+      tl.set("#c1_2_2",{attr:{class:"w on"}},2.855);
+      tl.fromTo("#c1_2_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},2.855);
+      tl.set("#c1_2_2",{attr:{class:"w"}},3.005);
+      tl.set("#c1_2_3",{attr:{class:"w on"}},3.079);
+      tl.fromTo("#c1_2_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},3.079);
+      tl.set("#c1_2_3",{attr:{class:"w"}},3.279);
+      tl.fromTo("#c1_3",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},3.254);
+      tl.set("#c1_3",{opacity:0},4.300);
+      tl.set("#c1_3_0",{attr:{class:"w on"}},3.304);
+      tl.fromTo("#c1_3_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},3.304);
+      tl.set("#c1_3_0",{attr:{class:"w"}},3.503);
+      tl.set("#c1_3_1",{attr:{class:"w on"}},3.528);
+      tl.fromTo("#c1_3_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},3.528);
+      tl.set("#c1_3_1",{attr:{class:"w"}},3.678);
+      tl.set("#c1_3_2",{attr:{class:"w on"}},3.703);
+      tl.fromTo("#c1_3_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},3.703);
+      tl.set("#c1_3_2",{attr:{class:"w"}},4.326);
+      tl.fromTo("#c1_4",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},4.300);
+      tl.set("#c1_4",{opacity:0},5.796);
+      tl.set("#c1_4_0",{attr:{class:"w on"}},4.350);
+      tl.fromTo("#c1_4_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},4.350);
+      tl.set("#c1_4_0",{attr:{class:"w"}},4.500);
+      tl.set("#c1_4_1",{attr:{class:"w on"}},4.500);
+      tl.fromTo("#c1_4_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},4.500);
+      tl.set("#c1_4_1",{attr:{class:"w"}},4.774);
+      tl.set("#c1_4_2",{attr:{class:"w on"}},4.874);
+      tl.fromTo("#c1_4_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},4.874);
+      tl.set("#c1_4_2",{attr:{class:"w"}},5.522);
+      tl.fromTo("#c1_5",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},5.796);
+      tl.set("#c1_5",{opacity:0},7.587);
+      tl.set("#c1_5_0",{attr:{class:"w on"}},5.846);
+      tl.fromTo("#c1_5_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},5.846);
+      tl.set("#c1_5_0",{attr:{class:"w"}},6.045);
+      tl.set("#c1_5_1",{attr:{class:"w on"}},6.145);
+      tl.fromTo("#c1_5_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},6.145);
+      tl.set("#c1_5_1",{attr:{class:"w"}},6.344);
+      tl.set("#c1_5_2",{attr:{class:"w on"}},6.369);
+      tl.fromTo("#c1_5_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},6.369);
+      tl.set("#c1_5_2",{attr:{class:"w"}},6.519);
+      tl.set("#c1_5_3",{attr:{class:"w on"}},6.519);
+      tl.fromTo("#c1_5_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},6.519);
+      tl.set("#c1_5_3",{attr:{class:"w"}},7.316);
+      tl.fromTo("#c2_0",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},7.643);
+      tl.set("#c2_0",{opacity:0},8.926);
+      tl.set("#c2_0_0",{attr:{class:"w on"}},7.693);
+      tl.fromTo("#c2_0_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},7.693);
+      tl.set("#c2_0_0",{attr:{class:"w"}},7.843);
+      tl.set("#c2_0_1",{attr:{class:"w on"}},7.844);
+      tl.fromTo("#c2_0_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},7.844);
+      tl.set("#c2_0_1",{attr:{class:"w"}},8.120);
+      tl.set("#c2_0_2",{attr:{class:"w on"}},8.145);
+      tl.fromTo("#c2_0_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},8.145);
+      tl.set("#c2_0_2",{attr:{class:"w"}},8.799);
+      tl.fromTo("#c2_1",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},8.926);
+      tl.set("#c2_1",{opacity:0},9.756);
+      tl.set("#c2_1_0",{attr:{class:"w on"}},8.976);
+      tl.fromTo("#c2_1_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},8.976);
+      tl.set("#c2_1_0",{attr:{class:"w"}},9.629);
+      tl.fromTo("#c2_2",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},9.756);
+      tl.set("#c2_2",{opacity:0},10.661);
+      tl.set("#c2_2_0",{attr:{class:"w on"}},9.806);
+      tl.fromTo("#c2_2_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},9.806);
+      tl.set("#c2_2_0",{attr:{class:"w"}},10.082);
+      tl.set("#c2_2_1",{attr:{class:"w on"}},10.145);
+      tl.fromTo("#c2_2_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},10.145);
+      tl.set("#c2_2_1",{attr:{class:"w"}},10.309);
+      tl.set("#c2_2_2",{attr:{class:"w on"}},10.372);
+      tl.fromTo("#c2_2_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},10.372);
+      tl.set("#c2_2_2",{attr:{class:"w"}},10.535);
+      tl.set("#c2_2_3",{attr:{class:"w on"}},10.560);
+      tl.fromTo("#c2_2_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},10.560);
+      tl.set("#c2_2_3",{attr:{class:"w"}},10.710);
+      tl.fromTo("#c2_3",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},10.661);
+      tl.set("#c2_3",{opacity:0},11.819);
+      tl.set("#c2_3_0",{attr:{class:"w on"}},10.711);
+      tl.fromTo("#c2_3_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},10.711);
+      tl.set("#c2_3_0",{attr:{class:"w"}},10.912);
+      tl.set("#c2_3_1",{attr:{class:"w on"}},10.938);
+      tl.fromTo("#c2_3_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},10.938);
+      tl.set("#c2_3_1",{attr:{class:"w"}},11.214);
+      tl.set("#c2_3_2",{attr:{class:"w on"}},11.240);
+      tl.fromTo("#c2_3_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},11.240);
+      tl.set("#c2_3_2",{attr:{class:"w"}},11.868);
+      tl.fromTo("#c2_4",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},11.819);
+      tl.set("#c2_4",{opacity:0},12.850);
+      tl.set("#c2_4_0",{attr:{class:"w on"}},11.869);
+      tl.fromTo("#c2_4_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},11.869);
+      tl.set("#c2_4_0",{attr:{class:"w"}},12.120);
+      tl.set("#c2_4_1",{attr:{class:"w on"}},12.183);
+      tl.fromTo("#c2_4_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},12.183);
+      tl.set("#c2_4_1",{attr:{class:"w"}},12.346);
+      tl.set("#c2_4_2",{attr:{class:"w on"}},12.372);
+      tl.fromTo("#c2_4_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},12.372);
+      tl.set("#c2_4_2",{attr:{class:"w"}},12.724);
+      tl.set("#c2_4_3",{attr:{class:"w on"}},12.749);
+      tl.fromTo("#c2_4_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},12.749);
+      tl.set("#c2_4_3",{attr:{class:"w"}},12.899);
+      tl.fromTo("#c2_5",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},12.850);
+      tl.set("#c2_5",{opacity:0},13.756);
+      tl.set("#c2_5_0",{attr:{class:"w on"}},12.900);
+      tl.fromTo("#c2_5_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},12.900);
+      tl.set("#c2_5_0",{attr:{class:"w"}},13.050);
+      tl.set("#c2_5_1",{attr:{class:"w on"}},13.051);
+      tl.fromTo("#c2_5_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},13.051);
+      tl.set("#c2_5_1",{attr:{class:"w"}},13.592);
+      tl.fromTo("#c2_6",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},13.756);
+      tl.set("#c2_6",{opacity:0},14.435);
+      tl.set("#c2_6_0",{attr:{class:"w on"}},13.806);
+      tl.fromTo("#c2_6_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},13.806);
+      tl.set("#c2_6_0",{attr:{class:"w"}},14.007);
+      tl.set("#c2_6_1",{attr:{class:"w on"}},14.032);
+      tl.fromTo("#c2_6_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},14.032);
+      tl.set("#c2_6_1",{attr:{class:"w"}},14.497);
+      tl.fromTo("#c2_7",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},14.435);
+      tl.set("#c2_7",{opacity:0},15.969);
+      tl.set("#c2_7_0",{attr:{class:"w on"}},14.485);
+      tl.fromTo("#c2_7_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},14.485);
+      tl.set("#c2_7_0",{attr:{class:"w"}},14.761);
+      tl.set("#c2_7_1",{attr:{class:"w on"}},14.787);
+      tl.fromTo("#c2_7_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},14.787);
+      tl.set("#c2_7_1",{attr:{class:"w"}},14.988);
+      tl.set("#c2_7_2",{attr:{class:"w on"}},15.013);
+      tl.fromTo("#c2_7_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},15.013);
+      tl.set("#c2_7_2",{attr:{class:"w"}},15.163);
+      tl.set("#c2_7_3",{attr:{class:"w on"}},15.164);
+      tl.fromTo("#c2_7_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},15.164);
+      tl.set("#c2_7_3",{attr:{class:"w"}},15.667);
+      tl.fromTo("#c3_0",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},16.025);
+      tl.set("#c3_0",{opacity:0},17.836);
+      tl.set("#c3_0_0",{attr:{class:"w on"}},16.075);
+      tl.fromTo("#c3_0_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},16.075);
+      tl.set("#c3_0_0",{attr:{class:"w"}},16.276);
+      tl.set("#c3_0_1",{attr:{class:"w on"}},16.301);
+      tl.fromTo("#c3_0_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},16.301);
+      tl.set("#c3_0_1",{attr:{class:"w"}},16.451);
+      tl.set("#c3_0_2",{attr:{class:"w on"}},16.452);
+      tl.fromTo("#c3_0_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},16.452);
+      tl.set("#c3_0_2",{attr:{class:"w"}},16.804);
+      tl.set("#c3_0_3",{attr:{class:"w on"}},16.905);
+      tl.fromTo("#c3_0_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},16.905);
+      tl.set("#c3_0_3",{attr:{class:"w"}},17.710);
+      tl.fromTo("#c3_1",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},17.836);
+      tl.set("#c3_1",{opacity:0},19.044);
+      tl.set("#c3_1_0",{attr:{class:"w on"}},17.886);
+      tl.fromTo("#c3_1_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},17.886);
+      tl.set("#c3_1_0",{attr:{class:"w"}},18.036);
+      tl.set("#c3_1_1",{attr:{class:"w on"}},18.037);
+      tl.fromTo("#c3_1_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},18.037);
+      tl.set("#c3_1_1",{attr:{class:"w"}},18.389);
+      tl.set("#c3_1_2",{attr:{class:"w on"}},18.414);
+      tl.fromTo("#c3_1_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},18.414);
+      tl.set("#c3_1_2",{attr:{class:"w"}},18.766);
+      tl.set("#c3_1_3",{attr:{class:"w on"}},18.792);
+      tl.fromTo("#c3_1_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},18.792);
+      tl.set("#c3_1_3",{attr:{class:"w"}},19.068);
+      tl.fromTo("#c3_2",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},19.044);
+      tl.set("#c3_2",{opacity:0},19.647);
+      tl.set("#c3_2_0",{attr:{class:"w on"}},19.094);
+      tl.fromTo("#c3_2_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},19.094);
+      tl.set("#c3_2_0",{attr:{class:"w"}},19.244);
+      tl.set("#c3_2_1",{attr:{class:"w on"}},19.244);
+      tl.fromTo("#c3_2_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},19.244);
+      tl.set("#c3_2_1",{attr:{class:"w"}},19.394);
+      tl.set("#c3_2_2",{attr:{class:"w on"}},19.433);
+      tl.fromTo("#c3_2_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},19.433);
+      tl.set("#c3_2_2",{attr:{class:"w"}},19.596);
+      tl.set("#c3_2_3",{attr:{class:"w on"}},19.584);
+      tl.fromTo("#c3_2_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},19.584);
+      tl.set("#c3_2_3",{attr:{class:"w"}},19.734);
+      tl.fromTo("#c3_3",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},19.647);
+      tl.set("#c3_3",{opacity:0},20.427);
+      tl.set("#c3_3_0",{attr:{class:"w on"}},19.697);
+      tl.fromTo("#c3_3_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},19.697);
+      tl.set("#c3_3_0",{attr:{class:"w"}},19.847);
+      tl.set("#c3_3_1",{attr:{class:"w on"}},20.075);
+      tl.fromTo("#c3_3_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},20.075);
+      tl.set("#c3_3_1",{attr:{class:"w"}},20.477);
+      tl.fromTo("#c3_4",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},20.427);
+      tl.set("#c3_4",{opacity:0},21.647);
+      tl.set("#c3_4_0",{attr:{class:"w on"}},20.477);
+      tl.fromTo("#c3_4_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},20.477);
+      tl.set("#c3_4_0",{attr:{class:"w"}},20.627);
+      tl.set("#c3_4_1",{attr:{class:"w on"}},20.565);
+      tl.fromTo("#c3_4_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},20.565);
+      tl.set("#c3_4_1",{attr:{class:"w"}},20.804);
+      tl.set("#c3_4_2",{attr:{class:"w on"}},20.829);
+      tl.fromTo("#c3_4_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},20.829);
+      tl.set("#c3_4_2",{attr:{class:"w"}},20.979);
+      tl.set("#c3_4_3",{attr:{class:"w on"}},21.131);
+      tl.fromTo("#c3_4_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},21.131);
+      tl.set("#c3_4_3",{attr:{class:"w"}},21.634);
+      tl.fromTo("#c3_5",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},21.647);
+      tl.set("#c3_5",{opacity:0},23.370);
+      tl.set("#c3_5_0",{attr:{class:"w on"}},21.697);
+      tl.fromTo("#c3_5_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},21.697);
+      tl.set("#c3_5_0",{attr:{class:"w"}},21.860);
+      tl.set("#c3_5_1",{attr:{class:"w on"}},21.886);
+      tl.fromTo("#c3_5_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},21.886);
+      tl.set("#c3_5_1",{attr:{class:"w"}},22.162);
+      tl.set("#c3_5_2",{attr:{class:"w on"}},22.188);
+      tl.fromTo("#c3_5_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},22.188);
+      tl.set("#c3_5_2",{attr:{class:"w"}},22.338);
+      tl.set("#c3_5_3",{attr:{class:"w on"}},22.490);
+      tl.fromTo("#c3_5_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},22.490);
+      tl.set("#c3_5_3",{attr:{class:"w"}},23.068);
+      tl.fromTo("#c4_0",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},23.598);
+      tl.set("#c4_0",{opacity:0},24.417);
+      tl.set("#c4_0_0",{attr:{class:"w on"}},23.648);
+      tl.fromTo("#c4_0_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},23.648);
+      tl.set("#c4_0_0",{attr:{class:"w"}},23.798);
+      tl.set("#c4_0_1",{attr:{class:"w on"}},23.781);
+      tl.fromTo("#c4_0_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},23.781);
+      tl.set("#c4_0_1",{attr:{class:"w"}},24.364);
+      tl.fromTo("#c4_1",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},24.417);
+      tl.set("#c4_1",{opacity:0},25.331);
+      tl.set("#c4_1_0",{attr:{class:"w on"}},24.467);
+      tl.fromTo("#c4_1_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},24.467);
+      tl.set("#c4_1_0",{attr:{class:"w"}},24.669);
+      tl.set("#c4_1_1",{attr:{class:"w on"}},24.657);
+      tl.fromTo("#c4_1_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},24.657);
+      tl.set("#c4_1_1",{attr:{class:"w"}},24.898);
+      tl.set("#c4_1_2",{attr:{class:"w on"}},24.886);
+      tl.fromTo("#c4_1_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},24.886);
+      tl.set("#c4_1_2",{attr:{class:"w"}},25.036);
+      tl.set("#c4_1_3",{attr:{class:"w on"}},25.000);
+      tl.fromTo("#c4_1_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},25.000);
+      tl.set("#c4_1_3",{attr:{class:"w"}},25.279);
+      tl.fromTo("#c4_2",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},25.331);
+      tl.set("#c4_2",{opacity:0},26.322);
+      tl.set("#c4_2_0",{attr:{class:"w on"}},25.381);
+      tl.fromTo("#c4_2_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},25.381);
+      tl.set("#c4_2_0",{attr:{class:"w"}},25.583);
+      tl.set("#c4_2_1",{attr:{class:"w on"}},25.610);
+      tl.fromTo("#c4_2_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},25.610);
+      tl.set("#c4_2_1",{attr:{class:"w"}},25.760);
+      tl.set("#c4_2_2",{attr:{class:"w on"}},25.762);
+      tl.fromTo("#c4_2_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},25.762);
+      tl.set("#c4_2_2",{attr:{class:"w"}},26.345);
+      tl.fromTo("#c4_3",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},26.322);
+      tl.set("#c4_3",{opacity:0},27.236);
+      tl.set("#c4_3_0",{attr:{class:"w on"}},26.372);
+      tl.fromTo("#c4_3_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},26.372);
+      tl.set("#c4_3_0",{attr:{class:"w"}},26.522);
+      tl.set("#c4_3_1",{attr:{class:"w on"}},26.486);
+      tl.fromTo("#c4_3_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},26.486);
+      tl.set("#c4_3_1",{attr:{class:"w"}},26.726);
+      tl.set("#c4_3_2",{attr:{class:"w on"}},26.753);
+      tl.fromTo("#c4_3_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},26.753);
+      tl.set("#c4_3_2",{attr:{class:"w"}},26.903);
+      tl.set("#c4_3_3",{attr:{class:"w on"}},26.905);
+      tl.fromTo("#c4_3_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},26.905);
+      tl.set("#c4_3_3",{attr:{class:"w"}},27.260);
+      tl.fromTo("#c4_4",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},27.236);
+      tl.set("#c4_4",{opacity:0},28.455);
+      tl.set("#c4_4_0",{attr:{class:"w on"}},27.286);
+      tl.fromTo("#c4_4_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},27.286);
+      tl.set("#c4_4_0",{attr:{class:"w"}},27.488);
+      tl.set("#c4_4_1",{attr:{class:"w on"}},27.514);
+      tl.fromTo("#c4_4_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},27.514);
+      tl.set("#c4_4_1",{attr:{class:"w"}},27.869);
+      tl.set("#c4_4_2",{attr:{class:"w on"}},28.124);
+      tl.fromTo("#c4_4_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},28.124);
+      tl.set("#c4_4_2",{attr:{class:"w"}},28.517);
+      tl.fromTo("#c4_5",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},28.455);
+      tl.set("#c4_5",{opacity:0},29.522);
+      tl.set("#c4_5_0",{attr:{class:"w on"}},28.505);
+      tl.fromTo("#c4_5_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},28.505);
+      tl.set("#c4_5_0",{attr:{class:"w"}},28.707);
+      tl.set("#c4_5_1",{attr:{class:"w on"}},28.733);
+      tl.fromTo("#c4_5_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},28.733);
+      tl.set("#c4_5_1",{attr:{class:"w"}},29.012);
+      tl.set("#c4_5_2",{attr:{class:"w on"}},29.038);
+      tl.fromTo("#c4_5_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},29.038);
+      tl.set("#c4_5_2",{attr:{class:"w"}},29.241);
+      tl.set("#c4_5_3",{attr:{class:"w on"}},29.267);
+      tl.fromTo("#c4_5_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},29.267);
+      tl.set("#c4_5_3",{attr:{class:"w"}},29.545);
+      tl.fromTo("#c4_6",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},29.522);
+      tl.set("#c4_6",{opacity:0},30.131);
+      tl.set("#c4_6_0",{attr:{class:"w on"}},29.572);
+      tl.fromTo("#c4_6_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},29.572);
+      tl.set("#c4_6_0",{attr:{class:"w"}},29.774);
+      tl.set("#c4_6_1",{attr:{class:"w on"}},29.800);
+      tl.fromTo("#c4_6_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},29.800);
+      tl.set("#c4_6_1",{attr:{class:"w"}},29.950);
+      tl.set("#c4_6_2",{attr:{class:"w on"}},29.953);
+      tl.fromTo("#c4_6_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},29.953);
+      tl.set("#c4_6_2",{attr:{class:"w"}},30.103);
+      tl.set("#c4_6_3",{attr:{class:"w on"}},30.067);
+      tl.fromTo("#c4_6_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},30.067);
+      tl.set("#c4_6_3",{attr:{class:"w"}},30.217);
+      tl.fromTo("#c4_7",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},30.131);
+      tl.set("#c4_7",{opacity:0},30.588);
+      tl.set("#c4_7_0",{attr:{class:"w on"}},30.181);
+      tl.fromTo("#c4_7_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},30.181);
+      tl.set("#c4_7_0",{attr:{class:"w"}},30.623);
+      tl.fromTo("#c4_8",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},30.588);
+      tl.set("#c4_8",{opacity:0},32.565);
+      tl.set("#c4_8_0",{attr:{class:"w on"}},30.638);
+      tl.fromTo("#c4_8_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},30.638);
+      tl.set("#c4_8_0",{attr:{class:"w"}},30.841);
+      tl.set("#c4_8_1",{attr:{class:"w on"}},30.829);
+      tl.fromTo("#c4_8_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},30.829);
+      tl.set("#c4_8_1",{attr:{class:"w"}},31.222);
+      tl.set("#c4_8_2",{attr:{class:"w on"}},31.248);
+      tl.fromTo("#c4_8_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},31.248);
+      tl.set("#c4_8_2",{attr:{class:"w"}},31.603);
+      tl.set("#c4_8_3",{attr:{class:"w on"}},31.705);
+      tl.fromTo("#c4_8_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},31.705);
+      tl.set("#c4_8_3",{attr:{class:"w"}},32.212);
+      tl.fromTo("#c5_0",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},32.720);
+      tl.set("#c5_0",{opacity:0},34.118);
+      tl.set("#c5_0_0",{attr:{class:"w on"}},32.770);
+      tl.fromTo("#c5_0_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},32.770);
+      tl.set("#c5_0_0",{attr:{class:"w"}},33.208);
+      tl.set("#c5_0_1",{attr:{class:"w on"}},33.236);
+      tl.fromTo("#c5_0_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},33.236);
+      tl.set("#c5_0_1",{attr:{class:"w"}},33.946);
+      tl.fromTo("#c5_1",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},34.118);
+      tl.set("#c5_1",{opacity:0},35.361);
+      tl.set("#c5_1_0",{attr:{class:"w on"}},34.168);
+      tl.fromTo("#c5_1_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},34.168);
+      tl.set("#c5_1_0",{attr:{class:"w"}},34.451);
+      tl.set("#c5_1_1",{attr:{class:"w on"}},34.479);
+      tl.fromTo("#c5_1_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},34.479);
+      tl.set("#c5_1_1",{attr:{class:"w"}},35.228);
+      tl.fromTo("#c5_2",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},35.361);
+      tl.set("#c5_2",{opacity:0},36.798);
+      tl.set("#c5_2_0",{attr:{class:"w on"}},35.411);
+      tl.fromTo("#c5_2_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},35.411);
+      tl.set("#c5_2_0",{attr:{class:"w"}},35.616);
+      tl.set("#c5_2_1",{attr:{class:"w on"}},35.644);
+      tl.fromTo("#c5_2_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},35.644);
+      tl.set("#c5_2_1",{attr:{class:"w"}},36.160);
+      tl.set("#c5_2_2",{attr:{class:"w on"}},36.188);
+      tl.fromTo("#c5_2_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},36.188);
+      tl.set("#c5_2_2",{attr:{class:"w"}},36.471);
+      tl.set("#c5_2_3",{attr:{class:"w on"}},36.498);
+      tl.fromTo("#c5_2_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},36.498);
+      tl.set("#c5_2_3",{attr:{class:"w"}},36.781);
+      tl.fromTo("#c5_3",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},36.798);
+      tl.set("#c5_3",{opacity:0},38.002);
+      tl.set("#c5_3_0",{attr:{class:"w on"}},36.848);
+      tl.fromTo("#c5_3_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},36.848);
+      tl.set("#c5_3_0",{attr:{class:"w"}},37.170);
+      tl.set("#c5_3_1",{attr:{class:"w on"}},37.197);
+      tl.fromTo("#c5_3_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},37.197);
+      tl.set("#c5_3_1",{attr:{class:"w"}},37.713);
+      tl.fromTo("#c5_4",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},38.002);
+      tl.set("#c5_4",{opacity:0},39.633);
+      tl.set("#c5_4_0",{attr:{class:"w on"}},38.052);
+      tl.fromTo("#c5_4_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},38.052);
+      tl.set("#c5_4_0",{attr:{class:"w"}},38.202);
+      tl.set("#c5_4_1",{attr:{class:"w on"}},38.168);
+      tl.fromTo("#c5_4_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},38.168);
+      tl.set("#c5_4_1",{attr:{class:"w"}},38.318);
+      tl.set("#c5_4_2",{attr:{class:"w on"}},38.362);
+      tl.fromTo("#c5_4_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},38.362);
+      tl.set("#c5_4_2",{attr:{class:"w"}},38.723);
+      tl.set("#c5_4_3",{attr:{class:"w on"}},38.751);
+      tl.fromTo("#c5_4_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},38.751);
+      tl.set("#c5_4_3",{attr:{class:"w"}},39.461);
+      tl.fromTo("#c5_5",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},39.633);
+      tl.set("#c5_5",{opacity:0},41.098);
+      tl.set("#c5_5_0",{attr:{class:"w on"}},39.683);
+      tl.fromTo("#c5_5_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},39.683);
+      tl.set("#c5_5_0",{attr:{class:"w"}},39.833);
+      tl.set("#c5_5_1",{attr:{class:"w on"}},39.838);
+      tl.fromTo("#c5_5_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},39.838);
+      tl.set("#c5_5_1",{attr:{class:"w"}},40.043);
+      tl.set("#c5_5_2",{attr:{class:"w on"}},40.071);
+      tl.fromTo("#c5_5_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},40.071);
+      tl.set("#c5_5_2",{attr:{class:"w"}},40.742);
+      tl.fromTo("#c6_0",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},41.137);
+      tl.set("#c6_0",{opacity:0},43.001);
+      tl.set("#c6_0_0",{attr:{class:"w on"}},41.187);
+      tl.fromTo("#c6_0_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},41.187);
+      tl.set("#c6_0_0",{attr:{class:"w"}},41.337);
+      tl.set("#c6_0_1",{attr:{class:"w on"}},41.342);
+      tl.fromTo("#c6_0_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},41.342);
+      tl.set("#c6_0_1",{attr:{class:"w"}},41.625);
+      tl.set("#c6_0_2",{attr:{class:"w on"}},41.653);
+      tl.fromTo("#c6_0_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},41.653);
+      tl.set("#c6_0_2",{attr:{class:"w"}},42.751);
+      tl.fromTo("#c6_1",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},43.001);
+      tl.set("#c6_1",{opacity:0},44.476);
+      tl.set("#c6_1_0",{attr:{class:"w on"}},43.051);
+      tl.fromTo("#c6_1_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},43.051);
+      tl.set("#c6_1_0",{attr:{class:"w"}},43.201);
+      tl.set("#c6_1_1",{attr:{class:"w on"}},43.206);
+      tl.fromTo("#c6_1_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},43.206);
+      tl.set("#c6_1_1",{attr:{class:"w"}},43.356);
+      tl.set("#c6_1_2",{attr:{class:"w on"}},43.439);
+      tl.fromTo("#c6_1_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},43.439);
+      tl.set("#c6_1_2",{attr:{class:"w"}},43.916);
+      tl.fromTo("#c6_2",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},44.476);
+      tl.set("#c6_2",{opacity:0},45.603);
+      tl.set("#c6_2_0",{attr:{class:"w on"}},44.526);
+      tl.fromTo("#c6_2_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},44.526);
+      tl.set("#c6_2_0",{attr:{class:"w"}},44.732);
+      tl.set("#c6_2_1",{attr:{class:"w on"}},44.759);
+      tl.fromTo("#c6_2_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},44.759);
+      tl.set("#c6_2_1",{attr:{class:"w"}},45.275);
+      tl.set("#c6_2_2",{attr:{class:"w on"}},45.342);
+      tl.fromTo("#c6_2_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},45.342);
+      tl.set("#c6_2_2",{attr:{class:"w"}},45.508);
+      tl.set("#c6_2_3",{attr:{class:"w on"}},45.536);
+      tl.fromTo("#c6_2_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},45.536);
+      tl.set("#c6_2_3",{attr:{class:"w"}},45.686);
+      tl.fromTo("#c6_3",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},45.603);
+      tl.set("#c6_3",{opacity:0},46.923);
+      tl.set("#c6_3_0",{attr:{class:"w on"}},45.653);
+      tl.fromTo("#c6_3_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},45.653);
+      tl.set("#c6_3_0",{attr:{class:"w"}},46.907);
+      tl.fromTo("#c6_4",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},46.923);
+      tl.set("#c6_4",{opacity:0},48.643);
+      tl.set("#c6_4_0",{attr:{class:"w on"}},46.973);
+      tl.fromTo("#c6_4_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},46.973);
+      tl.set("#c6_4_0",{attr:{class:"w"}},47.140);
+      tl.set("#c6_4_1",{attr:{class:"w on"}},47.167);
+      tl.fromTo("#c6_4_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},47.167);
+      tl.set("#c6_4_1",{attr:{class:"w"}},47.450);
+      tl.set("#c6_4_2",{attr:{class:"w on"}},47.478);
+      tl.fromTo("#c6_4_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},47.478);
+      tl.set("#c6_4_2",{attr:{class:"w"}},48.227);
+      tl.fromTo("#c7_0",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},48.756);
+      tl.set("#c7_0",{opacity:0},50.252);
+      tl.set("#c7_0_0",{attr:{class:"w on"}},48.806);
+      tl.fromTo("#c7_0_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},48.806);
+      tl.set("#c7_0_0",{attr:{class:"w"}},49.081);
+      tl.set("#c7_0_1",{attr:{class:"w on"}},49.105);
+      tl.fromTo("#c7_0_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},49.105);
+      tl.set("#c7_0_1",{attr:{class:"w"}},50.053);
+      tl.fromTo("#c7_1",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},50.252);
+      tl.set("#c7_1",{opacity:0},51.448);
+      tl.set("#c7_1_0",{attr:{class:"w on"}},50.302);
+      tl.fromTo("#c7_1_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},50.302);
+      tl.set("#c7_1_0",{attr:{class:"w"}},50.501);
+      tl.set("#c7_1_1",{attr:{class:"w on"}},50.526);
+      tl.fromTo("#c7_1_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},50.526);
+      tl.set("#c7_1_1",{attr:{class:"w"}},50.875);
+      tl.set("#c7_1_2",{attr:{class:"w on"}},50.900);
+      tl.fromTo("#c7_1_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},50.900);
+      tl.set("#c7_1_2",{attr:{class:"w"}},51.099);
+      tl.set("#c7_1_3",{attr:{class:"w on"}},51.124);
+      tl.fromTo("#c7_1_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},51.124);
+      tl.set("#c7_1_3",{attr:{class:"w"}},51.473);
+      tl.fromTo("#c7_2",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},51.448);
+      tl.set("#c7_2",{opacity:0},52.868);
+      tl.set("#c7_2_0",{attr:{class:"w on"}},51.498);
+      tl.fromTo("#c7_2_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},51.498);
+      tl.set("#c7_2_0",{attr:{class:"w"}},51.996);
+      tl.set("#c7_2_1",{attr:{class:"w on"}},52.096);
+      tl.fromTo("#c7_2_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},52.096);
+      tl.set("#c7_2_1",{attr:{class:"w"}},52.296);
+      tl.set("#c7_2_2",{attr:{class:"w on"}},52.320);
+      tl.fromTo("#c7_2_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},52.320);
+      tl.set("#c7_2_2",{attr:{class:"w"}},52.744);
+      tl.set("#c7_2_3",{attr:{class:"w on"}},52.769);
+      tl.fromTo("#c7_2_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},52.769);
+      tl.set("#c7_2_3",{attr:{class:"w"}},52.919);
+      tl.fromTo("#c7_3",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},52.868);
+      tl.set("#c7_3",{opacity:0},54.962);
+      tl.set("#c7_3_0",{attr:{class:"w on"}},52.918);
+      tl.fromTo("#c7_3_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},52.918);
+      tl.set("#c7_3_0",{attr:{class:"w"}},53.118);
+      tl.set("#c7_3_1",{attr:{class:"w on"}},53.143);
+      tl.fromTo("#c7_3_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},53.143);
+      tl.set("#c7_3_1",{attr:{class:"w"}},53.791);
+      tl.set("#c7_3_2",{attr:{class:"w on"}},53.816);
+      tl.fromTo("#c7_3_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},53.816);
+      tl.set("#c7_3_2",{attr:{class:"w"}},54.090);
+      tl.set("#c7_3_3",{attr:{class:"w on"}},54.115);
+      tl.fromTo("#c7_3_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},54.115);
+      tl.set("#c7_3_3",{attr:{class:"w"}},54.987);
+      tl.fromTo("#c7_4",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},54.962);
+      tl.set("#c7_4",{opacity:0},55.859);
+      tl.set("#c7_4_0",{attr:{class:"w on"}},55.012);
+      tl.fromTo("#c7_4_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},55.012);
+      tl.set("#c7_4_0",{attr:{class:"w"}},55.162);
+      tl.set("#c7_4_1",{attr:{class:"w on"}},55.124);
+      tl.fromTo("#c7_4_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},55.124);
+      tl.set("#c7_4_1",{attr:{class:"w"}},55.274);
+      tl.set("#c7_4_2",{attr:{class:"w on"}},55.236);
+      tl.fromTo("#c7_4_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},55.236);
+      tl.set("#c7_4_2",{attr:{class:"w"}},55.660);
+      tl.set("#c7_4_3",{attr:{class:"w on"}},55.685);
+      tl.fromTo("#c7_4_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},55.685);
+      tl.set("#c7_4_3",{attr:{class:"w"}},55.884);
+      tl.fromTo("#c7_5",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},55.859);
+      tl.set("#c7_5",{opacity:0},57.058);
+      tl.set("#c7_5_0",{attr:{class:"w on"}},55.909);
+      tl.fromTo("#c7_5_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},55.909);
+      tl.set("#c7_5_0",{attr:{class:"w"}},56.109);
+      tl.set("#c7_5_1",{attr:{class:"w on"}},56.208);
+      tl.fromTo("#c7_5_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},56.208);
+      tl.set("#c7_5_1",{attr:{class:"w"}},56.707);
+      tl.fromTo("#c8_0",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},57.224);
+      tl.set("#c8_0",{opacity:0},57.930);
+      tl.set("#c8_0_0",{attr:{class:"w on"}},57.274);
+      tl.fromTo("#c8_0_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},57.274);
+      tl.set("#c8_0_0",{attr:{class:"w"}},57.834);
+      tl.fromTo("#c8_1",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},57.930);
+      tl.set("#c8_1",{opacity:0},58.871);
+      tl.set("#c8_1_0",{attr:{class:"w on"}},57.980);
+      tl.fromTo("#c8_1_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},57.980);
+      tl.set("#c8_1_0",{attr:{class:"w"}},58.187);
+      tl.set("#c8_1_1",{attr:{class:"w on"}},58.215);
+      tl.fromTo("#c8_1_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},58.215);
+      tl.set("#c8_1_1",{attr:{class:"w"}},58.422);
+      tl.set("#c8_1_2",{attr:{class:"w on"}},58.450);
+      tl.fromTo("#c8_1_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},58.450);
+      tl.set("#c8_1_2",{attr:{class:"w"}},58.736);
+      tl.set("#c8_1_3",{attr:{class:"w on"}},58.764);
+      tl.fromTo("#c8_1_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},58.764);
+      tl.set("#c8_1_3",{attr:{class:"w"}},58.914);
+      tl.fromTo("#c8_2",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},58.871);
+      tl.set("#c8_2",{opacity:0},59.891);
+      tl.set("#c8_2_0",{attr:{class:"w on"}},58.921);
+      tl.fromTo("#c8_2_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},58.921);
+      tl.set("#c8_2_0",{attr:{class:"w"}},59.677);
+      tl.fromTo("#c8_3",{opacity:0,y:14},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},59.891);
+      tl.set("#c8_3",{opacity:0},62.290);
+      tl.set("#c8_3_0",{attr:{class:"w on"}},59.941);
+      tl.fromTo("#c8_3_0",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},59.941);
+      tl.set("#c8_3_0",{attr:{class:"w"}},60.304);
+      tl.set("#c8_3_1",{attr:{class:"w on"}},60.333);
+      tl.fromTo("#c8_3_1",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},60.333);
+      tl.set("#c8_3_1",{attr:{class:"w"}},60.540);
+      tl.set("#c8_3_2",{attr:{class:"w on"}},60.568);
+      tl.fromTo("#c8_3_2",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},60.568);
+      tl.set("#c8_3_2",{attr:{class:"w"}},60.853);
+      tl.set("#c8_3_3",{attr:{class:"w on"}},60.960);
+      tl.fromTo("#c8_3_3",{scale:1.18},{scale:1,duration:.2,ease:"back.out(3)",immediateRender:false},60.960);
+      tl.set("#c8_3_3",{attr:{class:"w"}},61.873);
+      tl.set({}, {}, 63.79);
+      window.__timelines["main"] = tl;
+    </script>
+    <script type="module" src="assets/js/track.js"></script>
+  </body>
+</html>
