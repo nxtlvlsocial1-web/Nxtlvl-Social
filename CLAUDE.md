@@ -176,6 +176,11 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
   background job: 3D renders take hours and a background job is killed at its time limit. When the person asks for the
   final export directly, render it in delivery quality straight away (no draft first).
 - Never use music or images we don't have the rights to; source them through `media-use`.
+- Sound effects: always build the SFX library from Openverse first (`api.openverse.org`, licences CC0 or CC BY only,
+  never NC, ND or SA; record each sound's title, creator, licence and link, and credit CC BY ones in the post). Then
+  mix them with the `real-sfx` skill under the song. Most Openverse sound effects are Freesound files, and Freesound's
+  file server refuses downloads from cloud sessions; never fake a browser to get around that. When a download is
+  refused, use the CC0 OpenGameArt packs (`spin-bout-u-drake/build/oga_sfx.py`) as the fallback and say so.
 - Keep rendered MP4s out of git; deliver them, don't commit them.
 - Never use emojis in post descriptions, captions or hashtag blocks we write for clients (number lists with "1.", not
   emoji digits). Plain text only.

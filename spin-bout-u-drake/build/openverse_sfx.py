@@ -56,11 +56,12 @@ def main():
     cpath = os.path.join(ROOT, "plan", "sfx_credits.json")
     credits = json.load(open(cpath)) if os.path.exists(cpath) else {}
     seen = {v["openverse_id"] for v in credits.values()}
+    refused = [0]
     for folder, queries in WANT.items():
         os.makedirs(os.path.join(LIB, folder), exist_ok=True)
         for q, maxd, n in queries:
             url = ("https://api.openverse.org/v1/audio/?" + urllib.parse.urlencode(
-                {"q": q, "license": "cc0,by", "page_size": 20, "source": "freesound"}))
+                {"q": q, "license_type": "commercial", "page_size": 20}))      # "cc0,by" and source filters time out
             try:
                 res = json.loads(get(url))["results"]
             except Exception as e:                       # noqa: BLE001
@@ -71,6 +72,8 @@ def main():
             got = 0
             for r in res:
                 d = (r.get("duration") or 0) / 1000
+                if r["license"] not in ("cc0", "by"):            # commercial also lets BY-SA through: not for us
+                    continue
                 if got >= n or not r.get("url") or r["id"] in seen or not (.08 < d <= maxd):
                     continue
                 name = f"{slug(r['title'])}_{r['id'][:8]}.mp3"
@@ -78,9 +81,11 @@ def main():
                 dst = os.path.join(LIB, rel)
                 try:
                     if not os.path.exists(dst):
-                        open(dst, "wb").write(get(r["url"]))
+                        data = get(r["url"])                     # fetch first: a refused download leaves no empty file
+                        open(dst, "wb").write(data)
                 except Exception as e:                   # noqa: BLE001
-                    print("  download failed", r["title"], e)
+                    print("  download failed", r["title"], e, "(Freesound refuses cloud sessions: fall back to build/oga_sfx.py)")
+                    refused[0] += 1
                     continue
                 credits[rel] = {"openverse_id": r["id"], "title": r["title"], "creator": r.get("creator"),
                                 "license": r["license"], "license_version": r.get("license_version"),
@@ -90,6 +95,8 @@ def main():
             print(f"{folder:9s} {q!r}: {got}")
             time.sleep(1.2)
     json.dump(credits, open(cpath, "w"), indent=1, ensure_ascii=False)
+    if refused[0]:
+        print(f"{refused[0]} downloads refused by the file host; never fake a browser, use build/oga_sfx.py for the rest")
     print(len(credits), "sounds;", sum(1 for v in credits.values() if v["license"] == "by"), "need credit (CC BY)")
 
 
