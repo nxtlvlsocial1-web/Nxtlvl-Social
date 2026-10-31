@@ -1,6 +1,6 @@
 # TASTE: ashke-lyric-9x16
 
-Updated 2026-10-31. Current version: final v6, renders/nxtlvl_ashke-lyric_reels_9x16_v6.mp4 (60 s, the song only).
+Updated 2026-10-31. Current version: final v7, renders/nxtlvl_ashke-lyric_reels_9x16_v7.mp4 (60 s, the song only).
 
 ## 1. Brief
 - 9:16 Ashke (Karan Aujla, Mxrci) lyric edit: 60 s from 2:14, 1080x1920, 30 fps.
@@ -91,3 +91,4 @@ Updated 2026-10-31. Current version: final v6, renders/nxtlvl_ashke-lyric_reels_
 | 2026-10-30 | use these six photos for the image elements, keep the selected videos | cut-outs from the photos only |
 | 2026-10-30 | no logo, most SFX out, music unchanged, 35 s on the strongest drop, quicker transitions, two more photos | 3d |
 | 2026-10-31 | 1 min again, no sound effects, more clips and pictures cropped nicely, follow the reference completely, motion tracking on point | 3e |
+| 2026-10-31 | the owner sent the real lyrics: check every caption against them | captions rebuilt from plan/lyrics.md (v7); never trust transcription for lyrics, always ask for the official lyrics |

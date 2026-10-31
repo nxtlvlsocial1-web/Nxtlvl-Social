@@ -44,31 +44,31 @@ CAMKEYS = {}          # scene index -> list of (t, fx, fy, scale, rot, dur)
 FLASH = []            # (t, kind)
 NID = [0]
 
-LYRICS = [
-    (3, 6, "Main *seedha turiya jaavan"), (7, 10, "Tu takdi tedi *tedi"), (11, 15, "Tu body kar layi *slim"),
-    (16, 21, "Tere te main karda kamm *shady"), (22, 27, "Saada taan tora fera hai na"), (28, 31, "Main nahi launda *gedi"),
-    (32, 35, "*Kaaran, jutti te *asla"), (36, 40, "Nahi ae tinn ikki *dukki"), (41, 43, "Nahi leeda *latta"),
-    (44, 50, "Top da rakhaan main jaana *chadh ke"), (51, 54, "Kacchi oh *chabb jaa"), (55, 61, "Peene haan *chaa nahi, udda kaadh ke"),
-    (62, 64, "*Jatt khulla *ghummda"), (65, 71, "*Vairi nu rakhaan main udda taad ke"), (72, 75, "Nahi taan full *baggy"),
-    (76, 80, "*Patthraan 'ch aaya munda paadh ke"), (81, 83, "Kardi meri *adeeta"), (84, 88, "Nahi saada khul gaya *chaaka"),
-    (89, 94, "Tu dil kardi ae *chori"), (95, 100, "Nahi taan main maari da *daaka"), (101, 104, "*Bebe kehndi tainu vyahna"),
-    (105, 109, "Te mera *shastar dena thaaka"), (110, 114, "Dass ki kar lena *kaama"), (115, 119, "Nahi mera *baaja yaala raakha"),
-    (120, 122, "Raahan vich *rode"), (123, 128, "Behna ji *yaarana bhena kass ke"), (129, 131, "*Jatt mudhto *zehri"),
-    (132, 137, "*Naagni reha koi saanu dass ke"), (138, 141, "*Baape di saanu bakhshe"), (142, 145, "Chanattiyan *gaani lass ke"),
-    (146, 148, "Nahi *mod te paundi"), (149, 153, "Chhumbar de naale kehki *Ashke"), (154, 156, "Nahi mod te paundi"),
+LYRICS = [   # the owner's lyrics (2026-10-31), split on the sung lines; (first word, last word) index the Scribe timings
+    (3, 6, "Main *sidha turiya jaavaan"), (7, 10, "Tu takkdi tedhi *tedhi"), (11, 15, "Tu body kar laae *slim"),
+    (16, 21, "Teri main karda kamm *shady"), (22, 27, "Saada taan poora phera ae na"), (28, 31, "Main nahi laaunda *gedhi"),
+    (32, 35, "*Car'an, jutti te *asla"), (36, 40, "Ni eh tinne *Italy made ee"), (41, 43, "Ni leerha *latta"),
+    (44, 50, "Top da rakhhaan main jaane *chaadh ke"), (51, 54, "Kacchi oon *chabb ja"), (55, 61, "Peene aan *chaahaan nu odan kaadh ke"),
+    (62, 64, "*Jatt khulla *ghummda"), (65, 71, "*Vairi nu rakhhaan main odan taadh ke"), (72, 75, "Ni tu *phull vargi"),
+    (76, 80, "*Pathraan nu aaya munda paarh ke"), (81, 83, "Tu kardi meriyan *deedaaan"), (84, 88, "Ni saada khull gaya *jhaaka"),
+    (89, 94, "Tu dil kardi ae *chori"), (95, 100, "Ni te main maarida *daaka"), (101, 104, "*Bebe kehndi tainu viaahuna"),
+    (105, 109, "Te mera *shastar de naal thaaka"), (110, 114, "Dass ki kar laina *kaavaan"), (115, 119, "Ni mera *baajaan aala raakha"),
+    (120, 122, "Raahan vich *rodhe"), (123, 128, "Behna je *yaaran naa' paina kass ke"), (129, 131, "*Jatt mudh ton *zehri"),
+    (132, 137, "*Naag nahi riha koi saanu dass ke"), (138, 141, "*Baabe di saanu baksh ae"), (142, 145, "Kann nattian *gaani lashke"),
+    (146, 148, "Ni *modhe paundi"), (149, 153, "Jhoomar doonaali keh ke *Ashke"), (154, 156, "Ni modhe paundi"),
 ]
 
 
-GURMUKHI = [
-    "ਮੈਂ *ਸਿੱਧਾ ਤੁਰਿਆ ਜਾਵਾਂ", "ਤੂੰ ਤੱਕਦੀ ਟੇਢੀ *ਟੇਢੀ", "ਤੂੰ ਬਾਡੀ ਕਰ ਲਈ *ਸਲਿੱਮ", "ਤੇਰੇ ਤੇ ਮੈਂ ਕਰਦਾ ਕੰਮ *ਸ਼ੇਡੀ",
-    "ਸਾਡਾ ਤਾਂ ਤੋਰਾ ਫੇਰਾ ਹੈ ਨਾ", "ਮੈਂ ਨਹੀਂ ਲਾਉਂਦਾ *ਗੇੜੀ", "*ਕਾਰਾਂ, ਜੁੱਤੀ ਤੇ *ਅਸਲਾ", "ਨਹੀਂ ਐ ਤਿੰਨ ਇੱਕੀ *ਦੁੱਕੀ",
-    "ਨਹੀਂ ਲੀੜਾ *ਲੱਤਾ", "ਟੌਪ ਦਾ ਰੱਖਾਂ ਮੈਂ ਜਾਣਾ *ਚੜ੍ਹ ਕੇ", "ਕੱਚੀ ਉਹ *ਚੱਬ ਜਾ", "ਪੀਣੇ ਹਾਂ *ਚਾਹ ਨਹੀਂ, ਉੱਡਾ ਕਾੜ੍ਹ ਕੇ",
-    "*ਜੱਟ ਖੁੱਲ੍ਹਾ *ਘੁੰਮਦਾ", "*ਵੈਰੀ ਨੂੰ ਰੱਖਾਂ ਮੈਂ ਉੱਡਾ ਤਾੜ ਕੇ", "ਨਹੀਂ ਤਾਂ ਫੁੱਲ *ਬੈਗੀ", "*ਪੱਥਰਾਂ 'ਚ ਆਇਆ ਮੁੰਡਾ ਪਾੜ ਕੇ",
-    "ਕਰਦੀ ਮੇਰੀ *ਅਡੀਟਾ", "ਨਹੀਂ ਸਾਡਾ ਖੁੱਲ੍ਹ ਗਿਆ *ਚਾਕਾ", "ਤੂੰ ਦਿਲ ਕਰਦੀ ਐ *ਚੋਰੀ", "ਨਹੀਂ ਤਾਂ ਮੈਂ ਮਾਰੀ ਦਾ *ਡਾਕਾ",
-    "*ਬੇਬੇ ਕਹਿੰਦੀ ਤੈਨੂੰ ਵਿਆਹੁਣਾ", "ਤੇ ਮੇਰਾ *ਸ਼ਸਤਰ ਦੇਣਾ ਠਾਕਾ", "ਦੱਸ ਕੀ ਕਰ ਲੈਣਾ *ਕਾਮਾ", "ਨਹੀਂ ਮੇਰਾ *ਬਾਜਾਂ ਵਾਲਾ ਰਾਖਾ",
-    "ਰਾਹਾਂ ਵਿੱਚ *ਰੋੜੇ", "ਬਹਿਣਾ ਜੀ *ਯਾਰਾਨਾ ਭੈਣਾ ਕੱਸ ਕੇ", "*ਜੱਟ ਮੁੱਢੋਂ *ਜ਼ਹਿਰੀ", "*ਨਾਗਣੀ ਰਿਹਾ ਕੋਈ ਸਾਨੂੰ ਡੱਸ ਕੇ",
-    "*ਬਾਪੇ ਦੀ ਸਾਨੂੰ ਬਖ਼ਸ਼ੇ", "ਚਨੱਟੀਆਂ *ਗਾਨੀ ਲੱਸ ਕੇ", "ਨਹੀਂ *ਮੋੜ ਤੇ ਪੌਂਦੀ", "ਛੁੰਬਰ ਦੇ ਨਾਲੇ ਕਹਿਕੀ *ਅਸ਼ਕੇ",
-    "ਨਹੀਂ ਮੋੜ ਤੇ ਪੌਂਦੀ",
+GURMUKHI = [   # word for word with LYRICS
+    "ਮੈਂ *ਸਿੱਧਾ ਤੁਰਿਆ ਜਾਵਾਂ", "ਤੂੰ ਤੱਕਦੀ ਟੇਢੀ *ਟੇਢੀ", "ਤੂੰ ਬਾਡੀ ਕਰ ਲਈ *ਸਲਿੱਮ", "ਤੇਰੀ ਮੈਂ ਕਰਦਾ ਕੰਮ *ਸ਼ੇਡੀ",
+    "ਸਾਡਾ ਤਾਂ ਪੂਰਾ ਫੇਰਾ ਏ ਨਾ", "ਮੈਂ ਨਹੀਂ ਲਾਉਂਦਾ *ਗੇੜੀ", "*ਕਾਰਾਂ, ਜੁੱਤੀ ਤੇ *ਅਸਲਾ", "ਨੀ ਇਹ ਤਿੰਨੇ *ਇਟਲੀ ਮੇਡ ਈ",
+    "ਨੀ ਲੀੜਾ *ਲੱਤਾ", "ਟੌਪ ਦਾ ਰੱਖਾਂ ਮੈਂ ਜਾਣੇ *ਚਾੜ੍ਹ ਕੇ", "ਕੱਚੀ ਉਂ *ਚੱਬ ਜਾ", "ਪੀਣੇ ਆਂ *ਚਾਹਾਂ ਨੂੰ ਓਦਾਂ ਕਾੜ੍ਹ ਕੇ",
+    "*ਜੱਟ ਖੁੱਲ੍ਹਾ *ਘੁੰਮਦਾ", "*ਵੈਰੀ ਨੂੰ ਰੱਖਾਂ ਮੈਂ ਓਦਾਂ ਤਾੜ ਕੇ", "ਨੀ ਤੂੰ *ਫੁੱਲ ਵਰਗੀ", "*ਪੱਥਰਾਂ ਨੂੰ ਆਇਆ ਮੁੰਡਾ ਪਾੜ ਕੇ",
+    "ਤੂੰ ਕਰਦੀ ਮੇਰੀਆਂ *ਦੀਦਾਂ", "ਨੀ ਸਾਡਾ ਖੁੱਲ੍ਹ ਗਿਆ *ਝਾਕਾ", "ਤੂੰ ਦਿਲ ਕਰਦੀ ਐ *ਚੋਰੀ", "ਨੀ ਤੇ ਮੈਂ ਮਾਰੀਦਾ *ਡਾਕਾ",
+    "*ਬੇਬੇ ਕਹਿੰਦੀ ਤੈਨੂੰ ਵਿਆਹੁਣਾ", "ਤੇ ਮੇਰਾ *ਸ਼ਸਤਰ ਦੇ ਨਾਲ ਠਾਕਾ", "ਦੱਸ ਕੀ ਕਰ ਲੈਣਾ *ਕਾਵਾਂ", "ਨੀ ਮੇਰਾ *ਬਾਜਾਂ ਵਾਲਾ ਰਾਖਾ",
+    "ਰਾਹਾਂ ਵਿੱਚ *ਰੋੜੇ", "ਬਹਿਣਾ ਜੇ *ਯਾਰਾਂ ਨਾ' ਪੈਣਾ ਕੱਸ ਕੇ", "*ਜੱਟ ਮੁੱਢ ਤੋਂ *ਜ਼ਹਿਰੀ", "*ਨਾਗ ਨਹੀਂ ਰਿਹਾ ਕੋਈ ਸਾਨੂੰ ਡੱਸ ਕੇ",
+    "*ਬਾਬੇ ਦੀ ਸਾਨੂੰ ਬਖ਼ਸ਼ ਏ", "ਕੰਨ ਨੱਤੀਆਂ *ਗਾਨੀ ਲਿਸ਼ਕੇ", "ਨੀ *ਮੋਢੇ ਪੌਂਦੀ", "ਝੂਮਰ ਦੁਨਾਲੀ ਕਹਿ ਕੇ *ਅਸ਼ਕੇ",
+    "ਨੀ ਮੋਢੇ ਪੌਂਦੀ",
 ]
 
 
@@ -507,15 +507,19 @@ def r9(si, a, b, li, gs):
     scrap("white", 2, -120, 880, 760, 3, a, b)
     kw = next((g for g in gs if g[1]), None)
     rest = [g for g in gs if g is not kw]
-    pos = [(420, 740, "redw", 175, -2), (680, 960, "red", 140, 3), (520, 1170, "w3d", 210, -2), (440, 1380, "blk", 130, -3)]
-    cam(si, a, 420, 820, 1.25, -1, .01)
-    for k, (txt, key, t) in enumerate(rest):
-        x, y, st, size, rot = pos[k % 4]
-        label(txt, st, x, y, fit(txt, 900, size), rot, t, b, z=6)
-        cam(si, t, (x + 540) / 2, y + 60, 1.22, rot * .3, .3)
+    styles = ["redw", "red", "w3d", "blk"]
+    y = 560 if len(rest) > 2 else 700
+    cam(si, a, 470, y + 120, 1.15, -1, .01)
+    for k, (txt, key, t) in enumerate(rest):                      # stacked down the page, each on its own line
+        x = 540 + (-80, 80)[k % 2]
+        sz = fit(txt, 820, (170, 140, 190, 130)[k % 4])
+        label(txt, styles[k % 4], x, y, sz, (-2, 3, -2, -3)[k % 4], t, b, z=6)
+        cam(si, t, (x + 540) / 2, y + sz * .6, 1.12, (-2, 3, -2, -3)[k % 4] * .3, .3)
+        y += sz * 1.3 + 34
     if kw:
-        label(kw[0], "stamp", 540, 1000, fit(kw[0], 1040, 300), -2, kw[2], b, circle=True, z=5)
-        cam(si, kw[2], 540, 1060, 1.0, 0, .4)
+        sz = fit(kw[0], 1000, 290)
+        label(kw[0], "stamp", 540, y + 10, sz, -2, kw[2], b, circle=True, z=5)
+        cam(si, kw[2], 540, y + sz * .6, 1.0, 0, .4)
 
 
 def ending(si, a, b, li, gs):
