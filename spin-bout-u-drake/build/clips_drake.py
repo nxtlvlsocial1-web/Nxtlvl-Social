@@ -17,11 +17,19 @@ SEG = {   # name: (source, start s, end s)
 }
 
 
+# speed ramp (the owner's reel project leans on time remapping): fast in, a slow hold in the middle, fast out.
+# setpts maps source time to output time; the curve keeps the clip's overall length about the same.
+RAMP = "setpts='(0.62*T + 0.38*(T - sin(2*PI*T/{dur})*{dur}/(2*PI)))/TB'"
+
+
 def main():
     os.makedirs(os.path.join(ROOT, "assets", "video", "clips"), exist_ok=True)
+    global RAMP
+    base = RAMP
     for name, (src, a, b) in SEG.items():
+        RAMP = base.replace("{dur}", f"{b - a:.3f}")
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(a), "-to", str(b), "-i", os.path.join(ROOT, "assets", "video", "src", src + ".mp4"),
-                        "-vf", "fps=30,scale=720:-2,eq=contrast=1.08:saturation=.92:gamma=.97,colorbalance=rs=.03:bs=-.02",
+                        "-vf", RAMP + ",fps=30,scale=720:-2,eq=contrast=1.08:saturation=.92:gamma=.97,colorbalance=rs=.03:bs=-.02",
                         "-an", "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", "-movflags", "+faststart",
                         os.path.join(ROOT, "assets", "video", "clips", name + ".mp4")], check=True)
         print("wrote", name)

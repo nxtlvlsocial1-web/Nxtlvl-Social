@@ -1,5 +1,5 @@
 # PROGRESS: spin-bout-u-drake (updated 2026-10-31)
-Phase: v13 PREVIEW (draft for the owner's approval; final not rendered yet)
+Phase: v14 PREVIEW (with sound design) (draft for the owner's approval; final not rendered yet)
 v11: Ashke-structure collage (build/collage.py) in the Spin colours over a live gradient background. The anime
 pictures the owner sent back are removed; lyric concepts replace them (footsteps + counter, GPS route + pins +
 compass, shockwaves, heart rings, BODY wisps); full-screen smoke, burn, drop and ghost on those lines. Vogue call screen shows the name
@@ -10,3 +10,6 @@ Build: python3 build/clips_drake.py (owner clip segments), python3 build/pixel.p
 plan/g3d.json and assets/js/g3d.js), python3 build/clips90.py (owner's Canva clips), python3 build/collage.py
 (index.html); draft with build/render_draft.sh, final with build/render_final.sh (both detached with setsid nohup).
 Not in git: the song, owner photos and their cut-outs/prints/stickers, Canva art and clips, renders.
+Sound: python3 build/oga_sfx.py (CC0 packs -> assets/sfx/oga, not in git; credits plan/sfx_credits_oga.json, all CC0),
+register once with the real-sfx skill (setup.py add-library oga_cc0 assets/sfx/oga --tier main --index), then
+build/render_final.sh runs build/sfx_sheet.py + the skill's mix.py on the graded master. Pixel art: build/mascot.py.

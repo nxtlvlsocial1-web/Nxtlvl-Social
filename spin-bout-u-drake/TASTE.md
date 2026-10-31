@@ -133,6 +133,21 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 - Alignment pass: captions sit on their scrap, stray decorative arcs removed, icons moved off people and clips, the
   tissue box moved clear of the last captions, bloom on cuts halved.
 
+## v14 (owner: live pixel mascot, diamonds for a girl, the reel project's grammar, real SFX)
+- A live pixel mascot of Drake drawn by hand (build/mascot.py): chibi, cornrows, beard, black hoodie, gold chain,
+  frames for idle bob, a 4-frame walk, aim, shoot recoil and a drop pose. He lives in framed Game Boy screens on
+  the collage: walks in and shoots the guy before the smoke; walks up to a pixel girl and drops diamonds that bounce
+  (gravity expression) and twinkle while she cheers with hearts and a counter ticks. The 3D diamonds are gone.
+- From the owner's Yuvan reel project (esdeekid-style): speed ramps on the Drake clips (fast in, slow middle, fast
+  out), a white flicker hit on every keyword (S_Flicker).
+- Sound: real recordings only, from CC0 packs on OpenGameArt (Freesound files via Openverse would not download here;
+  bypassing that block was refused). build/sfx_sheet.py maps every moment collage.py logs (plan/sfx_events.json) to
+  a recording: whooshes from five families on the cuts, paper slaps when stickers land, shutters on the clip flashes,
+  a ringtone on the dialing phone, footsteps, compass ticks, 8-bit gunshot / hit / fall / coins / power-ups for the
+  mascot, a zippo click, flame, steam hiss for the smoke, a low explosion for the frame drop. Mixed under the song by
+  the real-sfx skill: sync 10, pacing 10, balance 10, hierarchy, headroom, loudness and mono 10, hook 9; variety
+  scores low because the sticker / camera motifs repeat on purpose and the CC0 library has few whoosh families.
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|
@@ -152,3 +167,4 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 
 | 2026-10-31 | make every element feel premium, as per the After Effects links and packs sent | v12 above |
 | 2026-10-31 | dial animation in the blank phone; texts not aligned with their shapes; smoke needs context (pixel Drake shooting a guy); burn needs Drake throwing a lighter; use the two Drake clips (ending, and the phone one on the one-call lines) with animated elements | v13 above |
+| 2026-10-31 | live animated pixel mascot of Drake (not a pixelated photo); for the diamond line he drops diamonds for a girl; use the reel project; real SFX from Openverse for transitions and elements | v14 above |
