@@ -71,9 +71,10 @@ KINDS = {
     "ignite": ([f("catching-fire/flame_0.ogg")], "foley", 0, {"anchor": "start", "max_dur": 1.4}),
     "fire": ([f("catching-fire/flame_0.ogg")], "ambience", -4, {"anchor": "start", "fade_out": .3}),
     "smoke": ([f("steam-release-sounds/steam hisses - Marker _2.wav")], "ambience", -1, {"anchor": "start", "fade_out": .5}),
+    "throw": (r8("sfx_movement_jump1."), "ui", -6, {}),
     "ghost": ([f("wind-hit-time-morph/qubodup-slomo1.wav")], "whoosh", -6, {"max_dur": 1.2}),
     "pixel_start": (r8("sfx_sounds_powerup1."), "ui", -10, {}),
-    "pixel_walk": (r8("footsteps1a"), "foley", -9, {"anchor": "start"}),
+    "pixel_walk": (r8("sfx_movement_footsteps"), "foley", -9, {"anchor": "start"}),
     "pixel_hold": (r8("menu_select1"), "ui", -9, {}),
     "pixel_shot": (r8("sfx_weapon_singleshot1."), "hit", -3, {}),
     "pixel_hit": (r8("sfx_damage_hit1."), "hit", -7, {}),
@@ -82,6 +83,12 @@ KINDS = {
     "heart": (r8("sfx_sounds_powerup2."), "ui", -12, {}),
 }
 SKIP = {"keyword"}
+# v15: the owner found the transition whooshes too light. Every cut whoosh is pitched down and gets a low impact
+# under it (a lowpassed explosion / bang / thump, rotated so the sub layer is not one sample on repeat).
+SUBS = ["sci-fi-sounds/Audio__lowFrequency_explosion_000.ogg", "25-cc0-bang-firework-sfx/bang_03.ogg",
+        "sci-fi-sounds/Audio__lowFrequency_explosion_001.ogg", "75-cc0-breaking-falling-hit-sfx/bfh1_falling_02.ogg",
+        "100-cc0-sfx/explosion.ogg", "25-cc0-bang-firework-sfx/bang_07.ogg"]
+WEIGHT = {"whoosh": (-3, -5), "swish": (-2, -8), "whoosh_big": (-4, -2)}   # (pitch semitones, sub layer gain)
 LIFT = 2.0          # critique round 3: the median sound sat -13 dB under the song (target -12..+2)
 
 
@@ -129,6 +136,12 @@ def main():
         c = {"t": t, "label": k, "file": fn, "role": role, "gain_db": gain + LIFT} | extra
         if n and "pitch" not in c and k not in ("phone", "fire", "smoke"):
             c["pitch"] = (0, -1, 1, -2, 2)[n % 5]              # a repeat is a new take, not the same file twice
+        if k in WEIGHT:
+            pt, sub_gain = WEIGHT[k]
+            c["pitch"] = max(-12, c.get("pitch", 0) + pt)
+            sub = SUBS[sum(1 for x in cues if x.get("layers")) % len(SUBS)]
+            c["layers"] = [{"dt": 0.0, "file": f(sub), "role": "hit", "gain_db": sub_gain + LIFT,
+                            "lowpass": 320, "max_dur": .55, "fade_out": .2}]
         if e.get("len") and k in ("phone", "fire", "smoke", "pixel_walk"):
             c["max_dur"] = e["len"]
         cues.append(c)

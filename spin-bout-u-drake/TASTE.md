@@ -148,6 +148,17 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
   the real-sfx skill: sync 10, pacing 10, balance 10, hierarchy, headroom, loudness and mono 10, hook 9; variety
   scores low because the sticker / camera motifs repeat on purpose and the CC0 library has few whoosh families.
 
+## v15 (owner: no game boxes, pixel Drake for the burn too, a clip on "the way", faster, bassier transitions)
+- The pixel scenes stand straight on the collage (no Game Boy screen, no score / counter): sprites carry a white
+  sticker outline and a hard drop shadow like the paper stickers.
+- Burn somebody block uses the pixel mascot: walk in, wind-up frame (lit lighter cocked back), throw frame, the pixel
+  lighter arcs with the gravity expression, fire starts where it lands, the sprite rim-lit orange.
+- The second "the way you make me feel" plays the backstage corridor walk (clip A 4-8 s) as a camcorder print.
+- Faster, harder transitions: camera whip offsets 720 / 620 px with a 0.05 s settle, zoom snap 1.34x into every scene,
+  bigger beat punches, camera moves land on the word (+0.06 s), text presets and box wipes about 30% quicker.
+- Transition sound: every cut whoosh pitched down 2-4 semitones with a lowpassed low impact under it (rotating
+  explosions / bangs / a thump): about +9.5 dB in the 30-150 Hz band at the cuts.
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|
@@ -168,3 +179,4 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 | 2026-10-31 | make every element feel premium, as per the After Effects links and packs sent | v12 above |
 | 2026-10-31 | dial animation in the blank phone; texts not aligned with their shapes; smoke needs context (pixel Drake shooting a guy); burn needs Drake throwing a lighter; use the two Drake clips (ending, and the phone one on the one-call lines) with animated elements | v13 above |
 | 2026-10-31 | live animated pixel mascot of Drake (not a pixelated photo); for the diamond line he drops diamonds for a girl; use the reel project; real SFX from Openverse for transitions and elements | v14 above |
+| 2026-10-31 | pixel animations not in boxes; pixel mascot for the burn; a clip on the way lyrics; transitions still slow, make them fast After Effects style; transition sounds not bassy enough | v15 above |

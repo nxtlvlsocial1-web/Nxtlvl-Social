@@ -54,7 +54,7 @@ CARD1 = {0: AV + "jealous.mp4", 2: PR + "envogue_funky_divas.jpg", 4: CL + "b_ph
          11: AV + "her_blush.mp4"}
 CARD2 = {1: PR + "vogue_cat_cover.jpg", 3: "assets/img/collage/call_vogue.jpg", 9: AF + "jet.jpg", 10: AV + "road.mp4",
          16: CL + "a_close.mp4"}
-CUTPRINT = {14: None, 9: None, 16: None, 7: CL + "b_phone2.mp4", 5: CL + "b_seated.mp4"}     # recipes with a cut-out slot that use a picture instead
+CUTPRINT = {14: None, 9: None, 16: None, 7: CL + "b_phone2.mp4", 5: CL + "b_seated.mp4", 15: CL + "a_walk2.mp4"}     # recipes with a cut-out slot that use a picture instead
 FILL = {0: AF + "jealous.jpg", 6: PR + "cat_white_dumb.jpg", 11: AF + "her_blush.jpg"}
 G3D_AT = {9: ("globe", 120, 620, 860), 15: ("heart", 140, 470, 800),
           16: ("body", 0, 700, 1080), 17: ("tissue", 0, 1200, 360)}
@@ -317,17 +317,17 @@ def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor
     n = max(1, len(text))
     sharp = f"#{i} .ch:not(.cz)"
     if style in ("blk", "wht", "mag", "magw", "mb", "blkm"):          # the box wipes open first
-        js(f'tl.fromTo("#{i}", {{clipPath: "inset(-20% 100% -20% 0%)"}}, {{clipPath: "inset(-20% -10% -20% 0%)", duration: .32, ease: "expo.out", immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("#{i}", {{clipPath: "inset(-20% 100% -20% 0%)"}}, {{clipPath: "inset(-20% -10% -20% 0%)", duration: .2, ease: "expo.out", immediateRender: false}}, {t:.3f});')
     if mode == "blur":
-        js(f'tl.fromTo("{sharp}", {{opacity: 0, filter: "blur(16px)", x: {-size * .22:.0f}}}, {{opacity: 1, filter: "blur(0px)", x: 0, duration: .45, ease: "expo.out", stagger: {min(.03, .3 / n):.3f}, immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("{sharp}", {{opacity: 0, filter: "blur(16px)", x: {-size * .22:.0f}}}, {{opacity: 1, filter: "blur(0px)", x: 0, duration: .3, ease: "expo.out", stagger: {min(.022, .22 / n):.3f}, immediateRender: false}}, {t:.3f});')
         js(f'tl.fromTo("#{i} .cz", {{opacity: 0}}, {{opacity: 1, duration: .3, immediateRender: false}}, {t + .1:.3f});')
         js(f'tl.fromTo("#{i} .smear", {{x: {-size * .6:.0f}, opacity: 1}}, {{x: {w:.0f}, opacity: 0, duration: .5, ease: "power2.out", immediateRender: false}}, {t:.3f});')
         done = t + .35
     elif mode == "cascade":
-        js(f'tl.fromTo("#{i} .ch", {{yPercent: 115, opacity: 0, rotation: 10}}, {{yPercent: 0, opacity: 1, rotation: 0, duration: .5, ease: "back.out(2.4)", stagger: {min(.035, .35 / n):.3f}, immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("#{i} .ch", {{yPercent: 115, opacity: 0, rotation: 10}}, {{yPercent: 0, opacity: 1, rotation: 0, duration: .36, ease: "back.out(2.4)", stagger: {min(.026, .26 / n):.3f}, immediateRender: false}}, {t:.3f});')
         done = t + .4
     elif mode == "slide":
-        js(f'tl.fromTo("{sharp}", {{y: {size * .55:.0f}, opacity: 0, filter: "blur(10px)"}}, {{y: 0, opacity: 1, filter: "blur(0px)", duration: .55, ease: "expo.out", stagger: {min(.025, .3 / n):.3f}, immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("{sharp}", {{y: {size * .55:.0f}, opacity: 0, filter: "blur(10px)"}}, {{y: 0, opacity: 1, filter: "blur(0px)", duration: .4, ease: "expo.out", stagger: {min(.02, .22 / n):.3f}, immediateRender: false}}, {t:.3f});')
         done = t + .4
     elif mode == "flicker":
         for k, o in enumerate([1, 0, 1, .2, 0, 1, .45, 1]):
@@ -615,7 +615,8 @@ def r8(si, a, b, li, gs):
     cam(si, a, 540, 960, 1.0, 0, .01)
     cam(si, g0[2], 540, 1060, 1.05, 0, .3)
     scrap("red", 3, -40, 1180, 1000, -6, t2, b)
-    cutout(li, 280, 640, 540, 0, t2, b)
+    if li != 15:                       # the heart takes this slot on the second "the way"
+        cutout(li, 280, 640, 540, 0, t2, b)
     g3el(li, t2, b)
     printel(CARD2.get(li), 660, 1060, 360, 430, 8, t2 + .1, b)
     flame(760, 1380, t2, b)
@@ -725,7 +726,7 @@ def camera():
         d = (d[0] / n, d[1] / n)
         pts = [(a, keys[0][1], keys[0][2], keys[0][3], keys[0][4])]
         for (tk, kx, ky, ks, kr, kd) in keys[1:]:
-            tt = min(max(tk + .12, pts[-1][0] + .1), b - .05)
+            tt = min(max(tk + .06, pts[-1][0] + .07), b - .05)
             if tt > pts[-1][0] + .05:
                 pts.append((tt, kx, ky, ks, kr))
         lx, ly, ls, lr = pts[-1][1:]
@@ -733,7 +734,7 @@ def camera():
         pts.append((b + .001, lx + d[0] * run, ly + d[1] * run, ls, lr))
         plans.append(dict(a=a, b=b, li=li, d=d, pts=pts))
     tend = DUR - .5
-    E, X, TAU = 560, 480, .075
+    E, X, TAU = 720, 620, .05
 
     def herm(pts, t, idx):
         T = [p[0] for p in pts]
@@ -777,8 +778,8 @@ def camera():
         if t - STEP < plans[si]["a"]:
             vx, vy = -vx, -vy
         lb = max([bt for bt in BEATS["beats"] if bt <= t + 1e-6] or [-9])
-        s *= 1 + .05 * math.exp(-(t - lb) / .09)
-        s *= 1 + .22 * math.exp(-(t - plans[si]["a"]) / .07)          # zoom snap into every scene
+        s *= 1 + .075 * math.exp(-(t - lb) / .07)
+        s *= 1 + .34 * math.exp(-(t - plans[si]["a"]) / .055)         # zoom snap into every scene
         fy = 960 + (fy - 960) * VTRACK
         dy = DROP.get(f, 0)
         if dy:
@@ -951,49 +952,47 @@ def front_layer(gid, fil, t0, t1, y_from, y_to, t_full, L, drift, z=5, extra="")
 
 
 def lighter_throw(a, b):
-    """Drake (arm-out cut-out) flicks a lit lighter; it arcs with the owner's gravity expression, bounces once and the
-    fire starts where it lands. Drake stays in front of the flames, rim-lit orange. Returns the landing time."""
+    """Burn somebody block, with the live pixel mascot (owner): he walks in, cocks a lit lighter back and flings it;
+    it arcs with the gravity expression, bounces once, and the fire starts where it lands. He stays in front of the
+    flames, rim-lit orange. Returns the landing time."""
     tw = next(s_ for w, s_ in words_of(14) if w == "burn")
-    dx, dy, dw = 0, 560, 560
-    fist = (dx + .93 * dw, dy + .06 * dw * 746 / 691)
-    i = nid("dk")
-    PAN.append(f'<img class="el" id="{i}" src="assets/img/collage/sticker/drake_boat_sunset.png" style="left:{dx}px;top:{dy}px;width:{dw}px;'
-               f'z-index:6;transform-origin:20% 100%" alt="">')
-    show(f"#{i}", a, b)
-    js(f'tl.fromTo("#{i}", {{x: -380, rotation: 0}}, {{x: 0, duration: .25, ease: "expo.out", immediateRender: false}}, {a:.3f});')
-    js(f'tl.fromTo("#{i}", {{rotation: 6}}, {{rotation: -4, duration: .14, ease: "power3.out", immediateRender: false}}, {tw - .06:.3f});')
-    js(f'tl.to("#{i}", {{rotation: 0, duration: .3, ease: "power2.out"}}, {tw + .08:.3f});')
+    S, X0, Y0 = 11, 20, 540
+    dr, dhtml = sprite("drake", 0, 0, S)
+    w = nid("pw")
+    PAN.append(f'<div class="el pxone" id="{w}" style="left:{X0}px;top:{Y0}px;z-index:6">{dhtml}</div>')
+    show(f"#{w}", a, b)
+    t_in = walk_in(dr, -420, a, .3, S)
+    idle(dr, "drake", t_in, tw - .22, S)
+    set_frame(dr, "drake", DFR["windup"], tw - .22, S)
+    set_frame(dr, "drake", DFR["throw"], tw, S)
+    set_frame(dr, "drake", DFR["idle0"], tw + .45, S)
+    idle(dr, "drake", tw + .45, b, S)
+    hand = (X0 + 29 * S, Y0 + 12 * S)
     floor = 1250
-    path = phys(-(floor - fist[1]), -700, vx0=560, g_m=65, bounce=.28, drag=.1, fric=.5, dur=1.2)
+    path = phys(-(floor - hand[1]), -720, vx0=600, g_m=65, bounce=.28, drag=.1, fric=.5, dur=1.2)
     land = next(t_ for t_, x_, y_ in path[1:] if y_ >= -1)
     j = nid("lt")
-    PAN.append(f'<svg class="el" id="{j}" viewBox="0 0 60 100" style="left:{fist[0] - 30:.0f}px;top:{fist[1] - 50:.0f}px;width:66px;height:110px;'
-               f'z-index:7;overflow:visible"><defs><linearGradient id="zg" x1="0" x2="1"><stop offset="0" stop-color="#8d8a86"/>'
-               f'<stop offset=".45" stop-color="#f4f2ee"/><stop offset="1" stop-color="#6d6a67"/></linearGradient></defs>'
-               f'<path class="lf" d="M30 2 C40 16 44 26 38 36 C35 42 25 42 22 36 C16 26 22 16 30 2 Z" fill="#ffb347"/>'
-               f'<path d="M30 14 C35 22 36 28 33 33 C31 36 29 36 27 33 C24 28 26 22 30 14 Z" fill="#fff3c4"/>'
-               f'<rect x="12" y="40" width="36" height="58" rx="6" fill="url(#zg)" stroke="#2a2626" stroke-width="2.5"/>'
-               f'<rect x="12" y="40" width="36" height="16" rx="4" fill="#cfccc7" stroke="#2a2626" stroke-width="2.5"/></svg>')
+    PAN.append(f'<img class="el px pxo" id="{j}" src="{PX}lighter.png" style="left:{hand[0] - 20:.0f}px;top:{hand[1] - 72:.0f}px;width:40px;z-index:7" alt="">')
     show(f"#{j}", tw, b)
     x_end = 0
     for (t_, x_, y_) in path:
-        js(f'tl.set("#{j}", {{x: {x_:.0f}, y: {y_ + (floor - fist[1]):.0f}, rotation: {min(1, t_ / .55) * 610:.0f}}}, {tw + t_:.3f});')
+        js(f'tl.set("#{j}", {{x: {x_:.0f}, y: {y_ + (floor - hand[1]):.0f}, rotation: {min(1, t_ / .55) * 610:.0f}}}, {tw + t_:.3f});')
         x_end = x_
-    for k in range(int((b - tw) * 15)):
-        js(f'tl.set("#{j} .lf", {{scaleY: {.85 + .3 * abs(math.sin(k * 1.7)):.2f}, transformOrigin: "50% 100%"}}, {tw + k / 15:.3f});')
     k_ = nid("ig")
-    lx, ly = fist[0] + x_end, floor + 30
+    lx, ly = hand[0] + x_end, floor + 30
     PAN.append(f'<i class="el shock" id="{k_}" style="left:{lx - 160:.0f}px;top:{ly - 60:.0f}px;width:320px;height:120px;z-index:6;border-color:#ffb347"></i>')
     show(f"#{k_}", tw + land, tw + land + .5)
     js(f'tl.fromTo("#{k_}", {{scale: .2, opacity: 1}}, {{scale: 3, opacity: 0, duration: .45, ease: "power2.out", immediateRender: false}}, {tw + land:.3f});')
-    CUES.extend([(tw - .08, "lighter", 0), (tw + land, "ignite", 0), (tw + land + .05, "fire", b - tw - land)])
-    js(f'tl.set("#{i}", {{filter: "drop-shadow(0 0 22px rgba(255,120,40,.95)) drop-shadow(0 0 60px rgba(255,60,20,.6)) brightness(1.08)"}}, {tw + land:.3f});')
+    CUES.extend([(a, "pixel_walk", .3), (tw - .22, "lighter", 0), (tw, "throw", 0), (tw + land, "ignite", 0),
+                 (tw + land + .05, "fire", b - tw - land)])
+    js(f'tl.set("#{dr}", {{filter: "drop-shadow(4px 0 0 #f2f1ec) drop-shadow(-4px 0 0 #f2f1ec) drop-shadow(0 4px 0 #f2f1ec) '
+       f'drop-shadow(0 -4px 0 #f2f1ec) drop-shadow(0 0 26px rgba(255,120,40,.95)) drop-shadow(0 0 60px rgba(255,60,20,.6))"}}, {tw + land:.3f});')
     return tw + land
 
 
 PX = "assets/img/pixel/"
-SPR = {"drake": (44, 40, 9), "girl": (28, 40, 4), "guy": (24, 40, 3)}
-DFR = {n: k for k, n in enumerate(["idle0", "idle1", "walk0", "walk1", "walk2", "walk3", "aim", "shoot", "drop"])}
+SPR = {"drake": (44, 40, 11), "girl": (28, 40, 4), "guy": (24, 40, 3)}
+DFR = {n: k for k, n in enumerate(["idle0", "idle1", "walk0", "walk1", "walk2", "walk3", "aim", "shoot", "drop", "windup", "throw"])}
 
 
 def sprite(name, x, y, S, extra=""):
@@ -1008,15 +1007,13 @@ def set_frame(i, name, k, t, S):
     js(f'tl.set("#{i}", {{backgroundPosition: "{-k * SPR[name][0] * S}px 0px"}}, {t:.3f});')
 
 
-def game_box(x, y, w, h, t0, t1, inner, score="1UP"):
-    """A Game Boy style screen on the collage: dark screen, scanlines, a pixel floor, a score line."""
+def game_box(x, y, w, h, t0, t1, inner, score=None):
+    """v15: the pixel scene sits straight on the collage (owner: no box, this is not an explainer). Same inner
+    coordinates as the old game screen, so the staging is kept; the sprites carry a white sticker outline."""
     i = nid("gb")
-    PAN.append(f'<div class="gbox el" id="{i}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px;z-index:3">'
-               f'<div class="gscr">{inner}<div class="gfloor"></div><div class="gscan"></div>'
-               f'<span class="gscore">{score}</span></div></div>')
+    PAN.append(f'<div class="pxstage el" id="{i}" style="left:{x + 14}px;top:{y + 14}px;width:{w - 28}px;height:{h - 28}px;z-index:5">'
+               f'{inner}</div>')
     show(f"#{i}", t0, t1)
-    CUES.append((t0 + .05, "pixel_start", 0))
-    js(f'tl.fromTo("#{i}", {{scale: .6, rotation: -6, opacity: 0}}, {{scale: 1, rotation: -2, opacity: 1, duration: .35, ease: "back.out(1.8)", immediateRender: false}}, {t0:.3f});')
     return i
 
 
@@ -1102,8 +1099,6 @@ def diamond_drop(a, b):
     hearts = [nid("ht") for _ in range(5)]
     inner += "".join(f'<img id="{h}" class="px" src="{PX}heart.png" style="left:{700 + 30 * (k % 3) - 30:.0f}px;top:{FL - 38 * S - 20:.0f}px;width:70px;opacity:0">'
                      for k, h in enumerate(hearts))
-    cnt = nid("ct")
-    inner += f'<span class="gcount" id="{cnt}">x0</span>'
     game_box(100, 480, 880, 640, a, b, inner, score="1UP  ICE")
     t_in = walk_in(dr, -380, a + .1, .5, S)
     idle(dr, "drake", t_in, td - .2, S)
@@ -1123,8 +1118,6 @@ def diamond_drop(a, b):
         while tt < b:
             js(f'tl.set("#{sp[k]}", {{opacity: {(1, 0, .6, 0)[m % 4]}, scale: {(1.2, .6, 1, .6)[m % 4]}}}, {tt:.3f});')
             tt, m = tt + .12 + .02 * (k % 3), m + 1
-        js(f'tl.set("#{cnt}", {{textContent: "x{k + 1}"}}, {land:.3f});')
-        js(f'tl.fromTo("#{cnt}", {{scale: 1.6}}, {{scale: 1, duration: .2, ease: "back.out(3)", immediateRender: false}}, {land:.3f});')
         CUES.append((land, "diamond", 0))
     set_frame(dr, "drake", DFR["idle0"], td + .7, S)
     idle(dr, "drake", td + .7, b, S)
@@ -1441,7 +1434,12 @@ img.el {{ display: block; height: auto; }}
 .gscore {{ position: absolute; left: 22px; top: 16px; font: 400 26px/1 "Archivo Black"; color: #ffd640; letter-spacing: .12em;
   text-shadow: 3px 3px 0 #141213; }}
 .gcount {{ position: absolute; right: 26px; top: 14px; font: 400 34px/1 "Archivo Black"; color: #bfefff; text-shadow: 3px 3px 0 #141213; }}
-.spr {{ position: absolute; image-rendering: pixelated; background-repeat: no-repeat; background-position: 0 0; }}
+.spr {{ position: absolute; image-rendering: pixelated; background-repeat: no-repeat; background-position: 0 0;
+  filter: drop-shadow(4px 0 0 #f2f1ec) drop-shadow(-4px 0 0 #f2f1ec) drop-shadow(0 4px 0 #f2f1ec) drop-shadow(0 -4px 0 #f2f1ec)
+  drop-shadow(10px 14px 0 rgba(20,6,12,.45)); }}
+.pxstage {{ overflow: visible; }}
+.pxone {{ position: absolute; width: 0; height: 0; overflow: visible; }}
+.pxstage .px, .pxo {{ filter: drop-shadow(3px 0 0 #f2f1ec) drop-shadow(-3px 0 0 #f2f1ec) drop-shadow(0 3px 0 #f2f1ec) drop-shadow(0 -3px 0 #f2f1ec); }}
 .pxw {{ position: absolute; inset: 0; }}
 .px {{ position: absolute; image-rendering: pixelated; display: block; height: auto; }}
 .bullet {{ position: absolute; width: 46px; height: 7px; background: #ffd640; box-shadow: 0 0 10px #ffb000; }}

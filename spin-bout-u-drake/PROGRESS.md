@@ -1,5 +1,5 @@
 # PROGRESS: spin-bout-u-drake (updated 2026-10-31)
-Phase: v14 PREVIEW (with sound design) (draft for the owner's approval; final not rendered yet)
+Phase: v15 PREVIEW (with sound design) (draft for the owner's approval; final not rendered yet)
 v11: Ashke-structure collage (build/collage.py) in the Spin colours over a live gradient background. The anime
 pictures the owner sent back are removed; lyric concepts replace them (footsteps + counter, GPS route + pins +
 compass, shockwaves, heart rings, BODY wisps); full-screen smoke, burn, drop and ghost on those lines. Vogue call screen shows the name

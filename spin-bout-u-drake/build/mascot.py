@@ -18,7 +18,8 @@ OUT = os.path.join(ROOT, "assets", "img", "pixel")
 K, S, S2, H, H2 = (20, 18, 19), (122, 74, 46), (94, 56, 34), (27, 20, 20), (64, 50, 48)
 B, D, D2, G, P = (24, 18, 17), (32, 32, 38), (56, 56, 66), (232, 184, 74), (40, 40, 48)
 W, R, A, A2 = (242, 241, 236), (176, 25, 79), (78, 78, 88), (120, 120, 132)
-DRAKE_FRAMES = ["idle0", "idle1", "walk0", "walk1", "walk2", "walk3", "aim", "shoot", "drop"]
+DRAKE_FRAMES = ["idle0", "idle1", "walk0", "walk1", "walk2", "walk3", "aim", "shoot", "drop", "windup", "throw"]
+FL1, FL2, FL3 = (255, 214, 64), (255, 140, 40), (255, 244, 200)
 
 
 class Canvas:
@@ -102,6 +103,24 @@ def drake(pose):
         c.rect(hx + 2, hy - 1, hx + 8, hy, A)               # barrel
         c.rect(hx + 3, hy - 1, hx + 7, hy - 1, A2)
         c.rect(hx + 2, hy + 1, hx + 3, hy + 3, A)           # grip
+    elif pose == "windup":                                  # lit lighter cocked back behind the head
+        c.rect(20, 19 + y, 22, 26 + y, D)                   # front arm hangs
+        c.rect(20, 27 + y, 22, 28 + y, S)
+        for k in range(7):                                  # back arm raised up and back
+            c.rect(7 - k // 3, 18 - k + y, 9 - k // 3, 18 - k + y, D)
+        c.rect(4, 9 + y, 6, 11 + y, S)
+        c.rect(4, 5 + y, 6, 8 + y, A2)
+        c.rect(4, 5 + y, 6, 5 + y, A)
+        c.px(5, 3 + y, FL1)
+        c.px(5, 4 + y, FL2)
+        c.px(5, 2 + y, FL3)
+    elif pose == "throw":                                   # follow-through: arm flung forward, hand open
+        for k in range(8):
+            ax, ay = 20 + k, 20 - k * 6 // 8 + y
+            c.rect(ax, ay, ax + 1, ay + 2, D)
+        c.rect(28, 12 + y, 30, 14 + y, S)
+        c.px(31, 11 + y, S)
+        c.px(31, 13 + y, S)
     elif pose == "drop":
         c.rect(20, 20 + y, 28, 22 + y, D)
         c.rect(29, 21 + y, 31, 23 + y, S)
@@ -192,6 +211,7 @@ def grid_rows(rows, pal):
 
 DIAMOND = ["..kkkkk..", ".kwcwcck.", "kwwccwcck", "kkkkkkkkk", ".kcwccck.", "..kcwck..", "...kck...", "....k...."]
 SPARKLE = ["..w..", "..w..", "wwyww", "..w..", "..w.."]
+LIGHTER = ["..y..", ".yoy.", ".ooo.", "aaaaa", "awwwa", "aaaaa", "aaaaa", "aaaaa", "aaaaa"]
 HEART = [".kk.kk.", "krrkrrk", "krrrrrk", ".krrrk.", "..krk..", "...k..."]
 
 
@@ -206,6 +226,7 @@ def main():
     grid_rows(DIAMOND, pal).save(os.path.join(OUT, "diamond.png"))
     grid_rows(SPARKLE, pal).save(os.path.join(OUT, "sparkle.png"))
     grid_rows(HEART, pal).save(os.path.join(OUT, "heart.png"))
+    grid_rows(LIGHTER, pal | {"o": FL2, "a": A2}).save(os.path.join(OUT, "lighter.png"))
     print("wrote", sorted(os.listdir(OUT)))
 
 

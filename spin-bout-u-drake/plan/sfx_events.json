@@ -302,10 +302,6 @@
 "len": 0.35
 },
 {
-"t": 35.13,
-"type": "pixel_start"
-},
-{
 "t": 35.18,
 "type": "pixel_walk",
 "len": 0.5
@@ -393,10 +389,6 @@
 },
 {
 "t": 38.79,
-"type": "pixel_start"
-},
-{
-"t": 38.79,
 "type": "pixel_walk",
 "len": 0.45
 },
@@ -430,8 +422,13 @@
 "type": "pixel_fall"
 },
 {
-"t": 42.4,
+"t": 42.26,
 "type": "lighter"
+},
+{
+"t": 42.42,
+"type": "pixel_walk",
+"len": 0.3
 },
 {
 "t": 42.42,
@@ -443,17 +440,21 @@
 "type": "glitch"
 },
 {
-"t": 43.313,
-"type": "ignite"
+"t": 42.48,
+"type": "throw"
 },
 {
-"t": 43.363,
-"type": "fire",
-"len": 0.97
+"t": 43.413,
+"type": "ignite"
 },
 {
 "t": 43.42,
 "type": "keyword"
+},
+{
+"t": 43.463,
+"type": "fire",
+"len": 0.87
 },
 {
 "t": 44.253,
@@ -467,6 +468,26 @@
 {
 "t": 44.28,
 "type": "glitch"
+},
+{
+"t": 44.48,
+"type": "camera"
+},
+{
+"t": 44.86,
+"type": "camera"
+},
+{
+"t": 45.24,
+"type": "camera"
+},
+{
+"t": 45.62,
+"type": "camera"
+},
+{
+"t": 46.0,
+"type": "camera"
 },
 {
 "t": 47.6,

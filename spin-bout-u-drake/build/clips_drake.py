@@ -14,6 +14,7 @@ SEG = {   # name: (source, start s, end s)
     "b_phone2": ("clip_b", 2.1, 4.2),     # one call and my n**** ten toes
     "a_close": ("clip_a", 9.4, 13.4),     # wipe him like he snotty: close-up
     "a_walk": ("clip_a", 0.4, 3.6),       # the ending: walking in, smiling
+    "a_walk2": ("clip_a", 4.0, 8.0),      # the way you make me feel (second hook): walking down the corridor
 }
 
 
