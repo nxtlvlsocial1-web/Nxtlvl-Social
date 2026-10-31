@@ -192,7 +192,7 @@ const KINDS = {
     } };
   },
   city(c) {       // burn somebody block: a city block at night, flames flickering on the roofs, the camera circling
-    const scene = new THREE.Scene(), camera = cam(40, 0); scene.fog = new THREE.Fog(INK, 18, 60);
+    const scene = new THREE.Scene(), camera = cam(40, 0); scene.fog = new THREE.Fog(INK, 30, 75);
     scene.add(new THREE.AmbientLight(0xffffff, 0.35));
     const fire = new THREE.PointLight(0xff5a1f, 160, 40); fire.position.set(0, 6, 0); scene.add(fire);
     const R = rng(21), flames = [];
@@ -204,9 +204,9 @@ const KINDS = {
       b.position.set(i * 2.4, h / 2, j * 2.4); scene.add(b);
       if (R() < 0.45) { const f = new THREE.Mesh(new THREE.ConeGeometry(0.6, 1.8, 9), new THREE.MeshBasicMaterial({ color: R() < 0.5 ? 0xff7a1a : MAG, transparent: true, opacity: 0.9 }));
         f.position.set(i * 2.4, h + 0.9, j * 2.4); f.userData = { h, ph: R() * 9 }; scene.add(f); flames.push(f); } }
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), new THREE.MeshStandardMaterial({ color: 0x121214 })); ground.rotation.x = -Math.PI / 2; scene.add(ground);
+    const ground = new THREE.Mesh(new THREE.CircleGeometry(9.6, 64), new THREE.MeshStandardMaterial({ color: 0x1a1216, emissive: 0x5f1b30, emissiveIntensity: 0.35 })); ground.rotation.x = -Math.PI / 2; scene.add(ground);
     return { scene, camera, update(t) {
-      const a = 0.6 + t * 0.35; camera.position.set(Math.sin(a) * 20, 9 + Math.sin(t) * 0.5, Math.cos(a) * 20); camera.lookAt(0, 2.5, 0);
+      const a = 0.6 + t * 0.35; camera.position.set(Math.sin(a) * 30, 15 + Math.sin(t) * 0.5, Math.cos(a) * 30); camera.lookAt(0, 2.2, 0);
       flames.forEach((f) => { const n = 0.75 + 0.35 * Math.sin(t * 23 + f.userData.ph) * Math.sin(t * 17 + f.userData.ph * 2); f.scale.set(1, n * 1.4, 1); f.position.y = f.userData.h + 0.9 * n * 1.4; });
       fire.intensity = 130 + 50 * Math.sin(t * 19) * Math.sin(t * 7);
     } };

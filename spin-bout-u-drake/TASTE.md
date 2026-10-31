@@ -92,6 +92,14 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
   blobs drifting on slow loops, a little brighter on each beat) under the paper's crumple shading, which travels with
   the camera, so the sheet floats over moving colour.
 
+- v11: the anime pictures the owner sent back are out (crew, point, diamonds, smoke, fire, spin, spirit,
+  him_smitten). Lyric concepts take their place: footsteps marching with a 1-10 counter (ten toes), a GPS route with
+  pins dropping on each "go" and a snapping compass (wherever I say go), shockwaves under the 3D diamonds (dropped),
+  displaced billowing smoke, a floating burning 3D city island with embers (burn somebody block), rings off the 3D
+  heart, wisps out of the 3D BODY. The Vogue call screen is phone-shaped with the name on it; the dumb cat has its own
+  spot. After Effects finish: harder whips, a zoom snap into every scene, bigger beat punches, a bloom and RGB split
+  on about 60% of cuts, light-leak sweeps, mid-scene bloom pulses.
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|
@@ -99,9 +107,11 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 | 2026-10-31 | cats only at the start; 3D renders look mid; more motion and story built round the lyrics; don't repeat Drake photos; anime-style illustrations (not fully 3D); transitions up to the MJ reference; remove the constant shaking | v3 above |
 | 2026-10-31 | the first anime images look like AI slop; make them better (owner bought Canva Pro) | 90s hand-painted cel style, consistent couple |
 | 2026-10-31 | the Canva images still look AI slop; make them look like 90s anime | regenerated as 1993 TV-episode frames |
-\n| 2026-10-31 | the images are still, animate them so they feel lively; fonts and transitions feel dull, take the Spin Bout U reference | v4 above |\n| 2026-10-31 | his smile in the dance picture looks creepy | redone with a calm closed-mouth smile |\n
+| 2026-10-31 | the images are still, animate them so they feel lively; fonts and transitions feel dull, take the Spin Bout U reference | v4 above |
+| 2026-10-31 | his smile in the dance picture looks creepy | redone with a calm closed-mouth smile |
 | 2026-10-31 | the art must act live (expressions, interaction), not a warp effect | Canva Image-to-Video clips |
 | 2026-10-31 | the clips look a little AI; lower the frame rate and add a 90s anime filter | clips90.py: on threes, broadcast look |
 | 2026-10-31 | remove the swoosh sounds; transitions still basic; bring the 3D globe and other 3D elements in with the characters | v8: song only, 3D with the art, layered cuts |
 | 2026-10-31 | use the Ashke edit as the reference for the structure, keep the current colour theme | v9: build/collage.py |
 | 2026-10-31 | remove the grids, add a lively gradient background so it feels immersive | v10 above |
+| 2026-10-31 | Vogue name missing on the call screen; dumb cat hidden; more motion tracking and faster transitions; remove the attached anime pictures and build lyric visual concepts; random bloom on transitions; After Effects feel | v11 above |

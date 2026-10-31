@@ -54,5 +54,13 @@
   "cues": {
    "wipe": 0.1
   }
+ },
+ {
+  "id": "g3city",
+  "kind": "city",
+  "t0": 42.4,
+  "t1": 44.75,
+  "bg": null,
+  "cues": {}
  }
 ]

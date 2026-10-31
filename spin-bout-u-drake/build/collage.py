@@ -47,17 +47,16 @@ PHRASES = {("for", "you"), ("baby", "girl"), ("front", "row"), ("sent", "home"),
 RECIPE = {-1: "R1", 0: "R2", 1: "R3", 2: "R5", 3: "R4", 4: "R6", 5: "R8", 6: "R2", 7: "R1", 8: "R7", 9: "R3", 10: "R9", 11: "R2",
           12: "R5", 13: "R6", 14: "R4", 15: "R8", 16: "R3", 17: "R1", 18: "R9"}
 CUTOUT = {-1: "drake_back_jacket", 1: "cat_black_collar", 3: "hand_phone_sticker", 5: "drake_chanel_night", 6: "cat_white_dumb",
-          7: "crew", 15: "spin", 16: "spirit", 17: "snotty", 18: "finale"}
+          17: "snotty", 18: "finale"}
 AF, PR, AV = "assets/img/anime/full/", "assets/img/print/", "assets/video/anime/"
 CARD1 = {0: AV + "jealous.mp4", 2: PR + "envogue_funky_divas.jpg", 4: PR + "rolex_cat_ad.jpg",
-         8: AF + "point.jpg", 11: AV + "her_blush.mp4", 12: AF + "diamonds.jpg", 13: AF + "smoke.jpg"}
-CARD2 = {1: PR + "vogue_cat_cover.jpg", 3: "assets/img/src/incoming_call.jpg", 9: AF + "jet.jpg", 10: AV + "road.mp4",
-         12: AF + "diamonds.jpg", 15: AV + "spin.mp4", 16: AV + "him_smitten.mp4"}
-CUTPRINT = {13: AF + "smoke.jpg", 14: AF + "fire.jpg", 9: None}     # recipes with a cut-out slot that use a picture instead
-FILL = {0: AF + "jealous.jpg", 6: PR + "cat_white_dumb.jpg", 11: AF + "him_smitten.jpg"}
-G3D_AT = {9: ("globe", 120, 620, 860), 12: ("diamonds", 440, 160, 700), 15: ("heart", 560, 1180, 520), 17: ("tissue", 40, 1350, 460)}
-STILLS = [AF + n + ".jpg" for n in ("jealous", "point", "her_blush", "jet", "road", "him_smitten", "diamonds", "smoke", "fire",
-                                    "spin", "crew", "finale")] + [PR + "vogue_cat_cover.jpg", PR + "rolex_cat_ad.jpg", PR + "envogue_funky_divas.jpg"]
+         11: AV + "her_blush.mp4"}
+CARD2 = {1: PR + "vogue_cat_cover.jpg", 3: "assets/img/collage/call_vogue.jpg", 9: AF + "jet.jpg", 10: AV + "road.mp4"}
+CUTPRINT = {14: None, 9: None, 16: None, 7: None}     # recipes with a cut-out slot that use a picture instead
+FILL = {0: AF + "jealous.jpg", 6: PR + "cat_white_dumb.jpg", 11: AF + "her_blush.jpg"}
+G3D_AT = {9: ("globe", 120, 620, 860), 12: ("diamonds", 0, 360, 1080), 14: ("city", 60, 420, 960), 15: ("heart", 140, 470, 800),
+          16: ("body", 0, 700, 1080), 17: ("tissue", 40, 1350, 460)}
+STILLS = [AF + n + ".jpg" for n in ("jealous", "her_blush", "jet", "road", "finale", "snotty")] + [PR + "vogue_cat_cover.jpg", PR + "rolex_cat_ad.jpg", PR + "envogue_funky_divas.jpg"]
 A, HIDE, PAN, SCREEN = [], [], [], []
 CAMKEYS, FLASH = {}, []
 NID, VTR = [0], [1]
@@ -348,7 +347,12 @@ def r2(si, a, b, li, gs):
     scrap("black", 3, -60, 760, 1200, -5, kw[2], b)
     size = fit(kw[0], 1060, 330)
     after_n = len(gs) - ki - 1
-    cutout(li, 540 - 220, 860 + size * 1.25 + 150 * after_n, 440, 2, kw[2], b, z=2)
+    if li == 6:
+        td = next(g[2] for g in gs if g[0].startswith("DUMB"))
+        cutout(li, 600, 1080, 460, 6, td, b, z=8)
+        cam(si, td, 640, 1120, 1.05, 2, .25)
+    else:
+        cutout(li, 540 - 220, 860 + size * 1.25 + 150 * after_n, 440, 2, kw[2], b, z=2)
     _, fw = label(kw[0], f"fill f{li}", 540, 860, size, -3, kw[2], b, mode="pop", z=6)
     cam(si, kw[2], 540, 960, 1.0, 0, .2)
     zt = kw[2] + .4
@@ -400,7 +404,11 @@ def r4(si, a, b, li, gs):
     mids = [g for g in gs[1:] if g is not kw]
     t_cut = min(mids[0][2] if mids else (kw[2] if kw is not g0 else a + .5), a + .45)
     cutout(li, 150, 480, 780, -1, t_cut, b)
-    printel(CARD2.get(li), 30, 560, 300, 360, -8, t_cut + PERIOD / 2, b)
+    g3el(li, a + .134, b)
+    if li == 3:
+        printel(CARD2[li], 20, 420, 300, 650, -8, t_cut + PERIOD / 2, b, z=4)
+    else:
+        printel(CARD2.get(li), 30, 560, 300, 360, -8, t_cut + PERIOD / 2, b)
     cam(si, t_cut, 540, 820, 1.18, 0, .35)
     for k, (txt, key, t) in enumerate(mids):
         label(txt, "blk", 780, 1180 + 120 * k, fit(txt, 520, 96), 4, t, b, z=6)
@@ -583,11 +591,11 @@ def camera():
             if tt > pts[-1][0] + .05:
                 pts.append((tt, kx, ky, ks, kr))
         lx, ly, ls, lr = pts[-1][1:]
-        run = min(320, 380 * (b - pts[-1][0]))
+        run = min(440, 520 * (b - pts[-1][0]))
         pts.append((b + .001, lx + d[0] * run, ly + d[1] * run, ls, lr))
         plans.append(dict(a=a, b=b, li=li, d=d, pts=pts))
     tend = DUR - .5
-    E, X, TAU = 380, 330, .1
+    E, X, TAU = 560, 480, .075
 
     def herm(pts, t, idx):
         T = [p[0] for p in pts]
@@ -629,7 +637,8 @@ def camera():
         if t - STEP < plans[si]["a"]:
             vx, vy = -vx, -vy
         lb = max([bt for bt in BEATS["beats"] if bt <= t + 1e-6] or [-9])
-        s *= 1 + .025 * math.exp(-(t - lb) / .09)
+        s *= 1 + .05 * math.exp(-(t - lb) / .09)
+        s *= 1 + .22 * math.exp(-(t - plans[si]["a"]) / .07)          # zoom snap into every scene
         fy = 960 + (fy - 960) * VTRACK
         js(f'tl.set("#pan", {{x: {540 - fx:.1f}, y: {CY - fy:.1f}}}, {t:.3f});')
         js(f'tl.set("#cam", {{scale: {s * 1.06 * ZOOM:.4f}, rotation: {rot:.2f}}}, {t:.3f});')
@@ -643,6 +652,145 @@ def camera():
         elif blurred:
             js(f'tl.set("#cam", {{filter: "none"}}, {t:.3f});')
             blurred = False
+
+
+# ------------------------------------------------------------------------------------------------ lyric concepts
+def conc(html, t0, t1, z=5):
+    i = nid("cc")
+    PAN.append(html.replace("ID", i).replace("ZZ", str(z)))
+    show(f"#{i}", t0, t1)
+    return i
+
+
+def words_of(li):
+    return [(w.lower().strip(",.'"), s) for w, s, e in L[li]["words"]]
+
+
+def concepts():
+    """Motion-graphics concepts drawn from what each line says, where the removed anime pictures were."""
+    sc = {li: (a, b) for a, b, li in scenes()}
+    # ten toes: footsteps march up the page one per beat, a 10 counter ticks with them and slams
+    a, b = sc[7]
+    steps = [t for t in BEATS["beats"] if a + .05 < t < b - .1][:10]
+    for k, t in enumerate(steps):
+        x, y = (330 if k % 2 == 0 else 520), 820 - k * 62
+        i = conc(f'<svg class="el" id="ID" viewBox="0 0 120 120" style="left:{x}px;top:{y}px;width:170px;height:170px;z-index:ZZ;'
+                 f'transform:rotate({-12 if k % 2 == 0 else 12}deg)">' + svg_foot(k % 2) + '</svg>', t, b)
+        js(f'tl.fromTo("#{i}", {{scale: 1.8}}, {{scale: 1, duration: .134, ease: "steps(2)", immediateRender: false}}, {t:.3f});')
+    cnt = conc(f'<div class="el counter" id="ID" style="left:700px;top:260px;z-index:ZZ">1</div>', steps[0] if steps else a, b, z=6)
+    for k, t in enumerate(steps):
+        js(f'tl.set("#{cnt}", {{textContent: "{k + 1}"}}, {t:.3f});')
+        js(f'tl.fromTo("#{cnt}", {{scale: 1.5}}, {{scale: 1, duration: .134, ease: "steps(2)", immediateRender: false}}, {t:.3f});')
+    # wherever I say go: a GPS route draws across, pins drop on each "go", a compass needle snaps round
+    a, b = sc[8]
+    gos = [s_ for w, s_ in words_of(8) if w == "go"]
+    route = "M120 1500 C 160 1420, 190 1360, 250 1330 S 600 1250, 700 1170 S 860 1080, 900 1060"
+    rt = conc(f'<svg class="el" id="ID" viewBox="0 0 1080 1920" style="left:0;top:0;width:1080px;height:1920px;z-index:ZZ;overflow:visible">'
+              f'<path d="{route}" pathLength="1000" fill="none" stroke="{WHT}" stroke-width="16" stroke-dasharray="1000" stroke-linecap="round"/>'
+              f'<path d="{route}" pathLength="1000" fill="none" stroke="{MAG}" stroke-width="8" stroke-dasharray="14 18" stroke-linecap="round"/></svg>', a, b, z=4)
+    js(f'tl.fromTo("#{rt} path", {{strokeDashoffset: 1000}}, {{strokeDashoffset: 0, duration: {max(.4, gos[-1] - a):.2f}, ease: "steps({max(4, round((gos[-1] - a) * 15))})", immediateRender: false}}, {a:.3f});')
+    for k, (t, (px, py)) in enumerate(zip([a + .2] + gos, [(120, 1500), (250, 1330), (900, 1060)])):
+        i = conc(f'<svg class="el" id="ID" viewBox="0 0 100 130" style="left:{px - 60}px;top:{py - 150}px;width:120px;height:156px;z-index:ZZ">'
+                 f'<path d="M50 125 C20 80 6 62 6 44 A44 44 0 1 1 94 44 C94 62 80 80 50 125 Z" fill="{MAG}" stroke="{WHT}" stroke-width="8"/>'
+                 f'<circle cx="50" cy="44" r="16" fill="{WHT}"/></svg>', t, b, z=6)
+        js(f'tl.fromTo("#{i}", {{y: -260, scale: 1.3}}, {{y: 0, scale: 1, duration: .2, ease: "steps(3)", immediateRender: false}}, {t:.3f});')
+    cp = conc(f'<svg class="el" id="ID" viewBox="-110 -110 220 220" style="left:600px;top:1180px;width:400px;height:400px;z-index:ZZ">'
+              f'<circle r="100" fill="{INK}" stroke="{WHT}" stroke-width="8"/>'
+              + "".join(f'<text x="{78 * math.sin(k * math.pi / 2):.0f}" y="{-78 * math.cos(k * math.pi / 2) + 9:.0f}" fill="{WHT}" font-family="Anton" font-size="28" text-anchor="middle">{d}</text>'
+                        for k, d in enumerate("NESW")) +
+              f'<g class="ndl"><path d="M0 -70 L14 0 L0 12 L-14 0 Z" fill="{MAG}"/><path d="M0 70 L14 0 L0 -12 L-14 0 Z" fill="{WHT}"/></g></svg>', a, b, z=5)
+    ang = 0
+    for k, t in enumerate([a] + gos + [b - .3]):
+        ang += 160 + 70 * k
+        js(f'tl.to("#{cp} .ndl", {{rotation: {ang}, svgOrigin: "0 0", duration: .2, ease: "back.out(3)"}}, {t:.3f});')
+    # dropped: impact shockwaves under the 3D diamonds
+    a, b = sc[12]
+    td = next(s_ for w, s_ in words_of(12) if w == "dropped")
+    for k in range(3):
+        i = conc(f'<i class="el shock" id="ID" style="left:240px;top:1080px;width:600px;height:200px;z-index:ZZ"></i>', td + k * .12, td + .9 + k * .12, z=3)
+        js(f'tl.fromTo("#{i}", {{scale: .2, opacity: 1}}, {{scale: 2.2, opacity: 0, duration: .8, ease: "steps(12)", immediateRender: false}}, {td + k * .12:.3f});')
+    # smoke: real billowing smoke rising through the frame (displaced soft puffs), SMOKE ghosted inside it
+    a, b = sc[13]
+    g = random.Random(13)
+    puffs = "".join(f'<circle cx="{g.uniform(180, 900):.0f}" cy="{g.uniform(300, 1300):.0f}" r="{g.uniform(90, 200):.0f}" '
+                    f'fill="{g.choice([WHT, "#d8c8cf", "#f0b5c8", "#9a7f8a"])}" opacity="{g.uniform(.35, .7):.2f}"/>' for _ in range(26))
+    sm = conc(f'<svg class="el" id="ID" viewBox="0 0 1080 1600" style="left:0;top:150px;width:1080px;height:1600px;z-index:ZZ;overflow:visible">'
+              f'<g filter="url(#smokef)"><g class="sp">{puffs}</g></g></svg>', a, b, z=3)
+    n = max(2, round((b - a) * 15))
+    js(f'tl.fromTo("#{sm} .sp", {{y: 260, scale: .9, transformOrigin: "50% 100%"}}, {{y: -260, scale: 1.25, duration: {b - a:.2f}, ease: "steps({n})", immediateRender: false}}, {a:.3f});')
+    js(f'tl.fromTo("#smo", {{attr: {{dx: 0, dy: 0}}}}, {{attr: {{dx: 160, dy: -420}}, duration: {b - a:.2f}, ease: "steps({n})", immediateRender: false}}, {a:.3f});')
+    # burn: embers rising over the burning 3D block
+    a, b = sc[14]
+    g = random.Random(14)
+    for k in range(28):
+        x = g.uniform(80, 1000)
+        i = conc(f'<i class="el ember" id="ID" style="left:{x:.0f}px;top:1400px;width:{g.uniform(8, 18):.0f}px;height:{g.uniform(8, 18):.0f}px;z-index:ZZ"></i>', a, b, z=6)
+        per = g.uniform(.9, 1.6)
+        st = a - g.uniform(0, per)
+        while st < b:
+            nn = max(2, round(per * 15))
+            js(f'tl.fromTo("#{i}", {{y: 0, x: 0}}, {{y: {-g.uniform(700, 1100):.0f}, x: {g.uniform(-120, 120):.0f}, duration: {per:.2f}, ease: "steps({nn})", immediateRender: false}}, {max(a, st):.3f});')
+            st += per
+    # hook 2: rings pulse out of the chrome heart on every other beat
+    a, b = sc[15]
+    for k, t in enumerate([t for t in BEATS["beats"][::2] if a < t < b - .2]):
+        i = conc(f'<i class="el ring" id="ID" style="left:340px;top:670px;width:400px;height:400px;z-index:ZZ"></i>', t, t + .6, z=3)
+        js(f'tl.fromTo("#{i}", {{scale: .5, opacity: 1}}, {{scale: 2.4, opacity: 0, duration: .6, ease: "steps(9)", immediateRender: false}}, {t:.3f});')
+    # comin' out my body: glowing wisps rising out of the 3D BODY
+    a, b = sc[16]
+    g = random.Random(16)
+    for k in range(14):
+        x = g.uniform(160, 920)
+        i = conc(f'<i class="el wisp" id="ID" style="left:{x:.0f}px;top:1300px;width:{g.uniform(30, 70):.0f}px;height:{g.uniform(120, 260):.0f}px;z-index:ZZ"></i>', a, b, z=5)
+        per = g.uniform(1.2, 2.0)
+        st = a - g.uniform(0, per)
+        while st < b:
+            nn = max(2, round(per * 15))
+            js(f'tl.fromTo("#{i}", {{y: 0, opacity: .9, scaleY: .6}}, {{y: -900, opacity: 0, scaleY: 1.4, duration: {per:.2f}, ease: "steps({nn})", immediateRender: false}}, {max(a, st):.3f});')
+            st += per
+
+
+def svg_foot(right):
+    s_ = -1 if right else 1
+    return (f'<g transform="translate(60 60) scale({s_} 1) translate(-60 -60)">'
+            f'<path d="M48 42 C30 50 32 96 50 106 C68 114 80 96 76 72 C74 56 64 38 48 42 Z" fill="{WHT}" stroke="{INK}" stroke-width="5"/>'
+            f'<circle cx="62" cy="14" r="9" fill="{MAG}" stroke="{INK}" stroke-width="4"/><circle cx="78" cy="22" r="7" fill="{MAG}" stroke="{INK}" stroke-width="4"/>'
+            f'<circle cx="88" cy="35" r="6" fill="{MAG}" stroke="{INK}" stroke-width="4"/><circle cx="44" cy="20" r="8" fill="{MAG}" stroke="{INK}" stroke-width="4"/></g>')
+
+
+def finishing():
+    """The After Effects pass on the cuts: a bloom burst on some cuts (random), a light leak sweep on others, a colour
+    split on every whip."""
+    g = random.Random(31)
+    for si, (a, b, li) in enumerate(scenes()):
+        if si == 0:
+            continue
+        r = g.random()
+        fil = []
+        for k in range(4):
+            parts = []
+            if r < .6:
+                parts.append("url(#bloom)")
+            if k < 2:
+                parts.append("url(#rgbsplit)")
+            fil.append(" ".join(parts) or "none")
+        for k in range(4):
+            t = a - STEP + k * STEP
+            js(f'tl.set("#glow", {{filter: "{fil[k]}"}}, {t:.3f});')
+            js(f'tl.set("#blg", {{attr: {{stdDeviation: {[26, 20, 13, 7][k]}}}}}, {t:.3f});')
+            js(f'tl.set("#rgbR", {{attr: {{dx: {[30, 16, 0, 0][k]}}}}}, {t:.3f});')
+            js(f'tl.set("#rgbB", {{attr: {{dx: {[-30, -16, 0, 0][k]}}}}}, {t:.3f});')
+        js(f'tl.set("#glow", {{filter: "none"}}, {a + 3 * STEP:.3f});')
+        if r >= .45:
+            js(f'tl.set("#leak", {{opacity: 1}}, {a - STEP:.3f});')
+            js(f'tl.fromTo("#leak", {{x: {-900 if si % 2 else 900}, opacity: 1}}, {{x: {900 if si % 2 else -900}, opacity: 0, duration: .5, ease: "steps(8)", immediateRender: false}}, {a - STEP:.3f});')
+        if b - a > 2.6:                       # a smaller bloom pulse mid-scene on a strong beat
+            mb = [t for t in BEATS["beats"][::4] if a + 1 < t < b - .6]
+            if mb:
+                t = mb[0]
+                js(f'tl.set("#glow", {{filter: "url(#bloom)"}}, {t:.3f});')
+                js(f'tl.set("#blg", {{attr: {{stdDeviation: 16}}}}, {t:.3f});')
+                js(f'tl.set("#glow", {{filter: "none"}}, {t + 2 * STEP:.3f});')
 
 
 # The lively gradient behind the collage (screen space, under the moving paper): big soft colour blobs drifting on
@@ -744,6 +892,14 @@ img.el {{ display: block; height: auto; }}
 #flash {{ position: absolute; inset: 0; z-index: 20; background: {WHT}; opacity: 0; }}
 #split {{ position: absolute; inset: 0; z-index: 20; background: {MAG}; opacity: 0; }}
 #split i {{ position: absolute; left: 50%; top: 0; width: 50%; height: 100%; background: {INK}; }}
+#glow {{ position: absolute; inset: 0; }}
+#leak {{ position: absolute; inset: -200px; z-index: 17; opacity: 0; pointer-events: none; mix-blend-mode: screen;
+  background: radial-gradient(ellipse 35% 60% at 50% 50%, rgba(255,170,120,.85), rgba(255,60,140,.5) 45%, rgba(0,0,0,0) 75%); }}
+.counter {{ font: 400 300px/1 "Anton"; color: {WHT}; -webkit-text-stroke: 6px {INK}; paint-order: stroke fill; text-shadow: 14px 14px 0 {MAG}; }}
+.shock {{ border-radius: 50%; border: 10px solid {WHT}; box-shadow: 0 0 30px 6px rgba(255,140,190,.8); }}
+.ring {{ border-radius: 50%; border: 12px solid {MAG}; box-shadow: 0 0 34px 8px rgba(255,90,150,.7); }}
+.ember {{ border-radius: 50%; background: #ffb36b; box-shadow: 0 0 12px 5px #ff4f7a; }}
+.wisp {{ border-radius: 50%; background: radial-gradient(ellipse, rgba(255,230,240,.9), rgba(255,120,170,.4) 50%, rgba(0,0,0,0) 72%); filter: blur(6px); }}
 #vig {{ position: absolute; inset: 0; z-index: 18; pointer-events: none; background: radial-gradient(ellipse 80% 75% at 50% 48%, rgba(0,0,0,0) 55%, rgba(0,0,0,.4) 100%); }}
 #grain {{ position: absolute; left: 0; top: 0; width: 1120px; height: 1120px; z-index: 18; pointer-events: none; opacity: .08; background: url(assets/img/grain.png); mix-blend-mode: overlay; }}
 """
@@ -756,8 +912,10 @@ def main():
         builders[RECIPE[li]](si, a, b, li, gs)
     lyric_icons()
     transition_frames()
+    concepts()
     camera()
     background()
+    finishing()
     flashes()
     g = random.Random(3)
     for f in range(int(DUR * 15)):
@@ -776,9 +934,23 @@ def main():
   </head>
   <body>
     <svg width="0" height="0" style="position:absolute"><filter id="mb" x="-5%" y="-5%" width="110%" height="110%">
-      <feGaussianBlur id="mbg" stdDeviation="0 0"/></filter></svg>
+      <feGaussianBlur id="mbg" stdDeviation="0 0"/></filter>
+      <filter id="bloom" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+      <feGaussianBlur id="blg" in="SourceGraphic" stdDeviation="20" result="b"/>
+      <feColorMatrix in="b" type="matrix" values="1.7 0 0 0 0  0 1.3 0 0 0  0 0 1.6 0 0  0 0 0 1 0" result="bb"/>
+      <feBlend in="SourceGraphic" in2="bb" mode="screen"/></filter>
+      <filter id="rgbsplit" color-interpolation-filters="sRGB">
+      <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+      <feOffset id="rgbR" in="r" dx="0" dy="0" result="r2"/>
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b2"/>
+      <feOffset id="rgbB" in="b2" dx="0" dy="0" result="b3"/>
+      <feBlend in="r2" in2="g" mode="screen" result="rg"/><feBlend in="rg" in2="b3" mode="screen"/></filter>
+      <filter id="smokef" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".011" numOctaves="4" seed="6"/>
+      <feOffset id="smo" dx="0" dy="0" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="140" xChannelSelector="R" yChannelSelector="G"/>
+      <feGaussianBlur stdDeviation="3"/></filter></svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
-      <div id="fx">
+      <div id="glow"><div id="fx">
         <div id="bg">{"".join(f'<i class="blob" id="bl{k}"></i>' for k in range(len(BLOBS)))}</div>
         <div id="cam"><div id="pan">
           <div id="paper"></div>
@@ -788,7 +960,8 @@ def main():
         </div></div>
         <div id="blinds"></div>
         {"".join(SCREEN)}
-      </div>
+      </div></div>
+      <div id="leak"></div>
       <div id="vig"></div>
       <div id="grain"></div>
       <audio id="song" src="assets/audio/section.wav" data-start="0" data-duration="{DUR}" data-track-index="0" data-volume="1"></audio>
