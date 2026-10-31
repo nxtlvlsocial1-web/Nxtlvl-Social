@@ -72,6 +72,14 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
   v3 read as dull. Palette black / maroon / magenta / off-white; fonts Anton, Archivo Black, Dela Gothic One,
   Kaushan Script.
 
+## v5 (owner, 2026-10-31)
+- The anime must really act (expressions, the couple interacting), not just warp: the owner's Canva Image-to-Video
+  clips (prompts in plan/anime_video_prompts.md) replace the stills where they exist (jealous, road, her, him, fire,
+  spin; the Canva limit stopped the rest).
+- AI video reads smooth and "slop"-like: build/clips90.py holds every clip on threes (8 drawings a second) and gives
+  it a 90s broadcast look (soft 480-line picture, colour bleed, faded warm colour, light vignette, live grain). The
+  still scenes' wind and breathing step on threes too.
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|
@@ -80,3 +88,5 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 | 2026-10-31 | the first anime images look like AI slop; make them better (owner bought Canva Pro) | 90s hand-painted cel style, consistent couple |
 | 2026-10-31 | the Canva images still look AI slop; make them look like 90s anime | regenerated as 1993 TV-episode frames |
 \n| 2026-10-31 | the images are still, animate them so they feel lively; fonts and transitions feel dull, take the Spin Bout U reference | v4 above |\n| 2026-10-31 | his smile in the dance picture looks creepy | redone with a calm closed-mouth smile |\n
+| 2026-10-31 | the art must act live (expressions, interaction), not a warp effect | Canva Image-to-Video clips |
+| 2026-10-31 | the clips look a little AI; lower the frame rate and add a 90s anime filter | clips90.py: on threes, broadcast look |

@@ -41,6 +41,7 @@ FAM = {"anton": "Anton", "archivo": "Archivo Black", "dela": "Dela Gothic One", 
        "marker": "Permanent Marker"}
 CURSE = {"ass", "hoes", "nigga", "niggas", "shitll", "shit"}
 A, HIDE, FILTERS = [], [], []
+CLIPN = [0]
 NID = [0]
 CUR = {}
 
@@ -127,24 +128,18 @@ def enter(sel, t, how, n=3):
 
 
 def osc(sel, prop, amp, t0, t1, period, attr=False, base=0.0):
-    """A smooth back-and-forth (sine) of one property: the wind and the breathing."""
-    half = period / 2
-    t, k = q(t0), 0
+    """A back-and-forth (sine) of one property, the wind and the breathing, held on threes: a new drawing every
+    0.15 s (about 8 a second), like hand-drawn 90s anime rather than smooth AI motion."""
+    t = q(t0)
     while t < t1 - 1e-6:
-        a, b = (base - amp, base + amp) if k % 2 == 0 else (base + amp, base - amp)
-        d = min(half, t1 - t)
-        if attr:
-            js(f'tl.fromTo("{sel}", {{attr: {{{prop}: {a:.4f}}}}}, {{attr: {{{prop}: {b:.4f}}}, duration: {d:.3f}, ease: "sine.inOut", '
-               f'immediateRender: false}}, {t:.3f});')
-        else:
-            js(f'tl.fromTo("{sel}", {{{prop}: {a:.4f}}}, {{{prop}: {b:.4f}, duration: {d:.3f}, ease: "sine.inOut", '
-               f'immediateRender: false}}, {t:.3f});')
-        t, k = t + half, k + 1
+        v = base + amp * math.sin((t - t0) / period * math.tau)
+        js(f'tl.set("{sel}", {{attr: {{{prop}: {v:.4f}}}}}, {t:.3f});' if attr else f'tl.set("{sel}", {{{prop}: {v:.4f}}}, {t:.3f});')
+        t = q(t + 3 * STEP)
 
 
 def photo(src, x, y, w, h=None, rot=0, t0=0, t1=DUR, kind="cut", how="settle", z=3, push=.05, outline=False,
           card=False, round_=False, wind=0.0, breathe=False, flow=None, sweeps=(), reveal=False, slices=(), punches=(),
-          pos="", ly=1):
+          pos="", ly=1, clip=None):
     """kind: cut / print (the owner's photos), acut / afull (the anime art). wind: displacement amount (fraction of
     the picture); flow: 'smoke' or 'fire' (that area flows); breathe: a slow rise and fall; sweeps: times a light
     sweeps across; reveal: arrives as a white glowing silhouette; slices: slice-glitch times; punches: (t, scale)."""
@@ -178,6 +173,13 @@ def photo(src, x, y, w, h=None, rot=0, t0=0, t1=DUR, kind="cut", how="settle", z
     pf = f"filter:drop-shadow(4px 0 0 {WHT}) drop-shadow(-4px 0 0 {WHT}) drop-shadow(0 4px 0 {WHT}) drop-shadow(0 -4px 0 {WHT});" if outline else ""
     cls = "ph" + (" card" if card else "") + (" rnd" if round_ else "")
     img = f'<img src="{path}" alt="" style="{pos}">'
+    vid = ""
+    if clip:    # the owner's animated clip (build/clips90.py) plays over the still
+        cp = os.path.join(ROOT, "assets", "video", "anime", f"{clip}.mp4")
+        ln = float(os.popen(f'ffprobe -v error -show_entries format=duration -of csv=p=0 "{cp}"').read() or 0)
+        CLIPN[0] += 1
+        vid = (f'<video id="vc{CLIPN[0]}" class="clip" src="assets/video/anime/{clip}.mp4" data-start="{q(t0):.3f}" '
+               f'data-duration="{min(ln, q(t1) - q(t0) + 6 * STEP):.3f}" data-track-index="{2 + CLIPN[0]}" muted playsinline></video>')
     sl = ""
     if slices:
         sl = '<div class="slc">' + "".join(f'<div style="clip-path:inset({k * 100 / 7:.1f}% 0 {100 - (k + 1) * 100 / 7:.1f}% 0)">{img}</div>'
@@ -187,7 +189,7 @@ def photo(src, x, y, w, h=None, rot=0, t0=0, t1=DUR, kind="cut", how="settle", z
         mask = f"-webkit-mask-image:url({path});mask-image:url({path});" if kind in ("cut", "acut") else ""
         sw = f'<div class="sw" style="{mask}"><i></i></div>'
     put(f'<div class="{cls}" id="{i}" style="left:{x:.0f}px;top:{y:.0f}px;width:{w:.0f}px;height:{h:.0f}px;transform:rotate({rot}deg);'
-        f'z-index:{z}"><div class="pu" style="{pf}"><div class="br"><div class="in" style="{filt}">{img}</div>{sl}{sw}</div></div></div>', ly)
+        f'z-index:{z}"><div class="pu" style="{pf}"><div class="br"><div class="in" style="{filt}">{img}{vid}</div>{sl}{sw}</div></div></div>', ly)
     show(f"#{i}", t0, t1)
     if how:
         enter(f"#{i}", t0, how)
@@ -207,7 +209,7 @@ def photo(src, x, y, w, h=None, rot=0, t0=0, t1=DUR, kind="cut", how="settle", z
         seq = ["brightness(0) invert(1) blur(6px)", "brightness(0) invert(1) drop-shadow(0 0 14px #fff)",
                "grayscale(1) brightness(2.6) contrast(.6)", "brightness(1.6)", "brightness(1.2)", "none"]
         for k, f_ in enumerate(seq):
-            js(f'tl.set("#{i} .in img", {{filter: "{f_}"}}, {q(t0) + k * STEP:.3f});')
+            js(f'tl.set("#{i} .in > *", {{filter: "{f_}"}}, {q(t0) + k * STEP:.3f});')
     for ts in slices:
         g = random.Random(int(ts * 100))
         js(f'tl.set("#{i} .in", {{opacity: 0}}, {q(ts):.3f});')
@@ -479,7 +481,7 @@ def build():
     scene(E[0], E[1], bg=MAR, drift=(-12, 0), trans="whip")
     cap("JEALOUS", 540, 300, fit("JEALOUS", 1050, 420), at(li, 0), E[1], align="center", style="giant", how="pop1", ly=0, z=2, sy=1.15)
     para(650, 120, 380, 820, MAG, E[0], E[1], z=1)
-    photo("jealous", 200, 170, 680, 680, -3, E[0] + .1, E[1], kind="afull", how="tilt", card=True, round_=True, wind=.025,
+    photo("jealous", 200, 170, 680, 680, -3, E[0] + .1, E[1], kind="afull", how="tilt", card=True, round_=True, clip="jealous",
           sweeps=(at(li, 2),), punches=((at(li, 3), 1.08),), z=3)
     cap(text(li, 1, 2) + ",", 70, 890, 96, at(li, 1), E[1], style="sticker", how="pop", rot=-4)
     cap("yeah", 840, 830, 180, at(li, 3), E[1], font="script", color=MAG, style="script", upper=False, rot=-8, how="write", align="center")
@@ -601,7 +603,7 @@ def build():
     cap(text(li, 0, 3), 60, 30, 50, at(li, 0), fr, font="archivo", how="pop1", ly=1)
     swoosh_line([(-40, 80), ((300, -60), (700, 260), (1120, 40))], at(li, 4), fr)
     swoosh_line([(-40, 1000), ((260, 760), (520, 1100), (700, 860)), ((820, 700), (980, 900), (1120, 760))], at(li, 7), fr)
-    photo("road", -40, -40, 1160, 1160, 0, fr, E[11], kind="afull", how="settle", push=.06, z=5, ly=1, wind=.012)
+    photo("road", -40, -40, 1160, 1160, 0, fr, E[11], kind="afull", how="settle", push=.06, z=5, ly=1, clip="road")
     cap("for real", 540, 800, 220, at(li, 10), E[11], font="script", color=MAG, style="script", upper=False, rot=-8, how="write", align="center")
     white(fr)
 
@@ -612,15 +614,15 @@ def build():
     scene(E[11], E[12], bg=MAR, drift=(0, -10), trans="glitchcard")
     cap("THE WAY", 540, 40, fit("THE WAY", 1040, 330), at(li, 0), fe, align="center", style="giant", how="pop1", ly=0, z=2, sy=1.1)
     her = photo("her_blush", 220, 230, 640, 640, -4, E[11] + .1, E[12], kind="afull", how="tilt", card=True, round_=True,
-                wind=.022, push=.08, sweeps=(at(li, 2),), z=3)
+                clip="her_blush", push=.05, z=3)
     tween(f"#{her}", {"x": 0, "scale": 1}, {"x": -230, "scale": .82}, fe, 4)
     particles("sparkle", E[11], E[12], 8, 12, box=(150, 150, 950, 800))
     particles("petal", E[11], E[12], 12, 13)
     burst(["YOU"], 870, 760, 160, at(li, 2), fe, size=110)
     cap("MAKE ME", 80, 900, 90, at(li, 3), fe, style="sticker", how="pop", rot=-4)
     cap("FEEL", 540, 40, fit("FEEL", 1040, 520), fe, E[12], align="center", style="giant", how="pop1", ly=0, z=2, sy=1.1)
-    photo("him_smitten", 470, 250, 560, 560, 5, fe, E[12], kind="afull", how="right", card=True, round_=True, wind=.02, push=.08,
-          sweeps=(at(li, 6),), z=4)
+    photo("him_smitten", 470, 250, 560, 560, 5, fe, E[12], kind="afull", how="right", card=True, round_=True, clip="him_smitten",
+          push=.05, z=4)
     cap("these days", 540, 850, 180, at(li, 6), E[12], font="script", color=MAG, style="script", upper=False, rot=-7, how="write", align="center", z=9)
     for b in beats_in(fe, E[12], 4, 0):
         white(b)
@@ -652,7 +654,7 @@ def build():
     # S15 Burn somebody block for you: he walks out of the burning block, the flames flowing, embers rising.
     li = 14
     scene(E[14], E[15], drift=(0, -10), trans="whip")
-    photo("fire", -40, -40, 1160, 1160, 0, E[14], E[15], kind="afull", how="settle", push=.1, z=1, ly=0, flow="fire", wind=.012)
+    photo("fire", -40, -40, 1160, 1160, 0, E[14], E[15], kind="afull", how="settle", push=.06, z=1, ly=0, clip="fire")
     particles("ember", E[14], E[15], 24, 18, z=3, ly=1)
     b = cap("BURN", 540, 30, fit("BURN", 1000, 380), at(li, 0), E[15], align="center", style="giant", how="pop1", sy=1.15)
     for k, t in enumerate(frames(at(li, 0) + .3, E[15], 2)):
@@ -668,8 +670,8 @@ def build():
     panel(60, 120, 960, 330, INK, E[15], E[16], how="left", z=2, ly=0)
     cap("THE WAY", 540, 140, fit("THE WAY", 920, 300), at(li, 0), E[16], align="center", style="giant", how="pop1", ly=0, z=3, sy=1.05)
     pb = beats_in(E[15], E[16], 4, 2)
-    photo("spin", 150, 190, 780, None, 0, E[15], E[16], kind="acut", how="", reveal=True, push=.05, wind=.04, breathe=True,
-          sweeps=(at(li, 5),), punches=[(t, [1.1, 1.0][k % 2]) for k, t in enumerate(pb)], z=4)
+    photo("spin", 170, 210, 740, 740, -3, E[15], E[16], kind="afull", how="tilt", card=True, round_=True, clip="spin", push=.04,
+          punches=[(t, [1.08, 1.0][k % 2]) for k, t in enumerate(pb)], z=4)
     burst(["YOU"], 930, 400, 120, at(li, 2), E[16], size=84)
     cap("MAKE ME FEEL", 540, 860, fit("MAKE ME FEEL", 1000, 170, "archivo"), at(li, 3), E[16], font="archivo", align="center",
         style="block", rot=-4, how="pop1")
@@ -802,7 +804,8 @@ html, body {{ width: {S}px; height: {S}px; overflow: hidden; background: {INK}; 
 .ph .pu, .ph .br, .ph .in, .ph .slc, .ph .slc > div, .ph .sw {{ position: absolute; inset: 0; }}
 .ph .br {{ transform-origin: 50% 100%; }}
 .ph .slc {{ opacity: 0; }}
-.ph img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
+.ph img, .ph video {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
+.ph .in video {{ position: absolute; inset: 0; }}
 .ph.card .pu {{ box-shadow: 0 0 0 7px {WHT}, 16px 16px 0 7px {MAG}; }}
 .ph.rnd .pu, .ph.rnd .in, .ph.rnd .sw {{ border-radius: 34px; overflow: hidden; }}
 .ph .sw {{ overflow: hidden; pointer-events: none; mix-blend-mode: screen; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }}

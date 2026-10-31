@@ -1,5 +1,7 @@
 # PROGRESS: spin-bout-u-drake (updated 2026-10-31)
-Phase: v4 PREVIEW (draft for the owner's approval; final not rendered yet)
+Phase: v5 PREVIEW (draft for the owner's approval; final not rendered yet)
+v5: six scenes play the owner's Canva Image-to-Video clips through build/clips90.py (on threes, 90s broadcast look);
+the other anime scenes keep the stepped wind/breathing. Clip sources: assets/video/anime/<name>_src.mp4 (not in git).
 Previous: final v2 → renders/nxtlvl_spin-bout-u_reels_1x1_v2.mp4; v3 preview (MJ-reference cuts, still anime art)
 v4 changes (owner feedback on v3): the anime illustrations move (wind displacement maps, breathing, flowing smoke and
 fire, light sweeps, particles); type and cuts rebuilt from the Spin Bout U reference (giant pop-in letters grey to
