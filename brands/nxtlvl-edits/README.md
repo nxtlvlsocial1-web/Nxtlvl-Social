@@ -1,6 +1,6 @@
 # nxtlvl edits: logo concepts
 
-> **Chosen: R1 · Pearl (the refined Monoline N).** The finished kit is in this folder: see `brand.md` and
+> **Chosen: Y · N Disc** (after R1 · Pearl was picked first). The finished kit is in this folder: see `brand.md` and
 > `kit-preview.png`. Everything below is the concept work that led to it.
 
 Logo concepts for the new editing account (Instagram: `@nxtlvlledits`). They're built from the Nxtlvl Social
@@ -95,7 +95,7 @@ python3 build2.py && python3 sheet.py 2   # round 2: concepts E-L, concepts-prev
 python3 build3.py && python3 sheet.py 3   # round 3: concepts M-T, concepts-preview-3a.png and -3b.png
 python3 build4.py && python3 sheet.py 4   # R refined: R1-R5, concepts-preview-4.png
 python3 build5.py && python3 sheet.py 5   # round 5: concepts U-Z, concepts-preview-5a.png and -5b.png
-python3 final.py                          # the kit from R1: SVGs, png/, kit-preview.png
+python3 final.py                          # the kit from Y (N Disc): SVGs, png/, kit-preview.png
 ```
 
 `vector.py` outlines text with fontTools and traces the wordmark (cached in `nxtlvl-wordmark.svgfrag`).

@@ -9,22 +9,23 @@ h1 { font-family: "Serif Italic", serif; font-weight: 400; font-size: 76px; line
 .lede { font-size: 24px; line-height: 1.45; color: #4A4360; margin-bottom: 40px; }
 h2 { font-weight: 600; font-size: 20px; letter-spacing: .14em; text-transform: uppercase; color: #6E6787; margin: 40px 0 16px; }
 .row { display: flex; gap: 24px; align-items: center; }
-.tile { border-radius: 28px; display: flex; align-items: center; justify-content: center; padding: 44px; }
-.dark { background: #05030C; } .light { background: #FFFFFF; } .violet { background: #7D18FC; } .deep { background: #5E0FC4; }
+.tile { border-radius: 28px; display: flex; align-items: center; justify-content: center; padding: 36px; flex: 1; min-width: 0; }
+.tile img { max-width: 100%; height: auto; }
+.dark { background: #05030C; } .light { background: #FFFFFF; } .mist { background: #F5F2FF; } .deep { background: #5E0FC4; }
 .circle { border-radius: 50%; display: block; }
-.ig { display: flex; align-items: center; gap: 20px; background: #fff; border-radius: 28px; padding: 32px 36px; flex: 1; align-self: stretch; }
+.ig { display: flex; flex-direction: column; justify-content: center; gap: 28px; background: #fff; border-radius: 28px;
+  padding: 32px 36px; flex: 1; align-self: stretch; }
 .ig b { display: block; font-weight: 600; font-size: 26px; } .ig span { display: block; font-size: 21px; color: #6E6787; margin-top: 4px; }
 img { display: block; }
-.tile { min-width: 0; } .tile img { max-width: 100%; height: auto; }
 </style></head><body>
 <p class="kicker">@nxtlvlledits · logo</p>
-<h1>The Monoline N, Pearl</h1>
-<p class="lede">One fine line, the right stem climbing past the left and ending in the star. Pearl on rich black for the profile,
-Ink and violet on light backgrounds, white or black where only one colour will do.</p>
+<h1>The N Disc</h1>
+<p class="lede">A solid pearl disc with the N and the star cut out of it, like a coin or a seal. The cut lets whatever is behind
+show through, so the same disc works on black, on light backgrounds and over footage.</p>
 <h2>Instagram profile picture</h2>
 <div class="row">
   <img class="circle" src="../png/profile-1080.png" style="width:380px;height:380px">
-  <div class="ig" style="flex-direction:column;align-items:flex-start;justify-content:center;gap:28px">
+  <div class="ig">
     <div class="row"><img class="circle" src="../png/profile-1080.png" style="width:110px;height:110px">
       <div><b>nxtlvlledits</b><span>profile size</span></div></div>
     <div class="row"><img class="circle" src="../png/profile-1080.png" style="width:56px;height:56px">
@@ -32,12 +33,12 @@ Ink and violet on light backgrounds, white or black where only one colour will d
       <span style="font-size:20px;color:#6E6787">feed and comment sizes</span></div>
   </div>
 </div>
-<h2>The N on its own (transparent PNGs)</h2>
+<h2>The disc on its own (transparent PNGs)</h2>
 <div class="row">
-  <div class="tile light" style="flex:1;padding:28px"><img src="../mark.svg" style="width:200px"></div>
-  <div class="tile dark" style="flex:1;padding:28px"><img src="../mark-pearl.svg" style="width:200px"></div>
-  <div class="tile deep" style="flex:1;padding:28px"><img src="../mark-white.svg" style="width:200px"></div>
-  <div class="tile light" style="flex:1;padding:28px"><img src="../mark-black.svg" style="width:200px"></div>
+  <div class="tile dark"><img src="../mark-pearl.svg" style="width:190px"></div>
+  <div class="tile deep"><img src="../mark-white.svg" style="width:190px"></div>
+  <div class="tile light"><img src="../mark.svg" style="width:190px"></div>
+  <div class="tile mist"><img src="../mark-violet.svg" style="width:190px"></div>
 </div>
 <h2>App icon, favicon and story highlight covers</h2>
 <div class="row" style="align-items:flex-end">
