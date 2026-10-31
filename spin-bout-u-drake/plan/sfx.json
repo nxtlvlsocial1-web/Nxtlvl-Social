@@ -1,0 +1,177 @@
+[
+{
+"t": 2.8,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 4.6,
+"kind": "snap",
+"gain": 0.16
+},
+{
+"t": 6.2,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 8.2,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 10.8,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 13.0,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 13.0,
+"kind": "boom",
+"gain": 0.3
+},
+{
+"t": 14.9,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 16.7,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 20.4,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 22.2,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 22.2,
+"kind": "riser",
+"gain": 0.26
+},
+{
+"t": 22.2,
+"kind": "drop",
+"len": 0.14
+},
+{
+"t": 24.1,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 25.9,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 28.9,
+"kind": "snap",
+"gain": 0.16
+},
+{
+"t": 29.6,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 29.6,
+"kind": "boom",
+"gain": 0.3
+},
+{
+"t": 31.95,
+"kind": "snap",
+"gain": 0.16
+},
+{
+"t": 35.15,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 38.0,
+"kind": "snap",
+"gain": 0.16
+},
+{
+"t": 38.8,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 41.05,
+"kind": "snap",
+"gain": 0.16
+},
+{
+"t": 42.5,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 44.35,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 44.35,
+"kind": "riser",
+"gain": 0.26
+},
+{
+"t": 44.35,
+"kind": "drop",
+"len": 0.14
+},
+{
+"t": 47.15,
+"kind": "snap",
+"gain": 0.16
+},
+{
+"t": 49.9,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 53.6,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 53.6,
+"kind": "boom",
+"gain": 0.3
+},
+{
+"t": 56.25,
+"kind": "snap",
+"gain": 0.16
+},
+{
+"t": 57.3,
+"kind": "whip",
+"gain": 0.34
+},
+{
+"t": 59.3,
+"kind": "snap",
+"gain": 0.16
+},
+{
+"t": 59.45,
+"kind": "whip",
+"gain": 0.34
+}
+]
