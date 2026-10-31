@@ -1,6 +1,6 @@
 # PROGRESS: ashke-lyric-9x16 (updated 2026-10-30)
-Phase: DONE (final v7 delivered: 1080x1920, 60 s, 124 MB, -14.1 LUFS)
-Current version: final v7 → renders/nxtlvl_ashke-lyric_reels_9x16_v7.mp4 (captions from the owner's lyrics); v1-v6 delivered earlier
+Phase: final render (v8)
+Current version: final v8 → renders/nxtlvl_ashke-lyric_reels_9x16_v8.mp4 (three more photos); v1-v7 delivered earlier
 Done: v3 rebuilt on the second YouMotion reference: nine scene recipes, cut-out stickers (local segmentation), photo prints
 from the estate and tour clips, typed labels, flashes, camera whips and tracking; v2 cinema layer removed.
 Next step: owner reviews v4 and checks the Gurmukhi spelling; feedback goes into v5.

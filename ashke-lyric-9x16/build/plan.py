@@ -41,8 +41,8 @@ RECIPE = {-1: "R1", 0: "R2", 1: "R3", 2: "R4", 3: "R5", 4: "R6", 5: "R7", 6: "R8
           22: "R6", 23: "R7", 24: "R8", 25: "R9", 26: "R2", 27: "R1", 28: "R3", 29: "R4", 30: "R6", 31: "END", 32: "END"}
 # cut-out stickers (build/cutouts.py) for the cut-out recipes
 CUTOUT = {-1: "coat", 0: "profile", 1: "jet", 2: "selfie_a", 6: "redmic", 8: "point", 9: "suit", 10: "arms",
-          12: "stage", 15: "crowdmic", 17: "bugatti", 18: "selfie_b", 19: "profile", 20: "back", 24: "point", 26: "selfie_c",
-          27: "coat", 28: "suit", 29: "jet"}   # the owner's photos and clean solo frames of Karan (build/cutouts.py)
+          12: "stage", 15: "crowdmic", 17: "bugatti", 18: "selfie_b", 19: "fireup", 20: "back", 24: "jet", 26: "selfie_c",
+          27: "barn", 28: "coat", 29: "purple"}   # the owner's photos and clean solo frames of Karan (build/cutouts.py)
 PRINT = {7: "fire", 16: "fire", 25: "fire"}   # the fire-stage photo as a still print (its flames cannot be cut away)
 # card footage (build/cards.py): Karan-only shots (source, start time, x of Karan as a fraction)
 SHOTS = {"K1": ("estate", 1.4, .5), "K2": ("estate", 13.0, .5), "K3": ("estate", 15.2, .42), "K4": ("estate", 42.6, .5),
