@@ -502,7 +502,7 @@ def r9(si, a, b, li, gs):
     printel(CARD2.get(li), 600, 60, 440, 550, 7, a + .067, b)
     scrap("grey", 3, -160, -90, 1000, 5, a, b)
     scrap("grey", 1, 420, 1560, 860, -7, a, b)
-    scrap("white", 2, -120, 880, 760, 3, a, b)
+    scrap("black", 2, -120, 880, 760, 3, a, b)            # dark under the stamp: the stamp is off-white here
     kw = next((g for g in reversed(gs) if g[1]), gs[-1]) if gs else None
     rest = [g for g in gs if g is not kw]
     styles = ["magw", "mag", "w3d", "blk"]
