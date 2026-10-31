@@ -31,4 +31,4 @@ the end, and a closing question plus the follow prompt.
 ## Made
 - What if one AI ran a city for 24 hours? (`ai-city-9x16`)
 - What if an AI managed a football club for a season? (`ai-football-9x16`)
-- What if an AI ran a Formula 1 team for a race? (`ai-f1-9x16`, in progress)
+- What if an AI ran a Formula 1 team for a race? (`ai-f1-9x16`, done; narrator Jase)
