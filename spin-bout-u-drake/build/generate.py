@@ -768,10 +768,10 @@ def transitions():
             white(p2)                                              # white, the old shot sliced, then the card
             js(f'tl.set("#stage", {{filter: "url(#gslice) grayscale(1) contrast(1.5)"}}, {p1:.3f});')
             js(f'tl.set("#stage", {{filter: "none"}}, {t:.3f});')
-            js(f'tl.set("#wbg", {{opacity: 1}}, {t + STEP:.3f});')
+            js(f'tl.set("#wbg", {{opacity: 1}}, {t:.3f});')
             js(f'tl.set("#wbg", {{opacity: 0}}, {t + 6 * STEP:.3f});')
             tween(f"#{cur}", {"scale": .3, "rotation": -24, "borderRadius": 60, "filter": "blur(4px)"},
-                  {"scale": 1, "rotation": 0, "borderRadius": 0, "filter": "blur(0px)"}, t + STEP, 5)
+                  {"scale": 1, "rotation": 0, "borderRadius": 0, "filter": "blur(0px)"}, t, 6)
         elif kind == "diag":        # a diagonal scroll: the last shot leaves up-left, the next arrives from down-right
             tween(f"#{prev}", {"x": 0, "y": 0, "rotation": 0}, {"x": -380, "y": -760, "rotation": -6}, p2, 3)
             tween(f"#{cur}", {"x": 380, "y": 760, "rotation": 6, "filter": "url(#vblur)"}, {"x": 0, "y": 0, "rotation": 0, "filter": "blur(0px)"}, t, 4)
