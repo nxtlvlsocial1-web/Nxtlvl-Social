@@ -65,6 +65,13 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
   paint, painted backgrounds, VHS softness and grain; the same couple kept consistent with a reference image. Both
   the glossy webtoon set and the clean modern cel set were rejected as "AI slop" (too detailed and polished).
 
+## v4 (owner, 2026-10-31)
+- The illustrations must move, not sit still: wind in hair and clothes, breathing, flowing smoke and fire, light
+  sweeps, particles. Done in the browser (SVG displacement maps from build/animaps.py), no shake.
+- Type and cuts follow the Spin Bout U reference again (see the v4 docstring in build/generate.py); the MJ look of
+  v3 read as dull. Palette black / maroon / magenta / off-white; fonts Anton, Archivo Black, Dela Gothic One,
+  Kaushan Script.
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|
@@ -72,3 +79,4 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 | 2026-10-31 | cats only at the start; 3D renders look mid; more motion and story built round the lyrics; don't repeat Drake photos; anime-style illustrations (not fully 3D); transitions up to the MJ reference; remove the constant shaking | v3 above |
 | 2026-10-31 | the first anime images look like AI slop; make them better (owner bought Canva Pro) | 90s hand-painted cel style, consistent couple |
 | 2026-10-31 | the Canva images still look AI slop; make them look like 90s anime | regenerated as 1993 TV-episode frames |
+\n| 2026-10-31 | the images are still, animate them so they feel lively; fonts and transitions feel dull, take the Spin Bout U reference | v4 above |\n| 2026-10-31 | his smile in the dance picture looks creepy | redone with a calm closed-mouth smile |\n
