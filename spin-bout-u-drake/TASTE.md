@@ -135,4 +135,5 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 | 2026-10-31 | remove the grids, add a lively gradient background so it feels immersive | v10 above |
 | 2026-10-31 | Vogue name missing on the call screen; dumb cat hidden; more motion tracking and faster transitions; remove the attached anime pictures and build lyric visual concepts; random bloom on transitions; After Effects feel | v11 above |
 | 2026-10-31 | don't add the 3D city for burn, burn the whole screen; same for all such context lyrics | full-screen smoke, burn, drop, ghost |
-\n| 2026-10-31 | make every element feel premium, as per the After Effects links and packs sent | v12 above |\n
+
+| 2026-10-31 | make every element feel premium, as per the After Effects links and packs sent | v12 above |
