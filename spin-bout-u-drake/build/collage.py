@@ -31,8 +31,14 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DUR, FPS = 60.0, 30
 LOGO_LEN = 1.72          # v19 (owner): the edit stops at the second "the way" and hands over to the logo
 STEP = 1 / 15
-FW = FH = 1080
-CY, ZOOM, VTRACK = 540, .64, .55          # the board is 1080x1920 (the Ashke layouts); the square camera pulls back
+# v21 (owner): SPIN_FORMAT=9x16 builds the same edit in 9:16 into ../spin-bout-u-drake-9x16 (assets hard-linked). The
+# board is 1080x1920 (the Ashke layouts): the square camera pulls back (ZOOM) and tracks vertically less (VTRACK); the
+# 9:16 camera sees the board 1:1. Screen-space layers scale with KY.
+NINE = os.environ.get("SPIN_FORMAT") == "9x16"
+FW, FH = (1080, 1920) if NINE else (1080, 1080)
+CY, ZOOM, VTRACK = (960, 1.0, 1.0) if NINE else (540, .64, .55)
+KY = FH / 1080
+OUT = os.path.join(os.path.dirname(ROOT), "spin-bout-u-drake-9x16") if NINE else ROOT
 L = json.load(open(os.path.join(ROOT, "plan", "lines.json")))
 BEATS = json.load(open(os.path.join(ROOT, "plan", "beats.json")))
 PERIOD = 60 / BEATS["bpm"]
@@ -324,17 +330,31 @@ def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor
     left = x - w / 2 if anchor == "center" else x
     letters = "".join(f'<span class="ch{" cz" if c == "*" else " sp" if c == " " else ""}">{c if c != " " else "&nbsp;"}</span>' for c in text)
     if mode == "type":
-        mode = ("track" if style == "ser" else "flicker" if style == "stamp"
-                else ("slamx", "scramble", "flip3d", "cascade", "blur")[NID[0] % 5])
-    smear = '<i class="smear"></i>' if mode == "blur" else ""
+        mode = ("track" if style == "ser" else "flicker" if style == "stamp" else "type")   # v21: the reference's typing
+    smear = '<i class="smear"></i>' if mode == "blur" else ('<span class="cur"></span>' if mode == "type" else "")
     PAN.append(f'<div class="lw" data-layout-allow-overlap style="left:{left:.0f}px;top:{y:.0f}px;transform:rotate({rot:.1f}deg);z-index:{z}">'
                f'<div class="lb {style}" id="{i}" style="font-size:{size:.0f}px">{letters}{smear}{CIRC if circle else ""}</div></div>')
-    show(f"#{i}", t, t1)
+    boxed = style in ("blk", "wht", "mag", "magw", "mb", "blkm")
+    show(f"#{i}", t - 2 * STEP if boxed and mode == "type" else t, t1)
     n = max(1, len(text))
     sharp = f"#{i} .ch:not(.cz)"
-    if style in ("blk", "wht", "mag", "magw", "mb", "blkm"):          # the box wipes open first
+    if boxed and mode == "type":                             # v21, the reference: the box wipes open, then the text types
+        js(f'tl.fromTo("#{i}", {{clipPath: "inset(-20% 100% -20% 0%)"}}, {{clipPath: "inset(-20% -10% -20% 0%)", duration: {2 * STEP:.3f}, ease: "steps(2)", immediateRender: false}}, {t - 2 * STEP:.3f});')
+    elif boxed:                                              # the box wipes open first
         js(f'tl.fromTo("#{i}", {{clipPath: "inset(-20% 100% -20% 0%)"}}, {{clipPath: "inset(-20% -10% -20% 0%)", duration: .2, ease: "expo.out", immediateRender: false}}, {t:.3f});')
-    if mode == "blur":
+    if mode == "type":                                       # chunks land as grey ghosts, solid a step later (reference)
+        per = 3 if n > 8 else 2
+        js(f'tl.set("#{i} .ch", {{display: "none", opacity: 1}}, {t - 2 * STEP - .001:.3f});')
+        k = 0
+        while k < n:
+            sel = f"#{i} .ch:nth-child(n+{k + 1}):nth-child(-n+{min(n, k + per)})"
+            tk = t + (k // per) * STEP
+            js(f'tl.set("{sel}", {{display: "inline-block", opacity: .32}}, {tk:.3f});')
+            js(f'tl.set("{sel}", {{opacity: 1}}, {tk + STEP:.3f});')
+            k += per
+        done = t + (n // per + 1) * STEP
+        js(f'tl.set("#{i} .cur", {{display: "none"}}, {done:.3f});')
+    elif mode == "blur":
         js(f'tl.fromTo("{sharp}", {{opacity: 0, filter: "blur(16px)", x: {-size * .22:.0f}}}, {{opacity: 1, filter: "blur(0px)", x: 0, duration: .22, ease: "expo.out", stagger: {min(.016, .16 / n):.3f}, immediateRender: false}}, {t:.3f});')
         js(f'tl.fromTo("#{i} .cz", {{opacity: 0}}, {{opacity: 1, duration: .3, immediateRender: false}}, {t + .1:.3f});')
         js(f'tl.fromTo("#{i} .smear", {{x: {-size * .6:.0f}, opacity: 1}}, {{x: {w:.0f}, opacity: 0, duration: .5, ease: "power2.out", immediateRender: false}}, {t:.3f});')
@@ -506,34 +526,35 @@ def r2(si, a, b, li, gs):
     cam(si, a, 540, 860, 1.12, 1.5, .01)
     y = 520
     for k, (txt, key, t) in enumerate(gs[:ki]):
-        size = fit(txt, 820, 120)
-        label(txt, "blk", 540 - 60 * k, y, size, -2, t, b)
+        size = fit(txt, 820, 120 if ki < 4 else 100)
+        label(txt, "blk", 540 + (-50, 50)[k % 2], y, size, -2, t, b)     # v21: zigzag, a long stack stays in frame
         y += size * 1.15 + 18
         cam(si, t, 540, 760 + 60 * k, 1.1, 1, .3)
     FLASH.append((kw[2] - .067, "white"))
-    scrap("black", 3, -60, 760, 1200, -5, kw[2], b)
     size = fit(kw[0], 1060, 330)
+    ky = max(860, y + 10)                                    # v21: the keyword sits under its stack, never over it
+    scrap("black", 3, -60, ky - 100, 1200, -5, kw[2], b)
     after_n = len(gs) - ki - 1
     if li == 6:
         td = next(g[2] for g in gs if g[0].startswith("DUMB"))
-        cutout(li, 600, 1080, 460, 6, td, b, z=8)
-        cam(si, td, 640, 1120, 1.05, 2, .25)
+        cutout(li, 600, ky + 220, 460, 6, td, b, z=8)
+        cam(si, td, 640, ky + 260, 1.05, 2, .25)
     else:
-        cutout(li, 540 - 220, 860 + size * 1.25 + 150 * after_n, 440, 2, kw[2], b, z=2)
-    _, fw = label(kw[0], f"fill f{li}" if li in FILL else "w3d", 540, 860, size, -3, kw[2], b, mode="slamx" if li not in FILL else "pop", z=6)
-    cam(si, kw[2], 540, 960, 1.0, 0, .2)
+        cutout(li, 540 - 220, ky + size * 1.25 + 150 * after_n, 440, 2, kw[2], b, z=2)
+    _, fw = label(kw[0], f"fill f{li}" if li in FILL else "w3d", 540, ky, size, -3, kw[2], b, mode="slamx" if li not in FILL else "pop", z=6)
+    cam(si, kw[2], 540, ky + 100, 1.0, 0, .2)
     zt = kw[2] + .4
     after = gs[ki + 1:]
     back = min(b - .1, (after[0][2] - .05) if after else kw[2] + 1.0, zt + .55)
     if back - zt > .2:
-        cam(si, zt, 540 + fw * .22, 860 + size * .5, 2.6, -2, .27)
-        cam(si, back, 540, 1000, 1.0, 0, .27)
-    y = 860 + size + 20
+        cam(si, zt, 540 + fw * .22, ky + size * .5, 2.6, -2, .27)
+        cam(si, back, 540, ky + 140, 1.0, 0, .27)
+    y = ky + size + 20
     for txt, key, t in after:
         sz = fit(txt, 820, 120)
         label(txt, "wht", 560, y, sz, 2, t, b)
         y += sz * 1.15 + 18
-        cam(si, max(t, back + .05), 540, 1080, 1.0, 0, .35)
+        cam(si, max(t, back + .05), 540, ky + 220, 1.0, 0, .35)
 
 
 def r3(si, a, b, li, gs):
@@ -870,7 +891,7 @@ def logo_outro(a, b):
     js(f'/*smooth*/tl.fromTo("#{i} .lsweep i", {{x: -700}}, {{x: 700, duration: .75, ease: "power2.inOut", immediateRender: false}}, {a + .45:.3f});')
     js(f'/*smooth*/tl.fromTo("#{i} .lstar", {{scale: 0, rotation: -45, opacity: 0}}, {{scale: 1, rotation: 0, opacity: 1, duration: .35, ease: "back.out(2.2)", immediateRender: false}}, {a + .9:.3f});')
     js(f'/*smooth*/tl.to("#{i} .lstar", {{scale: .55, opacity: .0, duration: .4, ease: "power2.in"}}, {a + 1.25:.3f});')
-    CUES.extend([(a + .05, "logo_in", 0), (a + .9, "logo_star", 0)])
+    # v21 (owner): no sound effects on the logo, the song's fade carries it
 
 
 def cut_bursts():
@@ -879,15 +900,27 @@ def cut_bursts():
     slides across in stepped frames), stutter (Eimantas / YouMotion: B/W threshold still, invert, duotone still, white
     blast, one frame each), slam (Jennifer: two stop-motion stills slammed in). Section changes get ink + stutter."""
     big = {6, 10, 11, 15, 17, 18}
-    SCREEN.append('<svg id="ink" viewBox="0 0 1080 1080" preserveAspectRatio="none"><rect width="1080" height="1080" fill="#0b0608" filter="url(#inkf)"/></svg>')
-    HIDE.append("#ink")
-    order = ["tear", "stutter", "ink", "slam"]
+    # v21 (owner's "ssspin" reference): held invert flips across the cut, two white frames, the torn sheet and the
+    # stop-motion stills; the next shot enters through a horizontal slice glitch. The ink matte and stutter are out.
+    order = ["flip", "tear", "white", "slam"]
     k = 0
     for si, (a, b, li) in enumerate(scenes()):
         if si == 0 or (li in VEL and li != VEL[0]):         # inside the velocity ending the lyric cards are the cuts
             continue
-        styles = ["ink", "stutter"] if li in big else [order[si % 4]]
+        styles = ["flip"] if li in big else [order[si % 4]]
+        if styles[0] != "flip":
+            for j, (sc, sd) in enumerate([(80, 3), (34, 7)]):
+                js(f'tl.set("#board", {{filter: "url(#hgl)"}}, {a + j * STEP:.3f});')
+                js(f'tl.set("#hglD", {{attr: {{scale: {sc}}}}}, {a + j * STEP:.3f});')
+                js(f'tl.set("#hglT", {{attr: {{seed: {si * 5 + sd}}}}}, {a + j * STEP:.3f});')
+            js(f'tl.set("#board", {{filter: "none"}}, {a + 2 * STEP:.3f});')
         for st in styles:
+            if st == "flip":                                 # inverted 8 frames into the cut, 2 after (reference)
+                FLASH.append((a - 3 * STEP, "invhold"))
+                continue
+            if st == "white":
+                FLASH.append((a - STEP, "white"))
+                continue
             if st == "ink":                                  # coverage 100% -> 0 over 4 frames after the cut
                 js(f'tl.set("#ink", {{opacity: 1}}, {a - 1 / 30:.3f});')
                 for j, ic in enumerate([1.2, .55, -.1, -.6, -1.4]):
@@ -897,10 +930,10 @@ def cut_bursts():
             elif st == "tear":
                 i = nid("tr")
                 kind = ("black", "mag", "white")[si % 3]
-                SCREEN.append(f'<img class="tear" id="{i}" src="assets/img/collage/scrap/{kind}-{si % 4}.png" alt="">')
+                SCREEN.append(f'<img class="tear" id="{i}" src="assets/img/collage/scrap/{kind}-{si % 4}.png" style="top:{CY - (840 if not NINE else 1300):.0f}px" alt="">')
                 HIDE.append(f"#{i}")
                 js(f'tl.set("#{i}", {{opacity: 1}}, {a - 3 / 15:.3f});')
-                for j, x in enumerate([-1900, -1100, -400, 300, 1100]):
+                for j, x in enumerate([-2700, -1700, -800, 100, 1100] if NINE else [-1900, -1100, -400, 300, 1100]):
                     js(f'tl.set("#{i}", {{x: {x}, rotation: {(-8, -5, -3, -1, 2)[j]}}}, {a - 3 / 15 + j / 15:.3f});')
                 js(f'tl.set("#{i}", {{opacity: 0}}, {a + 2 / 15:.3f});')
             elif st == "stutter":
@@ -910,7 +943,7 @@ def cut_bursts():
                         src = STILLS[k % len(STILLS)]
                         k += 1
                         i = nid("tf")
-                        SCREEN.append(f'<div class="tframe {kind}" id="{i}" style="left:0;top:0;width:1080px;height:1080px;padding:0">'
+                        SCREEN.append(f'<div class="tframe {kind}" id="{i}" style="left:0;top:0;width:{FW}px;height:{FH}px;padding:0">'
                                       f'<img src="{src}" alt=""></div>')
                         show(f"#{i}", t0, t0 + 1 / 30)
                     elif kind == "inv":
@@ -923,7 +956,7 @@ def cut_bursts():
                     k += 1
                     i = nid("tf")
                     w = (760, 880)[j]
-                    SCREEN.append(f'<div class="tframe" id="{i}" style="left:{540 - w / 2:.0f}px;top:{540 - w * 1.2 / 2:.0f}px;width:{w}px;'
+                    SCREEN.append(f'<div class="tframe" id="{i}" style="left:{540 - w / 2:.0f}px;top:{CY - w * 1.2 / 2:.0f}px;width:{w}px;'
                                   f'height:{w * 1.2:.0f}px;transform:rotate({(-6, 4)[j]}deg)"><img src="{src}" alt=""></div>')
                     t0 = a - (2 - j) * 2 / 30
                     show(f"#{i}", t0, t0 + 2 / 30)
@@ -1140,10 +1173,11 @@ def pin_locks():
 
 def front_layer(gid, fil, t0, t1, y_from, y_to, t_full, L, drift, z=5, extra=""):
     """A procedural noise front sweeping up the screen (filter fil maps the swept value to colour)."""
-    svg = (f'<svg viewBox="-80 -80 1240 1240" style="position:absolute;left:-80px;top:-80px;width:1240px;height:1240px;overflow:visible">'
+    y_from, y_to, L, H = y_from * KY, y_to * KY, L * KY, FH + 160                 # v21: 9:16 sweeps the tall screen
+    svg = (f'<svg viewBox="-80 -80 1240 {H}" style="position:absolute;left:-80px;top:-80px;width:1240px;height:{H}px;overflow:visible">'
            f'<defs><linearGradient id="{gid}" gradientUnits="userSpaceOnUse" x1="0" y1="{y_from - L / 2:.0f}" x2="0" y2="{y_from + L / 2:.0f}">'
            f'<stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#fff"/></linearGradient></defs>'
-           f'<rect x="-80" y="-80" width="1240" height="1240" fill="url(#{gid})" filter="url(#{fil})"/></svg>{extra}')
+           f'<rect x="-80" y="-80" width="1240" height="{H}" fill="url(#{gid})" filter="url(#{fil})"/></svg>{extra}')
     i = locked(svg, t0, t1, z)
     n = max(1, round((t_full - t0) * 30))
     for k in range(n + 1):
@@ -1389,7 +1423,7 @@ def context_fx():
     a, b = sc[14]
     tl_ = lighter_throw(a, b)
     g = random.Random(14)
-    em = "".join(f'<i class="ember" style="position:absolute;left:{g.uniform(0, 1080):.0f}px;top:{g.uniform(700, 1250):.0f}px;'
+    em = "".join(f'<i class="ember" style="position:absolute;left:{g.uniform(0, 1080):.0f}px;top:{g.uniform(700, 1250) * KY:.0f}px;'
                  f'width:{g.uniform(7, 16):.0f}px;height:{g.uniform(7, 16):.0f}px"></i>' for _ in range(36))
     bi = front_layer("fig", "firef", tl_, b, 1350, -520, b - .12, 900, (0, -620), z=4, extra=f'<div class="embers">{em}</div>')
     n = max(2, round((b - tl_) * 15))
@@ -1541,9 +1575,9 @@ def sound_cues():
         if si:
             CUES.append((a, "whoosh_big" if li in big else ("whoosh" if si % 2 else "swish"), .35))
     for t, kind in FLASH:
-        CUES.append((t, {"invert": "glitch", "white": "hit", "split": "glitch"}[kind], 0))
+        CUES.append((t, {"invert": "glitch", "invhold": "glitch", "white": "hit", "split": "glitch"}[kind], 0))
     ev = sorted(({"t": round(t, 3), "type": k} | ({"len": round(d, 2)} if d else {}) for t, k, d in CUES), key=lambda e: e["t"])
-    json.dump(ev, open(os.path.join(ROOT, "plan", "sfx_events.json"), "w"), indent=0)
+    json.dump(ev, open(os.path.join(ROOT, "plan", "sfx_events_9x16.json" if NINE else "sfx_events.json"), "w"), indent=0)
     return ev
 
 
@@ -1551,7 +1585,10 @@ def flashes():
     SCREEN.append('<div id="flash"></div><div id="split"><i></i></div>')
     HIDE.extend(["#flash", "#split"])
     for t, kind in FLASH:
-        if kind == "invert":
+        if kind == "invhold":                                # v21: held 4 steps across the cut, like the reference
+            js(f'tl.set("#fx", {{filter: "invert(1)"}}, {t:.3f});')
+            js(f'tl.set("#fx", {{filter: "none"}}, {t + 4 * STEP:.3f});')
+        elif kind == "invert":
             js(f'tl.set("#fx", {{filter: "invert(1)"}}, {t:.3f});')
             js(f'tl.set("#fx", {{filter: "none"}}, {t + STEP:.3f});')
         elif kind == "white":
@@ -1645,7 +1682,7 @@ img.el {{ display: block; height: auto; }}
 .ring {{ border-radius: 50%; border: 12px solid {MAG}; box-shadow: 0 0 34px 8px rgba(255,90,150,.7); }}
 .ember {{ border-radius: 50%; background: #ffb36b; box-shadow: 0 0 12px 5px #ff4f7a; }}
 .wisp {{ border-radius: 50%; background: radial-gradient(ellipse, rgba(255,230,240,.9), rgba(255,120,170,.4) 50%, rgba(0,0,0,0) 72%); filter: blur(6px); }}
-.lock {{ left: 0; top: 0; width: {FW}px; height: {FH}px; transform-origin: 540px 540px; pointer-events: none; }}
+.lock {{ left: 0; top: 0; width: {FW}px; height: {FH}px; transform-origin: 540px {CY}px; pointer-events: none; }}
 .embers {{ position: absolute; inset: 0; }}
 #heat {{ position: absolute; inset: 0; z-index: 16; opacity: 0; pointer-events: none; mix-blend-mode: screen; }}
 .vf {{ position: absolute; inset: 34px; pointer-events: none; font: 400 22px/1 "Archivo Black"; color: #fff; text-shadow: 0 2px 6px rgba(0,0,0,.7); }}
@@ -1697,14 +1734,14 @@ img.el {{ display: block; height: auto; }}
 .foot video {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }}
 .fred {{ position: absolute; inset: 0; background: #ff1e2e; mix-blend-mode: multiply; opacity: 0; }}
 .fdbl {{ position: absolute; left: -210px; top: -1000px; width: 1500px; mix-blend-mode: screen; opacity: .45; filter: grayscale(1) contrast(1.4); }}
-.fst {{ position: absolute; top: 0; width: 6px; height: 1080px; background: #fff; opacity: 0; box-shadow: 0 0 14px #fff; }}
+.fst {{ position: absolute; top: 0; width: 6px; height: {FH}px; background: #fff; opacity: 0; box-shadow: 0 0 14px #fff; }}
 .fcap-line {{ position: absolute; left: 60px; right: 60px; top: 900px; z-index: 16; text-align: center; font: italic 800 46px/1.1 "Playfair";
   letter-spacing: .06em; text-transform: uppercase; color: #ff2a3c; text-shadow: 0 0 18px rgba(255,30,50,.65), 0 3px 10px rgba(0,0,0,.8); }}
 .fkey-line {{ position: absolute; left: 0; right: 0; top: 430px; z-index: 16; text-align: center; font: 400 190px/1 "Anton"; color: #fff;
   letter-spacing: .01em; text-shadow: 0 0 30px rgba(255,40,60,.7), 8px 8px 0 #ff1e2e; }}
 .fw {{ margin: 0 .16em; }}
 .logo {{ position: absolute; inset: 0; z-index: 21; background: #05030d; overflow: hidden; }}
-.lin {{ position: absolute; inset: 0; transform: scale(.6); }}   /* v20: owner wanted the logo smaller (circle 624 -> 375 px) */
+.lin {{ position: absolute; left: 0; top: {CY - 540}px; width: 1080px; height: 1080px; transform: scale(.6); }}   /* v20: owner wanted the logo smaller (circle 624 -> 375 px) */
 .logo img {{ position: absolute; inset: 0; width: 100%; height: 100%; display: block;
   -webkit-mask-image: radial-gradient(circle closest-side, #000 74%, transparent 100%); mask-image: radial-gradient(circle closest-side, #000 74%, transparent 100%); }}
 .lsweep {{ position: absolute; left: 228px; top: 228px; width: 624px; height: 624px; border-radius: 50%; overflow: hidden; mix-blend-mode: screen;
@@ -1719,8 +1756,8 @@ img.el {{ display: block; height: auto; }}
 .vtxt {{ position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }}
 .vtxt .lb {{ position: relative; }}
 .fw.cz {{ filter: blur(.1em); }}
-#ink {{ position: absolute; inset: 0; width: 1080px; height: 1080px; z-index: 19; opacity: 0; pointer-events: none; }}
-.tear {{ position: absolute; left: 0; top: -300px; width: 1900px; height: auto; z-index: 19; opacity: 0; pointer-events: none;
+#ink {{ position: absolute; inset: 0; width: {FW}px; height: {FH}px; z-index: 19; opacity: 0; pointer-events: none; }}
+.tear {{ position: absolute; left: 0; width: {2700 if NINE else 1900}px; height: auto; z-index: 19; opacity: 0; pointer-events: none;
   filter: drop-shadow(0 20px 30px rgba(0,0,0,.55)); }}
 .tframe.thr img {{ filter: grayscale(1) contrast(5) brightness(1.1); }}
 .tframe.duo img {{ filter: invert(1) sepia(1) saturate(4) hue-rotate(130deg) contrast(1.4); }}
@@ -1745,7 +1782,7 @@ def main():
     concepts()
     camera()
     background()
-    finishing()
+    # v21: no bloom / colour-split / leak bursts on the cuts (finishing); the reference's flips and flashes carry them
     context_fx()
     film_burns()
     pin_locks()
@@ -1758,17 +1795,21 @@ def main():
     grid = "".join(f'<line x1="{x + gl.uniform(-8, 8):.0f}" y1="-20" x2="{x + gl.uniform(-40, 40):.0f}" y2="3920"/>' for x in range(260, 2600, 390)) + \
            "".join(f'<line x1="-20" y1="{y + gl.uniform(-8, 8):.0f}" x2="2620" y2="{y + gl.uniform(-40, 40):.0f}"/>' for y in range(200, 3900, 420))
     html = f"""<!doctype html>
-<html lang="en" data-resolution="square">
+<html lang="en" data-resolution="{'portrait' if NINE else 'square'}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width={FW}, height={FH}" />
-    <title>Spin Bout U collage lyric edit 1x1</title>
+    <title>Spin Bout U collage lyric edit {'9x16' if NINE else '1x1'}</title>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>{CSS}</style>
   </head>
   <body>
     <svg width="0" height="0" style="position:absolute"><filter id="mb" x="-5%" y="-5%" width="110%" height="110%">
       <feGaussianBlur id="mbg" stdDeviation="0 0"/></filter>
+      <filter id="hgl" x="-5%" y="0" width="110%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence id="hglT" type="turbulence" baseFrequency="0.00008 0.035" numOctaves="1" seed="3" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="1 0 0 0 0  0 0 0 0 .5  0 0 0 0 0  0 0 0 0 1" result="m"/>
+      <feDisplacementMap id="hglD" in="SourceGraphic" in2="m" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter>
       <filter id="bloom" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
       <feGaussianBlur id="blg" in="SourceGraphic" stdDeviation="20" result="b"/>
       <feColorMatrix in="b" type="matrix" values=".95 0 0 0 0  0 .72 0 0 0  0 0 .9 0 0  0 0 0 1 0" result="bb"/>
@@ -1813,7 +1854,7 @@ def main():
   </body>
 </html>
 """
-    open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8").write(html)
+    open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(html)
     print(f"wrote index.html {len(html) // 1024} KB, {len(A)} timeline lines, {len(scenes())} scenes")
 
 

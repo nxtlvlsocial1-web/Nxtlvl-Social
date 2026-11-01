@@ -62,6 +62,7 @@ GUR = ImageFont.truetype(os.path.join(ROOT, "assets", "fonts", "AnekGurmukhi", "
                          layout_engine=ImageFont.Layout.RAQM)
 CAMKEYS = {}          # scene index -> list of (t, fx, fy, scale, rot, dur)
 FLASH = []            # (t, kind)
+BOXED = {"blk", "wht", "redw", "red", "rb", "blkr"}   # label styles drawn on a box
 BURST = []            # v10: (cut time, burst style)
 NID = [0]
 
@@ -252,39 +253,32 @@ def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor
     w = tw(text, size) + size * .56
     left = x - w / 2 if anchor == "center" else x
     cl = clusters(text)
-    if mode == "type" and "stamp" not in style:              # v10: quicker modes beside the reference's typing
-        mode = ("type", "slamx", "flip3d", "type", "cascade")[NID[0] % 5]
+    box = style.split()[0] in BOXED and mode == "type"       # v11: the box wipes open first, then the text types in
     letters = "".join(f'<span class="ch">{c if c != " " else "&nbsp;"}</span>' for c in cl)
     cur = '<span class="cur"></span>' if mode == "type" else ""
     pl = " pl" if mode in ("slamx", "flip3d", "cascade") else ""
     PAN.append(f'<div class="lw" data-layout-allow-overlap style="left:{left:.0f}px;top:{y:.0f}px;transform:rotate({rot:.1f}deg);z-index:{z}">'
                f'<div class="lb {style}{pl}" id="{i}" style="font-size:{size:.0f}px">{letters}{cur}{CIRC if circle else ""}</div></div>')
-    show(f"#{i}", t, t1)
+    show(f"#{i}", t - 2 * STEP if box else t, t1)
     if "stamp" in style:
         EV.append((t, "stamp"))
     if mode == "type":
         n = len(cl)
         per = 3 if n > 8 else 2
-        js(f'tl.set("#{i} .ch", {{display: "none"}}, {t - .001:.3f});')
+        if box:
+            js(f'tl.fromTo("#{i}", {{clipPath: "inset(-30% 100% -30% 0%)"}}, {{clipPath: "inset(-30% -12% -30% 0%)", duration: {2 * STEP:.3f}, '
+               f'ease: "steps(2)", immediateRender: false}}, {t - 2 * STEP:.3f});')
+        js(f'tl.set("#{i} .ch", {{display: "none", opacity: 1}}, {t - 2 * STEP - .001:.3f});')
         k = 0
-        while k < n:
-            js(f'tl.set("#{i} .ch:nth-child(-n+{min(n, k + per)})", {{display: "inline"}}, {t + (k // per) * STEP:.3f});')
+        while k < n:                                         # v11: each chunk lands as a grey ghost, solid a step later
+            a_, b_ = k + 1, min(n, k + per)
+            tk = t + (k // per) * STEP
+            sel = f"#{i} .ch:nth-child(n+{a_}):nth-child(-n+{b_})"
+            js(f'tl.set("{sel}", {{display: "inline", opacity: .32}}, {tk:.3f});')
+            js(f'tl.set("{sel}", {{opacity: 1}}, {tk + STEP:.3f});')
             k += per
         done = t + (n // per + 1) * STEP
         js(f'tl.set("#{i} .cur", {{display: "none"}}, {done:.3f});')
-    elif mode in ("slamx", "flip3d", "cascade"):
-        n = max(1, len(cl))
-        if mode == "slamx":                                  # letters slam in big and spun, settle on twos
-            js(f'tl.fromTo("#{i} .ch", {{scale: 2.6, rotation: (k) => [-24, 18, -12, 26, -8][k % 5], opacity: 0}}, '
-               f'{{scale: 1, rotation: 0, opacity: 1, duration: .18, ease: "back.out(2.6)", stagger: {min(.016, .16 / n):.3f}, immediateRender: false}}, {t:.3f});')
-            EV.append((t, "pop"))
-        elif mode == "flip3d":                               # letters flip up out of the page
-            js(f'tl.fromTo("#{i} .ch", {{rotationX: -95, transformPerspective: 500, transformOrigin: "50% 100%", opacity: 0}}, '
-               f'{{rotationX: 0, opacity: 1, duration: .26, ease: "back.out(1.8)", stagger: {min(.018, .18 / n):.3f}, immediateRender: false}}, {t:.3f});')
-        else:                                                # letters pop up one by one with overshoot
-            js(f'tl.fromTo("#{i} .ch", {{yPercent: 115, opacity: 0, rotation: 10}}, {{yPercent: 0, opacity: 1, rotation: 0, duration: .26, '
-               f'ease: "back.out(2.6)", stagger: {min(.018, .18 / n):.3f}, immediateRender: false}}, {t:.3f});')
-        done = t + .3
     elif mode == "slam":
         EV.append((t, "slam"))
         js(f'tl.fromTo("#{i}", {{scale: 1.65}}, {{scale: 1, duration: .2, ease: "steps(3)", immediateRender: false}}, {t:.3f});')
@@ -592,14 +586,13 @@ POST = []             # v10b: layers above the glow (the logo stays crisp, untou
 
 
 def logo_outro(a, b):
-    """v10d: as the ssspin reference ends, the logo stays on the paper: the paper crossfades in while the song fades
-    (59-60 s), the owner's logo disc (cut to its circle, soft shadow) blurs in, a blue marker circle draws round it, the
-    sheen sweeps and the star twinkles. Earlier (v10b), the Spin Bout U ending: after the ASHKE tape the frame eases into the logo's dark violet over the same second
+    """v11 (owner): the logo on its own dark violet again, no paper, no logo sound effects; the frame eases into the dark
+    over 0.8 s while the song keeps playing and fades out across the logo (59.2-61.6 s, build/audio_outro.py).
+    As on Spin Bout U: after the ASHKE tape the frame eases into the logo's dark violet over the same second
     the song fades out (59-60 s, build/audio_outro.py; v10c: one long dip, no echo); the owner's N logo comes in from a soft blur and a
     slight scale at 60% size, a light sweep runs across the circle's sheen, the star twinkles. Smooth, not stepped."""
     i = nid("lg")
-    POST.append(f'<div class="logo2 el" id="{i}"><div class="lpaper"></div><div class="lblinds"></div><div class="lin"><img src="assets/img/brand/nxtlvl_logo.png" alt="Nxtlvl">'
-                f'<svg class="lmark" viewBox="0 0 1080 1080"><path pathLength="400" d="M560 150 C820 130 960 330 940 560 C920 800 720 950 520 935 C300 920 130 760 140 540 C150 330 330 160 600 170"/></svg>'
+    POST.append(f'<div class="logo2 el" id="{i}"><div class="lin"><img src="assets/img/brand/nxtlvl_logo.png" alt="Nxtlvl">'
                 f'<div class="lsweep"><i></i></div><svg class="lstar" viewBox="-50 -50 100 100"><path d="M0 -48 C6 -8 8 -6 48 0 C8 6 6 8 0 48 '
                 f'C-6 8 -8 6 -48 0 C-8 -6 -6 -8 0 -48 Z" fill="#fff"/></svg></div></div>')
     HIDE.append(f"#{i}")
@@ -609,10 +602,9 @@ def logo_outro(a, b):
     js(f'tl.to("#{i} img", {{scale: .965, duration: {b - a - .55:.2f}, ease: "none"}}, {a + .55:.3f}); /*smooth*/')
     js(f'tl.set("#{i} .lsweep i", {{x: -700}}, {a - 1.02:.3f});')
     js(f'tl.fromTo("#{i} .lsweep i", {{x: -700}}, {{x: 700, duration: .75, ease: "power2.inOut", immediateRender: false}}, {a + .45:.3f}); /*smooth*/')
-    js(f'tl.fromTo("#{i} .lmark path", {{strokeDashoffset: 400}}, {{strokeDashoffset: 0, duration: .5, ease: "power2.out", immediateRender: false}}, {a + .5:.3f}); /*smooth*/')
     js(f'tl.fromTo("#{i} .lstar", {{scale: 0, rotation: -45, opacity: 0}}, {{scale: 1, rotation: 0, opacity: 1, duration: .35, ease: "back.out(2.2)", immediateRender: false}}, {a + .9:.3f}); /*smooth*/')
     js(f'tl.to("#{i} .lstar", {{scale: .55, opacity: 0, duration: .4, ease: "power2.in"}}, {a + 1.25:.3f}); /*smooth*/')
-    EV.extend([(a + .05, "logo_in"), (a + .5, "marker"), (a + .9, "logo_star")])
+    # v11 (owner): no sound effects on the logo; the song itself fades across it (build/audio_outro.py)
 
 
 def end_card():
@@ -677,7 +669,7 @@ def transition_frames():
     R9) take the ink matte."""
     # v10d (owner's second YouMotion reference, "ssspin"): stills, a held colour flip, the torn sheet and a blurred whip
     # across blank paper; the ink matte and the duotone stutter are out (the reference has neither)
-    order = ["frames", "flip", "tear", "whip", "flip"]
+    order = ["frames", "flip", "white", "whip", "flip", "tear"]
     k = q = 0
     for si, (a, b, li) in enumerate(scenes()):
         if si == 0 or li == 32:
@@ -685,6 +677,12 @@ def transition_frames():
         st = "whip" if RECIPE[li] in ("R4", "R8", "R9") else order[q % len(order)]
         q += 1
         BURST.append((a, st))
+        if st in ("frames", "whip", "white"):                # v11: the next shot enters through a horizontal slice glitch
+            for j, (sc, sd) in enumerate([(80, 3), (34, 7)]):
+                js(f'tl.set("#board", {{filter: "url(#hgl)"}}, {a + j * STEP:.3f});')
+                js(f'tl.set("#hglD", {{attr: {{scale: {sc}}}}}, {a + j * STEP:.3f});')
+                js(f'tl.set("#hglT", {{attr: {{seed: {si * 5 + sd}}}}}, {a + j * STEP:.3f});')
+            js(f'tl.set("#board", {{filter: "none"}}, {a + 2 * STEP:.3f});')
         if st == "frames":
             for j in range(3):
                 shot = TRANS_POOL[k % len(TRANS_POOL)]
@@ -697,7 +695,9 @@ def transition_frames():
                 t0 = a - (3 - j) / 30
                 show(f"#{i}", t0, t0 + 1 / 30)
         elif st == "flip":                                   # the reference's colour change: the frame inverts and holds
-            FLASH.append((a, "invhold"))                     # (cream -> slate blue, red -> teal, ink -> white)
+            FLASH.append((a - 3 * STEP, "invhold"))          # (cream -> slate blue, red -> teal, ink -> white); v11: across the cut
+        elif st == "white":                                  # two white frames on the cut (reference 0:03.67)
+            FLASH.append((a - STEP, "white"))
         elif st == "whip":                                   # the camera tears across blank paper, heavy motion blur
             i = nid("wp")
             d = 1 if si % 2 else -1
@@ -716,10 +716,11 @@ def transition_frames():
         elif st == "tear":
             i = nid("tr")
             kind = ("black", "red", "white", "grey")[si % 4]
-            SCREEN.append(f'<img class="tear" id="{i}" src="assets/img/scrap/{kind}-{si % 4}.png" style="top:{CY - 840:.0f}px" alt="">')
+            SCREEN.append(f'<img class="tear" id="{i}" src="assets/img/scrap/{kind}-{si % 4}.png" style="top:{CY - (840 if SQUARE else 1300):.0f}px" alt="">')
             HIDE.append(f"#{i}")
             js(f'tl.set("#{i}", {{opacity: 1}}, {a - 3 / 15:.3f});')
-            for j, x in enumerate([-1900, -1100, -400, 300, 1100]):
+            xs = [-1900, -1100, -400, 300, 1100] if SQUARE else [-2700, -1700, -800, 100, 1100]
+            for j, x in enumerate(xs):
                 js(f'tl.set("#{i}", {{x: {x}, rotation: {(-8, -5, -3, -1, 2)[j]}}}, {a - 3 / 15 + j / 15:.3f});')
             js(f'tl.set("#{i}", {{opacity: 0}}, {a + 2 / 15:.3f});')
         else:                                                # stutter
@@ -893,7 +894,7 @@ def flashes():
         EV.append((t, {"invert": "glitch", "invhold": "glitch", "white": "flash", "split": "click"}[kind]))
         if kind == "invhold":                                # held for three steps, like the reference's colour flips
             js(f'tl.set("#fx", {{filter: "invert(1)"}}, {t:.3f});')
-            js(f'tl.set("#fx", {{filter: "none"}}, {t + 3 * STEP:.3f});')
+            js(f'tl.set("#fx", {{filter: "none"}}, {t + 4 * STEP:.3f});')
         elif kind == "invert":
             js(f'tl.set("#fx", {{filter: "invert(1)"}}, {t:.3f});')            # red goes teal, like the reference
             js(f'tl.set("#fx", {{filter: "none"}}, {t + STEP:.3f});')
@@ -1000,18 +1001,10 @@ img.el {{ display: block; height: auto; }}
 .circ path {{ fill: none; stroke: {BLUE}; stroke-width: 5.5; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 400; }}
 .tframe {{ position: absolute; z-index: 15; opacity: 0; background: #f3f1ec; padding: 18px; box-shadow: 0 18px 40px rgba(0,0,0,.45); }}
 .tframe img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
-.logo2 {{ position: absolute; inset: 0; z-index: 21; background: #ece9e3; overflow: hidden; }}
-.lpaper {{ position: absolute; left: -400px; top: -400px; width: 2600px; height: 3900px; background: url(assets/img/paper.png);
-  filter: sepia(.06) saturate(.8) brightness(1.08); }}
-.lblinds {{ position: absolute; inset: -300px; pointer-events: none; mix-blend-mode: multiply;
-  background: repeating-linear-gradient(-32deg, rgba(70,60,52,0) 0px, rgba(70,60,52,0) 70px, rgba(70,60,52,.27) 150px, rgba(70,60,52,.31) 210px,
-  rgba(70,60,52,0) 290px, rgba(70,60,52,0) 330px); }}
-.lin {{ position: absolute; left: 0; top: {CY - 540:.0f}px; width: 1080px; height: 1080px; transform: scale(.6);
-  filter: drop-shadow(0 22px 26px rgba(40,30,20,.35)); }}
+.logo2 {{ position: absolute; inset: 0; z-index: 21; background: #05030d; overflow: hidden; }}
+.lin {{ position: absolute; left: 0; top: {CY - 540:.0f}px; width: 1080px; height: 1080px; transform: scale(.6); }}
 .logo2 img {{ position: absolute; inset: 0; width: 100%; height: 100%; display: block;
-  -webkit-mask-image: radial-gradient(circle closest-side, #000 57.3%, transparent 57.9%); mask-image: radial-gradient(circle closest-side, #000 57.3%, transparent 57.9%); }}
-.lmark {{ position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }}
-.lmark path {{ fill: none; stroke: {BLUE}; stroke-width: 11; stroke-linecap: round; stroke-dasharray: 400; stroke-dashoffset: 400; }}
+  -webkit-mask-image: radial-gradient(circle closest-side, #000 74%, transparent 100%); mask-image: radial-gradient(circle closest-side, #000 74%, transparent 100%); }}
 .lsweep {{ position: absolute; left: 228px; top: 228px; width: 624px; height: 624px; border-radius: 50%; overflow: hidden; mix-blend-mode: screen;
   -webkit-mask-image: radial-gradient(circle, #000 70%, transparent 71%); mask-image: radial-gradient(circle, #000 70%, transparent 71%); }}
 .lsweep i {{ position: absolute; left: -50%; top: 0; width: 200%; height: 100%;
@@ -1031,7 +1024,7 @@ img.el {{ display: block; height: auto; }}
 #leak {{ position: absolute; inset: -200px; z-index: 17; opacity: 0; pointer-events: none; mix-blend-mode: screen;
   background: radial-gradient(ellipse 35% 60% at 50% 50%, rgba(255,214,180,.55), rgba(255,120,100,.25) 45%, rgba(0,0,0,0) 75%); }}
 #ink {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; z-index: 19; opacity: 0; pointer-events: none; }}
-.tear {{ position: absolute; left: 0; width: 1900px; height: auto; z-index: 19; opacity: 0; pointer-events: none;
+.tear {{ position: absolute; left: 0; width: {1900 if SQUARE else 2700}px; height: auto; z-index: 19; opacity: 0; pointer-events: none;
   filter: drop-shadow(0 20px 30px rgba(0,0,0,.55)); }}
 .tframe.thr img {{ filter: grayscale(1) contrast(5) brightness(1.1); }}
 .tframe.duo img {{ filter: invert(1) sepia(1) saturate(4) hue-rotate(130deg) contrast(1.4); }}
@@ -1072,7 +1065,11 @@ def main():
   <body>
     <svg width="0" height="0" style="position:absolute"><filter id="mb" x="-5%" y="-5%" width="110%" height="110%">
       <feGaussianBlur id="mbg" stdDeviation="0 0"/></filter>
-      <filter id="mbw" x="-10%" y="-5%" width="120%" height="110%"><feGaussianBlur stdDeviation="34 3"/></filter>{FX_DEFS}</svg>
+      <filter id="mbw" x="-10%" y="-5%" width="120%" height="110%"><feGaussianBlur stdDeviation="34 3"/></filter>
+      <filter id="hgl" x="-5%" y="0" width="110%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence id="hglT" type="turbulence" baseFrequency="0.00008 0.035" numOctaves="1" seed="3" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="1 0 0 0 0  0 0 0 0 .5  0 0 0 0 0  0 0 0 0 1" result="m"/>
+      <feDisplacementMap id="hglD" in="SourceGraphic" in2="m" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter>{FX_DEFS}</svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="{FW}" data-height="{FH}">
       <div id="glow"><div id="fx">
         <div id="bg"></div>

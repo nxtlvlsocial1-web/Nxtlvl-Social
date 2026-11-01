@@ -114,8 +114,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("video")
     ap.add_argument("--out", default=os.path.join(ROOT, "cache", "sfx", "cues.json"))
+    ap.add_argument("--events", default=os.path.join(ROOT, "plan", "sfx_events.json"))   # v21: sfx_events_9x16.json for 9:16
     a = ap.parse_args()
-    ev = json.load(open(os.path.join(ROOT, "plan", "sfx_events.json")))
+    ev = json.load(open(a.events))
     rot = {k: itertools.cycle(v[0]) for k, v in KINDS.items()}
     if "streak" in KINDS:                                   # interleave the two streak families
         st = KINDS["streak"][0]
