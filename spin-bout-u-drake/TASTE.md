@@ -187,6 +187,15 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
   word by word as sung (centred), the keyword big in the centre with a white flash, and the last shot double-exposes
   the intro photo.
 
+## v18 (owner: the switch is at the SECOND "the way"; the ending as a velocity edit, lyrics card / Drake / lyrics card)
+- The first "the way" (29.5 s) is the collage again. From the second (44.28 s) to the end: a velocity edit.
+- build/velocity.py: the walking clip with a speed curve locked to the song, every two beats a slow-mo hang (0.32x)
+  after the hit and a ramp to 3x into the next (clip A 3.0-20.5 s squeezed into 15.7 s).
+- Every lyric line cuts to a full-screen card in the edit's own look (maroon paper, a torn scrap, the Anton / stamp /
+  3D / Playfair caption styles), letters slammed in within 0.1 s, held for about 0.6 of the gap, then back to Drake.
+  Grade per line (warm / B/W / warm / B/W); the last second double-exposes the intro photo; the out-of-body ghost on
+  "body" lifts the footage and the cards. Card sounds: light swishes, keyword cards a soft hit with a low layer.
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|
@@ -210,3 +219,4 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 | 2026-10-31 | pixel animations not in boxes; pixel mascot for the burn; a clip on the way lyrics; transitions still slow, make them fast After Effects style; transition sounds not bassy enough | v15 above |
 | 2026-11-01 | paper slaps once only; pixel sounds quieter; jealous as pixel girls throwing phones; transitions to the flow of the three references; no pulsing; fix the intro Drake crop or change its background; better, faster text | v16 above |
 | 2026-11-01 | remove the double whooshes (road, the way, ending); from the way lyrics switch to the Eimantas style with the walking clip full screen, back and forth with the collage | v17 above |
+| 2026-11-01 | the switch belongs at the second the way; make the end a velocity edit, lyrics card then Drake back and forth | v18 above |

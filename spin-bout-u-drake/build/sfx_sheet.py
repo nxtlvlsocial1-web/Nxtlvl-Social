@@ -79,6 +79,12 @@ KINDS = {
                     "glass", -12, {"max_dur": .5}),
     "streak": ([f(p_) for k in range(4) for p_ in (f"sci-fi-sounds/Audio__computerNoise_00{3 - k}.ogg",)] + r8("sfx_sounds_interaction")[:4],
                "glitch", -12, {"max_dur": .2}),
+    "card": ([f("swishes-sound-pack/swishes__swish-2.wav"), f("rpg-sound-pack/" + RPG_SWING[1]), f("swishes-sound-pack/swishes__swish-6.wav"),
+              f("fantasy-sound-effects-tinysized-sfx/sfx-cc0__cloth-pouch-shake-02.wav"), f("swishes-sound-pack/swishes__swish-10.wav")],
+             "whoosh", -9, {"max_dur": .4}),
+    "card_key": ([f("100-cc0-sfx-2/sfx100v2_hit_01.ogg"), f("100-cc0-sfx-2/sfx100v2_hit_03.ogg")], "hit", -6,
+                 {"layers": [{"dt": 0.0, "file": f("sci-fi-sounds/Audio__lowFrequency_explosion_001.ogg"), "role": "hit", "gain_db": -6,
+                              "lowpass": 300, "max_dur": .5, "fade_out": .2}]}),
     "ghost": ([f("wind-hit-time-morph/qubodup-slomo1.wav")], "whoosh", -6, {"max_dur": 1.2}),
     "pixel_start": (r8("sfx_sounds_powerup1."), "ui", -10, {}),
     "pixel_walk": (r8("sfx_movement_footsteps"), "foley", -9, {"anchor": "start"}),
@@ -134,6 +140,8 @@ def main():
             continue
         if k == "glitch" and any(e2["type"].startswith(("whoosh", "swish")) and abs(e2["t"] - t) < .12 for e2 in ev):
             continue                                       # a cut already has its whoosh: the flash rides on it
+        if k in ("card", "card_key") and any(e2["type"].startswith(("whoosh", "swish")) and abs(e2["t"] - t) < .15 for e2 in ev):
+            continue                                       # the scene cut's whoosh already carries this card
         if k == "heart":
             if any(c["label"] == "heart" and t - c["t"] < .45 for c in cues):
                 continue

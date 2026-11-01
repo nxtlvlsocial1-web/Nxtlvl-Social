@@ -702,7 +702,7 @@ ICON_LI = {14: (830, 760, 8), 16: (30, 250, -8), 7: (760, 700, 8), 0: (800, 1480
 
 def lyric_icons():
     for si, (a, b, li) in enumerate(scenes()):
-        if li in FOOT:
+        if li in FOOT or li in VEL:
             continue
         gs = groups_of(li) if li >= 0 else [("", True, a + 1.2)]
         kws = [g for g in gs if g[1]]
@@ -745,7 +745,8 @@ def transition_frames():
             show(f"#{i}", t0, t0 + 1 / 30)
 
 
-FOOT = {11: "f_hook1", 15: "f_hook2", 18: "f_end"}     # v17: full-screen footage, Eimantas style
+FOOT = {}                                              # v17 footage scenes; v18 replaced them with the velocity ending
+VEL = (15, 16, 17, 18)                                 # v18: from the second "the way" to the end, a velocity edit
 LOOKS = {"grade": "contrast(1.14) saturate(1.2) sepia(.2) hue-rotate(-8deg)",
          "thr": "grayscale(1) contrast(4.2) brightness(1.06)",
          "red": "grayscale(1) contrast(1.8) brightness(.95)",
@@ -800,6 +801,49 @@ def footage_scene(si, a, b, li, gs):
             js(f'tl.fromTo("#{j}", {{scale: 1.5}}, {{scale: 1, duration: .2, ease: "expo.out", immediateRender: false}}, {t:.3f});')
 
 
+def velocity_section(a, b):
+    """v18 (owner): from the second "the way" the ending is a velocity edit: the walking clip runs full screen with a
+    speed curve locked to the beat (build/velocity.py), and every lyric line cuts to a full-screen card in the edit's
+    own type and colours (maroon paper, a torn scrap, the Anton / Playfair caption styles) and back to Drake: frame 1
+    lyrics, frame 2 Drake. The last line double-exposes the intro photo."""
+    src = f"{CL}vel_end.mp4"
+    i = nid("vl")
+    VTR[0] += 1
+    SCREEN.append(f'<div class="foot el" id="{i}"><video id="v{i}" src="{src}" data-start="{a:.3f}" data-duration="{b - a:.3f}" '
+                  f'data-track-index="{VTR[0]}" muted playsinline></video>'
+                  f'<img class="fdbl" id="d{i}" src="assets/img/src/drake_back_black.jpg" alt="" style="opacity:0"></div>')
+    show(f"#{i}", a, b)
+    sc = {li: (x, y) for x, y, li in scenes()}
+    for li, look in zip(VEL, ("grade", "bw", "grade", "bw")):
+        js(f'tl.set("#v{i}", {{filter: "{LOOKS[look]}"}}, {sc[li][0]:.3f});')
+    js(f'tl.set("#d{i}", {{opacity: .45}}, {sc[18][0] + 1.0:.3f});')
+    groups = [(li, g) for li in VEL for g in groups_of(li)]
+    styles = ["blk", "mag", "ser", "magw", "wht"]
+    n_plain = 0
+    for k, (li, (txt, key, t)) in enumerate(groups):
+        t_next = groups[k + 1][1][2] if k + 1 < len(groups) else b
+        gap = t_next - t
+        dur = min(.6, gap * .66)                            # the card, then Drake until the next line
+        if key:
+            style = "w3d" if k % 2 else "stamp"
+        else:
+            style = styles[n_plain % len(styles)]
+            n_plain += 1
+        text = txt.lower() if style == "ser" else txt
+        size = fit(text, 940, 250 if key else 170)
+        letters = "".join(f'<span class="ch{" cz" if c == "*" else ""}">{c if c != " " else "&nbsp;"}</span>' for c in text)
+        j = nid("vc")
+        kind = ("black", "mag", "black", "white", "mag")[k % 5]
+        SCREEN.append(f'<div class="vcard el" id="{j}"><div class="vbg"></div>'
+                      f'<img class="vscrap" src="assets/img/collage/scrap/{kind}-{k % 4}.png" style="transform:rotate({(-7, 5, -3, 8)[k % 4]}deg)" alt="">'
+                      f'<div class="vtxt"><div class="lb {style}" style="font-size:{size:.0f}px;opacity:1;transform:rotate({(-3, 2, -2, 3)[k % 4]}deg)">{letters}</div></div></div>')
+        show(f"#{j}", t, t + dur)
+        js(f'tl.fromTo("#{j} .ch", {{scale: 2.4, rotation: (q) => [-20, 16, -10, 22][q % 4], opacity: 0}}, '
+           f'{{scale: 1, rotation: 0, opacity: 1, duration: .1, ease: "back.out(2.2)", stagger: {min(.006, .05 / max(1, len(text))):.3f}, immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("#{j} .vscrap", {{scale: 1.35}}, {{scale: 1, duration: .12, ease: "expo.out", immediateRender: false}}, {t:.3f});')
+        CUES.append((t, "card_key" if key else "card", 0))
+
+
 def cut_bursts():
     """v16: every cut is a short burst instead of one clean cut, rotating the owner's three references:
     ink (Eimantas: a grunge ink matte eats the frame and recedes off the next shot), tear (YouMotion: a torn paper sheet
@@ -811,7 +855,7 @@ def cut_bursts():
     order = ["tear", "stutter", "ink", "slam"]
     k = 0
     for si, (a, b, li) in enumerate(scenes()):
-        if si == 0:
+        if si == 0 or (li in VEL and li != VEL[0]):         # inside the velocity ending the lyric cards are the cuts
             continue
         styles = ["ink", "stutter"] if li in big else [order[si % 4]]
         for st in styles:
@@ -1363,7 +1407,7 @@ def context_fx():
         js(f'tl.set("#fx", {{filter: "none"}}, {tw + (m + 1) * STEP:.3f});')
 
 
-BURNS = {11: "burn5", 15: "burn12", 17: "burn5", 18: "burn12", 6: "burn1", 10: "burn2"}
+BURNS = {11: "burn5", 15: "burn12", 6: "burn1", 10: "burn2"}
 
 
 def film_burns():
@@ -1626,6 +1670,12 @@ img.el {{ display: block; height: auto; }}
 .fkey-line {{ position: absolute; left: 0; right: 0; top: 430px; z-index: 16; text-align: center; font: 400 190px/1 "Anton"; color: #fff;
   letter-spacing: .01em; text-shadow: 0 0 30px rgba(255,40,60,.7), 8px 8px 0 #ff1e2e; }}
 .fw {{ margin: 0 .16em; }}
+.vcard {{ position: absolute; inset: 0; z-index: 16; overflow: hidden; }}
+.vbg {{ position: absolute; inset: 0; background: url(assets/img/collage/shade.png) center / 1400px auto, radial-gradient(ellipse at 50% 45%, #6a1d36, #14060b 78%);
+  background-blend-mode: multiply; }}
+.vscrap {{ position: absolute; left: 60px; top: 330px; width: 960px; height: 420px; object-fit: fill; }}
+.vtxt {{ position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }}
+.vtxt .lb {{ position: relative; }}
 .fw.cz {{ filter: blur(.1em); }}
 #ink {{ position: absolute; inset: 0; width: 1080px; height: 1080px; z-index: 19; opacity: 0; pointer-events: none; }}
 .tear {{ position: absolute; left: 0; top: -300px; width: 1900px; height: auto; z-index: 19; opacity: 0; pointer-events: none;
@@ -1641,7 +1691,10 @@ def main():
     builders = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6, "R7": r7, "R8": r8, "R9": r9}
     for si, (a, b, li) in enumerate(scenes()):
         gs = [("SPIN BOUT U", False, .3), ("DRAKE", True, 1.1), ("21 SAVAGE", False, 1.6)] if li < 0 else groups_of(li)
-        if li in FOOT:
+        if li in VEL:
+            if li == VEL[0]:
+                velocity_section(a, DUR)
+        elif li in FOOT:
             footage_scene(si, a, b, li, gs)
         else:
             builders[RECIPE[li]](si, a, b, li, gs)
