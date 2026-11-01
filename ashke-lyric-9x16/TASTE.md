@@ -1,6 +1,6 @@
 # TASTE: ashke-lyric-9x16
 
-Updated 2026-10-31. Current version: final v8, renders/nxtlvl_ashke-lyric_reels_9x16_v8.mp4 (60 s, the song only).
+Updated 2026-11-01. Current version: v10 build, square preview ../ashke-lyric-1x1/renders/preview_ashke-lyric_1x1_v2_sfx.mp4 (60 s, song + SFX from 3 s).
 
 ## 1. Brief
 - 9:16 Ashke (Karan Aujla, Mxrci) lyric edit: 60 s from 2:14, 1080x1920, 30 fps.
@@ -77,6 +77,24 @@ Updated 2026-10-31. Current version: final v8, renders/nxtlvl_ashke-lyric_reels_
 - The window-blind shadows are in screen space (a light over the table); the invert flash is plain, so red goes
   teal, as in the reference.
 
+## 3f. v10 remake (owner, 2026-11-01), square in ../ashke-lyric-1x1
+- Everything the Spin Bout U edit learned, on Ashke:
+  - Liquid gradient background (build/fluidbg.py): blood red, crimson, an ember highlight on near-black.
+  - The paper's white grid lines are gone (and the end tape's grid). Only the crumple stays, as a faint see-through
+    texture that moves with the camera (build/crumple.py).
+  - Every ease keeps its curve but steps on twos (15 fps).
+  - Cut bursts rotate: the three single-frame stills, a torn sheet, an ink matte that breaks up over four steps, and a
+    stutter (threshold, invert, duotone, white).
+  - Deep glow on the bright parts, bloom and colour split on the cuts, warm light-leak sweeps.
+  - Labels: slam, flip and cascade beside the typing.
+- Dark-ground fixes: stamped words are white with a black outline, the ghost and paragraph are light, stars are paper
+  white, R9's white scrap is now black.
+- Sound: real CC0 recordings from 3 s on, nothing before (the intro under the drop is the song alone).
+  - Whooshes with a low sub on the cuts, impacts on slams and stamps, keyword hits, paper tears, a shutter per print
+    (at most one per 2.6 s), glitches.
+  - No typing or star sounds, a paper slap once.
+  - Openverse first: Freesound refused every download (403), so the OpenGameArt CC0 packs.
+
 ## 4. Removed
 - v2's full-bleed 9:16 cinema layer (eimantasbitinas23 reference): it blew the footage up and looked blurry.
 
@@ -95,3 +113,4 @@ Updated 2026-10-31. Current version: final v8, renders/nxtlvl_ashke-lyric_reels_
 | 2026-10-31 | add three more photos (barn with horse, fire stage arm up, purple stage) | cut-outs barn, fireup, purple, replacing repeats (v8) |
 | 2026-10-31 | Bugatti: add the full photo; stop repeating the same clips | Bugatti as a full framed print; every print, fill and flash its own window from a shot-by-shot breakdown, flashes from the MV verse (v9) |
 | 2026-10-31 | make the whole edit in the 1:1 box ratio | square render in ../ashke-lyric-1x1 from the same build (ASHKE_FORMAT=1x1) |
+| 2026-11-01 | remake with the Spin Bout U transitions, tracking and pacing with sound effects; remove the white grids, gradient background; SFX from 3 s, nothing before | 3f (v10) |

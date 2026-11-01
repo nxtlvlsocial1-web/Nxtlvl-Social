@@ -1,5 +1,11 @@
 """Ashke (Karan Aujla, Mxrci) lyric edit, 9:16, 60 s from 2:14 of the song, v3: writes index.html.
 
+v10 (owner, 2026-11-01): remade with what the Spin Bout U edit learned. A liquid gradient background (blood red,
+crimson, ember, near-black; build/fluidbg.py) replaces the paper and its white grid lines; every ease keeps its curve
+but steps on twos (15 fps); cut bursts rotate ink matte / torn sheet / stutter / stills; a luminance-keyed deep glow,
+bloom and colour split on the cuts and light-leak sweeps; quicker label animations (slam, flip, cascade beside the
+typing); real CC0 sound effects from 3 s on (plan/sfx_events*.json -> build/sfx_sheet.py -> the real-sfx mixer).
+
 python3 build/generate.py      (from the project root; after build/paper.py, scraps.py, cutouts.py, cards.py and
 audio.py)
 
@@ -21,6 +27,7 @@ import json
 import math
 import os
 import random
+import re
 import sys
 
 from PIL import ImageFont
@@ -50,6 +57,7 @@ GUR = ImageFont.truetype(os.path.join(ROOT, "assets", "fonts", "AnekGurmukhi", "
                          layout_engine=ImageFont.Layout.RAQM)
 CAMKEYS = {}          # scene index -> list of (t, fx, fy, scale, rot, dur)
 FLASH = []            # (t, kind)
+BURST = []            # v10: (cut time, burst style)
 NID = [0]
 
 LYRICS = [   # the owner's lyrics (2026-10-31), on the sung lines; (first word, last word) index the Scribe timings
@@ -93,7 +101,20 @@ def clusters(text):
     return out
 
 
+_STEPS = re.compile(r'ease: "steps\(\d+\)"')
+
+
 def js(s):
+    """Timeline line. v10: a linear steps(n) ease becomes a curve (expo out for short entrances, power2 out for longer
+    moves) that still steps on twos (15 fps), the frame pacing of the references with an After Effects ease."""
+    if 'ease: "steps(' in s:
+        m = re.search(r'duration: ([\d.]+)', s)
+        d = float(m.group(1)) if m else .3
+        s = _STEPS.sub('ease: "expo.out"' if d <= .5 else 'ease: "power2.out"', s)
+    if 'ease: "' in s and "duration:" in s:
+        m = re.search(r'duration: ([\d.]+)', s)
+        d = float(m.group(1)) if m else .3
+        s = re.sub(r'ease: "([^"]+)"', lambda mm: f'ease: SE("{mm.group(1)}", {max(2, round(d * 15))})', s)
     A.append("      " + s)
 
 
@@ -207,7 +228,7 @@ def card(n, x, y, w, h, rot, t0, t1, red=False):
         js(f'tl.set("#pr{n}", {{opacity: 0}}, {t1:.3f});')
 
 
-def star(x, y, size, t0, t1, color=INK, n=7, seed=0):
+def star(x, y, size, t0, t1, color="#f1eee8", n=7, seed=0):
     i = nid("st")
     PAN.append(f'<svg class="el" id="{i}" viewBox="-50 -50 100 100" style="left:{x:.0f}px;top:{y:.0f}px;width:{size}px;height:{size}px;z-index:4">'
                f'<path d="{star_path(n, seed=seed)}" fill="{color}"/></svg>')
@@ -223,10 +244,13 @@ def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor
     w = tw(text, size) + size * .56
     left = x - w / 2 if anchor == "center" else x
     cl = clusters(text)
+    if mode == "type" and "stamp" not in style:              # v10: quicker modes beside the reference's typing
+        mode = ("type", "slamx", "flip3d", "type", "cascade")[NID[0] % 5]
     letters = "".join(f'<span class="ch">{c if c != " " else "&nbsp;"}</span>' for c in cl)
     cur = '<span class="cur"></span>' if mode == "type" else ""
+    pl = " pl" if mode in ("slamx", "flip3d", "cascade") else ""
     PAN.append(f'<div class="lw" data-layout-allow-overlap style="left:{left:.0f}px;top:{y:.0f}px;transform:rotate({rot:.1f}deg);z-index:{z}">'
-               f'<div class="lb {style}" id="{i}" style="font-size:{size:.0f}px">{letters}{cur}{CIRC if circle else ""}</div></div>')
+               f'<div class="lb {style}{pl}" id="{i}" style="font-size:{size:.0f}px">{letters}{cur}{CIRC if circle else ""}</div></div>')
     show(f"#{i}", t, t1)
     if "stamp" in style:
         EV.append((t, "stamp"))
@@ -240,6 +264,19 @@ def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor
             k += per
         done = t + (n // per + 1) * STEP
         js(f'tl.set("#{i} .cur", {{display: "none"}}, {done:.3f});')
+    elif mode in ("slamx", "flip3d", "cascade"):
+        n = max(1, len(cl))
+        if mode == "slamx":                                  # letters slam in big and spun, settle on twos
+            js(f'tl.fromTo("#{i} .ch", {{scale: 2.6, rotation: (k) => [-24, 18, -12, 26, -8][k % 5], opacity: 0}}, '
+               f'{{scale: 1, rotation: 0, opacity: 1, duration: .18, ease: "back.out(2.6)", stagger: {min(.016, .16 / n):.3f}, immediateRender: false}}, {t:.3f});')
+            EV.append((t, "pop"))
+        elif mode == "flip3d":                               # letters flip up out of the page
+            js(f'tl.fromTo("#{i} .ch", {{rotationX: -95, transformPerspective: 500, transformOrigin: "50% 100%", opacity: 0}}, '
+               f'{{rotationX: 0, opacity: 1, duration: .26, ease: "back.out(1.8)", stagger: {min(.018, .18 / n):.3f}, immediateRender: false}}, {t:.3f});')
+        else:                                                # letters pop up one by one with overshoot
+            js(f'tl.fromTo("#{i} .ch", {{yPercent: 115, opacity: 0, rotation: 10}}, {{yPercent: 0, opacity: 1, rotation: 0, duration: .26, '
+               f'ease: "back.out(2.6)", stagger: {min(.018, .18 / n):.3f}, immediateRender: false}}, {t:.3f});')
+        done = t + .3
     elif mode == "slam":
         EV.append((t, "slam"))
         js(f'tl.fromTo("#{i}", {{scale: 1.65}}, {{scale: 1, duration: .2, ease: "steps(3)", immediateRender: false}}, {t:.3f});')
@@ -518,7 +555,7 @@ def r9(si, a, b, li, gs):
         still(PRINT[li], 600, 60, 440, 550, 7, a + .067, b)
     scrap("grey", 3, -160, -90, 1000, 5, a, b)
     scrap("grey", 1, 420, 1560, 860, -7, a, b)
-    scrap("white", 2, -120, 880, 760, 3, a, b)
+    scrap("black", 2, -120, 880, 760, 3, a, b)            # v10: black, so the white stamped word reads on it
     kw = gs[-1] if gs else None         # sung order top-down, the last word stamped big at the bottom
     rest = gs[:-1]
     styles = ["redw", "red", "w3d", "blk"]
@@ -583,13 +620,8 @@ def logo_outro():
 
 
 def end_card():
-    """The reference's logo moment: white flash, ASHKE on white tape between grid lines, the blue circle draws round."""
+    """The reference's logo moment: white flash, ASHKE on white tape (v10: no grid lines), the blue circle draws round."""
     t = W[153]["s"]
-    PAN.append('<svg class="el" id="eg" viewBox="0 0 700 300" style="left:190px;top:800px;width:700px;height:300px;z-index:5">' +
-               "".join(f'<line x1="{x}" y1="10" x2="{x + 4}" y2="290" stroke="#2b2724" stroke-width="2.4"/>' for x in range(80, 640, 72)) +
-               '<line x1="10" y1="60" x2="690" y2="56" stroke="#2b2724" stroke-width="2.4"/>'
-               '<line x1="10" y1="246" x2="690" y2="250" stroke="#2b2724" stroke-width="2.4"/></svg>')
-    show("#eg", t, DUR)
     scrap("black", 0, 160, -160, 760, 4, t, DUR)
     scrap("white", 3, 280, 1480, 640, -4, t, DUR)
     PAN.append('<div class="lw" data-layout-allow-overlap style="left:236px;top:870px;z-index:6;transform:rotate(-1.5deg)"><div class="lb logo" id="logo">'
@@ -642,22 +674,109 @@ def lyric_icons():
 
 
 def transition_frames():
-    """Two single-frame stills (one 15 fps step each) right before the cut: the frame pacing of the transitions."""
-    k = 0
+    """v10: every cut is a short burst, rotating what the Spin Bout U edit took from the owner's references:
+    frames (the owner's three single-frame stills right before the cut), tear (a torn sheet slides across in stepped
+    frames), ink (a grunge ink matte covers the cut and recedes off the next shot over four steps) and stutter (B/W
+    threshold still, invert, duotone still, white frame, one frame each). Scenes that open on their own flash (R4, R8,
+    R9) take the ink matte."""
+    SCREEN.append(f'<svg id="ink" viewBox="0 0 {FW} {FH}" preserveAspectRatio="none"><rect width="{FW}" height="{FH}" fill="#0b0606" filter="url(#inkf)"/></svg>')
+    HIDE.append("#ink")
+    order = ["frames", "tear", "stutter", "frames", "ink"]
+    k = q = 0
     for si, (a, b, li) in enumerate(scenes()):
-        if si == 0 or li == 32 or RECIPE[li] in ("R4", "R8", "R9"):
+        if si == 0 or li == 32:
             continue
-        for j in range(3):
-            shot = TRANS_POOL[k % len(TRANS_POOL)]
-            k += 1
-            i = nid("tf")
-            rot = (-4, 5, -2)[j]
-            w = (820, 700, 900)[j]
-            w = w * (.82 if SQUARE else 1)
-            SCREEN.append(f'<div class="tframe" id="{i}" style="left:{540 - w / 2:.0f}px;top:{CY - w * 1.25 / 2:.0f}px;width:{w}px;height:{w * 1.25:.0f}px;'
-                          f'transform:rotate({rot}deg)"><img src="assets/img/photo/frame_{shot}.jpg" alt=""></div>')
-            t0 = a - (3 - j) / 30
-            show(f"#{i}", t0, t0 + 1 / 30)
+        st = "ink" if RECIPE[li] in ("R4", "R8", "R9") else order[q % len(order)]
+        q += 1
+        BURST.append((a, st))
+        if st == "frames":
+            for j in range(3):
+                shot = TRANS_POOL[k % len(TRANS_POOL)]
+                k += 1
+                i = nid("tf")
+                rot = (-4, 5, -2)[j]
+                w = (820, 700, 900)[j] * (.82 if SQUARE else 1)
+                SCREEN.append(f'<div class="tframe" id="{i}" style="left:{540 - w / 2:.0f}px;top:{CY - w * 1.25 / 2:.0f}px;width:{w:.0f}px;height:{w * 1.25:.0f}px;'
+                              f'transform:rotate({rot}deg)"><img src="assets/img/photo/frame_{shot}.jpg" alt=""></div>')
+                t0 = a - (3 - j) / 30
+                show(f"#{i}", t0, t0 + 1 / 30)
+        elif st == "ink":                                    # coverage 100% -> 0 over 4 steps after the cut
+            js(f'tl.set("#ink", {{opacity: 1}}, {a - 1 / 30:.3f});')
+            for j, ic in enumerate([1.0, -4.2, -6.2, -8.0, -10.5]):   # noise alpha ~.4-1 x slope 9: full -> eaten away
+                js(f'tl.set("#inkA", {{attr: {{intercept: {ic}}}}}, {a - 1 / 30 + j / 15:.3f});')
+                js(f'tl.set("#inkT", {{attr: {{seed: {si * 7 + j}}}}}, {a - 1 / 30 + j / 15:.3f});')
+            js(f'tl.set("#ink", {{opacity: 0}}, {a + 4 / 15:.3f});')
+        elif st == "tear":
+            i = nid("tr")
+            kind = ("black", "red", "white", "grey")[si % 4]
+            SCREEN.append(f'<img class="tear" id="{i}" src="assets/img/scrap/{kind}-{si % 4}.png" style="top:{CY - 840:.0f}px" alt="">')
+            HIDE.append(f"#{i}")
+            js(f'tl.set("#{i}", {{opacity: 1}}, {a - 3 / 15:.3f});')
+            for j, x in enumerate([-1900, -1100, -400, 300, 1100]):
+                js(f'tl.set("#{i}", {{x: {x}, rotation: {(-8, -5, -3, -1, 2)[j]}}}, {a - 3 / 15 + j / 15:.3f});')
+            js(f'tl.set("#{i}", {{opacity: 0}}, {a + 2 / 15:.3f});')
+        else:                                                # stutter
+            for j, kind in enumerate(["thr", "inv", "duo", "white"]):
+                t0 = a - (4 - j) / 30
+                if kind in ("thr", "duo"):
+                    shot = TRANS_POOL[k % len(TRANS_POOL)]
+                    k += 1
+                    i = nid("tf")
+                    SCREEN.append(f'<div class="tframe {kind}" id="{i}" style="left:0;top:0;width:{FW}px;height:{FH}px;padding:0">'
+                                  f'<img src="assets/img/photo/frame_{shot}.jpg" alt=""></div>')
+                    show(f"#{i}", t0, t0 + 1 / 30)
+                else:
+                    FLASH.append((t0, "invert" if kind == "inv" else "white"))
+
+
+def finishing():
+    """The After Effects pass on the cuts (as in Spin Bout U): a bloom burst on some cuts, a colour split on every whip,
+    a warm light-leak sweep on others; the deep glow (bright parts only) the rest of the time."""
+    g = random.Random(31)
+    for si, (a, b, li) in enumerate(scenes()):
+        if si == 0 or li == 32:
+            continue
+        r = g.random()
+        for k in range(4):
+            parts = (["url(#bloom)"] if r < .6 else []) + (["url(#rgbsplit)"] if k < 2 else [])
+            t = a - STEP + k * STEP
+            js(f'tl.set("#glow", {{filter: "{" ".join(parts) or "url(#dglow)"}"}}, {t:.3f});')
+            js(f'tl.set("#blg", {{attr: {{stdDeviation: {[26, 20, 13, 7][k]}}}}}, {t:.3f});')
+            js(f'tl.set("#rgbR", {{attr: {{dx: {[30, 16, 0, 0][k]}}}}}, {t:.3f});')
+            js(f'tl.set("#rgbB", {{attr: {{dx: {[-30, -16, 0, 0][k]}}}}}, {t:.3f});')
+        js(f'tl.set("#glow", {{filter: "url(#dglow)"}}, {a + 3 * STEP:.3f});')
+        if r >= .45:
+            js(f'tl.set("#leak", {{opacity: 1}}, {a - STEP:.3f});')
+            js(f'tl.fromTo("#leak", {{x: {-900 if si % 2 else 900}, opacity: 1}}, {{x: {900 if si % 2 else -900}, opacity: 0, duration: .5, ease: "steps(8)", immediateRender: false}}, {a - STEP:.3f});')
+
+
+SFX_FROM = 3.0        # v10 (owner): sound effects from 3 s on, nothing before
+
+
+def sound_cues():
+    """Picture moments for the sound design -> plan/sfx_events(_1x1).json, read by build/sfx_sheet.py. Only from
+    SFX_FROM on; the intro under the drop stays the song alone."""
+    cues = []
+    for si, (a, b, li) in enumerate(scenes()):
+        if 0 < si and li != 32:
+            cues.append((a, "whoosh_big" if RECIPE[li] in ("R4", "R8", "R9") else ("whoosh" if si % 2 else "swish"), .35))
+    for a, st in BURST:
+        if st == "tear":
+            cues.append((a - 3 / 15, "tear", 0))
+    kmap = {"slam": "slam", "stamp": "stamp", "shutter": "camera", "glitch": "glitch", "click": "glitch", "flash": "hit",
+            "pop": "pop", "paper": "paper", "tear": "tear"}
+    for t, kind in EV:
+        if kind in kmap:
+            cues.append((t, kmap[kind], 0))
+    for si, (a, b, li) in enumerate(scenes()):                # the photo-filled keywords land with weight
+        if li >= 0 and RECIPE[li] == "R2":
+            kw = next((g for g in reversed(groups_of(li)) if g[1]), None)
+            if kw:
+                cues.append((kw[2], "keyword", 0))
+    ev = sorted(({"t": round(t, 3), "type": k} | ({"len": round(d, 2)} if d else {}) for t, k, d in cues
+                 if SFX_FROM - 1e-6 <= t < DUR - .05), key=lambda e: e["t"])
+    json.dump(ev, open(os.path.join(ROOT, "plan", "sfx_events_1x1.json" if SQUARE else "sfx_events.json"), "w"), indent=0)
+    return ev
 
 
 # ------------------------------------------------------------------------------------------------ camera
@@ -776,24 +895,53 @@ def flashes():
             js(f'tl.set("#split", {{opacity: 0}}, {t + STEP:.3f});')
 
 
+FX_DEFS = """
+      <filter id="inkf" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+      <feTurbulence id="inkT" type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="4" seed="1" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.4 0 0 0 0" result="na"/>
+      <feComponentTransfer in="na" result="m"><feFuncA id="inkA" type="linear" slope="9" intercept="1.2"/></feComponentTransfer>
+      <feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
+      <filter id="dglow" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  .3 .59 .11 0 0" result="lum"/>
+      <feComponentTransfer in="lum" result="mask"><feFuncA type="linear" slope="3.2" intercept="-2.45"/></feComponentTransfer>
+      <feComposite in="SourceGraphic" in2="mask" operator="in" result="hi"/>
+      <feGaussianBlur in="hi" stdDeviation="4" result="b1"/><feGaussianBlur in="hi" stdDeviation="14" result="b2"/>
+      <feGaussianBlur in="hi" stdDeviation="38" result="b3"/>
+      <feComposite in="b1" in2="b2" operator="arithmetic" k2="0.45" k3="0.4" result="m1"/>
+      <feComposite in="m1" in2="b3" operator="arithmetic" k2="1" k3="0.3" result="gl"/>
+      <feBlend in="SourceGraphic" in2="gl" mode="screen"/></filter>
+      <filter id="bloom" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+      <feGaussianBlur id="blg" in="SourceGraphic" stdDeviation="20" result="b"/>
+      <feColorMatrix in="b" type="matrix" values=".95 0 0 0 0  0 .62 0 0 0  0 0 .55 0 0  0 0 0 1 0" result="bb"/>
+      <feBlend in="SourceGraphic" in2="bb" mode="screen"/></filter>
+      <filter id="rgbsplit" color-interpolation-filters="sRGB">
+      <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+      <feOffset id="rgbR" in="r" dx="0" dy="0" result="r2"/>
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b2"/>
+      <feOffset id="rgbB" in="b2" dx="0" dy="0" result="b3"/>
+      <feBlend in="r2" in2="g" mode="screen" result="rg"/><feBlend in="rg" in2="b3" mode="screen"/></filter>"""
+
+
 CSS = f"""
 @font-face {{ font-family: "Anek C"; font-weight: 800; src: url("assets/fonts/AnekGurmukhi/AnekGurmukhi-Condensed-800.ttf"); }}
 @font-face {{ font-family: "Anek"; font-weight: 600; src: url("assets/fonts/AnekGurmukhi/AnekGurmukhi-600.ttf"); }}
 @font-face {{ font-family: "Outfit"; font-weight: 800; src: url("assets/fonts/Outfit/Outfit-800.ttf"); }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #e9e4dc; }}
-#root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: #e9e4dc; }}
+html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #0c0506; }}
+#root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: #0c0506; }}
+#glow {{ position: absolute; inset: 0; filter: url(#dglow); }}
+#bg {{ position: absolute; inset: 0; overflow: hidden; background: #160709; }}
+#fluid {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }}
 #fx {{ position: absolute; inset: 0; }}
 #cam {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; transform-origin: 540px {CY:.0f}px; }}
 #pan {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; }}
-#paper {{ position: absolute; left: -760px; top: -1000px; width: 2600px; height: 3900px; background: url(assets/img/paper.png);
-  filter: sepia(.18) brightness(.98); }}
-#grid {{ position: absolute; left: -760px; top: -1000px; width: 2600px; height: 3900px; pointer-events: none; opacity: .55; }}
-#grid line {{ stroke: #2f2b28; stroke-width: 1.6; }}
+#paper {{ position: absolute; left: -760px; top: -1000px; width: 2600px; height: 3900px; background: url(assets/img/crumple.png);
+  opacity: .11; }}   /* v10: only the crumple (build/crumple.py), as texture over the gradient; it moves with the camera */
 #board {{ position: absolute; inset: 0; }}
 #blinds {{ position: absolute; left: -1100px; top: -1300px; width: 3300px; height: 4500px; z-index: 9; pointer-events: none; mix-blend-mode: multiply;
-  background: repeating-linear-gradient(-32deg, rgba(70,55,40,0) 0px, rgba(70,55,40,0) 70px, rgba(70,55,40,.30) 150px, rgba(70,55,40,.34) 210px,
-  rgba(70,55,40,0) 290px, rgba(70,55,40,0) 330px); }}
+  background: repeating-linear-gradient(-32deg, rgba(20,6,8,0) 0px, rgba(20,6,8,0) 70px, rgba(20,6,8,.32) 150px, rgba(20,6,8,.36) 210px,
+  rgba(20,6,8,0) 290px, rgba(20,6,8,0) 330px); }}
 .el {{ position: absolute; opacity: 0; }}
 img.el {{ display: block; height: auto; }}
 .print {{ position: absolute; left: 0; top: 0; width: 600px; height: 700px; opacity: 0; z-index: 2; background: #f3f1ec; padding: 16px;
@@ -804,6 +952,7 @@ img.el {{ display: block; height: auto; }}
 .lb {{ position: relative; display: inline-block; font: 800 120px/1.18 "Anek C"; white-space: nowrap; opacity: 0;
   padding: .06em .28em .02em; }}
 .lb .ch {{ display: inline; }}
+.lb.pl .ch {{ display: inline-block; }}
 .lb .cur {{ display: inline-block; width: .45em; height: .8em; margin-left: .06em; vertical-align: -.02em; background: rgba(95,92,88,.9); }}
 .blk {{ background: url(assets/img/tex/speckle.png) 0 0 / 300px auto, {INK}; color: #f1eee8; box-shadow: 0 12px 22px rgba(0,0,0,.28); }}
 .wht {{ background: url(assets/img/tex/speckle.png) 0 0 / 300px auto, #f3f1ec; color: {INK}; box-shadow: 0 12px 22px rgba(0,0,0,.25); }}
@@ -813,9 +962,10 @@ img.el {{ display: block; height: auto; }}
 .rb {{ background: {RED}; color: #fff; text-shadow: 4px 4px 0 {INK}; box-shadow: 18px 16px 0 {INK}; }}
 .blkr {{ background: {INK}; color: #fff; box-shadow: 16px 18px 0 {RED}; }}
 .rtyp {{ background: none; color: {RED}; padding: 0; -webkit-mask-image: url(assets/img/tex/grunge.png); mask-image: url(assets/img/tex/grunge.png); }}
-.stamp {{ background: none; color: #1c1b1a; padding: 0; line-height: 1.12;
+.stamp {{ background: none; color: #f1eee8; padding: 0; line-height: 1.12; -webkit-text-stroke: 4px #161616; paint-order: stroke fill;
+  text-shadow: 0 8px 18px rgba(0,0,0,.45);
   -webkit-mask-image: url(assets/img/tex/grunge.png); mask-image: url(assets/img/tex/grunge.png); -webkit-mask-size: 520px auto; mask-size: 520px auto; }}
-.stamp .cur {{ background: rgba(60,58,55,.55); }}
+.stamp .cur {{ background: rgba(241,238,232,.55); }}
 .w3d {{ background: none; color: #f6f4ef; padding: 0; -webkit-text-stroke: 2px #2a2a2a;
   text-shadow: 1px 1px 0 #cfcac2, 2px 2px 0 #bdb7ae, 3px 3px 0 #a7a097, 4px 4px 0 #8f887f, 5px 5px 0 #77706a, 6px 6px 0 #5e5852, 7px 7px 0 #48433e, 10px 12px 10px rgba(0,0,0,.5); }}
 .r3d {{ background: none; color: {RED}; padding: 0; -webkit-text-stroke: 2px #6e0b0f;
@@ -825,8 +975,8 @@ img.el {{ display: block; height: auto; }}
 .fill {{ color: transparent; padding: 0; line-height: 1.12; background-size: cover; background-position: 50% 40%;
   -webkit-background-clip: text; background-clip: text; -webkit-text-stroke: 5px {INK}; filter: drop-shadow(8px 10px 0 rgba(22,22,22,.85)); }}
 {"".join(f'.f{li} {{ background-image: url(assets/img/photo/fill_{li}.jpg); }}' for li in FILL)}
-.ghost {{ font: 800 250px/1.15 "Anek C"; color: rgba(40,36,32,.16); white-space: nowrap; opacity: 0; }}
-.para {{ font: 600 36px/1.3 "Anek"; color: #2a2724; z-index: 5; }}
+.ghost {{ font: 800 250px/1.15 "Anek C"; color: rgba(255,236,230,.09); white-space: nowrap; opacity: 0; }}
+.para {{ font: 600 36px/1.3 "Anek"; color: #efe9e2; z-index: 5; }}
 .itag {{ position: absolute; left: 50%; top: 212px; transform: translateX(-50%) rotate(-3deg); font: 800 52px/1.2 "Anek C"; white-space: nowrap;
   background: {RED}; color: #fff; padding: 0 .3em; box-shadow: 0 8px 14px rgba(0,0,0,.25); }}
 .rline {{ border: 9px solid {RED}; z-index: 2; }}
@@ -849,7 +999,14 @@ img.el {{ display: block; height: auto; }}
 #split {{ position: absolute; inset: 0; z-index: 20; background: #f4f3ef; opacity: 0; }}
 #split i {{ position: absolute; left: 50%; top: 0; width: 50%; height: 100%; background: #111; }}
 #dim {{ position: absolute; inset: 0; z-index: 19; background: #000; opacity: 0; pointer-events: none; }}
-#vig {{ position: absolute; inset: 0; z-index: 18; pointer-events: none; background: radial-gradient(ellipse 80% 75% at 50% 48%, rgba(0,0,0,0) 58%, rgba(30,20,10,.28) 100%); }}
+#vig {{ position: absolute; inset: 0; z-index: 18; pointer-events: none; background: radial-gradient(ellipse 80% 75% at 50% 48%, rgba(0,0,0,0) 55%, rgba(0,0,0,.42) 100%); }}
+#leak {{ position: absolute; inset: -200px; z-index: 17; opacity: 0; pointer-events: none; mix-blend-mode: screen;
+  background: radial-gradient(ellipse 35% 60% at 50% 50%, rgba(255,180,120,.8), rgba(255,60,40,.45) 45%, rgba(0,0,0,0) 75%); }}
+#ink {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; z-index: 19; opacity: 0; pointer-events: none; }}
+.tear {{ position: absolute; left: 0; width: 1900px; height: auto; z-index: 19; opacity: 0; pointer-events: none;
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,.55)); }}
+.tframe.thr img {{ filter: grayscale(1) contrast(5) brightness(1.1); }}
+.tframe.duo img {{ filter: invert(1) sepia(1) saturate(4) hue-rotate(130deg) contrast(1.4); }}
 #grain {{ position: absolute; left: 0; top: 0; width: 1120px; height: 1960px; z-index: 18; pointer-events: none; opacity: .07; background: url(assets/img/grain.png); mix-blend-mode: overlay; }}
 """
 
@@ -866,17 +1023,12 @@ def main():
     transition_frames()
     camera()
     flashes()
-    for si, (a, b, li) in enumerate(scenes()):                  # a whoosh on every camera whip into the next scene
-        if 0 < si and li != 32 and a < SONG:
-            EV.append((a - .2, "whoosh"))
-    if not SQUARE:
-        json.dump(sorted(EV), open(os.path.join(ROOT, "plan", "events.json"), "w"))
+    finishing()
+    ev = sound_cues()
+    print(f"{len(ev)} sound moments from {SFX_FROM:.0f} s")
     g = random.Random(3)
     for f in range(int(DUR * 15)):
         js(f'tl.set("#grain", {{x: {g.randint(-40, 0)}, y: {g.randint(-40, 0)}}}, {f / 15:.3f});')
-    gl = random.Random(4)
-    grid = "".join(f'<line x1="{x + gl.uniform(-8, 8):.0f}" y1="-20" x2="{x + gl.uniform(-40, 40):.0f}" y2="3920"/>' for x in range(260, 2600, 390)) + \
-           "".join(f'<line x1="-20" y1="{y + gl.uniform(-8, 8):.0f}" x2="2620" y2="{y + gl.uniform(-40, 40):.0f}"/>' for y in range(200, 3900, 420))
     prints = "".join(f'<div class="print" id="pr{n}"><video id="cv{n}" class="clip" src="assets/video/card{n}.mp4" data-start="0" '
                      f'data-duration="{SONG}" data-track-index="{n}" muted playsinline></video><i></i></div>' for n in (1, 2))
     HIDE.extend(["#pr1", "#pr2"])
@@ -891,12 +1043,12 @@ def main():
   </head>
   <body>
     <svg width="0" height="0" style="position:absolute"><filter id="mb" x="-5%" y="-5%" width="110%" height="110%">
-      <feGaussianBlur id="mbg" stdDeviation="0 0"/></filter></svg>
+      <feGaussianBlur id="mbg" stdDeviation="0 0"/></filter>{FX_DEFS}</svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="{FW}" data-height="{FH}">
-      <div id="fx">
+      <div id="glow"><div id="fx">
+        <div id="bg"><video id="fluid" src="assets/video/fluid_bg.mp4" data-start="0" data-duration="{DUR}" data-track-index="90" muted playsinline></video></div>
         <div id="cam"><div id="pan">
           <div id="paper"></div>
-          <svg id="grid" viewBox="0 0 2600 3900">{grid}</svg>
           <div id="board">
             {prints}
             {"".join(PAN)}
@@ -904,7 +1056,8 @@ def main():
         </div></div>
         <div id="blinds"></div>
         {"".join(SCREEN)}
-      </div>
+      </div></div>
+      <div id="leak"></div>
       <div id="dim"></div>
       <div id="vig"></div>
       <div id="grain"></div>
@@ -912,6 +1065,7 @@ def main():
     </div>
     <script>
       window.__timelines = window.__timelines || {{}};
+      const SE = (n, k) => {{ const f = gsap.parseEase(n); return (p) => p >= 1 ? 1 : f(Math.floor(p * k) / k); }};
       const tl = gsap.timeline({{ paused: true }});
       gsap.set({json.dumps(list(dict.fromkeys(HIDE)))}, {{opacity: 0}});
 {chr(10).join(A)}
