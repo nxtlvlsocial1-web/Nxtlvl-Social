@@ -77,7 +77,8 @@ KINDS = {
     "phone_throw": (r8("sfx_movement_jump2."), "ui", -14, {}),
     "phone_smash": ([f("75-cc0-breaking-falling-hit-sfx/bfh1_glass_hit_01.ogg"), f("75-cc0-breaking-falling-hit-sfx/bfh1_glass_hit_02.ogg")],
                     "glass", -12, {"max_dur": .5}),
-    "streak": ([f(p_) for k in range(4) for p_ in (f"sci-fi-sounds/Audio__computerNoise_00{k}.ogg",)], "glitch", -12, {"max_dur": .2}),
+    "streak": ([f(p_) for k in range(4) for p_ in (f"sci-fi-sounds/Audio__computerNoise_00{3 - k}.ogg",)] + r8("sfx_sounds_interaction")[:4],
+               "glitch", -12, {"max_dur": .2}),
     "ghost": ([f("wind-hit-time-morph/qubodup-slomo1.wav")], "whoosh", -6, {"max_dur": 1.2}),
     "pixel_start": (r8("sfx_sounds_powerup1."), "ui", -10, {}),
     "pixel_walk": (r8("sfx_movement_footsteps"), "foley", -9, {"anchor": "start"}),
@@ -107,6 +108,9 @@ def main():
     a = ap.parse_args()
     ev = json.load(open(os.path.join(ROOT, "plan", "sfx_events.json")))
     rot = {k: itertools.cycle(v[0]) for k, v in KINDS.items()}
+    if "streak" in KINDS:                                   # interleave the two streak families
+        st = KINDS["streak"][0]
+        rot["streak"] = itertools.cycle([x for pair in zip(st[:4], st[4:]) for x in pair])
     cues, last_cam, n_dia, uses = [], [], 0, {}
     busy = sorted(e["t"] for e in ev if e["type"] not in SKIP | {"sticker", "camera", "diamond", "heart"})
     hard = [e["t"] for e in ev if e["type"] in ("pixel_shot", "boom")]

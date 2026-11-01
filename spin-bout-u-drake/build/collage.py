@@ -1122,7 +1122,7 @@ def lighter_throw(a, b):
 
 
 PX = "assets/img/pixel/"
-SPR = {"drake": (44, 40, 11), "girl": (28, 40, 4), "guy": (24, 40, 3)}
+SPR = {"drake": (44, 40, 11), "girl": (28, 40, 7), "girl2": (28, 40, 7), "guy": (24, 40, 3)}   # frame counts of the sheets
 DFR = {n: k for k, n in enumerate(["idle0", "idle1", "walk0", "walk1", "walk2", "walk3", "aim", "shoot", "drop", "windup", "throw"])}
 
 
@@ -1213,8 +1213,6 @@ def phone_throw(a, b):
     expression and smash on the floor (a white crack burst). Straight on the collage above the keyword."""
     S, FL, X0, Y0 = 8, 470, 60, 250
     tj = next(s_ for w, s_ in words_of(0) if w == "jealous")
-    SPR["girl2"] = (28, 40, 7)
-    SPR["girl"] = (28, 40, 7)
     g1, h1 = sprite("girl", 640, FL - 38 * S, S)
     g2, h2 = sprite("girl2", 120, FL - 38 * S, S, "transform:scaleX(-1)")
     ph = [nid("ph"), nid("ph")]
