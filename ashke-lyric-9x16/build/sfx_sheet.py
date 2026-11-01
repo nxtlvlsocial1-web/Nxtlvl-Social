@@ -41,13 +41,16 @@ KINDS = {
     "whoosh": ([f("rpg-sound-pack/" + RPG_SWING[0]), f("wind-hit-time-morph/60009__qubodup__swosh_22.flac"),
                 f("swishes-sound-pack/swishes__swish-9.wav"), f("wierd-whooshes/weird_whoosh_sounds_-_whoosh_12_0.mp3"),
                 f(R8P + "sfx_movement_portal5.wav"), f("rpg-sound-pack/" + RPG_SWING[1])], "whoosh", -4, {"max_dur": 1.0}),
-    "swish": ([f("swishes-sound-pack/swishes__swish-4.wav"), f("wind-hit-time-morph/qubodup-megaswosh2.wav"),
-               f("fantasy-sound-effects-tinysized-sfx/sfx-cc0__cloth-pouch-shake-01.wav"), f("rpg-sound-pack/" + RPG_SWING[2]),
-               f("swishes-sound-pack/swishes__swish-6.wav")], "whoosh", -6, {"max_dur": .8}),
-    "whoosh_big": ([f("wind-hit-time-morph/qubodup-megaswosh1.wav"), f("wind-hit-time-morph/60009__qubodup__swosh_22.flac"),
-                    f("wind-hit-time-morph/qubodup-megaswosh2.wav"), f("rpg-sound-pack/" + RPG_SWING[0])], "whoosh", -2, {"max_dur": .9}),
+    "swish": ([f("swishes-sound-pack/swishes__swish-4.wav"), f("fantasy-sound-effects-tinysized-sfx/sfx-cc0__tube-plastic-whoosh-02.wav"),
+               f("fantasy-sound-effects-tinysized-sfx/sfx-cc0__cloth-pouch-shake-01.wav"), f("swishes-sound-pack/swishes__swish-8.wav"),
+               f("rpg-sound-pack/" + RPG_SWING[2]), f("fantasy-sound-effects-tinysized-sfx/sfx-cc0__tin-whistle-whoosh-02.wav")],
+              "whoosh", -6, {"max_dur": .8}),
+    # critique: 8 takes of the megaswosh family on the big cuts; six families now, the tube whooshes carry the low end
+    "whoosh_big": ([f("wind-hit-time-morph/qubodup-megaswosh1.wav"), f("fantasy-sound-effects-tinysized-sfx/sfx-cc0__tube-plastic-whoosh-01.wav"),
+                    f(R8P.replace("portal5", "") + "sfx_movement_portal4.wav"), f("fantasy-sound-effects-tinysized-sfx/sfx-cc0__tin-whistle-whoosh-01.wav"),
+                    f("rpg-sound-pack/" + RPG_SWING[0]), f("swishes-sound-pack/swishes__swish-7.wav")], "whoosh", -2, {"max_dur": .9}),
     "glitch": ([f(p_) for k in range(4) for p_ in (f"interface-sounds/Audio__glitch_00{k + 1}.ogg",
-                                                     f"sci-fi-sounds/Audio__computerNoise_00{k}.ogg")], "glitch", -8, {"max_dur": .3}),
+                                                     f"sci-fi-sounds/Audio__computerNoise_00{k}.ogg")], "glitch", -8, {"max_dur": .25, "anchor": "start"}),
     "hit": ([f("100-cc0-sfx-2/sfx100v2_hit_01.ogg"), f("75-cc0-breaking-falling-hit-sfx/bfh1_hit_02.ogg"),
              f("100-cc0-sfx-2/sfx100v2_hit_03.ogg")], "hit", -5, {}),
     "slam": (punch("heavy"), "hit", -5, {"max_dur": .5}),
@@ -58,7 +61,10 @@ KINDS = {
     "camera": ([f("camera/photo.ogg"), f("202-more-sound-effects/Camera__Camera_01.wav"), f("camerashudder/camera_0.ogg"),
                 f("202-more-sound-effects/Camera__Camera_03.wav")], "camera", -10, {}),
     "paper": ([f("202-more-sound-effects/Paper _ Stationery__Stationery_01.wav")], "paper", -11, {"max_dur": .45, "slice": "first"}),
-    "pop": ([f(f"interface-sounds/Audio__drop_00{k}.ogg") for k in (1, 2, 3)], "pop", -9, {}),
+    # four families interleaved (critique: 29 takes of one 'drop' family gave the library away)
+    "pop": ([f("100-cc0-sfx/plop_02.ogg"), f("interface-sounds/Audio__drop_001.ogg"), f("card-game-sounds/cockatrice__playcard.wav"),
+             f("rpg-sound-pack/RPG Sound Pack__inventory__bubble.wav"), f("100-cc0-sfx/plop_01.ogg"), f("interface-sounds/Audio__drop_003.ogg"),
+             f("card-game-sounds/cockatrice__draw.wav"), f("rpg-sound-pack/RPG Sound Pack__inventory__bubble2.wav")], "pop", -9, {"max_dur": .4}),
     "tear": ([f("fantasy-sound-effects-tinysized-sfx/sfx-cc0__cover-paper-tear-01.wav"),
               f("fantasy-sound-effects-tinysized-sfx/sfx-cc0__cover-paper-tear-02.wav")], "paper", -6, {"anchor": "start", "max_dur": .6}),
 }
@@ -91,7 +97,8 @@ def main():
             continue                                       # a cut already carries its whoosh and sub
         if k == "camera" and any(c["label"] == "camera" and t - c["t"] < 2.6 for c in cues):
             continue
-        if k == "pop" and any(c["label"] in ("pop", "slam", "stamp", "keyword") and abs(t - c["t"]) < .45 for c in cues):
+        if k == "pop" and (any(c["label"] == "pop" and t - c["t"] < 1.0 for c in cues)
+                           or any(c["label"] in ("slam", "stamp", "keyword") and abs(t - c["t"]) < .45 for c in cues)):
             continue
         if k == "paper" and any(c["label"] == "paper" for c in cues):
             continue                                       # one paper slap in the whole edit
