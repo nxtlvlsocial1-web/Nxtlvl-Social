@@ -94,6 +94,12 @@ Updated 2026-11-01. Current version: v10 build, square preview ../ashke-lyric-1x
     (at most one per 2.6 s), glitches.
   - No typing or star sounds, a paper slap once.
   - Openverse first: Freesound refused every download (403), so the OpenGameArt CC0 packs.
+- v10b (owner, same day): the gradient changed to midnight navy, indigo and steel blue with one warm red accent, because
+  the red version read like the Drake edit's maroon.
+  - Added the nxtlvl logo outro (60-61.72 s), as on Spin Bout U: the frame eases into the logo's dark violet, the logo
+    blurs in at 60% with a sheen sweep and a star twinkle.
+  - The song's own fade (59.2-60 s) gets a low-passed echo tail under the logo (build/audio_outro.py).
+  - The final was asked for directly.
 
 ## 4. Removed
 - v2's full-bleed 9:16 cinema layer (eimantasbitinas23 reference): it blew the footage up and looked blurry.
@@ -113,4 +119,5 @@ Updated 2026-11-01. Current version: v10 build, square preview ../ashke-lyric-1x
 | 2026-10-31 | add three more photos (barn with horse, fire stage arm up, purple stage) | cut-outs barn, fireup, purple, replacing repeats (v8) |
 | 2026-10-31 | Bugatti: add the full photo; stop repeating the same clips | Bugatti as a full framed print; every print, fill and flash its own window from a shot-by-shot breakdown, flashes from the MV verse (v9) |
 | 2026-10-31 | make the whole edit in the 1:1 box ratio | square render in ../ashke-lyric-1x1 from the same build (ASHKE_FORMAT=1x1) |
+| 2026-11-01 | final with the outro; change the gradient (too close to the Drake one) | v10b: navy gradient, logo outro |
 | 2026-11-01 | remake with the Spin Bout U transitions, tracking and pacing with sound effects; remove the white grids, gradient background; SFX from 3 s, nothing before | 3f (v10) |
