@@ -1,5 +1,5 @@
 """Liquid gradient background for Ashke v10 (owner: "remove the white grids, go for a gradient background"), built the
-way the owner's CreateGradients pack builds its looks (a 4-colour gradient warped by animated turbulent displacement), in the Ashke palette (blood red, crimson, an ember highlight, near-black). Pre-rendered so the browser render
+way the owner's CreateGradients pack builds its looks (a 4-colour gradient warped by animated turbulent displacement), v10b: midnight navy, indigo and steel blue with one warm red accent (owner: the red version looked too close to the Drake edit's). Pre-rendered so the browser render
 stays cheap: writes assets/video/fluid_bg.mp4 (540x540, 30 fps, the full edit length; the page scales it up, it is
 soft by design).
 
@@ -12,15 +12,15 @@ import subprocess
 import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-N, FPS, DUR = 540, 30, 60.0
+N, FPS, DUR = 540, 30, 62.0
 BEATS = json.load(open(os.path.join(ROOT, "plan", "beats_raw.json")))["beats"]
 
 # (colour, path centre x, y, radius of the path, speed, phase, weight)
-PTS = [((120, 12, 20), .25, .30, .18, .11, 0.0, 1.0),      # blood red
-       ((216, 35, 42), .72, .35, .20, .13, 1.9, .85),      # crimson (the edit's red)
-       ((255, 112, 60), .58, .72, .16, .17, 3.4, .38),     # ember highlight
-       ((52, 8, 16), .22, .78, .19, .09, 4.6, 1.0)]        # deep maroon
-BASE = np.array((12, 5, 6), float)                         # near-black warm floor
+PTS = [((30, 32, 96), .25, .30, .18, .11, 0.0, 1.0),       # midnight indigo
+       ((54, 98, 172), .72, .35, .20, .13, 1.9, .7),       # steel blue
+       ((178, 26, 44), .58, .72, .16, .17, 3.4, .32),      # the edit's red, one warm accent
+       ((12, 18, 48), .22, .78, .19, .09, 4.6, 1.0)]       # deep navy
+BASE = np.array((5, 6, 16), float)                         # near-black navy floor
 
 
 def frame(t, yy, xx):

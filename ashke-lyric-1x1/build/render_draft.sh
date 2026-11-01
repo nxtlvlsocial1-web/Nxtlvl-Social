@@ -7,7 +7,7 @@ export HYPERFRAMES_NO_TELEMETRY=1
 mkdir -p renders
 OUT=renders/preview_ashke-lyric_1x1_v2.mp4
 npx --yes hyperframes@0.8.203 render --quality draft -w 3 -o renders/draft_master.mp4 > renders/draft.log 2>&1
-ffmpeg -v error -y -i renders/draft_master.mp4 -i assets/audio/section.wav -map 0:v -map 1:a -c:v libx264 -preset veryfast -crf 24 \
+ffmpeg -v error -y -i renders/draft_master.mp4 -i assets/audio/section_outro.wav -map 0:v -map 1:a -c:v libx264 -preset veryfast -crf 24 \
   -pix_fmt yuv420p -c:a aac -b:a 192k -shortest -movflags +faststart "$OUT" >> renders/draft.log 2>&1
 echo "EXIT $?" >> renders/draft.log
 SFX_SKILL=$(ls -d /root/.claude/skills/synced/*/real-sfx 2>/dev/null | head -1)

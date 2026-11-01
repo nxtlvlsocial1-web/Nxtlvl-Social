@@ -37,7 +37,9 @@ from icons import ICON, WORD, svg  # noqa: E402
 from plan import CARD2, CUTOUT, FILL, OFFSET, PRINT, RECIPE, TRANS_POOL, W, line_times, scenes  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DUR, SONG = 60.0, 60.0          # 60 s from 2:14 (build/plan.py)
+SONG = 60.0                     # 60 s from 2:14 (build/plan.py)
+LOGO_LEN = 1.72                 # v10b (owner): the nxtlvl logo outro after the song, as on Spin Bout U
+DUR = SONG + LOGO_LEN
 # ASHKE_FORMAT=1x1 renders the same edit square (1080x1080) into ../ashke-lyric-1x1: the board stays 1080x1920, the
 # camera centres on the square and pulls back (ZOOM) so the tall layouts still fit.
 SQUARE = os.environ.get("ASHKE_FORMAT") == "1x1"
@@ -111,6 +113,9 @@ def js(s):
         m = re.search(r'duration: ([\d.]+)', s)
         d = float(m.group(1)) if m else .3
         s = _STEPS.sub('ease: "expo.out"' if d <= .5 else 'ease: "power2.out"', s)
+    if "/*smooth*/" in s:                                     # the logo outro moves smoothly, not on twos
+        A.append("      " + s.replace(" /*smooth*/", ""))
+        return
     if 'ease: "' in s and "duration:" in s:
         m = re.search(r'duration: ([\d.]+)', s)
         d = float(m.group(1)) if m else .3
@@ -580,43 +585,27 @@ def ending(si, a, b, li, gs):
     FLASH.append((t - .067, "white"))
 
 
-LOGO = ('<svg viewBox="0 0 1080 1080" width="1080" height="1080"><defs>'
-        '<linearGradient id="ng" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#c4a6ff"/><stop offset=".45" stop-color="#ffffff"/>'
-        '<stop offset="1" stop-color="#d9c8ff"/></linearGradient>'
-        '<linearGradient id="sp" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#f1eaff"/><stop offset="1" stop-color="#b48cff"/></linearGradient>'
-        '<radialGradient id="gl"><stop offset="0" stop-color="#b48cff" stop-opacity=".55"/><stop offset="1" stop-color="#b48cff" stop-opacity="0"/></radialGradient></defs>'
-        '<circle id="lglow" cx="540" cy="560" r="420" fill="url(#gl)" opacity="0"/>'
-        '<path id="ln" pathLength="1000" d="M357 825 L357 495 A65 65 0 0 1 484 472 L597 772 A66 66 0 0 0 722 756 L722 470" fill="none" '
-        'stroke="url(#ng)" stroke-width="26" stroke-dasharray="1000" stroke-dashoffset="1000"/>'
-        '<path id="lsp" d="M709 470 L722 345 L735 470 Z" fill="url(#sp)" opacity="0"/>'
-        '<path id="lst" d="M722 258 Q727 295 764 300 Q727 305 722 342 Q717 305 681 300 Q717 295 722 258 Z" fill="#fff" '
-        'opacity="0"/></svg>')
+POST = []             # v10b: layers above the glow (the logo stays crisp, untouched by the bloom)
 
 
-def logo_outro():
-    """The owner's N logo, blended in with the collage: a black torn sheet tears across the paper, the logo's night
-    violet underneath, the N draws on like the marker circles, the star pops, torn black paper frames it."""
-    t = SONG
-    SCREEN.append('<div id="endcard"><div id="ecglow"></div>' + f'<div id="ecl">{LOGO}</div>' +
-                  '<img class="ecs" src="assets/img/scrap/black-3.png" style="left:-260px;top:-150px;width:900px;transform:rotate(8deg)" alt="">'
-                  '<img class="ecs" src="assets/img/scrap/black-1.png" style="left:420px;top:1580px;width:900px;transform:rotate(-6deg)" alt="">'
-                  '</div><img id="ectear" src="assets/img/scrap/black-0.png" alt="">')
-    HIDE.extend(["#endcard", "#ectear"])
-    js(f'tl.set("#ectear", {{opacity: 1}}, {t - .2:.3f});')
-    js(f'tl.fromTo("#ectear", {{y: 2400, rotation: -8}}, {{y: -2600, rotation: 6, duration: .67, ease: "steps(10)", immediateRender: false}}, {t - .2:.3f});')
-    js(f'tl.set("#endcard", {{opacity: 1}}, {t + .07:.3f});')
-    js(f'tl.set("#ectear", {{opacity: 0}}, {t + .47:.3f});')
-    EV.extend([(t - .2, "tear"), (t + .3, "logo")])
-    js(f'tl.to("#ln", {{strokeDashoffset: 0, duration: .9, ease: "steps(14)"}}, {t + .3:.3f});')
-    js(f'tl.set("#lsp", {{opacity: 1}}, {t + 1.2:.3f});')
-    js(f'tl.fromTo("#lsp", {{scaleY: 0, svgOrigin: "722 470"}}, {{scaleY: 1, duration: .2, ease: "steps(3)", immediateRender: false}}, {t + 1.2:.3f});')
-    js(f'tl.set("#lst", {{opacity: 1}}, {t + 1.36:.3f});')
-    js(f'tl.fromTo("#lst", {{scale: 0, rotation: -90, svgOrigin: "722 300"}}, {{scale: 1, rotation: 0, duration: .27, ease: "steps(4)", immediateRender: false}}, {t + 1.36:.3f});')
-    js(f'tl.to("#lglow", {{opacity: 1, duration: .4, ease: "steps(6)"}}, {t + 1.36:.3f});')
-    EV.append((t + 1.36, "sparkle"))
-    for k in range(6):                                         # the star twinkles
-        js(f'tl.set("#lst", {{scale: {1.12 if k % 2 == 0 else 1}, svgOrigin: "722 300"}}, {t + 1.8 + k * .2:.3f});')
-    js(f'tl.to("#endcard", {{opacity: 0, duration: .4, ease: "steps(6)"}}, {DUR - .45:.3f});')
+def logo_outro(a, b):
+    """v10b, the Spin Bout U ending: after the ASHKE tape the frame eases into the logo's dark violet while the song
+    fades (its echo trails under the logo, build/audio_outro.py); the owner's N logo comes in from a soft blur and a
+    slight scale at 60% size, a light sweep runs across the circle's sheen, the star twinkles. Smooth, not stepped."""
+    i = nid("lg")
+    POST.append(f'<div class="logo2 el" id="{i}"><div class="lin"><img src="assets/img/brand/nxtlvl_logo.png" alt="Nxtlvl">'
+                f'<div class="lsweep"><i></i></div><svg class="lstar" viewBox="-50 -50 100 100"><path d="M0 -48 C6 -8 8 -6 48 0 C8 6 6 8 0 48 '
+                f'C-6 8 -8 6 -48 0 C-8 -6 -6 -8 0 -48 Z" fill="#fff"/></svg></div></div>')
+    HIDE.append(f"#{i}")
+    js(f'tl.set("#{i} img", {{opacity: 0}}, {a - .36:.3f});')
+    js(f'tl.fromTo("#{i}", {{opacity: 0}}, {{opacity: 1, duration: .34, ease: "power2.inOut", immediateRender: false}}, {a - .34:.3f}); /*smooth*/')
+    js(f'tl.fromTo("#{i} img", {{opacity: 0, scale: 1.1, filter: "blur(18px)"}}, {{opacity: 1, scale: 1, filter: "blur(0px)", duration: .55, ease: "power3.out", immediateRender: false}}, {a:.3f}); /*smooth*/')
+    js(f'tl.to("#{i} img", {{scale: .965, duration: {b - a - .55:.2f}, ease: "none"}}, {a + .55:.3f}); /*smooth*/')
+    js(f'tl.set("#{i} .lsweep i", {{x: -700}}, {a - .36:.3f});')
+    js(f'tl.fromTo("#{i} .lsweep i", {{x: -700}}, {{x: 700, duration: .75, ease: "power2.inOut", immediateRender: false}}, {a + .45:.3f}); /*smooth*/')
+    js(f'tl.fromTo("#{i} .lstar", {{scale: 0, rotation: -45, opacity: 0}}, {{scale: 1, rotation: 0, opacity: 1, duration: .35, ease: "back.out(2.2)", immediateRender: false}}, {a + .9:.3f}); /*smooth*/')
+    js(f'tl.to("#{i} .lstar", {{scale: .55, opacity: 0, duration: .4, ease: "power2.in"}}, {a + 1.25:.3f}); /*smooth*/')
+    EV.extend([(a + .05, "logo_in"), (a + .9, "logo_star")])
 
 
 def end_card():
@@ -679,7 +668,7 @@ def transition_frames():
     frames), ink (a grunge ink matte covers the cut and recedes off the next shot over four steps) and stutter (B/W
     threshold still, invert, duotone still, white frame, one frame each). Scenes that open on their own flash (R4, R8,
     R9) take the ink matte."""
-    SCREEN.append(f'<svg id="ink" viewBox="0 0 {FW} {FH}" preserveAspectRatio="none"><rect width="{FW}" height="{FH}" fill="#0b0606" filter="url(#inkf)"/></svg>')
+    SCREEN.append(f'<svg id="ink" viewBox="0 0 {FW} {FH}" preserveAspectRatio="none"><rect width="{FW}" height="{FH}" fill="#06070f" filter="url(#inkf)"/></svg>')
     HIDE.append("#ink")
     order = ["frames", "tear", "stutter", "frames", "ink"]
     k = q = 0
@@ -764,7 +753,7 @@ def sound_cues():
         if st == "tear":
             cues.append((a - 3 / 15, "tear", 0))
     kmap = {"slam": "slam", "stamp": "stamp", "shutter": "camera", "glitch": "glitch", "click": "glitch", "flash": "hit",
-            "pop": "pop", "paper": "paper", "tear": "tear"}
+            "pop": "pop", "paper": "paper", "tear": "tear", "logo_in": "logo_in", "logo_star": "logo_star"}
     for t, kind in EV:
         if kind in kmap:
             cues.append((t, kmap[kind], 0))
@@ -928,10 +917,10 @@ CSS = f"""
 @font-face {{ font-family: "Anek"; font-weight: 600; src: url("assets/fonts/AnekGurmukhi/AnekGurmukhi-600.ttf"); }}
 @font-face {{ font-family: "Outfit"; font-weight: 800; src: url("assets/fonts/Outfit/Outfit-800.ttf"); }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #0c0506; }}
-#root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: #0c0506; }}
+html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #05060f; }}
+#root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: #05060f; }}
 #glow {{ position: absolute; inset: 0; filter: url(#dglow); }}
-#bg {{ position: absolute; inset: 0; overflow: hidden; background: #160709; }}
+#bg {{ position: absolute; inset: 0; overflow: hidden; background: #0a0c1e; }}
 #fluid {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }}
 #fx {{ position: absolute; inset: 0; }}
 #cam {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; transform-origin: 540px {CY:.0f}px; }}
@@ -940,8 +929,8 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #0c05
   opacity: .11; }}   /* v10: only the crumple (build/crumple.py), as texture over the gradient; it moves with the camera */
 #board {{ position: absolute; inset: 0; }}
 #blinds {{ position: absolute; left: -1100px; top: -1300px; width: 3300px; height: 4500px; z-index: 9; pointer-events: none; mix-blend-mode: multiply;
-  background: repeating-linear-gradient(-32deg, rgba(20,6,8,0) 0px, rgba(20,6,8,0) 70px, rgba(20,6,8,.32) 150px, rgba(20,6,8,.36) 210px,
-  rgba(20,6,8,0) 290px, rgba(20,6,8,0) 330px); }}
+  background: repeating-linear-gradient(-32deg, rgba(4,6,18,0) 0px, rgba(4,6,18,0) 70px, rgba(4,6,18,.32) 150px, rgba(4,6,18,.36) 210px,
+  rgba(4,6,18,0) 290px, rgba(4,6,18,0) 330px); }}
 .el {{ position: absolute; opacity: 0; }}
 img.el {{ display: block; height: auto; }}
 .print {{ position: absolute; left: 0; top: 0; width: 600px; height: 700px; opacity: 0; z-index: 2; background: #f3f1ec; padding: 16px;
@@ -989,6 +978,15 @@ img.el {{ display: block; height: auto; }}
 .circ path {{ fill: none; stroke: {BLUE}; stroke-width: 5.5; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 400; }}
 .tframe {{ position: absolute; z-index: 15; opacity: 0; background: #f3f1ec; padding: 18px; box-shadow: 0 18px 40px rgba(0,0,0,.45); }}
 .tframe img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
+.logo2 {{ position: absolute; inset: 0; z-index: 21; background: #05030d; overflow: hidden; }}
+.lin {{ position: absolute; left: 0; top: {CY - 540:.0f}px; width: 1080px; height: 1080px; transform: scale(.6); }}
+.logo2 img {{ position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+  -webkit-mask-image: radial-gradient(circle closest-side, #000 74%, transparent 100%); mask-image: radial-gradient(circle closest-side, #000 74%, transparent 100%); }}
+.lsweep {{ position: absolute; left: 228px; top: 228px; width: 624px; height: 624px; border-radius: 50%; overflow: hidden; mix-blend-mode: screen;
+  -webkit-mask-image: radial-gradient(circle, #000 70%, transparent 71%); mask-image: radial-gradient(circle, #000 70%, transparent 71%); }}
+.lsweep i {{ position: absolute; left: -50%; top: 0; width: 200%; height: 100%;
+  background: linear-gradient(115deg, rgba(255,255,255,0) 40%, rgba(255,255,255,.7) 50%, rgba(255,255,255,0) 60%); }}
+.lstar {{ position: absolute; left: 651px; top: 285px; width: 80px; height: 80px; opacity: 0; filter: drop-shadow(0 0 14px #fff) drop-shadow(0 0 30px #c9a8ff); }}
 #endcard {{ position: absolute; inset: 0; z-index: 17; opacity: 0; overflow: hidden;
   background: radial-gradient(ellipse 70% 45% at 30% 30%, rgba(101,22,199,.35), rgba(0,0,0,0) 70%),
   radial-gradient(ellipse 70% 45% at 75% 75%, rgba(75,6,193,.3), rgba(0,0,0,0) 70%), #08060f; }}
@@ -1019,6 +1017,7 @@ def main():
         gs = [("ਅਸ਼ਕੇ", False, .56), ("ਕਰਨ ਔਜਲਾ", True, .8)] if li < 0 else groups_of(li)   # ASHKE lands on the drop
         builders[RECIPE[li]](si, a, b, li, gs)
     end_card()
+    logo_outro(SONG, DUR)
     lyric_icons()
     transition_frames()
     camera()
@@ -1057,11 +1056,12 @@ def main():
         <div id="blinds"></div>
         {"".join(SCREEN)}
       </div></div>
+      {"".join(POST)}
       <div id="leak"></div>
       <div id="dim"></div>
       <div id="vig"></div>
       <div id="grain"></div>
-      <audio id="song" src="assets/audio/section.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
+      <audio id="song" src="assets/audio/section_outro.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
     </div>
     <script>
       window.__timelines = window.__timelines || {{}};

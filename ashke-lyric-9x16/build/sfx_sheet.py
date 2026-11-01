@@ -67,6 +67,9 @@ KINDS = {
              f("card-game-sounds/cockatrice__draw.wav"), f("rpg-sound-pack/RPG Sound Pack__inventory__bubble2.wav")], "pop", -9, {"max_dur": .4}),
     "tear": ([f("fantasy-sound-effects-tinysized-sfx/sfx-cc0__cover-paper-tear-01.wav"),
               f("fantasy-sound-effects-tinysized-sfx/sfx-cc0__cover-paper-tear-02.wav")], "paper", -6, {"anchor": "start", "max_dur": .6}),
+    # v10b: the logo outro, as on Spin Bout U: a soft reversed swell as it appears, a light bell on the star
+    "logo_in": ([f("wind-hit-time-morph/qubodup-megaswosh2.wav")], "whoosh", -9, {"reverse": True, "max_dur": .6}),
+    "logo_star": ([f("bell-dingschimes/bell_ding2.wav")], "chime", -13, {"max_dur": 1.2, "fade_out": .5}),
 }
 # every cut whoosh is pitched down with a low impact under it (the owner wanted bassier transitions on Spin Bout U)
 SUBS = ["sci-fi-sounds/Audio__lowFrequency_explosion_000.ogg", "25-cc0-bang-firework-sfx/bang_03.ogg",
