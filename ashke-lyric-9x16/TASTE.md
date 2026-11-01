@@ -100,6 +100,11 @@ Updated 2026-11-01. Current version: v10 build, square preview ../ashke-lyric-1x
     blurs in at 60% with a sheen sweep and a star twinkle.
   - The song's own fade (59.2-60 s) gets a low-passed echo tail under the logo (build/audio_outro.py).
   - The final was asked for directly.
+- v10c (owner, same day): a light grey gradient (near white to cool slate).
+  - The original dark-ink pieces are back (stamps, ghost words, paragraph, stars), and R9's scrap is white again.
+  - The glow threshold is raised so the light ground does not bloom.
+  - Outro: no echo tail (it repeated the lyric). The song fades once, smoothly, over 59-60 s, and the picture dips into
+    the logo over that same second.
 
 ## 4. Removed
 - v2's full-bleed 9:16 cinema layer (eimantasbitinas23 reference): it blew the footage up and looked blurry.
@@ -119,5 +124,6 @@ Updated 2026-11-01. Current version: v10 build, square preview ../ashke-lyric-1x
 | 2026-10-31 | add three more photos (barn with horse, fire stage arm up, purple stage) | cut-outs barn, fireup, purple, replacing repeats (v8) |
 | 2026-10-31 | Bugatti: add the full photo; stop repeating the same clips | Bugatti as a full framed print; every print, fill and flash its own window from a shot-by-shot breakdown, flashes from the MV verse (v9) |
 | 2026-10-31 | make the whole edit in the 1:1 box ratio | square render in ../ashke-lyric-1x1 from the same build (ASHKE_FORMAT=1x1) |
+| 2026-11-01 | grey gradient, a bit light; the outro is not faded well, no repeating lyric in the fade | v10c |
 | 2026-11-01 | final with the outro; change the gradient (too close to the Drake one) | v10b: navy gradient, logo outro |
 | 2026-11-01 | remake with the Spin Bout U transitions, tracking and pacing with sound effects; remove the white grids, gradient background; SFX from 3 s, nothing before | 3f (v10) |

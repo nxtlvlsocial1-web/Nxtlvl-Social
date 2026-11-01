@@ -1,5 +1,5 @@
 """Liquid gradient background for Ashke v10 (owner: "remove the white grids, go for a gradient background"), built the
-way the owner's CreateGradients pack builds its looks (a 4-colour gradient warped by animated turbulent displacement), v10b: midnight navy, indigo and steel blue with one warm red accent (owner: the red version looked too close to the Drake edit's). Pre-rendered so the browser render
+way the owner's CreateGradients pack builds its looks (a 4-colour gradient warped by animated turbulent displacement), v10c: light greys, near white to cool slate (owner: a grey gradient, a bit light). Pre-rendered so the browser render
 stays cheap: writes assets/video/fluid_bg.mp4 (540x540, 30 fps, the full edit length; the page scales it up, it is
 soft by design).
 
@@ -16,11 +16,11 @@ N, FPS, DUR = 540, 30, 62.0
 BEATS = json.load(open(os.path.join(ROOT, "plan", "beats_raw.json")))["beats"]
 
 # (colour, path centre x, y, radius of the path, speed, phase, weight)
-PTS = [((30, 32, 96), .25, .30, .18, .11, 0.0, 1.0),       # midnight indigo
-       ((54, 98, 172), .72, .35, .20, .13, 1.9, .7),       # steel blue
-       ((178, 26, 44), .58, .72, .16, .17, 3.4, .32),      # the edit's red, one warm accent
-       ((12, 18, 48), .22, .78, .19, .09, 4.6, 1.0)]       # deep navy
-BASE = np.array((5, 6, 16), float)                         # near-black navy floor
+PTS = [((238, 238, 240), .25, .30, .18, .11, 0.0, .8),     # near white
+       ((150, 153, 160), .72, .35, .20, .13, 1.9, 1.0),    # mid grey
+       ((118, 124, 136), .58, .72, .16, .17, 3.4, .55),    # cool slate
+       ((206, 202, 198), .22, .78, .19, .09, 4.6, .7)]     # warm light grey
+BASE = np.array((182, 184, 188), float)                    # light grey floor
 
 
 def frame(t, yy, xx):
@@ -41,7 +41,7 @@ def frame(t, yy, xx):
         wsum += w
     img = acc / wsum[..., None]
     v = np.hypot(xx - .5, yy - .5)                         # soft vignette
-    img *= (1 - .55 * np.clip(v - .25, 0, 1) ** 1.2)[..., None]
+    img *= (1 - .3 * np.clip(v - .25, 0, 1) ** 1.2)[..., None]
     return np.clip(img, 0, 255).astype(np.uint8)
 
 

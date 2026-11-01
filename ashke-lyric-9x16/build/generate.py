@@ -233,7 +233,7 @@ def card(n, x, y, w, h, rot, t0, t1, red=False):
         js(f'tl.set("#pr{n}", {{opacity: 0}}, {t1:.3f});')
 
 
-def star(x, y, size, t0, t1, color="#f1eee8", n=7, seed=0):
+def star(x, y, size, t0, t1, color=INK, n=7, seed=0):
     i = nid("st")
     PAN.append(f'<svg class="el" id="{i}" viewBox="-50 -50 100 100" style="left:{x:.0f}px;top:{y:.0f}px;width:{size}px;height:{size}px;z-index:4">'
                f'<path d="{star_path(n, seed=seed)}" fill="{color}"/></svg>')
@@ -560,7 +560,7 @@ def r9(si, a, b, li, gs):
         still(PRINT[li], 600, 60, 440, 550, 7, a + .067, b)
     scrap("grey", 3, -160, -90, 1000, 5, a, b)
     scrap("grey", 1, 420, 1560, 860, -7, a, b)
-    scrap("black", 2, -120, 880, 760, 3, a, b)            # v10: black, so the white stamped word reads on it
+    scrap("white", 2, -120, 880, 760, 3, a, b)
     kw = gs[-1] if gs else None         # sung order top-down, the last word stamped big at the bottom
     rest = gs[:-1]
     styles = ["redw", "red", "w3d", "blk"]
@@ -589,19 +589,19 @@ POST = []             # v10b: layers above the glow (the logo stays crisp, untou
 
 
 def logo_outro(a, b):
-    """v10b, the Spin Bout U ending: after the ASHKE tape the frame eases into the logo's dark violet while the song
-    fades (its echo trails under the logo, build/audio_outro.py); the owner's N logo comes in from a soft blur and a
+    """v10b, the Spin Bout U ending: after the ASHKE tape the frame eases into the logo's dark violet over the same second
+    the song fades out (59-60 s, build/audio_outro.py; v10c: one long dip, no echo); the owner's N logo comes in from a soft blur and a
     slight scale at 60% size, a light sweep runs across the circle's sheen, the star twinkles. Smooth, not stepped."""
     i = nid("lg")
     POST.append(f'<div class="logo2 el" id="{i}"><div class="lin"><img src="assets/img/brand/nxtlvl_logo.png" alt="Nxtlvl">'
                 f'<div class="lsweep"><i></i></div><svg class="lstar" viewBox="-50 -50 100 100"><path d="M0 -48 C6 -8 8 -6 48 0 C8 6 6 8 0 48 '
                 f'C-6 8 -8 6 -48 0 C-8 -6 -6 -8 0 -48 Z" fill="#fff"/></svg></div></div>')
     HIDE.append(f"#{i}")
-    js(f'tl.set("#{i} img", {{opacity: 0}}, {a - .36:.3f});')
-    js(f'tl.fromTo("#{i}", {{opacity: 0}}, {{opacity: 1, duration: .34, ease: "power2.inOut", immediateRender: false}}, {a - .34:.3f}); /*smooth*/')
+    js(f'tl.set("#{i} img", {{opacity: 0}}, {a - 1.02:.3f});')
+    js(f'tl.fromTo("#{i}", {{opacity: 0}}, {{opacity: 1, duration: 1.0, ease: "sine.inOut", immediateRender: false}}, {a - 1.0:.3f}); /*smooth*/')
     js(f'tl.fromTo("#{i} img", {{opacity: 0, scale: 1.1, filter: "blur(18px)"}}, {{opacity: 1, scale: 1, filter: "blur(0px)", duration: .55, ease: "power3.out", immediateRender: false}}, {a:.3f}); /*smooth*/')
     js(f'tl.to("#{i} img", {{scale: .965, duration: {b - a - .55:.2f}, ease: "none"}}, {a + .55:.3f}); /*smooth*/')
-    js(f'tl.set("#{i} .lsweep i", {{x: -700}}, {a - .36:.3f});')
+    js(f'tl.set("#{i} .lsweep i", {{x: -700}}, {a - 1.02:.3f});')
     js(f'tl.fromTo("#{i} .lsweep i", {{x: -700}}, {{x: 700, duration: .75, ease: "power2.inOut", immediateRender: false}}, {a + .45:.3f}); /*smooth*/')
     js(f'tl.fromTo("#{i} .lstar", {{scale: 0, rotation: -45, opacity: 0}}, {{scale: 1, rotation: 0, opacity: 1, duration: .35, ease: "back.out(2.2)", immediateRender: false}}, {a + .9:.3f}); /*smooth*/')
     js(f'tl.to("#{i} .lstar", {{scale: .55, opacity: 0, duration: .4, ease: "power2.in"}}, {a + 1.25:.3f}); /*smooth*/')
@@ -668,7 +668,7 @@ def transition_frames():
     frames), ink (a grunge ink matte covers the cut and recedes off the next shot over four steps) and stutter (B/W
     threshold still, invert, duotone still, white frame, one frame each). Scenes that open on their own flash (R4, R8,
     R9) take the ink matte."""
-    SCREEN.append(f'<svg id="ink" viewBox="0 0 {FW} {FH}" preserveAspectRatio="none"><rect width="{FW}" height="{FH}" fill="#06070f" filter="url(#inkf)"/></svg>')
+    SCREEN.append(f'<svg id="ink" viewBox="0 0 {FW} {FH}" preserveAspectRatio="none"><rect width="{FW}" height="{FH}" fill="#141416" filter="url(#inkf)"/></svg>')
     HIDE.append("#ink")
     order = ["frames", "tear", "stutter", "frames", "ink"]
     k = q = 0
@@ -892,7 +892,7 @@ FX_DEFS = """
       <feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
       <filter id="dglow" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
       <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  .3 .59 .11 0 0" result="lum"/>
-      <feComponentTransfer in="lum" result="mask"><feFuncA type="linear" slope="3.2" intercept="-2.45"/></feComponentTransfer>
+      <feComponentTransfer in="lum" result="mask"><feFuncA type="linear" slope="3.2" intercept="-2.88"/></feComponentTransfer>
       <feComposite in="SourceGraphic" in2="mask" operator="in" result="hi"/>
       <feGaussianBlur in="hi" stdDeviation="4" result="b1"/><feGaussianBlur in="hi" stdDeviation="14" result="b2"/>
       <feGaussianBlur in="hi" stdDeviation="38" result="b3"/>
@@ -901,7 +901,7 @@ FX_DEFS = """
       <feBlend in="SourceGraphic" in2="gl" mode="screen"/></filter>
       <filter id="bloom" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
       <feGaussianBlur id="blg" in="SourceGraphic" stdDeviation="20" result="b"/>
-      <feColorMatrix in="b" type="matrix" values=".95 0 0 0 0  0 .62 0 0 0  0 0 .55 0 0  0 0 0 1 0" result="bb"/>
+      <feColorMatrix in="b" type="matrix" values=".42 0 0 0 0  0 .4 0 0 0  0 0 .4 0 0  0 0 0 1 0" result="bb"/>
       <feBlend in="SourceGraphic" in2="bb" mode="screen"/></filter>
       <filter id="rgbsplit" color-interpolation-filters="sRGB">
       <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
@@ -917,20 +917,20 @@ CSS = f"""
 @font-face {{ font-family: "Anek"; font-weight: 600; src: url("assets/fonts/AnekGurmukhi/AnekGurmukhi-600.ttf"); }}
 @font-face {{ font-family: "Outfit"; font-weight: 800; src: url("assets/fonts/Outfit/Outfit-800.ttf"); }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #05060f; }}
-#root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: #05060f; }}
+html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #b8babe; }}
+#root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: #b8babe; }}
 #glow {{ position: absolute; inset: 0; filter: url(#dglow); }}
-#bg {{ position: absolute; inset: 0; overflow: hidden; background: #0a0c1e; }}
+#bg {{ position: absolute; inset: 0; overflow: hidden; background: #b8babe; }}
 #fluid {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }}
 #fx {{ position: absolute; inset: 0; }}
 #cam {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; transform-origin: 540px {CY:.0f}px; }}
 #pan {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; }}
 #paper {{ position: absolute; left: -760px; top: -1000px; width: 2600px; height: 3900px; background: url(assets/img/crumple.png);
-  opacity: .11; }}   /* v10: only the crumple (build/crumple.py), as texture over the gradient; it moves with the camera */
+  opacity: .16; }}   /* v10: only the crumple (build/crumple.py), as texture over the gradient; it moves with the camera */
 #board {{ position: absolute; inset: 0; }}
 #blinds {{ position: absolute; left: -1100px; top: -1300px; width: 3300px; height: 4500px; z-index: 9; pointer-events: none; mix-blend-mode: multiply;
-  background: repeating-linear-gradient(-32deg, rgba(4,6,18,0) 0px, rgba(4,6,18,0) 70px, rgba(4,6,18,.32) 150px, rgba(4,6,18,.36) 210px,
-  rgba(4,6,18,0) 290px, rgba(4,6,18,0) 330px); }}
+  background: repeating-linear-gradient(-32deg, rgba(40,42,50,0) 0px, rgba(40,42,50,0) 70px, rgba(40,42,50,.24) 150px, rgba(40,42,50,.27) 210px,
+  rgba(40,42,50,0) 290px, rgba(40,42,50,0) 330px); }}
 .el {{ position: absolute; opacity: 0; }}
 img.el {{ display: block; height: auto; }}
 .print {{ position: absolute; left: 0; top: 0; width: 600px; height: 700px; opacity: 0; z-index: 2; background: #f3f1ec; padding: 16px;
@@ -951,10 +951,9 @@ img.el {{ display: block; height: auto; }}
 .rb {{ background: {RED}; color: #fff; text-shadow: 4px 4px 0 {INK}; box-shadow: 18px 16px 0 {INK}; }}
 .blkr {{ background: {INK}; color: #fff; box-shadow: 16px 18px 0 {RED}; }}
 .rtyp {{ background: none; color: {RED}; padding: 0; -webkit-mask-image: url(assets/img/tex/grunge.png); mask-image: url(assets/img/tex/grunge.png); }}
-.stamp {{ background: none; color: #f1eee8; padding: 0; line-height: 1.12; -webkit-text-stroke: 4px #161616; paint-order: stroke fill;
-  text-shadow: 0 8px 18px rgba(0,0,0,.45);
+.stamp {{ background: none; color: #1c1b1a; padding: 0; line-height: 1.12;
   -webkit-mask-image: url(assets/img/tex/grunge.png); mask-image: url(assets/img/tex/grunge.png); -webkit-mask-size: 520px auto; mask-size: 520px auto; }}
-.stamp .cur {{ background: rgba(241,238,232,.55); }}
+.stamp .cur {{ background: rgba(60,58,55,.55); }}
 .w3d {{ background: none; color: #f6f4ef; padding: 0; -webkit-text-stroke: 2px #2a2a2a;
   text-shadow: 1px 1px 0 #cfcac2, 2px 2px 0 #bdb7ae, 3px 3px 0 #a7a097, 4px 4px 0 #8f887f, 5px 5px 0 #77706a, 6px 6px 0 #5e5852, 7px 7px 0 #48433e, 10px 12px 10px rgba(0,0,0,.5); }}
 .r3d {{ background: none; color: {RED}; padding: 0; -webkit-text-stroke: 2px #6e0b0f;
@@ -964,8 +963,8 @@ img.el {{ display: block; height: auto; }}
 .fill {{ color: transparent; padding: 0; line-height: 1.12; background-size: cover; background-position: 50% 40%;
   -webkit-background-clip: text; background-clip: text; -webkit-text-stroke: 5px {INK}; filter: drop-shadow(8px 10px 0 rgba(22,22,22,.85)); }}
 {"".join(f'.f{li} {{ background-image: url(assets/img/photo/fill_{li}.jpg); }}' for li in FILL)}
-.ghost {{ font: 800 250px/1.15 "Anek C"; color: rgba(255,236,230,.09); white-space: nowrap; opacity: 0; }}
-.para {{ font: 600 36px/1.3 "Anek"; color: #efe9e2; z-index: 5; }}
+.ghost {{ font: 800 250px/1.15 "Anek C"; color: rgba(40,40,46,.15); white-space: nowrap; opacity: 0; }}
+.para {{ font: 600 36px/1.3 "Anek"; color: #2a2a2e; z-index: 5; }}
 .itag {{ position: absolute; left: 50%; top: 212px; transform: translateX(-50%) rotate(-3deg); font: 800 52px/1.2 "Anek C"; white-space: nowrap;
   background: {RED}; color: #fff; padding: 0 .3em; box-shadow: 0 8px 14px rgba(0,0,0,.25); }}
 .rline {{ border: 9px solid {RED}; z-index: 2; }}
@@ -997,9 +996,9 @@ img.el {{ display: block; height: auto; }}
 #split {{ position: absolute; inset: 0; z-index: 20; background: #f4f3ef; opacity: 0; }}
 #split i {{ position: absolute; left: 50%; top: 0; width: 50%; height: 100%; background: #111; }}
 #dim {{ position: absolute; inset: 0; z-index: 19; background: #000; opacity: 0; pointer-events: none; }}
-#vig {{ position: absolute; inset: 0; z-index: 18; pointer-events: none; background: radial-gradient(ellipse 80% 75% at 50% 48%, rgba(0,0,0,0) 55%, rgba(0,0,0,.42) 100%); }}
+#vig {{ position: absolute; inset: 0; z-index: 18; pointer-events: none; background: radial-gradient(ellipse 80% 75% at 50% 48%, rgba(0,0,0,0) 58%, rgba(20,20,26,.3) 100%); }}
 #leak {{ position: absolute; inset: -200px; z-index: 17; opacity: 0; pointer-events: none; mix-blend-mode: screen;
-  background: radial-gradient(ellipse 35% 60% at 50% 50%, rgba(255,180,120,.8), rgba(255,60,40,.45) 45%, rgba(0,0,0,0) 75%); }}
+  background: radial-gradient(ellipse 35% 60% at 50% 50%, rgba(255,214,180,.55), rgba(255,120,100,.25) 45%, rgba(0,0,0,0) 75%); }}
 #ink {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH}px; z-index: 19; opacity: 0; pointer-events: none; }}
 .tear {{ position: absolute; left: 0; width: 1900px; height: auto; z-index: 19; opacity: 0; pointer-events: none;
   filter: drop-shadow(0 20px 30px rgba(0,0,0,.55)); }}
