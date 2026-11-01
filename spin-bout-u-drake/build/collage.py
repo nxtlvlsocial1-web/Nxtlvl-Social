@@ -322,7 +322,7 @@ def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor
     size = min(size * 1.12, fit(text, 980, 999))
     w = tw(text, size) + size * .56
     left = x - w / 2 if anchor == "center" else x
-    letters = "".join(f'<span class="ch{" cz" if c == "*" else ""}">{c if c != " " else "&nbsp;"}</span>' for c in text)
+    letters = "".join(f'<span class="ch{" cz" if c == "*" else " sp" if c == " " else ""}">{c if c != " " else "&nbsp;"}</span>' for c in text)
     if mode == "type":
         mode = ("track" if style == "ser" else "flicker" if style == "stamp"
                 else ("slamx", "scramble", "flip3d", "cascade", "blur")[NID[0] % 5])
@@ -353,10 +353,10 @@ def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor
         G = "#%&@$*?!/<>XZ0123456789"
         rr = random.Random(int(t * 1000))
         for f_ in range(4):
-            js(f'tl.set("#{i} .ch:not(.cz)", {{textContent: (k) => "{"".join(rr.choice(G) for _ in range(40))}"[(k * 7 + {f_ * 3}) % 40]}}, {t + f_ / 15:.3f});')
+            js(f'tl.set("#{i} .ch:not(.cz):not(.sp)", {{textContent: (k) => "{"".join(rr.choice(G) for _ in range(40))}"[(k * 7 + {f_ * 3}) % 40]}}, {t + f_ / 15:.3f});')
         for k, c in enumerate(text):
-            if c != "*":                                     # spaces come back as no-break spaces
-                ch = "\\u00a0" if c == " " else c.replace(chr(34), "")
+            if c not in "* ":                                # v20: spaces are never scrambled (GSAP read a space after a digit as 0)
+                ch = c.replace(chr(34), "")
                 js(f'tl.set("#{i} .ch:nth-child({k + 1})", {{textContent: "{ch}"}}, {t + 4 / 15 + k * .012:.3f});')
         done = t + .3
     elif mode == "flip3d":                                   # letters flip up out of the page
@@ -842,7 +842,7 @@ def velocity_section(a, b):
             n_plain += 1
         text = txt.lower() if style == "ser" else txt
         size = fit(text, 940, 250 if key else 170)
-        letters = "".join(f'<span class="ch{" cz" if c == "*" else ""}">{c if c != " " else "&nbsp;"}</span>' for c in text)
+        letters = "".join(f'<span class="ch{" cz" if c == "*" else " sp" if c == " " else ""}">{c if c != " " else "&nbsp;"}</span>' for c in text)
         j = nid("vc")
         kind = ("black", "mag", "black", "white", "mag")[k % 5]
         SCREEN.append(f'<div class="vcard el" id="{j}"><div class="vbg"></div>'
@@ -860,9 +860,9 @@ def logo_outro(a, b):
     to near black at the cut, so the logo rises out of that darkness: it comes in from a soft blur and a slight scale,
     a light sweep runs across the circle's sheen, the star twinkles, and the song fades out (render scripts)."""
     i = nid("lg")
-    POST.append(f'<div class="logo el" id="{i}"><img src="assets/img/brand/nxtlvl_logo.png" alt="Nxtlvl">'
+    POST.append(f'<div class="logo el" id="{i}"><div class="lin"><img src="assets/img/brand/nxtlvl_logo.png" alt="Nxtlvl">'
                   f'<div class="lsweep"><i></i></div><svg class="lstar" viewBox="-50 -50 100 100"><path d="M0 -48 C6 -8 8 -6 48 0 C8 6 6 8 0 48 '
-                  f'C-6 8 -8 6 -48 0 C-8 -6 -6 -8 0 -48 Z" fill="#fff"/></svg></div>')
+                  f'C-6 8 -8 6 -48 0 C-8 -6 -6 -8 0 -48 Z" fill="#fff"/></svg></div></div>')
     show(f"#{i}", a, b + 1)
     js(f'/*smooth*/tl.fromTo("#{i} img", {{opacity: 0, scale: 1.1, filter: "blur(18px)"}}, {{opacity: 1, scale: 1, filter: "blur(0px)", duration: .55, ease: "power3.out", immediateRender: false}}, {a:.3f});')
     js(f'/*smooth*/tl.to("#{i} img", {{scale: .965, duration: {b - a - .55:.2f}, ease: "none"}}, {a + .55:.3f});')
@@ -1704,7 +1704,9 @@ img.el {{ display: block; height: auto; }}
   letter-spacing: .01em; text-shadow: 0 0 30px rgba(255,40,60,.7), 8px 8px 0 #ff1e2e; }}
 .fw {{ margin: 0 .16em; }}
 .logo {{ position: absolute; inset: 0; z-index: 21; background: #05030d; overflow: hidden; }}
-.logo img {{ position: absolute; inset: 0; width: 100%; height: 100%; display: block; }}
+.lin {{ position: absolute; inset: 0; transform: scale(.6); }}   /* v20: owner wanted the logo smaller (circle 624 -> 375 px) */
+.logo img {{ position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+  -webkit-mask-image: radial-gradient(circle closest-side, #000 74%, transparent 100%); mask-image: radial-gradient(circle closest-side, #000 74%, transparent 100%); }}
 .lsweep {{ position: absolute; left: 228px; top: 228px; width: 624px; height: 624px; border-radius: 50%; overflow: hidden; mix-blend-mode: screen;
   -webkit-mask-image: radial-gradient(circle, #000 70%, transparent 71%); mask-image: radial-gradient(circle, #000 70%, transparent 71%); }}
 .lsweep i {{ position: absolute; left: -50%; top: 0; width: 200%; height: 100%;
