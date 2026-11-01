@@ -105,6 +105,18 @@ Updated 2026-11-01. Current version: v10 build, square preview ../ashke-lyric-1x
   - The glow threshold is raised so the light ground does not bloom.
   - Outro: no echo tail (it repeated the lyric). The song fades once, smoothly, over 59-60 s, and the picture dips into
     the logo over that same second.
+- v10d (owner, same day, second YouMotion reference "ssspin", in cache/ref/ssspin.mp4, not in git):
+  - Background: whitish crumpled paper with the window-blind shadows and no grid. No gradient video, no glow, bloom or
+    leak pass (they would wash out the white).
+  - Cuts change colour and frame the way the reference does:
+    - Held invert flips (three steps; cream goes slate blue, red goes teal, ink goes white), as at 0:01.75 and 0:08.5.
+    - Torn sheets.
+    - Blurred whips across blank paper (a screen layer of paper under a 34 px horizontal blur, sliding four steps).
+    - The single-frame stills.
+  - Longer camera whips (460/420 px). The ink matte and duotone stutter are out.
+  - Outro on the paper, as the reference ends: the paper crossfades in as the song fades (59-60 s), and the logo disc
+    (cut to its circle, soft shadow) blurs in. A blue marker circle draws round it, the sheen sweeps and the star
+    twinkles.
 
 ## 4. Removed
 - v2's full-bleed 9:16 cinema layer (eimantasbitinas23 reference): it blew the footage up and looked blurry.
@@ -124,6 +136,7 @@ Updated 2026-11-01. Current version: v10 build, square preview ../ashke-lyric-1x
 | 2026-10-31 | add three more photos (barn with horse, fire stage arm up, purple stage) | cut-outs barn, fireup, purple, replacing repeats (v8) |
 | 2026-10-31 | Bugatti: add the full photo; stop repeating the same clips | Bugatti as a full framed print; every print, fill and flash its own window from a shot-by-shot breakdown, flashes from the MV verse (v9) |
 | 2026-10-31 | make the whole edit in the 1:1 box ratio | square render in ../ashke-lyric-1x1 from the same build (ASHKE_FORMAT=1x1) |
+| 2026-11-01 | whitish background without the grid; follow the ssspin reference for how colours and transitions change between frames | v10d |
 | 2026-11-01 | grey gradient, a bit light; the outro is not faded well, no repeating lyric in the fade | v10c |
 | 2026-11-01 | final with the outro; change the gradient (too close to the Drake one) | v10b: navy gradient, logo outro |
 | 2026-11-01 | remake with the Spin Bout U transitions, tracking and pacing with sound effects; remove the white grids, gradient background; SFX from 3 s, nothing before | 3f (v10) |
