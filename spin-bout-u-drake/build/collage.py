@@ -29,6 +29,7 @@ from doodles import ICON, WORD, svg  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DUR, FPS = 60.0, 30
+LOGO_LEN = 1.72          # v19 (owner): the edit stops at the second "the way" and hands over to the logo
 STEP = 1 / 15
 FW = FH = 1080
 CY, ZOOM, VTRACK = 540, .64, .55          # the board is 1080x1920 (the Ashke layouts); the square camera pulls back
@@ -60,6 +61,7 @@ G3D_AT = {9: ("globe", 120, 620, 860), 15: ("heart", 140, 470, 800),
           16: ("body", 0, 700, 1080), 17: ("tissue", 0, 1200, 360)}
 STILLS = [AF + n + ".jpg" for n in ("her_blush", "jet", "road", "finale", "snotty")] + [PR + "vogue_cat_cover.jpg", PR + "rolex_cat_ad.jpg", PR + "envogue_funky_divas.jpg"]
 A, HIDE, PAN, SCREEN = [], [], [], []
+POST = []           # layers above the glow (the logo: crisp, untouched by the edit's bloom)
 CAMKEYS, FLASH = {}, []
 LOCKS, CAMSTATE = [], {}
 CUES = []           # (t, kind, len) moments for the sound design, written to plan/sfx_events.json     # screen-pinned layers inside the board; the camera per 15 fps frame (fx, fy, scale, rot)
@@ -77,6 +79,9 @@ def js(s):
         m = re.search(r'duration: ([\d.]+)', s)
         d = float(m.group(1)) if m else .3
         s = _STEPS.sub('ease: "expo.out"' if d <= .5 else 'ease: "power2.out"', s)
+    if "/*smooth*/" in s:
+        A.append("      " + s.replace("/*smooth*/", ""))
+        return
     if "ease: \"" in s and "duration:" in s:             # v16: the curve is kept, time steps on twos (15 fps)
         m = re.search(r'duration: ([\d.]+)', s)
         d = float(m.group(1)) if m else .3
@@ -98,8 +103,14 @@ def scenes():
     for li in range(len(L)):
         a = lt(li) - .06
         b = (lt(li + 1) - .06) if li + 1 < len(L) else DUR
-        out.append((a, b, li))
+        if a >= CUT - 1e-6:                                # v19: everything from the second "the way" is cut
+            break
+        out.append((a, min(b, CUT), li))
     return out
+
+
+CUT = lt(15) - .06                                     # the second "the way"
+DUR = round(CUT + LOGO_LEN, 3)
 
 
 def groups_of(li):
@@ -844,6 +855,24 @@ def velocity_section(a, b):
         CUES.append((t, "card_key" if key else "card", 0))
 
 
+def logo_outro(a, b):
+    """v19 (owner): a second or two on the Nxtlvl logo, smooth, not bolted on. The burn scene has charred the frame
+    to near black at the cut, so the logo rises out of that darkness: it comes in from a soft blur and a slight scale,
+    a light sweep runs across the circle's sheen, the star twinkles, and the song fades out (render scripts)."""
+    i = nid("lg")
+    POST.append(f'<div class="logo el" id="{i}"><img src="assets/img/brand/nxtlvl_logo.png" alt="Nxtlvl">'
+                  f'<div class="lsweep"><i></i></div><svg class="lstar" viewBox="-50 -50 100 100"><path d="M0 -48 C6 -8 8 -6 48 0 C8 6 6 8 0 48 '
+                  f'C-6 8 -8 6 -48 0 C-8 -6 -6 -8 0 -48 Z" fill="#fff"/></svg></div>')
+    show(f"#{i}", a, b + 1)
+    js(f'/*smooth*/tl.fromTo("#{i} img", {{opacity: 0, scale: 1.1, filter: "blur(18px)"}}, {{opacity: 1, scale: 1, filter: "blur(0px)", duration: .55, ease: "power3.out", immediateRender: false}}, {a:.3f});')
+    js(f'/*smooth*/tl.to("#{i} img", {{scale: .965, duration: {b - a - .55:.2f}, ease: "none"}}, {a + .55:.3f});')
+    js(f'tl.set("#{i} .lsweep i", {{x: -700}}, {a - .01:.3f});')
+    js(f'/*smooth*/tl.fromTo("#{i} .lsweep i", {{x: -700}}, {{x: 700, duration: .75, ease: "power2.inOut", immediateRender: false}}, {a + .45:.3f});')
+    js(f'/*smooth*/tl.fromTo("#{i} .lstar", {{scale: 0, rotation: -45, opacity: 0}}, {{scale: 1, rotation: 0, opacity: 1, duration: .35, ease: "back.out(2.2)", immediateRender: false}}, {a + .9:.3f});')
+    js(f'/*smooth*/tl.to("#{i} .lstar", {{scale: .55, opacity: .0, duration: .4, ease: "power2.in"}}, {a + 1.25:.3f});')
+    CUES.extend([(a + .05, "logo_in", 0), (a + .9, "logo_star", 0)])
+
+
 def cut_bursts():
     """v16: every cut is a short burst instead of one clean cut, rotating the owner's three references:
     ink (Eimantas: a grunge ink matte eats the frame and recedes off the next shot), tear (YouMotion: a torn paper sheet
@@ -1039,6 +1068,8 @@ def concepts():
         CUES.append((t, "tick", 0))
         js(f'tl.to("#{cp} .ndl", {{rotation: {ang}, svgOrigin: "0 0", duration: .2, ease: "back.out(3)"}}, {t:.3f});')
     # comin' out my body: glowing wisps rising out of the 3D BODY
+    if 16 not in sc:
+        return
     a, b = sc[16]
     g = random.Random(16)
     for k in range(14):
@@ -1390,6 +1421,8 @@ def context_fx():
     FLASH.append((td + 3 * STEP, "white"))
     CUES.append((td + 3 * STEP, "boom", 0))
     # comin' out my body: a ghost of the whole picture lifts up out of it on "out", again on "body"
+    if 16 not in sc:
+        return
     a, b = sc[16]
     for tw in [s_ for w, s_ in words_of(16) if w in ("out", "body")]:
         CUES.append((tw, "ghost", .4))
@@ -1670,6 +1703,13 @@ img.el {{ display: block; height: auto; }}
 .fkey-line {{ position: absolute; left: 0; right: 0; top: 430px; z-index: 16; text-align: center; font: 400 190px/1 "Anton"; color: #fff;
   letter-spacing: .01em; text-shadow: 0 0 30px rgba(255,40,60,.7), 8px 8px 0 #ff1e2e; }}
 .fw {{ margin: 0 .16em; }}
+.logo {{ position: absolute; inset: 0; z-index: 21; background: #05030d; overflow: hidden; }}
+.logo img {{ position: absolute; inset: 0; width: 100%; height: 100%; display: block; }}
+.lsweep {{ position: absolute; left: 228px; top: 228px; width: 624px; height: 624px; border-radius: 50%; overflow: hidden; mix-blend-mode: screen;
+  -webkit-mask-image: radial-gradient(circle, #000 70%, transparent 71%); mask-image: radial-gradient(circle, #000 70%, transparent 71%); }}
+.lsweep i {{ position: absolute; left: -50%; top: 0; width: 200%; height: 100%;
+  background: linear-gradient(115deg, rgba(255,255,255,0) 40%, rgba(255,255,255,.7) 50%, rgba(255,255,255,0) 60%); }}
+.lstar {{ position: absolute; left: 651px; top: 285px; width: 80px; height: 80px; opacity: 0; filter: drop-shadow(0 0 14px #fff) drop-shadow(0 0 30px #c9a8ff); }}
 .vcard {{ position: absolute; inset: 0; z-index: 16; overflow: hidden; }}
 .vbg {{ position: absolute; inset: 0; background: url(assets/img/collage/shade.png) center / 1400px auto, radial-gradient(ellipse at 50% 45%, #6a1d36, #14060b 78%);
   background-blend-mode: multiply; }}
@@ -1692,12 +1732,12 @@ def main():
     for si, (a, b, li) in enumerate(scenes()):
         gs = [("SPIN BOUT U", False, .3), ("DRAKE", True, 1.1), ("21 SAVAGE", False, 1.6)] if li < 0 else groups_of(li)
         if li in VEL:
-            if li == VEL[0]:
-                velocity_section(a, DUR)
+            continue
         elif li in FOOT:
             footage_scene(si, a, b, li, gs)
         else:
             builders[RECIPE[li]](si, a, b, li, gs)
+    logo_outro(CUT, DUR)
     lyric_icons()
     cut_bursts()
     concepts()
@@ -1753,6 +1793,7 @@ def main():
         <div id="blinds"></div>
         {"".join(SCREEN)}
       </div></div>
+      {"".join(POST)}
       <div id="leak"></div>
       <div id="vig"></div>
       <div id="grain"></div>

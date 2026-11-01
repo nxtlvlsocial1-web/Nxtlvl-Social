@@ -196,6 +196,16 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
   Grade per line (warm / B/W / warm / B/W); the last second double-exposes the intro photo; the out-of-body ghost on
   "body" lifts the footage and the cards. Card sounds: light swishes, keyword cards a soft hit with a low layer.
 
+## v19 (owner: cut everything after 44 s; end on the logo, smooth, a second or two, with the audio fading)
+- The edit now ends at the second "the way" (44.28 s, CUT) and runs 46.0 s: scenes() stops at CUT, the velocity
+  ending and everything after it are out (code kept for reference).
+- Logo outro (logo_outro, assets/img/brand/nxtlvl_logo.png, the owner's mark): the burn scene chars the frame to
+  near black right at the cut, the logo's dark navy backing is there from the first frame, and the mark rises out of
+  an 18 px blur and a 1.1x scale (0.55 s, smooth, not stepped), then drifts in slightly; a light sweep crosses the
+  circle's sheen; the star twinkles; it sits above the edit's glow so the mark stays crisp; quiet reversed swell and a
+  small bell. Render scripts: the song fades out from 44.28 s over 1.65 s; the MoodyGloss grade stops at the cut so
+  the brand colours stay true.
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|
@@ -220,3 +230,4 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 | 2026-11-01 | paper slaps once only; pixel sounds quieter; jealous as pixel girls throwing phones; transitions to the flow of the three references; no pulsing; fix the intro Drake crop or change its background; better, faster text | v16 above |
 | 2026-11-01 | remove the double whooshes (road, the way, ending); from the way lyrics switch to the Eimantas style with the walking clip full screen, back and forth with the collage | v17 above |
 | 2026-11-01 | the switch belongs at the second the way; make the end a velocity edit, lyrics card then Drake back and forth | v18 above |
+| 2026-11-01 | cut the whole part after 44 s; a smooth one-to-two second transition to the logo with the audio fading | v19 above |

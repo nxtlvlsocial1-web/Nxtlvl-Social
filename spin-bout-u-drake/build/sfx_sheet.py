@@ -86,6 +86,8 @@ KINDS = {
     "card_key": ([f("100-cc0-sfx-2/sfx100v2_hit_01.ogg"), f("100-cc0-sfx-2/sfx100v2_hit_03.ogg")], "hit", -6,
                  {"layers": [{"dt": 0.0, "file": f("sci-fi-sounds/Audio__lowFrequency_explosion_001.ogg"), "role": "hit", "gain_db": -6,
                               "lowpass": 300, "max_dur": .5, "fade_out": .2}]}),
+    "logo_in": ([f("wind-hit-time-morph/qubodup-megaswosh2.wav")], "whoosh", -9, {"reverse": True, "max_dur": .6}),
+    "logo_star": ([f("bell-dingschimes/bell_ding2.wav")], "chime", -13, {"max_dur": 1.2, "fade_out": .5}),
     "ghost": ([f("wind-hit-time-morph/qubodup-slomo1.wav")], "whoosh", -6, {"max_dur": 1.2}),
     "pixel_start": (r8("sfx_sounds_powerup1."), "ui", -10, {}),
     "pixel_walk": (r8("sfx_movement_footsteps"), "foley", -9, {"anchor": "start"}),
