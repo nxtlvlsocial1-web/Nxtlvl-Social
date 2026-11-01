@@ -225,6 +225,19 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 - R2 puts its keyword under the label stack (it overlapped on the long "one wrong call" line) and zigzags the stack.
 - No sound effects on the logo; the song's fade carries it.
 
+## v21b (owner: 9:16 final; start 0.5 s before "Yeah"; three photos on their lines)
+- The 9:16 starts 0.5 s before the first "Yeah" (TRIM 0.88 s; assets/audio/section_9x16.wav). The lyric words, beats
+  and 3D starts move with it: the cut is at 43.40 s and the edit runs 45.12 s. DRAKE lands on "Yeah".
+- The owner's photos (assets/img/print, not in git):
+  - drake_frontrow.jpg (theatre seat, wine) on "I'm sittin' front row" (R8's cut-out slot).
+  - drake_phone_runway.jpg on "you in runway shows" (R6's print).
+  - drake_pose_jealous.jpg, at 600 px, under JEALOUS.
+- 9:16 fixes:
+  - Black under the intro photo.
+  - Horizontal scene drift at 45%.
+  - Labels capped at 900 px (FRONT ROW lost its F).
+  - The runway print moved down so his face stays in frame.
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|
