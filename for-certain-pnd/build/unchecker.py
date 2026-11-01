@@ -32,9 +32,9 @@ bg = border_connected(cand)
 lab_c, nc = ndimage.label(cand & ~bg)                          # enclosed checker patches (between the legs...)
 if nc:
     area = ndimage.sum(np.ones_like(lab_c), lab_c, range(1, nc + 1))
-    bg |= np.isin(lab_c, [k + 1 for k, ar in enumerate(area) if ar >= 120])
-band = ndimage.binary_dilation(bg, iterations=7) & ~bg
-bg |= band & (sat <= 16) & (br >= 150)                  # the blended checker at the subject's edge
+    bg |= np.isin(lab_c, [k + 1 for k, ar in enumerate(area) if ar >= 30])      # 30 px: small gaps in loose hair
+band = ndimage.binary_dilation(bg, iterations=10) & ~bg
+bg |= band & (sat <= 18) & (br >= 160)                  # the blended checker at the subject's edge
 fg = ndimage.binary_opening(~bg, iterations=2)
 lab, n = ndimage.label(fg)
 fg = lab == (np.argmax(ndimage.sum(fg, lab, range(1, n + 1))) + 1)
