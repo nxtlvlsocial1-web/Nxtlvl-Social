@@ -169,7 +169,24 @@ def boom(d=1.6):
     return x * .6
 
 
+def heartbeat():
+    """lub-dub: two low thumps."""
+    n = int(.5 * SR)
+    t = np.arange(n) / SR
+    beat = lambda t0, f, g: np.where(t >= t0, np.sin(2 * np.pi * f * (t - t0)) * np.exp(-np.maximum(0, t - t0) * 18), 0) * g  # noqa: E731
+    return lp(beat(0, 55, 1.0) + beat(.17, 48, .7), 220) * .9
+
+
 def sfx():
+    # tension: heartbeats through every slow-motion window, a reverse swell into the freeze, a release out of it
+    for a, b, _ in T["slowwin"]:
+        k = 0
+        while a + .1 + k * .62 < b:
+            put(heartbeat(), a + .1 + k * .62, .9); k += 1
+    a0, b0, _ = T["slowwin"][0]
+    put(smp("whoosh-cinematic")[::-1].copy(), a0 - 1.1, .5)
+    put(smp("whoosh-cinematic"), b0 - .1, .45)
+    put(smp("riser"), T["says"] - 1.6, .35)
     cut = T["cuts"]
     for t in cut:
         put(smp("whoosh-short"), t - .1, .45)
@@ -273,6 +290,14 @@ def main():
     m = compose(T, N)
     sf.write(os.path.join(ROOT, "assets", "audio", "score.wav"), m.astype(np.float32), SR, subtype="PCM_24")
     sfxb = np.stack([reverb(SFX[:, c], 1.0, .15, c + 2) for c in (0, 1)], 1)
+    # slow motion: music and effects go muffled (low-passed) while race time slows, the voice stays clear
+    tt = np.arange(N) / SR
+    mw = np.zeros(N)
+    for a, b, _ in T["slowwin"]:
+        mw = np.maximum(mw, np.clip((tt - a) / .15, 0, 1) * np.clip((b - tt) / .2, 0, 1))
+    mw = mw[:, None]
+    m = m * (1 - mw) + np.stack([lp(m[:, c], 650) for c in (0, 1)], 1) * mw * 1.3
+    sfxb = sfxb * (1 - mw * .6) + np.stack([lp(sfxb[:, c], 900) for c in (0, 1)], 1) * mw * .6
     score = m * (.075 / rms(m)) * (1 - .45 * talk)[:, None] + sfxb * (.045 / rms(sfxb)) * (1 - .5 * talk)[:, None]
     fade = np.ones(N)
     fade[-int(.25 * SR):] = np.linspace(1, 0, int(.25 * SR))

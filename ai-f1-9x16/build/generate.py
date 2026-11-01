@@ -56,6 +56,7 @@ T["att"] = round(T["attack"] + .1, 3)                     # the hairpin pass
 T["tc"] = round(T["two"] + .12, 3)                        # the two leaders touch
 T["slowmo"] = [30.0, 31.9]
 T["finish"] = 40.75                                       # #11 takes the flag
+T["slowwin"] = [[round(T["crash"] - .05, 3), round(T["slows"] - .35, 3), .22], [30.0, 31.9, .35], [round(T["let"] - .15, 3), T["finish"] + .35, .45]]   # race-time slow motion
 T["radio"] = [[T["just"] - .15, T["pits"] + .4], [T["exactly"] - .2, T["att"] + .2], [T["slows"] - .2, T["early"] + .4], [T["let"] - .2, T["through2"] + .6]]
 # close-ups (camera in front of the driver's face) and the name tag under each
 T["focus"] = [

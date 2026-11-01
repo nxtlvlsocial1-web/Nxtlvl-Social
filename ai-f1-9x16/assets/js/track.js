@@ -16,6 +16,7 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 const C = window.CT;
 const L = C.l, E = C.e, DUR = C.end;
@@ -62,6 +63,8 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.NeutralToneMapping ?? THREE.ACESFilmicToneMapping;
 
 const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+const ENV = pmrem.fromScene(new RoomEnvironment(), .04).texture;
 scene.background = col(0xF1E9DC);
 scene.fog = new THREE.Fog(0xF1E9DC, 80, 260);
 const camera = new THREE.PerspectiveCamera(40, W / H, .05, 600);
@@ -75,20 +78,37 @@ const bloom = new UnrealBloomPass(new THREE.Vector2(W, H), .25, .5, .9);
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
 const grade = new ShaderPass({
-  uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uSat: { value: 1 }, uVig: { value: .28 }, uFlash: { value: 0 }, uCool: { value: 0 }, uRed: { value: 0 } },
+  uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uSat: { value: 1 }, uVig: { value: .28 }, uFlash: { value: 0 }, uCool: { value: 0 }, uRed: { value: 0 },
+    uBlur: { value: 0 }, uCA: { value: 0 }, uBars: { value: 0 }, uScan: { value: 0 }, uCon: { value: 0 } },
   vertexShader: "varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }",
-  fragmentShader: `uniform sampler2D tDiffuse; uniform float uTime, uSat, uVig, uFlash, uCool, uRed; varying vec2 vUv;
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float uTime, uSat, uVig, uFlash, uCool, uRed, uBlur, uCA, uBars, uScan, uCon; varying vec2 vUv;
     float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
     void main(){
-      vec3 c = texture2D(tDiffuse, vUv).rgb;
+      vec2 uv = vUv, d = vec2(.5, .5) - uv;
+      vec3 c = vec3(0.);
+      for (int i = 0; i < 8; i++) {                      // radial speed blur + chromatic fringes
+        vec2 o = d * uBlur * float(i) / 7.;
+        c.r += texture2D(tDiffuse, uv + o + d * uCA).r;
+        c.g += texture2D(tDiffuse, uv + o).g;
+        c.b += texture2D(tDiffuse, uv + o - d * uCA).b;
+      }
+      c /= 8.;
       float g = dot(c, vec3(.299, .587, .114));
       c = mix(vec3(g), c, uSat);
       c = mix(c, c * vec3(.92, .98, 1.08), uCool);
+      c = (c - .5) * (1. + uCon) + .5;
       vec2 q = vUv - .5; float r = dot(q, q);
       c *= 1. - r * uVig * 2.2;
       c = mix(c, c * vec3(1.25, .55, .5), uRed * smoothstep(.05, .32, r));
-      c += (h(floor(vUv * vec2(1080., 1920.)) + fract(uTime * 7.13) * 97.) - .5) * .026;
+      // AI vision: a coral grid and a scan line sweeping down
+      vec2 px = vUv * vec2(1080., 1920.);
+      float grid = max(step(.96, fract(px.x / 54.)), step(.96, fract(px.y / 54.)));
+      float sweep = 1. - smoothstep(0., .012, abs(fract(-vUv.y - uTime * .45) - .5));
+      c = mix(c, vec3(.91, .45, .35), uScan * (.22 * grid + .5 * sweep));
+      c += (h(floor(px) + fract(uTime * 7.13) * 97.) - .5) * .026;
       c = mix(c, vec3(1., .99, .96), uFlash);
+      float bh = uBars * 150. / 1920.;
+      if (vUv.y < bh || vUv.y > 1. - bh) c = vec3(.075, .065, .06);
       gl_FragColor = vec4(c, 1.);
     }`,
 });
@@ -103,6 +123,9 @@ sun.shadow.mapSize.set(2048, 2048);
 sun.shadow.bias = -.0005;
 sun.shadow.normalBias = .02;
 scene.add(sun, sun.target);
+// a soft key light that rides with the camera for the face close-ups
+const faceKey = new THREE.PointLight(0xfff0e0, 0, 5, 1.2);
+scene.add(faceKey);
 const mat = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: .88, metalness: 0, ...o });
 const add = (m, cast = true, recv = true) => { m.castShadow = cast; m.receiveShadow = recv; scene.add(m); return m; };
 
@@ -308,7 +331,11 @@ const pulseM = new THREE.InstancedMesh(new THREE.SphereGeometry(.16, 10, 8), new
 scene.add(pulseM);
 
 // ---------------------------------------------------------------- cars
-// car ids: 0 = #7 (the driver), 1 = #11 (his teammate), 2..19 the field, two cars per team
+// car ids: 0 = #7 (the driver), 1 = #11 (his teammate), 2..19 the field, two cars per team. Each car is built from
+// ~40 instanced parts: floor, tapered tub, nose, sidepods with inlets, engine cover and shark fin, airbox, a three-
+// element front wing, rear wing with DRS flap and beam wing, diffuser, mirrors, wishbones, rounded tyres on spoked rims,
+// the halo, the driver (shoulders, HANS collar, arms, gloves on a steering wheel) and his open-face helmet and face.
+// Paint is clear-coated and reflects a studio environment.
 const NC = 20, HERO = 0, MATE = 1;
 const TEAM = [CORAL, CORAL, NAVY, NAVY, 0x3FA372, 0x3FA372, 0xF08A3C, 0xF08A3C, 0x2A2623, 0x2A2623, 0xF4EFE6, 0xF4EFE6, 0x2E9AA6, 0x2E9AA6, 0x7E5BB0, 0x7E5BB0, 0xE36FA6, 0xE36FA6, 0xA9B1BA, 0xA9B1BA];
 const ACC = TEAM.map((c, i) => (i === HERO ? CREAM : i === MATE ? GOLD : c === 0xF4EFE6 || c === 0xA9B1BA ? INK : i % 2 ? CREAM : INK));
@@ -316,45 +343,94 @@ const HELM = TEAM.map((c, i) => (i === HERO ? CREAM : i === MATE ? GOLD : [0xF4E
 const HTOP = TEAM.map((c, i) => (i === HERO ? CORAL : i === MATE ? INK : c));
 const SKIN = [0xF1C9A5, 0xE3B28E, 0xC68863, 0xA06D4B, 0x7A4E34, 0xF6D7BF];
 const SKINC = TEAM.map((c, i) => (i === HERO ? 0xE3B28E : i === MATE ? 0xA06D4B : SKIN[Math.floor(hash(i * 13) * 6)]));
+const BROWC = TEAM.map((c, i) => (i === HERO ? 0x4A3222 : i === MATE ? 0x1E1B18 : [0x1E1B18, 0x4A3222, 0x7A5230, 0xB8572E][Math.floor(hash(i * 17) * 4)]));
+const NUM = [7, 11, 1, 4, 16, 55, 44, 63, 14, 18, 10, 31, 22, 3, 23, 2, 77, 24, 20, 27];
 const IM = (geo, m, n = NC, cast = true) => { const x = new THREE.InstancedMesh(geo, m, n); x.castShadow = cast; x.receiveShadow = true; scene.add(x); return x; };
-const taper = (g, f) => { const p = g.attributes.position; for (let i = 0; i < p.count; i++) { const z = p.getZ(i), k = f(z); p.setX(i, p.getX(i) * k); p.setY(i, p.getY(i) * (.5 + .5 * k)); } g.computeVertexNormals(); return g; };
-const paint = (o = {}) => new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .38, metalness: .05, ...o });
-const floorM = IM(new THREE.BoxGeometry(.82, .035, 1.8), mat(0x2A2623, { roughness: .6 }));
-const tubM = IM(new RoundedBoxGeometry(.38, .2, 1.3, 2, .07), paint());
-const noseM = IM(taper(new THREE.BoxGeometry(.24, .13, .8, 1, 1, 4), (z) => lerp(1, .42, (z + .4) / .8)), paint());
-const podM = IM(new RoundedBoxGeometry(.84, .19, .66, 2, .08), paint());
-const coverM = IM(new RoundedBoxGeometry(.26, .22, .74, 2, .09), paint());
-const finM = IM(new THREE.BoxGeometry(.025, .16, .5), paint());
-const fwM = IM(new THREE.BoxGeometry(1.04, .03, .22), paint());
-const rwM = IM(new THREE.BoxGeometry(.8, .055, .2), paint());
-const rw2M = IM(new THREE.BoxGeometry(.8, .03, .11), paint());
-const plateM = IM(new THREE.BoxGeometry(.03, .3, .3), paint(), NC * 4);
-const pillarM = IM(new THREE.BoxGeometry(.04, .28, .06), mat(0x2A2623));
-const wheelM = IM(new THREE.CylinderGeometry(.18, .18, .2, 26).rotateZ(Math.PI / 2), mat(0x2A2623, { roughness: .7 }), NC * 4);
-const stripeM = IM(new THREE.TorusGeometry(.13, .018, 6, 28).rotateY(Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false }), NC * 4, false);
-const rimM = IM(new THREE.CylinderGeometry(.07, .07, .21, 10).rotateZ(Math.PI / 2), mat(0x8a8580, { roughness: .4, metalness: .3 }), NC * 4, false);
-const haloM = IM(new THREE.TorusGeometry(.17, .022, 6, 20, Math.PI).rotateX(Math.PI / 2).rotateY(Math.PI), mat(0x2A2623, { roughness: .5 }));
-const haloPM = IM(new THREE.BoxGeometry(.03, .13, .03), mat(0x2A2623, { roughness: .5 }));
+const taper = (g, f, fy = .5) => { const p = g.attributes.position; for (let i = 0; i < p.count; i++) { const z = p.getZ(i), k = f(z); p.setX(i, p.getX(i) * k); p.setY(i, p.getY(i) * (1 - fy + fy * k)); } if (!g.index) return g; g.computeVertexNormals(); return g; };
+const paint = () => new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: .36, metalness: .04, clearcoat: .8, clearcoatRoughness: .12, envMap: ENV, envMapIntensity: .32 });
+const carbon = () => new THREE.MeshStandardMaterial({ color: 0x24211f, roughness: .42, metalness: .35, envMap: ENV, envMapIntensity: .55 });
+const metalM = (c) => new THREE.MeshStandardMaterial({ color: c, roughness: .28, metalness: .85, envMap: ENV, envMapIntensity: 1 });
+const floorM = IM(new RoundedBoxGeometry(.88, .035, 1.95, 1, .015), carbon());
+const tubM = IM(taper(new RoundedBoxGeometry(.42, .22, 1.3, 2, .08), (z) => lerp(1, .68, clamp((z + .2) / .85))), paint());
+const noseM = IM(taper(new THREE.BoxGeometry(.24, .13, .82, 2, 2, 6), (z) => lerp(1, .38, (z + .41) / .82)), paint());
+const podM = IM(taper(new RoundedBoxGeometry(.88, .21, .78, 3, .09), (z) => lerp(.66, 1, clamp((z + .39) / .6)), .35), paint());
+const inletM = IM(new RoundedBoxGeometry(.12, .12, .05, 1, .03), new THREE.MeshBasicMaterial({ color: 0x14110f }), NC * 2, false);
+const coverM = IM(taper(new RoundedBoxGeometry(.3, .27, .95, 3, .11), (z) => lerp(.38, 1, clamp((z + .47) / .8)), .65), paint());
+const airboxM = IM(new RoundedBoxGeometry(.13, .1, .06, 1, .03), new THREE.MeshBasicMaterial({ color: 0x14110f }), NC, false);
+const finM = IM(taper(new THREE.BoxGeometry(.018, .2, .6, 1, 1, 3), (z) => lerp(.6, 1, (z + .3) / .6), 1), paint());
+const lineTopM = IM(new THREE.BoxGeometry(.07, .012, .95), paint());
+const lineSideM = IM(new THREE.BoxGeometry(.012, .035, .62), paint(), NC * 2);
+const cockpitM = IM(new THREE.TorusGeometry(.15, .024, 6, 24).rotateX(Math.PI / 2).scale(1, 1, 1.45), carbon());
+const fwM = IM(new RoundedBoxGeometry(1.08, .024, .25, 1, .01), carbon());
+const fwfM = IM(new RoundedBoxGeometry(1.0, .02, .12, 1, .008), paint(), NC * 2);
+const plateM = IM(new RoundedBoxGeometry(.024, .3, .3, 1, .01), paint(), NC * 4);
+const rwM = IM(new RoundedBoxGeometry(.82, .05, .2, 1, .02), paint());
+const drsM = IM(new RoundedBoxGeometry(.8, .028, .13, 1, .01), paint());
+const pylonM = IM(new THREE.BoxGeometry(.035, .3, .07), carbon());
+const beamWM = IM(new THREE.BoxGeometry(.62, .03, .1), carbon());
+const diffM = IM(new THREE.BoxGeometry(.74, .09, .24, 4, 1, 1), carbon());
+const mirrorM = IM(new RoundedBoxGeometry(.11, .055, .035, 1, .015), paint(), NC * 2);
+const stalkM = IM(new THREE.BoxGeometry(.02, .02, .1), carbon(), NC * 2);
+const susM = IM(new THREE.CylinderGeometry(.009, .009, 1, 5), carbon(), NC * 8);
+const TP = [[.112, -.098], [.15, -.1], [.172, -.094], [.183, -.075], [.187, -.04], [.187, .04], [.183, .075], [.172, .094], [.15, .1], [.112, .098]].map(([x, y]) => new THREE.Vector2(x, y));
+const wheelM = IM(new THREE.LatheGeometry(TP, 32).rotateZ(Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0x262321, roughness: .72, side: THREE.DoubleSide }), NC * 4);
+const stripeM = IM(new THREE.TorusGeometry(.136, .014, 6, 32).rotateY(Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false }), NC * 4, false);
+const rimM = IM(new THREE.CylinderGeometry(.112, .112, .185, 18).rotateZ(Math.PI / 2), metalM(0x4a4642), NC * 4, false);
+const spokeM = IM(new THREE.BoxGeometry(.192, .2, .022), metalM(0x8c8780), NC * 8, false);
+const capWM = IM(new THREE.CylinderGeometry(.034, .034, .2, 10).rotateZ(Math.PI / 2), paint(), NC * 4, false);
+const haloM = IM(new THREE.TorusGeometry(.2, .015, 6, 28, Math.PI * 1.25).rotateX(Math.PI / 2).rotateY(Math.PI * .125), carbon());
+const haloPM = IM(new THREE.BoxGeometry(.022, .24, .022), carbon());
 const lightM = IM(new THREE.BoxGeometry(.09, .055, .02), new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false }), NC, false);
-// the driver: an open-face helmet (shell with a face opening, top cap, chin) and a face with eyes, brows and a mouth
+// the driver in the cockpit
+const suitM = IM(new RoundedBoxGeometry(.3, .13, .2, 2, .06), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .85 }));
+const hansM = IM(new THREE.TorusGeometry(.085, .026, 6, 16, Math.PI * 1.3).rotateX(Math.PI / 2).rotateY(-Math.PI * .85), carbon());
+const swM = IM(new RoundedBoxGeometry(.2, .085, .03, 1, .02), carbon());
+const swDispM = IM(new THREE.BoxGeometry(.07, .035, .005), new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false }));
+const armDM = IM(new THREE.CapsuleGeometry(.03, .16, 3, 8), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .85 }), NC * 2);
+const gloveM = IM(new THREE.SphereGeometry(.036, 10, 8), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .7 }), NC * 2);
+// the open-face helmet: shell with a face opening, top cap, chin bar, visor (up), foam rim, stripe, rear spoiler
 const HR = .125;
-const dbl = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: .35, side: THREE.DoubleSide, ...o });
-const shellM = IM(new THREE.SphereGeometry(HR, 28, 18, Math.PI / 2 + .78, Math.PI * 2 - 1.56, .9, 1.3), dbl(0xffffff));
-const capM = IM(new THREE.SphereGeometry(HR * 1.01, 28, 8, 0, Math.PI * 2, 0, .95), dbl(0xffffff));
-const chinM = IM(new THREE.SphereGeometry(HR, 28, 8, 0, Math.PI * 2, 2.15, Math.PI - 2.15), dbl(0xffffff));
-const visorM = IM(new THREE.SphereGeometry(HR * 1.04, 20, 6, Math.PI / 2 - .85, 1.7, .62, .3), new THREE.MeshStandardMaterial({ color: 0x2a3440, roughness: .15, metalness: .4, side: THREE.DoubleSide }));
-const faceM = IM(new THREE.SphereGeometry(.1, 24, 18), mat(0xffffff, { roughness: .65 }), NC, false);
+const dbl = (c) => new THREE.MeshPhysicalMaterial({ color: c, roughness: .3, clearcoat: .8, clearcoatRoughness: .1, side: THREE.DoubleSide, envMap: ENV, envMapIntensity: .35 });
+const shellM = IM(new THREE.SphereGeometry(HR, 30, 18, Math.PI / 2 + .78, Math.PI * 2 - 1.56, .9, 1.3), dbl(0xffffff));
+const capM = IM(new THREE.SphereGeometry(HR * 1.01, 30, 8, 0, Math.PI * 2, 0, .95), dbl(0xffffff));
+const chinM = IM(new THREE.SphereGeometry(HR, 30, 8, 0, Math.PI * 2, 2.15, Math.PI - 2.15), dbl(0xffffff));
+const visorM = IM(new THREE.SphereGeometry(HR * 1.045, 22, 6, Math.PI / 2 - .86, 1.72, .6, .32), new THREE.MeshPhysicalMaterial({ color: 0x3a3f6a, roughness: .05, metalness: .6, iridescence: 1, iridescenceIOR: 1.6, side: THREE.DoubleSide, envMap: ENV, envMapIntensity: 1.4 }));
+const foamM = IM(new THREE.TorusGeometry(.088, .0065, 6, 28).scale(1.12, 1.08, 1), new THREE.MeshStandardMaterial({ color: 0x4a4440, roughness: 1 }), NC, false);
+const hStripeM = IM(new THREE.TorusGeometry(HR * 1.012, .011, 6, 32, Math.PI * 2 - 1.75).rotateX(Math.PI / 2).rotateY(-(Math.PI / 2 + .875)), dbl(0xffffff), NC, false);
+const spoilerM = IM(new RoundedBoxGeometry(.11, .02, .055, 1, .008), dbl(0xffffff), NC, false);
+// the face: skin, eye whites, pupils, highlights, lids (they blink), brows, nose, cheeks, mouth (arc / o / gritted teeth), sweat
+const faceM = IM(new THREE.SphereGeometry(.1, 26, 20), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .6 }), NC, false);
 const basic = (c) => new THREE.MeshBasicMaterial({ color: c });
-const eyeM = IM(new THREE.SphereGeometry(.016, 12, 10), basic(INK), NC * 2, false);
-const eyeHiM = IM(new THREE.SphereGeometry(.0055, 8, 6), basic(0xffffff), NC * 2, false);
-const browM = IM(new THREE.BoxGeometry(.046, .011, .012), basic(INK), NC * 2, false);
-const mouthArcM = IM(new THREE.TorusGeometry(.027, .0075, 6, 16, Math.PI), basic(0x6a2a20), NC, false);
+const whiteM = IM(new THREE.SphereGeometry(.019, 14, 12), new THREE.MeshStandardMaterial({ color: 0xFFFDF8, roughness: .35, emissive: 0x2a2826 }), NC * 2, false);
+const pupilM = IM(new THREE.SphereGeometry(.0105, 12, 10), basic(0x1E1B18), NC * 2, false);
+const eyeHiM = IM(new THREE.SphereGeometry(.0038, 8, 6), basic(0xD8D2C8), NC * 2, false);
+const lidM = IM(new THREE.SphereGeometry(.0205, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .6 }), NC * 2, false);
+const browM = IM(new RoundedBoxGeometry(.05, .014, .012, 1, .005), basic(0xffffff), NC * 2, false);
+const noseFM = IM(new THREE.SphereGeometry(.013, 10, 8), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .6 }), NC, false);
+const cheekM = IM(new THREE.SphereGeometry(.014, 10, 8), new THREE.MeshBasicMaterial({ color: 0xE88C78, transparent: true, opacity: .45 }), NC * 2, false);
+const mouthArcM = IM(new THREE.TorusGeometry(.026, .0075, 6, 16, Math.PI), basic(0x6a2a20), NC, false);
 const mouthOM = IM(new THREE.TorusGeometry(.017, .0085, 8, 16), basic(0x6a2a20), NC, false);
-const CARPARTS = [floorM, tubM, noseM, podM, coverM, finM, fwM, rwM, rw2M, plateM, pillarM, wheelM, stripeM, rimM, haloM, haloPM, lightM, shellM, capM, chinM, visorM, faceM, eyeM, eyeHiM, browM, mouthArcM, mouthOM];
-// #11's arm, raised out of the cockpit when he wins the title
-const armMesh = add(new THREE.Mesh(new THREE.CapsuleGeometry(.045, .26, 4, 10), mat(CORAL)));
-const glove = add(new THREE.Mesh(new THREE.SphereGeometry(.06, 12, 10), mat(GOLD)));
-armMesh.matrixAutoUpdate = false; glove.matrixAutoUpdate = false;
+const mouthInM = IM(new THREE.CircleGeometry(.016, 16), basic(0x3a1612), NC, false);
+const teethM = IM(new RoundedBoxGeometry(.05, .018, .008, 1, .004), new THREE.MeshStandardMaterial({ color: 0xFFFDF8, roughness: .4, emissive: 0x2a2826 }), NC, false);
+const lipLineM = IM(new THREE.BoxGeometry(.052, .003, .009), basic(0x6a2a20), NC, false);
+const sweatM = IM(new THREE.SphereGeometry(.008, 10, 8).scale(1, 1.4, 1), new THREE.MeshStandardMaterial({ color: 0xBFE3F2, roughness: .05, metalness: .1, envMap: ENV }), NC, false);
+const CARPARTS = [floorM, tubM, noseM, podM, inletM, coverM, airboxM, finM, lineTopM, lineSideM, cockpitM, fwM, fwfM, plateM, rwM, drsM, pylonM, beamWM, diffM, mirrorM, stalkM, susM,
+  wheelM, stripeM, rimM, spokeM, capWM, haloM, haloPM, lightM, suitM, hansM, swM, swDispM, armDM, gloveM, shellM, capM, chinM, visorM, foamM, hStripeM, spoilerM,
+  faceM, whiteM, pupilM, eyeHiM, lidM, browM, noseFM, cheekM, mouthArcM, mouthOM, mouthInM, teethM, lipLineM, sweatM];
+// race numbers: decals on the nose and on both sides of the shark fin (their own small textures, so plain meshes)
+const numTex = (n, fg, bg) => { const c = document.createElement("canvas"); c.width = 128; c.height = 128; const g = c.getContext("2d");
+  g.fillStyle = bg; g.beginPath(); g.arc(64, 64, 60, 0, Math.PI * 2); g.fill();
+  g.fillStyle = fg; g.font = "800 78px Manrope, sans-serif"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(String(n), 64, 70);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; };
+const hex = (c) => "#" + col(c).getHexString();
+const DECALS = [];
+const decalGeo = new THREE.PlaneGeometry(.16, .16);
+for (let id = 0; id < NC; id++) {
+  const m = new THREE.MeshBasicMaterial({ map: numTex(NUM[id], hex(TEAM[id] === 0x2A2623 ? CREAM : INK), hex(ACC[id] === INK ? CREAM : ACC[id])), transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 });
+  const ds = [0, 1, 2].map(() => { const d = new THREE.Mesh(decalGeo, m); d.matrixAutoUpdate = false; scene.add(d); return d; });
+  DECALS.push(ds);
+}
+// #11's second arm for the title celebration comes from the same instanced arms (both hands leave the wheel)
 // floating markers over #7 (coral) and #11 (gold), so they can be followed from far away
 function marker(c) {
   const g = new THREE.Group();
@@ -364,11 +440,18 @@ function marker(c) {
   g.add(cone, ringm); scene.add(g); return g;
 }
 const MK = [marker(CORAL), marker(GOLD)];
-// pit crew round #7's box
-const NCREW = 8;
-const crewBody = IM(new THREE.CapsuleGeometry(.1, .3, 4, 10).translate(0, .3, 0), mat(CORAL), NCREW);
-const crewHead = IM(new THREE.SphereGeometry(.1, 14, 10).translate(0, .66, 0), mat(CREAM, { roughness: .4 }), NCREW);
-const CREWP = [[.95, .82], [-.95, .82], [.95, -.62], [-.95, -.62], [0, 1.95], [0, -1.55], [1.4, .1], [-1.4, .1]];
+// pit crew round #7's box: articulated figures (torso, legs, arms, helmet with visor), wheel guns, two jacks, the lollipop
+const NCREW = 9;
+const crewTorsoM = IM(new THREE.CapsuleGeometry(.11, .22, 4, 10), new THREE.MeshStandardMaterial({ color: CORAL, roughness: .8 }), NCREW);
+const crewLegM = IM(new THREE.CapsuleGeometry(.055, .3, 3, 8), new THREE.MeshStandardMaterial({ color: 0x2A2623, roughness: .8 }), NCREW * 2);
+const crewArmM = IM(new THREE.CapsuleGeometry(.042, .22, 3, 8), new THREE.MeshStandardMaterial({ color: CORAL, roughness: .8 }), NCREW * 2);
+const crewHeadM = IM(new THREE.SphereGeometry(.105, 16, 12), dbl(CREAM), NCREW);
+const crewVisorM = IM(new THREE.SphereGeometry(.108, 16, 6, Math.PI / 2 - .9, 1.8, 1.2, .5), new THREE.MeshStandardMaterial({ color: 0x23262e, roughness: .1, metalness: .5 }), NCREW, false);
+const gunM = IM(new THREE.CylinderGeometry(.035, .045, .22, 10).rotateX(Math.PI / 2), metalM(0x8c8780), NCREW);
+const jackM = IM(new THREE.CylinderGeometry(.02, .02, 1, 6), metalM(0xF2B33D), NCREW);
+const lolliM = IM(new THREE.CylinderGeometry(.13, .13, .02, 20).rotateX(Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0xffffff }), 1, false);
+const CREWP = [[.98, .82], [-.98, .82], [.98, -.62], [-.98, -.62], [0, 2.0], [0, -1.6], [1.45, .1], [-1.45, .1], [0, 2.7]];
+const CREWPARTS = [crewTorsoM, crewLegM, crewArmM, crewHeadM, crewVisorM, gunM, jackM, lolliM];
 
 // effects: rain, spray, sound rings, prediction dots, smoke, debris, fireworks, ghost simulations
 const RAIN_N = 1600;
@@ -397,6 +480,9 @@ debM.castShadow = true; scene.add(debM);
 const FW_N = 6 * 70;
 const fwkM = new THREE.InstancedMesh(new THREE.SphereGeometry(.09, 8, 6), new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false }), FW_N);
 scene.add(fwkM);
+const SPK_K = 5;
+const sparkM = new THREE.InstancedMesh(new THREE.BoxGeometry(.014, .014, .2), new THREE.MeshBasicMaterial({ color: 0xFFC26A, toneMapped: false }), NC * SPK_K);
+scene.add(sparkM);
 const GH_N = 900;
 const ghostM = new THREE.InstancedMesh(new THREE.CapsuleGeometry(.1, .5, 3, 6).rotateX(Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: .75, toneMapped: false, depthWrite: false }), GH_N);
 scene.add(ghostM);
@@ -418,7 +504,8 @@ function vbase(t) {
 }
 const WA = new Float64Array(NT + 1), DA = new Float64Array(NT + 1);
 for (let i = 1; i <= NT; i++) {
-  const t = (i - .5) / FR, k = t > SLOW[0] && t < SLOW[1] ? .35 : 1;
+  const t = (i - .5) / FR;
+  let k = 1; for (const [a, b, f] of C.slowwin) if (t > a && t < b) k = Math.min(k, lerp(1, f, ss(t, a, a + .15) * (1 - ss(t, b - .15, b))));
   WA[i] = WA[i - 1] + k / FR;
   DA[i] = DA[i - 1] + k * vbase(t) / FR;
 }
@@ -442,8 +529,8 @@ const gDB = pchip([[C.cuts[2], 9.2], [TC - 1.6, 8.6], [TC, 4.6]]);
 const gDH = pchip([[C.cuts[2], 14.4], [C.slows, 14.4], [C.slows + 1.7, 46], [C.slows + 4, 46.2]]);
 // scene E: #7 leads, #11 behind; #7 lets him through before the line
 const FIN = C.finish;
-const gEH = pchip([[C.cuts[3], 4], [C.let - .1, 4], [C.let + .5, 9.6], [FIN + .3, 15], [C.cuts[4], 17]]);
-const gET = pchip([[C.cuts[3], 12], [C.leading + 1.6, 9.0], [C.let - .1, 7.6], [C.cuts[4], 7.6]]);
+const gEH = pchip([[C.cuts[3], 4], [C.let - .2, 4], [C.let + .9, 9.6], [FIN + .6, 15], [C.cuts[4], 17]]);
+const gET = pchip([[C.cuts[3], 12], [C.leading + 1.6, 9.0], [C.let - .2, 7.6], [C.cuts[4], 7.6]]);
 // distance offsets per scene so that each beat lands where it should on the circuit
 const OFF = [
   D_PIN + GP(4) - Dt(2.9),
@@ -536,21 +623,28 @@ function poseAt(id, t, s, out) {
   return out;
 }
 
-// the face for car id at time t: mouth, brows (left, right tilt: + angry), brow lift, eye size, head nod / shake / tilt
+// the face for car id at time t: mouth (smile / frown / flat / o / grit), brows (left, right tilt: + angry), brow lift,
+// eye size, lids (0 open .. 1 shut; they blink), where the eyes look (lx, ly), sweat, head nod / shake / tilt
 const FOC = C.focus;
+const blinkAt = (id, t) => { const p = 2.4 + hash(id * 3) * 1.8, u = (t + hash(id) * 7) % p; return u < .14 ? Math.sin(Math.PI * u / .14) : 0; };
 function expression(id, t) {
-  const ex = { mouth: "flat", bl: .25, br: .25, lift: 0, eyes: 1, nod: 0, shake: 0, tilt: 0 };
+  const ex = { mouth: "flat", bl: .25, br: .25, lift: 0, eyes: 1, lid: .3, lx: 0, ly: 0, sweat: 0, nod: 0, shake: 0, tilt: 0 };
+  ex.lx = Math.sin(t * .9 + id) * .25 + (Math.sin(t * 2.3 + id * 3) > .9 ? .7 : 0);
+  ex.ly = Math.sin(t * .7 + id * 2) * .15;
+  const tense = bump(t, C.crash - .3, TC + 1.2, .3);
+  if (tense > .5 && (id === HERO || id === MATE)) { ex.mouth = "grit"; ex.bl = ex.br = -.2; ex.eyes = 1.12; ex.lid = .12; ex.sweat = 1; ex.lx = 0; }
   if (id === HERO) {
-    if (t > FOC[0].a - .3 && t < FOC[0].b + .2) { ex.mouth = "frown"; ex.bl = ex.br = .5; ex.shake = Math.sin(t * 9) * .22 * bump(t, 4.85, 5.75, .15); }
-    if (t > FOC[1].a - .2 && t < FOC[1].b) { ex.mouth = "smile"; ex.bl = ex.br = -.05; }
-    if (t > FOC[3].a - .2 && t < FOC[3].b + .3) { ex.mouth = "o"; ex.eyes = 1.4; ex.lift = .014; ex.bl = ex.br = -.35; }
-    if (t > FOC[4].a - .2 && t < C.obeys - .25) { ex.mouth = "frown"; ex.bl = -.45; ex.br = .35; ex.lift = .006; ex.tilt = .2; ex.eyes = 1.1; ex.shake = Math.sin(t * 3) * .08; }
-    if (t >= C.obeys - .25 && t < FOC[4].b + .2) { ex.mouth = "flat"; ex.bl = ex.br = -.15; ex.eyes = .85; ex.nod = Math.max(0, Math.sin((t - C.obeys + .25) * 7)) * .32 * (1 - ramp(t, C.obeys + 1.1, C.obeys + 1.5)); }
+    if (t > FOC[0].a - .3 && t < FOC[0].b + .2) { ex.mouth = "frown"; ex.bl = ex.br = .5; ex.lid = .42; ex.lx = Math.sin(t * 2) > 0 ? -.8 : .3; ex.shake = Math.sin(t * 9) * .2 * bump(t, 4.85, 5.75, .15); }
+    if (t > FOC[1].a - .2 && t < FOC[1].b) { ex.mouth = "smile"; ex.bl = ex.br = -.05; ex.lid = .3; ex.lx = .1; }
+    if (t > FOC[3].a - .2 && t < FOC[3].b + .3) { ex.mouth = "o"; ex.eyes = 1.3; ex.lid = 0; ex.lift = .014; ex.bl = ex.br = -.35; ex.sweat = 1; ex.lx = 0; ex.ly = .2; }
+    if (t > FOC[4].a - .2 && t < C.obeys - .25) { ex.mouth = "frown"; ex.bl = -.45; ex.br = .35; ex.lift = .006; ex.tilt = .2; ex.eyes = 1.08; ex.lid = .18; ex.lx = .75; ex.shake = Math.sin(t * 3) * .08; }
+    if (t >= C.obeys - .25 && t < FOC[4].b + .2) { ex.mouth = "flat"; ex.bl = ex.br = -.15; ex.lid = .58; ex.ly = -.8; ex.lx = 0; ex.nod = Math.max(0, Math.sin((t - C.obeys + .25) * 7)) * .32 * (1 - ramp(t, C.obeys + 1.1, C.obeys + 1.5)); }
   }
   if (id === MATE) {
-    if (t > FOC[2].a - .2 && t < FOC[2].b) { ex.mouth = "flat"; ex.bl = ex.br = .45; ex.eyes = .82; }
-    if (t > C.wins - .3) { ex.mouth = "o"; ex.bl = ex.br = -.3; ex.lift = .012; ex.eyes = 1.25; ex.nod = Math.abs(Math.sin(t * 6)) * .12; }
+    if (t > FOC[2].a - .2 && t < FOC[2].b) { ex.mouth = "grit"; ex.bl = ex.br = .45; ex.lid = .5; ex.ly = .25; ex.lx = -.2; }
+    if (t > C.wins - .3) { ex.mouth = Math.sin(t * 5) > -.3 ? "o" : "smile"; ex.bl = ex.br = -.3; ex.lift = .012; ex.lid = .45; ex.ly = .3; ex.nod = Math.abs(Math.sin(t * 6)) * .12; }
   }
+  ex.lid = Math.max(ex.lid, blinkAt(id, t));
   return ex;
 }
 
@@ -585,12 +679,19 @@ trackAt(D_CRASH + 6, 0, TA); const CRP = [TA.x, TA.z];
 trackAt(D_SF, 0, TA); const SFP = [TA.x, TA.z];
 trackAt(D_CRASH - 16, -1.5, TA); const CRV = { x: TA.x, z: TA.z };
 trackAt(D_CRASH + 13, 0, TA); const THRU = { x: TA.x, z: TA.z, tx: TA.tx, tz: TA.tz };
-const focusShot = (k, d = 1.75, h = .07, side = .22, fov = 27) => face(FOC[k].id, d, h, side, fov);
+const focusShot = (k, d = 1.75, h = .07, side = .36, fov = 27) => face(FOC[k].id, d, h, side, fov);
+// dolly zoom on a face: the lens widens while the camera moves in, so the face holds its size and the world stretches
+const vertigo = (k, d0, f0, f1, h = .05, side = .3) => (t) => {
+  const f = FOC[k], u = ss(t, f.a + .1, f.b), fov = lerp(f0, f1, u);
+  return face(f.id, d0 * Math.tan(f0 * Math.PI / 360) / Math.tan(fov * Math.PI / 360), h, side, fov)(t);
+};
+// a slow push in on a face
+const push = (k, d0, d1, fov = 27, h = .07, side = .36) => (t) => { const f = FOC[k]; return face(f.id, lerp(d0, d1, ss(t, f.a, f.b)), h, side, fov)(t); };
 const SHOTS = [
   { t: 0, tr: 0, f: rigid(HERO, [.5, 1.25, -3.4], [0, .45, 3.5], 50) },
   { t: C.ai - .35, tr: .45, f: orbShot(5.5, 1.2, 7.5, 32) },
   { t: C.called - .1, tr: .55, f: heli(HERO, [-6.5, 7.5, -8], .3, 42) },
-  { t: FOC[0].a, tr: .4, f: focusShot(0, 1.9, .3, .4, 21) },
+  { t: FOC[0].a, tr: .4, f: focusShot(0, 1.9, .14, .36, 21) },
   { t: FOC[0].b, tr: .45, f: fixed([10, 15, D_BOX > 0 ? 9 : 9], [21.5, 0, -2], 44) },
   { t: C.cuts[0], tr: 0, f: heli(10, [9, 9, 11], .3, 44) },
   { t: C.every - .2, tr: .5, f: rigid(5, [3.4, 1.1, 1.6], [0, .3, .2], 42) },
@@ -600,7 +701,7 @@ const SHOTS = [
   { t: C.tyre - .35, tr: .45, f: rigid(HERO, [3.2, 2.2, -1.2], [0, .2, -.4], 40) },
   { t: C.exactly - .5, tr: .6, f: fixed([ATTP[0] + 9, 21, ATTP[1] - 6], [ATTP[0], 0, ATTP[1]], 42) },
   { t: C.cuts[2], tr: 0, f: chase(HERO, .2, 2.6, .5, .55, 52) },
-  { t: C.crash - .2, tr: .55, f: fixed([CRP[0] - 4, 34, CRP[1] + 22], [CRP[0] - 2, 0, CRP[1] + 1], 40) },
+  { t: C.crash - .2, tr: .55, f: (t) => { const u = ramp(t, C.crash - .2, C.slows - .2), a = -.35 + u * .7; SH.p.set(CRP[0] - 2 + Math.sin(a) * 25, 32 - u * 7, CRP[1] + 1 + Math.cos(a) * 25); SH.l.set(CRP[0] - 2, 0, CRP[1] + 1); SH.fov = 40; return SH; } },
   { t: C.slows - .2, tr: .5, f: chase(HERO, .3, 4.0, .3, 1.0, 50) },
   { t: TC - .45, tr: .4, f: fixed([CRV.x, 6.5, CRV.z], [CRP[0], .3, CRP[1] - 2], 44) },
   { t: SLOW[0] - .05, tr: .35, f: (t) => { const P = POSE[HERO]; SH.p.set(THRU.x + THRU.tx * 5 + THRU.tz * 1.2, 1.1, THRU.z + THRU.tz * 5 - THRU.tx * 1.2); SH.l.set(P.x, .5, P.z); SH.fov = 46; return SH; } },
@@ -609,9 +710,9 @@ const SHOTS = [
   { t: FOC[2].a, tr: .4, f: focusShot(2, 1.75, .12, -.3, 27) },
   { t: FOC[2].b, tr: .45, f: rigid(HERO, [-2.8, 4.6, -12.5], [0, .3, -1.2], 44) },
   { t: C.says - .75, tr: .45, f: orbShot(-6, 1.5, 7, 32) },
-  { t: FOC[3].a, tr: .3, f: focusShot(3, 1.35, .05, .18, 26) },
+  { t: FOC[3].a, tr: .3, f: vertigo(3, 2.1, 17, 42, .05, .3) },
   { t: FOC[3].b, tr: .3, f: fixed([SFP[0] + 1.2, 3.0, SFP[1] - 9], [SFP[0], 1.3, SFP[1] + 3], 46) },
-  { t: FOC[4].a, tr: .35, f: focusShot(4, 1.55, .07, .24, 27) },
+  { t: FOC[4].a, tr: .35, f: push(4, 2.3, 1.45, 27, .07, .36) },
   { t: FOC[4].b, tr: .5, f: heli(MATE, [-13, 9, 13], 2.5, 44) },
   { t: FOC[5].a, tr: .4, f: focusShot(5, 1.55, .08, -.24, 28) },
   { t: C.cuts[4], tr: 0, f: (t) => { const u = ramp(t, C.cuts[4], C.e[6]); SH.p.set(2 + Math.sin(u * .6) * 6, 125 - u * 18, 34 - u * 6); SH.l.set(1, 0, -2); SH.fov = 40; return SH; } },
@@ -639,8 +740,17 @@ function camAt(t) {
 }
 
 // ---------------------------------------------------------------- render at time t
-const MC = new THREE.Matrix4(), MHD = new THREE.Matrix4(), MP = new THREE.Matrix4(), MR = new THREE.Matrix4(), MOUT = new THREE.Matrix4(), EU = new THREE.Euler();
+const MC = new THREE.Matrix4(), MHD = new THREE.Matrix4(), MP = new THREE.Matrix4(), MR = new THREE.Matrix4(), MOUT = new THREE.Matrix4(), EU = new THREE.Euler(), EUQ = new THREE.Euler();
+const MBC = new THREE.Matrix4();
 let BASEM = MC;
+// a limb (or rod) from local point a to b: the mesh's long axis is y, `baseLen` its length at scale 1
+const Q2 = new THREE.Quaternion(), S2 = new THREE.Vector3(), VA = new THREE.Vector3(), VB = new THREE.Vector3();
+function seg(mesh, idx, a, b, baseLen) {
+  VA.set(b[0] - a[0], b[1] - a[1], b[2] - a[2]); const len = Math.max(1e-4, VA.length()); VA.divideScalar(len);
+  Q2.setFromUnitVectors(UP, VA);
+  MP.compose(VB.set((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2), Q2, S2.set(1, len / baseLen, 1));
+  MOUT.multiplyMatrices(BASEM, MP); mesh.setMatrixAt(idx, MOUT);
+}
 function part(mesh, idx, x, y, z, rx = 0, ry = 0, rz = 0, sx = 1, sy = 1, sz = 1) {
   MP.makeTranslation(x, y, z);
   if (rx || ry || rz) MP.multiply(MR.makeRotationFromEuler(EU.set(rx, ry, rz, "YXZ")));
@@ -659,7 +769,7 @@ function compound(id, t) {
   return hash(id * 3.3) < .55 ? CMP.soft : CMP.med;
 }
 const posEl = document.getElementById("pos"), tyreEl = document.getElementById("tyre"), tyreDot = document.getElementById("tdot");
-const WHEELS = [[.47, .18, .82, 1], [-.47, .18, .82, 1], [.47, .18, -.6, 1.2], [-.47, .18, -.6, 1.2]];
+const WHEELS = [[.47, .187, .84, 1], [-.47, .187, .84, 1], [.47, .187, -.62, 1.22], [-.47, .187, -.62, 1.22]];
 function renderAt(t) {
   const s = sceneOf(t), w = Wt(t);
   // weather and light: rain in scene B (wet track lingers), dusk for the title
@@ -688,68 +798,126 @@ function renderAt(t) {
 
   // cars
   for (let id = 0; id < NC; id++) poseAt(id, t, s, POSE[id]);
+  const liftHero = s === 0 ? .07 * ss(t, 4.38, 4.55) * (1 - ss(t, 5.85, 6.0)) : 0;
+  const setc = (m, i, c) => m.setColorAt(i, tmpC.set(c));
   for (let id = 0; id < NC; id++) {
-    const P = POSE[id];
-    MC.compose(V.set(P.x, 0, P.z), Q.setFromAxisAngle(UP, P.yaw), S.set(1, 1, 1));
+    const P = POSE[id], fast = clamp(P.spd / 30);
+    // chassis: vibration at speed, nose dive under braking, roll in corners, on the jacks in the pit stop
+    const vib = Math.sin(t * 61 + id * 3) * .004 * fast;
+    const pitch = .035 * P.brake + .008 * Math.sin(t * 13 + id) * fast;
+    const roll = clamp(P.k * P.spd * .0035, -.06, .06);
+    MC.compose(V.set(P.x, vib + (id === HERO ? liftHero : 0), P.z), Q.setFromEuler(EUQ.set(pitch, P.yaw, roll, "YXZ")), S.set(1, 1, 1));
     BASEM = MC;
-    const tc = tmpC.set(TEAM[id]), ac = tmpC2.set(ACC[id]);
-    part(floorM, id, 0, .055, -.05);
-    part(tubM, id, 0, .2, .1); tubM.setColorAt(id, tc);
-    part(noseM, id, 0, .17, 1.12); noseM.setColorAt(id, id === HERO ? ac : tc);
-    part(podM, id, 0, .19, -.14); podM.setColorAt(id, tc);
-    part(coverM, id, 0, .36, -.38); coverM.setColorAt(id, tc);
-    part(finM, id, 0, .52, -.55); finM.setColorAt(id, ac);
-    part(fwM, id, 0, .06, 1.44); fwM.setColorAt(id, ac);
-    part(rwM, id, 0, .6, -.86); rwM.setColorAt(id, ac);
-    part(rw2M, id, 0, .68, -.8); rw2M.setColorAt(id, tc);
+    const tc = TEAM[id], ac = ACC[id];
+    const drs = Math.abs(P.k) < .006 && P.spd > 24 ? 1 : 0;
+    part(floorM, id, 0, .052, -.05);
+    part(tubM, id, 0, .21, .12); setc(tubM, id, tc);
+    part(noseM, id, 0, .165, 1.15, .05); setc(noseM, id, id === HERO ? ac : tc);
+    part(podM, id, 0, .2, -.16); setc(podM, id, tc);
+    for (let k = 0; k < 2; k++) {
+      const sx = k ? -1 : 1, i2 = id * 2 + k;
+      part(inletM, i2, sx * .33, .23, .22);
+      part(lineSideM, i2, sx * .446, .21, -.16); setc(lineSideM, i2, ac);
+      part(mirrorM, i2, sx * .3, .38, .3); setc(mirrorM, i2, tc);
+      part(stalkM, i2, sx * .245, .355, .3, 0, 0, sx * .35);
+      part(fwfM, i2, 0, .082 + k * .03, 1.42 - k * .04, -.32 - k * .26, 0, 0, 1 - k * .07, 1, 1); setc(fwfM, i2, k ? tc : ac);
+    }
+    part(coverM, id, 0, .37, -.42); setc(coverM, id, tc);
+    part(airboxM, id, 0, .53, -.12);
+    part(finM, id, 0, .56, -.62); setc(finM, id, ac);
+    part(lineTopM, id, 0, .326, .5); setc(lineTopM, id, ac);
+    part(cockpitM, id, 0, .326, .0);
+    part(fwM, id, 0, .055, 1.46);
     for (let k = 0; k < 4; k++) {
       const front = k < 2, sx = k % 2 ? -1 : 1;
-      part(plateM, id * 4 + k, sx * (front ? .52 : .41), front ? .1 : .52, front ? 1.42 : -.84, 0, 0, 0, 1, front ? .4 : 1, front ? .8 : 1);
-      plateM.setColorAt(id * 4 + k, ac);
+      part(plateM, id * 4 + k, sx * (front ? .55 : .425), front ? .1 : .55, front ? 1.43 : -.88, 0, 0, 0, 1, front ? .42 : 1.05, front ? .88 : 1.05);
+      setc(plateM, id * 4 + k, ac);
     }
-    part(pillarM, id, 0, .42, -.82);
-    // wheels roll with distance, the fronts steer; in the hook #7's wheels come off and go back on (wets)
-    const roll = -P.d / .18;
+    part(rwM, id, 0, .64, -.92); setc(rwM, id, ac);
+    part(drsM, id, 0, .72 + .015 * drs, -.86, -.5 + .42 * drs); setc(drsM, id, tc);
+    part(pylonM, id, 0, .47, -.92);
+    part(beamWM, id, 0, .31, -1.0);
+    part(diffM, id, 0, .1, -1.02, .38);
     for (let k = 0; k < 4; k++) {
-      const [wx, wy, wz, ws] = WHEELS[k];
+      const [, wy, wz] = WHEELS[k], sx = Math.sign(WHEELS[k][0]);
+      for (let j = 0; j < 2; j++) seg(susM, id * 8 + k * 2 + j, [sx * .18, .19 + j * .07, wz + (j ? .07 : -.07)], [sx * .37, wy + (j ? .05 : -.04), wz], 1);
+    }
+    // wheels roll with distance, the fronts steer; in the hook #7's wheels come off and go back on (wets)
+    const rollA = -P.d / .186;
+    for (let k = 0; k < 4; k++) {
+      const [wx, wy, wz, ws] = WHEELS[k], i4 = id * 4 + k;
       let ox = 0;
       if (id === HERO && s === 0) ox = Math.sign(wx) * (.55 * bump(t, 4.55, 5.35, .2));
       const st = k < 2 ? P.steer : 0;
-      part(wheelM, id * 4 + k, wx + ox, wy, wz, roll, st, 0, ws, 1, 1);
-      part(stripeM, id * 4 + k, wx + ox + Math.sign(wx) * .101 * ws, wy, wz, roll, st, 0);
-      stripeM.setColorAt(id * 4 + k, tmpC.set(compound(id, t)));
-      part(rimM, id * 4 + k, wx + ox, wy, wz, roll, st, 0, ws, 1, 1);
+      part(wheelM, i4, wx + ox, wy, wz, rollA, st, 0, ws, 1, 1);
+      part(stripeM, i4, wx + ox + Math.sign(wx) * .1 * ws, wy, wz, rollA, st, 0); setc(stripeM, i4, compound(id, t));
+      part(rimM, i4, wx + ox, wy, wz, rollA, st, 0, ws, 1, 1);
+      part(spokeM, id * 8 + k * 2, wx + ox, wy, wz, rollA, st, 0, ws, 1, 1);
+      part(spokeM, id * 8 + k * 2 + 1, wx + ox, wy, wz, rollA + Math.PI / 2, st, 0, ws, 1, 1);
+      part(capWM, i4, wx + ox, wy, wz, rollA, st, 0, ws, 1, 1); setc(capWM, i4, ac);
     }
-    part(haloM, id, 0, .655, .0, 0, 0, 0, .001, .001, .001); part(haloPM, id, 0, .44, .2, 0, 0, 0, .001, .001, .001);
+    let hide = 0; for (const f of FOC) if (f.id === id) hide = Math.max(hide, bump(t, f.a - .35, f.b + .35, .05));
+    const hs = hide > .5 ? .001 : 1;
+    part(haloM, id, 0, .6, -.01, 0, 0, 0, hs, hs, hs);
+    part(haloPM, id, 0, .49, .2, -.42, 0, 0, hs, hs, hs);
     // rear light: on when braking, blinking in the rain
     const lt = Math.max(P.brake, rain * (Math.sin(t * 22 + id) > 0 ? 1 : 0));
-    part(lightM, id, 0, .26, -.98); lightM.setColorAt(id, tmpC.set(0x5a1a14).lerp(tmpC2.set(0xff4030), lt));
-    // the driver's head
-    const ex = expression(id, t);
-    MHD.copy(MC).multiply(MR.makeTranslation(...HELMET)).multiply(MP.makeRotationFromEuler(EU.set(ex.nod, ex.shake, ex.tilt, "YXZ")));
-    BASEM = MHD;
-    part(shellM, id, 0, 0, 0); shellM.setColorAt(id, tmpC.set(HELM[id]));
-    part(capM, id, 0, 0, 0); capM.setColorAt(id, tmpC.set(HTOP[id]));
-    part(chinM, id, 0, 0, 0); chinM.setColorAt(id, tmpC.set(HELM[id]));
-    part(visorM, id, 0, .002, 0);
-    part(faceM, id, 0, -.005, .012); faceM.setColorAt(id, tmpC.set(SKINC[id]));
+    part(lightM, id, 0, .27, -1.0); lightM.setColorAt(id, tmpC.set(0x5a1a14).lerp(tmpC2.set(0xff4030), lt));
+    // race numbers
+    part(null, 0, 0, .236, .98, -Math.PI / 2 + .1, 0, 0, .8, .8, .8); DECALS[id][0].matrix.copy(MOUT);
+    part(null, 0, .011, .575, -.64, 0, Math.PI / 2, 0, .82, .82, .82); DECALS[id][1].matrix.copy(MOUT);
+    part(null, 0, -.011, .575, -.64, 0, -Math.PI / 2, 0, .82, .82, .82); DECALS[id][2].matrix.copy(MOUT);
+    // the driver: shoulders, HANS, hands on the wheel (it turns with the steering); #11 throws both arms up for the title
+    const up = id === MATE ? ss(t, C.wins - .2, C.wins + .3) * (1 - ss(t, C.cuts[4] - .4, C.cuts[4])) : 0;
+    const sw = P.steer * 1.7 * (1 - up) + (id === HERO && s === 0 && t > 4.4 && t < 6 ? Math.sin(t * 3) * .1 : 0);
+    part(suitM, id, 0, .4, -.05); setc(suitM, id, tc);
+    part(hansM, id, 0, .45, -.04);
+    part(swM, id, 0, .375, .2, -.45, 0, sw);
+    part(swDispM, id, 0, .383, .216, -.45, 0, sw); swDispM.setColorAt(id, tmpC.set(talk > .3 && id === HERO && Math.sin(t * 16) > 0 ? 0xF2B33D : 0x7FE0A8));
     for (let k = 0; k < 2; k++) {
-      const sx = k ? .036 : -.036, b = k ? ex.br : ex.bl;
-      part(eyeM, id * 2 + k, sx, .016, .1, 0, 0, 0, 1, ex.eyes, 1);
-      part(eyeHiM, id * 2 + k, sx + .006, .022, .113);
-      part(browM, id * 2 + k, sx, .05 + ex.lift + (k === 0 && ex.bl < -.3 ? .01 : 0), .093, 0, 0, (k ? -1 : 1) * b);
+      const sx = k ? -1 : 1, i2 = id * 2 + k;
+      const gx = sx * .095 * Math.cos(sw), gy = .375 - sx * .095 * Math.sin(sw) + .01;
+      const wave = Math.sin(t * 9 + k * 1.7) * .07;
+      const hand = [lerp(gx, sx * .24 + wave * .5, up), lerp(gy, .9 + wave, up), lerp(.185, .03, up)];
+      seg(armDM, i2, [sx * .13, .435, -.05], hand, .22); setc(armDM, i2, tc);
+      part(gloveM, i2, hand[0], hand[1], hand[2]); setc(gloveM, i2, ac === INK ? 0x3a3532 : ac);
     }
-    const o = ex.mouth === "o";
-    part(mouthArcM, id, 0, -.038 + (ex.mouth === "smile" ? .018 : 0), .1, 0, 0, ex.mouth === "smile" ? Math.PI : 0, o ? .001 : 1, ex.mouth === "flat" ? .2 : 1, 1);
+    // the head: expression, G-force lean in the corners, buzz at speed
+    const ex = expression(id, t);
+    const lean = clamp(-P.k * P.spd * .006, -.2, .2) * (1 - up);
+    const hv = Math.sin(t * 47 + id) * .012 * fast;
+    MHD.copy(MC).multiply(MR.makeTranslation(...HELMET)).multiply(MP.makeRotationFromEuler(EU.set(ex.nod + hv, ex.shake + ex.lx * .12, ex.tilt + lean, "YXZ")));
+    BASEM = MHD;
+    part(shellM, id, 0, 0, 0); setc(shellM, id, HELM[id]);
+    part(capM, id, 0, 0, 0); setc(capM, id, HTOP[id]);
+    part(chinM, id, 0, 0, 0); setc(chinM, id, HELM[id]);
+    part(visorM, id, 0, .004, 0, -.06);
+    part(foamM, id, 0, -.004, .099);
+    part(hStripeM, id, 0, .045, 0); setc(hStripeM, id, id === HERO ? GOLD : id === MATE ? CREAM : ac);
+    part(spoilerM, id, 0, .116, -.075, .25); setc(spoilerM, id, HTOP[id]);
+    const skin = SKINC[id];
+    part(faceM, id, 0, -.005, .012); setc(faceM, id, skin);
+    for (let k = 0; k < 2; k++) {
+      const sx = k ? .036 : -.036, i2 = id * 2 + k, b = k ? ex.br : ex.bl;
+      const ey = .016, ez = .099;
+      part(whiteM, i2, sx, ey, ez, 0, 0, 0, 1, 1.12 * ex.eyes, .55);
+      const px = sx + ex.lx * .0065, py = ey + ex.ly * .006;
+      const pz = ex.eyes > 1.2 ? .82 : 1;
+      part(pupilM, i2, px, py, .1065, 0, 0, 0, pz, pz, .6);
+      part(eyeHiM, i2, px + .004, py + .0045, .1125);
+      part(lidM, i2, sx, ey, ez, (ex.lid - .5) * Math.PI, 0, 0, 1.08, 1.15 * ex.eyes, .62); setc(lidM, i2, skin);
+      part(browM, i2, sx, .05 + ex.lift + (k === 0 && ex.bl < -.3 ? .008 : 0), .094, 0, 0, (k ? -1 : 1) * b); setc(browM, i2, BROWC[id]);
+      part(cheekM, i2, sx * 1.55, -.024, .092, 0, 0, 0, 1, .65, .4);
+    }
+    part(noseFM, id, 0, -.007, .111); noseFM.setColorAt(id, tmpC.set(skin).multiplyScalar(.9));
+    const mo = ex.mouth, o = mo === "o", g = mo === "grit", arc = !o && !g;
+    part(mouthArcM, id, 0, -.038 + (mo === "smile" ? .017 : 0), .1, 0, 0, mo === "smile" ? Math.PI : 0, arc ? 1 : .001, mo === "flat" ? .2 : arc ? 1 : .001, 1);
     part(mouthOM, id, 0, -.036, .1, 0, 0, 0, o ? 1 : .001, o ? 1.15 : .001, 1);
+    part(mouthInM, id, 0, -.036, .1035, 0, 0, 0, o ? 1 : .001, o ? 1.15 : .001, 1);
+    part(teethM, id, 0, -.038, .1, 0, 0, 0, g ? 1 : .001, g ? 1 : .001, 1);
+    part(lipLineM, id, 0, -.038, .1045, 0, 0, 0, g ? 1 : .001, g ? 1 : .001, 1);
+    part(sweatM, id, .06, .056 - (t * .03) % .03, .073, 0, 0, 0, ex.sweat ? 1 : .001, ex.sweat ? 1 : .001, ex.sweat ? 1 : .001);
     BASEM = MC;
-    if (id === MATE) {
-      const up = ss(t, C.wins - .2, C.wins + .3) * (1 - ss(t, C.cuts[4] - .4, C.cuts[4]));
-      part(null, 0, .2, .42, .02, 0, 0, -lerp(1.4, -.15 + Math.sin(t * 9) * .12, up));
-      MOUT.multiply(MR.makeTranslation(0, .17, 0)); armMesh.matrix.copy(MOUT);
-      MOUT.multiply(MR.makeTranslation(0, .17, 0)); glove.matrix.copy(MOUT);
-      armMesh.visible = glove.visible = up > .01;
-    }
   }
   for (const m_ of CARPARTS) { m_.instanceMatrix.needsUpdate = true; if (m_.instanceColor) m_.instanceColor.needsUpdate = true; }
 
@@ -764,20 +932,54 @@ function renderAt(t) {
     tyreDot.style.background = "#" + col(c).getHexString();
   }
 
-  // pit crew (hook)
-  const crewIn = s === 0 ? ss(t, 4.0, 4.35) * (1 - ss(t, 6.0, 6.35)) : 0;
+  // pit crew (hook): they run out of the garage, crouch at the wheels with the guns, the jacks lift the car, the
+  // lollipop flips from red to green, and they run back
+  const crewIn = s === 0 ? ss(t, 3.95, 4.38) * (1 - ss(t, 6.05, 6.5)) : 0;
+  const crewVis = s === 0 && t > 3.2 && t < 7.4;
   trackAt(D_BOX, PITLAT, TA);
-  const byaw = Math.atan2(TA.tx, TA.tz);
+  const byaw = Math.atan2(TA.tx, TA.tz), bc = Math.cos(byaw), bsn = Math.sin(byaw);
+  const guns = bump(t, 4.5, 5.4, .08);
   for (let k = 0; k < NCREW; k++) {
     const [lx, lz] = CREWP[k];
-    const c = Math.cos(byaw), sn = Math.sin(byaw);
-    const gx = TA.x + 2.6, gz = TA.z + (k - 3.5) * .5;                  // waiting at the garage door
-    const px = TA.x + lx * c + lz * sn, pz = TA.z - lx * sn + lz * c;
-    const busy = Math.sin(t * 18 + k) * .03 * crewIn;
-    M4.compose(V.set(lerp(gx, px, crewIn), busy, lerp(gz, pz, crewIn)), Q.setFromAxisAngle(UP, Math.atan2(TA.x - px, TA.z - pz)), S.setScalar(s === 0 && t < 7.4 ? 1 : .001));
-    crewBody.setMatrixAt(k, M4); crewHead.setMatrixAt(k, M4);
+    const gx = TA.x + 2.4 + (k % 3) * .4, gz = TA.z + (k - 4) * .55;
+    const px = TA.x + lx * bc + lz * bsn, pz = TA.z - lx * bsn + lz * bc;
+    const x = lerp(gx, px, crewIn), z = lerp(gz, pz, crewIn);
+    const moving = clamp(bump(t, 3.95, 4.4, .1) + bump(t, 6.05, 6.5, .1));
+    const runYaw = Math.atan2(px - gx, pz - gz) + (t > 5 ? Math.PI : 0);
+    const carYaw = Math.atan2(TA.x - x + (k === 8 ? 0 : 0), TA.z - z);
+    let dy = carYaw - runYaw; dy = Math.atan2(Math.sin(dy), Math.cos(dy));
+    const yawC = runYaw + dy * (1 - moving);
+    MBC.compose(V.set(x, 0, z), Q.setFromAxisAngle(UP, yawC), S.setScalar(crewVis ? 1 : .001));
+    BASEM = MBC;
+    const c = (k < 4 ? 1 : k < 6 ? .45 : k < 8 ? .25 : 0) * ss(t, 4.3, 4.5) * (1 - ss(t, 5.9, 6.1));
+    const hipY = .62 - .27 * c, shY = 1.06 - .4 * c, fw = .14 * c;
+    const ph = t * 15 + k * 1.3, swing = Math.sin(ph) * moving;
+    seg(crewTorsoM, k, [0, hipY, -.02], [0, shY, fw + .02], .44);
+    for (let j = 0; j < 2; j++) {
+      const sx = j ? -.09 : .09, sgn = j ? -1 : 1;
+      const foot = [sx * (1 + .5 * c), .07 + Math.max(0, swing * sgn) * .12, swing * sgn * .28 + .22 * c];
+      seg(crewLegM, k * 2 + j, [sx, hipY, 0], foot, .41);
+      const sh = [sx * 1.7, shY - .04, fw];
+      let hand;
+      if (k < 4) hand = [sx * .5, shY - .3 - .08 * c, fw + .36];
+      else if (k < 6) hand = [sx * .7, shY - .36, fw + .34];
+      else if (k < 8) hand = [sx * .8, .5, .42];
+      else hand = j ? [-.2, shY - .45, 0] : [.12, shY + .32, .1];
+      const runHand = [sx * 2, shY - .42, -swing * sgn * .24];
+      const hh = [lerp(hand[0], runHand[0], moving), lerp(hand[1], runHand[1], moving), lerp(hand[2], runHand[2], moving)];
+      seg(crewArmM, k * 2 + j, sh, hh, .304);
+    }
+    part(crewHeadM, k, 0, shY + .17, fw + .03);
+    part(crewVisorM, k, 0, shY + .17, fw + .03);
+    const has = (b) => (b ? 1 : .001);
+    part(gunM, k, 0, shY - .32 - .08 * c, fw + .46, 0, 0, t * 60 * guns, has(k < 4 && moving < .5), has(k < 4 && moving < .5), has(k < 4 && moving < .5));
+    if (k >= 4 && k < 6 && moving < .5) seg(jackM, k, [0, shY - .36, fw + .34], [0, .1 + liftHero * 1.2, 1.0], 1);
+    else if (k === 8) seg(jackM, k, [.12, shY + .3, .1], [.12, shY + 1.0, .1], 1);
+    else part(jackM, k, 0, 0, 0, 0, 0, 0, .001, .001, .001);
+    if (k === 8) { part(lolliM, 0, .12, shY + 1.08, .1); lolliM.setColorAt(0, tmpC.set(t < 5.95 ? RED : 0x3FA372)); }
   }
-  crewBody.instanceMatrix.needsUpdate = crewHead.instanceMatrix.needsUpdate = true;
+  BASEM = MC;
+  for (const m_ of CREWPARTS) { m_.instanceMatrix.needsUpdate = true; if (m_.instanceColor) m_.instanceColor.needsUpdate = true; }
 
   // markers over #7 and #11 (scaled with distance; hidden up close)
   const look = new THREE.Vector3();
@@ -890,6 +1092,24 @@ function renderAt(t) {
   }
   sprayM.instanceMatrix.needsUpdate = true;
 
+  // titanium sparks off the plank on the straights
+  for (let id = 0; id < NC; id++) for (let k = 0; k < SPK_K; k++) {
+    const per = .3 + hash(id * 7 + k) * .45, ph = hash(id * 13 + k * 3) * per;
+    const te = Math.floor((t + ph) / per) * per - ph, age = t - te;
+    let sc = .001;
+    if (age < .2 && rain < .05 && POSE[id].spd > 20) {
+      carXZ(id, te, s, PO);
+      if (Math.abs(PO.k) < .015) {
+        const lat = (hash(id * 31 + k * 7 + Math.floor(te * 10)) - .5) * 2;
+        V.set(PO.x - PO.tx * (1.0 + age * 5) + PO.tz * lat * age * 1.4, .05 + age * 1.6 - 9 * age * age, PO.z - PO.tz * (1.0 + age * 5) - PO.tx * lat * age * 1.4);
+        sc = 1 - age / .2;
+      }
+    }
+    M4.compose(V, Q.setFromAxisAngle(UP, Math.atan2(PO.tx, PO.tz)), S.setScalar(Math.max(.001, sc)));
+    sparkM.setMatrixAt(id * SPK_K + k, M4);
+  }
+  sparkM.instanceMatrix.needsUpdate = true;
+
   // fireworks over the circuit when #11 wins the title
   for (let b = 0; b < 6; b++) {
     const tb = C.wins - .2 + b * .45;
@@ -945,10 +1165,22 @@ function renderAt(t) {
   let fl = 0;
   for (const ct of C.cuts) fl += .7 * Math.exp(-(((t - ct) / .07) ** 2)) * (t >= ct ? 1 : .2);
   fl += .55 * pulse(t, C.rain, .07) + .3 * pulse(t, C.rain + .25, .05) + .35 * pulse(t, TC, .1);
+  // tension: letterbox bars, more contrast, fringes and a handheld camera while the crash is coming and on the call;
+  // AI vision while it listens and predicts; radial speed blur in the chases and on the hits
+  const bars = Math.max(bump(t, C.crash - .35, C.drives + .7, .4), bump(t, C.says - 1.0, FIN + .8, .4));
+  const scan = Math.max(.7 * bump(t, C.listening - .3, C.tyre + .3, .3), bump(t, C.crash - .1, C.slows - .3, .2));
+  let chaseB = 0;
+  for (const [a, b] of [[0, C.ai - .35], [C.six - .45, C.cuts[1]], [C.cuts[2], C.crash - .2], [C.slows - .2, TC - .45]]) chaseB = Math.max(chaseB, bump(t, a, b, .2));
+  let slowB = 0; for (const [a, b] of C.slowwin) slowB = Math.max(slowB, bump(t, a, b, .15));
   grade.uniforms.uFlash.value = fl;
-  grade.uniforms.uSat.value = 1 - rain * .25;
+  grade.uniforms.uSat.value = 1 - rain * .25 - scan * .35;
   grade.uniforms.uCool.value = rain * .8;
   grade.uniforms.uRed.value = pr * .55;
+  grade.uniforms.uBars.value = bars;
+  grade.uniforms.uScan.value = scan;
+  grade.uniforms.uCon.value = .12 * bars;
+  grade.uniforms.uBlur.value = .012 * chaseB + .02 * slowB + .05 * pulse(t, TC, .12) + .03 * pulse(t, C.through + .2, .12) + .03 * pulse(t, ATT, .12);
+  grade.uniforms.uCA.value = .0012 + .0035 * bars + .008 * pulse(t, TC, .15) + .006 * pulse(t, C.rain, .1);
   grade.uniforms.uTime.value = t;
 
   // camera
@@ -959,10 +1191,15 @@ function renderAt(t) {
   camera.position.copy(CAMP);
   camera.position.x += Math.sin(t * .37) * .06 + Math.sin(t * 31) * sh * .3;
   camera.position.y += Math.sin(t * .29 + 1) * .04 + Math.sin(t * 27 + 2) * sh * .2;
+  const hand = .035 * bars * Math.min(1, CAMP.distanceTo(CAML) / 3);
+  camera.position.x += (Math.sin(t * 3.1) + Math.sin(t * 7.3 + 1) * .5) * hand;
+  camera.position.y += (Math.sin(t * 2.7 + 2) + Math.sin(t * 6.1) * .5) * hand;
   camera.fov = fov;
   grade.uniforms.uVig.value = .28 + .5 * fb;
+  faceKey.position.copy(camera.position).add(V.set(.3, .5, 0));
+  faceKey.intensity = fb * (1.1 + 1.6 * dusk);
   const cv = window.F1_COVER;
-  if (cv) { camera.position.set(...cv.cam); camera.fov = cv.fov; look.set(...cv.look); }
+  if (cv) { camera.position.set(...cv.cam); camera.fov = cv.fov; look.set(...cv.look); for (const u of ['uBars', 'uBlur', 'uScan', 'uFlash']) grade.uniforms[u].value = 0; grade.uniforms.uCA.value = .001; grade.uniforms.uCon.value = 0; grade.uniforms.uSat.value = 1 - rain * .25; MK.forEach((m) => m.scale.setScalar(.001)); }
   camera.updateProjectionMatrix();
   camera.lookAt(look);
   // shadows follow what the camera looks at

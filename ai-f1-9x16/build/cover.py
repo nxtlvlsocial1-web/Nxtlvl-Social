@@ -23,7 +23,7 @@ T = json.load(open(os.path.join(ROOT, "build", "cues.json")))
 CLI = ["npx", "--yes", "hyperframes@0.8.203"]
 
 PLATES = {"rain": (14.6, {"cam": [23.0, 4.6, -12.0], "look": [18.4, 0, -24.5], "fov": 42}),
-          "finish": (40.35, {"cam": [21.7, 2.2, -18.5], "look": [21.5, .9, -1.5], "fov": 27})}
+          "finish": (40.12, {"cam": [21.7, 2.2, -18.5], "look": [20.7, .9, -1.5], "fov": 29})}
 
 HEAD = """<!doctype html>
 <html lang="en" data-resolution="portrait">
