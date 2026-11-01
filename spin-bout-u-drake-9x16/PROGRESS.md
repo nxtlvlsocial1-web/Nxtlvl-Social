@@ -1,5 +1,5 @@
 # PROGRESS: spin-bout-u-drake-9x16 (updated 2026-11-01)
-Phase: v1 FINAL rendering (build v21b: starts 0.5 s before "Yeah", the owner's three photos), 45.12 s; the owner asked for the final directly.
+Phase: DONE: final v1 delivered (renders/nxtlvl_spin-bout-u_reels_9x16_v1_sfx.mp4, 1080x1920, 45.13 s, 71 MB, -15.0 LUFS).
 What it is: Spin Bout U in 9:16 (1080x1920, 45.12 s, ends on the logo), built from ../spin-bout-u-drake with
 `SPIN_FORMAT=9x16 python3 build/collage.py` (build v21: the ssspin reference's typing, held flips, white frames, entry
 glitch). Assets are hard links to ../spin-bout-u-drake/assets (not in git). See ../spin-bout-u-drake/TASTE.md § v21.
