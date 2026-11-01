@@ -27,13 +27,23 @@ def border_connected(mask):
     return np.isin(lab, list(ids))
 
 
-bg = border_connected((sat <= 7) & (br >= 196))
+cand = (sat <= 7) & (br >= 196)
+bg = border_connected(cand)
+lab_c, nc = ndimage.label(cand & ~bg)                          # enclosed checker patches (between the legs...)
+if nc:
+    area = ndimage.sum(np.ones_like(lab_c), lab_c, range(1, nc + 1))
+    bg |= np.isin(lab_c, [k + 1 for k, ar in enumerate(area) if ar >= 120])
 band = ndimage.binary_dilation(bg, iterations=7) & ~bg
 bg |= band & (sat <= 16) & (br >= 150)                  # the blended checker at the subject's edge
 fg = ndimage.binary_opening(~bg, iterations=2)
 lab, n = ndimage.label(fg)
 fg = lab == (np.argmax(ndimage.sum(fg, lab, range(1, n + 1))) + 1)
-fg = ndimage.binary_fill_holes(ndimage.binary_erosion(fg, iterations=1))
+fg = ndimage.binary_erosion(fg, iterations=1)
+holes, nh = ndimage.label(ndimage.binary_fill_holes(fg) & ~fg)   # enclosed gaps (between legs, under an arm)
+for k in range(1, nh + 1):
+    h = holes == k
+    if ((sat[h] <= 12) & (br[h] >= 185)).mean() < .45:         # mostly not checker colour: a real hole in the subject
+        fg |= h
 alpha = Image.fromarray((fg * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(.9))
 out = Image.fromarray(a.astype(np.uint8)).convert("RGBA")
 out.putalpha(alpha)
