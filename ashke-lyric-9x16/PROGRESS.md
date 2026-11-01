@@ -1,6 +1,6 @@
-# PROGRESS: ashke-lyric-9x16 (updated 2026-10-30)
-Phase: v10 build (gradient remake, cut bursts, SFX from 3 s), square preview in ../ashke-lyric-1x1
-Current version: final v8 → renders/nxtlvl_ashke-lyric_reels_9x16_v8.mp4 (three more photos); v1-v7 delivered earlier
+# PROGRESS: ashke-lyric-9x16 (updated 2026-11-01)
+Phase: 9:16 v9 PREVIEW (build v11: ssspin-reference typing, held flips, entry glitch, dark logo with the song fading across it); final after approval.
+Current version: v9 preview → renders/preview_ashke-lyric_reels_9x16_v9_sfx.mp4 (render_draft.sh); final: build/render_final.sh.
 Done: v3 rebuilt on the second YouMotion reference: nine scene recipes, cut-out stickers (local segmentation), photo prints
 from the estate and tour clips, typed labels, flashes, camera whips and tracking; v2 cinema layer removed.
 Next step: owner reviews v4 and checks the Gurmukhi spelling; feedback goes into v5.

@@ -117,6 +117,18 @@ Updated 2026-11-01. Current version: v10 build, square preview ../ashke-lyric-1x
   - Outro on the paper, as the reference ends: the paper crossfades in as the song fades (59-60 s), and the logo disc
     (cut to its circle, soft shadow) blurs in. A blue marker circle draws round it, the sheen sweeps and the star
     twinkles.
+- v11 (owner, 2026-11-01): both edits in 9:16, timed to the ssspin reference frame by frame.
+  - Labels:
+    - Each label types on two or three letters a step. Each chunk lands as a grey ghost (32% opacity) and goes solid
+      a step later.
+    - Boxed labels wipe open in two steps before their text.
+    - No slam, flip or cascade modes.
+  - Cuts:
+    - The invert flip holds 8 frames into the cut and 2 after it.
+    - Two white frames on some cuts.
+    - Stills, whip and white cuts enter through a horizontal slice glitch (feDisplacementMap, 2 steps).
+  - Logo: on its dark violet, with no logo sound effects. The song plays on past the section (full song at the
+    section's measured -7.62 dB) and fades across the logo, 59.2-61.6 s.
 
 ## 4. Removed
 - v2's full-bleed 9:16 cinema layer (eimantasbitinas23 reference): it blew the footage up and looked blurry.
@@ -136,6 +148,7 @@ Updated 2026-11-01. Current version: v10 build, square preview ../ashke-lyric-1x
 | 2026-10-31 | add three more photos (barn with horse, fire stage arm up, purple stage) | cut-outs barn, fireup, purple, replacing repeats (v8) |
 | 2026-10-31 | Bugatti: add the full photo; stop repeating the same clips | Bugatti as a full framed print; every print, fill and flash its own window from a shot-by-shot breakdown, flashes from the MV verse (v9) |
 | 2026-10-31 | make the whole edit in the 1:1 box ratio | square render in ../ashke-lyric-1x1 from the same build (ASHKE_FORMAT=1x1) |
+| 2026-11-01 | dark logo, no logo SFX, music fade blended into the logo; both edits in 9:16 with the reference's pacing, filter effects and text transitions | v11 |
 | 2026-11-01 | whitish background without the grid; follow the ssspin reference for how colours and transitions change between frames | v10d |
 | 2026-11-01 | grey gradient, a bit light; the outro is not faded well, no repeating lyric in the fade | v10c |
 | 2026-11-01 | final with the outro; change the gradient (too close to the Drake one) | v10b: navy gradient, logo outro |

@@ -206,6 +206,25 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
   small bell. Render scripts: the song fades out from 44.28 s over 1.65 s; the MoodyGloss grade stops at the cut so
   the brand colours stay true.
 
+## v20 (owner: "bein' in" not "bein'oin"; smaller logo; final under 100 MB)
+- The scramble never touches spaces. GSAP tweened a space restored after a digit glyph as the number 0.
+- Logo at 60% (circle 375 px). Final v20 delivered, 55 MB.
+
+## v21 (owner: make it in 9:16; the ssspin reference's pacing, filter effects and text transitions; no logo SFX)
+- `SPIN_FORMAT=9x16 python3 build/collage.py` writes ../spin-bout-u-drake-9x16 (assets hard-linked):
+  - ZOOM 1 and VTRACK 1 (the board seen 1:1).
+  - Screen-space fronts, embers, pins, the torn sheet and the stills scale to 1920.
+  - The logo is centred on the tall frame.
+- Labels type in like the reference: grey ghost chunks go solid a step later, and boxes wipe open first. The serif
+  accents keep their tracking and stamps keep their flicker.
+- Cuts:
+  - Held invert flips across the cut (8 frames before, 2 after) and two white frames.
+  - The torn sheet and the stop-motion stills.
+  - A horizontal slice glitch on entry.
+  - No ink matte, stutter, bloom or leak bursts. The deep glow stays.
+- R2 puts its keyword under the label stack (it overlapped on the long "one wrong call" line) and zigzags the stack.
+- No sound effects on the logo; the song's fade carries it.
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|

@@ -1,5 +1,5 @@
-# PROGRESS: spin-bout-u-drake (updated 2026-10-31)
-Phase: v19 PREVIEW (with sound design), 46 s, ends on the logo (draft for the owner's approval; final not rendered yet)
+# PROGRESS: spin-bout-u-drake (updated 2026-11-01)
+Phase: square final v20 delivered (renders/nxtlvl_spin-bout-u_reels_1x1_v20_sfx.mp4); 9:16 v1 PREVIEW in ../spin-bout-u-drake-9x16 (build v21, ssspin reference); final after approval.
 v11: Ashke-structure collage (build/collage.py) in the Spin colours over a live gradient background. The anime
 pictures the owner sent back are removed; lyric concepts replace them (footsteps + counter, GPS route + pins +
 compass, shockwaves, heart rings, BODY wisps); full-screen smoke, burn, drop and ghost on those lines. Vogue call screen shows the name
