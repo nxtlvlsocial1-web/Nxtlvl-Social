@@ -43,6 +43,17 @@ L = json.load(open(os.path.join(ROOT, "plan", "lines.json")))
 BEATS = json.load(open(os.path.join(ROOT, "plan", "beats.json")))
 PERIOD = 60 / BEATS["bpm"]
 G3T = {e["kind"]: e["t0"] for e in json.load(open(os.path.join(ROOT, "plan", "g3d.json")))}   # the 3D clips' start times
+# v21b (owner): the 9:16 starts 0.5 s before the first "Yeah" (0.88 s later in the song than the square), and everything
+# keeps its place on the song: lyric words, beats and the 3D clips all move 0.88 s earlier on the edit's clock.
+TRIM = .88 if NINE else 0.0
+if TRIM:
+    for _l in L:
+        _l["start"] -= TRIM
+        _l["end"] -= TRIM
+        _l["words"] = [[w_, s_ - TRIM, e_ - TRIM] for w_, s_, e_ in _l["words"]]
+    BEATS["beats"] = [b_ - TRIM for b_ in BEATS["beats"] if b_ - TRIM > -.5]
+    G3T = {k_: v_ - TRIM for k_, v_ in G3T.items()}
+SONG_SRC = "assets/audio/section_9x16.wav" if TRIM else "assets/audio/section.wav"
 INK, MAR, MAG, WHT = "#151314", "#5f1b30", "#b0194f", "#f2f1ec"
 ANTON = ImageFont.truetype(os.path.join(ROOT, "assets", "fonts", "Anton.ttf"), 100)
 CURSE = {"ass", "hoes", "nigga", "niggas", "shitll", "shit"}
@@ -57,11 +68,12 @@ CUTOUT = {1: "cat_black_collar", 3: "hand_phone_sticker", 5: "drake_chanel_night
           17: "snotty"}
 AF, PR, AV = "assets/img/anime/full/", "assets/img/print/", "assets/video/anime/"
 CL = "assets/video/clips/"                                # the owner's Drake clips, cut by build/clips_drake.py
-CARD1 = {0: AV + "jealous.mp4", 2: PR + "envogue_funky_divas.jpg", 4: CL + "b_phone1.mp4",
+CARD1 = {0: AV + "jealous.mp4", 2: PR + "envogue_funky_divas.jpg", 4: PR + "drake_phone_runway.jpg",
          11: AV + "her_blush.mp4"}
 CARD2 = {1: PR + "vogue_cat_cover.jpg", 3: "assets/img/collage/call_vogue.jpg", 9: AF + "jet.jpg", 10: AV + "road.mp4",
          16: CL + "a_close.mp4"}
-CUTPRINT = {14: None, 9: None, 16: None, 7: CL + "b_phone2.mp4", 5: CL + "b_seated.mp4", 15: CL + "a_walk2.mp4"}     # recipes with a cut-out slot that use a picture instead
+CUTPRINT = {14: None, 9: None, 16: None, 7: CL + "b_phone2.mp4", 5: PR + "drake_frontrow.jpg", 15: CL + "a_walk2.mp4",
+            0: PR + "drake_pose_jealous.jpg"}   # v21b (owner): the front-row and the jealous-pose photos     # recipes with a cut-out slot that use a picture instead
 FILL = {6: PR + "cat_white_dumb.jpg", 11: AF + "her_blush.jpg"}
 G3D_AT = {9: ("globe", 120, 620, 860), 15: ("heart", 140, 470, 800),
           16: ("body", 0, 700, 1080), 17: ("tissue", 0, 1200, 360)}
@@ -325,7 +337,7 @@ def label(text, style, x, y, size, rot, t, t1, mode="type", circle=False, anchor
     i = nid("lb")
     if style in ("blk", "wht", "magw") and text in SERIF:
         style, text = "ser", text.lower()
-    size = min(size * 1.12, fit(text, 980, 999))
+    size = min(size * 1.12, fit(text, 900 if NINE else 980, 999))   # v21b: the narrow 9:16 view clipped 980 px words
     w = tw(text, size) + size * .56
     left = x - w / 2 if anchor == "center" else x
     letters = "".join(f'<span class="ch{" cz" if c == "*" else " sp" if c == " " else ""}">{c if c != " " else "&nbsp;"}</span>' for c in text)
@@ -487,6 +499,9 @@ def cam(si, t, fx, fy, s=1.0, rot=0.0, dur=.35):
 def r1(si, a, b, li, gs):
     if li < 0:                         # v16 intro: the owner's clean photo (black on black) is the whole background
         i = nid("ib")
+        j = nid("ibk")                 # v21b: black under the photo, so the tall 9:16 frame never shows its edge
+        PAN.append(f'<i class="el" id="{j}" style="left:-900px;top:-1600px;width:2900px;height:4200px;background:#000;z-index:0"></i>')
+        show(f"#{j}", a, b)
         PAN.append(f'<img class="el" id="{i}" src="assets/img/src/drake_back_black.jpg" style="left:-455px;top:-1264px;'
                    f'width:1800px;z-index:0" alt="">')
         show(f"#{i}", a, b)
@@ -540,7 +555,8 @@ def r2(si, a, b, li, gs):
         cutout(li, 600, ky + 220, 460, 6, td, b, z=8)
         cam(si, td, 640, ky + 260, 1.05, 2, .25)
     else:
-        cutout(li, 540 - 220, ky + size * 1.25 + 150 * after_n, 440, 2, kw[2], b, z=2)
+        cw = 600 if li == 0 else 440                         # v21b: the owner's jealous pose photo reads bigger
+        cutout(li, 540 - cw / 2, ky + size * 1.25 + 150 * after_n, cw, 2, kw[2], b, z=2)
     _, fw = label(kw[0], f"fill f{li}" if li in FILL else "w3d", 540, ky, size, -3, kw[2], b, mode="slamx" if li not in FILL else "pop", z=6)
     cam(si, kw[2], 540, ky + 100, 1.0, 0, .2)
     zt = kw[2] + .4
@@ -635,7 +651,7 @@ def r5(si, a, b, li, gs):
 
 def r6(si, a, b, li, gs):
     kw = gs[-1]
-    printel(CARD1.get(li), 400, 170, 660, 760, 9, a, b)
+    printel(CARD1.get(li), 380 if NINE else 400, 290 if NINE else 170, 660, 760, 9, a, b)    # v21b: 9:16 keeps the face in frame
     scrap("black", 1, 90, 960, 780, -4, a, b)
     cam(si, a, 600, 640 if li == 13 else 860, 1.0, 1, .01)
     rest = [g for g in gs if g is not kw]
@@ -980,7 +996,7 @@ def camera():
                 pts.append((tt, kx, ky, ks, kr))
         lx, ly, ls, lr = pts[-1][1:]
         run = min(440, 520 * (b - pts[-1][0]))
-        pts.append((b + .001, lx + d[0] * run, ly + d[1] * run, ls, lr))
+        pts.append((b + .001, lx + d[0] * run * (.45 if NINE else 1), ly + d[1] * run, ls, lr))   # v21b: 9:16 is narrow
         plans.append(dict(a=a, b=b, li=li, d=d, pts=pts))
     tend = DUR - .5
     E, X, TAU = 720, 620, .05
@@ -1769,7 +1785,9 @@ img.el {{ display: block; height: auto; }}
 def main():
     builders = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6, "R7": r7, "R8": r8, "R9": r9}
     for si, (a, b, li) in enumerate(scenes()):
-        gs = [("SPIN BOUT U", False, .3), ("DRAKE", True, 1.1), ("21 SAVAGE", False, 1.6)] if li < 0 else groups_of(li)
+        intro = ([("SPIN BOUT U", False, .1), ("DRAKE", True, .5), ("21 SAVAGE", False, 1.0)] if TRIM      # DRAKE on the "Yeah"
+                 else [("SPIN BOUT U", False, .3), ("DRAKE", True, 1.1), ("21 SAVAGE", False, 1.6)])
+        gs = intro if li < 0 else groups_of(li)
         if li in VEL:
             continue
         elif li in FOOT:
@@ -1840,7 +1858,7 @@ def main():
       <div id="leak"></div>
       <div id="vig"></div>
       <div id="grain"></div>
-      <audio id="song" src="assets/audio/section.wav" data-start="0" data-duration="{DUR}" data-track-index="0" data-volume="1"></audio>
+      <audio id="song" src="{SONG_SRC}" data-start="0" data-duration="{DUR}" data-track-index="0" data-volume="1"></audio>
     </div>
     <script>
       window.__timelines = window.__timelines || {{}};
