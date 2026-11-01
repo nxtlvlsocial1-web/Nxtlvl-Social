@@ -45,9 +45,11 @@ KINDS = {
     "swish": ([f("swishes-sound-pack/swishes__swish-4.wav"), f("wind-hit-time-morph/qubodup-megaswosh2.wav"),
                f("fantasy-sound-effects-tinysized-sfx/sfx-cc0__cloth-pouch-shake-01.wav"), f("fantasy-sound-effects-tinysized-sfx/sfx-cc0__cloth-pouch-shake-02.wav"),
                f("rpg-sound-pack/" + RPG_SWING[2])], "whoosh", -6, {"max_dur": .8}),
-    "whoosh_big": ([f("wind-hit-time-morph/qubodup-megaswosh1.wav"), f("air-whoosh/whoosh2_0.wav"),
-                    f("wind-hit-time-morph/60009__qubodup__swosh_22.flac"), f("wierd-whooshes/weird_whoosh_sounds_-_whoosh_12_0.mp3")],
-                   "whoosh", -2, {"max_dur": 1.6}),
+    # v17: whoosh2_0 holds 9 sweeps and the weird whoosh 15; at max_dur 1.6 two of them played (owner: "double woosh").
+    # Only single-sweep recordings on the big cuts now, and the multi-sweep files are cut to their first sweep elsewhere.
+    "whoosh_big": ([f("wind-hit-time-morph/qubodup-megaswosh1.wav"), f("wind-hit-time-morph/60009__qubodup__swosh_22.flac"),
+                    f("wind-hit-time-morph/qubodup-megaswosh2.wav"), f("rpg-sound-pack/" + RPG_SWING[0])],
+                   "whoosh", -2, {"max_dur": .9}),
     "glitch": ([f(p_) for k in range(4) for p_ in (f"interface-sounds/Audio__glitch_00{k + 1}.ogg",
                                                      f"sci-fi-sounds/Audio__computerNoise_00{k}.ogg")], "glitch", -7, {"max_dur": .35}),
     "hit": ([f("100-cc0-sfx-2/sfx100v2_hit_01.ogg"), f("75-cc0-breaking-falling-hit-sfx/bfh1_hit_02.ogg"),
@@ -75,6 +77,7 @@ KINDS = {
     "phone_throw": (r8("sfx_movement_jump2."), "ui", -14, {}),
     "phone_smash": ([f("75-cc0-breaking-falling-hit-sfx/bfh1_glass_hit_01.ogg"), f("75-cc0-breaking-falling-hit-sfx/bfh1_glass_hit_02.ogg")],
                     "glass", -12, {"max_dur": .5}),
+    "streak": ([f(p_) for k in range(4) for p_ in (f"sci-fi-sounds/Audio__computerNoise_00{k}.ogg",)], "glitch", -12, {"max_dur": .2}),
     "ghost": ([f("wind-hit-time-morph/qubodup-slomo1.wav")], "whoosh", -6, {"max_dur": 1.2}),
     "pixel_start": (r8("sfx_sounds_powerup1."), "ui", -10, {}),
     "pixel_walk": (r8("sfx_movement_footsteps"), "foley", -9, {"anchor": "start"}),
@@ -145,6 +148,8 @@ def main():
         c = {"t": t, "label": k, "file": fn, "role": role, "gain_db": gain + LIFT + (PIXEL_TRIM if k in PIXEL else 0)} | extra
         if n and "pitch" not in c and k not in ("phone", "fire", "smoke"):
             c["pitch"] = (0, -1, 1, -2, 2)[n % 5]              # a repeat is a new take, not the same file twice
+        if fn.endswith(("whoosh2_0.wav", "weird_whoosh_sounds_-_whoosh_12_0.mp3")):
+            c["slice"] = [0.0, .9] if fn.endswith("whoosh2_0.wav") else [.25, .85]
         if k in WEIGHT:
             pt, sub_gain = WEIGHT[k]
             c["pitch"] = max(-12, c.get("pitch", 0) + pt)

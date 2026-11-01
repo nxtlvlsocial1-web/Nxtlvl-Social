@@ -176,6 +176,17 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
   picture is out (fill and stills).
 - Sound: the paper slap plays once; every pixel-scene sound -6 dB; phone throws / smashes quiet.
 
+## v17 (owner: double whooshes on road / the way / ending; from "the way" switch to the Eimantas style with the walk)
+- The double whoosh was inside two recordings: whoosh2_0 holds 9 sweeps and the weird whoosh 15, so at max 1.6 s two
+  played. The big cuts now use single-sweep recordings only (megaswosh 1/2, swosh_22, RPG swing), max 0.9 s, and the
+  multi-sweep files are sliced to their first sweep wherever else they appear.
+- From the first "the way" the edit goes back and forth: full-screen footage of the walking clip on the two hooks and
+  the last line (clip A 4-9.6 s, 13-18.6 s, 0.4-3.4 s, held on 12 fps), collage scenes in between (diamonds, smoke,
+  burn, body, snotty). Treated like the Eimantas reference: looks cut on every other beat (warm grade, stark B/W
+  threshold, red monochrome, B/W), white streak glitches on the switches, small red Playfair caps lyrics that build
+  word by word as sung (centred), the keyword big in the centre with a white flash, and the last shot double-exposes
+  the intro photo.
+
 ## Feedback rules
 | Date | User said | Rule |
 |---|---|---|
@@ -198,3 +209,4 @@ Updated 2026-10-31. Current version: v3 in preview (renders/preview_spin-bout-u_
 | 2026-10-31 | live animated pixel mascot of Drake (not a pixelated photo); for the diamond line he drops diamonds for a girl; use the reel project; real SFX from Openverse for transitions and elements | v14 above |
 | 2026-10-31 | pixel animations not in boxes; pixel mascot for the burn; a clip on the way lyrics; transitions still slow, make them fast After Effects style; transition sounds not bassy enough | v15 above |
 | 2026-11-01 | paper slaps once only; pixel sounds quieter; jealous as pixel girls throwing phones; transitions to the flow of the three references; no pulsing; fix the intro Drake crop or change its background; better, faster text | v16 above |
+| 2026-11-01 | remove the double whooshes (road, the way, ending); from the way lyrics switch to the Eimantas style with the walking clip full screen, back and forth with the collage | v17 above |

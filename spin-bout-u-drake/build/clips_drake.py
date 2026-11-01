@@ -15,7 +15,12 @@ SEG = {   # name: (source, start s, end s)
     "a_close": ("clip_a", 9.4, 13.4),     # wipe him like he snotty: close-up
     "a_walk": ("clip_a", 0.4, 3.6),       # the ending: walking in, smiling
     "a_walk2": ("clip_a", 4.0, 8.0),      # the way you make me feel (second hook): walking down the corridor
+    # v17: full-screen footage scenes in the Eimantas reference style (held on 12 fps, cut by build/collage.py)
+    "f_hook1": ("clip_a", 4.0, 9.6),
+    "f_hook2": ("clip_a", 13.0, 18.6),
+    "f_end": ("clip_a", 0.4, 3.4),
 }
+HELD = {"f_hook1", "f_hook2", "f_end"}
 
 
 # speed ramp (the owner's reel project leans on time remapping): fast in, a slow hold in the middle, fast out.
@@ -28,7 +33,7 @@ def main():
     global RAMP
     base = RAMP
     for name, (src, a, b) in SEG.items():
-        RAMP = base.replace("{dur}", f"{b - a:.3f}")
+        RAMP = base.replace("{dur}", f"{b - a:.3f}") + (",fps=12" if name in HELD else "")
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(a), "-to", str(b), "-i", os.path.join(ROOT, "assets", "video", "src", src + ".mp4"),
                         "-vf", RAMP + ",fps=30,scale=720:-2,eq=contrast=1.08:saturation=.92:gamma=.97,colorbalance=rs=.03:bs=-.02",
                         "-an", "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", "-movflags", "+faststart",

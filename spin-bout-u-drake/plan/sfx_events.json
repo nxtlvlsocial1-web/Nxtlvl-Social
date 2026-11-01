@@ -301,12 +301,20 @@
 "len": 0.35
 },
 {
-"t": 32.793,
+"t": 31.18,
+"type": "streak"
+},
+{
+"t": 32.7,
+"type": "streak"
+},
+{
+"t": 32.86,
 "type": "hit"
 },
 {
-"t": 33.693,
-"type": "sticker"
+"t": 34.22,
+"type": "streak"
 },
 {
 "t": 34.98,
@@ -482,32 +490,20 @@
 "len": 0.35
 },
 {
-"t": 44.28,
-"type": "glitch"
-},
-{
-"t": 44.48,
-"type": "camera"
-},
-{
-"t": 44.86,
-"type": "camera"
-},
-{
-"t": 45.24,
-"type": "camera"
-},
-{
 "t": 45.62,
-"type": "camera"
+"type": "streak"
 },
 {
-"t": 46.0,
-"type": "camera"
+"t": 47.14,
+"type": "streak"
 },
 {
-"t": 48.433,
-"type": "sticker"
+"t": 47.6,
+"type": "hit"
+},
+{
+"t": 48.66,
+"type": "streak"
 },
 {
 "t": 49.72,
@@ -591,35 +587,11 @@
 "len": 0.35
 },
 {
-"t": 57.22,
-"type": "glitch"
-},
-{
-"t": 57.4,
-"type": "camera"
-},
-{
-"t": 57.78,
-"type": "camera"
-},
-{
-"t": 58.16,
-"type": "camera"
+"t": 58.2,
+"type": "hit"
 },
 {
 "t": 58.54,
-"type": "camera"
-},
-{
-"t": 58.92,
-"type": "camera"
-},
-{
-"t": 59.033,
-"type": "sticker"
-},
-{
-"t": 59.3,
-"type": "camera"
+"type": "streak"
 }
 ]

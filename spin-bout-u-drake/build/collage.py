@@ -702,6 +702,8 @@ ICON_LI = {14: (830, 760, 8), 16: (30, 250, -8), 7: (760, 700, 8), 0: (800, 1480
 
 def lyric_icons():
     for si, (a, b, li) in enumerate(scenes()):
+        if li in FOOT:
+            continue
         gs = groups_of(li) if li >= 0 else [("", True, a + 1.2)]
         kws = [g for g in gs if g[1]]
         t = (kws[-1] if kws else gs[len(gs) // 2])[2]
@@ -741,6 +743,61 @@ def transition_frames():
                           f'transform:rotate({rot}deg)"><img src="{src}" alt=""></div>')
             t0 = a - (3 - j) / 30
             show(f"#{i}", t0, t0 + 1 / 30)
+
+
+FOOT = {11: "f_hook1", 15: "f_hook2", 18: "f_end"}     # v17: full-screen footage, Eimantas style
+LOOKS = {"grade": "contrast(1.14) saturate(1.2) sepia(.2) hue-rotate(-8deg)",
+         "thr": "grayscale(1) contrast(4.2) brightness(1.06)",
+         "red": "grayscale(1) contrast(1.8) brightness(.95)",
+         "bw": "grayscale(1) contrast(1.35) brightness(.98)"}
+
+
+def footage_scene(si, a, b, li, gs):
+    """From "the way" on (owner), the edit cuts back and forth between the collage and the walking clip full screen,
+    treated like the Eimantas reference: footage held on 12 fps, looks cut on the beat (warm grade / stark B/W
+    threshold / red monochrome / B/W), white streak glitches, small red serif lyrics appearing word by word as they are
+    sung, the keyword big in the centre; the last shot double-exposes the intro photo."""
+    src = f"{CL}{FOOT[li]}.mp4"
+    n = float(os.popen(f'ffprobe -v error -show_entries format=duration -of csv=p=0 "{os.path.join(ROOT, src)}"').read() or 0)
+    i = nid("ft")
+    VTR[0] += 1
+    dbl = (f'<img class="fdbl" src="assets/img/src/drake_back_black.jpg" alt="">' if li == 18 else "")
+    streaks = "".join(f'<i class="fst" style="left:{x}px"></i>' for x in (140, 610, 880))
+    SCREEN.append(f'<div class="foot el" id="{i}"><video id="v{i}" src="{src}" data-start="{a:.3f}" data-duration="{min(n, b - a):.3f}" '
+                  f'data-track-index="{VTR[0]}" muted playsinline></video><div class="fred"></div>{dbl}{streaks}'
+                  f'<div class="fcap"></div><div class="fkey"></div></div>')
+    show(f"#{i}", a, b)
+    order = (["grade", "thr", "red", "grade", "bw", "thr", "red", "grade"] if li != 18 else ["bw", "thr", "bw", "red"])
+    beats = [a] + [t for t in BEATS["beats"][::2] if a + .3 < t < b - .1]
+    for k, t in enumerate(beats):
+        look = order[k % len(order)]
+        js(f'tl.set("#v{i}", {{filter: "{LOOKS[look]}"}}, {t:.3f});')
+        js(f'tl.set("#{i} .fred", {{opacity: {1 if look == "red" else 0}}}, {t:.3f});')
+        if k and k % 2 == 0:                                 # white streak glitch for two frames on the switch
+            js(f'tl.set("#{i} .fst", {{opacity: 1, x: (j) => [0, -40, 30][j] + {k * 37 % 90 - 45}}}, {t:.3f});')
+            js(f'tl.set("#{i} .fst", {{opacity: 0}}, {t + 2 / 30:.3f});')
+            CUES.append((t, "streak", 0))
+    # captions: words of each group appear as they are sung, small red serif; the keyword big in the centre
+    words = list(words_of(li))
+    wi = 0
+    for gk, (txt, key, t) in enumerate(gs):
+        toks = txt.split()
+        t_end = gs[gk + 1][2] if gk + 1 < len(gs) else b
+        times = []
+        for _ in toks:
+            times.append(words[wi][1] if wi < len(words) else t)
+            wi += 1
+        box = "fkey" if key else "fcap"
+        spans = "".join(f'<span class="fw{" cz" if "*" in w else ""}">{w}</span>' for w in toks)
+        j = nid("fc")
+        SCREEN.append(f'<div class="{box}-line el" id="{j}">{spans}</div>')
+        show(f"#{j}", t, t_end if not key else min(t_end, t + 1.2))
+        js(f'tl.set("#{j} .fw", {{display: "none"}}, {t - .001:.3f});')     # words join the line as sung, centred
+        for w_, tw in enumerate(times):
+            js(f'tl.set("#{j} .fw:nth-child({w_ + 1})", {{display: "inline"}}, {max(t, tw):.3f});')
+        if key:
+            FLASH.append((t, "white"))
+            js(f'tl.fromTo("#{j}", {{scale: 1.5}}, {{scale: 1, duration: .2, ease: "expo.out", immediateRender: false}}, {t:.3f});')
 
 
 def cut_bursts():
@@ -1561,6 +1618,17 @@ img.el {{ display: block; height: auto; }}
 .pxstars i {{ position: absolute; width: 14px; height: 14px; background: #ffd640; box-shadow: 0 0 0 4px #141213; }}
 .pxground {{ position: absolute; left: 0; right: 0; top: 508px; height: 12px; background: repeating-linear-gradient(90deg, #f2f1ec 0 24px, #b0194f 24px 48px);
   image-rendering: pixelated; opacity: .9; }}
+.foot {{ position: absolute; inset: 0; z-index: 15; background: #000; overflow: hidden; }}
+.foot video {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }}
+.fred {{ position: absolute; inset: 0; background: #ff1e2e; mix-blend-mode: multiply; opacity: 0; }}
+.fdbl {{ position: absolute; left: -210px; top: -1000px; width: 1500px; mix-blend-mode: screen; opacity: .45; filter: grayscale(1) contrast(1.4); }}
+.fst {{ position: absolute; top: 0; width: 6px; height: 1080px; background: #fff; opacity: 0; box-shadow: 0 0 14px #fff; }}
+.fcap-line {{ position: absolute; left: 60px; right: 60px; top: 900px; z-index: 16; text-align: center; font: italic 800 46px/1.1 "Playfair";
+  letter-spacing: .06em; text-transform: uppercase; color: #ff2a3c; text-shadow: 0 0 18px rgba(255,30,50,.65), 0 3px 10px rgba(0,0,0,.8); }}
+.fkey-line {{ position: absolute; left: 0; right: 0; top: 430px; z-index: 16; text-align: center; font: 400 190px/1 "Anton"; color: #fff;
+  letter-spacing: .01em; text-shadow: 0 0 30px rgba(255,40,60,.7), 8px 8px 0 #ff1e2e; }}
+.fw {{ margin: 0 .16em; }}
+.fw.cz {{ filter: blur(.1em); }}
 #ink {{ position: absolute; inset: 0; width: 1080px; height: 1080px; z-index: 19; opacity: 0; pointer-events: none; }}
 .tear {{ position: absolute; left: 0; top: -300px; width: 1900px; height: auto; z-index: 19; opacity: 0; pointer-events: none;
   filter: drop-shadow(0 20px 30px rgba(0,0,0,.55)); }}
@@ -1575,7 +1643,10 @@ def main():
     builders = {"R1": r1, "R2": r2, "R3": r3, "R4": r4, "R5": r5, "R6": r6, "R7": r7, "R8": r8, "R9": r9}
     for si, (a, b, li) in enumerate(scenes()):
         gs = [("SPIN BOUT U", False, .3), ("DRAKE", True, 1.1), ("21 SAVAGE", False, 1.6)] if li < 0 else groups_of(li)
-        builders[RECIPE[li]](si, a, b, li, gs)
+        if li in FOOT:
+            footage_scene(si, a, b, li, gs)
+        else:
+            builders[RECIPE[li]](si, a, b, li, gs)
     lyric_icons()
     cut_bursts()
     concepts()
