@@ -1,6 +1,6 @@
 # For Certain (PARTYNEXTDOOR): edit plan, first minute
 
-Status: analysis done, waiting for the owner's lyrics (0:00 to 1:02) before building.
+Status: lyrics in (owner, 2026-11-01); line timings estimated from the audio; scene plan below. Waiting on format and pictures.
 - The reference is reference/ref_edit.mp4 (960x720, 44.7 s, not in git).
 - The song is assets/audio/song.m4a (3:40, not in git). PARTYNEXTDOOR 4, track 9, April 2024.
 
@@ -108,3 +108,78 @@ Elements to build:
    - PARTYNEXTDOOR photos to cut out for the recurring character, or an illustrated silhouette.
    - Painterly backgrounds: generated (Higgsfield or Canva, which spends credits), drawn in code, or the owner's
      images.
+
+## 5. Line timings (estimated from the vocal band, +/-0.3 s)
+
+These come from the centre-channel energy in the 200-3500 Hz band; the intro was measured on its own scale. They
+get refined from syllable onsets at build time (exact with Scribe if the ElevenLabs account is topped up).
+
+| # | Time (s) | Line (owner's lyrics) | Section |
+|---|---|---|---|
+| 1 | 0.9-3.2 | We didn't vibe on the first night | Verse 1 (intro, no drums) |
+| 2 | 3.3-5.2 | But you're so enticin' | |
+| 3 | 5.2-7.4 | We didn't vibe then | |
+| 4 | 7.5-9.8 | But now I want you | |
+| 5 | 11.7-14.0 | So, I-I-I, pure desire | Pre-chorus |
+| 6 | 14.0-19.5 | So heart racin', entire body sayin', "Ah-ooh-ah" | (the "ah-ooh-ah" from about 16.5) |
+| 7 | 20.2-22.5 | I want you to make you my girlfriend (Yeah) | Chorus (the drop: first 808 at 20.63) |
+| 8 | 23.7-25.5 | Wait 'til the world ends | |
+| 9 | 25.8-28.2 | Badman deserves ya (Yeah) | |
+| 10 | 28.9-30.3 | Badman buy Birkins | |
+| 11 | 31.2-33.0 | For you, for certain | (808 roll at 32.9) |
+| 12 | 33.0-34.6 | Search, I been searchin' | |
+| 13 | 34.8-36.5 | Woah, woah, ah | (roll at 35.5) |
+| 14 | 36.5-41.1 | And I want you (x5) | |
+| 15 | 41.5-42.9 | Tried on the first night, I | Verse 2 |
+| 16 | 42.9-45.4 | Extended my hand and let go of my pride | (roll at 43.2) |
+| 17 | 45.5-47.5 | I got a bottle of '42 I could pour for you | (roll at 45.8) |
+| 18 | 47.7-50.5 | I'm not sayin' no tonight, yeah | |
+| 19 | 50.5-53.6 | While you dance, I'ma hold you tight | (roll at 53.9) |
+| 20 | 53.8-55.4 | You know how I want you | |
+| 21 | 55.5-58.6 | And sometimes, I feel like I need you | |
+| 22 | 59.2-61.7 | The pressure of love, the pressure of, woah, oh-oh | then the breakdown at about 62 s |
+
+## 6. Scenes: one object per line, portal zooms between them
+
+Colours: night blue and amber. Each scene names an object, its red keyword, its reaction on the keyword and the
+circle the camera dives through into the next scene.
+
+Intro, slow, with blur-dissolves and pushes:
+1. **First night.** A party seen through a door peephole. Keyword FIRST NIGHT. A crescent moon rises; dive through
+   the moon.
+2. **Enticin'.** A perfume bottle. Keyword ENTICIN'. Mist sprays on the word; dive through the bottle-cap ring.
+3. **Didn't vibe then.** A vinyl record. Keyword THEN. The needle scratches and the record stops dead; dive through
+   the label.
+4. **But now I want you.** A phone lights up with her name. Keyword NOW (big), then I WANT YOU. Dive through the
+   camera lens.
+
+Pre-chorus, the build:
+5. **Pure desire.** An eye; neon flames in the iris. The "I-I-I" types in three stutters with the vocal, then
+   keyword DESIRE. Dive through the iris (the reference's move).
+6. **Heart racin'.** An illustrated heart. It beats on each syllable, an ECG line races across, and AH-OOH-AH
+   echoes outward. A long accelerating push into the heart from about 17 s.
+
+Chorus, from the drop; a cut on every 808:
+7. **Girlfriend.** The portal bursts on the 808 at 20.63. A ring box snaps open as GIRLFRIEND slams (flash and
+   shake). Dive through the ring.
+8. **World ends.** The globe turns, and a sun flare blooms on WORLD ENDS. Dive through the sun.
+9. **Badman deserves ya.** The PND cut-out, with a crown and halo drawing on. Keyword BADMAN.
+10. **Birkins.** Plain designer bags (no brand marks) drop and bounce on the 808. Keyword BIRKINS.
+11. **For certain.** The title beat: the cover art as a print, and a stamp CERTAIN slams on the 32.9 roll.
+12. **Searchin'.** A magnifying glass sweeps over a search bar. Keyword SEARCH. Dive through the lens.
+13. **Woah, woah.** A swirling night sky, like the reference's star swirl. The 35.5 roll becomes a three-step
+    stutter push.
+14. **And I want you x5.** The phrase stamps five times on the beat, each new frame bigger, as an echo stack, with
+    couple polaroids piling up.
+
+Verse 2, the second chance:
+15. **Tried on the first night.** A call-back to scene 1: a VHS rewind back to FIRST NIGHT.
+16. **Let go of my pride.** A hand reaches out, and PRIDE shatters on the 43.2 roll (the reference's shatter beat).
+17. **'42.** A tequila bottle (an unbranded label reading '42) pours on the 45.8 roll. Keyword '42. Dive through the
+    glass rim from above.
+18. **Not sayin' no tonight.** A neon NO flickers off and TONIGHT lights up.
+19. **While you dance.** A disco ball and dancing silhouettes. Keyword HOLD YOU TIGHT; flash on the 53.9 roll.
+20. **You know how I want you.** The I WANT YOU type returns.
+21. **I need you.** Softer: rain on a window and a candle. Keyword NEED YOU.
+22. **The pressure of love.** A pressure gauge's needle climbs into the red. Keyword PRESSURE. At about 62 s the low
+    end falls away, then a slow push into the gauge, then the logo (dark violet, the song fading across it).
