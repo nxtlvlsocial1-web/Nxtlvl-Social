@@ -399,10 +399,10 @@ const worldGround = box(240, .2, 240, mat(0xE9DDC8), 0, -4.4, 0, { cast: false }
 // joints in the figure's own frame (y up, facing +z, feet at y = 0); arms and legs are solved with two-bone IK from
 // hand and foot targets; every limb is a capsule placed between two joints
 const QA = new THREE.Quaternion(), SA = new THREE.Vector3(), VA = new THREE.Vector3(), VB = new THREE.Vector3(), VC = new THREE.Vector3();
-function seg(mesh, a, b, baseLen) {
+function seg(mesh, a, b, baseLen, rx = 1, rz = 1) {
   VA.subVectors(b, a); const len = Math.max(1e-4, VA.length()); VA.divideScalar(len);
   QA.setFromUnitVectors(UP, VA);
-  mesh.matrix.compose(VB.addVectors(a, b).multiplyScalar(.5), QA, SA.set(1, len / baseLen, 1));
+  mesh.matrix.compose(VB.addVectors(a, b).multiplyScalar(.5), QA, SA.set(rx, len / baseLen, rz));
   mesh.matrixWorldNeedsUpdate = true;
 }
 function ik(s, h, l1, l2, pole, out) {
@@ -479,10 +479,12 @@ const HEADW = { you: new THREE.Vector3(), thief: new THREE.Vector3() }, HEADM = 
 // draw a figure: root matrix RM must be set; ex = face; hr = head rotation {pitch, yaw, roll}
 function drawPerson(P, ex, hr, key) {
   const pel = W_(J.pel), chest = W_(J.chest);
-  seg(P.torso, pel, chest, P.torsoLen); P.pelvis.matrix.compose(pel, QA.setFromRotationMatrix(TMP.extractRotation(RM)), SA.set(1.05, .85, .9));
+  P.pelvis.matrix.compose(pel, QA.setFromRotationMatrix(TMP.extractRotation(RM)), SA.set(1.05, .85, .9));
   // shoulders and hips sit on the torso's frame
   const right = new THREE.Vector3(1, 0, 0).transformDirection(RM), fwd = new THREE.Vector3(0, 0, 1).transformDirection(RM);
   const upT = VC.subVectors(chest, pel).normalize().clone();
+  // the torso runs from the hips up to the shoulder line (a little wider than deep), so the collar sits on it
+  seg(P.torso, pel.clone().addScaledVector(upT, -.05), chest.clone().addScaledVector(upT, .13), P.torsoLen, 1.15, .85);
   for (let k = 0; k < 2; k++) {
     const sx = k ? -1 : 1;
     const sh = chest.clone().addScaledVector(right, .2 * sx).addScaledVector(upT, .03);
@@ -500,9 +502,9 @@ function drawPerson(P, ex, hr, key) {
     P.sole[k].matrix.compose(foot.clone().addScaledVector(fwd, .06).addScaledVector(upT, -.045), sq, SA.set(1, 1, 1));
   }
   P.pocket.matrix.compose(pel.clone().lerp(chest, .3).addScaledVector(fwd, .16), QA.setFromRotationMatrix(TMP.extractRotation(RM)), SA.set(1, 1, 1));
-  const neckA = chest.clone().addScaledVector(upT, .12), headC = W_(J.head);
-  seg(P.neck, neckA, headC.clone().addScaledVector(upT, -.1), .14);
-  P.hoodRing.matrix.compose(neckA.clone().addScaledVector(fwd, -.03), QA.setFromUnitVectors(V.set(0, 0, 1), upT), SA.set(1.1, 1, 1));
+  const neckA = chest.clone().addScaledVector(upT, .06), headC = W_(J.head);
+  seg(P.neck, neckA, headC.clone().addScaledVector(upT, -.06), .14, 1.05, 1.05);
+  P.hoodRing.matrix.compose(chest.clone().addScaledVector(upT, .115).addScaledVector(fwd, -.02), QA.setFromUnitVectors(V.set(0, 0, 1), upT), SA.set(1.2, 1.05, 1));
   // head frame: the root's rotation, then the head's own pitch / yaw / roll
   HM.copy(RM).setPosition(0, 0, 0).premultiply(TMP.makeTranslation(headC.x, headC.y, headC.z)).multiply(TMP.makeRotationFromEuler(EU.set(hr.pitch, hr.yaw, hr.roll, "YXZ")));
   HEADW[key].copy(headC); HEADM[key].copy(HM);
