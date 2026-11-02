@@ -22,8 +22,8 @@ OUT = os.path.join(ROOT, "cover")
 T = json.load(open(os.path.join(ROOT, "build", "cues.json")))
 CLI = ["npx", "--yes", "hyperframes@0.8.203"]
 
-PLATES = {"day1": (round(T["cancels"] + .55, 2), {"cam": [-3.05, 1.95, 2.0], "look": [-4.2, 1.45, -1.7], "fov": 46}),
-          "day30": (round(T["go"] - .4, 2), {"cam": [7.2, 5.4, 6.2], "look": [2.6, 5.6, -2.4], "fov": 46})}
+PLATES = {"day1": (round(T["cancels"] + .45, 2), {"cam": [-3.45, 1.75, 1.3], "look": [-3.55, 1.45, -2.0], "fov": 50}),
+          "day30": (round(T["go"] - .4, 2), {"cam": [6.2, 8.0, 5.3], "look": [1.7, 8.4, -1.8], "fov": 46})}
 
 HEAD = """<!doctype html>
 <html lang="en" data-resolution="portrait">
@@ -57,7 +57,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #F1E9D
 .tag { position: absolute; padding: 12px 22px; border-radius: 24px; background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 6px 7px 0 #1E1B18;
   font-size: 28px; letter-spacing: 2px; display: flex; align-items: center; gap: 12px; white-space: nowrap; }
 .tag i { width: 22px; height: 22px; border-radius: 50%; border: 3px solid #1E1B18; }
-.tag.ok { left: 60px; top: 820px; color: #3FA372; border-color: #3FA372; box-shadow: 6px 7px 0 #3FA372; } .tag.ok i { background: #3FA372; border-color: #3FA372; }
+.tag.ok { left: 60px; top: 728px; color: #3FA372; border-color: #3FA372; box-shadow: 6px 7px 0 #3FA372; } .tag.ok i { background: #3FA372; border-color: #3FA372; }
 .tag.bad { right: 60px; top: 1250px; color: #D9483B; border-color: #D9483B; box-shadow: 6px 7px 0 #D9483B; } .tag.bad i { background: #D9483B; border-color: #D9483B; }
 .tl { position: absolute; left: 50px; right: 50px; top: 1468px; padding: 20px 20px 22px; border-radius: 30px; background: #FFFDF8;
   border: 3px solid #1E1B18; box-shadow: 8px 9px 0 #1E1B18; display: flex; justify-content: space-between; }
