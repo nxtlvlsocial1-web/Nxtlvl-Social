@@ -1,0 +1,69 @@
+{
+ "duration": 52.688,
+ "lines": [
+  {
+   "line": 1,
+   "take": "01_hook",
+   "speaker": "narrator",
+   "text": "Day one. An AI takes over your bank account. In the first hour, it cancels four subscriptions you forgot you had.",
+   "start": 0.1,
+   "end": 7.29
+  },
+  {
+   "line": 2,
+   "take": "02_phone",
+   "speaker": "narrator",
+   "text": "Day three. It calls your phone company, and argues with their AI. Your bill drops by forty percent.",
+   "start": 7.57,
+   "end": 13.735
+  },
+  {
+   "line": 3,
+   "take": "03_freeze",
+   "speaker": "narrator",
+   "text": "Day nine. Two A.M. You're about to buy shoes you don't need. It freezes your card.",
+   "start": 14.035,
+   "end": 18.945
+  },
+  {
+   "line": 4,
+   "take": "04_invest",
+   "speaker": "narrator",
+   "text": "Week two. It starts investing your coffee money, three dollars at a time. You're up three hundred.",
+   "start": 19.245,
+   "end": 24.775
+  },
+  {
+   "line": 5,
+   "take": "05_fraud",
+   "speaker": "narrator",
+   "text": "Day twenty-one. Someone in another country tries your card. It was already blocked, eleven seconds before they even tried.",
+   "start": 25.075,
+   "end": 32.505
+  },
+  {
+   "line": 6,
+   "take": "06_vault",
+   "speaker": "narrator",
+   "text": "Day thirty. It moves all of your savings. Every cent. In one go. And it won't tell you where.",
+   "start": 32.885,
+   "end": 39.215
+  },
+  {
+   "line": 7,
+   "take": "07_real",
+   "speaker": "narrator",
+   "text": "Sounds far-fetched? Visa's AI already checks every card payment in real time, and stopped forty billion dollars of fraud in a single year.",
+   "start": 39.665,
+   "end": 48.675
+  },
+  {
+   "line": 8,
+   "take": "08_close",
+   "speaker": "narrator",
+   "text": "So, how much would you trust it with? Follow for more what-ifs.",
+   "start": 49.025,
+   "end": 52.588
+  }
+ ]
+}

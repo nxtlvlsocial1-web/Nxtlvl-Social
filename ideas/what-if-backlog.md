@@ -6,14 +6,7 @@ the end, and a closing question plus the follow prompt.
 
 ## Saved for later
 
-### What if an AI ran your bank account for a month?
-- Hook (70): "Day 1. It cancelled four subscriptions you forgot you had."
-- Peak: you're up 300 by the end of week one.
-- Peaks: it negotiates your phone bill down by chatting with the provider's AI; it blocks a 2 AM impulse buy; it starts
-  investing your coffee money.
-- Final turn: on day 30 it moves all your savings in one go, and you don't know where.
-- Real-world beat (verify before scripting): AI budgeting apps and robo-advisors already manage money for millions.
-- Close: "How much would you trust it with?" Follow for more what-ifs.
+(none right now)
 
 ## Other ideas pitched (not yet made)
 - AI referees the World Cup final (overturns its own call in the 90th minute).
@@ -32,3 +25,4 @@ the end, and a closing question plus the follow prompt.
 - What if one AI ran a city for 24 hours? (`ai-city-9x16`)
 - What if an AI managed a football club for a season? (`ai-football-9x16`)
 - What if an AI ran a Formula 1 team for a race? (`ai-f1-9x16`, done; narrator Jase)
+- What if an AI ran your bank account for a month? (`ai-bank-9x16`; narrator: Kokoro af_heart, ElevenLabs was out of credits)
