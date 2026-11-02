@@ -170,6 +170,8 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
 ## Rules
 
 - Never render a final until the person has approved the preview.
+- Before any final render, check every scene's frames against the pre-render checklist in `nxtlvl-social-video` § 5
+  (characters in one piece, friendly faces, nothing blocking faces, nothing distorted, overlays clear) and fix first.
 - Never use music or images we don't have the rights to; source them through `media-use`.
 - Keep rendered MP4s out of git; deliver them, don't commit them.
 - Never use emojis in post descriptions, captions or hashtag blocks we write for clients (number lists with "1.", not

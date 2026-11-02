@@ -76,6 +76,21 @@ Nxtlvl Social's own kit is `brands/nxtlvl/` — fill it in before using it as th
 3. Render with `--quality draft` while iterating and `--quality delivery` for the final.
 4. Verify each file with `ffprobe`: size, duration, fps match § 2.
 
+**Before every final render, check the frames yourself** (snapshot every scene, wide shots and every close-up, at
+full size) and fix anything on this list first. The owner has had to point these out after a final; they must never
+reach one again:
+
+- **Characters in one piece:** head, neck, collar and torso connected with no gap or floating part in every pose
+  (standing, sitting, lying, arms up); limbs joined at shoulders and hips; nothing intersecting the furniture.
+- **Faces friendly, never creepy:** simple cartoon features (dark eyes with a highlight, small brows, small nose, a
+  small mouth or a filled "o"); no dark patches from hair or helmet shells across the face, no oversized rings or
+  bulges; expressions read clearly in the close-ups.
+- **Faces and subjects not blocked:** no prop, phone, halo, wing or other object between the camera and a face or the
+  action of the shot; no camera inside walls, furniture or crowds; the subject of each shot is actually in frame.
+- **Nothing distorted or missing:** no stretched or squashed parts, objects popping in or out (frustum culling), or
+  lights washing a face out; dark scenes still readable.
+- **Overlays clear of faces:** cards, tags and the HUD do not cover the face or the key action in a shot.
+
 ## 6. Delivery
 
 - File name: `<client>_<campaign>_<platform>_<aspect>_v<n>.mp4`, e.g.
