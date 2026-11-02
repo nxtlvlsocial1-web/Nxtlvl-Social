@@ -1,8 +1,8 @@
 # What-if reel backlog
 
 Saved concepts for future "what if" reels. Every one follows the house rules in `nxtlvl-social-video` § 7: the modern
-story arc (start at 70/100, a peak every 8-15 s, the biggest turn last), no keyword CTA, a verified real-world beat near
-the end, and a closing question plus the follow prompt.
+story arc (start at 70/100, a peak every 8-15 s, the biggest turn last), a verified real-world beat near the end, and a
+closing question plus the follow prompt; a keyword CTA only when there is a real resource to DM.
 
 ## Saved for later
 
@@ -26,3 +26,4 @@ the end, and a closing question plus the follow prompt.
 - What if an AI managed a football club for a season? (`ai-football-9x16`)
 - What if an AI ran a Formula 1 team for a race? (`ai-f1-9x16`, done; narrator Jase)
 - What if an AI ran your bank account for a month? (`ai-bank-9x16`; narrator: Kokoro af_heart, ElevenLabs was out of credits)
+- What if an AI clone of you answered every message? (`ai-clone-9x16`; voxel style from the owner's reference; narrator: Kokoro am_michael; keyword CTA CLONE, DMs the auto-DM tool)

@@ -103,9 +103,15 @@ reach one again:
 
 Every "what if" reel (a hypothetical scenario, e.g. "What if one AI ran a city for 24 hours?") follows these rules.
 
-**No keyword CTA.** No "comment X and I'll send you Y" in the script, on the end card or in the description; there is
-nothing to DM. End instead on the follow prompt (spoken "Follow for more what-ifs" and the `@handle` on the end card)
-and a question that invites comments ("Would you trust it?"). The description opens with the hook, not a CTA line.
+**No keyword CTA by default.** No "comment X and I'll send you Y" in the script, on the end card or in the
+description when there is nothing to DM. End instead on the follow prompt (spoken "Follow for more what-ifs" and the
+`@handle` on the end card) and a question that invites comments ("Would you trust it?"). The description then opens
+with the hook, not a CTA line.
+
+**Exception: a real resource to send.** When the scenario leads to a real tool, guide or template we actually DM
+(e.g. the AI clone reel sends the auto-DM tool), the reel may close on a keyword CTA instead: spoken "Follow
+@nxtlvlsocial.ai and comment KEYWORD", the keyword on the end card, and the description opening with the CTA keyword
+line as for any other reel. Set up the comment-to-DM automation for that keyword before the post goes live.
 
 **The modern story arc** (from the reference the owner shared): stack peaks, never one slow climb to a mid-video
 climax. Plan every script as a list of beats on this curve before writing a line:
