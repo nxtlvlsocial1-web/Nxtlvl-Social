@@ -1,0 +1,67 @@
+<template>
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-400.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #m-rays { position: absolute; left: 260px; top: -460px; width: 1400px; height: 1400px; border-radius: 50%; opacity: 0;
+      background: repeating-conic-gradient(from 0deg, rgba(216,187,255,.14) 0deg 3deg, rgba(216,187,255,0) 3deg 15deg);
+      -webkit-mask: radial-gradient(closest-side, #000 15%, transparent 100%); mask: radial-gradient(closest-side, #000 15%, transparent 100%); }
+    #m-glow { position: absolute; left: 560px; top: 30px; width: 800px; height: 620px; border-radius: 50%; opacity: 0;
+      background: radial-gradient(closest-side, rgba(169,92,255,.5), rgba(125,24,252,0)); }
+    #m-lock { position: absolute; left: 0; right: 0; top: 230px; height: 300px; }
+    #m-star { position: absolute; left: 380px; top: 0; width: 290px; height: 290px; }
+    #m-word { position: absolute; left: 700px; top: 92px; width: 640px; height: 147px; clip-path: inset(0 100% 0 0); }
+    #m-social { position: absolute; left: 1362px; top: 128px; font-family: "Instrument Sans", sans-serif; font-weight: 400; font-size: 104px; line-height: 1;
+      color: #D8BBFF; letter-spacing: -.01em; opacity: 0; }
+    #m-chips { position: absolute; left: 0; right: 0; top: 640px; display: flex; justify-content: center; gap: 22px; }
+    .m-chip { height: 76px; padding: 0 32px; border-radius: 38px; display: flex; align-items: center; gap: 12px; opacity: 0;
+      background: rgba(23,12,52,.85); border: 2px solid rgba(216,187,255,.35); font-family: "Instrument Sans", sans-serif; font-weight: 600;
+      font-size: 34px; color: #F5F2FF; }
+    .m-chip i { width: 12px; height: 12px; border-radius: 50%; background: #A95CFF; box-shadow: 0 0 12px #A95CFF; }
+    #m-flash { position: absolute; inset: 0; background: #F5F2FF; opacity: 0; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="s2-meet" data-width="1920" data-height="1080" data-duration="5.6">
+    <div id="m-wrap" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <div id="m-stage" class="clip" data-start="0" data-duration="5.6" data-track-index="0" style="position:absolute;inset:0"></div>
+      <div id="m-rays"></div>
+      <div id="m-glow"></div>
+      <div id="m-lock" data-layout-allow-overflow>
+        <img id="m-star" src="assets/logo/shooting-star.svg" alt="">
+        <img id="m-word" src="assets/logo/nxtlvl-wordmark.png" alt="nxtlvl">
+        <div id="m-social">social</div>
+      </div>
+      <div id="m-chips">
+        <div id="m-c0" class="m-chip"><i></i>Design</div>
+        <div id="m-c1" class="m-chip"><i></i>Reels</div>
+        <div id="m-c2" class="m-chip"><i></i>Automation</div>
+        <div id="m-c3" class="m-chip"><i></i>Websites</div>
+      </div>
+      <div id="m-flash" class="clip" data-start="0" data-duration="0.45" data-track-index="1"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      // the drop: a flash, the shooting star streaks in from bottom left
+      tl.fromTo("#m-flash", { opacity: 0.75 }, { opacity: 0, duration: 0.4, ease: "power2.out" }, 0);
+      tl.fromTo("#m-star", { x: -900, y: 700, scale: 0.4, filter: "blur(14px)" }, { x: 0, y: 0, scale: 1, filter: "blur(0px)", duration: 0.55, ease: "expo.out" }, 0);
+      tl.fromTo("#m-glow", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.7, ease: "power2.out" }, 0.3);
+      tl.fromTo("#m-rays", { opacity: 0, rotation: 0 }, { opacity: 1, rotation: 30, duration: 5.6, ease: "none" }, 0.2);
+      // "Meet Nxtlvl Social": the wordmark wipes on behind the star, social follows
+      tl.to("#m-word", { clipPath: "inset(0 0% 0 0)", duration: 0.5, ease: "power3.inOut" }, 0.45);
+      tl.fromTo("#m-social", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.85);
+      tl.fromTo("#m-lock", { scale: 1 }, { scale: 1.04, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.out" }, 0.55);
+      // the studio's four things pop on the beat
+      for (var i = 0; i < 4; i++) {
+        tl.fromTo("#m-c" + i, { opacity: 0, y: 30, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: "back.out(2)" }, 2.0 + i * 0.5);
+      }
+      tl.to("#m-lock", { y: -10, duration: 3.0, ease: "sine.inOut" }, 1.4);
+      // out: rush forward into the services
+      tl.to(["#m-lock", "#m-chips", "#m-glow"], { scale: 1.5, opacity: 0, filter: "blur(14px)", duration: 0.35, ease: "power3.in" }, 5.25);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["s2-meet"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,163 @@
+<template>
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-400.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Serif Italic"; src: url("assets/fonts/instrument-serif-italic-400.woff2") format("woff2"); }
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    .sv { position: absolute; inset: 0; }
+    .sv-idx { position: absolute; left: 150px; top: 230px; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 30px; letter-spacing: .28em; color: #A95CFF; }
+    .sv-title { position: absolute; left: 146px; top: 300px; width: 720px; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 108%; font-size: 92px;
+      line-height: 1.02; letter-spacing: -.035em; color: #F5F2FF; }
+    .sv-sub { position: absolute; left: 150px; top: 500px; width: 620px; font-family: "Instrument Sans", sans-serif; font-weight: 400; font-size: 36px; line-height: 1.35;
+      color: rgba(245,242,255,.72); }
+    .sv-title em { font-family: "Serif Italic", serif; font-style: normal; font-weight: 400; color: #D8BBFF; letter-spacing: 0; }
+    /* 01 design */
+    .d-card { position: absolute; left: 1330px; top: 200px; width: 340px; height: 425px; border-radius: 26px; overflow: hidden;
+      box-shadow: 0 30px 70px rgba(0,0,0,.55); transform-origin: 50% 100%; }
+    .d-card h4 { position: absolute; left: 28px; right: 28px; bottom: 34px; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 110%; font-size: 52px;
+      line-height: .98; letter-spacing: -.03em; color: #FFFFFF; margin: 0; }
+    .d-card p { position: absolute; left: 30px; top: 28px; margin: 0; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 22px; letter-spacing: .18em; color: rgba(255,255,255,.8); }
+    #d-c0 { background: radial-gradient(260px 220px at 70% 30%, #B57BFF, rgba(125,24,252,0)), linear-gradient(160deg, #7D18FC, #2A0670); }
+    #d-c1 { background: radial-gradient(260px 220px at 30% 25%, #FF9AC8, rgba(255,122,182,0)), linear-gradient(160deg, #C24CF5, #4B0FA8); }
+    #d-c2 { background: radial-gradient(240px 200px at 60% 30%, rgba(216,187,255,.6), rgba(216,187,255,0)), linear-gradient(160deg, #1E0F45, #05030C); border: 2px solid rgba(216,187,255,.35); }
+    #d-stamp { position: absolute; left: 1470px; top: 640px; height: 64px; padding: 0 26px; border-radius: 32px; display: flex; align-items: center; gap: 10px;
+      background: #3BE38F; color: #05030C; font-family: "Archivo", sans-serif; font-weight: 800; font-size: 28px; box-shadow: 0 12px 30px rgba(59,227,143,.35); opacity: 0; }
+    /* 02 reels */
+    #r-vidwrap { position: absolute; left: 1066px; top: 112px; width: 340px; height: 604px; border-radius: 34px; overflow: hidden; }
+    #r-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    #r-phone { position: absolute; left: 1054px; top: 100px; width: 364px; height: 628px; border-radius: 44px; border: 12px solid #120A26;
+      box-shadow: 0 0 0 2px rgba(216,187,255,.4), 0 30px 80px rgba(0,0,0,.6), 0 0 60px rgba(125,24,252,.35); }
+    #r-tl { position: absolute; left: 1470px; top: 250px; width: 330px; height: 300px; border-radius: 26px; background: rgba(23,12,52,.9); border: 2px solid rgba(216,187,255,.25); }
+    .r-trk { position: absolute; left: 24px; width: 282px; height: 52px; border-radius: 12px; }
+    #r-t0 { top: 40px; background: linear-gradient(90deg, #5E0FC4, #7D18FC); }
+    #r-t1 { top: 112px; background: linear-gradient(90deg, #7D18FC, #A95CFF); }
+    #r-t2 { top: 184px; background: linear-gradient(90deg, #2A1260, #3A1A80); }
+    .r-cut { position: absolute; top: 28px; width: 8px; height: 222px; margin-left: -4px; background: #120A26; transform-origin: 50% 50%; }
+    #r-head { position: absolute; left: 24px; top: 16px; width: 4px; height: 250px; background: #FFFFFF; box-shadow: 0 0 12px #D8BBFF; }
+    /* 03 automation */
+    #a-dm { position: absolute; left: 1080px; top: 120px; width: 620px; height: 600px; border-radius: 34px; background: rgba(18,10,40,.95);
+      border: 2px solid rgba(216,187,255,.28); box-shadow: 0 30px 80px rgba(0,0,0,.55); overflow: hidden; }
+    #a-top { position: absolute; left: 0; right: 0; top: 0; height: 96px; border-bottom: 1px solid rgba(216,187,255,.15); display: flex; align-items: center; gap: 18px; padding: 0 30px;
+      font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 30px; color: #F5F2FF; }
+    #a-top i { width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(135deg, #FF7AB6, #7D18FC); display: block; }
+    #a-time { position: absolute; right: 30px; top: 30px; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 28px; color: rgba(216,187,255,.8); }
+    .a-b { position: absolute; max-width: 430px; padding: 22px 28px; border-radius: 30px; font-family: "Instrument Sans", sans-serif; font-weight: 400; font-size: 32px; line-height: 1.3; opacity: 0; }
+    #a-in { left: 30px; top: 140px; background: #2A2145; color: #F5F2FF; border-bottom-left-radius: 8px; }
+    #a-dots { left: 30px; top: 300px; padding: 22px 26px; background: #2A2145; }
+    #a-dots i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #D8BBFF; margin: 0 4px; }
+    #a-out { right: 30px; top: 300px; background: linear-gradient(135deg, #7D18FC, #A95CFF); color: #FFFFFF; border-bottom-right-radius: 8px; }
+    #a-badge { position: absolute; left: 30px; bottom: 34px; height: 60px; padding: 0 24px; border-radius: 30px; display: flex; align-items: center; gap: 10px;
+      background: rgba(59,227,143,.14); border: 2px solid rgba(59,227,143,.6); color: #3BE38F; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 26px; opacity: 0; }
+    /* 04 websites */
+    #w-win { position: absolute; left: 960px; top: 150px; width: 860px; height: 580px; border-radius: 22px; overflow: hidden; background: #0A0618;
+      border: 2px solid rgba(216,187,255,.3); box-shadow: 0 30px 90px rgba(0,0,0,.6), 0 0 60px rgba(125,24,252,.3); }
+    #w-bar { position: absolute; left: 0; right: 0; top: 0; height: 46px; background: #140C2C; display: flex; align-items: center; gap: 10px; padding: 0 18px; }
+    #w-bar i { width: 13px; height: 13px; border-radius: 50%; background: #3A2F5C; display: block; }
+    #w-url { margin-left: 18px; height: 28px; padding: 0 16px; border-radius: 14px; background: #0A0618; display: flex; align-items: center;
+      font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 18px; color: rgba(245,242,255,.75); }
+    #w-shot { position: absolute; left: 0; top: 46px; width: 860px; height: 537px; background: url("assets/img/site-hero.png") center top / 860px 537px no-repeat; }
+    #w-cursor { position: absolute; left: 1600px; top: 760px; width: 46px; height: 46px; }
+    #w-ring { position: absolute; left: 1336px; top: 568px; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: 50%; border: 4px solid #FFFFFF; opacity: 0; }
+    #w-toast { position: absolute; left: 1420px; top: 96px; height: 92px; padding: 0 30px 0 22px; border-radius: 24px; display: flex; align-items: center; gap: 16px;
+      background: #F5F2FF; color: #05030C; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 30px; box-shadow: 0 20px 50px rgba(0,0,0,.5); opacity: 0; }
+    #w-toast i { width: 46px; height: 46px; border-radius: 12px; background: linear-gradient(135deg, #7D18FC, #A95CFF); display: block; }
+    #w-toast small { display: block; font-weight: 400; font-size: 22px; color: #4A4360; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="s3-services" data-width="1920" data-height="1080" data-duration="8.6">
+    <!-- 01 design -->
+    <div id="sv1" class="sv clip" data-start="0" data-duration="2.0" data-track-index="0" data-layout-allow-overflow>
+      <div id="sv1-i" class="sv-idx">01 · DESIGN</div>
+      <div id="sv1-t" class="sv-title">Social media <em>design</em></div>
+      <div id="d-c2" class="d-card" data-layout-allow-overlap><p>NOW OPEN</p><h4>Doors open at 9 ✦</h4></div>
+      <div id="d-c1" class="d-card" data-layout-allow-overlap><p>THIS WEEKEND</p><h4>Brunch is back</h4></div>
+      <div id="d-c0" class="d-card" data-layout-allow-overlap><p>NEW DROP</p><h4>The monsoon menu</h4></div>
+      <div id="d-stamp">✓ Designer-finished</div>
+    </div>
+    <!-- 02 reels: the video is timed on its own, outside the timed panel -->
+    <div id="sv2" class="sv clip" data-start="2.0" data-duration="2.0" data-track-index="1" data-layout-allow-overflow>
+      <div id="sv2-i" class="sv-idx">02 · REELS</div>
+      <div id="sv2-t" class="sv-title">Reel <em>editing</em></div>
+      <div id="r-tl"><div id="r-t0" class="r-trk"></div><div id="r-t1" class="r-trk"></div><div id="r-t2" class="r-trk"></div>
+        <div id="r-c0" class="r-cut" style="left:100px"></div><div id="r-c1" class="r-cut" style="left:170px"></div><div id="r-c2" class="r-cut" style="left:240px"></div>
+        <div id="r-head"></div></div>
+    </div>
+    <div id="r-vidwrap" data-layout-allow-overflow><video id="r-vid" class="clip" src="assets/video/edit.mp4" muted playsinline data-start="2.0" data-duration="2.0" data-track-index="2"></video></div>
+    <div id="r-phonehost" class="clip" data-start="2.0" data-duration="2.0" data-track-index="3" style="position:absolute;inset:0" data-layout-allow-overflow><div id="r-phone"></div></div>
+    <!-- 03 automation -->
+    <div id="sv3" class="sv clip" data-start="4.0" data-duration="2.25" data-track-index="4" data-layout-allow-overflow>
+      <div id="sv3-i" class="sv-idx">03 · AUTOMATION</div>
+      <div id="sv3-t" class="sv-title">Replies, <em>on autopilot</em></div>
+      <div id="a-dm">
+        <div id="a-top"><i></i>Brew &amp; Co. · Direct</div>
+        <div id="a-time">11:42 PM ☾</div>
+        <div id="a-in" class="a-b">Is the brunch menu up? 👀</div>
+        <div id="a-dots" class="a-b"><i></i><i></i><i></i></div>
+        <div id="a-out" class="a-b">Yes! Just sent it to your DMs ✦</div>
+        <div id="a-badge">⚡ Auto-reply · 3 sec</div>
+      </div>
+    </div>
+    <!-- 04 websites -->
+    <div id="sv4" class="sv clip" data-start="6.25" data-duration="2.35" data-track-index="5" data-layout-allow-overflow>
+      <div id="sv4-i" class="sv-idx">04 · WEBSITES</div>
+      <div id="sv4-t" class="sv-title">Websites that <em>convert</em></div>
+      <div id="w-win"><div id="w-bar"><i></i><i></i><i></i><div id="w-url">nxtlvlsocial.ai</div></div><div id="w-shot"></div></div>
+      <div id="w-ring"></div>
+      <svg id="w-cursor" viewBox="0 0 24 24"><path d="M3 2l7 19 2.6-7.8L21 10.6z" fill="#FFFFFF" stroke="#05030C" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      <div id="w-toast"><i></i><div>New enquiry ✦<small>Booked a free call · just now</small></div></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      function textIn(n, t) {
+        tl.fromTo("#sv" + n + "-i", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, t);
+        tl.fromTo("#sv" + n + "-t", { opacity: 0, y: 50, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.4, ease: "expo.out" }, t + 0.05);
+      }
+      function textOut(n, t) {
+        tl.to(["#sv" + n + "-i", "#sv" + n + "-t"], { opacity: 0, x: -60, duration: 0.18, ease: "power3.in" }, t);
+      }
+      // 01 design: the stack lands, fans out, gets the designer's stamp
+      textIn(1, 0);
+      tl.fromTo(["#d-c0", "#d-c1", "#d-c2"], { y: 500, rotation: 0, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "expo.out", stagger: 0.08 }, 0.05);
+      tl.to("#d-c2", { x: -360, rotation: -12, duration: 0.45, ease: "back.out(1.6)" }, 0.3);
+      tl.to("#d-c1", { x: -180, rotation: -5, duration: 0.45, ease: "back.out(1.6)" }, 0.45);
+      tl.to("#d-c0", { x: 40, rotation: 5, duration: 0.45, ease: "back.out(1.6)" }, 0.6);
+      tl.fromTo("#d-stamp", { opacity: 0, scale: 1.8, rotation: -10 }, { opacity: 1, scale: 1, rotation: -4, duration: 0.3, ease: "back.out(2.5)" }, 1.05);
+      textOut(1, 1.82);
+      tl.to(["#d-c0", "#d-c1", "#d-c2", "#d-stamp"], { x: "-=200", opacity: 0, duration: 0.18, ease: "power3.in" }, 1.82);
+      // 02 reels: the real edit plays in the phone, the timeline is cut on the beat
+      textIn(2, 2.0);
+      tl.fromTo(["#r-vidwrap", "#r-phone"], { y: 600, rotation: 6 }, { y: 0, rotation: 0, duration: 0.5, ease: "expo.out" }, 2.0);
+      tl.fromTo("#r-tl", { opacity: 0, x: 80 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 2.2);
+      tl.fromTo("#r-head", { x: 0 }, { x: 282, duration: 1.6, ease: "none" }, 2.25);
+      for (var c = 0; c < 3; c++) tl.fromTo("#r-c" + c, { scaleY: 0 }, { scaleY: 1, duration: 0.08, ease: "power3.out" }, 2.4 + c * 0.5);
+      textOut(2, 3.82);
+      tl.to(["#r-vidwrap", "#r-phone", "#r-tl"], { y: -700, duration: 0.2, ease: "power3.in" }, 3.8);
+      // 03 automation: a late-night DM gets answered by itself
+      textIn(3, 4.0);
+      tl.fromTo("#a-dm", { opacity: 0, scale: 0.85, y: 60 }, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: "expo.out" }, 4.0);
+      tl.fromTo("#a-in", { opacity: 0, y: 20, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: "back.out(2)" }, 4.25);
+      tl.fromTo("#a-dots", { opacity: 0 }, { opacity: 1, duration: 0.15 }, 4.6);
+      tl.fromTo("#a-dots i", { y: 0 }, { y: -8, duration: 0.15, yoyo: true, repeat: 3, stagger: 0.08, ease: "sine.inOut" }, 4.62);
+      tl.to("#a-dots", { opacity: 0, duration: 0.1 }, 5.1);
+      tl.fromTo("#a-out", { opacity: 0, y: 20, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: "back.out(2)" }, 5.15);
+      tl.fromTo("#a-badge", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, 5.4);
+      textOut(3, 6.07);
+      tl.to("#a-dm", { x: 900, opacity: 0, duration: 0.2, ease: "power3.in" }, 6.05);
+      // 04 websites: our own site, a visitor books a call, the enquiry arrives
+      textIn(4, 6.25);
+      tl.fromTo("#w-win", { opacity: 0, scale: 0.85, y: 80 }, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: "expo.out" }, 6.25);
+      tl.fromTo("#w-shot", { backgroundPosition: "center 40px" }, { backgroundPosition: "center 0px", duration: 0.8, ease: "power2.out" }, 6.3);
+      tl.fromTo("#w-cursor", { x: 0, y: 0, opacity: 0 }, { x: -264, y: -192, opacity: 1, duration: 0.55, ease: "power3.inOut" }, 6.45);
+      tl.to("#w-cursor", { scale: 0.85, duration: 0.06, yoyo: true, repeat: 1, ease: "power2.out" }, 7.0);
+      tl.fromTo("#w-ring", { opacity: 0.9, scale: 0.3 }, { opacity: 0, scale: 1.6, duration: 0.45, ease: "power2.out" }, 7.02);
+      tl.fromTo("#w-toast", { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: 0.35, ease: "back.out(2)" }, 7.25);
+      tl.to(["#w-win", "#w-toast", "#w-cursor"], { opacity: 0, scale: 0.9, duration: 0.2, ease: "power3.in" }, 8.4);
+      tl.to(["#sv4-i", "#sv4-t"], { opacity: 0, duration: 0.2 }, 8.4);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["s3-services"] = tl;
+    })();
+  </script>
+</template>
