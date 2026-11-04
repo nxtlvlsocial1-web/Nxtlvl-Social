@@ -27,3 +27,4 @@ closing question plus the follow prompt; a keyword CTA only when there is a real
 - What if an AI ran a Formula 1 team for a race? (`ai-f1-9x16`, done; narrator Jase)
 - What if an AI ran your bank account for a month? (`ai-bank-9x16`; narrator: Kokoro af_heart, ElevenLabs was out of credits)
 - What if an AI clone of you answered every message? (`ai-clone-9x16`; voxel style from the owner's reference; narrator: Kokoro am_michael; keyword CTA CLONE, DMs the auto-DM tool)
+- What if every DM turned into a sale on autopilot? (`ai-closer-9x16`; voxel street with THE CLOSER robot; narrator: Kokoro am_puck, voiced phrase by phrase with emotions; keyword CTA CLOSE, DMs the DM sales template for HeyDM)

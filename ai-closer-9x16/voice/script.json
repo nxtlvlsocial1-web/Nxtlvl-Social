@@ -1,0 +1,228 @@
+{
+ "voice": "Kokoro-82M am_puck (local, Apache-2.0), phrase by phrase with an emotion each",
+ "lines": [
+  [
+   "01_hook",
+   null,
+   [
+    [
+     "Three A.M.",
+     "hush",
+     0.35
+    ],
+    [
+     "Your phone won't stop buzzing.",
+     "tense",
+     0.3
+    ],
+    [
+     "Seven sales!",
+     "excite",
+     0.35
+    ],
+    [
+     "You haven't talked to a single buyer.",
+     "punch",
+     0
+    ]
+   ]
+  ],
+  [
+   "02_price",
+   null,
+   [
+    [
+     "Day one.",
+     "calm",
+     0.25
+    ],
+    [
+     "Someone comments price on your reel.",
+     "warm",
+     0.25
+    ],
+    [
+     "Before they can scroll away,",
+     "tense",
+     0.08
+    ],
+    [
+     "your AI closer is already in their DMs.",
+     "smile",
+     0
+    ]
+   ]
+  ],
+  [
+   "03_objection",
+   null,
+   [
+    [
+     "Day four.",
+     "calm",
+     0.25
+    ],
+    [
+     "A buyer says, it's too expensive.",
+     "warm",
+     0.3
+    ],
+    [
+     "The AI doesn't argue.",
+     "punch",
+     0.25
+    ],
+    [
+     "It sends one story, from a student just like her.",
+     "warm",
+     0.3
+    ],
+    [
+     "She buys in nine minutes!",
+     "excite",
+     0
+    ]
+   ]
+  ],
+  [
+   "04_followup",
+   null,
+   [
+    [
+     "Day ten.",
+     "calm",
+     0.25
+    ],
+    [
+     "It sees who clicked the link, and didn't buy.",
+     "tense",
+     0.3
+    ],
+    [
+     "One day later, it follows up.",
+     "warm",
+     0.3
+    ],
+    [
+     "Half of them come back!",
+     "excite",
+     0
+    ]
+   ]
+  ],
+  [
+   "05_no",
+   null,
+   [
+    [
+     "Day eighteen.",
+     "calm",
+     0.25
+    ],
+    [
+     "Midnight.",
+     "hush",
+     0.3
+    ],
+    [
+     "A stranger is ready to pay.",
+     "tense",
+     0.35
+    ],
+    [
+     "And your AI says...",
+     "tense",
+     0.55
+    ],
+    [
+     "... no.",
+     "punch",
+     0.4
+    ],
+    [
+     "This isn't the right fit for you.",
+     "hush",
+     0
+    ]
+   ]
+  ],
+  [
+   "06_return",
+   null,
+   [
+    [
+     "Day thirty.",
+     "calm",
+     0.25
+    ],
+    [
+     "Two hundred and twelve sales!",
+     "excite",
+     0.25
+    ],
+    [
+     "Zero sales calls.",
+     "punch",
+     0.35
+    ],
+    [
+     "And the woman it turned away?",
+     "tense",
+     0.4
+    ],
+    [
+     "She came back, with four friends!",
+     "excite",
+     0
+    ]
+   ]
+  ],
+  [
+   "07_real",
+   null,
+   [
+    [
+     "Sounds far-fetched?",
+     "smile",
+     0.3
+    ],
+    [
+     "A billion people already message a business on Meta's apps,",
+     "warm",
+     0.08
+    ],
+    [
+     "every single week.",
+     "punch",
+     0
+    ]
+   ]
+  ],
+  [
+   "08_cta",
+   "Want my DM sales setup? Follow @nxtlvlsocial.ai ~ ~ and comment CLOSE. I'll send you the template.",
+   [
+    [
+     "Want my DM sales setup?",
+     "smile",
+     0.3
+    ],
+    [
+     "Follow next level social,",
+     "warm",
+     0.08
+    ],
+    [
+     "and comment close.",
+     "punch",
+     0.25
+    ],
+    [
+     "I'll send you the template.",
+     "smile",
+     0
+    ]
+   ]
+  ]
+ ]
+}
