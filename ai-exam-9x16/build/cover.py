@@ -22,7 +22,7 @@ OUT = os.path.join(ROOT, "cover")
 T = json.load(open(os.path.join(ROOT, "build", "cues.json")))
 CLI = ["npx", "--yes", "hyperframes@0.8.203"]
 
-PLATES = {"panic": (9.9, {"cam": [.62, 1.45, 2.9], "look": [.6, 1.22, -.25], "fov": 40, "ap": .3}),
+PLATES = {"panic": (3.4, {"cam": [.36, 1.45, 2.9], "look": [.34, 1.22, -.25], "fov": 40, "ap": .3}),
           "win": (40.6, {"cam": [-.42, 1.45, 3.0], "look": [-.42, 1.3, -.5], "fov": 40, "ap": .3})}
 
 HEAD = """<!doctype html>
@@ -102,7 +102,7 @@ FINAL = HEAD + """    <div id="root" data-composition-id="cover" data-start="0" 
         <div class="top mono"><span class="pill"><i></i>NXTLVLSOCIAL.AI</span><span class="pill w">AI STUDY HACK</span></div>
         <div class="card"><b>300 pages. Exam on Monday.</b><em>my AI owl got me to 91%</em></div>
         <div class="tag bad mono" style="left:60px;right:auto;top:728px"><i></i>PRACTICE TEST &middot; 62%</div>
-        <div class="tag ok mono" style="right:60px;left:auto;top:1250px"><i></i>AFTER STEP 4 &middot; 91%</div>
+        <div class="tag ok mono" style="right:60px;left:auto;top:1352px"><i></i>AFTER STEP 4 &middot; 91%</div>
         <div class="tl">
           <div class="st b"><i></i><span class="h mono">STEP 1</span><span class="d">upload<br />your notes</span></div>
           <div class="st y"><i></i><span class="h mono">STEP 2</span><span class="d">a 20-min<br />podcast</span></div>
