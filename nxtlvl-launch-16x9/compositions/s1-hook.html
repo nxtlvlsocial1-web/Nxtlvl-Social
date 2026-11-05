@@ -2,59 +2,51 @@
   <style>
     @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
     @font-face { font-family: "Serif Italic"; src: url("assets/fonts/instrument-serif-italic-400.woff2") format("woff2"); }
-    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
     #root { position: absolute; inset: 0; overflow: hidden; }
-    #k-wall { position: absolute; left: 40px; top: 0; width: 1840px; height: 2400px; }
-    .k-card { position: absolute; width: 280px; height: 350px; border-radius: 22px; background: #17132A; border: 1px solid rgba(216,187,255,.1); overflow: hidden; }
-    .k-card i { position: absolute; left: 0; right: 0; top: 0; height: 220px; background: linear-gradient(160deg, #2A2540, #1F1B33); }
-    .k-card b { position: absolute; left: 22px; top: 244px; width: 190px; height: 16px; border-radius: 8px; background: #2E2945; }
-    .k-card u { position: absolute; left: 22px; top: 274px; width: 130px; height: 14px; border-radius: 7px; background: #262139; }
-    .k-card s { position: absolute; left: 22px; bottom: 24px; width: 26px; height: 22px; border-radius: 6px 6px 13px 13px; background: #3A3452; text-decoration: none; }
-    .k-card q { position: absolute; left: 58px; bottom: 30px; width: 18px; height: 10px; border-radius: 5px; background: #3A3452; }
-    #k-scrim { position: absolute; inset: 0; background: radial-gradient(900px 420px at 50% 46%, rgba(5,3,12,.92), rgba(5,3,12,.55) 70%, rgba(5,3,12,.25)); }
-    .k-head { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; }
-    #k-a { top: 400px; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 108%; font-size: 128px; line-height: 1; letter-spacing: -.035em; color: #F5F2FF; }
-    #k-b { top: 330px; opacity: 0; }
-    #k-b .x { display: block; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 116%; font-size: 124px; line-height: 1.05; letter-spacing: -.035em; color: #F5F2FF; }
-    #k-b .y { display: block; font-family: "Serif Italic", serif; font-size: 170px; line-height: 1.05; color: #D8BBFF; }
-    #k-views { position: absolute; left: 50%; top: 760px; height: 72px; padding: 0 30px; border-radius: 36px; display: flex; align-items: center; gap: 14px;
-      background: rgba(23,19,42,.92); border: 2px solid rgba(216,187,255,.28); font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 34px;
-      color: #F5F2FF; font-variant-numeric: tabular-nums; opacity: 0; }
-    #k-views svg { width: 36px; height: 36px; }
+    .h-part { position: absolute; inset: 0; overflow: hidden; }
+    .h-big { position: absolute; left: 0; right: 0; text-align: center; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 125%;
+      font-size: 380px; line-height: .9; letter-spacing: -.05em; white-space: nowrap; }
+    .h-ser { position: absolute; left: 0; right: 0; text-align: center; font-family: "Serif Italic", serif; font-size: 190px; line-height: 1; white-space: nowrap; }
+    .h-row { position: absolute; left: -400px; white-space: nowrap; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 125%; font-size: 230px;
+      line-height: 1; letter-spacing: -.04em; color: transparent; -webkit-text-stroke: 3px rgba(245,242,255,.55); }
+    #h-r1 { color: #7D18FC; -webkit-text-stroke: 0; }
   </style>
   <script src="assets/vendor/gsap.min.js"></script>
   <div id="root" data-composition-id="s1-hook" data-width="1920" data-height="1080" data-duration="4.0">
-    <div id="k-wrap" class="clip" data-start="0" data-duration="4.0" data-track-index="0" style="position:absolute;inset:0" data-layout-allow-overflow>
-      <div id="k-wall" data-layout-allow-overflow></div>
-      <div id="k-scrim"></div>
-      <div id="k-a" class="k-head">EVERYONE'S POSTING.</div>
-      <div id="k-b" class="k-head"><span class="x">ALMOST NO ONE</span><span class="y">gets seen.</span></div>
-      <div id="k-views"><svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="#D8BBFF" stroke-width="2"/><circle cx="12" cy="12" r="3.2" fill="#D8BBFF"/></svg><span id="k-n">0 views</span></div>
+    <!-- A: stop posting (mist) -->
+    <div id="h-a" class="h-part clip" data-start="0" data-duration="1.45" data-track-index="0" style="background:#F5F2FF">
+      <div id="h-stop" class="h-big" style="top:250px;color:#0B0816">STOP</div>
+      <div id="h-posting" class="h-ser" style="top:610px;color:#7D18FC">posting.</div>
+    </div>
+    <!-- B: start getting seen (violet) -->
+    <div id="h-b" class="h-part clip" data-start="1.45" data-duration="1.15" data-track-index="1" style="background:#7D18FC">
+      <div id="h-start" class="h-big" style="top:250px;color:#FFFFFF">START</div>
+      <div id="h-seen" class="h-ser" style="top:610px;color:#F5F2FF">getting seen.</div>
+    </div>
+    <!-- C: seen, on repeat (ink), the riser builds -->
+    <div id="h-c" class="h-part clip" data-start="2.6" data-duration="1.4" data-track-index="2" style="background:#05030C" data-layout-allow-overflow>
+      <div id="h-rows" style="position:absolute;inset:0" data-layout-allow-overflow>
+        <div id="h-r0" class="h-row" style="top:70px">SEEN ✦ SEEN ✦ SEEN ✦ SEEN ✦</div>
+        <div id="h-r1" class="h-row" style="top:420px">SEEN ✦ SEEN ✦ SEEN ✦ SEEN ✦</div>
+        <div id="h-r2" class="h-row" style="top:770px">SEEN ✦ SEEN ✦ SEEN ✦ SEEN ✦</div>
+      </div>
     </div>
   </div>
   <script>
     (function () {
-      var wall = document.querySelector("#k-wall"), html = "";
-      for (var c = 0; c < 6; c++) for (var r = 0; r < 7; r++)
-        html += '<div class="k-card" style="left:' + (c * 310) + 'px;top:' + (r * 380 + (c % 2) * 190) + 'px"><i></i><b></b><u></u><s></s><q></q></div>';
-      wall.innerHTML = html;
-
       var tl = gsap.timeline({ paused: true });
-      // the feed flies past: everyone's posting
-      tl.fromTo("#k-wall", { y: 0 }, { y: -1000, duration: 1.7, ease: "power1.in" }, 0);
-      tl.to("#k-wall", { y: -1250, duration: 2.3, ease: "power3.out" }, 1.7);
-      tl.fromTo("#k-a", { scale: 1.25, opacity: 0, filter: "blur(10px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.3, ease: "expo.out" }, 0.0);
-      // almost no one gets seen: the feed dies, the views stall
-      tl.to("#k-a", { opacity: 0, y: -40, filter: "blur(10px)", duration: 0.18, ease: "power3.in" }, 1.45);
-      tl.to("#k-wall", { opacity: 0.28, filter: "grayscale(1)", duration: 0.5, ease: "power2.out" }, 1.6);
-      tl.fromTo("#k-b", { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.3, ease: "expo.out" }, 1.6);
-      tl.fromTo("#k-views", { opacity: 0, y: 20, xPercent: -50 }, { opacity: 1, y: 0, xPercent: -50, duration: 0.3, ease: "power3.out" }, 1.9);
-      var v = { n: 0 };
-      tl.fromTo(v, { n: 0 }, { n: 12, duration: 1.2, ease: "power4.out",
-        onUpdate: function () { document.querySelector("#k-n").textContent = Math.round(v.n) + " views"; } }, 2.0);
-      // into the dark, ready for the drop
-      tl.to(["#k-b", "#k-views"], { opacity: 0, scale: 0.9, filter: "blur(8px)", duration: 0.3, ease: "power3.in" }, 3.55);
-      tl.to("#k-wall", { opacity: 0, duration: 0.4, ease: "power2.in" }, 3.5);
+      // frame 0 already reads STOP; it slams and settles
+      tl.fromTo("#h-stop", { scale: 1.18 }, { scale: 1, duration: 0.35, ease: "expo.out" }, 0);
+      tl.fromTo("#h-posting", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.3, ease: "expo.out" }, 0.62);
+      tl.fromTo("#h-stop", { x: 0 }, { x: -18, duration: 0.05, yoyo: true, repeat: 3, ease: "none", immediateRender: false }, 0.9);
+      // hard cut on the beat to violet
+      tl.fromTo("#h-start", { scale: 0.82, y: 40 }, { scale: 1, y: 0, duration: 0.3, ease: "back.out(1.8)" }, 1.45);
+      tl.fromTo("#h-seen", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.3, ease: "expo.out" }, 1.85);
+      // hard cut to ink: SEEN on repeat, rows drift in opposite directions and grow with the riser
+      tl.fromTo("#h-r0", { x: 0 }, { x: -520, duration: 1.4, ease: "none" }, 2.6);
+      tl.fromTo("#h-r1", { x: -560 }, { x: 0, duration: 1.4, ease: "none" }, 2.6);
+      tl.fromTo("#h-r2", { x: 0 }, { x: -520, duration: 1.4, ease: "none" }, 2.6);
+      tl.fromTo("#h-rows", { scale: 1, rotation: -4 }, { scale: 1.35, rotation: 0, duration: 1.4, ease: "power2.in" }, 2.6);
       window.__timelines = window.__timelines || {};
       window.__timelines["s1-hook"] = tl;
     })();
