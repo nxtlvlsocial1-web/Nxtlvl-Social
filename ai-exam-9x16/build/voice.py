@@ -2,7 +2,7 @@
 
 python3 build/voice.py      (from the project root; needs kokoro-onnx, numpy, soundfile, ffmpeg)
 
-Placeholder voices: Kokoro-82M (Apache-2.0, local); the final voices come from ElevenLabs (voice/el/<take>.wav,
+Placeholder voices: Kokoro-82M (Apache-2.0, local); the final voices come from ElevenLabs (voice/el/<take>.wav or voice/el/mp3/<take>.mp3,
 one take per line, which replace the Kokoro phrases when present). Every phrase in
 voice/script.json carries an emotion. The emotion sets the speaking rate (Kokoro's speed), a small pitch move (about a
 semitone, by playback rate, with Kokoro slowed to match so there are no artifacts) and the level, and the phrase is followed by its own pause: hushed and tense phrases are
@@ -55,6 +55,17 @@ def fade(x, thr=-52):
     return y
 
 
+def level(x, target=-20.0):
+    """Bring a take's speech (frames within 30 dB of its peak) to one RMS, so the two voices sit at the same level."""
+    hop = SR // 100
+    n = len(x) // hop
+    fr = x[: n * hop].reshape(n, hop)
+    db = 20 * np.log10(np.sqrt(np.mean(fr ** 2, axis=1)) + 1e-9)
+    act = fr[db > db.max() - 30]
+    rms = 20 * np.log10(np.sqrt(np.mean(act ** 2)) + 1e-9)
+    return x * 10 ** ((target - rms) / 20)
+
+
 def split_phrases(a, n):
     """[(start, end)] in seconds for n phrases of a take: the n-1 longest pauses inside the speech split it, in order."""
     hop = SR // 100
@@ -89,10 +100,10 @@ def main():
     for i, (take, spk, disp, phrases) in enumerate(script):
         shown = disp.split() if disp else None
         wi, t0 = 0, t
-        elp = os.path.join(V, "el", f"{take}.wav")
-        if os.path.exists(elp):                     # an ElevenLabs take for the whole line
+        elp = next((q for q in (os.path.join(V, "el", f"{take}.wav"), os.path.join(V, "el", "mp3", f"{take}.mp3")) if os.path.exists(q)), None)
+        if elp:                     # an ElevenLabs take for the whole line
             raw = subprocess.run(["ffmpeg", "-v", "error", "-i", elp, "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
-            a = fade(np.frombuffer(raw, np.float32).astype(np.float64))
+            a = level(fade(np.frombuffer(raw, np.float32).astype(np.float64)))
             d = len(a) / SR
             spans = split_phrases(a, len(phrases))
             for (text, emo, pause), (p0, p1) in zip(phrases, spans):
