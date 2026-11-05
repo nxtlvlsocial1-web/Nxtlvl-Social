@@ -1,1 +1,16 @@
-{"flow_id":"KkjV8FYWrfX2KURe9Ytd","model":"eleven_v3","done":{"01_you":{"generation_id":"XKaNkUVUZuB3nJ8CPj7l","session_id":"LJ0jmjyQVpndYjQjWxDK","duration":2.48}}}
+{
+ "flow_id": "KkjV8FYWrfX2KURe9Ytd",
+ "model": "eleven_v3",
+ "done": {
+  "01_you": {
+   "generation_id": "XKaNkUVUZuB3nJ8CPj7l",
+   "session_id": "LJ0jmjyQVpndYjQjWxDK",
+   "duration": 2.48
+  },
+  "02_owl": {
+   "generation_id": "RAozAjRyYsWjG8Cw8v8r",
+   "session_id": "qEUW5uBvny3h555TVBVO",
+   "duration": 0.88
+  }
+ }
+}
