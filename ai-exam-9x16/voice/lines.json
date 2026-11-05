@@ -1,0 +1,149 @@
+{
+ "duration": 46.13,
+ "lines": [
+  {
+   "line": 1,
+   "take": "01_you",
+   "speaker": "you",
+   "text": "Hoot. My exam is Monday.",
+   "start": 0.12,
+   "end": 1.85
+  },
+  {
+   "line": 2,
+   "take": "02_owl",
+   "speaker": "owl",
+   "text": "And?",
+   "start": 2.13,
+   "end": 2.775
+  },
+  {
+   "line": 3,
+   "take": "03_you",
+   "speaker": "you",
+   "text": "And I have three hundred pages of notes!",
+   "start": 3.055,
+   "end": 5.235
+  },
+  {
+   "line": 4,
+   "take": "04_owl",
+   "speaker": "owl",
+   "text": "Give them to me.",
+   "start": 5.515,
+   "end": 6.565
+  },
+  {
+   "line": 5,
+   "take": "05_you",
+   "speaker": "you",
+   "text": "All of them?",
+   "start": 6.845,
+   "end": 7.52
+  },
+  {
+   "line": 6,
+   "take": "06_owl",
+   "speaker": "owl",
+   "text": "Step one. NotebookLM. It's free, from Google. Drop everything in.",
+   "start": 7.8,
+   "end": 12.26
+  },
+  {
+   "line": 7,
+   "take": "07_owl",
+   "speaker": "owl",
+   "text": "Step two. I turned your notes into a podcast.",
+   "start": 12.54,
+   "end": 15.085
+  },
+  {
+   "line": 8,
+   "take": "08_you",
+   "speaker": "you",
+   "text": "A podcast? Of my notes?!",
+   "start": 15.365,
+   "end": 17.085
+  },
+  {
+   "line": 9,
+   "take": "09_owl",
+   "speaker": "owl",
+   "text": "Twenty minutes. Listen on the bus.",
+   "start": 17.365,
+   "end": 19.16
+  },
+  {
+   "line": 10,
+   "take": "10_owl",
+   "speaker": "owl",
+   "text": "Step three. Fifty flashcards, and a practice test.",
+   "start": 19.44,
+   "end": 22.31
+  },
+  {
+   "line": 11,
+   "take": "11_you",
+   "speaker": "you",
+   "text": "Sixty-two percent...",
+   "start": 22.59,
+   "end": 23.92
+  },
+  {
+   "line": 12,
+   "take": "12_owl",
+   "speaker": "owl",
+   "text": "Step four. Your weak spots. Chapter seven, again.",
+   "start": 24.2,
+   "end": 27.05
+  },
+  {
+   "line": 13,
+   "take": "13_you",
+   "speaker": "you",
+   "text": "Ninety-one! Ninety-one percent!",
+   "start": 27.33,
+   "end": 29.19
+  },
+  {
+   "line": 14,
+   "take": "14_you",
+   "speaker": "you",
+   "text": "Okay. Last thing. You're small. You fit in my bag. Take the exam for me?",
+   "start": 29.47,
+   "end": 33.82
+  },
+  {
+   "line": 15,
+   "take": "15_owl",
+   "speaker": "owl",
+   "text": "No.",
+   "start": 34.1,
+   "end": 34.79
+  },
+  {
+   "line": 16,
+   "take": "16_you",
+   "speaker": "you",
+   "text": "Please?",
+   "start": 35.07,
+   "end": 35.785
+  },
+  {
+   "line": 17,
+   "take": "17_owl",
+   "speaker": "owl",
+   "text": "You don't need me anymore. You know every answer.",
+   "start": 36.065,
+   "end": 38.93
+  },
+  {
+   "line": 18,
+   "take": "18_owl",
+   "speaker": "owl",
+   "text": "Send this to a friend with an exam this week. Follow @nxtlvlsocial.ai and comment EXAM. I'll send you the setup.",
+   "start": 39.21,
+   "end": 45.98
+  }
+ ]
+}

@@ -1,0 +1,23 @@
+{
+"voice": "two speakers: YOU (the student) and HOOT (the AI owl); phrase by phrase with an emotion each",
+"lines": [
+ ["01_you", "you", null, [["Hoot. My exam is Monday.", "panic", 0]]],
+ ["02_owl", "owl", null, [["And?", "dry", 0]]],
+ ["03_you", "you", null, [["And I have three hundred pages of notes!", "whine", 0]]],
+ ["04_owl", "owl", null, [["Give them to me.", "calm", 0]]],
+ ["05_you", "you", null, [["All of them?", "surprised", 0]]],
+ ["06_owl", "owl", null, [["Step one. NotebookLM.", "calm", 0.25], ["It's free, from Google. Drop everything in.", "warm", 0]]],
+ ["07_owl", "owl", null, [["Step two. I turned your notes into a podcast.", "proud", 0]]],
+ ["08_you", "you", null, [["A podcast? Of my notes?!", "amazed", 0]]],
+ ["09_owl", "owl", null, [["Twenty minutes. Listen on the bus.", "warm", 0]]],
+ ["10_owl", "owl", null, [["Step three. Fifty flashcards, and a practice test.", "calm", 0]]],
+ ["11_you", "you", null, [["Sixty-two percent...", "sad", 0]]],
+ ["12_owl", "owl", null, [["Step four. Your weak spots. Chapter seven, again.", "calm", 0]]],
+ ["13_you", "you", null, [["Ninety-one! Ninety-one percent!", "excite", 0]]],
+ ["14_you", "you", null, [["Okay. Last thing. You're small. You fit in my bag.", "scheme", 0.2], ["Take the exam for me?", "scheme", 0]]],
+ ["15_owl", "owl", null, [["No.", "dry", 0]]],
+ ["16_you", "you", null, [["Please?", "whine", 0]]],
+ ["17_owl", "owl", null, [["You don't need me anymore.", "warm", 0.25], ["You know every answer.", "warm", 0]]],
+ ["18_owl", "owl", "Send this to a friend with an exam this week. Follow @nxtlvlsocial.ai ~ ~ and comment EXAM. I'll send you the setup.", [["Send this to a friend with an exam this week.", "warm", 0.3], ["Follow next level social,", "warm", 0.08], ["and comment exam.", "punch", 0.2], ["I'll send you the setup.", "smile", 0]]]
+]
+}

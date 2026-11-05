@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>The Exam Setup</title>
+<style>
+@font-face { font-family: "Manrope"; font-weight: 200 800; src: url("manrope.ttf"); }
+@font-face { font-family: "Serif"; font-style: italic; src: url("InstrumentSerif-Italic.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 700; src: url("jbmono-bold.ttf"); }
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: "Manrope", sans-serif; color: #1E1B18; background: #F1E9DC; }
+.page { width: 210mm; min-height: 297mm; padding: 16mm 15mm 14mm; page-break-after: always; position: relative; background: #F1E9DC; }
+.page:last-child { page-break-after: auto; }
+.mono { font-family: "JBMono", monospace; font-weight: 700; }
+.top { display: flex; justify-content: space-between; align-items: center; font-size: 9.5pt; letter-spacing: 2.5px; margin-bottom: 9mm; }
+.top .b { display: flex; align-items: center; gap: 8px; } .top .b img { width: 18px; height: 18px; }
+.top .r { color: #5446B8; }
+h1 { font: 800 38pt/1.02 "Manrope"; letter-spacing: -1.5px; }
+h1 em { display: block; font: italic 30pt/1.1 "Serif"; color: #6B5BD6; margin-top: 3mm; letter-spacing: 0; }
+.lead { font: 600 12pt/1.5 "Manrope"; color: #4a453f; margin: 6mm 0 7mm; max-width: 165mm; }
+.how { background: #FFFDF8; border: 2px solid #1E1B18; border-radius: 16px; box-shadow: 5px 6px 0 #1E1B18; padding: 6mm 7mm; }
+.how h3 { font: 800 12pt "Manrope"; margin-bottom: 3mm; }
+.how ol { padding-left: 5mm; font: 600 10.5pt/1.6 "Manrope"; color: #3a3530; }
+.flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 7mm 0; }
+.flow div { background: #FFFDF8; border: 2px solid #1E1B18; border-radius: 12px; padding: 3.5mm; font: 700 9.5pt/1.3 "Manrope"; text-align: center; }
+.flow b { display: block; font: 700 8pt "JBMono"; letter-spacing: 1.5px; color: #6B5BD6; margin-bottom: 1.5mm; }
+.sec { margin-bottom: 6mm; break-inside: avoid; }
+.sec h2 { display: flex; align-items: baseline; gap: 4mm; font: 800 17pt "Manrope"; letter-spacing: -.5px; margin-bottom: 1.5mm; }
+.sec h2 .n { font: 700 10pt "JBMono"; color: #fff; background: #6B5BD6; border-radius: 8px; padding: 1.5mm 2.5mm; letter-spacing: 1px; }
+.sec .when { font: 600 10pt/1.45 "Manrope"; color: #5b5650; margin-bottom: 3mm; }
+.dm { background: #FFFDF8; border: 2px solid #1E1B18; border-radius: 14px; box-shadow: 4px 5px 0 #1E1B18; padding: 4mm 5mm; margin-bottom: 3mm; break-inside: avoid; }
+.dm .lab { font: 700 8pt "JBMono"; letter-spacing: 1.5px; color: #5446B8; margin-bottom: 1.5mm; }
+.dm p { font: 600 11pt/1.5 "Manrope"; }
+.dm p + p { margin-top: 2mm; }
+.f { background: #E4DEFA; border-radius: 5px; padding: 0 1.5mm; font-weight: 800; color: #5446B8; }
+.btn { display: inline-block; margin-top: 2.5mm; font: 700 9pt "JBMono"; letter-spacing: 1px; border: 2px solid #1E1B18; border-radius: 20px; padding: 1mm 4mm; background: #6B5BD6; color: #fff; }
+.btn.o { background: #FFFDF8; color: #1E1B18; }
+.tip { font: 600 9.5pt/1.45 "Manrope"; color: #3FA372; margin-top: 1mm; }
+.tip b { font: 700 8pt "JBMono"; letter-spacing: 1.5px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+table { width: 100%; border-collapse: collapse; background: #FFFDF8; border: 2px solid #1E1B18; border-radius: 14px; overflow: hidden; font: 600 10pt "Manrope"; }
+th, td { text-align: left; padding: 2.6mm 3.5mm; border-bottom: 1px solid #E4D9C7; }
+th { font: 700 8pt "JBMono"; letter-spacing: 1.5px; color: #5446B8; background: #FBF3EA; }
+.foot { position: absolute; left: 15mm; right: 15mm; bottom: 8mm; display: flex; justify-content: space-between; font: 700 8pt "JBMono"; letter-spacing: 1.5px; color: #8a847c; }
+.cta { margin-top: 6mm; background: #1E1B18; color: #FFFDF8; border-radius: 16px; padding: 6mm 7mm; }
+.cta b { font: 800 16pt "Manrope"; display: block; } .cta span { font: 600 10.5pt/1.5 "Manrope"; color: #E4D9C7; }
+</style></head><body>
+<section class="page">
+  <div class="top mono"><span class="b"><img src="logo-mark.svg" alt="">NXTLVLSOCIAL.AI</span><span class="r">FREE SETUP</span></div>
+  <h1>The Exam Setup<em>300 pages of notes, ready by Monday</em></h1>
+  <p class="lead">The exact study system from the reel. One free tool, NotebookLM by Google, turns your notes into a podcast you can listen to anywhere, flashcards, practice tests, and a plan for your weakest chapter. All you need is a Google account.</p>
+  <div class="flow">
+    <div><b>STEP 1</b>Upload<br>your notes</div>
+    <div><b>STEP 2</b>Make it<br>a podcast</div>
+    <div><b>STEP 3</b>Flashcards +<br>practice test</div>
+    <div><b>STEP 4</b>Fix your<br>weak spots</div>
+  </div>
+  <div class="how"><h3>Before you start</h3><ol>
+    <li>Go to <span class="f">notebooklm.google.com</span> and sign in with your Google account.</li>
+    <li>Gather everything: lecture PDFs, slides, Google Docs, and photos of handwritten notes (scan them to PDF with your phone first).</li>
+    <li>One notebook per exam. Give it the exam's name, e.g. <span class="f">Biology final</span>.</li>
+    <li>The free plan has daily limits on audio, flashcards and quizzes. Check the current limits in the app.</li>
+  </ol></div>
+  <div class="sec" style="margin-top:8mm">
+    <h2><span class="n">01</span>Upload your notes</h2>
+    <p class="when">Click <b>Add sources</b> and drop in every file. NotebookLM only answers from what you upload, and every answer links back to the page it came from.</p>
+    <div class="grid2"><div class="dm"><div class="lab">GOOD SOURCES</div><p>Lecture slides, your notes, the textbook chapters on the syllabus, past papers.</p></div><div class="dm"><div class="lab">CHECK IT</div><p>Ask: "Summarise what my sources cover, chapter by chapter." Missing a chapter? Add it.</p></div></div>
+  </div>
+  <div class="foot"><span>THE EXAM SETUP</span><span>1 / 4</span></div>
+</section>
+<section class="page">
+  <div class="top mono"><span class="b"><img src="logo-mark.svg" alt="">NXTLVLSOCIAL.AI</span><span class="r">FREE SETUP</span></div>
+  <div class="sec">
+    <h2><span class="n">02</span>Turn them into a podcast</h2>
+    <p class="when">In the <b>Studio</b> panel, open <b>Audio Overview</b>, click <b>Customize</b>, paste a focus prompt, then generate. Two AI hosts talk through your notes. Listen on the bus, at the gym, before bed.</p>
+    <div class="dm"><div class="lab">FOCUS PROMPT</div><p>Explain my notes for an exam on <span class="f">[date]</span>. Start with the big ideas, then the definitions and formulas I must memorise. Spend extra time on <span class="f">[chapter]</span>.</p></div>
+    <div class="dm"><div class="lab">SHORTER VERSION</div><p>Pick the <b>Brief</b> format for a 5-minute recap the night before.</p></div>
+  </div>
+  <div class="sec">
+    <h2><span class="n">03</span>Flashcards + a practice test</h2>
+    <p class="when">In <b>Studio</b>, create <b>Flashcards</b> and a <b>Quiz</b>. Choose the number of cards and the difficulty, then take the quiz without looking at your notes.</p>
+    <div class="grid2"><div class="dm"><div class="lab">FLASHCARDS PROMPT</div><p>Make flashcards for every definition, formula and date in <span class="f">[chapters]</span>. One fact per card.</p></div><div class="dm"><div class="lab">QUIZ PROMPT</div><p>Write a hard practice test in the style of my past papers. Mix multiple choice and short answers.</p></div></div>
+  </div>
+  <div class="foot"><span>THE EXAM SETUP</span><span>2 / 4</span></div>
+</section>
+<section class="page">
+  <div class="top mono"><span class="b"><img src="logo-mark.svg" alt="">NXTLVLSOCIAL.AI</span><span class="r">FREE SETUP</span></div>
+  <div class="sec">
+    <h2><span class="n">04</span>Fix your weak spots</h2>
+    <p class="when">After the quiz, ask the chat about everything you got wrong, then make a new quiz on only those topics. Repeat until your score climbs.</p>
+    <div class="dm"><div class="lab">ASK THE CHAT</div><p>I got these questions wrong: <span class="f">[paste them]</span>. Explain each one simply, show where it is in my notes, and tell me the trick to remember it.</p></div>
+    <div class="dm"><div class="lab">RETAKE</div><p>Make a new 15-question quiz only on <span class="f">[chapter 7]</span>, harder than the last one.</p></div>
+  </div>
+  <div class="sec">
+    <h2><span class="n">05</span>The 3-day plan</h2>
+    <table>
+      <tr><th>DAY</th><th>MORNING</th><th>EVENING</th></tr>
+      <tr><td>Friday</td><td>Upload everything, listen to the podcast</td><td>Flashcards, chapters 1-6</td></tr>
+      <tr><td>Saturday</td><td>Flashcards, chapters 7-12</td><td>Practice test, write down every mistake</td></tr>
+      <tr><td>Sunday</td><td>Weak-spot quiz until you pass it twice</td><td>Brief podcast recap, then sleep</td></tr>
+    </table>
+  </div>
+  <div class="foot"><span>THE EXAM SETUP</span><span>3 / 4</span></div>
+</section>
+<section class="page">
+  <div class="top mono"><span class="b"><img src="logo-mark.svg" alt="">NXTLVLSOCIAL.AI</span><span class="r">FREE SETUP</span></div>
+  <div class="sec">
+    <h2><span class="n">06</span>Prompts worth stealing</h2>
+    <div class="dm"><div class="lab">EXPLAIN IT</div><p>Explain <span class="f">[topic]</span> like I am 12, then like a professor, then give me one example that would appear in an exam.</p></div>
+    <div class="dm"><div class="lab">MEMORY HOOKS</div><p>Turn the 10 hardest facts in my notes into short memory tricks or rhymes.</p></div>
+    <div class="dm"><div class="lab">PREDICT THE EXAM</div><p>Based on my notes and past papers, which 5 questions are most likely to come up? Answer each in 3 lines.</p></div>
+  </div>
+  <div class="sec">
+    <h2><span class="n">07</span>Rules</h2>
+    <div class="how"><ol>
+      <li>Click the citations: every answer shows the page it came from. Check anything that matters.</li>
+      <li>Only upload your own notes and course material, nothing private or confidential.</li>
+      <li>The AI helps you study. You still sit the exam.</li>
+    </ol></div>
+  </div>
+  <div class="cta"><b>Want more AI study and growth setups?</b><span>Follow @nxtlvlsocial.ai for a new one every week.</span></div>
+  <div class="foot"><span>THE EXAM SETUP</span><span>4 / 4</span></div>
+</section>
+</body></html>

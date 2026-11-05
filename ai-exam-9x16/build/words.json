@@ -1,0 +1,828 @@
+[
+{
+"line": 1,
+"speaker": "you",
+"w": "Hoot.",
+"s": 0.1,
+"e": 0.387
+},
+{
+"line": 1,
+"speaker": "you",
+"w": "My",
+"s": 0.367,
+"e": 0.654
+},
+{
+"line": 1,
+"speaker": "you",
+"w": "exam",
+"s": 0.634,
+"e": 1.118
+},
+{
+"line": 1,
+"speaker": "you",
+"w": "is",
+"s": 1.098,
+"e": 1.385
+},
+{
+"line": 1,
+"speaker": "you",
+"w": "Monday.",
+"s": 1.365,
+"e": 1.85
+},
+{
+"line": 2,
+"speaker": "owl",
+"w": "And?",
+"s": 2.11,
+"e": 2.775
+},
+{
+"line": 3,
+"speaker": "you",
+"w": "And",
+"s": 3.035,
+"e": 3.268
+},
+{
+"line": 3,
+"speaker": "you",
+"w": "I",
+"s": 3.248,
+"e": 3.482
+},
+{
+"line": 3,
+"speaker": "you",
+"w": "have",
+"s": 3.462,
+"e": 3.695
+},
+{
+"line": 3,
+"speaker": "you",
+"w": "three",
+"s": 3.675,
+"e": 3.908
+},
+{
+"line": 3,
+"speaker": "you",
+"w": "hundred",
+"s": 3.888,
+"e": 4.279
+},
+{
+"line": 3,
+"speaker": "you",
+"w": "pages",
+"s": 4.259,
+"e": 4.651
+},
+{
+"line": 3,
+"speaker": "you",
+"w": "of",
+"s": 4.631,
+"e": 4.864
+},
+{
+"line": 3,
+"speaker": "you",
+"w": "notes!",
+"s": 4.844,
+"e": 5.235
+},
+{
+"line": 4,
+"speaker": "owl",
+"w": "Give",
+"s": 5.495,
+"e": 5.778
+},
+{
+"line": 4,
+"speaker": "owl",
+"w": "them",
+"s": 5.758,
+"e": 6.04
+},
+{
+"line": 4,
+"speaker": "owl",
+"w": "to",
+"s": 6.02,
+"e": 6.302
+},
+{
+"line": 4,
+"speaker": "owl",
+"w": "me.",
+"s": 6.283,
+"e": 6.565
+},
+{
+"line": 5,
+"speaker": "you",
+"w": "All",
+"s": 6.825,
+"e": 7.07
+},
+{
+"line": 5,
+"speaker": "you",
+"w": "of",
+"s": 7.05,
+"e": 7.295
+},
+{
+"line": 5,
+"speaker": "you",
+"w": "them?",
+"s": 7.275,
+"e": 7.52
+},
+{
+"line": 6,
+"speaker": "owl",
+"w": "Step",
+"s": 7.78,
+"e": 8.122
+},
+{
+"line": 6,
+"speaker": "owl",
+"w": "one.",
+"s": 8.102,
+"e": 8.682
+},
+{
+"line": 6,
+"speaker": "owl",
+"w": "NotebookLM.",
+"s": 8.662,
+"e": 9.48
+},
+{
+"line": 6,
+"speaker": "owl",
+"w": "It's",
+"s": 9.71,
+"e": 9.984
+},
+{
+"line": 6,
+"speaker": "owl",
+"w": "free,",
+"s": 9.964,
+"e": 10.238
+},
+{
+"line": 6,
+"speaker": "owl",
+"w": "from",
+"s": 10.218,
+"e": 10.492
+},
+{
+"line": 6,
+"speaker": "owl",
+"w": "Google.",
+"s": 10.472,
+"e": 10.934
+},
+{
+"line": 6,
+"speaker": "owl",
+"w": "Drop",
+"s": 10.914,
+"e": 11.188
+},
+{
+"line": 6,
+"speaker": "owl",
+"w": "everything",
+"s": 11.168,
+"e": 12.006
+},
+{
+"line": 6,
+"speaker": "owl",
+"w": "in.",
+"s": 11.986,
+"e": 12.26
+},
+{
+"line": 7,
+"speaker": "owl",
+"w": "Step",
+"s": 12.52,
+"e": 12.753
+},
+{
+"line": 7,
+"speaker": "owl",
+"w": "two.",
+"s": 12.733,
+"e": 12.965
+},
+{
+"line": 7,
+"speaker": "owl",
+"w": "I",
+"s": 12.945,
+"e": 13.178
+},
+{
+"line": 7,
+"speaker": "owl",
+"w": "turned",
+"s": 13.158,
+"e": 13.549
+},
+{
+"line": 7,
+"speaker": "owl",
+"w": "your",
+"s": 13.529,
+"e": 13.761
+},
+{
+"line": 7,
+"speaker": "owl",
+"w": "notes",
+"s": 13.741,
+"e": 14.132
+},
+{
+"line": 7,
+"speaker": "owl",
+"w": "into",
+"s": 14.112,
+"e": 14.502
+},
+{
+"line": 7,
+"speaker": "owl",
+"w": "a",
+"s": 14.482,
+"e": 14.715
+},
+{
+"line": 7,
+"speaker": "owl",
+"w": "podcast.",
+"s": 14.695,
+"e": 15.085
+},
+{
+"line": 8,
+"speaker": "you",
+"w": "A",
+"s": 15.345,
+"e": 15.63
+},
+{
+"line": 8,
+"speaker": "you",
+"w": "podcast?",
+"s": 15.61,
+"e": 16.092
+},
+{
+"line": 8,
+"speaker": "you",
+"w": "Of",
+"s": 16.072,
+"e": 16.358
+},
+{
+"line": 8,
+"speaker": "you",
+"w": "my",
+"s": 16.338,
+"e": 16.623
+},
+{
+"line": 8,
+"speaker": "you",
+"w": "notes?!",
+"s": 16.603,
+"e": 17.085
+},
+{
+"line": 9,
+"speaker": "owl",
+"w": "Twenty",
+"s": 17.345,
+"e": 17.714
+},
+{
+"line": 9,
+"speaker": "owl",
+"w": "minutes.",
+"s": 17.694,
+"e": 18.211
+},
+{
+"line": 9,
+"speaker": "owl",
+"w": "Listen",
+"s": 18.191,
+"e": 18.559
+},
+{
+"line": 9,
+"speaker": "owl",
+"w": "on",
+"s": 18.539,
+"e": 18.759
+},
+{
+"line": 9,
+"speaker": "owl",
+"w": "the",
+"s": 18.739,
+"e": 18.96
+},
+{
+"line": 9,
+"speaker": "owl",
+"w": "bus.",
+"s": 18.94,
+"e": 19.16
+},
+{
+"line": 10,
+"speaker": "owl",
+"w": "Step",
+"s": 19.42,
+"e": 19.721
+},
+{
+"line": 10,
+"speaker": "owl",
+"w": "three.",
+"s": 19.701,
+"e": 20.002
+},
+{
+"line": 10,
+"speaker": "owl",
+"w": "Fifty",
+"s": 19.982,
+"e": 20.49
+},
+{
+"line": 10,
+"speaker": "owl",
+"w": "flashcards,",
+"s": 20.47,
+"e": 20.979
+},
+{
+"line": 10,
+"speaker": "owl",
+"w": "and",
+"s": 20.959,
+"e": 21.26
+},
+{
+"line": 10,
+"speaker": "owl",
+"w": "a",
+"s": 21.24,
+"e": 21.541
+},
+{
+"line": 10,
+"speaker": "owl",
+"w": "practice",
+"s": 21.521,
+"e": 22.029
+},
+{
+"line": 10,
+"speaker": "owl",
+"w": "test.",
+"s": 22.009,
+"e": 22.31
+},
+{
+"line": 11,
+"speaker": "you",
+"w": "Sixty-two",
+"s": 22.57,
+"e": 23.372
+},
+{
+"line": 11,
+"speaker": "you",
+"w": "percent...",
+"s": 23.352,
+"e": 23.92
+},
+{
+"line": 12,
+"speaker": "owl",
+"w": "Step",
+"s": 24.18,
+"e": 24.479
+},
+{
+"line": 12,
+"speaker": "owl",
+"w": "four.",
+"s": 24.459,
+"e": 24.758
+},
+{
+"line": 12,
+"speaker": "owl",
+"w": "Your",
+"s": 24.738,
+"e": 25.036
+},
+{
+"line": 12,
+"speaker": "owl",
+"w": "weak",
+"s": 25.016,
+"e": 25.315
+},
+{
+"line": 12,
+"speaker": "owl",
+"w": "spots.",
+"s": 25.295,
+"e": 25.594
+},
+{
+"line": 12,
+"speaker": "owl",
+"w": "Chapter",
+"s": 25.574,
+"e": 26.079
+},
+{
+"line": 12,
+"speaker": "owl",
+"w": "seven,",
+"s": 26.059,
+"e": 26.565
+},
+{
+"line": 12,
+"speaker": "owl",
+"w": "again.",
+"s": 26.545,
+"e": 27.05
+},
+{
+"line": 13,
+"speaker": "you",
+"w": "Ninety-one!",
+"s": 27.31,
+"e": 28.019
+},
+{
+"line": 13,
+"speaker": "you",
+"w": "Ninety-one",
+"s": 27.999,
+"e": 28.707
+},
+{
+"line": 13,
+"speaker": "you",
+"w": "percent!",
+"s": 28.687,
+"e": 29.19
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "Okay.",
+"s": 29.45,
+"e": 29.938
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "Last",
+"s": 29.918,
+"e": 30.206
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "thing.",
+"s": 30.186,
+"e": 30.475
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "You're",
+"s": 30.455,
+"e": 30.743
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "small.",
+"s": 30.723,
+"e": 31.012
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "You",
+"s": 30.992,
+"e": 31.281
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "fit",
+"s": 31.261,
+"e": 31.549
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "in",
+"s": 31.529,
+"e": 31.818
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "my",
+"s": 31.798,
+"e": 32.086
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "bag.",
+"s": 32.066,
+"e": 32.355
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "Take",
+"s": 32.535,
+"e": 32.775
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "the",
+"s": 32.755,
+"e": 32.996
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "exam",
+"s": 32.976,
+"e": 33.379
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "for",
+"s": 33.359,
+"e": 33.6
+},
+{
+"line": 14,
+"speaker": "you",
+"w": "me?",
+"s": 33.58,
+"e": 33.82
+},
+{
+"line": 15,
+"speaker": "owl",
+"w": "No.",
+"s": 34.08,
+"e": 34.79
+},
+{
+"line": 16,
+"speaker": "you",
+"w": "Please?",
+"s": 35.05,
+"e": 35.785
+},
+{
+"line": 17,
+"speaker": "owl",
+"w": "You",
+"s": 36.045,
+"e": 36.272
+},
+{
+"line": 17,
+"speaker": "owl",
+"w": "don't",
+"s": 36.252,
+"e": 36.478
+},
+{
+"line": 17,
+"speaker": "owl",
+"w": "need",
+"s": 36.458,
+"e": 36.685
+},
+{
+"line": 17,
+"speaker": "owl",
+"w": "me",
+"s": 36.665,
+"e": 36.892
+},
+{
+"line": 17,
+"speaker": "owl",
+"w": "anymore.",
+"s": 36.872,
+"e": 37.405
+},
+{
+"line": 17,
+"speaker": "owl",
+"w": "You",
+"s": 37.635,
+"e": 37.86
+},
+{
+"line": 17,
+"speaker": "owl",
+"w": "know",
+"s": 37.84,
+"e": 38.065
+},
+{
+"line": 17,
+"speaker": "owl",
+"w": "every",
+"s": 38.045,
+"e": 38.573
+},
+{
+"line": 17,
+"speaker": "owl",
+"w": "answer.",
+"s": 38.553,
+"e": 38.93
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "Send",
+"s": 39.19,
+"e": 39.424
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "this",
+"s": 39.404,
+"e": 39.637
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "to",
+"s": 39.617,
+"e": 39.851
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "a",
+"s": 39.831,
+"e": 40.065
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "friend",
+"s": 40.045,
+"e": 40.278
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "with",
+"s": 40.258,
+"e": 40.492
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "an",
+"s": 40.472,
+"e": 40.706
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "exam",
+"s": 40.686,
+"e": 41.078
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "this",
+"s": 41.058,
+"e": 41.291
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "week.",
+"s": 41.271,
+"e": 41.505
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "Follow",
+"s": 41.785,
+"e": 42.241
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "@nxtlvlsocial.ai",
+"s": 42.221,
+"e": 43.365
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "and",
+"s": 43.425,
+"e": 43.699
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "comment",
+"s": 43.679,
+"e": 44.142
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "EXAM.",
+"s": 44.122,
+"e": 44.585
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "I'll",
+"s": 44.765,
+"e": 44.993
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "send",
+"s": 44.973,
+"e": 45.201
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "you",
+"s": 45.181,
+"e": 45.409
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "the",
+"s": 45.389,
+"e": 45.618
+},
+{
+"line": 18,
+"speaker": "owl",
+"w": "setup.",
+"s": 45.598,
+"e": 45.98
+}
+]

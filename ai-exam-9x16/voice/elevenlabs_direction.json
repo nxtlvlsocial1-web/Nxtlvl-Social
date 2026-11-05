@@ -1,0 +1,24 @@
+{
+"note": "Direction for the ElevenLabs takes (Eleven v3 audio tags). One file per line in voice/el/<take>.wav; build/voice.py uses them in place of the Kokoro placeholder.",
+"voices": {"you": "a young, bright, expressive female student voice (no Indian accent; new for this reel)", "owl": "a warm, calm, slightly dry and witty voice, friendly mentor energy"},
+"lines": [
+ ["01_you", "you", "[panicked] Hoot. My exam is Monday."],
+ ["02_owl", "owl", "[deadpan] And?"],
+ ["03_you", "you", "[whining, exasperated] And I have three hundred pages of notes!"],
+ ["04_owl", "owl", "[calm, confident] Give them to me."],
+ ["05_you", "you", "[surprised] All of them?"],
+ ["06_owl", "owl", "Step one. NotebookLM. [warm] It's free, from Google. Drop everything in."],
+ ["07_owl", "owl", "[proud] Step two. I turned your notes into a podcast."],
+ ["08_you", "you", "[amazed, laughing] A podcast? Of my notes?!"],
+ ["09_owl", "owl", "[warm] Twenty minutes. Listen on the bus."],
+ ["10_owl", "owl", "Step three. Fifty flashcards, and a practice test."],
+ ["11_you", "you", "[deflated, sad] Sixty-two percent..."],
+ ["12_owl", "owl", "[encouraging] Step four. Your weak spots. Chapter seven, again."],
+ ["13_you", "you", "[ecstatic, shouting] Ninety-one! Ninety-one percent!"],
+ ["14_you", "you", "[scheming, quiet] Okay. Last thing. You're small. You fit in my bag. [hopeful] Take the exam for me?"],
+ ["15_owl", "owl", "[flat] No."],
+ ["16_you", "you", "[pleading] Please?"],
+ ["17_owl", "owl", "[softly, warm] You don't need me anymore. You know every answer."],
+ ["18_owl", "owl", "[friendly] Send this to a friend with an exam this week. Follow next level social, and comment exam. I'll send you the setup."]
+]
+}
