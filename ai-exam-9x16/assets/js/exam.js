@@ -326,7 +326,7 @@ let NOW = 0;
 const blinkAt = (seed, t) => { const p = 2.9 + hash(seed) * 1.6, u = (t + hash(seed * 3) * 7) % p; return u < .12 ? Math.sin(Math.PI * u / .12) : 0; };
 function setFace(P, f) {
   let mouth = f.mouth || "smile";
-  if (f.talk) { const k = Math.floor(NOW * 9 + P.seed) % 3; mouth = k === 0 ? "o" : k === 1 ? (f.mouth === "wide" ? "wide" : "grin") : (f.mouth || "smile"); }
+  if (f.talk) { const k = Math.floor(NOW * 9 + P.seed) % 3; const low = f.mouth === "sad" || f.mouth === "flat"; mouth = k === 0 ? "o" : k === 1 ? (f.mouth === "wide" ? "wide" : low ? f.mouth : "grin") : (f.mouth || "smile"); }
   for (const k in P.M) P.M[k].visible = k === mouth;
   const happy = f.eyes === "happy";
   P.arcs.forEach((a) => (a.visible = happy));
@@ -466,7 +466,7 @@ function youAt(t, s) {
     return { vis: true, p: { ...p, lean: p.lean + .01 * Math.sin(t * 13) }, f: { mouth: "smile", eyes: "happy" }, phones: true };
   }
   if (s === 6) {
-    const p = idle(withArms(SIT(40, -3.65, Math.PI), [[.85, .05, 1.0], [.6, .1, .8]], { hp: .4 }), t, 3);
+    const p = idle(withArms(SIT(40, -3.65, Math.PI), [[.85, .05, 1.0], [.6, .1, .8]], { hp: .2 }), t, 3);
     p.a[0][2] += .08 * Math.sin(t * 12); p.a[0][1] += .05 * Math.sin(t * 7);
     return { vis: true, p, f: { mouth: "smile", eyes: "open" } };
   }
@@ -496,7 +496,7 @@ function owlAt(t, s) {
     return { vis: true, p, f, phones: false };
   }
   if (s === 3) return { vis: true, p: opose({ x: 20.78, y: .51, z: -.25, ry: -.2, s: .8, hop: .015 * Math.abs(Math.sin(t * 5)), hy: .15 * Math.sin(t * 2.5) }), f: { eyes: "happy" }, phones: true };
-  if (s === 6) return { vis: t > C.every - .5, p: opose({ x: 40 - 4.85, y: .95, z: -2.1, ry: Math.PI / 2, w: [.2, 1.5 + .4 * Math.sin(t * 9)] }), f: { eyes: "happy" }, phones: false };
+  if (s === 6) return { vis: t > C.every - .5, p: opose({ x: 40 - 4.85, y: .95, z: -2.45, ry: Math.PI / 2, w: [.2, 1.5 + .4 * Math.sin(t * 9)] }), f: { eyes: "happy" }, phones: false };
   return { vis: false };
 }
 function extraAt(P, t, s, k) {
@@ -545,8 +545,8 @@ const SHOTS = [
   { t: F[5].a, tr: 0, f: faceShot("owl", 1.8, .03, .05, 30, -.04) },
   { t: C.please - .25, tr: 0, f: fixed([-.4, 1.3, 2.1], [-.04, 1.0, -.58], 30) },
   // exam day
-  { t: CU[5], tr: 0, f: move(CU[5], C.every - .3, [42.6, 1.65, -5.2], [42.45, 1.6, -5.1], [40, 1.0, -3.55], [40, 1.0, -3.55], 36, 34) },
-  { t: C.every - .3, tr: 0, f: move(C.every - .3, CU[6], [40 - 1.3, 1.35, -3.0], [40 - 1.6, 1.35, -2.9], [40 - 4.7, 1.3, -2.1], [40 - 4.7, 1.3, -2.1], 34, 32) },
+  { t: CU[5], tr: 0, f: move(CU[5], C.every - .3, [40.95, 1.6, -5.4], [40.8, 1.55, -5.3], [40, 1.0, -3.75], [40, 1.0, -3.75], 52, 48) },
+  { t: C.every - .3, tr: 0, f: move(C.every - .3, CU[6], [40 - 1.3, 1.35, -3.0], [40 - 1.6, 1.35, -2.9], [40 - 4.7, 1.3, -2.45], [40 - 4.7, 1.3, -2.45], 34, 32) },
   // close
   { t: CU[6], tr: 0, f: move(CU[6], DUR, [.1, 1.3, 3.8], [.1, 1.3, 3.5], [.18, 1.75, -.3], [.18, 1.75, -.3], 38, 38) },
 ];
@@ -583,7 +583,8 @@ function renderAt(t) {
   sun.color.set(Lk.sun); sun.intensity = Lk.si;
   for (const tw of towers) tw.material.emissiveIntensity = Lk.win;
   const deskSet = s <= 2 || s === 4 || s === 5 || s === 7;
-  lampL.intensity = deskSet ? Lk.lamp : 0; shadeM.emissiveIntensity = deskSet && Lk.lamp > 0 ? .5 : .05; bulb.visible = Lk.lamp > 0;
+  const close62 = s === 4 && t >= FOC[4].a && t < C.step4 - .25;
+  lampL.intensity = deskSet ? Lk.lamp * (close62 ? .45 : 1) : 0; shadeM.emissiveIntensity = deskSet && Lk.lamp > 0 ? .5 : .05; bulb.visible = Lk.lamp > 0;
   screenL.position.copy(SCREEN).add(V.set(0, .05, -.25)); screenL.intensity = deskSet ? Lk.scr + (s === 1 || s === 2 ? .8 : 0) : 0;
   busL1.position.set(20.2, 1.9, -.9); busL2.position.set(20.1, 1.6, .9); busL1.intensity = busL2.intensity = s === 3 ? 1.6 : 0;
   hallL.position.set(40, 3.0, -2.5); hallL.intensity = s === 6 ? 1.0 : 0;
@@ -620,7 +621,7 @@ function renderAt(t) {
   }
   // the podcast: a glowing waveform over the laptop; on the bus, over the phone
   hideAll(barM, BAR_N);
-  if ((s === 2 && t > C.podcast - .3) || s === 3) {
+  if (s === 2 && t > C.podcast - .3) {
     const base = s === 2 ? A0.set(-.5, 1.12, .05) : (PP.copy(phoneK.position).add(V.set(0, .14, .05)), A0.copy(PP));
     const sc = s === 2 ? 1 : .45, grow = s === 2 ? ss(t, C.podcast - .3, C.podcast + .2) : 1;
     for (let k = 0; k < BAR_N; k++) { const hgt = (.04 + .16 * Math.abs(Math.sin(t * 7 + k * .8) * Math.sin(t * 2.3 + k * .3))) * grow * sc; M4.compose(V.set(A0.x + (k - (BAR_N - 1) / 2) * .024 * sc, A0.y, A0.z), Q.identity(), S.set(sc, Math.max(.001, hgt), sc)); barM.setMatrixAt(k, M4); }
