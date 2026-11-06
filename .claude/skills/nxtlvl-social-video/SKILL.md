@@ -98,6 +98,7 @@ reach one again:
 - MP4, H.264, AAC audio, under 100 MB per file.
 - Deliver every requested format plus a 1-frame cover image (`.png`, same size) per format.
 - In the final reply, list each file with its platform, size, duration and path.
+- Post descriptions: hashtags all lowercase (`#instagramgrowth`, never `#InstagramGrowth`), no emojis.
 
 ## 7. "What if" reels
 

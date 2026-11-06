@@ -176,6 +176,8 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
 - Keep rendered MP4s out of git; deliver them, don't commit them.
 - Never use emojis in post descriptions, captions or hashtag blocks we write for clients (number lists with "1.", not
   emoji digits). Plain text only.
+- Write every hashtag in all lowercase (`#studytips #notebooklm`, never `#StudyTips`), in descriptions, captions and
+  hashtag blocks alike.
 - Start every post description with the video's CTA keyword line (e.g. `Comment "AGENT" and I'll DM you my whole
   setup.`), then the hook and the body; don't repeat the CTA further down.
 - Exception, "what if" reels: no comment-keyword CTA anywhere (script, end card or description) when there is
