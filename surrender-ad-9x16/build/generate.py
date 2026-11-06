@@ -28,7 +28,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W = json.load(open(os.path.join(ROOT, "plan", "words_tight.json")))
 FW, FH, FPS = 1080, 1920, 30
-DUR = 137.0
+DUR = 117.1                     # v2: repeats cut from the script (build/tight.py CUT_WORDS)
 A, HIDE, TOP, POST, CUES = [], [], [], [], []
 NID = [0]
 
@@ -67,6 +67,8 @@ ROMAN = {
 
 
 def word(i):
+    if i == 181:
+        return "Kanav"                      # the owner: his name is Kanav (Scribe heard "Kanak")
     t = re.sub(r"[,.।?!]", "", W[i]["text"]).strip()
     return ROMAN.get(t, t)
 
@@ -75,7 +77,7 @@ def word(i):
 # (kind, first word, end word); kind: intro / split / full. A section ends where the next starts.
 SECTIONS = [("intro", 0, 18), ("split", 18, 80), ("full", 80, 104), ("split", 104, 135), ("full", 135, 164),
             ("split", 164, 177), ("full", 177, 214), ("split", 214, 254), ("full", 254, 278), ("split", 278, 313),
-            ("full", 313, 334), ("split", 334, 367), ("split", 367, 398), ("full", 398, 412), ("split", 412, 440),
+            ("full", 313, 334), ("split", 334, 367), ("split", 367, 412), ("split", 412, 440),
             ("cta", 440, None)]
 
 
@@ -125,19 +127,21 @@ def icon(name, size=56, color="#ff2d55", stroke=3.4):
             f'stroke-linecap="round" stroke-linejoin="round" style="color:{color}">{ICON[name]}</svg>')
 
 
-def el(html, x, y, t0, t1, w=None, cls="glass", z=3, style="", rise=70, tilt=16, d=.75):
+def el(html, x, y, t0, t1, w=None, cls="glass", z=3, style="", rise=90, tilt=18, d=.5):
     """A motion element in the top stage: rises out of a blur with a slight 3D tilt (the promo's entrance), floats,
     leaves blurred upward."""
     i = nid("g")
     ws = f"width:{w}px;" if w else ""
     TOP.append(f'<div class="mg {cls}" id="{i}" style="left:{x}px;top:{y}px;{ws}z-index:{z};{style}">{html}</div>')
     HIDE.append(f"#{i}")
-    js(f'tl.fromTo("#{i}", {{opacity: 0, y: {rise}, scale: .9, rotationX: {tilt}, filter: "blur(14px)"}}, '
+    js(f'tl.fromTo("#{i}", {{opacity: 0, y: {rise}, scale: .86, rotationX: {tilt}, filter: "blur(16px)"}}, '
        f'{{opacity: 1, y: 0, scale: 1, rotationX: 0, filter: "blur(0px)", duration: {d}, ease: "expo.out", immediateRender: false}}, {t0:.3f});')
-    n = int((t1 - t0 - d) / 1.6)
+    if "ic" in html and rise:                # v2: every card's icon pops in a beat after the card
+        js(f'tl.fromTo("#{i} .ic", {{scale: 0, rotation: -35}}, {{scale: 1, rotation: 0, duration: .35, ease: "back.out(3)", immediateRender: false}}, {t0 + .12:.3f});')
+    n = int((t1 - t0 - d) / 1.1)
     if n > 0:
-        js(f'tl.to("#{i}", {{y: -10, duration: 1.6, ease: "sine.inOut", yoyo: true, repeat: {n - 1 if n % 2 == 0 else n}}}, {t0 + d:.3f});')
-    js(f'tl.to("#{i}", {{opacity: 0, y: -50, scale: .96, filter: "blur(10px)", duration: .32, ease: "power2.in"}}, {t1 - .32:.3f});')
+        js(f'tl.to("#{i}", {{y: -9, duration: 1.1, ease: "sine.inOut", yoyo: true, repeat: {n - 1 if n % 2 == 0 else n}}}, {t0 + d:.3f});')
+    js(f'tl.to("#{i}", {{opacity: 0, y: -60, scale: .94, filter: "blur(12px)", duration: .22, ease: "power2.in"}}, {t1 - .22:.3f});')
     CUES.append((t0, "pop"))
     return i
 
@@ -202,7 +206,7 @@ def graphics():
     s5b = SECS[9][2]
     q = T(301)
     cards = []
-    for k, (wi, ic, h) in enumerate([(280, "book", "Courses"), (282, "play", "YouTube content"), (286, "layers", "Everything else")]):
+    for k, (wi, ic, h) in enumerate([(292, "book", "Courses"), (295, "play", "YouTube content"), (299, "layers", "Everything else")]):
         cards.append(el(f'{icon(ic, 60, "#ff2d55")}<div class="h2">{h}</div>', 130 + 270 * k, 160 + 40 * k, T(wi), q + 1.1, w=300,
                         cls="glass tall", style=f"transform:rotate({(-6, 3, 7)[k]}deg)"))
     for k, c in enumerate(cards):
@@ -236,7 +240,7 @@ def graphics():
            '<div class="sub">We implement it together</div>', 190, 200, T(383), SECS[12][2], w=700, cls="glass center")
     js(f'tl.to("#{i} .live", {{opacity: .25, duration: .5, yoyo: true, repeat: {int((s7b - T(383)) / .5)}, ease: "sine.inOut"}}, {T(383):.3f});')
     # S8: goal -> 3 high-paying clients -> 10 lakh a month
-    s8b = SECS[14][2]
+    s8b = SECS[13][2]
     e8 = T(429) - .05
     el('<div class="h3 c">THE GOAL</div>', 390, 90, T(415), s8b, cls="glass chip", rise=30)
     av = []
@@ -264,6 +268,8 @@ def chunks(a, b, maxw=3, maxc=16):
     into the next chunk instead), so the big word is always a meaningful one."""
     out, cur = [], []
     for i in range(a, b):
+        if W[i].get("cut"):
+            continue
         cur.append(i)
         txt = " ".join(word(j) for j in cur)
         end = W[i]["text"][-1] in ",.।?"
@@ -338,6 +344,7 @@ def layout():
             continue
         if kind == "split":
             js(f'tl.set("#split", {{opacity: 1, scale: 1, filter: "blur(0px)"}}, {ta:.3f});')
+            js(f'tl.fromTo("#stage", {{scale: 1.06, y: 34}}, {{scale: 1.13, y: 22, duration: {tb - ta:.2f}, ease: "none", immediateRender: false}}, {ta:.3f});')
             js(f'tl.set("#split", {{opacity: 0}}, {tb:.3f});')
             if prev in ("intro", "full"):
                 # the reference: the face lands close and blurred and settles; the screen sharpens in
@@ -364,6 +371,8 @@ def layout():
             cta(ta, a)
             continue
         full_caps(a, b, tb)
+        if a <= 181 < b:
+            namecard(T(181) - .05, T(202) - .1)
         nxt = SECS[k + 1][0] if k + 1 < len(SECS) else None
         if nxt == "split":                          # the reference's colour flash into the next split
             js(f'tl.set("#tint", {{opacity: .55}}, {tb - .3:.3f});')
@@ -374,6 +383,18 @@ def layout():
             js(f'tl.to("#flash", {{opacity: 0, duration: .25, ease: "power2.out"}}, {tb + .02:.3f});')
             CUES.append((tb - .3, "shimmer"))
     HIDE.extend(["#split", "#full", "#tint", "#leak", "#flash"])
+
+
+def namecard(t0, t1):
+    """A liquid-glass name card at the top of the frame while he introduces himself, and the teacher's name under it."""
+    POST.append('<div id="name" class="glass"><div class="nm">Kanav Kesar</div><div class="nr">Founder &middot; The Conscious Millionaire</div>'
+                '<div id="jk">Learned from J. Krishnamurti</div></div>')
+    HIDE.extend(["#name", "#jk"])         # under the captions: his head fills the top of the full frame
+    js(f'tl.fromTo("#name", {{opacity: 0, y: -60, filter: "blur(14px)"}}, {{opacity: 1, y: 0, filter: "blur(0px)", duration: .5, ease: "expo.out", immediateRender: false}}, {t0:.3f});')
+    js(f'tl.to("#name", {{opacity: 0, y: -40, filter: "blur(10px)", duration: .22, ease: "power2.in"}}, {t1 - .22:.3f});')
+    tj = T(197) - .05
+    js(f'tl.fromTo("#jk", {{opacity: 0, y: 16, filter: "blur(10px)"}}, {{opacity: 1, y: 0, filter: "blur(0px)", duration: .4, ease: "expo.out", immediateRender: false}}, {tj:.3f});')
+    CUES.extend([(t0, "pop"), (tj, "pop")])
 
 
 def cta(ta, a):
@@ -424,7 +445,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f7b7
 #split {{ position: absolute; inset: 0; opacity: 0; transform-origin: 50% 50%; }}
 #top {{ position: absolute; left: 0; top: 0; width: {FW}px; height: 960px; overflow: hidden; }}
 #topin {{ position: absolute; inset: 0; perspective: 1400px; transform-origin: 50% 50%; }}
-#stage {{ position: absolute; left: 0; top: 0; width: 1080px; height: 960px; transform: translate(0, 30px) scale(1.1); transform-origin: 50% 40%; }}
+#stage {{ position: absolute; left: 0; top: 0; width: 1080px; height: 960px; transform-origin: 50% 40%; }}
 #bot {{ position: absolute; left: 0; top: 960px; width: {FW}px; height: 960px; overflow: hidden; background: #2a0d14; }}
 #botin {{ position: absolute; inset: 0; transform-origin: 50% 35%; }}
 #botin video {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
@@ -496,6 +517,11 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f7b7
 .fcap .scr {{ font: 400 74px/1.1 "Kaushan"; color: #fff; text-shadow: 0 4px 14px rgba(0,0,0,.55); margin-left: 6px; }}
 .fcap .bigw {{ font: 400 150px/1 "Anton"; color: #fff; letter-spacing: .01em; text-shadow: 0 8px 26px rgba(0,0,0,.45); transform-origin: 0 60%; }}
 .fcap .bigw.red {{ color: #ff2d3d; text-shadow: 0 4px 0 #fff, 0 10px 30px rgba(0,0,0,.45); }}
+#name {{ position: absolute; left: 110px; top: 1470px; width: 860px; opacity: 0; z-index: 9; text-align: center; padding: 26px 34px 24px;
+  background: linear-gradient(140deg, rgba(255,255,255,.9), rgba(255,240,244,.72)); }}
+#name .nm {{ font: 800 74px/1 "Inter"; letter-spacing: -.03em; color: #3b0a1f; }}
+#name .nr {{ font: 700 32px/1.2 "Inter"; color: #ff2d55; margin-top: 10px; }}
+#jk {{ font: 600 28px/1.2 "Inter"; color: #7a3a52; margin-top: 8px; opacity: 0; }}
 #ctabox {{ position: absolute; left: 150px; top: 760px; width: 780px; opacity: 0; transform: rotate(-6deg); z-index: 9; }}
 #ctabox .cl {{ position: absolute; left: 50%; top: -10px; width: 12px; height: 300px; margin-left: -6px; background: #e8ff2a; transform-origin: 50% 100%; }}
 #ctabox .cb {{ background: #e8ff2a; padding: 22px 30px 26px; text-align: center; box-shadow: 0 16px 40px rgba(0,0,0,.4); }}
