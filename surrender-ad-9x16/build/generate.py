@@ -28,7 +28,8 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W = json.load(open(os.path.join(ROOT, "plan", "words_tight.json")))
 FW, FH, FPS = 1080, 1920, 30
-DUR = 106.5                     # v3: repeats cut (build/tight.py CUT_WORDS) and the take sped 1.1x
+VDUR = 106.5                    # v3: repeats cut (build/tight.py CUT_WORDS) and the take sped 1.1x
+DUR = VDUR + 1.0                # v4: the CTA holds a second on his last frame so the DM line can be read
 A, HIDE, TOP, POST, CUES = [], [], [], [], []
 NID = [0]
 
@@ -159,11 +160,11 @@ def graphics():
     el(f'<div class="row">{icon("target", 74)}<div><div class="h1">ACHIEVE</div><div class="sub">something big in life</div></div></div>',
        110, 150, T(24), e1, w=620)
     i = el('<div class="lbl">Hard work</div><div class="bar"><i></i></div><div class="pct"><span class="num">0</span>%</div>',
-           400, 430, T(35), e1, w=560)
+           400, 350, T(35), e1, w=560)
     js(f'tl.fromTo("#{i} .bar i", {{scaleX: 0}}, {{scaleX: .92, duration: 1.4, ease: "power3.out", immediateRender: false}}, {T(35) + .2:.3f});')
     counter(i, T(35) + .2, 1.4, 92)
     for k, (wi, txt) in enumerate([(43, "Try everything"), (46, "Every method"), (50, "Hope it works")]):
-        el(f'{icon("check", 40, "#18b26b")}<span>{txt}</span>', 150 + 30 * k, 640 + 96 * k, T(wi), e1, cls="glass chip", rise=40)
+        el(f'{icon("check", 40, "#18b26b")}<span>{txt}</span>', 150 + 30 * k, 540 + 92 * k, T(wi), e1, cls="glass chip", rise=40)
     for k, (wi, ic, h, sub) in enumerate([(64, "book", "Courses", "bought"), (69, "layers", "Programs", "joined"),
                                           (72, "play", "YouTube", "content consumed")]):
         el(f'{icon(ic, 70, "#ff2d55")}<div class="h2">{h}</div><div class="sub">{sub}</div>', 110 + 300 * k, 230 + 70 * (k % 2),
@@ -225,8 +226,8 @@ def graphics():
     CUES.append((T(339) + .1, "cash"))
     el(f'{icon("clock", 46, "#7a1238")}<span>in 25 months</span>', 330, 470, T(348), s6b, cls="glass chip", rise=40)
     for k, (wi, txt) in enumerate([(355, "Skill"), (358, "Expertise"), (360, "Courses"), (362, "Services")]):
-        el(f'<span>{txt}</span>', (150, 560, 150, 560)[k] + (0, 0, 40, 40)[k], (620, 620, 740, 740)[k], T(wi), s6b, cls="glass chip sm", rise=40)
-    i = el(f'{icon("check", 40, "#fff", 5)}<span>Sold</span>', 420, 860, T(365), s6b, cls="glass chip sold", rise=40)
+        el(f'<span>{txt}</span>', (150, 560, 150, 560)[k] + (0, 0, 40, 40)[k], (560, 560, 660, 660)[k], T(wi), s6b, cls="glass chip sm", rise=40)
+    i = el(f'{icon("check", 40, "#fff", 5)}<span>Sold</span>', 420, 760, T(365), s6b, cls="glass chip sold", rise=40)
     # S7: 100 serious people -> live done-with-you system
     s7b = SECS[12][2]
     e7 = T(383) - .05
@@ -257,11 +258,13 @@ def graphics():
     js(f'tl.to("#{i} .ln", {{strokeDashoffset: 0, duration: 1.2, ease: "power3.inOut"}}, {T(431) + .1:.3f});')
     counter(i, T(431) + .1, 1.3, 10)
     CUES.append((T(431) + .1, "cash"))
-    el(f'{icon("arrowup", 44, "#18b26b")}<span>Scale</span>', 420, 760, T(438), s8b, cls="glass chip", rise=40)
+    el(f'{icon("arrowup", 44, "#18b26b")}<span>Scale</span>', 420, 690, T(438), s8b, cls="glass chip", rise=40)
 
 
 # ------------------------------------------------------------------------------------------------ captions
-FUNC = {"ki", "ke", "ka", "ko", "se", "pe", "hai", "hain", "toh", "aur", "ek", "ye", "woh", "mein", "the", "of", "to", "a", "and", "is", "an", "your", "you", "i", "am", "or", "ya", "bhi"}
+FUNC = {"ki", "ke", "ka", "ko", "se", "pe", "hai", "hain", "toh", "aur", "ek", "ye", "woh", "mein", "the", "of", "to", "a", "and", "is", "an",
+        "your", "you", "i", "am", "or", "ya", "bhi", "main", "tha", "thi", "hoon", "sab", "kuch", "har", "guys", "hi", "jab", "hum", "aap",
+        "j", "then", "if", "this", "just", "kar", "di", "lag", "jaata", "ban"}
 
 
 def chunks(a, b, maxw=3, maxc=16):
@@ -273,13 +276,19 @@ def chunks(a, b, maxw=3, maxc=16):
             continue
         cur.append(i)
         txt = " ".join(word(j) for j in cur)
-        end = W[i]["text"][-1] in ",.।?"
+        end = W[i]["text"][-1] in ",.।?" and W[i]["text"] != "J."
         if (len(cur) >= maxw or len(txt) >= maxc or end) and (end or word(i).lower() not in FUNC or len(cur) >= maxw + 2):
             out.append(cur)
             cur = []
     if cur:
         out.append(cur)
-    return out
+    merged = []                               # a chunk of fillers only rides with the chunk before it
+    for c in out:
+        if merged and all(word(j).lower() in FUNC for j in c):
+            merged[-1] = merged[-1] + c
+        else:
+            merged.append(c)
+    return merged
 
 
 def seam_caps(a, b, tend):
@@ -301,14 +310,15 @@ def full_caps(a, b, tend):
         t0 = T(c[0]) - .02
         t1 = T(ch[k + 1][0]) - .02 if k + 1 < len(ch) else tend
         key = [j for j in c if j in RED]
-        big = key if key else c[-1:] if len(word(c[-1])) > 2 or len(c) == 1 else c[-2:]
+        tail = [j for j in c if word(j).lower() not in FUNC]       # the big word: from the last meaningful word to the end
+        big = key if key else (c[c.index(tail[-1]):] if tail else c[-1:])
         small = [j for j in c if j not in big]
         red = bool(key)
         i = nid("fc")
         sm = " ".join(word(j) for j in small).lower()
         bg = " ".join(word(j) for j in big).upper()
         POST.append(f'<div class="fcap" id="{i}">' + (f'<div class="scr">{sm}</div>' if sm else "") +
-                    f'<div class="bigw{" red" if red else ""}">{bg}</div></div>')
+                    f'<div class="bigw{" red" if red else ""}" style="font-size:{min(150, int(1780 / max(1, len(bg))))}px">{bg}</div></div>')   # fits 880 px
         show(f"#{i}", t0, t1)
         if sm:
             js(f'tl.fromTo("#{i} .scr", {{opacity: 0, x: -20, filter: "blur(6px)"}}, {{opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}}, {t0:.3f});')
@@ -340,6 +350,10 @@ def layout():
         if kind == "intro":
             show("#intro", 0, tb)
             js(f'tl.fromTo("#cards", {{scale: 1}}, {{scale: .985, duration: {tb - .3:.2f}, ease: "none"}}, 0);')
+            js(f'tl.fromTo("#cbefore", {{y: 40, rotationY: 14, rotationX: 4, opacity: 0, filter: "blur(10px)"}}, {{y: 0, rotationY: 8, rotationX: 2, opacity: 1, filter: "blur(0px)", duration: .6, ease: "expo.out", immediateRender: false}}, 0);')
+            js(f'tl.fromTo("#cafter", {{y: 60, rotationY: -12, rotationX: 4, opacity: 0, filter: "blur(10px)"}}, {{y: 0, rotationY: -6, rotationX: 2, opacity: 1, filter: "blur(0px)", duration: .7, ease: "expo.out", immediateRender: false}}, .08);')
+            js(f'tl.to("#cbefore", {{y: -18, rotationY: 4, duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: 3}}, .6);')
+            js(f'tl.to("#cafter", {{y: -24, rotationY: -2, duration: 1.7, ease: "sine.inOut", yoyo: true, repeat: 2}}, .78);')
             js(f'tl.to("#cards", {{scale: .9, x: -40, y: -40, filter: "blur(6px)", duration: .28, ease: "power2.in"}}, {tb - .28:.3f});')
             intro_caps(a, b, tb)
             continue
@@ -372,8 +386,6 @@ def layout():
             cta(ta, a)
             continue
         full_caps(a, b, tb)
-        if a <= 181 < b:
-            namecard(T(181) - .05, T(202) - .1)
         nxt = SECS[k + 1][0] if k + 1 < len(SECS) else None
         if nxt == "split":                          # the reference's colour flash into the next split
             js(f'tl.set("#tint", {{opacity: .55}}, {tb - .3:.3f});')
@@ -383,7 +395,8 @@ def layout():
             js(f'tl.fromTo("#flash", {{opacity: 0}}, {{opacity: .85, duration: .06, immediateRender: false}}, {tb - .05:.3f});')
             js(f'tl.to("#flash", {{opacity: 0, duration: .25, ease: "power2.out"}}, {tb + .02:.3f});')
             CUES.append((tb - .3, "shimmer"))
-    HIDE.extend(["#split", "#full", "#tint", "#leak", "#flash"])
+    HIDE.extend(["#split", "#full", "#tint", "#leak", "#flash", "#hold"])
+    js(f'tl.set("#hold", {{opacity: 1}}, {VDUR - .04:.3f});')
 
 
 def namecard(t0, t1):
@@ -431,9 +444,17 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f7b7
   background-size: 26px 26px; -webkit-mask-image: linear-gradient(#000 20%, rgba(0,0,0,.35)); mask-image: linear-gradient(#000 20%, rgba(0,0,0,.35)); }}
 .blob {{ position: absolute; border-radius: 50%; filter: blur(90px); opacity: .3; }}
 #intro {{ position: absolute; inset: 0; opacity: 0; }}
-#cards {{ position: absolute; inset: 0; transform-origin: 50% 45%; }}
-.card {{ position: absolute; border-radius: 34px; overflow: hidden; box-shadow: 0 30px 60px rgba(120,20,50,.28), 0 0 0 1px rgba(255,255,255,.6); }}
+#cards {{ position: absolute; inset: 0; transform-origin: 50% 45%; perspective: 1600px; }}
+.card {{ position: absolute; border-radius: 46px; padding: 16px; perspective: 1200px;
+  background: linear-gradient(140deg, rgba(255,255,255,.62), rgba(255,255,255,.18) 50%, rgba(255,255,255,.38));
+  border: 1.5px solid rgba(255,255,255,.85); backdrop-filter: blur(24px) saturate(1.7); -webkit-backdrop-filter: blur(24px) saturate(1.7);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.95), inset 0 -18px 40px rgba(255,80,130,.18), 0 40px 80px rgba(140,20,60,.30), 0 8px 22px rgba(140,20,60,.16); }}
+.card::after {{ content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(118deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 26%, rgba(255,255,255,0) 74%, rgba(255,255,255,.22) 100%); }}
+.card .scr {{ position: relative; width: 100%; height: 100%; border-radius: 32px; overflow: hidden; box-shadow: 0 0 0 1px rgba(255,255,255,.5); }}
 .card video {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
+.card .notch {{ position: absolute; left: 50%; top: 14px; width: 110px; height: 26px; margin-left: -55px; border-radius: 14px; background: rgba(20,6,12,.55);
+  backdrop-filter: blur(6px); z-index: 2; }}
 #cbefore {{ left: 50px; top: 760px; width: 380px; height: 676px; }}
 #cbefore video {{ filter: saturate(.45) contrast(.9) brightness(1.06); }}
 #cafter {{ left: 460px; top: 500px; width: 570px; height: 1013px; }}
@@ -454,6 +475,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f7b7
 #full {{ position: absolute; inset: 0; opacity: 0; overflow: hidden; background: #2a0d14; }}
 #fullin {{ position: absolute; inset: 0; transform-origin: 50% 30%; }}
 #fullin video {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
+#hold {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; }}
 .mg {{ position: absolute; opacity: 0; transform-origin: 50% 80%; }}
 .glass {{ border-radius: 36px; padding: 30px 36px; overflow: hidden;
   background: linear-gradient(140deg, rgba(255,255,255,.62), rgba(255,255,255,.2) 55%, rgba(255,255,255,.34));
@@ -560,18 +582,18 @@ def main():
       <div id="bg"></div>
       <div id="split">
         <div id="top"><div id="topin"><div id="blobs">{blobs}</div><div id="stage">{"".join(TOP)}</div></div></div>
-        <div id="bot"><div id="botin"><video id="vsplit" class="clip" src="assets/video/face_split.mp4" data-start="0" data-duration="{DUR}" data-track-index="2" muted playsinline></video></div></div>
+        <div id="bot"><div id="botin"><video id="vsplit" class="clip" src="assets/video/face_split.mp4" data-start="0" data-duration="{VDUR}" data-track-index="2" muted playsinline></video></div></div>
         <div id="seamline"></div>
       </div>
-      <div id="full"><div id="fullin"><video id="vfull" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{DUR}" data-track-index="1" muted playsinline></video></div></div>
+      <div id="full"><div id="fullin"><video id="vfull" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{VDUR}" data-track-index="1" muted playsinline></video><img id="hold" src="assets/img/last_full.png" alt=""></div></div>
       <div id="intro"><div id="cards">
         <div class="tag" id="tbefore">Before</div><div class="tag" id="tafter">After</div>
-        <div class="card" id="cbefore"><video id="vbefore" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{i_end:.3f}" data-track-index="3" muted playsinline></video></div>
-        <div class="card" id="cafter"><video id="vafter" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{i_end:.3f}" data-track-index="4" muted playsinline></video></div>
+        <div class="card" id="cbefore"><div class="scr"><i class="notch"></i><video id="vbefore" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{i_end:.3f}" data-track-index="3" muted playsinline></video></div></div>
+        <div class="card" id="cafter"><div class="scr"><i class="notch"></i><video id="vafter" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{i_end:.3f}" data-track-index="4" muted playsinline></video></div></div>
       </div></div>
       {"".join(POST)}
       <div id="tint"></div><div id="leak"></div><div id="flash"></div><div id="grain"></div>
-      <audio id="voice" src="assets/audio/voice.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
+      <audio id="voice" src="assets/audio/voice.wav" data-start="0" data-duration="{VDUR}" data-track-index="10" data-volume="1"></audio>
     </div>
     <script>
       window.__timelines = window.__timelines || {{}};

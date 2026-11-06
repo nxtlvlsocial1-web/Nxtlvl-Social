@@ -5,10 +5,10 @@
 cd "$(dirname "$0")/.." || exit 1
 export HYPERFRAMES_NO_TELEMETRY=1
 mkdir -p renders
-OUT=renders/preview_surrender-ad_9x16_v3.mp4
+OUT=renders/preview_surrender-ad_9x16_v4.mp4
 npx --yes hyperframes@0.8.203 render --quality draft -w 3 -o renders/draft_master.mp4 > renders/draft.log 2>&1
 ffmpeg -v error -y -i renders/draft_master.mp4 -i assets/audio/voice.wav -i assets/audio/music_bed.wav -filter_complex \
-  "[1:a]aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-2:LRA=9,asplit=2[v][sc];[2:a]volume=-19dB[m0];[m0][sc]sidechaincompress=threshold=0.04:ratio=5:attack=15:release=320[m];[v][m]amix=inputs=2:normalize=0:duration=first,atrim=0:106.5,afade=t=out:st=105.4:d=1.1[a]" \
+  "[1:a]aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-2:LRA=9,asplit=2[v][sc];[2:a]volume=-19dB[m0];[m0][sc]sidechaincompress=threshold=0.04:ratio=5:attack=15:release=320[m];[v][m]amix=inputs=2:normalize=0:duration=first,atrim=0:107.5,afade=t=out:st=106.2:d=1.3[a]" \
   -map 0:v -map "[a]" -c:v libx264 -preset veryfast -crf 24 -pix_fmt yuv420p -c:a aac -b:a 192k -shortest -movflags +faststart "$OUT" >> renders/draft.log 2>&1
 echo "EXIT $?" >> renders/draft.log
 SFX_SKILL=$(ls -d /root/.claude/skills/synced/*/real-sfx 2>/dev/null | head -1)
