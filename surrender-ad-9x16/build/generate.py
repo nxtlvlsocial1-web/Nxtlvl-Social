@@ -28,7 +28,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W = json.load(open(os.path.join(ROOT, "plan", "words_tight.json")))
 FW, FH, FPS = 1080, 1920, 30
-DUR = 117.1                     # v2: repeats cut from the script (build/tight.py CUT_WORDS)
+DUR = 106.5                     # v3: repeats cut (build/tight.py CUT_WORDS) and the take sped 1.1x
 A, HIDE, TOP, POST, CUES = [], [], [], [], []
 NID = [0]
 

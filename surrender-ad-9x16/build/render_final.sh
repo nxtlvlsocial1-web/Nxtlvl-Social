@@ -5,10 +5,10 @@
 cd "$(dirname "$0")/.." || exit 1
 export HYPERFRAMES_NO_TELEMETRY=1
 mkdir -p renders
-OUT=renders/nxtlvl_surrender-ad_reels_9x16_v2.mp4
+OUT=renders/nxtlvl_surrender-ad_reels_9x16_v3.mp4
 npx --yes hyperframes@0.8.203 render --quality delivery -w 3 -o renders/master.mp4 > renders/final.log 2>&1
 ffmpeg -v error -y -i renders/master.mp4 -i assets/audio/voice.wav -i assets/audio/music_bed.wav -filter_complex \
-  "[1:a]aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-2:LRA=9,asplit=2[v][sc];[2:a]volume=-19dB[m0];[m0][sc]sidechaincompress=threshold=0.04:ratio=5:attack=15:release=320[m];[v][m]amix=inputs=2:normalize=0:duration=first,atrim=0:117.1,afade=t=out:st=115.9:d=1.2[a]" \
+  "[1:a]aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-2:LRA=9,asplit=2[v][sc];[2:a]volume=-19dB[m0];[m0][sc]sidechaincompress=threshold=0.04:ratio=5:attack=15:release=320[m];[v][m]amix=inputs=2:normalize=0:duration=first,atrim=0:106.5,afade=t=out:st=105.4:d=1.1[a]" \
   -map 0:v -map "[a]" -c:v libx264 -preset slow -crf 18 -maxrate 9M -bufsize 18M -profile:v high -pix_fmt yuv420p -c:a aac -b:a 320k -shortest -movflags +faststart "$OUT" >> renders/final.log 2>&1
 echo "EXIT $?" >> renders/final.log
 SFX_SKILL=$(ls -d /root/.claude/skills/synced/*/real-sfx 2>/dev/null | head -1)

@@ -16,6 +16,7 @@ import subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW = os.path.join(ROOT, "assets", "video", "drive2", "raw_hq.mp4")   # v3: the owner's 1080p original (not in git)
+SPEED = 1.1            # v3 (owner: "fast forward the voice a little"): picture and voice 1.1x, pitch kept (atempo)
 OFFSET = .048          # the 1080p file runs 0.048 s later than the 720p copy Scribe transcribed (audio cross-correlation)
 THRESH, MINSIL, KEEP = -30, .1, .08
 # v2 (owner: "find any repetitive pattern in the script, if the same thing is said twice cut it out"): word ranges
@@ -76,7 +77,7 @@ def to_tight(x):
     return round(t, 3)                     # a removed word lands on the next kept moment
 
 
-words = [{"text": w["text"], "s": to_tight(w["start_time"]), "e": to_tight(w["end_time"]),
+words = [{"text": w["text"], "s": round(to_tight(w["start_time"]) / SPEED, 3), "e": round(to_tight(w["end_time"]) / SPEED, 3),
           "cut": any(a <= i <= b for a, b in CUT_WORDS)} for i, w in enumerate(W)]
 json.dump(cuts, open(os.path.join(ROOT, "plan", "cuts.json"), "w"), indent=0)
 json.dump(words, open(os.path.join(ROOT, "plan", "words_tight.json"), "w"), ensure_ascii=False, indent=0)
@@ -94,6 +95,9 @@ for k, (a, b) in enumerate(segs):
                     out], check=True)
     lst.append(f"file '{out}'")
 open(os.path.join(tmp, "list.txt"), "w").write("\n".join(lst) + "\n")
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", os.path.join(tmp, "list.txt"), "-c", "copy",
+one = os.path.join(tmp, "tight_1x.mov")
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", os.path.join(tmp, "list.txt"), "-c", "copy", one], check=True)
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-threads", "2", "-i", one, "-vf", f"setpts=PTS/{SPEED}", "-af", f"atempo={SPEED}", "-r", "30",
+                "-c:v", "libx264", "-crf", "14", "-preset", "medium", "-pix_fmt", "yuv420p", "-c:a", "pcm_s16le", "-ar", "48000",
                 os.path.join(ROOT, "assets", "video", "tight.mov")], check=True)
-print(f"{len(segs)} pieces, {t:.2f} s (raw {dur:.2f} s, speech {start:.2f}-{end:.2f})")
+print(f"{len(segs)} pieces, {t:.2f} s at 1x, {t / SPEED:.2f} s at {SPEED}x (raw {dur:.2f} s, speech {start:.2f}-{end:.2f})")
