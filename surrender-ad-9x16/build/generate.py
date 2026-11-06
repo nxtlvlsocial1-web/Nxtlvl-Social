@@ -453,6 +453,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f7b7
   background: linear-gradient(118deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 26%, rgba(255,255,255,0) 74%, rgba(255,255,255,.22) 100%); }}
 .card .scr {{ position: relative; width: 100%; height: 100%; border-radius: 32px; overflow: hidden; box-shadow: 0 0 0 1px rgba(255,255,255,.5); }}
 .card video {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
+#cbefore {{ left: 50px; top: 760px; width: 380px; height: 676px; }}
 #cbefore video {{ filter: saturate(.45) contrast(.9) brightness(1.06); }}
 #cafter {{ left: 460px; top: 500px; width: 570px; height: 1013px; }}
 .tag {{ position: absolute; font: 800 54px/1 "Inter"; color: #1a0610; letter-spacing: -.01em; }}
