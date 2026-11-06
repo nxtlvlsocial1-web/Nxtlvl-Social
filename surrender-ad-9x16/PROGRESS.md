@@ -1,5 +1,5 @@
 # PROGRESS: surrender-ad-9x16 (updated 2026-11-06)
-Phase: v2 PREVIEW rendering (1080p original, repeats cut: 117.1 s, faster motion, name Kanav); final after approval.
+Phase: DONE: final v4 delivered (renders/nxtlvl_surrender-ad_reels_9x16_v4_sfx.mp4, 1080x1920, 107.5 s, 95 MB, -14.8 LUFS).
 What it is:
 - Talking-head ad for Kanak Kesar (The Conscious Millionaire): "comment SURRENDER". 9:16, 1080x1920, 30 fps, 137 s.
 - Raw take: 145 s, landscape 720p (assets/video/raw.mp4, not in git).
