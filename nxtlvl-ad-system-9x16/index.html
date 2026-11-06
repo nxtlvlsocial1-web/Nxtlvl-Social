@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+      @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05030C; }
+      body { font-family: "Archivo", "Instrument Sans", sans-serif; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #05030C; }
+      .scene { position: absolute; inset: 0; width: 100%; height: 100%; }
+      /* the face card: a rounded window on the 60 px grid; the camera inside it zooms per cut */
+      #pane { position: absolute; left: 60px; top: 846px; width: 960px; height: 1020px; overflow: hidden; z-index: 2; background: #05030C;
+               border-radius: 44px; border: 2px solid rgba(216,187,255,.55);
+               box-shadow: 0 0 0 1px rgba(125,24,252,.55), 0 0 46px rgba(169,92,255,.45), 0 30px 80px rgba(5,3,12,.7); }
+      #cam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; }
+      #a-roll { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="21.83" data-width="1080" data-height="1920">
+      <div id="pane" data-layout-allow-overflow>
+        <div id="cam" data-layout-allow-overflow>
+          <video id="a-roll" class="clip" src="assets/video/aroll.mp4" playsinline data-has-audio="true"
+            data-start="0" data-duration="21.83" data-track-index="0"></video>
+        </div>
+      </div>
+
+      <div id="el-panel" class="scene clip" data-composition-id="panel" data-composition-src="compositions/panel.html" data-start="0" data-duration="19.66" data-track-index="2" data-track-kind="graphics" style="z-index:1"></div>
+      <div id="el-p1-hook" class="scene clip" data-composition-id="p1-hook" data-composition-src="compositions/p1-hook.html" data-start="0" data-duration="3.84" data-track-index="3" data-track-kind="graphics" style="z-index:5"></div>
+      <div id="el-p2-system" class="scene clip" data-composition-id="p2-system" data-composition-src="compositions/p2-system.html" data-start="3.84" data-duration="1.76" data-track-index="4" data-track-kind="graphics" style="z-index:5"></div>
+      <div id="el-p3-inside" class="scene clip" data-composition-id="p3-inside" data-composition-src="compositions/p3-inside.html" data-start="5.45" data-duration="7.35" data-track-index="5" data-track-kind="graphics" style="z-index:5"></div>
+      <div id="el-p4-price" class="scene clip" data-composition-id="p4-price" data-composition-src="compositions/p4-price.html" data-start="12.77" data-duration="4.05" data-track-index="6" data-track-kind="graphics" style="z-index:5"></div>
+      <div id="el-p5-cta" class="scene clip" data-composition-id="p5-cta" data-composition-src="compositions/p5-cta.html" data-start="16.8" data-duration="5.03" data-track-index="7" data-track-kind="graphics" style="z-index:9"></div>
+      <div id="el-captions" class="scene clip" data-composition-id="captions" data-composition-src="compositions/captions.html"
+        data-start="0" data-duration="19.66" data-track-index="1" data-track-kind="captions" style="z-index:7"></div>
+
+      <audio id="el-bgm" src="assets/music/nxtlvl-brand.wav" data-start="0" data-duration="21.83" data-media-start="4" data-volume="0.13" data-fade-out="1.2" data-track-index="10"></audio>
+      <audio id="el-sfx-0" src="assets/sfx/pop.mp3" data-start="2.203" data-duration="0.72" data-volume="0.3" data-track-index="20"></audio>
+      <audio id="el-sfx-1" src="assets/sfx/sparkle.mp3" data-start="2.263" data-duration="1.8" data-volume="0.16" data-track-index="21"></audio>
+      <audio id="el-sfx-2" src="assets/sfx/pop.mp3" data-start="2.903" data-duration="0.72" data-volume="0.24" data-track-index="22"></audio>
+      <audio id="el-sfx-3" src="assets/sfx/whoosh-short.mp3" data-start="3.703" data-duration="0.57" data-volume="0.18" data-track-index="23"></audio>
+      <audio id="el-sfx-4" src="assets/sfx/click-soft.mp3" data-start="4.283" data-duration="0.37" data-volume="0.3" data-track-index="24"></audio>
+      <audio id="el-sfx-5" src="assets/sfx/impact-bass-1.mp3" data-start="4.463" data-duration="2.12" data-volume="0.3" data-track-index="25"></audio>
+      <audio id="el-sfx-6" src="assets/sfx/whoosh-short.mp3" data-start="5.413" data-duration="0.57" data-volume="0.16" data-track-index="26"></audio>
+      <audio id="el-sfx-7" src="assets/sfx/pop.mp3" data-start="6.083" data-duration="0.72" data-volume="0.22" data-track-index="27"></audio>
+      <audio id="el-sfx-8" src="assets/sfx/pop.mp3" data-start="7.063" data-duration="0.72" data-volume="0.16" data-track-index="28"></audio>
+      <audio id="el-sfx-9" src="assets/sfx/click-soft.mp3" data-start="8.133" data-duration="0.37" data-volume="0.28" data-track-index="29"></audio>
+      <audio id="el-sfx-10" src="assets/sfx/pop.mp3" data-start="8.213" data-duration="0.72" data-volume="0.22" data-track-index="30"></audio>
+      <audio id="el-sfx-11" src="assets/sfx/click-soft.mp3" data-start="10.063" data-duration="0.37" data-volume="0.28" data-track-index="31"></audio>
+      <audio id="el-sfx-12" src="assets/sfx/pop.mp3" data-start="10.153" data-duration="0.72" data-volume="0.22" data-track-index="32"></audio>
+      <audio id="el-sfx-13" src="assets/sfx/click-soft.mp3" data-start="12.663" data-duration="0.37" data-volume="0.28" data-track-index="33"></audio>
+      <audio id="el-sfx-14" src="assets/sfx/whoosh-short.mp3" data-start="12.693" data-duration="0.57" data-volume="0.18" data-track-index="34"></audio>
+      <audio id="el-sfx-15" src="assets/sfx/pop.mp3" data-start="13.823" data-duration="0.72" data-volume="0.22" data-track-index="35"></audio>
+      <audio id="el-sfx-16" src="assets/sfx/click-soft.mp3" data-start="15.103" data-duration="0.37" data-volume="0.3" data-track-index="36"></audio>
+      <audio id="el-sfx-17" src="assets/sfx/pop.mp3" data-start="15.893" data-duration="0.72" data-volume="0.28" data-track-index="37"></audio>
+      <audio id="el-sfx-18" src="assets/sfx/sparkle.mp3" data-start="15.953" data-duration="1.8" data-volume="0.24" data-track-index="38"></audio>
+      <audio id="el-sfx-19" src="assets/sfx/whoosh-short.mp3" data-start="16.713" data-duration="0.57" data-volume="0.16" data-track-index="39"></audio>
+      <audio id="el-sfx-20" src="assets/sfx/notification.mp3" data-start="17.873" data-duration="2.46" data-volume="0.18" data-track-index="40"></audio>
+      <audio id="el-sfx-21" src="assets/sfx/click-soft.mp3" data-start="18.853" data-duration="0.37" data-volume="0.34" data-track-index="41"></audio>
+      <audio id="el-sfx-22" src="assets/sfx/impact-bass-2.mp3" data-start="17.673" data-duration="2.59" data-volume="0.3" data-track-index="42"></audio>
+      <audio id="el-sfx-23" src="assets/sfx/sparkle.mp3" data-start="19.643" data-duration="1.8" data-volume="0.22" data-track-index="43"></audio>
+    </div>
+    <script>
+      (function () {
+        var tl = gsap.timeline({ paused: true });
+        // base fit 960/1080 = 0.8889 shows the full width with ~36 px headroom over the hair; the face centre
+        // (source 540, 850) stays at (480, 391.6) in the card at every zoom: eyes ~y 1295, mouth ~1430 on canvas
+        function frame(z) { var s = 0.8889 * z; return { scale: s, x: 480 - 540 * s, y: 391.6 - 850 * s }; }
+        tl.set("#cam", frame(1.0), 0.0);
+        tl.set("#cam", frame(1.15), 3.8333);
+        tl.set("#cam", frame(1.0), 6.1);
+        tl.set("#cam", frame(1.1), 8.2333);
+        tl.set("#cam", frame(1.0), 10.1667);
+        tl.set("#cam", frame(1.1), 12.7667);
+        tl.set("#cam", frame(1.22), 15.2);
+        tl.set("#cam", frame(1.0), 16.7667);
+        tl.set("#cam", frame(1.12), 18.0);
+        tl.set("#cam", frame(1.26), 4.5);                 // "A system." - tighter, inside the same cut
+        window.__timelines = window.__timelines || {};
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+  </body>
+</html>
