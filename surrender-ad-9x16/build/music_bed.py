@@ -18,12 +18,21 @@ while have < LEN:
     take = min(LOOP_OUT - LOOP_IN, LEN - have + .1)
     pieces.append((LOOP_IN, LOOP_IN + take))
     have += take
-fc = "".join(f"[0:a]atrim={a}:{b},asetpts=PTS-STARTPTS[p{k}];" for k, (a, b) in enumerate(pieces))
-cur = "p0"
-for k in range(1, len(pieces)):
-    fc += f"[{cur}][p{k}]acrossfade=d=0.08:c1=tri:c2=tri[x{k}];"
+# each piece cut to its own file first (trimming one input twice inside one filter graph dropped the first piece)
+tmp = os.path.join(ROOT, "cache", "bed")
+os.makedirs(tmp, exist_ok=True)
+files = []
+for k, (a, b) in enumerate(pieces):
+    fp = os.path.join(tmp, f"m{k}.wav")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a}", "-to", f"{b}", "-i", SRC, fp], check=True)
+    files.append(fp)
+fc, cur = "", "0:a"
+for k in range(1, len(files)):
+    fc += f"[{cur}][{k}:a]acrossfade=d=0.08:c1=tri:c2=tri[x{k}];"
     cur = f"x{k}"
 fc += f"[{cur}]atrim=0:{LEN},afade=t=out:st={LEN - 1.2}:d=1.2[o]"
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", SRC, "-filter_complex", fc, "-map", "[o]", "-ar", "48000",
-                os.path.join(ROOT, "assets", "audio", "music_bed.wav")], check=True)
+args = ["ffmpeg", "-v", "error", "-y"]
+for fp in files:
+    args += ["-i", fp]
+subprocess.run(args + ["-filter_complex", fc, "-map", "[o]", "-ar", "48000", os.path.join(ROOT, "assets", "audio", "music_bed.wav")], check=True)
 print("pieces", pieces)
