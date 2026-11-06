@@ -131,6 +131,7 @@ def el(html, x, y, t0, t1, w=None, cls="glass", z=3, style="", rise=90, tilt=18,
     """A motion element in the top stage: rises out of a blur with a slight 3D tilt (the promo's entrance), floats,
     leaves blurred upward."""
     i = nid("g")
+    d = min(d, max(.2, t1 - t0 - .3))       # a short window gets a quicker entrance, so its exit always lands after it
     ws = f"width:{w}px;" if w else ""
     TOP.append(f'<div class="mg {cls}" id="{i}" style="left:{x}px;top:{y}px;{ws}z-index:{z};{style}">{html}</div>')
     HIDE.append(f"#{i}")
@@ -161,7 +162,7 @@ def graphics():
            400, 430, T(35), e1, w=560)
     js(f'tl.fromTo("#{i} .bar i", {{scaleX: 0}}, {{scaleX: .92, duration: 1.4, ease: "power3.out", immediateRender: false}}, {T(35) + .2:.3f});')
     counter(i, T(35) + .2, 1.4, 92)
-    for k, (wi, txt) in enumerate([(43, "Try everything"), (46, "Every method"), (54, "Hope it works")]):
+    for k, (wi, txt) in enumerate([(43, "Try everything"), (46, "Every method"), (50, "Hope it works")]):
         el(f'{icon("check", 40, "#18b26b")}<span>{txt}</span>', 150 + 30 * k, 640 + 96 * k, T(wi), e1, cls="glass chip", rise=40)
     for k, (wi, ic, h, sub) in enumerate([(64, "book", "Courses", "bought"), (69, "layers", "Programs", "joined"),
                                           (72, "play", "YouTube", "content consumed")]):
