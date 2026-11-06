@@ -13,3 +13,16 @@ The bottom-left corner is kept clear in every option: LinkedIn puts the profile 
 
 Built from HTML with the brand colours (`#0A0620`→`#05030C`, glows `#7E1AF6` and `#5E06F2`) and the site's fonts
 (Archivo, Instrument Serif, Instrument Sans).
+
+## Set 2 (November): in the look of the v2 launch film
+
+`preview-set2.png` shows each banner with the page-logo spot (company) and the photo spot (personal) marked.
+
+| Option | Company page (1128×191) | Personal profile (1584×396) |
+|---|---|---|
+| D · Editorial blocks: violet, off-white and ink blocks; the headline, 01–04 services and nxtlvlsocial.ai | `editorial-blocks-1128x191.png` | `editorial-blocks-1584x396.png` |
+| E · Film slate: the launch film's corner marks, REC timecode and "Your brand, *next level.*" | `film-slate-1128x191.png` | `film-slate-1584x396.png` |
+| F · Price board: from $5 a month; Design $5 · Reels $15 · Automation $49 /mo, websites custom quote | `price-board-1128x191.png` | `price-board-1584x396.png` |
+
+Each also has an `@2x` file: upload that one. Built by `source/v2.py` (HTML, rendered with Playwright).
+Prices are the ones the site listed before prices came off it; update them in `prices()` if they change.
