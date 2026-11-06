@@ -453,9 +453,6 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f7b7
   background: linear-gradient(118deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 26%, rgba(255,255,255,0) 74%, rgba(255,255,255,.22) 100%); }}
 .card .scr {{ position: relative; width: 100%; height: 100%; border-radius: 32px; overflow: hidden; box-shadow: 0 0 0 1px rgba(255,255,255,.5); }}
 .card video {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
-.card .notch {{ position: absolute; left: 50%; top: 14px; width: 110px; height: 26px; margin-left: -55px; border-radius: 14px; background: rgba(20,6,12,.55);
-  backdrop-filter: blur(6px); z-index: 2; }}
-#cbefore {{ left: 50px; top: 760px; width: 380px; height: 676px; }}
 #cbefore video {{ filter: saturate(.45) contrast(.9) brightness(1.06); }}
 #cafter {{ left: 460px; top: 500px; width: 570px; height: 1013px; }}
 .tag {{ position: absolute; font: 800 54px/1 "Inter"; color: #1a0610; letter-spacing: -.01em; }}
@@ -588,8 +585,8 @@ def main():
       <div id="full"><div id="fullin"><video id="vfull" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{VDUR}" data-track-index="1" muted playsinline></video><img id="hold" src="assets/img/last_full.png" alt=""></div></div>
       <div id="intro"><div id="cards">
         <div class="tag" id="tbefore">Before</div><div class="tag" id="tafter">After</div>
-        <div class="card" id="cbefore"><div class="scr"><i class="notch"></i><video id="vbefore" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{i_end:.3f}" data-track-index="3" muted playsinline></video></div></div>
-        <div class="card" id="cafter"><div class="scr"><i class="notch"></i><video id="vafter" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{i_end:.3f}" data-track-index="4" muted playsinline></video></div></div>
+        <div class="card" id="cbefore"><div class="scr"><video id="vbefore" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{i_end:.3f}" data-track-index="3" muted playsinline></video></div></div>
+        <div class="card" id="cafter"><div class="scr"><video id="vafter" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{i_end:.3f}" data-track-index="4" muted playsinline></video></div></div>
       </div></div>
       {"".join(POST)}
       <div id="tint"></div><div id="leak"></div><div id="flash"></div><div id="grain"></div>
