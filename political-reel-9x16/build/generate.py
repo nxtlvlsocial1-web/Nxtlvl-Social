@@ -346,7 +346,15 @@ def boards():
     scrap("grey", 2, 600, 480, 420, 7, ta + .12, z=1)
     words = [j for j in range(1, 24)]
     body = " ".join(f'<span class="qw{" mk" if j in (15, 19, 20, 21) else ""}" id="qw{j}">{word(j)}</span>' for j in words)
-    card(f'<div class="qmark">&ldquo;</div><div class="qtxt">{body}</div>', 110, 150, 860, ta + .08, rot=-2, z=3, cls="note quote")
+    card(f'<div class="qmark">&ldquo;</div><div class="qtxt">{body}</div>', 110, 175, 860, ta + .08, rot=-2, z=3, cls="note quote")
+    # v6 (owner): the title on the opening frames, until the first transition
+    words_t = "DIWALI BRINGS ALL RELIGIONS TOGETHER".split()
+    POST.append('<div id="title"><div class="tt">' + " ".join(f'<span class="tw2">{w}</span>' for w in words_t) + '</div></div>')
+    show("#title", .15, tb)
+    js('tl.fromTo("#title .tt", {scaleX: .05}, {scaleX: 1, duration: .3, ease: ' + ST(.3, "power3.out") + ', immediateRender: false}, .15);')
+    js('tl.fromTo("#title .tw2", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .16, stagger: .08, ease: ' + ST(.16, "power2.out") + ', immediateRender: false}, .3);')
+    js(f'tl.to("#title", {{y: -6, duration: 1.6, ease: "sine.inOut", yoyo: true, repeat: {max(1, int((tb - 1) / 1.6))}}}, .8);')
+    cue(.15, "paper")
     cue(ta + .08, "paper")
     words_on("qw", words)
     marker("#qw15", T(15) + .05)
@@ -355,7 +363,7 @@ def boards():
     cue(T(15) + .05, "marker")
     diya(60, 700, 170, ta + .4, tb)
     diya(850, 710, 160, ta + .55, tb)
-    twinkle(6, ta, tb, area=(60, 40, 960, 90))
+    twinkle(5, ta, tb, area=(250, 720, 580, 120))
     end_group()
 
     # 2. Who said it: his photo, circled; a speech bubble says it in pictures (a tilak, a shopping bag ticked)
@@ -826,6 +834,11 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #efeb
   box-shadow: 0 16px 30px rgba(0,0,0,.35); }}
 .fambox svg {{ width: 100%; height: 100%; fill: none; stroke: #fff; stroke-width: 7; stroke-linecap: round; }}
 .mini {{ font: 700 30px/1.3 "Inter"; color: #333; }}
+#title {{ position: absolute; left: 0; width: {FW}px; top: 262px; text-align: center; opacity: 0; z-index: 13; }}
+#title .tt {{ display: inline-block; background: #111; color: #fff; font: 400 54px/1 "Anton"; letter-spacing: .02em; padding: 14px 26px 12px;
+  transform: rotate(-1.5deg); box-shadow: 0 10px 20px rgba(0,0,0,.28); }}
+#title .tw2 {{ display: inline-block; }}
+#title .tw2:last-child {{ color: #ff3048; }}
 .hdw {{ position: absolute; opacity: 0; overflow: visible; transform-origin: 50% 50%; }}
 .hdw text {{ font-family: "Kaushan"; stroke-width: 3px; stroke-dasharray: 1600; paint-order: stroke; }}
 .hdw .h1 {{ font-size: 200px; fill: #111; stroke: #111; }}
