@@ -1,0 +1,23 @@
+{
+"voice": "two speakers: YOU (a creator who stopped posting) and LUMI (the AI ring light); phrase by phrase with an emotion each",
+"lines": [
+ ["01_you", "you", null, [["LUMI. I haven't posted in three weeks.", "panic", 0]]],
+ ["02_lumi", "lumi", null, [["Twenty-three days. I counted.", "dry", 0]]],
+ ["03_you", "you", null, [["I have zero ideas!", "whine", 0]]],
+ ["04_lumi", "lumi", null, [["Talk to me. Two minutes. About anything.", "calm", 0]]],
+ ["05_you", "you", null, [["Like... my morning?", "surprised", 0]]],
+ ["06_lumi", "lumi", null, [["Step one. Record a voice memo.", "calm", 0.25], ["Your phone turns it into text.", "warm", 0]]],
+ ["07_lumi", "lumi", null, [["Step two. Paste it into ChatGPT with my prompt.", "proud", 0.2], ["Thirty post ideas.", "proud", 0]]],
+ ["08_you", "you", null, [["Thirty?! From my coffee rant?", "amazed", 0]]],
+ ["09_lumi", "lumi", null, [["Step three. Every idea gets a hook, a caption and slides.", "warm", 0]]],
+ ["10_lumi", "lumi", null, [["Step four. Schedule all thirty in Meta Business Suite.", "calm", 0.2], ["It's free.", "warm", 0]]],
+ ["11_you", "you", null, [["A whole month... in one night!", "excite", 0]]],
+ ["12_you", "you", null, [["Wait. Eighty thousand views?! On the coffee one?", "amazed", 0]]],
+ ["13_lumi", "lumi", null, [["Your rant. My hook.", "dry", 0]]],
+ ["14_you", "you", null, [["Okay. Just be me. Post forever?", "scheme", 0]]],
+ ["15_lumi", "lumi", null, [["No.", "dry", 0]]],
+ ["16_you", "you", null, [["Why not?", "whine", 0]]],
+ ["17_lumi", "lumi", null, [["They follow you, not me.", "warm", 0.25], ["Your voice is the content.", "warm", 0]]],
+ ["18_lumi", "lumi", "Send this to a creator who hasn't posted in weeks. Follow @nxtlvlsocial.ai ~ ~ and comment POSTS. I'll send you the prompt.", [["Send this to a creator who hasn't posted in weeks.", "warm", 0.3], ["Follow next level social,", "warm", 0.08], ["and comment posts.", "punch", 0.2], ["I'll send you the prompt.", "smile", 0]]]
+]
+}

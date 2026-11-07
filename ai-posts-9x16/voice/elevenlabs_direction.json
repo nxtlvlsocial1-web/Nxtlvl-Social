@@ -1,0 +1,26 @@
+{
+"note": "Direction for the ElevenLabs takes (eleven_v3 audio tags; v4 is refused on the free queue). One file per line in voice/el/mp3/<take>.mp3; build/voice.py uses them in place of the Kokoro placeholder.",
+"voices": {"you": "Louie the Legend ataV0GNgfIus2NWdTJP0 (expressive young male creator)", "lumi": "Lyan tnVKC6NjwhdRxoQIfKue (casual, sarcastic young female)"},
+"voice_ids": {"you": "ataV0GNgfIus2NWdTJP0", "lumi": "tnVKC6NjwhdRxoQIfKue"},
+"flow_id": null,
+"lines": [
+ ["01_you", "you", "[panicked] LUMI. I haven't posted in three weeks."],
+ ["02_lumi", "lumi", "[deadpan] Twenty-three days. I counted."],
+ ["03_you", "you", "[whining, exasperated] I have zero ideas!"],
+ ["04_lumi", "lumi", "[calm, confident] Talk to me. Two minutes. About anything."],
+ ["05_you", "you", "[confused] Like... my morning?"],
+ ["06_lumi", "lumi", "Step one. Record a voice memo. [warm] Your phone turns it into text."],
+ ["07_lumi", "lumi", "[proud] Step two. Paste it into ChatGPT with my prompt. Thirty post ideas."],
+ ["08_you", "you", "[amazed, laughing] Thirty?! From my coffee rant?"],
+ ["09_lumi", "lumi", "[warm] Step three. Every idea gets a hook, a caption and slides."],
+ ["10_lumi", "lumi", "Step four. Schedule all thirty in Meta Business Suite. [warm] It's free."],
+ ["11_you", "you", "[excited] A whole month... in one night!"],
+ ["12_you", "you", "[shocked, shouting] Wait. Eighty thousand views?! On the coffee one?"],
+ ["13_lumi", "lumi", "[smug] Your rant. My hook."],
+ ["14_you", "you", "[scheming, quiet] Okay. Just be me. [hopeful] Post forever?"],
+ ["15_lumi", "lumi", "[flat] No."],
+ ["16_you", "you", "[pleading] Why not?"],
+ ["17_lumi", "lumi", "[softly, warm] They follow you, not me. Your voice is the content."],
+ ["18_lumi", "lumi", "[friendly] Send this to a creator who hasn't posted in weeks. Follow next level social, and comment posts. I'll send you the prompt."]
+]
+}
