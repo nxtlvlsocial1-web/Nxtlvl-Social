@@ -27,7 +27,8 @@ FW, FH, FPS = 1080, 1920, 30
 W = json.load(open(os.path.join(ROOT, "plan", "words_tight.json")))
 VDUR = round(float(__import__("subprocess").run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
     os.path.join(ROOT, "assets", "video", "face_split.mp4")], capture_output=True, text=True).stdout), 3)     # v2: the take at 1.1x
-TOPH = 780                          # v2 (owner): the face gets more height so her hands stay in frame
+BY, BH = 240, 380                   # v3: the board strip (inside the Reels safe area: 250 to 1520)
+CARD = (90, 650, 900, 860)          # v3: her video as a taped print, x y w h, ends at 1510 above the caption UI
 DUR = round(VDUR + 1.0, 3)          # the last board holds a second on her last frame
 A, HIDE, TOP, POST = [], [], [], []
 NID = [0]
@@ -267,217 +268,223 @@ def chapter(board, num, title, lead, ta, tb, a, title_at):
 
 
 # ------------------------------------------------------------------------------------------------ the boards
+# v3 (owner: "fit the reels grid perfectly without anything overlapping"): everything that matters sits between the
+# Reels top bar (0-250) and the caption / username area (from 1520): a board strip 1080x380 at y 240 and her video as
+# a taped print below it (90,650 900x860). Board coordinates below are in that 1080x380 strip.
 def boards():
     S = {s[5]: s for s in SECS if s[5]}
 
-    # 1. The hook: her quote of the minister, typed on as she says it, the key words marked
+    # 1. The hook: her quote, typed on as she says it, key words marked; diyas either side
     _, ta, tb, a, b, _ = S["quote"]
     group("quote", ta, tb)
-    scrap("red", 0, 40, 90, 640, -8, ta + .05, z=1)
-    scrap("grey", 2, 560, 520, 520, 7, ta + .12, z=1)
+    scrap("red", 0, 20, 10, 420, -6, ta + .05, z=1)
     words = [j for j in range(1, 24)]
     body = " ".join(f'<span class="qw{" mk" if j in (15, 19, 20, 21) else ""}" id="qw{j}">{word(j)}</span>' for j in words)
     card(f'<div class="qmark">&ldquo;</div><div class="qtxt">{body}</div><div class="qby">&mdash; a Maharashtra cabinet minister</div>',
-         120, 150, 840, ta + .08, rot=-2, z=3, cls="note quote")
+         150, 0, 780, ta + .08, rot=-1.5, z=3, cls="note quote")
     words_on("qw", words)
-    diya(60, 760, 150, ta + .4, tb)
-    diya(870, 770, 140, ta + .55, tb)
-    twinkle(6, ta, tb, area=(40, 40, 1000, 140))
     marker("#qw15", T(15) + .05)
     for j in (19, 20, 21):
         marker(f"#qw{j}", T(j) + .02, .18)
+    diya(20, 270, 120, ta + .4, tb)
+    diya(940, 270, 120, ta + .55, tb)
+    twinkle(5, ta, tb, area=(180, 300, 720, 40))
     end_group()
     js('tl.set(".qby", {opacity: 0}, 0);')
     js(f'tl.to(".qby", {{opacity: 1, duration: .2}}, {T(23) + .2:.3f});')
 
-    # 2. Who said it: the minister's photo as a black-and-white print, his name types on, circled
+    # 2. Who said it: his photo as a black-and-white print, circled, his name types on
     _, ta, tb, a, b, _ = S["rane"]
     group("rane", ta, tb)
-    scrap("red", 1, 30, 120, 600, -10, ta + .03, z=1)
-    prt("assets/img/ref/speaker_face.jpg", 90, 140, 480, 560, -4, ta + .06, z=3)
-    label("SITTING CABINET MINISTER", 610, 240, T(37) - .05, kind="white", size=36, rot=3, z=9)
-    label("MAHARASHTRA", 630, 310, T(35), kind="red", size=58, rot=3, z=9)
-    label("NITESH RANE", 540, 420, T(40) - .04, kind="black", size=92, rot=-3, z=9)
-    circle(10, 70, 650, 680, T(40) + .05)
-    draw(["M 40 120 C 120 40 200 20 300 30", "M 300 30 L 262 8 M 300 30 L 268 58"], 560, 600, 330, 140, "0 0 320 140", T(41) + .1, d=.35)
+    scrap("red", 1, 40, 20, 380, -10, ta + .03, z=1)
+    prt("assets/img/ref/speaker_face.jpg", 100, 20, 280, 300, -4, ta + .06, z=3)
+    label("SITTING CABINET MINISTER", 470, 40, T(37) - .05, kind="white", size=34, rot=2, z=9)
+    label("MAHARASHTRA", 480, 100, T(35), kind="red", size=52, rot=2, z=9)
+    label("NITESH RANE", 450, 180, T(40) - .04, kind="black", size=96, rot=-3, z=9)
+    circle(40, -20, 410, 410, T(40) + .05)
+    draw(["M 40 90 C 120 30 200 14 300 22", "M 300 22 L 262 2 M 300 22 L 268 48"], 520, 290, 300, 100, "0 0 320 110", T(41) + .1, d=.35)
     end_group()
+
+    def chapter2(board, num, title, lead, title_at):
+        _, ta, tb, a, b, _ = S[board]
+        group(board, ta, tb)
+        scrap("black", 1, 500, 110, 520, -5, ta + .05, z=1)
+        i = nid("num")
+        TOP.append(f'<div class="num" id="{i}">{num}</div>')
+        slap(i, ta + .02, -4, d=.4, frm=1.6)
+        label(lead, 420, 50, ta + .1, kind="white", size=40, rot=-2)
+        label(title, 400, 150, title_at, kind="black", size=68, rot=-3)
+        draw(["M 30 40 C 200 10 420 60 600 30"], 420, 270, 560, 60, "0 0 640 70", title_at + .3, d=.35)
+        diya(880, 280, 110, title_at + .2, tb)
+        twinkle(5, ta, tb)
+        end_group()
 
     # 3. Chapter one
-    _, ta, tb, a, b, _ = S["ch1"]
-    chapter("ch1", "01", "MUSLIM COMMUNITY", "LET'S START WITH", ta, tb, a, T(61) - .04)
+    chapter2("ch1", "01", "MUSLIM COMMUNITY", "LET'S START WITH", T(61) - .04)
 
-    # 4. Firecrackers: drawn rockets and sparkle bursts, Mumbai, the biggest market
+    # 4. Pataake: bursts that keep going off, Mumbai, the biggest market
     _, ta, tb, a, b, _ = S["crackers"]
     group("crackers", ta, tb)
-    scrap("white", 0, 60, 120, 960, -3, ta + .03, z=1)
-    burst = []
-    import math
-    for cx, cy, r in [(230, 300, 120), (560, 220, 90), (820, 330, 130)]:
-        for k in range(10):
-            ang = k / 10 * 6.283
-            burst.append(f"M {cx + math.cos(ang) * r * .35:.0f} {cy + math.sin(ang) * r * .35:.0f} L {cx + math.cos(ang) * r:.0f} {cy + math.sin(ang) * r:.0f}")
-    firework(230, 300, 150, T(70) - .05, tb, "#e3202f", 1.0)
-    firework(560, 210, 120, T(70) + .3, tb, "#111", 1.2)
-    firework(830, 320, 160, T(71), tb, "#d9a520", 0.9)
-    firework(160, 760, 100, T(76), tb, "#e3202f", 1.3)
-    twinkle(8, ta, tb)
-    draw(["M 230 300 C 240 420 250 560 260 700", "M 820 330 C 800 450 790 560 780 700"], 0, 0, 1080, 960, "0 0 1080 960", T(70) - .3, d=.3, z=3,
+    scrap("white", 0, 60, -10, 960, -2, ta + .03, z=1)
+    firework(190, 120, 120, T(70) - .05, tb, "#e3202f", 1.0)
+    firework(540, 80, 90, T(70) + .3, tb, "#111", 1.2)
+    firework(900, 130, 130, T(71), tb, "#d9a520", 0.9)
+    draw(["M 190 120 C 196 200 200 300 204 380", "M 900 130 C 890 220 884 300 880 380"], 0, 0, 1080, 380, "0 0 1080 380", T(70) - .3, d=.3, z=3,
          stroke="#111", sw=6)
-    label("PATAAKE", 340, 470, T(70), kind="black", size=100, rot=-3)
-    label("MUMBAI", 140, 640, T(76), kind="white", size=70, rot=2)
-    stamp("SABSE BADA MARKET", 250, 690, T(85) - .03, rot=-5, size=78)
-    end_group()
-
-    # 5. Mohammad Ali Road: the owner's photo (Minara Masjid's minaret over the market), a pin drops on it
-    _, ta, tb, a, b, _ = S["mar"]
-    group("mar", ta, tb)
-    scrap("black", 0, 30, 60, 480, -9, ta + .03, z=1)
-    prt("assets/img/ref/mohammad_ali_road.jpg", 70, 60, 500, 660, -3, ta + .05, z=3, bw=True, color_at=T(89) + .1)
-    i = nid("pin")
-    TOP.append(f'<div class="pin" id="{i}" style="left:430px;top:150px"><svg viewBox="0 0 60 80"><path d="M30 78 C 30 78 4 46 4 28 A 26 26 0 1 1 56 28 '
-               f'C 56 46 30 78 30 78 Z"/><circle cx="30" cy="28" r="10"/></svg></div>')
-    js(f'tl.fromTo("#{i}", {{opacity: 0, y: -260}}, {{opacity: 1, y: 0, duration: .4, ease: {ST(.4, "bounce.out")}, immediateRender: false}}, {T(89) - .05:.3f});')
-    label("MOHAMMAD", 560, 250, T(89) - .02, kind="black", size=100, rot=-3)
-    label("ALI ROAD", 600, 370, T(90) - .02, kind="black", size=100, rot=-3)
-    label("MUMBAI", 640, 500, T(91) + .1, kind="white", size=52, rot=3)
-    stamp("MUSLIM-OWNED", 560, 620, T(99) - .03, rot=-6, size=80)
-    twinkle(7, ta, tb, area=(80, 60, 480, 400), colors=("#ffd34d", "#fff"))
-    end_group()
-
-    # 6. Kandeel: the lantern stall as a print that turns to colour on "kandeel"
-    _, ta, tb, a, b, _ = S["kandil"]
-    group("kandil", ta, tb)
-    scrap("black", 2, 520, 140, 520, 8, ta + .03, z=1)
-    prt("assets/img/ref/attar_kandil_lanterns_pune.jpg", 110, 140, 760, 520, -3, ta + .05, z=3, color_at=T(116) - .05)
-    label("KANDIL", 600, 640, T(116) - .03, kind="red", size=100, rot=3)
-    label("LANTERNS", 600, 770, T(119), kind="white", size=56, rot=-2)
-    lantern(40, 40, 110, ta + .2, tb, "#e3202f")
-    lantern(910, 60, 100, ta + .35, tb, "#d9a520")
-    lantern(800, 40, 80, T(116), tb, "#111")
+    label("PATAAKE", 360, 140, T(70), kind="black", size=96, rot=-3)
+    label("MUMBAI", 110, 290, T(76), kind="white", size=52, rot=2)
+    stamp("SABSE BADA MARKET", 420, 270, T(85) - .03, rot=-4, size=64)
     twinkle(6, ta, tb)
     end_group()
 
-    # 7. The Attar community of Pune, generations of makers
+    # 5. Mohammad Ali Road: the owner's photo (Minara Masjid over the market), the pin drops on the minaret
+    _, ta, tb, a, b, _ = S["mar"]
+    group("mar", ta, tb)
+    scrap("black", 0, 50, 0, 300, -9, ta + .03, z=1)
+    prt("assets/img/ref/mohammad_ali_road.jpg", 80, -10, 270, 360, -3, ta + .05, z=3, bw=True, color_at=T(89) + .1)
+    i = nid("pin")
+    TOP.append(f'<div class="pin" id="{i}" style="left:270px;top:20px"><svg viewBox="0 0 60 80"><path d="M30 78 C 30 78 4 46 4 28 A 26 26 0 1 1 56 28 '
+               f'C 56 46 30 78 30 78 Z"/><circle cx="30" cy="28" r="10"/></svg></div>')
+    js(f'tl.fromTo("#{i}", {{opacity: 0, y: -200}}, {{opacity: 1, y: 0, duration: .4, ease: {ST(.4, "bounce.out")}, immediateRender: false}}, {T(89) - .05:.3f});')
+    label("MOHAMMAD", 420, 20, T(89) - .02, kind="black", size=92, rot=-3)
+    label("ALI ROAD", 450, 130, T(90) - .02, kind="black", size=92, rot=-3)
+    label("MUMBAI", 820, 150, T(91) + .1, kind="white", size=46, rot=4)
+    stamp("MUSLIM-OWNED", 480, 260, T(99) - .03, rot=-5, size=68)
+    twinkle(6, ta, tb, area=(90, 0, 260, 300), colors=("#ffd34d", "#fff"))
+    end_group()
+
+    # 6. Kandil: the stall print turns to colour on "kandil"; kandils swing
+    _, ta, tb, a, b, _ = S["kandil"]
+    group("kandil", ta, tb)
+    scrap("black", 2, 380, 20, 380, 8, ta + .03, z=1)
+    prt("assets/img/ref/attar_kandil_lanterns_pune.jpg", 90, 10, 470, 310, -3, ta + .05, z=3, color_at=T(116) - .05)
+    label("KANDIL", 620, 110, T(116) - .03, kind="red", size=110, rot=3)
+    label("LANTERNS", 650, 250, T(119), kind="white", size=50, rot=-2)
+    lantern(940, 20, 80, ta + .2, tb, "#d9a520")
+    lantern(30, 30, 70, ta + .35, tb, "#e3202f")
+    lantern(840, 10, 60, T(116), tb, "#111")
+    twinkle(5, ta, tb)
+    end_group()
+
+    # 7. Attar community, Pune: generations of makers
     _, ta, tb, a, b, _ = S["attar"]
     group("attar", ta, tb)
-    scrap("red", 2, 60, 360, 960, -3, ta + .03, z=1)
-    prt("assets/img/ref/attar_kandil_lanterns_pune.jpg?v=2", 640, 90, 360, 250, 6, ta + .02, z=2, bw=False)
-    label("PUNE", 110, 150, T(124) - .04, kind="white", size=80, rot=-3)
-    label("ATTAR COMMUNITY", 110, 270, T(126) - .04, kind="black", size=96, rot=-2)
+    scrap("red", 2, 40, 190, 700, -3, ta + .03, z=1)
+    prt("assets/img/ref/attar_kandil_lanterns_pune.jpg?v=2", 790, 0, 230, 160, 6, ta + .02, z=2, bw=False)
+    label("PUNE", 80, 10, T(124) - .04, kind="white", size=60, rot=-3)
+    label("ATTAR COMMUNITY", 80, 90, T(126) - .04, kind="black", size=84, rot=-2)
     person = "M 50 30 A 18 18 0 1 1 50.1 30 M 50 52 L 50 110 M 50 70 L 22 92 M 50 70 L 78 92 M 50 110 L 30 150 M 50 110 L 70 150"
-    for k, (x, sz, tk) in enumerate([(160, 230, T(130)), (440, 200, T(131) + .1), (700, 170, T(133))]):
-        draw([person], x, 420 + (230 - sz), sz * .66, sz, "0 0 100 160", tk, d=.4, z=4, stroke="#fff", sw=7)
-    draw(["M 120 680 L 960 680", "M 960 680 L 925 658 M 960 680 L 925 702"], 0, 0, 1080, 960, "0 0 1080 960", T(130), d=.5, z=4, stroke="#fff", sw=7)
-    label("PEEDHIYON SE", 380, 720, T(133) - .03, kind="white", size=60, rot=-1)
-    lantern(920, 420, 90, T(136) - .1, tb, "#d9a520", z=7)
+    for k, (x, sz, tk) in enumerate([(110, 150, T(130)), (300, 130, T(131) + .1), (480, 110, T(133))]):
+        draw([person], x, 210 + (150 - sz), sz * .66, sz, "0 0 100 160", tk, d=.4, z=4, stroke="#fff", sw=7)
+    draw(["M 90 370 L 700 370", "M 700 370 L 668 350 M 700 370 L 668 390"], 0, 0, 1080, 400, "0 0 1080 400", T(130), d=.5, z=4, stroke="#fff", sw=7)
+    label("PEEDHIYON SE", 740, 260, T(133) - .03, kind="white", size=56, rot=-2)
+    lantern(960, 230, 60, T(136) - .1, tb, "#d9a520", z=7, string=60)
     end_group()
 
     # 8. Crawford Market: the print, half of Mumbai, Bohri Muslims
     _, ta, tb, a, b, _ = S["crawford"]
     group("crawford", ta, tb)
-    scrap("grey", 1, 30, 80, 700, -6, ta + .03, z=1)
-    prt("assets/img/ref/crawford_market.jpg", 90, 110, 900, 560, 2, ta + .05, z=3)
-    label("CRAWFORD MARKET", 120, 680, ta + .2, kind="black", size=96, rot=-2)
+    scrap("grey", 1, 40, 0, 420, -6, ta + .03, z=1)
+    prt("assets/img/ref/crawford_market.jpg", 70, 10, 540, 320, 2, ta + .05, z=3)
+    label("CRAWFORD", 650, 20, ta + .2, kind="black", size=80, rot=-2)
+    label("MARKET", 680, 120, ta + .35, kind="black", size=80, rot=-2)
     i = nid("pie")
     TOP.append(f'<div class="pie" id="{i}"><svg viewBox="0 0 200 200"><circle class="pbg" cx="100" cy="100" r="78"/>'
                f'<circle class="pfg" cx="100" cy="100" r="78" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 100 100)"/></svg>'
                f'<div class="pt">&frac12;+</div><div class="pl">MUMBAI</div></div>')
     slap(i, T(162) - .05, -4, d=.3, frm=1.5)
     js(f'tl.fromTo("#{i} .pfg", {{strokeDashoffset: 1}}, {{strokeDashoffset: .4, duration: .6, ease: {ST(.6, "power2.out")}, immediateRender: false}}, {T(162):.3f});')
-    label("SHOPPING YAHIN SE", 600, 770, T(169) - .05, kind="white", size=48, rot=2)
-    twinkle(6, ta, tb, area=(100, 120, 880, 500), colors=("#ffd34d", "#e3202f"))
+    label("SHOPPING YAHIN SE", 640, 250, T(169) - .05, kind="white", size=40, rot=2)
     js(f'tl.to("#{i}", {{opacity: 0, scale: .6, duration: .2, ease: {ST(.2, "power2.in")}}}, {T(188) - .25:.3f});')
-    stamp("BOHRI MUSLIMS", 300, 300, T(192) - .03, rot=-7, size=100)
+    stamp("BOHRI MUSLIMS", 120, 130, T(192) - .03, rot=-7, size=78)
+    twinkle(5, ta, tb, area=(80, 20, 520, 280), colors=("#ffd34d", "#e3202f"))
     end_group()
 
     # 9. Chapter two
-    _, ta, tb, a, b, _ = S["ch2"]
-    chapter("ch2", "02", "PARSI COMMUNITY", "NOW LET'S TALK ABOUT", ta, tb, a, T(202) - .04)
+    chapter2("ch2", "02", "PARSI COMMUNITY", "NOW LET'S TALK ABOUT", T(202) - .04)
 
     # 10. Dhanteras gold, the biggest jewellery brand: Tanishq
     _, ta, tb, a, b, _ = S["tanishq"]
     group("tanishq", ta, tb)
-    scrap("black", 3, 40, 100, 520, -7, ta + .03, z=1)
-    label("DHANTERAS", 100, 150, T(207) - .04, kind="red", size=100, rot=-4)
-    draw(["M 150 360 A 70 70 0 1 1 150.1 360", "M 150 300 L 168 270 L 132 270 Z", "M 300 400 A 46 46 0 1 1 300.1 400",
-          "M 400 420 A 46 46 0 1 1 400.1 420"], 60, 260, 520, 330, "0 0 520 330", T(212) - .05, d=.5, z=4, stroke="#d9a520", sw=8)
-    label("JEWELLERY", 120, 590, T(212) - .03, kind="white", size=60, rot=2)
-    label("GOLD", 420, 590, T(215) - .03, kind="white", size=60, rot=-2)
-    card('<div class="qq">India ka sabse bada<br>jewellery brand?</div>', 560, 160, 470, T(219) - .05, rot=3, z=3)
-    logo("tanishq", 590, 430, 380, 380, T(229) - .04, rot=-3, z=6)
-    circle(540, 400, 480, 440, T(229) + .2)
-    twinkle(8, ta, tb, colors=("#d9a520", "#ffd34d", "#e3202f"))
+    scrap("black", 3, 40, 0, 400, -7, ta + .03, z=1)
+    label("DHANTERAS", 70, 30, T(207) - .04, kind="red", size=80, rot=-4)
+    draw(["M 110 230 A 52 52 0 1 1 110.1 230", "M 110 186 L 124 164 L 96 164 Z", "M 230 260 A 36 36 0 1 1 230.1 260",
+          "M 310 270 A 36 36 0 1 1 310.1 270"], 30, 0, 400, 330, "0 0 400 330", T(212) - .05, d=.5, z=4, stroke="#d9a520", sw=8)
+    label("JEWELLERY", 70, 300, T(212) - .03, kind="white", size=44, rot=2)
+    label("GOLD", 300, 300, T(215) - .03, kind="white", size=44, rot=-2)
+    card('<div class="qq">India ka sabse bada<br>jewellery brand?</div>', 440, 20, 330, T(219) - .05, rot=3, z=3)
+    logo("tanishq", 800, 60, 240, 240, T(229) - .04, rot=-3, z=6)
+    circle(760, 30, 320, 300, T(229) + .2)
+    twinkle(7, ta, tb, colors=("#d9a520", "#ffd34d", "#e3202f"))
     end_group()
 
     # 11. Electronics: Croma
     _, ta, tb, a, b, _ = S["croma"]
     group("croma", ta, tb)
-    scrap("red", 3, 520, 140, 520, 6, ta + .03, z=1)
-    label("ELECTRONICS", 90, 170, T(233) - .04, kind="black", size=96, rot=-3)
-    card('<div class="qq">Kahaan se?<br><span>mostly&hellip;</span></div>', 110, 360, 400, T(239) - .05, rot=-2, z=3)
-    logo("croma", 560, 300, 420, 420, T(245) - .04, rot=3, z=6)
-    circle(510, 270, 520, 480, T(245) + .2)
-    twinkle(5, ta, tb)
+    scrap("red", 3, 600, 20, 420, 6, ta + .03, z=1)
+    label("ELECTRONICS", 70, 40, T(233) - .04, kind="black", size=88, rot=-3)
+    card('<div class="qq">Kahaan se?<br><span>mostly&hellip;</span></div>', 100, 200, 320, T(239) - .05, rot=-2, z=3)
+    logo("croma", 660, 40, 290, 290, T(245) - .04, rot=3, z=6)
+    circle(620, 10, 370, 350, T(245) + .2)
+    twinkle(4, ta, tb)
     end_group()
 
     # 12. New clothes: Westside and Zudio
     _, ta, tb, a, b, _ = S["wz"]
     group("wz", ta, tb)
-    scrap("grey", 3, 40, 420, 620, -5, ta + .03, z=1)
-    label("NAYE KAPDE", 90, 150, T(251) - .04, kind="black", size=100, rot=-3)
-    draw(["M 300 360 C 300 330 340 320 350 345 C 358 368 330 380 320 392 L 320 410", "M 320 410 L 160 500 L 480 500 Z"],
-         520, 140, 520, 420, "0 0 640 520", T(252), d=.5, z=3, stroke="#111", sw=8)
-    logo("westside", 90, 420, 400, 400, T(265) - .04, rot=-4, z=6)
-    i = logo("zudio", 560, 560, 460, 120, T(267) - .04, rot=3, z=7)
-    twinkle(5, ta, tb)
+    scrap("grey", 3, 400, 120, 460, -5, ta + .03, z=1)
+    label("NAYE KAPDE", 70, 30, T(251) - .04, kind="black", size=84, rot=-3)
+    hng = draw(["M 300 360 C 300 330 340 320 350 345 C 358 368 330 380 320 392 L 320 410", "M 320 410 L 160 500 L 480 500 Z"],
+               40, 130, 300, 245, "0 0 640 520", T(252), d=.5, z=3, stroke="#111", sw=10)
+    js(f'tl.fromTo("#{hng}", {{rotation: -6, transformOrigin: "50% 10%"}}, {{rotation: 6, duration: .9, ease: "sine.inOut", yoyo: true, repeat: 7, immediateRender: false}}, {T(252) + .5:.3f});')
+    logo("westside", 450, 40, 260, 260, T(265) - .04, rot=-4, z=6)
+    logo("zudio", 760, 200, 270, 72, T(267) - .04, rot=3, z=7)
+    twinkle(4, ta, tb)
     end_group()
 
     # 13. All of them: Tata, a Parsi family
     _, ta, tb, a, b, _ = S["tata"]
     group("tata", ta, tb)
-    for k, (n, x, y, w, h, r) in enumerate([("tanishq", 60, 90, 250, 250, -4), ("croma", 770, 90, 250, 250, 4),
-                                            ("westside", 60, 600, 250, 250, 3), ("zudio", 730, 720, 300, 80, -3)]):
+    for k, (n, x, y, w, h, r) in enumerate([("tanishq", 60, 10, 170, 170, -4), ("croma", 850, 10, 170, 170, 4),
+                                            ("westside", 80, 200, 160, 160, 3), ("zudio", 820, 270, 210, 56, -3)]):
         logo(n, x, y, w, h, ta + .05 + k * .1, rot=r, z=4)
-    draw(["M 310 220 L 430 400", "M 770 220 L 650 400", "M 310 720 L 430 560", "M 760 730 L 650 560"], 0, 0, 1080, 960, "0 0 1080 960",
-         T(283) - .05, d=.3, z=3, stroke="#111", sw=7)
+    draw(["M 230 100 L 390 150", "M 850 100 L 690 150", "M 240 280 L 390 220", "M 820 290 L 690 220"], 0, 0, 1080, 380, "0 0 1080 380",
+         T(283) - .05, d=.3, z=3, stroke="#111", sw=6)
     i = nid("tata")
     TOP.append(f'<div class="tatabox" id="{i}">TATA</div>')
     slap(i, T(285) - .05, -3, d=.36, frm=2)
-    stamp("PARSI FAMILY", 330, 580, T(293) - .03, rot=-6, size=76)
-    twinkle(6, ta, tb)
+    stamp("PARSI FAMILY", 380, 270, T(293) - .03, rot=-5, size=60)
+    twinkle(5, ta, tb)
     end_group()
 
     # 14. Secular: the Preamble, SECULAR marked
     _, ta, tb, a, b, _ = S["secular"]
     group("secular", ta, tb)
-    scrap("red", 0, 600, 80, 460, 8, ta + .03, z=1)
+    scrap("red", 0, 780, 0, 280, 8, ta + .03, z=1)
     card('<div class="pre-h">THE CONSTITUTION OF INDIA &middot; PREAMBLE</div><div class="pre">WE, THE PEOPLE OF INDIA, having solemnly resolved to '
          'constitute India into a SOVEREIGN SOCIALIST <b id="sec">SECULAR</b> DEMOCRATIC REPUBLIC and to secure to all its citizens: JUSTICE, '
-         'social, economic and political; LIBERTY of thought, expression, belief, faith and worship; EQUALITY of status and of opportunity&hellip;</div>',
-         110, 120, 860, ta + .05, rot=-2, z=3, cls="note doc")
+         'social, economic and political; LIBERTY of thought, expression, belief, faith and worship&hellip;</div>',
+         80, 0, 920, ta + .05, rot=-1.5, z=3, cls="note doc")
     marker("#sec", T(337) - .05, .35)
-    circle(100, 350, 270, 150, T(337) + .25, z=6)
-    stamp("KHILAAF", 640, 730, T(342) - .03, rot=-8, size=90)
+    stamp("KHILAAF", 770, 270, T(342) - .03, rot=-8, size=70)
     end_group()
 
-    # 15. The close: every community, Happy Diwali
+    # 15. The close: every community, Happy Diwali, diyas, fireworks
     _, ta, tb, a, b, _ = S["names"]
     group("names", ta, tb)
-    scrap("white", 2, 30, 90, 1020, -2, ta + .03, z=1)
-    spots = [(355, "HINDU", 90, 130, "black", -4), (356, "MUSLIM", 520, 160, "red", 3), (357, "SIKH", 140, 300, "white", 2),
-             (358, "ISAAI", 470, 330, "black", -3), (359, "PARSI", 150, 470, "red", -2), (360, "JAIN", 560, 500, "white", 4)]
+    scrap("white", 2, 30, -10, 1020, -2, ta + .03, z=1)
+    spots = [(355, "HINDU", 80, 0, "black", -4), (356, "MUSLIM", 320, 10, "red", 3), (357, "SIKH", 630, 0, "white", 2),
+             (358, "ISAAI", 820, 20, "black", -3), (359, "PARSI", 180, 110, "red", -2), (360, "JAIN", 560, 110, "white", 4)]
     for j, txt, x, y, kind, r in spots:
-        label(txt, x, y, T(j) - .04, kind=kind, size=100, rot=r, type_on=False)
+        label(txt, x, y, T(j) - .04, kind=kind, size=74, rot=r, type_on=False)
     i = nid("hd")
     TOP.append(f'<div class="hd" id="{i}"><span>HAPPY</span> <span class="r">DIWALI</span></div>')
     slap(i, T(365) - .05, -3, d=.4, frm=1.8)
-    for k, x in enumerate([110, 460, 810]):
-        diya(x, 780, 170, T(365) + .1 + k * .08, DUR)
-    firework(150, 140, 130, T(365) - .1, DUR, "#e3202f", .9, z=2)
-    firework(930, 180, 150, T(365) + .2, DUR, "#d9a520", 1.0, z=2)
-    firework(820, 560, 110, T(366), DUR, "#111", 1.1, z=2)
-    twinkle(10, ta, DUR)
-    lantern(950, 40, 80, ta + .3, DUR, "#e3202f", z=3)
+    diya(20, 250, 120, T(365) + .1, DUR)
+    diya(940, 250, 120, T(365) + .2, DUR)
+    firework(150, 90, 110, T(365) - .1, DUR, "#e3202f", .9, z=2)
+    firework(930, 100, 120, T(365) + .2, DUR, "#d9a520", 1.0, z=2)
+    twinkle(8, ta, DUR)
     end_group()
 
 
@@ -624,14 +631,14 @@ CSS = f"""
 html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #efebe4; }}
 #root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; font-family: "Inter"; color: #111; background: #efebe4; }}
 #split {{ position: absolute; inset: 0; opacity: 0; transform-origin: 50% 50%; }}
-#top {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {TOPH}px; overflow: hidden; background: #efebe4; }}
+#top {{ position: absolute; left: 0; top: {BY - 60}px; width: {FW}px; height: {BH + 90}px; overflow: hidden; }}
 #topin {{ position: absolute; inset: 0; transform-origin: 50% 50%; }}
-#paper {{ position: absolute; left: -300px; top: -400px; width: 1700px; height: 2550px; background: url(assets/img/paper/paper.png) 0 0 / 1700px auto;
+#paper {{ position: absolute; left: -300px; top: -300px; width: 1700px; height: 2550px; background: url(assets/img/paper/paper.png) 0 0 / 1700px auto;
   filter: sepia(.06) saturate(.8) brightness(1.06); }}
 #grid {{ position: absolute; inset: -40px; opacity: .55;
   background-image: linear-gradient(rgba(70,90,130,.22) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(70,90,130,.22) 1.5px, transparent 1.5px);
   background-size: 72px 72px; }}
-#stagefit {{ position: absolute; left: 0; top: 0; width: 1080px; height: 960px; transform: scale({TOPH / 960:.4f}); transform-origin: 50% 0; }}
+#stagefit {{ position: absolute; left: 0; top: 60px; width: 1080px; height: {BH}px; }}
 #stagew {{ position: absolute; inset: 0; transform-origin: 50% 45%; }}
 .grp {{ position: absolute; inset: 0; opacity: 0; }}
 .scrap {{ position: absolute; opacity: 0; filter: drop-shadow(0 10px 14px rgba(0,0,0,.28)); }}
@@ -649,12 +656,12 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #efeb
 .stamp {{ position: absolute; opacity: 0; font-family: "Anton"; line-height: 1.15; color: #e3202f; border: 9px solid #e3202f; border-radius: 12px; padding: .04em .26em 0;
   white-space: nowrap; background: rgba(251,249,244,.55); mix-blend-mode: multiply; }}
 .doo, .map {{ position: absolute; opacity: 0; fill: none; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }}
-.note {{ position: absolute; opacity: 0; background: #fbf9f4; padding: 34px 40px 38px; box-shadow: 0 18px 34px rgba(0,0,0,.3); }}
-.quote .qmark {{ font: italic 700 190px/0.6 "Play"; color: #e3202f; height: 80px; }}
-.quote .qtxt {{ font: 700 52px/1.3 "Inter"; letter-spacing: -.01em; color: #111; }}
+.note {{ position: absolute; opacity: 0; background: #fbf9f4; padding: 24px 32px 26px; box-shadow: 0 18px 34px rgba(0,0,0,.3); }}
+.quote .qmark {{ font: italic 700 130px/0.6 "Play"; color: #e3202f; height: 44px; }}
+.quote .qtxt {{ font: 700 37px/1.28 "Inter"; letter-spacing: -.01em; color: #111; }}
 .quote .qw {{ display: inline-block; opacity: 0; padding: 0 .06em; }}
 .quote .qw.mk {{ background: linear-gradient(transparent 52%, rgba(255,214,0,.85) 52%) 0 0 / 0% 100% no-repeat; }}
-.quote .qby {{ font: 500 30px/1.2 "Inter"; color: #666; margin-top: 20px; }}
+.quote .qby {{ font: 500 24px/1.2 "Inter"; color: #666; margin-top: 10px; }}
 .mapc {{ height: 460px; padding: 20px; }}
 .mapc .map {{ position: absolute; left: 20px; top: 20px; width: 740px; height: 420px; opacity: 1; stroke: #b9b2a5; stroke-width: 14; }}
 .mapc .map .main {{ stroke: #111; stroke-width: 22; }}
@@ -662,40 +669,43 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #efeb
 .pin svg {{ width: 100%; height: 100%; }}
 .pin path {{ fill: #e3202f; }}
 .pin circle {{ fill: #fff; }}
-.num {{ position: absolute; left: 70px; top: 330px; opacity: 0; font: 400 400px/1 "Anton"; color: transparent; -webkit-text-stroke: 10px #111; z-index: 2; }}
-.qq {{ font: 800 50px/1.15 "Inter"; letter-spacing: -.02em; }}
-.qq span {{ font: 700 italic 40px/1.2 "Play"; color: #e3202f; }}
+.num {{ position: absolute; left: 90px; top: 0px; opacity: 0; font: 400 330px/1 "Anton"; color: transparent; -webkit-text-stroke: 10px #111; z-index: 2; }}
+.qq {{ font: 800 36px/1.15 "Inter"; letter-spacing: -.02em; }}
+.qq span {{ font: 700 italic 32px/1.2 "Play"; color: #e3202f; }}
 .logo {{ position: absolute; opacity: 0; background: #fff; padding: 18px; box-shadow: 0 14px 28px rgba(0,0,0,.3); display: grid; place-items: center; }}
 .logo img {{ max-width: 100%; max-height: 100%; display: block; }}
-.pie {{ position: absolute; left: 700px; top: 40px; width: 340px; height: 340px; opacity: 0; z-index: 6; background: #fbf9f4; border-radius: 50%;
+.pie {{ position: absolute; left: 470px; top: 160px; width: 210px; height: 210px; opacity: 0; z-index: 6; background: #fbf9f4; border-radius: 50%;
   box-shadow: 0 14px 28px rgba(0,0,0,.3); }}
 .pie svg {{ position: absolute; inset: 0; }}
 .pie .pbg {{ fill: none; stroke: #e6e0d4; stroke-width: 20; }}
 .pie .pfg {{ fill: none; stroke: #e3202f; stroke-width: 20; }}
-.pie .pt {{ position: absolute; left: 0; right: 0; top: 104px; text-align: center; font: 400 96px/1 "Anton"; color: #111; }}
-.pie .pl {{ position: absolute; left: 0; right: 0; top: 212px; text-align: center; font: 800 34px/1 "Inter"; letter-spacing: .06em; color: #e3202f; }}
-.tatabox {{ position: absolute; left: 380px; top: 380px; width: 320px; padding: 30px 0 22px; opacity: 0; z-index: 6; background: #111; color: #fff; text-align: center;
-  font: 400 150px/1 "Anton"; letter-spacing: .04em; box-shadow: 0 16px 30px rgba(0,0,0,.35); }}
-.doc {{ padding: 40px 46px; }}
-.pre-h {{ font: 800 28px/1.2 "Inter"; letter-spacing: .14em; color: #e3202f; margin-bottom: 22px; }}
-.pre {{ font: 500 44px/1.38 "Play"; font-style: italic; color: #222; }}
+.pie .pt {{ position: absolute; left: 0; right: 0; top: 60px; text-align: center; font: 400 64px/1 "Anton"; color: #111; }}
+.pie .pl {{ position: absolute; left: 0; right: 0; top: 132px; text-align: center; font: 800 22px/1 "Inter"; letter-spacing: .04em; color: #e3202f; }}
+.tatabox {{ position: absolute; left: 390px; top: 70px; width: 300px; padding: 24px 0 18px; opacity: 0; z-index: 6; background: #111; color: #fff; text-align: center;
+  font: 400 130px/1 "Anton"; letter-spacing: .04em; box-shadow: 0 16px 30px rgba(0,0,0,.35); }}
+.doc {{ padding: 24px 34px; }}
+.pre-h {{ font: 800 22px/1.2 "Inter"; letter-spacing: .14em; color: #e3202f; margin-bottom: 12px; }}
+.pre {{ font: 500 31px/1.36 "Play"; font-style: italic; color: #222; }}
 .pre b {{ font-style: normal; font-family: "Anton"; font-weight: 400; letter-spacing: .02em; padding: 0 .1em;
   background: linear-gradient(transparent 50%, rgba(255,214,0,.9) 50%) 0 0 / 0% 100% no-repeat; }}
-.hd {{ position: absolute; left: 0; width: {FW}px; top: 640px; text-align: center; opacity: 0; z-index: 8; font: 400 150px/1 "Anton"; color: #111; }}
+.hd {{ position: absolute; left: 0; width: {FW}px; top: 215px; text-align: center; opacity: 0; z-index: 8; font: 400 130px/1 "Anton"; color: #111; }}
 .hd .r {{ color: #e3202f; }}
-#bot {{ position: absolute; left: 0; top: {TOPH}px; width: {FW}px; height: {FH - TOPH}px; overflow: hidden; background: #222; }}
+#bot {{ position: absolute; left: {CARD[0]}px; top: {CARD[1]}px; width: {CARD[2]}px; height: {CARD[3]}px; background: #fbf9f4; padding: 14px;
+  box-shadow: 0 22px 44px rgba(0,0,0,.32); transform: rotate(-.6deg); }}
+#bot .tape {{ z-index: 3; top: -24px; width: 220px; margin-left: -110px; }}
+#botclip {{ position: absolute; inset: 14px; overflow: hidden; background: #222; }}
 #botin {{ position: absolute; inset: 0; transform-origin: 50% 35%; }}
 #botin video, #hold {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
 #hold {{ position: absolute; inset: 0; opacity: 0; }}
-#seamline {{ position: absolute; left: -20px; top: {TOPH - 16}px; width: {FW + 40}px; height: 34px; z-index: 6; background: #fbf9f4;
+#seamline {{ display: none; position: absolute; left: -20px; top: 0; width: {FW + 40}px; height: 34px; z-index: 6; background: #fbf9f4;
   clip-path: polygon(0 30%, 4% 10%, 9% 40%, 14% 15%, 20% 35%, 26% 8%, 31% 30%, 37% 12%, 43% 38%, 49% 10%, 55% 32%, 61% 14%, 67% 36%, 73% 9%, 79% 30%,
   85% 12%, 91% 38%, 96% 14%, 100% 30%, 100% 74%, 95% 92%, 89% 70%, 83% 95%, 77% 72%, 71% 90%, 65% 68%, 59% 94%, 53% 70%, 47% 92%, 41% 66%, 35% 90%,
   29% 70%, 23% 95%, 17% 72%, 11% 92%, 5% 70%, 0 88%); }}
-#tear {{ position: absolute; left: -200px; top: -60px; width: 1480px; height: 1080px; object-fit: fill; opacity: 0; z-index: 7; filter: drop-shadow(0 10px 20px rgba(0,0,0,.3)); }}
+#tear {{ position: absolute; left: -200px; top: -40px; width: 1480px; height: 560px; object-fit: fill; opacity: 0; z-index: 7; filter: drop-shadow(0 10px 20px rgba(0,0,0,.3)); }}
 #full {{ position: absolute; inset: 0; opacity: 0; overflow: hidden; background: #222; }}
 #fullin, #fullz {{ position: absolute; inset: 0; transform-origin: 50% 45%; }}
 #fullz video {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
-.seam {{ position: absolute; left: 0; width: {FW}px; top: {TOPH - 90}px; text-align: center; opacity: 0; z-index: 9; }}
+.seam {{ position: absolute; left: 0; width: {FW}px; top: {CARD[1] - 46}px; text-align: center; opacity: 0; z-index: 9; }}
 .seam span {{ display: inline-block; background: #000; color: #fff; font: 800 52px/1 "Inter"; padding: 13px 26px 15px; border-radius: 8px; letter-spacing: -.01em; }}
 .fcap {{ position: absolute; left: 100px; right: 80px; top: 1290px; opacity: 0; z-index: 9; }}
 .fcap .scr {{ font: 400 74px/1.1 "Kaushan"; color: #fff; text-shadow: 0 4px 14px rgba(0,0,0,.6); margin-left: 6px; }}
@@ -739,10 +749,11 @@ def main():
     <svg width="0" height="0" style="position:absolute"><filter id="mbx" x="-30%" y="0" width="160%" height="100%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="0 0"/></filter></svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
       <div id="split">
-        <div id="top"><div id="topin"><div id="paper"></div><div id="grid"></div><div id="stagefit"><div id="stagew">{"".join(TOP)}</div></div>
+        <div id="paper"></div><div id="grid"></div>
+        <div id="top"><div id="topin"><div id="stagefit"><div id="stagew">{"".join(TOP)}</div></div>
           <img id="tear" src="assets/img/paper/scrap/white-1.png" alt=""><div id="tflash"></div></div></div>
-        <div id="bot"><div id="botin"><video id="vsplit" class="clip" src="assets/video/face_split.mp4" data-start="0" data-duration="{VDUR}" data-track-index="2" muted playsinline></video>
-          <img id="hold" src="assets/img/hold/last_split.png" alt=""></div></div>
+        <div id="bot"><i class="tape"></i><div id="botclip"><div id="botin"><video id="vsplit" class="clip" src="assets/video/face_split.mp4" data-start="0" data-duration="{VDUR}" data-track-index="2" muted playsinline></video>
+          <img id="hold" src="assets/img/hold/last_split.png" alt=""></div></div></div>
         <div id="seamline"></div>
       </div>
       <div id="full"><div id="fullin"><div id="fullz"><video id="vfull" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{VDUR}" data-track-index="1" muted playsinline></video></div></div></div>
