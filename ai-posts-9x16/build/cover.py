@@ -1,13 +1,13 @@
 """The reel cover (1080x1920 PNG): the whole story in one frame. Two low-poly plates split on a diagonal: the panic on
-the left (dusk, 300 pages, "all of them?") and the payoff on the right (night, 91% and confetti), under the hook
-headline, with the four NotebookLM steps as a timeline. Everything that matters sits inside the 3:4 profile-grid crop
+the left (dusk, 23 days without a post) and the payoff on the right (night, a month planned, confetti), under the hook
+headline, with the four steps as a timeline. Everything that matters sits inside the 3:4 profile-grid crop
 (y 240-1680).
 
 python3 build/cover.py      (after build/generate.py; needs npx and the HyperFrames CLI)
-  1. renders each plate: writes cover/index.html with window.EXAM_COVER (the reel's time, a pinned camera) and no
+  1. renders each plate: writes cover/index.html with window.POSTS_COVER (the reel's time, a pinned camera) and no
      overlays, snapshots it, keeps the PNG in cover/assets/plates/
   2. writes the final cover/index.html (the two plates, the diagonal, the cards), snapshots it and copies the PNG to
-     renders/nxtlvl_ai-exam_reels_9x16_cover.png
+     renders/nxtlvl_ai-posts_reels_9x16_cover.png
 cover/assets is a copy of the reel's assets plus the plates (git-ignored), because a project only serves its own folder.
 """
 import glob
@@ -22,15 +22,15 @@ OUT = os.path.join(ROOT, "cover")
 T = json.load(open(os.path.join(ROOT, "build", "cues.json")))
 CLI = ["npx", "--yes", "hyperframes@0.8.203"]
 
-PLATES = {"panic": (3.4, {"cam": [.36, 1.45, 2.9], "look": [.34, 1.22, -.25], "fov": 40, "ap": .3}),
-          "win": (40.6, {"cam": [-.42, 1.45, 3.0], "look": [-.42, 1.3, -.5], "fov": 40, "ap": .3})}
+PLATES = {"panic": (1.5, {"cam": [.36, 1.45, 2.9], "look": [.34, 1.22, -.25], "fov": 40, "ap": .3}),
+          "win": (39.8, {"cam": [-.42, 1.45, 3.0], "look": [-.42, 1.3, -.5], "fov": 40, "ap": .3})}
 
 HEAD = """<!doctype html>
 <html lang="en" data-resolution="portrait">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>AI Exam cover</title>
+    <title>AI Posts cover</title>
     <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
@@ -79,13 +79,13 @@ def plate_html(t, cam):
     </div>
     <script>
       window.CT = {json.dumps(T)};
-      window.EXAM_COVER = {json.dumps({"t": t, **cam})};
+      window.POSTS_COVER = {json.dumps({"t": t, **cam})};
       window.__timelines = window.__timelines || {{}};
       const tl = gsap.timeline({{ paused: true }});
       tl.set({{}}, {{}}, 1);
       window.__timelines["cover"] = tl;
     </script>
-    <script type="module" src="assets/js/exam.js"></script>
+    <script type="module" src="assets/js/posts.js"></script>
   </body>
 </html>
 """
@@ -99,15 +99,15 @@ FINAL = HEAD + """    <div id="root" data-composition-id="cover" data-start="0" 
           <line x1="640" y1="0" x2="400" y2="1920" stroke="#1E1B18" stroke-width="4"/></svg>
       </div>
       <div class="clip" data-start="0" data-duration="1" data-track-index="1">
-        <div class="top mono"><span class="pill"><i></i>NXTLVLSOCIAL.AI</span><span class="pill w">AI STUDY HACK</span></div>
-        <div class="card"><b>300 pages. Exam on Monday.</b><em>my AI owl got me to 91%</em></div>
-        <div class="tag bad mono" style="left:60px;right:auto;top:728px"><i></i>PRACTICE TEST &middot; 62%</div>
-        <div class="tag ok mono" style="right:60px;left:auto;top:1352px"><i></i>AFTER STEP 4 &middot; 91%</div>
+        <div class="top mono"><span class="pill"><i></i>NXTLVLSOCIAL.AI</span><span class="pill w">AI CONTENT HACK</span></div>
+        <div class="card"><b>No posts in 3 weeks.</b><em>one voice memo became 30</em></div>
+        <div class="tag bad mono" style="left:60px;right:auto;top:728px"><i></i>LAST POST &middot; 23 DAYS AGO</div>
+        <div class="tag ok mono" style="right:60px;left:auto;top:1352px"><i></i>NEXT MORNING &middot; 80K VIEWS</div>
         <div class="tl">
-          <div class="st b"><i></i><span class="h mono">STEP 1</span><span class="d">upload<br />your notes</span></div>
-          <div class="st y"><i></i><span class="h mono">STEP 2</span><span class="d">a 20-min<br />podcast</span></div>
-          <div class="st g"><i></i><span class="h mono">STEP 3</span><span class="d">50 cards +<br />a test</span></div>
-          <div class="st r"><i></i><span class="h mono">STEP 4</span><span class="d">fix weak<br />spots</span></div>
+          <div class="st b"><i></i><span class="h mono">STEP 1</span><span class="d">a 2-min<br />voice memo</span></div>
+          <div class="st y"><i></i><span class="h mono">STEP 2</span><span class="d">30 post<br />ideas</span></div>
+          <div class="st g"><i></i><span class="h mono">STEP 3</span><span class="d">hooks +<br />slides</span></div>
+          <div class="st r"><i></i><span class="h mono">STEP 4</span><span class="d">schedule<br />for free</span></div>
         </div></div>
       </div>
     </div>
@@ -144,7 +144,7 @@ def main():
         snap(os.path.join(dst, "plates", name + ".png"))
         print("plate", name, "at t =", t)
     open(html, "w", encoding="utf-8", newline="\n").write(FINAL)
-    out = os.path.join(ROOT, "renders", "nxtlvl_ai-exam_reels_9x16_cover.png")
+    out = os.path.join(ROOT, "renders", "nxtlvl_ai-posts_reels_9x16_cover.png")
     snap(out)
     print("wrote", out)
 
