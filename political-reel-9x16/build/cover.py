@@ -21,10 +21,10 @@ body {{ width: 1080px; height: 1920px; overflow: hidden; background: #efebe4; po
 #grid {{ position: absolute; inset: 0; opacity: .55; background-image: linear-gradient(rgba(70,90,130,.22) 1.5px, transparent 1.5px),
   linear-gradient(90deg, rgba(70,90,130,.22) 1.5px, transparent 1.5px); background-size: 72px 72px; }}
 .scrap {{ position: absolute; filter: drop-shadow(0 14px 18px rgba(0,0,0,.3)); }}
-#quote {{ position: absolute; left: 92px; top: 330px; width: 640px; color: #fff; font: 800 64px/1.22 "Mukta"; text-shadow: 0 3px 10px rgba(0,0,0,.25); }}
+#quote {{ position: absolute; left: 92px; top: 440px; width: 640px; color: #fff; font: 800 64px/1.22 "Mukta"; text-shadow: 0 3px 10px rgba(0,0,0,.25); }}
 #quote b {{ font-weight: 800; background: #111; padding: 0 .14em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }}
-#qm {{ position: absolute; left: 60px; top: 250px; font: 800 180px/1 "Mukta"; color: #fff; opacity: .9; }}
-#by {{ position: absolute; left: 110px; top: 840px; font: 800 44px/1 "Mukta"; color: #fff; font-style: italic; opacity: .95; }}
+#qm {{ position: absolute; left: 88px; top: 352px; font: 800 180px/1 "Mukta"; color: #fff; opacity: .9; }}
+#by {{ position: absolute; left: 110px; top: 945px; font: 800 44px/1 "Mukta"; color: #fff; font-style: italic; opacity: .95; }}
 .print {{ position: absolute; background: #f6f3ec; padding: 14px 14px 44px; box-shadow: 0 18px 34px rgba(0,0,0,.35); }}
 .print img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
 .bw img {{ filter: grayscale(1) contrast(1.25) brightness(1.05); }}
@@ -35,13 +35,13 @@ body {{ width: 1080px; height: 1920px; overflow: hidden; background: #efebe4; po
 .red {{ background: #e3202f; color: #fff; }}
 .white {{ background: #fbf9f4; color: #111; }}
 .diya {{ position: absolute; }}
-#title {{ position: absolute; left: 0; width: 1080px; top: 1040px; text-align: center; }}
+#title {{ position: absolute; left: 0; width: 1080px; top: 1060px; text-align: center; }}
 #title > div {{ margin-bottom: 12px; }}
 #title .lab {{ position: relative; display: inline-block; }}
 .star {{ position: absolute; }}
 </style></head><body>
 <div id="paper"></div><div id="grid"></div>
-<img class="scrap" src="../assets/img/paper/scrap/red-1.png" style="left:-260px;top:200px;width:1480px;height:800px;object-fit:fill;transform:rotate(-2deg)">
+<img class="scrap" src="../assets/img/paper/scrap/red-1.png" style="left:-260px;top:210px;width:1480px;height:875px;object-fit:fill;transform:rotate(-2deg)">
 <div id="qm">&ldquo;</div>
 <div id="quote">{QUOTE}</div>
 <div id="by">&mdash; नितेश राणे</div>
@@ -54,7 +54,7 @@ body {{ width: 1080px; height: 1920px; overflow: hidden; background: #efebe4; po
   <div><span class="lab red" style="font-size:128px;transform:rotate(1.5deg)">TOGETHER</span></div>
 </div>
 {"".join(f'<svg class="diya" viewBox="0 0 160 130" style="left:{x}px;top:{y}px;width:{w}px"><ellipse cx="80" cy="52" rx="44" ry="44" fill="rgba(255,190,80,.5)"/><path d="M 8 78 C 24 124 136 124 152 78 C 120 92 40 92 8 78 Z" fill="#b8521f"/><path d="M 8 78 C 40 92 120 92 152 78" fill="none" stroke="#e2a33a" stroke-width="6"/><path d="M 80 80 C 58 62 68 34 80 12 C 92 34 102 62 80 80 Z" fill="#ff9a1a"/><path d="M 80 78 C 70 66 74 50 80 38 C 86 50 90 66 80 78 Z" fill="#fff1a8"/></svg>' for x, y, w in [(90, 1380, 140), (850, 1390, 140)])}
-{"".join(f'<svg class="star" viewBox="-50 -50 100 100" style="left:{x}px;top:{y}px;width:{s}px"><path d="M0 -48 C6 -8 8 -6 48 0 C8 6 6 8 0 48 C-6 8 -8 6 -48 0 C-8 -6 -6 -8 0 -48 Z" fill="{c}"/></svg>' for x, y, s, c in [(930, 1060, 56, "#d9a520"), (120, 1100, 44, "#e3202f"), (900, 1330, 36, "#111"), (130, 1380, 40, "#d9a520"), (540, 1010, 34, "#e3202f")])}
+{"".join(f'<svg class="star" viewBox="-50 -50 100 100" style="left:{x}px;top:{y}px;width:{s}px"><path d="M0 -48 C6 -8 8 -6 48 0 C8 6 6 8 0 48 C-6 8 -8 6 -48 0 C-8 -6 -6 -8 0 -48 Z" fill="{c}"/></svg>' for x, y, s, c in [(930, 1060, 56, "#d9a520"), (120, 1100, 44, "#e3202f"), (900, 1330, 36, "#111"), (130, 1380, 40, "#d9a520"), (990, 1560, 34, "#e3202f")])}
 </body></html>"""
 
 
