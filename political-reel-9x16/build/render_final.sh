@@ -4,8 +4,8 @@
 cd "$(dirname "$0")/.." || exit 1
 export HYPERFRAMES_NO_TELEMETRY=1
 mkdir -p renders
-OUT=renders/nxtlvl_diwali-opinion_reels_9x16_v1.mp4
+OUT=renders/nxtlvl_diwali-opinion_reels_9x16_v2.mp4
 npx --yes hyperframes@0.8.203 render --quality high -w 3 -o renders/master.mp4 > renders/final.log 2>&1
 ffmpeg -v error -y -i renders/master.mp4 -i assets/audio/voice.wav -map 0:v -map 1:a -c:v libx264 -preset slow -crf 19 -maxrate 6M -bufsize 12M -pix_fmt yuv420p \
-  -c:a aac -b:a 192k -af "apad=whole_dur=136.767" -t 136.767 -movflags +faststart "$OUT" >> renders/final.log 2>&1
+  -c:a aac -b:a 192k -af "apad=whole_dur=124.467" -t 124.467 -movflags +faststart "$OUT" >> renders/final.log 2>&1
 echo "EXIT $?" >> renders/final.log

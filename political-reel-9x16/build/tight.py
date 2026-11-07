@@ -19,6 +19,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW = os.path.join(ROOT, "assets", "video", "raw.mp4")
 VOICE = os.path.join(ROOT, "cache", "voice_clean.wav")
 THRESH, MINSIL, KEEP = -30, .1, .08
+SPEED = 1.1            # v2 (owner: "fast forward the voiceover just a little"): picture and voice 1.1x, pitch kept
 CUT_WORDS = [(0, 0),        # [breath] before the first word
              (361, 361)]    # "बहन--" (the stumble before "भाइयों बहनों")
 
@@ -66,7 +67,7 @@ def to_tight(x):
     return round(t, 3)
 
 
-words = [{"i": i, "text": w["text"], "s": to_tight(w["start_time"]), "e": to_tight(w["end_time"]),
+words = [{"i": i, "text": w["text"], "s": round(to_tight(w["start_time"]) / SPEED, 3), "e": round(to_tight(w["end_time"]) / SPEED, 3),
           "cut": any(a <= i <= b for a, b in CUT_WORDS)} for i, w in enumerate(W)]
 json.dump(cuts, open(os.path.join(ROOT, "plan", "cuts.json"), "w"), indent=0)
 json.dump(words, open(os.path.join(ROOT, "plan", "words_tight.json"), "w"), ensure_ascii=False, indent=0)
@@ -84,6 +85,9 @@ for k, (a, b) in enumerate(segs):
                     "-c:a", "pcm_s16le", "-ar", "48000", "-ac", "1", out], check=True)
     lst.append(f"file '{out}'")
 open(os.path.join(tmp, "list.txt"), "w").write("\n".join(lst) + "\n")
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", os.path.join(tmp, "list.txt"), "-c", "copy",
+one = os.path.join(tmp, "tight_1x.mov")
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", os.path.join(tmp, "list.txt"), "-c", "copy", one], check=True)
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", one, "-vf", f"setpts=PTS/{SPEED}", "-af", f"atempo={SPEED}", "-r", "30",
+                "-c:v", "libx264", "-crf", "14", "-preset", "medium", "-pix_fmt", "yuv420p", "-c:a", "pcm_s16le", "-ar", "48000",
                 os.path.join(ROOT, "assets", "video", "tight.mov")], check=True)
-print(f"{len(segs)} pieces, {t:.2f} s (raw {dur:.2f} s), voice from {os.path.basename(AUD)}")
+print(f"{len(segs)} pieces, {t:.2f} s at 1x, {t / SPEED:.2f} s at {SPEED}x (raw {dur:.2f} s), voice from {os.path.basename(AUD)}")
