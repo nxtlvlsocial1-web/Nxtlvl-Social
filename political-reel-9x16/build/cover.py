@@ -35,6 +35,9 @@ body {{ width: 1080px; height: 1920px; overflow: hidden; background: #efebe4; po
 .red {{ background: #e3202f; color: #fff; }}
 .white {{ background: #fbf9f4; color: #111; }}
 .diya {{ position: absolute; }}
+#title {{ position: absolute; left: 0; width: 1080px; top: 1040px; text-align: center; }}
+#title > div {{ margin-bottom: 12px; }}
+#title .lab {{ position: relative; display: inline-block; }}
 .star {{ position: absolute; }}
 </style></head><body>
 <div id="paper"></div><div id="grid"></div>
@@ -44,14 +47,14 @@ body {{ width: 1080px; height: 1920px; overflow: hidden; background: #efebe4; po
 <div id="by">&mdash; नितेश राणे</div>
 <div class="print bw" style="left:752px;top:560px;width:270px;height:320px;transform:rotate(5deg)"><img src="../assets/img/ref/speaker_face.jpg"><i class="tape"></i></div>
 <svg class="ring" viewBox="0 0 300 230" style="left:720px;top:520px;width:340px;height:370px"><path d="M 150 14 C 250 10 300 62 296 116 C 292 180 222 222 146 220 C 62 218 6 172 8 112 C 10 50 70 12 160 14 C 222 16 266 36 286 64"/></svg>
-<img class="scrap" src="../assets/img/paper/scrap/black-2.png" style="left:560px;top:1010px;width:520px;transform:rotate(6deg)">
-<div class="print" style="left:520px;top:1030px;width:500px;height:620px;transform:rotate(3deg)"><img src="../assets/img/hold/cover_her.jpg" style="object-position:50% 30%"><i class="tape"></i></div>
-<div class="lab black" style="left:70px;top:1050px;font-size:150px;transform:rotate(-3deg)">DIWALI</div>
-<div class="lab white" style="left:80px;top:1240px;font-size:92px;transform:rotate(2deg)">BRINGS ALL</div>
-<div class="lab black" style="left:70px;top:1370px;font-size:104px;transform:rotate(-2deg)">RELIGIONS</div>
-<div class="lab red" style="left:84px;top:1515px;font-size:118px;transform:rotate(1.5deg)">TOGETHER</div>
-{"".join(f'<svg class="diya" viewBox="0 0 160 130" style="left:{x}px;top:{y}px;width:{w}px"><ellipse cx="80" cy="52" rx="44" ry="44" fill="rgba(255,190,80,.5)"/><path d="M 8 78 C 24 124 136 124 152 78 C 120 92 40 92 8 78 Z" fill="#b8521f"/><path d="M 8 78 C 40 92 120 92 152 78" fill="none" stroke="#e2a33a" stroke-width="6"/><path d="M 80 80 C 58 62 68 34 80 12 C 92 34 102 62 80 80 Z" fill="#ff9a1a"/><path d="M 80 78 C 70 66 74 50 80 38 C 86 50 90 66 80 78 Z" fill="#fff1a8"/></svg>' for x, y, w in [(300, 920, 110), (420, 945, 90)])}
-{"".join(f'<svg class="star" viewBox="-50 -50 100 100" style="left:{x}px;top:{y}px;width:{s}px"><path d="M0 -48 C6 -8 8 -6 48 0 C8 6 6 8 0 48 C-6 8 -8 6 -48 0 C-8 -6 -6 -8 0 -48 Z" fill="{c}"/></svg>' for x, y, s, c in [(960, 1000, 54, "#d9a520"), (470, 1430, 40, "#e3202f"), (90, 990, 36, "#111"), (980, 1660, 40, "#d9a520")])}
+<div id="title">
+  <div><span class="lab black" style="font-size:150px;transform:rotate(-3deg)">DIWALI</span></div>
+  <div><span class="lab white" style="font-size:96px;transform:rotate(2deg)">BRINGS ALL</span></div>
+  <div><span class="lab black" style="font-size:114px;transform:rotate(-2deg)">RELIGIONS</span></div>
+  <div><span class="lab red" style="font-size:128px;transform:rotate(1.5deg)">TOGETHER</span></div>
+</div>
+{"".join(f'<svg class="diya" viewBox="0 0 160 130" style="left:{x}px;top:{y}px;width:{w}px"><ellipse cx="80" cy="52" rx="44" ry="44" fill="rgba(255,190,80,.5)"/><path d="M 8 78 C 24 124 136 124 152 78 C 120 92 40 92 8 78 Z" fill="#b8521f"/><path d="M 8 78 C 40 92 120 92 152 78" fill="none" stroke="#e2a33a" stroke-width="6"/><path d="M 80 80 C 58 62 68 34 80 12 C 92 34 102 62 80 80 Z" fill="#ff9a1a"/><path d="M 80 78 C 70 66 74 50 80 38 C 86 50 90 66 80 78 Z" fill="#fff1a8"/></svg>' for x, y, w in [(90, 1380, 140), (850, 1390, 140)])}
+{"".join(f'<svg class="star" viewBox="-50 -50 100 100" style="left:{x}px;top:{y}px;width:{s}px"><path d="M0 -48 C6 -8 8 -6 48 0 C8 6 6 8 0 48 C-6 8 -8 6 -48 0 C-8 -6 -6 -8 0 -48 Z" fill="{c}"/></svg>' for x, y, s, c in [(930, 1060, 56, "#d9a520"), (120, 1100, 44, "#e3202f"), (900, 1330, 36, "#111"), (130, 1380, 40, "#d9a520"), (540, 1010, 34, "#e3202f")])}
 </body></html>"""
 
 
