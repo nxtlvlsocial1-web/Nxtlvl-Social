@@ -1,4 +1,4 @@
-"""The AI Exam reel's original score, composed in code: a cozy lo-fi study beat (soft kick, brushed hats, warm plucks
+"""The AI Posts reel's original score, composed in code: a cozy lo-fi study beat (soft kick, brushed hats, warm plucks
 and pads, a little pulse-wave melody for Hoot), tuned to the skit's beats. Nothing is sampled, so it needs no licence.
 
   the desk     a quiet lo-fi loop; a thud of a hit when the notes land; a lift into each STEP
@@ -243,43 +243,40 @@ def compose(cues, n):
     L_, E_ = C["l"], C["e"]
     # the desk at dusk
     put(bell(81, 1.2), .05, "keys", .3)
-    lofi(0, cut[2] - .05, .9)
+    lofi(0, cut[0] - .05, .9)
     put(taiko(1.1), C["three"] + .05, "drums", .8)
-    for st in ("step1", "step2"):
+    put(pluck(64, .6, .6), C["zero"], "keys", .45); put(pluck(60, .9, .6), C["zero"] + .3, "keys", .45)
+    # step 1 + 2: the memo, thirty ideas
+    for st in ("step1", "step2", "step3", "step4"):
         put(riser(.6, .5), C[st] - .6, "fx"); put(bell(88, 1.0), C[st], "keys", .35)
-    for k in range(6):
-        put(chip(76 + [0, 4, 7, 12, 7, 12][k], .12), C["drop"] + k * .18, "keys", .3, (k % 2 - .5) * .6)
-    for k, m in enumerate([84, 88, 91]):
-        put(bell(m, 1.0), C["podcast8"] + k * .1, "keys", .35)
-    # the bus: the loop as heard through headphones
-    i0 = int(cut[2] * SR)
-    lofi(cut[2], cut[3] - .05, .8, 900, keys=True)
-    # flashcards, the test, chapter 7, 91
-    lofi(cut[3], C["sixty"] - .3, .85)
-    put(riser(.6, .5), C["step3"] - .6, "fx"); put(bell(88, 1.0), C["step3"], "keys", .35)
+    lofi(cut[0], cut[2] - .05, .85)
     for k in range(10):
-        put(chip(84 + (k % 5) * 2, .08), C["flashcards"] + k * .07, "keys", .22, (k % 2 - .5) * .6)
-    put(pluck(64, .6, .6), C["sixty"], "keys", .5); put(pluck(60, .9, .6), C["sixty"] + .35, "keys", .5)
-    put(supersaw([52, 55, 59], C["step4"] - C["sixty"], 700, .2, .4, .8), C["sixty"], "chords", .35)
-    lofi(C["step4"] - .05, C["ninety"] - .1, .85)
-    put(riser(C["ninety"] - C["seven"] + .1, .6), C["seven"] - .1, "fx")
-    put(taiko(1.4), C["ninety"], "drums", 1.0); put(crash(), C["ninety"], "drums", .7)
+        put(chip(84 + (k % 5) * 2, .08), C["thirty7"] + k * .07, "keys", .22, (k % 2 - .5) * .6)
+    for k, m in enumerate([84, 88, 91]):
+        put(bell(m, 1.0), C["thirty8"] + k * .1, "keys", .35)
+    # step 3 + 4: slides, a month fills in, the cheer
+    lofi(cut[2], C["month"] - .3, .85)
+    put(riser(C["month"] - C["schedule"] + .1, .6), C["schedule"] - .1, "fx")
+    put(taiko(1.4), C["month"] - .1, "drums", 1.0); put(crash(), C["month"] - .1, "drums", .7)
     for k in range(6):
-        put(bell(84 + k * 2, .9), C["ninety"] + .05 + k * .08, "keys", .35, (k - 2.5) * .3)
-    lofi(C["ninety"], cut[4] - .05, 1.0, 3200)
-    # the bag: a sneaky pluck line, the beat drops for "No."
-    for t, k in beats(cut[4], C["no"] - .15, BEAT / 2):
+        put(bell(84 + k * 2, .9), C["month"] + k * .08, "keys", .35, (k - 2.5) * .3)
+    lofi(C["month"], cut[4] - .05, 1.0, 3200)
+    # the morning: brighter, a hit on eighty thousand
+    lofi(cut[4], cut[5] - .05, .95, 3600)
+    put(taiko(1.3), C["eighty"] - .05, "drums", .9); put(crash(), C["eighty"] - .05, "drums", .6)
+    # "just be me": a sneaky pluck line, the beat drops for "No."
+    for t, k in beats(cut[5], C["no"] - .15, BEAT / 2):
         put(pluck([69, 72, 71, 67][k % 4], .25, .9), t, "keys", .3, (k % 2 - .5) * .5)
         if k % 2 == 0:
             put(kick(), t, "drums", .3); kicks.append(t)
     put(sub(33, .8), C["no"], "bass", .6)
-    put(bell(69, 1.6), C["please"] + .2, "keys", .3)
-    # exam day: a warm pad
-    put(supersaw([60, 64, 67, 71], cut[6] - cut[5] + .3, 1800, .4, .6, .9), cut[5], "chords", .45)
-    put(bell(84, 1.6), C["every"], "keys", .35)
+    put(bell(69, 1.6), C["why"] + .2, "keys", .3)
+    # your voice is the content: a warm pad
+    put(supersaw([60, 64, 67, 71], cut[7] - cut[6] + .3, 1800, .4, .6, .9), cut[6], "chords", .45)
+    put(bell(84, 1.6), C["voice"], "keys", .35)
     # close
     last = int((C["end"] - .3) / BEAT) * BEAT
-    lofi(cut[6], last, 1.0, 3000)
+    lofi(cut[7], last, 1.0, 3000)
     put(taiko(1.2), last, "drums", .9); put(crash(), last, "drums", .7)
     # mix
     duck = np.ones(n)

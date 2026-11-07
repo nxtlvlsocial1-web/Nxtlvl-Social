@@ -226,6 +226,7 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
 .srow b { font: 800 56px "Manrope"; letter-spacing: -1.5px; color: #1E1B18; } .srow b i { font-style: normal; } .srow b.coral { color: #D45C40; }
 .ptag { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; top: 1190px; padding: 12px 28px 14px; border-radius: 24px;
   background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 6px 7px 0 #1E1B18; text-align: center; }
+.ptag.tg-lumi { top: 1560px; }
 .ptag span { display: block; font-size: 22px; letter-spacing: 5px; color: #6B5BD6; }
 .ptag b { display: block; font: 800 36px/1.15 "Manrope"; letter-spacing: -1px; }
 #caps { z-index: 6; }

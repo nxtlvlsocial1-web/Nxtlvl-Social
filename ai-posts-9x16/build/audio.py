@@ -127,37 +127,42 @@ def sfx():
     cu = T["cuts"]
     for t in cu:
         put(smp("whoosh-short"), t - .1, .35)
-    # the city at dusk, the notes land, the pages fly
-    put(noise_bed(cu[2], 150, 800, .08, .8), 0, .3)
-    put(rustle(.5), T["and3"] - .1, .5, -.3)
-    put(thud(), T["three"] + .05, .8, .2)
+    # the city at dusk, the panic
+    put(noise_bed(cu[1], 150, 800, .08, .8), 0, .3)
+    put(smp("pop"), T["counted"] + .1, .3)
+    put(smp("error", 0, .5), T["zero"] - .05, .2)
+    # step 1: record, the words fly into the laptop
+    put(smp("click-soft", 0, .1), T["record"] - .1, .4)
+    for j in range(16):
+        put(smp("key-press", 0, .06), T["phone"] - .1 + j * (E[5] - T["phone"]) / 16, .12, ((j % 3) - 1) * .4)
+    put(smp("sparkle"), T["text"] + .1, .25)
+    # step 2: thirty sticky notes, the coffee one
     for j in range(24):
-        put(flick(), T["drop"] - .2 + j * (T["everything"] + .7 - T["drop"]) / 24, .45, ((j % 3) - 1) * .5)
-    put(smp("sparkle"), T["everything"] + .3, .3)
-    put(smp("click-soft", 0, .1), T["podcast"] - .2, .4)
-    # the bus
-    put(noise_bed(cu[3] - cu[2], 60, 300, .5, .3), cu[2], .5)
-    # flashcards, the test, 91
-    for j in range(18):
-        put(flick(), T["flashcards"] - .2 + j * .05, .3, ((j % 3) - 1) * .5)
-    put(rustle(.35), T["test"] - .2, .4)
-    put(smp("error", 0, .5), T["sixty"] - .05, .2)
-    for j in range(6):
-        put(flick(), T["seven"] - .3 + j * .06, .35)
-    put(smp("chime"), T["ninety"] - .02, .45)
-    put(smp("sparkle"), T["ninety"] + .1, .35)
-    # the bag, "No."
-    put(rustle(.4, .8), T["small"] - .3, .4)
+        put(flick(), T["thirty7"] - .2 + j * .035, .3, ((j % 3) - 1) * .5)
+    put(smp("pop"), T["coffee"] - .05, .3)
+    # step 3: hook, caption, slides
+    for k in ("hook", "caption", "slides"):
+        put(smp("click-soft", 0, .1), T[k] - .08, .35)
+    for j in range(5):
+        put(flick(), T["hook"] - .2 + j * .12, .3, (j - 2) * .3)
+    # step 4: thirty days fill in, free, a month in one night
+    for j in range(30):
+        put(smp("key-press", 0, .05), T["schedule"] + j * 1.3 / 30, .1, ((j % 5) - 2) * .2)
+    put(smp("chime"), T["free"] - .02, .35)
+    put(smp("sparkle"), T["month"], .35)
+    # the morning: notifications pile up
+    for j in range(9):
+        put(smp("ping"), T["eighty"] - .1 + j * .16, .16 + .02 * (j % 3), ((j % 3) - 1) * .5)
+    put(smp("sparkle"), T["hook13"], .25)
+    # "just be me", "No."
+    put(rustle(.4, .8), T["just"] - .3, .35)
     put(smp("pop"), T["no"] - .05, .25)
-    # exam day: a quiet room, a pencil
-    put(noise_bed(cu[6] - cu[5], 300, 2500, .05, .4), cu[5], .25)
-    put(pencil(cu[6] - cu[5] - .4), cu[5] + .2, .5, -.2)
-    put(smp("sparkle"), T["every"] + .2, .3)
+    put(smp("sparkle"), T["voice"] + .2, .3)
     # the close
     put(smp("pop"), T["send"] - .3, .35)
-    for k in range(4):
-        put(smp("key-press", 0, .08), T["commentk"] + .15 + k * .12, .35)
-    put(smp("ping"), T["examk"] + .3, .4)
+    for k in range(5):
+        put(smp("key-press", 0, .08), T["commentk"] + .15 + k * .1, .35)
+    put(smp("ping"), T["postsk"] + .3, .4)
 
 
 def reverb(x, secs=1.0, mix=.15, seed=0):
@@ -191,11 +196,6 @@ def main():
     m = compose(T, N)
     sf.write(os.path.join(ROOT, "assets", "audio", "score.wav"), m.astype(np.float32), SR, subtype="PCM_24")
     sfxb = np.stack([reverb(SFX[:, c], 1.0, .15, c + 2) for c in (0, 1)], 1)
-    # on the bus the music is muffled, as if through her headphones; the voice stays clear
-    tt = np.arange(N) / SR
-    mw = (.9 * np.clip((tt - T["cuts"][2]) / .2, 0, 1) * np.clip((T["cuts"][3] - tt) / .2, 0, 1))[:, None]
-    m = m * (1 - mw) + np.stack([lp(m[:, c], 600) for c in (0, 1)], 1) * mw * 1.2
-    sfxb = sfxb * (1 - mw * .6) + np.stack([lp(sfxb[:, c], 900) for c in (0, 1)], 1) * mw * .6
     score = m * (.075 / rms(m)) * (1 - .45 * talk)[:, None] + sfxb * (.045 / rms(sfxb)) * (1 - .5 * talk)[:, None]
     fade = np.ones(N)
     fade[-int(.25 * SR):] = np.linspace(1, 0, int(.25 * SR))

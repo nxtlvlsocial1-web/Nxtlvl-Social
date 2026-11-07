@@ -236,7 +236,7 @@ function makeKid(sp) {
   M.smirk = P(new THREE.TorusGeometry(.03, .008, 5, 12, Math.PI * .6), dark, mouth, .01, .012, 0, false); M.smirk.rotation.z = Math.PI * 1.1;
   // hair: a cap over the top and back, side locks, bangs, long hair down the back
   const cap = P(new THREE.SphereGeometry(R + .03, 12, 8, 0, Math.PI * 2, 0, 1.28), hair, face, 0, 0, 0); cap.rotation.x = -.22;
-  P(new THREE.IcosahedronGeometry(.3, 1), hair, face, 0, -.1, -.1).scale.set(1.04, 1.12, .78);
+  if (sp.short) P(new THREE.IcosahedronGeometry(.3, 1), hair, face, 0, -.02, -.1).scale.set(1.0, .82, .76); else P(new THREE.IcosahedronGeometry(.3, 1), hair, face, 0, -.1, -.1).scale.set(1.04, 1.12, .78);
   for (const s of [-1, 1]) { const lock = P(new THREE.IcosahedronGeometry(.12, 1), hair, face, s * .255, sp.short ? -.02 : -.12, .02); if (sp.short) lock.scale.set(.38, .75, .7); else lock.scale.set(.45, 1.35, .75); }
   for (const [x, rz] of [[-.12, .35], [.0, 0], [.13, -.35]]) { const b = P(new THREE.IcosahedronGeometry(.1, 1), hair, face, x, .19, .2); b.scale.set(1.05, .5, .55); b.rotation.z = rz; }
   if (sp.long) { const back = P(new THREE.IcosahedronGeometry(.22, 1), hair, face, 0, -.32, -.13); back.scale.set(1.25, 1.35, .55); }
@@ -320,7 +320,7 @@ function makeLumi() {
     const hp = P(new THREE.TorusGeometry(.022, .006, 5, 12, Math.PI), eyeM, head, x, y - .008, FZ, false); EY.happy.push(hp);
     const cl = P(new THREE.BoxGeometry(.044, .009, .002), eyeM, head, x, y - .004, FZ, false); EY.closed.push(cl);
     const sg = new THREE.Group(); sg.position.set(x, y, FZ); head.add(sg);
-    P(new THREE.CapsuleGeometry(.014, .012, 3, 8), eyeM, sg, 0, -.01, 0, false); P(new THREE.BoxGeometry(.044, .008, .002), eyeM, sg, 0, .012, 0, false); sg.rotation.z = -s * .12; EY.smug.push(sg);
+    P(new THREE.CapsuleGeometry(.014, .012, 3, 8), eyeM, sg, 0, -.01, 0, false); P(new THREE.BoxGeometry(.044, .008, .002), eyeM, sg, 0, .012, 0, false); sg.rotation.z = -s * .03; EY.smug.push(sg);
   }
   const MO = {};
   MO.smile = P(new THREE.TorusGeometry(.024, .005, 5, 12, Math.PI), eyeM, head, 0, -.035, FZ, false); MO.smile.rotation.z = Math.PI;
@@ -361,7 +361,7 @@ const COFFEE_K = 13;
 const SLIDE_N = 5, slides = [];
 for (let k = 0; k < SLIDE_N; k++) { const m = mesh(new THREE.PlaneGeometry(.24, .3), texMat("slide" + k, { transparent: false, side: THREE.DoubleSide }), 0, 0, 0, ROOT3, false); slides.push(m); }
 const TILE_N = 30;
-const tileM = new THREE.InstancedMesh(new RoundedBoxGeometry(.11, .11, .012, 1, .01), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .6, emissive: 0x2a2a2a }), TILE_N); ROOT3.add(tileM);
+const tileM = new THREE.InstancedMesh(new RoundedBoxGeometry(.085, .085, .01, 1, .008), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .6, emissive: 0x2a2a2a }), TILE_N); ROOT3.add(tileM);
 const TILE_ON = [0x6B5BD6, 0xE8735A, 0x3FA372, 0xF2B33D];
 const heartShape = new THREE.Shape(); heartShape.moveTo(0, -.5); heartShape.bezierCurveTo(-.9, .1, -.5, .9, 0, .45); heartShape.bezierCurveTo(.5, .9, .9, .1, 0, -.5);
 const HEART_N = 26;
@@ -387,7 +387,7 @@ const DESK_HANDS = [[.75, .05, .75], [.75, .05, .75]];
 const CHEER = (t) => [[.3, 2.6 + .12 * Math.sin(t * 10), .25], [.3, 2.6 + .12 * Math.sin(t * 10 + 1.5), .25]];
 const HOLD = [[.72, -.28, 1.2], [.72, -.28, 1.2]];
 const PLEAD = [[1.05, -.38, 1.55], [1.05, -.38, 1.55]];
-const SELFIE = [[.75, .05, .75], [1.75, .35, .55]];
+const SELFIE = [[.75, .05, .75], [2.05, .55, .35]];
 const idle = (p, t, s) => ({ ...p, lean: p.lean + .015 * Math.sin(t * 1.4 + s), hr: p.hr + .03 * Math.sin(t * .9 + s * 2), hy: p.hy + .04 * Math.sin(t * .6 + s) });
 const DESK = { x: 0, z: -.58 };
 function youAt(t, s) {
@@ -422,7 +422,7 @@ function youAt(t, s) {
     else if (t < C.l[15]) { p = { ...p, hy: .32 }; f = { mouth: "o", eyes: "wide" }; }
     else { p = mixP(p, withArms(p, PLEAD, { hy: .25, hp: -.1, hr: .12 }), ss(t, C.why - .3, C.why)); f = { mouth: "sad", eyes: "wide" }; }
   }
-  if (s === 7) { p = withArms(p, SELFIE, { hy: .15, hp: -.05, hr: -.06 }); f = { mouth: "grin", eyes: t > C.voice - .2 ? "happy" : "open" }; phone = "selfie"; }
+  if (s === 7) { p = withArms(p, HOLD, { hy: .32, hp: .02, hr: -.05 }); f = { mouth: "grin", eyes: t > C.voice - .2 ? "happy" : "open" }; phone = "selfie"; }
   if (s === 8) { p = idle(withArms(SIT(DESK.x, DESK.z, 0), [[.95, .55, .55], [.3, 2.4 + .3 * Math.sin(t * 9), .5]]), t, 4); f = { mouth: "grin", eyes: t > C.postsk ? "happy" : "open" }; }
   return { vis: true, p, phone, f: { ...f, talk: talk && f.mouth !== "wide" } };
 }
@@ -467,9 +467,9 @@ const faceShot = (key, d, h, side, fov, lift = 0, push = 0, win = null) => (t) =
 const F = FOC;
 const SHOTS = [
   { t: 0, f: faceShot("you", 3.1, .05, .25, 30, -.12, .4, [0, F[0].b]) },
-  { t: F[1].a, f: faceShot("lumi", 1.8, .03, -.12, 30, -.03) },
+  { t: F[1].a, f: faceShot("lumi", 2.5, .03, -.15, 30, .09) },
   { t: C.l[2] - .3, f: move(C.l[2] - .3, F[2].a, [-.25, 1.5, 3.4], [-.2, 1.45, 3.1], [.05, 1.25, -.2], [.05, 1.25, -.2], 38, 37) },
-  { t: F[2].a, f: faceShot("lumi", 1.7, .03, .1, 30, -.03) },
+  { t: F[2].a, f: faceShot("lumi", 2.5, .03, .12, 30, .09) },
   { t: C.l[4] - .3, f: fixed([.3, 1.48, 3.1], [.18, 1.24, -.2], 38) },
   // step 1: the voice memo, the words fly into the laptop
   { t: CU[0], f: move(CU[0], CU[1], [-.95, 1.55, 2.7], [-.8, 1.5, 2.4], [-.1, 1.15, -.3], [-.1, 1.15, -.3], 38, 37) },
@@ -483,10 +483,10 @@ const SHOTS = [
   { t: C.l[10] - .3, f: fixed([0, 1.45, 3.0], [0, 1.32, -.5], 38) },
   // the next morning
   { t: CU[4], f: faceShot("you", 3.2, .1, .2, 30, .14) },
-  { t: C.l[12] - .15, f: faceShot("lumi", 1.7, .03, -.05, 30, -.03) },
+  { t: C.l[12] - .15, f: faceShot("lumi", 2.5, .03, -.08, 30, .09) },
   // "just be me", "No.", "why not?"
   { t: CU[5], f: move(CU[5], F[5].a, [.3, 1.5, 3.2], [.28, 1.47, 2.9], [.22, 1.2, -.2], [.22, 1.2, -.2], 38, 36) },
-  { t: F[5].a, f: faceShot("lumi", 1.6, .03, .05, 30, -.03) },
+  { t: F[5].a, f: faceShot("lumi", 2.4, .03, .06, 30, .09) },
   { t: C.why - .25, f: fixed([-.4, 1.3, 2.1], [-.04, 1.0, -.58], 30) },
   // your voice is the content
   { t: CU[6], f: move(CU[6], CU[7], [.25, 1.42, 2.7], [.2, 1.38, 2.3], [.12, 1.18, -.3], [.12, 1.18, -.3], 36, 35) },
@@ -536,7 +536,7 @@ function renderAt(t) {
   HEADM.lumi.copy(LUMI.head.matrixWorld); HEADW.lumi.setFromMatrixPosition(LUMI.head.matrixWorld);
   // LUMI is the room's key light: from its ring toward his face
   lampL.position.copy(HEADW.lumi).lerp(HEADW.you, .25); lampL.intensity = Lk.ring * (s === 7 ? 1 + .6 * ss(t, C.voice - .3, C.voice + .3) : 1);
-  owlL.position.copy(HEADW.lumi).add(V.set(-.1, 0, .25)); owlL.intensity = .25;
+  owlL.intensity = 0;
 
   // the coffee steam
   steam.forEach((m, k) => { const u = ((t * .35 + k / 3) % 1); m.position.set(MUG.x + Math.sin(t * 2 + k * 2) * .015, MUG.y + u * .14, MUG.z); m.scale.setScalar(.6 + u); m.material.opacity = .35 * Math.sin(u * Math.PI) * (s === 2 && t > C.coffee - .2 && t < C.e[7] + .2 ? 1.8 : 1); });
@@ -545,20 +545,19 @@ function renderAt(t) {
   phoneK.visible = !!ys.phone;
   if (phoneK.visible) {
     if (TEX.phoneMemo) setMap(phoneScrM, TEX[ys.phone === "memo" ? "phoneMemo" : ys.phone === "stats" ? "phoneStats" : "phoneSelfie"]);
-    if (ys.phone === "selfie") { YOU.hand[1].getWorldPosition(PP); phoneK.position.copy(PP).add(V.set(0, .05, .02)); phoneK.lookAt(HEADW.you); phoneK.rotateY(Math.PI); }
-    else { handsMid(YOU, PP); phoneK.position.copy(PP).add(V.set(0, .05, .03)); phoneK.rotation.set(-.75, 0, 0); }
+    { handsMid(YOU, PP); phoneK.position.copy(PP).add(V.set(0, .05, .03)); phoneK.rotation.set(-.75, 0, 0); }
   }
   // step 1: a waveform by the phone, then his words fly into the laptop as lines of text
   hideAll(barM, BAR_N);
   if (s === 1 && t > C.record - .3) {
     const grow = ss(t, C.record - .3, C.record + .1);
-    A0.set(-.3, 1.0, -.25);
-    for (let k = 0; k < BAR_N; k++) { const hgt = (.03 + .12 * Math.abs(Math.sin(t * 8 + k * .8) * Math.sin(t * 2.7 + k * .3))) * grow; M4.compose(V.set(A0.x + (k - (BAR_N - 1) / 2) * .02, A0.y, A0.z), Q.identity(), S.set(1, Math.max(.001, hgt), 1)); barM.setMatrixAt(k, M4); }
+    A0.set(-.52, .97, -.12);
+    for (let k = 0; k < BAR_N; k++) { const hgt = (.02 + .08 * Math.abs(Math.sin(t * 8 + k * .8) * Math.sin(t * 2.7 + k * .3))) * grow; M4.compose(V.set(A0.x + (k - (BAR_N - 1) / 2) * .02, A0.y, A0.z), Q.identity(), S.set(1, Math.max(.001, hgt), 1)); barM.setMatrixAt(k, M4); }
   }
   hideAll(pageM, PAGE_N);
   if (s === 1) for (let k = 0; k < PAGE_N; k++) {
     const a = C.phone - .2 + k * (C.e[5] - C.phone) / PAGE_N, u = ramp(t, a, a + .8); if (u <= 0 || u >= 1) continue;
-    A0.copy(phoneK.position); A2.copy(SCREEN); A1.lerpVectors(A0, A2, .5).add(V.set(0, .25 + hash(k) * .1, .2));
+    A0.copy(phoneK.position); A2.copy(SCREEN); A1.lerpVectors(A0, A2, .5).add(V.set(0, -.02 + hash(k) * .06, .38));
     bez(A0, A1, A2, u, PP); Q.setFromEuler(new THREE.Euler(0, .6 * (1 - u), (hash(k) - .5) * .2)); M4.compose(PP, Q, S.setScalar(1 - .5 * u)); pageM.setMatrixAt(k, M4);
   }
   // step 2: 30 sticky notes out of the laptop into an arc around him; the coffee one comes forward
@@ -566,7 +565,7 @@ function renderAt(t) {
   if (s === 2) for (let k = 0; k < CARD_N; k++) {
     const a = C.thirty7 - .25 + k * .035, u = ss(t, a, a + .6); if (u <= 0) continue;
     const ang = -1.3 + 2.6 * (k / (CARD_N - 1)), ring = k % 2 ? .95 : .8;
-    A2.set(Math.sin(ang) * (ring + .1), 1.25 + Math.cos(ang) * .4 + (k % 3) * .06, -1.0 + Math.cos(ang) * .1);
+    A2.set(Math.sin(ang) * (ring + .1), 1.1 + Math.cos(ang) * .36 + (k % 3) * .06, -1.0 + Math.cos(ang) * .1);
     const cof = k === COFFEE_K, fwd = cof ? ss(t, C.coffee - .3, C.coffee + .25) : 0;
     bez(A0.copy(SCREEN), A1.set(-.2, 2.0, -.6), A2, u, PP);
     if (fwd > 0) PP.lerp(A1.set(.32, 1.18, -.1), fwd);
@@ -581,16 +580,17 @@ function renderAt(t) {
     m.visible = s === 3 && t > C.step3;
     if (!m.visible) return;
     const u = ss(t, C.hook - .2 + k * .12, C.hook + .4 + k * .12), slide = .12 * Math.sin((t - C.step3) * .9);
-    A2.set(-.6 + k * .3 + slide, 1.62 + .03 * Math.sin(t * 2 + k), -1.05 - Math.abs(k - 2) * .05);
-    PP.lerpVectors(SCREEN, A2, u); m.position.copy(PP); m.rotation.set(0, (k - 2) * -.12 * u, 0); m.scale.setScalar(.3 + .7 * u);
+    const fan = k - (SLIDE_N - 1) / 2;
+    A2.set(-.62 + fan * .13 + slide * .3, 1.36 + Math.abs(fan) * -.025 + .015 * Math.sin(t * 2 + k), -.5 - (SLIDE_N - 1 - k) * .03);
+    PP.lerpVectors(SCREEN, A2, u); m.position.copy(PP); m.rotation.set(0, .35 * u, -fan * .1 * u); m.scale.setScalar((.3 + .7 * u) * .85);
   });
   // step 4: the month: 30 tiles fill in, one post a day
   hideAll(tileM, TILE_N);
   if (s === 4) for (let k = 0; k < TILE_N; k++) {
-    const col = k % 6, row = Math.floor(k / 6), appear = ss(t, CU[3] + row * .05, CU[3] + .4 + row * .05);
+    const col = k % 15, row = Math.floor(k / 15), appear = ss(t, CU[3] + row * .05, CU[3] + .4 + row * .05);
     if (appear <= 0) continue;
     const on = ss(t, C.schedule + k * (1.3 / TILE_N), C.schedule + k * (1.3 / TILE_N) + .2);
-    PP.set(-.36 + col * .145, 1.95 - row * .145, -1.15);
+    PP.set(-.735 + col * .105, 1.6 - row * .105, -1.15);
     const pop = t > C.l[10] ? .08 * Math.abs(Math.sin(t * 8 + k * .5)) * bump(t, C.l[10], C.l[10] + 1.6, .2) : 0;
     Q.setFromEuler(new THREE.Euler(0, Math.PI * (1 - on), 0)); M4.compose(PP, Q, S.setScalar(appear * (1 + pop))); tileM.setMatrixAt(k, M4);
     tileM.setColorAt(k, tmpC.set(on > .5 ? TILE_ON[k % 4] : 0xFFFDF8));
@@ -600,7 +600,7 @@ function renderAt(t) {
   hideAll(heartM, HEART_N);
   if (s === 5 && t > C.eighty - .2) for (let k = 0; k < HEART_N; k++) {
     const t0 = C.eighty - .2 + k * .09, u = ramp(t, t0, t0 + 1.6); if (u <= 0 || u >= 1) continue;
-    PP.copy(phoneK.position).add(V.set(.2 + (hash(k) - .3) * .5, .1 + u * .9, .15 + hash(k * 3) * .1));
+    PP.copy(phoneK.position).add(V.set(.42 + hash(k) * .35 + u * .15, .05 + u * .75, .1 + hash(k * 3) * .1));
     Q.setFromEuler(new THREE.Euler(0, 0, Math.sin(t * 3 + k) * .3)); M4.compose(PP, Q, S.setScalar(.06 * Math.sin(u * Math.PI) + .02)); heartM.setMatrixAt(k, M4);
   }
   hideAll(confM, CONF_N);
