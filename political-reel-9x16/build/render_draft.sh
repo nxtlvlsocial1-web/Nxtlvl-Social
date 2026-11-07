@@ -5,7 +5,7 @@
 cd "$(dirname "$0")/.." || exit 1
 export HYPERFRAMES_NO_TELEMETRY=1
 mkdir -p renders
-D=124.467
+D=97.067
 BASE=renders/preview_diwali-opinion_reels_9x16_v4_voice.mp4
 OUT=renders/preview_diwali-opinion_reels_9x16_v4.mp4
 npx --yes hyperframes@0.8.203 render --quality draft -w 3 -o renders/draft_master.mp4 > renders/draft.log 2>&1

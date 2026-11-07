@@ -19,7 +19,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW = os.path.join(ROOT, "assets", "video", "raw.mp4")
 VOICE = os.path.join(ROOT, "cache", "voice_clean.wav")
 THRESH, MINSIL, KEEP = -30, .1, .08
-SPEED = 1.1            # v2 (owner: "fast forward the voiceover just a little"): picture and voice 1.1x, pitch kept
+SPEED = 1.4143         # v7 (owner: "fast forward the whole video to 1:37"): picture and voice 1.4143x of the take, pitch kept, 96 s + the 1 s end hold
 CUT_WORDS = [(0, 0),        # [breath] before the first word
              (361, 361)]    # "बहन--" (the stumble before "भाइयों बहनों")
 

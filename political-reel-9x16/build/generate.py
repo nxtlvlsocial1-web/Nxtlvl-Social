@@ -560,17 +560,17 @@ def boards():
     TOP.append(f'<svg class="hdw" id="{i}" viewBox="0 0 1080 520" style="left:0;top:300px;width:1080px;height:520px;z-index:8">'
                f'<text class="h1" x="540" y="200" text-anchor="middle">Happy</text><text class="h2" x="540" y="430" text-anchor="middle">Diwali</text>'
                f'<path class="ul" d="M 300 470 C 450 440 650 500 800 455" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>')
-    th = T(365) - .1
+    th = T(364) - .05          # v7: starts on "ko" so it is written by the time she says "Diwali"
     js(f'tl.set("#{i}", {{opacity: 1}}, {th:.3f});')
-    js(f'tl.fromTo("#{i} .h1", {{strokeDashoffset: 1600, fillOpacity: 0}}, {{strokeDashoffset: 0, duration: .55, ease: "power2.inOut", immediateRender: false}}, {th:.3f});')
-    js(f'tl.to("#{i} .h1", {{fillOpacity: 1, duration: .25}}, {th + .45:.3f});')
-    js(f'tl.fromTo("#{i} .h2", {{strokeDashoffset: 1900, fillOpacity: 0}}, {{strokeDashoffset: 0, duration: .65, ease: "power2.inOut", immediateRender: false}}, {th + .3:.3f});')
-    js(f'tl.to("#{i} .h2", {{fillOpacity: 1, duration: .25}}, {th + .85:.3f});')
-    js(f'tl.fromTo("#{i} .ul", {{strokeDashoffset: 1}}, {{strokeDashoffset: 0, duration: .35, ease: "power2.out", immediateRender: false}}, {th + .9:.3f});')
+    js(f'tl.fromTo("#{i} .h1", {{strokeDashoffset: 1600, fillOpacity: 0}}, {{strokeDashoffset: 0, duration: .35, ease: "power2.inOut", immediateRender: false}}, {th:.3f});')
+    js(f'tl.to("#{i} .h1", {{fillOpacity: 1, duration: .15}}, {th + .28:.3f});')
+    js(f'tl.fromTo("#{i} .h2", {{strokeDashoffset: 1900, fillOpacity: 0}}, {{strokeDashoffset: 0, duration: .42, ease: "power2.inOut", immediateRender: false}}, {th + .15:.3f});')
+    js(f'tl.to("#{i} .h2", {{fillOpacity: 1, duration: .15}}, {th + .5:.3f});')
+    js(f'tl.fromTo("#{i} .ul", {{strokeDashoffset: 1}}, {{strokeDashoffset: 0, duration: .25, ease: "power2.out", immediateRender: false}}, {th + .55:.3f});')
     js(f'tl.fromTo("#{i}", {{scale: .92}}, {{scale: 1.03, duration: 2.0, ease: "sine.out", immediateRender: false}}, {th:.3f});')
     HIDE.append(f"#{i}")
     cue(th, "shimmer")
-    cue(th + .9, "chime")
+    cue(th + .55, "chime")
     firework(150, 330, 130, T(365) - .1, DUR, "#e3202f", .9, z=3)
     firework(930, 340, 140, T(365) + .2, DUR, "#d9a520", 1.0, z=3)
     firework(170, 760, 100, T(366), DUR, "#d9a520", 1.1, z=3)
