@@ -8,6 +8,8 @@ A light layer under the song:
 - thuds for the bags, a glass break on PRIDE, a stamp on CERTAIN
 - a sparkle on the diamond, a spray, a pour, a neon buzz
 - a soft swell into the logo
+v2 adds a paper tear on the torn-hole cuts, the phone buzz, a heartbeat thump, a camera shutter and a paper slap for
+the polaroid memories.
 
 python3 build/sfx_sheet.py VIDEO.mp4 [--out renders/cues.json]
 """
@@ -47,6 +49,12 @@ KINDS = {   # kind: (files, role, gain_db, extra)
     "scratch": ([f("interface-sounds/Audio__error_004.ogg")], "glitch", -16, {"max_dur": .3}),
     "neon": ([f("sci-fi-sounds/Audio__forceField_001.ogg")], "ambience", -20, {"anchor": "start", "max_dur": .5, "fade_out": .2}),
     "logo": ([f("wind-hit-time-morph/qubodup-megaswosh2.wav")], "whoosh", -14, {"reverse": True, "max_dur": .6}),
+    # v2
+    "tear": ([f("100-cc0-sfx/paper_04.ogg"), f("100-cc0-sfx/paper_03.ogg")], "foley", -10, {"max_dur": .6}),
+    "buzz": ([f("202-more-sound-effects/Phone__Phone2.wav")], "foley", -14, {}),
+    "heartbeat": ([f("75-cc0-breaking-falling-hit-sfx/bfh1_hit_02.ogg")], "hit", -12, {"lowpass": 400, "max_dur": .35}),
+    "shutter": ([f("camera/photo.ogg")], "foley", -11, {"max_dur": .6}),
+    "slap": ([f("100-cc0-sfx/paper_01.ogg"), f("100-cc0-sfx/paper_02.ogg")], "foley", -13, {"max_dur": .45}),
 }
 
 

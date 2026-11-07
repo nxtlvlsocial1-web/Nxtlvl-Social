@@ -183,3 +183,41 @@ Verse 2, the second chance:
 21. **I need you.** Softer: rain on a window and a candle. Keyword NEED YOU.
 22. **The pressure of love.** A pressure gauge's needle climbs into the red. Keyword PRESSURE. At about 62 s the low
     end falls away, then a slow push into the gauge, then the logo (dark violet, the song fading across it).
+
+## 7. v2 (2026-11-07): timing corrected, rebuilt on the reference's motion
+
+Owner feedback on v1: the lyrics didn't match the song, and the edit was static. Section 5's timings were wrong: they
+assumed the verse starts at 0.9 s, but the 0-20 s intro has no vocals.
+
+Measured on the vocal estimate (centre minus 1.5x side, 150-5000 Hz, voicing plus onsets):
+
+| Line | Song time (s) |
+|---|---|
+| We didn't vibe on the first night | 20.18-22.14 |
+| But you're so enticin' | 23.52-25.58 |
+| We didn't vibe then | 25.74-27.84 |
+| But now I want you | 28.98-30.26 |
+| So, I-I-I | 30.89-32.54 |
+| pure desire | 33.00-34.60 |
+| So heart racin' | 35.21-36.98 |
+| entire body sayin', "Ah-ooh-ah" | 37.15-41.06 |
+| I want you to make you my girlfriend (Yeah) | 41.21-44.40 |
+| Wait 'til the world ends | 44.88-46.94 |
+| Badman deserves ya (Yeah) | 47.65-49.56 |
+| Badman buy Birkins | 50.23-51.64 |
+| For you, for certain | 52.14-54.76 |
+| Search, I been searchin' | 55.38-57.80 |
+| Woah, woah, ah | 59.06-59.87 |
+| And I want you, x5 | 60.17, 65.37, 70.52, 75.67, 80.83 (each about 1.5 s) |
+
+The five "And I want you" repeats match one another at 0.93-0.95 spectral correlation; they're sung over the
+breakdown. Verse 2 starts after about 87 s, outside the minute.
+
+The edit plays the song from 19.70 s to 85.70 s (66 s), with the logo at 83.75 and the song fading from 83.2. Word
+times are in build/generate.py.
+
+Motion rebuilt from a 6 fps frame study of the reference:
+- Words land one by one as they're sung, letters fly in from blur, and the keyword's tracking collapses as it lands.
+- The camera never stops, and text drifts on its own layer.
+- A new shot on every line: portal, torn paper, motion-blur whip, burn, zoom.
+- Particles, light leaks, and polaroid memories for the five repeats.

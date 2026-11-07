@@ -1,134 +1,210 @@
 [
 {
-"t": 2.95,
-"type": "whip"
+"t": 0.96,
+"type": "hit"
 },
 {
-"t": 4.35,
+"t": 3.18,
+"type": "tear"
+},
+{
+"t": 4.75,
 "type": "spray"
 },
 {
-"t": 4.6,
+"t": 5.37,
 "type": "portal"
 },
 {
-"t": 6.85,
-"type": "portal"
-},
-{
-"t": 6.88,
+"t": 7.14,
 "type": "scratch"
 },
 {
-"t": 10.25,
+"t": 8.72,
+"type": "whip"
+},
+{
+"t": 9.5,
+"type": "buzz"
+},
+{
+"t": 10.05,
+"type": "buzz"
+},
+{
+"t": 10.47,
 "type": "portal"
 },
 {
-"t": 13.4,
+"t": 11.57,
+"type": "hit"
+},
+{
+"t": 11.81,
+"type": "hit"
+},
+{
+"t": 12.29,
+"type": "hit"
+},
+{
+"t": 12.53,
 "type": "portal"
 },
 {
-"t": 20.33,
+"t": 14.99,
+"type": "hit"
+},
+{
+"t": 16.16,
+"type": "heartbeat"
+},
+{
+"t": 17.08,
+"type": "whip"
+},
+{
+"t": 21.4,
 "type": "drop"
 },
 {
-"t": 21.65,
+"t": 23.6,
 "type": "sparkle"
 },
 {
-"t": 22.61,
-"type": "portal"
+"t": 24.6,
+"type": "tear"
 },
 {
-"t": 25.19,
-"type": "portal"
-},
-{
-"t": 28.07,
-"type": "whip"
-},
-{
-"t": 28.6,
-"type": "thud"
-},
-{
-"t": 29.25,
-"type": "thud"
-},
-{
-"t": 29.9,
-"type": "thud"
-},
-{
-"t": 30.65,
-"type": "whip"
-},
-{
-"t": 32.4,
-"type": "stamp"
-},
-{
-"t": 32.7,
-"type": "air"
-},
-{
-"t": 34.15,
-"type": "portal"
-},
-{
-"t": 36.1,
-"type": "hit"
-},
-{
-"t": 40.97,
-"type": "glitch"
-},
-{
-"t": 42.55,
-"type": "whip"
-},
-{
-"t": 44.9,
+"t": 26.47,
 "type": "shatter"
 },
 {
-"t": 45.1,
-"type": "hit"
-},
-{
-"t": 47.05,
+"t": 27.23,
 "type": "portal"
 },
 {
-"t": 47.05,
+"t": 27.95,
+"type": "sparkle"
+},
+{
+"t": 30.08,
+"type": "whip"
+},
+{
+"t": 30.75,
+"type": "thud"
+},
+{
+"t": 31.22,
+"type": "thud"
+},
+{
+"t": 31.53,
+"type": "thud"
+},
+{
+"t": 31.85,
+"type": "thud"
+},
+{
+"t": 31.86,
+"type": "air"
+},
+{
+"t": 32.04,
+"type": "thud"
+},
+{
+"t": 33.72,
+"type": "stamp"
+},
+{
+"t": 35.22,
+"type": "whip"
+},
+{
+"t": 35.6,
+"type": "air"
+},
+{
+"t": 38.63,
+"type": "portal"
+},
+{
+"t": 39.36,
+"type": "hit"
+},
+{
+"t": 39.68,
+"type": "hit"
+},
+{
+"t": 40.07,
+"type": "hit"
+},
+{
+"t": 40.31,
+"type": "hit"
+},
+{
+"t": 42.48,
+"type": "shutter"
+},
+{
+"t": 45.45,
+"type": "whip"
+},
+{
+"t": 45.8,
+"type": "slap"
+},
+{
+"t": 47.64,
+"type": "shutter"
+},
+{
+"t": 50.6,
+"type": "whip"
+},
+{
+"t": 50.95,
+"type": "slap"
+},
+{
+"t": 52.78,
+"type": "shutter"
+},
+{
+"t": 55.75,
+"type": "whip"
+},
+{
+"t": 56.1,
+"type": "slap"
+},
+{
+"t": 56.9,
 "type": "pour"
 },
 {
-"t": 48.45,
-"type": "neon"
+"t": 57.92,
+"type": "shutter"
 },
 {
-"t": 49.3,
-"type": "neon"
-},
-{
-"t": 50.1,
+"t": 60.9,
 "type": "whip"
 },
 {
-"t": 53.4,
-"type": "air"
+"t": 61.25,
+"type": "slap"
 },
 {
-"t": 55.15,
-"type": "air"
+"t": 62.85,
+"type": "shutter"
 },
 {
-"t": 58.6,
-"type": "whip"
-},
-{
-"t": 61.96,
+"t": 63.6,
 "type": "logo"
 }
 ]
