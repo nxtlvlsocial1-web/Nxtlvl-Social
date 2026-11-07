@@ -323,8 +323,8 @@ AWNING = ["M 0 40 L 200 40 L 180 0 L 20 0 Z", "M 0 40 Q 25 72 50 40 Q 75 72 100 
 TV = ["M 10 10 H 190 V 130 H 10 Z", "M 70 170 H 130 M 100 130 V 170"]
 PHONE = ["M 30 2 H 90 Q 100 2 100 12 V 168 Q 100 178 90 178 H 30 Q 20 178 20 168 V 12 Q 20 2 30 2 Z", "M 50 160 H 70"]
 LAPTOP = ["M 30 10 H 170 V 110 H 30 Z", "M 0 130 H 200 L 185 145 H 15 Z"]
-KURTA = ["M 220 40 C 220 20 245 15 250 32 C 255 48 235 55 225 62 L 220 80", "M 220 80 L 130 150 L 310 150",
-         "M 200 150 L 140 180 L 110 260 L 150 270 L 160 230 L 160 420 L 280 420 L 280 230 L 290 270 L 330 260 L 300 180 L 240 150 Q 220 175 200 150 Z"]
+KURTA = ["M 220 40 C 220 22 240 18 246 32 C 250 44 236 52 226 58 L 220 76", "M 220 76 L 108 150 Q 102 158 114 158 L 326 158 Q 338 158 332 150 Z",
+         "M 196 120 L 118 158 L 92 252 L 136 264 L 150 214 L 150 420 L 290 420 L 290 214 L 304 264 L 348 252 L 322 158 L 244 120 Q 220 148 196 120 Z"]
 NECK = ["M 30 30 C 60 170 240 170 270 30", "M 150 150 L 150 165", "M 150 185 A 18 18 0 1 1 150.1 185"]
 MEDAL = ["M 100 70 A 60 60 0 1 1 100.1 70", "M 88 52 L 104 40 L 104 102 M 90 102 L 118 102", "M 70 120 L 50 205 L 78 190 L 92 214 L 98 130", "M 130 120 L 150 205 L 122 190 L 108 214 L 102 130"]
 CROSS = ["M 20 20 L 380 230", "M 380 20 L 20 230"]
@@ -391,7 +391,7 @@ def boards():
     _, ta, tb, a, b, _ = S["crackers"]
     group("crackers", ta, tb)
     scrap("white", 0, 50, 90, 980, -2, ta + .03, z=1)
-    icon(SKYLINE, 80, 520, 920, 300, "0 0 920 300", T(76) - .1, stroke="#111", sw=6, bob=False, snd="whoosh")
+    prt("assets/img/ref/mumbai_taj.jpg", 150, 330, 560, 374, -3, T(76) - .08, z=4, bw=False)
     for k, (x, tk) in enumerate([(240, T(70) - .2), (560, T(70) + .1), (840, T(71) - .1)]):
         i = nid("rk")
         TOP.append(f'<svg class="rk" id="{i}" viewBox="-5 -45 40 80" style="left:{x}px;top:640px;width:46px;height:90px;z-index:5">'
@@ -437,11 +437,11 @@ def boards():
     # 7. Attar community, Pune: three generations, each holding a kandil, along a time arrow
     _, ta, tb, a, b, _ = S["attar"]
     group("attar", ta, tb)
-    scrap("red", 2, 50, 260, 980, -3, ta + .03, z=1)
-    prt("assets/img/ref/attar_kandil_lanterns_pune.jpg?v=2", 700, 40, 320, 220, 6, ta + .02, z=2, bw=False)
-    for k, (path, x, sz, tk) in enumerate([(ELDER, 130, 330, T(130)), (PERSON, 430, 300, T(131) + .1), (PERSON, 720, 220, T(133))]):
-        icon([path, LAMP], x, 300 + (330 - sz), sz * .66, sz, "0 0 100 160", tk, stroke="#fff", sw=6, snd="pop")
-    draw(["M 120 720 L 960 720", "M 960 720 L 925 698 M 960 720 L 925 742"], 0, 0, 1080, 960, "0 0 1080 960", T(130), d=.6, z=4, stroke="#fff", sw=8)
+    scrap("red", 2, 60, 150, 960, -2, ta + .03, z=1)
+    prt("assets/img/ref/attar_kandil_lanterns_pune.jpg?v=2", 720, 20, 300, 200, 6, ta + .02, z=2, bw=False)
+    for k, (path, x, sz, tk) in enumerate([(ELDER, 200, 280, T(130)), (PERSON, 460, 250, T(131) + .1), (PERSON, 700, 190, T(133))]):
+        icon([path, LAMP], x, 330 + (280 - sz), sz * .66, sz, "0 0 100 160", tk, stroke="#fff", sw=6, snd="pop")
+    draw(["M 180 660 L 900 660", "M 900 660 L 865 638 M 900 660 L 865 682"], 0, 0, 1080, 960, "0 0 1080 960", T(130), d=.6, z=4, stroke="#fff", sw=8)
     lantern(80, 60, 90, ta + .2, tb, "#e3202f")
     end_group()
 
@@ -512,11 +512,7 @@ def boards():
     draw(["M 310 220 L 430 380", "M 770 220 L 650 380", "M 310 680 L 430 560", "M 760 690 L 650 560"], 0, 0, 1080, 960, "0 0 1080 960",
          T(283) - .05, d=.3, z=3, stroke="#111", sw=7)
     cue(T(283) - .05, "marker")
-    i = nid("fam")
-    TOP.append(f'<div class="fambox" id="{i}"><svg viewBox="0 0 300 170">'
-               + "".join(f'<path transform="translate({20 + k * 90} 5) scale(.9)" d="{PERSON}"/>' for k in range(3)) + '</svg></div>')
-    slap(i, T(285) - .05, -3, d=.36, frm=2)
-    cue(T(285) - .05, "stamp")
+    logo("tata", 380, 300, 320, 320, T(285) - .05, rot=-2, z=6)
     twinkle(6, ta, tb)
     end_group()
 
@@ -537,26 +533,41 @@ def boards():
     icon(CROSS, 520, 540, 480, 300, "0 0 400 250", T(342) - .05, stroke="#e3202f", sw=16, z=7, bob=False, snd="hit")
     end_group()
 
-    # 15. The close: six diyas, one lights for each community she names; a rangoli draws on; fireworks
+    # 15. The close: six diyas light, one per community; then "Happy Diwali" writes itself on in script (outline drawn,
+    # then the ink fills), a rangoli blooms behind it, fireworks and sparkles
     _, ta, tb, a, b, _ = S["names"]
     group("names", ta, tb)
-    scrap("white", 2, 30, 90, 1020, -2, ta + .03, z=1)
+    scrap("white", 2, 30, 60, 1020, -2, ta + .03, z=1)
     for k, j in enumerate(range(355, 361)):
-        diya(70 + k * 160, 280 + (40 if k % 2 else 0), 140, ta + .1 + k * .06, DUR, lit_at=T(j) - .02)
+        diya(70 + k * 160, 120 + (30 if k % 2 else 0), 130, ta + .1 + k * .06, DUR, lit_at=T(j) - .02)
     rang = []
     import math
-    for k in range(8):
-        a_ = k / 8 * 6.283
-        cx, cy = 540 + math.cos(a_) * 120, 700 + math.sin(a_) * 120
-        rang.append(f"M 540 700 Q {540 + math.cos(a_ - .4) * 150:.0f} {700 + math.sin(a_ - .4) * 150:.0f} {cx + math.cos(a_) * 60:.0f} {cy + math.sin(a_) * 60:.0f} "
-                    f"Q {540 + math.cos(a_ + .4) * 150:.0f} {700 + math.sin(a_ + .4) * 150:.0f} 540 700")
-    icon(rang, 290, 450, 500, 500, "290 450 500 500", T(365) - .05, stroke="#e3202f", sw=8, bob=False, snd="chime", d=.6)
-    icon(["M 540 640 A 60 60 0 1 1 540.1 640", "M 540 610 A 90 90 0 1 1 540.1 610"], 290, 450, 500, 500, "290 450 500 500", T(365) + .2,
-         stroke="#d9a520", sw=8, bob=False, snd=None, d=.5)
-    firework(150, 140, 130, T(365) - .1, DUR, "#e3202f", .9, z=2)
-    firework(930, 160, 150, T(365) + .2, DUR, "#d9a520", 1.0, z=2)
-    firework(880, 700, 110, T(366), DUR, "#111", 1.1, z=2)
-    twinkle(10, ta, DUR)
+    for k in range(12):
+        a_ = k / 12 * 6.283
+        rang.append(f"M 540 560 Q {540 + math.cos(a_ - .3) * 230:.0f} {560 + math.sin(a_ - .3) * 230:.0f} {540 + math.cos(a_) * 300:.0f} {560 + math.sin(a_) * 300:.0f} "
+                    f"Q {540 + math.cos(a_ + .3) * 230:.0f} {560 + math.sin(a_ + .3) * 230:.0f} 540 560")
+    rg = draw(rang, 190, 210, 700, 700, "190 210 700 700", T(365) - .3, d=.7, z=2, stroke="#f2c4c8", sw=6)
+    js(f'tl.fromTo("#{rg}", {{rotation: -20, scale: .6}}, {{rotation: 10, scale: 1, duration: 2.2, ease: "power2.out", immediateRender: false}}, {T(365) - .3:.3f});')
+    i = nid("hdw")
+    TOP.append(f'<svg class="hdw" id="{i}" viewBox="0 0 1080 520" style="left:0;top:300px;width:1080px;height:520px;z-index:8">'
+               f'<text class="h1" x="540" y="200" text-anchor="middle">Happy</text><text class="h2" x="540" y="430" text-anchor="middle">Diwali</text>'
+               f'<path class="ul" d="M 300 470 C 450 440 650 500 800 455" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>')
+    th = T(365) - .1
+    js(f'tl.set("#{i}", {{opacity: 1}}, {th:.3f});')
+    js(f'tl.fromTo("#{i} .h1", {{strokeDashoffset: 1600, fillOpacity: 0}}, {{strokeDashoffset: 0, duration: .55, ease: "power2.inOut", immediateRender: false}}, {th:.3f});')
+    js(f'tl.to("#{i} .h1", {{fillOpacity: 1, duration: .25}}, {th + .45:.3f});')
+    js(f'tl.fromTo("#{i} .h2", {{strokeDashoffset: 1900, fillOpacity: 0}}, {{strokeDashoffset: 0, duration: .65, ease: "power2.inOut", immediateRender: false}}, {th + .3:.3f});')
+    js(f'tl.to("#{i} .h2", {{fillOpacity: 1, duration: .25}}, {th + .85:.3f});')
+    js(f'tl.fromTo("#{i} .ul", {{strokeDashoffset: 1}}, {{strokeDashoffset: 0, duration: .35, ease: "power2.out", immediateRender: false}}, {th + .9:.3f});')
+    js(f'tl.fromTo("#{i}", {{scale: .92}}, {{scale: 1.03, duration: 2.0, ease: "sine.out", immediateRender: false}}, {th:.3f});')
+    HIDE.append(f"#{i}")
+    cue(th, "shimmer")
+    cue(th + .9, "chime")
+    firework(150, 330, 130, T(365) - .1, DUR, "#e3202f", .9, z=3)
+    firework(930, 340, 140, T(365) + .2, DUR, "#d9a520", 1.0, z=3)
+    firework(170, 760, 100, T(366), DUR, "#d9a520", 1.1, z=3)
+    firework(900, 780, 110, T(366) + .3, DUR, "#e3202f", 1.2, z=3)
+    twinkle(12, ta, DUR)
     end_group()
 
 
@@ -600,6 +611,29 @@ def caps(a, b, tend, where):
         POST.append(f'<div class="cap {where}" id="{i}"><span>{txt}</span></div>')
         show(f"#{i}", t0, t1)
         js(f'tl.fromTo("#{i} span", {{scale: .9, y: 8}}, {{scale: 1, y: 0, duration: .14, ease: "power3.out", immediateRender: false}}, {t0:.3f});')
+
+
+def full_caps(a, b, tend):
+    """Full-frame shots (owner, v5: the earlier style): a small script line over a big condensed word, red on key words."""
+    ch = chunks(a, b, maxw=4, maxc=22)
+    for k, c in enumerate(ch):
+        t0 = T(c[0]) - .02
+        t1 = T(ch[k + 1][0]) - .02 if k + 1 < len(ch) else tend
+        key = [j for j in c if j in RED]
+        tail = [j for j in c if word(j).lower().strip(",.?") not in FUNC]
+        big = key if key else (c[c.index(tail[-1]):] if tail else c[-1:])
+        small = [j for j in c if j not in big]
+        i = nid("fc")
+        sm = " ".join(word(j) for j in small).lower()
+        bg = " ".join(word(j) for j in big).upper().rstrip(",.")
+        POST.append(f'<div class="fcap" id="{i}">' + (f'<div class="scr">{sm}</div>' if sm else "") +
+                    f'<div class="bigw{" red" if key else ""}" style="font-size:{min(150, int(1780 / max(1, len(bg))))}px">{bg}</div></div>')
+        show(f"#{i}", t0, t1)
+        if sm:
+            js(f'tl.fromTo("#{i} .scr", {{opacity: 0, x: -20, filter: "blur(6px)"}}, {{opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}}, {t0:.3f});')
+        tb = T(big[0]) - .02
+        js(f'tl.set("#{i} .bigw", {{opacity: 0}}, {t0 - .001:.3f});')
+        js(f'tl.fromTo("#{i} .bigw", {{opacity: 0, scale: 1.3, filter: "blur(10px)"}}, {{opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}}, {max(t0, tb):.3f});')
 
 
 # ------------------------------------------------------------------------------------------------ layout + transitions
@@ -669,7 +703,7 @@ def layout():
             js(f'tl.set("#fullz", {{scale: {1.14 if n % 2 == 0 else 1}}}, {T(i) - .04:.3f});')
         if starts:
             js(f'tl.set("#fullz", {{scale: 1}}, {tb:.3f});')
-        caps(a, b, tb, "low")
+        full_caps(a, b, tb)
     HIDE.extend(["#split", "#full", "#flash", "#tflash", "#tear", "#tearbig", "#hold"])
     js(f'tl.set("#hold", {{opacity: 1}}, {VDUR - .04:.3f});')
 
@@ -774,8 +808,12 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #efeb
 .kand .lt {{ stroke: #111; stroke-width: 3; }}
 .kand .ln {{ stroke: rgba(255,255,255,.8); stroke-width: 3; fill: none; }}
 .kand .ts {{ stroke: #d9a520; stroke-width: 4; fill: none; stroke-linecap: round; }}
-.cap {{ position: absolute; left: 60px; right: 140px; text-align: center; opacity: 0; z-index: 12; }}
+.cap {{ position: absolute; left: 50px; right: 50px; text-align: center; opacity: 0; z-index: 12; }}
 .cap.seam {{ top: 905px; }}
+.fcap {{ position: absolute; left: 100px; right: 100px; top: 1250px; opacity: 0; z-index: 9; }}
+.fcap .scr {{ font: 400 74px/1.1 "Kaushan"; color: #fff; text-shadow: 0 4px 14px rgba(0,0,0,.6); margin-left: 6px; }}
+.fcap .bigw {{ font: 400 150px/1 "Anton"; color: #fff; letter-spacing: .01em; text-shadow: 0 8px 26px rgba(0,0,0,.5); transform-origin: 0 60%; }}
+.fcap .bigw.red {{ color: #ff2d3d; text-shadow: 0 4px 0 #fff, 0 10px 30px rgba(0,0,0,.5); }}
 .cap.low {{ top: 1330px; }}
 .cap span {{ display: inline-block; font: 800 60px/1.12 "Inter"; color: #fff; letter-spacing: -.01em;
   text-shadow: 4px 0 0 #000, -4px 0 0 #000, 0 4px 0 #000, 0 -4px 0 #000, 3px 3px 0 #000, -3px 3px 0 #000, 3px -3px 0 #000, -3px -3px 0 #000,
@@ -788,6 +826,11 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #efeb
   box-shadow: 0 16px 30px rgba(0,0,0,.35); }}
 .fambox svg {{ width: 100%; height: 100%; fill: none; stroke: #fff; stroke-width: 7; stroke-linecap: round; }}
 .mini {{ font: 700 30px/1.3 "Inter"; color: #333; }}
+.hdw {{ position: absolute; opacity: 0; overflow: visible; transform-origin: 50% 50%; }}
+.hdw text {{ font-family: "Kaushan"; stroke-width: 3px; stroke-dasharray: 1600; paint-order: stroke; }}
+.hdw .h1 {{ font-size: 200px; fill: #111; stroke: #111; }}
+.hdw .h2 {{ font-size: 270px; fill: #e3202f; stroke: #e3202f; stroke-dasharray: 1900; }}
+.hdw .ul {{ fill: none; stroke: #d9a520; stroke-width: 12; stroke-linecap: round; }}
 #flash {{ position: absolute; inset: 0; z-index: 22; opacity: 0; background: #fbf9f4; }}
 #grain {{ position: absolute; inset: 0; z-index: 23; pointer-events: none; opacity: .06; background: url(assets/img/paper/grain.png); mix-blend-mode: multiply; }}
 """

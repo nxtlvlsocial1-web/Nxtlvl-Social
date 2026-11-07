@@ -84,12 +84,12 @@
 "type": "firework"
 },
 {
-"t": 24.936,
-"type": "whoosh"
-},
-{
 "t": 24.939,
 "type": "firework"
+},
+{
+"t": 24.956,
+"type": "paper"
 },
 {
 "t": 27.799,
@@ -273,7 +273,7 @@
 },
 {
 "t": 95.902,
-"type": "stamp"
+"type": "pop"
 },
 {
 "t": 98.919,
@@ -329,11 +329,11 @@
 },
 {
 "t": 122.591,
-"type": "firework"
+"type": "shimmer"
 },
 {
-"t": 122.641,
-"type": "chime"
+"t": 122.591,
+"type": "firework"
 },
 {
 "t": 122.891,
@@ -342,6 +342,14 @@
 {
 "t": 123.018,
 "type": "firework"
+},
+{
+"t": 123.318,
+"type": "firework"
+},
+{
+"t": 123.491,
+"type": "chime"
 },
 {
 "t": 123.491,
