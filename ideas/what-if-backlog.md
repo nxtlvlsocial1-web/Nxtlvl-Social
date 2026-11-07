@@ -12,7 +12,6 @@ closing question plus the follow prompt; a keyword CTA only when there is a real
 
 Skit + real resource (two characters, real tool steps, keyword CTA; the AI Exam format):
 - INTERVIEW: "My interview is at 9 AM." AI mock interview, CV rewritten to the job post, the salary answer. Twist: "Go to the interview for me?" Sends an interview prompt pack.
-- POSTS: "I haven't posted in 3 weeks." One voice memo becomes 30 posts, captions and a schedule. Twist: the AI's post outperforms everything the creator wrote. Sends a 30-day content prompt pack.
 - RENT: "Landlord wants $400 more a month." AI pulls comparable listings and writes the negotiation email. Twist: the landlord replies "deal" in 4 minutes. Sends the email template.
 - SIGN: "I'm about to sign this gym contract." AI reads all 14 pages in 6 seconds, finds the auto-renew and the cancellation fee. Sends a contract-check prompt.
 - TRIP: "Tokyo, 5 days, $900." AI builds the itinerary, the cheapest flight days, the visa checklist. Twist: it books a rest day she didn't ask for. Sends the trip-planner prompt.
@@ -46,3 +45,4 @@ Pure what-ifs (follow CTA, no keyword):
 - What if an AI clone of you answered every message? (`ai-clone-9x16`; voxel style from the owner's reference; narrator: Kokoro am_michael; keyword CTA CLONE, DMs the auto-DM tool)
 - What if every DM turned into a sale on autopilot? (`ai-closer-9x16`; voxel street with THE CLOSER robot; narrator: Kokoro am_puck, voiced phrase by phrase with emotions; keyword CTA CLOSE, DMs the DM sales template for HeyDM)
 - AI Exam skit: student and HOOT the AI owl, 4 real NotebookLM steps (`ai-exam-9x16`; low-poly style from the owner's reference; ElevenLabs voices Ruby B and Jonah Vale on eleven_v3; keyword CTA EXAM, DMs the setup guide PDF)
+- AI Posts skit: creator YOU and LUMI the AI ring light, voice memo to 30 posts in one night (`ai-posts-9x16`; low-poly style; ElevenLabs voices Louie the Legend and Lyan on eleven_v3; keyword CTA POSTS, DMs the 30-post prompt pack PDF)
