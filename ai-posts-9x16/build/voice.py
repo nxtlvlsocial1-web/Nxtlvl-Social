@@ -26,7 +26,7 @@ V = os.path.join(ROOT, "voice")
 CACHE = os.path.expanduser("~/.cache/hyperframes/tts")
 SR = 48000
 LEAD = .12
-LINE_GAP = .28
+LINE_GAP = .18
 VOICES = {"you": "am_puck", "lumi": "af_nicole"}
 # emotion -> (speed, semitones, gain dB)
 EMO = {"panic": (1.08, .4, 1.0), "dry": (.92, -.3, 0), "whine": (1.02, .5, .5), "calm": (.98, 0, 0), "surprised": (1.04, .5, 1.0),

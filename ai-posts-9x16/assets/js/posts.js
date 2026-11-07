@@ -439,11 +439,11 @@ function lumiAt(t, s) {
   if (s === 2) { p = { ...p, a: [2.2 + .2 * Math.sin(t * 5), 2.2 + .2 * Math.sin(t * 5 + 1)], hop: bob + .02 * Math.abs(Math.sin(t * 6)), glow: 1.15 }; f = { eyes: "happy" }; }
   if (s === 3) { p = { ...p, a: [.35, 1.6], hy: .3 }; f = { eyes: "open" }; }
   if (s === 4) { p = { ...p, a: [.6, 1.5] }; f = { eyes: t > C.l[10] ? "happy" : "open" }; if (t > C.l[10]) p.hop = .04 * Math.abs(Math.sin(t * 9)); }
-  if (s === 5) { if (t > C.l[12] - .1) { p = { ...p, hr: .18, a: [2.6, 2.6] }; f = { eyes: "smug", mouth: "smirk" }; } }
+  if (s === 5) { if (t > C.l[12] - .1) { p = { ...p, hr: .18, a: [.95, .95] }; f = { eyes: "smug", mouth: "smirk" }; } }
   if (s === 6) {
     if (t < C.l[14]) { p = { ...p, hy: .3, hp: .1 }; f = { eyes: t > C.just ? "wide" : "open", mouth: "flat" }; }
-    else if (t < C.l[15] + .1) { p = { ...p, hy: .5 * Math.sin((t - C.no) * 12) * bump(t, C.no - .05, C.no + .9, .1), a: [2.7, 2.7] }; f = { eyes: "closed", mouth: "flat" }; }
-    else { p = { ...p, hy: .25, a: [2.7, 2.7] }; f = { eyes: "closed", mouth: "flat" }; }
+    else if (t < C.l[15] + .1) { p = { ...p, hy: .5 * Math.sin((t - C.no) * 12) * bump(t, C.no - .05, C.no + .9, .1), a: [1.1, 1.1] }; f = { eyes: "closed", mouth: "flat" }; }
+    else { p = { ...p, hy: .25, a: [1.1, 1.1] }; f = { eyes: "closed", mouth: "flat" }; }
   }
   if (s === 7) { p = { ...p, a: [.35, 1.2], glow: 1.15 + .1 * ss(t, C.voice - .3, C.voice + .3) }; f = { eyes: "happy", mouth: "smile" }; }
   if (s === 8) { p = { ...p, a: [.2, 2.2 + .4 * Math.sin(t * 9)], hop: bob + .02 * Math.abs(Math.sin(t * 5)) }; f = { eyes: t > C.postsk && t < C.postsk + 1.2 ? "closed" : "happy" }; }
@@ -581,7 +581,7 @@ function renderAt(t) {
     if (!m.visible) return;
     const u = ss(t, C.hook - .2 + k * .12, C.hook + .4 + k * .12), slide = .12 * Math.sin((t - C.step3) * .9);
     const fan = k - (SLIDE_N - 1) / 2;
-    A2.set(-.62 + fan * .13 + slide * .3, 1.36 + Math.abs(fan) * -.025 + .015 * Math.sin(t * 2 + k), -.5 - (SLIDE_N - 1 - k) * .03);
+    A2.set(-.4 + fan * .12 + slide * .3, 1.36 + Math.abs(fan) * -.025 + .015 * Math.sin(t * 2 + k), -.5 - (SLIDE_N - 1 - k) * .03);
     PP.lerpVectors(SCREEN, A2, u); m.position.copy(PP); m.rotation.set(0, .35 * u, -fan * .1 * u); m.scale.setScalar((.3 + .7 * u) * .85);
   });
   // step 4: the month: 30 tiles fill in, one post a day
