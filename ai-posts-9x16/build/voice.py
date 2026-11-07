@@ -1,4 +1,4 @@
-"""The AI Exam reel's dialogue (YOU, the student, and HOOT, the AI owl), voiced phrase by phrase, and its caption timing.
+"""The AI Posts reel's dialogue (YOU, the creator, and LUMI, the AI ring light), voiced phrase by phrase, and its caption timing.
 
 python3 build/voice.py      (from the project root; needs kokoro-onnx, numpy, soundfile, ffmpeg)
 
@@ -19,7 +19,6 @@ from fractions import Fraction
 
 import numpy as np
 import soundfile as sf
-from kokoro_onnx import Kokoro
 from scipy.signal import resample_poly
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,7 +27,7 @@ CACHE = os.path.expanduser("~/.cache/hyperframes/tts")
 SR = 48000
 LEAD = .12
 LINE_GAP = .28
-VOICES = {"you": "af_bella", "owl": "am_fenrir"}
+VOICES = {"you": "am_puck", "lumi": "af_nicole"}
 # emotion -> (speed, semitones, gain dB)
 EMO = {"panic": (1.08, .4, 1.0), "dry": (.92, -.3, 0), "whine": (1.02, .5, .5), "calm": (.98, 0, 0), "surprised": (1.04, .5, 1.0),
        "warm": (.97, 0, 0), "proud": (1.0, .2, .5), "amazed": (1.06, .6, 1.5), "sad": (.88, -.4, -2.0), "excite": (1.1, .6, 2.0),
@@ -95,7 +94,11 @@ def split_phrases(a, n):
 def main():
     script = json.load(open(os.path.join(V, "script.json")))["lines"]
     os.makedirs(os.path.join(V, "phr"), exist_ok=True)
-    k = Kokoro(os.path.join(CACHE, "models", "kokoro-v1.0.onnx"), os.path.join(CACHE, "voices", "voices-v1.0.bin"))
+    mp = os.path.join(CACHE, "models", "kokoro-v1.0.onnx")
+    k = None
+    if os.path.exists(mp):
+        from kokoro_onnx import Kokoro
+        k = Kokoro(mp, os.path.join(CACHE, "voices", "voices-v1.0.bin"))
     out, lines, words, t = [], [], [], LEAD
     for i, (take, spk, disp, phrases) in enumerate(script):
         shown = disp.split() if disp else None
@@ -126,10 +129,14 @@ def main():
         for n, (text, emo, pause) in enumerate(phrases):
             sp, st, gdb = EMO[emo]
             r = 2 ** (st / 12)                       # pitch by playback rate; Kokoro speaks slower to keep the pace
-            a, sr = k.create(text, voice=VOICES[spk], speed=sp / r, lang="en-us", trim=False)
-            q = Fraction(SR / (r * sr)).limit_denominator(200)
-            a = resample_poly(a.astype(np.float64), q.numerator, q.denominator)
-            a = fade(a) * 10 ** (gdb / 20)
+            if k is None:                            # no Kokoro here: silent placeholder of the estimated length
+                ws0 = [w for w in text.split() if re.search(r"[A-Za-z0-9]", w)]
+                a = np.zeros(int(SR * (.12 + sum(syl(w) for w in ws0) * .2 / sp)))
+            else:
+                a, sr = k.create(text, voice=VOICES[spk], speed=sp / r, lang="en-us", trim=False)
+                q = Fraction(SR / (r * sr)).limit_denominator(200)
+                a = resample_poly(a.astype(np.float64), q.numerator, q.denominator)
+                a = fade(a) * 10 ** (gdb / 20)
             sf.write(os.path.join(V, "phr", f"{take}_{n}.wav"), a.astype(np.float32), SR)
             d = len(a) / SR
             ws = [w for w in text.split() if re.search(r"[A-Za-z0-9]", w)]     # "..." is a pause, not a word

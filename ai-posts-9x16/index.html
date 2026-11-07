@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>AI Exam 9x16</title>
+    <title>AI Posts 9x16</title>
     <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
@@ -42,10 +42,15 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
 .tot b { font: 800 46px "Manrope"; letter-spacing: -1px; color: #1E1B18; } .tot b i { font-style: normal; }
 .tot b.red { color: #D9483B; } .tot b.green { color: #3FA372; display: inline-block; } .coral { color: #D45C40; }
 .player { display: flex; align-items: center; gap: 18px; padding: 18px; }
-.play { width: 0; height: 0; border-left: 34px solid #6B5BD6; border-top: 21px solid transparent; border-bottom: 21px solid transparent; }
-.wave { display: flex; gap: 6px; align-items: center; height: 80px; }
-.wv { display: block; width: 12px; height: 80px; border-radius: 6px; background: #6B5BD6; transform: scaleY(.2); }
-.c-notes { width: 640px; } .srow { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; font: 700 34px "Manrope"; color: #5b5650; }
+.rec { width: 34px; height: 34px; border-radius: 50%; background: #E8735A; flex: none; box-shadow: 0 0 0 6px rgba(232,115,90,.25); }
+.tm { margin-left: auto; font-size: 26px; }
+.ln { padding: 8px 18px; font: 600 28px/1.25 "Manrope"; color: #3a3530; opacity: 0; }
+.src .num { width: 40px; height: 40px; border-radius: 50%; background: #6B5BD6; color: #fff; display: grid; place-items: center; font-size: 22px; flex: none; }
+.tot b.small { font: 800 30px/1.2 "Manrope"; letter-spacing: -.5px; max-width: 520px; text-align: right; }
+.r1, .r2, .r3 { opacity: 0; }
+.wave { display: flex; gap: 6px; align-items: center; height: 70px; }
+.wv { display: block; width: 10px; height: 70px; border-radius: 6px; background: #6B5BD6; transform: scaleY(.2); }
+.c-sit, .c-stats { width: 680px; } .srow { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; font: 700 34px "Manrope"; color: #5b5650; }
 .srow b { font: 800 56px "Manrope"; letter-spacing: -1.5px; color: #1E1B18; } .srow b i { font-style: normal; } .srow b.coral { color: #D45C40; }
 .ptag { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; top: 1190px; padding: 12px 28px 14px; border-radius: 24px;
   background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 6px 7px 0 #1E1B18; text-align: center; }
@@ -54,7 +59,7 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
 #caps { z-index: 6; }
 .cap { position: absolute; left: 0; right: 0; top: 262px; display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0; }
 .cap .who { padding: 4px 14px; border-radius: 10px; font-size: 20px; letter-spacing: 3px; color: #fff; background: #E8735A; }
-.cap.owl .who { background: #6B5BD6; }
+.cap.lumi .who { background: #6B5BD6; }
 .cap .txt { max-width: 900px; padding: 12px 28px 16px; border-radius: 22px; background: rgba(24,20,30,.82); color: #fff; text-align: center;
   font: 800 52px/1.18 "Manrope"; letter-spacing: -1px; }
 #endc { position: absolute; left: 60px; right: 60px; top: 470px; padding: 44px 40px 40px; border-radius: 40px; text-align: center;
@@ -72,137 +77,145 @@ body { font-family: "Manrope", sans-serif; color: #1E1B18; }
 </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="64.55" data-fps="30" data-width="1080" data-height="1920">
-      <canvas id="gl" class="clip" data-start="0" data-duration="64.55" data-track-index="0"></canvas>
-      <div id="ui" class="clip" data-start="0" data-duration="64.55" data-track-index="3" data-layout-allow-overflow>
-        <div class="top"><span class="brand mono"><b></b>NXTLVLSOCIAL.AI</span><span class="live mono">AI STUDY HACK</span><span class="prog"><i></i></span></div>
-        <div class="card c-notes"><span class="mono lab">THE SITUATION</span><div class="srow"><span>Exam</span><b class="coral">Monday</b></div><div class="srow"><span>Notes</span><b><i class="pg">0</i> pages</b></div></div><div class="card step c-s1"><span class="steps"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span><span class="mono lab">STEP 1/4</span><b class="sh">Upload your notes</b><div class="app"><div class="ab"><i></i><i></i><i></i><span class="mono">NotebookLM &middot; Sources</span></div><div class="src s0"><span class="doc"></span><span class="sn">Lecture notes.pdf</span><span class="sp mono">120 pages</span><b class="ok">&#10003;</b></div><div class="src s1"><span class="doc"></span><span class="sn">Slides, weeks 1-12.pdf</span><span class="sp mono">96 pages</span><b class="ok">&#10003;</b></div><div class="src s2"><span class="doc"></span><span class="sn">Photos of my notebook</span><span class="sp mono">84 pages</span><b class="ok">&#10003;</b></div><div class="tot mono"><span>Added</span><b><i class="tp">0</i> pages</b></div></div></div><div class="card step c-s2"><span class="steps"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span><span class="mono lab">STEP 2/4</span><b class="sh">Turn them into a podcast</b><div class="app"><div class="ab"><i></i><i></i><i></i><span class="mono">Audio Overview</span></div><div class="player"><span class="play"></span><em class="wave"><i class="wv wv0"></i><i class="wv wv1"></i><i class="wv wv2"></i><i class="wv wv3"></i><i class="wv wv4"></i><i class="wv wv5"></i><i class="wv wv6"></i><i class="wv wv7"></i><i class="wv wv8"></i><i class="wv wv9"></i><i class="wv wv10"></i><i class="wv wv11"></i><i class="wv wv12"></i><i class="wv wv13"></i><i class="wv wv14"></i><i class="wv wv15"></i><i class="wv wv16"></i><i class="wv wv17"></i><i class="wv wv18"></i><i class="wv wv19"></i><i class="wv wv20"></i><i class="wv wv21"></i><i class="wv wv22"></i><i class="wv wv23"></i><i class="wv wv24"></i><i class="wv wv25"></i><i class="wv wv26"></i><i class="wv wv27"></i></em></div><div class="tot mono"><span>Deep dive</span><b>20 min</b></div></div></div><div class="card step c-s3"><span class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span><span class="mono lab">STEP 3/4</span><b class="sh">Flashcards + a practice test</b><div class="app"><div class="ab"><i></i><i></i><i></i><span class="mono">Study tools</span></div><div class="tot mono"><span>Flashcards</span><b><i class="fc">0</i></b></div><div class="tot mono"><span>Practice test</span><b class="red"><i class="sc">0</i>%</b></div></div></div><div class="card step c-s4"><span class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="mono lab">STEP 4/4</span><b class="sh">Fix your weak spots</b><div class="app"><div class="ab"><i></i><i></i><i></i><span class="mono">Practice test &middot; retake</span></div><div class="tot mono"><span>Weakest</span><b class="red">Chapter 7</b></div><div class="tot mono"><span>Score</span><b class="green"><i class="sc2">62</i>%</b></div></div></div><div class="ptag tg-you"><span class="mono">YOU</span><b>exam on Monday</b></div><div class="ptag tg-owl"><span class="mono">HOOT</span><b>your AI study buddy</b></div><div id="endc"><div class="ec-1">Send this to a friend<em>with an exam this week</em></div><div class="ec-box"><i class="av"></i><span class="fld"><span class="mono">you &middot; now</span><b class="ec-typed"></b></span><b class="ec-heart">&#9829;</b></div><div class="ec-h mono">FOLLOW @NXTLVLSOCIAL.AI &middot; COMMENT EXAM</div><div class="ec-2">I&rsquo;ll DM you the setup</div></div>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="49.19" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="gl" class="clip" data-start="0" data-duration="49.19" data-track-index="0"></canvas>
+      <div id="ui" class="clip" data-start="0" data-duration="49.19" data-track-index="3" data-layout-allow-overflow>
+        <div class="top"><span class="brand mono"><b></b>NXTLVLSOCIAL.AI</span><span class="live mono">AI CONTENT HACK</span><span class="prog"><i></i></span></div>
+        <div class="card c-sit"><span class="mono lab">THE SITUATION</span><div class="srow"><span>Last post</span><b class="coral"><i class="dd">0</i> days ago</b></div><div class="srow"><span>Ideas</span><b><i class="id0">0</i></b></div></div><div class="card step c-s1"><span class="steps"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span><span class="mono lab">STEP 1/4</span><b class="sh">Record a voice memo</b><div class="app"><div class="ab"><i></i><i></i><i></i><span class="mono">Voice Memos &middot; Transcript</span></div><div class="player"><span class="rec"></span><em class="wave"><i class="wv wv0"></i><i class="wv wv1"></i><i class="wv wv2"></i><i class="wv wv3"></i><i class="wv wv4"></i><i class="wv wv5"></i><i class="wv wv6"></i><i class="wv wv7"></i><i class="wv wv8"></i><i class="wv wv9"></i><i class="wv wv10"></i><i class="wv wv11"></i><i class="wv wv12"></i><i class="wv wv13"></i><i class="wv wv14"></i><i class="wv wv15"></i><i class="wv wv16"></i><i class="wv wv17"></i><i class="wv wv18"></i><i class="wv wv19"></i><i class="wv wv20"></i><i class="wv wv21"></i><i class="wv wv22"></i><i class="wv wv23"></i><i class="wv wv24"></i><i class="wv wv25"></i></em><b class="mono tm">2:00</b></div><div class="ln l0">so every morning I make coffee first,</div><div class="ln l1">before I even look at my phone,</div><div class="ln l2">and honestly that one rule changed...</div></div></div><div class="card step c-s2"><span class="steps"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span><span class="mono lab">STEP 2/4</span><b class="sh">30 post ideas</b><div class="app"><div class="ab"><i></i><i></i><i></i><span class="mono">ChatGPT &middot; my prompt</span></div><div class="src s0"><span class="num mono">1</span><span class="sn">My 6 AM coffee rule</span></div><div class="src s1"><span class="num mono">2</span><span class="sn">Why I stopped checking my phone first</span></div><div class="src s2"><span class="num mono">3</span><span class="sn">The 2-minute morning reset</span></div><div class="tot mono"><span>Ideas</span><b><i class="ic">0</i></b></div></div></div><div class="card step c-s3"><span class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span><span class="mono lab">STEP 3/4</span><b class="sh">Hook, caption, slides</b><div class="app"><div class="ab"><i></i><i></i><i></i><span class="mono">Post 1 of 30</span></div><div class="tot mono r1"><span>Hook</span><b class="small">&ldquo;I drank coffee wrong for 10 years&rdquo;</b></div><div class="tot mono r2"><span>Caption</span><b class="green">&#10003;</b></div><div class="tot mono r3"><span>Slides</span><b><i class="sl">0</i></b></div></div></div><div class="card step c-s4"><span class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="mono lab">STEP 4/4</span><b class="sh">Schedule all 30</b><div class="app"><div class="ab"><i></i><i></i><i></i><span class="mono">Meta Business Suite &middot; Planner</span></div><div class="tot mono"><span>Scheduled</span><b><i class="sc">0</i>/30</b></div><div class="tot mono"><span>Cost</span><b class="green">free</b></div></div></div><div class="card c-stats"><span class="mono lab">THE NEXT MORNING</span><div class="srow"><span>Coffee post</span><b class="coral"><i class="vw">0</i> views</b></div><div class="srow"><span>Likes</span><b><i class="lk">0</i></b></div></div><div class="ptag tg-you"><span class="mono">YOU</span><b>last post: 23 days ago</b></div><div class="ptag tg-lumi"><span class="mono">LUMI</span><b>your AI content buddy</b></div><div id="endc"><div class="ec-1">Send this to a creator<em>who hasn&rsquo;t posted in weeks</em></div><div class="ec-box"><i class="av"></i><span class="fld"><span class="mono">you &middot; now</span><b class="ec-typed"></b></span><b class="ec-heart">&#9829;</b></div><div class="ec-h mono">FOLLOW @NXTLVLSOCIAL.AI &middot; COMMENT POSTS</div><div class="ec-2">I&rsquo;ll DM you the prompt</div></div>
       </div>
-      <div id="caps" class="clip" data-start="0" data-duration="64.55" data-track-index="4"><div class="cap you" id="c0_0"><span class="who mono">YOU</span><span class="txt">Hoot. My exam is Monday.</span></div><div class="cap owl" id="c1_0"><span class="who mono">HOOT</span><span class="txt">And?</span></div><div class="cap you" id="c2_0"><span class="who mono">YOU</span><span class="txt">And I have three hundred pages of notes!</span></div><div class="cap owl" id="c3_0"><span class="who mono">HOOT</span><span class="txt">Give them to me.</span></div><div class="cap you" id="c4_0"><span class="who mono">YOU</span><span class="txt">All of them?</span></div><div class="cap owl" id="c5_0"><span class="who mono">HOOT</span><span class="txt">Step one.</span></div><div class="cap owl" id="c5_1"><span class="who mono">HOOT</span><span class="txt">NotebookLM.</span></div><div class="cap owl" id="c5_2"><span class="who mono">HOOT</span><span class="txt">It's free, from Google.</span></div><div class="cap owl" id="c5_3"><span class="who mono">HOOT</span><span class="txt">Drop everything in.</span></div><div class="cap owl" id="c6_0"><span class="who mono">HOOT</span><span class="txt">Step two. I turned your notes into a podcast.</span></div><div class="cap you" id="c7_0"><span class="who mono">YOU</span><span class="txt">A podcast? Of my notes?!</span></div><div class="cap owl" id="c8_0"><span class="who mono">HOOT</span><span class="txt">Twenty minutes. Listen on the bus.</span></div><div class="cap owl" id="c9_0"><span class="who mono">HOOT</span><span class="txt">Step three. Fifty flashcards, and a practice test.</span></div><div class="cap you" id="c10_0"><span class="who mono">YOU</span><span class="txt">Sixty-two percent...</span></div><div class="cap owl" id="c11_0"><span class="who mono">HOOT</span><span class="txt">Step four. Your weak spots. Chapter seven, again.</span></div><div class="cap you" id="c12_0"><span class="who mono">YOU</span><span class="txt">Ninety-one! Ninety-one percent!</span></div><div class="cap you" id="c13_0"><span class="who mono">YOU</span><span class="txt">Okay.</span></div><div class="cap you" id="c13_1"><span class="who mono">YOU</span><span class="txt">Last thing.</span></div><div class="cap you" id="c13_2"><span class="who mono">YOU</span><span class="txt">You're small.</span></div><div class="cap you" id="c13_3"><span class="who mono">YOU</span><span class="txt">You fit in my bag.</span></div><div class="cap you" id="c13_4"><span class="who mono">YOU</span><span class="txt">Take the exam for me?</span></div><div class="cap owl" id="c14_0"><span class="who mono">HOOT</span><span class="txt">No.</span></div><div class="cap you" id="c15_0"><span class="who mono">YOU</span><span class="txt">Please?</span></div><div class="cap owl" id="c16_0"><span class="who mono">HOOT</span><span class="txt">You don't need me anymore. You know every answer.</span></div><div class="cap owl" id="c17_0"><span class="who mono">HOOT</span><span class="txt">Send this to a friend with an exam this week.</span></div><div class="cap owl" id="c17_1"><span class="who mono">HOOT</span><span class="txt">Follow @nxtlvlsocial.ai and comment EXAM.</span></div><div class="cap owl" id="c17_2"><span class="who mono">HOOT</span><span class="txt">I'll send you the setup.</span></div></div>
-      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="64.55" data-track-index="10" data-volume="1"></audio>
+      <div id="caps" class="clip" data-start="0" data-duration="49.19" data-track-index="4"><div class="cap you" id="c0_0"><span class="who mono">YOU</span><span class="txt">LUMI. I haven't posted in three weeks.</span></div><div class="cap lumi" id="c1_0"><span class="who mono">LUMI</span><span class="txt">Twenty-three days. I counted.</span></div><div class="cap you" id="c2_0"><span class="who mono">YOU</span><span class="txt">I have zero ideas!</span></div><div class="cap lumi" id="c3_0"><span class="who mono">LUMI</span><span class="txt">Talk to me. Two minutes. About anything.</span></div><div class="cap you" id="c4_0"><span class="who mono">YOU</span><span class="txt">Like... my morning?</span></div><div class="cap lumi" id="c5_0"><span class="who mono">LUMI</span><span class="txt">Step one.</span></div><div class="cap lumi" id="c5_1"><span class="who mono">LUMI</span><span class="txt">Record a voice memo.</span></div><div class="cap lumi" id="c5_2"><span class="who mono">LUMI</span><span class="txt">Your phone turns it into text.</span></div><div class="cap lumi" id="c6_0"><span class="who mono">LUMI</span><span class="txt">Step two.</span></div><div class="cap lumi" id="c6_1"><span class="who mono">LUMI</span><span class="txt">Paste it into ChatGPT with my prompt.</span></div><div class="cap lumi" id="c6_2"><span class="who mono">LUMI</span><span class="txt">Thirty post ideas.</span></div><div class="cap you" id="c7_0"><span class="who mono">YOU</span><span class="txt">Thirty?! From my coffee rant?</span></div><div class="cap lumi" id="c8_0"><span class="who mono">LUMI</span><span class="txt">Step three. Every idea gets a hook, a caption and slides.</span></div><div class="cap lumi" id="c9_0"><span class="who mono">LUMI</span><span class="txt">Step four.</span></div><div class="cap lumi" id="c9_1"><span class="who mono">LUMI</span><span class="txt">Schedule all thirty in Meta Business Suite.</span></div><div class="cap lumi" id="c9_2"><span class="who mono">LUMI</span><span class="txt">It's free.</span></div><div class="cap you" id="c10_0"><span class="who mono">YOU</span><span class="txt">A whole month... in one night!</span></div><div class="cap you" id="c11_0"><span class="who mono">YOU</span><span class="txt">Wait. Eighty thousand views?! On the coffee one?</span></div><div class="cap lumi" id="c12_0"><span class="who mono">LUMI</span><span class="txt">Your rant. My hook.</span></div><div class="cap you" id="c13_0"><span class="who mono">YOU</span><span class="txt">Okay. Just be me. Post forever?</span></div><div class="cap lumi" id="c14_0"><span class="who mono">LUMI</span><span class="txt">No.</span></div><div class="cap you" id="c15_0"><span class="who mono">YOU</span><span class="txt">Why not?</span></div><div class="cap lumi" id="c16_0"><span class="who mono">LUMI</span><span class="txt">They follow you, not me. Your voice is the content.</span></div><div class="cap lumi" id="c17_0"><span class="who mono">LUMI</span><span class="txt">Send this to a creator who hasn't posted in weeks.</span></div><div class="cap lumi" id="c17_1"><span class="who mono">LUMI</span><span class="txt">Follow @nxtlvlsocial.ai and comment POSTS.</span></div><div class="cap lumi" id="c17_2"><span class="who mono">LUMI</span><span class="txt">I'll send you the prompt.</span></div></div>
+      <audio id="mix" src="assets/audio/voice.wav" data-start="0" data-duration="49.19" data-track-index="10" data-volume="1"></audio>
     </div>
     <script>
-      window.CT = {"l": [0.12, 2.88, 4.04, 7.6, 9.72, 11.0, 17.36, 22.335, 25.225, 28.145, 32.425, 35.105, 39.625, 43.185, 48.585, 49.585, 51.235, 55.515], "e": [2.6, 3.76, 7.32, 9.44, 10.72, 17.08, 22.055, 24.945, 27.865, 32.145, 34.825, 39.345, 42.905, 48.305, 49.305, 50.955, 55.235, 62.955], "monday": 1.757, "and3": 4.13, "three": 5.057, "pages": 5.905, "notes": 6.752, "give": 7.6, "all": 9.77, "step1": 10.99, "notebooklm": 13.367, "free": 15.71, "drop": 16.269, "everything": 16.419, "step2": 17.51, "podcast": 21.278, "podcast8": 22.779, "twenty": 25.215, "bus": 27.543, "step3": 28.195, "flashcards": 29.622, "test": 31.713, "sixty": 32.475, "step4": 35.135, "weak": 36.362, "seven": 37.891, "ninety": 39.605, "ninety2": 40.819, "last": 43.784, "small": 44.731, "bag": 46.309, "take": 46.945, "no": 48.595, "please": 49.635, "need": 51.288, "every": 52.559, "answer": 54.102, "send": 55.715, "friend": 57.577, "follow": 60.765, "commentk": 61.645, "examk": 61.68, "setup": 62.573, "end": 64.55, "cuts": [10.88, 17.24, 25.105, 28.025, 43.065, 51.115, 55.395], "lines": [{"s": 0.12, "e": 2.6, "who": "you"}, {"s": 2.88, "e": 3.76, "who": "owl"}, {"s": 4.04, "e": 7.32, "who": "you"}, {"s": 7.6, "e": 9.44, "who": "owl"}, {"s": 9.72, "e": 10.72, "who": "you"}, {"s": 11.0, "e": 17.08, "who": "owl"}, {"s": 17.36, "e": 22.055, "who": "owl"}, {"s": 22.335, "e": 24.945, "who": "you"}, {"s": 25.225, "e": 27.865, "who": "owl"}, {"s": 28.145, "e": 32.145, "who": "owl"}, {"s": 32.425, "e": 34.825, "who": "you"}, {"s": 35.105, "e": 39.345, "who": "owl"}, {"s": 39.625, "e": 42.905, "who": "you"}, {"s": 43.185, "e": 48.305, "who": "you"}, {"s": 48.585, "e": 49.305, "who": "owl"}, {"s": 49.585, "e": 50.955, "who": "you"}, {"s": 51.235, "e": 55.235, "who": "owl"}, {"s": 55.515, "e": 62.955, "who": "owl"}], "focus": [{"who": "you", "a": 0.0, "b": 2.7}, {"who": "owl", "a": 2.78, "b": 3.91}, {"who": "owl", "a": 7.5, "b": 9.59}, {"who": "you", "a": 22.235, "b": 25.095}, {"who": "you", "a": 32.325, "b": 34.925}, {"who": "owl", "a": 48.485, "b": 49.505}]};
+      window.CT = {"l": [0.12, 3.28, 5.202, 6.778, 9.627, 10.796, 14.846, 18.566, 20.287, 23.986, 28.18, 30.034, 32.698, 33.968, 36.168, 36.785, 37.577, 40.822], "e": [3.0, 4.922, 6.498, 9.347, 10.516, 14.566, 18.286, 20.007, 23.706, 27.9, 29.754, 32.418, 33.688, 35.888, 36.505, 37.297, 40.542, 47.586], "three": 2.389, "weeks": 2.679, "twenty": 3.26, "counted": 4.442, "zero": 5.655, "ideas3": 6.066, "talk": 6.758, "anything": 8.732, "morning": 10.083, "step1": 10.776, "record": 11.429, "memo": 12.319, "phone": 13.215, "text": 14.314, "step2": 14.826, "paste": 15.262, "prompt": 16.729, "thirty7": 17.146, "thirty8": 18.546, "coffee": 19.378, "rant": 19.765, "step3": 20.267, "hook": 22.179, "caption": 22.644, "slides": 23.281, "step4": 23.966, "schedule": 24.439, "thirty10": 25.263, "free": 27.614, "month": 28.736, "night": 29.524, "wait": 30.014, "eighty": 30.232, "views": 30.989, "coffee12": 31.641, "rant13": 32.926, "hook13": 33.421, "just": 34.354, "forever": 35.288, "no": 36.148, "why": 36.765, "follow17": 37.794, "voice": 39.401, "content": 40.11, "send": 40.802, "creator": 41.705, "follow": 43.696, "commentk": 45.589, "postsk": 46.025, "promptk": 47.348, "end": 49.19, "cuts": [10.676, 14.726, 20.167, 23.866, 29.914, 33.848, 37.457, 40.702], "lines": [{"s": 0.12, "e": 3.0, "who": "you"}, {"s": 3.28, "e": 4.922, "who": "lumi"}, {"s": 5.202, "e": 6.498, "who": "you"}, {"s": 6.778, "e": 9.347, "who": "lumi"}, {"s": 9.627, "e": 10.516, "who": "you"}, {"s": 10.796, "e": 14.566, "who": "lumi"}, {"s": 14.846, "e": 18.286, "who": "lumi"}, {"s": 18.566, "e": 20.007, "who": "you"}, {"s": 20.287, "e": 23.706, "who": "lumi"}, {"s": 23.986, "e": 27.9, "who": "lumi"}, {"s": 28.18, "e": 29.754, "who": "you"}, {"s": 30.034, "e": 32.418, "who": "you"}, {"s": 32.698, "e": 33.688, "who": "lumi"}, {"s": 33.968, "e": 35.888, "who": "you"}, {"s": 36.168, "e": 36.505, "who": "lumi"}, {"s": 36.785, "e": 37.297, "who": "you"}, {"s": 37.577, "e": 40.542, "who": "lumi"}, {"s": 40.822, "e": 47.586, "who": "lumi"}], "focus": [{"who": "you", "a": 0.0, "b": 3.1}, {"who": "lumi", "a": 3.18, "b": 5.072}, {"who": "lumi", "a": 6.678, "b": 9.497}, {"who": "you", "a": 18.466, "b": 20.157}, {"who": "you", "a": 29.934, "b": 32.518}, {"who": "lumi", "a": 36.068, "b": 36.705}]};
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
-      tl.fromTo(".c-notes",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},4.030);
-      (()=>{const o={v:0};tl.to(o,{v:300,duration:0.800,ease:"power2.out",onUpdate:()=>{document.querySelectorAll(".pg").forEach(e=>e.textContent=Math.round(o.v))}},5.057);})();
-      tl.to(".c-notes",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},10.820);
-      tl.fromTo(".c-s1",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},10.840);
-      tl.fromTo(".s0",{x:-30,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},16.169);
-      tl.fromTo(".s1",{x:-30,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},16.419);
-      tl.fromTo(".s2",{x:-30,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},16.669);
-      (()=>{const o={v:0};tl.to(o,{v:300,duration:1.000,ease:"power2.out",onUpdate:()=>{document.querySelectorAll(".tp").forEach(e=>e.textContent=Math.round(o.v))}},16.269);})();
-      tl.to(".c-s1",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},17.180);
-      tl.fromTo(".c-s2",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},17.360);
-      tl.fromTo(".wv0",{scaleY:.2},{scaleY:0.58,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.278);
-      tl.fromTo(".wv1",{scaleY:.2},{scaleY:0.51,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.288);
-      tl.fromTo(".wv2",{scaleY:.2},{scaleY:0.37,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.298);
-      tl.fromTo(".wv3",{scaleY:.2},{scaleY:0.72,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.308);
-      tl.fromTo(".wv4",{scaleY:.2},{scaleY:0.44,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.318);
-      tl.fromTo(".wv5",{scaleY:.2},{scaleY:0.44,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.328);
-      tl.fromTo(".wv6",{scaleY:.2},{scaleY:0.65,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.338);
-      tl.fromTo(".wv7",{scaleY:.2},{scaleY:0.37,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.348);
-      tl.fromTo(".wv8",{scaleY:.2},{scaleY:0.51,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.358);
-      tl.fromTo(".wv9",{scaleY:.2},{scaleY:0.58,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.368);
-      tl.fromTo(".wv10",{scaleY:.2},{scaleY:0.30,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.378);
-      tl.fromTo(".wv11",{scaleY:.2},{scaleY:0.58,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.388);
-      tl.fromTo(".wv12",{scaleY:.2},{scaleY:0.51,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.398);
-      tl.fromTo(".wv13",{scaleY:.2},{scaleY:0.37,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.408);
-      tl.fromTo(".wv14",{scaleY:.2},{scaleY:0.72,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.418);
-      tl.fromTo(".wv15",{scaleY:.2},{scaleY:0.44,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.428);
-      tl.fromTo(".wv16",{scaleY:.2},{scaleY:0.44,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.438);
-      tl.fromTo(".wv17",{scaleY:.2},{scaleY:0.65,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.448);
-      tl.fromTo(".wv18",{scaleY:.2},{scaleY:0.37,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.458);
-      tl.fromTo(".wv19",{scaleY:.2},{scaleY:0.51,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.468);
-      tl.fromTo(".wv20",{scaleY:.2},{scaleY:0.58,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.478);
-      tl.fromTo(".wv21",{scaleY:.2},{scaleY:0.30,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.488);
-      tl.fromTo(".wv22",{scaleY:.2},{scaleY:0.58,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.498);
-      tl.fromTo(".wv23",{scaleY:.2},{scaleY:0.51,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.508);
-      tl.fromTo(".wv24",{scaleY:.2},{scaleY:0.37,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.518);
-      tl.fromTo(".wv25",{scaleY:.2},{scaleY:0.72,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.528);
-      tl.fromTo(".wv26",{scaleY:.2},{scaleY:0.44,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.538);
-      tl.fromTo(".wv27",{scaleY:.2},{scaleY:0.44,duration:.12,yoyo:true,repeat:54,ease:"sine.inOut",immediateRender:false},21.548);
-      tl.to(".c-s2",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},27.965);
-      tl.fromTo(".c-s3",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},28.045);
-      (()=>{const o={v:0};tl.to(o,{v:50,duration:0.700,ease:"power2.out",onUpdate:()=>{document.querySelectorAll(".fc").forEach(e=>e.textContent=Math.round(o.v))}},29.622);})();
-      (()=>{const o={v:0};tl.to(o,{v:62,duration:0.700,ease:"power2.out",onUpdate:()=>{document.querySelectorAll(".sc").forEach(e=>e.textContent=Math.round(o.v))}},32.375);})();
-      tl.to(".c-s3",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},34.855);
-      tl.fromTo(".c-s4",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},34.985);
-      (()=>{const o={v:62};tl.to(o,{v:91,duration:0.600,ease:"power3.out",onUpdate:()=>{document.querySelectorAll(".sc2").forEach(e=>e.textContent=Math.round(o.v))}},39.505);})();
-      tl.fromTo(".c-s4 .green",{scale:1.4},{scale:1,duration:.35,ease:"back.out(3)",immediateRender:false},40.105);
-      tl.to(".c-s4",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},43.055);
+      tl.fromTo(".c-sit",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},2.289);
+      (()=>{const o={v:0};tl.to(o,{v:23,duration:0.800,ease:"power2.out",onUpdate:()=>{document.querySelectorAll(".dd").forEach(e=>e.textContent=Math.round(o.v))}},2.389);})();
+      tl.fromTo(".c-sit .coral",{scale:1.25},{scale:1,duration:.3,ease:"back.out(3)",immediateRender:false},4.442);
+      tl.to(".c-sit",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},10.616);
+      tl.fromTo(".c-s1",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},10.626);
+      tl.fromTo(".wv0",{scaleY:.2},{scaleY:0.58,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.429);
+      tl.fromTo(".wv1",{scaleY:.2},{scaleY:0.51,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.439);
+      tl.fromTo(".wv2",{scaleY:.2},{scaleY:0.37,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.449);
+      tl.fromTo(".wv3",{scaleY:.2},{scaleY:0.72,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.459);
+      tl.fromTo(".wv4",{scaleY:.2},{scaleY:0.44,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.469);
+      tl.fromTo(".wv5",{scaleY:.2},{scaleY:0.44,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.479);
+      tl.fromTo(".wv6",{scaleY:.2},{scaleY:0.65,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.489);
+      tl.fromTo(".wv7",{scaleY:.2},{scaleY:0.37,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.499);
+      tl.fromTo(".wv8",{scaleY:.2},{scaleY:0.51,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.509);
+      tl.fromTo(".wv9",{scaleY:.2},{scaleY:0.58,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.519);
+      tl.fromTo(".wv10",{scaleY:.2},{scaleY:0.30,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.529);
+      tl.fromTo(".wv11",{scaleY:.2},{scaleY:0.58,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.539);
+      tl.fromTo(".wv12",{scaleY:.2},{scaleY:0.51,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.549);
+      tl.fromTo(".wv13",{scaleY:.2},{scaleY:0.37,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.559);
+      tl.fromTo(".wv14",{scaleY:.2},{scaleY:0.72,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.569);
+      tl.fromTo(".wv15",{scaleY:.2},{scaleY:0.44,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.579);
+      tl.fromTo(".wv16",{scaleY:.2},{scaleY:0.44,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.589);
+      tl.fromTo(".wv17",{scaleY:.2},{scaleY:0.65,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.599);
+      tl.fromTo(".wv18",{scaleY:.2},{scaleY:0.37,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.609);
+      tl.fromTo(".wv19",{scaleY:.2},{scaleY:0.51,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.619);
+      tl.fromTo(".wv20",{scaleY:.2},{scaleY:0.58,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.629);
+      tl.fromTo(".wv21",{scaleY:.2},{scaleY:0.30,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.639);
+      tl.fromTo(".wv22",{scaleY:.2},{scaleY:0.58,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.649);
+      tl.fromTo(".wv23",{scaleY:.2},{scaleY:0.51,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.659);
+      tl.fromTo(".wv24",{scaleY:.2},{scaleY:0.37,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.669);
+      tl.fromTo(".wv25",{scaleY:.2},{scaleY:0.72,duration:.12,yoyo:true,repeat:26,ease:"sine.inOut",immediateRender:false},11.679);
+      tl.fromTo(".l0",{x:-24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"power2.out",immediateRender:false},13.015);
+      tl.fromTo(".l1",{x:-24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"power2.out",immediateRender:false},13.365);
+      tl.fromTo(".l2",{x:-24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"power2.out",immediateRender:false},13.715);
+      tl.to(".c-s1",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},14.666);
+      tl.fromTo(".c-s2",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},14.676);
+      tl.fromTo(".s0",{x:-30,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},17.046);
+      tl.fromTo(".s1",{x:-30,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},17.246);
+      tl.fromTo(".s2",{x:-30,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},17.446);
+      (()=>{const o={v:0};tl.to(o,{v:30,duration:0.900,ease:"power2.out",onUpdate:()=>{document.querySelectorAll(".ic").forEach(e=>e.textContent=Math.round(o.v))}},17.046);})();
+      tl.fromTo(".c-s2 .s0",{backgroundColor:"rgba(232,115,90,0)"},{backgroundColor:"rgba(232,115,90,.22)",duration:.25,immediateRender:false},19.278);
+      tl.to(".c-s2",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},20.107);
+      tl.fromTo(".c-s3",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},20.117);
+      tl.fromTo(".r1",{x:-24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"power2.out",immediateRender:false},22.079);
+      tl.fromTo(".r2",{x:-24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"power2.out",immediateRender:false},22.544);
+      tl.fromTo(".r3",{x:-24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"power2.out",immediateRender:false},23.181);
+      (()=>{const o={v:0};tl.to(o,{v:7,duration:0.500,ease:"power2.out",onUpdate:()=>{document.querySelectorAll(".sl").forEach(e=>e.textContent=Math.round(o.v))}},23.281);})();
+      tl.to(".c-s3",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},23.806);
+      tl.fromTo(".c-s4",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},23.816);
+      (()=>{const o={v:0};tl.to(o,{v:30,duration:1.400,ease:"power1.inOut",onUpdate:()=>{document.querySelectorAll(".sc").forEach(e=>e.textContent=Math.round(o.v))}},24.439);})();
+      tl.fromTo(".c-s4 .green",{scale:1.4},{scale:1,duration:.35,ease:"back.out(3)",immediateRender:false},27.614);
+      tl.to(".c-s4",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},29.904);
+      tl.fromTo(".c-stats",{y:40,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(1.8)",immediateRender:false},29.914);
+      (()=>{const o={v:0};tl.to(o,{v:80000,duration:1.000,ease:"power3.out",onUpdate:()=>{document.querySelectorAll(".vw").forEach(e=>e.textContent=Math.round(o.v).toLocaleString('en-US'))}},30.082);})();
+      (()=>{const o={v:0};tl.to(o,{v:6200,duration:1.000,ease:"power3.out",onUpdate:()=>{document.querySelectorAll(".lk").forEach(e=>e.textContent=Math.round(o.v).toLocaleString('en-US'))}},30.232);})();
+      tl.to(".c-stats",{opacity:0,y:-24,duration:0.22,ease:"power2.in"},33.838);
       tl.fromTo(".tg-you",{y:24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},0.350);
-      tl.to(".tg-you",{opacity:0,y:-24,duration:0.18,ease:"power2.in"},2.550);
-      tl.fromTo(".tg-owl",{y:24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},2.930);
-      tl.to(".tg-owl",{opacity:0,y:-24,duration:0.18,ease:"power2.in"},3.810);
-      tl.fromTo("#endc",{opacity:0,scale:.9,y:40},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.35,ease:"back.out(1.8)",immediateRender:false},55.415);
-      tl.fromTo(".ec-box",{y:20,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(2)",immediateRender:false},60.565);
-      tl.set(".ec-typed",{textContent:"E"},61.795);
-      tl.set(".ec-typed",{textContent:"EX"},61.915);
-      tl.set(".ec-typed",{textContent:"EXA"},62.035);
-      tl.set(".ec-typed",{textContent:"EXAM"},62.155);
-      tl.fromTo(".ec-heart",{scale:1},{scale:1.5,duration:.15,yoyo:true,repeat:1,ease:"sine.inOut",immediateRender:false},61.980);
-      tl.set(".ec-heart",{color:"#E8735A"},61.980);
-      tl.fromTo(".ec-2",{y:20,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},62.273);
-      tl.fromTo(".prog i",{scaleX:0},{scaleX:1,duration:64.55,ease:"none",immediateRender:false},0);
-      tl.fromTo("#c0_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},0.090);
-      tl.set("#c0_0",{opacity:0},2.830);
-      tl.fromTo("#c1_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},2.850);
-      tl.set("#c1_0",{opacity:0},3.990);
-      tl.fromTo("#c2_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},4.050);
-      tl.set("#c2_0",{opacity:0},7.550);
-      tl.fromTo("#c3_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},7.520);
-      tl.set("#c3_0",{opacity:0},9.670);
-      tl.fromTo("#c4_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},9.690);
-      tl.set("#c4_0",{opacity:0},10.950);
-      tl.fromTo("#c5_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},10.910);
-      tl.set("#c5_0",{opacity:0},13.287);
-      tl.fromTo("#c5_1",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},13.287);
-      tl.set("#c5_1",{opacity:0},15.480);
-      tl.fromTo("#c5_2",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},15.480);
-      tl.set("#c5_2",{opacity:0},16.189);
-      tl.fromTo("#c5_3",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},16.189);
-      tl.set("#c5_3",{opacity:0},17.310);
-      tl.fromTo("#c6_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},17.430);
-      tl.set("#c6_0",{opacity:0},22.285);
-      tl.fromTo("#c7_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},22.315);
-      tl.set("#c7_0",{opacity:0},25.175);
-      tl.fromTo("#c8_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},25.135);
-      tl.set("#c8_0",{opacity:0},28.095);
-      tl.fromTo("#c9_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},28.115);
-      tl.set("#c9_0",{opacity:0},32.375);
-      tl.fromTo("#c10_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},32.395);
-      tl.set("#c10_0",{opacity:0},35.055);
-      tl.fromTo("#c11_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},35.055);
-      tl.set("#c11_0",{opacity:0},39.575);
-      tl.fromTo("#c12_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},39.525);
-      tl.set("#c12_0",{opacity:0},43.135);
-      tl.fromTo("#c13_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},43.155);
-      tl.set("#c13_0",{opacity:0},43.704);
-      tl.fromTo("#c13_1",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},43.704);
-      tl.set("#c13_1",{opacity:0},44.336);
-      tl.fromTo("#c13_2",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},44.336);
-      tl.set("#c13_2",{opacity:0},44.967);
-      tl.fromTo("#c13_3",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},44.967);
-      tl.set("#c13_3",{opacity:0},46.865);
-      tl.fromTo("#c13_4",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},46.865);
-      tl.set("#c13_4",{opacity:0},48.535);
-      tl.fromTo("#c14_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},48.515);
-      tl.set("#c14_0",{opacity:0},49.535);
-      tl.fromTo("#c15_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},49.555);
-      tl.set("#c15_0",{opacity:0},51.185);
-      tl.fromTo("#c16_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},51.205);
-      tl.set("#c16_0",{opacity:0},55.465);
-      tl.fromTo("#c17_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},55.635);
-      tl.set("#c17_0",{opacity:0},60.685);
-      tl.fromTo("#c17_1",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},60.685);
-      tl.set("#c17_1",{opacity:0},61.685);
-      tl.fromTo("#c17_2",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},61.685);
-      tl.set("#c17_2",{opacity:0},63.205);
-      tl.set({}, {}, 64.55);
+      tl.to(".tg-you",{opacity:0,y:-24,duration:0.18,ease:"power2.in"},2.950);
+      tl.fromTo(".tg-lumi",{y:24,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.25,ease:"back.out(2)",immediateRender:false},3.330);
+      tl.to(".tg-lumi",{opacity:0,y:-24,duration:0.18,ease:"power2.in"},4.972);
+      tl.fromTo("#endc",{opacity:0,scale:.9,y:40},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.35,ease:"back.out(1.8)",immediateRender:false},40.502);
+      tl.fromTo(".ec-box",{y:20,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(2)",immediateRender:false},43.496);
+      tl.set(".ec-typed",{textContent:"P"},45.739);
+      tl.set(".ec-typed",{textContent:"PO"},45.839);
+      tl.set(".ec-typed",{textContent:"POS"},45.939);
+      tl.set(".ec-typed",{textContent:"POST"},46.039);
+      tl.set(".ec-typed",{textContent:"POSTS"},46.139);
+      tl.fromTo(".ec-heart",{scale:1},{scale:1.5,duration:.15,yoyo:true,repeat:1,ease:"sine.inOut",immediateRender:false},46.325);
+      tl.set(".ec-heart",{color:"#E8735A"},46.325);
+      tl.fromTo(".ec-2",{y:20,opacity:0},{scale:1,opacity:1,x:0,y:0,rotation:0,duration:0.3,ease:"back.out(2.2)",immediateRender:false},47.048);
+      tl.fromTo(".prog i",{scaleX:0},{scaleX:1,duration:49.19,ease:"none",immediateRender:false},0);
+      tl.fromTo("#c0_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},0.210);
+      tl.set("#c0_0",{opacity:0},3.230);
+      tl.fromTo("#c1_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},3.180);
+      tl.set("#c1_0",{opacity:0},5.152);
+      tl.fromTo("#c2_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},5.102);
+      tl.set("#c2_0",{opacity:0},6.728);
+      tl.fromTo("#c3_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},6.678);
+      tl.set("#c3_0",{opacity:0},9.577);
+      tl.fromTo("#c4_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},9.527);
+      tl.set("#c4_0",{opacity:0},10.746);
+      tl.fromTo("#c5_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},10.696);
+      tl.set("#c5_0",{opacity:0},11.349);
+      tl.fromTo("#c5_1",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},11.349);
+      tl.set("#c5_1",{opacity:0},12.903);
+      tl.fromTo("#c5_2",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},12.903);
+      tl.set("#c5_2",{opacity:0},14.796);
+      tl.fromTo("#c6_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},14.746);
+      tl.set("#c6_0",{opacity:0},15.182);
+      tl.fromTo("#c6_1",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},15.182);
+      tl.set("#c6_1",{opacity:0},17.066);
+      tl.fromTo("#c6_2",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},17.066);
+      tl.set("#c6_2",{opacity:0},18.516);
+      tl.fromTo("#c7_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},18.466);
+      tl.set("#c7_0",{opacity:0},20.237);
+      tl.fromTo("#c8_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},20.187);
+      tl.set("#c8_0",{opacity:0},23.936);
+      tl.fromTo("#c9_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},23.886);
+      tl.set("#c9_0",{opacity:0},24.359);
+      tl.fromTo("#c9_1",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},24.359);
+      tl.set("#c9_1",{opacity:0},27.267);
+      tl.fromTo("#c9_2",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},27.267);
+      tl.set("#c9_2",{opacity:0},28.130);
+      tl.fromTo("#c10_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},28.080);
+      tl.set("#c10_0",{opacity:0},29.984);
+      tl.fromTo("#c11_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},29.934);
+      tl.set("#c11_0",{opacity:0},32.648);
+      tl.fromTo("#c12_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},32.598);
+      tl.set("#c12_0",{opacity:0},33.918);
+      tl.fromTo("#c13_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},33.868);
+      tl.set("#c13_0",{opacity:0},36.118);
+      tl.fromTo("#c14_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},36.068);
+      tl.set("#c14_0",{opacity:0},36.735);
+      tl.fromTo("#c15_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},36.685);
+      tl.set("#c15_0",{opacity:0},37.527);
+      tl.fromTo("#c16_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},37.477);
+      tl.set("#c16_0",{opacity:0},40.772);
+      tl.fromTo("#c17_0",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},40.722);
+      tl.set("#c17_0",{opacity:0},43.616);
+      tl.fromTo("#c17_1",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},43.616);
+      tl.set("#c17_1",{opacity:0},46.395);
+      tl.fromTo("#c17_2",{opacity:0,y:12,scale:.96},{opacity:1,y:0,scale:1,duration:.14,ease:"power2.out",immediateRender:false},46.395);
+      tl.set("#c17_2",{opacity:0},47.836);
+      tl.set({}, {}, 49.19);
       window.__timelines["main"] = tl;
     </script>
-    <script type="module" src="assets/js/exam.js"></script>
+    <script type="module" src="assets/js/posts.js"></script>
   </body>
 </html>

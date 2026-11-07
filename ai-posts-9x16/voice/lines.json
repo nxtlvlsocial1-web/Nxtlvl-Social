@@ -1,149 +1,149 @@
 {
- "duration": 63.105,
+ "duration": 47.736,
  "lines": [
   {
    "line": 1,
    "take": "01_you",
    "speaker": "you",
-   "text": "Hoot. My exam is Monday.",
+   "text": "LUMI. I haven't posted in three weeks.",
    "start": 0.12,
-   "end": 2.6
+   "end": 3.0
   },
   {
    "line": 2,
-   "take": "02_owl",
-   "speaker": "owl",
-   "text": "And?",
-   "start": 2.88,
-   "end": 3.76
+   "take": "02_lumi",
+   "speaker": "lumi",
+   "text": "Twenty-three days. I counted.",
+   "start": 3.28,
+   "end": 4.922
   },
   {
    "line": 3,
    "take": "03_you",
    "speaker": "you",
-   "text": "And I have three hundred pages of notes!",
-   "start": 4.04,
-   "end": 7.32
+   "text": "I have zero ideas!",
+   "start": 5.202,
+   "end": 6.498
   },
   {
    "line": 4,
-   "take": "04_owl",
-   "speaker": "owl",
-   "text": "Give them to me.",
-   "start": 7.6,
-   "end": 9.44
+   "take": "04_lumi",
+   "speaker": "lumi",
+   "text": "Talk to me. Two minutes. About anything.",
+   "start": 6.778,
+   "end": 9.347
   },
   {
    "line": 5,
    "take": "05_you",
    "speaker": "you",
-   "text": "All of them?",
-   "start": 9.72,
-   "end": 10.72
+   "text": "Like... my morning?",
+   "start": 9.627,
+   "end": 10.516
   },
   {
    "line": 6,
-   "take": "06_owl",
-   "speaker": "owl",
-   "text": "Step one. NotebookLM. It's free, from Google. Drop everything in.",
-   "start": 11.0,
-   "end": 17.08
+   "take": "06_lumi",
+   "speaker": "lumi",
+   "text": "Step one. Record a voice memo. Your phone turns it into text.",
+   "start": 10.796,
+   "end": 14.566
   },
   {
    "line": 7,
-   "take": "07_owl",
-   "speaker": "owl",
-   "text": "Step two. I turned your notes into a podcast.",
-   "start": 17.36,
-   "end": 22.055
+   "take": "07_lumi",
+   "speaker": "lumi",
+   "text": "Step two. Paste it into ChatGPT with my prompt. Thirty post ideas.",
+   "start": 14.846,
+   "end": 18.286
   },
   {
    "line": 8,
    "take": "08_you",
    "speaker": "you",
-   "text": "A podcast? Of my notes?!",
-   "start": 22.335,
-   "end": 24.945
+   "text": "Thirty?! From my coffee rant?",
+   "start": 18.566,
+   "end": 20.007
   },
   {
    "line": 9,
-   "take": "09_owl",
-   "speaker": "owl",
-   "text": "Twenty minutes. Listen on the bus.",
-   "start": 25.225,
-   "end": 27.865
+   "take": "09_lumi",
+   "speaker": "lumi",
+   "text": "Step three. Every idea gets a hook, a caption and slides.",
+   "start": 20.287,
+   "end": 23.706
   },
   {
    "line": 10,
-   "take": "10_owl",
-   "speaker": "owl",
-   "text": "Step three. Fifty flashcards, and a practice test.",
-   "start": 28.145,
-   "end": 32.145
+   "take": "10_lumi",
+   "speaker": "lumi",
+   "text": "Step four. Schedule all thirty in Meta Business Suite. It's free.",
+   "start": 23.986,
+   "end": 27.9
   },
   {
    "line": 11,
    "take": "11_you",
    "speaker": "you",
-   "text": "Sixty-two percent...",
-   "start": 32.425,
-   "end": 34.825
+   "text": "A whole month... in one night!",
+   "start": 28.18,
+   "end": 29.754
   },
   {
    "line": 12,
-   "take": "12_owl",
-   "speaker": "owl",
-   "text": "Step four. Your weak spots. Chapter seven, again.",
-   "start": 35.105,
-   "end": 39.345
+   "take": "12_you",
+   "speaker": "you",
+   "text": "Wait. Eighty thousand views?! On the coffee one?",
+   "start": 30.034,
+   "end": 32.418
   },
   {
    "line": 13,
-   "take": "13_you",
-   "speaker": "you",
-   "text": "Ninety-one! Ninety-one percent!",
-   "start": 39.625,
-   "end": 42.905
+   "take": "13_lumi",
+   "speaker": "lumi",
+   "text": "Your rant. My hook.",
+   "start": 32.698,
+   "end": 33.688
   },
   {
    "line": 14,
    "take": "14_you",
    "speaker": "you",
-   "text": "Okay. Last thing. You're small. You fit in my bag. Take the exam for me?",
-   "start": 43.185,
-   "end": 48.305
+   "text": "Okay. Just be me. Post forever?",
+   "start": 33.968,
+   "end": 35.888
   },
   {
    "line": 15,
-   "take": "15_owl",
-   "speaker": "owl",
+   "take": "15_lumi",
+   "speaker": "lumi",
    "text": "No.",
-   "start": 48.585,
-   "end": 49.305
+   "start": 36.168,
+   "end": 36.505
   },
   {
    "line": 16,
    "take": "16_you",
    "speaker": "you",
-   "text": "Please?",
-   "start": 49.585,
-   "end": 50.955
+   "text": "Why not?",
+   "start": 36.785,
+   "end": 37.297
   },
   {
    "line": 17,
-   "take": "17_owl",
-   "speaker": "owl",
-   "text": "You don't need me anymore. You know every answer.",
-   "start": 51.235,
-   "end": 55.235
+   "take": "17_lumi",
+   "speaker": "lumi",
+   "text": "They follow you, not me. Your voice is the content.",
+   "start": 37.577,
+   "end": 40.542
   },
   {
    "line": 18,
-   "take": "18_owl",
-   "speaker": "owl",
-   "text": "Send this to a friend with an exam this week. Follow @nxtlvlsocial.ai and comment EXAM. I'll send you the setup.",
-   "start": 55.515,
-   "end": 62.955
+   "take": "18_lumi",
+   "speaker": "lumi",
+   "text": "Send this to a creator who hasn't posted in weeks. Follow @nxtlvlsocial.ai and comment POSTS. I'll send you the prompt.",
+   "start": 40.822,
+   "end": 47.586
   }
  ]
 }
