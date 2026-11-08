@@ -612,7 +612,7 @@ mkSet("vegas");
   flat(60, 16, mat(0x1A1A22, { roughness: .4, metalness: .2 }), 0, .01, 19);
   // pillars and chandeliers
   for (const [x, z] of [[-3.4, -7], [3.4, -7], [-3.4, 6.5], [3.4, 6.5]]) { box(.8, 5.2, .8, mat(0x3A1E20), x, 2.6, z); box(.9, .2, .9, goldM, x, 4.9, z); box(.9, .2, .9, goldM, x, .1, z); }
-  const chand = (x, z) => { const g = new THREE.Group(); g.position.set(x, 4.4, z); SET.vegas.add(g); box(1.6, .08, 1.6, goldM, 0, .3, 0, { parent: g }); for (let k = 0; k < 16; k++) { const a = k * Math.PI / 8, r = k % 2 ? .75 : .5; box(.07, .3 + (k % 3) * .12, .07, glow(0xFFF0D0), Math.cos(a) * r, 0, Math.sin(a) * r, { parent: g, cast: false }); } box(.2, .8, .2, goldM, 0, .65, 0, { parent: g }); };
+  const chand = (x, z) => { const g = new THREE.Group(); g.position.set(x, 4.4, z); SET.vegas.add(g); box(1.6, .08, 1.6, goldM, 0, .3, 0, { parent: g }); for (let k = 0; k < 16; k++) { const a = k * Math.PI / 8, r = k % 2 ? .75 : .5; box(.07, .3 + (k % 3) * .12, .07, glow(0xC9A46E), Math.cos(a) * r, 0, Math.sin(a) * r, { parent: g, cast: false }); } box(.2, .8, .2, goldM, 0, .65, 0, { parent: g }); };
   chand(0, -1); chand(0, -8.5); chand(-6.5, 3); chand(6.5, 3);
   // slot machines along both sides, facing the aisle
   for (const sx of [-1, 1]) for (const row of [0, 1]) for (let k = 0; k < 7; k++) {
