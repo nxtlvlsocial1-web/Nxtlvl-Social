@@ -1,0 +1,24 @@
+{
+"note": "One narrator, eleven_v3 (v4 is refused on the free queue). One file per line in voice/el/mp3/<take>.mp3.",
+"voice_ids": {"nar": "S44KQ3oLFckbxgyKfold"},
+"voice_name": "Calen Voss - Resonant, Magnetic (deep American baritone)",
+"flow_id": null,
+"lines": [
+ ["01", "nar", "[calm, intrigued] Day one. Your phone shows you tomorrow."],
+ ["02", "nar", "[mysterious] Nine fourteen A.M. A man drops his coffee."],
+ ["03", "nar", "[slowly, amazed whisper] At nine fourteen... he does."],
+ ["04", "nar", "[excited] Day four. Las Vegas. It knows the winning number."],
+ ["05", "nar", "[tense whisper] Black seventeen."],
+ ["06", "nar", "[triumphant] You walk out with two million dollars."],
+ ["07", "nar", "[serious, ominous] Day twelve. Miami. It shows a storm, and a bridge that falls at noon."],
+ ["08", "nar", "[urgent] You block the road. Everyone yells at you."],
+ ["09", "nar", "[relieved, emotional] At noon, the bridge goes down. Nobody is on it."],
+ ["10", "nar", "[uneasy] Day twenty-one. A message, from your own number."],
+ ["11", "nar", "[whispering, scared] Don't open the door."],
+ ["12", "nar", "[tense, slow] Then someone knocks."],
+ ["13", "nar", "[quiet] Day thirty. You check tomorrow."],
+ ["14", "nar", "[chilling, slow] The screen is black."],
+ ["15", "nar", "[matter-of-fact] And this isn't all fiction. Google DeepMind's AI already forecasts the weather ten days ahead."],
+ ["16", "nar", "[warm, curious] Would you look at tomorrow? Follow for more what-ifs."]
+]
+}

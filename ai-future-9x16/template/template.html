@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>The DM Sales Template</title>
+<style>
+@font-face { font-family: "Manrope"; font-weight: 200 800; src: url("manrope.ttf"); }
+@font-face { font-family: "Serif"; font-style: italic; src: url("InstrumentSerif-Italic.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 700; src: url("jbmono-bold.ttf"); }
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: "Manrope", sans-serif; color: #1E1B18; background: #F1E9DC; }
+.page { width: 210mm; min-height: 297mm; padding: 16mm 15mm 14mm; page-break-after: always; position: relative; background: #F1E9DC; }
+.page:last-child { page-break-after: auto; }
+.mono { font-family: "JBMono", monospace; font-weight: 700; }
+.top { display: flex; justify-content: space-between; align-items: center; font-size: 9.5pt; letter-spacing: 2.5px; margin-bottom: 9mm; }
+.top .b { display: flex; align-items: center; gap: 8px; } .top .b img { width: 18px; height: 18px; }
+.top .r { color: #A8452F; }
+h1 { font: 800 38pt/1.02 "Manrope"; letter-spacing: -1.5px; }
+h1 em { display: block; font: italic 30pt/1.1 "Serif"; color: #D45C40; margin-top: 3mm; letter-spacing: 0; }
+.lead { font: 600 12pt/1.5 "Manrope"; color: #4a453f; margin: 6mm 0 7mm; max-width: 165mm; }
+.how { background: #FFFDF8; border: 2px solid #1E1B18; border-radius: 16px; box-shadow: 5px 6px 0 #1E1B18; padding: 6mm 7mm; }
+.how h3 { font: 800 12pt "Manrope"; margin-bottom: 3mm; }
+.how ol { padding-left: 5mm; font: 600 10.5pt/1.6 "Manrope"; color: #3a3530; }
+.flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 7mm 0; }
+.flow div { background: #FFFDF8; border: 2px solid #1E1B18; border-radius: 12px; padding: 3.5mm; font: 700 9.5pt/1.3 "Manrope"; text-align: center; }
+.flow b { display: block; font: 700 8pt "JBMono"; letter-spacing: 1.5px; color: #D45C40; margin-bottom: 1.5mm; }
+.sec { margin-bottom: 6mm; break-inside: avoid; }
+.sec h2 { display: flex; align-items: baseline; gap: 4mm; font: 800 17pt "Manrope"; letter-spacing: -.5px; margin-bottom: 1.5mm; }
+.sec h2 .n { font: 700 10pt "JBMono"; color: #fff; background: #E8735A; border-radius: 8px; padding: 1.5mm 2.5mm; letter-spacing: 1px; }
+.sec .when { font: 600 10pt/1.45 "Manrope"; color: #5b5650; margin-bottom: 3mm; }
+.dm { background: #FFFDF8; border: 2px solid #1E1B18; border-radius: 14px; box-shadow: 4px 5px 0 #1E1B18; padding: 4mm 5mm; margin-bottom: 3mm; break-inside: avoid; }
+.dm .lab { font: 700 8pt "JBMono"; letter-spacing: 1.5px; color: #A8452F; margin-bottom: 1.5mm; }
+.dm p { font: 600 11pt/1.5 "Manrope"; }
+.dm p + p { margin-top: 2mm; }
+.f { background: #F7D9C4; border-radius: 5px; padding: 0 1.5mm; font-weight: 800; color: #A8452F; }
+.btn { display: inline-block; margin-top: 2.5mm; font: 700 9pt "JBMono"; letter-spacing: 1px; border: 2px solid #1E1B18; border-radius: 20px; padding: 1mm 4mm; background: #E8735A; color: #fff; }
+.btn.o { background: #FFFDF8; color: #1E1B18; }
+.tip { font: 600 9.5pt/1.45 "Manrope"; color: #3FA372; margin-top: 1mm; }
+.tip b { font: 700 8pt "JBMono"; letter-spacing: 1.5px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+table { width: 100%; border-collapse: collapse; background: #FFFDF8; border: 2px solid #1E1B18; border-radius: 14px; overflow: hidden; font: 600 10pt "Manrope"; }
+th, td { text-align: left; padding: 2.6mm 3.5mm; border-bottom: 1px solid #E4D9C7; }
+th { font: 700 8pt "JBMono"; letter-spacing: 1.5px; color: #A8452F; background: #FBF3EA; }
+.foot { position: absolute; left: 15mm; right: 15mm; bottom: 8mm; display: flex; justify-content: space-between; font: 700 8pt "JBMono"; letter-spacing: 1.5px; color: #8a847c; }
+.cta { margin-top: 6mm; background: #1E1B18; color: #FFFDF8; border-radius: 16px; padding: 6mm 7mm; }
+.cta b { font: 800 16pt "Manrope"; display: block; } .cta span { font: 600 10.5pt/1.5 "Manrope"; color: #E4D9C7; }
+</style></head><body>
+
+<section class="page">
+  <div class="top mono"><span class="b"><img src="logo-mark.svg" alt="">NXTLVLSOCIAL.AI</span><span class="r">FREE TEMPLATE</span></div>
+  <h1>The DM Sales Template<em>sell in the DMs while you sleep</em></h1>
+  <p class="lead">Copy-and-paste scripts for every step of a DM sale: the comment that starts it, the reply that lands in seconds, the answer to "too expensive", the follow-up that brings half of them back, and the message that turns a "no" into referrals. Works with any comment-to-DM tool, or by hand.</p>
+  <div class="flow">
+    <div><b>STEP 1-2</b>Comment<br>&rarr; instant DM</div>
+    <div><b>STEP 3-4</b>Qualify &amp;<br>answer doubts</div>
+    <div><b>STEP 5</b>Follow up<br>24h &middot; 72h</div>
+    <div><b>STEP 6-8</b>Close, say no<br>or ask for referrals</div>
+  </div>
+  <div class="how">
+    <h3>How to use it</h3>
+    <ol>
+      <li>Replace everything in <span class="f">[brackets]</span> with your product, price, link and customer stories.</li>
+      <li>Keep one keyword per post and say it in the video and the first line of the caption.</li>
+      <li>Send one idea and one link per message. Short DMs get read; long ones get skipped.</li>
+      <li>Wait about a minute before the first automatic reply so it feels natural.</li>
+      <li>Check the numbers on the last page every week and rewrite the step where people drop off.</li>
+    </ol>
+  </div>
+  <div class="sec" style="margin-top:8mm">
+    <h2><span class="n">01</span>The trigger post</h2>
+    <p class="when">The comment keyword that starts every conversation. Put it in the video, on the end screen and in the first line of the caption.</p>
+    <div class="grid2">
+      <div class="dm"><div class="lab">CAPTION FIRST LINE</div><p>Comment "<span class="f">[KEYWORD]</span>" and I'll DM you <span class="f">[the thing]</span>.</p></div>
+      <div class="dm"><div class="lab">PUBLIC REPLY UNDER THE COMMENT</div><p>Sent! Check your DMs (or your requests folder).</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>THE DM SALES TEMPLATE</span><span>1 / 5</span></div>
+</section>
+
+<section class="page">
+  <div class="top mono"><span class="b"><img src="logo-mark.svg" alt="">NXTLVLSOCIAL.AI</span><span class="r">FREE TEMPLATE</span></div>
+  <div class="sec">
+    <h2><span class="n">02</span>The instant reply</h2>
+    <p class="when">Sent within seconds of the comment, while they're still on your post. Pick the version that fits your offer.</p>
+    <div class="dm"><div class="lab">VERSION A &middot; DIRECT</div><p>Hey <span class="f">[Name]</span>! You asked about <span class="f">[product]</span>. It's <span class="f">[price]</span>, and here's everything it includes: <span class="f">[link]</span></p><span class="btn">SEE WHAT'S INSIDE</span></div>
+    <div class="dm"><div class="lab">VERSION B &middot; QUESTION FIRST</div><p>Hey <span class="f">[Name]</span>, thanks for commenting! Quick question so I send you the right thing: are you <span class="f">[situation A]</span> or <span class="f">[situation B]</span>?</p><span class="btn o">[SITUATION A]</span> <span class="btn o">[SITUATION B]</span></div>
+    <div class="dm"><div class="lab">VERSION C &middot; FREE FIRST</div><p>Here's the free <span class="f">[guide / checklist]</span> I promised: <span class="f">[link]</span>. If you want the full system, I'll send you that too.</p><span class="btn">SEND THE FULL SYSTEM</span></div>
+  </div>
+  <div class="sec">
+    <h2><span class="n">03</span>Qualify in one message</h2>
+    <p class="when">Two quick questions tell you whether to sell, help for free, or say "not yet" (step 6).</p>
+    <div class="dm"><div class="lab">QUALIFY</div><p>Love that. Two quick ones: what's your goal for the next <span class="f">[30 days]</span>, and what's stopping you right now?</p></div>
+    <p class="tip"><b>TIP</b> &nbsp;If their goal matches what your product does, go to the close. If not, step 6.</p>
+  </div>
+  <div class="foot"><span>THE DM SALES TEMPLATE</span><span>2 / 5</span></div>
+</section>
+
+<section class="page">
+  <div class="top mono"><span class="b"><img src="logo-mark.svg" alt="">NXTLVLSOCIAL.AI</span><span class="r">FREE TEMPLATE</span></div>
+  <div class="sec">
+    <h2><span class="n">04</span>Answer the doubts</h2>
+    <p class="when">Never argue. Answer with one story, one fact or one easy next step.</p>
+    <div class="grid2">
+      <div class="dm"><div class="lab">"TOO EXPENSIVE"</div><p>Totally fair. <span class="f">[Customer]</span> said the same before they joined. <span class="f">[Where they were.]</span> <span class="f">[The result they got.]</span> Here's their story: <span class="f">[link]</span></p></div>
+      <div class="dm"><div class="lab">"NOT RIGHT NOW"</div><p>No rush at all. Want me to send you <span class="f">[free resource]</span> so you can start today, and check back in <span class="f">[2 weeks]</span>?</p></div>
+      <div class="dm"><div class="lab">"WILL IT WORK FOR ME?"</div><p>It works best for people who <span class="f">[who it's for]</span>. If that's you, yes. <span class="f">[Customer]</span> started exactly where you are.</p></div>
+      <div class="dm"><div class="lab">"I NEED TO THINK"</div><p>Of course. What's the one thing you're unsure about? I'll answer it straight.</p></div>
+    </div>
+  </div>
+  <div class="sec">
+    <h2><span class="n">05</span>The follow-ups</h2>
+    <p class="when">For people who clicked the link and didn't buy. Most sales happen here, so don't skip it. Stop after the third message.</p>
+    <div class="dm"><div class="lab">AFTER 24 HOURS</div><p>Hey <span class="f">[Name]</span>, saw you checked out <span class="f">[product]</span> yesterday. Any question I can answer? Most people ask about <span class="f">[question 1]</span> or <span class="f">[question 2]</span>.</p><span class="btn o">I HAVE A QUESTION</span> <span class="btn">GET IT NOW</span></div>
+    <div class="dm"><div class="lab">AFTER 72 HOURS &middot; PROOF</div><p><span class="f">[Customer]</span> just got <span class="f">[result]</span> with it this week. Thought you'd like to see it: <span class="f">[link]</span></p></div>
+    <div class="dm"><div class="lab">LAST ONE &middot; NO PRESSURE</div><p>Last message from me on this! The <span class="f">[offer / bonus]</span> ends <span class="f">[date]</span>. If now's not the time, no worries at all, I'll keep sharing free tips on my page.</p></div>
+  </div>
+  <div class="foot"><span>THE DM SALES TEMPLATE</span><span>3 / 5</span></div>
+</section>
+
+<section class="page">
+  <div class="top mono"><span class="b"><img src="logo-mark.svg" alt="">NXTLVLSOCIAL.AI</span><span class="r">FREE TEMPLATE</span></div>
+  <div class="sec">
+    <h2><span class="n">06</span>The "not the right fit" message</h2>
+    <p class="when">Send it when someone isn't ready. It builds trust, and the people you turn away often come back, and bring friends.</p>
+    <div class="dm"><div class="lab">SAY NO, KINDLY</div><p>Honestly? <span class="f">[Product]</span> isn't the right fit for you yet. It works best for people who <span class="f">[who it's for]</span>.</p><p>Start with <span class="f">[free resource]</span> first, and come back when you <span class="f">[milestone]</span>. I'll be here.</p></div>
+  </div>
+  <div class="sec">
+    <h2><span class="n">07</span>The close</h2>
+    <div class="dm"><div class="lab">WHEN THEY SAY YES</div><p>Amazing! Here's your link: <span class="f">[checkout link]</span>. Once you're in, you'll get <span class="f">[what happens next]</span> straight away.</p><span class="btn">JOIN NOW</span></div>
+  </div>
+  <div class="sec">
+    <h2><span class="n">08</span>Thank you, then ask for referrals</h2>
+    <div class="dm"><div class="lab">RIGHT AFTER THE PURCHASE</div><p>You're in! Here's how to get started: <span class="f">[link]</span>. Reply here any time you get stuck.</p></div>
+    <div class="dm"><div class="lab">7 DAYS LATER</div><p>How's it going with <span class="f">[product]</span>? If you know someone who'd love it, send them my way, and here's <span class="f">[a thank-you bonus]</span> for you.</p></div>
+  </div>
+  <div class="foot"><span>THE DM SALES TEMPLATE</span><span>4 / 5</span></div>
+</section>
+
+<section class="page">
+  <div class="top mono"><span class="b"><img src="logo-mark.svg" alt="">NXTLVLSOCIAL.AI</span><span class="r">FREE TEMPLATE</span></div>
+  <div class="sec">
+    <h2><span class="n">09</span>Your weekly numbers</h2>
+    <p class="when">Fill this in every week. The biggest drop between two rows is the message to rewrite next.</p>
+    <table>
+      <tr><th>STEP</th><th>WEEK 1</th><th>WEEK 2</th><th>WEEK 3</th><th>WEEK 4</th></tr>
+      <tr><td>Comments with the keyword</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>DMs opened</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Link clicks</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Sales from the first DM</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Sales from follow-ups</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Referrals</td><td></td><td></td><td></td><td></td></tr>
+    </table>
+  </div>
+  <div class="sec">
+    <h2><span class="n">10</span>Five rules</h2>
+    <div class="how"><ol>
+      <li>Reply fast. The first minutes after a comment are when people are most interested.</li>
+      <li>One message, one idea, one link.</li>
+      <li>Answer doubts with stories and proof, never with pressure.</li>
+      <li>Follow up three times at most, then let it go kindly.</li>
+      <li>Say no to people your product can't help yet. It's the fastest way to be trusted.</li>
+    </ol></div>
+  </div>
+  <div class="cta"><b>Want more setups like this?</b><span>Follow @nxtlvlsocial.ai for AI tools and templates that grow your page and your sales.</span></div>
+  <div class="foot"><span>THE DM SALES TEMPLATE</span><span>5 / 5</span></div>
+</section>
+
+</body></html>
