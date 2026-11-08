@@ -993,6 +993,7 @@ function renderAt(t) {
   sun.color.set(Lk.sun); sun.intensity = Lk.si;
   for (const [m, k] of NIGHTM) m.emissiveIntensity = Lk.night * k;
   for (const l of PL) l.intensity = 0;
+  rack.visible = false;
   const c = camAt(t, s);
   let flash = 0;
   if (s === 0) updNY(t);
