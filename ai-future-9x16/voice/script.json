@@ -1,194 +1,206 @@
 {
- "voice": "one narrator (second person); phrase by phrase with an emotion each",
+ "note": "Dialogue what-if: Alex, his friend Jay, the phone (an AI voice), a casino dealer, a driver. [take, speaker, display text or null, [[spoken text, emotion, pause]]]",
  "lines": [
   [
    "01",
-   "nar",
-   null,
+   "phone",
+   "Tomorrow. 9:14 ~ AM. The man in the grey coat drops his coffee.",
    [
     [
-     "Day one. Your phone shows you tomorrow.",
-     "calm",
+     "Tomorrow. Nine fourteen A.M. The man in the grey coat drops his coffee.",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "02",
-   "nar",
-   "9:14 ~ AM. A man drops his coffee.",
+   "alex",
+   null,
    [
     [
-     "Nine fourteen A.M. A man drops his coffee.",
-     "calm",
+     "Tomorrow? That's not possible.",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "03",
-   "nar",
-   "At 9:14... ~ he does.",
+   "alex",
+   null,
    [
     [
-     "At nine fourteen... he does.",
-     "punch",
+     "It's real.",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "04",
-   "nar",
+   "jay",
    null,
    [
     [
-     "Day four. Las Vegas. It knows the winning number.",
-     "excite",
+     "Bro, you put everything on one number?!",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "05",
-   "nar",
-   "Black 17.",
+   "alex",
+   "Black 17. Trust me.",
    [
     [
-     "Black seventeen.",
-     "punch",
+     "Black seventeen. Trust me.",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "06",
-   "nar",
-   "You walk out with $2,000,000. ~ ~",
+   "dealer",
+   null,
    [
     [
-     "You walk out with two million dollars.",
-     "excite",
+     "No more bets.",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "07",
-   "nar",
-   null,
+   "jay",
+   "$2,000,000! ~ ~ How?!",
    [
     [
-     "Day twelve. Miami. It shows a storm, and a bridge that falls at noon.",
-     "calm",
+     "Two million dollars! How?!",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "08",
-   "nar",
+   "alex",
    null,
    [
     [
-     "You block the road. Everyone yells at you.",
-     "excite",
+     "Lucky guess.",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "09",
-   "nar",
-   null,
+   "phone",
+   "Tomorrow. 12 PM. The bridge collapses. 14 cars on it.",
    [
     [
-     "At noon, the bridge goes down. Nobody is on it.",
-     "warm",
+     "Tomorrow. Twelve P.M. The bridge collapses. Fourteen cars on it.",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "10",
-   "nar",
+   "driver",
    null,
    [
     [
-     "Day twenty-one. A message, from your own number.",
-     "calm",
+     "Get out of the road, man!",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "11",
-   "nar",
+   "alex",
    null,
    [
     [
-     "Don't open the door.",
-     "punch",
+     "Turn around! The bridge is going down!",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "12",
-   "nar",
+   "driver",
    null,
    [
     [
-     "Then someone knocks.",
-     "punch",
+     "How did you know?",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "13",
-   "nar",
+   "alex",
    null,
    [
     [
-     "Day thirty. You check tomorrow.",
-     "calm",
+     "A message... from me?",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "14",
-   "nar",
+   "jay",
    null,
    [
     [
-     "The screen is black.",
-     "punch",
+     "Alex? It's me. Open the door.",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "15",
-   "nar",
+   "alex",
    null,
    [
     [
-     "And this isn't all fiction. Google DeepMind's AI already forecasts the weather ten days ahead.",
-     "calm",
+     "Show me tomorrow.",
+     "neutral",
      0
     ]
    ]
   ],
   [
    "16",
-   "nar",
+   "phone",
    null,
    [
     [
-     "Would you look at tomorrow? Follow for more what-ifs.",
-     "warm",
+     "There is no tomorrow.",
+     "neutral",
+     0
+    ]
+   ]
+  ],
+  [
+   "17",
+   "phone",
+   null,
+   [
+    [
+     "Would you look? Follow for more what-ifs.",
+     "neutral",
      0
     ]
    ]
