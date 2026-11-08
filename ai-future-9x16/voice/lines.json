@@ -1,5 +1,5 @@
 {
- "duration": 54.496,
+ "duration": 63.67,
  "lines": [
   {
    "line": 1,
@@ -63,71 +63,71 @@
    "speaker": "nar",
    "text": "You block the road. Everyone yells at you.",
    "start": 30.705,
-   "end": 32.643
+   "end": 33.585
   },
   {
    "line": 9,
    "take": "09",
    "speaker": "nar",
    "text": "At noon, the bridge goes down. Nobody is on it.",
-   "start": 32.963,
-   "end": 35.557
+   "start": 33.905,
+   "end": 37.985
   },
   {
    "line": 10,
    "take": "10",
    "speaker": "nar",
    "text": "Day twenty-one. A message, from your own number.",
-   "start": 36.277,
-   "end": 38.642
+   "start": 38.705,
+   "end": 43.105
   },
   {
    "line": 11,
    "take": "11",
    "speaker": "nar",
    "text": "Don't open the door.",
-   "start": 38.962,
-   "end": 40.103
+   "start": 43.425,
+   "end": 45.665
   },
   {
    "line": 12,
    "take": "12",
    "speaker": "nar",
    "text": "Then someone knocks.",
-   "start": 40.423,
-   "end": 41.359
+   "start": 45.985,
+   "end": 48.225
   },
   {
    "line": 13,
    "take": "13",
    "speaker": "nar",
    "text": "Day thirty. You check tomorrow.",
-   "start": 42.129,
-   "end": 43.882
+   "start": 48.995,
+   "end": 51.285
   },
   {
    "line": 14,
    "take": "14",
    "speaker": "nar",
    "text": "The screen is black.",
-   "start": 44.202,
-   "end": 45.138
+   "start": 51.605,
+   "end": 53.17
   },
   {
    "line": 15,
    "take": "15",
    "speaker": "nar",
    "text": "And this isn't all fiction. Google DeepMind's AI already forecasts the weather ten days ahead.",
-   "start": 46.008,
-   "end": 51.026
+   "start": 54.04,
+   "end": 60.2
   },
   {
    "line": 16,
    "take": "16",
    "speaker": "nar",
    "text": "Would you look at tomorrow? Follow for more what-ifs.",
-   "start": 51.546,
-   "end": 54.346
+   "start": 60.72,
+   "end": 63.52
   }
  ]
 }

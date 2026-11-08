@@ -386,7 +386,7 @@ phGlass.position.z = .0052;
 const LH = { g: new THREE.Group() }; PHONE.add(LH.g);
 hmesh(.064, .1, .034, handM, LH.g, .006, -.05, -.024);                        // palm behind the phone
 for (let k = 0; k < 3; k++) hmesh(.012, .018, .026, handM, LH.g, .044, -.025 - k * .024, -.012);   // fingertips round the right edge
-hmesh(.014, .042, .022, handM, LH.g, -.044, -.05, -.008).rotation.z = .25;    // thumb on the left edge
+hmesh(.011, .03, .02, handM, LH.g, -.0425, -.062, -.012);    // thumb on the left edge
 hmesh(.08, .032, .056, cuffM, LH.g, .006, -.11, -.024);
 const lArm = new THREE.Group(); lArm.position.set(.004, -.115, -.026); lArm.rotation.x = .55; LH.g.add(lArm);
 hmesh(.086, .7, .054, sleeveM, lArm, 0, -.35, 0);
