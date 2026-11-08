@@ -26,8 +26,9 @@ V = os.path.join(ROOT, "voice")
 CACHE = os.path.expanduser("~/.cache/hyperframes/tts")
 SR = 48000
 LEAD = 2.4
-LINE_GAP = .32
-GAP_AFTER = {"03": .55, "06": .35, "09": .4, "12": .45, "14": .55, "15": .2}   # breathing room where the scene changes
+LINE_GAP = .22
+MUFFLE = {"14"}      # heard through the apartment door
+GAP_AFTER = {"02": 2.6, "03": .7, "04": .25, "05": .35, "06": 2.2, "07": .3, "08": .8, "09": .9, "10": .2, "11": 2.8, "12": .9, "13": 1.3, "14": 2.4, "15": .5, "16": 1.4}   # the cinematic beats between lines
 VOICES = {"nar": "am_onyx"}
 # emotion -> (speed, semitones, gain dB)
 EMO = {"panic": (1.08, .4, 1.0), "dry": (.92, -.3, 0), "whine": (1.02, .5, .5), "calm": (.98, 0, 0), "surprised": (1.04, .5, 1.0),
@@ -108,6 +109,9 @@ def main():
         if elp:                     # an ElevenLabs take for the whole line
             raw = subprocess.run(["ffmpeg", "-v", "error", "-i", elp, "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
             a = level(fade(np.frombuffer(raw, np.float32).astype(np.float64)))
+            if take in MUFFLE:
+                from scipy.signal import butter, sosfilt
+                a = sosfilt(butter(4, 1100, "low", fs=SR, output="sos"), a) * 1.6
             d = len(a) / SR
             spans = split_phrases(a, len(phrases))
             for (text, emo, pause), (p0, p1) in zip(phrases, spans):

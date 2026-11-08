@@ -1,14 +1,14 @@
 """AI Future reel ("What if your phone could see 24 hours into the future?"): writes index.html. 1080x1920, 30 fps.
-Account: @nxtlvlsocial.ai. A first-person "what if": you only see your own blocky hands and your phone, which shows
-you tomorrow. Four places, one prediction each (New York, Las Vegas, Miami, home), a day tracker that never leaves the
-screen, one italic serif line per beat, and a title card that the end loops back to. Pure what-if: no keyword CTA, it
-ends on a question and the follow prompt. The real-world beat (Google DeepMind's GraphCast forecasts the weather up to
-10 days ahead, Science, Nov 2023) is in the description with its source.
+Account: @nxtlvlsocial.ai. A cinematic what-if told in dialogue, no narrator: Alex's phone starts showing him tomorrow.
+New York (the coffee at 9:14), Las Vegas with his friend Jay (black 17), Miami in a storm (the bridge), home on day 21
+(a text from his own number: don't open the door; a knock; "that's not Jay"), day 30 (there is no tomorrow). The phone
+speaks in its own AI voice and closes the reel with the question and the follow prompt. Pure what-if: no keyword CTA.
 
 python3 build/generate.py      (from the project root, after build/voice.py)
 
-The 3D (assets/js/future.js) is the voxel engine of the AI Clone / Closer reels, rebuilt for a first-person camera and
-four big sets. This file writes the HTML layer: the title card, the tracker, the serif captions and the end card.
+The 3D (assets/js/future.js) plays a shot list per scene: wides, close-ups, over-the-shoulders, slow motion and POV
+shots of the phone in Alex's hand. This file writes the HTML layer: the title card, the place/day tracker, the "next
+day" stamp, speaker-tagged serif captions and the end card.
 """
 import json
 import os
@@ -30,29 +30,17 @@ def word(line, text, nth=1, end=False):
 
 L = [ln["start"] for ln in LINES]
 E = [ln["end"] for ln in LINES]
-SCENE_STARTS = [4, 7, 10, 13, 15, 16]      # Vegas, Miami, home day 21, home day 30, the real part, the end
+WHO = [ln["speaker"] for ln in LINES]
 T = {
-    "day1": word(1, "day"), "tomorrow1": word(1, "tomorrow"),
-    "drops": word(2, "drops"), "coffee2": word(2, "coffee"),
-    "at3": word(3, "at"), "he3": word(3, "he"), "does": word(3, "does"),
-    "vegas": word(4, "vegas"), "number": word(4, "number"),
-    "black5": word(5, "black"), "seventeen": word(5, "17"),
-    "walk": word(6, "walk"), "million": word(6, "$2"),
-    "miami": word(7, "miami"), "storm": word(7, "storm"), "bridge7": word(7, "bridge"), "noon7": word(7, "noon"),
-    "block": word(8, "block"), "yells": word(8, "yells"),
-    "noon9": word(9, "noon"), "down": word(9, "down"), "nobody": word(9, "nobody"),
-    "message": word(10, "message"), "own": word(10, "own"),
-    "open": word(11, "open"), "door": word(11, "door"),
-    "knocks": word(12, "knocks"),
-    "check": word(13, "check"), "tomorrow13": word(13, "tomorrow"),
-    "black": word(14, "black"),
-    "fiction": word(15, "fiction"), "deepmind": word(15, "deepmind"), "ten": word(15, "ten"),
-    "look": word(16, "look"), "follow": word(16, "follow"),
+    "tom1": word(1, "tomorrow"), "coffee1": word(1, "coffee"),
+    "black5": word(5, "black"), "trust": word(5, "trust"),
+    "bridge9": word(9, "bridge"), "cars9": word(9, "14"),
+    "follow": word(17, "follow"), "look": word(17, "look"),
     "end": DUR,
 }
-T["cuts"] = [round(L[k - 1] - .25, 3) for k in SCENE_STARTS]
+T["cuts"] = [round(L[3] - .35, 3), round(L[8] - .45, 3), round(L[12] - .5, 3), round(L[14] - .45, 3), round(E[15] + 1.0, 3)]
+T["who"] = WHO
 T["lines"] = [{"s": ln["start"], "e": ln["end"]} for ln in LINES]
-T["focus"] = []
 CU = T["cuts"]
 A = []
 
@@ -73,14 +61,9 @@ def setText(sel, txt, t):
     add(f'tl.set("{sel}",{{textContent:{json.dumps(txt)}}},{t:.3f});')
 
 
-# the tracker: place, day, predictions that came true
-HUD = [  # (from, place, day, correct before, correct after, tick time)
-    (L[0] - .3, "NEW YORK", "1", "0", "1", T["does"]),
-    (CU[0], "LAS VEGAS", "4", "3", "4", T["seventeen"]),
-    (CU[1], "MIAMI", "12", "11", "12", T["down"]),
-    (CU[2], "HOME", "21", "20", "21", T["knocks"]),
-    (CU[3], "HOME", "30", "29", "?", T["black"]),
-]
+# the tracker: place and day
+HUD = [(L[0] - .3, "NEW YORK", "1"), (CU[0], "LAS VEGAS", "4"), (CU[1], "MIAMI", "12"), (CU[2], "HOME", "21"), (CU[3], "HOME", "30")]
+NAMES = {"alex": "ALEX", "jay": "JAY", "phone": "THE PHONE", "dealer": "DEALER", "driver": "DRIVER"}
 
 
 def story():
@@ -92,15 +75,18 @@ def story():
     hide("#title", L[0] - .45, .4, "opacity:0,y:-30")
     # the tracker
     show("#hud", L[0] - .3, .4, "opacity:0,x:-30", "opacity:1,x:0")
-    for (t0, place, day, c0, c1, tick) in HUD:
-        setText(".h-place", place, t0); setText(".h-day", day, t0); setText(".h-c", c0, t0)
-        add(f'tl.fromTo("#hud .h-place",{{opacity:.2}},{{opacity:1,duration:.4,immediateRender:false}},{t0 + .02:.3f});')
-        setText(".h-c", c1, tick)
-        add(f'tl.fromTo("#hud .h-c",{{scale:1.6,color:"#FFFFFF"}},{{scale:1,color:"{"#E8473B" if c1 == "?" else "#F2C94C"}",duration:.45,ease:"back.out(3)",immediateRender:false}},{tick:.3f});')
+    for k, (t0, place, day) in enumerate(HUD):
+        setText(".h-place", place, t0); setText(".h-day", day, t0)
+        if k:
+            add(f'tl.fromTo("#hud",{{opacity:.15}},{{opacity:1,duration:.5,immediateRender:false}},{t0 + .02:.3f});')
+    add(f'tl.fromTo("#hud .h-day",{{color:"#FFFDF6"}},{{color:"#E8473B",duration:.3,immediateRender:false}},{E[15] - .25:.3f});')
     hide("#hud", CU[4] - .1, .4, "opacity:0,x:-30")
+    # the next day
+    show("#stamp", E[1] + .25, .35, "opacity:0,y:-10")
+    hide("#stamp", E[1] + 1.35, .3)
     # the end card: the title again, the question, the follow prompt
-    show("#endc", CU[5] - .05, .5, "opacity:0", "opacity:1")
-    show(".e1", CU[5] + .05, .45, "opacity:0,y:18")
+    show("#endc", CU[4] + .25, .6, "opacity:0", "opacity:1")
+    show(".e1", CU[4] + .35, .5, "opacity:0,y:18")
     show(".e2", T["look"] - .1, .4, "opacity:0,y:14")
     show(".e3", T["follow"] - .1, .4, "opacity:0,y:14")
 
@@ -122,7 +108,9 @@ def captions():
             pid = f"{cid}_{j}"
             if k == len(LINES) - 1:          # the last line is on the end card already
                 continue
-            html.append(f'<div class="cap" id="{pid}">{p}</div>')
+            who = LINES[k]["speaker"]
+            tag = "VOICE AT THE DOOR" if LINES[k]["take"] == "14" else NAMES[who]
+            html.append(f'<div class="cap sp-{who}" id="{pid}"><span class="who">{tag}</span>{p}</div>')
             add(f'tl.fromTo("#{pid}",{{opacity:0,y:10}},{{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false}},{a0:.3f});')
             add(f'tl.to("#{pid}",{{opacity:0,duration:.18,ease:"power1.in"}},{z:.3f});')
     return "".join(html)
@@ -138,7 +126,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0B0A1
 .clip { position: absolute; inset: 0; }
 #gl { width: 1080px; height: 1920px; display: block; }
 #ui { z-index: 5; }
-#title, #hud, #endc, .cap { opacity: 0; }
+#title, #hud, #endc, .cap, #stamp { opacity: 0; }
 .shadow { text-shadow: 0 3px 18px rgba(0,0,0,.55), 0 1px 3px rgba(0,0,0,.6); }
 #title { position: absolute; left: 70px; right: 70px; top: 520px; text-align: center; color: #FFFDF6; font-family: "Garamond", serif; }
 #title .t1, #title .t3 { display: block; font: 500 82px/1.1 "Garamond"; letter-spacing: -.5px; }
@@ -149,7 +137,12 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0B0A1
 #hud .h-row { display: block; margin-top: 6px; font: 600 54px/1 "Garamond"; }
 #hud .h-row small { font-size: 30px; color: rgba(255,253,246,.75); }
 #hud .h-c { display: inline-block; color: #F2C94C; font-weight: 700; }
-.cap { position: absolute; left: 80px; right: 80px; top: 1330px; text-align: center; color: #FFFDF6; font: italic 500 54px/1.22 "Garamond"; }
+.cap { position: absolute; left: 80px; right: 80px; top: 1320px; text-align: center; color: #FFFDF6; font: italic 500 56px/1.2 "Garamond"; }
+.cap .who { display: block; margin-bottom: 8px; font: 800 28px/1 "Manrope"; font-style: normal; letter-spacing: 4px; color: rgba(255,253,246,.8); }
+.cap.sp-phone { color: #A8F0FF; } .cap.sp-phone .who { color: #7FE3FF; }
+.cap.sp-jay .who { color: #F2C94C; } .cap.sp-driver .who, .cap.sp-dealer .who { color: #F2B98A; }
+#stamp { position: absolute; left: 0; right: 0; top: 330px; text-align: center; color: #FFFDF6; font: italic 500 64px/1.1 "Garamond"; opacity: 0; }
+#stamp b { display: block; margin-top: 10px; font: 800 30px/1 "Manrope"; letter-spacing: 6px; font-style: normal; color: #F2C94C; }
 #endc { position: absolute; left: 70px; right: 70px; top: 560px; text-align: center; color: #FFFDF6; }
 #endc .e1 { display: block; font: 500 76px/1.12 "Garamond"; }
 #endc .e1 b { color: #F2C94C; font-weight: 700; }
@@ -167,8 +160,8 @@ def main():
     ui = ('<div id="title" class="shadow"><span class="t1">What if your phone</span><span class="t1">could see</span>'
           '<span class="t2">24 hours</span><span class="t3">into the future?</span></div>'
           '<div id="hud" class="shadow"><span class="h-place">NEW YORK</span><span class="lab">DAY</span>'
-          '<span class="h-row"><span class="h-day">1</span> <small>/ 30</small></span><span class="lab">CORRECT</span>'
-          '<span class="h-row"><span class="h-c">0</span></span></div>'
+          '<span class="h-row"><span class="h-day">1</span> <small>/ 30</small></span></div>'
+          '<div id="stamp" class="shadow">The next day<b>9:13 AM</b></div>'
           '<div id="endc" class="shadow"><span class="e1">What if your phone could see <b>24 hours</b> into the future?</span>'
           '<span class="e2">Would you look?</span>'
           '<span class="e3">FOLLOW FOR MORE WHAT-IFS<span>@nxtlvlsocial.ai</span></span></div>')

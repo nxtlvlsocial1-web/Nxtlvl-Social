@@ -1,133 +1,141 @@
 {
- "duration": 64.79,
+ "duration": 69.28,
  "lines": [
   {
    "line": 1,
    "take": "01",
-   "speaker": "nar",
-   "text": "Day one. Your phone shows you tomorrow.",
+   "speaker": "phone",
+   "text": "Tomorrow. 9:14 AM. The man in the grey coat drops his coffee.",
    "start": 2.4,
-   "end": 5.52
+   "end": 8.405
   },
   {
    "line": 2,
    "take": "02",
-   "speaker": "nar",
-   "text": "9:14 AM. A man drops his coffee.",
-   "start": 5.84,
-   "end": 9.84
+   "speaker": "alex",
+   "text": "Tomorrow? That's not possible.",
+   "start": 8.625,
+   "end": 11.005
   },
   {
    "line": 3,
    "take": "03",
-   "speaker": "nar",
-   "text": "At 9:14... he does.",
-   "start": 10.16,
-   "end": 13.52
+   "speaker": "alex",
+   "text": "It's real.",
+   "start": 13.825,
+   "end": 15.97
   },
   {
    "line": 4,
    "take": "04",
-   "speaker": "nar",
-   "text": "Day four. Las Vegas. It knows the winning number.",
-   "start": 14.39,
-   "end": 18.675
+   "speaker": "jay",
+   "text": "Bro, you put everything on one number?!",
+   "start": 16.89,
+   "end": 19.66
   },
   {
    "line": 5,
    "take": "05",
-   "speaker": "nar",
-   "text": "Black 17.",
-   "start": 18.995,
-   "end": 20.595
+   "speaker": "alex",
+   "text": "Black 17. Trust me.",
+   "start": 20.13,
+   "end": 22.13
   },
   {
    "line": 6,
    "take": "06",
-   "speaker": "nar",
-   "text": "You walk out with $2,000,000.",
-   "start": 20.915,
-   "end": 23.635
+   "speaker": "dealer",
+   "text": "No more bets.",
+   "start": 22.7,
+   "end": 25.08
   },
   {
    "line": 7,
    "take": "07",
-   "speaker": "nar",
-   "text": "Day twelve. Miami. It shows a storm, and a bridge that falls at noon.",
-   "start": 24.305,
-   "end": 30.385
+   "speaker": "jay",
+   "text": "$2,000,000! How?!",
+   "start": 27.5,
+   "end": 30.46
   },
   {
    "line": 8,
    "take": "08",
-   "speaker": "nar",
-   "text": "You block the road. Everyone yells at you.",
-   "start": 30.705,
-   "end": 33.585
+   "speaker": "alex",
+   "text": "Lucky guess.",
+   "start": 30.98,
+   "end": 32.925
   },
   {
    "line": 9,
    "take": "09",
-   "speaker": "nar",
-   "text": "At noon, the bridge goes down. Nobody is on it.",
-   "start": 33.905,
-   "end": 37.985
+   "speaker": "phone",
+   "text": "Tomorrow. 12 PM. The bridge collapses. 14 cars on it.",
+   "start": 33.945,
+   "end": 39.785
   },
   {
    "line": 10,
    "take": "10",
-   "speaker": "nar",
-   "text": "Day twenty-one. A message, from your own number.",
-   "start": 38.705,
-   "end": 43.105
+   "speaker": "driver",
+   "text": "Get out of the road, man!",
+   "start": 40.905,
+   "end": 42.375
   },
   {
    "line": 11,
    "take": "11",
-   "speaker": "nar",
-   "text": "Don't open the door.",
-   "start": 43.425,
-   "end": 45.665
+   "speaker": "alex",
+   "text": "Turn around! The bridge is going down!",
+   "start": 42.795,
+   "end": 45.105
   },
   {
    "line": 12,
    "take": "12",
-   "speaker": "nar",
-   "text": "Then someone knocks.",
-   "start": 45.985,
-   "end": 48.225
+   "speaker": "driver",
+   "text": "How did you know?",
+   "start": 48.125,
+   "end": 49.805
   },
   {
    "line": 13,
    "take": "13",
-   "speaker": "nar",
-   "text": "Day thirty. You check tomorrow.",
-   "start": 48.995,
-   "end": 51.285
+   "speaker": "alex",
+   "text": "A message... from me?",
+   "start": 50.925,
+   "end": 53.25
   },
   {
    "line": 14,
    "take": "14",
-   "speaker": "nar",
-   "text": "The screen is black.",
-   "start": 51.605,
-   "end": 53.17
+   "speaker": "jay",
+   "text": "Alex? It's me. Open the door.",
+   "start": 54.77,
+   "end": 57.2
   },
   {
    "line": 15,
    "take": "15",
-   "speaker": "nar",
-   "text": "And this isn't all fiction. Google DeepMind's AI already forecasts the weather ten days ahead.",
-   "start": 54.04,
-   "end": 60.2
+   "speaker": "alex",
+   "text": "Show me tomorrow.",
+   "start": 59.82,
+   "end": 61.08
   },
   {
    "line": 16,
    "take": "16",
-   "speaker": "nar",
-   "text": "Would you look at tomorrow? Follow for more what-ifs.",
-   "start": 60.72,
-   "end": 64.64
+   "speaker": "phone",
+   "text": "There is no tomorrow.",
+   "start": 61.8,
+   "end": 63.99
+  },
+  {
+   "line": 17,
+   "take": "17",
+   "speaker": "phone",
+   "text": "Would you look? Follow for more what-ifs.",
+   "start": 65.61,
+   "end": 69.13
   }
  ]
 }

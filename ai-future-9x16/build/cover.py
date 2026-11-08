@@ -21,7 +21,7 @@ OUT = os.path.join(ROOT, "cover")
 T = json.load(open(os.path.join(ROOT, "build", "cues.json")))
 CLI = ["npx", "--yes", "hyperframes@0.8.203"]
 
-PLATES = {"street": (round((T["tomorrow1"] + T["l"][2]) / 2 + .4, 2), {"ap": .16})}
+PLATES = {"street": (round(T["l"][0] + 1.6, 2), {"ap": .16})}
 
 HEAD = """<!doctype html>
 <html lang="en" data-resolution="portrait">

@@ -1,800 +1,611 @@
 [
 {
 "line": 1,
-"speaker": "nar",
-"w": "Day",
-"s": 2.43,
-"e": 2.781
+"speaker": "phone",
+"w": "Tomorrow.",
+"s": 2.46,
+"e": 3.397
 },
 {
 "line": 1,
-"speaker": "nar",
-"w": "one.",
-"s": 2.761,
-"e": 3.356
-},
-{
-"line": 1,
-"speaker": "nar",
-"w": "Your",
-"s": 3.336,
-"e": 3.687
-},
-{
-"line": 1,
-"speaker": "nar",
-"w": "phone",
-"s": 3.667,
-"e": 4.018
-},
-{
-"line": 1,
-"speaker": "nar",
-"w": "shows",
-"s": 3.998,
-"e": 4.349
-},
-{
-"line": 1,
-"speaker": "nar",
-"w": "you",
-"s": 4.329,
-"e": 4.679
-},
-{
-"line": 1,
-"speaker": "nar",
-"w": "tomorrow.",
-"s": 4.659,
-"e": 5.5
-},
-{
-"line": 2,
-"speaker": "nar",
+"speaker": "phone",
 "w": "9:14",
-"s": 5.85,
-"e": 7.018
+"s": 3.377,
+"e": 4.41
 },
 {
-"line": 2,
-"speaker": "nar",
+"line": 1,
+"speaker": "phone",
 "w": "AM.",
-"s": 6.998,
-"e": 7.436
+"s": 4.39,
+"e": 4.78
 },
 {
-"line": 2,
-"speaker": "nar",
-"w": "A",
-"s": 7.416,
-"e": 7.855
-},
-{
-"line": 2,
-"speaker": "nar",
-"w": "man",
-"s": 7.835,
-"e": 8.274
-},
-{
-"line": 2,
-"speaker": "nar",
-"w": "drops",
-"s": 8.254,
-"e": 8.692
-},
-{
-"line": 2,
-"speaker": "nar",
-"w": "his",
-"s": 8.672,
-"e": 9.111
-},
-{
-"line": 2,
-"speaker": "nar",
-"w": "coffee.",
-"s": 9.091,
-"e": 9.84
-},
-{
-"line": 3,
-"speaker": "nar",
-"w": "At",
-"s": 10.19,
-"e": 10.787
-},
-{
-"line": 3,
-"speaker": "nar",
-"w": "9:14...",
-"s": 10.767,
-"e": 12.367
-},
-{
-"line": 3,
-"speaker": "nar",
-"w": "he",
-"s": 12.347,
-"e": 12.943
-},
-{
-"line": 3,
-"speaker": "nar",
-"w": "does.",
-"s": 12.923,
-"e": 13.52
-},
-{
-"line": 4,
-"speaker": "nar",
-"w": "Day",
-"s": 14.4,
-"e": 14.786
-},
-{
-"line": 4,
-"speaker": "nar",
-"w": "four.",
-"s": 14.766,
-"e": 15.152
-},
-{
-"line": 4,
-"speaker": "nar",
-"w": "Las",
-"s": 15.132,
-"e": 15.519
-},
-{
-"line": 4,
-"speaker": "nar",
-"w": "Vegas.",
-"s": 15.499,
-"e": 16.156
-},
-{
-"line": 4,
-"speaker": "nar",
-"w": "It",
-"s": 16.136,
-"e": 16.522
-},
-{
-"line": 4,
-"speaker": "nar",
-"w": "knows",
-"s": 16.502,
-"e": 16.889
-},
-{
-"line": 4,
-"speaker": "nar",
-"w": "the",
-"s": 16.869,
-"e": 17.255
-},
-{
-"line": 4,
-"speaker": "nar",
-"w": "winning",
-"s": 17.235,
-"e": 17.892
-},
-{
-"line": 4,
-"speaker": "nar",
-"w": "number.",
-"s": 17.872,
-"e": 18.53
-},
-{
-"line": 5,
-"speaker": "nar",
-"w": "Black",
-"s": 18.995,
-"e": 19.449
-},
-{
-"line": 5,
-"speaker": "nar",
-"w": "17.",
-"s": 19.429,
-"e": 20.525
-},
-{
-"line": 6,
-"speaker": "nar",
-"w": "You",
-"s": 20.935,
-"e": 21.267
-},
-{
-"line": 6,
-"speaker": "nar",
-"w": "walk",
-"s": 21.247,
-"e": 21.58
-},
-{
-"line": 6,
-"speaker": "nar",
-"w": "out",
-"s": 21.56,
-"e": 21.892
-},
-{
-"line": 6,
-"speaker": "nar",
-"w": "with",
-"s": 21.872,
-"e": 22.205
-},
-{
-"line": 6,
-"speaker": "nar",
-"w": "$2,000,000.",
-"s": 22.185,
-"e": 23.605
-},
-{
-"line": 7,
-"speaker": "nar",
-"w": "Day",
-"s": 24.305,
-"e": 24.733
-},
-{
-"line": 7,
-"speaker": "nar",
-"w": "twelve.",
-"s": 24.713,
-"e": 25.142
-},
-{
-"line": 7,
-"speaker": "nar",
-"w": "Miami.",
-"s": 25.122,
-"e": 25.853
-},
-{
-"line": 7,
-"speaker": "nar",
-"w": "It",
-"s": 25.833,
-"e": 26.261
-},
-{
-"line": 7,
-"speaker": "nar",
-"w": "shows",
-"s": 26.241,
-"e": 26.669
-},
-{
-"line": 7,
-"speaker": "nar",
-"w": "a",
-"s": 26.649,
-"e": 27.078
-},
-{
-"line": 7,
-"speaker": "nar",
-"w": "storm,",
-"s": 27.058,
-"e": 27.486
-},
-{
-"line": 7,
-"speaker": "nar",
-"w": "and",
-"s": 27.466,
-"e": 27.895
-},
-{
-"line": 7,
-"speaker": "nar",
-"w": "a",
-"s": 27.875,
-"e": 28.303
-},
-{
-"line": 7,
-"speaker": "nar",
-"w": "bridge",
-"s": 28.283,
-"e": 28.711
-},
-{
-"line": 7,
-"speaker": "nar",
-"w": "that",
-"s": 28.691,
-"e": 29.12
-},
-{
-"line": 7,
-"speaker": "nar",
-"w": "falls",
-"s": 29.1,
-"e": 29.528
-},
-{
-"line": 7,
-"speaker": "nar",
-"w": "at",
-"s": 29.508,
-"e": 29.937
-},
-{
-"line": 7,
-"speaker": "nar",
-"w": "noon.",
-"s": 29.917,
-"e": 30.345
-},
-{
-"line": 8,
-"speaker": "nar",
-"w": "You",
-"s": 30.715,
-"e": 31.036
-},
-{
-"line": 8,
-"speaker": "nar",
-"w": "block",
-"s": 31.016,
-"e": 31.336
-},
-{
-"line": 8,
-"speaker": "nar",
-"w": "the",
-"s": 31.316,
-"e": 31.637
-},
-{
-"line": 8,
-"speaker": "nar",
-"w": "road.",
-"s": 31.617,
-"e": 31.937
-},
-{
-"line": 8,
-"speaker": "nar",
-"w": "Everyone",
-"s": 31.917,
-"e": 32.683
-},
-{
-"line": 8,
-"speaker": "nar",
-"w": "yells",
-"s": 32.663,
-"e": 32.984
-},
-{
-"line": 8,
-"speaker": "nar",
-"w": "at",
-"s": 32.964,
-"e": 33.284
-},
-{
-"line": 8,
-"speaker": "nar",
-"w": "you.",
-"s": 33.264,
-"e": 33.585
-},
-{
-"line": 9,
-"speaker": "nar",
-"w": "At",
-"s": 33.935,
-"e": 34.305
-},
-{
-"line": 9,
-"speaker": "nar",
-"w": "noon,",
-"s": 34.285,
-"e": 34.655
-},
-{
-"line": 9,
-"speaker": "nar",
-"w": "the",
-"s": 34.635,
-"e": 35.005
-},
-{
-"line": 9,
-"speaker": "nar",
-"w": "bridge",
-"s": 34.985,
-"e": 35.356
-},
-{
-"line": 9,
-"speaker": "nar",
-"w": "goes",
-"s": 35.336,
-"e": 35.706
-},
-{
-"line": 9,
-"speaker": "nar",
-"w": "down.",
-"s": 35.686,
-"e": 36.056
-},
-{
-"line": 9,
-"speaker": "nar",
-"w": "Nobody",
-"s": 36.036,
-"e": 36.925
-},
-{
-"line": 9,
-"speaker": "nar",
-"w": "is",
-"s": 36.905,
-"e": 37.275
-},
-{
-"line": 9,
-"speaker": "nar",
-"w": "on",
-"s": 37.255,
-"e": 37.625
-},
-{
-"line": 9,
-"speaker": "nar",
-"w": "it.",
-"s": 37.605,
-"e": 37.975
-},
-{
-"line": 10,
-"speaker": "nar",
-"w": "Day",
-"s": 38.715,
-"e": 39.161
-},
-{
-"line": 10,
-"speaker": "nar",
-"w": "twenty-one.",
-"s": 39.141,
-"e": 39.901
-},
-{
-"line": 10,
-"speaker": "nar",
-"w": "A",
-"s": 39.881,
-"e": 40.327
-},
-{
-"line": 10,
-"speaker": "nar",
-"w": "message,",
-"s": 40.307,
-"e": 41.068
-},
-{
-"line": 10,
-"speaker": "nar",
-"w": "from",
-"s": 41.048,
-"e": 41.493
-},
-{
-"line": 10,
-"speaker": "nar",
-"w": "your",
-"s": 41.473,
-"e": 41.919
-},
-{
-"line": 10,
-"speaker": "nar",
-"w": "own",
-"s": 41.899,
-"e": 42.344
-},
-{
-"line": 10,
-"speaker": "nar",
-"w": "number.",
-"s": 42.324,
-"e": 43.085
-},
-{
-"line": 11,
-"speaker": "nar",
-"w": "Don't",
-"s": 43.415,
-"e": 43.905
-},
-{
-"line": 11,
-"speaker": "nar",
-"w": "open",
-"s": 43.885,
-"e": 44.724
-},
-{
-"line": 11,
-"speaker": "nar",
-"w": "the",
-"s": 44.704,
-"e": 45.195
-},
-{
-"line": 11,
-"speaker": "nar",
-"w": "door.",
-"s": 45.175,
-"e": 45.665
-},
-{
-"line": 12,
-"speaker": "nar",
-"w": "Then",
-"s": 45.975,
-"e": 46.439
-},
-{
-"line": 12,
-"speaker": "nar",
-"w": "someone",
-"s": 46.419,
-"e": 47.211
-},
-{
-"line": 12,
-"speaker": "nar",
-"w": "knocks.",
-"s": 47.191,
-"e": 47.655
-},
-{
-"line": 13,
-"speaker": "nar",
-"w": "Day",
-"s": 49.055,
-"e": 49.377
-},
-{
-"line": 13,
-"speaker": "nar",
-"w": "thirty.",
-"s": 49.357,
-"e": 49.902
-},
-{
-"line": 13,
-"speaker": "nar",
-"w": "You",
-"s": 49.882,
-"e": 50.204
-},
-{
-"line": 13,
-"speaker": "nar",
-"w": "check",
-"s": 50.184,
-"e": 50.506
-},
-{
-"line": 13,
-"speaker": "nar",
-"w": "tomorrow.",
-"s": 50.486,
-"e": 51.255
-},
-{
-"line": 14,
-"speaker": "nar",
+"line": 1,
+"speaker": "phone",
 "w": "The",
-"s": 51.655,
-"e": 52.005
+"s": 4.76,
+"e": 5.149
 },
 {
-"line": 14,
-"speaker": "nar",
-"w": "screen",
-"s": 51.985,
-"e": 52.335
+"line": 1,
+"speaker": "phone",
+"w": "man",
+"s": 5.129,
+"e": 5.519
 },
 {
-"line": 14,
-"speaker": "nar",
-"w": "is",
-"s": 52.315,
-"e": 52.665
+"line": 1,
+"speaker": "phone",
+"w": "in",
+"s": 5.499,
+"e": 5.889
 },
 {
-"line": 14,
-"speaker": "nar",
-"w": "black.",
-"s": 52.645,
-"e": 52.995
-},
-{
-"line": 15,
-"speaker": "nar",
-"w": "And",
-"s": 54.03,
-"e": 54.333
-},
-{
-"line": 15,
-"speaker": "nar",
-"w": "this",
-"s": 54.313,
-"e": 54.616
-},
-{
-"line": 15,
-"speaker": "nar",
-"w": "isn't",
-"s": 54.596,
-"e": 54.899
-},
-{
-"line": 15,
-"speaker": "nar",
-"w": "all",
-"s": 54.879,
-"e": 55.182
-},
-{
-"line": 15,
-"speaker": "nar",
-"w": "fiction.",
-"s": 55.162,
-"e": 55.674
-},
-{
-"line": 15,
-"speaker": "nar",
-"w": "Google",
-"s": 55.654,
-"e": 56.167
-},
-{
-"line": 15,
-"speaker": "nar",
-"w": "DeepMind's",
-"s": 56.147,
-"e": 56.659
-},
-{
-"line": 15,
-"speaker": "nar",
-"w": "AI",
-"s": 56.639,
-"e": 56.942
-},
-{
-"line": 15,
-"speaker": "nar",
-"w": "already",
-"s": 56.922,
-"e": 57.644
-},
-{
-"line": 15,
-"speaker": "nar",
-"w": "forecasts",
-"s": 57.624,
-"e": 58.346
-},
-{
-"line": 15,
-"speaker": "nar",
+"line": 1,
+"speaker": "phone",
 "w": "the",
-"s": 58.326,
-"e": 58.629
+"s": 5.869,
+"e": 6.258
 },
 {
-"line": 15,
-"speaker": "nar",
-"w": "weather",
-"s": 58.609,
-"e": 59.122
+"line": 1,
+"speaker": "phone",
+"w": "grey",
+"s": 6.238,
+"e": 6.628
 },
 {
-"line": 15,
-"speaker": "nar",
-"w": "ten",
-"s": 59.102,
-"e": 59.405
+"line": 1,
+"speaker": "phone",
+"w": "coat",
+"s": 6.608,
+"e": 6.997
 },
 {
-"line": 15,
-"speaker": "nar",
-"w": "days",
-"s": 59.385,
-"e": 59.688
+"line": 1,
+"speaker": "phone",
+"w": "drops",
+"s": 6.977,
+"e": 7.367
 },
 {
-"line": 15,
-"speaker": "nar",
-"w": "ahead.",
-"s": 59.668,
-"e": 60.18
+"line": 1,
+"speaker": "phone",
+"w": "his",
+"s": 7.347,
+"e": 7.737
 },
 {
-"line": 16,
-"speaker": "nar",
-"w": "Would",
-"s": 60.8,
-"e": 61.138
+"line": 1,
+"speaker": "phone",
+"w": "coffee.",
+"s": 7.717,
+"e": 8.38
 },
 {
-"line": 16,
-"speaker": "nar",
+"line": 2,
+"speaker": "alex",
+"w": "Tomorrow?",
+"s": 8.675,
+"e": 9.508
+},
+{
+"line": 2,
+"speaker": "alex",
+"w": "That's",
+"s": 9.488,
+"e": 9.835
+},
+{
+"line": 2,
+"speaker": "alex",
+"w": "not",
+"s": 9.815,
+"e": 10.162
+},
+{
+"line": 2,
+"speaker": "alex",
+"w": "possible.",
+"s": 10.142,
+"e": 10.975
+},
+{
+"line": 3,
+"speaker": "alex",
+"w": "It's",
+"s": 13.875,
+"e": 14.505
+},
+{
+"line": 3,
+"speaker": "alex",
+"w": "real.",
+"s": 14.485,
+"e": 15.115
+},
+{
+"line": 4,
+"speaker": "jay",
+"w": "Bro,",
+"s": 16.94,
+"e": 17.207
+},
+{
+"line": 4,
+"speaker": "jay",
 "w": "you",
-"s": 61.118,
-"e": 61.455
+"s": 17.187,
+"e": 17.453
 },
 {
-"line": 16,
-"speaker": "nar",
-"w": "look",
-"s": 61.435,
-"e": 61.773
+"line": 4,
+"speaker": "jay",
+"w": "put",
+"s": 17.433,
+"e": 17.7
 },
 {
-"line": 16,
-"speaker": "nar",
-"w": "at",
-"s": 61.753,
-"e": 62.091
+"line": 4,
+"speaker": "jay",
+"w": "everything",
+"s": 17.68,
+"e": 18.495
 },
 {
-"line": 16,
-"speaker": "nar",
-"w": "tomorrow?",
-"s": 62.071,
-"e": 62.879
+"line": 4,
+"speaker": "jay",
+"w": "on",
+"s": 18.475,
+"e": 18.741
 },
 {
-"line": 16,
-"speaker": "nar",
-"w": "Follow",
-"s": 62.859,
-"e": 63.432
+"line": 4,
+"speaker": "jay",
+"w": "one",
+"s": 18.721,
+"e": 19.171
 },
 {
-"line": 16,
-"speaker": "nar",
-"w": "for",
-"s": 63.412,
-"e": 63.749
+"line": 4,
+"speaker": "jay",
+"w": "number?!",
+"s": 19.151,
+"e": 19.6
 },
 {
-"line": 16,
-"speaker": "nar",
+"line": 5,
+"speaker": "alex",
+"w": "Black",
+"s": 20.22,
+"e": 20.579
+},
+{
+"line": 5,
+"speaker": "alex",
+"w": "17.",
+"s": 20.559,
+"e": 21.421
+},
+{
+"line": 5,
+"speaker": "alex",
+"w": "Trust",
+"s": 21.401,
+"e": 21.761
+},
+{
+"line": 5,
+"speaker": "alex",
+"w": "me.",
+"s": 21.741,
+"e": 22.1
+},
+{
+"line": 6,
+"speaker": "dealer",
+"w": "No",
+"s": 22.78,
+"e": 23.167
+},
+{
+"line": 6,
+"speaker": "dealer",
 "w": "more",
-"s": 63.729,
-"e": 64.067
+"s": 23.147,
+"e": 23.533
+},
+{
+"line": 6,
+"speaker": "dealer",
+"w": "bets.",
+"s": 23.513,
+"e": 23.9
+},
+{
+"line": 7,
+"speaker": "jay",
+"w": "$2,000,000!",
+"s": 27.78,
+"e": 29.68
+},
+{
+"line": 7,
+"speaker": "jay",
+"w": "How?!",
+"s": 29.66,
+"e": 30.1
+},
+{
+"line": 8,
+"speaker": "alex",
+"w": "Lucky",
+"s": 31.03,
+"e": 31.596
+},
+{
+"line": 8,
+"speaker": "alex",
+"w": "guess.",
+"s": 31.576,
+"e": 31.91
+},
+{
+"line": 9,
+"speaker": "phone",
+"w": "Tomorrow.",
+"s": 34.005,
+"e": 35.055
+},
+{
+"line": 9,
+"speaker": "phone",
+"w": "12",
+"s": 35.035,
+"e": 35.471
+},
+{
+"line": 9,
+"speaker": "phone",
+"w": "PM.",
+"s": 35.451,
+"e": 35.886
+},
+{
+"line": 9,
+"speaker": "phone",
+"w": "The",
+"s": 35.866,
+"e": 36.301
+},
+{
+"line": 9,
+"speaker": "phone",
+"w": "bridge",
+"s": 36.281,
+"e": 36.716
+},
+{
+"line": 9,
+"speaker": "phone",
+"w": "collapses.",
+"s": 36.696,
+"e": 37.747
+},
+{
+"line": 9,
+"speaker": "phone",
+"w": "14",
+"s": 37.727,
+"e": 38.469
+},
+{
+"line": 9,
+"speaker": "phone",
+"w": "cars",
+"s": 38.449,
+"e": 38.885
+},
+{
+"line": 9,
+"speaker": "phone",
+"w": "on",
+"s": 38.865,
+"e": 39.3
+},
+{
+"line": 9,
+"speaker": "phone",
+"w": "it.",
+"s": 39.28,
+"e": 39.715
+},
+{
+"line": 10,
+"speaker": "driver",
+"w": "Get",
+"s": 40.955,
+"e": 41.185
+},
+{
+"line": 10,
+"speaker": "driver",
+"w": "out",
+"s": 41.165,
+"e": 41.395
+},
+{
+"line": 10,
+"speaker": "driver",
+"w": "of",
+"s": 41.375,
+"e": 41.605
+},
+{
+"line": 10,
+"speaker": "driver",
+"w": "the",
+"s": 41.585,
+"e": 41.815
+},
+{
+"line": 10,
+"speaker": "driver",
+"w": "road,",
+"s": 41.795,
+"e": 42.025
+},
+{
+"line": 10,
+"speaker": "driver",
+"w": "man!",
+"s": 42.005,
+"e": 42.235
+},
+{
+"line": 11,
+"speaker": "alex",
+"w": "Turn",
+"s": 42.845,
+"e": 43.152
+},
+{
+"line": 11,
+"speaker": "alex",
+"w": "around!",
+"s": 43.132,
+"e": 43.651
+},
+{
+"line": 11,
+"speaker": "alex",
+"w": "The",
+"s": 43.631,
+"e": 43.938
+},
+{
+"line": 11,
+"speaker": "alex",
+"w": "bridge",
+"s": 43.918,
+"e": 44.225
+},
+{
+"line": 11,
+"speaker": "alex",
+"w": "is",
+"s": 44.205,
+"e": 44.511
+},
+{
+"line": 11,
+"speaker": "alex",
+"w": "going",
+"s": 44.491,
+"e": 44.798
+},
+{
+"line": 11,
+"speaker": "alex",
+"w": "down!",
+"s": 44.778,
+"e": 45.085
+},
+{
+"line": 12,
+"speaker": "driver",
+"w": "How",
+"s": 48.995,
+"e": 49.205
+},
+{
+"line": 12,
+"speaker": "driver",
+"w": "did",
+"s": 49.185,
+"e": 49.395
+},
+{
+"line": 12,
+"speaker": "driver",
+"w": "you",
+"s": 49.375,
+"e": 49.585
+},
+{
+"line": 12,
+"speaker": "driver",
+"w": "know?",
+"s": 49.565,
+"e": 49.775
+},
+{
+"line": 13,
+"speaker": "alex",
+"w": "A",
+"s": 50.975,
+"e": 51.47
+},
+{
+"line": 13,
+"speaker": "alex",
+"w": "message...",
+"s": 51.45,
+"e": 52.296
+},
+{
+"line": 13,
+"speaker": "alex",
+"w": "from",
+"s": 52.276,
+"e": 52.77
+},
+{
+"line": 13,
+"speaker": "alex",
+"w": "me?",
+"s": 52.75,
+"e": 53.245
+},
+{
+"line": 14,
+"speaker": "jay",
+"w": "Alex?",
+"s": 54.82,
+"e": 55.364
+},
+{
+"line": 14,
+"speaker": "jay",
+"w": "It's",
+"s": 55.344,
+"e": 55.664
+},
+{
+"line": 14,
+"speaker": "jay",
+"w": "me.",
+"s": 55.644,
+"e": 55.965
+},
+{
+"line": 14,
+"speaker": "jay",
+"w": "Open",
+"s": 55.945,
+"e": 56.489
+},
+{
+"line": 14,
+"speaker": "jay",
+"w": "the",
+"s": 56.469,
+"e": 56.789
+},
+{
+"line": 14,
+"speaker": "jay",
+"w": "door.",
+"s": 56.769,
+"e": 57.09
+},
+{
+"line": 15,
+"speaker": "alex",
+"w": "Show",
+"s": 59.88,
+"e": 60.121
+},
+{
+"line": 15,
+"speaker": "alex",
+"w": "me",
+"s": 60.101,
+"e": 60.342
+},
+{
+"line": 15,
+"speaker": "alex",
+"w": "tomorrow.",
+"s": 60.322,
+"e": 60.89
 },
 {
 "line": 16,
-"speaker": "nar",
+"speaker": "phone",
+"w": "There",
+"s": 61.85,
+"e": 62.145
+},
+{
+"line": 16,
+"speaker": "phone",
+"w": "is",
+"s": 62.125,
+"e": 62.421
+},
+{
+"line": 16,
+"speaker": "phone",
+"w": "no",
+"s": 62.401,
+"e": 62.696
+},
+{
+"line": 16,
+"speaker": "phone",
+"w": "tomorrow.",
+"s": 62.676,
+"e": 63.38
+},
+{
+"line": 17,
+"speaker": "phone",
+"w": "Would",
+"s": 65.66,
+"e": 66.08
+},
+{
+"line": 17,
+"speaker": "phone",
+"w": "you",
+"s": 66.06,
+"e": 66.479
+},
+{
+"line": 17,
+"speaker": "phone",
+"w": "look?",
+"s": 66.459,
+"e": 66.879
+},
+{
+"line": 17,
+"speaker": "phone",
+"w": "Follow",
+"s": 66.859,
+"e": 67.575
+},
+{
+"line": 17,
+"speaker": "phone",
+"w": "for",
+"s": 67.555,
+"e": 67.975
+},
+{
+"line": 17,
+"speaker": "phone",
+"w": "more",
+"s": 67.955,
+"e": 68.374
+},
+{
+"line": 17,
+"speaker": "phone",
 "w": "what-ifs.",
-"s": 64.047,
-"e": 64.62
+"s": 68.354,
+"e": 69.07
 }
 ]
