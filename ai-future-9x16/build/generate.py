@@ -145,7 +145,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0B0A1
 #title .t2 { display: block; font: 700 104px/1.12 "Garamond"; color: #F2C94C; }
 #hud { position: absolute; left: 72px; top: 960px; color: #FFFDF6; }
 #hud .h-place { display: block; font: 800 40px/1 "Manrope"; letter-spacing: 3px; }
-#hud .lab { display: block; margin-top: 16px; font: 800 19px/1 "Manrope"; letter-spacing: 4px; color: rgba(255,253,246,.8); }
+#hud .lab { display: block; margin-top: 14px; font: 800 28px/1 "Manrope"; letter-spacing: 3px; color: rgba(255,253,246,.85); }
 #hud .h-row { display: block; margin-top: 6px; font: 600 54px/1 "Garamond"; }
 #hud .h-row small { font-size: 30px; color: rgba(255,253,246,.75); }
 #hud .h-c { display: inline-block; color: #F2C94C; font-weight: 700; }
@@ -167,7 +167,7 @@ def main():
     ui = ('<div id="title" class="shadow"><span class="t1">What if your phone</span><span class="t1">could see</span>'
           '<span class="t2">24 hours</span><span class="t3">into the future?</span></div>'
           '<div id="hud" class="shadow"><span class="h-place">NEW YORK</span><span class="lab">DAY</span>'
-          '<span class="h-row"><span class="h-day">1</span> <small>/ 30</small></span><span class="lab">PREDICTIONS RIGHT</span>'
+          '<span class="h-row"><span class="h-day">1</span> <small>/ 30</small></span><span class="lab">CORRECT</span>'
           '<span class="h-row"><span class="h-c">0</span></span></div>'
           '<div id="endc" class="shadow"><span class="e1">What if your phone could see <b>24 hours</b> into the future?</span>'
           '<span class="e2">Would you look?</span>'
@@ -184,7 +184,7 @@ def main():
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="30" data-width="1080" data-height="1920">
-      <canvas id="gl" class="clip" data-start="0" data-duration="{DUR}" data-track-index="0"></canvas>
+      <canvas id="gl" class="clip" data-hold data-start="0" data-duration="{DUR}" data-track-index="0"></canvas>
       <div id="ui" class="clip" data-start="0" data-duration="{DUR}" data-track-index="3" data-layout-allow-overflow>{ui}</div>
       <div id="caps" class="clip" data-start="0" data-duration="{DUR}" data-track-index="4">{caps}</div>
       <audio id="mix" src="assets/audio/{mix}" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
