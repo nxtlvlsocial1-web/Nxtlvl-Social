@@ -87,7 +87,7 @@ FINAL = HEAD + """    <div id="root" data-composition-id="cover" data-start="0" 
           <div class="chip"><i>&#10003;</i><span>DAY 1 &middot; 9:14 AM<small>the coffee drops</small></span></div>
           <div class="chip"><i>&#10003;</i><span>DAY 4 &middot; LAS VEGAS<small>black 17</small></span></div>
           <div class="chip"><i>&#10003;</i><span>DAY 12 &middot; NOON<small>the bridge falls</small></span></div>
-          <div class="chip q"><i>?</i><span>DAY 30<small>the screen goes black</small></span></div>
+          <div class="chip q"><i>?</i><span>DAY 30<small>there is no tomorrow</small></span></div>
         </div>
       </div>
     </div>
