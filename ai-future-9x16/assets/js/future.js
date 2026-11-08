@@ -384,12 +384,12 @@ const phScr = new THREE.Mesh(new THREE.PlaneGeometry(.0715, .1545), phScrM); phS
 const phGlass = new THREE.Mesh(new THREE.PlaneGeometry(.0715, .1545), new THREE.MeshPhysicalMaterial({ color: 0xffffff, transparent: true, opacity: .07, roughness: .05, envMap: ENV, envMapIntensity: 1.2, depthWrite: false }));
 phGlass.position.z = .0052;
 const LH = { g: new THREE.Group() }; PHONE.add(LH.g);
-hmesh(.09, .1, .036, handM, LH.g, .004, -.045, -.026);                        // palm behind the phone
+hmesh(.064, .1, .034, handM, LH.g, .006, -.05, -.024);                        // palm behind the phone
 for (let k = 0; k < 3; k++) hmesh(.012, .018, .026, handM, LH.g, .044, -.025 - k * .024, -.012);   // fingertips round the right edge
 hmesh(.014, .042, .022, handM, LH.g, -.044, -.05, -.008).rotation.z = .25;    // thumb on the left edge
-hmesh(.1, .032, .06, cuffM, LH.g, .004, -.105, -.026);
+hmesh(.08, .032, .056, cuffM, LH.g, .006, -.11, -.024);
 const lArm = new THREE.Group(); lArm.position.set(.004, -.115, -.026); lArm.rotation.x = .55; LH.g.add(lArm);
-hmesh(.1, .7, .058, sleeveM, lArm, 0, -.35, 0);
+hmesh(.086, .7, .054, sleeveM, lArm, 0, -.35, 0);
 // poses in camera space: the phone (p*) and the free right hand (r*); f = finger curl
 const HP = {
   phDown: { px: -.17, py: -.42, pz: -.36, prx: -.5, pry: .25, prz: .15 },

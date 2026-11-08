@@ -1,14 +1,13 @@
-"""The reel cover (1080x1920 PNG): the whole month in one frame. Two voxel plates split on a diagonal: 3 AM on the left
-(you asleep while the AI closer, dollar signs in its eyes, takes the orders), day 30 on the right (golden hour, the
-stranger it turned away comes back), under the hook headline, with a four-stop timeline. Everything that matters sits
-inside the 3:4 profile-grid crop (y 240-1680).
+"""The reel cover (1080x1920 PNG): your hand holding the phone on the New York street, the screen showing tomorrow
+(9:14 AM, a man drops his coffee), the man himself behind it, under the serif hook, with four prediction chips that end on
+the black screen. Everything that matters sits inside the 3:4 profile-grid crop (y 240-1680).
 
 python3 build/cover.py      (after build/generate.py; needs npx and the HyperFrames CLI)
-  1. renders each plate: writes cover/index.html with window.CLOSER_COVER (the reel's time, a pinned camera) and no
-     overlays, snapshots it, keeps the PNG in cover/assets/plates/
-  2. writes the final cover/index.html (the two plates, the diagonal, the cards), snapshots it and copies the PNG to
-     renders/nxtlvl_ai-closer_reels_9x16_cover.png
-cover/assets is a copy of the reel's assets plus the plates (git-ignored), because a project only serves its own folder.
+  1. renders the plate: writes cover/index.html with window.FUTURE_COVER (the reel's time) and no overlays, snapshots
+     it, keeps the PNG in cover/assets/plates/
+  2. writes the final cover/index.html (the plate, a shade, the headline, the chips), snapshots it and copies the PNG to
+     renders/nxtlvl_ai-future_reels_9x16_cover.png
+cover/assets is a copy of the reel's assets plus the plate (git-ignored), because a project only serves its own folder.
 """
 import glob
 import json
@@ -22,51 +21,37 @@ OUT = os.path.join(ROOT, "cover")
 T = json.load(open(os.path.join(ROOT, "build", "cues.json")))
 CLI = ["npx", "--yes", "hyperframes@0.8.203"]
 
-PLATES = {"night": (4.55, {"cam": [6.5, 2.1, 6.0], "look": [1.75, 1.8, -3.9], "fov": 40, "ap": .3}),
-          "gold": (49.6, {"cam": [-4.2, 1.9, 18.3], "look": [.75, 2.0, 8.4], "fov": 40, "ap": .3})}
+PLATES = {"street": (round((T["tomorrow1"] + T["l"][2]) / 2 + .4, 2), {"ap": .16})}
 
 HEAD = """<!doctype html>
 <html lang="en" data-resolution="portrait">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>AI Closer cover</title>
+    <title>AI Future cover</title>
     <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
+@font-face { font-family: "Garamond"; font-weight: 400 800; src: url("assets/fonts/EBGaramond.ttf"); }
+@font-face { font-family: "Garamond"; font-style: italic; font-weight: 400 800; src: url("assets/fonts/EBGaramond-Italic.ttf"); }
 @font-face { font-family: "Manrope"; font-weight: 200 800; src: url("assets/fonts/manrope.ttf"); }
-@font-face { font-family: "Serif"; font-style: italic; src: url("assets/fonts/InstrumentSerif-Italic.ttf"); }
-@font-face { font-family: "JBMono"; font-weight: 700; src: url("assets/fonts/jbmono-bold.ttf"); }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 1080px; height: 1920px; overflow: hidden; background: #F1E9DC; }
-#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #F1E9DC; color: #1E1B18; font-family: "Manrope", sans-serif; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0B0A12; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0B0A12; color: #FFFDF6; }
 .clip { position: absolute; inset: 0; }
 #gl { width: 1080px; height: 1920px; display: block; }
-.mono { font-family: "JBMono", monospace; font-weight: 700; }
 .plate { position: absolute; inset: 0; width: 1080px; height: 1920px; }
-.finish { clip-path: polygon(640px 0, 1080px 0, 1080px 1920px, 400px 1920px); }
-.top { position: absolute; left: 60px; right: 60px; top: 262px; display: flex; justify-content: space-between; align-items: center;
-  font-size: 28px; letter-spacing: 4px; }
-.pill { padding: 10px 20px; border-radius: 28px; background: #FFFDF8; border: 3px solid #1E1B18; display: flex; align-items: center; gap: 12px; }
-.pill i { width: 16px; height: 16px; border-radius: 50%; background: #E8735A; }
-.pill.w { color: #A8452F; }
-.card { position: absolute; left: 60px; right: 60px; top: 340px; padding: 28px 34px 32px; border-radius: 34px; background: #FFFDF8;
-  border: 3px solid #1E1B18; box-shadow: 10px 11px 0 #1E1B18; text-align: center; }
-.card b { display: block; font: 800 92px/1.0 "Manrope"; letter-spacing: -3.5px; }
-.card em { display: block; margin-top: 12px; font: italic 70px/1 "Serif"; color: #D45C40; }
-.tag { position: absolute; padding: 12px 22px; border-radius: 24px; background: #FFFDF8; border: 3px solid #1E1B18; box-shadow: 6px 7px 0 #1E1B18;
-  font-size: 28px; letter-spacing: 2px; display: flex; align-items: center; gap: 12px; white-space: nowrap; }
-.tag i { width: 22px; height: 22px; border-radius: 50%; border: 3px solid #1E1B18; }
-.tag.ok { left: 60px; top: 728px; color: #3FA372; border-color: #3FA372; box-shadow: 6px 7px 0 #3FA372; } .tag.ok i { background: #3FA372; border-color: #3FA372; }
-.tag.bad { right: 60px; top: 1250px; color: #D9483B; border-color: #D9483B; box-shadow: 6px 7px 0 #D9483B; } .tag.bad i { background: #D9483B; border-color: #D9483B; }
-.tl { position: absolute; left: 50px; right: 50px; top: 1468px; padding: 20px 20px 22px; border-radius: 30px; background: #FFFDF8;
-  border: 3px solid #1E1B18; box-shadow: 8px 9px 0 #1E1B18; display: flex; justify-content: space-between; }
-.st { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; position: relative; }
-.st + .st::before { content: ""; position: absolute; left: -2px; top: 6px; bottom: 6px; width: 2px; background: #E4D9C7; }
-.st i { width: 26px; height: 26px; border-radius: 50%; border: 3px solid #1E1B18; }
-.st .h { font-size: 28px; letter-spacing: 1px; }
-.st .d { font: 700 24px/1.15 "Manrope"; color: #3a3530; }
-.st.g i { background: #3FA372; } .st.r i { background: #D9483B; } .st.r .h { color: #D9483B; } .st.b i { background: #3A7BD5; } .st.y i { background: #F2B33D; }
+.shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,8,14,.88) 0%, rgba(8,8,14,.62) 24%, rgba(8,8,14,0) 36%, rgba(8,8,14,0) 66%, rgba(8,8,14,.78) 78%, rgba(8,8,14,.9) 100%); }
+.head { position: absolute; left: 60px; right: 60px; top: 262px; text-align: center; text-shadow: 0 4px 20px rgba(0,0,0,.6); }
+.head .k { display: block; font: 800 26px/1 "Manrope"; letter-spacing: 7px; color: rgba(255,253,246,.85); }
+.head b { display: block; margin-top: 18px; font: 500 78px/1.04 "Garamond"; letter-spacing: -.5px; }
+.head b span { color: #F2C94C; font-weight: 700; }
+.chips { position: absolute; left: 50px; right: 50px; top: 1430px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.chip { padding: 18px 22px; border-radius: 22px; background: rgba(16,18,28,.82); border: 2px solid rgba(255,253,246,.22); display: flex; align-items: center; gap: 16px; }
+.chip i { flex: none; width: 46px; height: 46px; border-radius: 50%; background: #3FA372; color: #fff; font: 800 28px/46px "Manrope"; text-align: center; font-style: normal; }
+.chip.q i { background: #C8372D; }
+.chip span { font: 800 22px/1.15 "Manrope"; letter-spacing: 1px; }
+.chip span small { display: block; font: italic 500 30px/1.1 "Garamond"; letter-spacing: 0; color: rgba(255,253,246,.85); }
     </style>
   </head>
   <body>
@@ -79,13 +64,13 @@ def plate_html(t, cam):
     </div>
     <script>
       window.CT = {json.dumps(T)};
-      window.CLOSER_COVER = {json.dumps({"t": t, **cam})};
+      window.FUTURE_COVER = {json.dumps({"t": t, **cam})};
       window.__timelines = window.__timelines || {{}};
       const tl = gsap.timeline({{ paused: true }});
       tl.set({{}}, {{}}, 1);
       window.__timelines["cover"] = tl;
     </script>
-    <script type="module" src="assets/js/closer.js"></script>
+    <script type="module" src="assets/js/future.js"></script>
   </body>
 </html>
 """
@@ -93,22 +78,17 @@ def plate_html(t, cam):
 
 FINAL = HEAD + """    <div id="root" data-composition-id="cover" data-start="0" data-duration="1" data-fps="30" data-width="1080" data-height="1920">
       <div class="clip" data-start="0" data-duration="1" data-track-index="0">
-        <img class="plate" src="assets/plates/night.png" alt="" />
-        <img class="plate finish" src="assets/plates/gold.png" alt="" />
-        <svg class="plate" viewBox="0 0 1080 1920"><line x1="640" y1="0" x2="400" y2="1920" stroke="#FFFDF8" stroke-width="12"/>
-          <line x1="640" y1="0" x2="400" y2="1920" stroke="#1E1B18" stroke-width="4"/></svg>
+        <img class="plate" src="assets/plates/street.png" alt="" />
+        <div class="shade"></div>
       </div>
       <div class="clip" data-start="0" data-duration="1" data-track-index="1">
-        <div class="top mono"><span class="pill"><i></i>NXTLVLSOCIAL.AI</span><span class="pill w">WHAT IF</span></div>
-        <div class="card"><b>Every DM turned into a sale on autopilot</b><em>then it said no to $497</em></div>
-        <div class="tag ok mono"><i></i>3 AM &middot; 7 SALES WHILE YOU SLEPT</div>
-        <div class="tag bad mono"><i></i>DAY 30 &middot; 212 SALES, 0 CALLS</div>
-        <div class="tl">
-          <div class="st g"><i></i><span class="h mono">DAY 1</span><span class="d">replied in<br />2 seconds</span></div>
-          <div class="st y"><i></i><span class="h mono">DAY 4</span><span class="d">&ldquo;too expensive&rdquo;<br />sold in 9 min</span></div>
-          <div class="st b"><i></i><span class="h mono">DAY 10</span><span class="d">half came<br />back</span></div>
-          <div class="st r"><i></i><span class="h mono">DAY 18</span><span class="d">it said<br />no</span></div>
-        </div></div>
+        <div class="head"><span class="k">WHAT IF</span><b>your phone could see <span>24&nbsp;hours</span> into the future?</b></div>
+        <div class="chips">
+          <div class="chip"><i>&#10003;</i><span>DAY 1 &middot; 9:14 AM<small>the coffee drops</small></span></div>
+          <div class="chip"><i>&#10003;</i><span>DAY 4 &middot; LAS VEGAS<small>black 17</small></span></div>
+          <div class="chip"><i>&#10003;</i><span>DAY 12 &middot; NOON<small>the bridge falls</small></span></div>
+          <div class="chip q"><i>?</i><span>DAY 30<small>the screen goes black</small></span></div>
+        </div>
       </div>
     </div>
     <script>
@@ -144,7 +124,7 @@ def main():
         snap(os.path.join(dst, "plates", name + ".png"))
         print("plate", name, "at t =", t)
     open(html, "w", encoding="utf-8", newline="\n").write(FINAL)
-    out = os.path.join(ROOT, "renders", "nxtlvl_ai-closer_reels_9x16_cover.png")
+    out = os.path.join(ROOT, "renders", "nxtlvl_ai-future_reels_9x16_cover.png")
     snap(out)
     print("wrote", out)
 
