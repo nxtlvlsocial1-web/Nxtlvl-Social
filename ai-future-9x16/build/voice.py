@@ -25,10 +25,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 V = os.path.join(ROOT, "voice")
 CACHE = os.path.expanduser("~/.cache/hyperframes/tts")
 SR = 48000
-LEAD = 2.4
+LEAD = 3.4
 LINE_GAP = .22
 MUFFLE = {"14"}      # heard through the apartment door
-GAP_AFTER = {"02": 2.6, "03": .7, "04": .25, "05": .35, "06": 2.2, "07": .3, "08": .8, "09": .9, "10": .2, "11": 2.8, "12": .9, "13": 1.3, "14": 2.4, "15": .5, "16": 1.4}   # the cinematic beats between lines
+GAP_AFTER = {"01": .6, "02": 7.4, "03": 3.2, "04": .3, "05": 2.0, "06": 7.0, "07": .5, "08": 3.4, "09": 2.4, "10": .3, "11": 7.4, "12": 3.4, "13": 2.4, "14": 4.6, "15": 1.6, "16": 5.8}   # the cinematic beats between lines
 VOICES = {"nar": "am_onyx"}
 # emotion -> (speed, semitones, gain dB)
 EMO = {"panic": (1.08, .4, 1.0), "dry": (.92, -.3, 0), "whine": (1.02, .5, .5), "calm": (.98, 0, 0), "surprised": (1.04, .5, 1.0),

@@ -38,7 +38,12 @@ T = {
     "follow": word(17, "follow"), "look": word(17, "look"),
     "end": DUR,
 }
-T["cuts"] = [round(L[3] - .35, 3), round(L[8] - .45, 3), round(L[12] - .5, 3), round(L[14] - .45, 3), round(E[15] + 1.0, 3)]
+T["cuts"] = [round(E[2] + 1.1, 3), round(E[7] + 1.0, 3), round(E[11] + 1.2, 3), round(E[13] + 2.6, 3), round(E[15] + 4.8, 3)]
+# story beats the 3D and the mix share: LED flip, cup release, ball lands, rogue cars go, span falls, lights die
+T["led"], T["tr"] = round(E[1] + 3.4, 3), round(E[1] + 4.6, 3)
+T["tl"] = round(E[5] + 4.6, 3)
+T["rog"], T["tc"] = round(E[9] + .4, 3), round(E[10] + 3.8, 3)
+T["out"] = round(E[15] + 4.2, 3)
 T["who"] = WHO
 T["lines"] = [{"s": ln["start"], "e": ln["end"]} for ln in LINES]
 CU = T["cuts"]
@@ -62,7 +67,7 @@ def setText(sel, txt, t):
 
 
 # the tracker: place and day
-HUD = [(L[0] - .3, "NEW YORK", "1"), (CU[0], "LAS VEGAS", "4"), (CU[1], "MIAMI", "12"), (CU[2], "HOME", "21"), (CU[3], "HOME", "30")]
+HUD = [(2.5, "NEW YORK", "1"), (CU[0], "LAS VEGAS", "4"), (CU[1], "MIAMI", "12"), (CU[2], "HOME", "21"), (CU[3], "HOME", "30")]
 NAMES = {"alex": "ALEX", "jay": "JAY", "phone": "THE PHONE", "dealer": "DEALER", "driver": "DRIVER"}
 
 
@@ -72,18 +77,24 @@ def story():
     show(".t1", .05, .4, "opacity:0,y:18")
     show(".t2", .35, .45, "opacity:0,scale:.9", "opacity:1,scale:1")
     show(".t3", .7, .4, "opacity:0,y:18")
-    hide("#title", L[0] - .45, .4, "opacity:0,y:-30")
+    hide("#title", 2.05, .35, "opacity:0,y:-30")
     # the tracker
-    show("#hud", L[0] - .3, .4, "opacity:0,x:-30", "opacity:1,x:0")
+    show("#hud", 2.5, .4, "opacity:0,x:-30", "opacity:1,x:0")
+    # a chapter card at the start of every day
+    for k, (t0, place, day) in enumerate(HUD):
+        cid = f"#ch{k}"
+        show(cid, t0 + .15, .45, "opacity:0,scale:1.08", "opacity:1,scale:1")
+        hide(cid, t0 + 1.9, .45, "opacity:0,y:-16")
     for k, (t0, place, day) in enumerate(HUD):
         setText(".h-place", place, t0); setText(".h-day", day, t0)
         if k:
             add(f'tl.fromTo("#hud",{{opacity:.15}},{{opacity:1,duration:.5,immediateRender:false}},{t0 + .02:.3f});')
     add(f'tl.fromTo("#hud .h-day",{{color:"#FFFDF6"}},{{color:"#E8473B",duration:.3,immediateRender:false}},{E[15] - .25:.3f});')
     hide("#hud", CU[4] - .1, .4, "opacity:0,x:-30")
-    # the next day
-    show("#stamp", E[1] + .25, .35, "opacity:0,y:-10")
-    hide("#stamp", E[1] + 1.35, .3)
+    # time stamps: the next day in New York, the minutes before noon in Miami
+    for sid, a, b in (("#st0", E[1] + .4, E[1] + 2.4), ("#st1", E[8] + .3, E[8] + 2.2), ("#st2", T["tc"] - 1.3, T["tc"] + .5)):
+        show(sid, a, .35, "opacity:0,y:-10")
+        hide(sid, b, .3)
     # the end card: the title again, the question, the follow prompt
     show("#endc", CU[4] + .25, .6, "opacity:0", "opacity:1")
     show(".e1", CU[4] + .35, .5, "opacity:0,y:18")
@@ -126,7 +137,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0B0A1
 .clip { position: absolute; inset: 0; }
 #gl { width: 1080px; height: 1920px; display: block; }
 #ui { z-index: 5; }
-#title, #hud, #endc, .cap, #stamp { opacity: 0; }
+#title, #hud, #endc, .cap, .stamp, .chap { opacity: 0; }
 .shadow { text-shadow: 0 3px 18px rgba(0,0,0,.55), 0 1px 3px rgba(0,0,0,.6); }
 #title { position: absolute; left: 70px; right: 70px; top: 520px; text-align: center; color: #FFFDF6; font-family: "Garamond", serif; }
 #title .t1, #title .t3 { display: block; font: 500 82px/1.1 "Garamond"; letter-spacing: -.5px; }
@@ -141,8 +152,11 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0B0A1
 .cap .who { display: block; margin-bottom: 8px; font: 800 28px/1 "Manrope"; font-style: normal; letter-spacing: 4px; color: rgba(255,253,246,.8); }
 .cap.sp-phone { color: #A8F0FF; } .cap.sp-phone .who { color: #7FE3FF; }
 .cap.sp-jay .who { color: #F2C94C; } .cap.sp-driver .who, .cap.sp-dealer .who { color: #F2B98A; }
-#stamp { position: absolute; left: 0; right: 0; top: 330px; text-align: center; color: #FFFDF6; font: italic 500 64px/1.1 "Garamond"; opacity: 0; }
-#stamp b { display: block; margin-top: 10px; font: 800 30px/1 "Manrope"; letter-spacing: 6px; font-style: normal; color: #F2C94C; }
+.stamp { position: absolute; left: 0; right: 0; top: 330px; text-align: center; color: #FFFDF6; font: italic 500 64px/1.1 "Garamond"; opacity: 0; }
+.chap { position: absolute; left: 0; right: 0; top: 600px; text-align: center; color: #FFFDF6; opacity: 0; }
+.chap .cd { display: block; font: 600 132px/1 "Garamond"; letter-spacing: -1px; }
+.chap .cp { display: block; margin-top: 14px; font: 800 40px/1 "Manrope"; letter-spacing: 12px; color: #F2C94C; }
+.stamp b { display: block; margin-top: 10px; font: 800 30px/1 "Manrope"; letter-spacing: 6px; font-style: normal; color: #F2C94C; }
 #endc { position: absolute; left: 70px; right: 70px; top: 560px; text-align: center; color: #FFFDF6; }
 #endc .e1 { display: block; font: 500 76px/1.12 "Garamond"; }
 #endc .e1 b { color: #F2C94C; font-weight: 700; }
@@ -161,8 +175,11 @@ def main():
           '<span class="t2">24 hours</span><span class="t3">into the future?</span></div>'
           '<div id="hud" class="shadow"><span class="h-place">NEW YORK</span><span class="lab">DAY</span>'
           '<span class="h-row"><span class="h-day">1</span> <small>/ 30</small></span></div>'
-          '<div id="stamp" class="shadow">The next day<b>9:13 AM</b></div>'
-          '<div id="endc" class="shadow"><span class="e1">What if your phone could see <b>24 hours</b> into the future?</span>'
+          '<div id="st0" class="stamp shadow">The next day<b>9:13 AM</b></div>'
+          '<div id="st1" class="stamp shadow">Day 12<b>11:58 AM</b></div>'
+          '<div id="st2" class="stamp shadow">Noon<b>12:00 PM</b></div>'
+          + "".join(f'<div id="ch{k}" class="chap shadow"><span class="cd">Day {d}</span><span class="cp">{p}</span></div>' for k, (_, p, d) in enumerate(HUD))
+          + '<div id="endc" class="shadow"><span class="e1">What if your phone could see <b>24 hours</b> into the future?</span>'
           '<span class="e2">Would you look?</span>'
           '<span class="e3">FOLLOW FOR MORE WHAT-IFS<span>@nxtlvlsocial.ai</span></span></div>')
     html = f"""<!doctype html>

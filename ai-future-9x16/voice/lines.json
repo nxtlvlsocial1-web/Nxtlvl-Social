@@ -1,141 +1,141 @@
 {
- "duration": 69.28,
+ "duration": 104.98,
  "lines": [
   {
    "line": 1,
    "take": "01",
    "speaker": "phone",
    "text": "Tomorrow. 9:14 AM. The man in the grey coat drops his coffee.",
-   "start": 2.4,
-   "end": 8.405
+   "start": 3.4,
+   "end": 9.405
   },
   {
    "line": 2,
    "take": "02",
    "speaker": "alex",
    "text": "Tomorrow? That's not possible.",
-   "start": 8.625,
-   "end": 11.005
+   "start": 10.225,
+   "end": 12.605
   },
   {
    "line": 3,
    "take": "03",
    "speaker": "alex",
    "text": "It's real.",
-   "start": 13.825,
-   "end": 15.97
+   "start": 20.225,
+   "end": 22.37
   },
   {
    "line": 4,
    "take": "04",
    "speaker": "jay",
    "text": "Bro, you put everything on one number?!",
-   "start": 16.89,
-   "end": 19.66
+   "start": 25.79,
+   "end": 28.56
   },
   {
    "line": 5,
    "take": "05",
    "speaker": "alex",
    "text": "Black 17. Trust me.",
-   "start": 20.13,
-   "end": 22.13
+   "start": 29.08,
+   "end": 31.08
   },
   {
    "line": 6,
    "take": "06",
    "speaker": "dealer",
    "text": "No more bets.",
-   "start": 22.7,
-   "end": 25.08
+   "start": 33.3,
+   "end": 35.68
   },
   {
    "line": 7,
    "take": "07",
    "speaker": "jay",
    "text": "$2,000,000! How?!",
-   "start": 27.5,
-   "end": 30.46
+   "start": 42.9,
+   "end": 45.86
   },
   {
    "line": 8,
    "take": "08",
    "speaker": "alex",
    "text": "Lucky guess.",
-   "start": 30.98,
-   "end": 32.925
+   "start": 46.58,
+   "end": 48.525
   },
   {
    "line": 9,
    "take": "09",
    "speaker": "phone",
    "text": "Tomorrow. 12 PM. The bridge collapses. 14 cars on it.",
-   "start": 33.945,
-   "end": 39.785
+   "start": 52.145,
+   "end": 57.985
   },
   {
    "line": 10,
    "take": "10",
    "speaker": "driver",
    "text": "Get out of the road, man!",
-   "start": 40.905,
-   "end": 42.375
+   "start": 60.605,
+   "end": 62.075
   },
   {
    "line": 11,
    "take": "11",
    "speaker": "alex",
    "text": "Turn around! The bridge is going down!",
-   "start": 42.795,
-   "end": 45.105
+   "start": 62.595,
+   "end": 64.905
   },
   {
    "line": 12,
    "take": "12",
    "speaker": "driver",
    "text": "How did you know?",
-   "start": 48.125,
-   "end": 49.805
+   "start": 72.525,
+   "end": 74.205
   },
   {
    "line": 13,
    "take": "13",
    "speaker": "alex",
    "text": "A message... from me?",
-   "start": 50.925,
-   "end": 53.25
+   "start": 77.825,
+   "end": 80.15
   },
   {
    "line": 14,
    "take": "14",
    "speaker": "jay",
    "text": "Alex? It's me. Open the door.",
-   "start": 54.77,
-   "end": 57.2
+   "start": 82.77,
+   "end": 85.2
   },
   {
    "line": 15,
    "take": "15",
    "speaker": "alex",
    "text": "Show me tomorrow.",
-   "start": 59.82,
-   "end": 61.08
+   "start": 90.02,
+   "end": 91.28
   },
   {
    "line": 16,
    "take": "16",
    "speaker": "phone",
    "text": "There is no tomorrow.",
-   "start": 61.8,
-   "end": 63.99
+   "start": 93.1,
+   "end": 95.29
   },
   {
    "line": 17,
    "take": "17",
    "speaker": "phone",
    "text": "Would you look? Follow for more what-ifs.",
-   "start": 65.61,
-   "end": 69.13
+   "start": 101.31,
+   "end": 104.83
   }
  ]
 }

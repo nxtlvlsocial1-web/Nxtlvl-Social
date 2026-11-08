@@ -718,6 +718,8 @@ mkSet("miami");
     if (k < 6) { const P = k === 0 ? makeChar(SP_DRIVER, g) : npc(80 + k, g); P.root.scale.setScalar(.9); P.u = { k }; SET.miami.drivers.push(P); }
   });
   SET.miami.alex = makeChar(SP_ALEX, SET.miami); SET.miami.alex.seed = 1.3;
+  SET.miami.rogue = [0xC8372D, 0xF4F1EA].map((c, k) => { const g = car(c); g.scale.setScalar(1.25); const P = npc(95 + k, g); P.root.scale.setScalar(.9); g.userData.drv = P; return g; });
+  SET.miami.watch = [[5.6, -3.3, 2.5], [6.9, -2.6, 2.4], [8.3, -3.6, 2.55]].map(([x, zz, ry], k) => { const P = npc(100 + k, SET.miami); P.u = { x, z: zz, ry }; return P; });
   SET.miami.peds = [[5.6, 8.6, -2.6], [6.4, 12.4, -2.9], [-5.8, 9.5, 2.7]].map(([x, zz, ry], k) => { const P = npc(90 + k, SET.miami); P.u = { x, z: zz, ry }; return P; });
   for (let j = 0; j < 6; j++) { const c = new THREE.Group(); c.position.set(-3.4 + j * 1.36, 0, 4.2); SET.miami.add(c); box(.5, .06, .5, mat(0x1E1B18), 0, .03, 0, { parent: c }); const cone = new THREE.Mesh(new THREE.ConeGeometry(.22, .8, 12), mat(0xF26B1D)); cone.position.y = .45; cone.castShadow = true; c.add(cone); box(.3, .1, .3, mat(0xF4F1EA), 0, .5, 0, { parent: c }); }
   // rain, a lightning bolt, the splash
@@ -771,6 +773,9 @@ mkSet("apt");
   for (const zz of [-2.6, -2.3]) box(.06, .06, .14, goldM, -3.06, 1.8, zz); box(.5, .9, .2, mat(0x7A2E2E), -2.98, 1.4, -2.45);
   box(.8, .02, .5, mat(0x4A4A4A), 0, .01, -2.55, { cast: false });
   SET.apt.alex = makeChar(SP_ALEX, SET.apt); SET.apt.alex.seed = 1.3;
+  SET.apt.fig = makeChar({ id: "fig", skin: "#08080C", hair: "#08080C", style: "short", top: "#0A0A10", topStyle: "hoodie", pants: "#08080C", shoe: "#050508" }, SET.apt);
+  SET.apt.fig.root.scale.setScalar(1.14);
+  SET.apt.fig.faceM.map = pix(24, 24, (g) => { px(g, "#06060A", 0, 0, 24, 24); px(g, "#CFD8E8", 6, 11, 2, 1); px(g, "#CFD8E8", 16, 11, 2, 1); }); SET.apt.fig.faceM.emissive = new THREE.Color(0xffffff); SET.apt.fig.faceM.emissiveMap = SET.apt.fig.faceM.map; SET.apt.fig.faceM.emissiveIntensity = 1.4; SET.apt.fig.faceM.needsUpdate = true;
   SET.apt.clockM = texMat("clock"); const ck = new THREE.Mesh(new THREE.CircleGeometry(.24, 32), SET.apt.clockM); ck.position.set(0, 2.85, -2.99); SET.apt.add(ck);
 }
 
@@ -813,7 +818,7 @@ const LOOKS = [
   { set: "ny", sky: "ny", fog: 0xE6D6C0, fn: 70, ff: 340, hs: 0xEAF0FF, hg: 0xC9B79A, hi: 1.0, sun: 0xFFE0B4, si: 2.8, sd: [-.5, .62, .6], ext: 46, warm: .3, cool: 0, sat: 1.06, con: .08, vig: .38, night: 0 },
   { set: "vegas", sky: null, bg: 0x0E0809, fog: 0x140A0C, fn: 16, ff: 46, hs: 0xFFD9B0, hg: 0x3A1A12, hi: .5, sun: 0xFFE6C4, si: 1.1, sd: [.25, 1, .35], ext: 12, warm: .22, cool: 0, sat: 1.12, con: .12, vig: .55, night: 0 },
   { set: "miami", sky: "storm", fog: 0x68717A, fn: 50, ff: 320, hs: 0xB4C0CE, hg: 0x4A5058, hi: 1.3, sun: 0xD0DAE6, si: 1.3, sd: [.3, .8, .5], ext: 60, warm: 0, cool: .5, sat: .74, con: .12, vig: .5, night: 0 },
-  { set: "apt", sky: null, bg: 0x05070C, fog: 0x0A0E18, fn: 40, ff: 120, hs: 0x5468A0, hg: 0x1A1A24, hi: .42, sun: 0x9FB8FF, si: 1.0, sd: [-1, .55, .25], ext: 7, warm: 0, cool: .45, sat: .86, con: .12, vig: .6, night: 0 },
+  { set: "apt", sky: null, bg: 0x05070C, fog: 0x0A0E18, fn: 40, ff: 120, hs: 0x5468A0, hg: 0x1A1A24, hi: .42, sun: 0x9FB8FF, si: .55, sd: [-1, .55, .25], ext: 7, warm: 0, cool: .45, sat: .86, con: .12, vig: .6, night: 0 },
   { set: "apt", sky: null, bg: 0x0A0C12, fog: 0x0A0E18, fn: 40, ff: 120, hs: 0x7486A8, hg: 0x2A2A33, hi: .5, sun: 0xBCCBEA, si: .9, sd: [-1, .4, .1], ext: 7, warm: 0, cool: .3, sat: .78, con: .1, vig: .55, night: 0 },
   { set: "ny", sky: "nynight", fog: 0x1A2240, fn: 60, ff: 300, hs: 0x3A4C80, hg: 0x1A1A24, hi: .42, sun: 0x9FB0E0, si: .45, sd: [-.5, .7, .6], ext: 46, warm: .1, cool: .15, sat: 1.0, con: .1, vig: .45, night: 1 },
 ];
@@ -821,44 +826,62 @@ const SKY = {};
 
 // ---------------------------------------------------------------- the shot list: [start, {p0, p1 (camera), l0, l1 (look at), fov, fov1, ap, pov, hp}]
 const v = (x, y, z) => new THREE.Vector3(x, y, z);
-const tl0 = () => E[5] + 1.6;            // the ball lands
-const TR = () => E[1] + 1.35;            // the man lets go of the cup
-const TC = () => E[10] + .6;             // the span starts to fall
-const KN = () => [0, .28, .56].map((a) => E[12] + .4 + a);   // three knocks
+const tl0 = () => C.tl;                  // the ball lands
+const TR = () => C.tr;                   // the man lets go of the cup
+const TC = () => C.tc;                   // the span starts to fall
+const KN = () => [0, .28, .56].map((a) => E[12] + .6 + a);   // three knocks
 const SIDE = { p0: v(60, 2.2, -5.4), l0: v(36, -.5, -41), fov: 66, ap: .006 };
 const SHOTS = [
-  // New York
-  [0, { p0: v(2.8, 11, 10), p1: v(4.6, 4.2, 6.5), l0: v(7, 2, -14), l1: v(7, 1.7, -6), fov: 60, ap: .008 }],
-  [L[0] - .15, { p0: v(7.0, 1.93, .5), l0: v(7.0, 1.72, -1.0), fov: 70, ap: .22, f: .3, pov: 1 }],
-  [L[0] + 3.2, { p0: v(6.6, 1.95, -1.6), p1: v(6.8, 1.9, -1.4), l0: v(7.0, 1.72, .5), fov: 40, ap: .2, d: 2.6, d1: 2.2 }],
-  [E[1] + .2, { p0: v(7.4, 3.9, -4.6), p1: v(7.7, 4.1, -5.6), l0: v(8.55, 5.0, -9.3), fov: 45, ap: .05 }],
-  [E[1] + 1.3, { p0: v(7.0, 1.15, -3.1), p1: v(7.1, .95, -3.5), l0: v(7.9, 1.0, -6.1), l1: v(7.95, .6, -6.0), fov: 50, ap: .12 }],
-  [L[2] - .1, { p0: v(6.85, 1.95, -.6), l0: v(7.0, 1.86, .5), fov: 36, ap: .3, d: 2.1, d1: 1.75 }],
-  // Las Vegas
-  [CU[0], { p0: v(.1, 2.3, -.6), p1: v(.15, 2.15, -.2), l0: v(.15, 1.55, 2.25), fov: 44, ap: .08 }],
+  // New York: the title, the street, the phone, Alex, the next day, the man, the drop, the reaction
+  [0, { p0: v(2.8, 11, 10), p1: v(4.6, 5.2, 7.5), l0: v(7, 2, -14), l1: v(7, 1.8, -7), fov: 60, ap: .008 }],
+  [2.5, { p0: v(5.4, 2.5, 5.2), p1: v(5.9, 2.2, 3.4), l0: v(7.1, 1.6, -3), fov: 52, ap: .02 }],
+  [L[0] + .3, { p0: v(7.0, 1.93, .5), l0: v(7.0, 1.72, -1.0), fov: 70, ap: .22, f: .3, pov: 1 }],
+  [L[0] + 3.6, { p0: v(6.6, 1.95, -1.6), p1: v(6.8, 1.9, -1.4), l0: v(7.0, 1.72, .5), fov: 40, ap: .2, d: 2.8, d1: 2.4 }],
+  [E[0] + .3, { p0: v(6.55, 1.9, -1.5), l0: v(7.0, 1.78, .5), fov: 38, ap: .25, d: 2.3, d1: 2.0 }],
+  [E[1] + .4, { p0: v(7.3, 3.8, -4.4), p1: v(7.7, 4.1, -5.7), l0: v(8.55, 5.0, -9.3), fov: 45, ap: .05 }],
+  [C.led - .8, { p0: v(5.6, 2.5, 1.7), p1: v(5.75, 2.35, 1.1), l0: v(8.0, 2.3, -7.5), l1: v(8.1, 2.1, -7.0), fov: 52, ap: .03 }],
+  [TR() - .6, { p0: v(7.0, 1.15, -3.1), p1: v(7.1, .95, -3.5), l0: v(7.9, 1.0, -6.1), l1: v(7.95, .6, -6.0), fov: 50, ap: .12 }],
+  [TR() + 1.7, { p0: v(7.3, 1.9, -4.2), l0: v(8.0, 1.75, -6.2), fov: 40, ap: .25, d: 2.3, d1: 2.0 }],
+  [L[2] - .25, { p0: v(6.85, 1.95, -.6), l0: v(7.0, 1.86, .5), fov: 36, ap: .3, d: 2.1, d1: 1.7 }],
+  // Las Vegas: the floor, Jay and Alex, the chips on 17, the dealer, the spin, the ball, 17, the board, the crowd
+  [CU[0], { p0: v(-3.2, 4.4, 8.2), p1: v(-1.2, 2.8, 5.0), l0: v(0, 1.4, -1), fov: 52, ap: .01 }],
+  [L[3] - .2, { p0: v(.1, 2.3, -.6), p1: v(.15, 2.15, -.2), l0: v(.15, 1.55, 2.25), fov: 44, ap: .08 }],
   [L[4] - .1, { p0: v(-.4, 1.9, 1.45), l0: v(-.25, 1.78, 2.35), fov: 36, ap: .3, d: 2.2, d1: 1.95 }],
-  [E[4] + .1, { p0: v(.8, 2.0, -1.1), p1: v(.95, 1.95, -1.4), l0: v(1.9, 1.75, -2.6), fov: 40, ap: .15 }],
-  [E[5] + .25, { p0: v(0, 2.6, -2.3), p1: v(0, 2.25, -2.8), l0: v(0, 1.12, -3.95), fov: 42, ap: .1 }],
-  [tl0() + .6, { p0: v(0, 2.4, -4.4), p1: v(0, 2.2, -4.0), l0: v(.1, 1.6, 2.2), fov: 50, ap: .02 }],
+  [E[4] + .3, { p0: v(.55, 1.8, 1.1), p1: v(.35, 1.65, .6), l0: v(0, .92, -.25), l1: v(0, .92, -.6), fov: 46, ap: .1 }],
+  [L[5] - .1, { p0: v(.8, 2.0, -1.1), p1: v(.95, 1.95, -1.4), l0: v(1.9, 1.75, -2.6), fov: 40, ap: .15 }],
+  [E[5] + .3, { p0: v(0, 2.15, 1.2), p1: v(0, 2.0, .2), l0: v(0, 1.15, -3.95), fov: 38, ap: .06 }],
+  [E[5] + 1.4, { p0: v(0, 2.55, -2.55), p1: v(0, 2.3, -3.0), l0: v(0, 1.12, -3.95), fov: 40, ap: .1 }],
+  [E[5] + 2.9, { follow17: 1, fov: 36, ap: .25 }],
+  [C.tl + .65, { p0: v(0, 2.3, -.3), p1: v(0, 2.35, -.7), l0: v(0, 3.55, -5.8), fov: 52, ap: .05 }],
+  [C.tl + 1.75, { p0: v(0, 2.4, -4.4), p1: v(0, 2.2, -4.0), l0: v(.1, 1.6, 2.2), fov: 50, ap: .02 }],
   [L[6] + .15, { p0: v(.9, 2.0, 1.3), l0: v(.55, 1.8, 2.15), fov: 40, ap: .3, d: 2.6, d1: 2.3 }],
   [E[6] + .1, { p0: v(-.5, 1.55, 1.4), l0: v(-.25, 1.75, 2.35), fov: 36, ap: .3, d: 2.1, d1: 1.9 }],
-  // Miami
+  // Miami: the storm, Alex and the warning, he runs into the road, the driver, Alex shouting, two cars go anyway,
+  // onto the bridge, noon, the fall, the people who stayed, the driver
   [CU[1], { ...SIDE, p1: v(60, 2.2, -5.4), l1: v(34, -.5, -42) }],
-  [L[8] + 2.2, { p0: v(.3, 1.93, 6.0), l0: v(-.2, 1.62, 3.0), fov: 70, ap: .22, f: .3, pov: 1 }],
-  [E[8] + .25, { p0: v(-4.6, 1.75, 9.4), l0: v(-3.05, 1.68, 11.1), fov: 40, ap: .2, d: 2.4, d1: 2.1 }],
+  [L[8] - .15, { p0: v(2.2, 1.9, 4.6), p1: v(2.0, 1.88, 4.9), l0: v(3.6, 1.7, 2.6), fov: 40, ap: .2, d: 2.4, d1: 2.1 }],
+  [L[8] + 2.45, { p0: v(3.6, 1.93, 2.6), l0: v(2.8, 1.62, -.2), fov: 70, ap: .22, f: .3, pov: 1 }],
+  [E[8] + .3, { p0: v(-6.0, 3.6, 19.5), p1: v(-5.4, 3.3, 18.2), l0: v(.8, .9, 5.0), fov: 50, ap: .01 }],
+  [L[9] - .1, { p0: v(-4.6, 1.75, 9.4), l0: v(-3.05, 1.68, 11.1), fov: 40, ap: .2, d: 2.4, d1: 2.1 }],
   [E[9] + .1, { p0: v(-.3, 1.6, 8.6), l0: v(.3, 1.85, 6.0), fov: 48, ap: .12, d: 3.6, d1: 3.1 }],
-  [E[10] + .3, { ...SIDE, l1: v(36, -2, -41), fov1: 56 }],
+  [E[10] + .1, { p0: v(-7.2, 1.7, 2.6), p1: v(-7.2, 1.75, 4.6), l0: v(1.0, 1.4, 5.5), fov: 58, ap: .01 }],
+  [C.tc - 2.1, { p0: v(44, 3.0, -2.5), p1: v(46, 3.0, -5), l0: v(18, -.5, -22), l1: v(30, -1, -35), fov: 50, ap: .006 }],
+  [C.tc - .3, { p0: v(55, 3.0, -13), p1: v(55.5, 3.0, -13.5), l0: v(36, -2, -41), l1: v(36, -4, -41), fov: 52, fov1: 46, ap: .006 }],
+  [C.tc + 2.5, { p0: v(3.0, 3.1, 3.4), p1: v(3.4, 2.9, 2.6), l0: v(26, -3, -30), fov: 52, ap: .01 }],
   [L[11] - .1, { p0: v(-4.4, 1.7, 9.7), l0: v(-3.05, 1.66, 11.1), fov: 38, ap: .25, d: 2.1, d1: 1.9 }],
-  // home, night
-  [CU[2], { p0: v(.25, 1.93, 1.0), l0: v(.2, 1.55, -1.0), fov: 70, ap: .25, f: .3, pov: 1 }],
-  [E[12] + .15, { p0: v(.25, 1.93, 1.0), p1: v(.25, 1.9, 1.3), l0: v(0, 1.25, -3), fov: 54, fov1: 48, ap: .03, pov: 2 }],
-  [L[13] - .1, { p0: v(.55, 1.15, -.1), p1: v(.4, 1.0, -.6), l0: v(0, .55, -3.0), fov: 50, ap: .08 }],
+  // home, night: the room, the text from himself, the knock (his POV), the voice at the door, "that's not Jay", the handle
+  [CU[2], { p0: v(2.5, 1.75, 2.7), p1: v(2.2, 1.7, 2.4), l0: v(-.2, 1.25, -1.6), fov: 50, ap: .03 }],
+  [L[12] - .1, { p0: v(.25, 1.93, 1.0), l0: v(.2, 1.55, -1.0), fov: 70, ap: .25, f: .3, pov: 1 }],
+  [E[12] + .3, { p0: v(.25, 1.93, 1.0), p1: v(.25, 1.9, 1.3), l0: v(0, 1.25, -3), fov: 54, fov1: 48, ap: .03, pov: 2 }],
+  [L[13] - .15, { p0: v(.55, 1.15, -.1), p1: v(.4, 1.0, -.6), l0: v(0, .55, -3.0), fov: 50, ap: .08 }],
   [E[13] + .2, { p0: v(.25, 1.93, 1.0), l0: v(.2, 1.55, -1.0), fov: 70, ap: .25, f: .3, pov: 1 }],
-  [E[13] + 1.3, { p0: v(.78, 1.13, -2.3), p1: v(.7, 1.1, -2.45), l0: v(.44, 1.05, -2.95), fov: 40, ap: .25 }],
-  // home, day 30
-  [CU[3], { p0: v(1.05, 1.55, .0), l0: v(2.3, 1.3, .3), fov: 40, ap: .25, d: 2.3, d1: 2.0 }],
-  [E[14] + .15, { p0: v(2.3, 1.42, .3), l0: v(1.2, 1.12, .3), fov: 70, ap: .25, f: .3, pov: 1 }],
-  [E[15] - .3, { p0: v(1.6, 1.45, .2), l0: v(2.3, 1.38, .3), fov: 34, ap: .3, d: 1.9, d1: 1.6 }],
+  [E[13] + 1.5, { p0: v(.78, 1.13, -2.3), p1: v(.7, 1.1, -2.45), l0: v(.44, 1.05, -2.95), fov: 40, ap: .25 }],
+  // home, day 30: the room at dawn, "show me tomorrow", the phone, the glitch, the reflection, his face, the corner, dark
+  [CU[3], { p0: v(-.7, 1.95, -2.1), p1: v(-.4, 1.85, -1.7), l0: v(2.4, 1.15, .6), fov: 56, ap: .02 }],
+  [L[14] - .15, { p0: v(1.05, 1.55, .0), l0: v(2.3, 1.3, .3), fov: 40, ap: .25, d: 2.3, d1: 2.0 }],
+  [E[14] + .2, { p0: v(2.3, 1.42, .3), l0: v(1.2, 1.12, .3), fov: 70, ap: .25, f: .3, pov: 1 }],
+  [E[15] + 1.3, { p0: v(1.6, 1.45, .2), l0: v(2.3, 1.38, .3), fov: 34, ap: .3, d: 1.9, d1: 1.55 }],
+  [E[15] + 2.7, { p0: v(.5, 1.6, -.9), p1: v(.7, 1.58, -.6), l0: v(2.65, 1.5, 1.0), fov: 50, ap: .03 }],
   // the end: New York at night, the crane goes up
   [CU[4], { p0: v(5.4, 3.0, 6.5), p1: v(3.6, 10, 11), l0: v(7, 1.7, -4), l1: v(7, 3, -18), fov: 56, ap: .006 }],
 ];
@@ -866,6 +889,12 @@ function shotAt(t) {
   let i = 0; while (i + 1 < SHOTS.length && t >= SHOTS[i + 1][0]) i++;
   const [a, s] = SHOTS[i], b = i + 1 < SHOTS.length ? SHOTS[i + 1][0] : DUR;
   const u = sm(clamp((t - a) / Math.max(.1, b - a)));
+  if (s.follow17) {
+    const psi = wheelAngle(t) + WINI * Math.PI * 2 / 37, rad = v(Math.cos(psi), 0, -Math.sin(psi));
+    const l = WC.clone().addScaledVector(rad, .64).add(v(0, .05, 0)), p = WC.clone().addScaledVector(rad, 1.25 - .08 * u).add(v(0, .62 - .05 * u, 0));
+    p.addScaledVector(v(-rad.z, 0, rad.x), .18);
+    return { i, a, b, u, p, l, fov: s.fov, ap: s.ap, f: p.distanceTo(l), pov: false, hands: false };
+  }
   let p = (s.p1 ? V.lerpVectors(s.p0, s.p1, u) : V.copy(s.p0)).clone(); const l = s.l1 ? V2.lerpVectors(s.l0, s.l1, u).clone() : s.l0.clone();
   if (s.d) { const d = lerp(s.d, s.d1 ?? s.d, u); p = l.clone().add(p.sub(l).normalize().multiplyScalar(d)); }
   return { i, a, b, u, p, l, fov: lerp(s.fov, s.fov1 ?? s.fov, u), ap: s.ap, f: s.f ?? p.distanceTo(l), pov: !!s.pov, hands: s.pov === 1 };
@@ -879,12 +908,20 @@ function phoneKey(t, s) {
   if (s === 3) return t < E[13] + .2 ? "phMsg" : "phNotJay";
   if (t < L[15] + .3) return "phLoad" + (Math.floor(t * 8) % 4);
   if (t < E[15] - .3) return "phGlitch" + (Math.floor(t * 14) % 3);
+  if (t > E[15] + .2 && t < E[15] + 1.3) return "phReflect";
   return "phBlack";
 }
 
 // ---------------------------------------------------------------- per set, per frame
 const wrap = (x, a, b) => a + ((((x - a) % (b - a)) + (b - a)) % (b - a));
 const PP = new THREE.Vector3();
+function wheelAngle(t) {
+  const t0 = CU[0], ts = E[5] + .3, w0 = 3.0, w1 = .7, k = .55, tk = ts + (w0 - w1) / k;
+  if (t < ts) return 1 + w0 * (t - t0);
+  const base = 1 + w0 * (ts - t0);
+  if (t < tk) { const u = t - ts; return base + w0 * u - .5 * k * u * u; }
+  return base + w0 * (tk - ts) - .5 * k * (tk - ts) ** 2 + w1 * (t - tk);
+}
 let SHAKE = 0;
 // Alex holding his phone up at his chest, looking at it (hp = head pitch)
 const HOLD = (o = {}) => pose({ a: [[1.15, .12, 1.65], [.35, .1, .5]], hp: .42, ...o });
@@ -897,8 +934,9 @@ function holdPhone(P, key, vis = true) {
   if (TEX[key]) setMap(aphM, TEX[key]);
 }
 function manPose(t) {
-  const tr = TR();
+  const tr = TR(), w0 = C.led - 2.2, w1 = C.led + .1;
   let p = idle(pose({ x: 8.0, y: .15, z: -6.2, ry: -.5, hy: .28, hp: .06, a: [[.95, .12, 1.4], [.08, .12, .15]] }), t, 4.2);
+  if (t < w1) { const u = clamp((t - w0) / (w1 - w0)); p = walk({ ...p, z: lerp(-13, -6.2, u), ry: 0, hy: 0 }, t * 6.5); p.a = [[.95, .12, 1.4], p.a[1]]; }
   if (t > tr) { const u = ss(t, tr, tr + .5); p.a = [[lerp(.95, .45, u), lerp(.12, .35, u), lerp(1.4, .4, u)], p.a[1]]; }
   const u2 = ss(t, tr + .7, tr + 1.4);
   if (u2 > 0) p = mixP(p, { ...p, lean: -.06, hp: .38, hy: .1, a: [[1.1, .55, 2.0], [1.1, .55, 2.0]] }, u2);
@@ -913,38 +951,38 @@ function updNY(t, sh, s) {
   const A = S0.alex, night = s === 5;
   let ap = HOLD({ x: 7.0, y: .15, z: .5, ry: Math.PI });
   if (!night && t > L[0] + 3.4) ap = mixP(ap, { ...ap, hp: .05, hy: .08 }, ss(t, L[0] + 3.4, L[0] + 4.0));
-  if (!night && t > L[2] - .2) ap = { ...ap, hp: -.04, hy: -.12, a: [[.6, .15, .9], [.3, .1, .5]] };
-  const af = night ? { mouth: "flat", eyes: "half" } : t > L[2] - .2 ? { eyes: "wide", mouth: "o", brows: "up", talk: who(t, "alex"), noblink: true } : t > L[0] + 3.4 ? { brows: "raise1", mouth: "smirk", talk: who(t, "alex") } : { mouth: "flat", brows: "flat" };
+  if (!night && t > E[1] + .3) ap = { ...ap, hp: -.04, hy: .28, a: [[.6, .15, .9], [.3, .1, .5]] };
+  const af = night ? { mouth: "flat", eyes: "half" } : t > TR() + .4 ? { eyes: "wide", mouth: "o", brows: "up", talk: who(t, "alex"), noblink: true } : t > L[0] + 3.4 ? { brows: "raise1", mouth: "smirk", talk: who(t, "alex") } : { mouth: "flat", brows: "flat" };
   placeChar(A, !sh.pov, idle(ap, t, 1.3), af);
-  holdPhone(A, "phNY", t < L[2] - .2 || night);
+  holdPhone(A, "phNY", t < E[1] + .3 || night);
   // the man and his coffee, in slow motion
   const M = S0.man, tr = TR(), K = .45;
   applyPose(M, manPose(Math.min(t, tr))); M.root.updateMatrixWorld(true); M.hand[0].getWorldPosition(PP);
   const p0 = PP.clone().add(V.set(0, -.03, 0));
-  placeChar(M, !night, manPose(t), t < tr ? { mouth: "smile", eyes: "half" } : { eyes: "wide", mouth: "o", brows: "up", noblink: true });
+  placeChar(M, !night && t > E[1] + .3, manPose(t), t < tr ? { mouth: "smile", eyes: "half" } : { eyes: "wide", mouth: "o", brows: "up", noblink: true });
   const cup = S0.cup, G = 5.75, gy = .15 + .06, ti = Math.sqrt(Math.max(0, p0.y - gy) / G), d = (t - tr) * K;
   const land = V2.set(p0.x + .25 * ti, gy, p0.z - .1 * ti).clone();
-  cup.visible = !night;
+  cup.visible = !night && t > E[1] + .3;
   if (t < tr) { M.hand[0].getWorldPosition(PP); cup.position.copy(PP).add(V.set(0, .02, .02)); cup.rotation.set(0, 0, 0); }
   else if (d < ti) { cup.position.set(p0.x + .25 * d, p0.y - G * d * d, p0.z - .1 * d); cup.rotation.set(d * 3, 0, -d * 9); }
   else { const e = d - ti; cup.position.set(land.x + .25 * (1 - Math.exp(-e * 3)), gy - .02, land.z); cup.rotation.set(.3, 0, -Math.PI / 2 - (1 - Math.exp(-e * 3)) * 2); }
   const de = d - ti, pu = clamp(de / .35);
   S0.pud.visible = pu > 0 && !night; S0.pud.position.set(land.x + .1, .157, land.z + .05); S0.pud.scale.setScalar(.05 + .85 * sm(pu));
   S0.drops.forEach((m, k) => { m.visible = de > 0 && de < .9 && !night; if (!m.visible) return; const a = hash(k * 3.7) * Math.PI * 2, sp = 1 + hash(k) * 1.4, up = 1.8 + hash(k * 5) * 1.6; const y = Math.max(.16, gy + up * de - G * de * de); m.position.set(land.x + Math.cos(a) * sp * Math.min(de, .5), y, land.z + Math.sin(a) * sp * Math.min(de, .5)); m.scale.setScalar((.04 + hash(k) * .03) * (y <= .16 ? .6 : 1)); });
-  if (TEX.led914) setMap(S0.ledM, t > E[1] + .85 ? TEX.led914 : TEX.led913);
+  if (TEX.led914) setMap(S0.ledM, t > C.led ? TEX.led914 : TEX.led913);
   if (night) { [[5.6, 6.2, 6], [5.6, 6.2, -10], [-5.6, 6.2, -2], [-5.6, 6.2, -18]].forEach(([x, y, z], k) => { PL[k].position.set(x - Math.sign(x) * 1.4, y - .3, z); PL[k].color.set(0xFFD9A0); PL[k].intensity = 9; PL[k].distance = 14; }); }
 }
 function updVegas(t, sh) {
   const S1 = SET.vegas, t0 = CU[0], tl = tl0();
-  const th = 3.0 * (t - t0) + 1.0; S1.disk.rotation.y = th;
+  const th = wheelAngle(t); S1.disk.rotation.y = th;
   const aWin = WINI * Math.PI * 2 / 37;
   let rel = aWin, r = .66, y = 1.18;
-  if (t < tl) { const dd = tl - t; rel = aWin + 7.5 * dd + 2.2 * dd * dd; r = lerp(.9, .66, ss(t, tl - 1.4, tl)); y = lerp(1.17, 1.18, ss(t, tl - 1.4, tl)); }
-  if (t > tl - .6 && t < tl + .2) y += .035 * Math.abs(Math.sin((t - tl + .6) * 15)) * (1 - ramp(t, tl - .6, tl + .2));
+  if (t < tl) { const dd = tl - t; rel = aWin + 1.1 * dd + 1.9 * dd * dd; r = lerp(.9, .66, ss(t, tl - 2.4, tl - 1.0)); y = lerp(1.17, 1.18, ss(t, tl - 2.4, tl - 1.0)); }
+  if (t > tl - 1.7 && t < tl + .15) { const k = 1 - ramp(t, tl - 1.7, tl + .15); y += .045 * Math.abs(Math.sin((t - tl + 1.7) * 7.5)) * k; r += .05 * Math.abs(Math.sin((t - tl + 1.7) * 5.5)) * k; }
   const psi = th + rel; S1.ball.position.set(WC.x + Math.cos(psi) * r, y, WC.z - Math.sin(psi) * r);
-  S1.my.position.set(cellX(WIN), .9, cellZ(WIN));
+  const mu = ss(t, E[4] + .5, E[4] + 1.6); S1.my.position.set(lerp(-.15, cellX(WIN), mu), .9, lerp(1.45, cellZ(WIN), mu));
   S1.won.forEach((g, k) => { const a = tl + .55 + k * .04, u = ss(t, a, a + .7); g.visible = t > a; g.position.set(lerp(-.2 + k * .03, g.userData.x, u), .9, lerp(-3.0, g.userData.z, u)); });
-  const amt = t < tl + .3 ? 0 : 2e6 * ss(t, tl + .35, L[6] + .6);
+  const amt = t < tl + .3 ? 0 : 2e6 * ss(t, tl + .75, tl + 1.65);
   drawBoard(t < tl ? 0 : 1, Math.round(amt / 1000) * 1000, t > tl && Math.floor(t * 5) % 2 === 0);
   const cfT = t - tl - .35; S1.conf.visible = cfT > 0;
   if (cfT > 0) for (let k = 0; k < 260; k++) { const yy = Math.max(.02, 5.3 + hash(k * 2.1) * 2.5 - cfT * (1.2 + hash(k) * .6)); EU.set(cfT * (3 + hash(k * 5) * 4) + k, k, cfT * 2 + k * .3); Q.setFromEuler(EU); M4.compose(V.set((hash(k * 1.7) - .5) * 7 + .25 * Math.sin(cfT * 3 + k), yy, -5 + hash(k * 3.3) * 8), Q, S.set(1, 1, 1)); S1.conf.setMatrixAt(k, M4); }
@@ -986,16 +1024,37 @@ function updMiami(t, cam, sh) {
   S2.splash.instanceMatrix.needsUpdate = true;
   SHAKE = Math.max(SHAKE, .5 * pulse(t, ti + .1, .35));
   // the drivers get angry when Alex blocks the road; the first one yells, then goes quiet
-  const angry = ss(t, E[8] - .2, E[8] + .3), after = t > L[11] - .3;
+  const angry = ss(t, E[8] + .8, E[8] + 1.3), after = t > C.tc + .6;
   S2.drivers.forEach((P, k) => { let p = pose({ x: -.5, y: .02, z: .25, ry: Math.PI, l: [[1.45, 1.5], [1.45, 1.5]], a: [[.8, .1, .9], [.8, .1, .9]] }); if (angry > 0 && !after) p = mixP(p, { ...p, x: -1.0, tw: .3, hy: .55, a: [[.8, .1, .9], [.5, 1.45 + .25 * Math.sin(t * 9 + k), 1.0 + .5 * Math.sin(t * 9 + k)]] }, angry); if (after) p = { ...p, x: -1.0, tw: .3, hy: .6, hp: -.05 }; const yell = k === 0 ? who(t, "driver") : angry > .5 && !after && Math.sin(t * 3 + k) > 0; placeChar(P, true, p, after ? { eyes: "wide", mouth: "o", brows: "worry", talk: k === 0 && who(t, "driver"), noblink: true } : angry > .5 ? { brows: "angry", mouth: "talk", talk: yell, eyes: "open" } : { brows: "flat", mouth: "flat" }); });
   S2.peds.forEach((P, k) => { const u2 = P.u; let p = idle(pose({ x: u2.x, y: .15, z: u2.z, ry: u2.ry }), t, k * 2); if (angry > 0 && !after) p = mixP(p, { ...p, a: [[2.3 + .3 * Math.sin(t * 8 + k), .45, 1.0], [.7, .2, 1.7]] }, angry); placeChar(P, true, p, after ? { eyes: "wide", mouth: "o" } : angry > .5 ? { brows: "angry", talk: true, mouth: "talk" } : { mouth: "flat" }); });
   // Alex in the road, arms up, shouting
-  const A = S2.alex, up = ss(t, E[9] - .1, E[9] + .25);
+  const A = S2.alex, up = ss(t, E[9] - .1, E[9] + .25), ru = clamp((t - (E[8] + .3)) / 1.5);
   let ap = pose({ x: .3, z: 6.0, ry: 0, a: [[.3, .15, .3], [.3, .15, .3]] });
+  if (ru < 1) ap = ru <= 0 ? HOLD({ x: 3.6, z: 2.6, ry: -.6 }) : walk({ ...ap, x: lerp(3.6, .3, ru), z: lerp(2.6, 6.0, ru), ry: Math.atan2(-3.3, 3.4) }, t * 11, 1.4);
   if (up > 0) ap = mixP(ap, { ...ap, a: [[2.5 + .15 * Math.sin(t * 6), .5, .35], [2.5 + .15 * Math.sin(t * 6 + 1), .5, .35]], lean: .08 }, up);
   if (t > E[10] + .3) ap = { ...ap, ry: Math.PI, a: [[.3, .15, .3], [.3, .15, .3]] };
-  placeChar(A, !sh.pov, ap, up > 0 ? { brows: "worry", eyes: "wide", mouth: "talk", talk: who(t, "alex"), noblink: true } : { mouth: "flat", brows: "worry" });
-  APH.visible = false;
+  placeChar(A, !sh.pov, ap, ru <= 0 ? { mouth: "flat", brows: "worry", eyes: "wide" } : up > 0 ? { brows: "worry", eyes: "wide", mouth: "talk", talk: who(t, "alex"), noblink: true } : { mouth: "flat", brows: "worry" });
+  if (ru <= 0) holdPhone(A, "phMiami", !sh.pov); else APH.visible = false;
+  // the two cars that ignore him: around the queue, past Alex, onto the bridge, onto the middle span as it falls
+  const br = S2.br; br.updateMatrixWorld(true);
+  const per = v(Math.cos(BRY), 0, -Math.sin(BRY));
+  S2.rogue.forEach((g, j) => {
+    const sx = j ? 1 : -1, lat = sx * 2.3, dT = j ? 53 : 44;
+    const pts = [v(sx * 2.1, 0, j ? 37.4 : 38.0), v(sx * 4.3, 0, 30), v(sx * 4.3, 0, 9), v(j ? 3.0 : -1.6, 0, 1.5), brAt(0).addScaledVector(per, lat), brAt(dT).addScaledVector(per, lat)];
+    const seg = []; let tot = 0; for (let q = 0; q < pts.length - 1; q++) { const ll = pts[q].distanceTo(pts[q + 1]); seg.push(ll); tot += ll; }
+    const u2 = clamp((t - C.rog - j * .25) / (C.tc - C.rog - j * .25)), sd = tot * Math.pow(u2, 1.5);
+    const drv = g.userData.drv; placeChar(drv, true, pose({ x: -.5, y: .02, z: .25, ry: Math.PI, l: [[1.45, 1.5], [1.45, 1.5]], a: [[.8, .1, .9], [.8, .1, .9]] }), { mouth: "flat", brows: "angry" });
+    if (t < C.tc) {
+      let q = 0, acc = 0; while (q < seg.length - 1 && acc + seg[q] < sd) { acc += seg[q]; q++; }
+      const f = clamp((sd - acc) / seg[q]); const pnt = V.lerpVectors(pts[q], pts[q + 1], f); const dir = V2.subVectors(pts[q + 1], pts[q]).normalize();
+      g.position.copy(pnt); g.rotation.set(0, Math.atan2(-dir.x, -dir.z), 0); g.visible = true;
+    } else {
+      const half = dT < (SPAN0 + SPAN1) / 2 ? 0 : 1, pv = S2.halves[half]; pv.updateMatrix();
+      M4.multiplyMatrices(br.matrixWorld, pv.matrix).multiply(new THREE.Matrix4().makeTranslation(lat, 0, (half ? SPAN1 : SPAN0) - dT));
+      M4.decompose(g.position, g.quaternion, S); g.visible = g.position.y > -9.5;
+    }
+  });
+  S2.watch.forEach((P, k) => { const u3 = P.u, sh2 = ss(t, C.tc + .6 + k * .15, C.tc + 1.1 + k * .15); let p = idle(pose({ x: u3.x, y: .02, z: u3.z, ry: u3.ry }), t, k * 3); if (sh2 > 0) p = mixP(p, { ...p, a: [[2.7, .8, 2.3], [2.7, .8, 2.3]], lean: -.05 }, sh2); placeChar(P, true, p, sh2 > .5 ? { eyes: "wide", mouth: "o", brows: "up", noblink: true } : { mouth: "flat" }); });
   return fl.f;
 }
 function updApt(t, s, sh) {
@@ -1008,7 +1067,15 @@ function updApt(t, s, sh) {
   let k = 0; if (night) for (const a of KN()) k += pulse(t, a, .045);
   S3.door.rotation.y = -.01 * k; S3.door.position.z = -3.02 + .006 * k;
   SHAKE = Math.max(SHAKE, .12 * k);
-  S3.lever.rotation.z = night ? -.7 * ss(t, E[13] + 1.5, CU[3] - .1) : 0;
+  S3.lever.rotation.z = night ? -.7 * ss(t, E[13] + 1.7, CU[3] - .1) : 0;
+  // day 30: the lights start to flicker when the phone dies; the figure in the corner; then everything goes out
+  const hz = !night && t > E[15] - .3, dead = !night && t > C.out;
+  const on = hz ? (!dead && hash(Math.floor(t * 9) * 1.7) > .42 ? 1 : 0) : 1;
+  PL[2].position.set(.6, 3.0, .6); PL[2].color.set(0xDDE6FF); PL[2].intensity = hz ? 3.2 * on : 0; PL[2].distance = 8;
+  if (hz) { sun.intensity *= dead ? 0 : .25 + .3 * on; hemi.intensity *= dead ? 0 : .35 + .45 * on; }
+  const fg = S3.fig;
+  PL[3].position.set(3.1, 2.3, 2.6); PL[3].color.set(0x9FB8FF); PL[3].intensity = hz && !dead && t > E[15] + 2.5 ? 2.4 * on : 0; PL[3].distance = 3;
+  placeChar(fg, !night && t > E[15] + .2, idle(pose({ x: 2.75, z: 2.05, ry: -2.92, a: [[.05, .05, .05], [.05, .05, .05]], hp: .12 }), t * .3, 7), { eyes: "open", mouth: "flat", noblink: true });
   const A = S3.alex;
   if (night) {
     let ap = HOLD({ x: .25, z: 1.0, ry: Math.PI });
@@ -1018,9 +1085,9 @@ function updApt(t, s, sh) {
     holdPhone(A, t < E[13] + .2 ? "phMsg" : "phNotJay");
   } else {
     // day 30: sitting on the couch edge with the phone
-    const ap = pose({ x: 2.35, y: -.145, z: .3, ry: -Math.PI / 2, l: [[1.5, 1.5], [1.5, 1.5]], a: [[1.25, .12, 1.7], [1.0, .15, 1.5]], hp: .4 });
-    const dead = t > E[15] - .3;
-    placeChar(A, !sh.pov, idle(ap, t, 1.3), dead ? { eyes: "wide", mouth: "o", brows: "worry", noblink: true } : { eyes: "half", mouth: "flat", brows: "worry", talk: who(t, "alex") });
+    const turn = ss(t, E[15] + 1.7, E[15] + 2.6);
+    const ap = pose({ x: 2.35, y: -.145, z: .3, ry: -Math.PI / 2, l: [[1.5, 1.5], [1.5, 1.5]], a: [[1.25, .12, 1.7], [1.0, .15, 1.5]], hp: .4 - .45 * turn, hy: 1.05 * turn });
+    placeChar(A, !sh.pov, idle(ap, t, 1.3), t > E[15] - .3 ? { eyes: "wide", mouth: "o", brows: "worry", noblink: true } : { eyes: "half", mouth: "flat", brows: "worry", talk: who(t, "alex") });
     holdPhone(A, phoneKey(t, 4));
   }
 }
@@ -1071,7 +1138,7 @@ function renderAt(t) {
   gu.uTime.value = t; gu.uWarm.value = Lk.warm; gu.uCool.value = Lk.cool; gu.uSat.value = Lk.sat; gu.uCon.value = Lk.con; gu.uVig.value = Lk.vig;
   gu.uFlash.value = flash * .45; gu.uCA.value = .0012 + shk * .004;
   gu.uTop.value = cv ? 0 : Math.max(s === 0 ? 1 - ss(t, L[0] - .6, L[0] + .1) : 0, s === 5 ? ss(t, CU[4], CU[4] + .6) : 0);
-  gu.uDark.value = s === 4 ? .45 * ss(t, E[15] - .3, CU[4]) : 0;
+  gu.uDark.value = s === 4 ? Math.max(.12 * ss(t, E[15] - .3, E[15] + .3), ss(t, C.out, C.out + .12)) : 0;
   bloom.strength = s === 1 ? .55 : s === 5 ? .6 : s === 2 ? .3 : .32;
   // the sun follows the camera
   camera.getWorldDirection(V); V.y = 0; V.normalize();
@@ -1208,6 +1275,18 @@ function buildTextures() {
     g.fillStyle = "#8A93A8"; g.font = FT(700, 34); g.fillText("Loading tomorrow...", w / 2, 900);
   }, { clock: "6:02", sub: "Day 30 · 24 hours ahead" });
   TEX.phBlack = text(PW, PH_, (g, w, h) => { g.fillStyle = "#000"; g.fillRect(0, 0, w, h); const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, "rgba(255,255,255,.06)"); gr.addColorStop(.4, "rgba(255,255,255,0)"); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+  TEX.phReflect = text(PW, PH_, (g, w, h) => {
+    g.fillStyle = "#000"; g.fillRect(0, 0, w, h);
+    const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, "rgba(160,180,220,.10)"); gr.addColorStop(.5, "rgba(160,180,220,.03)"); gr.addColorStop(1, "rgba(160,180,220,.07)"); g.fillStyle = gr; g.fillRect(0, 0, w, h);
+    // the figure behind his shoulder: a tall shape a shade lighter than black, two pale eyes
+    g.fillStyle = "rgba(90,100,130,.5)"; g.fillRect(330, 120, 150, 150); g.fillRect(300, 270, 210, 420); g.fillRect(270, 300, 40, 300); g.fillRect(500, 300, 40, 300);
+    g.fillStyle = "rgba(225,235,255,.85)"; g.fillRect(366, 190, 14, 8); g.fillRect(430, 190, 14, 8);
+    // Alex's own face, dim, close to the glass
+    const sx = 70, sy = 520, k = 11;
+    g.fillStyle = "rgba(150,165,200,.38)"; g.fillRect(sx, sy, 24 * k, 24 * k);
+    g.fillStyle = "rgba(20,24,34,.55)"; g.fillRect(sx, sy, 24 * k, 4 * k);
+    g.fillStyle = "rgba(10,12,18,.8)"; g.fillRect(sx + 6 * k, sy + 10 * k, 3 * k, 3 * k); g.fillRect(sx + 15 * k, sy + 10 * k, 3 * k, 3 * k); g.fillRect(sx + 10 * k, sy + 16 * k, 4 * k, 2 * k);
+  });
   TEX.phCast = phoneScreen((g, w) => {
     g.fillStyle = "#8FE6FF"; g.font = FT(800, 36); g.textAlign = "left"; g.fillText("AI FORECAST · 10 DAYS", 40, 280);
     for (let k = 0; k < 8; k++) { const y = 330 + k * 92; card(g, 30, y, w - 60, 80, "#18202E"); g.fillStyle = "#EDEFF5"; g.font = FT(800, 34); g.fillText(DAYS[k], 60, y + 52); icon(g, ICO[k], 220, y + 14, 7); g.textAlign = "right"; g.fillText(TMP[k] + "°", w - 60, y + 52); g.textAlign = "left"; }
