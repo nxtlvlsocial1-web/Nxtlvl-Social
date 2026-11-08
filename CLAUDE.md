@@ -174,9 +174,11 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
   (characters in one piece, friendly faces, nothing blocking faces, nothing distorted, overlays clear) and fix first.
 - Never use music or images we don't have the rights to; source them through `media-use`.
 - Always run final renders fully detached with no time limit: launch the render in a script with `setsid nohup`
-  (never as a backgrounded tool command, which is killed after its time limit), and pipe `sleep infinity |` into
-  `npx hyperframes render`, because the CLI cancels itself when its input closes (`render_cancelled_parent_exited`).
-  Confirm frames are streaming in the log before telling the person it is rendering.
+  (never as a backgrounded tool command, which is killed after its time limit), and feed the render a held-open input
+  with `< <(sleep infinity)`, because the CLI cancels itself when its input closes (`render_cancelled_parent_exited`).
+  Don't pipe `sleep infinity |` into it: the pipeline then never ends and the next step never runs. Confirm frames are
+  streaming in the log before saying it is rendering, and keep the session active until it finishes (watch it in
+  10-minute checks inside the same turn): a cloud machine shuts down when the session goes idle and kills the render.
 - Keep rendered MP4s out of git; deliver them, don't commit them.
 - Never use emojis in post descriptions, captions or hashtag blocks we write for clients (number lists with "1.", not
   emoji digits). Plain text only.

@@ -75,8 +75,9 @@ Nxtlvl Social's own kit is `brands/nxtlvl/` — fill it in before using it as th
 2. Open `npx hyperframes preview --background`, give the person the URL, and wait for approval.
 3. Render with `--quality draft` while iterating and `--quality delivery` for the final.
    Run the final render fully detached with no time limit (a `setsid nohup` script, never a backgrounded tool
-   command with a timeout), with `sleep infinity |` piped into the render so the CLI does not cancel itself when
-   its input closes. Check the log shows frames streaming before reporting that it is rendering.
+   command with a timeout), with `< <(sleep infinity)` as its input so the CLI does not cancel itself when its input
+   closes. Check the log shows frames streaming, then keep the session active until it finishes (an idle cloud
+   session's machine shuts down and kills the render).
 4. Verify each file with `ffprobe`: size, duration, fps match § 2.
 
 **Before every final render, check the frames yourself** (snapshot every scene, wide shots and every close-up, at
