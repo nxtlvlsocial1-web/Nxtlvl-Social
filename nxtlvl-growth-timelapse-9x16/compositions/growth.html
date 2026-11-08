@@ -2,6 +2,7 @@
   <style>
     @font-face { font-family: "Inter"; src: url("assets/fonts/inter-variable.woff2") format("woff2"); font-weight: 100 900; }
     @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-400.woff2") format("woff2"); font-weight: 400; }
     @font-face { font-family: "Serif Italic"; src: url("assets/fonts/instrument-serif-italic-400.woff2") format("woff2"); }
     #root { position: absolute; inset: 0; overflow: hidden; background: #0C0F14; }
     #g-glow { position: absolute; left: -200px; top: 1000px; width: 1480px; height: 1100px; border-radius: 50%;
@@ -34,6 +35,14 @@
     #g-pill { position: absolute; left: 540px; top: 352px; height: 72px; padding: 0 30px; border-radius: 36px; display: flex; align-items: center; gap: 10px;
       background: rgba(59,227,143,.14); border: 2px solid rgba(59,227,143,.75); color: #3BE38F; font-family: "Inter", sans-serif; font-weight: 700; font-size: 34px; white-space: nowrap; opacity: 0; }
     #g-flash { position: absolute; inset: 0; background: #FFFFFF; }
+    /* the brand first: the Shooting Star lockup, 0 to 1.9 s */
+    #g-intro { position: absolute; inset: 0; }
+    #g-ibg { position: absolute; inset: 0;
+      background: radial-gradient(760px 620px at 0% 0%, rgba(126,26,246,.7), rgba(126,26,246,0)), radial-gradient(760px 620px at 100% 100%, rgba(94,6,242,.6), rgba(94,6,242,0)), #05030C; }
+    #g-lock { position: absolute; inset: 0; }
+    #g-star { position: absolute; left: 380px; top: 560px; width: 320px; height: 320px; }
+    #g-word { position: absolute; left: 211px; top: 930px; width: 440px; height: 101px; clip-path: inset(0 100% 0 0); }
+    #g-social { position: absolute; left: 669px; top: 948px; font-family: "Instrument Sans", sans-serif; font-weight: 400; font-size: 82px; line-height: 1; color: #D8BBFF; }
   </style>
   <script src="assets/vendor/gsap.min.js"></script>
   <div id="root" data-composition-id="growth" data-width="1080" data-height="1920" data-duration="13">
@@ -61,12 +70,20 @@
       <div id="g-h2" class="h1">To <em>10K.</em></div>
       <div id="g-pill">↗ 1M views</div>
       <div id="g-flash" class="clip" data-start="11.66" data-duration="0.4" data-track-index="1"></div>
+      <div id="g-intro" class="clip" data-start="0" data-duration="2.0" data-track-index="2" data-layout-allow-overflow>
+        <div id="g-ibg"></div>
+        <div id="g-lock" data-layout-allow-overflow>
+          <img id="g-star" src="assets/logo/shooting-star.svg" alt="">
+          <img id="g-word" src="assets/img/nxtlvl-wordmark.png" alt="nxtlvl">
+          <div id="g-social">social</div>
+        </div>
+      </div>
     </div>
   </div>
   <script>
     (function () {
-      var T0 = 0.13, TICK = 0.2222;                         // the song section: hats every 0.222 s from 0.13 s
-      var NF = 53, NV = 57;                                  // tick NF lands at 11.69 s (the hit), tick NV at 12.58 s
+      var T0 = 1.91, TICK = 0.2222;                         // counting starts on the hit at 1.91 s (after the logo); hats every 0.222 s
+      var NF = 45, NV = 49;                                  // tick NF lands at 11.69 s (the hit), tick NV at 12.58 s
       function grow(i, n, a) { if (i >= n) return 1; return (Math.exp(a * i / n) - 1) / (Math.exp(a) - 1); }
       function fmtViews(v) {
         if (v >= 1000000) return "1.0M";
@@ -86,11 +103,19 @@
       var clock = { t: 0 };
       tl.fromTo(clock, { t: 0 }, { t: 13, duration: 13, ease: "none", onUpdate: function () { render(clock.t); } }, 0);
       // a slow push in while it climbs
-      tl.fromTo("#g-cam", { scale: 1, transformOrigin: "50% 40%" }, { scale: 1.045, duration: 11.57, ease: "power1.in" }, 0.13);
+      tl.fromTo("#g-cam", { scale: 1, transformOrigin: "50% 40%" }, { scale: 1.045, duration: 9.79, ease: "power1.in" }, 1.91);
       tl.fromTo("#g-glow", { opacity: 0 }, { opacity: 1, duration: 11.5, ease: "power2.in" }, 0.2);
       // 11.70: followers land: flash, the hook flips to "To 10K."
+      // the brand first: the star streaks in on the first hit, the wordmark wipes on, then it clears into the profile on the hit at 1.91 s
+      tl.fromTo("#g-star", { x: -700, y: 700, scale: 0.35, filter: "blur(14px)" }, { x: 0, y: 0, scale: 1, filter: "blur(0px)", duration: 0.55, ease: "expo.out" }, 0.13);
+      tl.to("#g-word", { clipPath: "inset(0 0% 0 0)", duration: 0.45, ease: "power3.inOut" }, 0.5);
+      tl.fromTo("#g-social", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.85);
+      tl.to("#g-lock", { scale: 1.04, duration: 0.67, ease: "sine.inOut" }, 0.95);
+      tl.to("#g-lock", { scale: 0.6, y: -560, opacity: 0, duration: 0.28, ease: "power3.in" }, 1.62);
+      tl.to("#g-ibg", { opacity: 0, duration: 0.21, ease: "power2.in" }, 1.70);
+      tl.fromTo("#g-hook", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.3, ease: "expo.out" }, 1.95);
       tl.fromTo("#g-flash", { opacity: 0.55 }, { opacity: 0, duration: 0.38, ease: "power2.out" }, 11.66);
-      tl.to("#g-hook", { opacity: 0, y: -30, duration: 0.12, ease: "power2.in" }, 11.6);
+      tl.to("#g-hook", { opacity: 0, y: -30, duration: 0.12, ease: "power2.in", immediateRender: false }, 11.6);
       tl.fromTo("#g-h2", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "expo.out" }, 11.7);
       // 12.59: a million views
       tl.fromTo("#g-pill", { opacity: 0, xPercent: -50, scale: 0.6, y: 20 }, { opacity: 1, xPercent: -50, scale: 1, y: 0, duration: 0.3, ease: "back.out(2.2)" }, 12.59);
