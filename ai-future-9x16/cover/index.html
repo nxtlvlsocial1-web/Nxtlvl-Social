@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>AI Future cover</title>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Garamond"; font-weight: 400 800; src: url("assets/fonts/EBGaramond.ttf"); }
+@font-face { font-family: "Garamond"; font-style: italic; font-weight: 400 800; src: url("assets/fonts/EBGaramond-Italic.ttf"); }
+@font-face { font-family: "Manrope"; font-weight: 200 800; src: url("assets/fonts/manrope.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0B0A12; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0B0A12; color: #FFFDF6; }
+.clip { position: absolute; inset: 0; }
+#gl { width: 1080px; height: 1920px; display: block; }
+.plate { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+.shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,8,14,.88) 0%, rgba(8,8,14,.62) 24%, rgba(8,8,14,0) 36%, rgba(8,8,14,0) 66%, rgba(8,8,14,.78) 78%, rgba(8,8,14,.9) 100%); }
+.head { position: absolute; left: 60px; right: 60px; top: 262px; text-align: center; text-shadow: 0 4px 20px rgba(0,0,0,.6); }
+.head .k { display: block; font: 800 26px/1 "Manrope"; letter-spacing: 7px; color: rgba(255,253,246,.85); }
+.head b { display: block; margin-top: 18px; font: 500 78px/1.04 "Garamond"; letter-spacing: -.5px; }
+.head b span { color: #F2C94C; font-weight: 700; }
+.chips { position: absolute; left: 50px; right: 50px; top: 1430px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.chip { padding: 18px 22px; border-radius: 22px; background: rgba(16,18,28,.82); border: 2px solid rgba(255,253,246,.22); display: flex; align-items: center; gap: 16px; }
+.chip i { flex: none; width: 46px; height: 46px; border-radius: 50%; background: #3FA372; color: #fff; font: 800 28px/46px "Manrope"; text-align: center; font-style: normal; }
+.chip.q i { background: #C8372D; }
+.chip span { font: 800 22px/1.15 "Manrope"; letter-spacing: 1px; }
+.chip span small { display: block; font: italic 500 30px/1.1 "Garamond"; letter-spacing: 0; color: rgba(255,253,246,.85); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="cover" data-start="0" data-duration="1" data-fps="30" data-width="1080" data-height="1920">
+      <div class="clip" data-start="0" data-duration="1" data-track-index="0">
+        <img class="plate" src="assets/plates/street.png" alt="" />
+        <div class="shade"></div>
+      </div>
+      <div class="clip" data-start="0" data-duration="1" data-track-index="1">
+        <div class="head"><span class="k">WHAT IF</span><b>your phone could see <span>24&nbsp;hours</span> into the future?</b></div>
+        <div class="chips">
+          <div class="chip"><i>&#10003;</i><span>DAY 1 &middot; 9:14 AM<small>the coffee drops</small></span></div>
+          <div class="chip"><i>&#10003;</i><span>DAY 4 &middot; LAS VEGAS<small>black 17</small></span></div>
+          <div class="chip"><i>&#10003;</i><span>DAY 12 &middot; NOON<small>the bridge falls</small></span></div>
+          <div class="chip q"><i>?</i><span>DAY 30<small>the screen goes black</small></span></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.set({}, {}, 1);
+      window.__timelines["cover"] = tl;
+    </script>
+  </body>
+</html>
