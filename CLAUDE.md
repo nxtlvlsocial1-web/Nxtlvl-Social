@@ -173,6 +173,10 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
 - Before any final render, check every scene's frames against the pre-render checklist in `nxtlvl-social-video` § 5
   (characters in one piece, friendly faces, nothing blocking faces, nothing distorted, overlays clear) and fix first.
 - Never use music or images we don't have the rights to; source them through `media-use`.
+- Always run final renders fully detached with no time limit: launch the render in a script with `setsid nohup`
+  (never as a backgrounded tool command, which is killed after its time limit), and pipe `sleep infinity |` into
+  `npx hyperframes render`, because the CLI cancels itself when its input closes (`render_cancelled_parent_exited`).
+  Confirm frames are streaming in the log before telling the person it is rendering.
 - Keep rendered MP4s out of git; deliver them, don't commit them.
 - Never use emojis in post descriptions, captions or hashtag blocks we write for clients (number lists with "1.", not
   emoji digits). Plain text only.
