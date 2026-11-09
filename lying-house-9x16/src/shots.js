@@ -462,13 +462,18 @@ export function buildShots(ctx) {
   shot(200, 210, (u, d) => {
     D.lights("broc", 0, { fill: [BRC.x + 0.5, 6, BRC.z + 59.5, 230] });
     const k = C.kid;
-    D.place(k, BRC.x, 0, BRC.z + 54.5, 0);
+    D.place(k, BRC.x - 0.4, 0, BRC.z + 50.5, 0.15);
     k.setFace("nervous", { sweat: true });
-    k.j.armL.rotation.x = k.j.armR.rotation.x = -0.5;
-    k.j.armL.rotation.z = -0.7;
-    k.j.armR.rotation.z = 0.7;
+    k.j.armL.rotation.x = -0.9;
+    k.j.armL.rotation.z = -0.35;
+    k.j.armR.rotation.z = 0.25;
+    k.j.handL.add(P.floret);
+    P.floret.visible = true;
+    P.floret.scale.setScalar(0.5);
+    P.floret.position.set(0, -0.3, 0.2);
+    P.floret.rotation.set(PI, 0, 0);
     const h = head(k);
-    D.cam({ p: [BRC.x + 0.6, 3.6, BRC.z + 61], l: [BRC.x, 9.5, BRC.z + 40], f: h, fov: 58, ap: 4, shake: 0, seed: 99 }, 0, 1);
+    D.cam({ p: [BRC.x + 0.8, 3.6, BRC.z + 58.6], l: [BRC.x - 0.2, 8.8, BRC.z + 28], f: h, fov: 56, ap: 4, shake: 0, seed: 99 }, 0, 1);
   });
 
   return S;
