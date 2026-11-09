@@ -40,13 +40,13 @@ function broccoliGeometry() {
   };
   const stem = new THREE.CylinderGeometry(0.22, 0.32, 1.2, 8);
   stem.translate(0, 0.6, 0);
-  parts.push(tint(stem.toNonIndexed(), "#a6c96a"));
+  parts.push(tint(stem.index ? stem.toNonIndexed() : stem, "#a6c96a"));
   const r = rng(3);
   const pts = [[0, 1.5, 0, 0.52], [0.42, 1.3, 0.1, 0.4], [-0.4, 1.32, -0.1, 0.42], [0.1, 1.32, 0.42, 0.4], [-0.08, 1.3, -0.44, 0.4], [0.3, 1.62, -0.25, 0.34], [-0.3, 1.6, 0.25, 0.34]];
   for (const [x, y, z, rad] of pts) {
     const s = new THREE.IcosahedronGeometry(rad, 1);
     s.translate(x, y, z);
-    parts.push(tint(s.toNonIndexed(), ["#2f6b24", "#3a7d2b", "#336f27"][Math.floor(r() * 3)]));
+    parts.push(tint(s.index ? s.toNonIndexed() : s, ["#2f6b24", "#3a7d2b", "#336f27"][Math.floor(r() * 3)]));
   }
   for (const p of parts) {
     for (const k of Object.keys(p.attributes)) if (!["position", "normal", "color"].includes(k)) p.deleteAttribute(k);
