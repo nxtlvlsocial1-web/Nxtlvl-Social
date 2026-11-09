@@ -64,7 +64,11 @@ for i, text in enumerate(lines, start=1):
 listfile = work / "list.txt"
 listfile.write_text("".join(f"file '{p}'\n" for p in pieces))
 out = proj / "audio" / "vo.wav"
+raw = work / "joined.wav"
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(listfile),
+                "-ar", "48000", "-ac", "1", str(raw)], check=True)
+# social-video loudness for the narration: -16 LUFS integrated, -1.5 dBTP
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(raw), "-af", "loudnorm=I=-16:TP=-1.5:LRA=11",
                 "-ar", "48000", "-ac", "1", str(out)], check=True)
 (proj / "audio" / "vo-lines.json").write_text(json.dumps({"duration": round(dur(out), 3), "lines": meta},
                                                          indent=1))
