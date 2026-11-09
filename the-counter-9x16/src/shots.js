@@ -932,5 +932,35 @@ export function buildShots(ctx) {
     D.cam({ p: [[3.0, 3.4, 15.6], [3.0, 3.2, 15.0]], l: [3.0, 2.3, 6.9], fov: 42, ap: 10, seed: 58 }, u, d);
   });
 
+  // COVER (thumbnail still; sits past the end of the film so it never renders in the video)
+  shot(200, 210, (u, d, t) => {
+    D.lights("night", 0, { fill: [2.5, 5.5, 13, 230] });
+    pipe.bloom.strength = 0.5;
+    W.lights.hemi.intensity = 0.75;
+    pipe.grade.uniforms.uVignette.value = 0.75;
+    riceRain(130);
+    dustHang(130, 900);
+    const k = C.kid;
+    D.place(k, 1.0, 0, 6.55, 0.12);
+    k.j.torso.rotation.x = 0.12;
+    k.j.head.rotation.x = 0.06;
+    k.j.head.rotation.y = -0.18;
+    k.j.armL.rotation.x = k.j.armR.rotation.x = -1.25;
+    k.j.armL.rotation.z = -0.45;
+    k.j.armR.rotation.z = 0.45;
+    k.setFace("scared", { sweat: true });
+    const c = D.counterStand(0.35, 0, -1.4, { hunch: 0.5, neck: 0.65 });
+    c.root.rotation.y = 0;
+    c.j.head.rotation.x = 0.2;
+    c.j.upperR.rotation.x = -1.05;
+    c.j.upperR.rotation.z = 0.12;
+    c.j.foreR.rotation.x = -0.5;
+    c.j.upperL.rotation.x = -0.35;
+    D.point(c, "R");
+    c.setEyes(1.2, 0);
+    const kh = D.wpos(k.j.head, [0, 0.62, 0]);
+    D.cam({ p: [1.5, 3.4, 14.2], l: [1.1, 7.6, 2.0], f: kh, fov: 52, ap: 5, shake: 0, seed: 99 }, 0, 1);
+  });
+
   return S;
 }
