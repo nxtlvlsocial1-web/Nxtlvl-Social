@@ -1,6 +1,6 @@
 ---
 format: 1080x1920
-duration: 127s
+duration: 127.6s
 message: "A kid outsmarts the Counter, a midnight creature who must count everything, to save Grandpa"
 arc: Rule → Creature → Weakness → Cast → Accident → Midnight → Hide → Idea → Loop → Sunrise → Button
 audience: storytime viewers on TikTok and YouTube Shorts
@@ -18,7 +18,7 @@ time, centred inside the 9:16 safe zone (clear of the top 250 px and bottom 400 
 - start: 0.00s
 - poster: 2.25
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "In my town, every house keeps a jar of rice by the front door."
 - src: index.html
 - shots: 1 shot
@@ -32,7 +32,7 @@ Opens on the strange rule itself: the jar is the hook and the story's key prop.
 - start: 3.75s
 - poster: 5.66
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Because every night at midnight, the Counter lets himself in."
 - src: index.html
 - shots: 1 shot
@@ -46,7 +46,7 @@ Makes the rule town-wide and introduces the threat by shadow only.
 - start: 6.93s
 - poster: 8.99
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "He's so tall, he has to fold in half to fit through the door."
 - src: index.html
 - shots: 1 shot
@@ -60,7 +60,7 @@ First look at the Counter's size; keep him half-hidden.
 - start: 10.37s
 - poster: 12.95
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "His head is a big white cube, like a dice. And every black dot is an eye."
 - src: index.html
 - shots: 1 shot
@@ -74,7 +74,7 @@ The creature's memorable design: creepy and a bit funny.
 - start: 14.67s
 - poster: 19.01
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "He can't take anyone until he's counted everything in the house. Every spoon. Every sock. Every single grain of rice."
 - src: index.html
 - shots: 4 shots (cut on each 'Every')
@@ -88,7 +88,7 @@ Sets the rule the whole plot turns on.
 - start: 21.90s
 - poster: 24.44
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "The rice keeps him busy until sunrise. And at sunrise, he has to leave."
 - src: index.html
 - shots: 1 shot, time-lapse light
@@ -102,7 +102,7 @@ Sets the escape condition: survive until sunrise.
 - start: 26.13s
 - poster: 28.56
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "And if anything makes him lose count, he has to start again, from one."
 - src: index.html
 - shots: 1 shot
@@ -116,7 +116,7 @@ Plants the weakness that pays off in the climax.
 - start: 30.18s
 - poster: 31.97
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "I'm eleven, and keeping our jar full is my job."
 - src: index.html
 - shots: 1 shot
@@ -130,7 +130,7 @@ The hero and his job: the jar is his responsibility.
 - start: 33.16s
 - poster: 35.05
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Grandpa lives with us. He hates mess more than anything."
 - src: index.html
 - shots: 1 shot
@@ -144,7 +144,7 @@ Grandpa's quirk #1: hates mess (causes the problem).
 - start: 36.30s
 - poster: 38.46
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "He vacuums after breakfast, after lunch, and once, at a wedding."
 - src: index.html
 - shots: 3 quick shots
@@ -158,7 +158,7 @@ Comic beat; makes the vacuum a character.
 - start: 39.90s
 - poster: 41.61
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "And when he sleeps, he snores like a lawnmower."
 - src: index.html
 - shots: 1 shot
@@ -172,7 +172,7 @@ Grandpa's quirk #2: snoring (saves the day later).
 - start: 42.75s
 - poster: 44.63
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Last Tuesday, Mom had the night shift at the hospital."
 - src: index.html
 - shots: 1 shot
@@ -186,7 +186,7 @@ Removes the adult: the kid is in charge.
 - start: 45.88s
 - poster: 47.69
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Jar by the door, she said. Lights out by eleven."
 - src: index.html
 - shots: 1 shot
@@ -200,7 +200,7 @@ Restates the stakes in the parent's voice.
 - start: 48.89s
 - poster: 51.12
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "I filled it right to the top, with the last bag of rice in the house."
 - src: index.html
 - shots: 1 shot
@@ -214,7 +214,7 @@ Explains why the jar can't be refilled later.
 - start: 52.61s
 - poster: 55.02
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "At eleven fifty-five, our dog Biscuit chased a moth, straight into it."
 - src: index.html
 - shots: 2 shots
@@ -228,7 +228,7 @@ The accident, five minutes before midnight.
 - start: 56.62s
 - poster: 57.49
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Rice. Everywhere."
 - src: index.html
 - shots: 1 shot
@@ -242,7 +242,7 @@ The problem lands, with a laugh.
 - start: 58.07s
 - poster: 60.11
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Grandpa didn't say a word. He just plugged in the vacuum."
 - src: index.html
 - shots: 2 shots
@@ -256,7 +256,7 @@ Grandpa's quirk turns into the disaster.
 - start: 61.47s
 - poster: 63.48
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "By the time I got back with the broom, every grain was gone."
 - src: index.html
 - shots: 1 shot
@@ -270,7 +270,7 @@ Raises stakes: nothing left for the Counter to count.
 - start: 64.82s
 - poster: 66.62
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "And Grandpa was asleep in his armchair, smiling."
 - src: index.html
 - shots: 1 shot
@@ -284,7 +284,7 @@ Calm before the scare.
 - start: 67.82s
 - poster: 69.37
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Then the clock in the hall began to chime."
 - src: index.html
 - shots: 1 shot
@@ -298,7 +298,7 @@ Midnight arrives; sound cue.
 - start: 70.40s
 - poster: 71.14
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Twelve."
 - src: index.html
 - shots: 1 shot
@@ -312,7 +312,7 @@ Single held beat.
 - start: 71.64s
 - poster: 72.71
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "The front door creaked open."
 - src: index.html
 - shots: 1 shot
@@ -326,7 +326,7 @@ The threat enters.
 - start: 73.43s
 - poster: 74.73
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "One long, pale hand. Then another."
 - src: index.html
 - shots: 1 shot
@@ -340,7 +340,7 @@ Slow reveal, horror grammar.
 - start: 75.59s
 - poster: 77.18
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Then the Counter unfolded into our living room."
 - src: index.html
 - shots: 1 shot
@@ -354,7 +354,7 @@ Full reveal, in our house.
 - start: 78.24s
 - poster: 79.25
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "I dove behind the couch."
 - src: index.html
 - shots: 1 shot
@@ -368,7 +368,7 @@ Puts the viewer in hiding with the kid.
 - start: 79.92s
 - poster: 81.62
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "He looked at the empty jar. Then he started counting."
 - src: index.html
 - shots: 1 shot
@@ -382,7 +382,7 @@ Consequence: nothing to keep him busy.
 - start: 82.76s
 - poster: 84.87
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "One lamp. Two cushions. Forty-one socks. Three hundred books."
 - src: index.html
 - shots: 4 quick shots
@@ -396,7 +396,7 @@ Rhythm: the count is fast and relentless.
 - start: 86.28s
 - poster: 88.46
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Fast. Way too fast. And he was getting closer to Grandpa."
 - src: index.html
 - shots: 1 shot
@@ -410,7 +410,7 @@ Peak tension: Grandpa is next.
 - start: 89.91s
 - poster: 90.82
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Then I saw the vacuum."
 - src: index.html
 - shots: 1 shot
@@ -424,7 +424,7 @@ The idea: the problem becomes the solution.
 - start: 91.42s
 - poster: 93.63
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "I ripped off the lid, yanked out the bag, and threw it as high as I could."
 - src: index.html
 - shots: 3 shots
@@ -438,7 +438,7 @@ The hero acts.
 - start: 95.10s
 - poster: 96.78
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Rice and dust rained down over the whole room."
 - src: index.html
 - shots: 1 shot
@@ -452,7 +452,7 @@ Spectacle: the money shot of the film.
 - start: 97.90s
 - poster: 99.56
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "The Counter froze. All six eyes went wide."
 - src: index.html
 - shots: 1 shot
@@ -466,7 +466,7 @@ He's trapped by his own rule.
 - start: 100.66s
 - poster: 101.43
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "One. Two. Three."
 - src: index.html
 - shots: 1 shot
@@ -480,7 +480,7 @@ Counting begins.
 - start: 101.94s
 - poster: 103.23
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "He got all the way to nine hundred."
 - src: index.html
 - shots: 1 shot
@@ -494,7 +494,7 @@ Time passing, hope rising.
 - start: 104.09s
 - poster: 105.16
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Then Grandpa snored."
 - src: index.html
 - shots: 1 shot
@@ -508,7 +508,7 @@ Payoff of quirk #2.
 - start: 105.88s
 - poster: 107.08
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "The Counter flinched. He'd lost count."
 - src: index.html
 - shots: 1 shot
@@ -522,7 +522,7 @@ Payoff of the lose-count rule.
 - start: 107.88s
 - poster: 108.65
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "One. Two. Three."
 - src: index.html
 - shots: 1 shot
@@ -536,7 +536,7 @@ Comic repeat.
 - start: 109.16s
 - poster: 110.95
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Every time he got close, Grandpa snored again."
 - src: index.html
 - shots: 1 shot
@@ -550,7 +550,7 @@ The loop, in one frame.
 - start: 112.14s
 - poster: 113.19
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "All. Night. Long."
 - src: index.html
 - shots: 1 shot
@@ -564,7 +564,7 @@ Compresses the night.
 - start: 113.89s
 - poster: 117.89
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "When the sun hit the window, the Counter stood up, stared at me with all six eyes, and folded himself back out the door."
 - src: index.html
 - shots: 4 shots
@@ -578,7 +578,7 @@ Resolution and one last scare.
 - start: 120.55s
 - poster: 122.26
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Grandpa woke up, looked at the floor, and sighed."
 - src: index.html
 - shots: 1 shot
@@ -592,7 +592,7 @@ Set-up for the button.
 - start: 123.41s
 - poster: 124.29
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: "Who made this mess?"
 - src: index.html
 - shots: 1 shot
@@ -606,7 +606,7 @@ Deadpan button, as in the reference.
 - start: 124.87s
 - poster: 125.87
 - transition_in: cut
-- status: outline
+- status: animated
 - voiceover: ""
 - src: index.html
 - shots: 1 shot + CTA text

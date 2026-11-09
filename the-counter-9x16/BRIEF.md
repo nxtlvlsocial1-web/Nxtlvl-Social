@@ -38,3 +38,5 @@ a parent away for the night, a midnight close call, and a deadpan button.
 - Original blocky characters built in three.js. No Roblox logos, UI, avatars or assets.
 - Hard cuts every 1-4 s like the reference; no fades from black (hook in the first frame).
 - Music and SFX only from licensed or generated sources (media-use).
+- 2026-11-09: user approved the script and shot plan ("All good") and asked to skip the sketch pass and
+  go straight to the 3D video. Draft render goes to the user for approval before the delivery render.

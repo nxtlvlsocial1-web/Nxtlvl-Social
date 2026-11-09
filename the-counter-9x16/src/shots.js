@@ -916,7 +916,7 @@ export function buildShots(ctx) {
     D.cam({ p: [ahead(h, CF, 3.8, -0.3, 0.4), ahead(h, CF, 3.5, -0.25, 0.35)], l: [h[0], h[1] - 0.25, h[2]], fov: 30, ap: 16, seed: 57 }, u, d);
   });
   // F43 end card: the kid and Biscuit, dust-covered, behind the couch
-  shot(124.87, 126.92, (u, d, t) => {
+  shot(124.87, 127.6, (u, d, t) => {
     D.lights("dawn", 1, { fill: [2.5, 5, 12, 200] });
     riceRain(t);
     dustHang(t, 500);
