@@ -8,8 +8,9 @@ Opened outside claude.ai, the same page falls back to saving in the browser.
 
 ## What it does
 - **Clients & brands**: GSTIN auto-fills state and PAN; billing currency, TDS rate, payment terms, monthly retainer and bill day.
+  Per-client GST setting: Auto (follows your own GST registration), Charge GST, or No GST.
 - **Invoices**: numbered PREFIX/26-27/001 (restarts each April); CGST+SGST or IGST from place of supply, export under LUT,
-  or no GST; SAC codes; TDS shown with net payable; amount in words (Indian system); UPI QR for the amount due;
+  or no GST, with an Applicable / Not applicable switch on every invoice; SAC codes; TDS shown with net payable; amount in words (Indian system); UPI QR for the amount due;
   download as HTML (print to PDF); copy or WhatsApp a payment reminder; duplicate, cancel, mark fully paid.
 - **Payments**: against an invoice (pre-fills balance and TDS) or as other income (brand deals, AdSense, affiliate);
   UPI/NEFT/IMPS/RTGS/cash/cheque/PayPal/Wise, UTR reference, foreign currency with INR credited.

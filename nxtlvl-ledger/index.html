@@ -253,6 +253,16 @@ tfoot td { font-weight: 700; border-top: 1px solid var(--line-2); border-bottom:
 .fld input::placeholder, .fld textarea::placeholder, .items input::placeholder { color: var(--faint); }
 .fsec { grid-column: 1 / -1; margin: 10px 0 0; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; color: var(--accent-text); }
 .fsec::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(216, 187, 255, .25), transparent); }
+.fld .lab { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .01em; }
+.switch { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; padding: 7px 0; position: relative; width: fit-content; }
+.fld label.switch { font-size: 14px; font-weight: 600; color: var(--ink); }
+.switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.switch .knob { width: 44px; height: 25px; border-radius: 99px; background: rgba(255, 255, 255, .09); border: 1px solid var(--line-2); position: relative; flex: none; transition: background .25s, box-shadow .25s, border-color .25s; }
+.switch .knob::after { content: ""; position: absolute; top: 2px; left: 2px; width: 19px; height: 19px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0, 0, 0, .4); transition: transform .3s var(--ease); }
+.switch input:checked + .knob { background: var(--grad); border-color: transparent; box-shadow: 0 0 16px rgba(169, 92, 255, .6); }
+.switch input:checked + .knob::after { transform: translateX(19px); }
+.switch input:focus-visible + .knob { outline: 2px solid var(--lift); outline-offset: 2px; }
+.items select:disabled { opacity: .35; }
 .check { grid-column: span 6; display: flex; gap: 10px; align-items: center; font-weight: 500; }
 .check.half { grid-column: span 3; }
 .check input { width: 18px; height: 18px; accent-color: var(--lift); }
@@ -469,12 +479,18 @@ const hasSamples = () => COLS.some(c => S[c].some(x => x.sample));
 const fxRate = cur => cur && cur !== 'INR' ? (num((S.config.fx || {})[cur]) || 1) : 1;
 
 /* ---------- money maths ---------- */
-function autoTaxMode(cl) {
+const GST_PREFS = [['auto', 'Auto · follow my GST registration'], ['yes', 'Charge GST'], ['no', 'No GST for this client']];
+function placeMode(cl) {
   const c = S.config;
-  if (!c.gstRegistered) return 'none';
   if (cl && cl.country && cl.country !== 'India') return 'export';
   if (cl && cl.state && c.state && cl.state !== c.state) return 'inter';
   return 'intra';
+}
+function autoTaxMode(cl) {
+  const pref = (cl && cl.gst) || 'auto';
+  if (pref === 'no') return 'none';
+  if (pref === 'auto' && !S.config.gstRegistered) return 'none';
+  return placeMode(cl);
 }
 function calc(inv) {
   const mode = inv.taxMode || 'none';
@@ -714,6 +730,7 @@ function clientForm(c = {}) {
     { k: 'tdsRate', label: 'TDS they deduct', half: true, type: 'select', opts: TDS_OPTS, def: 0 },
     { k: 'address', label: 'Billing address', type: 'textarea', rows: 2 },
     { k: 'terms', label: 'Payment terms (days)', type: 'number', half: true, def: S.config.terms, step: '1' },
+    { k: 'gst', label: 'GST on their invoices', type: 'select', half: true, opts: GST_PREFS, def: 'auto', help: 'Pick No GST for clients you bill without GST' },
     { type: 'section', label: 'Monthly retainer' },
     { k: 'retainer', label: 'Retainer per month (in billing currency)', type: 'number', half: true, ph: 'Leave empty if project-based' },
     { k: 'billingDay', label: 'Bill on day of month', type: 'number', half: true, def: 1, step: '1' },
@@ -818,7 +835,8 @@ function invoiceEditor(inv = {}) {
   const d = clean({ date: TODAY, items: [{ desc: '', sac: '', qty: 1, rate: '', gst: c.defaultGst ?? 18 }], status: 'draft', kind: 'project', currency: 'INR', fx: 1, tdsRate: 0, taxMode: autoTaxMode(client(inv.clientId)), notes: c.invoiceNotes || '', ...inv });
   if (!d.dueDate) d.dueDate = addDays(d.date, num(client(d.clientId)?.terms) || num(c.terms) || 7);
   const kinds = [['project', 'Project'], ['retainer', 'Monthly retainer'], ['brand', 'Brand deal']];
-  const modes = [['intra', 'CGST + SGST (same state)'], ['inter', 'IGST (other state)'], ['export', 'Export · LUT, 0% IGST'], ['none', 'No GST']];
+  const modes = [['intra', 'CGST + SGST (same state)'], ['inter', 'IGST (other state)'], ['export', 'Export · LUT, 0% IGST']];
+  const gstOn0 = d.taxMode !== 'none';
   openModal(`<form id="invform" novalidate>
     <header class="sh"><div><h2>${isNew ? 'New invoice' : 'Edit ' + esc(d.number)}</h2><p class="sub">${isNew ? 'Number ' + esc(nextNumber(d.date).number) + ' is given when you save' : ''}</p></div><button type="button" class="icon-btn" data-act="close" aria-label="Close">×</button></header>
     <div class="grid-form">
@@ -829,7 +847,8 @@ function invoiceEditor(inv = {}) {
       <div class="fld third" data-fld="period" ${d.kind === 'retainer' ? '' : 'hidden'}><label for="i_period">Retainer month</label><input id="i_period" name="period" type="month" value="${esc(d.period || d.date.slice(0, 7))}"></div>
       <div class="fld third"><label for="i_cur">Currency</label><select id="i_cur" name="currency">${opt(CURRENCIES, d.currency)}</select></div>
       <div class="fld third" data-fld="fx" ${d.currency === 'INR' ? 'hidden' : ''}><label for="i_fx">₹ per 1 <span id="fxcur">${esc(d.currency)}</span></label><input id="i_fx" name="fx" type="number" step="any" inputmode="decimal" value="${esc(d.fx)}"></div>
-      <div class="fld third"><label for="i_tax">GST</label><select id="i_tax" name="taxMode">${opt(modes, d.taxMode)}</select></div>
+      <div class="fld third"><span class="lab">GST</span><label class="switch" for="i_gston"><input type="checkbox" id="i_gston" ${gstOn0 ? 'checked' : ''}><span class="knob"></span><span class="sw-l" id="gst-l">${gstOn0 ? 'Applicable' : 'Not applicable'}</span></label><small id="gst-note" ${gstOn0 && !c.gstRegistered ? '' : 'hidden'}>Add your GSTIN in Settings so it prints on the invoice</small></div>
+      <div class="fld third" data-fld="taxmode" ${gstOn0 ? '' : 'hidden'}><label for="i_tax">GST type</label><select id="i_tax" name="taxMode">${opt(modes, gstOn0 ? d.taxMode : placeMode(client(d.clientId)))}</select></div>
       <div class="fld half"><label for="i_tds">TDS client will deduct</label><select id="i_tds" name="tdsRate">${opt(TDS_OPTS, d.tdsRate)}</select></div>
       <div class="fld half"><label for="i_status">Status</label><select id="i_status" name="status">${opt([['draft', 'Draft (not sent yet)'], ['sent', 'Sent to client']], d.status === 'cancelled' ? 'sent' : d.status)}</select></div>
     </div>
@@ -849,13 +868,13 @@ function invoiceEditor(inv = {}) {
         <input data-k="sac" placeholder="SAC" value="${esc(it.sac)}" aria-label="SAC code" inputmode="numeric">
         <input data-k="qty" type="number" step="any" inputmode="decimal" value="${esc(it.qty)}" aria-label="Quantity">
         <input data-k="rate" type="number" step="any" inputmode="decimal" placeholder="0" value="${esc(it.rate)}" aria-label="Rate">
-        <select data-k="gst" aria-label="GST rate">${opt([0, 5, 12, 18, 28], it.gst)}</select>
+        <select data-k="gst" aria-label="GST rate" ${gstOn() ? '' : 'disabled title="GST not applicable on this invoice"'}>${opt([0, 5, 12, 18, 28], it.gst)}</select>
         <span class="amt" data-amt="${i}"></span>
         <button type="button" class="icon-btn" data-act="del-item" data-i="${i}" aria-label="Remove line" ${d.items.length < 2 ? 'disabled' : ''}>×</button></div>`).join('');
     drawTotals();
   };
   const drawTotals = () => {
-    d.taxMode = E.taxMode.value; d.tdsRate = num(E.tdsRate.value); d.currency = E.currency.value; d.fx = num(E.fx.value) || 1;
+    d.taxMode = taxMode(); d.tdsRate = num(E.tdsRate.value); d.currency = E.currency.value; d.fx = num(E.fx.value) || 1;
     const k = calc(d); const cur = d.currency;
     k.lines.forEach((l, i) => { const el = form.querySelector(`[data-amt="${i}"]`); if (el) el.textContent = fmtCur(l.taxable, cur); });
     $('#inv-totals').innerHTML = `<div><span>Taxable value</span><span>${fmtCur(k.sub, cur)}</span></div>
@@ -875,27 +894,32 @@ function invoiceEditor(inv = {}) {
   form.addEventListener('change', e => {
     const n = e.target.name;
     if (n === 'clientId') { const cl = client(e.target.value); if (cl) {
-      E.currency.value = cl.currency || 'INR'; E.tdsRate.value = num(cl.tdsRate); E.taxMode.value = autoTaxMode(cl);
+      E.currency.value = cl.currency || 'INR'; E.tdsRate.value = num(cl.tdsRate); setGst(autoTaxMode(cl) !== 'none'); E.taxMode.value = placeMode(cl);
       E.dueDate.value = addDays(E.date.value || TODAY, num(cl.terms) || num(c.terms) || 7);
       if (cl.type === 'brand') E.kind.value = 'brand';
       if (E.currency.value !== 'INR') E.fx.value = fxRate(E.currency.value);
       syncFx(); } }
+    if (e.target.id === 'i_gston') setGst(e.target.checked);
     if (n === 'kind') form.querySelector('[data-fld="period"]').hidden = E.kind.value !== 'retainer';
     if (n === 'currency') { if (E.currency.value !== 'INR') E.fx.value = fxRate(E.currency.value); syncFx(); }
     if (n === 'date') { const cl = client(E.clientId.value); E.dueDate.value = addDays(E.date.value || TODAY, num(cl?.terms) || num(c.terms) || 7); }
     drawTotals();
   });
+  function gstOn() { const el = document.getElementById('i_gston'); return el ? el.checked : gstOn0; }
+  function taxMode() { return gstOn() ? E.taxMode.value : 'none'; }
+  function setGst(on) { $('#i_gston').checked = on; $('#gst-l').textContent = on ? 'Applicable' : 'Not applicable'; form.querySelector('[data-fld="taxmode"]').hidden = !on; $('#gst-note').hidden = !(on && !c.gstin);
+    form.querySelectorAll('.item [data-k=gst]').forEach(sel => { sel.disabled = !on; }); }
   const syncFx = () => { form.querySelector('[data-fld="fx"]').hidden = E.currency.value === 'INR'; $('#fxcur').textContent = E.currency.value; };
   form.addEventListener('click', e => {
     const a = e.target.closest('[data-act]'); if (!a) return;
-    if (a.dataset.act === 'add-item') { d.items.push({ desc: '', sac: '', qty: 1, rate: '', gst: c.gstRegistered ? (c.defaultGst ?? 18) : 0 }); drawItems(); form.querySelector(`.item[data-i="${d.items.length - 1}"] input`).focus(); }
+    if (a.dataset.act === 'add-item') { d.items.push({ desc: '', sac: '', qty: 1, rate: '', gst: c.defaultGst ?? 18 }); drawItems(); form.querySelector(`.item[data-i="${d.items.length - 1}"] input`).focus(); }
     if (a.dataset.act === 'del-item') { d.items.splice(+a.dataset.i, 1); drawItems(); }
   });
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const go = e.submitter && e.submitter.value;
     const v = { clientId: E.clientId.value, kind: E.kind.value, date: E.date.value, dueDate: E.dueDate.value, currency: E.currency.value, fx: E.currency.value === 'INR' ? 1 : (num(E.fx.value) || 1),
-      taxMode: E.taxMode.value, tdsRate: num(E.tdsRate.value), status: d.status === 'cancelled' ? 'cancelled' : E.status.value, notes: E.notes.value.trim(), period: E.kind.value === 'retainer' ? E.period.value : '' };
+      taxMode: taxMode(), tdsRate: num(E.tdsRate.value), status: d.status === 'cancelled' ? 'cancelled' : E.status.value, notes: E.notes.value.trim(), period: E.kind.value === 'retainer' ? E.period.value : '' };
     const items = d.items.map(it => ({ desc: String(it.desc || '').trim(), sac: String(it.sac || '').trim(), qty: num(it.qty) || 0, rate: num(it.rate), gst: num(it.gst) })).filter(it => it.desc || it.rate);
     if (!v.clientId) { toast('Choose who the invoice is for.', 'bad'); return; }
     if (!v.date) { toast('Add an invoice date.', 'bad'); return; }
@@ -996,7 +1020,7 @@ function clientView(id) {
     <div class="inv-actions"><button class="btn primary sm" data-act="new-invoice" data-client="${esc(c.id)}">New invoice</button><button class="btn sm" data-act="new-payment" data-client="${esc(c.id)}">Record payment</button><button class="btn sm" data-act="edit-client" data-id="${esc(c.id)}">Edit details</button>${wa ? `<a class="btn sm" href="${esc(wa)}" target="_blank" rel="noopener">WhatsApp</a>` : ''}</div>
     <div class="sbody">
       <div class="mini-tiles"><div><span>Revenue ${fyLabel(S.fy)}</span><b>${fmtShort(fyRev)}</b></div><div><span>Billed all time</span><b>${fmtShort(billed)}</b></div><div><span>Outstanding</span><b class="${out > 0 ? 'neg' : ''}">${fmtShort(out)}</b></div><div><span>Retainer / month</span><b>${num(c.retainer) ? fmtCur(num(c.retainer), c.currency || 'INR', 0) : '—'}</b></div></div>
-      <div class="kv">${[['Contact', c.contact], ['Phone', c.phone], ['Email', c.email], ['GSTIN', c.gstin], ['PAN', c.pan], ['State', c.state], ['Country', c.country], ['Billing in', c.currency || 'INR'], ['TDS', labelOf(TDS_OPTS, num(c.tdsRate))], ['Terms', (c.terms || S.config.terms) + ' days'], ['Services', c.services], ['Bills on', num(c.retainer) ? 'Day ' + (c.billingDay || 1) : '']].filter(x => x[1]).map(x => `<div><span>${x[0]}</span><b>${esc(x[1])}</b></div>`).join('')}</div>
+      <div class="kv">${[['Contact', c.contact], ['Phone', c.phone], ['Email', c.email], ['GSTIN', c.gstin], ['PAN', c.pan], ['State', c.state], ['Country', c.country], ['Billing in', c.currency || 'INR'], ['TDS', labelOf(TDS_OPTS, num(c.tdsRate))], ['GST on invoices', labelOf(GST_PREFS, c.gst || 'auto') + ' (' + (autoTaxMode(c) === 'none' ? 'not charged' : 'charged') + ')'], ['Terms', (c.terms || S.config.terms) + ' days'], ['Services', c.services], ['Bills on', num(c.retainer) ? 'Day ' + (c.billingDay || 1) : '']].filter(x => x[1]).map(x => `<div><span>${x[0]}</span><b>${esc(x[1])}</b></div>`).join('')}</div>
       ${c.address ? `<div class="kv"><div><span>Billing address</span><b style="white-space:pre-line">${esc(c.address)}</b></div></div>` : ''}
       ${c.notes ? `<div class="kv"><div><span>Notes</span><b style="white-space:pre-line">${esc(c.notes)}</b></div></div>` : ''}
       <div class="card"><header><h2>Invoices</h2><small>${invs.length}</small></header><div class="body list">${invs.length ? invs.map(i => { const k = calc(i); return `<div class="row" data-act="view-invoice" data-id="${esc(i.id)}" style="cursor:pointer"><div class="grow"><div class="t">${esc(i.number)}</div><div class="s">${fmtDate(i.date)} · due ${fmtDate(i.dueDate)}</div></div><span class="num">${fmtCur(k.total, i.currency || 'INR', 0)}</span>${chip(k.status)}</div>`; }).join('') : '<p class="muted" style="margin:0">No invoices yet.</p>'}</div></div>
@@ -1110,7 +1134,7 @@ function vClients() {
   return top('Clients & brands', `${nC} clients · ${nB} brands · ${fmtShort(mrr())} in monthly retainers`, `${fySelect()}<button class="btn primary" data-act="new-client">+ Add client or brand</button>`) + banners()
   + `<div class="tools"><div class="chips">${[['all', 'All'], ['client', 'Clients'], ['brand', 'Brands']].map(([k, l]) => `<button type="button" data-act="filter" data-key="clients" data-val="${k}" aria-pressed="${f === k}">${l}</button>`).join('')}</div><span class="sp" style="flex:1"></span><input class="search" id="q" type="search" placeholder="Search name, phone, GSTIN" value="${esc(S.f.q)}" aria-label="Search clients"></div>`
   + `<div class="card">${rows.length ? `<div class="tbl-wrap"><table class="tbl-min"><thead><tr><th>Name</th><th>Contact</th><th>State</th><th class="r">Retainer / mo</th><th class="r">Revenue ${fyLabel(S.fy)}</th><th class="r">Outstanding</th><th>Status</th></tr></thead><tbody>
-    ${rows.map(({ c, out, rev }) => `<tr class="click" data-act="view-client" data-id="${esc(c.id)}"><td><div class="t">${esc(c.name)}${c.sample ? ' <span class="st plain">Example</span>' : ''}</div><div class="s">${c.type === 'brand' ? 'Brand' : 'Client'}${c.services ? ' · ' + esc(c.services) : ''}</div></td><td><div>${esc(c.contact || '—')}</div><div class="s">${esc(c.phone || c.email || '')}</div></td><td>${esc(c.country && c.country !== 'India' ? c.country : c.state || '—')}</td><td class="r">${num(c.retainer) ? fmtCur(num(c.retainer), c.currency || 'INR', 0) : '—'}</td><td class="r">${fmtShort(rev)}</td><td class="r ${out > 0 ? 'neg' : ''}">${out ? fmtShort(out) : '—'}</td><td>${chip(c.status || 'active', labelOf([['active', 'Active'], ['paused', 'Paused'], ['ended', 'Ended']], c.status || 'active'))}</td></tr>`).join('')}
+    ${rows.map(({ c, out, rev }) => `<tr class="click" data-act="view-client" data-id="${esc(c.id)}"><td><div class="t">${esc(c.name)}${c.sample ? ' <span class="st plain">Example</span>' : ''}</div><div class="s">${c.type === 'brand' ? 'Brand' : 'Client'}${c.gst === 'no' ? ' · No GST' : c.gst === 'yes' ? ' · GST' : ''}${c.services ? ' · ' + esc(c.services) : ''}</div></td><td><div>${esc(c.contact || '—')}</div><div class="s">${esc(c.phone || c.email || '')}</div></td><td>${esc(c.country && c.country !== 'India' ? c.country : c.state || '—')}</td><td class="r">${num(c.retainer) ? fmtCur(num(c.retainer), c.currency || 'INR', 0) : '—'}</td><td class="r">${fmtShort(rev)}</td><td class="r ${out > 0 ? 'neg' : ''}">${out ? fmtShort(out) : '—'}</td><td>${chip(c.status || 'active', labelOf([['active', 'Active'], ['paused', 'Paused'], ['ended', 'Ended']], c.status || 'active'))}</td></tr>`).join('')}
     </tbody></table></div>` : `<div class="empty"><span class="serif">${S.clients.length ? 'No matches.' : 'No clients yet.'}</span><p>${S.clients.length ? 'Try another search or filter.' : 'Add the businesses you work for and the brands you collaborate with. GSTIN fills in their state and PAN automatically.'}</p>${S.clients.length ? '' : '<button class="btn primary" data-act="new-client">Add client or brand</button>'}</div>`}</div>`;
 }
 function vInvoices() {
@@ -1307,7 +1331,7 @@ async function act(el) {
       const cl = client(id); if (!cl) break; const svc = (cl.services || 'Monthly retainer').split(',')[0].trim();
       const known = (S.config.services || []).find(s => s.name.toLowerCase() === svc.toLowerCase());
       invoiceEditor({ clientId: cl.id, kind: 'retainer', period: THIS_MONTH, currency: cl.currency || 'INR', fx: fxRate(cl.currency), tdsRate: num(cl.tdsRate), taxMode: autoTaxMode(cl),
-        items: [{ desc: `${svc} retainer · ${fmtMonth(THIS_MONTH)}`, sac: known ? known.sac : '998361', qty: 1, rate: num(cl.retainer), gst: S.config.gstRegistered ? (num(S.config.defaultGst) || 18) : 0 }] }); break; }
+        items: [{ desc: `${svc} retainer · ${fmtMonth(THIS_MONTH)}`, sac: known ? known.sac : '998361', qty: 1, rate: num(cl.retainer), gst: num(S.config.defaultGst) || 18 }] }); break; }
     case 'view-invoice': invoiceView(id); break;
     case 'edit-invoice': { const inv = S.invoices.find(i => i.id === id); if (inv) invoiceEditor(inv); break; }
     case 'inv-sent': { const inv = S.invoices.find(i => i.id === id); if (inv) { await saveDoc('invoices', { ...inv, status: 'sent' }); toast('Marked as sent'); setTimeout(() => invoiceView(id), 60); } break; }
@@ -1326,7 +1350,7 @@ async function act(el) {
     case 'edit-deal': { const d = S.deals.find(x => x.id === id); if (d) dealForm(d); break; }
     case 'deal-invoice': { const d = S.deals.find(x => x.id === id); const cl = d && client(d.clientId); if (!cl) break; closeModal();
       invoiceEditor({ clientId: cl.id, kind: d.kind === 'client' ? 'project' : 'brand', currency: d.currency || cl.currency || 'INR', fx: fxRate(d.currency || cl.currency), tdsRate: num(cl.tdsRate), taxMode: autoTaxMode(cl),
-        items: [{ desc: d.title, sac: '998361', qty: 1, rate: num(d.value), gst: S.config.gstRegistered ? (num(S.config.defaultGst) || 18) : 0 }] }); break; }
+        items: [{ desc: d.title, sac: '998361', qty: 1, rate: num(d.value), gst: num(S.config.defaultGst) || 18 }] }); break; }
     case 'clear-samples': { let n = 0; try { for (const c of COLS) for (const row of S[c].filter(x => x.sample)) { await removeDoc(c, row.id); n++; } toast(`Cleared ${n} example records`); } catch (e) { /* toast shown */ } break; }
     case 'csv': exportCSV(el.dataset.kind); break;
     case 'backup': saveFile(`nxtlvl-ledger-backup-${TODAY}.json`, JSON.stringify({ app: 'nxtlvl-ledger', version: 1, exportedAt: new Date().toISOString(), config: S.config, ...Object.fromEntries(COLS.map(c => [c, S[c]])) }, null, 2)); break;
