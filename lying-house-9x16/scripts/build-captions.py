@@ -16,12 +16,15 @@ lines = json.loads((proj / "audio" / "vo-lines.json").read_text())["lines"]
 whisper = json.loads((proj / "transcript.json").read_text())
 
 norm = lambda w: re.sub(r"[^a-z0-9]", "", w.lower())
+# show spoken numbers as digits (punchier on screen, and whisper writes them that way)
+DIGITS = {"twelve": "12", "thirty": "30", "thirty-nine": "39", "forty-seven": "47", "forty-eight": "48", "forty-nine": "49"}
 script = []  # (display, norm, line_no)
 for ln in lines:
     for w in ln["text"].split():
         disp = re.sub(r"[^\w'\-]", "", w).lower()
+        disp = DIGITS.get(disp, disp)
         if disp:
-            script.append({"w": disp, "n": norm(w), "line": ln["line"]})
+            script.append({"w": disp, "n": norm(disp), "line": ln["line"]})
 wn = [norm(x["text"]) for x in whisper]
 sn = [s["n"] for s in script]
 
