@@ -6,7 +6,7 @@
 cd "$(dirname "$0")/.." || exit 1
 export HYPERFRAMES_NO_TELEMETRY=1
 mkdir -p renders
-OUT=renders/nxtlvl_creedom-explainer_reels_9x16_v7.mp4
+OUT=renders/nxtlvl_creedom-explainer_reels_9x16_v9.mp4
 npx --yes hyperframes@0.8.203 render --quality high -w 3 -o renders/master.mp4 > renders/final.log 2>&1
 echo "EXIT $?" >> renders/final.log
 python3 build/sfx_mix.py renders/master.mp4 "$OUT" >> renders/final.log 2>&1

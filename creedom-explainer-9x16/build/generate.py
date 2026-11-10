@@ -32,7 +32,7 @@ import os
 import random
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FW, FH, FPS = 1080, 1920, 40
+FW, FH, FPS = 1080, 1920, 37
 VO = json.load(open(os.path.join(ROOT, "plan", "vo_tight.json")))
 VDUR = 35.43
 DUR = 37.5
@@ -1138,7 +1138,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
   background-image: linear-gradient(rgba(240,50,140,.32) 2px, transparent 2px), linear-gradient(90deg, rgba(240,50,140,.32) 2px, transparent 2px); background-size: 120px 120px;
   -webkit-mask-image: linear-gradient(transparent, #000 45%); mask-image: linear-gradient(transparent, #000 45%); }}
 #lgm {{ position: absolute; left: 100px; top: 715px; width: 250px; height: 250px; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(200,40,120,.25)); }}
-#lgw {{ position: absolute; left: 360px; top: 760px; font: 700 168px/1 "Fraunces"; letter-spacing: -.04em; color: {INK}; padding-bottom: 20px; }}
+#lgw {{ position: absolute; left: 372px; top: 786px; width: 616px; height: auto; }}   /* the client's own wordmark (font and gradient), cut from their logo */
 #lgt {{ position: absolute; left: 0; right: 0; top: 1030px; text-align: center; font: 500 46px/1.2 "Manrope"; color: #7a7a73; opacity: 0; }}
 .spk {{ position: absolute; width: 44px; height: 44px; opacity: 0; }}
 /* Cree */
@@ -1185,7 +1185,7 @@ def main():
       </div></div>
       {"".join(CAPS)}
       <div id="lq"></div>
-      <div id="logo"><div id="lgf"></div><img id="lgm" src="assets/img/cree.png" alt="Cree"><div id="lgw">creedom</div>
+      <div id="logo"><div id="lgf"></div><img id="lgm" src="assets/img/cree.png" alt="Cree"><img id="lgw" src="assets/img/wordmark.png" alt="Creedom">
 <div id="lgt">creedom.ai</div></div>
       {"".join(GBANDS)}
       <audio id="mix" src="assets/audio/bed.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
