@@ -1,6 +1,7 @@
 # Deploys the website and the Book-a-call API to Cloudflare, and attaches nxtlvlsocial.ai, on every push
 # to main (and by hand from the Actions tab). Needs three repository secrets (Settings → Secrets and
-# variables → Actions): CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, RESEND_API_KEY. See DEPLOY.md.
+# variables → Actions): CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, RESEND_API_KEY. Optional: CF_WEB_ANALYTICS_TOKEN
+# turns on Cloudflare Web Analytics on every page. See DEPLOY.md.
 name: Deploy to Cloudflare
 
 on:
@@ -31,6 +32,12 @@ jobs:
       - name: Test the API
         working-directory: backend
         run: npm test
+
+      - name: Add Cloudflare Web Analytics (only when the token secret is set)
+        working-directory: backend
+        run: node scripts/add-web-analytics.mjs
+        env:
+          CF_WEB_ANALYTICS_TOKEN: ${{ secrets.CF_WEB_ANALYTICS_TOKEN }}
 
       - name: Deploy the Worker, the site and the domain
         uses: cloudflare/wrangler-action@v3

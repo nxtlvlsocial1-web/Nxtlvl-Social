@@ -1,0 +1,93 @@
+<template>
+  <link rel="stylesheet" href="assets/css/ad.css" />
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-400.woff2") format("woff2"); font-weight: 400; }
+    #root { position: absolute; inset: 0; overflow: visible; }
+    /* profile row */
+    #h-ava { position: absolute; left: 60px; top: 308px; width: 88px; height: 88px; border-radius: 50%; padding: 4px;
+      background: conic-gradient(from 210deg, #A95CFF, #7D18FC, #FF6FD8, #FFB35C, #A95CFF); }
+    #h-ava > div { width: 100%; height: 100%; border-radius: 50%; border: 4px solid #0B0624; display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(circle at 30% 25%, #2A1260, #05030C 70%); }
+    #h-ava svg { width: 52px; height: 52px; display: block; }
+    #h-handle { position: absolute; left: 168px; top: 314px; font-family: "Archivo", sans-serif; font-weight: 800; font-stretch: 104%;
+      font-size: 42px; line-height: 1; color: #FFFFFF; letter-spacing: -.01em; }
+    #h-sub { position: absolute; left: 168px; top: 364px; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 28px; line-height: 1; color: #D8BBFF; }
+    #h-posts { position: absolute; right: 60px; top: 306px; width: 170px; text-align: center; }
+    #h-pn { font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 108%; font-size: 58px; line-height: 1; color: #FFFFFF; font-variant-numeric: tabular-nums; }
+    #h-pl { margin-top: 6px; font-family: "Instrument Serif", serif; font-style: italic; font-size: 36px; line-height: 1; color: rgba(245,242,255,.75); }
+    /* the growth line behind the counter */
+    #h-chart { position: absolute; left: 0; top: -800px; width: 1080px; height: 1920px; }
+    /* the counter: a fixed-width box so the number grows to the left and nothing jitters */
+    #h-num { position: absolute; left: 30px; top: 436px; width: 640px; text-align: right; font-family: "Archivo", sans-serif; font-weight: 900;
+      font-stretch: 112%; font-size: 196px; line-height: 1; letter-spacing: -.03em; font-variant-numeric: tabular-nums;
+      background: linear-gradient(180deg, #FFFFFF 10%, #E6D3FF 60%, #B98AFF 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 10px 30px rgba(5,3,12,.8)); transform-origin: 100% 80%; }
+    #h-lab { position: absolute; left: 690px; top: 530px; font-family: "Instrument Serif", serif; font-style: italic; font-size: 82px; line-height: 1; color: #FFFFFF;
+      text-shadow: 0 6px 24px rgba(5,3,12,.8); }
+    #h-fill, #h-dot, #h-halo { opacity: 0; }
+    #h-chip { opacity: 0; position: absolute; left: 404px; top: 650px; height: 56px; padding: 0 22px 0 16px; border-radius: 28px; display: flex; align-items: center; gap: 8px;
+      background: #3BE38F; color: #05030C; font-family: "Archivo", sans-serif; font-weight: 800; font-size: 32px; transform-origin: 50% 0%;
+      box-shadow: 0 10px 28px rgba(59,227,143,.4); }
+    #h-chip svg { width: 26px; height: 26px; display: block; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="p1-hook" data-width="1080" data-height="1920" data-duration="3.84">
+    <div id="h-wrap" class="clip" data-start="0" data-duration="3.84" data-track-index="0" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <svg id="h-chart" viewBox="0 0 1080 1920" data-layout-allow-overflow><defs>
+        <linearGradient id="h-area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7D18FC" stop-opacity=".45"/><stop offset="1" stop-color="#7D18FC" stop-opacity="0"/></linearGradient>
+        <linearGradient id="h-stroke" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7D18FC"/><stop offset="1" stop-color="#E6D3FF"/></linearGradient></defs>
+        <polygon id="h-fill" points="40.0,1470.0 60.0,1467.1 80.0,1464.7 100.0,1462.9 120.0,1461.9 140.0,1461.7 160.0,1462.2 180.0,1463.1 200.0,1464.1 220.0,1465.0 240.0,1465.4 260.0,1465.1 280.0,1464.1 300.0,1462.3 320.0,1459.8 340.0,1456.8 360.0,1453.6 380.0,1450.4 400.0,1447.5 420.0,1444.9 440.0,1442.8 460.0,1441.0 480.0,1439.5 500.0,1438.1 520.0,1436.6 540.0,1434.8 560.0,1432.5 580.0,1429.6 600.0,1426.0 620.0,1421.9 640.0,1417.1 660.0,1412.0 680.0,1406.5 700.0,1400.9 720.0,1395.1 740.0,1389.3 760.0,1383.3 780.0,1377.2 800.0,1370.7 820.0,1363.8 840.0,1356.3 860.0,1348.2 880.0,1339.3 900.0,1329.7 920.0,1319.3 940.0,1308.1 960.0,1296.2 980.0,1283.5 1000.0,1270.0 1000,1490 40,1490" fill="url(#h-area)"/>
+        <polyline id="h-line" points="40.0,1470.0 60.0,1467.1 80.0,1464.7 100.0,1462.9 120.0,1461.9 140.0,1461.7 160.0,1462.2 180.0,1463.1 200.0,1464.1 220.0,1465.0 240.0,1465.4 260.0,1465.1 280.0,1464.1 300.0,1462.3 320.0,1459.8 340.0,1456.8 360.0,1453.6 380.0,1450.4 400.0,1447.5 420.0,1444.9 440.0,1442.8 460.0,1441.0 480.0,1439.5 500.0,1438.1 520.0,1436.6 540.0,1434.8 560.0,1432.5 580.0,1429.6 600.0,1426.0 620.0,1421.9 640.0,1417.1 660.0,1412.0 680.0,1406.5 700.0,1400.9 720.0,1395.1 740.0,1389.3 760.0,1383.3 780.0,1377.2 800.0,1370.7 820.0,1363.8 840.0,1356.3 860.0,1348.2 880.0,1339.3 900.0,1329.7 920.0,1319.3 940.0,1308.1 960.0,1296.2 980.0,1283.5 1000.0,1270.0" fill="none" stroke="url(#h-stroke)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle id="h-dot" cx="1000" cy="1270" r="11" fill="#FFFFFF"/>
+        <circle id="h-halo" cx="1000" cy="1270" r="26" fill="#A95CFF" opacity=".35"/>
+      </svg>
+      <div id="h-ava"><div><svg viewBox="20.6 31.6 147.8 147.8"><defs>
+          <linearGradient id="h-g0" gradientUnits="userSpaceOnUse" x1="28.3" y1="171.7" x2="121.6" y2="78.4"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".55" stop-color="#FFFFFF" stop-opacity=".9"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+          <linearGradient id="h-g1" gradientUnits="userSpaceOnUse" x1="69.3" y1="164.7" x2="121.6" y2="112.3"><stop offset="0" stop-color="#A95CFF" stop-opacity="0"/><stop offset=".55" stop-color="#A95CFF" stop-opacity=".9"/><stop offset="1" stop-color="#A95CFF"/></linearGradient>
+          <linearGradient id="h-g2" gradientUnits="userSpaceOnUse" x1="43.8" y1="122.2" x2="82.0" y2="84.0"><stop offset="0" stop-color="#B98AFF" stop-opacity="0"/><stop offset=".55" stop-color="#B98AFF" stop-opacity=".9"/><stop offset="1" stop-color="#B98AFF"/></linearGradient></defs>
+          <path d="M125.94 83.55 L125.37 80.68 L123.99 78.09 L122.30 76.31 L119.78 74.81 L116.94 74.09 L114.00 74.24 L111.24 75.23 L109.24 76.64 L22.62 177.38 L122.67 91.45 L124.77 88.76 L125.85 85.51Z" fill="url(#h-g0)"/>
+          <path d="M123.37 116.27 L122.36 113.23 L120.46 111.42 L117.96 110.59 L115.63 110.82 L113.35 112.12 L65.05 168.89 L121.40 121.01 L122.92 118.86Z" fill="url(#h-g1)"/>
+          <path d="M82.77 88.04 L81.79 85.30 L79.69 83.66 L76.80 83.38 L74.42 84.58 L39.59 126.47 L81.14 91.99 L82.40 90.20Z" fill="url(#h-g2)"/>
+          <path d="M140 33.62 L141.87 42.15 L146.74 50.4 L154.06 56.37 L166.38 60 L154.06 63.63 L146.74 69.6 L141.87 77.85 L140 86.38 L138.13 77.85 L133.26 69.6 L125.94 63.63 L113.62 60 L125.94 56.37 L133.26 50.4 L138.13 42.15 Z" fill="#FFFFFF"/>
+        </svg></div></div>
+      <div id="h-handle">@ai.nxtlvl</div>
+      <div id="h-sub">Grown by Nxtlvl Social</div>
+      <div id="h-posts"><div id="h-pn">0</div><div id="h-pl">posts</div></div>
+      <div id="h-num">0</div>
+      <div id="h-lab">followers</div>
+      <div id="h-chip"><svg viewBox="0 0 24 24"><path d="M5 15l7-7 7 7" stroke="#05030C" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>in 22 posts</div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      function fmt(v) { return String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+      var LEN = document.querySelector("#h-line").getTotalLength();
+      // frame 0: the profile and "0 followers" are already there (the hook); the line waits
+      gsap.set("#h-line", { strokeDasharray: LEN, strokeDashoffset: LEN });
+      tl.fromTo("#h-num", { scale: 0.92 }, { scale: 1, duration: 0.4, ease: "expo.out" }, 0);
+      // "zero" (1.24): the 0 flashes
+      tl.fromTo("#h-num", { filter: "drop-shadow(0 10px 30px rgba(5,3,12,.8)) brightness(1)" },
+        { filter: "drop-shadow(0 0 40px rgba(169,92,255,1)) brightness(1.3)", duration: 0.12, yoyo: true, repeat: 1 }, 1.24);
+      // "7,100" (1.56-2.30): count up while the growth line draws, then land
+      var f = { v: 0 };
+      tl.to(f, { v: 7100, duration: 0.74, ease: "power3.out", onUpdate: function () {
+        var el = document.querySelector("#h-num"); if (el) el.textContent = fmt(f.v); } }, 1.56);
+      tl.fromTo("#h-line", { strokeDashoffset: LEN }, { strokeDashoffset: 0, duration: 0.74, ease: "power3.out" }, 1.56);
+      tl.fromTo("#h-fill", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 1.7);
+      tl.fromTo("#h-num", { scale: 1 }, { scale: 1.08, duration: 0.1, ease: "power2.out", immediateRender: false }, 2.3);
+      tl.to("#h-num", { scale: 1, duration: 0.35, ease: "power3.out" }, 2.4);
+      tl.fromTo(["#h-dot", "#h-halo"], { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)", transformOrigin: "50% 50%" }, 2.28);
+      // "22 posts" (3.00-3.44)
+      var p = { v: 0 };
+      tl.to(p, { v: 22, duration: 0.4, ease: "power2.out", onUpdate: function () {
+        var el = document.querySelector("#h-pn"); if (el) el.textContent = fmt(p.v); } }, 3.0);
+      tl.fromTo("#h-chip", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.7)" }, 2.62);
+      tl.to("#h-wrap", { opacity: 0, filter: "blur(8px)", duration: 0.14, ease: "power2.in" }, 3.7);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["p1-hook"] = tl;
+    })();
+  </script>
+</template>

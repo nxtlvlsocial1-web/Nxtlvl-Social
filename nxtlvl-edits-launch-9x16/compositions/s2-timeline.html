@@ -1,0 +1,116 @@
+<template>
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #t-cam { position: absolute; inset: 0; }
+    #t-panel { position: absolute; left: 40px; top: 300px; width: 1000px; height: 500px; border-radius: 36px;
+      background: linear-gradient(180deg, rgba(26,12,58,.92), rgba(12,6,30,.92)); border: 2px solid rgba(216,187,255,.22);
+      box-shadow: 0 30px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.06); }
+    .t-tick { position: absolute; top: 330px; width: 3px; height: 34px; border-radius: 2px; background: rgba(216,187,255,.55); }
+    .t-num { position: absolute; top: 372px; width: 60px; margin-left: -30px; text-align: center; font-family: "Instrument Sans", sans-serif;
+      font-weight: 600; font-size: 28px; color: rgba(216,187,255,.6); }
+    .t-lab { position: absolute; left: 60px; width: 60px; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 28px; color: rgba(245,242,255,.5); }
+    .t-clip { position: absolute; height: 96px; border-radius: 16px; overflow: hidden; }
+    .t-clip::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, rgba(255,255,255,.07) 0 2px, transparent 2px 48px); }
+    #t-v2 { left: 120px; top: 430px; width: 880px; background: linear-gradient(90deg, #5E0FC4, #7D18FC); }
+    #t-v1 { left: 120px; top: 546px; width: 880px; background: linear-gradient(90deg, #7D18FC, #A95CFF); }
+    #t-a1 { left: 120px; top: 662px; width: 880px; background: linear-gradient(90deg, #2A1260, #3A1A80); }
+    .t-wave { position: absolute; bottom: 14px; width: 6px; border-radius: 3px; background: #D8BBFF; }
+    .t-gap { position: absolute; top: 420px; width: 10px; height: 352px; margin-left: -5px; background: #0C061E; transform-origin: 50% 50%; }
+    .t-slash { position: absolute; top: 410px; width: 6px; height: 372px; margin-left: -3px; border-radius: 3px; background: #FFFFFF;
+      box-shadow: 0 0 24px #A95CFF, 0 0 50px #7D18FC; opacity: 0; }
+    #t-head { position: absolute; left: 0; top: 318px; width: 60px; height: 470px; margin-left: -30px; }
+    #t-head i { position: absolute; left: 28px; top: 40px; width: 4px; height: 430px; background: #FFFFFF; box-shadow: 0 0 14px rgba(216,187,255,.9); }
+    #t-head svg { position: absolute; left: 0; top: 0; width: 60px; height: 60px; overflow: visible; filter: drop-shadow(0 0 12px #A95CFF); }
+    .t-chip { position: absolute; height: 66px; padding: 0 26px; border-radius: 33px; display: flex; align-items: center; gap: 12px;
+      font-family: "Archivo", sans-serif; font-weight: 800; font-stretch: 112%; font-size: 30px; letter-spacing: .04em; color: #05030C; white-space: nowrap;
+      background: #F5F2FF; box-shadow: 0 12px 34px rgba(125,24,252,.45); opacity: 0; }
+    #t-chip1 { left: 610px; top: 238px; }
+    #t-chip2 { left: 540px; top: 1068px; }
+    #t-strip { position: absolute; left: 0; top: 850px; height: 190px; width: 1800px; }
+    .t-frame { position: absolute; top: 0; width: 140px; height: 190px; border-radius: 14px; overflow: hidden;
+      background: linear-gradient(160deg, #2A1260, #0C061E); border: 2px solid rgba(216,187,255,.18); }
+    .t-frame b { position: absolute; left: 20px; right: 20px; bottom: 22px; height: 8px; border-radius: 4px; background: rgba(216,187,255,.35); }
+    .t-frame em { position: absolute; left: 44px; top: 50px; width: 52px; height: 52px; border-radius: 50%; background: radial-gradient(closest-side, #D8BBFF, rgba(169,92,255,0)); }
+    #t-find { position: absolute; left: 446px; top: 830px; width: 188px; height: 230px; opacity: 0; }
+    #t-find i { position: absolute; width: 44px; height: 44px; border-color: #FFFFFF; border-style: solid; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="s2-timeline" data-width="1080" data-height="1920" data-duration="4.0">
+    <div id="t-wrap" class="clip" data-start="0" data-duration="4.0" data-track-index="0" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <div id="t-cam" data-layout-allow-overflow>
+        <div id="t-panel"></div>
+        <div class="t-tick" style="left:179px"></div><div class="t-tick" style="left:299px"></div><div class="t-tick" style="left:419px"></div>
+        <div class="t-tick" style="left:539px"></div><div class="t-tick" style="left:659px"></div><div class="t-tick" style="left:779px"></div>
+        <div class="t-tick" style="left:899px"></div>
+        <div class="t-lab" style="top:462px">V2</div><div class="t-lab" style="top:578px">V1</div><div class="t-lab" style="top:694px">A1</div>
+        <div id="t-v2" class="t-clip"></div>
+        <div id="t-v1" class="t-clip"></div>
+        <div id="t-a1" class="t-clip">
+          <i class="t-wave" style="left:14px;height:30px"></i><i class="t-wave" style="left:34px;height:52px"></i><i class="t-wave" style="left:54px;height:24px"></i>
+          <i class="t-wave" style="left:74px;height:60px"></i><i class="t-wave" style="left:94px;height:38px"></i><i class="t-wave" style="left:114px;height:66px"></i>
+          <i class="t-wave" style="left:134px;height:28px"></i><i class="t-wave" style="left:154px;height:48px"></i><i class="t-wave" style="left:174px;height:62px"></i>
+          <i class="t-wave" style="left:194px;height:34px"></i><i class="t-wave" style="left:214px;height:56px"></i><i class="t-wave" style="left:234px;height:22px"></i>
+          <i class="t-wave" style="left:254px;height:64px"></i><i class="t-wave" style="left:274px;height:40px"></i><i class="t-wave" style="left:294px;height:58px"></i>
+          <i class="t-wave" style="left:314px;height:30px"></i><i class="t-wave" style="left:334px;height:66px"></i><i class="t-wave" style="left:354px;height:44px"></i>
+          <i class="t-wave" style="left:374px;height:26px"></i><i class="t-wave" style="left:394px;height:60px"></i><i class="t-wave" style="left:414px;height:36px"></i>
+          <i class="t-wave" style="left:434px;height:54px"></i><i class="t-wave" style="left:454px;height:66px"></i><i class="t-wave" style="left:474px;height:30px"></i>
+          <i class="t-wave" style="left:494px;height:50px"></i><i class="t-wave" style="left:514px;height:24px"></i><i class="t-wave" style="left:534px;height:62px"></i>
+          <i class="t-wave" style="left:554px;height:42px"></i><i class="t-wave" style="left:574px;height:58px"></i><i class="t-wave" style="left:594px;height:32px"></i>
+          <i class="t-wave" style="left:614px;height:66px"></i><i class="t-wave" style="left:634px;height:46px"></i><i class="t-wave" style="left:654px;height:28px"></i>
+          <i class="t-wave" style="left:674px;height:60px"></i><i class="t-wave" style="left:694px;height:38px"></i><i class="t-wave" style="left:714px;height:52px"></i>
+          <i class="t-wave" style="left:734px;height:64px"></i><i class="t-wave" style="left:754px;height:26px"></i><i class="t-wave" style="left:774px;height:56px"></i>
+          <i class="t-wave" style="left:794px;height:40px"></i><i class="t-wave" style="left:814px;height:62px"></i><i class="t-wave" style="left:834px;height:30px"></i>
+          <i class="t-wave" style="left:854px;height:50px"></i>
+        </div>
+        <div id="t-gap1" class="t-gap" style="left:180px"></div><div id="t-gap2" class="t-gap" style="left:300px"></div>
+        <div id="t-gap3" class="t-gap" style="left:420px"></div><div id="t-gap4" class="t-gap" style="left:540px"></div>
+        <div id="t-sl1" class="t-slash" style="left:180px"></div><div id="t-sl2" class="t-slash" style="left:300px"></div>
+        <div id="t-sl3" class="t-slash" style="left:420px"></div><div id="t-sl4" class="t-slash" style="left:540px"></div>
+        <div id="t-head" data-layout-allow-overflow><i></i>
+          <svg viewBox="-1 -1 2 2"><path d="M0-1C.06-.34.34-.06 1 0 .34.06.06.34 0 1-.06.34-.34.06-1 0-.34-.06-.06-.34 0-1Z" fill="#FFFFFF"/></svg></div>
+        <div id="t-chip1" class="t-chip">✦ ON THE BEAT</div>
+        <div id="t-strip" data-layout-allow-overflow>
+          <div class="t-frame" style="left:0px"><em></em><b></b></div><div class="t-frame" style="left:160px"><em></em><b></b></div>
+          <div class="t-frame" style="left:320px"><em></em><b></b></div><div class="t-frame" style="left:480px"><em></em><b></b></div>
+          <div class="t-frame" style="left:640px"><em></em><b></b></div><div class="t-frame" style="left:800px"><em></em><b></b></div>
+          <div class="t-frame" style="left:960px"><em></em><b></b></div><div class="t-frame" style="left:1120px"><em></em><b></b></div>
+          <div class="t-frame" style="left:1280px"><em></em><b></b></div><div class="t-frame" style="left:1440px"><em></em><b></b></div>
+          <div class="t-frame" style="left:1600px"><em></em><b></b></div>
+        </div>
+        <div id="t-find">
+          <i style="left:0;top:0;border-width:7px 0 0 7px;border-radius:12px 0 0 0"></i><i style="right:0;top:0;border-width:7px 7px 0 0;border-radius:0 12px 0 0"></i>
+          <i style="left:0;bottom:0;border-width:0 0 7px 7px;border-radius:0 0 0 12px"></i><i style="right:0;bottom:0;border-width:0 7px 7px 0;border-radius:0 0 12px 0"></i>
+        </div>
+        <div id="t-chip2" class="t-chip">✦ EVERY FRAME, ON PURPOSE</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      // in on the drop
+      tl.fromTo("#t-cam", { scale: 1.25, opacity: 0, filter: "blur(10px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 0);
+      tl.fromTo(["#t-v2", "#t-v1", "#t-a1"], { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.4, ease: "power3.out", stagger: 0.06 }, 0.05);
+      // the playhead: 240 px a second, so it crosses a beat marker on every beat
+      tl.fromTo("#t-head", { x: 60 }, { x: 1020, duration: 4.0, ease: "none" }, 0);
+      // a razor cut on each of the first four beats
+      for (var n = 1; n <= 4; n++) {
+        var t = n * 0.5;
+        tl.fromTo("#t-sl" + n, { opacity: 0, scaleY: 0.4 }, { opacity: 1, scaleY: 1, duration: 0.05, ease: "none" }, t - 0.02);
+        tl.to("#t-sl" + n, { opacity: 0, duration: 0.25, ease: "power2.out" }, t + 0.05);
+        tl.fromTo("#t-gap" + n, { scaleY: 0 }, { scaleY: 1, duration: 0.08, ease: "power3.out" }, t);
+      }
+      tl.fromTo("#t-chip1", { opacity: 0, y: 20, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: "back.out(2)" }, 0.45);
+      // "Every frame, on purpose.": the strip slides, the viewfinder locks on one frame
+      tl.fromTo("#t-strip", { x: 300, opacity: 0 }, { x: -490, opacity: 1, duration: 1.2, ease: "power3.out" }, 1.35);   // frame 7 stops under the viewfinder
+      tl.fromTo("#t-find", { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.25, ease: "expo.out" }, 2.55);
+      tl.fromTo("#t-chip2", { xPercent: -50, opacity: 0, y: 20, scale: 0.8 }, { xPercent: -50, opacity: 1, y: 0, scale: 1, duration: 0.3, ease: "back.out(2)" }, 2.3);
+      // out: everything rushes past the camera into the four words
+      tl.to("#t-cam", { scale: 1.6, opacity: 0, filter: "blur(16px)", duration: 0.28, ease: "power3.in" }, 3.72);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["s2-timeline"] = tl;
+    })();
+  </script>
+</template>

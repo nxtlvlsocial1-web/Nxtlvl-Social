@@ -1,0 +1,43 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    #root { position: absolute; inset: 0; pointer-events: none; }
+    .u-t { position: absolute; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 28px; letter-spacing: .2em; color: #0B0816;
+      white-space: nowrap; font-variant-numeric: tabular-nums; }
+    #u-tl { left: 120px; top: 70px; } #u-tr { right: 120px; top: 70px; } #u-bl { left: 120px; bottom: 64px; } #u-br { right: 120px; bottom: 64px; }
+    .u-c { position: absolute; width: 34px; height: 34px; border-color: #0B0816; border-style: solid; }
+    #u-c0 { left: 64px; top: 56px; border-width: 3px 0 0 3px; } #u-c1 { right: 64px; top: 56px; border-width: 3px 3px 0 0; }
+    #u-c2 { left: 64px; bottom: 56px; border-width: 0 0 3px 3px; } #u-c3 { right: 64px; bottom: 56px; border-width: 0 3px 3px 0; }
+    #u-rec { display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #FF4D6D; margin-right: 14px; vertical-align: 2px; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="hud" data-width="1920" data-height="1080" data-duration="32">
+    <div id="u-wrap" class="clip" data-start="0" data-duration="32" data-track-index="0" style="position:absolute;inset:0">
+      <div id="u-c0" class="u-c"></div><div id="u-c1" class="u-c"></div><div id="u-c2" class="u-c"></div><div id="u-c3" class="u-c"></div>
+      <div id="u-tl" class="u-t">NXTLVL SOCIAL ✦</div>
+      <div id="u-tr" class="u-t"><i id="u-rec"></i><span id="u-tc">00:00:00</span></div>
+      <div id="u-bl" class="u-t">LAUNCH FILM · VOL. 01</div>
+      <div id="u-br" class="u-t">NXTLVLSOCIAL.AI</div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      // a running timecode, seconds:frames
+      var clock = { t: 0 };
+      tl.fromTo(clock, { t: 0 }, { t: 32, duration: 32, ease: "none", onUpdate: function () {
+        var s = Math.floor(clock.t), f = Math.floor((clock.t - s) * 30);
+        document.querySelector("#u-tc").textContent = "00:" + (s < 10 ? "0" : "") + s + ":" + (f < 10 ? "0" : "") + f;
+      } }, 0);
+      tl.fromTo("#u-rec", { opacity: 1 }, { opacity: 0.25, duration: 0.5, yoyo: true, repeat: 31, ease: "steps(1)" }, 0);
+      // the frame follows the ground: ink on light, mist on dark
+      var grounds = [[1.45, "#F5F2FF"], [6.3, "#0B0816"], [9.5, "#F5F2FF"], [15.3, "#0B0816"], [19.4, "#F5F2FF"]];
+      grounds.forEach(function (g) {
+        tl.to([".u-t"], { color: g[1], duration: 0.01, ease: "none" }, g[0]);
+        tl.to([".u-c"], { borderColor: g[1], duration: 0.01, ease: "none" }, g[0]);
+      });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["hud"] = tl;
+    })();
+  </script>
+</template>

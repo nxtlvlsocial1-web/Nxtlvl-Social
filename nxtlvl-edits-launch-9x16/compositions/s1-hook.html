@@ -1,0 +1,80 @@
+<template>
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Serif Italic"; src: url("assets/fonts/instrument-serif-italic-400.woff2") format("woff2"); }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #h-cam { position: absolute; inset: 0; }
+    .h-line { position: absolute; left: 0; right: 0; text-align: center; font-family: "Archivo", sans-serif; font-weight: 900;
+      font-stretch: 108%; font-size: 112px; line-height: 1; letter-spacing: -.035em; color: #F5F2FF; white-space: nowrap; }
+    #h-l1 { top: 340px; } #h-l2 { top: 470px; } #h-l3 { top: 600px; }
+    #h-l2 b { color: #FF5C7A; font-weight: 900; }
+    #h-ecg { position: absolute; left: 0; top: 900px; width: 1080px; height: 300px; overflow: visible; }
+    #h-timer { position: absolute; left: 760px; top: 830px; height: 64px; padding: 0 22px; border-radius: 32px; display: flex; align-items: center; gap: 12px;
+      background: rgba(20,9,46,.85); border: 2px solid rgba(216,187,255,.35); font-family: "Instrument Sans", sans-serif; font-weight: 600;
+      font-size: 34px; color: #F5F2FF; font-variant-numeric: tabular-nums; }
+    #h-timer i { width: 14px; height: 14px; border-radius: 50%; background: #FF5C7A; display: block; }
+    #h-ours { position: absolute; left: 0; right: 0; top: 380px; text-align: center; opacity: 0; }
+    #h-ours .a { display: block; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 118%; font-size: 150px; line-height: 1;
+      letter-spacing: -.035em; color: #F5F2FF; }
+    #h-ours .b { display: block; margin-top: 6px; font-family: "Serif Italic", serif; font-size: 210px; line-height: 1.02; padding: 0 30px;
+      background: linear-gradient(100deg, #FFFFFF 10%, #D8BBFF 45%, #A95CFF 75%, #FFFFFF 100%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; }
+    #h-flash { position: absolute; inset: 0; background: #F5F2FF; opacity: 0; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="s1-hook" data-width="1080" data-height="1920" data-duration="4.0">
+    <div id="h-wrap" class="clip" data-start="0" data-duration="4.0" data-track-index="0" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <div id="h-cam" data-layout-allow-overflow>
+        <div id="h-l1" class="h-line">MOST REELS</div>
+        <div id="h-l2" class="h-line"><b>DIE</b> IN THE</div>
+        <div id="h-l3" class="h-line">FIRST SECOND</div>
+        <div id="h-timer"><i></i><span id="h-time">1.00s</span></div>
+        <svg id="h-ecg" viewBox="0 0 1080 300" data-layout-allow-overflow>
+          <path id="h-pulse" pathLength="1" d="M-20 150 L120 150 L150 150 L170 92 L190 210 L210 40 L232 236 L254 150 L380 150 L400 120 L420 190 L440 70 L460 220 L482 150 L600 150 L616 132 L632 168 L648 118 L664 176 L680 150 L1100 150"
+            fill="none" stroke="#D8BBFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"
+            style="filter: drop-shadow(0 0 10px rgba(169,92,255,.9))" stroke-dasharray="1 1.2" stroke-dashoffset="1.1"/>
+          <path id="h-revive" pathLength="1" d="M300 150 L470 150 L500 120 L530 260 L560 -60 L600 300 L632 150 L780 150"
+            fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"
+            style="filter: drop-shadow(0 0 16px rgba(169,92,255,1))" stroke-dasharray="1 1.2" stroke-dashoffset="1.1"/>
+        </svg>
+        <div id="h-ours"><span class="a">OURS</span><span class="b">don't.</span></div>
+      </div>
+      <div id="h-flash"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      // frame 0 already reads: the first line is up, the rest slam in with the voice
+      tl.fromTo("#h-l1", { scale: 1.12, opacity: 1 }, { scale: 1, duration: 0.35, ease: "expo.out" }, 0);
+      tl.fromTo("#h-l2", { y: 60, opacity: 0, filter: "blur(10px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.3, ease: "expo.out" }, 0.72);
+      tl.fromTo("#h-l3", { y: 60, opacity: 0, filter: "blur(10px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.3, ease: "expo.out" }, 1.22);
+      tl.fromTo("#h-l2 b", { scale: 1 }, { scale: 1.14, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.out" }, 0.9);
+      // the heartbeat draws, the clock runs out, the line goes flat
+      tl.fromTo("#h-pulse", { strokeDashoffset: 1.1 }, { strokeDashoffset: 0, duration: 1.65, ease: "none" }, 0.1);
+      tl.fromTo("#h-timer", { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 0.25, ease: "power3.out" }, 0.3);
+      var clock = { v: 1 };
+      tl.fromTo(clock, { v: 1 }, { v: 0, duration: 1.2, ease: "none",
+        onUpdate: function () { document.querySelector("#h-time").textContent = clock.v.toFixed(2) + "s"; } }, 0.5);
+      tl.to("#h-pulse", { stroke: "#FF5C7A", duration: 0.2, ease: "none" }, 1.72);
+      tl.to(["#h-l1", "#h-l2", "#h-l3"], { opacity: 0.32, duration: 0.3, ease: "power2.out" }, 1.8);
+      tl.to("#h-timer", { borderColor: "rgba(255,92,122,.8)", duration: 0.2 }, 1.72);
+      // "Ours don't.": the line jolts back to life
+      tl.to(["#h-l1", "#h-l2", "#h-l3", "#h-timer"], { opacity: 0, y: -50, filter: "blur(12px)", duration: 0.2, ease: "power3.in" }, 2.35);
+      tl.to("#h-pulse", { opacity: 0, duration: 0.1 }, 2.5);
+      tl.fromTo("#h-revive", { strokeDashoffset: 1.1 }, { strokeDashoffset: 0, duration: 0.28, ease: "power2.out" }, 2.5);
+      tl.fromTo("#h-flash", { opacity: 0 }, { opacity: 0.55, duration: 0.05, ease: "none" }, 2.55);
+      tl.to("#h-flash", { opacity: 0, duration: 0.35, ease: "power2.out" }, 2.6);
+      tl.fromTo("#h-cam", { x: 0, y: 0 }, { x: 14, y: -10, duration: 0.05, ease: "none" }, 2.55);
+      tl.to("#h-cam", { x: -10, y: 8, duration: 0.05, ease: "none" }, 2.6);
+      tl.to("#h-cam", { x: 0, y: 0, duration: 0.2, ease: "power2.out" }, 2.65);
+      tl.fromTo("#h-ours", { opacity: 0, scale: 1.5 }, { opacity: 1, scale: 1, duration: 0.32, ease: "expo.out" }, 2.55);
+      tl.fromTo("#h-ours .b", { backgroundPosition: "0% 0" }, { backgroundPosition: "100% 0", duration: 1.2, ease: "sine.inOut" }, 2.6);
+      // out: punch through into the timeline
+      tl.to("#h-ours", { scale: 3.2, opacity: 0, filter: "blur(14px)", duration: 0.32, ease: "power3.in" }, 3.66);
+      tl.to("#h-revive", { opacity: 0, duration: 0.2 }, 3.7);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["s1-hook"] = tl;
+    })();
+  </script>
+</template>
