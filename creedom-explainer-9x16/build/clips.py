@@ -19,5 +19,6 @@ for name, a, b, d in CLIPS:
                     "-vf", f"setpts=PTS/{sp:.4f},fps=30,format=rgb24,lutrgb=r='clip(val*2.02,0,255)':g='clip(val*2.02,0,255)':b='clip(val*2.02,0,255)',"
                            f"scale=660:1434:flags=lanczos",
                     "-c:v", "libx264", "-crf", "16", "-preset", "medium", "-pix_fmt", "yuv420p", "-g", "15",
+                    "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709",   # SDR now: drop the phone's HDR tags
                     os.path.join(ROOT, "assets", "video", f"{name}.mp4")], check=True)
     print(name, f"{sp:.2f}x")
