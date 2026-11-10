@@ -1,0 +1,1122 @@
+[
+{
+"line": 1,
+"speaker": "system",
+"w": "Your",
+"s": 0.86,
+"e": 1.16
+},
+{
+"line": 1,
+"speaker": "system",
+"w": "Adobe",
+"s": 1.14,
+"e": 1.649
+},
+{
+"line": 1,
+"speaker": "system",
+"w": "Creative",
+"s": 1.629,
+"e": 2.137
+},
+{
+"line": 1,
+"speaker": "system",
+"w": "Cloud",
+"s": 2.117,
+"e": 2.417
+},
+{
+"line": 1,
+"speaker": "system",
+"w": "subscription",
+"s": 2.397,
+"e": 3.113
+},
+{
+"line": 1,
+"speaker": "system",
+"w": "has",
+"s": 3.093,
+"e": 3.394
+},
+{
+"line": 1,
+"speaker": "system",
+"w": "been",
+"s": 3.374,
+"e": 3.674
+},
+{
+"line": 1,
+"speaker": "system",
+"w": "cancelled.",
+"s": 3.654,
+"e": 4.37
+},
+{
+"line": 2,
+"speaker": "maya",
+"w": "What?",
+"s": 5.055,
+"e": 5.392
+},
+{
+"line": 2,
+"speaker": "maya",
+"w": "I",
+"s": 5.372,
+"e": 5.709
+},
+{
+"line": 2,
+"speaker": "maya",
+"w": "didn't",
+"s": 5.689,
+"e": 6.026
+},
+{
+"line": 2,
+"speaker": "maya",
+"w": "cancel",
+"s": 6.006,
+"e": 6.578
+},
+{
+"line": 2,
+"speaker": "maya",
+"w": "anything.",
+"s": 6.558,
+"e": 7.365
+},
+{
+"line": 3,
+"speaker": "system",
+"w": "Canva.",
+"s": 7.97,
+"e": 8.774
+},
+{
+"line": 3,
+"speaker": "system",
+"w": "CapCut.",
+"s": 8.754,
+"e": 9.558
+},
+{
+"line": 3,
+"speaker": "system",
+"w": "Mailchimp.",
+"s": 9.538,
+"e": 10.341
+},
+{
+"line": 3,
+"speaker": "system",
+"w": "Hootsuite.",
+"s": 10.321,
+"e": 11.125
+},
+{
+"line": 3,
+"speaker": "system",
+"w": "Linktree.",
+"s": 11.105,
+"e": 11.909
+},
+{
+"line": 3,
+"speaker": "system",
+"w": "Notion.",
+"s": 11.889,
+"e": 12.693
+},
+{
+"line": 3,
+"speaker": "system",
+"w": "ChatGPT.",
+"s": 12.673,
+"e": 13.143
+},
+{
+"line": 3,
+"speaker": "system",
+"w": "Cancelled.",
+"s": 13.123,
+"e": 14.26
+},
+{
+"line": 4,
+"speaker": "system",
+"w": "Every",
+"s": 15.075,
+"e": 15.74
+},
+{
+"line": 4,
+"speaker": "system",
+"w": "paid",
+"s": 15.72,
+"e": 15.999
+},
+{
+"line": 4,
+"speaker": "system",
+"w": "app",
+"s": 15.979,
+"e": 16.259
+},
+{
+"line": 4,
+"speaker": "system",
+"w": "on",
+"s": 16.239,
+"e": 16.519
+},
+{
+"line": 4,
+"speaker": "system",
+"w": "this",
+"s": 16.499,
+"e": 16.779
+},
+{
+"line": 4,
+"speaker": "system",
+"w": "account",
+"s": 16.759,
+"e": 17.231
+},
+{
+"line": 4,
+"speaker": "system",
+"w": "is",
+"s": 17.211,
+"e": 17.491
+},
+{
+"line": 4,
+"speaker": "system",
+"w": "locked.",
+"s": 17.471,
+"e": 17.943
+},
+{
+"line": 4,
+"speaker": "system",
+"w": "For",
+"s": 17.923,
+"e": 18.203
+},
+{
+"line": 4,
+"speaker": "system",
+"w": "30",
+"s": 18.183,
+"e": 18.655
+},
+{
+"line": 4,
+"speaker": "system",
+"w": "days.",
+"s": 18.635,
+"e": 18.915
+},
+{
+"line": 5,
+"speaker": "maya",
+"w": "My",
+"s": 20.105,
+"e": 20.416
+},
+{
+"line": 5,
+"speaker": "maya",
+"w": "launch",
+"s": 20.396,
+"e": 20.707
+},
+{
+"line": 5,
+"speaker": "maya",
+"w": "is",
+"s": 20.687,
+"e": 20.997
+},
+{
+"line": 5,
+"speaker": "maya",
+"w": "in",
+"s": 20.977,
+"e": 21.288
+},
+{
+"line": 5,
+"speaker": "maya",
+"w": "30",
+"s": 21.268,
+"e": 21.794
+},
+{
+"line": 5,
+"speaker": "maya",
+"w": "days.",
+"s": 21.774,
+"e": 22.085
+},
+{
+"line": 6,
+"speaker": "noah",
+"w": "You",
+"s": 24.545,
+"e": 24.864
+},
+{
+"line": 6,
+"speaker": "noah",
+"w": "know",
+"s": 24.844,
+"e": 25.163
+},
+{
+"line": 6,
+"speaker": "noah",
+"w": "you",
+"s": 25.143,
+"e": 25.462
+},
+{
+"line": 6,
+"speaker": "noah",
+"w": "can",
+"s": 25.442,
+"e": 25.761
+},
+{
+"line": 6,
+"speaker": "noah",
+"w": "replace",
+"s": 25.741,
+"e": 26.281
+},
+{
+"line": 6,
+"speaker": "noah",
+"w": "all",
+"s": 26.261,
+"e": 26.58
+},
+{
+"line": 6,
+"speaker": "noah",
+"w": "of",
+"s": 26.56,
+"e": 26.879
+},
+{
+"line": 6,
+"speaker": "noah",
+"w": "that...",
+"s": 26.859,
+"e": 27.178
+},
+{
+"line": 6,
+"speaker": "noah",
+"w": "for",
+"s": 27.158,
+"e": 27.477
+},
+{
+"line": 6,
+"speaker": "noah",
+"w": "free,",
+"s": 27.457,
+"e": 27.776
+},
+{
+"line": 6,
+"speaker": "noah",
+"w": "right?",
+"s": 27.756,
+"e": 28.075
+},
+{
+"line": 7,
+"speaker": "maya",
+"w": "Free?",
+"s": 28.825,
+"e": 29.286
+},
+{
+"line": 7,
+"speaker": "maya",
+"w": "Like,",
+"s": 29.266,
+"e": 29.728
+},
+{
+"line": 7,
+"speaker": "maya",
+"w": "actually",
+"s": 29.708,
+"e": 30.824
+},
+{
+"line": 7,
+"speaker": "maya",
+"w": "free?",
+"s": 30.804,
+"e": 31.265
+},
+{
+"line": 8,
+"speaker": "noah",
+"w": "Open",
+"s": 32.13,
+"e": 33.062
+},
+{
+"line": 8,
+"speaker": "noah",
+"w": "source.",
+"s": 33.042,
+"e": 33.586
+},
+{
+"line": 8,
+"speaker": "noah",
+"w": "Watch.",
+"s": 33.566,
+"e": 34.11
+},
+{
+"line": 9,
+"speaker": "maya",
+"w": "The",
+"s": 44.55,
+"e": 44.889
+},
+{
+"line": 9,
+"speaker": "maya",
+"w": "teaser's",
+"s": 44.869,
+"e": 45.443
+},
+{
+"line": 9,
+"speaker": "maya",
+"w": "done.",
+"s": 45.423,
+"e": 45.761
+},
+{
+"line": 9,
+"speaker": "maya",
+"w": "And",
+"s": 45.741,
+"e": 46.08
+},
+{
+"line": 9,
+"speaker": "maya",
+"w": "it",
+"s": 46.06,
+"e": 46.399
+},
+{
+"line": 9,
+"speaker": "maya",
+"w": "cost",
+"s": 46.379,
+"e": 46.717
+},
+{
+"line": 9,
+"speaker": "maya",
+"w": "me",
+"s": 46.697,
+"e": 47.036
+},
+{
+"line": 9,
+"speaker": "maya",
+"w": "nothing.",
+"s": 47.016,
+"e": 47.59
+},
+{
+"line": 10,
+"speaker": "maya",
+"w": "10,000",
+"s": 49.76,
+"e": 50.583
+},
+{
+"line": 10,
+"speaker": "maya",
+"w": "subscribers...",
+"s": 50.563,
+"e": 51.309
+},
+{
+"line": 10,
+"speaker": "maya",
+"w": "and",
+"s": 51.289,
+"e": 51.602
+},
+{
+"line": 10,
+"speaker": "maya",
+"w": "I",
+"s": 51.582,
+"e": 51.895
+},
+{
+"line": 10,
+"speaker": "maya",
+"w": "can't",
+"s": 51.875,
+"e": 52.188
+},
+{
+"line": 10,
+"speaker": "maya",
+"w": "email",
+"s": 52.168,
+"e": 52.698
+},
+{
+"line": 10,
+"speaker": "maya",
+"w": "a",
+"s": 52.678,
+"e": 52.99
+},
+{
+"line": 10,
+"speaker": "maya",
+"w": "single",
+"s": 52.97,
+"e": 53.5
+},
+{
+"line": 10,
+"speaker": "maya",
+"w": "one.",
+"s": 53.48,
+"e": 54.01
+},
+{
+"line": 11,
+"speaker": "noah",
+"w": "Listmonk.",
+"s": 54.81,
+"e": 55.349
+},
+{
+"line": 11,
+"speaker": "noah",
+"w": "Your",
+"s": 55.329,
+"e": 55.647
+},
+{
+"line": 11,
+"speaker": "noah",
+"w": "list,",
+"s": 55.627,
+"e": 55.945
+},
+{
+"line": 11,
+"speaker": "noah",
+"w": "on",
+"s": 55.925,
+"e": 56.243
+},
+{
+"line": 11,
+"speaker": "noah",
+"w": "your",
+"s": 56.223,
+"e": 56.542
+},
+{
+"line": 11,
+"speaker": "noah",
+"w": "own",
+"s": 56.522,
+"e": 56.84
+},
+{
+"line": 11,
+"speaker": "noah",
+"w": "server.",
+"s": 56.82,
+"e": 57.359
+},
+{
+"line": 11,
+"speaker": "noah",
+"w": "Nobody",
+"s": 57.339,
+"e": 58.098
+},
+{
+"line": 11,
+"speaker": "noah",
+"w": "can",
+"s": 58.078,
+"e": 58.397
+},
+{
+"line": 11,
+"speaker": "noah",
+"w": "lock",
+"s": 58.377,
+"e": 58.695
+},
+{
+"line": 11,
+"speaker": "noah",
+"w": "you",
+"s": 58.675,
+"e": 58.993
+},
+{
+"line": 11,
+"speaker": "noah",
+"w": "out",
+"s": 58.973,
+"e": 59.291
+},
+{
+"line": 11,
+"speaker": "noah",
+"w": "again.",
+"s": 59.271,
+"e": 59.81
+},
+{
+"line": 12,
+"speaker": "maya",
+"w": "Posts",
+"s": 70.7,
+"e": 71.067
+},
+{
+"line": 12,
+"speaker": "maya",
+"w": "scheduled.",
+"s": 71.047,
+"e": 71.929
+},
+{
+"line": 12,
+"speaker": "maya",
+"w": "Plan's",
+"s": 71.909,
+"e": 72.276
+},
+{
+"line": 12,
+"speaker": "maya",
+"w": "back.",
+"s": 72.256,
+"e": 72.623
+},
+{
+"line": 12,
+"speaker": "maya",
+"w": "And",
+"s": 72.603,
+"e": 72.97
+},
+{
+"line": 12,
+"speaker": "maya",
+"w": "my",
+"s": 72.95,
+"e": 73.317
+},
+{
+"line": 12,
+"speaker": "maya",
+"w": "bill",
+"s": 73.297,
+"e": 73.664
+},
+{
+"line": 12,
+"speaker": "maya",
+"w": "is",
+"s": 73.644,
+"e": 74.011
+},
+{
+"line": 12,
+"speaker": "maya",
+"w": "almost",
+"s": 73.991,
+"e": 74.616
+},
+{
+"line": 12,
+"speaker": "maya",
+"w": "zero.",
+"s": 74.596,
+"e": 75.22
+},
+{
+"line": 13,
+"speaker": "maya",
+"w": "Launch",
+"s": 77.83,
+"e": 78.174
+},
+{
+"line": 13,
+"speaker": "maya",
+"w": "is",
+"s": 78.154,
+"e": 78.498
+},
+{
+"line": 13,
+"speaker": "maya",
+"w": "tomorrow,",
+"s": 78.478,
+"e": 79.303
+},
+{
+"line": 13,
+"speaker": "maya",
+"w": "and",
+"s": 79.283,
+"e": 79.627
+},
+{
+"line": 13,
+"speaker": "maya",
+"w": "I",
+"s": 79.607,
+"e": 79.951
+},
+{
+"line": 13,
+"speaker": "maya",
+"w": "still",
+"s": 79.931,
+"e": 80.275
+},
+{
+"line": 13,
+"speaker": "maya",
+"w": "have",
+"s": 80.255,
+"e": 80.599
+},
+{
+"line": 13,
+"speaker": "maya",
+"w": "to",
+"s": 80.579,
+"e": 80.923
+},
+{
+"line": 13,
+"speaker": "maya",
+"w": "write",
+"s": 80.903,
+"e": 81.247
+},
+{
+"line": 13,
+"speaker": "maya",
+"w": "everything.",
+"s": 81.227,
+"e": 82.292
+},
+{
+"line": 13,
+"speaker": "maya",
+"w": "Without",
+"s": 82.272,
+"e": 82.856
+},
+{
+"line": 13,
+"speaker": "maya",
+"w": "ChatGPT.",
+"s": 82.836,
+"e": 83.18
+},
+{
+"line": 14,
+"speaker": "maya",
+"w": "No.",
+"s": 85.2,
+"e": 85.548
+},
+{
+"line": 14,
+"speaker": "maya",
+"w": "No,",
+"s": 85.528,
+"e": 85.876
+},
+{
+"line": 14,
+"speaker": "maya",
+"w": "no,",
+"s": 85.856,
+"e": 86.203
+},
+{
+"line": 14,
+"speaker": "maya",
+"w": "no.",
+"s": 86.183,
+"e": 86.531
+},
+{
+"line": 14,
+"speaker": "maya",
+"w": "The",
+"s": 86.511,
+"e": 86.859
+},
+{
+"line": 14,
+"speaker": "maya",
+"w": "internet's",
+"s": 86.839,
+"e": 87.672
+},
+{
+"line": 14,
+"speaker": "maya",
+"w": "gone.",
+"s": 87.652,
+"e": 88.0
+},
+{
+"line": 15,
+"speaker": "noah",
+"w": "Then",
+"s": 88.895,
+"e": 89.233
+},
+{
+"line": 15,
+"speaker": "noah",
+"w": "run",
+"s": 89.213,
+"e": 89.552
+},
+{
+"line": 15,
+"speaker": "noah",
+"w": "your",
+"s": 89.532,
+"e": 89.87
+},
+{
+"line": 15,
+"speaker": "noah",
+"w": "own",
+"s": 89.85,
+"e": 90.189
+},
+{
+"line": 15,
+"speaker": "noah",
+"w": "AI.",
+"s": 90.169,
+"e": 90.507
+},
+{
+"line": 15,
+"speaker": "noah",
+"w": "Right",
+"s": 90.487,
+"e": 90.825
+},
+{
+"line": 15,
+"speaker": "noah",
+"w": "here,",
+"s": 90.805,
+"e": 91.144
+},
+{
+"line": 15,
+"speaker": "noah",
+"w": "on",
+"s": 91.124,
+"e": 91.462
+},
+{
+"line": 15,
+"speaker": "noah",
+"w": "your",
+"s": 91.442,
+"e": 91.781
+},
+{
+"line": 15,
+"speaker": "noah",
+"w": "laptop.",
+"s": 91.761,
+"e": 92.335
+},
+{
+"line": 16,
+"speaker": "maya",
+"w": "No",
+"s": 95.0,
+"e": 95.387
+},
+{
+"line": 16,
+"speaker": "maya",
+"w": "internet...",
+"s": 95.367,
+"e": 96.299
+},
+{
+"line": 16,
+"speaker": "maya",
+"w": "and",
+"s": 96.279,
+"e": 96.666
+},
+{
+"line": 16,
+"speaker": "maya",
+"w": "it's",
+"s": 96.646,
+"e": 97.033
+},
+{
+"line": 16,
+"speaker": "maya",
+"w": "still",
+"s": 97.013,
+"e": 97.401
+},
+{
+"line": 16,
+"speaker": "maya",
+"w": "writing.",
+"s": 97.381,
+"e": 98.04
+},
+{
+"line": 17,
+"speaker": "noah",
+"w": "So",
+"s": 101.365,
+"e": 101.815
+},
+{
+"line": 17,
+"speaker": "noah",
+"w": "what",
+"s": 101.795,
+"e": 102.245
+},
+{
+"line": 17,
+"speaker": "noah",
+"w": "did",
+"s": 102.225,
+"e": 102.675
+},
+{
+"line": 17,
+"speaker": "noah",
+"w": "all",
+"s": 102.655,
+"e": 103.105
+},
+{
+"line": 17,
+"speaker": "noah",
+"w": "of",
+"s": 103.085,
+"e": 103.535
+},
+{
+"line": 17,
+"speaker": "noah",
+"w": "this",
+"s": 103.515,
+"e": 103.965
+},
+{
+"line": 17,
+"speaker": "noah",
+"w": "cost",
+"s": 103.945,
+"e": 104.395
+},
+{
+"line": 17,
+"speaker": "noah",
+"w": "you?",
+"s": 104.375,
+"e": 104.825
+},
+{
+"line": 18,
+"speaker": "maya",
+"w": "Zero.",
+"s": 105.525,
+"e": 106.363
+},
+{
+"line": 18,
+"speaker": "maya",
+"w": "Not",
+"s": 106.343,
+"e": 106.832
+},
+{
+"line": 18,
+"speaker": "maya",
+"w": "one",
+"s": 106.812,
+"e": 107.65
+},
+{
+"line": 18,
+"speaker": "maya",
+"w": "subscription.",
+"s": 107.63,
+"e": 108.815
+},
+{
+"line": 19,
+"speaker": "system",
+"w": "Your",
+"s": 110.105,
+"e": 110.386
+},
+{
+"line": 19,
+"speaker": "system",
+"w": "subscriptions",
+"s": 110.366,
+"e": 111.035
+},
+{
+"line": 19,
+"speaker": "system",
+"w": "are",
+"s": 111.015,
+"e": 111.49
+},
+{
+"line": 19,
+"speaker": "system",
+"w": "available",
+"s": 111.47,
+"e": 112.332
+},
+{
+"line": 19,
+"speaker": "system",
+"w": "again.",
+"s": 112.312,
+"e": 112.787
+},
+{
+"line": 19,
+"speaker": "system",
+"w": "Resubscribe?",
+"s": 112.767,
+"e": 113.435
+},
+{
+"line": 20,
+"speaker": "maya",
+"w": "No",
+"s": 114.35,
+"e": 115.235
+},
+{
+"line": 20,
+"speaker": "maya",
+"w": "thanks.",
+"s": 115.215,
+"e": 116.1
+},
+{
+"line": 21,
+"speaker": "maya",
+"w": "Want",
+"s": 117.49,
+"e": 117.785
+},
+{
+"line": 21,
+"speaker": "maya",
+"w": "my",
+"s": 117.765,
+"e": 118.06
+},
+{
+"line": 21,
+"speaker": "maya",
+"w": "whole",
+"s": 118.04,
+"e": 118.538
+},
+{
+"line": 21,
+"speaker": "maya",
+"w": "stack?",
+"s": 118.518,
+"e": 118.813
+},
+{
+"line": 21,
+"speaker": "maya",
+"w": "Follow",
+"s": 118.793,
+"e": 119.291
+},
+{
+"line": 21,
+"speaker": "maya",
+"w": "@nxtlvlsocial.ai",
+"s": 119.271,
+"e": 120.522
+},
+{
+"line": 21,
+"speaker": "maya",
+"w": "and",
+"s": 120.502,
+"e": 120.797
+},
+{
+"line": 21,
+"speaker": "maya",
+"w": "comment",
+"s": 120.777,
+"e": 121.275
+},
+{
+"line": 21,
+"speaker": "maya",
+"w": "STACK.",
+"s": 121.255,
+"e": 121.55
+}
+]

@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Zero Stack 9x16</title>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Garamond"; font-weight: 400 800; src: url("assets/fonts/EBGaramond.ttf"); }
+@font-face { font-family: "Garamond"; font-style: italic; font-weight: 400 800; src: url("assets/fonts/EBGaramond-Italic.ttf"); }
+@font-face { font-family: "Manrope"; font-weight: 200 800; src: url("assets/fonts/manrope.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0B0A12; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0B0A12; }
+.clip { position: absolute; inset: 0; }
+#gl { width: 1080px; height: 1920px; display: block; }
+.shadow { text-shadow: 0 3px 18px rgba(0,0,0,.55), 0 1px 3px rgba(0,0,0,.6); }
+#hud, .cap, .stamp, .chap, .note, .swap, .swap .new, #offline, .order, #zero, #endc, #endc span { opacity: 0; }
+#title { position: absolute; left: 70px; right: 70px; top: 470px; text-align: center; color: #FFFDF6; }
+#title .t0 { display: inline-block; padding: 10px 26px; border-radius: 40px; background: #F2C94C; color: #1E1B18; font: 800 34px/1 "Manrope"; letter-spacing: 6px; margin-bottom: 34px; }
+#title .t1, #title .t3 { display: block; font: 500 80px/1.1 "Garamond"; letter-spacing: -.5px; }
+#title .t2 { display: block; font: 700 112px/1.08 "Garamond"; color: #F2C94C; }
+.stamp { position: absolute; left: 0; right: 0; top: 330px; text-align: center; color: #FFFDF6; font: italic 500 64px/1.1 "Garamond"; }
+.stamp b { display: block; margin-top: 10px; font: 800 30px/1 "Manrope"; letter-spacing: 6px; font-style: normal; color: #F2C94C; }
+.note { position: absolute; left: 70px; right: 70px; top: 300px; height: 96px; border-radius: 26px; background: rgba(250,250,252,.94);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35); display: flex; align-items: center; padding: 0 24px; gap: 20px; }
+.note .ic { width: 58px; height: 58px; border-radius: 14px; flex: none; display: flex; align-items: center; justify-content: center; font: 800 30px/1 "Manrope"; color: #fff; }
+.note .tx { flex: 1; min-width: 0; }
+.note .tt { display: block; font: 800 28px/1.15 "Manrope"; color: #14161C; }
+.note .bd { display: block; font: 600 26px/1.2 "Manrope"; color: #C0392B; margin-top: 4px; }
+.note .tm { font: 600 22px/1 "Manrope"; color: #8A8F9C; align-self: flex-start; margin-top: 18px; }
+#hud { position: absolute; left: 64px; right: 64px; top: 268px; display: flex; justify-content: space-between; color: #FFFDF6; }
+#hud .lab { display: block; font: 800 28px/1 "Manrope"; letter-spacing: 4px; color: rgba(255,253,246,.85); }
+#hud .row { display: block; margin-top: 8px; font: 700 66px/1 "Garamond"; }
+#hud .row small { font: 600 30px/1 "Garamond"; color: rgba(255,253,246,.75); }
+#hud .bill { text-align: right; }
+#hud .d-n, #hud .b-n { display: inline-block; transform-origin: 50% 70%; }
+.swap { position: absolute; left: 80px; right: 80px; top: 400px; padding: 18px 26px 20px; border-radius: 28px; background: rgba(12,14,22,.94);
+  box-shadow: 0 14px 40px rgba(0,0,0,.45); color: #FFFDF6; text-align: center; }
+.swap .day { font: 800 28px/1 "Manrope"; letter-spacing: 6px; color: #F2C94C; }
+.swap .old { position: relative; display: inline-block; margin-top: 12px; padding: 0 8px; white-space: nowrap; }
+.swap .old .nm { font: 800 38px/1.1 "Manrope"; }
+.swap .old .pr { margin-left: 14px; font: 700 30px/1.1 "Manrope"; color: #FF8A80; }
+.swap .strike { position: absolute; left: -6px; right: -6px; top: 50%; height: 6px; margin-top: -3px; background: #FF5A4E; border-radius: 4px; transform-origin: 0 50%; transform: scaleX(0); }
+.swap .new { margin-top: 8px; white-space: nowrap; }
+.swap .new .ar { font: 800 34px/1 "Manrope"; color: rgba(255,253,246,.7); margin-right: 12px; }
+.swap .new .nm { font: 800 44px/1.1 "Manrope"; color: #5BE38A; }
+.swap .new .pr { display: block; margin-top: 6px; font: 800 28px/1 "Manrope"; letter-spacing: 5px; color: #FFFDF6; }
+.chap { position: absolute; left: 0; right: 0; top: 560px; text-align: center; color: #FFFDF6; }
+.chap .cd { display: block; font: 600 132px/1 "Garamond"; letter-spacing: -1px; }
+.chap .cp { display: block; margin-top: 16px; font: 800 36px/1 "Manrope"; letter-spacing: 10px; color: #F2C94C; }
+#offline { position: absolute; left: 50%; top: 430px; margin-left: -190px; width: 380px; padding: 18px 0; border-radius: 40px; background: #E5484D; color: #fff; text-align: center; font: 800 32px/1 "Manrope"; letter-spacing: 5px; }
+.order { position: absolute; left: 110px; right: 110px; top: 430px; height: 92px; border-radius: 24px; background: rgba(250,250,252,.95); box-shadow: 0 10px 30px rgba(0,0,0,.3);
+  display: flex; align-items: center; padding: 0 22px; gap: 18px; }
+.order .ic { width: 54px; height: 54px; border-radius: 14px; background: #3FA372; color: #fff; display: flex; align-items: center; justify-content: center; font: 800 30px/1 "Manrope"; flex: none; }
+.order .tt { flex: 1; font: 800 30px/1 "Manrope"; color: #14161C; }
+.order .pr { font: 800 30px/1 "Manrope"; color: #3FA372; }
+#zero { position: absolute; left: 90px; right: 90px; top: 390px; text-align: center; color: #FFFDF6; }
+#zero .z0 { display: block; font: 800 30px/1 "Manrope"; letter-spacing: 6px; }
+#zero .z1 { display: block; margin-top: 8px; font: 700 190px/1 "Garamond"; color: #5BE38A; }
+#zero .z2 { display: block; margin-top: 6px; font: italic 500 52px/1.1 "Garamond"; }
+#zero .z2 s { color: #FF8A80; }
+#zero .z3 { display: block; margin-top: 12px; font: 700 28px/1.2 "Manrope"; letter-spacing: 2px; color: rgba(255,253,246,.8); }
+.cap { position: absolute; left: 80px; right: 80px; top: 1330px; text-align: center; color: #FFFDF6; font: italic 500 56px/1.2 "Garamond"; }
+.cap .who { display: block; margin-bottom: 8px; font: 800 28px/1 "Manrope"; font-style: normal; letter-spacing: 4px; color: rgba(255,253,246,.8); }
+.cap.sp-system { color: #FFB4AE; font-style: normal; font-family: "Manrope"; font-weight: 700; font-size: 46px; } .cap.sp-system .who { color: #FF8A80; }
+.cap.sp-noah .who { color: #7FE3B0; } .cap.sp-maya .who { color: #F2C94C; }
+#endc { position: absolute; left: 70px; right: 70px; top: 330px; text-align: center; color: #FFFDF6; }
+#endc span { display: block; }
+#endc .e0 { font: italic 500 70px/1.1 "Garamond"; }
+#endc .e1 { margin-top: 6px; font: 800 170px/1 "Manrope"; letter-spacing: 6px; color: #F2C94C; }
+#endc .e2 { margin-top: 14px; font: italic 500 54px/1.15 "Garamond"; }
+#endc .e3 { margin-top: 40px; font: 800 30px/1.4 "Manrope"; letter-spacing: 5px; }
+#endc .e3 b { display: block; font: 800 42px/1.3 "Manrope"; letter-spacing: 2px; }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="124.89" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="gl" class="clip" data-hold data-start="0" data-duration="124.89" data-track-index="0"></canvas>
+      <div id="ui" class="clip" data-start="0" data-duration="124.89" data-track-index="3" data-layout-allow-overflow><div id="title" class="shadow"><span class="t0">WHAT IF</span><span class="t1">every app you pay for</span><span class="t2">vanished</span><span class="t3">overnight?</span></div><div class="note" id="n0"><span class="ic" style="background:#E1251B;">A</span><span class="tx"><span class="tt">Adobe Creative Cloud</span><span class="bd">Your subscription has been cancelled.</span></span><span class="tm">now</span></div><div class="note" id="n1"><span class="ic" style="background:#00B8C4;">C</span><span class="tx"><span class="tt">Canva Pro</span><span class="bd">Your subscription has been cancelled.</span></span><span class="tm">now</span></div><div class="note" id="n2"><span class="ic" style="background:#111111;">C</span><span class="tx"><span class="tt">CapCut Pro</span><span class="bd">Your subscription has been cancelled.</span></span><span class="tm">now</span></div><div class="note" id="n3"><span class="ic" style="background:#F2C11B;color:#1E1B18;">M</span><span class="tx"><span class="tt">Mailchimp</span><span class="bd">Your subscription has been cancelled.</span></span><span class="tm">now</span></div><div class="note" id="n4"><span class="ic" style="background:#143059;">H</span><span class="tx"><span class="tt">Hootsuite</span><span class="bd">Your subscription has been cancelled.</span></span><span class="tm">now</span></div><div class="note" id="n5"><span class="ic" style="background:#43E55E;color:#1E1B18;">L</span><span class="tx"><span class="tt">Linktree Pro</span><span class="bd">Your subscription has been cancelled.</span></span><span class="tm">now</span></div><div class="note" id="n6"><span class="ic" style="background:#F4F4F2;color:#1E1B18;">N</span><span class="tx"><span class="tt">Notion</span><span class="bd">Your subscription has been cancelled.</span></span><span class="tm">now</span></div><div class="note" id="n7"><span class="ic" style="background:#10A37F;">C</span><span class="tx"><span class="tt">ChatGPT Plus</span><span class="bd">Your subscription has been cancelled.</span></span><span class="tm">now</span></div><div id="hud" class="shadow"><div><span class="lab">DAY</span><span class="row"><span class="d-n">1</span> <small>/ 30</small></span></div><div class="bill"><span class="lab">SOFTWARE BILL</span><span class="row"><span class="b-n">$374.86</span><small>/mo</small></span></div></div><div class="swap" id="sw0"><div class="day">DAY 1</div><div class="old"><span class="nm">Adobe Creative Cloud</span><span class="pr">$69.99/mo</span><i class="strike"></i></div><div class="new"><span class="ar">&#8594;</span><span class="nm">GIMP · Inkscape · Kdenlive</span><span class="pr">FREE · OPEN SOURCE</span></div></div><div class="swap" id="sw1"><div class="day">DAY 4</div><div class="old"><span class="nm">Canva Pro</span><span class="pr">$18.00/mo</span><i class="strike"></i></div><div class="new"><span class="ar">&#8594;</span><span class="nm">Penpot</span><span class="pr">FREE · OPEN SOURCE</span></div></div><div class="swap" id="sw2"><div class="day">DAY 8</div><div class="old"><span class="nm">CapCut Pro</span><span class="pr">$19.99/mo</span><i class="strike"></i></div><div class="new"><span class="ar">&#8594;</span><span class="nm">Shotcut</span><span class="pr">FREE · OPEN SOURCE</span></div></div><div class="swap" id="sw3"><div class="day">DAY 12</div><div class="old"><span class="nm">Mailchimp</span><span class="pr">$108.88/mo</span><i class="strike"></i></div><div class="new"><span class="ar">&#8594;</span><span class="nm">Listmonk</span><span class="pr">FREE · OPEN SOURCE</span></div></div><div class="swap" id="sw4"><div class="day">DAY 16</div><div class="old"><span class="nm">Hootsuite</span><span class="pr">$99.00/mo</span><i class="strike"></i></div><div class="new"><span class="ar">&#8594;</span><span class="nm">Postiz</span><span class="pr">FREE · OPEN SOURCE</span></div></div><div class="swap" id="sw5"><div class="day">DAY 20</div><div class="old"><span class="nm">Linktree Pro</span><span class="pr">$15.00/mo</span><i class="strike"></i></div><div class="new"><span class="ar">&#8594;</span><span class="nm">LinkStack</span><span class="pr">FREE · OPEN SOURCE</span></div></div><div class="swap" id="sw6"><div class="day">DAY 25</div><div class="old"><span class="nm">Notion</span><span class="pr">$24.00/mo</span><i class="strike"></i></div><div class="new"><span class="ar">&#8594;</span><span class="nm">AppFlowy</span><span class="pr">FREE · OPEN SOURCE</span></div></div><div class="swap" id="sw7"><div class="day">DAY 29</div><div class="old"><span class="nm">ChatGPT Plus</span><span class="pr">$20.00/mo</span><i class="strike"></i></div><div class="new"><span class="ar">&#8594;</span><span class="nm">Ollama · local AI</span><span class="pr">FREE · OPEN SOURCE</span></div></div><div id="ch0" class="chap shadow"><span class="cd">Day 12</span><span class="cp">THE EMAIL LIST</span></div><div id="ch1" class="chap shadow"><span class="cd">Day 29</span><span class="cp">11:48 PM · A STORM</span></div><div id="ch2" class="chap shadow"><span class="cd">Day 30</span><span class="cp">LAUNCH DAY</span></div><div id="offline">NO INTERNET</div><div class="order" id="o0"><span class="ic">$</span><span class="tt">New order</span><span class="pr">$39.00</span></div><div class="order" id="o1"><span class="ic">$</span><span class="tt">New order</span><span class="pr">$78.00</span></div><div class="order" id="o2"><span class="ic">$</span><span class="tt">New order</span><span class="pr">$39.00</span></div><div class="order" id="o3"><span class="ic">$</span><span class="tt">New order</span><span class="pr">$117.00</span></div><div id="zero" class="shadow"><span class="z0">SOFTWARE BILL</span><span class="z1">$0</span><span class="z2">was <s>$374.86/mo</s></span><span class="z3">$4,498 A YEAR, BACK IN HER POCKET</span></div><div id="endc" class="shadow"><span class="e0">Want the whole stack?</span><span class="e1">STACK</span><span class="e2">Comment it and I'll DM you every tool</span><span class="e3">FOLLOW<b>@nxtlvlsocial.ai</b></span></div></div>
+      <div id="caps" class="clip" data-start="0" data-duration="124.89" data-track-index="4"><div class="cap sp-system" id="c0_0"><span class="who">SYSTEM</span>Your Adobe Creative Cloud subscription has been cancelled.</div><div class="cap sp-maya" id="c1_0"><span class="who">MAYA</span>What? I didn't cancel anything.</div><div class="cap sp-system" id="c2_0"><span class="who">SYSTEM</span>Canva. CapCut. Mailchimp. Hootsuite. Linktree. Notion. ChatGPT. Cancelled.</div><div class="cap sp-system" id="c3_0"><span class="who">SYSTEM</span>Every paid app on this account is locked.</div><div class="cap sp-system" id="c3_1"><span class="who">SYSTEM</span>For 30 days.</div><div class="cap sp-maya" id="c4_0"><span class="who">MAYA</span>My launch is in 30 days.</div><div class="cap sp-noah" id="c5_0"><span class="who">NOAH</span>You know you can replace all of that... for free, right?</div><div class="cap sp-maya" id="c6_0"><span class="who">MAYA</span>Free? Like, actually free?</div><div class="cap sp-noah" id="c7_0"><span class="who">NOAH</span>Open source. Watch.</div><div class="cap sp-maya" id="c8_0"><span class="who">MAYA</span>The teaser's done. And it cost me nothing.</div><div class="cap sp-maya" id="c9_0"><span class="who">MAYA</span>10,000 subscribers... and I can't email a single one.</div><div class="cap sp-noah" id="c10_0"><span class="who">NOAH</span>Listmonk.</div><div class="cap sp-noah" id="c10_1"><span class="who">NOAH</span>Your list, on your own server.</div><div class="cap sp-noah" id="c10_2"><span class="who">NOAH</span>Nobody can lock you out again.</div><div class="cap sp-maya" id="c11_0"><span class="who">MAYA</span>Posts scheduled.</div><div class="cap sp-maya" id="c11_1"><span class="who">MAYA</span>Plan's back.</div><div class="cap sp-maya" id="c11_2"><span class="who">MAYA</span>And my bill is almost zero.</div><div class="cap sp-maya" id="c12_0"><span class="who">MAYA</span>Launch is tomorrow, and I still have to write everything.</div><div class="cap sp-maya" id="c12_1"><span class="who">MAYA</span>Without ChatGPT.</div><div class="cap sp-maya" id="c13_0"><span class="who">MAYA</span>No. No, no, no. The internet's gone.</div><div class="cap sp-noah" id="c14_0"><span class="who">NOAH</span>Then run your own AI. Right here, on your laptop.</div><div class="cap sp-maya" id="c15_0"><span class="who">MAYA</span>No internet... and it's still writing.</div><div class="cap sp-noah" id="c16_0"><span class="who">NOAH</span>So what did all of this cost you?</div><div class="cap sp-maya" id="c17_0"><span class="who">MAYA</span>Zero. Not one subscription.</div><div class="cap sp-system" id="c18_0"><span class="who">SYSTEM</span>Your subscriptions are available again.</div><div class="cap sp-system" id="c18_1"><span class="who">SYSTEM</span>Resubscribe?</div><div class="cap sp-maya" id="c19_0"><span class="who">MAYA</span>No thanks.</div></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="124.89" data-track-index="10" data-volume="1"></audio>
+    </div>
+    <script>
+      window.CT = {"l": [0.8, 5.005, 7.94, 15.025, 20.065, 24.535, 28.755, 32.11, 44.48, 49.73, 54.76, 70.68, 77.76, 85.1, 88.875, 94.96, 101.315, 105.485, 110.055, 114.29, 117.44], "e": [4.485, 7.52, 14.405, 19.045, 22.315, 28.235, 31.59, 34.26, 47.71, 54.14, 59.96, 75.34, 83.28, 88.155, 92.54, 98.095, 104.965, 108.935, 113.57, 116.22, 121.69], "cuts": [34.61, 48.11, 76.54, 98.995], "sw": [36.01, 39.21, 42.41, 56.76, 62.56, 65.76, 68.96, 89.975], "who": ["system", "maya", "system", "system", "maya", "noah", "maya", "noah", "maya", "maya", "noah", "maya", "maya", "maya", "noah", "maya", "noah", "maya", "system", "maya", "maya"], "knock": 22.465, "cut": 84.03, "flash": [77.14, 83.83, 96.36], "nothanks": 114.64, "zero": 105.635, "endc": 117.14, "end": 124.89, "tileNames": [["Adobe\nCreative Cloud", "GIMP\nInkscape\nKdenlive"], ["Canva Pro", "Penpot"], ["CapCut Pro", "Shotcut"], ["Mailchimp", "Listmonk"], ["Hootsuite", "Postiz"], ["Linktree Pro", "LinkStack"], ["Notion", "AppFlowy"], ["ChatGPT Plus", "Ollama"]], "tileCol": [["#E1251B", "#3D8B5A"], ["#00B8C4", "#18181C"], ["#111111", "#2C7BD8"], ["#F2C11B", "#0055D4"], ["#143059", "#612BD3"], ["#43E55E", "#2B2B6E"], ["#F4F4F2", "#6E3FF3"], ["#10A37F", "#F4F4F2"]], "tileFg": [["#FFFFFF", "#FFFFFF"], ["#FFFFFF", "#31EFB8"], ["#FFFFFF", "#FFFFFF"], ["#1E1B18", "#FFFFFF"], ["#FFFFFF", "#FFFFFF"], ["#1E1B18", "#FFFFFF"], ["#1E1B18", "#FFFFFF"], ["#FFFFFF", "#1E1B18"]], "lines": [{"s": 0.8, "e": 4.485}, {"s": 5.005, "e": 7.52}, {"s": 7.94, "e": 14.405}, {"s": 15.025, "e": 19.045}, {"s": 20.065, "e": 22.315}, {"s": 24.535, "e": 28.235}, {"s": 28.755, "e": 31.59}, {"s": 32.11, "e": 34.26}, {"s": 44.48, "e": 47.71}, {"s": 49.73, "e": 54.14}, {"s": 54.76, "e": 59.96}, {"s": 70.68, "e": 75.34}, {"s": 77.76, "e": 83.28}, {"s": 85.1, "e": 88.155}, {"s": 88.875, "e": 92.54}, {"s": 94.96, "e": 98.095}, {"s": 101.315, "e": 104.965}, {"s": 105.485, "e": 108.935}, {"s": 110.055, "e": 113.57}, {"s": 114.29, "e": 116.22}, {"s": 117.44, "e": 121.69}]};
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo(".t1",{opacity:1},{opacity:1,duration:0.01,ease:"power2.out",immediateRender:false},0.000);
+      tl.fromTo(".t2",{opacity:1},{opacity:1,duration:0.01,ease:"power2.out",immediateRender:false},0.000);
+      tl.fromTo(".t3",{opacity:1},{opacity:1,duration:0.01,ease:"power2.out",immediateRender:false},0.000);
+      tl.fromTo("#title .t2",{scale:1.04},{scale:1,duration:1.2,ease:"power2.out",immediateRender:false},0);
+      tl.to("#title",{opacity:0,y:-30,duration:0.4,ease:"power2.in"},2.450);
+      tl.fromTo("#n0",{opacity:0,y:-40,scale:.96},{opacity:1,y:0,scale:1,duration:.28,ease:"back.out(1.6)",immediateRender:false},0.850);
+      tl.to("#n0",{y:108,duration:.25,ease:"power2.out"},8.020);
+      tl.to("#n0",{y:216,duration:.25,ease:"power2.out"},8.740);
+      tl.to("#n0",{y:324,duration:.25,ease:"power2.out"},9.540);
+      tl.to("#n0",{y:432,duration:.25,ease:"power2.out"},10.260);
+      tl.to("#n0",{y:540,duration:.25,ease:"power2.out"},11.060);
+      tl.to("#n0",{y:648,duration:.25,ease:"power2.out"},11.860);
+      tl.to("#n0",{y:756,duration:.25,ease:"power2.out"},12.580);
+      tl.fromTo("#n1",{opacity:0,y:-40,scale:.96},{opacity:1,y:0,scale:1,duration:.28,ease:"back.out(1.6)",immediateRender:false},8.020);
+      tl.to("#n1",{y:108,duration:.25,ease:"power2.out"},8.740);
+      tl.to("#n1",{y:216,duration:.25,ease:"power2.out"},9.540);
+      tl.to("#n1",{y:324,duration:.25,ease:"power2.out"},10.260);
+      tl.to("#n1",{y:432,duration:.25,ease:"power2.out"},11.060);
+      tl.to("#n1",{y:540,duration:.25,ease:"power2.out"},11.860);
+      tl.to("#n1",{y:648,duration:.25,ease:"power2.out"},12.580);
+      tl.fromTo("#n2",{opacity:0,y:-40,scale:.96},{opacity:1,y:0,scale:1,duration:.28,ease:"back.out(1.6)",immediateRender:false},8.740);
+      tl.to("#n2",{y:108,duration:.25,ease:"power2.out"},9.540);
+      tl.to("#n2",{y:216,duration:.25,ease:"power2.out"},10.260);
+      tl.to("#n2",{y:324,duration:.25,ease:"power2.out"},11.060);
+      tl.to("#n2",{y:432,duration:.25,ease:"power2.out"},11.860);
+      tl.to("#n2",{y:540,duration:.25,ease:"power2.out"},12.580);
+      tl.fromTo("#n3",{opacity:0,y:-40,scale:.96},{opacity:1,y:0,scale:1,duration:.28,ease:"back.out(1.6)",immediateRender:false},9.540);
+      tl.to("#n3",{y:108,duration:.25,ease:"power2.out"},10.260);
+      tl.to("#n3",{y:216,duration:.25,ease:"power2.out"},11.060);
+      tl.to("#n3",{y:324,duration:.25,ease:"power2.out"},11.860);
+      tl.to("#n3",{y:432,duration:.25,ease:"power2.out"},12.580);
+      tl.fromTo("#n4",{opacity:0,y:-40,scale:.96},{opacity:1,y:0,scale:1,duration:.28,ease:"back.out(1.6)",immediateRender:false},10.260);
+      tl.to("#n4",{y:108,duration:.25,ease:"power2.out"},11.060);
+      tl.to("#n4",{y:216,duration:.25,ease:"power2.out"},11.860);
+      tl.to("#n4",{y:324,duration:.25,ease:"power2.out"},12.580);
+      tl.fromTo("#n5",{opacity:0,y:-40,scale:.96},{opacity:1,y:0,scale:1,duration:.28,ease:"back.out(1.6)",immediateRender:false},11.060);
+      tl.to("#n5",{y:108,duration:.25,ease:"power2.out"},11.860);
+      tl.to("#n5",{y:216,duration:.25,ease:"power2.out"},12.580);
+      tl.fromTo("#n6",{opacity:0,y:-40,scale:.96},{opacity:1,y:0,scale:1,duration:.28,ease:"back.out(1.6)",immediateRender:false},11.860);
+      tl.to("#n6",{y:108,duration:.25,ease:"power2.out"},12.580);
+      tl.fromTo("#n7",{opacity:0,y:-40,scale:.96},{opacity:1,y:0,scale:1,duration:.28,ease:"back.out(1.6)",immediateRender:false},12.580);
+      tl.to("#n0",{opacity:0,y:-60,duration:0.35,ease:"power2.in"},4.735);
+      tl.to("#n1",{opacity:0,y:588,duration:0.35,ease:"power2.in"},14.835);
+      tl.to("#n2",{opacity:0,y:480,duration:0.35,ease:"power2.in"},14.805);
+      tl.to("#n3",{opacity:0,y:372,duration:0.35,ease:"power2.in"},14.775);
+      tl.to("#n4",{opacity:0,y:264,duration:0.35,ease:"power2.in"},14.745);
+      tl.to("#n5",{opacity:0,y:156,duration:0.35,ease:"power2.in"},14.715);
+      tl.to("#n6",{opacity:0,y:48,duration:0.35,ease:"power2.in"},14.685);
+      tl.to("#n7",{opacity:0,y:-60,duration:0.35,ease:"power2.in"},14.655);
+      tl.fromTo("#hud",{opacity:0,y:-14},{opacity:1,y:0,duration:0.45,ease:"power2.out",immediateRender:false},15.425);
+      tl.set("#hud .d-n",{textContent:"1"},15.425);
+      tl.fromTo("#hud .d-n",{scale:1.35,color:"#F2C94C"},{scale:1,color:"#FFFDF6",duration:.5,ease:"power2.out",immediateRender:false},15.425);
+      tl.set("#hud .d-n",{textContent:"4"},38.210);
+      tl.fromTo("#hud .d-n",{scale:1.35,color:"#F2C94C"},{scale:1,color:"#FFFDF6",duration:.5,ease:"power2.out",immediateRender:false},38.210);
+      tl.set("#hud .d-n",{textContent:"8"},41.410);
+      tl.fromTo("#hud .d-n",{scale:1.35,color:"#F2C94C"},{scale:1,color:"#FFFDF6",duration:.5,ease:"power2.out",immediateRender:false},41.410);
+      tl.set("#hud .d-n",{textContent:"12"},48.110);
+      tl.fromTo("#hud .d-n",{scale:1.35,color:"#F2C94C"},{scale:1,color:"#FFFDF6",duration:.5,ease:"power2.out",immediateRender:false},48.110);
+      tl.set("#hud .d-n",{textContent:"16"},61.560);
+      tl.fromTo("#hud .d-n",{scale:1.35,color:"#F2C94C"},{scale:1,color:"#FFFDF6",duration:.5,ease:"power2.out",immediateRender:false},61.560);
+      tl.set("#hud .d-n",{textContent:"20"},64.760);
+      tl.fromTo("#hud .d-n",{scale:1.35,color:"#F2C94C"},{scale:1,color:"#FFFDF6",duration:.5,ease:"power2.out",immediateRender:false},64.760);
+      tl.set("#hud .d-n",{textContent:"25"},67.960);
+      tl.fromTo("#hud .d-n",{scale:1.35,color:"#F2C94C"},{scale:1,color:"#FFFDF6",duration:.5,ease:"power2.out",immediateRender:false},67.960);
+      tl.set("#hud .d-n",{textContent:"29"},76.540);
+      tl.fromTo("#hud .d-n",{scale:1.35,color:"#F2C94C"},{scale:1,color:"#FFFDF6",duration:.5,ease:"power2.out",immediateRender:false},76.540);
+      tl.set("#hud .d-n",{textContent:"30"},98.995);
+      tl.fromTo("#hud .d-n",{scale:1.35,color:"#F2C94C"},{scale:1,color:"#FFFDF6",duration:.5,ease:"power2.out",immediateRender:false},98.995);
+      tl.set("#hud .b-n",{textContent:"$369.03"},36.810);
+      tl.set("#hud .b-n",{textContent:"$363.19"},36.860);
+      tl.set("#hud .b-n",{textContent:"$357.36"},36.910);
+      tl.set("#hud .b-n",{textContent:"$351.53"},36.960);
+      tl.set("#hud .b-n",{textContent:"$345.70"},37.010);
+      tl.set("#hud .b-n",{textContent:"$339.87"},37.060);
+      tl.set("#hud .b-n",{textContent:"$334.03"},37.110);
+      tl.set("#hud .b-n",{textContent:"$328.20"},37.160);
+      tl.set("#hud .b-n",{textContent:"$322.37"},37.210);
+      tl.set("#hud .b-n",{textContent:"$316.54"},37.260);
+      tl.set("#hud .b-n",{textContent:"$310.70"},37.310);
+      tl.set("#hud .b-n",{textContent:"$304.87"},37.360);
+      tl.fromTo("#hud .b-n",{scale:1.2},{scale:1,duration:.5,ease:"power2.out",immediateRender:false},37.360);
+      tl.set("#hud .b-n",{textContent:"$303.37"},40.010);
+      tl.set("#hud .b-n",{textContent:"$301.87"},40.060);
+      tl.set("#hud .b-n",{textContent:"$300.37"},40.110);
+      tl.set("#hud .b-n",{textContent:"$298.87"},40.160);
+      tl.set("#hud .b-n",{textContent:"$297.37"},40.210);
+      tl.set("#hud .b-n",{textContent:"$295.87"},40.260);
+      tl.set("#hud .b-n",{textContent:"$294.37"},40.310);
+      tl.set("#hud .b-n",{textContent:"$292.87"},40.360);
+      tl.set("#hud .b-n",{textContent:"$291.37"},40.410);
+      tl.set("#hud .b-n",{textContent:"$289.87"},40.460);
+      tl.set("#hud .b-n",{textContent:"$288.37"},40.510);
+      tl.set("#hud .b-n",{textContent:"$286.87"},40.560);
+      tl.fromTo("#hud .b-n",{scale:1.2},{scale:1,duration:.5,ease:"power2.out",immediateRender:false},40.560);
+      tl.set("#hud .b-n",{textContent:"$285.20"},43.210);
+      tl.set("#hud .b-n",{textContent:"$283.54"},43.260);
+      tl.set("#hud .b-n",{textContent:"$281.87"},43.310);
+      tl.set("#hud .b-n",{textContent:"$280.21"},43.360);
+      tl.set("#hud .b-n",{textContent:"$278.54"},43.410);
+      tl.set("#hud .b-n",{textContent:"$276.88"},43.460);
+      tl.set("#hud .b-n",{textContent:"$275.21"},43.510);
+      tl.set("#hud .b-n",{textContent:"$273.54"},43.560);
+      tl.set("#hud .b-n",{textContent:"$271.88"},43.610);
+      tl.set("#hud .b-n",{textContent:"$270.21"},43.660);
+      tl.set("#hud .b-n",{textContent:"$268.55"},43.710);
+      tl.set("#hud .b-n",{textContent:"$266.88"},43.760);
+      tl.fromTo("#hud .b-n",{scale:1.2},{scale:1,duration:.5,ease:"power2.out",immediateRender:false},43.760);
+      tl.set("#hud .b-n",{textContent:"$257.81"},57.560);
+      tl.set("#hud .b-n",{textContent:"$248.73"},57.610);
+      tl.set("#hud .b-n",{textContent:"$239.66"},57.660);
+      tl.set("#hud .b-n",{textContent:"$230.59"},57.710);
+      tl.set("#hud .b-n",{textContent:"$221.51"},57.760);
+      tl.set("#hud .b-n",{textContent:"$212.44"},57.810);
+      tl.set("#hud .b-n",{textContent:"$203.37"},57.860);
+      tl.set("#hud .b-n",{textContent:"$194.29"},57.910);
+      tl.set("#hud .b-n",{textContent:"$185.22"},57.960);
+      tl.set("#hud .b-n",{textContent:"$176.15"},58.010);
+      tl.set("#hud .b-n",{textContent:"$167.07"},58.060);
+      tl.set("#hud .b-n",{textContent:"$158.00"},58.110);
+      tl.fromTo("#hud .b-n",{scale:1.2},{scale:1,duration:.5,ease:"power2.out",immediateRender:false},58.110);
+      tl.set("#hud .b-n",{textContent:"$149.75"},63.360);
+      tl.set("#hud .b-n",{textContent:"$141.50"},63.410);
+      tl.set("#hud .b-n",{textContent:"$133.25"},63.460);
+      tl.set("#hud .b-n",{textContent:"$125.00"},63.510);
+      tl.set("#hud .b-n",{textContent:"$116.75"},63.560);
+      tl.set("#hud .b-n",{textContent:"$108.50"},63.610);
+      tl.set("#hud .b-n",{textContent:"$100.25"},63.660);
+      tl.set("#hud .b-n",{textContent:"$92.00"},63.710);
+      tl.set("#hud .b-n",{textContent:"$83.75"},63.760);
+      tl.set("#hud .b-n",{textContent:"$75.50"},63.810);
+      tl.set("#hud .b-n",{textContent:"$67.25"},63.860);
+      tl.set("#hud .b-n",{textContent:"$59.00"},63.910);
+      tl.fromTo("#hud .b-n",{scale:1.2},{scale:1,duration:.5,ease:"power2.out",immediateRender:false},63.910);
+      tl.set("#hud .b-n",{textContent:"$57.75"},66.560);
+      tl.set("#hud .b-n",{textContent:"$56.50"},66.610);
+      tl.set("#hud .b-n",{textContent:"$55.25"},66.660);
+      tl.set("#hud .b-n",{textContent:"$54.00"},66.710);
+      tl.set("#hud .b-n",{textContent:"$52.75"},66.760);
+      tl.set("#hud .b-n",{textContent:"$51.50"},66.810);
+      tl.set("#hud .b-n",{textContent:"$50.25"},66.860);
+      tl.set("#hud .b-n",{textContent:"$49.00"},66.910);
+      tl.set("#hud .b-n",{textContent:"$47.75"},66.960);
+      tl.set("#hud .b-n",{textContent:"$46.50"},67.010);
+      tl.set("#hud .b-n",{textContent:"$45.25"},67.060);
+      tl.set("#hud .b-n",{textContent:"$44.00"},67.110);
+      tl.fromTo("#hud .b-n",{scale:1.2},{scale:1,duration:.5,ease:"power2.out",immediateRender:false},67.110);
+      tl.set("#hud .b-n",{textContent:"$42.00"},69.760);
+      tl.set("#hud .b-n",{textContent:"$40.00"},69.810);
+      tl.set("#hud .b-n",{textContent:"$38.00"},69.860);
+      tl.set("#hud .b-n",{textContent:"$36.00"},69.910);
+      tl.set("#hud .b-n",{textContent:"$34.00"},69.960);
+      tl.set("#hud .b-n",{textContent:"$32.00"},70.010);
+      tl.set("#hud .b-n",{textContent:"$30.00"},70.060);
+      tl.set("#hud .b-n",{textContent:"$28.00"},70.110);
+      tl.set("#hud .b-n",{textContent:"$26.00"},70.160);
+      tl.set("#hud .b-n",{textContent:"$24.00"},70.210);
+      tl.set("#hud .b-n",{textContent:"$22.00"},70.260);
+      tl.set("#hud .b-n",{textContent:"$20.00"},70.310);
+      tl.fromTo("#hud .b-n",{scale:1.2},{scale:1,duration:.5,ease:"power2.out",immediateRender:false},70.310);
+      tl.set("#hud .b-n",{textContent:"$18.33"},90.775);
+      tl.set("#hud .b-n",{textContent:"$16.67"},90.825);
+      tl.set("#hud .b-n",{textContent:"$15.00"},90.875);
+      tl.set("#hud .b-n",{textContent:"$13.33"},90.925);
+      tl.set("#hud .b-n",{textContent:"$11.67"},90.975);
+      tl.set("#hud .b-n",{textContent:"$10.00"},91.025);
+      tl.set("#hud .b-n",{textContent:"$8.33"},91.075);
+      tl.set("#hud .b-n",{textContent:"$6.67"},91.125);
+      tl.set("#hud .b-n",{textContent:"$5.00"},91.175);
+      tl.set("#hud .b-n",{textContent:"$3.33"},91.225);
+      tl.set("#hud .b-n",{textContent:"$1.67"},91.275);
+      tl.set("#hud .b-n",{textContent:"$0.00"},91.325);
+      tl.fromTo("#hud .b-n",{scale:1.2},{scale:1,duration:.5,ease:"power2.out",immediateRender:false},91.325);
+      tl.to("#hud .b-n",{color:"#5BE38A",duration:.3},91.325);
+      tl.to("#hud",{opacity:0,y:-14,duration:0.4,ease:"power2.in"},117.040);
+      tl.fromTo("#sw0",{opacity:0,y:-16,scale:.97},{opacity:1,y:0,scale:1,duration:0.35,ease:"power2.out",immediateRender:false},34.410);
+      tl.fromTo("#sw0 .strike",{scaleX:0},{scaleX:1,duration:.25,ease:"power2.out",immediateRender:false},36.010);
+      tl.to("#sw0 .old",{opacity:.45,duration:.25},36.110);
+      tl.fromTo("#sw0 .new",{opacity:0,y:12},{opacity:1,y:0,duration:0.35,ease:"power2.out",immediateRender:false},36.460);
+      tl.to("#sw0",{opacity:0,y:-12,duration:0.3,ease:"power2.in"},37.810);
+      tl.fromTo("#sw1",{opacity:0,y:-16,scale:.97},{opacity:1,y:0,scale:1,duration:0.35,ease:"power2.out",immediateRender:false},37.610);
+      tl.fromTo("#sw1 .strike",{scaleX:0},{scaleX:1,duration:.25,ease:"power2.out",immediateRender:false},39.210);
+      tl.to("#sw1 .old",{opacity:.45,duration:.25},39.310);
+      tl.fromTo("#sw1 .new",{opacity:0,y:12},{opacity:1,y:0,duration:0.35,ease:"power2.out",immediateRender:false},39.660);
+      tl.to("#sw1",{opacity:0,y:-12,duration:0.3,ease:"power2.in"},41.010);
+      tl.fromTo("#sw2",{opacity:0,y:-16,scale:.97},{opacity:1,y:0,scale:1,duration:0.35,ease:"power2.out",immediateRender:false},40.810);
+      tl.fromTo("#sw2 .strike",{scaleX:0},{scaleX:1,duration:.25,ease:"power2.out",immediateRender:false},42.410);
+      tl.to("#sw2 .old",{opacity:.45,duration:.25},42.510);
+      tl.fromTo("#sw2 .new",{opacity:0,y:12},{opacity:1,y:0,duration:0.35,ease:"power2.out",immediateRender:false},42.860);
+      tl.to("#sw2",{opacity:0,y:-12,duration:0.3,ease:"power2.in"},44.280);
+      tl.fromTo("#sw3",{opacity:0,y:-16,scale:.97},{opacity:1,y:0,scale:1,duration:0.35,ease:"power2.out",immediateRender:false},55.160);
+      tl.fromTo("#sw3 .strike",{scaleX:0},{scaleX:1,duration:.25,ease:"power2.out",immediateRender:false},56.760);
+      tl.to("#sw3 .old",{opacity:.45,duration:.25},56.860);
+      tl.fromTo("#sw3 .new",{opacity:0,y:12},{opacity:1,y:0,duration:0.35,ease:"power2.out",immediateRender:false},57.210);
+      tl.to("#sw3",{opacity:0,y:-12,duration:0.3,ease:"power2.in"},59.360);
+      tl.fromTo("#sw4",{opacity:0,y:-16,scale:.97},{opacity:1,y:0,scale:1,duration:0.35,ease:"power2.out",immediateRender:false},60.960);
+      tl.fromTo("#sw4 .strike",{scaleX:0},{scaleX:1,duration:.25,ease:"power2.out",immediateRender:false},62.560);
+      tl.to("#sw4 .old",{opacity:.45,duration:.25},62.660);
+      tl.fromTo("#sw4 .new",{opacity:0,y:12},{opacity:1,y:0,duration:0.35,ease:"power2.out",immediateRender:false},63.010);
+      tl.to("#sw4",{opacity:0,y:-12,duration:0.3,ease:"power2.in"},64.360);
+      tl.fromTo("#sw5",{opacity:0,y:-16,scale:.97},{opacity:1,y:0,scale:1,duration:0.35,ease:"power2.out",immediateRender:false},64.160);
+      tl.fromTo("#sw5 .strike",{scaleX:0},{scaleX:1,duration:.25,ease:"power2.out",immediateRender:false},65.760);
+      tl.to("#sw5 .old",{opacity:.45,duration:.25},65.860);
+      tl.fromTo("#sw5 .new",{opacity:0,y:12},{opacity:1,y:0,duration:0.35,ease:"power2.out",immediateRender:false},66.210);
+      tl.to("#sw5",{opacity:0,y:-12,duration:0.3,ease:"power2.in"},67.560);
+      tl.fromTo("#sw6",{opacity:0,y:-16,scale:.97},{opacity:1,y:0,scale:1,duration:0.35,ease:"power2.out",immediateRender:false},67.360);
+      tl.fromTo("#sw6 .strike",{scaleX:0},{scaleX:1,duration:.25,ease:"power2.out",immediateRender:false},68.960);
+      tl.to("#sw6 .old",{opacity:.45,duration:.25},69.060);
+      tl.fromTo("#sw6 .new",{opacity:0,y:12},{opacity:1,y:0,duration:0.35,ease:"power2.out",immediateRender:false},69.410);
+      tl.to("#sw6",{opacity:0,y:-12,duration:0.3,ease:"power2.in"},70.530);
+      tl.fromTo("#sw7",{opacity:0,y:-16,scale:.97},{opacity:1,y:0,scale:1,duration:0.35,ease:"power2.out",immediateRender:false},88.375);
+      tl.fromTo("#sw7 .strike",{scaleX:0},{scaleX:1,duration:.25,ease:"power2.out",immediateRender:false},89.975);
+      tl.to("#sw7 .old",{opacity:.45,duration:.25},90.075);
+      tl.fromTo("#sw7 .new",{opacity:0,y:12},{opacity:1,y:0,duration:0.35,ease:"power2.out",immediateRender:false},90.425);
+      tl.to("#sw7",{opacity:0,y:-12,duration:0.3,ease:"power2.in"},92.575);
+      tl.fromTo("#ch0",{opacity:0,scale:1.08},{opacity:1,scale:1,duration:0.45,ease:"power2.out",immediateRender:false},48.210);
+      tl.to("#ch0",{opacity:0,y:-16,duration:0.35,ease:"power2.in"},50.010);
+      tl.fromTo("#ch1",{opacity:0,scale:1.08},{opacity:1,scale:1,duration:0.45,ease:"power2.out",immediateRender:false},76.640);
+      tl.to("#ch1",{opacity:0,y:-16,duration:0.35,ease:"power2.in"},78.440);
+      tl.fromTo("#ch2",{opacity:0,scale:1.08},{opacity:1,scale:1,duration:0.45,ease:"power2.out",immediateRender:false},99.095);
+      tl.to("#ch2",{opacity:0,y:-16,duration:0.35,ease:"power2.in"},100.195);
+      tl.fromTo("#offline",{opacity:0,scale:.9},{opacity:1,scale:1,duration:0.3,ease:"power2.out",immediateRender:false},84.280);
+      tl.to("#offline",{opacity:0,duration:0.3,ease:"power2.in"},88.325);
+      tl.fromTo("#o0",{opacity:0,y:-40},{opacity:1,y:0,duration:.25,ease:"back.out(1.6)",immediateRender:false},100.495);
+      tl.to("#o0",{y:108,duration:.22,ease:"power2.out"},100.795);
+      tl.to("#o0",{y:216,duration:.22,ease:"power2.out"},101.095);
+      tl.to("#o0",{y:324,duration:.22,ease:"power2.out"},101.395);
+      tl.fromTo("#o1",{opacity:0,y:-40},{opacity:1,y:0,duration:.25,ease:"back.out(1.6)",immediateRender:false},100.795);
+      tl.to("#o1",{y:108,duration:.22,ease:"power2.out"},101.095);
+      tl.to("#o1",{y:216,duration:.22,ease:"power2.out"},101.395);
+      tl.fromTo("#o2",{opacity:0,y:-40},{opacity:1,y:0,duration:.25,ease:"back.out(1.6)",immediateRender:false},101.095);
+      tl.to("#o2",{y:108,duration:.22,ease:"power2.out"},101.395);
+      tl.fromTo("#o3",{opacity:0,y:-40},{opacity:1,y:0,duration:.25,ease:"back.out(1.6)",immediateRender:false},101.395);
+      tl.to("#o0",{opacity:0,y:264,duration:0.35,ease:"power2.in"},102.405);
+      tl.to("#o1",{opacity:0,y:156,duration:0.35,ease:"power2.in"},102.375);
+      tl.to("#o2",{opacity:0,y:48,duration:0.35,ease:"power2.in"},102.345);
+      tl.to("#o3",{opacity:0,y:-60,duration:0.35,ease:"power2.in"},102.315);
+      tl.fromTo("#zero",{opacity:0,scale:1.12},{opacity:1,scale:1,duration:0.45,ease:"power2.out",immediateRender:false},105.635);
+      tl.to("#zero",{opacity:0,duration:0.35,ease:"power2.in"},109.535);
+      tl.fromTo("#endc",{opacity:0},{opacity:1,duration:0.5,ease:"power2.out",immediateRender:false},117.140);
+      tl.fromTo("#endc .e0",{opacity:0,y:14},{opacity:1,y:0,duration:0.4,ease:"power2.out",immediateRender:false},117.190);
+      tl.fromTo("#endc .e1",{opacity:0,scale:1.15},{opacity:1,scale:1,duration:0.5,ease:"power2.out",immediateRender:false},117.440);
+      tl.fromTo("#endc .e2",{opacity:0,y:14},{opacity:1,y:0,duration:0.4,ease:"power2.out",immediateRender:false},117.840);
+      tl.fromTo("#endc .e3",{opacity:0,y:14},{opacity:1,y:0,duration:0.4,ease:"power2.out",immediateRender:false},118.140);
+      tl.fromTo("#c0_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},0.760);
+      tl.to("#c0_0",{opacity:0,duration:.18,ease:"power1.in"},4.785);
+      tl.fromTo("#c1_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},4.955);
+      tl.to("#c1_0",{opacity:0,duration:.18,ease:"power1.in"},7.740);
+      tl.fromTo("#c2_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},7.870);
+      tl.to("#c2_0",{opacity:0,duration:.18,ease:"power1.in"},14.705);
+      tl.fromTo("#c3_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},14.975);
+      tl.to("#c3_0",{opacity:0,duration:.18,ease:"power1.in"},17.603);
+      tl.fromTo("#c3_1",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},17.823);
+      tl.to("#c3_1",{opacity:0,duration:.18,ease:"power1.in"},19.345);
+      tl.fromTo("#c4_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},20.005);
+      tl.to("#c4_0",{opacity:0,duration:.18,ease:"power1.in"},22.615);
+      tl.fromTo("#c5_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},24.445);
+      tl.to("#c5_0",{opacity:0,duration:.18,ease:"power1.in"},28.535);
+      tl.fromTo("#c6_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},28.725);
+      tl.to("#c6_0",{opacity:0,duration:.18,ease:"power1.in"},31.890);
+      tl.fromTo("#c7_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},32.030);
+      tl.to("#c7_0",{opacity:0,duration:.18,ease:"power1.in"},34.560);
+      tl.fromTo("#c8_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},44.450);
+      tl.to("#c8_0",{opacity:0,duration:.18,ease:"power1.in"},48.010);
+      tl.fromTo("#c9_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},49.660);
+      tl.to("#c9_0",{opacity:0,duration:.18,ease:"power1.in"},54.440);
+      tl.fromTo("#c10_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},54.710);
+      tl.to("#c10_0",{opacity:0,duration:.18,ease:"power1.in"},55.009);
+      tl.fromTo("#c10_1",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},55.229);
+      tl.to("#c10_1",{opacity:0,duration:.18,ease:"power1.in"},57.019);
+      tl.fromTo("#c10_2",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},57.239);
+      tl.to("#c10_2",{opacity:0,duration:.18,ease:"power1.in"},60.260);
+      tl.fromTo("#c11_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},70.600);
+      tl.to("#c11_0",{opacity:0,duration:.18,ease:"power1.in"},71.589);
+      tl.fromTo("#c11_1",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},71.809);
+      tl.to("#c11_1",{opacity:0,duration:.18,ease:"power1.in"},72.283);
+      tl.fromTo("#c11_2",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},72.503);
+      tl.to("#c11_2",{opacity:0,duration:.18,ease:"power1.in"},75.640);
+      tl.fromTo("#c12_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},77.730);
+      tl.to("#c12_0",{opacity:0,duration:.18,ease:"power1.in"},81.952);
+      tl.fromTo("#c12_1",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},82.172);
+      tl.to("#c12_1",{opacity:0,duration:.18,ease:"power1.in"},83.580);
+      tl.fromTo("#c13_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},85.100);
+      tl.to("#c13_0",{opacity:0,duration:.18,ease:"power1.in"},88.455);
+      tl.fromTo("#c14_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},88.795);
+      tl.to("#c14_0",{opacity:0,duration:.18,ease:"power1.in"},92.840);
+      tl.fromTo("#c15_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},94.900);
+      tl.to("#c15_0",{opacity:0,duration:.18,ease:"power1.in"},98.395);
+      tl.fromTo("#c16_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},101.265);
+      tl.to("#c16_0",{opacity:0,duration:.18,ease:"power1.in"},105.265);
+      tl.fromTo("#c17_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},105.425);
+      tl.to("#c17_0",{opacity:0,duration:.18,ease:"power1.in"},109.235);
+      tl.fromTo("#c18_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},110.005);
+      tl.to("#c18_0",{opacity:0,duration:.18,ease:"power1.in"},112.447);
+      tl.fromTo("#c18_1",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},112.667);
+      tl.to("#c18_1",{opacity:0,duration:.18,ease:"power1.in"},113.870);
+      tl.fromTo("#c19_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},114.250);
+      tl.to("#c19_0",{opacity:0,duration:.18,ease:"power1.in"},116.520);
+      tl.set({}, {}, 124.89);
+      window.__timelines["main"] = tl;
+    </script>
+    <script type="module" src="assets/js/stack.js"></script>
+  </body>
+</html>

@@ -1,0 +1,120 @@
+{
+ "note": "eleven_v4, one take per line in voice/el/mp3/<take>.mp3.",
+ "voice_ids": {
+  "maya": "dmWfLQZJq7wNPv9WmtiM",
+  "noah": "xDM73lGN1cPZSG4X87cj",
+  "system": "ZD29qZCdYhhdqzBLRKNH"
+ },
+ "voice_names": {
+  "maya": "Emma - Wry, Gritty Hero",
+  "noah": "Ronan",
+  "system": "Female Humanoid - Futuristic"
+ },
+ "lines": [
+  [
+   "01",
+   "system",
+   "[cold, calm, synthetic system voice] Your Adobe Creative Cloud subscription has been cancelled."
+  ],
+  [
+   "02",
+   "maya",
+   "[groggy, just woke up, then alarmed] What? I didn't cancel anything."
+  ],
+  [
+   "03",
+   "system",
+   "[flat, quick, each name clipped] Canva. CapCut. Mailchimp. Hootsuite. Linktree. Notion. ChatGPT. Cancelled."
+  ],
+  [
+   "04",
+   "system",
+   "[cold, final] Every paid app on this account is locked. For thirty days."
+  ],
+  [
+   "05",
+   "maya",
+   "[panicked whisper, to herself] My launch is in thirty days."
+  ],
+  [
+   "06",
+   "noah",
+   "[casual, amused, leaning on the doorframe] You know you can replace all of that... for free, right?"
+  ],
+  [
+   "07",
+   "maya",
+   "[skeptical, hopeful] Free? Like, actually free?"
+  ],
+  [
+   "08",
+   "noah",
+   "[confident, a small smile] Open source. Watch."
+  ],
+  [
+   "09",
+   "maya",
+   "[delighted, surprised at herself] The teaser's done. And it cost me nothing."
+  ],
+  [
+   "10",
+   "maya",
+   "[frustrated, desperate] Ten thousand subscribers... and I can't email a single one."
+  ],
+  [
+   "11",
+   "noah",
+   "[calm, reassuring] Listmonk. Your list, on your own server. Nobody can lock you out again."
+  ],
+  [
+   "12",
+   "maya",
+   "[proud, energized] Posts scheduled. Plan's back. And my bill is almost zero."
+  ],
+  [
+   "13",
+   "maya",
+   "[exhausted, stressed, late at night] Launch is tomorrow, and I still have to write everything. Without ChatGPT."
+  ],
+  [
+   "14",
+   "maya",
+   "[panicking] No. No, no, no. The internet's gone."
+  ],
+  [
+   "15",
+   "noah",
+   "[calm, steady] Then run your own AI. Right here, on your laptop."
+  ],
+  [
+   "16",
+   "maya",
+   "[amazed whisper] No internet... and it's still writing."
+  ],
+  [
+   "17",
+   "noah",
+   "[grinning, teasing] So what did all of this cost you?"
+  ],
+  [
+   "18",
+   "maya",
+   "[proud, a short laugh] Zero. Not one subscription."
+  ],
+  [
+   "19",
+   "system",
+   "[cold, synthetic] Your subscriptions are available again. Resubscribe?"
+  ],
+  [
+   "20",
+   "maya",
+   "[smiling, relaxed] No thanks."
+  ],
+  [
+   "21",
+   "maya",
+   "[warm, friendly, to the viewer] Want my whole stack? Follow next level social, and comment STACK."
+  ]
+ ]
+}
