@@ -14,6 +14,9 @@ Opened outside claude.ai, the same page falls back to saving in the browser.
   download as HTML (print to PDF); copy or WhatsApp a payment reminder; duplicate, cancel, mark fully paid.
 - **Payments**: against an invoice (pre-fills balance and TDS) or as other income (brand deals, AdSense, affiliate);
   UPI/NEFT/IMPS/RTGS/cash/cheque/PayPal/Wise, UTR reference, foreign currency with INR credited.
+- **Bank statement import**: drop any Indian bank's Excel/CSV statement (HDFC, ICICI, SBI, Axis, Kotak…); credits are matched
+  to open invoices (TDS included) or marked as brand/AdSense income, debits get expense categories, UTR and mode are read
+  from the narration, own-account transfers are skipped, and re-imports are recognised. Reviewed before anything is saved.
 - **Expenses**: categories, GST input credit, monthly/yearly repeats, client-linked costs.
 - **Deals**: brand and client pipeline from lead to delivered, with "create invoice" when won.
 - **Overview**: revenue excl. GST, cash in, outstanding/overdue, expenses, net profit, monthly retainers; revenue vs

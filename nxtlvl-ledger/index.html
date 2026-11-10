@@ -295,6 +295,12 @@ tfoot td { font-weight: 700; border-top: 1px solid var(--line-2); border-bottom:
 .kv div span { display: block; font-size: 11.5px; color: var(--faint); letter-spacing: .02em; }
 .kv div b { font-weight: 550; overflow-wrap: anywhere; }
 
+.drop { border: 1.5px dashed var(--line-2); border-radius: 16px; padding: 30px 20px; text-align: center; display: grid; gap: 6px; justify-items: center; background: rgba(255, 255, 255, .02); cursor: pointer; transition: border-color .25s, background .25s, transform .25s var(--ease); }
+.drop b { font-size: 15px; }
+.drop:hover, .drop.over { border-color: var(--lift); background: rgba(169, 92, 255, .07); transform: translateY(-1px); }
+.imp td select { width: 100%; min-width: 230px; border: 1px solid var(--line-2); background: var(--field); border-radius: 9px; padding: 7px 9px; }
+.imp td input[type=checkbox] { width: 17px; height: 17px; accent-color: var(--lift); }
+.amt-in { color: var(--good); font-weight: 650; } .amt-out { color: var(--bad); font-weight: 650; }
 .svc-row { display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, .8fr) 34px; gap: 8px; align-items: center; }
 @media (max-width: 560px) { .svc-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 34px; } .svc-row .n { grid-column: 1 / -1; } }
 
@@ -1155,7 +1161,7 @@ function vPayments() {
   const rows = S.payments.filter(p => p.date && fyOf(p.date) === S.fy && (!q || [client(p.clientId)?.name, p.ref, p.notes].join(' ').toLowerCase().includes(q))).sort((a, b) => b.date.localeCompare(a.date));
   const cash = rows.reduce((s, p) => s + payINR(p), 0), tds = rows.reduce((s, p) => s + payTdsINR(p), 0);
   const byMode = {}; rows.forEach(p => byMode[p.mode || 'Other'] = (byMode[p.mode || 'Other'] || 0) + payINR(p));
-  return top('Payments', `${fyLabel(S.fy)} · ${fmtINR(cash)} received${tds ? ` · ${fmtINR(tds)} TDS` : ''}`, `${fySelect()}<button class="btn primary" data-act="new-payment">+ Record payment</button>`) + banners()
+  return top('Payments', `${fyLabel(S.fy)} · ${fmtINR(cash)} received${tds ? ` · ${fmtINR(tds)} TDS` : ''}`, `${fySelect()}<button class="btn" data-act="import-bank">Import bank statement</button><button class="btn primary" data-act="new-payment">+ Record payment</button>`) + banners()
   + `<div class="tools"><span class="muted">Record client payments, brand deal money, AdSense and anything else that comes in.</span><span class="sp" style="flex:1"></span><input class="search" id="q" type="search" placeholder="Search client, UTR" value="${esc(S.f.q)}" aria-label="Search payments"></div>`
   + `<div class="grid g-2"><div class="card">${rows.length ? `<div class="tbl-wrap"><table class="tbl-min"><thead><tr><th>Date</th><th>From</th><th>For</th><th>Mode</th><th class="r">TDS</th><th class="r">Received</th></tr></thead><tbody>
     ${rows.map(p => { const inv = S.invoices.find(i => i.id === p.invoiceId); return `<tr class="click" data-act="edit-payment" data-id="${esc(p.id)}"><td>${fmtDate(p.date)}</td><td><div class="t">${esc(client(p.clientId)?.name || '—')}</div>${p.sample ? '<div class="s">Example</div>' : ''}</td><td>${inv ? esc(inv.number) : esc(labelOf(SOURCES, p.source || 'other'))}</td><td><div>${esc(p.mode || '')}</div><div class="s">${esc(p.ref || '')}</div></td><td class="r">${num(p.tds) ? fmtINR(payTdsINR(p)) : '—'}</td><td class="r"><b>${fmtINR(payINR(p))}</b>${p.currency && p.currency !== 'INR' ? `<div class="s">${fmtCur(num(p.amount), p.currency)}</div>` : ''}</td></tr>`; }).join('')}
@@ -1171,7 +1177,7 @@ function vExpenses() {
   const recurring = S.expenses.filter(e => e.recurring === 'monthly'); const seenR = {}; recurring.forEach(e => { const key = (e.vendor + '|' + e.desc).toLowerCase(); if (!seenR[key] || seenR[key].date < e.date) seenR[key] = e; });
   const monthlyFixed = Object.values(seenR).reduce((s, e) => s + num(e.amount), 0);
   const cats = ['all', ...EXP_CATS.filter(c => byCat[c])];
-  return top('Expenses', `${fyLabel(S.fy)} · ${fmtINR(fyRows.reduce((s, e) => s + num(e.amount), 0))} spent${monthlyFixed ? ` · ${fmtINR(monthlyFixed)}/month in subscriptions` : ''}`, `${fySelect()}<button class="btn primary" data-act="new-expense">+ Add expense</button>`) + banners()
+  return top('Expenses', `${fyLabel(S.fy)} · ${fmtINR(fyRows.reduce((s, e) => s + num(e.amount), 0))} spent${monthlyFixed ? ` · ${fmtINR(monthlyFixed)}/month in subscriptions` : ''}`, `${fySelect()}<button class="btn" data-act="import-bank">Import bank statement</button><button class="btn primary" data-act="new-expense">+ Add expense</button>`) + banners()
   + `<div class="tools"><select class="sel" id="cat-sel" aria-label="Category">${opt(cats.map(c => [c, c === 'all' ? 'All categories' : c]), cat)}</select><span class="sp" style="flex:1"></span><input class="search" id="q" type="search" placeholder="Search vendor or note" value="${esc(S.f.q)}" aria-label="Search expenses"></div>`
   + `<div class="grid g-2"><div class="card">${rows.length ? `<div class="tbl-wrap"><table class="tbl-min"><thead><tr><th>Date</th><th>Paid to</th><th>Category</th><th>Mode</th><th class="r">GST credit</th><th class="r">Amount</th><th></th></tr></thead><tbody>
     ${rows.map(e => `<tr class="click" data-act="edit-expense" data-id="${esc(e.id)}"><td>${fmtDate(e.date)}</td><td><div class="t">${esc(e.vendor)}</div><div class="s">${esc(e.desc || '')}${e.recurring && e.recurring !== 'none' ? ` · ${e.recurring === 'monthly' ? 'Monthly' : 'Yearly'}` : ''}${e.clientId ? ' · for ' + esc(client(e.clientId)?.name || '') : ''}${e.sample ? ' · Example' : ''}</div></td><td>${esc(e.category)}</td><td>${esc(e.mode || '')}</td><td class="r">${num(e.gst) ? fmtINR(num(e.gst)) : '—'}</td><td class="r"><b>${fmtINR(num(e.amount))}</b></td><td><button class="btn sm ghost" data-act="dup-expense" data-id="${esc(e.id)}" title="Add again with today's date">Repeat</button></td></tr>`).join('')}
@@ -1201,7 +1207,7 @@ function vReports() {
     <div class="card"><header><h2>Export & backup</h2><small>CSV opens in Excel or Google Sheets</small></header><div class="body" style="display:grid;gap:10px">
       <div class="tools">${[['invoices', 'Invoices'], ['payments', 'Payments'], ['expenses', 'Expenses'], ['clients', 'Clients'], ['gst', 'GST summary'], ['pl', 'Profit & loss']].map(([k, l]) => `<button class="btn sm" data-act="csv" data-kind="${k}">${l} CSV</button>`).join('')}</div>
       <p class="muted" style="margin:4px 0 0;font-size:12.5px">CSV files cover ${fyLabel(S.fy)}; send them to your CA at filing time.</p>
-      <div class="tools" style="margin-top:6px"><button class="btn sm" data-act="backup">Download full backup</button><button class="btn sm" data-act="restore">Restore from backup</button></div>
+      <div class="tools" style="margin-top:6px"><button class="btn sm" data-act="import-bank">Import bank statement</button><button class="btn sm" data-act="backup">Download full backup</button><button class="btn sm" data-act="restore">Restore from backup</button></div>
     </div></div></div>`;
 }
 function vSettings() {
@@ -1308,6 +1314,174 @@ async function doRestore() {
   closeModal();
 }
 
+/* ---------- bank statement import ---------- */
+let IMP = null;
+function loadXLSX() {
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  return new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; sc.onload = () => window.XLSX ? res(window.XLSX) : rej(new Error('load')); sc.onerror = () => rej(new Error('load')); document.head.appendChild(sc); });
+}
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).slice(0, 30).join('\n');
+  const cnt = ch => (lines.match(new RegExp('\\' + ch, 'g')) || []).length;
+  const delim = [',', '\t', '|', ';'].sort((a, b) => cnt(b) - cnt(a))[0];
+  const rows = []; let row = [], cell = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === delim) { row.push(cell); cell = ''; }
+    else if (ch === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
+    else if (ch !== '\r') cell += ch;
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+const MONTHS_FULL = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+function parseBankDate(v) {
+  if (typeof v === 'number' && v > 20000 && v < 80000) { const d = new Date(Math.round((v - 25569) * 864e5)); return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`; }
+  const s = String(v || '').trim(); let m;
+  const fy = y => { y = Number(y); return y < 100 ? 2000 + y : y; };
+  const ok = (y, mo, d) => (mo >= 1 && mo <= 12 && d >= 1 && d <= 31) ? `${fy(y)}-${pad(mo)}-${pad(d)}` : '';
+  if ((m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return ok(m[1], +m[2], +m[3]);
+  if ((m = s.match(/^(\d{1,2})[\/\-. ](\d{1,2})[\/\-. ](\d{2,4})/))) return ok(m[3], +m[2], +m[1]);
+  if ((m = s.match(/^(\d{1,2})[\/\-. ]([A-Za-z]{3,9})[\/\-., ]+(\d{2,4})/))) return ok(m[3], MONTHS_FULL.indexOf(m[2].slice(0, 3).toLowerCase()) + 1, +m[1]);
+  if ((m = s.match(/^([A-Za-z]{3,9})[ .]+(\d{1,2}),? (\d{4})/))) return ok(m[3], MONTHS_FULL.indexOf(m[1].slice(0, 3).toLowerCase()) + 1, +m[2]);
+  return '';
+}
+function parseAmt(v) {
+  if (typeof v === 'number') return Math.abs(v);
+  const s = String(v || '').replace(/INR|Rs\.?|₹|,|\s/gi, '').replace(/(cr|dr)$/i, '').replace(/[()]/g, '');
+  const n = parseFloat(s); return isFinite(n) ? Math.abs(n) : 0;
+}
+function detectCols(rows) {
+  for (let i = 0; i < Math.min(rows.length, 80); i++) {
+    const r = rows[i].map(x => String(x ?? '').toLowerCase().replace(/\s+/g, ' ').trim());
+    const find = re => r.findIndex(c => re.test(c));
+    const date = find(/date/);
+    const desc = find(/narration|description|particular|remark|details|transaction info/);
+    let debit = find(/withdraw|debit|dr amount|paid out|money out/), credit = find(/deposit|credit|cr amount|paid in|money in/);
+    const type = find(/^(dr ?\/ ?cr|cr ?\/ ?dr|type|debit ?\/ ?credit|txn type|transaction type)$/);
+    const amount = find(/^(txn |transaction )?amount/);
+    const ref = find(/chq|cheque|ref|utr/);
+    if (debit === type || credit === type) { debit = -1; credit = -1; }
+    if (date >= 0 && desc >= 0 && ((debit >= 0 && credit >= 0 && debit !== credit) || amount >= 0)) return { i, date, desc, debit, credit, amount, type, ref: ref === desc ? -1 : ref };
+  }
+  return null;
+}
+function txMode(d) { return /upi/.test(d) ? 'UPI' : /neft/.test(d) ? 'NEFT' : /imps/.test(d) ? 'IMPS' : /rtgs/.test(d) ? 'RTGS' : /atm|cash/.test(d) ? 'Cash' : /chq|cheque|clg/.test(d) ? 'Cheque' : /pos |card|ecom/.test(d) ? 'Card' : 'Bank transfer'; }
+const NOISE = /^(upi|neft|imps|rtgs|mmt|ib|inb|dr|cr|p2a|p2m|payment|pay|paid|to|from|by|transfer|trf|fund|ft|txn|ach|nach|ecs|pos|ref|utr|ok|na|null|bank|ltd|pvt|private|limited|india|a\/c|ac|hdfc|icic|sbin|utib|kkbk|yesb|punb|barb|cnrb|idib|ubin|indb|ioba|fdrl|idfb|aubl|inv|no)$/i;
+const titleCase = x => x.toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());
+function partyOf(desc) {
+  for (const seg of String(desc).split(/[\/|\-:]+/)) {
+    const name = seg.trim().split(/\s+/).filter(w => w && !/\d/.test(w) && !/@/.test(w) && !NOISE.test(w.replace(/[.,]/g, ''))).join(' ');
+    if (name.replace(/[^a-z]/gi, '').length >= 3) return titleCase(name).slice(0, 48);
+  }
+  return titleCase(String(desc).slice(0, 32).trim());
+}
+function extractTxs(rows, col) {
+  const out = [];
+  for (const r of rows.slice(col.i + 1)) {
+    if (!r || !r.length) continue;
+    const date = parseBankDate(r[col.date]); if (!date) continue;
+    const desc = String(r[col.desc] ?? '').replace(/\s+/g, ' ').trim();
+    let amt = 0, credit = false;
+    if (col.debit >= 0 && col.credit >= 0) { const dr = parseAmt(r[col.debit]), cr = parseAmt(r[col.credit]); if (cr > 0) { amt = cr; credit = true; } else amt = dr; }
+    else { amt = parseAmt(r[col.amount]); const t = String(col.type >= 0 ? r[col.type] : r[col.amount]); credit = /cr|credit|deposit/i.test(t); }
+    if (!amt) continue;
+    const d = desc.toLowerCase();
+    const refCell = col.ref >= 0 ? String(r[col.ref] ?? '').trim() : '';
+    const m = desc.match(/(?:neft|imps|rtgs)[\/\- ]*(?:[a-z]+[\/\- ]+)?([a-z0-9]{10,22})/i) || desc.match(/\b(\d{12})\b/);
+    const ref = (refCell && !/^0+$/.test(refCell) ? refCell : '') || (m ? m[1].toUpperCase() : '');
+    const fp = `${date}|${credit ? 'c' : 'd'}|${amt.toFixed(2)}|${(ref || desc).slice(0, 40).toLowerCase()}`;
+    out.push({ date, desc, amount: r2(amt), credit, ref, mode: txMode(d), party: partyOf(desc), fp });
+  }
+  return out;
+}
+const EXP_RULES = [[/charges|chrg|sms alert|amc |annual fee|min bal|debit card fee/, 'Bank & payment fees'], [/adobe|canva|figma|notion|openai|chatgpt|claude|anthropic|capcut|workspace|gsuite|microsoft|zoom|apple\.com|icloud|spotify|envato|freepik|shopify|hostinger|godaddy|cloudflare|github|vercel|netlify|heygen|elevenlabs|midjourney|higgsfield/, 'Software & subscriptions'],
+  [/facebook|meta platforms|fb ads|google ads|adwords|instagram|linkedin ads/, 'Ads spend'], [/airtel|jio|vodafone|bsnl|act fibernet|hathway|excitel/, 'Internet & phone'], [/uber|ola |rapido|irctc|indigo|vistara|air india|akasa|makemytrip|goibibo|redbus|fastag|petrol|fuel|hpcl|iocl|bpcl/, 'Travel'],
+  [/zomato|swiggy|starbucks|cafe|restaurant|domino|mcdonald|blinkit|zepto/, 'Food & meetings'], [/gst|cbdt|income tax|tds|challan|tin-nsdl|oltas|advance tax/, 'Taxes & govt fees'], [/salary|payroll/, 'Salaries'], [/rent|cowork|wework|springboard/, 'Rent & coworking'],
+  [/amazon|flipkart|croma|reliance digital|vijay sales|apple store/, 'Equipment & gear'], [/upwork|fiverr|freelanc|editor/, 'Freelancers & editors'], [/chartered|legal|advocate| ca fees/, 'Professional fees (CA, legal)']];
+function suggestTx(tx, open) {
+  const d = tx.desc.toLowerCase();
+  if (/self|own a\/c|own account|sweep/.test(d)) return { act: 'skip' };
+  if (!tx.credit) { for (const [re, cat] of EXP_RULES) if (re.test(d)) return { act: 'exp:' + cat }; return { act: 'exp:Other' }; }
+  const words = c => c.name.toLowerCase().replace(/^example · /, '').split(/[^a-z0-9]+/).filter(w => w.length > 3);
+  let best = null;
+  for (const { inv, k } of open) {
+    const cl = client(inv.clientId); const hit = cl && words(cl).some(w => d.includes(w));
+    const net = Math.abs(k.dueNow - tx.amount) <= 1, full = Math.abs(k.balance - tx.amount) <= 1;
+    if (!net && !full) continue;
+    const score = (hit ? 2 : 0) + 1;
+    if (!best || score > best.score) best = { inv, score, tds: net && k.tdsLeft > 0 ? k.tdsLeft : 0 };
+  }
+  if (best) return { act: 'inv:' + best.inv.id, tds: best.tds };
+  if (/adsense|google ?ireland|youtube/.test(d)) return { act: 'inc:adsense' };
+  const cl = S.clients.find(c => words(c).some(w => d.includes(w)));
+  if (cl) return { act: cl.type === 'brand' ? 'inc:brand' : 'inc:other', clientId: cl.id };
+  return { act: 'inc:other' };
+}
+function openImport() {
+  IMP = null;
+  openModal(`<header class="sh"><div><h2>Import bank statement</h2><p class="sub">Works with any Indian bank's Excel or CSV statement</p></div><button type="button" class="icon-btn" data-act="close" aria-label="Close">×</button></header>
+    <div class="sbody" id="imp-body">
+      <label class="drop" for="imp-file"><b>Choose your statement file</b><span class="muted">or drop it here · .xlsx, .xls or .csv</span><input type="file" id="imp-file" accept=".csv,.xls,.xlsx,.txt" hidden></label>
+      <div class="kv"><div><span>Where to download it</span><b>Net banking → Account statement → choose the date range → download as Excel or CSV (HDFC calls it "Delimited"). PDF statements can't be read.</b></div>
+      <div><span>Privacy</span><b>The file is read here in your browser. Only the transactions you choose to add are saved to your ledger.</b></div></div>
+    </div>`, true);
+}
+async function handleImportFile(file) {
+  const body = $('#imp-body'); if (!body || !file) return;
+  body.innerHTML = '<p class="muted" style="margin:0">Reading your statement…</p>';
+  let rows;
+  try {
+    if (/\.xlsx?$/i.test(file.name)) { const X = await loadXLSX(); const wb = X.read(await file.arrayBuffer(), { type: 'array' }); rows = X.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, raw: true, defval: '' }); }
+    else rows = parseCSV(await file.text());
+  } catch (e) { body.innerHTML = `<div class="banner warn"><p>That file couldn't be opened. Try saving the statement as CSV and import it again.</p></div>`; return; }
+  const col = detectCols(rows);
+  if (!col) { body.innerHTML = `<div class="banner warn"><p>No transaction table found. The statement needs columns for date, narration (or description) and withdrawal/deposit, or a single amount column with Dr/Cr.</p></div><div><button class="btn" data-act="import-bank">Try another file</button></div>`; return; }
+  const txs = extractTxs(rows, col);
+  if (!txs.length) { body.innerHTML = `<div class="banner warn"><p>The table was found but no dated transactions were read from it.</p></div><div><button class="btn" data-act="import-bank">Try another file</button></div>`; return; }
+  const seen = new Set([...S.payments, ...S.expenses].map(x => x.bankFp).filter(Boolean));
+  const open = openInvoices().filter(x => (x.inv.currency || 'INR') === 'INR');
+  IMP = { filter: 'all', file: file.name, open, rows: txs.slice(0, 1000).map((t, i) => { const sg = suggestTx(t, open); const dup = seen.has(t.fp); return { ...t, i, dup, act: sg.act, tds: sg.tds || 0, clientId: sg.clientId || '', on: !dup && sg.act !== 'skip' }; }) };
+  drawImport();
+}
+function drawImport() {
+  const body = $('#imp-body'); if (!body || !IMP) return;
+  const R = IMP.rows, inR = R.filter(r => r.credit), outR = R.filter(r => !r.credit), dups = R.filter(r => r.dup).length;
+  const invOpts = IMP.open.map(({ inv, k }) => [`inv:${inv.id}`, `Payment · ${inv.number} · ${client(inv.clientId)?.name || ''} · ${fmtINR(k.dueNow)}`]);
+  const incOpts = SOURCES.filter(s => s[0] !== 'invoice').map(s => [`inc:${s[0]}`, `Income · ${s[1]}`]);
+  const expOpts = EXP_CATS.map(c => [`exp:${c}`, `Expense · ${c}`]);
+  const shown = R.filter(r => IMP.filter === 'all' || (IMP.filter === 'in' ? r.credit : !r.credit));
+  const picked = R.filter(r => r.on && r.act !== 'skip');
+  body.innerHTML = `<div class="mini-tiles"><div><span>Transactions</span><b>${R.length}</b></div><div><span>Money in</span><b class="pos">${fmtShort(inR.reduce((s, r) => s + r.amount, 0))}</b></div><div><span>Money out</span><b class="neg">${fmtShort(outR.reduce((s, r) => s + r.amount, 0))}</b></div><div><span>Already imported</span><b>${dups}</b></div></div>
+    <div class="tools"><div class="chips">${[['all', 'All'], ['in', 'Money in'], ['out', 'Money out']].map(([k, l]) => `<button type="button" data-act="imp-filter" data-val="${k}" aria-pressed="${IMP.filter === k}">${l}</button>`).join('')}</div><span style="flex:1"></span><button type="button" class="btn sm ghost" data-act="imp-all" data-val="1">Select all</button><button type="button" class="btn sm ghost" data-act="imp-all" data-val="0">Select none</button></div>
+    <div class="tbl-wrap"><table class="imp" style="min-width:820px"><thead><tr><th></th><th>Date</th><th>Details</th><th class="r">Amount</th><th>Add as</th></tr></thead><tbody>
+    ${shown.map(r => `<tr data-row="${r.i}"><td><input type="checkbox" class="imp-on" aria-label="Include" ${r.on ? 'checked' : ''}></td><td style="white-space:nowrap">${fmtDate(r.date)}</td>
+      <td><div class="t">${esc(r.party)}${r.dup ? ' <span class="st plain">Already imported</span>' : ''}</div><div class="s" style="max-width:380px;overflow-wrap:anywhere">${esc(r.desc)}</div><div class="s">${esc(r.mode)}${r.ref ? ' · ' + esc(r.ref) : ''}</div></td>
+      <td class="r ${r.credit ? 'amt-in' : 'amt-out'}" style="white-space:nowrap">${r.credit ? '+' : '−'} ${fmtINR(r.amount, 2)}</td>
+      <td><select class="imp-act" aria-label="Add as">${opt(r.credit ? [...invOpts, ...incOpts, ['skip', 'Skip']] : [...expOpts, ['skip', 'Skip']], r.act)}</select>${r.tds ? `<div class="s">+ TDS ${fmtINR(r.tds)} recorded</div>` : ''}</td></tr>`).join('')}
+    </tbody></table></div>
+    ${R.length >= 1000 ? '<p class="muted" style="margin:0">Showing the first 1,000 transactions. Import a shorter date range for the rest.</p>' : ''}
+    <div class="sf" style="margin:0 -22px -20px"><span class="muted" style="font-size:12.5px">${esc(IMP.file)} · ${(n => `matched ${n} payment${n === 1 ? '' : 's'} to invoices`)(R.filter(r => r.act.startsWith('inv:')).length)}</span><span class="sp"></span><button class="btn ghost" data-act="close">Cancel</button><button class="btn primary" data-act="imp-run" ${picked.length ? '' : 'disabled'}>Add ${picked.length} to ledger</button></div>`;
+}
+async function runImport() {
+  if (!IMP) return; const rows = IMP.rows.filter(r => r.on && r.act !== 'skip'); let n = 0;
+  const btn = $('[data-act="imp-run"]'); if (btn) { btn.disabled = true; btn.textContent = 'Adding…'; }
+  try {
+    for (const r of rows) {
+      const base = { date: r.date, mode: r.mode, ref: r.ref, notes: r.desc.slice(0, 300), bankFp: r.fp };
+      if (r.act.startsWith('inv:')) { const inv = S.invoices.find(i => i.id === r.act.slice(4)); if (!inv) continue;
+        const k = calc(inv); const net = Math.abs(k.dueNow - r.amount) <= 1;
+        await saveDoc('payments', { ...base, clientId: inv.clientId, invoiceId: inv.id, source: 'invoice', currency: 'INR', amount: r.amount, inr: r.amount, tds: net && k.tdsLeft > 0 ? k.tdsLeft : '' }); }
+      else if (r.act.startsWith('inc:')) await saveDoc('payments', { ...base, clientId: r.clientId || '', invoiceId: '', source: r.act.slice(4), currency: 'INR', amount: r.amount, inr: r.amount, tds: '' });
+      else if (r.act.startsWith('exp:')) await saveDoc('expenses', { ...base, category: r.act.slice(4), vendor: r.party, desc: 'From bank statement', amount: r.amount, gst: '', recurring: 'none', clientId: '' });
+      n++;
+    }
+    toast(`Added ${n} transactions from your statement`); closeModal();
+  } catch (e) { toast(`Stopped after ${n}. Import the same file again to add the rest; added ones are skipped.`, 'bad'); if (btn) { btn.disabled = false; btn.textContent = 'Try again'; } }
+}
+
 /* ---------- events ---------- */
 async function act(el) {
   const a = el.dataset.act, id = el.dataset.id;
@@ -1353,6 +1527,10 @@ async function act(el) {
         items: [{ desc: d.title, sac: '998361', qty: 1, rate: num(d.value), gst: num(S.config.defaultGst) || 18 }] }); break; }
     case 'clear-samples': { let n = 0; try { for (const c of COLS) for (const row of S[c].filter(x => x.sample)) { await removeDoc(c, row.id); n++; } toast(`Cleared ${n} example records`); } catch (e) { /* toast shown */ } break; }
     case 'csv': exportCSV(el.dataset.kind); break;
+    case 'import-bank': openImport(); break;
+    case 'imp-filter': if (IMP) { IMP.filter = el.dataset.val; drawImport(); } break;
+    case 'imp-all': if (IMP) { const on = el.dataset.val === '1'; IMP.rows.forEach(r => { if (IMP.filter === 'all' || (IMP.filter === 'in' ? r.credit : !r.credit)) r.on = on && r.act !== 'skip'; }); drawImport(); } break;
+    case 'imp-run': runImport(); break;
     case 'backup': saveFile(`nxtlvl-ledger-backup-${TODAY}.json`, JSON.stringify({ app: 'nxtlvl-ledger', version: 1, exportedAt: new Date().toISOString(), config: S.config, ...Object.fromEntries(COLS.map(c => [c, S[c]])) }, null, 2)); break;
     case 'restore': $('#restore-file').value = ''; $('#restore-file').click(); break;
     case 'do-restore': doRestore(); break;
@@ -1366,6 +1544,9 @@ document.addEventListener('click', e => {
   if (el.tagName === 'A') return;
   e.preventDefault(); act(el);
 });
+document.addEventListener('dragover', e => { const d = e.target.closest && e.target.closest('.drop'); if (d) { e.preventDefault(); d.classList.add('over'); } });
+document.addEventListener('dragleave', e => { const d = e.target.closest && e.target.closest('.drop'); if (d) d.classList.remove('over'); });
+document.addEventListener('drop', e => { const d = e.target.closest && e.target.closest('.drop'); if (!d) return; e.preventDefault(); const f = e.dataTransfer && e.dataTransfer.files[0]; if (f) handleImportFile(f); });
 let MV = null;
 document.addEventListener('pointermove', e => {
   if (e.pointerType !== 'mouse') return; const card = e.target.closest && e.target.closest('.card'); if (!card) return;
@@ -1381,6 +1562,11 @@ document.addEventListener('change', e => {
   if (e.target.id === 'fy-sel') { S.fy = Number(e.target.value); render(); }
   if (e.target.id === 'cat-sel') { S.f.expCat = e.target.value; render(); }
   if (e.target.closest('#settings')) S.settingsDirty = true;
+  if (e.target.id === 'imp-file') { const f = e.target.files && e.target.files[0]; if (f) handleImportFile(f); return; }
+  if (IMP && e.target.closest('tr[data-row]')) { const r = IMP.rows[+e.target.closest('tr[data-row]').dataset.row];
+    if (e.target.classList.contains('imp-on')) r.on = e.target.checked;
+    if (e.target.classList.contains('imp-act')) { r.act = e.target.value; r.on = r.act !== 'skip'; if (!r.act.startsWith('inv:')) r.tds = 0; }
+    drawImport(); return; }
   if (e.target.id === 'restore-file') {
     const f = e.target.files && e.target.files[0]; if (!f) return;
     const rd = new FileReader();
