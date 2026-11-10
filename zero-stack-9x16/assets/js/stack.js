@@ -515,49 +515,35 @@ const TB = { p0: v(-3.0, 1.7, .4), p1: v(-2.85, 1.72, .1), l0: v(-1.0, 1.78, -2.
 const LAPS = { p0: v(-2.55, 1.48, -3.4), p1: v(-2.5, 1.42, -3.3), l0: v(-2.05, .9, -1.95), fov: 40, ap: .2 }; // behind her left shoulder, the laptop
 const NOAH_T = (x, z) => ({ l0: v(x, 1.68, z), fov: 40, ap: .25 });
 const SHOTS = [
-  // s0, dawn: her phone lights up; she sits up; runs to the desk; the wall of cancellations; locked; Noah at the door
+  // s0, dawn: her phone lights up; she sits up; runs to the desk; locked for 30 days; Noah at the door
   [0, { p0: v(1.35, 1.7, -.8), p1: v(1.45, 1.6, -1.05), l0: v(2.6, .75, -3.0), fov: 46, ap: .05 }],
   [L[0] + .2, { p0: v(1.3, 1.0, -3.1), p1: v(1.33, .92, -3.2), l0: v(1.42, .565, -3.52), fov: 40, ap: .35 }],
   [L[1] - .15, { p0: v(2.4, 1.55, -.4), l0: v(2.85, 1.42, -2.45), fov: 40, ap: .2, d: 3.04, d1: 2.75 }],
   [L[2] - .25, { p0: v(2.6, 2.2, 2.6), p1: v(1.9, 2.0, 2.0), l0: v(.6, 1.0, -2.4), l1: v(-1.0, 1.1, -2.6), fov: 54, ap: .02 }],
-  [L[2] + 3.1, OTS],
-  [L[3] - .1, { ...OTS, p0: v(-.8, 1.76, -3.5), p1: v(-.85, 1.68, -3.3), fov: 34 }],
-  [L[4] - .15, FACE],
-  [E[4] + .25, { p0: v(-1.2, 1.7, -2.0), p1: v(-1.0, 1.7, -1.8), l0: v(3.9, 1.3, -.3), fov: 46, ap: .04 }],
-  [L[5] - .15, { p0: v(2.3, 1.72, .3), ...NOAH_T(3.62, -.3), d: 2.90, d1: 2.61 }],
-  [L[6] - .15, { p0: v(.6, 1.78, -1.05), l0: HEAD, fov: 40, ap: .25, d: 2.75, d1: 2.46 }],
-  [L[7] - .2, { p0: v(2.7, 2.1, 2.7), p1: v(2.4, 2.0, 2.4), l0: v(.9, 1.2, -1.3), fov: 58, ap: .02 }],
-  // s1, days 1-8: Adobe, Canva, CapCut
-  [CU[0], TA], [SW[0] + 1.0, OTS],
-  [SW[1] - .85, TB], [SW[1] + 1.0, OTS],
-  [SW[2] - .85, TA], [SW[2] + 1.0, OTS],
-  [L[8] - .1, FACE],
-  // s2, days 12-25: Mailchimp, Hootsuite, Linktree, Notion
-  [CU[1], { p0: v(3.0, 2.4, 3.6), p1: v(2.8, 2.3, 3.3), l0: v(-1.3, 1.1, -2.3), fov: 56, ap: .01 }],
-  [L[9] + .5, { ...FACE, d: 2.61, d1: 2.39 }],
-  [L[10] - .6, { p0: v(1.2, 1.5, 1.6), ...NOAH_T(1.3, 3.0), l0: v(1.3, 1.45, 3.0), d: 2.90, d1: 2.61 }],
-  [SW[3] - .8, TB], [SW[3] + 1.05, OTS],
-  [SW[4] - .85, TA], [SW[4] + .95, OTS],
-  [SW[5] - .85, TB], [SW[5] + .95, OTS],
-  [SW[6] - .85, TA], [SW[6] + .95, OTS],
-  [L[11] - .1, { p0: v(-1.0, 1.65, -.4), l0: v(-1.35, 1.65, -2.55), fov: 42, ap: .2, d: 3.48, d1: 3.19 }],
-  // s3, day 29, a storm: the night before launch; lightning; the power dies; an AI on her own laptop
+  [L[2] + 2.75, { ...OTS, p0: v(-.8, 1.76, -3.5), p1: v(-.85, 1.68, -3.3), fov: 34 }],
+  [L[3] - .15, FACE],
+  [E[3] + .2, { p0: v(-1.2, 1.7, -2.0), p1: v(-1.0, 1.7, -1.8), l0: v(3.9, 1.3, -.3), fov: 46, ap: .04 }],
+  [L[4] - .15, { p0: v(2.3, 1.72, .3), ...NOAH_T(3.62, -.3), d: 2.90, d1: 2.61 }],
+  // s1-s2, days 1-25: the montage, seven apps in about 11 seconds
+  [CU[0], TA], [SW[0] + .75, OTS],
+  [SW[1] - .6, TB], [SW[1] + .75, OTS],
+  [SW[2] - .6, TA],
+  [CU[1], TB], [SW[3] + .75, OTS],
+  [SW[4] - .6, TA], [SW[4] + .75, OTS],
+  [SW[5] - .6, TB], [SW[5] + .75, OTS],
+  [SW[6] - .6, TA], [SW[6] + .75, { ...FACE, d: 2.75, d1: 2.6 }],
+  // s3, day 29, a storm: no ChatGPT; lightning; the internet dies; an AI on her own laptop
   [CU[2], { p0: v(1.6, 2.2, 1.4), p1: v(1.2, 2.05, 1.0), l0: v(-1.3, 1.2, -2.6), fov: 50, ap: .02 }],
-  [L[12] - .1, FACE],
-  [E[12] + .35, { p0: v(.7, 1.6, -2.4), p1: v(.6, 1.62, -2.6), l0: v(-1.6, 1.85, -4.0), fov: 56, ap: .02 }],
-  [E[12] + 1.0, LAPS],
-  [L[13] + .35, { ...FACE, d: 2.54, d1: 2.32 }],
-  [L[14] - .1, { p0: v(-1.75, 1.72, -1.95), ...NOAH_T(-.25, -2.5), d: 2.75, d1: 2.54 }],
-  [SW[7] - .8, TA], [SW[7] + 1.0, LAPS],
-  [L[15] - .15, { ...FACE, d: 2.46, d1: 2.25 }],
-  // s4, day 30, launch: orders; "what did it cost?"; zero; resubscribe? no thanks; she turns to us
+  [L[5] + .9, FACE],
+  [C.cut - .2, { p0: v(.7, 1.6, -2.4), p1: v(.6, 1.62, -2.6), l0: v(-1.6, 1.85, -4.0), fov: 56, ap: .02 }],
+  [C.cut + .6, LAPS],
+  [L[6] - .1, { p0: v(-1.75, 1.72, -1.95), ...NOAH_T(-.25, -2.5), d: 2.75, d1: 2.54 }],
+  [SW[7] - .7, TA], [SW[7] + .8, LAPS],
+  [L[7] - .15, { ...FACE, d: 2.46, d1: 2.25 }],
+  // s4, day 30, launch: orders; zero; she turns to us
   [CU[3], { p0: v(-3.2, 2.3, 2.8), p1: v(-2.9, 2.2, 2.4), l0: v(-1.0, 1.1, -2.3), fov: 56, ap: .01 }],
-  [CU[3] + 1.3, OTS],
-  [L[16] - .1, { p0: v(.1, 1.75, .6), ...NOAH_T(-.4, -1.72), l0: v(-.4, 1.62, -1.72), d: 3.3, d1: 3.0 }],
-  [L[17] - .1, { p0: v(-1.45, 1.65, -.3), l0: v(CHAIR.x, 1.66, CHAIR.z), fov: 40, ap: .25, d: 2.68, d1: 2.39 }],
-  [L[18] - .15, OTS],
-  [L[19] - .1, { p0: v(-1.45, 1.65, -.3), l0: HEAD, fov: 40, ap: .25, d: 2.61, d1: 2.39 }],
-  [E[19] + .35, { p0: v(-1.5, 1.58, -.6), p1: v(-1.5, 1.56, -.9), l0: HEAD, fov: 40, ap: .2 }],
+  [L[8] - .1, { p0: v(-1.45, 1.7, -.3), l0: v(CHAIR.x, 1.8, CHAIR.z), fov: 40, ap: .25, d: 2.68, d1: 2.39 }],
+  [E[8] + .3, { p0: v(-1.5, 1.62, -.6), p1: v(-1.5, 1.6, -.9), l0: v(CHAIR.x, 1.72, CHAIR.z), fov: 42, ap: .2 }],
 ];
 function shotAt(t) {
   let i = 0; while (i + 1 < SHOTS.length && t >= SHOTS[i + 1][0]) i++;
@@ -605,45 +591,43 @@ function updMaya(t, s) {
       f = { eyes: "wide", mouth: "o", brows: "worry", noblink: true };
     } else {
       const sit = ss(t, L[2] + 2.45, L[2] + 3.0);
-      const turn = ss(t, L[6] - .6, L[6] - .1);                      // swivels to the door for "Free?"
+      const turn = ss(t, L[4] - .5, L[4]);                            // swivels to the door when Noah speaks
       const ry = lerp(FACING_DESK, ry2(CHAIR.x, CHAIR.z, 3.62, -.3), turn); chairRy = ry;
-      p = mixP(pose({ x: -1.35 - .15 * sit, z: -3.05 + .25 * sit, ry: -Math.PI / 2 }), sitP(ry, { a: turn > .5 ? [[.45, .15, .9], [.45, .15, .9]] : typeA(t, t < L[3] ? 1 : .3) }), sit);
-      if (t > L[4] - .2 && t < E[4] + .4) p.a = [[1.25, -.12, 2.35], [1.25, -.12, 2.35]];   // hands to her mouth
-      f = t < L[6] - .3 ? { eyes: "wide", mouth: t > L[4] - .2 ? "sad" : "flat", brows: "worry", talk: who(t, "maya") } : { eyes: "open", mouth: "smile", brows: "raise1", talk: who(t, "maya") };
-      if (t > L[7] - .2) f = { eyes: "open", mouth: "smile", brows: "up" };
+      p = mixP(pose({ x: -1.35 - .15 * sit, z: -3.05 + .25 * sit, ry: -Math.PI / 2 }), sitP(ry, { a: turn > .5 ? [[.45, .15, .9], [.45, .15, .9]] : typeA(t, t < L[2] + 3.4 ? 1 : .3) }), sit);
+      if (t > L[3] - .2 && t < E[3] + .4) p.a = [[1.25, -.12, 2.35], [1.25, -.12, 2.35]];   // hands to her mouth
+      f = t < L[4] + .4 ? { eyes: "wide", mouth: t > L[3] - .2 ? "sad" : "flat", brows: "worry", talk: who(t, "maya") } : { eyes: "open", mouth: "smile", brows: "raise1", talk: who(t, "maya") };
+      if (t > L[4] + 1.5) f = { eyes: "open", mouth: "smile", brows: "up" };
     }
   } else if (s === 1) {
-    const look = bump(t, L[8] + .6, CU[1] + .5, .4);                 // turns to Noah, delighted
+    const look = 0;
     p = sitP(FACING_DESK, { a: typeA(t, .8), hy: .9 * look, hp: -.05 });
     const yay = SW.slice(0, 3).some((b) => t > b + .6 && t < b + 1.6);
     if (yay) p.a = [[1.5, .2, .4], [1.5, .2, .4]];
-    f = { eyes: yay || t > L[8] ? "happy" : "open", mouth: t > L[8] - .2 ? "grin" : yay ? "grin" : "smile", brows: "up", talk: who(t, "maya") };
+    f = { eyes: yay ? "happy" : "open", mouth: yay ? "grin" : "smile", brows: "up" };
   } else if (s === 2) {
-    const stand = ss(t, L[11] - .6, L[11] + .1);
-    const sat = sitP(FACING_DESK, { a: typeA(t, t < L[9] ? 1 : .4) });
-    if (t > L[9] && t < E[9]) sat.a = [[1.9, .35, 2.2], [1.9, .35, 2.2]];       // head in hands
-    const st = pose({ x: -1.35, z: -2.55, ry: .25, a: CHEER, hp: -.1 });
+    const stand = 0;
+    const sat = sitP(FACING_DESK, { a: typeA(t, .8) });
+        const st = pose({ x: -1.35, z: -2.55, ry: .25, a: CHEER, hp: -.1 });
     p = mixP(sat, st, stand); chairRy = FACING_DESK;
     const yay = SW.slice(3, 7).some((b) => t > b + .6 && t < b + 1.5);
     if (yay && stand < .1) p.a = [[1.5, .2, .4], [1.5, .2, .4]];
-    f = t < SW[3] ? { eyes: "half", mouth: "flat", brows: "angry", talk: who(t, "maya") } : { eyes: yay || stand > .5 ? "happy" : "open", mouth: stand > .5 ? "grin" : "smile", brows: "up", talk: who(t, "maya") };
+    f = t < SW[3] - .5 ? { eyes: "open", mouth: "smile", brows: "flat" } : { eyes: yay || stand > .5 ? "happy" : "open", mouth: stand > .5 ? "grin" : "smile", brows: "up", talk: who(t, "maya") };
   } else if (s === 3) {
     p = sitP(FACING_DESK, { a: typeA(t, t < C.cut ? .7 : 0) });
-    if (t > C.cut + .2 && t < L[14] + .4) p.a = PANIC;
-    if (t > L[14] + .4) { p.a = [[1.0, .12, .7], [1.0, .12, .7]]; p.hy = -.45; p.hp = .3; }   // leans to the laptop
+    if (t > C.cut + .2 && t < L[6] + .4) p.a = PANIC;
+    if (t > L[6] + .4) { p.a = [[1.0, .12, .7], [1.0, .12, .7]]; p.hy = -.45; p.hp = .3; }   // leans to the laptop
     f = t < C.cut ? { eyes: "half", mouth: "flat", brows: "worry", talk: who(t, "maya") } : t < SW[7] + .6 ? { eyes: "wide", mouth: "o", brows: "worry", talk: who(t, "maya"), noblink: true } : { eyes: "wide", mouth: "smile", brows: "up", talk: who(t, "maya") };
   } else {
     const toN = ry2(CHAIR.x, CHAIR.z, -.4, -1.72);
     const toCam = 0;
-    const tN = ss(t, L[16] - .3, L[16] + .3) * (1 - ss(t, L[18] - .5, L[18] - .1));
-    const tC = ss(t, E[19] + .3, E[19] + 1.0);
+    const tN = ss(t, L[8] - .3, L[8] + .2) * (1 - ss(t, E[8], E[8] + .4));
+    const tC = ss(t, E[8] + .3, E[8] + .9);
     let ry = lerp(lerp(FACING_DESK, toN, tN), toCam, tC); chairRy = ry;
     p = sitP(ry, { a: tN > .5 || tC > .5 ? [[.45, .15, .9], [.45, .15, .9]] : typeA(t, .6) });
-    if (t > CU[3] + .2 && t < L[16] - .4) p.a = CHEER;                          // the orders roll in
-    if (t > L[19] + .1 && t < L[19] + .6) p.a = [[1.25, .12, .4], [.4, .1, .5]];  // the click
-    if (tC > .5) { p.a = [[.4, .1, .6], [2.2, -.2, 1.6]]; p.a[1][1] = .1 + .25 * Math.sin(t * 8); }   // a small wave
-    f = { eyes: t > L[17] && t < E[17] ? "happy" : "open", mouth: t > L[17] && t < E[17] + .3 ? "laugh" : "smile", brows: "up", talk: who(t, "maya") };
-    if (t > CU[3] + .2 && t < L[16] - .4) f = { eyes: "happy", mouth: "laugh", brows: "up" };
+    if (t > CU[3] + .1 && t < L[8] - .2) p.a = CHEER;                           // the orders roll in
+        if (tC > .5) { p.a = [[.4, .1, .6], [2.2, -.2, 1.6]]; p.a[1][1] = .1 + .25 * Math.sin(t * 8); }   // a small wave
+    f = { eyes: t > L[8] && t < E[8] ? "happy" : "open", mouth: t > L[8] && t < E[8] + .3 ? "laugh" : "smile", brows: "up", talk: who(t, "maya") };
+    if (t > CU[3] + .1 && t < L[8] - .2) f = { eyes: "happy", mouth: "laugh", brows: "up" };
   }
   swivel(P, chairRy);
   placeChar(P, true, idle(p, t, P.seed), f);
@@ -653,10 +637,10 @@ function updNoah(t, s) {
   let p, vis = true, f = { eyes: "open", mouth: "smile", brows: "flat", talk: who(t, "noah") };
   MUG.visible = false; TORCH.visible = false; torchL.intensity = 0;
   if (s === 0) {
-    vis = t > E[4] + .6;
-    if (t < L[7] - .2) p = pose({ x: 3.62, z: -.3, ry: -Math.PI / 2, tw: .12, a: [[.75, .1, 1.5], [.1, .15, .2]], hr: .06 });
-    else { const u = clamp((t - (L[7] - .2)) / (CU[0] + .25 - (L[7] - .2))), a = along([[3.62, -.3], [1.6, -1.0], [.8, -2.2], [.4, -2.45]], u); p = walk(pose({ x: a.x, z: a.z, ry: a.ry, a: [[.75, .1, 1.5], [.1, .15, .2]] }), t * 9, 1); p.a[0] = [.75, .1, 1.5]; }
-    f = { eyes: "open", mouth: t > L[7] - .2 ? "grin" : "smirk", brows: "flat", talk: who(t, "noah") };
+    vis = t > E[3] + .6;
+    if (t < E[4] - .1) p = pose({ x: 3.62, z: -.3, ry: -Math.PI / 2, tw: .12, a: [[.75, .1, 1.5], [.1, .15, .2]], hr: .06 });
+    else { const u = clamp((t - (E[4] - .1)) / (CU[0] + .25 - (E[4] - .1))), a = along([[3.62, -.3], [1.6, -1.0], [.8, -2.2], [.4, -2.45]], u); p = walk(pose({ x: a.x, z: a.z, ry: a.ry, a: [[.75, .1, 1.5], [.1, .15, .2]] }), t * 9, 1); p.a[0] = [.75, .1, 1.5]; }
+    f = { eyes: "open", mouth: t > E[4] - .5 ? "grin" : "smirk", brows: "flat", talk: who(t, "noah") };
     if (vis) { MUG.visible = true; }
   } else if (s === 1) {
     p = pose({ x: .4, z: -2.45, ry: -1.13, a: [[.75, .1, 1.5], [.1, .15, .2]] });
@@ -664,19 +648,18 @@ function updNoah(t, s) {
     MUG.visible = true; f = { eyes: "open", mouth: "smirk" };
   } else if (s === 2) {
     p = pose({ x: 1.3, y: -.185, z: 3.0, ry: Math.PI, l: [[1.5, 1.5], [1.5, 1.5]], a: typeA(t, .6), hp: .12 });
-    if (t > L[10] - .4 && t < E[10] + .3) { p.hy = -.5; p.hp = 0; p.a = [[1.0, .12, .5], [.9, .12, .4]]; }   // looks over to her
-    f = { eyes: "open", mouth: "smile", brows: "flat", talk: who(t, "noah") };
+        f = { eyes: "open", mouth: "smile", brows: "flat", talk: who(t, "noah") };
   } else if (s === 3) {
-    vis = t > L[14] - 1.6;
-    const inT = ss(t, L[14] - 1.6, L[14] - .5);
+    vis = t > L[6] - 1.6;
+    const inT = ss(t, L[6] - 1.6, L[6] - .5);
     p = walk(pose({ x: lerp(1.6, -.25, inT), z: lerp(-1.0, -2.5, inT), ry: -1.22, a: [[.2, .1, .3], [1.5, .1, .6]] }), t * 8.5, 1 - inT);
     p.a[1] = [1.5, .1, .6];
     TORCH.visible = vis; torchL.intensity = vis ? 3.5 : 0;
     f = { eyes: "open", mouth: "smile", brows: "flat", talk: who(t, "noah") };
   } else {
     p = pose({ x: -.4, y: .05, z: -1.72, ry: .15, l: [[1.45, 1.25], [1.45, 1.35]], a: [[.35, .3, .25], [.35, .3, .25]], hy: -.45 });
-    if (t > CU[3] + .2 && t < L[16] - .4) p.a = CHEER;
-    f = { eyes: t > L[17] && t < E[17] + .3 ? "happy" : "open", mouth: t > L[17] && t < E[17] + .3 ? "laugh" : "grin", brows: "up", talk: who(t, "noah") };
+    if (t > CU[3] + .1 && t < L[8] - .2) p.a = CHEER;
+    f = { eyes: t > L[8] && t < E[8] + .3 ? "happy" : "open", mouth: t > L[8] && t < E[8] + .3 ? "laugh" : "grin", brows: "up", talk: who(t, "noah") };
   }
   NOAH.root.visible = vis;
   if (!vis) return;
@@ -744,11 +727,11 @@ function updTile(t) {
 
 // ---------------------------------------------------------------- screens
 function monKey(t, s) {
-  if (s === 0) return t < L[2] + 2.3 ? "off" : t < L[3] + .2 ? "cancel" : "locked";
+  if (s === 0) return t < L[2] + 2.3 ? "off" : "locked";
   if (s === 1) return t < SW[0] + .2 ? "locked" : t < SW[1] + .2 ? "gimp" : t < SW[2] + .2 ? "penpot" : "shotcut";
   if (s === 2) return t < SW[3] + .2 ? "mailLocked" : t < SW[4] + .2 ? "listmonk" : t < SW[5] + .2 ? "postiz" : t < SW[6] + .2 ? "linkstack" : "appflowy";
   if (s === 3) return t < C.cut ? "doc" : "off";
-  return t < L[18] - .3 ? "orders" : t < C.nothanks + .5 ? "resub" : "calm";
+  return t < L[8] - .2 ? "orders" : "calm";
 }
 function lapKey(t, s) {
   if (s === 3) return t < C.cut ? "lapDoc" : t < SW[7] + .3 ? "nowifi" : "ollama";
@@ -757,12 +740,11 @@ function lapKey(t, s) {
 }
 function screens(t, s) {
   const mk = monKey(t, s), lk = lapKey(t, s);
-  if (mk === "listmonk") setMap(R.monM, DYN.listmonk(clamp((t - (E[10] - .6)) / 2.2)));
-  else if (mk === "postiz") setMap(R.monM, DYN.postiz(clamp((t - (SW[4] + .2)) / 1.6)));
-  else if (mk === "orders") setMap(R.monM, DYN.orders(clamp((t - (CU[3] + .1)) / (L[16] - CU[3]))));
-  else if (mk === "resub") setMap(R.monM, DYN.resub(t > C.nothanks ? 2 : t > L[19] - .3 ? 1 : 0));
+  if (mk === "listmonk") setMap(R.monM, DYN.listmonk(clamp((t - (SW[3] + .25)) / 1.2)));
+  else if (mk === "postiz") setMap(R.monM, DYN.postiz(clamp((t - (SW[4] + .2)) / 1.2)));
+  else if (mk === "orders") setMap(R.monM, DYN.orders(clamp((t - (CU[3] + .1)) / (L[8] - CU[3]))));
   else if (TEX["m_" + mk]) setMap(R.monM, TEX["m_" + mk]);
-  if (lk === "ollama") setMap(R.lapM, DYN.ollama(clamp((t - (SW[7] + .35)) / (CU[3] - SW[7] - .5))));
+  if (lk === "ollama") setMap(R.lapM, DYN.ollama(clamp((t - (SW[7] + .35)) / (CU[3] - SW[7] - .4))));
   else if (TEX["l_" + lk]) setMap(R.lapM, TEX["l_" + lk]);
   return { mk, lk };
 }
@@ -776,10 +758,10 @@ function updLoft(t, s) {
   if (TEX.rain) TEX.rain.offset.set(0, -t * 1.4);
   R.blanket.scale.y = .36; R.blanket.position.y = .6;
   // the door: opens for Noah on day 1
-  R.door.rotation.y = s === 0 ? -1.35 * ss(t, E[4] + .5, E[4] + 1.1) : 0;
+  R.door.rotation.y = s === 0 ? -1.35 * ss(t, E[3] + .5, E[3] + 1.1) : 0;
   let kn = 0; if (s === 0) for (const a of [0, .26, .52]) kn += pulse(t, C.knock + a, .045);
   R.door.position.x = 4.02 - .006 * kn;
-  PL[7].position.set(3.3, 2.0, -.3); PL[7].color.set(0xFFD9A8); PL[7].intensity = s === 0 ? 3.0 * ss(t, E[4] + .5, E[4] + 1.0) : 0; PL[7].distance = 5;
+  PL[7].position.set(3.3, 2.0, -.3); PL[7].color.set(0xFFD9A8); PL[7].intensity = s === 0 ? 3.0 * ss(t, E[3] + .5, E[3] + 1.0) : 0; PL[7].distance = 5;
   // lights
   const { mk, lk } = screens(t, s);
   const monOn = mk !== "off", lapOn = lk !== "lapOff";
@@ -802,7 +784,7 @@ function updLoft(t, s) {
   PL[6].position.set(-1.95, 1.05, -2.25); PL[6].color.set(lk === "ollama" ? 0xBFF5D0 : 0xCFE0FF); PL[6].intensity = lapOn && (s === 3 || s === 0) ? 1.0 : 0; PL[6].distance = 2.2;
   if (s === 0 && t < L[2]) { PL[6].position.set(2.3, 1.9, -1.0); PL[6].color.set(0x9FB4E8); PL[6].intensity = 2.2; PL[6].distance = 4; }
   if (s === 3 && t > C.cut) { hemi.intensity *= .55; }
-  if (s === 3 && t > L[14] - 1.6) { PL[3].position.set(-.9, 1.8, -1.7); PL[3].color.set(0xBFD4F0); PL[3].intensity = 1.6; PL[3].distance = 3; }
+  if (s === 3 && t > L[6] - 1.6) { PL[3].position.set(-.9, 1.8, -1.7); PL[3].color.set(0xBFD4F0); PL[3].intensity = 1.6; PL[3].distance = 3; }
   SHAKE = Math.max(SHAKE, .1 * kn, s === 3 ? .5 * pulse(t, C.flash[1] + .1, .2) : 0);
   R.monM.color.setScalar(s === 1 || s === 2 || s === 4 ? .92 : .8); R.lapM.color.setScalar(.85);
   updMaya(t, s); updNoah(t, s); updTile(t);

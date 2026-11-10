@@ -30,7 +30,7 @@ Build the **master** at the first row the request needs, then make the other for
 
 | Platform / placement                  | Aspect | Size (px)  | `init --resolution` | Length target     |
 | ------------------------------------- | ------ | ---------- | ------------------- | ----------------- |
-| Instagram Reels, TikTok, YT Shorts    | 9:16   | 1080×1920  | `portrait`          | 7–30 s (max 60 s) |
+| Instagram Reels, TikTok, YT Shorts    | 9:16   | 1080×1920  | `portrait`          | 7–58 s (always under 60 s) |
 | Instagram / Facebook Stories          | 9:16   | 1080×1920  | `portrait`          | ≤ 15 s per card   |
 | Instagram / Facebook feed (preferred) | 4:5    | 1080×1350  | custom (see below)  | 6–30 s            |
 | Feed square, LinkedIn                 | 1:1    | 1080×1080  | `square`            | 6–30 s            |
@@ -127,7 +127,8 @@ climax. Plan every script as a list of beats on this curve before writing a line
    warm-up, no logo, no question the viewer can answer "no" to.
 2. **First peak, by 5-10 s, spike to 90.** A contrast, a contrarian line or a shocking number that pays off the hook.
 3. **Release, then peak again, every 8-15 s.** Each release is one or two lines of context; each peak is a new turn:
-   a twist, a stat, a reversal, something going wrong. Aim for 4-5 peaks in a 45-70 s reel.
+   a twist, a stat, a reversal, something going wrong. Aim for 4-5 peaks in a 45-58 s reel. Every reel stays under
+   60 s: when a story has many steps (days, tools, swaps), show them as a fast montage with on-screen cards, not a line each.
 4. **The final peak is the biggest turn** (the thing nobody can explain, the reversal, the real-world fact that
    says "this is already happening"), then land on the question and the follow prompt. Leave no flat stretch longer
    than about 10 s.

@@ -23,7 +23,6 @@ SR = 48000
 DUR = T["end"]
 N = int(DUR * SR)
 LIB = os.path.join(os.path.dirname(ROOT), ".claude", "skills", "media-use", "audio", "assets", "sfx")
-NAME_OFF = [.08, .8, 1.6, 2.32, 3.12, 3.92, 4.64]
 
 
 def load(path):
@@ -57,7 +56,8 @@ def music():
     A, B, C, D = M("cueA_dawn.mp3"), M("cueB_montage.mp3"), M("cueC_storm.mp3"), M("cueD_launch.mp3")
     put(m, A, 0, 1.0, 0, CU[0] + .4, fin=.05, fout=.6)
     put(m, B, CU[0] - .2, 1.0, 0, CU[2] - CU[0] + .6, fin=.25, fout=.8)
-    put(m, C, CU[2] - .2, 1.0, 0, CU[3] - CU[2] + .4, fin=.3, fout=.4)
+    c0 = max(0.0, 13.4 - (SW[7] + .1 - (CU[2] - .2)))           # C turns hopeful about 13.4 s in: land that on the offline AI
+    put(m, C, CU[2] - .2, 1.0, c0, c0 + CU[3] - CU[2] + .4, fin=.3, fout=.4)
     put(m, D, CU[3] - .1, 1.0, 0, DUR - CU[3] + .1, fin=.05, fout=1.4)
     return m
 
@@ -75,19 +75,19 @@ def sfx():
     # the cancellations
     put(s, S("phone_buzz"), .2, .8)
     note = lib("notification")
-    for t in [L[0] + .05] + [L[2] + o for o in NAME_OFF]:
-        put(s, note, t, .45)
+    for t in [L[0] + .05] + [L[1] + .1 + .36 * k for k in range(7)]:
+        put(s, note, t, .4)
     put(s, S("footsteps"), L[2] - .2, .9)
-    put(s, lib("impact-bass-1"), L[3] + .25, .55)
+    put(s, lib("impact-bass-1"), L[2] + 2.75, .55)
     put(s, S("knock"), T["knock"] - .05, 1.2)
-    put(s, S("door_open"), E[4] + .45, .9)
+    put(s, S("door_open"), E[3] + .45, .9)
     # the swaps: the old tile bursts into voxels, the new one snaps together
     burst, form = S("voxel_burst"), S("voxel_form")
     for b in SW:
         put(s, burst, b - .03, 1.0)
         put(s, form, b + .45, .8)
     typing = lib("typing")
-    for a, b in ((CU[0] + .2, CU[0] + 2.0), (CU[1] + .3, CU[1] + 2.2), (CU[2] + .2, T["cut"] - .2)):
+    for a, b in ((CU[0] + .2, CU[0] + 1.2), (CU[1] + .2, CU[1] + 1.0), (CU[2] + .2, T["cut"] - .2)):
         put(s, loop(typing, b - a), a, .25, fin=.1, fout=.2)
     # the storm
     thunder = S("thunder")
@@ -98,11 +98,9 @@ def sfx():
     put(s, lib("glitch-1"), T["cut"] + .4, .3)
     # launch day
     ping = S("order_ping")
-    for k in range(4):
-        put(s, ping, CU[3] + 1.5 + k * .3, .55)
-    put(s, ping, CU[3] + .3, .5)
+    for k in range(3):
+        put(s, ping, CU[3] + .15 + k * .22, .55)
     put(s, lib("chime"), T["zero"], .45)
-    put(s, lib("click"), T["nothanks"], .6)
     put(s, lib("sparkle"), T["endc"] + .3, .4)
     return s
 

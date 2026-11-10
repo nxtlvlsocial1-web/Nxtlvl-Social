@@ -19,7 +19,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 B = os.path.join(ROOT, "build")
 LINES = json.load(open(os.path.join(ROOT, "voice", "lines.json")))["lines"]
 WORDS = json.load(open(os.path.join(B, "words.json")))
-DUR = round(LINES[-1]["end"] + 3.2, 2)
+DUR = round(LINES[-1]["end"] + 2.0, 2)
 
 L = [ln["start"] for ln in LINES]
 E = [ln["end"] for ln in LINES]
@@ -38,18 +38,18 @@ SWAPS = [
     ("ChatGPT Plus", "ChatGPT Plus", 20.00, "Ollama", "Ollama · local AI", "#10A37F", "#F4F4F2", "#FFFFFF", "#1E1B18", 29),
 ]
 BILL0 = round(sum(s[2] for s in SWAPS), 2)          # 374.86
-CU = [r3(E[7] + .35), r3(E[8] + .4), r3(E[11] + 1.2), r3(E[15] + .9)]
-SW = [CU[0] + 1.4, CU[0] + 4.6, CU[0] + 7.8, L[10] + 2.0, E[10] + 2.6, E[10] + 5.8, E[10] + 9.0, L[14] + 1.1]
-SW = [r3(x) for x in SW]
+# the 60-second cut: lines 0 Adobe cancelled, 1 "What?", 2 locked, 3 "My launch", 4 Noah, 5 the night, 6 "run your own AI",
+# 7 "still writing", 8 "Zero", 9 the CTA. The swaps between Noah's line and the night play as a fast montage.
+CU0 = r3(E[4] + .3)
+SW = [r3(CU0 + .85 + 1.6 * k) for k in range(7)] + [r3(L[6] + 1.1)]
+CU = [CU0, r3(SW[2] + .8), r3(SW[6] + 1.2), r3(E[7] + .35)]
 T = {
     "cuts": CU, "sw": SW, "who": WHO,
-    "knock": r3(E[4] + .15), "cut": r3(E[12] + .75), "flash": [r3(CU[2] + .6), r3(E[12] + .55), r3(L[15] + 1.4)],
-    "nothanks": r3(L[19] + .35), "zero": r3(L[17] + .15), "endc": r3(L[20] - .3), "end": DUR,
+    "knock": r3(E[3] + .15), "cut": r3(L[5] + 3.05), "flash": [r3(CU[2] + .5), r3(L[5] + 2.9), r3(L[6] + 1.5)],
+    "zero": r3(L[8] + .1), "endc": r3(L[9] - .3), "end": DUR,
     "tileNames": [[s[0], s[3]] for s in SWAPS], "tileCol": [[s[5], s[6]] for s in SWAPS], "tileFg": [[s[7], s[8]] for s in SWAPS],
     "lines": [{"s": ln["start"], "e": ln["end"]} for ln in LINES],
 }
-# line 3 names every app: the offsets of each name inside the take (from the ElevenLabs transcript of the take)
-NAME_OFF = [.08, .8, 1.6, 2.32, 3.12, 3.92, 4.64]
 A = []
 
 
@@ -82,66 +82,58 @@ def story():
     show(".t1", 0.0, .01, "opacity:1", "opacity:1"); show(".t2", 0.0, .01, "opacity:1", "opacity:1"); show(".t3", 0.0, .01, "opacity:1", "opacity:1")
     add('tl.fromTo("#title .t2",{scale:1.04},{scale:1,duration:1.2,ease:"power2.out",immediateRender:false},0);')
     hide("#title", 2.45, .4, "opacity:0,y:-30")
-    # the notifications: Adobe first, then one per name in line 3; they stack, newest on top
-    times = [L[0] + .05] + [L[2] + o for o in NAME_OFF]
+    # the notifications: Adobe on line 0, the other seven pile in during "What? I didn't cancel anything."
+    times = [L[0] + .05] + [L[1] + .1 + .36 * k for k in range(7)]
     for k, t0 in enumerate(times):
         nid = f"#n{k}"
-        add(f'tl.fromTo("{nid}",{{opacity:0,y:-40,scale:.96}},{{opacity:1,y:0,scale:1,duration:.28,ease:"back.out(1.6)",immediateRender:false}},{t0:.3f});')
+        add(f'tl.fromTo("{nid}",{{opacity:0,y:-40,scale:.96}},{{opacity:1,y:0,scale:1,duration:.24,ease:"back.out(1.6)",immediateRender:false}},{t0:.3f});')
         for j in range(k + 1, len(times)):
-            add(f'tl.to("{nid}",{{y:{(j - k) * 108},duration:.25,ease:"power2.out"}},{times[j]:.3f});')
-    hide("#n0", E[0] + .25, .35, "opacity:0,y:-60")
-    for k in range(1, 8):
-        hide(f"#n{k}", E[2] + .25 + (7 - k) * .03, .35, f"opacity:0,y:{(7 - k) * 108 - 60}")
+            add(f'tl.to("{nid}",{{y:{(j - k) * 108},duration:.2,ease:"power2.out"}},{times[j]:.3f});')
+    for k in range(8):
+        hide(f"#n{k}", L[2] + .6 + (7 - k) * .03, .35, f"opacity:0,y:{(7 - k) * 108 - 60}")
     # the HUD: day and bill
-    show("#hud", L[3] + .4, .45, "opacity:0,y:-14")
-    days = [(L[3] + .4, 1), (SW[1] - 1.0, 4), (SW[2] - 1.0, 8), (CU[1], 12), (SW[4] - 1.0, 16), (SW[5] - 1.0, 20), (SW[6] - 1.0, 25), (CU[2], 29), (CU[3], 30)]
+    show("#hud", L[3] - .2, .45, "opacity:0,y:-14")
+    days = [(L[3] - .2, 1)] + [(SW[k] - .6, SWAPS[k][9]) for k in range(1, 7)] + [(CU[2], 29), (CU[3], 30)]
     for t0, d in days:
         setText("#hud .d-n", str(d), t0)
-        add(f'tl.fromTo("#hud .d-n",{{scale:1.35,color:"#F2C94C"}},{{scale:1,color:"#FFFDF6",duration:.5,ease:"power2.out",immediateRender:false}},{t0:.3f});')
+        add(f'tl.fromTo("#hud .d-n",{{scale:1.35,color:"#F2C94C"}},{{scale:1,color:"#FFFDF6",duration:.45,ease:"power2.out",immediateRender:false}},{t0:.3f});')
     bill = BILL0
     for k, s in enumerate(SWAPS):
-        new = round(bill - s[2], 2); t0 = SW[k] + .75
-        for j in range(1, 13):
-            setText("#hud .b-n", money(bill + (new - bill) * j / 12), t0 + j * .05)
-        add(f'tl.fromTo("#hud .b-n",{{scale:1.2}},{{scale:1,duration:.5,ease:"power2.out",immediateRender:false}},{t0 + .6:.3f});')
+        new = round(bill - s[2], 2); t0 = SW[k] + .4
+        for j in range(1, 9):
+            setText("#hud .b-n", money(bill + (new - bill) * j / 8), t0 + j * .05)
+        add(f'tl.fromTo("#hud .b-n",{{scale:1.2}},{{scale:1,duration:.4,ease:"power2.out",immediateRender:false}},{t0 + .4:.3f});')
         bill = new
-    add(f'tl.to("#hud .b-n",{{color:"#5BE38A",duration:.3}},{SW[7] + 1.35:.3f});')
+    add(f'tl.to("#hud .b-n",{{color:"#5BE38A",duration:.3}},{SW[7] + .9:.3f});')
     hide("#hud", T["endc"] - .1, .4, "opacity:0,y:-14")
-    # a card for every swap: the paid app and its price, struck out; then the open-source tool, free
+    # a card for every swap: the paid app and its price, struck out, and the open-source tool, free
     for k, s in enumerate(SWAPS):
-        b = SW[k]; nb = SW[k + 1] - 1.4 if k + 1 < len(SWAPS) else b + 2.6
-        z = min(nb, b + 2.6)
-        if k == 2:
-            z = min(z, L[8] - .2)
-        if k == 6:
-            z = min(z, L[11] - .15)
+        b = SW[k]
+        z = b + .88 if k < 6 else (CU[2] - .15 if k == 6 else b + 2.2)
         cid = f"#sw{k}"
-        show(cid, b - 1.6, .35, "opacity:0,y:-16,scale:.97", "opacity:1,y:0,scale:1")
-        add(f'tl.fromTo("{cid} .strike",{{scaleX:0}},{{scaleX:1,duration:.25,ease:"power2.out",immediateRender:false}},{b:.3f});')
-        add(f'tl.to("{cid} .old",{{opacity:.45,duration:.25}},{b + .1:.3f});')
-        show(f"{cid} .new", b + .45, .35, "opacity:0,y:12")
-        hide(cid, z, .3, "opacity:0,y:-12")
+        show(cid, b - .55 if k else b - .6, .2, "opacity:0,y:-16,scale:.97", "opacity:1,y:0,scale:1")
+        add(f'tl.fromTo("{cid} .strike",{{scaleX:0}},{{scaleX:1,duration:.22,ease:"power2.out",immediateRender:false}},{b:.3f});')
+        add(f'tl.to("{cid} .old",{{opacity:.5,duration:.2}},{b + .1:.3f});')
+        show(f"{cid} .new", b + .15, .25, "opacity:0,y:12")
+        hide(cid, z, .14, "opacity:0,y:-12")
         html.append(f'<div class="swap" id="sw{k}"><div class="day">DAY {s[9]}</div>'
                     f'<div class="old"><span class="nm">{s[1]}</span><span class="pr">{money(s[2])}/mo</span><i class="strike"></i></div>'
                     f'<div class="new"><span class="ar">&#8594;</span><span class="nm">{s[4]}</span><span class="pr">FREE · OPEN SOURCE</span></div></div>')
-    # chapter cards
-    for cid, t0, dur in (("#ch0", CU[1], 1.9), ("#ch1", CU[2], 1.9), ("#ch2", CU[3], 1.2)):
-        show(cid, t0 + .1, .45, "opacity:0,scale:1.08", "opacity:1,scale:1")
-        hide(cid, t0 + dur, .35, "opacity:0,y:-16")
-    # the night: no internet
-    show("#offline", T["cut"] + .25, .3, "opacity:0,scale:.9", "opacity:1,scale:1"); hide("#offline", SW[7] - 1.65, .3)
+    # the night
+    show("#ch1", CU[2] + .1, .4, "opacity:0,scale:1.08", "opacity:1,scale:1"); hide("#ch1", CU[2] + 1.5, .3, "opacity:0,y:-16")
+    show("#offline", T["cut"] + .25, .3, "opacity:0,scale:.9", "opacity:1,scale:1"); hide("#offline", SW[7] - .75, .25)
     # launch day: the orders roll in
-    for k in range(4):
-        t0 = CU[3] + 1.5 + k * .3
+    for k in range(3):
+        t0 = CU[3] + .15 + k * .22
         oid = f"#o{k}"
-        add(f'tl.fromTo("{oid}",{{opacity:0,y:-40}},{{opacity:1,y:0,duration:.25,ease:"back.out(1.6)",immediateRender:false}},{t0:.3f});')
-        for j in range(k + 1, 4):
-            add(f'tl.to("{oid}",{{y:{(j - k) * 108},duration:.22,ease:"power2.out"}},{CU[3] + 1.5 + j * .3:.3f});')
-    for k in range(4):
-        hide(f"#o{k}", L[16] + 1.0 + (3 - k) * .03, .35, f"opacity:0,y:{(3 - k) * 108 - 60}")
+        add(f'tl.fromTo("{oid}",{{opacity:0,y:-40}},{{opacity:1,y:0,duration:.22,ease:"back.out(1.6)",immediateRender:false}},{t0:.3f});')
+        for j in range(k + 1, 3):
+            add(f'tl.to("{oid}",{{y:{(j - k) * 108},duration:.18,ease:"power2.out"}},{CU[3] + .15 + j * .22:.3f});')
+    for k in range(3):
+        hide(f"#o{k}", T["zero"] - .2 + (2 - k) * .03, .25, f"opacity:0,y:{(2 - k) * 108 - 60}")
     # the $0 reveal
-    show("#zero", T["zero"], .45, "opacity:0,scale:1.12", "opacity:1,scale:1")
-    hide("#zero", E[17] + .6, .35)
+    show("#zero", T["zero"], .4, "opacity:0,scale:1.12", "opacity:1,scale:1")
+    hide("#zero", E[8] + .25, .3)
     # the end card
     show("#endc", T["endc"], .5, "opacity:0", "opacity:1")
     show("#endc .e0", T["endc"] + .05, .4, "opacity:0,y:14")
@@ -157,7 +149,7 @@ def captions():
         if k == len(LINES) - 1:              # the CTA is on the end card
             continue
         text = ln["text"]
-        parts = [text] if len(text) < 52 or ln["take"] == "03" else [p for p in re.split(r"(?<=[.?!,])\s+(?=[A-Z0-9])", text) if p]
+        parts = [text] if len(text) < 44 else [p for p in re.split(r"(?<=[.?!,])\s+(?=[A-Z0-9])", text) if p]
         ws = [w for w in WORDS if w["line"] == ln["line"]]
         wi = 0
         nxt = LINES[k + 1]["start"] if k + 1 < len(LINES) else DUR
@@ -168,7 +160,7 @@ def captions():
             wi += n
             pid = f"c{k}_{j}"
             who = ln["speaker"]
-            html.append(f'<div class="cap sp-{who}" id="{pid}"><span class="who">{NAMES[who]}</span>{p}</div>')
+            html.append(f'<div class="cap sp-{who}" id="{pid}"><span class="who">{NAMES[who]}</span><span class="br"></span><span class="tx">{p}</span></div>')
             add(f'tl.fromTo("#{pid}",{{opacity:0,y:10}},{{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false}},{a0:.3f});')
             add(f'tl.to("#{pid}",{{opacity:0,duration:.18,ease:"power1.in"}},{z:.3f});')
     return "".join(html)
@@ -230,10 +222,12 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0B0A1
 #zero .z2 { display: block; margin-top: 6px; font: italic 500 52px/1.1 "Garamond"; }
 #zero .z2 s { color: #FF8A80; }
 #zero .z3 { display: block; margin-top: 12px; font: 700 28px/1.2 "Manrope"; letter-spacing: 2px; color: rgba(255,253,246,.8); }
-.cap { position: absolute; left: 80px; right: 80px; top: 1330px; text-align: center; color: #FFFDF6; font: italic 500 56px/1.2 "Garamond"; }
-.cap .who { display: block; margin-bottom: 8px; font: 800 28px/1 "Manrope"; font-style: normal; letter-spacing: 4px; color: rgba(255,253,246,.8); }
-.cap.sp-system { color: #FFB4AE; font-style: normal; font-family: "Manrope"; font-weight: 700; font-size: 46px; } .cap.sp-system .who { color: #FF8A80; }
-.cap.sp-noah .who { color: #7FE3B0; } .cap.sp-maya .who { color: #F2C94C; }
+.cap { position: absolute; left: 60px; right: 60px; top: 1300px; text-align: center; }
+.cap .who { display: inline-block; margin-bottom: 10px; padding: 7px 16px; border-radius: 20px; font: 800 26px/1 "Manrope"; letter-spacing: 4px; color: #0B0D12; background: #F2C94C; }
+.cap .tx { display: inline; padding: 8px 18px; border-radius: 16px; line-height: 1.55; font: 800 48px/1.5 "Manrope"; color: #FFFFFF;
+  background: rgba(8,10,16,.82); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.cap .br { display: block; height: 0; }
+.cap.sp-noah .who { background: #5BE38A; } .cap.sp-system .who { background: #FF8A80; } .cap.sp-system .tx { color: #FFD3CF; }
 #endc { position: absolute; left: 70px; right: 70px; top: 330px; text-align: center; color: #FFFDF6; }
 #endc span { display: block; }
 #endc .e0 { font: italic 500 70px/1.1 "Garamond"; }
@@ -255,16 +249,14 @@ def main():
                     f'<span class="tx"><span class="tt">{n}</span><span class="bd">Your subscription has been cancelled.</span></span><span class="tm">now</span></div>'
                     for k, (n, c, i) in enumerate(NOTES))
     orders = "".join(f'<div class="order" id="o{k}"><span class="ic">$</span><span class="tt">New order</span><span class="pr">{p}</span></div>'
-                     for k, p in enumerate(["$39.00", "$78.00", "$39.00", "$117.00"]))
+                     for k, p in enumerate(["$39.00", "$78.00", "$117.00"]))
     ui = ('<div id="title" class="shadow"><span class="t0">WHAT IF</span><span class="t1">every app you pay for</span>'
           '<span class="t2">vanished</span><span class="t3">overnight?</span></div>'
           + notes +
           '<div id="hud" class="shadow"><div><span class="lab">DAY</span><span class="row"><span class="d-n">1</span> <small>/ 30</small></span></div>'
           f'<div class="bill"><span class="lab">SOFTWARE BILL</span><span class="row"><span class="b-n">{money(BILL0)}</span><small>/mo</small></span></div></div>'
           + sw_html +
-          '<div id="ch0" class="chap shadow"><span class="cd">Day 12</span><span class="cp">THE EMAIL LIST</span></div>'
           '<div id="ch1" class="chap shadow"><span class="cd">Day 29</span><span class="cp">11:48 PM · A STORM</span></div>'
-          '<div id="ch2" class="chap shadow"><span class="cd">Day 30</span><span class="cp">LAUNCH DAY</span></div>'
           '<div id="offline">NO INTERNET</div>'
           + orders +
           f'<div id="zero" class="shadow"><span class="z0">SOFTWARE BILL</span><span class="z1">$0</span><span class="z2">was <s>{money(BILL0)}/mo</s></span>'

@@ -169,6 +169,8 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
 
 ## Rules
 
+- Keep every video under 60 seconds (aim for 45-58 s) unless the owner asks for a longer one. Plan the script to fit
+  before voicing it: cut lines, merge beats and turn repeated steps into a quick montage rather than going over.
 - Never render a final until the person has approved the preview.
 - Before any final render, check every scene's frames against the pre-render checklist in `nxtlvl-social-video` § 5
   (characters in one piece, friendly faces, nothing blocking faces, nothing distorted, overlays clear) and fix first.

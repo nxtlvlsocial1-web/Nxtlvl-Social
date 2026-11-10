@@ -1,5 +1,5 @@
 {
- "note": "Dialogue what-if: Maya (solo founder), Noah (her developer neighbour), the system voice. [take, speaker, display text or null, [[spoken text, emotion, pause]]]",
+ "note": "60-second cut. Dialogue what-if: Maya (solo founder), Noah (her developer neighbour), the system voice. [take, speaker, display text or null, [[spoken text, emotion, pause]]]",
  "lines": [
   [
    "01",
@@ -20,18 +20,6 @@
    [
     [
      "What? I didn't cancel anything.",
-     "neutral",
-     0
-    ]
-   ]
-  ],
-  [
-   "03",
-   "system",
-   null,
-   [
-    [
-     "Canva. CapCut. Mailchimp. Hootsuite. Linktree. Notion. ChatGPT. Cancelled.",
      "neutral",
      0
     ]
@@ -62,108 +50,24 @@
    ]
   ],
   [
-   "06",
+   "22",
    "noah",
    null,
    [
     [
-     "You know you can replace all of that... for free, right?",
+     "Relax. There's a free, open-source tool for every single one.",
      "neutral",
      0
     ]
    ]
   ],
   [
-   "07",
+   "23",
    "maya",
    null,
    [
     [
-     "Free? Like, actually free?",
-     "neutral",
-     0
-    ]
-   ]
-  ],
-  [
-   "08",
-   "noah",
-   null,
-   [
-    [
-     "Open source. Watch.",
-     "neutral",
-     0
-    ]
-   ]
-  ],
-  [
-   "09",
-   "maya",
-   null,
-   [
-    [
-     "The teaser's done. And it cost me nothing.",
-     "neutral",
-     0
-    ]
-   ]
-  ],
-  [
-   "10",
-   "maya",
-   "10,000 ~ subscribers... and I can't email a single one.",
-   [
-    [
-     "Ten thousand subscribers... and I can't email a single one.",
-     "neutral",
-     0
-    ]
-   ]
-  ],
-  [
-   "11",
-   "noah",
-   null,
-   [
-    [
-     "Listmonk. Your list, on your own server. Nobody can lock you out again.",
-     "neutral",
-     0
-    ]
-   ]
-  ],
-  [
-   "12",
-   "maya",
-   null,
-   [
-    [
-     "Posts scheduled. Plan's back. And my bill is almost zero.",
-     "neutral",
-     0
-    ]
-   ]
-  ],
-  [
-   "13",
-   "maya",
-   null,
-   [
-    [
-     "Launch is tomorrow, and I still have to write everything. Without ChatGPT.",
-     "neutral",
-     0
-    ]
-   ]
-  ],
-  [
-   "14",
-   "maya",
-   null,
-   [
-    [
-     "No. No, no, no. The internet's gone.",
+     "Launch is tomorrow. No ChatGPT... and now the internet's gone.",
      "neutral",
      0
     ]
@@ -194,48 +98,12 @@
    ]
   ],
   [
-   "17",
-   "noah",
-   null,
-   [
-    [
-     "So what did all of this cost you?",
-     "neutral",
-     0
-    ]
-   ]
-  ],
-  [
    "18",
    "maya",
    null,
    [
     [
      "Zero. Not one subscription.",
-     "neutral",
-     0
-    ]
-   ]
-  ],
-  [
-   "19",
-   "system",
-   null,
-   [
-    [
-     "Your subscriptions are available again. Resubscribe?",
-     "neutral",
-     0
-    ]
-   ]
-  ],
-  [
-   "20",
-   "maya",
-   null,
-   [
-    [
-     "No thanks.",
      "neutral",
      0
     ]
