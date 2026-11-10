@@ -40,6 +40,7 @@ A, HIDE, EL, CUES, CAPS = [], [], [], [], []
 NID = [0]
 RND = random.Random(9)
 GRAD = "linear-gradient(90deg,#F515E8 0%,#F54BA8 50%,#F5876C 100%)"
+INK, PINK = "#0b0b0b", "#e0187e"   # creedom.ai ink and accent pink
 
 
 def js(s):
@@ -97,43 +98,43 @@ def float_idle(sel, t, t1, amp=10, period=1.8):
 
 # ------------------------------------------------------------------------------------------------ kinetic type
 def headline(lines, y, out=None, how="up", z=8):
-    """Headline in the top band. lines = [(text, size, t, accent)] with accent words in [brackets]; accent is the
-    accent style (grad / red / green / white). Each word rises out of its own mask, one after another; accent words
-    land with a light sweep and a punch, and the gradient ones get a drawn underline. out = when the words leave
-    (how: up = back down into the mask upwards, left = slide off to the left)."""
+    """Headline in the top band, set like the website: Fraunces, the first of two lines in warm grey and the second in
+    ink. lines = [(text, size, t, accent)] with accent words in [brackets] (accent: pink / red / green / white).
+    Inside each word's mask the letters rise in reading order; accent words land with a small punch and a drawn
+    underline. out = when the letters leave (how: up, or left = slide off to the left)."""
     i = nid("h")
     rows = []
     for k, (text, size, t, acc) in enumerate(lines):
         ws = []
         for n, w in enumerate(text.split(" ")):
             a = w.startswith("[")
-            w = w.strip("[]")
-            ws.append(f'<span class="wm"><span class="wi{" acc " + acc if a else ""}" id="{i}l{k}w{n}">{w}</span></span>')
+            w = w.replace("[", "").replace("]", "")
+            ws.append(f'<span class="wm"><span class="wi{" acc " + acc if a else ""}" id="{i}l{k}w{n}">{chars(w)}</span></span>')
+        tone = " grey" if len(lines) > 1 and k == 0 else ""
         under = ('<svg class="uline" viewBox="0 0 600 40" preserveAspectRatio="none"><path id="{0}u{1}" d="M 8 30 C 160 6 430 6 592 20" pathLength="1" '
-                 'stroke-dasharray="1" stroke-dashoffset="1"/></svg>').format(i, k) if acc == "grad" and "[" in text and k == len(lines) - 1 else ""
-        rows.append(f'<div class="hl" id="{i}l{k}" style="font-size:{size}px"><span class="hli">{" ".join(ws)}{under}</span></div>')
+                 'stroke-dasharray="1" stroke-dashoffset="1"/></svg>').format(i, k) if acc == "pink" and "[" in text and k == len(lines) - 1 else ""
+        rows.append(f'<div class="hl{tone}" id="{i}l{k}" style="font-size:{size}px"><span class="hli">{" ".join(ws)}{under}</span></div>')
     put(f'<div class="head" id="{i}" style="top:{y}px;z-index:{z}">{"".join(rows)}</div>')
-    t_end = out + .6 if out else None
-    show(f"#{i}", lines[0][2], t_end)
+    show(f"#{i}", lines[0][2], out + .6 if out else None)
     for k, (text, size, t, acc) in enumerate(lines):
         show(f"#{i}l{k}", t)
-        js(f'tl.fromTo("#{i}l{k} .wi", {{yPercent: 118, rotation: 8}}, {{yPercent: 0, rotation: 0, duration: .7, ease: "expo.out", stagger: .085, '
+        n = len(text.replace("[", "").replace("]", ""))
+        st = min(.035, .45 / max(1, n))
+        js(f'tl.fromTo("#{i}l{k} .ch", {{yPercent: 115, rotation: 6}}, {{yPercent: 0, rotation: 0, duration: .65, ease: "expo.out", stagger: {st:.3f}, '
            f'immediateRender: false}}, {t:.3f});')
-        js(f'tl.fromTo("#{i}l{k}", {{scale: 1.08}}, {{scale: 1, duration: 1.1, ease: "power3.out", immediateRender: false}}, {t:.3f});')
         if "[" in text:
-            ta = t + .085 * [n for n, w in enumerate(text.split(" ")) if w.startswith("[")][0] + .28
-            js(f'tl.fromTo("#{i}l{k} .acc", {{backgroundPosition: "100% 0%"}}, {{backgroundPosition: "0% 0%", duration: 1.1, ease: "power2.out", '
-               f'immediateRender: false}}, {ta:.3f});')
-            js(f'tl.fromTo("#{i}l{k} .acc", {{scale: 1}}, {{keyframes: [{{scale: 1.12, duration: .12, ease: "power2.out"}}, {{scale: 1, duration: .5, '
+            first = [m for m, w in enumerate(text.split(" ")) if w.startswith("[")][0]
+            ta = t + st * len(" ".join(text.split(" ")[:first])) + .3
+            js(f'tl.fromTo("#{i}l{k} .acc", {{scale: 1}}, {{keyframes: [{{scale: 1.1, duration: .12, ease: "power2.out"}}, {{scale: 1, duration: .5, '
                f'ease: "elastic.out(1, .45)"}}], immediateRender: false}}, {ta:.3f});')
-            if acc == "grad" and k == len(lines) - 1:
+            if acc == "pink" and k == len(lines) - 1:
                 js(f'tl.fromTo("#{i}u{k}", {{strokeDashoffset: 1}}, {{strokeDashoffset: 0, duration: .5, ease: "power2.out", immediateRender: false}}, {ta + .1:.3f});')
     if out:
         if how == "left":
-            js(f'tl.to("#{i} .wi", {{x: -1300, rotation: -10, filter: "blur(12px)", duration: .5, ease: "power3.in", stagger: .05}}, {out:.3f});')
+            js(f'tl.to("#{i} .ch", {{x: -1300, rotation: -10, filter: "blur(12px)", duration: .5, ease: "power3.in", stagger: .012}}, {out:.3f});')
         else:
-            js(f'tl.to("#{i} .wi", {{yPercent: -150, y: 0, rotation: -6, duration: .4, ease: "power3.in", stagger: .03}}, {out:.3f});')
-            if lines[-1][3] == "grad" and "[" in lines[-1][0]:
+            js(f'tl.to("#{i} .ch", {{yPercent: -130, duration: .38, ease: "power3.in", stagger: .008}}, {out:.3f});')
+            if lines[-1][3] == "pink" and "[" in lines[-1][0]:
                 js(f'tl.to("#{i} .uline", {{opacity: 0, duration: .2}}, {out:.3f});')
     return i
 
@@ -355,21 +356,30 @@ def caption_track():
 NOCAP = []          # windows where the big type already says the words: no captions there
 
 
-def beat(text, t, t_out, size, style="white", y=820, through=True, sub=None):
-    """A full-screen word beat: punches in from a blur zoom, then flies past the camera (through) or drops away."""
+def chars(text, cls="ch"):
+    return "".join(f'<span class="{cls}">{c if c != " " else "&nbsp;"}</span>' for c in text)
+
+
+def beat(text, t, t_out, size, style="ink", y=820, through=True, sub=None):
+    """A full-screen word beat in the website's serif (Fraunces): the letters arrive in reading order, each rising and
+    un-blurring a moment after the one before it (the small line above first), then the word leaves letter by letter."""
     i = nid("b")
-    body = text if not sub else f'<span class="bsub" style="font-size:{sub[1]}px">{sub[0]}</span><br>{text}'
+    body = f'<span class="bw">{chars(text)}</span>'
+    if sub:
+        body = f'<span class="bsub" style="font-size:{sub[1]}px">{chars(sub[0], "ch sc")}</span><br>' + body
     put(f'<div class="beat {style}" id="{i}" style="top:{y}px;font-size:{size}px">{body}</div>')
-    show(f"#{i}", t, t_out + .32)
-    js(f'tl.fromTo("#{i}", {{opacity: 0, scale: 2.1, filter: "blur(22px)"}}, {{opacity: 1, scale: 1, filter: "blur(0px)", duration: .38, ease: "power4.out", '
-       f'immediateRender: false}}, {t:.3f});')
-    js(f'tl.fromTo("#{i}", {{scale: 1}}, {{scale: 1.06, duration: {max(.1, t_out - t - .38):.2f}, ease: "none", immediateRender: false}}, {t + .38:.3f});')
-    if style == "dark":                # on a white flash: gone before the flash fades, no dark ghost on the dark ground
-        js(f'tl.to("#{i}", {{opacity: 0, scale: 1.6, duration: .08, ease: "power2.in"}}, {t_out - .06:.3f});')
-    elif through:
-        js(f'tl.to("#{i}", {{opacity: 0, scale: 3.2, filter: "blur(14px)", duration: .3, ease: "power2.in"}}, {t_out:.3f});')
-    else:
-        js(f'tl.to("#{i}", {{opacity: 0, y: 140, filter: "blur(10px)", duration: .28, ease: "power2.in"}}, {t_out:.3f});')
+    show(f"#{i}", t, t_out + .45)
+    nch = len(text) + (len(sub[0]) if sub else 0)
+    t_exit = t_out - (.06 if style == "white" else .12)
+    avail = t_exit - t - .02                       # the entrance must be over before the exit starts (or it pulls letters back)
+    st = min(.05, .32 / max(1, nch), avail * .35 / max(1, nch - 1))
+    dur = max(.18, min(.55, avail - st * (nch - 1)))
+    js(f'tl.fromTo("#{i} .ch", {{transformPerspective: 800, opacity: 0, yPercent: 70, rotationX: -70, filter: "blur(10px)"}}, {{opacity: 1, yPercent: 0, rotationX: 0, '
+       f'filter: "blur(0px)", duration: {dur:.3f}, ease: "expo.out", stagger: {st:.3f}, transformPerspective: 800, immediateRender: false}}, {t:.3f});')
+    js(f'tl.fromTo("#{i}", {{scale: 1.05}}, {{scale: 1, duration: {max(.3, t_out - t):.2f}, ease: "power2.out", immediateRender: false}}, {t:.3f});')
+    d_out = .08 if style == "white" else .16         # out fast, so the next word lands on a clean frame
+    js(f'tl.to("#{i} .ch", {{opacity: 0, yPercent: {-60 if through else 60}, filter: "blur(8px)", duration: {d_out}, ease: "power2.in", '
+       f'stagger: .008}}, {t_exit:.3f});')
     return i
 
 
@@ -501,17 +511,17 @@ def scenes():
 
     # ---- S1 the hook: "This AI told me the exact second people stopped watching my reel."
     NOCAP.append((0, t_ppl - .05))
-    rays(0, t_ppl, cy=820)
+    rays(0, t_ppl, cy=820, color="rgba(224,24,126,.55)")
     js('tl.fromTo("#star0", {scale: 1, rotation: 0}, {keyframes: [{scale: 1.25, rotation: 20, duration: .1}, {scale: 0, rotation: 90, opacity: 0, duration: .2, ease: "power3.in"}], '
        'immediateRender: false}, .08);')
-    beat("THIS AI", W("This"), t_told - .04, 180)
+    beat("This AI", W("This"), t_told - .04, 210)
     cue(W("This"), "hit")
-    beat("TOLD ME", t_told, t_the - .04, 180, style="outline")
+    beat("told me", t_told, t_the - .04, 210, style="grey")
     cue(t_told, "whoosh")
-    flip(t_the, t_sec - .04, "#ffffff", fade=.05)
-    beat("EXACT", t_the, t_sec - .05, 250, style="dark", sub=("THE", 110))
+    flip(t_the, t_sec - .04, INK, fade=.05)
+    beat("exact", t_the, t_sec - .05, 270, style="white", sub=("the", 130))
     cue(t_the, "hit")
-    sc = beat("SECOND", t_sec, t_ppl - .05, 210, style="grad", y=720)
+    sc = beat("second.", t_sec, t_ppl - .05, 250, style="pink", y=720)
     glitch(t_sec, 1.2)
     cue(t_sec, "hit")
     i = nid("clk")
@@ -552,7 +562,7 @@ def scenes():
     cree_say(t_stop + .05, "!", d=1.0)
 
     # ---- S2a: "I uploaded a reel that flopped"
-    hf = headline([("I UPLOADED A REEL", 66, t_up, None), ("THAT [FLOPPED.]", 100, t_flop, "red")], 250, out=t_cr - .4)
+    hf = headline([("I uploaded a reel", 76, t_up, None), ("that [flopped.]", 118, t_flop, "red")], 240, out=t_cr - .4)
     js(f'tl.fromTo("#{hf}l1", {{x: 0}}, {{keyframes: [{{x: -16, duration: .05}}, {{x: 16, duration: .05}}, {{x: -10, duration: .05}}, {{x: 8, duration: .05}}, '
        f'{{x: 0, duration: .05}}], immediateRender: false}}, {t_flop + .35:.3f});')
     r = glass(f'<div class="rv" id="rv"><i class="play"></i><div class="up" id="up"><div class="upt">Uploading <b id="upn">0%</b></div>'
@@ -576,13 +586,13 @@ def scenes():
 
     # ---- S2b: "into Creedom's Reel Analyzer, and it watched it second by second."
     glitch(t_cr - .12, .9)
-    flip(t_cr - .1, t_cr - .02, "#ffffff", fade=.1)
+    flip(t_cr - .1, t_cr - .02, INK, fade=.1)
     phone_build([("c1_pick.mp4", t_cr - .1, 2.0), ("c2_steps.mp4", t_cr + 1.9, 2.0),
                  ("c4_fixes.mp4", t_what - .3, S5 - t_what + .1)], 330, 540, 420)
     phone_in(t_cr - .1, S3 - .05)
     cue(t_cr - .1, "whoosh_big")
     tk1 = ticker(760, -14, ["REEL ANALYZER", "SECOND BY SECOND", "HOOK SCORE", "RETENTION"], t_cr - .05, t_wat + .1, 1, "mag")
-    tk2 = ticker(1060, 9, ["CREEDOM", "AI FEEDBACK", "WHAT TO FIX", "NEW HOOKS"], t_cr + .05, t_wat + .1, -1, "wht")
+    tk2 = ticker(1060, 9, ["CREEDOM", "AI FEEDBACK", "WHAT TO FIX", "NEW HOOKS"], t_cr + .05, t_wat + .1, -1, "ink")
     ch = glass('<img src="assets/img/cree.png" alt=""><span>Creedom &middot; <b>Reel Analyzer</b></span>', 0, 250, 0, t_cr, t_wat - .1, cls="chip", flt=False)
     js(f'tl.to("#{ch}", {{opacity: 0, y: -40, filter: "blur(8px)", duration: .25}}, {t_wat - .35:.3f});')
     cue(t_cr, "pop")
@@ -592,7 +602,7 @@ def scenes():
     js(f'tl.to("#phone", {{scale: 1.18, y: -58, duration: .7, ease: "expo.inOut"}}, {t_wat - .25:.3f});')
     show("#scan", t_wat, S3)
     js(f'tl.fromTo("#scan", {{yPercent: -100}}, {{yPercent: 900, duration: .6, ease: "none", repeat: 2, immediateRender: false}}, {t_wat:.3f});')
-    headline([("[SECOND] BY [SECOND]", 82, t_sec2 - .1, "grad")], 236, out=S3 - .35)
+    headline([("[Second] by [second].", 96, t_sec2 - .1, "pink")], 230, out=S3 - .35)
     cue(t_sec2, "tick")
     for k in range(8):
         tc = nid("ts")
@@ -613,12 +623,12 @@ def scenes():
     glitch(S3 - .1)
 
     # ---- S3: "It told me my [hook worked], but my [energy dropped] in the middle, and that's exactly where [people swiped] away."
-    headline([("IT TOLD ME MY", 76, t_it, None)], 360, out=S4 - .4)
+    headline([("It told me my", 92, t_it, None)], 350, out=S4 - .4)
     put('<div class="pill" id="pill"><div class="pst" id="pst"><div class="pw">HOOK WORKED &#10003;</div><div class="pw">ENERGY DROPPED &darr;</div>'
         '<div class="pw">PEOPLE SWIPED &larr;</div></div><i class="shine" data-layout-allow-overflow id="pills"></i></div>')
     show("#pill", t_hook - .05, S4 - .3)
     js(f'tl.fromTo("#pill", {{opacity: 0, scaleX: .2, scaleY: .6}}, {{opacity: 1, scaleX: 1, scaleY: 1, duration: .45, ease: "back.out(1.8)", immediateRender: false}}, {t_hook - .05:.3f});')
-    for k, (tt, col) in enumerate([(t_ene, "#ff2d55"), (t_ppl2, "#c40db8")]):
+    for k, (tt, col) in enumerate([(t_ene, "#e11d48"), (t_ppl2, "#0b0b0b")]):
         js(f'tl.to("#pst", {{yPercent: {-(k + 1) * 100 / 3:.3f}, duration: .45, ease: "back.inOut(1.6)"}}, {tt - .05:.3f});')
         js(f'tl.to("#pill", {{background: "{col}", boxShadow: "0 20px 60px {col}88", duration: .3}}, {tt - .05:.3f});')
         js(f'tl.fromTo("#pills", {{xPercent: 0}}, {{xPercent: 420, duration: .7, ease: "power2.inOut", immediateRender: false}}, {tt + .2:.3f});')
@@ -648,7 +658,7 @@ def scenes():
     # visual 3: the reels get flicked away
     for k in range(5):
         s = nid("sc")
-        put(f'<div class="mini" id="{s}" style="left:{300 + k * 40}px;top:{790 + k * 18}px;z-index:{12 + k}"><i class="play"></i></div>')
+        put(f'<div class="mini" id="{s}" style="left:{300 + k * 40}px;top:{690 + k * 14}px;z-index:{12 + k}"><i class="play"></i></div>')
         show(f"#{s}", t_ppl2 - .1, S4)
         pop(f"#{s}", t_ppl2 - .1 + k * .05, frm=.5, rot=-8 + k * 4)
         js(f'tl.to("#{s}", {{x: -900, rotation: -40, opacity: 0, filter: "blur(10px)", duration: .4, ease: "power3.in"}}, {t_swp + .05 + k * .1:.3f});')
@@ -681,14 +691,14 @@ def scenes():
             cells += f'<div class="wc wv"><i class="play"></i><b>{RND.choice(["12.4K", "48K", "9.1K", "103K", "27K"])} views</b></div>'
         else:
             cells += f'<div class="wc wg"><b>+{RND.choice([38, 52, 71, 64, 90])}%</b><span>retention</span></div>'
-    put(f'<div class="wall" id="wall"><div class="wallg" id="wallg">{cells}</div></div>')
+    put(f'<div class="wall" data-layout-allow-occlusion data-layout-allow-overlap aria-hidden="true" id="wall"><div class="wallp"><div class="wallg" id="wallg">{cells}</div></div></div>')
     show("#wall", S4, t_what)
     js(f'tl.fromTo("#wall", {{opacity: 0, scale: 1.3}}, {{opacity: 1, scale: 1, duration: .6, ease: "expo.out", immediateRender: false}}, {S4:.3f});')
     js(f'tl.fromTo("#wallg", {{y: 0}}, {{y: -700, duration: {t_what - S4:.2f}, ease: "none", immediateRender: false}}, {S4:.3f});')
     js(f'tl.to("#wall", {{opacity: 0, scale: 1.6, filter: "blur(10px)", duration: .35, ease: "power2.in"}}, {t_what - .35:.3f});')
     put('<div class="wallfade" id="wallfade"></div>')
     show("#wallfade", S4, t_what)
-    beat("HOOKS", t_new, t_what - .35, 230, style="grad", y=700, sub=("NEW", 150))
+    beat("hooks.", t_new, t_what - .35, 260, style="pink", y=680, sub=("New", 160))
     cue(t_new, "hit")
     sparkle(540, 860, t_new + .2, n=12, r=380)
     for k in range(14):                    # confetti
@@ -704,7 +714,7 @@ def scenes():
     js(f'tl.fromTo("#phone", {{transformPerspective: 1400, opacity: 0, x: -600, scale: .9, rotationY: 40, filter: "blur(0px)"}}, {{opacity: 1, x: {70 - PHONE["x"]}, y: -60, scale: .85, '
        f'rotationY: 0, duration: .6, ease: "expo.out", transformPerspective: 1400, immediateRender: false}}, {t_what - .3:.3f});')
     js(f'tl.to("#phone", {{y: 700, rotation: -12, opacity: 0, duration: .4, ease: "power3.in"}}, {S5 - .5:.3f});')
-    headline([("WHAT TO [FIX]", 120, t_what - .05, "grad")], 300, out=S5 - .5)
+    headline([("What to [fix].", 136, t_what - .05, "pink")], 280, out=S5 - .5)
     for k, txt in enumerate(["Caption at 0:12", "Caption at 0:20", "Save-worthy CTA"]):
         fc = nid("fc")
         put(f'<div class="fixchip" id="{fc}" style="top:{700 + k * 150}px"><b>&#10003;</b>{txt}</div>')
@@ -723,20 +733,22 @@ def scenes():
     # ---- S5: the free account audit
     NOCAP.append((t_you - .1, t_just - .1))
     liquid(S5 - .6, 540, 2350, S5 - .05)
-    flip(S5 - .1, t_just - .15, "radial-gradient(circle at 50% 40%, #ff6fd8 0%, #F515E8 45%, #a80f7c 100%)", fade=.2)
-    rays(S5, t_just - .2, n=36, cy=760, color="rgba(255,255,255,.8)")
-    beat("FREE", t_free, t_audit - .03, 320, style="white", y=560)
+    flip(S5 - .1, t_just - .15, "radial-gradient(circle at 50% 40%, #fff6fa 0%, #ffd3ea 55%, #ffa6d4 100%)", fade=.2)
+    rays(S5, t_just - .2, n=36, cy=760, color="rgba(255,255,255,.95)")
+    beat("Free.", t_free, t_audit - .03, 340, style="pink", y=540)
     cue(t_free, "hit")
     sparkle(540, 700, t_free + .15, n=12, r=420)
-    beat("AUDIT", t_audit, t_just - .2, 250, style="white", y=640, sub=("ACCOUNT", 120), through=False)
+    beat("audit.", t_audit, t_just - .2, 270, style="ink", y=620, sub=("Account", 150), through=False)
     cue(t_audit, "whoosh")
     glitch(t_just - .2)
     # the steps, one beat each (the reference's Brief / Create / Launch)
-    steps = [("@", "TYPE YOUR HANDLE", t_type - .3), ("&#9201;", "ABOUT 20 SECONDS", t_20 - .3), ("&#9733;", "YOUR SCORE", t_score - .15), ("&#10003;", "FIRST THING TO FIX", t_first - .2)]
+    steps = [("@", "Type your handle", t_type - .3), ("&#9201;", "About 20 seconds", t_20 - .3), ("&#9733;", "Your score", t_score - .15), ("&#10003;", "First thing to fix", t_first - .2)]
     ends = [t_20 - .35, t_score - .2, t_first - .25, S6 - .1]
     for k, ((ic, title, tt), te) in enumerate(zip(steps, ends)):
         st = nid("st")
-        put(f'<div class="step" id="{st}"><span class="sic">{ic}</span><span class="stx">{title}</span></div>')
+        put(f'<div class="step" id="{st}"><span class="sic">{ic}</span><span class="stx">{chars(title)}</span></div>')
+        js(f'tl.fromTo("#{st} .ch", {{opacity: 0, yPercent: 60, filter: "blur(8px)"}}, {{opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .45, ease: "expo.out", '
+           f'stagger: .022, immediateRender: false}}, {tt + .08:.3f});')
         show(f"#{st}", tt, te)
         js(f'tl.fromTo("#{st}", {{opacity: 0, y: 60, scale: .9}}, {{opacity: 1, y: 0, scale: 1, duration: .45, ease: "expo.out", immediateRender: false}}, {tt:.3f});')
         js(f'tl.to("#{st}", {{opacity: 0, y: -50, duration: .22, ease: "power2.in"}}, {te - .22:.3f});')
@@ -744,7 +756,7 @@ def scenes():
         dd = nid("dt")
         put(f'<div class="dots" id="{dd}">{dots}</div>')
         show(f"#{dd}", tt, te)
-    flip(t_score - .15, t_first - .25, "radial-gradient(circle at 50% 45%, #3b0d4a 0%, #1a0622 70%)", fade=.2)
+    flip(t_score - .15, t_first - .25, "radial-gradient(circle at 50% 45%, #ffffff 0%, #ffe6f2 75%)", fade=.2)
     # 1: the handle types into a glass bar
     hb = glass('<span class="at">@</span><span id="auh"></span><i class="caret" id="auc"></i>', 110, 800, 860, t_type - .2, t_20 - .35, cls="hbar", flt=False)
     handle = "yourhandle"
@@ -791,14 +803,14 @@ def scenes():
     cree_say(t_first, "!", d=.8)
 
     # ---- S6: the CTA, "Comment "CREE" and I'll send you the link."
-    flip(S6 - .1, DUR, "radial-gradient(circle at 50% 38%, #ff6fd8 0%, #F515E8 42%, #9a0c72 100%)", fade=.2)
+    flip(S6 - .1, DUR, "radial-gradient(circle at 50% 38%, #fff4fa 0%, #ffcfe7 50%, #ff97cc 100%)", fade=.2)
     glitch(S6 - .1, 1.2)
-    rays(S6, S7, n=40, cy=620, color="rgba(255,255,255,.75)")
+    rays(S6, S7, n=40, cy=620, color="rgba(255,255,255,.95)")
     gout(f"#{ff}", S6 - .1, to="up", d=.3)
     cree_to(S6 + .1, 540, 640, .66, d=.6, ease="back.out(1.4)")
     pose(S6 + .1, "wave", flip=False)
     cree_wiggle(S6 + .7, n=4, amp=9)
-    beat("COMMENT", t_com - .02, S7 - .1, 170, style="white", y=1040, through=False)
+    beat("Comment", t_com - .02, S7 - .1, 200, style="ink", y=1020, through=False)
     cue(t_com, "hit")
     cb = nid("cb")
     put(f'<div class="cbig" id="{cb}"><span class="ctx" id="{cb}t"></span><i class="caret big" id="{cb}c"></i>'
@@ -856,110 +868,127 @@ def scenes():
 
 
 def background():
-    """Dark plum ground with slow magenta / coral glows and drifting glass orbs."""
-    blobs = [(-360, -300, 1000, "#F515E8", .30), (500, 1100, 1000, "#F5876C", .24), (200, 500, 800, "#a21caf", .26), (-300, 1300, 800, "#F54BA8", .2)]
+    """The website's ground: warm off-white melting into pink, slow pink glows, drifting glass orbs, and (in the hook,
+    like the creedom.ai hero) the creator worries floating past in faint grey."""
+    blobs = [(-360, -300, 1000, "#ffb3d9", .45), (520, 1150, 1000, "#ffc2a6", .38), (300, 520, 760, "#ffd1ea", .4), (-300, 1300, 800, "#f9a8d4", .32)]
     html = ""
     for k, (x, y, s, c, o) in enumerate(blobs):
         html += f'<i class="blob" data-layout-allow-overflow id="bl{k}" style="left:{x}px;top:{y}px;width:{s}px;height:{s}px;background:{c};opacity:{o}"></i>'
         js(f'tl.to("#bl{k}", {{x: {RND.uniform(-260, 260):.0f}, y: {RND.uniform(-300, 300):.0f}, duration: {DUR:.1f}, ease: "sine.inOut"}}, 0);')
         js(f'tl.fromTo("#bl{k}", {{scale: 1}}, {{scale: 1.25, duration: {3.4 + k * .8:.1f}, ease: "sine.inOut", yoyo: true, repeat: {int(DUR / (3.4 + k * .8))}, '
            f'immediateRender: false}}, 0);')
-    for k in range(10):
-        s = RND.choice([10, 14, 20, 46, 70])
-        x, y = RND.uniform(0, FW - 60), RND.uniform(200, FH - 200)
+    for k in range(8):
+        s = RND.choice([46, 64, 90, 120])
+        x, y = RND.uniform(-20, FW - 80), RND.uniform(200, FH - 200)
         html += f'<i class="orb" id="ob{k}" style="left:{x:.0f}px;top:{y:.0f}px;width:{s}px;height:{s}px"></i>'
         js(f'tl.to("#ob{k}", {{y: {-RND.uniform(260, 620):.0f}, duration: {DUR:.1f}, ease: "none"}}, 0);')
         js(f'tl.fromTo("#ob{k}", {{x: -24}}, {{x: 24, duration: {RND.uniform(2.6, 4.2):.1f}, ease: "sine.inOut", yoyo: true, repeat: 11, immediateRender: false}}, 0);')
+    worries = ["Why did my views drop?", "Algorithm changed again", "Is my content bad?", "No clarity", "What should I post?", "200 views", "Drowning in drafts",
+               "Why isn't this working?", "Am I even good at this?", "15 hours, 200 views"]
+    spots = [(60, 250), (640, 330), (90, 600), (700, 640), (40, 1060), (720, 1000), (380, 1240), (80, 1380), (660, 1330), (330, 470)]
+    for k, (w, (x, y)) in enumerate(zip(worries, spots)):
+        html += f'<i class="worry" aria-hidden="true" data-layout-allow-occlusion id="wr{k}" style="left:{x}px;top:{y}px;transform:rotate({RND.uniform(-9, 9):.0f}deg)">{w}</i>'
+    js('tl.fromTo(".worry", {y: 0}, {y: -160, duration: 6.5, ease: "none", stagger: .05, immediateRender: false}, .01);')
+    js(f'tl.to(".worry", {{opacity: 0, duration: .5, stagger: .03}}, {W("Creedom's") - .6:.3f});')
     return html
 
 
 STAR = "M0 -48 C6 -8 8 -6 48 0 C8 6 6 8 0 48 C-6 8 -8 6 -48 0 C-8 -6 -6 -8 0 -48 Z"
 CSS = f"""
-@font-face {{ font-family: "Outfit"; font-weight: 600; src: url("assets/fonts/Outfit-600.woff2"); }}
-@font-face {{ font-family: "Outfit"; font-weight: 800; src: url("assets/fonts/Outfit-800.woff2"); }}
-@font-face {{ font-family: "Outfit"; font-weight: 900; src: url("assets/fonts/Outfit-900.woff2"); }}
+@font-face {{ font-family: "Fraunces"; font-weight: 600; src: url("assets/fonts/fraunces-latin-600-normal.woff2"); }}
+@font-face {{ font-family: "Fraunces"; font-weight: 600; font-style: italic; src: url("assets/fonts/fraunces-latin-600-italic.woff2"); }}
+@font-face {{ font-family: "Fraunces"; font-weight: 700; src: url("assets/fonts/fraunces-latin-700-normal.woff2"); }}
+@font-face {{ font-family: "Manrope"; font-weight: 500; src: url("assets/fonts/manrope-latin-500-normal.woff2"); }}
+@font-face {{ font-family: "Manrope"; font-weight: 700; src: url("assets/fonts/manrope-latin-700-normal.woff2"); }}
+@font-face {{ font-family: "Manrope"; font-weight: 800; src: url("assets/fonts/manrope-latin-800-normal.woff2"); }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #0d0412; }}
-#root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: #0d0412; font-family: "Outfit"; color: #fff; }}
-#bgl {{ position: absolute; inset: 0; overflow: hidden; background: radial-gradient(circle at 50% 42%, #2a0a33 0%, #14051b 55%, #0b030f 100%); }}
-#dots {{ position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.07) 2px, transparent 2.5px); background-size: 46px 46px; }}
+html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6f3; }}
+#root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6f3; font-family: "Manrope"; color: {INK}; }}
+#bgl {{ position: absolute; inset: 0; overflow: hidden; background: linear-gradient(180deg, #f8f7f4 0%, #fbeff5 55%, #ffe1ee 100%); }}
+#dots {{ position: absolute; inset: 0; background-image: radial-gradient(rgba(11,11,11,.06) 2px, transparent 2.5px); background-size: 46px 46px; }}
 .blob {{ position: absolute; border-radius: 50%; filter: blur(110px); }}
-.orb {{ position: absolute; border-radius: 50%; z-index: 1; background: radial-gradient(circle, rgba(255,255,255,.95) 0 20%, rgba(255,140,220,.45) 45%, rgba(245,21,232,0) 72%); }}
+.orb {{ position: absolute; border-radius: 50%; z-index: 1; border: 2px solid rgba(255,255,255,.8);
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.95) 0 8%, rgba(255,255,255,.35) 24%, rgba(255,190,225,.2) 62%, rgba(240,50,140,.14) 100%);
+  box-shadow: inset -6px -8px 18px rgba(240,50,140,.14), 0 10px 24px rgba(200,40,120,.1); }}
+.worry {{ position: absolute; font: 600 34px/1.15 "Manrope"; color: rgba(11,11,11,.2); white-space: nowrap; }}
 .flip {{ position: absolute; inset: 0; opacity: 0; }}
 #cam, #cam2 {{ position: absolute; inset: 0; transform-origin: 50% 45%; }}
 #cam {{ z-index: 2; }}
-.star0 {{ position: absolute; left: 440px; top: 720px; width: 200px; height: 200px; z-index: 5; filter: drop-shadow(0 0 40px #F515E8) drop-shadow(0 0 90px #F54BA8); }}
+.star0 {{ position: absolute; left: 440px; top: 720px; width: 200px; height: 200px; z-index: 5; filter: drop-shadow(0 0 30px rgba(240,50,140,.6)); }}
 .rays {{ position: absolute; inset: 0; opacity: 0; z-index: 1; pointer-events: none; }}
 .ray {{ position: absolute; width: 0; height: 0; transform-origin: 0 0; }}
 .rl {{ position: absolute; left: 0; top: -2px; width: 200px; height: 4px; border-radius: 2px; transform-origin: 0 50%; }}
-.gband {{ position: absolute; left: -300px; right: -300px; opacity: 0; z-index: 45; mix-blend-mode: screen; }}
-/* word beats */
-.beat {{ position: absolute; left: 0; right: 0; opacity: 0; z-index: 9; text-align: center; font-weight: 900; line-height: .92; letter-spacing: -.03em; white-space: nowrap;
-  color: #fff; transform-origin: 50% 50%; text-shadow: 0 0 40px rgba(245,21,232,.35); }}
-.beat.outline {{ color: transparent; -webkit-text-stroke: 4px #fff; text-shadow: none; }}
-.beat.dark {{ color: #1a0620; text-shadow: none; }}
-.beat.grad {{ background: linear-gradient(90deg,#ff5bf0 0%,#F54BA8 50%,#FF9A7A 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
-  text-shadow: none; filter: drop-shadow(0 0 30px rgba(245,21,232,.55)); padding: 0 20px; }}
-.beat.white {{ text-shadow: 0 10px 40px rgba(90,0,60,.45); }}
-.bsub {{ display: inline-block; letter-spacing: .02em; line-height: 1.05; }}
-.clock {{ position: absolute; left: 0; right: 0; top: 960px; opacity: 0; z-index: 9; text-align: center; font: 800 96px/1 "Outfit"; letter-spacing: .06em;
-  color: rgba(255,255,255,.9); font-variant-numeric: tabular-nums; }}
-/* headlines (mask reveal) */
+.gband {{ position: absolute; left: -300px; right: -300px; opacity: 0; z-index: 45; mix-blend-mode: multiply; }}
+/* word beats: the website's serif, letters in reading order */
+.beat {{ position: absolute; left: 0; right: 0; opacity: 0; z-index: 9; text-align: center; font-family: "Fraunces"; font-weight: 600; line-height: .98;
+  letter-spacing: -.035em; white-space: nowrap; color: {INK}; transform-origin: 50% 50%; }}
+.beat .ch {{ display: inline-block; transform-origin: 50% 100%; }}
+.beat.grey {{ color: #7a7a73; }}
+.beat.pink {{ color: {PINK}; }}
+.beat.white {{ color: #fff; }}
+.bsub {{ display: inline-block; letter-spacing: -.02em; line-height: 1.1; color: #7a7a73; }}
+.beat.white .bsub {{ color: rgba(255,255,255,.6); }}
+.bw {{ display: inline-block; }}
+.clock {{ position: absolute; left: 0; right: 0; top: 1040px; opacity: 0; z-index: 9; text-align: center; font: 700 90px/1 "Manrope"; letter-spacing: .04em;
+  color: rgba(11,11,11,.75); font-variant-numeric: tabular-nums; }}
+/* headlines */
 .head {{ position: absolute; left: 0; right: 0; opacity: 0; text-align: center; }}
-.hl {{ opacity: 0; font-weight: 900; line-height: .98; letter-spacing: -.025em; word-spacing: .16em; white-space: nowrap; color: #fff; transform-origin: 50% 60%; }}
+.hl {{ opacity: 0; font-family: "Fraunces"; font-weight: 600; line-height: 1.02; letter-spacing: -.03em; word-spacing: .06em; white-space: nowrap; color: {INK};
+  transform-origin: 50% 60%; }}
+.hl.grey {{ color: #7a7a73; }}
 .hli {{ position: relative; display: inline-block; }}
-.wm {{ display: inline-block; overflow: hidden; vertical-align: top; padding: .08em .05em .16em; margin: -.08em -.05em -.16em; }}
+.wm {{ display: inline-block; overflow: hidden; vertical-align: top; padding: .06em .04em .2em; margin: -.06em -.04em -.2em; }}
 .wi {{ display: inline-block; transform-origin: 50% 80%; }}
-.acc {{ background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; padding: 0 .02em; }}
-.acc.grad {{ background-image: linear-gradient(90deg,#ff5bf0 0%,#F54BA8 30%,#FF9A7A 50%,#ffc4ef 60%,#ff5bf0 72%,#F54BA8 100%); }}
-.acc.red {{ background-image: linear-gradient(90deg,#ff2d55 0%,#ff4d6d 45%,#ff9db0 58%,#ff2d55 70%,#e0143c 100%); }}
-.acc.green {{ background-image: linear-gradient(90deg,#22c47a 0%,#3ee08f 45%,#a6ffd1 58%,#22c47a 70%,#10a35f 100%); }}
-.acc.white {{ background-image: linear-gradient(90deg,#fff 0%,#fff 45%,#ffd6f3 55%,#fff 66%,#fff 100%); }}
-.uline {{ position: absolute; left: 4%; right: 4%; bottom: -.14em; width: 92%; height: .2em; overflow: visible; }}
+.wi .ch {{ display: inline-block; }}
+.acc.pink {{ color: {PINK}; font-style: italic; }}
+.acc.red {{ color: #e11d48; font-style: italic; }}
+.acc.green {{ color: #15a05a; font-style: italic; }}
+.acc.white {{ color: #fff; }}
+.uline {{ position: absolute; left: 4%; right: 4%; bottom: -.16em; width: 92%; height: .2em; overflow: visible; }}
 .uline path {{ fill: none; stroke: url(#gr); stroke-width: 9; stroke-linecap: round; }}
-/* dark glass */
-.glass {{ position: absolute; opacity: 0; border-radius: 40px; padding: 28px 32px; overflow: hidden; color: #fff;
-  background: linear-gradient(140deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,.06) 60%, rgba(245,75,168,.1) 100%);
-  border: 1.5px solid rgba(255,255,255,.24); backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  box-shadow: 0 30px 80px rgba(0,0,0,.45), 0 0 60px rgba(245,21,232,.12), inset 0 1px 0 rgba(255,255,255,.28); }}
+/* light glass */
+.glass {{ position: absolute; opacity: 0; border-radius: 40px; padding: 28px 32px; overflow: hidden; color: {INK};
+  background: linear-gradient(140deg, rgba(255,255,255,.88) 0%, rgba(255,255,255,.58) 55%, rgba(255,236,246,.7) 100%);
+  border: 2px solid rgba(255,255,255,.95); backdrop-filter: blur(22px) saturate(1.5); -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  box-shadow: 0 30px 70px rgba(170,20,110,.15), 0 6px 18px rgba(170,20,110,.07), inset 0 2px 0 rgba(255,255,255,.95); }}
 .shine {{ position: absolute; top: -30%; bottom: -30%; left: -48%; width: 40%; pointer-events: none;
-  background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.35) 50%, rgba(255,255,255,0) 100%); transform: skewX(-18deg); }}
+  background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.85) 50%, rgba(255,255,255,0) 100%); transform: skewX(-18deg); }}
 .glass.chip {{ left: 0 !important; right: 0; width: max-content !important; margin: 0 auto; padding: 12px 34px 12px 14px; border-radius: 999px; display: flex;
-  align-items: center; gap: 16px; font: 600 40px/1 "Outfit"; z-index: 9; }}
+  align-items: center; gap: 16px; font: 500 38px/1 "Manrope"; z-index: 9; }}
 .chip img {{ width: 64px; height: 64px; object-fit: contain; }}
-.chip b {{ font-weight: 900; background: {GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }}
+.chip b {{ font: 600 40px/1 "Fraunces"; color: {PINK}; font-style: italic; }}
 /* retention */
 .graph .gh {{ display: flex; justify-content: space-between; align-items: baseline; }}
-.gt {{ font: 900 34px/1 "Outfit"; letter-spacing: .1em; color: rgba(255,255,255,.7); }}
-.gp {{ font: 900 72px/1 "Outfit"; background: {GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }}
+.gt {{ font: 800 30px/1 "Manrope"; letter-spacing: .12em; color: #7a7a73; }}
+.gp {{ font: 600 76px/1 "Fraunces"; color: {PINK}; }}
 .avs {{ display: flex; gap: 14px; margin: 18px 0 6px; }}
 .av {{ display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; opacity: 0; background: linear-gradient(140deg,#F54BA8,#F5876C);
-  box-shadow: 0 0 22px rgba(245,75,168,.5), inset 0 2px 0 rgba(255,255,255,.5); }}
+  box-shadow: 0 8px 18px rgba(245,75,168,.3), inset 0 2px 0 rgba(255,255,255,.5); }}
 .av svg {{ width: 36px; height: 36px; fill: #fff; }}
 .gs {{ width: 100%; height: 284px; overflow: visible; }}
-.gl0 {{ stroke: rgba(255,255,255,.12); stroke-width: 4; }}
-.gline {{ fill: none; stroke: url(#gr); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 12px #F515E8); }}
-.gdot {{ fill: #ff2d55; opacity: 0; transform-box: fill-box; transform-origin: center; filter: drop-shadow(0 0 14px #ff2d55); }}
-.gtag {{ position: absolute; left: 470px; top: 200px; opacity: 0; background: #fff; color: #1a0620; font: 900 30px/1 "Outfit"; padding: 14px 20px; border-radius: 16px; }}
+.gl0 {{ stroke: rgba(11,11,11,.1); stroke-width: 4; }}
+.gline {{ fill: none; stroke: url(#gr); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 6px 10px rgba(240,50,140,.35)); }}
+.gdot {{ fill: #e11d48; opacity: 0; transform-box: fill-box; transform-origin: center; }}
+.gtag {{ position: absolute; left: 470px; top: 200px; opacity: 0; background: {INK}; color: #fff; font: 800 30px/1 "Manrope"; padding: 14px 20px; border-radius: 16px; }}
 /* the flopped reel */
 .glass.reel {{ padding: 0; }}
 .rv {{ position: relative; height: 470px; background: linear-gradient(160deg,#3a2140,#7a3060 60%,#c0567a); display: grid; place-items: center; }}
-.play {{ display: block; width: 0; height: 0; border-left: 70px solid rgba(255,255,255,.9); border-top: 44px solid transparent; border-bottom: 44px solid transparent; margin-left: 20px; }}
-.up {{ position: absolute; left: 30px; right: 30px; bottom: 30px; padding: 18px 22px; border-radius: 22px; background: rgba(255,255,255,.2); border: 1.5px solid rgba(255,255,255,.5); }}
-.upt {{ font: 800 30px/1 "Outfit"; color: #fff; margin-bottom: 12px; }}
+.play {{ display: block; width: 0; height: 0; border-left: 70px solid rgba(255,255,255,.92); border-top: 44px solid transparent; border-bottom: 44px solid transparent; margin-left: 20px; }}
+.up {{ position: absolute; left: 30px; right: 30px; bottom: 30px; padding: 18px 22px; border-radius: 22px; background: rgba(255,255,255,.22); border: 1.5px solid rgba(255,255,255,.5); }}
+.upt {{ font: 800 30px/1 "Manrope"; color: #fff; margin-bottom: 12px; }}
 .upb {{ height: 12px; border-radius: 6px; background: rgba(255,255,255,.3); overflow: hidden; }}
 .upb i {{ display: block; height: 100%; background: linear-gradient(90deg,#F515E8,#F5876C); transform-origin: 0 50%; }}
 .rm {{ padding: 22px 28px 26px; display: flex; flex-direction: column; gap: 6px; }}
-.rm > b {{ font: 800 36px/1.1 "Outfit"; }}
-.views {{ font: 600 32px/1.1 "Outfit"; color: rgba(255,255,255,.65); }}
-.views b {{ color: #fff; }}
-.views em {{ display: inline-block; opacity: 0; font-style: normal; color: #ff4d6d; font-weight: 800; }}
-.stampf {{ position: absolute; left: 50px; top: 200px; opacity: 0; font: 900 72px/1.1 "Outfit"; color: #ff2d55; border: 10px solid #ff2d55; border-radius: 18px;
+.rm > b {{ font: 800 36px/1.1 "Manrope"; }}
+.views {{ font: 500 32px/1.1 "Manrope"; color: #7a7a73; }}
+.views b {{ color: {INK}; }}
+.views em {{ display: inline-block; opacity: 0; font-style: normal; color: #e11d48; font-weight: 800; }}
+.stampf {{ position: absolute; left: 50px; top: 200px; opacity: 0; font: 800 72px/1.1 "Manrope"; color: #e11d48; border: 10px solid #e11d48; border-radius: 18px;
   padding: 0 22px; background: rgba(255,255,255,.92); }}
 /* the phone */
 #phone {{ position: absolute; opacity: 0; z-index: 6; }}
 #phonei {{ position: absolute; inset: 0; border-radius: 72px; background: #160b18; padding: 14px;
-  box-shadow: 0 50px 120px rgba(0,0,0,.6), 0 0 80px rgba(245,21,232,.3), 0 0 0 4px #3a2a3c inset, 0 0 0 2px rgba(255,255,255,.3); }}
+  box-shadow: 0 50px 110px rgba(120,10,80,.3), 0 0 0 4px #3a2a3c inset, 0 0 0 2px rgba(255,255,255,.4); }}
 #phone .scr {{ position: relative; width: 100%; height: 100%; border-radius: 58px; overflow: hidden; background: #fdfdfd; }}
 .pv {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; }}
 .isl {{ position: absolute; left: 50%; top: 26px; width: 120px; height: 35px; margin-left: -60px; border-radius: 18px; background: #050305; }}
@@ -968,115 +997,110 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #0d04
 .refl {{ position: absolute; top: -10%; bottom: -10%; left: 0; width: 45%; pointer-events: none;
   background: linear-gradient(100deg, rgba(255,255,255,0), rgba(255,255,255,.55), rgba(255,255,255,0)); transform: skewX(-16deg); }}
 .tkw {{ position: absolute; left: -310px; width: 1700px; height: 96px; overflow: hidden; opacity: 0; z-index: 4; display: flex; align-items: center; }}
-.tkw.mag {{ background: linear-gradient(90deg,#F515E8,#F54BA8,#F5876C); box-shadow: 0 20px 60px rgba(245,21,232,.45); }}
-.tkw.wht {{ background: #fff; box-shadow: 0 20px 60px rgba(0,0,0,.4); }}
-.tki {{ white-space: nowrap; font: 900 50px/96px "Outfit"; letter-spacing: .04em; color: #fff; }}
-.wht .tki {{ color: #1a0620; }}
-.tchip {{ position: absolute; opacity: 0; z-index: 10; padding: 14px 24px; border-radius: 18px; font: 900 42px/1 "Outfit"; color: #fff;
-  background: rgba(255,255,255,.12); border: 2px solid rgba(255,255,255,.4); box-shadow: 0 10px 30px rgba(245,21,232,.35); }}
-.tchip:nth-of-type(odd) {{ background: linear-gradient(90deg,#F515E8,#F5876C); border-color: rgba(255,255,255,.5); }}
+.tkw.mag {{ background: linear-gradient(90deg,#F515E8,#F54BA8,#F5876C); box-shadow: 0 20px 50px rgba(245,21,232,.3); }}
+.tkw.ink {{ background: {INK}; box-shadow: 0 20px 50px rgba(0,0,0,.25); }}
+.tki {{ white-space: nowrap; font: 800 46px/96px "Manrope"; letter-spacing: .08em; color: #fff; }}
+.tchip {{ position: absolute; opacity: 0; z-index: 10; padding: 14px 24px; border-radius: 18px; font: 800 40px/1 "Manrope"; color: {INK};
+  background: rgba(255,255,255,.85); border: 2px solid #fff; box-shadow: 0 10px 26px rgba(200,40,120,.2); }}
+.tchip:nth-of-type(odd) {{ background: {INK}; color: #fff; border-color: {INK}; }}
 /* findings */
 #pill {{ position: absolute; left: 130px; width: 820px; top: 500px; height: 150px; border-radius: 999px; overflow: hidden; opacity: 0; z-index: 9;
-  background: #10a35f; box-shadow: 0 20px 60px #10a35f88; }}
+  background: #15a05a; box-shadow: 0 20px 50px rgba(21,160,90,.35); }}
 .pst {{ position: absolute; left: 0; right: 0; top: 0; }}
-.pw {{ height: 150px; display: grid; place-items: center; font: 900 66px/1 "Outfit"; color: #fff; letter-spacing: -.01em; white-space: nowrap; }}
+.pw {{ height: 150px; display: grid; place-items: center; font: 800 62px/1 "Manrope"; color: #fff; letter-spacing: -.01em; white-space: nowrap; }}
 .glass.hookbig {{ display: flex; align-items: center; gap: 40px; }}
 .hring {{ position: relative; width: 260px; height: 260px; flex: 0 0 auto; }}
 .hring svg {{ width: 100%; height: 100%; overflow: visible; }}
-.hb {{ fill: none; stroke: rgba(255,255,255,.12); stroke-width: 18; }}
-.hf {{ fill: none; stroke: #22c47a; stroke-width: 18; stroke-linecap: round; filter: drop-shadow(0 0 12px #22c47a); }}
-.hv {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 82px; }}
-.hv b {{ font: 900 100px/1 "Outfit"; }}
-.hv small {{ font: 800 32px/1 "Outfit"; color: rgba(255,255,255,.6); }}
-.hkl {{ font: 900 30px/1 "Outfit"; letter-spacing: .08em; color: rgba(255,255,255,.6); }}
-.hkv {{ font: 900 62px/1.1 "Outfit"; margin-top: 10px; }}
-.et {{ font: 900 30px/1 "Outfit"; letter-spacing: .1em; color: rgba(255,255,255,.65); margin-bottom: 16px; }}
+.hb {{ fill: none; stroke: rgba(21,160,90,.14); stroke-width: 18; }}
+.hf {{ fill: none; stroke: #15a05a; stroke-width: 18; stroke-linecap: round; }}
+.hv {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 78px; }}
+.hv b {{ font: 600 104px/1 "Fraunces"; }}
+.hv small {{ font: 700 30px/1 "Manrope"; color: #7a7a73; }}
+.hkl {{ font: 800 28px/1 "Manrope"; letter-spacing: .1em; color: #7a7a73; }}
+.hkv {{ font: 600 64px/1.08 "Fraunces"; margin-top: 10px; }}
+.et {{ font: 800 28px/1 "Manrope"; letter-spacing: .12em; color: #7a7a73; margin-bottom: 16px; }}
 .ebars {{ position: relative; display: flex; align-items: flex-end; gap: 12px; height: 250px; }}
-.eb {{ display: block; flex: 1; border-radius: 10px; background: linear-gradient(180deg,#ff5bf0,#F5876C); box-shadow: 0 0 18px rgba(245,21,232,.45); }}
-.emid {{ position: absolute; left: 214px; width: 308px; top: -12px; bottom: -12px; border: 4px dashed rgba(255,255,255,.75); border-radius: 22px; opacity: 0; }}
-.edrop {{ opacity: 0; margin-top: 14px; font: 900 36px/1 "Outfit"; color: #ff4d6d; text-align: center; }}
-.mini {{ position: absolute; opacity: 0; width: 220px; height: 360px; border-radius: 28px; background: linear-gradient(160deg,#5a1d63,#c0367e); display: grid; place-items: center;
-  box-shadow: 0 18px 40px rgba(0,0,0,.4); border: 2px solid rgba(255,255,255,.4); }}
+.eb {{ display: block; flex: 1; border-radius: 10px; background: linear-gradient(180deg,#F515E8,#F5876C); }}
+.emid {{ position: absolute; left: 214px; width: 308px; top: -12px; bottom: -12px; border: 4px dashed rgba(11,11,11,.55); border-radius: 22px; opacity: 0; }}
+.edrop {{ opacity: 0; margin-top: 14px; font: 800 36px/1 "Manrope"; color: #e11d48; text-align: center; }}
+.mini {{ position: absolute; opacity: 0; width: 210px; height: 330px; border-radius: 28px; background: linear-gradient(160deg,#5a1d63,#c0367e); display: grid; place-items: center;
+  box-shadow: 0 18px 40px rgba(80,0,50,.3); border: 2px solid rgba(255,255,255,.6); }}
 .mini .play {{ border-left-width: 44px; border-top-width: 28px; border-bottom-width: 28px; margin-left: 12px; }}
-.vcount {{ position: absolute; left: 0; right: 0; top: 1110px; opacity: 0; z-index: 12; text-align: center; font: 900 76px/1 "Outfit"; color: #ff4d6d;
-  text-shadow: 0 0 30px rgba(255,45,85,.6); }}
+.vcount {{ position: absolute; left: 0; right: 0; top: 1110px; opacity: 0; z-index: 12; text-align: center; font: 600 84px/1 "Fraunces"; color: #e11d48; font-style: italic; }}
 .wall {{ position: absolute; left: -420px; top: 120px; width: 1920px; height: 1900px; opacity: 0; z-index: 3; }}
 .wallp {{ position: absolute; inset: 0; transform: perspective(1500px) rotateX(46deg) rotateZ(-20deg); }}
 .wallg {{ display: grid; grid-template-columns: repeat(5, 340px); gap: 26px; }}
-.wc {{ height: 230px; border-radius: 32px; padding: 24px; background: linear-gradient(140deg, rgba(255,255,255,.16), rgba(255,255,255,.05)); border: 2px solid rgba(255,255,255,.22); }}
-.wc .hn {{ font: 900 24px/1 "Outfit"; letter-spacing: .1em; color: #ff7ad9; margin-bottom: 12px; }}
-.wt {{ font: 800 32px/1.15 "Outfit"; }}
-.wv {{ display: grid; place-items: center; gap: 10px; background: linear-gradient(160deg,#5a1d63,#c0367e); }}
-.wv b {{ font: 900 34px/1 "Outfit"; }}
+.wc {{ height: 230px; border-radius: 32px; padding: 24px; background: rgba(255,255,255,.82); border: 2px solid #fff; box-shadow: 0 16px 40px rgba(170,20,110,.12); }}
+.wc .hn {{ font: 800 22px/1 "Manrope"; letter-spacing: .12em; color: {PINK}; margin-bottom: 12px; }}
+.wt {{ font: 600 32px/1.15 "Fraunces"; }}
+.wv {{ display: grid; place-items: center; gap: 10px; background: linear-gradient(160deg,#5a1d63,#c0367e); color: #fff; }}
+.wv b {{ font: 800 32px/1 "Manrope"; }}
 .wg {{ display: flex; flex-direction: column; justify-content: center; }}
-.wg b {{ font: 900 84px/1 "Outfit"; color: #5fe3a1; }}
-.wg span {{ font: 800 30px/1 "Outfit"; color: rgba(255,255,255,.7); }}
-.wallfade {{ position: absolute; inset: 0; z-index: 5; opacity: 0; background: radial-gradient(ellipse at 50% 44%, rgba(13,4,18,.9) 0%, rgba(13,4,18,.6) 32%, rgba(13,4,18,0) 68%); }}
+.wg b {{ font: 600 84px/1 "Fraunces"; color: #15a05a; }}
+.wg span {{ font: 700 28px/1 "Manrope"; color: #7a7a73; }}
+.wallfade {{ position: absolute; inset: 0; z-index: 5; opacity: 0; background: radial-gradient(ellipse at 50% 44%, rgba(248,247,244,.95) 0%, rgba(248,247,244,.7) 32%, rgba(248,247,244,0) 68%); }}
 .fixchip {{ position: absolute; left: 520px; width: 470px; opacity: 0; z-index: 9; display: flex; gap: 18px; align-items: center; padding: 26px 28px; border-radius: 30px;
-  font: 900 42px/1.1 "Outfit"; background: rgba(255,255,255,.12); border: 2px solid rgba(255,255,255,.3); box-shadow: 0 20px 50px rgba(0,0,0,.4); }}
-.fixchip b {{ display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; background: #22c47a; font-size: 32px; flex: 0 0 auto; box-shadow: 0 0 20px #22c47a; }}
+  font: 800 40px/1.1 "Manrope"; background: rgba(255,255,255,.88); border: 2px solid #fff; box-shadow: 0 20px 50px rgba(170,20,110,.15); }}
+.fixchip b {{ display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; background: #15a05a; color: #fff; font-size: 32px; flex: 0 0 auto; }}
 .conf {{ position: absolute; opacity: 0; width: 22px; height: 34px; border-radius: 6px; z-index: 21; }}
 #lq {{ position: absolute; left: 0; top: 0; width: 2800px; height: 2800px; z-index: 30; opacity: 0; border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, #ff8be0 0%, #F515E8 35%, #F54BA8 62%, #F5876C 100%); }}
+  background: radial-gradient(circle at 40% 35%, #ffe3f1 0%, #ffb8dc 40%, #ff8cc8 70%, #F5876C 100%); }}
 /* the audit steps */
-.step {{ position: absolute; left: 0; right: 0; top: 420px; display: flex; justify-content: center; align-items: center; gap: 24px; opacity: 0; z-index: 9; }}
-.sic {{ display: grid; place-items: center; width: 112px; height: 112px; border-radius: 32px; background: linear-gradient(140deg,#F515E8,#F5876C); font: 900 62px/1 "Outfit";
-  box-shadow: 0 16px 40px rgba(245,21,232,.5), inset 0 2px 0 rgba(255,255,255,.4); }}
-.stx {{ font: 900 58px/1 "Outfit"; letter-spacing: -.01em; }}
+.step {{ position: absolute; left: 0; right: 0; top: 420px; display: flex; justify-content: center; align-items: center; gap: 26px; opacity: 0; z-index: 9; }}
+.sic {{ display: grid; place-items: center; width: 112px; height: 112px; border-radius: 32px; background: {INK}; color: #fff; font: 800 58px/1 "Manrope";
+  box-shadow: 0 16px 36px rgba(0,0,0,.2); }}
+.stx {{ font: 600 70px/1 "Fraunces"; letter-spacing: -.02em; }}
 .dots {{ position: absolute; left: 0; right: 0; top: 1200px; display: flex; justify-content: center; gap: 14px; opacity: 0; z-index: 9; }}
-.dots i {{ display: block; width: 70px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.22); }}
-.dots i.on {{ background: linear-gradient(90deg,#F515E8,#F5876C); box-shadow: 0 0 14px #F515E8; }}
-.glass.hbar {{ display: flex; align-items: center; height: 160px; padding: 0 44px; border-radius: 44px; font: 800 76px/1 "Outfit"; }}
-.at {{ color: #ff7ad9; margin-right: 8px; }}
-.caret {{ display: inline-block; width: 6px; height: 76px; background: #ff7ad9; margin-left: 6px; }}
+.dots i {{ display: block; width: 70px; height: 8px; border-radius: 4px; background: rgba(11,11,11,.14); }}
+.dots i.on {{ background: linear-gradient(90deg,#F515E8,#F5876C); }}
+.glass.hbar {{ display: flex; align-items: center; height: 160px; padding: 0 44px; border-radius: 44px; font: 700 74px/1 "Manrope"; }}
+.at {{ color: {PINK}; margin-right: 8px; }}
+.caret {{ display: inline-block; width: 6px; height: 76px; background: {PINK}; margin-left: 6px; }}
 .cdown {{ position: absolute; left: 330px; top: 620px; width: 420px; height: 420px; opacity: 0; z-index: 9; }}
 .cdown svg {{ width: 100%; height: 100%; overflow: visible; }}
-.cb {{ fill: none; stroke: rgba(255,255,255,.14); stroke-width: 16; }}
-.cf {{ fill: none; stroke: url(#gr); stroke-width: 16; stroke-linecap: round; filter: drop-shadow(0 0 12px #F515E8); }}
-.cv {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 136px; }}
-.cv b {{ font: 900 156px/1 "Outfit"; font-variant-numeric: tabular-nums; }}
-.cv small {{ font: 800 44px/1 "Outfit"; color: rgba(255,255,255,.6); margin-left: 6px; }}
-.score {{ position: absolute; left: 0; right: 0; top: 660px; opacity: 0; z-index: 9; text-align: center; font: 900 320px/1 "Outfit"; color: #fff;
-  text-shadow: 0 0 50px rgba(245,21,232,.75); }}
+.cb {{ fill: none; stroke: rgba(240,50,140,.14); stroke-width: 16; }}
+.cf {{ fill: none; stroke: url(#gr); stroke-width: 16; stroke-linecap: round; }}
+.cv {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 128px; }}
+.cv b {{ font: 600 160px/1 "Fraunces"; font-variant-numeric: tabular-nums; }}
+.cv small {{ font: 700 42px/1 "Manrope"; color: #7a7a73; margin-left: 6px; }}
+.score {{ position: absolute; left: 0; right: 0; top: 660px; opacity: 0; z-index: 9; text-align: center; font: 600 330px/1 "Fraunces"; color: {INK}; }}
 .slot {{ display: inline-flex; vertical-align: bottom; }}
 .sw {{ display: inline-block; height: 1em; overflow: hidden; line-height: 1; }}
 .sc {{ display: flex; flex-direction: column; }}
-.sc b {{ display: block; height: 1em; line-height: 1em; }}
-.of {{ font-size: 96px; color: rgba(255,255,255,.65); margin-left: 12px; text-shadow: none; }}
+.sc b {{ display: block; height: 1em; line-height: 1em; font-weight: 600; }}
+.of {{ font: 700 90px/1 "Manrope"; color: #7a7a73; margin-left: 12px; }}
 .glass.first {{ padding: 38px 42px; z-index: 9; }}
-.fl {{ font: 900 34px/1 "Outfit"; letter-spacing: .1em; color: #ff7ad9; margin-bottom: 16px; }}
-.fv {{ font: 900 62px/1.12 "Outfit"; }}
-/* the CTA */
+.fl {{ font: 800 30px/1 "Manrope"; letter-spacing: .12em; color: {PINK}; margin-bottom: 16px; }}
+.fv {{ font: 600 64px/1.1 "Fraunces"; }}
+/* the CTA: a black pill like the website's button */
 .cbig {{ position: absolute; left: 160px; width: 760px; top: 1230px; height: 190px; border-radius: 999px; opacity: 0; z-index: 22; display: flex; align-items: center;
-  justify-content: center; gap: 8px; background: rgba(255,255,255,.96); box-shadow: 0 30px 70px rgba(80,0,60,.4), inset 0 2px 0 #fff; }}
-.ctx {{ font: 900 130px/1 "Outfit"; color: #1a0620; letter-spacing: .06em; transform-origin: 50% 60%; display: inline-block; }}
-.caret.big {{ height: 120px; width: 9px; background: #c40db8; }}
-.heart {{ position: absolute; right: -30px; top: -90px; width: 120px; height: 110px; opacity: 0; }}
+  justify-content: center; gap: 8px; background: {INK}; box-shadow: 0 30px 70px rgba(60,0,40,.35); }}
+.ctx {{ font: 800 124px/1 "Manrope"; color: #fff; letter-spacing: .08em; transform-origin: 50% 60%; display: inline-block; }}
+.caret.big {{ height: 116px; width: 9px; background: #ff7ad9; }}
+.heart {{ position: absolute; right: -70px; top: -40px; width: 110px; height: 100px; opacity: 0; }}
 .gheart {{ position: absolute; width: 70px; height: 64px; opacity: 0; z-index: 21; overflow: visible; }}
-.gheart path {{ fill: rgba(255,255,255,.5); stroke: rgba(255,255,255,.95); stroke-width: 2; }}
-.plane {{ position: absolute; left: 990px; top: 1180px; width: 120px; height: 120px; opacity: 0; z-index: 23; filter: drop-shadow(0 10px 18px rgba(80,0,60,.35)); }}
+.gheart path {{ fill: rgba(255,255,255,.6); stroke: #fff; stroke-width: 2; }}
+.plane {{ position: absolute; left: 990px; top: 1180px; width: 120px; height: 120px; opacity: 0; z-index: 23; filter: drop-shadow(0 10px 18px rgba(80,0,60,.3)); }}
 .glass.dm {{ padding: 22px 26px; }}
-.dmh {{ display: flex; align-items: center; gap: 12px; font: 900 34px/1 "Outfit"; }}
+.dmh {{ display: flex; align-items: center; gap: 12px; font: 600 36px/1 "Fraunces"; }}
 .dmh img {{ width: 56px; height: 56px; object-fit: contain; }}
-.dmt {{ margin-top: 12px; font: 800 38px/1.2 "Outfit"; }}
+.dmt {{ margin-top: 12px; font: 700 36px/1.2 "Manrope"; }}
 /* captions */
-.cap {{ position: absolute; left: 60px; right: 60px; top: 1510px; opacity: 0; text-align: center; z-index: 25; font: 800 54px/1.25 "Outfit"; color: #fff;
-  text-shadow: 0 4px 24px rgba(0,0,0,.6); }}
+.cap {{ position: absolute; left: 60px; right: 60px; top: 1510px; opacity: 0; text-align: center; z-index: 25; font: 800 52px/1.25 "Manrope"; color: {INK}; }}
 .cw {{ display: inline-block; padding: 2px 14px 6px; border-radius: 16px; }}
-.cw.on {{ background: {GRAD}; color: #fff; text-shadow: none; box-shadow: 0 10px 26px rgba(245,21,232,.45); }}
+.cw.on {{ background: {GRAD}; color: #fff; box-shadow: 0 10px 22px rgba(245,21,232,.3); }}
 /* logo */
-#logo {{ position: absolute; inset: 0; z-index: 40; opacity: 0; overflow: hidden; background: radial-gradient(circle at 50% 42%, #3a0d48 0%, #14051b 60%, #0b030f 100%); }}
+#logo {{ position: absolute; inset: 0; z-index: 40; opacity: 0; overflow: hidden; background: radial-gradient(circle at 50% 42%, #ffffff 0%, #fbf3f6 55%, #ffe1ee 100%); }}
 #lgf {{ position: absolute; left: -50%; right: -50%; bottom: -12%; height: 52%; transform: perspective(600px) rotateX(62deg); transform-origin: 50% 0;
-  background-image: linear-gradient(rgba(245,75,168,.55) 2px, transparent 2px), linear-gradient(90deg, rgba(245,75,168,.55) 2px, transparent 2px); background-size: 120px 120px;
+  background-image: linear-gradient(rgba(240,50,140,.32) 2px, transparent 2px), linear-gradient(90deg, rgba(240,50,140,.32) 2px, transparent 2px); background-size: 120px 120px;
   -webkit-mask-image: linear-gradient(transparent, #000 45%); mask-image: linear-gradient(transparent, #000 45%); }}
-#lgm {{ position: absolute; left: 80px; top: 720px; width: 260px; height: 260px; object-fit: contain; filter: drop-shadow(0 0 40px rgba(245,21,232,.5)); }}
-#lgw {{ position: absolute; left: 350px; top: 775px; font: 800 150px/1 "Outfit"; letter-spacing: -.02em; background: linear-gradient(90deg,#ff5bf0,#FF9A7A);
-  -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: 16px; }}
-#lgs {{ position: absolute; left: 935px; top: 700px; width: 110px; height: 110px; filter: drop-shadow(0 0 24px #F515E8); }}
-#lgt {{ position: absolute; left: 0; right: 0; top: 1020px; text-align: center; font: 600 46px/1.2 "Outfit"; color: rgba(255,255,255,.75); opacity: 0; }}
+#lgm {{ position: absolute; left: 100px; top: 715px; width: 250px; height: 250px; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(200,40,120,.25)); }}
+#lgw {{ position: absolute; left: 360px; top: 760px; font: 700 168px/1 "Fraunces"; letter-spacing: -.04em; color: {INK}; padding-bottom: 20px; }}
+#lgs {{ position: absolute; left: 930px; top: 690px; width: 100px; height: 100px; }}
+#lgt {{ position: absolute; left: 0; right: 0; top: 1030px; text-align: center; font: 500 46px/1.2 "Manrope"; color: #7a7a73; opacity: 0; }}
 .spk {{ position: absolute; width: 44px; height: 44px; opacity: 0; }}
 /* Cree */
-#cree {{ position: absolute; left: 0; top: 0; width: 820px; height: 820px; z-index: 20; opacity: 0; transform-origin: 410px 500px; filter: drop-shadow(0 0 40px rgba(245,21,232,.35)); }}
+#cree {{ position: absolute; left: 0; top: 0; width: 820px; height: 820px; z-index: 20; opacity: 0; transform-origin: 410px 500px; filter: drop-shadow(0 24px 30px rgba(200,40,120,.22)); }}
 #creeb {{ position: absolute; inset: 0; transform-origin: 50% 97.5%; }}
 #creef {{ position: absolute; inset: 0; transform-origin: 50% 60%; }}
 #creep {{ position: absolute; inset: 0; transform-origin: 50% 97.5%; }}
@@ -1086,9 +1110,9 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #0d04
 .csw {{ overflow: visible; }}
 .lidg {{ opacity: 0; }}
 .sweat {{ opacity: 0; transform-box: fill-box; transform-origin: 50% 0; }}
-#bub {{ position: absolute; left: 560px; top: 20px; width: 200px; height: 170px; opacity: 0; background: rgba(255,255,255,.95); border-radius: 50% 50% 50% 12px;
-  box-shadow: 0 14px 30px rgba(0,0,0,.3); display: grid; place-items: center; transform-origin: 0 100%; }}
-#bubt {{ font: 900 96px/1 "Outfit"; color: #c40db8; }}
+#bub {{ position: absolute; left: 560px; top: 20px; width: 200px; height: 170px; opacity: 0; background: #fff; border-radius: 50% 50% 50% 12px;
+  box-shadow: 0 14px 30px rgba(150,20,100,.2); display: grid; place-items: center; transform-origin: 0 100%; }}
+#bubt {{ font: 600 96px/1 "Fraunces"; color: #c40db8; }}
 .prop {{ position: absolute; opacity: 0; transform-origin: 50% 80%; }}
 .prop svg {{ width: 100%; height: 100%; }}
 """
@@ -1109,8 +1133,8 @@ def main():
     <style>{CSS}</style>
   </head>
   <body>
-    <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff5bf0"/>
-      <stop offset=".5" stop-color="#F54BA8"/><stop offset="1" stop-color="#FF9A7A"/></linearGradient></defs></svg>
+    <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F515E8"/>
+      <stop offset=".5" stop-color="#F54BA8"/><stop offset="1" stop-color="#F5876C"/></linearGradient></defs></svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
       <div id="bgl">{bg}{"".join(FLIPS)}<div id="dots"></div></div>
       <div id="cam"><div id="cam2">
@@ -1120,7 +1144,7 @@ def main():
       </div></div>
       {"".join(CAPS)}
       <div id="lq"></div>
-      <div id="logo"><div id="lgf"></div><img id="lgm" src="assets/img/cree.png" alt="Cree"><div id="lgw">Creedom</div>
+      <div id="logo"><div id="lgf"></div><img id="lgm" src="assets/img/cree.png" alt="Cree"><div id="lgw">creedom</div>
         <svg id="lgs" viewBox="-50 -50 100 100"><path d="{STAR}" fill="url(#gr)"/></svg><div id="lgt">creedom.ai</div></div>
       {"".join(GBANDS)}
       <audio id="mix" src="assets/audio/bed.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
