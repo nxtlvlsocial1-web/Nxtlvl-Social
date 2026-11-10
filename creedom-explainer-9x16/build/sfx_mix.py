@@ -9,7 +9,8 @@
   * every effect is trimmed to its moment, then PEAK-normalised by measurement with the skill's sfx_normalize.py
     (never loudnorm on a short file); the per-kind peak target sets the hierarchy (hits and whooshes up, ticks and
     typing down), all of them above the music and under the voice.
-  * our original music is normalised to -20 LUFS and sidechain-ducked under the voice; the voice is the loudest layer.
+  * the music (Openverse: "Inspiring Technology" by Soundrider/Dope, CC BY 3.0, edited to the reel by build/music_ov.py)
+    is normalised to -20 LUFS and sidechain-ducked under the voice; the voice is the loudest layer.
   * two-pass loudnorm to -16 LUFS with a -4.5 dBTP ceiling (the AAC encode adds ~0.5 dB), muxed onto the picture.
   * credits.txt lists every pack used (CC0: no credit required, logged anyway).
 
@@ -84,7 +85,7 @@ def main():
 
     # the music bed: -20 LUFS, then ducked under the voice
     bed = os.path.join(WORK, "music_bed.wav")
-    run(["python3", os.path.join(SKILL, "sfx_normalize.py"), os.path.join(ROOT, "assets", "audio", "music.wav"), bed, "--mode", "lufs", "--target", "-20",
+    run(["python3", os.path.join(SKILL, "sfx_normalize.py"), os.path.join(ROOT, "assets", "audio", "music_ov.wav"), bed, "--mode", "lufs", "--target", "-20",
          "--max-peak", "-3"])
     vo = os.path.join(ROOT, "assets", "audio", "vo.wav")
     # mix: voice + ducked bed + every effect at its moment (amix normalize=0, float, so nothing clips before the master)
@@ -116,7 +117,9 @@ def main():
     # credits
     oga = json.load(open(os.path.join(os.path.dirname(ROOT), "spin-bout-u-drake", "plan", "sfx_credits_oga.json")))
     lines = ["Creedom explainer reel - sound credits", "",
-             "Music: original, made for this video (build/music.py). Voice: ElevenLabs (eleven_v3).", "",
+             "Music: \"Inspiring Technology\" by Soundrider/Dope is licensed under CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/),",
+             "found on Openverse, hosted by Jamendo. Edited (cut and spliced to the reel, low-pass dip at 0:13) by Nxtlvl Social.",
+             "Voice: ElevenLabs (eleven_v3).", "",
              "Openverse was searched first (sfx/search/*.json); its sound-effect results are Freesound files, whose server refuses",
              "downloads from this cloud session (HTTP 403), so the effects are CC0 recordings from OpenGameArt:", ""]
     for p in sorted(packs):
