@@ -1,37 +1,68 @@
 <template>
   <style>
-    #root { position: absolute; inset: 0; overflow: hidden; background: #fff56c; }
+    #root { position: absolute; inset: 0; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; }
     #root * { box-sizing: border-box; }
-    #s6-stage { position: absolute; inset: 0; }
-    #s6-markwrap { position: absolute; left: 320px; top: 360px; width: 440px; height: 440px; border: 8px solid #0a0a0a; border-radius: 52px; box-shadow: 18px 18px 0 #0a0a0a; overflow: hidden; background: #fff56c; }
-    #s6-markwrap img { display: block; width: 100%; height: 100%; }
-    #s6-wm { position: absolute; left: 190px; top: 850px; width: 700px; height: 365px; }
-    #s6-wm img { display: block; width: 700px; height: 365px; }
     #s6-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
-    #s6-pat { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(10, 10, 10, 0.11) 3.2px, rgba(10, 10, 10, 0) 3.8px); background-size: 46px 46px; }
+    #s6-stage { position: absolute; inset: 0; }
+    #s6-burst { position: absolute; left: 90px; top: -40px; width: 900px; height: 900px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 245, 108, 0.55) 0%, rgba(255, 245, 108, 0.18) 35%, rgba(255, 245, 108, 0) 66%); }
+    #s6-ring { position: absolute; left: 90px; top: 250px; width: 900px; height: 300px; }
+    #s6-markwrap { position: absolute; left: 350px; top: 220px; width: 380px; height: 380px; border-radius: 44px; overflow: hidden; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5), 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 90px rgba(255, 245, 108, 0.45); z-index: 2; }
+    #s6-markwrap img { display: block; width: 100%; height: 100%; }
+    .s6-orb { position: absolute; left: 0; top: 0; width: 104px; height: 104px; border-radius: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.4); }
+    .s6-orb svg { width: 56px; height: 56px; }
+    .s6-orb img { width: 104px; height: 104px; border-radius: 28px; display: block; }
+    #s6-wm { position: absolute; left: 220px; top: 640px; width: 640px; height: 333px; }
+    #s6-wm img { display: block; width: 640px; height: 333px; filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.25)); }
+    #s6-flash { position: absolute; left: -200px; top: -200px; width: 1480px; height: 1480px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 245, 108, 0.6) 30%, rgba(255, 245, 108, 0) 65%); }
   </style>
   <div id="root" data-composition-id="s6" data-width="1080" data-height="1920">
-    <div id="s6-pat" data-layout-ignore></div>
     <div id="s6-shift" data-layout-allow-overflow>
-    <div id="s6-stage" data-layout-allow-overflow>
-      <div id="s6-markwrap"><img src="assets/brand/mark.svg" alt="YepAPI mark" /></div>
-      <div id="s6-wm"><img src="assets/brand/wordmark.svg" alt="yepapi" /></div>
-    </div>
+      <div id="s6-stage" data-layout-allow-overflow>
+        <div id="s6-burst" data-layout-ignore></div>
+        <svg id="s6-ring" viewBox="0 0 900 300" data-layout-ignore>
+          <ellipse cx="450" cy="150" rx="430" ry="130" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="3" stroke-dasharray="10 14" />
+        </svg>
+        <div id="s6-markwrap"><img src="assets/brand/mark.svg" alt="YepAPI mark" /></div>
+        <div class="s6-orb" id="s6-o0"><img src="assets/claude/claude-logo.png" alt="Claude" /></div>
+        <div class="s6-orb" id="s6-o1" style="background: linear-gradient(180deg, #fff9a8, #fff56c 55%, #e3d84a)"><svg viewBox="0 0 56 56"><circle cx="24" cy="24" r="14" fill="none" stroke="#0a0a0a" stroke-width="6" /><path d="M35 35 L48 48" stroke="#0a0a0a" stroke-width="6" stroke-linecap="round" /></svg></div>
+        <div class="s6-orb" id="s6-o2" style="background: linear-gradient(180deg, #5b61ff, #2d33ba)"><svg viewBox="0 0 56 56"><rect x="6" y="20" width="26" height="16" rx="8" fill="none" stroke="#ffffff" stroke-width="5" /><rect x="24" y="20" width="26" height="16" rx="8" fill="none" stroke="#ffffff" stroke-width="5" /></svg></div>
+        <div class="s6-orb" id="s6-o3" style="background: linear-gradient(180deg, #ff7cb4, #fe4a97)"><svg viewBox="0 0 56 56"><rect x="8" y="30" width="10" height="18" rx="3" fill="#ffffff" /><rect x="23" y="20" width="10" height="28" rx="3" fill="#ffffff" /><rect x="38" y="8" width="10" height="40" rx="3" fill="#ffffff" /></svg></div>
+        <div id="s6-wm"><img src="assets/brand/wordmark-light.svg" alt="yepapi" /></div>
+      </div>
+      <div id="s6-flash" data-layout-ignore></div>
     </div>
   </div>
   <script>
     (function () {
       const tl = gsap.timeline({ paused: true });
-      // The mark is thrown in and lands with weight ("the tool behind it")
-      tl.fromTo("#s6-markwrap", { y: -980, rotation: -14 }, { y: 0, rotation: 0, duration: 0.5, ease: "back.out(1.3)" }, 0.0);
+      const shake = (t, a) => tl.to("#s6-shift", { keyframes: { x: [0, -a, a * 0.8, -a * 0.5, a * 0.3, 0], y: [0, a * 0.6, -a * 0.5, a * 0.3, -a * 0.2, 0] }, duration: 0.32, ease: "none" }, t);
+      // The light from the answer clears...
+      tl.fromTo("#s6-flash", { opacity: 1, scale: 1 }, { opacity: 0, scale: 1.3, duration: 0.35, ease: "power2.out" }, 0.0);
+      // ...and the mark drops in with weight ("the tool behind it")
+      tl.fromTo("#s6-markwrap", { y: -900, rotation: -14 }, { y: 0, rotation: 0, duration: 0.5, ease: "back.out(1.3)" }, 0.0);
+      shake(0.27, 18);
+      tl.fromTo("#s6-burst", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "expo.out" }, 0.27);
+      tl.fromTo("#s6-ring", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.4, ease: "expo.out", transformOrigin: "50% 50%" }, 0.3);
+      // Four tools orbit the mark (front of the ring passes in front of it)
+      const orbs = ["#s6-o0", "#s6-o1", "#s6-o2", "#s6-o3"].map((id) => document.querySelector(id));
+      const place = (a) => {
+        orbs.forEach((el, i) => {
+          const t = a + (i * Math.PI) / 2;
+          const x = 540 + 430 * Math.cos(t) - 52;
+          const y = 400 + 130 * Math.sin(t) - 52;
+          const front = Math.sin(t) > 0;
+          const sc = 0.8 + 0.25 * (Math.sin(t) + 1) / 2;
+          gsap.set(el, { x, y, scale: sc, zIndex: front ? 3 : 1 });
+        });
+      };
+      const orbit = { a: 0.4 };
+      place(orbit.a);
+      tl.fromTo(orbs, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out", stagger: 0.06 }, 0.35);
+      tl.fromTo(orbit, { a: 0.4 }, { a: 0.4 + Math.PI * 0.9, duration: 2.4, ease: "none", onUpdate: () => place(orbit.a) }, 0);
       // "...is YepAPI" — the wordmark wipes in
       tl.fromTo("#s6-wm", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.45, ease: "expo.out" }, 1.39);
       // Whip out to the left
       tl.to("#s6-stage", { x: -1200, filter: "blur(18px)", duration: 0.25, ease: "power3.in" }, 2.15);
-      // Camera, background drift, impacts
-      const shake = (t, a) => tl.to("#s6-shift", { keyframes: { x: [0, -a, a * 0.8, -a * 0.5, a * 0.3, 0], y: [0, a * 0.6, -a * 0.5, a * 0.3, -a * 0.2, 0] }, duration: 0.32, ease: "none" }, t);
-      tl.fromTo("#s6-pat", { backgroundPosition: "0px 0px" }, { backgroundPosition: "92px -92px", duration: 2.4, ease: "none" }, 0);
-      shake(0.27, 18);
       window.__timelines["s6"] = tl;
     })();
   </script>

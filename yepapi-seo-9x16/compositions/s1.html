@@ -2,73 +2,79 @@
   <style>
     @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk-latin-var.woff2") format("woff2"); font-weight: 300 700; font-style: normal; }
     @font-face { font-family: "Geist Mono"; src: url("assets/fonts/GeistMono-latin-var.woff2") format("woff2"); font-weight: 100 900; font-style: normal; }
-    #root { position: absolute; inset: 0; overflow: hidden; background: #fff56c; font-family: "Inter", sans-serif; }
+    #root { position: absolute; inset: 0; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; }
     #root * { box-sizing: border-box; }
-    #s1-head { position: absolute; left: 60px; top: 262px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 150px; line-height: 0.98; letter-spacing: -0.045em; color: #0a0a0a; }
-    #s1-seo { background: #fe4a97; padding: 0 18px; border-radius: 14px; }
-    #s1-card { position: absolute; left: 90px; top: 620px; width: 900px; height: 500px; background: #ffffff; border: 6px solid #0a0a0a; border-radius: 28px; box-shadow: 14px 14px 0 #0a0a0a; overflow: hidden; }
-    #s1-bar { position: absolute; left: 0; right: 0; top: 0; height: 76px; border-bottom: 6px solid #0a0a0a; display: flex; align-items: center; gap: 12px; padding: 0 24px; }
-    .s1-dot { width: 22px; height: 22px; border-radius: 50%; border: 4px solid #0a0a0a; flex: none; }
-    #s1-url { margin-left: 14px; flex: 1; height: 48px; border: 4px solid #0a0a0a; border-radius: 24px; padding: 0 22px; font-family: "Geist Mono", monospace; font-weight: 500; font-size: 30px; line-height: 40px; color: #0a0a0a; }
-    #s1-body { position: absolute; left: 0; right: 0; top: 76px; bottom: 0; }
-    .s1-ph { position: absolute; background: #e4e4e4; border-radius: 12px; }
-    #s1-ex { position: absolute; right: 24px; bottom: 16px; font-weight: 500; font-size: 28px; color: #5a5a5a; }
-    #s1-xray { position: absolute; left: 0; right: 0; top: 76px; bottom: 0; background: #2d33ba; padding: 40px 44px; clip-path: circle(134px at 234px 158px); }
-    .s1-row { font-family: "Geist Mono", monospace; font-weight: 500; font-size: 36px; line-height: 44px; color: #ffffff; margin-bottom: 30px; white-space: nowrap; }
-    .s1-row b { color: #fff56c; font-weight: 800; margin-right: 18px; }
-    #s1-ex2 { position: absolute; right: 24px; bottom: 16px; font-weight: 500; font-size: 28px; color: #ffffff; }
-    #s1-flood { position: absolute; left: 616px; top: 771px; width: 268px; height: 268px; border-radius: 50%; background: #2d33ba; opacity: 0; }
-    #s1-lens { position: absolute; left: 0; top: 0; width: 300px; height: 300px; }
-    #s1-ring { position: absolute; inset: 0; border: 16px solid #0a0a0a; border-radius: 50%; }
-    #s1-handle { position: absolute; left: 238px; top: 248px; width: 46px; height: 190px; background: #0a0a0a; border-radius: 23px; transform: rotate(-45deg); transform-origin: 50% 0; }
+    .cr { background: linear-gradient(180deg, #ffffff 0%, #f4f4f4 30%, #a3a3a3 50%, #ffffff 66%, #cfcfcf 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .gl { color: #fff56c; text-shadow: 0 0 30px rgba(255, 245, 108, 0.55), 0 0 2px rgba(255, 245, 108, 0.9); }
+    .glass { background: linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04)); border: 1.5px solid rgba(255, 255, 255, 0.17); border-radius: 30px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22); }
     #s1-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
-    #s1-pat { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(10, 10, 10, 0.11) 3.2px, rgba(10, 10, 10, 0) 3.8px); background-size: 46px 46px; }
-    #s1-kick { position: absolute; left: 60px; top: 160px; display: flex; align-items: center; gap: 18px; font-weight: 800; font-size: 50px; line-height: 60px; letter-spacing: -0.02em; color: #0a0a0a; }
-    #s1-kick img { display: block; width: 72px; height: 72px; border-radius: 16px; border: 4px solid #0a0a0a; }
-    #s1-mascot { position: absolute; left: 760px; top: 474px; width: 240px; height: 151px; }
-    #s1-mascot img { display: block; width: 240px; height: 151px; image-rendering: pixelated; }
+    #s1-kick { position: absolute; left: 60px; top: 148px; display: flex; align-items: center; gap: 16px; font-weight: 700; font-size: 44px; line-height: 56px; color: rgba(255, 255, 255, 0.88); }
+    #s1-kick img { display: block; width: 64px; height: 64px; border-radius: 15px; box-shadow: 0 0 30px rgba(217, 119, 87, 0.45); }
+    #s1-head { position: absolute; left: 56px; top: 226px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 158px; line-height: 0.96; letter-spacing: -0.05em; }
+    #s1-wave { position: absolute; left: -200px; top: 470px; width: 1600px; height: 240px; opacity: 0.85; }
+    #s1-card { position: absolute; left: 90px; top: 600px; width: 900px; height: 470px; overflow: hidden; }
+    #s1-bar { position: absolute; left: 0; right: 0; top: 0; height: 76px; border-bottom: 1.5px solid rgba(255, 255, 255, 0.14); display: flex; align-items: center; gap: 12px; padding: 0 26px; }
+    .s1-dot { width: 18px; height: 18px; border-radius: 50%; flex: none; }
+    #s1-url { margin-left: 14px; flex: 1; height: 46px; border-radius: 23px; background: rgba(255, 255, 255, 0.08); padding: 0 22px; font-family: "Geist Mono", monospace; font-weight: 500; font-size: 30px; line-height: 46px; color: rgba(255, 255, 255, 0.85); }
+    #s1-body { position: absolute; left: 0; right: 0; top: 76px; bottom: 0; }
+    .s1-ph { position: absolute; background: rgba(255, 255, 255, 0.08); border-radius: 12px; }
+    #s1-ex { position: absolute; right: 24px; bottom: 16px; font-weight: 500; font-size: 28px; color: rgba(255, 255, 255, 0.55); }
+    #s1-xray { position: absolute; left: 0; right: 0; top: 76px; bottom: 0; background: radial-gradient(circle at 50% 40%, #3a40d6 0%, #232894 60%, #181c6e 100%); padding: 40px 44px; clip-path: circle(134px at 238px 162px); }
+    .s1-row { font-family: "Geist Mono", monospace; font-weight: 500; font-size: 36px; line-height: 44px; color: #ffffff; margin-bottom: 30px; white-space: nowrap; }
+    .s1-row b { color: #fff56c; font-weight: 800; margin-right: 18px; text-shadow: 0 0 18px rgba(255, 245, 108, 0.6); }
+    #s1-ex2 { position: absolute; right: 24px; bottom: 16px; font-weight: 500; font-size: 28px; color: rgba(255, 255, 255, 0.75); }
+    #s1-mascot { position: absolute; left: 760px; top: 456px; width: 240px; height: 151px; }
+    #s1-mascot img { display: block; width: 240px; height: 151px; image-rendering: pixelated; filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.5)); }
+    #s1-flood { position: absolute; left: 616px; top: 751px; width: 268px; height: 268px; border-radius: 50%; background: #0a0a0a; opacity: 0; }
+    #s1-lens { position: absolute; left: 0; top: 0; width: 300px; height: 300px; }
+    #s1-ring { position: absolute; inset: 0; border: 14px solid #fff56c; border-radius: 50%; box-shadow: 0 0 36px rgba(255, 245, 108, 0.65), inset 0 0 30px rgba(255, 245, 108, 0.35); }
+    #s1-handle { position: absolute; left: 240px; top: 250px; width: 42px; height: 180px; background: linear-gradient(90deg, #fff56c, #d9cf3a); border-radius: 21px; transform: rotate(-45deg); transform-origin: 50% 0; box-shadow: 0 0 24px rgba(255, 245, 108, 0.45); }
   </style>
   <div id="root" data-composition-id="s1" data-width="1080" data-height="1920">
-    <div id="s1-pat" data-layout-ignore></div>
     <div id="s1-shift" data-layout-allow-overflow>
-    <div id="s1-kick"><img src="assets/claude/claude-logo.png" alt="Claude" /><span>Claude can now</span></div>
-    <div id="s1-head" data-layout-allow-overlap><div>SPY ON</div><div>THEIR <span id="s1-seo">SEO</span></div></div>
-    <div id="s1-card">
-      <div id="s1-bar"><span class="s1-dot"></span><span class="s1-dot"></span><span class="s1-dot"></span><div id="s1-url">competitor.com</div></div>
-      <div id="s1-body">
-        <div class="s1-ph" style="left: 30px; top: 26px; width: 828px; height: 120px"></div>
-        <div class="s1-ph" style="left: 30px; top: 172px; width: 600px; height: 30px"></div>
-        <div class="s1-ph" style="left: 30px; top: 222px; width: 760px; height: 30px"></div>
-        <div class="s1-ph" style="left: 30px; top: 272px; width: 520px; height: 30px"></div>
-        <div class="s1-ph" style="left: 30px; top: 322px; width: 400px; height: 40px"></div>
-        <div id="s1-ex">example data</div>
+      <svg id="s1-wave" viewBox="0 0 1600 240" data-layout-ignore>
+        <path d="M0 120 C100 40 200 40 300 120 S500 200 600 120 S800 40 900 120 S1100 200 1200 120 S1400 40 1500 120 S1700 200 1800 120" fill="none" stroke="rgba(255,245,108,0.32)" stroke-width="22" stroke-linecap="round" />
+        <path d="M0 120 C100 40 200 40 300 120 S500 200 600 120 S800 40 900 120 S1100 200 1200 120 S1400 40 1500 120 S1700 200 1800 120" fill="none" stroke="#fff56c" stroke-width="5" stroke-linecap="round" />
+      </svg>
+      <div id="s1-kick"><img src="assets/claude/claude-logo.png" alt="Claude" /><span>Claude can now</span></div>
+      <div id="s1-head" data-layout-allow-overlap><div><span class="cr">SPY ON</span></div><div><span class="cr">THEIR</span> <span class="gl">SEO</span></div></div>
+      <div id="s1-card" class="glass">
+        <div id="s1-bar"><span class="s1-dot" style="background: #fe4a97"></span><span class="s1-dot" style="background: #fff56c"></span><span class="s1-dot" style="background: #00c38a"></span><div id="s1-url">competitor.com</div></div>
+        <div id="s1-body">
+          <div class="s1-ph" style="left: 30px; top: 26px; width: 828px; height: 120px"></div>
+          <div class="s1-ph" style="left: 30px; top: 172px; width: 600px; height: 30px"></div>
+          <div class="s1-ph" style="left: 30px; top: 222px; width: 760px; height: 30px"></div>
+          <div class="s1-ph" style="left: 30px; top: 272px; width: 520px; height: 30px"></div>
+          <div class="s1-ph" style="left: 30px; top: 322px; width: 400px; height: 40px"></div>
+          <div id="s1-ex">example data</div>
+        </div>
+        <div id="s1-xray" data-layout-allow-overlap data-layout-allow-occlusion>
+          <div class="s1-row"><b>#1</b>best crm for startups</div>
+          <div class="s1-row"><b>#3</b>crm pricing</div>
+          <div class="s1-row"><b>#2</b>free crm tool</div>
+          <div class="s1-row"><b>#5</b>sales pipeline app</div>
+          <div id="s1-ex2">example data</div>
+        </div>
       </div>
-      <div id="s1-xray" data-layout-allow-overlap data-layout-allow-occlusion>
-        <div class="s1-row"><b>#1</b>best crm for startups</div>
-        <div class="s1-row"><b>#3</b>crm pricing</div>
-        <div class="s1-row"><b>#2</b>free crm tool</div>
-        <div class="s1-row"><b>#5</b>sales pipeline app</div>
-        <div id="s1-ex2">example data</div>
-      </div>
-    </div>
-    <div id="s1-mascot" data-layout-allow-overlap><img src="assets/claude/claude-mascot.png" alt="Claude" /></div>
-    <div id="s1-flood" data-layout-ignore></div>
-    <div id="s1-lens" data-layout-allow-occlusion data-layout-allow-overflow><div id="s1-ring"></div><div id="s1-handle"></div></div>
+      <div id="s1-mascot" data-layout-allow-overlap><img src="assets/claude/claude-mascot.png" alt="Claude" /></div>
+      <div id="s1-flood" data-layout-ignore></div>
+      <div id="s1-lens" data-layout-allow-occlusion data-layout-allow-overflow><div id="s1-ring"></div><div id="s1-handle"></div></div>
     </div>
   </div>
   <script>
     (function () {
       const tl = gsap.timeline({ paused: true });
+      // The glowing wave runs behind the headline the whole shot
+      tl.fromTo("#s1-wave", { x: 0 }, { x: -600, duration: 3.05, ease: "none" }, 0);
       // Hero move: the lens x-rays the competitor's page (frame 0 already shows it)
-      tl.fromTo("#s1-lens", { x: 180, y: 710 }, { x: 600, y: 755, duration: 2.5, ease: "power1.inOut" }, 0.1);
-      tl.fromTo("#s1-xray", { clipPath: "circle(134px at 234px 158px)" }, { clipPath: "circle(134px at 654px 203px)", duration: 2.5, ease: "power1.inOut" }, 0.1);
-      tl.fromTo("#s1-pat", { backgroundPosition: "0px 0px" }, { backgroundPosition: "92px 92px", duration: 3.05, ease: "none" }, 0);
+      tl.fromTo("#s1-lens", { x: 180, y: 690 }, { x: 600, y: 735, duration: 2.5, ease: "power1.inOut" }, 0.1);
+      tl.fromTo("#s1-xray", { clipPath: "circle(134px at 238px 162px)" }, { clipPath: "circle(134px at 658px 207px)", duration: 2.5, ease: "power1.inOut" }, 0.1);
       // Claude (the mascot) is on the job: pixel-step bob
       for (let t = 0.2, k = 0; t < 2.6; t += 0.22, k++) tl.set("#s1-mascot", { y: k % 2 ? 0 : -8 }, t);
       // "spy" — the camera punches in; "competitor's" — it lets go
       tl.fromTo("#s1-shift", { scale: 1 }, { scale: 1.05, duration: 0.16, ease: "expo.out", transformOrigin: "540px 560px" }, 1.0);
       tl.to("#s1-shift", { scale: 1, duration: 0.22, ease: "power2.inOut" }, 1.74);
-      // Object becomes the world: the lens interior floods the frame blue
+      // Zoom through the lens
       tl.set("#s1-flood", { opacity: 1, scale: 1 }, 2.62);
       tl.fromTo("#s1-flood", { scale: 1 }, { scale: 17, duration: 0.4, ease: "power3.in" }, 2.64);
       tl.fromTo("#s1-lens", { scale: 1 }, { scale: 13, duration: 0.4, ease: "power3.in", transformOrigin: "50% 50%" }, 2.64);

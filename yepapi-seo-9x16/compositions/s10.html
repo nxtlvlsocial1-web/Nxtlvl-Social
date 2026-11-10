@@ -2,50 +2,53 @@
   <style>
     @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk-latin-var.woff2") format("woff2"); font-weight: 300 700; font-style: normal; }
     @font-face { font-family: "Geist Mono"; src: url("assets/fonts/GeistMono-latin-var.woff2") format("woff2"); font-weight: 100 900; font-style: normal; }
-    #root { position: absolute; inset: 0; overflow: hidden; background: #fff56c; font-family: "Inter", sans-serif; }
+    #root { position: absolute; inset: 0; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; }
     #root * { box-sizing: border-box; }
-    #s10-logo { position: absolute; left: 270px; top: 270px; width: 540px; height: 179px; }
-    #s10-logo img { display: block; width: 540px; height: 179px; }
-    #s10-c { position: absolute; left: 0; top: 500px; width: 1080px; text-align: center; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 128px; line-height: 1; letter-spacing: -0.045em; color: #0a0a0a; }
-    #s10-kwrap { position: absolute; left: 0; top: 640px; width: 1080px; text-align: center; }
-    #s10-k { display: inline-block; background: #0a0a0a; color: #fff56c; border-radius: 22px; padding: 4px 40px 14px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 168px; line-height: 1; letter-spacing: -0.03em; box-shadow: 12px 12px 0 #2d33ba; }
-    #s10-box { position: absolute; left: 60px; top: 880px; width: 900px; height: 124px; background: #ffffff; border: 6px solid #0a0a0a; border-radius: 62px; box-shadow: 12px 12px 0 #0a0a0a; }
-    #s10-av { position: absolute; left: 22px; top: 25px; width: 62px; height: 62px; border-radius: 50%; background: #fe4a97; border: 5px solid #0a0a0a; }
-    #s10-text { position: absolute; left: 110px; top: 26px; font-weight: 700; font-size: 50px; line-height: 60px; color: #0a0a0a; white-space: nowrap; }
-    #s10-ph { color: #767676; font-weight: 600; }
+    .cr { background: linear-gradient(180deg, #ffffff 0%, #f4f4f4 30%, #a3a3a3 50%, #ffffff 66%, #cfcfcf 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .glass { background: linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.05)); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 30px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.24); }
+    #s10-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
+    #s10-logo { position: absolute; left: 255px; top: 170px; width: 570px; height: 189px; }
+    #s10-logo img { display: block; width: 570px; height: 189px; }
+    #s10-c { position: absolute; left: 0; top: 400px; width: 1080px; text-align: center; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 132px; line-height: 1; letter-spacing: -0.05em; }
+    #s10-kwrap { position: absolute; left: 0; top: 540px; width: 1080px; text-align: center; }
+    #s10-k { display: inline-block; background: linear-gradient(180deg, #fffbc4, #fff56c 50%, #e9de4c); color: #0a0a0a; border-radius: 26px; padding: 6px 44px 16px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 172px; line-height: 1; letter-spacing: -0.04em; box-shadow: 0 0 80px rgba(255, 245, 108, 0.55), 0 24px 60px rgba(0, 0, 0, 0.5); }
+    #s10-box { position: absolute; left: 60px; top: 800px; width: 900px; height: 124px; background: linear-gradient(180deg, #ffffff, #f1efe6); border-radius: 62px; box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55), 0 0 0 2px rgba(255, 245, 108, 0.45); }
+    #s10-av { position: absolute; left: 22px; top: 27px; width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #ff8cc0, #fe4a97); }
+    #s10-text { position: absolute; left: 116px; top: 30px; font-weight: 700; font-size: 50px; line-height: 64px; color: #0a0a0a; white-space: nowrap; }
+    #s10-ph { color: #8a8a8a; font-weight: 600; }
     .s10-c { display: none; }
     #s10-caret { display: inline-block; width: 5px; height: 52px; margin-left: 4px; background: #0a0a0a; vertical-align: -8px; }
-    #s10-send { position: absolute; right: 16px; top: 15px; width: 82px; height: 82px; border-radius: 50%; background: #2d33ba; }
-    #s10-send svg { position: absolute; left: 19px; top: 19px; width: 44px; height: 44px; }
-    #s10-dm { position: absolute; left: 60px; top: 1040px; width: 900px; height: 112px; background: #ffffff; border: 6px solid #0a0a0a; border-radius: 26px; box-shadow: 12px 12px 0 #0a0a0a; }
-    #s10-dm img { position: absolute; left: 18px; top: 17px; width: 66px; height: 66px; border-radius: 14px; }
-    #s10-dmtxt { position: absolute; left: 104px; top: 24px; font-size: 40px; line-height: 52px; color: #0a0a0a; white-space: nowrap; }
-    #s10-dmtxt b { font-weight: 800; }
-    #s10-now { position: absolute; right: 26px; top: 34px; font-family: "Geist Mono", monospace; font-weight: 500; font-size: 28px; color: #3a3a3a; }
-    #s10-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
-    #s10-pat { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(10, 10, 10, 0.11) 3.2px, rgba(10, 10, 10, 0) 3.8px); background-size: 46px 46px; }
+    #s10-send { position: absolute; right: 16px; top: 16px; width: 92px; height: 92px; border-radius: 50%; background: #fff56c; box-shadow: 0 0 30px rgba(255, 245, 108, 0.8), inset 0 -4px 0 rgba(0, 0, 0, 0.12); }
+    #s10-send svg { position: absolute; left: 22px; top: 22px; width: 48px; height: 48px; }
+    #s10-dm { position: absolute; left: 60px; top: 960px; width: 900px; height: 132px; }
+    #s10-dm img { position: absolute; left: 22px; top: 24px; width: 82px; height: 82px; border-radius: 20px; }
+    #s10-dmname { position: absolute; left: 126px; top: 22px; font-weight: 800; font-size: 38px; line-height: 46px; color: #ffffff; }
+    #s10-dmtxt { position: absolute; left: 126px; top: 70px; font-weight: 500; font-size: 34px; line-height: 42px; color: rgba(255, 255, 255, 0.82); white-space: nowrap; }
+    #s10-now { position: absolute; right: 30px; top: 26px; font-weight: 600; font-size: 28px; color: rgba(255, 255, 255, 0.55); }
   </style>
   <div id="root" data-composition-id="s10" data-width="1080" data-height="1920">
-    <div id="s10-pat" data-layout-ignore></div>
     <div id="s10-shift" data-layout-allow-overflow>
-    <div id="s10-logo"><img src="assets/brand/logo.svg" alt="YepAPI" /></div>
-    <div id="s10-c">COMMENT</div>
-    <div id="s10-kwrap"><span id="s10-k">YEPAPI</span></div>
-    <div id="s10-box">
-      <span id="s10-av"></span>
-      <span id="s10-text"><span id="s10-ph">Add a comment</span><span class="s10-c" id="s10-c0">Y</span><span class="s10-c" id="s10-c1">E</span><span class="s10-c" id="s10-c2">P</span><span class="s10-c" id="s10-c3">A</span><span class="s10-c" id="s10-c4">P</span><span class="s10-c" id="s10-c5">I</span><span id="s10-caret"></span></span>
-      <div id="s10-send"><svg viewBox="0 0 44 44"><path d="M22 36 V9 M10 20 L22 8 L34 20" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
-    </div>
-    <div id="s10-dm"><img src="assets/brand/mark.svg" alt="" /><div id="s10-dmtxt"><b>YepAPI</b> sent you the link</div><span id="s10-now">now</span></div>
+      <div id="s10-logo"><img src="assets/brand/logo-light.svg" alt="YepAPI" /></div>
+      <div id="s10-c"><span class="cr">COMMENT</span></div>
+      <div id="s10-kwrap"><span id="s10-k">YEPAPI</span></div>
+      <div id="s10-box">
+        <span id="s10-av"></span>
+        <span id="s10-text"><span id="s10-ph">Add a comment</span><span class="s10-c" id="s10-c0">Y</span><span class="s10-c" id="s10-c1">E</span><span class="s10-c" id="s10-c2">P</span><span class="s10-c" id="s10-c3">A</span><span class="s10-c" id="s10-c4">P</span><span class="s10-c" id="s10-c5">I</span><span id="s10-caret"></span></span>
+        <div id="s10-send"><svg viewBox="0 0 48 48"><path d="M24 40 V10 M11 22 L24 9 L37 22" fill="none" stroke="#0a0a0a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+      </div>
+      <div id="s10-dm" class="glass"><img src="assets/brand/mark.svg" alt="" /><div id="s10-dmname">YepAPI</div><div id="s10-dmtxt">Here's your link</div><span id="s10-now">now</span></div>
     </div>
   </div>
   <script>
     (function () {
       const tl = gsap.timeline({ paused: true });
-      // The lockup wipes in (the mark leads), then the ask
+      const shake = (t, a) => tl.to("#s10-shift", { keyframes: { x: [0, -a, a * 0.8, -a * 0.5, a * 0.3, 0], y: [0, a * 0.6, -a * 0.5, a * 0.3, -a * 0.2, 0] }, duration: 0.32, ease: "none" }, t);
+      // Arrive out of the zoom: everything settles from slightly large
+      tl.fromTo("#s10-shift", { scale: 1.12, filter: "blur(10px)" }, { scale: 1, filter: "blur(0px)", duration: 0.35, ease: "expo.out", transformOrigin: "540px 600px" }, 0.0);
       tl.fromTo("#s10-logo", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.5, ease: "expo.out" }, 0.04);
       tl.fromTo("#s10-c", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power2.out" }, 0.05);
-      tl.fromTo("#s10-k", { scale: 1.5, rotation: -8, opacity: 0 }, { scale: 1, rotation: -3, opacity: 1, duration: 0.32, ease: "back.out(1.6)" }, 0.36);
+      tl.fromTo("#s10-k", { scale: 1.6, rotation: -8, opacity: 0 }, { scale: 1, rotation: -3, opacity: 1, duration: 0.32, ease: "back.out(1.7)" }, 0.36);
+      shake(0.45, 12);
       tl.fromTo("#s10-box", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "expo.out" }, 0.2);
       // The viewer's comment is typed and posted
       tl.set("#s10-ph", { display: "none" }, 0.4);
@@ -53,12 +56,8 @@
       tl.to("#s10-send", { scale: 0.85, duration: 0.06, ease: "power2.in" }, 0.8);
       tl.to("#s10-send", { scale: 1, duration: 0.14, ease: "power2.out" }, 0.86);
       tl.set("#s10-caret", { opacity: 0 }, 0.86);
-      // "...and I'll send you the link": the DM arrives
-      tl.fromTo("#s10-dm", { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "expo.out" }, 1.45);
-      // Camera, background drift, impacts
-      const shake = (t, a) => tl.to("#s10-shift", { keyframes: { x: [0, -a, a * 0.8, -a * 0.5, a * 0.3, 0], y: [0, a * 0.6, -a * 0.5, a * 0.3, -a * 0.2, 0] }, duration: 0.32, ease: "none" }, t);
-      tl.fromTo("#s10-pat", { backgroundPosition: "0px 0px" }, { backgroundPosition: "-92px 92px", duration: 4.2, ease: "none" }, 0);
-      shake(0.45, 12);
+      // "...and I'll send you the link": the DM drops in like a phone notification
+      tl.fromTo("#s10-dm", { y: -60, opacity: 0, scale: 0.92 }, { y: 0, opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, 1.4);
       window.__timelines["s10"] = tl;
     })();
   </script>

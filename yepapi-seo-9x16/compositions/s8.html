@@ -2,78 +2,74 @@
   <style>
     @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk-latin-var.woff2") format("woff2"); font-weight: 300 700; font-style: normal; }
     @font-face { font-family: "Geist Mono"; src: url("assets/fonts/GeistMono-latin-var.woff2") format("woff2"); font-weight: 100 900; font-style: normal; }
-    #root { position: absolute; inset: 0; overflow: hidden; background: #fe4a97; font-family: "Inter", sans-serif; }
+    #root { position: absolute; inset: 0; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; }
     #root * { box-sizing: border-box; }
+    .cr { background: linear-gradient(180deg, #ffffff 0%, #f4f4f4 30%, #a3a3a3 50%, #ffffff 66%, #cfcfcf 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .glass { background: linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04)); border: 1.5px solid rgba(255, 255, 255, 0.17); border-radius: 30px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22); }
+    #s8-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
     #s8-top { position: absolute; inset: 0; }
-    #s8-head { position: absolute; left: 60px; top: 272px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 140px; line-height: 0.96; letter-spacing: -0.045em; color: #0a0a0a; }
-    .s8-w { color: rgba(10, 10, 10, 0.22); }
-    #s8-from { position: absolute; left: 66px; top: 572px; font-weight: 700; font-size: 46px; color: #0a0a0a; }
-    #s8-num { position: absolute; left: 52px; top: 616px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 250px; line-height: 250px; letter-spacing: -0.05em; color: #ffffff; text-shadow: 10px 10px 0 #0a0a0a; white-space: nowrap; }
+    #s8-head { position: absolute; left: 56px; top: 170px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 140px; line-height: 0.96; letter-spacing: -0.05em; }
+    .s8-w { opacity: 0.22; }
+    #s8-from { position: absolute; left: 64px; top: 470px; font-weight: 700; font-size: 44px; color: rgba(255, 255, 255, 0.75); }
+    #s8-num { position: absolute; left: 48px; top: 512px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 260px; line-height: 260px; letter-spacing: -0.06em; color: #fff56c; text-shadow: 0 0 60px rgba(255, 245, 108, 0.55), 0 0 4px rgba(255, 245, 108, 0.9); white-space: nowrap; }
     .s8-ch { display: inline-block; }
-    #s8-note { position: absolute; left: 62px; top: 884px; font-family: "Geist Mono", monospace; font-weight: 700; font-size: 34px; color: #0a0a0a; }
-    #s8-ticket { position: absolute; left: 120px; top: 952px; width: 840px; height: 180px; }
+    #s8-note { position: absolute; left: 62px; top: 790px; font-family: "Geist Mono", monospace; font-weight: 700; font-size: 34px; color: rgba(255, 255, 255, 0.75); }
+    #s8-ticket { position: absolute; left: 120px; top: 870px; width: 840px; height: 180px; filter: drop-shadow(0 0 40px rgba(255, 245, 108, 0.45)); }
     #s8-ticket svg { position: absolute; inset: 0; }
     #s8-tickettxt { position: absolute; left: 0; right: 0; top: 0; height: 180px; text-align: center; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 86px; line-height: 180px; letter-spacing: -0.04em; color: #0a0a0a; }
-    #s8-card { position: absolute; left: 250px; top: 300px; width: 580px; height: 360px; background: #ffffff; border: 6px solid #0a0a0a; border-radius: 30px; box-shadow: 14px 14px 0 #0a0a0a; overflow: visible; }
-    #s8-chip { position: absolute; left: 50px; top: 80px; width: 96px; height: 74px; background: #fff56c; border: 5px solid #0a0a0a; border-radius: 14px; }
-    .s8-bar { position: absolute; height: 26px; background: #d9d9d9; border-radius: 13px; }
-    .s8-x { position: absolute; left: -40px; top: 167px; width: 660px; height: 16px; background: #0a0a0a; border-radius: 8px; }
-    #s8-nocard { position: absolute; left: 0; width: 1080px; top: 724px; text-align: center; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 104px; line-height: 110px; letter-spacing: -0.045em; color: #0a0a0a; }
-    #s8-dip { position: absolute; inset: 0; background: #0a0a0a; opacity: 0; }
-    #s8-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
-    #s8-pat { position: absolute; inset: 0; background-image: repeating-linear-gradient(45deg, rgba(10, 10, 10, 0.07) 0px 14px, rgba(10, 10, 10, 0) 14px 40px); background-size: 113.137px 113.137px; }
+    #s8-card { position: absolute; left: 250px; top: 220px; width: 580px; height: 360px; overflow: visible; }
+    #s8-chip { position: absolute; left: 50px; top: 80px; width: 96px; height: 74px; border-radius: 14px; background: linear-gradient(135deg, #fffbc4, #fff56c 50%, #cfc43a); }
+    .s8-bar { position: absolute; height: 24px; background: rgba(255, 255, 255, 0.18); border-radius: 12px; }
+    .s8-x { position: absolute; left: -40px; top: 167px; width: 660px; height: 14px; background: #fe4a97; border-radius: 7px; box-shadow: 0 0 26px rgba(254, 74, 151, 0.85); }
+    #s8-nocard { position: absolute; left: 0; width: 1080px; top: 640px; text-align: center; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 104px; line-height: 110px; letter-spacing: -0.05em; }
   </style>
   <div id="root" data-composition-id="s8" data-width="1080" data-height="1920">
-    <div id="s8-pat" data-layout-ignore></div>
     <div id="s8-shift" data-layout-allow-overflow>
-    <div id="s8-top">
-      <div id="s8-head"><div><span class="s8-w" id="s8-w0">PAY</span> <span class="s8-w" id="s8-w1">PER</span></div><div><span class="s8-w" id="s8-w2">CALL</span></div></div>
-      <div id="s8-from">from</div>
-      <div id="s8-num"><span class="s8-ch">$</span><span class="s8-ch">0</span><span class="s8-ch">.</span><span class="s8-ch">0</span><span class="s8-ch">1</span></div>
-      <div id="s8-note">no subscriptions / no tiers / no minimums</div>
+      <div id="s8-top">
+        <div id="s8-head"><div><span class="s8-w cr" id="s8-w0">PAY</span> <span class="s8-w cr" id="s8-w1">PER</span></div><div><span class="s8-w cr" id="s8-w2">CALL</span></div></div>
+        <div id="s8-from">from</div>
+        <div id="s8-num"><span class="s8-ch">$</span><span class="s8-ch">0</span><span class="s8-ch">.</span><span class="s8-ch">0</span><span class="s8-ch">1</span></div>
+        <div id="s8-note">no subscriptions / no tiers / no minimums</div>
+      </div>
+      <div id="s8-card" class="glass" data-layout-allow-overflow>
+        <div id="s8-chip"></div>
+        <div class="s8-bar" style="left: 50px; top: 210px; width: 400px"></div>
+        <div class="s8-bar" style="left: 50px; top: 262px; width: 220px"></div>
+        <div class="s8-x" id="s8-x1"></div>
+        <div class="s8-x" id="s8-x2"></div>
+      </div>
+      <div id="s8-nocard"><span class="cr">NO CARD NEEDED</span></div>
+      <div id="s8-ticket">
+        <svg viewBox="0 0 840 180"><path d="M24 6 H816 a18 18 0 0 1 18 18 V64 a26 26 0 0 0 0 52 V156 a18 18 0 0 1 -18 18 H24 a18 18 0 0 1 -18 -18 V116 a26 26 0 0 0 0 -52 V24 a18 18 0 0 1 18 -18 Z" fill="#fff56c" /><path d="M64 26 V154 M776 26 V154" stroke="rgba(10,10,10,0.45)" stroke-width="5" stroke-dasharray="12 12" /></svg>
+        <div id="s8-tickettxt">$5 FREE CREDIT</div>
+      </div>
     </div>
-    <div id="s8-card" data-layout-allow-overflow>
-      <div id="s8-chip"></div>
-      <div class="s8-bar" style="left: 50px; top: 210px; width: 400px"></div>
-      <div class="s8-bar" style="left: 50px; top: 262px; width: 220px"></div>
-      <div class="s8-x" id="s8-x1"></div>
-      <div class="s8-x" id="s8-x2"></div>
-    </div>
-    <div id="s8-nocard">NO CARD NEEDED</div>
-    <div id="s8-ticket">
-      <svg viewBox="0 0 840 180"><path d="M24 6 H816 a18 18 0 0 1 18 18 V64 a26 26 0 0 0 0 52 V156 a18 18 0 0 1 -18 18 H24 a18 18 0 0 1 -18 -18 V116 a26 26 0 0 0 0 -52 V24 a18 18 0 0 1 18 -18 Z" fill="#fff56c" stroke="#0a0a0a" stroke-width="9" stroke-linejoin="round" /><path d="M64 22 V158 M776 22 V158" stroke="#0a0a0a" stroke-width="6" stroke-dasharray="14 12" /></svg>
-      <div id="s8-tickettxt">$5 FREE CREDIT</div>
-    </div>
-    </div>
-    <div id="s8-dip" data-layout-ignore></div>
   </div>
   <script>
     (function () {
       const tl = gsap.timeline({ paused: true });
-      // "You pay per call": each word inks in as it is said
-      tl.to("#s8-w0", { color: "#0a0a0a", duration: 0.08, ease: "none" }, 0.12);
-      tl.to("#s8-w1", { color: "#0a0a0a", duration: 0.08, ease: "none" }, 0.3);
-      tl.to("#s8-w2", { color: "#0a0a0a", duration: 0.08, ease: "none" }, 0.48);
-      // "starting around a cent": the price lands
+      const shake = (t, a) => tl.to("#s8-shift", { keyframes: { x: [0, -a, a * 0.8, -a * 0.5, a * 0.3, 0], y: [0, a * 0.6, -a * 0.5, a * 0.3, -a * 0.2, 0] }, duration: 0.32, ease: "none" }, t);
+      // "You pay per call": each word lights as it is said
+      tl.to("#s8-w0", { opacity: 1, duration: 0.08, ease: "none" }, 0.12);
+      tl.to("#s8-w1", { opacity: 1, duration: 0.08, ease: "none" }, 0.3);
+      tl.to("#s8-w2", { opacity: 1, duration: 0.08, ease: "none" }, 0.48);
+      // "starting around a cent": the price lands, the camera punches in
       tl.fromTo("#s8-from", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power2.out" }, 1.1);
-      tl.fromTo("#s8-num .s8-ch", { opacity: 0, filter: "blur(10px)", y: 30 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.2, ease: "power4.out", stagger: 0.05 }, 1.3);
+      tl.fromTo("#s8-num .s8-ch", { opacity: 0, filter: "blur(12px)", y: 40 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.2, ease: "power4.out", stagger: 0.05 }, 1.3);
+      tl.fromTo("#s8-shift", { scale: 1 }, { scale: 1.05, duration: 0.16, ease: "expo.out", transformOrigin: "400px 640px" }, 1.35);
       tl.fromTo("#s8-note", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 1.7);
+      tl.to("#s8-shift", { scale: 1, duration: 0.24, ease: "power2.inOut" }, 2.85);
       // "first five dollars are free": the credit ticket stamps down
       tl.fromTo("#s8-ticket", { scale: 1.6, rotation: -12, opacity: 0 }, { scale: 1, rotation: -4, opacity: 1, duration: 0.35, ease: "back.out(1.5)" }, 2.98);
+      shake(3.08, 14);
       // "No card": blur swap to the payment card, which gets crossed out
-      tl.to("#s8-top", { opacity: 0, filter: "blur(8px)", duration: 0.16, ease: "power2.in" }, 4.22);
+      tl.to("#s8-top", { opacity: 0, filter: "blur(10px)", duration: 0.16, ease: "power2.in" }, 4.22);
       tl.fromTo("#s8-card", { x: 900, opacity: 0 }, { x: 0, opacity: 1, duration: 0.32, ease: "expo.out" }, 4.27);
       tl.fromTo("#s8-x1", { rotation: 30, scaleX: 0 }, { rotation: 30, scaleX: 1, duration: 0.12, ease: "power2.out" }, 4.5);
       tl.fromTo("#s8-x2", { rotation: -30, scaleX: 0 }, { rotation: -30, scaleX: 1, duration: 0.12, ease: "power2.out" }, 4.6);
-      tl.fromTo("#s8-nocard", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power2.out" }, 4.36);
-      // Dip, then a hard cut to ink
-      tl.fromTo("#s8-dip", { opacity: 0 }, { opacity: 0.4, duration: 0.1, ease: "none" }, 5.34);
-      // Camera, background drift, impacts
-      const shake = (t, a) => tl.to("#s8-shift", { keyframes: { x: [0, -a, a * 0.8, -a * 0.5, a * 0.3, 0], y: [0, a * 0.6, -a * 0.5, a * 0.3, -a * 0.2, 0] }, duration: 0.32, ease: "none" }, t);
-      tl.fromTo("#s8-pat", { backgroundPosition: "0px 0px" }, { backgroundPosition: "226.274px 0px", duration: 5.45, ease: "none" }, 0);
-      tl.fromTo("#s8-shift", { scale: 1 }, { scale: 1.05, duration: 0.16, ease: "expo.out", transformOrigin: "400px 720px" }, 1.35);
-      tl.to("#s8-shift", { scale: 1, duration: 0.24, ease: "power2.inOut" }, 2.85);
-      shake(3.08, 14);
+      tl.fromTo("#s8-nocard", { opacity: 0, filter: "blur(10px)", scale: 1.15 }, { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.2, ease: "power3.out" }, 4.28);
+      // Glitch cut out
+      tl.to("#s8-shift", { keyframes: { x: [0, 30, -22, 40, -16, 0], skewX: [0, -10, 8, -12, 4, 0], opacity: [1, 0.8, 1, 0.55, 0.9, 0] }, duration: 0.25, ease: "steps(6)" }, 5.19);
       window.__timelines["s8"] = tl;
     })();
   </script>

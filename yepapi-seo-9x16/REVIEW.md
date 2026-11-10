@@ -1,6 +1,16 @@
-# Review — YepAPI "SEO spy" Reel (9:16, 35 s) — preview draft
+# Review — YepAPI "SEO spy" Reel (9:16, 35 s) — v3 preview draft
 
 ## Creative calls
+
+v3 (after "make it more engaging, clean visuals and captions"): restyled to the person's own reference video's
+language — dark stage with ambient brand light (lemon/blue/pink), dot grid and a lit horizon arc; chrome
+headlines; glass cards; glowing wave, lens, key and stamps; orbiting tools around the mark; LED lookup grid;
+clean white captions with the spoken word in lemon. Glow and glass are used because the reference uses them.
+Claude logo and mascot supplied by the person (nominative use: "works with Claude").
+More SFX with on-screen causes: glitch cuts, ping on "Connected", sparkle on the wordmark, typing under the
+lookup grid, notification on the DM.
+
+v1 notes:
 
 - Storyline A, "the question travels" (see STORYLINES.md). Not built: B "the case file", C "type on colour".
 - Look from the brand: lemon / ink / thumb blue / sleeve pink / cuff green, ink outlines with hard offset

@@ -2,87 +2,101 @@
   <style>
     @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk-latin-var.woff2") format("woff2"); font-weight: 300 700; font-style: normal; }
     @font-face { font-family: "Geist Mono"; src: url("assets/fonts/GeistMono-latin-var.woff2") format("woff2"); font-weight: 100 900; font-style: normal; }
-    #root { position: absolute; inset: 0; overflow: hidden; background: #2d33ba; font-family: "Inter", sans-serif; }
+    #root { position: absolute; inset: 0; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; }
     #root * { box-sizing: border-box; }
-    #s2-label { position: absolute; left: 60px; top: 272px; height: 112px; width: 900px; overflow: hidden; }
-    #s2-roll { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 104px; line-height: 112px; letter-spacing: -0.04em; color: #fff56c; }
-    #s2-sub { position: absolute; left: 62px; top: 392px; font-family: "Geist Mono", monospace; font-weight: 600; font-size: 34px; color: #ffffff; }
-    #s2-ex { position: absolute; right: 120px; top: 398px; font-weight: 500; font-size: 28px; color: #ffffff; }
-    .s2-row { position: absolute; left: 60px; width: 900px; height: 108px; background: #ffffff; border: 6px solid #0a0a0a; border-radius: 22px; box-shadow: 10px 10px 0 #0a0a0a; display: flex; align-items: center; gap: 24px; padding: 0 24px; }
-    .s2-rank { width: 74px; height: 74px; flex: none; border-radius: 50%; background: #fff56c; border: 5px solid #0a0a0a; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 32px; line-height: 64px; text-align: center; color: #0a0a0a; }
-    .s2-kw { font-weight: 600; font-size: 44px; color: #0a0a0a; }
-    #s2-lines { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
-    #s2-node { position: absolute; left: 300px; top: 740px; width: 480px; height: 110px; background: #fff56c; border: 6px solid #0a0a0a; border-radius: 24px; box-shadow: 10px 10px 0 #0a0a0a; font-family: "Geist Mono", monospace; font-weight: 700; font-size: 40px; line-height: 98px; text-align: center; color: #0a0a0a; }
-    .s2-chip { position: absolute; background: #ffffff; border: 5px solid #0a0a0a; border-radius: 20px; padding: 14px 22px; font-family: "Geist Mono", monospace; font-weight: 500; font-size: 30px; line-height: 36px; color: #0a0a0a; white-space: nowrap; }
-    #s2-wipe { position: absolute; left: 0; top: 1920px; width: 1080px; height: 1920px; background: #fff56c; }
+    .cr { background: linear-gradient(180deg, #ffffff 0%, #f4f4f4 30%, #a3a3a3 50%, #ffffff 66%, #cfcfcf 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .glass { background: linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04)); border: 1.5px solid rgba(255, 255, 255, 0.17); border-radius: 30px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22); }
     #s2-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
-    #s2-pat { position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 255, 255, 0.07) 3px, rgba(255, 255, 255, 0) 3px), linear-gradient(90deg, rgba(255, 255, 255, 0.07) 3px, rgba(255, 255, 255, 0) 3px); background-size: 72px 72px; }
+    #s2-label { position: absolute; left: 56px; top: 150px; height: 118px; width: 960px; overflow: hidden; }
+    #s2-roll { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 112px; line-height: 118px; letter-spacing: -0.05em; }
+    #s2-sub { position: absolute; left: 62px; top: 282px; font-family: "Geist Mono", monospace; font-weight: 600; font-size: 32px; color: rgba(255, 255, 255, 0.7); }
+    #s2-ex { position: absolute; right: 120px; top: 288px; font-weight: 500; font-size: 28px; color: rgba(255, 255, 255, 0.6); }
+    #s2-spine { position: absolute; left: 100px; top: 400px; width: 4px; height: 500px; background: #fff56c; box-shadow: 0 0 18px rgba(255, 245, 108, 0.8); border-radius: 2px; }
+    .s2-row { position: absolute; left: 60px; width: 900px; height: 100px; display: flex; align-items: center; gap: 24px; padding: 0 22px 0 14px; border-radius: 26px; }
+    .s2-ico { width: 72px; height: 72px; flex: none; border-radius: 20px; background: linear-gradient(180deg, #fff9a8, #fff56c 55%, #e3d84a); box-shadow: 0 0 24px rgba(255, 245, 108, 0.45); display: flex; align-items: center; justify-content: center; }
+    .s2-ico svg { width: 40px; height: 40px; }
+    .s2-kw { flex: 1; font-weight: 600; font-size: 44px; color: #ffffff; }
+    .s2-rank { font-family: "Geist Mono", monospace; font-weight: 700; font-size: 34px; color: #fff56c; background: rgba(255, 245, 108, 0.12); border: 1.5px solid rgba(255, 245, 108, 0.45); border-radius: 18px; padding: 4px 16px; }
+    #s2-list { position: absolute; inset: 0; }
+    #s2-net { position: absolute; inset: 0; }
+    #s2-lines { position: absolute; left: 0; top: 0; width: 1080px; height: 1820px; }
+    #s2-node { position: absolute; left: 290px; top: 600px; width: 500px; height: 110px; border-radius: 55px; background: linear-gradient(180deg, #fff9a8, #fff56c 55%, #e3d84a); box-shadow: 0 0 60px rgba(255, 245, 108, 0.55); font-family: "Geist Mono", monospace; font-weight: 800; font-size: 40px; line-height: 110px; text-align: center; color: #0a0a0a; }
+    .s2-chip { position: absolute; border-radius: 22px; padding: 14px 24px; font-family: "Geist Mono", monospace; font-weight: 600; font-size: 32px; line-height: 38px; color: #ffffff; white-space: nowrap; }
   </style>
   <div id="root" data-composition-id="s2" data-width="1080" data-height="1920">
-    <div id="s2-pat" data-layout-ignore></div>
     <div id="s2-shift" data-layout-allow-overflow>
-    <div id="s2-label"><div id="s2-roll"><div>KEYWORDS</div><div>BACKLINKS</div></div></div>
-    <div id="s2-sub">competitor.com</div>
-    <div id="s2-ex">example data</div>
+      <div id="s2-label"><div id="s2-roll"><div class="cr">KEYWORDS</div><div class="cr">BACKLINKS</div></div></div>
+      <div id="s2-sub">competitor.com</div>
+      <div id="s2-ex">example data</div>
 
-    <div class="s2-row" id="s2-r0" style="top: 480px"><span class="s2-rank">#1</span><span class="s2-kw">best crm for startups</span></div>
-    <div class="s2-row" id="s2-r1" style="top: 608px"><span class="s2-rank">#3</span><span class="s2-kw">crm pricing</span></div>
-    <div class="s2-row" id="s2-r2" style="top: 736px"><span class="s2-rank">#2</span><span class="s2-kw">free crm tool</span></div>
-    <div class="s2-row" id="s2-r3" style="top: 864px"><span class="s2-rank">#5</span><span class="s2-kw">sales pipeline app</span></div>
-    <div class="s2-row" id="s2-r4" style="top: 992px"><span class="s2-rank">#1</span><span class="s2-kw">crm for small teams</span></div>
+      <div id="s2-list">
+        <div id="s2-spine"></div>
+        <div class="s2-row glass" id="s2-r0" style="top: 384px"><span class="s2-ico"><svg viewBox="0 0 40 40"><circle cx="17" cy="17" r="10" fill="none" stroke="#0a0a0a" stroke-width="5" /><path d="M25 25 L35 35" stroke="#0a0a0a" stroke-width="5" stroke-linecap="round" /></svg></span><span class="s2-kw">best crm for startups</span><span class="s2-rank">#1</span></div>
+        <div class="s2-row glass" id="s2-r1" style="top: 500px"><span class="s2-ico"><svg viewBox="0 0 40 40"><circle cx="17" cy="17" r="10" fill="none" stroke="#0a0a0a" stroke-width="5" /><path d="M25 25 L35 35" stroke="#0a0a0a" stroke-width="5" stroke-linecap="round" /></svg></span><span class="s2-kw">crm pricing</span><span class="s2-rank">#3</span></div>
+        <div class="s2-row glass" id="s2-r2" style="top: 616px"><span class="s2-ico"><svg viewBox="0 0 40 40"><circle cx="17" cy="17" r="10" fill="none" stroke="#0a0a0a" stroke-width="5" /><path d="M25 25 L35 35" stroke="#0a0a0a" stroke-width="5" stroke-linecap="round" /></svg></span><span class="s2-kw">free crm tool</span><span class="s2-rank">#2</span></div>
+        <div class="s2-row glass" id="s2-r3" style="top: 732px"><span class="s2-ico"><svg viewBox="0 0 40 40"><circle cx="17" cy="17" r="10" fill="none" stroke="#0a0a0a" stroke-width="5" /><path d="M25 25 L35 35" stroke="#0a0a0a" stroke-width="5" stroke-linecap="round" /></svg></span><span class="s2-kw">sales pipeline app</span><span class="s2-rank">#5</span></div>
+        <div class="s2-row glass" id="s2-r4" style="top: 848px"><span class="s2-ico"><svg viewBox="0 0 40 40"><circle cx="17" cy="17" r="10" fill="none" stroke="#0a0a0a" stroke-width="5" /><path d="M25 25 L35 35" stroke="#0a0a0a" stroke-width="5" stroke-linecap="round" /></svg></span><span class="s2-kw">crm for small teams</span><span class="s2-rank">#1</span></div>
+      </div>
 
-    <svg id="s2-lines" viewBox="0 0 1080 1920" data-layout-ignore>
-      <line id="s2-l0" x1="200" y1="512" x2="540" y2="795" stroke="#fff56c" stroke-width="7" stroke-linecap="round" />
-      <line id="s2-l1" x1="790" y1="512" x2="540" y2="795" stroke="#fff56c" stroke-width="7" stroke-linecap="round" />
-      <line id="s2-l2" x1="190" y1="652" x2="540" y2="795" stroke="#fff56c" stroke-width="7" stroke-linecap="round" />
-      <line id="s2-l3" x1="800" y1="662" x2="540" y2="795" stroke="#fff56c" stroke-width="7" stroke-linecap="round" />
-      <line id="s2-l4" x1="225" y1="992" x2="540" y2="795" stroke="#fff56c" stroke-width="7" stroke-linecap="round" />
-      <line id="s2-l5" x1="790" y1="1002" x2="540" y2="795" stroke="#fff56c" stroke-width="7" stroke-linecap="round" />
-    </svg>
-    <div id="s2-node">competitor.com</div>
-    <div class="s2-chip" id="s2-c0" style="left: 60px; top: 476px">techdaily.io</div>
-    <div class="s2-chip" id="s2-c1" style="left: 630px; top: 476px">growthblog.com</div>
-    <div class="s2-chip" id="s2-c2" style="left: 60px; top: 616px">crmguide.org</div>
-    <div class="s2-chip" id="s2-c3" style="left: 650px; top: 626px">toolstack.dev</div>
-    <div class="s2-chip" id="s2-c4" style="left: 60px; top: 956px">saasreviews.net</div>
-    <div class="s2-chip" id="s2-c5" style="left: 630px; top: 966px">startupnews.co</div>
+      <div id="s2-net">
+        <svg id="s2-lines" viewBox="0 0 1080 1820" data-layout-ignore>
+          <g stroke="rgba(255,245,108,0.85)" stroke-width="4" stroke-linecap="round">
+            <line id="s2-l0" x1="210" y1="420" x2="540" y2="655" />
+            <line id="s2-l1" x1="800" y1="420" x2="540" y2="655" />
+            <line id="s2-l2" x1="200" y1="560" x2="540" y2="655" />
+            <line id="s2-l3" x1="810" y1="570" x2="540" y2="655" />
+            <line id="s2-l4" x1="230" y1="900" x2="540" y2="655" />
+            <line id="s2-l5" x1="800" y1="910" x2="540" y2="655" />
+          </g>
+          <g fill="#ffffff">
+            <circle id="s2-d0" cx="210" cy="420" r="8" />
+            <circle id="s2-d1" cx="800" cy="420" r="8" />
+            <circle id="s2-d2" cx="200" cy="560" r="8" />
+            <circle id="s2-d3" cx="810" cy="570" r="8" />
+            <circle id="s2-d4" cx="230" cy="900" r="8" />
+            <circle id="s2-d5" cx="800" cy="910" r="8" />
+          </g>
+        </svg>
+        <div id="s2-node">competitor.com</div>
+        <div class="s2-chip glass" id="s2-c0" style="left: 60px; top: 384px">techdaily.io</div>
+        <div class="s2-chip glass" id="s2-c1" style="left: 630px; top: 384px">growthblog.com</div>
+        <div class="s2-chip glass" id="s2-c2" style="left: 60px; top: 524px">crmguide.org</div>
+        <div class="s2-chip glass" id="s2-c3" style="left: 650px; top: 534px">toolstack.dev</div>
+        <div class="s2-chip glass" id="s2-c4" style="left: 60px; top: 864px">saasreviews.net</div>
+        <div class="s2-chip glass" id="s2-c5" style="left: 630px; top: 874px">startupnews.co</div>
+      </div>
     </div>
-
-    <div id="s2-wipe" data-layout-ignore></div>
   </div>
   <script>
     (function () {
       const tl = gsap.timeline({ paused: true });
       const rows = ["#s2-r0", "#s2-r1", "#s2-r2", "#s2-r3", "#s2-r4"];
-      const chips = ["#s2-c0", "#s2-c1", "#s2-c2", "#s2-c3", "#s2-c4", "#s2-c5"];
-      const lines = ["#s2-l0", "#s2-l1", "#s2-l2", "#s2-l3", "#s2-l4", "#s2-l5"];
-      // Label and sub read on arrival
-      tl.fromTo("#s2-label", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power2.out" }, 0.02);
+      // Title lands as a blur-in; the spine draws down and each keyword clicks onto it
+      tl.fromTo("#s2-label", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.16, ease: "power2.out" }, 0.0);
       tl.fromTo(["#s2-sub", "#s2-ex"], { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 0.1);
-      // Keywords slam in from the right
+      tl.fromTo("#s2-spine", { scaleY: 0 }, { scaleY: 1, duration: 0.55, ease: "power2.out", transformOrigin: "50% 0%" }, 0.05);
       rows.forEach((r, i) => {
-        tl.fromTo(r, { x: 1100, filter: "blur(10px)" }, { x: 0, filter: "blur(0px)", duration: 0.4, ease: "expo.out" }, 0.08 + i * 0.1);
+        tl.fromTo(r, { x: 140, opacity: 0, filter: "blur(8px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.32, ease: "expo.out" }, 0.08 + i * 0.09);
       });
-      // Switch to backlinks: rows leave left, the label rolls
-      rows.forEach((r, i) => {
-        tl.to(r, { x: -1150, duration: 0.24, ease: "power3.in" }, 1.38 + i * 0.035);
+      // Backlinks: the list clears, the roll turns, the network wires up
+      tl.to(["#s2-list"], { opacity: 0, x: -80, filter: "blur(10px)", duration: 0.2, ease: "power2.in" }, 1.38);
+      tl.fromTo("#s2-roll", { y: 0 }, { y: -118, duration: 0.3, ease: "power3.inOut" }, 1.45);
+      tl.fromTo("#s2-node", { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(1.6)" }, 1.6);
+      ["#s2-c0", "#s2-c1", "#s2-c2", "#s2-c3", "#s2-c4", "#s2-c5"].forEach((c, i) => {
+        tl.fromTo(c, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.28, ease: "back.out(1.6)" }, 1.72 + i * 0.07);
       });
-      tl.fromTo("#s2-roll", { y: 0 }, { y: -112, duration: 0.3, ease: "power3.inOut" }, 1.48);
-      tl.fromTo("#s2-node", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(1.4)" }, 1.62);
-      chips.forEach((c, i) => {
-        tl.fromTo(c, { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.5)" }, 1.75 + i * 0.08);
-      });
-      lines.forEach((l, i) => {
-        const el = document.querySelector(l);
-        const len = Math.hypot(el.x2.baseVal.value - el.x1.baseVal.value, el.y2.baseVal.value - el.y1.baseVal.value);
+      for (let i = 0; i < 6; i++) {
+        const el = document.querySelector("#s2-l" + i);
+        const x1 = el.x1.baseVal.value, y1 = el.y1.baseVal.value, x2 = el.x2.baseVal.value, y2 = el.y2.baseVal.value;
+        const len = Math.hypot(x2 - x1, y2 - y1);
         el.style.strokeDasharray = len;
-        tl.fromTo(l, { strokeDashoffset: len }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, 1.8 + i * 0.08);
-      });
-      // Lemon wipe up into the next world
-      tl.fromTo("#s2-wipe", { y: 0 }, { y: -1920, duration: 0.33, ease: "power2.inOut" }, 2.62);
-      // Camera, background drift, impacts
-      tl.fromTo("#s2-pat", { backgroundPosition: "0px 0px" }, { backgroundPosition: "144px -144px", duration: 2.95, ease: "none" }, 0);
-      tl.fromTo("#s2-shift", { scale: 1 }, { scale: 1.04, duration: 0.16, ease: "expo.out", transformOrigin: "540px 700px" }, 1.5);
+        tl.fromTo(el, { strokeDashoffset: len }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, 1.76 + i * 0.07);
+        // a data packet travels each link into the competitor
+        tl.fromTo("#s2-d" + i, { attr: { cx: x1, cy: y1 }, opacity: 0 }, { attr: { cx: x2, cy: y2 }, opacity: 1, duration: 0.5, ease: "power1.in" }, 2.0 + i * 0.06);
+      }
+      tl.fromTo("#s2-shift", { scale: 1 }, { scale: 1.04, duration: 0.16, ease: "expo.out", transformOrigin: "540px 655px" }, 1.6);
+      // Glitch cut out: slices jitter and the frame drops
+      tl.to("#s2-shift", { keyframes: { x: [0, -26, 18, -40, 30, 0], skewX: [0, 8, -6, 12, -4, 0], opacity: [1, 0.85, 1, 0.6, 0.9, 0] }, duration: 0.3, ease: "steps(6)" }, 2.6);
       window.__timelines["s2"] = tl;
     })();
   </script>
