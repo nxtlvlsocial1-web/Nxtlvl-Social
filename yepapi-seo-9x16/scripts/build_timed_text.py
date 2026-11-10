@@ -44,23 +44,32 @@ def display_words(a, b):
     return out
 
 
+# Words that carry the message: pink block, a touch bigger (transcript word indices)
+EMPHASIS = {7, 9, 14, 20, 25, 41, 49, 55, 58, 62, 68, 72, 79, 81, 83, 89}
+
+
 def caption_html():
     groups = []
     for gi, (a, b) in enumerate(GROUPS):
         ws = display_words(a, b)
+        idx = [i for i in range(a, b + 1) if OVERRIDES.get(i, "") is not None]
         nxt = words[GROUPS[gi + 1][0]]["start"] if gi + 1 < len(GROUPS) else 99
-        s = max(0.12, ws[0]["s"] - 0.04)
-        e = min(ws[-1]["e"] + 0.28, nxt - 0.04)
-        chars = sum(len(w["t"]) for w in ws)
-        fs = int(min(62, max(46, (860 - 36 - len(ws) * 20) / (0.64 * chars))))
-        spans = "".join(
-            f'<span class="cap-w" data-s="{w["s"]:.2f}" data-e="{w["e"]:.2f}"><span class="cap-bg"></span>'
-            f'<span class="cap-t">{html.escape(w["t"])}</span></span>'
-            for w in ws
-        )
+        s = max(0.12, ws[0]["s"] - 0.03)
+        e = min(ws[-1]["e"] + 0.3, nxt - 0.03)
+        chars = sum(len(w["t"]) * (1.18 if i in EMPHASIS else 1) for w, i in zip(ws, idx))
+        fs = int(min(88, max(56, (860 - len(ws) * 28) / (0.66 * chars))))
+        spans = []
+        for k, (w, i) in enumerate(zip(ws, idx)):
+            ws_next = ws[k + 1]["s"] if k + 1 < len(ws) else w["e"] + 0.25
+            cls = "cap-w em" if i in EMPHASIS else "cap-w"
+            spans.append(
+                f'<span class="{cls}" data-s="{w["s"]:.2f}" data-n="{ws_next:.2f}"><span class="cap-bg"></span>'
+                f'<span class="cap-t">{html.escape(w["t"])}</span></span>'
+            )
+        tilt = (-2.0, 1.5, -1.0, 2.0)[gi % 4]
         groups.append(
-            f'      <div class="cap-g" id="cap-g{gi}" data-s="{s:.2f}" data-e="{e:.2f}" style="font-size: {fs}px">'
-            f'<span class="cap-plate">{spans}</span></div>'
+            f'      <div class="cap-g" id="cap-g{gi}" data-s="{s:.2f}" data-e="{e:.2f}" data-r="{tilt}" style="font-size: {fs}px">'
+            + " ".join(spans) + "</div>"
         )
     return "\n".join(groups)
 
@@ -70,11 +79,11 @@ CAPTIONS_TEMPLATE = """<template>
     @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk-latin-var.woff2") format("woff2"); font-weight: 300 700; font-style: normal; }
     #root { position: absolute; inset: 0; overflow: visible; background: transparent; pointer-events: none; }
     #root * { box-sizing: border-box; }
-    .cap-g { position: absolute; left: 0; top: 1290px; width: 1080px; padding: 0 110px; text-align: center; opacity: 0; visibility: hidden; overflow: visible; }
-    .cap-plate { display: inline-block; background: #0a0a0a; border-radius: 22px; padding: 10px 16px 12px; line-height: 1.08; }
-    .cap-w { position: relative; display: inline-block; isolation: isolate; padding: 4px 10px 2px; font-family: "Space Grotesk", sans-serif; font-weight: 700; letter-spacing: -0.01em; color: #ffffff; }
-    .cap-bg { position: absolute; inset: 0; z-index: -1; background: #2d33ba; border-radius: 10px; transform: scaleX(0); transform-origin: 0% 50%; }
-    .cap-t { position: relative; }
+    .cap-g { position: absolute; left: 0; top: 1270px; width: 1080px; padding: 0 100px; text-align: center; line-height: 1.12; opacity: 0; visibility: hidden; overflow: visible; }
+    .cap-w { position: relative; display: inline-block; isolation: isolate; padding: 0 6px; font-family: "Space Grotesk", sans-serif; font-weight: 700; letter-spacing: -0.02em; text-transform: uppercase; color: #ffffff; -webkit-text-stroke: 13px #0a0a0a; paint-order: stroke fill; text-shadow: 0 8px 0 #0a0a0a; }
+    .cap-w.em { font-size: 1.18em; padding: 0 16px; }
+    .cap-bg { position: absolute; left: -2px; right: -2px; top: 8%; bottom: 2%; z-index: -1; border-radius: 16px; background: #fe4a97; border: 6px solid #0a0a0a; box-shadow: 6px 6px 0 #0a0a0a; transform: scaleX(0); transform-origin: 0% 50%; }
+    .cap-t { position: relative; display: inline-block; }
   </style>
   <div id="root" data-composition-id="captions" data-width="1080" data-height="1920">
 __GROUPS__
@@ -83,16 +92,23 @@ __GROUPS__
     (function () {
       const tl = gsap.timeline({ paused: true });
       document.querySelectorAll(".cap-g").forEach((g) => {
-        const s = parseFloat(g.dataset.s), e = parseFloat(g.dataset.e);
-        tl.set(g, { visibility: "visible" }, s);
-        tl.fromTo(g, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power2.out" }, s);
+        const s = parseFloat(g.dataset.s), e = parseFloat(g.dataset.e), r = parseFloat(g.dataset.r);
+        tl.set(g, { visibility: "visible", opacity: 1 }, s);
+        tl.fromTo(g, { rotation: 0, scale: 0.94 }, { rotation: r, scale: 1, duration: 0.2, ease: "back.out(2)" }, s);
         g.querySelectorAll(".cap-w").forEach((w) => {
-          const ws = parseFloat(w.dataset.s), we = parseFloat(w.dataset.e);
-          const bg = w.querySelector(".cap-bg");
-          tl.fromTo(bg, { scaleX: 0 }, { scaleX: 1, duration: 0.12, ease: "power2.out" }, ws);
-          tl.to(bg, { scaleX: 0, duration: 0.08, ease: "power2.in" }, Math.max(we, ws + 0.14));
+          const ws = parseFloat(w.dataset.s), wn = parseFloat(w.dataset.n);
+          const t = w.querySelector(".cap-t"), bg = w.querySelector(".cap-bg");
+          // each word pops in as it is spoken
+          tl.fromTo(w, { opacity: 0, scale: 0.45, y: 26 }, { opacity: 1, scale: 1, y: 0, duration: 0.17, ease: "back.out(2.4)" }, Math.max(s, ws - 0.03));
+          if (w.classList.contains("em")) {
+            tl.fromTo(bg, { scaleX: 0 }, { scaleX: 1, duration: 0.16, ease: "power3.out" }, ws);
+          } else {
+            // the spoken word is lemon, then settles back to white
+            tl.fromTo(t, { color: "#ffffff" }, { color: "#fff56c", duration: 0.04, ease: "none" }, ws);
+            tl.to(t, { color: "#ffffff", duration: 0.08, ease: "none" }, Math.min(wn, e - 0.1));
+          }
         });
-        tl.to(g, { opacity: 0, duration: 0.08, ease: "power2.in" }, e - 0.08);
+        tl.to(g, { opacity: 0, scale: 0.9, duration: 0.09, ease: "power2.in" }, e - 0.09);
         tl.set(g, { opacity: 0, visibility: "hidden" }, e);
       });
       window.__timelines["captions"] = tl;

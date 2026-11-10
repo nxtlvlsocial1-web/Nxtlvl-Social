@@ -14,8 +14,10 @@
     #s9-meter b { color: #00c38a; font-weight: 800; }
     #s9-flood { position: absolute; inset: 0; background: #fff56c; clip-path: circle(0px at 540px 890px); }
     #s9-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
+    #s9-pat { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255, 245, 108, 0.1) 3.2px, rgba(255, 245, 108, 0) 3.8px); background-size: 46px 46px; }
   </style>
   <div id="root" data-composition-id="s9" data-width="1080" data-height="1920">
+    <div id="s9-pat" data-layout-ignore></div>
     <div id="s9-shift" data-layout-allow-overflow>
     <div id="s9-all">
       <div id="s9-head"><span class="s9-ch">H</span><span class="s9-ch">U</span><span class="s9-ch">N</span><span class="s9-ch">D</span><span class="s9-ch">R</span><span class="s9-ch">E</span><span class="s9-ch">D</span><span class="s9-ch">S</span></div>
@@ -36,6 +38,9 @@
       tl.fromTo("#s9-grid .s9-t", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "back.out(1.6)", stagger: { each: 0.0048, grid: [12, 22], from: "start" } }, 0.22);
       // Iris open from the grid into the lemon end card
       tl.fromTo("#s9-flood", { clipPath: "circle(0px at 540px 890px)" }, { clipPath: "circle(1300px at 540px 890px)", duration: 0.34, ease: "power2.in" }, 2.1);
+      // Camera, background drift, impacts
+      tl.fromTo("#s9-pat", { backgroundPosition: "0px 0px" }, { backgroundPosition: "92px 92px", duration: 2.45, ease: "none" }, 0);
+      tl.fromTo("#s9-shift", { scale: 1 }, { scale: 1.05, duration: 0.16, ease: "expo.out", transformOrigin: "540px 700px" }, 1.76);
       window.__timelines["s9"] = tl;
     })();
   </script>

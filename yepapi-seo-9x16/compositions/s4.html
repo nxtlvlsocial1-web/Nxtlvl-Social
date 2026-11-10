@@ -12,15 +12,18 @@
     #s4-chip { position: absolute; left: 40px; bottom: 40px; border: 5px solid #0a0a0a; border-radius: 40px; padding: 8px 24px; font-weight: 700; font-size: 34px; line-height: 42px; color: #0a0a0a; background: #fff56c; }
     #s4-send { position: absolute; right: 34px; bottom: 30px; width: 112px; height: 112px; border-radius: 50%; background: #0a0a0a; }
     #s4-send svg { position: absolute; left: 26px; top: 26px; width: 60px; height: 60px; }
+    #s4-chip img { display: inline-block; width: 40px; height: 40px; border-radius: 9px; margin-right: 12px; vertical-align: -9px; }
     #s4-cursor { position: absolute; left: 0; top: 0; width: 100px; height: 120px; }
     #s4-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
+    #s4-pat { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(45, 51, 186, 0.12) 3.2px, rgba(45, 51, 186, 0) 3.8px); background-size: 46px 46px; }
   </style>
   <div id="root" data-composition-id="s4" data-width="1080" data-height="1920">
+    <div id="s4-pat" data-layout-ignore></div>
     <div id="s4-shift" data-layout-allow-overflow>
     <div id="s4-head">ONE QUESTION</div>
     <div id="s4-box">
       <div id="s4-text"><span id="s4-ph">Ask Claude anything</span><!--CHARS--><span class="s4-c" id="s4-c0">W</span><span class="s4-c" id="s4-c1">h</span><span class="s4-c" id="s4-c2">a</span><span class="s4-c" id="s4-c3">t</span><span class="s4-c" id="s4-c4"> </span><span class="s4-c" id="s4-c5">i</span><span class="s4-c" id="s4-c6">s</span><span class="s4-c" id="s4-c7"> </span><span class="s4-c" id="s4-c8">m</span><span class="s4-c" id="s4-c9">y</span><span class="s4-c" id="s4-c10"> </span><span class="s4-c" id="s4-c11">c</span><span class="s4-c" id="s4-c12">o</span><span class="s4-c" id="s4-c13">m</span><span class="s4-c" id="s4-c14">p</span><span class="s4-c" id="s4-c15">e</span><span class="s4-c" id="s4-c16">t</span><span class="s4-c" id="s4-c17">i</span><span class="s4-c" id="s4-c18">t</span><span class="s4-c" id="s4-c19">o</span><span class="s4-c" id="s4-c20">r</span><span class="s4-c" id="s4-c21"> </span><span class="s4-c" id="s4-c22">r</span><span class="s4-c" id="s4-c23">a</span><span class="s4-c" id="s4-c24">n</span><span class="s4-c" id="s4-c25">k</span><span class="s4-c" id="s4-c26">i</span><span class="s4-c" id="s4-c27">n</span><span class="s4-c" id="s4-c28">g</span><span class="s4-c" id="s4-c29"> </span><span class="s4-c" id="s4-c30">f</span><span class="s4-c" id="s4-c31">o</span><span class="s4-c" id="s4-c32">r</span><span class="s4-c" id="s4-c33"> </span><span class="s4-c" id="s4-c34">t</span><span class="s4-c" id="s4-c35">h</span><span class="s4-c" id="s4-c36">a</span><span class="s4-c" id="s4-c37">t</span><span class="s4-c" id="s4-c38"> </span><span class="s4-c" id="s4-c39">I</span><span class="s4-c" id="s4-c40">&#x27;</span><span class="s4-c" id="s4-c41">m</span><span class="s4-c" id="s4-c42"> </span><span class="s4-c" id="s4-c43">n</span><span class="s4-c" id="s4-c44">o</span><span class="s4-c" id="s4-c45">t</span><span class="s4-c" id="s4-c46">?</span><!--/CHARS--><span id="s4-caret"></span></div>
-      <div id="s4-chip">Claude</div>
+      <div id="s4-chip"><img src="assets/claude/claude-logo.png" alt="" />Claude</div>
       <div id="s4-send"><svg viewBox="0 0 60 60"><path d="M30 50 V12 M14 27 L30 11 L46 27" fill="none" stroke="#fff56c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
     </div>
     <div id="s4-cursor" data-layout-allow-occlusion data-layout-allow-overflow>
@@ -91,6 +94,9 @@
       tl.fromTo("#s4-cursor", { x: 1150, y: 1500 }, { x: 858, y: 902, duration: 0.6, ease: "power3.out" }, 3.0);
       tl.to("#s4-send", { scale: 0.86, duration: 0.06, ease: "power2.in" }, 3.72);
       tl.to("#s4-cursor", { scale: 0.9, duration: 0.06, ease: "power2.in", transformOrigin: "6px 4px" }, 3.72);
+      // Camera, background drift, impacts
+      tl.fromTo("#s4-pat", { backgroundPosition: "0px 0px" }, { backgroundPosition: "-92px 92px", duration: 3.8, ease: "none" }, 0);
+      tl.fromTo("#s4-shift", { scale: 1 }, { scale: 1.06, duration: 0.16, ease: "expo.out", transformOrigin: "870px 910px" }, 3.72);
       window.__timelines["s4"] = tl;
     })();
   </script>

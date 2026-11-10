@@ -16,8 +16,10 @@
     .s2-chip { position: absolute; background: #ffffff; border: 5px solid #0a0a0a; border-radius: 20px; padding: 14px 22px; font-family: "Geist Mono", monospace; font-weight: 500; font-size: 30px; line-height: 36px; color: #0a0a0a; white-space: nowrap; }
     #s2-wipe { position: absolute; left: 0; top: 1920px; width: 1080px; height: 1920px; background: #fff56c; }
     #s2-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
+    #s2-pat { position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 255, 255, 0.07) 3px, rgba(255, 255, 255, 0) 3px), linear-gradient(90deg, rgba(255, 255, 255, 0.07) 3px, rgba(255, 255, 255, 0) 3px); background-size: 72px 72px; }
   </style>
   <div id="root" data-composition-id="s2" data-width="1080" data-height="1920">
+    <div id="s2-pat" data-layout-ignore></div>
     <div id="s2-shift" data-layout-allow-overflow>
     <div id="s2-label"><div id="s2-roll"><div>KEYWORDS</div><div>BACKLINKS</div></div></div>
     <div id="s2-sub">competitor.com</div>
@@ -78,6 +80,9 @@
       });
       // Lemon wipe up into the next world
       tl.fromTo("#s2-wipe", { y: 0 }, { y: -1920, duration: 0.33, ease: "power2.inOut" }, 2.62);
+      // Camera, background drift, impacts
+      tl.fromTo("#s2-pat", { backgroundPosition: "0px 0px" }, { backgroundPosition: "144px -144px", duration: 2.95, ease: "none" }, 0);
+      tl.fromTo("#s2-shift", { scale: 1 }, { scale: 1.04, duration: 0.16, ease: "expo.out", transformOrigin: "540px 700px" }, 1.5);
       window.__timelines["s2"] = tl;
     })();
   </script>

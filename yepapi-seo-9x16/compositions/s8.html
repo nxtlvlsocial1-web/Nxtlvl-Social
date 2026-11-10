@@ -13,7 +13,7 @@
     #s8-note { position: absolute; left: 62px; top: 884px; font-family: "Geist Mono", monospace; font-weight: 700; font-size: 34px; color: #0a0a0a; }
     #s8-ticket { position: absolute; left: 120px; top: 952px; width: 840px; height: 180px; }
     #s8-ticket svg { position: absolute; inset: 0; }
-    #s8-tickettxt { position: absolute; left: 0; right: 0; top: 0; height: 180px; text-align: center; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 90px; line-height: 180px; letter-spacing: -0.04em; color: #0a0a0a; }
+    #s8-tickettxt { position: absolute; left: 0; right: 0; top: 0; height: 180px; text-align: center; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 86px; line-height: 180px; letter-spacing: -0.04em; color: #0a0a0a; }
     #s8-card { position: absolute; left: 250px; top: 300px; width: 580px; height: 360px; background: #ffffff; border: 6px solid #0a0a0a; border-radius: 30px; box-shadow: 14px 14px 0 #0a0a0a; overflow: visible; }
     #s8-chip { position: absolute; left: 50px; top: 80px; width: 96px; height: 74px; background: #fff56c; border: 5px solid #0a0a0a; border-radius: 14px; }
     .s8-bar { position: absolute; height: 26px; background: #d9d9d9; border-radius: 13px; }
@@ -21,8 +21,10 @@
     #s8-nocard { position: absolute; left: 0; width: 1080px; top: 724px; text-align: center; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 104px; line-height: 110px; letter-spacing: -0.045em; color: #0a0a0a; }
     #s8-dip { position: absolute; inset: 0; background: #0a0a0a; opacity: 0; }
     #s8-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
+    #s8-pat { position: absolute; inset: 0; background-image: repeating-linear-gradient(45deg, rgba(10, 10, 10, 0.07) 0px 14px, rgba(10, 10, 10, 0) 14px 40px); background-size: 113.137px 113.137px; }
   </style>
   <div id="root" data-composition-id="s8" data-width="1080" data-height="1920">
+    <div id="s8-pat" data-layout-ignore></div>
     <div id="s8-shift" data-layout-allow-overflow>
     <div id="s8-top">
       <div id="s8-head"><div><span class="s8-w" id="s8-w0">PAY</span> <span class="s8-w" id="s8-w1">PER</span></div><div><span class="s8-w" id="s8-w2">CALL</span></div></div>
@@ -39,7 +41,7 @@
     </div>
     <div id="s8-nocard">NO CARD NEEDED</div>
     <div id="s8-ticket">
-      <svg viewBox="0 0 840 180"><path d="M24 6 H816 a18 18 0 0 1 18 18 V64 a26 26 0 0 0 0 52 V156 a18 18 0 0 1 -18 18 H24 a18 18 0 0 1 -18 -18 V116 a26 26 0 0 0 0 -52 V24 a18 18 0 0 1 18 -18 Z" fill="#fff56c" stroke="#0a0a0a" stroke-width="9" stroke-linejoin="round" /><path d="M150 22 V158 M690 22 V158" stroke="#0a0a0a" stroke-width="6" stroke-dasharray="14 12" /></svg>
+      <svg viewBox="0 0 840 180"><path d="M24 6 H816 a18 18 0 0 1 18 18 V64 a26 26 0 0 0 0 52 V156 a18 18 0 0 1 -18 18 H24 a18 18 0 0 1 -18 -18 V116 a26 26 0 0 0 0 -52 V24 a18 18 0 0 1 18 -18 Z" fill="#fff56c" stroke="#0a0a0a" stroke-width="9" stroke-linejoin="round" /><path d="M64 22 V158 M776 22 V158" stroke="#0a0a0a" stroke-width="6" stroke-dasharray="14 12" /></svg>
       <div id="s8-tickettxt">$5 FREE CREDIT</div>
     </div>
     </div>
@@ -66,6 +68,12 @@
       tl.fromTo("#s8-nocard", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power2.out" }, 4.36);
       // Dip, then a hard cut to ink
       tl.fromTo("#s8-dip", { opacity: 0 }, { opacity: 0.4, duration: 0.1, ease: "none" }, 5.34);
+      // Camera, background drift, impacts
+      const shake = (t, a) => tl.to("#s8-shift", { keyframes: { x: [0, -a, a * 0.8, -a * 0.5, a * 0.3, 0], y: [0, a * 0.6, -a * 0.5, a * 0.3, -a * 0.2, 0] }, duration: 0.32, ease: "none" }, t);
+      tl.fromTo("#s8-pat", { backgroundPosition: "0px 0px" }, { backgroundPosition: "226.274px 0px", duration: 5.45, ease: "none" }, 0);
+      tl.fromTo("#s8-shift", { scale: 1 }, { scale: 1.05, duration: 0.16, ease: "expo.out", transformOrigin: "400px 720px" }, 1.35);
+      tl.to("#s8-shift", { scale: 1, duration: 0.24, ease: "power2.inOut" }, 2.85);
+      shake(3.08, 14);
       window.__timelines["s8"] = tl;
     })();
   </script>

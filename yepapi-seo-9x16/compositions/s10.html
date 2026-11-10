@@ -23,8 +23,10 @@
     #s10-dmtxt b { font-weight: 800; }
     #s10-now { position: absolute; right: 26px; top: 34px; font-family: "Geist Mono", monospace; font-weight: 500; font-size: 28px; color: #3a3a3a; }
     #s10-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
+    #s10-pat { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(10, 10, 10, 0.11) 3.2px, rgba(10, 10, 10, 0) 3.8px); background-size: 46px 46px; }
   </style>
   <div id="root" data-composition-id="s10" data-width="1080" data-height="1920">
+    <div id="s10-pat" data-layout-ignore></div>
     <div id="s10-shift" data-layout-allow-overflow>
     <div id="s10-logo"><img src="assets/brand/logo.svg" alt="YepAPI" /></div>
     <div id="s10-c">COMMENT</div>
@@ -53,6 +55,10 @@
       tl.set("#s10-caret", { opacity: 0 }, 0.86);
       // "...and I'll send you the link": the DM arrives
       tl.fromTo("#s10-dm", { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "expo.out" }, 1.45);
+      // Camera, background drift, impacts
+      const shake = (t, a) => tl.to("#s10-shift", { keyframes: { x: [0, -a, a * 0.8, -a * 0.5, a * 0.3, 0], y: [0, a * 0.6, -a * 0.5, a * 0.3, -a * 0.2, 0] }, duration: 0.32, ease: "none" }, t);
+      tl.fromTo("#s10-pat", { backgroundPosition: "0px 0px" }, { backgroundPosition: "-92px 92px", duration: 4.2, ease: "none" }, 0);
+      shake(0.45, 12);
       window.__timelines["s10"] = tl;
     })();
   </script>

@@ -4,58 +4,68 @@
     @font-face { font-family: "Geist Mono"; src: url("assets/fonts/GeistMono-latin-var.woff2") format("woff2"); font-weight: 100 900; font-style: normal; }
     #root { position: absolute; inset: 0; overflow: hidden; background: #0a0a0a; font-family: "Inter", sans-serif; }
     #root * { box-sizing: border-box; }
-    #s5-msg { position: absolute; left: 180px; top: 280px; width: 780px; background: #ffffff; border-radius: 30px 30px 8px 30px; padding: 24px 32px 26px; font-weight: 600; font-size: 42px; line-height: 52px; color: #0a0a0a; }
-    #s5-live { position: absolute; left: 60px; top: 470px; font-family: "Geist Mono", monospace; font-weight: 600; font-size: 32px; color: #fff56c; }
+    #s5-pat { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255, 245, 108, 0.1) 3.2px, rgba(255, 245, 108, 0) 3.8px); background-size: 46px 46px; }
+    #s5-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
+    #s5-mascot { position: absolute; left: 34px; top: 236px; width: 240px; height: 151px; }
+    #s5-mascot img { display: block; width: 240px; height: 151px; image-rendering: pixelated; }
+    #s5-msg { position: absolute; left: 290px; top: 236px; width: 670px; background: #ffffff; border-radius: 30px 30px 30px 8px; padding: 22px 30px 24px; font-weight: 600; font-size: 40px; line-height: 50px; color: #0a0a0a; }
+    #s5-live { position: absolute; left: 60px; top: 440px; font-family: "Geist Mono", monospace; font-weight: 600; font-size: 32px; color: #fff56c; }
     #s5-dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; background: #00c38a; margin-right: 14px; vertical-align: 1px; }
     .s5-term { position: absolute; left: 60px; width: 900px; display: flex; justify-content: space-between; font-family: "Geist Mono", monospace; font-weight: 500; font-size: 36px; line-height: 44px; color: #ffffff; white-space: nowrap; }
     .s5-k { color: #fff56c; font-weight: 700; margin-right: 16px; }
     .s5-ok { color: #00c38a; font-weight: 700; }
-    #s5-card { position: absolute; left: 60px; top: 700px; width: 900px; height: 440px; background: #fff56c; border: 6px solid #0a0a0a; border-radius: 28px; box-shadow: 14px 14px 0 #fe4a97; padding: 30px 40px; }
+    #s5-card { position: absolute; left: 60px; top: 616px; width: 900px; height: 470px; background: #fff56c; border: 6px solid #0a0a0a; border-radius: 28px; box-shadow: 14px 14px 0 #fe4a97; }
     #s5-inner { position: absolute; inset: 0; padding: 28px 40px; }
     #s5-title { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 56px; line-height: 64px; letter-spacing: -0.03em; color: #0a0a0a; margin-bottom: 14px; }
     .s5-row { display: flex; justify-content: space-between; align-items: baseline; border-top: 4px solid #0a0a0a; padding: 10px 0 8px; }
     .s5-kw { font-weight: 600; font-size: 42px; line-height: 50px; color: #0a0a0a; }
     .s5-vol { font-family: "Geist Mono", monospace; font-weight: 600; font-size: 34px; color: #0a0a0a; }
-    #s5-ex { position: absolute; right: 120px; top: 652px; font-weight: 500; font-size: 28px; color: #ffffff; }
-    #s5-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
+    #s5-ex { position: absolute; right: 30px; bottom: 14px; font-weight: 500; font-size: 28px; color: #0a0a0a; }
   </style>
   <div id="root" data-composition-id="s5" data-width="1080" data-height="1920">
+    <div id="s5-pat" data-layout-ignore></div>
     <div id="s5-shift" data-layout-allow-overflow>
-    <div id="s5-msg">What is my competitor ranking for that I'm not?</div>
-    <div id="s5-live"><span id="s5-dot"></span>live data via YepAPI</div>
-    <div class="s5-term" id="s5-t1" style="top: 530px"><span><span class="s5-k">POST</span>/v1/seo/domain/keywords</span><span class="s5-ok" id="s5-ok1">200</span></div>
-    <div class="s5-term" id="s5-t2" style="top: 590px"><span><span class="s5-k">POST</span>/v1/seo/competitors/domain</span><span class="s5-ok" id="s5-ok2">200</span></div>
-    <div id="s5-ex">example data</div>
-    <div id="s5-card" data-layout-allow-overflow>
-      <div id="s5-inner">
-        <div id="s5-title">Keywords you're missing</div>
-        <div class="s5-row" id="s5-r0"><span class="s5-kw">crm pricing</span><span class="s5-vol">3,100/mo</span></div>
-        <div class="s5-row" id="s5-r1"><span class="s5-kw">best crm for startups</span><span class="s5-vol">2,400/mo</span></div>
-        <div class="s5-row" id="s5-r2"><span class="s5-kw">free crm tool</span><span class="s5-vol">1,300/mo</span></div>
-        <div class="s5-row" id="s5-r3"><span class="s5-kw">sales pipeline app</span><span class="s5-vol">880/mo</span></div>
+      <div id="s5-mascot"><img src="assets/claude/claude-mascot.png" alt="Claude" /></div>
+      <div id="s5-msg">What is my competitor ranking for that I'm not?</div>
+      <div id="s5-live"><span id="s5-dot"></span>live data via YepAPI</div>
+      <div class="s5-term" id="s5-t1" style="top: 494px"><span><span class="s5-k">POST</span>/v1/seo/domain/keywords</span><span class="s5-ok" id="s5-ok1">200</span></div>
+      <div class="s5-term" id="s5-t2" style="top: 548px"><span><span class="s5-k">POST</span>/v1/seo/competitors/domain</span><span class="s5-ok" id="s5-ok2">200</span></div>
+      <div id="s5-card" data-layout-allow-overflow>
+        <div id="s5-inner">
+          <div id="s5-title">Keywords you're missing</div>
+          <div class="s5-row" id="s5-r0"><span class="s5-kw">crm pricing</span><span class="s5-vol">3,100/mo</span></div>
+          <div class="s5-row" id="s5-r1"><span class="s5-kw">best crm for startups</span><span class="s5-vol">2,400/mo</span></div>
+          <div class="s5-row" id="s5-r2"><span class="s5-kw">free crm tool</span><span class="s5-vol">1,300/mo</span></div>
+          <div class="s5-row" id="s5-r3"><span class="s5-kw">sales pipeline app</span><span class="s5-vol">880/mo</span></div>
+          <div id="s5-ex">example data</div>
+        </div>
       </div>
-    </div>
     </div>
   </div>
   <script>
     (function () {
       const tl = gsap.timeline({ paused: true });
-      // The sent question is carried up into the conversation
-      tl.fromTo("#s5-msg", { y: 320, scale: 1.2, opacity: 0, filter: "blur(6px)" }, { y: 0, scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "power3.out", transformOrigin: "100% 100%" }, 0.0);
+      tl.fromTo("#s5-pat", { backgroundPosition: "0px 0px" }, { backgroundPosition: "92px 184px", duration: 3.45, ease: "none" }, 0);
+      // The sent question is carried up into the chat; Claude is there to take it
+      tl.fromTo("#s5-msg", { y: 340, scale: 1.2, opacity: 0, filter: "blur(6px)" }, { y: 0, scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "power3.out", transformOrigin: "0% 100%" }, 0.0);
+      tl.fromTo("#s5-mascot", { scale: 0.4, opacity: 0, rotation: -12 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.35, ease: "back.out(2)", transformOrigin: "50% 100%" }, 0.12);
+      // Claude works: a pixel-step bob while the data comes in
+      for (let t = 0.55, k = 0; t < 3.0; t += 0.2, k++) tl.set("#s5-mascot", { y: k % 2 ? 0 : -8 }, t);
       tl.fromTo("#s5-live", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power2.out" }, 0.28);
       // Real YepAPI endpoints fire ("pulls live data")
       tl.fromTo("#s5-t1", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.26, ease: "steps(20)" }, 0.32);
       tl.fromTo("#s5-ok1", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.2, ease: "back.out(1.6)" }, 0.6);
       tl.fromTo("#s5-t2", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.26, ease: "steps(20)" }, 0.6);
       tl.fromTo("#s5-ok2", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.2, ease: "back.out(1.6)" }, 0.88);
-      // The answer: keywords you're missing
-      tl.fromTo("#s5-card", { y: 90, scale: 0.94, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.4, ease: "expo.out" }, 1.27);
+      // The answer: keywords you're missing (camera punches in as it lands)
+      tl.fromTo("#s5-card", { y: 110, scale: 0.9, opacity: 0, rotation: 3 }, { y: 0, scale: 1, opacity: 1, rotation: 0, duration: 0.42, ease: "back.out(1.4)" }, 1.27);
+      tl.to("#s5-shift", { scale: 1.04, duration: 0.18, ease: "expo.out", transformOrigin: "540px 760px" }, 1.3);
       ["#s5-r0", "#s5-r1", "#s5-r2", "#s5-r3"].forEach((r, i) => {
-        tl.fromTo(r, { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "expo.out" }, 1.45 + i * 0.15);
+        tl.fromTo(r, { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.28, ease: "expo.out" }, 1.45 + i * 0.15);
       });
       tl.fromTo("#s5-ex", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 1.6);
       // The lemon card becomes the next world
-      tl.to(["#s5-msg", "#s5-live", "#s5-t1", "#s5-t2", "#s5-ex"], { opacity: 0, filter: "blur(8px)", duration: 0.16, ease: "power2.in" }, 2.96);
+      tl.to(["#s5-msg", "#s5-live", "#s5-t1", "#s5-t2", "#s5-mascot"], { opacity: 0, filter: "blur(8px)", duration: 0.16, ease: "power2.in" }, 2.96);
       tl.to("#s5-inner", { opacity: 0, duration: 0.12, ease: "power2.in" }, 2.96);
       tl.to("#s5-card", { scale: 6.5, duration: 0.4, ease: "power2.in", transformOrigin: "50% 50%" }, 2.98);
       window.__timelines["s5"] = tl;
