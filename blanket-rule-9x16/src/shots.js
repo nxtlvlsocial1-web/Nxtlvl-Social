@@ -354,16 +354,26 @@ export function buildShots(ctx) {
     D.cam({ p: [[3.6, 6.4, 1.6], [3.3, 6.3, 1.2]], l: [-4.2, 5.0, -7.4], fov: 50, ap: 3, seed: 24 }, u, d);
   });
 
-  // COVER (thumbnail still, past the end)
+  // COVER (thumbnail still, past the end): the kid sitting up, the heap looming beside the bed
   shot(200, 210, (u, d) => {
-    D.lights("night", 0, { fill: [1.5, 4, -1, 80], fillColor: "#9fc0ff" });
-    lie({ legOut: 1, face: "scared", faceOpts: { sweat: true } });
-    blanketFloor();
-    reach(ankle(), 1, 1);
-    const h = heap(CHAIR.x - 3.5, CHAIR.z + 0.4, 1);
-    h.eyeMat.emissiveIntensity = 4;
-    const a = ankle();
-    D.cam({ p: [1.6, 1.5, 0.8], l: [0.5, 4.6, -4.2], f: a, fov: 58, ap: 5, shake: 0, seed: 99 }, 0, 1);
+    D.lights("night", 0, { fill: [1.5, 6.5, 1.5, 120], fillColor: "#b8c8ff" });
+    D.place(kid, -4.6, 0, -7.3, 0);
+    D.sit(kid, 3.2);
+    kid.setFace("scared", { sweat: true });
+    kid.j.armL.rotation.x = kid.j.armR.rotation.x = -1.3;
+    kid.j.armL.rotation.z = 0.35;
+    kid.j.armR.rotation.z = -0.35;
+    kid.j.head.rotation.y = -0.15;
+    P.blanket.position.set(BED.x + 0.3, 4.2, -4.6);
+    P.blanket.scale.set(1, 1.3, 0.85);
+    const h = heap(-0.3, -8.0, 1);
+    h.root.rotation.y = -1.0;
+    h.j.torso.rotation.x = 0.35;
+    h.j.head.rotation.x = 0.4;
+    h.j.arms[1].rotation.x = -0.7;
+    h.eyeMat.emissiveIntensity = 5;
+    const kh = kHead();
+    D.cam({ p: [0.9, 5.4, 0.6], l: [-2.6, 6.2, -6.8], f: kh, fov: 50, ap: 4, shake: 0, seed: 99 }, 0, 1);
   });
 
   return S;
