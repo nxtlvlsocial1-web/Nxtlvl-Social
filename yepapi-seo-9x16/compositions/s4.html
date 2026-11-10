@@ -1,0 +1,97 @@
+<template>
+  <style>
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk-latin-var.woff2") format("woff2"); font-weight: 300 700; font-style: normal; }
+    #root { position: absolute; inset: 0; overflow: hidden; background: #ffffff; font-family: "Inter", sans-serif; }
+    #root * { box-sizing: border-box; }
+    #s4-head { position: absolute; left: 60px; top: 290px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 124px; line-height: 1; letter-spacing: -0.045em; color: #0a0a0a; }
+    #s4-box { position: absolute; left: 60px; top: 500px; width: 900px; height: 500px; background: #ffffff; border: 6px solid #0a0a0a; border-radius: 36px; box-shadow: 14px 14px 0 #2d33ba; }
+    #s4-text { position: absolute; left: 44px; top: 40px; right: 44px; font-weight: 600; font-size: 60px; line-height: 74px; letter-spacing: -0.01em; color: #0a0a0a; }
+    #s4-ph { color: #767676; }
+    .s4-c { display: none; }
+    #s4-caret { display: inline-block; width: 6px; height: 62px; margin-left: 4px; background: #0a0a0a; vertical-align: -10px; }
+    #s4-chip { position: absolute; left: 40px; bottom: 40px; border: 5px solid #0a0a0a; border-radius: 40px; padding: 8px 24px; font-weight: 700; font-size: 34px; line-height: 42px; color: #0a0a0a; background: #fff56c; }
+    #s4-send { position: absolute; right: 34px; bottom: 30px; width: 112px; height: 112px; border-radius: 50%; background: #0a0a0a; }
+    #s4-send svg { position: absolute; left: 26px; top: 26px; width: 60px; height: 60px; }
+    #s4-cursor { position: absolute; left: 0; top: 0; width: 100px; height: 120px; }
+    #s4-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
+  </style>
+  <div id="root" data-composition-id="s4" data-width="1080" data-height="1920">
+    <div id="s4-shift" data-layout-allow-overflow>
+    <div id="s4-head">ONE QUESTION</div>
+    <div id="s4-box">
+      <div id="s4-text"><span id="s4-ph">Ask Claude anything</span><!--CHARS--><span class="s4-c" id="s4-c0">W</span><span class="s4-c" id="s4-c1">h</span><span class="s4-c" id="s4-c2">a</span><span class="s4-c" id="s4-c3">t</span><span class="s4-c" id="s4-c4"> </span><span class="s4-c" id="s4-c5">i</span><span class="s4-c" id="s4-c6">s</span><span class="s4-c" id="s4-c7"> </span><span class="s4-c" id="s4-c8">m</span><span class="s4-c" id="s4-c9">y</span><span class="s4-c" id="s4-c10"> </span><span class="s4-c" id="s4-c11">c</span><span class="s4-c" id="s4-c12">o</span><span class="s4-c" id="s4-c13">m</span><span class="s4-c" id="s4-c14">p</span><span class="s4-c" id="s4-c15">e</span><span class="s4-c" id="s4-c16">t</span><span class="s4-c" id="s4-c17">i</span><span class="s4-c" id="s4-c18">t</span><span class="s4-c" id="s4-c19">o</span><span class="s4-c" id="s4-c20">r</span><span class="s4-c" id="s4-c21"> </span><span class="s4-c" id="s4-c22">r</span><span class="s4-c" id="s4-c23">a</span><span class="s4-c" id="s4-c24">n</span><span class="s4-c" id="s4-c25">k</span><span class="s4-c" id="s4-c26">i</span><span class="s4-c" id="s4-c27">n</span><span class="s4-c" id="s4-c28">g</span><span class="s4-c" id="s4-c29"> </span><span class="s4-c" id="s4-c30">f</span><span class="s4-c" id="s4-c31">o</span><span class="s4-c" id="s4-c32">r</span><span class="s4-c" id="s4-c33"> </span><span class="s4-c" id="s4-c34">t</span><span class="s4-c" id="s4-c35">h</span><span class="s4-c" id="s4-c36">a</span><span class="s4-c" id="s4-c37">t</span><span class="s4-c" id="s4-c38"> </span><span class="s4-c" id="s4-c39">I</span><span class="s4-c" id="s4-c40">&#x27;</span><span class="s4-c" id="s4-c41">m</span><span class="s4-c" id="s4-c42"> </span><span class="s4-c" id="s4-c43">n</span><span class="s4-c" id="s4-c44">o</span><span class="s4-c" id="s4-c45">t</span><span class="s4-c" id="s4-c46">?</span><!--/CHARS--><span id="s4-caret"></span></div>
+      <div id="s4-chip">Claude</div>
+      <div id="s4-send"><svg viewBox="0 0 60 60"><path d="M30 50 V12 M14 27 L30 11 L46 27" fill="none" stroke="#fff56c" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+    </div>
+    <div id="s4-cursor" data-layout-allow-occlusion data-layout-allow-overflow>
+      <svg viewBox="0 0 100 120" width="100" height="120"><path d="M6 4 L6 92 L30 70 L46 108 L64 100 L48 63 L82 63 Z" fill="#ffffff" stroke="#0a0a0a" stroke-width="7" stroke-linejoin="round" /></svg>
+    </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      // The gap's empty field widens into the prompt box
+      tl.fromTo("#s4-box", { scaleX: 0.6, scaleY: 0.3, opacity: 0, filter: "blur(12px)" }, { scaleX: 1, scaleY: 1, opacity: 1, filter: "blur(0px)", duration: 0.35, ease: "power3.out" }, 0.0);
+      tl.fromTo("#s4-head", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power2.out" }, 0.12);
+      // Caret blinks while waiting (set steps, no loops)
+      [0.45, 0.9].forEach((t) => { tl.set("#s4-caret", { opacity: 0 }, t); tl.set("#s4-caret", { opacity: 1 }, t + 0.22); });
+      // Typing, synced to the spoken question
+      tl.set("#s4-ph", { display: "none" }, 1.15);
+      /*TIMES*/
+      tl.set("#s4-c0", { display: "inline" }, 1.170);
+      tl.set("#s4-c1", { display: "inline" }, 1.219);
+      tl.set("#s4-c2", { display: "inline" }, 1.268);
+      tl.set("#s4-c3", { display: "inline" }, 1.317);
+      tl.set("#s4-c4", { display: "inline" }, 1.420);
+      tl.set("#s4-c5", { display: "inline" }, 1.451);
+      tl.set("#s4-c6", { display: "inline" }, 1.482);
+      tl.set("#s4-c7", { display: "inline" }, 1.530);
+      tl.set("#s4-c8", { display: "inline" }, 1.564);
+      tl.set("#s4-c9", { display: "inline" }, 1.598);
+      tl.set("#s4-c10", { display: "inline" }, 1.650);
+      tl.set("#s4-c11", { display: "inline" }, 1.698);
+      tl.set("#s4-c12", { display: "inline" }, 1.746);
+      tl.set("#s4-c13", { display: "inline" }, 1.794);
+      tl.set("#s4-c14", { display: "inline" }, 1.842);
+      tl.set("#s4-c15", { display: "inline" }, 1.890);
+      tl.set("#s4-c16", { display: "inline" }, 1.937);
+      tl.set("#s4-c17", { display: "inline" }, 1.985);
+      tl.set("#s4-c18", { display: "inline" }, 2.033);
+      tl.set("#s4-c19", { display: "inline" }, 2.081);
+      tl.set("#s4-c20", { display: "inline" }, 2.129);
+      tl.set("#s4-c21", { display: "inline" }, 2.270);
+      tl.set("#s4-c22", { display: "inline" }, 2.308);
+      tl.set("#s4-c23", { display: "inline" }, 2.347);
+      tl.set("#s4-c24", { display: "inline" }, 2.385);
+      tl.set("#s4-c25", { display: "inline" }, 2.423);
+      tl.set("#s4-c26", { display: "inline" }, 2.461);
+      tl.set("#s4-c27", { display: "inline" }, 2.500);
+      tl.set("#s4-c28", { display: "inline" }, 2.538);
+      tl.set("#s4-c29", { display: "inline" }, 2.630);
+      tl.set("#s4-c30", { display: "inline" }, 2.711);
+      tl.set("#s4-c31", { display: "inline" }, 2.792);
+      tl.set("#s4-c32", { display: "inline" }, 2.872);
+      tl.set("#s4-c33", { display: "inline" }, 3.010);
+      tl.set("#s4-c34", { display: "inline" }, 3.029);
+      tl.set("#s4-c35", { display: "inline" }, 3.047);
+      tl.set("#s4-c36", { display: "inline" }, 3.066);
+      tl.set("#s4-c37", { display: "inline" }, 3.085);
+      tl.set("#s4-c38", { display: "inline" }, 3.120);
+      tl.set("#s4-c39", { display: "inline" }, 3.146);
+      tl.set("#s4-c40", { display: "inline" }, 3.171);
+      tl.set("#s4-c41", { display: "inline" }, 3.197);
+      tl.set("#s4-c42", { display: "inline" }, 3.300);
+      tl.set("#s4-c43", { display: "inline" }, 3.378);
+      tl.set("#s4-c44", { display: "inline" }, 3.456);
+      tl.set("#s4-c45", { display: "inline" }, 3.535);
+      tl.set("#s4-c46", { display: "inline" }, 3.613);
+      /*/TIMES*/
+      // Big cursor enters and presses send
+      tl.fromTo("#s4-cursor", { x: 1150, y: 1500 }, { x: 858, y: 902, duration: 0.6, ease: "power3.out" }, 3.0);
+      tl.to("#s4-send", { scale: 0.86, duration: 0.06, ease: "power2.in" }, 3.72);
+      tl.to("#s4-cursor", { scale: 0.9, duration: 0.06, ease: "power2.in", transformOrigin: "6px 4px" }, 3.72);
+      window.__timelines["s4"] = tl;
+    })();
+  </script>
+</template>

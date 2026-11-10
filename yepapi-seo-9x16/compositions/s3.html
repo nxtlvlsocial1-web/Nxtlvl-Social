@@ -1,0 +1,56 @@
+<template>
+  <style>
+    @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk-latin-var.woff2") format("woff2"); font-weight: 300 700; font-style: normal; }
+    #root { position: absolute; inset: 0; overflow: hidden; background: #fff56c; font-family: "Inter", sans-serif; }
+    #root * { box-sizing: border-box; }
+    #s3-stage { position: absolute; inset: 0; }
+    .s3-lab { position: absolute; left: 60px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 76px; line-height: 80px; letter-spacing: -0.03em; color: #0a0a0a; }
+    .s3-bar { position: absolute; left: 60px; height: 150px; border: 6px solid #0a0a0a; border-radius: 20px; box-shadow: 12px 12px 0 #0a0a0a; }
+    #s3-them { top: 470px; width: 900px; background: #2d33ba; }
+    #s3-you { top: 780px; width: 340px; background: #fe4a97; }
+    #s3-gap { position: absolute; left: 420px; top: 780px; width: 540px; height: 150px; border: 6px dashed #0a0a0a; border-radius: 20px; overflow: hidden; background: repeating-linear-gradient(45deg, rgba(10, 10, 10, 0.75) 0 6px, rgba(10, 10, 10, 0) 6px 24px); }
+    #s3-gapfill { position: absolute; inset: 0; background: #ffffff; opacity: 0; }
+    #s3-bracket { position: absolute; left: 420px; top: 952px; width: 540px; height: 40px; }
+    #s3-gaplabel { position: absolute; left: 420px; top: 1000px; width: 540px; text-align: center; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 92px; line-height: 100px; letter-spacing: -0.04em; color: #0a0a0a; }
+    #s3-white { position: absolute; inset: 0; background: #ffffff; opacity: 0; }
+    #s3-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
+  </style>
+  <div id="root" data-composition-id="s3" data-width="1080" data-height="1920">
+    <div id="s3-shift" data-layout-allow-overflow>
+    <div id="s3-stage" data-layout-allow-overflow>
+      <div class="s3-lab" id="s3-lab-them" style="top: 378px">THEM</div>
+      <div class="s3-bar" id="s3-them"></div>
+      <div class="s3-lab" id="s3-lab-you" style="top: 688px">YOU</div>
+      <div class="s3-bar" id="s3-you"></div>
+      <div id="s3-gap"><div id="s3-gapfill"></div></div>
+      <svg id="s3-bracket" viewBox="0 0 540 40" data-layout-ignore>
+        <path d="M4 4 V30 H536 V4" fill="none" stroke="#0a0a0a" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" />
+      </svg>
+      <div id="s3-gaplabel">THE GAP</div>
+    </div>
+    </div>
+    <div id="s3-white" data-layout-ignore></div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      // Bars measure the two sides
+      tl.fromTo("#s3-lab-them", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.16, ease: "power2.out" }, 0.0);
+      tl.fromTo("#s3-them", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "expo.out", transformOrigin: "0% 50%" }, 0.04);
+      tl.fromTo("#s3-lab-you", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.16, ease: "power2.out" }, 0.16);
+      tl.fromTo("#s3-you", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "expo.out", transformOrigin: "0% 50%" }, 0.2);
+      // "the exact gap" — the missing stretch is measured out
+      tl.fromTo("#s3-gap", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.4, ease: "power2.out" }, 0.82);
+      tl.fromTo("#s3-bracket", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out", transformOrigin: "0% 50%" }, 0.92);
+      tl.fromTo("#s3-gaplabel", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power2.out" }, 1.0);
+      // Spoken "you" / "them": each label takes its bar's colour
+      tl.to("#s3-lab-you", { color: "#fe4a97", duration: 0.12, ease: "power2.out" }, 1.63);
+      tl.to("#s3-lab-them", { color: "#2d33ba", duration: 0.12, ease: "power2.out" }, 2.33);
+      // "Watch." — dive into the gap; its inside becomes the empty input field
+      tl.to("#s3-gapfill", { opacity: 1, duration: 0.25, ease: "power2.inOut" }, 2.95);
+      tl.fromTo("#s3-stage", { scale: 1 }, { scale: 18, duration: 0.6, ease: "power3.in", transformOrigin: "690px 855px" }, 2.88);
+      tl.set("#s3-white", { opacity: 1 }, 3.49);
+      window.__timelines["s3"] = tl;
+    })();
+  </script>
+</template>
