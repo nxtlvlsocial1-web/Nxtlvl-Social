@@ -175,7 +175,9 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
 - Never use music or images we don't have the rights to; source them through `media-use`.
 - Always run final renders fully detached with no time limit: launch the render in a script with `setsid nohup`
   (never as a backgrounded tool command, which is killed after its time limit), and feed the render a held-open input
-  with `< <(sleep infinity)`, because the CLI cancels itself when its input closes (`render_cancelled_parent_exited`).
+  with `< <(sleep infinity)`, and set `HYPERFRAMES_RENDER_DETACHED=1` on the render command: the CLI cancels itself
+  (`render_cancelled_parent_exited`) when its input closes or when any ancestor process exits, including the tool shell
+  that launched the script.
   Don't pipe `sleep infinity |` into it: the pipeline then never ends and the next step never runs. Confirm frames are
   streaming in the log before saying it is rendering, and keep the session active until it finishes (watch it in
   10-minute checks inside the same turn): a cloud machine shuts down when the session goes idle and kills the render.
