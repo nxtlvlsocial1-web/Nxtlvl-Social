@@ -1,5 +1,10 @@
 """Creedom explainer reel, 9:16 (1080x1920). Writes index.html and plan/sfx_events.json.
 
+v4, after "it still doesn't feel that engaging": rebuilt on the reference promo's own grammar (a new idea every
+half second to second): full-screen word beats that fly past the camera, background flips, glitch hits, warp rays,
+diagonal tickers, a word rolling in a pill, a 3D wall of cards, step beats and a slot-machine score, on a dark plum
+ground with Creedom's magenta -> coral glow. Captions sit out where the big type already says the words.
+
 Owner's brief: an explainer on creedom.ai from the owner's script, paced like the Nxtlvl promo, using the owner's
 screen recording of the app where the script needs it, highly interactive from the hook to the end, with the mascot
 Cree animated and expressive, colours from the Creedom logo (magenta -> pink -> coral on white/blush), original music
@@ -325,10 +330,11 @@ def caption_track():
             cur = []
     if cur:
         chunks.append(cur)
-    chunks = [c for c in chunks if VO[c[0]]["s"] < W("Comment") - .9]
+    chunks = [c for c in chunks if VO[c[0]]["s"] < W("Comment") - .9 and not any(a <= VO[c[0]]["s"] < b for a, b in NOCAP)]
     for n, c in enumerate(chunks):
         t0 = VO[c[0]]["s"] - .05
         t1 = VO[chunks[n + 1][0]]["s"] - .05 if n + 1 < len(chunks) else VDUR + .2
+        t1 = min([t1] + [a - .05 for a, b in NOCAP if a > t0])         # step aside for the big type
         i = nid("cap")
         spans = " ".join(f'<span class="cw" id="{i}w{k}">{VO[k]["text"]}</span>' for k in c)
         CAPS.append(f'<div class="cap" id="{i}">{spans}</div>')
@@ -342,37 +348,151 @@ def caption_track():
                 js(f'tl.set("#{i}w{k}", {{attr: {{class: "cw"}}}}, {nxt:.3f});')
 
 
+# ------------------------------------------------------------------------------------------------ v4 motion kit
+# The reference promo's grammar: full-screen word beats that fly past the camera, background flips, glitch hits,
+# warp rays, diagonal tickers, a word that rolls inside a pill, a 3D wall of cards, step beats and a slot-machine
+# number. Dark plum ground with Creedom's magenta -> coral glow so the pink mascot and the UI pop.
+NOCAP = []          # windows where the big type already says the words: no captions there
+
+
+def beat(text, t, t_out, size, style="white", y=820, through=True, sub=None):
+    """A full-screen word beat: punches in from a blur zoom, then flies past the camera (through) or drops away."""
+    i = nid("b")
+    body = text if not sub else f'<span class="bsub" style="font-size:{sub[1]}px">{sub[0]}</span><br>{text}'
+    put(f'<div class="beat {style}" id="{i}" style="top:{y}px;font-size:{size}px">{body}</div>')
+    show(f"#{i}", t, t_out + .32)
+    js(f'tl.fromTo("#{i}", {{opacity: 0, scale: 2.1, filter: "blur(22px)"}}, {{opacity: 1, scale: 1, filter: "blur(0px)", duration: .38, ease: "power4.out", '
+       f'immediateRender: false}}, {t:.3f});')
+    js(f'tl.fromTo("#{i}", {{scale: 1}}, {{scale: 1.06, duration: {max(.1, t_out - t - .38):.2f}, ease: "none", immediateRender: false}}, {t + .38:.3f});')
+    if style == "dark":                # on a white flash: gone before the flash fades, no dark ghost on the dark ground
+        js(f'tl.to("#{i}", {{opacity: 0, scale: 1.6, duration: .08, ease: "power2.in"}}, {t_out - .06:.3f});')
+    elif through:
+        js(f'tl.to("#{i}", {{opacity: 0, scale: 3.2, filter: "blur(14px)", duration: .3, ease: "power2.in"}}, {t_out:.3f});')
+    else:
+        js(f'tl.to("#{i}", {{opacity: 0, y: 140, filter: "blur(10px)", duration: .28, ease: "power2.in"}}, {t_out:.3f});')
+    return i
+
+
+def flip(t, t1, bg, fade=.12):
+    """Background flip: the whole ground turns a colour (white flash, magenta) for a beat."""
+    i = nid("f")
+    FLIPS.append(f'<div class="flip" id="{i}" style="background:{bg}"></div>')
+    js(f'tl.fromTo("#{i}", {{opacity: 0}}, {{opacity: 1, duration: .06, immediateRender: false}}, {t:.3f});')
+    if t1 < DUR:
+        js(f'tl.to("#{i}", {{opacity: 0, duration: {fade}}}, {t1:.3f});')
+    HIDE.append(f"#{i}")
+    return i
+
+
+FLIPS = []
+
+
+def glitch(t, strong=1.0):
+    """Glitch hit: RGB split, a sideways jitter and torn colour bands, about a fifth of a second."""
+    a = 14 * strong
+    js(f'tl.fromTo("#cam2", {{x: 0, filter: "drop-shadow(0px 0 0 rgba(0,240,255,0)) drop-shadow(0px 0 0 rgba(255,0,200,0))"}}, {{keyframes: ['
+       f'{{x: {-a:.0f}, filter: "drop-shadow({a:.0f}px 0 0 rgba(0,240,255,.75)) drop-shadow({-a:.0f}px 0 0 rgba(255,0,200,.75))", duration: .05}}, '
+       f'{{x: {a * .7:.0f}, filter: "drop-shadow({-a * .7:.0f}px 0 0 rgba(0,240,255,.6)) drop-shadow({a * .7:.0f}px 0 0 rgba(255,0,200,.6))", duration: .05}}, '
+       f'{{x: {-a * .4:.0f}, duration: .04}}, {{x: 0, filter: "drop-shadow(0px 0 0 rgba(0,240,255,0)) drop-shadow(0px 0 0 rgba(255,0,200,0))", duration: .06}}], '
+       f'immediateRender: false}}, {t:.3f});')
+    for k in range(4):
+        g = nid("gb")
+        y, h = RND.uniform(150, 1750), RND.choice([10, 18, 34, 60])
+        GBANDS.append(f'<i class="gband" id="{g}" style="top:{y:.0f}px;height:{h}px;background:{["#00f0ff", "#ff2bd6", "#ffffff", "#F5876C"][k]}"></i>')
+        js(f'tl.fromTo("#{g}", {{opacity: 0, x: {RND.uniform(-300, 300):.0f}}}, {{keyframes: [{{opacity: .85, duration: .03}}, {{x: {RND.uniform(-300, 300):.0f}, duration: .08}}, '
+           f'{{opacity: 0, duration: .04}}], immediateRender: false}}, {t + k * .02:.3f});')
+        HIDE.append(f"#{g}")
+    cue(t, "swish")
+
+
+GBANDS = []
+
+
+def rays(t0, t1, n=44, cx=540, cy=820, color="rgba(255,190,240,.85)"):
+    """Warp streaks rushing out from the centre."""
+    i = nid("ry")
+    lines = ""
+    for k in range(n):
+        ang = RND.uniform(0, 360)
+        lines += f'<i class="ray" style="left:{cx}px;top:{cy}px;transform:rotate({ang:.0f}deg)"><i class="rl" id="{i}r{k}" style="background:linear-gradient(90deg,transparent,{color})"></i></i>'
+    put(f'<div class="rays" id="{i}"{" style=\"opacity:1\"" if t0 <= 0 else ""}>{lines}</div>')
+    if t0 <= 0:
+        RAYS0.append(f"#{i}")
+    else:
+        show(f"#{i}", t0, t1)
+    if t0 > 0 or t1 < DUR:
+        js(f'tl.to("#{i}", {{opacity: 0, duration: .25}}, {t1 - .25:.3f});')
+    for k in range(n):
+        d = RND.uniform(.5, .95)
+        reps = max(0, int((t1 - t0) / d) - 1)
+        js(f'tl.fromTo("#{i}r{k}", {{x: {RND.uniform(30, 260):.0f}, scaleX: .3}}, {{x: 1250, scaleX: 1.6, duration: {d:.2f}, ease: "power2.in", repeat: {reps}, '
+           f'immediateRender: false}}, {max(.01, t0) + RND.uniform(0, d):.3f});')
+    return i
+
+
+RAYS0 = []
+
+
+def ticker(y, rot, words, t0, t1, dirn=1, style="mag"):
+    i = nid("tk")
+    txt = " &#10022; ".join(words * 6)
+    put(f'<div class="tkw {style}" id="{i}" style="top:{y}px"><div class="tki" id="{i}i">{txt}</div></div>')
+    show(f"#{i}", t0, t1)
+    js(f'tl.fromTo("#{i}", {{scaleY: 0, rotation: {rot}}}, {{scaleY: 1, rotation: {rot}, duration: .3, ease: "expo.out", immediateRender: false}}, {t0:.3f});')
+    js(f'tl.fromTo("#{i}i", {{x: {-200 if dirn > 0 else -1400}}}, {{x: {-1400 if dirn > 0 else -200}, duration: {t1 - t0:.2f}, ease: "none", immediateRender: false}}, {t0:.3f});')
+    js(f'tl.to("#{i}", {{scaleY: 0, duration: .22, ease: "power2.in"}}, {t1 - .22:.3f});')
+    return i
+
+
+def slot_html(i, digits):
+    cols = ""
+    for k, d in enumerate(digits):
+        stack = "".join(f"<b>{n % 10}</b>" for n in range(30))
+        cols += f'<span class="sw"><span class="sc" id="{i}d{k}">{stack}</span></span>'
+    return cols
+
+
+def slot_roll(i, digits, t, d=1.1):
+    for k, dg in enumerate(digits):
+        idx = 20 + int(dg)
+        js(f'tl.fromTo("#{i}d{k}", {{yPercent: 0}}, {{yPercent: {-idx / 30 * 100:.3f}, duration: {d + k * .25:.2f}, ease: "back.out(1.1)", immediateRender: false}}, {t:.3f});')
+
+
 # ------------------------------------------------------------------------------------------------ the phone
-PHX, PHY, PHW = 350, 630, 370
-PHH = round(PHW * 1434 / 660)
+PHONE = {}
 
 
-def phone(t, t1, clips):
-    """The app on a phone with a clean island (the recording's own status bar is painted out). It swoops in tilted,
-    then sways gently in 3D; a light reflection sweeps the glass on every new clip."""
+def phone_build(clips, x, y, w):
+    PHONE.update(x=x, y=y, w=w)
+    h = round(w * 1434 / 660)
     vids = "".join(f'<video id="pv{k}" class="pv" src="assets/video/{f}" data-start="{s:.3f}" data-duration="{d:.3f}" data-track-index="{2 + k}" muted playsinline></video>'
                    for k, (f, s, d) in enumerate(clips))
-    put(f'<div id="phone" style="left:{PHX}px;top:{PHY}px;width:{PHW}px;height:{PHH}px"><div id="phonei"><div class="scr">{vids}'
+    put(f'<div id="phone" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px"><div id="phonei"><div class="scr">{vids}'
         f'<i class="scan" data-layout-allow-overflow id="scan"></i><i class="refl" data-layout-allow-overflow id="refl"></i></div><i class="isl"></i></div></div>')
-    show("#phone", t, t1)
-    js(f'tl.fromTo("#phone", {{transformPerspective: 1400, y: 900, rotationX: 38, rotationY: -18, rotation: -8, scale: .8}}, {{y: 0, rotationX: 0, rotationY: 0, rotation: 0, scale: 1, '
-       f'duration: .9, ease: "expo.out", transformPerspective: 1400, immediateRender: false}}, {t:.3f});')
-    reps = int((t1 - t - 1) / 2.4)
-    reps -= 1 - reps % 2
-    js(f'tl.fromTo("#phonei", {{transformPerspective: 1400, rotationY: -6, y: 0}}, {{rotationY: 6, y: -14, duration: 2.4, ease: "sine.inOut", yoyo: true, repeat: {reps}, '
-       f'transformPerspective: 1400, immediateRender: false}}, {t + .9:.3f});')
     for k, (f, s, d) in enumerate(clips):
         show(f"#pv{k}", s, s + d)
         js(f'tl.fromTo("#pv{k}", {{scale: 1.08, filter: "blur(8px)"}}, {{scale: 1, filter: "blur(0px)", duration: .35, ease: "power3.out", immediateRender: false}}, {s:.3f});')
         js(f'tl.fromTo("#refl", {{xPercent: -160}}, {{xPercent: 260, duration: .9, ease: "power2.inOut", immediateRender: false}}, {s + .05:.3f});')
 
 
+def phone_in(t, t1):
+    show("#phone", t, t1)
+    js(f'tl.fromTo("#phone", {{transformPerspective: 1400, opacity: 0, y: 1000, rotationX: 40, rotationY: -20, rotation: -10, scale: .75}}, {{opacity: 1, y: 0, rotationX: 0, '
+       f'rotationY: 0, rotation: 0, scale: 1, duration: .85, ease: "expo.out", transformPerspective: 1400, immediateRender: false}}, {t:.3f});')
+    reps = int((t1 - t - 1) / 2.4)
+    reps -= 1 - reps % 2
+    if reps >= 1:
+        js(f'tl.fromTo("#phonei", {{transformPerspective: 1400, rotationY: -6, y: 0}}, {{rotationY: 6, y: -14, duration: 2.4, ease: "sine.inOut", yoyo: true, '
+           f'repeat: {reps}, transformPerspective: 1400, immediateRender: false}}, {t + .85:.3f});')
+
+
 # ------------------------------------------------------------------------------------------------ the scenes
 def scenes():
-    t_up, t_flop, t_cr, t_wat, t_sec2 = W("uploaded"), W("flopped"), W("Creedom's"), W("watched"), W("second", 2)
-    t_it, t_hook, t_ene, t_drop, t_swp = W("It", 3), W("hook"), W("energy"), W("dropped"), W("swiped")
-    t_also, t_new, t_fix = W("also"), W("new"), W("fix")
-    t_you, t_free, t_audit, t_acc, t_type, t_hand = W("You"), W("free"), W("audit"), W("account"), W("type"), W("handle")
+    t_told, t_me, t_the, t_exact, t_sec, t_ppl, t_stop = W("told"), W("me"), W("the"), W("exact"), W("second"), W("people"), W("stopped")
+    t_up, t_flop, t_cr, t_rl, t_and, t_wat, t_sec2 = W("uploaded"), W("flopped"), W("Creedom's"), W("Reel", 1), W("and"), W("watched"), W("second", 2)
+    t_it, t_hook, t_ene, t_drop, t_mid, t_ppl2, t_swp = W("It", 3), W("hook"), W("energy"), W("dropped"), W("middle"), W("people", 2), W("swiped")
+    t_also, t_new, t_what, t_fix = W("also"), W("new"), W("what"), W("fix")
+    t_you, t_free, t_audit, t_acc, t_just, t_type, t_hand = W("You"), W("free"), W("audit"), W("account"), W("Just"), W("type"), W("handle")
     t_20, t_score, t_100, t_first, t_fix2 = W("20"), W("score"), W("100"), W("first"), W("fix", 2)
     t_com, t_cree, t_send, t_link = W("Comment"), W("CREE"), W("send"), W("link")
     S2, S3, S4, S5, S6, S7 = t_up - .25, t_it - .2, t_also - .3, t_you - .25, t_com - .9, VDUR + .05
@@ -380,215 +500,289 @@ def scenes():
         push(a, b, *((1, 1.04) if k % 2 == 0 else (1.04, 1)))
 
     # ---- S1 the hook: "This AI told me the exact second people stopped watching my reel."
-    headline([("THIS AI TOLD ME", 70, W("This"), None), ("THE EXACT", 124, W("the"), None), ("[SECOND]", 188, W("second"), "grad")], 236, out=S2 - .4)
-    cue(W("second"), "hit")
-    sparkle(540, 520, W("second") + .35, n=10, r=300)
-    # retention: a glass card that is already on screen at 0 s; the line runs, then falls off a cliff where people left
+    NOCAP.append((0, t_ppl - .05))
+    rays(0, t_ppl, cy=820)
+    js('tl.fromTo("#star0", {scale: 1, rotation: 0}, {keyframes: [{scale: 1.25, rotation: 20, duration: .1}, {scale: 0, rotation: 90, opacity: 0, duration: .2, ease: "power3.in"}], '
+       'immediateRender: false}, .08);')
+    beat("THIS AI", W("This"), t_told - .04, 180)
+    cue(W("This"), "hit")
+    beat("TOLD ME", t_told, t_the - .04, 180, style="outline")
+    cue(t_told, "whoosh")
+    flip(t_the, t_sec - .04, "#ffffff", fade=.05)
+    beat("EXACT", t_the, t_sec - .05, 250, style="dark", sub=("THE", 110))
+    cue(t_the, "hit")
+    sc = beat("SECOND", t_sec, t_ppl - .05, 210, style="grad", y=720)
+    glitch(t_sec, 1.2)
+    cue(t_sec, "hit")
+    i = nid("clk")
+    put(f'<div class="clock" id="{i}">00:0<span id="{i}n">0</span></div>')
+    show(f"#{i}", t_sec + .1, t_ppl - .05)
+    fly(f"#{i}", t_sec + .1, y=40, d=.3)
+    js(f'tl.fromTo("#{i}n", {{textContent: 0}}, {{textContent: 7, duration: .35, ease: "none", snap: {{textContent: 1}}, immediateRender: false}}, {t_sec + .1:.3f});')
+    js(f'tl.to("#{i}", {{opacity: 0, scale: 2, filter: "blur(10px)", duration: .25}}, {t_ppl - .1:.3f});')
+    sparkle(540, 830, t_sec + .1, n=10, r=360)
+    # the retention line: neon, full width, it crashes where people left
     av = "".join(f'<i class="av" id="av{k}"><svg viewBox="0 0 40 40"><circle cx="20" cy="14" r="8"/><path d="M 5 38 C 6 26 34 26 35 38 Z"/></svg></i>' for k in range(7))
-    g = glass(f'<div class="gh"><span class="gt">Retention</span><span class="gp" id="gp">100%</span></div><div class="avs">{av}</div>'
+    g = glass(f'<div class="gh"><span class="gt">RETENTION</span><span class="gp" id="gp">100%</span></div><div class="avs">{av}</div>'
               f'<svg viewBox="0 0 700 240" class="gs"><path class="gl0" d="M 0 230 H 700"/>'
               f'<path class="gline" id="gl" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" d="M 0 24 C 80 28 160 34 240 44 C 300 50 330 54 360 58 '
               f'C 380 62 395 130 410 190 C 430 206 520 212 700 216"/><circle class="gdot" id="gd" cx="372" cy="66" r="16"/></svg>'
-              f'<div class="gtag" id="gtag">0:07 &middot; they left here</div>', 110, 690, 860, 0, S2 - .3, cls="graph", flt=False, enter="settle")
-    js(f'tl.fromTo("#gl", {{strokeDashoffset: 1}}, {{strokeDashoffset: 0, duration: 1.5, ease: "power1.inOut", immediateRender: false}}, 1.7);')
-    js('tl.fromTo("#gp", {textContent: 100}, {textContent: 38, duration: 1.5, ease: "power2.in", snap: {textContent: 1}, '
-       'modifiers: {textContent: (v) => Math.round(v) + "%"}, immediateRender: false}, 1.7);')
-    js('tl.fromTo(".av", {opacity: 0, y: 30, scale: .5}, {opacity: 1, y: 0, scale: 1, duration: .5, ease: "back.out(2)", stagger: .07, immediateRender: false}, .5);')
-    pop("#gd", W("stopped") - .05, frm=0)
-    js(f'tl.to("#gd", {{scale: 1.6, opacity: .5, duration: .3, yoyo: true, repeat: 3}}, {W("stopped") + .3:.3f});')
-    pop("#gtag", W("stopped") + .05, frm=.4)
-    cue(W("stopped") - .05, "alert")
-    # the viewers who leave: five of the seven turn red and drop out of the row
-    js(f'tl.to(["#av2", "#av3", "#av4", "#av5", "#av6"], {{keyframes: [{{background: "rgba(255,45,85,.9)", duration: .12}}, {{x: -60, y: 120, rotation: -40, '
-       f'opacity: 0, duration: .55, ease: "power2.in"}}], stagger: .08}}, {W("watching"):.3f});')
-    cue(W("watching"), "swish")
-    gout(f"#{g}", S2 - .4, to="down")
-    whip(S2 - .15)
-    # Cree: pops up waving, thinks, points at the graph, then is shocked where people left
-    cree_set(0, 880, 1600, .40)
-    js(f'tl.fromTo("#cree", {{opacity: 0, y: 1500}}, {{opacity: 1, y: {1320 - PCY}, duration: .6, ease: "back.out(1.6)", immediateRender: false}}, {W("AI") - .1:.3f});')
-    cue(W("AI") - .1, "pop")
-    cree_wiggle(W("AI") + .4, n=3, amp=8)
-    pose(1.55, "think")
-    pose(2.6, "point", flip=True)
-    pose(W("stopped") - .1, "shock", flip=False)
-    cree_face(W("stopped"), "sweat", d=1.2)
-    cree_say(W("stopped") + .05, "!", d=1.0)
-    cree_hop(W("stopped") - .1, h=40)
+              f'<div class="gtag" id="gtag">0:07 &middot; they left here</div>', 90, 560, 900, t_ppl, S2 - .2, cls="graph", flt=False)
+    js(f'tl.fromTo("#gl", {{strokeDashoffset: 1}}, {{strokeDashoffset: 0, duration: .8, ease: "power1.inOut", immediateRender: false}}, {t_ppl + .1:.3f});')
+    js(f'tl.fromTo("#gp", {{textContent: 100}}, {{textContent: 38, duration: .8, ease: "power2.in", snap: {{textContent: 1}}, '
+       f'modifiers: {{textContent: (v) => Math.round(v) + "%"}}, immediateRender: false}}, {t_ppl + .1:.3f});')
+    js(f'tl.fromTo(".av", {{opacity: 0, y: 30, scale: .5}}, {{opacity: 1, y: 0, scale: 1, duration: .35, ease: "back.out(2)", stagger: .04, immediateRender: false}}, {t_ppl:.3f});')
+    flip(t_stop, t_stop + .1, "#ff2d55", fade=.15)
+    pop("#gd", t_stop - .02, frm=0)
+    js(f'tl.to("#gd", {{scale: 1.6, opacity: .5, duration: .25, yoyo: true, repeat: 3}}, {t_stop + .25:.3f});')
+    pop("#gtag", t_stop + .05, frm=.4)
+    cue(t_stop - .02, "alert")
+    js(f'tl.to(["#av2", "#av3", "#av4", "#av5", "#av6"], {{keyframes: [{{background: "rgba(255,45,85,.95)", duration: .1}}, {{x: -60, y: 140, rotation: -40, '
+       f'opacity: 0, duration: .5, ease: "power2.in"}}], stagger: .07}}, {t_stop + .2:.3f});')
+    cue(t_stop + .25, "swish")
+    js(f'tl.fromTo("#{g}", {{x: 0}}, {{keyframes: [{{x: -16, duration: .04}}, {{x: 14, duration: .04}}, {{x: -8, duration: .04}}, {{x: 0, duration: .04}}], '
+       f'immediateRender: false}}, {t_stop:.3f});')
+    gout(f"#{g}", S2 - .35, to="down")
+    glitch(S2 - .15)
+    cree_set(0, 880, 1700, .38)
+    js(f'tl.fromTo("#cree", {{opacity: 0, y: 1700 - {PCY}}}, {{opacity: 1, y: {1330 - PCY}, duration: .45, ease: "back.out(1.8)", immediateRender: false}}, {t_stop - .15:.3f});')
+    pose(t_stop - .15, "shock", squash=False)
+    cue(t_stop - .15, "pop")
+    cree_face(t_stop, "sweat", d=1.2)
+    cree_say(t_stop + .05, "!", d=1.0)
 
     # ---- S2a: "I uploaded a reel that flopped"
-    hf = headline([("I UPLOADED A REEL", 66, t_up, None), ("THAT [FLOPPED.]", 96, t_flop, "red")], 260, out=t_cr - .4)
-    js(f'tl.fromTo("#{hf}l1", {{x: 0}}, {{keyframes: [{{x: -14, duration: .05}}, {{x: 14, duration: .05}}, {{x: -10, duration: .05}}, {{x: 8, duration: .05}}, '
-       f'{{x: 0, duration: .05}}], immediateRender: false}}, {t_flop + .4:.3f});')
+    hf = headline([("I UPLOADED A REEL", 66, t_up, None), ("THAT [FLOPPED.]", 100, t_flop, "red")], 250, out=t_cr - .4)
+    js(f'tl.fromTo("#{hf}l1", {{x: 0}}, {{keyframes: [{{x: -16, duration: .05}}, {{x: 16, duration: .05}}, {{x: -10, duration: .05}}, {{x: 8, duration: .05}}, '
+       f'{{x: 0, duration: .05}}], immediateRender: false}}, {t_flop + .35:.3f});')
     r = glass(f'<div class="rv" id="rv"><i class="play"></i><div class="up" id="up"><div class="upt">Uploading <b id="upn">0%</b></div>'
               f'<div class="upb"><i id="upf"></i></div></div></div><div class="rm"><b>my_reel.mp4</b><span class="views"><b id="vn">0</b> views '
-              f'<em id="vd">&darr; 84%</em></span></div><div class="stampf" id="stamp">FLOPPED</div>', 170, 650, 440, S2 + .05, t_cr - .1, cls="reel")
+              f'<em id="vd">&darr; 84%</em></span></div><div class="stampf" id="stamp">FLOPPED</div>', 220, 600, 460, S2 + .05, t_cr - .1, cls="reel", flt=False)
     cue(S2 + .05, "whoosh")
-    js(f'tl.fromTo("#upf", {{scaleX: 0}}, {{scaleX: 1, duration: .7, ease: "power2.inOut", immediateRender: false}}, {t_up + .1:.3f});')
-    js(f'tl.fromTo("#upn", {{textContent: 0}}, {{textContent: 100, duration: .7, ease: "power2.inOut", snap: {{textContent: 1}}, modifiers: {{textContent: (v) => Math.round(v) + "%"}}, '
-       f'immediateRender: false}}, {t_up + .1:.3f});')
-    js(f'tl.to("#up", {{opacity: 0, y: 30, duration: .25}}, {t_up + .85:.3f});')
-    js(f'tl.fromTo("#vn", {{textContent: 0}}, {{textContent: 312, duration: .6, ease: "power2.out", snap: {{textContent: 1}}, immediateRender: false}}, {t_up + .9:.3f});')
+    js(f'tl.fromTo("#upf", {{scaleX: 0}}, {{scaleX: 1, duration: .55, ease: "power2.inOut", immediateRender: false}}, {t_up + .05:.3f});')
+    js(f'tl.fromTo("#upn", {{textContent: 0}}, {{textContent: 100, duration: .55, ease: "power2.inOut", snap: {{textContent: 1}}, modifiers: {{textContent: (v) => Math.round(v) + "%"}}, '
+       f'immediateRender: false}}, {t_up + .05:.3f});')
+    js(f'tl.to("#up", {{opacity: 0, y: 30, duration: .2}}, {t_up + .65:.3f});')
+    js(f'tl.fromTo("#vn", {{textContent: 0}}, {{textContent: 312, duration: .45, ease: "power2.out", snap: {{textContent: 1}}, immediateRender: false}}, {t_up + .7:.3f});')
     pop("#vd", t_flop, frm=.4)
+    flip(t_flop, t_flop + .08, "#ff2d55", fade=.2)
     js(f'tl.to("#{r}", {{rotationX: 18, y: 40, duration: .45, ease: "bounce.out", transformPerspective: 1200}}, {t_flop:.3f});')
-    js(f'tl.to("#rv", {{filter: "grayscale(.85) brightness(.8)", duration: .4}}, {t_flop:.3f});')
-    pop("#stamp", t_flop + .05, frm=2.4, d=.3, ease="back.out(2)", rot=-12)
+    js(f'tl.to("#rv", {{filter: "grayscale(.85) brightness(.75)", duration: .3}}, {t_flop:.3f});')
+    pop("#stamp", t_flop + .05, frm=2.6, d=.28, ease="back.out(2)", rot=-12)
     cue(t_flop + .05, "stamp")
-    # the flop gets sucked into the analyzer's phone
-    js(f'tl.to("#{r}", {{x: 300, y: 260, scale: .2, rotation: 20, opacity: 0, duration: .45, ease: "power3.in"}}, {t_cr - .55:.3f});')
-    cree_walk(S2 + .05, t_flop - .1, (880, 1320, .40), (840, 1310, .42), end="sad")
-    cree_say(t_flop + .1, "...", d=.9, size=70)
+    js(f'tl.to("#{r}", {{x: 220, y: 300, scale: .15, rotation: 25, opacity: 0, duration: .4, ease: "power3.in"}}, {t_cr - .5:.3f});')
+    cree_walk(S2 + .05, t_flop - .1, (880, 1330, .38), (860, 1320, .40), end="sad")
+    cree_say(t_flop + .1, "...", d=.8, size=70)
 
     # ---- S2b: "into Creedom's Reel Analyzer, and it watched it second by second."
-    ch = glass('<img src="assets/img/cree.png" alt=""><span>Creedom &middot; <b>Reel Analyzer</b></span>', 0, 250, 0, t_cr, S3 - .1, cls="chip", flt=False)
+    glitch(t_cr - .12, .9)
+    flip(t_cr - .1, t_cr - .02, "#ffffff", fade=.1)
+    phone_build([("c1_pick.mp4", t_cr - .1, 2.0), ("c2_steps.mp4", t_cr + 1.9, 2.0),
+                 ("c4_fixes.mp4", t_what - .3, S5 - t_what + .1)], 330, 540, 420)
+    phone_in(t_cr - .1, S3 - .05)
+    cue(t_cr - .1, "whoosh_big")
+    tk1 = ticker(760, -14, ["REEL ANALYZER", "SECOND BY SECOND", "HOOK SCORE", "RETENTION"], t_cr - .05, t_wat + .1, 1, "mag")
+    tk2 = ticker(1060, 9, ["CREEDOM", "AI FEEDBACK", "WHAT TO FIX", "NEW HOOKS"], t_cr + .05, t_wat + .1, -1, "wht")
+    ch = glass('<img src="assets/img/cree.png" alt=""><span>Creedom &middot; <b>Reel Analyzer</b></span>', 0, 250, 0, t_cr, t_wat - .1, cls="chip", flt=False)
+    js(f'tl.to("#{ch}", {{opacity: 0, y: -40, filter: "blur(8px)", duration: .25}}, {t_wat - .35:.3f});')
     cue(t_cr, "pop")
-    phone(t_cr - .2, S5 - .1, [("c1_pick.mp4", t_cr - .2, 2.0), ("c2_steps.mp4", t_cr + 1.8, 2.0),
-                               ("c3_score.mp4", S3 - .2, 6.6), ("c4_fixes.mp4", S4 - .2, 4.6)])
-    cue(t_cr - .2, "whoosh_big")
     pose(t_cr, "present")
-    cree_to(t_cr - .1, 890, 1310, .42, d=.5)
-    # second by second: the scan bar sweeps the screen, a glass filmstrip of seconds runs under the headline
+    cree_to(t_cr - .1, 940, 1350, .36, d=.45)
+    # it watched it second by second: the camera dives into the screen, timestamps tick out around it
+    js(f'tl.to("#phone", {{scale: 1.18, y: -58, duration: .7, ease: "expo.inOut"}}, {t_wat - .25:.3f});')
     show("#scan", t_wat, S3)
-    js(f'tl.fromTo("#scan", {{yPercent: -100}}, {{yPercent: 900, duration: .65, ease: "none", repeat: 2, immediateRender: false}}, {t_wat:.3f});')
-    fs = nid("fs")
-    cells = "".join(f'<span class="fc">0:{k:02d}</span>' for k in range(0, 31))
-    put(f'<div class="film" id="{fs}"><div class="fin" id="{fs}i">{cells}</div></div>')
-    show(f"#{fs}", t_wat - .1, S3 - .1)
-    fly(f"#{fs}", t_wat - .1, y=40)
-    js(f'tl.fromTo("#{fs}i", {{x: 0}}, {{x: -1900, duration: {S3 - t_wat + .4:.2f}, ease: "none", immediateRender: false}}, {t_wat - .1:.3f});')
-    js(f'tl.to("#{fs}", {{opacity: 0, y: -30, duration: .25}}, {S3 - .35:.3f});')
-    js(f'tl.to("#{ch}", {{opacity: 0, y: -40, filter: "blur(8px)", duration: .3}}, {S3 - .4:.3f});')
-    headline([("[SECOND] BY [SECOND]", 78, t_sec2, "grad")], 344, out=S3 - .4)
+    js(f'tl.fromTo("#scan", {{yPercent: -100}}, {{yPercent: 900, duration: .6, ease: "none", repeat: 2, immediateRender: false}}, {t_wat:.3f});')
+    headline([("[SECOND] BY [SECOND]", 82, t_sec2 - .1, "grad")], 236, out=S3 - .35)
     cue(t_sec2, "tick")
-    cree_to(t_wat - .3, 900, 1290, .42, d=.4)
+    for k in range(8):
+        tc = nid("ts")
+        side = -1 if k % 2 == 0 else 1
+        x = 540 + side * RND.uniform(360, 430) - 80
+        y = 600 + k * 82
+        put(f'<div class="tchip" id="{tc}" style="left:{x:.0f}px;top:{y:.0f}px">0:0{k + 1}</div>')
+        tt = t_wat + .05 + k * .2
+        show(f"#{tc}", tt, S3 - .1)
+        js(f'tl.fromTo("#{tc}", {{opacity: 0, scale: .3, x: {-side * 120}}}, {{opacity: 1, scale: 1, x: 0, duration: .3, ease: "back.out(2.4)", immediateRender: false}}, {tt:.3f});')
+        js(f'tl.to("#{tc}", {{opacity: 0, scale: .6, y: -40, duration: .2}}, {S3 - .3:.3f});')
+        if k % 2 == 0:
+            cue(tt, "tick")
+    cree_to(t_wat - .3, 930, 1360, .36, d=.4)
     pose(t_wat, "mag")
     js(f'tl.fromTo("#creef", {{rotation: 0}}, {{rotation: -6, duration: .45, ease: "sine.inOut", yoyo: true, repeat: 3, immediateRender: false}}, {t_wat + .3:.3f});')
-    cue(t_wat, "pop")
+    js(f'tl.to("#phone", {{scale: 2.4, opacity: 0, filter: "blur(16px)", duration: .35, ease: "power3.in"}}, {S3 - .3:.3f});')
+    glitch(S3 - .1)
 
-    # ---- S3: "It told me my hook worked, but my energy dropped in the middle, and that's exactly where people swiped away."
-    # the phone takes the left column; the findings come in on the right
-    js(f'tl.to("#phone", {{x: {60 - PHX}, duration: .7, ease: "expo.inOut"}}, {S3 - .25:.3f});')
-    headline([("HOOK [WORKED]", 108, t_hook, "green")], 330, out=t_ene - .45)
-    he = headline([("ENERGY [DROPPED]", 86, t_ene - .1, "red")], 340, out=t_swp - .45)
-    js(f'tl.to("#{he}l0w1", {{y: 22, rotation: 4, duration: .6, ease: "bounce.out"}}, {t_drop + .1:.3f});')
-    headline([("SWIPED [AWAY]", 108, t_swp - .1, "red")], 330, out=S4 - .45, how="left")
-    hk = glass('<div class="hkr"><i class="ok"><svg viewBox="0 0 40 40"><path d="M 9 21 L 17 29 L 32 12" fill="none" stroke="#fff" stroke-width="6" '
-               'stroke-linecap="round" stroke-linejoin="round"/></svg></i><div><div class="hkl">HOOK &middot; 0:00-0:03</div><div class="hkv">Strong start</div></div>'
-               '<b class="hks" id="hks">92</b></div><div class="hkbar"><i id="hkf"></i></div>', 470, 640, 560, t_hook, S4 - .3, cls="hook", enter="right")
-    js(f'tl.fromTo("#hkf", {{scaleX: 0}}, {{scaleX: .92, duration: .8, ease: "power3.out", immediateRender: false}}, {t_hook + .3:.3f});')
-    js(f'tl.fromTo("#hks", {{textContent: 0}}, {{textContent: 92, duration: .8, ease: "power3.out", snap: {{textContent: 1}}, immediateRender: false}}, {t_hook + .3:.3f});')
+    # ---- S3: "It told me my [hook worked], but my [energy dropped] in the middle, and that's exactly where [people swiped] away."
+    headline([("IT TOLD ME MY", 76, t_it, None)], 360, out=S4 - .4)
+    put('<div class="pill" id="pill"><div class="pst" id="pst"><div class="pw">HOOK WORKED &#10003;</div><div class="pw">ENERGY DROPPED &darr;</div>'
+        '<div class="pw">PEOPLE SWIPED &larr;</div></div><i class="shine" data-layout-allow-overflow id="pills"></i></div>')
+    show("#pill", t_hook - .05, S4 - .3)
+    js(f'tl.fromTo("#pill", {{opacity: 0, scaleX: .2, scaleY: .6}}, {{opacity: 1, scaleX: 1, scaleY: 1, duration: .45, ease: "back.out(1.8)", immediateRender: false}}, {t_hook - .05:.3f});')
+    for k, (tt, col) in enumerate([(t_ene, "#ff2d55"), (t_ppl2, "#c40db8")]):
+        js(f'tl.to("#pst", {{yPercent: {-(k + 1) * 100 / 3:.3f}, duration: .45, ease: "back.inOut(1.6)"}}, {tt - .05:.3f});')
+        js(f'tl.to("#pill", {{background: "{col}", boxShadow: "0 20px 60px {col}88", duration: .3}}, {tt - .05:.3f});')
+        js(f'tl.fromTo("#pills", {{xPercent: 0}}, {{xPercent: 420, duration: .7, ease: "power2.inOut", immediateRender: false}}, {tt + .2:.3f});')
+        cue(tt - .05, "whoosh")
+    js(f'tl.fromTo("#pills", {{xPercent: 0}}, {{xPercent: 420, duration: .7, ease: "power2.inOut", immediateRender: false}}, {t_hook + .3:.3f});')
+    js(f'tl.to("#pill", {{opacity: 0, scale: .6, y: -60, duration: .3, ease: "power2.in"}}, {S4 - .45:.3f});')
     cue(t_hook, "success")
-    bars = "".join(f'<i class="eb" id="eb{k}" style="height:{h}px"></i>' for k, h in enumerate([150, 170, 160, 175, 165, 150, 140, 150, 165, 170]))
-    en = glass(f'<div class="et">ENERGY</div><div class="ebars">{bars}</div><div class="edrop" id="edrop">&darr; dropped at 0:07</div>', 470, 830, 560,
-               t_ene - .25, S4 - .3, cls="energy", enter="right")
-    cue(t_ene - .25, "whoosh")
-    js('tl.to(["#eb3", "#eb4", "#eb5", "#eb6"], {height: (k) => [70, 34, 26, 58][k], background: "#ff4d6d", duration: .5, ease: "bounce.out", stagger: .05}, '
-       f'{t_drop:.3f});')
-    pop("#edrop", t_drop + .15, frm=.5)
+    # visual 1: the hook score ring
+    hk = glass('<div class="hring"><svg viewBox="0 0 200 200"><circle class="hb" cx="100" cy="100" r="80"/><circle class="hf" id="hkr" cx="100" cy="100" r="80" '
+               'pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 100 100)"/></svg><div class="hv"><b id="hkn">0</b><small>/100</small></div></div>'
+               '<div class="hkt"><div class="hkl">HOOK &middot; 0:00-0:03</div><div class="hkv">Strong start</div></div>', 140, 760, 800, t_hook + .05, t_ene - .1,
+               cls="hookbig", flt=False)
+    js(f'tl.fromTo("#hkr", {{strokeDashoffset: 1}}, {{strokeDashoffset: .08, duration: .9, ease: "power3.out", immediateRender: false}}, {t_hook + .25:.3f});')
+    js(f'tl.fromTo("#hkn", {{textContent: 0}}, {{textContent: 92, duration: .9, ease: "power3.out", snap: {{textContent: 1}}, immediateRender: false}}, {t_hook + .25:.3f});')
+    gout(f"#{hk}", t_ene - .3, to="left")
+    # visual 2: the energy bars crash in the middle
+    bars = "".join(f'<i class="eb" id="eb{k}" style="height:{h}px"></i>' for k, h in enumerate([210, 240, 225, 245, 230, 215, 200, 215, 235, 245]))
+    en = glass(f'<div class="et">ENERGY</div><div class="ebars">{bars}<i class="emid" id="emid"></i></div><div class="edrop" id="edrop">&darr; dropped at 0:07</div>',
+               140, 760, 800, t_ene - .15, t_ppl2 - .1, cls="energy", enter="right", flt=False)
+    js('tl.to(["#eb3", "#eb4", "#eb5", "#eb6"], {height: (k) => [90, 40, 30, 70][k], background: "#ff2d55", boxShadow: "0 0 24px rgba(255,45,85,.8)", '
+       f'duration: .5, ease: "bounce.out", stagger: .05}}, {t_drop:.3f});')
+    flip(t_drop, t_drop + .06, "#ff2d55", fade=.15)
+    pop("#emid", t_mid - .05, frm=.4)
+    pop("#edrop", t_drop + .2, frm=.5)
     cue(t_drop, "drop")
-    gout(f"#{hk}", S4 - .35, to="right")
-    gout(f"#{en}", S4 - .3, to="right")
-    # swiped away: reels flick off the phone screen to the left
-    for k in range(4):
+    gout(f"#{en}", t_ppl2 - .35, to="left")
+    # visual 3: the reels get flicked away
+    for k in range(5):
         s = nid("sc")
-        put(f'<div class="mini" id="{s}" style="left:{150 + k * 18}px;top:{820 + k * 16}px;z-index:{12 + k}"><i class="play"></i></div>')
-        show(f"#{s}", t_swp - .3, S4)
-        pop(f"#{s}", t_swp - .3 + k * .05, frm=.6)
-        js(f'tl.to("#{s}", {{x: -760, rotation: -35, opacity: 0, filter: "blur(10px)", duration: .45, ease: "power3.in"}}, {t_swp + .1 + k * .12:.3f});')
+        put(f'<div class="mini" id="{s}" style="left:{300 + k * 40}px;top:{790 + k * 18}px;z-index:{12 + k}"><i class="play"></i></div>')
+        show(f"#{s}", t_ppl2 - .1, S4)
+        pop(f"#{s}", t_ppl2 - .1 + k * .05, frm=.5, rot=-8 + k * 4)
+        js(f'tl.to("#{s}", {{x: -900, rotation: -40, opacity: 0, filter: "blur(10px)", duration: .4, ease: "power3.in"}}, {t_swp + .05 + k * .1:.3f});')
         if k % 2 == 0:
-            cue(t_swp + .1 + k * .12, "swish")
-    cree_walk(S3 - .25, S3 + .45, (900, 1290, .42), (800, 1320, .38))
+            cue(t_swp + .05 + k * .1, "swish")
+    vc = nid("vc")
+    put(f'<div class="vcount" id="{vc}">&minus;62% viewers</div>')
+    show(f"#{vc}", t_swp + .3, S4 - .2)
+    pop(f"#{vc}", t_swp + .3, frm=.3)
+    cree_to(S3, 900, 1360, .36, d=.4)
+    pose(S3, "stand")
     pose(t_hook, "cheer")
     cree_hop(t_hook + .05, h=50, n=2)
     pose(t_ene - .2, "think")
     pose(t_drop, "sad")
     cree_face(t_drop, "sweat", d=1.4)
-    js(f'tl.to("#creeb", {{y: 30, scaleY: .9, duration: .25, ease: "power2.out", yoyo: true, repeat: 1}}, {t_drop:.3f});')
     pose(t_swp - .05, "shock")
     cree_say(t_swp, "!?", d=.9, size=80)
+    glitch(S4 - .2)
 
     # ---- S4: "It also gave me new hooks and showed me what to fix before I post the next one."
-    headline([("NEW [HOOKS]", 130, t_new, "grad")], 316, out=t_fix - .45)
-    headline([("WHAT TO [FIX]", 110, t_fix - .05, "grad")], 320, out=S5 - .5)
-    hooks = [("01", "Stanford just open-sourced a real Jarvis"), ("02", "Stop paying for AI assistants"), ("03", "This open-source AI sorts your day")]
-    hcs = []
-    for k, (n, txt) in enumerate(hooks):
-        hcs.append(glass(f'<div class="hn">HOOK {n}</div><div class="htx">{txt}</div>', 470, 630 + k * 172, 560, t_new + k * .16, t_fix + .3, cls="hookc", enter="right",
-                         rot=[-2, 1.5, -1][k]))
-        cue(t_new + k * .16, "pop")
-    for k, h in enumerate(hcs):
-        gout(f"#{h}", t_fix - .35 + k * .06, to="right")
-    fx = glass('<div class="et">FIX BEFORE YOU POST</div><div class="fxl" id="fx1"><b>&#10003;</b> Caption at 0:12</div>'
-               '<div class="fxl" id="fx2"><b>&#10003;</b> Caption at 0:20</div><div class="fxl" id="fx3"><b>&#10003;</b> Save-worthy CTA</div>',
-               470, 660, 560, t_fix - .05, S5 - .2, cls="fixc", enter="right", rot=1.5)
-    for k in range(3):
-        fly(f"#fx{k + 1}", t_fix + .2 + k * .25, x=40, y=0, blur=6, d=.35)
-        cue(t_fix + .2 + k * .25, "tick")
-    gout(f"#{fx}", S5 - .45, to="right")
-    js(f'tl.to("#phone", {{y: 700, rotation: -10, opacity: 0, duration: .45, ease: "power3.in"}}, {S5 - .5:.3f});')
+    hooks = ["Stanford just open-sourced a real Jarvis", "Stop paying for AI assistants", "This open-source AI sorts your day", "Nobody tells you this about reels",
+             "I tested 5 hooks so you don't have to", "Your first 2 seconds decide it"]
+    cells = ""
+    for k in range(30):
+        kind = k % 3
+        if kind == 0:
+            cells += f'<div class="wc"><div class="hn">HOOK {k // 3 + 1:02d}</div><div class="wt">{hooks[(k // 3) % len(hooks)]}</div></div>'
+        elif kind == 1:
+            cells += f'<div class="wc wv"><i class="play"></i><b>{RND.choice(["12.4K", "48K", "9.1K", "103K", "27K"])} views</b></div>'
+        else:
+            cells += f'<div class="wc wg"><b>+{RND.choice([38, 52, 71, 64, 90])}%</b><span>retention</span></div>'
+    put(f'<div class="wall" id="wall"><div class="wallg" id="wallg">{cells}</div></div>')
+    show("#wall", S4, t_what)
+    js(f'tl.fromTo("#wall", {{opacity: 0, scale: 1.3}}, {{opacity: 1, scale: 1, duration: .6, ease: "expo.out", immediateRender: false}}, {S4:.3f});')
+    js(f'tl.fromTo("#wallg", {{y: 0}}, {{y: -700, duration: {t_what - S4:.2f}, ease: "none", immediateRender: false}}, {S4:.3f});')
+    js(f'tl.to("#wall", {{opacity: 0, scale: 1.6, filter: "blur(10px)", duration: .35, ease: "power2.in"}}, {t_what - .35:.3f});')
+    put('<div class="wallfade" id="wallfade"></div>')
+    show("#wallfade", S4, t_what)
+    beat("HOOKS", t_new, t_what - .35, 230, style="grad", y=700, sub=("NEW", 150))
+    cue(t_new, "hit")
+    sparkle(540, 860, t_new + .2, n=12, r=380)
+    for k in range(14):                    # confetti
+        cf = nid("cf")
+        put(f'<i class="conf" id="{cf}" style="left:{540 + RND.uniform(-160, 160):.0f}px;top:900px;background:{["#F515E8", "#F5876C", "#FFC83D", "#54d6a0"][k % 4]}"></i>')
+        show(f"#{cf}", t_new + .1, t_new + 1.7)
+        js(f'tl.fromTo("#{cf}", {{x: 0, y: 0, rotation: 0}}, {{x: {RND.uniform(-460, 460):.0f}, y: {RND.uniform(-520, 380):.0f}, rotation: {RND.uniform(-600, 600):.0f}, '
+           f'opacity: 0, duration: 1.5, ease: "power2.out", immediateRender: false}}, {t_new + .1:.3f});')
+    cue(t_new + .1, "sparkle")
+    # what to fix: the phone back with the fixes, check chips fly out beside it
+    glitch(t_what - .3, .8)
+    show("#phone", t_what - .3, S5 - .3)
+    js(f'tl.fromTo("#phone", {{transformPerspective: 1400, opacity: 0, x: -600, scale: .9, rotationY: 40, filter: "blur(0px)"}}, {{opacity: 1, x: {70 - PHONE["x"]}, y: -60, scale: .85, '
+       f'rotationY: 0, duration: .6, ease: "expo.out", transformPerspective: 1400, immediateRender: false}}, {t_what - .3:.3f});')
+    js(f'tl.to("#phone", {{y: 700, rotation: -12, opacity: 0, duration: .4, ease: "power3.in"}}, {S5 - .5:.3f});')
+    headline([("WHAT TO [FIX]", 120, t_what - .05, "grad")], 300, out=S5 - .5)
+    for k, txt in enumerate(["Caption at 0:12", "Caption at 0:20", "Save-worthy CTA"]):
+        fc = nid("fc")
+        put(f'<div class="fixchip" id="{fc}" style="top:{700 + k * 150}px"><b>&#10003;</b>{txt}</div>')
+        tt = t_fix + k * .28
+        show(f"#{fc}", tt, S5 - .3)
+        js(f'tl.fromTo("#{fc}", {{transformPerspective: 1000, opacity: 0, x: 500, rotationY: -50, scale: .8}}, {{opacity: 1, x: 0, rotationY: 0, scale: 1, duration: .5, '
+           f'ease: "expo.out", transformPerspective: 1000, immediateRender: false}}, {tt:.3f});')
+        js(f'tl.to("#{fc}", {{opacity: 0, x: 400, duration: .3, ease: "power2.in"}}, {S5 - .5 + k * .04:.3f});')
+        cue(tt, "tick")
+    cree_to(S4 + .1, 880, 1380, .36, d=.4)
     pose(t_new, "cheer")
     cree_hop(t_new, h=70, n=3, period=.4)
-    for k in range(12):                    # confetti
-        cf = nid("cf")
-        put(f'<i class="conf" id="{cf}" style="left:{800 + RND.uniform(-120, 120):.0f}px;top:1180px;background:{["#F515E8", "#F5876C", "#FFC83D", "#54d6a0"][k % 4]}"></i>')
-        show(f"#{cf}", t_new, t_new + 1.6)
-        js(f'tl.fromTo("#{cf}", {{x: 0, y: 0, rotation: 0}}, {{x: {RND.uniform(-280, 220):.0f}, y: {RND.uniform(-560, -300):.0f}, rotation: {RND.uniform(-600, 600):.0f}, '
-           f'duration: 1.5, ease: "power2.out", immediateRender: false}}, {t_new:.3f});')
-    cue(t_new, "sparkle")
     pose(t_new + 1.25, "proud")
-    pose(t_fix, "point", flip=True)        # "what to fix": at the fixes on the phone
+    pose(t_fix, "point", flip=True)
 
-    # ---- S5: the free account audit (a liquid wipe in)
-    liquid(S5 - .62, 540, 2350, S5 - .05)   # a liquid wave rises from the bottom edge
-    headline([("[FREE]", 236, t_free, "grad"), ("ACCOUNT AUDIT", 88, t_audit, None)], 236, out=t_type - .5)
+    # ---- S5: the free account audit
+    NOCAP.append((t_you - .1, t_just - .1))
+    liquid(S5 - .6, 540, 2350, S5 - .05)
+    flip(S5 - .1, t_just - .15, "radial-gradient(circle at 50% 40%, #ff6fd8 0%, #F515E8 45%, #a80f7c 100%)", fade=.2)
+    rays(S5, t_just - .2, n=36, cy=760, color="rgba(255,255,255,.8)")
+    beat("FREE", t_free, t_audit - .03, 320, style="white", y=560)
     cue(t_free, "hit")
-    sparkle(540, 360, t_free + .35, n=10, r=320)
-    au = glass('<div class="ah"><img src="assets/img/cree.png" alt=""><b>Account Audit</b><span class="free">FREE</span></div>'
-               '<div class="inp" id="auin"><span class="at">@</span><span id="auh"></span><i class="caret" id="auc"></i></div>'
-               '<div class="btn" id="aub">Audit my account</div>'
-               '<div class="ring" id="aur"><svg viewBox="0 0 200 200"><circle class="rb" cx="100" cy="100" r="82"/>'
-               '<circle class="rf" id="aurf" cx="100" cy="100" r="82" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 100 100)"/></svg>'
-               '<div class="rval"><span id="aun">20</span><small id="auu">sec</small></div></div>'
-               '<div class="first" id="auf"><div class="fl">FIRST THING TO FIX</div><div class="fv">Show the payoff in your first 2 seconds</div></div>',
-               90, 650, 900, t_acc - .15, S6 + .2, cls="audit", flt=False)
-    cue(t_acc - .15, "whoosh")
-    js(f'tl.to("#{au}", {{y: -120, duration: .6, ease: "expo.inOut"}}, {t_type - .45:.3f});')
+    sparkle(540, 700, t_free + .15, n=12, r=420)
+    beat("AUDIT", t_audit, t_just - .2, 250, style="white", y=640, sub=("ACCOUNT", 120), through=False)
+    cue(t_audit, "whoosh")
+    glitch(t_just - .2)
+    # the steps, one beat each (the reference's Brief / Create / Launch)
+    steps = [("@", "TYPE YOUR HANDLE", t_type - .3), ("&#9201;", "ABOUT 20 SECONDS", t_20 - .3), ("&#9733;", "YOUR SCORE", t_score - .15), ("&#10003;", "FIRST THING TO FIX", t_first - .2)]
+    ends = [t_20 - .35, t_score - .2, t_first - .25, S6 - .1]
+    for k, ((ic, title, tt), te) in enumerate(zip(steps, ends)):
+        st = nid("st")
+        put(f'<div class="step" id="{st}"><span class="sic">{ic}</span><span class="stx">{title}</span></div>')
+        show(f"#{st}", tt, te)
+        js(f'tl.fromTo("#{st}", {{opacity: 0, y: 60, scale: .9}}, {{opacity: 1, y: 0, scale: 1, duration: .45, ease: "expo.out", immediateRender: false}}, {tt:.3f});')
+        js(f'tl.to("#{st}", {{opacity: 0, y: -50, duration: .22, ease: "power2.in"}}, {te - .22:.3f});')
+        dots = "".join(f'<i class="{"on" if j == k else ""}"></i>' for j in range(4))
+        dd = nid("dt")
+        put(f'<div class="dots" id="{dd}">{dots}</div>')
+        show(f"#{dd}", tt, te)
+    flip(t_score - .15, t_first - .25, "radial-gradient(circle at 50% 45%, #3b0d4a 0%, #1a0622 70%)", fade=.2)
+    # 1: the handle types into a glass bar
+    hb = glass('<span class="at">@</span><span id="auh"></span><i class="caret" id="auc"></i>', 110, 800, 860, t_type - .2, t_20 - .35, cls="hbar", flt=False)
     handle = "yourhandle"
     for k in range(len(handle) + 1):
         js(f'tl.set("#auh", {{textContent: "{handle[:k]}"}}, {t_hand - .1 + k * .07:.3f});')
     for k in range(0, len(handle), 2):
         cue(t_hand - .1 + k * .07, "type")
-    js(f'tl.fromTo("#auc", {{opacity: 1}}, {{opacity: 0, duration: .2, repeat: 9, yoyo: true, ease: "steps(1)", immediateRender: false}}, {t_type - .3:.3f});')
-    js(f'tl.fromTo("#aub", {{scale: 1}}, {{keyframes: [{{scale: .92, duration: .08}}, {{scale: 1, duration: .15}}], immediateRender: false}}, {t_20 - .4:.3f});')
-    cue(t_20 - .4, "click")
-    js(f'tl.to(["#auin", "#aub"], {{opacity: 0, scaleY: .2, duration: .25, ease: "power2.in"}}, {t_20 - .35:.3f});')
-    js(f'tl.set(["#auin", "#aub"], {{display: "none"}}, {t_20 - .1:.3f});')
-    js(f'tl.set("#aur", {{display: "block", opacity: 1}}, {t_20 - .3:.3f});')
-    pop("#aur", t_20 - .3, frm=.5)
-    js(f'tl.fromTo("#aurf", {{strokeDashoffset: 1}}, {{strokeDashoffset: 0, duration: {t_score - t_20 + .2:.2f}, ease: "power1.inOut", immediateRender: false}}, {t_20 - .1:.3f});')
-    js(f'tl.fromTo("#aun", {{textContent: 20}}, {{textContent: 0, duration: {t_score - t_20 + .2:.2f}, ease: "none", snap: {{textContent: 1}}, immediateRender: false}}, {t_20 - .1:.3f});')
-    js(f'tl.set("#auu", {{textContent: "/100"}}, {t_score - .02:.3f});')
-    js(f'tl.set("#aurf", {{strokeDashoffset: 1, stroke: "url(#gr)"}}, {t_score - .02:.3f});')
-    js(f'tl.fromTo("#aun", {{textContent: 0}}, {{textContent: 78, duration: .9, ease: "power2.out", snap: {{textContent: 1}}, immediateRender: false}}, {t_score:.3f});')
-    js(f'tl.fromTo("#aurf", {{strokeDashoffset: 1}}, {{strokeDashoffset: .22, duration: .9, ease: "power2.out", immediateRender: false}}, {t_score:.3f});')
-    js(f'tl.fromTo("#aur", {{scale: 1}}, {{scale: 1.08, duration: .12, yoyo: true, repeat: 1}}, {t_100 + .1:.3f});')
-    sparkle(540, 780, t_100 + .1, n=10, r=260)
-    cue(t_score, "rise")
+    js(f'tl.fromTo("#auc", {{opacity: 1}}, {{opacity: 0, duration: .2, repeat: 7, yoyo: true, ease: "steps(1)", immediateRender: false}}, {t_type - .2:.3f});')
+    js(f'tl.to("#{hb}", {{scale: .9, opacity: 0, duration: .22}}, {t_20 - .57:.3f});')
+    # 2: the 20-second countdown ring
+    cd = nid("cd")
+    put(f'<div class="cdown" id="{cd}"><svg viewBox="0 0 200 200"><circle class="cb" cx="100" cy="100" r="86"/><circle class="cf" id="{cd}f" cx="100" cy="100" r="86" '
+        f'pathLength="1" stroke-dasharray="1" stroke-dashoffset="0" transform="rotate(-90 100 100)"/></svg><div class="cv"><b id="{cd}n">20</b><small>sec</small></div></div>')
+    show(f"#{cd}", t_20 - .3, t_score - .2)
+    pop(f"#{cd}", t_20 - .3, frm=.4)
+    js(f'tl.fromTo("#{cd}f", {{strokeDashoffset: 0}}, {{strokeDashoffset: 1, duration: {t_score - t_20:.2f}, ease: "none", immediateRender: false}}, {t_20 - .1:.3f});')
+    js(f'tl.fromTo("#{cd}n", {{textContent: 20}}, {{textContent: 0, duration: {t_score - t_20:.2f}, ease: "none", snap: {{textContent: 1}}, immediateRender: false}}, {t_20 - .1:.3f});')
+    js(f'tl.to("#{cd}", {{scale: 1.4, opacity: 0, filter: "blur(10px)", duration: .22}}, {t_score - .42:.3f});')
+    cue(t_20 - .3, "pop")
+    # 3: the score rolls like a slot machine
+    sl = nid("sl")
+    put(f'<div class="score" id="{sl}"><span class="slot">{slot_html(sl, "78")}</span><span class="of">/100</span></div>')
+    show(f"#{sl}", t_score - .1, t_first - .25)
+    pop(f"#{sl}", t_score - .1, frm=.5)
+    slot_roll(sl, "78", t_score - .05, d=.9)
+    js(f'tl.fromTo("#{sl}", {{scale: 1}}, {{scale: 1.12, duration: .12, yoyo: true, repeat: 1}}, {t_100 + .1:.3f});')
+    sparkle(540, 900, t_100 + .1, n=14, r=420)
+    cue(t_score - .05, "rise")
     cue(t_100 + .1, "ding")
-    js(f'tl.set("#auf", {{display: "block"}}, {t_first - .12:.3f});')
-    fly("#auf", t_first - .1, y=60)
+    js(f'tl.to("#{sl}", {{scale: .8, opacity: 0, y: -60, duration: .22}}, {t_first - .47:.3f});')
+    # 4: the first fix
+    ff = glass('<div class="fl">FIRST THING TO FIX</div><div class="fv">Show the payoff in your first 2 seconds</div>', 110, 760, 860, t_first - .1, S6, cls="first", flt=False)
     cue(t_first - .1, "pop")
-    js(f'tl.fromTo("#auf", {{boxShadow: "0 0 0 0 rgba(245,21,232,.0)"}}, {{boxShadow: "0 0 0 14px rgba(245,21,232,.25)", duration: .4, yoyo: true, repeat: 2, '
+    js(f'tl.fromTo("#{ff}", {{boxShadow: "0 0 0 0 rgba(245,21,232,0)"}}, {{boxShadow: "0 0 0 16px rgba(245,21,232,.35)", duration: .35, yoyo: true, repeat: 3, '
        f'immediateRender: false}}, {t_fix2:.3f});')
-    cree_walk(S5 + .05, t_free + .35, (-220, 1330, .40), (840, 1330, .40), end="wave")   # he strolls in under FREE
+    cree_walk(S5 + .05, t_free + .3, (-220, 1360, .38), (860, 1360, .38), end="wave")
     pose(t_acc - .1, "proud")
-    cree_to(t_type - .45, 880, 1340, .38, d=.5)
     pose(t_type - .3, "phone")
-    sw = prop('<svg viewBox="0 0 200 220"><circle cx="100" cy="125" r="80" fill="#fff" stroke="#2b1530" stroke-width="14"/>'
-              '<rect x="85" y="18" width="30" height="28" rx="6" fill="#2b1530"/><path id="swh" d="M 100 125 L 100 70" stroke="#F515E8" stroke-width="12" '
-              'stroke-linecap="round"/></svg>', t_20 - .3, t_score + .2, cls="prop watch")
-    js(f'tl.fromTo("#swh", {{rotation: 0, transformOrigin: "100px 125px"}}, {{rotation: 1080, duration: {t_score - t_20 + .3:.2f}, ease: "none", immediateRender: false}}, '
-       f'{t_20 - .3:.3f});')
     pose(t_20 - .3, "think")
     cree_wiggle(t_20 - .2, n=4, amp=6, period=.25)
     pose(t_score + .2, "cheer")
@@ -596,266 +790,306 @@ def scenes():
     pose(t_first - .1, "point", flip=True)
     cree_say(t_first, "!", d=.8)
 
-    # ---- S6: the CTA, "Comment "CREE" and I'll send you the link." The colour floods out from Cree.
-    js(f'tl.fromTo("#ctabg", {{opacity: 1, clipPath: "circle(0px at 880px 1300px)"}}, {{opacity: 1, clipPath: "circle(2300px at 880px 1300px)", duration: .7, ease: "power3.in", '
-       f'immediateRender: false}}, {S6 - .1:.3f});')
-    HIDE.append("#ctabg")
-    cue(S6 - .1, "whoosh_big")
-    gout(f"#{au}", S6 - .05, to="up", d=.4, y0=-120)
-    cree_to(S6 + .2, 540, 800, .9, d=.7, ease="back.out(1.4)")
-    pose(S6 + .2, "wave", flip=False)
-    cree_wiggle(S6 + .9, n=4, amp=9)
-    headline([("[COMMENT]", 132, t_com, "white")], 1140, out=None, z=22)
+    # ---- S6: the CTA, "Comment "CREE" and I'll send you the link."
+    flip(S6 - .1, DUR, "radial-gradient(circle at 50% 38%, #ff6fd8 0%, #F515E8 42%, #9a0c72 100%)", fade=.2)
+    glitch(S6 - .1, 1.2)
+    rays(S6, S7, n=40, cy=620, color="rgba(255,255,255,.75)")
+    gout(f"#{ff}", S6 - .1, to="up", d=.3)
+    cree_to(S6 + .1, 540, 640, .66, d=.6, ease="back.out(1.4)")
+    pose(S6 + .1, "wave", flip=False)
+    cree_wiggle(S6 + .7, n=4, amp=9)
+    beat("COMMENT", t_com - .02, S7 - .1, 170, style="white", y=1040, through=False)
+    cue(t_com, "hit")
     cb = nid("cb")
-    put(f'<div class="cbar" id="{cb}"><span class="cav"></span><span class="ctx" id="{cb}t"></span><i class="caret dark" id="{cb}c"></i>'
-        f'<span class="cpost" id="{cb}p">Post</span><svg class="heart" id="{cb}h" viewBox="0 0 40 36"><path d="M20 34 C 8 25 1 18 1 10 A 9 9 0 0 1 20 6 A 9 9 0 0 1 39 10 '
-        f'C 39 18 32 25 20 34 Z" fill="#ff2d6f"/></svg></div>')
-    show(f"#{cb}", t_com + .1, S7)
-    js(f'tl.fromTo("#{cb}", {{transformPerspective: 1200, opacity: 0, y: 200, scale: .8, rotationX: 40}}, {{opacity: 1, y: 0, scale: 1, rotationX: 0, duration: .7, ease: "back.out(1.6)", '
-       f'transformPerspective: 1200, immediateRender: false}}, {t_com + .1:.3f});')
+    put(f'<div class="cbig" id="{cb}"><span class="ctx" id="{cb}t"></span><i class="caret big" id="{cb}c"></i>'
+        f'<svg class="heart" id="{cb}h" viewBox="0 0 40 36"><path d="M20 34 C 8 25 1 18 1 10 A 9 9 0 0 1 20 6 A 9 9 0 0 1 39 10 C 39 18 32 25 20 34 Z" fill="#ff2d6f"/></svg></div>')
+    show(f"#{cb}", t_cree - .1, S7)
+    js(f'tl.fromTo("#{cb}", {{transformPerspective: 1200, opacity: 0, y: 160, scale: .7, rotationX: 50}}, {{opacity: 1, y: 0, scale: 1, rotationX: 0, duration: .55, '
+       f'ease: "back.out(1.7)", transformPerspective: 1200, immediateRender: false}}, {t_cree - .1:.3f});')
     for k in range(5):
-        js(f'tl.set("#{cb}t", {{textContent: "{"CREE"[:k]}"}}, {t_cree + k * .16:.3f});')
+        js(f'tl.set("#{cb}t", {{textContent: "{"CREE"[:k]}"}}, {t_cree + .1 + k * .2:.3f});')
         if k:
-            cue(t_cree + k * .16, "type")
-    js(f'tl.fromTo("#{cb}p", {{scale: 1}}, {{keyframes: [{{scale: .85, duration: .08}}, {{scale: 1.1, duration: .15}}, {{scale: 1, duration: .1}}], immediateRender: false}}, '
-       f'{t_cree + .8:.3f});')
-    pop(f"#{cb}h", t_cree + .85, frm=0, ease="back.out(3)")
-    cue(t_cree + .85, "pop")
-    for k in range(7):                     # glass hearts float up from the comment
+            cue(t_cree + .1 + k * .2, "type")
+            js(f'tl.fromTo("#{cb}t", {{scale: 1.15}}, {{scale: 1, duration: .18, ease: "power2.out", immediateRender: false}}, {t_cree + .1 + k * .2:.3f});')
+    pop(f"#{cb}h", t_cree + 1.0, frm=0, ease="back.out(3)")
+    cue(t_cree + 1.0, "pop")
+    for k in range(8):
         hh = nid("hh")
-        put(f'<svg class="gheart" id="{hh}" viewBox="0 0 40 36" style="left:{700 + RND.uniform(-60, 220):.0f}px;top:1290px"><path d="M20 34 C 8 25 1 18 1 10 A 9 9 0 0 1 20 6 '
+        put(f'<svg class="gheart" id="{hh}" viewBox="0 0 40 36" style="left:{760 + RND.uniform(-80, 180):.0f}px;top:1300px"><path d="M20 34 C 8 25 1 18 1 10 A 9 9 0 0 1 20 6 '
             f'A 9 9 0 0 1 39 10 C 39 18 32 25 20 34 Z"/></svg>')
-        show(f"#{hh}", t_cree + .9 + k * .12, S7)
-        js(f'tl.fromTo("#{hh}", {{y: 0, x: 0, scale: .3, rotation: 0}}, {{y: {RND.uniform(-700, -420):.0f}, x: {RND.uniform(-120, 120):.0f}, scale: {RND.uniform(.8, 1.4):.2f}, '
-           f'rotation: {RND.uniform(-30, 30):.0f}, opacity: 0, duration: 1.8, ease: "power1.out", immediateRender: false}}, {t_cree + .9 + k * .12:.3f});')
-    pose(t_cree - .15, "phone")
+        show(f"#{hh}", t_cree + 1.05 + k * .1, S7)
+        js(f'tl.fromTo("#{hh}", {{y: 0, x: 0, scale: .3, rotation: 0}}, {{y: {RND.uniform(-760, -460):.0f}, x: {RND.uniform(-140, 120):.0f}, scale: {RND.uniform(.8, 1.4):.2f}, '
+           f'rotation: {RND.uniform(-30, 30):.0f}, opacity: 0, duration: 1.7, ease: "power1.out", immediateRender: false}}, {t_cree + 1.05 + k * .1:.3f});')
+    pose(t_cree - .1, "phone")
     pl = nid("pl")
     put(f'<svg class="plane" id="{pl}" viewBox="0 0 100 100"><path d="M 5 45 L 95 8 L 62 92 L 46 60 Z" fill="#fff"/><path d="M 46 60 L 95 8" stroke="#F54BA8" '
         f'stroke-width="5"/></svg>')
     show(f"#{pl}", t_send - .2, S7)
-    js(f'tl.fromTo("#{pl}", {{x: 0, y: 0, rotation: -10, scale: .5}}, {{x: 220, y: -1000, rotation: 18, scale: 1.1, duration: .9, ease: "power2.in", immediateRender: false}}, '
+    js(f'tl.fromTo("#{pl}", {{x: 0, y: 0, rotation: -10, scale: .5}}, {{x: 160, y: -1100, rotation: 18, scale: 1.1, duration: .8, ease: "power2.in", immediateRender: false}}, '
        f'{t_send - .2:.3f});')
     cue(t_send - .2, "whoosh")
-    glass('<div class="dmh"><img src="assets/img/cree.png" alt=""><b>Creedom</b></div><div class="dmt">Here\'s your link &#128279;</div>', 560, 290, 440,
-          t_link - .05, S7, cls="dm", z=22, rot=3)
+    glass('<div class="dmh"><img src="assets/img/cree.png" alt=""><b>Creedom</b></div><div class="dmt">Here\'s your link &#128279;</div>', 60, 200, 420,
+          t_link - .05, S7, cls="dm", z=22, rot=-3, flt=False)
     cue(t_link - .05, "notify")
     pose(t_send - .25, "point", flip=False)
     pose(t_link - .05, "cheer")
     cree_say(t_link, "♥", d=.8)
     cree_hop(t_link + .1, h=80, n=2)
 
-    # ---- S7: the logo
-    js(f'tl.fromTo("#logo", {{opacity: 1, clipPath: "circle(0px at 540px 860px)"}}, {{opacity: 1, clipPath: "circle(1400px at 540px 860px)", duration: .55, ease: "power3.in", '
-       f'immediateRender: false}}, {S7 - .2:.3f});')
+    # ---- S7: the logo, star and grid floor
+    js(f'tl.fromTo("#logo", {{opacity: 0}}, {{opacity: 1, duration: .12, immediateRender: false}}, {S7 - .05:.3f});')
     HIDE.append("#logo")
-    js(f'tl.set("#cree", {{opacity: 0}}, {S7 + .4:.3f});')
+    glitch(S7 - .05, 1.3)
+    js(f'tl.set("#cree", {{opacity: 0}}, {S7 + .1:.3f});')
     js(f'tl.fromTo("#lgm", {{scale: 0, rotation: -40, y: 80}}, {{scale: 1, rotation: 0, y: 0, duration: .6, ease: "back.out(2)", immediateRender: false}}, {S7 + .05:.3f});')
-    js(f'tl.fromTo("#lgw", {{clipPath: "inset(0 100% 0 0)"}}, {{clipPath: "inset(0 0% 0 0)", duration: .55, ease: "power3.out", immediateRender: false}}, {S7 + .25:.3f});')
-    js(f'tl.fromTo("#lgt", {{opacity: 0, y: 30}}, {{opacity: 1, y: 0, duration: .4, ease: "power3.out", immediateRender: false}}, {S7 + .45:.3f});')
-    js(f'tl.fromTo("#lgm", {{rotation: 0}}, {{keyframes: [{{rotation: 10, duration: .14}}, {{rotation: -8, duration: .14}}, {{rotation: 6, duration: .12}}, '
-       f'{{rotation: 0, duration: .1}}], immediateRender: false}}, {S7 + .7:.3f});')
+    js(f'tl.fromTo("#lgw", {{clipPath: "inset(0 100% 0 0)"}}, {{clipPath: "inset(0 0% 0 0)", duration: .5, ease: "power3.out", immediateRender: false}}, {S7 + .2:.3f});')
+    js(f'tl.fromTo("#lgt", {{opacity: 0, y: 30}}, {{opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}}, {S7 + .35:.3f});')
+    js(f'tl.fromTo("#lgs", {{scale: 0, rotation: -90}}, {{scale: 1, rotation: 0, duration: .6, ease: "back.out(2.5)", immediateRender: false}}, {S7 + .45:.3f});')
+    js(f'tl.to("#lgs", {{rotation: 30, scale: 1.15, duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 1}}, {S7 + 1.05:.3f});')
+    js(f'tl.fromTo("#lgf", {{backgroundPosition: "0px 0px"}}, {{backgroundPosition: "0px 240px", duration: {DUR - S7:.2f}, ease: "none", immediateRender: false}}, {S7:.3f});')
     cue(S7 + .05, "logo")
     sparkle(540, 860, S7 + .3, n=12, r=380, z=41)
 
-    # Cree idles: a slow bob and a blink every couple of seconds the whole way
     js(f'tl.fromTo("#creep", {{y: 0}}, {{y: -10, duration: .8, ease: "sine.inOut", yoyo: true, repeat: {int(DUR / .8)}, immediateRender: false}}, 0);')
-    for tb in [1.2, 2.2, 6.9, 8.0, 9.3, 12.95, 15.2, 20.4, 23.4, 26.0, 30.8, 33.0]:   # only while an open-eyed pose shows
+    for tb in [6.9, 8.0, 12.95, 15.2, 20.4, 23.4, 26.0, 30.8, 33.0]:
         cree_face(tb, "blink")
 
 
 def background():
-    """Morphing blurred colour blobs and drifting glass orbs: the frame is never still."""
-    blobs = [(-320, -260, 980, "#F515E8"), (520, 1080, 1000, "#F5876C"), (380, 260, 760, "#ffb3e6"), (-260, 1300, 820, "#c86bff")]
+    """Dark plum ground with slow magenta / coral glows and drifting glass orbs."""
+    blobs = [(-360, -300, 1000, "#F515E8", .30), (500, 1100, 1000, "#F5876C", .24), (200, 500, 800, "#a21caf", .26), (-300, 1300, 800, "#F54BA8", .2)]
     html = ""
-    for k, (x, y, s, c) in enumerate(blobs):
-        html += f'<i class="blob" data-layout-allow-overflow id="bl{k}" style="left:{x}px;top:{y}px;width:{s}px;height:{s}px;background:{c}"></i>'
-        dx, dy = RND.uniform(-260, 260), RND.uniform(-300, 300)
-        js(f'tl.to("#bl{k}", {{x: {dx:.0f}, y: {dy:.0f}, rotation: {RND.choice([-1, 1]) * 120}, duration: {DUR:.1f}, ease: "sine.inOut"}}, 0);')
-        js(f'tl.fromTo("#bl{k}", {{borderRadius: "50% 50% 50% 50% / 50% 50% 50% 50%"}}, {{borderRadius: "38% 62% 57% 43% / 61% 39% 58% 42%", duration: {3.2 + k * .7:.1f}, '
-           f'ease: "sine.inOut", yoyo: true, repeat: {int(DUR / (3.2 + k * .7))}, immediateRender: false}}, 0);')
-    for k in range(9):
-        s = RND.choice([46, 64, 90, 120, 150])
-        x, y = RND.uniform(-40, FW - 60), RND.uniform(200, FH - 200)
+    for k, (x, y, s, c, o) in enumerate(blobs):
+        html += f'<i class="blob" data-layout-allow-overflow id="bl{k}" style="left:{x}px;top:{y}px;width:{s}px;height:{s}px;background:{c};opacity:{o}"></i>'
+        js(f'tl.to("#bl{k}", {{x: {RND.uniform(-260, 260):.0f}, y: {RND.uniform(-300, 300):.0f}, duration: {DUR:.1f}, ease: "sine.inOut"}}, 0);')
+        js(f'tl.fromTo("#bl{k}", {{scale: 1}}, {{scale: 1.25, duration: {3.4 + k * .8:.1f}, ease: "sine.inOut", yoyo: true, repeat: {int(DUR / (3.4 + k * .8))}, '
+           f'immediateRender: false}}, 0);')
+    for k in range(10):
+        s = RND.choice([10, 14, 20, 46, 70])
+        x, y = RND.uniform(0, FW - 60), RND.uniform(200, FH - 200)
         html += f'<i class="orb" id="ob{k}" style="left:{x:.0f}px;top:{y:.0f}px;width:{s}px;height:{s}px"></i>'
         js(f'tl.to("#ob{k}", {{y: {-RND.uniform(260, 620):.0f}, duration: {DUR:.1f}, ease: "none"}}, 0);')
         js(f'tl.fromTo("#ob{k}", {{x: -24}}, {{x: 24, duration: {RND.uniform(2.6, 4.2):.1f}, ease: "sine.inOut", yoyo: true, repeat: 11, immediateRender: false}}, 0);')
     return html
 
 
+STAR = "M0 -48 C6 -8 8 -6 48 0 C8 6 6 8 0 48 C-6 8 -8 6 -48 0 C-8 -6 -6 -8 0 -48 Z"
 CSS = f"""
 @font-face {{ font-family: "Outfit"; font-weight: 600; src: url("assets/fonts/Outfit-600.woff2"); }}
 @font-face {{ font-family: "Outfit"; font-weight: 800; src: url("assets/fonts/Outfit-800.woff2"); }}
 @font-face {{ font-family: "Outfit"; font-weight: 900; src: url("assets/fonts/Outfit-900.woff2"); }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #fff6fb; }}
-#root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: #fff6fb; font-family: "Outfit"; color: #1d0f24; }}
+html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #0d0412; }}
+#root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: #0d0412; font-family: "Outfit"; color: #fff; }}
+#bgl {{ position: absolute; inset: 0; overflow: hidden; background: radial-gradient(circle at 50% 42%, #2a0a33 0%, #14051b 55%, #0b030f 100%); }}
+#dots {{ position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.07) 2px, transparent 2.5px); background-size: 46px 46px; }}
+.blob {{ position: absolute; border-radius: 50%; filter: blur(110px); }}
+.orb {{ position: absolute; border-radius: 50%; z-index: 1; background: radial-gradient(circle, rgba(255,255,255,.95) 0 20%, rgba(255,140,220,.45) 45%, rgba(245,21,232,0) 72%); }}
+.flip {{ position: absolute; inset: 0; opacity: 0; }}
 #cam, #cam2 {{ position: absolute; inset: 0; transform-origin: 50% 45%; }}
 #cam {{ z-index: 2; }}
-#bgl {{ position: absolute; inset: 0; overflow: hidden; }}
-#dots {{ position: absolute; inset: 0; background-image: radial-gradient(rgba(245,75,168,.2) 2px, transparent 2.5px); background-size: 46px 46px; }}
-.blob {{ position: absolute; border-radius: 50%; filter: blur(100px); opacity: .34; }}
-.orb {{ position: absolute; border-radius: 50%; z-index: 1; border: 2px solid rgba(255,255,255,.75);
-  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.95) 0 8%, rgba(255,255,255,.35) 22%, rgba(255,190,230,.18) 60%, rgba(245,75,168,.16) 100%);
-  box-shadow: inset -8px -10px 24px rgba(245,75,168,.18), 0 14px 30px rgba(200,40,140,.12); }}
-/* kinetic type */
+.star0 {{ position: absolute; left: 440px; top: 720px; width: 200px; height: 200px; z-index: 5; filter: drop-shadow(0 0 40px #F515E8) drop-shadow(0 0 90px #F54BA8); }}
+.rays {{ position: absolute; inset: 0; opacity: 0; z-index: 1; pointer-events: none; }}
+.ray {{ position: absolute; width: 0; height: 0; transform-origin: 0 0; }}
+.rl {{ position: absolute; left: 0; top: -2px; width: 200px; height: 4px; border-radius: 2px; transform-origin: 0 50%; }}
+.gband {{ position: absolute; left: -300px; right: -300px; opacity: 0; z-index: 45; mix-blend-mode: screen; }}
+/* word beats */
+.beat {{ position: absolute; left: 0; right: 0; opacity: 0; z-index: 9; text-align: center; font-weight: 900; line-height: .92; letter-spacing: -.03em; white-space: nowrap;
+  color: #fff; transform-origin: 50% 50%; text-shadow: 0 0 40px rgba(245,21,232,.35); }}
+.beat.outline {{ color: transparent; -webkit-text-stroke: 4px #fff; text-shadow: none; }}
+.beat.dark {{ color: #1a0620; text-shadow: none; }}
+.beat.grad {{ background: linear-gradient(90deg,#ff5bf0 0%,#F54BA8 50%,#FF9A7A 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: none; filter: drop-shadow(0 0 30px rgba(245,21,232,.55)); padding: 0 20px; }}
+.beat.white {{ text-shadow: 0 10px 40px rgba(90,0,60,.45); }}
+.bsub {{ display: inline-block; letter-spacing: .02em; line-height: 1.05; }}
+.clock {{ position: absolute; left: 0; right: 0; top: 960px; opacity: 0; z-index: 9; text-align: center; font: 800 96px/1 "Outfit"; letter-spacing: .06em;
+  color: rgba(255,255,255,.9); font-variant-numeric: tabular-nums; }}
+/* headlines (mask reveal) */
 .head {{ position: absolute; left: 0; right: 0; opacity: 0; text-align: center; }}
-.hl {{ opacity: 0; font-weight: 900; line-height: .98; letter-spacing: -.025em; word-spacing: .16em; white-space: nowrap; color: #1d0f24; transform-origin: 50% 60%; }}
+.hl {{ opacity: 0; font-weight: 900; line-height: .98; letter-spacing: -.025em; word-spacing: .16em; white-space: nowrap; color: #fff; transform-origin: 50% 60%; }}
 .hli {{ position: relative; display: inline-block; }}
 .wm {{ display: inline-block; overflow: hidden; vertical-align: top; padding: .08em .05em .16em; margin: -.08em -.05em -.16em; }}
 .wi {{ display: inline-block; transform-origin: 50% 80%; }}
 .acc {{ background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; padding: 0 .02em; }}
-.acc.grad {{ background-image: linear-gradient(90deg,#F515E8 0%,#F54BA8 30%,#F5876C 50%,#ff9fe4 60%,#F515E8 72%,#F54BA8 100%); }}
-.acc.red {{ background-image: linear-gradient(90deg,#ff2d55 0%,#ff4d6d 45%,#ff8da3 58%,#ff2d55 70%,#e0143c 100%); }}
-.acc.green {{ background-image: linear-gradient(90deg,#10a35f 0%,#22c47a 45%,#5fdc9e 58%,#10a35f 70%,#0b8a50 100%); }}
-.acc.white {{ background-image: linear-gradient(90deg,#ffffff 0%,#ffffff 45%,#ffd6f3 55%,#ffffff 66%,#ffffff 100%); filter: drop-shadow(0 10px 26px rgba(110,0,70,.35)); }}
+.acc.grad {{ background-image: linear-gradient(90deg,#ff5bf0 0%,#F54BA8 30%,#FF9A7A 50%,#ffc4ef 60%,#ff5bf0 72%,#F54BA8 100%); }}
+.acc.red {{ background-image: linear-gradient(90deg,#ff2d55 0%,#ff4d6d 45%,#ff9db0 58%,#ff2d55 70%,#e0143c 100%); }}
+.acc.green {{ background-image: linear-gradient(90deg,#22c47a 0%,#3ee08f 45%,#a6ffd1 58%,#22c47a 70%,#10a35f 100%); }}
+.acc.white {{ background-image: linear-gradient(90deg,#fff 0%,#fff 45%,#ffd6f3 55%,#fff 66%,#fff 100%); }}
 .uline {{ position: absolute; left: 4%; right: 4%; bottom: -.14em; width: 92%; height: .2em; overflow: visible; }}
 .uline path {{ fill: none; stroke: url(#gr); stroke-width: 9; stroke-linecap: round; }}
-/* glass */
-.glass {{ position: absolute; opacity: 0; border-radius: 40px; padding: 28px 32px; overflow: hidden;
-  background: linear-gradient(140deg, rgba(255,255,255,.84) 0%, rgba(255,255,255,.52) 55%, rgba(255,236,248,.66) 100%);
-  border: 2px solid rgba(255,255,255,.92); backdrop-filter: blur(22px) saturate(1.5); -webkit-backdrop-filter: blur(22px) saturate(1.5);
-  box-shadow: 0 30px 70px rgba(170,20,110,.17), 0 6px 18px rgba(170,20,110,.08), inset 0 2px 0 rgba(255,255,255,.95), inset 0 -26px 50px rgba(245,75,168,.07); }}
+/* dark glass */
+.glass {{ position: absolute; opacity: 0; border-radius: 40px; padding: 28px 32px; overflow: hidden; color: #fff;
+  background: linear-gradient(140deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,.06) 60%, rgba(245,75,168,.1) 100%);
+  border: 1.5px solid rgba(255,255,255,.24); backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  box-shadow: 0 30px 80px rgba(0,0,0,.45), 0 0 60px rgba(245,21,232,.12), inset 0 1px 0 rgba(255,255,255,.28); }}
 .shine {{ position: absolute; top: -30%; bottom: -30%; left: -48%; width: 40%; pointer-events: none;
-  background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.8) 50%, rgba(255,255,255,0) 100%); transform: skewX(-18deg); }}
+  background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.35) 50%, rgba(255,255,255,0) 100%); transform: skewX(-18deg); }}
 .glass.chip {{ left: 0 !important; right: 0; width: max-content !important; margin: 0 auto; padding: 12px 34px 12px 14px; border-radius: 999px; display: flex;
   align-items: center; gap: 16px; font: 600 40px/1 "Outfit"; z-index: 9; }}
 .chip img {{ width: 64px; height: 64px; object-fit: contain; }}
 .chip b {{ font-weight: 900; background: {GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }}
 /* retention */
 .graph .gh {{ display: flex; justify-content: space-between; align-items: baseline; }}
-.gt {{ font: 800 42px/1 "Outfit"; }}
-.gp {{ font: 900 60px/1 "Outfit"; background: {GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }}
+.gt {{ font: 900 34px/1 "Outfit"; letter-spacing: .1em; color: rgba(255,255,255,.7); }}
+.gp {{ font: 900 72px/1 "Outfit"; background: {GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }}
 .avs {{ display: flex; gap: 14px; margin: 18px 0 6px; }}
-.av {{ display: grid; place-items: center; width: 60px; height: 60px; border-radius: 50%; opacity: 0; background: linear-gradient(140deg,#F54BA8,#F5876C);
-  box-shadow: 0 8px 18px rgba(245,75,168,.3), inset 0 2px 0 rgba(255,255,255,.5); }}
-.av svg {{ width: 34px; height: 34px; fill: #fff; }}
-.gs {{ width: 100%; height: 272px; overflow: visible; }}
-.gl0 {{ stroke: #f1dbe8; stroke-width: 4; }}
-.gline {{ fill: none; stroke: url(#gr); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }}
-.gdot {{ fill: #ff2d55; opacity: 0; transform-box: fill-box; transform-origin: center; }}
-.gtag {{ position: absolute; left: 450px; top: 196px; opacity: 0; background: #1d0f24; color: #fff; font: 800 30px/1 "Outfit"; padding: 14px 20px; border-radius: 16px; }}
+.av {{ display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; opacity: 0; background: linear-gradient(140deg,#F54BA8,#F5876C);
+  box-shadow: 0 0 22px rgba(245,75,168,.5), inset 0 2px 0 rgba(255,255,255,.5); }}
+.av svg {{ width: 36px; height: 36px; fill: #fff; }}
+.gs {{ width: 100%; height: 284px; overflow: visible; }}
+.gl0 {{ stroke: rgba(255,255,255,.12); stroke-width: 4; }}
+.gline {{ fill: none; stroke: url(#gr); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 12px #F515E8); }}
+.gdot {{ fill: #ff2d55; opacity: 0; transform-box: fill-box; transform-origin: center; filter: drop-shadow(0 0 14px #ff2d55); }}
+.gtag {{ position: absolute; left: 470px; top: 200px; opacity: 0; background: #fff; color: #1a0620; font: 900 30px/1 "Outfit"; padding: 14px 20px; border-radius: 16px; }}
 /* the flopped reel */
 .glass.reel {{ padding: 0; }}
 .rv {{ position: relative; height: 470px; background: linear-gradient(160deg,#3a2140,#7a3060 60%,#c0567a); display: grid; place-items: center; }}
 .play {{ display: block; width: 0; height: 0; border-left: 70px solid rgba(255,255,255,.9); border-top: 44px solid transparent; border-bottom: 44px solid transparent; margin-left: 20px; }}
-.up {{ position: absolute; left: 30px; right: 30px; bottom: 30px; padding: 18px 22px; border-radius: 22px; background: rgba(255,255,255,.22);
-  border: 1.5px solid rgba(255,255,255,.5); backdrop-filter: blur(10px); }}
+.up {{ position: absolute; left: 30px; right: 30px; bottom: 30px; padding: 18px 22px; border-radius: 22px; background: rgba(255,255,255,.2); border: 1.5px solid rgba(255,255,255,.5); }}
 .upt {{ font: 800 30px/1 "Outfit"; color: #fff; margin-bottom: 12px; }}
 .upb {{ height: 12px; border-radius: 6px; background: rgba(255,255,255,.3); overflow: hidden; }}
 .upb i {{ display: block; height: 100%; background: linear-gradient(90deg,#F515E8,#F5876C); transform-origin: 0 50%; }}
 .rm {{ padding: 22px 28px 26px; display: flex; flex-direction: column; gap: 6px; }}
 .rm > b {{ font: 800 36px/1.1 "Outfit"; }}
-.views {{ font: 600 32px/1.1 "Outfit"; color: #7b6a80; }}
-.views b {{ color: #1d0f24; }}
-.views em {{ display: inline-block; opacity: 0; font-style: normal; color: #ff2d55; font-weight: 800; }}
+.views {{ font: 600 32px/1.1 "Outfit"; color: rgba(255,255,255,.65); }}
+.views b {{ color: #fff; }}
+.views em {{ display: inline-block; opacity: 0; font-style: normal; color: #ff4d6d; font-weight: 800; }}
 .stampf {{ position: absolute; left: 50px; top: 200px; opacity: 0; font: 900 72px/1.1 "Outfit"; color: #ff2d55; border: 10px solid #ff2d55; border-radius: 18px;
-  padding: 0 22px; background: rgba(255,255,255,.88); }}
+  padding: 0 22px; background: rgba(255,255,255,.92); }}
 /* the phone */
 #phone {{ position: absolute; opacity: 0; z-index: 6; }}
 #phonei {{ position: absolute; inset: 0; border-radius: 72px; background: #160b18; padding: 14px;
-  box-shadow: 0 50px 110px rgba(120,10,80,.32), 0 0 0 4px #3a2a3c inset, 0 0 0 2px rgba(255,255,255,.35); }}
+  box-shadow: 0 50px 120px rgba(0,0,0,.6), 0 0 80px rgba(245,21,232,.3), 0 0 0 4px #3a2a3c inset, 0 0 0 2px rgba(255,255,255,.3); }}
 #phone .scr {{ position: relative; width: 100%; height: 100%; border-radius: 58px; overflow: hidden; background: #fdfdfd; }}
 .pv {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; }}
-.isl {{ position: absolute; left: 50%; top: 26px; width: 112px; height: 33px; margin-left: -56px; border-radius: 17px; background: #050305; }}
+.isl {{ position: absolute; left: 50%; top: 26px; width: 120px; height: 35px; margin-left: -60px; border-radius: 18px; background: #050305; }}
 .scan {{ position: absolute; left: 0; right: 0; top: 0; height: 11%; opacity: 0; mix-blend-mode: multiply;
   background: linear-gradient(180deg, rgba(245,21,232,0), rgba(245,21,232,.22) 70%, rgba(245,21,232,.6) 100%); }}
 .refl {{ position: absolute; top: -10%; bottom: -10%; left: 0; width: 45%; pointer-events: none;
   background: linear-gradient(100deg, rgba(255,255,255,0), rgba(255,255,255,.55), rgba(255,255,255,0)); transform: skewX(-16deg); }}
-.film {{ position: absolute; left: 0; top: 458px; width: {FW}px; height: 70px; opacity: 0; z-index: 4; }}
-.fin {{ display: flex; gap: 14px; padding-left: 40px; }}
-.fc {{ flex: 0 0 auto; width: 140px; height: 70px; border-radius: 18px; font: 800 30px/66px "Outfit"; text-align: center; color: #1d0f24;
-  background: rgba(255,255,255,.62); border: 2px solid rgba(255,255,255,.95); box-shadow: 0 10px 24px rgba(170,20,110,.12); }}
-.film .fc:nth-child(3n) {{ background: linear-gradient(90deg,#F515E8,#F5876C); color: #fff; border-color: rgba(255,255,255,.6); }}
+.tkw {{ position: absolute; left: -310px; width: 1700px; height: 96px; overflow: hidden; opacity: 0; z-index: 4; display: flex; align-items: center; }}
+.tkw.mag {{ background: linear-gradient(90deg,#F515E8,#F54BA8,#F5876C); box-shadow: 0 20px 60px rgba(245,21,232,.45); }}
+.tkw.wht {{ background: #fff; box-shadow: 0 20px 60px rgba(0,0,0,.4); }}
+.tki {{ white-space: nowrap; font: 900 50px/96px "Outfit"; letter-spacing: .04em; color: #fff; }}
+.wht .tki {{ color: #1a0620; }}
+.tchip {{ position: absolute; opacity: 0; z-index: 10; padding: 14px 24px; border-radius: 18px; font: 900 42px/1 "Outfit"; color: #fff;
+  background: rgba(255,255,255,.12); border: 2px solid rgba(255,255,255,.4); box-shadow: 0 10px 30px rgba(245,21,232,.35); }}
+.tchip:nth-of-type(odd) {{ background: linear-gradient(90deg,#F515E8,#F5876C); border-color: rgba(255,255,255,.5); }}
 /* findings */
-.hkr {{ display: flex; align-items: center; gap: 20px; }}
-.ok {{ display: grid; place-items: center; width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(140deg,#22c47a,#10a35f); flex: 0 0 auto;
-  box-shadow: 0 10px 22px rgba(16,163,95,.35); }}
-.ok svg {{ width: 44px; height: 44px; }}
-.hkl {{ font: 900 26px/1 "Outfit"; letter-spacing: .08em; color: #7b6a80; }}
-.hkv {{ font: 900 40px/1.15 "Outfit"; margin-top: 6px; }}
-.hks {{ margin-left: auto; font: 900 64px/1 "Outfit"; color: #10a35f; }}
-.hkbar {{ margin-top: 18px; height: 14px; border-radius: 7px; background: rgba(16,163,95,.14); overflow: hidden; }}
-.hkbar i {{ display: block; height: 100%; background: linear-gradient(90deg,#22c47a,#10a35f); transform-origin: 0 50%; }}
-.et {{ font: 900 30px/1 "Outfit"; letter-spacing: .08em; color: #7b6a80; margin-bottom: 16px; }}
-.ebars {{ display: flex; align-items: flex-end; gap: 12px; height: 180px; }}
-.eb {{ display: block; flex: 1; border-radius: 10px; background: linear-gradient(180deg,#F515E8,#F5876C); }}
-.edrop {{ opacity: 0; margin-top: 14px; font: 900 34px/1 "Outfit"; color: #ff2d55; text-align: center; }}
-.mini {{ position: absolute; opacity: 0; width: 200px; height: 330px; border-radius: 26px; background: linear-gradient(160deg,#3a2140,#a2406e); display: grid; place-items: center;
-  box-shadow: 0 18px 40px rgba(0,0,0,.25); border: 2px solid rgba(255,255,255,.5); }}
-.mini .play {{ border-left-width: 40px; border-top-width: 26px; border-bottom-width: 26px; margin-left: 12px; }}
-.glass.hookc {{ padding: 22px 28px; }}
-.hn {{ font: 900 26px/1 "Outfit"; letter-spacing: .1em; background: {GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 10px; }}
-.htx {{ font: 800 34px/1.15 "Outfit"; }}
-.fxl {{ opacity: 0; font: 800 36px/1.2 "Outfit"; padding: 10px 0; display: flex; gap: 14px; align-items: center; }}
-.fxl b {{ display: inline-grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: #18b26b; color: #fff; font-size: 26px; }}
+#pill {{ position: absolute; left: 130px; width: 820px; top: 500px; height: 150px; border-radius: 999px; overflow: hidden; opacity: 0; z-index: 9;
+  background: #10a35f; box-shadow: 0 20px 60px #10a35f88; }}
+.pst {{ position: absolute; left: 0; right: 0; top: 0; }}
+.pw {{ height: 150px; display: grid; place-items: center; font: 900 66px/1 "Outfit"; color: #fff; letter-spacing: -.01em; white-space: nowrap; }}
+.glass.hookbig {{ display: flex; align-items: center; gap: 40px; }}
+.hring {{ position: relative; width: 260px; height: 260px; flex: 0 0 auto; }}
+.hring svg {{ width: 100%; height: 100%; overflow: visible; }}
+.hb {{ fill: none; stroke: rgba(255,255,255,.12); stroke-width: 18; }}
+.hf {{ fill: none; stroke: #22c47a; stroke-width: 18; stroke-linecap: round; filter: drop-shadow(0 0 12px #22c47a); }}
+.hv {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 82px; }}
+.hv b {{ font: 900 100px/1 "Outfit"; }}
+.hv small {{ font: 800 32px/1 "Outfit"; color: rgba(255,255,255,.6); }}
+.hkl {{ font: 900 30px/1 "Outfit"; letter-spacing: .08em; color: rgba(255,255,255,.6); }}
+.hkv {{ font: 900 62px/1.1 "Outfit"; margin-top: 10px; }}
+.et {{ font: 900 30px/1 "Outfit"; letter-spacing: .1em; color: rgba(255,255,255,.65); margin-bottom: 16px; }}
+.ebars {{ position: relative; display: flex; align-items: flex-end; gap: 12px; height: 250px; }}
+.eb {{ display: block; flex: 1; border-radius: 10px; background: linear-gradient(180deg,#ff5bf0,#F5876C); box-shadow: 0 0 18px rgba(245,21,232,.45); }}
+.emid {{ position: absolute; left: 214px; width: 308px; top: -12px; bottom: -12px; border: 4px dashed rgba(255,255,255,.75); border-radius: 22px; opacity: 0; }}
+.edrop {{ opacity: 0; margin-top: 14px; font: 900 36px/1 "Outfit"; color: #ff4d6d; text-align: center; }}
+.mini {{ position: absolute; opacity: 0; width: 220px; height: 360px; border-radius: 28px; background: linear-gradient(160deg,#5a1d63,#c0367e); display: grid; place-items: center;
+  box-shadow: 0 18px 40px rgba(0,0,0,.4); border: 2px solid rgba(255,255,255,.4); }}
+.mini .play {{ border-left-width: 44px; border-top-width: 28px; border-bottom-width: 28px; margin-left: 12px; }}
+.vcount {{ position: absolute; left: 0; right: 0; top: 1110px; opacity: 0; z-index: 12; text-align: center; font: 900 76px/1 "Outfit"; color: #ff4d6d;
+  text-shadow: 0 0 30px rgba(255,45,85,.6); }}
+.wall {{ position: absolute; left: -420px; top: 120px; width: 1920px; height: 1900px; opacity: 0; z-index: 3; }}
+.wallp {{ position: absolute; inset: 0; transform: perspective(1500px) rotateX(46deg) rotateZ(-20deg); }}
+.wallg {{ display: grid; grid-template-columns: repeat(5, 340px); gap: 26px; }}
+.wc {{ height: 230px; border-radius: 32px; padding: 24px; background: linear-gradient(140deg, rgba(255,255,255,.16), rgba(255,255,255,.05)); border: 2px solid rgba(255,255,255,.22); }}
+.wc .hn {{ font: 900 24px/1 "Outfit"; letter-spacing: .1em; color: #ff7ad9; margin-bottom: 12px; }}
+.wt {{ font: 800 32px/1.15 "Outfit"; }}
+.wv {{ display: grid; place-items: center; gap: 10px; background: linear-gradient(160deg,#5a1d63,#c0367e); }}
+.wv b {{ font: 900 34px/1 "Outfit"; }}
+.wg {{ display: flex; flex-direction: column; justify-content: center; }}
+.wg b {{ font: 900 84px/1 "Outfit"; color: #5fe3a1; }}
+.wg span {{ font: 800 30px/1 "Outfit"; color: rgba(255,255,255,.7); }}
+.wallfade {{ position: absolute; inset: 0; z-index: 5; opacity: 0; background: radial-gradient(ellipse at 50% 44%, rgba(13,4,18,.9) 0%, rgba(13,4,18,.6) 32%, rgba(13,4,18,0) 68%); }}
+.fixchip {{ position: absolute; left: 520px; width: 470px; opacity: 0; z-index: 9; display: flex; gap: 18px; align-items: center; padding: 26px 28px; border-radius: 30px;
+  font: 900 42px/1.1 "Outfit"; background: rgba(255,255,255,.12); border: 2px solid rgba(255,255,255,.3); box-shadow: 0 20px 50px rgba(0,0,0,.4); }}
+.fixchip b {{ display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; background: #22c47a; font-size: 32px; flex: 0 0 auto; box-shadow: 0 0 20px #22c47a; }}
 .conf {{ position: absolute; opacity: 0; width: 22px; height: 34px; border-radius: 6px; z-index: 21; }}
 #lq {{ position: absolute; left: 0; top: 0; width: 2800px; height: 2800px; z-index: 30; opacity: 0; border-radius: 50%;
   background: radial-gradient(circle at 40% 35%, #ff8be0 0%, #F515E8 35%, #F54BA8 62%, #F5876C 100%); }}
-/* the audit */
-.glass.audit {{ padding: 40px 44px; z-index: 7; overflow: visible; }}
-.ah {{ display: flex; align-items: center; gap: 18px; font: 900 48px/1 "Outfit"; }}
-.ah img {{ width: 84px; height: 84px; object-fit: contain; }}
-.free {{ margin-left: auto; font: 900 30px/1 "Outfit"; color: #fff; background: {GRAD}; padding: 12px 22px; border-radius: 999px; }}
-.inp {{ margin-top: 32px; height: 110px; border-radius: 28px; background: rgba(255,255,255,.7); border: 3px solid #f6cfe4; display: flex; align-items: center; padding: 0 34px;
-  font: 800 52px/1 "Outfit"; overflow: hidden; }}
-.at {{ color: #F515E8; margin-right: 6px; }}
-.caret {{ display: inline-block; width: 5px; height: 60px; background: #F515E8; margin-left: 4px; }}
-.btn {{ margin-top: 22px; height: 100px; border-radius: 28px; background: {GRAD}; color: #fff; font: 900 44px/100px "Outfit"; text-align: center; overflow: hidden;
-  box-shadow: 0 16px 34px rgba(245,21,232,.3); }}
-.ring {{ position: relative; width: 300px; height: 300px; margin: 30px auto 0; opacity: 0; display: none; }}
-.ring svg {{ width: 100%; height: 100%; }}
-.rb {{ fill: none; stroke: rgba(245,75,168,.16); stroke-width: 22; }}
-.rf {{ fill: none; stroke: #1d0f24; stroke-width: 22; stroke-linecap: round; }}
-.rval {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 92px; }}
-.rval span {{ font: 900 110px/1 "Outfit"; }}
-.rval small {{ font: 800 40px/1 "Outfit"; color: #7b6a80; margin-left: 4px; }}
-.first {{ display: none; opacity: 0; margin-top: 26px; border-radius: 26px; padding: 22px 28px; background: rgba(255,243,250,.85); border: 3px solid #F54BA8; }}
-.fl {{ font: 900 28px/1 "Outfit"; letter-spacing: .1em; color: #F515E8; margin-bottom: 10px; }}
-.fv {{ font: 800 40px/1.15 "Outfit"; }}
+/* the audit steps */
+.step {{ position: absolute; left: 0; right: 0; top: 420px; display: flex; justify-content: center; align-items: center; gap: 24px; opacity: 0; z-index: 9; }}
+.sic {{ display: grid; place-items: center; width: 112px; height: 112px; border-radius: 32px; background: linear-gradient(140deg,#F515E8,#F5876C); font: 900 62px/1 "Outfit";
+  box-shadow: 0 16px 40px rgba(245,21,232,.5), inset 0 2px 0 rgba(255,255,255,.4); }}
+.stx {{ font: 900 58px/1 "Outfit"; letter-spacing: -.01em; }}
+.dots {{ position: absolute; left: 0; right: 0; top: 1200px; display: flex; justify-content: center; gap: 14px; opacity: 0; z-index: 9; }}
+.dots i {{ display: block; width: 70px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.22); }}
+.dots i.on {{ background: linear-gradient(90deg,#F515E8,#F5876C); box-shadow: 0 0 14px #F515E8; }}
+.glass.hbar {{ display: flex; align-items: center; height: 160px; padding: 0 44px; border-radius: 44px; font: 800 76px/1 "Outfit"; }}
+.at {{ color: #ff7ad9; margin-right: 8px; }}
+.caret {{ display: inline-block; width: 6px; height: 76px; background: #ff7ad9; margin-left: 6px; }}
+.cdown {{ position: absolute; left: 330px; top: 620px; width: 420px; height: 420px; opacity: 0; z-index: 9; }}
+.cdown svg {{ width: 100%; height: 100%; overflow: visible; }}
+.cb {{ fill: none; stroke: rgba(255,255,255,.14); stroke-width: 16; }}
+.cf {{ fill: none; stroke: url(#gr); stroke-width: 16; stroke-linecap: round; filter: drop-shadow(0 0 12px #F515E8); }}
+.cv {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 136px; }}
+.cv b {{ font: 900 156px/1 "Outfit"; font-variant-numeric: tabular-nums; }}
+.cv small {{ font: 800 44px/1 "Outfit"; color: rgba(255,255,255,.6); margin-left: 6px; }}
+.score {{ position: absolute; left: 0; right: 0; top: 660px; opacity: 0; z-index: 9; text-align: center; font: 900 320px/1 "Outfit"; color: #fff;
+  text-shadow: 0 0 50px rgba(245,21,232,.75); }}
+.slot {{ display: inline-flex; vertical-align: bottom; }}
+.sw {{ display: inline-block; height: 1em; overflow: hidden; line-height: 1; }}
+.sc {{ display: flex; flex-direction: column; }}
+.sc b {{ display: block; height: 1em; line-height: 1em; }}
+.of {{ font-size: 96px; color: rgba(255,255,255,.65); margin-left: 12px; text-shadow: none; }}
+.glass.first {{ padding: 38px 42px; z-index: 9; }}
+.fl {{ font: 900 34px/1 "Outfit"; letter-spacing: .1em; color: #ff7ad9; margin-bottom: 16px; }}
+.fv {{ font: 900 62px/1.12 "Outfit"; }}
 /* the CTA */
-#ctabg {{ position: absolute; inset: 0; z-index: 15; opacity: 0; background: radial-gradient(circle at 50% 40%, #ff7ad9 0%, #F515E8 40%, #c4128f 100%); }}
-#ctabg::after {{ content: ""; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.25) 2px, transparent 2.5px); background-size: 46px 46px; }}
-.cbar {{ position: absolute; left: 90px; top: 1310px; width: 900px; height: 130px; opacity: 0; z-index: 22; border-radius: 999px; display: flex; align-items: center;
-  padding: 0 26px; gap: 20px; background: rgba(255,255,255,.88); border: 2px solid rgba(255,255,255,.95); box-shadow: 0 24px 50px rgba(80,0,60,.3), inset 0 2px 0 #fff; }}
-.cav {{ width: 84px; height: 84px; border-radius: 50%; background: url(assets/img/cree.png) center/86% no-repeat, #ffe3f3; flex: 0 0 auto; }}
-.ctx {{ font: 900 64px/1 "Outfit"; letter-spacing: .04em; }}
-.caret.dark {{ background: #1d0f24; height: 64px; }}
-.cpost {{ margin-left: auto; font: 900 44px/1 "Outfit"; color: #c40db8; }}
-.heart {{ position: absolute; right: -30px; top: -90px; width: 110px; height: 100px; opacity: 0; }}
+.cbig {{ position: absolute; left: 160px; width: 760px; top: 1230px; height: 190px; border-radius: 999px; opacity: 0; z-index: 22; display: flex; align-items: center;
+  justify-content: center; gap: 8px; background: rgba(255,255,255,.96); box-shadow: 0 30px 70px rgba(80,0,60,.4), inset 0 2px 0 #fff; }}
+.ctx {{ font: 900 130px/1 "Outfit"; color: #1a0620; letter-spacing: .06em; transform-origin: 50% 60%; display: inline-block; }}
+.caret.big {{ height: 120px; width: 9px; background: #c40db8; }}
+.heart {{ position: absolute; right: -30px; top: -90px; width: 120px; height: 110px; opacity: 0; }}
 .gheart {{ position: absolute; width: 70px; height: 64px; opacity: 0; z-index: 21; overflow: visible; }}
-.gheart path {{ fill: rgba(255,255,255,.55); stroke: rgba(255,255,255,.95); stroke-width: 2; }}
-.plane {{ position: absolute; left: 980px; top: 1200px; width: 120px; height: 120px; opacity: 0; z-index: 23; filter: drop-shadow(0 10px 18px rgba(80,0,60,.35)); }}
+.gheart path {{ fill: rgba(255,255,255,.5); stroke: rgba(255,255,255,.95); stroke-width: 2; }}
+.plane {{ position: absolute; left: 990px; top: 1180px; width: 120px; height: 120px; opacity: 0; z-index: 23; filter: drop-shadow(0 10px 18px rgba(80,0,60,.35)); }}
 .glass.dm {{ padding: 22px 26px; }}
 .dmh {{ display: flex; align-items: center; gap: 12px; font: 900 34px/1 "Outfit"; }}
 .dmh img {{ width: 56px; height: 56px; object-fit: contain; }}
 .dmt {{ margin-top: 12px; font: 800 38px/1.2 "Outfit"; }}
 /* captions */
-.cap {{ position: absolute; left: 60px; right: 60px; top: 1500px; opacity: 0; text-align: center; z-index: 25; font: 800 54px/1.25 "Outfit"; color: #1d0f24; }}
+.cap {{ position: absolute; left: 60px; right: 60px; top: 1510px; opacity: 0; text-align: center; z-index: 25; font: 800 54px/1.25 "Outfit"; color: #fff;
+  text-shadow: 0 4px 24px rgba(0,0,0,.6); }}
 .cw {{ display: inline-block; padding: 2px 14px 6px; border-radius: 16px; }}
-.cw.on {{ background: {GRAD}; color: #fff; box-shadow: 0 10px 22px rgba(245,21,232,.3); }}
+.cw.on {{ background: {GRAD}; color: #fff; text-shadow: none; box-shadow: 0 10px 26px rgba(245,21,232,.45); }}
 /* logo */
-#logo {{ position: absolute; inset: 0; z-index: 40; opacity: 0; background: radial-gradient(circle at 50% 45%, #ffffff 0%, #fff3fa 70%, #ffe6f4 100%); }}
-#lgm {{ position: absolute; left: 80px; top: 720px; width: 260px; height: 260px; object-fit: contain; }}
-#lgw {{ position: absolute; left: 350px; top: 775px; font: 800 150px/1 "Outfit"; letter-spacing: -.02em; background: linear-gradient(90deg,#F515E8,#F5876C);
+#logo {{ position: absolute; inset: 0; z-index: 40; opacity: 0; overflow: hidden; background: radial-gradient(circle at 50% 42%, #3a0d48 0%, #14051b 60%, #0b030f 100%); }}
+#lgf {{ position: absolute; left: -50%; right: -50%; bottom: -12%; height: 52%; transform: perspective(600px) rotateX(62deg); transform-origin: 50% 0;
+  background-image: linear-gradient(rgba(245,75,168,.55) 2px, transparent 2px), linear-gradient(90deg, rgba(245,75,168,.55) 2px, transparent 2px); background-size: 120px 120px;
+  -webkit-mask-image: linear-gradient(transparent, #000 45%); mask-image: linear-gradient(transparent, #000 45%); }}
+#lgm {{ position: absolute; left: 80px; top: 720px; width: 260px; height: 260px; object-fit: contain; filter: drop-shadow(0 0 40px rgba(245,21,232,.5)); }}
+#lgw {{ position: absolute; left: 350px; top: 775px; font: 800 150px/1 "Outfit"; letter-spacing: -.02em; background: linear-gradient(90deg,#ff5bf0,#FF9A7A);
   -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: 16px; }}
-#lgt {{ position: absolute; left: 0; right: 0; top: 1020px; text-align: center; font: 600 46px/1.2 "Outfit"; color: #7b6a80; opacity: 0; }}
+#lgs {{ position: absolute; left: 935px; top: 700px; width: 110px; height: 110px; filter: drop-shadow(0 0 24px #F515E8); }}
+#lgt {{ position: absolute; left: 0; right: 0; top: 1020px; text-align: center; font: 600 46px/1.2 "Outfit"; color: rgba(255,255,255,.75); opacity: 0; }}
 .spk {{ position: absolute; width: 44px; height: 44px; opacity: 0; }}
 /* Cree */
-#cree {{ position: absolute; left: 0; top: 0; width: 820px; height: 820px; z-index: 20; opacity: 0; transform-origin: 410px 500px; }}
+#cree {{ position: absolute; left: 0; top: 0; width: 820px; height: 820px; z-index: 20; opacity: 0; transform-origin: 410px 500px; filter: drop-shadow(0 0 40px rgba(245,21,232,.35)); }}
 #creeb {{ position: absolute; inset: 0; transform-origin: 50% 97.5%; }}
 #creef {{ position: absolute; inset: 0; transform-origin: 50% 60%; }}
 #creep {{ position: absolute; inset: 0; transform-origin: 50% 97.5%; }}
 .cpose {{ position: absolute; inset: 0; opacity: 0; }}
-#cp-wave {{ opacity: 1; }}
+#cp-shock {{ opacity: 1; }}
 .cpose img, .clids, .csw {{ position: absolute; inset: 0; width: 820px; height: 820px; }}
 .csw {{ overflow: visible; }}
 .lidg {{ opacity: 0; }}
 .sweat {{ opacity: 0; transform-box: fill-box; transform-origin: 50% 0; }}
-#bub {{ position: absolute; left: 560px; top: 20px; width: 200px; height: 170px; opacity: 0; background: rgba(255,255,255,.92); border-radius: 50% 50% 50% 12px;
-  border: 2px solid #fff; box-shadow: 0 14px 30px rgba(150,20,100,.2); display: grid; place-items: center; transform-origin: 0 100%; }}
+#bub {{ position: absolute; left: 560px; top: 20px; width: 200px; height: 170px; opacity: 0; background: rgba(255,255,255,.95); border-radius: 50% 50% 50% 12px;
+  box-shadow: 0 14px 30px rgba(0,0,0,.3); display: grid; place-items: center; transform-origin: 0 100%; }}
 #bubt {{ font: 900 96px/1 "Outfit"; color: #c40db8; }}
 .prop {{ position: absolute; opacity: 0; transform-origin: 50% 80%; }}
-.prop.watch {{ left: 40px; top: 110px; width: 230px; height: 250px; }}
 .prop svg {{ width: 100%; height: 100%; }}
 """
 
@@ -875,18 +1109,20 @@ def main():
     <style>{CSS}</style>
   </head>
   <body>
-    <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F515E8"/>
-      <stop offset=".5" stop-color="#F54BA8"/><stop offset="1" stop-color="#F5876C"/></linearGradient></defs></svg>
+    <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff5bf0"/>
+      <stop offset=".5" stop-color="#F54BA8"/><stop offset="1" stop-color="#FF9A7A"/></linearGradient></defs></svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
-      <div id="bgl">{bg}<div id="dots"></div></div>
+      <div id="bgl">{bg}{"".join(FLIPS)}<div id="dots"></div></div>
       <div id="cam"><div id="cam2">
+      <svg class="star0" id="star0" viewBox="-50 -50 100 100"><path d="{STAR}" fill="url(#gr)"/></svg>
       {"".join(EL)}
-      <div id="ctabg"></div>
       {cree}
       </div></div>
       {"".join(CAPS)}
       <div id="lq"></div>
-      <div id="logo"><img id="lgm" src="assets/img/cree.png" alt="Cree"><div id="lgw">Creedom</div><div id="lgt">creedom.ai</div></div>
+      <div id="logo"><div id="lgf"></div><img id="lgm" src="assets/img/cree.png" alt="Cree"><div id="lgw">Creedom</div>
+        <svg id="lgs" viewBox="-50 -50 100 100"><path d="{STAR}" fill="url(#gr)"/></svg><div id="lgt">creedom.ai</div></div>
+      {"".join(GBANDS)}
       <audio id="mix" src="assets/audio/bed.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
     </div>
     <script>
