@@ -1,0 +1,31 @@
+{
+  "query": "clock tick",
+  "license_filter": "cc0,by,pdm",
+  "source_filter": "freesound,jamendo",
+  "results": [
+    {
+      "id": "815ccec4-47ad-432a-bde7-791709e2e5de",
+      "title": "Clock Tick (Tik Tak)",
+      "creator": "KaosMakinesi",
+      "license": "cc0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "freesound",
+      "duration_s": 2.0,
+      "audio_url": "https://cdn.freesound.org/previews/403/403001_4381068-hq.mp3",
+      "landing_url": "https://freesound.org/people/KaosMakinesi/sounds/403001",
+      "attribution": "\"Clock Tick (Tik Tak)\" by KaosMakinesi is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/."
+    },
+    {
+      "id": "934a047b-2d06-4b87-947b-550cf71b8b74",
+      "title": "mab-clock-tick-1-20080713.wav",
+      "creator": "mab",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/3.0/",
+      "source": "freesound",
+      "duration_s": 0.25,
+      "audio_url": "https://cdn.freesound.org/previews/57/57211_127220-hq.mp3",
+      "landing_url": "https://freesound.org/people/mab/sounds/57211",
+      "attribution": "\"mab-clock-tick-1-20080713.wav\" by mab is licensed under CC BY 3.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/3.0/."
+    }
+  ]
+}
