@@ -32,7 +32,7 @@ import os
 import random
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FW, FH, FPS = 1080, 1920, 30
+FW, FH, FPS = 1080, 1920, 40
 VO = json.load(open(os.path.join(ROOT, "plan", "vo_tight.json")))
 VDUR = 35.43
 DUR = 37.5
@@ -510,34 +510,63 @@ def scenes():
         push(a, b, *((1, 1.04) if k % 2 == 0 else (1.04, 1)))
 
     # ---- S1 the hook: "This AI told me the exact second people stopped watching my reel."
-    NOCAP.append((0, t_ppl - .05))
-    rays(0, t_ppl, cy=820, color="rgba(224,24,126,.55)")
-    js('tl.fromTo("#star0", {scale: 1, rotation: 0}, {keyframes: [{scale: 1.25, rotation: 20, duration: .1}, {scale: 0, rotation: 90, opacity: 0, duration: .2, ease: "power3.in"}], '
-       'immediateRender: false}, .08);')
-    beat("This AI", W("This"), t_told - .04, 210)
-    cue(W("This"), "hit")
-    beat("told me", t_told, t_the - .04, 210, style="grey")
-    cue(t_told, "whoosh")
-    flip(t_the, t_sec - .04, INK, fade=.05)
-    beat("exact", t_the, t_sec - .05, 270, style="white", sub=("the", 130))
-    cue(t_the, "hit")
-    sc = beat("second.", t_sec, t_ppl - .05, 250, style="pink", y=720)
-    glitch(t_sec, 1.2)
-    cue(t_sec, "hit")
-    i = nid("clk")
-    put(f'<div class="clock" id="{i}">00:0<span id="{i}n">0</span></div>')
-    show(f"#{i}", t_sec + .1, t_ppl - .05)
-    fly(f"#{i}", t_sec + .1, y=40, d=.3)
-    js(f'tl.fromTo("#{i}n", {{textContent: 0}}, {{textContent: 7, duration: .35, ease: "none", snap: {{textContent: 1}}, immediateRender: false}}, {t_sec + .1:.3f});')
-    js(f'tl.to("#{i}", {{opacity: 0, scale: 2, filter: "blur(10px)", duration: .25}}, {t_ppl - .1:.3f});')
-    sparkle(540, 830, t_sec + .1, n=10, r=360)
+    # Owner's reference (a picker-wheel title): a drum of lines in a tight grotesk; the line in focus in the brand
+    # gradient, the ones it has passed above it in fading grey, the next one waiting faint below, a 3D curve on the
+    # drum; every turn is a fast upward scroll with a vertical motion blur that settles; a small block beside it
+    # (here the rest of the sentence) lights up word by word as it is spoken.
+    NOCAP.append((0, S2 - .1))
+    items = ["This AI", "told me", "the exact", "second."]
+    turns = [.02, t_told - .06, t_the - .06, t_sec - .06]
+    H, FY, XR = 142, 640, 650                         # row height, focus line centre, right edge of the drum
+    rows = "".join(f'<div class="di" id="di{k}" style="top:{k * H}px"><span class="dg">{w}</span><span class="dc" id="dc{k}">{w}</span></div>'
+                   for k, w in enumerate(items))
+    put(f'<div class="drumw" id="drw" style="top:{FY - H // 2}px;width:{XR}px"><div class="drum" id="drum">{rows}</div></div>')
+    show("#drw", .02, S2 - .02)
+
+    def look(d):
+        """scale, opacity, rotationX, pull toward the focus line for a row d rows from the focus."""
+        sc = {0: 1, -1: .8, 1: .8, -2: .66, 2: .66}.get(d, .56)
+        op = {0: 1, -1: .62, -2: .34, 1: .26, 2: .1}.get(d, .14 if d < 0 else 0)
+        pull = 0 if d == 0 else -math.copysign(1, d) * (1 - sc) * H * .55 * min(abs(d), 2)
+        return sc, op, 0, pull          # no tilt: pivoting on the right edge skewed the rows like italics
+    for k in range(len(items)):
+        sc, op, rx, pull = look(k)
+        js(f'tl.fromTo("#di{k}", {{transformPerspective: 900, scale: {sc}, opacity: 0, rotationX: {rx}, y: {pull:.0f}}}, {{transformPerspective: 900, scale: {sc}, '
+           f'opacity: {op}, rotationX: {rx}, y: {pull:.0f}, duration: .5, ease: "expo.out", immediateRender: false}}, .02);')
+        js(f'tl.fromTo("#dc{k}", {{opacity: 0}}, {{opacity: {1 if k == 0 else 0}, duration: .3, immediateRender: false}}, .02);')
+    js(f'tl.fromTo("#drum", {{y: {H * 1.7:.0f}}}, {{y: 0, duration: .62, ease: "expo.out", immediateRender: false}}, .02);')
+    js('tl.fromTo("#vbg", {attr: {stdDeviation: "0 22"}}, {attr: {stdDeviation: "0 0"}, duration: .45, ease: "power2.out", immediateRender: false}, .02);')
+    cue(.02, "whoosh")
+    for f, tf in list(enumerate(turns))[1:]:
+        js(f'tl.to("#drum", {{y: {-f * H}, duration: .5, ease: "expo.out"}}, {tf:.3f});')
+        js(f'tl.fromTo("#vbg", {{attr: {{stdDeviation: "0 18"}}}}, {{attr: {{stdDeviation: "0 0"}}, duration: .34, ease: "power2.out", immediateRender: false}}, {tf:.3f});')
+        for k in range(len(items)):
+            sc, op, rx, pull = look(k - f)
+            js(f'tl.to("#di{k}", {{transformPerspective: 900, scale: {sc}, opacity: {op}, rotationX: {rx}, y: {pull:.0f}, duration: .5, ease: "expo.out"}}, {tf:.3f});')
+            js(f'tl.to("#dc{k}", {{opacity: {1 if k == f else 0}, duration: .25}}, {tf:.3f});')
+        cue(tf, "swish" if f < len(items) - 1 else "hit")
+    js(f'tl.fromTo("#di3", {{scale: 1}}, {{keyframes: [{{scale: 1.07, duration: .14, ease: "power2.out"}}, {{scale: 1, duration: .5, ease: "elastic.out(1, .5)"}}], '
+       f'immediateRender: false}}, {turns[3] + .3:.3f});')
+    # the block beside it: the rest of the sentence, each word lights up as it is said
+    words = [("people", t_ppl), ("stopped", t_stop), ("watching", W("watching")), ("my reel.", W("my", 2))]
+    blk = "".join(f'<div class="bwm"><span class="bwl" id="bwl{k}">{w}</span></div>' for k, (w, _) in enumerate(words))
+    put(f'<div class="dblock" id="dblk" style="left:{XR + 30}px;top:{FY - H // 2 + 6}px">{blk}</div>')
+    show("#dblk", .25, S2 - .02)
+    js('tl.fromTo(".bwl", {yPercent: 110, filter: "blur(6px)"}, {yPercent: 0, filter: "blur(0px)", duration: .55, ease: "expo.out", stagger: .07, immediateRender: false}, .25);')
+    for k, (w, tw) in enumerate(words):
+        js(f'tl.to("#bwl{k}", {{color: "{PINK if k < 3 else "#e11d48"}", duration: .15}}, {tw - .03:.3f});')
+        js(f'tl.fromTo("#bwl{k}", {{scale: 1}}, {{keyframes: [{{scale: 1.12, duration: .1}}, {{scale: 1, duration: .3, ease: "power2.out"}}], immediateRender: false}}, {tw - .03:.3f});')
+    # out: the drum keeps turning up and away, the block lifts off
+    js(f'tl.to("#drum", {{y: {-(len(items) + 2) * H}, opacity: 0, duration: .45, ease: "power3.in"}}, {S2 - .45:.3f});')
+    js(f'tl.fromTo("#vbg", {{attr: {{stdDeviation: "0 0"}}}}, {{attr: {{stdDeviation: "0 24"}}, duration: .45, ease: "power3.in", immediateRender: false}}, {S2 - .45:.3f});')
+    js(f'tl.to(".bwl", {{yPercent: -110, filter: "blur(6px)", duration: .35, ease: "power3.in", stagger: .04}}, {S2 - .45:.3f});')
     # the retention line: neon, full width, it crashes where people left
     av = "".join(f'<i class="av" id="av{k}"><svg viewBox="0 0 40 40"><circle cx="20" cy="14" r="8"/><path d="M 5 38 C 6 26 34 26 35 38 Z"/></svg></i>' for k in range(7))
     g = glass(f'<div class="gh"><span class="gt">RETENTION</span><span class="gp" id="gp">100%</span></div><div class="avs">{av}</div>'
               f'<svg viewBox="0 0 700 240" class="gs"><path class="gl0" d="M 0 230 H 700"/>'
               f'<path class="gline" id="gl" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" d="M 0 24 C 80 28 160 34 240 44 C 300 50 330 54 360 58 '
               f'C 380 62 395 130 410 190 C 430 206 520 212 700 216"/><circle class="gdot" id="gd" cx="372" cy="66" r="16"/></svg>'
-              f'<div class="gtag" id="gtag">0:07 &middot; they left here</div>', 90, 560, 900, t_ppl, S2 - .2, cls="graph", flt=False)
+              f'<div class="gtag" id="gtag">0:07 &middot; they left here</div>', 70, 880, 690, t_ppl, S2 - .2, cls="graph", flt=False)
     js(f'tl.fromTo("#gl", {{strokeDashoffset: 1}}, {{strokeDashoffset: 0, duration: .8, ease: "power1.inOut", immediateRender: false}}, {t_ppl + .1:.3f});')
     js(f'tl.fromTo("#gp", {{textContent: 100}}, {{textContent: 38, duration: .8, ease: "power2.in", snap: {{textContent: 1}}, '
        f'modifiers: {{textContent: (v) => Math.round(v) + "%"}}, immediateRender: false}}, {t_ppl + .1:.3f});')
@@ -553,7 +582,6 @@ def scenes():
     js(f'tl.fromTo("#{g}", {{x: 0}}, {{keyframes: [{{x: -16, duration: .04}}, {{x: 14, duration: .04}}, {{x: -8, duration: .04}}, {{x: 0, duration: .04}}], '
        f'immediateRender: false}}, {t_stop:.3f});')
     gout(f"#{g}", S2 - .35, to="down")
-    glitch(S2 - .15)
     cree_set(0, 880, 1700, .38)
     js(f'tl.fromTo("#cree", {{opacity: 0, y: 1700 - {PCY}}}, {{opacity: 1, y: {1330 - PCY}, duration: .45, ease: "back.out(1.8)", immediateRender: false}}, {t_stop - .15:.3f});')
     pose(t_stop - .15, "shock", squash=False)
@@ -886,10 +914,7 @@ def background():
     worries = ["Why did my views drop?", "Algorithm changed again", "Is my content bad?", "No clarity", "What should I post?", "200 views", "Drowning in drafts",
                "Why isn't this working?", "Am I even good at this?", "15 hours, 200 views"]
     spots = [(60, 250), (640, 330), (90, 600), (700, 640), (40, 1060), (720, 1000), (380, 1240), (80, 1380), (660, 1330), (330, 470)]
-    for k, (w, (x, y)) in enumerate(zip(worries, spots)):
-        html += f'<i class="worry" aria-hidden="true" data-layout-allow-occlusion id="wr{k}" style="left:{x}px;top:{y}px;transform:rotate({RND.uniform(-9, 9):.0f}deg)">{w}</i>'
-    js('tl.fromTo(".worry", {y: 0}, {y: -160, duration: 6.5, ease: "none", stagger: .05, immediateRender: false}, .01);')
-    js(f'tl.to(".worry", {{opacity: 0, duration: .5, stagger: .03}}, {W("Creedom's") - .6:.3f});')
+    # (the drifting worries came out of the hook in v6: the owner's title reference is a clean ground)
     return html
 
 
@@ -898,6 +923,8 @@ CSS = f"""
 @font-face {{ font-family: "Fraunces"; font-weight: 600; src: url("assets/fonts/fraunces-latin-600-normal.woff2"); }}
 @font-face {{ font-family: "Fraunces"; font-weight: 600; font-style: italic; src: url("assets/fonts/fraunces-latin-600-italic.woff2"); }}
 @font-face {{ font-family: "Fraunces"; font-weight: 700; src: url("assets/fonts/fraunces-latin-700-normal.woff2"); }}
+@font-face {{ font-family: "Inter"; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2"); }}
+@font-face {{ font-family: "Inter"; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2"); }}
 @font-face {{ font-family: "Manrope"; font-weight: 500; src: url("assets/fonts/manrope-latin-500-normal.woff2"); }}
 @font-face {{ font-family: "Manrope"; font-weight: 700; src: url("assets/fonts/manrope-latin-700-normal.woff2"); }}
 @font-face {{ font-family: "Manrope"; font-weight: 800; src: url("assets/fonts/manrope-latin-800-normal.woff2"); }}
@@ -919,6 +946,17 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
 .ray {{ position: absolute; width: 0; height: 0; transform-origin: 0 0; }}
 .rl {{ position: absolute; left: 0; top: -2px; width: 200px; height: 4px; border-radius: 2px; transform-origin: 0 50%; }}
 .gband {{ position: absolute; left: -300px; right: -300px; opacity: 0; z-index: 45; mix-blend-mode: multiply; }}
+/* the hook: a picker wheel (owner's reference) */
+.drumw {{ position: absolute; left: 0; height: 142px; opacity: 0; z-index: 9; }}
+.drum {{ position: absolute; left: 0; right: 0; top: 0; filter: url(#vblur); }}
+.di {{ position: absolute; right: 0; height: 142px; white-space: nowrap; text-align: right; font: 700 128px/142px "Inter"; letter-spacing: -.045em; color: #161616;
+  transform-origin: 100% 50%; opacity: 0; }}
+.dg {{ display: inline-block; padding-right: .08em; }}
+.dc {{ position: absolute; right: 0; top: 0; opacity: 0; padding-right: .08em; background: linear-gradient(95deg,#F515E8 0%,#e0187e 45%,#F5876C 100%); -webkit-background-clip: text;
+  background-clip: text; color: transparent; }}
+.dblock {{ position: absolute; opacity: 0; z-index: 9; font: 600 58px/1.06 "Inter"; letter-spacing: -.03em; color: #161616; }}
+.bwm {{ overflow: hidden; padding: 0 .4em .08em 0; margin-right: -.4em; }}
+.bwl {{ display: inline-block; transform-origin: 0 60%; }}
 /* word beats: the website's serif, letters in reading order */
 .beat {{ position: absolute; left: 0; right: 0; opacity: 0; z-index: 9; text-align: center; font-family: "Fraunces"; font-weight: 600; line-height: .98;
   letter-spacing: -.035em; white-space: nowrap; color: {INK}; transform-origin: 50% 50%; }}
@@ -969,7 +1007,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
 .gl0 {{ stroke: rgba(11,11,11,.1); stroke-width: 4; }}
 .gline {{ fill: none; stroke: url(#gr); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 6px 10px rgba(240,50,140,.35)); }}
 .gdot {{ fill: #e11d48; opacity: 0; transform-box: fill-box; transform-origin: center; }}
-.gtag {{ position: absolute; left: 470px; top: 200px; opacity: 0; background: {INK}; color: #fff; font: 800 30px/1 "Manrope"; padding: 14px 20px; border-radius: 16px; }}
+.gtag {{ position: absolute; left: 300px; top: 176px; opacity: 0; background: {INK}; color: #fff; font: 800 30px/1 "Manrope"; padding: 14px 20px; border-radius: 16px; }}
 /* the flopped reel */
 .glass.reel {{ padding: 0; }}
 .rv {{ position: relative; height: 470px; background: linear-gradient(160deg,#3a2140,#7a3060 60%,#c0567a); display: grid; place-items: center; }}
@@ -1133,12 +1171,11 @@ def main():
     <style>{CSS}</style>
   </head>
   <body>
-    <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F515E8"/>
+    <svg width="0" height="0" style="position:absolute"><defs><filter id="vblur" x="-10%" y="-60%" width="120%" height="220%"><feGaussianBlur id="vbg" stdDeviation="0 0"/></filter><linearGradient id="gr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F515E8"/>
       <stop offset=".5" stop-color="#F54BA8"/><stop offset="1" stop-color="#F5876C"/></linearGradient></defs></svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
       <div id="bgl">{bg}{"".join(FLIPS)}<div id="dots"></div></div>
       <div id="cam"><div id="cam2">
-      <svg class="star0" id="star0" viewBox="-50 -50 100 100"><path d="{STAR}" fill="url(#gr)"/></svg>
       {"".join(EL)}
       {cree}
       </div></div>
