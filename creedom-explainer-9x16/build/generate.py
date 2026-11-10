@@ -127,7 +127,7 @@ def headline(lines, y, out=None, how="up", z=8):
         if how == "left":
             js(f'tl.to("#{i} .wi", {{x: -1300, rotation: -10, filter: "blur(12px)", duration: .5, ease: "power3.in", stagger: .05}}, {out:.3f});')
         else:
-            js(f'tl.to("#{i} .wi", {{yPercent: -118, rotation: -6, duration: .4, ease: "power3.in", stagger: .03}}, {out:.3f});')
+            js(f'tl.to("#{i} .wi", {{yPercent: -150, y: 0, rotation: -6, duration: .4, ease: "power3.in", stagger: .03}}, {out:.3f});')
             if lines[-1][3] == "grad" and "[" in lines[-1][0]:
                 js(f'tl.to("#{i} .uline", {{opacity: 0, duration: .2}}, {out:.3f});')
     return i
