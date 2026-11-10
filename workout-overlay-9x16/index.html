@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Workout overlay 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Ubuntu"; font-weight: 500; src: url("assets/fonts/ubuntu-latin-500-normal.woff2"); }
+@font-face { font-family: "Ubuntu"; font-weight: 700; src: url("assets/fonts/ubuntu-latin-700-normal.woff2"); }
+@font-face { font-family: "Montserrat"; font-weight: 900; font-style: italic; src: url("assets/fonts/montserrat-latin-900-italic.woff2"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #000; font-family: "Ubuntu"; color: #fff; }
+#foot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* the opening card, like the reel's */
+#title { position: absolute; left: 0; right: 0; top: 300px; text-align: center; z-index: 5; font-family: "Montserrat"; font-weight: 900; font-style: italic;
+  color: #F6DE3F; -webkit-text-stroke: 9px #111; paint-order: stroke fill; letter-spacing: -.01em; }
+#title .t1 { font-size: 132px; line-height: 1; }
+#title .t2 { font-size: 56px; line-height: 1.15; margin-top: 10px; -webkit-text-stroke-width: 7px; }
+/* the panel */
+#panel { position: absolute; left: 60px; right: 60px; top: 250px; height: 280px; z-index: 5; border-radius: 40px;
+  background: rgba(16,16,18,.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); opacity: 0; }
+.col { position: absolute; top: 34px; display: flex; flex-direction: column; gap: 22px; font-weight: 500; font-size: 33px; line-height: 1.12;
+  white-space: nowrap; text-shadow: 0 2px 8px rgba(0,0,0,.35); }
+.col.l { left: 40px; }
+.col.r { left: 585px; }
+.mv { color: #fff; opacity: .82; }
+#timer { position: absolute; left: 400px; top: 22px; width: 160px; height: 160px; }
+#timer svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.trk { fill: none; stroke: rgba(255,255,255,.22); stroke-width: 10; }
+#wring { fill: none; stroke: #fff; stroke-width: 10; stroke-linecap: round; }
+#rring { fill: none; stroke: #F6DE3F; stroke-width: 8; stroke-linecap: round; }
+#rdisc { fill: #F6DE3F; transform-box: fill-box; transform-origin: center; }
+.num { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+#wnum { font-size: 70px; color: #fff; }
+#rnum { font-size: 56px; color: #141414; }
+#work, #rest { position: absolute; inset: 0; }
+#rest { opacity: 0; }
+#mus { position: absolute; left: 0; right: 0; top: 214px; text-align: center; font-weight: 500; font-size: 30px; letter-spacing: .01em; color: #fff;
+  opacity: 0; white-space: nowrap; }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="178.4" data-fps="30" data-width="1080" data-height="1920">
+      <video id="foot" src="assets/video/footage_1080.mp4" data-start="0" data-duration="178.4" data-track-index="0" muted playsinline></video>
+      <div id="title"><div class="t1">5 SETS</div><div class="t2">Full Body Intermediate workout</div></div>
+      <div id="panel"><div class="col l"><div class="mv" id="mv0">1. Jump Squats</div><div class="mv" id="mv1">2. Spiderman Pushups</div><div class="mv" id="mv2">3. Glute Bridges</div></div><div id="timer"><div id="work"><svg viewBox="0 0 200 200"><circle class="trk" cx="100" cy="100" r="88"/><circle id="wring" r="88" cx="100" cy="100" pathLength="1000" stroke-dasharray="1000" transform="rotate(-90 100 100)" stroke-dashoffset="0"/></svg><div class="num" id="wnum">20</div></div><div id="rest"><svg viewBox="0 0 200 200"><circle id="rdisc" cx="100" cy="100" r="74"/><circle id="rring" r="92" cx="100" cy="100" pathLength="1000" stroke-dasharray="1000" transform="rotate(-90 100 100)" stroke-dashoffset="0"/></svg><div class="num" id="rnum">&#8203;10</div></div></div><div class="col r"><div class="mv" id="mv3">4. Shoulder Taps</div><div class="mv" id="mv4">5. Burpees</div><div class="mv" id="mv5">6. Prone Swimmers</div></div><div id="mus"></div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      gsap.set(["#panel"], {opacity: 0});
+      tl.to("#title", {opacity: 0, y: -40, duration: .35, ease: "power2.in"}, 2.55);
+      tl.fromTo("#panel", {opacity: 0, y: -24}, {opacity: 1, y: 0, duration: .45, ease: "power3.out", immediateRender: false}, 2.95);
+      tl.set("#mv0", {color: "#F6DE3F"}, 2.95);
+      tl.set("#work", {opacity: 1}, 5.132); tl.set("#rest", {opacity: 0}, 5.132);
+      tl.fromTo("#wring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 20.0, ease: "none", immediateRender: false}, 5.132);
+      tl.set("#wnum", {textContent: "20"}, 5.132);
+      tl.set("#wnum", {textContent: "19"}, 6.132);
+      tl.set("#wnum", {textContent: "18"}, 7.132);
+      tl.set("#wnum", {textContent: "17"}, 8.132);
+      tl.set("#wnum", {textContent: "16"}, 9.132);
+      tl.set("#wnum", {textContent: "15"}, 10.132);
+      tl.set("#wnum", {textContent: "14"}, 11.132);
+      tl.set("#wnum", {textContent: "13"}, 12.132);
+      tl.set("#wnum", {textContent: "12"}, 13.132);
+      tl.set("#wnum", {textContent: "11"}, 14.132);
+      tl.set("#wnum", {textContent: "10"}, 15.132);
+      tl.set("#wnum", {textContent: "9"}, 16.132);
+      tl.set("#wnum", {textContent: "8"}, 17.132);
+      tl.set("#wnum", {textContent: "7"}, 18.132);
+      tl.set("#wnum", {textContent: "6"}, 19.132);
+      tl.set("#wnum", {textContent: "5"}, 20.132);
+      tl.set("#wnum", {textContent: "4"}, 21.132);
+      tl.set("#wnum", {textContent: "3"}, 22.132);
+      tl.set("#wnum", {textContent: "2"}, 23.132);
+      tl.set("#wnum", {textContent: "1"}, 24.132);
+      tl.set("#mv0", {color: "#F6DE3F", opacity: 1}, 5.132);
+      tl.set("#mv1", {color: "#ffffff", opacity: 0.82}, 5.132);
+      tl.set("#mv2", {color: "#ffffff", opacity: 0.82}, 5.132);
+      tl.set("#mv3", {color: "#ffffff", opacity: 0.82}, 5.132);
+      tl.set("#mv4", {color: "#ffffff", opacity: 0.82}, 5.132);
+      tl.set("#mv5", {color: "#ffffff", opacity: 0.82}, 5.132);
+      tl.set("#mus", {textContent: "Quads + Glutes + Power"}, 5.122);
+      tl.fromTo("#mus", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .35, ease: "power2.out", immediateRender: false}, 5.132);
+      tl.to("#mus", {opacity: 0, duration: .25, ease: "power1.in"}, 25.082);
+      tl.set("#work", {opacity: 0}, 25.132); tl.set("#rest", {opacity: 1}, 25.132);
+      tl.fromTo("#rdisc", {scale: .86}, {scale: 1, duration: .25, ease: "power2.out", immediateRender: false}, 25.132);
+      tl.fromTo("#rring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 10.0, ease: "none", immediateRender: false}, 25.132);
+      tl.set("#rnum", {textContent: "\u200b10"}, 25.132);
+      tl.set("#rnum", {textContent: "\u200b09"}, 26.132);
+      tl.set("#rnum", {textContent: "\u200b08"}, 27.132);
+      tl.set("#rnum", {textContent: "\u200b07"}, 28.132);
+      tl.set("#rnum", {textContent: "\u200b06"}, 29.132);
+      tl.set("#rnum", {textContent: "\u200b05"}, 30.132);
+      tl.set("#rnum", {textContent: "\u200b04"}, 31.132);
+      tl.set("#rnum", {textContent: "\u200b03"}, 32.132);
+      tl.set("#rnum", {textContent: "\u200b02"}, 33.132);
+      tl.set("#rnum", {textContent: "\u200b01"}, 34.132);
+      tl.set("#mv0", {color: "#ffffff", opacity: 0.82}, 25.132);
+      tl.set("#mv1", {color: "#F6DE3F", opacity: 1}, 25.132);
+      tl.set("#mv2", {color: "#ffffff", opacity: 0.82}, 25.132);
+      tl.set("#mv3", {color: "#ffffff", opacity: 0.82}, 25.132);
+      tl.set("#mv4", {color: "#ffffff", opacity: 0.82}, 25.132);
+      tl.set("#mv5", {color: "#ffffff", opacity: 0.82}, 25.132);
+      tl.set("#work", {opacity: 1}, 35.132); tl.set("#rest", {opacity: 0}, 35.132);
+      tl.fromTo("#wring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 20.0, ease: "none", immediateRender: false}, 35.132);
+      tl.set("#wnum", {textContent: "20"}, 35.132);
+      tl.set("#wnum", {textContent: "19"}, 36.132);
+      tl.set("#wnum", {textContent: "18"}, 37.132);
+      tl.set("#wnum", {textContent: "17"}, 38.132);
+      tl.set("#wnum", {textContent: "16"}, 39.132);
+      tl.set("#wnum", {textContent: "15"}, 40.132);
+      tl.set("#wnum", {textContent: "14"}, 41.132);
+      tl.set("#wnum", {textContent: "13"}, 42.132);
+      tl.set("#wnum", {textContent: "12"}, 43.132);
+      tl.set("#wnum", {textContent: "11"}, 44.132);
+      tl.set("#wnum", {textContent: "10"}, 45.132);
+      tl.set("#wnum", {textContent: "9"}, 46.132);
+      tl.set("#wnum", {textContent: "8"}, 47.132);
+      tl.set("#wnum", {textContent: "7"}, 48.132);
+      tl.set("#wnum", {textContent: "6"}, 49.132);
+      tl.set("#wnum", {textContent: "5"}, 50.132);
+      tl.set("#wnum", {textContent: "4"}, 51.132);
+      tl.set("#wnum", {textContent: "3"}, 52.132);
+      tl.set("#wnum", {textContent: "2"}, 53.132);
+      tl.set("#wnum", {textContent: "1"}, 54.132);
+      tl.set("#mv0", {color: "#ffffff", opacity: 0.82}, 35.132);
+      tl.set("#mv1", {color: "#F6DE3F", opacity: 1}, 35.132);
+      tl.set("#mv2", {color: "#ffffff", opacity: 0.82}, 35.132);
+      tl.set("#mv3", {color: "#ffffff", opacity: 0.82}, 35.132);
+      tl.set("#mv4", {color: "#ffffff", opacity: 0.82}, 35.132);
+      tl.set("#mv5", {color: "#ffffff", opacity: 0.82}, 35.132);
+      tl.set("#mus", {textContent: "Chest + Triceps + Core"}, 35.122);
+      tl.fromTo("#mus", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .35, ease: "power2.out", immediateRender: false}, 35.132);
+      tl.to("#mus", {opacity: 0, duration: .25, ease: "power1.in"}, 55.082);
+      tl.set("#work", {opacity: 0}, 55.132); tl.set("#rest", {opacity: 1}, 55.132);
+      tl.fromTo("#rdisc", {scale: .86}, {scale: 1, duration: .25, ease: "power2.out", immediateRender: false}, 55.132);
+      tl.fromTo("#rring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 10.0, ease: "none", immediateRender: false}, 55.132);
+      tl.set("#rnum", {textContent: "\u200b10"}, 55.132);
+      tl.set("#rnum", {textContent: "\u200b09"}, 56.132);
+      tl.set("#rnum", {textContent: "\u200b08"}, 57.132);
+      tl.set("#rnum", {textContent: "\u200b07"}, 58.132);
+      tl.set("#rnum", {textContent: "\u200b06"}, 59.132);
+      tl.set("#rnum", {textContent: "\u200b05"}, 60.132);
+      tl.set("#rnum", {textContent: "\u200b04"}, 61.132);
+      tl.set("#rnum", {textContent: "\u200b03"}, 62.132);
+      tl.set("#rnum", {textContent: "\u200b02"}, 63.132);
+      tl.set("#rnum", {textContent: "\u200b01"}, 64.132);
+      tl.set("#mv0", {color: "#ffffff", opacity: 0.82}, 55.132);
+      tl.set("#mv1", {color: "#ffffff", opacity: 0.82}, 55.132);
+      tl.set("#mv2", {color: "#F6DE3F", opacity: 1}, 55.132);
+      tl.set("#mv3", {color: "#ffffff", opacity: 0.82}, 55.132);
+      tl.set("#mv4", {color: "#ffffff", opacity: 0.82}, 55.132);
+      tl.set("#mv5", {color: "#ffffff", opacity: 0.82}, 55.132);
+      tl.set("#work", {opacity: 1}, 65.132); tl.set("#rest", {opacity: 0}, 65.132);
+      tl.fromTo("#wring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 20.0, ease: "none", immediateRender: false}, 65.132);
+      tl.set("#wnum", {textContent: "20"}, 65.132);
+      tl.set("#wnum", {textContent: "19"}, 66.132);
+      tl.set("#wnum", {textContent: "18"}, 67.132);
+      tl.set("#wnum", {textContent: "17"}, 68.132);
+      tl.set("#wnum", {textContent: "16"}, 69.132);
+      tl.set("#wnum", {textContent: "15"}, 70.132);
+      tl.set("#wnum", {textContent: "14"}, 71.132);
+      tl.set("#wnum", {textContent: "13"}, 72.132);
+      tl.set("#wnum", {textContent: "12"}, 73.132);
+      tl.set("#wnum", {textContent: "11"}, 74.132);
+      tl.set("#wnum", {textContent: "10"}, 75.132);
+      tl.set("#wnum", {textContent: "9"}, 76.132);
+      tl.set("#wnum", {textContent: "8"}, 77.132);
+      tl.set("#wnum", {textContent: "7"}, 78.132);
+      tl.set("#wnum", {textContent: "6"}, 79.132);
+      tl.set("#wnum", {textContent: "5"}, 80.132);
+      tl.set("#wnum", {textContent: "4"}, 81.132);
+      tl.set("#wnum", {textContent: "3"}, 82.132);
+      tl.set("#wnum", {textContent: "2"}, 83.132);
+      tl.set("#wnum", {textContent: "1"}, 84.132);
+      tl.set("#mv0", {color: "#ffffff", opacity: 0.82}, 65.132);
+      tl.set("#mv1", {color: "#ffffff", opacity: 0.82}, 65.132);
+      tl.set("#mv2", {color: "#F6DE3F", opacity: 1}, 65.132);
+      tl.set("#mv3", {color: "#ffffff", opacity: 0.82}, 65.132);
+      tl.set("#mv4", {color: "#ffffff", opacity: 0.82}, 65.132);
+      tl.set("#mv5", {color: "#ffffff", opacity: 0.82}, 65.132);
+      tl.set("#mus", {textContent: "Glutes + Hamstrings"}, 65.122);
+      tl.fromTo("#mus", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .35, ease: "power2.out", immediateRender: false}, 65.132);
+      tl.to("#mus", {opacity: 0, duration: .25, ease: "power1.in"}, 85.082);
+      tl.set("#work", {opacity: 0}, 85.132); tl.set("#rest", {opacity: 1}, 85.132);
+      tl.fromTo("#rdisc", {scale: .86}, {scale: 1, duration: .25, ease: "power2.out", immediateRender: false}, 85.132);
+      tl.fromTo("#rring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 10.0, ease: "none", immediateRender: false}, 85.132);
+      tl.set("#rnum", {textContent: "\u200b10"}, 85.132);
+      tl.set("#rnum", {textContent: "\u200b09"}, 86.132);
+      tl.set("#rnum", {textContent: "\u200b08"}, 87.132);
+      tl.set("#rnum", {textContent: "\u200b07"}, 88.132);
+      tl.set("#rnum", {textContent: "\u200b06"}, 89.132);
+      tl.set("#rnum", {textContent: "\u200b05"}, 90.132);
+      tl.set("#rnum", {textContent: "\u200b04"}, 91.132);
+      tl.set("#rnum", {textContent: "\u200b03"}, 92.132);
+      tl.set("#rnum", {textContent: "\u200b02"}, 93.132);
+      tl.set("#rnum", {textContent: "\u200b01"}, 94.132);
+      tl.set("#mv0", {color: "#ffffff", opacity: 0.82}, 85.132);
+      tl.set("#mv1", {color: "#ffffff", opacity: 0.82}, 85.132);
+      tl.set("#mv2", {color: "#ffffff", opacity: 0.82}, 85.132);
+      tl.set("#mv3", {color: "#F6DE3F", opacity: 1}, 85.132);
+      tl.set("#mv4", {color: "#ffffff", opacity: 0.82}, 85.132);
+      tl.set("#mv5", {color: "#ffffff", opacity: 0.82}, 85.132);
+      tl.set("#work", {opacity: 1}, 95.132); tl.set("#rest", {opacity: 0}, 95.132);
+      tl.fromTo("#wring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 20.0, ease: "none", immediateRender: false}, 95.132);
+      tl.set("#wnum", {textContent: "20"}, 95.132);
+      tl.set("#wnum", {textContent: "19"}, 96.132);
+      tl.set("#wnum", {textContent: "18"}, 97.132);
+      tl.set("#wnum", {textContent: "17"}, 98.132);
+      tl.set("#wnum", {textContent: "16"}, 99.132);
+      tl.set("#wnum", {textContent: "15"}, 100.132);
+      tl.set("#wnum", {textContent: "14"}, 101.132);
+      tl.set("#wnum", {textContent: "13"}, 102.132);
+      tl.set("#wnum", {textContent: "12"}, 103.132);
+      tl.set("#wnum", {textContent: "11"}, 104.132);
+      tl.set("#wnum", {textContent: "10"}, 105.132);
+      tl.set("#wnum", {textContent: "9"}, 106.132);
+      tl.set("#wnum", {textContent: "8"}, 107.132);
+      tl.set("#wnum", {textContent: "7"}, 108.132);
+      tl.set("#wnum", {textContent: "6"}, 109.132);
+      tl.set("#wnum", {textContent: "5"}, 110.132);
+      tl.set("#wnum", {textContent: "4"}, 111.132);
+      tl.set("#wnum", {textContent: "3"}, 112.132);
+      tl.set("#wnum", {textContent: "2"}, 113.132);
+      tl.set("#wnum", {textContent: "1"}, 114.132);
+      tl.set("#mv0", {color: "#ffffff", opacity: 0.82}, 95.132);
+      tl.set("#mv1", {color: "#ffffff", opacity: 0.82}, 95.132);
+      tl.set("#mv2", {color: "#ffffff", opacity: 0.82}, 95.132);
+      tl.set("#mv3", {color: "#F6DE3F", opacity: 1}, 95.132);
+      tl.set("#mv4", {color: "#ffffff", opacity: 0.82}, 95.132);
+      tl.set("#mv5", {color: "#ffffff", opacity: 0.82}, 95.132);
+      tl.set("#mus", {textContent: "Core + Shoulder + Stability"}, 95.122);
+      tl.fromTo("#mus", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .35, ease: "power2.out", immediateRender: false}, 95.132);
+      tl.to("#mus", {opacity: 0, duration: .25, ease: "power1.in"}, 115.082);
+      tl.set("#work", {opacity: 0}, 115.132); tl.set("#rest", {opacity: 1}, 115.132);
+      tl.fromTo("#rdisc", {scale: .86}, {scale: 1, duration: .25, ease: "power2.out", immediateRender: false}, 115.132);
+      tl.fromTo("#rring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 10.0, ease: "none", immediateRender: false}, 115.132);
+      tl.set("#rnum", {textContent: "\u200b10"}, 115.132);
+      tl.set("#rnum", {textContent: "\u200b09"}, 116.132);
+      tl.set("#rnum", {textContent: "\u200b08"}, 117.132);
+      tl.set("#rnum", {textContent: "\u200b07"}, 118.132);
+      tl.set("#rnum", {textContent: "\u200b06"}, 119.132);
+      tl.set("#rnum", {textContent: "\u200b05"}, 120.132);
+      tl.set("#rnum", {textContent: "\u200b04"}, 121.132);
+      tl.set("#rnum", {textContent: "\u200b03"}, 122.132);
+      tl.set("#rnum", {textContent: "\u200b02"}, 123.132);
+      tl.set("#rnum", {textContent: "\u200b01"}, 124.132);
+      tl.set("#mv0", {color: "#ffffff", opacity: 0.82}, 115.132);
+      tl.set("#mv1", {color: "#ffffff", opacity: 0.82}, 115.132);
+      tl.set("#mv2", {color: "#ffffff", opacity: 0.82}, 115.132);
+      tl.set("#mv3", {color: "#ffffff", opacity: 0.82}, 115.132);
+      tl.set("#mv4", {color: "#F6DE3F", opacity: 1}, 115.132);
+      tl.set("#mv5", {color: "#ffffff", opacity: 0.82}, 115.132);
+      tl.set("#work", {opacity: 1}, 125.132); tl.set("#rest", {opacity: 0}, 125.132);
+      tl.fromTo("#wring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 20.0, ease: "none", immediateRender: false}, 125.132);
+      tl.set("#wnum", {textContent: "20"}, 125.132);
+      tl.set("#wnum", {textContent: "19"}, 126.132);
+      tl.set("#wnum", {textContent: "18"}, 127.132);
+      tl.set("#wnum", {textContent: "17"}, 128.132);
+      tl.set("#wnum", {textContent: "16"}, 129.132);
+      tl.set("#wnum", {textContent: "15"}, 130.132);
+      tl.set("#wnum", {textContent: "14"}, 131.132);
+      tl.set("#wnum", {textContent: "13"}, 132.132);
+      tl.set("#wnum", {textContent: "12"}, 133.132);
+      tl.set("#wnum", {textContent: "11"}, 134.132);
+      tl.set("#wnum", {textContent: "10"}, 135.132);
+      tl.set("#wnum", {textContent: "9"}, 136.132);
+      tl.set("#wnum", {textContent: "8"}, 137.132);
+      tl.set("#wnum", {textContent: "7"}, 138.132);
+      tl.set("#wnum", {textContent: "6"}, 139.132);
+      tl.set("#wnum", {textContent: "5"}, 140.132);
+      tl.set("#wnum", {textContent: "4"}, 141.132);
+      tl.set("#wnum", {textContent: "3"}, 142.132);
+      tl.set("#wnum", {textContent: "2"}, 143.132);
+      tl.set("#wnum", {textContent: "1"}, 144.132);
+      tl.set("#mv0", {color: "#ffffff", opacity: 0.82}, 125.132);
+      tl.set("#mv1", {color: "#ffffff", opacity: 0.82}, 125.132);
+      tl.set("#mv2", {color: "#ffffff", opacity: 0.82}, 125.132);
+      tl.set("#mv3", {color: "#ffffff", opacity: 0.82}, 125.132);
+      tl.set("#mv4", {color: "#F6DE3F", opacity: 1}, 125.132);
+      tl.set("#mv5", {color: "#ffffff", opacity: 0.82}, 125.132);
+      tl.set("#mus", {textContent: "Full Body + Cardio"}, 125.122);
+      tl.fromTo("#mus", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .35, ease: "power2.out", immediateRender: false}, 125.132);
+      tl.to("#mus", {opacity: 0, duration: .25, ease: "power1.in"}, 145.082);
+      tl.set("#work", {opacity: 0}, 145.132); tl.set("#rest", {opacity: 1}, 145.132);
+      tl.fromTo("#rdisc", {scale: .86}, {scale: 1, duration: .25, ease: "power2.out", immediateRender: false}, 145.132);
+      tl.fromTo("#rring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 10.0, ease: "none", immediateRender: false}, 145.132);
+      tl.set("#rnum", {textContent: "\u200b10"}, 145.132);
+      tl.set("#rnum", {textContent: "\u200b09"}, 146.132);
+      tl.set("#rnum", {textContent: "\u200b08"}, 147.132);
+      tl.set("#rnum", {textContent: "\u200b07"}, 148.132);
+      tl.set("#rnum", {textContent: "\u200b06"}, 149.132);
+      tl.set("#rnum", {textContent: "\u200b05"}, 150.132);
+      tl.set("#rnum", {textContent: "\u200b04"}, 151.132);
+      tl.set("#rnum", {textContent: "\u200b03"}, 152.132);
+      tl.set("#rnum", {textContent: "\u200b02"}, 153.132);
+      tl.set("#rnum", {textContent: "\u200b01"}, 154.132);
+      tl.set("#mv0", {color: "#ffffff", opacity: 0.82}, 145.132);
+      tl.set("#mv1", {color: "#ffffff", opacity: 0.82}, 145.132);
+      tl.set("#mv2", {color: "#ffffff", opacity: 0.82}, 145.132);
+      tl.set("#mv3", {color: "#ffffff", opacity: 0.82}, 145.132);
+      tl.set("#mv4", {color: "#ffffff", opacity: 0.82}, 145.132);
+      tl.set("#mv5", {color: "#F6DE3F", opacity: 1}, 145.132);
+      tl.set("#work", {opacity: 1}, 155.132); tl.set("#rest", {opacity: 0}, 155.132);
+      tl.fromTo("#wring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 20.0, ease: "none", immediateRender: false}, 155.132);
+      tl.set("#wnum", {textContent: "20"}, 155.132);
+      tl.set("#wnum", {textContent: "19"}, 156.132);
+      tl.set("#wnum", {textContent: "18"}, 157.132);
+      tl.set("#wnum", {textContent: "17"}, 158.132);
+      tl.set("#wnum", {textContent: "16"}, 159.132);
+      tl.set("#wnum", {textContent: "15"}, 160.132);
+      tl.set("#wnum", {textContent: "14"}, 161.132);
+      tl.set("#wnum", {textContent: "13"}, 162.132);
+      tl.set("#wnum", {textContent: "12"}, 163.132);
+      tl.set("#wnum", {textContent: "11"}, 164.132);
+      tl.set("#wnum", {textContent: "10"}, 165.132);
+      tl.set("#wnum", {textContent: "9"}, 166.132);
+      tl.set("#wnum", {textContent: "8"}, 167.132);
+      tl.set("#wnum", {textContent: "7"}, 168.132);
+      tl.set("#wnum", {textContent: "6"}, 169.132);
+      tl.set("#wnum", {textContent: "5"}, 170.132);
+      tl.set("#wnum", {textContent: "4"}, 171.132);
+      tl.set("#wnum", {textContent: "3"}, 172.132);
+      tl.set("#wnum", {textContent: "2"}, 173.132);
+      tl.set("#wnum", {textContent: "1"}, 174.132);
+      tl.set("#mv0", {color: "#ffffff", opacity: 0.82}, 155.132);
+      tl.set("#mv1", {color: "#ffffff", opacity: 0.82}, 155.132);
+      tl.set("#mv2", {color: "#ffffff", opacity: 0.82}, 155.132);
+      tl.set("#mv3", {color: "#ffffff", opacity: 0.82}, 155.132);
+      tl.set("#mv4", {color: "#ffffff", opacity: 0.82}, 155.132);
+      tl.set("#mv5", {color: "#F6DE3F", opacity: 1}, 155.132);
+      tl.set("#mus", {textContent: "Upper Back + Rear Delts + Posterior Chain"}, 155.122);
+      tl.fromTo("#mus", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .35, ease: "power2.out", immediateRender: false}, 155.132);
+      tl.to("#mus", {opacity: 0, duration: .25, ease: "power1.in"}, 175.082);
+      tl.set("#wnum", {textContent: "0"}, 175.132);
+      tl.to("#panel", {opacity: 0, y: -24, duration: .5, ease: "power2.in"}, 175.732);
+      tl.set({}, {}, 178.4);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
