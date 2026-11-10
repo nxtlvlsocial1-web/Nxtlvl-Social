@@ -97,45 +97,53 @@ def float_idle(sel, t, t1, amp=10, period=1.8):
 
 
 # ------------------------------------------------------------------------------------------------ kinetic type
+VB = []              # one vertical-blur filter per moving title (an SVG blur on the y axis only, like the hook)
+
+
+def vblur(name):
+    VB.append(f'<filter id="vb{name}" x="-10%" y="-80%" width="120%" height="260%"><feGaussianBlur id="vbg{name}" stdDeviation="0 0"/></filter>')
+    return f"url(#vb{name})"
+
+
 def headline(lines, y, out=None, how="up", z=8):
-    """Headline in the top band, set like the website: Fraunces, the first of two lines in warm grey and the second in
-    ink. lines = [(text, size, t, accent)] with accent words in [brackets] (accent: pink / red / green / white).
-    Inside each word's mask the letters rise in reading order; accent words land with a small punch and a drawn
-    underline. out = when the letters leave (how: up, or left = slide off to the left)."""
+    """Top-band title in the hook's style (owner: "change the font style and how these texts come on screen with this
+    style present in the hook ... give them more glass liquid type of feel"): Inter, each line on its own liquid-glass
+    capsule (frosted, bright rim, top gloss, inner pink glow) that lands with a jelly stretch and a light sweep; inside
+    it the words rise out of their masks one after another through a vertical motion blur that settles. The first of
+    two lines is warm grey, accent words in [brackets] carry the brand gradient (accent: pink / red / green)."""
     i = nid("h")
     rows = []
     for k, (text, size, t, acc) in enumerate(lines):
         ws = []
         for n, w in enumerate(text.split(" ")):
-            a = w.startswith("[")
+            a = "[" in w
             w = w.replace("[", "").replace("]", "")
-            ws.append(f'<span class="wm"><span class="wi{" acc " + acc if a else ""}" id="{i}l{k}w{n}">{chars(w)}</span></span>')
+            ws.append(f'<span class="wm"><span class="wi{" acc " + acc if a else ""}" id="{i}l{k}w{n}">{w}</span></span>')
         tone = " grey" if len(lines) > 1 and k == 0 else ""
-        under = ('<svg class="uline" viewBox="0 0 600 40" preserveAspectRatio="none"><path id="{0}u{1}" d="M 8 30 C 160 6 430 6 592 20" pathLength="1" '
-                 'stroke-dasharray="1" stroke-dashoffset="1"/></svg>').format(i, k) if acc == "pink" and "[" in text and k == len(lines) - 1 else ""
-        rows.append(f'<div class="hl{tone}" id="{i}l{k}" style="font-size:{size}px"><span class="hli">{" ".join(ws)}{under}</span></div>')
+        rows.append(f'<div class="lgw"><div class="lg" id="{i}g{k}" style="font-size:{size}px"><i class="lgsh" data-layout-allow-overflow id="{i}s{k}"></i>'
+                    f'<div class="hl{tone}" id="{i}l{k}" style="filter:{vblur(f"{i}_{k}")}">{" ".join(ws)}</div></div></div>')
     put(f'<div class="head" id="{i}" style="top:{y}px;z-index:{z}">{"".join(rows)}</div>')
-    show(f"#{i}", lines[0][2], out + .6 if out else None)
+    show(f"#{i}", lines[0][2] - .02, out + .6 if out else None)
     for k, (text, size, t, acc) in enumerate(lines):
-        show(f"#{i}l{k}", t)
-        n = len(text.replace("[", "").replace("]", ""))
-        st = min(.035, .45 / max(1, n))
-        js(f'tl.fromTo("#{i}l{k} .ch", {{yPercent: 115, rotation: 6}}, {{yPercent: 0, rotation: 0, duration: .65, ease: "expo.out", stagger: {st:.3f}, '
-           f'immediateRender: false}}, {t:.3f});')
+        g = f"#{i}g{k}"
+        js(f'tl.fromTo("{g}", {{opacity: 0}}, {{opacity: 1, duration: .16, immediateRender: false}}, {t - .02:.3f});')
+        js(f'tl.fromTo("{g}", {{scaleX: .3, scaleY: .5}}, {{keyframes: [{{scaleX: 1.07, scaleY: .9, duration: .26, ease: "power3.out"}}, '
+           f'{{scaleX: .97, scaleY: 1.05, duration: .16, ease: "sine.inOut"}}, {{scaleX: 1, scaleY: 1, duration: .3, ease: "elastic.out(1, .5)"}}], '
+           f'immediateRender: false}}, {t - .02:.3f});')
+        js(f'tl.fromTo("#{i}s{k}", {{xPercent: 0}}, {{xPercent: 420, duration: .9, ease: "power2.inOut", immediateRender: false}}, {t + .3:.3f});')
+        js(f'tl.fromTo("#{i}l{k} .wi", {{yPercent: 110}}, {{yPercent: 0, duration: .55, ease: "expo.out", stagger: .07, immediateRender: false}}, {t + .06:.3f});')
+        js(f'tl.fromTo("#vbg{i}_{k}", {{attr: {{stdDeviation: "0 18"}}}}, {{attr: {{stdDeviation: "0 0"}}, duration: .45, ease: "power2.out", immediateRender: false}}, '
+           f'{t + .06:.3f});')
         if "[" in text:
-            first = [m for m, w in enumerate(text.split(" ")) if w.startswith("[")][0]
-            ta = t + st * len(" ".join(text.split(" ")[:first])) + .3
+            first = [m for m, w in enumerate(text.split(" ")) if "[" in w][0]
             js(f'tl.fromTo("#{i}l{k} .acc", {{scale: 1}}, {{keyframes: [{{scale: 1.1, duration: .12, ease: "power2.out"}}, {{scale: 1, duration: .5, '
-               f'ease: "elastic.out(1, .45)"}}], immediateRender: false}}, {ta:.3f});')
-            if acc == "pink" and k == len(lines) - 1:
-                js(f'tl.fromTo("#{i}u{k}", {{strokeDashoffset: 1}}, {{strokeDashoffset: 0, duration: .5, ease: "power2.out", immediateRender: false}}, {ta + .1:.3f});')
+               f'ease: "elastic.out(1, .45)"}}], immediateRender: false}}, {t + .06 + .07 * first + .28:.3f});')
     if out:
-        if how == "left":
-            js(f'tl.to("#{i} .ch", {{x: -1300, rotation: -10, filter: "blur(12px)", duration: .5, ease: "power3.in", stagger: .012}}, {out:.3f});')
-        else:
-            js(f'tl.to("#{i} .ch", {{yPercent: -130, duration: .38, ease: "power3.in", stagger: .008}}, {out:.3f});')
-            if lines[-1][3] == "pink" and "[" in lines[-1][0]:
-                js(f'tl.to("#{i} .uline", {{opacity: 0, duration: .2}}, {out:.3f});')
+        js(f'tl.to("#{i} .wi", {{yPercent: -110, duration: .34, ease: "power3.in", stagger: .03}}, {out:.3f});')
+        for k in range(len(lines)):
+            js(f'tl.fromTo("#vbg{i}_{k}", {{attr: {{stdDeviation: "0 0"}}}}, {{attr: {{stdDeviation: "0 16"}}, duration: .34, ease: "power3.in", immediateRender: false}}, '
+               f'{out:.3f});')
+        js(f'tl.to("#{i} .lg", {{scaleX: .35, scaleY: .5, opacity: 0, duration: .32, ease: "power3.in", stagger: .05}}, {out + .14:.3f});')
     return i
 
 
@@ -361,25 +369,22 @@ def chars(text, cls="ch"):
 
 
 def beat(text, t, t_out, size, style="ink", y=820, through=True, sub=None):
-    """A full-screen word beat in the website's serif (Fraunces): the letters arrive in reading order, each rising and
-    un-blurring a moment after the one before it (the small line above first), then the word leaves letter by letter."""
+    """A full-screen word beat in the hook's style: Inter, the small line then the big word rising out of their masks
+    through a vertical motion blur that settles (the hook's picker-wheel feel), leaving the same way."""
     i = nid("b")
-    body = f'<span class="bw">{chars(text)}</span>'
-    if sub:
-        body = f'<span class="bsub" style="font-size:{sub[1]}px">{chars(sub[0], "ch sc")}</span><br>' + body
-    put(f'<div class="beat {style}" id="{i}" style="top:{y}px;font-size:{size}px">{body}</div>')
+    body = (f'<div class="bm"><span class="bl bsub" style="font-size:{sub[1]}px">{sub[0]}</span></div>' if sub else "") + \
+        f'<div class="bm"><span class="bl bw">{text}</span></div>'
+    put(f'<div class="beat {style}" id="{i}" style="top:{y}px;font-size:{size}px"><div style="filter:{vblur(i)}">{body}</div></div>')
     show(f"#{i}", t, t_out + .45)
-    nch = len(text) + (len(sub[0]) if sub else 0)
-    t_exit = t_out - (.06 if style == "white" else .12)
-    avail = t_exit - t - .02                       # the entrance must be over before the exit starts (or it pulls letters back)
-    st = min(.05, .32 / max(1, nch), avail * .35 / max(1, nch - 1))
-    dur = max(.18, min(.55, avail - st * (nch - 1)))
-    js(f'tl.fromTo("#{i} .ch", {{transformPerspective: 800, opacity: 0, yPercent: 70, rotationX: -70, filter: "blur(10px)"}}, {{opacity: 1, yPercent: 0, rotationX: 0, '
-       f'filter: "blur(0px)", duration: {dur:.3f}, ease: "expo.out", stagger: {st:.3f}, transformPerspective: 800, immediateRender: false}}, {t:.3f});')
-    js(f'tl.fromTo("#{i}", {{scale: 1.05}}, {{scale: 1, duration: {max(.3, t_out - t):.2f}, ease: "power2.out", immediateRender: false}}, {t:.3f});')
-    d_out = .08 if style == "white" else .16         # out fast, so the next word lands on a clean frame
-    js(f'tl.to("#{i} .ch", {{opacity: 0, yPercent: {-60 if through else 60}, filter: "blur(8px)", duration: {d_out}, ease: "power2.in", '
-       f'stagger: .008}}, {t_exit:.3f});')
+    t_exit = t_out - .12
+    dur = max(.22, min(.55, t_exit - t - .1))
+    js(f'tl.fromTo("#{i} .bl", {{yPercent: 105}}, {{yPercent: 0, duration: {dur:.2f}, ease: "expo.out", stagger: .08, immediateRender: false}}, {t:.3f});')
+    js(f'tl.fromTo("#vbg{i}", {{attr: {{stdDeviation: "0 24"}}}}, {{attr: {{stdDeviation: "0 0"}}, duration: {min(.45, dur):.2f}, ease: "power2.out", '
+       f'immediateRender: false}}, {t:.3f});')
+    js(f'tl.fromTo("#{i}", {{scale: 1.04}}, {{scale: 1, duration: {max(.3, t_out - t):.2f}, ease: "power2.out", immediateRender: false}}, {t:.3f});')
+    js(f'tl.to("#{i} .bl", {{yPercent: {-105 if through else 105}, duration: .3, ease: "power3.in", stagger: .04}}, {t_exit:.3f});')
+    js(f'tl.fromTo("#vbg{i}", {{attr: {{stdDeviation: "0 0"}}}}, {{attr: {{stdDeviation: "0 20"}}, duration: .3, ease: "power3.in", immediateRender: false}}, '
+       f'{t_exit:.3f});')
     return i
 
 
@@ -590,7 +595,7 @@ def scenes():
     cree_say(t_stop + .05, "!", d=1.0)
 
     # ---- S2a: "I uploaded a reel that flopped"
-    hf = headline([("I uploaded a reel", 76, t_up, None), ("that [flopped.]", 118, t_flop, "red")], 240, out=t_cr - .4)
+    hf = headline([("I uploaded a reel", 64, t_up, None), ("that [flopped.]", 104, t_flop, "red")], 230, out=t_cr - .4)
     js(f'tl.fromTo("#{hf}l1", {{x: 0}}, {{keyframes: [{{x: -16, duration: .05}}, {{x: 16, duration: .05}}, {{x: -10, duration: .05}}, {{x: 8, duration: .05}}, '
        f'{{x: 0, duration: .05}}], immediateRender: false}}, {t_flop + .35:.3f});')
     r = glass(f'<div class="rv" id="rv"><i class="play"></i><div class="up" id="up"><div class="upt">Uploading <b id="upn">0%</b></div>'
@@ -630,7 +635,7 @@ def scenes():
     js(f'tl.to("#phone", {{scale: 1.18, y: -58, duration: .7, ease: "expo.inOut"}}, {t_wat - .25:.3f});')
     show("#scan", t_wat, S3)
     js(f'tl.fromTo("#scan", {{yPercent: -100}}, {{yPercent: 900, duration: .6, ease: "none", repeat: 2, immediateRender: false}}, {t_wat:.3f});')
-    headline([("[Second] by [second].", 96, t_sec2 - .1, "pink")], 230, out=S3 - .35)
+    headline([("[Second] by [second].", 82, t_sec2 - .1, "pink")], 232, out=S3 - .35)
     cue(t_sec2, "tick")
     for k in range(8):
         tc = nid("ts")
@@ -651,7 +656,7 @@ def scenes():
     glitch(S3 - .1)
 
     # ---- S3: "It told me my [hook worked], but my [energy dropped] in the middle, and that's exactly where [people swiped] away."
-    headline([("It told me my", 92, t_it, None)], 350, out=S4 - .4)
+    headline([("It told me my", 80, t_it, None)], 330, out=S4 - .4)
     put('<div class="pill" id="pill"><div class="pst" id="pst"><div class="pw">HOOK WORKED &#10003;</div><div class="pw">ENERGY DROPPED &darr;</div>'
         '<div class="pw">PEOPLE SWIPED &larr;</div></div><i class="shine" data-layout-allow-overflow id="pills"></i></div>')
     show("#pill", t_hook - .05, S4 - .3)
@@ -726,7 +731,7 @@ def scenes():
     js(f'tl.to("#wall", {{opacity: 0, scale: 1.6, filter: "blur(10px)", duration: .35, ease: "power2.in"}}, {t_what - .35:.3f});')
     put('<div class="wallfade" id="wallfade"></div>')
     show("#wallfade", S4, t_what)
-    beat("hooks.", t_new, t_what - .35, 260, style="pink", y=680, sub=("New", 160))
+    beat("hooks.", t_new, t_what - .35, 250, style="pink", y=680, sub=("New", 150))
     cue(t_new, "hit")
     sparkle(540, 860, t_new + .2, n=12, r=380)
     for k in range(14):                    # confetti
@@ -742,7 +747,7 @@ def scenes():
     js(f'tl.fromTo("#phone", {{transformPerspective: 1400, opacity: 0, x: -600, scale: .9, rotationY: 40, filter: "blur(0px)"}}, {{opacity: 1, x: {70 - PHONE["x"]}, y: -60, scale: .85, '
        f'rotationY: 0, duration: .6, ease: "expo.out", transformPerspective: 1400, immediateRender: false}}, {t_what - .3:.3f});')
     js(f'tl.to("#phone", {{y: 700, rotation: -12, opacity: 0, duration: .4, ease: "power3.in"}}, {S5 - .5:.3f});')
-    headline([("What to [fix].", 136, t_what - .05, "pink")], 280, out=S5 - .5)
+    headline([("What to [fix].", 112, t_what - .05, "pink")], 260, out=S5 - .5)
     for k, txt in enumerate(["Caption at 0:12", "Caption at 0:20", "Save-worthy CTA"]):
         fc = nid("fc")
         put(f'<div class="fixchip" id="{fc}" style="top:{700 + k * 150}px"><b>&#10003;</b>{txt}</div>')
@@ -763,10 +768,10 @@ def scenes():
     liquid(S5 - .6, 540, 2350, S5 - .05)
     flip(S5 - .1, t_just - .15, "radial-gradient(circle at 50% 40%, #fff6fa 0%, #ffd3ea 55%, #ffa6d4 100%)", fade=.2)
     rays(S5, t_just - .2, n=36, cy=760, color="rgba(255,255,255,.95)")
-    beat("Free.", t_free, t_audit - .03, 340, style="pink", y=540)
+    beat("Free.", t_free, t_audit - .03, 330, style="pink", y=560)
     cue(t_free, "hit")
     sparkle(540, 700, t_free + .15, n=12, r=420)
-    beat("audit.", t_audit, t_just - .2, 270, style="ink", y=620, sub=("Account", 150), through=False)
+    beat("audit.", t_audit, t_just - .2, 250, style="ink", y=620, sub=("Account", 140), through=False)
     cue(t_audit, "whoosh")
     glitch(t_just - .2)
     # the steps, one beat each (the reference's Brief / Create / Launch)
@@ -774,9 +779,10 @@ def scenes():
     ends = [t_20 - .35, t_score - .2, t_first - .25, S6 - .1]
     for k, ((ic, title, tt), te) in enumerate(zip(steps, ends)):
         st = nid("st")
-        put(f'<div class="step" id="{st}"><span class="sic">{ic}</span><span class="stx">{chars(title)}</span></div>')
-        js(f'tl.fromTo("#{st} .ch", {{opacity: 0, yPercent: 60, filter: "blur(8px)"}}, {{opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .45, ease: "expo.out", '
-           f'stagger: .022, immediateRender: false}}, {tt + .08:.3f});')
+        words_ = " ".join(f'<span class="wm"><span class="wi">{w}</span></span>' for w in title.split(" "))
+        put(f'<div class="step" id="{st}"><span class="sic">{ic}</span><span class="stx" style="filter:{vblur(st)}">{words_}</span></div>')
+        js(f'tl.fromTo("#{st} .wi", {{yPercent: 110}}, {{yPercent: 0, duration: .5, ease: "expo.out", stagger: .06, immediateRender: false}}, {tt + .08:.3f});')
+        js(f'tl.fromTo("#vbg{st}", {{attr: {{stdDeviation: "0 16"}}}}, {{attr: {{stdDeviation: "0 0"}}, duration: .4, ease: "power2.out", immediateRender: false}}, {tt + .08:.3f});')
         show(f"#{st}", tt, te)
         js(f'tl.fromTo("#{st}", {{opacity: 0, y: 60, scale: .9}}, {{opacity: 1, y: 0, scale: 1, duration: .45, ease: "expo.out", immediateRender: false}}, {tt:.3f});')
         js(f'tl.to("#{st}", {{opacity: 0, y: -50, duration: .22, ease: "power2.in"}}, {te - .22:.3f});')
@@ -838,7 +844,7 @@ def scenes():
     cree_to(S6 + .1, 540, 640, .66, d=.6, ease="back.out(1.4)")
     pose(S6 + .1, "wave", flip=False)
     cree_wiggle(S6 + .7, n=4, amp=9)
-    beat("Comment", t_com - .02, S7 - .1, 200, style="ink", y=1020, through=False)
+    beat("Comment", t_com - .02, S7 - .1, 190, style="ink", y=1010, through=False)
     cue(t_com, "hit")
     cb = nid("cb")
     put(f'<div class="cbig" id="{cb}"><span class="ctx" id="{cb}t"></span><i class="caret big" id="{cb}c"></i>'
@@ -884,8 +890,6 @@ def scenes():
     js(f'tl.fromTo("#lgm", {{scale: 0, rotation: -40, y: 80}}, {{scale: 1, rotation: 0, y: 0, duration: .6, ease: "back.out(2)", immediateRender: false}}, {S7 + .05:.3f});')
     js(f'tl.fromTo("#lgw", {{clipPath: "inset(0 100% 0 0)"}}, {{clipPath: "inset(0 0% 0 0)", duration: .5, ease: "power3.out", immediateRender: false}}, {S7 + .2:.3f});')
     js(f'tl.fromTo("#lgt", {{opacity: 0, y: 30}}, {{opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}}, {S7 + .35:.3f});')
-    js(f'tl.fromTo("#lgs", {{scale: 0, rotation: -90}}, {{scale: 1, rotation: 0, duration: .6, ease: "back.out(2.5)", immediateRender: false}}, {S7 + .45:.3f});')
-    js(f'tl.to("#lgs", {{rotation: 30, scale: 1.15, duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 1}}, {S7 + 1.05:.3f});')
     js(f'tl.fromTo("#lgf", {{backgroundPosition: "0px 0px"}}, {{backgroundPosition: "0px 240px", duration: {DUR - S7:.2f}, ease: "none", immediateRender: false}}, {S7:.3f});')
     cue(S7 + .05, "logo")
     sparkle(540, 860, S7 + .3, n=12, r=380, z=41)
@@ -957,33 +961,34 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
 .dblock {{ position: absolute; opacity: 0; z-index: 9; font: 600 58px/1.06 "Inter"; letter-spacing: -.03em; color: #161616; }}
 .bwm {{ overflow: hidden; padding: 0 .4em .08em 0; margin-right: -.4em; }}
 .bwl {{ display: inline-block; transform-origin: 0 60%; }}
-/* word beats: the website's serif, letters in reading order */
-.beat {{ position: absolute; left: 0; right: 0; opacity: 0; z-index: 9; text-align: center; font-family: "Fraunces"; font-weight: 600; line-height: .98;
-  letter-spacing: -.035em; white-space: nowrap; color: {INK}; transform-origin: 50% 50%; }}
-.beat .ch {{ display: inline-block; transform-origin: 50% 100%; }}
-.beat.grey {{ color: #7a7a73; }}
-.beat.pink {{ color: {PINK}; }}
-.beat.white {{ color: #fff; }}
-.bsub {{ display: inline-block; letter-spacing: -.02em; line-height: 1.1; color: #7a7a73; }}
-.beat.white .bsub {{ color: rgba(255,255,255,.6); }}
-.bw {{ display: inline-block; }}
-.clock {{ position: absolute; left: 0; right: 0; top: 1040px; opacity: 0; z-index: 9; text-align: center; font: 700 90px/1 "Manrope"; letter-spacing: .04em;
-  color: rgba(11,11,11,.75); font-variant-numeric: tabular-nums; }}
-/* headlines */
+/* word beats and titles: the hook's grotesk, gradient accents */
+.beat {{ position: absolute; left: 0; right: 0; opacity: 0; z-index: 9; text-align: center; font-family: "Inter"; font-weight: 700; line-height: 1.02;
+  letter-spacing: -.05em; white-space: nowrap; color: #161616; transform-origin: 50% 50%; }}
+.bm {{ overflow: hidden; padding: .04em .1em .12em; margin: -.04em 0 -.12em; }}
+.bl {{ display: inline-block; }}
+.bsub {{ color: #8a8a84; letter-spacing: -.04em; }}
+.beat.pink .bw {{ background: linear-gradient(95deg,#F515E8 0%,#e0187e 45%,#F5876C 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+  padding-right: .06em; }}
+.clock {{ position: absolute; left: 0; right: 0; top: 1040px; opacity: 0; z-index: 9; text-align: center; font: 700 90px/1 "Inter"; color: rgba(11,11,11,.75); }}
 .head {{ position: absolute; left: 0; right: 0; opacity: 0; text-align: center; }}
-.hl {{ opacity: 0; font-family: "Fraunces"; font-weight: 600; line-height: 1.02; letter-spacing: -.03em; word-spacing: .06em; white-space: nowrap; color: {INK};
-  transform-origin: 50% 60%; }}
-.hl.grey {{ color: #7a7a73; }}
-.hli {{ position: relative; display: inline-block; }}
-.wm {{ display: inline-block; overflow: hidden; vertical-align: top; padding: .06em .04em .2em; margin: -.06em -.04em -.2em; }}
+.lgw {{ display: block; margin-bottom: 16px; }}
+.lg {{ position: relative; display: inline-block; padding: .14em .46em .2em; border-radius: 999px; overflow: hidden; opacity: 0;
+  background: linear-gradient(160deg, rgba(255,255,255,.66) 0%, rgba(255,255,255,.24) 48%, rgba(255,210,234,.4) 100%);
+  border: 1.5px solid rgba(255,255,255,.9); backdrop-filter: blur(16px) saturate(1.8); -webkit-backdrop-filter: blur(16px) saturate(1.8);
+  box-shadow: inset 0 2px 2px rgba(255,255,255,.95), inset 0 -10px 22px rgba(240,60,150,.16), inset 0 0 0 1px rgba(255,255,255,.3),
+    0 18px 44px rgba(200,40,120,.16), 0 2px 6px rgba(200,40,120,.08); }}
+.lg::before {{ content: ""; position: absolute; left: 7%; right: 7%; top: 3px; height: 44%; border-radius: 999px; pointer-events: none;
+  background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,0)); }}
+.lgsh {{ position: absolute; top: -30%; bottom: -30%; left: -48%; width: 40%; pointer-events: none;
+  background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.9) 50%, rgba(255,255,255,0) 100%); transform: skewX(-18deg); }}
+.hl {{ position: relative; font-family: "Inter"; font-weight: 700; line-height: 1.1; letter-spacing: -.045em; word-spacing: .14em; white-space: nowrap; color: #161616; }}
+.hl.grey {{ color: #6f6f6a; }}
+.wm {{ display: inline-block; overflow: hidden; vertical-align: top; padding: .04em .05em .14em; margin: -.04em -.05em -.14em; }}
 .wi {{ display: inline-block; transform-origin: 50% 80%; }}
-.wi .ch {{ display: inline-block; }}
-.acc.pink {{ color: {PINK}; font-style: italic; }}
-.acc.red {{ color: #e11d48; font-style: italic; }}
-.acc.green {{ color: #15a05a; font-style: italic; }}
-.acc.white {{ color: #fff; }}
-.uline {{ position: absolute; left: 4%; right: 4%; bottom: -.16em; width: 92%; height: .2em; overflow: visible; }}
-.uline path {{ fill: none; stroke: url(#gr); stroke-width: 9; stroke-linecap: round; }}
+.acc {{ -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: .06em; }}
+.acc.pink {{ background-image: linear-gradient(95deg,#F515E8 0%,#e0187e 45%,#F5876C 100%); }}
+.acc.red {{ background-image: linear-gradient(95deg,#ff2d6f 0%,#e11d48 55%,#ff7a59 100%); }}
+.acc.green {{ background-image: linear-gradient(95deg,#22c47a 0%,#0e9f55 100%); }}
 /* light glass */
 .glass {{ position: absolute; opacity: 0; border-radius: 40px; padding: 28px 32px; overflow: hidden; color: {INK};
   background: linear-gradient(140deg, rgba(255,255,255,.88) 0%, rgba(255,255,255,.58) 55%, rgba(255,236,246,.7) 100%);
@@ -994,11 +999,11 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
 .glass.chip {{ left: 0 !important; right: 0; width: max-content !important; margin: 0 auto; padding: 12px 34px 12px 14px; border-radius: 999px; display: flex;
   align-items: center; gap: 16px; font: 500 38px/1 "Manrope"; z-index: 9; }}
 .chip img {{ width: 64px; height: 64px; object-fit: contain; }}
-.chip b {{ font: 600 40px/1 "Fraunces"; color: {PINK}; font-style: italic; }}
+.chip b {{ font: 700 40px/1 "Inter"; letter-spacing: -.03em; color: {PINK}; }}
 /* retention */
 .graph .gh {{ display: flex; justify-content: space-between; align-items: baseline; }}
 .gt {{ font: 800 30px/1 "Manrope"; letter-spacing: .12em; color: #7a7a73; }}
-.gp {{ font: 600 76px/1 "Fraunces"; color: {PINK}; }}
+.gp {{ font: 700 72px/1 "Inter"; letter-spacing: -.04em; color: {PINK}; }}
 .avs {{ display: flex; gap: 14px; margin: 18px 0 6px; }}
 .av {{ display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; opacity: 0; background: linear-gradient(140deg,#F54BA8,#F5876C);
   box-shadow: 0 8px 18px rgba(245,75,168,.3), inset 0 2px 0 rgba(255,255,255,.5); }}
@@ -1052,10 +1057,10 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
 .hb {{ fill: none; stroke: rgba(21,160,90,.14); stroke-width: 18; }}
 .hf {{ fill: none; stroke: #15a05a; stroke-width: 18; stroke-linecap: round; }}
 .hv {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 78px; }}
-.hv b {{ font: 600 104px/1 "Fraunces"; }}
+.hv b {{ font: 700 100px/1 "Inter"; letter-spacing: -.05em; }}
 .hv small {{ font: 700 30px/1 "Manrope"; color: #7a7a73; }}
 .hkl {{ font: 800 28px/1 "Manrope"; letter-spacing: .1em; color: #7a7a73; }}
-.hkv {{ font: 600 64px/1.08 "Fraunces"; margin-top: 10px; }}
+.hkv {{ font: 700 60px/1.08 "Inter"; letter-spacing: -.04em; margin-top: 10px; }}
 .et {{ font: 800 28px/1 "Manrope"; letter-spacing: .12em; color: #7a7a73; margin-bottom: 16px; }}
 .ebars {{ position: relative; display: flex; align-items: flex-end; gap: 12px; height: 250px; }}
 .eb {{ display: block; flex: 1; border-radius: 10px; background: linear-gradient(180deg,#F515E8,#F5876C); }}
@@ -1064,17 +1069,17 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
 .mini {{ position: absolute; opacity: 0; width: 210px; height: 330px; border-radius: 28px; background: linear-gradient(160deg,#5a1d63,#c0367e); display: grid; place-items: center;
   box-shadow: 0 18px 40px rgba(80,0,50,.3); border: 2px solid rgba(255,255,255,.6); }}
 .mini .play {{ border-left-width: 44px; border-top-width: 28px; border-bottom-width: 28px; margin-left: 12px; }}
-.vcount {{ position: absolute; left: 0; right: 0; top: 1110px; opacity: 0; z-index: 12; text-align: center; font: 600 84px/1 "Fraunces"; color: #e11d48; font-style: italic; }}
+.vcount {{ position: absolute; left: 0; right: 0; top: 1110px; opacity: 0; z-index: 12; text-align: center; font: 700 80px/1 "Inter"; letter-spacing: -.04em; color: #e11d48; }}
 .wall {{ position: absolute; left: -420px; top: 120px; width: 1920px; height: 1900px; opacity: 0; z-index: 3; }}
 .wallp {{ position: absolute; inset: 0; transform: perspective(1500px) rotateX(46deg) rotateZ(-20deg); }}
 .wallg {{ display: grid; grid-template-columns: repeat(5, 340px); gap: 26px; }}
 .wc {{ height: 230px; border-radius: 32px; padding: 24px; background: rgba(255,255,255,.82); border: 2px solid #fff; box-shadow: 0 16px 40px rgba(170,20,110,.12); }}
 .wc .hn {{ font: 800 22px/1 "Manrope"; letter-spacing: .12em; color: {PINK}; margin-bottom: 12px; }}
-.wt {{ font: 600 32px/1.15 "Fraunces"; }}
+.wt {{ font: 700 31px/1.15 "Inter"; letter-spacing: -.03em; }}
 .wv {{ display: grid; place-items: center; gap: 10px; background: linear-gradient(160deg,#5a1d63,#c0367e); color: #fff; }}
 .wv b {{ font: 800 32px/1 "Manrope"; }}
 .wg {{ display: flex; flex-direction: column; justify-content: center; }}
-.wg b {{ font: 600 84px/1 "Fraunces"; color: #15a05a; }}
+.wg b {{ font: 700 80px/1 "Inter"; letter-spacing: -.04em; color: #15a05a; }}
 .wg span {{ font: 700 28px/1 "Manrope"; color: #7a7a73; }}
 .wallfade {{ position: absolute; inset: 0; z-index: 5; opacity: 0; background: radial-gradient(ellipse at 50% 44%, rgba(248,247,244,.95) 0%, rgba(248,247,244,.7) 32%, rgba(248,247,244,0) 68%); }}
 .fixchip {{ position: absolute; left: 520px; width: 470px; opacity: 0; z-index: 9; display: flex; gap: 18px; align-items: center; padding: 26px 28px; border-radius: 30px;
@@ -1087,7 +1092,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
 .step {{ position: absolute; left: 0; right: 0; top: 420px; display: flex; justify-content: center; align-items: center; gap: 26px; opacity: 0; z-index: 9; }}
 .sic {{ display: grid; place-items: center; width: 112px; height: 112px; border-radius: 32px; background: {INK}; color: #fff; font: 800 58px/1 "Manrope";
   box-shadow: 0 16px 36px rgba(0,0,0,.2); }}
-.stx {{ font: 600 70px/1 "Fraunces"; letter-spacing: -.02em; }}
+.stx {{ font: 700 64px/1.1 "Inter"; letter-spacing: -.045em; word-spacing: .14em; }}
 .dots {{ position: absolute; left: 0; right: 0; top: 1200px; display: flex; justify-content: center; gap: 14px; opacity: 0; z-index: 9; }}
 .dots i {{ display: block; width: 70px; height: 8px; border-radius: 4px; background: rgba(11,11,11,.14); }}
 .dots i.on {{ background: linear-gradient(90deg,#F515E8,#F5876C); }}
@@ -1099,17 +1104,17 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
 .cb {{ fill: none; stroke: rgba(240,50,140,.14); stroke-width: 16; }}
 .cf {{ fill: none; stroke: url(#gr); stroke-width: 16; stroke-linecap: round; }}
 .cv {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 128px; }}
-.cv b {{ font: 600 160px/1 "Fraunces"; font-variant-numeric: tabular-nums; }}
+.cv b {{ font: 700 156px/1 "Inter"; letter-spacing: -.05em; font-variant-numeric: tabular-nums; }}
 .cv small {{ font: 700 42px/1 "Manrope"; color: #7a7a73; margin-left: 6px; }}
-.score {{ position: absolute; left: 0; right: 0; top: 660px; opacity: 0; z-index: 9; text-align: center; font: 600 330px/1 "Fraunces"; color: {INK}; }}
+.score {{ position: absolute; left: 0; right: 0; top: 660px; opacity: 0; z-index: 9; text-align: center; font: 700 320px/1 "Inter"; letter-spacing: -.06em; color: {INK}; }}
 .slot {{ display: inline-flex; vertical-align: bottom; }}
 .sw {{ display: inline-block; height: 1em; overflow: hidden; line-height: 1; }}
 .sc {{ display: flex; flex-direction: column; }}
-.sc b {{ display: block; height: 1em; line-height: 1em; font-weight: 600; }}
-.of {{ font: 700 90px/1 "Manrope"; color: #7a7a73; margin-left: 12px; }}
+.sc b {{ display: block; height: 1em; line-height: 1em; font-weight: 700; }}
+.of {{ font: 700 90px/1 "Inter"; letter-spacing: -.02em; color: #7a7a73; margin-left: 12px; }}
 .glass.first {{ padding: 38px 42px; z-index: 9; }}
 .fl {{ font: 800 30px/1 "Manrope"; letter-spacing: .12em; color: {PINK}; margin-bottom: 16px; }}
-.fv {{ font: 600 64px/1.1 "Fraunces"; }}
+.fv {{ font: 700 60px/1.12 "Inter"; letter-spacing: -.04em; }}
 /* the CTA: a black pill like the website's button */
 .cbig {{ position: absolute; left: 160px; width: 760px; top: 1230px; height: 190px; border-radius: 999px; opacity: 0; z-index: 22; display: flex; align-items: center;
   justify-content: center; gap: 8px; background: {INK}; box-shadow: 0 30px 70px rgba(60,0,40,.35); }}
@@ -1120,7 +1125,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
 .gheart path {{ fill: rgba(255,255,255,.6); stroke: #fff; stroke-width: 2; }}
 .plane {{ position: absolute; left: 990px; top: 1180px; width: 120px; height: 120px; opacity: 0; z-index: 23; filter: drop-shadow(0 10px 18px rgba(80,0,60,.3)); }}
 .glass.dm {{ padding: 22px 26px; }}
-.dmh {{ display: flex; align-items: center; gap: 12px; font: 600 36px/1 "Fraunces"; }}
+.dmh {{ display: flex; align-items: center; gap: 12px; font: 700 36px/1 "Inter"; letter-spacing: -.03em; }}
 .dmh img {{ width: 56px; height: 56px; object-fit: contain; }}
 .dmt {{ margin-top: 12px; font: 700 36px/1.2 "Manrope"; }}
 /* captions */
@@ -1134,7 +1139,6 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
   -webkit-mask-image: linear-gradient(transparent, #000 45%); mask-image: linear-gradient(transparent, #000 45%); }}
 #lgm {{ position: absolute; left: 100px; top: 715px; width: 250px; height: 250px; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(200,40,120,.25)); }}
 #lgw {{ position: absolute; left: 360px; top: 760px; font: 700 168px/1 "Fraunces"; letter-spacing: -.04em; color: {INK}; padding-bottom: 20px; }}
-#lgs {{ position: absolute; left: 930px; top: 690px; width: 100px; height: 100px; }}
 #lgt {{ position: absolute; left: 0; right: 0; top: 1030px; text-align: center; font: 500 46px/1.2 "Manrope"; color: #7a7a73; opacity: 0; }}
 .spk {{ position: absolute; width: 44px; height: 44px; opacity: 0; }}
 /* Cree */
@@ -1150,7 +1154,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
 .sweat {{ opacity: 0; transform-box: fill-box; transform-origin: 50% 0; }}
 #bub {{ position: absolute; left: 560px; top: 20px; width: 200px; height: 170px; opacity: 0; background: #fff; border-radius: 50% 50% 50% 12px;
   box-shadow: 0 14px 30px rgba(150,20,100,.2); display: grid; place-items: center; transform-origin: 0 100%; }}
-#bubt {{ font: 600 96px/1 "Fraunces"; color: #c40db8; }}
+#bubt {{ font: 700 92px/1 "Inter"; color: #c40db8; }}
 .prop {{ position: absolute; opacity: 0; transform-origin: 50% 80%; }}
 .prop svg {{ width: 100%; height: 100%; }}
 """
@@ -1159,7 +1163,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
 def main():
     bg = background()
     scenes()
-    caption_track()
+    # (no bottom captions in v7: the owner found them unnecessary; the titles carry the words)
     cree = cree_html().replace('<div id="bub">', "".join(put_cree) + '<div id="bub">')
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
@@ -1171,7 +1175,7 @@ def main():
     <style>{CSS}</style>
   </head>
   <body>
-    <svg width="0" height="0" style="position:absolute"><defs><filter id="vblur" x="-10%" y="-60%" width="120%" height="220%"><feGaussianBlur id="vbg" stdDeviation="0 0"/></filter><linearGradient id="gr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F515E8"/>
+    <svg width="0" height="0" style="position:absolute"><defs>{"".join(VB)}<filter id="vblur" x="-10%" y="-60%" width="120%" height="220%"><feGaussianBlur id="vbg" stdDeviation="0 0"/></filter><linearGradient id="gr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F515E8"/>
       <stop offset=".5" stop-color="#F54BA8"/><stop offset="1" stop-color="#F5876C"/></linearGradient></defs></svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
       <div id="bgl">{bg}{"".join(FLIPS)}<div id="dots"></div></div>
@@ -1182,7 +1186,7 @@ def main():
       {"".join(CAPS)}
       <div id="lq"></div>
       <div id="logo"><div id="lgf"></div><img id="lgm" src="assets/img/cree.png" alt="Cree"><div id="lgw">creedom</div>
-        <svg id="lgs" viewBox="-50 -50 100 100"><path d="{STAR}" fill="url(#gr)"/></svg><div id="lgt">creedom.ai</div></div>
+<div id="lgt">creedom.ai</div></div>
       {"".join(GBANDS)}
       <audio id="mix" src="assets/audio/bed.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
     </div>
