@@ -6,8 +6,8 @@ cd "$(dirname "$0")/.." || exit 1
 export HYPERFRAMES_NO_TELEMETRY=1
 mkdir -p renders
 D=37.5
-BASE=renders/nxtlvl_creedom-explainer_reels_9x16_v1_bed.mp4
-OUT=renders/nxtlvl_creedom-explainer_reels_9x16_v1.mp4
+BASE=renders/nxtlvl_creedom-explainer_reels_9x16_v2_bed.mp4
+OUT=renders/nxtlvl_creedom-explainer_reels_9x16_v2.mp4
 npx --yes hyperframes@0.8.203 render --quality high -w 3 -o renders/master.mp4 > renders/final.log 2>&1
 ffmpeg -v error -y -i renders/master.mp4 -i assets/audio/bed.wav -map 0:v -map 1:a -c:v libx264 -preset slow -crf 18 -maxrate 8M -bufsize 16M -pix_fmt yuv420p \
   -c:a aac -b:a 192k -t $D -movflags +faststart "$BASE" >> renders/final.log 2>&1

@@ -93,34 +93,67 @@ def slam(text, x, y, t, size=150, cls="", w=FW, align="center", t1=None, letters
 
 
 # ------------------------------------------------------------------------------------------------ Cree, the mascot
-# cree.png is 645x649; the overlay svg uses the same coordinates. Eyes: left (211,220) rx 70 ry 76, right (434,173)
-# rx 68 ry 71.
-EYES = [(211, 220, 72, 78), (434, 174, 70, 73)]
-LID = "#F4549F"
+# Owner: "make him walk, stand on two legs, move his hands, make his face expressive" and "make him exactly like that
+# i sent". So Cree is the mascot's own 3D render in thirteen poses (generated from the mascot image as the reference,
+# cut out by build/poses.py): stand, walk + pass (a two-frame walk cycle), wave, point (right), present (left),
+# cheer, shock, sad, mag (magnifying glass), phone (typing), think, proud. Every pose sits on one 820 x 820 canvas
+# with the feet on y 800, so a pose swap never moves him; the body centre is (410, 500). Blinks: a shaded lid with
+# a lash line over each open eye (plan/poses.json has the eyes).
+POSES = json.load(open(os.path.join(ROOT, "plan", "poses.json")))
+PCX, PCY = 410, 500
 
 
 def cree_html():
-    lids = "".join(f'<ellipse class="lid" cx="{x}" cy="{y}" rx="{rx + 6}" ry="{ry + 6}" style="transform-origin:{x}px {y - ry - 6}px"/>' for x, y, rx, ry in EYES)
-    happy = "".join(f'<g class="hap"><ellipse cx="{x}" cy="{y}" rx="{rx + 6}" ry="{ry + 6}" fill="{LID}"/>'
-                    f'<path d="M {x - 44} {y + 12} Q {x} {y - 40} {x + 44} {y + 12}" fill="none" stroke="#1c0b16" stroke-width="16" stroke-linecap="round"/></g>'
-                    for x, y, rx, ry in EYES)
-    meh = "".join(f'<g class="meh"><path d="M {x - rx - 8} {y - ry - 8} H {x + rx + 8} V {y - 6} Q {x} {y + 6} {x - rx - 8} {y - 6} Z" fill="{LID}"/>'
-                  f'<path d="M {x - rx} {y - 4} Q {x} {y + 8} {x + rx} {y - 4}" fill="none" stroke="#b5236c" stroke-width="6"/></g>' for x, y, rx, ry in EYES)
-    sweat = ('<path class="sweat" d="M 600 40 C 585 70 575 90 575 105 A 25 25 0 0 0 625 105 C 625 90 615 70 600 40 Z" fill="#7fd3ff" stroke="#3aa6e6" '
-             'stroke-width="5"/>')
-    blush = "".join(f'<ellipse class="blush" cx="{x}" cy="{y}" rx="44" ry="22" fill="#ff8fb8"/>' for x, y in [(160, 330), (500, 270)])
-    return (f'<div id="cree"><div id="creeb"><img src="assets/img/cree.png" alt="Cree">'
-            f'<svg viewBox="0 0 645 649" class="crees">{blush}{lids}{happy}{meh}{sweat}</svg></div>'
+    parts = []
+    for name, m in POSES.items():
+        defs, lids = "", ""
+        for k, (cx, cy, rx, ry, top, bot) in enumerate(m["eyes"]):
+            defs += (f'<linearGradient id="lg{name}{k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{top}"/>'
+                     f'<stop offset="1" stop-color="{bot}"/></linearGradient>')
+            lids += (f'<ellipse cx="{cx}" cy="{cy}" rx="{rx + 8}" ry="{ry + 8}" fill="url(#lg{name}{k})"/>'
+                     f'<path d="M {cx - rx * .8:.0f} {cy + ry * .05:.0f} Q {cx} {cy + ry * .55:.0f} {cx + rx * .8:.0f} {cy + ry * .05:.0f}" fill="none" '
+                     f'stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/>')
+        svg = f'<svg viewBox="0 0 820 820" class="clids"><defs>{defs}</defs><g class="lidg">{lids}</g></svg>' if lids else ""
+        parts.append(f'<div class="cpose" id="cp-{name}"><img src="assets/img/poses/{name}.png" alt="">{svg}</div>')
+    sweat = ('<svg viewBox="0 0 820 820" class="csw"><path class="sweat" d="M 690 190 C 675 220 665 240 665 255 A 25 25 0 0 0 715 255 C 715 240 705 220 690 190 Z" '
+             'fill="#7fd3ff" stroke="#3aa6e6" stroke-width="5"/></svg>')
+    return (f'<div id="cree"><div id="creeb"><div id="creef"><div id="creep">{"".join(parts)}</div></div>{sweat}</div>'
             f'<div id="bub"><span id="bubt">!</span></div></div>')
 
 
 def cree_to(t, x, y, s, d=.6, rot=0, ease="power3.inOut"):
-    """Move Cree (centre at x, y in frame px; s = scale of the 645 px art)."""
-    js(f'tl.to("#cree", {{x: {x - 322:.0f}, y: {y - 325:.0f}, scale: {s}, rotation: {rot}, duration: {d}, ease: "{ease}"}}, {t:.3f});')
+    """Move Cree (body centre at x, y in frame px; s = scale of the 820 px pose canvas)."""
+    js(f'tl.to("#cree", {{x: {x - PCX:.0f}, y: {y - PCY:.0f}, scale: {s}, rotation: {rot}, duration: {d}, ease: "{ease}"}}, {t:.3f});')
 
 
 def cree_set(t, x, y, s, rot=0):
-    js(f'tl.set("#cree", {{x: {x - 322:.0f}, y: {y - 325:.0f}, scale: {s}, rotation: {rot}}}, {t:.3f});')
+    js(f'tl.set("#cree", {{x: {x - PCX:.0f}, y: {y - PCY:.0f}, scale: {s}, rotation: {rot}}}, {t:.3f});')
+
+
+def pose(t, name, flip=None, squash=True):
+    """Swap to a pose (flip: True faces him the other way, None keeps the current facing), with a little squash."""
+    js(f'tl.set("#cree .cpose", {{opacity: 0}}, {t:.3f});')
+    js(f'tl.set("#cp-{name}", {{opacity: 1}}, {t:.3f});')
+    if flip is not None:
+        js(f'tl.set("#creef", {{scaleX: {-1 if flip else 1}}}, {t:.3f});')
+    if squash:
+        js(f'tl.fromTo("#creep", {{scaleX: 1.07, scaleY: .9}}, {{scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}}, {t:.3f});')
+
+
+def cree_walk(t0, t1, frm, to, end="stand", step=.15):
+    """Walk from frm (x, y, s) to to (x, y, s): stride and pass frames alternate with a bob, facing the way he goes."""
+    n = max(2, round((t1 - t0) / step))
+    n += n % 2
+    st = (t1 - t0) / n
+    flip = to[0] < frm[0]
+    js(f'tl.fromTo("#cree", {{x: {frm[0] - PCX:.0f}, y: {frm[1] - PCY:.0f}, scale: {frm[2]}}}, {{x: {to[0] - PCX:.0f}, y: {to[1] - PCY:.0f}, scale: {to[2]}, '
+       f'duration: {t1 - t0:.3f}, ease: "none", immediateRender: false}}, {t0:.3f});')
+    for k in range(n):
+        pose(t0 + k * st, "walk" if k % 2 == 0 else "pass", flip=flip if k == 0 else None, squash=False)
+    js(f'tl.fromTo("#creef", {{y: 0}}, {{y: -22, duration: {st / 2:.3f}, ease: "sine.inOut", yoyo: true, repeat: {2 * n - 1}, immediateRender: false}}, {t0:.3f});')
+    js(f'tl.fromTo("#creef", {{rotation: -4}}, {{rotation: 4, duration: {st:.3f}, ease: "sine.inOut", yoyo: true, repeat: {n - 1}, immediateRender: false}}, {t0:.3f});')
+    js(f'tl.to("#creef", {{rotation: 0, duration: .12}}, {t1:.3f});')
+    pose(t1, end, flip=False)
 
 
 def cree_hop(t, h=60, n=1, period=.36):
@@ -137,18 +170,15 @@ def cree_wiggle(t, n=3, amp=10, period=.22):
 
 
 def cree_face(t, mode, d=None):
-    """happy / meh / sweat / blush / blink on the overlay; d = how long it stays."""
+    """blink (the lids of whichever pose is showing) or sweat (a drop that slides down); d = how long it stays."""
     if mode == "blink":
-        js(f'tl.fromTo("#cree .lid", {{scaleY: 0}}, {{keyframes: [{{scaleY: 1, duration: .06}}, {{scaleY: 0, duration: .08}}], immediateRender: false}}, {t:.3f});')
+        js(f'tl.set("#cree .lidg", {{opacity: 1}}, {t:.3f});')
+        js(f'tl.set("#cree .lidg", {{opacity: 0}}, {t + .11:.3f});')
         return
-    sel = {"happy": ".hap", "meh": ".meh", "sweat": ".sweat", "blush": ".blush"}[mode]
-    if mode == "sweat":
-        js(f'tl.fromTo("#cree .sweat", {{opacity: 0, y: -20, scale: .4}}, {{opacity: 1, y: 0, scale: 1, duration: .25, ease: "back.out(2)", immediateRender: false}}, {t:.3f});')
-        js(f'tl.to("#cree .sweat", {{y: 40, duration: {(d or 1) - .2:.2f}, ease: "power1.in"}}, {t + .25:.3f});')
-    else:
-        js(f'tl.fromTo("#cree {sel}", {{opacity: 0}}, {{opacity: 1, duration: .08, immediateRender: false}}, {t:.3f});')
+    js(f'tl.fromTo("#cree .sweat", {{opacity: 0, y: -20, scale: .4}}, {{opacity: 1, y: 0, scale: 1, duration: .25, ease: "back.out(2)", immediateRender: false}}, {t:.3f});')
+    js(f'tl.to("#cree .sweat", {{y: 40, duration: {(d or 1) - .2:.2f}, ease: "power1.in"}}, {t + .25:.3f});')
     if d:
-        js(f'tl.to("#cree {sel}", {{opacity: 0, duration: .1}}, {t + d:.3f});')
+        js(f'tl.to("#cree .sweat", {{opacity: 0, duration: .1}}, {t + d:.3f});')
 
 
 def cree_say(t, text, d=1.0, size=96):
@@ -299,12 +329,14 @@ def scenes():
         js(f'tl.fromTo("#{s}", {{opacity: 0, x: 0}}, {{keyframes: [{{opacity: 1, duration: .1}}, {{x: -520, opacity: 0, duration: .5, ease: "power2.in"}}]}}, '
            f'{W("watching") + k * .12:.3f});')
         cue(W("watching") + k * .12, "swish") if k == 0 else None
-    # Cree: pops up waving, then is shocked
+    # Cree: pops up waving, points at the graph, then is shocked where people left
     cree_set(0, 860, 1600, .42)
-    js(f'tl.fromTo("#cree", {{opacity: 0, y: 1500}}, {{opacity: 1, y: {1300 - 325}, duration: .6, ease: "back.out(1.6)", immediateRender: false}}, {W("AI") - .1:.3f});')
+    js(f'tl.fromTo("#cree", {{opacity: 0, y: 1500}}, {{opacity: 1, y: {1300 - PCY}, duration: .6, ease: "back.out(1.6)", immediateRender: false}}, {W("AI") - .1:.3f});')
     cue(W("AI") - .1, "pop")
     cree_wiggle(W("AI") + .4, n=3, amp=8)
-    cree_face(1.4, "blink")
+    pose(1.55, "think")
+    pose(2.6, "point", flip=True)
+    pose(W("stopped") - .1, "shock", flip=False)
     cree_face(W("stopped"), "sweat", d=1.2)
     cree_say(W("stopped") + .05, "!", d=1.0)
     cree_hop(W("stopped") - .1, h=40)
@@ -324,9 +356,9 @@ def scenes():
     cue(t_flop + .05, "stamp")
     js(f'tl.to("#{r}", {{rotationX: 0, y: 0, scale: .22, x: 0, opacity: .0, duration: .45, ease: "power3.in"}}, {t_cr + .05:.3f});')
     slam("FLOPPED.", 0, 360, t_flop, size=140, cls="dark", t1=t_cr - .05)
-    cree_to(S2, 820, 1250, .5, d=.6)
-    cree_face(t_flop, "meh", d=1.1)
+    cree_walk(S2 + .05, t_flop - .1, (860, 1300, .42), (800, 1260, .5), end="sad")
     cree_say(t_flop + .1, "...", d=.9, size=70)
+    pose(t_cr, "present")                  # "Creedom's Reel Analyzer": ta-da, towards the phone
     # the app: Creedom's Reel Analyzer
     ch = nid("chip")
     put(f'<div class="chip" id="{ch}"><img src="assets/img/cree.png" alt=""><span>Creedom &middot; <b>Reel Analyzer</b></span></div>')
@@ -344,9 +376,8 @@ def scenes():
     fly(f"#{fs}", t_wat - .1, y=60)
     js(f'tl.fromTo("#{fs}i", {{x: 0}}, {{x: -2300, duration: {S3 - t_wat:.2f}, ease: "none", immediateRender: false}}, {t_wat - .1:.3f});')
     cree_to(t_wat - .3, 880, 1180, .44, d=.5)
-    mg = prop('<svg viewBox="0 0 200 200"><circle cx="80" cy="80" r="58" fill="rgba(200,240,255,.45)" stroke="#2b1530" stroke-width="16"/>'
-              '<path d="M 124 124 L 186 186" stroke="#2b1530" stroke-width="24" stroke-linecap="round"/></svg>', t_wat, S3, cls="prop mag")
-    js(f'tl.to("#{mg}", {{x: -60, y: 30, rotation: -14, duration: .5, ease: "sine.inOut", yoyo: true, repeat: 3}}, {t_wat + .3:.3f});')
+    pose(t_wat, "mag")                     # he inspects the reel second by second
+    js(f'tl.fromTo("#creef", {{rotation: 0}}, {{rotation: -6, duration: .45, ease: "sine.inOut", yoyo: true, repeat: 3, immediateRender: false}}, {t_wat + .3:.3f});')
     cue(t_wat, "pop")
     sc = slam("SECOND BY SECOND", 0, 360, t_sec2, size=96, cls="grad", t1=S3 - .1)
     cue(t_sec2, "tick")
@@ -356,8 +387,10 @@ def scenes():
               'stroke-linejoin="round"/></svg>HOOK WORKED</div>', 40, 470, 360, t_hook, S4 - .2, cls="tag", rot=-6, enter="pop")
     cue(t_hook, "success")
     cree_to(S3, 870, 1280, .42, d=.5)
-    cree_face(t_hook, "happy", d=1.1)
+    pose(S3, "stand")
+    pose(t_hook, "cheer")
     cree_hop(t_hook + .05, h=50, n=2)
+    pose(t_ene - .2, "think")
     # energy: bars that sag in the middle
     bars = "".join(f'<i class="eb" id="eb{k}" style="height:{h}px"></i>' for k, h in enumerate([150, 170, 160, 175, 165, 150, 140, 150, 165, 170]))
     en = card(f'<div class="et">ENERGY</div><div class="ebars">{bars}</div><div class="edrop" id="edrop">&darr; dropped here</div>', 640, 560, 400, t_ene - .25,
@@ -367,6 +400,7 @@ def scenes():
        f'{t_drop:.3f});')
     pop("#edrop", t_drop + .15, frm=.5)
     cue(t_drop, "drop")
+    pose(t_drop, "sad")
     cree_face(t_drop, "sweat", d=1.4)
     js(f'tl.to("#creeb", {{y: 30, scaleY: .9, duration: .25, ease: "power2.out", yoyo: true, repeat: 1}}, {t_drop:.3f});')
     # swiped away: thumbs flick a stack of reels off to the left
@@ -379,6 +413,7 @@ def scenes():
         if k % 2 == 0:
             cue(t_swp + k * .12, "swish")
     slam("SWIPED AWAY", 0, 360, t_swp - .1, size=110, cls="dark", t1=S4 - .2)
+    pose(t_swp - .05, "shock")
     cree_say(t_swp, "!?", d=.9, size=80)
 
     # ---- S4: "It also gave me new hooks and showed me what to fix before I post the next one."
@@ -395,10 +430,11 @@ def scenes():
         cue(t_fix + .1 + k * .25, "tick")
     slam("NEW HOOKS", 0, 360, t_new, size=110, cls="grad", t1=t_fix - .05)
     slam("WHAT TO FIX", 0, 360, t_fix, size=110, cls="dark", t1=S5 - .2)
-    cree_to(S4, 860, 1300, .45, d=.5)
-    cree_face(t_new, "happy", d=2.6)
-    cree_face(t_new + .2, "blush", d=2.4)
+    cree_walk(S4, t_new - .1, (870, 1280, .42), (720, 1320, .45))
+    pose(t_new, "cheer")
     cree_hop(t_new, h=70, n=3, period=.4)
+    pose(t_new + 1.25, "proud")
+    pose(t_fix, "point", flip=False)       # "what to fix": at the checklist
     for k in range(10):                    # confetti
         cf = nid("cf")
         put(f'<i class="conf" id="{cf}" style="left:{820 + RND.uniform(-140, 140):.0f}px;top:1100px;background:{["#F515E8", "#F5876C", "#FFC83D", "#54d6a0"][k % 4]}"></i>')
@@ -458,16 +494,20 @@ def scenes():
     cue(t_first - .1, "pop")
     js(f'tl.fromTo("#{au}f", {{boxShadow: "0 0 0 0 rgba(245,21,232,.0)"}}, {{boxShadow: "0 0 0 14px rgba(245,21,232,.25)", duration: .4, yoyo: true, repeat: 2, '
        f'immediateRender: false}}, {t_fix2:.3f});')
-    cree_to(S5 + .1, 880, 1360, .4, d=.5)
+    cree_walk(S5 + .05, t_free + .3, (-200, 1380, .42), (840, 1380, .42), end="wave")   # he strolls in under FREE
+    pose(t_acc - .1, "proud")
     cree_to(t_type - .45, 930, 640, .34, d=.5)
+    pose(t_type - .3, "phone")             # types the handle
     sw = prop('<svg viewBox="0 0 200 220"><circle cx="100" cy="125" r="80" fill="#fff" stroke="#2b1530" stroke-width="14"/>'
               '<rect x="85" y="18" width="30" height="28" rx="6" fill="#2b1530"/><path id="swh" d="M 100 125 L 100 70" stroke="#F515E8" stroke-width="12" '
               'stroke-linecap="round"/></svg>', t_20 - .3, t_score + .2, cls="prop watch")
     js(f'tl.fromTo("#swh", {{rotation: 0, transformOrigin: "100px 125px"}}, {{rotation: 1080, duration: {t_score - t_20 + .3:.2f}, ease: "none", immediateRender: false}}, '
        f'{t_20 - .3:.3f});')
+    pose(t_20 - .3, "think")
     cree_wiggle(t_20 - .2, n=4, amp=6, period=.25)
-    cree_face(t_score + .3, "happy", d=1.4)
+    pose(t_score + .2, "cheer")
     cree_hop(t_100, h=60, n=2)
+    pose(t_first - .1, "point", flip=True)  # at "first thing to fix"
     cree_say(t_first, "!", d=.8)
 
     # ---- S6: the CTA, "Comment "CREE" and I'll send you the link."
@@ -475,8 +515,9 @@ def scenes():
     HIDE.append("#ctabg")
     cue(S6, "whoosh_big")
     cree_to(S6, 540, 820, .95, d=.7, ease="back.out(1.4)")
-    cree_face(S6 + .7, "happy", d=2.2)
+    pose(S6, "wave", flip=False)
     cree_wiggle(S6 + .7, n=4, amp=9)
+    pose(t_cree - .15, "phone")            # he types CREE himself
     k1 = slam("COMMENT", 0, 1180, t_com, size=120, cls="white", t1=S7)
     cb = nid("cb")
     put(f'<div class="cbar" id="{cb}"><span class="cav"></span><span class="ctx" id="{cb}t"></span><i class="caret dark" id="{cb}c"></i>'
@@ -503,6 +544,8 @@ def scenes():
     dm = card('<div class="dmh"><img src="assets/img/cree.png" alt=""><b>Creedom</b></div><div class="dmt">Here\'s your link &#128279;</div>', 560, 300, 440,
               t_link - .05, S7, cls="card dm", rot=3, enter="pop")
     cue(t_link - .05, "notify")
+    pose(t_send - .25, "point", flip=False)  # the plane goes up and right
+    pose(t_link - .05, "cheer")
     cree_say(t_link, "♥", d=.8)
     cree_hop(t_link + .1, h=80, n=2)
 
@@ -526,8 +569,8 @@ def scenes():
            f'ease: "power2.out", immediateRender: false}}, {S7 + .3:.3f});')
 
     # Cree idles: a slow bob and a blink every couple of seconds the whole way
-    js(f'tl.fromTo("#cree .crees, #cree img", {{y: 0}}, {{y: -10, duration: .8, ease: "sine.inOut", yoyo: true, repeat: {int(DUR / .8)}, immediateRender: false}}, 0);')
-    for tb in [1.4, 3.9, 6.9, 9.3, 12.0, 15.2, 19.8, 23.4, 26.0, 30.8, 33.0]:
+    js(f'tl.fromTo("#creep", {{y: 0}}, {{y: -10, duration: .8, ease: "sine.inOut", yoyo: true, repeat: {int(DUR / .8)}, immediateRender: false}}, 0);')
+    for tb in [1.2, 2.2, 6.9, 8.0, 9.3, 12.95, 15.2, 20.4, 23.4, 26.0, 30.8, 33.0]:   # only while an open-eyed pose shows
         cree_face(tb, "blink")
 
 
@@ -558,19 +601,21 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #fff6
 .gdot {{ fill: #ff2d55; opacity: 0; transform-box: fill-box; transform-origin: center; }}
 .gtag {{ position: absolute; left: 330px; top: 92px; opacity: 0; background: #1d0f24; color: #fff; font: 800 30px/1 "Outfit"; padding: 14px 20px; border-radius: 16px; }}
 .swipe {{ position: absolute; opacity: 0; font: 900 90px/1 "Outfit"; color: #ff2d55; z-index: 9; }}
-#cree {{ position: absolute; left: 0; top: 0; width: 645px; height: 649px; z-index: 20; opacity: 0; transform-origin: 50% 50%; }}
-#creeb {{ position: absolute; inset: 0; transform-origin: 50% 92%; }}
-#creeb img, .crees {{ position: absolute; inset: 0; width: 645px; height: 649px; }}
-.crees {{ overflow: visible; }}
-.lid {{ fill: {LID}; }}
-.hap, .meh, .sweat, .blush {{ opacity: 0; }}
-.sweat {{ transform-box: fill-box; transform-origin: 50% 0; }}
-#bub {{ position: absolute; left: 470px; top: -170px; width: 200px; height: 170px; opacity: 0; background: #fff; border-radius: 50% 50% 50% 12px;
+#cree {{ position: absolute; left: 0; top: 0; width: 820px; height: 820px; z-index: 20; opacity: 0; transform-origin: 410px 500px; }}
+#creeb {{ position: absolute; inset: 0; transform-origin: 50% 97.5%; }}
+#creef {{ position: absolute; inset: 0; transform-origin: 50% 60%; }}
+#creep {{ position: absolute; inset: 0; transform-origin: 50% 97.5%; }}
+.cpose {{ position: absolute; inset: 0; opacity: 0; }}
+#cp-wave {{ opacity: 1; }}
+.cpose img, .clids, .csw {{ position: absolute; inset: 0; width: 820px; height: 820px; }}
+.csw {{ overflow: visible; }}
+.lidg {{ opacity: 0; }}
+.sweat {{ opacity: 0; transform-box: fill-box; transform-origin: 50% 0; }}
+#bub {{ position: absolute; left: 560px; top: 20px; width: 200px; height: 170px; opacity: 0; background: #fff; border-radius: 50% 50% 50% 12px;
   box-shadow: 0 14px 30px rgba(150,20,100,.2); display: grid; place-items: center; transform-origin: 0 100%; }}
 #bubt {{ font: 900 96px/1 "Outfit"; color: #F515E8; }}
 .prop {{ position: absolute; opacity: 0; transform-origin: 50% 80%; }}
-.prop.mag {{ left: -170px; top: 230px; width: 260px; height: 260px; }}
-.prop.watch {{ left: 470px; top: 330px; width: 230px; height: 250px; }}
+.prop.watch {{ left: 40px; top: 110px; width: 230px; height: 250px; }}
 .prop svg {{ width: 100%; height: 100%; }}
 .reel {{ position: absolute; left: 290px; top: 560px; width: 500px; opacity: 0; z-index: 7; background: #fff; border-radius: 34px; overflow: hidden;
   box-shadow: 0 30px 70px rgba(150,20,100,.22); transform-origin: 50% 100%; }}
@@ -696,7 +741,6 @@ def main():
       window.__timelines = window.__timelines || {{}};
       const tl = gsap.timeline({{ paused: true }});
       gsap.set({json.dumps(list(dict.fromkeys(HIDE)))}, {{opacity: 0}});
-      gsap.set("#cree .lid", {{scaleY: 0, transformOrigin: "50% 0%"}});
 {chr(10).join(A)}
       tl.set({{}}, {{}}, {DUR});
       window.__timelines["main"] = tl;
