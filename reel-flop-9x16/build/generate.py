@@ -149,6 +149,73 @@ def shard_points(n=150):
     return sorted(starts, key=key), sorted(targets, key=key), (540 - adv / 2, top)
 
 
+IMPACT = (560, 1000)
+GLASS_CENTRES = []
+
+
+def glass_grid():
+    """A cracked-glass pattern around the impact point: jittered rings x sectors. The radial and ring edges are the
+    crack lines, and the cells are the pieces that fall, so cracks and pieces line up exactly."""
+    import math
+    import random
+    r = random.Random(4)
+    radii = [0, 110, 300, 600, 1000, 2400]
+    n = 13
+    base = [i * 2 * math.pi / n + r.uniform(-.18, .18) for i in range(n)]
+    P = []
+    for ri, rad in enumerate(radii):
+        ring = []
+        for a in base:
+            if ri == 0:
+                ring.append(IMPACT)
+                continue
+            rr = rad * r.uniform(.78, 1.22)
+            aa = a + r.uniform(-.1, .1)
+            ring.append((IMPACT[0] + rr * math.cos(aa), IMPACT[1] + rr * math.sin(aa)))
+        P.append(ring)
+    return P
+
+
+def cold_open():
+    """The slam cards (THIS / REEL / IS ABOUT TO / LOSE / YOU.), the crack lines and the glass pieces."""
+    def card(cid, bg, col, rows, shown=False):
+        h = "".join(f'<div class="sw" id="{cid}w{j}" style="font-size:{min(sz, int(MAXW / text_w(t, 1, 800, -.04)))}px">{t}</div>'
+                    for j, (t, sz) in enumerate(rows))
+        return f'<div class="scard" id="{cid}" style="background:{bg};color:{col};{"opacity:1" if shown else ""}">{h}</div>'
+    cards = (card("sc0", "#f4f4f4", INK, [("THIS", 360)], shown=True) + card("sc1", "#050505", "#ffffff", [("REEL", 360)])
+             + card("sc2", "#f4f4f4", INK, [("IS", 250), ("ABOUT", 250), ("TO", 250)]) + card("sc3", RED, "#ffffff", [("LOSE", 380)])
+             + card("sc4", "#f4f4f4", INK, [("YOU.", 380)]))
+    P = glass_grid()
+    lines = []
+    for a in range(len(P[0])):
+        pts = " ".join(f"{P[ri][a][0]:.0f},{P[ri][a][1]:.0f}" for ri in range(len(P)))
+        lines.append(f'<polyline class="crk" pathLength="1000" points="{pts}"/>')
+    for ri in (1, 2, 3, 4):
+        for a in range(len(P[0])):
+            if (ri + a) % 3 == 0 and ri > 2:
+                continue
+            b = (a + 1) % len(P[0])
+            lines.append(f'<polyline class="crk" pathLength="1000" points="{P[ri][a][0]:.0f},{P[ri][a][1]:.0f} {P[ri][b][0]:.0f},{P[ri][b][1]:.0f}"/>')
+    cracks = (f'<svg id="cracks" viewBox="0 0 {FW} {FH}"><g class="under">{"".join(lines)}</g><g class="over">{"".join(lines)}</g>'
+              f'<circle cx="{IMPACT[0]}" cy="{IMPACT[1]}" r="26" class="imp"/></svg>')
+    # pieces: each a full-screen copy of the "YOU." card (and its cracks), clipped to one cell
+    you = card("x", "#f4f4f4", INK, [("YOU.", 380)], shown=True).replace('id="x"', "").replace('id="xw0"', "")
+    pieces = []
+    for ri in range(len(P) - 1):
+        for a in range(len(P[0])):
+            b = (a + 1) % len(P[0])
+            poly = [P[ri][a], P[ri][b], P[ri + 1][b], P[ri + 1][a]] if ri else [IMPACT, P[1][b], P[1][a]]
+            cx = sum(p[0] for p in poly) / len(poly)
+            cy = sum(p[1] for p in poly) / len(poly)
+            k = len(GLASS_CENTRES)
+            GLASS_CENTRES.append((cx, cy))
+            cp = ", ".join(f"{x:.0f}px {y:.0f}px" for x, y in poly)
+            edge = " ".join(f"{x:.0f},{y:.0f}" for x, y in poly)
+            pieces.append(f'<div class="gp" id="gp{k}" style="clip-path:polygon({cp});transform-origin:{cx:.0f}px {cy:.0f}px">{you}'
+                          f'<svg class="ge" viewBox="0 0 {FW} {FH}"><polygon points="{edge}"/></svg></div>')
+    return f'<div id="slam">{cards}{cracks}</div><div id="glass">{"".join(pieces)}</div>'
+
+
 def fake_reel_html():
     """Frame 0: an ordinary-looking reel, full screen (no username: an avatar dot and blank bars), and the next reel
     under it for the fake swipe."""
@@ -186,6 +253,48 @@ def flip(t, x, y, to_dark):
 def scenes():
     H = []
     L = lambda l, i, k="t0": W(l, i, k)    # noqa: E731
+
+    # ---- S0 cold open (v3, owner: "I just wanna create a shock value in the hook"; picked "This reel is about to lose
+    # you."). Giant words slam one per hard cut, the ground flipping white / black; on "lose" the screen cracks like a
+    # dropped phone (red), on "you." the glass breaks and falls away, and the ordinary-looking reel is underneath.
+    H.append(cold_open())
+    sfx("hit", 0.0)
+    sfx("stamp", L("l00", 1) - .02)
+    sfx("stamp", L("l00", 2) - .02)
+    js(f'tl.fromTo("#sc0 .sw", {{scale: 1.18}}, {{scale: 1, duration: .22, ease: "expo.out", immediateRender: false}}, 0);')
+    cards = [("sc1", L("l00", 1)), ("sc2", L("l00", 2)), ("sc3", L("l00", 5)), ("sc4", L("l00", 6))]
+    prev = "sc0"
+    for cid, t in cards:
+        js(f'tl.set("#{prev}", {{opacity: 0}}, {t - .03:.3f}); tl.set("#{cid}", {{opacity: 1}}, {t - .03:.3f});')
+        js(f'tl.fromTo("#{cid} .sw", {{scale: 1.22}}, {{scale: 1, duration: .24, ease: "expo.out", immediateRender: false}}, {t - .03:.3f});')
+        prev = cid
+    # "is about to": the three words land as spoken
+    for j, i in enumerate((3, 4)):
+        js(f'tl.fromTo("#sc2w{j + 1}", {{opacity: 0, scale: 1.25}}, {{opacity: 1, scale: 1, duration: .2, ease: "expo.out", immediateRender: false}}, {L("l00", i) - .03:.3f});')
+    t_lose, t_you = L("l00", 5) - .03, L("l00", 6) - .03
+    js(f'tl.fromTo(".crk", {{strokeDashoffset: 1000}}, {{strokeDashoffset: 0, duration: .14, ease: "power2.out", immediateRender: false}}, {t_lose + .02:.3f});')
+    js(f'tl.set("#cracks", {{opacity: 1}}, {t_lose:.3f});')
+    sfx("crack", t_lose)
+    sfx("hit", t_lose)
+    sfx("stamp", t_you)
+    # "you." breaks: the slam layer becomes glass pieces (the same cracks are their edges) that fall under gravity
+    t_br = L("l00", 6, "t1") + .02
+    js(f'tl.set("#slam", {{opacity: 0}}, {t_br:.3f}); tl.set("#glass", {{opacity: 1}}, {t_br:.3f});')
+    import math
+    import random
+    rnd = random.Random(11)
+    for k, (cx, cy) in enumerate(GLASS_CENTRES):
+        dx, dy = cx - IMPACT[0], cy - IMPACT[1]
+        dist = math.hypot(dx, dy)
+        # a violent burst away from the impact (closer pieces harder), then gravity
+        push = 40 + 260 * max(0, 1 - dist / 1400) + rnd.uniform(0, 60)
+        bx, by = dx / max(dist, 1) * push, dy / max(dist, 1) * push - rnd.uniform(20, 90)
+        rot = rnd.uniform(-35, 35)
+        js(f'tl.to("#gp{k}", {{x: {bx:.0f}, y: {by:.0f}, rotation: {rot:.0f}, scale: {rnd.uniform(1.02, 1.12):.2f}, duration: .14, ease: "expo.out"}}, {t_br:.3f});')
+        js(f'tl.to("#gp{k}", {{x: {bx * 1.6:.0f}, y: {by + 1700 + rnd.uniform(0, 700):.0f}, rotation: {rot * 3:.0f}, duration: {rnd.uniform(.5, .72):.2f}, ease: "power2.in"}}, {t_br + .14 + rnd.uniform(0, .05):.3f});')
+    js(f'tl.set("#glass", {{opacity: 0}}, {t_br + 1.0:.3f});')
+    sfx("shatter", t_br)
+    sfx("whoosh_big", t_br + .1)
 
     # ---- S1 hook (owner: "try something miraculous in the first 6-7 seconds", picked the fourth-wall fake swipe +
     # the shatter + the full-screen countdown). Frame 0 is an ordinary-looking reel, full screen, already playing (no
@@ -517,6 +626,20 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #e9e9
 .redtxt {{ color: {RED}; }}
 #strike {{ position: absolute; left: 248px; right: 248px; top: 1020px; height: 12px; border-radius: 6px; background: {RED}; transform-origin: left center;
   opacity: 0; }}
+/* v3 cold open: slam cards, cracks, glass */
+#slam {{ position: absolute; inset: 0; z-index: 8; }}
+.scard {{ position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; }}
+.sw {{ font-weight: 800; letter-spacing: -.04em; line-height: .9; white-space: nowrap; }}
+#sc2w1, #sc2w2 {{ opacity: 0; }}
+#cracks {{ position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }}
+.crk {{ fill: none; stroke-dasharray: 1000; stroke-linejoin: round; stroke-linecap: round; }}
+#cracks .under .crk {{ stroke: rgba(0,0,0,.8); stroke-width: 6; }}
+#cracks .over .crk {{ stroke: rgba(255,255,255,.95); stroke-width: 2.5; }}
+.imp {{ fill: rgba(255,255,255,.85); stroke: rgba(0,0,0,.4); stroke-width: 4; }}
+#glass {{ position: absolute; inset: 0; z-index: 8; opacity: 0; pointer-events: none; }}
+.gp {{ position: absolute; inset: 0; }}
+.ge {{ position: absolute; inset: 0; width: 100%; height: 100%; }}
+.ge polygon {{ fill: none; stroke: rgba(0,0,0,.8); stroke-width: 7; }}
 /* the fake reel (frame 0) */
 #fake {{ position: absolute; inset: 0; z-index: 4; overflow: hidden; }}
 #fkS {{ position: absolute; left: 0; top: 0; width: 100%; height: 200%; }}

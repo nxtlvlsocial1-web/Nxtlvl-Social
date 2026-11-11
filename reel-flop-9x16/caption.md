@@ -3,7 +3,7 @@
 ```
 Comment "HOOK" and I'll send you my list of 20 hooks that work.
 
-Your reel didn't flop because of the algorithm. It flopped in the first three seconds.
+This reel is about to lose you. Your reel didn't flop because of the algorithm. It flopped in the first three seconds.
 
 3 mistakes killing your views:
 1. Your hook is a greeting. Nobody stays for "Hey guys." Start with the result.

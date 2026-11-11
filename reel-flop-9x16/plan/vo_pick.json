@@ -1,6 +1,20 @@
 {
- "duration": 34.86,
+ "duration": 37.54,
  "takes": [
+  {
+   "line": "l00",
+   "take": 0,
+   "heard": "This reel is about to lose you.",
+   "errors": 0,
+   "pitch_spread_hz": 234
+  },
+  {
+   "line": "l00",
+   "take": 1,
+   "heard": "This real is about to lose you.",
+   "errors": 1,
+   "pitch_spread_hz": 178
+  },
   {
    "line": "l01",
    "take": 0,

@@ -44,6 +44,9 @@ KINDS = {
     "glitch": ([f("interface-sounds/Audio__glitch_002.ogg"), f("interface-sounds/Audio__glitch_003.ogg")], "ui", -15, {"max_dur": .45}),
     "scratch": ([f("interface-sounds/Audio__scratch_003.ogg")], "ui", -15, {"max_dur": .45}),
     "count": ([f("interface-sounds/Audio__tick_002.ogg")], "ui", -16, {"max_dur": .25}),
+    # v3 cold open: the screen cracks on "lose", shatters on "you."
+    "crack": ([f("100-cc0-sfx-2/sfx100v2_glass_04.ogg")], "hit", -12, {"max_dur": .3}),
+    "shatter": ([f("100-cc0-sfx/glass_05.ogg")], "hit", -12, {"max_dur": 1.0, "fade_out": .3}),
     "logo": ([f("wind-hit-time-morph/qubodup-megaswosh2.wav")], "whoosh", -16, {"reverse": True, "max_dur": .6, "anchor": "end"}),
 }
 

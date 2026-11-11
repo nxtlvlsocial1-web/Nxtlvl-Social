@@ -21,6 +21,8 @@ REF = os.path.join(ROOT, "assets", "audio", "vo_test", "ref_af_heart.wav")
 OUT = os.path.join(ROOT, "assets", "audio", "vo_takes")
 # (id, text, beat, exaggeration)
 LINES = [
+    # v3 (owner: "I just wanna create a shock value in the hook", picked this cold open)
+    ("l00", "This reel is about to lose you.", "hook 70 (cold open)", 1.0),
     ("l01", "Your reel didn't flop because of the algorithm.", "hook 70", .75),
     ("l02", "It flopped in the first three seconds.", "peak", .95),
     ("l03", "Here are three mistakes killing your views.", "release", .6),
@@ -42,6 +44,8 @@ def main():
     m.prepare_conditionals(REF, exaggeration=.6)
     for lid, text, beat, ex in LINES:
         for take, seed in enumerate((11, 29)):
+            if os.path.exists(os.path.join(OUT, f"{lid}_t{take}.wav")):
+                continue                      # keep the takes already made
             torch.manual_seed(seed)
             w = m.generate(text, audio_prompt_path=REF, exaggeration=ex, cfg_weight=.35, temperature=.8)
             ta.save(os.path.join(OUT, f"{lid}_t{take}.wav"), w, m.sr)

@@ -32,7 +32,8 @@ DUR = round(json.load(open(os.path.join(ROOT, "plan", "words.json")))[-1]["t1"] 
 # peak target (dBTP) per kind after normalising: the mix hierarchy
 PEAK = {"whoosh_big": -6, "whoosh": -8, "swish": -10, "pop": -9, "hit": -6, "alert": -9, "stamp": -6, "tick": -16, "success": -8,
         "drop": -8, "sparkle": -12, "click": -10, "type": -17, "rise": -10, "ding": -8, "notify": -8, "logo": -7,
-        "error": -9, "glitch": -8, "scratch": -8, "count": -11}
+        "error": -9, "glitch": -8, "scratch": -8, "count": -11,
+        "crack": -5, "shatter": -5}
 
 
 def run(cmd):
