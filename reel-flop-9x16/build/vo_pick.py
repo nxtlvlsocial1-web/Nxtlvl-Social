@@ -22,6 +22,8 @@ from faster_whisper import WhisperModel
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TAKES = os.path.join(ROOT, "assets", "audio", "vo_takes")
 SR = 48000
+TEMPO = 1.15         # v10 (owner: "make the pacing of video just a little fast, around 38 seconds"): spoken 15% faster, pitch kept
+GAP_SCALE = .6       # and the pauses between lines tightened
 LEAD = .04          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast
 GAP = {"l00": .3, "l01": .22, "l02": .5, "l03": .3, "l04": .12, "l05": .3, "l06": .4, "l07": .12, "l08": .4, "l09": .12, "l10": .3, "l11": .4,
@@ -82,7 +84,7 @@ def main():
             words.append({"line": ln["id"], "w": txt, "t0": round(t + w.start - a / SR, 3), "t1": round(t + w.end - a / SR, 3)})
         out.append(seg.astype(np.float32))
         t += len(seg) / SR
-        g = GAP[ln["id"]]
+        g = GAP[ln["id"]] * GAP_SCALE
         out.append(np.zeros(int(g * SR), dtype=np.float32))
         t += g
         print(f"{ln['id']} take {k} errors {score[0]} spread {-score[1]:.0f} Hz  {len(seg) / SR:.2f}s", flush=True)
@@ -91,8 +93,10 @@ def main():
     sf.write(raw, vo, SR)
     # gentle polish: high-pass, a little compression, then -16 LUFS for the voice on its own
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", raw, "-af",
-                    "highpass=f=80,acompressor=threshold=-20dB:ratio=3:attack=5:release=80:makeup=2,loudnorm=I=-16:TP=-2:LRA=9",
+                    f"atempo={TEMPO},highpass=f=80,acompressor=threshold=-20dB:ratio=3:attack=5:release=80:makeup=2,loudnorm=I=-16:TP=-2:LRA=9",
                     "-ar", str(SR), "-ac", "1", os.path.join(ROOT, "assets", "audio", "vo.wav")], check=True)
+    for w in words:                       # atempo scales time linearly
+        w["t0"], w["t1"] = round(w["t0"] / TEMPO, 3), round(w["t1"] / TEMPO, 3)
     json.dump(words, open(os.path.join(ROOT, "plan", "words.json"), "w"), indent=0)
     json.dump({"duration": round(len(vo) / SR, 3), "takes": log}, open(os.path.join(ROOT, "plan", "vo_pick.json"), "w"), indent=1)
     print(f"vo.wav {len(vo) / SR:.2f}s, {len(words)} words")

@@ -11,11 +11,12 @@ from chatterbox.tts import ChatterboxTTS
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "assets", "audio", "intro")
-TEXT = "Hey guys, welcome back to my channel! So today, I wanna talk about something really"
+# v10 (owner: "make the hey guys person's voice intentionally dumber and funny"): a clueless, goofy delivery
+TEXT = "Heyyy guyyys! Uhhh... welcome back to my... channel?"
 
 m = ChatterboxTTS.from_pretrained(device="cpu")
-for k, seed in enumerate((3, 17)):
+for k, seed in enumerate((3, 17, 29)):
     torch.manual_seed(seed)
-    w = m.generate(TEXT, exaggeration=.3, cfg_weight=.5, temperature=.7)
-    ta.save(os.path.join(OUT, f"bland_t{k}.wav"), w, m.sr)
+    w = m.generate(TEXT, exaggeration=1.1, cfg_weight=.3, temperature=.95)
+    ta.save(os.path.join(OUT, f"dumb_t{k}.wav"), w, m.sr)
     print(k, round(w.shape[-1] / m.sr, 2), flush=True)

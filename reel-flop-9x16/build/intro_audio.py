@@ -19,26 +19,21 @@ SR = 48000
 
 def main():
     m = WhisperModel("Systran/faster-whisper-small.en", device="cpu", compute_type="int8")
-    best = None
-    for k in (0, 1):
-        p = os.path.join(A, f"bland_t{k}.wav")
-        segs, _ = m.transcribe(p, word_timestamps=True, language="en")
-        ws = [w for s in segs for w in s.words]
-        txt = " ".join(w.word.strip().lower() for w in ws)
-        ok = "welcome back" in txt and "channel" in txt
-        if ok and best is None:
-            best = (k, ws)
-    k, ws = best
-    y, _ = librosa.load(os.path.join(A, f"bland_t{k}.wav"), sr=SR)
+    # v10: the goofy take (build/intro_vo.py, take 2: "Hey... guys, ...welcome back..."), two semitones up, sillier
+    k = 2
+    segs, _ = m.transcribe(os.path.join(A, f"dumb_t{k}.wav"), word_timestamps=True, language="en")
+    ws = [w for s in segs for w in s.words]
+    y, _ = librosa.load(os.path.join(A, f"dumb_t{k}.wav"), sr=SR)
+    y = librosa.effects.pitch_shift(y, sr=SR, n_steps=2)
     lead = max(0, ws[0].start - .05)
     y = y[int(lead * SR):]
     words = [{"w": w.word.strip(), "t0": round(w.start - lead, 3), "t1": round(w.end - lead, 3)} for w in ws]
-    td = next(w for w in words if w["w"].lower().startswith("today"))
-    S1 = round(td["t1"] + .06, 3)                    # he gets as far as "So today..." and is swiped away
-    gib = json.load(open(os.path.join(ROOT, "plan", "pixo_sylls.json")))
-    G0 = round(S1 + .32, 3)
-    S2 = round(G0 + gib["dur"] - .05, 3)
-    T0 = round(S2 + .75, 3)
+    wl = next(w for w in words if w["w"].lower().startswith("welcome"))
+    S1 = round(wl["t0"] + .7, 3)                     # he drawls "welcome..." and is swiped away
+    dance = json.load(open(os.path.join(ROOT, "plan", "dance.json")))
+    G0 = round(S1 + .3, 3)                           # the mascots' song starts as reel 2 lands
+    S2 = round(G0 + dance["beat"] * 4 + .05, 3)      # one bar of dancing, then back to reel 1
+    T0 = round(S2 + .55, 3)
     out = np.zeros((int((T0 + .1) * SR), 2), dtype=np.float32)
     b = y[:int((S1 + .06) * SR)]
     fade = int(.06 * SR)
@@ -48,10 +43,13 @@ def main():
     b = np.tanh(b * (.24 / max(np.sqrt(np.mean(act ** 2)), 1e-4)) * 1.3) / 1.3
     out[:len(b), 0] += b
     out[:len(b), 1] += b
-    g, gsr = sf.read(os.path.join(A, "gibberish.wav"), dtype="float32")
+    g, gsr = sf.read(os.path.join(A, "dance.wav"), dtype="float32")
+    g = g[:int((S2 - G0 + .12) * SR)]
+    f2 = int(.1 * SR)
+    g[-f2:] *= np.linspace(1, 0, f2)[:, None]
     i = int(G0 * SR)
     n = min(len(g), len(out) - i)
-    out[i:i + n] += g[:n] * .5
+    out[i:i + n] += g[:n] * .55
     sf.write(os.path.join(A, "intro.wav"), out, SR)
     json.dump({"take": k, "words": words, "S1": S1, "G0": G0, "S2": S2, "T0": T0}, open(os.path.join(ROOT, "plan", "intro_timing.json"), "w"), indent=0)
     print(f"take {k}; scroll to reel 2 at {S1}s, gibberish {G0}s, back at {S2}s, our video at {T0}s")

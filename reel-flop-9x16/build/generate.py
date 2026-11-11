@@ -140,6 +140,10 @@ def phrase(pid, line, rows, top, start=0, t_out=None, left=LEFT, first_visible=F
             k += 1
         out.append("</div>")
     out.append("</div>")
+    # v10: nothing sits still: once a phrase lands it keeps drifting (a slow scale toward the viewer)
+    t_first = ws[start]["t0"] - .05
+    life = (t_out if t_out else t_first + 4) - t_first
+    js(f'tl.fromTo("#{pid}", {{scale: 1}}, {{scale: 1.045, duration: {max(.5, life):.2f}, ease: "none", immediateRender: false}}, {max(0, t_first):.3f});')
     if t_out:
         js(f'tl.to("#{pid}", {{opacity: 0, y: -60, duration: .26, ease: "expo.in"}}, {t_out:.3f});')
     return "".join(out)
@@ -830,7 +834,7 @@ def scenes():
     scene_out("sJ", t_k - .04)
     kw = ["GUIDE", "LINK", "TIPS", "SEND", "HOOK"]
     wK = Wheel("wK", kw, WY + 110, 150, start=0, grads=["gr1"] * 5)
-    phK = phrase("pK", "l12", [("m", "=Save this so you"), ("m", "don't forget,")], PH, t_out=L("l12", 6) - .1)
+    phK = phrase("pK", "l12", [("m", "=Save this so you"), ("m", "don't forget,")], PH, t_out=L("l12", 6) - .3)
     phK2 = phrase("pK2", "l12", [("m", "and comment")], PH, start=6)
     phK3 = phrase("pK3", "l12", [("s", "_for _my _list _of _20 _hooks _that _work.")], 1400, start=9)
     bk = f'<div class="bkm" id="bkm">{icon("bookmark", "bki")}</div>'
@@ -906,7 +910,7 @@ def intro():
     room = ('<div class="room"><i class="win"></i><i class="win2"></i><i class="shelf"></i><i class="plant"><b></b><b></b><b></b></i>'
             '<i class="pot"></i><i class="lamp"></i></div>')
     caps = []
-    chunks = [("Hey guys,", 0, 2), ("welcome back to my channel!", 2, 7), ("So today...", 7, 9)]
+    chunks = [("Heyyy guyyys!", 0, 2), ("uhhh... welcome ba-", 2, 3)]
     for k, (txt, a, b) in enumerate(chunks):
         caps.append(f'<div class="igcap" id="ic{k}">{txt}</div>')
         t_in = IT["words"][a]["t0"] - .02
@@ -918,31 +922,41 @@ def intro():
           f'{reel_overlay("danny.daily.vlogs", av1)}</div>')
     creator_live_i("crI", 0, S1 + .2)
     ji(f'M.fromTo("#r1c", {{x: -6, y: 0, rotation: -.4}}, {{x: 8, y: -6, rotation: .5, duration: 1.3, repeat: 3, yoyo: true, ease: "sine.inOut", immediateRender: false}}, 0);')
-    # ---- reel 2: Pixo, a pixel mascot, introduces himself in gibberish
-    sprites = "".join(f'<img class="pxs" id="px_{n}" src="assets/img/pixo/{n}.png"{" style=opacity:1" if n == "idle" else ""}>' for n in ("idle", "talk", "blink", "waveup", "wavedn"))
-    words = "".join(f'<span class="gw" id="gw{k}">{w}</span> ' for k, w in enumerate(PX["words"]))
+    # ---- reel 2 (v10, owner: "make those mascots dance to a funny song based on their setting"): Pixo and two pixel
+    # friends dance in sync to a goofy 8-bit tune (build/pixo.py): bounces with squash and stretch, arms up / down,
+    # the side ones flipping, pixel notes rising, a "PIXO PARTY!" banner popping on the beat
+    DN = json.load(open(os.path.join(ROOT, "plan", "dance.json")))
+    crew = [("pk", "pink_", 10, 1110, 340), ("mn", "", 310, 1030, 440), ("sn", "sun_", 730, 1110, 340)]
+    dancers = ""
+    for cid, pre, x, y, w in crew:
+        imgs = "".join(f'<img class="pxs" id="dn{cid}_{n}" src="assets/img/pixo/{pre}{n}.png"{" style=opacity:1" if n == "idle" else ""}>' for n in ("idle", "waveup", "wavedn"))
+        dancers += f'<div class="pxd" id="dn{cid}" style="left:{x}px;top:{y}px;width:{w}px;height:{w}px">{imgs}</div>'
+    note = '<svg viewBox="0 0 8 10" shape-rendering="crispEdges"><path fill="#fff" d="M3 0h5v2H5v6H4v1H1V8H0V6h1V5h3V0z"/></svg>'
+    notes = "".join(f'<div class="pxn" id="pxn{k}" style="left:{x}px;top:{y}px">{note}</div>' for k, (x, y) in enumerate([(150, 820), (900, 760), (520, 700), (260, 600), (780, 560)]))
     av2 = '<img src="assets/img/pixo/idle.png" style="width:100%;height:100%;image-rendering:pixelated;background:#6a2fb0">'
-    r2 = (f'<div class="igr" id="igr2" style="top:{RH}px"><img class="pxbg" src="assets/img/pixo/bg.png"><div class="pxm" id="pxm">{sprites}</div>'
-          f'<div class="pxb" id="pxb">{words}</div>{reel_overlay("pixo.planet.fm", av2)}</div>')
+    r2 = (f'<div class="igr" id="igr2" style="top:{RH}px"><img class="pxbg" src="assets/img/pixo/bg.png">{notes}{dancers}'
+          f'<div class="pxb" id="pxb">PIXO PARTY!</div>{reel_overlay("pixo.planet.fm", av2)}</div>')
     # the scroll: the reel stack moves (status bar, nav and comment bar stay put)
     ji(f'M.fromTo("#igstack", {{y: 0}}, {{y: {-RH}, duration: .42, ease: "expo.out", immediateRender: false}}, {S1:.3f});')
     ji(f'M.fromTo("#igstack", {{y: {-RH}}}, {{y: 0, duration: .42, ease: "expo.out", immediateRender: false}}, {S2:.3f});')
     SFX.append({"type": "swish", "t": round(S1 - T0, 3)})
     SFX.append({"type": "swish", "t": round(S2 - T0, 3)})
-    # Pixo talks: the mouth opens on every blip, he bobs, waves on "Mi Pixo!", blinks; the gibberish pops in word by word
-    ji(f'M.fromTo("#pxm", {{y: 0}}, {{y: -16, duration: .22, repeat: {int((S2 - S1) / .22) + 1}, yoyo: true, ease: "steps(2)", immediateRender: false}}, {S1:.3f});')
-    for s_ in PX["sylls"]:
-        t = G0 + s_
-        frame = "waveup" if 1.0 < s_ < 1.9 and int(s_ * 10) % 3 else ("wavedn" if 1.0 < s_ < 1.9 else "talk")
-        ji(f'M.set("#px_idle", {{opacity: 0}}, {t:.3f}); M.set("#px_{frame}", {{opacity: 1}}, {t:.3f});')
-        ji(f'M.set("#px_{frame}", {{opacity: 0}}, {t + .07:.3f}); M.set("#px_idle", {{opacity: 1}}, {t + .07:.3f});')
-    ji(f'M.set("#px_idle", {{opacity: 0}}, {G0 + PX["dur"] - .1:.3f}); M.set("#px_blink", {{opacity: 1}}, {G0 + PX["dur"] - .1:.3f});')
-    ji(f'M.set("#px_blink", {{opacity: 0}}, {G0 + PX["dur"]:.3f}); M.set("#px_idle", {{opacity: 1}}, {G0 + PX["dur"]:.3f});')
-    ji(f'M.fromTo("#pxb", {{opacity: 0, scale: .6}}, {{opacity: 1, scale: 1, duration: .25, ease: "steps(4)", immediateRender: false}}, {G0 - .05:.3f});')
-    for k, t in enumerate(PX["word_t"]):
-        ji(f'M.fromTo("#gw{k}", {{opacity: 0, y: 14}}, {{opacity: 1, y: 0, duration: .12, ease: "steps(3)", immediateRender: false}}, {G0 + t:.3f});')
+    beat = DN["beat"]
+    for k, bt in enumerate(DN["beats"]):
+        t = G0 + bt
+        if t > S2 + .05:
+            break
+        for j, (cid, pre, x, y, w) in enumerate(crew):
+            up = "waveup" if (k + j) % 2 == 0 else "wavedn"
+            ji(f'M.set("#dn{cid}_idle, #dn{cid}_waveup, #dn{cid}_wavedn", {{opacity: 0}}, {t:.3f}); M.set("#dn{cid}_{up}", {{opacity: 1}}, {t:.3f});')
+            flip = -1 if (cid != "mn" and k % 2) else 1
+            ji(f'M.fromTo("#dn{cid}", {{y: 0, scaleX: {1.12 * flip}, scaleY: .86}}, {{keyframes: {{y: [0, -70, 0], scaleX: [{1.12 * flip}, {.92 * flip}, {1.1 * flip}], scaleY: [.86, 1.1, .9]}}, duration: {beat:.3f}, ease: "none", immediateRender: false}}, {t:.3f});')
+        if k < 5:
+            ji(f'M.fromTo("#pxn{k}", {{opacity: 0, y: 0, rotation: 0}}, {{keyframes: {{opacity: [0, 1, 1, 0], y: [0, -80, -160, -240], rotation: [0, -12, 10, 0]}}, duration: 1.1, ease: "none", immediateRender: false}}, {t:.3f});')
+    ji(f'M.fromTo("#pxb", {{opacity: 0, scale: .5}}, {{opacity: 1, scale: 1, duration: .2, ease: "steps(4)", immediateRender: false}}, {G0:.3f});')
+    ji(f'M.fromTo("#pxb", {{rotation: -3}}, {{rotation: 3, duration: {beat:.3f}, repeat: 4, yoyo: true, ease: "steps(2)", immediateRender: false}}, {G0:.3f});')
     # back on reel 1: it is paused (the creator freezes mid-word); then our video takes over and the UI falls away
-    ji(f'M.set("#ic2", {{opacity: 1}}, {S2:.3f});')
+    ji(f'M.set("#ic1", {{opacity: 1}}, {S2:.3f});')
     t_g = T0 - .18
     for k, (dx, op) in enumerate([(14, .9), (-12, .8), (10, .9), (0, 0)]):
         ji(f'M.set("#iglR", {{x: {dx}, opacity: {op}}}, {t_g + k * .045:.3f}); M.set("#iglC", {{x: {-dx}, opacity: {op}}}, {t_g + k * .045:.3f});')
@@ -995,7 +1009,10 @@ INTRO_CSS = """
 .pxbg { position: absolute; left: 0; top: -100px; width: 1080px; height: 1920px; image-rendering: pixelated; }
 .pxm { position: absolute; left: 200px; top: 780px; width: 704px; height: 704px; }
 .pxs { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; opacity: 0; }
-.pxb { position: absolute; left: 70px; right: 70px; top: 330px; padding: 40px 36px; background: #fff; color: #1b1f4a; font-family: PressStart; font-size: 46px; line-height: 1.5;
+.pxd { position: absolute; transform-origin: 50% 100%; }
+.pxn { position: absolute; width: 64px; height: 80px; opacity: 0; filter: drop-shadow(4px 4px 0 rgba(27,31,74,.5)); }
+.pxn svg { width: 100%; height: 100%; }
+.pxb { position: absolute; left: 140px; right: 140px; top: 360px; padding: 40px 36px; background: #fff; color: #1b1f4a; font-family: PressStart; font-size: 58px; line-height: 1.5;
   text-align: center; opacity: 0; box-shadow: 0 0 0 8px #1b1f4a, 12px 12px 0 8px rgba(27,31,74,.45); }
 .gw { opacity: 0; display: inline-block; }
 .igshade { position: absolute; left: 0; right: 0; bottom: 0; height: 520px; background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.5)); z-index: 4; }
@@ -1049,7 +1066,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f4f4
 #flash {{ position: absolute; inset: 0; background: radial-gradient(90% 60% at 50% 50%, #1d1d1d, #050505); opacity: 0; z-index: 2; }}
 .scn {{ position: absolute; inset: 0; opacity: 0; z-index: 3; }}
 /* phrases */
-.ph {{ position: absolute; right: 80px; }}
+.ph {{ position: absolute; right: 80px; transform-origin: 0% 50%; }}
 .ln {{ white-space: nowrap; line-height: 1.08; }}
 .ln.xl, .ln.l {{ letter-spacing: -.035em; line-height: 1.0; }}
 .ln.m {{ letter-spacing: -.025em; }}

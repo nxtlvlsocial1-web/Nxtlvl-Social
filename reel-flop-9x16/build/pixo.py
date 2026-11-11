@@ -23,7 +23,12 @@ C = {"o": (27, 31, 74), "b": (79, 224, 181), "B": (41, 176, 146), "h": (176, 255
      "c": (255, 130, 170), "m": (122, 31, 61), "t": (255, 110, 140), "a": (27, 31, 74), "y": (255, 214, 64), "f": (255, 159, 67), "F": (214, 112, 36)}
 
 
-def sprite(mouth="closed", eyes="open", arm="down"):
+SKINS = {"mint": ((79, 224, 181), (41, 176, 146), (176, 255, 228)), "pink": ((255, 143, 199), (222, 92, 160), (255, 205, 230)),
+         "sun": ((255, 214, 79), (232, 168, 40), (255, 240, 170))}
+
+
+def sprite(mouth="closed", eyes="open", arm="down", skin="mint"):
+    C["b"], C["B"], C["h"] = SKINS[skin]
     g = [[None] * 32 for _ in range(32)]
 
     def px(x, y, k):
@@ -185,11 +190,68 @@ def gibberish():
     return total
 
 
+def dance_song(bars=2, bpm=150):
+    """v10 (owner: "make those mascots dance to a funny song based on their setting"): a goofy 8-bit polka-ish tune,
+    oom-pah bass, a silly melody with pitch slides, noise snares, spring "boings"; made here, original."""
+    import soundfile as sf
+    beat = 60 / bpm
+    n_beats = bars * 4 + 1
+    total = n_beats * beat + .3
+    buf = np.zeros(int(total * SR))
+    t_all = np.arange(len(buf)) / SR
+
+    def add(t0, sig):
+        i = int(t0 * SR)
+        n = min(len(sig), len(buf) - i)
+        if n > 0:
+            buf[i:i + n] += sig[:n]
+
+    def sq(f, d, vol=.3, slide=1.0, duty=.5, dec=6):
+        n = int(d * SR)
+        t = np.arange(n) / SR
+        ff = f * (slide ** (t / d))
+        ph = np.cumsum(ff) / SR % 1
+        return np.where(ph < duty, 1, -1) * np.exp(-t * dec) * vol
+
+    def tri(f, d, vol=.4):
+        n = int(d * SR)
+        t = np.arange(n) / SR
+        return (2 * np.abs(2 * ((f * t) % 1) - 1) - 1) * np.exp(-t * 5) * vol
+
+    def noise(d, vol=.25, dec=28):
+        n = int(d * SR)
+        r = np.random.default_rng(int(d * 1e4)).uniform(-1, 1, n)
+        return r * np.exp(-np.arange(n) / SR * dec) * vol
+    roots = [(131, 196), (147, 220), (131, 196), (98, 147)]
+    mel = [523, 659, 784, 659, 698, 880, 784, 523, 587, 740, 880, 740, 784, 659, 523, 392]
+    for b in range(n_beats):
+        t = b * beat
+        r = roots[(b // 2) % 4]
+        add(t, tri(r[0] if b % 2 == 0 else r[1], beat * .8, .42))             # oom-pah
+        if b % 2:
+            add(t, noise(.12, .22))                                            # snare
+        add(t, sq(60, .06, .5, slide=.4, dec=40))                              # kick blip
+        for h in (0, 1):                                                        # melody in eighths, some sliding
+            k = (b * 2 + h) % len(mel)
+            sl = 1.12 if k % 5 == 2 else (.89 if k % 7 == 3 else 1.0)
+            add(t + h * beat / 2, sq(mel[k], beat / 2 * .9, .2, slide=sl, duty=.25, dec=7))
+        if b % 4 == 3:                                                          # boing
+            add(t + beat / 2, sq(220, .35, .22, slide=3.2, duty=.5, dec=5))
+    buf /= np.max(np.abs(buf)) * 1.12
+    sf.write(os.path.join(AUD, "dance.wav"), np.stack([buf, buf], 1).astype(np.float32), SR)
+    json.dump({"bpm": bpm, "beat": beat, "beats": [round(b * beat, 3) for b in range(n_beats)], "dur": round(total, 3)},
+              open(os.path.join(ROOT, "plan", "dance.json"), "w"), indent=0)
+    return total
+
+
 def main():
     os.makedirs(IMG, exist_ok=True)
     os.makedirs(AUD, exist_ok=True)
-    for name, kw in [("idle", {}), ("talk", {"mouth": "open"}), ("blink", {"eyes": "closed"}), ("waveup", {"arm": "up", "mouth": "open"}), ("wavedn", {"arm": "mid", "mouth": "open"})]:
-        sprite(**kw).save(os.path.join(IMG, f"{name}.png"))
+    for skin in ("mint", "pink", "sun"):
+        for name, kw in [("idle", {}), ("talk", {"mouth": "open"}), ("blink", {"eyes": "closed"}), ("waveup", {"arm": "up", "mouth": "open"}), ("wavedn", {"arm": "mid", "mouth": "open"})]:
+            fn = f"{name}.png" if skin == "mint" else f"{skin}_{name}.png"
+            sprite(skin=skin, **kw).save(os.path.join(IMG, fn))
+    print("dance song", round(dance_song(bars=1), 2), "s")
     scene().save(os.path.join(IMG, "bg.png"))
     print("gibberish", round(gibberish(), 2), "s; sprites + scene written")
 
