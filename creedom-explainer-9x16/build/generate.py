@@ -364,6 +364,19 @@ def caption_track():
 NOCAP = []          # windows where the big type already says the words: no captions there
 
 
+def halo(x, y, size, t0, t1, c1="rgba(255,70,200,.55)", c2="rgba(185,139,255,.32)"):
+    """v10: a soft colour halo behind a scene's key element (the frames read flat and pale without it); it fades in, drifts
+    a little, and fades out with the scene."""
+    i = nid("ha")
+    put(f'<i class="halo" data-layout-allow-overflow id="{i}" style="left:{x - size // 2}px;top:{y - size // 2}px;width:{size}px;height:{size}px;'
+        f'background:radial-gradient(circle, {c1} 0%, {c2} 42%, rgba(255,255,255,0) 70%)"></i>')
+    HIDE.append(f"#{i}")
+    js(f'tl.fromTo("#{i}", {{opacity: 0, scale: .85}}, {{opacity: 1, scale: 1, duration: .6, ease: "power2.out", immediateRender: false}}, {max(.02, t0):.3f});')
+    js(f'tl.fromTo("#{i}", {{rotation: 0, x: 0}}, {{rotation: 25, x: 40, duration: {max(.5, t1 - t0 - .6):.2f}, ease: "sine.inOut", immediateRender: false}}, {max(.02, t0) + .6:.3f});')
+    js(f'tl.to("#{i}", {{opacity: 0, duration: .4, ease: "power1.in"}}, {t1 - .4:.3f});')
+    return i
+
+
 def chars(text, cls="ch"):
     return "".join(f'<span class="{cls}">{c if c != " " else "&nbsp;"}</span>' for c in text)
 
@@ -515,6 +528,8 @@ def scenes():
         push(a, b, *((1, 1.04) if k % 2 == 0 else (1.04, 1)))
 
     # ---- S1 the hook: "This AI told me the exact second people stopped watching my reel."
+    halo(340, 640, 1000, .02, S2 - .1)
+    halo(420, 1080, 900, .25, S2 - .1, "rgba(255,120,90,.42)", "rgba(255,70,200,.22)")
     # Owner's reference (a picker-wheel title): a drum of lines in a tight grotesk; the line in focus in the brand
     # gradient, the ones it has passed above it in fading grey, the next one waiting faint below, a 3D curve on the
     # drum; every turn is a fast upward scroll with a vertical motion blur that settles; a small block beside it
@@ -557,10 +572,12 @@ def scenes():
     blk = "".join(f'<div class="bwm"><span class="bwl" id="bwl{k}">{w}</span></div>' for k, (w, _) in enumerate(words))
     put(f'<div class="dblock" id="dblk" style="left:{XR + 30}px;top:{FY - H // 2 + 6}px">{blk}</div>')
     show("#dblk", .25, S2 - .02)
-    js('tl.fromTo(".bwl", {yPercent: 110, filter: "blur(6px)"}, {yPercent: 0, filter: "blur(0px)", duration: .55, ease: "expo.out", stagger: .07, immediateRender: false}, .25);')
+    # owner (v10): each word only appears when it is spoken; it rises in pink, then settles to ink when the next one comes
     for k, (w, tw) in enumerate(words):
-        js(f'tl.to("#bwl{k}", {{color: "{PINK if k < 3 else "#e11d48"}", duration: .15}}, {tw - .03:.3f});')
-        js(f'tl.fromTo("#bwl{k}", {{scale: 1}}, {{keyframes: [{{scale: 1.12, duration: .1}}, {{scale: 1, duration: .3, ease: "power2.out"}}], immediateRender: false}}, {tw - .03:.3f});')
+        js(f'tl.fromTo("#bwl{k}", {{opacity: 0, yPercent: 110, filter: "blur(8px)", color: "{PINK}"}}, {{opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .45, '
+           f'ease: "expo.out", immediateRender: false}}, {tw - .06:.3f});')
+        if k + 1 < len(words):
+            js(f'tl.to("#bwl{k}", {{color: "#161616", duration: .25}}, {words[k + 1][1] - .06:.3f});')
     # out: the drum keeps turning up and away, the block lifts off
     js(f'tl.to("#drum", {{y: {-(len(items) + 2) * H}, opacity: 0, duration: .45, ease: "power3.in"}}, {S2 - .45:.3f});')
     js(f'tl.fromTo("#vbg", {{attr: {{stdDeviation: "0 0"}}}}, {{attr: {{stdDeviation: "0 24"}}, duration: .45, ease: "power3.in", immediateRender: false}}, {S2 - .45:.3f});')
@@ -569,13 +586,21 @@ def scenes():
     av = "".join(f'<i class="av" id="av{k}"><svg viewBox="0 0 40 40"><circle cx="20" cy="14" r="8"/><path d="M 5 38 C 6 26 34 26 35 38 Z"/></svg></i>' for k in range(7))
     g = glass(f'<div class="gh"><span class="gt">RETENTION</span><span class="gp" id="gp">100%</span></div><div class="avs">{av}</div>'
               f'<svg viewBox="0 0 700 240" class="gs"><path class="gl0" d="M 0 230 H 700"/>'
-              f'<path class="gline" id="gl" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" d="M 0 24 C 80 28 160 34 240 44 C 300 50 330 54 360 58 '
+              f'<path class="gline" id="gl" pathLength="1000" stroke-dasharray="1000" stroke-dashoffset="1000" d="M 0 24 C 80 28 160 34 240 44 C 300 50 330 54 360 58 '
               f'C 380 62 395 130 410 190 C 430 206 520 212 700 216"/><circle class="gdot" id="gd" cx="372" cy="66" r="16"/></svg>'
-              f'<div class="gtag" id="gtag">0:07 &middot; they left here</div>', 70, 880, 690, t_ppl, S2 - .2, cls="graph", flt=False)
-    js(f'tl.fromTo("#gl", {{strokeDashoffset: 1}}, {{strokeDashoffset: 0, duration: .8, ease: "power1.inOut", immediateRender: false}}, {t_ppl + .1:.3f});')
-    js(f'tl.fromTo("#gp", {{textContent: 100}}, {{textContent: 38, duration: .8, ease: "power2.in", snap: {{textContent: 1}}, '
-       f'modifiers: {{textContent: (v) => Math.round(v) + "%"}}, immediateRender: false}}, {t_ppl + .1:.3f});')
-    js(f'tl.fromTo(".av", {{opacity: 0, y: 30, scale: .5}}, {{opacity: 1, y: 0, scale: 1, duration: .35, ease: "back.out(2)", stagger: .04, immediateRender: false}}, {t_ppl:.3f});')
+              f'<div class="gtag" id="gtag">0:07 &middot; they left here</div><i class="phead" id="phd"></i>', 70, 880, 690, .25, S2 - .2, cls="graph", flt=False)
+    # v10 hook: the reel's retention plays live while she speaks (viewers join, the line runs high with a playhead),
+    # the playhead lands on "second.", then the line falls off the cliff on "stopped"
+    js(f'tl.fromTo(".av", {{opacity: 0, y: 30, scale: .5}}, {{opacity: 1, y: 0, scale: 1, duration: .35, ease: "back.out(2)", stagger: .2, immediateRender: false}}, .45);')
+    js(f'tl.fromTo("#gl", {{strokeDashoffset: 1000}}, {{strokeDashoffset: 560, duration: {t_sec - .55:.2f}, ease: "none", immediateRender: false}}, .55);')
+    js(f'tl.fromTo("#phd", {{opacity: 0, x: 0}}, {{opacity: 1, x: 318, duration: {t_sec - .55:.2f}, ease: "none", immediateRender: false}}, .55);')
+    js(f'tl.to("#phd", {{background: "#e11d48", boxShadow: "0 0 18px rgba(225,29,72,.8)", duration: .15}}, {t_sec - .06:.3f});')
+    js(f'tl.fromTo("#gp", {{textContent: 100}}, {{textContent: 96, duration: {t_sec - .55:.2f}, ease: "none", snap: {{textContent: 1}}, '
+       f'modifiers: {{textContent: (v) => Math.round(v) + "%"}}, immediateRender: false}}, .55);')
+    js(f'tl.to("#gl", {{strokeDashoffset: 0, duration: .6, ease: "power2.in"}}, {t_stop - .1:.3f});')
+    js(f'tl.to("#phd", {{opacity: 0, duration: .2}}, {t_stop:.3f});')
+    js(f'tl.fromTo("#gp", {{textContent: 96}}, {{textContent: 38, duration: .6, ease: "power2.in", snap: {{textContent: 1}}, '
+       f'modifiers: {{textContent: (v) => Math.round(v) + "%"}}, immediateRender: false}}, {t_stop - .1:.3f});')
     flip(t_stop, t_stop + .1, "#ff2d55", fade=.15)
     pop("#gd", t_stop - .02, frm=0)
     js(f'tl.to("#gd", {{scale: 1.6, opacity: .5, duration: .25, yoyo: true, repeat: 3}}, {t_stop + .25:.3f});')
@@ -595,6 +620,7 @@ def scenes():
     cree_say(t_stop + .05, "!", d=1.0)
 
     # ---- S2a: "I uploaded a reel that flopped"
+    halo(450, 900, 900, S2, t_cr, "rgba(255,110,90,.48)", "rgba(255,70,200,.26)")
     hf = headline([("I uploaded a reel", 64, t_up, None), ("that [flopped.]", 104, t_flop, "red")], 230, out=t_cr - .4)
     js(f'tl.fromTo("#{hf}l1", {{x: 0}}, {{keyframes: [{{x: -16, duration: .05}}, {{x: 16, duration: .05}}, {{x: -10, duration: .05}}, {{x: 8, duration: .05}}, '
        f'{{x: 0, duration: .05}}], immediateRender: false}}, {t_flop + .35:.3f});')
@@ -618,6 +644,7 @@ def scenes():
     cree_say(t_flop + .1, "...", d=.8, size=70)
 
     # ---- S2b: "into Creedom's Reel Analyzer, and it watched it second by second."
+    halo(540, 1000, 1050, t_cr - .1, S3)
     glitch(t_cr - .12, .9)
     flip(t_cr - .1, t_cr - .02, INK, fade=.1)
     phone_build([("c1_pick.mp4", t_cr - .1, 2.0), ("c2_steps.mp4", t_cr + 1.9, 2.0),
@@ -656,6 +683,7 @@ def scenes():
     glitch(S3 - .1)
 
     # ---- S3: "It told me my [hook worked], but my [energy dropped] in the middle, and that's exactly where [people swiped] away."
+    halo(540, 900, 1050, S3, S4, "rgba(185,139,255,.45)", "rgba(255,70,200,.28)")
     headline([("It told me my", 80, t_it, None)], 330, out=S4 - .4)
     put('<div class="pill" id="pill"><div class="pst" id="pst"><div class="pw">HOOK WORKED &#10003;</div><div class="pw">ENERGY DROPPED &darr;</div>'
         '<div class="pw">PEOPLE SWIPED &larr;</div></div><i class="shine" data-layout-allow-overflow id="pills"></i></div>')
@@ -713,6 +741,7 @@ def scenes():
     glitch(S4 - .2)
 
     # ---- S4: "It also gave me new hooks and showed me what to fix before I post the next one."
+    halo(540, 850, 1100, S4, S5)
     hooks = ["Stanford just open-sourced a real Jarvis", "Stop paying for AI assistants", "This open-source AI sorts your day", "Nobody tells you this about reels",
              "I tested 5 hooks so you don't have to", "Your first 2 seconds decide it"]
     cells = ""
@@ -767,7 +796,9 @@ def scenes():
     NOCAP.append((t_you - .1, t_just - .1))
     liquid(S5 - .6, 540, 2350, S5 - .05)
     flip(S5 - .1, t_just - .15, "radial-gradient(circle at 50% 40%, #fff6fa 0%, #ffd3ea 55%, #ffa6d4 100%)", fade=.2)
-    rays(S5, t_just - .2, n=36, cy=760, color="rgba(255,255,255,.95)")
+    rays(S5, t_just - .2, n=36, cy=760, color="rgba(240,40,170,.8)")
+    halo(540, 700, 1150, S5, t_just - .1, "rgba(255,255,255,.9)", "rgba(255,90,200,.35)")
+    halo(540, 860, 1000, t_just - .2, S6, "rgba(255,70,200,.42)", "rgba(185,139,255,.28)")
     beat("Free.", t_free, t_audit - .03, 330, style="pink", y=560)
     cue(t_free, "hit")
     sparkle(540, 700, t_free + .15, n=12, r=420)
@@ -840,6 +871,7 @@ def scenes():
     flip(S6 - .1, DUR, "radial-gradient(circle at 50% 38%, #fff4fa 0%, #ffcfe7 50%, #ff97cc 100%)", fade=.2)
     glitch(S6 - .1, 1.2)
     rays(S6, S7, n=40, cy=620, color="rgba(255,255,255,.95)")
+    halo(540, 640, 1000, S6, S7 + .2, "rgba(255,255,255,.85)", "rgba(255,120,200,.35)")
     gout(f"#{ff}", S6 - .1, to="up", d=.3)
     cree_to(S6 + .1, 540, 640, .66, d=.6, ease="back.out(1.4)")
     pose(S6 + .1, "wave", flip=False)
@@ -902,7 +934,9 @@ def scenes():
 def background():
     """The website's ground: warm off-white melting into pink, slow pink glows, drifting glass orbs, and (in the hook,
     like the creedom.ai hero) the creator worries floating past in faint grey."""
-    blobs = [(-360, -300, 1000, "#ffb3d9", .45), (520, 1150, 1000, "#ffc2a6", .38), (300, 520, 760, "#ffd1ea", .4), (-300, 1300, 800, "#f9a8d4", .32)]
+    # v10: the glows carry real brand colour (magenta, coral, violet, hot pink) instead of near-white pastel
+    blobs = [(-360, -300, 1000, "#ff5fcf", .34), (520, 1150, 1000, "#ff9a7a", .36), (300, 520, 760, "#c58bff", .22), (-300, 1300, 800, "#ff6fb4", .3),
+             (600, -200, 700, "#ffb36b", .22)]
     html = ""
     for k, (x, y, s, c, o) in enumerate(blobs):
         html += f'<i class="blob" data-layout-allow-overflow id="bl{k}" style="left:{x}px;top:{y}px;width:{s}px;height:{s}px;background:{c};opacity:{o}"></i>'
@@ -935,12 +969,14 @@ CSS = f"""
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6f3; }}
 #root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6f3; font-family: "Manrope"; color: {INK}; }}
-#bgl {{ position: absolute; inset: 0; overflow: hidden; background: linear-gradient(180deg, #f8f7f4 0%, #fbeff5 55%, #ffe1ee 100%); }}
+#bgl {{ position: absolute; inset: 0; overflow: hidden; background: linear-gradient(180deg, #fff6fa 0%, #ffe6f2 42%, #ffd0e6 78%, #ffc0dc 100%); }}
+#grain {{ position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: .07; mix-blend-mode: multiply; background: url(assets/img/grain.png); }}
+.halo {{ position: absolute; border-radius: 50%; opacity: 0; z-index: 1; pointer-events: none; filter: blur(30px); }}
 #dots {{ position: absolute; inset: 0; background-image: radial-gradient(rgba(11,11,11,.06) 2px, transparent 2.5px); background-size: 46px 46px; }}
 .blob {{ position: absolute; border-radius: 50%; filter: blur(110px); }}
-.orb {{ position: absolute; border-radius: 50%; z-index: 1; border: 2px solid rgba(255,255,255,.8);
-  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.95) 0 8%, rgba(255,255,255,.35) 24%, rgba(255,190,225,.2) 62%, rgba(240,50,140,.14) 100%);
-  box-shadow: inset -6px -8px 18px rgba(240,50,140,.14), 0 10px 24px rgba(200,40,120,.1); }}
+.orb {{ position: absolute; border-radius: 50%; z-index: 1; border: 1.5px solid rgba(255,255,255,.95);
+  background: radial-gradient(circle at 30% 26%, #ffffff 0 9%, rgba(255,255,255,.45) 22%, rgba(255,120,205,.38) 52%, rgba(176,120,255,.38) 76%, rgba(255,150,110,.5) 100%);
+  box-shadow: inset -10px -12px 24px rgba(200,50,190,.28), inset 8px 8px 16px rgba(255,255,255,.55), 0 14px 30px rgba(220,40,140,.22); }}
 .worry {{ position: absolute; font: 600 34px/1.15 "Manrope"; color: rgba(11,11,11,.2); white-space: nowrap; }}
 .flip {{ position: absolute; inset: 0; opacity: 0; }}
 #cam, #cam2 {{ position: absolute; inset: 0; transform-origin: 50% 45%; }}
@@ -960,7 +996,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
   background-clip: text; color: transparent; }}
 .dblock {{ position: absolute; opacity: 0; z-index: 9; font: 600 58px/1.06 "Inter"; letter-spacing: -.03em; color: #161616; }}
 .bwm {{ overflow: hidden; padding: 0 .4em .08em 0; margin-right: -.4em; }}
-.bwl {{ display: inline-block; transform-origin: 0 60%; }}
+.bwl {{ display: inline-block; transform-origin: 0 60%; opacity: 0; }}
 /* word beats and titles: the hook's grotesk, gradient accents */
 .beat {{ position: absolute; left: 0; right: 0; opacity: 0; z-index: 9; text-align: center; font-family: "Inter"; font-weight: 700; line-height: 1.02;
   letter-spacing: -.05em; white-space: nowrap; color: #161616; transform-origin: 50% 50%; }}
@@ -991,9 +1027,11 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
 .acc.green {{ background-image: linear-gradient(95deg,#22c47a 0%,#0e9f55 100%); }}
 /* light glass */
 .glass {{ position: absolute; opacity: 0; border-radius: 40px; padding: 28px 32px; overflow: hidden; color: {INK};
-  background: linear-gradient(140deg, rgba(255,255,255,.88) 0%, rgba(255,255,255,.58) 55%, rgba(255,236,246,.7) 100%);
-  border: 2px solid rgba(255,255,255,.95); backdrop-filter: blur(22px) saturate(1.5); -webkit-backdrop-filter: blur(22px) saturate(1.5);
-  box-shadow: 0 30px 70px rgba(170,20,110,.15), 0 6px 18px rgba(170,20,110,.07), inset 0 2px 0 rgba(255,255,255,.95); }}
+  border: 2.5px solid transparent;
+  background: linear-gradient(140deg, rgba(255,255,255,.92) 0%, rgba(255,255,255,.66) 55%, rgba(255,236,246,.78) 100%) padding-box,
+    linear-gradient(135deg, #ff4fd8 0%, #ffc2e4 30%, #ffffff 48%, #ff9a7a 72%, #b98bff 100%) border-box;
+  backdrop-filter: blur(22px) saturate(1.6); -webkit-backdrop-filter: blur(22px) saturate(1.6);
+  box-shadow: 0 30px 70px rgba(220,30,140,.22), 0 0 46px rgba(255,80,180,.16), 0 6px 18px rgba(170,20,110,.08), inset 0 2px 0 rgba(255,255,255,.95); }}
 .shine {{ position: absolute; top: -30%; bottom: -30%; left: -48%; width: 40%; pointer-events: none;
   background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.85) 50%, rgba(255,255,255,0) 100%); transform: skewX(-18deg); }}
 .glass.chip {{ left: 0 !important; right: 0; width: max-content !important; margin: 0 auto; padding: 12px 34px 12px 14px; border-radius: 999px; display: flex;
@@ -1012,6 +1050,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
 .gl0 {{ stroke: rgba(11,11,11,.1); stroke-width: 4; }}
 .gline {{ fill: none; stroke: url(#gr); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 6px 10px rgba(240,50,140,.35)); }}
 .gdot {{ fill: #e11d48; opacity: 0; transform-box: fill-box; transform-origin: center; }}
+.phead {{ position: absolute; left: 32px; top: 196px; width: 4px; height: 250px; border-radius: 2px; opacity: 0; background: rgba(22,22,22,.55); }}
 .gtag {{ position: absolute; left: 300px; top: 176px; opacity: 0; background: {INK}; color: #fff; font: 800 30px/1 "Manrope"; padding: 14px 20px; border-radius: 16px; }}
 /* the flopped reel */
 .glass.reel {{ padding: 0; }}
@@ -1137,6 +1176,8 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f6f6
 #lgf {{ position: absolute; left: -50%; right: -50%; bottom: -12%; height: 52%; transform: perspective(600px) rotateX(62deg); transform-origin: 50% 0;
   background-image: linear-gradient(rgba(240,50,140,.32) 2px, transparent 2px), linear-gradient(90deg, rgba(240,50,140,.32) 2px, transparent 2px); background-size: 120px 120px;
   -webkit-mask-image: linear-gradient(transparent, #000 45%); mask-image: linear-gradient(transparent, #000 45%); }}
+#lgglow {{ position: absolute; left: 40px; top: 440px; width: 1000px; height: 800px; border-radius: 50%; filter: blur(40px);
+  background: radial-gradient(ellipse, rgba(255,90,200,.42) 0%, rgba(255,150,110,.24) 40%, rgba(255,255,255,0) 70%); }}
 #lgm {{ position: absolute; left: 100px; top: 715px; width: 250px; height: 250px; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(200,40,120,.25)); }}
 #lgw {{ position: absolute; left: 372px; top: 786px; width: 616px; height: auto; }}   /* the client's own wordmark (font and gradient), cut from their logo */
 #lgt {{ position: absolute; left: 0; right: 0; top: 1030px; text-align: center; font: 500 46px/1.2 "Manrope"; color: #7a7a73; opacity: 0; }}
@@ -1178,14 +1219,14 @@ def main():
     <svg width="0" height="0" style="position:absolute"><defs>{"".join(VB)}<filter id="vblur" x="-10%" y="-60%" width="120%" height="220%"><feGaussianBlur id="vbg" stdDeviation="0 0"/></filter><linearGradient id="gr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F515E8"/>
       <stop offset=".5" stop-color="#F54BA8"/><stop offset="1" stop-color="#F5876C"/></linearGradient></defs></svg>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
-      <div id="bgl">{bg}{"".join(FLIPS)}<div id="dots"></div></div>
+      <div id="bgl">{bg}{"".join(FLIPS)}<div id="dots"></div></div><div id="grain"></div>
       <div id="cam"><div id="cam2">
       {"".join(EL)}
       {cree}
       </div></div>
       {"".join(CAPS)}
       <div id="lq"></div>
-      <div id="logo"><div id="lgf"></div><img id="lgm" src="assets/img/cree.png" alt="Cree"><img id="lgw" src="assets/img/wordmark.png" alt="Creedom">
+      <div id="logo"><i id="lgglow"></i><div id="lgf"></div><img id="lgm" src="assets/img/cree.png" alt="Cree"><img id="lgw" src="assets/img/wordmark.png" alt="Creedom">
 <div id="lgt">creedom.ai</div></div>
       {"".join(GBANDS)}
       <audio id="mix" src="assets/audio/bed.wav" data-start="0" data-duration="{DUR}" data-track-index="10" data-volume="1"></audio>
