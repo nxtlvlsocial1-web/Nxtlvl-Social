@@ -43,12 +43,15 @@ def main():
     b = y[:int((S1 + .06) * SR)]
     fade = int(.06 * SR)
     b[-fade:] *= np.linspace(1, 0, fade)
-    out[:len(b), 0] += b * .9
-    out[:len(b), 1] += b * .9
+    # level it with our voiceover: RMS to about -12 dBFS, then a soft limiter
+    act = b[np.abs(b) > .01]
+    b = np.tanh(b * (.24 / max(np.sqrt(np.mean(act ** 2)), 1e-4)) * 1.3) / 1.3
+    out[:len(b), 0] += b
+    out[:len(b), 1] += b
     g, gsr = sf.read(os.path.join(A, "gibberish.wav"), dtype="float32")
     i = int(G0 * SR)
     n = min(len(g), len(out) - i)
-    out[i:i + n] += g[:n] * .8
+    out[i:i + n] += g[:n] * .5
     sf.write(os.path.join(A, "intro.wav"), out, SR)
     json.dump({"take": k, "words": words, "S1": S1, "G0": G0, "S2": S2, "T0": T0}, open(os.path.join(ROOT, "plan", "intro_timing.json"), "w"), indent=0)
     print(f"take {k}; scroll to reel 2 at {S1}s, gibberish {G0}s, back at {S2}s, our video at {T0}s")
