@@ -1,0 +1,65 @@
+{
+ "note": "Autopilot reel: Rosa (caf\u00e9 owner), Theo (her developer friend). Open-source voices: Kokoro reference + Chatterbox. [take, speaker, display text or null, [[spoken text, emotion, pause]]]",
+ "lines": [
+  [
+   "01",
+   "rosa",
+   null,
+   [
+    [
+     "Two hundred messages... I can't answer one more.",
+     "neutral",
+     0
+    ]
+   ]
+  ],
+  [
+   "02",
+   "theo",
+   null,
+   [
+    [
+     "Go to sleep. Your marketing won't.",
+     "neutral",
+     0
+    ]
+   ]
+  ],
+  [
+   "03",
+   "rosa",
+   null,
+   [
+    [
+     "Wait... who answered all of these?",
+     "neutral",
+     0
+    ]
+   ]
+  ],
+  [
+   "04",
+   "theo",
+   null,
+   [
+    [
+     "Nobody. It ran itself. For zero dollars.",
+     "neutral",
+     0
+    ]
+   ]
+  ],
+  [
+   "05",
+   "rosa",
+   "Want the whole setup? Follow @nxtlvlsocial.ai ~ ~ and comment AUTOPILOT.",
+   [
+    [
+     "Want the whole setup? Follow next level social, and comment autopilot.",
+     "neutral",
+     0
+    ]
+   ]
+  ]
+ ]
+}

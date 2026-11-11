@@ -1,0 +1,112 @@
+{
+ "01_0": {
+  "who": "rosa",
+  "text": "Two hundred messages... I can't answer one more.",
+  "exaggeration": 0.65,
+  "cfg_weight": 0.4,
+  "seed": 7,
+  "seconds": 3.12,
+  "heard": "200 messages, I can't answer one more.",
+  "match": 0.8,
+  "picked": false
+ },
+ "01_1": {
+  "who": "rosa",
+  "text": "Two hundred messages... I can't answer one more.",
+  "exaggeration": 0.8,
+  "cfg_weight": 0.4,
+  "seed": 21,
+  "seconds": 2.96,
+  "heard": "200 messages, I can't answer one more.",
+  "match": 0.8,
+  "picked": true
+ },
+ "02_0": {
+  "who": "theo",
+  "text": "Go to sleep. Your marketing won't.",
+  "exaggeration": 0.5,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 2.34,
+  "heard": "Go to sleep. Your marketing won't.",
+  "match": 1.0,
+  "picked": true
+ },
+ "02_1": {
+  "who": "theo",
+  "text": "Go to sleep. Your marketing won't.",
+  "exaggeration": 0.65,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 2.7,
+  "heard": "Go to sleep, your marketing won't.",
+  "match": 1.0,
+  "picked": false
+ },
+ "03_0": {
+  "who": "rosa",
+  "text": "Wait... who answered all of these?",
+  "exaggeration": 0.8,
+  "cfg_weight": 0.35,
+  "seed": 7,
+  "seconds": 2.2,
+  "heard": "Wait, who answered all of these?",
+  "match": 1.0,
+  "picked": false
+ },
+ "03_1": {
+  "who": "rosa",
+  "text": "Wait... who answered all of these?",
+  "exaggeration": 0.9500000000000001,
+  "cfg_weight": 0.35,
+  "seed": 21,
+  "seconds": 2.2,
+  "heard": "Wait, who answered all of these?",
+  "match": 1.0,
+  "picked": true
+ },
+ "04_0": {
+  "who": "theo",
+  "text": "Nobody. It ran itself. For zero dollars.",
+  "exaggeration": 0.55,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 3.7,
+  "heard": "Nobody, it ran itself for $0.",
+  "match": 0.769,
+  "picked": false
+ },
+ "04_1": {
+  "who": "theo",
+  "text": "Nobody. It ran itself. For zero dollars.",
+  "exaggeration": 0.7000000000000001,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 3.58,
+  "heard": "Nobody, it ran itself for $0.",
+  "match": 0.769,
+  "picked": true
+ },
+ "05_0": {
+  "who": "rosa",
+  "text": "Want the whole setup? Follow next level social, and comment autopilot.",
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 4.08,
+  "heard": "Want the whole setup? Follow Next Level Social and Comment Autopilot.",
+  "match": 1.0,
+  "picked": true
+ },
+ "05_1": {
+  "who": "rosa",
+  "text": "Want the whole setup? Follow next level social, and comment autopilot.",
+  "exaggeration": 0.7000000000000001,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 4.24,
+  "heard": "Want the whole setup? Follow Next Level Social and Comment Autopilot.",
+  "match": 1.0,
+  "picked": false
+ }
+}
