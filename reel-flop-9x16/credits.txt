@@ -1,0 +1,20 @@
+Reel-flop explainer - sound credits
+
+Music: "Hip-Hop 1" by Deff Syndicate is licensed under CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/),
+found on Openverse, hosted by Jamendo (https://www.jamendo.com/track/164177). Edited (cut to the reel, drop-out at 0:18) by Nxtlvl Social.
+Voice: open-source models run locally: Chatterbox by Resemble AI (MIT), with a reference voice made by Kokoro-82M by hexgrad
+(Apache 2.0, voice af_heart).
+
+Openverse was searched first (sfx/search/*.json); its sound-effect results are Freesound files, whose server refuses
+downloads from this cloud session (HTTP 403), so the effects are CC0 recordings from OpenGameArt:
+
+- 100-cc0-sfx: rubberduck, CC0, https://opengameart.org/content/100-cc0-sfx
+- bell-dingschimes: PWL, CC0, https://opengameart.org/content/bell-dingschimes
+- fantasy-magic-spell: Almitory, CC0, https://opengameart.org/content/fantasy-magic-spell
+- fantasy-sound-effects-tinysized-sfx: Vehicle, CC0, https://opengameart.org/content/fantasy-sound-effects-tinysized-sfx
+- interface-sounds: Kenney, CC0, https://opengameart.org/content/interface-sounds
+- swishes-sound-pack: artisticdude, CC0, https://opengameart.org/content/swishes-sound-pack
+- ui-sounds: StumpyStrust, CC0, https://opengameart.org/content/ui-sounds
+- wind-hit-time-morph: qubodup, CC0, https://opengameart.org/content/wind-hit-time-morph
+
+CC0 needs no credit; listed for the record.
