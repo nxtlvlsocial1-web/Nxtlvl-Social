@@ -1,0 +1,255 @@
+{
+ "duration": 37.267,
+ "lines": [
+  {
+   "line": 1,
+   "take": "01",
+   "cand": "01a",
+   "text": "Psst. There's a secret store... where every paid app is free.",
+   "start": 0.12,
+   "end": 3.707,
+   "phrases": [
+    {
+     "text": "Psst.",
+     "start": 0.147,
+     "end": 0.418
+    },
+    {
+     "text": "There's a secret store...",
+     "start": 0.65,
+     "end": 1.767
+    },
+    {
+     "text": "where every paid app is free.",
+     "start": 1.969,
+     "end": 3.662
+    }
+   ]
+  },
+  {
+   "line": 2,
+   "take": "02",
+   "cand": "02a",
+   "text": "Almost nobody knows the door.",
+   "start": 3.887,
+   "end": 5.681,
+   "phrases": [
+    {
+     "text": "Almost nobody knows the door.",
+     "start": 3.914,
+     "end": 5.636
+    }
+   ]
+  },
+  {
+   "line": 3,
+   "take": "03",
+   "cand": "03a",
+   "text": "Rare chest! Typeform? Formbricks. Free.",
+   "start": 7.681,
+   "end": 10.648,
+   "phrases": [
+    {
+     "text": "Rare chest!",
+     "start": 7.708,
+     "end": 8.505
+    },
+    {
+     "text": "Typeform?",
+     "start": 8.687,
+     "end": 9.196
+    },
+    {
+     "text": "Formbricks.",
+     "start": 9.398,
+     "end": 10.005
+    },
+    {
+     "text": "Free.",
+     "start": 10.187,
+     "end": 10.603
+    }
+   ]
+  },
+  {
+   "line": 4,
+   "take": "04",
+   "cand": "04a",
+   "text": "Mailchimp? Listmonk. Free!",
+   "start": 10.968,
+   "end": 12.896,
+   "phrases": [
+    {
+     "text": "Mailchimp?",
+     "start": 10.995,
+     "end": 11.542
+    },
+    {
+     "text": "Listmonk.",
+     "start": 11.724,
+     "end": 12.264
+    },
+    {
+     "text": "Free!",
+     "start": 12.436,
+     "end": 12.851
+    }
+   ]
+  },
+  {
+   "line": 5,
+   "take": "05",
+   "cand": "05c",
+   "text": "Epic! DocuSign? Documenso. Google Analytics? Umami.",
+   "start": 13.316,
+   "end": 17.229,
+   "phrases": [
+    {
+     "text": "Epic!",
+     "start": 13.343,
+     "end": 13.858
+    },
+    {
+     "text": "DocuSign?",
+     "start": 14.03,
+     "end": 14.616
+    },
+    {
+     "text": "Documenso.",
+     "start": 14.788,
+     "end": 15.567
+    },
+    {
+     "text": "Google Analytics?",
+     "start": 15.769,
+     "end": 16.513
+    },
+    {
+     "text": "Umami.",
+     "start": 16.685,
+     "end": 17.184
+    }
+   ]
+  },
+  {
+   "line": 6,
+   "take": "06",
+   "cand": "06b",
+   "text": "Legendary. Otter? Whisper. Transcribes anything... free.",
+   "start": 17.649,
+   "end": 21.801,
+   "phrases": [
+    {
+     "text": "Legendary.",
+     "start": 17.676,
+     "end": 18.624
+    },
+    {
+     "text": "Otter?",
+     "start": 18.826,
+     "end": 19.176
+    },
+    {
+     "text": "Whisper.",
+     "start": 19.358,
+     "end": 19.744
+    },
+    {
+     "text": "Transcribes anything...",
+     "start": 19.946,
+     "end": 21.037
+    },
+    {
+     "text": "free.",
+     "start": 21.289,
+     "end": 21.756
+    }
+   ]
+  },
+  {
+   "line": 7,
+   "take": "07",
+   "cand": "07b",
+   "text": "And the... MYTHIC.",
+   "start": 22.301,
+   "end": 24.029,
+   "phrases": [
+    {
+     "text": "And the...",
+     "start": 22.328,
+     "end": 22.8
+    },
+    {
+     "text": "MYTHIC.",
+     "start": 23.212,
+     "end": 23.984
+    }
+   ]
+  },
+  {
+   "line": 8,
+   "take": "08",
+   "cand": "08a",
+   "text": "Zapier? n8n! Automate your whole business... for free!",
+   "start": 24.829,
+   "end": 28.708,
+   "phrases": [
+    {
+     "text": "Zapier?",
+     "start": 24.856,
+     "end": 25.412
+    },
+    {
+     "text": "N-eight-N!",
+     "start": 25.594,
+     "end": 26.393
+    },
+    {
+     "text": "Automate your whole business...",
+     "start": 26.595,
+     "end": 27.886
+    },
+    {
+     "text": "for free!",
+     "start": 28.118,
+     "end": 28.663
+    }
+   ]
+  },
+  {
+   "line": 9,
+   "take": "09",
+   "cand": "09a",
+   "text": "But there are three more chests... and I only open them in DMs.",
+   "start": 29.128,
+   "end": 33.242,
+   "phrases": [
+    {
+     "text": "But there are three more chests...",
+     "start": 29.155,
+     "end": 30.908
+    },
+    {
+     "text": "and I only open them in DMs.",
+     "start": 31.14,
+     "end": 33.197
+    }
+   ]
+  },
+  {
+   "line": 10,
+   "take": "10",
+   "cand": "10b",
+   "text": "Comment REPO, and I'll send you all nine.",
+   "start": 33.462,
+   "end": 35.767,
+   "phrases": [
+    {
+     "text": "Comment REPO, and I'll send you all nine.",
+     "start": 33.489,
+     "end": 35.722
+    }
+   ]
+  }
+ ]
+}
