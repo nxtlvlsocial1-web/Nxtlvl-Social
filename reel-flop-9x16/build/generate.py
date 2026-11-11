@@ -1,44 +1,35 @@
-"""Reel-flop explainer, 9:16 (1080x1920, 30 fps): "Your reel didn't flop because of the algorithm."
+"""Reel-flop explainer, 9:16 (1080x1920, 30 fps), v4: black-and-white PAPERCRAFT.
 
-Owner's brief: an explainer from their script card, no @ handle anywhere (the CTA is only in the script), a minimal
-white-and-black gradient ground, one red accent (picked: "3-second autopsy" concept, one red accent, no brand).
+Owner: v3 "still feels dull" (music too slow/flat, look too flat/grey, too still between cuts) and sent a reference reel
+(reference/ref.mp4, kept out of git): a papercraft / stop-motion explainer. Owner picked: black/white papercraft (the red
+accent stays), no character, props built in code. Its grammar, rebuilt here in our own black/white world:
+  * every section is its own crumpled-paper world (light / mid / dark paper, build/paper.py) standing on a cardboard
+    floor; sections whip-pan into each other;
+  * props are paper cut-outs: rough edges that "boil" like stop-motion (one SVG turbulence filter whose seed changes 12
+    times a second) and hard drop shadows; they pop in with a squash;
+  * a taped paper headline strip at the top of each section;
+  * the spoken words land one by one as ransom-note paper scraps on the floor (Fraunces), key words on red paper;
+  * the camera never sits still: a slow push-in in every section, punches on key words, a paper sunburst on peaks.
+Script, voice, word timings and the hook (cold-open slams + paper tear, the fake swipe, the "algorithm" scrap tearing
+into a giant 3, the countdown) are unchanged in content. v3 is kept in cache/generate_v3_backup.py.
 
-The idea: a reel lives or dies in its first 3 seconds, so the video acts it out. Problems play on the light (white) side,
-each fix and each big line on the dark (black) side: an iris wipe flips the ground on every beat. Red is kept for the
-moments a reel dies (the strike-through, the 0 on the countdown, "killing", the swipe-away, the scroll-past, "too late").
-Every word appears only when it is spoken (plan/words.json, from build/vo_pick.py). Mock reels in a phone show each
-mistake failing, then fixed; no usernames, handles or logos.
-
-python3 build/generate.py  ->  index.html, plan/sfx_events.json
-(needs fontTools + brotli for the text fit: /root/tts/.venv/bin/python build/generate.py)
+/root/tts/.venv/bin/python build/generate.py  ->  index.html, plan/sfx_events.json
 """
 import json
+import math
 import os
+import random
 
 from fontTools.ttLib import TTFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FW, FH, FPS = 1080, 1920, 30
 WORDS = json.load(open(os.path.join(ROOT, "plan", "words.json")))
-DUR = round(WORDS[-1]["t1"] + 1.7, 2)          # the CTA holds ~1.7 s after the last word
-INK, PAPER, RED = "#0b0b0b", "#f6f6f6", "#ff2a2a"
-GREY_L, GREY_D = "#6f6f6f", "#9c9c9c"           # secondary text on light / dark
+DUR = round(WORDS[-1]["t1"] + 1.7, 2)
+INK, PAPER, RED = "#141414", "#f1efea", "#e8262a"
+FLOOR_Y = 1300
 A, SFX = [], []
-MAXW = 920
-
-# ---------------------------------------------------------------- text measuring (Inter, the weights used)
-_F = {}
-
-
-def text_w(s, size, weight, ls):
-    if weight not in _F:
-        f = TTFont(os.path.join(ROOT, "assets", "fonts", f"inter-latin-{weight}-normal.woff2"))
-        _F[weight] = (f.getBestCmap(), f["hmtx"], f["head"].unitsPerEm)
-    cmap, hm, upm = _F[weight]
-    return sum(hm[cmap.get(ord(c), cmap[ord("n")])][0] for c in s) / upm * size + ls * size * (len(s) - 1)
-
-
-STYLE = {"big": (132, 800, -.035), "mid": (92, 800, -.03), "sm": (60, 600, -.01)}
+R = random.Random(42)
 
 
 def js(s):
@@ -46,118 +37,203 @@ def js(s):
 
 
 def sfx(kind, t):
-    SFX.append({"type": kind, "t": round(t, 3)})
-
-
-def W(line, i, key="t0"):
-    ws = [w for w in WORDS if w["line"] == line]
-    return ws[i][key]
+    SFX.append({"type": kind, "t": round(max(0, t), 3)})
 
 
 def words_of(line):
     return [w for w in WORDS if w["line"] == line]
 
 
-# ---------------------------------------------------------------- words that appear as they are spoken
-def title(tid, line, rows, top, scheme="light", start=0, t_out=None, extra_cls=""):
-    """rows: [(style, "display text")]; display words pair one by one with the line's spoken words from `start`.
-    *word* marks the red accent. Each word rises in, sharp, on its own spoken time; the block drifts up slowly while
-    on screen and leaves (if t_out) blurred and lifted."""
-    ws = words_of(line)
-    k = start
-    html = [f'<div class="tt {scheme} {extra_cls}" id="{tid}" style="top:{top}px">']
-    first = ws[start]["t0"]
-    for r, (style, text) in enumerate(rows):
-        size, weight, ls = STYLE[style]
-        plain = text.replace("*", "").replace("~", "")
-        size = min(size, int(MAXW / text_w(plain, 1, weight, ls)))
-        html.append(f'<div class="ln {style}" style="font-size:{size}px">')
-        for j, word in enumerate(text.split(" ")):
-            red, stk = word.startswith("*"), word.startswith("~")
-            word = word.replace("*", "").replace("~", "")
-            wid = f"{tid}_{r}_{j}"
-            inner = f'{word}<i class="stk" id="{wid}s"></i>' if stk else word
-            html.append(f'<span class="w{" red" if red else ""}" id="{wid}">{inner}</span>')
-            t = ws[k]["t0"]
-            js(f'tl.fromTo("#{wid}", {{opacity: 0, yPercent: 45, filter: "blur(10px)"}}, {{opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}}, {t - .04:.3f});')
-            k += 1
-        html.append('</div>')
-    html.append('</div>')
-    js(f'tl.set("#{tid}", {{opacity: 1}}, {first - .05:.3f});')
-    end = t_out if t_out else DUR
-    js(f'tl.fromTo("#{tid}", {{y: 0}}, {{y: -16, duration: {end - first + .3:.3f}, ease: "none", immediateRender: false}}, {first - .05:.3f});')
-    if t_out:
-        js(f'tl.to("#{tid}", {{opacity: 0, yPercent: -12, filter: "blur(10px)", duration: .3, ease: "power2.in"}}, {t_out:.3f});')
-    return "".join(html)
+def L(line, i, key="t0"):
+    return words_of(line)[i][key]
 
 
-def kicker(kid, text, top, t, t_out, scheme="light"):
-    js(f'tl.fromTo("#{kid}", {{opacity: 0, y: 14}}, {{opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}}, {t:.3f});')
-    js(f'tl.to("#{kid}", {{opacity: 0, filter: "blur(6px)", duration: .25, ease: "power2.in"}}, {t_out:.3f});')
-    return f'<div class="kick {scheme}" id="{kid}" style="top:{top}px">{text}</div>'
+# ---------------------------------------------------------------- text measuring
+_F = {}
+FONT_FILE = {"inter": "inter-latin-{w}-normal.woff2", "fraunces": "fraunces-latin-{w}-normal.woff2"}
 
 
-def show(sel, t, d=.4, y=24, ease="expo.out", extra=""):
-    js(f'tl.fromTo("{sel}", {{opacity: 0, y: {y}{", " + extra.split("|")[0] if extra else ""}}}, {{opacity: 1, y: 0{", " + extra.split("|")[1] if extra else ""}, duration: {d}, ease: "{ease}", immediateRender: false}}, {t:.3f});')
+def font(family, weight):
+    key = (family, weight)
+    if key not in _F:
+        _F[key] = TTFont(os.path.join(ROOT, "assets", "fonts", FONT_FILE[family].format(w=weight)))
+    return _F[key]
 
 
-def hide(sel, t, d=.3):
-    js(f'tl.to("{sel}", {{opacity: 0, filter: "blur(8px)", duration: {d}, ease: "power2.in"}}, {t:.3f});')
+def text_w(s, size, family="inter", weight=800, ls=0.0):
+    f = font(family, weight)
+    cmap, hm, upm = f.getBestCmap(), f["hmtx"], f["head"].unitsPerEm
+    return sum(hm[cmap.get(ord(c), cmap[ord("n")])][0] for c in s) / upm * size + ls * size * max(0, len(s) - 1)
 
 
-def font_metrics(weight=800):
-    f = TTFont(os.path.join(ROOT, "assets", "fonts", f"inter-latin-{weight}-normal.woff2"))
-    hh, upm = f["hhea"], f["head"].unitsPerEm
-    return hh.ascent / upm, -hh.descent / upm, f
-
-
-def shard_points(n=150):
-    """Start points inside the letters of "algorithm." (where the caption draws it) and end points inside a giant "3"
-    (where #bign draws it), both from the real font outlines rasterised with PIL. Returns (starts, targets, (x, top))."""
-    import random
-
-    from PIL import Image, ImageDraw, ImageFont
-    asc, desc, f = font_metrics(800)
-    ttf = os.path.join(ROOT, "cache", "inter-800.ttf")
-    if not os.path.exists(ttf):
-        os.makedirs(os.path.dirname(ttf), exist_ok=True)
+def ttf(family, weight):
+    path = os.path.join(ROOT, "cache", f"{family}-{weight}.ttf")
+    if not os.path.exists(path):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        f = TTFont(os.path.join(ROOT, "assets", "fonts", FONT_FILE[family].format(w=weight)))
         f.flavor = None
-        f.save(ttf)
-    upm = f["head"].unitsPerEm
-
-    def base(top, size, lh):
-        return top + ((lh - (asc + desc)) / 2 + asc) * size
-
-    def sample(text, size, x, baseline, k, seed):
-        im = Image.new("L", (FW, FH), 0)
-        ImageDraw.Draw(im).text((x, baseline), text, font=ImageFont.truetype(ttf, size), fill=255, anchor="ls")
-        px = [(i % FW, i // FW) for i, v in enumerate(im.getdata()) if v > 128]
-        r = random.Random(seed)
-        return r.sample(px, k)
-
-    # caption row 4 of #t1 (top 600: big, big, sm, big)
-    big, sm = STYLE["big"][0], STYLE["sm"][0]
-    row4 = 600 + 2 * big * 1.07 + sm * 1.3
-    starts = sample("algorithm.", big, 80, base(row4, big, 1.07), n, 3)
-    # the giant numeral: font-size 1100, line-height 1, centred; its digit top at y 690
-    size = 1100
-    adv = f["hmtx"][f.getBestCmap()[ord("3")]][0] / upm * size
-    glyf_top = f["glyf"][f.getBestCmap()[ord("3")]].yMax / upm * size if "glyf" in f else .73 * size
-    top = round(690 - (base(0, size, 1.0) - glyf_top))
-    targets = sample("3", size, 540 - adv / 2, base(top, size, 1.0), n, 5)
-    key = lambda p: p[0] + .35 * p[1]    # noqa: E731
-    return sorted(starts, key=key), sorted(targets, key=key), (540 - adv / 2, top)
+        f.save(path)
+    return path
 
 
-IMPACT = (560, 1000)
-GLASS_CENTRES = []
+# ---------------------------------------------------------------- sections (paper worlds) and the camera
+def section(sid, tone, t0, t1, inner, floor=True, strip=None, push=.05, alt=None):
+    """A paper world: ground + floor + the scene inside a moving camera + a taped headline strip. `alt`: a second
+    ground/floor tone, hidden, that hard cuts can switch on (#sid_g2 / #sid_f2)."""
+    fl = f'<div class="floor {tone}"></div>' if floor else ""
+    if alt:
+        fl += f'<div class="floor {alt}" id="{sid}_f2" style="opacity:0"></div>'
+    g2 = f'<div class="gnd {alt}" id="{sid}_g2" style="opacity:0"></div>' if alt else ""
+    st = ""
+    if strip:
+        w = text_w(strip, 46, "inter", 800, .02) + 72
+        st = (f'<div class="strip" id="{sid}_st" style="width:{w:.0f}px;margin-left:{-w / 2:.0f}px">{strip}'
+              f'<i class="tape tl"></i><i class="tape tr"></i></div>')
+        js(f'tl.fromTo("#{sid}_st", {{opacity: 0, y: -60, rotation: -9}}, {{opacity: 1, y: 0, rotation: -1.5, duration: .4, ease: "back.out(2.2)", immediateRender: false}}, {t0 + .12:.3f});')
+        sfx("paper", t0 + .14)
+    js(f'tl.fromTo("#{sid}_cam", {{scale: 1}}, {{scale: {1 + push}, duration: {max(.5, t1 - t0 + .4):.2f}, ease: "none", immediateRender: false}}, {t0:.3f});')
+    return (f'<div class="sec" id="{sid}"><div class="gnd {tone}" id="{sid}_g"></div>{g2}<div class="cam" id="{sid}_cam">{fl}'
+            f'<div class="punch" id="{sid}_p">{inner}</div></div>{st}</div>')
 
 
-def glass_grid():
-    """A cracked-glass pattern around the impact point: jittered rings x sectors. The radial and ring edges are the
-    crack lines, and the cells are the pieces that fall, so cracks and pieces line up exactly."""
-    import math
-    import random
+def show_sec(sid, t):
+    js(f'tl.set("#{sid}", {{visibility: "visible"}}, {t:.3f});')
+
+
+def hide_sec(sid, t):
+    js(f'tl.set("#{sid}", {{visibility: "hidden"}}, {t:.3f});')
+
+
+def whip(a, b, t, d=1):
+    """Whip pan from section a to section b at time t (the new world slides in, the old out, both blurred)."""
+    show_sec(b, t)
+    js(f'tl.fromTo("#{b}", {{x: {FW * d}, filter: "blur(16px)"}}, {{x: 0, filter: "blur(0px)", duration: .34, ease: "expo.inOut", immediateRender: false}}, {t:.3f});')
+    js(f'tl.fromTo("#{a}", {{x: 0, filter: "blur(0px)"}}, {{x: {-FW * d}, filter: "blur(16px)", duration: .34, ease: "expo.inOut", immediateRender: false}}, {t:.3f});')
+    hide_sec(a, t + .36)
+    sfx("whoosh", t)
+
+
+def punch(sid, t, amt=.06):
+    """A zoom punch on a key word: a quick extra scale on the section's punch layer that settles back."""
+    js(f'tl.fromTo("#{sid}_p", {{scale: 1}}, {{keyframes: {{scale: [1, {1 + amt}, 1]}}, duration: .4, ease: "power2.out", immediateRender: false}}, {t - .02:.3f});')
+
+
+def pop(sel, t, d=.32, rot=0, y=40, sc=.6):
+    """A cut-out pops in with a squash (stop-motion feel: overshoot and settle)."""
+    js(f'tl.fromTo("{sel}", {{opacity: 0, scale: {sc}, y: {y}, rotation: {rot - 8}}}, {{opacity: 1, scale: 1, y: 0, rotation: {rot}, duration: {d}, ease: "back.out(2.6)", immediateRender: false}}, {t:.3f});')
+
+
+def stamp(sel, t, rot=-8):
+    """A rubber stamp slams on (red ink)."""
+    js(f'tl.fromTo("{sel}", {{opacity: 0, scale: 2.2, rotation: {rot - 10}}}, {{opacity: 1, scale: 1, rotation: {rot}, duration: .2, ease: "power4.in", immediateRender: false}}, {t:.3f});')
+    sfx("stamp", t + .18)
+
+
+def sunburst(sid, n=22):
+    rays = []
+    for i in range(n):
+        a0, a1 = i * 2 * math.pi / n, (i + .5) * 2 * math.pi / n
+        p = f"0,0 {1600 * math.cos(a0):.0f},{1600 * math.sin(a0):.0f} {1600 * math.cos(a1):.0f},{1600 * math.sin(a1):.0f}"
+        rays.append(f'<polygon points="{p}"/>')
+    return f'<svg class="sun" id="{sid}" viewBox="-1600 -1600 3200 3200">{"".join(rays)}</svg>'
+
+
+# ---------------------------------------------------------------- ransom-note captions (global layer, on the floor)
+CAP = []
+KEY = {"algorithm.", "three", "\"Hey", "guys.\"", "still.", "show.", "result", "\"HOOK\"", "flopped", "nothing", "first,", "Fix", "Save"}
+CAP_TOP, CAP_MAXW, CAP_SIZE = 1350, 940, 56
+SCRAP_POS = {}
+
+
+def cap_layout(ws):
+    """Rows of scraps for a chunk of words, centred, wrapping at CAP_MAXW. Returns ([(word, x, y, w)], rows)."""
+    rows, row, rw = [], [], 0
+    for w in ws:
+        wd = text_w(w["w"], CAP_SIZE, "fraunces", 700) + 30
+        if row and rw + wd + 12 > CAP_MAXW:
+            rows.append((row, rw))
+            row, rw = [], 0
+        rw += wd + (12 if row else 0)
+        row.append((w, wd))
+    if row:
+        rows.append((row, rw))
+    out = []
+    for ri, (row, rw) in enumerate(rows):
+        x = (FW - rw) / 2
+        for w, wd in row:
+            out.append((w, x, CAP_TOP + ri * 92, wd))
+            x += wd + 12
+    return out, len(rows)
+
+
+def chunks(line):
+    """Split a spoken line into chunks of at most two rows of scraps, breaking after commas where possible."""
+    out, cur = [], []
+    for w in words_of(line):
+        cur.append(w)
+        if cap_layout(cur)[1] > 2:
+            cur.pop()
+            cut = max((i for i, x in enumerate(cur) if x["w"].endswith(",")), default=None)
+            if cut is not None and cut < len(cur) - 1:
+                out.append(cur[:cut + 1])
+                cur = cur[cut + 1:]
+            else:
+                out.append(cur)
+                cur = []
+            cur.append(w)
+    if cur:
+        out.append(cur)
+    return out
+
+
+def captions(lines):
+    groups = []
+    for line in lines:
+        groups += chunks(line)
+    k = 0
+    for gi, g in enumerate(groups):
+        lay, _ = cap_layout(g)
+        t_end = groups[gi + 1][0]["t0"] - .06 if gi + 1 < len(groups) else None
+        for w, x, y, wd in lay:
+            sid = f"cp{k}"
+            k += 1
+            red = w["w"] in KEY
+            rot = R.uniform(-4, 4)
+            dy = R.uniform(-6, 6)
+            mark = '<i class="mk"></i>' if (w["line"], w["w"]) == ("l01", "algorithm.") else ""
+            CAP.append(f'<div class="scrap{" red" if red else ""}" id="{sid}" style="left:{x:.0f}px;top:{y + dy:.0f}px;width:{wd:.0f}px">'
+                       f'{w["w"].replace(chr(34), "&quot;")}{mark}</div>')
+            SCRAP_POS[(w["line"], w["w"])] = (x, y + dy, wd, sid)
+            js(f'tl.fromTo("#{sid}", {{opacity: 0, scale: 1.45, rotation: {rot + R.choice([-10, 10]):.1f}, y: -14}}, {{opacity: 1, scale: 1, rotation: {rot:.1f}, y: 0, duration: .2, ease: "back.out(3)", immediateRender: false}}, {w["t0"] - .03:.3f});')
+            if t_end:
+                js(f'tl.to("#{sid}", {{opacity: 0, y: 60, rotation: {rot + R.uniform(-25, 25):.0f}, duration: .16, ease: "power2.in"}}, {t_end:.3f});')
+        sfx("paper", g[0]["t0"] - .03)
+
+
+# ---------------------------------------------------------------- props
+def phone(pid, screens, x=305, y=520, w=470, h=760):
+    return (f'<div class="phone pp" id="{pid}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px">'
+            f'<div class="scr" id="{pid}_scr">{screens}</div><i class="notch"></i></div>')
+
+
+def person(cls=""):
+    return f'<div class="person {cls}"><i class="hd"></i><i class="bd"></i></div>'
+
+
+def pbar(bid, mk=True):
+    return f'<div class="pbar"><i class="pfill" id="{bid}"></i>{"<i class=mk></i>" if mk else ""}</div>'
+
+
+def lines3():
+    return '<i class="ln1"></i><i class="ln2"></i><i class="ln3"></i>'
+
+
+# ---------------------------------------------------------------- cold open: slams, a rip, the paper tears away
+IMPACT = (560, 980)
+GLASS = []
+
+
+def tear_grid():
     r = random.Random(4)
     radii = [0, 110, 300, 600, 1000, 2400]
     n = 13
@@ -176,16 +252,17 @@ def glass_grid():
     return P
 
 
+def slam_card(cid, tone, col, rows, shown=False):
+    h = "".join(f'<div class="sw" id="{cid}w{j}" style="font-size:{min(sz, int(940 / max(1, text_w(t, 1, "inter", 800, -.04))))}px">{t}</div>'
+                for j, (t, sz) in enumerate(rows))
+    return f'<div class="scard {tone}" id="{cid}" style="color:{col};{"opacity:1" if shown else ""}">{h}</div>'
+
+
 def cold_open():
-    """The slam cards (THIS / REEL / IS ABOUT TO / LOSE / YOU.), the crack lines and the glass pieces."""
-    def card(cid, bg, col, rows, shown=False):
-        h = "".join(f'<div class="sw" id="{cid}w{j}" style="font-size:{min(sz, int(MAXW / text_w(t, 1, 800, -.04)))}px">{t}</div>'
-                    for j, (t, sz) in enumerate(rows))
-        return f'<div class="scard" id="{cid}" style="background:{bg};color:{col};{"opacity:1" if shown else ""}">{h}</div>'
-    cards = (card("sc0", "#f4f4f4", INK, [("THIS", 360)], shown=True) + card("sc1", "#050505", "#ffffff", [("REEL", 360)])
-             + card("sc2", "#f4f4f4", INK, [("IS", 250), ("ABOUT", 250), ("TO", 250)]) + card("sc3", RED, "#ffffff", [("LOSE", 380)])
-             + card("sc4", "#f4f4f4", INK, [("YOU.", 380)]))
-    P = glass_grid()
+    cards = (slam_card("sc0", "light", INK, [("THIS", 360)], shown=True) + slam_card("sc1", "dark", PAPER, [("REEL", 360)])
+             + slam_card("sc2", "light", INK, [("IS", 250), ("ABOUT", 250), ("TO", 250)]) + slam_card("sc3", "redp", PAPER, [("LOSE", 380)])
+             + slam_card("sc4", "light", INK, [("YOU.", 380)]))
+    P = tear_grid()
     lines = []
     for a in range(len(P[0])):
         pts = " ".join(f"{P[ri][a][0]:.0f},{P[ri][a][1]:.0f}" for ri in range(len(P)))
@@ -196,10 +273,8 @@ def cold_open():
                 continue
             b = (a + 1) % len(P[0])
             lines.append(f'<polyline class="crk" pathLength="1000" points="{P[ri][a][0]:.0f},{P[ri][a][1]:.0f} {P[ri][b][0]:.0f},{P[ri][b][1]:.0f}"/>')
-    cracks = (f'<svg id="cracks" viewBox="0 0 {FW} {FH}"><g class="under">{"".join(lines)}</g><g class="over">{"".join(lines)}</g>'
-              f'<circle cx="{IMPACT[0]}" cy="{IMPACT[1]}" r="26" class="imp"/></svg>')
-    # pieces: each a full-screen copy of the "YOU." card (and its cracks), clipped to one cell
-    you = card("x", "#f4f4f4", INK, [("YOU.", 380)], shown=True).replace('id="x"', "").replace('id="xw0"', "")
+    cracks = f'<svg id="cracks" viewBox="0 0 {FW} {FH}"><g class="under">{"".join(lines)}</g><g class="over">{"".join(lines)}</g></svg>'
+    you = slam_card("x", "light", INK, [("YOU.", 380)], shown=True).replace('id="x"', "").replace('id="xw0"', "")
     pieces = []
     for ri in range(len(P) - 1):
         for a in range(len(P[0])):
@@ -207,8 +282,8 @@ def cold_open():
             poly = [P[ri][a], P[ri][b], P[ri + 1][b], P[ri + 1][a]] if ri else [IMPACT, P[1][b], P[1][a]]
             cx = sum(p[0] for p in poly) / len(poly)
             cy = sum(p[1] for p in poly) / len(poly)
-            k = len(GLASS_CENTRES)
-            GLASS_CENTRES.append((cx, cy))
+            k = len(GLASS)
+            GLASS.append((cx, cy))
             cp = ", ".join(f"{x:.0f}px {y:.0f}px" for x, y in poly)
             edge = " ".join(f"{x:.0f},{y:.0f}" for x, y in poly)
             pieces.append(f'<div class="gp" id="gp{k}" style="clip-path:polygon({cp});transform-origin:{cx:.0f}px {cy:.0f}px">{you}'
@@ -216,573 +291,462 @@ def cold_open():
     return f'<div id="slam">{cards}{cracks}</div><div id="glass">{"".join(pieces)}</div>'
 
 
-def fake_reel_html():
-    """Frame 0: an ordinary-looking reel, full screen (no username: an avatar dot and blank bars), and the next reel
-    under it for the fake swipe."""
-    icon = {
-        "heart": '<path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/>',
-        "comment": '<path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/>',
-        "share": '<path d="M21 3L10 14M21 3l-7 18-4-7-7-4z"/>',
-        "save": '<path d="M6 3.5h12v17l-6-4.2-6 4.2z"/>',
-    }
-    acts = "".join(f'<div class="fa"><svg viewBox="0 0 24 24">{icon[k]}</svg><span>{n}</span></div>'
-                   for k, n in [("heart", "1,204"), ("comment", "86"), ("share", "41"), ("save", "")])
-    reel = (f'<div class="fk" id="fk1"><div class="fksh" id="fkSh"><i class="fkh"></i><i class="fkb"></i></div>'
-            f'<!--CAPTION--><div id="fkAct">{acts}</div>'
-            f'<div id="fkMeta"><i class="fkav"></i><i class="fkbar b1"></i><i class="fkbar b2"></i><i class="fkbar b3"></i></div>'
-            f'<div class="fkpb"><i id="fkPb"></i></div></div>')
-    nxt = ('<div class="fk" id="fk2"><div class="fksh s2"><i class="fkh"></i><i class="fkb"></i></div>'
-           '<div id="fkMeta2"><i class="fkav"></i><i class="fkbar b1"></i><i class="fkbar b2"></i></div></div>')
-    return (f'<div id="fake"><div id="fkS">{reel}{nxt}</div><div id="fkThumb"></div>'
-            f'<div id="almost"><i class="dot"></i>you almost scrolled.</div></div>')
+# ---------------------------------------------------------------- the giant numerals and the shards that build the 3
+NUM_SIZE = 1000
+NUM_BASE = FLOOR_Y - 10          # the giant numerals stand on the floor
 
 
-# ---------------------------------------------------------------- the ground: iris flips light <-> dark
-def flip(t, x, y, to_dark):
-    a, b = ("0px", "2400px") if to_dark else ("2400px", "0px")
-    js(f'tl.fromTo("#bgD", {{clipPath: "circle({a} at {x}px {y}px)"}}, {{clipPath: "circle({b} at {x}px {y}px)", duration: .62, ease: "expo.inOut", immediateRender: false}}, {t:.3f});')
-    # the persistent 3-second pill follows the ground
-    if to_dark:
-        js(f'tl.to("#tp", {{color: "#f2f2f2", backgroundColor: "rgba(255,255,255,.07)", borderColor: "rgba(255,255,255,.16)", duration: .4}}, {t + .15:.3f});')
-    else:
-        js(f'tl.to("#tp", {{color: "{INK}", backgroundColor: "rgba(255,255,255,.6)", borderColor: "rgba(0,0,0,.1)", duration: .4}}, {t + .15:.3f});')
-    sfx("whoosh_big" if to_dark else "whoosh", t + .05)
+def num_top():
+    f = font("inter", 800)
+    hh, upm = f["hhea"], f["head"].unitsPerEm
+    asc, desc = hh.ascent / upm, -hh.descent / upm
+    return round(NUM_BASE - ((1 - (asc + desc)) / 2 + asc) * NUM_SIZE)
 
 
-# ================================================================= scenes
+def sample_mask(draw_fn, n, seed):
+    from PIL import Image, ImageDraw
+    im = Image.new("L", (FW, FH), 0)
+    draw_fn(ImageDraw.Draw(im))
+    data = im.get_flattened_data() if hasattr(im, "get_flattened_data") else im.getdata()
+    px = [(i % FW, i // FW) for i, v in enumerate(data) if v > 128]
+    return random.Random(seed).sample(px, n)
+
+
+def shards(t_x, t_g, t_3):
+    """The struck "algorithm." scrap tears into 150 shards that burst up and rush into the outline of the giant 3."""
+    from PIL import ImageFont
+    x, y, wd, sid = SCRAP_POS[("l01", "algorithm.")]
+    starts = sample_mask(lambda d: d.rectangle([x, y, x + wd, y + 78], fill=255), 150, 3)
+    f = font("inter", 800)
+    adv = f["hmtx"][f.getBestCmap()[ord("3")]][0] / f["head"].unitsPerEm * NUM_SIZE
+    fi = ImageFont.truetype(ttf("inter", 800), NUM_SIZE)
+    targets = sample_mask(lambda d: d.text((540 - adv / 2, NUM_BASE), "3", font=fi, fill=255, anchor="ls"), 150, 5)
+    key = lambda p: p[0] + .35 * p[1]    # noqa: E731
+    starts, targets = sorted(starts, key=key), sorted(targets, key=key)
+    rnd = random.Random(7)
+    cx = sum(p[0] for p in starts) / len(starts)
+    cy = sum(p[1] for p in starts) / len(starts)
+    out = []
+    for k, ((sx, sy), (tx, ty)) in enumerate(zip(starts, targets)):
+        size = rnd.randint(18, 34)
+        pts = [(rnd.randint(0, 40), rnd.randint(0, 30)), (rnd.randint(60, 100), rnd.randint(0, 45)), (rnd.randint(20, 80), rnd.randint(70, 100))]
+        poly = ", ".join(f"{a}% {b}%" for a, b in pts)
+        col = RED if rnd.random() < .45 else PAPER
+        out.append(f'<i class="shd" id="sh{k}" style="left:{sx - size / 2:.0f}px;top:{sy - size / 2:.0f}px;width:{size}px;height:{size}px;'
+                   f'clip-path:polygon({poly});background:{col}"></i>')
+        ang = math.atan2(sy - cy, sx - cx) + rnd.uniform(-.7, .7)
+        dist = rnd.uniform(160, 520)
+        ex, ey = math.cos(ang) * dist, math.sin(ang) * dist - rnd.uniform(120, 360)
+        js(f'tl.fromTo("#sh{k}", {{opacity: 1, x: 0, y: 0, rotation: 0}}, {{opacity: 1, x: {ex:.0f}, y: {ey:.0f}, rotation: {rnd.uniform(-260, 260):.0f}, duration: .4, ease: "expo.out", immediateRender: false}}, {t_x:.3f});')
+        d = rnd.uniform(0, .1)
+        js(f'tl.to("#sh{k}", {{x: {tx - sx:.0f}, y: {ty - sy:.0f}, rotation: {rnd.uniform(-30, 30):.0f}, backgroundColor: "{INK}", duration: {.46 - d:.2f}, ease: "expo.inOut"}}, {t_g + d:.3f});')
+    js(f'tl.to(".shd", {{opacity: 0, duration: .16}}, {t_3:.3f});')
+    js(f'tl.fromTo("#{sid} .mk", {{scaleX: 0}}, {{scaleX: 1, duration: .2, ease: "power3.inOut", immediateRender: false}}, {t_x - .3:.3f});')
+    js(f'tl.set("#{sid}", {{visibility: "hidden"}}, {t_x:.3f});')
+    sfx("scratch", t_x - .3)
+    sfx("rip", t_x)
+    sfx("rise", t_g)
+    return f'<div id="shards">{"".join(out)}</div>'
+
+
+# ================================================================= the scenes
 def scenes():
-    H = []
-    L = lambda l, i, k="t0": W(l, i, k)    # noqa: E731
+    H, S = [], []
 
-    # ---- S0 cold open (v3, owner: "I just wanna create a shock value in the hook"; picked "This reel is about to lose
-    # you."). Giant words slam one per hard cut, the ground flipping white / black; on "lose" the screen cracks like a
-    # dropped phone (red), on "you." the glass breaks and falls away, and the ordinary-looking reel is underneath.
+    # ---- S0 cold open: THIS / REEL / IS ABOUT TO / LOSE (red paper rips) / YOU. (the paper tears away)
     H.append(cold_open())
     sfx("hit", 0.0)
-    sfx("stamp", L("l00", 1) - .02)
-    sfx("stamp", L("l00", 2) - .02)
-    js(f'tl.fromTo("#sc0 .sw", {{scale: 1.18}}, {{scale: 1, duration: .22, ease: "expo.out", immediateRender: false}}, 0);')
-    cards = [("sc1", L("l00", 1)), ("sc2", L("l00", 2)), ("sc3", L("l00", 5)), ("sc4", L("l00", 6))]
+    js('tl.fromTo("#sc0 .sw", {scale: 1.18}, {scale: 1, duration: .22, ease: "expo.out", immediateRender: false}, 0);')
     prev = "sc0"
-    for cid, t in cards:
+    for cid, t in [("sc1", L("l00", 1)), ("sc2", L("l00", 2)), ("sc3", L("l00", 5)), ("sc4", L("l00", 6))]:
         js(f'tl.set("#{prev}", {{opacity: 0}}, {t - .03:.3f}); tl.set("#{cid}", {{opacity: 1}}, {t - .03:.3f});')
-        js(f'tl.fromTo("#{cid} .sw", {{scale: 1.22}}, {{scale: 1, duration: .24, ease: "expo.out", immediateRender: false}}, {t - .03:.3f});')
+        js(f'tl.fromTo("#{cid} .sw", {{scale: 1.22, rotation: {R.uniform(-4, 4):.1f}}}, {{scale: 1, rotation: 0, duration: .24, ease: "expo.out", immediateRender: false}}, {t - .03:.3f});')
+        sfx("stamp", t - .02)
         prev = cid
-    # "is about to": the three words land as spoken
     for j, i in enumerate((3, 4)):
         js(f'tl.fromTo("#sc2w{j + 1}", {{opacity: 0, scale: 1.25}}, {{opacity: 1, scale: 1, duration: .2, ease: "expo.out", immediateRender: false}}, {L("l00", i) - .03:.3f});')
-    t_lose, t_you = L("l00", 5) - .03, L("l00", 6) - .03
+    t_lose = L("l00", 5) - .03
     js(f'tl.fromTo(".crk", {{strokeDashoffset: 1000}}, {{strokeDashoffset: 0, duration: .14, ease: "power2.out", immediateRender: false}}, {t_lose + .02:.3f});')
     js(f'tl.set("#cracks", {{opacity: 1}}, {t_lose:.3f});')
-    sfx("crack", t_lose)
+    sfx("rip", t_lose)
     sfx("hit", t_lose)
-    sfx("stamp", t_you)
-    # "you." breaks: the slam layer becomes glass pieces (the same cracks are their edges) that fall under gravity
     t_br = L("l00", 6, "t1") + .02
     js(f'tl.set("#slam", {{opacity: 0}}, {t_br:.3f}); tl.set("#glass", {{opacity: 1}}, {t_br:.3f});')
-    import math
-    import random
     rnd = random.Random(11)
-    for k, (cx, cy) in enumerate(GLASS_CENTRES):
+    for k, (cx, cy) in enumerate(GLASS):
         dx, dy = cx - IMPACT[0], cy - IMPACT[1]
         dist = math.hypot(dx, dy)
-        # a violent burst away from the impact (closer pieces harder), then gravity
         push = 40 + 260 * max(0, 1 - dist / 1400) + rnd.uniform(0, 60)
         bx, by = dx / max(dist, 1) * push, dy / max(dist, 1) * push - rnd.uniform(20, 90)
         rot = rnd.uniform(-35, 35)
         js(f'tl.to("#gp{k}", {{x: {bx:.0f}, y: {by:.0f}, rotation: {rot:.0f}, scale: {rnd.uniform(1.02, 1.12):.2f}, duration: .14, ease: "expo.out"}}, {t_br:.3f});')
         js(f'tl.to("#gp{k}", {{x: {bx * 1.6:.0f}, y: {by + 1700 + rnd.uniform(0, 700):.0f}, rotation: {rot * 3:.0f}, duration: {rnd.uniform(.5, .72):.2f}, ease: "power2.in"}}, {t_br + .14 + rnd.uniform(0, .05):.3f});')
     js(f'tl.set("#glass", {{opacity: 0}}, {t_br + 1.0:.3f});')
-    sfx("shatter", t_br)
-    sfx("whoosh_big", t_br + .1)
+    sfx("rip", t_br - .02)
+    sfx("whoosh_big", t_br + .08)
 
-    # ---- S1 hook (owner: "try something miraculous in the first 6-7 seconds", picked the fourth-wall fake swipe +
-    # the shatter + the full-screen countdown). Frame 0 is an ordinary-looking reel, full screen, already playing (no
-    # username anywhere); its on-screen text is the voice, word by word. On "didn't" an invisible thumb swipes it away on
-    # the viewer's own screen, the next reel shows, then it snaps back with "you almost scrolled."
-    H.append(fake_reel_html())
-    t_sw = L("l01", 2) + .1
-    js(f'tl.fromTo("#fkThumb", {{opacity: 0, scale: .7}}, {{opacity: .9, scale: 1, duration: .16, ease: "power2.out", immediateRender: false}}, {t_sw - .18:.3f});')
-    js(f'tl.to("#fkS, #fkThumb", {{y: -1050, duration: .42, ease: "power2.inOut"}}, {t_sw:.3f});')
-    js(f'tl.to("#fkThumb", {{opacity: 0, duration: .12}}, {t_sw + .46:.3f});')
-    js(f'tl.to("#fkS", {{y: 0, duration: .75, ease: "elastic.out(1, .6)"}}, {t_sw + .5:.3f});')
-    sfx("whoosh", t_sw + .02)
-    sfx("swish", t_sw + .5)
-    t_alm = t_sw + .62
-    js(f'tl.fromTo("#almost", {{opacity: 0, scale: .6, y: 20}}, {{opacity: 1, scale: 1, y: 0, duration: .4, ease: "back.out(2)", immediateRender: false}}, {t_alm:.3f});')
-    sfx("error", t_alm)
-    js(f'tl.fromTo("#fkSh", {{scale: 1}}, {{scale: 1.07, duration: 3, ease: "none", immediateRender: false}}, 0);')
-    js(f'tl.fromTo("#fkPb", {{scaleX: 0}}, {{scaleX: .32, duration: 3, ease: "none", immediateRender: false}}, 0);')
-    H_title = title("t1", "l01", [("big", "Your reel"), ("big", "didn't flop"), ("sm", "because of the"), ("big", "~algorithm.")], 600, scheme="dark fk")
-    H[-1] = H[-1].replace("<!--CAPTION-->", H_title)
+    # ---- S1 (light paper): the fake swipe on a paper phone. "Your reel didn't flop because of the algorithm."
     a_end = L("l01", 7, "t1")
-    js(f'tl.fromTo("#t1_3_0s", {{scaleX: 0}}, {{scaleX: 1, duration: .24, ease: "power3.inOut", immediateRender: false}}, {a_end - .1:.3f});')
-    js(f'tl.to("#t1_3_0", {{color: "#a9a9a9", duration: .2}}, {a_end - .05:.3f});')
-    sfx("scratch", a_end - .08)
+    t_x = a_end + .14                       # the algorithm scrap tears
+    t_g, t_3 = t_x + .4, t_x + .9           # the shards gather; the solid 3
+    t1a, t2a = t_br, t_x + .4
+    show_sec("s1", t1a)
+    reel = (f'<div class="reel" id="r1">{person()}<div class="vtag"><i class="play"></i>312 views <b>&#8595; 97%</b></div>{pbar("r1pb", False)}</div>'
+            f'<div class="reel nxt" id="r1n">{person("p2")}{lines3()}</div>')
+    inner = (phone("ph1", reel) + '<div class="thumb" id="th1"></div>'
+             '<div class="rtag" id="almost">YOU ALMOST SCROLLED.<i class="tape tl"></i></div>')
+    S.append(section("s1", "light", t1a, t2a, inner, strip="WHY YOUR REEL FLOPPED"))
+    js(f'tl.fromTo("#ph1", {{rotation: -2}}, {{rotation: 1.5, duration: {t2a - t1a:.2f}, ease: "sine.inOut", immediateRender: false}}, {t1a:.3f});')
+    js(f'tl.fromTo("#r1pb", {{scaleX: 0}}, {{scaleX: .3, duration: {t2a - t1a:.2f}, ease: "none", immediateRender: false}}, {t1a:.3f});')
+    t_sw = L("l01", 2) + .05
+    pop("#th1", t_sw - .22, d=.18, y=60)
+    js(f'tl.to("#th1", {{y: -420, duration: .38, ease: "power2.inOut"}}, {t_sw:.3f});')
+    js(f'tl.to("#r1, #r1n", {{yPercent: -62, duration: .38, ease: "power2.inOut"}}, {t_sw:.3f});')
+    js(f'tl.to("#th1", {{opacity: 0, duration: .12}}, {t_sw + .4:.3f});')
+    js(f'tl.to("#r1, #r1n", {{yPercent: 0, duration: .7, ease: "elastic.out(1, .55)"}}, {t_sw + .44:.3f});')
+    sfx("swish", t_sw)
+    sfx("swish", t_sw + .44)
+    stamp("#almost", t_sw + .56, rot=-6)
+    punch("s1", t_sw + .6)
+    punch("s1", L("l01", 7), .05)
 
-    # "algorithm." shatters: the struck word breaks into shards that burst out, then rush together into a giant red 3
-    t_x = a_end + .16
-    js(f'tl.to("#almost", {{opacity: 0, duration: .2}}, {t_x - .1:.3f});')
-    js(f'tl.set("#t1_3_0", {{opacity: 0}}, {t_x:.3f});')
-    js(f'tl.to("#fake", {{opacity: 0, scale: .94, duration: .45, ease: "power2.inOut"}}, {t_x:.3f});')
-    starts, targets, (bx, btop) = shard_points()
-    import random
-    rnd = random.Random(7)
-    cx = sum(p[0] for p in starts) / len(starts)
-    cy = sum(p[1] for p in starts) / len(starts)
-    sh = []
-    t_g = t_x + .42                 # gather
-    t_3 = t_g + .5                  # the solid 3
-    for k, ((sx, sy), (tx, ty)) in enumerate(zip(starts, targets)):
-        size = rnd.randint(16, 30)
-        pts = [(rnd.randint(0, 40), rnd.randint(0, 30)), (rnd.randint(60, 100), rnd.randint(0, 45)), (rnd.randint(20, 80), rnd.randint(70, 100))]
-        poly = ", ".join(f"{a}% {b}%" for a, b in pts)
-        col = RED if rnd.random() < .35 else "#b5b5b5"
-        sh.append(f'<i class="shd" id="sh{k}" style="left:{sx - size / 2:.0f}px;top:{sy - size / 2:.0f}px;width:{size}px;height:{size}px;'
-                  f'clip-path:polygon({poly});background:{col}"></i>')
-        ang = __import__("math").atan2(sy - cy, sx - cx) + rnd.uniform(-.6, .6)
-        dist = rnd.uniform(140, 460)
-        ex, ey = __import__("math").cos(ang) * dist, __import__("math").sin(ang) * dist + rnd.uniform(-80, 40)
-        rot = rnd.uniform(-260, 260)
-        js(f'tl.fromTo("#sh{k}", {{opacity: 1, x: 0, y: 0, rotation: 0}}, {{opacity: 1, x: {ex:.0f}, y: {ey:.0f}, rotation: {rot:.0f}, duration: .42, ease: "expo.out", immediateRender: false}}, {t_x:.3f});')
-        d = rnd.uniform(0, .1)
-        js(f'tl.to("#sh{k}", {{x: {tx - sx:.0f}, y: {ty - sy:.0f}, rotation: {rnd.uniform(-30, 30):.0f}, backgroundColor: "{RED}", duration: {.46 - d:.2f}, ease: "expo.inOut"}}, {t_g + d:.3f});')
-    js(f'tl.to(".shd", {{opacity: 0, duration: .18}}, {t_3:.3f});')
-    H.append(f'<div id="shards">{"".join(sh)}</div>')
-    sfx("glitch", t_x)
-    sfx("whoosh_big", t_x + .02)
-    sfx("rise", t_g)
+    # ---- S2: "It flopped in the first three seconds." Giant paper-cut 3, 2, 1, 0 standing on the floor; the world
+    # flips with every number (light + sunburst, dark, light, dark with a red 0)
+    t_s3 = L("l03", 0) - .14
+    flip_t = L("l02", 6, "t1") + .06
+    c2 = L("l02", 5) - .02
+    c1 = (c2 + flip_t) / 2
+    inner = sunburst("sun2") + f'<div class="bign pp" id="bign" style="top:{num_top()}px">&#8203;3</div>'
+    S.append(section("s2", "light", t_x, t_s3, inner, strip="THE FIRST 3 SECONDS", push=.04, alt="dark"))
+    show_sec("s2", t_x)
+    js(f'tl.to("#s1", {{opacity: 0, scale: .96, duration: .35, ease: "power2.in"}}, {t_x:.3f});')
+    hide_sec("s1", t_x + .4)
+    js(f'tl.fromTo("#s2", {{opacity: 0}}, {{opacity: 1, duration: .3, immediateRender: false}}, {t_x:.3f});')
+    js(f'tl.fromTo("#sun2", {{rotation: 0, opacity: 0}}, {{rotation: 40, opacity: 1, duration: {t_s3 - t_x:.2f}, ease: "none", immediateRender: false}}, {t_x:.3f});')
+    js(f'tl.fromTo("#bign", {{opacity: 0}}, {{opacity: 1, duration: .14, immediateRender: false}}, {t_3 - .05:.3f});')
+    js(f'tl.fromTo("#bign", {{scale: 1.08, rotation: -4}}, {{scale: 1, rotation: 0, duration: .45, ease: "back.out(3)", immediateRender: false}}, {t_3 - .05:.3f});')
     sfx("hit", t_3 - .04)
-
-    # ---- S2 peak: "It flopped in the first three seconds." The 3 fills the screen; 3, 2, 1 cut the ground
-    # white / black / white with hard cuts, 0 lands red on black as the beat drops
-    t_flip1 = L("l02", 6, "t1") + .06
-    H.append(title("t2", "l02", [("big", "It flopped"), ("mid", "in the first 3 seconds.")], 380, t_out=t_flip1 - .02))
-    H.append(f'<div id="bign" style="top:{btop}px">&#8203;3</div>')
-    js(f'tl.fromTo("#bign", {{opacity: 0}}, {{opacity: 1, duration: .16, immediateRender: false}}, {t_3 - .06:.3f});')
-    js(f'tl.fromTo("#bign", {{scale: 1.06}}, {{scale: 1, duration: .5, ease: "expo.out", immediateRender: false}}, {t_3 - .06:.3f});')
-    c2, c0 = L("l02", 5) - .02, t_flip1
-    c1 = (c2 + c0) / 2
-    for t, n, dark, col in [(c2, 2, True, "#ffffff"), (c1, 1, False, INK), (c0, 0, True, RED)]:
-        js(f'tl.set("#bgD", {{clipPath: "circle({2400 if dark else 0}px at 540px 1100px)"}}, {t:.3f});')
+    for t, n, tone, col in [(c2, 2, "dark", PAPER), (c1, 1, "light", INK), (flip_t, 0, "dark", RED)]:
+        o = 1 if tone == "dark" else 0
+        js(f'tl.set("#s2_g2, #s2_f2", {{opacity: {o}}}, {t:.3f});')
+        js(f'tl.set("#sun2", {{visibility: "{"hidden" if tone == "dark" else "visible"}"}}, {t:.3f});')
         js(f'tl.set("#bign", {{textContent: "\\u200b{n}", color: "{col}"}}, {t:.3f});')
-        if n:
-            js(f'tl.set("#t2", {{color: "{"#ffffff" if dark else INK}"}}, {t:.3f});')
-        js(f'tl.fromTo("#bign", {{scale: 1.12}}, {{scale: 1, duration: .3, ease: "expo.out", immediateRender: false}}, {t:.3f});')
+        js(f'tl.fromTo("#bign", {{scale: 1.14, rotation: {R.choice([-5, 5])}}}, {{scale: 1, rotation: 0, duration: .3, ease: "back.out(3)", immediateRender: false}}, {t:.3f});')
         sfx("count" if n else "glitch", t)
-    # the dead "0" shrinks away; the persistent 3-second pill takes over at the top
-    t_s3 = L("l03", 0)
-    js(f'tl.to("#bign", {{opacity: 0, scale: .1, y: -760, duration: .5, ease: "power3.in"}}, {t_s3 - .25:.3f});')
-    H.append('<div id="tp"><i class="dot"></i>FIRST 3 SECONDS</div>')
-    js(f'tl.fromTo("#tp", {{opacity: 0, y: -14}}, {{opacity: 1, y: 0, duration: .4, ease: "expo.out", immediateRender: false}}, {t_s3 + .2:.3f});')
+    punch("s2", flip_t, .08)
 
-    # ---- S3 (dark): "Here are three mistakes killing your views." + three numbered glass slots
+    # ---- S3 (dark paper): "Here are three mistakes killing your views." Three taped paper cards drop in
     t_s4 = L("l04", 0) - .14
-    H.append(title("t3", "l03", [("sm", "Here are"), ("big", "3 mistakes"), ("mid", "*killing* your views.")], 470, scheme="dark", t_out=t_s4))
-    slots = "".join(f'<div class="slot" id="sl{k}"><span>{k + 1}</span></div>' for k in range(3))
-    H.append(f'<div id="slots">{slots}</div>')
+    cards = "".join(f'<div class="card3 pp" id="c3_{k}" style="left:{90 + k * 310}px"><span>{k + 1}</span><i class="tape tc"></i></div>' for k in range(3))
+    inner = cards + '<div class="arrow pp" id="arr3"><svg viewBox="0 0 100 160"><path d="M50 0v120M15 90l35 50 35-50"/></svg></div>'
+    S.append(section("s3", "dark", t_s3, t_s4, inner, strip="3 MISTAKES"))
+    whip("s2", "s3", t_s3)
     for k in range(3):
-        tt = L("l03", 2) + k * .13
-        js(f'tl.fromTo("#sl{k}", {{opacity: 0, y: 60, rotationX: -35, transformPerspective: 900}}, {{opacity: 1, y: 0, rotationX: 0, transformPerspective: 900, duration: .55, ease: "expo.out", immediateRender: false}}, {tt:.3f});')
-        sfx("pop", tt)
-    # on "views" the slots tilt down a touch: views falling
-    js(f'tl.to("#slots", {{y: 26, duration: .4, ease: "power2.out"}}, {L("l03", 6):.3f});')
+        tt = L("l03", 2) + k * .14
+        pop(f"#c3_{k}", tt, rot=R.uniform(-6, 6), y=-200)
+        sfx("paper", tt + .1)
+    pop("#arr3", L("l03", 6) - .05, y=-80)
     sfx("drop", L("l03", 6))
-    js(f'tl.to("#sl1, #sl2", {{opacity: 0, filter: "blur(8px)", duration: .3, ease: "power2.in"}}, {t_s4:.3f});')
-    js(f'tl.to("#sl0", {{scale: 2.4, opacity: 0, duration: .5, ease: "power3.in"}}, {t_s4:.3f});')
+    punch("s3", L("l03", 3))
 
-    # ---- the phone (S4, S5): mock reels, no usernames
-    H.append(phone_html())
-    flip(t_s4 + .02, 230, 1210, False)
-    show("#phone", t_s4 + .25, d=.6, y=120)
-    sfx("swish", t_s4 + .25)
-    js(f'tl.fromTo("#phone", {{rotation: -2}}, {{rotation: 0, duration: .9, ease: "expo.out", immediateRender: false}}, {t_s4 + .25:.3f});')
-
-    # ---- S4a mistake 1: "One: your hook is a greeting." The reel opens on "Hey guys, so today..."
-    t_m1b = L("l05", 0) - .1
-    H.append(kicker("k1", "MISTAKE 1", 346, L("l04", 0) - .04, t_m1b))
-    H.append(title("t4", "l04", [("mid", "Your hook is"), ("big", "a greeting.")], 410, start=1, t_out=t_m1b))
+    # ---- S4 (light): mistake 1. "One: your hook is a greeting. Nobody stays for 'Hey guys.'"
+    t_f1 = L("l06", 0) - .12
+    reel = (f'<div class="reel" id="r4">{person()}<div class="bubble pp" id="bub4"><span id="bub4t"></span></div>{pbar("r4pb")}</div>'
+            f'<div class="reel nxt" id="r4n">{person("p2")}{lines3()}</div>')
+    inner = phone("ph4", reel) + '<div class="thumb" id="th4"></div><div class="rstamp" id="st4">SKIPPED AT 0:01</div>'
+    S.append(section("s4", "light", t_s4, t_f1, inner, strip="MISTAKE 1: THE GREETING"))
+    whip("s3", "s4", t_s4, -1)
+    js(f'tl.fromTo("#ph4", {{rotation: 2}}, {{rotation: -1.5, duration: {t_f1 - t_s4:.2f}, ease: "sine.inOut", immediateRender: false}}, {t_s4:.3f});')
     t_cap = L("l04", 4) - .1
+    pop("#bub4", t_cap - .1, y=20)
     cap = "Hey guys, so today..."
-    js(f'tl.set("#cap1", {{opacity: 1}}, {t_cap:.3f});')
     for i in range(1, len(cap) + 1):
-        js(f'tl.set("#cap1t", {{textContent: {json.dumps(cap[:i])}}}, {t_cap + i * .035:.3f});')
+        js(f'tl.set("#bub4t", {{textContent: {json.dumps(cap[:i])}}}, {t_cap + i * .035:.3f});')
         if i % 4 == 1:
             sfx("type", t_cap + i * .035)
-    js(f'tl.fromTo("#pb1", {{scaleX: 0}}, {{scaleX: .035, duration: 2.6, ease: "none", immediateRender: false}}, {L("l04", 1):.3f});')
-
-    # "Nobody stays for 'Hey guys.'": a thumb flicks it away before 0:03
-    H.append(title("t4b", "l05", [("mid", "Nobody stays for"), ("big", "“Hey guys.”")], 410, t_out=L("l06", 0) - .12))
+    js(f'tl.fromTo("#r4pb", {{scaleX: 0}}, {{scaleX: .035, duration: 2.6, ease: "none", immediateRender: false}}, {L("l04", 1):.3f});')
     t_sw = L("l05", 3)
-    js(f'tl.fromTo("#thumb", {{opacity: 0, x: 40, y: 140}}, {{opacity: .92, x: 0, y: 0, duration: .3, ease: "power3.out", immediateRender: false}}, {t_sw - .35:.3f});')
-    js(f'tl.to("#thumb", {{y: -330, opacity: 0, duration: .32, ease: "power3.in"}}, {t_sw + .02:.3f});')
-    js(f'tl.to("#reel1", {{yPercent: -100, duration: .38, ease: "power3.in"}}, {t_sw + .06:.3f});')
-    js(f'tl.fromTo("#reel1b", {{yPercent: 100, opacity: 1}}, {{yPercent: 0, opacity: 1, duration: .38, ease: "power3.in", immediateRender: false}}, {t_sw + .06:.3f});')
+    pop("#th4", t_sw - .3, d=.2, y=60)
+    js(f'tl.to("#th4", {{y: -420, opacity: 0, duration: .34, ease: "power3.in"}}, {t_sw:.3f});')
+    js(f'tl.to("#r4, #r4n", {{yPercent: -100, duration: .38, ease: "power3.in"}}, {t_sw + .04:.3f});')
     sfx("whoosh", t_sw)
-    js(f'tl.fromTo("#gone1", {{opacity: 0, scale: .85}}, {{opacity: 1, scale: 1, duration: .32, ease: "back.out(1.7)", immediateRender: false}}, {t_sw + .42:.3f});')
-    sfx("error", t_sw + .42)
+    stamp("#st4", t_sw + .3, rot=-9)
+    punch("s4", t_sw + .6)
 
-    # ---- S4b fix 1 (dark): "Start with the result." The next reel opens on the result itself
-    t_f1 = L("l06", 0) - .1
-    flip(t_f1, 540, 1100, True)
-    js(f'tl.to("#phone", {{boxShadow: "0 0 0 3px rgba(255,255,255,.22), 0 40px 90px rgba(0,0,0,.55)", duration: .4}}, {t_f1 + .1:.3f});')
-    H.append(title("t5", "l06", [("mid", "Start with"), ("big", "the result.")], 410, scheme="dark", t_out=L("l07", 0) - .12))
-    js(f'tl.fromTo("#reel2", {{yPercent: 100, opacity: 1}}, {{yPercent: 0, opacity: 1, duration: .45, ease: "expo.out", immediateRender: false}}, {t_f1 + .1:.3f});')
-    t_res = L("l06", 3) - .05
-    js(f'tl.to("#gone1", {{opacity: 0, duration: .2}}, {t_res - .2:.3f});')
-    js(f'tl.fromTo("#res1", {{opacity: 0, scale: .6, filter: "blur(10px)"}}, {{opacity: 1, scale: 1, filter: "blur(0px)", duration: .45, ease: "back.out(1.6)", immediateRender: false}}, {t_res:.3f});')
-    js(f'tl.fromTo("#res2", {{opacity: 0, y: 16}}, {{opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}}, {t_res + .14:.3f});')
-    sfx("hit", t_res)
-    # its progress bar runs straight past the 3-second mark
-    js(f'tl.fromTo("#pb2", {{scaleX: 0}}, {{scaleX: .22, duration: 1.5, ease: "none", immediateRender: false}}, {t_f1 + .1:.3f});')
-    t_pass = t_f1 + .1 + 1.5 * (.1 / .22)
-    js(f'tl.to("#mk2", {{backgroundColor: "#ffffff", scaleY: 1.6, duration: .2}}, {t_pass:.3f});')
-    js(f'tl.fromTo("#kept", {{opacity: 0, y: 10}}, {{opacity: 1, y: 0, duration: .3, ease: "power3.out", immediateRender: false}}, {t_pass:.3f});')
-    sfx("ding", t_pass)
-
-    # ---- S5a mistake 2 (light): "Two: your first frame is still." A feed; the first frame is a still photo
+    # ---- S4b (dark): fix 1. "Start with the result." The next reel opens on the result; a sunburst behind
     t_m2 = L("l07", 0) - .12
-    flip(t_m2, 540, 1100, False)
-    js(f'tl.to("#phone", {{boxShadow: "0 0 0 0px rgba(255,255,255,0), 0 40px 90px rgba(0,0,0,.28)", duration: .4}}, {t_m2 + .1:.3f});')
-    t_m2b = L("l08", 0) - .1
-    H.append(kicker("k2", "MISTAKE 2", 346, t_m2 + .08, t_m2b))
-    H.append(title("t6", "l07", [("mid", "Your first frame"), ("big", "is still.")], 410, start=1, t_out=t_m2b))
-    js(f'tl.to("#kept, #res1, #res2", {{opacity: 0, duration: .2}}, {t_m2:.3f});')
-    js(f'tl.fromTo("#feed", {{yPercent: 100, opacity: 1}}, {{yPercent: 0, opacity: 1, duration: .5, ease: "expo.out", immediateRender: false}}, {t_m2 + .1:.3f});')
-    sfx("swish", t_m2 + .1)
-    js(f'tl.fromTo("#paused", {{opacity: 0, scale: .7}}, {{opacity: 1, scale: 1, duration: .3, ease: "back.out(1.7)", immediateRender: false}}, {L("l07", 5):.3f});')
+    reel = f'<div class="reel" id="r4b">{person("p3")}<div class="res"><div id="res1">1M VIEWS</div><div id="res2">in 3 days. Here\'s how.</div></div>{pbar("r4bpb")}</div>'
+    inner = sunburst("sun4b") + phone("ph4b", reel) + '<div class="rstamp white" id="st4b">STILL WATCHING</div>'
+    S.append(section("s4b", "dark", t_f1, t_m2, inner, strip="FIX: START WITH THE RESULT"))
+    whip("s4", "s4b", t_f1)
+    js(f'tl.fromTo("#sun4b", {{rotation: 0, opacity: 0}}, {{rotation: 30, opacity: 1, duration: {t_m2 - t_f1:.2f}, ease: "none", immediateRender: false}}, {t_f1:.3f});')
+    t_res = L("l06", 3) - .05
+    pop("#res1", t_res, sc=.4, y=0)
+    pop("#res2", t_res + .12, y=10)
+    sfx("hit", t_res)
+    punch("s4b", t_res)
+    js(f'tl.fromTo("#r4bpb", {{scaleX: 0}}, {{scaleX: .24, duration: 1.4, ease: "none", immediateRender: false}}, {t_f1 + .1:.3f});')
+    stamp("#st4b", t_res + .2, rot=7)
+
+    # ---- S5 (mid paper): mistake 2. "Two: your first frame is still. If nothing moves, thumbs keep scrolling."
+    t_m3 = L("l09", 0) - .14
+    still = (f'<div class="fi"><div class="photo"><i class="sunc"></i><i class="hill1"></i><i class="hill2"></i></div>'
+             f'<div class="paused" id="pz5"><i></i><i></i></div>{pbar("r5pb")}</div>')
+    other = lambda c: f'<div class="fi {c}">{person(c)}{lines3()}</div>'   # noqa: E731
+    reel = f'<div class="reel" id="feed5"><div class="strip5" id="strip5">{still}{other("p2")}{other("p3")}</div></div>'
+    inner = (phone("ph5", reel) + '<div class="thumb" id="th5"></div><div class="rtag" id="nm5">NOTHING MOVES<i class="tape tl"></i></div>'
+             '<div class="rstamp" id="st5">SCROLLED PAST</div>')
+    S.append(section("s5", "mid", t_m2, t_m3, inner, strip="MISTAKE 2: A STILL FIRST FRAME"))
+    whip("s4b", "s5", t_m2, -1)
+    pop("#pz5", L("l07", 5), sc=.3, y=0)
     sfx("click", L("l07", 5))
-    # "If nothing moves, thumbs keep scrolling." The music drops out on "nothing moves", then the feed whips past it
-    H.append(title("t6b", "l08", [("mid", "If nothing moves,"), ("mid", "thumbs keep scrolling.")], 410, t_out=L("l09", 0) - .14))
-    js(f'tl.fromTo("#nomove", {{opacity: 0, x: -20}}, {{opacity: 1, x: 0, duration: .3, ease: "power3.out", immediateRender: false}}, {L("l08", 2):.3f});')
-    sfx("alert", L("l08", 2))
+    punch("s5", L("l07", 5))
+    stamp("#nm5", L("l08", 1), rot=-5)
     t_sc = L("l08", 3)
-    js(f'tl.fromTo("#thumb", {{opacity: 0, x: 40, y: 140}}, {{opacity: .92, x: 0, y: 0, duration: .25, ease: "power3.out", immediateRender: false}}, {t_sc - .28:.3f});')
-    js(f'tl.to("#thumb", {{y: -330, opacity: 0, duration: .3, ease: "power3.in"}}, {t_sc:.3f});')
-    js(f'tl.to("#nomove", {{opacity: 0, duration: .15}}, {t_sc:.3f});')
-    js(f'tl.to("#strip", {{yPercent: -66.667, duration: .85, ease: "expo.inOut"}}, {t_sc:.3f});')
-    js(f'tl.fromTo("#strip", {{filter: "blur(0px)"}}, {{filter: "blur(9px)", duration: .3, ease: "power2.in", immediateRender: false}}, {t_sc + .1:.3f});')
-    js(f'tl.to("#strip", {{filter: "blur(0px)", duration: .3, ease: "power2.out"}}, {t_sc + .5:.3f});')
+    pop("#th5", t_sc - .28, d=.2, y=60)
+    js(f'tl.to("#th5", {{y: -420, opacity: 0, duration: .3, ease: "power3.in"}}, {t_sc:.3f});')
+    js(f'tl.to("#nm5", {{opacity: 0, duration: .12}}, {t_sc:.3f});')
+    js(f'tl.to("#strip5", {{yPercent: -66.667, duration: .85, ease: "expo.inOut"}}, {t_sc:.3f});')
+    js(f'tl.fromTo("#strip5", {{filter: "blur(0px)"}}, {{filter: "blur(9px)", duration: .3, ease: "power2.in", immediateRender: false}}, {t_sc + .1:.3f});')
+    js(f'tl.to("#strip5", {{filter: "blur(0px)", duration: .3, ease: "power2.out"}}, {t_sc + .5:.3f});')
     sfx("whoosh", t_sc + .05)
     sfx("swish", t_sc + .35)
-    js(f'tl.fromTo("#gone2", {{opacity: 0, scale: .85}}, {{opacity: 1, scale: 1, duration: .3, ease: "back.out(1.7)", immediateRender: false}}, {t_sc + .62:.3f});')
-    sfx("error", t_sc + .62)
-    t_m3 = L("l09", 0) - .14
-    js(f'tl.to("#phone", {{opacity: 0, y: 140, rotation: 3, duration: .4, ease: "power3.in"}}, {t_m3 + .55:.3f});')
+    stamp("#st5", t_sc + .7, rot=8)
 
-    # ---- S6a mistake 3 (light): "Three: you explain before you show." Two cards in the wrong order
-    t_m3b = L("l10", 0) - .1
-    H.append(kicker("k3", "MISTAKE 3", 346, t_m3 + .1, t_m3b))
-    H.append(title("t7", "l09", [("mid", "You explain"), ("big", "before you show.")], 410, start=1, t_out=t_m3b))
-    H.append('<div class="card" id="cEx"><span class="cn" id="cExn">1</span><div><b>EXPLAIN</b><i>how you did it</i></div></div>'
-             '<div class="card" id="cSh"><span class="cn" id="cShn">2</span><div><b>SHOW</b><i>the result</i></div></div>'
-             '<div id="late"><i class="dot"></i>viewer gone before this</div>')
-    show("#cEx", L("l09", 2) - .05, d=.45, y=50)
-    sfx("pop", L("l09", 2) - .05)
-    show("#cSh", L("l09", 5) - .05, d=.45, y=50)
-    sfx("pop", L("l09", 5) - .05)
-    js(f'tl.fromTo("#late", {{opacity: 0, x: -24}}, {{opacity: 1, x: 0, duration: .25, ease: "power3.out", immediateRender: false}}, {L("l09", 5) + .1:.3f});')
-    sfx("error", L("l09", 5) + .1)
+    # ---- S6 (light): mistake 3. "Three: you explain before you show." Two taped cards, wrong order
+    t_f3 = L("l10", 0) - .12
+    inner = ('<div class="card2 pp" id="cEx"><span class="cn">1</span><div><b>EXPLAIN</b><i>how you did it</i></div><i class="tape tl"></i></div>'
+             '<div class="card2 pp" id="cSh"><span class="cn">2</span><div><b>SHOW</b><i>the result</i></div><i class="tape tr"></i></div>'
+             '<div class="rstamp" id="st6">TOO LATE</div>')
+    S.append(section("s6", "light", t_m3, t_f3, inner, strip="MISTAKE 3: EXPLAIN BEFORE SHOW"))
+    whip("s5", "s6", t_m3)
+    pop("#cEx", L("l09", 2) - .05, rot=-2, y=-160)
+    sfx("paper", L("l09", 2))
+    pop("#cSh", L("l09", 3) - .2, rot=2, y=-160)
+    sfx("paper", L("l09", 3) - .15)
+    stamp("#st6", L("l09", 3) + .05, rot=-10)
+    punch("s6", L("l09", 3) + .15)
 
-    # ---- S6b fix 3 (dark): "Show the result first, then explain how you got it." The cards swap
-    t_f3 = L("l10", 0) - .1
-    flip(t_f3, 540, 1100, True)
-    H.append(title("t8", "l10", [("mid", "Show the result first,"), ("sm", "then explain how you got it.")], 410, scheme="dark", t_out=L("l11", 0) - .14))
-    js(f'tl.to("#late", {{opacity: 0, duration: .2}}, {t_f3:.3f});')
-    t_swap = t_f3 + .3
-    js(f'tl.to("#cSh", {{y: -240, x: 0, duration: .6, ease: "expo.inOut"}}, {t_swap:.3f});')
-    js(f'tl.to("#cSh", {{keyframes: {{x: [0, 70, 0]}}, duration: .6, ease: "sine.inOut"}}, {t_swap:.3f});')
-    js(f'tl.to("#cEx", {{y: 240, duration: .6, ease: "expo.inOut"}}, {t_swap:.3f});')
-    js(f'tl.to("#cEx", {{keyframes: {{x: [0, -70, 0]}}, duration: .6, ease: "sine.inOut"}}, {t_swap:.3f});')
-    sfx("swish", t_swap)
-    js(f'tl.set("#cShn", {{textContent: "1"}}, {t_swap + .3:.3f}); tl.set("#cExn", {{textContent: "2"}}, {t_swap + .3:.3f});')
-    js(f'tl.to("#cSh", {{backgroundColor: "#ffffff", color: "{INK}", borderColor: "#ffffff", duration: .35}}, {t_swap + .55:.3f});')
-    js(f'tl.to("#cShn", {{backgroundColor: "{INK}", color: "#ffffff", duration: .35}}, {t_swap + .55:.3f});')
-    js(f'tl.to("#cEx", {{backgroundColor: "rgba(255,255,255,.06)", color: "#f2f2f2", borderColor: "rgba(255,255,255,.16)", duration: .35}}, {t_f3 + .1:.3f});')
-    js(f'tl.to("#cExn", {{backgroundColor: "rgba(255,255,255,.14)", color: "#ffffff", duration: .35}}, {t_f3 + .1:.3f});')
-    js(f'tl.to("#cSh", {{backgroundColor: "rgba(255,255,255,.06)", color: "#f2f2f2", borderColor: "rgba(255,255,255,.16)", duration: .3}}, {t_f3 + .1:.3f});')
-    js(f'tl.fromTo("#chk", {{opacity: 0, scale: .4}}, {{opacity: 1, scale: 1, duration: .35, ease: "back.out(2)", immediateRender: false}}, {t_swap + .65:.3f});')
-    sfx("success", t_swap + .65)
-    H.append('<div id="chk"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" /></svg></div>')
-
-    # ---- S7 (light): "Fix these three and watch your next reel." Checklist + views climbing
+    # ---- S6b (dark): fix 3. "Show the result first, then explain how you got it." The cards swap
     t_s7 = L("l11", 0) - .14
-    flip(t_s7, 540, 960, False)
-    js(f'tl.to("#cEx, #cSh, #chk", {{opacity: 0, filter: "blur(8px)", duration: .3, ease: "power2.in"}}, {t_s7:.3f});')
-    H.append(title("t9", "l11", [("big", "Fix these three"), ("sm", "and watch your next reel.")], 380, t_out=L("l12", 0) - .14))
+    inner = ('<div class="card2 pp" id="cSh2"><span class="cn">1</span><div><b>SHOW</b><i>the result</i></div><i class="tape tr"></i></div>'
+             '<div class="card2 pp" id="cEx2"><span class="cn">2</span><div><b>EXPLAIN</b><i>how you got it</i></div><i class="tape tl"></i></div>'
+             '<div class="chk pp" id="chk6"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg></div>')
+    S.append(section("s6b", "dark", t_f3, t_s7, inner, strip="FIX: SHOW FIRST"))
+    whip("s6", "s6b", t_f3, -1)
+    t_swap = t_f3 + .3
+    js(f'tl.set("#cSh2, #cEx2", {{opacity: 1}}, {t_f3:.3f});')
+    js(f'tl.fromTo("#cSh2", {{y: 250}}, {{y: 0, duration: .6, ease: "expo.inOut", immediateRender: false}}, {t_swap:.3f});')
+    js(f'tl.fromTo("#cSh2", {{x: 0}}, {{keyframes: {{x: [0, 90, 0]}}, duration: .6, ease: "sine.inOut", immediateRender: false}}, {t_swap:.3f});')
+    js(f'tl.fromTo("#cEx2", {{y: -250}}, {{y: 0, duration: .6, ease: "expo.inOut", immediateRender: false}}, {t_swap:.3f});')
+    js(f'tl.fromTo("#cEx2", {{x: 0}}, {{keyframes: {{x: [0, -90, 0]}}, duration: .6, ease: "sine.inOut", immediateRender: false}}, {t_swap:.3f});')
+    sfx("swish", t_swap)
+    pop("#chk6", t_swap + .62, sc=.3, y=0)
+    sfx("success", t_swap + .62)
+    punch("s6b", t_swap + .62)
+
+    # ---- S7 (light): "Fix these three and watch your next reel." A taped notebook checklist, red ticks, a counter
+    t_s8 = L("l12", 0) - .14
     fixes = ["Start with the result", "Move in frame one", "Show, then explain"]
-    rows = "".join(f'<div class="row" id="rw{k}"><span class="rn">{k + 1}</span><b>{t}</b><span class="rc" id="rc{k}">'
-                   f'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" /></svg></span></div>' for k, t in enumerate(fixes))
-    H.append(f'<div id="rows">{rows}</div>')
+    rows = "".join(f'<div class="nrow" id="nr{k}"><b>{k + 1}.</b> {t}<svg class="tick" viewBox="0 0 60 50"><path id="tk{k}" pathLength="100" d="M5 28 L22 44 L55 6"/></svg></div>'
+                   for k, t in enumerate(fixes))
+    inner = (f'<div class="note pp" id="note7">{rows}<i class="tape tc"></i></div>'
+             '<div class="ctr pp" id="ctr7"><div id="ctrn">312</div><div class="ctrl">views on your next reel</div></div>')
+    S.append(section("s7", "light", t_s7, t_s8, inner, strip="THE FIX"))
+    whip("s6b", "s7", t_s7)
+    pop("#note7", t_s7 + .2, rot=-1.5, y=-120)
     for k in range(3):
-        tt = L("l11", k) - .04
-        show(f"#rw{k}", tt, d=.45, y=40)
-        sfx("click", tt)
-        js(f'tl.to("#rc{k}", {{backgroundColor: "{INK}", borderColor: "{INK}", duration: .2}}, {tt + .35:.3f});')
-        js(f'tl.fromTo("#rc{k} path", {{strokeDashoffset: 30}}, {{strokeDashoffset: 0, duration: .25, ease: "power2.out", immediateRender: false}}, {tt + .35:.3f});')
-        sfx("pop", tt + .35)
-    H.append('<div id="ctr"><div id="ctrn">312</div><div id="ctrl"><span class="up">&#8593;</span> views on your next reel</div></div>')
+        tt = L("l11", k) + .05
+        js(f'tl.fromTo("#nr{k}", {{opacity: 0, x: -30}}, {{opacity: 1, x: 0, duration: .2, ease: "power3.out", immediateRender: false}}, {tt - .1:.3f});')
+        js(f'tl.fromTo("#tk{k}", {{strokeDashoffset: 100}}, {{strokeDashoffset: 0, duration: .22, ease: "power2.out", immediateRender: false}}, {tt + .15:.3f});')
+        sfx("type", tt + .15)
     t_c = L("l11", 4) - .05
-    show("#ctr", t_c, d=.4, y=30)
+    pop("#ctr7", t_c, rot=1.5, y=60)
     vals = [312, 900, 2400, 5200, 9800, 15400, 22100, 29300, 36100, 41800, 45600, 47600, 48200]
     for i, v in enumerate(vals):
         js(f'tl.set("#ctrn", {{textContent: "{v:,}"}}, {t_c + .1 + i * .075:.3f});')
     sfx("rise", t_c)
     sfx("ding", t_c + .1 + (len(vals) - 1) * .075)
+    punch("s7", t_c + .1 + (len(vals) - 1) * .075)
 
-    # ---- S8 CTA (dark): "Save this so you don't forget, and comment HOOK for my list of twenty hooks that work."
-    t_s8 = L("l12", 0) - .14
-    flip(t_s8, 540, 330, True)
-    js(f'tl.to("#rows, #ctr", {{opacity: 0, filter: "blur(8px)", duration: .3, ease: "power2.in"}}, {t_s8:.3f});')
-    js(f'tl.to("#tp", {{opacity: 0, y: -14, duration: .3, ease: "power2.in"}}, {t_s8:.3f});')
-    H.append('<div id="bkm"><svg viewBox="0 0 24 24"><path id="bkp" d="M6 3.5h12v17l-6-4.2-6 4.2z"/></svg></div>')
-    js(f'tl.fromTo("#bkm", {{opacity: 0, scale: .5, y: 20}}, {{opacity: 1, scale: 1, y: 0, duration: .45, ease: "back.out(1.8)", immediateRender: false}}, {L("l12", 0) - .05:.3f});')
-    js(f'tl.to("#bkp", {{fill: "#ffffff", duration: .2}}, {L("l12", 1):.3f});')
-    sfx("pop", L("l12", 0) - .05)
-    H.append(title("t10", "l12", [("big", "Save this"), ("sm", "so you don't forget,")], 420, scheme="dark"))
-    H.append(title("t11", "l12", [("sm", "and comment")], 790, scheme="dark", start=6))
-    # the comment box types HOOK, then the keyword card lands and holds to the end
+    # ---- S8 (dark): CTA. "Save this so you don't forget, and comment HOOK for my list of twenty hooks that work."
+    letters = "".join(f'<div class="hl pp hl{k}" id="hl{k}">{c}</div>' for k, c in enumerate("HOOK"))
+    inner = (sunburst("sun8") + '<div class="bkm pp" id="bkm8"><svg viewBox="0 0 24 24"><path d="M6 3.5h12v17l-6-4.2-6 4.2z"/></svg></div>'
+             '<div class="cbox pp" id="cbox8"><span id="cbph">Add a comment...</span><span id="cbk"></span><i id="caret"></i></div>'
+             f'<div id="hook8">{letters}</div>')
+    S.append(section("s8", "dark", t_s8, DUR + .5, inner, strip="COMMENT “HOOK”", push=.03))
+    whip("s7", "s8", t_s8, -1)
+    pop("#bkm8", L("l12", 0), sc=.3, y=0)
+    sfx("pop", L("l12", 0))
     t_in = L("l12", 7) - .1
-    H.append('<div id="cbox"><span id="cbt"><span id="cbph">Add a comment...</span><span id="cbk"></span><i id="caret"></i></span>'
-             '<span id="send"><svg viewBox="0 0 24 24"><path d="M4 12h14M13 6l6 6-6 6"/></svg></span></div>')
-    show("#cbox", t_in, d=.45, y=30)
-    sfx("click", t_in)
+    pop("#cbox8", t_in, y=40)
     t_k = L("l12", 8) - .06
     js(f'tl.set("#cbph", {{display: "none"}}, {t_k:.3f});')
-    for i, s in enumerate(["H", "HO", "HOO", "HOOK"]):
-        js(f'tl.set("#cbk", {{textContent: "{s}"}}, {t_k + i * .09:.3f});')
+    for i, s_ in enumerate(["H", "HO", "HOO", "HOOK"]):
+        js(f'tl.set("#cbk", {{textContent: "{s_}"}}, {t_k + i * .09:.3f});')
         sfx("type", t_k + i * .09)
-    js(f'tl.to("#send", {{backgroundColor: "#ffffff", color: "{INK}", duration: .2}}, {t_k + .4:.3f});')
-    H.append('<div id="hook">HOOK</div>')
-    t_h = t_k + .5
-    js(f'tl.fromTo("#hook", {{opacity: 0, scale: .55, y: 40, filter: "blur(12px)"}}, {{opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: .55, ease: "back.out(1.5)", immediateRender: false}}, {t_h:.3f});')
-    js(f'tl.fromTo("#hook", {{scale: 1}}, {{scale: 1.035, duration: {DUR - t_h - .55:.3f}, ease: "none", immediateRender: false}}, {t_h + .55:.3f});')
-    sfx("hit", t_h)
-    sfx("sparkle", t_h + .1)
-    H.append(title("t12", "l12", [("sm", "for my list of 20 hooks that work.")], 1390, scheme="dark", start=9))
-    return "".join(H)
-
-
-def phone_html():
-    """A phone with four screens: reel 1 (the greeting), the reel after the swipe, reel 2 (the result), the feed."""
-    bar = lambda i, mk: (f'<div class="pbar"><i class="pfill" id="pb{i}"></i>'      # noqa: E731
-                         f'<i class="mk" id="mk{i}"></i></div>' if mk else f'<div class="pbar"><i class="pfill" id="pb{i}"></i></div>')
-    person = '<div class="person"><i class="hd"></i><i class="bd"></i></div>'
-    reel1 = (f'<div class="reel" id="reel1"><div class="shot s1">{person}</div>'
-             f'<div class="cap" id="cap1"><span id="cap1t"></span></div>{bar(1, True)}</div>')
-    reel1b = '<div class="reel" id="reel1b"><div class="shot s2"><i class="ln1"></i><i class="ln2"></i><i class="ln3"></i></div></div>'
-    reel2 = (f'<div class="reel" id="reel2"><div class="shot s3">{person}</div>'
-             f'<div class="res"><div id="res1">1M views</div><div id="res2">in 3 days. Here\'s how.</div></div>'
-             f'<div id="kept">still watching past 0:03</div>{bar(2, True)}</div>')
-    still = (f'<div class="fi"><div class="shot s4"><div class="photo"><i class="sun"></i><i class="hill1"></i><i class="hill2"></i></div></div>'
-             f'<div id="paused"><i></i><i></i></div><div id="nomove"><i class="dot"></i>nothing moves</div>{bar(3, True)}</div>')
-    other = lambda c: f'<div class="fi"><div class="shot {c}"><i class="ln1"></i><i class="ln2"></i><i class="ln3"></i></div></div>'  # noqa: E731
-    feed = f'<div class="reel" id="feed"><div id="strip">{still}{other("s5")}{other("s6")}</div></div>'
-    gone1 = '<div class="gone" id="gone1"><i class="dot"></i>swiped at 0:01</div>'
-    gone2 = '<div class="gone" id="gone2"><i class="dot"></i>scrolled past at 0:00</div>'
-    return (f'<div id="phone"><div id="scr">{reel1}{reel1b}{reel2}{feed}{gone1}{gone2}</div>'
-            f'<i class="notch"></i><div id="thumb"></div></div>')
+    t_h = t_k + .45
+    js(f'tl.fromTo("#sun8", {{rotation: 0, opacity: 0}}, {{rotation: 25, opacity: 1, duration: {DUR - t_h:.2f}, ease: "none", immediateRender: false}}, {t_h:.3f});')
+    for k, rot in enumerate([-7, 5, -4, 8]):
+        pop(f"#hl{k}", t_h + k * .1, d=.3, rot=rot, sc=1.8, y=-30)
+        sfx("stamp" if k % 2 == 0 else "paper", t_h + k * .1 + .12)
+    punch("s8", t_h + .35, .07)
+    return "".join(H), "".join(S), (t_x, t_g, t_3)
 
 
 CSS = f"""
-@font-face {{ font-family: "Inter"; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2"); }}
 @font-face {{ font-family: "Inter"; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2"); }}
 @font-face {{ font-family: "Inter"; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2"); }}
 @font-face {{ font-family: "Inter"; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2"); }}
+@font-face {{ font-family: "Fraunces"; font-weight: 700; src: url("assets/fonts/fraunces-latin-700-normal.woff2"); }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #e9e9e9; }}
-#root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; font-family: "Inter"; color: {INK}; }}
-/* the ground: a white gradient, and a black gradient revealed by the iris */
-#bgL, #bgD {{ position: absolute; inset: 0; overflow: hidden; }}
-#bgL {{ z-index: 0; background: radial-gradient(130% 85% at 50% 32%, #ffffff 0%, #f3f3f3 42%, #d9d9d9 78%, #c4c4c4 100%); }}
-#bgD {{ z-index: 1; background: radial-gradient(130% 85% at 50% 32%, #303030 0%, #151515 45%, #060606 80%, #000 100%);
-  clip-path: circle(0px at 540px 1140px); }}
-.blob {{ position: absolute; border-radius: 50%; filter: blur(60px); }}
-#bgL .blob {{ background: radial-gradient(circle, rgba(0,0,0,.09), rgba(0,0,0,0) 70%); }}
-#bgD .blob {{ background: radial-gradient(circle, rgba(255,255,255,.11), rgba(255,255,255,0) 70%); }}
-.b1 {{ width: 900px; height: 900px; left: -260px; top: 120px; }}
-.b2 {{ width: 760px; height: 760px; left: 520px; top: 1080px; }}
-#grain {{ position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: .06; background: url(assets/img/grain.png); mix-blend-mode: overlay; }}
-#cam {{ position: absolute; inset: 0; z-index: 3; }}
-/* titles: every word on its own spoken time */
-.tt {{ position: absolute; left: 80px; right: 80px; text-align: left; opacity: 0; }}
-.ln {{ white-space: nowrap; line-height: 1.07; }}
-.ln.big, .ln.mid {{ font-weight: 800; letter-spacing: -.035em; }}
-.ln.mid {{ letter-spacing: -.03em; }}
-.ln.sm {{ font-weight: 600; letter-spacing: -.01em; line-height: 1.3; }}
-.tt.light {{ color: {INK}; }} .tt.light .sm {{ color: {GREY_L}; }}
-.tt.dark {{ color: #f4f4f4; }} .tt.dark .sm {{ color: {GREY_D}; }}
-.w {{ display: inline-block; opacity: 0; margin-right: .24em; padding-bottom: .06em; position: relative; }}
-.w .stk {{ position: absolute; left: -.04em; right: -.04em; top: 50%; height: .09em; border-radius: .05em; background: {RED}; transform-origin: left center; transform: scaleX(0); }}
-.w.red {{ color: {RED}; }}
-.kick {{ position: absolute; left: 80px; width: fit-content; padding: 8px 20px; border-radius: 999px; font-weight: 700; font-size: 28px;
-  letter-spacing: .24em; opacity: 0; white-space: nowrap; }}
-.kick.light {{ color: {INK}; border: 2px solid rgba(0,0,0,.85); }}
-/* frame 0: a dead reel's stats */
-.chip {{ position: absolute; top: 420px; left: 80px; width: fit-content; display: flex; align-items: center; gap: 16px; padding: 14px 28px;
-  border-radius: 999px; font-size: 34px; font-weight: 700; white-space: nowrap; }}
-.chip.light {{ background: rgba(255,255,255,.7); border: 1.5px solid rgba(0,0,0,.08); box-shadow: 0 14px 40px rgba(0,0,0,.08); }}
-.play {{ width: 0; height: 0; border-left: 20px solid {INK}; border-top: 12px solid transparent; border-bottom: 12px solid transparent; }}
-.redtxt {{ color: {RED}; }}
-#strike {{ position: absolute; left: 248px; right: 248px; top: 1020px; height: 12px; border-radius: 6px; background: {RED}; transform-origin: left center;
-  opacity: 0; }}
-/* v3 cold open: slam cards, cracks, glass */
+html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #222; }}
+#root {{ position: relative; width: {FW}px; height: {FH}px; overflow: hidden; font-family: "Inter"; color: {INK}; background: #222; }}
+.fx {{ position: absolute; width: 0; height: 0; }}
+/* paper worlds */
+.sec {{ position: absolute; inset: 0; overflow: hidden; visibility: hidden; }}
+.gnd {{ position: absolute; inset: 0; background-size: cover; }}
+.gnd.light {{ background-image: url(assets/img/paper_light.jpg); }}
+.gnd.mid {{ background-image: url(assets/img/paper_mid.jpg); }}
+.gnd.dark {{ background-image: url(assets/img/paper_dark.jpg); }}
+.cam {{ position: absolute; inset: 0; transform-origin: 50% 62%; }}
+.punch {{ position: absolute; inset: 0; transform-origin: 50% 50%; }}
+.floor {{ position: absolute; left: -60px; right: -60px; top: {FLOOR_Y}px; bottom: -80px; background-size: 1200px 1920px; background-position: 0 -400px;
+  box-shadow: 0 -10px 24px rgba(0,0,0,.3); filter: url(#rough); }}
+.floor.light {{ background-image: url(assets/img/paper_mid.jpg); }}
+.floor.mid {{ background-image: url(assets/img/paper_dark.jpg); }}
+.floor.dark {{ background-image: url(assets/img/paper_dark.jpg); filter: url(#rough) brightness(.5); }}
+.sun {{ position: absolute; left: -1060px; top: -700px; width: 3200px; height: 3200px; opacity: 0; }}
+.sun polygon {{ fill: rgba(255,255,255,.3); }}
+#sun4b polygon, #sun8 polygon {{ fill: rgba(255,255,255,.07); }}
+/* paper cut-outs: rough boiling edges + hard shadow */
+.pp {{ filter: url(#rough) drop-shadow(7px 10px 0 rgba(0,0,0,.3)); }}
+.tape {{ position: absolute; width: 110px; height: 38px; background: rgba(236,232,222,.75); box-shadow: 0 1px 2px rgba(0,0,0,.15); }}
+.tape.tl {{ left: -34px; top: -10px; transform: rotate(-24deg); }}
+.tape.tr {{ right: -34px; top: -10px; transform: rotate(22deg); }}
+.tape.tc {{ left: 50%; margin-left: -55px; top: -20px; transform: rotate(-3deg); }}
+.strip {{ position: absolute; left: 50%; top: 268px; height: 76px; display: flex; align-items: center; justify-content: center; white-space: nowrap;
+  background: url(assets/img/paper_tile.jpg); font-weight: 800; font-size: 46px; letter-spacing: .02em; color: {INK};
+  filter: url(#rough) drop-shadow(5px 8px 0 rgba(0,0,0,.3)); opacity: 0; z-index: 5; }}
+/* ransom-note captions */
+#caps {{ position: absolute; inset: 0; z-index: 9; pointer-events: none; }}
+.scrap {{ position: absolute; height: 78px; display: flex; align-items: center; justify-content: center; white-space: nowrap;
+  font-family: "Fraunces"; font-weight: 700; font-size: {CAP_SIZE}px; color: {INK}; background: url(assets/img/paper_tile.jpg);
+  filter: url(#rough) drop-shadow(4px 6px 0 rgba(0,0,0,.35)); opacity: 0; }}
+.scrap.red {{ background: {RED}; color: #fff; }}
+.scrap .mk {{ position: absolute; left: -6px; right: -6px; top: 44%; height: 12px; background: {INK}; border-radius: 6px; transform: scaleX(0); transform-origin: left center; }}
+/* cold open */
 #slam {{ position: absolute; inset: 0; z-index: 8; }}
-.scard {{ position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; }}
-.sw {{ font-weight: 800; letter-spacing: -.04em; line-height: .9; white-space: nowrap; }}
+.scard {{ position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; background-size: cover; }}
+.scard.light {{ background-image: url(assets/img/paper_light.jpg); }}
+.scard.dark {{ background-image: url(assets/img/paper_dark.jpg); }}
+.scard.redp {{ background-color: {RED}; background-image: url(assets/img/paper_light.jpg); background-blend-mode: multiply; }}
+.sw {{ font-weight: 800; letter-spacing: -.04em; line-height: .9; white-space: nowrap; filter: url(#rough) drop-shadow(8px 12px 0 rgba(0,0,0,.28)); }}
 #sc2w1, #sc2w2 {{ opacity: 0; }}
-#cracks {{ position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }}
+#cracks {{ position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; filter: url(#rough); }}
 .crk {{ fill: none; stroke-dasharray: 1000; stroke-linejoin: round; stroke-linecap: round; }}
-#cracks .under .crk {{ stroke: rgba(0,0,0,.8); stroke-width: 6; }}
-#cracks .over .crk {{ stroke: rgba(255,255,255,.95); stroke-width: 2.5; }}
-.imp {{ fill: rgba(255,255,255,.85); stroke: rgba(0,0,0,.4); stroke-width: 4; }}
+#cracks .under .crk {{ stroke: rgba(0,0,0,.8); stroke-width: 7; }}
+#cracks .over .crk {{ stroke: rgba(255,255,255,.95); stroke-width: 3; }}
 #glass {{ position: absolute; inset: 0; z-index: 8; opacity: 0; pointer-events: none; }}
-.gp {{ position: absolute; inset: 0; }}
+.gp {{ position: absolute; inset: 0; filter: drop-shadow(6px 10px 0 rgba(0,0,0,.35)); }}
 .ge {{ position: absolute; inset: 0; width: 100%; height: 100%; }}
-.ge polygon {{ fill: none; stroke: rgba(0,0,0,.8); stroke-width: 7; }}
-/* the fake reel (frame 0) */
-#fake {{ position: absolute; inset: 0; z-index: 4; overflow: hidden; }}
-#fkS {{ position: absolute; left: 0; top: 0; width: 100%; height: 200%; }}
-.fk {{ position: absolute; left: 0; width: 100%; height: 50%; overflow: hidden; }}
-#fk1 {{ top: 0; background: radial-gradient(90% 55% at 50% 40%, #4c4c4c 0%, #262626 55%, #0e0e0e 100%); }}
-#fk2 {{ top: 50%; background: radial-gradient(90% 55% at 40% 45%, #6a6a6a 0%, #3a3a3a 55%, #1a1a1a 100%); }}
-.fksh {{ position: absolute; inset: 0; transform-origin: 50% 70%; }}
-.fkh {{ position: absolute; left: 400px; top: 760px; width: 280px; height: 340px; border-radius: 50%; background: linear-gradient(160deg, #5c5c5c, #353535); }}
-.fkb {{ position: absolute; left: 170px; top: 1090px; width: 740px; height: 900px; border-radius: 370px 370px 0 0; background: linear-gradient(170deg, #474747, #222 70%); }}
-.fksh.s2 .fkh {{ left: 300px; background: linear-gradient(160deg, #8a8a8a, #555); }}
-.fksh.s2 .fkb {{ left: 60px; background: linear-gradient(170deg, #707070, #3a3a3a 70%); }}
-.tt.fk {{ text-shadow: 0 4px 30px rgba(0,0,0,.45); }}
-#fkAct {{ position: absolute; right: 34px; top: 1150px; display: flex; flex-direction: column; align-items: center; gap: 40px; }}
-.fa {{ display: flex; flex-direction: column; align-items: center; gap: 8px; color: #fff; font-weight: 600; font-size: 28px; }}
-.fa svg {{ width: 70px; height: 70px; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; }}
-#fkMeta, #fkMeta2 {{ position: absolute; left: 40px; top: 1640px; width: 700px; height: 200px; }}
-.fkav {{ position: absolute; left: 0; top: 0; width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #9a9a9a, #5a5a5a); border: 3px solid #fff; }}
-.fkbar {{ position: absolute; height: 22px; border-radius: 11px; background: rgba(255,255,255,.55); }}
-.fkbar.b1 {{ left: 92px; top: 24px; width: 220px; }}
-.fkbar.b2 {{ left: 0; top: 104px; width: 560px; background: rgba(255,255,255,.35); }}
-.fkbar.b3 {{ left: 0; top: 144px; width: 380px; background: rgba(255,255,255,.35); }}
-.fkpb {{ position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: rgba(255,255,255,.25); }}
-#fkPb {{ position: absolute; inset: 0; background: #fff; transform-origin: left center; transform: scaleX(0); }}
-#fkThumb {{ position: absolute; left: 560px; top: 1450px; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,.88);
-  box-shadow: 0 0 0 14px rgba(255,255,255,.2), 0 12px 40px rgba(0,0,0,.4); opacity: 0; }}
-#almost {{ position: absolute; top: 420px; left: 80px; width: fit-content; display: flex; align-items: center; gap: 14px; padding: 16px 30px;
-  border-radius: 999px; background: {RED}; color: #fff; font-weight: 800; font-size: 44px; letter-spacing: -.01em; white-space: nowrap; opacity: 0;
-  box-shadow: 0 18px 50px rgba(255,42,42,.35); }}
-#almost .dot {{ background: #fff; }}
-/* shards and the giant numeral */
-#shards {{ position: absolute; inset: 0; z-index: 6; pointer-events: none; }}
-.shd {{ position: absolute; opacity: 0; }}
-#bign {{ position: absolute; left: 0; right: 0; text-align: center; font-weight: 800; font-size: 1100px; line-height: 1; letter-spacing: 0; color: {RED};
-  font-variant-numeric: tabular-nums; opacity: 0; z-index: 1; }}
-/* the countdown ring */
-#ring {{ position: absolute; left: 330px; top: 930px; width: 420px; height: 420px; opacity: 0; }}
-#ring svg {{ position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }}
-.rtrk {{ fill: none; stroke: rgba(0,0,0,.12); stroke-width: 9; }}
-#rfill {{ fill: none; stroke: {INK}; stroke-width: 9; stroke-linecap: round; }}
-#rnum {{ position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 230px; letter-spacing: -.05em;
-  font-variant-numeric: tabular-nums; color: {INK}; }}
-/* the 3-second pill */
-#tp {{ position: absolute; top: 268px; left: 0; right: 0; margin-left: auto; margin-right: auto; width: fit-content; display: flex; align-items: center; gap: 12px; padding: 10px 22px;
-  border-radius: 999px; font-size: 28px; font-weight: 700; letter-spacing: .2em; white-space: nowrap; color: #f2f2f2;
-  background: rgba(255,255,255,.07); border: 1.5px solid rgba(255,255,255,.16); opacity: 0; }}
-.dot {{ display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: {RED}; flex: none; }}
-/* three slots */
-#slots {{ position: absolute; left: 90px; right: 90px; top: 1060px; display: flex; justify-content: space-between; }}
-.slot {{ width: 270px; height: 320px; border-radius: 36px; background: rgba(255,255,255,.06); border: 1.5px solid rgba(255,255,255,.16);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 30px 60px rgba(0,0,0,.4); display: grid; place-items: center; opacity: 0; }}
-.slot span {{ font-weight: 800; font-size: 150px; color: transparent; -webkit-text-stroke: 3px rgba(255,255,255,.7); letter-spacing: -.04em; }}
+.ge polygon {{ fill: none; stroke: #fff; stroke-width: 6; }}
 /* the phone */
-#phone {{ position: absolute; left: 315px; top: 700px; width: 450px; height: 800px; border-radius: 64px; background: {INK}; padding: 11px;
-  box-shadow: 0 0 0 0 rgba(255,255,255,0), 0 40px 90px rgba(0,0,0,.28); opacity: 0; }}
-#scr {{ position: relative; width: 100%; height: 100%; border-radius: 54px; overflow: hidden; background: #1a1a1a; }}
-.notch {{ position: absolute; left: 50%; top: 24px; width: 120px; height: 34px; margin-left: -60px; border-radius: 20px; background: #000; z-index: 6; }}
-.reel {{ position: absolute; inset: 0; }}
-#reel1b, #reel2, #feed {{ opacity: 0; }}
-.shot {{ position: absolute; inset: 0; }}
-.s1 {{ background: linear-gradient(180deg, #3a3a3a, #232323 60%, #1b1b1b); }}
-.s2 {{ background: linear-gradient(180deg, #4b4b4b, #2d2d2d); }}
-.s3 {{ background: linear-gradient(180deg, #2e2e2e, #141414 70%); }}
-#reel2 .person {{ transform: translateY(150px); }}
-.s4 {{ background: #262626; }}
-.s5 {{ background: linear-gradient(180deg, #555, #333); }}
-.s6 {{ background: linear-gradient(180deg, #3d3d3d, #222); }}
-.person .hd {{ position: absolute; left: 165px; top: 250px; width: 100px; height: 120px; border-radius: 50%; background: #5a5a5a; }}
-.person .bd {{ position: absolute; left: 100px; top: 380px; width: 230px; height: 420px; border-radius: 115px 115px 0 0; background: #4a4a4a; }}
-.ln1, .ln2, .ln3 {{ position: absolute; left: 40px; height: 22px; border-radius: 11px; background: rgba(255,255,255,.16); }}
+.phone {{ position: absolute; border-radius: 64px; background: #1b1b1b; padding: 16px; }}
+.scr {{ position: relative; width: 100%; height: 100%; border-radius: 50px; overflow: hidden; background: #2b2b2b; }}
+.notch {{ position: absolute; left: 50%; top: 30px; width: 120px; height: 34px; margin-left: -60px; border-radius: 20px; background: #0d0d0d; z-index: 6; }}
+.reel {{ position: absolute; inset: 0; background: linear-gradient(180deg, #8f8f8c, #5f5f5c 60%, #4a4a48); }}
+.reel.nxt {{ top: 100%; background: linear-gradient(180deg, #b9b9b5, #7d7d7a); }}
+#r4b {{ background: linear-gradient(180deg, #4a4a48, #232322 70%); }}
+.person .hd {{ position: absolute; left: 165px; top: 250px; width: 108px; height: 128px; border-radius: 50%; background: #d7d5cf; }}
+.person .bd {{ position: absolute; left: 92px; top: 390px; width: 254px; height: 420px; border-radius: 127px 127px 0 0; background: #c3c1bb; }}
+.person.p2 .hd {{ background: #ecebe6; left: 120px; }} .person.p2 .bd {{ background: #dedcd6; left: 50px; }}
+.person.p3 .hd {{ top: 330px; }} .person.p3 .bd {{ top: 470px; }}
+.ln1, .ln2, .ln3 {{ position: absolute; left: 40px; height: 22px; border-radius: 11px; background: rgba(255,255,255,.5); }}
 .ln1 {{ top: 520px; width: 300px; }} .ln2 {{ top: 560px; width: 220px; }} .ln3 {{ top: 600px; width: 260px; }}
-.cap {{ position: absolute; left: 30px; right: 30px; top: 470px; text-align: center; opacity: 0; }}
-.cap span {{ display: inline-block; min-height: 52px; padding: 8px 16px; border-radius: 12px; background: rgba(0,0,0,.72); color: #fff; font-weight: 700; font-size: 30px; }}
-.pbar {{ position: absolute; left: 26px; right: 26px; bottom: 34px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.22); }}
-.pfill {{ position: absolute; left: 0; top: 0; bottom: 0; width: 100%; border-radius: 4px; background: #fff; transform-origin: left center; transform: scaleX(0); }}
-#pb1, #pb3 {{ background: {RED}; }}
-.mk {{ position: absolute; left: 10%; top: -7px; width: 4px; height: 22px; border-radius: 2px; background: {RED}; }}
-.res {{ position: absolute; left: 20px; right: 20px; top: 170px; text-align: center; color: #fff; }}
-#res1 {{ font-weight: 800; font-size: 84px; letter-spacing: -.04em; opacity: 0; }}
-#res2 {{ font-weight: 600; font-size: 30px; color: #cfcfcf; margin-top: 6px; opacity: 0; }}
-#kept {{ position: absolute; left: 0; right: 0; bottom: 64px; text-align: center; font-size: 26px; font-weight: 700; color: #fff; opacity: 0; letter-spacing: .02em; }}
-#strip {{ position: absolute; left: 0; right: 0; top: 0; height: 300%; }}
-.fi {{ position: relative; height: 33.3334%; overflow: hidden; }}
-.photo {{ position: absolute; inset: 0; background: linear-gradient(180deg, #8d8d8d, #6a6a6a 55%, #4a4a4a); }}
-.sun {{ position: absolute; left: 270px; top: 150px; width: 90px; height: 90px; border-radius: 50%; background: #d8d8d8; }}
-.hill1 {{ position: absolute; left: -80px; top: 470px; width: 520px; height: 520px; border-radius: 50%; background: #3e3e3e; }}
-.hill2 {{ position: absolute; left: 160px; top: 540px; width: 460px; height: 460px; border-radius: 50%; background: #2c2c2c; }}
-#paused {{ position: absolute; left: 50%; top: 50%; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; background: rgba(0,0,0,.55);
-  display: flex; align-items: center; justify-content: center; gap: 16px; opacity: 0; }}
-#paused i {{ width: 14px; height: 46px; border-radius: 4px; background: #fff; }}
-#nomove {{ position: absolute; left: 24px; top: 84px; display: flex; align-items: center; gap: 10px; padding: 8px 16px; border-radius: 999px;
-  background: rgba(0,0,0,.7); color: #fff; font-weight: 700; font-size: 26px; opacity: 0; }}
-.gone {{ position: absolute; top: 46%; left: 0; right: 0; margin-left: auto; margin-right: auto; width: fit-content; display: flex; align-items: center; gap: 12px; padding: 14px 24px;
-  border-radius: 999px; background: #fff; color: {INK}; font-weight: 700; font-size: 30px; white-space: nowrap; opacity: 0;
-  box-shadow: 0 16px 40px rgba(0,0,0,.4); z-index: 5; }}
-#thumb {{ position: absolute; left: 190px; top: 600px; width: 86px; height: 86px; border-radius: 50%; background: rgba(255,255,255,.85);
-  box-shadow: 0 0 0 10px rgba(255,255,255,.18), 0 10px 30px rgba(0,0,0,.35); opacity: 0; z-index: 7; }}
-/* explain / show cards */
-.card {{ position: absolute; left: 140px; width: 800px; height: 200px; border-radius: 40px; display: flex; align-items: center; gap: 36px; padding: 0 44px;
-  background: rgba(255,255,255,.72); border: 1.5px solid rgba(0,0,0,.08); box-shadow: 0 24px 60px rgba(0,0,0,.1); color: {INK}; opacity: 0; }}
-#cEx {{ top: 820px; }} #cSh {{ top: 1060px; }}
-.cn {{ width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 52px; background: {INK}; color: #fff; flex: none; }}
-.card b {{ display: block; font-weight: 800; font-size: 64px; letter-spacing: -.02em; line-height: 1; }}
-.card i {{ display: block; font-style: normal; font-weight: 600; font-size: 32px; opacity: .6; margin-top: 8px; }}
-#late {{ position: absolute; top: 1290px; left: 0; right: 0; margin-left: auto; margin-right: auto; width: fit-content; display: flex; align-items: center; gap: 12px; padding: 12px 24px;
-  border-radius: 999px; border: 2px solid {RED}; color: {RED}; font-weight: 700; font-size: 30px; white-space: nowrap; opacity: 0; }}
-#chk {{ position: absolute; left: 816px; top: 846px; width: 96px; height: 96px; border-radius: 50%; background: {INK}; display: grid; place-items: center; opacity: 0; }}
-#chk svg {{ width: 56px; height: 56px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }}
-/* checklist + counter */
-#rows {{ position: absolute; left: 110px; right: 110px; top: 690px; display: flex; flex-direction: column; gap: 26px; }}
-.row {{ height: 128px; border-radius: 32px; display: flex; align-items: center; gap: 30px; padding: 0 30px; background: rgba(255,255,255,.72);
-  border: 1.5px solid rgba(0,0,0,.08); box-shadow: 0 18px 40px rgba(0,0,0,.08); opacity: 0; }}
-.rn {{ width: 64px; height: 64px; border-radius: 50%; border: 3px solid {INK}; display: grid; place-items: center; font-weight: 800; font-size: 34px; flex: none; }}
-.row b {{ flex: 1; font-weight: 700; font-size: 46px; letter-spacing: -.02em; white-space: nowrap; }}
-.rc {{ width: 64px; height: 64px; border-radius: 50%; border: 3px solid rgba(0,0,0,.25); display: grid; place-items: center; flex: none; }}
-.rc svg {{ width: 40px; height: 40px; fill: none; stroke: #fff; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 30; stroke-dashoffset: 30; }}
-#ctr {{ position: absolute; left: 60px; right: 60px; top: 1200px; text-align: center; opacity: 0; }}
+.vtag {{ position: absolute; left: 24px; top: 90px; display: flex; align-items: center; gap: 10px; padding: 8px 16px; border-radius: 999px; background: rgba(255,255,255,.92);
+  font-weight: 700; font-size: 28px; color: {INK}; }}
+.vtag b {{ color: {RED}; }}
+.play {{ width: 0; height: 0; border-left: 18px solid {INK}; border-top: 11px solid transparent; border-bottom: 11px solid transparent; }}
+.pbar {{ position: absolute; left: 26px; right: 26px; bottom: 34px; height: 9px; border-radius: 5px; background: rgba(255,255,255,.35); }}
+.pfill {{ position: absolute; left: 0; top: 0; bottom: 0; width: 100%; border-radius: 5px; background: #fff; transform-origin: left center; transform: scaleX(0); }}
+#r4pb, #r5pb {{ background: {RED}; }}
+.pbar .mk {{ position: absolute; left: 10%; top: -8px; width: 5px; height: 25px; border-radius: 2px; background: {RED}; }}
+.thumb {{ position: absolute; left: 600px; top: 1150px; width: 120px; height: 120px; border-radius: 50%; background: url(assets/img/paper_tile.jpg);
+  filter: url(#rough) drop-shadow(6px 10px 0 rgba(0,0,0,.35)); opacity: 0; z-index: 7; }}
+.rtag {{ position: absolute; left: 150px; top: 430px; padding: 18px 30px; background: {RED}; color: #fff; font-weight: 800; font-size: 50px; white-space: nowrap;
+  filter: url(#rough) drop-shadow(6px 10px 0 rgba(0,0,0,.35)); opacity: 0; z-index: 7; }}
+.rstamp {{ position: absolute; left: 220px; top: 860px; width: 640px; padding: 14px 0; text-align: center; border: 9px solid {RED}; border-radius: 18px;
+  color: {RED}; font-weight: 800; font-size: 62px; letter-spacing: .04em; white-space: nowrap; opacity: 0; z-index: 7; filter: url(#rough);
+  background: rgba(255,255,255,.55); }}
+.rstamp.white {{ color: #fff; border-color: #fff; background: rgba(0,0,0,.45); top: 1120px; }}
+.bubble {{ position: absolute; left: 30px; right: 30px; top: 150px; padding: 18px 22px; border-radius: 26px; background: #fff; text-align: center; opacity: 0; }}
+.bubble span {{ font-family: "Fraunces"; font-weight: 700; font-size: 40px; color: {INK}; }}
+.res {{ position: absolute; left: 10px; right: 10px; top: 120px; text-align: center; }}
+#res1 {{ font-weight: 800; font-size: 96px; letter-spacing: -.04em; color: #fff; opacity: 0; }}
+#res2 {{ font-family: "Fraunces"; font-weight: 700; font-size: 36px; color: #e9e7e1; margin-top: 4px; opacity: 0; }}
+.strip5 {{ position: absolute; left: 0; right: 0; top: 0; height: 300%; }}
+.fi {{ position: relative; height: 33.3334%; overflow: hidden; background: linear-gradient(180deg, #a5a5a1, #6f6f6c); }}
+.fi.p3 {{ background: linear-gradient(180deg, #828280, #4f4f4d); }}
+.photo {{ position: absolute; inset: 40px 30px 120px; border: 14px solid #fff; overflow: hidden; background: linear-gradient(180deg, #cfcdc7, #9d9b96); }}
+.sunc {{ position: absolute; left: 230px; top: 70px; width: 90px; height: 90px; border-radius: 50%; background: #f5f4f0; }}
+.hill1 {{ position: absolute; left: -80px; top: 330px; width: 460px; height: 460px; border-radius: 50%; background: #5d5c59; }}
+.hill2 {{ position: absolute; left: 140px; top: 390px; width: 420px; height: 420px; border-radius: 50%; background: #3f3e3c; }}
+.paused {{ position: absolute; left: 50%; top: 42%; width: 130px; height: 130px; margin: -65px 0 0 -65px; border-radius: 50%; background: rgba(20,20,20,.75);
+  display: flex; align-items: center; justify-content: center; gap: 18px; opacity: 0; }}
+.paused i {{ width: 16px; height: 52px; border-radius: 4px; background: #fff; }}
+/* cards */
+.card3 {{ position: absolute; top: 760px; width: 270px; height: 360px; background: url(assets/img/paper_tile.jpg); display: grid; place-items: center; opacity: 0; }}
+.card3 span {{ font-weight: 800; font-size: 210px; letter-spacing: -.05em; color: {INK}; }}
+.arrow {{ position: absolute; left: 470px; top: 470px; width: 140px; height: 230px; opacity: 0; }}
+.arrow svg {{ width: 100%; height: 100%; overflow: visible; }}
+.arrow path {{ fill: none; stroke: {RED}; stroke-width: 18; stroke-linecap: round; stroke-linejoin: round; }}
+.card2 {{ position: absolute; left: 130px; width: 820px; height: 210px; display: flex; align-items: center; gap: 34px; padding: 0 44px;
+  background: url(assets/img/paper_tile.jpg); opacity: 0; }}
+#cEx, #cSh2 {{ top: 600px; }} #cSh, #cEx2 {{ top: 850px; }}
+.cn {{ width: 104px; height: 104px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 58px; background: {INK}; color: #fff; flex: none; }}
+.card2 b {{ display: block; font-weight: 800; font-size: 76px; letter-spacing: -.02em; line-height: 1; }}
+.card2 div i {{ display: block; font-family: "Fraunces"; font-style: normal; font-weight: 700; font-size: 34px; opacity: .65; margin-top: 8px; }}
+#cSh2 {{ background: {RED}; color: #fff; }} #cSh2 .cn {{ background: #fff; color: {RED}; }}
+.chk {{ position: absolute; left: 840px; top: 540px; width: 140px; height: 140px; border-radius: 50%; background: #fff; display: grid; place-items: center; opacity: 0; }}
+.chk svg {{ width: 90px; height: 90px; fill: none; stroke: {RED}; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }}
+/* notebook + counter */
+.note {{ position: absolute; left: 110px; top: 450px; width: 860px; padding: 40px 50px 34px 110px; background-color: #f7f6f1;
+  background-image: repeating-linear-gradient(180deg, transparent 0 86px, rgba(60,60,60,.22) 86px 89px), linear-gradient(90deg, transparent 0 84px, rgba(232,38,42,.55) 84px 87px, transparent 87px);
+  opacity: 0; }}
+.nrow {{ position: relative; height: 89px; display: flex; align-items: center; font-family: "Fraunces"; font-weight: 700; font-size: 50px; color: {INK}; white-space: nowrap; opacity: 0; }}
+.nrow b {{ margin-right: 18px; }}
+.tick {{ position: absolute; right: -10px; top: 12px; width: 70px; height: 60px; overflow: visible; }}
+.tick path {{ fill: none; stroke: {RED}; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 100; stroke-dashoffset: 100; }}
+.ctr {{ position: absolute; left: 190px; top: 900px; width: 700px; padding: 26px 0 30px; text-align: center; background: {INK}; color: #fff; opacity: 0; }}
 #ctrn {{ font-weight: 800; font-size: 170px; letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }}
-#ctrl {{ font-weight: 600; font-size: 40px; color: {GREY_L}; margin-top: 6px; }}
-.up {{ color: {INK}; font-weight: 800; }}
+.ctrl {{ font-family: "Fraunces"; font-weight: 700; font-size: 40px; color: #d9d7d1; margin-top: 4px; }}
 /* CTA */
-#bkm {{ position: absolute; left: 495px; top: 290px; width: 90px; height: 110px; opacity: 0; }}
-#bkm svg {{ width: 100%; height: 100%; overflow: visible; }}
-#bkp {{ fill: none; stroke: #fff; stroke-width: 1.8; stroke-linejoin: round; }}
-#cbox {{ position: absolute; left: 110px; right: 110px; top: 880px; height: 132px; border-radius: 999px; display: flex; align-items: center;
-  justify-content: space-between; padding: 0 18px 0 46px; background: rgba(255,255,255,.07); border: 1.5px solid rgba(255,255,255,.2);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.12); opacity: 0; }}
-#cbt {{ display: flex; align-items: center; font-size: 46px; font-weight: 700; color: #fff; letter-spacing: .04em; }}
-#cbph {{ color: rgba(255,255,255,.45); font-weight: 600; letter-spacing: 0; }}
-#caret {{ width: 4px; height: 52px; margin-left: 6px; background: #fff; border-radius: 2px; }}
-#send {{ width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.12); color: #fff; }}
-#send svg {{ width: 48px; height: 48px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }}
-#hook {{ position: absolute; left: 50%; top: 1080px; margin-left: -330px; width: 660px; height: 250px; border-radius: 60px; background: #fff; color: {INK};
-  display: grid; place-items: center; font-weight: 800; font-size: 190px; letter-spacing: -.04em; opacity: 0;
-  box-shadow: 0 0 0 10px rgba(255,255,255,.08), 0 40px 120px rgba(255,255,255,.14); }}
+.bkm {{ position: absolute; left: 470px; top: 410px; width: 140px; height: 170px; opacity: 0; }}
+.bkm svg {{ width: 100%; height: 100%; overflow: visible; }}
+.bkm path {{ fill: #f1efea; stroke: none; }}
+.cbox {{ position: absolute; left: 110px; top: 640px; width: 860px; height: 132px; border-radius: 999px; display: flex; align-items: center; padding: 0 46px;
+  background: url(assets/img/paper_tile.jpg); font-size: 50px; font-weight: 800; color: {INK}; opacity: 0; }}
+#cbph {{ font-family: "Fraunces"; font-weight: 700; color: rgba(0,0,0,.45); }}
+#caret {{ width: 5px; height: 56px; margin-left: 6px; background: {INK}; border-radius: 2px; }}
+#hook8 {{ position: absolute; left: 0; right: 0; top: 880px; display: flex; justify-content: center; gap: 14px; }}
+.hl {{ width: 210px; height: 270px; display: grid; place-items: center; font-weight: 800; font-size: 230px; line-height: 1; opacity: 0; }}
+.hl0 {{ background: {RED}; color: #fff; }} .hl1 {{ background: url(assets/img/paper_tile.jpg); color: {INK}; }}
+.hl2 {{ background: #0e0e0e; color: #fff; outline: 4px solid #f1efea; }} .hl3 {{ background: url(assets/img/paper_tile.jpg); color: {RED}; font-family: "Fraunces"; }}
+/* numerals + shards */
+.bign {{ position: absolute; left: 0; right: 0; text-align: center; font-weight: 800; font-size: {NUM_SIZE}px; line-height: 1; color: {INK}; opacity: 0; }}
+#shards {{ position: absolute; inset: 0; z-index: 10; pointer-events: none; }}
+.shd {{ position: absolute; opacity: 0; }}
 """
 
 
 def main():
-    body = scenes()
-    # the ground breathes: two soft blobs drift the whole time on both sides of the iris
-    for side in ("L", "D"):
-        js(f'tl.to("#bg{side} .b1", {{x: 160, y: -90, duration: {DUR / 2:.2f}, ease: "sine.inOut", repeat: 1, yoyo: true}}, 0);')
-        js(f'tl.to("#bg{side} .b2", {{x: -180, y: 70, duration: {DUR / 3:.2f}, ease: "sine.inOut", repeat: 2, yoyo: true}}, 0);')
+    H, S, (t_x, t_g, t_3) = scenes()
+    captions([f"l{i:02d}" for i in range(1, 13)])
+    sh = shards(t_x, t_g, t_3)
+    # stop-motion boil: the edge filter's noise changes 12 times a second
+    for i in range(int(DUR * 12)):
+        js(f'tl.set("#roughT", {{attr: {{seed: {i % 9 + 1}}}}}, {i / 12:.3f});')
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
   <head>
@@ -794,10 +758,12 @@ def main():
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
-      <div id="bgL"><i class="blob b1"></i><i class="blob b2"></i></div>
-      <div id="bgD"><i class="blob b1"></i><i class="blob b2"></i></div>
-      <div id="grain"></div>
-      <div id="cam">{body}</div>
+      <svg class="fx"><defs><filter id="rough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence id="roughT" type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="1"/>
+        <feDisplacementMap in="SourceGraphic" scale="7" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
+      {S}
+      {H}
+      <div id="caps">{"".join(CAP)}</div>
+      {sh}
       <audio id="vo" src="assets/audio/vo.wav" data-start="0" data-duration="{DUR}" data-track-index="1"></audio>
     </div>
     <script>

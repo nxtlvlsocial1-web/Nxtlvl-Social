@@ -47,6 +47,9 @@ KINDS = {
     # v3 cold open: the screen cracks on "lose", shatters on "you."
     "crack": ([f("100-cc0-sfx-2/sfx100v2_glass_04.ogg")], "hit", -12, {"max_dur": .3}),
     "shatter": ([f("100-cc0-sfx/glass_05.ogg")], "hit", -12, {"max_dur": 1.0, "fade_out": .3}),
+    # v4 papercraft: paper handling for the scraps / strips / cards, a real paper rip for the tears
+    "paper": ([f("100-cc0-sfx/paper_01.ogg"), f("100-cc0-sfx/paper_02.ogg"), f("100-cc0-sfx/paper_03.ogg"), f("100-cc0-sfx/paper_04.ogg")], "foley", -14, {"max_dur": .45}),
+    "rip": ([f("202-more-sound-effects/Paper _ Stationery__Stationery_44.wav")], "foley", -8, {"max_dur": .9, "fade_out": .25}),
     "logo": ([f("wind-hit-time-morph/qubodup-megaswosh2.wav")], "whoosh", -16, {"reverse": True, "max_dur": .6, "anchor": "end"}),
 }
 

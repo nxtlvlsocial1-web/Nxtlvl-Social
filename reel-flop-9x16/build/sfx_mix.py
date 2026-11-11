@@ -9,7 +9,7 @@ too"), with the openverse-sfx skill (~/.claude/skills/openverse-sfx), following 
   * every effect is trimmed to its moment, then PEAK-normalised by measurement with the skill's sfx_normalize.py
     (never loudnorm on a short file); the per-kind peak target sets the hierarchy (hits and whooshes up, ticks and
     typing down), all of them above the music and under the voice.
-  * the music (Openverse: "Hip-Hop 1" by Deff Syndicate, CC BY 3.0, edited to the reel by build/music.py)
+  * the music (Openverse: "What Can Do" by Felixjd, CC BY 3.0, edited to the reel by build/music.py)
     is normalised to -20 LUFS and sidechain-ducked under the voice; the voice is the loudest layer.
   * two-pass loudnorm to -16 LUFS with a -4.5 dBTP ceiling (the AAC encode adds ~0.5 dB), muxed onto the picture.
   * credits.txt lists every pack used (CC0: no credit required, logged anyway).
@@ -33,7 +33,7 @@ DUR = round(json.load(open(os.path.join(ROOT, "plan", "words.json")))[-1]["t1"] 
 PEAK = {"whoosh_big": -6, "whoosh": -8, "swish": -10, "pop": -9, "hit": -6, "alert": -9, "stamp": -6, "tick": -16, "success": -8,
         "drop": -8, "sparkle": -12, "click": -10, "type": -17, "rise": -10, "ding": -8, "notify": -8, "logo": -7,
         "error": -9, "glitch": -8, "scratch": -8, "count": -11,
-        "crack": -5, "shatter": -5}
+        "crack": -5, "shatter": -5, "paper": -12, "rip": -6}
 
 
 def run(cmd):
@@ -119,8 +119,8 @@ def main():
     # credits
     oga = json.load(open(os.path.join(os.path.dirname(ROOT), "spin-bout-u-drake", "plan", "sfx_credits_oga.json")))
     lines = ["Reel-flop explainer - sound credits", "",
-             "Music: \"Hip-Hop 1\" by Deff Syndicate is licensed under CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/),",
-             "found on Openverse, hosted by Jamendo (https://www.jamendo.com/track/164177). Edited (cut to the reel, drop-out at 0:18) by Nxtlvl Social.",
+             "Music: \"What Can Do\" by Felixjd is licensed under CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/),",
+             "found on Openverse, hosted by Jamendo (https://www.jamendo.com/track/367005). Edited (cut to the reel, drop-out on \"nothing moves\") by Nxtlvl Social.",
              "Voice: open-source models run locally: Chatterbox by Resemble AI (MIT), with a reference voice made by Kokoro-82M by hexgrad",
              "(Apache 2.0, voice af_heart).", "",
              "Openverse was searched first (sfx/search/*.json); its sound-effect results are Freesound files, whose server refuses",

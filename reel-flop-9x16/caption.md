@@ -12,7 +12,7 @@ This reel is about to lose you. Your reel didn't flop because of the algorithm. 
 
 Fix these three and watch your next reel. Save this so you don't forget.
 
-Music: "Hip-Hop 1" by Deff Syndicate, CC BY 3.0
+Music: "What Can Do" by Felixjd, CC BY 3.0
 
 #reelstips #contentcreator #instagramgrowth #hooks #socialmediatips
 reel hooks, how to get more views on reels, why my reels flop, instagram algorithm, first 3 seconds of a reel, video hook ideas, reels retention tips, short form video tips, tiktok hooks, content creation tips
