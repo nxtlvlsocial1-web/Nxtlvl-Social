@@ -861,6 +861,176 @@ def scenes():
 
 
 
+# ================================================================= v9 intro: two "real" reels in the Instagram UI
+# Owner's idea: their own green-screen recording of the Instagram reel screen sets the grid. Reel 1 is an average,
+# skippable hook; the viewer scrolls to reel 2 (an imaginary pixel mascot introducing himself in gibberish, full
+# screen), scrolls back to reel 1, and from there our video takes over. Usernames are made up (not the recording's).
+# The UI is rebuilt here at the recording's positions (1320x2868 -> 1080 wide; the top anchored to the top, the bottom
+# block to the bottom), so it stays crisp white and the usernames are ours.
+IT = json.load(open(os.path.join(ROOT, "plan", "intro_timing.json")))
+PX = json.load(open(os.path.join(ROOT, "plan", "pixo_sylls.json")))
+T0 = IT["T0"]
+I = []
+RH = 1716           # the reel area (above the comment bar)
+
+
+def ji(s):
+    I.append("      " + s)
+
+
+IG = {
+    "heart": '<path d="M12 20.3s-7.6-4.6-9.2-9.4C1.8 7.6 4 4.8 7 4.8c2 0 3.5 1.1 5 3 1.5-1.9 3-3 5-3 3 0 5.2 2.8 4.2 6.1-1.6 4.8-9.2 9.4-9.2 9.4z"/>',
+    "comment": '<path d="M20.6 16.2A9 9 0 1 0 17 19.8L21.5 21z"/>',
+    "repost": '<path d="M4 10.5V9a3 3 0 0 1 3-3h12M16 3l3 3-3 3M20 13.5V15a3 3 0 0 1-3 3H5M8 21l-3-3 3-3"/>',
+    "send": '<path d="M21.5 3 3 10.2l7.4 3.1 3.1 7.4zM10.4 13.3 21.5 3"/>',
+    "save": '<path d="M19 21l-7-5-7 5V4.5A1.5 1.5 0 0 1 6.5 3h11A1.5 1.5 0 0 1 19 4.5z"/>',
+    "menu": '<path d="M5 9h14M5 15h14"/>',
+}
+
+
+def ig_icon(n, cls="igi"):
+    return f'<svg class="{cls}" viewBox="0 0 24 24">{IG[n]}</svg>'
+
+
+def reel_overlay(user, avatar):
+    icons = "".join(f'<div class="igc" style="top:{y}px">{ig_icon(n)}</div>' for n, y in
+                    [("heart", 1055), ("comment", 1169), ("repost", 1285), ("send", 1400), ("save", 1521), ("menu", 1629)])
+    fw = text_w(user, 37, 700, -.005)
+    return (f'<i class="igshade"></i>{icons}<div class="igav">{avatar}</div><div class="igu">{user}</div>'
+            f'<div class="igf" style="left:{149 + fw + 26:.0f}px">Follow</div><div class="igsee">See more</div>')
+
+
+def intro():
+    S1, G0, S2 = IT["S1"], IT["G0"], IT["S2"]
+    # ---- reel 1: an ordinary creator video ("Hey guys, welcome back to my channel...")
+    room = ('<div class="room"><i class="win"></i><i class="win2"></i><i class="shelf"></i><i class="plant"><b></b><b></b><b></b></i>'
+            '<i class="pot"></i><i class="lamp"></i></div>')
+    caps = []
+    chunks = [("Hey guys,", 0, 2), ("welcome back to my channel!", 2, 7), ("So today...", 7, 9)]
+    for k, (txt, a, b) in enumerate(chunks):
+        caps.append(f'<div class="igcap" id="ic{k}">{txt}</div>')
+        t_in = IT["words"][a]["t0"] - .02
+        ji(f'M.set("#ic{k}", {{opacity: 1}}, {t_in:.3f});')
+        if k + 1 < len(chunks):
+            ji(f'M.set("#ic{k}", {{opacity: 0}}, {IT["words"][chunks[k + 1][1]]["t0"] - .02:.3f});')
+    av1 = '<svg viewBox="0 0 40 40"><defs><linearGradient id="av1g"><stop offset="0" stop-color="#f6c3a1"/><stop offset="1" stop-color="#e9a987"/></linearGradient></defs><circle cx="20" cy="20" r="20" fill="#5a6cff"/><circle cx="20" cy="17" r="8" fill="url(#av1g)"/><path d="M6 36c3-8 9-10 14-10s11 2 14 10" fill="#ff7a8a"/></svg>'
+    r1 = (f'<div class="igr" id="igr1">{room}<div class="r1c" id="r1c">{creator("crI", ("#9aa7b8", "#6d7c92"))}</div>{"".join(caps)}'
+          f'{reel_overlay("danny.daily.vlogs", av1)}</div>')
+    creator_live_i("crI", 0, S1 + .2)
+    ji(f'M.fromTo("#r1c", {{x: -6, y: 0, rotation: -.4}}, {{x: 8, y: -6, rotation: .5, duration: 1.3, repeat: 3, yoyo: true, ease: "sine.inOut", immediateRender: false}}, 0);')
+    # ---- reel 2: Pixo, a pixel mascot, introduces himself in gibberish
+    sprites = "".join(f'<img class="pxs" id="px_{n}" src="assets/img/pixo/{n}.png"{" style=opacity:1" if n == "idle" else ""}>' for n in ("idle", "talk", "blink", "waveup", "wavedn"))
+    words = "".join(f'<span class="gw" id="gw{k}">{w}</span> ' for k, w in enumerate(PX["words"]))
+    av2 = '<img src="assets/img/pixo/idle.png" style="width:100%;height:100%;image-rendering:pixelated;background:#6a2fb0">'
+    r2 = (f'<div class="igr" id="igr2" style="top:{RH}px"><img class="pxbg" src="assets/img/pixo/bg.png"><div class="pxm" id="pxm">{sprites}</div>'
+          f'<div class="pxb" id="pxb">{words}</div>{reel_overlay("pixo.planet.fm", av2)}</div>')
+    # the scroll: the reel stack moves (status bar, nav and comment bar stay put)
+    ji(f'M.fromTo("#igstack", {{y: 0}}, {{y: {-RH}, duration: .42, ease: "expo.out", immediateRender: false}}, {S1:.3f});')
+    ji(f'M.fromTo("#igstack", {{y: {-RH}}}, {{y: 0, duration: .42, ease: "expo.out", immediateRender: false}}, {S2:.3f});')
+    SFX.append({"type": "swish", "t": round(S1 - T0, 3)})
+    SFX.append({"type": "swish", "t": round(S2 - T0, 3)})
+    # Pixo talks: the mouth opens on every blip, he bobs, waves on "Mi Pixo!", blinks; the gibberish pops in word by word
+    ji(f'M.fromTo("#pxm", {{y: 0}}, {{y: -16, duration: .22, repeat: {int((S2 - S1) / .22) + 1}, yoyo: true, ease: "steps(2)", immediateRender: false}}, {S1:.3f});')
+    for s_ in PX["sylls"]:
+        t = G0 + s_
+        frame = "waveup" if 1.0 < s_ < 1.9 and int(s_ * 10) % 3 else ("wavedn" if 1.0 < s_ < 1.9 else "talk")
+        ji(f'M.set("#px_idle", {{opacity: 0}}, {t:.3f}); M.set("#px_{frame}", {{opacity: 1}}, {t:.3f});')
+        ji(f'M.set("#px_{frame}", {{opacity: 0}}, {t + .07:.3f}); M.set("#px_idle", {{opacity: 1}}, {t + .07:.3f});')
+    ji(f'M.set("#px_idle", {{opacity: 0}}, {G0 + PX["dur"] - .1:.3f}); M.set("#px_blink", {{opacity: 1}}, {G0 + PX["dur"] - .1:.3f});')
+    ji(f'M.set("#px_blink", {{opacity: 0}}, {G0 + PX["dur"]:.3f}); M.set("#px_idle", {{opacity: 1}}, {G0 + PX["dur"]:.3f});')
+    ji(f'M.fromTo("#pxb", {{opacity: 0, scale: .6}}, {{opacity: 1, scale: 1, duration: .25, ease: "steps(4)", immediateRender: false}}, {G0 - .05:.3f});')
+    for k, t in enumerate(PX["word_t"]):
+        ji(f'M.fromTo("#gw{k}", {{opacity: 0, y: 14}}, {{opacity: 1, y: 0, duration: .12, ease: "steps(3)", immediateRender: false}}, {G0 + t:.3f});')
+    # back on reel 1: it is paused (the creator freezes mid-word); then our video takes over and the UI falls away
+    ji(f'M.set("#ic2", {{opacity: 1}}, {S2:.3f});')
+    t_g = T0 - .18
+    for k, (dx, op) in enumerate([(14, .9), (-12, .8), (10, .9), (0, 0)]):
+        ji(f'M.set("#iglR", {{x: {dx}, opacity: {op}}}, {t_g + k * .045:.3f}); M.set("#iglC", {{x: {-dx}, opacity: {op}}}, {t_g + k * .045:.3f});')
+    SFX.append({"type": "glitch", "t": round(t_g - T0, 3)})
+    ji(f'M.to("#intro", {{opacity: 0, scale: 1.12, duration: .3, ease: "power2.in"}}, {T0 - .05:.3f});')
+    ji(f'M.set("#intro", {{display: "none"}}, {T0 + .3:.3f});')
+    status = ('<div class="igst"><b>20:19</b><svg class="bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 10-4.5M18 11v5l1.5 2H6.5M10 21h4M3 3l18 18"/></svg>'
+              '<i class="isl"></i><div class="sr"><span class="sig"><i></i><i></i><i></i><i></i></span>'
+              '<svg class="wifi" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r="1.2"/></svg>'
+              '<span class="bat"><b>62</b></span></div></div>'
+              '<svg class="ignav l" viewBox="0 0 24 24"><path d="M15 4 7 12l8 8"/></svg><svg class="ignav r" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></svg>')
+    cbar = '<div class="igcb"><div class="igin">Add comment...</div></div>'
+    glx = '<i class="iglx" id="iglR"></i><i class="iglx c" id="iglC"></i>'
+    return (f'<div id="intro"><div id="igview"><div id="igstack">{r1}{r2}</div></div>{status}{cbar}{glx}</div>')
+
+
+def creator_live_i(cid, t0, t1):
+    """creator_live for the intro's master timeline."""
+    rnd = random.Random(2)
+    t = t0 + .5
+    while t < t1:
+        ji(f'M.fromTo("#{cid}_eyes", {{scaleY: 1, transformOrigin: "50% 50%"}}, {{keyframes: {{scaleY: [1, .08, 1]}}, duration: .16, ease: "none", immediateRender: false}}, {t:.3f});')
+        t += rnd.uniform(1.2, 2.0)
+    for w in IT["words"]:
+        if w["t0"] < t1:
+            d = max(.12, w["t1"] - w["t0"])
+            ji(f'M.fromTo("#{cid}_mouth", {{scaleY: .5, transformOrigin: "50% 50%"}}, {{scaleY: 1.5, transformOrigin: "50% 50%", duration: {d / 2:.3f}, repeat: 1, yoyo: true, ease: "sine.inOut", immediateRender: false}}, {w["t0"]:.3f});')
+
+
+INTRO_CSS = """
+@font-face { font-family: "PressStart"; src: url("assets/fonts/press-start-2p-latin-400-normal.woff2"); }
+#intro { position: absolute; inset: 0; z-index: 30; background: #000; transform-origin: 50% 45%; }
+#igview { position: absolute; left: 0; top: 0; width: 1080px; height: 1716px; overflow: hidden; }
+#igstack { position: absolute; left: 0; top: 0; width: 1080px; height: 3432px; }
+.igr { position: absolute; left: 0; width: 1080px; height: 1716px; overflow: hidden; }
+#igr1 { top: 0; background: linear-gradient(180deg, #d7cbbb, #c3b29c 70%, #a8957c); }
+.room .win { position: absolute; left: 90px; top: 300px; width: 330px; height: 430px; border: 18px solid #efe7dc; background: linear-gradient(180deg, #cfe3f2, #e9f1f6); }
+.room .win2 { position: absolute; left: 245px; top: 300px; width: 18px; height: 430px; background: #efe7dc; }
+.room .shelf { position: absolute; left: 640px; top: 560px; width: 360px; height: 20px; background: #8a6d52; }
+.room .pot { position: absolute; left: 790px; top: 470px; width: 90px; height: 90px; border-radius: 0 0 20px 20px; background: #b26b4c; }
+.room .plant b { position: absolute; width: 60px; height: 120px; border-radius: 50% 50% 0 50%; background: #5f9e6e; }
+.room .plant b:nth-child(1) { left: 770px; top: 360px; transform: rotate(-30deg); }
+.room .plant b:nth-child(2) { left: 815px; top: 340px; }
+.room .plant b:nth-child(3) { left: 860px; top: 365px; transform: rotate(35deg); }
+.room .lamp { position: absolute; left: 680px; top: 410px; width: 70px; height: 150px; border-radius: 30px 30px 6px 6px; background: linear-gradient(#f3e3c0, #e2c48e); }
+.r1c { position: absolute; left: 140px; top: 640px; width: 800px; height: 1120px; }
+.r1c .crt { height: 100%; }
+.igcap { position: absolute; left: 0; right: 0; top: 860px; text-align: center; font-family: Inter; font-weight: 800; font-size: 64px; color: #fff; opacity: 0;
+  text-shadow: 0 0 6px #000, 0 0 6px #000, 3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000; z-index: 3; }
+.pxbg { position: absolute; left: 0; top: -100px; width: 1080px; height: 1920px; image-rendering: pixelated; }
+.pxm { position: absolute; left: 200px; top: 780px; width: 704px; height: 704px; }
+.pxs { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; opacity: 0; }
+.pxb { position: absolute; left: 70px; right: 70px; top: 330px; padding: 40px 36px; background: #fff; color: #1b1f4a; font-family: PressStart; font-size: 46px; line-height: 1.5;
+  text-align: center; opacity: 0; box-shadow: 0 0 0 8px #1b1f4a, 12px 12px 0 8px rgba(27,31,74,.45); }
+.gw { opacity: 0; display: inline-block; }
+.igshade { position: absolute; left: 0; right: 0; bottom: 0; height: 520px; background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.5)); z-index: 4; }
+.igc { position: absolute; left: 975px; width: 62px; height: 62px; margin-top: -31px; z-index: 5; }
+.igi { width: 62px; height: 62px; fill: none; stroke: #fff; stroke-width: 1.7; stroke-linejoin: round; stroke-linecap: round; filter: drop-shadow(0 1px 3px rgba(0,0,0,.4)); }
+.igav { position: absolute; left: 40px; top: 1502px; width: 84px; height: 84px; border-radius: 50%; overflow: hidden; z-index: 5; box-shadow: 0 0 0 2px rgba(255,255,255,.5); }
+.igav svg { width: 100%; height: 100%; }
+.igu { position: absolute; left: 149px; top: 1520px; font-family: Inter; font-weight: 700; font-size: 37px; color: #fff; z-index: 5; letter-spacing: -.005em; text-shadow: 0 1px 4px rgba(0,0,0,.35); }
+.igf { position: absolute; top: 1513px; height: 58px; padding: 0 24px; display: flex; align-items: center; border: 2.5px solid rgba(255,255,255,.85); border-radius: 15px;
+  font-family: Inter; font-weight: 600; font-size: 32px; color: #fff; z-index: 5; }
+.igsee { position: absolute; left: 41px; top: 1620px; font-family: Inter; font-weight: 600; font-size: 33px; color: rgba(255,255,255,.75); z-index: 5; }
+.igst { position: absolute; left: 0; right: 0; top: 0; height: 150px; z-index: 6; }
+.igst > b { position: absolute; left: 88px; top: 56px; font-family: Inter; font-weight: 700; font-size: 44px; color: #fff; letter-spacing: -.01em; }
+.bell { position: absolute; left: 228px; top: 62px; width: 36px; height: 36px; fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; }
+.isl { position: absolute; left: 321px; top: 34px; width: 421px; height: 90px; border-radius: 45px; background: #000; }
+.sr { position: absolute; right: 70px; top: 60px; display: flex; align-items: center; gap: 16px; }
+.sig { display: flex; align-items: flex-end; gap: 5px; height: 34px; }
+.sig i { width: 8px; border-radius: 2px; background: #fff; }
+.sig i:nth-child(1) { height: 12px; } .sig i:nth-child(2) { height: 18px; } .sig i:nth-child(3) { height: 25px; } .sig i:nth-child(4) { height: 32px; background: rgba(255,255,255,.4); }
+.wifi { width: 44px; height: 44px; fill: #fff; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; }
+.wifi path { fill: none; }
+.bat { width: 74px; height: 38px; border-radius: 11px; background: rgba(255,255,255,.4); position: relative; display: grid; place-items: center; }
+.bat:before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 62%; border-radius: 11px 0 0 11px; background: #fff; }
+.bat b { position: relative; font-family: Inter; font-weight: 800; font-size: 26px; color: #000; }
+.ignav { position: absolute; top: 172px; width: 64px; height: 64px; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; z-index: 6;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,.35)); }
+.ignav.l { left: 50px; } .ignav.r { left: 990px; }
+.igcb { position: absolute; left: 0; right: 0; top: 1716px; bottom: 0; background: #0f0f13; z-index: 6; }
+.igin { position: absolute; left: 39px; right: 36px; top: 22px; height: 116px; border-radius: 58px; background: #1d1e24; padding-left: 52px; display: flex; align-items: center;
+  font-family: Inter; font-weight: 600; font-size: 40px; color: #9b9ca3; }
+.iglx { position: absolute; inset: 0; z-index: 7; opacity: 0; background: rgba(255,0,60,.25); mix-blend-mode: screen; }
+.iglx.c { background: rgba(0,220,255,.25); }
+"""
+
+
 CSS = f"""
 @font-face {{ font-family: "Inter"; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2"); }}
 @font-face {{ font-family: "Inter"; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2"); }}
@@ -1096,7 +1266,8 @@ def main():
     for a, b in zip(cuts, cuts[1:]):
         js(f'tl.fromTo("#stage", {{scale: 1}}, {{scale: 1.05, duration: {b - a:.3f}, ease: "none", immediateRender: false}}, {a:.3f});')
     js(f'tl.fromTo("#dots", {{y: 0}}, {{y: -45 * 6, duration: {DUR:.2f}, ease: "none", immediateRender: false}}, 0);')
-    css = CSS
+    intro_html = intro()
+    css = CSS + INTRO_CSS
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
   <head>
@@ -1107,7 +1278,7 @@ def main():
     <style>{css}</style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="{round(T0 + DUR, 2)}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
       <svg class="fx"><defs>{"".join(DEFS)}<linearGradient id="ig1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff2a2a"/><stop offset="1" stop-color="#d02cff"/></linearGradient>
         <linearGradient id="ig2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6a1fe0"/><stop offset="1" stop-color="#2a7bff"/></linearGradient></defs></svg>
       <div id="bg"><i class="glow g1"></i><i class="glow g2"></i><i class="glow g3"></i>
@@ -1119,14 +1290,19 @@ def main():
       <div id="fxl">{"".join(FXH)}</div>
       <div id="wps">{"".join(WP)}</div>
       <div id="grain"></div>
-      <audio id="vo" src="assets/audio/vo.wav" data-start="0" data-duration="{DUR}" data-track-index="1"></audio>
+      {intro_html}
+      <audio id="vo" src="assets/audio/vo.wav" data-start="{T0}" data-duration="{DUR}" data-track-index="1"></audio>
     </div>
     <script>
       window.__timelines = window.__timelines || {{}};
-      const tl = gsap.timeline({{ paused: true }});
+      const M = gsap.timeline({{ paused: true }});
+      const tl = gsap.timeline();
 {chr(10).join(A)}
       tl.set({{}}, {{}}, {DUR});
-      window.__timelines["main"] = tl;
+      M.add(tl, {T0});
+{chr(10).join(I)}
+      M.set({{}}, {{}}, {round(T0 + DUR, 2)});
+      window.__timelines["main"] = M;
     </script>
   </body>
 </html>

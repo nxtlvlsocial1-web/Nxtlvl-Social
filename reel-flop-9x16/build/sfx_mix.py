@@ -28,7 +28,10 @@ from sfx_sheet import KINDS, L  # noqa: E402
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SKILL = os.path.expanduser("~/.claude/skills/openverse-sfx/scripts")
 WORK = os.path.join(ROOT, "sfx", "work")
-DUR = round(json.load(open(os.path.join(ROOT, "plan", "words.json")))[-1]["t1"] + 1.7, 2)
+EXP = round(json.load(open(os.path.join(ROOT, "plan", "words.json")))[-1]["t1"] + 2.1, 2)    # the explainer (build/generate.py)
+# v9: the intro (two reels in the Instagram UI) plays first; the explainer, its voice, music and effects start at T0
+T0 = json.load(open(os.path.join(ROOT, "plan", "intro_timing.json")))["T0"]
+DUR = round(T0 + EXP, 2)
 # peak target (dBTP) per kind after normalising: the mix hierarchy
 PEAK = {"whoosh_big": -6, "whoosh": -8, "swish": -10, "pop": -9, "hit": -6, "alert": -9, "stamp": -6, "tick": -16, "success": -8,
         "drop": -8, "sparkle": -12, "click": -10, "type": -17, "rise": -10, "ding": -8, "notify": -8, "logo": -7,
@@ -68,7 +71,7 @@ def main():
     # one prepared file per (kind, source); rotate through a kind's sources like the cue sheet does
     prepared, rot, cues, last, packs = {}, {}, [], {}, set()
     for e in ev:
-        kind, t = e["type"], e["t"]
+        kind, t = e["type"], e["t"] + T0
         if kind not in KINDS or t - last.get(kind, -9) < (.06 if kind == "type" else .2):
             continue
         last[kind] = t
@@ -89,13 +92,18 @@ def main():
     bed = os.path.join(WORK, "music_bed.wav")
     run(["python3", os.path.join(SKILL, "sfx_normalize.py"), os.path.join(ROOT, "assets", "audio", "music.wav"), bed, "--mode", "lufs", "--target", "-20",
          "--max-peak", "-3"])
-    vo = os.path.join(ROOT, "assets", "audio", "vo.wav")
+    # the voice track: the intro's own audio (reel 1's flat creator, Pixo's gibberish), then our voiceover from T0
+    vo = os.path.join(WORK, "voice_full.wav")
+    ms0 = int(round(T0 * 1000))
+    run(["ffmpeg", "-y", "-loglevel", "error", "-i", os.path.join(ROOT, "assets", "audio", "intro", "intro.wav"), "-i", os.path.join(ROOT, "assets", "audio", "vo.wav"),
+         "-filter_complex", f"[0:a]aresample=48000,aformat=channel_layouts=stereo[i];[1:a]aresample=48000,aformat=channel_layouts=stereo,adelay={ms0}|{ms0}[v];[i][v]amix=inputs=2:normalize=0:duration=longest[o]",
+         "-map", "[o]", "-c:a", "pcm_f32le", vo])
     # mix: voice + ducked bed + every effect at its moment (amix normalize=0, float, so nothing clips before the master)
     inputs = ["-i", bed, "-i", vo]
     for _, path, _, _ in cues:
         inputs += ["-i", path]
     # the voice is padded to full length: sidechaincompress stops when its control input ends (it cut the logo tail)
-    fc = [f"[1:a]aresample=48000,apad=whole_dur={DUR + .1},asplit=2[sc][vo]", "[0:a]aresample=48000[bd]",
+    fc = [f"[1:a]aresample=48000,apad=whole_dur={DUR + .1},asplit=2[sc][vo]", f"[0:a]aresample=48000,adelay={ms0}|{ms0}[bd]",
           "[bd][sc]sidechaincompress=threshold=0.02:ratio=8:attack=20:release=400:makeup=1[bg]"]
     labels = ["[bg]", "[vo]"]
     for k, (start, _, _, _) in enumerate(cues):
