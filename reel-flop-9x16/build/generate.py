@@ -765,8 +765,8 @@ def scenes():
     card_in("#tlI", t_i + .1)
     js(f'tl.fromTo("#swE", {{opacity: 0, yPercent: 60}}, {{opacity: 1, yPercent: 0, duration: .4, ease: "expo.out", immediateRender: false}}, {L("l09", 2) - .05:.3f});')
     js(f'tl.fromTo("#swS", {{opacity: 0, yPercent: 60}}, {{opacity: .35, yPercent: 0, duration: .4, ease: "expo.out", immediateRender: false}}, {L("l09", 5) - .05:.3f});')
-    js(f'tl.fromTo("#bkE", {{scaleX: 0}}, {{scaleX: 1, duration: .4, ease: "expo.out", immediateRender: false}}, {L("l09", 2):.3f});')
-    js(f'tl.fromTo("#bkS", {{scaleX: 0}}, {{scaleX: 1, duration: .4, ease: "expo.out", immediateRender: false}}, {L("l09", 5):.3f});')
+    js(f'tl.fromTo("#bkE", {{scaleX: 0, opacity: 1}}, {{scaleX: 1, opacity: 1, duration: .4, ease: "expo.out", immediateRender: false}}, {L("l09", 2):.3f});')
+    js(f'tl.fromTo("#bkS", {{scaleX: 0, opacity: 1}}, {{scaleX: 1, opacity: 1, duration: .4, ease: "expo.out", immediateRender: false}}, {L("l09", 5):.3f});')
     popin("#lvI", L("l09", 5) + .15)
     popin("#lvlI", L("l09", 5) + .2)
     sfx("tick", L("l09", 2))
@@ -1026,7 +1026,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f4f4
 .z3 {{ position: absolute; left: 40px; top: 120px; width: 78px; height: 150px; border-radius: 16px; background: rgba(255,42,42,.12); }}
 .zl {{ position: absolute; left: 40px; top: 90px; font-style: normal; font-size: 22px; font-weight: 700; color: {RED}; white-space: nowrap; }}
 .blk {{ position: absolute; top: 160px; height: 76px; border-radius: 18px; display: grid; place-items: center; font-size: 28px; font-weight: 800; letter-spacing: .04em;
-  transform-origin: left center; }}
+  transform-origin: left center; opacity: 0; }}
 .blk.ex {{ left: 40px; width: 234px; background: rgba(0,0,0,.08); color: #55554f; }}
 .blk.sh {{ left: 274px; width: 78px; background: linear-gradient(90deg, #ff2a2a, #ff3d7f); color: #fff; font-size: 20px; }}
 .lv {{ position: absolute; left: 116px; top: 110px; width: 4px; height: 170px; background: {RED}; opacity: 0; }}

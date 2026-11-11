@@ -100,6 +100,11 @@
 "kind": "drop"
 },
 {
+"t": 11.14,
+"cue": 11.14,
+"kind": "whoosh_big"
+},
+{
 "t": 11.36,
 "cue": 11.36,
 "kind": "swish"
@@ -200,6 +205,11 @@
 "kind": "sparkle"
 },
 {
+"t": 17.18,
+"cue": 17.18,
+"kind": "whoosh_big"
+},
+{
 "t": 17.59,
 "cue": 17.59,
 "kind": "pop"
@@ -235,6 +245,11 @@
 "kind": "swish"
 },
 {
+"t": 22.58,
+"cue": 22.58,
+"kind": "whoosh_big"
+},
+{
 "t": 22.99,
 "cue": 22.99,
 "kind": "pop"
@@ -258,6 +273,11 @@
 "t": 25.93,
 "cue": 25.93,
 "kind": "success"
+},
+{
+"t": 28.74,
+"cue": 28.74,
+"kind": "whoosh_big"
 },
 {
 "t": 28.96,
@@ -303,6 +323,11 @@
 "t": 31.84,
 "cue": 31.84,
 "kind": "ding"
+},
+{
+"t": 31.86,
+"cue": 31.86,
+"kind": "whoosh_big"
 },
 {
 "t": 32.08,
