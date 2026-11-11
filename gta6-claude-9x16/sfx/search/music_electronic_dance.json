@@ -1,0 +1,67 @@
+{
+  "query": "electronic dance",
+  "license_filter": "cc0,by,pdm",
+  "source_filter": "freesound,jamendo",
+  "results": [
+    {
+      "id": "c80cca74-7ade-4e47-9572-ab57b8555694",
+      "title": "Electronic Dance Music",
+      "creator": "TheoJT",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "freesound",
+      "duration_s": 128.01,
+      "audio_url": "https://cdn.freesound.org/previews/698/698094_6627602-hq.mp3",
+      "landing_url": "https://freesound.org/people/TheoJT/sounds/698094",
+      "attribution": "\"Electronic Dance Music\" by TheoJT is licensed under CC BY 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/."
+    },
+    {
+      "id": "13ea82f2-eb72-4fa6-b1e2-62a9a09c9bf0",
+      "title": "Video Game 7.wav",
+      "creator": "djgriffin",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "freesound",
+      "duration_s": 144.88,
+      "audio_url": "https://cdn.freesound.org/previews/172/172561_45941-hq.mp3",
+      "landing_url": "https://freesound.org/people/djgriffin/sounds/172561",
+      "attribution": "\"Video Game 7.wav\" by djgriffin is licensed under CC BY 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/."
+    },
+    {
+      "id": "09cd883a-cb42-4db7-9a49-2bfedbc79191",
+      "title": "Techno 80 - base loop",
+      "creator": "frankum",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "freesound",
+      "duration_s": 104.0,
+      "audio_url": "https://cdn.freesound.org/previews/346/346193_2305278-hq.mp3",
+      "landing_url": "https://freesound.org/people/frankum/sounds/346193",
+      "attribution": "\"Techno 80 - base loop\" by frankum is licensed under CC BY 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/."
+    },
+    {
+      "id": "a0a23e2f-0984-4e0d-b5ca-6384308a344b",
+      "title": "Epic intro guitar -",
+      "creator": "frankum",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "freesound",
+      "duration_s": 120.0,
+      "audio_url": "https://cdn.freesound.org/previews/382/382063_2305278-hq.mp3",
+      "landing_url": "https://freesound.org/people/frankum/sounds/382063",
+      "attribution": "\"Epic intro guitar -\" by frankum is licensed under CC BY 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/."
+    },
+    {
+      "id": "cdbfba39-3c6e-4695-8f33-48acc06b9fda",
+      "title": "Electronic base and pop guitar",
+      "creator": "frankum",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "freesound",
+      "duration_s": 147.4,
+      "audio_url": "https://cdn.freesound.org/previews/273/273300_2305278-hq.mp3",
+      "landing_url": "https://freesound.org/people/frankum/sounds/273300",
+      "attribution": "\"Electronic base and pop guitar\" by frankum is licensed under CC BY 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/."
+    }
+  ]
+}

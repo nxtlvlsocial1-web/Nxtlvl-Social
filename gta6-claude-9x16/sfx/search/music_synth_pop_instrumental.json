@@ -1,0 +1,31 @@
+{
+  "query": "synth pop instrumental",
+  "license_filter": "cc0,by,pdm",
+  "source_filter": "freesound,jamendo",
+  "results": [
+    {
+      "id": "8f5d58c1-5817-4a0d-b011-f6f5fc31c2a2",
+      "title": "Victim of the Cybor Wars.wav",
+      "creator": "BaDoink",
+      "license": "cc0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "freesound",
+      "duration_s": 80.34,
+      "audio_url": "https://cdn.freesound.org/previews/547/547427_2019171-hq.mp3",
+      "landing_url": "https://freesound.org/people/BaDoink/sounds/547427",
+      "attribution": "\"Victim of the Cybor Wars.wav\" by BaDoink is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/."
+    },
+    {
+      "id": "b8a7ace8-b412-48ca-a578-37b41f1ede1c",
+      "title": "05122013_dblSpd_EQ",
+      "creator": "soundathon",
+      "license": "cc0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "freesound",
+      "duration_s": 253.28,
+      "audio_url": "https://cdn.freesound.org/previews/647/647153_1556689-hq.mp3",
+      "landing_url": "https://freesound.org/people/soundathon/sounds/647153",
+      "attribution": "\"05122013_dblSpd_EQ\" by soundathon is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/."
+    }
+  ]
+}

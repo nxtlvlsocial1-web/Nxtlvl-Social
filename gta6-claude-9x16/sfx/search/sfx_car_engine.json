@@ -1,0 +1,31 @@
+{
+  "query": "car engine",
+  "license_filter": "cc0,by,pdm",
+  "source_filter": "freesound,jamendo",
+  "results": [
+    {
+      "id": "8a8eed09-14fe-4e0a-a5c9-2de92bced6ef",
+      "title": "Car Engine Starting",
+      "creator": "Grasopt",
+      "license": "cc0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "freesound",
+      "duration_s": 3.65,
+      "audio_url": "https://cdn.freesound.org/previews/479/479351_6323727-hq.mp3",
+      "landing_url": "https://freesound.org/people/Grasopt/sounds/479351",
+      "attribution": "\"Car Engine Starting\" by Grasopt is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/."
+    },
+    {
+      "id": "3e6c90d4-2640-426e-bdf6-c05b156ba37b",
+      "title": "Car engine rev inside.mp3",
+      "creator": "Omar Alvarado",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "freesound",
+      "duration_s": 7.04,
+      "audio_url": "https://cdn.freesound.org/previews/115/115199_1143716-hq.mp3",
+      "landing_url": "https://freesound.org/people/Omar%20Alvarado/sounds/115199",
+      "attribution": "\"Car engine rev inside.mp3\" by Omar Alvarado is licensed under CC BY 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/."
+    }
+  ]
+}
