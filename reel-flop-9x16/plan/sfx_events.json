@@ -1,27 +1,47 @@
 [
 {
+"type": "whoosh",
+"t": 0.98
+},
+{
+"type": "swish",
+"t": 1.46
+},
+{
+"type": "error",
+"t": 1.58
+},
+{
 "type": "scratch",
-"t": 2.62
+"t": 2.58
+},
+{
+"type": "glitch",
+"t": 2.82
+},
+{
+"type": "whoosh_big",
+"t": 2.84
+},
+{
+"type": "rise",
+"t": 3.24
+},
+{
+"type": "hit",
+"t": 3.7
 },
 {
 "type": "count",
-"t": 4.45
+"t": 4.7
 },
 {
 "type": "count",
-"t": 4.813
-},
-{
-"type": "count",
-"t": 5.177
+"t": 5.12
 },
 {
 "type": "glitch",
 "t": 5.54
-},
-{
-"type": "whoosh_big",
-"t": 5.59
 },
 {
 "type": "pop",

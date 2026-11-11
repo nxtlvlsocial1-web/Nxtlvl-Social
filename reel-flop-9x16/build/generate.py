@@ -105,6 +105,71 @@ def hide(sel, t, d=.3):
     js(f'tl.to("{sel}", {{opacity: 0, filter: "blur(8px)", duration: {d}, ease: "power2.in"}}, {t:.3f});')
 
 
+def font_metrics(weight=800):
+    f = TTFont(os.path.join(ROOT, "assets", "fonts", f"inter-latin-{weight}-normal.woff2"))
+    hh, upm = f["hhea"], f["head"].unitsPerEm
+    return hh.ascent / upm, -hh.descent / upm, f
+
+
+def shard_points(n=150):
+    """Start points inside the letters of "algorithm." (where the caption draws it) and end points inside a giant "3"
+    (where #bign draws it), both from the real font outlines rasterised with PIL. Returns (starts, targets, (x, top))."""
+    import random
+
+    from PIL import Image, ImageDraw, ImageFont
+    asc, desc, f = font_metrics(800)
+    ttf = os.path.join(ROOT, "cache", "inter-800.ttf")
+    if not os.path.exists(ttf):
+        os.makedirs(os.path.dirname(ttf), exist_ok=True)
+        f.flavor = None
+        f.save(ttf)
+    upm = f["head"].unitsPerEm
+
+    def base(top, size, lh):
+        return top + ((lh - (asc + desc)) / 2 + asc) * size
+
+    def sample(text, size, x, baseline, k, seed):
+        im = Image.new("L", (FW, FH), 0)
+        ImageDraw.Draw(im).text((x, baseline), text, font=ImageFont.truetype(ttf, size), fill=255, anchor="ls")
+        px = [(i % FW, i // FW) for i, v in enumerate(im.getdata()) if v > 128]
+        r = random.Random(seed)
+        return r.sample(px, k)
+
+    # caption row 4 of #t1 (top 600: big, big, sm, big)
+    big, sm = STYLE["big"][0], STYLE["sm"][0]
+    row4 = 600 + 2 * big * 1.07 + sm * 1.3
+    starts = sample("algorithm.", big, 80, base(row4, big, 1.07), n, 3)
+    # the giant numeral: font-size 1100, line-height 1, centred; its digit top at y 690
+    size = 1100
+    adv = f["hmtx"][f.getBestCmap()[ord("3")]][0] / upm * size
+    glyf_top = f["glyf"][f.getBestCmap()[ord("3")]].yMax / upm * size if "glyf" in f else .73 * size
+    top = round(690 - (base(0, size, 1.0) - glyf_top))
+    targets = sample("3", size, 540 - adv / 2, base(top, size, 1.0), n, 5)
+    key = lambda p: p[0] + .35 * p[1]    # noqa: E731
+    return sorted(starts, key=key), sorted(targets, key=key), (540 - adv / 2, top)
+
+
+def fake_reel_html():
+    """Frame 0: an ordinary-looking reel, full screen (no username: an avatar dot and blank bars), and the next reel
+    under it for the fake swipe."""
+    icon = {
+        "heart": '<path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/>',
+        "comment": '<path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/>',
+        "share": '<path d="M21 3L10 14M21 3l-7 18-4-7-7-4z"/>',
+        "save": '<path d="M6 3.5h12v17l-6-4.2-6 4.2z"/>',
+    }
+    acts = "".join(f'<div class="fa"><svg viewBox="0 0 24 24">{icon[k]}</svg><span>{n}</span></div>'
+                   for k, n in [("heart", "1,204"), ("comment", "86"), ("share", "41"), ("save", "")])
+    reel = (f'<div class="fk" id="fk1"><div class="fksh" id="fkSh"><i class="fkh"></i><i class="fkb"></i></div>'
+            f'<!--CAPTION--><div id="fkAct">{acts}</div>'
+            f'<div id="fkMeta"><i class="fkav"></i><i class="fkbar b1"></i><i class="fkbar b2"></i><i class="fkbar b3"></i></div>'
+            f'<div class="fkpb"><i id="fkPb"></i></div></div>')
+    nxt = ('<div class="fk" id="fk2"><div class="fksh s2"><i class="fkh"></i><i class="fkb"></i></div>'
+           '<div id="fkMeta2"><i class="fkav"></i><i class="fkbar b1"></i><i class="fkbar b2"></i></div></div>')
+    return (f'<div id="fake"><div id="fkS">{reel}{nxt}</div><div id="fkThumb"></div>'
+            f'<div id="almost"><i class="dot"></i>you almost scrolled.</div></div>')
+
+
 # ---------------------------------------------------------------- the ground: iris flips light <-> dark
 def flip(t, x, y, to_dark):
     a, b = ("0px", "2400px") if to_dark else ("2400px", "0px")
@@ -122,42 +187,83 @@ def scenes():
     H = []
     L = lambda l, i, k="t0": W(l, i, k)    # noqa: E731
 
-    # ---- S1 hook (light): a dead reel's stats are on screen from frame 0; the headline lands word by word,
-    # "algorithm." is struck through in red the moment it is said
-    H.append('<div class="chip light" id="views"><i class="play"></i><b>312 views</b><span class="redtxt">&#8595; 97%</span></div>')
-    js('tl.fromTo("#views", {y: 0}, {y: -10, duration: 2.9, ease: "none", immediateRender: false}, 0);')
-    t_s1 = L("l02", 0) - .1
-    hide("#views", t_s1)
-    H.append(title("t1", "l01", [("big", "Your reel"), ("big", "didn't flop"), ("sm", "because of the"), ("big", "~algorithm.")], 600, t_out=t_s1))
+    # ---- S1 hook (owner: "try something miraculous in the first 6-7 seconds", picked the fourth-wall fake swipe +
+    # the shatter + the full-screen countdown). Frame 0 is an ordinary-looking reel, full screen, already playing (no
+    # username anywhere); its on-screen text is the voice, word by word. On "didn't" an invisible thumb swipes it away on
+    # the viewer's own screen, the next reel shows, then it snaps back with "you almost scrolled."
+    H.append(fake_reel_html())
+    t_sw = L("l01", 2) + .1
+    js(f'tl.fromTo("#fkThumb", {{opacity: 0, scale: .7}}, {{opacity: .9, scale: 1, duration: .16, ease: "power2.out", immediateRender: false}}, {t_sw - .18:.3f});')
+    js(f'tl.to("#fkS, #fkThumb", {{y: -1050, duration: .42, ease: "power2.inOut"}}, {t_sw:.3f});')
+    js(f'tl.to("#fkThumb", {{opacity: 0, duration: .12}}, {t_sw + .46:.3f});')
+    js(f'tl.to("#fkS", {{y: 0, duration: .75, ease: "elastic.out(1, .6)"}}, {t_sw + .5:.3f});')
+    sfx("whoosh", t_sw + .02)
+    sfx("swish", t_sw + .5)
+    t_alm = t_sw + .62
+    js(f'tl.fromTo("#almost", {{opacity: 0, scale: .6, y: 20}}, {{opacity: 1, scale: 1, y: 0, duration: .4, ease: "back.out(2)", immediateRender: false}}, {t_alm:.3f});')
+    sfx("error", t_alm)
+    js(f'tl.fromTo("#fkSh", {{scale: 1}}, {{scale: 1.07, duration: 3, ease: "none", immediateRender: false}}, 0);')
+    js(f'tl.fromTo("#fkPb", {{scaleX: 0}}, {{scaleX: .32, duration: 3, ease: "none", immediateRender: false}}, 0);')
+    H_title = title("t1", "l01", [("big", "Your reel"), ("big", "didn't flop"), ("sm", "because of the"), ("big", "~algorithm.")], 600, scheme="dark fk")
+    H[-1] = H[-1].replace("<!--CAPTION-->", H_title)
     a_end = L("l01", 7, "t1")
-    js(f'tl.fromTo("#t1_3_0s", {{scaleX: 0}}, {{scaleX: 1, duration: .28, ease: "power3.inOut", immediateRender: false}}, {a_end - .06:.3f});')
-    js(f'tl.to("#t1_3_0", {{color: "#a9a9a9", duration: .25}}, {a_end:.3f});')
-    sfx("scratch", a_end - .04)
+    js(f'tl.fromTo("#t1_3_0s", {{scaleX: 0}}, {{scaleX: 1, duration: .24, ease: "power3.inOut", immediateRender: false}}, {a_end - .1:.3f});')
+    js(f'tl.to("#t1_3_0", {{color: "#a9a9a9", duration: .2}}, {a_end - .05:.3f});')
+    sfx("scratch", a_end - .08)
 
-    # ---- S2 peak: "It flopped in the first three seconds." with a 3-2-1-0 countdown on "three seconds."
+    # "algorithm." shatters: the struck word breaks into shards that burst out, then rush together into a giant red 3
+    t_x = a_end + .16
+    js(f'tl.to("#almost", {{opacity: 0, duration: .2}}, {t_x - .1:.3f});')
+    js(f'tl.set("#t1_3_0", {{opacity: 0}}, {t_x:.3f});')
+    js(f'tl.to("#fake", {{opacity: 0, scale: .94, duration: .45, ease: "power2.inOut"}}, {t_x:.3f});')
+    starts, targets, (bx, btop) = shard_points()
+    import random
+    rnd = random.Random(7)
+    cx = sum(p[0] for p in starts) / len(starts)
+    cy = sum(p[1] for p in starts) / len(starts)
+    sh = []
+    t_g = t_x + .42                 # gather
+    t_3 = t_g + .5                  # the solid 3
+    for k, ((sx, sy), (tx, ty)) in enumerate(zip(starts, targets)):
+        size = rnd.randint(16, 30)
+        pts = [(rnd.randint(0, 40), rnd.randint(0, 30)), (rnd.randint(60, 100), rnd.randint(0, 45)), (rnd.randint(20, 80), rnd.randint(70, 100))]
+        poly = ", ".join(f"{a}% {b}%" for a, b in pts)
+        col = RED if rnd.random() < .35 else "#b5b5b5"
+        sh.append(f'<i class="shd" id="sh{k}" style="left:{sx - size / 2:.0f}px;top:{sy - size / 2:.0f}px;width:{size}px;height:{size}px;'
+                  f'clip-path:polygon({poly});background:{col}"></i>')
+        ang = __import__("math").atan2(sy - cy, sx - cx) + rnd.uniform(-.6, .6)
+        dist = rnd.uniform(140, 460)
+        ex, ey = __import__("math").cos(ang) * dist, __import__("math").sin(ang) * dist + rnd.uniform(-80, 40)
+        rot = rnd.uniform(-260, 260)
+        js(f'tl.fromTo("#sh{k}", {{opacity: 1, x: 0, y: 0, rotation: 0}}, {{opacity: 1, x: {ex:.0f}, y: {ey:.0f}, rotation: {rot:.0f}, duration: .42, ease: "expo.out", immediateRender: false}}, {t_x:.3f});')
+        d = rnd.uniform(0, .1)
+        js(f'tl.to("#sh{k}", {{x: {tx - sx:.0f}, y: {ty - sy:.0f}, rotation: {rnd.uniform(-30, 30):.0f}, backgroundColor: "{RED}", duration: {.46 - d:.2f}, ease: "expo.inOut"}}, {t_g + d:.3f});')
+    js(f'tl.to(".shd", {{opacity: 0, duration: .18}}, {t_3:.3f});')
+    H.append(f'<div id="shards">{"".join(sh)}</div>')
+    sfx("glitch", t_x)
+    sfx("whoosh_big", t_x + .02)
+    sfx("rise", t_g)
+    sfx("hit", t_3 - .04)
+
+    # ---- S2 peak: "It flopped in the first three seconds." The 3 fills the screen; 3, 2, 1 cut the ground
+    # white / black / white with hard cuts, 0 lands red on black as the beat drops
     t_flip1 = L("l02", 6, "t1") + .06
-    H.append(title("t2", "l02", [("big", "It flopped"), ("mid", "in the first 3 seconds.")], 420, t_out=t_flip1 - .02))
-    ring = ('<svg viewBox="0 0 200 200"><circle class="rtrk" cx="100" cy="100" r="90"/>'
-            '<circle id="rfill" cx="100" cy="100" r="90" pathLength="1000" stroke-dasharray="1000" stroke-dashoffset="0" transform="rotate(-90 100 100)"/></svg>')
-    H.append(f'<div id="ring">{ring}<div id="rnum">&#8203;3</div></div>')
-    t3 = L("l02", 4) - .05
-    js(f'tl.fromTo("#ring", {{opacity: 0, scale: .7}}, {{opacity: 1, scale: 1, duration: .4, ease: "back.out(1.4)", immediateRender: false}}, {t3:.3f});')
-    step = (t_flip1 - t3) / 3
-    js(f'tl.fromTo("#rfill", {{strokeDashoffset: 0}}, {{strokeDashoffset: 1000, duration: {t_flip1 - t3:.3f}, ease: "none", immediateRender: false}}, {t3:.3f});')
-    for n in range(3):
-        tt = t3 + n * step
-        js(f'tl.set("#rnum", {{textContent: "\\u200b{3 - n}"}}, {tt:.3f});')
-        js(f'tl.fromTo("#rnum", {{scale: 1.25}}, {{scale: 1, duration: .22, ease: "power3.out", immediateRender: false}}, {tt:.3f});')
-        sfx("count", tt)
-    js(f'tl.set("#rnum", {{textContent: "\\u200b0", color: "{RED}"}}, {t_flip1:.3f});')
-    js(f'tl.set("#rfill", {{stroke: "{RED}"}}, {t_flip1:.3f});')
-    js(f'tl.to(".rtrk", {{stroke: "rgba(255,42,42,.35)", duration: .2}}, {t_flip1:.3f});')
-    js(f'tl.fromTo("#ring", {{scale: 1}}, {{scale: 1.08, duration: .28, ease: "expo.out", immediateRender: false}}, {t_flip1:.3f});')
-    sfx("glitch", t_flip1)
-    flip(t_flip1, 540, 1140, True)
+    H.append(title("t2", "l02", [("big", "It flopped"), ("mid", "in the first 3 seconds.")], 380, t_out=t_flip1 - .02))
+    H.append(f'<div id="bign" style="top:{btop}px">&#8203;3</div>')
+    js(f'tl.fromTo("#bign", {{opacity: 0}}, {{opacity: 1, duration: .16, immediateRender: false}}, {t_3 - .06:.3f});')
+    js(f'tl.fromTo("#bign", {{scale: 1.06}}, {{scale: 1, duration: .5, ease: "expo.out", immediateRender: false}}, {t_3 - .06:.3f});')
+    c2, c0 = L("l02", 5) - .02, t_flip1
+    c1 = (c2 + c0) / 2
+    for t, n, dark, col in [(c2, 2, True, "#ffffff"), (c1, 1, False, INK), (c0, 0, True, RED)]:
+        js(f'tl.set("#bgD", {{clipPath: "circle({2400 if dark else 0}px at 540px 1100px)"}}, {t:.3f});')
+        js(f'tl.set("#bign", {{textContent: "\\u200b{n}", color: "{col}"}}, {t:.3f});')
+        if n:
+            js(f'tl.set("#t2", {{color: "{"#ffffff" if dark else INK}"}}, {t:.3f});')
+        js(f'tl.fromTo("#bign", {{scale: 1.12}}, {{scale: 1, duration: .3, ease: "expo.out", immediateRender: false}}, {t:.3f});')
+        sfx("count" if n else "glitch", t)
     # the dead "0" shrinks away; the persistent 3-second pill takes over at the top
     t_s3 = L("l03", 0)
-    js(f'tl.to("#ring", {{opacity: 0, scale: .2, y: -700, duration: .5, ease: "power3.in"}}, {t_s3 - .25:.3f});')
+    js(f'tl.to("#bign", {{opacity: 0, scale: .1, y: -760, duration: .5, ease: "power3.in"}}, {t_s3 - .25:.3f});')
     H.append('<div id="tp"><i class="dot"></i>FIRST 3 SECONDS</div>')
     js(f'tl.fromTo("#tp", {{opacity: 0, y: -14}}, {{opacity: 1, y: 0, duration: .4, ease: "expo.out", immediateRender: false}}, {t_s3 + .2:.3f});')
 
@@ -411,6 +517,40 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #e9e9
 .redtxt {{ color: {RED}; }}
 #strike {{ position: absolute; left: 248px; right: 248px; top: 1020px; height: 12px; border-radius: 6px; background: {RED}; transform-origin: left center;
   opacity: 0; }}
+/* the fake reel (frame 0) */
+#fake {{ position: absolute; inset: 0; z-index: 4; overflow: hidden; }}
+#fkS {{ position: absolute; left: 0; top: 0; width: 100%; height: 200%; }}
+.fk {{ position: absolute; left: 0; width: 100%; height: 50%; overflow: hidden; }}
+#fk1 {{ top: 0; background: radial-gradient(90% 55% at 50% 40%, #4c4c4c 0%, #262626 55%, #0e0e0e 100%); }}
+#fk2 {{ top: 50%; background: radial-gradient(90% 55% at 40% 45%, #6a6a6a 0%, #3a3a3a 55%, #1a1a1a 100%); }}
+.fksh {{ position: absolute; inset: 0; transform-origin: 50% 70%; }}
+.fkh {{ position: absolute; left: 400px; top: 760px; width: 280px; height: 340px; border-radius: 50%; background: linear-gradient(160deg, #5c5c5c, #353535); }}
+.fkb {{ position: absolute; left: 170px; top: 1090px; width: 740px; height: 900px; border-radius: 370px 370px 0 0; background: linear-gradient(170deg, #474747, #222 70%); }}
+.fksh.s2 .fkh {{ left: 300px; background: linear-gradient(160deg, #8a8a8a, #555); }}
+.fksh.s2 .fkb {{ left: 60px; background: linear-gradient(170deg, #707070, #3a3a3a 70%); }}
+.tt.fk {{ text-shadow: 0 4px 30px rgba(0,0,0,.45); }}
+#fkAct {{ position: absolute; right: 34px; top: 1150px; display: flex; flex-direction: column; align-items: center; gap: 40px; }}
+.fa {{ display: flex; flex-direction: column; align-items: center; gap: 8px; color: #fff; font-weight: 600; font-size: 28px; }}
+.fa svg {{ width: 70px; height: 70px; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; }}
+#fkMeta, #fkMeta2 {{ position: absolute; left: 40px; top: 1640px; width: 700px; height: 200px; }}
+.fkav {{ position: absolute; left: 0; top: 0; width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #9a9a9a, #5a5a5a); border: 3px solid #fff; }}
+.fkbar {{ position: absolute; height: 22px; border-radius: 11px; background: rgba(255,255,255,.55); }}
+.fkbar.b1 {{ left: 92px; top: 24px; width: 220px; }}
+.fkbar.b2 {{ left: 0; top: 104px; width: 560px; background: rgba(255,255,255,.35); }}
+.fkbar.b3 {{ left: 0; top: 144px; width: 380px; background: rgba(255,255,255,.35); }}
+.fkpb {{ position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: rgba(255,255,255,.25); }}
+#fkPb {{ position: absolute; inset: 0; background: #fff; transform-origin: left center; transform: scaleX(0); }}
+#fkThumb {{ position: absolute; left: 560px; top: 1450px; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,.88);
+  box-shadow: 0 0 0 14px rgba(255,255,255,.2), 0 12px 40px rgba(0,0,0,.4); opacity: 0; }}
+#almost {{ position: absolute; top: 420px; left: 80px; width: fit-content; display: flex; align-items: center; gap: 14px; padding: 16px 30px;
+  border-radius: 999px; background: {RED}; color: #fff; font-weight: 800; font-size: 44px; letter-spacing: -.01em; white-space: nowrap; opacity: 0;
+  box-shadow: 0 18px 50px rgba(255,42,42,.35); }}
+#almost .dot {{ background: #fff; }}
+/* shards and the giant numeral */
+#shards {{ position: absolute; inset: 0; z-index: 6; pointer-events: none; }}
+.shd {{ position: absolute; opacity: 0; }}
+#bign {{ position: absolute; left: 0; right: 0; text-align: center; font-weight: 800; font-size: 1100px; line-height: 1; letter-spacing: 0; color: {RED};
+  font-variant-numeric: tabular-nums; opacity: 0; z-index: 1; }}
 /* the countdown ring */
 #ring {{ position: absolute; left: 330px; top: 930px; width: 420px; height: 420px; opacity: 0; }}
 #ring svg {{ position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }}
