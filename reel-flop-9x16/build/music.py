@@ -1,11 +1,12 @@
-"""Background music from Openverse (owner: "also use background music from openverse"). v4 (owner: the music was too
-slow/flat): "What Can Do" by Felixjd (Jamendo, CC BY 3.0), 129 BPM, the busiest and brightest of the faster CC BY tracks
-found on Openverse (sfx/search/music2_*.json; all checked instrumental with Whisper). v1-v3 used "Hip-Hop 1" by Deff
-Syndicate (83 BPM).
+"""Background music from Openverse (owner: "also use background music from openverse"). v7 (owner: "I don't need
+singing in background ... just plain music which is very vibe matching"): "Future Inspiration" by Soundrider/Dope
+(Jamendo, CC BY 3.0), 123 BPM, bright and driving; checked with Demucs (build/music_check.py): its vocal stem sits at
+-49 dB under the mix, i.e. no singing. (v4-v6 used "What Can Do" by Felixjd, which has vocals a speech check missed;
+v1-v3 "Hip-Hop 1" by Deff Syndicate.)
 
 The edit (beat grid: sfx/music/beats_hh1.json, the skill's beat_grid.py):
-  * the track's breakdown (60-74 s) plays under the hook, and its full beat slams back (track 74.07 s, on a beat) exactly
-    on the countdown's 0 after "three seconds.";
+  * the track's lighter-kick stretch plays under the hook, and its full kick slams back in (track ~20 s, on a beat)
+    exactly on the countdown's 0 after "three seconds.";
   * on "If nothing moves," the music drops out (low-pass, near silence) and comes back on "thumbs keep scrolling",
     acting out the line;
   * a 1.2 s fade at the end.
@@ -17,10 +18,10 @@ import os
 import subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "sfx", "music", "m2_what_can_do.mp3")
+SRC = os.path.join(ROOT, "sfx", "music", "m3_future_inspiration.mp3")
 OUT = os.path.join(ROOT, "assets", "audio", "music.wav")
 W = json.load(open(os.path.join(ROOT, "plan", "words.json")))
-DROP_BEAT = 74.072
+DROP_BEAT = 20.039
 
 
 def wt(line, i, key="t0"):
@@ -40,7 +41,7 @@ def main():
           f"[dry][wet]amix=inputs=2:normalize=0,atrim=0:{dur}[out]")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", SRC, "-filter_complex", fc, "-map", "[out]", "-ac", "2", "-ar", "48000",
                     "-c:a", "pcm_f32le", OUT], check=True)
-    json.dump({"track": "sfx/music/m2_what_can_do.mp3", "offset": round(o, 3), "flip": round(flip, 3), "dip": [round(d0, 3), round(d1, 3)], "dur": dur},
+    json.dump({"track": "sfx/music/m3_future_inspiration.mp3", "offset": round(o, 3), "flip": round(flip, 3), "dip": [round(d0, 3), round(d1, 3)], "dur": dur},
               open(os.path.join(ROOT, "plan", "music_edit.json"), "w"), indent=1)
     print(f"wrote {OUT}: track {o:.2f} s -> video 0, beat drop on the flip at {flip:.2f} s, dip {d0:.2f}-{d1:.2f}")
 

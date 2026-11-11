@@ -1,0 +1,43 @@
+{
+  "query": "electro funk",
+  "license_filter": "cc0,by,pdm",
+  "source_filter": "freesound,jamendo",
+  "results": [
+    {
+      "id": "10476bfd-8c33-49cd-95c4-31539131948d",
+      "title": "Retro.m4a",
+      "creator": "B_Sean",
+      "license": "cc0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "freesound",
+      "duration_s": 89.98,
+      "audio_url": "https://cdn.freesound.org/previews/421/421888_6785762-hq.mp3",
+      "landing_url": "https://freesound.org/people/B_Sean/sounds/421888",
+      "attribution": "\"Retro.m4a\" by B_Sean is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/."
+    },
+    {
+      "id": "7aab3a5a-307e-4353-91d9-2ab725e758e6",
+      "title": "scaryscape_digitalgangstha.wav",
+      "creator": "suonho",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "freesound",
+      "duration_s": 86.29,
+      "audio_url": "https://cdn.freesound.org/previews/58/58966_308-hq.mp3",
+      "landing_url": "https://freesound.org/people/suonho/sounds/58966",
+      "attribution": "\"scaryscape_digitalgangstha.wav\" by suonho is licensed under CC BY 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/."
+    },
+    {
+      "id": "24620e5c-7664-4209-b953-582b75077ada",
+      "title": "Funk Jams.m4a",
+      "creator": "LandZhark",
+      "license": "cc0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "freesound",
+      "duration_s": 74.54,
+      "audio_url": "https://cdn.freesound.org/previews/415/415656_8210681-hq.mp3",
+      "landing_url": "https://freesound.org/people/LandZhark/sounds/415656",
+      "attribution": "\"Funk Jams.m4a\" by LandZhark is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/."
+    }
+  ]
+}

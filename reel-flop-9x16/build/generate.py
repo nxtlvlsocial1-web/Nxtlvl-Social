@@ -73,13 +73,13 @@ def blur_pulse(name, t, peak, d_in, d_out):
 
 
 # ---------------------------------------------------------------- scenes: enter / exit with a vertical whip + blur
-def scene_in(sid, t, d=.38, dy=220):
-    js(f'tl.fromTo("#{sid}", {{opacity: 0, y: {dy}}}, {{opacity: 1, y: 0, duration: {d}, ease: "expo.out", immediateRender: false}}, {t:.3f});')
+def scene_in(sid, t, d=.45, dy=220):
+    js(f'tl.fromTo("#{sid}", {{opacity: 0, y: {dy * .5:.0f}, scale: .82}}, {{opacity: 1, y: 0, scale: 1, duration: {d}, ease: "expo.out", immediateRender: false}}, {t:.3f});')
     blur_pulse(sid, t, 26, .02, d)
 
 
 def scene_out(sid, t, d=.3, dy=-220):
-    js(f'tl.to("#{sid}", {{opacity: 0, y: {dy}, duration: {d}, ease: "expo.in"}}, {t:.3f});')
+    js(f'tl.to("#{sid}", {{opacity: 0, y: {dy * .4:.0f}, scale: 1.22, duration: {d}, ease: "expo.in"}}, {t:.3f});')
     blur_pulse(sid, t, 30, d, .05)
     sfx("swish", t)
 
@@ -243,6 +243,8 @@ class Wheel:
             sfx("tick", t + dur - .02)
         self.p = to
         self.light(t + dur - .06)
+        if self.icons:
+            js(f'tl.fromTo("#{self.wid}_{to} .ic", {{rotation: 0, scale: 1, transformOrigin: "50% 50%"}}, {{keyframes: {{rotation: [0, -18, 14, -6, 0], scale: [1, 1.25, 1.1, 1]}}, duration: .5, ease: "power1.out", immediateRender: false}}, {t + dur - .05:.3f});')
         self.busy = t + dur + .2
         return t + dur
 
@@ -281,16 +283,139 @@ class Odometer:
 
 
 
+# ---------------------------------------------------------------- v7 lively motion: FX layer, illustrated creator, 3D phone
+FXH = []          # elements of the FX layer (bursts, confetti, hearts), above the scenes
+PAL = ["#ff2a2a", "#ff3d7f", "#d02cff", "#6a1fe0", "#3346ff", "#2a7bff", "#ffb800", "#2fd28a"]
+_fxn = [0]
+
+
+def _fid(p):
+    _fxn[0] += 1
+    return f"{p}{_fxn[0]}"
+
+
+def burst(x, y, t, color=RED, n=12, r0=40, r1=170, sfx_kind=None):
+    """Radial speed lines + a shockwave ring + a few dots flying out."""
+    bid = _fid("bu")
+    lines = "".join(f'<line x1="{math.cos(a) * r0:.0f}" y1="{math.sin(a) * r0:.0f}" x2="{math.cos(a) * r1:.0f}" y2="{math.sin(a) * r1:.0f}" pathLength="100"/>'
+                    for a in [i * 2 * math.pi / n + .2 for i in range(n)])
+    FXH.append(f'<svg class="bur" id="{bid}" style="left:{x - 200}px;top:{y - 200}px;stroke:{color}" viewBox="-200 -200 400 400">{lines}'
+               f'<circle class="shw" id="{bid}r" r="60"/></svg>')
+    js(f'tl.fromTo("#{bid}", {{opacity: 1}}, {{opacity: 0, duration: .5, ease: "power2.in", immediateRender: false}}, {t + .15:.3f});')
+    js(f'tl.set("#{bid}", {{opacity: 1}}, {t:.3f});')
+    js(f'tl.fromTo("#{bid} line", {{strokeDashoffset: 100, scale: .6, transformOrigin: "0px 0px"}}, {{strokeDashoffset: -100, scale: 1.25, transformOrigin: "0px 0px", duration: .55, ease: "expo.out", immediateRender: false}}, {t:.3f});')
+    js(f'tl.fromTo("#{bid}r", {{scale: .2, opacity: .9, transformOrigin: "0px 0px"}}, {{scale: 3, opacity: 0, transformOrigin: "0px 0px", duration: .6, ease: "expo.out", immediateRender: false}}, {t:.3f});')
+    if sfx_kind:
+        sfx(sfx_kind, t)
+
+
+def confetti(x, y, t, n=26, spread=520, seed=0):
+    rnd = random.Random(seed + int(t * 100))
+    for k in range(n):
+        cid = _fid("cf")
+        w, h = rnd.randint(14, 24), rnd.randint(8, 14)
+        col = rnd.choice(PAL)
+        shape = "border-radius:50%;" if rnd.random() < .3 else "border-radius:3px;"
+        FXH.append(f'<i class="cf" id="{cid}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px;background:{col};{shape}"></i>')
+        ang = rnd.uniform(-math.pi * .95, -math.pi * .05)
+        sp = rnd.uniform(.35, 1) * spread
+        ex, ey = math.cos(ang) * sp, math.sin(ang) * sp
+        rot = rnd.uniform(-540, 540)
+        js(f'tl.fromTo("#{cid}", {{opacity: 1, x: 0, y: 0, rotation: 0, scale: .4}}, {{opacity: 1, x: {ex:.0f}, y: {ey:.0f}, rotation: {rot * .4:.0f}, scale: 1, duration: .45, ease: "expo.out", immediateRender: false}}, {t:.3f});')
+        js(f'tl.to("#{cid}", {{x: {ex * 1.25:.0f}, y: {ey + rnd.uniform(380, 640):.0f}, rotation: {rot:.0f}, opacity: 0, duration: {rnd.uniform(.9, 1.3):.2f}, ease: "power1.in"}}, {t + .45:.3f});')
+    sfx("sparkle", t)
+
+
+def hearts(x, y, t0, t1, n=6, seed=1):
+    """Hearts rising from a like button, one after another, while the reel plays."""
+    rnd = random.Random(seed)
+    k = 0
+    t = t0
+    while t < t1:
+        hid = _fid("ht")
+        col = rnd.choice(["#ff2a2a", "#ff3d7f", "#ff6b9a", "#d02cff"])
+        FXH.append(f'<svg class="hrt" id="{hid}" style="left:{x}px;top:{y}px" viewBox="0 0 24 24"><path fill="{col}" d="M12 21s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 8.1a4.3 4.3 0 0 1 7.5 2.7C19.5 16.4 12 21 12 21z"/></svg>')
+        dx = rnd.uniform(-70, 30)
+        js(f'tl.fromTo("#{hid}", {{opacity: 0, y: 0, x: 0, scale: .4, rotation: 0}}, {{keyframes: {{opacity: [0, 1, 1, 0], y: [0, -90, -200, -300], x: [0, {dx * .4:.0f}, {dx:.0f}, {dx * .6:.0f}], scale: [.4, 1.1, 1, .9], rotation: [0, -10, 12, -6]}}, duration: 1.3, ease: "none", immediateRender: false}}, {t:.3f});')
+        t += rnd.uniform(.22, .38)
+        k += 1
+
+
+def float_idle(sel, t, dur=10, amp=14, tilt=4, period=1.8):
+    reps = max(1, int(dur / period))
+    js(f'tl.fromTo("{sel}", {{y: 0, rotationX: {-tilt * .6:.1f}, rotationY: {-tilt:.1f}, transformPerspective: 1200}}, {{y: {-amp}, rotationX: {tilt * .6:.1f}, rotationY: {tilt:.1f}, transformPerspective: 1200, duration: {period}, repeat: {reps}, yoyo: true, ease: "sine.inOut", immediateRender: false}}, {t:.3f});')
+
+
+def creator(cid, shirt=("#ff7a8a", "#ff3d7f"), wave=False, bg=None):
+    """A flat illustrated creator (head, hair, blinking eyes, talking mouth, cheeks, shirt, a waving arm)."""
+    g = f'<linearGradient id="{cid}sh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{shirt[0]}"/><stop offset="1" stop-color="{shirt[1]}"/></linearGradient>'
+    arm = (f'<g id="{cid}_arm"><path d="M232 330 C250 300 268 262 278 222" stroke="url(#{cid}sh)" stroke-width="40" stroke-linecap="round" fill="none"/>'
+           f'<circle cx="280" cy="200" r="25" fill="#f2b896"/><path d="M262 185 l-6 -22 M276 178 l-2 -24 M290 180 l4 -22" stroke="#f2b896" stroke-width="11" stroke-linecap="round"/></g>') if wave else ""
+    return (f'<svg class="crt" id="{cid}" viewBox="0 0 300 420" preserveAspectRatio="xMidYMax meet"><defs>{g}</defs>'
+            f'<path d="M30 420 C30 330 85 292 150 292 C215 292 270 330 270 420 Z" fill="url(#{cid}sh)"/>'
+            f'<rect x="133" y="250" width="34" height="52" rx="14" fill="#e9a987"/>'
+            f'<circle cx="80" cy="205" r="15" fill="#f2b896"/><circle cx="220" cy="205" r="15" fill="#f2b896"/>'
+            f'<ellipse cx="150" cy="200" rx="70" ry="80" fill="#f6c3a1"/>'
+            f'<path d="M76 210 C66 122 118 104 152 106 C206 104 238 140 226 210 C214 168 190 150 150 152 C112 152 90 168 76 210Z" fill="#2b2140"/>'
+            f'<g id="{cid}_eyes"><ellipse cx="125" cy="206" rx="8" ry="11" fill="#2b2140"/><ellipse cx="175" cy="206" rx="8" ry="11" fill="#2b2140"/></g>'
+            f'<path d="M112 186 q12 -8 24 -2 M164 184 q12 -6 24 2" stroke="#2b2140" stroke-width="5" stroke-linecap="round" fill="none"/>'
+            f'<circle cx="108" cy="234" r="11" fill="#ff8fa0" opacity=".55"/><circle cx="192" cy="234" r="11" fill="#ff8fa0" opacity=".55"/>'
+            f'<ellipse id="{cid}_mouth" cx="150" cy="246" rx="16" ry="9" fill="#8a2b3b"/>{arm}</svg>')
+
+
+def creator_live(cid, t0, t1, talk=True, wave=False, seed=0):
+    rnd = random.Random(seed)
+    t = t0 + rnd.uniform(.3, .9)
+    while t < t1:
+        js(f'tl.fromTo("#{cid}_eyes", {{scaleY: 1, transformOrigin: "50% 50%"}}, {{keyframes: {{scaleY: [1, .08, 1]}}, duration: .16, ease: "none", immediateRender: false}}, {t:.3f});')
+        t += rnd.uniform(1.4, 2.4)
+    if talk:
+        reps = max(1, int((t1 - t0) / .18))
+        js(f'tl.fromTo("#{cid}_mouth", {{scaleY: .5, scaleX: 1, transformOrigin: "50% 50%"}}, {{scaleY: 1.6, scaleX: .85, transformOrigin: "50% 50%", duration: .09, repeat: {reps}, yoyo: true, ease: "sine.inOut", immediateRender: false}}, {t0:.3f});')
+    if wave:
+        reps = max(1, int((t1 - t0) / .28))
+        js(f'tl.fromTo("#{cid}_arm", {{rotation: -14, svgOrigin: "232 330"}}, {{rotation: 16, svgOrigin: "232 330", duration: .28, repeat: {reps}, yoyo: true, ease: "sine.inOut", immediateRender: false}}, {t0:.3f});')
+
+
+def shapes_html():
+    """Glossy floating shapes behind everything: spheres, rings, squiggles, sparkles; they drift and spin in parallax."""
+    items = [("sph", 120, 160, 150, "#ff9ab0", "#d02cff"), ("ring", 880, 120, 150, "#6a1fe0", "#2a7bff"), ("sqg", 560, 1640, 220, "#ff3d7f", "#ffb800"),
+             ("spk", 170, 1420, 90, "#ffb800", "#ff3d7f"), ("sph", 900, 1180, 110, "#8fd0ff", "#3346ff"), ("spk", 930, 620, 70, "#d02cff", "#ff3d7f"),
+             ("ring", 40, 1640, 120, "#ff3d7f", "#ffb800"), ("sph", 520, 1700, 90, "#b6f0a0", "#2fd28a"), ("sqg", 840, 1500, 170, "#6a1fe0", "#ff3d7f")]
+    out = []
+    for k, (kind, x, y, s, c1, c2) in enumerate(items):
+        sid = f"shp{k}"
+        if kind == "sph":
+            out.append(f'<i class="shp sph" id="{sid}" style="left:{x}px;top:{y}px;width:{s}px;height:{s}px;background:radial-gradient(circle at 32% 28%, #fff 0%, {c1} 34%, {c2} 100%)"></i>')
+        elif kind == "ring":
+            out.append(f'<svg class="shp" id="{sid}" style="left:{x}px;top:{y}px;width:{s}px;height:{s}px" viewBox="0 0 100 100"><defs><linearGradient id="{sid}g"><stop offset="0" stop-color="{c1}"/><stop offset="1" stop-color="{c2}"/></linearGradient></defs>'
+                       f'<circle cx="50" cy="50" r="38" fill="none" stroke="url(#{sid}g)" stroke-width="13"/></svg>')
+        elif kind == "sqg":
+            out.append(f'<svg class="shp" id="{sid}" style="left:{x}px;top:{y}px;width:{s}px;height:{s * .5:.0f}px" viewBox="0 0 200 100"><defs><linearGradient id="{sid}g"><stop offset="0" stop-color="{c1}"/><stop offset="1" stop-color="{c2}"/></linearGradient></defs>'
+                       f'<path d="M10 60 Q35 10 60 55 T110 55 T160 55 T190 40" fill="none" stroke="url(#{sid}g)" stroke-width="16" stroke-linecap="round"/></svg>')
+        else:
+            out.append(f'<svg class="shp" id="{sid}" style="left:{x}px;top:{y}px;width:{s}px;height:{s}px" viewBox="0 0 100 100"><defs><linearGradient id="{sid}g"><stop offset="0" stop-color="{c1}"/><stop offset="1" stop-color="{c2}"/></linearGradient></defs>'
+                       f'<path d="M50 0 C54 36 64 46 100 50 C64 54 54 64 50 100 C46 64 36 54 0 50 C36 46 46 36 50 0Z" fill="url(#{sid}g)"/></svg>')
+        rnd = random.Random(k)
+        per = rnd.uniform(3.2, 5.5)
+        reps = int(DUR / per) + 1
+        js(f'tl.fromTo("#{sid}", {{x: 0, y: 0, rotation: 0}}, {{x: {rnd.uniform(-60, 60):.0f}, y: {rnd.uniform(-90, -40):.0f}, rotation: {rnd.choice([-1, 1]) * rnd.uniform(40, 120):.0f}, duration: {per:.2f}, repeat: {reps}, yoyo: true, ease: "sine.inOut", immediateRender: false}}, 0);')
+    return f'<div id="shapes">{"".join(out)}</div>'
+
+
 # ================================================================= the reel
 PH, WY, VY = 330, 800, 1060      # phrase top, wheel centre, visual zone top (to ~1500)
 
 
 def card(cid, x, y, w, h, inner, cls="", extra=""):
-    return f'<div class="card {cls}" id="{cid}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px;{extra}">{inner}</div>'
+    return (f'<div class="cw" id="{cid}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px;{extra}">'
+            f'<div class="card {cls}" id="{cid}_c">{inner}</div></div>')
 
 
-def card_in(sel, t, d=.55, dy=90):
-    js(f'tl.fromTo("{sel}", {{opacity: 0, y: {dy}, scale: .96}}, {{opacity: 1, y: 0, scale: 1, duration: {d}, ease: "expo.out", immediateRender: false}}, {t:.3f});')
+def card_in(sel, t, d=.6, dy=140):
+    js(f'tl.fromTo("{sel}", {{opacity: 0, y: {dy}, scale: .7, rotation: {R.choice([-6, 6])}}}, {{opacity: 1, y: 0, scale: 1, rotation: 0, duration: {d}, ease: "back.out(1.5)", immediateRender: false}}, {t:.3f});')
+    float_idle(f"{sel}_c", t + .2)
+    sfx("pop", t + .05)
 
 
 def card_out(sel, t, d=.3):
@@ -309,11 +434,12 @@ def person(cls=""):
     return f'<div class="person {cls}"><i class="hd"></i><i class="bd"></i></div>'
 
 
-def reel_ui(rid, cls="", caption=True, side=True, bar=True, extra=""):
+def reel_ui(rid, cls="", caption=True, side=True, bar=True, extra="", crt=None):
     side_ = ('<div class="side">' + "".join(f'<span>{icon(n, "sic")}<b>{c}</b></span>' for n, c in [("heart", "1.2K"), ("chat", "86"), ("send", "41")]) + "</div>") if side else ""
     cap = '<div class="capl"><i class="av"></i><i class="cl1"></i><i class="cl2"></i></div>' if caption else ""
     br = f'<div class="pbar"><i class="pfill" id="{rid}pb"></i></div>' if bar else ""
-    return f'<div class="reel {cls}" id="{rid}">{person()}{extra}{side_}{cap}{br}</div>'
+    who = crt if crt is not None else person()
+    return f'<div class="reel {cls}" id="{rid}">{who}{extra}{side_}{cap}{br}</div>'
 
 
 def scenes():
@@ -324,11 +450,19 @@ def scenes():
     rows = [("xl", "This reel"), ("xl", "is about to"), ("xl", "*lose* *you.*")]
     ph = phrase("pA", "l00", rows, PH, first_visible=True)
     glitch = '<div class="glx" id="glxR">lose you.</div><div class="glx c" id="glxC">lose you.</div>'
-    phone = (f'<div class="phone" id="phA"><div class="scr">{reel_ui("rA")}{reel_ui("rA2", "nx", extra="")}'
-             f'<div class="thumb" id="thA"></div></div><i class="notch"></i></div>')
+    phone = (f'<div class="phone" id="phA"><div class="scr">{reel_ui("rA", crt=creator("crA"))}{reel_ui("rA2", "nx", crt=creator("crA2", ("#8fd0ff", "#3346ff")))}'
+             f'<i class="gloss"></i><div class="thumb" id="thA"></div></div><i class="notch"></i><i class="btn b1"></i><i class="btn b2"></i></div>'
+             f'<div class="vbub" id="vbA">{icon("play", "vbi")}<b id="vbAn">1,204</b><span>views</span><em>&#8595;</em></div>')
     H.append(scene("sA", ph + glitch + phone, shown=True))
-    js(f'tl.fromTo("#phA", {{rotation: -3, y: 30}}, {{rotation: 2, y: 0, duration: {t_a_out:.2f}, ease: "sine.inOut", immediateRender: false}}, 0);')
+    # the phone floats in 3D, turning slowly; the creator talks and blinks; hearts rise from the like button
+    js(f'tl.fromTo("#phA", {{rotationY: -24, rotationX: 10, rotation: -6, y: 40, transformPerspective: 1400}}, {{rotationY: 14, rotationX: 4, rotation: 3, y: -10, transformPerspective: 1400, duration: {L("l00", 6) + .24:.2f}, ease: "sine.inOut", immediateRender: false}}, 0);')
     js(f'tl.fromTo("#rApb", {{scaleX: .05}}, {{scaleX: .4, duration: {t_a_out:.2f}, ease: "none", immediateRender: false}}, 0);')
+    creator_live("crA", 0, t_a_out, talk=True, seed=1)
+    hearts(670, 1180, .1, L("l00", 5), seed=3)
+    js(f'tl.fromTo("#vbA", {{opacity: 0, scale: .4, x: 60, rotation: 10}}, {{opacity: 1, scale: 1, x: 0, rotation: -4, duration: .45, ease: "back.out(2.4)", immediateRender: false}}, {L("l00", 2):.3f});')
+    for i, v in enumerate(["1,204", "980", "702", "511", "388", "312"]):
+        js(f'tl.set("#vbAn", {{textContent: "{v}"}}, {L("l00", 2) + .25 + i * .12:.3f});')
+    sfx("pop", L("l00", 2))
     t_lose = L("l00", 5)
     for k, (dx, op) in enumerate([(14, .85), (-10, .7), (8, .9), (-16, .6), (0, 0)]):
         tt = t_lose + .03 + k * .05
@@ -337,9 +471,13 @@ def scenes():
     sfx("glitch", t_lose)
     popin("#thA", t_lose + .05, d=.2)
     t_fl = L("l00", 6) + .05
-    js(f'tl.to("#thA", {{y: -330, opacity: 0, duration: .32, ease: "power3.in"}}, {t_fl:.3f});')
-    js(f'tl.to("#rA", {{yPercent: -100, duration: .34, ease: "power3.in"}}, {t_fl + .04:.3f});')
-    js(f'tl.fromTo("#rA2", {{yPercent: 100}}, {{yPercent: 0, duration: .34, ease: "power3.in", immediateRender: false}}, {t_fl + .04:.3f});')
+    js(f'tl.to("#thA", {{y: -330, opacity: 0, duration: .26, ease: "power3.in"}}, {t_fl - .1:.3f});')
+    js(f'tl.to("#rA", {{yPercent: -100, duration: .28, ease: "power3.in"}}, {t_fl - .06:.3f});')
+    js(f'tl.fromTo("#rA2", {{yPercent: 100, opacity: 1}}, {{yPercent: 0, opacity: 1, duration: .28, ease: "power3.in", immediateRender: false}}, {t_fl - .06:.3f});')
+    # ...and the whole phone is flicked away, spinning off with a motion trail
+    js(f'tl.to("#phA", {{x: 760, y: -520, rotation: 38, rotationY: 50, transformPerspective: 1400, duration: .42, ease: "power3.in"}}, {t_fl + .2:.3f});')
+    js(f'tl.to("#vbA", {{x: -500, y: -300, rotation: -30, opacity: 0, duration: .38, ease: "power3.in"}}, {t_fl + .2:.3f});')
+    burst(540, 1220, t_fl + .2, color="#ff3d7f")
     sfx("whoosh", t_fl)
     scene_out("sA", t_a_out, d=.26, dy=-420)
     sfx("hit", 0)
@@ -358,12 +496,14 @@ def scenes():
     spark = ('<svg class="spark" viewBox="0 0 300 120"><path class="sp-a" id="spBa" d="M0 12 C40 14 50 90 90 104 S200 112 300 114 L300 120 L0 120Z"/>'
              '<path class="sp-l" id="spBl" pathLength="1000" d="M0 12 C40 14 50 90 90 104 S200 112 300 114"/></svg>')
     ins = card("insB", 110, VY, 860, 380,
-               f'<div class="ct">Post insights</div><div class="big"><b>312</b><span>views</span></div>'
+               f'<div class="ct">Post insights</div><div class="big"><b id="insBn">1,204</b><span>views</span></div>'
                f'<div class="pill red">&#8595; 97%</div>{spark}<div class="row"><span>Avg. watch time</span><b>0.9s</b></div>')
     H.append(scene("sB", phB + wB.html() + strike + ins))
     scene_in("sB", t_b)
     wB.appear(t_b + .05)
     card_in("#insB", t_b + .35)
+    for i, v in enumerate(["1,204", "1,020", "840", "655", "480", "390", "312"]):
+        js(f'tl.set("#insBn", {{textContent: "{v}"}}, {t_b + .55 + i * .09:.3f});')
     draw("#spBl", t_b + .6, 1.1)
     js(f'tl.fromTo("#spBa", {{opacity: 0}}, {{opacity: 1, duration: .8, immediateRender: false}}, {t_b + .9:.3f});')
     t_alg = L("l01", 7) - .02
@@ -406,8 +546,9 @@ def scenes():
         js(f'tl.fromTo("#bigs", {{y: {-k * 900}}}, {{y: {-(k + 1) * 900}, duration: .2, ease: "back.out(1.4)", immediateRender: false}}, {t - .1:.3f});')
         blur_pulse("sD", t - .1, 30, .06, .14)
         sfx("count" if k < 2 else "glitch", t)
+    burst(540, 970, flip_t, color=RED, n=16, r0=420, r1=620)
     js(f'tl.set("#flash", {{opacity: 1}}, {flip_t - .02:.3f}); tl.to("#flash", {{opacity: 0, duration: .45, ease: "power2.in"}}, {flip_t + .32:.3f});')
-    js(f'tl.fromTo("#sD", {{scale: 1}}, {{scale: 1.1, duration: .5, ease: "power2.out", immediateRender: false}}, {flip_t:.3f});')
+    js(f'tl.fromTo("#sD", {{scale: 1}}, {{scale: 1.08, duration: .3, ease: "power2.out", immediateRender: false}}, {flip_t:.3f});')
     t_e = L("l03", 0) - .14
     scene_out("sD", t_e - .05, d=.25, dy=-400)
 
@@ -431,6 +572,7 @@ def scenes():
     draw("#lnE", t_e + .45, 1.0, "power1.inOut")
     js(f'tl.fromTo("#arE", {{opacity: 0}}, {{opacity: 1, duration: .6, immediateRender: false}}, {t_e + .9:.3f});')
     popin("#dotE", L("l03", 4) - .05)
+    burst(240, 1080, L("l03", 4) - .05, color=RED, n=10, r0=20, r1=110)
     popin("#coE", L("l03", 4) + .05)
     popin("#pillE", L("l03", 6) - .05)
     js(f'tl.fromTo("#m3E", {{opacity: 0}}, {{opacity: 1, duration: .3, immediateRender: false}}, {L("l03", 4) - .1:.3f});')
@@ -443,7 +585,7 @@ def scenes():
     wF = Wheel("wF", mistakes, WY, 112, start=0, grads=["gr1"] * 3, icons=["chat", "pause", "list"])
     lab = '<div class="lab" id="labF"><span id="labN">01</span> / 03</div>'
     phF = phrase("pF", "l04", [("s", "_One:"), ("m", "your hook is"), ("m", "a greeting.")], PH, t_out=L("l05", 0) - .12)
-    thumb = f'<div class="thn">{person()}</div>'
+    thumb = f'<div class="thn">{creator("crF", wave=True)}</div>'
     rc = card("rcF", 110, VY, 860, 400,
               f'{thumb}<div class="rcr"><div class="bub" id="bubF"><span id="bubFt"></span></div>'
               f'<div class="pbar2"><i class="pf2" id="pbF"></i><i class="mk3"></i><em>0:03</em></div>'
@@ -452,6 +594,7 @@ def scenes():
     scene_in("sF", t_f)
     wF.appear(t_f + .05)
     card_in("#rcF", t_f + .3)
+    creator_live("crF", t_f + .3, L("l05", 3) + .5, talk=True, wave=True, seed=4)
     js(f'tl.fromTo("#labF", {{opacity: 0, x: -30}}, {{opacity: 1, x: 0, duration: .4, ease: "expo.out", immediateRender: false}}, {t_f + .1:.3f});')
     t_cap = L("l04", 5) - .15
     popin("#bubF", t_cap - .1)
@@ -482,6 +625,7 @@ def scenes():
     blur_pulse("sF", t_sw + .04, 30, .3, .08)
     sfx("whoosh", t_sw)
     popin("#skipF", t_sw + .4)
+    burst(540, 1270, t_sw + .4, color=RED, n=12, r0=200, r1=320)
     sfx("error", t_sw + .4)
 
     # "Start with the result." : the quote decodes into the result; a new reel card with the result and rising bars
@@ -489,7 +633,7 @@ def scenes():
     phF3 = phrase("pF3", "l06", [("m", "Start with the ^result.")], PH, t_out=L("l07", 0) - .14)
     bars = "".join(f'<i class="bar" id="brF{k}" style="left:{k * 66}px;height:{h}px"></i>' for k, h in enumerate([60, 96, 140, 190, 250]))
     rc2 = card("rc2F", 110, VY, 860, 400,
-               f'<div class="thn dark">{person()}<div class="thres">1M<br><small>views</small></div></div>'
+               f'<div class="thn dark">{creator("crF2", ("#ffd29e", "#ff9fb2"))}<div class="thres">1M<br><small>views</small></div></div>'
                f'<div class="rcr"><div class="ct">Views</div><div class="bars">{bars}</div>'
                f'<div class="pill blue" id="keptF">{icon("check", "pic")}still watching past 0:03</div></div>')
     H.append(scene("sF3", phF3 + rc2))
@@ -514,21 +658,24 @@ def scenes():
     for k in range(5):
         js(f'tl.fromTo("#brF{k}", {{scaleY: 0}}, {{scaleY: 1, duration: .45, ease: "back.out(1.6)", immediateRender: false}}, {t_r + .4 + k * .07:.3f});')
     popin("#keptF", t_res + .1)
+    creator_live("crF2", t_r + .15, t_res + 1.2, talk=True, seed=6)
+    confetti(560, 1180, t_res, n=28)
     t_g = L("l07", 0) - .14
-    js(f'tl.to("#quote, #qres", {{opacity: 0, y: -120, duration: .26, ease: "expo.in"}}, {t_g - .04:.3f});')
-    blur_pulse("sF2", t_g - .04, 24, .26, .05)
-    card_out("#rc2F", t_g - .04)
+    js(f'tl.to("#quote, #qres", {{opacity: 0, y: -120, duration: .22, ease: "expo.in"}}, {t_g - .3:.3f});')
+    blur_pulse("sF2", t_g - .3, 24, .22, .05)
+    card_out("#rc2F", t_g - .3)
 
     # ---- G: "Two: your first frame is still. If nothing moves, thumbs keep scrolling." A still photo, then a feed whips past
     phG = phrase("pG", "l07", [("s", "_Two:"), ("m", "your first frame"), ("m", "is still.")], PH, t_out=L("l08", 0) - .12)
     photo = ('<div class="fcard photo"><i class="sun"></i><i class="h1"></i><i class="h2"></i>'
              f'<div class="pz" id="pzG">{icon("pause", "pzi")}</div><div class="chip" id="chG">frame 1</div>'
              '<div class="pill red nm" id="nmG">nothing moves</div></div>')
-    others = "".join(f'<div class="fcard o{k}">{person()}</div>' for k in (1, 2, 3))
-    feed = f'<div class="feed card" id="feedG" style="left:110px;top:{VY}px;width:860px;height:420px"><div class="fstrip" id="fsG">{photo}{others}</div></div>'
+    shirts = {1: ("#ffd29e", "#ff9f43"), 2: ("#8fd0ff", "#3346ff"), 3: ("#c9a7ff", "#6a1fe0")}
+    others = "".join(f'<div class="fcard o{k}">{creator(f"crG{k}", shirts[k])}</div>' for k in (1, 2, 3))
+    feed = card("feedG", 110, VY, 860, 420, f'<div class="fstrip" id="fsG">{photo}{others}</div>', cls="feed")
     H.append(scene("sG", phG + feed))
     js(f'tl.set("#sG", {{opacity: 1}}, {t_g:.3f});')
-    js(f'tl.to("#wF", {{opacity: 1, y: 0, duration: .4, ease: "expo.out"}}, {t_g:.3f});')
+    js(f'tl.to("#wF", {{opacity: 1, y: 0, duration: .4, ease: "expo.out"}}, {t_g + .05:.3f});')
     card_in("#feedG", t_g + .1)
     wF.move(t_g + .2, 1, .45)
     js(f'tl.set("#labN", {{textContent: "02"}}, {t_g + .4:.3f});')
@@ -588,6 +735,7 @@ def scenes():
     blur_pulse("swp", t_sw, 22, .2, .3)
     sfx("swish", t_sw)
     sfx("success", t_sw + .5)
+    burst(330, 760, t_sw + .5, color="#ff3d7f", n=12, r0=120, r1=260)
     t_j = L("l11", 0) - .14
     scene_out("sI", t_j - .04)
     js(f'tl.to("#sI2, #sF", {{opacity: 0, duration: .2}}, {t_j - .04:.3f});')
@@ -620,6 +768,7 @@ def scenes():
     js(f'tl.fromTo("#arJ", {{opacity: 0}}, {{opacity: 1, duration: .8, immediateRender: false}}, {t_o + .6:.3f});')
     sfx("rise", t_o + .2)
     sfx("ding", t_o + 1.3)
+    confetti(540, 760, t_o + 1.25, n=30, seed=9)
 
     # ---- K: CTA. "Save this so you don't forget, and comment HOOK for my list of twenty hooks that work."
     t_k = L("l12", 0) - .14
@@ -645,6 +794,9 @@ def scenes():
     wK.move(L("l12", 7) - .05, 4, t_hook - L("l12", 7) + .05, final_ease="back.out(2.2)")
     js(f'tl.fromTo("#wK_4", {{scale: 1}}, {{keyframes: {{scale: [1, 1.1, 1]}}, duration: .4, ease: "power2.out", immediateRender: false}}, {t_hook + .05:.3f});')
     sfx("hit", t_hook)
+    burst(330, WY + 110, t_hook + .02, color="#ff3d7f", n=14, r0=150, r1=300)
+    confetti(330, WY + 110, t_hook + .05, n=34, seed=12)
+    hearts(880, 1250, t_hook + .5, DUR - .6, seed=8)
     js(f'tl.set("#cbph", {{display: "none"}}, {t_hook - .05:.3f});')
     for i, s_ in enumerate(["H", "HO", "HOO", "HOOK"]):
         js(f'tl.set("#cbk", {{textContent: "{s_}"}}, {t_hook + i * .08:.3f});')
@@ -738,12 +890,12 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f4f4
 .row b {{ color: {INK}; font-weight: 800; }}
 .redt {{ color: {RED} !important; }}
 /* phone */
-.phone {{ position: absolute; left: 330px; top: 900px; width: 420px; height: 640px; border-radius: 64px; background: #121212; padding: 14px;
+.phone {{ position: absolute; left: 320px; top: 870px; width: 440px; height: 650px; border-radius: 64px; background: linear-gradient(145deg, #2c2c2c, #0d0d0d); padding: 14px;
   box-shadow: 0 50px 100px rgba(40,20,40,.3); z-index: 3; }}
 .scr {{ position: relative; width: 100%; height: 100%; border-radius: 52px; overflow: hidden; background: #333; }}
 .notch {{ position: absolute; left: 50%; top: 26px; width: 120px; height: 34px; margin-left: -60px; border-radius: 20px; background: #000; z-index: 6; }}
 .reel {{ position: absolute; inset: 0; background: linear-gradient(170deg, #ffb3c3 0%, #c9a7ff 55%, #8fa3ff 100%); }}
-.reel.nx {{ background: linear-gradient(170deg, #c9e6a3, #8fd0c4 60%, #6aa6d9); transform: translateY(100%); }}
+.reel.nx {{ background: linear-gradient(170deg, #c9e6a3, #8fd0c4 60%, #6aa6d9); opacity: 0; }}
 .person .hd {{ position: absolute; left: 50%; top: 28%; width: 30%; height: 22%; margin-left: -15%; border-radius: 50%; background: rgba(255,255,255,.75); }}
 .person .bd {{ position: absolute; left: 50%; top: 52%; width: 66%; height: 60%; margin-left: -33%; border-radius: 50% 50% 0 0; background: rgba(255,255,255,.6); }}
 .side {{ position: absolute; right: 18px; bottom: 120px; display: flex; flex-direction: column; gap: 22px; align-items: center; }}
@@ -833,6 +985,28 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f4f4
 #caret {{ width: 4px; height: 50px; margin-left: 6px; background: {INK}; border-radius: 2px; }}
 .snd {{ position: absolute; right: 30px; top: 40px; width: 90px; height: 90px; border-radius: 50%; background: rgba(0,0,0,.06); display: grid; place-items: center; }}
 .sdi {{ width: 46px; height: 46px; fill: none; stroke: {INK}; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }}
+
+/* ---- v7 lively motion */
+#shapes {{ position: absolute; inset: 0; }}
+.shp {{ position: absolute; display: block; overflow: visible; filter: drop-shadow(0 18px 30px rgba(80,40,90,.18)); }}
+.sph {{ border-radius: 50%; }}
+#fxl {{ position: absolute; inset: 0; z-index: 6; pointer-events: none; }}
+.bur {{ position: absolute; width: 400px; height: 400px; overflow: visible; opacity: 0; fill: none; stroke-width: 9; stroke-linecap: round; }}
+.bur line {{ stroke-dasharray: 100; }}
+.bur .shw {{ fill: none; stroke-width: 6; }}
+.cf {{ position: absolute; opacity: 0; }}
+.hrt {{ position: absolute; width: 58px; height: 58px; opacity: 0; filter: drop-shadow(0 6px 10px rgba(255,40,90,.35)); }}
+.cw {{ position: absolute; opacity: 0; z-index: 3; }}
+.cw .card {{ left: 0; top: 0; width: 100%; height: 100%; opacity: 1; }}
+.crt {{ position: absolute; left: 0; bottom: 0; width: 100%; height: 92%; overflow: visible; }}
+.gloss {{ position: absolute; inset: 0; background: linear-gradient(115deg, rgba(255,255,255,.38) 0%, rgba(255,255,255,0) 32%, rgba(255,255,255,0) 70%, rgba(255,255,255,.12) 100%); z-index: 5; pointer-events: none; }}
+.btn {{ position: absolute; width: 8px; border-radius: 4px; background: #2a2a2a; }}
+.btn.b1 {{ right: -6px; top: 160px; height: 90px; }} .btn.b2 {{ left: -6px; top: 140px; height: 60px; }}
+.vbub {{ position: absolute; left: 120px; top: 1010px; display: flex; align-items: center; gap: 12px; padding: 16px 26px; border-radius: 26px; background: #fff;
+  box-shadow: 0 24px 50px rgba(70,30,60,.2); font-size: 40px; font-weight: 800; opacity: 0; z-index: 4; }}
+.vbub span {{ font-size: 28px; color: #66665f; font-weight: 700; }}
+.vbub em {{ font-style: normal; color: {RED}; font-size: 42px; }}
+.vbi {{ width: 34px; height: 34px; fill: {INK}; stroke: none; }}
 /* CTA */
 .bkm {{ position: absolute; left: 880px; top: 330px; width: 110px; height: 130px; opacity: 0; }}
 .bki {{ width: 100%; height: 100%; overflow: visible; fill: none; stroke: {INK}; stroke-width: 1.8; stroke-linejoin: round; }}
@@ -859,9 +1033,10 @@ def main():
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
       <svg class="fx"><defs>{"".join(DEFS)}<linearGradient id="ig1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff2a2a"/><stop offset="1" stop-color="#d02cff"/></linearGradient>
         <linearGradient id="ig2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6a1fe0"/><stop offset="1" stop-color="#2a7bff"/></linearGradient></defs></svg>
-      <div id="bg"><i class="glow g1"></i><i class="glow g2"></i><i class="glow g3"></i></div>
+      <div id="bg"><i class="glow g1"></i><i class="glow g2"></i><i class="glow g3"></i>{shapes_html()}</div>
       <div id="flash"></div>
       {body}
+      <div id="fxl">{"".join(FXH)}</div>
       <div id="grain"></div>
       <audio id="vo" src="assets/audio/vo.wav" data-start="0" data-duration="{DUR}" data-track-index="1"></audio>
     </div>
