@@ -1,0 +1,407 @@
+{
+ "prompt": "a top-down open-world city driving game at night. Neon streets, rain reflections, traffic, a few ramps and police lights in the distance. I drive a car around freely, drift around corners and hit a ramp for a jump. Original art and setting only - no references to any existing game. It must look great in a vertical screen recording: bold colours, big readable UI, a speedometer and a \"DRIFT x2\" combo counter that pops on screen.",
+ "change_request_1d": "Make these changes for a video recording:\n1. Add a cinematic camera that follows the car slightly behind and above.\n2. Make drift smoke, sparks and the ramp jump more dramatic.\n3. Add an on-screen title card at start: \"MY OPEN WORLD - BUILT BY CLAUDE\".\n4. Add a toggle (key H) that hides all UI except the speedometer.\nKeep everything else the same.",
+ "questions": [
+  {
+   "n": 1,
+   "asked": "How should it feel: tight and arcade, grippy until you drift (usual); heavy and grounded, with weight and early braking; or kart, tiny turns and hops into drifts?",
+   "answer": "Fast, arcadey, satisfying drifts. Not a simulator."
+  },
+  {
+   "n": 2,
+   "asked": "How should it look: the view from above that follows the car, a tilted 3D top-down (usual, as you said top-down); and a direction: saturated 90s arcade neon (usual) or isometric stylised low poly? Paste a screenshot or two, or drop them in references/.",
+   "answer": "Neon night city, rain, glowing signs, chunky low-poly / blocky style"
+  },
+  {
+   "n": 3,
+   "asked": "How hard: when should trouble first come and what does a crash cost? Usual: easy to drive in the first minute, a real challenge in the rooftop climb; a crash costs a few seconds, one key puts you back on the road.",
+   "answer": "Easy to drive in the first 10 seconds"
+  },
+  {
+   "n": 4,
+   "asked": "The goal: free roam with a list of things to try (usual), or a set challenge on top, like reaching a landmark against the clock?",
+   "answer": "Free roam plus a short 'reach the rooftop ramp' challenge"
+  },
+  {
+   "n": 5,
+   "asked": "Pickups: none, pure driving (usual), or boost earned by sliding and near misses?",
+   "answer": "you pick"
+  },
+  {
+   "n": 6,
+   "asked": "A slice of the game: a short session from start to finish (usual), or a quick test of one mechanic, like how the drift feels?",
+   "answer": "you pick"
+  }
+ ],
+ "genres_matched": [
+  "racing (driving, drift game)",
+  "action-adventure (open world: one open place with a landmark)"
+ ],
+ "brief_path": "design/game-brief.md (copy: plan/game-brief.md)",
+ "steps": [
+  {
+   "t": 1794413956,
+   "what": "repo cloned (depth 1) from GitHub: build clock starts"
+  },
+  {
+   "t": 1794414043,
+   "what": "read .claude/skills/prototype/SKILL.md (route: no engine set, so the browser one-shot)"
+  },
+  {
+   "t": 1794414047,
+   "what": "step 1b started: /prototype with the request; read one-shot-1-card.md and chipsets.yaml"
+  },
+  {
+   "t": 1794414078,
+   "what": "matched genres racing (driving, drift game) and action-adventure (open world); read their sheets, mashups.md, art-direction.md, the brief template"
+  },
+  {
+   "t": 1794414080,
+   "what": "card asked 6 questions (feel, look, challenge, goal, pickups, slice or quick test)"
+  },
+  {
+   "t": 1794414089,
+   "what": "answers recorded: the four given, \"you pick\" for pickups and slice"
+  },
+  {
+   "t": 1794414124,
+   "what": "brief written to design/game-brief.md (Neon Drift District)"
+  },
+  {
+   "t": 1794414139,
+   "what": "Build it (pre-approved); one-shot-new.sh made prototypes/neon-drift-district/ (time row 16:22:19)"
+  },
+  {
+   "t": 1794414151,
+   "what": "vendor-three.sh bundled three.js 0.186.1 into vendor/three.js"
+  },
+  {
+   "t": 1794414411,
+   "what": "read build, self-check and code rules; wrote evidence/nearest-game.txt"
+  },
+  {
+   "t": 1794415012,
+   "what": "(time of the first figures shot; files written just before) files written: config.js (tuning values) and index.html (city, car, drift combo, ramps, traffic, police, rain, HUD, rooftop challenge); first figures.png shot"
+  },
+  {
+   "t": 1794415101,
+   "what": "cars brightened and turned to face the figures camera"
+  },
+  {
+   "t": 1794415125,
+   "what": "small check run 1 (one-shot-check.sh): boots with 0 uncaught errors, screen drawn, keys respond (changed), step 0.16 ms; no play screenshot (the full Chrome build timed out taking it in this sandbox); brief word low-poly unlisted"
+  },
+  {
+   "t": 1794415904,
+   "what": "looked at play screenshot (page-shot via the headless shell): tall towers filled the top-down view"
+  },
+  {
+   "t": 1794416043,
+   "what": "fix round: lower buildings, steeper camera, smaller windows, sign words fitted, slow-motion beat off ramps, rain thickens with speed, closer camera in portrait, brief-words low-poly added"
+  },
+  {
+   "t": 1794416055,
+   "what": "small check run 2: 0 uncaught, screen drawn, play.png shot taken, responds changed, brief words all shown"
+  },
+  {
+   "t": 1794416126,
+   "what": "looked at play.png: car hidden behind roofs; closed car-wide alleys, added an x-ray ghost of the car, camera 62 high / 22 back; checked with one-shot-run.sh (0 uncaught)"
+  },
+  {
+   "t": 1794416204,
+   "what": "figures.png re-shot: four cars, four outlines"
+  },
+  {
+   "t": 1794416233,
+   "what": "brief checklist written (23 of 28 pass) and small check recorded: boots, shot, outlines pass"
+  },
+  {
+   "t": 1794416243,
+   "what": "handover card written; Features marked in both briefs"
+  },
+  {
+   "t": 1794416255,
+   "what": "committed and tagged one-shot/neon-drift-district (local clone only)"
+  },
+  {
+   "t": 1794416259,
+   "what": "step 1d started via one-shot-4-change.md: no hand edits, no Keep/Avoid/Out of scope conflicts"
+  },
+  {
+   "t": 1794416380,
+   "what": "(time approximate) change made: cinematic chase camera (C toggles top-down), neon-lit drift smoke and spark showers, ramp boost, longer slow-motion, FOV kick, shockwave rings and flash on landing, title card MY OPEN WORLD - BUILT BY CLAUDE, H hides all UI but the speedometer, bigger speedometer and combo in portrait"
+  },
+  {
+   "t": 1794416433,
+   "what": "light check: keep rows none; one-shot-run play + shots of title card (also 800x450), HUD hidden, drift, portrait: 0 uncaught"
+  },
+  {
+   "t": 1794416470,
+   "what": "(time approximate) looked at shots: smoke near the camera covered the view and the road was black in the chase view; added near-camera smoke fade and a neon environment reflection on the wet road; re-shot drift and portrait: 0 uncaught"
+  },
+  {
+   "t": 1794416507,
+   "what": "brief updated (After play line, Features, Controls, Your systems); changes.tsv written; committed iteration 1: 1d done"
+  },
+  {
+   "t": 1794416697,
+   "what": "while scripting footage, a route test showed the car could not climb the garage ramp (corner probe read the 0.4 slope as a wall): fixing"
+  },
+  {
+   "t": 1794416738,
+   "what": "iteration 2 committed: climb_slope 0.45, parapets raised; route test now climbs, launches off the rooftop lip and lands on the plaza; challenge run from the gate ends in a win at 21 s game time"
+  },
+  {
+   "t": 1794416859,
+   "what": "footage capture started (deterministic 1080x1920, 30 fps, virtual clock)"
+  }
+ ],
+ "timings": {
+  "start": 1794413956,
+  "1b_start": 1794414047,
+  "brief": 1794414124,
+  "handover": 1794416243,
+  "filmable_done": 1794416507,
+  "total_minutes": 42.5,
+  "prototype_minutes": 36.6,
+  "ramp_fix_done": 1794416738,
+  "total_minutes_incl_ramp_fix": 46.4,
+  "built_in_minutes_per_skill": 32,
+  "notes": "prototype_minutes = 1b start to handover card; built_in_minutes_per_skill = one-shot-new.sh time row 16:22:19 to the last check 16:54:16, as the card counts it"
+ },
+ "handover_card": "How to play: Arrows or WASD to drive and steer, hold Space (or Shift) to drift, R back on the road, Enter starts the rooftop run, P pause, M mute\nOpen: prototypes/neon-drift-district/index.html\nTune: say \"let me tune it\" for live sliders\nSmall check: passed boots, shot, outlines, brief words, emoji, nearest game \u00b7 failed none \u00b7 not assessed none\nBrief checklist: 23 of 28 pass\n  fail L3 View: 3D \u00b7 Camera: angled top-down chase, about 55 degrees: broken (the camera sits at about 70 degrees so tall buildings hide less of the car)\n  fail C2 Real trouble comes with the rooftop ramp challenge: missing (the garage ramp is straight, not a spiral)\n  not assessed F6 Rooftop ramp challenge: no check run reached the garage\n  not assessed F10 Engine note that climbs with speed: a check cannot hear sound\n  not assessed S7 rooftop ramp challenge: no check run reached the garage\nFixed: the screenshot of play was hidden by tall towers, so buildings are lower, the camera steeper, alleys closed, and a see-through ghost of the car shows behind buildings; windows made smaller and sign words fitted to their panels; added the slow-motion beat off big ramp launches and rain that thickens with speed (both in the brief's First minute); the camera sits closer in portrait\nNearest game: Absolute Drift (top-down drift scoring in a minimalist arena); this one differs in an open neon night city in the rain with lane traffic, street ramps for air and a garage-rooftop ramp launch challenge, seen from an angled 3D camera, with a chained DRIFT xN combo across corners.\nStill to do: the parking-garage spiral (built as a straight ramp)\nGuessed: drift on held Space with a tail flick and low sideways grip; top speed 50 u/s (shown as 200 km/h); a 2.6 s window to chain the next drift; 0.45 s of slow motion at 40% speed off big launches; points for air time; the start gate on the east avenue\nEffort: this session's\nBuilt in 32 minutes\nNot yet played by a person.\n",
+ "files": [
+  {
+   "path": "neon-drift-district/config.js",
+   "lines": 69,
+   "bytes": 5543,
+   "note": ""
+  },
+  {
+   "path": "neon-drift-district/index.html",
+   "lines": 1266,
+   "bytes": 86267,
+   "note": ""
+  },
+  {
+   "path": "neon-drift-district/assets/provenance.yaml",
+   "lines": 18,
+   "bytes": 1075,
+   "note": ""
+  },
+  {
+   "path": "neon-drift-district/vendor/three.js",
+   "lines": 4230,
+   "bytes": 743207,
+   "note": "three.js 0.186.1 minified bundle (MIT), not written in this build"
+  }
+ ],
+ "checks": {
+  "small_check": {
+   "boots": "pass",
+   "shot": "pass",
+   "outlines": "pass",
+   "brief_words": "pass",
+   "emoji": "pass",
+   "nearest_game": "pass",
+   "notes": "run 1 took no play screenshot in this sandbox (full Chrome); run 2 used the bundled headless shell and passed"
+  },
+  "brief_checklist": {
+   "L1": {
+    "result": "pass",
+    "evidence": "evidence/play.png",
+    "note": "blocky low-poly towers with lit windows, neon signs and roof trims, rain streaks, glossy dark road with coloured smears; the player car is yellow-orange"
+   },
+   "L2": {
+    "result": "pass",
+    "evidence": "index.html:313",
+    "note": "no game named; sign words are generic shop words; all art drawn in code"
+   },
+   "L3": {
+    "result": "broken",
+    "evidence": "index.html:911",
+    "note": "angled top-down camera follows and looks ahead, fills portrait and landscape (fovFor index.html:1020); but it sits at about 70 degrees, not the brief's 55, so tall buildings hide less of the car"
+   },
+   "F1": {
+    "result": "pass",
+    "evidence": "index.html:756",
+    "note": "steering smoothed (c.steer lerp), drift on held Space with low sideways grip and a tail flick, steering cut at speed so braking turns tighter; how it feels is the person's to judge"
+   },
+   "F2": {
+    "result": "pass",
+    "evidence": "evidence/play.png",
+    "note": "grid of blocks, neon signs, lit windows, wet glossy road with sign reflections, rain"
+   },
+   "F3": {
+    "result": "pass",
+    "evidence": "index.html:1098",
+    "note": "DRIFT xN drawn big with a pop scale on each new drift in the chain; the chain banks into the score after the combo window (index.html:829); the run's shot shows BEST CHAIN x2 and COMBO LOST"
+   },
+   "F4": {
+    "result": "pass",
+    "evidence": "evidence/play.png",
+    "note": "arc gauge with needle and large km/h digits at the bottom centre"
+   },
+   "F5": {
+    "result": "pass",
+    "evidence": "index.html:187",
+    "note": "five striped street ramps; the run launched at t=2.27 s and landed after 1.04 s of air with impact 18.9 (game events), with shake, sparks, smoke and a low thump tone (index.html:810)"
+   },
+   "F6": {
+    "result": "not_assessed",
+    "evidence": "index.html:887",
+    "note": "garage ramp, rooftop lip, 60 s timer and best time are built, but no check run reached the garage; the person's play covers it"
+   },
+   "F7": {
+    "result": "pass",
+    "evidence": "evidence/play.png",
+    "note": "a traffic car with headlights crosses top right; cars follow lanes and turn at crossings (index.html:707)"
+   },
+   "F8": {
+    "result": "pass",
+    "evidence": "index.html:1045",
+    "note": "four parked patrol cruisers at the city edges, light bar and ground pools alternate red and blue; the cruiser is in evidence/figures.png"
+   },
+   "F9": {
+    "result": "pass",
+    "evidence": "index.html:946",
+    "note": "R puts the car on the nearest road facing along it (or restarts the run in the challenge); air pitch eases back to level on landing"
+   },
+   "F10": {
+    "result": "not_assessed",
+    "evidence": "index.html:141",
+    "note": "engine pitch follows speed and drops on brake and slide, and the view widens with speed (index.html:1050); the sound cannot be heard in a check"
+   },
+   "S1": {
+    "result": "pass",
+    "evidence": "evidence/play.png",
+    "note": "traffic drives the lanes, bumpable"
+   },
+   "S2": {
+    "result": "pass",
+    "evidence": "index.html:716",
+    "note": "flashing police lights at the city edges, decorative"
+   },
+   "S3": {
+    "result": "pass",
+    "evidence": "evidence/play.png",
+    "note": "rain streaks and wet-road sign reflections"
+   },
+   "S4": {
+    "result": "pass",
+    "evidence": "index.html:187",
+    "note": "ramps launch the car (launch and land events in the run)"
+   },
+   "S5": {
+    "result": "pass",
+    "evidence": "index.html:1098",
+    "note": "combo counter built and drawn"
+   },
+   "S6": {
+    "result": "pass",
+    "evidence": "evidence/play.png",
+    "note": "speedometer on screen"
+   },
+   "S7": {
+    "result": "not_assessed",
+    "evidence": "index.html:887",
+    "note": "built, not reached by a check run"
+   },
+   "M1": {
+    "result": "pass",
+    "evidence": "index.html:159",
+    "note": "the car starts stopped by a crossroads with the speedometer and the hint HOLD UP TO DRIVE / HOLD SPACE TO DRIFT (index.html:1146)"
+   },
+   "M2": {
+    "result": "pass",
+    "evidence": "index.html:654",
+    "note": "up accelerates hard (0 to 49 u/s in 1.7 s in the run), the needle follows speed, rain streaks lengthen and brighten with speed"
+   },
+   "M3": {
+    "result": "pass",
+    "evidence": "index.html:829",
+    "note": "the run's first drift came at t=3.42 s with combo 1; tyre smoke, sparks and skid marks while sliding; each chained drift pops the counter bigger"
+   },
+   "M4": {
+    "result": "pass",
+    "evidence": "index.html:802",
+    "note": "the ramp on the start avenue throws the car into the air with a 0.45 s slow-motion beat and a landing thump"
+   },
+   "M5": {
+    "result": "pass",
+    "evidence": "index.html:453",
+    "note": "a cyan light beam rises from the garage roof, and a HUD arrow points to it (index.html:1116)"
+   },
+   "C1": {
+    "result": "pass",
+    "evidence": "index.html:810",
+    "note": "no fail state in free roam; traffic bumps (index.html:756 collisions) cost speed only"
+   },
+   "C2": {
+    "result": "missing",
+    "evidence": "index.html:887",
+    "note": "the garage ramp is straight, not a spiral; the 60 s run, wall crashes costing speed, falling off ending the run and R restarting are built but no check run reached them"
+   },
+   "C3": {
+    "result": "pass",
+    "evidence": "index.html:898",
+    "note": "best time kept for the session; drift score banks"
+   },
+   "F11": {
+    "result": "pass",
+    "evidence": "evidence/iteration-1-hud-hidden.png",
+    "note": "chase view behind and above the car (iteration 1)"
+   },
+   "F12": {
+    "result": "pass",
+    "evidence": "evidence/iteration-1-portrait.png",
+    "note": "thick neon-lit smoke, spark showers, a shockwave ring and burst on landing (iteration 1)"
+   },
+   "F13": {
+    "result": "pass",
+    "evidence": "evidence/iteration-1-titlecard.png",
+    "note": "the card reads MY OPEN WORLD / - BUILT BY CLAUDE (iteration 1)"
+   },
+   "F14": {
+    "result": "pass",
+    "evidence": "evidence/iteration-1-hud-hidden.png",
+    "note": "after H only the speedometer is drawn (iteration 1)"
+   },
+   "S8": {
+    "result": "pass",
+    "evidence": "evidence/iteration-1-hud-hidden.png",
+    "note": "as F11"
+   },
+   "S9": {
+    "result": "pass",
+    "evidence": "evidence/iteration-1-titlecard.png",
+    "note": "as F13"
+   },
+   "S10": {
+    "result": "pass",
+    "evidence": "evidence/iteration-1-hud-hidden.png",
+    "note": "as F14"
+   }
+  },
+  "brief_checklist_summary": "first build: 23 of 28 pass; broken L3 (camera about 70 degrees, not 55); missing C2 (garage ramp straight, not a spiral); not assessed F6, S7 (rooftop challenge not reached by a check run), F10 (sound). After iteration 2 a route test drove the rooftop challenge to a win. Iteration 1 items F11-F14, S8-S10 pass.",
+  "change_checks": [
+   [
+    "iteration 1",
+    "added a cinematic chase camera (default; C switches to top-down), bigger neon-lit drift smoke and spark showers, street-ramp launches 1.3x higher with a 0.8 s slow-motion beat, a field-of-view kick, shockwave rings, a flash and heavier landing bursts; the title card MY OPEN WORLD - BUILT BY CLAUDE at the start of play; H hides all UI except the speedometer; a bigger speedometer and combo on tall screens; neon reflections on the wet road (environment map); near-camera smoke fades",
+    "errors: none",
+    "evidence/iteration-1-play.png evidence/iteration-1-titlecard.png evidence/iteration-1-titlecard-small.png evidence/iteration-1-hud-hidden.png evidence/iteration-1-drift.png evidence/iteration-1-portrait.png"
+   ],
+   [
+    "iteration 2",
+    "fix: the garage ramp could not be climbed (a corner probe on the 0.4 slope read as a wall); corners may now sit higher by climb_slope 0.45 per unit of reach, and the roof parapets are raised to 3 so they stay walls; found while scripting the rooftop footage (a route test drove up the ramp and launched off the lip afterwards)",
+    "errors: none",
+    "evidence/iteration-2-play.png"
+   ]
+  ]
+ },
+ "commits": [
+  "8d045b7 iteration 2: fix the garage ramp so the car can climb it",
+  "1f9a362 iteration 1: added a cinematic camera, bigger drift and jump effects, the title card and the H toggle",
+  "7a9f19f feat: one-shot neon-drift-district"
+ ]
+}
