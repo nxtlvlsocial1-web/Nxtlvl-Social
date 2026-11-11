@@ -1,7 +1,7 @@
 Reel-flop explainer - sound credits
 
-Music: "Hip-Hop 1" by Deff Syndicate is licensed under CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/),
-found on Openverse, hosted by Jamendo (https://www.jamendo.com/track/164177). Edited (cut to the reel, drop-out at 0:18) by Nxtlvl Social.
+Music: "What Can Do" by Felixjd is licensed under CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/),
+found on Openverse, hosted by Jamendo (https://www.jamendo.com/track/367005). Edited (cut to the reel, drop-out on "nothing moves") by Nxtlvl Social.
 Voice: open-source models run locally: Chatterbox by Resemble AI (MIT), with a reference voice made by Kokoro-82M by hexgrad
 (Apache 2.0, voice af_heart).
 
@@ -9,9 +9,8 @@ Openverse was searched first (sfx/search/*.json); its sound-effect results are F
 downloads from this cloud session (HTTP 403), so the effects are CC0 recordings from OpenGameArt:
 
 - 100-cc0-sfx: rubberduck, CC0, https://opengameart.org/content/100-cc0-sfx
-- 100-cc0-sfx-2: rubberduck, CC0, https://opengameart.org/content/100-cc0-sfx-2
+- 202-more-sound-effects: OwlishMedia, CC0, https://opengameart.org/content/202-more-sound-effects
 - 75-cc0-breaking-falling-hit-sfx: rubberduck, CC0, https://opengameart.org/content/75-cc0-breaking-falling-hit-sfx
-- bell-dingschimes: PWL, CC0, https://opengameart.org/content/bell-dingschimes
 - fantasy-magic-spell: Almitory, CC0, https://opengameart.org/content/fantasy-magic-spell
 - fantasy-sound-effects-tinysized-sfx: Vehicle, CC0, https://opengameart.org/content/fantasy-sound-effects-tinysized-sfx
 - interface-sounds: Kenney, CC0, https://opengameart.org/content/interface-sounds

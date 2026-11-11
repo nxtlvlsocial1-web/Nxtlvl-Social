@@ -1,7 +1,7 @@
 [
 {
-"t": 0.0,
-"cue": 0.0,
+"t": 0,
+"cue": 0,
 "kind": "hit"
 },
 {
@@ -17,7 +17,7 @@
 {
 "t": 1.59,
 "cue": 1.59,
-"kind": "crack"
+"kind": "rip"
 },
 {
 "t": 1.59,
@@ -25,58 +25,73 @@
 "kind": "hit"
 },
 {
-"t": 1.93,
-"cue": 1.93,
+"t": 1.6,
+"cue": 1.6,
 "kind": "stamp"
 },
 {
-"t": 2.4,
-"cue": 2.4,
-"kind": "shatter"
+"t": 1.94,
+"cue": 1.94,
+"kind": "stamp"
 },
 {
-"t": 2.5,
-"cue": 2.5,
+"t": 2.38,
+"cue": 2.38,
+"kind": "rip"
+},
+{
+"t": 2.48,
+"cue": 2.48,
 "kind": "whoosh_big"
 },
 {
-"t": 3.66,
-"cue": 3.66,
-"kind": "whoosh"
+"t": 2.54,
+"cue": 2.54,
+"kind": "paper"
 },
 {
-"t": 4.14,
-"cue": 4.14,
+"t": 2.77,
+"cue": 2.77,
+"kind": "paper"
+},
+{
+"t": 3.59,
+"cue": 3.59,
 "kind": "swish"
 },
 {
-"t": 4.26,
-"cue": 4.26,
-"kind": "error"
+"t": 4.03,
+"cue": 4.03,
+"kind": "swish"
 },
 {
-"t": 5.26,
-"cue": 5.26,
+"t": 4.33,
+"cue": 4.33,
+"kind": "stamp"
+},
+{
+"t": 5.18,
+"cue": 5.18,
 "kind": "scratch"
 },
 {
-"t": 5.5,
-"cue": 5.5,
-"kind": "glitch"
+"t": 5.48,
+"cue": 5.48,
+"kind": "rip"
 },
 {
-"t": 5.52,
-"cue": 5.52,
-"kind": "whoosh_big"
+"t": 5.62,
+"cue": 5.62,
+"kind": "paper"
 },
 {
-"t": 5.92,
-"cue": 5.92,
+"t": 5.88,
+"cue": 5.88,
 "kind": "rise"
 },
 {
-"t": 6.38,
-"cue": 6.38,
+"t": 6.34,
+"cue": 6.34,
 "kind": "hit"
 },
 {
@@ -95,14 +110,24 @@
 "kind": "glitch"
 },
 {
-"t": 9.44,
-"cue": 9.44,
-"kind": "pop"
+"t": 8.64,
+"cue": 8.64,
+"kind": "whoosh"
 },
 {
-"t": 9.7,
-"cue": 9.7,
-"kind": "pop"
+"t": 8.75,
+"cue": 8.75,
+"kind": "paper"
+},
+{
+"t": 9.54,
+"cue": 9.54,
+"kind": "paper"
+},
+{
+"t": 9.82,
+"cue": 9.82,
+"kind": "paper"
 },
 {
 "t": 10.88,
@@ -110,14 +135,14 @@
 "kind": "drop"
 },
 {
-"t": 11.47,
-"cue": 11.47,
+"t": 11.4,
+"cue": 11.4,
 "kind": "whoosh"
 },
 {
-"t": 11.65,
-"cue": 11.65,
-"kind": "swish"
+"t": 11.51,
+"cue": 11.51,
+"kind": "paper"
 },
 {
 "t": 13.035,
@@ -145,6 +170,11 @@
 "kind": "type"
 },
 {
+"t": 13.71,
+"cue": 13.71,
+"kind": "paper"
+},
+{
 "t": 13.735,
 "cue": 13.735,
 "kind": "type"
@@ -155,14 +185,19 @@
 "kind": "whoosh"
 },
 {
-"t": 15.16,
-"cue": 15.16,
-"kind": "error"
+"t": 15.22,
+"cue": 15.22,
+"kind": "stamp"
 },
 {
-"t": 16.01,
-"cue": 16.01,
-"kind": "whoosh_big"
+"t": 15.94,
+"cue": 15.94,
+"kind": "whoosh"
+},
+{
+"t": 16.03,
+"cue": 16.03,
+"kind": "paper"
 },
 {
 "t": 16.73,
@@ -170,19 +205,19 @@
 "kind": "hit"
 },
 {
-"t": 16.742,
-"cue": 16.742,
-"kind": "ding"
+"t": 17.11,
+"cue": 17.11,
+"kind": "stamp"
 },
 {
-"t": 17.51,
-"cue": 17.51,
+"t": 17.46,
+"cue": 17.46,
 "kind": "whoosh"
 },
 {
-"t": 17.56,
-"cue": 17.56,
-"kind": "swish"
+"t": 17.55,
+"cue": 17.55,
+"kind": "paper"
 },
 {
 "t": 19.52,
@@ -190,9 +225,14 @@
 "kind": "click"
 },
 {
-"t": 20.6,
-"cue": 20.6,
-"kind": "alert"
+"t": 20.07,
+"cue": 20.07,
+"kind": "paper"
+},
+{
+"t": 20.58,
+"cue": 20.58,
+"kind": "stamp"
 },
 {
 "t": 21.65,
@@ -205,74 +245,79 @@
 "kind": "swish"
 },
 {
-"t": 22.22,
-"cue": 22.22,
-"kind": "error"
+"t": 22.48,
+"cue": 22.48,
+"kind": "stamp"
 },
 {
-"t": 23.87,
-"cue": 23.87,
-"kind": "pop"
-},
-{
-"t": 24.93,
-"cue": 24.93,
-"kind": "pop"
-},
-{
-"t": 25.08,
-"cue": 25.08,
-"kind": "error"
-},
-{
-"t": 25.43,
-"cue": 25.43,
-"kind": "whoosh_big"
-},
-{
-"t": 25.68,
-"cue": 25.68,
-"kind": "swish"
-},
-{
-"t": 26.33,
-"cue": 26.33,
-"kind": "success"
-},
-{
-"t": 29.05,
-"cue": 29.05,
+"t": 22.82,
+"cue": 22.82,
 "kind": "whoosh"
 },
 {
-"t": 29.1,
-"cue": 29.1,
-"kind": "click"
+"t": 22.93,
+"cue": 22.93,
+"kind": "paper"
 },
 {
-"t": 29.45,
-"cue": 29.45,
-"kind": "pop"
+"t": 23.92,
+"cue": 23.92,
+"kind": "paper"
 },
 {
-"t": 29.56,
-"cue": 29.56,
-"kind": "click"
+"t": 24.23,
+"cue": 24.23,
+"kind": "paper"
 },
 {
-"t": 29.86,
-"cue": 29.86,
-"kind": "click"
+"t": 24.61,
+"cue": 24.61,
+"kind": "stamp"
 },
 {
-"t": 29.91,
-"cue": 29.91,
-"kind": "pop"
+"t": 25.36,
+"cue": 25.36,
+"kind": "whoosh"
 },
 {
-"t": 30.21,
-"cue": 30.21,
-"kind": "pop"
+"t": 25.45,
+"cue": 25.45,
+"kind": "paper"
+},
+{
+"t": 25.66,
+"cue": 25.66,
+"kind": "swish"
+},
+{
+"t": 26.28,
+"cue": 26.28,
+"kind": "success"
+},
+{
+"t": 29.0,
+"cue": 29.0,
+"kind": "whoosh"
+},
+{
+"t": 29.11,
+"cue": 29.11,
+"kind": "paper"
+},
+{
+"t": 29.34,
+"cue": 29.34,
+"kind": "type"
+},
+{
+"t": 29.8,
+"cue": 29.8,
+"kind": "type"
+},
+{
+"t": 30.1,
+"cue": 30.1,
+"kind": "type"
 },
 {
 "t": 30.59,
@@ -285,19 +330,24 @@
 "kind": "ding"
 },
 {
-"t": 32.17,
-"cue": 32.17,
-"kind": "whoosh_big"
+"t": 32.12,
+"cue": 32.12,
+"kind": "whoosh"
 },
 {
-"t": 32.21,
-"cue": 32.21,
+"t": 32.23,
+"cue": 32.23,
+"kind": "paper"
+},
+{
+"t": 32.26,
+"cue": 32.26,
 "kind": "pop"
 },
 {
-"t": 34.08,
-"cue": 34.08,
-"kind": "click"
+"t": 33.65,
+"cue": 33.65,
+"kind": "paper"
 },
 {
 "t": 34.6,
@@ -320,13 +370,18 @@
 "kind": "type"
 },
 {
-"t": 35.1,
-"cue": 35.1,
-"kind": "hit"
+"t": 35.17,
+"cue": 35.17,
+"kind": "stamp"
 },
 {
-"t": 35.2,
-"cue": 35.2,
-"kind": "sparkle"
+"t": 35.27,
+"cue": 35.27,
+"kind": "paper"
+},
+{
+"t": 36.65,
+"cue": 36.65,
+"kind": "paper"
 }
 ]
