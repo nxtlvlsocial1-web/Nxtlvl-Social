@@ -154,6 +154,30 @@
   {
    "t": 1794416859,
    "what": "footage capture started (deterministic 1080x1920, 30 fps, virtual clock)"
+  },
+  {
+   "t": 1794417004,
+   "what": "clip_title.mp4 captured and encoded: 90 frames, opens on the title card, car starts at 0.7 s, launches off the first street ramp at 2.4 s"
+  },
+  {
+   "t": 1794417368,
+   "what": "clip_drift.mp4 captured and encoded: 240 frames, drifts chained DRIFT x1 to x4 (events at 3.20, 5.65, 7.55, 9.87 s game time)"
+  },
+  {
+   "t": 1794417674,
+   "what": "clip_ramp.mp4 captured and encoded: 180 frames, real drive from the start (unrecorded run-up), up the garage ramp, off the rooftop lip at clip frame ~107, lands on the plaza LAND pad at frame ~171"
+  },
+  {
+   "t": 1794418185,
+   "what": "clip_drive.mp4 captured and encoded: 360 frames, up to 208 km/h, two street-ramp jumps and drifts"
+  },
+  {
+   "t": 1794418371,
+   "what": "clip_wide.mp4 captured and encoded: 120 frames, top-down camera (C) with UI hidden (H), traffic"
+  },
+  {
+   "t": 1794418400,
+   "what": "six stills saved from the captured frames; PNG sequences deleted"
   }
  ],
  "timings": {
@@ -403,5 +427,24 @@
   "8d045b7 iteration 2: fix the garage ramp so the car can climb it",
   "1f9a362 iteration 1: added a cinematic camera, bigger drift and jump effects, the title card and the H toggle",
   "7a9f19f feat: one-shot neon-drift-district"
- ]
+ ],
+ "footage": {
+  "method": "Playwright Chromium (SwiftShader WebGL), 1080x1920 viewport, full render; init script replaced requestAnimationFrame, performance.now and Date.now with a virtual clock advanced 1/30 s per frame; the game's own loop ran 2 fixed steps per frame; inputs were keyboard events from a route-following script (arrows, Space, C, H); the run-up before each clip was played unrecorded with the same inputs; one PNG per frame, encoded with ffmpeg libx264 -crf 16 -pix_fmt yuv420p -r 30, then deleted",
+  "clips": {
+   "clip_title.mp4": 3.0,
+   "clip_drive.mp4": 12.0,
+   "clip_drift.mp4": 8.0,
+   "clip_ramp.mp4": 6.0,
+   "clip_wide.mp4": 4.0
+  },
+  "stills": [
+   "still_title.png",
+   "still_combo.png",
+   "still_drift.png",
+   "still_ramp.png",
+   "still_speedo.png",
+   "still_city.png"
+  ],
+  "render_ms_per_frame": "about 1300-1700"
+ }
 }

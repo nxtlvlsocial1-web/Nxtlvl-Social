@@ -1,0 +1,201 @@
+{
+ "duration": 45.4,
+ "takes": [
+  {
+   "line": "g00",
+   "take": 0,
+   "heard": "GTA 6 drops next week. I couldn't wait.",
+   "errors": 0,
+   "pitch_spread_hz": 79
+  },
+  {
+   "line": "g00",
+   "take": 1,
+   "heard": "GTA 6 drops next week. I couldn't wait.",
+   "errors": 0,
+   "pitch_spread_hz": 81
+  },
+  {
+   "line": "g01",
+   "take": 0,
+   "heard": "So I made Claude build me my own.",
+   "errors": 0,
+   "pitch_spread_hz": 43
+  },
+  {
+   "line": "g01",
+   "take": 1,
+   "heard": "So I made Claude built me my own.",
+   "errors": 1,
+   "pitch_spread_hz": 74
+  },
+  {
+   "line": "g02",
+   "take": 0,
+   "heard": "This is a free GitHub repo called Claude Cold Gain Studios.",
+   "errors": 2,
+   "pitch_spread_hz": 64
+  },
+  {
+   "line": "g02",
+   "take": 1,
+   "heard": "This is a free GitHub repo called Claude Code Game Studios",
+   "errors": 0,
+   "pitch_spread_hz": 67
+  },
+  {
+   "line": "g03",
+   "take": 0,
+   "heard": "You describe again. Claude asks a few questions, writes the plan, and builds it.",
+   "errors": 2,
+   "pitch_spread_hz": 88
+  },
+  {
+   "line": "g03",
+   "take": 1,
+   "heard": "You describe again Claude asks a few questions writes the plan and builds it",
+   "errors": 2,
+   "pitch_spread_hz": 75
+  },
+  {
+   "line": "g03",
+   "take": 2,
+   "heard": "You describe a game. Claude asks a few questions, writes the plan, and builds it.",
+   "errors": 0,
+   "pitch_spread_hz": 63
+  },
+  {
+   "line": "g03",
+   "take": 3,
+   "heard": "You describe a game Claude asks a few questions rice the plan and builds it",
+   "errors": 1,
+   "pitch_spread_hz": 82
+  },
+  {
+   "line": "g04",
+   "take": 0,
+   "heard": "I type one prompt, a neon open world city I can drive around.",
+   "errors": 3,
+   "pitch_spread_hz": 61
+  },
+  {
+   "line": "g04",
+   "take": 1,
+   "heard": "I typed one prompt, a neon open world city I can drive around.",
+   "errors": 2,
+   "pitch_spread_hz": 63
+  },
+  {
+   "line": "g05",
+   "take": 0,
+   "heard": "This is what it made.",
+   "errors": 0,
+   "pitch_spread_hz": 67
+  },
+  {
+   "line": "g05",
+   "take": 1,
+   "heard": "This is what it made",
+   "errors": 0,
+   "pitch_spread_hz": 60
+  },
+  {
+   "line": "g06",
+   "take": 0,
+   "heard": "Drifts, combos, a rooftop ramp.",
+   "errors": 0,
+   "pitch_spread_hz": 74
+  },
+  {
+   "line": "g06",
+   "take": 1,
+   "heard": "Drifts, combos, a wolf top ramp.",
+   "errors": 2,
+   "pitch_spread_hz": 89
+  },
+  {
+   "line": "g07",
+   "take": 0,
+   "heard": "It's not GTA, but I didn't write a single line of code.",
+   "errors": 0,
+   "pitch_spread_hz": 80
+  },
+  {
+   "line": "g07",
+   "take": 1,
+   "heard": "It's not GTA, but I didn't write a single line of code.",
+   "errors": 0,
+   "pitch_spread_hz": 56
+  },
+  {
+   "line": "g08",
+   "take": 0,
+   "heard": "and it took 46 minutes.",
+   "errors": 0,
+   "pitch_spread_hz": 63
+  },
+  {
+   "line": "g08",
+   "take": 1,
+   "heard": "and it took 46 minutes.",
+   "errors": 0,
+   "pitch_spread_hz": 93
+  },
+  {
+   "line": "g09",
+   "take": 0,
+   "heard": "Step one, paste the repo into Claude code. Step two, describe your game. Step three, play it.",
+   "errors": 1,
+   "pitch_spread_hz": 300
+  },
+  {
+   "line": "g09",
+   "take": 1,
+   "heard": "Step 1. Paste the repo into clock code. Step 2. Describe your game. Step 3. Play it.",
+   "errors": 1,
+   "pitch_spread_hz": 111
+  },
+  {
+   "line": "g09",
+   "take": 2,
+   "heard": "Step one, paste the repo into Claude code. Step two, describe your game. Step three, play it.",
+   "errors": 0,
+   "pitch_spread_hz": 79
+  },
+  {
+   "line": "g09",
+   "take": 3,
+   "heard": "Step 1. Paste the repo into Claude code. Step 2. Describe your game. Step 3. Play it.",
+   "errors": 0,
+   "pitch_spread_hz": 66
+  },
+  {
+   "line": "g10",
+   "take": 0,
+   "heard": "comment, game, and I'll send you the link.",
+   "errors": 0,
+   "pitch_spread_hz": 70
+  },
+  {
+   "line": "g10",
+   "take": 1,
+   "heard": "Comment, Gain, and I'll send you the link.",
+   "errors": 1,
+   "pitch_spread_hz": 77
+  },
+  {
+   "line": "g11",
+   "take": 0,
+   "heard": "And send this to the friend who's taking November 19th off, right?!",
+   "errors": 1,
+   "pitch_spread_hz": 57
+  },
+  {
+   "line": "g11",
+   "take": 1,
+   "heard": "And send this to the friend who's taking November 19th off.",
+   "errors": 0,
+   "pitch_spread_hz": 73
+  }
+ ]
+}

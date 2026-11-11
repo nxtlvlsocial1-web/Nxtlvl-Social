@@ -25,6 +25,8 @@ LINES = [
     ("g05", "This is what it made.", "peak", .9),
     ("g06", "Drifts. Combos. A rooftop ramp.", "peak", 1.0),
     ("g07", "It's not GTA. But I didn't write a single line of code...", "peak", .8),
+    # the real build time (plan/build_log.json: clone to a fully working game, ramp fix included = 46.4 min)
+    ("g08", "and it took forty-six minutes.", "peak", .85),
     ("g09", "Step one: paste the repo into Claude Code. Step two: describe your game. Step three: play it.", "release", .7),
     ("g10", "Comment GAME, and I'll send you the link.", "CTA", .8),
     ("g11", "And send this to the friend who's taking November nineteenth off.", "CTA", .85),
