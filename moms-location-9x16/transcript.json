@@ -1,0 +1,836 @@
+[
+  {
+    "text": "Last",
+    "start": 0.14,
+    "end": 0.3,
+    "id": "w0"
+  },
+  {
+    "text": "night",
+    "start": 0.3,
+    "end": 0.59,
+    "id": "w1"
+  },
+  {
+    "text": "at",
+    "start": 0.68,
+    "end": 0.77,
+    "id": "w2"
+  },
+  {
+    "text": "2.14,",
+    "start": 0.86,
+    "end": 1.92,
+    "id": "w3"
+  },
+  {
+    "text": "my",
+    "start": 2.08,
+    "end": 2.1,
+    "id": "w4"
+  },
+  {
+    "text": "mom's",
+    "start": 2.1,
+    "end": 2.55,
+    "id": "w5"
+  },
+  {
+    "text": "location",
+    "start": 2.55,
+    "end": 3.28,
+    "id": "w6"
+  },
+  {
+    "text": "said",
+    "start": 3.28,
+    "end": 3.44,
+    "id": "w7"
+  },
+  {
+    "text": "she",
+    "start": 3.44,
+    "end": 3.68,
+    "id": "w8"
+  },
+  {
+    "text": "was",
+    "start": 3.68,
+    "end": 3.92,
+    "id": "w9"
+  },
+  {
+    "text": "in",
+    "start": 3.92,
+    "end": 4.08,
+    "id": "w10"
+  },
+  {
+    "text": "my",
+    "start": 4.08,
+    "end": 4.24,
+    "id": "w11"
+  },
+  {
+    "text": "bedroom.",
+    "start": 4.24,
+    "end": 4.79,
+    "id": "w12"
+  },
+  {
+    "text": "She",
+    "start": 5.18,
+    "end": 5.24,
+    "id": "w13"
+  },
+  {
+    "text": "wasn't,",
+    "start": 5.24,
+    "end": 5.77,
+    "id": "w14"
+  },
+  {
+    "text": "she",
+    "start": 5.77,
+    "end": 5.97,
+    "id": "w15"
+  },
+  {
+    "text": "works",
+    "start": 5.97,
+    "end": 6.3,
+    "id": "w16"
+  },
+  {
+    "text": "night",
+    "start": 6.3,
+    "end": 6.59,
+    "id": "w17"
+  },
+  {
+    "text": "shift",
+    "start": 6.62,
+    "end": 6.69,
+    "id": "w18"
+  },
+  {
+    "text": "at",
+    "start": 6.69,
+    "end": 7.13,
+    "id": "w19"
+  },
+  {
+    "text": "the",
+    "start": 7.13,
+    "end": 7.29,
+    "id": "w20"
+  },
+  {
+    "text": "hospital.",
+    "start": 7.29,
+    "end": 8.08,
+    "id": "w21"
+  },
+  {
+    "text": "We",
+    "start": 8.08,
+    "end": 8.23,
+    "id": "w22"
+  },
+  {
+    "text": "share",
+    "start": 8.23,
+    "end": 8.6,
+    "id": "w23"
+  },
+  {
+    "text": "locations.",
+    "start": 8.6,
+    "end": 9.48,
+    "id": "w24"
+  },
+  {
+    "text": "She",
+    "start": 9.66,
+    "end": 9.7,
+    "id": "w25"
+  },
+  {
+    "text": "tracks",
+    "start": 9.7,
+    "end": 10.05,
+    "id": "w26"
+  },
+  {
+    "text": "me,",
+    "start": 10.05,
+    "end": 10.28,
+    "id": "w27"
+  },
+  {
+    "text": "I",
+    "start": 10.28,
+    "end": 10.29,
+    "id": "w28"
+  },
+  {
+    "text": "track",
+    "start": 10.38,
+    "end": 10.57,
+    "id": "w29"
+  },
+  {
+    "text": "her,",
+    "start": 10.69,
+    "end": 10.92,
+    "id": "w30"
+  },
+  {
+    "text": "that's",
+    "start": 10.92,
+    "end": 11.2,
+    "id": "w31"
+  },
+  {
+    "text": "the",
+    "start": 11.32,
+    "end": 11.45,
+    "id": "w32"
+  },
+  {
+    "text": "deal.",
+    "start": 11.6,
+    "end": 11.92,
+    "id": "w33"
+  },
+  {
+    "text": "So",
+    "start": 12.06,
+    "end": 12.07,
+    "id": "w34"
+  },
+  {
+    "text": "I",
+    "start": 12.08,
+    "end": 12.16,
+    "id": "w35"
+  },
+  {
+    "text": "texted",
+    "start": 12.16,
+    "end": 12.63,
+    "id": "w36"
+  },
+  {
+    "text": "her,",
+    "start": 12.63,
+    "end": 12.97,
+    "id": "w37"
+  },
+  {
+    "text": "are",
+    "start": 13.09,
+    "end": 13.23,
+    "id": "w38"
+  },
+  {
+    "text": "you",
+    "start": 13.29,
+    "end": 13.49,
+    "id": "w39"
+  },
+  {
+    "text": "home?",
+    "start": 13.49,
+    "end": 14.16,
+    "id": "w40"
+  },
+  {
+    "text": "She",
+    "start": 14.3,
+    "end": 14.38,
+    "id": "w41"
+  },
+  {
+    "text": "replied",
+    "start": 14.38,
+    "end": 14.91,
+    "id": "w42"
+  },
+  {
+    "text": "right",
+    "start": 14.91,
+    "end": 15.22,
+    "id": "w43"
+  },
+  {
+    "text": "away.",
+    "start": 15.33,
+    "end": 15.8,
+    "id": "w44"
+  },
+  {
+    "text": "No,",
+    "start": 15.98,
+    "end": 16.12,
+    "id": "w45"
+  },
+  {
+    "text": "sweetie,",
+    "start": 16.12,
+    "end": 16.76,
+    "id": "w46"
+  },
+  {
+    "text": "still",
+    "start": 16.76,
+    "end": 17.12,
+    "id": "w47"
+  },
+  {
+    "text": "at",
+    "start": 17.12,
+    "end": 17.24,
+    "id": "w48"
+  },
+  {
+    "text": "work,",
+    "start": 17.24,
+    "end": 17.69,
+    "id": "w49"
+  },
+  {
+    "text": "go",
+    "start": 17.69,
+    "end": 17.92,
+    "id": "w50"
+  },
+  {
+    "text": "to",
+    "start": 17.92,
+    "end": 17.97,
+    "id": "w51"
+  },
+  {
+    "text": "sleep.",
+    "start": 17.97,
+    "end": 18.64,
+    "id": "w52"
+  },
+  {
+    "text": "But",
+    "start": 18.78,
+    "end": 18.85,
+    "id": "w53"
+  },
+  {
+    "text": "the",
+    "start": 18.85,
+    "end": 19.06,
+    "id": "w54"
+  },
+  {
+    "text": "second",
+    "start": 19.06,
+    "end": 19.4,
+    "id": "w55"
+  },
+  {
+    "text": "her",
+    "start": 19.5,
+    "end": 19.69,
+    "id": "w56"
+  },
+  {
+    "text": "text",
+    "start": 19.69,
+    "end": 19.95,
+    "id": "w57"
+  },
+  {
+    "text": "came",
+    "start": 20.01,
+    "end": 20.19,
+    "id": "w58"
+  },
+  {
+    "text": "in,",
+    "start": 20.23,
+    "end": 20.56,
+    "id": "w59"
+  },
+  {
+    "text": "my",
+    "start": 20.72,
+    "end": 20.76,
+    "id": "w60"
+  },
+  {
+    "text": "closet",
+    "start": 20.76,
+    "end": 21.35,
+    "id": "w61"
+  },
+  {
+    "text": "lit",
+    "start": 21.35,
+    "end": 21.65,
+    "id": "w62"
+  },
+  {
+    "text": "up.",
+    "start": 21.65,
+    "end": 22.14,
+    "id": "w63"
+  },
+  {
+    "text": "I",
+    "start": 22.14,
+    "end": 22.3,
+    "id": "w64"
+  },
+  {
+    "text": "zoomed",
+    "start": 22.3,
+    "end": 22.75,
+    "id": "w65"
+  },
+  {
+    "text": "in",
+    "start": 22.75,
+    "end": 22.92,
+    "id": "w66"
+  },
+  {
+    "text": "on",
+    "start": 22.92,
+    "end": 23.1,
+    "id": "w67"
+  },
+  {
+    "text": "the",
+    "start": 23.11,
+    "end": 23.36,
+    "id": "w68"
+  },
+  {
+    "text": "map.",
+    "start": 23.36,
+    "end": 23.8,
+    "id": "w69"
+  },
+  {
+    "text": "Her",
+    "start": 24.06,
+    "end": 24.21,
+    "id": "w70"
+  },
+  {
+    "text": "dot",
+    "start": 24.21,
+    "end": 24.5,
+    "id": "w71"
+  },
+  {
+    "text": "was",
+    "start": 24.5,
+    "end": 24.79,
+    "id": "w72"
+  },
+  {
+    "text": "inside",
+    "start": 24.79,
+    "end": 25.38,
+    "id": "w73"
+  },
+  {
+    "text": "my",
+    "start": 25.38,
+    "end": 25.56,
+    "id": "w74"
+  },
+  {
+    "text": "closet.",
+    "start": 26,
+    "end": 26.48,
+    "id": "w75"
+  },
+  {
+    "text": "Then",
+    "start": 26.62,
+    "end": 26.78,
+    "id": "w76"
+  },
+  {
+    "text": "my",
+    "start": 26.78,
+    "end": 26.93,
+    "id": "w77"
+  },
+  {
+    "text": "phone",
+    "start": 26.93,
+    "end": 27.24,
+    "id": "w78"
+  },
+  {
+    "text": "rang.",
+    "start": 27.34,
+    "end": 27.79,
+    "id": "w79"
+  },
+  {
+    "text": "It",
+    "start": 27.79,
+    "end": 27.99,
+    "id": "w80"
+  },
+  {
+    "text": "was",
+    "start": 27.99,
+    "end": 28.2,
+    "id": "w81"
+  },
+  {
+    "text": "the",
+    "start": 28.25,
+    "end": 28.42,
+    "id": "w82"
+  },
+  {
+    "text": "hospital.",
+    "start": 28.43,
+    "end": 29.24,
+    "id": "w83"
+  },
+  {
+    "text": "Baby,",
+    "start": 29.42,
+    "end": 29.72,
+    "id": "w84"
+  },
+  {
+    "text": "it's",
+    "start": 29.72,
+    "end": 30.01,
+    "id": "w85"
+  },
+  {
+    "text": "mom.",
+    "start": 30.01,
+    "end": 30.48,
+    "id": "w86"
+  },
+  {
+    "text": "I",
+    "start": 30.48,
+    "end": 30.62,
+    "id": "w87"
+  },
+  {
+    "text": "lost",
+    "start": 30.62,
+    "end": 30.81,
+    "id": "w88"
+  },
+  {
+    "text": "my",
+    "start": 30.81,
+    "end": 30.94,
+    "id": "w89"
+  },
+  {
+    "text": "phone",
+    "start": 30.94,
+    "end": 31.24,
+    "id": "w90"
+  },
+  {
+    "text": "at",
+    "start": 31.34,
+    "end": 31.41,
+    "id": "w91"
+  },
+  {
+    "text": "home",
+    "start": 31.43,
+    "end": 31.68,
+    "id": "w92"
+  },
+  {
+    "text": "last",
+    "start": 31.68,
+    "end": 31.95,
+    "id": "w93"
+  },
+  {
+    "text": "week.",
+    "start": 31.95,
+    "end": 32.48,
+    "id": "w94"
+  },
+  {
+    "text": "Who",
+    "start": 32.48,
+    "end": 32.62,
+    "id": "w95"
+  },
+  {
+    "text": "have",
+    "start": 32.62,
+    "end": 32.78,
+    "id": "w96"
+  },
+  {
+    "text": "you",
+    "start": 32.78,
+    "end": 32.91,
+    "id": "w97"
+  },
+  {
+    "text": "been",
+    "start": 32.91,
+    "end": 33.07,
+    "id": "w98"
+  },
+  {
+    "text": "texting?",
+    "start": 33.07,
+    "end": 33.52,
+    "id": "w99"
+  },
+  {
+    "text": "Every",
+    "start": 33.52,
+    "end": 34.38,
+    "id": "w100"
+  },
+  {
+    "text": "night",
+    "start": 34.38,
+    "end": 34.6,
+    "id": "w101"
+  },
+  {
+    "text": "this",
+    "start": 34.6,
+    "end": 35,
+    "id": "w102"
+  },
+  {
+    "text": "week,",
+    "start": 35.1,
+    "end": 35.64,
+    "id": "w103"
+  },
+  {
+    "text": "mom",
+    "start": 35.67,
+    "end": 35.88,
+    "id": "w104"
+  },
+  {
+    "text": "had",
+    "start": 35.88,
+    "end": 36.18,
+    "id": "w105"
+  },
+  {
+    "text": "texted",
+    "start": 36.33,
+    "end": 36.68,
+    "id": "w106"
+  },
+  {
+    "text": "me",
+    "start": 36.68,
+    "end": 36.82,
+    "id": "w107"
+  },
+  {
+    "text": "goodnight.",
+    "start": 36.83,
+    "end": 37.6,
+    "id": "w108"
+  },
+  {
+    "text": "And",
+    "start": 37.74,
+    "end": 37.86,
+    "id": "w109"
+  },
+  {
+    "text": "my",
+    "start": 37.86,
+    "end": 38.03,
+    "id": "w110"
+  },
+  {
+    "text": "closet",
+    "start": 38.03,
+    "end": 38.56,
+    "id": "w111"
+  },
+  {
+    "text": "door",
+    "start": 38.56,
+    "end": 38.91,
+    "id": "w112"
+  },
+  {
+    "text": "was",
+    "start": 38.91,
+    "end": 39.15,
+    "id": "w113"
+  },
+  {
+    "text": "opening.",
+    "start": 39.17,
+    "end": 40.08,
+    "id": "w114"
+  },
+  {
+    "text": "Something",
+    "start": 40.22,
+    "end": 40.68,
+    "id": "w115"
+  },
+  {
+    "text": "stepped",
+    "start": 40.76,
+    "end": 41.13,
+    "id": "w116"
+  },
+  {
+    "text": "out",
+    "start": 41.25,
+    "end": 41.36,
+    "id": "w117"
+  },
+  {
+    "text": "wearing",
+    "start": 41.36,
+    "end": 41.64,
+    "id": "w118"
+  },
+  {
+    "text": "my",
+    "start": 41.88,
+    "end": 41.96,
+    "id": "w119"
+  },
+  {
+    "text": "mom's",
+    "start": 42.16,
+    "end": 42.29,
+    "id": "w120"
+  },
+  {
+    "text": "scrubs.",
+    "start": 42.29,
+    "end": 42.96,
+    "id": "w121"
+  },
+  {
+    "text": "It",
+    "start": 42.96,
+    "end": 43.1,
+    "id": "w122"
+  },
+  {
+    "text": "was",
+    "start": 43.1,
+    "end": 43.31,
+    "id": "w123"
+  },
+  {
+    "text": "way",
+    "start": 43.31,
+    "end": 43.52,
+    "id": "w124"
+  },
+  {
+    "text": "too",
+    "start": 43.52,
+    "end": 43.72,
+    "id": "w125"
+  },
+  {
+    "text": "tall,",
+    "start": 43.72,
+    "end": 44.15,
+    "id": "w126"
+  },
+  {
+    "text": "and",
+    "start": 44.15,
+    "end": 44.36,
+    "id": "w127"
+  },
+  {
+    "text": "it",
+    "start": 44.36,
+    "end": 44.5,
+    "id": "w128"
+  },
+  {
+    "text": "was",
+    "start": 44.5,
+    "end": 44.6,
+    "id": "w129"
+  },
+  {
+    "text": "still",
+    "start": 45.04,
+    "end": 45.06,
+    "id": "w130"
+  },
+  {
+    "text": "typing.",
+    "start": 45.06,
+    "end": 45.76,
+    "id": "w131"
+  },
+  {
+    "text": "My",
+    "start": 45.76,
+    "end": 46.15,
+    "id": "w132"
+  },
+  {
+    "text": "phone",
+    "start": 46.15,
+    "end": 46.54,
+    "id": "w133"
+  },
+  {
+    "text": "buzzed.",
+    "start": 46.54,
+    "end": 47.36,
+    "id": "w134"
+  },
+  {
+    "text": "Go",
+    "start": 47.36,
+    "end": 47.75,
+    "id": "w135"
+  },
+  {
+    "text": "to",
+    "start": 47.75,
+    "end": 48.14,
+    "id": "w136"
+  },
+  {
+    "text": "sleep,",
+    "start": 48.14,
+    "end": 48.57,
+    "id": "w137"
+  },
+  {
+    "text": "sweetie.",
+    "start": 48.57,
+    "end": 49.56,
+    "id": "w138"
+  }
+]
