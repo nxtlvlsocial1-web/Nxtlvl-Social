@@ -101,7 +101,7 @@ def phrase(pid, line, rows, top, start=0, t_out=None, left=LEFT, first_visible=F
     out = [f'<div class="ph" id="{pid}" style="top:{top}px;left:{left}px">']
     for r, (sty, text) in enumerate(rows):
         size, wt, ls = STY[sty]
-        plain = "".join(c for c in text if c not in "*^_~")
+        plain = "".join(c for c in text if c not in "*^_~=+")
         size = min(size, int(MAXW / max(1, text_w(plain, 1, wt, ls))))
         out.append(f'<div class="ln {sty}" style="font-size:{size}px;font-weight:{wt}">')
         for j, word in enumerate(text.split(" ")):
@@ -113,14 +113,30 @@ def phrase(pid, line, rows, top, start=0, t_out=None, left=LEFT, first_visible=F
             elif word.startswith("_"):
                 cls += " grey"
             stk = word.startswith("~")
-            word = word.strip("*^_~")
+            mark = "r" if word.startswith("=") else ("b" if word.startswith("+") else "")
+            word = word.strip("*^_~=+")
             wid = f"{pid}_{r}_{j}"
-            inner = f'{word}<i class="stk" id="{pid}_s"></i>' if stk else word
             vis = first_visible and k == start
-            out.append(f'<span class="wm"><span class="{cls}" id="{wid}"{" style=opacity:1" if vis else ""}>{inner}</span></span>')
+            chars = sty == "xl" and not vis and " gr" not in cls and not mark and not stk
+            if chars:
+                inner = "".join(f'<span class="ch" id="{wid}c{c}">{ch}</span>' for c, ch in enumerate(word))
+            else:
+                inner = f'{word}<i class="stk" id="{pid}_s"></i>' if stk else word
+            if mark:
+                cls += " hlw"
+                inner = f'<i class="mkr {mark}" id="{wid}m"></i><span class="hlt" id="{wid}t">{inner}</span>'
+            out.append(f'<span class="wm{" wmh" if mark else ""}"><span class="{cls}" id="{wid}"{" style=opacity:1" if vis else ""}>{inner}</span></span>')
             if not vis:
                 t = ws[k]["t0"]
-                js(f'tl.fromTo("#{wid}", {{yPercent: 110, opacity: 0}}, {{yPercent: 0, opacity: 1, duration: .42, ease: "expo.out", immediateRender: false}}, {t - .05:.3f});')
+                if chars:
+                    js(f'tl.set("#{wid}", {{opacity: 1}}, {t - .06:.3f});')
+                    for c in range(len(word)):
+                        js(f'tl.fromTo("#{wid}c{c}", {{yPercent: 105, rotationX: -85, opacity: 0, transformPerspective: 600}}, {{yPercent: 0, rotationX: 0, opacity: 1, transformPerspective: 600, duration: .5, ease: "back.out(1.7)", immediateRender: false}}, {t - .05 + c * .028:.3f});')
+                else:
+                    js(f'tl.fromTo("#{wid}", {{yPercent: 110, opacity: 0}}, {{yPercent: 0, opacity: 1, duration: .42, ease: "expo.out", immediateRender: false}}, {t - .05:.3f});')
+                if mark:
+                    js(f'tl.fromTo("#{wid}m", {{scaleX: 0}}, {{scaleX: 1, duration: .32, ease: "expo.out", immediateRender: false}}, {t + .1:.3f});')
+                    js(f'tl.to("#{wid}t", {{color: "#ffffff", duration: .15}}, {t + .16:.3f});')
             k += 1
         out.append("</div>")
     out.append("</div>")
@@ -283,6 +299,33 @@ class Odometer:
 
 
 
+# ---------------------------------------------------------------- v8: chapter swipes, colour themes, the camera
+WIPES = []
+WP = []
+
+
+def wipe(t, label, sub="", grad=("#ff2a2a", "#ff3d7f", "#d02cff")):
+    """A diagonal gradient panel sweeps across the frame carrying a chapter title; the scene swaps under it at t."""
+    wid = f"wp{len(WIPES)}"
+    WIPES.append(t)
+    WP.append(f'<div class="wp" id="{wid}" style="background:linear-gradient(120deg, {grad[0]}, {grad[1]} 55%, {grad[2]})">'
+              f'<div class="wpl" id="{wid}l"><b style="font-size:{min(300, int(860 / text_w(label, 1, 800, -.05)))}px">{label}</b>{f"<span>{sub}</span>" if sub else ""}</div></div>')
+    js(f'tl.fromTo("#{wid}", {{x: 1900, rotation: -12}}, {{x: 0, rotation: -12, duration: .26, ease: "expo.in", immediateRender: false}}, {t - .26:.3f});')
+    js(f'tl.to("#{wid}", {{x: -2000, duration: .3, ease: "expo.in"}}, {t + .16:.3f});')
+    js(f'tl.fromTo("#{wid}l", {{x: 90, scale: .9}}, {{x: -160, scale: 1.05, duration: .72, ease: "none", immediateRender: false}}, {t - .26:.3f});')
+    sfx("whoosh_big", t - .26)
+
+
+def theme(t, cols, d=.6):
+    for k, c in enumerate(cols):
+        js(f'tl.to(".g{k + 1}", {{backgroundColor: "{c}", duration: {d}, ease: "power1.inOut"}}, {t:.3f});')
+
+
+WARM = ("rgba(255,120,110,.55)", "rgba(255,170,120,.5)", "rgba(255,90,140,.3)")
+COOL = ("rgba(120,150,255,.55)", "rgba(150,120,255,.5)", "rgba(110,200,255,.3)")
+PINK = ("rgba(255,140,190,.55)", "rgba(200,120,255,.5)", "rgba(255,180,200,.3)")
+
+
 # ---------------------------------------------------------------- v7 lively motion: FX layer, illustrated creator, 3D phone
 FXH = []          # elements of the FX layer (bursts, confetti, hearts), above the scenes
 PAL = ["#ff2a2a", "#ff3d7f", "#d02cff", "#6a1fe0", "#3346ff", "#2a7bff", "#ffb800", "#2fd28a"]
@@ -409,12 +452,14 @@ PH, WY, VY = 330, 800, 1060      # phrase top, wheel centre, visual zone top (to
 
 def card(cid, x, y, w, h, inner, cls="", extra=""):
     return (f'<div class="cw" id="{cid}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px;{extra}">'
-            f'<div class="card {cls}" id="{cid}_c">{inner}</div></div>')
+            f'<div class="card {cls}" id="{cid}_c">{inner}<i class="sheen" id="{cid}_sh"></i></div></div>')
 
 
 def card_in(sel, t, d=.6, dy=140):
     js(f'tl.fromTo("{sel}", {{opacity: 0, y: {dy}, scale: .7, rotation: {R.choice([-6, 6])}}}, {{opacity: 1, y: 0, scale: 1, rotation: 0, duration: {d}, ease: "back.out(1.5)", immediateRender: false}}, {t:.3f});')
     float_idle(f"{sel}_c", t + .2)
+    js(f'tl.fromTo("{sel}_sh", {{xPercent: -180, opacity: 1}}, {{xPercent: 320, opacity: 1, duration: .9, ease: "power2.inOut", immediateRender: false}}, {t + .35:.3f});')
+    js(f'tl.set("{sel}_sh", {{opacity: 0}}, {t + 1.27:.3f});')
     sfx("pop", t + .05)
 
 
@@ -490,7 +535,7 @@ def scenes():
     gr[-1] = "gr1"
     t_b = t_a_out + .12
     wB = Wheel("wB", excuses, WY, 104, start=0, grads=gr, icons=icons_)
-    phB = phrase("pB", "l01", [("m", "Your reel didn't"), ("m", "flop because of")], PH, t_out=L("l02", 0) - .12)
+    phB = phrase("pB", "l01", [("m", "Your reel didn't"), ("m", "=flop because of")], PH, t_out=L("l02", 0) - .12)
     sw_ = text_w("the algorithm", wB.size, 800, -.03) + 1.15 * wB.size
     strike = f'<i class="wstk" id="wBstk" style="width:{sw_ + 16:.0f}px;top:{WY - wB.size * .05:.0f}px;height:{wB.size * .09:.0f}px"></i>'
     spark = ('<svg class="spark" viewBox="0 0 300 120"><path class="sp-a" id="spBa" d="M0 12 C40 14 50 90 90 104 S200 112 300 114 L300 120 L0 120Z"/>'
@@ -578,13 +623,15 @@ def scenes():
     js(f'tl.fromTo("#m3E", {{opacity: 0}}, {{opacity: 1, duration: .3, immediateRender: false}}, {L("l03", 4) - .1:.3f});')
     sfx("drop", L("l03", 4))
     t_f = L("l04", 0) - .14
+    theme(t_e, WARM)
+    wipe(t_f, "01", "THE GREETING")
     scene_out("sE", t_f - .04)
 
     # ---- F: the mistakes wheel + a reel card. "One: your hook is a greeting."
     mistakes = ["The greeting", "A still frame", "Explaining first"]
     wF = Wheel("wF", mistakes, WY, 112, start=0, grads=["gr1"] * 3, icons=["chat", "pause", "list"])
     lab = '<div class="lab" id="labF"><span id="labN">01</span> / 03</div>'
-    phF = phrase("pF", "l04", [("s", "_One:"), ("m", "your hook is"), ("m", "a greeting.")], PH, t_out=L("l05", 0) - .12)
+    phF = phrase("pF", "l04", [("s", "_One:"), ("m", "your hook is"), ("m", "a =greeting.")], PH, t_out=L("l05", 0) - .12)
     thumb = f'<div class="thn">{creator("crF", wave=True)}</div>'
     rc = card("rcF", 110, VY, 860, 400,
               f'{thumb}<div class="rcr"><div class="bub" id="bubF"><span id="bubFt"></span></div>'
@@ -630,7 +677,8 @@ def scenes():
 
     # "Start with the result." : the quote decodes into the result; a new reel card with the result and rising bars
     t_r = L("l06", 0) - .1
-    phF3 = phrase("pF3", "l06", [("m", "Start with the ^result.")], PH, t_out=L("l07", 0) - .14)
+    theme(t_r, COOL)
+    phF3 = phrase("pF3", "l06", [("m", "Start with the +result.")], PH, t_out=L("l07", 0) - .14)
     bars = "".join(f'<i class="bar" id="brF{k}" style="left:{k * 66}px;height:{h}px"></i>' for k, h in enumerate([60, 96, 140, 190, 250]))
     rc2 = card("rc2F", 110, VY, 860, 400,
                f'<div class="thn dark">{creator("crF2", ("#ffd29e", "#ff9fb2"))}<div class="thres">1M<br><small>views</small></div></div>'
@@ -666,7 +714,9 @@ def scenes():
     card_out("#rc2F", t_g - .3)
 
     # ---- G: "Two: your first frame is still. If nothing moves, thumbs keep scrolling." A still photo, then a feed whips past
-    phG = phrase("pG", "l07", [("s", "_Two:"), ("m", "your first frame"), ("m", "is still.")], PH, t_out=L("l08", 0) - .12)
+    wipe(t_g, "02", "A STILL FRAME")
+    theme(t_g, WARM)
+    phG = phrase("pG", "l07", [("s", "_Two:"), ("m", "your first frame"), ("m", "is =still.")], PH, t_out=L("l08", 0) - .12)
     photo = ('<div class="fcard photo"><i class="sun"></i><i class="h1"></i><i class="h2"></i>'
              f'<div class="pz" id="pzG">{icon("pause", "pzi")}</div><div class="chip" id="chG">frame 1</div>'
              '<div class="pill red nm" id="nmG">nothing moves</div></div>')
@@ -683,7 +733,7 @@ def scenes():
     popin("#chG", L("l07", 3))
     sfx("click", L("l07", 5))
     t_h = L("l08", 0) - .1
-    phH = phrase("pH", "l08", [("m", "If nothing moves,"), ("m", "thumbs keep scrolling.")], PH, t_out=L("l09", 0) - .12)
+    phH = phrase("pH", "l08", [("m", "If nothing moves,"), ("m", "thumbs keep =scrolling.")], PH, t_out=L("l09", 0) - .12)
     H.append(scene("sH", phH))
     js(f'tl.set("#sH", {{opacity: 1}}, {t_h:.3f});')
     popin("#nmG", L("l08", 1))
@@ -698,8 +748,9 @@ def scenes():
 
     # ---- I: "Three: you explain before you show." / "Show the result first, then explain how you got it."
     t_i = L("l09", 0) - .12
+    wipe(t_i, "03", "EXPLAINING FIRST")
     card_out("#feedG", t_i - .02)
-    phI = phrase("pI", "l09", [("s", "_Three:"), ("m", "you explain"), ("m", "before you show.")], PH, t_out=L("l10", 0) - .12)
+    phI = phrase("pI", "l09", [("s", "_Three:"), ("m", "you explain"), ("m", "before you =show.")], PH, t_out=L("l10", 0) - .12)
     sw = vblur("swp")
     swap = (f'<div id="swp" style="filter:{sw}"><div class="sw2" id="swE"><span class="n">1</span>{icon("list", "ic2")}EXPLAIN</div>'
             f'<div class="sw2" id="swS"><span class="n">2</span>{icon("play", "ic2")}<span class="t">SHOW<span class="g gr1" id="swSg">SHOW</span></span></div></div>')
@@ -721,7 +772,8 @@ def scenes():
     sfx("tick", L("l09", 2))
     sfx("error", L("l09", 5) + .2)
     t_sw = L("l10", 0) - .05
-    phI2 = phrase("pI2", "l10", [("m", "Show the result"), ("m", "first,"), ("s", "_then _explain _how _you _got _it.")], PH)
+    theme(t_sw, COOL)
+    phI2 = phrase("pI2", "l10", [("m", "Show the result"), ("m", "+first,"), ("s", "_then _explain _how _you _got _it.")], PH)
     H.append(scene("sI2", phI2))
     js(f'tl.set("#sI2", {{opacity: 1}}, {t_sw - .05:.3f});')
     js(f'tl.to("#swS", {{y: -190, opacity: 1, duration: .5, ease: "expo.inOut"}}, {t_sw:.3f});')
@@ -741,6 +793,7 @@ def scenes():
     js(f'tl.to("#sI2, #sF", {{opacity: 0, duration: .2}}, {t_j - .04:.3f});')
 
     # ---- J: "Fix these three and watch your next reel." Fixes wheel with checks; a rising chart; the odometer
+    wipe(t_j, "THE FIX", "", grad=("#3346ff", "#6a1fe0", "#d02cff"))
     fixes = ["Result first", "Move in frame 1", "Show, then explain"]
     wJ = Wheel("wJ", fixes, WY, 112, start=0, grads=["gr2"] * 3, icons=["check"] * 3)
     phJ = phrase("pJ", "l11", [("m", "*Fix these three"), ("s", "_and _watch _your _next _reel.")], PH)
@@ -772,10 +825,12 @@ def scenes():
 
     # ---- K: CTA. "Save this so you don't forget, and comment HOOK for my list of twenty hooks that work."
     t_k = L("l12", 0) - .14
+    wipe(t_k, "SAVE THIS", "", grad=("#ff3d7f", "#d02cff", "#6a1fe0"))
+    theme(t_k, PINK)
     scene_out("sJ", t_k - .04)
     kw = ["GUIDE", "LINK", "TIPS", "SEND", "HOOK"]
     wK = Wheel("wK", kw, WY + 110, 150, start=0, grads=["gr1"] * 5)
-    phK = phrase("pK", "l12", [("m", "Save this so you"), ("m", "don't forget,")], PH, t_out=L("l12", 6) - .1)
+    phK = phrase("pK", "l12", [("m", "=Save this so you"), ("m", "don't forget,")], PH, t_out=L("l12", 6) - .1)
     phK2 = phrase("pK2", "l12", [("m", "and comment")], PH, start=6)
     phK3 = phrase("pK3", "l12", [("s", "_for _my _list _of _20 _hooks _that _work.")], 1400, start=9)
     bk = f'<div class="bkm" id="bkm">{icon("bookmark", "bki")}</div>'
@@ -1007,6 +1062,23 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f4f4
 .vbub span {{ font-size: 28px; color: #66665f; font-weight: 700; }}
 .vbub em {{ font-style: normal; color: {RED}; font-size: 42px; }}
 .vbi {{ width: 34px; height: 34px; fill: {INK}; stroke: none; }}
+
+/* ---- v8 */
+#stage {{ position: absolute; inset: 0; transform-origin: 50% 48%; z-index: 3; }}
+#dots {{ position: absolute; left: 0; top: 0; width: 1080px; height: 2010px; }}
+#wps {{ position: absolute; inset: 0; z-index: 9; pointer-events: none; overflow: hidden; }}
+.wp {{ position: absolute; left: -420px; top: -360px; width: 1920px; height: 2640px; display: grid; place-items: center; transform: translateX(1900px) rotate(-12deg); }}
+.wpl {{ display: flex; flex-direction: column; align-items: center; transform: rotate(12deg); color: #fff; text-align: center; }}
+.wpl b {{ font-size: 300px; font-weight: 800; letter-spacing: -.05em; line-height: .95; text-shadow: 0 20px 60px rgba(0,0,0,.18); white-space: nowrap; }}
+.wpl span {{ font-size: 64px; font-weight: 800; letter-spacing: .12em; margin-top: 18px; white-space: nowrap; }}
+.wm.wmh {{ padding: 0 .1em .12em; margin: 0 .1em -.12em -.1em; }}
+.hlw {{ position: relative; }}
+.mkr {{ position: absolute; left: -.08em; right: -.08em; top: .1em; bottom: -.02em; border-radius: .14em; transform-origin: left center; transform: scaleX(0); z-index: 0; }}
+.mkr.r {{ background: linear-gradient(90deg, #ff2a2a, #ff3d7f); }}
+.mkr.b {{ background: linear-gradient(90deg, #3346ff, #6a1fe0); }}
+.hlt {{ position: relative; z-index: 1; }}
+.ch {{ display: inline-block; opacity: 0; transform-origin: 50% 100%; }}
+.sheen {{ position: absolute; top: -20%; bottom: -20%; left: 0; width: 34%; background: linear-gradient(100deg, rgba(255,255,255,0), rgba(255,255,255,.75), rgba(255,255,255,0)); transform: translateX(-180%) skewX(-18deg); pointer-events: none; z-index: 8; opacity: 0; }}
 /* CTA */
 .bkm {{ position: absolute; left: 880px; top: 330px; width: 110px; height: 130px; opacity: 0; }}
 .bki {{ width: 100%; height: 100%; overflow: visible; fill: none; stroke: {INK}; stroke-width: 1.8; stroke-linejoin: round; }}
@@ -1019,6 +1091,11 @@ def main():
     js(f'tl.to(".g1", {{x: 220, y: 160, duration: {DUR / 2:.2f}, ease: "sine.inOut", repeat: 1, yoyo: true}}, 0);')
     js(f'tl.to(".g2", {{x: -240, y: -140, duration: {DUR / 3:.2f}, ease: "sine.inOut", repeat: 2, yoyo: true}}, 0);')
     js(f'tl.to(".g3", {{x: -200, y: 260, duration: {DUR / 2:.2f}, ease: "sine.inOut", repeat: 1, yoyo: true}}, 0);')
+    # the camera: a slow push-in on the whole stage, reset under each chapter swipe (where nobody can see it)
+    cuts = [0.0] + WIPES + [DUR]
+    for a, b in zip(cuts, cuts[1:]):
+        js(f'tl.fromTo("#stage", {{scale: 1}}, {{scale: 1.05, duration: {b - a:.3f}, ease: "none", immediateRender: false}}, {a:.3f});')
+    js(f'tl.fromTo("#dots", {{y: 0}}, {{y: -45 * 6, duration: {DUR:.2f}, ease: "none", immediateRender: false}}, 0);')
     css = CSS
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
@@ -1033,10 +1110,14 @@ def main():
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
       <svg class="fx"><defs>{"".join(DEFS)}<linearGradient id="ig1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff2a2a"/><stop offset="1" stop-color="#d02cff"/></linearGradient>
         <linearGradient id="ig2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6a1fe0"/><stop offset="1" stop-color="#2a7bff"/></linearGradient></defs></svg>
-      <div id="bg"><i class="glow g1"></i><i class="glow g2"></i><i class="glow g3"></i>{shapes_html()}</div>
+      <div id="bg"><i class="glow g1"></i><i class="glow g2"></i><i class="glow g3"></i>
+        <svg id="dots" viewBox="0 0 1080 2010"><defs><pattern id="dp" width="45" height="45" patternUnits="userSpaceOnUse"><circle cx="22" cy="22" r="2.4" fill="rgba(40,30,50,.13)"/></pattern>
+        <radialGradient id="dm"><stop offset="0" stop-color="#fff"/><stop offset=".75" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+        <mask id="dmk"><rect width="1080" height="2010" fill="url(#dm)"/></mask></defs><rect width="1080" height="2010" fill="url(#dp)" mask="url(#dmk)"/></svg></div>
       <div id="flash"></div>
-      {body}
+      <div id="stage">{body}</div>
       <div id="fxl">{"".join(FXH)}</div>
+      <div id="wps">{"".join(WP)}</div>
       <div id="grain"></div>
       <audio id="vo" src="assets/audio/vo.wav" data-start="0" data-duration="{DUR}" data-track-index="1"></audio>
     </div>
