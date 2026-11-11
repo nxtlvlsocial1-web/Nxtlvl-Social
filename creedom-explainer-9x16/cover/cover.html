@@ -1,0 +1,69 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face { font-family: "Inter"; font-weight: 800; src: url("../assets/fonts/inter-latin-800-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("../assets/fonts/inter-latin-700-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("../assets/fonts/inter-latin-600-normal.woff2"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; }
+body { position: relative; font-family: "Inter"; color: #0b0b0b;
+  background: linear-gradient(180deg, #fff6fa 0%, #ffe6f2 40%, #ffd0e6 76%, #ffc0dc 100%); }
+.blob { position: absolute; border-radius: 50%; filter: blur(110px); }
+.b1 { width: 760px; height: 760px; left: -300px; top: 120px; background: rgba(255,95,207,.34); }
+.b2 { width: 820px; height: 820px; left: 520px; top: 900px; background: rgba(255,154,122,.34); }
+.b3 { width: 600px; height: 600px; left: 600px; top: 160px; background: rgba(197,139,255,.26); }
+.grain { position: absolute; inset: 0; background: url(../assets/img/grain.png); opacity: .06; mix-blend-mode: multiply; }
+.head { position: absolute; left: 70px; right: 70px; top: 250px; text-align: center; }
+.k { display: inline-flex; align-items: center; gap: 14px; padding: 12px 28px; border-radius: 999px; background: rgba(255,255,255,.75);
+  font-size: 34px; font-weight: 700; color: #e0187e; box-shadow: 0 10px 30px rgba(224,24,126,.15); }
+.k i { width: 16px; height: 16px; border-radius: 50%; background: #ff2a55; box-shadow: 0 0 0 6px rgba(255,42,85,.18); }
+.l1 { margin-top: 34px; font-size: 76px; font-weight: 800; letter-spacing: -.035em; line-height: 1.02; }
+.l2 { font-size: 150px; font-weight: 800; letter-spacing: -.05em; line-height: .98;
+  background: linear-gradient(90deg, #ff2a6d, #e0187e 45%, #b14dff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.l3 { font-size: 76px; font-weight: 800; letter-spacing: -.035em; line-height: 1.04; }
+.card { position: absolute; left: 70px; top: 820px; width: 940px; height: 520px; border-radius: 48px;
+  background: rgba(255,255,255,.72); border: 3px solid transparent;
+  background-clip: padding-box; box-shadow: 0 40px 100px rgba(224,24,126,.2), 0 0 0 3px rgba(255,255,255,.9) inset; }
+.ct { position: absolute; left: 44px; top: 36px; font-size: 34px; font-weight: 700; color: #6d5b66; }
+.vw { position: absolute; right: 40px; top: 30px; display: flex; align-items: center; gap: 10px; padding: 10px 22px; border-radius: 999px;
+  background: rgba(255,42,85,.12); color: #ff2a55; font-size: 32px; font-weight: 800; }
+svg.g { position: absolute; left: 30px; top: 100px; width: 880px; height: 400px; overflow: visible; }
+.gl { stroke: rgba(0,0,0,.07); stroke-width: 2; }
+.ax { font-family: Inter; font-weight: 700; font-size: 26px; fill: #8b7b85; }
+.tag { position: absolute; left: 296px; top: 700px; padding: 14px 26px; border-radius: 20px; background: #0b0b0b; color: #fff; font-size: 40px; font-weight: 800;
+  box-shadow: 0 16px 40px rgba(0,0,0,.25); }
+.tag:after { content: ""; position: absolute; left: 50%; bottom: -14px; margin-left: -14px; border: 14px solid transparent; border-bottom: 0; border-top-color: #0b0b0b; }
+.tag span { color: #ff5d8a; }
+.cree { position: absolute; left: 470px; top: 975px; width: 640px; height: 640px; filter: drop-shadow(0 30px 40px rgba(180,20,100,.3)); }
+.wm { position: absolute; left: 50%; top: 1610px; width: 330px; margin-left: -165px; }
+</style></head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+<div class="head">
+  <div class="k"><i></i>This AI found</div>
+  <div class="l1">the</div>
+  <div class="l2">exact second</div>
+  <div class="l3">people stopped watching</div>
+</div>
+<div class="card">
+  <div class="ct">Audience retention</div>
+  <div class="vw">&#8595; 62% here</div>
+  <svg class="g" viewBox="0 0 880 400">
+    <defs>
+      <linearGradient id="ln" x1="0" x2="1"><stop offset="0" stop-color="#ff5fb0"/><stop offset=".45" stop-color="#e0187e"/><stop offset="1" stop-color="#ff2a55"/></linearGradient>
+      <linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0187e" stop-opacity=".28"/><stop offset="1" stop-color="#e0187e" stop-opacity="0"/></linearGradient>
+    </defs>
+    <line class="gl" x1="20" y1="40" x2="860" y2="40"/><line class="gl" x1="20" y1="140" x2="860" y2="140"/>
+    <line class="gl" x1="20" y1="240" x2="860" y2="240"/><line class="gl" x1="20" y1="340" x2="860" y2="340"/>
+    <path d="M20 46 C120 48 200 54 280 62 C330 66 345 70 352 120 C360 200 372 250 410 262 C520 290 700 300 860 306 L860 340 L20 340 Z" fill="url(#ar)"/>
+    <path d="M20 46 C120 48 200 54 280 62 C330 66 345 70 352 120 C360 200 372 250 410 262 C520 290 700 300 860 306" fill="none" stroke="url(#ln)" stroke-width="10" stroke-linecap="round"/>
+    <line x1="350" y1="0" x2="350" y2="350" stroke="#ff2a55" stroke-width="5" stroke-dasharray="12 10"/>
+    <circle cx="352" cy="120" r="17" fill="#ff2a55" stroke="#fff" stroke-width="7"/>
+    <text class="ax" x="20" y="390">0:00</text><text class="ax" x="324" y="390" style="fill:#ff2a55">0:03</text><text class="ax" x="600" y="390">0:15</text><text class="ax" x="800" y="390">0:30</text>
+  </svg>
+</div>
+<div class="tag">viewers left at <span>0:03</span></div>
+<img class="cree" src="../assets/img/poses/mag.png">
+<img class="wm" src="../assets/img/wordmark.png">
+<div class="grain"></div>
+</body></html>
