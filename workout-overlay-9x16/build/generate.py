@@ -50,13 +50,10 @@ def scenes():
             js(f'tl.set("#wnum", {{textContent: "{int(WORK) - s}"}}, {w + s:.3f});')
         for j in range(len(MOVES)):
             js(f'tl.set("#mv{j}", {{color: "{YEL if j == k else "#ffffff"}", opacity: {1 if j == k else .82}}}, {w:.3f});')
-        # owner: muscles bigger, outside below the box, as dark glass chips with a move counter. The counter drops in on
-        # the move's beat, the chips follow one by one, then everything holds still for the 20 s and leaves at the end
-        js(f'tl.set("#mg{k}", {{opacity: 1}}, {w - .01:.3f});')
-        js(f'tl.fromTo("#mc{k}", {{opacity: 0, y: -16}}, {{opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}}, {w:.3f});')
-        for j in range(len(muscles.split(" + "))):
-            js(f'tl.fromTo("#mp{k}_{j}", {{opacity: 0, y: 26, scale: .92}}, {{opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}}, {w + .08 + .11 * j:.3f});')
-        js(f'tl.to("#mg{k}", {{opacity: 0, y: -10, duration: .3, ease: "power2.in"}}, {r - .1:.3f});')
+        # owner: muscles bigger, outside below the box, as dark glass chips with a move counter; v3 (owner: no shake,
+        # keep it minimal, a fade): the whole group simply fades in on the move's beat, holds still, fades out at the end
+        js(f'tl.fromTo("#mg{k}", {{opacity: 0}}, {{opacity: 1, duration: .45, ease: "power1.out", immediateRender: false}}, {w:.3f});')
+        js(f'tl.to("#mg{k}", {{opacity: 0, duration: .35, ease: "power1.in"}}, {r - .1:.3f});')
         HIDE.append(f"#mg{k}")
         if k == len(MOVES) - 1:
             # the last move: when it ends the timer shows 0, then the panel leaves
@@ -106,16 +103,15 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #000;
 #rnum {{ font-size: 56px; color: #141414; }}
 #work, #rest {{ position: absolute; inset: 0; }}
 #rest {{ opacity: 0; }}
-/* the targeted muscles, outside below the box: a move counter, then one dark glass chip per muscle (the first in yellow) */
+/* the targeted muscles, outside below the box: a move counter, then one dark glass chip per muscle, all the same white */
 .mg {{ position: absolute; left: 40px; right: 40px; top: 492px; z-index: 5; display: flex; flex-direction: column; align-items: center; gap: 16px; opacity: 0; }}
 .mc, .mp {{ background: rgba(16,16,18,.58); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1.5px solid rgba(255,255,255,.14);
   border-radius: 999px; box-shadow: 0 10px 30px rgba(0,0,0,.18); white-space: nowrap; }}
-.mc {{ padding: 8px 22px; font-weight: 700; font-size: 26px; letter-spacing: .2em; color: rgba(255,255,255,.88); }}
-.mc b {{ color: {YEL}; font-weight: 700; }}
+.mc {{ padding: 8px 22px; font-weight: 700; font-size: 28px; letter-spacing: .2em; color: rgba(255,255,255,.88); }}
+.mc b {{ font-weight: 700; }}
 .chips {{ display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }}
 .mp {{ padding: 14px 30px 16px; font-weight: 700; font-size: 52px; line-height: 1; letter-spacing: .02em; color: #fff; text-transform: uppercase;
   text-shadow: 0 2px 8px rgba(0,0,0,.3); }}
-.mp.first {{ color: {YEL}; }}
 """
 
 
@@ -127,7 +123,7 @@ def main():
     ring = 'cx="100" cy="100" pathLength="1000" stroke-dasharray="1000" transform="rotate(-90 100 100)"'
     groups = "".join(
         f'<div class="mg" id="mg{k}"><div class="mc" id="mc{k}">MOVE <b>{k + 1}</b>/{len(MOVES)}</div><div class="chips">'
-        + "".join(f'<div class="mp{" first" if j == 0 else ""}" id="mp{k}_{j}">{m}</div>' for j, m in enumerate(mus.split(" + ")))
+        + "".join(f'<div class="mp" id="mp{k}_{j}">{m}</div>' for j, m in enumerate(mus.split(" + ")))
         + '</div></div>' for k, (_, mus) in enumerate(MOVES))
     timer = (f'<div id="timer"><div id="work"><svg viewBox="0 0 200 200"><circle class="trk" cx="100" cy="100" r="88"/>'
              f'<circle id="wring" r="88" {ring} stroke-dashoffset="0"/></svg><div class="num" id="wnum">20</div></div>'

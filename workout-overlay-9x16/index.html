@@ -37,16 +37,15 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; 
 #rnum { font-size: 56px; color: #141414; }
 #work, #rest { position: absolute; inset: 0; }
 #rest { opacity: 0; }
-/* the targeted muscles, outside below the box: a move counter, then one dark glass chip per muscle (the first in yellow) */
+/* the targeted muscles, outside below the box: a move counter, then one dark glass chip per muscle, all the same white */
 .mg { position: absolute; left: 40px; right: 40px; top: 492px; z-index: 5; display: flex; flex-direction: column; align-items: center; gap: 16px; opacity: 0; }
 .mc, .mp { background: rgba(16,16,18,.58); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1.5px solid rgba(255,255,255,.14);
   border-radius: 999px; box-shadow: 0 10px 30px rgba(0,0,0,.18); white-space: nowrap; }
-.mc { padding: 8px 22px; font-weight: 700; font-size: 26px; letter-spacing: .2em; color: rgba(255,255,255,.88); }
-.mc b { color: #F6DE3F; font-weight: 700; }
+.mc { padding: 8px 22px; font-weight: 700; font-size: 28px; letter-spacing: .2em; color: rgba(255,255,255,.88); }
+.mc b { font-weight: 700; }
 .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
 .mp { padding: 14px 30px 16px; font-weight: 700; font-size: 52px; line-height: 1; letter-spacing: .02em; color: #fff; text-transform: uppercase;
   text-shadow: 0 2px 8px rgba(0,0,0,.3); }
-.mp.first { color: #F6DE3F; }
 </style>
   </head>
   <body>
@@ -54,7 +53,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; 
       <video id="foot" src="assets/video/footage_1080.mp4" data-start="0" data-duration="178.4" data-track-index="0" muted playsinline></video>
       <div id="title"><div class="t1">5 SETS</div><div class="t2">Full Body Intermediate workout</div></div>
       <div id="panel"><div class="col l"><div class="mv" id="mv0">1. Jump Squats</div><div class="mv" id="mv1">2. Spiderman Pushups</div><div class="mv" id="mv2">3. Glute Bridges</div></div><div id="timer"><div id="work"><svg viewBox="0 0 200 200"><circle class="trk" cx="100" cy="100" r="88"/><circle id="wring" r="88" cx="100" cy="100" pathLength="1000" stroke-dasharray="1000" transform="rotate(-90 100 100)" stroke-dashoffset="0"/></svg><div class="num" id="wnum">20</div></div><div id="rest"><svg viewBox="0 0 200 200"><circle id="rdisc" cx="100" cy="100" r="74"/><circle id="rring" r="92" cx="100" cy="100" pathLength="1000" stroke-dasharray="1000" transform="rotate(-90 100 100)" stroke-dashoffset="0"/></svg><div class="num" id="rnum">&#8203;10</div></div></div><div class="col r"><div class="mv" id="mv3">4. Shoulder Taps</div><div class="mv" id="mv4">5. Burpees</div><div class="mv" id="mv5">6. Prone Swimmers</div></div></div>
-      <div class="mg" id="mg0"><div class="mc" id="mc0">MOVE <b>1</b>/6</div><div class="chips"><div class="mp first" id="mp0_0">Quads</div><div class="mp" id="mp0_1">Glutes</div><div class="mp" id="mp0_2">Power</div></div></div><div class="mg" id="mg1"><div class="mc" id="mc1">MOVE <b>2</b>/6</div><div class="chips"><div class="mp first" id="mp1_0">Chest</div><div class="mp" id="mp1_1">Triceps</div><div class="mp" id="mp1_2">Core</div></div></div><div class="mg" id="mg2"><div class="mc" id="mc2">MOVE <b>3</b>/6</div><div class="chips"><div class="mp first" id="mp2_0">Glutes</div><div class="mp" id="mp2_1">Hamstrings</div></div></div><div class="mg" id="mg3"><div class="mc" id="mc3">MOVE <b>4</b>/6</div><div class="chips"><div class="mp first" id="mp3_0">Core</div><div class="mp" id="mp3_1">Shoulder</div><div class="mp" id="mp3_2">Stability</div></div></div><div class="mg" id="mg4"><div class="mc" id="mc4">MOVE <b>5</b>/6</div><div class="chips"><div class="mp first" id="mp4_0">Full Body</div><div class="mp" id="mp4_1">Cardio</div></div></div><div class="mg" id="mg5"><div class="mc" id="mc5">MOVE <b>6</b>/6</div><div class="chips"><div class="mp first" id="mp5_0">Upper Back</div><div class="mp" id="mp5_1">Rear Delts</div><div class="mp" id="mp5_2">Posterior Chain</div></div></div>
+      <div class="mg" id="mg0"><div class="mc" id="mc0">MOVE <b>1</b>/6</div><div class="chips"><div class="mp" id="mp0_0">Quads</div><div class="mp" id="mp0_1">Glutes</div><div class="mp" id="mp0_2">Power</div></div></div><div class="mg" id="mg1"><div class="mc" id="mc1">MOVE <b>2</b>/6</div><div class="chips"><div class="mp" id="mp1_0">Chest</div><div class="mp" id="mp1_1">Triceps</div><div class="mp" id="mp1_2">Core</div></div></div><div class="mg" id="mg2"><div class="mc" id="mc2">MOVE <b>3</b>/6</div><div class="chips"><div class="mp" id="mp2_0">Glutes</div><div class="mp" id="mp2_1">Hamstrings</div></div></div><div class="mg" id="mg3"><div class="mc" id="mc3">MOVE <b>4</b>/6</div><div class="chips"><div class="mp" id="mp3_0">Core</div><div class="mp" id="mp3_1">Shoulder</div><div class="mp" id="mp3_2">Stability</div></div></div><div class="mg" id="mg4"><div class="mc" id="mc4">MOVE <b>5</b>/6</div><div class="chips"><div class="mp" id="mp4_0">Full Body</div><div class="mp" id="mp4_1">Cardio</div></div></div><div class="mg" id="mg5"><div class="mc" id="mc5">MOVE <b>6</b>/6</div><div class="chips"><div class="mp" id="mp5_0">Upper Back</div><div class="mp" id="mp5_1">Rear Delts</div><div class="mp" id="mp5_2">Posterior Chain</div></div></div>
     </div>
     <script>
       window.__timelines = window.__timelines || {};
@@ -91,12 +90,8 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; 
       tl.set("#mv3", {color: "#ffffff", opacity: 0.82}, 5.132);
       tl.set("#mv4", {color: "#ffffff", opacity: 0.82}, 5.132);
       tl.set("#mv5", {color: "#ffffff", opacity: 0.82}, 5.132);
-      tl.set("#mg0", {opacity: 1}, 5.122);
-      tl.fromTo("#mc0", {opacity: 0, y: -16}, {opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}, 5.132);
-      tl.fromTo("#mp0_0", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 5.212);
-      tl.fromTo("#mp0_1", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 5.322);
-      tl.fromTo("#mp0_2", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 5.432);
-      tl.to("#mg0", {opacity: 0, y: -10, duration: .3, ease: "power2.in"}, 25.032);
+      tl.fromTo("#mg0", {opacity: 0}, {opacity: 1, duration: .45, ease: "power1.out", immediateRender: false}, 5.132);
+      tl.to("#mg0", {opacity: 0, duration: .35, ease: "power1.in"}, 25.032);
       tl.set("#work", {opacity: 0}, 25.132); tl.set("#rest", {opacity: 1}, 25.132);
       tl.fromTo("#rdisc", {scale: .86}, {scale: 1, duration: .25, ease: "power2.out", immediateRender: false}, 25.132);
       tl.fromTo("#rring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 10.0, ease: "none", immediateRender: false}, 25.132);
@@ -144,12 +139,8 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; 
       tl.set("#mv3", {color: "#ffffff", opacity: 0.82}, 35.132);
       tl.set("#mv4", {color: "#ffffff", opacity: 0.82}, 35.132);
       tl.set("#mv5", {color: "#ffffff", opacity: 0.82}, 35.132);
-      tl.set("#mg1", {opacity: 1}, 35.122);
-      tl.fromTo("#mc1", {opacity: 0, y: -16}, {opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}, 35.132);
-      tl.fromTo("#mp1_0", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 35.212);
-      tl.fromTo("#mp1_1", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 35.322);
-      tl.fromTo("#mp1_2", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 35.432);
-      tl.to("#mg1", {opacity: 0, y: -10, duration: .3, ease: "power2.in"}, 55.032);
+      tl.fromTo("#mg1", {opacity: 0}, {opacity: 1, duration: .45, ease: "power1.out", immediateRender: false}, 35.132);
+      tl.to("#mg1", {opacity: 0, duration: .35, ease: "power1.in"}, 55.032);
       tl.set("#work", {opacity: 0}, 55.132); tl.set("#rest", {opacity: 1}, 55.132);
       tl.fromTo("#rdisc", {scale: .86}, {scale: 1, duration: .25, ease: "power2.out", immediateRender: false}, 55.132);
       tl.fromTo("#rring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 10.0, ease: "none", immediateRender: false}, 55.132);
@@ -197,11 +188,8 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; 
       tl.set("#mv3", {color: "#ffffff", opacity: 0.82}, 65.132);
       tl.set("#mv4", {color: "#ffffff", opacity: 0.82}, 65.132);
       tl.set("#mv5", {color: "#ffffff", opacity: 0.82}, 65.132);
-      tl.set("#mg2", {opacity: 1}, 65.122);
-      tl.fromTo("#mc2", {opacity: 0, y: -16}, {opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}, 65.132);
-      tl.fromTo("#mp2_0", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 65.212);
-      tl.fromTo("#mp2_1", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 65.322);
-      tl.to("#mg2", {opacity: 0, y: -10, duration: .3, ease: "power2.in"}, 85.032);
+      tl.fromTo("#mg2", {opacity: 0}, {opacity: 1, duration: .45, ease: "power1.out", immediateRender: false}, 65.132);
+      tl.to("#mg2", {opacity: 0, duration: .35, ease: "power1.in"}, 85.032);
       tl.set("#work", {opacity: 0}, 85.132); tl.set("#rest", {opacity: 1}, 85.132);
       tl.fromTo("#rdisc", {scale: .86}, {scale: 1, duration: .25, ease: "power2.out", immediateRender: false}, 85.132);
       tl.fromTo("#rring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 10.0, ease: "none", immediateRender: false}, 85.132);
@@ -249,12 +237,8 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; 
       tl.set("#mv3", {color: "#F6DE3F", opacity: 1}, 95.132);
       tl.set("#mv4", {color: "#ffffff", opacity: 0.82}, 95.132);
       tl.set("#mv5", {color: "#ffffff", opacity: 0.82}, 95.132);
-      tl.set("#mg3", {opacity: 1}, 95.122);
-      tl.fromTo("#mc3", {opacity: 0, y: -16}, {opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}, 95.132);
-      tl.fromTo("#mp3_0", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 95.212);
-      tl.fromTo("#mp3_1", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 95.322);
-      tl.fromTo("#mp3_2", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 95.432);
-      tl.to("#mg3", {opacity: 0, y: -10, duration: .3, ease: "power2.in"}, 115.032);
+      tl.fromTo("#mg3", {opacity: 0}, {opacity: 1, duration: .45, ease: "power1.out", immediateRender: false}, 95.132);
+      tl.to("#mg3", {opacity: 0, duration: .35, ease: "power1.in"}, 115.032);
       tl.set("#work", {opacity: 0}, 115.132); tl.set("#rest", {opacity: 1}, 115.132);
       tl.fromTo("#rdisc", {scale: .86}, {scale: 1, duration: .25, ease: "power2.out", immediateRender: false}, 115.132);
       tl.fromTo("#rring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 10.0, ease: "none", immediateRender: false}, 115.132);
@@ -302,11 +286,8 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; 
       tl.set("#mv3", {color: "#ffffff", opacity: 0.82}, 125.132);
       tl.set("#mv4", {color: "#F6DE3F", opacity: 1}, 125.132);
       tl.set("#mv5", {color: "#ffffff", opacity: 0.82}, 125.132);
-      tl.set("#mg4", {opacity: 1}, 125.122);
-      tl.fromTo("#mc4", {opacity: 0, y: -16}, {opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}, 125.132);
-      tl.fromTo("#mp4_0", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 125.212);
-      tl.fromTo("#mp4_1", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 125.322);
-      tl.to("#mg4", {opacity: 0, y: -10, duration: .3, ease: "power2.in"}, 145.032);
+      tl.fromTo("#mg4", {opacity: 0}, {opacity: 1, duration: .45, ease: "power1.out", immediateRender: false}, 125.132);
+      tl.to("#mg4", {opacity: 0, duration: .35, ease: "power1.in"}, 145.032);
       tl.set("#work", {opacity: 0}, 145.132); tl.set("#rest", {opacity: 1}, 145.132);
       tl.fromTo("#rdisc", {scale: .86}, {scale: 1, duration: .25, ease: "power2.out", immediateRender: false}, 145.132);
       tl.fromTo("#rring", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 10.0, ease: "none", immediateRender: false}, 145.132);
@@ -354,12 +335,8 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; 
       tl.set("#mv3", {color: "#ffffff", opacity: 0.82}, 155.132);
       tl.set("#mv4", {color: "#ffffff", opacity: 0.82}, 155.132);
       tl.set("#mv5", {color: "#F6DE3F", opacity: 1}, 155.132);
-      tl.set("#mg5", {opacity: 1}, 155.122);
-      tl.fromTo("#mc5", {opacity: 0, y: -16}, {opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}, 155.132);
-      tl.fromTo("#mp5_0", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 155.212);
-      tl.fromTo("#mp5_1", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 155.322);
-      tl.fromTo("#mp5_2", {opacity: 0, y: 26, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .42, ease: "back.out(1.6)", immediateRender: false}, 155.432);
-      tl.to("#mg5", {opacity: 0, y: -10, duration: .3, ease: "power2.in"}, 175.032);
+      tl.fromTo("#mg5", {opacity: 0}, {opacity: 1, duration: .45, ease: "power1.out", immediateRender: false}, 155.132);
+      tl.to("#mg5", {opacity: 0, duration: .35, ease: "power1.in"}, 175.032);
       tl.set("#wnum", {textContent: "0"}, 175.132);
       tl.to("#panel", {opacity: 0, y: -24, duration: .5, ease: "power2.in"}, 175.732);
       tl.set({}, {}, 178.4);
