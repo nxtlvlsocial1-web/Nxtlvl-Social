@@ -1,0 +1,55 @@
+{
+  "query": "minimal electronic",
+  "license_filter": "cc0,by,pdm",
+  "source_filter": "freesound,jamendo",
+  "results": [
+    {
+      "id": "36a9cc52-92dc-447b-a6ab-7b6c86b46a22",
+      "title": "minimal electronic grove _Techno loop track",
+      "creator": "frankum",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "freesound",
+      "duration_s": 127.93,
+      "audio_url": "https://cdn.freesound.org/previews/397/397166_2305278-hq.mp3",
+      "landing_url": "https://freesound.org/people/frankum/sounds/397166",
+      "attribution": "\"minimal electronic grove _Techno loop track\" by frankum is licensed under CC BY 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/."
+    },
+    {
+      "id": "d3501660-83bb-481c-811d-c8acbf70518b",
+      "title": "Stasis (music for space)",
+      "creator": "Drakensson",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "freesound",
+      "duration_s": 181.2,
+      "audio_url": "https://cdn.freesound.org/previews/547/547029_6628165-hq.mp3",
+      "landing_url": "https://freesound.org/people/Drakensson/sounds/547029",
+      "attribution": "\"Stasis (music for space)\" by Drakensson is licensed under CC BY 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/."
+    },
+    {
+      "id": "f0accf01-68cd-461f-b1b4-45b684a0ae75",
+      "title": "Cosmic minimal music fragment.Wav",
+      "creator": "Clacksberg",
+      "license": "cc0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "freesound",
+      "duration_s": 78.01,
+      "audio_url": "https://cdn.freesound.org/previews/506/506324_10147508-hq.mp3",
+      "landing_url": "https://freesound.org/people/Clacksberg/sounds/506324",
+      "attribution": "\"Cosmic minimal music fragment.Wav\" by Clacksberg is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/."
+    },
+    {
+      "id": "fb67246e-08f1-4a66-88df-41dc2255fa57",
+      "title": "Background e-music fragment..Wav",
+      "creator": "Clacksberg",
+      "license": "cc0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "freesound",
+      "duration_s": 110.0,
+      "audio_url": "https://cdn.freesound.org/previews/507/507754_10147508-hq.mp3",
+      "landing_url": "https://freesound.org/people/Clacksberg/sounds/507754",
+      "attribution": "\"Background e-music fragment..Wav\" by Clacksberg is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/."
+    }
+  ]
+}

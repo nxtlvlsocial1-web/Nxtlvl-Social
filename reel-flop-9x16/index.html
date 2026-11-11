@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Reel flop explainer 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Inter"; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #e9e9e9; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Inter"; color: #0b0b0b; }
+/* the ground: a white gradient, and a black gradient revealed by the iris */
+#bgL, #bgD { position: absolute; inset: 0; overflow: hidden; }
+#bgL { z-index: 0; background: radial-gradient(130% 85% at 50% 32%, #ffffff 0%, #f3f3f3 42%, #d9d9d9 78%, #c4c4c4 100%); }
+#bgD { z-index: 1; background: radial-gradient(130% 85% at 50% 32%, #303030 0%, #151515 45%, #060606 80%, #000 100%);
+  clip-path: circle(0px at 540px 1140px); }
+.blob { position: absolute; border-radius: 50%; filter: blur(60px); }
+#bgL .blob { background: radial-gradient(circle, rgba(0,0,0,.09), rgba(0,0,0,0) 70%); }
+#bgD .blob { background: radial-gradient(circle, rgba(255,255,255,.11), rgba(255,255,255,0) 70%); }
+.b1 { width: 900px; height: 900px; left: -260px; top: 120px; }
+.b2 { width: 760px; height: 760px; left: 520px; top: 1080px; }
+#grain { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: .06; background: url(assets/img/grain.png); mix-blend-mode: overlay; }
+#cam { position: absolute; inset: 0; z-index: 3; }
+/* titles: every word on its own spoken time */
+.tt { position: absolute; left: 80px; right: 80px; text-align: left; opacity: 0; }
+.ln { white-space: nowrap; line-height: 1.07; }
+.ln.big, .ln.mid { font-weight: 800; letter-spacing: -.035em; }
+.ln.mid { letter-spacing: -.03em; }
+.ln.sm { font-weight: 600; letter-spacing: -.01em; line-height: 1.3; }
+.tt.light { color: #0b0b0b; } .tt.light .sm { color: #6f6f6f; }
+.tt.dark { color: #f4f4f4; } .tt.dark .sm { color: #9c9c9c; }
+.w { display: inline-block; opacity: 0; margin-right: .24em; padding-bottom: .06em; position: relative; }
+.w .stk { position: absolute; left: -.04em; right: -.04em; top: 50%; height: .09em; border-radius: .05em; background: #ff2a2a; transform-origin: left center; transform: scaleX(0); }
+.w.red { color: #ff2a2a; }
+.kick { position: absolute; left: 80px; width: fit-content; padding: 8px 20px; border-radius: 999px; font-weight: 700; font-size: 28px;
+  letter-spacing: .24em; opacity: 0; white-space: nowrap; }
+.kick.light { color: #0b0b0b; border: 2px solid rgba(0,0,0,.85); }
+/* frame 0: a dead reel's stats */
+.chip { position: absolute; top: 420px; left: 80px; width: fit-content; display: flex; align-items: center; gap: 16px; padding: 14px 28px;
+  border-radius: 999px; font-size: 34px; font-weight: 700; white-space: nowrap; }
+.chip.light { background: rgba(255,255,255,.7); border: 1.5px solid rgba(0,0,0,.08); box-shadow: 0 14px 40px rgba(0,0,0,.08); }
+.play { width: 0; height: 0; border-left: 20px solid #0b0b0b; border-top: 12px solid transparent; border-bottom: 12px solid transparent; }
+.redtxt { color: #ff2a2a; }
+#strike { position: absolute; left: 248px; right: 248px; top: 1020px; height: 12px; border-radius: 6px; background: #ff2a2a; transform-origin: left center;
+  opacity: 0; }
+/* the countdown ring */
+#ring { position: absolute; left: 330px; top: 930px; width: 420px; height: 420px; opacity: 0; }
+#ring svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.rtrk { fill: none; stroke: rgba(0,0,0,.12); stroke-width: 9; }
+#rfill { fill: none; stroke: #0b0b0b; stroke-width: 9; stroke-linecap: round; }
+#rnum { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 230px; letter-spacing: -.05em;
+  font-variant-numeric: tabular-nums; color: #0b0b0b; }
+/* the 3-second pill */
+#tp { position: absolute; top: 268px; left: 0; right: 0; margin-left: auto; margin-right: auto; width: fit-content; display: flex; align-items: center; gap: 12px; padding: 10px 22px;
+  border-radius: 999px; font-size: 28px; font-weight: 700; letter-spacing: .2em; white-space: nowrap; color: #f2f2f2;
+  background: rgba(255,255,255,.07); border: 1.5px solid rgba(255,255,255,.16); opacity: 0; }
+.dot { display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #ff2a2a; flex: none; }
+/* three slots */
+#slots { position: absolute; left: 90px; right: 90px; top: 1060px; display: flex; justify-content: space-between; }
+.slot { width: 270px; height: 320px; border-radius: 36px; background: rgba(255,255,255,.06); border: 1.5px solid rgba(255,255,255,.16);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 30px 60px rgba(0,0,0,.4); display: grid; place-items: center; opacity: 0; }
+.slot span { font-weight: 800; font-size: 150px; color: transparent; -webkit-text-stroke: 3px rgba(255,255,255,.7); letter-spacing: -.04em; }
+/* the phone */
+#phone { position: absolute; left: 315px; top: 700px; width: 450px; height: 800px; border-radius: 64px; background: #0b0b0b; padding: 11px;
+  box-shadow: 0 0 0 0 rgba(255,255,255,0), 0 40px 90px rgba(0,0,0,.28); opacity: 0; }
+#scr { position: relative; width: 100%; height: 100%; border-radius: 54px; overflow: hidden; background: #1a1a1a; }
+.notch { position: absolute; left: 50%; top: 24px; width: 120px; height: 34px; margin-left: -60px; border-radius: 20px; background: #000; z-index: 6; }
+.reel { position: absolute; inset: 0; }
+#reel1b, #reel2, #feed { opacity: 0; }
+.shot { position: absolute; inset: 0; }
+.s1 { background: linear-gradient(180deg, #3a3a3a, #232323 60%, #1b1b1b); }
+.s2 { background: linear-gradient(180deg, #4b4b4b, #2d2d2d); }
+.s3 { background: linear-gradient(180deg, #2e2e2e, #141414 70%); }
+#reel2 .person { transform: translateY(150px); }
+.s4 { background: #262626; }
+.s5 { background: linear-gradient(180deg, #555, #333); }
+.s6 { background: linear-gradient(180deg, #3d3d3d, #222); }
+.person .hd { position: absolute; left: 165px; top: 250px; width: 100px; height: 120px; border-radius: 50%; background: #5a5a5a; }
+.person .bd { position: absolute; left: 100px; top: 380px; width: 230px; height: 420px; border-radius: 115px 115px 0 0; background: #4a4a4a; }
+.ln1, .ln2, .ln3 { position: absolute; left: 40px; height: 22px; border-radius: 11px; background: rgba(255,255,255,.16); }
+.ln1 { top: 520px; width: 300px; } .ln2 { top: 560px; width: 220px; } .ln3 { top: 600px; width: 260px; }
+.cap { position: absolute; left: 30px; right: 30px; top: 470px; text-align: center; opacity: 0; }
+.cap span { display: inline-block; min-height: 52px; padding: 8px 16px; border-radius: 12px; background: rgba(0,0,0,.72); color: #fff; font-weight: 700; font-size: 30px; }
+.pbar { position: absolute; left: 26px; right: 26px; bottom: 34px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.22); }
+.pfill { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; border-radius: 4px; background: #fff; transform-origin: left center; transform: scaleX(0); }
+#pb1, #pb3 { background: #ff2a2a; }
+.mk { position: absolute; left: 10%; top: -7px; width: 4px; height: 22px; border-radius: 2px; background: #ff2a2a; }
+.res { position: absolute; left: 20px; right: 20px; top: 170px; text-align: center; color: #fff; }
+#res1 { font-weight: 800; font-size: 84px; letter-spacing: -.04em; opacity: 0; }
+#res2 { font-weight: 600; font-size: 30px; color: #cfcfcf; margin-top: 6px; opacity: 0; }
+#kept { position: absolute; left: 0; right: 0; bottom: 64px; text-align: center; font-size: 26px; font-weight: 700; color: #fff; opacity: 0; letter-spacing: .02em; }
+#strip { position: absolute; left: 0; right: 0; top: 0; height: 300%; }
+.fi { position: relative; height: 33.3334%; overflow: hidden; }
+.photo { position: absolute; inset: 0; background: linear-gradient(180deg, #8d8d8d, #6a6a6a 55%, #4a4a4a); }
+.sun { position: absolute; left: 270px; top: 150px; width: 90px; height: 90px; border-radius: 50%; background: #d8d8d8; }
+.hill1 { position: absolute; left: -80px; top: 470px; width: 520px; height: 520px; border-radius: 50%; background: #3e3e3e; }
+.hill2 { position: absolute; left: 160px; top: 540px; width: 460px; height: 460px; border-radius: 50%; background: #2c2c2c; }
+#paused { position: absolute; left: 50%; top: 50%; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; background: rgba(0,0,0,.55);
+  display: flex; align-items: center; justify-content: center; gap: 16px; opacity: 0; }
+#paused i { width: 14px; height: 46px; border-radius: 4px; background: #fff; }
+#nomove { position: absolute; left: 24px; top: 84px; display: flex; align-items: center; gap: 10px; padding: 8px 16px; border-radius: 999px;
+  background: rgba(0,0,0,.7); color: #fff; font-weight: 700; font-size: 26px; opacity: 0; }
+.gone { position: absolute; top: 46%; left: 0; right: 0; margin-left: auto; margin-right: auto; width: fit-content; display: flex; align-items: center; gap: 12px; padding: 14px 24px;
+  border-radius: 999px; background: #fff; color: #0b0b0b; font-weight: 700; font-size: 30px; white-space: nowrap; opacity: 0;
+  box-shadow: 0 16px 40px rgba(0,0,0,.4); z-index: 5; }
+#thumb { position: absolute; left: 190px; top: 600px; width: 86px; height: 86px; border-radius: 50%; background: rgba(255,255,255,.85);
+  box-shadow: 0 0 0 10px rgba(255,255,255,.18), 0 10px 30px rgba(0,0,0,.35); opacity: 0; z-index: 7; }
+/* explain / show cards */
+.card { position: absolute; left: 140px; width: 800px; height: 200px; border-radius: 40px; display: flex; align-items: center; gap: 36px; padding: 0 44px;
+  background: rgba(255,255,255,.72); border: 1.5px solid rgba(0,0,0,.08); box-shadow: 0 24px 60px rgba(0,0,0,.1); color: #0b0b0b; opacity: 0; }
+#cEx { top: 820px; } #cSh { top: 1060px; }
+.cn { width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 52px; background: #0b0b0b; color: #fff; flex: none; }
+.card b { display: block; font-weight: 800; font-size: 64px; letter-spacing: -.02em; line-height: 1; }
+.card i { display: block; font-style: normal; font-weight: 600; font-size: 32px; opacity: .6; margin-top: 8px; }
+#late { position: absolute; top: 1290px; left: 0; right: 0; margin-left: auto; margin-right: auto; width: fit-content; display: flex; align-items: center; gap: 12px; padding: 12px 24px;
+  border-radius: 999px; border: 2px solid #ff2a2a; color: #ff2a2a; font-weight: 700; font-size: 30px; white-space: nowrap; opacity: 0; }
+#chk { position: absolute; left: 816px; top: 846px; width: 96px; height: 96px; border-radius: 50%; background: #0b0b0b; display: grid; place-items: center; opacity: 0; }
+#chk svg { width: 56px; height: 56px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+/* checklist + counter */
+#rows { position: absolute; left: 110px; right: 110px; top: 690px; display: flex; flex-direction: column; gap: 26px; }
+.row { height: 128px; border-radius: 32px; display: flex; align-items: center; gap: 30px; padding: 0 30px; background: rgba(255,255,255,.72);
+  border: 1.5px solid rgba(0,0,0,.08); box-shadow: 0 18px 40px rgba(0,0,0,.08); opacity: 0; }
+.rn { width: 64px; height: 64px; border-radius: 50%; border: 3px solid #0b0b0b; display: grid; place-items: center; font-weight: 800; font-size: 34px; flex: none; }
+.row b { flex: 1; font-weight: 700; font-size: 46px; letter-spacing: -.02em; white-space: nowrap; }
+.rc { width: 64px; height: 64px; border-radius: 50%; border: 3px solid rgba(0,0,0,.25); display: grid; place-items: center; flex: none; }
+.rc svg { width: 40px; height: 40px; fill: none; stroke: #fff; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 30; stroke-dashoffset: 30; }
+#ctr { position: absolute; left: 60px; right: 60px; top: 1200px; text-align: center; opacity: 0; }
+#ctrn { font-weight: 800; font-size: 170px; letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }
+#ctrl { font-weight: 600; font-size: 40px; color: #6f6f6f; margin-top: 6px; }
+.up { color: #0b0b0b; font-weight: 800; }
+/* CTA */
+#bkm { position: absolute; left: 495px; top: 290px; width: 90px; height: 110px; opacity: 0; }
+#bkm svg { width: 100%; height: 100%; overflow: visible; }
+#bkp { fill: none; stroke: #fff; stroke-width: 1.8; stroke-linejoin: round; }
+#cbox { position: absolute; left: 110px; right: 110px; top: 880px; height: 132px; border-radius: 999px; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 18px 0 46px; background: rgba(255,255,255,.07); border: 1.5px solid rgba(255,255,255,.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12); opacity: 0; }
+#cbt { display: flex; align-items: center; font-size: 46px; font-weight: 700; color: #fff; letter-spacing: .04em; }
+#cbph { color: rgba(255,255,255,.45); font-weight: 600; letter-spacing: 0; }
+#caret { width: 4px; height: 52px; margin-left: 6px; background: #fff; border-radius: 2px; }
+#send { width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.12); color: #fff; }
+#send svg { width: 48px; height: 48px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+#hook { position: absolute; left: 50%; top: 1080px; margin-left: -330px; width: 660px; height: 250px; border-radius: 60px; background: #fff; color: #0b0b0b;
+  display: grid; place-items: center; font-weight: 800; font-size: 190px; letter-spacing: -.04em; opacity: 0;
+  box-shadow: 0 0 0 10px rgba(255,255,255,.08), 0 40px 120px rgba(255,255,255,.14); }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="36.14" data-fps="30" data-width="1080" data-height="1920">
+      <div id="bgL"><i class="blob b1"></i><i class="blob b2"></i></div>
+      <div id="bgD"><i class="blob b1"></i><i class="blob b2"></i></div>
+      <div id="grain"></div>
+      <div id="cam"><div class="chip light" id="views"><i class="play"></i><b>312 views</b><span class="redtxt">&#8595; 97%</span></div><div class="tt light " id="t1" style="top:600px"><div class="ln big" style="font-size:132px"><span class="w" id="t1_0_0">Your</span><span class="w" id="t1_0_1">reel</span></div><div class="ln big" style="font-size:132px"><span class="w" id="t1_1_0">didn't</span><span class="w" id="t1_1_1">flop</span></div><div class="ln sm" style="font-size:60px"><span class="w" id="t1_2_0">because</span><span class="w" id="t1_2_1">of</span><span class="w" id="t1_2_2">the</span></div><div class="ln big" style="font-size:132px"><span class="w" id="t1_3_0">algorithm.<i class="stk" id="t1_3_0s"></i></span></div></div><div class="tt light " id="t2" style="top:420px"><div class="ln big" style="font-size:132px"><span class="w" id="t2_0_0">It</span><span class="w" id="t2_0_1">flopped</span></div><div class="ln mid" style="font-size:91px"><span class="w" id="t2_1_0">in</span><span class="w" id="t2_1_1">the</span><span class="w" id="t2_1_2">first</span><span class="w" id="t2_1_3">3</span><span class="w" id="t2_1_4">seconds.</span></div></div><div id="ring"><svg viewBox="0 0 200 200"><circle class="rtrk" cx="100" cy="100" r="90"/><circle id="rfill" cx="100" cy="100" r="90" pathLength="1000" stroke-dasharray="1000" stroke-dashoffset="0" transform="rotate(-90 100 100)"/></svg><div id="rnum">&#8203;3</div></div><div id="tp"><i class="dot"></i>FIRST 3 SECONDS</div><div class="tt dark " id="t3" style="top:470px"><div class="ln sm" style="font-size:60px"><span class="w" id="t3_0_0">Here</span><span class="w" id="t3_0_1">are</span></div><div class="ln big" style="font-size:132px"><span class="w" id="t3_1_0">3</span><span class="w" id="t3_1_1">mistakes</span></div><div class="ln mid" style="font-size:92px"><span class="w red" id="t3_2_0">killing</span><span class="w" id="t3_2_1">your</span><span class="w" id="t3_2_2">views.</span></div></div><div id="slots"><div class="slot" id="sl0"><span>1</span></div><div class="slot" id="sl1"><span>2</span></div><div class="slot" id="sl2"><span>3</span></div></div><div id="phone"><div id="scr"><div class="reel" id="reel1"><div class="shot s1"><div class="person"><i class="hd"></i><i class="bd"></i></div></div><div class="cap" id="cap1"><span id="cap1t"></span></div><div class="pbar"><i class="pfill" id="pb1"></i><i class="mk" id="mk1"></i></div></div><div class="reel" id="reel1b"><div class="shot s2"><i class="ln1"></i><i class="ln2"></i><i class="ln3"></i></div></div><div class="reel" id="reel2"><div class="shot s3"><div class="person"><i class="hd"></i><i class="bd"></i></div></div><div class="res"><div id="res1">1M views</div><div id="res2">in 3 days. Here's how.</div></div><div id="kept">still watching past 0:03</div><div class="pbar"><i class="pfill" id="pb2"></i><i class="mk" id="mk2"></i></div></div><div class="reel" id="feed"><div id="strip"><div class="fi"><div class="shot s4"><div class="photo"><i class="sun"></i><i class="hill1"></i><i class="hill2"></i></div></div><div id="paused"><i></i><i></i></div><div id="nomove"><i class="dot"></i>nothing moves</div><div class="pbar"><i class="pfill" id="pb3"></i><i class="mk" id="mk3"></i></div></div><div class="fi"><div class="shot s5"><i class="ln1"></i><i class="ln2"></i><i class="ln3"></i></div></div><div class="fi"><div class="shot s6"><i class="ln1"></i><i class="ln2"></i><i class="ln3"></i></div></div></div></div><div class="gone" id="gone1"><i class="dot"></i>swiped at 0:01</div><div class="gone" id="gone2"><i class="dot"></i>scrolled past at 0:00</div></div><i class="notch"></i><div id="thumb"></div></div><div class="kick light" id="k1" style="top:346px">MISTAKE 1</div><div class="tt light " id="t4" style="top:410px"><div class="ln mid" style="font-size:92px"><span class="w" id="t4_0_0">Your</span><span class="w" id="t4_0_1">hook</span><span class="w" id="t4_0_2">is</span></div><div class="ln big" style="font-size:132px"><span class="w" id="t4_1_0">a</span><span class="w" id="t4_1_1">greeting.</span></div></div><div class="tt light " id="t4b" style="top:410px"><div class="ln mid" style="font-size:92px"><span class="w" id="t4b_0_0">Nobody</span><span class="w" id="t4b_0_1">stays</span><span class="w" id="t4b_0_2">for</span></div><div class="ln big" style="font-size:132px"><span class="w" id="t4b_1_0">“Hey</span><span class="w" id="t4b_1_1">guys.”</span></div></div><div class="tt dark " id="t5" style="top:410px"><div class="ln mid" style="font-size:92px"><span class="w" id="t5_0_0">Start</span><span class="w" id="t5_0_1">with</span></div><div class="ln big" style="font-size:132px"><span class="w" id="t5_1_0">the</span><span class="w" id="t5_1_1">result.</span></div></div><div class="kick light" id="k2" style="top:346px">MISTAKE 2</div><div class="tt light " id="t6" style="top:410px"><div class="ln mid" style="font-size:92px"><span class="w" id="t6_0_0">Your</span><span class="w" id="t6_0_1">first</span><span class="w" id="t6_0_2">frame</span></div><div class="ln big" style="font-size:132px"><span class="w" id="t6_1_0">is</span><span class="w" id="t6_1_1">still.</span></div></div><div class="tt light " id="t6b" style="top:410px"><div class="ln mid" style="font-size:92px"><span class="w" id="t6b_0_0">If</span><span class="w" id="t6b_0_1">nothing</span><span class="w" id="t6b_0_2">moves,</span></div><div class="ln mid" style="font-size:85px"><span class="w" id="t6b_1_0">thumbs</span><span class="w" id="t6b_1_1">keep</span><span class="w" id="t6b_1_2">scrolling.</span></div></div><div class="kick light" id="k3" style="top:346px">MISTAKE 3</div><div class="tt light " id="t7" style="top:410px"><div class="ln mid" style="font-size:92px"><span class="w" id="t7_0_0">You</span><span class="w" id="t7_0_1">explain</span></div><div class="ln big" style="font-size:113px"><span class="w" id="t7_1_0">before</span><span class="w" id="t7_1_1">you</span><span class="w" id="t7_1_2">show.</span></div></div><div class="card" id="cEx"><span class="cn" id="cExn">1</span><div><b>EXPLAIN</b><i>how you did it</i></div></div><div class="card" id="cSh"><span class="cn" id="cShn">2</span><div><b>SHOW</b><i>the result</i></div></div><div id="late"><i class="dot"></i>viewer gone before this</div><div class="tt dark " id="t8" style="top:410px"><div class="ln mid" style="font-size:92px"><span class="w" id="t8_0_0">Show</span><span class="w" id="t8_0_1">the</span><span class="w" id="t8_0_2">result</span><span class="w" id="t8_0_3">first,</span></div><div class="ln sm" style="font-size:60px"><span class="w" id="t8_1_0">then</span><span class="w" id="t8_1_1">explain</span><span class="w" id="t8_1_2">how</span><span class="w" id="t8_1_3">you</span><span class="w" id="t8_1_4">got</span><span class="w" id="t8_1_5">it.</span></div></div><div id="chk"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" /></svg></div><div class="tt light " id="t9" style="top:380px"><div class="ln big" style="font-size:132px"><span class="w" id="t9_0_0">Fix</span><span class="w" id="t9_0_1">these</span><span class="w" id="t9_0_2">three</span></div><div class="ln sm" style="font-size:60px"><span class="w" id="t9_1_0">and</span><span class="w" id="t9_1_1">watch</span><span class="w" id="t9_1_2">your</span><span class="w" id="t9_1_3">next</span><span class="w" id="t9_1_4">reel.</span></div></div><div id="rows"><div class="row" id="rw0"><span class="rn">1</span><b>Start with the result</b><span class="rc" id="rc0"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" /></svg></span></div><div class="row" id="rw1"><span class="rn">2</span><b>Move in frame one</b><span class="rc" id="rc1"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" /></svg></span></div><div class="row" id="rw2"><span class="rn">3</span><b>Show, then explain</b><span class="rc" id="rc2"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" /></svg></span></div></div><div id="ctr"><div id="ctrn">312</div><div id="ctrl"><span class="up">&#8593;</span> views on your next reel</div></div><div id="bkm"><svg viewBox="0 0 24 24"><path id="bkp" d="M6 3.5h12v17l-6-4.2-6 4.2z"/></svg></div><div class="tt dark " id="t10" style="top:420px"><div class="ln big" style="font-size:132px"><span class="w" id="t10_0_0">Save</span><span class="w" id="t10_0_1">this</span></div><div class="ln sm" style="font-size:60px"><span class="w" id="t10_1_0">so</span><span class="w" id="t10_1_1">you</span><span class="w" id="t10_1_2">don't</span><span class="w" id="t10_1_3">forget,</span></div></div><div class="tt dark " id="t11" style="top:790px"><div class="ln sm" style="font-size:60px"><span class="w" id="t11_0_0">and</span><span class="w" id="t11_0_1">comment</span></div></div><div id="cbox"><span id="cbt"><span id="cbph">Add a comment...</span><span id="cbk"></span><i id="caret"></i></span><span id="send"><svg viewBox="0 0 24 24"><path d="M4 12h14M13 6l6 6-6 6"/></svg></span></div><div id="hook">HOOK</div><div class="tt dark " id="t12" style="top:1390px"><div class="ln sm" style="font-size:58px"><span class="w" id="t12_0_0">for</span><span class="w" id="t12_0_1">my</span><span class="w" id="t12_0_2">list</span><span class="w" id="t12_0_3">of</span><span class="w" id="t12_0_4">20</span><span class="w" id="t12_0_5">hooks</span><span class="w" id="t12_0_6">that</span><span class="w" id="t12_0_7">work.</span></div></div></div>
+      <audio id="vo" src="assets/audio/vo.wav" data-start="0" data-duration="36.14" data-track-index="1"></audio>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#views", {y: 0}, {y: -10, duration: 2.9, ease: "none", immediateRender: false}, 0);
+      tl.to("#views", {opacity: 0, filter: "blur(8px)", duration: 0.3, ease: "power2.in"}, 2.900);
+      tl.fromTo("#t1_0_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 0.080);
+      tl.fromTo("#t1_0_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 0.520);
+      tl.fromTo("#t1_1_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 0.820);
+      tl.fromTo("#t1_1_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 1.300);
+      tl.fromTo("#t1_2_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 1.580);
+      tl.fromTo("#t1_2_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 1.920);
+      tl.fromTo("#t1_2_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 2.040);
+      tl.fromTo("#t1_3_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 2.140);
+      tl.set("#t1", {opacity: 1}, 0.070);
+      tl.fromTo("#t1", {y: 0}, {y: -16, duration: 3.080, ease: "none", immediateRender: false}, 0.070);
+      tl.to("#t1", {opacity: 0, yPercent: -12, filter: "blur(10px)", duration: .3, ease: "power2.in"}, 2.900);
+      tl.fromTo("#t1_3_0s", {scaleX: 0}, {scaleX: 1, duration: .28, ease: "power3.inOut", immediateRender: false}, 2.600);
+      tl.to("#t1_3_0", {color: "#a9a9a9", duration: .25}, 2.660);
+      tl.fromTo("#t2_0_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 2.960);
+      tl.fromTo("#t2_0_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 3.360);
+      tl.fromTo("#t2_1_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 4.200);
+      tl.fromTo("#t2_1_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 4.320);
+      tl.fromTo("#t2_1_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 4.460);
+      tl.fromTo("#t2_1_3", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 4.680);
+      tl.fromTo("#t2_1_4", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 4.980);
+      tl.set("#t2", {opacity: 1}, 2.950);
+      tl.fromTo("#t2", {y: 0}, {y: -16, duration: 2.820, ease: "none", immediateRender: false}, 2.950);
+      tl.to("#t2", {opacity: 0, yPercent: -12, filter: "blur(10px)", duration: .3, ease: "power2.in"}, 5.520);
+      tl.fromTo("#ring", {opacity: 0, scale: .7}, {opacity: 1, scale: 1, duration: .4, ease: "back.out(1.4)", immediateRender: false}, 4.450);
+      tl.fromTo("#rfill", {strokeDashoffset: 0}, {strokeDashoffset: 1000, duration: 1.090, ease: "none", immediateRender: false}, 4.450);
+      tl.set("#rnum", {textContent: "\u200b3"}, 4.450);
+      tl.fromTo("#rnum", {scale: 1.25}, {scale: 1, duration: .22, ease: "power3.out", immediateRender: false}, 4.450);
+      tl.set("#rnum", {textContent: "\u200b2"}, 4.813);
+      tl.fromTo("#rnum", {scale: 1.25}, {scale: 1, duration: .22, ease: "power3.out", immediateRender: false}, 4.813);
+      tl.set("#rnum", {textContent: "\u200b1"}, 5.177);
+      tl.fromTo("#rnum", {scale: 1.25}, {scale: 1, duration: .22, ease: "power3.out", immediateRender: false}, 5.177);
+      tl.set("#rnum", {textContent: "\u200b0", color: "#ff2a2a"}, 5.540);
+      tl.set("#rfill", {stroke: "#ff2a2a"}, 5.540);
+      tl.to(".rtrk", {stroke: "rgba(255,42,42,.35)", duration: .2}, 5.540);
+      tl.fromTo("#ring", {scale: 1}, {scale: 1.08, duration: .28, ease: "expo.out", immediateRender: false}, 5.540);
+      tl.fromTo("#bgD", {clipPath: "circle(0px at 540px 1140px)"}, {clipPath: "circle(2400px at 540px 1140px)", duration: .62, ease: "expo.inOut", immediateRender: false}, 5.540);
+      tl.to("#tp", {color: "#f2f2f2", backgroundColor: "rgba(255,255,255,.07)", borderColor: "rgba(255,255,255,.16)", duration: .4}, 5.690);
+      tl.to("#ring", {opacity: 0, scale: .2, y: -700, duration: .5, ease: "power3.in"}, 5.850);
+      tl.fromTo("#tp", {opacity: 0, y: -14}, {opacity: 1, y: 0, duration: .4, ease: "expo.out", immediateRender: false}, 6.300);
+      tl.fromTo("#t3_0_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 6.060);
+      tl.fromTo("#t3_0_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 6.520);
+      tl.fromTo("#t3_1_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 6.720);
+      tl.fromTo("#t3_1_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 7.040);
+      tl.fromTo("#t3_2_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 7.460);
+      tl.fromTo("#t3_2_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 7.940);
+      tl.fromTo("#t3_2_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 8.160);
+      tl.set("#t3", {opacity: 1}, 6.050);
+      tl.fromTo("#t3", {y: 0}, {y: -16, duration: 2.920, ease: "none", immediateRender: false}, 6.050);
+      tl.to("#t3", {opacity: 0, yPercent: -12, filter: "blur(10px)", duration: .3, ease: "power2.in"}, 8.720);
+      tl.fromTo("#sl0", {opacity: 0, y: 60, rotationX: -35, transformPerspective: 900}, {opacity: 1, y: 0, rotationX: 0, transformPerspective: 900, duration: .55, ease: "expo.out", immediateRender: false}, 6.760);
+      tl.fromTo("#sl1", {opacity: 0, y: 60, rotationX: -35, transformPerspective: 900}, {opacity: 1, y: 0, rotationX: 0, transformPerspective: 900, duration: .55, ease: "expo.out", immediateRender: false}, 6.890);
+      tl.fromTo("#sl2", {opacity: 0, y: 60, rotationX: -35, transformPerspective: 900}, {opacity: 1, y: 0, rotationX: 0, transformPerspective: 900, duration: .55, ease: "expo.out", immediateRender: false}, 7.020);
+      tl.to("#slots", {y: 26, duration: .4, ease: "power2.out"}, 8.200);
+      tl.to("#sl1, #sl2", {opacity: 0, filter: "blur(8px)", duration: .3, ease: "power2.in"}, 8.720);
+      tl.to("#sl0", {scale: 2.4, opacity: 0, duration: .5, ease: "power3.in"}, 8.720);
+      tl.fromTo("#bgD", {clipPath: "circle(2400px at 230px 1210px)"}, {clipPath: "circle(0px at 230px 1210px)", duration: .62, ease: "expo.inOut", immediateRender: false}, 8.740);
+      tl.to("#tp", {color: "#0b0b0b", backgroundColor: "rgba(255,255,255,.6)", borderColor: "rgba(0,0,0,.1)", duration: .4}, 8.890);
+      tl.fromTo("#phone", {opacity: 0, y: 120}, {opacity: 1, y: 0, duration: 0.6, ease: "expo.out", immediateRender: false}, 8.970);
+      tl.fromTo("#phone", {rotation: -2}, {rotation: 0, duration: .9, ease: "expo.out", immediateRender: false}, 8.970);
+      tl.fromTo("#k1", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}, 8.820);
+      tl.to("#k1", {opacity: 0, filter: "blur(6px)", duration: .25, ease: "power2.in"}, 10.960);
+      tl.fromTo("#t4_0_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 9.820);
+      tl.fromTo("#t4_0_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 9.920);
+      tl.fromTo("#t4_0_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 10.140);
+      tl.fromTo("#t4_1_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 10.380);
+      tl.fromTo("#t4_1_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 10.520);
+      tl.set("#t4", {opacity: 1}, 9.810);
+      tl.fromTo("#t4", {y: 0}, {y: -16, duration: 1.400, ease: "none", immediateRender: false}, 9.810);
+      tl.to("#t4", {opacity: 0, yPercent: -12, filter: "blur(10px)", duration: .3, ease: "power2.in"}, 10.960);
+      tl.set("#cap1", {opacity: 1}, 10.320);
+      tl.set("#cap1t", {textContent: "H"}, 10.355);
+      tl.set("#cap1t", {textContent: "He"}, 10.390);
+      tl.set("#cap1t", {textContent: "Hey"}, 10.425);
+      tl.set("#cap1t", {textContent: "Hey "}, 10.460);
+      tl.set("#cap1t", {textContent: "Hey g"}, 10.495);
+      tl.set("#cap1t", {textContent: "Hey gu"}, 10.530);
+      tl.set("#cap1t", {textContent: "Hey guy"}, 10.565);
+      tl.set("#cap1t", {textContent: "Hey guys"}, 10.600);
+      tl.set("#cap1t", {textContent: "Hey guys,"}, 10.635);
+      tl.set("#cap1t", {textContent: "Hey guys, "}, 10.670);
+      tl.set("#cap1t", {textContent: "Hey guys, s"}, 10.705);
+      tl.set("#cap1t", {textContent: "Hey guys, so"}, 10.740);
+      tl.set("#cap1t", {textContent: "Hey guys, so "}, 10.775);
+      tl.set("#cap1t", {textContent: "Hey guys, so t"}, 10.810);
+      tl.set("#cap1t", {textContent: "Hey guys, so to"}, 10.845);
+      tl.set("#cap1t", {textContent: "Hey guys, so tod"}, 10.880);
+      tl.set("#cap1t", {textContent: "Hey guys, so toda"}, 10.915);
+      tl.set("#cap1t", {textContent: "Hey guys, so today"}, 10.950);
+      tl.set("#cap1t", {textContent: "Hey guys, so today."}, 10.985);
+      tl.set("#cap1t", {textContent: "Hey guys, so today.."}, 11.020);
+      tl.set("#cap1t", {textContent: "Hey guys, so today..."}, 11.055);
+      tl.fromTo("#pb1", {scaleX: 0}, {scaleX: .035, duration: 2.6, ease: "none", immediateRender: false}, 9.860);
+      tl.fromTo("#t4b_0_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 11.020);
+      tl.fromTo("#t4b_0_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 11.400);
+      tl.fromTo("#t4b_0_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 11.720);
+      tl.fromTo("#t4b_1_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 12.020);
+      tl.fromTo("#t4b_1_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 12.460);
+      tl.set("#t4b", {opacity: 1}, 11.010);
+      tl.fromTo("#t4b", {y: 0}, {y: -16, duration: 2.500, ease: "none", immediateRender: false}, 11.010);
+      tl.to("#t4b", {opacity: 0, yPercent: -12, filter: "blur(10px)", duration: .3, ease: "power2.in"}, 13.260);
+      tl.fromTo("#thumb", {opacity: 0, x: 40, y: 140}, {opacity: .92, x: 0, y: 0, duration: .3, ease: "power3.out", immediateRender: false}, 11.710);
+      tl.to("#thumb", {y: -330, opacity: 0, duration: .32, ease: "power3.in"}, 12.080);
+      tl.to("#reel1", {yPercent: -100, duration: .38, ease: "power3.in"}, 12.120);
+      tl.fromTo("#reel1b", {yPercent: 100, opacity: 1}, {yPercent: 0, opacity: 1, duration: .38, ease: "power3.in", immediateRender: false}, 12.120);
+      tl.fromTo("#gone1", {opacity: 0, scale: .85}, {opacity: 1, scale: 1, duration: .32, ease: "back.out(1.7)", immediateRender: false}, 12.480);
+      tl.fromTo("#bgD", {clipPath: "circle(0px at 540px 1100px)"}, {clipPath: "circle(2400px at 540px 1100px)", duration: .62, ease: "expo.inOut", immediateRender: false}, 13.280);
+      tl.to("#tp", {color: "#f2f2f2", backgroundColor: "rgba(255,255,255,.07)", borderColor: "rgba(255,255,255,.16)", duration: .4}, 13.430);
+      tl.to("#phone", {boxShadow: "0 0 0 3px rgba(255,255,255,.22), 0 40px 90px rgba(0,0,0,.55)", duration: .4}, 13.380);
+      tl.fromTo("#t5_0_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 13.340);
+      tl.fromTo("#t5_0_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 13.800);
+      tl.fromTo("#t5_1_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 13.960);
+      tl.fromTo("#t5_1_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 14.060);
+      tl.set("#t5", {opacity: 1}, 13.330);
+      tl.fromTo("#t5", {y: 0}, {y: -16, duration: 1.700, ease: "none", immediateRender: false}, 13.330);
+      tl.to("#t5", {opacity: 0, yPercent: -12, filter: "blur(10px)", duration: .3, ease: "power2.in"}, 14.780);
+      tl.fromTo("#reel2", {yPercent: 100, opacity: 1}, {yPercent: 0, opacity: 1, duration: .45, ease: "expo.out", immediateRender: false}, 13.380);
+      tl.to("#gone1", {opacity: 0, duration: .2}, 13.850);
+      tl.fromTo("#res1", {opacity: 0, scale: .6, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .45, ease: "back.out(1.6)", immediateRender: false}, 14.050);
+      tl.fromTo("#res2", {opacity: 0, y: 16}, {opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}, 14.190);
+      tl.fromTo("#pb2", {scaleX: 0}, {scaleX: .22, duration: 1.5, ease: "none", immediateRender: false}, 13.380);
+      tl.to("#mk2", {backgroundColor: "#ffffff", scaleY: 1.6, duration: .2}, 14.062);
+      tl.fromTo("#kept", {opacity: 0, y: 10}, {opacity: 1, y: 0, duration: .3, ease: "power3.out", immediateRender: false}, 14.062);
+      tl.fromTo("#bgD", {clipPath: "circle(2400px at 540px 1100px)"}, {clipPath: "circle(0px at 540px 1100px)", duration: .62, ease: "expo.inOut", immediateRender: false}, 14.780);
+      tl.to("#tp", {color: "#0b0b0b", backgroundColor: "rgba(255,255,255,.6)", borderColor: "rgba(0,0,0,.1)", duration: .4}, 14.930);
+      tl.to("#phone", {boxShadow: "0 0 0 0px rgba(255,255,255,0), 0 40px 90px rgba(0,0,0,.28)", duration: .4}, 14.880);
+      tl.fromTo("#k2", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}, 14.860);
+      tl.to("#k2", {opacity: 0, filter: "blur(6px)", duration: .25, ease: "power2.in"}, 17.320);
+      tl.fromTo("#t6_0_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 15.780);
+      tl.fromTo("#t6_0_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 15.900);
+      tl.fromTo("#t6_0_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 16.160);
+      tl.fromTo("#t6_1_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 16.540);
+      tl.fromTo("#t6_1_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 16.800);
+      tl.set("#t6", {opacity: 1}, 15.770);
+      tl.fromTo("#t6", {y: 0}, {y: -16, duration: 1.800, ease: "none", immediateRender: false}, 15.770);
+      tl.to("#t6", {opacity: 0, yPercent: -12, filter: "blur(10px)", duration: .3, ease: "power2.in"}, 17.320);
+      tl.to("#kept, #res1, #res2", {opacity: 0, duration: .2}, 14.780);
+      tl.fromTo("#feed", {yPercent: 100, opacity: 1}, {yPercent: 0, opacity: 1, duration: .5, ease: "expo.out", immediateRender: false}, 14.880);
+      tl.fromTo("#paused", {opacity: 0, scale: .7}, {opacity: 1, scale: 1, duration: .3, ease: "back.out(1.7)", immediateRender: false}, 16.840);
+      tl.fromTo("#t6b_0_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 17.380);
+      tl.fromTo("#t6b_0_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 17.680);
+      tl.fromTo("#t6b_0_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 17.880);
+      tl.fromTo("#t6b_1_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 18.880);
+      tl.fromTo("#t6b_1_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 19.040);
+      tl.fromTo("#t6b_1_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 19.360);
+      tl.set("#t6b", {opacity: 1}, 17.370);
+      tl.fromTo("#t6b", {y: 0}, {y: -16, duration: 3.020, ease: "none", immediateRender: false}, 17.370);
+      tl.to("#t6b", {opacity: 0, yPercent: -12, filter: "blur(10px)", duration: .3, ease: "power2.in"}, 20.140);
+      tl.fromTo("#nomove", {opacity: 0, x: -20}, {opacity: 1, x: 0, duration: .3, ease: "power3.out", immediateRender: false}, 17.920);
+      tl.fromTo("#thumb", {opacity: 0, x: 40, y: 140}, {opacity: .92, x: 0, y: 0, duration: .25, ease: "power3.out", immediateRender: false}, 18.640);
+      tl.to("#thumb", {y: -330, opacity: 0, duration: .3, ease: "power3.in"}, 18.920);
+      tl.to("#nomove", {opacity: 0, duration: .15}, 18.920);
+      tl.to("#strip", {yPercent: -66.667, duration: .85, ease: "expo.inOut"}, 18.920);
+      tl.fromTo("#strip", {filter: "blur(0px)"}, {filter: "blur(9px)", duration: .3, ease: "power2.in", immediateRender: false}, 19.020);
+      tl.to("#strip", {filter: "blur(0px)", duration: .3, ease: "power2.out"}, 19.420);
+      tl.fromTo("#gone2", {opacity: 0, scale: .85}, {opacity: 1, scale: 1, duration: .3, ease: "back.out(1.7)", immediateRender: false}, 19.540);
+      tl.to("#phone", {opacity: 0, y: 140, rotation: 3, duration: .4, ease: "power3.in"}, 20.690);
+      tl.fromTo("#k3", {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: .35, ease: "power3.out", immediateRender: false}, 20.240);
+      tl.to("#k3", {opacity: 0, filter: "blur(6px)", duration: .25, ease: "power2.in"}, 22.700);
+      tl.fromTo("#t7_0_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 21.080);
+      tl.fromTo("#t7_0_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 21.200);
+      tl.fromTo("#t7_1_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 21.660);
+      tl.fromTo("#t7_1_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 22.040);
+      tl.fromTo("#t7_1_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 22.260);
+      tl.set("#t7", {opacity: 1}, 21.070);
+      tl.fromTo("#t7", {y: 0}, {y: -16, duration: 1.880, ease: "none", immediateRender: false}, 21.070);
+      tl.to("#t7", {opacity: 0, yPercent: -12, filter: "blur(10px)", duration: .3, ease: "power2.in"}, 22.700);
+      tl.fromTo("#cEx", {opacity: 0, y: 50}, {opacity: 1, y: 0, duration: 0.45, ease: "expo.out", immediateRender: false}, 21.190);
+      tl.fromTo("#cSh", {opacity: 0, y: 50}, {opacity: 1, y: 0, duration: 0.45, ease: "expo.out", immediateRender: false}, 22.250);
+      tl.fromTo("#late", {opacity: 0, x: -24}, {opacity: 1, x: 0, duration: .25, ease: "power3.out", immediateRender: false}, 22.400);
+      tl.fromTo("#bgD", {clipPath: "circle(0px at 540px 1100px)"}, {clipPath: "circle(2400px at 540px 1100px)", duration: .62, ease: "expo.inOut", immediateRender: false}, 22.700);
+      tl.to("#tp", {color: "#f2f2f2", backgroundColor: "rgba(255,255,255,.07)", borderColor: "rgba(255,255,255,.16)", duration: .4}, 22.850);
+      tl.fromTo("#t8_0_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 22.760);
+      tl.fromTo("#t8_0_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 23.200);
+      tl.fromTo("#t8_0_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 23.360);
+      tl.fromTo("#t8_0_3", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 23.640);
+      tl.fromTo("#t8_1_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 24.460);
+      tl.fromTo("#t8_1_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 24.680);
+      tl.fromTo("#t8_1_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 25.140);
+      tl.fromTo("#t8_1_3", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 25.400);
+      tl.fromTo("#t8_1_4", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 25.580);
+      tl.fromTo("#t8_1_5", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 25.760);
+      tl.set("#t8", {opacity: 1}, 22.750);
+      tl.fromTo("#t8", {y: 0}, {y: -16, duration: 3.820, ease: "none", immediateRender: false}, 22.750);
+      tl.to("#t8", {opacity: 0, yPercent: -12, filter: "blur(10px)", duration: .3, ease: "power2.in"}, 26.320);
+      tl.to("#late", {opacity: 0, duration: .2}, 22.700);
+      tl.to("#cSh", {y: -240, x: 0, duration: .6, ease: "expo.inOut"}, 23.000);
+      tl.to("#cSh", {keyframes: {x: [0, 70, 0]}, duration: .6, ease: "sine.inOut"}, 23.000);
+      tl.to("#cEx", {y: 240, duration: .6, ease: "expo.inOut"}, 23.000);
+      tl.to("#cEx", {keyframes: {x: [0, -70, 0]}, duration: .6, ease: "sine.inOut"}, 23.000);
+      tl.set("#cShn", {textContent: "1"}, 23.300); tl.set("#cExn", {textContent: "2"}, 23.300);
+      tl.to("#cSh", {backgroundColor: "#ffffff", color: "#0b0b0b", borderColor: "#ffffff", duration: .35}, 23.550);
+      tl.to("#cShn", {backgroundColor: "#0b0b0b", color: "#ffffff", duration: .35}, 23.550);
+      tl.to("#cEx", {backgroundColor: "rgba(255,255,255,.06)", color: "#f2f2f2", borderColor: "rgba(255,255,255,.16)", duration: .35}, 22.800);
+      tl.to("#cExn", {backgroundColor: "rgba(255,255,255,.14)", color: "#ffffff", duration: .35}, 22.800);
+      tl.to("#cSh", {backgroundColor: "rgba(255,255,255,.06)", color: "#f2f2f2", borderColor: "rgba(255,255,255,.16)", duration: .3}, 22.800);
+      tl.fromTo("#chk", {opacity: 0, scale: .4}, {opacity: 1, scale: 1, duration: .35, ease: "back.out(2)", immediateRender: false}, 23.650);
+      tl.fromTo("#bgD", {clipPath: "circle(2400px at 540px 960px)"}, {clipPath: "circle(0px at 540px 960px)", duration: .62, ease: "expo.inOut", immediateRender: false}, 26.320);
+      tl.to("#tp", {color: "#0b0b0b", backgroundColor: "rgba(255,255,255,.6)", borderColor: "rgba(0,0,0,.1)", duration: .4}, 26.470);
+      tl.to("#cEx, #cSh, #chk", {opacity: 0, filter: "blur(8px)", duration: .3, ease: "power2.in"}, 26.320);
+      tl.fromTo("#t9_0_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 26.420);
+      tl.fromTo("#t9_0_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 26.880);
+      tl.fromTo("#t9_0_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 27.180);
+      tl.fromTo("#t9_1_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 27.520);
+      tl.fromTo("#t9_1_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 27.920);
+      tl.fromTo("#t9_1_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 28.160);
+      tl.fromTo("#t9_1_3", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 28.380);
+      tl.fromTo("#t9_1_4", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 28.740);
+      tl.set("#t9", {opacity: 1}, 26.410);
+      tl.fromTo("#t9", {y: 0}, {y: -16, duration: 3.280, ease: "none", immediateRender: false}, 26.410);
+      tl.to("#t9", {opacity: 0, yPercent: -12, filter: "blur(10px)", duration: .3, ease: "power2.in"}, 29.440);
+      tl.fromTo("#rw0", {opacity: 0, y: 40}, {opacity: 1, y: 0, duration: 0.45, ease: "expo.out", immediateRender: false}, 26.420);
+      tl.to("#rc0", {backgroundColor: "#0b0b0b", borderColor: "#0b0b0b", duration: .2}, 26.770);
+      tl.fromTo("#rc0 path", {strokeDashoffset: 30}, {strokeDashoffset: 0, duration: .25, ease: "power2.out", immediateRender: false}, 26.770);
+      tl.fromTo("#rw1", {opacity: 0, y: 40}, {opacity: 1, y: 0, duration: 0.45, ease: "expo.out", immediateRender: false}, 26.880);
+      tl.to("#rc1", {backgroundColor: "#0b0b0b", borderColor: "#0b0b0b", duration: .2}, 27.230);
+      tl.fromTo("#rc1 path", {strokeDashoffset: 30}, {strokeDashoffset: 0, duration: .25, ease: "power2.out", immediateRender: false}, 27.230);
+      tl.fromTo("#rw2", {opacity: 0, y: 40}, {opacity: 1, y: 0, duration: 0.45, ease: "expo.out", immediateRender: false}, 27.180);
+      tl.to("#rc2", {backgroundColor: "#0b0b0b", borderColor: "#0b0b0b", duration: .2}, 27.530);
+      tl.fromTo("#rc2 path", {strokeDashoffset: 30}, {strokeDashoffset: 0, duration: .25, ease: "power2.out", immediateRender: false}, 27.530);
+      tl.fromTo("#ctr", {opacity: 0, y: 30}, {opacity: 1, y: 0, duration: 0.4, ease: "expo.out", immediateRender: false}, 27.910);
+      tl.set("#ctrn", {textContent: "312"}, 28.010);
+      tl.set("#ctrn", {textContent: "900"}, 28.085);
+      tl.set("#ctrn", {textContent: "2,400"}, 28.160);
+      tl.set("#ctrn", {textContent: "5,200"}, 28.235);
+      tl.set("#ctrn", {textContent: "9,800"}, 28.310);
+      tl.set("#ctrn", {textContent: "15,400"}, 28.385);
+      tl.set("#ctrn", {textContent: "22,100"}, 28.460);
+      tl.set("#ctrn", {textContent: "29,300"}, 28.535);
+      tl.set("#ctrn", {textContent: "36,100"}, 28.610);
+      tl.set("#ctrn", {textContent: "41,800"}, 28.685);
+      tl.set("#ctrn", {textContent: "45,600"}, 28.760);
+      tl.set("#ctrn", {textContent: "47,600"}, 28.835);
+      tl.set("#ctrn", {textContent: "48,200"}, 28.910);
+      tl.fromTo("#bgD", {clipPath: "circle(0px at 540px 330px)"}, {clipPath: "circle(2400px at 540px 330px)", duration: .62, ease: "expo.inOut", immediateRender: false}, 29.440);
+      tl.to("#tp", {color: "#f2f2f2", backgroundColor: "rgba(255,255,255,.07)", borderColor: "rgba(255,255,255,.16)", duration: .4}, 29.590);
+      tl.to("#rows, #ctr", {opacity: 0, filter: "blur(8px)", duration: .3, ease: "power2.in"}, 29.440);
+      tl.to("#tp", {opacity: 0, y: -14, duration: .3, ease: "power2.in"}, 29.440);
+      tl.fromTo("#bkm", {opacity: 0, scale: .5, y: 20}, {opacity: 1, scale: 1, y: 0, duration: .45, ease: "back.out(1.8)", immediateRender: false}, 29.530);
+      tl.to("#bkp", {fill: "#ffffff", duration: .2}, 30.060);
+      tl.fromTo("#t10_0_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 29.540);
+      tl.fromTo("#t10_0_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 30.020);
+      tl.fromTo("#t10_1_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 30.220);
+      tl.fromTo("#t10_1_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 30.380);
+      tl.fromTo("#t10_1_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 30.480);
+      tl.fromTo("#t10_1_3", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 30.680);
+      tl.set("#t10", {opacity: 1}, 29.530);
+      tl.fromTo("#t10", {y: 0}, {y: -16, duration: 6.860, ease: "none", immediateRender: false}, 29.530);
+      tl.fromTo("#t11_0_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 30.960);
+      tl.fromTo("#t11_0_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 31.460);
+      tl.set("#t11", {opacity: 1}, 30.950);
+      tl.fromTo("#t11", {y: 0}, {y: -16, duration: 5.440, ease: "none", immediateRender: false}, 30.950);
+      tl.fromTo("#cbox", {opacity: 0, y: 30}, {opacity: 1, y: 0, duration: 0.45, ease: "expo.out", immediateRender: false}, 31.400);
+      tl.set("#cbph", {display: "none"}, 31.920);
+      tl.set("#cbk", {textContent: "H"}, 31.920);
+      tl.set("#cbk", {textContent: "HO"}, 32.010);
+      tl.set("#cbk", {textContent: "HOO"}, 32.100);
+      tl.set("#cbk", {textContent: "HOOK"}, 32.190);
+      tl.to("#send", {backgroundColor: "#ffffff", color: "#0b0b0b", duration: .2}, 32.320);
+      tl.fromTo("#hook", {opacity: 0, scale: .55, y: 40, filter: "blur(12px)"}, {opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: .55, ease: "back.out(1.5)", immediateRender: false}, 32.420);
+      tl.fromTo("#hook", {scale: 1}, {scale: 1.035, duration: 3.170, ease: "none", immediateRender: false}, 32.970);
+      tl.fromTo("#t12_0_0", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 32.580);
+      tl.fromTo("#t12_0_1", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 32.940);
+      tl.fromTo("#t12_0_2", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 33.060);
+      tl.fromTo("#t12_0_3", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 33.220);
+      tl.fromTo("#t12_0_4", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 33.400);
+      tl.fromTo("#t12_0_5", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 33.680);
+      tl.fromTo("#t12_0_6", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 33.960);
+      tl.fromTo("#t12_0_7", {opacity: 0, yPercent: 45, filter: "blur(10px)"}, {opacity: 1, yPercent: 0, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 34.160);
+      tl.set("#t12", {opacity: 1}, 32.570);
+      tl.fromTo("#t12", {y: 0}, {y: -16, duration: 3.820, ease: "none", immediateRender: false}, 32.570);
+      tl.to("#bgL .b1", {x: 160, y: -90, duration: 18.07, ease: "sine.inOut", repeat: 1, yoyo: true}, 0);
+      tl.to("#bgL .b2", {x: -180, y: 70, duration: 12.05, ease: "sine.inOut", repeat: 2, yoyo: true}, 0);
+      tl.to("#bgD .b1", {x: 160, y: -90, duration: 18.07, ease: "sine.inOut", repeat: 1, yoyo: true}, 0);
+      tl.to("#bgD .b2", {x: -180, y: 70, duration: 12.05, ease: "sine.inOut", repeat: 2, yoyo: true}, 0);
+      tl.set({}, {}, 36.14);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
