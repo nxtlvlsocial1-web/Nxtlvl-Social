@@ -4,355 +4,183 @@
 "t": 0
 },
 {
-"type": "stamp",
-"t": 0.54
-},
-{
-"type": "stamp",
-"t": 0.9
-},
-{
-"type": "rip",
-"t": 1.59
-},
-{
-"type": "hit",
-"t": 1.59
-},
-{
-"type": "stamp",
-"t": 1.6
-},
-{
-"type": "stamp",
-"t": 1.94
-},
-{
-"type": "rip",
-"t": 2.38
-},
-{
-"type": "whoosh_big",
-"t": 2.48
-},
-{
-"type": "paper",
-"t": 2.54
-},
-{
-"type": "paper",
-"t": 2.77
+"type": "glitch",
+"t": 1.62
 },
 {
 "type": "swish",
-"t": 3.59
+"t": 2.4
 },
 {
-"type": "swish",
-"t": 4.03
+"type": "tick",
+"t": 4.34
 },
 {
-"type": "stamp",
-"t": 4.33
+"type": "tick",
+"t": 4.82
 },
 {
 "type": "scratch",
-"t": 5.18
+"t": 5.24
 },
 {
-"type": "rip",
-"t": 5.48
-},
-{
-"type": "paper",
-"t": 5.62
-},
-{
-"type": "paper",
-"t": 5.65
-},
-{
-"type": "rise",
-"t": 5.88
+"type": "swish",
+"t": 5.73
 },
 {
 "type": "hit",
-"t": 6.34
+"t": 7.04
+},
+{
+"type": "tick",
+"t": 7.07
+},
+{
+"type": "swish",
+"t": 7.15
+},
+{
+"type": "hit",
+"t": 7.27
 },
 {
 "type": "count",
-"t": 7.38
+"t": 7.65
 },
 {
 "type": "count",
-"t": 7.8
+"t": 7.935
 },
 {
 "type": "glitch",
 "t": 8.22
 },
 {
-"type": "whoosh",
-"t": 8.64
+"type": "swish",
+"t": 8.59
 },
 {
-"type": "paper",
-"t": 8.75
-},
-{
-"type": "paper",
-"t": 8.78
-},
-{
-"type": "paper",
-"t": 9.54
-},
-{
-"type": "paper",
-"t": 9.68
-},
-{
-"type": "paper",
-"t": 9.82
-},
-{
-"type": "drop",
-"t": 10.88
-},
-{
-"type": "whoosh",
-"t": 11.4
-},
-{
-"type": "paper",
-"t": 11.51
-},
-{
-"type": "paper",
-"t": 11.54
-},
-{
-"type": "type",
-"t": 13.035
-},
-{
-"type": "type",
-"t": 13.175
-},
-{
-"type": "type",
-"t": 13.315
-},
-{
-"type": "type",
-"t": 13.455
-},
-{
-"type": "type",
-"t": 13.595
-},
-{
-"type": "paper",
-"t": 13.71
-},
-{
-"type": "type",
-"t": 13.735
-},
-{
-"type": "whoosh",
-"t": 14.74
-},
-{
-"type": "stamp",
-"t": 15.22
-},
-{
-"type": "whoosh",
-"t": 15.94
-},
-{
-"type": "paper",
-"t": 16.03
-},
-{
-"type": "paper",
-"t": 16.08
+"type": "swish",
+"t": 11.36
 },
 {
 "type": "hit",
-"t": 16.73
+"t": 14.69
 },
 {
-"type": "stamp",
-"t": 17.11
+"type": "scratch",
+"t": 15.59
 },
 {
-"type": "whoosh",
-"t": 17.46
+"type": "type",
+"t": 16.01
 },
 {
-"type": "paper",
-"t": 17.55
+"type": "type",
+"t": 16.145
 },
 {
-"type": "paper",
-"t": 17.6
+"type": "type",
+"t": 16.28
 },
 {
-"type": "click",
-"t": 19.52
+"type": "type",
+"t": 16.415
 },
 {
-"type": "paper",
-"t": 20.07
+"type": "type",
+"t": 16.55
 },
 {
-"type": "stamp",
-"t": 20.58
+"type": "ding",
+"t": 16.64
+},
+{
+"type": "tick",
+"t": 17.64
+},
+{
+"type": "tick",
+"t": 18.07
 },
 {
 "type": "whoosh",
 "t": 21.65
 },
 {
-"type": "swish",
-"t": 21.95
-},
-{
-"type": "stamp",
-"t": 22.48
-},
-{
-"type": "whoosh",
-"t": 22.82
-},
-{
-"type": "paper",
-"t": 22.93
-},
-{
-"type": "paper",
-"t": 22.96
-},
-{
-"type": "paper",
+"type": "tick",
 "t": 23.92
 },
 {
-"type": "paper",
-"t": 24.23
-},
-{
-"type": "stamp",
-"t": 24.61
-},
-{
-"type": "whoosh",
-"t": 25.36
-},
-{
-"type": "paper",
-"t": 25.45
-},
-{
-"type": "paper",
-"t": 25.5
+"type": "tick",
+"t": 24.98
 },
 {
 "type": "swish",
-"t": 25.66
+"t": 25.43
 },
 {
 "type": "success",
-"t": 26.28
+"t": 25.93
 },
 {
-"type": "whoosh",
-"t": 29.0
+"type": "swish",
+"t": 28.96
 },
 {
-"type": "paper",
-"t": 29.11
+"type": "pop",
+"t": 29.3
 },
 {
-"type": "paper",
-"t": 29.14
+"type": "tick",
+"t": 29.79
 },
 {
-"type": "type",
-"t": 29.34
+"type": "pop",
+"t": 29.9
 },
 {
-"type": "type",
-"t": 29.8
+"type": "tick",
+"t": 29.95
 },
 {
-"type": "type",
-"t": 30.1
+"type": "tick",
+"t": 30.17
+},
+{
+"type": "pop",
+"t": 30.25
+},
+{
+"type": "tick",
+"t": 30.33
 },
 {
 "type": "rise",
-"t": 30.59
+"t": 30.74
 },
 {
 "type": "ding",
-"t": 31.59
+"t": 31.84
 },
 {
-"type": "whoosh",
-"t": 32.12
-},
-{
-"type": "paper",
-"t": 32.23
-},
-{
-"type": "paper",
-"t": 32.26
+"type": "swish",
+"t": 32.08
 },
 {
 "type": "pop",
 "t": 32.26
 },
 {
-"type": "paper",
-"t": 33.65
+"type": "swish",
+"t": 34.43
 },
 {
-"type": "type",
-"t": 34.6
+"type": "tick",
+"t": 34.64
 },
 {
-"type": "type",
-"t": 34.69
-},
-{
-"type": "type",
-"t": 34.78
-},
-{
-"type": "type",
-"t": 34.87
-},
-{
-"type": "stamp",
-"t": 35.17
-},
-{
-"type": "paper",
-"t": 35.27
-},
-{
-"type": "stamp",
-"t": 35.37
-},
-{
-"type": "paper",
-"t": 35.47
-},
-{
-"type": "paper",
-"t": 36.65
+"type": "hit",
+"t": 34.66
 }
 ]
