@@ -1,0 +1,43 @@
+{
+  "query": "phonk",
+  "license_filter": "cc0,by,pdm",
+  "source_filter": "freesound,jamendo",
+  "results": [
+    {
+      "id": "f8668888-6291-4bdb-a125-43ce256b5e9e",
+      "title": "Drift Phonk Beat By JH.mp3",
+      "creator": "Johnnie_Holiday",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "freesound",
+      "duration_s": 51.25,
+      "audio_url": "https://cdn.freesound.org/previews/704/704714_4819210-hq.mp3",
+      "landing_url": "https://freesound.org/people/Johnnie_Holiday/sounds/704714",
+      "attribution": "\"Drift Phonk Beat By JH.mp3\" by Johnnie_Holiday is licensed under CC BY 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/."
+    },
+    {
+      "id": "ff7f6e37-9657-4ea8-a52e-e4980f17d30d",
+      "title": "Phonk Song [preview]",
+      "creator": "Seth_Makes_Sounds",
+      "license": "cc0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source": "freesound",
+      "duration_s": 81.0,
+      "audio_url": "https://cdn.freesound.org/previews/704/704410_13228046-hq.mp3",
+      "landing_url": "https://freesound.org/people/Seth_Makes_Sounds/sounds/704410",
+      "attribution": "\"Phonk Song [preview]\" by Seth_Makes_Sounds is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/."
+    },
+    {
+      "id": "36286618-865c-4e40-9e83-cda030b2c1af",
+      "title": "First School Music Project.wav",
+      "creator": "Muna_Alaneme",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "freesound",
+      "duration_s": 212.31,
+      "audio_url": "https://cdn.freesound.org/previews/701/701968_11974333-hq.mp3",
+      "landing_url": "https://freesound.org/people/Muna_Alaneme/sounds/701968",
+      "attribution": "\"First School Music Project.wav\" by Muna_Alaneme is licensed under CC BY 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/."
+    }
+  ]
+}

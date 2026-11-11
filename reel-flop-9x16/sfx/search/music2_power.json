@@ -1,0 +1,43 @@
+{
+  "query": "power",
+  "license_filter": "cc0,by,pdm",
+  "source_filter": "freesound,jamendo",
+  "results": [
+    {
+      "id": "8742bb03-d57e-4ebc-801f-bc8efa545c5f",
+      "title": "The Power of Nature",
+      "creator": "REC",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/3.0/",
+      "source": "jamendo",
+      "duration_s": 289.0,
+      "audio_url": "https://prod-1.storage.jamendo.com/?trackid=1199522&format=mp32",
+      "landing_url": "https://www.jamendo.com/track/1199522",
+      "attribution": "\"The Power of Nature\" by REC is licensed under CC BY 3.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/3.0/."
+    },
+    {
+      "id": "19a5df3f-8239-405e-8862-15674039e618",
+      "title": "Ebon power (ft. Qvimera)",
+      "creator": "BrunoXe",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/3.0/",
+      "source": "jamendo",
+      "duration_s": 137.0,
+      "audio_url": "https://prod-1.storage.jamendo.com/?trackid=1081801&format=mp32",
+      "landing_url": "https://www.jamendo.com/track/1081801",
+      "attribution": "\"Ebon power (ft. Qvimera)\" by BrunoXe is licensed under CC BY 3.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/3.0/."
+    },
+    {
+      "id": "f6ef7d8e-c546-4060-9bd3-ff637a729e30",
+      "title": "Power Loom - China.wav",
+      "creator": "RTB45",
+      "license": "by",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source": "freesound",
+      "duration_s": 293.55,
+      "audio_url": "https://cdn.freesound.org/previews/185/185902_2409224-hq.mp3",
+      "landing_url": "https://freesound.org/people/RTB45/sounds/185902",
+      "attribution": "\"Power Loom - China.wav\" by RTB45 is licensed under CC BY 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/."
+    }
+  ]
+}
