@@ -4,7 +4,7 @@
 cd "$(dirname "$0")/.." || exit 1
 export HYPERFRAMES_NO_TELEMETRY=1
 mkdir -p renders
-OUT=renders/nxtlvl_workout-overlay_reels_9x16_v1.mp4
+OUT=renders/nxtlvl_workout-overlay_reels_9x16_v2.mp4
 LOG=renders/high.log
 npx --yes hyperframes@0.8.203 render --quality high -w 3 -o renders/high_master.mp4 > $LOG 2>&1
 echo "EXIT $?" >> $LOG
