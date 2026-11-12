@@ -1,0 +1,11 @@
+{
+  "source": "Owner's screen recording of the Raj Shamani podcast (Figuring Out) with Deepinder Goyal, footage/podcast_rec.mp4; cropped to 16:9 as footage/podcast_169.mp4 (crop=2344:1318:262:1). The picture is flat (log-like): grade up contrast when used. Credit on screen: Source: Raj Shamani podcast. Keep each use short (<= 4 s).",
+  "picks": [
+    {"id": "A_soundbite", "t0": 47.15, "t1": 49.65, "audio": true, "what": "Deepinder, Temple visible on his temple: \"It's super easy and it measures blood flow to your brain.\" (English, his own voice). The cold open."},
+    {"id": "B_tape", "t0": 42.40, "t1": 46.05, "audio": true, "what": "Deepinder touching the device: \"But if you're not going to pluck it out, this device will not come out.\" Optional second soundbite."},
+    {"id": "C_device_close", "t0": 26.0, "t1": 28.5, "audio": false, "what": "Clean view of the white Temple patch on his temple, talking. B-roll under her \"Deepinder Goyal's Temple costs 85,000 rupees\"."},
+    {"id": "D_device_still", "t0": 34.4, "t1": 37.2, "audio": false, "what": "Device clearly visible, calm face. B-roll under \"It can measure your brain's blood flow...\"."},
+    {"id": "E_points", "t0": 16.8, "t1": 19.6, "audio": false, "what": "Deepinder touches his temple where the device sits. Alternative B-roll."}
+  ],
+  "crop_top_half": "Deepinder is right of centre: crop x 470..1570, y 0..870 of the 1920x1080 picture for the split screen's top half."
+}
