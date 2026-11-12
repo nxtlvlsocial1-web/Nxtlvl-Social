@@ -832,7 +832,7 @@ def scenes():
     js(f'tl.to("#sndK", {{backgroundColor: "{RED}", duration: .2}}, {t_hook + .4:.3f}); tl.to("#sndK .sdi", {{stroke: "#ffffff", duration: .2}}, {t_hook + .4:.3f});')
     names = ["maya.creates", "jonnyedits", "the.reel.lab", "ana_films", "studio.kai", "lena.makes", "dev.daily", "rio.clips"]
     cols = ["#ff7a8a", "#5a6cff", "#ffb347", "#38c9a5", "#c77dff", "#ff5fa2", "#4cc3ff", "#ff9f43"]
-    bub = "".join(f'<div class="cmt" id="cm{k}" style="left:{110 if k % 2 == 0 else 330}px">{viewer(cols[k])}<div><em>{n}</em><b>HOOK</b></div></div>'
+    bub = "".join(f'<div class="cmt" id="cm{k}" style="left:{110 if k % 2 == 0 else 560}px">{viewer(cols[k])}<div><em>{n}</em><b>HOOK</b></div></div>'
                   for k, n in enumerate(names))
     H.append(f'<div class="cms" id="cms">{bub}</div><div class="cmc" id="cmc"><i class="live"></i><b id="cmn">1</b> comments</div>')
     t_st = t_hook + .55
@@ -841,7 +841,7 @@ def scenes():
     tt = t_st
     while tt < DUR - .5 and k < 16:
         j = k % len(names)
-        js(f'tl.fromTo("#cm{j}", {{opacity: 0, y: 230, scale: .8}}, {{keyframes: {{opacity: [0, 1, 1, 0], y: [230, 120, 20, -80], scale: [.8, 1, 1, .95]}}, duration: 1.8, ease: "none", immediateRender: false}}, {tt:.3f});')
+        js(f'tl.fromTo("#cm{j}", {{opacity: 0, y: 230, scale: .8}}, {{keyframes: {{opacity: [0, 1, 1, 0], y: [260, 170, 80, -10], scale: [.8, 1, 1, .95]}}, duration: 1.8, ease: "none", immediateRender: false}}, {tt:.3f});')
         if k < 4:
             sfx("tick", tt + .15)
         k += 1
@@ -1183,13 +1183,13 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f4f4
 .wb.blue {{ width: 470px; background: linear-gradient(90deg, #3346ff, #6a1fe0); }}
 .wtr b {{ font-size: 36px; font-weight: 800; }}
 .bluet {{ color: #3346ff; }}
-.cms {{ position: absolute; left: 0; top: 1500px; width: 1080px; height: 260px; z-index: 4; }}
+.cms {{ position: absolute; left: 0; top: 1570px; width: 1080px; height: 260px; z-index: 4; }}
 .cmt {{ position: absolute; top: 0; display: flex; align-items: center; gap: 16px; padding: 14px 26px 14px 14px; border-radius: 999px;
   background: rgba(255,255,255,.82); box-shadow: 0 14px 34px rgba(0,0,0,.12); opacity: 0; }}
 .cmt svg {{ width: 64px; height: 64px; }}
 .cmt em {{ display: block; font-style: normal; font-size: 24px; font-weight: 600; color: #77776f; }}
 .cmt b {{ display: block; font-size: 36px; font-weight: 800; color: {INK}; letter-spacing: .02em; }}
-.cmc {{ position: absolute; right: 110px; top: 1430px; display: flex; align-items: center; gap: 12px; padding: 10px 24px; border-radius: 999px;
+.cmc {{ position: absolute; right: 110px; top: 1500px; display: flex; align-items: center; gap: 12px; padding: 10px 24px; border-radius: 999px;
   background: {INK}; color: #fff; font-size: 30px; font-weight: 700; opacity: 0; z-index: 5; }}
 .insB .pill, #insB .pill {{ left: 44px; top: 260px; }}
 .pill.tr {{ right: 36px; top: 26px; }}

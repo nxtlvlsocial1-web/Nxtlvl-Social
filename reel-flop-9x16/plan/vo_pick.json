@@ -1,159 +1,389 @@
 {
- "duration": 31.366,
+ "duration": 32.436,
  "takes": [
   {
    "line": "l00",
    "take": 0,
-   "heard": "This video already lost you in the first three seconds.",
+   "heard": "This video already lost you.",
    "errors": 0,
-   "pitch_spread_hz": 55
+   "pitch_spread_hz": 119,
+   "word_prob": 0.939
   },
   {
    "line": "l00",
    "take": 1,
-   "heard": "This video already lost you in the first three seconds.",
+   "heard": "This video already lost you.",
    "errors": 0,
-   "pitch_spread_hz": 146
+   "pitch_spread_hz": 104,
+   "word_prob": 0.979
+  },
+  {
+   "line": "l00",
+   "take": 2,
+   "heard": "This video already lost you.",
+   "errors": 0,
+   "pitch_spread_hz": 192,
+   "word_prob": 0.952
+  },
+  {
+   "line": "l00",
+   "take": 3,
+   "heard": "This video already lost you.",
+   "errors": 0,
+   "pitch_spread_hz": 160,
+   "word_prob": 0.935
+  },
+  {
+   "line": "l00b",
+   "take": 0,
+   "heard": "in the first three seconds.",
+   "errors": 0,
+   "pitch_spread_hz": 123,
+   "word_prob": 0.918
+  },
+  {
+   "line": "l00b",
+   "take": 1,
+   "heard": "In the first three seconds, no hind.",
+   "errors": 2,
+   "pitch_spread_hz": 134,
+   "word_prob": 0.84
+  },
+  {
+   "line": "l00b",
+   "take": 2,
+   "heard": "in the first three seconds. He!",
+   "errors": 1,
+   "pitch_spread_hz": 209,
+   "word_prob": 0.872
+  },
+  {
+   "line": "l00b",
+   "take": 3,
+   "heard": "in the first three seconds.",
+   "errors": 1,
+   "pitch_spread_hz": 400,
+   "word_prob": 0.874
   },
   {
    "line": "l03",
    "take": 0,
    "heard": "Here are three mistakes killing your views.",
    "errors": 0,
-   "pitch_spread_hz": 88
+   "pitch_spread_hz": 88,
+   "word_prob": 0.957
   },
   {
    "line": "l03",
    "take": 1,
    "heard": "Here are three mistakes killing your views.",
    "errors": 0,
-   "pitch_spread_hz": 135
+   "pitch_spread_hz": 135,
+   "word_prob": 0.957
+  },
+  {
+   "line": "l03",
+   "take": 2,
+   "heard": "Here are three mistakes killing your views.",
+   "errors": 0,
+   "pitch_spread_hz": 141,
+   "word_prob": 0.95
+  },
+  {
+   "line": "l03",
+   "take": 3,
+   "heard": "Here are 3 mistakes killing your views.",
+   "errors": 0,
+   "pitch_spread_hz": 153,
+   "word_prob": 0.88
   },
   {
    "line": "l04",
    "take": 0,
    "heard": "One, your hook is a greeting.",
    "errors": 0,
-   "pitch_spread_hz": 116
+   "pitch_spread_hz": 116,
+   "word_prob": 0.916
   },
   {
    "line": "l04",
    "take": 1,
    "heard": "1. Your hook is a greeting.",
+   "errors": 0,
+   "pitch_spread_hz": 81,
+   "word_prob": 0.921
+  },
+  {
+   "line": "l04",
+   "take": 2,
+   "heard": "Could ever eating MUN your hook is a greeting?",
+   "errors": 5,
+   "pitch_spread_hz": 173,
+   "word_prob": 0.692
+  },
+  {
+   "line": "l04",
+   "take": 3,
+   "heard": "1. Your hook is a greeting.",
+   "errors": 0,
+   "pitch_spread_hz": 107,
+   "word_prob": 0.861
+  },
+  {
+   "line": "l05",
+   "take": 0,
+   "heard": "Nobody stays for hey guys",
    "errors": 1,
-   "pitch_spread_hz": 81
-  },
-  {
-   "line": "l05",
-   "take": 0,
-   "heard": "Nobody stays for hey guys",
-   "errors": 0,
-   "pitch_spread_hz": 99
+   "pitch_spread_hz": 99,
+   "word_prob": 0.687
   },
   {
    "line": "l05",
    "take": 1,
    "heard": "Nobody stays for hey guys",
-   "errors": 0,
-   "pitch_spread_hz": 166
+   "errors": 1,
+   "pitch_spread_hz": 166,
+   "word_prob": 0.686
+  },
+  {
+   "line": "l05",
+   "take": 2,
+   "heard": "Nobody stays for hey guys",
+   "errors": 1,
+   "pitch_spread_hz": 230,
+   "word_prob": 0.788
+  },
+  {
+   "line": "l05",
+   "take": 3,
+   "heard": "Nobody stays for hey guys",
+   "errors": 1,
+   "pitch_spread_hz": 126,
+   "word_prob": 0.761
   },
   {
    "line": "l06",
    "take": 0,
    "heard": "Start with the result.",
    "errors": 0,
-   "pitch_spread_hz": 35
+   "pitch_spread_hz": 35,
+   "word_prob": 0.982
   },
   {
    "line": "l06",
    "take": 1,
    "heard": "Start with the result.",
    "errors": 0,
-   "pitch_spread_hz": 155
+   "pitch_spread_hz": 155,
+   "word_prob": 0.964
+  },
+  {
+   "line": "l06",
+   "take": 2,
+   "heard": "Start with the result.",
+   "errors": 0,
+   "pitch_spread_hz": 112,
+   "word_prob": 0.878
+  },
+  {
+   "line": "l06",
+   "take": 3,
+   "heard": "Start with the result.",
+   "errors": 0,
+   "pitch_spread_hz": 87,
+   "word_prob": 0.973
   },
   {
    "line": "l07",
    "take": 0,
    "heard": "2. Your first frame is still",
-   "errors": 1,
-   "pitch_spread_hz": 122
+   "errors": 0,
+   "pitch_spread_hz": 122,
+   "word_prob": 0.946
   },
   {
    "line": "l07",
    "take": 1,
    "heard": "2. Your first frame is still.",
+   "errors": 0,
+   "pitch_spread_hz": 62,
+   "word_prob": 0.892
+  },
+  {
+   "line": "l07",
+   "take": 2,
+   "heard": "Cool, your first frame is still!",
    "errors": 1,
-   "pitch_spread_hz": 62
+   "pitch_spread_hz": 105,
+   "word_prob": 0.952
+  },
+  {
+   "line": "l07",
+   "take": 3,
+   "heard": "2. Your first frame is still",
+   "errors": 0,
+   "pitch_spread_hz": 220,
+   "word_prob": 0.889
   },
   {
    "line": "l08",
    "take": 0,
    "heard": "Thumbs keep scrolling.",
    "errors": 3,
-   "pitch_spread_hz": 134
+   "pitch_spread_hz": 134,
+   "word_prob": 0.818
   },
   {
    "line": "l08",
    "take": 1,
    "heard": "If nothing moves, thumbs keep scrolling.",
    "errors": 0,
-   "pitch_spread_hz": 109
+   "pitch_spread_hz": 109,
+   "word_prob": 0.985
+  },
+  {
+   "line": "l08",
+   "take": 2,
+   "heard": "If nothing moves, thumbs keep scrolling. Ow!",
+   "errors": 1,
+   "pitch_spread_hz": 278,
+   "word_prob": 0.874
+  },
+  {
+   "line": "l08",
+   "take": 3,
+   "heard": "If nothing moves, thumbs keep scrolling.",
+   "errors": 0,
+   "pitch_spread_hz": 187,
+   "word_prob": 0.978
   },
   {
    "line": "l09",
    "take": 0,
    "heard": "3. You explain before you show.",
-   "errors": 1,
-   "pitch_spread_hz": 176
+   "errors": 0,
+   "pitch_spread_hz": 176,
+   "word_prob": 0.891
   },
   {
    "line": "l09",
    "take": 1,
    "heard": "3. You explain before you show.",
-   "errors": 1,
-   "pitch_spread_hz": 110
+   "errors": 0,
+   "pitch_spread_hz": 110,
+   "word_prob": 0.882
+  },
+  {
+   "line": "l09",
+   "take": 2,
+   "heard": "Three, you explain before you show.",
+   "errors": 0,
+   "pitch_spread_hz": 103,
+   "word_prob": 0.92
+  },
+  {
+   "line": "l09",
+   "take": 3,
+   "heard": "3. You explain before you show.",
+   "errors": 0,
+   "pitch_spread_hz": 154,
+   "word_prob": 0.855
   },
   {
    "line": "l10",
    "take": 0,
    "heard": "Show the result first, then explain how you got it.",
    "errors": 0,
-   "pitch_spread_hz": 115
+   "pitch_spread_hz": 115,
+   "word_prob": 0.989
   },
   {
    "line": "l10",
    "take": 1,
    "heard": "Show the result first, then explain how you got it.",
    "errors": 0,
-   "pitch_spread_hz": 85
+   "pitch_spread_hz": 85,
+   "word_prob": 0.99
+  },
+  {
+   "line": "l10",
+   "take": 2,
+   "heard": "Show the result first, then explain how you got it.",
+   "errors": 0,
+   "pitch_spread_hz": 196,
+   "word_prob": 0.985
+  },
+  {
+   "line": "l10",
+   "take": 3,
+   "heard": "Show the result first, then explain how you got it. I...",
+   "errors": 1,
+   "pitch_spread_hz": 174,
+   "word_prob": 0.946
   },
   {
    "line": "l11",
    "take": 0,
    "heard": "Fix these three and watch your next reel.",
    "errors": 0,
-   "pitch_spread_hz": 149
+   "pitch_spread_hz": 149,
+   "word_prob": 0.97
   },
   {
    "line": "l11",
    "take": 1,
    "heard": "Fix these three and watch your next reel.",
    "errors": 0,
-   "pitch_spread_hz": 123
+   "pitch_spread_hz": 123,
+   "word_prob": 0.962
+  },
+  {
+   "line": "l11",
+   "take": 2,
+   "heard": "Fix these three and watch your next reel.",
+   "errors": 0,
+   "pitch_spread_hz": 151,
+   "word_prob": 0.951
+  },
+  {
+   "line": "l11",
+   "take": 3,
+   "heard": "Fix these three and watch your next reel!",
+   "errors": 0,
+   "pitch_spread_hz": 116,
+   "word_prob": 0.953
   },
   {
    "line": "l12",
    "take": 0,
    "heard": "Save this so you don't forget, and comment, hook, for my list of 20 hooks that work.",
    "errors": 0,
-   "pitch_spread_hz": 123
+   "pitch_spread_hz": 123,
+   "word_prob": 0.909
   },
   {
    "line": "l12",
    "take": 1,
    "heard": "Save this so you don't forget and comment, hook for my list of 20 hooks that work.",
    "errors": 0,
-   "pitch_spread_hz": 99
+   "pitch_spread_hz": 99,
+   "word_prob": 0.902
+  },
+  {
+   "line": "l12",
+   "take": 2,
+   "heard": "Save this so you don't forget and comment hook for my list of 20 hooks that work",
+   "errors": 0,
+   "pitch_spread_hz": 155,
+   "word_prob": 0.879
+  },
+  {
+   "line": "l12",
+   "take": 3,
+   "heard": "Save this so you don't forget and comment hook for my list of 20 hooks that work",
+   "errors": 0,
+   "pitch_spread_hz": 149,
+   "word_prob": 0.902
   }
  ]
 }

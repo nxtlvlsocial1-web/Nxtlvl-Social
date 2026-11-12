@@ -33,7 +33,8 @@ GAP = {"l00": .65, "l00b": .55, "l03": .3, "l04": .12, "l05": .3, "l06": .4, "l0
 
 
 def norm(w):
-    return re.sub(r"[^a-z0-9]", "", w.lower().replace("twenty", "20"))
+    w = re.sub(r"[^a-z0-9]", "", w.lower().replace("twenty", "20"))
+    return {"one": "1", "two": "2", "three": "3"}.get(w, w)
 
 
 def wer(ref, hyp):

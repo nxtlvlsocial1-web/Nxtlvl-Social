@@ -1,8 +1,14 @@
 [
  {
   "id": "l00",
-  "text": "This video already lost you in the first three seconds.",
-  "beat": "hook 70 + first peak (callback to the skipped reel)",
+  "text": "This video already lost you.",
+  "beat": "hook 70 (callback to the skipped reel)",
+  "exaggeration": 1.1
+ },
+ {
+  "id": "l00b",
+  "text": "In the first three seconds.",
+  "beat": "first peak",
   "exaggeration": 1.0
  },
  {
