@@ -50,6 +50,8 @@ KINDS = {
     # v4 papercraft: paper handling for the scraps / strips / cards, a real paper rip for the tears
     "paper": ([f("100-cc0-sfx/paper_01.ogg"), f("100-cc0-sfx/paper_02.ogg"), f("100-cc0-sfx/paper_03.ogg"), f("100-cc0-sfx/paper_04.ogg")], "foley", -14, {"max_dur": .45}),
     "rip": ([f("202-more-sound-effects/Paper _ Stationery__Stationery_44.wav")], "foley", -8, {"max_dur": .9, "fade_out": .25}),
+    # kokila-peace: a sub layer under the reveal and the end card (earshot: "thin bottom")
+    "sub": ([f("sci-fi-sounds/Audio__lowFrequency_explosion_000.ogg")], "hit", -10, {"max_dur": 1.6, "fade_out": .6}),
     "logo": ([f("wind-hit-time-morph/qubodup-megaswosh2.wav")], "whoosh", -16, {"reverse": True, "max_dur": .6, "anchor": "end"}),
 }
 

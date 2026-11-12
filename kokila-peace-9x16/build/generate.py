@@ -270,6 +270,7 @@ def build_overlays():
         pop(f"#ob{k}", t_people + .05 + k * .05)
     sfx("rise", t_people - 1.2)
     sfx("hit", t_people)
+    sfx("sub", t_people)
     # the silent beat (not recorded): "How do you feel afterwards? Drained. Anxious. Exhausted."
     bat = ('<div class="bat"><div class="bb"><i id="bf"></i></div><i class="bn"></i><b id="bv">80%</b></div>')
     OVER.append(f'<div class="ov beat" id="o3"><div class="q" id="o3q">How do you feel afterwards?</div>'
@@ -302,6 +303,8 @@ def build_overlays():
     show("#e3", VDUR + 3.75, d=.45, y=40, ease="expo.out")
     show("#sig", VDUR + 4.2, d=.4, y=20, ease="expo.out")
     sfx("whoosh_big", VDUR - .2)
+    sfx("sub", VDUR + .1)
+    sfx("hit", VDUR + 4.2)
     sfx("sparkle", VDUR + 3.8)
 
 

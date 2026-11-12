@@ -80,6 +80,11 @@
 "kind": "hit"
 },
 {
+"t": 26.14,
+"cue": 26.14,
+"kind": "sub"
+},
+{
 "t": 27.6,
 "cue": 27.6,
 "kind": "whoosh"
@@ -190,8 +195,18 @@
 "kind": "whoosh_big"
 },
 {
+"t": 67.24,
+"cue": 67.24,
+"kind": "sub"
+},
+{
 "t": 70.94,
 "cue": 70.94,
 "kind": "sparkle"
+},
+{
+"t": 71.34,
+"cue": 71.34,
+"kind": "hit"
 }
 ]

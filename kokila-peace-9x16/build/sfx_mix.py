@@ -29,7 +29,7 @@ WORK = os.path.join(ROOT, "sfx", "work")
 E = json.load(open(os.path.join(ROOT, "plan", "edit.json")))
 DUR = E["dur"]
 PEAK = {"whoosh_big": -9, "whoosh": -11, "swish": -13, "pop": -12, "hit": -7, "stamp": -8, "tick": -18, "success": -11,
-        "drop": -10, "sparkle": -14, "click": -13, "type": -19, "rise": -11, "ding": -10, "error": -13, "scratch": -12, "count": -14}
+        "drop": -10, "sparkle": -14, "click": -13, "type": -19, "rise": -11, "ding": -10, "error": -13, "scratch": -12, "count": -14, "sub": -5}
 VCHAIN = "highpass=f=80,afftdn=nf=-28,acompressor=threshold=-20dB:ratio=3:attack=8:release=120:makeup=2"
 
 
