@@ -5,8 +5,12 @@ cd "$(dirname "$0")/.." || exit 1
 export HYPERFRAMES_NO_TELEMETRY=1
 mkdir -p renders
 OUT=renders/nxtlvl_kokila-peace_reels_9x16_v1.mp4
+rm -f renders/master.mp4
 npx --yes hyperframes@0.8.203 render --quality high --sdr -w 3 -o renders/master.mp4 > renders/final.log 2>&1
-echo "EXIT $?" >> renders/final.log
+RC=$?
+echo "EXIT $RC" >> renders/final.log
+# a failed picture render must not be mixed onto an older master
+if [ $RC -ne 0 ] || [ ! -s renders/master.mp4 ]; then echo "SFX EXIT skipped (render failed)" >> renders/final.log; exit 1; fi
 python3 build/sfx_mix.py renders/master.mp4 "$OUT" >> renders/final.log 2>&1
 python3 ~/.claude/skills/openverse-sfx/scripts/verify_mix.py "$OUT" --target -14 --outdir renders/verify_high >> renders/final.log 2>&1
 echo "SFX EXIT $?" >> renders/final.log
