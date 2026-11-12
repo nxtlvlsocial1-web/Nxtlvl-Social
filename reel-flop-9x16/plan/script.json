@@ -1,21 +1,9 @@
 [
  {
   "id": "l00",
-  "text": "This reel is about to lose you.",
-  "beat": "hook 70 (cold open)",
+  "text": "This video already lost you in the first three seconds.",
+  "beat": "hook 70 + first peak (callback to the skipped reel)",
   "exaggeration": 1.0
- },
- {
-  "id": "l01",
-  "text": "Your reel didn't flop because of the algorithm.",
-  "beat": "hook 70",
-  "exaggeration": 0.75
- },
- {
-  "id": "l02",
-  "text": "It flopped in the first three seconds.",
-  "beat": "peak",
-  "exaggeration": 0.95
  },
  {
   "id": "l03",

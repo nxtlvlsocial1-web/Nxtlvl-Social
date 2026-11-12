@@ -1,47 +1,19 @@
 {
- "duration": 36.148,
+ "duration": 31.366,
  "takes": [
   {
    "line": "l00",
    "take": 0,
-   "heard": "This reel is about to lose you.",
+   "heard": "This video already lost you in the first three seconds.",
    "errors": 0,
-   "pitch_spread_hz": 234
+   "pitch_spread_hz": 55
   },
   {
    "line": "l00",
    "take": 1,
-   "heard": "This real is about to lose you.",
-   "errors": 1,
-   "pitch_spread_hz": 178
-  },
-  {
-   "line": "l01",
-   "take": 0,
-   "heard": "Your real didn't flop because of the algorithm.",
-   "errors": 1,
-   "pitch_spread_hz": 119
-  },
-  {
-   "line": "l01",
-   "take": 1,
-   "heard": "Your reel didn't flop because of the algorithm.",
+   "heard": "This video already lost you in the first three seconds.",
    "errors": 0,
-   "pitch_spread_hz": 119
-  },
-  {
-   "line": "l02",
-   "take": 0,
-   "heard": "in the first three seconds.",
-   "errors": 2,
-   "pitch_spread_hz": 106
-  },
-  {
-   "line": "l02",
-   "take": 1,
-   "heard": "It flopped in the first three seconds.",
-   "errors": 0,
-   "pitch_spread_hz": 153
+   "pitch_spread_hz": 146
   },
   {
    "line": "l03",
@@ -102,7 +74,7 @@
   {
    "line": "l07",
    "take": 0,
-   "heard": "2. Your first frame is still.",
+   "heard": "2. Your first frame is still",
    "errors": 1,
    "pitch_spread_hz": 122
   },
@@ -172,7 +144,7 @@
   {
    "line": "l12",
    "take": 0,
-   "heard": "Save this so you don't forget and comment hook for my list of 20 hooks that work",
+   "heard": "Save this so you don't forget, and comment, hook, for my list of 20 hooks that work.",
    "errors": 0,
    "pitch_spread_hz": 123
   },

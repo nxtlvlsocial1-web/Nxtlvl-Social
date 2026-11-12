@@ -26,6 +26,8 @@ TEMPO = 1.15         # v10 (owner: "make the pacing of video just a little fast,
 GAP_SCALE = .6       # and the pauses between lines tightened
 LEAD = .04          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast
+# v11: "This video already lost you... in the first three seconds." (the SKIPPED stamp lands in the pause)
+PAUSE = {"l00": (4, .6)}
 GAP = {"l00": .55, "l03": .3, "l04": .12, "l05": .3, "l06": .4, "l07": .12, "l08": .4, "l09": .12, "l10": .3, "l11": .4,
        "l12": .0}
 
@@ -80,8 +82,14 @@ def main():
         # word times in the reel; the script's own words (same count when the take is clean, else Whisper's)
         sw = ln["text"].split()
         use = sw if len(sw) == len(ws) else [w.word.strip() for w in ws]
-        for w, txt in zip(ws, use):
-            words.append({"line": ln["id"], "w": txt, "t0": round(t + w.start - a / SR, 3), "t1": round(t + w.end - a / SR, 3)})
+        shift = [0.0] * len(ws)
+        if ln["id"] in PAUSE:                  # a beat of silence inside the line, after word i
+            i, p = PAUSE[ln["id"]]
+            cut = int(((ws[i].end + ws[i + 1].start) / 2 - a / SR) * SR)
+            seg = np.concatenate([seg[:cut], np.zeros(int(p * SR), dtype=seg.dtype), seg[cut:]])
+            shift = [0.0 if j <= i else p for j in range(len(ws))]
+        for w, txt, sh in zip(ws, use, shift):
+            words.append({"line": ln["id"], "w": txt, "t0": round(t + w.start - a / SR + sh, 3), "t1": round(t + w.end - a / SR + sh, 3)})
         out.append(seg.astype(np.float32))
         t += len(seg) / SR
         g = GAP[ln["id"]] * GAP_SCALE
