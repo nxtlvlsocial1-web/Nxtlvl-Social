@@ -9,5 +9,5 @@ OUT=renders/preview_reel-flop_reels_9x16_v12.mp4
 npx --yes hyperframes@0.8.203 render --quality draft -w 3 -o renders/draft_master.mp4 > renders/draft.log 2>&1
 echo "EXIT $?" >> renders/draft.log
 python3 build/sfx_mix.py renders/draft_master.mp4 "$OUT" >> renders/draft.log 2>&1
-python3 ~/.claude/skills/openverse-sfx/scripts/verify_mix.py "$OUT" --outdir renders/verify_draft >> renders/draft.log 2>&1
+python3 ~/.claude/skills/openverse-sfx/scripts/verify_mix.py "$OUT" --target -14 --outdir renders/verify_draft >> renders/draft.log 2>&1
 echo "SFX EXIT $?" >> renders/draft.log

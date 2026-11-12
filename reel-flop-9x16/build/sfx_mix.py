@@ -106,9 +106,23 @@ def main():
     fc = [f"[1:a]aresample=48000,apad=whole_dur={DUR + .1},asplit=2[sc][vo]", f"[0:a]aresample=48000,adelay={ms0}|{ms0}[bd]",
           "[bd][sc]sidechaincompress=threshold=0.02:ratio=8:attack=20:release=400:makeup=1[bg]"]
     labels = ["[bg]", "[vo]"]
-    for k, (start, _, _, _) in enumerate(cues):
+    # v12 (earshot critique: "nearly mono, pan SFX with the motion"): the voice stays centre; whooshes and swishes
+    # sweep across the stereo field, the other effects sit off-centre, alternating left / right (constant power)
+    import math
+    for k, (start, _, kind, _) in enumerate(cues):
         ms = int(round(start * 1000))
-        fc.append(f"[{k + 2}:a]adelay={ms}|{ms}[s{k}]")
+        if kind in ("whoosh", "whoosh_big", "swish", "logo"):
+            d = 1 if k % 2 else -1
+            # a moving pan: left gain falls / right gain rises over the sound (or the reverse), via volume expressions
+            pan = (f"aformat=channel_layouts=stereo,channelsplit[sl{k}][sr{k}];"
+                   f"[sl{k}]volume='cos((0.5+{d}*0.35*(2*min(t/0.4,1)-1))*PI/2)':eval=frame[gl{k}];"
+                   f"[sr{k}]volume='sin((0.5+{d}*0.35*(2*min(t/0.4,1)-1))*PI/2)':eval=frame[gr{k}];"
+                   f"[gl{k}][gr{k}]join=inputs=2:channel_layout=stereo,")
+            fc.append(f"[{k + 2}:a]{pan}adelay={ms}|{ms}[s{k}]")
+        else:
+            p = .5 + (.22 if k % 2 else -.22)            # 0 = left, 1 = right
+            gl, gr = math.cos(p * math.pi / 2) * 1.414, math.sin(p * math.pi / 2) * 1.414
+            fc.append(f"[{k + 2}:a]aformat=channel_layouts=stereo,pan=stereo|c0={gl:.3f}*c0|c1={gr:.3f}*c1,adelay={ms}|{ms}[s{k}]")
         labels.append(f"[s{k}]")
     fc.append(f"{''.join(labels)}amix=inputs={len(labels)}:normalize=0:duration=longest,atrim=0:{DUR},apad=whole_dur={DUR}[mix]")
     mix = os.path.join(WORK, "mix.wav")
@@ -116,11 +130,11 @@ def main():
     open(script, "w").write(";\n".join(fc))
     run(["ffmpeg", "-y", "-loglevel", "error", *inputs, "-filter_complex_script", script, "-map", "[mix]", "-ar", "48000", "-c:a", "pcm_f32le", mix])
     # two-pass loudnorm: -16 LUFS, -4.5 dBTP ceiling
-    r = run(["ffmpeg", "-i", mix, "-af", "loudnorm=I=-16:TP=-4.5:LRA=11:print_format=json", "-f", "null", "-"])
+    r = run(["ffmpeg", "-i", mix, "-af", "loudnorm=I=-14:TP=-2:LRA=11:print_format=json", "-f", "null", "-"])
     m = json.loads(re.findall(r"\{[^{}]*\}", r.stderr)[-1])
     final_audio = os.path.join(WORK, "final_audio.wav")
     run(["ffmpeg", "-y", "-loglevel", "error", "-i", mix, "-af",
-         f"loudnorm=I=-16:TP=-4.5:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}:"
+         f"loudnorm=I=-14:TP=-2:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}:"
          f"measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true", "-ar", "48000", "-c:a", "pcm_f32le", final_audio])
     run(["ffmpeg", "-y", "-loglevel", "error", "-i", pic, "-i", final_audio, "-map", "0:v", "-c:v", "copy", "-map", "1:a", "-af", "apad",
          "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", out])

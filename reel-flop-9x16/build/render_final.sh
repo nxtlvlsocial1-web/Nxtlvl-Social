@@ -9,5 +9,5 @@ OUT=renders/nxtlvl_reel-flop_reels_9x16_v10.mp4
 npx --yes hyperframes@0.8.203 render --quality high -w 3 -o renders/master.mp4 > renders/final.log 2>&1
 echo "EXIT $?" >> renders/final.log
 python3 build/sfx_mix.py renders/master.mp4 "$OUT" >> renders/final.log 2>&1
-python3 ~/.claude/skills/openverse-sfx/scripts/verify_mix.py "$OUT" --outdir renders/verify_high >> renders/final.log 2>&1
+python3 ~/.claude/skills/openverse-sfx/scripts/verify_mix.py "$OUT" --target -14 --outdir renders/verify_high >> renders/final.log 2>&1
 echo "SFX EXIT $?" >> renders/final.log
