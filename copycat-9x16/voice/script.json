@@ -19,7 +19,7 @@
    null,
    [
     [
-     "Then we watch her. Legally. Public pages only. Zero dollars.",
+     "Then... we watch her. Legally. Public pages only. Zero dollars.",
      "neutral",
      0
     ]
@@ -28,10 +28,10 @@
   [
    "03",
    "kane",
-   "Clue one: changedetection.io. ~ ~ Her prices change? You know in a minute.",
+   "Clue ~ one: changedetection.io. ~ ~ ~ ~ Her prices change? You know in a minute.",
    [
     [
-     "Clue one: changedetection dot io. Her prices change? You know in a minute.",
+     "Clue number one. Change detection dot I O. Her prices change? You know in a minute.",
      "neutral",
      0
     ]
@@ -121,5 +121,17 @@
     ]
    ]
   ]
- ]
+ ],
+ "picked": {
+  "01": "01_1",
+  "02": "02_r0",
+  "03": "03_r0",
+  "04": "04_0",
+  "05": "05_0",
+  "06": "06_1",
+  "07": "07_1",
+  "08": "08_0",
+  "09": "09_1",
+  "10": "10_1"
+ }
 }

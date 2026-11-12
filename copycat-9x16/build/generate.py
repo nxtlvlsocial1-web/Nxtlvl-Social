@@ -174,21 +174,21 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05060
 #title .t2 { display: block; font: italic 700 112px/1.05 "Garamond"; color: #FFFFFF; }
 #title .t3 b { color: #FF3B30; font-weight: 700; }
 .when { position: absolute; left: 0; right: 0; top: 300px; text-align: center; font: 700 46px/1 "JBMono"; color: #F4F1EA; letter-spacing: 10px; text-shadow: 0 3px 16px rgba(0,0,0,.8); }
-.scr { position: absolute; left: 70px; right: 70px; top: 470px; background: #0E0F13; border: 2px solid #3A3D46; border-radius: 18px; overflow: hidden; color: #F4F1EA; box-shadow: 0 30px 60px rgba(0,0,0,.65); }
+.scr { position: absolute; left: 50px; right: 50px; top: 400px; background: #0E0F13; border: 2px solid #3A3D46; border-radius: 18px; overflow: hidden; color: #F4F1EA; box-shadow: 0 30px 60px rgba(0,0,0,.65); }
 .scr .bar { display: flex; align-items: center; gap: 18px; padding: 20px 26px; background: #1C1E25; }
-.scr .cl { padding: 6px 12px; border: 3px solid #FF3B30; color: #FF3B30; font: 700 26px/1 "JBMono"; letter-spacing: 3px; transform: rotate(-3deg); }
-.scr .tn { font: 700 46px/1 "JBMono"; letter-spacing: -1px; }
-.scr .sub { padding: 12px 26px 0; font: 700 24px/1.2 "JBMono"; color: #9AA0AA; letter-spacing: 1px; }
+.scr .cl { padding: 6px 12px; border: 3px solid #FF3B30; color: #FF3B30; font: 700 30px/1 "JBMono"; letter-spacing: 3px; transform: rotate(-3deg); }
+.scr .tn { font: 700 54px/1 "JBMono"; letter-spacing: -1px; }
+.scr .sub { padding: 14px 26px 0; font: 700 28px/1.2 "JBMono"; color: #9AA0AA; letter-spacing: 1px; }
 .scr .body { position: relative; padding: 18px 26px 28px; }
-.scr .url { font: 700 26px/1.2 "JBMono"; color: #9AA0AA; margin-bottom: 14px; }
-.scr .row { display: flex; justify-content: space-between; padding: 14px 6px; border-top: 1px solid #2A2D35; font: 700 40px/1.1 "Manrope"; }
+.scr .url { font: 700 30px/1.2 "JBMono"; color: #9AA0AA; margin-bottom: 14px; }
+.scr .row { display: flex; justify-content: space-between; padding: 18px 8px; border-top: 1px solid #2A2D35; font: 700 54px/1.1 "Manrope"; }
 .scr .row s { color: #8A8E96; } .scr .row b { color: #FF3B30; }
 .scr .row.hit { color: #FFFFFF; }
-.scr .ring { position: absolute; left: 6px; right: -6px; top: 70px; height: 82px; border: 6px solid #FF3B30; border-radius: 50%; transform: rotate(-2deg); }
-.scr .ft { margin-top: 14px; font: 700 26px/1.2 "JBMono"; color: #FF8A80; }
-.scr .feed { display: flex; gap: 16px; align-items: baseline; padding: 14px 6px; border-top: 1px solid #2A2D35; font: 600 34px/1.2 "Manrope"; }
-.scr .feed b { flex: none; width: 210px; font: 700 26px/1 "JBMono"; color: #FF8A80; }
-.scr .ty { font: 700 38px/1.5 "JBMono"; } .scr .ty em { font-style: normal; color: #C9A6FF; font-size: 46px; }
+.scr .ring { position: absolute; left: 4px; right: -4px; top: 74px; height: 104px; border: 6px solid #FF3B30; border-radius: 50%; transform: rotate(-2deg); }
+.scr .ft { margin-top: 16px; font: 700 30px/1.2 "JBMono"; color: #FF8A80; }
+.scr .feed { display: flex; gap: 18px; align-items: baseline; padding: 18px 8px; border-top: 1px solid #2A2D35; font: 700 42px/1.2 "Manrope"; }
+.scr .feed b { flex: none; width: 240px; font: 700 30px/1 "JBMono"; color: #FF8A80; }
+.scr .ty { font: 700 44px/1.5 "JBMono"; } .scr .ty em { font-style: normal; color: #C9A6FF; font-size: 58px; }
 #cal { position: absolute; left: 0; right: 0; top: 470px; height: 520px; opacity: 0; }
 #cal .pg { position: absolute; top: 0; width: 400px; height: 470px; background: #F4F1EA; border-radius: 16px; box-shadow: 0 24px 50px rgba(0,0,0,.6); text-align: center; color: #1E1B18; overflow: hidden; }
 #cal .hd { padding: 26px 0 20px; font: 700 110px/1 "JBMono"; color: #FFFFFF; }

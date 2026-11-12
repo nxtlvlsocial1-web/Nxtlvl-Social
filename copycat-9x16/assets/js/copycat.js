@@ -531,24 +531,29 @@ KANE.seed = 3.7;
 const JUNE = makeChar({ id: "june", skin: "#8E5E40", hair: "#1E1B18", style: "bun", top: "#5B6F8C", topStyle: "apron", pants: "#2E3A55", shoe: "#F4EFE6", lash: true, earring: true }, O);
 JUNE.seed = 1.3;
 const JUNE2 = makeChar({ ...JUNE.sp, id: "june2" }, ST); JUNE2.seed = 1.3;
+const KANE2 = makeChar({ ...KANE.sp, id: "kane2" }, ST); KANE2.seed = 3.7;
+const CROIS = new THREE.Group(); ST.add(CROIS);
+{ const cm3 = mat(0xC98A4A), lav = glow(0xB26BFF); [[-.07, .0, -.5], [-.035, .02, -.2], [0, .03, 0], [.035, .02, .2], [.07, 0, .5]].forEach(([x, y, r], i) => { const b = box(.05, .045, .05, cm3, x, y, 0, { parent: CROIS, rz: r }); b.scale.y *= i === 2 ? 1.25 : 1; }); box(.12, .008, .03, lav, 0, .045, 0, { parent: CROIS }); }
 const RIVAL = makeChar({ id: "rival", skin: "#F3CBA5", hair: "#B88A4A", style: "bob", top: "#3A3A3A", topStyle: "apron", pants: "#1E1B18", shoe: "#1E1B18", lash: true }, ST);
 RIVAL.seed = 6.1;
 const JPHONE = new THREE.Group(); O.add(JPHONE); box(.08, .16, .012, mat(0x15171C), 0, 0, 0, { parent: JPHONE });
 const jpM = new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false }); { const s = new THREE.Mesh(new THREE.PlaneGeometry(.07, .145), jpM); s.position.z = .007; JPHONE.add(s); }
 const JPL = new THREE.PointLight(0xffffff, 0, 1.2, 2); scene.add(JPL);
 
+
 // ---------------------------------------------------------------- cue times (window.CT, from build/generate.py)
-const NT = C.tools;                    // when each case card is pinned
-const M0 = C.montage, A0 = C.alert, D0 = C.morning, TH = C.thu, FR = C.fri;
+// lines: 0 June's hook | 1 Kane "we watch her" | 2-4 the three clues | 5 June "on Friday?" | 6 Kane "you launch Thursday"
+//        7 June "a day behind" | 8 Kane "case closed" | 9 June's CTA
+const NT = C.tools;                    // when each clue card is pinned (just before its line)
+const M0 = C.montage, D0 = C.morning, TH = C.thu, FR = C.fri;
 const who = (t, name) => C.who.some((w, k) => w === name && t > L[k] - .05 && t < E[k] + .02);
-// 0 street at night (opening) | 1 the office, midnight | 2 the case board | 3 2 AM | 4 morning | 5 Thursday | 6 Friday
-const sceneOf = (t) => (t < C.open ? 0 : t < M0 ? 1 : t < A0 ? 2 : t < D0 ? 3 : t < TH ? 4 : t < FR ? 5 : 6);
+// 1 the office at night | 2 the three clues | 4 7 AM | 5 Thursday | 6 Friday
+const sceneOf = (t) => (t < M0 ? 1 : t < D0 ? 2 : t < TH ? 4 : t < FR ? 5 : 6);
 function clockMin(t) {
   const K = C.clock; let i = 0; while (i + 1 < K.length && t >= K[i + 1][0]) i++;
   const [a, ma] = K[i], [b, mb] = K[Math.min(i + 1, K.length - 1)];
   return b > a ? lerp(ma, mb, clamp((t - a) / (b - a))) : ma;
 }
-// lightning: a double flash at a few moments
 const BOLTS = C.bolts;
 const lightning = (t) => Math.max(0, ...BOLTS.map((b) => pulse(t, b, .05) + .7 * pulse(t, b + .16, .06)));
 
@@ -559,30 +564,21 @@ const KHEAD = v(KSEAT.x, 1.5, KSEAT.z + .05), JHEAD = v(CSEAT.x, 1.36, CSEAT.z);
 const OVERK = { p0: v(-.78, 1.62, -2.3), p1: v(-.7, 1.6, -2.12), l0: JHEAD, fov: 54, ap: .14 };
 const KANECU = (r) => ({ p0: v(1.05, 1.32, .02), p1: v(.92, 1.36, -.16), l0: KHEAD, fov: 52, ap: .14, roll: r });
 const cardShot = (k) => { const c = CARDS[k], z = lerp(BOARD.z, c.z, .55); return { p0: v(.55, 1.78, z + .25), p1: v(.95, 1.74, z + .1), l0: v(BOARD.x, lerp(BOARD.y, c.y, .4), z), fov: 54, ap: .06, roll: (k % 2 ? 1 : -1) * .04 }; };
-const CUT = [
-  { p0: v(.02, 1.24, -1.98), p1: v(.12, 1.12, -1.74), l0: LAPS, fov: 38, ap: .32 },                                          // the laptop: her menu page, a change flagged
-  { p0: v(SX - 3.4, 1.5, -1.9), p1: v(SX - 1.6, 1.6, -2.1), l0: v(SX + .4, 1.9, 4.2), l1: v(SX + 1.2, 1.9, 4.2), fov: 56, ap: .01, set: "street" },   // Crumb & Co. in the rain
-  { p0: v(.62, 1.12, -1.64), p1: v(.48, 1.06, -1.52), l0: LAPS, fov: 40, ap: .3 },                                          // the laptop: every update in one reader
-  { p0: v(KPHONE.x + .06, 1.34, KPHONE.z + .3), p1: v(KPHONE.x + .04, 1.22, KPHONE.z + .22), l0: KPHONE, fov: 34, ap: .35 }, // his phone buzzes on the desk
-  { p0: v(-2.7, 2.15, 2.5), p1: v(-2.35, 2.0, 2.1), l0: v(.4, 1.1, -1.4), fov: 58, ap: .02 },                               // wide: the fan, the rain, June asleep, Kane typing
-];
+const LAPCU = (k) => [{ p0: v(1.45, 1.5, .35), p1: v(1.25, 1.46, .1), l0: v(.05, 1.22, -1.85) }, { p0: v(-1.35, 1.55, .3), p1: v(-1.15, 1.5, .05), l0: v(.05, 1.22, -1.85) }, { p0: v(.15, 1.85, .6), p1: v(.12, 1.7, .3), l0: v(0, 1.2, -1.8) }].map((q) => ({ ...q, fov: 50, ap: .08, roll: (k - 1) * .04 }))[k];   // Kane at work while the clue fills the screen
 const SHOTS = [
-  [0, { p0: v(SX + 4.6, 3.4, 2.0), p1: v(SX + 2.9, 1.8, 1.4), l0: v(SX - 1.4, 2.4, -4.2), l1: v(SX - 1.2, 1.9, -4.2), fov: 54, ap: .01, set: "street" }],
-  [C.open, { p0: v(2.85, 1.05, 2.95), p1: v(2.5, 1.12, 2.6), l0: v(-1.35, 1.3, -.7), fov: 62, ap: .02, roll: -.04 }],
-  [L[1] - .25, OVERK],
-  [L[2] - .25, KANECU(.07)],
-  ...NT.flatMap((n, k) => [[n - .25, cardShot(k)], [n + 1.45, CUT[k]]]),
-  [A0, { p0: v(2.05, 1.62, -.75), p1: v(1.8, 1.56, -.92), l0: v(.08, 1.32, -1.8), fov: 58, fov1: 52, ap: .1 }],
-  [A0 + 2.0, { p0: v(.62, 1.22, .38), p1: v(.52, 1.26, .2), l0: KHEAD, fov: 50, ap: .14, roll: -.05 }],
-  [D0, { p0: v(2.65, 1.75, 2.65), p1: v(2.25, 1.62, 2.3), l0: v(-.3, 1.2, -1.1), fov: 54, ap: .02 }],
-  [L[4] - .3, { ...OVERK, p0: v(-.62, 1.55, -2.15), p1: v(-.56, 1.52, -1.98), fov: 52 }],
-  [L[5] - .25, KANECU(-.06)],
+  [0, { p0: v(2.85, 1.15, 2.95), p1: v(2.35, 1.2, 2.45), l0: v(-1.5, 1.3, -.4), l1: v(-.6, 1.3, -.4), fov: 60, ap: .02, roll: -.04 }],
+  [L[1] - .2, KANECU(.06)],
+  ...NT.map((n, k) => [n - .1, cardShot(k)]),                             // the card is pinned; the camera drifts on the board while the clue fills the screen
+  [D0, { p0: v(2.65, 1.75, 2.65), p1: v(2.3, 1.62, 2.3), l0: v(-.3, 1.2, -1.1), fov: 54, ap: .02 }],
+  [L[5] - .3, { ...OVERK, p0: v(-.62, 1.55, -2.15), p1: v(-.56, 1.52, -1.98), fov: 52 }],
+  [L[6] - .2, KANECU(-.05)],
   [TH, { p0: v(SX + 5.2, 3.3, 1.6), p1: v(SX + 3.6, 2.0, 1.05), l0: v(SX - .6, 1.2, -3.6), fov: 52, ap: .01, set: "street" }],
-  [TH + 1.6, { p0: v(SX - 1.45, 1.05, -.85), p1: v(SX - 1.6, .95, -1.2), l0: v(SX - 2.3, .75, -3.2), fov: 50, ap: .08, set: "street" }],
+  [TH + 1.25, { p0: v(SX - 1.45, 1.05, -.85), p1: v(SX - 1.6, .95, -1.2), l0: v(SX - 2.3, .75, -3.2), fov: 50, ap: .08, set: "street" }],
   [FR, { p0: v(SX - .5, 1.5, -1.9), p1: v(SX - .1, 1.58, -1.55), l0: v(SX + .4, 1.6, 4.1), fov: 60, ap: .02, set: "street" }],
-  [FR + 1.35, { p0: v(SX + 6.2, 4.1, 2.35), p1: v(SX + 5.4, 3.6, 2.1), l0: v(SX - .8, .8, -2.4), fov: 56, ap: .005, set: "street" }],
-  [L[6] - .3, { p0: v(SX - .25, 1.58, -.75), p1: v(SX - .32, 1.56, -.95), l0: v(SX - 1.0, 1.45, -3.3), fov: 52, ap: .12, set: "street" }],
-  [C.endc - .1, { p0: v(SX + .6, 1.95, 2.5), p1: v(SX + .4, 1.9, 2.0), l0: v(SX - .9, 1.5, -3.2), fov: 54, ap: .08, set: "street" }],
+  [FR + 1.3, { p0: v(SX + 6.2, 4.1, 2.35), p1: v(SX + 5.4, 3.6, 2.1), l0: v(SX - .8, .8, -2.4), fov: 56, ap: .005, set: "street" }],
+  [L[7] - .3, { p0: v(SX - .25, 1.58, -.75), p1: v(SX - .32, 1.56, -.95), l0: v(SX - 1.0, 1.45, -3.3), fov: 52, ap: .12, set: "street" }],
+  [L[8] - .35, { p0: v(SX + .5, 1.6, -.35), p1: v(SX + .4, 1.58, -.6), l0: v(SX - .45, 1.45, -3.2), fov: 54, ap: .1, set: "street" }],
+  [C.endc - .1, { p0: v(SX + .6, 1.95, 2.5), p1: v(SX + .4, 1.9, 2.0), l0: v(SX - .6, 1.5, -3.2), fov: 54, ap: .08, set: "street" }],
 ];
 function shotAt(t) {
   let i = 0; while (i + 1 < SHOTS.length && t >= SHOTS[i + 1][0]) i++;
@@ -606,37 +602,33 @@ function holdAt(P, k, obj, off = [0, -.1, .04]) {
 }
 const TYPE = (t) => [[1.15, .12, 1.05 + .08 * Math.sin(t * 13)], [1.15, .12, 1.05 + .08 * Math.sin(t * 11 + 1)]];
 function updKane(t, s) {
-  if (s === 0 || s >= 5) { KANE.root.visible = false; return; }
+  if (s >= 5) { KANE.root.visible = false; return; }
   const p = pose({ x: KSEAT.x, y: SITY, z: KSEAT.z, ry: 0, l: [[1.5, 1.5], [1.5, 1.5]], a: [[1.0, .15, 1.2], [1.0, .15, 1.2]], hp: .05 });
-  let f = { eyes: "half", mouth: "flat", brows: "flat", talk: who(t, "kane") };
-  if (s === 2 || (s === 1 && t > E[2])) p.a = TYPE(t);
-  if (s === 3) { p.a = t < A0 + 1.8 ? TYPE(t) : [[1.05, .15, 1.25], [1.05, .15, 1.25]]; p.lean = .08; f = { eyes: t > A0 + .2 ? "open" : "half", mouth: "flat", brows: "angry", talk: who(t, "kane"), noblink: t < A0 + 1 }; }
-  if (s === 4) { p.hp = .02; f = { eyes: "half", mouth: t > E[5] - .3 || t < L[5] ? "smirk" : "flat", brows: "raise1", talk: who(t, "kane") }; }
-  if (s === 1 && t > L[2] - .3) { p.hp = -.04; f = { eyes: "half", mouth: "smirk", brows: "flat", talk: who(t, "kane") }; }
+  let f = { eyes: "half", mouth: "smirk", brows: "flat", talk: who(t, "kane") };
+  if (s === 2) p.a = TYPE(t);
+  if (s === 1 && t < L[1] - .3) f = { eyes: "open", mouth: "flat", brows: "raise1" };                 // June bursts in: he looks up
+  if (s === 4) { p.hp = .02; f = { eyes: "half", mouth: "smirk", brows: "raise1", talk: who(t, "kane") }; }
   placeChar(KANE, true, idle(p, t, KANE.seed), f);
 }
 function updJune(t, s) {
   JPHONE.visible = false; JPL.intensity = 0;
   const sit = pose({ x: CSEAT.x, y: SITY, z: CSEAT.z, ry: Math.PI, l: [[1.5, 1.5], [1.5, 1.5]], a: [[.6, .1, .9], [.6, .1, .9]], hp: .02 });
   if (s === 1) {
-    const u = clamp((t - (C.open + .55)) / (L[1] - .55 - (C.open + .55)));
-    const sitU = ss(t, L[1] - .7, L[1] - .25);
+    // she bursts in, already talking, and drops into the chair
+    const u = clamp((t - .15) / (L[1] - .9));
+    const sitU = ss(t, L[1] - .55, L[1] - .1);
     const a = along([[-3.3, DOORZ], [-1.6, 1.35], [CSEAT.x + .1, CSEAT.z + .55]], u);
     let p = pose({ x: a.x, z: a.z, ry: a.ry, a: [[.25, .12, .4], [.25, .12, .4]] });
-    if (u < 1) p = walk(p, t * 8, 1); else p.ry = lerp(a.ry, Math.PI, ss(t, L[1] - .9, L[1] - .6));
+    if (u < 1) { p = walk(p, t * 9, 1.1); p.a[0] = [1.2 + .3 * Math.sin(t * 6), .3, 1.1]; } else p.ry = lerp(a.ry, Math.PI, ss(t, L[1] - .8, L[1] - .5));
     p = mixP(p, sit, sitU);
-    const f = t < L[1] ? { eyes: "open", mouth: "sad", brows: "worry" } : { eyes: "open", mouth: "sad", brows: "worry", talk: who(t, "june") };
-    if (t > L[1]) p.a = [[.9, .1, .9 + .25 * Math.sin(t * 5)], [.6, .1, .9]];
-    placeChar(JUNE, true, idle(p, t, JUNE.seed), f);
+    placeChar(JUNE, true, idle(p, t, JUNE.seed), { eyes: "wide", mouth: "o", brows: "angry", talk: who(t, "june"), noblink: true });
   } else if (s === 2) {
-    const p = { ...sit, hp: .35, hr: .18, lean: .12 };                    // dozing off in the chair while he works
-    placeChar(JUNE, true, idle(p, t, JUNE.seed), { eyes: t > NT[2] ? "closed" : "half", mouth: "flat", noblink: true });
+    placeChar(JUNE, true, idle({ ...sit, hp: -.04, lean: .1 }, t, JUNE.seed), { eyes: "open", mouth: "flat", brows: "up" });
   } else if (s === 4) {
-    const p = { ...sit, a: [[1.45, .05, 1.6], [.6, .1, .9]], hp: .16 };
-    const f = t < L[4] ? { eyes: "open", mouth: "flat", brows: "flat" } : t < E[4] + .3 ? { eyes: "wide", mouth: "o", brows: "up", talk: who(t, "june"), noblink: true } : { eyes: "open", mouth: "smile", brows: "up" };
-    if (t > E[4] + .2) { p.a[0] = [.9, .1, .9]; p.hp = .02; }
+    const p = { ...sit, hp: .02 };
+    const f = t < L[5] ? { eyes: "open", mouth: "flat", brows: "flat" } : t < E[5] + .3 ? { eyes: "wide", mouth: "o", brows: "up", talk: who(t, "june"), noblink: true } : { eyes: "happy", mouth: "grin", brows: "up" };
+    if (t > L[5] && t < E[5] + .3) p.a = [[1.3, .2, 1.4], [1.3, .2, 1.4]];
     placeChar(JUNE, true, idle(p, t, JUNE.seed), f);
-    if (t < E[4] + .2) { JPHONE.visible = true; holdAt(JUNE, 0, JPHONE, [0, -.08, .06]); JPHONE.rotateX(-.25); JPL.position.copy(JPHONE.position).add(v(0, .05, -.15)); JPL.color.set(0xB06CFF); JPL.intensity = .28; JPL.distance = 1.2; }
   } else JUNE.root.visible = false;
 }
 const QUEUE = (i) => [SX - .2 + i * .78, -3.25];
@@ -658,8 +650,18 @@ function updStreet(t, s) {
   if (day) {
     const p = pose({ x: JDOOR.x + .1, z: JDOOR.z + .75, ry: .25, a: [[.3, .1, .5], [.3, .1, .5]] });
     if (t > C.endc + .3) { p.a[1] = [2.2, -.2, 1.5]; p.a[1][1] = .1 + .22 * Math.sin(t * 8); }
-    placeChar(JUNE2, true, idle(p, t, JUNE2.seed), { eyes: s === 6 && t > L[6] - .3 && t < E[6] ? "happy" : "open", mouth: s === 6 ? "grin" : "smile", brows: "up", talk: who(t, "june") });
+    placeChar(JUNE2, true, idle(p, t, JUNE2.seed), { eyes: s === 6 && t > L[7] - .3 && t < E[7] ? "happy" : "open", mouth: s === 6 ? "grin" : "smile", brows: "up", talk: who(t, "june") });
   } else JUNE2.root.visible = false;
+  // Kane strolls in for the last line with a lavender croissant
+  CROIS.visible = false;
+  if (s === 6 && t > L[8] - 2.0) {
+    const u = clamp((t - (L[8] - 2.0)) / 1.6), a = along([[JDOOR.x + 2.6, -2.2], [JDOOR.x + .95, -2.65]], u);
+    let p = pose({ x: a.x, z: a.z, ry: u < 1 ? a.ry : -.35, a: [[.15, .1, .2], [1.3, .15, 1.3]] });
+    if (u < 1) { p = walk(p, t * 8, 1); p.a[1] = [1.3, .15, 1.3]; }
+    if (t > C.endc + .3) { p.a[0] = [2.6, .1, 2.1]; }                       // tips his hat
+    placeChar(KANE2, true, idle(p, t, KANE2.seed), { eyes: t > E[8] ? "happy" : "half", mouth: "smirk", brows: "raise1", talk: who(t, "kane") });
+    CROIS.visible = true; holdAt(KANE2, 1, CROIS, [0, -.09, .08]);
+  } else KANE2.root.visible = false;
   if (s === 6) placeChar(RIVAL, true, idle(pose({ x: SX - .95, z: RDOOR.z - .8, ry: Math.PI - .2, a: [[.2, .1, .3], [.2, .1, .3]], hp: .12 }), t, RIVAL.seed), { eyes: "half", mouth: "sad", brows: "worry" });
   else RIVAL.root.visible = false;
   ST.banner.visible = s === 6; ST.banner.position.y = 1.62 + .45 * (1 - ss(t, FR + .15, FR + .5));
@@ -670,9 +672,9 @@ function updStreet(t, s) {
 
 // ---------------------------------------------------------------- the case board: cards pinned, red string drawn to the photo
 function updBoard(t) {
-  O.cards.forEach((g, k) => { const u = ss(t, NT[k] - .05, NT[k] + .18); g.visible = u > 0; g.scale.setScalar(lerp(1.35, 1, u)); });
+  O.cards.forEach((g, k) => { const u = k < NT.length ? ss(t, NT[k] - .05, NT[k] + .18) : 0; g.visible = u > 0; g.scale.setScalar(lerp(1.35, 1, u)); });
   O.strings.forEach((m, k) => {
-    const u = ss(t, NT[k] + .25, NT[k] + .9);
+    const u = k < NT.length ? ss(t, NT[k] + .2, NT[k] + .7) : 0;
     if (u <= 0) { m.visible = false; return; }
     m.visible = true;
     const a = PHOTO.clone().add(v(-.02, .28, 0)), b = CARDS[k].clone().add(v(-.02, .19, 0)), e = V.lerpVectors(a, b, u).clone();
@@ -685,35 +687,30 @@ function updBoard(t) {
 // ---------------------------------------------------------------- per frame
 let SHAKE = 0;
 function updOffice(t, s) {
-  const night = s <= 3, lt = lightning(t);
+  const night = s <= 2, lt = lightning(t);
   updBoard(t);
   const min = clockMin(t), hrs = (min / 60) % 12;
   O.hands[0].rotation.z = -hrs / 12 * Math.PI * 2; O.hands[1].rotation.z = -(min % 60) / 60 * Math.PI * 2;
   O.fan.rotation.y = t * 1.6;
-  O.door.rotation.y = s === 1 ? 1.25 * bump(t, C.open + .05, L[1] - .9, .45) : 0;
-  O.hallL.intensity = s === 1 ? 5 * bump(t, C.open, L[1] - .8, .4) : 0;
-  O.lampShade.emissiveIntensity = night ? .75 : .2; O.lampL.intensity = night ? 2.6 : .8;
-  PL[0].position.set(2.2, 2.6, -.5); PL[0].color.set(0xF2EEE6); PL[0].intensity = s === 2 || s === 1 ? 2.2 : s === 3 ? .8 : 0; PL[0].distance = 3.2;   // a light on the case board
-  PL[1].position.set(-1.6, 2.6, 1.2); PL[1].color.set(0xDCE2EC); PL[1].intensity = night ? 1.4 : 0; PL[1].distance = 5;                              // fill by the door
+  O.door.rotation.y = s === 1 ? 1.35 * (1 - ss(t, L[1] - .8, L[1] + .4)) : 0;          // the door flies open as she comes in
+  O.hallL.intensity = s === 1 ? 5 * (1 - ss(t, L[1] - .8, L[1] + .2)) : 0;
+  O.lampShade.emissiveIntensity = night ? .75 : .2; O.lampL.intensity = night ? 2.8 : .8;
+  PL[0].position.set(2.2, 2.6, -.5); PL[0].color.set(0xF2EEE6); PL[0].intensity = night ? 2.4 : .6; PL[0].distance = 3.2;   // a light on the case board
+  PL[1].position.set(-1.6, 2.6, 1.2); PL[1].color.set(0xDCE2EC); PL[1].intensity = night ? 2.2 : 0; PL[1].distance = 5.5;   // fill by the door
+  PL[2].position.set(.6, 2.4, .2); PL[2].color.set(0xF2EEE6); PL[2].intensity = night ? 1.6 : 0; PL[2].distance = 4.5;      // a soft key on the faces
   O.streetL.intensity = night ? 9 + 40 * lt : 0;
   rainAt(O.rainO, t, 0, -5.2, 6, 3, -1, 5, night ? 9 : 7);
   O.rainO.visible = night || s === 4; O.rainO.material.opacity = night ? .42 : .16;
-  // the laptop and phone screens
+  // the laptop: a clue's page during its line, idle otherwise
   let mode = 5, u = 0;
-  if (s === 2) { const k = NT.findLastIndex((n) => t > n + 1.3); mode = [0, 1, 2, 2, 3][Math.max(0, k)]; u = clamp((t - (NT[Math.max(0, k)] + 1.45)) / 1.4); }
-  if (s === 3) { mode = 4; u = clamp((t - A0) / 1.2); }
-  if (s === 1 && t > E[2] - .5) { mode = 0; u = 0; }
+  if (s === 2) { const k = Math.max(0, NT.findLastIndex((n) => t > n + .6)); mode = [0, 2, 3][k]; u = clamp((t - (NT[k] + .9)) / 2.6); }
   setMap(O.lapM, DYN.lap(mode, Math.round(u * 40) / 40, Math.floor(t * 2) % 2));
-  O.lapL.position.copy(LAPP).add(v(0, .2, -.3)); O.lapL.color.set(mode === 4 ? 0xFF2A1E : 0xCFE0FF);
-  O.lapL.intensity = mode === 4 ? 1.6 + .8 * Math.sin(t * 10) : .55; O.lapL.distance = mode === 4 ? 2.6 : 1.6;
-  const buzz = s === 2 && t > NT[3] + 1.45 && t < NT[4] - .3;
-  setMap(O.phoneM, DYN.kphone(buzz ? 1 : 0)); O.phone.position.x = KPHONE.x + (buzz ? .004 * Math.sin(t * 90) : 0);
-  O.phoneL.position.copy(KPHONE).add(v(0, .25, 0)); O.phoneL.intensity = buzz ? .9 : 0; O.phoneL.color.set(0xFF3B30);
-  SHAKE = s === 3 ? .3 * pulse(t, A0 + .1, .3) : 0;
+  O.lapL.position.copy(LAPP).add(v(0, .2, -.3)); O.lapL.color.set(0xCFE0FF); O.lapL.intensity = s === 2 ? .9 : .55; O.lapL.distance = 1.8;
+  setMap(O.phoneM, DYN.kphone(0)); O.phoneL.intensity = 0;
   updKane(t, s); updJune(t, s);
 }
 
-const LOOK_NIGHT = { bg: 0x05060A, hs: 0x8090B0, hg: 0x1A1A20, hi: .45, sun: 0xE8EEF8, si: 2.6, sd: [.18, .5, -1.0], sat: 0, con: .2, vig: .62, tint: 0 };
+const LOOK_NIGHT = { bg: 0x07080C, hs: 0x8C9AB8, hg: 0x24242A, hi: .8, sun: 0xE8EEF8, si: 2.8, sd: [.18, .5, -1.0], sat: 0, con: .12, vig: .45, tint: .12 };
 const LOOK_MORN = { bg: 0xB8BCC4, hs: 0xE8ECF2, hg: 0x5A5650, hi: .9, sun: 0xF2F0EA, si: 3.4, sd: [.3, .42, -1.0], sat: 0, con: .14, vig: .46, tint: .25 };
 const LOOK_STREETN = { bg: 0x0C0E14, hs: 0x7080A0, hg: 0x14141A, hi: .85, sun: 0xCAD4E6, si: 1.0, sd: [-.4, .8, .5], sat: 0, con: .2, vig: .6, tint: 0 };
 const LOOK_DAY = { bg: 0xC9CDD4, hs: 0xF2F4F8, hg: 0x6A6660, hi: 1.25, sun: 0xFFF6E8, si: 1.6, sd: [-.5, .9, .6], sat: 0, con: .12, vig: .4, tint: .3 };
@@ -748,8 +745,8 @@ function renderAt(t) {
   cocPass.uniforms.uF.value = sh.f; cocPass.uniforms.uAp.value = cv ? (cv.ap ?? sh.ap) : sh.ap;
   const gu = grade.uniforms;
   gu.uTime.value = t; gu.uWarm.value = 0; gu.uCool.value = street && !day ? .12 : 0; gu.uSat.value = Lk.sat; gu.uCon.value = Lk.con; gu.uVig.value = Lk.vig; gu.uTint.value = Lk.tint;
-  gu.uFlash.value = .22 * lt; gu.uCA.value = .0012 + SHAKE * .004; gu.uKeep.value = 1; gu.uGrain.value = .055;
-  gu.uTop.value = cv ? 0 : Math.max(1 - ss(t, 2.2, 2.7), ss(t, C.endc, C.endc + .6) * .9);
+  gu.uFlash.value = .22 * lt; gu.uCA.value = .0012 + SHAKE * .004; gu.uKeep.value = 1; gu.uGrain.value = .04;
+  gu.uTop.value = cv ? 0 : Math.max(1 - ss(t, 2.3, 2.8), ss(t, C.endc, C.endc + .6) * .9, C.screens.some(([a, b]) => t > a - .1 && t < b + .1) ? .55 : 0);
   gu.uDark.value = 0;
   bloom.strength = street && !day ? .55 : .42;
   const cx = street ? SX : 0;
@@ -819,9 +816,9 @@ function buildTextures() {
     const bar = (s) => { g.fillStyle = "#1E2026"; g.fillRect(0, 0, w, 44); mono(g, s, 18, 30, 20, "#C9CDD4"); };
     if (mode === 0) {
       bar("changedetection.io  ·  crumbandco.com/menu");
-      [["Croissant", "$3.50"], ["Pain au chocolat", "$4.00"], ["Cinnamon roll", "$4.50"], ["Sourdough loaf", "$8.00"], ["Coming soon page", "watched"]].forEach(([a, b], k) => {
-        const y = 92 + k * 58; if (k === 4) { g.strokeStyle = "#E9E4DA"; g.lineWidth = 3; g.strokeRect(14, y - 34, w - 28, 50); }
-        mono(g, a, 30, y, 26, "#E9E4DA"); mono(g, b, w - 30, y, 26, "#E9E4DA", "right"); });
+      [["Croissant", "$4.25"], ["Pain au chocolat", "$4.00"], ["Cinnamon roll", "$4.50"], ["Sourdough loaf", "$8.00"], ["Coming soon page", "watched"]].forEach(([a, b], k) => {
+        const y = 92 + k * 58; if (k === 0) { g.fillStyle = RED; g.fillRect(12, y - 34, w - 24, 50); }
+        mono(g, a, 30, y, 26, "#FFFFFF"); mono(g, b, w - 30, y, 26, "#FFFFFF", "right"); });
       mono(g, "checks every 60 s  ·  5 pages", 30, h - 20, 20, "#8A8E96");
     } else if (mode === 1 || mode === 2) {
       bar(mode === 1 ? "RSSHub  ·  feeds" : "Miniflux  ·  12 unread");
@@ -829,9 +826,9 @@ function buildTextures() {
       items.forEach((s, k) => { const y = 94 + k * 60; block(g, 18, y - 36, w - 36, 50, k === 0 && mode === 2 ? "#3A1A1A" : "#1A1C22", 8); g.fillStyle = k === 0 ? RED : "#5A5E66"; g.fillRect(30, y - 22, 14, 22); mono(g, s, 58, y - 4, 24, "#E9E4DA"); });
     } else if (mode === 3) {
       bar("Ollama  ·  local model");
-      const L3 = ["> Summarize everything Crumb & Co.", "  published today.", "", "Watching 5 pages and 3 feeds.", "Briefing ready at 7:00 AM."];
+      const L3 = ["7 AM BRIEFING", "1. Croissant price up 75 cents.", "2. Coming soon page, Friday:", "   LAVENDER CROISSANT"];
       const all = L3.join("\n"), n = Math.floor(all.length * u); let y = 96;
-      all.slice(0, n).split("\n").forEach((s) => { mono(g, s, 24, y, 25, "#E9E4DA"); y += 44; });
+      all.slice(0, n).split("\n").forEach((s, i) => { mono(g, s, 24, y, 25, i === 3 ? LAV : "#E9E4DA"); y += 44; });
       if (blink) { g.fillStyle = "#E9E4DA"; g.fillRect(24 + g.measureText(all.slice(0, n).split("\n").pop()).width + 4, y - 74, 14, 26); }
     } else if (mode === 4) {
       g.fillStyle = blink ? "#C81E14" : "#A0140C"; g.fillRect(0, 0, w, h);

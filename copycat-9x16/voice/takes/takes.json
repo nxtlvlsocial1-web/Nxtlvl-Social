@@ -1,0 +1,212 @@
+{
+ "01_0": {
+  "who": "june",
+  "text": "She copied my croissant. My font. Even my cat!",
+  "exaggeration": 0.9,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 3.4,
+  "heard": "She copied my croissant, my font, even my cat.",
+  "match": 1.0,
+  "picked": true
+ },
+ "01_1": {
+  "who": "june",
+  "text": "She copied my croissant. My font. Even my cat!",
+  "exaggeration": 0.98,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 3.76,
+  "heard": "She copied my croissant, my font, even my cat.",
+  "match": 1.0
+ },
+ "02_0": {
+  "who": "kane",
+  "text": "Then we watch her. Legally. Public pages only. Zero dollars.",
+  "exaggeration": 0.9,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 3.8,
+  "heard": "and we watch her. Legally, public pages only $0.",
+  "match": 0.737,
+  "picked": true
+ },
+ "02_1": {
+  "who": "kane",
+  "text": "Then we watch her. Legally. Public pages only. Zero dollars.",
+  "exaggeration": 0.98,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 3.84,
+  "heard": "Then we watch her legally, public page is only $0.",
+  "match": 0.7
+ },
+ "03_0": {
+  "who": "kane",
+  "text": "Clue one: changedetection dot io. Her prices change? You know in a minute.",
+  "exaggeration": 0.85,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 4.36,
+  "heard": "Blue 1, Changatetection.io, her prices change, you know in a minute.",
+  "match": 0.667,
+  "picked": true
+ },
+ "03_1": {
+  "who": "kane",
+  "text": "Clue one: changedetection dot io. Her prices change? You know in a minute.",
+  "exaggeration": 0.9299999999999999,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 4.2,
+  "heard": "Cluwan Chang's detection.io, her prices change, you know in a minute.",
+  "match": 0.667
+ },
+ "04_0": {
+  "who": "kane",
+  "text": "Clue two: R S S Hub and Mini flux. Every post she makes, in one feed.",
+  "exaggeration": 0.85,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 5.28,
+  "heard": "Clue 2, RSS Hub, and Mini Flux, every post she makes in one feed.",
+  "match": 0.8,
+  "picked": true
+ },
+ "04_1": {
+  "who": "kane",
+  "text": "Clue two: R S S Hub and Mini flux. Every post she makes, in one feed.",
+  "exaggeration": 0.9299999999999999,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 4.16,
+  "heard": "Clue 2, RSS Hub and Mini Flux every post she makes in one feed.",
+  "match": 0.8
+ },
+ "05_0": {
+  "who": "kane",
+  "text": "Clue three: Ollama. An AI on your own laptop reads it all... and writes your briefing.",
+  "exaggeration": 0.85,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 4.72,
+  "heard": "Clue 3, Alama, an AI on your own laptop reads it all and writes your briefing.",
+  "match": 0.875,
+  "picked": true
+ },
+ "05_1": {
+  "who": "kane",
+  "text": "Clue three: Ollama. An AI on your own laptop reads it all... and writes your briefing.",
+  "exaggeration": 0.9299999999999999,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 4.36,
+  "heard": "Ooh, three-year-old llama. An AI on your own laptop reads it all and writes your briefing.",
+  "match": 0.824
+ },
+ "06_0": {
+  "who": "june",
+  "text": "A lavender croissant... on Friday?",
+  "exaggeration": 0.9,
+  "cfg_weight": 0.4,
+  "seed": 7,
+  "seconds": 2.88,
+  "heard": "us a lavender croissant on Friday.",
+  "match": 0.909
+ },
+ "06_1": {
+  "who": "june",
+  "text": "A lavender croissant... on Friday?",
+  "exaggeration": 0.98,
+  "cfg_weight": 0.4,
+  "seed": 21,
+  "seconds": 2.6,
+  "heard": "A lavender croissant on Friday.",
+  "match": 1.0,
+  "picked": true
+ },
+ "07_0": {
+  "who": "kane",
+  "text": "She launches Friday. You launch Thursday.",
+  "exaggeration": 0.9,
+  "cfg_weight": 0.4,
+  "seed": 7,
+  "seconds": 2.56,
+  "heard": "She launches Friday, you launch Thursday.",
+  "match": 1.0,
+  "picked": true
+ },
+ "07_1": {
+  "who": "kane",
+  "text": "She launches Friday. You launch Thursday.",
+  "exaggeration": 0.98,
+  "cfg_weight": 0.4,
+  "seed": 21,
+  "seconds": 2.92,
+  "heard": "She launches Friday. You launch Thursday!",
+  "match": 1.0
+ },
+ "08_0": {
+  "who": "june",
+  "text": "A year of copying me... and now she's a day behind!",
+  "exaggeration": 0.9,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 3.96,
+  "heard": "A year of copying me, and now she's a day behind!",
+  "match": 1.0,
+  "picked": true
+ },
+ "08_1": {
+  "who": "june",
+  "text": "A year of copying me... and now she's a day behind!",
+  "exaggeration": 0.98,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 4.56,
+  "heard": "A year of copying me, and now she's a day behind?",
+  "match": 1.0
+ },
+ "09_0": {
+  "who": "kane",
+  "text": "Case closed, kid.",
+  "exaggeration": 0.95,
+  "cfg_weight": 0.4,
+  "seed": 7,
+  "seconds": 1.28,
+  "heard": "Case closed, kid.",
+  "match": 1.0,
+  "picked": true
+ },
+ "09_1": {
+  "who": "kane",
+  "text": "Case closed, kid.",
+  "exaggeration": 1.0,
+  "cfg_weight": 0.4,
+  "seed": 21,
+  "seconds": 1.68,
+  "heard": "Case closed, kid.",
+  "match": 1.0
+ },
+ "10_0": {
+  "who": "june",
+  "text": "Want the whole kit? Follow next level social, and comment spy.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 3.92,
+  "heard": "Want the whole kit? Follow Next Level Social and Comment Spy.",
+  "match": 1.0,
+  "picked": true
+ },
+ "10_1": {
+  "who": "june",
+  "text": "Want the whole kit? Follow next level social, and comment spy.",
+  "exaggeration": 0.7799999999999999,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 3.92,
+  "heard": "Want the whole kit? Follow Next Level Social and Comment Spy.",
+  "match": 1.0
+ }
+}

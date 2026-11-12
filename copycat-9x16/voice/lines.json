@@ -1,69 +1,85 @@
 {
- "duration": 56.395,
+ "duration": 49.06,
  "lines": [
   {
    "line": 1,
    "take": "01",
-   "speaker": "kane",
-   "text": "Midnight. Rain. She walked in with flour on her hands... and a copycat problem.",
+   "speaker": "june",
+   "text": "She copied my croissant. My font. Even my cat!",
    "start": 0.5,
-   "end": 6.475
+   "end": 3.845
   },
   {
    "line": 2,
    "take": "02",
-   "speaker": "june",
-   "text": "Every post I make, the bakery across the street copies by morning.",
-   "start": 6.995,
-   "end": 11.11
+   "speaker": "kane",
+   "text": "Then... we watch her. Legally. Public pages only. Zero dollars.",
+   "start": 4.365,
+   "end": 8.225
   },
   {
    "line": 3,
    "take": "03",
    "speaker": "kane",
-   "text": "Then we watch her. Public pages only. Five free tools.",
-   "start": 11.58,
-   "end": 15.98
+   "text": "Clue one: changedetection.io. Her prices change? You know in a minute.",
+   "start": 9.495,
+   "end": 14.65
   },
   {
    "line": 4,
    "take": "04",
    "speaker": "kane",
-   "text": "Two AM. She changed her prices. We knew in sixty seconds.",
-   "start": 31.6,
-   "end": 36.37
+   "text": "Clue two: RSSHub and Miniflux. Every post she makes, in one feed.",
+   "start": 15.92,
+   "end": 21.2
   },
   {
    "line": 5,
    "take": "05",
-   "speaker": "june",
-   "text": "She's launching a lavender croissant... on Friday?",
-   "start": 37.89,
-   "end": 40.76
+   "speaker": "kane",
+   "text": "Clue three: Ollama. An AI on your own laptop reads it all... and writes your briefing.",
+   "start": 22.47,
+   "end": 27.19
   },
   {
    "line": 6,
    "take": "06",
-   "speaker": "kane",
-   "text": "Then you launch yours on Thursday.",
-   "start": 41.18,
-   "end": 43.515
+   "speaker": "june",
+   "text": "A lavender croissant... on Friday?",
+   "start": 28.81,
+   "end": 31.14
   },
   {
    "line": 7,
    "take": "07",
-   "speaker": "june",
-   "text": "A year of copying me... and now she's a day behind.",
-   "start": 48.335,
-   "end": 52.04
+   "speaker": "kane",
+   "text": "She launches Friday. You launch Thursday.",
+   "start": 31.61,
+   "end": 34.365
   },
   {
    "line": 8,
    "take": "08",
    "speaker": "june",
+   "text": "A year of copying me... and now she's a day behind!",
+   "start": 39.185,
+   "end": 42.885
+  },
+  {
+   "line": 9,
+   "take": "09",
+   "speaker": "kane",
+   "text": "Case closed, kid.",
+   "start": 43.455,
+   "end": 44.875
+  },
+  {
+   "line": 10,
+   "take": "10",
+   "speaker": "june",
    "text": "Want the whole kit? Follow @nxtlvlsocial.ai and comment SPY.",
-   "start": 52.61,
-   "end": 56.245
+   "start": 45.445,
+   "end": 48.91
   }
  ]
 }

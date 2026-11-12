@@ -1,4 +1,4 @@
-"""The Copycat cover: Kane at his desk at 2 AM, lit red by the alert, the blinds behind him; the WHAT IF title and the five exhibits.
+"""The Copycat cover: Kane at his desk, the blinds behind him; the WHAT IF title and the three clues.
 
 python3 build/cover.py      (from the project root; needs node + the preinstalled Playwright)
 Writes renders/nxtlvl_copycat_reels_9x16_cover.png (1080x1920).
@@ -12,8 +12,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "renders", "nxtlvl_copycat_reels_9x16_cover.png")
 PLATE = os.path.join(ROOT, "cover", "plate.png")
 T = json.load(open(os.path.join(ROOT, "build", "cues.json")))
-PLATE_T = T["alert"] + 2.9          # 2 AM, a custom camera: Kane in the red light of the alert
-PLATE_CAM = {"cam": [0.75, 1.32, 0.7], "look": [0, 1.45, -2.0], "fov": 54}
+PLATE_T = T["l"][1] + 1.0           # "Then we watch her": Kane at his desk in the light through the blinds
+PLATE_CAM = {"cam": [0.75, 1.32, 0.7], "look": [0, 1.45, -2.0], "fov": 54}   # the board's red string glows behind the title
 
 GRAB = r"""
 const { chromium } = require('playwright'); const http = require('http'); const fs = require('fs'); const path = require('path');
@@ -44,7 +44,7 @@ def main():
     subprocess.run(["node", "-e", GRAB, ROOT, PLATE, str(PLATE_T), json.dumps(PLATE_CAM)], check=True)
     img = "data:image/png;base64," + base64.b64encode(open(PLATE, "rb").read()).decode()
     fonts = os.path.join(ROOT, "assets", "fonts")
-    tools = "".join(f"<span>{n}</span>" for n in T["toolNames"])
+    tools = "".join(f"<span>{n}</span>" for n in ["changedetection.io", "RSSHub", "Miniflux", "Ollama"])
     doc = f"""<!doctype html><html><head><meta charset="utf-8"><style>
 @font-face {{ font-family: "Garamond"; font-weight: 400 800; src: url("file://{fonts}/EBGaramond.ttf"); }}
 @font-face {{ font-family: "Garamond"; font-style: italic; font-weight: 400 800; src: url("file://{fonts}/EBGaramond-Italic.ttf"); }}
@@ -65,7 +65,7 @@ body {{ width: 1080px; height: 1920px; overflow: hidden; background: #000 url({i
 .ex .ft {{ margin-top: 24px; font: 800 30px/1.2 "Manrope"; letter-spacing: 3px; color: #F4F1EA; }}
 </style></head><body><div class="shade"></div>
 <div class="top"><span class="chip">WHAT IF</span><span class="l1">you could see</span><span class="l2">every move</span><span class="l3">your <b>competitor</b> makes?</span></div>
-<div class="ex"><span class="st">5 EXHIBITS</span><div class="tl">{tools}</div><div class="ft">FREE · OPEN SOURCE · PUBLIC PAGES ONLY</div></div>
+<div class="ex"><span class="st">3 CLUES</span><div class="tl">{tools}</div><div class="ft">FREE · OPEN SOURCE · PUBLIC PAGES ONLY</div></div>
 </body></html>"""
     src = os.path.join(ROOT, "cover", "cover.html")
     open(src, "w").write(doc)

@@ -1,562 +1,646 @@
 [
 {
 "line": 1,
-"speaker": "kane",
-"w": "Midnight.",
-"s": 0.56,
-"e": 1.116
-},
-{
-"line": 1,
-"speaker": "kane",
-"w": "Rain.",
-"s": 1.096,
-"e": 1.424
-},
-{
-"line": 1,
-"speaker": "kane",
+"speaker": "june",
 "w": "She",
-"s": 1.404,
-"e": 1.732
+"s": 0.55,
+"e": 0.851
 },
 {
 "line": 1,
-"speaker": "kane",
-"w": "walked",
-"s": 1.712,
-"e": 2.267
+"speaker": "june",
+"w": "copied",
+"s": 0.831,
+"e": 1.339
 },
 {
 "line": 1,
-"speaker": "kane",
-"w": "in",
-"s": 2.247,
-"e": 2.575
+"speaker": "june",
+"w": "my",
+"s": 1.319,
+"e": 1.62
 },
 {
 "line": 1,
-"speaker": "kane",
-"w": "with",
-"s": 2.555,
-"e": 2.883
+"speaker": "june",
+"w": "croissant.",
+"s": 1.6,
+"e": 2.109
 },
 {
 "line": 1,
-"speaker": "kane",
-"w": "flour",
-"s": 2.863,
-"e": 3.191
+"speaker": "june",
+"w": "My",
+"s": 2.089,
+"e": 2.389
 },
 {
 "line": 1,
-"speaker": "kane",
-"w": "on",
-"s": 3.171,
-"e": 3.499
+"speaker": "june",
+"w": "font.",
+"s": 2.369,
+"e": 2.67
 },
 {
 "line": 1,
-"speaker": "kane",
-"w": "her",
-"s": 3.479,
-"e": 3.807
+"speaker": "june",
+"w": "Even",
+"s": 2.65,
+"e": 3.159
 },
 {
 "line": 1,
-"speaker": "kane",
-"w": "hands...",
-"s": 3.787,
-"e": 4.115
+"speaker": "june",
+"w": "my",
+"s": 3.139,
+"e": 3.439
 },
 {
 "line": 1,
+"speaker": "june",
+"w": "cat!",
+"s": 3.419,
+"e": 3.72
+},
+{
+"line": 2,
 "speaker": "kane",
-"w": "and",
-"s": 4.095,
-"e": 4.422
-},
-{
-"line": 1,
-"speaker": "kane",
-"w": "a",
-"s": 4.402,
-"e": 4.73
-},
-{
-"line": 1,
-"speaker": "kane",
-"w": "copycat",
-"s": 4.71,
-"e": 5.494
-},
-{
-"line": 1,
-"speaker": "kane",
-"w": "problem.",
-"s": 5.474,
-"e": 6.03
+"w": "Then...",
+"s": 4.375,
+"e": 4.638
 },
 {
 "line": 2,
-"speaker": "june",
-"w": "Every",
-"s": 7.055,
-"e": 7.641
-},
-{
-"line": 2,
-"speaker": "june",
-"w": "post",
-"s": 7.621,
-"e": 7.869
-},
-{
-"line": 2,
-"speaker": "june",
-"w": "I",
-"s": 7.849,
-"e": 8.097
-},
-{
-"line": 2,
-"speaker": "june",
-"w": "make,",
-"s": 8.077,
-"e": 8.325
-},
-{
-"line": 2,
-"speaker": "june",
-"w": "the",
-"s": 8.305,
-"e": 8.553
-},
-{
-"line": 2,
-"speaker": "june",
-"w": "bakery",
-"s": 8.533,
-"e": 9.119
-},
-{
-"line": 2,
-"speaker": "june",
-"w": "across",
-"s": 9.099,
-"e": 9.517
-},
-{
-"line": 2,
-"speaker": "june",
-"w": "the",
-"s": 9.497,
-"e": 9.745
-},
-{
-"line": 2,
-"speaker": "june",
-"w": "street",
-"s": 9.725,
-"e": 9.973
-},
-{
-"line": 2,
-"speaker": "june",
-"w": "copies",
-"s": 9.953,
-"e": 10.37
-},
-{
-"line": 2,
-"speaker": "june",
-"w": "by",
-"s": 10.35,
-"e": 10.598
-},
-{
-"line": 2,
-"speaker": "june",
-"w": "morning.",
-"s": 10.578,
-"e": 10.995
-},
-{
-"line": 3,
-"speaker": "kane",
-"w": "Then",
-"s": 11.64,
-"e": 12.004
-},
-{
-"line": 3,
 "speaker": "kane",
 "w": "we",
-"s": 11.984,
-"e": 12.347
+"s": 4.618,
+"e": 4.881
 },
 {
-"line": 3,
+"line": 2,
 "speaker": "kane",
 "w": "watch",
-"s": 12.327,
-"e": 12.691
+"s": 4.861,
+"e": 5.124
 },
 {
-"line": 3,
+"line": 2,
 "speaker": "kane",
 "w": "her.",
-"s": 12.671,
-"e": 13.035
+"s": 5.104,
+"e": 5.367
 },
 {
-"line": 3,
+"line": 2,
+"speaker": "kane",
+"w": "Legally.",
+"s": 5.347,
+"e": 5.97
+},
+{
+"line": 2,
 "speaker": "kane",
 "w": "Public",
-"s": 13.015,
-"e": 13.633
+"s": 5.95,
+"e": 6.393
 },
 {
-"line": 3,
+"line": 2,
 "speaker": "kane",
 "w": "pages",
-"s": 13.613,
-"e": 14.231
+"s": 6.373,
+"e": 6.816
 },
 {
-"line": 3,
+"line": 2,
 "speaker": "kane",
 "w": "only.",
-"s": 14.211,
-"e": 14.829
+"s": 6.796,
+"e": 7.239
+},
+{
+"line": 2,
+"speaker": "kane",
+"w": "Zero",
+"s": 7.219,
+"e": 7.662
+},
+{
+"line": 2,
+"speaker": "kane",
+"w": "dollars.",
+"s": 7.642,
+"e": 8.085
 },
 {
 "line": 3,
 "speaker": "kane",
-"w": "Five",
-"s": 14.809,
-"e": 15.173
+"w": "Clue",
+"s": 9.505,
+"e": 10.197
 },
 {
 "line": 3,
 "speaker": "kane",
-"w": "free",
-"s": 15.153,
-"e": 15.516
+"w": "one:",
+"s": 10.177,
+"e": 10.623
 },
 {
 "line": 3,
 "speaker": "kane",
-"w": "tools.",
-"s": 15.496,
-"e": 15.86
+"w": "changedetection.io.",
+"s": 10.603,
+"e": 12.212
+},
+{
+"line": 3,
+"speaker": "kane",
+"w": "Her",
+"s": 12.192,
+"e": 12.457
+},
+{
+"line": 3,
+"speaker": "kane",
+"w": "prices",
+"s": 12.437,
+"e": 12.883
+},
+{
+"line": 3,
+"speaker": "kane",
+"w": "change?",
+"s": 12.863,
+"e": 13.128
+},
+{
+"line": 3,
+"speaker": "kane",
+"w": "You",
+"s": 13.108,
+"e": 13.373
+},
+{
+"line": 3,
+"speaker": "kane",
+"w": "know",
+"s": 13.353,
+"e": 13.618
+},
+{
+"line": 3,
+"speaker": "kane",
+"w": "in",
+"s": 13.598,
+"e": 13.863
+},
+{
+"line": 3,
+"speaker": "kane",
+"w": "a",
+"s": 13.843,
+"e": 14.108
+},
+{
+"line": 3,
+"speaker": "kane",
+"w": "minute.",
+"s": 14.088,
+"e": 14.535
 },
 {
 "line": 4,
 "speaker": "kane",
-"w": "Two",
-"s": 31.65,
-"e": 31.973
+"w": "Clue",
+"s": 15.96,
+"e": 16.237
 },
 {
 "line": 4,
 "speaker": "kane",
-"w": "AM.",
-"s": 31.953,
-"e": 32.276
+"w": "two:",
+"s": 16.217,
+"e": 16.494
 },
 {
 "line": 4,
 "speaker": "kane",
-"w": "She",
-"s": 32.256,
-"e": 32.579
+"w": "RSSHub",
+"s": 16.474,
+"e": 17.521
 },
 {
 "line": 4,
 "speaker": "kane",
-"w": "changed",
-"s": 32.559,
-"e": 33.106
+"w": "and",
+"s": 17.501,
+"e": 17.778
 },
 {
 "line": 4,
 "speaker": "kane",
-"w": "her",
-"s": 33.086,
-"e": 33.409
+"w": "Miniflux.",
+"s": 17.758,
+"e": 18.481
 },
 {
 "line": 4,
 "speaker": "kane",
-"w": "prices.",
-"s": 33.389,
-"e": 33.936
+"w": "Every",
+"s": 18.461,
+"e": 19.119
 },
 {
 "line": 4,
 "speaker": "kane",
-"w": "We",
-"s": 33.916,
-"e": 34.239
+"w": "post",
+"s": 19.099,
+"e": 19.376
 },
 {
 "line": 4,
 "speaker": "kane",
-"w": "knew",
-"s": 34.219,
-"e": 34.542
+"w": "she",
+"s": 19.356,
+"e": 19.632
+},
+{
+"line": 4,
+"speaker": "kane",
+"w": "makes,",
+"s": 19.612,
+"e": 20.079
 },
 {
 "line": 4,
 "speaker": "kane",
 "w": "in",
-"s": 34.522,
-"e": 34.845
+"s": 20.059,
+"e": 20.336
 },
 {
 "line": 4,
 "speaker": "kane",
-"w": "sixty",
-"s": 34.825,
-"e": 35.373
+"w": "one",
+"s": 20.316,
+"e": 20.783
 },
 {
 "line": 4,
 "speaker": "kane",
-"w": "seconds.",
-"s": 35.353,
-"e": 35.9
+"w": "feed.",
+"s": 20.763,
+"e": 21.04
 },
 {
 "line": 5,
-"speaker": "june",
-"w": "She's",
-"s": 37.94,
-"e": 38.208
-},
-{
-"line": 5,
-"speaker": "june",
-"w": "launching",
-"s": 38.188,
-"e": 38.639
-},
-{
-"line": 5,
-"speaker": "june",
-"w": "a",
-"s": 38.619,
-"e": 38.886
-},
-{
-"line": 5,
-"speaker": "june",
-"w": "lavender",
-"s": 38.866,
-"e": 39.5
-},
-{
-"line": 5,
-"speaker": "june",
-"w": "croissant...",
-"s": 39.48,
-"e": 39.931
-},
-{
-"line": 5,
-"speaker": "june",
-"w": "on",
-"s": 39.911,
-"e": 40.179
-},
-{
-"line": 5,
-"speaker": "june",
-"w": "Friday?",
-"s": 40.159,
-"e": 40.61
-},
-{
-"line": 6,
 "speaker": "kane",
-"w": "Then",
-"s": 41.24,
-"e": 41.573
+"w": "Clue",
+"s": 22.5,
+"e": 22.752
 },
 {
-"line": 6,
+"line": 5,
 "speaker": "kane",
-"w": "you",
-"s": 41.553,
-"e": 41.886
+"w": "three:",
+"s": 22.732,
+"e": 22.985
 },
 {
-"line": 6,
+"line": 5,
 "speaker": "kane",
-"w": "launch",
-"s": 41.866,
-"e": 42.199
+"w": "Ollama.",
+"s": 22.965,
+"e": 23.562
 },
 {
-"line": 6,
+"line": 5,
 "speaker": "kane",
-"w": "yours",
-"s": 42.179,
-"e": 42.512
+"w": "An",
+"s": 23.542,
+"e": 23.794
 },
 {
-"line": 6,
+"line": 5,
+"speaker": "kane",
+"w": "AI",
+"s": 23.774,
+"e": 24.027
+},
+{
+"line": 5,
 "speaker": "kane",
 "w": "on",
-"s": 42.492,
-"e": 42.825
+"s": 24.007,
+"e": 24.259
+},
+{
+"line": 5,
+"speaker": "kane",
+"w": "your",
+"s": 24.239,
+"e": 24.491
+},
+{
+"line": 5,
+"speaker": "kane",
+"w": "own",
+"s": 24.471,
+"e": 24.724
+},
+{
+"line": 5,
+"speaker": "kane",
+"w": "laptop",
+"s": 24.704,
+"e": 25.129
+},
+{
+"line": 5,
+"speaker": "kane",
+"w": "reads",
+"s": 25.109,
+"e": 25.361
+},
+{
+"line": 5,
+"speaker": "kane",
+"w": "it",
+"s": 25.341,
+"e": 25.593
+},
+{
+"line": 5,
+"speaker": "kane",
+"w": "all...",
+"s": 25.573,
+"e": 25.826
+},
+{
+"line": 5,
+"speaker": "kane",
+"w": "and",
+"s": 25.806,
+"e": 26.058
+},
+{
+"line": 5,
+"speaker": "kane",
+"w": "writes",
+"s": 26.038,
+"e": 26.463
+},
+{
+"line": 5,
+"speaker": "kane",
+"w": "your",
+"s": 26.443,
+"e": 26.695
+},
+{
+"line": 5,
+"speaker": "kane",
+"w": "briefing.",
+"s": 26.675,
+"e": 27.1
 },
 {
 "line": 6,
-"speaker": "kane",
-"w": "Thursday.",
-"s": 42.805,
-"e": 43.37
-},
-{
-"line": 7,
 "speaker": "june",
 "w": "A",
-"s": 48.395,
-"e": 48.683
+"s": 28.86,
+"e": 29.147
+},
+{
+"line": 6,
+"speaker": "june",
+"w": "lavender",
+"s": 29.127,
+"e": 29.811
+},
+{
+"line": 6,
+"speaker": "june",
+"w": "croissant...",
+"s": 29.791,
+"e": 30.277
+},
+{
+"line": 6,
+"speaker": "june",
+"w": "on",
+"s": 30.257,
+"e": 30.544
+},
+{
+"line": 6,
+"speaker": "june",
+"w": "Friday?",
+"s": 30.524,
+"e": 31.01
 },
 {
 "line": 7,
+"speaker": "kane",
+"w": "She",
+"s": 31.75,
+"e": 32.067
+},
+{
+"line": 7,
+"speaker": "kane",
+"w": "launches",
+"s": 32.047,
+"e": 32.583
+},
+{
+"line": 7,
+"speaker": "kane",
+"w": "Friday.",
+"s": 32.563,
+"e": 33.1
+},
+{
+"line": 7,
+"speaker": "kane",
+"w": "You",
+"s": 33.08,
+"e": 33.397
+},
+{
+"line": 7,
+"speaker": "kane",
+"w": "launch",
+"s": 33.377,
+"e": 33.693
+},
+{
+"line": 7,
+"speaker": "kane",
+"w": "Thursday.",
+"s": 33.673,
+"e": 34.21
+},
+{
+"line": 8,
+"speaker": "june",
+"w": "A",
+"s": 39.245,
+"e": 39.545
+},
+{
+"line": 8,
 "speaker": "june",
 "w": "year",
-"s": 48.663,
-"e": 48.952
+"s": 39.525,
+"e": 39.826
 },
 {
-"line": 7,
+"line": 8,
 "speaker": "june",
 "w": "of",
-"s": 48.932,
-"e": 49.22
+"s": 39.806,
+"e": 40.106
 },
 {
-"line": 7,
+"line": 8,
 "speaker": "june",
 "w": "copying",
-"s": 49.2,
-"e": 49.687
+"s": 40.086,
+"e": 40.594
 },
 {
-"line": 7,
+"line": 8,
 "speaker": "june",
 "w": "me...",
-"s": 49.667,
-"e": 49.956
+"s": 40.574,
+"e": 40.875
 },
 {
-"line": 7,
+"line": 8,
 "speaker": "june",
 "w": "and",
-"s": 49.936,
-"e": 50.224
+"s": 40.855,
+"e": 41.155
 },
 {
-"line": 7,
+"line": 8,
 "speaker": "june",
 "w": "now",
-"s": 50.204,
-"e": 50.493
+"s": 41.135,
+"e": 41.436
 },
 {
-"line": 7,
+"line": 8,
 "speaker": "june",
 "w": "she's",
-"s": 50.473,
-"e": 50.761
+"s": 41.416,
+"e": 41.716
 },
 {
-"line": 7,
+"line": 8,
 "speaker": "june",
 "w": "a",
-"s": 50.741,
-"e": 51.029
+"s": 41.696,
+"e": 41.996
 },
 {
-"line": 7,
+"line": 8,
 "speaker": "june",
 "w": "day",
-"s": 51.009,
-"e": 51.298
-},
-{
-"line": 7,
-"speaker": "june",
-"w": "behind.",
-"s": 51.278,
-"e": 51.765
+"s": 41.976,
+"e": 42.277
 },
 {
 "line": 8,
+"speaker": "june",
+"w": "behind!",
+"s": 42.257,
+"e": 42.765
+},
+{
+"line": 9,
+"speaker": "kane",
+"w": "Case",
+"s": 43.505,
+"e": 43.851
+},
+{
+"line": 9,
+"speaker": "kane",
+"w": "closed,",
+"s": 43.831,
+"e": 44.419
+},
+{
+"line": 9,
+"speaker": "kane",
+"w": "kid.",
+"s": 44.399,
+"e": 44.745
+},
+{
+"line": 10,
 "speaker": "june",
 "w": "Want",
-"s": 52.66,
-"e": 52.913
+"s": 45.495,
+"e": 45.736
 },
 {
-"line": 8,
+"line": 10,
 "speaker": "june",
 "w": "the",
-"s": 52.893,
-"e": 53.147
+"s": 45.716,
+"e": 45.957
 },
 {
-"line": 8,
+"line": 10,
 "speaker": "june",
 "w": "whole",
-"s": 53.127,
-"e": 53.553
+"s": 45.937,
+"e": 46.342
 },
 {
-"line": 8,
+"line": 10,
 "speaker": "june",
 "w": "kit?",
-"s": 53.533,
-"e": 53.786
+"s": 46.322,
+"e": 46.563
 },
 {
-"line": 8,
+"line": 10,
 "speaker": "june",
 "w": "Follow",
-"s": 53.766,
-"e": 54.192
+"s": 46.543,
+"e": 46.948
 },
 {
-"line": 8,
+"line": 10,
 "speaker": "june",
 "w": "@nxtlvlsocial.ai",
-"s": 54.172,
-"e": 55.237
+"s": 46.928,
+"e": 47.938
 },
 {
-"line": 8,
+"line": 10,
 "speaker": "june",
 "w": "and",
-"s": 55.217,
-"e": 55.471
+"s": 47.918,
+"e": 48.159
 },
 {
-"line": 8,
+"line": 10,
 "speaker": "june",
 "w": "comment",
-"s": 55.451,
-"e": 55.877
+"s": 48.139,
+"e": 48.544
 },
 {
-"line": 8,
+"line": 10,
 "speaker": "june",
 "w": "SPY.",
-"s": 55.857,
-"e": 56.11
+"s": 48.524,
+"e": 48.765
 }
 ]
