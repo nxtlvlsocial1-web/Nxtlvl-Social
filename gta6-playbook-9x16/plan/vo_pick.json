@@ -1,26 +1,26 @@
 {
- "duration": 38.23,
+ "duration": 38.335,
  "takes": [
   {
    "line": "p00",
    "take": 0,
-   "heard": "gta6 drafts on the 19 save this it's the only why create a video you'll need",
-   "errors": 7,
-   "pitch_spread_hz": 236
+   "heard": "GTA 6 drops on the 19th, so save this is the only creator video you'll need!",
+   "errors": 1,
+   "pitch_spread_hz": 155
   },
   {
    "line": "p00",
    "take": 1,
-   "heard": "GTA 6 drops on the 19th, say this is the only creator video you'll need.",
-   "errors": 3,
-   "pitch_spread_hz": 300
+   "heard": "GTA 6 drops on the 19th, so say this is the only creator video you'll need.",
+   "errors": 2,
+   "pitch_spread_hz": 152
   },
   {
    "line": "p00",
    "take": 2,
-   "heard": "GTA 6 drops on the 19th say this it's the only creative video you'll need",
-   "errors": 2,
-   "pitch_spread_hz": 150
+   "heard": "GTA 6 drops on the 19th, so save this, it's the only creative video you'll need.",
+   "errors": 1,
+   "pitch_spread_hz": 107
   },
   {
    "line": "p01",
@@ -46,43 +46,43 @@
   {
    "line": "p02",
    "take": 0,
-   "heard": "millions of views, YO!",
-   "errors": 1,
-   "pitch_spread_hz": 104
+   "heard": "millions of views",
+   "errors": 0,
+   "pitch_spread_hz": 26
   },
   {
    "line": "p02",
    "take": 1,
-   "heard": "millions of views and porche!",
-   "errors": 2,
-   "pitch_spread_hz": 250
+   "heard": "millions of views",
+   "errors": 0,
+   "pitch_spread_hz": 181
   },
   {
    "line": "p02",
    "take": 2,
-   "heard": "Millions of views, millions of views, you eat!",
-   "errors": 5,
-   "pitch_spread_hz": 293
+   "heard": "millions of Jews.",
+   "errors": 1,
+   "pitch_spread_hz": 0
   },
   {
    "line": "p03",
    "take": 0,
    "heard": "Step 1, an AI tool that turns any 8 -hour stream into 10 ready -to -post clips.",
-   "errors": 6,
+   "errors": 2,
    "pitch_spread_hz": 94
   },
   {
    "line": "p03",
    "take": 1,
    "heard": "Step one an AI tool that turns any eight -hour stream into ten ready to post clips",
-   "errors": 6,
+   "errors": 1,
    "pitch_spread_hz": 300
   },
   {
    "line": "p03",
    "take": 2,
    "heard": "An AI tool that turns any 8 -hour stream into 10 ready -to -post clips",
-   "errors": 8,
+   "errors": 4,
    "pitch_spread_hz": 95
   },
   {
@@ -130,23 +130,23 @@
   {
    "line": "p06",
    "take": 0,
-   "heard": "Comment, GTA6, and I'll send you AL of it, and follow, so you're early!",
-   "errors": 3,
-   "pitch_spread_hz": 57
+   "heard": "Comment, GTA6, and I'll send you all of it, and follow, so you're early!",
+   "errors": 0,
+   "pitch_spread_hz": 287
   },
   {
    "line": "p06",
    "take": 1,
-   "heard": "Comment, GTA6, and I'll send you a L of it, and follow, so you're early.",
-   "errors": 4,
-   "pitch_spread_hz": 102
+   "heard": "Comment, GTA6, and I'll send you all of it. And follow, so you're early!",
+   "errors": 0,
+   "pitch_spread_hz": 60
   },
   {
    "line": "p06",
    "take": 2,
-   "heard": "Comment GTA 6 and I'll send you a L of it and follow so you're early!",
-   "errors": 2,
-   "pitch_spread_hz": 112
+   "heard": "Comment GTA 6 and I'll send you all of it and follow so you're early",
+   "errors": 0,
+   "pitch_spread_hz": 42
   }
  ]
 }

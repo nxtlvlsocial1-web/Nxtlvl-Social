@@ -33,7 +33,7 @@ for w in W:
     LINES.setdefault(w["line"], []).append(w)
 L0 = {k: v[0]["t0"] for k, v in LINES.items()}
 L1 = {k: v[-1]["t1"] for k, v in LINES.items()}
-END = round(L1["p06"] + .9, 2)          # a beat on the end card after "early."
+END = round(L1["p06"] + .7, 2)          # a beat on the end card after "early."
 DUR = END
 
 

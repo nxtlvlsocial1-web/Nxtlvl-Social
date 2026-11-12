@@ -22,8 +22,8 @@ from faster_whisper import WhisperModel
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TAKES = os.path.join(ROOT, "assets", "audio", "vo_takes")
 SR = 48000
-TEMPO = 1.2           # owner: the reel runs 25-30 s; spoken 20% faster, pitch kept
-GAP_SCALE = .7
+TEMPO = 1.3           # owner: the reel runs 25-30 s; the expressive takes are slower, so spoken 30% faster, pitch kept
+GAP_SCALE = .55
 LEAD = .04          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast
 GAP = {"p00": .2, "p01": .08, "p02": .3, "p03": .22, "p04": .25, "p05": .25, "p06": .0}
@@ -37,8 +37,15 @@ def norm(w):
     return NUM.get(w, w)
 
 
+def spoken(text):
+    """Whisper writes numbers and names its own way ("GTA6", "8 -hour", "10"): compare in spoken words"""
+    t = re.sub(r"(?i)gta\s*6|gta\s*six", "gta six", text)
+    t = t.replace("-", " ")
+    return t.split()
+
+
 def wer(ref, hyp):
-    r, h = [norm(w) for w in ref.split()], [norm(w) for w in hyp.split()]
+    r, h = [norm(w) for w in spoken(ref)], [norm(w) for w in spoken(hyp)]
     r, h = [w for w in r if w], [w for w in h if w]
     d = np.arange(len(h) + 1)
     for i in range(1, len(r) + 1):
