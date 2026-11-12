@@ -19,14 +19,14 @@ OUT = os.path.join(ROOT, "assets", "audio", "vo_takes")
 # v2 (owner: "highly expressive and emotional, not like he's just reading the script"): each line carries its beat's
 # emotion through punctuation (the pauses and lifts Chatterbox follows) and a much higher exaggeration; three takes each
 LINES = [
-    ("p00", "GTA six drops on the nineteenth! Save this. It's the ONLY creator video you'll need.", "hook 70: urgent, hyped", 1.25),
+    ("p00", "GTA six drops on the nineteenth! So save this... it's the only creator video you'll need.", "hook 70: urgent, hyped", 1.15),
     ("p01", "The biggest GTA RP clip pages grew exactly like this... one police chase. One streamer losing it. Clipped in minutes.",
      "peak: storytelling, building", 1.1),
-    ("p02", "Millions of views!", "peak: amazed, big", 1.6),
+    ("p02", "Millions. Of. Views.", "peak: amazed, big", 1.3),
     ("p03", "Step one: an AI tool that turns any eight-hour stream into ten ready-to-post clips!", "release: excited reveal", 1.05),
     ("p04", "Step two: one game setting that decides if you get paid... or get claimed.", "peak: serious warning, drop on claimed", 1.2),
     ("p05", "Then the music rule... and the keyword trick most GTA pages will miss.", "peak: secretive, teasing", 1.15),
-    ("p06", "Comment GTA six, and I'll send you ALL of it. And follow, so you're early!", "CTA: warm, energetic", 1.2),
+    ("p06", "Comment GTA six, and I'll send you all of it. And follow, so you're early!", "CTA: warm, energetic", 1.2),
 ]
 
 
