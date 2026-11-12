@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>GTA 6 creator playbook 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Montserrat"; src: url("assets/fonts/montserrat.ttf"); font-weight: 100 900; }
+@font-face { font-family: "Serif"; src: url("assets/fonts/InstrumentSerif-Italic.ttf"); font-style: italic; }
+@font-face { font-family: "Mono"; src: url("assets/fonts/JetBrainsMono-Bold.ttf"); font-weight: 700; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050f; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #07050f; font-family: Montserrat; color: #fff; }
+#stage { position: absolute; inset: 0; transform-origin: 50% 45%; }
+.full { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
+#tint { background: linear-gradient(180deg, rgba(16,2,44,.55) 0%, rgba(16,2,44,.05) 30%, rgba(16,2,44,.1) 60%, rgba(7,5,15,.75) 100%); }
+#vig { background: radial-gradient(120% 80% at 50% 45%, transparent 55%, rgba(7,5,15,.7) 100%); }
+#flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 50; mix-blend-mode: screen; }
+#topbar { position: absolute; left: 56px; right: 56px; top: 92px; display: flex; align-items: center; justify-content: space-between; z-index: 40; }
+#topbar .h { font-family: Mono; font-size: 30px; letter-spacing: .14em; color: #fff; padding: 10px 18px; border-radius: 12px;
+  background: rgba(16,2,44,.55); border: 2px solid rgba(182,135,249,.5); }
+#topbar .h b { color: #b687f9; }
+#topbar img { height: 52px; filter: drop-shadow(0 4px 16px rgba(0,0,0,.6)); }
+.sc { position: absolute; inset: 0; z-index: 10; }
+.sc > * { opacity: 0; }
+#hook > * { position: absolute; }
+#gta { left: 0; right: 0; top: 520px; text-align: center; font-weight: 900; line-height: .8; letter-spacing: -.04em; }
+#gta span { font-size: 250px; background: linear-gradient(180deg, #fff 20%, #b687f9); -webkit-background-clip: text; color: transparent;
+  filter: drop-shadow(0 10px 40px rgba(127,27,248,.7)); }
+#gta b { font-size: 330px; margin-left: 20px; background: linear-gradient(160deg, #ffb36b, #ff4fa3 50%, #7f1bf8); -webkit-background-clip: text;
+  color: transparent; filter: drop-shadow(0 10px 50px rgba(255,79,163,.7)); }
+.chip { left: 50%; transform: translateX(-50%); padding: 18px 34px; border-radius: 999px; font-weight: 800; font-size: 44px; letter-spacing: .06em; white-space: nowrap; }
+.chip.date { top: 900px; background: #ff4fa3; color: #07050f; box-shadow: 0 12px 50px rgba(255,79,163,.6); }
+.chip.save { top: 640px; background: #fff; color: #07050f; display: flex; align-items: center; gap: 14px; }
+.chip.save svg { width: 44px; height: 44px; fill: #7f1bf8; }
+#only { opacity: 1; left: 40px; right: 40px; top: 780px; text-align: center; font-weight: 900; line-height: 1.04; white-space: nowrap; letter-spacing: -.035em; text-transform: uppercase; }
+#only > div { opacity: 0; }
+#only .l1 { font-size: 104px; text-shadow: 0 8px 40px rgba(7,5,15,.8); }
+#only .l2 { font-size: 96px; filter: drop-shadow(0 8px 30px rgba(7,5,15,.8)); background: linear-gradient(90deg, #ffb36b, #ff4fa3 45%, #b687f9); -webkit-background-clip: text; color: transparent; }
+#only .l3 { font-size: 104px; text-shadow: 0 8px 40px rgba(7,5,15,.8); }
+#only i { font-family: Serif; font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 104px; color: #b687f9; }
+#rlogo { right: 70px; top: 300px; width: 130px; height: 130px; border-radius: 28px; box-shadow: 0 12px 40px rgba(0,0,0,.5); }
+#proof > * { position: absolute; }
+.lab { left: 56px; top: 200px; font-family: Mono; font-size: 32px; letter-spacing: .14em; padding: 10px 18px; border-radius: 10px; background: #7f1bf8; }
+.tag { left: 70px; padding: 22px 34px; border-radius: 22px; font-weight: 900; font-size: 60px; letter-spacing: -.01em; background: rgba(16,2,44,.85);
+  border: 3px solid #b687f9; box-shadow: 0 14px 50px rgba(0,0,0,.5); }
+#tg1 { top: 470px; } #tg2 { top: 640px; left: auto; right: 70px; }
+#tg3 { top: 810px; left: 50%; margin-left: -330px; background: #ff4fa3; border-color: #fff; color: #07050f; }
+#views { left: 0; right: 0; top: 560px; text-align: center; }
+#vnum { font-weight: 900; font-size: 300px; letter-spacing: -.05em; line-height: 1; background: linear-gradient(180deg, #fff, #ff4fa3);
+  -webkit-background-clip: text; color: transparent; filter: drop-shadow(0 12px 60px rgba(255,79,163,.6)); }
+#vlab { font-family: Mono; font-size: 64px; letter-spacing: .4em; color: #b687f9; margin-top: 10px; }
+.step { position: absolute; left: 70px; top: 230px; font-family: Mono; font-size: 40px; letter-spacing: .2em; color: #b687f9; }
+.step b { font-family: Montserrat; font-weight: 900; font-size: 130px; letter-spacing: -.04em; color: #fff; vertical-align: -22px; margin-left: 8px; }
+.panel { position: absolute; left: 60px; right: 60px; top: 470px; padding: 34px; border-radius: 36px; background: rgba(16,2,44,.82);
+  border: 2px solid rgba(182,135,249,.45); box-shadow: 0 30px 90px rgba(7,5,15,.7), inset 0 1px 0 rgba(255,255,255,.12); backdrop-filter: blur(14px); }
+.ph { display: flex; align-items: center; gap: 18px; margin-bottom: 26px; }
+.ph .dot { width: 22px; height: 22px; border-radius: 50%; background: #38e08c; box-shadow: 0 0 16px #38e08c; }
+.blurname { font-weight: 800; font-size: 44px; filter: blur(11px); }
+.ph .tiny { margin-left: auto; font-family: Mono; font-size: 26px; color: #b687f9; letter-spacing: .12em; }
+#bar { position: relative; height: 150px; border-radius: 20px; background: linear-gradient(90deg, rgba(127,27,248,.35), rgba(255,79,163,.35));
+  overflow: hidden; transform-origin: 50% 0; }
+#bar .bt, #bar .bd { position: absolute; top: 16px; font-family: Mono; font-size: 28px; }
+#bar .bt { left: 20px; } #bar .bd { right: 20px; color: #ffb36b; }
+#wave { position: absolute; left: 20px; right: 20px; bottom: 18px; height: 70px;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,.75) 0 4px, transparent 4px 11px);
+  -webkit-mask: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent); opacity: .65; }
+#scan { position: absolute; left: 20px; top: 0; bottom: 0; width: 6px; background: #fff; box-shadow: 0 0 24px #fff, 0 0 60px #ff4fa3; }
+#grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 22px; }
+.th { position: relative; aspect-ratio: 9 / 16; border-radius: 14px; overflow: hidden; opacity: 0; border: 2px solid rgba(255,255,255,.25); }
+.th .im { position: absolute; inset: 0; background-image: url("assets/img/thumbs.jpg"); background-size: 500% 200%; }
+.th span { position: absolute; left: 6px; right: 6px; bottom: 8px; text-align: center; padding: 4px 0; border-radius: 8px; background: #38e08c;
+  color: #07050f; font-weight: 900; font-size: 20px; opacity: 0; }
+.sh { font-family: Mono; font-size: 34px; letter-spacing: .14em; margin-bottom: 18px; }
+.sh span { color: #b687f9; }
+.row { display: flex; align-items: center; gap: 20px; padding: 26px 22px; border-radius: 18px; font-weight: 700; font-size: 42px; margin-top: 10px;
+  background: rgba(255,255,255,.05); }
+.row span { width: 430px; }
+.row i { flex: 1; height: 16px; border-radius: 99px; background: linear-gradient(90deg, #b687f9 calc(var(--v) * 100%), rgba(255,255,255,.15) 0); }
+.row.key { background: rgba(255,79,163,.16); }
+.row em { font-style: normal; font-weight: 900; color: #ff4fa3; font-size: 50px; }
+.stamp { position: absolute; left: 50%; top: 1060px; margin-left: -330px; width: 660px; text-align: center; padding: 18px 0; border-radius: 22px;
+  font-weight: 900; font-size: 128px; letter-spacing: .04em; border: 10px solid; background: rgba(7,5,15,.55); }
+.stamp.paid { color: #38e08c; border-color: #38e08c; box-shadow: 0 0 80px rgba(56,224,140,.5); }
+.stamp.claimed { color: #ff3b5c; border-color: #ff3b5c; box-shadow: 0 0 80px rgba(255,59,92,.55); }
+.lock { position: absolute; left: 80px; right: 80px; height: 340px; border-radius: 34px; padding: 40px; background: rgba(16,2,44,.85);
+  border: 3px solid rgba(182,135,249,.6); box-shadow: 0 30px 90px rgba(7,5,15,.7); overflow: hidden; }
+#lk1 { top: 330px; } #lk2 { top: 760px; }
+.lt { font-weight: 800; font-size: 58px; letter-spacing: -.01em; }
+.lt b { font-weight: 900; background: linear-gradient(90deg, #ffb36b, #ff4fa3); -webkit-background-clip: text; color: transparent; }
+.fx { margin-top: 30px; filter: blur(9px); }
+.fl { height: 26px; border-radius: 12px; background: rgba(255,255,255,.55); margin-top: 18px; }
+.pad { position: absolute; right: 50px; top: 120px; width: 150px; height: 150px; fill: #fff; filter: drop-shadow(0 0 30px #ff4fa3); }
+#miss { position: absolute; left: 0; right: 0; top: 1200px; text-align: center; font-family: Mono; font-size: 40px; letter-spacing: .1em; color: #ffb36b; }
+#cta > * { position: absolute; left: 0; right: 0; text-align: center; }
+#ctadim { top: 0; bottom: 0; background: radial-gradient(90% 55% at 50% 42%, rgba(7,5,15,.82), rgba(16,2,44,.55) 70%, rgba(7,5,15,.4)); }
+.ct1 { top: 470px; font-family: Mono; font-size: 64px; letter-spacing: .4em; }
+#kw { top: 570px; font-weight: 900; font-size: 300px; letter-spacing: -.05em; line-height: 1;
+  background: linear-gradient(170deg, #fff 10%, #ffb36b 35%, #ff4fa3 60%, #7f1bf8); -webkit-background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 2px #fff) drop-shadow(0 16px 60px rgba(255,79,163,.8)); }
+.ct2 { top: 930px; font-weight: 800; font-size: 64px; }
+.ct2 i { font-family: Serif; font-weight: 400; font-size: 80px; color: #b687f9; }
+#follow { top: 1100px; left: 50%; right: auto; margin-left: -310px; width: 620px; padding: 26px 0; border-radius: 999px; background: #fff; color: #07050f;
+  font-weight: 900; font-size: 50px; box-shadow: 0 16px 60px rgba(127,27,248,.6); }
+#follow span { color: #7f1bf8; } #follow b { color: #ff4fa3; font-weight: 900; }
+#brand { top: 1300px; display: flex; align-items: center; justify-content: center; gap: 30px; }
+#brand .rl { width: 110px; height: 110px; border-radius: 24px; }
+#brand span { font-size: 50px; color: #b687f9; }
+#brand .wm { height: 74px; }
+.cap { position: absolute; left: 60px; right: 60px; top: 1390px; text-align: center; font-weight: 900; font-size: 74px; line-height: 1.05;
+  letter-spacing: -.02em; text-transform: uppercase; z-index: 30; opacity: 0; text-shadow: 0 6px 30px rgba(7,5,15,.9), 0 2px 0 rgba(7,5,15,.9); }
+.cap .k { color: #ff4fa3; }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="29.86" data-fps="30" data-width="1080" data-height="1920">
+      <div id="stage">
+        <video id="vsky" class="full" src="assets/video/r_sky.mp4" data-start="0" data-duration="4.920" data-media-start="0" data-track-index="1" muted playsinline></video>
+<video id="vproof" class="full" src="assets/video/proof.mp4" data-start="4.920" data-duration="7.588" data-media-start="0.4" data-track-index="2" muted playsinline></video>
+<video id="vvc" class="full" src="assets/video/vc_full.mp4" data-start="12.508" data-duration="12.797" data-media-start="5.6" data-track-index="3" muted playsinline></video>
+<video id="vvc2" class="full" src="assets/video/vc_full.mp4" data-start="25.305" data-duration="4.555" data-media-start="26.4" data-track-index="4" muted playsinline></video>
+<div id="tint" class="full"></div><div id="vig" class="full"></div>
+<div class="sc" id="hook"><div id="gta"><span>GTA</span><b>6</b></div><div class="chip date" id="date">DROPS NOV 19</div><div class="chip save" id="save"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg>SAVE THIS</div><div id="only"><div class="l1">THE ONLY</div><div class="l2">GTA 6 CREATOR</div><div class="l3">VIDEO <i>you'll need.</i></div></div><img id="rlogo" src="assets/img/rockstar_logo.jpg"></div>
+<div class="sc" id="proof"><div class="lab" id="plab">GTA RP CLIP PAGES</div><div class="tag" id="tg1">POLICE CHASE</div><div class="tag" id="tg2">STREAMER LOSING IT</div><div class="tag hot" id="tg3">CLIPPED IN MINUTES</div><div id="views"><div id="vnum">0</div><div id="vlab">VIEWS</div></div></div>
+<div class="sc" id="st1"><div class="step">STEP <b>01</b></div><div class="panel" id="tool"><div class="ph"><div class="dot"></div><div class="blurname">Clipr Pro AI</div><div class="tiny">AI CLIPPER</div></div><div id="bar"><div class="bt">STREAM.mp4</div><div class="bd">8:00:00</div><div id="wave"></div><div id="scan"></div></div><div id="grid"><div class="th" id="th0"><div class="im" style="background-position:0% 0%"></div><span>READY</span></div><div class="th" id="th1"><div class="im" style="background-position:25% 0%"></div><span>READY</span></div><div class="th" id="th2"><div class="im" style="background-position:50% 0%"></div><span>READY</span></div><div class="th" id="th3"><div class="im" style="background-position:75% 0%"></div><span>READY</span></div><div class="th" id="th4"><div class="im" style="background-position:100% 0%"></div><span>READY</span></div><div class="th" id="th5"><div class="im" style="background-position:0% 100%"></div><span>READY</span></div><div class="th" id="th6"><div class="im" style="background-position:25% 100%"></div><span>READY</span></div><div class="th" id="th7"><div class="im" style="background-position:50% 100%"></div><span>READY</span></div><div class="th" id="th8"><div class="im" style="background-position:75% 100%"></div><span>READY</span></div><div class="th" id="th9"><div class="im" style="background-position:100% 100%"></div><span>READY</span></div></div></div></div>
+<div class="sc" id="st2"><div class="step">STEP <b>02</b></div><div class="panel" id="set"><div class="sh">SETTINGS <span>/ AUDIO</span></div><div class="row"><span>Master Volume</span><i style="--v:.8"></i></div><div class="row key" id="keyrow"><span class="blurname">In-game Radio</span><i style="--v:.6"></i><em>?</em></div><div class="row"><span>Dialogue</span><i style="--v:.9"></i></div><div class="row"><span>Subtitles</span><i style="--v:.5"></i></div></div><div class="stamp paid" id="paid">PAID</div><div class="stamp claimed" id="claimed">CLAIMED</div></div>
+<div class="sc" id="st3"><div class="lock" id="lk1"><div class="lt">THE <b>MUSIC RULE</b></div><div class="fx"><div class="fl" style="width:92%"></div><div class="fl" style="width:78%"></div><div class="fl" style="width:85%"></div><div class="fl" style="width:60%"></div></div><svg class="pad" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1zm2 0h6V7a3 3 0 0 0-6 0z"/></svg></div><div class="lock" id="lk2"><div class="lt">THE <b>KEYWORD TRICK</b></div><div class="fx"><div class="fl" style="width:92%"></div><div class="fl" style="width:78%"></div><div class="fl" style="width:85%"></div><div class="fl" style="width:60%"></div></div><svg class="pad" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1zm2 0h6V7a3 3 0 0 0-6 0z"/></svg></div><div id="miss">MOST GTA PAGES WILL MISS THIS</div></div>
+<div class="sc" id="cta"><div id="ctadim"></div><div class="ct1">COMMENT</div><div id="kw">GTA6</div><div class="ct2">and I'll send you <i>all of it.</i></div><div id="follow"><span>+</span> FOLLOW <b>· BE EARLY</b></div><div id="brand"><img src="assets/img/rockstar_logo.jpg" class="rl"><span>×</span><img src="assets/img/logo-wordmark.png" class="wm"></div></div>
+<div class="cap" id="cap0"><span class="">The</span> <span class="">biggest</span> <span class="">GTA</span></div>
+<div class="cap" id="cap1"><span class="">RP</span> <span class="">clip</span> <span class="">pages</span></div>
+<div class="cap" id="cap2"><span class="">grew</span> <span class="">exactly</span> <span class="">like</span></div>
+<div class="cap" id="cap3"><span class="">this</span></div>
+<div class="cap" id="cap4"><span class="">one</span> <span class="k">police</span> <span class="k">chase</span></div>
+<div class="cap" id="cap5"><span class="">one</span> <span class="k">streamer</span> <span class="">losing</span></div>
+<div class="cap" id="cap6"><span class="">it</span></div>
+<div class="cap" id="cap7"><span class="">clipped</span> <span class="">in</span> <span class="k">minutes</span></div>
+<div class="cap" id="cap8"><span class="k">Millions</span> <span class="">of</span> <span class="">views</span></div>
+<div class="cap" id="cap9"><span class="">Step</span> <span class="">1</span></div>
+<div class="cap" id="cap10"><span class="">An</span> <span class="k">AI</span> <span class="">tool</span></div>
+<div class="cap" id="cap11"><span class="">that</span> <span class="">turns</span> <span class="">any</span></div>
+<div class="cap" id="cap12"><span class="k">8-hour</span> <span class="">stream</span> <span class="">into</span></div>
+<div class="cap" id="cap13"><span class="k">10</span></div>
+<div class="cap" id="cap14"><span class="">ready</span> <span class="">to</span> <span class="">post</span></div>
+<div class="cap" id="cap15"><span class="">clips</span></div>
+<div class="cap" id="cap16"><span class="">Step</span> <span class="">two</span></div>
+<div class="cap" id="cap17"><span class="">one</span> <span class="">game</span> <span class="k">setting</span></div>
+<div class="cap" id="cap18"><span class="">that</span> <span class="">decides</span> <span class="">if</span></div>
+<div class="cap" id="cap19"><span class="">you</span> <span class="">get</span> <span class="k">paid</span></div>
+<div class="cap" id="cap20"><span class="">or</span> <span class="">get</span> <span class="k">claimed</span></div>
+<div class="cap" id="cap21"><span class="">Then</span> <span class="">the</span> <span class="k">music</span></div>
+<div class="cap" id="cap22"><span class="">rule</span></div>
+<div class="cap" id="cap23"><span class="">and</span> <span class="">the</span> <span class="k">keyword</span></div>
+<div class="cap" id="cap24"><span class="">trick</span> <span class="">most</span> <span class="">GTA</span></div>
+<div class="cap" id="cap25"><span class="">pages</span> <span class="">will</span> <span class="k">miss</span></div>
+      </div>
+      <div id="topbar"><div class="h">AI.<b>NXTLVL</b></div><img src="assets/img/logo-wordmark.png"></div>
+      <div id="flash"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({paused: true});
+      tl.fromTo("#gta", {opacity: 0, scale: 1.6}, {...{opacity: 1, scale: 1}, duration: 0.35, ease: "expo.out", immediateRender: false}, 0.033);
+      tl.fromTo("#rlogo", {opacity: 0, scale: .6, rotation: -12}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 0.183);
+      tl.fromTo("#date", {opacity: 0, y: 40}, {...{opacity: 1, y: 0}, duration: 0.28, ease: "back.out(1.7)", immediateRender: false}, 1.500);
+      tl.to("#gta", {y: -210, scale: .62, duration: .35, ease: "expo.inOut"}, 2.267);
+      tl.to("#date", {opacity: 0, duration: 0.15, ease: "power2.in"}, 2.267);
+      tl.fromTo("#save", {opacity: 0, scale: .5}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 2.317);
+      tl.fromTo("#only .l1", {opacity: 0, y: 40}, {...{opacity: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 3.297);
+      tl.fromTo("#only .l2", {opacity: 0, y: 40}, {...{opacity: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 3.437);
+      tl.fromTo("#only .l3", {opacity: 0, y: 40}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 3.930);
+      tl.fromTo("#vsky", {scale: 1.0}, {scale: 1.1, duration: 4.920, ease: "none", immediateRender: false}, 0);
+      tl.to("#hook", {opacity: 0, duration: 0.08, ease: "power2.in"}, 4.870);
+      tl.fromTo("#flash", {opacity: .85}, {opacity: 0, duration: .22, ease: "power2.out", immediateRender: false}, 4.920);
+      tl.fromTo("#stage", {scale: 1.08}, {scale: 1, duration: .45, ease: "expo.out", immediateRender: false}, 4.920);
+      tl.fromTo("#plab", {opacity: 0, y: 40}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 5.020);
+      tl.fromTo("#tg1", {opacity: 0, x: -80}, {...{opacity: 1, x: 0}, duration: 0.28, ease: "back.out(1.7)", immediateRender: false}, 8.350);
+      tl.fromTo("#tg2", {opacity: 0, x: 80}, {...{opacity: 1, x: 0}, duration: 0.28, ease: "back.out(1.7)", immediateRender: false}, 9.350);
+      tl.fromTo("#tg3", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.28, ease: "back.out(1.7)", immediateRender: false}, 10.717);
+      tl.to(["#tg1", "#tg2", "#tg3"], {opacity: 0, y: -40, duration: .18, stagger: .04}, 11.130);
+      tl.to("#vproof", {filter: "brightness(.45) blur(6px)", duration: .3}, 11.230);
+      tl.fromTo("#views", {opacity: 0, scale: 1.7}, {...{opacity: 1, scale: 1}, duration: 0.35, ease: "expo.out", immediateRender: false}, 11.330);
+      const vc = {v: 0}; tl.to(vc, {v: 30.5, duration: .9, ease: "power3.out", onUpdate: () => { document.getElementById("vnum").textContent = vc.v.toFixed(1) + "M"; }}, 11.330);
+      tl.to("#proof", {opacity: 0, duration: 0.08, ease: "power2.in"}, 12.458);
+      tl.fromTo("#flash", {opacity: .85}, {opacity: 0, duration: .22, ease: "power2.out", immediateRender: false}, 12.508);
+      tl.fromTo("#stage", {scale: 1.08}, {scale: 1, duration: .45, ease: "expo.out", immediateRender: false}, 12.508);
+      tl.fromTo("#st1 .step", {opacity: 0, x: -60}, {...{opacity: 1, x: 0}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 12.558);
+      tl.fromTo("#tool", {opacity: 0, y: 80, scale: .94}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.4, ease: "back.out(1.7)", immediateRender: false}, 12.628);
+      tl.fromTo("#scan", {x: 0}, {x: 860, duration: 0.900, ease: "none", immediateRender: false}, 14.588);
+      tl.to("#bar", {scaleY: .4, opacity: .35, duration: .25, ease: "power2.in"}, 15.438);
+      tl.fromTo("#th0", {opacity: 0, scale: .4, y: -60}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 15.488);
+      tl.fromTo("#th1", {opacity: 0, scale: .4, y: -60}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 15.548);
+      tl.fromTo("#th2", {opacity: 0, scale: .4, y: -60}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 15.608);
+      tl.fromTo("#th3", {opacity: 0, scale: .4, y: -60}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 15.668);
+      tl.fromTo("#th4", {opacity: 0, scale: .4, y: -60}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 15.728);
+      tl.fromTo("#th5", {opacity: 0, scale: .4, y: -60}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 15.788);
+      tl.fromTo("#th6", {opacity: 0, scale: .4, y: -60}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 15.848);
+      tl.fromTo("#th7", {opacity: 0, scale: .4, y: -60}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 15.908);
+      tl.fromTo("#th8", {opacity: 0, scale: .4, y: -60}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 15.968);
+      tl.fromTo("#th9", {opacity: 0, scale: .4, y: -60}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 16.028);
+      tl.to(".th span", {opacity: 1, duration: .15, stagger: .05}, 15.988);
+      tl.to("#st1", {opacity: 0, duration: 0.08, ease: "power2.in"}, 16.870);
+      tl.fromTo("#flash", {opacity: .85}, {opacity: 0, duration: .22, ease: "power2.out", immediateRender: false}, 16.920);
+      tl.fromTo("#stage", {scale: 1.08}, {scale: 1, duration: .45, ease: "expo.out", immediateRender: false}, 16.920);
+      tl.fromTo("#st2 .step", {opacity: 0, x: -60}, {...{opacity: 1, x: 0}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 16.970);
+      tl.fromTo("#set", {opacity: 0, y: 80, scale: .94}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.4, ease: "back.out(1.7)", immediateRender: false}, 17.020);
+      tl.fromTo("#keyrow", {boxShadow: "0 0 0 0 rgba(255,79,163,0)"}, {boxShadow: "0 0 0 6px rgba(255,79,163,.9), 0 0 60px rgba(255,79,163,.6)", duration: .3, immediateRender: false}, 18.400);
+      tl.fromTo("#paid", {opacity: 0, scale: 2.2, rotation: -24}, {...{opacity: 1, scale: 1, rotation: -12}, duration: 0.25, ease: "expo.out", immediateRender: false}, 19.817);
+      tl.to("#paid", {opacity: 0, scale: .8, duration: .15}, 20.620);
+      tl.fromTo("#claimed", {opacity: 0, scale: 2.2, rotation: 20}, {...{opacity: 1, scale: 1, rotation: 8}, duration: 0.25, ease: "expo.out", immediateRender: false}, 20.700);
+      tl.fromTo("#stage", {x: -14}, {x: 0, duration: .3, ease: "elastic.out(1, .3)", immediateRender: false}, 20.700);
+      tl.to("#st2", {opacity: 0, duration: 0.08, ease: "power2.in"}, 21.133);
+      tl.fromTo("#flash", {opacity: .85}, {opacity: 0, duration: .22, ease: "power2.out", immediateRender: false}, 21.183);
+      tl.fromTo("#stage", {scale: 1.08}, {scale: 1, duration: .45, ease: "expo.out", immediateRender: false}, 21.183);
+      tl.fromTo("#lk1", {opacity: 0, x: -200, rotation: -6}, {...{opacity: 1, x: 0, rotation: -3}, duration: 0.35, ease: "back.out(1.7)", immediateRender: false}, 21.629);
+      tl.fromTo("#lk2", {opacity: 0, x: 200, rotation: 6}, {...{opacity: 1, x: 0, rotation: 3}, duration: 0.35, ease: "back.out(1.7)", immediateRender: false}, 22.762);
+      tl.fromTo("#miss", {opacity: 0, scale: 1.4}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 24.662);
+      tl.to("#st3", {opacity: 0, duration: 0.08, ease: "power2.in"}, 25.255);
+      tl.fromTo("#flash", {opacity: .85}, {opacity: 0, duration: .22, ease: "power2.out", immediateRender: false}, 25.305);
+      tl.fromTo("#stage", {scale: 1.08}, {scale: 1, duration: .45, ease: "expo.out", immediateRender: false}, 25.305);
+      tl.fromTo("#ctadim", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 25.305);
+      tl.fromTo(".ct1", {opacity: 0, y: 40}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 25.355);
+      tl.fromTo("#kw", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.4, ease: "expo.out", immediateRender: false}, 26.125);
+      tl.fromTo("#kw", {textShadow: "0 0 0px #ff4fa3"}, {textShadow: "0 0 50px #ff4fa3", duration: .6, yoyo: true, repeat: 3, immediateRender: false}, 26.525);
+      tl.fromTo(".ct2", {opacity: 0, y: 40}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 27.208);
+      tl.fromTo("#follow", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 28.092);
+      tl.to("#follow", {scale: .92, duration: .08, yoyo: true, repeat: 1}, 28.542);
+      tl.fromTo("#brand", {opacity: 0, y: 40}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "back.out(1.7)", immediateRender: false}, 28.542);
+      tl.fromTo("#cap0", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 4.970);
+      tl.set("#cap0", {opacity: 0}, 5.987);
+      tl.fromTo("#cap1", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 5.987);
+      tl.set("#cap1", {opacity: 0}, 6.853);
+      tl.fromTo("#cap2", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 6.853);
+      tl.set("#cap2", {opacity: 0}, 7.670);
+      tl.fromTo("#cap3", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 7.670);
+      tl.set("#cap3", {opacity: 0}, 8.170);
+      tl.fromTo("#cap4", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 8.170);
+      tl.set("#cap4", {opacity: 0}, 9.237);
+      tl.fromTo("#cap5", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 9.237);
+      tl.set("#cap5", {opacity: 0}, 10.203);
+      tl.fromTo("#cap6", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 10.203);
+      tl.set("#cap6", {opacity: 0}, 10.687);
+      tl.fromTo("#cap7", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 10.687);
+      tl.set("#cap7", {opacity: 0}, 11.300);
+      tl.fromTo("#cap8", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 11.300);
+      tl.set("#cap8", {opacity: 0}, 12.558);
+      tl.fromTo("#cap9", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 12.558);
+      tl.set("#cap9", {opacity: 0}, 13.308);
+      tl.fromTo("#cap10", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 13.308);
+      tl.set("#cap10", {opacity: 0}, 13.925);
+      tl.fromTo("#cap11", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 13.925);
+      tl.set("#cap11", {opacity: 0}, 14.558);
+      tl.fromTo("#cap12", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 14.558);
+      tl.set("#cap12", {opacity: 0}, 15.458);
+      tl.fromTo("#cap13", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 15.458);
+      tl.set("#cap13", {opacity: 0}, 15.958);
+      tl.fromTo("#cap14", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 15.958);
+      tl.set("#cap14", {opacity: 0}, 16.475);
+      tl.fromTo("#cap15", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 16.475);
+      tl.set("#cap15", {opacity: 0}, 16.970);
+      tl.fromTo("#cap16", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 16.970);
+      tl.set("#cap16", {opacity: 0}, 17.920);
+      tl.fromTo("#cap17", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 17.920);
+      tl.set("#cap17", {opacity: 0}, 18.653);
+      tl.fromTo("#cap18", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 18.653);
+      tl.set("#cap18", {opacity: 0}, 19.553);
+      tl.fromTo("#cap19", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 19.553);
+      tl.set("#cap19", {opacity: 0}, 20.020);
+      tl.fromTo("#cap20", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 20.020);
+      tl.set("#cap20", {opacity: 0}, 21.233);
+      tl.fromTo("#cap21", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 21.233);
+      tl.set("#cap21", {opacity: 0}, 21.966);
+      tl.fromTo("#cap22", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 21.966);
+      tl.set("#cap22", {opacity: 0}, 22.299);
+      tl.fromTo("#cap23", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 22.299);
+      tl.set("#cap23", {opacity: 0}, 23.132);
+      tl.fromTo("#cap24", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 23.132);
+      tl.set("#cap24", {opacity: 0}, 24.282);
+      tl.fromTo("#cap25", {opacity: 0, scale: .85, y: 12}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.14, ease: "back.out(2.4)", immediateRender: false}, 24.282);
+      tl.set("#cap25", {opacity: 0}, 25.379);
+      tl.set({}, {}, 29.86);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

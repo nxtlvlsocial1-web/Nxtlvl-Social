@@ -186,9 +186,12 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
 - Never use music or images we don't have the rights to; source them through `media-use`.
 - Sound effects: always build the SFX library from Openverse first (`api.openverse.org`, licences CC0 or CC BY only,
   never NC, ND or SA; record each sound's title, creator, licence and link, and credit CC BY ones in the post). Then
-  mix them with the `real-sfx` skill under the song. Most Openverse sound effects are Freesound files, and Freesound's
-  file server refuses downloads from cloud sessions; never fake a browser to get around that. When a download is
-  refused, use the CC0 OpenGameArt packs (`spin-bout-u-drake/build/oga_sfx.py`) as the fallback and say so.
+  mix them with the `real-sfx` skill under the song. Most Openverse sound effects are Freesound files: Freesound's
+  site and original-file downloads refuse cloud sessions, but its preview files (`cdn.freesound.org/previews/...`, the
+  `audio_url` the `openverse-sfx` skill's `sfx_search.py` returns) download fine, so fetch them with that skill's
+  `sfx_fetch.py` (install: `npx "@opendirectory.dev/skills" install openverse-sfx --target claude`). Never fake a
+  browser to get around a block. Only when a download is refused, use the CC0 OpenGameArt packs
+  (`spin-bout-u-drake/build/oga_sfx.py`) as the fallback and say so.
 - Keep rendered MP4s out of git; deliver them, don't commit them.
 - Never use emojis in post descriptions, captions or hashtag blocks we write for clients (number lists with "1.", not
   emoji digits). Plain text only.
