@@ -64,8 +64,15 @@ def main():
     run(["ffmpeg", "-y", "-loglevel", "error", "-i", os.path.join(ROOT, "assets", "video", "tight.mp4"), "-vn", "-af",
          f"{VCHAIN},loudnorm=I=-16:TP=-3:LRA=9", "-ar", "48000", "-ac", "1", her])
     bite = os.path.join(WORK, "voice_bite.wav")
-    run(["ffmpeg", "-y", "-loglevel", "error", "-i", os.path.join(ROOT, E["bite"]["src"]), "-af",
-         f"{VCHAIN},afade=t=out:st=2.45:d=0.12,loudnorm=I=-16:TP=-3:LRA=9", "-ar", "48000", "-ac", "1", bite])
+    # v4 (owner: "while his speech is ending add that effect in his voice where it kinda echoes"): his last word
+    # ("brain") repeats as three fading, darker echoes that trail into the cut to black
+    L, F = E["bite"]["len"], E["bite"]["echo_from"]
+    run(["ffmpeg", "-y", "-loglevel", "error", "-i", os.path.join(ROOT, E["bite"]["src"]), "-filter_complex",
+         f"[0:a]{VCHAIN},atrim=0:{L},afade=t=out:st={L - .1:.2f}:d=0.1,loudnorm=I=-16:TP=-3:LRA=9,asplit=2[dry][w];"
+         f"[w]atrim={F}:{L},asetpts=PTS-STARTPTS,highpass=f=200,lowpass=f=3000,asplit=3[e1][e2][e3];"
+         f"[e1]volume=0.55,adelay={int((F + .24) * 1000)}[d1];[e2]volume=0.32,lowpass=f=2200,adelay={int((F + .5) * 1000)}[d2];"
+         f"[e3]volume=0.18,lowpass=f=1500,adelay={int((F + .78) * 1000)}[d3];"
+         f"[dry][d1][d2][d3]amix=inputs=4:normalize=0:duration=longest[o]", "-map", "[o]", "-ar", "48000", "-ac", "1", bite])
     vo = os.path.join(WORK, "voice_full.wav")
     ms = int(E["bite"]["at"] * 1000)
     run(["ffmpeg", "-y", "-loglevel", "error", "-i", her, "-i", bite, "-filter_complex",

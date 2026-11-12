@@ -21,18 +21,20 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW = os.path.join(ROOT, "footage", "face_1080.mp4")
 SPEED = 1.08
 THRESH, MINSIL, KEEP = -32, .16, .1
-GAP = .22                                   # pause left between two lines
+GAP = .06                                   # v4 (owner: "only the part where she speaks, not her looking left or right
+                                            # in between"): two frames between lines, not 0.22 s of her looking away
 W = json.load(open(os.path.join(ROOT, "plan", "words_raw.json")))
 # (id, first word, last word) or (id, "silent", start, end)
-LINES = [("HOOK", "silent", .5, 3.4),
+LINES = [("HOOK", "silent", .5, 3.62),     # v4: covers Deepinder's full-screen line and the cut to black (her face is hidden)
          ("L1", 0, 39),       # Deepinder Goyal's Temple costs 85,000 rupees ... Does it work? We don't know yet.
          ("L2", 65, 90),      # So let me tell you of a tracker that is completely free. It does not need ... your time.
          ("L3", 91, 98),      # And that tracker is the people around you.
          ("L4", 99, 118),     # Just ask yourself, are the people in your life ... constantly complaining, criticizing and disrespecting you
          ("L5", 119, 144),    # or are the people in your life ... loving you, supporting you and inspiring you ... best version of yourself?
-         ("L6", 187, 202),    # because the people in our environment affect our peace of mind and mental health the most.
+         ("L6", 187, 202, 123.55),   # v3: starts on "Because" (a 0.3 s lip noise before it is dropped)    # because the people in our environment affect our peace of mind and mental health the most.
          ("L7", 203, 213),    # So surround yourself with people that make your life more beautiful
-         ("L8", 214, 236)]    # because sometimes the greatest upgrade ... may not be a device, it is simply the beautiful people in your life.
+         ("L8", 214, 236, 144.95)]   # v3: her second, clean take ("Because sometimes the greatest..."); the false start
+                                     # "Because sometimes great-" at 141.0-143.0 is dropped (owner: "two different takes")    # because sometimes the greatest upgrade ... may not be a device, it is simply the beautiful people in your life.
 
 
 def silences(a, b):
@@ -43,21 +45,40 @@ def silences(a, b):
     return list(zip(st, en))
 
 
+def speech_edges(a, b, pre=.05, post=.1):
+    """v4: trim a range to her voice: from just before the first sound to just after the last (silencedetect at THRESH)"""
+    sil = silences_fine(a, b)
+    if sil and sil[0][0] <= a + .02:
+        a = max(a, sil[0][1] - pre)
+    if sil and sil[-1][1] >= b - .02:
+        b = min(b, sil[-1][0] + post)
+    return a, b
+
+
+def silences_fine(a, b):
+    log = subprocess.run(["ffmpeg", "-v", "info", "-ss", f"{a:.3f}", "-to", f"{b:.3f}", "-i", RAW, "-vn", "-af",
+                          f"highpass=f=90,silencedetect=noise={THRESH}dB:d=0.05", "-f", "null", "-"], capture_output=True, text=True).stderr
+    st = [float(x) + a for x in re.findall(r"silence_start: (-?[\d.]+)", log)]
+    en = [float(x) + a for x in re.findall(r"silence_end: ([\d.]+)", log)]
+    if len(en) < len(st):
+        en.append(b)
+    return list(zip(st, en))
+
+
 pieces = []           # (line, src a, src b, mute)
 for ln in LINES:
     if ln[1] == "silent":
         pieces.append((ln[0], ln[2], ln[3], True))
         continue
-    lid, i, j = ln
-    a = W[i]["s"] - .08
-    b = W[j]["e"] + .15
-    if j + 1 < len(W):
-        b = min(b, W[j + 1]["s"] - .03)
+    lid, i, j = ln[:3]
+    a = ln[3] if len(ln) > 3 else W[i]["s"] - .08
+    a, b0 = speech_edges(a, W[j]["e"] + .4 if j + 1 >= len(W) else min(W[j]["e"] + .4, W[j + 1]["s"] - .03))
+    b = b0                                             # v4: the line ends where her voice ends (+ a short tail), not on Whisper's guess
     if ln is LINES[-1]:
-        b += .55                                       # v2: end on her face, half a second after "life."
+        b += .3                                        # end on her face, a beat after "life." (v4: was 0.55 s)
     cur = a
     for s, e in silences(a, b):
-        keep = min(.3, KEEP + .12 * (e - s))           # v2 (owner: "bad cuts"): a long pause keeps more of itself
+        keep = min(.18, KEEP + .04 * (e - s))          # v4: short, so no glance away survives a pause (v2 kept up to 0.3 s)
         s2, e2 = s + keep / 2, e - keep / 2
         if e2 - s2 > .03 and s2 > cur:
             if s2 - cur >= .18 or not pieces or pieces[-1][0] != lid:

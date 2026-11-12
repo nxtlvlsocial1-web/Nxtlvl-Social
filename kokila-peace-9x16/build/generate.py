@@ -116,6 +116,10 @@ t_so7, t_beaut7 = T("so", t_most), T("beautiful", t_most)
 t_because8, t_great, t_upgrade, t_device = T("because", t_beaut7), T("greatest"), T("upgrade"), T("device")
 t_it8, t_beaut8, t_life8 = T("it", t_device), T("beautiful", t_device), T("life", T("beautiful", t_device), "e")
 BEAT = None                                     # v2: the unrecorded text beat is gone
+# v4: Deepinder's line plays full screen (podcast 47.15 s on; "...to your brain." ends ~2.62 s in), then black until she starts
+BITE_LEN, ECHO_FROM = 2.62, 2.30               # the bite, and where his last word "brain" starts (its echo tail)
+T_BLACK = 2.56
+T_SPLIT = round(t_l1 - .06, 3)
 
 # (mode, t0, t1): split / full / beat / end
 SECTIONS = [("split", 0.0, t_but - .1), ("full", t_but - .1, t_does - .1), ("split", t_does - .1, t_because6 - .1),
@@ -138,12 +142,22 @@ def broll(sid, t0, t1, vid, at=0.0, label=None, pos="50% 40%", extra=""):
 
 def build_top():
     # the cold open: Deepinder's own line, the device on his temple
-    scene("ts0", 0, 2.75, clip("pA", 0, 2.75, 47.15) + '<div class="say" id="say0">"It measures blood flow to your brain."</div>', "vid")
+    # v4 (owner): Deepinder full screen while we hear him; as he stops, an instant black, then the split screen
+    OVER.append(f'<div class="ov deep" id="deep" style="opacity:1"><video class="podfull" id="pA" src="footage/podcast_169.mp4" data-start="0" '
+                f'data-duration="{T_BLACK:.3f}" data-media-start="47.150" data-track-index="5" muted playsinline></video>'
+                '<div class="credit">Source: Raj Shamani podcast</div><div class="say" id="say0">"It measures blood flow to your brain."</div></div>'
+                '<div class="ov blk" id="blk"></div>')
+    js(f'tl.fromTo("#pA", {{scale: 1.0}}, {{scale: 1.06, duration: {T_BLACK:.3f}, ease: "none", immediateRender: false}}, 0);')
     js(f'tl.fromTo("#say0", {{opacity: 0, y: 20}}, {{opacity: 1, y: 0, duration: .3, ease: "expo.out", immediateRender: false}}, 1.25);')
+    js(f'tl.set("#deep", {{opacity: 0}}, {T_BLACK:.3f}); tl.set("#blk", {{opacity: 1}}, {T_BLACK:.3f}); tl.set("#blk", {{opacity: 0}}, {T_SPLIT:.3f});')
+    js(f'tl.fromTo("#botin", {{scale: 1.3, filter: "blur(8px)"}}, {{scale: 1, filter: "blur(0px)", duration: .35, ease: "expo.out", immediateRender: false}}, {T_SPLIT:.3f});')
+    js(f'tl.fromTo("#top", {{scale: 1.12, filter: "blur(10px)"}}, {{scale: 1, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}}, {T_SPLIT:.3f});')
+    js(f'tl.set("#seamline", {{opacity: 1}}, {T_SPLIT:.3f});')      # the seam only exists once the split screen does
+    sfx("hit", T_SPLIT)
     # "Deepinder Goyal's Temple costs 85,000 rupees": the price tag counts up over his clip
     tag = (f'<div class="price glass" id="pr1"><div class="pl">{icon("card")} TEMPLE by Deepinder Goyal</div>'
            f'<div class="pv">₹<b id="pr1n">0</b></div></div>')
-    scene("ts1", 2.75, t_measure - .1, clip("pC", 2.75, t_measure - .1, 29.0) + tag, "vid")
+    scene("ts1", T_SPLIT, t_measure - .1, clip("pC", T_SPLIT, t_measure - .1, 29.0) + tag, "vid")
     pop("#pr1", T("costs") - .1)
     for k, v in enumerate(["0", "8,500", "21,000", "39,000", "57,000", "71,000", "80,500", "85,000"]):
         js(f'tl.set("#pr1n", {{textContent: "{v}"}}, {T("85") - .35 + k * .07:.3f});')
@@ -194,7 +208,7 @@ def build_top():
     broll("tb9", t_or - .1, t_loving - .1, "8888536", 4.0, None, "50% 40%")
     broll("tb10", t_loving - .1, t_supp - .1, "8058107", 4.0, None, "60% 40%")
     broll("tb11", t_supp - .1, t_insp - .1, "8416831", 2.0, None, "50% 45%")
-    broll("tb12", t_insp - .1, t_because6 - .1, "9579386", 5.0, None, "45% 40%")
+    broll("tb12", t_insp - .1, t_because6 - .1, "9579386", 2.5, None, "45% 40%")
     for t in (t_loving, t_supp, t_insp):
         sfx("swish", t - .12)
     sfx("sparkle", t_best)
@@ -202,7 +216,7 @@ def build_top():
     broll("tb13", t_so7 - .1, t_because8 - .1, "8773862", 1.0, None, "50% 45%")
     sfx("sparkle", t_beaut7)
     # "the greatest upgrade to your mental health may not be a device, it is simply the beautiful people in your life"
-    broll("tb14", t_because8 - .1, t_it8 - .1, "7223986", 7.5, None, "50% 50%")
+    broll("tb14", t_because8 - .1, t_it8 - .1, "7223986", 6.9, None, "50% 50%")
     broll("tb15", t_it8 - .1, DUR, "5899973", 3.0, None, "50% 40%")
     sfx("swish", t_it8 - .12)
     sfx("success", t_beaut8)
@@ -305,11 +319,15 @@ video {{ display: block; }}
 #bot {{ position: absolute; left: 0; top: {SEAM}px; width: {FW}px; height: {FH - SEAM}px; overflow: hidden; background: #222; }}
 #botin {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH - SEAM}px; transform-origin: 50% 47%; }}
 #botin video, #fullv {{ width: 100%; height: 100%; object-fit: cover; }}
-#seamline {{ position: absolute; left: 0; top: {SEAM - 3}px; width: {FW}px; height: 6px; background: linear-gradient(90deg, {BLUE}, {YEL}, {BLUE}); z-index: 6; }}
+#seamline {{ position: absolute; left: 0; top: {SEAM - 3}px; width: {FW}px; height: 6px; background: linear-gradient(90deg, {BLUE}, {YEL}, {BLUE}); z-index: 6; opacity: 0; }}
 #full {{ position: absolute; inset: 0; opacity: 0; overflow: hidden; }}
 #fullin {{ position: absolute; inset: 0; transform-origin: 50% 40%; }}
 #fullv {{ position: absolute; inset: 0; transform-origin: 50% 38%; }}
 .ts {{ position: absolute; inset: 0; opacity: 0; }}
+.deep {{ background: #000; z-index: 6; }}
+.podfull {{ position: absolute; left: -1540px; top: 0; width: 3413px; height: 1920px; filter: brightness(1.42) contrast(1.18) saturate(1.18); transform-origin: 2080px 700px; }}
+.deep .say {{ bottom: 330px; font-size: 52px; }}
+.blk {{ background: #000; z-index: 9; }}
 .br {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(1.08) contrast(1.05); }}
 .shade2 {{ position: absolute; left: 0; right: 0; bottom: 0; height: 260px; background: linear-gradient(180deg, transparent, rgba(14,26,58,.45)); }}
 .blab {{ position: absolute; left: 40px; top: 250px; padding: 12px 26px; border-radius: 18px; background: rgba(255,255,255,.9); color: {NAVY};
@@ -429,7 +447,7 @@ def main():
     build_caps()
     # the hook text on the seam, from frame 0 (CSS-visible), out when she starts
     js(f'tl.fromTo("#hook", {{scale: 1.04}}, {{scale: 1, duration: 2.0, ease: "power1.out", immediateRender: false}}, 0);')
-    js(f'tl.to("#hook", {{opacity: 0, y: -30, duration: .25, ease: "power2.in"}}, {t_l1 - .25:.3f});')
+    js(f'tl.set("#hook", {{opacity: 0}}, {T_BLACK:.3f});')
     sfx("hit", 0.0)
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
@@ -466,7 +484,7 @@ def main():
 """
     open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8").write(html)
     json.dump(sorted(SFX, key=lambda e: e["t"]), open(os.path.join(ROOT, "plan", "sfx_events.json"), "w"), indent=0)
-    json.dump({"dur": DUR, "vdur": VDUR, "beat": None, "sections": SECTIONS, "bite": {"src": "assets/audio/deepinder_bite.wav", "at": 0.0}},
+    json.dump({"dur": DUR, "vdur": VDUR, "beat": None, "sections": SECTIONS, "bite": {"src": "assets/audio/deepinder_bite.wav", "at": 0.0, "len": BITE_LEN, "echo_from": ECHO_FROM}},
               open(os.path.join(ROOT, "plan", "edit.json"), "w"), indent=1)
     print(f"wrote index.html: {len(A)} timeline lines, {len(CAPS)} captions, {len(SFX)} sfx, {DUR} s")
 
