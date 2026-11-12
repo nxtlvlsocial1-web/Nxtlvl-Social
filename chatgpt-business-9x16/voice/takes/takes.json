@@ -1,0 +1,191 @@
+{
+ "01_0": {
+  "who": "nar",
+  "text": "ChatGPT now recommends businesses. Is yours on it?",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 3.68,
+  "heard": "ChatGPT now recommends businesses. Is yours on it?",
+  "match": 1.0,
+  "picked": true
+ },
+ "01_1": {
+  "who": "nar",
+  "text": "ChatGPT now recommends businesses. Is yours on it?",
+  "exaggeration": 0.85,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 3.52,
+  "heard": "ChatGPT now recommends businesses. Is yours on it?",
+  "match": 1.0
+ },
+ "02_0": {
+  "who": "nar",
+  "text": "Since November tenth, you can claim your business profile. For free.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 4.04,
+  "heard": "Since November 10th, you can claim your business profile for free.",
+  "match": 0.909,
+  "picked": true
+ },
+ "02_1": {
+  "who": "nar",
+  "text": "Since November tenth, you can claim your business profile. For free.",
+  "exaggeration": 0.7999999999999999,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 4.52,
+  "heard": "Since November 10th, you can claim your business profile for free.",
+  "match": 0.909
+ },
+ "03_0": {
+  "who": "nar",
+  "text": "Step one. Log in, and open Business Hub: chat G P T dot com, slash business hub.",
+  "exaggeration": 0.65,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 5.92,
+  "heard": "Step 1, log in and open Business Hub, chat GPT.com slash Business Hub.",
+  "match": 0.733,
+  "picked": true
+ },
+ "03_1": {
+  "who": "nar",
+  "text": "Step one. Log in, and open Business Hub: chat G P T dot com, slash business hub.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 6.56,
+  "heard": "Step 1. Log in and open Business Hub, chat GPT.com slash Business Hub. Step 2. Log in and open Business Hub.",
+  "match": 0.579
+ },
+ "04_0": {
+  "who": "nar",
+  "text": "Step two. Search your business, and tap Get Started.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 4.08,
+  "heard": "Step 2. Search your business and tap. Get started.",
+  "match": 0.889,
+  "picked": true
+ },
+ "04_1": {
+  "who": "nar",
+  "text": "Step two. Search your business, and tap Get Started.",
+  "exaggeration": 0.7999999999999999,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 3.96,
+  "heard": "Step 2, search your business and tap, get started.",
+  "match": 0.889
+ },
+ "05_0": {
+  "who": "nar",
+  "text": "Step three. Prove it's yours, with your phone, email, website, or Shopify.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 4.68,
+  "heard": "Step 3. Prove it's yours with your phone, email, website or Shopify.",
+  "match": 0.917,
+  "picked": true
+ },
+ "05_1": {
+  "who": "nar",
+  "text": "Step three. Prove it's yours, with your phone, email, website, or Shopify.",
+  "exaggeration": 0.7999999999999999,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 5.56,
+  "heard": "30, Step 3. Prove its yours with your phone, email, website or Shopify.",
+  "match": 0.88
+ },
+ "06_0": {
+  "who": "nar",
+  "text": "Step four. A quick I D check, and you get the blue check.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 3.68,
+  "heard": "Step four, a quick ID check and you get the blue check.",
+  "match": 0.88,
+  "picked": true
+ },
+ "06_1": {
+  "who": "nar",
+  "text": "Step four. A quick I D check, and you get the blue check.",
+  "exaggeration": 0.85,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 3.6,
+  "heard": "Step 4. A quick ID check and you get the blue check.",
+  "match": 0.8
+ },
+ "07_0": {
+  "who": "nar",
+  "text": "Then add your prices and stock, and see how often ChatGPT mentions you.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 4.36,
+  "heard": "Then add your prices in stock, and see how often chat GPT mentions you.",
+  "match": 0.815,
+  "picked": true
+ },
+ "07_1": {
+  "who": "nar",
+  "text": "Then add your prices and stock, and see how often ChatGPT mentions you.",
+  "exaggeration": 0.7999999999999999,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 5.04,
+  "heard": "Then add your prices in stock and see how often chat GPT mentions you.",
+  "match": 0.815
+ },
+ "08_0": {
+  "who": "nar",
+  "text": "Online businesses can claim anywhere ChatGPT works. Local shops, U S listings for now.",
+  "exaggeration": 0.65,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 6.92,
+  "heard": "Online businesses can claim anywhere chat GPT works, local shops, U.S. listings for now.",
+  "match": 0.786,
+  "picked": true
+ },
+ "08_1": {
+  "who": "nar",
+  "text": "Online businesses can claim anywhere ChatGPT works. Local shops, U S listings for now.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 6.32,
+  "heard": "Online businesses can claim anywhere chat GPT works. Local shops, U.S. listings for now. Online businesses can claim anywhere chat GPT works.",
+  "match": 0.611
+ },
+ "09_0": {
+  "who": "nar",
+  "text": "Comment chat G P T, and I'll send you the full checklist. Follow next level social for more.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 5.6,
+  "heard": "Comment chat, GPT, and I'll send you the full checklist. Follow Next Level Social for more.",
+  "match": 0.882,
+  "picked": true
+ },
+ "09_1": {
+  "who": "nar",
+  "text": "Comment chat G P T, and I'll send you the full checklist. Follow next level social for more.",
+  "exaggeration": 0.7999999999999999,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 6.28,
+  "heard": "Comment chat gpt and I'll send you the full checklist follow next level social for more",
+  "match": 0.882
+ }
+}

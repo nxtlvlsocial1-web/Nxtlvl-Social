@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>ChatGPT Business 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Montserrat"; font-weight: 100 900; src: url("assets/fonts/montserrat.ttf"); }
+@font-face { font-family: "Serif"; font-style: italic; src: url("assets/fonts/InstrumentSerif-Italic.ttf"); }
+@font-face { font-family: "Mono"; font-weight: 700; src: url("assets/fonts/JetBrainsMono-Bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050f; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #07050f; font-family: "Montserrat"; color: #fff; }
+.clip { position: absolute; inset: 0; }
+#bg { background: radial-gradient(900px 900px at 0% 0%, rgba(101,22,199,.55), transparent 65%), radial-gradient(900px 900px at 100% 100%, rgba(75,6,193,.5), transparent 65%), #07050f; }
+#glow { position: absolute; width: 700px; height: 700px; left: 190px; top: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(167,91,252,.28), transparent 70%); }
+.head, .scr, .cap, .msg, .biz, .drop, .btn, .opt, .opt .tk, .prof, .stats, .elig, .row, .stamp, #vb5 { opacity: 0; }
+#h0, #s0, #q0 { opacity: 1; }                 /* the very first frame shows the headline and the question */
+.head { position: absolute; left: 70px; right: 70px; top: 290px; text-align: center; }
+.head .k { display: inline-block; padding: 9px 18px; border: 2px solid #a75bfc; border-radius: 999px; font: 700 28px/1 "Mono"; letter-spacing: 4px; color: #b687f9; }
+.head .t { display: block; margin-top: 22px; font: 800 70px/1.08 "Montserrat"; letter-spacing: -1.5px; }
+.head em { font: italic 400 86px/1 "Serif"; color: #b687f9; letter-spacing: 0; }
+#h8 { top: 520px; }
+#h8 .t { font-size: 64px; } #h8 .kw { display: block; margin-top: 10px; font: 900 150px/1 "Montserrat"; letter-spacing: -3px; color: #fff; text-shadow: 0 0 60px rgba(167,91,252,.8); }
+#h8 .sub { display: block; margin-top: 26px; font: 600 44px/1.25 "Montserrat"; color: #cfc8dd; }
+#h8 .fol { display: block; margin-top: 70px; font: 700 30px/1.5 "Mono"; letter-spacing: 6px; color: #b687f9; } #h8 .fol b { display: block; font: 800 50px/1.2 "Montserrat"; letter-spacing: 0; color: #fff; }
+#phone { position: absolute; left: 175px; top: 600px; width: 730px; height: 760px; border-radius: 56px; background: #0f0b1d; border: 3px solid #2c2150; box-shadow: 0 40px 90px rgba(0,0,0,.6), 0 0 0 10px rgba(167,91,252,.07); overflow: hidden; }
+.scr { position: absolute; inset: 0; padding: 36px 34px; }
+.bar { font: 800 32px/1 "Montserrat"; padding-bottom: 22px; border-bottom: 1px solid #2c2150; margin-bottom: 26px; color: #cfc8dd; }
+.msg { border-radius: 26px; padding: 18px 24px; font: 600 32px/1.3 "Montserrat"; margin-bottom: 18px; }
+.msg.me { margin-left: 140px; background: #2c2150; }
+.msg.ai p { color: #cfc8dd; margin-bottom: 14px; }
+.biz { display: flex; gap: 18px; align-items: center; padding: 14px 16px; border-radius: 20px; background: #160f2c; margin-bottom: 12px; }
+.biz b { display: flex; align-items: center; gap: 10px; font: 800 32px/1.1 "Montserrat"; } .biz span { font: 600 24px/1.4 "Montserrat"; color: #9d95b4; }
+.biz.miss { border: 3px dashed #a75bfc; background: transparent; } .biz.miss b { color: #b687f9; }
+.ph { flex: none; width: 74px; height: 74px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font: 800 40px/1 "Montserrat"; color: #b687f9; }
+.p1 { background: linear-gradient(135deg, #d9a066, #8a5a2b); } .p2 { background: linear-gradient(135deg, #f2c94c, #c27c2c); } .p3 { background: #1d1438; } .p4 { background: linear-gradient(135deg, #f4b6c2, #a75bfc); }
+.vb { width: 34px; height: 34px; flex: none; }
+.stamp { position: absolute; left: 70px; right: 70px; top: 200px; padding: 40px 30px; border: 6px solid #a75bfc; border-radius: 30px; text-align: center; transform: rotate(-4deg); }
+.stamp span { display: block; font: 900 92px/1 "Montserrat"; color: #a75bfc; letter-spacing: 6px; } .stamp b { display: block; margin-top: 18px; font: 800 44px/1.1 "Montserrat"; } .stamp i { display: block; margin-top: 12px; font: italic 400 50px/1 "Serif"; color: #b687f9; }
+.url { display: flex; align-items: center; gap: 14px; padding: 20px 24px; border-radius: 20px; background: #1d1438; font: 700 36px/1 "Mono"; color: #fff; }
+.url .lk { width: 22px; height: 26px; border-radius: 5px; border: 4px solid #22C55E; }
+.hub { margin-top: 30px; } .hub > b { display: block; font: 800 46px/1.1 "Montserrat"; } .hub > p { margin-top: 10px; font: 600 28px/1.3 "Montserrat"; color: #9d95b4; }
+.box { margin-top: 26px; padding: 22px 24px; border-radius: 18px; border: 2px solid #3a2d66; font: 600 32px/1 "Montserrat"; color: #6f6690; display: flex; align-items: center; }
+.box.on { color: #fff; border-color: #a75bfc; } .cur { display: inline-block; width: 3px; height: 34px; background: #a75bfc; margin-left: 6px; }
+.drop { margin-top: 10px; padding: 20px 24px; border-radius: 18px; background: #1d1438; } .drop b { display: block; font: 800 34px/1.2 "Montserrat"; } .drop span { font: 600 26px/1.4 "Montserrat"; color: #9d95b4; }
+.btn { position: relative; margin-top: 30px; padding: 26px; border-radius: 999px; background: #fff; color: #07050f; text-align: center; font: 800 38px/1 "Montserrat"; }
+.tap { position: absolute; left: 50%; top: 455px; width: 140px; height: 140px; margin-left: -70px; border-radius: 50%; background: rgba(167,91,252,.6); opacity: 0; }
+.opt { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; padding: 22px 24px; border-radius: 20px; background: #160f2c; border: 2px solid transparent; font: 700 36px/1 "Montserrat"; }
+.tk { width: 46px; height: 46px; }
+.idc { position: relative; margin: 30px auto 0; width: 560px; height: 300px; border-radius: 30px; background: #1d1438; border: 2px solid #3a2d66; overflow: hidden; }
+.idpic { position: absolute; left: 36px; top: 50px; width: 160px; height: 200px; border-radius: 18px; background: linear-gradient(180deg, #3a2d66, #2c2150); }
+.idl { position: absolute; left: 230px; top: 70px; right: 36px; } .idl i { display: block; height: 22px; margin-bottom: 26px; border-radius: 11px; background: #3a2d66; } .idl i.s { width: 60%; }
+.scan { position: absolute; left: 0; right: 0; top: 30px; height: 6px; background: #a75bfc; box-shadow: 0 0 30px #a75bfc; }
+.prof { display: flex; align-items: center; gap: 20px; margin-top: 40px; padding: 24px; border-radius: 26px; background: #160f2c; }
+.prof b { display: flex; align-items: center; gap: 12px; font: 800 44px/1.1 "Montserrat"; } .prof span { font: 600 28px/1.4 "Montserrat"; color: #9d95b4; }
+.prof.sm { margin-top: 0; opacity: 1; } .prof.sm b { font-size: 36px; }
+.row { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding: 22px 24px; border-radius: 18px; background: #160f2c; font: 700 30px/1 "Montserrat"; } .row b { font-weight: 700; color: #b687f9; }
+.tg { width: 76px; height: 42px; border-radius: 21px; background: #22C55E; position: relative; } .tg::after { content: ""; position: absolute; right: 5px; top: 5px; width: 32px; height: 32px; border-radius: 50%; background: #fff; }
+.stats { display: flex; gap: 16px; margin-top: 20px; } .stats div { flex: 1; padding: 20px; border-radius: 20px; background: linear-gradient(135deg, #4b06c1, #6516c7); text-align: center; }
+.stats b { display: block; font: 900 64px/1 "Montserrat"; } .stats span { font: 600 26px/1.4 "Montserrat"; color: #e7defa; }
+.note { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font: 700 22px/1 "Mono"; letter-spacing: 2px; color: #6f6690; }
+.elig { margin-top: 40px; padding: 40px 34px; border-radius: 30px; background: #160f2c; border: 3px solid #22C55E; } .elig.loc { border-color: #f2c94c; }
+.elig b { display: block; font: 800 52px/1.1 "Montserrat"; } .elig span { display: block; margin-top: 12px; font: 600 36px/1.3 "Montserrat"; color: #cfc8dd; }
+.cap { position: absolute; left: 60px; right: 60px; top: 1400px; text-align: center; }
+.cap span { display: inline; padding: 8px 18px; border-radius: 14px; font: 800 50px/1.45 "Montserrat"; color: #fff; background: rgba(7,5,15,.85); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="47.72" data-fps="30" data-width="1080" data-height="1920">
+      <div id="bg" class="clip" data-start="0" data-duration="47.72" data-track-index="0"><div id="glow"></div></div>
+      <div id="ui" class="clip" data-start="0" data-duration="47.72" data-track-index="2" data-layout-allow-overflow><div class="head" id="h0"><span class="k">NEW IN CHATGPT</span><span class="t">ChatGPT now recommends <em>businesses.</em></span></div><div class="head" id="h1"><span class="k">LAUNCHED NOV 10 · BETA</span><span class="t">Claim your business profile. <em>Free.</em></span></div><div class="head" id="h2"><span class="k">STEP 1 OF 4</span><span class="t">Open <em>Business Hub</em></span></div><div class="head" id="h3"><span class="k">STEP 2 OF 4</span><span class="t">Search it. Tap <em>Get Started.</em></span></div><div class="head" id="h4"><span class="k">STEP 3 OF 4</span><span class="t">Prove it&rsquo;s <em>yours</em></span></div><div class="head" id="h5"><span class="k">STEP 4 OF 4</span><span class="t">ID check. Get the <em>blue check.</em></span></div><div class="head" id="h6"><span class="k">THEN</span><span class="t">Prices, stock and <em>mentions</em></span></div><div class="head" id="h7"><span class="k">WHO CAN CLAIM</span><span class="t">Today, in the <em>beta</em></span></div><div class="head" id="h8"><span class="k">FREE CHECKLIST</span><span class="t">Comment</span><span class="kw">CHATGPT</span><span class="sub">and I'll DM you the full setup checklist</span><span class="fol">FOLLOW <b>@nxtlvlsocial.ai</b></span></div><div id="phone"><div class="scr" id="s0"><div class="bar"><b>ChatGPT</b></div>
+      <div class="msg me" id="q0">Best bakery near me, open now?</div>
+      <div class="msg ai" id="a0"><p>Here are two great picks nearby:</p>
+        <div class="biz" id="b0"><div class="ph p1"></div><div><b>Crumb &amp; Co. <svg class="vb" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#2F7BF6"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></b><span>4.8 · open until 7 PM</span></div></div>
+        <div class="biz" id="b1"><div class="ph p2"></div><div><b>Sunrise Bakes <svg class="vb" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#2F7BF6"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></b><span>4.7 · open until 6 PM</span></div></div>
+        <div class="biz miss" id="b2"><div class="ph p3">?</div><div><b>YOUR BUSINESS?</b><span>not claimed</span></div></div>
+      </div></div><div class="scr" id="s1"><div class="stamp" id="st1"><span>NEW</span><b>Businesses in ChatGPT</b><i>free at launch</i></div></div><div class="scr" id="s2"><div class="url"><span class="lk"></span><span id="u2">chatgpt.com/business-hub</span></div>
+      <div class="hub"><b>Business Hub</b><p>Claim your business on ChatGPT</p><div class="box">Search your business name</div></div></div><div class="scr" id="s3"><div class="hub"><b>Business Hub</b><div class="box on"><span id="ty3">June&rsquo;s Bakery</span><i class="cur"></i></div>
+      <div class="drop" id="dd3"><b>June&rsquo;s Bakery</b><span>12 Main St · Bakery</span></div>
+      <div class="btn" id="go3">Get Started</div><div class="tap" id="tap3"></div></div></div><div class="scr" id="s4"><div class="hub"><b>Verify your business</b><p>Just one of these, depending on your business</p><div class="opt" id="o0"><span>Business phone</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="opt" id="o1"><span>Business email</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="opt" id="o2"><span>Website domain</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="opt" id="o3"><span>Shopify store</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div></div><div class="scr" id="s5"><div class="idc" id="id5"><div class="idpic"></div><div class="idl"><i></i><i></i><i class="s"></i></div><div class="scan" id="sc5"></div></div>
+      <div class="prof" id="pf5"><div class="ph p4"></div><div><b>June's Bakery <span id="vb5"><svg class="vb" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#2F7BF6"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></b><span>Verified business</span></div></div></div><div class="scr" id="s6"><div class="prof sm"><div class="ph p4"></div><div><b>June's Bakery <svg class="vb" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#2F7BF6"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></b><span>Business Hub</span></div></div>
+      <div class="row" id="r60"><span>Croissant</span><b>$3.50 · in stock</b></div>
+      <div class="row" id="r61"><span>Sourdough loaf</span><b>$8.00 · in stock</b></div>
+      <div class="row sh" id="r62"><span>Connect Shopify</span><i class="tg"></i></div>
+      <div class="stats" id="st6"><div><b>128</b><span>mentions</span></div><div><b>34</b><span>website clicks</span></div></div>
+      <div class="note">last 28 days · illustration</div></div><div class="scr" id="s7"><div class="elig" id="e70"><b>Online business</b><span>anywhere ChatGPT works</span></div>
+      <div class="elig loc" id="e71"><b>Local shop</b><span>existing US listings, for now</span></div>
+      <div class="note">claiming doesn't buy a higher ranking</div></div></div></div>
+      <div id="caps" class="clip" data-start="0" data-duration="47.72" data-track-index="4"><div class="cap" id="c0_0"><span>ChatGPT now recommends businesses.</span></div><div class="cap" id="c0_1"><span>Is yours on it?</span></div><div class="cap" id="c1_0"><span>Since November tenth,</span></div><div class="cap" id="c1_1"><span>you can claim your business profile.</span></div><div class="cap" id="c1_2"><span>For free.</span></div><div class="cap" id="c2_0"><span>Step one. Log in, and open Business Hub:</span></div><div class="cap" id="c2_1"><span>chatgpt.com/business-hub</span></div><div class="cap" id="c3_0"><span>Step two. Search your business,</span></div><div class="cap" id="c3_1"><span>and tap Get Started.</span></div><div class="cap" id="c4_0"><span>Step three. Prove it's yours,</span></div><div class="cap" id="c4_1"><span>with your phone, email, website,</span></div><div class="cap" id="c4_2"><span>or Shopify.</span></div><div class="cap" id="c5_0"><span>Step four. A quick ID check,</span></div><div class="cap" id="c5_1"><span>and you get the blue check.</span></div><div class="cap" id="c6_0"><span>Then add your prices and stock,</span></div><div class="cap" id="c6_1"><span>and see how often ChatGPT mentions you.</span></div><div class="cap" id="c7_0"><span>Online businesses can claim anywhere ChatGPT works.</span></div><div class="cap" id="c7_1"><span>Local shops, US listings for now.</span></div></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="47.72" data-track-index="10" data-volume="1"></audio>
+    </div>
+    <script>
+      window.CT = {"l": [0.5, 4.6, 9.005, 15.22, 19.645, 24.79, 28.74, 33.39, 40.585], "e": [4.08, 8.535, 14.75, 19.175, 24.32, 28.27, 32.92, 40.015, 45.92], "sc": [0.5, 4.35, 8.755, 14.97, 19.395, 24.54, 28.49, 33.14, 40.335], "end": 47.72};
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#h0",{opacity:1},{opacity:1,y:0,duration:0.01,ease:"power3.out",immediateRender:false},0.000);
+      tl.to("#h0",{opacity:0,y:-16,duration:0.2,ease:"power2.in"},4.150);
+      tl.fromTo("#s0",{opacity:1},{opacity:1,x:0,duration:0.01,ease:"power3.out",immediateRender:false},0.000);
+      tl.to("#s0",{opacity:0,x:-60,duration:0.2,ease:"power2.in"},4.200);
+      tl.fromTo("#q0",{opacity:1},{opacity:1,duration:0.01,ease:"power3.out",immediateRender:false},0.000);
+      tl.fromTo("#a0",{opacity:0,y:12},{opacity:1,y:0,duration:0.2,ease:"power3.out",immediateRender:false},0.120);
+      tl.fromTo("#b0",{opacity:0,x:-24},{opacity:1,x:0,duration:0.22,ease:"power3.out",immediateRender:false},0.200);
+      tl.fromTo("#b1",{opacity:0,x:-24},{opacity:1,x:0,duration:0.22,ease:"power3.out",immediateRender:false},0.340);
+      tl.fromTo("#b2",{opacity:0,x:-24},{opacity:1,x:0,duration:0.22,ease:"power3.out",immediateRender:false},0.480);
+      tl.fromTo("#b2",{scale:1},{scale:1.05,duration:.35,yoyo:true,repeat:5,ease:"sine.inOut",immediateRender:false},1.500);
+      tl.fromTo("#h1",{opacity:0,y:-24},{opacity:1,y:0,duration:0.4,ease:"power3.out",immediateRender:false},4.350);
+      tl.to("#h1",{opacity:0,y:-16,duration:0.2,ease:"power2.in"},8.555);
+      tl.fromTo("#s1",{opacity:0,x:60},{opacity:1,x:0,duration:0.35,ease:"power3.out",immediateRender:false},4.350);
+      tl.to("#s1",{opacity:0,x:-60,duration:0.2,ease:"power2.in"},8.605);
+      tl.fromTo("#st1",{opacity:0,scale:1.6,rotation:-8},{opacity:1,scale:1,rotation:-4,duration:0.45,ease:"back.out(2)",immediateRender:false},4.550);
+      tl.fromTo("#h2",{opacity:0,y:-24},{opacity:1,y:0,duration:0.4,ease:"power3.out",immediateRender:false},8.755);
+      tl.to("#h2",{opacity:0,y:-16,duration:0.2,ease:"power2.in"},14.770);
+      tl.fromTo("#s2",{opacity:0,x:60},{opacity:1,x:0,duration:0.35,ease:"power3.out",immediateRender:false},8.755);
+      tl.to("#s2",{opacity:0,x:-60,duration:0.2,ease:"power2.in"},14.820);
+      tl.fromTo("#u2",{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0% 0 0)",duration:1.2,ease:"steps(25)",immediateRender:false},9.155);
+      tl.fromTo("#h3",{opacity:0,y:-24},{opacity:1,y:0,duration:0.4,ease:"power3.out",immediateRender:false},14.970);
+      tl.to("#h3",{opacity:0,y:-16,duration:0.2,ease:"power2.in"},19.195);
+      tl.fromTo("#s3",{opacity:0,x:60},{opacity:1,x:0,duration:0.35,ease:"power3.out",immediateRender:false},14.970);
+      tl.to("#s3",{opacity:0,x:-60,duration:0.2,ease:"power2.in"},19.245);
+      tl.fromTo("#ty3",{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0% 0 0)",duration:.8,ease:"steps(13)",immediateRender:false},15.320);
+      tl.fromTo("#dd3",{opacity:0,y:-10},{opacity:1,y:0,duration:0.25,ease:"power3.out",immediateRender:false},16.170);
+      tl.fromTo("#go3",{opacity:0,y:10},{opacity:1,y:0,duration:0.25,ease:"power3.out",immediateRender:false},16.570);
+      tl.fromTo("#tap3",{opacity:.7,scale:.2},{opacity:0,scale:1.6,duration:.5,ease:"power2.out",immediateRender:false},17.420);
+      tl.fromTo("#go3",{scale:1},{scale:.94,duration:.1,yoyo:true,repeat:1,immediateRender:false},17.420);
+      tl.fromTo("#h4",{opacity:0,y:-24},{opacity:1,y:0,duration:0.4,ease:"power3.out",immediateRender:false},19.395);
+      tl.to("#h4",{opacity:0,y:-16,duration:0.2,ease:"power2.in"},24.340);
+      tl.fromTo("#s4",{opacity:0,x:60},{opacity:1,x:0,duration:0.35,ease:"power3.out",immediateRender:false},19.395);
+      tl.to("#s4",{opacity:0,x:-60,duration:0.2,ease:"power2.in"},24.390);
+      tl.fromTo("#o0",{opacity:0,x:30},{opacity:1,x:0,duration:0.25,ease:"power3.out",immediateRender:false},19.695);
+      tl.to("#o0",{borderColor:"#a75bfc",background:"#24174a",duration:.15,yoyo:true,repeat:1,repeatDelay:.25,immediateRender:false},20.645);
+      tl.fromTo("#o1",{opacity:0,x:30},{opacity:1,x:0,duration:0.25,ease:"power3.out",immediateRender:false},19.945);
+      tl.to("#o1",{borderColor:"#a75bfc",background:"#24174a",duration:.15,yoyo:true,repeat:1,repeatDelay:.25,immediateRender:false},21.095);
+      tl.fromTo("#o2",{opacity:0,x:30},{opacity:1,x:0,duration:0.25,ease:"power3.out",immediateRender:false},20.195);
+      tl.to("#o2",{borderColor:"#a75bfc",background:"#24174a",duration:.15,yoyo:true,repeat:1,repeatDelay:.25,immediateRender:false},21.545);
+      tl.fromTo("#o3",{opacity:0,x:30},{opacity:1,x:0,duration:0.25,ease:"power3.out",immediateRender:false},20.445);
+      tl.to("#o3",{borderColor:"#a75bfc",background:"#24174a",duration:.15,yoyo:true,repeat:1,repeatDelay:.25,immediateRender:false},21.995);
+      tl.to("#o2",{borderColor:"#22C55E",duration:.2,immediateRender:false},22.745);
+      tl.fromTo("#o2 .tk",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.3,ease:"back.out(3)",immediateRender:false},22.745);
+      tl.fromTo("#h5",{opacity:0,y:-24},{opacity:1,y:0,duration:0.4,ease:"power3.out",immediateRender:false},24.540);
+      tl.to("#h5",{opacity:0,y:-16,duration:0.2,ease:"power2.in"},28.290);
+      tl.fromTo("#s5",{opacity:0,x:60},{opacity:1,x:0,duration:0.35,ease:"power3.out",immediateRender:false},24.540);
+      tl.to("#s5",{opacity:0,x:-60,duration:0.2,ease:"power2.in"},28.340);
+      tl.fromTo("#sc5",{y:0},{y:230,duration:.6,yoyo:true,repeat:1,ease:"sine.inOut",immediateRender:false},24.840);
+      tl.fromTo("#pf5",{opacity:0,y:20},{opacity:1,y:0,duration:0.3,ease:"power3.out",immediateRender:false},26.290);
+      tl.fromTo("#vb5",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.35,ease:"back.out(3)",immediateRender:false},26.890);
+      tl.fromTo("#h6",{opacity:0,y:-24},{opacity:1,y:0,duration:0.4,ease:"power3.out",immediateRender:false},28.490);
+      tl.to("#h6",{opacity:0,y:-16,duration:0.2,ease:"power2.in"},32.940);
+      tl.fromTo("#s6",{opacity:0,x:60},{opacity:1,x:0,duration:0.35,ease:"power3.out",immediateRender:false},28.490);
+      tl.to("#s6",{opacity:0,x:-60,duration:0.2,ease:"power2.in"},32.990);
+      tl.fromTo("#r60",{opacity:0,x:30},{opacity:1,x:0,duration:0.25,ease:"power3.out",immediateRender:false},28.790);
+      tl.fromTo("#r61",{opacity:0,x:30},{opacity:1,x:0,duration:0.25,ease:"power3.out",immediateRender:false},29.090);
+      tl.fromTo("#r62",{opacity:0,x:30},{opacity:1,x:0,duration:0.25,ease:"power3.out",immediateRender:false},29.390);
+      tl.fromTo("#st6",{opacity:0,y:20},{opacity:1,y:0,duration:0.35,ease:"power3.out",immediateRender:false},30.740);
+      tl.fromTo("#h7",{opacity:0,y:-24},{opacity:1,y:0,duration:0.4,ease:"power3.out",immediateRender:false},33.140);
+      tl.to("#h7",{opacity:0,y:-16,duration:0.2,ease:"power2.in"},40.135);
+      tl.fromTo("#s7",{opacity:0,x:60},{opacity:1,x:0,duration:0.35,ease:"power3.out",immediateRender:false},33.140);
+      tl.to("#s7",{opacity:0,x:-60,duration:0.2,ease:"power2.in"},40.185);
+      tl.fromTo("#e70",{opacity:0,y:20},{opacity:1,y:0,duration:0.3,ease:"power3.out",immediateRender:false},33.440);
+      tl.fromTo("#e71",{opacity:0,y:20},{opacity:1,y:0,duration:0.3,ease:"power3.out",immediateRender:false},35.490);
+      tl.to("#phone",{opacity:0,scale:.9,duration:.3,ease:"power2.in"},40.335);
+      tl.fromTo("#h8",{opacity:0,y:-24},{opacity:1,y:0,duration:0.4,ease:"power3.out",immediateRender:false},40.335);
+      tl.fromTo("#h8 .kw",{scale:1.25},{scale:1,duration:.5,ease:"back.out(2)",immediateRender:false},40.485);
+      tl.fromTo("#c0_0",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},0.470);
+      tl.to("#c0_0",{opacity:0,duration:.1},2.731);
+      tl.fromTo("#c0_1",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},2.701);
+      tl.to("#c0_1",{opacity:0,duration:.1},4.280);
+      tl.fromTo("#c1_0",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},4.570);
+      tl.to("#c1_0",{opacity:0,duration:.1},5.700);
+      tl.fromTo("#c1_1",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},5.670);
+      tl.to("#c1_1",{opacity:0,duration:.1},7.899);
+      tl.fromTo("#c1_2",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},7.869);
+      tl.to("#c1_2",{opacity:0,duration:.1},8.735);
+      tl.fromTo("#c2_0",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},8.975);
+      tl.to("#c2_0",{opacity:0,duration:.1},11.847);
+      tl.fromTo("#c2_1",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},11.817);
+      tl.to("#c2_1",{opacity:0,duration:.1},14.950);
+      tl.fromTo("#c3_0",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},15.190);
+      tl.to("#c3_0",{opacity:0,duration:.1},17.397);
+      tl.fromTo("#c3_1",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},17.367);
+      tl.to("#c3_1",{opacity:0,duration:.1},19.375);
+      tl.fromTo("#c4_0",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},19.565);
+      tl.to("#c4_0",{opacity:0,duration:.1},21.112);
+      tl.fromTo("#c4_1",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},21.082);
+      tl.to("#c4_1",{opacity:0,duration:.1},23.079);
+      tl.fromTo("#c4_2",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},23.049);
+      tl.to("#c4_2",{opacity:0,duration:.1},24.520);
+      tl.fromTo("#c5_0",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},24.760);
+      tl.to("#c5_0",{opacity:0,duration:.1},26.556);
+      tl.fromTo("#c5_1",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},26.526);
+      tl.to("#c5_1",{opacity:0,duration:.1},28.470);
+      tl.fromTo("#c6_0",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},28.710);
+      tl.to("#c6_0",{opacity:0,duration:.1},30.507);
+      tl.fromTo("#c6_1",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},30.477);
+      tl.to("#c6_1",{opacity:0,duration:.1},33.120);
+      tl.fromTo("#c7_0",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},33.360);
+      tl.to("#c7_0",{opacity:0,duration:.1},37.089);
+      tl.fromTo("#c7_1",{opacity:0,y:8},{opacity:1,y:0,duration:.15,ease:"power2.out",immediateRender:false},37.059);
+      tl.to("#c7_1",{opacity:0,duration:.1},40.215);
+      tl.fromTo("#glow",{x:-60,y:-30},{x:60,y:40,duration:47.72,ease:"none",immediateRender:false},0);
+      tl.set("#phone",{opacity:1},0);
+      tl.set({}, {}, 47.72);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
