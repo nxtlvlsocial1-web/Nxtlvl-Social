@@ -124,21 +124,24 @@ js(f'tl.fromTo("#grain", {{backgroundPosition: "0px 0px"}}, {{backgroundPosition
 
 # hook
 HTML.append('<div class="sc" id="hook">'
-            '<div id="gta"><span>GTA</span><b>6</b><div id="shine"></div></div>'
+            '<div id="gta"><img id="kart" src="assets/img/keyart.jpg"><div id="shine"></div></div>'
             '<div class="chip date" id="date">DROPS NOV 19</div>'
             '<div class="chip save" id="save"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg>SAVE THIS</div>'
             '<div id="only"><div class="l1">THE ONLY</div><div class="l2">GTA 6 CREATOR</div><div class="l3">VIDEO <i>you\'ll need.</i></div></div>'
             '<img id="rlogo" src="assets/img/rockstar_logo.jpg">'
             '</div>')
 t_gta, t_nine, t_save, t_only = T("p00", "GTA"), T("p00", "nineteenth"), T("p00", "Save"), T("p00", "only")
-show("#gta", t_gta, .35, "{opacity: 0, scale: 1.6}", "{opacity: 1, scale: 1}", "expo.out")
+show("#gta", t_gta, .4, "{opacity: 0, scale: 1.7, rotation: -14}", "{opacity: 1, scale: 1, rotation: -3}", "expo.out")
+js(f'tl.fromTo("#kart", {{scale: 1.0}}, {{scale: 1.14, duration: {S1 - t_gta:.3f}, ease: "none", immediateRender: false}}, {t_gta:.3f});')
+js(f'tl.fromTo("#gta", {{boxShadow: "0 0 0 4px rgba(255,255,255,.9), 0 0 40px rgba(255,79,163,.4)"}}, '
+   f'{{boxShadow: "0 0 0 4px rgba(255,255,255,.9), 0 0 110px rgba(255,79,163,.9)", duration: .5, yoyo: true, repeat: 5, immediateRender: false}}, {t_gta + .4:.3f});')
 sfx("impact", t_gta)
 js(f'tl.fromTo("#shine", {{x: -900}}, {{x: 900, duration: .7, ease: "power2.inOut", immediateRender: false}}, {t_gta + .35:.3f});')
-js(f'tl.fromTo("#gta", {{rotation: -2}}, {{rotation: 0, duration: .5, ease: "elastic.out(1,.4)", immediateRender: false}}, {t_gta:.3f});')
+sfx("whoosh_big", t_gta - .15)
 show("#rlogo", t_gta + .15, .3, "{opacity: 0, scale: .6, rotation: -12}", "{opacity: 1, scale: 1, rotation: 0}")
 show("#date", t_nine, .28)
 sfx("pop", t_nine)
-js(f'tl.to("#gta", {{y: -210, scale: .62, duration: .35, ease: "expo.inOut"}}, {t_save - .05:.3f});')
+js(f'tl.to("#gta", {{y: -480, scale: .5, rotation: 0, duration: .4, ease: "expo.inOut"}}, {t_save - .05:.3f});')
 hide("#date", t_save - .05, .15)
 show("#save", t_save, .3, "{opacity: 0, scale: .5}", "{opacity: 1, scale: 1}")
 sfx("click", t_save)
@@ -152,7 +155,11 @@ hide("#hook", S1 - .05, .08)
 HTML.append('<div class="sc" id="proof"><div class="lab" id="plab">GTA RP CLIP PAGES</div>'
             '<div class="tag" id="tg1">POLICE CHASE</div><div class="tag" id="tg2">STREAMER LOSING IT</div>'
             '<div class="tag hot" id="tg3">CLIPPED IN MINUTES</div>'
-            '<div id="views"><div id="vnum">0</div><div id="vlab">VIEWS</div></div></div>')
+            '<div id="views"><div id="vnum">0</div><div id="vlab">VIEWS</div></div>'
+            + "".join(f'<div class="vb" id="vb{i}" style="left:{x}px;top:{y}px">&#9654; {v}</div>'
+                      for i, (x, y, v) in enumerate([(90, 1050, "23.4M"), (640, 980, "30.5M"), (360, 1180, "12.1M"), (720, 1240, "20.3M"),
+                                                     (120, 1300, "4.8M"), (560, 1120, "6.9M")]))
+            + '</div>')
 cut(S1, True)
 show("#plab", S1 + .1, .3)
 show("#tg1", T("p01", "police"), .28, "{opacity: 0, x: -80}", "{opacity: 1, x: 0}")
@@ -161,6 +168,10 @@ show("#tg2", T("p01", "streamer"), .28, "{opacity: 0, x: 80}", "{opacity: 1, x: 
 sfx("pop", T("p01", "streamer"))
 show("#tg3", T("p01", "clipped"), .28, "{opacity: 0, scale: .6}", "{opacity: 1, scale: 1}")
 sfx("shutter", T("p01", "clipped"))
+for i, t in enumerate([T("p01", "grew"), T("p01", "exactly"), T("p01", "chase"), T("p01", "losing"), T("p01", "clipped"), T("p01", "minutes")]):
+    show(f"#vb{i}", t, .25, "{opacity: 0, scale: .4, y: 40}", "{opacity: 1, scale: 1, y: 0}", "back.out(2.5)")
+    js(f'tl.to("#vb{i}", {{y: -260, opacity: 0, duration: 1.4, ease: "power1.in"}}, {t + .35:.3f});')
+    sfx("pop", t)
 t_mil = T("p02", "Millions")
 js(f'tl.to(["#tg1", "#tg2", "#tg3"], {{opacity: 0, y: -40, duration: .18, stagger: .04}}, {t_mil - .2:.3f});')
 js(f'tl.to("#vproof", {{filter: "brightness(.45) blur(6px)", duration: .3}}, {t_mil - .1:.3f});')
@@ -176,7 +187,7 @@ thumbs = "".join(f'<div class="th" id="th{i}"><div class="im" style="background-
                  f'<span>READY</span></div>' for i in range(10))
 HTML.append('<div class="sc" id="st1"><div class="step">STEP <b>01</b></div>'
             '<div class="panel" id="tool"><div class="ph"><div class="dot"></div><div class="blurname">Clipr Pro AI</div>'
-            '<div class="tiny">AI CLIPPER</div></div>'
+            '<div class="tiny" id="pct">CLIPPING 0%</div></div>'
             '<div id="bar"><div class="bt">STREAM.mp4</div><div class="bd">8:00:00</div><div id="wave"></div><div id="scan"></div></div>'
             f'<div id="grid">{thumbs}</div></div></div>')
 cut(S2)
@@ -185,6 +196,9 @@ show("#tool", S2 + .12, .4, "{opacity: 0, y: 80, scale: .94}", "{opacity: 1, y: 
 t_8h = T("p03", "eight")
 js(f'tl.fromTo("#scan", {{x: 0}}, {{x: 860, duration: {max(.6, T("p03", "ten") - t_8h):.3f}, ease: "none", immediateRender: false}}, {t_8h:.3f});')
 sfx("riser_short", t_8h)
+js(f'const pc = {{v: 0}}; tl.to(pc, {{v: 100, duration: {max(.6, T("p03", "ten") - t_8h):.3f}, ease: "power1.inOut", onUpdate: () => {{ '
+   f'document.getElementById("pct").textContent = "CLIPPING " + Math.round(pc.v) + "%"; }}}}, {t_8h:.3f});')
+js(f'tl.set("#pct", {{color: "{GREEN}"}}, {T("p03", "ten"):.3f});')
 t_ten = T("p03", "ten")
 js(f'tl.to("#bar", {{scaleY: .4, opacity: .35, duration: .25, ease: "power2.in"}}, {t_ten - .05:.3f});')
 for i in range(10):
@@ -203,6 +217,7 @@ HTML.append('<div class="sc" id="st2"><div class="step">STEP <b>02</b></div>'
             '<div class="row key" id="keyrow"><span class="blurname">In-game Radio</span><i style="--v:.6"></i><em>?</em></div>'
             '<div class="row"><span>Dialogue</span><i style="--v:.9"></i></div>'
             '<div class="row"><span>Subtitles</span><i style="--v:.5"></i></div></div>'
+            '<svg id="cursor" viewBox="0 0 24 24"><path d="M4 2l16 9-7 2-3 7z"/></svg><div id="ripple"></div>'
             '<div class="stamp paid" id="paid">PAID</div><div class="stamp claimed" id="claimed">CLAIMED</div></div>')
 cut(S3)
 show("#st2 .step", S3 + .05, .3, "{opacity: 0, x: -60}", "{opacity: 1, x: 0}")
@@ -211,6 +226,9 @@ t_set = T("p04", "setting")
 js(f'tl.fromTo("#keyrow", {{boxShadow: "0 0 0 0 rgba(255,79,163,0)"}}, {{boxShadow: "0 0 0 6px rgba(255,79,163,.9), 0 0 60px rgba(255,79,163,.6)", '
    f'duration: .3, immediateRender: false}}, {t_set:.3f});')
 sfx("click", t_set)
+js(f'tl.fromTo("#cursor", {{opacity: 0, x: 380, y: 420}}, {{opacity: 1, x: 0, y: 0, duration: .45, ease: "power3.out", immediateRender: false}}, {t_set - .45:.3f});')
+js(f'tl.to("#cursor", {{scale: .8, duration: .07, yoyo: true, repeat: 1}}, {t_set:.3f});')
+js(f'tl.fromTo("#ripple", {{opacity: .9, scale: .2}}, {{opacity: 0, scale: 2.4, duration: .45, ease: "power2.out", immediateRender: false}}, {t_set:.3f});')
 t_paid, t_cl = T("p04", "paid"), T("p04", "claimed")
 show("#paid", t_paid, .25, "{opacity: 0, scale: 2.2, rotation: -24}", "{opacity: 1, scale: 1, rotation: -12}", "expo.out")
 sfx("cash", t_paid)
@@ -235,6 +253,9 @@ show("#lk1", t_mus - .1, .35, "{opacity: 0, x: -200, rotation: -6}", "{opacity: 
 sfx("lock", t_mus + .15)
 show("#lk2", t_key - .1, .35, "{opacity: 0, x: 200, rotation: 6}", "{opacity: 1, x: 0, rotation: 3}")
 sfx("lock", t_key + .15)
+for sel, t in (("#lk1 .pad", t_mus + .15), ("#lk2 .pad", t_key + .15)):
+    js(f'tl.fromTo("{sel}", {{rotation: -16}}, {{rotation: 0, duration: .6, ease: "elastic.out(1.2,.3)", immediateRender: false}}, {t:.3f});')
+js(f'tl.fromTo(".fx", {{opacity: .55}}, {{opacity: 1, duration: .09, yoyo: true, repeat: 15, ease: "steps(1)", immediateRender: false}}, {t_mus:.3f});')
 show("#miss", t_miss - .25, .3, "{opacity: 0, scale: 1.4}", "{opacity: 1, scale: 1}")
 sfx("riser", S5 - 1.0)
 hide("#st3", S5 - .05, .08)
@@ -243,6 +264,8 @@ hide("#st3", S5 - .05, .08)
 HTML.append('<div class="sc" id="cta"><div id="ctadim"></div><div class="ct1">COMMENT</div><div id="kw">GTA6</div>'
             '<div class="ct2">and I\'ll send you <i>all of it.</i></div>'
             '<div id="follow"><span>+</span> FOLLOW <b>· BE EARLY</b></div>'
+            '<div id="cbox"><div id="ctext">Add a comment...</div><div id="csend">&#10148;</div></div>'
+            '<div id="dm"><div class="dmi">&#9993;</div><div><b>New message</b><span>Your GTA 6 playbook is here</span></div></div>'
             '</div>')   # owner: no "Rockstar x nxtlvl" row, no page tag
 cut(S5, True)
 sfx("impact", S5)
@@ -251,6 +274,16 @@ show(".ct1", S5 + .05, .3)
 show("#kw", T("p06", "GTA") - .05, .4, "{opacity: 0, scale: 1.8}", "{opacity: 1, scale: 1}", "expo.out")
 js(f'tl.fromTo("#kw", {{textShadow: "0 0 0px {PINK}"}}, {{textShadow: "0 0 50px {PINK}", duration: .6, yoyo: true, repeat: 3, '
    f'immediateRender: false}}, {T("p06", "GTA") + .35:.3f});')
+show("#cbox", T("p06", "GTA") + .05, .3, "{opacity: 0, y: 60}", "{opacity: 1, y: 0}")
+_ty = T("p06", "GTA") + .35
+js(f'const ty = {{n: 0}}; tl.to(ty, {{n: 4, duration: .5, ease: "steps(4)", onUpdate: () => {{ const e = document.getElementById("ctext"); '
+   f'e.textContent = "GTA6".slice(0, Math.round(ty.n)) || "Add a comment..."; e.style.color = ty.n > 0 ? "#fff" : "rgba(255,255,255,.5)"; }}}}, {_ty:.3f});')
+for k in range(4):
+    sfx("tick", _ty + .125 * k)
+js(f'tl.fromTo("#csend", {{scale: 1}}, {{scale: 1.35, duration: .12, yoyo: true, repeat: 1, immediateRender: false}}, {_ty + .6:.3f});')
+sfx("click", _ty + .6)
+show("#dm", T("p06", "send") + .1, .4, "{opacity: 0, y: -160}", "{opacity: 1, y: 0}", "back.out(1.6)")
+sfx("notify", T("p06", "send") + .15)
 show(".ct2", T("p06", "send"), .3)
 show("#follow", T("p06", "follow"), .3, "{opacity: 0, scale: .6}", "{opacity: 1, scale: 1}")
 sfx("click", T("p06", "follow"))
@@ -298,6 +331,24 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: {NIGH
 #shine {{ position: absolute; top: -40px; bottom: -40px; left: 50%; width: 180px; margin-left: -90px; opacity: .9;
   background: linear-gradient(100deg, transparent, rgba(255,255,255,.85), transparent); mix-blend-mode: overlay; }}
 #gta {{ overflow: hidden; }}
+#hook #gta {{ left: 50px; right: auto; top: 560px; text-align: left; width: 980px; height: 653px; border-radius: 30px; overflow: hidden; line-height: 0; }}
+#kart {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
+.vb {{ position: absolute; padding: 12px 22px; border-radius: 999px; background: rgba(7,5,15,.8); border: 2px solid {PINK}; font-weight: 900;
+  font-size: 40px; color: #fff; box-shadow: 0 10px 40px rgba(255,79,163,.45); }}
+#pct {{ font-weight: 700; }}
+#cursor {{ position: absolute; left: 820px; top: 700px; width: 80px; height: 80px; fill: #fff; stroke: {NIGHT}; stroke-width: 1.2;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.6)); z-index: 12; }}
+#ripple {{ position: absolute; left: 790px; top: 670px; width: 90px; height: 90px; border-radius: 50%; border: 5px solid {PINK}; z-index: 11; }}
+#cbox {{ top: 1250px; left: 90px; right: 90px; display: flex; align-items: center; justify-content: space-between; padding: 26px 34px;
+  border-radius: 999px; background: rgba(255,255,255,.12); border: 2px solid rgba(255,255,255,.35); text-align: left; }}
+#ctext {{ font-weight: 800; font-size: 46px; color: rgba(255,255,255,.5); }}
+#csend {{ width: 76px; height: 76px; border-radius: 50%; background: {PINK}; color: #fff; font-size: 40px; line-height: 76px; text-align: center; }}
+#dm {{ top: 200px; left: 70px; right: 70px; display: flex; align-items: center; gap: 24px; padding: 26px 30px; border-radius: 30px;
+  background: rgba(255,255,255,.95); color: {NIGHT}; text-align: left; box-shadow: 0 20px 60px rgba(7,5,15,.6); }}
+#dm .dmi {{ width: 84px; height: 84px; border-radius: 22px; background: linear-gradient(135deg, {VIOLET}, {PINK}); color: #fff; font-size: 46px;
+  line-height: 84px; text-align: center; flex: none; }}
+#dm b {{ display: block; font-size: 38px; font-weight: 900; }}
+#dm span {{ display: block; font-size: 34px; font-weight: 600; opacity: .75; }}
 #tint {{ background: linear-gradient(180deg, rgba(16,2,44,.55) 0%, rgba(16,2,44,.05) 30%, rgba(16,2,44,.1) 60%, rgba(7,5,15,.75) 100%); }}
 #vig {{ background: radial-gradient(120% 80% at 50% 45%, transparent 55%, rgba(7,5,15,.7) 100%); }}
 #flash {{ position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 50; mix-blend-mode: screen; }}

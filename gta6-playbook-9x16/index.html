@@ -25,6 +25,24 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050
 #shine { position: absolute; top: -40px; bottom: -40px; left: 50%; width: 180px; margin-left: -90px; opacity: .9;
   background: linear-gradient(100deg, transparent, rgba(255,255,255,.85), transparent); mix-blend-mode: overlay; }
 #gta { overflow: hidden; }
+#hook #gta { left: 50px; right: auto; top: 560px; text-align: left; width: 980px; height: 653px; border-radius: 30px; overflow: hidden; line-height: 0; }
+#kart { width: 100%; height: 100%; object-fit: cover; display: block; }
+.vb { position: absolute; padding: 12px 22px; border-radius: 999px; background: rgba(7,5,15,.8); border: 2px solid #ff4fa3; font-weight: 900;
+  font-size: 40px; color: #fff; box-shadow: 0 10px 40px rgba(255,79,163,.45); }
+#pct { font-weight: 700; }
+#cursor { position: absolute; left: 820px; top: 700px; width: 80px; height: 80px; fill: #fff; stroke: #07050f; stroke-width: 1.2;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.6)); z-index: 12; }
+#ripple { position: absolute; left: 790px; top: 670px; width: 90px; height: 90px; border-radius: 50%; border: 5px solid #ff4fa3; z-index: 11; }
+#cbox { top: 1250px; left: 90px; right: 90px; display: flex; align-items: center; justify-content: space-between; padding: 26px 34px;
+  border-radius: 999px; background: rgba(255,255,255,.12); border: 2px solid rgba(255,255,255,.35); text-align: left; }
+#ctext { font-weight: 800; font-size: 46px; color: rgba(255,255,255,.5); }
+#csend { width: 76px; height: 76px; border-radius: 50%; background: #ff4fa3; color: #fff; font-size: 40px; line-height: 76px; text-align: center; }
+#dm { top: 200px; left: 70px; right: 70px; display: flex; align-items: center; gap: 24px; padding: 26px 30px; border-radius: 30px;
+  background: rgba(255,255,255,.95); color: #07050f; text-align: left; box-shadow: 0 20px 60px rgba(7,5,15,.6); }
+#dm .dmi { width: 84px; height: 84px; border-radius: 22px; background: linear-gradient(135deg, #7f1bf8, #ff4fa3); color: #fff; font-size: 46px;
+  line-height: 84px; text-align: center; flex: none; }
+#dm b { display: block; font-size: 38px; font-weight: 900; }
+#dm span { display: block; font-size: 34px; font-weight: 600; opacity: .75; }
 #tint { background: linear-gradient(180deg, rgba(16,2,44,.55) 0%, rgba(16,2,44,.05) 30%, rgba(16,2,44,.1) 60%, rgba(7,5,15,.75) 100%); }
 #vig { background: radial-gradient(120% 80% at 50% 45%, transparent 55%, rgba(7,5,15,.7) 100%); }
 #flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 50; mix-blend-mode: screen; }
@@ -142,12 +160,12 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050
 <video id="s3b" class="full plate" src="assets/video/c_dive.mp4" data-start="23.560" data-duration="2.280" data-media-start="0.000" data-track-index="1" muted playsinline></video>
 <video id="cta1" class="full" src="assets/video/vc_full.mp4" data-start="25.840" data-duration="4.530" data-media-start="26.400" data-track-index="2" muted playsinline></video>
 <div id="grade" class="full"></div><div id="leak1" class="leak"></div><div id="leak2" class="leak"></div><div id="tint" class="full"></div><div id="vig" class="full"></div><div id="grain" class="full"></div>
-<div class="sc" id="hook"><div id="gta"><span>GTA</span><b>6</b><div id="shine"></div></div><div class="chip date" id="date">DROPS NOV 19</div><div class="chip save" id="save"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg>SAVE THIS</div><div id="only"><div class="l1">THE ONLY</div><div class="l2">GTA 6 CREATOR</div><div class="l3">VIDEO <i>you'll need.</i></div></div><img id="rlogo" src="assets/img/rockstar_logo.jpg"></div>
-<div class="sc" id="proof"><div class="lab" id="plab">GTA RP CLIP PAGES</div><div class="tag" id="tg1">POLICE CHASE</div><div class="tag" id="tg2">STREAMER LOSING IT</div><div class="tag hot" id="tg3">CLIPPED IN MINUTES</div><div id="views"><div id="vnum">0</div><div id="vlab">VIEWS</div></div></div>
-<div class="sc" id="st1"><div class="step">STEP <b>01</b></div><div class="panel" id="tool"><div class="ph"><div class="dot"></div><div class="blurname">Clipr Pro AI</div><div class="tiny">AI CLIPPER</div></div><div id="bar"><div class="bt">STREAM.mp4</div><div class="bd">8:00:00</div><div id="wave"></div><div id="scan"></div></div><div id="grid"><div class="th" id="th0"><div class="im" style="background-position:0% 0%"></div><span>READY</span></div><div class="th" id="th1"><div class="im" style="background-position:25% 0%"></div><span>READY</span></div><div class="th" id="th2"><div class="im" style="background-position:50% 0%"></div><span>READY</span></div><div class="th" id="th3"><div class="im" style="background-position:75% 0%"></div><span>READY</span></div><div class="th" id="th4"><div class="im" style="background-position:100% 0%"></div><span>READY</span></div><div class="th" id="th5"><div class="im" style="background-position:0% 100%"></div><span>READY</span></div><div class="th" id="th6"><div class="im" style="background-position:25% 100%"></div><span>READY</span></div><div class="th" id="th7"><div class="im" style="background-position:50% 100%"></div><span>READY</span></div><div class="th" id="th8"><div class="im" style="background-position:75% 100%"></div><span>READY</span></div><div class="th" id="th9"><div class="im" style="background-position:100% 100%"></div><span>READY</span></div></div></div></div>
-<div class="sc" id="st2"><div class="step">STEP <b>02</b></div><div class="panel" id="set"><div class="sh">SETTINGS <span>/ AUDIO</span></div><div class="row"><span>Master Volume</span><i style="--v:.8"></i></div><div class="row key" id="keyrow"><span class="blurname">In-game Radio</span><i style="--v:.6"></i><em>?</em></div><div class="row"><span>Dialogue</span><i style="--v:.9"></i></div><div class="row"><span>Subtitles</span><i style="--v:.5"></i></div></div><div class="stamp paid" id="paid">PAID</div><div class="stamp claimed" id="claimed">CLAIMED</div></div>
+<div class="sc" id="hook"><div id="gta"><img id="kart" src="assets/img/keyart.jpg"><div id="shine"></div></div><div class="chip date" id="date">DROPS NOV 19</div><div class="chip save" id="save"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg>SAVE THIS</div><div id="only"><div class="l1">THE ONLY</div><div class="l2">GTA 6 CREATOR</div><div class="l3">VIDEO <i>you'll need.</i></div></div><img id="rlogo" src="assets/img/rockstar_logo.jpg"></div>
+<div class="sc" id="proof"><div class="lab" id="plab">GTA RP CLIP PAGES</div><div class="tag" id="tg1">POLICE CHASE</div><div class="tag" id="tg2">STREAMER LOSING IT</div><div class="tag hot" id="tg3">CLIPPED IN MINUTES</div><div id="views"><div id="vnum">0</div><div id="vlab">VIEWS</div></div><div class="vb" id="vb0" style="left:90px;top:1050px">&#9654; 23.4M</div><div class="vb" id="vb1" style="left:640px;top:980px">&#9654; 30.5M</div><div class="vb" id="vb2" style="left:360px;top:1180px">&#9654; 12.1M</div><div class="vb" id="vb3" style="left:720px;top:1240px">&#9654; 20.3M</div><div class="vb" id="vb4" style="left:120px;top:1300px">&#9654; 4.8M</div><div class="vb" id="vb5" style="left:560px;top:1120px">&#9654; 6.9M</div></div>
+<div class="sc" id="st1"><div class="step">STEP <b>01</b></div><div class="panel" id="tool"><div class="ph"><div class="dot"></div><div class="blurname">Clipr Pro AI</div><div class="tiny" id="pct">CLIPPING 0%</div></div><div id="bar"><div class="bt">STREAM.mp4</div><div class="bd">8:00:00</div><div id="wave"></div><div id="scan"></div></div><div id="grid"><div class="th" id="th0"><div class="im" style="background-position:0% 0%"></div><span>READY</span></div><div class="th" id="th1"><div class="im" style="background-position:25% 0%"></div><span>READY</span></div><div class="th" id="th2"><div class="im" style="background-position:50% 0%"></div><span>READY</span></div><div class="th" id="th3"><div class="im" style="background-position:75% 0%"></div><span>READY</span></div><div class="th" id="th4"><div class="im" style="background-position:100% 0%"></div><span>READY</span></div><div class="th" id="th5"><div class="im" style="background-position:0% 100%"></div><span>READY</span></div><div class="th" id="th6"><div class="im" style="background-position:25% 100%"></div><span>READY</span></div><div class="th" id="th7"><div class="im" style="background-position:50% 100%"></div><span>READY</span></div><div class="th" id="th8"><div class="im" style="background-position:75% 100%"></div><span>READY</span></div><div class="th" id="th9"><div class="im" style="background-position:100% 100%"></div><span>READY</span></div></div></div></div>
+<div class="sc" id="st2"><div class="step">STEP <b>02</b></div><div class="panel" id="set"><div class="sh">SETTINGS <span>/ AUDIO</span></div><div class="row"><span>Master Volume</span><i style="--v:.8"></i></div><div class="row key" id="keyrow"><span class="blurname">In-game Radio</span><i style="--v:.6"></i><em>?</em></div><div class="row"><span>Dialogue</span><i style="--v:.9"></i></div><div class="row"><span>Subtitles</span><i style="--v:.5"></i></div></div><svg id="cursor" viewBox="0 0 24 24"><path d="M4 2l16 9-7 2-3 7z"/></svg><div id="ripple"></div><div class="stamp paid" id="paid">PAID</div><div class="stamp claimed" id="claimed">CLAIMED</div></div>
 <div class="sc" id="st3"><div class="lock" id="lk1"><div class="lt">THE <b>MUSIC RULE</b></div><div class="fx"><div class="fl" style="width:92%"></div><div class="fl" style="width:78%"></div><div class="fl" style="width:85%"></div><div class="fl" style="width:60%"></div></div><svg class="pad" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1zm2 0h6V7a3 3 0 0 0-6 0z"/></svg></div><div class="lock" id="lk2"><div class="lt">THE <b>KEYWORD TRICK</b></div><div class="fx"><div class="fl" style="width:92%"></div><div class="fl" style="width:78%"></div><div class="fl" style="width:85%"></div><div class="fl" style="width:60%"></div></div><svg class="pad" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1zm2 0h6V7a3 3 0 0 0-6 0z"/></svg></div><div id="miss">MOST GTA PAGES WILL MISS THIS</div></div>
-<div class="sc" id="cta"><div id="ctadim"></div><div class="ct1">COMMENT</div><div id="kw">GTA6</div><div class="ct2">and I'll send you <i>all of it.</i></div><div id="follow"><span>+</span> FOLLOW <b>· BE EARLY</b></div></div>
+<div class="sc" id="cta"><div id="ctadim"></div><div class="ct1">COMMENT</div><div id="kw">GTA6</div><div class="ct2">and I'll send you <i>all of it.</i></div><div id="follow"><span>+</span> FOLLOW <b>· BE EARLY</b></div><div id="cbox"><div id="ctext">Add a comment...</div><div id="csend">&#10148;</div></div><div id="dm"><div class="dmi">&#9993;</div><div><b>New message</b><span>Your GTA 6 playbook is here</span></div></div></div>
 <div class="cap" id="cap0"><span class="">The</span> <span class="">biggest</span> <span class="">GTA</span></div>
 <div class="cap" id="cap1"><span class="">RP</span> <span class="">clip</span> <span class="">pages</span></div>
 <div class="cap" id="cap2"><span class="">grew</span> <span class="">exactly</span> <span class="">like</span></div>
@@ -200,12 +218,13 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050
       tl.fromTo("#leak1", {x: -420, y: -260, opacity: .55}, {x: 380, y: 520, opacity: .85, duration: 30.37, ease: "sine.inOut", immediateRender: false}, 0);
       tl.fromTo("#leak2", {x: 420, y: 1500, opacity: .35}, {x: -360, y: 900, opacity: .7, duration: 30.37, ease: "sine.inOut", immediateRender: false}, 0);
       tl.fromTo("#grain", {backgroundPosition: "0px 0px"}, {backgroundPosition: "1536px 1024px", duration: 30.37, ease: "steps(364)", immediateRender: false}, 0);
-      tl.fromTo("#gta", {opacity: 0, scale: 1.6}, {...{opacity: 1, scale: 1}, duration: 0.35, ease: "expo.out", immediateRender: false}, 0.040);
+      tl.fromTo("#gta", {opacity: 0, scale: 1.7, rotation: -14}, {...{opacity: 1, scale: 1, rotation: -3}, duration: 0.4, ease: "expo.out", immediateRender: false}, 0.040);
+      tl.fromTo("#kart", {scale: 1.0}, {scale: 1.14, duration: 4.960, ease: "none", immediateRender: false}, 0.040);
+      tl.fromTo("#gta", {boxShadow: "0 0 0 4px rgba(255,255,255,.9), 0 0 40px rgba(255,79,163,.4)"}, {boxShadow: "0 0 0 4px rgba(255,255,255,.9), 0 0 110px rgba(255,79,163,.9)", duration: .5, yoyo: true, repeat: 5, immediateRender: false}, 0.440);
       tl.fromTo("#shine", {x: -900}, {x: 900, duration: .7, ease: "power2.inOut", immediateRender: false}, 0.390);
-      tl.fromTo("#gta", {rotation: -2}, {rotation: 0, duration: .5, ease: "elastic.out(1,.4)", immediateRender: false}, 0.040);
       tl.fromTo("#rlogo", {opacity: 0, scale: .6, rotation: -12}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 0.190);
       tl.fromTo("#date", {opacity: 0, y: 40}, {...{opacity: 1, y: 0}, duration: 0.28, ease: "back.out(1.7)", immediateRender: false}, 1.680);
-      tl.to("#gta", {y: -210, scale: .62, duration: .35, ease: "expo.inOut"}, 2.650);
+      tl.to("#gta", {y: -480, scale: .5, rotation: 0, duration: .4, ease: "expo.inOut"}, 2.650);
       tl.to("#date", {opacity: 0, duration: 0.15, ease: "power2.in"}, 2.650);
       tl.fromTo("#save", {opacity: 0, scale: .5}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 2.700);
       tl.fromTo("#only .l1", {opacity: 0, y: 40}, {...{opacity: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 3.480);
@@ -218,6 +237,18 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050
       tl.fromTo("#tg1", {opacity: 0, x: -80}, {...{opacity: 1, x: 0}, duration: 0.28, ease: "back.out(1.7)", immediateRender: false}, 9.000);
       tl.fromTo("#tg2", {opacity: 0, x: 80}, {...{opacity: 1, x: 0}, duration: 0.28, ease: "back.out(1.7)", immediateRender: false}, 10.120);
       tl.fromTo("#tg3", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.28, ease: "back.out(1.7)", immediateRender: false}, 11.280);
+      tl.fromTo("#vb0", {opacity: 0, scale: .4, y: 40}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(2.5)", immediateRender: false}, 7.140);
+      tl.to("#vb0", {y: -260, opacity: 0, duration: 1.4, ease: "power1.in"}, 7.490);
+      tl.fromTo("#vb1", {opacity: 0, scale: .4, y: 40}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(2.5)", immediateRender: false}, 7.380);
+      tl.to("#vb1", {y: -260, opacity: 0, duration: 1.4, ease: "power1.in"}, 7.730);
+      tl.fromTo("#vb2", {opacity: 0, scale: .4, y: 40}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(2.5)", immediateRender: false}, 9.300);
+      tl.to("#vb2", {y: -260, opacity: 0, duration: 1.4, ease: "power1.in"}, 9.650);
+      tl.fromTo("#vb3", {opacity: 0, scale: .4, y: 40}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(2.5)", immediateRender: false}, 10.580);
+      tl.to("#vb3", {y: -260, opacity: 0, duration: 1.4, ease: "power1.in"}, 10.930);
+      tl.fromTo("#vb4", {opacity: 0, scale: .4, y: 40}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(2.5)", immediateRender: false}, 11.280);
+      tl.to("#vb4", {y: -260, opacity: 0, duration: 1.4, ease: "power1.in"}, 11.630);
+      tl.fromTo("#vb5", {opacity: 0, scale: .4, y: 40}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(2.5)", immediateRender: false}, 11.560);
+      tl.to("#vb5", {y: -260, opacity: 0, duration: 1.4, ease: "power1.in"}, 11.910);
       tl.to(["#tg1", "#tg2", "#tg3"], {opacity: 0, y: -40, duration: .18, stagger: .04}, 11.732);
       tl.to("#vproof", {filter: "brightness(.45) blur(6px)", duration: .3}, 11.832);
       tl.fromTo("#views", {opacity: 0, scale: 1.7}, {...{opacity: 1, scale: 1}, duration: 0.35, ease: "expo.out", immediateRender: false}, 11.932);
@@ -228,6 +259,8 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050
       tl.fromTo("#st1 .step", {opacity: 0, x: -60}, {...{opacity: 1, x: 0}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 13.322);
       tl.fromTo("#tool", {opacity: 0, y: 80, scale: .94}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.4, ease: "back.out(1.7)", immediateRender: false}, 13.392);
       tl.fromTo("#scan", {x: 0}, {x: 860, duration: 0.920, ease: "none", immediateRender: false}, 15.732);
+      const pc = {v: 0}; tl.to(pc, {v: 100, duration: 0.920, ease: "power1.inOut", onUpdate: () => { document.getElementById("pct").textContent = "CLIPPING " + Math.round(pc.v) + "%"; }}, 15.732);
+      tl.set("#pct", {color: "#38e08c"}, 16.652);
       tl.to("#bar", {scaleY: .4, opacity: .35, duration: .25, ease: "power2.in"}, 16.602);
       tl.fromTo("#th0", {opacity: 0, scale: .4, y: -60}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 16.652);
       tl.fromTo("#th1", {opacity: 0, scale: .4, y: -60}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.25, ease: "back.out(1.7)", immediateRender: false}, 16.712);
@@ -246,6 +279,9 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050
       tl.fromTo("#st2 .step", {opacity: 0, x: -60}, {...{opacity: 1, x: 0}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 17.990);
       tl.fromTo("#set", {opacity: 0, y: 80, scale: .94}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.4, ease: "back.out(1.7)", immediateRender: false}, 18.040);
       tl.fromTo("#keyrow", {boxShadow: "0 0 0 0 rgba(255,79,163,0)"}, {boxShadow: "0 0 0 6px rgba(255,79,163,.9), 0 0 60px rgba(255,79,163,.6)", duration: .3, immediateRender: false}, 19.440);
+      tl.fromTo("#cursor", {opacity: 0, x: 380, y: 420}, {opacity: 1, x: 0, y: 0, duration: .45, ease: "power3.out", immediateRender: false}, 18.990);
+      tl.to("#cursor", {scale: .8, duration: .07, yoyo: true, repeat: 1}, 19.440);
+      tl.fromTo("#ripple", {opacity: .9, scale: .2}, {opacity: 0, scale: 2.4, duration: .45, ease: "power2.out", immediateRender: false}, 19.440);
       tl.fromTo("#paid", {opacity: 0, scale: 2.2, rotation: -24}, {...{opacity: 1, scale: 1, rotation: -12}, duration: 0.25, ease: "expo.out", immediateRender: false}, 20.780);
       tl.to("#paid", {opacity: 0, scale: .8, duration: .15}, 21.380);
       tl.fromTo("#claimed", {opacity: 0, scale: 2.2, rotation: 20}, {...{opacity: 1, scale: 1, rotation: 8}, duration: 0.25, ease: "expo.out", immediateRender: false}, 21.460);
@@ -255,6 +291,9 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050
       tl.fromTo("#stage", {scale: 1.08}, {scale: 1, duration: .45, ease: "expo.out", immediateRender: false}, 21.900);
       tl.fromTo("#lk1", {opacity: 0, x: -200, rotation: -6}, {...{opacity: 1, x: 0, rotation: -3}, duration: 0.35, ease: "back.out(1.7)", immediateRender: false}, 22.440);
       tl.fromTo("#lk2", {opacity: 0, x: 200, rotation: 6}, {...{opacity: 1, x: 0, rotation: 3}, duration: 0.35, ease: "back.out(1.7)", immediateRender: false}, 23.560);
+      tl.fromTo("#lk1 .pad", {rotation: -16}, {rotation: 0, duration: .6, ease: "elastic.out(1.2,.3)", immediateRender: false}, 22.690);
+      tl.fromTo("#lk2 .pad", {rotation: -16}, {rotation: 0, duration: .6, ease: "elastic.out(1.2,.3)", immediateRender: false}, 23.810);
+      tl.fromTo(".fx", {opacity: .55}, {opacity: 1, duration: .09, yoyo: true, repeat: 15, ease: "steps(1)", immediateRender: false}, 22.540);
       tl.fromTo("#miss", {opacity: 0, scale: 1.4}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 25.230);
       tl.to("#st3", {opacity: 0, duration: 0.08, ease: "power2.in"}, 25.790);
       tl.fromTo("#flash", {opacity: .85}, {opacity: 0, duration: .22, ease: "power2.out", immediateRender: false}, 25.840);
@@ -263,6 +302,10 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050
       tl.fromTo(".ct1", {opacity: 0, y: 40}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 25.890);
       tl.fromTo("#kw", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.4, ease: "expo.out", immediateRender: false}, 26.470);
       tl.fromTo("#kw", {textShadow: "0 0 0px #ff4fa3"}, {textShadow: "0 0 50px #ff4fa3", duration: .6, yoyo: true, repeat: 3, immediateRender: false}, 26.870);
+      tl.fromTo("#cbox", {opacity: 0, y: 60}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 26.570);
+      const ty = {n: 0}; tl.to(ty, {n: 4, duration: .5, ease: "steps(4)", onUpdate: () => { const e = document.getElementById("ctext"); e.textContent = "GTA6".slice(0, Math.round(ty.n)) || "Add a comment..."; e.style.color = ty.n > 0 ? "#fff" : "rgba(255,255,255,.5)"; }}, 26.870);
+      tl.fromTo("#csend", {scale: 1}, {scale: 1.35, duration: .12, yoyo: true, repeat: 1, immediateRender: false}, 27.470);
+      tl.fromTo("#dm", {opacity: 0, y: -160}, {...{opacity: 1, y: 0}, duration: 0.4, ease: "back.out(1.6)", immediateRender: false}, 27.740);
       tl.fromTo(".ct2", {opacity: 0, y: 40}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 27.640);
       tl.fromTo("#follow", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(1.7)", immediateRender: false}, 28.900);
       tl.to("#follow", {scale: .92, duration: .08, yoyo: true, repeat: 1}, 29.350);
