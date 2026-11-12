@@ -120,6 +120,7 @@ BEAT = None                                     # v2: the unrecorded text beat i
 BITE_LEN, ECHO_FROM = 2.62, 2.30               # the bite, and where his last word "brain" starts (its echo tail)
 T_BLACK = 2.56
 T_SPLIT = round(t_l1 - .06, 3)
+HOOK_END = round(T("85") - .05, 3)               # the hook text holds until the price lands on "85,000"
 
 # (mode, t0, t1): split / full / beat / end
 SECTIONS = [("split", 0.0, t_but - .1), ("full", t_but - .1, t_does - .1), ("split", t_does - .1, t_because6 - .1),
@@ -294,7 +295,7 @@ def build_caps():
     for k, g in enumerate(gs):
         t0 = g[0]["s"] - .05
         t1 = min(gs[k + 1][0]["s"] - .05 if k + 1 < len(gs) else VDUR, g[-1]["e"] + .6)
-        if t0 < 2.75:                       # the cold open has the hook text on the seam
+        if t0 < HOOK_END - .1:              # the hook text is on the seam then
             continue
         m = mode_at(g[0]["s"])
         txt = " ".join(f'<span class="{"k" if norm(w["w"]) in KEY else ""}">{w["w"].replace("85", "85").replace(",000", ",000")}</span>' for w in g)
@@ -446,8 +447,10 @@ def main():
     build_layout()
     build_caps()
     # the hook text on the seam, from frame 0 (CSS-visible), out when she starts
-    js(f'tl.fromTo("#hook", {{scale: 1.04}}, {{scale: 1, duration: 2.0, ease: "power1.out", immediateRender: false}}, 0);')
-    js(f'tl.set("#hook", {{opacity: 0}}, {T_BLACK:.3f});')
+    # v5 (owner: "remove it from Deepinder's full screen, add it after the transition"): on the seam from the split's
+    # first frame until the price lands on "85,000"; her captions start after it
+    js(f'tl.fromTo("#hook", {{opacity: 0, scale: 1.25}}, {{opacity: 1, scale: 1, duration: .3, ease: "back.out(1.8)", immediateRender: false}}, {T_SPLIT:.3f});')
+    js(f'tl.to("#hook", {{opacity: 0, y: -30, duration: .2, ease: "power2.in"}}, {HOOK_END - .2:.3f});')
     sfx("hit", 0.0)
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
@@ -467,7 +470,7 @@ def main():
         <i id="seamline"></i>
       </div>
       {"".join(OVER)}
-      <div class="hook" id="hook"><b>Can an <span class="y">₹85,000</span> device<br>measure your <em>peace of mind?</em></b></div>
+      <div class="hook" id="hook" style="opacity:0"><b>Can an <span class="y">₹85,000</span> device<br>measure your <em>peace of mind?</em></b></div>
       {"".join(CAPS)}
       <div id="flash"></div>
       <div id="grain"></div>
