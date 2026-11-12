@@ -17,5 +17,6 @@ mental health tips, peace of mind, toxic people, how relationships affect mental
 ```
 
 No CTA, by the owner's choice. The music line is required by its CC BY 3.0 licence; the sound effects are CC0
-(OpenGameArt). The podcast footage (2.75 s with Deepinder's own voice, then 4.3 s and 5.9 s of silent
-footage under her lines) is credited on screen and here.
+(OpenGameArt). The podcast footage (2.75 s with Deepinder's own voice, then 4.3 s and 3.4 s of silent footage under her
+lines) is credited on screen and here. The other footage is from Pexels (Pexels licence: free for commercial use, no
+credit required; clip list in plan/broll_pexels.json).
