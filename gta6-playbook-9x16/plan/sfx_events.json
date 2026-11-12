@@ -1,122 +1,142 @@
 [
 {
 "type": "impact",
-"t": 0.031
-},
-{
-"type": "pop",
-"t": 1.108
-},
-{
-"type": "click",
-"t": 1.815
+"t": 0.04
 },
 {
 "type": "swish",
-"t": 2.723
-},
-{
-"type": "whoosh_big",
-"t": 4.208
-},
-{
-"type": "screech",
-"t": 7.562
+"t": 1.27
 },
 {
 "type": "pop",
-"t": 8.546
+"t": 1.68
 },
 {
-"type": "shutter",
-"t": 9.7
-},
-{
-"type": "impact",
-"t": 10.765
-},
-{
-"type": "cash",
-"t": 11.515
-},
-{
-"type": "whoosh",
-"t": 12.153
-},
-{
-"type": "riser_short",
-"t": 14.63
-},
-{
-"type": "tick",
-"t": 15.845
-},
-{
-"type": "tick",
-"t": 15.965
-},
-{
-"type": "tick",
-"t": 16.085
-},
-{
-"type": "notify",
-"t": 16.168
-},
-{
-"type": "tick",
-"t": 16.205
-},
-{
-"type": "tick",
-"t": 16.325
-},
-{
-"type": "whoosh",
-"t": 17.323
+"type": "swish",
+"t": 2.59
 },
 {
 "type": "click",
-"t": 18.769
+"t": 2.7
 },
 {
-"type": "cash",
-"t": 20.323
+"type": "swish",
+"t": 3.39
 },
 {
-"type": "stamp",
-"t": 21.231
-},
-{
-"type": "buzzer",
-"t": 21.281
-},
-{
-"type": "whoosh",
-"t": 21.536
-},
-{
-"type": "lock",
-"t": 22.24
-},
-{
-"type": "lock",
-"t": 23.102
-},
-{
-"type": "riser",
-"t": 24.307
+"type": "swish",
+"t": 3.5
 },
 {
 "type": "whoosh_big",
-"t": 25.187
+"t": 4.88
+},
+{
+"type": "swish",
+"t": 8.89
+},
+{
+"type": "screech",
+"t": 9.0
+},
+{
+"type": "swish",
+"t": 10.01
+},
+{
+"type": "pop",
+"t": 10.12
+},
+{
+"type": "shutter",
+"t": 11.28
 },
 {
 "type": "impact",
-"t": 25.307
+"t": 11.932
+},
+{
+"type": "cash",
+"t": 12.682
+},
+{
+"type": "whoosh",
+"t": 13.152
+},
+{
+"type": "riser_short",
+"t": 15.732
+},
+{
+"type": "tick",
+"t": 16.652
+},
+{
+"type": "tick",
+"t": 16.772
+},
+{
+"type": "tick",
+"t": 16.892
+},
+{
+"type": "notify",
+"t": 16.912
+},
+{
+"type": "tick",
+"t": 17.012
+},
+{
+"type": "tick",
+"t": 17.132
+},
+{
+"type": "whoosh",
+"t": 17.82
 },
 {
 "type": "click",
-"t": 28.227
+"t": 19.44
+},
+{
+"type": "cash",
+"t": 20.78
+},
+{
+"type": "stamp",
+"t": 21.46
+},
+{
+"type": "buzzer",
+"t": 21.51
+},
+{
+"type": "whoosh",
+"t": 21.78
+},
+{
+"type": "lock",
+"t": 22.69
+},
+{
+"type": "lock",
+"t": 23.81
+},
+{
+"type": "riser",
+"t": 24.84
+},
+{
+"type": "whoosh_big",
+"t": 25.72
+},
+{
+"type": "impact",
+"t": 25.84
+},
+{
+"type": "click",
+"t": 28.9
 }
 ]

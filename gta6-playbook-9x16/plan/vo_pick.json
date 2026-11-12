@@ -1,152 +1,103 @@
 {
- "duration": 38.335,
+ "duration": 30.34,
  "takes": [
   {
    "line": "p00",
    "take": 0,
-   "heard": "GTA 6 drops on the 19th, so save this is the only creator video you'll need!",
+   "heard": "GTA VI drops on the 19th. Save this, it's the only creator video you'll need.",
    "errors": 1,
-   "pitch_spread_hz": 155
+   "pitch_spread_hz": 74
   },
   {
    "line": "p00",
    "take": 1,
-   "heard": "GTA 6 drops on the 19th, so say this is the only creator video you'll need.",
-   "errors": 2,
-   "pitch_spread_hz": 152
-  },
-  {
-   "line": "p00",
-   "take": 2,
-   "heard": "GTA 6 drops on the 19th, so save this, it's the only creative video you'll need.",
-   "errors": 1,
-   "pitch_spread_hz": 107
+   "heard": "GTA 6 drops on the 19th. Save this, it's the only creator video you'll need.",
+   "errors": 0,
+   "pitch_spread_hz": 67
   },
   {
    "line": "p01",
    "take": 0,
-   "heard": "The biggest GTA RP clip pages grew exactly like this one police chase one streamer losing it clipped in minutes",
+   "heard": "The biggest GTA RP clip pages grew exactly like this. One police chase, one streamer losing it, clipped in minutes.",
    "errors": 0,
-   "pitch_spread_hz": 150
+   "pitch_spread_hz": 66
   },
   {
    "line": "p01",
    "take": 1,
-   "heard": "The biggest GTA RP clip pages go exactly like this one police chase one streamer losing it clipped in minutes",
-   "errors": 1,
-   "pitch_spread_hz": 143
-  },
-  {
-   "line": "p01",
-   "take": 2,
-   "heard": "The biggest GTA RP clip pages grew exactly like this. One police chase, one streamer losing it, clipped in minutes!",
+   "heard": "The biggest GTA RP clip pages grew exactly like this. One police chase, one streamer losing it, clipped in minutes.",
    "errors": 0,
-   "pitch_spread_hz": 136
+   "pitch_spread_hz": 66
   },
   {
    "line": "p02",
    "take": 0,
-   "heard": "millions of views",
+   "heard": "millions of views.",
    "errors": 0,
-   "pitch_spread_hz": 26
+   "pitch_spread_hz": 60
   },
   {
    "line": "p02",
    "take": 1,
-   "heard": "millions of views",
+   "heard": "millions of views.",
    "errors": 0,
-   "pitch_spread_hz": 181
-  },
-  {
-   "line": "p02",
-   "take": 2,
-   "heard": "millions of Jews.",
-   "errors": 1,
-   "pitch_spread_hz": 0
+   "pitch_spread_hz": 58
   },
   {
    "line": "p03",
    "take": 0,
    "heard": "Step 1, an AI tool that turns any 8 -hour stream into 10 ready -to -post clips.",
    "errors": 2,
-   "pitch_spread_hz": 94
+   "pitch_spread_hz": 56
   },
   {
    "line": "p03",
    "take": 1,
-   "heard": "Step one an AI tool that turns any eight -hour stream into ten ready to post clips",
-   "errors": 1,
-   "pitch_spread_hz": 300
-  },
-  {
-   "line": "p03",
-   "take": 2,
-   "heard": "An AI tool that turns any 8 -hour stream into 10 ready -to -post clips",
-   "errors": 4,
-   "pitch_spread_hz": 95
-  },
-  {
-   "line": "p04",
-   "take": 0,
-   "heard": "Step two, one game setting that decides if you get paid or get claimed.",
-   "errors": 0,
-   "pitch_spread_hz": 136
-  },
-  {
-   "line": "p04",
-   "take": 1,
-   "heard": "Step to one game setting that decides if you get paid or get claimed",
-   "errors": 1,
-   "pitch_spread_hz": 130
-  },
-  {
-   "line": "p04",
-   "take": 2,
-   "heard": "Step 2. One game setting that decides if you get paid or get claimed.",
-   "errors": 0,
-   "pitch_spread_hz": 194
-  },
-  {
-   "line": "p05",
-   "take": 0,
-   "heard": "Then the music rule and the keyword trick most GTA pages will miss.",
-   "errors": 0,
-   "pitch_spread_hz": 104
-  },
-  {
-   "line": "p05",
-   "take": 1,
-   "heard": "Then the music rule and the key word trick most GTA pages will miss.",
+   "heard": "Step 1, an AI tool that turns any 8 -hour stream into 10 ready -to -post clips.",
    "errors": 2,
-   "pitch_spread_hz": 138
+   "pitch_spread_hz": 64
+  },
+  {
+   "line": "p04",
+   "take": 0,
+   "heard": "Step two one game setting that decides if you get paid or get claimed",
+   "errors": 0,
+   "pitch_spread_hz": 66
+  },
+  {
+   "line": "p04",
+   "take": 1,
+   "heard": "Step two one game setting that decides if you get paid or get claimed",
+   "errors": 0,
+   "pitch_spread_hz": 57
   },
   {
    "line": "p05",
-   "take": 2,
-   "heard": "Then the music rule and the keyword trick most GTA pages will miss.",
+   "take": 0,
+   "heard": "Then the music rule, and the keyword trick most GTA pages will miss.",
    "errors": 0,
-   "pitch_spread_hz": 217
+   "pitch_spread_hz": 51
+  },
+  {
+   "line": "p05",
+   "take": 1,
+   "heard": "Then the music rule, and the keyword trick most GTA pages will miss.",
+   "errors": 0,
+   "pitch_spread_hz": 45
   },
   {
    "line": "p06",
    "take": 0,
-   "heard": "Comment, GTA6, and I'll send you all of it, and follow, so you're early!",
+   "heard": "Comment GTA 6 and I'll send you all of it and follow so you're early.",
    "errors": 0,
-   "pitch_spread_hz": 287
+   "pitch_spread_hz": 84
   },
   {
    "line": "p06",
    "take": 1,
-   "heard": "Comment, GTA6, and I'll send you all of it. And follow, so you're early!",
-   "errors": 0,
-   "pitch_spread_hz": 60
-  },
-  {
-   "line": "p06",
-   "take": 2,
-   "heard": "Comment GTA 6 and I'll send you all of it and follow so you're early",
-   "errors": 0,
-   "pitch_spread_hz": 42
+   "heard": "Comment GTA 6, and I'll send you all of it, and follow So Your Early.",
+   "errors": 1,
+   "pitch_spread_hz": 76
   }
  ]
 }

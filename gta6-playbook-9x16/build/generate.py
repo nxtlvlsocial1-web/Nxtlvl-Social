@@ -33,7 +33,7 @@ for w in W:
     LINES.setdefault(w["line"], []).append(w)
 L0 = {k: v[0]["t0"] for k, v in LINES.items()}
 L1 = {k: v[-1]["t1"] for k, v in LINES.items()}
-END = round(L1["p06"] + .7, 2)          # a beat on the end card after "early."
+END = round(L1["p06"] + .45, 2)          # a beat on the end card after "early."
 DUR = END
 
 
@@ -74,20 +74,57 @@ def cut(t, big=False):
 # ---- scenes ---------------------------------------------------------------------------------------------------------
 HTML = []
 
-# backgrounds: Rockstar's skydive (hook), the clip-page recording (proof), the Vice City album art (steps, CTA)
-HTML.append(f'<video id="vsky" class="full" src="assets/video/r_sky.mp4" data-start="0" data-duration="{S1:.3f}" '
-            'data-media-start="0" data-track-index="1" muted playsinline></video>')
-HTML.append(f'<video id="vproof" class="full" src="assets/video/proof.mp4" data-start="{S1:.3f}" data-duration="{S2 - S1:.3f}" '
-            'data-media-start="0.4" data-track-index="2" muted playsinline></video>')
-HTML.append(f'<video id="vvc" class="full" src="assets/video/vc_full.mp4" data-start="{S2:.3f}" data-duration="{S5 - S2:.3f}" '
-            'data-media-start="5.6" data-track-index="3" muted playsinline></video>')
-HTML.append(f'<video id="vvc2" class="full" src="assets/video/vc_full.mp4" data-start="{S5:.3f}" data-duration="{S6 - S5:.3f}" '
-            'data-media-start="26.4" data-track-index="4" muted playsinline></video>')
-HTML.append('<div id="tint" class="full"></div><div id="vig" class="full"></div>')
+# v2 (owner: "use the best of the best scenes from all of the videos... add more animations or clips and improve
+# background"): the picture is a run of Rockstar plates (build/clips.sh), cut on the words; behind the panels they play
+# blurred and dark so the panels read, and a Vice City grade, drifting light leaks and film grain sit over everything.
+PLATES = []
+
+
+def plate(vid, src, t0, t1, media=0.0, cls="full", push=(1.0, 1.07)):
+    HTML.append(f'<video id="{vid}" class="{cls}" src="assets/video/{src}.mp4" data-start="{t0:.3f}" data-duration="{t1 - t0:.3f}" '
+                f'data-media-start="{media:.3f}" data-track-index="{1 + len(PLATES) % 2}" muted playsinline></video>')
+    js(f'tl.fromTo("#{vid}", {{scale: {push[0]}}}, {{scale: {push[1]}, duration: {t1 - t0:.3f}, ease: "none", immediateRender: false}}, {t0:.3f});')
+    PLATES.append((vid, src, t0, t1))
+
+
+def mini_cut(t):
+    js(f'tl.fromTo("#flash", {{opacity: .45}}, {{opacity: 0, duration: .14, ease: "power2.out", immediateRender: false}}, {t:.3f});')
+    sfx("swish", t - .06)
+
+
+_tg, _td, _ts, _to = .0, T("p00", "drops"), T("p00", "Save"), T("p00", "only")
+plate("h1", "c_flip", 0, _td + .25, .0, push=(1.12, 1.0))
+plate("h2", "r_sky", _td + .25, _ts - .05, .5)
+plate("h3", "c_heli", _ts - .05, _to - .05, .2)
+plate("h4", "c_scoot", _to - .05, S1, .3)
+for t in (_td + .25, _ts - .05, _to - .05):
+    mini_cut(t)
+_tp, _tst, _tm = T("p01", "police"), T("p01", "streamer"), T("p02", "Millions")
+plate("pr1", "proof", S1, _tp - .05, .4)
+plate("pr2", "c_truck", _tp - .05, _tst - .05, .3, push=(1.15, 1.02))
+plate("vproof", "proof", _tst - .05, S2, 2.6)
+mini_cut(_tp - .05)
+mini_cut(_tst - .05)
+_t1h = T("p03", "ten")
+plate("s1a", "c_boat", S2, _t1h - .3, .2, "full plate")
+plate("s1b", "c_ball", _t1h - .3, S3, .1, "full plate")
+_tcl = T("p04", "claimed")
+plate("s2a", "c_cops", S3, _tcl - .1, .1, "full plate")
+plate("s2b", "c_truck", _tcl - .1, S4, 1.0, "full plate")
+_tkw = T("p05", "keyword")
+plate("s3a", "c_gym", S4, _tkw - .1, .2, "full plate")
+plate("s3b", "c_dive", _tkw - .1, S5, .0, "full plate")
+plate("cta1", "vc_full", S5, S6, 26.4, push=(1.0, 1.06))
+HTML.append('<div id="grade" class="full"></div><div id="leak1" class="leak"></div><div id="leak2" class="leak"></div>'
+            '<div id="tint" class="full"></div><div id="vig" class="full"></div><div id="grain" class="full"></div>')
+js(f'tl.fromTo("#leak1", {{x: -420, y: -260, opacity: .55}}, {{x: 380, y: 520, opacity: .85, duration: {DUR:.2f}, ease: "sine.inOut", immediateRender: false}}, 0);')
+js(f'tl.fromTo("#leak2", {{x: 420, y: 1500, opacity: .35}}, {{x: -360, y: 900, opacity: .7, duration: {DUR:.2f}, ease: "sine.inOut", immediateRender: false}}, 0);')
+js(f'tl.fromTo("#grain", {{backgroundPosition: "0px 0px"}}, {{backgroundPosition: "1536px 1024px", duration: {DUR:.2f}, '
+   f'ease: "steps({int(DUR * 12)})", immediateRender: false}}, 0);')
 
 # hook
 HTML.append('<div class="sc" id="hook">'
-            '<div id="gta"><span>GTA</span><b>6</b></div>'
+            '<div id="gta"><span>GTA</span><b>6</b><div id="shine"></div></div>'
             '<div class="chip date" id="date">DROPS NOV 19</div>'
             '<div class="chip save" id="save"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg>SAVE THIS</div>'
             '<div id="only"><div class="l1">THE ONLY</div><div class="l2">GTA 6 CREATOR</div><div class="l3">VIDEO <i>you\'ll need.</i></div></div>'
@@ -96,6 +133,8 @@ HTML.append('<div class="sc" id="hook">'
 t_gta, t_nine, t_save, t_only = T("p00", "GTA"), T("p00", "nineteenth"), T("p00", "Save"), T("p00", "only")
 show("#gta", t_gta, .35, "{opacity: 0, scale: 1.6}", "{opacity: 1, scale: 1}", "expo.out")
 sfx("impact", t_gta)
+js(f'tl.fromTo("#shine", {{x: -900}}, {{x: 900, duration: .7, ease: "power2.inOut", immediateRender: false}}, {t_gta + .35:.3f});')
+js(f'tl.fromTo("#gta", {{rotation: -2}}, {{rotation: 0, duration: .5, ease: "elastic.out(1,.4)", immediateRender: false}}, {t_gta:.3f});')
 show("#rlogo", t_gta + .15, .3, "{opacity: 0, scale: .6, rotation: -12}", "{opacity: 1, scale: 1, rotation: 0}")
 show("#date", t_nine, .28)
 sfx("pop", t_nine)
@@ -107,7 +146,6 @@ show("#only .l1", t_only - .02, .25)
 show("#only .l2", t_only + .12, .25)
 show("#only .l3", T("p00", "video") - .02, .3)
 sfx("swish", t_only)
-js(f'tl.fromTo("#vsky", {{scale: 1.0}}, {{scale: 1.1, duration: {S1:.3f}, ease: "none", immediateRender: false}}, 0);')
 hide("#hook", S1 - .05, .08)
 
 # proof: the clip pages, views on every tile
@@ -249,6 +287,17 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: {NIGH
 #root {{ position: relative; width: 1080px; height: 1920px; overflow: hidden; background: {NIGHT}; font-family: Montserrat; color: #fff; }}
 #stage {{ position: absolute; inset: 0; transform-origin: 50% 45%; }}
 .full {{ position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }}
+.plate {{ filter: blur(3px) brightness(.72) saturate(1.3); }}
+#grade {{ background: linear-gradient(170deg, rgba(127,27,248,.38) 0%, rgba(255,79,163,.22) 45%, rgba(255,179,107,.2) 100%);
+  mix-blend-mode: soft-light; }}
+.leak {{ position: absolute; left: 0; top: 0; width: 900px; height: 900px; border-radius: 50%; mix-blend-mode: screen; pointer-events: none;
+  filter: blur(40px); }}
+#leak1 {{ background: radial-gradient(circle, rgba(255,79,163,.55), rgba(255,79,163,0) 65%); }}
+#leak2 {{ background: radial-gradient(circle, rgba(127,27,248,.6), rgba(127,27,248,0) 65%); }}
+#grain {{ background-image: url("assets/img/grain.png"); background-size: 512px 512px; opacity: .07; mix-blend-mode: overlay; }}
+#shine {{ position: absolute; top: -40px; bottom: -40px; left: 50%; width: 180px; margin-left: -90px; opacity: .9;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.85), transparent); mix-blend-mode: overlay; }}
+#gta {{ overflow: hidden; }}
 #tint {{ background: linear-gradient(180deg, rgba(16,2,44,.55) 0%, rgba(16,2,44,.05) 30%, rgba(16,2,44,.1) 60%, rgba(7,5,15,.75) 100%); }}
 #vig {{ background: radial-gradient(120% 80% at 50% 45%, transparent 55%, rgba(7,5,15,.7) 100%); }}
 #flash {{ position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 50; mix-blend-mode: screen; }}

@@ -20,10 +20,10 @@ import soundfile as sf
 from faster_whisper import WhisperModel
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TAKES = os.path.join(ROOT, "assets", "audio", "vo_takes")
+TAKES = os.path.join(ROOT, os.environ.get("VO_TAKES", os.path.join("assets", "audio", "vo_takes")))
 SR = 48000
-TEMPO = 1.3           # owner: the reel runs 25-30 s; the expressive takes are slower, so spoken 30% faster, pitch kept
-GAP_SCALE = .55
+TEMPO = float(os.environ.get("VO_TEMPO", "1.0"))   # v3: Kokoro speaks at its own speed, no time-stretch
+GAP_SCALE = .4
 LEAD = .04          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast
 GAP = {"p00": .2, "p01": .08, "p02": .3, "p03": .22, "p04": .25, "p05": .25, "p06": .0}
