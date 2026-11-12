@@ -20,10 +20,12 @@ import soundfile as sf
 from faster_whisper import WhisperModel
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TAKES = os.path.join(ROOT, "assets", "audio", "vo_takes")
+# v13: the natural Kokoro takes (build/vo_kokoro.py); VO_TAKES=assets/audio/vo_takes for the old Chatterbox ones
+TAKES = os.path.join(ROOT, os.environ.get("VO_TAKES", "assets/audio/vo_takes_kokoro"))
 SR = 48000
-TEMPO = 1.15         # v10 (owner: "make the pacing of video just a little fast, around 38 seconds"): spoken 15% faster, pitch kept
-GAP_SCALE = .6       # and the pauses between lines tightened
+TEMPO = 1.0          # v13: no time-stretch (it made the voice sound processed); the pace is set by Kokoro's own speed
+_OLD_TEMPO = 1.15         # v10 (owner: "make the pacing of video just a little fast, around 38 seconds"): spoken 15% faster, pitch kept
+GAP_SCALE = .75       # and the pauses between lines tightened
 LEAD = .04          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast
 # v11: "This video already lost you... in the first three seconds." (the SKIPPED stamp lands in the pause)
