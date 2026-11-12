@@ -162,7 +162,10 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
   file, info and caption, a timed frame contact sheet, a transcript and earshot's sound timeline. Instagram works but
   allows only a few anonymous fetches before asking for a login; YouTube refuses video files to cloud machines (the
   script falls back to the info and the caption track). Never use the owner's cookies or pose as a browser; for a
-  refused link, ask for the file and run `--file VIDEO.mp4`. Downloaded reels are references only, never reused.
+  refused link, ask for the file and run `--file VIDEO.mp4`. Downloaded reels are references only, never reused. One
+  exception (owner's call): official promo clips posted by a game publisher (e.g. Rockstar Games' GTA 6 clips) may be
+  used in our videos, always with their audio muted (their music gets reels claimed) and only footage, never re-uploaded
+  whole.
 
 ## Repo layout
 
