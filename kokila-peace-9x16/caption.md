@@ -17,6 +17,6 @@ mental health tips, peace of mind, toxic people, how relationships affect mental
 ```
 
 No CTA, by the owner's choice. The music line is required by its CC BY 3.0 licence; the sound effects are CC0
-(OpenGameArt). The podcast footage (Deepinder's own line, 2.6 s full screen, then two silent clips of about 4 s and
-3.4 s under her lines) is credited on screen and here. The other footage is from Pexels (Pexels licence: free for
+(OpenGameArt). The podcast footage (Deepinder's own line, "It's super easy and it measures blood flow to your brain",
+2.6 s full screen with an echo on "to your brain", then two silent clips of about 4 s and 3.4 s under her lines) is credited on screen and here. The other footage is from Pexels (Pexels licence: free for
 commercial use, no credit required; clip list in plan/broll_pexels.json).

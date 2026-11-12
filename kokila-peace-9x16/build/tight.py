@@ -18,7 +18,9 @@ import re
 import subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-RAW = os.path.join(ROOT, "footage", "face_1080.mp4")
+RAW = os.path.join(ROOT, "footage", "IMG_0600.mov")         # v5: the 4K original itself (owner: "quality decreased")
+# one scale from 4K to 1080x1920 (full-range iPhone video converted to TV range properly), a light sharpen
+VF = "scale=1080:1920:flags=lanczos:in_range=full:out_range=tv,unsharp=5:5:0.45:5:5:0.0,format=yuv420p"
 SPEED = 1.08
 THRESH, MINSIL, KEEP = -32, .16, .1
 GAP = .06                                   # v4 (owner: "only the part where she speaks, not her looking left or right
@@ -99,7 +101,7 @@ for k, (lid, a, b, mute) in enumerate(pieces):
         gp = os.path.join(tmp, f"g{k:03d}.mov")
         ga = cuts[-1]["src"][1]
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{ga:.4f}", "-i", RAW, "-frames:v", str(round(GAP * 30)), "-t", f"{GAP:.4f}",
-                        "-af", "volume=0.15", "-r", "30", "-c:v", "libx264", "-crf", "15", "-preset", "fast", "-pix_fmt", "yuv420p",
+                        "-af", "volume=0.15", "-vf", VF, "-r", "30", "-c:v", "libx264", "-crf", "10", "-preset", "fast", "-pix_fmt", "yuv420p",
                         "-c:a", "pcm_s16le", "-ar", "48000", gp], check=True)
         lst.append(f"file '{gp}'")
         t += GAP
@@ -109,7 +111,7 @@ for k, (lid, a, b, mute) in enumerate(pieces):
     if mute:
         af = "volume=0.12," + af
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a:.4f}", "-i", RAW, "-frames:v", str(round(d * 30)), "-t", f"{d:.4f}",
-                    "-af", af, "-r", "30", "-c:v", "libx264", "-crf", "15", "-preset", "fast", "-pix_fmt", "yuv420p",
+                    "-af", af, "-vf", VF, "-r", "30", "-c:v", "libx264", "-crf", "10", "-preset", "fast", "-pix_fmt", "yuv420p",
                     "-c:a", "pcm_s16le", "-ar", "48000", out], check=True)
     lst.append(f"file '{out}'")
     cuts.append({"line": lid, "src": [a, b], "at": round(t, 3), "mute": mute})
@@ -120,7 +122,7 @@ one = os.path.join(tmp, "tight_1x.mov")
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", os.path.join(tmp, "list.txt"), "-c", "copy", one], check=True)
 os.makedirs(os.path.join(ROOT, "assets", "video"), exist_ok=True)
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", one, "-vf", f"setpts=PTS/{SPEED}", "-af", f"atempo={SPEED}", "-r", "30",
-                "-c:v", "libx264", "-crf", "16", "-preset", "medium", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "256k", "-ar", "48000",
+                "-c:v", "libx264", "-crf", "12", "-preset", "medium", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "256k", "-ar", "48000",
                 os.path.join(ROOT, "assets", "video", "tight.mp4")], check=True)
 
 

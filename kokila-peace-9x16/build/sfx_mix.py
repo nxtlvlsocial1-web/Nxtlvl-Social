@@ -66,13 +66,25 @@ def main():
     bite = os.path.join(WORK, "voice_bite.wav")
     # v4 (owner: "while his speech is ending add that effect in his voice where it kinda echoes"): his last word
     # ("brain") repeats as three fading, darker echoes that trail into the cut to black
+    # v5: three separate passes. The one-graph version (loudnorm inside asplit on a 2.6 s clip) came out with a silent
+    # dry branch, so only the echoes were heard; the line itself is now levelled with a measured gain instead.
     L, F = E["bite"]["len"], E["bite"]["echo_from"]
-    run(["ffmpeg", "-y", "-loglevel", "error", "-i", os.path.join(ROOT, E["bite"]["src"]), "-filter_complex",
-         f"[0:a]{VCHAIN},atrim=0:{L},afade=t=out:st={L - .1:.2f}:d=0.1,loudnorm=I=-16:TP=-3:LRA=9,asplit=2[dry][w];"
-         f"[w]atrim={F}:{L},asetpts=PTS-STARTPTS,highpass=f=200,lowpass=f=3000,asplit=3[e1][e2][e3];"
+    dry0 = os.path.join(WORK, "bite_dry0.wav")
+    run(["ffmpeg", "-y", "-loglevel", "error", "-i", os.path.join(ROOT, E["bite"]["src"]), "-af",
+         f"{VCHAIN},atrim=0:{L},afade=t=out:st={L - .1:.2f}:d=0.1", "-ar", "48000", "-ac", "1", "-c:a", "pcm_f32le", dry0])
+    r = run(["ffmpeg", "-i", dry0, "-af", "ebur128", "-f", "null", "-"])
+    gain = -16 - float(re.findall(r"I:\s+(-?[\d.]+) LUFS", r.stderr)[-1])
+    dry = os.path.join(WORK, "bite_dry.wav")
+    run(["ffmpeg", "-y", "-loglevel", "error", "-i", dry0, "-af", f"volume={gain:.2f}dB,alimiter=limit=0.7:level=false",
+         "-c:a", "pcm_f32le", dry])
+    echo = os.path.join(WORK, "bite_echo.wav")
+    run(["ffmpeg", "-y", "-loglevel", "error", "-i", dry, "-filter_complex",
+         f"[0:a]atrim={F}:{L},asetpts=PTS-STARTPTS,highpass=f=200,lowpass=f=3000,asplit=3[e1][e2][e3];"
          f"[e1]volume=0.55,adelay={int((F + .24) * 1000)}[d1];[e2]volume=0.32,lowpass=f=2200,adelay={int((F + .5) * 1000)}[d2];"
          f"[e3]volume=0.18,lowpass=f=1500,adelay={int((F + .78) * 1000)}[d3];"
-         f"[dry][d1][d2][d3]amix=inputs=4:normalize=0:duration=longest[o]", "-map", "[o]", "-ar", "48000", "-ac", "1", bite])
+         f"[d1][d2][d3]amix=inputs=3:normalize=0:duration=longest[o]", "-map", "[o]", "-c:a", "pcm_f32le", echo])
+    run(["ffmpeg", "-y", "-loglevel", "error", "-i", dry, "-i", echo, "-filter_complex",
+         "[0:a][1:a]amix=inputs=2:normalize=0:duration=longest[o]", "-map", "[o]", "-ar", "48000", "-ac", "1", bite])
     vo = os.path.join(WORK, "voice_full.wav")
     ms = int(E["bite"]["at"] * 1000)
     run(["ffmpeg", "-y", "-loglevel", "error", "-i", her, "-i", bite, "-filter_complex",

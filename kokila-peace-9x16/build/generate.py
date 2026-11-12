@@ -95,9 +95,13 @@ def icon(n, cls="ic"):
 
 
 def clip(vid, t0, t1, media, extra=""):
-    """a podcast clip in the top half (muted; its sound, where used, is in the mix), graded up from the flat recording"""
-    return (f'<video class="pod" id="{vid}" src="footage/podcast_169.mp4" data-start="{t0:.3f}" data-duration="{t1 - t0:.3f}" '
-            f'data-media-start="{media:.3f}" data-track-index="{2 + len(TOPH) % 3}" muted playsinline></video>{extra}'
+    """a podcast clip in the top half (muted; its sound, where used, is in the mix), graded up from the flat recording.
+    v5 (owner: "quality decreased"): each clip is cut once from the original screen recording straight to the panel
+    size (assets/video/pod_c.mp4, pod_d.mp4), so the browser no longer blows a small frame up; `media` is kept as a note
+    of where it sits in the recording"""
+    src = {"pC": "assets/video/pod_c.mp4", "pD": "assets/video/pod_d.mp4"}[vid]
+    return (f'<video class="pod" id="{vid}" src="{src}" data-start="{t0:.3f}" data-duration="{t1 - t0:.3f}" '
+            f'data-media-start="0.000" data-track-index="{2 + len(TOPH) % 3}" muted playsinline></video>{extra}'
             '<div class="credit">Source: Raj Shamani podcast</div>')
 
 
@@ -144,8 +148,8 @@ def broll(sid, t0, t1, vid, at=0.0, label=None, pos="50% 40%", extra=""):
 def build_top():
     # the cold open: Deepinder's own line, the device on his temple
     # v4 (owner): Deepinder full screen while we hear him; as he stops, an instant black, then the split screen
-    OVER.append(f'<div class="ov deep" id="deep" style="opacity:1"><video class="podfull" id="pA" src="footage/podcast_169.mp4" data-start="0" '
-                f'data-duration="{T_BLACK:.3f}" data-media-start="47.150" data-track-index="5" muted playsinline></video>'
+    OVER.append(f'<div class="ov deep" id="deep" style="opacity:1"><video class="podfull" id="pA" src="assets/video/pod_full.mp4" data-start="0" '
+                f'data-duration="{T_BLACK:.3f}" data-media-start="0.000" data-track-index="5" muted playsinline></video>'
                 '<div class="credit">Source: Raj Shamani podcast</div><div class="say" id="say0">"It measures blood flow to your brain."</div></div>'
                 '<div class="ov blk" id="blk"></div>')
     js(f'tl.fromTo("#pA", {{scale: 1.0}}, {{scale: 1.06, duration: {T_BLACK:.3f}, ease: "none", immediateRender: false}}, 0);')
@@ -320,7 +324,7 @@ video {{ display: block; }}
 #fullv {{ position: absolute; inset: 0; transform-origin: 50% 38%; }}
 .ts {{ position: absolute; inset: 0; opacity: 0; }}
 .deep {{ background: #000; z-index: 6; }}
-.podfull {{ position: absolute; left: -1540px; top: 0; width: 3413px; height: 1920px; filter: brightness(1.42) contrast(1.18) saturate(1.18); transform-origin: 2080px 700px; }}
+.podfull {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(1.42) contrast(1.18) saturate(1.18); transform-origin: 50% 35%; }}
 .deep .say {{ bottom: 330px; font-size: 52px; }}
 .blk {{ background: #000; z-index: 9; }}
 .br {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(1.08) contrast(1.05); }}
@@ -331,7 +335,7 @@ video {{ display: block; }}
   color: #fff; text-shadow: 0 10px 40px rgba(0,0,0,.6); opacity: 0; }}
 .big3 em {{ font-style: normal; color: {YEL}; }}
 .ts.vid {{ background: #000; }}
-.pod {{ position: absolute; left: -461px; top: -60px; width: 1882px; height: 1058px; filter: brightness(1.42) contrast(1.18) saturate(1.18); }}
+.pod {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(1.42) contrast(1.18) saturate(1.18); }}
 .credit {{ position: absolute; right: 24px; top: 24px; padding: 8px 16px; border-radius: 999px; background: rgba(0,0,0,.55); color: #fff; font-size: 28px; font-weight: 700; }}
 .shade {{ position: absolute; left: 0; right: 0; bottom: 0; height: 520px; background: linear-gradient(180deg, transparent, rgba(14,26,58,.75)); }}
 .say {{ position: absolute; left: 60px; right: 60px; bottom: 230px; text-align: center; color: #fff; font-size: 44px; font-weight: 700; font-style: italic;
