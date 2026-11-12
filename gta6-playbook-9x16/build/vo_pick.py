@@ -22,7 +22,7 @@ from faster_whisper import WhisperModel
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TAKES = os.path.join(ROOT, os.environ.get("VO_TAKES", os.path.join("assets", "audio", "vo_takes")))
 SR = 48000
-TEMPO = float(os.environ.get("VO_TEMPO", "1.0"))   # v3: Kokoro speaks at its own speed, no time-stretch
+TEMPO = float(os.environ.get("VO_TEMPO", "1.04"))   # v4: Chatterbox at medium emotion, only 4 % faster to land at 30 s
 GAP_SCALE = .4
 LEAD = .04          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast

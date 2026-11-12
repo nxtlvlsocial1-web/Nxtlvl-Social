@@ -339,11 +339,11 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: {NIGH
 #cursor {{ position: absolute; left: 820px; top: 700px; width: 80px; height: 80px; fill: #fff; stroke: {NIGHT}; stroke-width: 1.2;
   filter: drop-shadow(0 6px 14px rgba(0,0,0,.6)); z-index: 12; }}
 #ripple {{ position: absolute; left: 790px; top: 670px; width: 90px; height: 90px; border-radius: 50%; border: 5px solid {PINK}; z-index: 11; }}
-#cbox {{ top: 1250px; left: 90px; right: 90px; display: flex; align-items: center; justify-content: space-between; padding: 26px 34px;
+#cta #cbox {{ top: 1250px; left: 90px; right: 90px; display: flex; align-items: center; justify-content: space-between; padding: 26px 34px;
   border-radius: 999px; background: rgba(255,255,255,.12); border: 2px solid rgba(255,255,255,.35); text-align: left; }}
 #ctext {{ font-weight: 800; font-size: 46px; color: rgba(255,255,255,.5); }}
 #csend {{ width: 76px; height: 76px; border-radius: 50%; background: {PINK}; color: #fff; font-size: 40px; line-height: 76px; text-align: center; }}
-#dm {{ top: 200px; left: 70px; right: 70px; display: flex; align-items: center; gap: 24px; padding: 26px 30px; border-radius: 30px;
+#cta #dm {{ top: 200px; left: 70px; right: 70px; display: flex; align-items: center; gap: 24px; padding: 26px 30px; border-radius: 30px;
   background: rgba(255,255,255,.95); color: {NIGHT}; text-align: left; box-shadow: 0 20px 60px rgba(7,5,15,.6); }}
 #dm .dmi {{ width: 84px; height: 84px; border-radius: 22px; background: linear-gradient(135deg, {VIOLET}, {PINK}); color: #fff; font-size: 46px;
   line-height: 84px; text-align: center; flex: none; }}
