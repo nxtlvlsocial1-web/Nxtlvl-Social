@@ -1,0 +1,197 @@
+[
+{
+"t": 0.0,
+"cue": 0.0,
+"kind": "hit"
+},
+{
+"t": 5.14,
+"cue": 5.14,
+"kind": "ding"
+},
+{
+"t": 7.72,
+"cue": 7.72,
+"kind": "pop"
+},
+{
+"t": 10.44,
+"cue": 10.44,
+"kind": "pop"
+},
+{
+"t": 11.18,
+"cue": 11.18,
+"kind": "pop"
+},
+{
+"t": 12.02,
+"cue": 12.02,
+"kind": "pop"
+},
+{
+"t": 12.8,
+"cue": 12.8,
+"kind": "whoosh_big"
+},
+{
+"t": 14.61,
+"cue": 14.61,
+"kind": "stamp"
+},
+{
+"t": 15.06,
+"cue": 15.06,
+"kind": "whoosh"
+},
+{
+"t": 15.24,
+"cue": 15.24,
+"kind": "tick"
+},
+{
+"t": 19.67,
+"cue": 19.67,
+"kind": "success"
+},
+{
+"t": 21.93,
+"cue": 21.93,
+"kind": "scratch"
+},
+{
+"t": 24.04,
+"cue": 24.04,
+"kind": "scratch"
+},
+{
+"t": 24.48,
+"cue": 24.48,
+"kind": "whoosh_big"
+},
+{
+"t": 24.94,
+"cue": 24.94,
+"kind": "rise"
+},
+{
+"t": 26.14,
+"cue": 26.14,
+"kind": "hit"
+},
+{
+"t": 27.6,
+"cue": 27.6,
+"kind": "whoosh"
+},
+{
+"t": 28.88,
+"cue": 28.88,
+"kind": "pop"
+},
+{
+"t": 32.2,
+"cue": 32.2,
+"kind": "error"
+},
+{
+"t": 33.48,
+"cue": 33.48,
+"kind": "error"
+},
+{
+"t": 34.32,
+"cue": 34.32,
+"kind": "error"
+},
+{
+"t": 35.486,
+"cue": 35.486,
+"kind": "swish"
+},
+{
+"t": 36.186,
+"cue": 36.186,
+"kind": "drop"
+},
+{
+"t": 36.717,
+"cue": 36.717,
+"kind": "drop"
+},
+{
+"t": 37.249,
+"cue": 37.249,
+"kind": "drop"
+},
+{
+"t": 37.8,
+"cue": 37.8,
+"kind": "whoosh"
+},
+{
+"t": 41.5,
+"cue": 41.5,
+"kind": "sparkle"
+},
+{
+"t": 42.56,
+"cue": 42.56,
+"kind": "sparkle"
+},
+{
+"t": 43.46,
+"cue": 43.46,
+"kind": "sparkle"
+},
+{
+"t": 44.78,
+"cue": 44.78,
+"kind": "rise"
+},
+{
+"t": 46.68,
+"cue": 46.68,
+"kind": "whoosh_big"
+},
+{
+"t": 46.88,
+"cue": 46.88,
+"kind": "whoosh"
+},
+{
+"t": 48.28,
+"cue": 48.28,
+"kind": "pop"
+},
+{
+"t": 52.3,
+"cue": 52.3,
+"kind": "whoosh"
+},
+{
+"t": 56.32,
+"cue": 56.32,
+"kind": "sparkle"
+},
+{
+"t": 63.55,
+"cue": 63.55,
+"kind": "scratch"
+},
+{
+"t": 65.22,
+"cue": 65.22,
+"kind": "success"
+},
+{
+"t": 66.94,
+"cue": 66.94,
+"kind": "whoosh_big"
+},
+{
+"t": 70.94,
+"cue": 70.94,
+"kind": "sparkle"
+}
+]
