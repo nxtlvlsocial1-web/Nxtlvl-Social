@@ -158,6 +158,11 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 - `media-use` can now search Openverse for sound effects. Openverse items carry Creative Commons licences;
   check each one allows commercial use (and credit it if required) before it goes in a client video.
 - Telemetry: set `HYPERFRAMES_NO_TELEMETRY=1` to turn it off.
+- Seeing a reel or video from its link: `python3 tools/see_link.py URL --ears` (yt-dlp; installs itself) writes the
+  file, info and caption, a timed frame contact sheet, a transcript and earshot's sound timeline. Instagram works but
+  allows only a few anonymous fetches before asking for a login; YouTube refuses video files to cloud machines (the
+  script falls back to the info and the caption track). Never use the owner's cookies or pose as a browser; for a
+  refused link, ask for the file and run `--file VIDEO.mp4`. Downloaded reels are references only, never reused.
 
 ## Repo layout
 
