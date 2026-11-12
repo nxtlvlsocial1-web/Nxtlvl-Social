@@ -205,7 +205,7 @@ hide("#st3", S5 - .05, .08)
 HTML.append('<div class="sc" id="cta"><div id="ctadim"></div><div class="ct1">COMMENT</div><div id="kw">GTA6</div>'
             '<div class="ct2">and I\'ll send you <i>all of it.</i></div>'
             '<div id="follow"><span>+</span> FOLLOW <b>· BE EARLY</b></div>'
-            '<div id="brand"><img src="assets/img/rockstar_logo.jpg" class="rl"><span>×</span><img src="assets/img/logo-wordmark.png" class="wm"></div></div>')
+            '</div>')   # owner: no "Rockstar x nxtlvl" row, no page tag
 cut(S5, True)
 sfx("impact", S5)
 show("#ctadim", S5, .3, "{opacity: 0}", "{opacity: 1}", "power2.out")
@@ -217,7 +217,6 @@ show(".ct2", T("p06", "send"), .3)
 show("#follow", T("p06", "follow"), .3, "{opacity: 0, scale: .6}", "{opacity: 1, scale: 1}")
 sfx("click", T("p06", "follow"))
 js(f'tl.to("#follow", {{scale: .92, duration: .08, yoyo: true, repeat: 1}}, {T("p06", "follow") + .45:.3f});')
-show("#brand", T("p06", "early") - .2, .35)
 
 # captions: the spoken words, 2-3 at a time, under the action (not on the hook or the CTA, which carry their own type)
 KEY = {"police", "chase", "streamer", "minutes", "millions", "ai", "8-hour", "10", "setting", "paid", "claimed", "music",
@@ -363,7 +362,6 @@ html = f"""<!doctype html>
       <div id="stage">
         {chr(10).join(HTML)}
       </div>
-      <div id="topbar"><div class="h">AI.<b>NXTLVL</b></div><img src="assets/img/logo-wordmark.png"></div>
       <div id="flash"></div>
     </div>
     <script>
