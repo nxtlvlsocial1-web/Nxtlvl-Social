@@ -1,0 +1,89 @@
+{
+  "title": [
+    "5 STUDY",
+    "*PROMPTS*"
+  ],
+  "kicker": "Free study prompt pack",
+  "subtitle": "Turn any chapter into a manga, a timeline, a mind map, a labelled diagram or a one-page revision sheet.",
+  "tagline": "Works in ChatGPT or Gemini. Copy, paste, study.",
+  "blocks": [
+    {
+      "type": "text",
+      "heading": "How to *use* these",
+      "intro": "Each prompt works on one chapter or one topic at a time.",
+      "steps": [
+        [
+          "Copy the chapter",
+          "Paste the chapter text, or upload a clear photo or PDF of the pages."
+        ],
+        [
+          "Pick one prompt",
+          "Choose the format that suits the chapter: a story, a sequence, a map, a process or a quick revision."
+        ],
+        [
+          "Fill in the blanks",
+          "Replace the [highlighted parts] with your chapter or topic."
+        ],
+        [
+          "Check the facts",
+          "AI images can misspell labels or skip a step. Compare with your textbook before you revise from it."
+        ],
+        [
+          "Save it",
+          "Keep the images in one album per subject, so revision week is ready."
+        ]
+      ],
+      "note": "Tip: if the image comes out crowded, ask for the same thing \"with fewer words and bigger text\"."
+    },
+    {
+      "type": "cards",
+      "heading": "The *5 prompts*",
+      "per_page": 2,
+      "items": [
+        {
+          "tag": "Manga",
+          "line": "Turn this chapter into a 6-panel manga page. Each panel teaches one key idea, in order, with short speech bubbles in simple English. The last panel sums it all up. Keep every fact exactly as in the text: [paste chapter]",
+          "example": "Life Processes as a manga: a red blood cell carries oxygen from panel to panel.",
+          "why": "A story is easier to remember than a list. Each panel is one idea, so nothing gets skipped."
+        },
+        {
+          "tag": "Timeline",
+          "line": "Make a clean vertical timeline infographic of the key events or steps in this chapter, with dates or step numbers and a one-line explanation each: [paste chapter]",
+          "example": "The Rise of Nationalism in Europe, year by year, on one page.",
+          "why": "History and processes are sequences. Seeing the order makes the cause and effect stick."
+        },
+        {
+          "tag": "Mind map",
+          "line": "Create a colourful mind map of this chapter: the main topic in the centre, 4 to 6 branches for the subtopics, and 2 or 3 keywords on each branch: [paste chapter]",
+          "example": "Chemical Reactions and Equations: types of reactions as branches, examples as keywords.",
+          "why": "It shows how the whole chapter connects, so you can rebuild it from memory in an exam."
+        },
+        {
+          "tag": "Labelled diagram",
+          "line": "Draw a labelled diagram that explains [process] from this chapter, with arrows showing the order and a one-line caption for each label: [paste chapter]",
+          "example": "Photosynthesis: sunlight, water and carbon dioxide in, glucose and oxygen out.",
+          "why": "Diagram questions carry marks. Drawing the flow once makes it far easier to draw again."
+        },
+        {
+          "tag": "Revision sheet",
+          "line": "Make a one-page revision sheet for this chapter: key definitions, 5 must-know facts, 1 formula or diagram, and 3 likely exam questions with short answers: [paste chapter]",
+          "example": "Electricity on one page: Ohm's law, series vs parallel, and three questions to practise.",
+          "why": "The night before the exam you need one page, not twelve. This is that page."
+        }
+      ]
+    },
+    {
+      "type": "checklist",
+      "heading": "Before you *revise*",
+      "items": [
+        "One chapter or topic per prompt",
+        "Blanks replaced with your chapter",
+        "Facts and labels checked against the textbook",
+        "Asked for fewer words if the image is crowded",
+        "Saved in a folder for that subject",
+        "Revision sheet made for every chapter before the exam"
+      ],
+      "closing": "Study smarter, not longer."
+    }
+  ]
+}
