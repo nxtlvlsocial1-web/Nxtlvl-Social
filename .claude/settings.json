@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git clone --depth 1 https://github.com/Leonxlnx/earshot.git /root/tools/earshot)",
+      "Bash(python3 -m venv /root/tools/earshot/.venv)",
+      "Bash(/root/tools/earshot/.venv/bin/python -m pip install torch --index-url https://download.pytorch.org/whl/cpu)",
+      "Bash(/root/tools/earshot/.venv/bin/python -m pip install -e /root/tools/earshot[mcp])",
+      "Bash(/root/tools/earshot/.venv/bin/earshot:*)"
+    ]
+  }
+}
