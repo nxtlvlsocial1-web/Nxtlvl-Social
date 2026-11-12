@@ -27,8 +27,8 @@ GAP_SCALE = .6       # and the pauses between lines tightened
 LEAD = .04          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast
 # v11: "This video already lost you... in the first three seconds." (the SKIPPED stamp lands in the pause)
-PAUSE = {"l00": (4, .6)}
-GAP = {"l00": .55, "l03": .3, "l04": .12, "l05": .3, "l06": .4, "l07": .12, "l08": .4, "l09": .12, "l10": .3, "l11": .4,
+PAUSE = {}
+GAP = {"l00": .65, "l00b": .55, "l03": .3, "l04": .12, "l05": .3, "l06": .4, "l07": .12, "l08": .4, "l09": .12, "l10": .3, "l11": .4,
        "l12": .0}
 
 
@@ -59,7 +59,7 @@ def main():
     out, words, log, t = [np.zeros(int(LEAD * SR), dtype=np.float32)], [], [], LEAD
     for ln in script:
         best = None
-        for k in (0, 1):
+        for k in (0, 1, 2, 3):
             path = os.path.join(TAKES, f"{ln['id']}_t{k}.wav")
             if not os.path.exists(path):
                 continue
@@ -67,8 +67,13 @@ def main():
             ws = [w for s in segs for w in s.words]
             hyp = " ".join(w.word.strip() for w in ws)
             y, sr = librosa.load(path, sr=SR, mono=True)
-            score = (wer(ln["text"], hyp), -spread(y, sr))
-            log.append({"line": ln["id"], "take": k, "heard": hyp, "errors": score[0], "pitch_spread_hz": round(-score[1])})
+            # v12: expressive, but never weird: a take Whisper is unsure of (mumbled / garbled words) or with a pitch
+            # spike (a squeak) loses to a clean one; among clean takes the widest pitch range wins
+            sp = spread(y, sr)
+            prob = float(np.mean([w.probability for w in ws])) if ws else 0.0
+            bad = (1 if prob < .8 else 0) + (1 if sp > 300 else 0)
+            score = (wer(ln["text"], hyp) + bad, -min(sp, 300))
+            log.append({"line": ln["id"], "take": k, "heard": hyp, "errors": score[0], "pitch_spread_hz": round(sp), "word_prob": round(prob, 3)})
             if best is None or score < best[0]:
                 best = (score, k, y, ws)
         score, k, y, ws = best
@@ -95,7 +100,7 @@ def main():
         g = GAP[ln["id"]] * GAP_SCALE
         out.append(np.zeros(int(g * SR), dtype=np.float32))
         t += g
-        print(f"{ln['id']} take {k} errors {score[0]} spread {-score[1]:.0f} Hz  {len(seg) / SR:.2f}s", flush=True)
+        print(f"{ln['id']} take {k} score {score[0]} spread {-score[1]:.0f} Hz  {len(seg) / SR:.2f}s", flush=True)
     vo = np.concatenate(out + [np.zeros(int(.3 * SR), dtype=np.float32)])
     raw = os.path.join(ROOT, "assets", "audio", "vo_raw.wav")
     sf.write(raw, vo, SR)

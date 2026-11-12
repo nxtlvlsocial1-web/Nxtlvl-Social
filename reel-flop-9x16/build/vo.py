@@ -24,7 +24,10 @@ LINES = [
     # v3 (owner: "I just wanna create a shock value in the hook", picked this cold open)
     # v11 (owner: "change the losing line - This video already lost you in first three seconds and continue with here are
     # three mistakes killing your views"): it now calls back to the skipped reel just shown; l01/l02 are cut
-    ("l00", "This video already lost you in the first three seconds.", "hook 70 + first peak (callback to the skipped reel)", 1.0),
+    # v12 (owner: "the voiceover got a bit weird, make it more expressive"): the line is spoken as two sentences, so the
+    # beat after "lost you." is a real pause, not a splice
+    ("l00", "This video already lost you.", "hook 70 (callback to the skipped reel)", 1.1),
+    ("l00b", "In the first three seconds.", "first peak", 1.0),
     ("l03", "Here are three mistakes killing your views.", "release", .6),
     ("l04", "One: your hook is a greeting.", "peak", .7),
     ("l05", "Nobody stays for \"Hey guys.\"", "peak", .95),
@@ -43,11 +46,12 @@ def main():
     m = ChatterboxTTS.from_pretrained(device="cpu")
     m.prepare_conditionals(REF, exaggeration=.6)
     for lid, text, beat, ex in LINES:
-        for take, seed in enumerate((11, 29)):
+        # v12: four takes per line; takes 2-3 push the emotion harder (exaggeration +.2, lower cfg = livelier pacing)
+        for take, (seed, dex, cfg, temp) in enumerate(((11, 0, .35, .8), (29, 0, .35, .8), (41, .2, .3, .85), (53, .2, .3, .85))):
             if os.path.exists(os.path.join(OUT, f"{lid}_t{take}.wav")):
                 continue                      # keep the takes already made
             torch.manual_seed(seed)
-            w = m.generate(text, audio_prompt_path=REF, exaggeration=ex, cfg_weight=.35, temperature=.8)
+            w = m.generate(text, audio_prompt_path=REF, exaggeration=min(1.25, ex + dex), cfg_weight=cfg, temperature=temp)
             ta.save(os.path.join(OUT, f"{lid}_t{take}.wav"), w, m.sr)
             print(lid, take, round(w.shape[-1] / m.sr, 2), flush=True)
     json.dump([{"id": i, "text": t, "beat": b, "exaggeration": e} for i, t, b, e in LINES],

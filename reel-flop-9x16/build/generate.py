@@ -491,15 +491,24 @@ def reel_ui(rid, cls="", caption=True, side=True, bar=True, extra="", crt=None):
     return f'<div class="reel {cls}" id="{rid}">{who}{extra}{side_}{cap}{br}</div>'
 
 
+HAND = ('<svg viewBox="0 0 24 24"><path d="M18 11V10a2 2 0 0 0-4 0M14 10V9a2 2 0 0 0-4 0v1M10 9.5V4a2 2 0 0 0-4 0v10M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2'
+        'c-2.8 0-4.5-.86-6-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L6 14"/></svg>')
+
+
+def viewer(c):
+    return (f'<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="{c}"/><circle cx="20" cy="16" r="7" fill="#ffe0c8"/>'
+            f'<path d="M7 35c2.5-7 8-9 13-9s10.5 2 13 9" fill="#fff" opacity=".9"/></svg>')
+
+
 def scenes():
     H = []
 
     # v11: the cold open is the replay of the skipped reel (built in intro(): "This video already lost you"); the
     # explainer's first scene is the countdown on "...in the first three seconds."
     # ---- giant slot-machine digit inside a draining stopwatch ring: 3, 2, 1, 0 (red, dark flash, beat drop)
-    flip_t = L("l00", 9, "t1") + .06
-    c3 = L("l00", 7) - .08
-    c2 = L("l00", 8) - .05
+    flip_t = L("l00b", 4, "t1") + .06
+    c3 = L("l00b", 2) - .08
+    c2 = L("l00b", 3) - .05
     c1 = (c2 + flip_t) / 2
     ring = ('<svg class="ring" viewBox="0 0 1000 1000"><circle class="rt" cx="500" cy="500" r="440"/>'
             '<circle class="rf" id="rfD" cx="500" cy="500" r="440" pathLength="1000" transform="rotate(-90 500 500)"/>'
@@ -561,6 +570,14 @@ def scenes():
               f'<div class="pbar2"><i class="pf2" id="pbF"></i><i class="mk3"></i><em>0:03</em></div>'
               f'<div class="row"><span>Watch time</span><b class="redt">0.4s</b></div></div><div class="thumb2" id="thF"></div>')
     H.append(scene("sF", lab + phF + wF.html() + rc))
+    cols = ["#ff7a8a", "#5a6cff", "#ffb347", "#38c9a5", "#c77dff", "#ff5fa2", "#4cc3ff"]
+    avs = "".join(f'<div class="va" id="va{k}" style="left:{k * 122}px"><div class="vb" id="vb{k}">{viewer(c)}</div><em class="vm" id="vm{k}">-1</em></div>'
+                  for k, c in enumerate(cols))
+    H.append(f'<div class="aud" id="aud"><div class="audl"><i class="live"></i>Watching now <b id="audn">7</b></div><div class="avr">{avs}</div></div>')
+    js(f'tl.fromTo("#aud", {{opacity: 0, y: 50}}, {{opacity: 1, y: 0, duration: .45, ease: "expo.out", immediateRender: false}}, {t_f + .45:.3f});')
+    for k in range(7):
+        js(f'tl.fromTo("#va{k}", {{scale: .3, opacity: 0}}, {{scale: 1, opacity: 1, duration: .35, ease: "back.out(2.4)", immediateRender: false}}, {t_f + .55 + k * .05:.3f});')
+        js(f'tl.fromTo("#vb{k}", {{y: 0}}, {{y: -10, duration: {.42 + k * .05:.2f}, repeat: 11, yoyo: true, ease: "sine.inOut", immediateRender: false}}, {t_f + .9:.3f});')
     scene_in("sF", t_f)
     wF.appear(t_f + .05)
     card_in("#rcF", t_f + .3)
@@ -595,6 +612,14 @@ def scenes():
     blur_pulse("sF", t_sw + .04, 30, .3, .08)
     sfx("whoosh", t_sw)
     popin("#skipF", t_sw + .4)
+    for k in range(7):                   # one by one they leave: -1, -1, -1 ...
+        tk = t_sw - .1 + k * .085
+        js(f'tl.to("#va{k}", {{y: -70, opacity: .12, scale: .7, duration: .3, ease: "power3.in"}}, {tk:.3f});')
+        js(f'tl.fromTo("#vm{k}", {{opacity: 0, y: 0}}, {{keyframes: {{opacity: [0, 1, 1, 0], y: [0, -50, -90, -120]}}, duration: .7, ease: "none", immediateRender: false}}, {tk:.3f});')
+        js(f'tl.set("#audn", {{textContent: "{6 - k}"}}, {tk + .15:.3f});')
+        if k % 2 == 0:
+            sfx("pop", tk)
+    js(f'tl.to("#audn", {{color: "{RED}", duration: .1}}, {t_sw + .5:.3f});')
     burst(540, 1270, t_sw + .4, color=RED, n=12, r0=200, r1=320)
     sfx("error", t_sw + .4)
 
@@ -629,12 +654,19 @@ def scenes():
     for k in range(5):
         js(f'tl.fromTo("#brF{k}", {{scaleY: 0}}, {{scaleY: 1, duration: .45, ease: "back.out(1.6)", immediateRender: false}}, {t_r + .4 + k * .07:.3f});')
     popin("#keptF", t_res + .1)
+    for k in range(7):                   # ...and with the result first they come back, and bring friends
+        js(f'tl.to("#va{k}", {{y: 0, opacity: 1, scale: 1, duration: .4, ease: "back.out(2.2)"}}, {t_r + .3 + k * .06:.3f});')
+    js(f'tl.to("#audn", {{color: "#3346ff", duration: .1}}, {t_r + .3:.3f});')
+    for i, v in enumerate(["7", "48", "310", "1.2K", "9.8K", "48K", "212K", "1M"]):
+        js(f'tl.set("#audn", {{textContent: "{v}"}}, {t_r + .35 + i * .1:.3f});')
+    js(f'tl.fromTo("#audn", {{scale: 1}}, {{keyframes: {{scale: [1, 1.35, 1]}}, duration: .35, ease: "power2.out", immediateRender: false}}, {t_r + 1.1:.3f});')
     creator_live("crF2", t_r + .15, t_res + 1.2, talk=True, seed=6)
     confetti(560, 1180, t_res, n=28)
     t_g = L("l07", 0) - .14
     js(f'tl.to("#quote, #qres", {{opacity: 0, y: -120, duration: .22, ease: "expo.in"}}, {t_g - .3:.3f});')
     blur_pulse("sF2", t_g - .3, 24, .22, .05)
     card_out("#rc2F", t_g - .3)
+    js(f'tl.to("#aud", {{opacity: 0, y: 60, duration: .25, ease: "expo.in"}}, {t_g - .3:.3f});')
 
     # ---- G: "Two: your first frame is still. If nothing moves, thumbs keep scrolling." A still photo, then a feed whips past
     wipe(t_g, "02", "A STILL FRAME")
@@ -660,6 +692,14 @@ def scenes():
     H.append(scene("sH", phH))
     js(f'tl.set("#sH", {{opacity: 1}}, {t_h:.3f});')
     popin("#nmG", L("l08", 1))
+    H.append(f'<div class="thG" id="thG"><i class="sl" id="sl0"></i><i class="sl" id="sl1"></i><i class="sl" id="sl2"></i><div class="hd" id="hdG">{HAND}</div></div>')
+    js(f'tl.fromTo("#thG", {{opacity: 0, y: 120}}, {{opacity: 1, y: 0, duration: .4, ease: "expo.out", immediateRender: false}}, {L("l07", 5) - .1:.3f});')
+    js(f'tl.fromTo("#hdG", {{scale: 1}}, {{keyframes: {{scale: [1, .88, 1]}}, duration: .16, repeat: 2, repeatDelay: .25, ease: "none", immediateRender: false}}, {L("l08", 0):.3f});')
+    for r in range(3):                   # flick, flick, flick
+        tr = L("l08", 3) - .05 + r * .3
+        js(f'tl.fromTo("#hdG", {{y: 0}}, {{y: -230, duration: .2, ease: "power3.in", immediateRender: false}}, {tr:.3f}); tl.set("#hdG", {{y: 0}}, {tr + .24:.3f});')
+        js(f'tl.fromTo(".thG .sl", {{scaleY: 0, opacity: 1}}, {{scaleY: 1, opacity: 0, duration: .3, ease: "expo.out", stagger: .03, immediateRender: false}}, {tr + .08:.3f});')
+        sfx("swish", tr + .05)
     sfx("alert", L("l08", 1))
     t_sc = L("l08", 3)
     js(f'tl.to("#wF", {{y: -900, opacity: 0, duration: .5, ease: "power3.in"}}, {t_sc:.3f});')
@@ -673,6 +713,7 @@ def scenes():
     t_i = L("l09", 0) - .12
     wipe(t_i, "03", "EXPLAINING FIRST")
     card_out("#feedG", t_i - .02)
+    js(f'tl.to("#thG", {{opacity: 0, duration: .2}}, {t_i - .02:.3f});')
     phI = phrase("pI", "l09", [("s", "_Three:"), ("m", "you explain"), ("m", "before you =show.")], PH, t_out=L("l10", 0) - .12)
     sw = vblur("swp")
     swap = (f'<div id="swp" style="filter:{sw}"><div class="sw2" id="swE"><span class="n">1</span>{icon("list", "ic2")}EXPLAIN</div>'
@@ -694,6 +735,10 @@ def scenes():
     popin("#lvlI", L("l09", 5) + .2)
     sfx("tick", L("l09", 2))
     sfx("error", L("l09", 5) + .2)
+    H.append('<div class="wt" id="wtI"><div class="wtr" id="wtr0"><span>Explain first</span><i class="wb red" id="wb0"></i><b class="redt" id="wn0">0.9s</b></div>'
+             '<div class="wtr" id="wtr1"><span>Show first</span><i class="wb blue" id="wb1"></i><b class="bluet" id="wn1">0s</b></div></div>')
+    js(f'tl.fromTo("#wtr0", {{opacity: 0, x: -40}}, {{opacity: 1, x: 0, duration: .35, ease: "expo.out", immediateRender: false}}, {L("l09", 5) + .25:.3f});')
+    js(f'tl.fromTo("#wb0", {{scaleX: 0}}, {{scaleX: 1, duration: .4, ease: "expo.out", immediateRender: false}}, {L("l09", 5) + .3:.3f});')
     t_sw = L("l10", 0) - .05
     theme(t_sw, COOL)
     phI2 = phrase("pI2", "l10", [("m", "Show the result"), ("m", "+first,"), ("s", "_then _explain _how _you _got _it.")], PH)
@@ -711,9 +756,14 @@ def scenes():
     sfx("swish", t_sw)
     sfx("success", t_sw + .5)
     burst(330, 760, t_sw + .5, color="#ff3d7f", n=12, r0=120, r1=260)
+    js(f'tl.fromTo("#wtr1", {{opacity: 0, x: -40}}, {{opacity: 1, x: 0, duration: .35, ease: "expo.out", immediateRender: false}}, {t_sw + .45:.3f});')
+    js(f'tl.fromTo("#wb1", {{scaleX: 0}}, {{scaleX: 1, duration: 1.0, ease: "power2.out", immediateRender: false}}, {t_sw + .5:.3f});')
+    for i in range(13):
+        js(f'tl.set("#wn1", {{textContent: "{i * 12.4 / 12:.1f}s"}}, {t_sw + .5 + i * .075:.3f});')
+    js(f'tl.fromTo("#wn1", {{scale: 1}}, {{keyframes: {{scale: [1, 1.3, 1]}}, duration: .3, ease: "power2.out", immediateRender: false}}, {t_sw + 1.45:.3f});')
     t_j = L("l11", 0) - .14
     scene_out("sI", t_j - .04)
-    js(f'tl.to("#sI2, #sF", {{opacity: 0, duration: .2}}, {t_j - .04:.3f});')
+    js(f'tl.to("#sI2, #sF, #wtI", {{opacity: 0, duration: .2}}, {t_j - .04:.3f});')
 
     # ---- J: "Fix these three and watch your next reel." Fixes wheel with checks; a rising chart; the odometer
     wipe(t_j, "THE FIX", "", grad=("#3346ff", "#6a1fe0", "#d02cff"))
@@ -780,6 +830,24 @@ def scenes():
         js(f'tl.set("#cbk", {{textContent: "{s_}"}}, {t_hook + i * .08:.3f});')
         sfx("type", t_hook + i * .08)
     js(f'tl.to("#sndK", {{backgroundColor: "{RED}", duration: .2}}, {t_hook + .4:.3f}); tl.to("#sndK .sdi", {{stroke: "#ffffff", duration: .2}}, {t_hook + .4:.3f});')
+    names = ["maya.creates", "jonnyedits", "the.reel.lab", "ana_films", "studio.kai", "lena.makes", "dev.daily", "rio.clips"]
+    cols = ["#ff7a8a", "#5a6cff", "#ffb347", "#38c9a5", "#c77dff", "#ff5fa2", "#4cc3ff", "#ff9f43"]
+    bub = "".join(f'<div class="cmt" id="cm{k}" style="left:{110 if k % 2 == 0 else 330}px">{viewer(cols[k])}<div><em>{n}</em><b>HOOK</b></div></div>'
+                  for k, n in enumerate(names))
+    H.append(f'<div class="cms" id="cms">{bub}</div><div class="cmc" id="cmc"><i class="live"></i><b id="cmn">1</b> comments</div>')
+    t_st = t_hook + .55
+    js(f'tl.fromTo("#cmc", {{opacity: 0, y: 30}}, {{opacity: 1, y: 0, duration: .35, ease: "back.out(2)", immediateRender: false}}, {t_st:.3f});')
+    k = 0
+    tt = t_st
+    while tt < DUR - .5 and k < 16:
+        j = k % len(names)
+        js(f'tl.fromTo("#cm{j}", {{opacity: 0, y: 230, scale: .8}}, {{keyframes: {{opacity: [0, 1, 1, 0], y: [230, 120, 20, -80], scale: [.8, 1, 1, .95]}}, duration: 1.8, ease: "none", immediateRender: false}}, {tt:.3f});')
+        if k < 4:
+            sfx("tick", tt + .15)
+        k += 1
+        tt += .32
+    for i, v in enumerate(["1", "12", "87", "240", "611", "1,038", "1,284"]):
+        js(f'tl.set("#cmn", {{textContent: "{v}"}}, {t_st + .1 + i * .28:.3f});')
     return "".join(H), od
 
 
@@ -906,7 +974,7 @@ def intro():
     ji(f'M.fromTo("#rpch", {{opacity: 0, y: 30}}, {{opacity: 1, y: 0, duration: .3, ease: "back.out(2)", immediateRender: false}}, {tw[4]:.3f});')
     SFX.append({"type": "stamp", "t": round(t_st - T0, 3)})
     # "...in the first": the card is thrown away and the countdown takes over
-    t_out = T0 + LW[7]["t0"] - .3
+    t_out = T0 + L("l00b", 2) - .3
     ji(f'M.to("#intro", {{x: -900, y: -500, rotation: -30, scale: .3, opacity: 0, duration: .32, ease: "power3.in"}}, {t_out:.3f});')
     ji(f'M.to("#rp", {{opacity: 0, y: -80, duration: .25, ease: "power3.in"}}, {t_out + .02:.3f});')
     SFX.append({"type": "whoosh_big", "t": round(t_out - T0, 3)})
@@ -1094,6 +1162,35 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f4f4
 .pill {{ position: absolute; display: inline-flex; align-items: center; gap: 10px; padding: 10px 22px; border-radius: 999px; font-size: 30px; font-weight: 800; white-space: nowrap; }}
 .pill.red {{ background: rgba(255,42,42,.12); color: {RED}; }}
 .pill.blue {{ background: rgba(51,70,255,.1); color: #3346ff; }}
+.aud {{ position: absolute; left: 110px; top: 1500px; width: 860px; height: 190px; opacity: 0; z-index: 4; }}
+.audl {{ font-size: 34px; font-weight: 700; color: #4a4a44; display: flex; align-items: center; gap: 12px; }}
+.audl b {{ display: inline-block; font-weight: 800; color: {INK}; min-width: 80px; }}
+.live {{ width: 16px; height: 16px; border-radius: 50%; background: {RED}; box-shadow: 0 0 0 6px rgba(255,42,42,.18); }}
+.avr {{ position: absolute; left: 0; top: 66px; width: 860px; height: 120px; }}
+.va {{ position: absolute; top: 0; width: 104px; height: 104px; }}
+.vb svg {{ width: 104px; height: 104px; filter: drop-shadow(0 10px 18px rgba(0,0,0,.18)); }}
+.vm {{ position: absolute; left: 30px; top: -10px; font-style: normal; font-weight: 800; font-size: 36px; color: {RED}; opacity: 0; }}
+.thG {{ position: absolute; left: 640px; top: 1490px; width: 240px; height: 260px; opacity: 0; z-index: 4; }}
+.thG .hd {{ position: absolute; inset: 0; }}
+.thG .hd svg {{ width: 100%; height: 100%; fill: #fff; stroke: {INK}; stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 14px 24px rgba(0,0,0,.25)); }}
+.thG .sl {{ position: absolute; top: -60px; width: 10px; height: 180px; border-radius: 6px; background: linear-gradient(180deg, rgba(255,42,42,0), {RED}); transform-origin: 50% 100%; opacity: 0; }}
+.thG #sl0 {{ left: 40px; }} .thG #sl1 {{ left: 80px; top: -90px; }} .thG #sl2 {{ left: 120px; }}
+.wt {{ position: absolute; left: 110px; top: 1510px; width: 860px; z-index: 4; display: flex; flex-direction: column; gap: 22px; }}
+.wtr {{ position: relative; height: 60px; display: flex; align-items: center; gap: 22px; opacity: 0; font-size: 32px; font-weight: 700; color: #4a4a44; }}
+.wtr span {{ width: 220px; }}
+.wb {{ display: block; height: 30px; border-radius: 15px; transform-origin: left center; }}
+.wb.red {{ width: 90px; background: linear-gradient(90deg, #ff2a2a, #ff3d7f); }}
+.wb.blue {{ width: 470px; background: linear-gradient(90deg, #3346ff, #6a1fe0); }}
+.wtr b {{ font-size: 36px; font-weight: 800; }}
+.bluet {{ color: #3346ff; }}
+.cms {{ position: absolute; left: 0; top: 1500px; width: 1080px; height: 260px; z-index: 4; }}
+.cmt {{ position: absolute; top: 0; display: flex; align-items: center; gap: 16px; padding: 14px 26px 14px 14px; border-radius: 999px;
+  background: rgba(255,255,255,.82); box-shadow: 0 14px 34px rgba(0,0,0,.12); opacity: 0; }}
+.cmt svg {{ width: 64px; height: 64px; }}
+.cmt em {{ display: block; font-style: normal; font-size: 24px; font-weight: 600; color: #77776f; }}
+.cmt b {{ display: block; font-size: 36px; font-weight: 800; color: {INK}; letter-spacing: .02em; }}
+.cmc {{ position: absolute; right: 110px; top: 1430px; display: flex; align-items: center; gap: 12px; padding: 10px 24px; border-radius: 999px;
+  background: {INK}; color: #fff; font-size: 30px; font-weight: 700; opacity: 0; z-index: 5; }}
 .insB .pill, #insB .pill {{ left: 44px; top: 260px; }}
 .pill.tr {{ right: 36px; top: 26px; }}
 .spark {{ position: absolute; right: 40px; top: 110px; width: 420px; height: 170px; overflow: visible; }}
