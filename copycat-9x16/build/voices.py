@@ -13,20 +13,22 @@ import torchaudio as ta
 from chatterbox.tts import ChatterboxTTS
 
 LINES = [
-    ("01", "kane", "Midnight. Rain. She walked in with flour on her hands... and a copycat problem.", .45, .3),
-    ("02", "june", "Every post I make, the bakery across the street copies by morning.", .75, .4),
-    ("03", "kane", "Then we watch her. Public pages only. Five free tools.", .4, .35),
-    ("04", "kane", "Two A.M. She changed her prices. We knew in sixty seconds.", .5, .3),
-    ("05", "june", "She's launching a lavender croissant... on Friday?", .8, .35),
-    ("06", "kane", "Then you launch yours on Thursday.", .45, .35),
-    ("07", "june", "A year of copying me... and now she's a day behind.", .7, .4),
-    ("08", "june", "Want the whole kit? Follow next level social, and comment spy.", .55, .5),
+    ("01", "june", "She copied my croissant. My font. Even my cat!", .9, .45),
+    ("02", "kane", "Then we watch her. Legally. Public pages only. Zero dollars.", .9, .45),
+    ("03", "kane", "Clue one: changedetection dot io. Her prices change? You know in a minute.", .85, .45),
+    ("04", "kane", "Clue two: R S S Hub and Mini flux. Every post she makes, in one feed.", .85, .45),
+    ("05", "kane", "Clue three: Ollama. An AI on your own laptop reads it all... and writes your briefing.", .85, .45),
+    ("06", "june", "A lavender croissant... on Friday?", .9, .4),
+    ("07", "kane", "She launches Friday. You launch Thursday.", .9, .4),
+    ("08", "june", "A year of copying me... and now she's a day behind!", .9, .45),
+    ("09", "kane", "Case closed, kid.", .95, .4),
+    ("10", "june", "Want the whole kit? Follow next level social, and comment spy.", .7, .5),
 ]
 os.makedirs("voice/takes", exist_ok=True)
 m = ChatterboxTTS.from_pretrained(device="cpu")
 log = {}
 for take, who, text, ex, cfg in LINES:
-    for k, (ex_k, seed) in enumerate(((ex, 7), (min(1.0, ex + .15), 21))):
+    for k, (ex_k, seed) in enumerate(((ex, 7), (min(1.0, ex + .08), 21))):
         out = f"voice/takes/{take}_{k}.wav"
         if os.path.exists(out):
             continue

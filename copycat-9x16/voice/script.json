@@ -1,13 +1,13 @@
 {
- "note": "Copycat reel (noir): June (baker), Kane (private detective, narrates). Open-source voices: Kokoro reference + Chatterbox. [take, speaker, display text or null, [[spoken text, emotion, pause]]]",
+ "note": "Copycat re-cut (noir parody): June (baker), Kane (detective, voice 1: gravel and wry). Open-source voices: Kokoro reference + Chatterbox. [take, speaker, display text or null, [[spoken text, emotion, pause]]]",
  "lines": [
   [
    "01",
-   "kane",
+   "june",
    null,
    [
     [
-     "Midnight. Rain. She walked in with flour on her hands... and a copycat problem.",
+     "She copied my croissant. My font. Even my cat!",
      "neutral",
      0
     ]
@@ -15,11 +15,11 @@
   ],
   [
    "02",
-   "june",
+   "kane",
    null,
    [
     [
-     "Every post I make, the bakery across the street copies by morning.",
+     "Then we watch her. Legally. Public pages only. Zero dollars.",
      "neutral",
      0
     ]
@@ -28,10 +28,10 @@
   [
    "03",
    "kane",
-   null,
+   "Clue one: changedetection.io. ~ ~ Her prices change? You know in a minute.",
    [
     [
-     "Then we watch her. Public pages only. Five free tools.",
+     "Clue one: changedetection dot io. Her prices change? You know in a minute.",
      "neutral",
      0
     ]
@@ -40,10 +40,10 @@
   [
    "04",
    "kane",
-   "Two AM. She changed her prices. We knew in sixty seconds.",
+   "Clue two: RSSHub ~ ~ ~ and Miniflux. ~ Every post she makes, in one feed.",
    [
     [
-     "Two A.M. She changed her prices. We knew in sixty seconds.",
+     "Clue two: R S S Hub and Mini flux. Every post she makes, in one feed.",
      "neutral",
      0
     ]
@@ -51,11 +51,11 @@
   ],
   [
    "05",
-   "june",
+   "kane",
    null,
    [
     [
-     "She's launching a lavender croissant... on Friday?",
+     "Clue three: Ollama. An AI on your own laptop reads it all... and writes your briefing.",
      "neutral",
      0
     ]
@@ -63,11 +63,11 @@
   ],
   [
    "06",
-   "kane",
+   "june",
    null,
    [
     [
-     "Then you launch yours on Thursday.",
+     "A lavender croissant... on Friday?",
      "neutral",
      0
     ]
@@ -75,11 +75,11 @@
   ],
   [
    "07",
-   "june",
+   "kane",
    null,
    [
     [
-     "A year of copying me... and now she's a day behind.",
+     "She launches Friday. You launch Thursday.",
      "neutral",
      0
     ]
@@ -87,6 +87,30 @@
   ],
   [
    "08",
+   "june",
+   null,
+   [
+    [
+     "A year of copying me... and now she's a day behind!",
+     "neutral",
+     0
+    ]
+   ]
+  ],
+  [
+   "09",
+   "kane",
+   null,
+   [
+    [
+     "Case closed, kid.",
+     "neutral",
+     0
+    ]
+   ]
+  ],
+  [
+   "10",
    "june",
    "Want the whole kit? Follow @nxtlvlsocial.ai ~ ~ and comment SPY.",
    [

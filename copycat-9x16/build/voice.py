@@ -29,8 +29,8 @@ SR = 48000
 LEAD = .5
 LINE_GAP = .22
 MUFFLE = set()
-GAP_AFTER = {"01": .3, "02": .25, "03": 15.4, "04": 1.3, "05": .2, "06": 4.6, "07": .35}   # 03 -> 04: the case board (5 tools x 3.0 s); 04 -> 05: 2 AM to morning; 06 -> 07: Thursday and Friday on the street
-NOIR = {"01", "04"}
+GAP_AFTER = {"01": .3, "02": 1.05, "03": 1.05, "04": 1.05, "05": 1.4, "06": .25, "07": 4.6, "08": .35, "09": .35}   # 02-04: each clue card is pinned before its line; 05 -> 06: 7 AM; 07 -> 08: Thursday and Friday on the street
+NOIR = set()          # the re-cut: no voice-over room tail, it made Kane sound flat
 VOICES = {"nar": "am_onyx"}
 # emotion -> (speed, semitones, gain dB)
 EMO = {"panic": (1.08, .4, 1.0), "dry": (.92, -.3, 0), "whine": (1.02, .5, .5), "calm": (.98, 0, 0), "surprised": (1.04, .5, 1.0),

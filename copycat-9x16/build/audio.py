@@ -4,8 +4,7 @@ python3 build/audio.py      (from the project root, after build/voice.py and bui
 soundfile, ffmpeg)
 
 Music: instrumental Creative Commons tracks found through Openverse, all CC BY 3.0 from Jamendo, credited in the post
-description (assets/music/CREDITS.json): "Gritty Noir" and "Unsolved Mystery" by Lilith Nyx, "Suspense and Tension
-(stem 2)" by 3minutetunes and "Sfumato" by Zoop. Checked for vocals with faster-whisper: none. SFX: rain, storm, thunder,
+description (assets/music/CREDITS.json): "Gritty Noir" and "Unsolved Mystery" by Lilith Nyx and "Sfumato" by Zoop. Checked for vocals with faster-whisper: none. SFX: rain, storm, thunder,
 footsteps, a door and a city street generated with ElevenLabs for the owner's earlier reels (assets/sfx/), and hits from
 HyperFrames' bundled library (Pixabay Content License). Music ducks under dialogue. Writes assets/audio/mix.wav at about -14 LUFS.
 """
@@ -20,7 +19,7 @@ from scipy.signal import butter, sosfilt
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 T = json.load(open(os.path.join(ROOT, "build", "cues.json")))
 L, E = T["l"], T["e"]
-M0, NT, A0, D0, TH, FR, OPEN = T["montage"], T["tools"], T["alert"], T["morning"], T["thu"], T["fri"], T["open"]
+M0, NT, D0, TH, FR = T["montage"], T["tools"], T["morning"], T["thu"], T["fri"]
 SR = 48000
 DUR = T["end"]
 N = int(DUR * SR)
@@ -59,12 +58,11 @@ def loop(x, dur):
 def music():
     m = np.zeros((N, 2))
     M = lambda f: load(os.path.join(ROOT, "assets", "music", f))  # noqa: E731
-    gritty, mystery, tension, sax = M("gritty_noir.mp3"), M("unsolved_mystery.mp3"), M("suspense2.mp3"), M("sfumato.mp3")
-    put(m, gritty, 0, 1.0, 0, M0 + .3, fin=.6, fout=.35)                               # midnight: slow noir piano
-    put(m, mystery, M0 - .2, 1.0, 20.0, 20.0 + (A0 - M0) + .4, fin=.3, fout=.25)       # the case board
-    put(m, tension, A0 - .4, 1.15, 0, D0 - A0 + .6, fin=.1, fout=.6)                   # 2 AM
-    put(m, gritty, D0 - .2, .85, 60.0, 60.0 + (TH - D0) + .3, fin=.6, fout=.3)         # morning
-    put(m, sax, TH - .3, 1.0, 62.0, 62.0 + (DUR - TH) + .3, fin=.25, fout=1.4)         # Thursday, Friday: the sax comes in
+    gritty, mystery, sax = M("gritty_noir.mp3"), M("unsolved_mystery.mp3"), M("sfumato.mp3")
+    put(m, gritty, 0, 1.0, 0, M0 + .3, fin=.15, fout=.35)                               # she bursts in: noir piano
+    put(m, mystery, M0 - .2, 1.05, 20.0, 20.0 + (D0 - M0) + .4, fin=.3, fout=.3)        # the three clues
+    put(m, gritty, D0 - .2, .85, 60.0, 60.0 + (TH - D0) + .3, fin=.4, fout=.3)          # 7 AM
+    put(m, sax, TH - .3, 1.0, 62.0, 62.0 + (DUR - TH) + .3, fin=.25, fout=1.4)          # Thursday, Friday: the sax comes in
     return m
 
 
@@ -72,29 +70,30 @@ def sfx():
     s = np.zeros((N, 2))
     S = lambda n: load(os.path.join(ROOT, "assets", "sfx", n + ".mp3"))  # noqa: E731
     lib = lambda n: load(os.path.join(LIB, n + ".mp3"))  # noqa: E731
-    rain, storm, thunder = S("rain_bed"), S("storm_bed"), S("thunder")
-    put(s, loop(storm, OPEN + .3), 0, .9, fin=.3, fout=.3)                              # the street in the storm
-    put(s, lp(loop(rain, D0 - OPEN), 1800), OPEN, .7, fin=.2, fout=.8)                  # inside: rain on the window
-    put(s, lp(loop(rain, TH - D0), 1200), D0, .35, fin=.4, fout=.4)                     # morning drizzle
+    rain, thunder = S("rain_bed"), S("thunder")
+    put(s, lp(loop(rain, D0), 1800), 0, .6, fin=.1, fout=.8)                            # rain on the window
+    put(s, lp(loop(rain, TH - D0), 1200), D0, .3, fin=.4, fout=.4)                      # morning drizzle
     put(s, loop(S("ny_street"), DUR - TH), TH, .55, fin=.3, fout=1.0)                   # Thursday, Friday on the street
     for b in T["bolts"]:
-        put(s, thunder, b - .05, .8)
-    put(s, S("footsteps"), OPEN + .5, .55)
-    put(s, S("door"), OPEN + .05, .6)
-    for n in NT:                                                                         # each card: a pin, the string, a whoosh
+        put(s, thunder, b - .05, .7)
+    put(s, S("door"), 0, .7)
+    put(s, S("footsteps"), .2, .5)
+    for k, n in enumerate(NT):                                                           # each clue: a whoosh, the pin, typing, the screen
         put(s, lib("whoosh-short"), n - .35, .35)
-        put(s, lib("impact-bass-1"), n, .45)
+        put(s, lib("impact-bass-1"), n, .4)
         put(s, lib("click"), n + .02, .5)
-        put(s, lib("typing"), n + 1.45, .25, 0, 1.4)
-    put(s, S("phone_buzz"), NT[3] + 1.5, .7)
-    put(s, lib("riser"), A0 - 1.2, .35)
-    put(s, lib("glitch-2"), A0 + .05, .45, 0, .6)
-    for k in range(4):
-        put(s, lib("error"), A0 + .15 + k * .5, .3)
-    put(s, lib("notification"), L[4] - .4, .35)
+        put(s, lib("typing"), n + .7, .22, 0, 1.2)
+        put(s, lib("pop"), T["screens"][k][0], .3)
+    put(s, lib("error"), T["screens"][0][0] + 1.2, .3)                                   # the red circle on her price
+    for j in range(4):
+        put(s, lib("notification"), T["screens"][1][0] + .35 + j * .45, .22)            # her posts landing in the feed
+    put(s, lib("key-press"), T["screens"][2][0] + .3, .3)
+    put(s, lib("sparkle"), T["screens"][2][0] + 2.55, .35)                               # LAVENDER CROISSANT
+    put(s, lib("pop"), L[6] - .05, .3)
+    put(s, lib("impact-bass-2"), L[6] + 1.25, .45)                                       # THU slams down
     put(s, lib("chime"), TH + .3, .3)
     put(s, lib("whoosh-cinematic"), FR - .3, .35)
-    put(s, lib("pop"), FR + .3, .3)
+    put(s, lib("footsteps") if os.path.exists(os.path.join(LIB, "footsteps.mp3")) else S("footsteps"), L[8] - 2.0, .4)
     put(s, lib("sparkle"), T["endc"] + .3, .3)
     return s
 
