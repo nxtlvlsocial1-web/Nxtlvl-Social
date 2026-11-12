@@ -1,0 +1,782 @@
+[
+  {
+    "text": "The",
+    "start": 0.15,
+    "end": 0.23,
+    "id": "w0"
+  },
+  {
+    "text": "scariest",
+    "start": 0.23,
+    "end": 0.73,
+    "id": "w1"
+  },
+  {
+    "text": "phone",
+    "start": 0.9,
+    "end": 1.22,
+    "id": "w2"
+  },
+  {
+    "text": "call",
+    "start": 1.22,
+    "end": 1.52,
+    "id": "w3"
+  },
+  {
+    "text": "in",
+    "start": 1.52,
+    "end": 1.67,
+    "id": "w4"
+  },
+  {
+    "text": "America",
+    "start": 1.67,
+    "end": 2.03,
+    "id": "w5"
+  },
+  {
+    "text": "came",
+    "start": 2.36,
+    "end": 2.57,
+    "id": "w6"
+  },
+  {
+    "text": "from",
+    "start": 2.57,
+    "end": 2.9,
+    "id": "w7"
+  },
+  {
+    "text": "inside",
+    "start": 2.9,
+    "end": 3.4,
+    "id": "w8"
+  },
+  {
+    "text": "the",
+    "start": 3.4,
+    "end": 3.61,
+    "id": "w9"
+  },
+  {
+    "text": "house.",
+    "start": 3.64,
+    "end": 4.16,
+    "id": "w10"
+  },
+  {
+    "text": "I",
+    "start": 4.16,
+    "end": 4.31,
+    "id": "w11"
+  },
+  {
+    "text": "was",
+    "start": 4.31,
+    "end": 4.46,
+    "id": "w12"
+  },
+  {
+    "text": "babysitting",
+    "start": 4.46,
+    "end": 5.27,
+    "id": "w13"
+  },
+  {
+    "text": "two",
+    "start": 5.3,
+    "end": 5.52,
+    "id": "w14"
+  },
+  {
+    "text": "kids.",
+    "start": 5.52,
+    "end": 6.02,
+    "id": "w15"
+  },
+  {
+    "text": "They",
+    "start": 6.07,
+    "end": 6.21,
+    "id": "w16"
+  },
+  {
+    "text": "were",
+    "start": 6.52,
+    "end": 6.72,
+    "id": "w17"
+  },
+  {
+    "text": "asleep",
+    "start": 6.72,
+    "end": 7.19,
+    "id": "w18"
+  },
+  {
+    "text": "upstairs",
+    "start": 7.19,
+    "end": 7.73,
+    "id": "w19"
+  },
+  {
+    "text": "by",
+    "start": 7.89,
+    "end": 7.98,
+    "id": "w20"
+  },
+  {
+    "text": "8.",
+    "start": 7.98,
+    "end": 8.41,
+    "id": "w21"
+  },
+  {
+    "text": "At",
+    "start": 8.49,
+    "end": 8.53,
+    "id": "w22"
+  },
+  {
+    "text": "9",
+    "start": 8.53,
+    "end": 8.72,
+    "id": "w23"
+  },
+  {
+    "text": "the",
+    "start": 8.72,
+    "end": 8.8,
+    "id": "w24"
+  },
+  {
+    "text": "house",
+    "start": 8.8,
+    "end": 9.12,
+    "id": "w25"
+  },
+  {
+    "text": "phone",
+    "start": 9.12,
+    "end": 9.64,
+    "id": "w26"
+  },
+  {
+    "text": "rang.",
+    "start": 9.65,
+    "end": 10.08,
+    "id": "w27"
+  },
+  {
+    "text": "A",
+    "start": 10.08,
+    "end": 10.23,
+    "id": "w28"
+  },
+  {
+    "text": "man",
+    "start": 10.23,
+    "end": 10.38,
+    "id": "w29"
+  },
+  {
+    "text": "laughed",
+    "start": 10.45,
+    "end": 10.99,
+    "id": "w30"
+  },
+  {
+    "text": "and",
+    "start": 10.99,
+    "end": 11.24,
+    "id": "w31"
+  },
+  {
+    "text": "hung",
+    "start": 11.24,
+    "end": 11.57,
+    "id": "w32"
+  },
+  {
+    "text": "up.",
+    "start": 11.57,
+    "end": 11.93,
+    "id": "w33"
+  },
+  {
+    "text": "At",
+    "start": 11.99,
+    "end": 12.13,
+    "id": "w34"
+  },
+  {
+    "text": "10",
+    "start": 12.44,
+    "end": 12.54,
+    "id": "w35"
+  },
+  {
+    "text": "it",
+    "start": 12.54,
+    "end": 12.67,
+    "id": "w36"
+  },
+  {
+    "text": "rang",
+    "start": 12.67,
+    "end": 12.94,
+    "id": "w37"
+  },
+  {
+    "text": "again.",
+    "start": 12.94,
+    "end": 13.52,
+    "id": "w38"
+  },
+  {
+    "text": "He",
+    "start": 13.52,
+    "end": 13.69,
+    "id": "w39"
+  },
+  {
+    "text": "whispered.",
+    "start": 13.69,
+    "end": 14.48,
+    "id": "w40"
+  },
+  {
+    "text": "I",
+    "start": 14.48,
+    "end": 14.63,
+    "id": "w41"
+  },
+  {
+    "text": "have",
+    "start": 14.63,
+    "end": 14.78,
+    "id": "w42"
+  },
+  {
+    "text": "you",
+    "start": 14.78,
+    "end": 14.96,
+    "id": "w43"
+  },
+  {
+    "text": "checked",
+    "start": 14.96,
+    "end": 15.21,
+    "id": "w44"
+  },
+  {
+    "text": "the",
+    "start": 15.38,
+    "end": 15.56,
+    "id": "w45"
+  },
+  {
+    "text": "children.",
+    "start": 15.56,
+    "end": 16.24,
+    "id": "w46"
+  },
+  {
+    "text": "I",
+    "start": 16.24,
+    "end": 16.675,
+    "id": "w47"
+  },
+  {
+    "text": "called",
+    "start": 16.675,
+    "end": 17.11,
+    "id": "w48"
+  },
+  {
+    "text": "the",
+    "start": 17.11,
+    "end": 17.37,
+    "id": "w49"
+  },
+  {
+    "text": "police.",
+    "start": 17.37,
+    "end": 18.39,
+    "id": "w50"
+  },
+  {
+    "text": "They",
+    "start": 18.4,
+    "end": 18.67,
+    "id": "w51"
+  },
+  {
+    "text": "said",
+    "start": 18.67,
+    "end": 18.94,
+    "id": "w52"
+  },
+  {
+    "text": "if",
+    "start": 18.94,
+    "end": 19.01,
+    "id": "w53"
+  },
+  {
+    "text": "he",
+    "start": 19.01,
+    "end": 19.32,
+    "id": "w54"
+  },
+  {
+    "text": "calls",
+    "start": 19.32,
+    "end": 19.54,
+    "id": "w55"
+  },
+  {
+    "text": "again,",
+    "start": 19.54,
+    "end": 20.01,
+    "id": "w56"
+  },
+  {
+    "text": "keep",
+    "start": 20.03,
+    "end": 20.24,
+    "id": "w57"
+  },
+  {
+    "text": "him",
+    "start": 20.25,
+    "end": 20.42,
+    "id": "w58"
+  },
+  {
+    "text": "on",
+    "start": 20.42,
+    "end": 20.53,
+    "id": "w59"
+  },
+  {
+    "text": "the",
+    "start": 20.53,
+    "end": 20.57,
+    "id": "w60"
+  },
+  {
+    "text": "line.",
+    "start": 20.69,
+    "end": 21.12,
+    "id": "w61"
+  },
+  {
+    "text": "We'll",
+    "start": 21.26,
+    "end": 21.48,
+    "id": "w62"
+  },
+  {
+    "text": "trace",
+    "start": 21.48,
+    "end": 21.85,
+    "id": "w63"
+  },
+  {
+    "text": "it.",
+    "start": 21.85,
+    "end": 22.23,
+    "id": "w64"
+  },
+  {
+    "text": "He",
+    "start": 22.23,
+    "end": 22.39,
+    "id": "w65"
+  },
+  {
+    "text": "called",
+    "start": 22.39,
+    "end": 22.71,
+    "id": "w66"
+  },
+  {
+    "text": "again.",
+    "start": 22.71,
+    "end": 23.2,
+    "id": "w67"
+  },
+  {
+    "text": "I",
+    "start": 23.2,
+    "end": 23.28,
+    "id": "w68"
+  },
+  {
+    "text": "have",
+    "start": 23.28,
+    "end": 23.62,
+    "id": "w69"
+  },
+  {
+    "text": "you",
+    "start": 23.62,
+    "end": 23.87,
+    "id": "w70"
+  },
+  {
+    "text": "checked",
+    "start": 23.87,
+    "end": 24.26,
+    "id": "w71"
+  },
+  {
+    "text": "the",
+    "start": 24.6,
+    "end": 24.71,
+    "id": "w72"
+  },
+  {
+    "text": "children.",
+    "start": 24.71,
+    "end": 25.68,
+    "id": "w73"
+  },
+  {
+    "text": "I",
+    "start": 25.68,
+    "end": 26.47,
+    "id": "w74"
+  },
+  {
+    "text": "kept",
+    "start": 26.47,
+    "end": 26.62,
+    "id": "w75"
+  },
+  {
+    "text": "him",
+    "start": 26.69,
+    "end": 26.85,
+    "id": "w76"
+  },
+  {
+    "text": "talking",
+    "start": 26.85,
+    "end": 27.33,
+    "id": "w77"
+  },
+  {
+    "text": "for",
+    "start": 27.33,
+    "end": 27.53,
+    "id": "w78"
+  },
+  {
+    "text": "a",
+    "start": 27.53,
+    "end": 27.59,
+    "id": "w79"
+  },
+  {
+    "text": "whole",
+    "start": 27.59,
+    "end": 27.93,
+    "id": "w80"
+  },
+  {
+    "text": "minute.",
+    "start": 27.93,
+    "end": 28.38,
+    "id": "w81"
+  },
+  {
+    "text": "Then",
+    "start": 28.68,
+    "end": 28.81,
+    "id": "w82"
+  },
+  {
+    "text": "my",
+    "start": 28.81,
+    "end": 28.92,
+    "id": "w83"
+  },
+  {
+    "text": "cell",
+    "start": 29,
+    "end": 29.21,
+    "id": "w84"
+  },
+  {
+    "text": "phone",
+    "start": 29.21,
+    "end": 29.55,
+    "id": "w85"
+  },
+  {
+    "text": "buzzed.",
+    "start": 29.55,
+    "end": 30.17,
+    "id": "w86"
+  },
+  {
+    "text": "It",
+    "start": 30.17,
+    "end": 30.41,
+    "id": "w87"
+  },
+  {
+    "text": "was",
+    "start": 30.41,
+    "end": 30.65,
+    "id": "w88"
+  },
+  {
+    "text": "the",
+    "start": 30.65,
+    "end": 30.83,
+    "id": "w89"
+  },
+  {
+    "text": "police.",
+    "start": 30.83,
+    "end": 31.51,
+    "id": "w90"
+  },
+  {
+    "text": "Get",
+    "start": 31.67,
+    "end": 31.68,
+    "id": "w91"
+  },
+  {
+    "text": "out",
+    "start": 31.68,
+    "end": 31.82,
+    "id": "w92"
+  },
+  {
+    "text": "of",
+    "start": 31.89,
+    "end": 31.94,
+    "id": "w93"
+  },
+  {
+    "text": "the",
+    "start": 31.94,
+    "end": 32.1,
+    "id": "w94"
+  },
+  {
+    "text": "house.",
+    "start": 32.1,
+    "end": 32.56,
+    "id": "w95"
+  },
+  {
+    "text": "Now",
+    "start": 32.56,
+    "end": 32.76,
+    "id": "w96"
+  },
+  {
+    "text": "the",
+    "start": 32.76,
+    "end": 32.95,
+    "id": "w97"
+  },
+  {
+    "text": "calls",
+    "start": 32.96,
+    "end": 33.3,
+    "id": "w98"
+  },
+  {
+    "text": "are",
+    "start": 33.3,
+    "end": 33.5,
+    "id": "w99"
+  },
+  {
+    "text": "coming",
+    "start": 33.5,
+    "end": 33.91,
+    "id": "w100"
+  },
+  {
+    "text": "from",
+    "start": 33.93,
+    "end": 34.12,
+    "id": "w101"
+  },
+  {
+    "text": "inside",
+    "start": 34.2,
+    "end": 34.57,
+    "id": "w102"
+  },
+  {
+    "text": "the",
+    "start": 34.59,
+    "end": 34.79,
+    "id": "w103"
+  },
+  {
+    "text": "house.",
+    "start": 34.79,
+    "end": 35.2,
+    "id": "w104"
+  },
+  {
+    "text": "From",
+    "start": 35.35,
+    "end": 35.43,
+    "id": "w105"
+  },
+  {
+    "text": "the",
+    "start": 35.43,
+    "end": 35.6,
+    "id": "w106"
+  },
+  {
+    "text": "phone",
+    "start": 35.6,
+    "end": 35.89,
+    "id": "w107"
+  },
+  {
+    "text": "upstairs,",
+    "start": 35.89,
+    "end": 36.48,
+    "id": "w108"
+  },
+  {
+    "text": "I",
+    "start": 36.48,
+    "end": 36.56,
+    "id": "w109"
+  },
+  {
+    "text": "looked",
+    "start": 36.56,
+    "end": 37.05,
+    "id": "w110"
+  },
+  {
+    "text": "up",
+    "start": 37.05,
+    "end": 37.22,
+    "id": "w111"
+  },
+  {
+    "text": "the",
+    "start": 37.22,
+    "end": 37.26,
+    "id": "w112"
+  },
+  {
+    "text": "stairs.",
+    "start": 37.56,
+    "end": 38.24,
+    "id": "w113"
+  },
+  {
+    "text": "Someone",
+    "start": 38.24,
+    "end": 39.05,
+    "id": "w114"
+  },
+  {
+    "text": "was",
+    "start": 39.05,
+    "end": 39.53,
+    "id": "w115"
+  },
+  {
+    "text": "standing",
+    "start": 39.53,
+    "end": 39.84,
+    "id": "w116"
+  },
+  {
+    "text": "at",
+    "start": 39.84,
+    "end": 39.93,
+    "id": "w117"
+  },
+  {
+    "text": "the",
+    "start": 39.93,
+    "end": 40.08,
+    "id": "w118"
+  },
+  {
+    "text": "top,",
+    "start": 40.08,
+    "end": 40.8,
+    "id": "w119"
+  },
+  {
+    "text": "still",
+    "start": 40.95,
+    "end": 41.09,
+    "id": "w120"
+  },
+  {
+    "text": "holding",
+    "start": 41.09,
+    "end": 41.5,
+    "id": "w121"
+  },
+  {
+    "text": "the",
+    "start": 41.5,
+    "end": 41.53,
+    "id": "w122"
+  },
+  {
+    "text": "phone.",
+    "start": 41.7,
+    "end": 42.16,
+    "id": "w123"
+  },
+  {
+    "text": "I",
+    "start": 42.16,
+    "end": 42.27,
+    "id": "w124"
+  },
+  {
+    "text": "have",
+    "start": 42.27,
+    "end": 42.66,
+    "id": "w125"
+  },
+  {
+    "text": "you",
+    "start": 42.71,
+    "end": 42.85,
+    "id": "w126"
+  },
+  {
+    "text": "checked",
+    "start": 43.16,
+    "end": 43.85,
+    "id": "w127"
+  },
+  {
+    "text": "the",
+    "start": 43.85,
+    "end": 44.19,
+    "id": "w128"
+  },
+  {
+    "text": "children.",
+    "start": 44.19,
+    "end": 45.12,
+    "id": "w129"
+  }
+]
