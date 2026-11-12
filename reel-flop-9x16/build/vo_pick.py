@@ -26,7 +26,7 @@ TEMPO = 1.15         # v10 (owner: "make the pacing of video just a little fast,
 GAP_SCALE = .6       # and the pauses between lines tightened
 LEAD = .04          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast
-GAP = {"l00": .3, "l01": .22, "l02": .5, "l03": .3, "l04": .12, "l05": .3, "l06": .4, "l07": .12, "l08": .4, "l09": .12, "l10": .3, "l11": .4,
+GAP = {"l00": .55, "l03": .3, "l04": .12, "l05": .3, "l06": .4, "l07": .12, "l08": .4, "l09": .12, "l10": .3, "l11": .4,
        "l12": .0}
 
 

@@ -22,9 +22,9 @@ OUT = os.path.join(ROOT, "assets", "audio", "vo_takes")
 # (id, text, beat, exaggeration)
 LINES = [
     # v3 (owner: "I just wanna create a shock value in the hook", picked this cold open)
-    ("l00", "This reel is about to lose you.", "hook 70 (cold open)", 1.0),
-    ("l01", "Your reel didn't flop because of the algorithm.", "hook 70", .75),
-    ("l02", "It flopped in the first three seconds.", "peak", .95),
+    # v11 (owner: "change the losing line - This video already lost you in first three seconds and continue with here are
+    # three mistakes killing your views"): it now calls back to the skipped reel just shown; l01/l02 are cut
+    ("l00", "This video already lost you in the first three seconds.", "hook 70 + first peak (callback to the skipped reel)", 1.0),
     ("l03", "Here are three mistakes killing your views.", "release", .6),
     ("l04", "One: your hook is a greeting.", "peak", .7),
     ("l05", "Nobody stays for \"Hey guys.\"", "peak", .95),

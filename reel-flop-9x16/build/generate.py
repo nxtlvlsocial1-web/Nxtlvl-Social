@@ -494,93 +494,12 @@ def reel_ui(rid, cls="", caption=True, side=True, bar=True, extra="", crt=None):
 def scenes():
     H = []
 
-    # ---- A: cold open. "This reel is about to lose you." + a phone playing a reel that gets flicked away
-    t_a_out = L("l00", 6, "t1") + .02
-    rows = [("xl", "This reel"), ("xl", "is about to"), ("xl", "*lose* *you.*")]
-    ph = phrase("pA", "l00", rows, PH, first_visible=True)
-    glitch = '<div class="glx" id="glxR">lose you.</div><div class="glx c" id="glxC">lose you.</div>'
-    phone = (f'<div class="phone" id="phA"><div class="scr">{reel_ui("rA", crt=creator("crA"))}{reel_ui("rA2", "nx", crt=creator("crA2", ("#8fd0ff", "#3346ff")))}'
-             f'<i class="gloss"></i><div class="thumb" id="thA"></div></div><i class="notch"></i><i class="btn b1"></i><i class="btn b2"></i></div>'
-             f'<div class="vbub" id="vbA">{icon("play", "vbi")}<b id="vbAn">1,204</b><span>views</span><em>&#8595;</em></div>')
-    H.append(scene("sA", ph + glitch + phone, shown=True))
-    # the phone floats in 3D, turning slowly; the creator talks and blinks; hearts rise from the like button
-    js(f'tl.fromTo("#phA", {{rotationY: -24, rotationX: 10, rotation: -6, y: 40, transformPerspective: 1400}}, {{rotationY: 14, rotationX: 4, rotation: 3, y: -10, transformPerspective: 1400, duration: {L("l00", 6) + .24:.2f}, ease: "sine.inOut", immediateRender: false}}, 0);')
-    js(f'tl.fromTo("#rApb", {{scaleX: .05}}, {{scaleX: .4, duration: {t_a_out:.2f}, ease: "none", immediateRender: false}}, 0);')
-    creator_live("crA", 0, t_a_out, talk=True, seed=1)
-    hearts(670, 1180, .1, L("l00", 5), seed=3)
-    js(f'tl.fromTo("#vbA", {{opacity: 0, scale: .4, x: 60, rotation: 10}}, {{opacity: 1, scale: 1, x: 0, rotation: -4, duration: .45, ease: "back.out(2.4)", immediateRender: false}}, {L("l00", 2):.3f});')
-    for i, v in enumerate(["1,204", "980", "702", "511", "388", "312"]):
-        js(f'tl.set("#vbAn", {{textContent: "{v}"}}, {L("l00", 2) + .25 + i * .12:.3f});')
-    sfx("pop", L("l00", 2))
-    t_lose = L("l00", 5)
-    for k, (dx, op) in enumerate([(14, .85), (-10, .7), (8, .9), (-16, .6), (0, 0)]):
-        tt = t_lose + .03 + k * .05
-        js(f'tl.set("#glxR", {{x: {dx}, opacity: {op}}}, {tt:.3f}); tl.set("#glxC", {{x: {-dx}, opacity: {op}}}, {tt:.3f});')
-        js(f'tl.set("#pA_2_0, #pA_2_1", {{x: {R.choice([-6, 6, 0])}}}, {tt:.3f});')
-    sfx("glitch", t_lose)
-    popin("#thA", t_lose + .05, d=.2)
-    t_fl = L("l00", 6) + .05
-    js(f'tl.to("#thA", {{y: -330, opacity: 0, duration: .26, ease: "power3.in"}}, {t_fl - .1:.3f});')
-    js(f'tl.to("#rA", {{yPercent: -100, duration: .28, ease: "power3.in"}}, {t_fl - .06:.3f});')
-    js(f'tl.fromTo("#rA2", {{yPercent: 100, opacity: 1}}, {{yPercent: 0, opacity: 1, duration: .28, ease: "power3.in", immediateRender: false}}, {t_fl - .06:.3f});')
-    # ...and the whole phone is flicked away, spinning off with a motion trail
-    js(f'tl.to("#phA", {{x: 760, y: -520, rotation: 38, rotationY: 50, transformPerspective: 1400, duration: .42, ease: "power3.in"}}, {t_fl + .2:.3f});')
-    js(f'tl.to("#vbA", {{x: -500, y: -300, rotation: -30, opacity: 0, duration: .38, ease: "power3.in"}}, {t_fl + .2:.3f});')
-    burst(540, 1220, t_fl + .2, color="#ff3d7f")
-    sfx("whoosh", t_fl)
-    scene_out("sA", t_a_out, d=.26, dy=-420)
-    sfx("hit", 0)
-
-    # ---- B: "Your reel didn't flop because of the algorithm." Excuses wheel (with icons) + a post-insights card
-    excuses = ["the hashtags", "your audio", "posting time", "shadowbans", "the algorithm", "the caption", "the thumbnail",
-               "your niche", "trends", "the first 3 seconds"]
-    icons_ = ["hash", "music", "clock", "eyeoff", "cpu", "lines", "image", "target", "trend", "timer"]
-    gr = ["gr2"] * len(excuses)
-    gr[-1] = "gr1"
-    t_b = t_a_out + .12
-    wB = Wheel("wB", excuses, WY, 104, start=0, grads=gr, icons=icons_)
-    phB = phrase("pB", "l01", [("m", "Your reel didn't"), ("m", "=flop because of")], PH, t_out=L("l02", 0) - .12)
-    sw_ = text_w("the algorithm", wB.size, 800, -.03) + 1.15 * wB.size
-    strike = f'<i class="wstk" id="wBstk" style="width:{sw_ + 16:.0f}px;top:{WY - wB.size * .05:.0f}px;height:{wB.size * .09:.0f}px"></i>'
-    spark = ('<svg class="spark" viewBox="0 0 300 120"><path class="sp-a" id="spBa" d="M0 12 C40 14 50 90 90 104 S200 112 300 114 L300 120 L0 120Z"/>'
-             '<path class="sp-l" id="spBl" pathLength="1000" d="M0 12 C40 14 50 90 90 104 S200 112 300 114"/></svg>')
-    ins = card("insB", 110, VY, 860, 380,
-               f'<div class="ct">Post insights</div><div class="big"><b id="insBn">1,204</b><span>views</span></div>'
-               f'<div class="pill red">&#8595; 97%</div>{spark}<div class="row"><span>Avg. watch time</span><b>0.9s</b></div>')
-    H.append(scene("sB", phB + wB.html() + strike + ins))
-    scene_in("sB", t_b)
-    wB.appear(t_b + .05)
-    card_in("#insB", t_b + .35)
-    for i, v in enumerate(["1,204", "1,020", "840", "655", "480", "390", "312"]):
-        js(f'tl.set("#insBn", {{textContent: "{v}"}}, {t_b + .55 + i * .09:.3f});')
-    draw("#spBl", t_b + .6, 1.1)
-    js(f'tl.fromTo("#spBa", {{opacity: 0}}, {{opacity: 1, duration: .8, immediateRender: false}}, {t_b + .9:.3f});')
-    t_alg = L("l01", 7) - .02
-    wB.move(t_b + .5, 2, 1.0, tick=False)
-    wB.move(t_alg - .5, 4, .5)
-    a_end = L("l01", 7, "t1")
-    js(f'tl.fromTo("#wBstk", {{scaleX: 0, opacity: 1}}, {{scaleX: 1, opacity: 1, duration: .24, ease: "power3.inOut", immediateRender: false}}, {a_end - .12:.3f});')
-    js(f'tl.to("#wB_4", {{opacity: .45, duration: .2}}, {a_end:.3f});')
-    sfx("scratch", a_end - .1)
-
-    # ---- C: "It flopped in the first three seconds." The wheel spins hard to "the first 3 seconds" (red)
-    t_c = L("l02", 0) - .1
-    phC = phrase("pC", "l02", [("m", "It flopped in")], PH, t_out=L("l02", 5) - .3)
-    H.append(scene("sC", phC))
-    js(f'tl.set("#sC", {{opacity: 1}}, {t_c - .02:.3f});')
-    js(f'tl.to("#wBstk", {{opacity: 0, duration: .12}}, {t_c:.3f});')
-    t_first = L("l02", 3)
-    wB.move(t_c + .15, 9, t_first - t_c - .1, final_ease="back.out(2)")
-    js(f'tl.fromTo("#wB_9", {{scale: 1}}, {{keyframes: {{scale: [1, 1.12, 1]}}, duration: .35, ease: "power2.out", immediateRender: false}}, {t_first + .05:.3f});')
-    sfx("hit", t_first)
-    t_cd = L("l02", 5) - .25
-    scene_out("sB", t_cd, d=.24, dy=-300)
-    js(f'tl.to("#sC", {{opacity: 0, duration: .2}}, {t_cd:.3f});')
-
+    # v11: the cold open is the replay of the skipped reel (built in intro(): "This video already lost you"); the
+    # explainer's first scene is the countdown on "...in the first three seconds."
     # ---- giant slot-machine digit inside a draining stopwatch ring: 3, 2, 1, 0 (red, dark flash, beat drop)
-    flip_t = L("l02", 6, "t1") + .06
-    c3 = t_cd + .12
-    c2 = L("l02", 6) - .05
+    flip_t = L("l00", 9, "t1") + .06
+    c3 = L("l00", 7) - .08
+    c2 = L("l00", 8) - .05
     c1 = (c2 + flip_t) / 2
     ring = ('<svg class="ring" viewBox="0 0 1000 1000"><circle class="rt" cx="500" cy="500" r="440"/>'
             '<circle class="rf" id="rfD" cx="500" cy="500" r="440" pathLength="1000" transform="rotate(-90 500 500)"/>'
@@ -910,7 +829,7 @@ def intro():
     room = ('<div class="room"><i class="win"></i><i class="win2"></i><i class="shelf"></i><i class="plant"><b></b><b></b><b></b></i>'
             '<i class="pot"></i><i class="lamp"></i></div>')
     caps = []
-    chunks = [("Heyyy guyyys!", 0, 2), ("uhhh... welcome ba-", 2, 3)]
+    chunks = [("Heyyy guyyys!", 0, 2), ("uhhh... welcome back", 2, 4)]
     for k, (txt, a, b) in enumerate(chunks):
         caps.append(f'<div class="igcap" id="ic{k}">{txt}</div>')
         t_in = IT["words"][a]["t0"] - .02
@@ -936,6 +855,17 @@ def intro():
     av2 = '<img src="assets/img/pixo/idle.png" style="width:100%;height:100%;image-rendering:pixelated;background:#6a2fb0">'
     r2 = (f'<div class="igr" id="igr2" style="top:{RH}px"><img class="pxbg" src="assets/img/pixo/bg.png">{notes}{dancers}'
           f'<div class="pxb" id="pxb">PIXO PARTY!</div>{reel_overlay("pixo.planet.fm", av2)}</div>')
+    # v11: the viewer's thumb shows up, taps impatiently while he drawls, then flicks the reel away
+    t_th = 1.25
+    ji(f'M.fromTo("#vthumb", {{opacity: 0, x: 160, y: 260, rotation: 14}}, {{opacity: 1, x: 0, y: 0, rotation: 0, duration: .45, ease: "expo.out", immediateRender: false}}, {t_th:.3f});')
+    for k, tt in enumerate([t_th + .55, t_th + .95, t_th + 1.3]):
+        if tt > S1 - .3:
+            break
+        ji(f'M.fromTo("#vthumb", {{scale: 1}}, {{keyframes: {{scale: [1, .86, 1]}}, duration: .16, ease: "none", immediateRender: false}}, {tt:.3f});')
+        ji(f'M.fromTo("#vtap", {{opacity: .8, scale: .3}}, {{opacity: 0, scale: 1.6, duration: .35, ease: "expo.out", immediateRender: false}}, {tt + .04:.3f});')
+        SFX.append({"type": "tick", "t": round(tt - T0, 3)})
+    ji(f'M.to("#vthumb", {{y: -760, x: -40, rotation: -8, duration: .38, ease: "power3.in"}}, {S1 - .22:.3f});')
+    ji(f'M.set("#vthumb", {{opacity: 0}}, {S1 + .2:.3f});')
     # the scroll: the reel stack moves (status bar, nav and comment bar stay put)
     ji(f'M.fromTo("#igstack", {{y: 0}}, {{y: {-RH}, duration: .42, ease: "expo.out", immediateRender: false}}, {S1:.3f});')
     ji(f'M.fromTo("#igstack", {{y: {-RH}}}, {{y: 0, duration: .42, ease: "expo.out", immediateRender: false}}, {S2:.3f});')
@@ -961,8 +891,26 @@ def intro():
     for k, (dx, op) in enumerate([(14, .9), (-12, .8), (10, .9), (0, 0)]):
         ji(f'M.set("#iglR", {{x: {dx}, opacity: {op}}}, {t_g + k * .045:.3f}); M.set("#iglC", {{x: {-dx}, opacity: {op}}}, {t_g + k * .045:.3f});')
     SFX.append({"type": "glitch", "t": round(t_g - T0, 3)})
-    ji(f'M.to("#intro", {{opacity: 0, scale: 1.12, duration: .3, ease: "power2.in"}}, {T0 - .05:.3f});')
-    ji(f'M.set("#intro", {{display: "none"}}, {T0 + .3:.3f});')
+    LW = [w for w in WORDS if w["line"] == "l00"]
+    tw = [T0 + w["t0"] for w in LW]
+    t_sh = T0 - .05
+    ji(f'M.fromTo("#intro", {{scale: 1, y: 0, rotation: 0, borderRadius: 0, filter: "grayscale(0) brightness(1)"}}, {{scale: .56, y: 150, rotation: -3, borderRadius: 64, filter: "grayscale(1) brightness(.92)", duration: .5, ease: "expo.out", immediateRender: false}}, {t_sh:.3f});')
+    ji(f'M.fromTo("#rpfr", {{opacity: 0}}, {{opacity: 1, duration: .3, immediateRender: false}}, {t_sh + .1:.3f});')
+    ji(f'M.set("#rp", {{opacity: 1}}, {t_sh:.3f});')
+    SFX.append({"type": "whoosh", "t": round(t_sh - T0, 3)})
+    for j in range(5):                 # This / video / already / lost / you
+        ji(f'M.fromTo("#rpw{j}", {{opacity: 0, yPercent: 110}}, {{opacity: 1, yPercent: 0, duration: .4, ease: "expo.out", immediateRender: false}}, {tw[j] - .05:.3f});')
+    t_st = tw[3]
+    ji(f'M.fromTo("#rpst", {{opacity: 0, scale: 2.4, rotation: -22}}, {{opacity: 1, scale: 1, rotation: -12, duration: .22, ease: "back.out(1.6)", immediateRender: false}}, {t_st:.3f});')
+    ji(f'M.fromTo("#intro", {{x: 0}}, {{keyframes: {{x: [0, -14, 12, -8, 0]}}, duration: .22, ease: "none", immediateRender: false}}, {t_st + .18:.3f});')
+    ji(f'M.fromTo("#rpch", {{opacity: 0, y: 30}}, {{opacity: 1, y: 0, duration: .3, ease: "back.out(2)", immediateRender: false}}, {tw[4]:.3f});')
+    SFX.append({"type": "stamp", "t": round(t_st - T0, 3)})
+    # "...in the first": the card is thrown away and the countdown takes over
+    t_out = T0 + LW[7]["t0"] - .3
+    ji(f'M.to("#intro", {{x: -900, y: -500, rotation: -30, scale: .3, opacity: 0, duration: .32, ease: "power3.in"}}, {t_out:.3f});')
+    ji(f'M.to("#rp", {{opacity: 0, y: -80, duration: .25, ease: "power3.in"}}, {t_out + .02:.3f});')
+    SFX.append({"type": "whoosh_big", "t": round(t_out - T0, 3)})
+    ji(f'M.set("#intro, #rp", {{display: "none"}}, {t_out + .4:.3f});')
     status = ('<div class="igst"><b>20:19</b><svg class="bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 10-4.5M18 11v5l1.5 2H6.5M10 21h4M3 3l18 18"/></svg>'
               '<i class="isl"></i><div class="sr"><span class="sig"><i></i><i></i><i></i><i></i></span>'
               '<svg class="wifi" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r="1.2"/></svg>'
@@ -970,7 +918,15 @@ def intro():
               '<svg class="ignav l" viewBox="0 0 24 24"><path d="M15 4 7 12l8 8"/></svg><svg class="ignav r" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></svg>')
     cbar = '<div class="igcb"><div class="igin">Add comment...</div></div>'
     glx = '<i class="iglx" id="iglR"></i><i class="iglx c" id="iglC"></i>'
-    return (f'<div id="intro"><div id="igview"><div id="igstack">{r1}{r2}</div></div>{status}{cbar}{glx}</div>')
+    hand = ('<svg viewBox="0 0 24 24"><path d="M18 11V10a2 2 0 0 0-4 0M14 10V9a2 2 0 0 0-4 0v1M10 9.5V4a2 2 0 0 0-4 0v10M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2'
+            'c-2.8 0-4.5-.86-6-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L6 14"/></svg>')
+    thumb = f'<div id="vthumb"><i id="vtap"></i>{hand}</div>'
+    watched = f"0:0{int(round(S1))}"
+    rp = ('<div id="rp"><div class="rph"><div class="rpl"><span class="rpm"><b id="rpw0">This</b></span> <span class="rpm"><b id="rpw1">video</b></span></div>'
+          '<div class="rpl"><span class="rpm"><b id="rpw2">already</b></span></div>'
+          '<div class="rpl"><span class="rpm"><b class="red" id="rpw3">lost</b></span> <span class="rpm"><b class="red" id="rpw4">you.</b></span></div></div>'
+          f'<div id="rpst">SKIPPED</div><div id="rpch"><i></i>Watched {watched} of 0:48</div></div>')
+    return (f'<div id="intro"><div id="igview"><div id="igstack">{r1}{r2}</div></div>{status}{cbar}{glx}{thumb}<i id="rpfr"></i></div>{rp}')
 
 
 def creator_live_i(cid, t0, t1):
@@ -988,7 +944,22 @@ def creator_live_i(cid, t0, t1):
 
 INTRO_CSS = """
 @font-face { font-family: "PressStart"; src: url("assets/fonts/press-start-2p-latin-400-normal.woff2"); }
-#intro { position: absolute; inset: 0; z-index: 30; background: #000; transform-origin: 50% 45%; }
+#intro { position: absolute; inset: 0; z-index: 30; background: #000; transform-origin: 50% 45%; overflow: hidden; }
+#vthumb { position: absolute; left: 620px; top: 1240px; width: 300px; height: 300px; z-index: 8; opacity: 0; filter: drop-shadow(0 18px 30px rgba(0,0,0,.45)); }
+#vthumb svg { width: 100%; height: 100%; fill: rgba(255,255,255,.96); stroke: #1b1b1b; stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+#vtap { position: absolute; left: 30px; top: 0px; width: 150px; height: 150px; border-radius: 50%; border: 8px solid rgba(255,255,255,.9); opacity: 0; }
+#rpfr { position: absolute; inset: 0; z-index: 9; border: 22px solid #ff2a2a; border-radius: 64px; opacity: 0; }
+#rp { position: absolute; inset: 0; z-index: 31; opacity: 0; pointer-events: none; font-family: Inter; }
+.rph { position: absolute; left: 70px; right: 70px; top: 120px; }
+.rpl { font-weight: 800; font-size: 118px; line-height: 1.02; letter-spacing: -.04em; color: #121212; }
+.rpm { display: inline-block; overflow: hidden; padding-bottom: 8px; vertical-align: bottom; }
+.rpm b { display: inline-block; opacity: 0; }
+.rpm b.red { background: linear-gradient(90deg, #ff2a2a, #ff3d7f, #d02cff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+#rpst { position: absolute; left: 190px; top: 900px; width: 700px; text-align: center; font-weight: 800; font-size: 150px; letter-spacing: .02em; color: #ff2a2a;
+  border: 16px solid #ff2a2a; border-radius: 30px; padding: 6px 0 14px; background: rgba(255,255,255,.88); opacity: 0; box-shadow: 0 30px 60px rgba(0,0,0,.25); }
+#rpch { position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; top: 1620px; padding: 18px 34px; border-radius: 999px; background: #121212; color: #fff;
+  font-weight: 700; font-size: 46px; opacity: 0; display: flex; align-items: center; gap: 16px; }
+#rpch i { width: 22px; height: 22px; border-radius: 50%; background: #ff2a2a; }
 #igview { position: absolute; left: 0; top: 0; width: 1080px; height: 1716px; overflow: hidden; }
 #igstack { position: absolute; left: 0; top: 0; width: 1080px; height: 3432px; }
 .igr { position: absolute; left: 0; width: 1080px; height: 1716px; overflow: hidden; }

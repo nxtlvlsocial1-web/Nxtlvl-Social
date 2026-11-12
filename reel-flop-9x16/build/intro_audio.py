@@ -28,8 +28,10 @@ def main():
     lead = max(0, ws[0].start - .05)
     y = y[int(lead * SR):]
     words = [{"w": w.word.strip(), "t0": round(w.start - lead, 3), "t1": round(w.end - lead, 3)} for w in ws]
-    wl = next(w for w in words if w["w"].lower().startswith("welcome"))
-    S1 = round(wl["t0"] + .7, 3)                     # he drawls "welcome..." and is swiped away
+    # v11 (owner: the dull video "may not be understood by many viewers", overplay it): he drawls the whole
+    # "...welcome back" (about 3 s, the "first three seconds" the voiceover then calls back to) before the swipe
+    wl = next(w for w in words if w["w"].lower().startswith("back"))
+    S1 = round(wl["t1"] + .05, 3)
     dance = json.load(open(os.path.join(ROOT, "plan", "dance.json")))
     G0 = round(S1 + .3, 3)                           # the mascots' song starts as reel 2 lands
     S2 = round(G0 + dance["beat"] * 4 + .05, 3)      # one bar of dancing, then back to reel 1

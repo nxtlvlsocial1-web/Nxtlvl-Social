@@ -30,7 +30,7 @@ def wt(line, i, key="t0"):
 
 def main():
     dur = round(W[-1]["t1"] + 1.7, 2)
-    flip = wt("l02", 6, "t1") + .06            # the countdown's 0, the iris flip (build/generate.py: the 0 lands at the end of "seconds." + .06)
+    flip = wt("l00", 9, "t1") + .06            # the countdown's 0, the iris flip (build/generate.py: the 0 lands at the end of "seconds." + .06)
     o = DROP_BEAT - flip
     d0, d1 = wt("l08", 1) - .04, wt("l08", 3) - .02   # "nothing moves," .. "thumbs"
     w = f"clip((t-{d0:.3f})/0.08,0,1)*clip(({d1:.3f}-t)/0.06,0,1)"
