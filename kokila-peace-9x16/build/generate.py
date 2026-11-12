@@ -118,16 +118,29 @@ t_it8, t_beaut8, t_life8 = T("it", t_device), T("beautiful", t_device), T("life"
 BEAT = None                                     # v2: the unrecorded text beat is gone
 
 # (mode, t0, t1): split / full / beat / end
-SECTIONS = [("split", 0.0, t_but - .1), ("full", t_but - .1, t_does - .1), ("split", t_does - .1, t_and3 - .1),
-            ("full", t_and3 - .1, t_just - .1), ("split", t_just - .1, t_because6 - .1),
+SECTIONS = [("split", 0.0, t_but - .1), ("full", t_but - .1, t_does - .1), ("split", t_does - .1, t_because6 - .1),
             ("full", t_because6 - .1, t_so7 - .1), ("split", t_so7 - .1, DUR)]
 
 
+BROLL = json.load(open(os.path.join(ROOT, "footage", "broll", "pexels.json")))
+
+
+def broll(sid, t0, t1, vid, at=0.0, label=None, pos="50% 40%", extra=""):
+    """v3 (client: "less animated explanations, more real-life reference video"): a Pexels clip in the top half"""
+    lab = f'<div class="blab" id="{sid}l">{label}</div>' if label else ""
+    scene(sid, t0, t1, f'<video class="br" id="{sid}v" src="footage/broll/{vid}.mp4" data-start="{t0:.3f}" data-duration="{t1 - t0:.3f}" '
+                       f'data-media-start="{at:.3f}" data-track-index="{2 + len(TOPH) % 3}" muted playsinline style="object-position:{pos}"></video>'
+                       f'<i class="shade2"></i>{lab}{extra}', "vid")
+    js(f'tl.fromTo("#{sid}v", {{scale: 1.0}}, {{scale: 1.08, duration: {t1 - t0:.3f}, ease: "none", immediateRender: false}}, {t0:.3f});')
+    if label:
+        show(f"#{sid}l", t0 + .05, d=.3, y=24)
+
+
 def build_top():
-    # S0 the cold open: Deepinder's own line, the device on his temple
+    # the cold open: Deepinder's own line, the device on his temple
     scene("ts0", 0, 2.75, clip("pA", 0, 2.75, 47.15) + '<div class="say" id="say0">"It measures blood flow to your brain."</div>', "vid")
     js(f'tl.fromTo("#say0", {{opacity: 0, y: 20}}, {{opacity: 1, y: 0, duration: .3, ease: "expo.out", immediateRender: false}}, 1.25);')
-    # S1 "Deepinder Goyal's Temple costs 85,000 rupees": the price tag counts up over his clip
+    # "Deepinder Goyal's Temple costs 85,000 rupees": the price tag counts up over his clip
     tag = (f'<div class="price glass" id="pr1"><div class="pl">{icon("card")} TEMPLE by Deepinder Goyal</div>'
            f'<div class="pv">₹<b id="pr1n">0</b></div></div>')
     scene("ts1", 2.75, t_measure - .1, clip("pC", 2.75, t_measure - .1, 29.0) + tag, "vid")
@@ -136,27 +149,16 @@ def build_top():
         js(f'tl.set("#pr1n", {{textContent: "{v}"}}, {T("85") - .35 + k * .07:.3f});')
     js(f'tl.fromTo("#pr1", {{scale: 1}}, {{keyframes: {{scale: [1, 1.12, 1]}}, duration: .3, ease: "power2.out", immediateRender: false}}, {T("85") + .2:.3f});')
     sfx("ding", T("85") + .2)
-    # S2 "It can measure your brain's blood flow ... stress, sleep, exercise": metric chips over his clip + a pulse line
-    chips = [("brain", "Brain blood flow", t_brain), ("pulse", "Stress", t_stress), ("moon", "Sleep", t_sleep), ("run", "Exercise", t_ex)]
-    ch = "".join(f'<div class="mchip glass" id="mc{k}" style="left:{60 + (k % 2) * 500}px;top:{520 + (k // 2) * 150}px">{icon(i)}<span>{l}</span></div>'
-                 for k, (i, l, _) in enumerate(chips))
-    pulse = ('<svg class="pulse" viewBox="0 0 1080 120"><path id="pl2" pathLength="1000" d="M0 70 H300 L340 70 L370 20 L410 110 L440 50 L470 70 '
-             'H640 L680 70 L710 15 L750 115 L780 60 L800 70 H1080"/></svg>')
-    scene("ts2", t_measure - .1, t_but - .1, clip("pD", t_measure - .1, t_but - .1, 33.8) + '<i class="shade"></i>' + ch + pulse, "vid")
-    for k, (_, _, t) in enumerate(chips):
-        pop(f"#mc{k}", t - .08)
-        sfx("pop", t - .08)
-    js(f'tl.fromTo("#pl2", {{strokeDashoffset: 1000}}, {{strokeDashoffset: 0, duration: 1.4, ease: "none", immediateRender: false}}, {t_brain:.3f});')
-    # S3 "Does it work? We don't know yet.": a test that never finishes
-    load = ('<div class="loader glass" id="ld"><div class="lt">Does it work?</div><div class="lr"><i class="spin" id="spin"></i><span>Independent results</span>'
-            '<b>pending</b></div><div class="bar"><i id="ldb"></i></div><div class="ls" id="lds">We don\'t know yet.</div></div>')
-    scene("ts3", t_does - .1, t_so - .1, load)
-    show("#ld", t_does - .1)
-    js(f'tl.fromTo("#spin", {{rotation: 0}}, {{rotation: 720, duration: {t_so - t_does:.2f}, ease: "none", immediateRender: false}}, {t_does:.3f});')
-    js(f'tl.fromTo("#ldb", {{scaleX: 0}}, {{scaleX: .23, duration: .8, ease: "expo.out", immediateRender: false}}, {t_does:.3f});')
-    show("#lds", t_yet - .15, d=.3, y=20)
-    sfx("tick", t_does)
-    # S4 "a tracker that is completely free ... no subscription ... not even your time": ₹85,000 falls to ₹0
+    # "It can measure your brain's blood flow and how your body responds": the device; then real life, cut on each word
+    scene("ts2", t_measure - .1, t_stress - .1, clip("pD", t_measure - .1, t_stress - .1, 33.8), "vid")
+    broll("tb1", t_stress - .1, t_sleep - .05, "8632780", 1.0, "Stress")
+    broll("tb2", t_sleep - .05, t_ex - .05, "6639660", 2.0, "Sleep")
+    broll("tb3", t_ex - .05, t_but - .1, "4763892", 3.0, "Exercise", "50% 55%")
+    for t in (t_stress, t_sleep, t_ex):
+        sfx("swish", t - .12)
+    # "Does it work? We don't know yet.": a skeptical pose with a smartwatch
+    broll("tb4", t_does - .1, t_so - .1, "8165946", 2.0, "Results: not yet known")
+    # "a tracker that is completely free ... no subscription ... not even your time": ₹85,000 falls to ₹0
     free = (f'<div class="price glass big" id="pr4"><div class="pl">{icon("heart")} A tracker that is</div><div class="pv">₹<b id="pr4n">85,000</b></div>'
             f'<div class="fr" id="fr4">FREE</div></div>'
             f'<div class="nochip glass" id="nc1">{icon("card")}<span>Subscription</span><i class="stk" id="st1"></i></div>'
@@ -173,111 +175,52 @@ def build_top():
     show("#nc2", t_time - .9, y=40)
     js(f'tl.fromTo("#st2", {{scaleX: 0}}, {{scaleX: 1, duration: .25, ease: "power3.out", immediateRender: false}}, {t_time + .1:.3f});')
     sfx("scratch", t_time + .1)
-    # S5 / S7 "the people in your life": one circle of people, first draining you, then lifting you up
-    cols = ["#6C7BFF", "#FF8A5B", "#2BB5A0", "#C77DFF", "#FFB547", "#5BC0F8"]
-    ring = "".join(f'<div class="rp" id="rp{k}" style="left:{540 + 255 * math.cos(-math.pi / 2 + k * math.pi / 3) - 70:.0f}px;'
-                   f'top:{480 + 200 * math.sin(-math.pi / 2 + k * math.pi / 3) - 70:.0f}px">{avatar(c, size=140)}'
-                   f'<i class="mood bad" id="mb{k}">{icon("x")}</i><i class="mood good" id="mg{k}">{icon("heart")}</i></div>' for k, c in enumerate(cols))
-    meter = ('<div class="meter glass" id="mt"><span>Stress</span><div class="mtr"><i id="mtf"></i></div><b id="mtv">20%</b></div>')
-    you = f'<div class="you" id="you">{avatar(BLUE, size=170)}<em>You</em></div>'
-    words = ('<div class="bub red" id="bw0">complaining</div><div class="bub red" id="bw1">criticizing</div><div class="bub red" id="bw2">disrespecting</div>'
-             '<div class="bub warm" id="bg0">loving</div><div class="bub warm" id="bg1">supporting</div><div class="bub warm" id="bg2">inspiring</div>')
-    scene("ts5", t_just - .1, t_or - .1, ring + you + meter + words, "gfx circle")
-    show("#mt", t_just)
-    pop("#you", t_just - .05, d=.4)
-    for k in range(6):
-        pop(f"#rp{k}", T("people", t_just) - .1 + k * .06)
-    sfx("pop", T("people", t_just) - .1)
-    for k, t in enumerate([t_compl, t_crit, t_disr]):
-        show(f"#bw{k}", t - .1, d=.28, y=30)
-        for j in (2 * k, 2 * k + 1):
-            pop(f"#mb{j}", t)
-            js(f'tl.to("#rp{j} .av circle:first-child", {{fill: "#8a8f98", duration: .25}}, {t:.3f});')
-        sfx("error", t)
-    for k, (v, t) in enumerate([("45%", t_compl), ("70%", t_crit), ("92%", t_disr)]):
-        js(f'tl.to("#mtf", {{scaleX: {float(v[:-1]) / 100:.2f}, backgroundColor: "{CORAL}", duration: .4, ease: "power2.out"}}, {t:.3f}); tl.set("#mtv", {{textContent: "{v}"}}, {t + .1:.3f});')
-    js(f'tl.set("#mtf", {{scaleX: .2}}, {t_just:.3f});')
-    # the same circle, warm (S7)
-    scene("ts7", t_or - .1, t_because6 - .1, ring.replace('id="', 'id="w') + you.replace('id="you"', 'id="wyou"') + meter.replace('id="', 'id="w')
-          + words.replace('id="', 'id="w'), "gfx circle warm")
-    js(f'tl.set("#wmtf", {{scaleX: .92, backgroundColor: "{CORAL}"}}, {t_or - .1:.3f}); tl.set("#wmtv", {{textContent: "92%"}}, {t_or - .1:.3f});')
-    js(f'tl.set("#wmt, #wyou", {{opacity: 1}}, {t_or - .1:.3f});')
-    for k in range(6):
-        js(f'tl.set("#wrp{k}", {{opacity: 1}}, {t_or - .1:.3f}); tl.set("#wrp{k} .av circle:first-child", {{fill: "#8a8f98"}}, {t_or - .1:.3f});')
-    for k, t in enumerate([t_loving, t_supp, t_insp]):
-        show(f"#wbg{k}", t - .1, d=.28, y=30)
-        for j in (2 * k, 2 * k + 1):
-            pop(f"#wmg{j}", t)
-            js(f'tl.to("#wrp{j} .av circle:first-child", {{fill: "{cols[j]}", duration: .3}}, {t:.3f});')
-        sfx("sparkle", t)
-    for v, t in [("55%", t_loving), ("30%", t_supp), ("12%", t_insp)]:
-        js(f'tl.to("#wmtf", {{scaleX: {float(v[:-1]) / 100:.2f}, backgroundColor: "{GREEN}", duration: .45, ease: "power2.out"}}, {t:.3f}); tl.set("#wmtv", {{textContent: "{v}"}}, {t + .1:.3f});')
-    js(f'tl.fromTo("#wyou", {{scale: 1}}, {{scale: 1.22, duration: .5, ease: "back.out(2)", immediateRender: false}}, {t_best:.3f});')
-    TOPH.append(f'<div class="ts" id="tsup"><div class="upl" id="upl">{icon("up")}<span>best version of yourself</span></div></div>')
-    js(f'tl.set("#tsup", {{opacity: 1}}, {t_best - .1:.3f}); tl.set("#tsup", {{opacity: 0}}, {t_because6 - .1:.3f});')
-    js(f'tl.to("#wmt", {{opacity: 0, y: 30, duration: .2}}, {t_best - .1:.3f});')
-    show("#upl", t_best - .05, y=40)
-    sfx("rise", t_best - .3)
-    # S9 "So surround yourself with people that make your life more beautiful": the circle closes into a heart
-    hp = []
-    for k in range(14):
-        a = k / 14 * 2 * math.pi
-        x = 16 * math.sin(a) ** 3
-        y = 13 * math.cos(a) - 5 * math.cos(2 * a) - 2 * math.cos(3 * a) - math.cos(4 * a)
-        hp.append((540 + x * 16, 440 - y * 16))
-    heart = "".join(f'<div class="hpv" id="hp{k}" style="left:{x - 42:.0f}px;top:{y - 42:.0f}px">{avatar(cols[k % 6], size=84)}</div>' for k, (x, y) in enumerate(hp))
-    scene("ts9", t_so7 - .1, t_because8 - .1, heart + f'<div class="hcore" id="hcore">{icon("heart")}</div>'
-          '<div class="bigw" id="bw9">more <em>beautiful</em></div>', "gfx warm")
-    for k in range(14):
-        js(f'tl.fromTo("#hp{k}", {{opacity: 0, x: {R.choice([-1, 1]) * 300}, y: {R.choice([-1, 1]) * 200}, scale: .4}}, '
-           f'{{opacity: 1, x: 0, y: 0, scale: 1, duration: .6, ease: "expo.out", immediateRender: false}}, {T("surround", t_so7) - .1 + k * .05:.3f});')
-    pop("#hcore", T("people", t_so7), d=.45)
-    js(f'tl.fromTo("#hcore", {{scale: 1}}, {{scale: 1.12, duration: .45, repeat: 5, yoyo: true, ease: "sine.inOut", immediateRender: false}}, {T("people", t_so7) + .45:.3f});')
-    show("#bw9", t_beaut7 - .15, y=40)
-    sfx("whoosh", t_so7 - .1)
+    # "And that tracker is the people around you.": friends at a table, the line on top
+    broll("tb5", t_and3 - .1, t_just - .1, "9782812", 1.0, None, "50% 45%",
+          '<div class="big3" id="b3">THE PEOPLE<br><em>AROUND YOU</em></div>')
+    js(f'tl.fromTo("#b3", {{opacity: 0, scale: 1.3}}, {{opacity: 1, scale: 1, duration: .35, ease: "expo.out", immediateRender: false}}, {t_people - .05:.3f});')
+    sfx("rise", t_people - 1.2)
+    sfx("hit", t_people)
+    sfx("sub", t_people)
+    # "are the people in your life ... constantly complaining, criticizing and disrespecting you": real arguments
+    broll("tb6", t_just - .1, t_crit - .1, "8135467", 2.0, None, "55% 40%")
+    broll("tb7", t_crit - .1, t_disr - .1, "7640672", 4.0, None, "50% 35%")
+    broll("tb8", t_disr - .1, t_or - .1, "5658237", 3.0, None, "50% 40%")
+    js(f'tl.fromTo(".argue", {{opacity: 0}}, {{opacity: 1, duration: .3, immediateRender: false}}, {t_compl:.3f});')
+    for t in (t_crit, t_disr):
+        sfx("swish", t - .12)
+    sfx("error", t_compl)
+    # "or are the people ... loving you, supporting you and inspiring you to become the best version of yourself"
+    broll("tb9", t_or - .1, t_loving - .1, "8888536", 4.0, None, "50% 40%")
+    broll("tb10", t_loving - .1, t_supp - .1, "8058107", 4.0, None, "60% 40%")
+    broll("tb11", t_supp - .1, t_insp - .1, "8416831", 2.0, None, "50% 45%")
+    broll("tb12", t_insp - .1, t_because6 - .1, "9579386", 5.0, None, "45% 40%")
+    for t in (t_loving, t_supp, t_insp):
+        sfx("swish", t - .12)
+    sfx("sparkle", t_best)
+    # "So surround yourself with people that make your life more beautiful": friends around a dinner table
+    broll("tb13", t_so7 - .1, t_because8 - .1, "8773862", 1.0, None, "50% 45%")
     sfx("sparkle", t_beaut7)
-    # S10 "the greatest upgrade to your mental health may not be a device, it is simply the beautiful people in your life"
-    up = (f'<div class="upg" id="ug"><div class="ul">The greatest upgrade</div>'
-          f'<div class="dev glass" id="dv"><i class="patch"></i><div><b>₹85,000 device</b><span>brain blood flow, stress, sleep</span></div><i class="stk" id="dvs"></i></div>'
-          f'<div class="ppl glass" id="pp"><div class="pps">{"".join(avatar(c, size=96) for c in cols[:5])}</div><div><b>The people in your life</b>'
-          f'<span>free, and they upgrade your peace</span></div></div></div>')
-    scene("ts10", t_because8 - .1, VDUR, up, "gfx warm")
-    show("#ug", t_great - .2)
-    show("#dv", t_upgrade, y=50)
-    js(f'tl.fromTo("#dvs", {{scaleX: 0}}, {{scaleX: 1, duration: .3, ease: "power3.out", immediateRender: false}}, {t_device + .15:.3f});')
-    js(f'tl.to("#dv", {{opacity: .45, scale: .94, duration: .3}}, {t_device + .3:.3f});')
-    sfx("scratch", t_device + .15)
-    show("#pp", t_beaut8 - .15, y=60)
+    # "the greatest upgrade to your mental health may not be a device, it is simply the beautiful people in your life"
+    broll("tb14", t_because8 - .1, t_it8 - .1, "7223986", 7.5, None, "50% 50%")
+    broll("tb15", t_it8 - .1, DUR, "5899973", 3.0, None, "50% 40%")
+    sfx("swish", t_it8 - .12)
     sfx("success", t_beaut8)
 
 
 def build_overlays():
-    """full-frame sections: big type over her face"""
+    """full-frame sections: her face, with as little type as possible"""
     # "But can you afford it? Maybe not."
     OVER.append(f'<div class="ov" id="o1"><div class="big1" id="o1a">₹85,000?</div><div class="stamp" id="o1b">MAYBE NOT.</div></div>')
     js(f'tl.set("#o1", {{opacity: 1}}, {t_but - .1:.3f}); tl.set("#o1", {{opacity: 0}}, {t_does - .1:.3f});')
     show("#o1a", T("afford") - .1, y=40)
     js(f'tl.fromTo("#o1b", {{opacity: 0, scale: 2.2, rotation: -14}}, {{opacity: 1, scale: 1, rotation: -6, duration: .22, ease: "back.out(1.6)", immediateRender: false}}, {t_maybe:.3f});')
     sfx("stamp", t_maybe + .05)
-    # "And that tracker is the people around you." : the reveal, people orbit her
-    orb = "".join(f'<div class="orb" id="ob{k}" style="left:{540 + 400 * math.cos(k * math.pi / 4) - 60:.0f}px;top:{840 + 400 * math.sin(k * math.pi / 4) - 60:.0f}px">'
-                  f'{avatar(c, size=120)}</div>' for k, c in enumerate(["#6C7BFF", "#FF8A5B", "#2BB5A0", "#C77DFF", "#FFB547", "#5BC0F8", "#FF6FA5", "#7ED957"]))
-    OVER.append(f'<div class="ov" id="o2"><div class="big2" id="o2a">THE PEOPLE<br><em>AROUND YOU</em></div>{orb}</div>')
-    js(f'tl.set("#o2", {{opacity: 1}}, {t_and3 - .1:.3f}); tl.set("#o2", {{opacity: 0}}, {t_just - .1:.3f});')
-    js(f'tl.fromTo("#o2a", {{opacity: 0, scale: 1.4}}, {{opacity: 1, scale: 1, duration: .35, ease: "expo.out", immediateRender: false}}, {t_people - .05:.3f});')
-    for k in range(8):
-        pop(f"#ob{k}", t_people + .05 + k * .05)
-    sfx("rise", t_people - 1.2)
-    sfx("hit", t_people)
-    sfx("sub", t_people)
-    # "As a doctor" (not recorded) + the doctor line
-    OVER.append(f'<div class="ov" id="o4"><div class="namec glass" id="nm"><b>Dr S Kokila</b></div>'
-                f'<div class="brainc glass" id="bc">{icon("brain")}<div><b>Your environment</b><span>shapes your peace of mind</span></div></div></div>')
+    # the doctor line: her name only
+    OVER.append(f'<div class="ov" id="o4"><div class="namec glass" id="nm"><b>Dr S Kokila</b></div></div>')
     js(f'tl.set("#o4", {{opacity: 1}}, {t_because6 - .1:.3f}); tl.set("#o4", {{opacity: 0}}, {t_so7 - .1:.3f});')
     js(f'tl.fromTo("#nm", {{opacity: 0, x: -120}}, {{opacity: 1, x: 0, duration: .45, ease: "expo.out", immediateRender: false}}, {t_because6:.3f});')
-    show("#bc", T("environment") - .1, y=50)
     sfx("whoosh", t_because6)
-    sfx("pop", T("environment") - .1)
 
 
 def build_layout():
@@ -367,6 +310,13 @@ video {{ display: block; }}
 #fullin {{ position: absolute; inset: 0; transform-origin: 50% 40%; }}
 #fullv {{ position: absolute; inset: 0; transform-origin: 50% 38%; }}
 .ts {{ position: absolute; inset: 0; opacity: 0; }}
+.br {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(1.08) contrast(1.05); }}
+.shade2 {{ position: absolute; left: 0; right: 0; bottom: 0; height: 260px; background: linear-gradient(180deg, transparent, rgba(14,26,58,.45)); }}
+.blab {{ position: absolute; left: 40px; top: 250px; padding: 12px 26px; border-radius: 18px; background: rgba(255,255,255,.9); color: {NAVY};
+  font-size: 40px; font-weight: 800; opacity: 0; box-shadow: 0 12px 30px rgba(14,26,58,.25); }}
+.big3 {{ position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-size: 112px; font-weight: 800; line-height: .98; letter-spacing: -.04em;
+  color: #fff; text-shadow: 0 10px 40px rgba(0,0,0,.6); opacity: 0; }}
+.big3 em {{ font-style: normal; color: {YEL}; }}
 .ts.vid {{ background: #000; }}
 .pod {{ position: absolute; left: -461px; top: -60px; width: 1882px; height: 1058px; filter: brightness(1.42) contrast(1.18) saturate(1.18); }}
 .credit {{ position: absolute; right: 24px; top: 24px; padding: 8px 16px; border-radius: 999px; background: rgba(0,0,0,.55); color: #fff; font-size: 28px; font-weight: 700; }}

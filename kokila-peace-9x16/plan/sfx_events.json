@@ -8,20 +8,16 @@
 "t": 5.16
 },
 {
-"type": "pop",
-"t": 7.82
+"type": "swish",
+"t": 10.52
 },
 {
-"type": "pop",
-"t": 10.56
+"type": "swish",
+"t": 11.26
 },
 {
-"type": "pop",
-"t": 11.3
-},
-{
-"type": "pop",
-"t": 12.36
+"type": "swish",
+"t": 12.32
 },
 {
 "type": "whoosh_big",
@@ -36,10 +32,6 @@
 "t": 15.44
 },
 {
-"type": "tick",
-"t": 15.62
-},
-{
 "type": "success",
 "t": 20.07
 },
@@ -50,10 +42,6 @@
 {
 "type": "scratch",
 "t": 24.52
-},
-{
-"type": "whoosh_big",
-"t": 24.94
 },
 {
 "type": "rise",
@@ -68,40 +56,32 @@
 "t": 26.68
 },
 {
-"type": "whoosh",
-"t": 27.78
-},
-{
-"type": "pop",
-"t": 29.64
-},
-{
 "type": "error",
 "t": 33.02
 },
 {
-"type": "error",
-"t": 34.34
+"type": "swish",
+"t": 34.22
 },
 {
-"type": "error",
-"t": 35.18
+"type": "swish",
+"t": 35.06
+},
+{
+"type": "swish",
+"t": 39.78
+},
+{
+"type": "swish",
+"t": 40.92
+},
+{
+"type": "swish",
+"t": 41.82
 },
 {
 "type": "sparkle",
-"t": 39.9
-},
-{
-"type": "sparkle",
-"t": 41.04
-},
-{
-"type": "sparkle",
-"t": 41.94
-},
-{
-"type": "rise",
-"t": 43.26
+"t": 43.56
 },
 {
 "type": "whoosh_big",
@@ -112,24 +92,16 @@
 "t": 45.86
 },
 {
-"type": "pop",
-"t": 47.58
-},
-{
 "type": "whoosh",
 "t": 52.22
-},
-{
-"type": "whoosh",
-"t": 52.3
 },
 {
 "type": "sparkle",
 "t": 55.74
 },
 {
-"type": "scratch",
-"t": 63.47
+"type": "swish",
+"t": 64.02
 },
 {
 "type": "success",
