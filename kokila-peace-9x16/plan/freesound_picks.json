@@ -1,0 +1,20 @@
+{
+  "note": "Freesound refuses every request from cloud machines (403 on the site, the API and the CDN), so the owner downloads these from a normal connection into a Drive folder; build/sfx_mix.py takes each file by its Freesound id (Freesound names downloads <id>__<user>__<name>.<ext>). All CC0: no credit needed.",
+  "picks": [
+    {"id": 351256, "kind": "whoosh_big", "title": "Deep Whoosh #1", "creator": "Kinoton", "licence": "CC0", "url": "https://freesound.org/people/Kinoton/sounds/351256", "where": "cuts into the full-frame lines"},
+    {"id": 425700, "kind": "whoosh", "title": "Woosh_Low_02.wav", "creator": "moogy73", "licence": "CC0", "url": "https://freesound.org/people/moogy73/sounds/425700", "where": "cuts back to the split screen"},
+    {"id": 449992, "kind": "swish", "title": "whoosh_short_low.wav", "creator": "DJT4NN3R", "licence": "CC0", "url": "https://freesound.org/people/DJT4NN3R/sounds/449992", "where": "into the silent text beat"},
+    {"id": 269583, "kind": "pop", "title": "Bubble", "creator": "deleted_user_3854053", "licence": "CC0", "url": "https://freesound.org/people/deleted_user_3854053/sounds/269583", "where": "chips and people popping in"},
+    {"id": 467951, "kind": "tick", "title": "UI Button Click", "creator": "benzix2", "licence": "CC0", "url": "https://freesound.org/people/benzix2/sounds/467951", "where": "small UI ticks"},
+    {"id": 728224, "kind": "ding", "title": "cash register chching", "creator": "disman", "licence": "CC0", "url": "https://freesound.org/people/disman/sounds/728224", "where": "the price lands on 85,000"},
+    {"id": 362624, "kind": "stamp", "title": "Stamp", "creator": "kermite607", "licence": "CC0", "url": "https://freesound.org/people/kermite607/sounds/362624", "where": "MAYBE NOT. stamp"},
+    {"id": 522095, "kind": "rise", "title": "Energy Riser", "creator": "magnuswaker", "licence": "CC0", "url": "https://freesound.org/people/magnuswaker/sounds/522095", "where": "into 'the people around you', and 'best version'"},
+    {"id": 535592, "kind": "hit", "title": "BOOM IMPACT 2", "creator": "XHALE303", "licence": "CC0", "url": "https://freesound.org/people/XHALE303/sounds/535592", "where": "the reveal on 'people', and the cold open"},
+    {"id": 145288, "kind": "error", "title": "SeriousError01e.aif", "creator": "Kuru23", "licence": "CC0", "url": "https://freesound.org/people/Kuru23/sounds/145288", "where": "complaining, criticizing, disrespecting"},
+    {"id": 22417, "kind": "drop", "title": "Single Heartbeat HQ_BeatSmith.wav", "creator": "Lunardrive", "licence": "CC0", "url": "https://freesound.org/people/Lunardrive/sounds/22417", "where": "Drained. Anxious. Exhausted. (one beat each)"},
+    {"id": 462095, "kind": "sparkle", "title": "Sparkling Star 01.wav", "creator": "MATRIXXX_", "licence": "CC0", "url": "https://freesound.org/people/MATRIXXX_/sounds/462095", "where": "loving, supporting, inspiring; 'more beautiful'; the end card"},
+    {"id": 521873, "kind": "success", "title": "Glimmer.wav", "creator": "opticaillusions", "licence": "CC0", "url": "https://freesound.org/people/opticaillusions/sounds/521873", "where": "FREE, and 'the beautiful people in your life'"},
+    {"id": 82610, "kind": "scratch", "title": "scribble.mp3", "creator": "indigosierra", "licence": "CC0", "url": "https://freesound.org/people/indigosierra/sounds/82610", "where": "the strike-throughs: subscription, your time, the device"},
+    {"id": 188033, "kind": "clock", "title": "Ticking Clock", "creator": "AntumDeluge", "licence": "CC0", "url": "https://freesound.org/people/AntumDeluge/sounds/188033", "where": "under 'Does it work? We don't know yet.'"}
+  ]
+}
