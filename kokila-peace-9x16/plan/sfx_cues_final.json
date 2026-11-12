@@ -5,133 +5,93 @@
 "kind": "hit"
 },
 {
-"t": 5.16,
-"cue": 5.16,
-"kind": "ding"
-},
-{
-"t": 10.52,
-"cue": 10.52,
-"kind": "swish"
-},
-{
-"t": 11.26,
-"cue": 11.26,
-"kind": "swish"
-},
-{
-"t": 12.32,
-"cue": 12.32,
-"kind": "swish"
-},
-{
-"t": 12.88,
-"cue": 12.88,
-"kind": "whoosh_big"
-},
-{
-"t": 14.93,
-"cue": 14.93,
-"kind": "stamp"
-},
-{
-"t": 15.44,
-"cue": 15.44,
-"kind": "whoosh"
-},
-{
-"t": 20.07,
-"cue": 20.07,
-"kind": "success"
-},
-{
-"t": 22.33,
-"cue": 22.33,
-"kind": "scratch"
-},
-{
-"t": 24.52,
-"cue": 24.52,
-"kind": "scratch"
-},
-{
-"t": 25.48,
-"cue": 25.48,
-"kind": "rise"
-},
-{
-"t": 26.68,
-"cue": 26.68,
+"t": 2.94,
+"cue": 2.94,
 "kind": "hit"
 },
 {
-"t": 26.68,
-"cue": 26.68,
-"kind": "sub"
+"t": 5.14,
+"cue": 5.14,
+"kind": "ding"
 },
 {
-"t": 33.02,
-"cue": 33.02,
-"kind": "error"
-},
-{
-"t": 34.22,
-"cue": 34.22,
-"kind": "swish"
-},
-{
-"t": 35.06,
-"cue": 35.06,
-"kind": "swish"
-},
-{
-"t": 39.78,
-"cue": 39.78,
-"kind": "swish"
-},
-{
-"t": 40.92,
-"cue": 40.92,
-"kind": "swish"
-},
-{
-"t": 41.82,
-"cue": 41.82,
-"kind": "swish"
-},
-{
-"t": 43.56,
-"cue": 43.56,
-"kind": "sparkle"
-},
-{
-"t": 45.66,
-"cue": 45.66,
+"t": 12.8,
+"cue": 12.8,
 "kind": "whoosh_big"
 },
 {
-"t": 45.86,
-"cue": 45.86,
+"t": 14.77,
+"cue": 14.77,
+"kind": "stamp"
+},
+{
+"t": 15.24,
+"cue": 15.24,
 "kind": "whoosh"
 },
 {
-"t": 52.22,
-"cue": 52.22,
-"kind": "whoosh"
+"t": 19.65,
+"cue": 19.65,
+"kind": "success"
 },
 {
-"t": 55.74,
-"cue": 55.74,
+"t": 21.93,
+"cue": 21.93,
+"kind": "scratch"
+},
+{
+"t": 24.04,
+"cue": 24.04,
+"kind": "scratch"
+},
+{
+"t": 24.78,
+"cue": 24.78,
+"kind": "rise"
+},
+{
+"t": 25.98,
+"cue": 25.98,
+"kind": "hit"
+},
+{
+"t": 25.98,
+"cue": 25.98,
+"kind": "sub"
+},
+{
+"t": 32.04,
+"cue": 32.04,
+"kind": "error"
+},
+{
+"t": 42.3,
+"cue": 42.3,
 "kind": "sparkle"
 },
 {
-"t": 64.02,
-"cue": 64.02,
-"kind": "swish"
+"t": 43.9,
+"cue": 43.9,
+"kind": "whoosh_big"
 },
 {
-"t": 65.32,
-"cue": 65.32,
+"t": 44.1,
+"cue": 44.1,
+"kind": "whoosh"
+},
+{
+"t": 50.14,
+"cue": 50.14,
+"kind": "whoosh"
+},
+{
+"t": 53.58,
+"cue": 53.58,
+"kind": "sparkle"
+},
+{
+"t": 60.52,
+"cue": 60.52,
 "kind": "success"
 }
 ]

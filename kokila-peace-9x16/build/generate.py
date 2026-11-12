@@ -166,11 +166,10 @@ def build_top():
     sfx("ding", T("85") + .2)
     # "It can measure your brain's blood flow and how your body responds": the device; then real life, cut on each word
     scene("ts2", t_measure - .1, t_stress - .1, clip("pD", t_measure - .1, t_stress - .1, 33.8), "vid")
+    # v5 (earshot: "salient hit density 2.0/s, high"): the quick footage cuts inside a line carry no whoosh
     broll("tb1", t_stress - .1, t_sleep - .05, "8632780", 1.0, "Stress")
     broll("tb2", t_sleep - .05, t_ex - .05, "6639660", 2.0, "Sleep")
     broll("tb3", t_ex - .05, t_but - .1, "4763892", 3.0, "Exercise", "50% 55%")
-    for t in (t_stress, t_sleep, t_ex):
-        sfx("swish", t - .12)
     # "Does it work? We don't know yet.": a skeptical pose with a smartwatch
     broll("tb4", t_does - .1, t_so - .1, "8165946", 2.0, "Results: not yet known")
     # "a tracker that is completely free ... no subscription ... not even your time": ₹85,000 falls to ₹0
@@ -202,16 +201,12 @@ def build_top():
     broll("tb7", t_crit - .1, t_disr - .1, "7640672", 4.0, None, "50% 35%")
     broll("tb8", t_disr - .1, t_or - .1, "5658237", 3.0, None, "50% 40%")
     js(f'tl.fromTo(".argue", {{opacity: 0}}, {{opacity: 1, duration: .3, immediateRender: false}}, {t_compl:.3f});')
-    for t in (t_crit, t_disr):
-        sfx("swish", t - .12)
     sfx("error", t_compl)
     # "or are the people ... loving you, supporting you and inspiring you to become the best version of yourself"
     broll("tb9", t_or - .1, t_loving - .1, "8888536", 4.0, None, "50% 40%")
     broll("tb10", t_loving - .1, t_supp - .1, "8058107", 4.0, None, "60% 40%")
     broll("tb11", t_supp - .1, t_insp - .1, "8416831", 2.0, None, "50% 45%")
     broll("tb12", t_insp - .1, t_because6 - .1, "9579386", 2.5, None, "45% 40%")
-    for t in (t_loving, t_supp, t_insp):
-        sfx("swish", t - .12)
     sfx("sparkle", t_best)
     # "So surround yourself with people that make your life more beautiful": friends around a dinner table
     broll("tb13", t_so7 - .1, t_because8 - .1, "8773862", 1.0, None, "50% 45%")
@@ -219,7 +214,6 @@ def build_top():
     # "the greatest upgrade to your mental health may not be a device, it is simply the beautiful people in your life"
     broll("tb14", t_because8 - .1, t_it8 - .1, "7223986", 6.9, None, "50% 50%")
     broll("tb15", t_it8 - .1, DUR, "5899973", 3.0, None, "50% 40%")
-    sfx("swish", t_it8 - .12)
     sfx("success", t_beaut8)
 
 

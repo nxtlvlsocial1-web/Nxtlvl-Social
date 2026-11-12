@@ -12,18 +12,6 @@
 "t": 5.14
 },
 {
-"type": "swish",
-"t": 10.4
-},
-{
-"type": "swish",
-"t": 11.14
-},
-{
-"type": "swish",
-"t": 11.98
-},
-{
 "type": "whoosh_big",
 "t": 12.8
 },
@@ -64,26 +52,6 @@
 "t": 32.04
 },
 {
-"type": "swish",
-"t": 33.22
-},
-{
-"type": "swish",
-"t": 34.06
-},
-{
-"type": "swish",
-"t": 38.54
-},
-{
-"type": "swish",
-"t": 39.64
-},
-{
-"type": "swish",
-"t": 40.56
-},
-{
 "type": "sparkle",
 "t": 42.3
 },
@@ -102,10 +70,6 @@
 {
 "type": "sparkle",
 "t": 53.58
-},
-{
-"type": "swish",
-"t": 59.28
 },
 {
 "type": "success",
