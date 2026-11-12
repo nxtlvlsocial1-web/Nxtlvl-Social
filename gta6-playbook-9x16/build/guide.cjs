@@ -4,7 +4,7 @@
 // page (80 px margins; a fixed 330 px header with the kicker and a 2-line title; a content column that fills the page
 // evenly; a footer rule), fixed-size step badges aligned to the first line of text, one type family for titles (the
 // accent word in colour, not a second font), and no "Vice City" anywhere.
-// node build/guide.cjs [OUT.pdf] [--png]   (--png also writes cache/guide/page-N.png previews to check before delivery)
+// node build/guide.cjs [OUT.pdf]   (page images land in cache/guide/page-N.jpg; check them before delivery)
 const path = require("path");
 const fs = require("fs");
 const { chromium } = require("playwright");
@@ -125,7 +125,7 @@ body { font-family: M; color: #fff; background: var(--ink); }
 .pg { position: relative; width: 1080px; height: 1350px; overflow: hidden; page-break-after: always; display: flex; flex-direction: column;
   background: radial-gradient(80% 40% at 0% 100%, rgba(255,79,163,.22), transparent 70%), radial-gradient(70% 35% at 100% 60%, rgba(62,240,255,.1), transparent 70%),
   linear-gradient(180deg, #1b0840, var(--ink) 55%, #0b0420); }
-.acc { background: linear-gradient(90deg, var(--orange), var(--pink)); -webkit-background-clip: text; color: transparent; }
+.acc { color: #ff7a8f; }   /* v3: solid colour; gradient text (background-clip) prints as solid boxes in iOS PDF viewers */
 header { position: relative; flex: none; height: 330px; padding: 0 var(--m) 40px; background-size: cover; background-position: center 62%;
   display: flex; flex-direction: column; justify-content: flex-end; }
 .hs { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(18,6,46,.15) 0%, rgba(18,6,46,.45) 45%, var(--ink) 100%); }
@@ -186,15 +186,30 @@ h1 { font-weight: 900; font-size: 96px; line-height: 1.0; letter-spacing: -.035e
   // nothing may spill past its page: report any page whose content overflows
   const over = await p.evaluate(() => [...document.querySelectorAll(".pg main")].map((m, i) => (m.scrollHeight > m.clientHeight + 1 ? i + 2 : 0)).filter(Boolean));
   if (over.length) console.log("WARNING overflow on pages", over.join(", "));
-  fs.mkdirSync(path.dirname(OUT), { recursive: true });
-  await p.pdf({ path: OUT, width: "1080px", height: "1350px", printBackground: true });
-  if (PNG) {
-    const d = path.join(ROOT, "cache", "guide");
-    fs.rmSync(d, { recursive: true, force: true });
-    fs.mkdirSync(d, { recursive: true });
-    const els = await p.$$(".pg");
-    for (let i = 0; i < els.length; i++) await els[i].screenshot({ path: path.join(d, `page-${String(i + 1).padStart(2, "0")}.png`) });
+  // v3: every page is rasterised at 2x and the PDF is built from those images, so it looks the same in every viewer
+  // (the owner's phone drew CSS effects differently from Chrome)
+  const d = path.join(ROOT, "cache", "guide");
+  fs.rmSync(d, { recursive: true, force: true });
+  fs.mkdirSync(d, { recursive: true });
+  const p2 = await b.newPage({ viewport: { width: 1080, height: 1350 }, deviceScaleFactor: 2 });
+  await p2.goto("file://" + f);
+  await p2.evaluate(() => document.fonts.ready);
+  await p2.waitForTimeout(400);
+  const els = await p2.$$(".pg");
+  const imgs = [];
+  for (let i = 0; i < els.length; i++) {
+    const out = path.join(d, `page-${String(i + 1).padStart(2, "0")}.jpg`);
+    await els[i].screenshot({ path: out, type: "jpeg", quality: 90 });
+    imgs.push(out);
   }
+  const ih = path.join(ROOT, "cache", "guide_img.html");
+  fs.writeFileSync(ih, `<!doctype html><html><head><style>@page { size: 1080px 1350px; margin: 0; } * { margin: 0; padding: 0; }
+    img { display: block; width: 1080px; height: 1350px; page-break-after: always; }</style></head><body>${imgs.map((x) => `<img src="file://${x}">`).join("")}</body></html>`);
+  const p3 = await b.newPage();
+  await p3.goto("file://" + ih);
+  await p3.waitForTimeout(300);
+  fs.mkdirSync(path.dirname(OUT), { recursive: true });
+  await p3.pdf({ path: OUT, width: "1080px", height: "1350px", printBackground: true });
   await b.close();
   console.log("wrote", OUT, PAGES.length, "pages");
 })();
