@@ -111,3 +111,6 @@ surrender-ad-9x16/assets/img/last_full.png
 
 # downloads and source media waiting to be sorted into a project (never committed)
 _incoming/
+
+# Creators 100X PDF page previews (make_pdf.cjs --png)
+brands/creators-100x/pdf/*_p*.png

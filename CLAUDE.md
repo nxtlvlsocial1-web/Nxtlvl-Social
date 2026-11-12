@@ -163,7 +163,7 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 
 ```
 .claude/skills/       Claude Code skills
-brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-video § 4)
+brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-video § 4); brands/creators-100x also holds the PDF maker
                       Our own two pages: brands/nxtlvl = NXTLVLSOCIAL.AI (comet-star mark),
                       brands/ai-nxtlvl = AI.NXTLVL (the "nxtlvl" wordmark with a violet star)
 <project>/            One HyperFrames project per video and aspect ratio, e.g. spring-drop-9x16/
@@ -192,3 +192,6 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
   people search for the topic, comma separated), and always hand over the full description in one block, ready to paste.
 - The keyword auto-DM (automation) is only the resource link and its setup steps, nothing else: no greeting, buttons,
   comment replies, follow line or caveats. Hand it over as one plain block, or as a PDF when the person asks for one.
+- PDFs (lead magnets, automation resources) are made in the Creators 100X branding with its PDF maker:
+  `brands/creators-100x/brand.md` and `make_pdf.cjs` (content JSON in, branded phone-friendly PDF out). Check the
+  `--png` page previews before delivering.
