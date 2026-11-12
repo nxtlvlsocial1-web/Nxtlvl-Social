@@ -143,8 +143,7 @@ def main():
     lines = ["Reel-flop explainer - sound credits", "",
              "Music: \"Future Inspiration\" by Soundrider/Dope is licensed under CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/),",
              "found on Openverse, hosted by Jamendo (https://www.jamendo.com/track/1671033). Edited (cut to the reel, drop-out on \"nothing moves\") by Nxtlvl Social.",
-             "Voice: open-source models run locally: Chatterbox by Resemble AI (MIT), with a reference voice made by Kokoro-82M by hexgrad",
-             "(Apache 2.0, voice af_heart).", "",
+             "Voice: Kokoro-82M by hexgrad (Apache 2.0, voice af_heart), run locally; the intro creator: Chatterbox by Resemble AI (MIT).", "",
              "Openverse was searched first (sfx/search/*.json); its sound-effect results are Freesound files, whose server refuses",
              "downloads from this cloud session (HTTP 403), so the effects are CC0 recordings from OpenGameArt:", ""]
     for p in sorted(packs):
