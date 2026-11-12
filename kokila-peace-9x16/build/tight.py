@@ -4,7 +4,7 @@ Lines are word ranges of plan/words_raw.json (build/words.py), the clean take of
 of a tracker" take has a long stall, so take 2 is used; of the four "our social environment" attempts only the last
 is whole ("the people in our environment affect our peace of mind and mental health the most"). Two silent pieces of
 her looking into the lens are kept too: HOOK (under Deepinder's own soundbite, which plays in the top half) and BEAT
-(the "How do you feel afterwards? Drained. Anxious. Exhausted." text beat she did not record).
+(v2: the text beat she did not record is gone, owner: "remove the things that she is not speaking").
 
 Inside every line, pauses quieter than THRESH for MINSIL or longer (silencedetect after a 90 Hz high-pass) are cut to
 KEEP (half each side). Pieces carry PCM audio (AAC pieces each add encoder padding and drifted the voice ~1 s
@@ -29,9 +29,8 @@ LINES = [("HOOK", "silent", .5, 3.4),
          ("L2", 65, 90),      # So let me tell you of a tracker that is completely free. It does not need ... your time.
          ("L3", 91, 98),      # And that tracker is the people around you.
          ("L4", 99, 118),     # Just ask yourself, are the people in your life ... constantly complaining, criticizing and disrespecting you
-         ("BEAT", "silent", 75.0, 77.6),
          ("L5", 119, 144),    # or are the people in your life ... loving you, supporting you and inspiring you ... best version of yourself?
-         ("L6", 188, 202),    # the people in our environment affect our peace of mind and mental health the most.
+         ("L6", 187, 202),    # because the people in our environment affect our peace of mind and mental health the most.
          ("L7", 203, 213),    # So surround yourself with people that make your life more beautiful
          ("L8", 214, 236)]    # because sometimes the greatest upgrade ... may not be a device, it is simply the beautiful people in your life.
 
@@ -54,11 +53,18 @@ for ln in LINES:
     b = W[j]["e"] + .15
     if j + 1 < len(W):
         b = min(b, W[j + 1]["s"] - .03)
+    if ln is LINES[-1]:
+        b += .55                                       # v2: end on her face, half a second after "life."
     cur = a
     for s, e in silences(a, b):
-        s2, e2 = s + KEEP / 2, e - KEEP / 2
+        keep = min(.3, KEEP + .12 * (e - s))           # v2 (owner: "bad cuts"): a long pause keeps more of itself
+        s2, e2 = s + keep / 2, e - keep / 2
         if e2 - s2 > .03 and s2 > cur:
-            pieces.append((lid, cur, s2, False))
+            if s2 - cur >= .18 or not pieces or pieces[-1][0] != lid:
+                pieces.append((lid, cur, s2, False))
+            else:                                      # a sliver between two pauses: join it to the piece before
+                pl = pieces.pop()
+                pieces.append((lid, pl[1], s2, False))
             cur = e2
     pieces.append((lid, cur, b, False))
 pieces = [(l, round(a * 30) / 30, round(b * 30) / 30, m) for l, a, b, m in pieces]

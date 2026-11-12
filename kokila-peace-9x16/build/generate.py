@@ -25,7 +25,7 @@ FW, FH, FPS = 1080, 1920, 30
 WF = json.load(open(os.path.join(ROOT, "plan", "words_final.json")))
 WT = json.load(open(os.path.join(ROOT, "plan", "words_tight.json")))
 VDUR = round(WT["dur"], 2)                      # the face video
-END = 5.4                                       # the end cards after it
+END = 0.0                                       # v2: no end cards (owner: remove what she does not say); the cut ends on her face
 DUR = round(VDUR + END, 2)
 BLUE, NAVY, YEL, CORAL, GREEN, CREAM = "#2448E8", "#0E1A3A", "#FFD23F", "#E8443A", "#13895A", "#FFF6EA"
 A, SFX, TOPH, OVER, CAPS = [], [], [], [], []
@@ -42,7 +42,7 @@ def sfx(kind, t):
 
 
 def norm(w):
-    return w.lower().strip(".,?!'\"").replace("’", "'")
+    return w.lower().strip(".,?!'\"").replace("’", "'").replace("criticising", "criticizing")
 
 
 def T(text, after=0.0, key="s"):
@@ -115,13 +115,12 @@ t_peace, t_mental, t_most = T("peace"), T("mental", T("peace")), T("most", T("pe
 t_so7, t_beaut7 = T("so", t_most), T("beautiful", t_most)
 t_because8, t_great, t_upgrade, t_device = T("because", t_beaut7), T("greatest"), T("upgrade"), T("device")
 t_it8, t_beaut8, t_life8 = T("it", t_device), T("beautiful", t_device), T("life", T("beautiful", t_device), "e")
-BEAT = (round(WT["lines"]["BEAT"][0], 3), round(t_or - .08, 3))
+BEAT = None                                     # v2: the unrecorded text beat is gone
 
 # (mode, t0, t1): split / full / beat / end
 SECTIONS = [("split", 0.0, t_but - .1), ("full", t_but - .1, t_does - .1), ("split", t_does - .1, t_and3 - .1),
-            ("full", t_and3 - .1, t_just - .1), ("split", t_just - .1, BEAT[0]), ("beat", BEAT[0], BEAT[1]),
-            ("split", BEAT[1], t_because6 - .1), ("full", t_because6 - .1, t_so7 - .1), ("split", t_so7 - .1, VDUR),
-            ("end", VDUR, DUR)]
+            ("full", t_and3 - .1, t_just - .1), ("split", t_just - .1, t_because6 - .1),
+            ("full", t_because6 - .1, t_so7 - .1), ("split", t_so7 - .1, DUR)]
 
 
 def build_top():
@@ -183,7 +182,7 @@ def build_top():
     you = f'<div class="you" id="you">{avatar(BLUE, size=170)}<em>You</em></div>'
     words = ('<div class="bub red" id="bw0">complaining</div><div class="bub red" id="bw1">criticizing</div><div class="bub red" id="bw2">disrespecting</div>'
              '<div class="bub warm" id="bg0">loving</div><div class="bub warm" id="bg1">supporting</div><div class="bub warm" id="bg2">inspiring</div>')
-    scene("ts5", t_just - .1, BEAT[0], ring + you + meter + words, "gfx circle")
+    scene("ts5", t_just - .1, t_or - .1, ring + you + meter + words, "gfx circle")
     show("#mt", t_just)
     pop("#you", t_just - .05, d=.4)
     for k in range(6):
@@ -199,12 +198,12 @@ def build_top():
         js(f'tl.to("#mtf", {{scaleX: {float(v[:-1]) / 100:.2f}, backgroundColor: "{CORAL}", duration: .4, ease: "power2.out"}}, {t:.3f}); tl.set("#mtv", {{textContent: "{v}"}}, {t + .1:.3f});')
     js(f'tl.set("#mtf", {{scaleX: .2}}, {t_just:.3f});')
     # the same circle, warm (S7)
-    scene("ts7", BEAT[1], t_because6 - .1, ring.replace('id="', 'id="w') + you.replace('id="you"', 'id="wyou"') + meter.replace('id="', 'id="w')
+    scene("ts7", t_or - .1, t_because6 - .1, ring.replace('id="', 'id="w') + you.replace('id="you"', 'id="wyou"') + meter.replace('id="', 'id="w')
           + words.replace('id="', 'id="w'), "gfx circle warm")
-    js(f'tl.set("#wmtf", {{scaleX: .92, backgroundColor: "{CORAL}"}}, {BEAT[1]:.3f}); tl.set("#wmtv", {{textContent: "92%"}}, {BEAT[1]:.3f});')
-    js(f'tl.set("#wmt, #wyou", {{opacity: 1}}, {BEAT[1]:.3f});')
+    js(f'tl.set("#wmtf", {{scaleX: .92, backgroundColor: "{CORAL}"}}, {t_or - .1:.3f}); tl.set("#wmtv", {{textContent: "92%"}}, {t_or - .1:.3f});')
+    js(f'tl.set("#wmt, #wyou", {{opacity: 1}}, {t_or - .1:.3f});')
     for k in range(6):
-        js(f'tl.set("#wrp{k}", {{opacity: 1}}, {BEAT[1]:.3f}); tl.set("#wrp{k} .av circle:first-child", {{fill: "#8a8f98"}}, {BEAT[1]:.3f});')
+        js(f'tl.set("#wrp{k}", {{opacity: 1}}, {t_or - .1:.3f}); tl.set("#wrp{k} .av circle:first-child", {{fill: "#8a8f98"}}, {t_or - .1:.3f});')
     for k, t in enumerate([t_loving, t_supp, t_insp]):
         show(f"#wbg{k}", t - .1, d=.28, y=30)
         for j in (2 * k, 2 * k + 1):
@@ -271,41 +270,14 @@ def build_overlays():
     sfx("rise", t_people - 1.2)
     sfx("hit", t_people)
     sfx("sub", t_people)
-    # the silent beat (not recorded): "How do you feel afterwards? Drained. Anxious. Exhausted."
-    bat = ('<div class="bat"><div class="bb"><i id="bf"></i></div><i class="bn"></i><b id="bv">80%</b></div>')
-    OVER.append(f'<div class="ov beat" id="o3"><div class="q" id="o3q">How do you feel afterwards?</div>'
-                f'<div class="dw" id="o3w0">Drained.</div><div class="dw" id="o3w1">Anxious.</div><div class="dw" id="o3w2">Exhausted.</div>{bat}</div>')
-    b0, b1 = BEAT
-    js(f'tl.set("#o3", {{opacity: 1}}, {b0:.3f}); tl.set("#o3", {{opacity: 0}}, {b1:.3f});')
-    show("#o3q", b0 + .05, d=.35, y=30)
-    step = (b1 - b0 - .7) / 3
-    for k in range(3):
-        t = b0 + .6 + k * step
-        js(f'tl.fromTo("#o3w{k}", {{opacity: 0, y: 30, filter: "blur(8px)"}}, {{opacity: 1, y: 0, filter: "blur(0px)", duration: .3, ease: "expo.out", immediateRender: false}}, {t:.3f});')
-        js(f'tl.to("#bf", {{scaleY: {[.5, .25, .06][k]}, backgroundColor: "{[YEL, CORAL, CORAL][k]}", duration: .35}}, {t:.3f}); tl.set("#bv", {{textContent: "{["50%", "25%", "5%"][k]}"}}, {t + .1:.3f});')
-        sfx("drop", t)
     # "As a doctor" (not recorded) + the doctor line
-    OVER.append(f'<div class="ov" id="o4"><div class="namec glass" id="nm"><span>As a doctor</span><b>Dr S Kokila</b></div>'
+    OVER.append(f'<div class="ov" id="o4"><div class="namec glass" id="nm"><b>Dr S Kokila</b></div>'
                 f'<div class="brainc glass" id="bc">{icon("brain")}<div><b>Your environment</b><span>shapes your peace of mind</span></div></div></div>')
     js(f'tl.set("#o4", {{opacity: 1}}, {t_because6 - .1:.3f}); tl.set("#o4", {{opacity: 0}}, {t_so7 - .1:.3f});')
     js(f'tl.fromTo("#nm", {{opacity: 0, x: -120}}, {{opacity: 1, x: 0, duration: .45, ease: "expo.out", immediateRender: false}}, {t_because6:.3f});')
     show("#bc", T("environment") - .1, y=50)
     sfx("whoosh", t_because6)
     sfx("pop", T("environment") - .1)
-    # end cards (not recorded)
-    OVER.append('<div class="ov endc" id="o5"><div class="e1" id="e1">It\'s the company<br>you <em>keep.</em></div>'
-                '<div class="e2" id="e2">Let\'s use technology<br>to understand our life...</div><div class="e3" id="e3">...and our <em>hearts</em><br>to truly experience it.</div><div class="sig" id="sig">Dr S Kokila</div></div>')
-    js(f'tl.set("#o5", {{opacity: 1}}, {VDUR:.3f});')
-    js(f'tl.fromTo("#o5", {{backgroundColor: "rgba(14,26,58,0)"}}, {{backgroundColor: "rgba(14,26,58,1)", duration: .5, immediateRender: false}}, {VDUR - .3:.3f});')
-    show("#e1", VDUR + .1, d=.5, y=40, ease="expo.out")
-    js(f'tl.to("#e1", {{opacity: 0, y: -50, duration: .3, ease: "power2.in"}}, {VDUR + 2.5:.3f});')
-    show("#e2", VDUR + 2.75, d=.45, y=40, ease="expo.out")
-    show("#e3", VDUR + 3.75, d=.45, y=40, ease="expo.out")
-    show("#sig", VDUR + 4.2, d=.4, y=20, ease="expo.out")
-    sfx("whoosh_big", VDUR - .2)
-    sfx("sub", VDUR + .1)
-    sfx("hit", VDUR + 4.2)
-    sfx("sparkle", VDUR + 3.8)
 
 
 def build_layout():
@@ -326,8 +298,6 @@ def build_layout():
             if mode == "beat":
                 js(f'tl.fromTo("#fullv", {{filter: "blur(0px) saturate(1)"}}, {{filter: "blur(18px) saturate(.3)", duration: .4, immediateRender: false}}, {a:.3f});')
                 js(f'tl.set("#fullv", {{filter: "none"}}, {b:.3f});')
-    js(f'tl.set("#full", {{opacity: 1}}, {VDUR - .3:.3f});')
-    js(f'tl.fromTo("#fullv", {{filter: "blur(0px)"}}, {{filter: "blur(20px)", duration: .5, immediateRender: false}}, {VDUR - .3:.3f});')
 
 
 # ---------------------------------------------------------------- captions: 1-3 words, the blue pill
@@ -343,7 +313,7 @@ def caption_groups():
             ws[-1] = dict(ws[-1], w=ws[-1]["w"] + w["w"], e=w["e"])
             continue
         ws.append(dict(w))
-    ws = [w for w in ws if w["s"] < VDUR - .05 and not (BEAT[0] <= w["s"] < BEAT[1] - .05)]
+    ws = [w for w in ws if w["s"] < VDUR - .05]
     groups, cur = [], []
     cuts = [s[1] for s in SECTIONS]
     for w in ws:
@@ -546,7 +516,7 @@ def main():
 """
     open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8").write(html)
     json.dump(sorted(SFX, key=lambda e: e["t"]), open(os.path.join(ROOT, "plan", "sfx_events.json"), "w"), indent=0)
-    json.dump({"dur": DUR, "vdur": VDUR, "beat": list(BEAT), "sections": SECTIONS, "bite": {"src": "assets/audio/deepinder_bite.wav", "at": 0.0}},
+    json.dump({"dur": DUR, "vdur": VDUR, "beat": None, "sections": SECTIONS, "bite": {"src": "assets/audio/deepinder_bite.wav", "at": 0.0}},
               open(os.path.join(ROOT, "plan", "edit.json"), "w"), indent=1)
     print(f"wrote index.html: {len(A)} timeline lines, {len(CAPS)} captions, {len(SFX)} sfx, {DUR} s")
 

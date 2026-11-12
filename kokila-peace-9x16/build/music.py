@@ -6,7 +6,7 @@ The edit, on the reel's clock (plan/words_final.json):
   * the band lands on "people" in "...that tracker is the PEOPLE around you" (the reveal);
   * before it the soft intro plays: the reel is longer than the intro there, so the intro runs from its start and is
     restarted once under a 1 s crossfade (a pad, so the seam is not heard);
-  * under the silent "Drained. Anxious. Exhausted." beat the music drops to a low-passed hush and comes back on "Or";
+  * (v1 dipped under a silent text beat; v2 removed that beat, so there is no dip);
   * it holds to the end and fades over the last 0.6 s (earshot: end on a hit, not a fade).
 Writes assets/audio/music.wav and plan/music_edit.json.
 python3 build/music.py
@@ -33,7 +33,7 @@ def main():
     off = BAND - reveal                     # track time = reel time + off (after the restart)
     xf = 1.0
     seam = -off                             # reel time where the track would be at 0
-    d0, d1 = E["beat"]                      # the silent text beat
+    d0, d1 = E["beat"] or (-10, -9)        # the silent text beat (v2: removed, so no dip)
     w = f"clip((t-{d0:.3f})/0.25,0,1)*clip(({d1:.3f}-t)/0.2,0,1)"
     # v1b (earshot: "music is heard in only 27% of the film"): the input is split before it is used twice (it was
     # read once, so the second half came out empty), the soft pad intro is lifted 14 dB (it sits ~20 dB under the band)
