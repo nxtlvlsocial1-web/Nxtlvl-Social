@@ -3,7 +3,7 @@
   * Voice: her tight cut (assets/video/tight.mp4) cleaned (80 Hz high-pass, light de-noise, gentle compression) and
     levelled; Deepinder Goyal's own line (assets/audio/deepinder_bite.wav, the Raj Shamani podcast) under the cold
     open, cleaned and levelled to match her. The voice is the loudest layer.
-  * Music: "Finding Hope" by Blindmoore (Openverse / Jamendo, CC BY 3.0), cut by build/music.py, at -19 LUFS and
+  * Music: "Hope" by Yakov Golman (v2; Openverse / Jamendo, CC BY 3.0), cut by build/music.py, at -19 LUFS and
     sidechain-ducked under the voice.
   * Sound effects: Openverse was searched first (sfx/search/); every effect result is a Freesound file and Freesound
     refuses this cloud machine (403 on its site, API and files; we never pose as a browser). The owner chose the CC0
@@ -56,13 +56,8 @@ def prep(kind, src, k):
     return out, md, extra.get("anchor") == "end"
 
 
-def main():
-    pic, out = sys.argv[1], sys.argv[2]
-    os.makedirs(WORK, exist_ok=True)
-    # the voice: her cut and Deepinder's line, each cleaned and levelled to -16 LUFS, then laid together
-    her = os.path.join(WORK, "voice_her.wav")
-    run(["ffmpeg", "-y", "-loglevel", "error", "-i", os.path.join(ROOT, "assets", "video", "tight.mp4"), "-vn", "-af",
-         f"{VCHAIN},loudnorm=I=-16:TP=-3:LRA=9", "-ar", "48000", "-ac", "1", her])
+def voice_with_bite(her, vo):
+    """her cut with Deepinder's line (and its echo) laid under the cold open"""
     bite = os.path.join(WORK, "voice_bite.wav")
     # v4 (owner: "while his speech is ending add that effect in his voice where it kinda echoes"): his last word
     # ("brain") repeats as three fading, darker echoes that trail into the cut to black
@@ -85,11 +80,25 @@ def main():
          f"[d1][d2][d3]amix=inputs=3:normalize=0:duration=longest[o]", "-map", "[o]", "-c:a", "pcm_f32le", echo])
     run(["ffmpeg", "-y", "-loglevel", "error", "-i", dry, "-i", echo, "-filter_complex",
          "[0:a][1:a]amix=inputs=2:normalize=0:duration=longest[o]", "-map", "[o]", "-ar", "48000", "-ac", "1", bite])
-    vo = os.path.join(WORK, "voice_full.wav")
     ms = int(E["bite"]["at"] * 1000)
     run(["ffmpeg", "-y", "-loglevel", "error", "-i", her, "-i", bite, "-filter_complex",
          f"[1:a]adelay={ms}[b];[0:a][b]amix=inputs=2:normalize=0:duration=longest,apad=whole_dur={DUR}[o]", "-map", "[o]",
          "-ac", "2", "-c:a", "pcm_f32le", vo])
+
+
+def main():
+    pic, out = sys.argv[1], sys.argv[2]
+    os.makedirs(WORK, exist_ok=True)
+    # the voice: her cut and Deepinder's line, each cleaned and levelled to -16 LUFS, then laid together
+    her = os.path.join(WORK, "voice_her.wav")
+    # v2: cut B starts OFF seconds into her tight cut (no Deepinder line before her)
+    run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{E.get('off', 0):.3f}", "-i", os.path.join(ROOT, "assets", "video", "tight.mp4"), "-vn", "-af",
+         f"{VCHAIN},loudnorm=I=-16:TP=-3:LRA=9", "-ar", "48000", "-ac", "1", her])
+    vo = os.path.join(WORK, "voice_full.wav")
+    if E["bite"] is None:
+        run(["ffmpeg", "-y", "-loglevel", "error", "-i", her, "-af", f"apad=whole_dur={DUR}", "-ac", "2", "-c:a", "pcm_f32le", vo])
+    else:
+        voice_with_bite(her, vo)
     # effects
     ev = json.load(open(os.path.join(ROOT, "plan", "sfx_events.json")))
     prepared, rot, cues, last = {}, {}, [], {}

@@ -1,4 +1,4 @@
-# Post description (Instagram Reels / YouTube Shorts)
+# Post description (Instagram Reels / YouTube Shorts) - same text for both trial cuts (v2)
 
 ```
 Can an ₹85,000 device measure your peace of mind?
@@ -16,7 +16,7 @@ As a doctor, I can tell you that the people in our environment affect our peace 
 Sometimes the greatest upgrade to your mental health is not a device. It's the company you keep.
 
 Clip: Raj Shamani podcast with Deepinder Goyal
-Music: "Finding Hope" by Blindmoore, CC BY 3.0
+Music: "Hope" by Yakov Golman, CC BY 3.0
 
 #mentalhealth #peaceofmind #healthyrelationships #deepindergoyal #doctorsofinstagram
 mental health tips, peace of mind, Deepinder Goyal Temple device, Temple wearable price in India, brain health wearable, how people affect your mental health, toxic people and mental health, healthy relationships, stress and anxiety relief, surround yourself with good people, doctor advice on mental health, emotional wellbeing, free wellness tracker, Raj Shamani podcast Deepinder Goyal

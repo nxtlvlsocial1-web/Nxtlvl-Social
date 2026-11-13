@@ -24,10 +24,19 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FW, FH, FPS = 1080, 1920, 30
 WF = json.load(open(os.path.join(ROOT, "plan", "words_final.json")))
 WT = json.load(open(os.path.join(ROOT, "plan", "words_tight.json")))
-VDUR = round(WT["dur"], 2)                      # the face video
+# v2 (client voice note): two cuts for trial reels. VARIANT=A opens on Deepinder's own line (as v1); VARIANT=B opens
+# straight on her ("Deepinder Goyal's Temple costs..."): the face clock starts OFF seconds into the tight cut, every word
+# time moves back by OFF, and the full-screen podcast line and the cut to black are left out.
+VAR = os.environ.get("VARIANT", "A")
+OFF = 0.0
+if VAR == "B":
+    OFF = round(next(w["s"] for w in WF if w["w"].lower().startswith("deepinder")) - .06, 3)
+    WF = [dict(w, s=round(w["s"] - OFF, 3), e=round(w["e"] - OFF, 3)) for w in WF if w["s"] >= OFF - .02]
+VDUR = round(WT["dur"] - OFF, 2)                # the face video
 END = 0.0                                       # v2: no end cards (owner: remove what she does not say); the cut ends on her face
 DUR = round(VDUR + END, 2)
 BLUE, NAVY, YEL, CORAL, GREEN, CREAM = "#2448E8", "#0E1A3A", "#FFD23F", "#E8443A", "#13895A", "#FFF6EA"
+RED = "#E0182D"                                 # v2 (client): the hook's highlight is red, not blue
 A, SFX, TOPH, OVER, CAPS = [], [], [], [], []
 R = random.Random(7)
 SEAM = 920                                      # the split line: top 0..920 a screen, bottom 920..1920 her face
@@ -123,8 +132,10 @@ BEAT = None                                     # v2: the unrecorded text beat i
 # v4: Deepinder's line plays full screen (podcast 47.15 s on; "...to your brain." ends ~2.62 s in), then black until she starts
 BITE_LEN, ECHO_FROM = 2.62, 2.30               # the bite, and where his last word "brain" starts (its echo tail)
 T_BLACK = 2.56
-T_SPLIT = round(t_l1 - .06, 3)
-HOOK_END = round(T("85") - .05, 3)               # the hook text holds until the price lands on "85,000"
+T_SPLIT = 0.0 if VAR == "B" else round(t_l1 - .06, 3)
+# v2 (client: "before we are even able to read the text hook it goes, it should stay for five to six seconds"):
+# the hook holds 5.5 s on the split screen; her captions sit just under the hook, above her head, meanwhile (cap.hk), then go back to the seam
+HOOK_END = round(T_SPLIT + 5.5, 3)
 
 # (mode, t0, t1): split / full / beat / end
 SECTIONS = [("split", 0.0, t_but - .1), ("full", t_but - .1, t_does - .1), ("split", t_does - .1, t_because6 - .1),
@@ -148,16 +159,21 @@ def broll(sid, t0, t1, vid, at=0.0, label=None, pos="50% 40%", extra=""):
 def build_top():
     # the cold open: Deepinder's own line, the device on his temple
     # v4 (owner): Deepinder full screen while we hear him; as he stops, an instant black, then the split screen
-    OVER.append(f'<div class="ov deep" id="deep" style="opacity:1"><video class="podfull" id="pA" src="assets/video/pod_full.mp4" data-start="0" '
-                f'data-duration="{T_BLACK:.3f}" data-media-start="0.000" data-track-index="5" muted playsinline></video>'
-                '<div class="credit">Source: Raj Shamani podcast</div><div class="say" id="say0">"It measures blood flow to your brain."</div></div>'
-                '<div class="ov blk" id="blk"></div>')
-    js(f'tl.fromTo("#pA", {{scale: 1.0}}, {{scale: 1.06, duration: {T_BLACK:.3f}, ease: "none", immediateRender: false}}, 0);')
-    js(f'tl.fromTo("#say0", {{opacity: 0, y: 20}}, {{opacity: 1, y: 0, duration: .3, ease: "expo.out", immediateRender: false}}, 1.25);')
-    js(f'tl.set("#deep", {{opacity: 0}}, {T_BLACK:.3f}); tl.set("#blk", {{opacity: 1}}, {T_BLACK:.3f}); tl.set("#blk", {{opacity: 0}}, {T_SPLIT:.3f});')
-    js(f'tl.fromTo("#botin", {{scale: 1.3, filter: "blur(8px)"}}, {{scale: 1, filter: "blur(0px)", duration: .35, ease: "expo.out", immediateRender: false}}, {T_SPLIT:.3f});')
-    js(f'tl.fromTo("#top", {{scale: 1.12, filter: "blur(10px)"}}, {{scale: 1, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}}, {T_SPLIT:.3f});')
-    js(f'tl.set("#seamline", {{opacity: 1}}, {T_SPLIT:.3f});')      # the seam only exists once the split screen does
+    if VAR == "B":
+        js(f'tl.fromTo("#botin", {{scale: 1.12}}, {{scale: 1, duration: .5, ease: "expo.out", immediateRender: false}}, 0);')
+        js(f'tl.fromTo("#top", {{scale: 1.08}}, {{scale: 1, duration: .5, ease: "expo.out", immediateRender: false}}, 0);')
+        js('tl.set("#seamline", {opacity: 1}, 0);')
+    else:
+      OVER.append(f'<div class="ov deep" id="deep" style="opacity:1"><video class="podfull" id="pA" src="assets/video/pod_full.mp4" data-start="0" '
+                  f'data-duration="{T_BLACK:.3f}" data-media-start="0.000" data-track-index="5" muted playsinline></video>'
+                  '<div class="credit">Source: Raj Shamani podcast</div><div class="say" id="say0">"It measures blood flow to your brain."</div></div>'
+                  '<div class="ov blk" id="blk"></div>')
+      js(f'tl.fromTo("#pA", {{scale: 1.0}}, {{scale: 1.06, duration: {T_BLACK:.3f}, ease: "none", immediateRender: false}}, 0);')
+      js(f'tl.fromTo("#say0", {{opacity: 0, y: 20}}, {{opacity: 1, y: 0, duration: .3, ease: "expo.out", immediateRender: false}}, 1.25);')
+      js(f'tl.set("#deep", {{opacity: 0}}, {T_BLACK:.3f}); tl.set("#blk", {{opacity: 1}}, {T_BLACK:.3f}); tl.set("#blk", {{opacity: 0}}, {T_SPLIT:.3f});')
+      js(f'tl.fromTo("#botin", {{scale: 1.3, filter: "blur(8px)"}}, {{scale: 1, filter: "blur(0px)", duration: .35, ease: "expo.out", immediateRender: false}}, {T_SPLIT:.3f});')
+      js(f'tl.fromTo("#top", {{scale: 1.12, filter: "blur(10px)"}}, {{scale: 1, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}}, {T_SPLIT:.3f});')
+      js(f'tl.set("#seamline", {{opacity: 1}}, {T_SPLIT:.3f});')      # the seam only exists once the split screen does
     sfx("hit", T_SPLIT)
     # "Deepinder Goyal's Temple costs 85,000 rupees": the price tag counts up over his clip
     tag = (f'<div class="price glass" id="pr1"><div class="pl">{icon("card")} TEMPLE by Deepinder Goyal</div>'
@@ -201,7 +217,8 @@ def build_top():
     sfx("hit", t_people)
     sfx("sub", t_people)
     # "are the people in your life ... constantly complaining, criticizing and disrespecting you": real arguments
-    broll("tb6", t_just - .1, t_crit - .1, "8135467", 2.0, None, "55% 40%")
+    # v2 (client: "keep it neutral, no religion"): the couple clip with a hijab (8135467) is replaced by a neutral one
+    broll("tb6", t_just - .1, t_crit - .1, "8557555", .6, None, "50% 30%")
     broll("tb7", t_crit - .1, t_disr - .1, "7640672", 4.0, None, "50% 35%")
     broll("tb8", t_disr - .1, t_or - .1, "5658237", 3.0, None, "50% 40%")
     js(f'tl.fromTo(".argue", {{opacity: 0}}, {{opacity: 1, duration: .3, immediateRender: false}}, {t_compl:.3f});')
@@ -293,12 +310,11 @@ def build_caps():
     for k, g in enumerate(gs):
         t0 = g[0]["s"] - .05
         t1 = min(gs[k + 1][0]["s"] - .05 if k + 1 < len(gs) else VDUR, g[-1]["e"] + .6)
-        if t0 < HOOK_END - .1:              # the hook text is on the seam then
-            continue
         m = mode_at(g[0]["s"])
+        pos = "hk" if t0 < HOOK_END - .1 else ("seam" if m == "split" else "low")
         txt = " ".join(f'<span class="{"k" if norm(w["w"]) in KEY else ""}">{w["w"].replace("85", "85").replace(",000", ",000")}</span>' for w in g)
         txt = txt.replace('</span> <span class="k">,000', ',000').replace('<span class="k">85</span> <span class="k">,000</span>', '<span class="k">85,000</span>')
-        CAPS.append(f'<div class="cap {"seam" if m == "split" else "low"}" id="cp{k}"><b>{txt}</b></div>')
+        CAPS.append(f'<div class="cap {pos}" id="cp{k}"><b>{txt}</b></div>')
         js(f'tl.fromTo("#cp{k}", {{opacity: 0, scale: .82, y: 14}}, {{opacity: 1, scale: 1, y: 0, duration: .16, ease: "back.out(2.6)", immediateRender: false}}, {t0:.3f}); '
            f'tl.set("#cp{k}", {{opacity: 0}}, {t1:.3f});')
 
@@ -426,14 +442,14 @@ video {{ display: block; }}
 .sig {{ position: absolute; left: 0; right: 0; top: 1180px; text-align: center; color: {YEL}; font-size: 40px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; opacity: 0; }}
 /* captions */
 .cap {{ position: absolute; left: 0; right: 0; text-align: center; opacity: 0; z-index: 7; }}
-.cap.seam {{ top: {SEAM - 52}px; }} .cap.low {{ top: 1380px; }}
+.cap.seam {{ top: {SEAM - 52}px; }} .cap.low {{ top: 1380px; }} .cap.hk {{ top: 1000px; }}
 .cap b {{ display: inline-block; padding: 12px 30px 16px; border-radius: 22px; background: {BLUE}; color: #fff; font-size: 62px; font-weight: 800; letter-spacing: -.01em;
   box-shadow: 0 14px 34px rgba(14,26,58,.35); }}
 .cap .k {{ color: {YEL}; }}
 .hook {{ position: absolute; left: 30px; right: 30px; top: {SEAM - 120}px; text-align: center; z-index: 7; }}
 .hook b {{ display: inline-block; padding: 18px 30px 22px; border-radius: 26px; background: #fff; color: {NAVY}; font-size: 58px; font-weight: 800; line-height: 1.08;
   letter-spacing: -.02em; box-shadow: 0 18px 44px rgba(14,26,58,.4); }}
-.hook em {{ font-style: normal; color: {BLUE}; }} .hook .y {{ background: {YEL}; border-radius: 12px; padding: 0 10px; }}
+.hook em {{ font-style: normal; color: {RED}; }} .hook .y {{ background: {YEL}; border-radius: 12px; padding: 0 10px; }}
 #flash {{ position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 8; }}
 #grain {{ position: absolute; inset: 0; opacity: .05; background: url(assets/img/grain.png); mix-blend-mode: overlay; z-index: 9; pointer-events: none; }}
 """
@@ -461,10 +477,10 @@ def main():
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
-      <div id="full"><div id="fullin"><video id="fullv" src="assets/video/tight.mp4" data-start="0" data-duration="{VDUR}" data-media-start="0" data-track-index="0" muted playsinline></video></div></div>
+      <div id="full"><div id="fullin"><video id="fullv" src="assets/video/tight.mp4" data-start="0" data-duration="{VDUR}" data-media-start="{OFF}" data-track-index="0" muted playsinline></video></div></div>
       <div id="split">
         <div id="top">{"".join(TOPH)}</div>
-        <div id="bot"><div id="botin"><video id="botv" src="assets/video/tight_bot.mp4" data-start="0" data-duration="{VDUR}" data-media-start="0" data-track-index="1" muted playsinline></video></div></div>
+        <div id="bot"><div id="botin"><video id="botv" src="assets/video/tight_bot.mp4" data-start="0" data-duration="{VDUR}" data-media-start="{OFF}" data-track-index="1" muted playsinline></video></div></div>
         <i id="seamline"></i>
       </div>
       {"".join(OVER)}
@@ -485,7 +501,8 @@ def main():
 """
     open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8").write(html)
     json.dump(sorted(SFX, key=lambda e: e["t"]), open(os.path.join(ROOT, "plan", "sfx_events.json"), "w"), indent=0)
-    json.dump({"dur": DUR, "vdur": VDUR, "beat": None, "sections": SECTIONS, "bite": {"src": "assets/audio/deepinder_bite.wav", "at": 0.0, "len": BITE_LEN, "echo_from": ECHO_FROM}},
+    json.dump({"dur": DUR, "vdur": VDUR, "beat": None, "variant": VAR, "off": OFF, "sections": SECTIONS,
+               "bite": None if VAR == "B" else {"src": "assets/audio/deepinder_bite.wav", "at": 0.0, "len": BITE_LEN, "echo_from": ECHO_FROM}},
               open(os.path.join(ROOT, "plan", "edit.json"), "w"), indent=1)
     print(f"wrote index.html: {len(A)} timeline lines, {len(CAPS)} captions, {len(SFX)} sfx, {DUR} s")
 

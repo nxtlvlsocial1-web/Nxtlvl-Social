@@ -1,10 +1,9 @@
 {
- "track": "sfx/music/finding_hope.mp3",
- "band_on": 25.98,
- "restart_at": 11.4,
- "dip": [
-  -10,
-  -9
- ],
+ "track": "sfx/music/hope_golman.mp3",
+ "title": "Hope",
+ "creator": "Yakov Golman",
+ "license": "CC BY 3.0",
+ "landing_url": "https://www.jamendo.com/track/1559870",
+ "from": 0.0,
  "dur": 62.48
 }
