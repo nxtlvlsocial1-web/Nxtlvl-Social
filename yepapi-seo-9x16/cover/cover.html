@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>YepAPI Reel cover</title>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("../assets/fonts/SpaceGrotesk-latin-var.woff2") format("woff2"); font-weight: 300 700; }
+      @font-face { font-family: "Geist Mono"; src: url("../assets/fonts/GeistMono-latin-var.woff2") format("woff2"); font-weight: 100 900; }
+      @font-face { font-family: "Inter"; src: url("../assets/fonts/Inter-latin-var.woff2") format("woff2"); font-weight: 100 900; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0a0a0a; font-family: "Inter", sans-serif; }
+      #cover { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0a0a0a; }
+
+      /* Stage: the same ambient light, grid and horizon as the video */
+      .glow { position: absolute; border-radius: 50%; }
+      #g-lemon { left: -420px; top: 60px; width: 1900px; height: 1900px; background: radial-gradient(circle, rgba(255, 245, 108, 0.30) 0%, rgba(255, 245, 108, 0.10) 32%, rgba(255, 245, 108, 0) 62%); }
+      #g-blue { left: 380px; top: 700px; width: 1100px; height: 1100px; background: radial-gradient(circle, rgba(76, 84, 255, 0.32) 0%, rgba(45, 51, 186, 0.10) 40%, rgba(45, 51, 186, 0) 66%); }
+      #grid { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255, 255, 255, 0.10) 2.4px, rgba(255, 255, 255, 0) 3px); background-size: 40px 40px; -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 44%, #000 20%, rgba(0, 0, 0, 0) 80%); }
+      #arc { position: absolute; left: -760px; top: 1660px; width: 2600px; height: 2600px; border-radius: 50%; background: radial-gradient(circle at 50% 0%, #17171c 0%, #0b0b0d 40%, #0a0a0a 70%); border-top: 3px solid rgba(255, 245, 108, 0.55); box-shadow: 0 -30px 90px rgba(255, 245, 108, 0.16); }
+      #vig { position: absolute; inset: 0; background: radial-gradient(ellipse 85% 70% at 50% 45%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.55) 100%); }
+
+      .cr { background: linear-gradient(180deg, #ffffff 0%, #f4f4f4 30%, #a3a3a3 50%, #ffffff 66%, #cfcfcf 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .gl { color: #fff56c; text-shadow: 0 0 40px rgba(255, 245, 108, 0.6), 0 0 3px rgba(255, 245, 108, 0.9); }
+      .glass { background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04)); border: 1.5px solid rgba(255, 255, 255, 0.18); border-radius: 32px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.24); }
+
+      #kick { position: absolute; left: 0; width: 1080px; top: 262px; display: flex; justify-content: center; align-items: center; gap: 18px; font-weight: 700; font-size: 50px; line-height: 64px; color: rgba(255, 255, 255, 0.9); }
+      #kick img { width: 72px; height: 72px; border-radius: 17px; box-shadow: 0 0 34px rgba(217, 119, 87, 0.5); }
+      #head { position: absolute; left: 0; width: 1080px; top: 350px; text-align: center; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 196px; line-height: 0.93; letter-spacing: -0.055em; }
+
+      #wave { position: absolute; left: -160px; top: 690px; width: 1400px; height: 130px; opacity: 0.8; }
+      #card { position: absolute; left: 90px; top: 800px; width: 900px; height: 470px; overflow: hidden; }
+      #bar { position: absolute; left: 0; right: 0; top: 0; height: 78px; border-bottom: 1.5px solid rgba(255, 255, 255, 0.14); display: flex; align-items: center; gap: 12px; padding: 0 26px; }
+      .dot { width: 18px; height: 18px; border-radius: 50%; }
+      #url { margin-left: 14px; flex: 1; height: 46px; border-radius: 23px; background: rgba(255, 255, 255, 0.08); padding: 0 22px; font-family: "Geist Mono", monospace; font-weight: 500; font-size: 30px; line-height: 46px; color: rgba(255, 255, 255, 0.85); }
+      #rows { position: absolute; left: 0; right: 0; top: 78px; padding: 22px 34px; }
+      .row { display: flex; align-items: center; gap: 22px; height: 82px; border-bottom: 1.5px solid rgba(255, 255, 255, 0.09); }
+      .rk { width: 76px; font-family: "Geist Mono", monospace; font-weight: 800; font-size: 34px; color: #fff56c; text-shadow: 0 0 16px rgba(255, 245, 108, 0.6); }
+      .kw { flex: 1; font-weight: 600; font-size: 40px; color: #ffffff; }
+      .vol { font-family: "Geist Mono", monospace; font-weight: 600; font-size: 30px; color: rgba(255, 255, 255, 0.6); }
+      #ex { position: absolute; left: 34px; bottom: 14px; font-weight: 500; font-size: 26px; color: rgba(255, 255, 255, 0.5); }
+      #lens { position: absolute; left: 600px; top: 935px; width: 250px; height: 250px; }
+      #ring { position: absolute; inset: 0; border: 13px solid #fff56c; border-radius: 50%; background: radial-gradient(circle, rgba(255, 245, 108, 0.12), rgba(255, 245, 108, 0.02) 70%); box-shadow: 0 0 40px rgba(255, 245, 108, 0.7), inset 0 0 30px rgba(255, 245, 108, 0.35); }
+      #handle { position: absolute; left: 200px; top: 208px; width: 40px; height: 160px; background: linear-gradient(90deg, #fff56c, #d9cf3a); border-radius: 20px; transform: rotate(-45deg); transform-origin: 50% 0; box-shadow: 0 0 24px rgba(255, 245, 108, 0.5); }
+      #mascot { position: absolute; left: 104px; top: 700px; width: 190px; height: 120px; image-rendering: pixelated; filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.55)); }
+
+      #pills { position: absolute; left: 0; width: 1080px; top: 1318px; display: flex; justify-content: center; gap: 16px; }
+      .pill { display: flex; align-items: center; gap: 12px; padding: 12px 24px 12px 14px; border-radius: 40px; font-weight: 700; font-size: 34px; line-height: 44px; color: #ffffff; }
+      .pill i { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
+      .pill svg { width: 28px; height: 28px; }
+
+      #by { position: absolute; left: 0; width: 1080px; top: 1432px; display: flex; justify-content: center; align-items: center; gap: 22px; }
+      #by span { font-weight: 600; font-size: 34px; color: rgba(255, 255, 255, 0.65); }
+      #by img { width: 380px; height: 126px; }
+      #free { position: absolute; left: 0; width: 1080px; top: 1572px; text-align: center; font-family: "Geist Mono", monospace; font-weight: 700; font-size: 32px; color: #fff56c; text-shadow: 0 0 18px rgba(255, 245, 108, 0.5); }
+    </style>
+  </head>
+  <body>
+    <div id="cover">
+      <div class="glow" id="g-lemon"></div>
+      <div class="glow" id="g-blue"></div>
+      <div id="grid"></div>
+      <div id="arc"></div>
+      <div id="vig"></div>
+
+      <div id="kick"><img src="../assets/claude/claude-logo.png" alt="Claude" /><span>Claude can now</span></div>
+      <div id="head"><div><span class="cr">SPY ON</span></div><div><span class="cr">THEIR</span> <span class="gl">SEO</span></div></div>
+
+      <svg id="wave" viewBox="0 0 1400 220" preserveAspectRatio="none">
+        <path d="M0 110 C90 30 180 30 270 110 S450 190 540 110 S720 30 810 110 S990 190 1080 110 S1260 30 1350 110 S1530 190 1620 110" fill="none" stroke="rgba(255,245,108,0.32)" stroke-width="22" stroke-linecap="round" />
+        <path d="M0 110 C90 30 180 30 270 110 S450 190 540 110 S720 30 810 110 S990 190 1080 110 S1260 30 1350 110 S1530 190 1620 110" fill="none" stroke="#fff56c" stroke-width="5" stroke-linecap="round" />
+      </svg>
+
+      <div id="card" class="glass">
+        <div id="bar"><span class="dot" style="background: #fe4a97"></span><span class="dot" style="background: #fff56c"></span><span class="dot" style="background: #00c38a"></span><div id="url">competitor.com</div></div>
+        <div id="rows">
+          <div class="row"><span class="rk">#1</span><span class="kw">best crm for startups</span><span class="vol">2.4K</span></div>
+          <div class="row"><span class="rk">#2</span><span class="kw">free crm tool</span><span class="vol">1.3K</span></div>
+          <div class="row"><span class="rk">#3</span><span class="kw">crm pricing</span><span class="vol">3.1K</span></div>
+          <div class="row" style="border-bottom: none"><span class="rk">#5</span><span class="kw">sales pipeline app</span><span class="vol">880</span></div>
+        </div>
+        <div id="ex">example data</div>
+      </div>
+      <div id="lens"><div id="ring"></div><div id="handle"></div></div>
+      <img id="mascot" src="../assets/claude/claude-mascot.png" alt="Claude" />
+
+      <div id="pills">
+        <div class="pill glass"><i style="background: #fff56c"><svg viewBox="0 0 28 28"><circle cx="12" cy="12" r="7" fill="none" stroke="#0a0a0a" stroke-width="3.5" /><path d="M17.5 17.5 L24 24" stroke="#0a0a0a" stroke-width="3.5" stroke-linecap="round" /></svg></i>Keywords</div>
+        <div class="pill glass"><i style="background: #2d33ba"><svg viewBox="0 0 28 28"><rect x="2" y="9" width="14" height="10" rx="5" fill="none" stroke="#fff" stroke-width="3" /><rect x="12" y="9" width="14" height="10" rx="5" fill="none" stroke="#fff" stroke-width="3" /></svg></i>Backlinks</div>
+        <div class="pill glass"><i style="background: #fe4a97"><svg viewBox="0 0 28 28"><rect x="4" y="16" width="5" height="9" rx="1.5" fill="#fff" /><rect x="11.5" y="10" width="5" height="15" rx="1.5" fill="#fff" /><rect x="19" y="4" width="5" height="21" rx="1.5" fill="#fff" /></svg></i>The gap</div>
+      </div>
+
+      <div id="by"><span>with</span><img src="../assets/brand/logo-light.svg" alt="YepAPI" /></div>
+      <div id="free">$5 free credit / no card needed</div>
+    </div>
+  </body>
+</html>
