@@ -136,3 +136,27 @@ climax. Plan every script as a list of beats on this curve before writing a line
 On screen, every peak gets a visual event (a stamp, a counter, a camera move, a hit in the score), so the arc is
 visible in the edit as well as the voice. Label the reel `WHAT IF` and keep any real-world claim verified and sourced
 in the description; the scenario's own numbers are illustrative.
+
+## 8. Tutorial skit format (the default for tool and how-to reels)
+
+The owner's chosen format for any reel that teaches a tool or a set of steps (from the reference reel the owner shared:
+a creator and his AI sidekick showing a free voice tool in four steps). Use it instead of a cinematic story or a
+what-if wrapper whenever the point is "here is how to do X". Viewers must be able to follow every step on a phone.
+
+**Layout (one frame, the whole reel):**
+- Top half: one big, readable **app screen panel** (just below the 250 px safe line) with a `STEP n/4` pill, a segmented
+  progress bar and a short step title ("Open Business Hub", "Prove it's yours"). Inside it, the tool's screen at a size
+  a phone viewer can read (illustrated, never a logo we don't own), acted out with micro-interactions: typing, a cursor
+  click, a progress bar, a slider, a tick. One step per screen.
+- Bottom half: **one cozy 3D scene, one camera**, the same two characters the whole time (a person and a sidekick,
+  usually an AI helper). No location changes; they react, turn, talk. Keep their faces clear of the panel.
+- Captions: one centred serif line between the panel and the characters, warm cream on the scene, a few words at a time.
+
+**Script:**
+1. Hook (0-5 s): real-sounding **comment questions** float in ("how do I...", "is it free?"), then a two-line setup.
+   No title card, no "WHAT IF" label.
+2. Each step: the sidekick says the step plainly once; the person asks the question a viewer would ask; the sidekick
+   answers in one short line. Jokes are quick asides that reinforce the info ("No GPU works too. / Just slower. Like you.").
+3. An honest beat near the end (what it can't do, what not to do, a caveat), shown as a stamp or note on the panel.
+4. A punchline, then a clean end card: a share prompt ("Send this to a friend who..."), `Comment KEYWORD for the full
+   setup`, `Follow for the next one`. Under 60 s as always.
