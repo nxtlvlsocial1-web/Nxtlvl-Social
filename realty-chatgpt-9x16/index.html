@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Realty ChatGPT 9x16</title>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Garamond"; font-weight: 400 800; src: url("assets/fonts/EBGaramond.ttf"); }
+@font-face { font-family: "Manrope"; font-weight: 200 800; src: url("assets/fonts/manrope.ttf"); }
+@font-face { font-family: "JBMono"; font-weight: 700; src: url("assets/fonts/jbmono-bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #BFD9F2; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #BFD9F2; }
+.clip { position: absolute; inset: 0; }
+#gl { width: 1080px; height: 1920px; display: block; }
+.shadow { text-shadow: 0 3px 18px rgba(0,0,0,.55), 0 1px 3px rgba(0,0,0,.6); }
+.cap, #steps, #news, #endc, #endc span { opacity: 0; }
+#title { position: absolute; left: 60px; right: 60px; top: 330px; text-align: center; color: #FFFDF6; }
+#title .t0 { display: inline-block; padding: 10px 26px; border-radius: 40px; background: #F2C94C; color: #1E1B18; font: 800 34px/1 "Manrope"; letter-spacing: 6px; margin-bottom: 26px; text-shadow: none; }
+#title .t1, #title .t3 { display: block; font: 500 74px/1.08 "Garamond"; }
+#title .t2 { display: block; font: 700 112px/1.02 "Garamond"; color: #F2C94C; }
+#steps { position: absolute; left: 60px; right: 60px; top: 290px; padding: 24px 26px 18px; border-radius: 26px; background: rgba(12,14,22,.9); color: #fff; }
+#steps .sh { font: 800 26px/1 "Manrope"; letter-spacing: 4px; color: #F2C94C; margin-bottom: 14px; }
+#steps .st { display: flex; align-items: center; gap: 18px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,.12); opacity: .35; }
+#steps .n { flex: none; width: 54px; height: 54px; border-radius: 50%; background: #F2C94C; color: #1E1B18; font: 800 32px/54px "Manrope"; text-align: center; }
+#steps .tx { flex: 1; font: 700 36px/1.2 "Manrope"; }
+#steps .ok { flex: none; width: 46px; height: 46px; border-radius: 50%; background: #2F7BF6; opacity: 0; position: relative; }
+#steps .ok::after { content: ""; position: absolute; left: 15px; top: 9px; width: 11px; height: 20px; border: solid #fff; border-width: 0 5px 5px 0; transform: rotate(45deg); }
+#news { position: absolute; left: 140px; right: 140px; top: 270px; padding: 26px; border-radius: 30px; background: rgba(12,14,22,.9); text-align: center; color: #fff; }
+#news .k { display: block; font: 800 26px/1 "Manrope"; letter-spacing: 4px; color: #5BE38A; }
+#news .t { display: block; margin-top: 14px; font: 800 72px/1 "Manrope"; }
+#news .f { display: block; margin-top: 12px; font: 800 34px/1 "Manrope"; letter-spacing: 6px; color: #F2C94C; }
+.cap { position: absolute; left: 60px; right: 60px; top: 1300px; text-align: center; }
+.cap .who { display: inline-block; margin-bottom: 10px; padding: 7px 16px; border-radius: 20px; font: 800 26px/1 "Manrope"; letter-spacing: 4px; color: #0B0D12; background: #F2C94C; }
+.cap .tx { display: inline; padding: 8px 18px; border-radius: 16px; font: 800 48px/1.5 "Manrope"; color: #FFFFFF; background: rgba(8,10,16,.82); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.cap .br { display: block; height: 0; }
+.cap.sp-lena .who { background: #2F6F5E; color: #fff; }
+#endc { position: absolute; left: 60px; right: 60px; top: 300px; text-align: center; color: #FFFDF6; }
+#endc span { display: block; }
+#endc .e0 { font: italic 500 68px/1.1 "Garamond"; }
+#endc .e1 { margin-top: 6px; font: 800 140px/1 "Manrope"; letter-spacing: 2px; color: #F2C94C; }
+#endc .e2 { margin-top: 12px; font: italic 500 52px/1.15 "Garamond"; }
+#endc .e3 { margin-top: 34px; font: 800 30px/1.4 "Manrope"; letter-spacing: 5px; }
+#endc .e3 b { display: block; font: 800 42px/1.3 "Manrope"; letter-spacing: 2px; }
+#endc .e4 { margin-top: 24px; font: 700 24px/1.4 "Manrope"; color: rgba(255,253,246,.85); }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="47.73" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="gl" class="clip" data-hold data-start="0" data-duration="47.73" data-track-index="0"></canvas>
+      <div id="ui" class="clip" data-start="0" data-duration="47.73" data-track-index="3" data-layout-allow-overflow><div id="title" class="shadow"><span class="t0">WHAT IF</span><span class="t1">ChatGPT sent all</span><span class="t2">your clients</span><span class="t3">to your competitor?</span></div><div id="steps"><div class="sh">CLAIM YOUR BUSINESS IN CHATGPT</div><div class="st" id="st0"><span class="n">1</span><span class="tx">Open chatgpt.com/business-hub</span><span class="ok"></span></div><div class="st" id="st1"><span class="n">2</span><span class="tx">Search your business, tap Get Started</span><span class="ok"></span></div><div class="st" id="st2"><span class="n">3</span><span class="tx">Verify: phone, email, website or Shopify</span><span class="ok"></span></div><div class="st" id="st3"><span class="n">4</span><span class="tx">Quick ID check: blue check</span><span class="ok"></span></div></div><div id="news"><span class="k">REAL, NOT A WHAT-IF</span><span class="t">Launched Nov 10</span><span class="f">FREE · BETA</span></div><div id="endc" class="shadow"><span class="e0">Want the checklist?</span><span class="e1">CHATGPT</span><span class="e2">Comment it and I'll DM you the setup checklist</span><span class="e3">FOLLOW<b>@nxtlvlsocial.ai</b></span><span class="e4">Claiming doesn't guarantee a higher ranking. Local businesses may need an existing US listing for now.</span></div></div>
+      <div id="caps" class="clip" data-start="0" data-duration="47.73" data-track-index="4"><div class="cap sp-marcus" id="c0_0"><span class="who">MARCUS</span><span class="br"></span><span class="tx">Monday. 9 AM. Everyone in town is looking for a house...</span></div><div class="cap sp-marcus" id="c0_1"><span class="who">MARCUS</span><span class="br"></span><span class="tx">and my phone is dead silent.</span></div><div class="cap sp-lena" id="c1_0"><span class="who">LENA</span><span class="br"></span><span class="tx">Marcus,</span></div><div class="cap sp-lena" id="c1_1"><span class="who">LENA</span><span class="br"></span><span class="tx">they're all asking ChatGPT. And it keeps saying Prime Nest.</span></div><div class="cap sp-marcus" id="c2_0"><span class="who">MARCUS</span><span class="br"></span><span class="tx">Prime Nest?</span></div><div class="cap sp-marcus" id="c2_1"><span class="who">MARCUS</span><span class="br"></span><span class="tx">They spelled kitchen wrong on their last listing!</span></div><div class="cap sp-lena" id="c3_0"><span class="who">LENA</span><span class="br"></span><span class="tx">They claimed their business on ChatGPT. We didn't. Watch.</span></div><div class="cap sp-lena" id="c4_0"><span class="who">LENA</span><span class="br"></span><span class="tx">Business Hub. Search Keystone Realty. Get Started. Verify with our office phone. Quick ID check...</span></div><div class="cap sp-marcus" id="c5_0"><span class="who">MARCUS</span><span class="br"></span><span class="tx">Wait. Is that a blue check? On our sign?</span></div><div class="cap sp-lena" id="c6_0"><span class="who">LENA</span><span class="br"></span><span class="tx">It launched November tenth,</span></div><div class="cap sp-lena" id="c6_1"><span class="who">LENA</span><span class="br"></span><span class="tx">and it's free. Most agencies still haven't done it.</span></div><div class="cap sp-marcus" id="c7_0"><span class="who">MARCUS</span><span class="br"></span><span class="tx">Okay... who's buying a house today?</span></div></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="47.73" data-track-index="10" data-volume="1"></audio>
+    </div>
+    <script>
+      window.CT = {"l": [0.5, 7.27, 12.225, 16.02, 20.94, 28.715, 34.22, 39.42, 41.415], "e": [6.75, 11.705, 15.3, 20.42, 26.695, 31.0, 38.4, 40.745, 45.93], "cuts": [15.67, 27.265, 31.2, 39.07], "who": ["marcus", "lena", "marcus", "lena", "lena", "marcus", "lena", "marcus", "lena"], "inside": 15.67, "check": 27.265, "flip": 31.2, "next": 39.07, "steps": [20.99, 21.873, 23.704, 25.536], "cards": [[20.79, 27.365], [34.12, 38.7]], "endc": 41.115, "end": 47.73, "lines": [{"s": 0.5, "e": 6.75}, {"s": 7.27, "e": 11.705}, {"s": 12.225, "e": 15.3}, {"s": 16.02, "e": 20.42}, {"s": 20.94, "e": 26.695}, {"s": 28.715, "e": 31.0}, {"s": 34.22, "e": 38.4}, {"s": 39.42, "e": 40.745}, {"s": 41.415, "e": 45.93}]};
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#title .t0",{opacity:1},{opacity:1,duration:0.01,ease:"power2.out",immediateRender:false},0.000);
+      tl.fromTo("#title .t1",{opacity:1},{opacity:1,duration:0.01,ease:"power2.out",immediateRender:false},0.000);
+      tl.fromTo("#title .t2",{opacity:1},{opacity:1,duration:0.01,ease:"power2.out",immediateRender:false},0.000);
+      tl.fromTo("#title .t3",{opacity:1},{opacity:1,duration:0.01,ease:"power2.out",immediateRender:false},0.000);
+      tl.fromTo("#title .t2",{scale:1.05},{scale:1,duration:1.4,ease:"power2.out",immediateRender:false},0);
+      tl.to("#title",{opacity:0,y:-30,duration:0.35,ease:"power2.in"},2.500);
+      tl.fromTo("#steps",{opacity:0,y:-20},{opacity:1,y:0,duration:0.3,ease:"power2.out",immediateRender:false},20.790);
+      tl.fromTo("#st0",{opacity:.35},{opacity:1,duration:0.25,ease:"power2.out",immediateRender:false},20.940);
+      tl.fromTo("#st0 .ok",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.25,ease:"back.out(3)",immediateRender:false},21.340);
+      tl.fromTo("#st1",{opacity:.35},{opacity:1,duration:0.25,ease:"power2.out",immediateRender:false},21.823);
+      tl.fromTo("#st1 .ok",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.25,ease:"back.out(3)",immediateRender:false},22.223);
+      tl.fromTo("#st2",{opacity:.35},{opacity:1,duration:0.25,ease:"power2.out",immediateRender:false},23.654);
+      tl.fromTo("#st2 .ok",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.25,ease:"back.out(3)",immediateRender:false},24.054);
+      tl.fromTo("#st3",{opacity:.35},{opacity:1,duration:0.25,ease:"power2.out",immediateRender:false},25.486);
+      tl.fromTo("#st3 .ok",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.25,ease:"back.out(3)",immediateRender:false},25.886);
+      tl.to("#steps",{opacity:0,duration:0.3,ease:"power2.in"},27.365);
+      tl.fromTo("#news",{opacity:0,scale:1.1},{opacity:1,scale:1,duration:0.35,ease:"power2.out",immediateRender:false},34.120);
+      tl.to("#news",{opacity:0,duration:0.3,ease:"power2.in"},38.700);
+      tl.fromTo("#endc",{opacity:0},{opacity:1,duration:0.5,ease:"power2.out",immediateRender:false},41.115);
+      tl.fromTo("#endc .e0",{opacity:0,y:14},{opacity:1,y:0,duration:0.4,ease:"power2.out",immediateRender:false},41.165);
+      tl.fromTo("#endc .e1",{opacity:0,scale:1.15},{opacity:1,scale:1,duration:0.5,ease:"power2.out",immediateRender:false},41.415);
+      tl.fromTo("#endc .e2",{opacity:0,y:14},{opacity:1,y:0,duration:0.4,ease:"power2.out",immediateRender:false},41.815);
+      tl.fromTo("#endc .e3",{opacity:0,y:14},{opacity:1,y:0,duration:0.4,ease:"power2.out",immediateRender:false},42.115);
+      tl.fromTo("#endc .e4",{opacity:0},{opacity:1,duration:0.4,ease:"power2.out",immediateRender:false},42.415);
+      tl.fromTo("#c0_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},0.450);
+      tl.to("#c0_0",{opacity:0,duration:.18,ease:"power1.in"},4.428);
+      tl.fromTo("#c0_1",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},4.628);
+      tl.to("#c0_1",{opacity:0,duration:.18,ease:"power1.in"},7.050);
+      tl.fromTo("#c1_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},7.220);
+      tl.to("#c1_0",{opacity:0,duration:.18,ease:"power1.in"},7.610);
+      tl.fromTo("#c1_1",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},7.810);
+      tl.to("#c1_1",{opacity:0,duration:.18,ease:"power1.in"},12.005);
+      tl.fromTo("#c2_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},12.175);
+      tl.to("#c2_0",{opacity:0,duration:.18,ease:"power1.in"},12.445);
+      tl.fromTo("#c2_1",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},12.645);
+      tl.to("#c2_1",{opacity:0,duration:.18,ease:"power1.in"},15.600);
+      tl.fromTo("#c3_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},15.930);
+      tl.to("#c3_0",{opacity:0,duration:.18,ease:"power1.in"},20.720);
+      tl.fromTo("#c4_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},20.890);
+      tl.to("#c4_0",{opacity:0,duration:.18,ease:"power1.in"},26.995);
+      tl.fromTo("#c5_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},28.675);
+      tl.to("#c5_0",{opacity:0,duration:.18,ease:"power1.in"},31.300);
+      tl.fromTo("#c6_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},34.170);
+      tl.to("#c6_0",{opacity:0,duration:.18,ease:"power1.in"},35.390);
+      tl.fromTo("#c6_1",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},35.590);
+      tl.to("#c6_1",{opacity:0,duration:.18,ease:"power1.in"},38.700);
+      tl.fromTo("#c7_0",{opacity:0,y:10},{opacity:1,y:0,duration:.22,ease:"power2.out",immediateRender:false},39.370);
+      tl.to("#c7_0",{opacity:0,duration:.18,ease:"power1.in"},41.045);
+      tl.set({}, {}, 47.73);
+      window.__timelines["main"] = tl;
+    </script>
+    <script type="module" src="assets/js/realty.js"></script>
+  </body>
+</html>

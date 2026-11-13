@@ -1,0 +1,688 @@
+[
+{
+"line": 1,
+"speaker": "marcus",
+"w": "Monday.",
+"s": 0.55,
+"e": 1.056
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "9",
+"s": 1.036,
+"e": 1.335
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "AM.",
+"s": 1.315,
+"e": 1.894
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "Everyone",
+"s": 1.874,
+"e": 2.587
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "in",
+"s": 2.567,
+"e": 2.866
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "town",
+"s": 2.846,
+"e": 3.145
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "is",
+"s": 3.125,
+"e": 3.424
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "looking",
+"s": 3.404,
+"e": 3.91
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "for",
+"s": 3.89,
+"e": 4.189
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "a",
+"s": 4.169,
+"e": 4.469
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "house...",
+"s": 4.449,
+"e": 4.748
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "and",
+"s": 4.728,
+"e": 5.027
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "my",
+"s": 5.007,
+"e": 5.306
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "phone",
+"s": 5.286,
+"e": 5.586
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "is",
+"s": 5.566,
+"e": 5.865
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "dead",
+"s": 5.845,
+"e": 6.144
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "silent.",
+"s": 6.124,
+"e": 6.63
+},
+{
+"line": 2,
+"speaker": "lena",
+"w": "Marcus,",
+"s": 7.32,
+"e": 7.93
+},
+{
+"line": 2,
+"speaker": "lena",
+"w": "they're",
+"s": 7.91,
+"e": 8.269
+},
+{
+"line": 2,
+"speaker": "lena",
+"w": "all",
+"s": 8.249,
+"e": 8.608
+},
+{
+"line": 2,
+"speaker": "lena",
+"w": "asking",
+"s": 8.588,
+"e": 9.198
+},
+{
+"line": 2,
+"speaker": "lena",
+"w": "ChatGPT.",
+"s": 9.178,
+"e": 9.537
+},
+{
+"line": 2,
+"speaker": "lena",
+"w": "And",
+"s": 9.517,
+"e": 9.875
+},
+{
+"line": 2,
+"speaker": "lena",
+"w": "it",
+"s": 9.855,
+"e": 10.214
+},
+{
+"line": 2,
+"speaker": "lena",
+"w": "keeps",
+"s": 10.194,
+"e": 10.553
+},
+{
+"line": 2,
+"speaker": "lena",
+"w": "saying",
+"s": 10.533,
+"e": 10.892
+},
+{
+"line": 2,
+"speaker": "lena",
+"w": "Prime",
+"s": 10.872,
+"e": 11.231
+},
+{
+"line": 2,
+"speaker": "lena",
+"w": "Nest.",
+"s": 11.211,
+"e": 11.57
+},
+{
+"line": 3,
+"speaker": "marcus",
+"w": "Prime",
+"s": 12.275,
+"e": 12.53
+},
+{
+"line": 3,
+"speaker": "marcus",
+"w": "Nest?",
+"s": 12.51,
+"e": 12.765
+},
+{
+"line": 3,
+"speaker": "marcus",
+"w": "They",
+"s": 12.745,
+"e": 12.999
+},
+{
+"line": 3,
+"speaker": "marcus",
+"w": "spelled",
+"s": 12.979,
+"e": 13.408
+},
+{
+"line": 3,
+"speaker": "marcus",
+"w": "kitchen",
+"s": 13.388,
+"e": 13.817
+},
+{
+"line": 3,
+"speaker": "marcus",
+"w": "wrong",
+"s": 13.797,
+"e": 14.052
+},
+{
+"line": 3,
+"speaker": "marcus",
+"w": "on",
+"s": 14.032,
+"e": 14.287
+},
+{
+"line": 3,
+"speaker": "marcus",
+"w": "their",
+"s": 14.267,
+"e": 14.521
+},
+{
+"line": 3,
+"speaker": "marcus",
+"w": "last",
+"s": 14.501,
+"e": 14.756
+},
+{
+"line": 3,
+"speaker": "marcus",
+"w": "listing!",
+"s": 14.736,
+"e": 15.165
+},
+{
+"line": 4,
+"speaker": "lena",
+"w": "They",
+"s": 16.03,
+"e": 16.43
+},
+{
+"line": 4,
+"speaker": "lena",
+"w": "claimed",
+"s": 16.41,
+"e": 17.09
+},
+{
+"line": 4,
+"speaker": "lena",
+"w": "their",
+"s": 17.07,
+"e": 17.47
+},
+{
+"line": 4,
+"speaker": "lena",
+"w": "business",
+"s": 17.45,
+"e": 18.412
+},
+{
+"line": 4,
+"speaker": "lena",
+"w": "on",
+"s": 18.392,
+"e": 18.792
+},
+{
+"line": 4,
+"speaker": "lena",
+"w": "ChatGPT.",
+"s": 18.772,
+"e": 19.171
+},
+{
+"line": 4,
+"speaker": "lena",
+"w": "We",
+"s": 19.151,
+"e": 19.551
+},
+{
+"line": 4,
+"speaker": "lena",
+"w": "didn't.",
+"s": 19.531,
+"e": 19.93
+},
+{
+"line": 4,
+"speaker": "lena",
+"w": "Watch.",
+"s": 19.91,
+"e": 20.31
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "Business",
+"s": 20.99,
+"e": 21.639
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "Hub.",
+"s": 21.619,
+"e": 21.893
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "Search",
+"s": 21.873,
+"e": 22.146
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "Keystone",
+"s": 22.126,
+"e": 22.588
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "Realty.",
+"s": 22.568,
+"e": 23.029
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "Get",
+"s": 23.009,
+"e": 23.283
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "Started.",
+"s": 23.263,
+"e": 23.724
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "Verify",
+"s": 23.704,
+"e": 24.354
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "with",
+"s": 24.334,
+"e": 24.607
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "our",
+"s": 24.587,
+"e": 24.861
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "office",
+"s": 24.841,
+"e": 25.302
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "phone.",
+"s": 25.282,
+"e": 25.556
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "Quick",
+"s": 25.536,
+"e": 25.809
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "ID",
+"s": 25.789,
+"e": 26.316
+},
+{
+"line": 5,
+"speaker": "lena",
+"w": "check...",
+"s": 26.296,
+"e": 26.57
+},
+{
+"line": 6,
+"speaker": "marcus",
+"w": "Wait.",
+"s": 28.775,
+"e": 29.027
+},
+{
+"line": 6,
+"speaker": "marcus",
+"w": "Is",
+"s": 29.007,
+"e": 29.259
+},
+{
+"line": 6,
+"speaker": "marcus",
+"w": "that",
+"s": 29.239,
+"e": 29.492
+},
+{
+"line": 6,
+"speaker": "marcus",
+"w": "a",
+"s": 29.472,
+"e": 29.724
+},
+{
+"line": 6,
+"speaker": "marcus",
+"w": "blue",
+"s": 29.704,
+"e": 29.956
+},
+{
+"line": 6,
+"speaker": "marcus",
+"w": "check?",
+"s": 29.936,
+"e": 30.188
+},
+{
+"line": 6,
+"speaker": "marcus",
+"w": "On",
+"s": 30.168,
+"e": 30.421
+},
+{
+"line": 6,
+"speaker": "marcus",
+"w": "our",
+"s": 30.401,
+"e": 30.653
+},
+{
+"line": 6,
+"speaker": "marcus",
+"w": "sign?",
+"s": 30.633,
+"e": 30.885
+},
+{
+"line": 7,
+"speaker": "lena",
+"w": "It",
+"s": 34.27,
+"e": 34.518
+},
+{
+"line": 7,
+"speaker": "lena",
+"w": "launched",
+"s": 34.498,
+"e": 34.915
+},
+{
+"line": 7,
+"speaker": "lena",
+"w": "November",
+"s": 34.895,
+"e": 35.481
+},
+{
+"line": 7,
+"speaker": "lena",
+"w": "tenth,",
+"s": 35.461,
+"e": 35.71
+},
+{
+"line": 7,
+"speaker": "lena",
+"w": "and",
+"s": 35.69,
+"e": 35.938
+},
+{
+"line": 7,
+"speaker": "lena",
+"w": "it's",
+"s": 35.918,
+"e": 36.166
+},
+{
+"line": 7,
+"speaker": "lena",
+"w": "free.",
+"s": 36.146,
+"e": 36.394
+},
+{
+"line": 7,
+"speaker": "lena",
+"w": "Most",
+"s": 36.374,
+"e": 36.622
+},
+{
+"line": 7,
+"speaker": "lena",
+"w": "agencies",
+"s": 36.602,
+"e": 37.188
+},
+{
+"line": 7,
+"speaker": "lena",
+"w": "still",
+"s": 37.168,
+"e": 37.417
+},
+{
+"line": 7,
+"speaker": "lena",
+"w": "haven't",
+"s": 37.397,
+"e": 37.814
+},
+{
+"line": 7,
+"speaker": "lena",
+"w": "done",
+"s": 37.794,
+"e": 38.042
+},
+{
+"line": 7,
+"speaker": "lena",
+"w": "it.",
+"s": 38.022,
+"e": 38.27
+},
+{
+"line": 8,
+"speaker": "marcus",
+"w": "Okay...",
+"s": 39.47,
+"e": 39.755
+},
+{
+"line": 8,
+"speaker": "marcus",
+"w": "who's",
+"s": 39.735,
+"e": 39.908
+},
+{
+"line": 8,
+"speaker": "marcus",
+"w": "buying",
+"s": 39.888,
+"e": 40.06
+},
+{
+"line": 8,
+"speaker": "marcus",
+"w": "a",
+"s": 40.04,
+"e": 40.212
+},
+{
+"line": 8,
+"speaker": "marcus",
+"w": "house",
+"s": 40.192,
+"e": 40.365
+},
+{
+"line": 8,
+"speaker": "marcus",
+"w": "today?",
+"s": 40.345,
+"e": 40.63
+},
+{
+"line": 9,
+"speaker": "lena",
+"w": "Want",
+"s": 41.465,
+"e": 41.747
+},
+{
+"line": 9,
+"speaker": "lena",
+"w": "the",
+"s": 41.727,
+"e": 42.008
+},
+{
+"line": 9,
+"speaker": "lena",
+"w": "checklist?",
+"s": 41.988,
+"e": 42.464
+},
+{
+"line": 9,
+"speaker": "lena",
+"w": "Follow",
+"s": 42.444,
+"e": 42.919
+},
+{
+"line": 9,
+"speaker": "lena",
+"w": "@nxtlvlsocial.ai",
+"s": 42.899,
+"e": 44.091
+},
+{
+"line": 9,
+"speaker": "lena",
+"w": "and",
+"s": 44.071,
+"e": 44.353
+},
+{
+"line": 9,
+"speaker": "lena",
+"w": "comment",
+"s": 44.333,
+"e": 44.809
+},
+{
+"line": 9,
+"speaker": "lena",
+"w": "CHATGPT.",
+"s": 44.789,
+"e": 45.855
+}
+]

@@ -29,7 +29,7 @@ SR = 48000
 LEAD = .5
 LINE_GAP = .22
 MUFFLE = set()
-GAP_AFTER = {"01": .3, "02": .3, "03": .5, "04": .3, "05": .95, "06": 3.0, "07": .8, "08": .45}   # 05 -> 06: the blue check snaps on; 06 -> 07: the cards flip and the crowd crosses back
+GAP_AFTER = {"01": .3, "02": .3, "03": .5, "04": .3, "05": 1.8, "06": 3.0, "07": .8, "08": .45}   # 05 -> 06: the blue check snaps on; 06 -> 07: the cards flip and the crowd crosses back
 NOIR = set()
 VOICES = {"nar": "am_onyx"}
 # emotion -> (speed, semitones, gain dB)

@@ -418,7 +418,7 @@ const ST = mkSet("street");
   ST.f = front(-1, FX, brickA, "signKey", "awnKey", 4.3);
   ST.b = front(1, BX, brickB, "signPrime", "awnPrime", 2.3);
   // the blue check that snaps onto Keystone's sign
-  ST.checkM = texMat("check"); ST.check = plane(.62, .62, ST.checkM, FX + 2.55, 2.78, -4.08, 0);
+  ST.checkM = texMat("check"); ST.check = plane(.62, .62, ST.checkM, FX + 2.35, 2.78, -4.06, 0);
   ST.checkB = plane(.5, .5, texMat("check"), BX - 2.5, 2.78, 4.08, Math.PI);
   // neighbours, sky, trees, lamps
   for (const [x, z, s] of [[-14.5, -4.5, -1], [14, -4.5, -1], [-13.8, 4.5, 1], [14.5, 4.5, 1]]) box(19, 12, .3, s < 0 ? brickB : brickA, x, 6, z);
@@ -523,7 +523,7 @@ function updCast(t, s) {
   // Dev
   if (s === 0) placeChar(MARCUS, true, idle(pose({ x: FDOOR.x + .1, z: FDOOR.z + .55, ry: .35, a: t > L[2] - .1 && t < E[2] + .2 ? [[1.4, .5, 1.2], [1.4, .5, 1.2]] : CROSS }), t, MARCUS.seed),
     t > L[2] - .2 && t < E[2] + .3 ? { eyes: "wide", mouth: "o", brows: "angry", talk: who(t, "marcus"), noblink: true } : { eyes: "half", mouth: "flat", brows: "worry", talk: who(t, "marcus") });
-  else if (s === 1) placeChar(MARCUS, true, idle(pose({ x: COUNTER.x - 1.5, z: COUNTER.z + 1.3, ry: 2.4, a: CROSS, hp: -.05 }), t, MARCUS.seed), { eyes: "open", mouth: "flat", brows: "raise1" });
+  else if (s === 1) placeChar(MARCUS, true, idle(pose({ x: COUNTER.x + 1.0, z: COUNTER.z + 1.05, ry: -2.5, a: CROSS, hp: -.05 }), t, MARCUS.seed), { eyes: "open", mouth: "flat", brows: "raise1" });
   else if (s === 2 || s === 3) placeChar(MARCUS, true, idle(pose({ x: FDOOR.x + .1, z: FDOOR.z + .55, ry: s === 2 ? -.4 : .2, hp: s === 2 ? -.35 : 0, a: s === 3 ? [[2.3, .2, .3], [.2, .1, .3]] : [[.3, .2, .5], [.3, .2, .5]] }), t, MARCUS.seed),
     { eyes: s === 2 ? "wide" : "happy", mouth: s === 2 ? "o" : "grin", brows: "up", talk: who(t, "marcus"), noblink: s === 2 });
   else placeChar(MARCUS, true, idle(pose({ x: FX - 1.3, z: -7.45, ry: .45, a: t > L[7] - .1 ? [[1.3, .3, .2], [.3, .1, .4]] : [[.3, .1, .4], [.3, .1, .4]] }), t, MARCUS.seed), { eyes: "happy", mouth: "grin", brows: "up", talk: who(t, "marcus") });
@@ -546,14 +546,14 @@ function updCast(t, s) {
 const MARCUSHEAD = v(FDOOR.x + .1, 1.55, FDOOR.z + .55), LHEAD = v(COUNTER.x, 1.5, COUNTER.z - .58);
 const SHOTS = [
   [0, { p0: v(6.2, 4.4, 1.4), p1: v(3.6, 2.1, .7), l0: v(-1.8, 1.9, -3.6), l1: v(-2.6, 1.5, -3.8), fov: 56, ap: .01 }],
-  [L[1] - .3, { track: 4, off: v(1.5, 2.0, 1.9), look: v(0, 2.15, 0), fov: 50, ap: .1 }],
-  [L[2] - .25, { p0: v(FDOOR.x + .75, 1.6, -1.65), p1: v(FDOOR.x + .65, 1.58, -1.85), l0: MARCUSHEAD, fov: 52, ap: .12 }],
+  [L[1] - .3, { track: 4, off: v(1.9, 2.55, 2.9), look: v(0, 2.3, 0), fov: 46, ap: .08 }],
+  [L[2] - .25, { p0: v(FDOOR.x + 1.1, 1.62, -.85), p1: v(FDOOR.x + .95, 1.6, -1.05), l0: MARCUSHEAD, fov: 54, ap: .1 }],
   [IN0, { p0: v(COUNTER.x + .5, 1.6, -5.2), p1: v(COUNTER.x + .3, 1.58, -5.45), l0: LHEAD, fov: 52, ap: .12 }],
-  [L[4] - .3, { p0: v(FX + .1, 1.8, -4.85), p1: v(FX + 1.0, 1.75, -5.1), l0: v(COUNTER.x - 1.0, 1.85, -7.5), fov: 58, ap: .03 }],
-  [CK, { p0: v(FX + 2.0, 1.9, -1.3), p1: v(FX + 2.3, 2.25, -1.9), l0: v(FX + 2.2, 2.75, -4.2), fov: 46, ap: .05 }],
-  [L[5] - .2, { p0: v(FDOOR.x + .55, 1.1, -1.95), p1: v(FDOOR.x + .5, 1.15, -2.1), l0: MARCUSHEAD.clone().add(v(0, .1, 0)), fov: 54, ap: .12 }],
-  [FL, { p0: v(8.2, 5.6, 1.2), p1: v(6.6, 4.7, .7), l0: v(-1, .9, -1.2), fov: 58, ap: .005 }],
-  [FL + 2.7, { p0: v(BDOOR.x + .9, 1.6, 2.0), p1: v(BDOOR.x + .8, 1.58, 2.2), l0: v(BDOOR.x - .3, 1.5, BDOOR.z - .6), fov: 52, ap: .1 }],
+  [L[4] - .3, { p0: v(FX + .3, 1.5, -4.7), p1: v(FX + 1.1, 1.45, -4.95), l0: v(COUNTER.x - 1.0, 1.45, -7.5), fov: 58, ap: .03 }],
+  [CK, { p0: v(FX + 1.3, 1.55, 2.2), p1: v(FX + 1.4, 1.75, 1.5), l0: v(FX + 1.2, 2.6, -4.2), fov: 50, ap: .01 }],
+  [L[5] - .2, { p0: v(FDOOR.x + .9, 1.05, -1.0), p1: v(FDOOR.x + .8, 1.1, -1.2), l0: MARCUSHEAD.clone().add(v(0, .15, 0)), fov: 56, ap: .1 }],
+  [FL, { p0: v(FX + 3.2, 7.2, 2.6), p1: v(FX + 2.6, 6.4, 2.2), l0: v(FX + 2.2, .4, -2.2), fov: 62, ap: .005 }],
+  [FL + 2.7, { p0: v(BDOOR.x + 1.2, 1.5, .9), p1: v(BDOOR.x + 1.05, 1.48, 1.15), l0: v(BDOOR.x - .3, 1.8, BDOOR.z - .6), fov: 54, ap: .08 }],
   [NX, { p0: v(FX + 2.9, 1.85, -4.95), p1: v(FX + 2.6, 1.8, -5.1), l0: v(FX - 1.3, 1.45, -7.0), fov: 58, ap: .04 }],
   [C.endc - .1, { p0: v(FX + 1.6, 2.3, 2.5), p1: v(FX + 1.2, 2.15, 1.9), l0: v(FX - .4, 1.8, -4.2), fov: 58, ap: .01 }],
 ];
@@ -577,13 +577,13 @@ function updShop(t, s) {
   ST.holo.forEach((h, k) => {
     const on = s === 1 ? ss(t, C.steps[k] - .1, C.steps[k] + .25) : 0;
     h.visible = on > 0; h.material.opacity = .92 * on;
-    h.position.set(COUNTER.x - 1.95 + (k % 2) * 1.0, 2.25 - Math.floor(k / 2) * .7 + .03 * Math.sin(t * 2 + k), COUNTER.z + .25 + (k % 2) * .1);
+    h.position.set(COUNTER.x - 2.05 + (k % 2) * 1.0, 1.95 - Math.floor(k / 2) * .66 + .03 * Math.sin(t * 2 + k), COUNTER.z + .35 + (k % 2) * .1);
     h.rotation.set(0, .35, 0); h.scale.setScalar(lerp(.6, 1, on));
   });
   const k = C.steps.findLastIndex((x) => t > x - .1);
   setMap(ST.lapM, DYN.lap(s === 1 ? Math.max(0, k) : (s >= 2 ? 4 : 0)));
 }
-const LOOK = { bg: 0xBFD9F2, hs: 0xEAF4FF, hg: 0xC9B79A, hi: 1.05, sun: 0xFFE9C8, si: 2.6, sd: [.55, .8, .55], sat: 1.04, con: .06, vig: .3 };
+const LOOK = { bg: 0xBFD9F2, hs: 0xEAF4FF, hg: 0xC9B79A, hi: 1.15, sun: 0xFFE9C8, si: 2.6, sd: [.3, 2.2, .45], sat: 1.04, con: .06, vig: .3 };
 function renderAt(t) {
   if (!TEX.ready) return;
   NOW = t;

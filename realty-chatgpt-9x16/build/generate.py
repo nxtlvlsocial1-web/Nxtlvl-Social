@@ -56,7 +56,7 @@ def clock_text(m):
 
 NAMES = {"marcus": "MARCUS", "lena": "LENA"}
 IN0 = r3(L[3] - .35)            # inside the office
-CK = r3(L[5] - .55)             # the blue check snaps on
+CK = r3(L[5] - 1.45)            # the blue check snaps on (a full beat before Marcus sees it)
 FL = r3(E[5] + .2)              # the cards flip, the crowd crosses back
 NX = r3(L[7] - .35)             # a full office
 w5 = [w for w in WORDS if w["line"] == 5]
@@ -140,7 +140,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #BFD9F
 #steps .tx { flex: 1; font: 700 36px/1.2 "Manrope"; }
 #steps .ok { flex: none; width: 46px; height: 46px; border-radius: 50%; background: #2F7BF6; opacity: 0; position: relative; }
 #steps .ok::after { content: ""; position: absolute; left: 15px; top: 9px; width: 11px; height: 20px; border: solid #fff; border-width: 0 5px 5px 0; transform: rotate(45deg); }
-#news { position: absolute; left: 140px; right: 140px; top: 330px; padding: 26px; border-radius: 30px; background: rgba(12,14,22,.9); text-align: center; color: #fff; }
+#news { position: absolute; left: 140px; right: 140px; top: 270px; padding: 26px; border-radius: 30px; background: rgba(12,14,22,.9); text-align: center; color: #fff; }
 #news .k { display: block; font: 800 26px/1 "Manrope"; letter-spacing: 4px; color: #5BE38A; }
 #news .t { display: block; margin-top: 14px; font: 800 72px/1 "Manrope"; }
 #news .f { display: block; margin-top: 12px; font: 800 34px/1 "Manrope"; letter-spacing: 6px; color: #F2C94C; }
