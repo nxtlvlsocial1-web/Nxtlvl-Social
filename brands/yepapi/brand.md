@@ -10,6 +10,8 @@ Colours, fonts and logo files below are the brand's own; nothing here is redrawn
 | `logo.svg` | Lockup (thumb mark + black "yepapi" wordmark) on light backgrounds |
 | `logo-light.svg` | Lockup with white wordmark, for dark backgrounds |
 | `mark.svg` | Thumb mark alone (lemon rounded square), when the name is already next to it |
+| `png/mark-1024.png`, `png/mark-512.png` | The mark as PNG, transparent corners (profile pictures, stickers, app icons) |
+| `wordmark.svg`, `wordmark-light.svg` | "yepapi" text alone (cropped from the lockup) for light / dark backgrounds |
 | `fonts/SpaceGrotesk-latin-var.woff2` | Space Grotesk, variable 300–700, Latin subset (OFL) |
 | `fonts/GeistMono-latin-var.woff2` | Geist Mono, variable 100–900, Latin subset (OFL) |
 
