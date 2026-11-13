@@ -25,7 +25,6 @@ import random
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import bird  # noqa: E402  (the Creedom mascot rig, from creedom-reel-analyser-9x16)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W = json.load(open(os.path.join(ROOT, "plan", "words.json")))
@@ -234,7 +233,7 @@ head_out("hb", SC - .25)
 FS = (1, 4, 7, 10, 14)
 strip = "".join(f'<div class="fr glass" id="fr{i}">{SH}<img src="assets/img/demo_f{t:02d}.jpg"><span>0:{t:02d}</span></div>' for i, t in enumerate(FS))
 HTML.append(f'<div class="scn" id="sc"><div class="brand glass" id="brand">{SH}<img src="assets/img/creedom_logo.png"></div>')
-head("hcc", [[("It's", ""), ("called", "")], [("Creedom.", "it pk")]], 210, "c02", 96)
+head("hcc", [[("It's", ""), ("called", "")]], 330, "c02", 96)
 head("hc", [[("It", ""), ("watches", ""), ("your", "")], [("whole", ""), ("reel,", "")], [("second", "it"), ("by", "it"), ("second.", "it")]], 190, "c02", 80,
      after=T("c02", "Creedom") + .2)
 HTML.append(f'<div class="stat glass" id="stat">{SH}<i></i>WATCHING<b id="stt">0:00</b></div>'
@@ -388,229 +387,239 @@ sfx("notify", t_dm)
 tilt("#cbox", t_ty + .8, DUR, 4, 1.0)
 
 
-# ---- the Creedom mascot (not a bird): he performs every line, like in the Creedom reel-analyser reel -------------------------------
+# ---- the Creedom mascot, Cree (not a bird): the full 3D mascot from the creedom-explainer reel ------------------------------
+# v5 (owner: "when i say the mascot looks bad then it is bad, look how full he looks in the previous video, make him
+# like that"): the cut-out rig is gone; Cree is the mascot's own 3D render in thirteen poses (creedom-explainer-9x16,
+# assets/img/poses, plan/poses.json): stand, walk + pass (walk cycle), wave, point (to his left = frame right), present,
+# cheer, shock, sad, mag (magnifying glass), phone (typing), think, proud. Every pose sits on one 820 x 820 canvas with
+# the feet on y 800, so a pose swap never moves him; the body centre is (410, 500). He swaps poses on the script beats,
+# walks between scenes, hops with squash and stretch, blinks, sweats, and gets glass "?" and "!" bubbles.
+POSES = json.load(open(os.path.join(ROOT, "plan", "poses.json")))
+PCX, PCY = 410, 500
+CS = .52                                         # his scale: 600 px pose height -> ~312 px on screen
+
+
+def cree_html():
+    parts = []
+    for name, m in POSES.items():
+        defs, lids = "", ""
+        for k, (cx, cy, rx, ry, top, bot) in enumerate(m["eyes"]):
+            defs += (f'<linearGradient id="lg{name}{k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{top}"/>'
+                     f'<stop offset="1" stop-color="{bot}"/></linearGradient>')
+            lids += (f'<ellipse cx="{cx}" cy="{cy}" rx="{rx + 8}" ry="{ry + 8}" fill="url(#lg{name}{k})"/>'
+                     f'<path d="M {cx - rx * .8:.0f} {cy + ry * .05:.0f} Q {cx} {cy + ry * .55:.0f} {cx + rx * .8:.0f} {cy + ry * .05:.0f}" fill="none" '
+                     f'stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/>')
+        svg = f'<svg viewBox="0 0 820 820" class="clids"><defs>{defs}</defs><g class="lidg">{lids}</g></svg>' if lids else ""
+        parts.append(f'<div class="cpose" id="cp-{name}"><img src="assets/img/poses/{name}.png" alt="">{svg}</div>')
+    sweat = ('<svg viewBox="0 0 820 820" class="csw"><path class="sweat" d="M 690 190 C 675 220 665 240 665 255 A 25 25 0 0 0 715 255 C 715 240 705 220 690 190 Z" '
+             'fill="#7fd3ff" stroke="#3aa6e6" stroke-width="5"/></svg>')
+    sp = "".join(f'<div class="csp" style="left:{x}px;top:{y}px">{star(z, c)}</div>'
+                 for x, y, z, c in [(40, 170, 110, PINK), (680, 110, 90, "#f2b134"), (720, 440, 70, PINK), (60, 470, 64, "#f2b134")])
+    return (f'<div id="cree"><i id="cshadow"></i><div id="creeb"><div id="creef"><div id="creep">{"".join(parts)}</div></div>{sweat}</div>'
+            f'{sp}<div id="bub"><span id="bubt">!</span></div></div>')
+
+
+def cree_to(t, x, y, s=CS, d=.6, ease="power3.inOut"):
+    """Move Cree (body centre at x, y in frame px; s = scale of the 820 px pose canvas)."""
+    js(f'tl.to("#cree", {{x: {x - PCX:.0f}, y: {y - PCY:.0f}, scale: {s}, duration: {d}, ease: "{ease}"}}, {t:.3f});')
+
+
+def pose(t, name, flip=None, squash=True):
+    """Swap to a pose (flip: True faces him the other way, None keeps the current facing), with a little squash."""
+    js(f'tl.set("#cree .cpose", {{opacity: 0}}, {t:.3f});')
+    js(f'tl.set("#cp-{name}", {{opacity: 1}}, {t:.3f});')
+    if flip is not None:
+        js(f'tl.set("#creef", {{scaleX: {-1 if flip else 1}}}, {t:.3f});')
+    if squash:
+        js(f'tl.fromTo("#creep", {{scaleX: 1.07, scaleY: .9}}, {{scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}}, {t:.3f});')
+
+
+def cree_walk(t0, t1, frm, to, end="stand", step=.15, end_flip=False):
+    """Walk from frm (x, y, s) to to (x, y, s): stride and pass frames alternate with a bob, facing the way he goes."""
+    n = max(2, round((t1 - t0) / step))
+    n += n % 2
+    stp = (t1 - t0) / n
+    flip = to[0] < frm[0]
+    js(f'tl.fromTo("#cree", {{x: {frm[0] - PCX:.0f}, y: {frm[1] - PCY:.0f}, scale: {frm[2]}}}, {{x: {to[0] - PCX:.0f}, y: {to[1] - PCY:.0f}, scale: {to[2]}, '
+       f'duration: {t1 - t0:.3f}, ease: "none", immediateRender: false}}, {t0:.3f});')
+    for k in range(n):
+        pose(t0 + k * stp, "walk" if k % 2 == 0 else "pass", flip=flip if k == 0 else None, squash=False)
+    js(f'tl.fromTo("#creef", {{y: 0}}, {{y: -22, duration: {stp / 2:.3f}, ease: "sine.inOut", yoyo: true, repeat: {2 * n - 1}, immediateRender: false}}, {t0:.3f});')
+    js(f'tl.fromTo("#creef", {{rotation: -4}}, {{rotation: 4, duration: {stp:.3f}, ease: "sine.inOut", yoyo: true, repeat: {n - 1}, immediateRender: false}}, {t0:.3f});')
+    js(f'tl.to("#creef", {{rotation: 0, y: 0, duration: .12}}, {t1:.3f});')
+    pose(t1, end, flip=end_flip)
+    sfx("swish", t0)
+
+
+def cree_hop(t, h=70, n=1, period=.36):
+    for k in range(n):
+        tk = t + k * period
+        js(f'tl.fromTo("#creeb", {{y: 0, scaleY: 1, scaleX: 1}}, {{keyframes: [{{scaleY: .86, scaleX: 1.1, y: 10, duration: .07}}, '
+           f'{{scaleY: 1.08, scaleX: .94, y: {-h}, duration: .14, ease: "power2.out"}}, {{scaleY: 1, scaleX: 1, y: 0, duration: .13, ease: "power2.in"}}, '
+           f'{{scaleY: .92, scaleX: 1.06, y: 0, duration: .04}}, {{scaleY: 1, scaleX: 1, duration: .06}}], immediateRender: false}}, {tk:.3f});')
+        js(f'tl.fromTo("#cshadow", {{scale: 1, opacity: 1}}, {{scale: .7, opacity: .5, duration: .21, ease: "power2.out", yoyo: true, repeat: 1, immediateRender: false}}, {tk + .07:.3f});')
+    sfx("pop", t)
+
+
+def cree_wiggle(t, n=3, amp=8, period=.22):
+    js(f'tl.fromTo("#creeb", {{rotation: 0}}, {{keyframes: [' + ", ".join(f'{{rotation: {amp if k % 2 == 0 else -amp}, duration: {period / 2:.2f}}}' for k in range(n * 2))
+       + f', {{rotation: 0, duration: .1}}], immediateRender: false}}, {t:.3f});')
+
+
+def cree_tilt(t, a, d=.35):
+    js(f'tl.to("#creef", {{rotation: {a}, duration: {d}, ease: "back.out(2)"}}, {t:.3f});')
+
+
+def blink(t):
+    js(f'tl.set("#cree .lidg", {{opacity: 1}}, {t:.3f});')
+    js(f'tl.set("#cree .lidg", {{opacity: 0}}, {t + .11:.3f});')
+
+
+def sweat(t, d=1.0):
+    js(f'tl.fromTo("#cree .sweat", {{opacity: 0, y: -20, scale: .4}}, {{opacity: 1, y: 0, scale: 1, duration: .25, ease: "back.out(2)", immediateRender: false}}, {t:.3f});')
+    js(f'tl.to("#cree .sweat", {{y: 40, duration: {d - .2:.2f}, ease: "power1.in"}}, {t + .25:.3f});')
+    js(f'tl.to("#cree .sweat", {{opacity: 0, duration: .1}}, {t + d:.3f});')
+
+
+def say(t, text, d=.9, left=False):
+    """A glass thought bubble by his head (left=True puts it on his other side, for when he stands at the right edge)."""
+    js(f'tl.set("#bubt", {{textContent: "{text}"}}, {t - .01:.3f});')
+    js(f'tl.set("#bub", {{x: {-560 if left else 0}}}, {t - .01:.3f});')
+    js(f'tl.fromTo("#bub", {{opacity: 0, scale: .2, rotation: -30}}, {{opacity: 1, scale: 1, rotation: 0, duration: .35, ease: "back.out(2.4)", immediateRender: false}}, {t:.3f});')
+    js(f'tl.to("#bub", {{opacity: 0, scale: .6, duration: .2, ease: "power2.in"}}, {t + d:.3f});')
+    sfx("pop", t)
+
+
+def sparkle(t, d=1.0, rot=120):
+    js(f'tl.fromTo("#cree .csp", {{opacity: 0, scale: .3}}, {{opacity: 1, scale: 1, duration: .3, ease: "back.out(3)", stagger: .05, immediateRender: false}}, {t:.3f});')
+    js(f'tl.to("#cree .csp", {{rotation: "+={rot}", duration: {d}, ease: "none"}}, {t:.3f});')
+    js(f'tl.to("#cree .csp", {{opacity: 0, scale: .5, duration: .2, ease: "power2.in"}}, {t + d:.3f});')
+
+
 def star(sz, col=PINK):
     return (f'<svg viewBox="-50 -50 100 100" width="{sz}" height="{sz}"><path d="M0 -50 C6 -10 10 -6 50 0 C10 6 6 10 '
             f'0 50 C-6 10 -10 6 -50 0 C-10 -6 -6 -10 0 -50 Z" fill="{col}"/></svg>')
 
 
-HTML.append(f'<div id="birdlayer">{bird.rig(star)}</div>')
-b = bird.Bird(js)
-js(f'tl.set("#birdpos",{{x:1250,y:{MASCOT_R[1]},scale:{MASCOT_R[2]}}},0);tl.set("#bflip",{{scaleX:-1}},0);')
-js('tl.set("#sweat,#mag,.bub,.bsp,#cloud",{opacity:0,scale:.5},0);tl.set("#wingR,#footK",{opacity:0},0);')
-for k in "LR":
-    cx, cy, r = bird.EYES[k][:3]
-    js(f'tl.set("#lu{k}",{{scaleY:0,svgOrigin:"{cx} {cy - r - 6}"}},0);tl.set("#ld{k}",{{scaleY:0,svgOrigin:"{cx} {cy + r + 6}"}},0);')
-b.facing = -1
-# always alive under every gesture (the reel-analyser loops: bob, sway, breath, arms swinging a little, weight shifts)
-js(f'tl.to("#bidle",{{y:-7,duration:.42,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .42) - 1}}},0);')
-js(f'tl.fromTo("#bidle",{{rotation:-2.5}},{{rotation:2.5,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 1.3) - 1}}},0);')
-js(f'tl.to("#bbreath",{{scaleY:1.012,scaleX:.994,duration:.8,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .8) - 1}}},0);')
-js(f'tl.fromTo("#wingLi",{{rotation:3}},{{rotation:-4,duration:.6,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .6) - 1}}},0);')
-js(f'tl.fromTo("#wingDi",{{rotation:-3}},{{rotation:4,duration:.6,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .6) - 1}}},.3);')
-js(f'tl.fromTo("#footLi",{{rotation:0,y:0}},{{rotation:-7,y:-4,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 1.3) - 1}}},0);')
-js(f'tl.fromTo("#footRi",{{rotation:-7,y:-4}},{{rotation:0,y:0,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 1.3) - 1}}},0);')
-js(f'tl.fromTo("#wingRi",{{rotation:-4}},{{rotation:8,duration:.45,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .45) - 1}}},0);')
-js('tl.set("#bshadow",{opacity:0},0);tl.to("#bshadow",{opacity:1,duration:.3},.6);')
+HTML.append(cree_html())
 
 
-def sparkle(t, d=1.0, rot=120):
-    b.show(".bsp", t)
-    js(f'tl.to(".bsp",{{rotation:"+={rot}",duration:{d},ease:"none"}},{t:.3f});')
-    b.show(".bsp", t + d, False)
-    sfx("pop", t)
+def P(cx, feet, s=CS):
+    """frame position of his body centre from where his feet stand"""
+    return (cx, feet - (800 - PCY) * s, s)
 
 
-def bubble(sel, t, d=.8):
-    b.show(sel, t)
-    b.show(sel, t + d, False)
-    sfx("pop", t)
+RIGHT = P(885, 1362, .48)                           # right of the phone, feet level with its bottom
+js(f'tl.set("#cree", {{x: {1300 - PCX}, y: {RIGHT[1] - PCY:.0f}, scale: {CS}, opacity: 1}}, 0);')
+js(f'tl.fromTo("#creep", {{y: 0}}, {{y: -9, duration: .8, ease: "sine.inOut", yoyo: true, repeat: {int(DUR / .8)}, immediateRender: false}}, 0);')
+js(f'tl.fromTo("#creeb", {{scaleY: 1}}, {{scaleY: 1.015, duration: 1.1, ease: "sine.inOut", yoyo: true, repeat: {int(DUR / 1.1)}, immediateRender: false}}, 0);')
 
-
-# A: walks in from the right, studies the phone through his glass magnifier, jumps at "post", points, nods, winks
-b.expr(0, "curious", .01)
-b.at(.1, MASCOT_R[0], MASCOT_R[1], MASCOT_R[2], .9, "power1.out")
-b.walk(.1, .9)
-b.look(.2, 14, -4)
-b.blink(.75)
+# A: walks in, studies the phone through his magnifier, cheers at "post", points at the phone, proud at "exactly"
+cree_walk(.05, .85, (1300, RIGHT[1], CS), RIGHT, end="stand")
 t_r = T("c00", "rates")
-b.expr(t_r, "focused", .2)
-b.pose(t_r, "leanin", .3)
-b.show("#mag", t_r)
-js(f'tl.fromTo("#mag",{{rotation:0,y:0}},{{rotation:-14,y:-40,duration:.45,ease:"sine.inOut",yoyo:true,repeat:1}},{t_r + .05:.3f});')
-b.look(t_r, 16, -10)
+pose(t_r - .05, "mag")
+js(f'tl.fromTo("#creef", {{rotation: 0}}, {{rotation: -7, duration: .4, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}}, {t_r + .1:.3f});')
 t_p = T("c00", "post")
-b.show("#mag", t_p - .12, False)
-b.pose(t_p - .1, "tall", .15)
-b.expr(t_p, "excited", .12)
-b.hop(t_p + .05, 80)
-b.kick(t_p + .05, .55)
-b.pulse_overlay(t_p + .15, "str", 3)
-bubble(".bx", t_p + .05, .7)
-b.pose(T("c00", "and") + .1, "neutral", .2)
+pose(t_p - .05, "cheer")
+cree_hop(t_p, 90)
+say(t_p + .05, "!", .8, left=True)
 t_tl = T("c00", "tells")
-b.expr(t_tl, "curious", .15)
-b.look(t_tl, 16, 16)
-b.point(t_tl, 1.0)
+pose(t_tl - .05, "point", flip=True)
 t_x = T("c00", "exactly")
-b.expr(t_x + .25, "smile", .15)
-b.nod(t_x + .3, 2)
-t_fix = T("c00", "fix")
-b.expr(t_fix, "wink", .12)
-sparkle(t_fix, .9)
+pose(t_x + .2, "proud")
+cree_wiggle(t_x + .3, 2, 5)
+blink(T("c00", "fix"))
+sparkle(T("c00", "fix"), .9)
 
-# B (dark): unimpressed by views after you post (shrug, head shake, "?"), thrilled by reasons before (jump, star eyes)
-b.at(SB - .2, 390, 1230, .9, .55, "power2.inOut")
-b.walk(SB - .2, .55)
-b.face(SB + .4, 1)
+# B (dark): "views after"? he thinks, then droops; "reasons, before" makes him cheer and jump twice
+B_POS = P(540, 1545)
+cree_walk(SB - .25, SB + .35, RIGHT, B_POS, end="stand")
 t_vw = T("c01", "views")
-b.expr(t_vw, "skeptical", .2)
-b.look(t_vw, -14, -18)
-b.pose(t_vw, "leanback", .3)
-b.spread(T("c01", "after") + .05, 55, .18)
-b.shake(T("c01", "after") + .15, 3, 9)
-bubble(".bq", T("c01", "after"), .9)
-b.spread(T("c01", "post") + .3, 0, .2)
+pose(t_vw - .05, "think")
+cree_tilt(t_vw, -8)
+say(t_vw + .1, "?", .9)
+pose(T("c01", "post") - .05, "sad")
+cree_tilt(T("c01", "post"), 0)
 t_re2 = T("c01", "Reasons")
-b.pose(t_re2 - .05, "neutral", .15)
-b.expr(t_re2 - .05, "shock", .1)
-b.startle(t_re2 - .05)
-b.look(t_re2, 14, -18)
-b.expr(t_re2 + .25, "excited", .12)
-b.hop(t_re2 + .3, 90)
-b.kick(t_re2 + .3, .6)
-b.pulse_overlay(t_re2 + .4, "str", 3)
-sparkle(t_re2 + .35, 1.0, 140)
-b.expr(T("c01", "before") + .5, "joy", .15)
-b.blink(5.9)
+pose(t_re2 - .05, "cheer")
+cree_hop(t_re2, 100, 2)
+sparkle(t_re2 + .1, 1.0, 140)
 
-# C: introduces Creedom with a jump and a spin under the logo, waves; then scans the reel with his magnifier
-b.at(SC - .2, 390, 1100, 1.0, .5, "power2.inOut")
-b.look(SC + .2, 0, -18)
-b.expr(T("c02", "called"), "curious", .15)
+# C: one "Creedom" only (the logo pill), he waves under it and jumps; then scans the reel with his magnifier
+C_POS = P(540, 1330, .66)
+cree_to(SC - .2, *C_POS, d=.5)
+pose(SC + .1, "stand")
+blink(SC + .5)
 t_cr2 = T("c02", "Creedom")
-b.expr(t_cr2, "joy", .12)
-b.pose(t_cr2, "tall", .15)
-b.hop(t_cr2 + .05, 120)
-b.spin(t_cr2 + .05)
+pose(t_cr2 - .05, "wave")
+cree_hop(t_cr2 + .05, 110)
 sparkle(t_cr2 + .1, 1.1, 160)
-b.wave(t_cr2 + .55, 2)
-b.pose(t_cr2 + .6, "neutral", .2)
+pose(t_cr2 + .55, "present", flip=True)
 t_wt = T("c02", "watches")
-b.face(t_wt - .3, 1)
-b.at(t_wt - .25, 650, 960, .9, .5, "power2.inOut")
-b.walk(t_wt - .25, .5)
-b.face(t_wt + .28, -1)
-b.expr(t_wt + .1, "focused", .2)
-b.pose(t_wt + .2, "leanin", .3)
-b.show("#mag", t_wt + .15)
-js(f'tl.fromTo("#mag",{{y:-150,rotation:-10}},{{y:40,rotation:-18,duration:1.2,ease:"sine.inOut",yoyo:true,repeat:1,immediateRender:false}},{t_wt + .3:.3f});')
-b.look(t_wt + .3, 18, -16)
-b.look(t_wt + .9, 18, 2)
-b.look(t_wt + 1.5, 18, 14)
-b.look(t_wt + 2.1, 18, -8)
-b.show("#mag", T("c02", "second") - .1, False)
-b.pose(T("c02", "second") - .1, "neutral", .2)
+W_POS = P(800, 1276, .5)
+cree_walk(t_wt - .35, t_wt + .1, C_POS, W_POS, end="mag")
+js(f'tl.fromTo("#creef", {{rotation: 0, y: 0}}, {{rotation: -8, y: -30, duration: .55, ease: "sine.inOut", yoyo: true, repeat: 3, immediateRender: false}}, {t_wt + .25:.3f});')
 t_s2 = T("c02", "second")
-b.expr(t_s2, "curious", .15)
-for i in range(5):
-    b.look(t_s2 + .14 * i, 20 - 9 * i, 18)      # follows the frames as they land, left to right (he faces left)
-b.tap(t_s2 + .1, 4)
-t_vr = T("c02", "real")
-b.expr(t_vr, "smile", .15)
-b.nod(t_vr + .05, 2)
-b.blink(SD - .4)
+pose(t_s2 + .05, "point", flip=True)
+js(f'tl.to("#creef", {{rotation: 10, duration: .3, ease: "back.out(2)"}}, {t_s2 + .1:.3f});')
+js(f'tl.to("#creef", {{rotation: 0, duration: .25}}, {T("c02", "real") - .1:.3f});')
+pose(T("c02", "real") - .05, "proud")
+blink(SD - .45)
 
-# D (dark): counts along with the score, jumps with heart eyes; then reads the flags: scratches his head, wags a
-# finger, and gets a fright (sweat, "!") at "loses trust"
-b.at(SD - .25, 150, 574, .9, .55, "power2.inOut")
-b.walk(SD - .25, .55)
-b.face(SD + .35, 1)
-b.expr(t_sc, "curious", .15)
-b.pose(t_sc, "leanin", .3)
-b.look(t_sc, 16, -4)
-b.tap(t_sc + .15, 5)
+# D (dark): thinks while the score counts, cheers when it lands, points at the flags, thinks at "weak hook", points
+# at "claim", gets a fright (shock, sweat, "!") at "loses trust" and droops
+D_POS = P(300, 890)
+cree_walk(SD - .3, SD + .3, W_POS, D_POS, end="stand")
+pose(t_sc - .05, "think")
+cree_tilt(t_sc, -6)
 t_land = t_sc + 1.3
-b.expr(t_land, "love", .12)
-b.pose(t_land, "tall", .15)
-b.hop(t_land, 110)
-b.kick(t_land, .6)
-b.pulse_overlay(t_land + .1, "hrt", 3)
+cree_tilt(t_land - .1, 0, .15)
+pose(t_land - .05, "cheer")
+cree_hop(t_land, 110)
 sparkle(t_land + .05, 1.0)
-b.expr(t_fl + .5, "joy", .15)
-b.pose(t_fl + .5, "neutral", .2)
-b.look(t_fl + .6, 12, 18)
-b.expr(t_fl + 1.0, "focused", .2)
-b.blink(15.6)
+pose(t_fl + .4, "point")
+blink(t_fl + 1.4)
 t_wk = T("c03", "weak")
-b.expr(t_wk, "skeptical", .15)
-b.scratch(t_wk + .05, .9)
-bubble(".bq", t_wk + .1, .8)
+pose(t_wk - .05, "think")
+say(t_wk + .05, "?", .8)
 t_cl = T("c03", "claim")
-b.expr(t_cl, "annoyed", .15)
-b.shake(t_cl + .05, 2, 8)
-b.look(t_cl, 14, 18)
-b.point(t_cl + .5, .7)
+pose(t_cl - .05, "point")
+cree_wiggle(t_cl + .1, 2, 6)
 t_tr = T("c03", "loses")
-b.expr(t_tr, "shock", .1)
-b.startle(t_tr)
-b.spread(t_tr, 50, .12)
-b.spread(t_tr + .45, 0, .2)
-bubble(".bx", t_tr + .05, .7)
-b.show("#sweat", t_tr + .05)
-js(f'tl.to("#sweat",{{y:40,duration:.8,ease:"power1.in"}},{t_tr + .15:.3f});')
-b.show("#sweat", t_tr + .75, False)
-b.expr(t_tr + .4, "sad", .2)
+pose(t_tr - .05, "shock")
+cree_hop(t_tr, 50)
+say(t_tr + .05, "!", .7)
+sweat(t_tr + .1, .9)
+pose(t_tr + .6, "sad")
 
-# E: reads the fix card with his magnifier, then a proud nod at "the fix" and a little hop
-b.at(SE - .2, 390, 1090, .9, .45, "power2.inOut")
-b.expr(SE + .1, "curious", .15)
-b.look(SE + .1, 0, -18)
-b.show("#mag", SE + .2)
-js(f'tl.fromTo("#mag",{{y:-60,rotation:-8}},{{y:-130,rotation:-16,duration:.5,ease:"sine.inOut",yoyo:true,repeat:1,immediateRender:false}},{SE + .25:.3f});')
-b.expr(SE + .3, "focused", .2)
+# E: reads the fix card through his magnifier, proud at "the fix"
+E_POS = P(540, 1405)
+cree_to(SE - .2, *E_POS, d=.45)
+pose(SE + .05, "mag", flip=True)
+js(f'tl.fromTo("#creef", {{y: 0}}, {{y: -24, duration: .4, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}}, {SE + .2:.3f});')
 t_fx = T("c04", "fix")
-b.show("#mag", t_fx - .15, False)
-b.expr(t_fx, "proud", .15)
-b.pose(t_fx, "tall", .2)
-b.nod(t_fx + .05, 1)
-b.hop(t_fx + .35, 50)
+pose(t_fx - .05, "proud", flip=False)
+cree_hop(t_fx + .1, 60)
 
-# F: back beside the phone; points at the fixed reel, watches Share unlock, then celebrates with a jump and a kick
-b.at(SF - .2, *MASCOT_R, .45, "power2.inOut")
-b.walk(SF - .2, .45)
-b.face(SF + .27, -1)
-b.pose(SF, "neutral", .2)
-b.expr(SF + .2, "curious", .15)
-b.look(SF + .2, 16, -6)
-b.expr(t_fx2, "excited", .12)
-b.point(t_fx2 + .05, .9)
-b.look(T("c05", "anyone"), 16, 16)
-b.expr(T("c05", "anyone"), "hopeful", .15)
-b.expr(t_sees, "joy", .12)
-b.hop(t_sees + .05, 100)
-b.kick(t_sees + .05, .6)
+# F: back beside the phone; points at the fixed reel, watches Share unlock, cheers
+cree_walk(SF - .25, SF + .3, E_POS, RIGHT, end="stand")
+pose(t_fx2 - .05, "point", flip=True)
+pose(T("c05", "anyone") + .05, "think", flip=False)
+pose(t_sees - .05, "cheer")
+cree_hop(t_sees, 100, 2)
 sparkle(t_sees + .1, 1.0, -140)
-b.blink(SG - .5)
 
-# G: walks to centre stage, cheers at CHECK, chatters while the comment types, heart eyes, waves goodbye, winks
-b.at(SG - .2, 390, 1200, .95, .55, "power2.inOut")
-b.walk(SG - .2, .55)
-b.face(SG + .4, 1)
-b.look(SG + .45, 0, -18)
-b.expr(t_k, "excited", .12)
-b.hop(t_k + .05, 80)
-b.spread(t_k + .05, 55, .15)
-b.spread(t_k + .5, 0, .2)
-b.talk(t_ty, .6)
-b.look(t_ty, 0, -10)
-b.expr(T("c06", "send"), "love", .15)
-b.pulse_overlay(T("c06", "send") + .1, "hrt", 3)
-b.wave(t_dm + .05, 2)
-b.expr(DUR - .5, "wink", .12)
-b.hist.sort(key=lambda h: h[0])
-for t in (3.6, 9.6, 14.9, 17.9, 22.4, 24.9):
-    b.blink(t)
+# G: walks to centre stage, cheers at CHECK, types the comment on his phone, waves goodbye
+G_POS = P(540, 1520, .55)
+cree_walk(SG - .25, SG + .35, RIGHT, G_POS, end="stand")
+pose(t_k - .05, "cheer")
+cree_hop(t_k, 90)
+pose(t_ty - .1, "phone")
+pose(t_dm - .05, "wave")
+cree_wiggle(t_dm + .1, 3, 6)
+pose(DUR - .7, "proud")
+for t in (3.5, 9.9, 15.2, 17.8, 22.6, 24.95):
+    blink(t)
 
 # ---- fluid blobs and drifting glass panes --------------------------------------------------------------------------------------
 LB = [(-200, -150, 760, "rgba(238,104,139,.55)"), (520, 260, 820, "rgba(255,190,214,.75)"), (-260, 980, 900, "rgba(217,194,255,.6)"),
@@ -716,7 +725,7 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #fbf7
 .rows {{ display: flex; flex-direction: column; gap: 16px; }}
 .rows span {{ display: block; padding: 15px 22px; border-radius: 18px; background: rgba(243,67,162,.16); border: 1px solid rgba(243,67,162,.4); font-weight: 600; font-size: 32px; }}
 /* C */
-.brand {{ position: absolute; left: 50%; top: 600px; width: 620px; height: 200px; margin-left: -310px; border-radius: 100px; display: flex; align-items: center; justify-content: center;
+.brand {{ position: absolute; left: 50%; top: 500px; width: 620px; height: 200px; margin-left: -310px; border-radius: 100px; display: flex; align-items: center; justify-content: center;
   z-index: 25; opacity: 0; }}
 .brand img {{ height: 92px; }}
 .stat {{ position: absolute; left: 215px; top: 514px; width: 350px; height: 64px; border-radius: 999px; display: flex; align-items: center; gap: 14px; padding: 0 26px;
@@ -784,8 +793,23 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #fbf7
 .cbox b {{ margin-left: auto; width: 92px; height: 92px; border-radius: 50%; background: #fff; color: {MAG}; font-size: 44px; display: flex; align-items: center; justify-content: center; flex: none; }}
 .sub {{ position: absolute; left: 0; right: 0; top: 1066px; text-align: center; font-weight: 600; font-size: 54px; color: #fff; opacity: 0; z-index: 20; }}
 .sub i {{ font-family: Serif; font-weight: 400; font-size: 1.15em; color: #ffb3cd; }}
-/* mascot bubbles: inside the frame when he stands on the right */
-.bub {{ left: 120px; }}
+/* Cree */
+#cree {{ position: absolute; left: 0; top: 0; width: 820px; height: 820px; z-index: 30; opacity: 0; transform-origin: 410px 500px; pointer-events: none;
+  filter: drop-shadow(0 24px 30px rgba(200,40,120,.22)); }}
+#cshadow {{ position: absolute; left: 210px; top: 770px; width: 400px; height: 60px; border-radius: 50%; background: radial-gradient(closest-side, rgba(226,53,160,.35), rgba(226,53,160,0)); }}
+#creeb {{ position: absolute; inset: 0; transform-origin: 50% 97.5%; }}
+#creef {{ position: absolute; inset: 0; transform-origin: 50% 60%; }}
+#creep {{ position: absolute; inset: 0; transform-origin: 50% 97.5%; }}
+.cpose {{ position: absolute; inset: 0; opacity: 0; }}
+.cpose img, .clids, .csw {{ position: absolute; inset: 0; width: 820px; height: 820px; }}
+.csw {{ overflow: visible; }}
+.lidg {{ opacity: 0; }}
+.sweat {{ opacity: 0; transform-box: fill-box; transform-origin: 50% 0; }}
+.csp {{ position: absolute; opacity: 0; }}
+#bub {{ position: absolute; left: 600px; top: 0; width: 210px; height: 190px; opacity: 0; border-radius: 50% 50% 50% 14px; display: grid; place-items: center;
+  transform-origin: 0 100%; background: linear-gradient(135deg, rgba(255,255,255,.8), rgba(255,255,255,.38)); backdrop-filter: blur(18px) saturate(1.7);
+  -webkit-backdrop-filter: blur(18px) saturate(1.7); border: 2px solid rgba(255,255,255,.95); box-shadow: inset 0 2px 0 #fff, 0 20px 40px rgba(160,20,90,.28); }}
+#bubt {{ font: 800 120px/1 Inter; background: linear-gradient(180deg, {MAG}, {PINK}); -webkit-background-clip: text; background-clip: text; color: transparent; }}
 """
 
 html = f"""<!doctype html>
@@ -795,7 +819,7 @@ html = f"""<!doctype html>
     <meta name="viewport" content="width=1080, height=1920" />
     <title>Creedom: check before you post 9x16</title>
     <script src="assets/vendor/gsap.min.js"></script>
-    <style>{bird.CSS}{CSS}#birdlayer {{ position: absolute; inset: 0; z-index: 30; pointer-events: none; }}</style>
+    <style>{CSS}</style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR:.2f}" data-fps="30" data-width="1080" data-height="1920">
