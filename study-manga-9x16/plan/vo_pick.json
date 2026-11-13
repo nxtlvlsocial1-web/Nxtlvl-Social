@@ -1,19 +1,19 @@
 {
- "duration": 25.62,
+ "duration": 25.88,
  "takes": [
   {
    "line": "s00",
    "take": 0,
    "heard": "I made the hardest chapter in class 10 science into a manga, one prompt.",
    "errors": 0,
-   "pitch_spread_hz": 126
+   "pitch_spread_hz": 89
   },
   {
    "line": "s00",
    "take": 1,
    "heard": "I made the hardest chapter in class 10 science into a manga, one prompt.",
    "errors": 0,
-   "pitch_spread_hz": 90
+   "pitch_spread_hz": 108
   },
   {
    "line": "s01",
@@ -46,16 +46,16 @@
   {
    "line": "s03",
    "take": 0,
-   "heard": "1 manga 2 timeline 3 mind map 4 labeled diagram 5 a one -page revision sheet",
-   "errors": 3,
-   "pitch_spread_hz": 97
+   "heard": "One manga, two timeline, three mind map, four labeled diagram, five a one -page revision sheet",
+   "errors": 1,
+   "pitch_spread_hz": 106
   },
   {
    "line": "s03",
    "take": 1,
-   "heard": "1 manga 2 timeline 3 mind map 4 labeled diagram 5 a one -page revision sheet",
-   "errors": 3,
-   "pitch_spread_hz": 113
+   "heard": "One manga, two timeline, three mind map, four labeled diagram, five a one -page revision sheet",
+   "errors": 1,
+   "pitch_spread_hz": 97
   },
   {
    "line": "s04",
