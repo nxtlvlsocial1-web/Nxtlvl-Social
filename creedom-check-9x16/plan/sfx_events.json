@@ -9,7 +9,15 @@
 },
 {
 "type": "pop",
+"t": 1.97
+},
+{
+"type": "pop",
 "t": 3.22
+},
+{
+"type": "pop",
+"t": 4.02
 },
 {
 "type": "whoosh_big",
@@ -18,6 +26,10 @@
 {
 "type": "swish",
 "t": 4.79
+},
+{
+"type": "pop",
+"t": 5.16
 },
 {
 "type": "whoosh",
@@ -32,24 +44,44 @@
 "t": 6.44
 },
 {
+"type": "whoosh",
+"t": 6.57
+},
+{
+"type": "pop",
+"t": 6.57
+},
+{
+"type": "swish",
+"t": 6.97
+},
+{
 "type": "impact",
 "t": 7.86
 },
 {
-"type": "shutter",
-"t": 10.22
+"type": "pop",
+"t": 7.96
 },
 {
 "type": "shutter",
-"t": 10.34
+"t": 10.17
 },
 {
-"type": "notify",
-"t": 11.11
+"type": "tick",
+"t": 10.31
 },
 {
-"type": "notify",
-"t": 11.53
+"type": "shutter",
+"t": 10.45
+},
+{
+"type": "tick",
+"t": 10.59
+},
+{
+"type": "shutter",
+"t": 10.73
 },
 {
 "type": "whoosh_big",
@@ -60,12 +92,20 @@
 "t": 12.4
 },
 {
-"type": "impact",
-"t": 13.6
-},
-{
 "type": "swish",
 "t": 13.66
+},
+{
+"type": "impact",
+"t": 13.7
+},
+{
+"type": "pop",
+"t": 13.75
+},
+{
+"type": "pop",
+"t": 16.22
 },
 {
 "type": "pop",
@@ -80,16 +120,32 @@
 "t": 18.32
 },
 {
+"type": "pop",
+"t": 18.71
+},
+{
+"type": "whoosh",
+"t": 18.89
+},
+{
+"type": "swish",
+"t": 19.29
+},
+{
 "type": "whoosh_big",
 "t": 19.34
 },
 {
-"type": "riser",
-"t": 20.48
+"type": "whoosh",
+"t": 20.73
 },
 {
 "type": "ding",
 "t": 20.84
+},
+{
+"type": "swish",
+"t": 21.13
 },
 {
 "type": "notify",
@@ -98,6 +154,10 @@
 {
 "type": "success",
 "t": 23.0
+},
+{
+"type": "pop",
+"t": 23.1
 },
 {
 "type": "whoosh_big",
@@ -132,15 +192,7 @@
 "t": 25.37
 },
 {
-"type": "pop",
-"t": 25.57
-},
-{
-"type": "pop",
-"t": 25.87
-},
-{
-"type": "pop",
-"t": 26.17
+"type": "notify",
+"t": 25.48
 }
 ]

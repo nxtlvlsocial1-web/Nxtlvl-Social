@@ -123,10 +123,9 @@ def magnifier(s=150):
 
 
 def bubble(inner, w=150, h=120, cls=""):
+    """creedom-check: frosted-glass thought bubble (the old reel's was a white comic bubble with a black outline)"""
     return (f'<div class="bub {cls}" data-layout-ignore style="width:{w}px;height:{h}px">{inner}'
-            f'<svg class="tail" viewBox="0 0 60 50" width="60" height="50"><circle cx="20" cy="12" r="11" fill="#fff" '
-            f'stroke="{INK}" stroke-width="4"/><circle cx="6" cy="38" r="6" fill="#fff" stroke="{INK}" stroke-width="3"/>'
-            f'</svg></div>')
+            f'<i class="bt1"></i><i class="bt2"></i></div>')
 
 
 def cloud():
@@ -184,11 +183,15 @@ CSS = """
 #footKi { inset: 0; transform-origin: 20% 60%; }
 #sweat { position: absolute; left: 250px; top: 30px; }
 #mag { position: absolute; left: 150px; top: 140px; transform-origin: 30% 30%; }
-.bub { position: absolute; left: 190px; top: -130px; background: #fff; border: 4px solid #0B0B0B; border-radius: 50px;
-  display: flex; align-items: center; justify-content: center; font: 700 80px Inter; color: #C93A6D; }
-.bub .tail { position: absolute; left: 6px; bottom: -48px; }
-.bub i { font: 700 52px Inter; font-style: normal; letter-spacing: 1px; background: linear-gradient(90deg, #E235DD, #E34CB7 45%, #E68B70);
-  -webkit-background-clip: text; background-clip: text; color: transparent; }
+.bub { position: absolute; left: 190px; top: -130px; border-radius: 50px; display: flex; align-items: center; justify-content: center;
+  font: 800 80px Inter; color: #E2357F; background: linear-gradient(135deg, rgba(255,255,255,.78), rgba(255,255,255,.34));
+  backdrop-filter: blur(18px) saturate(1.7); -webkit-backdrop-filter: blur(18px) saturate(1.7); border: 1.5px solid rgba(255,255,255,.9);
+  box-shadow: inset 0 1.5px 0 #fff, 0 18px 40px rgba(160,20,90,.28); }
+.bub b { background: linear-gradient(180deg, #F343A2, #EE688B); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.bub .bt1, .bub .bt2 { position: absolute; border-radius: 50%; background: rgba(255,255,255,.7); border: 1.5px solid rgba(255,255,255,.95);
+  box-shadow: 0 8px 18px rgba(160,20,90,.22); }
+.bub .bt1 { left: 14px; bottom: -30px; width: 26px; height: 26px; }
+.bub .bt2 { left: -2px; bottom: -52px; width: 14px; height: 14px; }
 .bc { left: -200px; top: -150px; }
 .bsp { position: absolute; }
 #cloud { position: absolute; left: 60px; top: -150px; width: 180px; height: 200px; }
