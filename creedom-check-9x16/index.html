@@ -207,7 +207,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fbf7f
 <div class="scn" id="sd">
 <div class="head dk" id="hd" style="top:190px;font-size:84px"><div class="hl"><span class="hw " id="h25">Scores</span> <span class="hw " id="h26">it</span></div><div class="hl"><span class="hw " id="h27">out</span> <span class="hw " id="h28">of</span> <span class="hw it pk" id="h29">five.</span></div></div>
 <div class="head dk" id="hd2" style="top:190px;font-size:84px"><div class="hl"><span class="hw " id="h30">Flags</span> <span class="hw " id="h31">the</span> <span class="hw " id="h32">exact</span></div><div class="hl"><span class="hw it pk" id="h33">moments.</span></div></div>
-<div class="gc glass dkg" id="gc0" style="left:40px;top:600px;--c:#F5B544"><i class="sh"></i><i></i>Hook</div><div class="gc glass dkg" id="gc1" style="left:836px;top:700px;--c:#F5B544"><i class="sh"></i><i></i>Proof</div><div class="gc glass dkg" id="gc2" style="left:40px;top:840px;--c:#F343A2"><i class="sh"></i><i></i>Trust</div>
+<div id="gcs"><div class="gc glass dkg" id="gc0" style="left:40px;top:600px;--c:#F5B544"><i class="sh"></i><i></i>Hook</div><div class="gc glass dkg" id="gc1" style="left:836px;top:700px;--c:#F5B544"><i class="sh"></i><i></i>Proof</div><div class="gc glass dkg" id="gc2" style="left:40px;top:840px;--c:#F343A2"><i class="sh"></i><i></i>Trust</div></div>
 <div class="gauge glass dkg" id="gauge"><i class="gsh"></i><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84" class="gt"/><circle cx="100" cy="100" r="84" class="gf" id="gf"/></svg><div class="gin"><div class="gv"><b id="gnum">0.0</b><span>/5</span></div><div class="ex">EXAMPLE REEL</div></div></div><div class="rail glass dkg" id="rail"><i class="sh"></i><div class="rl"><i id="ph"></i><b class="mk" id="mk0" style="left:6.667%;--c:#F5B544"></b><b class="mk" id="mk1" style="left:46.667%;--c:#F5B544"></b><b class="mk" id="mk2" style="left:93.333%;--c:#F343A2"></b></div><div class="tk"><span style="left:0.000%">0:00</span><span style="left:33.333%">0:05</span><span style="left:66.667%">0:10</span><span style="left:100.000%">0:15</span></div><div class="rws"><div class="fl glass dkg" id="fl0" style="--c:#F5B544"><i></i><em>0:01</em><span>Weak hook</span><u>HOOK</u></div><div class="fl glass dkg" id="fl1" style="--c:#F5B544"><i></i><em>0:07</em><span>Claim, no proof</span><u>PROOF</u></div><div class="fl glass dkg" id="fl2" style="--c:#F343A2"><i></i><em>0:14</em><span>Loses trust</span><u>TRUST</u></div></div></div></div>
 <div class="scn" id="se"><div class="fix glass dkg" id="fix"><i class="sh"></i><div class="ft"><b>0:14</b><span>Loses trust</span></div><div class="fl2">The tool is never named, so viewers can't follow along.</div><div class="fx"><i>FIX</i>Name the tool on screen at 0:14.</div></div>
 <div class="head dk" id="he" style="top:190px;font-size:88px"><div class="hl"><span class="hw " id="h34">With</span> <span class="hw " id="h35">the</span> <span class="hw " id="h36">timestamp,</span></div><div class="hl"><span class="hw " id="h37">and</span> <span class="hw " id="h38">the</span> <span class="hw it pk" id="h39">fix.</span></div></div>
@@ -382,12 +382,12 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fbf7f
       (() => { const o = {v: 0}; tl.to(o, {v: 4.2, duration: 0.62, ease: "power2.out", onUpdate: () => { document.getElementById("gnum").textContent = o.v.toFixed(1); }}, 10.600); })();
       tl.fromTo(".gsh", {rotation: 0}, {rotation: 360, duration: 3.2, ease: "none", repeat: 1, immediateRender: false}, 10.600);
       tl.fromTo("#gauge", {rotationX: 0, rotationY: 0, transformPerspective: 1400}, {rotationX: 4.2, rotationY: -7, transformPerspective: 1400, duration: 0.80, ease: "sine.inOut", yoyo: true, repeat: 0, immediateRender: false}, 10.561);
-      tl.fromTo("#gc0", {opacity: 0, x: 260, scale: .3}, {...{opacity: 1, x: 0, scale: 1}, duration: 0.45, ease: "back.out(1.8)", immediateRender: false}, 11.260);
-      tl.fromTo("#gc0 > .sh", {xPercent: -160, opacity: 1}, {...{xPercent: 420, opacity: 1}, duration: 0.6, ease: "power2.inOut", immediateRender: false}, 11.560);
-      tl.fromTo("#gc1", {opacity: 0, x: -260, scale: .3}, {...{opacity: 1, x: 0, scale: 1}, duration: 0.45, ease: "back.out(1.8)", immediateRender: false}, 11.330);
-      tl.fromTo("#gc1 > .sh", {xPercent: -160, opacity: 1}, {...{xPercent: 420, opacity: 1}, duration: 0.6, ease: "power2.inOut", immediateRender: false}, 11.630);
-      tl.fromTo("#gc2", {opacity: 0, x: 260, scale: .3}, {...{opacity: 1, x: 0, scale: 1}, duration: 0.45, ease: "back.out(1.8)", immediateRender: false}, 11.400);
-      tl.fromTo("#gc2 > .sh", {xPercent: -160, opacity: 1}, {...{xPercent: 420, opacity: 1}, duration: 0.6, ease: "power2.inOut", immediateRender: false}, 11.700);
+      tl.fromTo("#gc0", {opacity: 0, x: 260, scale: .3}, {...{opacity: 1, x: 0, scale: 1}, duration: 0.3, ease: "back.out(1.8)", immediateRender: false}, 11.240);
+      tl.fromTo("#gc0 > .sh", {xPercent: -160, opacity: 1}, {...{xPercent: 420, opacity: 1}, duration: 0.35, ease: "power2.inOut", immediateRender: false}, 11.390);
+      tl.fromTo("#gc1", {opacity: 0, x: -260, scale: .3}, {...{opacity: 1, x: 0, scale: 1}, duration: 0.3, ease: "back.out(1.8)", immediateRender: false}, 11.290);
+      tl.fromTo("#gc1 > .sh", {xPercent: -160, opacity: 1}, {...{xPercent: 420, opacity: 1}, duration: 0.35, ease: "power2.inOut", immediateRender: false}, 11.440);
+      tl.fromTo("#gc2", {opacity: 0, x: 260, scale: .3}, {...{opacity: 1, x: 0, scale: 1}, duration: 0.3, ease: "back.out(1.8)", immediateRender: false}, 11.340);
+      tl.fromTo("#gc2 > .sh", {xPercent: -160, opacity: 1}, {...{xPercent: 420, opacity: 1}, duration: 0.35, ease: "power2.inOut", immediateRender: false}, 11.490);
       tl.fromTo("#cam", {scale: 1, filter: 'blur(0px)'}, {...{scale: 1.6, filter: 'blur(14px)'}, duration: 0.2, ease: "power2.in", immediateRender: false}, 11.593);
       tl.fromTo("#cam", {scale: .82, filter: 'blur(14px)'}, {...{scale: 1, filter: 'blur(0px)'}, duration: 0.34, ease: "expo.out", immediateRender: false}, 11.793);
       tl.fromTo("#stk0", {xPercent: -260, opacity: 1}, {...{xPercent: 260, opacity: 1}, duration: 0.38, ease: "power2.inOut", immediateRender: false}, 11.633);
@@ -395,9 +395,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fbf7f
       tl.fromTo("#stk2", {xPercent: -260, opacity: 1}, {...{xPercent: 260, opacity: 1}, duration: 0.38, ease: "power2.inOut", immediateRender: false}, 11.733);
       tl.set("#gauge", {opacity: 0}, 11.773);
       tl.set("#hd", {opacity: 0}, 11.773);
-      tl.set("#gc0", {opacity: 0}, 11.773);
-      tl.set("#gc1", {opacity: 0}, 11.773);
-      tl.set("#gc2", {opacity: 0}, 11.773);
+      tl.set("#gcs", {opacity: 0}, 11.773);
       tl.fromTo("#rail", {opacity: 0, y: 140, rotationX: 30}, {...{opacity: 1, y: 0, rotationX: 0}, duration: 0.5, ease: "back.out(1.4)", immediateRender: false}, 11.793);
       tl.fromTo("#rail > .sh", {xPercent: -160, opacity: 1}, {...{xPercent: 420, opacity: 1}, duration: 1.0, ease: "power2.inOut", immediateRender: false}, 12.123);
       tl.to("#ph", {...{left: '6.667%'}, duration: 0.35, ease: "power3.inOut"}, 14.070);

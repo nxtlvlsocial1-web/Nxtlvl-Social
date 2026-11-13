@@ -328,7 +328,7 @@ HTML.append('<div class="scn" id="sd">')
 head("hd", [[("Scores", ""), ("it", "")], [("out", ""), ("of", ""), ("five.", "it pk")]], 190, "c03", 84, dark=True)
 head("hd2", [[("Flags", ""), ("the", ""), ("exact", "")], [("moments.", "it pk")]], 190, "c03", 84, dark=True, after=T("c03", "flags") - .05)
 CHIPS = [("Hook", "#F5B544", 40, 600), ("Proof", "#F5B544", 836, 700), ("Trust", MAG, 40, 840)]
-HTML.append("".join(f'<div class="gc glass dkg" id="gc{i}" style="left:{x}px;top:{y}px;--c:{c}">{SH}<i></i>{n}</div>' for i, (n, c, x, y) in enumerate(CHIPS)))
+HTML.append('<div id="gcs">' + "".join(f'<div class="gc glass dkg" id="gc{i}" style="left:{x}px;top:{y}px;--c:{c}">{SH}<i></i>{n}</div>' for i, (n, c, x, y) in enumerate(CHIPS)) + '</div>')
 HTML.append(f'<div class="gauge glass dkg" id="gauge"><i class="gsh"></i><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84" class="gt"/>'
             '<circle cx="100" cy="100" r="84" class="gf" id="gf"/></svg><div class="gin"><div class="gv"><b id="gnum">0.0</b><span>/5</span></div>'
             '<div class="ex">EXAMPLE REEL</div></div></div>'
@@ -350,13 +350,15 @@ t_fl = snap(T("c03", "flags") - .05)
 tilt("#gauge", SD + .6, t_fl - .1, 7, .8)
 sfx("impact", t_land)
 for i in range(3):                                   # glass chips pop out of the ring when the score lands
-    tc = t_land + .04 + .07 * i
-    ft(f"#gc{i}", tc, .45, f"{{opacity: 0, x: {(260, -260, 260)[i]}, scale: .3}}", "{opacity: 1, x: 0, scale: 1}", "back.out(1.8)")
-    shine(f"#gc{i}", tc + .3, .6)
+    tc = t_land + .02 + .05 * i
+    ft(f"#gc{i}", tc, .3, f"{{opacity: 0, x: {(260, -260, 260)[i]}, scale: .3}}", "{opacity: 1, x: 0, scale: 1}", "back.out(1.8)")
+    shine(f"#gc{i}", tc + .15, .35)
     sfx("pop", tc)
 # D2: zoom through into the flags shot; the ring and chips leave under the zoom, the rail fills the frame
 zoom_through(t_fl)
-for b in ["#gauge", "#hd"] + [f"#gc{i}" for i in range(3)]:
+# v6.1 (owner: "fix this flickering from 0:13"): the Trust chip's entrance still ran when the flags shot began, so it
+# fought the hide; the chips now finish 0.2 s before the cut and leave as one group (#gcs) no chip tween touches
+for b in ["#gauge", "#hd", "#gcs"]:
     st(b, t_fl, "{opacity: 0}")
 ft("#rail", t_fl + .02, .5, "{opacity: 0, y: 140, rotationX: 30}", "{opacity: 1, y: 0, rotationX: 0}", "back.out(1.4)")
 shine("#rail", t_fl + .35, 1.0)
