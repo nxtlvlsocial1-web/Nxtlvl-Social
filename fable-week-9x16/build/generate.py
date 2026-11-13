@@ -145,12 +145,19 @@ HTML.append(f'<div class="meter glass" id="meter">{SH}<div class="mlab"><b>CLAUD
             '<div class="mval"><span id="m0">$0</span><em id="m0e">extra</em></div>'
             '<div class="mbar"><i id="mfill"></i></div>'
             '<div class="mend"><span>ENDS</span><b>MON 16 NOV · 11:59 PM PT</b></div>'
-            '<div class="paid" id="paid">PAID CREDITS</div></div></div>')
+            '<div class="paid" id="paid">PAID CREDITS</div></div>'
+            f'<div class="pick glass" id="pick">{SH}<div class="pkh">MODEL</div>'
+            '<div class="po on" id="po0"><b>Fable 5.2</b><span id="poz">included until Mon</span><i>&#10003;</i></div>'
+            '<div class="po"><b>Opus 5.5</b></div><div class="po"><b>Sonnet 5.5</b></div></div></div>')
 scene("sa", SA, SB)
 ft("#meter", 0, .55, "{opacity: 1, y: 160, rotationX: 18, scale: .92}", "{opacity: 1, y: 0, rotationX: 0, scale: 1}", "expo.out")
 streak(.08)
 sfx("impact", 0)
 shine("#meter", .45)
+t_fb = T("f00", "fable")
+ft("#pick", t_fb - .05, .45, "{opacity: 0, y: 80, scale: .94}", "{opacity: 1, y: 0, scale: 1}", "back.out(1.6)")
+shine("#pick", t_fb + .35, .7)
+sfx("click", t_fb + .1)
 ft("#mfill", .2, 1.6, "{scaleX: .08}", "{scaleX: 1}", "power2.out")
 t_mon = T("f00", "monday")
 punch(t_mon)
@@ -160,6 +167,8 @@ ft("#paid", t_paid - .05, .35, "{opacity: 0, scale: 1.8, rotation: -14}", "{opac
 to("#m0", t_paid - .05, .2, "{opacity: .25}")
 to("#m0e", t_paid - .05, .2, "{opacity: .25}")
 sfx("stamp", t_paid)
+st("#poz", t_paid, '{textContent: "now uses paid credits"}')
+to("#po0", t_paid, .25, f"{{borderColor: '{RED}', background: 'rgba(255,77,109,.14)'}}")
 js(f'tl.fromTo("#meter", {{x: 0}}, {{keyframes: [{{x: -14, duration: .05}}, {{x: 12, duration: .05}}, {{x: -8, duration: .05}}, {{x: 0, duration: .05}}], immediateRender: false}}, {t_paid:.3f});')
 head_out("ha", SB - .25)
 
@@ -296,7 +305,10 @@ shine("#pdf", t_se + .4, .8)
 sfx("swish", t_se - .1)
 
 # ---- the 3D twin canvas (scene C) -------------------------------------------------------------------------------------------------
-TW = f'<canvas id="twin" class="clip" width="1080" height="1080" data-start="0" data-duration="{DUR:.2f}" data-track-index="3"></canvas>'
+# the canvas exists only in its own scene (HyperFrames hides a clip outside its window; a style set from the module
+# was not enough, so the owl stayed on screen over the later scenes)
+TW = (f'<canvas id="twin" class="clip" width="1080" height="1080" data-start="{TWIN[0]:.3f}" data-duration="{TWIN[3] - TWIN[0]:.3f}" '
+      'data-track-index="3"></canvas>')
 
 # ---- background glows -------------------------------------------------------------------------------------------------------------
 for i, (x, y, s, c) in enumerate([(-260, -220, 900, VIO), (560, 1260, 960, ELEC), (380, 520, 600, STAR)]):
@@ -352,6 +364,12 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: {NIGH
 .mend b {{ color: #fff; font-size: 26px; }}
 .paid {{ position: absolute; right: 40px; top: 120px; padding: 14px 26px; border: 6px solid {RED}; border-radius: 18px; color: {RED}; font-weight: 900; font-size: 54px;
   letter-spacing: .02em; background: rgba(20,4,20,.75); opacity: 0; }}
+.pick {{ position: absolute; left: 90px; right: 90px; top: 1130px; padding: 26px 30px 30px; border-radius: 34px; opacity: 0; }}
+.pkh {{ font-family: J; font-size: 22px; letter-spacing: .16em; color: {LAV}; margin-bottom: 16px; }}
+.po {{ display: flex; align-items: center; gap: 18px; padding: 20px 24px; border-radius: 20px; font-size: 38px; border: 1.5px solid transparent; color: rgba(255,255,255,.45); }}
+.po.on {{ color: #fff; background: rgba(122,47,251,.22); border-color: rgba(182,135,249,.6); }}
+.po span {{ font-family: J; font-size: 22px; color: {LAV}; letter-spacing: .06em; }}
+.po i {{ margin-left: auto; width: 40px; height: 40px; border-radius: 50%; background: {STAR}; font-style: normal; font-size: 22px; display: flex; align-items: center; justify-content: center; }}
 /* B mails, tiles */
 .mails {{ position: absolute; left: 90px; right: 90px; top: 620px; display: flex; flex-direction: column; gap: 22px; }}
 .mail {{ position: relative; display: flex; align-items: center; gap: 24px; padding: 28px 32px; border-radius: 28px; opacity: 0; }}

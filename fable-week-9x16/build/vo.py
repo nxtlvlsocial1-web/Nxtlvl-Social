@@ -1,6 +1,7 @@
 """Fable 5.2 week reel (AI.NXTLVL): voiceover, same voice as the GTA reels (owner approved): Chatterbox (Resemble AI,
 MIT) at medium emotion, its timbre from a Kokoro-82M am_puck reference (a synthetic voice, nobody real is cloned).
-Lines are the approved script, spelled the way they are said ("Fable five point two", "three D", "twenty twenty-seven").
+Lines are the approved script, spelled the way they are said ("Klawd" for Claude: the first take came out "Clod",
+"Fable five point two", "three D", "twenty twenty-seven").
 Three takes per line; build/vo_pick.py picks and joins them.
 HF_HOME=/root/tts/hf /root/tts/.venv/bin/python build/vo.py
 """
@@ -14,7 +15,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REF = os.path.join(ROOT, "assets", "audio", "ref_am_puck.wav")
 OUT = os.path.join(ROOT, "assets", "audio", "vo_takes")
 LINES = [
-    ("f00", "Claude Pro users: Fable five point two costs nothing extra until Monday night. Then it eats paid credits.", .65),
+    ("f00", "Klawd Pro users: Fable five point two costs nothing extra until Monday night. Then it eats paid credits.", .65),
     ("f01", "So don't burn the week on emails. Build these three.", .6),
     ("f02", "One: your three D twin. Answer five questions, and Fable codes a three D animal that's built like you.", .6),
     ("f03", "Two: your twenty twenty-seven. It asks the questions nobody asks you, then turns the answers into a plan, month by month.", .6),

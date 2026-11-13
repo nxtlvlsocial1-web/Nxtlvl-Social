@@ -1,0 +1,131 @@
+{
+ "duration": 32.096,
+ "takes": [
+  {
+   "line": "f00",
+   "take": 0,
+   "heard": "Plod Pro users, Fable 5 .2 cost nothing extra until Monday night. Then it eats paid credits.",
+   "errors": 4,
+   "pitch_spread_hz": 65
+  },
+  {
+   "line": "f00",
+   "take": 1,
+   "heard": "Clod Pro users Fable 5 .2 cost nothing extra until Monday night, then it eats paid credits",
+   "errors": 4,
+   "pitch_spread_hz": 91
+  },
+  {
+   "line": "f00",
+   "take": 2,
+   "heard": "Clod Pro users, Fable 5 .2 costs nothing extra until Monday night, then it eats paid credits.",
+   "errors": 3,
+   "pitch_spread_hz": 66
+  },
+  {
+   "line": "f01",
+   "take": 0,
+   "heard": "So don't burn the week on emails. Build these three?",
+   "errors": 0,
+   "pitch_spread_hz": 120
+  },
+  {
+   "line": "f01",
+   "take": 1,
+   "heard": "So don't burn the weak on emails, build these three.",
+   "errors": 1,
+   "pitch_spread_hz": 58
+  },
+  {
+   "line": "f01",
+   "take": 2,
+   "heard": "So don't burn the weak on emails. Build these three.",
+   "errors": 1,
+   "pitch_spread_hz": 88
+  },
+  {
+   "line": "f02",
+   "take": 0,
+   "heard": "1. Your 3D Twin Answer 5 questions and fable codes a 3D animal that's built like you.",
+   "errors": 1,
+   "pitch_spread_hz": 64
+  },
+  {
+   "line": "f02",
+   "take": 1,
+   "heard": "1. Your 3D twin. Answer 5 questions and fable codes a 3D animal that's built like you.",
+   "errors": 1,
+   "pitch_spread_hz": 65
+  },
+  {
+   "line": "f02",
+   "take": 2,
+   "heard": "1. Your 3D Twin. Answer 5 questions and fable codes a 3D animal that's built like you.",
+   "errors": 1,
+   "pitch_spread_hz": 62
+  },
+  {
+   "line": "f03",
+   "take": 0,
+   "heard": "2. You're 2027. It asks the questions nobody asks you, then turns the answers into a plan, month by month.",
+   "errors": 1,
+   "pitch_spread_hz": 71
+  },
+  {
+   "line": "f03",
+   "take": 1,
+   "heard": "2. You're 2027. It asks the questions nobody asks you, then turns the answers into a plan month by month.",
+   "errors": 1,
+   "pitch_spread_hz": 75
+  },
+  {
+   "line": "f03",
+   "take": 2,
+   "heard": "2. You're 2027. It asks the questions nobody asks you, then turns the answers into a plan month by month.",
+   "errors": 1,
+   "pitch_spread_hz": 78
+  },
+  {
+   "line": "f04",
+   "take": 0,
+   "heard": "Three, the one that lasts, have Fable write its own playbook as a skill so cheaper models keep working like it after Monday.",
+   "errors": 0,
+   "pitch_spread_hz": 103
+  },
+  {
+   "line": "f04",
+   "take": 1,
+   "heard": "3. The one that lasts. Have Fable write its own playbook as a skill, so cheaper models keep working like it after Monday.",
+   "errors": 0,
+   "pitch_spread_hz": 86
+  },
+  {
+   "line": "f04",
+   "take": 2,
+   "heard": "3. The one that lasts, Half -Fable write its own playbook as a skill, so cheaper models keep working like it after Monday.",
+   "errors": 1,
+   "pitch_spread_hz": 76
+  },
+  {
+   "line": "f05",
+   "take": 0,
+   "heard": "Comment Fable, and I'll send you all three prompts.",
+   "errors": 0,
+   "pitch_spread_hz": 65
+  },
+  {
+   "line": "f05",
+   "take": 1,
+   "heard": "Come in, Fable, and I'll send you all three prompts.",
+   "errors": 2,
+   "pitch_spread_hz": 52
+  },
+  {
+   "line": "f05",
+   "take": 2,
+   "heard": "Comment Fable, and I'll send you all three prompts.",
+   "errors": 0,
+   "pitch_spread_hz": 60
+  }
+ ]
+}
