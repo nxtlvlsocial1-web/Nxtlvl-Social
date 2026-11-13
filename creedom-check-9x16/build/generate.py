@@ -115,9 +115,11 @@ def scene(sid, t0, t1):
 SA, SB, SC, SD, SE, SF, SG = 0.0, L0["c01"] - .14, L0["c02"] - .14, L0["c03"] - .1, L0["c04"] - .12, L0["c05"] - .12, L0["c06"] - .12
 
 # ---- persistent objects: the phone (demo reel), the Share pill, the lens orb ------------------------------------------
-VIDS = [(0, SB + .02, 0.0), (SC - .02, SD, 2.0), (SD, T("c03", "weak") - .05, 3.2), (T("c03", "weak") - .05, T("c03", "claim") - .05, 0.8),
-        (T("c03", "claim") - .05, T("c03", "moment", 1) - .05, 6.8), (T("c03", "moment", 1) - .05, SE + .02, 8.6), (SF - .02, DUR, 4.0)]
-vids = "".join(f'<video class="dv" id="dv{i}" src="assets/video/demo.mp4" data-start="{a:.3f}" data-duration="{b - a:.3f}" data-media-start="{m:.3f}" '
+# v3 (owner: "the dummy video just loops for those few frames"): a 30 s demo reel (three Pexels clips) that plays
+# straight through on the scene clock; the flags jump to its real 0:01, 0:07 and 0:14
+_tw, _tc, _tm = T("c03", "weak") - .05, T("c03", "claim") - .05, T("c03", "moment", 1) - .05
+VIDS = [(0, SB + .02, 0.0), (SC - .02, _tw, SC - .02), (_tw, _tc, 1.0), (_tc, _tm, 7.0), (_tm, SE + .02, 14.0), (SF - .02, DUR, SF - .02)]
+vids = "".join(f'<video class="dv" id="dv{i}" src="assets/video/demo_long.mp4" data-start="{a:.3f}" data-duration="{b - a:.3f}" data-media-start="{m:.3f}" '
                f'data-track-index="{1 + i % 2}" muted playsinline></video>' for i, (a, b, m) in enumerate(VIDS))
 HTML.append('<div class="phone" id="phone"><div class="scr">' + vids +
             '<div class="ig"><div class="cap">3 AI tools I use daily</div><div class="side"><i></i><i></i><i></i></div>'
@@ -128,11 +130,11 @@ HTML.append('<div class="share glass" id="share"><svg class="lk" id="lk" viewBox
 
 # ---- A hook (light) ---------------------------------------------------------------------------------------------------
 HTML.append('<div class="scn" id="sa">')
-head("ha", [[("An", ""), ("app", ""), ("that", ""), ("rates", "it")], [("your", ""), ("reel", ""), ("before", "it"), ("you", ""), ("post", "")]], 210, "c00", 86)
+head("ha", [[("An", ""), ("app", ""), ("that", ""), ("rates", "it")], [("your", ""), ("reel", ""), ("before", "it")], [("you", ""), ("post.", "")]], 190, "c00", 84)
 HTML.append('<div class="chip glass" id="fixchip">tells you exactly <i>what to fix</i></div></div>')
 scene("sa", SA, SB)
-ft("#phone", .05, .9, "{opacity: 0, y: 260, rotationX: 24, scale: .9}", "{opacity: 1, y: 0, rotationX: 0, scale: 1}", "expo.out")
-ft("#share", .45, .6, "{opacity: 0, y: 60, scale: .8}", "{opacity: 1, y: 0, scale: 1}", "expo.out")
+ft("#phone", .05, .9, "{opacity: 0, x: -120, y: 300, rotationX: 24, scale: .9}", "{opacity: 1, x: -120, y: 40, rotationX: 0, scale: 1}", "expo.out")
+ft("#share", .45, .6, "{opacity: 0, x: -120, y: 100, scale: .8}", "{opacity: 1, x: -120, y: 40, scale: 1}", "expo.out")
 t_r = T("c00", "rates")
 sfx("whoosh", t_r - .1)
 t_p = T("c00", "post")
@@ -170,11 +172,11 @@ sfx("ding", T("c01", "before"))
 head_out("hb", SC - .25)
 
 # ---- C meet Creedom, it watches (light) --------------------------------------------------------------------------------
-strip = "".join(f'<div class="fr glass" id="fr{i}"><img src="assets/img/demo_{t}.jpg"><span>0:0{t}</span></div>' for i, t in enumerate((1, 5, 8)))
+strip = "".join(f'<div class="fr glass" id="fr{i}"><img src="assets/img/demo_{t}.jpg"><span>0:{t:02d}</span></div>' for i, t in enumerate((1, 7)))
 steps = "".join(f'<div class="stp glass" id="sp{i}"><i>&#10003;</i>{s}</div>' for i, s in enumerate(["Watching the reel end to end", "Reading the scorecard"]))
 HTML.append('<div class="scn" id="sc"><div class="brand glass" id="brand"><img src="assets/img/creedom_logo.png"></div>')
 head("hcc", [[("It's", ""), ("called", "")], [("Creedom.", "it pk")]], 210, "c02", 96)
-head("hc", [[("It", ""), ("watches", ""), ("your", ""), ("whole", ""), ("reel", "")], [("second", "it"), ("by", "it"), ("second.", "it")]], 210, "c02", 80,
+head("hc", [[("It", ""), ("watches", ""), ("your", "")], [("whole", ""), ("reel,", "")], [("second", "it"), ("by", "it"), ("second.", "it")]], 190, "c02", 80,
      after=T("c02", "Creedom") + .2)
 HTML.append(f'<div class="strip">{strip}</div><div class="steps">{steps}</div><div class="beam" id="beam"></div></div>')
 scene("sc", SC, SD)
@@ -189,9 +191,9 @@ head_out("hcc", T("c02", "It", 1) - .3)
 ft("#phone", t_w - .2, .7, "{opacity: 0, scale: .85, filter: 'blur(12px)', x: -150}", "{opacity: 1, scale: .86, filter: 'blur(0px)', x: -150}", "expo.out")
 ft("#beam", t_w + .4, 2.6, "{opacity: .9, y: 0}", "{opacity: .9, y: 900}", "sine.inOut")
 to("#beam", t_w + 2.9, .2, "{opacity: 0}")
-for i in range(3):
+for i in range(2):
     t = T("c02", "second") + .12 * i
-    ft(f"#fr{i}", t, .6, "{opacity: 0, x: -320, scale: .6, filter: 'blur(10px)'}", f"{{opacity: 1, x: 0, scale: 1, filter: 'blur(0px)', rotation: {(-4, 2, 5)[i]}}}", "expo.out")
+    ft(f"#fr{i}", t, .6, "{opacity: 0, x: -320, scale: .6, filter: 'blur(10px)'}", f"{{opacity: 1, x: 0, scale: 1, filter: 'blur(0px)', rotation: {(-4, 3)[i]}}}", "expo.out")
     sfx("shutter", t)
 for i in range(2):
     t = T("c02", ("like", "viewer")[i]) - .05
@@ -204,16 +206,16 @@ MARK = [("weak", "0:01", "Weak hook", "#F5B544", 1 / 15), ("claim", "0:07", "Cla
 marks = "".join(f'<div class="mk" id="mk{i}" style="left:{p * 100:.1f}%;--c:{c}"><b></b><span class="glass dkg">{ts} · {lab}</span></div>'
                 for i, (_, ts, lab, c, p) in enumerate(MARK))
 HTML.append('<div class="scn" id="sd">')
-head("hd", [[("Scores", ""), ("it", ""), ("out", ""), ("of", ""), ("five", "it pk")]], 200, "c03", 84, dark=True)
+head("hd", [[("Scores", ""), ("it", "")], [("out", ""), ("of", ""), ("five.", "it pk")]], 190, "c03", 84, dark=True)
 HTML.append('<div class="gauge glass dkg" id="gauge"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84" class="gt"/>'
             '<circle cx="100" cy="100" r="84" class="gf" id="gf"/></svg><div class="gv"><b id="gnum">0.0</b><span>/5</span></div><div class="ex">EXAMPLE REEL</div></div>'
             f'<div class="rail glass dkg" id="rail"><div class="rl"><i id="ph"></i>{marks}</div><div class="tk"><span>0:00</span><span>0:05</span><span>0:10</span><span>0:15</span></div></div>'
-            '<div class="flagh" id="flagh">Flags the exact moments</div></div>')
+            '<div class="flagh" id="flagh">Flags the exact<br>moments</div></div>')
 scene("sd", SD, SE)
 sweep(SD)
 mode(SD, True)
 to("#phone", SD - .1, .55, "{opacity: 1, x: -250, y: -190, scale: .5, filter: 'blur(0px)'}", "expo.inOut")
-for b in ("#fr0", "#fr1", "#fr2", "#sp0", "#sp1"):
+for b in ("#fr0", "#fr1", "#sp0", "#sp1"):
     to(b, SD - .25, .2, "{opacity: 0}")
 t_sc = T("c03", "scores")
 ft("#gauge", t_sc - .1, .7, "{opacity: 0, scale: .7, filter: 'blur(14px)', rotation: -20}", "{opacity: 1, scale: 1, filter: 'blur(0px)', rotation: 0}", "expo.out")
@@ -239,7 +241,7 @@ for i, (w, ts, lab, c, p) in enumerate(MARK):
 HTML.append('<div class="scn" id="se"><div class="fix glass dkg" id="fix"><div class="ft"><b>0:14</b><span>Loses trust</span></div>'
             '<div class="fl">The tool is never named, so viewers can\'t follow along.</div>'
             '<div class="fx"><i>Fix</i>Name the tool on screen at 0:14.</div></div>')
-head("he", [[("With", ""), ("the", ""), ("timestamp,", "")], [("and", ""), ("the", ""), ("fix.", "it pk")]], 200, "c04", 92, dark=True)
+head("he", [[("With", ""), ("the", "")], [("timestamp,", "")], [("and", ""), ("the", ""), ("fix.", "it pk")]], 190, "c04", 88, dark=True)
 HTML.append('</div>')
 scene("se", SE, SF)
 for b in ("#rail", "#gauge", "#flagh"):
@@ -254,13 +256,13 @@ to("#fix", SF - .25, .3, "{opacity: 0, scale: 1.2, filter: 'blur(16px)'}", "powe
 
 # ---- F fix it before anyone sees it (light) -------------------------------------------------------------------------------
 HTML.append('<div class="scn" id="sf">')
-head("hf", [[("Fix", ""), ("it", "")], [("before", "it"), ("anyone", ""), ("sees", ""), ("it.", "")]], 210, "c05", 92)
+head("hf", [[("Fix", ""), ("it", "")], [("before", "it"), ("anyone", "")], [("sees", ""), ("it.", "")]], 190, "c05", 84)
 HTML.append('<div class="ok glass" id="ok"><i>&#10003;</i>0:14 fixed</div></div>')
 scene("sf", SF, SG)
 zoom_through(SF)
 mode(SF, False)
-ft("#phone", SF + .05, .7, "{opacity: 0, x: 0, y: 0, scale: .9, filter: 'blur(14px)'}", "{opacity: 1, x: 0, y: 0, scale: 1, filter: 'blur(0px)'}", "expo.out")
-ft("#share", SF + .1, .5, "{opacity: 0, y: 40}", "{opacity: 1, y: 0}", "expo.out")
+ft("#phone", SF + .05, .7, "{opacity: 0, x: -120, y: 40, scale: .9, filter: 'blur(14px)'}", "{opacity: 1, x: -120, y: 40, scale: 1, filter: 'blur(0px)'}", "expo.out")
+ft("#share", SF + .1, .5, "{opacity: 0, x: -120, y: 80}", "{opacity: 1, x: -120, y: 40}", "expo.out")
 ft("#ok", T("c05", "fix") + .1, .55, "{opacity: 0, x: 120, filter: 'blur(12px)'}", "{opacity: 1, x: 0, filter: 'blur(0px)'}", "expo.out")
 sfx("notify", T("c05", "fix") + .1)
 t_sees = T("c05", "sees")
@@ -273,7 +275,7 @@ for b in ("#phone", "#share", "#ok"):
     to(b, SG - .25, .3, "{opacity: 0, filter: 'blur(12px)'}")
 
 # ---- G CTA (dark) ---------------------------------------------------------------------------------------------------------------
-fl = "".join(f'<div class="flt glass dkg" id="fl{i}" style="left:{x}px;top:{y}px">CHECK</div>' for i, (x, y) in enumerate([(90, 1330), (620, 1420), (260, 1530), (700, 1260), (120, 1180)]))
+fl = "".join(f'<div class="flt glass dkg" id="fl{i}" style="left:{x}px;top:{y}px">CHECK</div>' for i, (x, y) in enumerate([(60, 1300), (790, 1250), (70, 1520), (800, 1480), (60, 1080)]))
 HTML.append('<div class="scn" id="sg"><div class="cm" id="cmh">Comment</div><div class="kw" id="kw">CHECK</div>'
             '<div class="cbox glass dkg" id="cbox"><i></i><span id="ctx">Add a comment…</span><b id="csend">&#10148;</b></div>'
             f'<div class="sub" id="sub">and I\'ll send you the <i>link.</i></div>{fl}</div>')
@@ -301,7 +303,7 @@ for i in range(5):
     if i % 2 == 0:
         sfx("pop", t)
 
-# ---- the Creedom mascot: he does the checking (owner: "use the creedom mascot that we made") ------------------------------
+# ---- the Creedom mascot (not a bird): he does the checking (owner: "use the creedom mascot that we made") ------------------------------
 def star(sz, col=PINK):
     return (f'<svg viewBox="-50 -50 100 100" width="{sz}" height="{sz}"><path d="M0 -50 C6 -10 10 -6 50 0 C10 6 6 10 '
             f'0 50 C-6 10 -10 6 -50 0 C-10 -6 -6 -10 0 -50 Z" fill="{col}"/></svg>')
@@ -309,7 +311,7 @@ def star(sz, col=PINK):
 
 HTML.append(f'<div id="birdlayer">{bird.rig(star)}</div>')
 b = bird.Bird(js)
-js('tl.set("#birdpos",{x:1250,y:1180,scale:.86},0);tl.set("#bflip",{scaleX:-1},0);')
+js('tl.set("#birdpos",{x:1250,y:1210,scale:.95},0);tl.set("#bflip",{scaleX:-1},0);')
 js('tl.set("#sweat,#mag,.bub,.bsp,#cloud",{opacity:0,scale:.5},0);tl.set("#wingR,#footK",{opacity:0},0);')
 for k in "LR":
     cx, cy, r = bird.EYES[k][:3]
@@ -318,91 +320,110 @@ b.facing = -1
 js(f'tl.to("#bidle",{{y:-7,duration:.42,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .42) - 1}}},0);')
 js(f'tl.fromTo("#bidle",{{rotation:-2.5}},{{rotation:2.5,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 1.3) - 1}}},0);')
 js(f'tl.to("#bbreath",{{scaleY:1.012,scaleX:.994,duration:.8,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .8) - 1}}},0);')
-js(f'tl.fromTo("#wingLi",{{rotation:3}},{{rotation:-4,duration:.6,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .6) - 1}}},0);')
-js(f'tl.fromTo("#wingDi",{{rotation:-3}},{{rotation:4,duration:.6,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .6) - 1}}},.3);')
+js(f'tl.fromTo("#wingLi",{{rotation:1.5}},{{rotation:-2,duration:.9,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .9) - 1}}},0);')
+js(f'tl.fromTo("#wingDi",{{rotation:-1.5}},{{rotation:2,duration:.9,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .9) - 1}}},.3);')
 js(f'tl.fromTo("#footLi",{{rotation:0,y:0}},{{rotation:-7,y:-4,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 1.3) - 1}}},0);')
 js(f'tl.fromTo("#footRi",{{rotation:-7,y:-4}},{{rotation:0,y:0,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 1.3) - 1}}},0);')
-# A: he walks in, lifts his glass magnifier to the reel, taps the locked Share, nods at "what to fix"
+# v3 performance: one spot per scene, reached with a smooth glide while a transition covers the cut; he acts with his
+# face (expressions, looks, blinks), small nods and hops, his glass magnifier, one gesture per beat. No walking cycles,
+# no flapping, no spins (owner: "that is not a bird, don't treat him like that"; "last time you made him it was better").
+def go(t, x, y, sc, d=.6, ease="power3.inOut"):
+    b.at(t, x, y, sc, d, ease)
+
+
+SPOT = (700, 1210, .95)                    # beside the phone in the light scenes
 b.expr(0, "curious", .01)
-b.at(.15, 730, 1200, 0.86, 1.0, "power2.out")
-b.walk(.15, 1.0)
-b.look(.3, -14, -6)
+go(.25, *SPOT, d=.9, ease="back.out(1.3)")
+b.look(.6, -16, -6)
+b.blink(1.0)
 t_r = T("c00", "rates")
 b.expr(t_r, "focused", .2)
 b.show("#mag", t_r)
-js(f'tl.to("#mag",{{rotation:-16,y:-24,duration:.45,ease:"sine.inOut",yoyo:true,repeat:3}},{t_r + .1:.3f});')
-b.look(t_r, -18, -12)
+js(f'tl.fromTo("#mag",{{rotation:0}},{{rotation:-10,duration:.6,ease:"sine.inOut",yoyo:true,repeat:1}},{t_r + .1:.3f});')
+b.look(t_r, -18, -10)
 t_p = T("c00", "post")
-b.show("#mag", t_p - .1, False)
-b.point(t_p, .9)
-b.expr(t_p, "proud", .15)
-b.nod(T("c00", "exactly"), 2)
-b.expr(T("c00", "exactly"), "smile", .15)
-# B (dark): skeptical at "views after", lights up at "reasons, before"
-b.at(SB - .2, 370, 1340, 0.96, .5)
+b.show("#mag", t_p - .15, False)
+b.point(t_p, .8)
+b.expr(t_p, "curious", .15)
+b.look(t_p, -16, 12)
+t_x = T("c00", "exactly")
+b.expr(t_x, "smile", .15)
+b.nod(t_x + .1, 2)
+# B (dark): unimpressed by "views after", lights up at "reasons, before"
+go(SB - .25, 390, 1280, .95)
 b.face(SB, 1)
 b.expr(T("c01", "views"), "skeptical", .2)
-b.shake(T("c01", "views") + .2, 3, 8)
+b.look(T("c01", "views"), -14, -10)
+b.shake(T("c01", "after") + .1, 2, 6)
 t_re = T("c01", "Reasons")
 b.expr(t_re, "excited", .12)
-b.hop(t_re, 90)
-b.flap(t_re, 4, 45)
-b.expr(T("c01", "before") + .3, "joy", .15)
-# C: pops up under the Creedom pill and waves, then scans the reel with the magnifier, second by second
-b.at(SC - .1, 360, 1060, 0.86, .45)
+b.look(t_re, 14, -10)
+b.hop(t_re + .05, 45)
+b.expr(T("c01", "before") + .35, "joy", .15)
+# C: under the Creedom pill he smiles and waves; then he reads the reel with his magnifier
+go(SC - .15, 390, 1040, .9)
 t_cr = T("c02", "Creedom")
 b.expr(t_cr - .1, "joy", .15)
-b.wave(t_cr, 3)
+b.wave(t_cr + .05, 2)
 b.show(".bsp", t_cr)
-js(f'tl.to(".bsp",{{rotation:120,duration:1.0,ease:"none"}},{t_cr:.3f});')
+js(f'tl.to(".bsp",{{rotation:90,duration:1.0,ease:"none"}},{t_cr:.3f});')
 b.show(".bsp", t_cr + 1.0, False)
 t_wt = T("c02", "watches")
-b.at(t_wt - .25, 610, 900, 0.79, .55)
-b.face(t_wt - .25, -1)
+go(t_wt - .3, 720, 1290, .9)
+b.face(t_wt - .3, -1)
 b.expr(t_wt, "focused", .2)
 b.show("#mag", t_wt)
-js(f'tl.to("#birdpos",{{y:1340,duration:1.4,ease:"sine.inOut",yoyo:true,repeat:1}},{t_wt + .4:.3f});')
-js(f'tl.to("#mag",{{rotation:-12,duration:.35,ease:"sine.inOut",yoyo:true,repeat:7}},{t_wt + .3:.3f});')
-b.look(t_wt + .3, -16, 6)
-b.blink(T("c02", "viewer"))
-b.show("#mag", SD - .2, False)
-# D (dark): impressed by the score, then points at each flag; shocked at "loses trust"
-b.at(SD - .1, 660, 1460, 0.79, .5)
-b.face(SD, -1)
+js(f'tl.fromTo("#mag",{{y:0,rotation:0}},{{y:-120,rotation:-14,duration:1.1,ease:"sine.inOut",yoyo:true,repeat:2}},{t_wt + .2:.3f});')
+js(f'tl.fromTo("#mag",{{x:0}},{{x:-30,duration:.55,ease:"sine.inOut",yoyo:true,repeat:5}},{t_wt + .2:.3f});')
+b.look(t_wt + .2, -18, -12)
+b.look(t_wt + 1.3, -18, 10)
+b.look(t_wt + 2.4, -18, -8)
+b.blink(T("c02", "real"))
+b.expr(T("c02", "viewer"), "smile", .15)
+b.show("#mag", SD - .25, False)
+# D (dark): impressed by the score; reads each flag; startled by "loses trust"
+go(SD - .2, 700, 1440, .9)
 t_sc = T("c03", "scores")
-b.expr(t_sc + 1.0, "excited", .12)
-b.hop(t_sc + 1.1, 60)
-for w, ex in (("weak", "skeptical"), ("claim", "focused")):
-    t = T("c03", w)
-    b.point(t, .7)
-    b.expr(t, ex, .15)
+b.look(t_sc, 6, -18)
+b.expr(t_sc + 1.1, "excited", .12)
+b.hop(t_sc + 1.15, 40)
+b.expr(t_sc + 1.7, "smile", .15)
+t_wk = T("c03", "weak")
+b.look(t_wk, -16, -16)
+b.expr(t_wk, "skeptical", .15)
+t_cl = T("c03", "claim")
+b.expr(t_cl, "focused", .15)
+b.point(t_cl + .1, .7)
 t_tr = T("c03", "moment", 1)
 b.expr(t_tr + .4, "shock", .1)
 b.startle(t_tr + .4)
-b.spread(t_tr + .4, 50, .12)
-b.spread(t_tr + .9, 0, .2)
-# E: beside the fix card, nods, proud
-b.at(SE - .1, 670, 1330, 0.79, .5)
-b.expr(SE + .2, "curious", .15)
-b.nod(T("c04", "fix"), 2)
-b.expr(T("c04", "fix"), "proud", .15)
-# F: celebrates when Share unlocks
-b.at(SF - .1, 740, 1240, 0.74, .5)
+b.expr(t_tr + 1.0, "confused", .2)
+# E: beside the fix card he reads it, then nods, proud
+go(SE - .2, 700, 1330, .9)
+b.expr(SE + .1, "curious", .15)
+b.look(SE + .1, -16, -18)
+t_fx = T("c04", "fix")
+b.expr(t_fx, "proud", .15)
+b.nod(t_fx + .05, 2)
+# F: back beside the phone, happy when Share unlocks
+go(SF - .2, *SPOT)
 b.expr(T("c05", "fix"), "smile", .15)
+b.look(T("c05", "fix"), -16, 10)
 t_se = T("c05", "sees")
 b.expr(t_se, "joy", .12)
-b.bounce(t_se, 3, 20)
-b.flap(t_se, 4, 50)
+b.bounce(t_se, 2, 16)
 b.show(".bsp", t_se)
-js(f'tl.to(".bsp",{{rotation:-120,duration:1.0,ease:"none"}},{t_se:.3f});')
+js(f'tl.to(".bsp",{{rotation:-90,duration:1.0,ease:"none"}},{t_se:.3f});')
 b.show(".bsp", t_se + 1.0, False)
-# G: points up at CHECK, then waves goodbye
-b.at(SG - .1, 360, 1420, 0.94, .5)
+# G: points up at CHECK, heart eyes on "send you the link", a little wave to end
+go(SG - .2, 390, 1400, .98)
 b.face(SG, 1)
-b.point(T("c06", "Check"), .9)
-b.expr(T("c06", "Check"), "excited", .12)
+b.look(SG + .1, 0, -18)
+t_ck = T("c06", "Check")
+b.expr(t_ck, "excited", .12)
+b.point(t_ck + .05, .8)
 b.expr(T("c06", "send"), "love", .15)
-b.wave(T("c06", "send") + .2, 3)
+b.wave(T("c06", "link") + .1, 2)
 
 # ---- fluid blobs --------------------------------------------------------------------------------------------------------------
 LB = [(-200, -150, 760, "rgba(238,104,139,.55)"), (520, 260, 820, "rgba(255,190,214,.75)"), (-260, 980, 900, "rgba(217,194,255,.6)"),
@@ -450,6 +471,7 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #fbf7
   border: 2px solid rgba(255,255,255,.25); box-shadow: 0 0 60px rgba(243,67,162,.25), inset 0 0 60px rgba(243,67,162,.15); }}
 /* headlines */
 .head {{ position: absolute; left: 80px; right: 80px; font-weight: 700; letter-spacing: -.035em; line-height: 1.04; z-index: 20; }}
+.hl {{ white-space: nowrap; }}
 .head.dk {{ color: #fff; }}
 .hw {{ display: inline-block; opacity: 0; }}
 .hw.it {{ font-family: Serif; font-style: italic; font-weight: 400; letter-spacing: -.01em; font-size: 1.12em; color: {ROSE}; }}
@@ -483,7 +505,7 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #fbf7
 .lring circle {{ fill: none; stroke: url(#none); stroke: {PINK}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 289; stroke-dashoffset: 289; filter: drop-shadow(0 0 8px {MAG}); }}
 .lhi {{ position: absolute; left: 50px; top: 36px; width: 120px; height: 60px; border-radius: 50%; background: rgba(255,255,255,.75); filter: blur(10px); transform: rotate(-24deg); }}
 .lcau {{ position: absolute; right: 40px; bottom: 34px; width: 90px; height: 90px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.7), transparent 70%); filter: blur(6px); }}
-.chip {{ position: absolute; left: 80px; top: 430px; padding: 18px 30px; border-radius: 999px; font-weight: 600; font-size: 38px; z-index: 20; opacity: 0; }}
+.chip {{ position: absolute; left: 175px; top: 1290px; padding: 18px 30px; border-radius: 999px; font-weight: 600; font-size: 38px; z-index: 20; opacity: 0; }}
 .chip i {{ font-family: Serif; font-weight: 400; font-size: 1.15em; color: {ROSE}; }}
 /* B cards */
 .card {{ position: absolute; top: 560px; width: 440px; height: 600px; border-radius: 44px; padding: 40px 36px; z-index: 12; opacity: 0; transform-style: preserve-3d; }}
@@ -501,11 +523,11 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #fbf7
 .brand {{ position: absolute; left: 50%; top: 820px; width: 620px; height: 200px; margin-left: -310px; border-radius: 100px; display: flex; align-items: center; justify-content: center;
   z-index: 25; opacity: 0; }}
 .brand img {{ height: 92px; }}
-.strip {{ position: absolute; left: 720px; top: 540px; display: flex; flex-direction: column; gap: 26px; z-index: 12; }}
-.fr {{ width: 220px; padding: 10px; border-radius: 26px; opacity: 0; }}
+.strip {{ position: absolute; left: 760px; top: 500px; display: flex; flex-direction: column; gap: 26px; z-index: 12; }}
+.fr {{ width: 200px; padding: 10px; border-radius: 26px; opacity: 0; }}
 .fr img {{ display: block; width: 100%; border-radius: 18px; }}
 .fr span {{ display: block; text-align: center; font-family: Mono; font-size: 22px; margin-top: 8px; color: {ROSE}; }}
-.steps {{ position: absolute; left: 80px; right: 80px; top: 1550px; display: flex; flex-direction: column; gap: 18px; z-index: 13; }}
+.steps {{ position: absolute; left: 80px; width: 600px; top: 1560px; display: flex; flex-direction: column; gap: 18px; z-index: 13; }}
 .stp {{ display: flex; align-items: center; gap: 18px; padding: 20px 28px; border-radius: 26px; font-weight: 600; font-size: 34px; opacity: 0; }}
 .stp i {{ width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, {PINK}, {MAG}); color: #fff; font-style: normal; font-size: 26px;
   display: flex; align-items: center; justify-content: center; }}
@@ -529,7 +551,7 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #fbf7
 #mk2 span {{ left: auto; right: -40px; }}
 #mk1 span {{ left: -110px; top: 140px; }}
 .tk {{ display: flex; justify-content: space-between; margin-top: 210px; font-family: Mono; font-size: 18px; color: rgba(255,255,255,.4); }}
-.flagh {{ position: absolute; left: 80px; right: 80px; top: 200px; font-weight: 700; font-size: 84px; letter-spacing: -.035em; color: #fff; line-height: 1.04; opacity: 0; z-index: 20; }}
+.flagh {{ position: absolute; left: 80px; right: 80px; top: 190px; font-weight: 700; font-size: 84px; letter-spacing: -.035em; color: #fff; line-height: 1.04; opacity: 0; z-index: 20; }}
 /* E */
 .fix {{ position: absolute; left: 80px; right: 80px; top: 760px; border-radius: 48px; padding: 50px 50px 56px; z-index: 12; opacity: 0;
   border-color: rgba(243,67,162,.55); box-shadow: inset 0 1.5px 0 rgba(255,255,255,.35), 0 0 120px rgba(243,67,162,.35), 0 40px 100px rgba(0,0,0,.55); }}
@@ -541,7 +563,7 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #fbf7
   font-weight: 700; font-size: 40px; opacity: 0; }}
 .fix .fx i {{ font-style: normal; font-family: Mono; font-size: 24px; letter-spacing: .14em; padding: 8px 14px; border-radius: 12px; background: linear-gradient(135deg, {PINK}, {MAG}); }}
 /* F */
-.ok {{ position: absolute; right: 60px; top: 425px; display: flex; align-items: center; gap: 14px; padding: 16px 26px; border-radius: 999px; font-weight: 700; font-size: 34px; z-index: 20; opacity: 0; }}
+.ok {{ position: absolute; right: 50px; top: 1040px; display: flex; align-items: center; gap: 14px; padding: 16px 26px; border-radius: 999px; font-weight: 700; font-size: 34px; z-index: 20; opacity: 0; }}
 .ok i {{ width: 42px; height: 42px; border-radius: 50%; background: #2fbf71; color: #fff; font-style: normal; font-size: 24px; display: flex; align-items: center; justify-content: center; }}
 /* G */
 .cm {{ position: absolute; left: 0; right: 0; top: 470px; text-align: center; font-family: Serif; font-style: italic; font-size: 110px; color: #ffb3cd; opacity: 0; z-index: 20; }}
