@@ -15,65 +15,72 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #2A1E1
 #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #2A1E16; font-family: "Manrope"; }
 .clip { position: absolute; inset: 0; }
 #gl { width: 1080px; height: 1920px; display: block; }
-.cm, .scr, .hd, .note, .drop, .btn, .opt .tk, .prof, #vb3, .stamp, .scrawl, .cap, #panel, #endc, #endc > * { opacity: 0; }
-#cms { position: absolute; left: 70px; top: 290px; width: 760px; }
-.cm { display: flex; gap: 16px; align-items: center; margin-bottom: 16px; padding: 14px 22px 14px 14px; border-radius: 22px; background: rgba(255,250,240,.96); box-shadow: 0 14px 30px rgba(0,0,0,.35); width: fit-content; max-width: 760px; }
-.cm i { flex: none; width: 56px; height: 56px; border-radius: 50%; background: #8B5CF6; color: #fff; font: 800 28px/56px "Manrope"; text-align: center; font-style: normal; }
-.cm b { display: block; font: 800 24px/1.2 "Manrope"; color: #6A6878; } .cm span { display: block; font: 700 32px/1.25 "Manrope"; color: #14161C; }
-#panel { position: absolute; left: 50px; right: 50px; top: 258px; height: 745px; border-radius: 30px; background: #1A1410; border: 2px solid #3A2C22; box-shadow: 0 30px 70px rgba(0,0,0,.55); overflow: hidden; }
-.hd { position: absolute; left: 30px; right: 30px; top: 24px; }
-.hd .pill { display: inline-block; padding: 7px 14px; border-radius: 10px; background: #E8735A; color: #fff; font: 800 22px/1 "Manrope"; letter-spacing: 2px; vertical-align: middle; } .hd .pill.done { background: #22C55E; }
-.hd .prog { display: inline-flex; gap: 10px; margin-left: 18px; vertical-align: middle; } .hd .prog i { width: 150px; height: 8px; border-radius: 4px; background: #4A3A2E; } .hd .prog i.on { background: #E8735A; }
-.hd b { display: block; margin-top: 16px; font: 700 54px/1 "Garamond"; color: #FFF3DC; }
-.win { position: absolute; left: 30px; right: 30px; top: 150px; bottom: 30px; border-radius: 18px; background: #F7F4EE; overflow: hidden; }
-.chrome { height: 34px; background: #E6DFD3; display: flex; gap: 9px; align-items: center; padding-left: 16px; } .chrome i { width: 13px; height: 13px; border-radius: 50%; background: #C9BFB0; }
-.wbody { position: absolute; left: 0; right: 0; top: 34px; bottom: 0; }
-.scr { position: absolute; inset: 0; padding: 20px 26px; color: #14161C; }
-.url { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-radius: 14px; background: #fff; border: 2px solid #E2DACD; font: 700 32px/1 "Mono"; }
-.url .lk { width: 18px; height: 22px; border-radius: 4px; border: 4px solid #22C55E; }
-.hub { margin-top: 18px; } .hub > b { display: block; font: 800 40px/1.1 "Manrope"; } .hub > p { margin-top: 6px; font: 600 26px/1.3 "Manrope"; color: #6A6878; }
-.box { margin-top: 16px; padding: 16px 20px; border-radius: 14px; border: 2px solid #D9D1C4; background: #fff; font: 600 32px/1 "Manrope"; color: #9A93A6; display: flex; align-items: center; }
-.box.on { color: #14161C; border-color: #8B5CF6; } .cur { display: inline-block; width: 3px; height: 34px; background: #8B5CF6; margin-left: 6px; }
-.drop { margin-top: 8px; padding: 12px 20px; border-radius: 14px; background: #fff; border: 2px solid #E2DACD; } .drop b { display: block; font: 800 32px/1.2 "Manrope"; } .drop span { font: 600 24px/1.4 "Manrope"; color: #6A6878; }
-.drop.add { font: 800 28px/1 "Manrope"; color: #8B5CF6; border-style: dashed; border-color: #8B5CF6; }
-.btn { position: relative; margin-top: 14px; padding: 18px; border-radius: 999px; background: #14161C; color: #fff; text-align: center; font: 800 34px/1 "Manrope"; }
-.tap { position: absolute; left: 50%; top: 340px; width: 130px; height: 130px; margin-left: -65px; border-radius: 50%; background: rgba(139,92,246,.55); opacity: 0; }
-.opt { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding: 13px 20px; border-radius: 14px; background: #fff; border: 2px solid #E2DACD; font: 700 32px/1 "Manrope"; }
-.tk { width: 38px; height: 38px; } .vb { width: 34px; height: 34px; flex: none; }
-.note { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; } .note span { padding: 10px 18px; border-radius: 999px; background: #E7F7EC; color: #15803D; font: 800 26px/1 "Manrope"; }
-.idc { position: relative; margin: 20px auto 0; width: 600px; height: 250px; border-radius: 24px; background: #fff; border: 2px solid #E2DACD; overflow: hidden; }
-.idpic { position: absolute; left: 30px; top: 36px; width: 140px; height: 175px; border-radius: 14px; background: linear-gradient(180deg, #D9D1C4, #BFB4A4); }
-.idl { position: absolute; left: 200px; top: 56px; right: 30px; } .idl i { display: block; height: 20px; margin-bottom: 24px; border-radius: 10px; background: #E6DFD3; } .idl i.s { width: 60%; }
-.scan { position: absolute; left: 0; right: 0; top: 24px; height: 6px; background: #8B5CF6; box-shadow: 0 0 24px #8B5CF6; }
-.scrawl { position: absolute; left: 70px; top: 270px; font: italic 600 40px/1 "Garamond"; color: #E8735A; transform: rotate(-6deg); }
-.prof { display: flex; align-items: center; gap: 18px; margin-top: 70px; padding: 20px; border-radius: 20px; background: #fff; border: 2px solid #E2DACD; }
-.prof b { display: flex; align-items: center; gap: 12px; font: 800 40px/1.1 "Manrope"; } .prof span { font: 600 26px/1.4 "Manrope"; color: #6A6878; }
-.ph { flex: none; width: 70px; height: 70px; border-radius: 16px; } .p1 { background: linear-gradient(135deg, #7DBA6A, #1F7A4D); } .p4 { background: linear-gradient(135deg, #F2C94C, #1C2A4A); }
-.bar2 { font: 800 30px/1 "Manrope"; color: #6A6878; padding-bottom: 16px; border-bottom: 1px solid #E2DACD; margin-bottom: 18px; }
-.msg.me { margin-left: 190px; padding: 16px 22px; border-radius: 22px; background: #ECE6DB; font: 700 30px/1.3 "Manrope"; margin-bottom: 16px; }
-.biz { display: flex; gap: 16px; align-items: center; padding: 14px 16px; border-radius: 18px; background: #fff; border: 2px solid #E2DACD; margin-bottom: 12px; }
-.biz b { display: flex; align-items: center; gap: 10px; font: 800 32px/1.1 "Manrope"; } .biz span { font: 600 24px/1.4 "Manrope"; color: #6A6878; }
-.biz.top { border-color: #2F7BF6; box-shadow: 0 0 0 4px rgba(47,123,246,.15); } .biz.top { opacity: 0; }
-.stamp { position: absolute; left: 60px; right: 60px; bottom: 30px; padding: 16px; border: 5px solid #E8735A; border-radius: 16px; text-align: center; color: #E8735A; background: rgba(255,250,240,.92); transform: rotate(-5deg); }
-.stamp b { display: block; font: 900 40px/1 "Manrope"; letter-spacing: 2px; } .stamp span { display: block; margin-top: 8px; font: italic 600 30px/1 "Garamond"; color: #6A4A3A; }
-.cap { position: absolute; left: 50px; right: 50px; top: 1040px; text-align: center; font: 600 54px/1.15 "Garamond"; color: #FFF1D6; text-shadow: 0 3px 14px rgba(0,0,0,.85), 0 1px 3px rgba(0,0,0,.9); }
-.cap.sp-byte { color: #C9F7E4; }
-#endc { position: absolute; inset: 0; background: radial-gradient(700px 700px at 50% 32%, #4A3426, #1E1510 70%); text-align: center; color: #FFF1D6; }
-#endc .e0 { position: absolute; left: 50%; top: 380px; width: 230px; height: 230px; margin-left: -115px; border-radius: 50%; background: rgba(255,214,140,.12); display: flex; align-items: center; justify-content: center; }
-#endc .e0 svg { width: 120px; height: 120px; }
-#endc .e1 { position: absolute; left: 80px; right: 80px; top: 680px; font: 700 64px/1.15 "Garamond"; }
-#endc .e2 { position: absolute; left: 60px; right: 60px; top: 900px; font: 800 40px/1.4 "Manrope"; } #endc .e2 b { padding: 4px 14px; border-radius: 10px; background: #E8735A; color: #fff; }
-#endc .e3 { position: absolute; left: 60px; right: 60px; top: 990px; font: 700 32px/1.4 "Manrope"; color: #D9C9B0; }
+.scr, .note, .drop, .btn, .opt .tk, .prof, #vb3, #vbh, .stamp, .scrawl, .cap, #phone, #pad, .it .tk, #endc, #endc .note2 { opacity: 0; }
+#phone { position: absolute; left: 372px; top: 262px; width: 660px; height: 740px; border-radius: 64px; background: #101114; padding: 16px; box-shadow: 0 30px 70px rgba(0,0,0,.55), inset 0 0 0 3px #2A2C33; transform: rotate(2deg); }
+#phone .isl { position: absolute; left: 50%; top: 30px; width: 150px; height: 34px; margin-left: -75px; border-radius: 20px; background: #000; z-index: 2; }
+#phone .sbar { position: absolute; left: 16px; right: 16px; top: 16px; height: 70px; border-radius: 48px 48px 0 0; background: #F7F4EE; padding: 26px 0 0 50px; } #phone .sbar b { font: 800 24px/1 "Manrope"; color: #14161C; }
+#phone .wbody { position: absolute; left: 16px; right: 16px; top: 86px; bottom: 16px; border-radius: 0 0 48px 48px; background: #F7F4EE; overflow: hidden; }
+.scr { position: absolute; inset: 0; padding: 8px 24px; color: #14161C; }
+.url { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-radius: 14px; background: #fff; border: 2px solid #E2DACD; font: 700 27px/1 "Mono"; }
+.url .lk { flex: none; width: 16px; height: 20px; border-radius: 4px; border: 4px solid #22C55E; }
+.hub { margin-top: 16px; } .hub > b { display: block; font: 800 38px/1.1 "Manrope"; } .hub > p { margin-top: 6px; font: 600 25px/1.3 "Manrope"; color: #6A6878; }
+.box { margin-top: 14px; padding: 15px 18px; border-radius: 14px; border: 2px solid #D9D1C4; background: #fff; font: 600 29px/1 "Manrope"; color: #9A93A6; display: flex; align-items: center; }
+.box.on { color: #14161C; border-color: #8B5CF6; } .cur { display: inline-block; width: 3px; height: 32px; background: #8B5CF6; margin-left: 6px; }
+.drop { margin-top: 8px; padding: 12px 18px; border-radius: 14px; background: #fff; border: 2px solid #E2DACD; } .drop b { display: block; font: 800 29px/1.2 "Manrope"; } .drop span { font: 600 23px/1.4 "Manrope"; color: #6A6878; }
+.drop.add { font: 800 26px/1 "Manrope"; color: #8B5CF6; border-style: dashed; border-color: #8B5CF6; }
+.btn { position: relative; margin-top: 14px; padding: 18px; border-radius: 999px; background: #14161C; color: #fff; text-align: center; font: 800 31px/1 "Manrope"; }
+.tap { position: absolute; left: 50%; top: 330px; width: 120px; height: 120px; margin-left: -60px; border-radius: 50%; background: rgba(139,92,246,.55); opacity: 0; }
+.opt { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding: 14px 18px; border-radius: 14px; background: #fff; border: 2px solid #E2DACD; font: 700 30px/1 "Manrope"; }
+.tk { width: 38px; height: 38px; } .vb { width: 32px; height: 32px; flex: none; }
+.note { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; } .note span { padding: 10px 16px; border-radius: 999px; background: #E7F7EC; color: #15803D; font: 800 25px/1 "Manrope"; }
+.idc { position: relative; margin: 20px auto 0; width: 560px; height: 236px; border-radius: 24px; background: #fff; border: 2px solid #E2DACD; overflow: hidden; }
+.idpic { position: absolute; left: 26px; top: 32px; width: 130px; height: 170px; border-radius: 14px; background: linear-gradient(180deg, #D9D1C4, #BFB4A4); }
+.idl { position: absolute; left: 186px; top: 52px; right: 26px; } .idl i { display: block; height: 20px; margin-bottom: 24px; border-radius: 10px; background: #E6DFD3; } .idl i.s { width: 60%; }
+.scan { position: absolute; left: 0; right: 0; top: 20px; height: 6px; background: #8B5CF6; box-shadow: 0 0 24px #8B5CF6; }
+.scrawl { position: absolute; left: 60px; top: 272px; font: italic 600 40px/1 "Garamond"; color: #E8735A; transform: rotate(-6deg); }
+.prof { display: flex; align-items: center; gap: 16px; margin-top: 76px; padding: 18px; border-radius: 20px; background: #fff; border: 2px solid #E2DACD; }
+.prof b { display: flex; align-items: center; gap: 10px; font: 800 34px/1.1 "Manrope"; } .prof span { font: 600 24px/1.4 "Manrope"; color: #6A6878; }
+.ph { flex: none; width: 62px; height: 62px; border-radius: 14px; } .p1 { background: linear-gradient(135deg, #7DBA6A, #1F7A4D); } .p4 { background: linear-gradient(135deg, #F2C94C, #1C2A4A); }
+.bar2 { font: 800 28px/1 "Manrope"; color: #6A6878; padding: 6px 0 14px; border-bottom: 1px solid #E2DACD; margin-bottom: 16px; }
+.msg.me { margin-left: 80px; padding: 14px 20px; border-radius: 22px; background: #ECE6DB; font: 700 28px/1.3 "Manrope"; margin-bottom: 16px; }
+.biz { display: flex; gap: 14px; align-items: center; padding: 14px; border-radius: 18px; background: #fff; border: 2px solid #E2DACD; margin-bottom: 12px; }
+.biz b { display: flex; align-items: center; gap: 8px; font: 800 29px/1.1 "Manrope"; } .biz span { font: 600 23px/1.4 "Manrope"; color: #6A6878; }
+.biz.top { border-color: #2F7BF6; box-shadow: 0 0 0 4px rgba(47,123,246,.15); opacity: 0; } .biz.dim { opacity: 0; } .biz.dim > * { filter: grayscale(1); } .biz.dim b { color: #8A8496; }
+.stamp { position: absolute; left: 30px; right: 30px; bottom: 26px; padding: 14px; border: 5px solid #E8735A; border-radius: 16px; text-align: center; color: #E8735A; background: rgba(255,250,240,.94); transform: rotate(-5deg); }
+.stamp b { display: block; font: 900 36px/1 "Manrope"; letter-spacing: 2px; } .stamp span { display: block; margin-top: 8px; font: italic 600 28px/1 "Garamond"; color: #6A4A3A; }
+#pad { position: absolute; left: 44px; top: 300px; width: 316px; padding: 26px 22px 18px; border-radius: 10px; background: #FFF6C9; box-shadow: 0 22px 44px rgba(0,0,0,.45); transform: rotate(-3deg);
+  background-image: repeating-linear-gradient(180deg, transparent 0 63px, rgba(90,120,200,.22) 63px 65px); }
+#pad::before { content: ""; position: absolute; left: 0; right: 0; top: -14px; height: 28px; background: #C9473A; border-radius: 8px 8px 4px 4px; }
+#pad .pt { position: relative; height: 44px; font: italic 700 44px/1 "Garamond"; color: #2A2440; margin-bottom: 14px; } #pad .pt span { position: absolute; left: 0; top: 0; } #pad .pb { color: #15803D; opacity: 0; }
+.it { position: relative; display: flex; align-items: center; gap: 14px; min-height: 104px; opacity: .45; }
+.it .num { flex: none; width: 48px; height: 48px; border-radius: 50%; border: 3px solid #2A2440; font: 800 28px/42px "Manrope"; text-align: center; color: #2A2440; }
+.it .tk { position: absolute; left: 4px; width: 44px; height: 44px; }
+.it b { position: relative; z-index: 1; font: 800 33px/1.12 "Manrope"; color: #2A2440; }
+.it .hl { position: absolute; left: 58px; right: -6px; top: 50%; height: 64px; margin-top: -32px; background: rgba(255,140,90,.45); border-radius: 6px; transform-origin: left center; transform: scaleX(0); z-index: 0; }
+.cap { position: absolute; left: 40px; right: 40px; top: 1036px; text-align: center; }
+.cap span { display: inline; padding: 6px 18px; border-radius: 14px; background: rgba(20,14,10,.78); font: 800 44px/1.5 "Manrope"; color: #FFFFFF; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.cap.sp-byte span { color: #9EF5D2; }
+#endc { position: absolute; inset: 0; background: rgba(22,15,10,.66); }
+#endc .note2 { position: absolute; left: 110px; right: 110px; top: 470px; padding: 70px 54px 56px; border-radius: 12px; background: #FFF6C9; box-shadow: 0 30px 70px rgba(0,0,0,.5); text-align: center; color: #2A2440; }
+#endc .note2::before { content: ""; position: absolute; left: 50%; top: -22px; width: 150px; height: 44px; margin-left: -75px; background: rgba(255,255,255,.55); transform: rotate(-3deg); }
+#endc .e0 svg { width: 110px; height: 110px; }
+#endc .e1 { margin-top: 18px; font: 700 62px/1.12 "Garamond"; }
+#endc .e2 { margin-top: 34px; font: 800 40px/1.45 "Manrope"; } #endc .e2 b { padding: 4px 14px; border-radius: 10px; background: #E8735A; color: #fff; }
+#endc .e3 { margin-top: 22px; font: 700 31px/1.4 "Manrope"; color: #6A5A48; }
 </style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="57.67" data-fps="30" data-width="1080" data-height="1920">
       <canvas id="gl" class="clip" data-hold data-start="0" data-duration="57.67" data-track-index="0"></canvas>
-      <div id="ui" class="clip" data-start="0" data-duration="57.67" data-track-index="3" data-layout-allow-overflow><div id="cms"><div class="cm" id="cm0"><i>K</i><div><b>@k.tanaka</b><span>why does ChatGPT keep recommending my competitor??</span></div></div><div class="cm" id="cm1"><i>D</i><div><b>@devon.realty</b><span>how do I get my business on ChatGPT</span></div></div><div class="cm" id="cm2"><i>M</i><div><b>@mira.homes</b><span>is it free??</span></div></div></div><div id="panel"><div class="hd" id="hd0"><span class="pill">STEP 1/4</span><span class="prog"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span><b>Open Business Hub</b></div><div class="hd" id="hd1"><span class="pill">STEP 2/4</span><span class="prog"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span><b>Find your business</b></div><div class="hd" id="hd2"><span class="pill">STEP 3/4</span><span class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span><b>Prove it&rsquo;s yours</b></div><div class="hd" id="hd3"><span class="pill">STEP 4/4</span><span class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><b>ID check, blue check</b></div><div class="hd" id="hd4"><span class="pill done">DONE</span><span class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><b>Now ask ChatGPT</b></div><div class="win"><div class="chrome"><i></i><i></i><i></i></div><div class="wbody"><div class="scr" id="s0"><div class="url"><span class="lk"></span><span id="u0">chatgpt.com/business-hub</span></div>
+      <div id="ui" class="clip" data-start="0" data-duration="57.67" data-track-index="3" data-layout-allow-overflow><div id="pad"><div class="pt"><span class="pa">4 steps</span><span class="pb">all done!</span></div><div class="it" id="it0"><span class="num">1</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Open the hub</b><i class="hl" id="hl0"></i></div><div class="it" id="it1"><span class="num">2</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Find your agency</b><i class="hl" id="hl1"></i></div><div class="it" id="it2"><span class="num">3</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Prove it&rsquo;s yours</b><i class="hl" id="hl2"></i></div><div class="it" id="it3"><span class="num">4</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Quick ID check</b><i class="hl" id="hl3"></i></div></div><div id="phone"><div class="isl"></div><div class="sbar"><b>9:41</b></div><div class="wbody"><div class="scr" id="s5"><div class="bar2"><b>ChatGPT</b></div>
+      <div class="msg me">Best real estate agent near me?</div>
+      <div class="biz top" id="bh0"><div class="ph p1"></div><div><b>Prime Nest Realty <span id="vbh"><svg class="vb" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#2F7BF6"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></b><span>open now · 4.6</span></div></div>
+      <div class="biz dim" id="bh1"><div class="ph p4"></div><div><b>Keystone Realty</b><span>not claimed</span></div></div>
+      <div class="note" id="nh"><span>Free · since Nov 10</span></div></div><div class="scr" id="s0"><div class="url"><span class="lk"></span><span id="u0">chatgpt.com/business-hub</span></div>
       <div class="hub"><b>Business Hub</b><p>Claim your business on ChatGPT</p><div class="box">Search your business name</div>
       <div class="note" id="n0"><span>No paid plan</span><span>No ads account</span></div></div></div><div class="scr" id="s1"><div class="url"><span class="lk"></span><span>chatgpt.com/business-hub</span></div>
       <div class="hub"><div class="box on"><span id="ty1">Keystone Realty</span><i class="cur"></i></div>
-      <div class="drop" id="dd1"><b>Keystone Realty</b><span>Real estate agency · 48 Oak Street</span></div>
+      <div class="drop" id="dd1"><b>Keystone Realty</b><span>Real estate · 48 Oak Street</span></div>
       <div class="drop add" id="ad1">+ Not listed? Add it yourself</div>
       <div class="btn" id="go1">Get Started</div><div class="tap" id="tap1"></div></div></div><div class="scr" id="s2"><div class="hub"><b>Verify your business</b><p>Just one of these</p><div class="opt" id="o0"><span>Business phone</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="opt" id="o1"><span>Business email</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="opt" id="o2"><span>Website domain</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="opt" id="o3"><span>Shopify store</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="note" id="n2"><span>Use the email on your website</span></div></div></div><div class="scr" id="s3"><div class="idc"><div class="idpic"></div><div class="idl"><i></i><i></i><i class="s"></i></div><div class="scan" id="sc3"></div></div>
       <div class="scrawl" id="sw3">not a headshot</div>
@@ -81,66 +88,82 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #2A1E1
       <div class="msg me">Best real estate agent near me?</div>
       <div class="biz top" id="bz0"><div class="ph p4"></div><div><b>Keystone Realty <svg class="vb" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#2F7BF6"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></b><span>open now · showings today</span></div></div>
       <div class="biz"><div class="ph p1"></div><div><b>Prime Nest Realty <svg class="vb" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#2F7BF6"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></b><span>open now · 4.6</span></div></div>
-      <div class="stamp" id="st4"><b>DOESN&rsquo;T BUY RANKING</b><span>it gives ChatGPT your real details</span></div></div></div></div></div></div>
-      <div id="caps" class="clip" data-start="0" data-duration="57.67" data-track-index="4"><div class="cap sp-marcus" id="c0_0">Hey Byte!</div><div class="cap sp-marcus" id="c0_1">Clients keep saying ChatGPT recommended Prime Nest.</div><div class="cap sp-marcus" id="c0_2">Not us!</div><div class="cap sp-byte" id="c1_0">Because Prime Nest claimed their business.</div><div class="cap sp-byte" id="c1_1">You didn't.</div><div class="cap sp-byte" id="c2_0">It's free.</div><div class="cap sp-byte" id="c2_1">Since November tenth. Watch.</div><div class="cap sp-byte" id="c3_0">Step one. Log in,</div><div class="cap sp-byte" id="c3_1">and open chatgpt.com/business-hub</div><div class="cap sp-marcus" id="c4_0">Do I need a paid plan?</div><div class="cap sp-byte" id="c5_0">Nope. No ads account either.</div><div class="cap sp-byte" id="c6_0">Step two. Search your agency.</div><div class="cap sp-byte" id="c6_1">Tap Get Started.</div><div class="cap sp-marcus" id="c7_0">What if we're not listed?</div><div class="cap sp-byte" id="c8_0">Type it in yourself.</div><div class="cap sp-byte" id="c9_0">Step three. Prove it's yours.</div><div class="cap sp-byte" id="c9_1">Business phone, email,</div><div class="cap sp-byte" id="c9_2">website, or Shopify.</div><div class="cap sp-marcus" id="c10_0">Can I use my personal email?</div><div class="cap sp-byte" id="c11_0">Use the one that matches your website.</div><div class="cap sp-byte" id="c12_0">Step four. A quick ID check,</div><div class="cap sp-byte" id="c12_1">and you get the blue check.</div><div class="cap sp-marcus" id="c13_0">I look terrible in ID photos.</div><div class="cap sp-byte" id="c14_0">It's a check. Not a headshot.</div><div class="cap sp-marcus" id="c15_0">So now we're number one?</div><div class="cap sp-byte" id="c16_0">It doesn't buy a ranking.</div><div class="cap sp-byte" id="c16_1">It gives ChatGPT your real details.</div><div class="cap sp-marcus" id="c17_0">Byte,</div><div class="cap sp-marcus" id="c17_1">you just saved me a fortune.</div><div class="cap sp-byte" id="c18_0">I'll send you my invoice.</div></div>
-      <div id="end" class="clip" data-start="0" data-duration="57.67" data-track-index="5"><div id="endc"><div class="e0"><svg viewBox="0 0 64 64"><path d="M8 30 L32 10 L56 30" stroke="#F2C94C" stroke-width="5" fill="none" stroke-linejoin="round"/><rect x="16" y="28" width="32" height="26" rx="3" fill="#F2C94C"/><circle cx="46" cy="44" r="12" fill="#2F7BF6"/><path d="M40 44.5l4 4 8-8" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="e1">Send this to an agent who&rsquo;s invisible on ChatGPT</div><div class="e2">Comment <b>CHATGPT</b> for the full checklist</div><div class="e3">Follow @nxtlvlsocial.ai for the next one</div></div></div>
+      <div class="stamp" id="st4"><b>DOESN&rsquo;T BUY RANKING</b><span>it gives ChatGPT your real details</span></div></div></div></div></div>
+      <div id="caps" class="clip" data-start="0" data-duration="57.67" data-track-index="4"><div class="cap sp-marcus" id="c0_0"><span>Hey Byte!</span></div><div class="cap sp-marcus" id="c0_1"><span>Clients keep saying ChatGPT recommended Prime Nest.</span></div><div class="cap sp-marcus" id="c0_2"><span>Not us!</span></div><div class="cap sp-byte" id="c1_0"><span>Because Prime Nest claimed their business.</span></div><div class="cap sp-byte" id="c1_1"><span>You didn't.</span></div><div class="cap sp-byte" id="c2_0"><span>It's free.</span></div><div class="cap sp-byte" id="c2_1"><span>Since November tenth. Watch.</span></div><div class="cap sp-byte" id="c3_0"><span>Step one. Log in,</span></div><div class="cap sp-byte" id="c3_1"><span>and open chatgpt.com/business-hub</span></div><div class="cap sp-marcus" id="c4_0"><span>Do I need a paid plan?</span></div><div class="cap sp-byte" id="c5_0"><span>Nope. No ads account either.</span></div><div class="cap sp-byte" id="c6_0"><span>Step two. Search your agency.</span></div><div class="cap sp-byte" id="c6_1"><span>Tap Get Started.</span></div><div class="cap sp-marcus" id="c7_0"><span>What if we're not listed?</span></div><div class="cap sp-byte" id="c8_0"><span>Type it in yourself.</span></div><div class="cap sp-byte" id="c9_0"><span>Step three. Prove it's yours.</span></div><div class="cap sp-byte" id="c9_1"><span>Business phone, email,</span></div><div class="cap sp-byte" id="c9_2"><span>website, or Shopify.</span></div><div class="cap sp-marcus" id="c10_0"><span>Can I use my personal email?</span></div><div class="cap sp-byte" id="c11_0"><span>Use the one that matches your website.</span></div><div class="cap sp-byte" id="c12_0"><span>Step four. A quick ID check,</span></div><div class="cap sp-byte" id="c12_1"><span>and you get the blue check.</span></div><div class="cap sp-marcus" id="c13_0"><span>I look terrible in ID photos.</span></div><div class="cap sp-byte" id="c14_0"><span>It's a check. Not a headshot.</span></div><div class="cap sp-marcus" id="c15_0"><span>So now we're number one?</span></div><div class="cap sp-byte" id="c16_0"><span>It doesn't buy a ranking.</span></div><div class="cap sp-byte" id="c16_1"><span>It gives ChatGPT your real details.</span></div><div class="cap sp-marcus" id="c17_0"><span>Byte,</span></div><div class="cap sp-marcus" id="c17_1"><span>you just saved me a fortune.</span></div><div class="cap sp-byte" id="c18_0"><span>I'll send you my invoice.</span></div></div>
+      <div id="end" class="clip" data-start="0" data-duration="57.67" data-track-index="5"><div id="endc"><div class="note2"><div class="e0"><svg viewBox="0 0 64 64"><path d="M8 30 L32 10 L56 30" stroke="#F2C94C" stroke-width="5" fill="none" stroke-linejoin="round"/><rect x="16" y="28" width="32" height="26" rx="3" fill="#F2C94C"/><circle cx="46" cy="44" r="12" fill="#2F7BF6"/><path d="M40 44.5l4 4 8-8" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="e1">Send this to an agent who&rsquo;s invisible on ChatGPT</div><div class="e2">Comment <b>CHATGPT</b> for the full checklist</div><div class="e3">Follow @nxtlvlsocial.ai for the next one</div></div></div></div>
       <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="57.67" data-track-index="10" data-volume="1"></audio>
     </div>
     <script>
-      window.CT = {"l": [0.5, 5.1, 8.19, 11.465, 16.755, 18.195, 20.41, 24.165, 25.44, 27.04, 32.225, 34.05, 36.34, 40.255, 42.65, 44.985, 46.58, 51.135, 53.335], "e": [4.9, 7.99, 10.915, 16.555, 17.995, 19.99, 23.965, 25.24, 26.62, 32.025, 33.85, 35.92, 40.055, 42.45, 44.435, 46.38, 50.685, 53.135, 54.925], "who": ["marcus", "byte", "byte", "byte", "marcus", "byte", "byte", "marcus", "byte", "byte", "marcus", "byte", "byte", "marcus", "byte", "marcus", "byte", "marcus", "byte"], "end": 57.67, "cuts": [], "stepLines": [3, 6, 9, 12], "tk": {"01": 0, "02": 1, "04": 2, "05": 3, "06": 4, "07": 5, "08": 6, "09": 7, "10": 8, "11": 9, "12": 10, "13": 11, "14": 12, "15": 13, "16": 14, "17": 15, "18": 16, "19": 17, "20": 18}, "panelIn": 11.015, "endIn": 55.375, "scr": [[11.115, 20.06], [20.06, 26.69], [26.69, 35.99], [35.99, 44.635]], "pay": [44.635, 55.375]};
+      window.CT = {"l": [0.5, 5.1, 8.19, 11.465, 16.755, 18.195, 20.41, 24.165, 25.44, 27.04, 32.225, 34.05, 36.34, 40.255, 42.65, 44.985, 46.58, 51.135, 53.335], "e": [4.9, 7.99, 10.915, 16.555, 17.995, 19.99, 23.965, 25.24, 26.62, 32.025, 33.85, 35.92, 40.055, 42.45, 44.435, 46.38, 50.685, 53.135, 54.925], "who": ["marcus", "byte", "byte", "byte", "marcus", "byte", "byte", "marcus", "byte", "byte", "marcus", "byte", "byte", "marcus", "byte", "marcus", "byte", "marcus", "byte"], "end": 57.67, "cuts": [], "stepLines": [3, 6, 9, 12], "tk": {"01": 0, "02": 1, "04": 2, "05": 3, "06": 4, "07": 5, "08": 6, "09": 7, "10": 8, "11": 9, "12": 10, "13": 11, "14": 12, "15": 13, "16": 14, "17": 15, "18": 16, "19": 17, "20": 18}, "panelIn": 0.25, "hook": [0.35, 11.115], "endIn": 55.375, "scr": [[11.115, 20.06], [20.06, 26.69], [26.69, 35.99], [35.99, 44.635]], "pay": [44.635, 55.375]};
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
-      tl.fromTo("#cm0",{opacity:0,y:20,scale:.9},{opacity:1,y:0,scale:1,duration:0.3,ease:"back.out(1.8)",immediateRender:false},0.050);
-      tl.fromTo("#cm1",{opacity:0,y:20,scale:.9},{opacity:1,y:0,scale:1,duration:0.3,ease:"back.out(1.8)",immediateRender:false},0.500);
-      tl.fromTo("#cm2",{opacity:0,y:20,scale:.9},{opacity:1,y:0,scale:1,duration:0.3,ease:"back.out(1.8)",immediateRender:false},0.950);
-      tl.to("#cms",{opacity:0,y:-20,duration:0.25,ease:"power2.in"},10.915);
-      tl.fromTo("#s0",{opacity:0,x:50},{opacity:1,x:0,duration:0.3,ease:"power3.out",immediateRender:false},11.115);
-      tl.to("#s0",{opacity:0,x:-50,duration:0.18,ease:"power2.in"},19.940);
+      tl.fromTo("#s5",{opacity:0,y:40},{opacity:1,y:0,duration:0.3,ease:"power3.out",immediateRender:false},0.350);
+      tl.to("#s5",{opacity:0,y:-40,duration:0.18,ease:"power2.in"},10.995);
+      tl.fromTo("#bh0",{opacity:0,x:-30},{opacity:1,x:0,duration:0.35,ease:"power3.out",immediateRender:false},0.850);
+      tl.fromTo("#bh1",{opacity:0,x:-30},{opacity:1,x:0,duration:0.35,ease:"power3.out",immediateRender:false},1.150);
+      tl.fromTo("#vbh",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.35,ease:"back.out(3)",immediateRender:false},5.400);
+      tl.fromTo("#nh",{opacity:0,scale:.8},{opacity:1,scale:1,duration:0.3,ease:"back.out(2)",immediateRender:false},8.240);
+      tl.fromTo("#s0",{opacity:0,y:40},{opacity:1,y:0,duration:0.3,ease:"power3.out",immediateRender:false},11.115);
+      tl.to("#s0",{opacity:0,y:-40,duration:0.18,ease:"power2.in"},19.940);
       tl.fromTo("#u0",{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0% 0 0)",duration:1.1,ease:"steps(25)",immediateRender:false},11.615);
       tl.fromTo("#n0",{opacity:0,scale:.8},{opacity:1,scale:1,duration:0.3,ease:"back.out(2)",immediateRender:false},18.145);
-      tl.fromTo("#s1",{opacity:0,x:50},{opacity:1,x:0,duration:0.3,ease:"power3.out",immediateRender:false},20.060);
-      tl.to("#s1",{opacity:0,x:-50,duration:0.18,ease:"power2.in"},26.570);
+      tl.fromTo("#s1",{opacity:0,y:40},{opacity:1,y:0,duration:0.3,ease:"power3.out",immediateRender:false},20.060);
+      tl.to("#s1",{opacity:0,y:-40,duration:0.18,ease:"power2.in"},26.570);
       tl.fromTo("#ty1",{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0% 0 0)",duration:.8,ease:"steps(15)",immediateRender:false},20.460);
       tl.fromTo("#dd1",{opacity:0,y:-10},{opacity:1,y:0,duration:0.22,ease:"power3.out",immediateRender:false},21.310);
       tl.fromTo("#go1",{opacity:0,y:10},{opacity:1,y:0,duration:0.22,ease:"power3.out",immediateRender:false},21.660);
       tl.fromTo("#tap1",{opacity:.7,scale:.2},{opacity:0,scale:1.6,duration:.45,ease:"power2.out",immediateRender:false},23.465);
       tl.fromTo("#go1",{scale:1},{scale:.94,duration:.1,yoyo:true,repeat:1,immediateRender:false},23.465);
       tl.fromTo("#ad1",{opacity:0,x:-20},{opacity:1,x:0,duration:0.25,ease:"power3.out",immediateRender:false},25.540);
-      tl.fromTo("#s2",{opacity:0,x:50},{opacity:1,x:0,duration:0.3,ease:"power3.out",immediateRender:false},26.690);
-      tl.to("#s2",{opacity:0,x:-50,duration:0.18,ease:"power2.in"},35.870);
-      tl.to("#o0",{borderColor:"#a75bfc",background:"#24174a",duration:.12,yoyo:true,repeat:1,repeatDelay:.22,immediateRender:false},29.435);
-      tl.to("#o1",{borderColor:"#a75bfc",background:"#24174a",duration:.12,yoyo:true,repeat:1,repeatDelay:.22,immediateRender:false},29.748);
-      tl.to("#o2",{borderColor:"#a75bfc",background:"#24174a",duration:.12,yoyo:true,repeat:1,repeatDelay:.22,immediateRender:false},30.293);
-      tl.to("#o3",{borderColor:"#a75bfc",background:"#24174a",duration:.12,yoyo:true,repeat:1,repeatDelay:.22,immediateRender:false},31.152);
+      tl.fromTo("#s2",{opacity:0,y:40},{opacity:1,y:0,duration:0.3,ease:"power3.out",immediateRender:false},26.690);
+      tl.to("#s2",{opacity:0,y:-40,duration:0.18,ease:"power2.in"},35.870);
+      tl.to("#o0",{borderColor:"#8B5CF6",background:"#EFE7FF",duration:.12,yoyo:true,repeat:1,repeatDelay:.22,immediateRender:false},29.435);
+      tl.to("#o1",{borderColor:"#8B5CF6",background:"#EFE7FF",duration:.12,yoyo:true,repeat:1,repeatDelay:.22,immediateRender:false},29.748);
+      tl.to("#o2",{borderColor:"#8B5CF6",background:"#EFE7FF",duration:.12,yoyo:true,repeat:1,repeatDelay:.22,immediateRender:false},30.293);
+      tl.to("#o3",{borderColor:"#8B5CF6",background:"#EFE7FF",duration:.12,yoyo:true,repeat:1,repeatDelay:.22,immediateRender:false},31.152);
       tl.to("#o1",{borderColor:"#22C55E",duration:.2,immediateRender:false},34.050);
       tl.fromTo("#o1 .tk",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.3,ease:"back.out(3)",immediateRender:false},34.050);
       tl.fromTo("#n2",{opacity:0,scale:.8},{opacity:1,scale:1,duration:0.3,ease:"back.out(2)",immediateRender:false},34.150);
-      tl.fromTo("#s3",{opacity:0,x:50},{opacity:1,x:0,duration:0.3,ease:"power3.out",immediateRender:false},35.990);
-      tl.to("#s3",{opacity:0,x:-50,duration:0.18,ease:"power2.in"},44.515);
-      tl.fromTo("#sc3",{y:0},{y:200,duration:.55,yoyo:true,repeat:1,ease:"sine.inOut",immediateRender:false},36.390);
+      tl.fromTo("#s3",{opacity:0,y:40},{opacity:1,y:0,duration:0.3,ease:"power3.out",immediateRender:false},35.990);
+      tl.to("#s3",{opacity:0,y:-40,duration:0.18,ease:"power2.in"},44.515);
+      tl.fromTo("#sc3",{y:0},{y:190,duration:.55,yoyo:true,repeat:1,ease:"sine.inOut",immediateRender:false},36.390);
       tl.fromTo("#pf3",{opacity:0,y:20},{opacity:1,y:0,duration:0.3,ease:"power3.out",immediateRender:false},39.155);
       tl.fromTo("#vb3",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.35,ease:"back.out(3)",immediateRender:false},39.605);
       tl.fromTo("#sw3",{opacity:0,rotation:-10,scale:1.3},{opacity:1,rotation:-6,scale:1,duration:0.3,ease:"back.out(2)",immediateRender:false},42.650);
-      tl.fromTo("#s4",{opacity:0,x:50},{opacity:1,x:0,duration:0.3,ease:"power3.out",immediateRender:false},44.635);
-      tl.to("#s4",{opacity:0,x:-50,duration:0.18,ease:"power2.in"},55.255);
+      tl.fromTo("#s4",{opacity:0,y:40},{opacity:1,y:0,duration:0.3,ease:"power3.out",immediateRender:false},44.635);
+      tl.to("#s4",{opacity:0,y:-40,duration:0.18,ease:"power2.in"},55.255);
       tl.fromTo("#bz0",{opacity:0,x:-30},{opacity:1,x:0,duration:0.35,ease:"power3.out",immediateRender:false},45.035);
       tl.fromTo("#st4",{opacity:0,scale:1.5,rotation:-10},{opacity:1,scale:1,rotation:-5,duration:0.35,ease:"back.out(2)",immediateRender:false},46.780);
-      tl.fromTo("#hd0",{opacity:0},{opacity:1,duration:0.25,ease:"power3.out",immediateRender:false},11.115);
-      tl.to("#hd0",{opacity:0,duration:0.15,ease:"power2.in"},19.960);
-      tl.fromTo("#hd1",{opacity:0},{opacity:1,duration:0.25,ease:"power3.out",immediateRender:false},20.060);
-      tl.to("#hd1",{opacity:0,duration:0.15,ease:"power2.in"},26.590);
-      tl.fromTo("#hd2",{opacity:0},{opacity:1,duration:0.25,ease:"power3.out",immediateRender:false},26.690);
-      tl.to("#hd2",{opacity:0,duration:0.15,ease:"power2.in"},35.890);
-      tl.fromTo("#hd3",{opacity:0},{opacity:1,duration:0.25,ease:"power3.out",immediateRender:false},35.990);
-      tl.to("#hd3",{opacity:0,duration:0.15,ease:"power2.in"},44.535);
-      tl.fromTo("#hd4",{opacity:0},{opacity:1,duration:0.25,ease:"power3.out",immediateRender:false},44.635);
-      tl.fromTo("#panel",{opacity:0,y:-40,scale:.96},{opacity:1,y:0,scale:1,duration:0.4,ease:"power3.out",immediateRender:false},11.015);
-      tl.to("#panel",{opacity:0,y:-30,duration:0.3,ease:"power2.in"},55.325);
-      tl.fromTo("#endc",{opacity:0},{opacity:1,duration:0.45,ease:"power3.out",immediateRender:false},55.375);
-      tl.fromTo("#endc .e0",{opacity:0,y:14},{opacity:1,y:0,duration:0.35,ease:"power3.out",immediateRender:false},55.475);
-      tl.fromTo("#endc .e1",{opacity:0,y:14},{opacity:1,y:0,duration:0.35,ease:"power3.out",immediateRender:false},55.725);
-      tl.fromTo("#endc .e2",{opacity:0,y:14},{opacity:1,y:0,duration:0.35,ease:"power3.out",immediateRender:false},55.975);
-      tl.fromTo("#endc .e3",{opacity:0,y:14},{opacity:1,y:0,duration:0.35,ease:"power3.out",immediateRender:false},56.225);
+      tl.fromTo("#pad",{opacity:0,x:-60,rotation:-8},{opacity:1,x:0,rotation:-3,duration:0.45,ease:"back.out(1.6)",immediateRender:false},11.015);
+      tl.fromTo("#hl0",{scaleX:0},{scaleX:1,duration:.35,ease:"power2.out",immediateRender:false},11.215);
+      tl.to("#it0",{opacity:1,duration:.2,immediateRender:false},11.115);
+      tl.to("#hl0",{opacity:0,duration:.2,immediateRender:false},19.760);
+      tl.to("#it0 .num",{opacity:0,duration:.12,immediateRender:false},19.760);
+      tl.fromTo("#it0 .tk",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.3,ease:"back.out(3)",immediateRender:false},19.760);
+      tl.fromTo("#hl1",{scaleX:0},{scaleX:1,duration:.35,ease:"power2.out",immediateRender:false},20.160);
+      tl.to("#it1",{opacity:1,duration:.2,immediateRender:false},20.060);
+      tl.to("#hl1",{opacity:0,duration:.2,immediateRender:false},26.390);
+      tl.to("#it1 .num",{opacity:0,duration:.12,immediateRender:false},26.390);
+      tl.fromTo("#it1 .tk",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.3,ease:"back.out(3)",immediateRender:false},26.390);
+      tl.fromTo("#hl2",{scaleX:0},{scaleX:1,duration:.35,ease:"power2.out",immediateRender:false},26.790);
+      tl.to("#it2",{opacity:1,duration:.2,immediateRender:false},26.690);
+      tl.to("#hl2",{opacity:0,duration:.2,immediateRender:false},35.690);
+      tl.to("#it2 .num",{opacity:0,duration:.12,immediateRender:false},35.690);
+      tl.fromTo("#it2 .tk",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.3,ease:"back.out(3)",immediateRender:false},35.690);
+      tl.fromTo("#hl3",{scaleX:0},{scaleX:1,duration:.35,ease:"power2.out",immediateRender:false},36.090);
+      tl.to("#it3",{opacity:1,duration:.2,immediateRender:false},35.990);
+      tl.to("#hl3",{opacity:0,duration:.2,immediateRender:false},44.335);
+      tl.to("#it3 .num",{opacity:0,duration:.12,immediateRender:false},44.335);
+      tl.fromTo("#it3 .tk",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.3,ease:"back.out(3)",immediateRender:false},44.335);
+      tl.to("#pad .pa",{opacity:0,duration:0.15,ease:"power2.in"},44.635);
+      tl.fromTo("#pad .pb",{opacity:0,scale:.7},{opacity:1,scale:1,duration:0.3,ease:"back.out(2)",immediateRender:false},44.735);
+      tl.fromTo("#phone",{opacity:0,y:60,rotation:6},{opacity:1,y:0,rotation:2,duration:0.5,ease:"back.out(1.4)",immediateRender:false},0.150);
+      tl.set("#phone",{x:-162},0);
+      tl.to("#phone",{x:0,duration:.55,ease:"power3.inOut"},10.665);
+      tl.to("#phone",{opacity:0,y:-30,duration:0.3,ease:"power2.in"},55.325);
+      tl.to("#pad",{opacity:0,x:-40,duration:0.3,ease:"power2.in"},55.325);
+      tl.fromTo("#endc",{opacity:0},{opacity:1,duration:0.4,ease:"power3.out",immediateRender:false},55.375);
+      tl.fromTo("#endc .note2",{opacity:0,y:60,rotation:-9,scale:.9},{opacity:1,y:0,rotation:-2,scale:1,duration:0.5,ease:"back.out(1.5)",immediateRender:false},55.425);
       tl.fromTo("#c0_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},0.440);
       tl.to("#c0_0",{opacity:0,duration:.08},1.110);
       tl.fromTo("#c0_1",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},1.090);

@@ -462,8 +462,10 @@ function updByte(t) {
   setMap(BYTE.faceM, DYN.byteFace(eyes, lv, Math.floor(t * 2.4 + 1) % 9 === 0 ? 1 : 0));
 }
 
-// ---------------------------------------------------------------- one camera, a slow push; tiny shake on the hook
-const CAM = { p0: v(.25, 1.8, 3.9), p1: v(.2, 1.74, 3.45), l0: v(.35, 2.38, -.5) };
+// ---------------------------------------------------------------- one camera, a slow push; it leans in on Marcus when he talks
+const CAM = { p0: v(.25, 1.8, 3.9), p1: v(.2, 1.74, 3.45), l0: v(.35, 2.38, -.5), dM: v(-.16, -.03, -.38), lM: v(-.2, -.05, 0) };
+const sst = (x) => { x = clamp(x); return x * x * (3 - 2 * x); };
+const marcusW = (t) => C.who.reduce((w, n, k) => n === "marcus" ? Math.max(w, sst((t - L[k] + .15) / .5) * sst((E[k] + .35 - t) / .5)) : w, 0);
 function renderAt(t) {
   if (!TEX.ready) return;
   NOW = t;
@@ -477,9 +479,10 @@ function renderAt(t) {
   updMarcus(t); updByte(t);
   const u = sm(clamp(t / DUR));
   const cv = window.SK_COVER;
-  camera.position.lerpVectors(CAM.p0, CAM.p1, u).add(V.set(Math.sin(t * .8) * .004, Math.sin(t * 1.2) * .004, 0));
+  const wm = t < E[0] + .3 ? 0 : marcusW(t);
+  camera.position.lerpVectors(CAM.p0, CAM.p1, u).addScaledVector(CAM.dM, wm).add(V.set(Math.sin(t * .8) * .004, Math.sin(t * 1.2) * .004, 0));
   camera.fov = 50;
-  const look = CAM.l0.clone();
+  const look = CAM.l0.clone().addScaledVector(CAM.lM, wm);
   if (cv && cv.cam) { camera.position.set(...cv.cam); look.set(...cv.look); camera.fov = cv.fov ?? camera.fov; }
   camera.updateProjectionMatrix(); camera.up.set(0, 1, 0); camera.lookAt(look);
   scene.updateMatrixWorld(true);

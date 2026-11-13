@@ -139,24 +139,35 @@ in the description; the scenario's own numbers are illustrative.
 
 ## 8. Tutorial skit format (the default for tool and how-to reels)
 
-The owner's chosen format for any reel that teaches a tool or a set of steps (from the reference reel the owner shared:
-a creator and his AI sidekick showing a free voice tool in four steps). Use it instead of a cinematic story or a
-what-if wrapper whenever the point is "here is how to do X". Viewers must be able to follow every step on a phone.
+For any reel that teaches a tool or a set of steps. The owner shared a reference reel (a creator and his AI sidekick
+showing a free voice tool in four steps) as an example of **clarity**, not a template: keep its principles, and vary the
+look, the screen device, the hook and the end card from reel to reel so no two look the same and none copies the
+reference. Viewers must be able to follow every step on a phone.
 
-**Layout (one frame, the whole reel):**
-- Top half: one big, readable **app screen panel** (just below the 250 px safe line) with a `STEP n/4` pill, a segmented
-  progress bar and a short step title ("Open Business Hub", "Prove it's yours"). Inside it, the tool's screen at a size
-  a phone viewer can read (illustrated, never a logo we don't own), acted out with micro-interactions: typing, a cursor
-  click, a progress bar, a slider, a tick. One step per screen.
-- Bottom half: **one cozy 3D scene, one camera**, the same two characters the whole time (a person and a sidekick,
-  usually an AI helper). No location changes; they react, turn, talk. Keep their faces clear of the panel.
-- Captions: one centred serif line between the panel and the characters, warm cream on the scene, a few words at a time.
+**The principles (keep these every time):**
+- One step at a time, on a screen big enough to read on a phone (illustrated, never a logo we don't own), acted out with
+  small interactions: typing, a tap, a scan, a tick.
+- Always show where the viewer is in the steps (a progress cue of some kind).
+- Two characters in one cozy 3D scene (a person and a sidekick, usually an AI helper), faces clear of every overlay.
+- Captions a few words at a time, between the screen and the characters.
+- The script beats below.
+
+**Vary these (pick a different mix each reel, and say which in the plan):**
+- Screen device: a big app panel, a phone in the frame, a laptop screen rising from the desk, a tablet on a stand.
+- Progress cue: a step pill and progress bar, a legal-pad checklist that ticks off, numbered sticky notes, a step counter
+  on the screen.
+- Hook: real-sounding comment questions, the tool's own result showing the problem (e.g. ChatGPT recommending the
+  competitor), a stat, a reaction.
+- Caption style: serif on the scene, boxed sans, speaker-coloured.
+- End card: a full card, a sticky note over the dimmed scene, the last screen turning into the CTA.
+- Camera: a still frame with a slow push, or gentle lean-ins on whoever is talking.
 
 **Script:**
-1. Hook (0-5 s): real-sounding **comment questions** float in ("how do I...", "is it free?"), then a two-line setup.
-   No title card, no "WHAT IF" label.
+1. Hook (0-5 s), then a two-line setup. No title card, no "WHAT IF" label.
 2. Each step: the sidekick says the step plainly once; the person asks the question a viewer would ask; the sidekick
    answers in one short line. Jokes are quick asides that reinforce the info ("No GPU works too. / Just slower. Like you.").
-3. An honest beat near the end (what it can't do, what not to do, a caveat), shown as a stamp or note on the panel.
-4. A punchline, then a clean end card: a share prompt ("Send this to a friend who..."), `Comment KEYWORD for the full
+3. An honest beat near the end (what it can't do, what not to do, a caveat), shown as a stamp or note on screen.
+4. A punchline, then the end card: a share prompt ("Send this to a friend who..."), `Comment KEYWORD for the full
    setup`, `Follow for the next one`. Under 60 s as always.
+5. Music: pick an Openverse track that fits the mood of a cozy comedy (warm acoustic, light jazz, playful), CC0 or CC BY
+   only, no lyrics, and credit it. Avoid heavy beats, 808s and anything odd that fights the dialogue.

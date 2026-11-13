@@ -3,7 +3,7 @@
 python3 build/audio.py      (from the project root, after build/voice.py and build/generate.py; needs numpy, scipy,
 soundfile, ffmpeg)
 
-Music: "808" by Shipititez tha Viruz (CC BY 3.0, Jamendo, found through Openverse; instrumental, checked with
+Music: "Lucky Acoustic" by Jesse Keller (CC BY 3.0, Jamendo, found through Openverse; instrumental, checked with
 faster-whisper), credited in the post description. SFX: office room tone generated with ElevenLabs for the owner's earlier
 reels (assets/sfx/) and HyperFrames' bundled library (Pixabay Content License). Music ducks under dialogue.
 Writes assets/audio/mix.wav at about -14 LUFS.
@@ -19,7 +19,7 @@ from scipy.signal import butter, sosfilt
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 T = json.load(open(os.path.join(ROOT, "build", "cues.json")))
 L, E = T["l"], T["e"]
-SCR, PAY, PIN, EIN, TK = T["scr"], T["pay"], T["panelIn"], T["endIn"], T["tk"]
+SCR, PAY, PIN, EIN, TK, HK = T["scr"], T["pay"], T["panelIn"], T["endIn"], T["tk"], T["hook"]
 SR = 48000
 DUR = T["end"]
 N = int(DUR * SR)
@@ -57,8 +57,8 @@ def loop(x, dur):
 
 def music():
     m = np.zeros((N, 2))
-    lofi = load(os.path.join(ROOT, "assets", "music", "hiphop_808.mp3"))
-    put(m, lofi, 0, 1.0, 10.0, 10.0 + DUR + .2, fin=.02, fout=1.0)
+    gtr = load(os.path.join(ROOT, "assets", "music", "lucky_acoustic.mp3"))
+    put(m, gtr, 0, 1.0, 0.0, DUR + .2, fin=.3, fout=1.2)
     return m
 
 
@@ -67,9 +67,11 @@ def sfx():
     S = lambda n: load(os.path.join(ROOT, "assets", "sfx", n + ".mp3"))  # noqa: E731
     lib = lambda n: load(os.path.join(LIB, n + ".mp3"))  # noqa: E731
     put(s, lp(loop(S("room_tone"), DUR), 1500), 0, .35, fin=.05, fout=.8)
-    for j in range(3):
-        put(s, lib("pop"), .05 + j * .45, .35)                                         # comment bubbles
-    put(s, lib("whoosh-short"), PIN - .05, .35)                                          # the panel slides in
+    put(s, lib("whoosh-short"), PIN - .1, .35)                                           # the phone slides in
+    put(s, lib("pop"), HK[0] + .5, .3); put(s, lib("pop"), HK[0] + .8, .25)            # the hook answers
+    put(s, lib("sparkle"), L[TK["02"]] + .3, .3)                                               # Prime Nest's blue check
+    put(s, lib("pop"), L[TK["04"]] + .05, .3)                                                  # Free
+    put(s, lib("whoosh-short"), SCR[0][0] - .15, .3)                                       # the notepad
     for a, b in SCR[1:] + [PAY]:
         put(s, lib("whoosh-short"), a - .05, .22)
     put(s, lib("typing"), SCR[0][0] + .5, .28, 0, 1.1)                                    # the URL
