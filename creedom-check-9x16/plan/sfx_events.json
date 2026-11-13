@@ -1,0 +1,150 @@
+[
+{
+"type": "whoosh",
+"t": 0.84
+},
+{
+"type": "click",
+"t": 1.92
+},
+{
+"type": "pop",
+"t": 3.22
+},
+{
+"type": "whoosh_big",
+"t": 4.09
+},
+{
+"type": "swish",
+"t": 4.79
+},
+{
+"type": "whoosh",
+"t": 6.12
+},
+{
+"type": "riser",
+"t": 6.32
+},
+{
+"type": "ding",
+"t": 6.44
+},
+{
+"type": "impact",
+"t": 7.86
+},
+{
+"type": "shutter",
+"t": 10.22
+},
+{
+"type": "shutter",
+"t": 10.34
+},
+{
+"type": "shutter",
+"t": 10.46
+},
+{
+"type": "notify",
+"t": 11.11
+},
+{
+"type": "notify",
+"t": 11.53
+},
+{
+"type": "whoosh_big",
+"t": 11.59
+},
+{
+"type": "riser_short",
+"t": 12.4
+},
+{
+"type": "impact",
+"t": 13.6
+},
+{
+"type": "swish",
+"t": 13.66
+},
+{
+"type": "pop",
+"t": 16.22
+},
+{
+"type": "pop",
+"t": 17.06
+},
+{
+"type": "pop",
+"t": 18.32
+},
+{
+"type": "whoosh_big",
+"t": 19.34
+},
+{
+"type": "riser",
+"t": 20.48
+},
+{
+"type": "ding",
+"t": 20.84
+},
+{
+"type": "notify",
+"t": 21.92
+},
+{
+"type": "success",
+"t": 23.0
+},
+{
+"type": "whoosh_big",
+"t": 23.39
+},
+{
+"type": "impact",
+"t": 24.32
+},
+{
+"type": "tick",
+"t": 24.87
+},
+{
+"type": "tick",
+"t": 24.96
+},
+{
+"type": "tick",
+"t": 25.05
+},
+{
+"type": "tick",
+"t": 25.14
+},
+{
+"type": "tick",
+"t": 25.23
+},
+{
+"type": "click",
+"t": 25.37
+},
+{
+"type": "pop",
+"t": 25.57
+},
+{
+"type": "pop",
+"t": 25.87
+},
+{
+"type": "pop",
+"t": 26.17
+}
+]
