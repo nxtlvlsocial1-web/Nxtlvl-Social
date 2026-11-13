@@ -56,9 +56,9 @@ def st(sel, t, props):
 WID = [0]
 
 
-def head(hid, rows, top, line, size=88, dark=False, align="left"):
+def head(hid, rows, top, line, size=88, dark=False, align="left", after=0.0):
     """premium headline: every word blurs into focus on its spoken time; ('word', cls) with cls '' or 'it' (serif)"""
-    spoken, k, out, rws = LINES[line], 0, [], []
+    spoken, k, out, rws = [w for w in LINES[line] if w["t0"] >= after], 0, [], []
     for row in rows:
         ws = []
         for word, cls in row:
@@ -174,7 +174,9 @@ head_out("hb", SC - .25)
 strip = "".join(f'<div class="fr glass" id="fr{i}"><img src="assets/img/demo_{t}.jpg"><span>0:0{t}</span></div>' for i, t in enumerate((1, 5, 8)))
 steps = "".join(f'<div class="stp glass" id="sp{i}"><i>&#10003;</i>{s}</div>' for i, s in enumerate(["Watching the reel end to end", "Reading the scorecard"]))
 HTML.append('<div class="scn" id="sc"><div class="brand glass" id="brand"><img src="assets/img/creedom_logo.png"></div>')
-head("hc", [[("It", ""), ("watches", ""), ("your", ""), ("whole", ""), ("reel", "")], [("second", "it"), ("by", "it"), ("second.", "it")]], 210, "c02", 80)
+head("hcc", [[("It's", ""), ("called", "")], [("Creedom.", "it pk")]], 210, "c02", 96)
+head("hc", [[("It", ""), ("watches", ""), ("your", ""), ("whole", ""), ("reel", "")], [("second", "it"), ("by", "it"), ("second.", "it")]], 210, "c02", 80,
+     after=T("c02", "Creedom") + .2)
 HTML.append(f'<div class="strip">{strip}</div><div class="steps">{steps}</div><div class="beam" id="beam"></div></div>')
 scene("sc", SC, SD)
 zoom_through(SC)
@@ -184,7 +186,7 @@ ft("#brand", SC + .05, .6, "{opacity: 0, scale: .6, filter: 'blur(16px)'}", "{op
 sfx("impact", t_cr)
 to("#brand", T("c02", "watches") - .2, .4, "{opacity: 0, scale: 1.4, filter: 'blur(14px)'}", "power2.in")
 t_w = T("c02", "watches")
-st("#hc", 0, "{opacity: 1}")
+head_out("hcc", T("c02", "It", 1) - .3)
 ft("#phone", t_w - .2, .7, "{opacity: 0, scale: .85, filter: 'blur(12px)', x: -150}", "{opacity: 1, scale: .86, filter: 'blur(0px)', x: -150}", "expo.out")
 ft("#lens", t_w, .5, "{opacity: 0, scale: .6, x: -150, y: 0}", "{opacity: 1, scale: .8, x: -150, y: -60}", "expo.out")
 js(f'tl.to("#lens", {{y: 440, duration: 1.3, ease: "sine.inOut", yoyo: true, repeat: 1}}, {t_w + .45:.3f});')
@@ -304,7 +306,7 @@ for i in range(5):
         sfx("pop", t)
 
 # ---- floating glass decor (depth) ----
-DEC = [(820, 1380, 210), (90, 1560, 150), (900, 300, 120), (160, 1180, 90), (620, 1700, 170)]
+DEC = [(840, 1400, 190), (70, 1600, 130), (930, 330, 100)]
 HTML.insert(0, "".join(f'<div class="orb" id="ob{i}" style="left:{x}px;top:{y}px;width:{d}px;height:{d}px"></div>' for i, (x, y, d) in enumerate(DEC))
             + '<div class="ringd" id="rgd"></div>')
 for i in range(len(DEC)):
@@ -351,8 +353,9 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #fbf7
 .glass.dkg {{ background: linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.04)); border: 1.5px solid rgba(255,255,255,.26); color: #fff;
   box-shadow: inset 0 1.5px 0 rgba(255,255,255,.35), inset 0 -18px 40px rgba(255,255,255,.04), 0 30px 90px rgba(0,0,0,.5); }}
 .orb {{ position: absolute; border-radius: 50%; z-index: 2; pointer-events: none;
-  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.85) 0, rgba(255,255,255,.25) 16%, rgba(255,255,255,.04) 45%, rgba(238,104,139,.18) 78%, rgba(255,255,255,.4) 100%);
-  backdrop-filter: blur(6px) saturate(1.6); -webkit-backdrop-filter: blur(6px) saturate(1.6); box-shadow: inset -10px -16px 40px rgba(243,67,162,.3), 0 20px 50px rgba(243,67,162,.2); }}
+  background: radial-gradient(circle at 30% 26%, rgba(255,255,255,.8) 0, rgba(255,255,255,.18) 12%, rgba(255,255,255,0) 40%, rgba(255,255,255,.06) 70%, rgba(255,255,255,.45) 100%);
+  border: 1px solid rgba(255,255,255,.55); opacity: .75;
+  backdrop-filter: blur(3px) saturate(1.4) brightness(1.08); -webkit-backdrop-filter: blur(3px) saturate(1.4) brightness(1.08); box-shadow: inset -8px -12px 30px rgba(255,255,255,.18), 0 18px 40px rgba(0,0,0,.08); }}
 .ringd {{ position: absolute; left: 520px; top: 1250px; width: 700px; height: 700px; border-radius: 50%; z-index: 1; pointer-events: none;
   border: 2px solid rgba(255,255,255,.25); box-shadow: 0 0 60px rgba(243,67,162,.25), inset 0 0 60px rgba(243,67,162,.15); }}
 /* headlines */

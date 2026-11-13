@@ -31,8 +31,9 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fbf7f
 .glass.dkg { background: linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.04)); border: 1.5px solid rgba(255,255,255,.26); color: #fff;
   box-shadow: inset 0 1.5px 0 rgba(255,255,255,.35), inset 0 -18px 40px rgba(255,255,255,.04), 0 30px 90px rgba(0,0,0,.5); }
 .orb { position: absolute; border-radius: 50%; z-index: 2; pointer-events: none;
-  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.85) 0, rgba(255,255,255,.25) 16%, rgba(255,255,255,.04) 45%, rgba(238,104,139,.18) 78%, rgba(255,255,255,.4) 100%);
-  backdrop-filter: blur(6px) saturate(1.6); -webkit-backdrop-filter: blur(6px) saturate(1.6); box-shadow: inset -10px -16px 40px rgba(243,67,162,.3), 0 20px 50px rgba(243,67,162,.2); }
+  background: radial-gradient(circle at 30% 26%, rgba(255,255,255,.8) 0, rgba(255,255,255,.18) 12%, rgba(255,255,255,0) 40%, rgba(255,255,255,.06) 70%, rgba(255,255,255,.45) 100%);
+  border: 1px solid rgba(255,255,255,.55); opacity: .75;
+  backdrop-filter: blur(3px) saturate(1.4) brightness(1.08); -webkit-backdrop-filter: blur(3px) saturate(1.4) brightness(1.08); box-shadow: inset -8px -12px 30px rgba(255,255,255,.18), 0 18px 40px rgba(0,0,0,.08); }
 .ringd { position: absolute; left: 520px; top: 1250px; width: 700px; height: 700px; border-radius: 50%; z-index: 1; pointer-events: none;
   border: 2px solid rgba(255,255,255,.25); box-shadow: 0 0 60px rgba(243,67,162,.25), inset 0 0 60px rgba(243,67,162,.15); }
 /* headlines */
@@ -149,7 +150,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fbf7f
       <div class="world" id="light"><i class="bl" id="lb0" style="left:-200px;top:-150px;width:760px;height:760px;background:rgba(238,104,139,.55)"></i><i class="bl" id="lb1" style="left:520px;top:260px;width:820px;height:820px;background:rgba(255,190,214,.75)"></i><i class="bl" id="lb2" style="left:-260px;top:980px;width:900px;height:900px;background:rgba(217,194,255,.6)"></i><i class="bl" id="lb3" style="left:480px;top:1280px;width:820px;height:820px;background:rgba(255,216,194,.6)"></i><i class="bl" id="lb4" style="left:200px;top:620px;width:600px;height:600px;background:rgba(243,67,162,.28)"></i></div>
       <div class="world" id="dark"><i class="bl" id="db0" style="left:-220px;top:-120px;width:800px;height:800px;background:rgba(177,71,107,.55)"></i><i class="bl" id="db1" style="left:480px;top:900px;width:900px;height:900px;background:rgba(243,67,162,.38)"></i><i class="bl" id="db2" style="left:-200px;top:1300px;width:760px;height:760px;background:rgba(120,40,200,.35)"></i><i class="bl" id="db3" style="left:420px;top:120px;width:600px;height:600px;background:rgba(238,104,139,.3)"></i></div>
       <div id="cam">
-        <div class="orb" id="ob0" style="left:820px;top:1380px;width:210px;height:210px"></div><div class="orb" id="ob1" style="left:90px;top:1560px;width:150px;height:150px"></div><div class="orb" id="ob2" style="left:900px;top:300px;width:120px;height:120px"></div><div class="orb" id="ob3" style="left:160px;top:1180px;width:90px;height:90px"></div><div class="orb" id="ob4" style="left:620px;top:1700px;width:170px;height:170px"></div><div class="ringd" id="rgd"></div>
+        <div class="orb" id="ob0" style="left:840px;top:1400px;width:190px;height:190px"></div><div class="orb" id="ob1" style="left:70px;top:1600px;width:130px;height:130px"></div><div class="orb" id="ob2" style="left:930px;top:330px;width:100px;height:100px"></div><div class="ringd" id="rgd"></div>
 <div class="phone" id="phone"><div class="scr"><video class="dv" id="dv0" src="assets/video/demo.mp4" data-start="0.000" data-duration="4.360" data-media-start="0.000" data-track-index="1" muted playsinline></video><video class="dv" id="dv1" src="assets/video/demo.mp4" data-start="7.000" data-duration="4.840" data-media-start="2.000" data-track-index="2" muted playsinline></video><video class="dv" id="dv2" src="assets/video/demo.mp4" data-start="11.840" data-duration="4.230" data-media-start="3.200" data-track-index="1" muted playsinline></video><video class="dv" id="dv3" src="assets/video/demo.mp4" data-start="16.070" data-duration="0.840" data-media-start="0.800" data-track-index="2" muted playsinline></video><video class="dv" id="dv4" src="assets/video/demo.mp4" data-start="16.910" data-duration="1.260" data-media-start="6.800" data-track-index="1" muted playsinline></video><video class="dv" id="dv5" src="assets/video/demo.mp4" data-start="18.170" data-duration="1.190" data-media-start="8.600" data-track-index="2" muted playsinline></video><video class="dv" id="dv6" src="assets/video/demo.mp4" data-start="21.160" data-duration="5.300" data-media-start="4.000" data-track-index="1" muted playsinline></video><div class="ig"><div class="cap">3 AI tools I use daily</div><div class="side"><i></i><i></i><i></i></div><div class="who"><b></b>creator.daily</div></div><div class="glint"></div></div><div class="isl"></div></div>
 <div class="share glass" id="share"><svg class="lk" id="lk" viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0 1 10 0v3"/><rect x="5" y="11" width="14" height="10" rx="3"/></svg><span id="shtx">Share</span></div>
 <div class="lens" id="lens"><div class="lring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" id="lfill"/></svg></div><div class="lhi"></div><div class="lcau"></div></div>
@@ -160,16 +161,17 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fbf7f
 <div class="head dk" id="hb" style="top:210px;font-size:92px;text-align:left"><div class="hl"><span class="hw " id="h10">Not</span> <span class="hw " id="h11">views</span> <span class="hw it" id="h12">after.</span></div><div class="hl"><span class="hw " id="h13">Reasons,</span> <span class="hw it pk" id="h14">before.</span></div></div>
 <div class="card glass dkg" id="after"><div class="lab">AFTER YOU POST</div><div class="big">Views</div><svg viewBox="0 0 400 140" class="spark"><polyline points="0,85.81303051614462 40,71.27195301571571 80,59.63521623119145 120,54.0 160,55.63521623119145 200,63.27195301571571 240,73.81303051614462 280,83.92723352971346 320,91.42331677093414 360,95.67604652628813 400,97.19376265696246"/></svg><div class="mut">numbers, no reasons</div></div><div class="card glass dkg pkc" id="before"><div class="lab pk">BEFORE YOU POST</div><div class="big">Reasons</div><div class="rows"><span>Hook</span><span>Proof</span><span>Trust</span></div><div class="mut">with the exact second</div></div></div>
 <div class="scn" id="sc"><div class="brand glass" id="brand"><img src="assets/img/creedom_logo.png"></div>
-<div class="head " id="hc" style="top:210px;font-size:80px;text-align:left"><div class="hl"><span class="hw " id="h15">It</span> <span class="hw " id="h16">watches</span> <span class="hw " id="h17">your</span> <span class="hw " id="h18">whole</span> <span class="hw " id="h19">reel</span></div><div class="hl"><span class="hw it" id="h20">second</span> <span class="hw it" id="h21">by</span> <span class="hw it" id="h22">second.</span></div></div>
+<div class="head " id="hcc" style="top:210px;font-size:96px;text-align:left"><div class="hl"><span class="hw " id="h15">It's</span> <span class="hw " id="h16">called</span></div><div class="hl"><span class="hw it pk" id="h17">Creedom.</span></div></div>
+<div class="head " id="hc" style="top:210px;font-size:80px;text-align:left"><div class="hl"><span class="hw " id="h18">It</span> <span class="hw " id="h19">watches</span> <span class="hw " id="h20">your</span> <span class="hw " id="h21">whole</span> <span class="hw " id="h22">reel</span></div><div class="hl"><span class="hw it" id="h23">second</span> <span class="hw it" id="h24">by</span> <span class="hw it" id="h25">second.</span></div></div>
 <div class="strip"><div class="fr glass" id="fr0"><img src="assets/img/demo_1.jpg"><span>0:01</span></div><div class="fr glass" id="fr1"><img src="assets/img/demo_5.jpg"><span>0:05</span></div><div class="fr glass" id="fr2"><img src="assets/img/demo_8.jpg"><span>0:08</span></div></div><div class="steps"><div class="stp glass" id="sp0"><i>&#10003;</i>Watching the reel end to end</div><div class="stp glass" id="sp1"><i>&#10003;</i>Reading the scorecard</div></div><div class="beam" id="beam"></div></div>
 <div class="scn" id="sd">
-<div class="head dk" id="hd" style="top:200px;font-size:84px;text-align:left"><div class="hl"><span class="hw " id="h23">Scores</span> <span class="hw " id="h24">it</span> <span class="hw " id="h25">out</span> <span class="hw " id="h26">of</span> <span class="hw it pk" id="h27">five</span></div></div>
+<div class="head dk" id="hd" style="top:200px;font-size:84px;text-align:left"><div class="hl"><span class="hw " id="h26">Scores</span> <span class="hw " id="h27">it</span> <span class="hw " id="h28">out</span> <span class="hw " id="h29">of</span> <span class="hw it pk" id="h30">five</span></div></div>
 <div class="gauge glass dkg" id="gauge"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84" class="gt"/><circle cx="100" cy="100" r="84" class="gf" id="gf"/></svg><div class="gv"><b id="gnum">0.0</b><span>/5</span></div><div class="ex">EXAMPLE REEL</div></div><div class="rail glass dkg" id="rail"><div class="rl"><i id="ph"></i><div class="mk" id="mk0" style="left:6.7%;--c:#F5B544"><b></b><span class="glass dkg">0:01 · Weak hook</span></div><div class="mk" id="mk1" style="left:46.7%;--c:#F5B544"><b></b><span class="glass dkg">0:07 · Claim, no proof</span></div><div class="mk" id="mk2" style="left:93.3%;--c:#F343A2"><b></b><span class="glass dkg">0:14 · Loses trust</span></div></div><div class="tk"><span>0:00</span><span>0:05</span><span>0:10</span><span>0:15</span></div></div><div class="flagh" id="flagh">Flags the exact moments</div></div>
 <div class="scn" id="se"><div class="fix glass dkg" id="fix"><div class="ft"><b>0:14</b><span>Loses trust</span></div><div class="fl">The tool is never named, so viewers can't follow along.</div><div class="fx"><i>Fix</i>Name the tool on screen at 0:14.</div></div>
-<div class="head dk" id="he" style="top:200px;font-size:92px;text-align:left"><div class="hl"><span class="hw " id="h28">With</span> <span class="hw " id="h29">the</span> <span class="hw " id="h30">timestamp,</span></div><div class="hl"><span class="hw " id="h31">and</span> <span class="hw " id="h32">the</span> <span class="hw it pk" id="h33">fix.</span></div></div>
+<div class="head dk" id="he" style="top:200px;font-size:92px;text-align:left"><div class="hl"><span class="hw " id="h31">With</span> <span class="hw " id="h32">the</span> <span class="hw " id="h33">timestamp,</span></div><div class="hl"><span class="hw " id="h34">and</span> <span class="hw " id="h35">the</span> <span class="hw it pk" id="h36">fix.</span></div></div>
 </div>
 <div class="scn" id="sf">
-<div class="head " id="hf" style="top:210px;font-size:92px;text-align:left"><div class="hl"><span class="hw " id="h34">Fix</span> <span class="hw " id="h35">it</span></div><div class="hl"><span class="hw it" id="h36">before</span> <span class="hw " id="h37">anyone</span> <span class="hw " id="h38">sees</span> <span class="hw " id="h39">it.</span></div></div>
+<div class="head " id="hf" style="top:210px;font-size:92px;text-align:left"><div class="hl"><span class="hw " id="h37">Fix</span> <span class="hw " id="h38">it</span></div><div class="hl"><span class="hw it" id="h39">before</span> <span class="hw " id="h40">anyone</span> <span class="hw " id="h41">sees</span> <span class="hw " id="h42">it.</span></div></div>
 <div class="ok glass" id="ok"><i>&#10003;</i>0:14 fixed</div></div>
 <div class="scn" id="sg"><div class="cm" id="cmh">Comment</div><div class="kw" id="kw">CHECK</div><div class="cbox glass dkg" id="cbox"><i></i><span id="ctx">Add a comment…</span><b id="csend">&#10148;</b></div><div class="sub" id="sub">and I'll send you the <i>link.</i></div><div class="flt glass dkg" id="fl0" style="left:90px;top:1330px">CHECK</div><div class="flt glass dkg" id="fl1" style="left:620px;top:1420px">CHECK</div><div class="flt glass dkg" id="fl2" style="left:260px;top:1530px">CHECK</div><div class="flt glass dkg" id="fl3" style="left:700px;top:1260px">CHECK</div><div class="flt glass dkg" id="fl4" style="left:120px;top:1180px">CHECK</div></div>
       </div>
@@ -217,13 +219,16 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fbf7f
       tl.fromTo("#before", {opacity: 0, x: 220, rotationY: -30, filter: 'blur(14px)', scale: .9}, {...{opacity: 1, x: 0, rotationY: -8, filter: 'blur(0px)', scale: 1.04}, duration: 0.7, ease: "expo.out", immediateRender: false}, 6.120);
       tl.to("#hb", {...{opacity: 0, filter: 'blur(16px)', y: -40}, duration: 0.3, ease: "power2.in"}, 6.770);
       tl.fromTo("#h15", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 7.100);
-      tl.fromTo("#h16", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 8.820);
-      tl.fromTo("#h17", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 9.120);
-      tl.fromTo("#h18", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 9.340);
-      tl.fromTo("#h19", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 9.540);
-      tl.fromTo("#h20", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 10.160);
-      tl.fromTo("#h21", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 10.260);
-      tl.fromTo("#h22", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 10.480);
+      tl.fromTo("#h16", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 7.560);
+      tl.fromTo("#h17", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 7.800);
+      tl.fromTo("#h18", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 8.740);
+      tl.fromTo("#h19", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 8.820);
+      tl.fromTo("#h20", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 9.120);
+      tl.fromTo("#h21", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 9.340);
+      tl.fromTo("#h22", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 9.540);
+      tl.fromTo("#h23", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 10.160);
+      tl.fromTo("#h24", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 10.260);
+      tl.fromTo("#h25", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 10.480);
       tl.set("#sc", {opacity: 1}, 7.020);
       tl.set("#sc", {opacity: 0}, 11.840);
       tl.fromTo("#cam", {scale: 1, filter: 'blur(0px)'}, {...{scale: 1.9, filter: 'blur(18px)'}, duration: 0.3, ease: "power2.in", immediateRender: false}, 6.770);
@@ -231,7 +236,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fbf7f
       tl.to("#dark", {...{opacity: 0}, duration: 0.45, ease: "power2.inOut"}, 6.920);
       tl.fromTo("#brand", {opacity: 0, scale: .6, filter: 'blur(16px)'}, {...{opacity: 1, scale: 1, filter: 'blur(0px)'}, duration: 0.6, ease: "expo.out", immediateRender: false}, 7.070);
       tl.to("#brand", {...{opacity: 0, scale: 1.4, filter: 'blur(14px)'}, duration: 0.4, ease: "power2.in"}, 8.680);
-      tl.set("#hc", {opacity: 1}, 0.000);
+      tl.to("#hcc", {...{opacity: 0, filter: 'blur(16px)', y: -40}, duration: 0.3, ease: "power2.in"}, 8.500);
       tl.fromTo("#phone", {opacity: 0, scale: .85, filter: 'blur(12px)', x: -150}, {...{opacity: 1, scale: .86, filter: 'blur(0px)', x: -150}, duration: 0.7, ease: "expo.out", immediateRender: false}, 8.680);
       tl.fromTo("#lens", {opacity: 0, scale: .6, x: -150, y: 0}, {...{opacity: 1, scale: .8, x: -150, y: -60}, duration: 0.5, ease: "expo.out", immediateRender: false}, 8.880);
       tl.to("#lens", {y: 440, duration: 1.3, ease: "sine.inOut", yoyo: true, repeat: 1}, 9.330);
@@ -243,11 +248,11 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fbf7f
       tl.fromTo("#sp0", {opacity: 0, y: 40, filter: 'blur(10px)'}, {...{opacity: 1, y: 0, filter: 'blur(0px)'}, duration: 0.5, ease: "expo.out", immediateRender: false}, 11.010);
       tl.fromTo("#sp1", {opacity: 0, y: 40, filter: 'blur(10px)'}, {...{opacity: 1, y: 0, filter: 'blur(0px)'}, duration: 0.5, ease: "expo.out", immediateRender: false}, 11.430);
       tl.to("#hc", {...{opacity: 0, filter: 'blur(16px)', y: -40}, duration: 0.3, ease: "power2.in"}, 11.590);
-      tl.fromTo("#h23", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 12.340);
-      tl.fromTo("#h24", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 12.540);
-      tl.fromTo("#h25", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 12.700);
-      tl.fromTo("#h26", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 12.820);
-      tl.fromTo("#h27", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 12.960);
+      tl.fromTo("#h26", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 12.340);
+      tl.fromTo("#h27", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 12.540);
+      tl.fromTo("#h28", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 12.700);
+      tl.fromTo("#h29", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 12.820);
+      tl.fromTo("#h30", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 12.960);
       tl.set("#sd", {opacity: 1}, 11.840);
       tl.set("#sd", {opacity: 0}, 19.340);
       tl.fromTo("#sweep", {xPercent: -170}, {...{xPercent: 170}, duration: 0.55, ease: "power2.inOut", immediateRender: false}, 11.620);
@@ -278,12 +283,12 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fbf7f
       tl.fromTo("#mk2 b", {opacity: 0, y: -140, scale: .4}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.5, ease: "back.out(2.4)", immediateRender: false}, 18.270);
       tl.fromTo("#mk2 span", {opacity: 0, y: 30, filter: 'blur(10px)'}, {...{opacity: 1, y: 0, filter: 'blur(0px)'}, duration: 0.45, ease: "expo.out", immediateRender: false}, 18.420);
       tl.fromTo("#mk2 b", {boxShadow: '0 0 0px 0px ' + 'rgba(255,255,255,0)'}, {...{boxShadow: '0 0 40px 10px #F343A2'}, duration: 0.6, ease: "power2.out", immediateRender: false}, 18.720);
-      tl.fromTo("#h28", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 19.400);
-      tl.fromTo("#h29", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 19.780);
-      tl.fromTo("#h30", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 19.940);
-      tl.fromTo("#h31", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 20.400);
-      tl.fromTo("#h32", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 20.660);
-      tl.fromTo("#h33", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 20.780);
+      tl.fromTo("#h31", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 19.400);
+      tl.fromTo("#h32", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 19.780);
+      tl.fromTo("#h33", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 19.940);
+      tl.fromTo("#h34", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 20.400);
+      tl.fromTo("#h35", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 20.660);
+      tl.fromTo("#h36", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 20.780);
       tl.set("#se", {opacity: 1}, 19.340);
       tl.set("#se", {opacity: 0}, 21.180);
       tl.to("#rail", {...{opacity: 0, filter: 'blur(12px)'}, duration: 0.3, ease: "power2.out"}, 19.140);
@@ -294,12 +299,12 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fbf7f
       tl.fromTo("#fix .fx", {opacity: 0, x: -60, filter: 'blur(10px)'}, {...{opacity: 1, x: 0, filter: 'blur(0px)'}, duration: 0.5, ease: "expo.out", immediateRender: false}, 20.790);
       tl.to("#he", {...{opacity: 0, filter: 'blur(16px)', y: -40}, duration: 0.3, ease: "power2.in"}, 20.930);
       tl.to("#fix", {...{opacity: 0, scale: 1.2, filter: 'blur(16px)'}, duration: 0.3, ease: "power2.in"}, 20.930);
-      tl.fromTo("#h34", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 21.760);
-      tl.fromTo("#h35", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 21.940);
-      tl.fromTo("#h36", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 22.120);
-      tl.fromTo("#h37", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 22.360);
-      tl.fromTo("#h38", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 22.940);
-      tl.fromTo("#h39", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 23.220);
+      tl.fromTo("#h37", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 21.760);
+      tl.fromTo("#h38", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 21.940);
+      tl.fromTo("#h39", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 22.120);
+      tl.fromTo("#h40", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 22.360);
+      tl.fromTo("#h41", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 22.940);
+      tl.fromTo("#h42", {opacity: 0, filter: 'blur(14px)', y: 26}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 23.220);
       tl.set("#sf", {opacity: 1}, 21.180);
       tl.set("#sf", {opacity: 0}, 23.640);
       tl.fromTo("#cam", {scale: 1, filter: 'blur(0px)'}, {...{scale: 1.9, filter: 'blur(18px)'}, duration: 0.3, ease: "power2.in", immediateRender: false}, 20.930);
@@ -334,18 +339,16 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fbf7f
       tl.fromTo("#ob0", {y: 0, x: 0}, {y: 131, x: 49, duration: 8.82, ease: "sine.inOut", yoyo: true, repeat: 2, immediateRender: false}, 0);
       tl.fromTo("#ob1", {y: 0, x: 0}, {y: 117, x: 15, duration: 8.82, ease: "sine.inOut", yoyo: true, repeat: 2, immediateRender: false}, 0);
       tl.fromTo("#ob2", {y: 0, x: 0}, {y: -83, x: 15, duration: 8.82, ease: "sine.inOut", yoyo: true, repeat: 2, immediateRender: false}, 0);
-      tl.fromTo("#ob3", {y: 0, x: 0}, {y: 140, x: 28, duration: 8.82, ease: "sine.inOut", yoyo: true, repeat: 2, immediateRender: false}, 0);
-      tl.fromTo("#ob4", {y: 0, x: 0}, {y: -72, x: 7, duration: 8.82, ease: "sine.inOut", yoyo: true, repeat: 2, immediateRender: false}, 0);
       tl.fromTo("#rgd", {rotation: 0, scale: 1}, {rotation: 160, scale: 1.15, duration: 26.46, ease: "none", immediateRender: false}, 0);
-      tl.fromTo("#lb0", {x: 0, y: 0, scale: 1}, {x: 50, y: -115, scale: 0.85, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
-      tl.fromTo("#lb1", {x: 0, y: 0, scale: 1}, {x: -218, y: 145, scale: 1.33, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
-      tl.fromTo("#lb2", {x: 0, y: 0, scale: 1}, {x: -99, y: -245, scale: 1.26, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
-      tl.fromTo("#lb3", {x: 0, y: 0, scale: 1}, {x: -196, y: -200, scale: 0.82, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
-      tl.fromTo("#lb4", {x: 0, y: 0, scale: 1}, {x: -13, y: -230, scale: 1.23, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
-      tl.fromTo("#db0", {x: 0, y: 0, scale: 1}, {x: 74, y: 191, scale: 1.13, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
-      tl.fromTo("#db1", {x: 0, y: 0, scale: 1}, {x: -60, y: -21, scale: 1.15, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
-      tl.fromTo("#db2", {x: 0, y: 0, scale: 1}, {x: 251, y: -256, scale: 1.16, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
-      tl.fromTo("#db3", {x: 0, y: 0, scale: 1}, {x: 208, y: 24, scale: 1.02, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
+      tl.fromTo("#lb0", {x: 0, y: 0, scale: 1}, {x: 227, y: -70, scale: 0.85, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
+      tl.fromTo("#lb1", {x: 0, y: 0, scale: 1}, {x: 50, y: -115, scale: 0.85, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
+      tl.fromTo("#lb2", {x: 0, y: 0, scale: 1}, {x: -218, y: 145, scale: 1.33, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
+      tl.fromTo("#lb3", {x: 0, y: 0, scale: 1}, {x: -99, y: -245, scale: 1.26, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
+      tl.fromTo("#lb4", {x: 0, y: 0, scale: 1}, {x: -196, y: -200, scale: 0.82, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
+      tl.fromTo("#db0", {x: 0, y: 0, scale: 1}, {x: -13, y: -230, scale: 1.23, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
+      tl.fromTo("#db1", {x: 0, y: 0, scale: 1}, {x: 74, y: 191, scale: 1.13, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
+      tl.fromTo("#db2", {x: 0, y: 0, scale: 1}, {x: -60, y: -21, scale: 1.15, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
+      tl.fromTo("#db3", {x: 0, y: 0, scale: 1}, {x: 251, y: -256, scale: 1.16, duration: 13.23, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}, 0);
       tl.set({}, {}, 26.46);
       window.__timelines["main"] = tl;
     </script>
