@@ -10,7 +10,17 @@
 "file": "click_click.wav"
 },
 {
+"t": 1.97,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
 "t": 3.22,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 4.02,
 "kind": "pop",
 "file": "pop_pop.wav"
 },
@@ -23,6 +33,11 @@
 "t": 4.79,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
+},
+{
+"t": 5.16,
+"kind": "pop",
+"file": "pop_pop.wav"
 },
 {
 "t": 6.12,
@@ -40,24 +55,54 @@
 "file": "ding_notify.wav"
 },
 {
+"t": 6.57,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 6.57,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 6.97,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
 "t": 7.86,
 "kind": "impact",
 "file": "impact_impact.wav"
 },
 {
-"t": 10.22,
+"t": 7.96,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 10.17,
 "kind": "shutter",
 "file": "shutter_shutter.wav"
 },
 {
-"t": 11.11,
-"kind": "notify",
-"file": "notify_notify.wav"
+"t": 10.31,
+"kind": "tick",
+"file": "tick_click.wav"
 },
 {
-"t": 11.53,
-"kind": "notify",
-"file": "notify_notify.wav"
+"t": 10.45,
+"kind": "shutter",
+"file": "shutter_shutter.wav"
+},
+{
+"t": 10.59,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 10.73,
+"kind": "shutter",
+"file": "shutter_shutter.wav"
 },
 {
 "t": 11.59,
@@ -70,14 +115,19 @@
 "file": "riser_short_riser.wav"
 },
 {
-"t": 13.6,
+"t": 13.66,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 13.7,
 "kind": "impact",
 "file": "impact_impact.wav"
 },
 {
-"t": 13.66,
-"kind": "swish",
-"file": "swish_whoosh_b.wav"
+"t": 13.75,
+"kind": "pop",
+"file": "pop_pop.wav"
 },
 {
 "t": 16.22,
@@ -95,19 +145,39 @@
 "file": "pop_pop.wav"
 },
 {
+"t": 18.71,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 18.89,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 19.29,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
 "t": 19.34,
 "kind": "whoosh_big",
 "file": "whoosh_big_whoosh_deep.wav"
 },
 {
-"t": 20.48,
-"kind": "riser",
-"file": "riser_riser.wav"
+"t": 20.73,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
 },
 {
 "t": 20.84,
 "kind": "ding",
 "file": "ding_notify.wav"
+},
+{
+"t": 21.13,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
 },
 {
 "t": 21.92,
@@ -118,6 +188,11 @@
 "t": 23.0,
 "kind": "success",
 "file": "success_notify.wav"
+},
+{
+"t": 23.1,
+"kind": "pop",
+"file": "pop_pop.wav"
 },
 {
 "t": 23.39,
@@ -150,18 +225,8 @@
 "file": "click_click.wav"
 },
 {
-"t": 25.57,
-"kind": "pop",
-"file": "pop_pop.wav"
-},
-{
-"t": 25.87,
-"kind": "pop",
-"file": "pop_pop.wav"
-},
-{
-"t": 26.17,
-"kind": "pop",
-"file": "pop_pop.wav"
+"t": 25.48,
+"kind": "notify",
+"file": "notify_notify.wav"
 }
 ]
