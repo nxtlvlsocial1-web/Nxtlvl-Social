@@ -1,5 +1,10 @@
 [
 {
+"t": 0.05,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
 "t": 0.84,
 "kind": "whoosh",
 "file": "whoosh_whoosh_a.wav"
@@ -10,7 +15,7 @@
 "file": "click_click.wav"
 },
 {
-"t": 1.97,
+"t": 1.92,
 "kind": "pop",
 "file": "pop_pop.wav"
 },
@@ -20,14 +25,14 @@
 "file": "pop_pop.wav"
 },
 {
-"t": 4.02,
-"kind": "pop",
-"file": "pop_pop.wav"
-},
-{
 "t": 4.09,
 "kind": "whoosh_big",
 "file": "whoosh_big_whoosh_deep.wav"
+},
+{
+"t": 4.09,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
 },
 {
 "t": 4.79,
@@ -35,7 +40,7 @@
 "file": "swish_whoosh_b.wav"
 },
 {
-"t": 5.16,
+"t": 5.04,
 "kind": "pop",
 "file": "pop_pop.wav"
 },
@@ -43,6 +48,11 @@
 "t": 6.12,
 "kind": "whoosh",
 "file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 6.22,
+"kind": "pop",
+"file": "pop_pop.wav"
 },
 {
 "t": 6.32,
@@ -60,11 +70,6 @@
 "file": "whoosh_whoosh_a.wav"
 },
 {
-"t": 6.57,
-"kind": "pop",
-"file": "pop_pop.wav"
-},
-{
 "t": 6.97,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
@@ -75,9 +80,14 @@
 "file": "impact_impact.wav"
 },
 {
-"t": 7.96,
+"t": 7.91,
 "kind": "pop",
 "file": "pop_pop.wav"
+},
+{
+"t": 8.53,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
 },
 {
 "t": 10.17,
@@ -105,6 +115,11 @@
 "file": "shutter_shutter.wav"
 },
 {
+"t": 11.54,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
 "t": 11.59,
 "kind": "whoosh_big",
 "file": "whoosh_big_whoosh_deep.wav"
@@ -125,12 +140,12 @@
 "file": "impact_impact.wav"
 },
 {
-"t": 13.75,
+"t": 13.7,
 "kind": "pop",
 "file": "pop_pop.wav"
 },
 {
-"t": 16.22,
+"t": 16.17,
 "kind": "pop",
 "file": "pop_pop.wav"
 },
@@ -145,7 +160,7 @@
 "file": "pop_pop.wav"
 },
 {
-"t": 18.71,
+"t": 18.66,
 "kind": "pop",
 "file": "pop_pop.wav"
 },
@@ -175,6 +190,16 @@
 "file": "ding_notify.wav"
 },
 {
+"t": 20.93,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 20.94,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
 "t": 21.13,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
@@ -190,7 +215,7 @@
 "file": "success_notify.wav"
 },
 {
-"t": 23.1,
+"t": 23.0,
 "kind": "pop",
 "file": "pop_pop.wav"
 },
@@ -200,9 +225,19 @@
 "file": "whoosh_big_whoosh_deep.wav"
 },
 {
+"t": 23.39,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
 "t": 24.32,
 "kind": "impact",
 "file": "impact_impact.wav"
+},
+{
+"t": 24.32,
+"kind": "pop",
+"file": "pop_pop.wav"
 },
 {
 "t": 24.87,
