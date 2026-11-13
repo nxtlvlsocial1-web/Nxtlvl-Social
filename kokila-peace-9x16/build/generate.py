@@ -196,10 +196,10 @@ def build_top():
         scene("ts2", a2, b2, clip("pD" if mode_at(a2 + .05) != "ref" else "pDF", a2, b2, 0.0), "vid")
     # v5 (earshot: "salient hit density 2.0/s, high"): the quick footage cuts inside a line carry no whoosh
     broll("tb1", t_stress - .1, t_sleep - .05, "8632780", 1.0, "Stress")
-    broll("tb2", t_sleep - .05, t_ex - .05, "6639660", 2.0, "Sleep")
+    broll("tb2", t_sleep - .05, t_ex - .05, "7164569", .3, "Sleep")
     broll("tb3", t_ex - .05, t_but - .1, "4763892", 3.0, "Exercise", "50% 55%")
     # "Does it work? We don't know yet.": a skeptical pose with a smartwatch
-    broll("tb4", t_does - .1, t_so - .1, "8165946", 2.0, "Results: not yet known")
+    broll("tb4", t_does - .1, t_so - .1, "10515013", .5, "Results: not yet known", "50% 30%")
     # "a tracker that is completely free ... no subscription ... not even your time": ₹85,000 falls to ₹0
     free = (f'<div class="price glass big" id="pr4"><div class="pl">{icon("heart")} A tracker that is</div><div class="pv">₹<b id="pr4n">85,000</b></div>'
             f'<div class="fr" id="fr4">FREE</div></div>'
@@ -218,31 +218,34 @@ def build_top():
     js(f'tl.fromTo("#st2", {{scaleX: 0}}, {{scaleX: 1, duration: .25, ease: "power3.out", immediateRender: false}}, {t_time + .1:.3f});')
     sfx("scratch", t_time + .1)
     # "And that tracker is the people around you.": friends at a table, the line on top
-    broll("tb5", t_and3 - .1, t_just - .1, "9782812", 1.0, None, "50% 45%",
+    broll("tb5", t_and3 - .1, t_just - .1, "8811044", 8.0, None, "50% 45%",
           '<div class="big3" id="b3">THE PEOPLE<br><em>AROUND YOU</em></div>')
     js(f'tl.fromTo("#b3", {{opacity: 0, scale: 1.3}}, {{opacity: 1, scale: 1, duration: .35, ease: "expo.out", immediateRender: false}}, {t_people - .05:.3f});')
     sfx("rise", t_people - 1.2)
     sfx("hit", t_people)
     sfx("sub", t_people)
-    # "are the people in your life ... constantly complaining, criticizing and disrespecting you": real arguments
+    # v4 (client: "use neutral races for the reference videos"): every clip with people now shows Indian people (her
+    # audience), no religious marks (no bindi or turban: the couple clip 4334053 is cropped to the woman only, the
+    # family dinner 8811044 is used only before the woman with a bindi comes in); sleep is a bedside shot
+    # "are the people in your life ... constantly complaining, criticizing and disrespecting you": upset faces
     # v2 (client: "keep it neutral, no religion"): the couple clip with a hijab (8135467) is replaced by a neutral one
-    broll("tb6", t_just - .1, t_crit - .1, "8557555", .6, None, "50% 30%")
-    broll("tb7", t_crit - .1, t_disr - .1, "7640672", 4.0, None, "50% 35%")
-    broll("tb8", t_disr - .1, t_or - .1, "5658237", 3.0, None, "50% 40%")
+    broll("tb6", t_just - .1, t_crit - .1, "4584772", 1.0, None, "50% 30%")
+    broll("tb7", t_crit - .1, t_disr - .1, "4334053", .5, None, "50% 35%")
+    broll("tb8", t_disr - .1, t_or - .1, "4584772", 12.0, None, "50% 40%")
     js(f'tl.fromTo(".argue", {{opacity: 0}}, {{opacity: 1, duration: .3, immediateRender: false}}, {t_compl:.3f});')
     sfx("error", t_compl)
     # "or are the people ... loving you, supporting you and inspiring you to become the best version of yourself"
-    broll("tb9", t_or - .1, t_loving - .1, "8888536", 4.0, None, "50% 40%")
-    broll("tb10", t_loving - .1, t_supp - .1, "8058107", 4.0, None, "60% 40%")
-    broll("tb11", t_supp - .1, t_insp - .1, "8416831", 2.0, None, "50% 45%")
-    broll("tb12", t_insp - .1, t_because6 - .1, "9579386", 2.5, None, "45% 40%")
+    broll("tb9", t_or - .1, t_loving - .1, "8187787", .3, None, "50% 40%")
+    broll("tb10", t_loving - .1, t_supp - .1, "5034858", .5, None, "45% 40%")
+    broll("tb11", t_supp - .1, t_insp - .1, "8187787", 5.0, None, "50% 45%")
+    broll("tb12", t_insp - .1, t_because6 - .1, "5034858", 6.0, None, "45% 40%")
     sfx("sparkle", t_best)
     # "So surround yourself with people that make your life more beautiful": friends around a dinner table
-    broll("tb13", t_so7 - .1, t_because8 - .1, "8773862", 1.0, None, "50% 45%")
+    broll("tb13", t_so7 - .1, t_because8 - .1, "8811044", 2.0, None, "50% 45%")
     sfx("sparkle", t_beaut7)
     # "the greatest upgrade to your mental health may not be a device, it is simply the beautiful people in your life"
-    broll("tb14", t_because8 - .1, t_it8 - .1, "7223986", 6.9, None, "50% 50%")
-    broll("tb15", t_it8 - .1, DUR, "5899973", 3.0, None, "50% 40%")
+    broll("tb14", t_because8 - .1, t_it8 - .1, "6956640", 1.5, None, "50% 50%")
+    broll("tb15", t_it8 - .1, DUR, "8187787", 7.0, None, "50% 40%")
     sfx("success", t_beaut8)
 
 
@@ -467,7 +470,7 @@ video {{ display: block; }}
 .hook {{ position: absolute; left: 30px; right: 30px; top: {SEAM - 120}px; text-align: center; z-index: 7; }}
 .hook b {{ display: inline-block; padding: 18px 30px 22px; border-radius: 26px; background: #fff; color: {NAVY}; font-size: 58px; font-weight: 800; line-height: 1.08;
   letter-spacing: -.02em; box-shadow: 0 18px 44px rgba(14,26,58,.4); }}
-.hook em {{ font-style: normal; color: {RED}; }} .hook .y {{ background: {YEL}; border-radius: 12px; padding: 0 10px; }}
+.hook b {{ color: {RED}; }} .hook em {{ font-style: normal; color: {RED}; }} .hook .y {{ color: {RED}; }}
 #flash {{ position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 8; }}
 #grain {{ position: absolute; inset: 0; opacity: .05; background: url(assets/img/grain.png); mix-blend-mode: overlay; z-index: 9; pointer-events: none; }}
 """
