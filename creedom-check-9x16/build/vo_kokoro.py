@@ -13,7 +13,7 @@ from kokoro import KPipeline
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "assets", "audio", "vo_takes_kokoro")
 VOICE = "af_heart"
-SPEEDS = (1.1, 1.18)
+SPEEDS = (1.28, 1.34)    # v6 (owner: faster pace): about 1.12x the v5 takes (1.18)
 
 
 def main():

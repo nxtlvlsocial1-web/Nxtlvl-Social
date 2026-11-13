@@ -19,7 +19,9 @@ WORK = os.path.join(ROOT, "sfx", "work")
 LIB = os.path.join(ROOT, "assets", "sfx")
 E = json.load(open(os.path.join(ROOT, "plan", "edit.json")))
 DUR = E["dur"]
-SONG, SONG_AT = os.path.join(ROOT, "sfx", "music", "music_down_for_you.mp3"), 43.0
+# v6: "Ruslan Latypov - Corporate Music" by Ruslan Latypov (Jamendo 1693123, CC BY 3.0, credit in the post), 99.4 bpm;
+# starts on a beat (6.037 s) so the half-beat grid in generate.py lines up with reel t = 0
+SONG, SONG_AT = os.path.join(ROOT, "sfx", "music", "music_corporate_latypov.mp3"), 6.037
 # kind -> (files, peak dBFS, max length s)
 KINDS = {
     "whoosh": (["whoosh_a", "whoosh_b"], -10, .6), "whoosh_big": (["whoosh_deep"], -9, 1.1), "swish": (["whoosh_b"], -13, .5),
@@ -27,6 +29,7 @@ KINDS = {
     "screech": (["screech"], -13, 1.2), "shutter": (["shutter"], -11, .35), "cash": (["cash"], -12, 1.0), "notify": (["notify"], -12, .4),
     "stamp": (["stamp"], -7, .6), "buzzer": (["buzzer"], -15, .5), "lock": (["lock"], -10, .9), "riser": (["riser"], -13, 1.0),
     "riser_short": (["riser"], -18, 1.0), "ding": (["notify"], -11, .4), "success": (["notify"], -10, .4),
+    "thump": (["impact"], -17, .45),
 }
 
 
@@ -72,7 +75,7 @@ def main():
     if music:
         bed = os.path.join(WORK, "music_bed.wav")
         run(["ffmpeg", "-y", "-loglevel", "error", "-ss", str(SONG_AT), "-t", f"{DUR + .2:.2f}", "-i", SONG, "-vn", "-af",
-             f"afade=t=in:d=0.12,afade=t=out:st={DUR - 1.0:.2f}:d=1.0,loudnorm=I=-18:TP=-3:LRA=11", "-ar", "48000", "-ac", "2", bed])
+             f"afade=t=in:d=0.12,afade=t=out:st={DUR - 1.0:.2f}:d=1.0,loudnorm=I=-16.5:TP=-3:LRA=11", "-ar", "48000", "-ac", "2", bed])
         inputs += ["-i", bed]
         fc.append("[1:a][sc]sidechaincompress=threshold=0.03:ratio=5:attack=15:release=300:makeup=1[bg]")
         labels.append("[bg]")

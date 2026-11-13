@@ -112,10 +112,47 @@ def tilt(sel, t0, t1, a=4, per=1.7):
        f'yoyo: true, repeat: {n - 1}, immediateRender: false}}, {t0:.3f});')
 
 
+# v6 (owner: "it still feels very slow"): voice ~1.12x faster, a punchy CC BY track ("Corporate Music" by Ruslan Latypov,
+# 99.4 bpm, strong kick) with every scene cut on its half-beat grid, 0.3 s whips and zooms instead of 0.5 s glides,
+# a punch-in + glass flash on every key word, the score scene split in two shots, light streaks on cuts, overshoot
+# entrances, faster panes, more mascot poses, a riser into every cut and deep hits on the hook and CHECK.
+BEAT = 60 / 99.384
+HB = BEAT / 2
+
+
+def snap(t):
+    """nearest half-beat of the song (it starts on a beat at reel t = 0)"""
+    return round(t / HB) * HB
+
+
 def sweep(t):
     """frosted-glass panel sweeping across the frame (scene change)"""
-    ft("#sweep", t - .22, .55, "{xPercent: -170}", "{xPercent: 170}", "power2.inOut")
-    sfx("whoosh_big", t - .25)
+    ft("#sweep", t - .16, .36, "{xPercent: -170}", "{xPercent: 170}", "power2.inOut")
+    sfx("whoosh_big", t - .2)
+
+
+def streak(t):
+    """three glass light streaks flying through the cut"""
+    for i in range(3):
+        ft(f"#stk{i}", t - .14 + .05 * i, .38, "{xPercent: -260, opacity: 1}", "{xPercent: 260, opacity: 1}", "power2.inOut")
+
+
+def whip(t, d=1):
+    """fast whip pan with motion blur: out to one side, in from the other (0.38 s in all)"""
+    ft("#cam", t - .16, .16, "{x: 0, filter: 'blur(0px)'}", f"{{x: {-460 * d}, filter: 'blur(24px)'}}", "power2.in")
+    ft("#cam", t, .24, f"{{x: {460 * d}, filter: 'blur(24px)'}}", "{x: 0, filter: 'blur(0px)'}", "power3.out")
+    streak(t)
+    sfx("riser_short", t - .9)
+    sfx("whoosh", t - .18)
+
+
+def punch(t, k=1.055):
+    """punch-in with a soft glass flash on a key word"""
+    ft("#punch", t - .03, .08, "{scale: 1}", f"{{scale: {k}}}", "power2.out")
+    to("#punch", t + .05, .42, "{scale: 1}", "power3.out")
+    st("#flash", t - .03, "{opacity: .38}")
+    to("#flash", t - .02, .32, "{opacity: 0}", "power2.out")
+    sfx("thump", t - .02)
 
 
 LIQ = [0]
@@ -125,23 +162,27 @@ def liquid(t):
     """liquid-glass morph: an organic glass drop grows over the frame, the scene changes under it, and it melts away"""
     LIQ[0] += 1
     r0, r1 = "50% 50% 50% 50% / 50% 50% 50% 50%", ("42% 58% 63% 37% / 41% 44% 56% 59%", "58% 42% 38% 62% / 55% 61% 39% 45%")[LIQ[0] % 2]
-    ft("#liq", t - .5, .55, f"{{scale: .04, rotation: 0, borderRadius: '{r0}'}}", f"{{scale: 4.4, opacity: 1, rotation: {(90, -90)[LIQ[0] % 2]}, borderRadius: '{r1}'}}", "power2.in")
-    to("#liq", t + .05, .45, "{opacity: 0, filter: 'blur(30px)'}", "power2.out")
-    st("#liq", t - .5, "{filter: 'blur(0px)', opacity: 1}")
-    st("#liq", t + .52, "{scale: .04, filter: 'blur(0px)'}")
-    sfx("whoosh", t - .45)
+    ft("#liq", t - .42, .45, f"{{scale: .04, rotation: 0, borderRadius: '{r0}'}}", f"{{scale: 4.4, opacity: 1, rotation: {(90, -90)[LIQ[0] % 2]}, borderRadius: '{r1}'}}", "power2.in")
+    to("#liq", t + .03, .35, "{opacity: 0, filter: 'blur(30px)'}", "power2.out")
+    st("#liq", t - .42, "{filter: 'blur(0px)', opacity: 1}")
+    st("#liq", t + .4, "{scale: .04, filter: 'blur(0px)'}")
+    streak(t)
+    sfx("riser_short", t - .9)
+    sfx("whoosh", t - .4)
     sfx("swish", t - .05)
 
 
 def zoom_through(t):
-    ft("#cam", t - .25, .3, "{scale: 1, filter: 'blur(0px)'}", "{scale: 1.6, filter: 'blur(14px)'}", "power2.in")
-    ft("#cam", t + .05, .5, "{scale: .8, filter: 'blur(14px)'}", "{scale: 1, filter: 'blur(0px)'}", "expo.out")
-    sfx("riser", t - .7)
+    ft("#cam", t - .18, .2, "{scale: 1, filter: 'blur(0px)'}", "{scale: 1.6, filter: 'blur(14px)'}", "power2.in")
+    ft("#cam", t + .02, .34, "{scale: .82, filter: 'blur(14px)'}", "{scale: 1, filter: 'blur(0px)'}", "expo.out")
+    streak(t)
+    sfx("riser", t - .8)
+    sfx("whoosh", t - .15)
 
 
 def mode(t, dark):
     """crossfade between the light and the dark fluid worlds"""
-    to("#dark", t - .1, .45, f"{{opacity: {1 if dark else 0}}}", "power2.inOut")
+    to("#dark", t - .08, .3, f"{{opacity: {1 if dark else 0}}}", "power2.inOut")
 
 
 def scene(sid, t0, t1):
@@ -150,7 +191,8 @@ def scene(sid, t0, t1):
     ft("#drift", t0, t1 - t0, "{scale: 1}", "{scale: 1.035}", "none")      # slow push-in on every scene
 
 
-SA, SB, SC, SD, SE, SF, SG = 0.0, L0["c01"] - .14, L0["c02"] - .14, L0["c03"] - .1, L0["c04"] - .12, L0["c05"] - .12, L0["c06"] - .12
+SA = 0.0
+SB, SC, SD, SE, SF, SG = (snap(x) for x in (L0["c01"] - .12, L0["c02"] - .12, L0["c03"] - .08, L0["c04"] - .1, L0["c05"] - .1, L0["c06"] - .1))
 # ---- layout grid (v4) -----------------------------------------------------------------------------------------------------
 # headline block from y 190; phone (base box 540x960 at 270,520, centre 540,1000) at scale .78 -> 329..751 x 615..1365;
 # chip slot 1392..1474 and Share pill 1500..1600 under it; the mascot stands right of the phone, feet on y 1365.
@@ -182,19 +224,23 @@ HTML.append('<div class="scn" id="sa">')
 head("ha", [[("An", ""), ("app", ""), ("that", ""), ("rates", "it")], [("your", ""), ("reel", ""), ("before", "it")], [("you", ""), ("post.", "")]], 190, "c00", 84)
 HTML.append(f'<div class="chip glass" id="fixchip">{SH}tells you exactly <i>what to fix</i></div></div>')
 scene("sa", SA, SB)
-ft("#phone", .05, .9, "{opacity: 0, x: 0, y: 300, rotationX: 24, scale: .7}", "{opacity: 1, x: 0, y: -10, rotationX: 0, scale: .78}", "expo.out")
-ft("#share", .45, .6, "{opacity: 0, y: 60, scale: .8}", "{opacity: 1, y: 0, scale: 1}", "expo.out")
+ft("#phone", 0, .6, "{opacity: 1, x: 0, y: 170, rotationX: 16, scale: .74}", "{opacity: 1, x: 0, y: -10, rotationX: 0, scale: .78}", "back.out(1.4)")
+ft("#share", .2, .45, "{opacity: 0, y: 60, scale: .8}", "{opacity: 1, y: 0, scale: 1}", "back.out(1.6)")
+sfx("impact", 0)
+streak(.12)
 phone_shine(.6)
 shine("#share", .9)
 t_r = T("c00", "rates")
 sfx("whoosh", t_r - .1)
+punch(t_r)
+punch(T("c00", "before"), 1.04)
 t_p = T("c00", "post")
 to("#share", t_p, .12, "{scale: .94}")
 to("#share", t_p + .12, .35, "{scale: 1}", "elastic.out(1,.4)")
 ft("#lk", t_p, .4, "{rotation: -18}", "{rotation: 0}", "elastic.out(1.2,.3)")
 sfx("click", t_p)
 t_f = T("c00", "exactly")
-ft("#fixchip", t_f - .1, .55, "{opacity: 0, filter: 'blur(12px)', y: 30, scale: .9}", "{opacity: 1, filter: 'blur(0px)', y: 0, scale: 1}", "expo.out")
+ft("#fixchip", t_f - .1, .55, "{opacity: 0, filter: 'blur(12px)', y: 30, scale: .9}", "{opacity: 1, filter: 'blur(0px)', y: 0, scale: 1}", "back.out(1.4)")
 shine("#fixchip", t_f + .25)
 sfx("pop", t_f)
 tilt("#phone .scr", .9, SB)
@@ -210,21 +256,22 @@ HTML.append(f'<div class="card glass dkg" id="after">{SH}<div class="lab">AFTER 
             f'<div class="card glass dkg pkc" id="before">{SH}<div class="lab pk">BEFORE YOU POST</div><div class="big">Reasons</div>'
             '<div class="rows"><span>Hook</span><span>Proof</span><span>Trust</span></div><div class="mut">with the exact second</div></div></div>')
 scene("sb", SB, SC)
-sweep(SB)
+whip(SB)
 mode(SB, True)
-to("#phone", SB - .2, .3, "{opacity: 0, scale: .7, filter: 'blur(10px)'}", "power2.in")
-to("#share", SB - .2, .3, "{opacity: 0}")
+st("#phone", SB, "{opacity: 0}")
+st("#share", SB, "{opacity: 0}")
 t_v = T("c01", "views")
-ft("#after", t_v - .15, .7, "{opacity: 0, x: -200, rotationY: 35, filter: 'blur(14px)'}", "{opacity: 1, x: 0, rotationY: 0, filter: 'blur(0px)'}", "expo.out")
+ft("#after", t_v - .15, .7, "{opacity: 0, x: -200, rotationY: 35, filter: 'blur(14px)'}", "{opacity: 1, x: 0, rotationY: 0, filter: 'blur(0px)'}", "back.out(1.4)")
 shine("#after", t_v + .3)
 tilt("#after", t_v + .6, T("c01", "reasons") - .1, 5, .8)
 sfx("swish", t_v - .15)
 t_re = T("c01", "reasons")
+punch(t_re)
 to("#after", t_re - .05, .5, "{opacity: .4, scale: .94, filter: 'grayscale(1) blur(2px)'}")
-ft("#before", t_re - .1, .7, "{opacity: 0, x: 200, rotationY: -35, filter: 'blur(14px)', scale: .9}", "{opacity: 1, x: 0, rotationY: 0, filter: 'blur(0px)', scale: 1.03}", "expo.out")
+ft("#before", t_re - .1, .7, "{opacity: 0, x: 200, rotationY: -35, filter: 'blur(14px)', scale: .9}", "{opacity: 1, x: 0, rotationY: 0, filter: 'blur(0px)', scale: 1.03}", "back.out(1.4)")
 shine("#before", t_re + .35)
 tilt("#before", t_re + .65, SC, 5, .9)
-ft("#before .rows span", t_re + .2, .45, "{opacity: 0, x: 40, filter: 'blur(8px)'}", "{opacity: 1, x: 0, filter: 'blur(0px)', stagger: .09}", "expo.out")
+ft("#before .rows span", t_re + .2, .45, "{opacity: 0, x: 40, filter: 'blur(8px)'}", "{opacity: 1, x: 0, filter: 'blur(0px)', stagger: .09}", "back.out(1.4)")
 sfx("whoosh", t_re - .1)
 sfx("ding", T("c01", "before"))
 head_out("hb", SC - .25)
@@ -243,17 +290,18 @@ liquid(SC)
 zoom_through(SC)
 mode(SC, False)
 t_cr = T("c02", "Creedom")
-ft("#brand", SC + .05, .6, "{opacity: 0, scale: .6, filter: 'blur(16px)'}", "{opacity: 1, scale: 1, filter: 'blur(0px)'}", "expo.out")
+ft("#brand", SC + .05, .6, "{opacity: 0, scale: .6, filter: 'blur(16px)'}", "{opacity: 1, scale: 1, filter: 'blur(0px)'}", "back.out(1.4)")
 shine("#brand", t_cr + .05)
 tilt("#brand", SC + .7, T("c02", "watches") - .2, 6, .8)
 sfx("impact", t_cr)
+punch(t_cr, 1.07)
 t_w = T("c02", "watches")
 to("#brand", t_w - .2, .4, "{opacity: 0, scale: 1.4, filter: 'blur(14px)'}", "power2.in")
 head_out("hcc", T("c02", "It", 1) - .3)
 # phone at x 390 (scale .7: 201..579 x 604..1276), status pill over it, the mascot holds his magnifier up to it on the right
-ft("#phone", t_w - .2, .7, "{opacity: 0, x: -150, y: -60, scale: .6, filter: 'blur(12px)'}", "{opacity: 1, x: -150, y: -60, scale: .7, filter: 'blur(0px)'}", "expo.out")
+ft("#phone", t_w - .2, .7, "{opacity: 0, x: -150, y: -60, scale: .6, filter: 'blur(12px)'}", "{opacity: 1, x: -150, y: -60, scale: .7, filter: 'blur(0px)'}", "back.out(1.4)")
 phone_shine(t_w + .5)
-ft("#stat", t_w, .55, "{opacity: 0, y: 30, filter: 'blur(10px)'}", "{opacity: 1, y: 0, filter: 'blur(0px)'}", "expo.out")
+ft("#stat", t_w, .55, "{opacity: 0, y: 30, filter: 'blur(10px)'}", "{opacity: 1, y: 0, filter: 'blur(0px)'}", "back.out(1.4)")
 shine("#stat", t_w + .4)
 js(f'(() => {{ const o = {{v: 0}}; tl.to(o, {{v: 15, duration: {SD - .3 - (t_w + .3):.2f}, ease: "none", onUpdate: () => {{ '
    f'document.getElementById("stt").textContent = "0:" + String(Math.floor(o.v)).padStart(2, "0"); }}}}, {t_w + .3:.3f}); }})();')
@@ -263,7 +311,7 @@ to("#beam", t_w + 2.7, .2, "{opacity: 0}")
 t_s = T("c02", "second")
 for i in range(len(FS)):
     t = t_s - .05 + .14 * i
-    ft(f"#fr{i}", t, .6, "{opacity: 0, y: 80, scale: .7, filter: 'blur(10px)', rotationX: 50}", "{opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', rotationX: 0}", "expo.out")
+    ft(f"#fr{i}", t, .6, "{opacity: 0, y: 80, scale: .7, filter: 'blur(10px)', rotationX: 50}", "{opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', rotationX: 0}", "back.out(1.4)")
     shine(f"#fr{i}", t + .3, .6)
     sfx("shutter" if i % 2 == 0 else "tick", t)
 ft("#fr4", T("c02", "viewer"), .4, "{boxShadow: '0 0 0px 0px rgba(243,67,162,0)'}", "{boxShadow: '0 0 50px 8px rgba(243,67,162,.6)'}", "power2.out")
@@ -279,35 +327,47 @@ rows = "".join(f'<div class="fl glass dkg" id="fl{i}" style="--c:{c}"><i></i><em
 HTML.append('<div class="scn" id="sd">')
 head("hd", [[("Scores", ""), ("it", "")], [("out", ""), ("of", ""), ("five.", "it pk")]], 190, "c03", 84, dark=True)
 head("hd2", [[("Flags", ""), ("the", ""), ("exact", "")], [("moments.", "it pk")]], 190, "c03", 84, dark=True, after=T("c03", "flags") - .05)
+CHIPS = [("Hook", "#F5B544", 40, 600), ("Proof", "#F5B544", 836, 700), ("Trust", MAG, 40, 840)]
+HTML.append("".join(f'<div class="gc glass dkg" id="gc{i}" style="left:{x}px;top:{y}px;--c:{c}">{SH}<i></i>{n}</div>' for i, (n, c, x, y) in enumerate(CHIPS)))
 HTML.append(f'<div class="gauge glass dkg" id="gauge"><i class="gsh"></i><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84" class="gt"/>'
             '<circle cx="100" cy="100" r="84" class="gf" id="gf"/></svg><div class="gin"><div class="gv"><b id="gnum">0.0</b><span>/5</span></div>'
             '<div class="ex">EXAMPLE REEL</div></div></div>'
             f'<div class="rail glass dkg" id="rail">{SH}<div class="rl"><i id="ph"></i>{marks}</div><div class="tk">{ticks}</div>'
             f'<div class="rws">{rows}</div></div></div>')
 scene("sd", SD, SE)
-sweep(SD)
+whip(SD, -1)
 mode(SD, True)
 for b in ["#phone", "#stat", "#beam"] + [f"#fr{i}" for i in range(len(FS))]:
-    to(b, SD - .25, .2, "{opacity: 0}")
+    st(b, SD, "{opacity: 0}")
 t_sc = T("c03", "scores")
-ft("#gauge", t_sc - .1, .7, "{opacity: 0, scale: .7, filter: 'blur(14px)', rotation: -20}", "{opacity: 1, scale: 1, filter: 'blur(0px)', rotation: 0}", "expo.out")
-ft("#gf", t_sc + .2, 1.1, "{strokeDashoffset: 528}", f"{{strokeDashoffset: {528 * (1 - 4.2 / 5):.0f}}}", "power2.out")
-js(f'(() => {{ const o = {{v: 0}}; tl.to(o, {{v: 4.2, duration: 1.1, ease: "power2.out", onUpdate: () => {{ document.getElementById("gnum").textContent = o.v.toFixed(1); }}}}, {t_sc + .2:.3f}); }})();')
+ft("#gauge", SD + .02, .55, "{opacity: 0, scale: .6, filter: 'blur(14px)', rotation: -30}", "{opacity: 1, scale: 1, filter: 'blur(0px)', rotation: 0}", "back.out(1.5)")
+punch(T("c03", "five"))
+t_land = T("c03", "five")                            # v6: the faster voice leaves 0.6 s to count up, landing on "five"
+ft("#gf", t_sc, t_land - t_sc, "{strokeDashoffset: 528}", f"{{strokeDashoffset: {528 * (1 - 4.2 / 5):.0f}}}", "power2.out")
+js(f'(() => {{ const o = {{v: 0}}; tl.to(o, {{v: 4.2, duration: {t_land - t_sc:.2f}, ease: "power2.out", onUpdate: () => {{ document.getElementById("gnum").textContent = o.v.toFixed(1); }}}}, {t_sc:.3f}); }})();')
 js(f'tl.fromTo(".gsh", {{rotation: 0}}, {{rotation: 360, duration: 3.2, ease: "none", repeat: 1, immediateRender: false}}, {t_sc:.3f});')
-tilt("#gauge", t_sc + .7, SE, 7, 1.1)
-sfx("riser_short", t_sc)
-sfx("impact", t_sc + 1.3)
-t_fl = T("c03", "flags")
-head_out("hd", t_fl - .25)
-ft("#rail", t_fl, .7, "{opacity: 0, y: 120, filter: 'blur(14px)', rotationX: 30}", "{opacity: 1, y: 0, filter: 'blur(0px)', rotationX: 0}", "expo.out")
-shine("#rail", t_fl + .4, 1.1)
-sfx("swish", t_fl)
+t_fl = snap(T("c03", "flags") - .05)
+tilt("#gauge", SD + .6, t_fl - .1, 7, .8)
+sfx("impact", t_land)
+for i in range(3):                                   # glass chips pop out of the ring when the score lands
+    tc = t_land + .04 + .07 * i
+    ft(f"#gc{i}", tc, .45, f"{{opacity: 0, x: {(260, -260, 260)[i]}, scale: .3}}", "{opacity: 1, x: 0, scale: 1}", "back.out(1.8)")
+    shine(f"#gc{i}", tc + .3, .6)
+    sfx("pop", tc)
+# D2: zoom through into the flags shot; the ring and chips leave under the zoom, the rail fills the frame
+zoom_through(t_fl)
+for b in ["#gauge", "#hd"] + [f"#gc{i}" for i in range(3)]:
+    st(b, t_fl, "{opacity: 0}")
+ft("#rail", t_fl + .02, .5, "{opacity: 0, y: 140, rotationX: 30}", "{opacity: 1, y: 0, rotationX: 0}", "back.out(1.4)")
+shine("#rail", t_fl + .35, 1.0)
 for i, (w, ts, lab, tag, c, p) in enumerate(MARK):
     t = T("c03", w, 1 if w == "moment" else 0) - .05
     to("#ph", t, .35, f"{{left: '{p * 100:.3f}%'}}", "power3.inOut")
     ft(f"#mk{i}", t + .1, .5, "{opacity: 0, y: -120, scale: .4}", "{opacity: 1, y: 0, scale: 1}", "back.out(2.4)")
     ft(f"#mk{i}", t + .5, .6, "{boxShadow: '0 0 0px 0px rgba(255,255,255,0)'}", f"{{boxShadow: '0 0 34px 8px {c}'}}", "power2.out")
-    ft(f"#fl{i}", t + .2, .55, "{opacity: 0, x: -60, filter: 'blur(10px)'}", "{opacity: 1, x: 0, filter: 'blur(0px)'}", "expo.out")
+    ft(f"#fl{i}", t + .15, .45, "{opacity: 0, x: -90, filter: 'blur(10px)'}", "{opacity: 1, x: 0, filter: 'blur(0px)'}", "back.out(1.7)")
+    shine(f"#fl{i}", t + .45, .6)
+    punch(t + .12, 1.035)
     sfx("pop", t + .15)
 
 # ---- E the fix card (dark) --------------------------------------------------------------------------------------------------
@@ -317,31 +377,32 @@ HTML.append(f'<div class="scn" id="se"><div class="fix glass dkg" id="fix">{SH}<
 head("he", [[("With", ""), ("the", ""), ("timestamp,", "")], [("and", ""), ("the", ""), ("fix.", "it pk")]], 190, "c04", 88, dark=True)
 HTML.append('</div>')
 scene("se", SE, SF)
-liquid(SE)
+whip(SE)
 for b in ("#rail", "#gauge"):
-    to(b, SE - .2, .3, "{opacity: 0, filter: 'blur(12px)'}")
-ft("#fix", SE + .05, .8, "{opacity: 0, scale: .5, y: 300, rotationX: 40, filter: 'blur(18px)'}", "{opacity: 1, scale: 1, y: 0, rotationX: 0, filter: 'blur(0px)'}", "expo.out")
+    st(b, SE, "{opacity: 0}")
+ft("#fix", SE + .02, .6, "{opacity: 0, scale: .5, y: 300, rotationX: 40, filter: 'blur(18px)'}", "{opacity: 1, scale: 1, y: 0, rotationX: 0, filter: 'blur(0px)'}", "back.out(1.4)")
 shine("#fix", SE + .55, 1.0)
 tilt("#fix", SE + .85, SF, 5, .9)
 sfx("whoosh_big", SE)
-ft("#fix .fx", T("c04", "fix") - .05, .5, "{opacity: 0, x: -60, filter: 'blur(10px)'}", "{opacity: 1, x: 0, filter: 'blur(0px)'}", "expo.out")
+ft("#fix .fx", T("c04", "fix") - .05, .5, "{opacity: 0, x: -60, filter: 'blur(10px)'}", "{opacity: 1, x: 0, filter: 'blur(0px)'}", "back.out(1.4)")
 sfx("ding", T("c04", "fix"))
+punch(T("c04", "fix"))
 head_out("he", SF - .25)
-to("#fix", SF - .25, .3, "{opacity: 0, scale: 1.2, filter: 'blur(16px)'}", "power2.in")
+to("#fix", SF - .2, .2, "{opacity: 0, scale: 1.2, filter: 'blur(16px)'}", "power2.in")
 
 # ---- F fix it before anyone sees it (light): the hook layout again, now fixed --------------------------------------------------
 HTML.append('<div class="scn" id="sf">')
 head("hf", [[("Fix", ""), ("it", ""), ("before", "it")], [("anyone", ""), ("sees", ""), ("it.", "")]], 190, "c05", 88)
 HTML.append(f'<div class="ok glass" id="ok">{SH}<i>&#10003;</i>0:14 fixed</div></div>')
 scene("sf", SF, SG)
-liquid(SF)
+zoom_through(SF)
 mode(SF, False)
-ft("#phone", SF + .05, .7, "{opacity: 0, x: 0, y: -10, scale: .7, filter: 'blur(14px)'}", "{opacity: 1, x: 0, y: -10, scale: .78, filter: 'blur(0px)'}", "expo.out")
-ft("#share", SF + .1, .5, "{opacity: 0, y: 40}", "{opacity: 1, y: 0}", "expo.out")
+ft("#phone", SF + .05, .7, "{opacity: 0, x: 0, y: -10, scale: .7, filter: 'blur(14px)'}", "{opacity: 1, x: 0, y: -10, scale: .78, filter: 'blur(0px)'}", "back.out(1.4)")
+ft("#share", SF + .1, .5, "{opacity: 0, y: 40}", "{opacity: 1, y: 0}", "back.out(1.4)")
 t_fx2 = T("c05", "fix")
 ft("#tool", t_fx2, .55, "{opacity: 0, scale: .6, filter: 'blur(10px)'}", "{opacity: 1, scale: 1, filter: 'blur(0px)'}", "back.out(2)")
 shine("#tool", t_fx2 + .3, .7)
-ft("#ok", t_fx2 + .15, .55, "{opacity: 0, y: 30, filter: 'blur(12px)'}", "{opacity: 1, y: 0, filter: 'blur(0px)'}", "expo.out")
+ft("#ok", t_fx2 + .15, .55, "{opacity: 0, y: 30, filter: 'blur(12px)'}", "{opacity: 1, y: 0, filter: 'blur(0px)'}", "back.out(1.4)")
 shine("#ok", t_fx2 + .5)
 sfx("notify", t_fx2 + .1)
 phone_shine(t_fx2 + .2)
@@ -351,10 +412,11 @@ to("#share", t_sees, .4, f"{{background: 'linear-gradient(135deg, {PINK}, {MAG})
 st("#shtx", t_sees, '{textContent: "Post it"}')
 shine("#share", t_sees + .2)
 sfx("success", t_sees)
+punch(t_sees)
 tilt("#phone .scr", SF + .7, SG, 4, 1.2)
 head_out("hf", SG - .25)
 for b in ("#phone", "#share", "#ok"):
-    to(b, SG - .25, .3, "{opacity: 0, filter: 'blur(12px)'}")
+    st(b, SG, "{opacity: 0}")
 
 # ---- G CTA (dark) ---------------------------------------------------------------------------------------------------------------
 HTML.append(f'<div class="scn" id="sg"><div class="dm glass dkg" id="dm">{SH}<img src="assets/img/creedom_logo.png"><div><b>Creedom</b><span>sent you the link</span></div><em>now</em></div>'
@@ -362,14 +424,16 @@ HTML.append(f'<div class="scn" id="sg"><div class="dm glass dkg" id="dm">{SH}<im
             f'<div class="cbox glass dkg" id="cbox">{SH}<i></i><span id="ctx">Add a comment…</span><b id="csend">&#10148;</b></div>'
             '<div class="sub" id="sub">and I\'ll send you the <i>link.</i></div></div>')
 scene("sg", SG, DUR + 1)
-sweep(SG)
+liquid(SG)
 mode(SG, True)
 t_c = T("c06", "Comment")
 ft("#cmh", t_c - .05, .5, "{opacity: 0, filter: 'blur(14px)', y: 30}", "{opacity: 1, filter: 'blur(0px)', y: 0}", "power3.out")
 t_k = T("c06", "Check")
-ft("#kw", t_k - .1, .8, "{opacity: 0, scale: 1.6, scaleX: 1.9, filter: 'blur(24px)'}", "{opacity: 1, scale: 1, scaleX: 1, filter: 'blur(0px)'}", "expo.out")
+ft("#kw", t_k - .1, .8, "{opacity: 0, scale: 1.6, scaleX: 1.9, filter: 'blur(24px)'}", "{opacity: 1, scale: 1, scaleX: 1, filter: 'blur(0px)'}", "back.out(1.4)")
 sfx("impact", t_k)
-ft("#cbox", t_k + .3, .5, "{opacity: 0, y: 60, filter: 'blur(10px)'}", "{opacity: 1, y: 0, filter: 'blur(0px)'}", "expo.out")
+sfx("thump", t_k)
+punch(t_k, 1.08)
+ft("#cbox", t_k + .3, .5, "{opacity: 0, y: 60, filter: 'blur(10px)'}", "{opacity: 1, y: 0, filter: 'blur(0px)'}", "back.out(1.4)")
 shine("#cbox", t_k + .55)
 t_ty = t_k + .55
 js(f'(() => {{ const o = {{n: 0}}; tl.to(o, {{n: 5, duration: .45, ease: "steps(5)", onUpdate: () => {{ const e = document.getElementById("ctx"); '
@@ -381,7 +445,7 @@ to("#csend", t_ty + .62, .15, "{scale: 1}")
 sfx("click", t_ty + .5)
 ft("#sub", T("c06", "send") - .05, .5, "{opacity: 0, filter: 'blur(12px)', y: 20}", "{opacity: 1, filter: 'blur(0px)', y: 0}", "power3.out")
 t_dm = T("c06", "link")
-ft("#dm", t_dm - .1, .7, "{opacity: 0, y: -160, scale: .9, filter: 'blur(12px)'}", "{opacity: 1, y: 0, scale: 1, filter: 'blur(0px)'}", "expo.out")
+ft("#dm", t_dm - .1, .7, "{opacity: 0, y: -160, scale: .9, filter: 'blur(12px)'}", "{opacity: 1, y: 0, scale: 1, filter: 'blur(0px)'}", "back.out(1.4)")
 shine("#dm", t_dm + .35)
 sfx("notify", t_dm)
 tilt("#cbox", t_ty + .8, DUR, 4, 1.0)
@@ -510,12 +574,12 @@ def P(cx, feet, s=CS):
 
 
 RIGHT = P(885, 1362, .48)                           # right of the phone, feet level with its bottom
-js(f'tl.set("#cree", {{x: {1300 - PCX}, y: {RIGHT[1] - PCY:.0f}, scale: {CS}, opacity: 1}}, 0);')
+js(f'tl.set("#cree", {{x: {1010 - PCX}, y: {RIGHT[1] - PCY:.0f}, scale: {RIGHT[2]}, opacity: 1}}, 0);')
 js(f'tl.fromTo("#creep", {{y: 0}}, {{y: -9, duration: .8, ease: "sine.inOut", yoyo: true, repeat: {int(DUR / .8)}, immediateRender: false}}, 0);')
 js(f'tl.fromTo("#creeb", {{scaleY: 1}}, {{scaleY: 1.015, duration: 1.1, ease: "sine.inOut", yoyo: true, repeat: {int(DUR / 1.1)}, immediateRender: false}}, 0);')
 
 # A: walks in, studies the phone through his magnifier, cheers at "post", points at the phone, proud at "exactly"
-cree_walk(.05, .85, (1300, RIGHT[1], CS), RIGHT, end="stand")
+cree_walk(0, .5, (1010, RIGHT[1], RIGHT[2]), RIGHT, end="stand")
 t_r = T("c00", "rates")
 pose(t_r - .05, "mag")
 js(f'tl.fromTo("#creef", {{rotation: 0}}, {{rotation: -7, duration: .4, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}}, {t_r + .1:.3f});')
@@ -558,7 +622,7 @@ pose(t_cr2 + .55, "present", flip=True)
 t_wt = T("c02", "watches")
 W_POS = P(800, 1276, .5)
 cree_walk(t_wt - .35, t_wt + .1, C_POS, W_POS, end="mag")
-js(f'tl.fromTo("#creef", {{rotation: 0, y: 0}}, {{rotation: -8, y: -30, duration: .55, ease: "sine.inOut", yoyo: true, repeat: 3, immediateRender: false}}, {t_wt + .25:.3f});')
+js(f'tl.fromTo("#creef", {{rotation: 0, y: 0}}, {{rotation: -8, y: -30, duration: .45, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}}, {t_wt + .2:.3f});')
 t_s2 = T("c02", "second")
 pose(t_s2 + .05, "point", flip=True)
 js(f'tl.to("#creef", {{rotation: 10, duration: .3, ease: "back.out(2)"}}, {t_s2 + .1:.3f});')
@@ -568,16 +632,17 @@ blink(SD - .45)
 
 # D (dark): thinks while the score counts, cheers when it lands, points at the flags, thinks at "weak hook", points
 # at "claim", gets a fright (shock, sweat, "!") at "loses trust" and droops
-D_POS = P(300, 890)
+D_POS = P(540, 1470)                             # under the ring (D1) and the rail (D2)
 cree_walk(SD - .3, SD + .3, W_POS, D_POS, end="stand")
 pose(t_sc - .05, "think")
 cree_tilt(t_sc, -6)
-t_land = t_sc + 1.3
+
 cree_tilt(t_land - .1, 0, .15)
 pose(t_land - .05, "cheer")
 cree_hop(t_land, 110)
 sparkle(t_land + .05, 1.0)
-pose(t_fl + .4, "point")
+pose(t_fl + .3, "present")
+cree_hop(t_fl + .3, 40)
 blink(t_fl + 1.4)
 t_wk = T("c03", "weak")
 pose(t_wk - .05, "think")
@@ -618,7 +683,7 @@ pose(t_ty - .1, "phone")
 pose(t_dm - .05, "wave")
 cree_wiggle(t_dm + .1, 3, 6)
 pose(DUR - .7, "proud")
-for t in (3.5, 9.9, 15.2, 17.8, 22.6, 24.95):
+for t in (3.1, 8.8, 13.5, 15.8, 20.1, 22.2):
     blink(t)
 
 # ---- fluid blobs and drifting glass panes --------------------------------------------------------------------------------------
@@ -629,16 +694,16 @@ blobs_l = "".join(f'<i class="bl" id="lb{i}" style="left:{x}px;top:{y}px;width:{
 blobs_d = "".join(f'<i class="bl" id="db{i}" style="left:{x}px;top:{y}px;width:{s}px;height:{s}px;background:{c}"></i>' for i, (x, y, s, c) in enumerate(DB))
 for i in range(len(LB)):
     js(f'tl.fromTo("#lb{i}", {{x: 0, y: 0, scale: 1}}, {{x: {random.randint(-260, 260)}, y: {random.randint(-260, 260)}, scale: {random.uniform(.8, 1.35):.2f}, '
-       f'duration: {DUR / 2:.2f}, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}}, 0);')
+       f'duration: {DUR / 3:.2f}, ease: "sine.inOut", yoyo: true, repeat: 2, immediateRender: false}}, 0);')
 for i in range(len(DB)):
     js(f'tl.fromTo("#db{i}", {{x: 0, y: 0, scale: 1}}, {{x: {random.randint(-260, 260)}, y: {random.randint(-260, 260)}, scale: {random.uniform(.8, 1.35):.2f}, '
-       f'duration: {DUR / 2:.2f}, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}}, 0);')
+       f'duration: {DUR / 3:.2f}, ease: "sine.inOut", yoyo: true, repeat: 2, immediateRender: false}}, 0);')
 # big frosted panes, mostly off-frame at the edges, drifting and turning slowly (glass, not bubbles)
 PANES = [(-300, 330, 560, 340, -18), (830, 1500, 600, 360, 16), (690, -170, 520, 300, 24), (-330, 1560, 600, 320, -10)]
 panes = "".join(f'<i class="pane" id="pn{i}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px"></i>' for i, (x, y, w, h, r) in enumerate(PANES))
 for i, (x, y, w, h, r) in enumerate(PANES):
     js(f'tl.fromTo("#pn{i}", {{rotation: {r}, x: 0, y: 0}}, {{rotation: {r + random.choice((-1, 1)) * random.randint(8, 14)}, x: {random.randint(-80, 80)}, '
-       f'y: {random.randint(-120, 120)}, duration: {DUR / 2:.2f}, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}}, 0);')
+       f'y: {random.randint(-160, 160)}, duration: {DUR / 4:.2f}, ease: "sine.inOut", yoyo: true, repeat: 3, immediateRender: false}}, 0);')
 
 CSS = f"""
 @font-face {{ font-family: Inter; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2"); }}
@@ -660,13 +725,22 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #fbf7
   box-shadow: inset 0 2px 0 rgba(255,255,255,.6), 0 30px 80px rgba(120,20,60,.10); }}
 #grain {{ position: absolute; inset: 0; opacity: .045; background: url(assets/img/grain.png); mix-blend-mode: overlay; pointer-events: none; }}
 #cam {{ position: absolute; inset: 0; transform-origin: 50% 46%; }}
+#punch {{ position: absolute; inset: 0; transform-origin: 50% 45%; }}
+#flash {{ position: absolute; inset: 0; z-index: 48; pointer-events: none; opacity: 0; mix-blend-mode: soft-light;
+  background: rgba(255,236,246,.9); }}
+.stk {{ position: absolute; left: 0; width: 60%; height: 10px; z-index: 51; pointer-events: none; opacity: 0; border-radius: 10px;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.95) 50%, rgba(255,255,255,0)); box-shadow: 0 0 30px 6px rgba(255,170,210,.55); }}
+#stk0 {{ top: 560px; }} #stk1 {{ top: 980px; height: 18px; }} #stk2 {{ top: 1380px; height: 6px; }}
+.gc {{ position: absolute; width: 204px; height: 76px; border-radius: 999px; display: flex; align-items: center; justify-content: center; gap: 14px;
+  font-weight: 700; font-size: 32px; z-index: 13; opacity: 0; }}
+.gc > i {{ width: 18px; height: 18px; border-radius: 50%; background: var(--c); box-shadow: 0 0 12px var(--c); }}
 #drift {{ position: absolute; inset: 0; transform-origin: 50% 50%; perspective: 1600px; }}
 .scn {{ position: absolute; inset: 0; opacity: 0; perspective: 1600px; }}
 #sweep {{ position: absolute; top: -10%; bottom: -10%; left: 0; width: 70%; z-index: 50; pointer-events: none;
   background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.28) 30%, rgba(255,255,255,.42) 50%, rgba(255,255,255,.28) 70%, rgba(255,255,255,0));
   backdrop-filter: blur(28px) saturate(1.6); -webkit-backdrop-filter: blur(28px) saturate(1.6); border-left: 2px solid rgba(255,255,255,.7); border-right: 2px solid rgba(255,255,255,.5); }}
 #liq {{ position: absolute; left: 50%; top: 50%; width: 520px; height: 520px; margin: -260px 0 0 -260px; z-index: 49; pointer-events: none; opacity: 0; border-radius: 50%;
-  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.75) 0, rgba(255,255,255,.28) 22%, rgba(255,214,230,.22) 60%, rgba(243,67,162,.22) 100%);
+  background: linear-gradient(135deg, rgba(255,255,255,.7) 0, rgba(255,255,255,.26) 30%, rgba(255,214,230,.22) 65%, rgba(243,67,162,.24) 100%);
   backdrop-filter: blur(26px) saturate(1.9) brightness(1.06); -webkit-backdrop-filter: blur(26px) saturate(1.9) brightness(1.06);
   border: 2px solid rgba(255,255,255,.8); box-shadow: inset -30px -40px 80px rgba(243,67,162,.28), inset 20px 26px 60px rgba(255,255,255,.55); }}
 /* glass */
@@ -739,17 +813,17 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #fbf7
 .beam {{ position: absolute; left: 215px; top: 622px; width: 350px; height: 8px; border-radius: 6px; z-index: 14; opacity: 0;
   background: linear-gradient(90deg, transparent, {MAG}, #fff, {MAG}, transparent); box-shadow: 0 0 40px 10px rgba(243,67,162,.5); }}
 /* D: mascot left (150..450), gauge right (600..1000) in the band 490..890; rail 60..1020 x 960..1422 */
-.gauge {{ position: absolute; left: 600px; top: 490px; width: 400px; height: 400px; border-radius: 50%; z-index: 12; opacity: 0; }}
+.gauge {{ position: absolute; left: 280px; top: 450px; width: 520px; height: 520px; border-radius: 50%; z-index: 12; opacity: 0; }}
 .gsh {{ position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, rgba(255,255,255,0) 0 62%, rgba(255,255,255,.22) 72%, rgba(255,255,255,0) 82%); }}
-.gauge svg {{ position: absolute; inset: 18px; width: 364px; height: 364px; transform: rotate(-90deg); }}
+.gauge svg {{ position: absolute; inset: 22px; width: 476px; height: 476px; transform: rotate(-90deg); }}
 .gt {{ fill: none; stroke: rgba(255,255,255,.12); stroke-width: 12; }}
 .gf {{ fill: none; stroke: {PINK}; stroke-width: 12; stroke-linecap: round; stroke-dasharray: 528; stroke-dashoffset: 528; filter: drop-shadow(0 0 10px {MAG}); }}
 .gin {{ position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }}
 .gv {{ display: flex; align-items: baseline; justify-content: center; line-height: 1; padding-top: 10px; }}
-.gv b {{ font-weight: 700; font-size: 118px; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }}
-.gv span {{ font-family: Serif; font-style: italic; font-size: 64px; color: #ffb3cd; margin-left: 6px; }}
-.ex {{ margin-top: 14px; font-family: Mono; font-size: 17px; letter-spacing: .22em; color: rgba(255,255,255,.55); }}
-.rail {{ position: absolute; left: 60px; right: 60px; top: 960px; height: 462px; border-radius: 40px; z-index: 12; opacity: 0; }}
+.gv b {{ font-weight: 700; font-size: 150px; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }}
+.gv span {{ font-family: Serif; font-style: italic; font-size: 82px; color: #ffb3cd; margin-left: 6px; }}
+.ex {{ margin-top: 16px; font-family: Mono; font-size: 21px; letter-spacing: .22em; color: rgba(255,255,255,.55); }}
+.rail {{ position: absolute; left: 60px; right: 60px; top: 560px; height: 462px; border-radius: 40px; z-index: 12; opacity: 0; }}
 .rl {{ position: absolute; left: 56px; right: 56px; top: 64px; height: 10px; border-radius: 8px; background: linear-gradient(90deg, rgba(255,255,255,.32), rgba(255,255,255,.12)); }}
 .rl #ph {{ position: absolute; left: 0; top: -21px; width: 4px; height: 52px; margin-left: -2px; background: #fff; border-radius: 2px; box-shadow: 0 0 20px #fff; }}
 .mk {{ position: absolute; top: -12px; width: 34px; height: 34px; margin-left: -17px; border-radius: 50%; background: var(--c); border: 3px solid #fff; opacity: 0; }}
@@ -826,9 +900,10 @@ html = f"""<!doctype html>
       <div class="world" id="light">{blobs_l}</div>
       <div class="world" id="dark">{blobs_d}</div>
       <div id="panes">{panes}</div>
-      <div id="cam"><div id="drift">
+      <div id="cam"><div id="punch"><div id="drift">
         {chr(10).join(HTML)}
-      </div></div>
+      </div></div></div>
+      <div id="flash"></div><div id="stk0" class="stk"></div><div id="stk1" class="stk"></div><div id="stk2" class="stk"></div>
       <div id="liq"></div><div id="sweep"></div><div id="grain"></div>
     </div>
     <script>
@@ -836,6 +911,7 @@ html = f"""<!doctype html>
       const tl = gsap.timeline({{paused: true}});
       tl.set("#sweep", {{xPercent: -170}}, 0);
       tl.set("#liq", {{scale: .04}}, 0);
+      tl.set(".stk", {{rotation: -24, xPercent: -260}}, 0);
       tl.set(".sh, .pshine", {{skewX: -18, xPercent: -160}}, 0);
       {chr(10).join("      " + j for j in JS).strip()}
       tl.set({{}}, {{}}, {DUR:.2f});

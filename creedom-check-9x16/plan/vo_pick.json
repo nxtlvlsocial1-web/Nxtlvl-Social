@@ -1,103 +1,103 @@
 {
- "duration": 26.08,
+ "duration": 23.16,
  "takes": [
   {
    "line": "c00",
    "take": 0,
    "heard": "There's an app that rates your reel before you post it and tells you exactly what to fix.",
    "errors": 0,
-   "pitch_spread_hz": 109
+   "pitch_spread_hz": 95
   },
   {
    "line": "c00",
    "take": 1,
-   "heard": "There's an app that rates your reel before you post it and tells you exactly what to fix.",
-   "errors": 0,
-   "pitch_spread_hz": 139
+   "heard": "There's an app that reads your reel before you post it and tells you exactly what to fix.",
+   "errors": 1,
+   "pitch_spread_hz": 188
   },
   {
    "line": "c01",
    "take": 0,
    "heard": "Not views after you post, reasons before.",
    "errors": 0,
-   "pitch_spread_hz": 116
+   "pitch_spread_hz": 134
   },
   {
    "line": "c01",
    "take": 1,
    "heard": "Not views after you post, reasons before.",
    "errors": 0,
-   "pitch_spread_hz": 207
+   "pitch_spread_hz": 110
   },
   {
    "line": "c02",
    "take": 0,
    "heard": "It's called Creedum. It watches your whole reel, second by second, like a real viewer.",
    "errors": 1,
-   "pitch_spread_hz": 149
+   "pitch_spread_hz": 114
   },
   {
    "line": "c02",
    "take": 1,
    "heard": "It's called Creedum. It watches your whole reel, second by second, like a real viewer.",
    "errors": 1,
-   "pitch_spread_hz": 132
+   "pitch_spread_hz": 152
   },
   {
    "line": "c03",
    "take": 0,
    "heard": "Then it scores it out of five and flags the exact moments that need work. A weak hook, a claim with no proof, a moment that loses trust.",
    "errors": 0,
-   "pitch_spread_hz": 112
+   "pitch_spread_hz": 120
   },
   {
    "line": "c03",
    "take": 1,
-   "heard": "Then it scores it out of five and flags the exact moments that need work. A weak hook, a claim with no proof, a moment that loses trust.",
-   "errors": 0,
-   "pitch_spread_hz": 113
+   "heard": "And it scores it out of five and flags the exact moments that need work. A weak hook, a claim with no proof, a moment that loses trust.",
+   "errors": 1,
+   "pitch_spread_hz": 117
   },
   {
    "line": "c04",
    "take": 0,
    "heard": "with the time stamp and the fix.",
    "errors": 2,
-   "pitch_spread_hz": 191
+   "pitch_spread_hz": 201
   },
   {
    "line": "c04",
    "take": 1,
    "heard": "with the time stamp and the fix.",
    "errors": 2,
-   "pitch_spread_hz": 111
+   "pitch_spread_hz": 210
   },
   {
    "line": "c05",
    "take": 0,
    "heard": "So you fix it before anyone ever sees it.",
    "errors": 0,
-   "pitch_spread_hz": 236
+   "pitch_spread_hz": 180
   },
   {
    "line": "c05",
    "take": 1,
-   "heard": "so you fix it before anyone ever sees it.",
+   "heard": "So you fix it before anyone ever sees it.",
    "errors": 0,
-   "pitch_spread_hz": 223
+   "pitch_spread_hz": 123
   },
   {
    "line": "c06",
    "take": 0,
    "heard": "Comment check, and I'll send you the link.",
    "errors": 0,
-   "pitch_spread_hz": 222
+   "pitch_spread_hz": 214
   },
   {
    "line": "c06",
    "take": 1,
    "heard": "Comment check, and I'll send you the link.",
    "errors": 0,
-   "pitch_spread_hz": 132
+   "pitch_spread_hz": 107
   }
  ]
 }
