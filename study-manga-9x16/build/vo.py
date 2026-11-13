@@ -20,7 +20,7 @@ OUT = os.path.join(ROOT, "assets", "audio", "vo_takes")
 # cloned), as on the GTA 6 playbook reel (owner: "Chatterbox"). Spoken spellings: "Class ten", "study" in lower case
 # (capitals get read letter by letter).
 LINES = [
-    ("s00", "I turned the hardest chapter in Class ten Science into a manga. One prompt.", "hook 70", .65),
+    ("s00", "I made the hardest chapter in Class 10 Science into a manga. One prompt.", "hook 70", .65),
     ("s01", "Same chapter. Twelve pages you forget by tomorrow, or six panels you actually remember.", "peak", .6),
     ("s02", "Here are five prompts. Paste your chapter, pick one.", "release", .55),
     ("s03", "One: manga. Two: timeline. Three: mind map. Four: labelled diagram. Five: a one-page revision sheet.", "peak", .6),

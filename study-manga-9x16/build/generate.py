@@ -1,32 +1,50 @@
-"""Creators 100X "STUDY" reel (9:16): writes index.html and plan/sfx_events.json from plan/words.json.
+"""Creators 100X "STUDY" reel v2 (9:16): writes index.html and plan/sfx_events.json from plan/words.json.
 
-Look and pacing from the Creators 100X hook reel (reel-flop-9x16): an off-white ground with drifting lime, pink and
-peach glows and grain; black Inter 800 headlines that rise in word by word on the voice, the key word in the red-pink
-gradient; a numbered list whose active item turns pink and the rest go grey; a comment box that types the keyword and a
-stack of comments flying up. The hero is an animated ChatGPT phone screen (dark theme, as in the owner's recording):
-the chapter PDF attached, the prompt typed, "Creating image", then each result revealed top-down from a blur.
-Results: 1 manga = the owner's real ChatGPT output; 2 timeline, 3 mind map = Canva; 4 diagram, 5 revision sheet =
-build/results.cjs (Canva was on a credit cooldown). The owner chose to show all five inside the ChatGPT screen.
+v2 (owner: "the video feels very dull, so less animation going on"): something moves at every moment.
+  * a hand-held camera drift on the whole stage, drifting study doodles (stars, sparks, pencils, rings), glows
+  * hook: the chapter is typed into the ChatGPT screen, the manga is generated, then its six panels BURST out of the
+    phone and fan across the screen; "1 PROMPT" slams with a camera punch and flash
+  * contrast: a stack of pages fans out with a 1-12 page counter, crumples grey under a red scribble X and falls away;
+    the six panels fly in and snap into a grid with a sparkle burst and a tick stamp
+  * prompts: the PDF uploads with a progress bar, the five format chips cascade in, a cursor taps one
+  * the five: a giant rolling number 01-05 and a slammed label per format, each result generated on the phone and
+    then thrown out of it to full size; progress dots fill
+  * payoff: the revision sheet with the camera panning from section to section while highlighter boxes draw on
+    each one, a ticking 11:47 PM clock
+  * CTA: a keyword slot-reel rolling to STUDY with a confetti burst, the keyword typed and sent, comments flying
+    in with hearts and a climbing comment counter
+Look from the Creators 100X hook reel (reel-flop-9x16): off-white ground, lime/pink/peach glows, grain, black Inter 800,
+red-pink gradient accents. Voice v2: Kokoro af_heart (build/vo_kokoro.py), the hook reel's approved voice.
 python3 build/generate.py
 """
 import json
+import math
 import os
+import random
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W = json.load(open(os.path.join(ROOT, "plan", "words.json")))
-INK, RED = "#121212", "#ff2a2a"
+INK, RED, PINK, LIME = "#121212", "#ff2a2a", "#ff3d7f", "#b8e05a"
 LEFT = 80
+random.seed(7)
 LINES = {}
 for w in W:
     LINES.setdefault(w["line"], []).append(w)
 L0 = {k: v[0]["t0"] for k, v in LINES.items()}
 L1 = {k: v[-1]["t1"] for k, v in LINES.items()}
-DUR = round(L1["s05"] + .6, 2)
+DUR = round(L1["s05"] + .7, 2)
 JS, SFX, HTML = [], [], []
+SPOKEN = {"10": "ten", "5": "five", "1": "one", "2": "two", "3": "three", "4": "four", "6": "six", "12": "twelve"}
+
+
+def norm(s):
+    s = s.lower().strip(".,:!?-")
+    return SPOKEN.get(s, s)
 
 
 def T(line, word, n=0):
-    hits = [w for w in LINES[line] if w["w"].lower().strip(".,:!?-").startswith(word.lower())]
+    k = norm(word)
+    hits = [w for w in LINES[line] if norm(w["w"]).startswith(k[:5])]
     return hits[min(n, len(hits) - 1)]["t0"]
 
 
@@ -38,207 +56,316 @@ def sfx(kind, t):
     SFX.append({"type": kind, "t": round(t, 3)})
 
 
-def show(sel, t, d=.3, frm="{opacity: 0, y: 40}", to="{opacity: 1, y: 0}", ease="back.out(1.7)"):
+def fromto(sel, t, d, frm, to, ease="power3.out"):
     js(f'tl.fromTo("{sel}", {frm}, {{...{to}, duration: {d}, ease: "{ease}", immediateRender: false}}, {t:.3f});')
 
 
-def hide(sel, t, d=.18):
-    js(f'tl.to("{sel}", {{opacity: 0, duration: {d}, ease: "power2.in"}}, {t:.3f});')
+def to(sel, t, d, props, ease="power2.out"):
+    js(f'tl.to("{sel}", {{...{props}, duration: {d}, ease: "{ease}"}}, {t:.3f});')
+
+
+def setp(sel, t, props):
+    js(f'tl.set("{sel}", {props}, {t:.3f});')
 
 
 WID = [0]
-SPOKEN = {"10": "ten", "5": "five", "1": "one", "2": "two", "3": "three", "4": "four", "6": "six", "12": "twelve"}
 
 
-def phrase(pid, rows, top, line, size=92, extra=""):
-    """kinetic headline: rows of (text, cls) words; each word rises in on its spoken time (hook-reel style)"""
-    out, spoken = [], [w for w in LINES[line]]
-    k = 0
-    html_rows = []
+def phrase(pid, rows, top, line, size=96, extra=""):
+    """kinetic headline: each word pops up on its spoken time with an overshoot; ('word', cls) rows"""
+    spoken = LINES[line]
+    k, out, html_rows = 0, [], []
     for row in rows:
         ws = []
         for word, cls in row:
             WID[0] += 1
             wid = f"w{WID[0]}"
-            # match the word to its spoken time, in order
-            t = None
-            key = SPOKEN.get(word.lower().strip(".,:!?"), word.lower().strip(".,:!?"))
+            key, t = norm(word), None
             while k < len(spoken):
-                sw = spoken[k]["w"].lower().strip(".,:!?-")
-                sw = SPOKEN.get(sw, sw)
+                sw = norm(spoken[k]["w"])
                 k += 1
-                if sw.startswith(key.split("-")[0][:4]) or key.startswith(sw[:4]):
+                if sw.startswith(key[:4]) or key.startswith(sw[:4]):
                     t = spoken[k - 1]["t0"]
                     break
             if t is None:
                 t = spoken[-1]["t0"]
             ws.append(f'<span class="wm"><span class="w {cls}" id="{wid}">{word}</span></span>')
-            out.append((wid, t))
+            out.append((wid, t, cls))
         html_rows.append(f'<div class="ln">{"".join(ws)}</div>')
     HTML.append(f'<div class="ph" id="{pid}" style="top:{top}px;font-size:{size}px;{extra}">{"".join(html_rows)}</div>')
-    for wid, t in out:
-        js(f'tl.fromTo("#{wid}", {{opacity: 0, yPercent: 110}}, {{opacity: 1, yPercent: 0, duration: .28, ease: "power3.out", immediateRender: false}}, {t - .04:.3f});')
-    return out
+    for wid, t, cls in out:
+        fromto(f"#{wid}", t - .05, .32, "{opacity: 0, yPercent: 120, rotation: 8, scale: .8}", "{opacity: 1, yPercent: 0, rotation: 0, scale: 1}", "back.out(2.2)")
+        if "gr1" in cls:
+            fromto(f"#{wid}", t + .27, .3, "{scale: 1.18}", "{scale: 1}", "elastic.out(1,.4)")
+    return {wid: t for wid, t, _ in out}
 
 
-def scene_cut(t):
-    js(f'tl.fromTo("#stage", {{scale: 1.05, filter: "blur(10px)"}}, {{scale: 1, filter: "blur(0px)", duration: .35, ease: "expo.out", immediateRender: false}}, {t:.3f});')
-    sfx("whoosh", t - .1)
+def scene(sid, t0, t1, whip=1):
+    """scene in with a whip-pan (blur + slide) and a gradient wipe band; scene out hard at t1"""
+    fromto(f"#{sid}", t0, .01, "{opacity: 0}", "{opacity: 1}", "none")
+    fromto("#stage", t0, .4, f"{{x: {160 * whip}, filter: 'blur(14px)'}}", "{x: 0, filter: 'blur(0px)'}", "expo.out")
+    fromto("#wipe", t0 - .14, .32, f"{{xPercent: {-110 * whip}}}", f"{{xPercent: {110 * whip}}}", "power2.inOut")
+    sfx("whoosh", t0 - .14)
+    setp(f"#{sid}", t1 - .01, "{opacity: 0}")
 
 
-# ---- ChatGPT phone -------------------------------------------------------------------------------------------------
-def phone(pid, top, scale, body, cls=""):
-    HTML.append(f'<div class="phone {cls}" id="{pid}" style="top:{top}px;transform:translateX(-50%) scale({scale})">'
-                '<div class="pbar"><span class="t">9:41</span><span class="isl"></span><span class="ic">&#9679;&#9679;&#9679;</span></div>'
+def punch(t, amt=1.06):
+    fromto("#cam", t, .45, f"{{scale: {amt}}}", "{scale: 1}", "expo.out")
+    setp("#flash", t, "{opacity: .7}")
+    to("#flash", t + .02, .23, "{opacity: 0}")
+
+
+def burst(bid, x, y, t, n=14, colors=(PINK, LIME, "#ffb36b", "#7f1bf8"), dist=260):
+    """confetti / sparkle burst from (x, y)"""
+    parts = []
+    for i in range(n):
+        a = 2 * math.pi * i / n + random.uniform(-.2, .2)
+        r = dist * random.uniform(.6, 1.1)
+        c = colors[i % len(colors)]
+        shape = "border-radius:50%" if i % 3 == 0 else ("transform:rotate(45deg)" if i % 3 == 1 else "border-radius:3px")
+        parts.append((f"{bid}{i}", math.cos(a) * r, math.sin(a) * r, c, shape))
+    HTML.append("".join(f'<i class="cf" id="{p}" style="left:{x}px;top:{y}px;background:{c};{s}"></i>' for p, _, _, c, s in parts))
+    for p, dx, dy, _, _ in parts:
+        fromto(f"#{p}", t, .7, "{opacity: 1, x: 0, y: 0, scale: 1.4}", f"{{opacity: 0, x: {dx:.0f}, y: {dy + 120:.0f}, scale: .4, rotation: {random.randint(-200, 200)}}}", "power2.out")
+
+
+S1, S2, S3, S4, S5, S6 = 0.0, L0["s01"] - .1, L0["s02"] - .1, L0["s03"] - .14, L0["s04"] - .1, L0["s05"] - .1
+
+
+def phone(pid, top, scale, body):
+    HTML.append(f'<div class="phone" id="{pid}" style="top:{top}px;--s:{scale}">'
+                '<div class="pbar"><span>9:41</span><span class="isl"></span><span class="ic">&#9679;&#9679;&#9679;</span></div>'
                 '<div class="ghead"><span class="hb">&#9776;</span><b>ChatGPT</b><span class="chev">&#8250;</span><span class="hb r">&#9998;</span></div>'
                 f'<div class="gbody">{body}</div>'
-                '<div class="ginput"><span class="plus">+</span><span class="ph2">Ask anything</span><span class="mic">&#127908;</span><span class="send">&#8593;</span></div>'
+                f'<div class="ginput"><span class="plus">+</span><span class="itx" id="{pid}_in">Ask anything</span><span class="send" id="{pid}_send">&#8593;</span></div>'
                 '</div>')
 
 
-PDF = '<div class="att"><div class="pdf">PDF</div><div><b>jesc105.pdf</b><span>Life Processes · PDF</span></div></div>'
+def typer(el, text, t, d, placeholder="Ask anything"):
+    js(f'(() => {{ const o = {{n: 0}}; tl.to(o, {{n: {len(text)}, duration: {d:.2f}, ease: "none", onUpdate: () => {{ const e = document.getElementById("{el}"); '
+       f'const k = Math.round(o.n); e.textContent = k ? {json.dumps(text)}.slice(0, k) : {json.dumps(placeholder)}; e.style.color = k ? "#ececec" : "#9b9b9b"; }}}}, {t:.3f}); }})();')
 
-# ---- S1 hook (s00): the chapter becomes a manga -------------------------------------------------------------------
-S1, S2, S3, S4, S5, S6 = 0.0, L0["s01"] - .1, L0["s02"] - .1, L0["s03"] - .12, L0["s04"] - .1, L0["s05"] - .1
+
+PDF = '<div class="att"><div class="pdf">PDF</div><div><b>jesc105.pdf</b><span>Life Processes · 12 pages</span></div></div>'
+
+# ---- global: camera drift and doodles ----------------------------------------------------------------------------------
+DOODLES = [("star", 70, 1480, PINK), ("ring", 900, 1580, LIME), ("spark", 930, 330, "#ffb36b"), ("star", 960, 980, "#7f1bf8"),
+           ("ring", 60, 760, PINK), ("spark", 140, 1780, "#7f1bf8"), ("star", 520, 1820, LIME), ("pencil", 860, 1250, INK)]
+SVG = {
+    "star": '<svg viewBox="0 0 24 24"><path d="M12 1l3 8 8 .5-6.2 5 2.2 8L12 18l-7 4.5 2.2-8L1 9.5 9 9z"/></svg>',
+    "ring": '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke-width="4"/></svg>',
+    "spark": '<svg viewBox="0 0 24 24"><path d="M12 0l2.2 9.8L24 12l-9.8 2.2L12 24l-2.2-9.8L0 12l9.8-2.2z"/></svg>',
+    "pencil": '<svg viewBox="0 0 24 24"><path d="M3 21l1.5-5L16 4.5l3.5 3.5L8 19.5zM17.5 3l3.5 3.5"/></svg>',
+}
+dood = "".join(f'<div class="dd {k}" id="dd{i}" style="left:{x}px;top:{y}px;color:{c};fill:{c};stroke:{c}">{SVG[k]}</div>' for i, (k, x, y, c) in enumerate(DOODLES))
+
+# ---- S1 hook -------------------------------------------------------------------------------------------------------------
 HTML.append('<div class="scn" id="sc1">')
-phrase("p1", [[("I", ""), ("turned", ""), ("the", ""), ("hardest", "")], [("chapter", ""), ("in", ""), ("Class", ""), ("10", "")],
-              [("Science", ""), ("into", ""), ("a", ""), ("manga.", "gr1")]], 190, "s00", 84)
-phone("ph1", 560, .82, PDF + '<div class="ub" id="ub1">Turn this chapter into a 6-panel manga page. Each panel teaches one key idea, in order…</div>'
+phrase("p1", [[("I", ""), ("made", ""), ("the", ""), ("hardest", "hl")], [("chapter", ""), ("in", ""), ("Class", ""), ("10", "")],
+              [("Science", ""), ("into", ""), ("a", ""), ("manga.", "gr1")]], 180, "s00", 88)
+HTML.append('<svg class="scrib" id="scr1" viewBox="0 0 400 40" style="left:470px;top:278px;width:330px"><path d="M5 25 C 90 8, 200 38, 395 14" /></svg>')
+phone("ph1", 560, .8, PDF + '<div class="ub" id="ub1">Turn this chapter into a 6-panel manga page…</div>'
       '<div class="cr" id="cr1"><i></i>Creating image</div><div class="gimg" id="gi1"><img src="footage/results/1_manga.png"></div>')
+PAN = [(-330, -30, -14), (330, -60, 12), (-360, 330, 9), (360, 300, -10), (-300, 690, -7), (330, 660, 13)]
+for i in range(6):
+    HTML.append(f'<div class="pan" id="pn{i}"><img src="assets/img/panels/p{i + 1}.png"></div>')
 HTML.append('<div class="stamp" id="one">1 PROMPT</div></div>')
-show("#sc1", 0, .01, "{opacity: 0}", "{opacity: 1}", "none")
-show("#ph1", .15, .5, "{opacity: 0, y: 160}", "{opacity: 1, y: 0}", "expo.out")
-show("#ub1", T("s00", "chapter"), .3, "{opacity: 0, y: 30, scale: .95}", "{opacity: 1, y: 0, scale: 1}")
-sfx("click", T("s00", "chapter"))
-show("#cr1", T("s00", "Science") - .1, .2, "{opacity: 0}", "{opacity: 1}", "none")
+scene("sc1", S1, S2)
+fromto("#ph1", .05, .7, "{opacity: 0, y: 500, rotationX: 40, scale: .7}", "{opacity: 1, y: 0, rotationX: 0, scale: 1}", "expo.out")
+fromto("#ph1 .att", .45, .35, "{opacity: 0, y: -80, scale: .6}", "{opacity: 1, y: 0, scale: 1}", "back.out(2)")
+sfx("pop", .45)
+typer("ph1_in", "Turn this chapter into a manga", .6, .7)
+for k in range(6):
+    sfx("tick", .6 + .12 * k)
+fromto("#ph1_send", 1.35, .12, "{scale: 1}", "{scale: 1.35}", "power2.out")
+to("#ph1_send", 1.47, .12, "{scale: 1}")
+sfx("click", 1.35)
+setp("#ph1_in", 1.4, '{textContent: "Ask anything", color: "#9b9b9b"}')
+fromto("#ub1", 1.4, .3, "{opacity: 0, y: 60, scale: .9}", "{opacity: 1, y: 0, scale: 1}", "back.out(2)")
+fromto("#cr1", 1.7, .15, "{opacity: 0}", "{opacity: 1}", "none")
 t_m = T("s00", "manga")
-hide("#cr1", t_m - .05, .1)
-js(f'tl.fromTo("#gi1", {{opacity: 0, clipPath: "inset(0 0 100% 0)", filter: "blur(24px)"}}, {{opacity: 1, clipPath: "inset(0 0 0% 0)", filter: "blur(0px)", '
-   f'duration: .9, ease: "power2.out", immediateRender: false}}, {t_m - .05:.3f});')
-sfx("riser", t_m - .4)
-sfx("impact", t_m)
-show("#one", T("s00", "One"), .3, "{opacity: 0, scale: 2.2, rotation: -16}", "{opacity: 1, scale: 1, rotation: -6}", "expo.out")
-sfx("stamp", T("s00", "One"))
-hide("#sc1", S2 - .02, .08)
+setp("#cr1", t_m - .25, "{opacity: 0}")
+fromto("#gi1", t_m - .25, .55, "{opacity: 0, clipPath: 'inset(0 0 100% 0)', filter: 'blur(26px)'}", "{opacity: 1, clipPath: 'inset(0 0 0% 0)', filter: 'blur(0px)'}", "power2.out")
+sfx("riser", t_m - .6)
+fromto("#scr1", T("s00", "hardest") + .1, .35, "{strokeDashoffset: 500}", "{strokeDashoffset: 0}", "power2.out")
+# the six panels burst out of the phone
+for i, (dx, dy, rot) in enumerate(PAN):
+    t = t_m + .32 + .05 * i
+    fromto(f"#pn{i}", t, .55, "{opacity: 0, x: 0, y: 260, scale: .3, rotation: 0}", f"{{opacity: 1, x: {dx}, y: {dy}, scale: 1, rotation: {rot}}}", "back.out(1.6)")
+    js(f'tl.to("#pn{i}", {{y: "+=24", rotation: "+={-rot / 3:.0f}", duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 1}}, {t + .55:.3f});')
+sfx("impact", t_m + .32)
+burst("b1", 540, 1100, t_m + .35, 18)
+t_one = T("s00", "One")
+fromto("#one", t_one, .3, "{opacity: 0, scale: 2.6, rotation: -20}", "{opacity: 1, scale: 1, rotation: -6}", "expo.out")
+punch(t_one)
+sfx("stamp", t_one)
 
-# ---- S2 contrast (s01): twelve pages vs six panels -----------------------------------------------------------------
-lines_html = "".join(f'<i style="width:{w}%"></i>' for w in (92, 88, 95, 70, 90, 85, 93, 60, 88, 91, 76, 94, 83, 89, 64, 92, 87, 79, 90, 72))
+# ---- S2 contrast ---------------------------------------------------------------------------------------------------------
 HTML.append('<div class="scn" id="sc2">')
-phrase("p2", [[("Same", ""), ("chapter.", "")]], 190, "s01", 110)
-HTML.append(f'<div class="cmp l" id="cl"><div class="pg"><div class="pgt">6 &nbsp;Life Processes</div>{lines_html}</div>'
-            f'<div class="pg p2"></div><div class="pg p3"></div><div class="cap"><b>12 pages</b><span id="fg">you forget by tomorrow</span></div></div>'
-            '<div class="cmp r" id="cr"><img src="footage/results/1_manga.png"><div class="cap"><b class="pk">6 panels</b><span>you actually remember</span></div></div>'
-            '<div class="vs" id="vs">vs</div></div>')
-scene_cut(S2)
-show("#sc2", S2, .01, "{opacity: 0}", "{opacity: 1}", "none")
-show("#cl", T("s01", "Twelve") - .1, .4, "{opacity: 0, x: -120, rotation: -8}", "{opacity: 1, x: 0, rotation: -4}")
-sfx("swish", T("s01", "Twelve") - .1)
-js(f'tl.to("#cl", {{filter: "grayscale(1) blur(1.5px)", opacity: .55, duration: .5}}, {T("s01", "forget"):.3f});')
-show("#vs", T("s01", "or") - .05, .25, "{opacity: 0, scale: .3}", "{opacity: 1, scale: 1}")
+phrase("p2", [[("Same", ""), ("chapter.", "")]], 180, "s01", 120)
+pg = "".join(f'<i style="width:{w}%"></i>' for w in (92, 88, 95, 70, 90, 85, 93, 60, 88, 91, 76, 94, 83, 89, 64, 92))
+HTML.append('<div class="stackw" id="stk">' + "".join(f'<div class="pg" id="pg{i}"><div class="pgt">Life Processes</div>{pg}</div>' for i in range(5))
+            + '<svg class="xx" id="xx" viewBox="0 0 100 100"><path d="M12 12 L88 88 M88 12 L12 88"/></svg></div>'
+            '<div class="cnt l" id="cnt12"><b id="n12">1</b><span>pages</span><em id="fg">you forget by tomorrow</em></div>')
+GRID = [(0, 0), (1, 0), (0, 1), (1, 1), (0, 2), (1, 2)]
+HTML.append('<div class="grid6" id="g6">' + "".join(f'<div class="gp" id="gp{i}" style="left:{c * 232}px;top:{r * 160}px"><img src="assets/img/panels/p{i + 1}.png"></div>' for i, (c, r) in enumerate(GRID))
+            + '<div class="tick" id="tk">&#10003;</div></div>'
+            '<div class="cnt r" id="cnt6"><b class="pk">6</b><span>panels</span><em>you actually remember</em></div><div class="vs" id="vs">vs</div></div>')
+scene("sc2", S2, S3, -1)
+t12 = T("s01", "Twelve")
+for i in range(5):
+    fromto(f"#pg{i}", t12 - .15 + .05 * i, .45, "{opacity: 0, x: -300, rotation: -30}", f"{{opacity: 1, x: {i * 14}, rotation: {-8 + i * 4}}}", "back.out(1.6)")
+sfx("swish", t12 - .15)
+js(f'(() => {{ const o = {{v: 1}}; tl.to(o, {{v: 12, duration: .5, ease: "power1.out", onUpdate: () => {{ document.getElementById("n12").textContent = Math.round(o.v); }}}}, {t12:.3f}); }})();')
+fromto("#cnt12", t12, .3, "{opacity: 0, y: 40}", "{opacity: 1, y: 0}", "back.out(2)")
+t_fg = T("s01", "forget")
+fromto("#xx", t_fg, .3, "{opacity: 1, strokeDashoffset: 300}", "{opacity: 1, strokeDashoffset: 0}", "power2.out")
+sfx("buzzer", t_fg + .05)
+to("#stk", t_fg + .1, .3, "{filter: 'grayscale(1)', scale: .92}")
+t_tm = T("s01", "tomorrow")
+for i in range(5):
+    to(f"#pg{i}", t_tm + .05 * i, .6, f"{{y: 1100, rotation: {random.randint(-60, 60)}, opacity: 0}}", "power2.in")
+to("#xx", t_tm, .3, "{opacity: 0}")
+to("#cnt12", t_tm + .3, .3, "{opacity: .35}")
+fromto("#vs", T("s01", "or") - .05, .3, "{opacity: 0, scale: .2, rotation: -90}", "{opacity: 1, scale: 1, rotation: 0}", "back.out(2.5)")
 sfx("pop", T("s01", "or"))
-show("#cr", T("s01", "six") - .1, .45, "{opacity: 0, x: 140, rotation: 10}", "{opacity: 1, x: 0, rotation: 4}")
-sfx("whoosh", T("s01", "six") - .15)
-js(f'tl.fromTo("#cr", {{boxShadow: "0 30px 80px rgba(255,61,127,.0)"}}, {{boxShadow: "0 30px 90px rgba(255,61,127,.55)", duration: .5, yoyo: true, repeat: 1, '
-   f'immediateRender: false}}, {T("s01", "remember"):.3f});')
-sfx("ding", T("s01", "remember"))
-hide("#sc2", S3 - .02, .08)
+t6 = T("s01", "six")
+for i in range(6):
+    fromto(f"#gp{i}", t6 - .1 + .06 * i, .4, f"{{opacity: 0, x: {random.choice([-1, 1]) * 500}, y: {random.randint(-400, 400)}, rotation: {random.randint(-50, 50)}, scale: .5}}",
+           "{opacity: 1, x: 0, y: 0, rotation: 0, scale: 1}", "back.out(1.7)")
+    if i % 2 == 0:
+        sfx("tick", t6 - .1 + .06 * i)
+fromto("#cnt6", t6, .3, "{opacity: 0, y: 40}", "{opacity: 1, y: 0}", "back.out(2)")
+t_rm = T("s01", "remember")
+fromto("#tk", t_rm, .35, "{opacity: 0, scale: 3, rotation: -30}", "{opacity: 1, scale: 1, rotation: 0}", "expo.out")
+burst("b2", 790, 1010, t_rm + .05, 16)
+sfx("ding", t_rm)
+punch(t_rm, 1.04)
 
-# ---- S3 (s02): five prompts, paste your chapter, pick one ----------------------------------------------------------
+# ---- S3 five prompts -----------------------------------------------------------------------------------------------------
 chips = "".join(f'<span class="chip" id="cp{i}">{c}</span>' for i, c in enumerate(["Manga", "Timeline", "Mind map", "Diagram", "Revision sheet"]))
 HTML.append('<div class="scn" id="sc3">')
-phrase("p3", [[("Here", ""), ("are", ""), ("5", "gr1"), ("prompts.", "gr1")]], 190, "s02", 96)
-phone("ph3", 470, .82, f'<div class="att big" id="at3">{PDF}</div><div class="chips" id="chips">{chips}</div>')
-HTML.append('<div class="cursor" id="cur3"><svg viewBox="0 0 24 24"><path d="M4 2l16 9-7 2-3 7z"/></svg></div></div>')
-scene_cut(S3)
-show("#sc3", S3, .01, "{opacity: 0}", "{opacity: 1}", "none")
-show("#ph3", S3 + .05, .45, "{opacity: 0, y: 140}", "{opacity: 1, y: 0}", "expo.out")
-show("#at3", T("s02", "Paste") - .05, .3, "{opacity: 0, y: 60, scale: .9}", "{opacity: 1, y: 0, scale: 1}")
-sfx("pop", T("s02", "Paste"))
+phrase("p3", [[("Here", ""), ("are", ""), ("5", "gr1 xl"), ("prompts.", "gr1")]], 160, "s02", 100)
+phone("ph3", 470, .8, '<div class="att big" id="at3"><div class="pdf">PDF</div><div><b>jesc105.pdf</b><span>Uploading…</span>'
+      '<div class="prog"><i id="pb3"></i></div></div></div>' + f'<div class="chips">{chips}</div>')
+HTML.append('<div class="cursor" id="cur3"><svg viewBox="0 0 24 24"><path d="M4 2l16 9-7 2-3 7z"/></svg></div><div class="rip" id="rip3"></div></div>')
+scene("sc3", S3, S4)
+fromto("#ph3", S3 + .05, .5, "{opacity: 0, y: 300, rotation: -6}", "{opacity: 1, y: 0, rotation: 0}", "expo.out")
 for i in range(5):
-    t = T("s02", "five") + .08 * i
-    show(f"#cp{i}", t, .25, "{opacity: 0, y: 30, scale: .8}", "{opacity: 1, y: 0, scale: 1}")
+    t = T("s02", "five") + .07 * i
+    fromto(f"#cp{i}", t, .35, "{opacity: 0, y: 120, scale: .4, rotation: -20}", "{opacity: 1, y: 0, scale: 1, rotation: 0}", "back.out(2.4)")
     sfx("tick", t)
-t_pick = T("s02", "pick")
-js(f'tl.fromTo("#cur3", {{opacity: 0, x: 300, y: 300}}, {{opacity: 1, x: 0, y: 0, duration: .35, ease: "power3.out", immediateRender: false}}, {t_pick - .35:.3f});')
-js(f'tl.to("#cp0", {{backgroundColor: "#ff3d7f", color: "#fff", scale: 1.08, duration: .15}}, {t_pick:.3f});')
-sfx("click", t_pick)
-hide("#sc3", S4 - .02, .08)
+t_p = T("s02", "Paste")
+fromto("#at3", t_p - .1, .35, "{opacity: 0, y: -120, scale: .5}", "{opacity: 1, y: 0, scale: 1}", "back.out(2)")
+fromto("#pb3", t_p, .55, "{scaleX: 0}", "{scaleX: 1}", "power1.inOut")
+sfx("pop", t_p - .1)
+t_pk = T("s02", "pick")
+fromto("#cur3", t_pk - .4, .4, "{opacity: 0, x: 380, y: 380}", "{opacity: 1, x: 0, y: 0}", "power3.out")
+to("#cur3", t_pk, .08, "{scale: .8}")
+to("#cur3", t_pk + .08, .1, "{scale: 1}")
+fromto("#rip3", t_pk, .5, "{opacity: .9, scale: .2}", "{opacity: 0, scale: 2.6}", "power2.out")
+to("#cp0", t_pk, .18, f"{{backgroundColor: '{PINK}', color: '#fff', scale: 1.12}}", "back.out(3)")
+sfx("click", t_pk)
 
-# ---- S4 (s03): the five, one by one, each generated in the ChatGPT screen ------------------------------------------
-ITEMS = [("Manga", "1_manga", "manga"), ("Timeline", "2_timeline", "timeline"), ("Mind map", "3_mindmap", "mind"),
-         ("Labelled diagram", "4_diagram", "labeled"), ("Revision sheet", "5_revision", "revision")]
-NUMW = ["One", "two", "three", "four", "five"]
-lst = "".join(f'<div class="li" id="li{i}"><span class="n">{i + 1}</span>{name}</div>' for i, (name, _, _) in enumerate(ITEMS))
-body = "".join(f'<div class="ub sm" id="u4{i}">{name} prompt</div><div class="gimg g4" id="g4{i}"><img src="footage/results/{img}.png"></div>'
-               for i, (name, img, _) in enumerate(ITEMS))
-HTML.append(f'<div class="scn" id="sc4"><div class="lst" id="lst">{lst}</div>')
-phone("ph4", 600, .8, body + '<div class="cr" id="cr4"><i></i>Creating image</div>')
-HTML.append('</div>')
-scene_cut(S4)
-show("#sc4", S4, .01, "{opacity: 0}", "{opacity: 1}", "none")
-show("#lst", S4 + .02, .3, "{opacity: 0, x: -60}", "{opacity: 1, x: 0}")
-show("#ph4", S4 + .05, .45, "{opacity: 0, y: 160}", "{opacity: 1, y: 0}", "expo.out")
-times = [T("s03", NUMW[i]) for i in range(5)]
+# ---- S4 the five ---------------------------------------------------------------------------------------------------------
+ITEMS = [("MANGA", "1_manga"), ("TIMELINE", "2_timeline"), ("MIND MAP", "3_mindmap"), ("DIAGRAM", "4_diagram"), ("REVISION<br>SHEET", "5_revision")]
+NUMW = ["1", "2", "3", "4", "5"]
+times = [T("s03", n) for n in NUMW]
+HTML.append('<div class="scn" id="sc4"><div class="bignum"><div class="reel" id="reel">' + "".join(f'<b>0{i + 1}</b>' for i in range(5)) + '</div></div>'
+            + "".join(f'<div class="lab4" id="lb{i}">{name}</div>' for i, (name, _) in enumerate(ITEMS))
+            + '<div class="dots">' + "".join(f'<i id="dt{i}"></i>' for i in range(5)) + '</div>')
+phone("ph4", 640, .62, '<div class="cr" id="cr4"><i></i>Creating image</div>' + "".join(f'<div class="gimg g4" id="g4{i}"><img src="footage/results/{img}.png"></div>' for i, (_, img) in enumerate(ITEMS)))
+HTML.append("".join(f'<div class="out" id="o4{i}"><img src="footage/results/{img}.png"></div>' for i, (_, img) in enumerate(ITEMS)) + '</div>')
+scene("sc4", S4, S5)
+fromto("#ph4", S4 + .02, .45, "{opacity: 0, y: 400}", "{opacity: 1, y: 0}", "expo.out")
 for i in range(5):
     t = times[i]
-    t_next = times[i + 1] if i < 4 else S5
-    js(f'tl.to(".li", {{color: "#b9b9b2", scale: 1, duration: .15}}, {t - .05:.3f});')
-    js(f'tl.to("#li{i}", {{color: "{INK}", scale: 1.06, duration: .2, ease: "back.out(2)"}}, {t - .05:.3f});')
-    js(f'tl.set("#li{i} .n", {{backgroundColor: "#ff3d7f", color: "#fff"}}, {t - .05:.3f});')
-    if i:
-        hide(f"#u4{i - 1}", t - .08, .08)
-        hide(f"#g4{i - 1}", t - .08, .08)
-    show(f"#u4{i}", t - .02, .22, "{opacity: 0, y: 30, scale: .95}", "{opacity: 1, y: 0, scale: 1}")
-    show("#cr4", t + .12, .12, "{opacity: 0}", "{opacity: 1}", "none")
-    hide("#cr4", t + .42, .08)
-    js(f'tl.fromTo("#g4{i}", {{opacity: 0, clipPath: "inset(0 0 100% 0)", filter: "blur(20px)"}}, {{opacity: 1, clipPath: "inset(0 0 0% 0)", filter: "blur(0px)", '
-       f'duration: .6, ease: "power2.out", immediateRender: false}}, {t + .45:.3f});')
-    js(f'tl.fromTo("#g4{i} img", {{scale: 1.0}}, {{scale: 1.08, duration: {max(.6, t_next - t - .45):.3f}, ease: "none", immediateRender: false}}, {t + .45:.3f});')
+    tn = times[i + 1] if i < 4 else S5
+    to("#reel", t - .1, .35, f"{{yPercent: {-i * 20}}}", "back.out(1.4)")
+    side = -1 if i % 2 == 0 else 1
+    fromto(f"#lb{i}", t - .05, .35, f"{{opacity: 0, x: {side * 600}, skewX: {side * -20}}}", "{opacity: 1, x: 0, skewX: 0}", "expo.out")
+    if i < 4:
+        to(f"#lb{i}", tn - .12, .12, "{opacity: 0}")
+    to(f"#dt{i}", t, .2, f"{{backgroundColor: '{PINK}', scale: 1.3}}", "back.out(3)")
+    fromto("#cr4", t + .02, .12, "{opacity: 0}", "{opacity: 1}", "none")
+    setp("#cr4", t + .3, "{opacity: 0}")
+    fromto(f"#g4{i}", t + .3, .35, "{opacity: 0, clipPath: 'inset(0 0 100% 0)'}", "{opacity: 1, clipPath: 'inset(0 0 0% 0)'}", "power2.out")
+    # the result is thrown out of the phone to full size, then the next one comes
+    rot = random.choice([-6, -4, 4, 6])
+    fromto(f"#o4{i}", t + .55, .4, "{opacity: 0, scale: .35, y: 520, rotation: 0}", f"{{opacity: 1, scale: 1, y: 0, rotation: {rot}}}", "back.out(1.5)")
+    js(f'tl.to("#o4{i} img", {{scale: 1.08, duration: {max(.4, tn - t - .55):.2f}, ease: "none"}}, {t + .55:.3f});')
+    setp(f"#o4{i}", tn - .08, "{opacity: 0}")
+    setp(f"#g4{i}", tn - .08, "{opacity: 0}")
     sfx("pop", t)
-    sfx("shutter", t + .45)
-hide("#sc4", S5 - .02, .08)
+    sfx("shutter", t + .55)
+    punch(t + .55, 1.03)
+fromto("#ph4", S4 + .5, S5 - S4 - .5, "{rotation: -2}", "{rotation: 2}", "sine.inOut")
 
-# ---- S5 (s04): number five, the night before the exam ---------------------------------------------------------------
+# ---- S5 payoff -----------------------------------------------------------------------------------------------------------
 HTML.append('<div class="scn" id="sc5">')
-phrase("p5", [[("Number", ""), ("5", "gr1")], [("is", ""), ("the", ""), ("one", ""), ("you", ""), ("want", "")],
-              [("the", ""), ("night", ""), ("before", ""), ("the", ""), ("exam.", "gr1")]], 190, "s04", 80)
-HTML.append('<div class="rev" id="rev"><img src="footage/results/5_revision.png"><div class="mk" id="mk"></div></div>'
-            '<div class="clock" id="clock">&#9790; 11:47 PM</div></div>')
-scene_cut(S5)
-show("#sc5", S5, .01, "{opacity: 0}", "{opacity: 1}", "none")
-show("#rev", S5 + .05, .5, "{opacity: 0, y: 200, rotation: 6}", "{opacity: 1, y: 0, rotation: -2}", "expo.out")
-js(f'tl.fromTo("#rev img", {{scale: 1}}, {{scale: 1.12, duration: {S6 - S5:.3f}, ease: "none", immediateRender: false}}, {S5:.3f});')
-js(f'tl.fromTo("#mk", {{scaleX: 0}}, {{scaleX: 1, duration: .45, ease: "power2.out", immediateRender: false}}, {T("s04", "want"):.3f});')
-sfx("swish", T("s04", "want"))
-show("#clock", T("s04", "night"), .3, "{opacity: 0, scale: .5}", "{opacity: 1, scale: 1}")
+phrase("p5", [[("Number", ""), ("5", "gr1 xl")], [("is", ""), ("the", ""), ("one", ""), ("you", ""), ("want", "")],
+              [("the", ""), ("night", ""), ("before", ""), ("the", ""), ("exam.", "gr1")]], 160, "s04", 78)
+HTML.append('<div class="revw" id="revw"><div class="rev" id="rev"><img src="footage/results/5_revision.png">'
+            '<svg class="box" id="bx1" viewBox="0 0 100 100" preserveAspectRatio="none" style="left:44px;top:240px;width:478px;height:330px"><rect x="2" y="2" width="96" height="96" rx="6"/></svg>'
+            '<svg class="box" id="bx2" viewBox="0 0 100 100" preserveAspectRatio="none" style="left:538px;top:240px;width:500px;height:330px"><rect x="2" y="2" width="96" height="96" rx="6"/></svg>'
+            '<svg class="box" id="bx3" viewBox="0 0 100 100" preserveAspectRatio="none" style="left:44px;top:830px;width:992px;height:420px"><rect x="2" y="2" width="96" height="96" rx="4"/></svg>'
+            '</div></div><div class="clock" id="clock"><div class="face"><i id="hand"></i></div>11:47 PM</div></div>')
+scene("sc5", S5, S6)
+fromto("#revw", S5 + .05, .5, "{opacity: 0, y: 500, rotation: 10, scale: .8}", "{opacity: 1, y: 0, rotation: -2, scale: 1}", "expo.out")
+sfx("whoosh_big", S5)
+for bx, w, (x, y, sc) in (("#bx1", "Number", (180, 80, 1.25)), ("#bx2", "want", (-200, 80, 1.25)), ("#bx3", "night", (0, -330, 1.18))):
+    t = T("s04", w)
+    to("#rev", t, .5, f"{{x: {x}, y: {y}, scale: {sc}}}", "power3.inOut")
+    fromto(bx, t + .2, .45, "{opacity: 1, strokeDashoffset: 420}", "{opacity: 1, strokeDashoffset: 0}", "power2.out")
+    sfx("swish", t + .2)
+fromto("#clock", T("s04", "night"), .35, "{opacity: 0, scale: .3, rotation: -40}", "{opacity: 1, scale: 1, rotation: 0}", "back.out(2.5)")
+fromto("#hand", T("s04", "night"), 1.2, "{rotation: 0}", "{rotation: 360}", "none")
 sfx("tick", T("s04", "night"))
-hide("#sc5", S6 - .02, .08)
+t_ex = T("s04", "exam")
+fromto("#p5", t_ex + .1, .4, "{x: -14}", "{x: 0}", "elastic.out(1,.25)")
+punch(t_ex + .1, 1.04)
 
-# ---- S6 CTA (s05): comment study --------------------------------------------------------------------------------------
+# ---- S6 CTA ---------------------------------------------------------------------------------------------------------------
+ROLL = ["MANGA", "NOTES", "GUIDE", "PROMPTS", "STUDY"]
 avatars = "".join(f'<div class="cm" id="cm{i}"><i style="background:{c}"></i><b>{n}</b><span>STUDY</span></div>'
                   for i, (n, c) in enumerate([("riya.k", "#ffb3c7"), ("aarav_10", "#b2f2bb"), ("sneha.studies", "#a5d8ff"),
                                               ("kabir", "#ffd8a8"), ("ananya_p", "#d0bfff"), ("rohan.s", "#ffc9c9")]))
+hearts = "".join(f'<div class="ht" id="ht{i}" style="left:{900 + random.randint(-40, 40)}px">&#10084;</div>' for i in range(7))
 HTML.append('<div class="scn" id="sc6">')
-phrase("p6", [[("Comment", "")], [("STUDY", "gr1 big")]], 230, "s05", 120)
-HTML.append('<div class="sub" id="sub6">and I\'ll send you all 5 prompts, ready to copy.</div>'
+phrase("p6", [[("Comment", "")]], 200, "s05", 110)
+HTML.append('<div class="slot"><div class="sreel" id="sreel">' + "".join(f'<b class="{"gr1" if w == "STUDY" else "gry"}">{w}</b>' for w in ROLL) + '</div></div>'
+            '<div class="sub" id="sub6">and I\'ll send you all <b>5 prompts</b>, ready to copy.</div>'
             '<div class="cbox" id="cbox"><i></i><span id="ctx">Add a comment…</span><b id="csend">&#10148;</b></div>'
-            f'<div class="cms">{avatars}</div></div>')
-scene_cut(S6)
-show("#sc6", S6, .01, "{opacity: 0}", "{opacity: 1}", "none")
-show("#cbox", T("s05", "Comment") + .1, .3, "{opacity: 0, y: 60}", "{opacity: 1, y: 0}")
-t_ty = T("s05", "study") + .1
-js(f'const ty = {{n: 0}}; tl.to(ty, {{n: 5, duration: .5, ease: "steps(5)", onUpdate: () => {{ const e = document.getElementById("ctx"); '
-   f'e.textContent = "STUDY".slice(0, Math.round(ty.n)) || "Add a comment…"; e.style.color = ty.n > 0 ? "{INK}" : "#9b9ca3"; }}}}, {t_ty:.3f});')
+            f'<div class="cms">{avatars}</div><div class="ccount" id="ccount"><span id="cnum">0</span> comments</div>{hearts}</div>')
+scene("sc6", S6, DUR + 1)
+t_st = T("s05", "STUDY")
+fromto("#sreel", S6 + .05, t_st - S6 - .05, "{yPercent: 0}", f"{{yPercent: {-80}}}", "power3.inOut")
+for k in range(4):
+    sfx("tick", S6 + .1 + k * (t_st - S6) / 4)
+fromto("#sreel", t_st, .4, "{scale: 1.25}", "{scale: 1}", "elastic.out(1,.35)")
+burst("b6", 540, 520, t_st, 22, dist=380)
+sfx("impact", t_st)
+punch(t_st, 1.05)
+fromto("#cbox", t_st + .15, .3, "{opacity: 0, y: 80}", "{opacity: 1, y: 0}", "back.out(2)")
+t_ty = t_st + .35
+js(f'(() => {{ const o = {{n: 0}}; tl.to(o, {{n: 5, duration: .45, ease: "steps(5)", onUpdate: () => {{ const e = document.getElementById("ctx"); '
+   f'e.textContent = "STUDY".slice(0, Math.round(o.n)) || "Add a comment…"; e.style.color = o.n > 0 ? "{INK}" : "#9b9ca3"; }}}}, {t_ty:.3f}); }})();')
 for k in range(5):
-    sfx("tick", t_ty + .1 * k)
-js(f'tl.fromTo("#csend", {{scale: 1}}, {{scale: 1.3, duration: .12, yoyo: true, repeat: 1, immediateRender: false}}, {t_ty + .6:.3f});')
-sfx("click", t_ty + .6)
-show("#sub6", T("s05", "send") - .05, .3)
+    sfx("tick", t_ty + .09 * k)
+fromto("#csend", t_ty + .5, .12, "{scale: 1}", "{scale: 1.35}", "power2.out")
+to("#csend", t_ty + .62, .12, "{scale: 1}")
+sfx("click", t_ty + .5)
+fromto("#sub6", T("s05", "send") - .05, .3, "{opacity: 0, y: 30}", "{opacity: 1, y: 0}", "back.out(2)")
 for i in range(6):
-    t = t_ty + .75 + .22 * i
-    js(f'tl.fromTo("#cm{i}", {{opacity: 0, y: 80, scale: .8}}, {{opacity: 1, y: 0, scale: 1, duration: .3, ease: "back.out(2)", immediateRender: false}}, {t:.3f});')
+    t = t_ty + .65 + .2 * i
+    fromto(f"#cm{i}", t, .35, f"{{opacity: 0, x: {-200 if i % 2 == 0 else 200}, scale: .7}}", "{opacity: 1, x: 0, scale: 1}", "back.out(2)")
     if i % 2 == 0:
         sfx("pop", t)
+fromto("#ccount", t_ty + .65, .3, "{opacity: 0, y: 30}", "{opacity: 1, y: 0}", "back.out(2)")
+js(f'(() => {{ const o = {{v: 0}}; tl.to(o, {{v: 1284, duration: 1.8, ease: "power2.out", onUpdate: () => {{ document.getElementById("cnum").textContent = Math.round(o.v).toLocaleString("en-US"); }}}}, {t_ty + .65:.3f}); }})();')
+for i in range(7):
+    t = t_ty + .7 + .22 * i
+    fromto(f"#ht{i}", t, 1.4, "{opacity: 0, y: 0, scale: .5}", f"{{opacity: 0, y: -520, scale: 1.3, x: {random.randint(-80, 80)}, keyframes: {{opacity: [0, 1, 1, 0]}}}}", "power1.out")
 
 CSS = f"""
 @font-face {{ font-family: "Inter"; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2"); }}
@@ -250,92 +377,129 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #f4f4
 #root {{ position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter; color: {INK}; background: #f4f4f1; }}
 #bg {{ position: absolute; inset: 0; background: radial-gradient(120% 80% at 50% 40%, #fbfbf9 0%, #f2f2ee 60%, #e9e9e4 100%); }}
 .glow {{ position: absolute; border-radius: 50%; filter: blur(110px); }}
-.g1 {{ width: 900px; height: 900px; left: -380px; top: -260px; background: rgba(176,206,120,.55); }}
-.g2 {{ width: 980px; height: 980px; left: 420px; top: 1160px; background: rgba(240,150,170,.5); }}
-.g3 {{ width: 700px; height: 700px; left: 560px; top: 260px; background: rgba(255,190,200,.28); }}
-#grain {{ position: absolute; inset: 0; opacity: .05; background: url(assets/img/grain.png); mix-blend-mode: multiply; }}
+.g1 {{ width: 900px; height: 900px; left: -380px; top: -260px; background: rgba(176,206,120,.6); }}
+.g2 {{ width: 980px; height: 980px; left: 420px; top: 1160px; background: rgba(240,150,170,.55); }}
+.g3 {{ width: 700px; height: 700px; left: 560px; top: 260px; background: rgba(255,190,200,.32); }}
+#grain {{ position: absolute; inset: 0; opacity: .05; background: url(assets/img/grain.png); mix-blend-mode: multiply; pointer-events: none; }}
+#flash {{ position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 40; pointer-events: none; }}
+#wipe {{ position: absolute; top: 0; bottom: 0; left: 0; width: 140%; background: linear-gradient(90deg, transparent, rgba(255,61,127,.85) 30%, rgba(208,44,255,.85) 60%, transparent);
+  z-index: 39; pointer-events: none; filter: blur(8px); }}
+#cam {{ position: absolute; inset: 0; transform-origin: 50% 45%; }}
 #stage {{ position: absolute; inset: 0; transform-origin: 50% 45%; }}
 .scn {{ position: absolute; inset: 0; opacity: 0; }}
-.ph {{ position: absolute; left: {LEFT}px; right: {LEFT}px; font-weight: 800; z-index: 5; }}
+.dd {{ position: absolute; width: 70px; height: 70px; opacity: .55; z-index: 1; }}
+.dd svg {{ width: 100%; height: 100%; stroke-width: 2.2; }}
+.dd.ring svg, .dd.pencil svg {{ fill: none; }}
+.ph {{ position: absolute; left: {LEFT}px; right: {LEFT}px; font-weight: 800; z-index: 6; }}
 .ln {{ white-space: nowrap; line-height: 1.04; letter-spacing: -.035em; }}
-.wm {{ display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .02em .1em; margin: 0 .2em -.1em 0; }}
-.w {{ display: inline-block; opacity: 0; }}
+.wm {{ display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .04em .12em; margin: 0 .16em -.12em 0; }}
+.w {{ display: inline-block; opacity: 0; transform-origin: 50% 90%; }}
 .gr1 {{ background-image: linear-gradient(90deg, #ff2a2a, #ff3d7f 70%, #d02cff); -webkit-background-clip: text; background-clip: text; color: transparent; }}
-.w.big {{ font-size: 1.9em; letter-spacing: -.05em; line-height: .95; }}
-/* ChatGPT phone, dark theme */
-.phone {{ position: absolute; left: 50%; width: 900px; height: 1500px; border-radius: 80px; background: #212121; overflow: hidden; transform-origin: 50% 0;
-  box-shadow: 0 0 0 14px #0d0d0d, 0 50px 120px rgba(0,0,0,.35); opacity: 0; z-index: 4; color: #ececec; }}
+.w.xl {{ font-size: 1.35em; line-height: .9; }}
+.w.hl {{ position: relative; }}
+.scrib {{ position: absolute; height: 40px; z-index: 7; overflow: visible; }}
+.scrib path {{ fill: none; stroke: {RED}; stroke-width: 9; stroke-linecap: round; stroke-dasharray: 500; stroke-dashoffset: 500; }}
+.cf {{ position: absolute; width: 22px; height: 22px; opacity: 0; z-index: 30; }}
+/* ChatGPT phone */
+.phone {{ position: absolute; left: 50%; width: 900px; height: 1500px; margin-left: -450px; border-radius: 80px; background: #212121; overflow: hidden;
+  transform: scale(var(--s)); transform-origin: 50% 0; box-shadow: 0 0 0 14px #0d0d0d, 0 50px 120px rgba(0,0,0,.35); opacity: 0; z-index: 4; color: #ececec; }}
 .pbar {{ height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 70px; font-weight: 700; font-size: 32px; }}
 .pbar .isl {{ width: 220px; height: 56px; border-radius: 40px; background: #000; }}
 .pbar .ic {{ font-size: 18px; letter-spacing: 4px; }}
 .ghead {{ height: 90px; display: flex; align-items: center; gap: 16px; padding: 0 40px; font-size: 36px; }}
 .ghead b {{ font-weight: 700; }}
-.ghead .chev {{ color: #9b9b9b; font-size: 40px; }}
-.ghead .hb {{ color: #cfcfcf; font-size: 40px; }}
+.ghead .chev, .ghead .hb {{ color: #a0a0a0; font-size: 40px; }}
 .ghead .r {{ margin-left: auto; }}
 .gbody {{ position: absolute; left: 0; right: 0; top: 190px; bottom: 150px; padding: 20px 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 22px; }}
-.att {{ display: flex; align-items: center; gap: 20px; padding: 18px 24px; border-radius: 26px; background: #2f2f2f; border: 1px solid #3d3d3d; }}
-.att .pdf {{ width: 66px; height: 66px; border-radius: 14px; background: #ff5a5f; color: #fff; font-weight: 800; font-size: 22px; display: flex; align-items: center; justify-content: center; }}
+.att {{ display: flex; align-items: center; gap: 20px; padding: 18px 24px; border-radius: 26px; background: #2f2f2f; border: 1px solid #3d3d3d; opacity: 0; }}
+.att .pdf {{ width: 66px; height: 66px; border-radius: 14px; background: #ff5a5f; color: #fff; font-weight: 800; font-size: 22px; display: flex; align-items: center; justify-content: center; flex: none; }}
 .att b {{ display: block; font-size: 30px; font-weight: 700; }}
 .att span {{ display: block; font-size: 24px; color: #9b9b9b; }}
-.att.big {{ padding: 0; background: none; border: 0; opacity: 0; }}
+.prog {{ width: 300px; height: 8px; border-radius: 4px; background: #444; margin-top: 10px; overflow: hidden; }}
+.prog i {{ display: block; height: 100%; background: {PINK}; transform-origin: left; transform: scaleX(0); }}
 .ub {{ max-width: 680px; padding: 24px 30px; border-radius: 34px; background: #303030; font-size: 30px; line-height: 1.35; font-weight: 500; opacity: 0; }}
-.ub.sm {{ position: absolute; right: 40px; top: 20px; }}
-.cr {{ align-self: flex-start; display: flex; align-items: center; gap: 16px; font-size: 32px; font-weight: 600; color: #b4b4b4; opacity: 0;
+.cr {{ align-self: flex-start; display: flex; align-items: center; gap: 16px; font-size: 32px; font-weight: 600; opacity: 0;
   background: linear-gradient(90deg, #8e8e8e 0%, #fff 50%, #8e8e8e 100%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; }}
 .cr i {{ width: 22px; height: 22px; border-radius: 50%; background: #ececec; display: inline-block; }}
-#cr4 {{ position: absolute; left: 40px; top: 150px; }}
+#cr4 {{ position: absolute; left: 40px; top: 40px; }}
 .gimg {{ align-self: flex-start; width: 820px; border-radius: 28px; overflow: hidden; opacity: 0; background: #fff; }}
-.gimg img {{ display: block; width: 100%; transform-origin: 50% 20%; }}
-.g4 {{ position: absolute; left: 40px; top: 150px; }}
+.gimg img {{ display: block; width: 100%; }}
+.g4 {{ position: absolute; left: 40px; top: 30px; }}
 .ginput {{ position: absolute; left: 30px; right: 30px; bottom: 40px; height: 96px; border-radius: 50px; background: #303030; display: flex; align-items: center; gap: 22px;
   padding: 0 18px 0 30px; font-size: 32px; color: #9b9b9b; }}
 .ginput .plus {{ font-size: 44px; color: #ececec; }}
-.ginput .mic {{ margin-left: auto; font-size: 30px; filter: grayscale(1); }}
+.ginput .itx {{ flex: 1; white-space: nowrap; overflow: hidden; }}
 .ginput .send {{ width: 66px; height: 66px; border-radius: 50%; background: #ececec; color: #212121; font-size: 36px; font-weight: 800; display: flex; align-items: center; justify-content: center; }}
 .chips {{ position: absolute; left: 40px; right: 40px; bottom: 30px; display: flex; flex-wrap: wrap; gap: 16px; }}
-.chip {{ padding: 18px 28px; border-radius: 999px; background: #2f2f2f; border: 1px solid #424242; font-size: 30px; font-weight: 600; color: #ececec; opacity: 0; }}
-.cursor {{ position: absolute; left: 260px; top: 1330px; width: 90px; height: 90px; opacity: 0; z-index: 8; }}
+.chip {{ padding: 20px 30px; border-radius: 999px; background: #2f2f2f; border: 1px solid #424242; font-size: 32px; font-weight: 700; color: #ececec; opacity: 0; }}
+.cursor {{ position: absolute; left: 230px; top: 1290px; width: 96px; height: 96px; opacity: 0; z-index: 8; }}
 .cursor svg {{ width: 100%; height: 100%; fill: #fff; stroke: {INK}; stroke-width: 1.4; filter: drop-shadow(0 6px 14px rgba(0,0,0,.4)); }}
-.stamp {{ position: absolute; left: 600px; top: 470px; padding: 14px 30px; border-radius: 18px; border: 8px solid {RED}; color: {RED}; font-weight: 800; font-size: 64px;
-  letter-spacing: .02em; background: rgba(255,255,255,.85); opacity: 0; z-index: 9; }}
-/* S2 compare */
-.cmp {{ position: absolute; top: 520px; width: 470px; opacity: 0; z-index: 4; }}
-.cmp.l {{ left: 50px; }} .cmp.r {{ right: 50px; border-radius: 24px; overflow: hidden; background: #fff; box-shadow: 0 30px 80px rgba(0,0,0,.18); }}
-.cmp.r img {{ display: block; width: 100%; }}
-.pg {{ position: relative; height: 620px; border-radius: 18px; background: #fff; padding: 34px 30px; box-shadow: 0 20px 50px rgba(0,0,0,.15); z-index: 3; }}
-.pg.p2, .pg.p3 {{ position: absolute; left: 14px; top: 14px; width: 100%; z-index: 2; }}
-.pg.p3 {{ left: 28px; top: 28px; z-index: 1; }}
-.pgt {{ font-weight: 800; font-size: 30px; margin-bottom: 18px; }}
-.pg i {{ display: block; height: 11px; border-radius: 6px; background: #d9d9d4; margin-bottom: 15px; }}
-.cap {{ margin-top: 60px; text-align: center; }}
-.cmp.r .cap {{ margin: 0; padding: 26px 10px 30px; }}
-.cap b {{ display: block; font-weight: 800; font-size: 56px; letter-spacing: -.03em; }}
-.cap span {{ display: block; font-weight: 700; font-size: 32px; color: #66665f; margin-top: 6px; }}
-.cap .pk {{ color: #ff3d7f; }}
-.vs {{ position: absolute; left: 50%; top: 780px; transform: translateX(-50%); width: 130px; height: 130px; border-radius: 50%; background: {INK}; color: #fff;
-  font-weight: 800; font-size: 54px; display: flex; align-items: center; justify-content: center; opacity: 0; z-index: 6; }}
-/* S4 list */
-.lst {{ position: absolute; left: {LEFT}px; top: 170px; opacity: 0; z-index: 5; }}
-.li {{ display: flex; align-items: center; gap: 22px; font-weight: 800; font-size: 54px; letter-spacing: -.03em; color: #b9b9b2; margin-bottom: 12px; transform-origin: 0 50%; }}
-.li .n {{ width: 62px; height: 62px; border-radius: 50%; background: #e4e4df; color: #66665f; font-size: 32px; display: flex; align-items: center; justify-content: center; }}
-/* S5 revision */
-.rev {{ position: absolute; left: 110px; top: 620px; width: 860px; height: 1146px; border-radius: 28px; overflow: hidden; background: #fff; box-shadow: 0 40px 110px rgba(0,0,0,.25); opacity: 0; z-index: 4; }}
-.rev img {{ display: block; width: 100%; transform-origin: 50% 70%; }}
-.mk {{ position: absolute; left: 30px; top: 616px; width: 520px; height: 44px; background: rgba(255,224,102,.65); transform-origin: left center; mix-blend-mode: multiply; }}
-.clock {{ position: absolute; right: 70px; top: 540px; padding: 16px 28px; border-radius: 999px; background: {INK}; color: #fff; font-weight: 800; font-size: 40px; opacity: 0; z-index: 6; }}
-/* S6 CTA */
-.sub {{ position: absolute; left: {LEFT}px; right: {LEFT}px; top: 640px; font-weight: 700; font-size: 46px; line-height: 1.25; color: #3a3a35; opacity: 0; }}
-.cbox {{ position: absolute; left: 70px; right: 70px; top: 820px; height: 120px; border-radius: 60px; background: rgba(255,255,255,.85); box-shadow: 0 20px 60px rgba(0,0,0,.12);
+.rip {{ position: absolute; left: 190px; top: 1255px; width: 110px; height: 110px; border-radius: 50%; border: 6px solid {PINK}; opacity: 0; z-index: 7; }}
+.pan {{ position: absolute; left: 360px; top: 980px; width: 380px; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 0 0 5px #fff, 0 24px 60px rgba(0,0,0,.3); opacity: 0; z-index: 8; }}
+.pan img {{ display: block; width: 100%; }}
+.stamp {{ position: absolute; left: 540px; top: 820px; padding: 16px 34px; border-radius: 20px; border: 9px solid {RED}; color: {RED}; font-weight: 800; font-size: 76px;
+  background: rgba(255,255,255,.92); opacity: 0; z-index: 12; white-space: nowrap; }}
+/* S2 */
+.stackw {{ position: absolute; left: 60px; top: 470px; width: 440px; height: 560px; z-index: 4; }}
+.pg {{ position: absolute; left: 0; top: 0; width: 420px; height: 560px; border-radius: 18px; background: #fff; padding: 30px 26px; box-shadow: 0 18px 44px rgba(0,0,0,.16); opacity: 0; }}
+.pgt {{ font-weight: 800; font-size: 28px; margin-bottom: 16px; }}
+.pg i {{ display: block; height: 11px; border-radius: 6px; background: #d9d9d4; margin-bottom: 14px; }}
+.xx {{ position: absolute; left: 40px; top: 60px; width: 360px; height: 360px; opacity: 0; z-index: 9; overflow: visible; }}
+.xx path {{ fill: none; stroke: {RED}; stroke-width: 9; stroke-linecap: round; stroke-dasharray: 300; stroke-dashoffset: 300; }}
+.cnt {{ position: absolute; top: 1080px; width: 460px; text-align: center; opacity: 0; z-index: 5; }}
+.cnt.l {{ left: 50px; }} .cnt.r {{ right: 50px; }}
+.cnt b {{ display: block; font-weight: 800; font-size: 150px; letter-spacing: -.05em; line-height: 1; }}
+.cnt .pk {{ color: {PINK}; }}
+.cnt span {{ display: block; font-weight: 800; font-size: 50px; }}
+.cnt em {{ display: block; font-style: normal; font-weight: 700; font-size: 32px; color: #66665f; margin-top: 8px; }}
+.grid6 {{ position: absolute; right: 60px; top: 500px; width: 456px; height: 476px; z-index: 4; }}
+.gp {{ position: absolute; width: 224px; height: 152px; border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 0 0 4px #fff, 0 12px 30px rgba(0,0,0,.2); opacity: 0; }}
+.gp img {{ width: 100%; height: 100%; object-fit: cover; }}
+.tick {{ position: absolute; right: -24px; bottom: -40px; width: 130px; height: 130px; border-radius: 50%; background: #2fbf71; color: #fff; font-size: 80px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 40px rgba(47,191,113,.5); opacity: 0; }}
+.vs {{ position: absolute; left: 50%; top: 690px; margin-left: -70px; width: 140px; height: 140px; border-radius: 50%; background: {INK}; color: #fff;
+  font-weight: 800; font-size: 58px; display: flex; align-items: center; justify-content: center; opacity: 0; z-index: 6; }}
+/* S4 */
+.bignum {{ position: absolute; right: 70px; top: 150px; height: 300px; overflow: hidden; z-index: 6; }}
+.reel {{ display: flex; flex-direction: column; }}
+.reel b {{ display: block; height: 300px; font-weight: 800; font-size: 290px; line-height: 300px; letter-spacing: -.06em;
+  background-image: linear-gradient(180deg, #ff2a2a, #ff3d7f 60%, #d02cff); -webkit-background-clip: text; background-clip: text; color: transparent; }}
+.lab4 {{ position: absolute; left: {LEFT}px; top: 330px; font-weight: 800; font-size: 96px; line-height: .95; letter-spacing: -.04em; opacity: 0; z-index: 7; white-space: nowrap; }}
+.dots {{ position: absolute; left: {LEFT}px; top: 470px; display: flex; gap: 16px; z-index: 6; }}
+.dots i {{ width: 26px; height: 26px; border-radius: 50%; background: #d9d9d4; }}
+.out {{ position: absolute; left: 120px; top: 560px; width: 840px; border-radius: 26px; overflow: hidden; background: #fff; box-shadow: 0 0 0 6px #fff, 0 40px 110px rgba(0,0,0,.3);
+  opacity: 0; z-index: 9; }}
+.out img {{ display: block; width: 100%; transform-origin: 50% 30%; }}
+/* S5 */
+.revw {{ position: absolute; left: 90px; top: 560px; width: 900px; height: 1200px; border-radius: 28px; overflow: hidden; background: #fff; box-shadow: 0 40px 110px rgba(0,0,0,.25); opacity: 0; z-index: 4; }}
+.rev {{ position: absolute; left: 0; top: 0; width: 1080px; height: 1440px; transform-origin: 50% 40%; transform: scale(.833); margin-left: -90px; margin-top: -120px; }}
+.rev img {{ display: block; width: 100%; }}
+.box {{ position: absolute; overflow: visible; opacity: 0; }}
+.box rect {{ fill: rgba(255,224,102,.18); stroke: {PINK}; stroke-width: 1.4; vector-effect: non-scaling-stroke; stroke-dasharray: 420; stroke-dashoffset: 420; }}
+.box rect {{ stroke-width: 7px; }}
+.clock {{ position: absolute; right: 70px; top: 470px; display: flex; align-items: center; gap: 16px; padding: 14px 28px 14px 16px; border-radius: 999px; background: {INK}; color: #fff;
+  font-weight: 800; font-size: 44px; opacity: 0; z-index: 8; }}
+.clock .face {{ position: relative; width: 60px; height: 60px; border-radius: 50%; border: 5px solid #fff; }}
+.clock .face i {{ position: absolute; left: 50%; top: 8px; width: 5px; height: 21px; margin-left: -2.5px; background: {LIME}; border-radius: 3px; transform-origin: 50% 100%; }}
+/* S6 */
+.slot {{ position: absolute; left: {LEFT}px; top: 330px; height: 240px; overflow: hidden; z-index: 6; }}
+.sreel {{ display: flex; flex-direction: column; transform-origin: 0 50%; }}
+.sreel b {{ display: block; height: 240px; font-weight: 800; font-size: 220px; line-height: 240px; letter-spacing: -.05em; }}
+.sreel .gry {{ color: #c9c9c2; }}
+.sub {{ position: absolute; left: {LEFT}px; right: {LEFT}px; top: 610px; font-weight: 700; font-size: 48px; line-height: 1.25; color: #3a3a35; opacity: 0; }}
+.sub b {{ color: {PINK}; }}
+.cbox {{ position: absolute; left: 70px; right: 70px; top: 800px; height: 124px; border-radius: 62px; background: rgba(255,255,255,.9); box-shadow: 0 20px 60px rgba(0,0,0,.12);
   display: flex; align-items: center; gap: 24px; padding: 0 20px 0 26px; opacity: 0; }}
-.cbox i {{ width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #ff9ec0, #c9a7ff); }}
-.cbox span {{ font-weight: 700; font-size: 46px; color: #9b9ca3; }}
-.cbox b {{ margin-left: auto; width: 84px; height: 84px; border-radius: 50%; background: #ff3d7f; color: #fff; font-size: 40px; display: flex; align-items: center; justify-content: center; }}
-.cms {{ position: absolute; left: 70px; right: 70px; top: 1010px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }}
-.cm {{ display: flex; align-items: center; gap: 14px; padding: 16px 20px; border-radius: 26px; background: rgba(255,255,255,.8); box-shadow: 0 10px 30px rgba(0,0,0,.08); opacity: 0; }}
-.cm i {{ width: 56px; height: 56px; border-radius: 50%; flex: none; }}
-.cm b {{ font-size: 24px; font-weight: 700; color: #66665f; }}
-.cm span {{ margin-left: auto; font-weight: 800; font-size: 32px; color: #ff3d7f; }}
+.cbox i {{ width: 74px; height: 74px; border-radius: 50%; background: linear-gradient(135deg, #ff9ec0, #c9a7ff); }}
+.cbox span {{ font-weight: 800; font-size: 50px; color: #9b9ca3; }}
+.cbox b {{ margin-left: auto; width: 88px; height: 88px; border-radius: 50%; background: {PINK}; color: #fff; font-size: 42px; display: flex; align-items: center; justify-content: center; }}
+.cms {{ position: absolute; left: 70px; right: 70px; top: 990px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }}
+.cm {{ display: flex; align-items: center; gap: 14px; padding: 18px 20px; border-radius: 26px; background: rgba(255,255,255,.85); box-shadow: 0 10px 30px rgba(0,0,0,.08); opacity: 0; }}
+.cm i {{ width: 58px; height: 58px; border-radius: 50%; flex: none; }}
+.cm b {{ font-size: 25px; font-weight: 700; color: #66665f; }}
+.cm span {{ margin-left: auto; font-weight: 800; font-size: 34px; color: {PINK}; }}
+.ccount {{ position: absolute; right: 70px; top: 1330px; padding: 12px 24px; border-radius: 999px; background: {INK}; color: #fff; font-weight: 800; font-size: 34px; opacity: 0; }}
+.ht {{ position: absolute; top: 1300px; font-size: 64px; color: {PINK}; opacity: 0; z-index: 9; }}
 """
 
 html = f"""<!doctype html>
@@ -350,18 +514,21 @@ html = f"""<!doctype html>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR:.2f}" data-fps="30" data-width="1080" data-height="1920">
       <div id="bg"></div><div class="glow g1" id="g1"></div><div class="glow g2" id="g2"></div><div class="glow g3" id="g3"></div>
-      <div id="stage">
+      <div id="cam"><div id="drift">{dood}<div id="stage">
         {chr(10).join(HTML)}
-      </div>
-      <div id="grain"></div>
+      </div></div></div>
+      <div id="wipe"></div><div id="flash"></div><div id="grain"></div>
     </div>
     <script>
       window.__timelines = window.__timelines || {{}};
       const tl = gsap.timeline({{paused: true}});
-      tl.fromTo("#g1", {{x: 0, y: 0}}, {{x: 260, y: 180, duration: {DUR:.2f}, ease: "sine.inOut", immediateRender: false}}, 0);
-      tl.fromTo("#g2", {{x: 0, y: 0}}, {{x: -320, y: -260, duration: {DUR:.2f}, ease: "sine.inOut", immediateRender: false}}, 0);
-      tl.fromTo("#g3", {{x: 0, y: 0, scale: 1}}, {{x: -200, y: 300, scale: 1.3, duration: {DUR:.2f}, ease: "sine.inOut", immediateRender: false}}, 0);
-      tl.fromTo(".cr", {{backgroundPosition: "200% 0"}}, {{backgroundPosition: "-200% 0", duration: {DUR:.2f}, ease: "none", immediateRender: false}}, 0);
+      tl.set("#wipe", {{xPercent: -110}}, 0);
+      tl.fromTo("#g1", {{x: 0, y: 0}}, {{x: 300, y: 220, duration: {DUR:.2f}, ease: "sine.inOut", immediateRender: false}}, 0);
+      tl.fromTo("#g2", {{x: 0, y: 0}}, {{x: -360, y: -300, duration: {DUR:.2f}, ease: "sine.inOut", immediateRender: false}}, 0);
+      tl.fromTo("#g3", {{x: 0, y: 0, scale: 1}}, {{x: -240, y: 360, scale: 1.35, duration: {DUR:.2f}, ease: "sine.inOut", immediateRender: false}}, 0);
+      tl.fromTo("#drift", {{rotation: -.6, scale: 1, x: -8}}, {{rotation: .6, scale: 1.03, x: 8, duration: {DUR / 4:.2f}, ease: "sine.inOut", yoyo: true, repeat: 3, immediateRender: false}}, 0);
+      tl.fromTo(".dd", {{rotation: 0, y: 0}}, {{rotation: 200, y: -60, duration: {DUR:.2f}, ease: "none", stagger: .3, immediateRender: false}}, 0);
+      tl.fromTo(".cr", {{backgroundPosition: "200% 0"}}, {{backgroundPosition: "-200% 0", duration: 1.2, ease: "none", repeat: {int(DUR / 1.2)}, immediateRender: false}}, 0);
       {chr(10).join("      " + j for j in JS).strip()}
       tl.set({{}}, {{}}, {DUR:.2f});
       window.__timelines["main"] = tl;

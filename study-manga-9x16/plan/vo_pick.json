@@ -1,131 +1,89 @@
 {
- "duration": 28.68,
+ "duration": 25.62,
  "takes": [
   {
    "line": "s00",
    "take": 0,
-   "heard": "I turn the hardest chapter in class 10 science into a manga, one prompt.",
-   "errors": 2,
-   "pitch_spread_hz": 68
+   "heard": "I made the hardest chapter in class 10 science into a manga, one prompt.",
+   "errors": 0,
+   "pitch_spread_hz": 126
   },
   {
    "line": "s00",
    "take": 1,
-   "heard": "I turned the hardest chapter in class 10 science into a manga, one prompt.",
-   "errors": 1,
-   "pitch_spread_hz": 86
-  },
-  {
-   "line": "s00",
-   "take": 2,
-   "heard": "I turned the hardest chapter in class 10 science into a manga. One prompt.",
-   "errors": 1,
-   "pitch_spread_hz": 101
+   "heard": "I made the hardest chapter in class 10 science into a manga, one prompt.",
+   "errors": 0,
+   "pitch_spread_hz": 90
   },
   {
    "line": "s01",
    "take": 0,
    "heard": "Same chapter 12 pages you forget by tomorrow or six panels you actually remember",
    "errors": 1,
-   "pitch_spread_hz": 69
+   "pitch_spread_hz": 151
   },
   {
    "line": "s01",
    "take": 1,
-   "heard": "Same chapter. 12 pages you forget by tomorrow, or 6 panels you actually remember.",
-   "errors": 1,
-   "pitch_spread_hz": 91
-  },
-  {
-   "line": "s01",
-   "take": 2,
-   "heard": "Sane Chapter, 12 pages you forget by tomorrow, or 6 panels you actually remember.",
-   "errors": 2,
-   "pitch_spread_hz": 87
+   "heard": "Same chapter. Twelve pages you forget by tomorrow, or six panels you actually remember.",
+   "errors": 0,
+   "pitch_spread_hz": 111
   },
   {
    "line": "s02",
    "take": 0,
-   "heard": "Here are five prompts. Paste your chapter. Pick one.",
+   "heard": "Here are five prompts. Paste your chapter, pick one.",
    "errors": 0,
-   "pitch_spread_hz": 68
+   "pitch_spread_hz": 102
   },
   {
    "line": "s02",
    "take": 1,
    "heard": "Here are five prompts. Paste your chapter. Pick one.",
    "errors": 0,
-   "pitch_spread_hz": 75
-  },
-  {
-   "line": "s02",
-   "take": 2,
-   "heard": "Here are five prompts. Paste your chapter. Pick one.",
-   "errors": 0,
-   "pitch_spread_hz": 108
+   "pitch_spread_hz": 164
   },
   {
    "line": "s03",
    "take": 0,
-   "heard": "One manga, two timeline, three mind map, four labeled diagram, five a one -page revision sheet.",
-   "errors": 1,
-   "pitch_spread_hz": 66
+   "heard": "1 manga 2 timeline 3 mind map 4 labeled diagram 5 a one -page revision sheet",
+   "errors": 3,
+   "pitch_spread_hz": 97
   },
   {
    "line": "s03",
    "take": 1,
-   "heard": "1. Manga 2. Timeline 3. Mind map 4. Labeled diagram 5. A one -page revision sheet",
+   "heard": "1 manga 2 timeline 3 mind map 4 labeled diagram 5 a one -page revision sheet",
    "errors": 3,
-   "pitch_spread_hz": 79
-  },
-  {
-   "line": "s03",
-   "take": 2,
-   "heard": "1. Manga 2. Timeline 3. Mind map 4. Labeled Diagram 5. A one -page revision sheet",
-   "errors": 3,
-   "pitch_spread_hz": 81
+   "pitch_spread_hz": 113
   },
   {
    "line": "s04",
    "take": 0,
-   "heard": "Number 5 is the one you want the night before the exam.",
-   "errors": 1,
-   "pitch_spread_hz": 78
-  },
-  {
-   "line": "s04",
-   "take": 1,
    "heard": "Number five is the one you want the night before the exam.",
    "errors": 0,
-   "pitch_spread_hz": 58
+   "pitch_spread_hz": 131
   },
   {
    "line": "s04",
-   "take": 2,
-   "heard": "Number five is the one you want the night before the exam.",
+   "take": 1,
+   "heard": "Number five is the one you want the night before the exam",
    "errors": 0,
-   "pitch_spread_hz": 91
+   "pitch_spread_hz": 137
   },
   {
    "line": "s05",
    "take": 0,
-   "heard": "comment study, and I'll send you all five prompts ready to copy.",
+   "heard": "Comment Study, and I'll send you all five prompts, ready to copy.",
    "errors": 0,
-   "pitch_spread_hz": 49
+   "pitch_spread_hz": 99
   },
   {
    "line": "s05",
    "take": 1,
-   "heard": "Common study, and I'll send you all five prompts, ready to copy.",
-   "errors": 1,
-   "pitch_spread_hz": 87
-  },
-  {
-   "line": "s05",
-   "take": 2,
-   "heard": "comment study, and I'll send you all five prompts ready to copy.",
+   "heard": "Comment Study, and I'll send you all five prompts, ready to copy.",
    "errors": 0,
-   "pitch_spread_hz": 72
+   "pitch_spread_hz": 103
   }
  ]
 }
