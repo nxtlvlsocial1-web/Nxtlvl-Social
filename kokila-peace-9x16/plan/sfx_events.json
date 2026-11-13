@@ -5,74 +5,90 @@
 },
 {
 "type": "hit",
-"t": 0.0
+"t": 2.94
 },
 {
-"type": "ding",
-"t": 2.2
+"type": "whoosh",
+"t": 8.36
 },
 {
 "type": "whoosh_big",
-"t": 9.9
+"t": 12.84
 },
 {
 "type": "stamp",
-"t": 11.83
+"t": 14.77
 },
 {
 "type": "whoosh",
-"t": 12.3
+"t": 15.24
 },
 {
 "type": "success",
-"t": 16.71
+"t": 19.65
 },
 {
 "type": "scratch",
-"t": 18.99
+"t": 21.93
 },
 {
 "type": "scratch",
-"t": 21.1
+"t": 24.04
+},
+{
+"type": "whoosh",
+"t": 24.4
 },
 {
 "type": "rise",
-"t": 21.84
+"t": 24.78
 },
 {
 "type": "hit",
-"t": 23.04
+"t": 25.98
 },
 {
 "type": "sub",
-"t": 23.04
+"t": 25.98
 },
 {
 "type": "error",
-"t": 29.1
+"t": 32.04
+},
+{
+"type": "whoosh",
+"t": 35.04
+},
+{
+"type": "whoosh",
+"t": 39.58
 },
 {
 "type": "sparkle",
-"t": 39.36
+"t": 42.3
 },
 {
 "type": "whoosh_big",
-"t": 40.96
+"t": 43.9
 },
 {
 "type": "whoosh",
-"t": 41.16
+"t": 44.1
 },
 {
 "type": "whoosh",
-"t": 47.18
+"t": 50.12
 },
 {
 "type": "sparkle",
-"t": 50.64
+"t": 53.58
+},
+{
+"type": "whoosh",
+"t": 59.22
 },
 {
 "type": "success",
-"t": 57.6
+"t": 60.54
 }
 ]

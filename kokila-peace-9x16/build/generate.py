@@ -108,9 +108,9 @@ def clip(vid, t0, t1, media, extra=""):
     v5 (owner: "quality decreased"): each clip is cut once from the original screen recording straight to the panel
     size (assets/video/pod_c.mp4, pod_d.mp4), so the browser no longer blows a small frame up; `media` is kept as a note
     of where it sits in the recording"""
-    src = {"pC": "assets/video/pod_c.mp4", "pD": "assets/video/pod_d.mp4"}[vid]
+    src = {"pC": "assets/video/pod_c.mp4", "pD": "assets/video/pod_d.mp4", "pDF": "assets/video/pod_dF.mp4"}[vid]
     return (f'<video class="pod" id="{vid}" src="{src}" data-start="{t0:.3f}" data-duration="{t1 - t0:.3f}" '
-            f'data-media-start="0.000" data-track-index="{2 + len(TOPH) % 3}" muted playsinline></video>{extra}'
+            f'data-media-start="{media if vid == "pDF" else 0:.3f}" data-track-index="{2 + len(TOPH) % 3}" muted playsinline></video>{extra}'
             '<div class="credit">Source: Raj Shamani podcast</div>')
 
 
@@ -138,8 +138,14 @@ T_SPLIT = 0.0 if VAR == "B" else round(t_l1 - .06, 3)
 HOOK_END = round(T_SPLIT + 5.5, 3)
 
 # (mode, t0, t1): split / full / beat / end
-SECTIONS = [("split", 0.0, t_but - .1), ("full", t_but - .1, t_does - .1), ("split", t_does - .1, t_because6 - .1),
-            ("full", t_because6 - .1, t_so7 - .1), ("split", t_so7 - .1, DUR)]
+# v3 (client: "the reference videos must be in full screen more; less split screen; her full screen or split now and
+# then"): "ref" = the reference footage fills the frame (her voice over it). Split only for the hook (5.5 s), the free-
+# tracker graphic with "does it work?", one beat of the loving-people list and the closing line; her full screen for
+# "can you afford it? maybe not" and the doctor line.
+SECTIONS = [("split", 0.0, HOOK_END), ("ref", HOOK_END, t_but - .1), ("full", t_but - .1, t_does - .1),
+            ("split", t_does - .1, t_and3 - .1), ("ref", t_and3 - .1, t_or - .1), ("split", t_or - .1, t_supp - .1),
+            ("ref", t_supp - .1, t_because6 - .1), ("full", t_because6 - .1, t_so7 - .1), ("ref", t_so7 - .1, t_it8 - .1),
+            ("split", t_it8 - .1, DUR)]
 
 
 BROLL = json.load(open(os.path.join(ROOT, "footage", "broll", "pexels.json")))
@@ -148,7 +154,10 @@ BROLL = json.load(open(os.path.join(ROOT, "footage", "broll", "pexels.json")))
 def broll(sid, t0, t1, vid, at=0.0, label=None, pos="50% 40%", extra=""):
     """v3 (client: "less animated explanations, more real-life reference video"): a Pexels clip in the top half"""
     lab = f'<div class="blab" id="{sid}l">{label}</div>' if label else ""
-    scene(sid, t0, t1, f'<video class="br" id="{sid}v" src="footage/broll/{vid}.mp4" data-start="{t0:.3f}" data-duration="{t1 - t0:.3f}" '
+    folder = "broll_v" if mode_at(t0 + .05) == "ref" else "broll"      # v3: the 1080x1920 crop when it fills the frame
+    if folder == "broll_v":
+        pos = "50% 50%"
+    scene(sid, t0, t1, f'<video class="br" id="{sid}v" src="footage/{folder}/{vid}.mp4" data-start="{t0:.3f}" data-duration="{t1 - t0:.3f}" '
                        f'data-media-start="{at:.3f}" data-track-index="{2 + len(TOPH) % 3}" muted playsinline style="object-position:{pos}"></video>'
                        f'<i class="shade2"></i>{lab}{extra}', "vid")
     js(f'tl.fromTo("#{sid}v", {{scale: 1.0}}, {{scale: 1.08, duration: {t1 - t0:.3f}, ease: "none", immediateRender: false}}, {t0:.3f});')
@@ -176,16 +185,15 @@ def build_top():
       js(f'tl.set("#seamline", {{opacity: 1}}, {T_SPLIT:.3f});')      # the seam only exists once the split screen does
     sfx("hit", T_SPLIT)
     # "Deepinder Goyal's Temple costs 85,000 rupees": the price tag counts up over his clip
-    tag = (f'<div class="price glass" id="pr1"><div class="pl">{icon("card")} TEMPLE by Deepinder Goyal</div>'
-           f'<div class="pv">₹<b id="pr1n">0</b></div></div>')
-    scene("ts1", T_SPLIT, t_measure - .1, clip("pC", T_SPLIT, t_measure - .1, 29.0) + tag, "vid")
-    pop("#pr1", T("costs") - .1)
-    for k, v in enumerate(["0", "8,500", "21,000", "39,000", "57,000", "71,000", "80,500", "85,000"]):
-        js(f'tl.set("#pr1n", {{textContent: "{v}"}}, {T("85") - .35 + k * .07:.3f});')
-    js(f'tl.fromTo("#pr1", {{scale: 1}}, {{keyframes: {{scale: [1, 1.12, 1]}}, duration: .3, ease: "power2.out", immediateRender: false}}, {T("85") + .2:.3f});')
-    sfx("ding", T("85") + .2)
+    # v3 (client: "don't put 85,000 twice on the same screen, the hook already says it"): no price tag over the clip
+    scene("ts1", T_SPLIT, t_measure - .1, clip("pC", T_SPLIT, t_measure - .1, 29.0), "vid")
     # "It can measure your brain's blood flow and how your body responds": the device; then real life, cut on each word
-    scene("ts2", t_measure - .1, t_stress - .1, clip("pD", t_measure - .1, t_stress - .1, 33.8), "vid")
+    a2, b2 = t_measure - .1, t_stress - .1
+    if a2 < HOOK_END < b2:          # the device clip runs on past the hook: split part, then the full-screen cut
+        scene("ts2", a2, HOOK_END, clip("pD", a2, HOOK_END, 33.8), "vid")
+        scene("ts2f", HOOK_END, b2, clip("pDF", HOOK_END, b2, HOOK_END - a2), "vid")
+    else:
+        scene("ts2", a2, b2, clip("pD" if mode_at(a2 + .05) != "ref" else "pDF", a2, b2, 0.0), "vid")
     # v5 (earshot: "salient hit density 2.0/s, high"): the quick footage cuts inside a line carry no whoosh
     broll("tb1", t_stress - .1, t_sleep - .05, "8632780", 1.0, "Stress")
     broll("tb2", t_sleep - .05, t_ex - .05, "6639660", 2.0, "Sleep")
@@ -255,8 +263,18 @@ def build_overlays():
 
 def build_layout():
     for k, (mode, a, b) in enumerate(SECTIONS):
+        if mode == "ref":
+            js(f'tl.set("#split", {{opacity: 1}}, {a:.3f}); tl.set("#split", {{opacity: 0}}, {b:.3f});')
+            js(f'tl.set("#top", {{height: {FH}}}, {a:.3f}); tl.set("#bot", {{opacity: 0}}, {a:.3f}); tl.set("#seamline", {{opacity: 0}}, {a:.3f});')
+            js(f'tl.fromTo("#top", {{scale: 1.14, filter: "blur(12px)"}}, {{scale: 1, filter: "blur(0px)", duration: .42, ease: "expo.out", immediateRender: false}}, {a:.3f});')
+            js(f'tl.fromTo("#flash", {{opacity: .45}}, {{opacity: 0, duration: .25, ease: "power2.out", immediateRender: false}}, {a:.3f});')
+            sfx("whoosh", a - .08)
+            continue
         if mode == "split":
             js(f'tl.set("#split", {{opacity: 1}}, {a:.3f}); tl.set("#split", {{opacity: 0}}, {b:.3f});')
+            js(f'tl.set("#top", {{height: {SEAM}}}, {a:.3f}); tl.set("#bot", {{opacity: 1}}, {a:.3f});')
+            if k:
+                js(f'tl.set("#seamline", {{opacity: 1}}, {a:.3f});')
             if k:
                 js(f'tl.fromTo("#botin", {{scale: 1.45, filter: "blur(10px)"}}, {{scale: 1, filter: "blur(0px)", duration: .4, ease: "expo.out", immediateRender: false}}, {a:.3f});')
                 js(f'tl.fromTo("#top", {{scale: 1.12, filter: "blur(12px)"}}, {{scale: 1, filter: "blur(0px)", duration: .42, ease: "expo.out", immediateRender: false}}, {a:.3f});')
@@ -311,7 +329,7 @@ def build_caps():
         t0 = g[0]["s"] - .05
         t1 = min(gs[k + 1][0]["s"] - .05 if k + 1 < len(gs) else VDUR, g[-1]["e"] + .6)
         m = mode_at(g[0]["s"])
-        pos = "hk" if t0 < HOOK_END - .1 else ("seam" if m == "split" else "low")
+        pos = "hk" if t0 < HOOK_END - .1 else {"split": "seam", "ref": "rf"}.get(m, "low")
         txt = " ".join(f'<span class="{"k" if norm(w["w"]) in KEY else ""}">{w["w"].replace("85", "85").replace(",000", ",000")}</span>' for w in g)
         txt = txt.replace('</span> <span class="k">,000', ',000').replace('<span class="k">85</span> <span class="k">,000</span>', '<span class="k">85,000</span>')
         CAPS.append(f'<div class="cap {pos}" id="cp{k}"><b>{txt}</b></div>')
@@ -442,7 +460,7 @@ video {{ display: block; }}
 .sig {{ position: absolute; left: 0; right: 0; top: 1180px; text-align: center; color: {YEL}; font-size: 40px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; opacity: 0; }}
 /* captions */
 .cap {{ position: absolute; left: 0; right: 0; text-align: center; opacity: 0; z-index: 7; }}
-.cap.seam {{ top: {SEAM - 52}px; }} .cap.low {{ top: 1380px; }} .cap.hk {{ top: 1000px; }}
+.cap.seam {{ top: {SEAM - 52}px; }} .cap.low {{ top: 1380px; }} .cap.hk {{ top: 1000px; }} .cap.rf {{ top: 1480px; }}
 .cap b {{ display: inline-block; padding: 12px 30px 16px; border-radius: 22px; background: {BLUE}; color: #fff; font-size: 62px; font-weight: 800; letter-spacing: -.01em;
   box-shadow: 0 14px 34px rgba(14,26,58,.35); }}
 .cap .k {{ color: {YEL}; }}
