@@ -1,0 +1,97 @@
+[
+{
+"t": 0.0,
+"cue": 0.0,
+"kind": "hit"
+},
+{
+"t": 2.94,
+"cue": 2.94,
+"kind": "hit"
+},
+{
+"t": 5.14,
+"cue": 5.14,
+"kind": "ding"
+},
+{
+"t": 12.84,
+"cue": 12.84,
+"kind": "whoosh_big"
+},
+{
+"t": 14.77,
+"cue": 14.77,
+"kind": "stamp"
+},
+{
+"t": 15.24,
+"cue": 15.24,
+"kind": "whoosh"
+},
+{
+"t": 19.65,
+"cue": 19.65,
+"kind": "success"
+},
+{
+"t": 21.93,
+"cue": 21.93,
+"kind": "scratch"
+},
+{
+"t": 24.04,
+"cue": 24.04,
+"kind": "scratch"
+},
+{
+"t": 24.78,
+"cue": 24.78,
+"kind": "rise"
+},
+{
+"t": 25.98,
+"cue": 25.98,
+"kind": "hit"
+},
+{
+"t": 25.98,
+"cue": 25.98,
+"kind": "sub"
+},
+{
+"t": 32.04,
+"cue": 32.04,
+"kind": "error"
+},
+{
+"t": 42.3,
+"cue": 42.3,
+"kind": "sparkle"
+},
+{
+"t": 43.9,
+"cue": 43.9,
+"kind": "whoosh_big"
+},
+{
+"t": 44.1,
+"cue": 44.1,
+"kind": "whoosh"
+},
+{
+"t": 50.12,
+"cue": 50.12,
+"kind": "whoosh"
+},
+{
+"t": 53.58,
+"cue": 53.58,
+"kind": "sparkle"
+},
+{
+"t": 60.54,
+"cue": 60.54,
+"kind": "success"
+}
+]
