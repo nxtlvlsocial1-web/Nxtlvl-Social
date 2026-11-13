@@ -13,6 +13,10 @@ import json
 import math
 import os
 import random
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import bird  # noqa: E402  (the Creedom mascot rig, from creedom-reel-analyser-9x16)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W = json.load(open(os.path.join(ROOT, "plan", "words.json")))
@@ -121,8 +125,6 @@ HTML.append('<div class="phone" id="phone"><div class="scr">' + vids +
             '<div class="isl"></div></div>')
 HTML.append('<div class="share glass" id="share"><svg class="lk" id="lk" viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0 1 10 0v3"/><rect x="5" y="11" width="14" height="10" rx="3"/></svg>'
             '<span id="shtx">Share</span></div>')
-HTML.append('<div class="lens" id="lens"><div class="lring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" id="lfill"/></svg></div>'
-            '<div class="lhi"></div><div class="lcau"></div></div>')
 
 # ---- A hook (light) ---------------------------------------------------------------------------------------------------
 HTML.append('<div class="scn" id="sa">')
@@ -132,9 +134,7 @@ scene("sa", SA, SB)
 ft("#phone", .05, .9, "{opacity: 0, y: 260, rotationX: 24, scale: .9}", "{opacity: 1, y: 0, rotationX: 0, scale: 1}", "expo.out")
 ft("#share", .45, .6, "{opacity: 0, y: 60, scale: .8}", "{opacity: 1, y: 0, scale: 1}", "expo.out")
 t_r = T("c00", "rates")
-ft("#lens", t_r - .1, 1.0, "{opacity: 0, x: 520, y: -260, scale: .5}", "{opacity: 1, x: 0, y: 0, scale: 1}", "expo.out")
 sfx("whoosh", t_r - .1)
-ft("#lfill", t_r + .4, 2.6, "{strokeDashoffset: 289}", "{strokeDashoffset: 60}", "power1.inOut")
 t_p = T("c00", "post")
 to("#share", t_p, .12, "{scale: .94}")
 to("#share", t_p + .12, .35, "{scale: 1}", "elastic.out(1,.4)")
@@ -159,7 +159,6 @@ sweep(SB)
 mode(SB, True)
 to("#phone", SB - .2, .3, "{opacity: 0, scale: .9, filter: 'blur(10px)'}", "power2.in")
 to("#share", SB - .2, .3, "{opacity: 0}")
-to("#lens", SB - .2, .3, "{opacity: 0, scale: .6}")
 t_v = T("c01", "views")
 ft("#after", t_v - .15, .7, "{opacity: 0, x: -200, rotationY: 30, filter: 'blur(14px)'}", "{opacity: 1, x: 0, rotationY: 12, filter: 'blur(0px)'}", "expo.out")
 sfx("swish", t_v - .15)
@@ -188,8 +187,6 @@ to("#brand", T("c02", "watches") - .2, .4, "{opacity: 0, scale: 1.4, filter: 'bl
 t_w = T("c02", "watches")
 head_out("hcc", T("c02", "It", 1) - .3)
 ft("#phone", t_w - .2, .7, "{opacity: 0, scale: .85, filter: 'blur(12px)', x: -150}", "{opacity: 1, scale: .86, filter: 'blur(0px)', x: -150}", "expo.out")
-ft("#lens", t_w, .5, "{opacity: 0, scale: .6, x: -150, y: 0}", "{opacity: 1, scale: .8, x: -150, y: -60}", "expo.out")
-js(f'tl.to("#lens", {{y: 440, duration: 1.3, ease: "sine.inOut", yoyo: true, repeat: 1}}, {t_w + .45:.3f});')
 ft("#beam", t_w + .4, 2.6, "{opacity: .9, y: 0}", "{opacity: .9, y: 900}", "sine.inOut")
 to("#beam", t_w + 2.9, .2, "{opacity: 0}")
 for i in range(3):
@@ -216,7 +213,6 @@ scene("sd", SD, SE)
 sweep(SD)
 mode(SD, True)
 to("#phone", SD - .1, .55, "{opacity: 1, x: -250, y: -190, scale: .5, filter: 'blur(0px)'}", "expo.inOut")
-to("#lens", SD - .2, .3, "{opacity: 0}")
 for b in ("#fr0", "#fr1", "#fr2", "#sp0", "#sp1"):
     to(b, SD - .25, .2, "{opacity: 0}")
 t_sc = T("c03", "scores")
@@ -305,14 +301,108 @@ for i in range(5):
     if i % 2 == 0:
         sfx("pop", t)
 
-# ---- floating glass decor (depth) ----
-DEC = [(840, 1400, 190), (70, 1600, 130), (930, 330, 100)]
-HTML.insert(0, "".join(f'<div class="orb" id="ob{i}" style="left:{x}px;top:{y}px;width:{d}px;height:{d}px"></div>' for i, (x, y, d) in enumerate(DEC))
-            + '<div class="ringd" id="rgd"></div>')
-for i in range(len(DEC)):
-    js(f'tl.fromTo("#ob{i}", {{y: 0, x: 0}}, {{y: {random.choice([-1, 1]) * random.randint(60, 140)}, x: {random.randint(-50, 50)}, duration: {DUR / 3:.2f}, '
-       f'ease: "sine.inOut", yoyo: true, repeat: 2, immediateRender: false}}, 0);')
-js(f'tl.fromTo("#rgd", {{rotation: 0, scale: 1}}, {{rotation: 160, scale: 1.15, duration: {DUR:.2f}, ease: "none", immediateRender: false}}, 0);')
+# ---- the Creedom mascot: he does the checking (owner: "use the creedom mascot that we made") ------------------------------
+def star(sz, col=PINK):
+    return (f'<svg viewBox="-50 -50 100 100" width="{sz}" height="{sz}"><path d="M0 -50 C6 -10 10 -6 50 0 C10 6 6 10 '
+            f'0 50 C-6 10 -10 6 -50 0 C-10 -6 -6 -10 0 -50 Z" fill="{col}"/></svg>')
+
+
+HTML.append(f'<div id="birdlayer">{bird.rig(star)}</div>')
+b = bird.Bird(js)
+js('tl.set("#birdpos",{x:1250,y:1180,scale:.86},0);tl.set("#bflip",{scaleX:-1},0);')
+js('tl.set("#sweat,#mag,.bub,.bsp,#cloud",{opacity:0,scale:.5},0);tl.set("#wingR,#footK",{opacity:0},0);')
+for k in "LR":
+    cx, cy, r = bird.EYES[k][:3]
+    js(f'tl.set("#lu{k}",{{scaleY:0,svgOrigin:"{cx} {cy - r - 6}"}},0);tl.set("#ld{k}",{{scaleY:0,svgOrigin:"{cx} {cy + r + 6}"}},0);')
+b.facing = -1
+js(f'tl.to("#bidle",{{y:-7,duration:.42,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .42) - 1}}},0);')
+js(f'tl.fromTo("#bidle",{{rotation:-2.5}},{{rotation:2.5,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 1.3) - 1}}},0);')
+js(f'tl.to("#bbreath",{{scaleY:1.012,scaleX:.994,duration:.8,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .8) - 1}}},0);')
+js(f'tl.fromTo("#wingLi",{{rotation:3}},{{rotation:-4,duration:.6,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .6) - 1}}},0);')
+js(f'tl.fromTo("#wingDi",{{rotation:-3}},{{rotation:4,duration:.6,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / .6) - 1}}},.3);')
+js(f'tl.fromTo("#footLi",{{rotation:0,y:0}},{{rotation:-7,y:-4,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 1.3) - 1}}},0);')
+js(f'tl.fromTo("#footRi",{{rotation:-7,y:-4}},{{rotation:0,y:0,duration:1.3,ease:"sine.inOut",yoyo:true,repeat:{int(DUR / 1.3) - 1}}},0);')
+# A: he walks in, lifts his glass magnifier to the reel, taps the locked Share, nods at "what to fix"
+b.expr(0, "curious", .01)
+b.at(.15, 730, 1200, 0.86, 1.0, "power2.out")
+b.walk(.15, 1.0)
+b.look(.3, -14, -6)
+t_r = T("c00", "rates")
+b.expr(t_r, "focused", .2)
+b.show("#mag", t_r)
+js(f'tl.to("#mag",{{rotation:-16,y:-24,duration:.45,ease:"sine.inOut",yoyo:true,repeat:3}},{t_r + .1:.3f});')
+b.look(t_r, -18, -12)
+t_p = T("c00", "post")
+b.show("#mag", t_p - .1, False)
+b.point(t_p, .9)
+b.expr(t_p, "proud", .15)
+b.nod(T("c00", "exactly"), 2)
+b.expr(T("c00", "exactly"), "smile", .15)
+# B (dark): skeptical at "views after", lights up at "reasons, before"
+b.at(SB - .2, 370, 1340, 0.96, .5)
+b.face(SB, 1)
+b.expr(T("c01", "views"), "skeptical", .2)
+b.shake(T("c01", "views") + .2, 3, 8)
+t_re = T("c01", "Reasons")
+b.expr(t_re, "excited", .12)
+b.hop(t_re, 90)
+b.flap(t_re, 4, 45)
+b.expr(T("c01", "before") + .3, "joy", .15)
+# C: pops up under the Creedom pill and waves, then scans the reel with the magnifier, second by second
+b.at(SC - .1, 360, 1060, 0.86, .45)
+t_cr = T("c02", "Creedom")
+b.expr(t_cr - .1, "joy", .15)
+b.wave(t_cr, 3)
+b.show(".bsp", t_cr)
+js(f'tl.to(".bsp",{{rotation:120,duration:1.0,ease:"none"}},{t_cr:.3f});')
+b.show(".bsp", t_cr + 1.0, False)
+t_wt = T("c02", "watches")
+b.at(t_wt - .25, 610, 900, 0.79, .55)
+b.face(t_wt - .25, -1)
+b.expr(t_wt, "focused", .2)
+b.show("#mag", t_wt)
+js(f'tl.to("#birdpos",{{y:1340,duration:1.4,ease:"sine.inOut",yoyo:true,repeat:1}},{t_wt + .4:.3f});')
+js(f'tl.to("#mag",{{rotation:-12,duration:.35,ease:"sine.inOut",yoyo:true,repeat:7}},{t_wt + .3:.3f});')
+b.look(t_wt + .3, -16, 6)
+b.blink(T("c02", "viewer"))
+b.show("#mag", SD - .2, False)
+# D (dark): impressed by the score, then points at each flag; shocked at "loses trust"
+b.at(SD - .1, 660, 1460, 0.79, .5)
+b.face(SD, -1)
+t_sc = T("c03", "scores")
+b.expr(t_sc + 1.0, "excited", .12)
+b.hop(t_sc + 1.1, 60)
+for w, ex in (("weak", "skeptical"), ("claim", "focused")):
+    t = T("c03", w)
+    b.point(t, .7)
+    b.expr(t, ex, .15)
+t_tr = T("c03", "moment", 1)
+b.expr(t_tr + .4, "shock", .1)
+b.startle(t_tr + .4)
+b.spread(t_tr + .4, 50, .12)
+b.spread(t_tr + .9, 0, .2)
+# E: beside the fix card, nods, proud
+b.at(SE - .1, 670, 1330, 0.79, .5)
+b.expr(SE + .2, "curious", .15)
+b.nod(T("c04", "fix"), 2)
+b.expr(T("c04", "fix"), "proud", .15)
+# F: celebrates when Share unlocks
+b.at(SF - .1, 740, 1240, 0.74, .5)
+b.expr(T("c05", "fix"), "smile", .15)
+t_se = T("c05", "sees")
+b.expr(t_se, "joy", .12)
+b.bounce(t_se, 3, 20)
+b.flap(t_se, 4, 50)
+b.show(".bsp", t_se)
+js(f'tl.to(".bsp",{{rotation:-120,duration:1.0,ease:"none"}},{t_se:.3f});')
+b.show(".bsp", t_se + 1.0, False)
+# G: points up at CHECK, then waves goodbye
+b.at(SG - .1, 360, 1420, 0.94, .5)
+b.face(SG, 1)
+b.point(T("c06", "Check"), .9)
+b.expr(T("c06", "Check"), "excited", .12)
+b.expr(T("c06", "send"), "love", .15)
+b.wave(T("c06", "send") + .2, 3)
 
 # ---- fluid blobs --------------------------------------------------------------------------------------------------------------
 LB = [(-200, -150, 760, "rgba(238,104,139,.55)"), (520, 260, 820, "rgba(255,190,214,.75)"), (-260, 980, 900, "rgba(217,194,255,.6)"),
@@ -474,7 +564,7 @@ html = f"""<!doctype html>
     <meta name="viewport" content="width=1080, height=1920" />
     <title>Creedom: check before you post 9x16</title>
     <script src="assets/vendor/gsap.min.js"></script>
-    <style>{CSS}</style>
+    <style>{CSS}{bird.CSS}#birdlayer {{ position: absolute; inset: 0; z-index: 30; pointer-events: none; }}</style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR:.2f}" data-fps="30" data-width="1080" data-height="1920">

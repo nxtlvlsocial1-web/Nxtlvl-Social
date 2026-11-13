@@ -1,7 +1,7 @@
 """Sound for the Creators 100X x Creedom CHECK reel (copied from study-manga-9x16/build/sfx_mix.py).
 
   * Voice: assets/audio/vo.wav (Kokoro af_heart, build/vo_pick.py, -16 LUFS), the loudest layer.
-  * Music: "Inspiring Technology" by Soundrider/Dope (Jamendo via Openverse, CC BY 3.0: credit in the post), from 0:15,
+  * Music: "Down For You (chillout lounge)" by Dj Quincy Ortiz (Jamendo via Openverse, CC BY 3.0: credit in the post), from 0:43,
     -18 LUFS, sidechain-ducked under the voice (plan/music.json, sfx/credits.txt).
   * Sound effects: Openverse CC0 one-shots (assets/sfx; plan/sfx_library.json).
   * Master: two-pass loudnorm to -14 LUFS, -1.5 dBTP; muxed onto the picture with the video stream copied.
@@ -19,7 +19,7 @@ WORK = os.path.join(ROOT, "sfx", "work")
 LIB = os.path.join(ROOT, "assets", "sfx")
 E = json.load(open(os.path.join(ROOT, "plan", "edit.json")))
 DUR = E["dur"]
-SONG, SONG_AT = os.path.join(ROOT, "sfx", "music", "music_inspiring_tech.mp3"), 15.0
+SONG, SONG_AT = os.path.join(ROOT, "sfx", "music", "music_down_for_you.mp3"), 43.0
 # kind -> (files, peak dBFS, max length s)
 KINDS = {
     "whoosh": (["whoosh_a", "whoosh_b"], -10, .6), "whoosh_big": (["whoosh_deep"], -9, 1.1), "swish": (["whoosh_b"], -13, .5),
