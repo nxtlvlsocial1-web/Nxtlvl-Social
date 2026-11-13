@@ -4,7 +4,8 @@
     @font-face { font-family: "Geist Mono"; src: url("assets/fonts/GeistMono-latin-var.woff2") format("woff2"); font-weight: 100 900; font-style: normal; }
     #root { position: absolute; inset: 0; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; }
     #root * { box-sizing: border-box; }
-    .cr { background: linear-gradient(180deg, #ffffff 0%, #f4f4f4 30%, #a3a3a3 50%, #ffffff 66%, #cfcfcf 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .cr { background-image: linear-gradient(110deg, rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 62%), linear-gradient(180deg, #ffffff 0%, #f4f4f4 30%, #a3a3a3 50%, #ffffff 66%, #cfcfcf 100%); background-size: 320% 100%, 100% 100%; background-position: 130% 0%, 0% 0%; background-repeat: no-repeat; -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .ch { display: inline-block; }
     .gl { color: #fff56c; text-shadow: 0 0 30px rgba(255, 245, 108, 0.55), 0 0 2px rgba(255, 245, 108, 0.9); }
     .glass { background: linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04)); border: 1.5px solid rgba(255, 255, 255, 0.17); border-radius: 30px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22); }
     #s1-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
@@ -37,7 +38,7 @@
         <path d="M0 120 C100 40 200 40 300 120 S500 200 600 120 S800 40 900 120 S1100 200 1200 120 S1400 40 1500 120 S1700 200 1800 120" fill="none" stroke="#fff56c" stroke-width="5" stroke-linecap="round" />
       </svg>
       <div id="s1-kick"><img src="assets/claude/claude-logo.png" alt="Claude" /><span>Claude can now</span></div>
-      <div id="s1-head" data-layout-allow-overlap><div><span class="cr">SPY ON</span></div><div><span class="cr">THEIR</span> <span class="gl">SEO</span></div></div>
+      <div id="s1-head" data-layout-allow-overlap><div><span class="wd"><span class="cr ch">S</span><span class="cr ch">P</span><span class="cr ch">Y</span></span> <span class="wd"><span class="cr ch">O</span><span class="cr ch">N</span></span></div><div><span class="wd"><span class="cr ch">T</span><span class="cr ch">H</span><span class="cr ch">E</span><span class="cr ch">I</span><span class="cr ch">R</span></span> <span class="gl" id="s1-seo">SEO</span></div></div>
       <div id="s1-card" class="glass">
         <div id="s1-bar"><span class="s1-dot" style="background: #fe4a97"></span><span class="s1-dot" style="background: #fff56c"></span><span class="s1-dot" style="background: #00c38a"></span><div id="s1-url">competitor.com</div></div>
         <div id="s1-body">
@@ -78,6 +79,11 @@
       tl.set("#s1-flood", { opacity: 1, scale: 1 }, 2.62);
       tl.fromTo("#s1-flood", { scale: 1 }, { scale: 17, duration: 0.4, ease: "power3.in" }, 2.64);
       tl.fromTo("#s1-lens", { scale: 1 }, { scale: 13, duration: 0.4, ease: "power3.in", transformOrigin: "50% 50%" }, 2.64);
+      // Text animation
+      const shine = (sel, t) => tl.fromTo(sel, { backgroundPosition: "130% 0%, 0% 0%" }, { backgroundPosition: "-30% 0%, 0% 0%", duration: 0.55, ease: "power2.inOut", stagger: 0.03 }, t);
+      shine("#s1-head .ch", 0.2);
+      // "SEO" flares as the camera punches in
+      tl.fromTo("#s1-seo", { textShadow: "0 0 30px rgba(255,245,108,0.55), 0 0 2px rgba(255,245,108,0.9)" }, { textShadow: "0 0 70px rgba(255,245,108,0.95), 0 0 4px rgba(255,255,255,1)", duration: 0.18, ease: "power2.out", yoyo: true, repeat: 1 }, 1.0);
       window.__timelines["s1"] = tl;
     })();
   </script>

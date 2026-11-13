@@ -2,7 +2,8 @@
   <style>
     @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/SpaceGrotesk-latin-var.woff2") format("woff2"); font-weight: 300 700; font-style: normal; }
     #root { position: absolute; inset: 0; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; }
-    .cr { background: linear-gradient(180deg, #ffffff 0%, #f4f4f4 30%, #a3a3a3 50%, #ffffff 66%, #cfcfcf 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .cr { background-image: linear-gradient(110deg, rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 62%), linear-gradient(180deg, #ffffff 0%, #f4f4f4 30%, #a3a3a3 50%, #ffffff 66%, #cfcfcf 100%); background-size: 320% 100%, 100% 100%; background-position: 130% 0%, 0% 0%; background-repeat: no-repeat; -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .ch { display: inline-block; }
     #root * { box-sizing: border-box; }
     #s4-head { position: absolute; left: 56px; top: 190px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 128px; line-height: 1; letter-spacing: -0.05em; }
     #s4-box { position: absolute; left: 60px; top: 410px; width: 900px; height: 470px; background: linear-gradient(180deg, #ffffff, #f3f1ea); border-radius: 44px; box-shadow: 0 30px 90px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(255, 245, 108, 0.55), 0 0 80px rgba(255, 245, 108, 0.25); }
@@ -19,7 +20,7 @@
   </style>
   <div id="root" data-composition-id="s4" data-width="1080" data-height="1920">
     <div id="s4-shift" data-layout-allow-overflow>
-    <div id="s4-head"><span class="cr">ONE QUESTION</span></div>
+    <div id="s4-head"><span class="wd"><span class="cr ch">O</span><span class="cr ch">N</span><span class="cr ch">E</span></span> <span class="wd"><span class="cr ch">Q</span><span class="cr ch">U</span><span class="cr ch">E</span><span class="cr ch">S</span><span class="cr ch">T</span><span class="cr ch">I</span><span class="cr ch">O</span><span class="cr ch">N</span></span></div>
     <div id="s4-box">
       <div id="s4-text"><span id="s4-ph">Ask Claude anything</span><!--CHARS--><span class="s4-c" id="s4-c0">W</span><span class="s4-c" id="s4-c1">h</span><span class="s4-c" id="s4-c2">a</span><span class="s4-c" id="s4-c3">t</span><span class="s4-c" id="s4-c4"> </span><span class="s4-c" id="s4-c5">i</span><span class="s4-c" id="s4-c6">s</span><span class="s4-c" id="s4-c7"> </span><span class="s4-c" id="s4-c8">m</span><span class="s4-c" id="s4-c9">y</span><span class="s4-c" id="s4-c10"> </span><span class="s4-c" id="s4-c11">c</span><span class="s4-c" id="s4-c12">o</span><span class="s4-c" id="s4-c13">m</span><span class="s4-c" id="s4-c14">p</span><span class="s4-c" id="s4-c15">e</span><span class="s4-c" id="s4-c16">t</span><span class="s4-c" id="s4-c17">i</span><span class="s4-c" id="s4-c18">t</span><span class="s4-c" id="s4-c19">o</span><span class="s4-c" id="s4-c20">r</span><span class="s4-c" id="s4-c21"> </span><span class="s4-c" id="s4-c22">r</span><span class="s4-c" id="s4-c23">a</span><span class="s4-c" id="s4-c24">n</span><span class="s4-c" id="s4-c25">k</span><span class="s4-c" id="s4-c26">i</span><span class="s4-c" id="s4-c27">n</span><span class="s4-c" id="s4-c28">g</span><span class="s4-c" id="s4-c29"> </span><span class="s4-c" id="s4-c30">f</span><span class="s4-c" id="s4-c31">o</span><span class="s4-c" id="s4-c32">r</span><span class="s4-c" id="s4-c33"> </span><span class="s4-c" id="s4-c34">t</span><span class="s4-c" id="s4-c35">h</span><span class="s4-c" id="s4-c36">a</span><span class="s4-c" id="s4-c37">t</span><span class="s4-c" id="s4-c38"> </span><span class="s4-c" id="s4-c39">I</span><span class="s4-c" id="s4-c40">&#x27;</span><span class="s4-c" id="s4-c41">m</span><span class="s4-c" id="s4-c42"> </span><span class="s4-c" id="s4-c43">n</span><span class="s4-c" id="s4-c44">o</span><span class="s4-c" id="s4-c45">t</span><span class="s4-c" id="s4-c46">?</span><!--/CHARS--><span id="s4-caret"></span></div>
       <div id="s4-chip"><img src="assets/claude/claude-logo.png" alt="" />Claude</div>
@@ -35,7 +36,6 @@
       const tl = gsap.timeline({ paused: true });
       // The gap's empty field widens into the prompt box
       tl.fromTo("#s4-box", { scaleX: 0.6, scaleY: 0.3, opacity: 0, filter: "blur(12px)" }, { scaleX: 1, scaleY: 1, opacity: 1, filter: "blur(0px)", duration: 0.35, ease: "power3.out" }, 0.0);
-      tl.fromTo("#s4-head", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power2.out" }, 0.12);
       // Caret blinks while waiting (set steps, no loops)
       [0.45, 0.9].forEach((t) => { tl.set("#s4-caret", { opacity: 0 }, t); tl.set("#s4-caret", { opacity: 1 }, t + 0.22); });
       // Typing, synced to the spoken question
@@ -95,6 +95,11 @@
       tl.to("#s4-cursor", { scale: 0.9, duration: 0.06, ease: "power2.in", transformOrigin: "6px 4px" }, 3.72);
       // Camera, background drift, impacts
       tl.fromTo("#s4-shift", { scale: 1 }, { scale: 1.06, duration: 0.16, ease: "expo.out", transformOrigin: "870px 794px" }, 3.72);
+      // Text animation
+      const shine = (sel, t) => tl.fromTo(sel, { backgroundPosition: "130% 0%, 0% 0%" }, { backgroundPosition: "-30% 0%, 0% 0%", duration: 0.55, ease: "power2.inOut", stagger: 0.03 }, t);
+      const cascade = (sel, t) => tl.fromTo(sel, { y: 70, opacity: 0, filter: "blur(8px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.34, ease: "expo.out", stagger: 0.028 }, t);
+      cascade("#s4-head .ch", 0.08);
+      shine("#s4-head .ch", 0.62);
       window.__timelines["s4"] = tl;
     })();
   </script>

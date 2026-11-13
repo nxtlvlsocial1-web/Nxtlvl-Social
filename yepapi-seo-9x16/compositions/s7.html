@@ -4,7 +4,8 @@
     @font-face { font-family: "Geist Mono"; src: url("assets/fonts/GeistMono-latin-var.woff2") format("woff2"); font-weight: 100 900; font-style: normal; }
     #root { position: absolute; inset: 0; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; }
     #root * { box-sizing: border-box; }
-    .cr { background: linear-gradient(180deg, #ffffff 0%, #f4f4f4 30%, #a3a3a3 50%, #ffffff 66%, #cfcfcf 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .cr { background-image: linear-gradient(110deg, rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 62%), linear-gradient(180deg, #ffffff 0%, #f4f4f4 30%, #a3a3a3 50%, #ffffff 66%, #cfcfcf 100%); background-size: 320% 100%, 100% 100%; background-position: 130% 0%, 0% 0%; background-repeat: no-repeat; -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .ch { display: inline-block; }
     .glass { background: linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04)); border: 1.5px solid rgba(255, 255, 255, 0.17); border-radius: 30px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22); }
     #s7-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
     #s7-stage { position: absolute; inset: 0; }
@@ -28,7 +29,7 @@
   <div id="root" data-composition-id="s7" data-width="1080" data-height="1920">
     <div id="s7-shift" data-layout-allow-overflow>
       <div id="s7-stage" data-layout-allow-overflow>
-        <div id="s7-head"><span class="cr">ONE KEY</span></div>
+        <div id="s7-head"><span class="wd"><span class="cr ch">O</span><span class="cr ch">N</span><span class="cr ch">E</span></span> <span class="wd"><span class="cr ch">K</span><span class="cr ch">E</span><span class="cr ch">Y</span></span></div>
         <svg id="s7-key" viewBox="0 0 520 200" data-layout-allow-overflow>
           <defs>
             <linearGradient id="s7-gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffbc4" /><stop offset="0.45" stop-color="#fff56c" /><stop offset="1" stop-color="#cfc43a" /></linearGradient>
@@ -74,6 +75,11 @@
       shake(2.5, 14);
       // Blur swap out
       tl.to("#s7-stage", { opacity: 0, scale: 0.94, filter: "blur(14px)", duration: 0.22, ease: "power2.in" }, 3.3);
+      // Text animation
+      const shine = (sel, t) => tl.fromTo(sel, { backgroundPosition: "130% 0%, 0% 0%" }, { backgroundPosition: "-30% 0%, 0% 0%", duration: 0.55, ease: "power2.inOut", stagger: 0.03 }, t);
+      const cascade = (sel, t) => tl.fromTo(sel, { y: 70, opacity: 0, filter: "blur(8px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.34, ease: "expo.out", stagger: 0.028 }, t);
+      cascade("#s7-head .ch", 0.1);
+      shine("#s7-head .ch", 0.55);
       window.__timelines["s7"] = tl;
     })();
   </script>

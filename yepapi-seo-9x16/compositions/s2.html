@@ -4,7 +4,8 @@
     @font-face { font-family: "Geist Mono"; src: url("assets/fonts/GeistMono-latin-var.woff2") format("woff2"); font-weight: 100 900; font-style: normal; }
     #root { position: absolute; inset: 0; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; }
     #root * { box-sizing: border-box; }
-    .cr { background: linear-gradient(180deg, #ffffff 0%, #f4f4f4 30%, #a3a3a3 50%, #ffffff 66%, #cfcfcf 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .cr { background-image: linear-gradient(110deg, rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 62%), linear-gradient(180deg, #ffffff 0%, #f4f4f4 30%, #a3a3a3 50%, #ffffff 66%, #cfcfcf 100%); background-size: 320% 100%, 100% 100%; background-position: 130% 0%, 0% 0%; background-repeat: no-repeat; -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .ch { display: inline-block; }
     .glass { background: linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04)); border: 1.5px solid rgba(255, 255, 255, 0.17); border-radius: 30px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22); }
     #s2-shift { position: absolute; left: 0; top: 100px; width: 1080px; height: 1820px; }
     #s2-label { position: absolute; left: 56px; top: 150px; height: 118px; width: 960px; overflow: hidden; }
@@ -25,7 +26,7 @@
   </style>
   <div id="root" data-composition-id="s2" data-width="1080" data-height="1920">
     <div id="s2-shift" data-layout-allow-overflow>
-      <div id="s2-label"><div id="s2-roll"><div class="cr">KEYWORDS</div><div class="cr">BACKLINKS</div></div></div>
+      <div id="s2-label"><div id="s2-roll"><div id="s2-kw"><span class="cr ch">K</span><span class="cr ch">E</span><span class="cr ch">Y</span><span class="cr ch">W</span><span class="cr ch">O</span><span class="cr ch">R</span><span class="cr ch">D</span><span class="cr ch">S</span></div><div id="s2-bl"><span class="cr ch">B</span><span class="cr ch">A</span><span class="cr ch">C</span><span class="cr ch">K</span><span class="cr ch">L</span><span class="cr ch">I</span><span class="cr ch">N</span><span class="cr ch">K</span><span class="cr ch">S</span></div></div></div>
       <div id="s2-sub">competitor.com</div>
       <div id="s2-ex">example data</div>
 
@@ -72,8 +73,7 @@
       const tl = gsap.timeline({ paused: true });
       const rows = ["#s2-r0", "#s2-r1", "#s2-r2", "#s2-r3", "#s2-r4"];
       // Title lands as a blur-in; the spine draws down and each keyword clicks onto it
-      tl.fromTo("#s2-label", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.16, ease: "power2.out" }, 0.0);
-      tl.fromTo(["#s2-sub", "#s2-ex"], { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 0.1);
+            tl.fromTo(["#s2-sub", "#s2-ex"], { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power2.out" }, 0.1);
       tl.fromTo("#s2-spine", { scaleY: 0 }, { scaleY: 1, duration: 0.55, ease: "power2.out", transformOrigin: "50% 0%" }, 0.05);
       rows.forEach((r, i) => {
         tl.fromTo(r, { x: 140, opacity: 0, filter: "blur(8px)" }, { x: 0, opacity: 1, filter: "blur(0px)", duration: 0.32, ease: "expo.out" }, 0.08 + i * 0.09);
@@ -97,6 +97,11 @@
       tl.fromTo("#s2-shift", { scale: 1 }, { scale: 1.04, duration: 0.16, ease: "expo.out", transformOrigin: "540px 655px" }, 1.6);
       // Glitch cut out: slices jitter and the frame drops
       tl.to("#s2-shift", { keyframes: { x: [0, -26, 18, -40, 30, 0], skewX: [0, 8, -6, 12, -4, 0], opacity: [1, 0.85, 1, 0.6, 0.9, 0] }, duration: 0.3, ease: "steps(6)" }, 2.6);
+      // Text animation
+      const shine = (sel, t) => tl.fromTo(sel, { backgroundPosition: "130% 0%, 0% 0%" }, { backgroundPosition: "-30% 0%, 0% 0%", duration: 0.55, ease: "power2.inOut", stagger: 0.03 }, t);
+      const cascade = (sel, t) => tl.fromTo(sel, { y: 70, opacity: 0, filter: "blur(8px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.34, ease: "expo.out", stagger: 0.028 }, t);
+      cascade("#s2-kw .ch", 0.0);
+      shine("#s2-bl .ch", 1.72);
       window.__timelines["s2"] = tl;
     })();
   </script>

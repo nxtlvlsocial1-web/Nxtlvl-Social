@@ -3,6 +3,7 @@
     #root { position: absolute; inset: 0; overflow: visible; background: transparent; pointer-events: none; }
     #root * { box-sizing: border-box; }
     .cap-g { position: absolute; left: 0; top: 1300px; width: 1080px; padding: 0 110px; text-align: center; line-height: 1.15; opacity: 0; visibility: hidden; overflow: visible; }
+    .cap-w { margin: 0 3px; }
     .cap-w { display: inline-block; font-family: "Inter", sans-serif; font-weight: 900; letter-spacing: -0.01em; text-transform: uppercase; color: #ffffff; text-shadow: 0 4px 20px rgba(0, 0, 0, 0.75), 0 2px 4px rgba(0, 0, 0, 0.6); }
   </style>
   <div id="root" data-composition-id="captions" data-width="1080" data-height="1920">
@@ -37,10 +38,11 @@
       const tl = gsap.timeline({ paused: true });
       document.querySelectorAll(".cap-g").forEach((g) => {
         const s = parseFloat(g.dataset.s), e = parseFloat(g.dataset.e);
-        tl.set(g, { visibility: "visible" }, s);
-        tl.fromTo(g, { opacity: 0, y: 14, filter: "blur(6px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.14, ease: "power2.out" }, s);
+        tl.set(g, { visibility: "visible", opacity: 1 }, s);
         g.querySelectorAll(".cap-w").forEach((w) => {
           const ws = parseFloat(w.dataset.s), wn = parseFloat(w.dataset.n);
+          // each word rises into place as it is spoken
+          tl.fromTo(w, { opacity: 0, y: 22, scale: 0.92, filter: "blur(6px)" }, { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 0.16, ease: "power3.out" }, Math.max(s, ws - 0.04));
           // the spoken word glows lemon, then settles back to white
           tl.fromTo(w, { color: "#ffffff", textShadow: "0 4px 20px rgba(0,0,0,0.75), 0 2px 4px rgba(0,0,0,0.6)" }, { color: "#fff56c", textShadow: "0 0 24px rgba(255,245,108,0.55), 0 2px 4px rgba(0,0,0,0.6)", duration: 0.05, ease: "none" }, ws);
           tl.to(w, { color: "#ffffff", textShadow: "0 4px 20px rgba(0,0,0,0.75), 0 2px 4px rgba(0,0,0,0.6)", duration: 0.08, ease: "none" }, Math.min(wn, e - 0.1));
