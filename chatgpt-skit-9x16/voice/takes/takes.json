@@ -1,0 +1,422 @@
+{
+ "01_0": {
+  "who": "marcus",
+  "text": "Byte! Clients keep saying ChatGPT recommended Prime Nest. Not us!",
+  "exaggeration": 0.85,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 4.48,
+  "heard": "But, clients keep saying chat GPT recommended Prime Nest. Not us!",
+  "match": 0.762,
+  "picked": true
+ },
+ "01_1": {
+  "who": "marcus",
+  "text": "Byte! Clients keep saying ChatGPT recommended Prime Nest. Not us!",
+  "exaggeration": 0.9299999999999999,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 4.04,
+  "heard": "But, clients keep saying chat GBT recommended Prime Nest, not us.",
+  "match": 0.762
+ },
+ "02_0": {
+  "who": "byte",
+  "text": "Because Prime Nest claimed their business. You didn't.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 4.12,
+  "heard": "Because Prime Nest claimed their business, you didn't.",
+  "match": 1.0,
+  "picked": true
+ },
+ "02_1": {
+  "who": "byte",
+  "text": "Because Prime Nest claimed their business. You didn't.",
+  "exaggeration": 0.6799999999999999,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 3.16,
+  "heard": "Because Prime Nest claimed their business, you didn't.",
+  "match": 1.0
+ },
+ "03_0": {
+  "who": "marcus",
+  "text": "Wait. We can do that?",
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 1.32,
+  "heard": "Wait, we can do that?",
+  "match": 1.0,
+  "picked": true
+ },
+ "03_1": {
+  "who": "marcus",
+  "text": "Wait. We can do that?",
+  "exaggeration": 0.88,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 1.52,
+  "heard": "Wait, we can do that?",
+  "match": 1.0
+ },
+ "04_0": {
+  "who": "byte",
+  "text": "It's free. Since November tenth. Watch.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 2.92,
+  "heard": "It's free since November 10th, watch.",
+  "match": 0.833,
+  "picked": true
+ },
+ "04_1": {
+  "who": "byte",
+  "text": "It's free. Since November tenth. Watch.",
+  "exaggeration": 0.6799999999999999,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 2.96,
+  "heard": "It's free since November 10th. Watch.",
+  "match": 0.833
+ },
+ "05_0": {
+  "who": "byte",
+  "text": "Step one. Log in, and open chat G P T dot com, slash business hub.",
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 6.0,
+  "heard": "Step 1. Log in and open chat gpt.com slash business hub",
+  "match": 0.692,
+  "picked": true
+ },
+ "05_1": {
+  "who": "byte",
+  "text": "Step one. Log in, and open chat G P T dot com, slash business hub.",
+  "exaggeration": 0.63,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 5.56,
+  "heard": "Step 1, log in and open chat gpt.com slash business hub.",
+  "match": 0.692
+ },
+ "06_0": {
+  "who": "marcus",
+  "text": "Do I need a paid plan?",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 1.4,
+  "heard": "Do I need a paid plan?",
+  "match": 1.0,
+  "picked": true
+ },
+ "06_1": {
+  "who": "marcus",
+  "text": "Do I need a paid plan?",
+  "exaggeration": 0.83,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 1.2,
+  "heard": "Do I need a pay plan?",
+  "match": 0.833
+ },
+ "07_0": {
+  "who": "byte",
+  "text": "Nope. No ads account either.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 2.24,
+  "heard": "Note, no ads account either.",
+  "match": 0.8
+ },
+ "07_1": {
+  "who": "byte",
+  "text": "Nope. No ads account either.",
+  "exaggeration": 0.6799999999999999,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 2.0,
+  "heard": "Nope. No ads account either.",
+  "match": 1.0,
+  "picked": true
+ },
+ "08_0": {
+  "who": "byte",
+  "text": "Step two. Search your agency. Tap Get Started.",
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 3.92,
+  "heard": "Step two, search your agency, tap, get started.",
+  "match": 1.0,
+  "picked": true
+ },
+ "08_1": {
+  "who": "byte",
+  "text": "Step two. Search your agency. Tap Get Started.",
+  "exaggeration": 0.63,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 4.32,
+  "heard": "Step 2. Search your agency. Tap. Get started.",
+  "match": 0.875
+ },
+ "09_0": {
+  "who": "marcus",
+  "text": "What if we're not listed?",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 0.96,
+  "heard": "What if we're not listed?",
+  "match": 1.0,
+  "picked": true
+ },
+ "09_1": {
+  "who": "marcus",
+  "text": "What if we're not listed?",
+  "exaggeration": 0.83,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 1.24,
+  "heard": "What if we're not listed?",
+  "match": 1.0
+ },
+ "10_0": {
+  "who": "byte",
+  "text": "Type it in yourself.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 1.32,
+  "heard": "Type it in yourself.",
+  "match": 1.0,
+  "picked": true
+ },
+ "10_1": {
+  "who": "byte",
+  "text": "Type it in yourself.",
+  "exaggeration": 0.6799999999999999,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 1.48,
+  "heard": "Type it in yourself.",
+  "match": 1.0
+ },
+ "11_0": {
+  "who": "byte",
+  "text": "Step three. Prove it's yours. Business phone, email, website, or Shopify.",
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 6.08,
+  "heard": "Step 3. Prove its yours. Business phone, email, website, or Shopify.",
+  "match": 0.909,
+  "picked": true
+ },
+ "11_1": {
+  "who": "byte",
+  "text": "Step three. Prove it's yours. Business phone, email, website, or Shopify.",
+  "exaggeration": 0.63,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 5.44,
+  "heard": "Step 3. Prove it's yours. Business phone, email, website or Shopify.",
+  "match": 0.909
+ },
+ "12_0": {
+  "who": "marcus",
+  "text": "Can I use my personal email?",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 1.84,
+  "heard": "Can I use my personal email?",
+  "match": 1.0,
+  "picked": true
+ },
+ "12_1": {
+  "who": "marcus",
+  "text": "Can I use my personal email?",
+  "exaggeration": 0.83,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 1.88,
+  "heard": "Can I use my personal email?",
+  "match": 1.0
+ },
+ "13_0": {
+  "who": "byte",
+  "text": "Use the one that matches your website.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 2.32,
+  "heard": "Use the one that matches your website.",
+  "match": 1.0,
+  "picked": true
+ },
+ "13_1": {
+  "who": "byte",
+  "text": "Use the one that matches your website.",
+  "exaggeration": 0.6799999999999999,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 2.08,
+  "heard": "Use the one that matches your website.",
+  "match": 1.0
+ },
+ "14_0": {
+  "who": "byte",
+  "text": "Step four. A quick I D check, and you get the blue check.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 4.44,
+  "heard": "Step 4 a quick ID check and you get the blue check",
+  "match": 0.8,
+  "picked": true
+ },
+ "14_1": {
+  "who": "byte",
+  "text": "Step four. A quick I D check, and you get the blue check.",
+  "exaggeration": 0.6799999999999999,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 4.08,
+  "heard": "Step 4. A quick ID check and you get the blue check.",
+  "match": 0.8
+ },
+ "15_0": {
+  "who": "marcus",
+  "text": "I look terrible in I D photos.",
+  "exaggeration": 0.85,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 2.32,
+  "heard": "I look terrible in ID photos.",
+  "match": 0.769,
+  "picked": true
+ },
+ "15_1": {
+  "who": "marcus",
+  "text": "I look terrible in I D photos.",
+  "exaggeration": 0.9299999999999999,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 2.52,
+  "heard": "I look terrible in ID photos.",
+  "match": 0.769
+ },
+ "16_0": {
+  "who": "byte",
+  "text": "It's a check. Not a headshot.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 1.96,
+  "heard": "It's a check, not a headshot.",
+  "match": 1.0,
+  "picked": true
+ },
+ "16_1": {
+  "who": "byte",
+  "text": "It's a check. Not a headshot.",
+  "exaggeration": 0.7799999999999999,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 1.76,
+  "heard": "It's a check, not a headshot.",
+  "match": 1.0
+ },
+ "17_0": {
+  "who": "marcus",
+  "text": "So now we're number one?",
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 1.52,
+  "heard": "So now we're number one.",
+  "match": 1.0,
+  "picked": true
+ },
+ "17_1": {
+  "who": "marcus",
+  "text": "So now we're number one?",
+  "exaggeration": 0.88,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 1.28,
+  "heard": "So now we're number one.",
+  "match": 1.0
+ },
+ "18_0": {
+  "who": "byte",
+  "text": "It doesn't buy a ranking. It gives ChatGPT your real details.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seed": 7,
+  "seconds": 4.56,
+  "heard": "It doesn't buy a ranking, it gives chat GPT your real details.",
+  "match": 0.87,
+  "picked": true
+ },
+ "18_1": {
+  "who": "byte",
+  "text": "It doesn't buy a ranking. It gives ChatGPT your real details.",
+  "exaggeration": 0.6799999999999999,
+  "cfg_weight": 0.5,
+  "seed": 21,
+  "seconds": 4.68,
+  "heard": "It doesn't buy a ranking, it gives chat GPT your real details.",
+  "match": 0.87
+ },
+ "19_0": {
+  "who": "marcus",
+  "text": "Byte, you just saved me a fortune.",
+  "exaggeration": 0.85,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 2.2,
+  "heard": "But, you just saved me a fortune.",
+  "match": 0.857,
+  "picked": true
+ },
+ "19_1": {
+  "who": "marcus",
+  "text": "Byte, you just saved me a fortune.",
+  "exaggeration": 0.9299999999999999,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 1.96,
+  "heard": "But you just saved me a fortune.",
+  "match": 0.857
+ },
+ "20_0": {
+  "who": "byte",
+  "text": "I'll send you my invoice.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 1.72,
+  "heard": "I'll send you my invoice.",
+  "match": 1.0,
+  "picked": true
+ },
+ "20_1": {
+  "who": "byte",
+  "text": "I'll send you my invoice.",
+  "exaggeration": 0.7799999999999999,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 1.6,
+  "heard": "I'll send you my invoice.",
+  "match": 1.0
+ }
+}

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>ChatGPT Skit 9x16</title>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Garamond"; font-weight: 400 800; src: url("assets/fonts/EBGaramond.ttf"); }
+@font-face { font-family: "Manrope"; font-weight: 200 800; src: url("assets/fonts/manrope.ttf"); }
+@font-face { font-family: "Mono"; font-weight: 700; src: url("assets/fonts/jbmono-bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #2A1E16; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #2A1E16; font-family: "Manrope"; }
+.clip { position: absolute; inset: 0; }
+#gl { width: 1080px; height: 1920px; display: block; }
+.cm, .scr, .hd, .note, .drop, .btn, .opt .tk, .prof, #vb3, .stamp, .scrawl, .cap, #panel, #endc, #endc > * { opacity: 0; }
+#cms { position: absolute; left: 70px; top: 290px; width: 760px; }
+.cm { display: flex; gap: 16px; align-items: center; margin-bottom: 16px; padding: 14px 22px 14px 14px; border-radius: 22px; background: rgba(255,250,240,.96); box-shadow: 0 14px 30px rgba(0,0,0,.35); width: fit-content; max-width: 760px; }
+.cm i { flex: none; width: 56px; height: 56px; border-radius: 50%; background: #8B5CF6; color: #fff; font: 800 28px/56px "Manrope"; text-align: center; font-style: normal; }
+.cm b { display: block; font: 800 24px/1.2 "Manrope"; color: #6A6878; } .cm span { display: block; font: 700 32px/1.25 "Manrope"; color: #14161C; }
+#panel { position: absolute; left: 50px; right: 50px; top: 258px; height: 745px; border-radius: 30px; background: #1A1410; border: 2px solid #3A2C22; box-shadow: 0 30px 70px rgba(0,0,0,.55); overflow: hidden; }
+.hd { position: absolute; left: 30px; right: 30px; top: 24px; }
+.hd .pill { display: inline-block; padding: 7px 14px; border-radius: 10px; background: #E8735A; color: #fff; font: 800 22px/1 "Manrope"; letter-spacing: 2px; vertical-align: middle; } .hd .pill.done { background: #22C55E; }
+.hd .prog { display: inline-flex; gap: 10px; margin-left: 18px; vertical-align: middle; } .hd .prog i { width: 150px; height: 8px; border-radius: 4px; background: #4A3A2E; } .hd .prog i.on { background: #E8735A; }
+.hd b { display: block; margin-top: 16px; font: 700 54px/1 "Garamond"; color: #FFF3DC; }
+.win { position: absolute; left: 30px; right: 30px; top: 150px; bottom: 30px; border-radius: 18px; background: #F7F4EE; overflow: hidden; }
+.chrome { height: 34px; background: #E6DFD3; display: flex; gap: 9px; align-items: center; padding-left: 16px; } .chrome i { width: 13px; height: 13px; border-radius: 50%; background: #C9BFB0; }
+.wbody { position: absolute; left: 0; right: 0; top: 34px; bottom: 0; }
+.scr { position: absolute; inset: 0; padding: 20px 26px; color: #14161C; }
+.url { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-radius: 14px; background: #fff; border: 2px solid #E2DACD; font: 700 32px/1 "Mono"; }
+.url .lk { width: 18px; height: 22px; border-radius: 4px; border: 4px solid #22C55E; }
+.hub { margin-top: 18px; } .hub > b { display: block; font: 800 40px/1.1 "Manrope"; } .hub > p { margin-top: 6px; font: 600 26px/1.3 "Manrope"; color: #6A6878; }
+.box { margin-top: 16px; padding: 16px 20px; border-radius: 14px; border: 2px solid #D9D1C4; background: #fff; font: 600 32px/1 "Manrope"; color: #9A93A6; display: flex; align-items: center; }
+.box.on { color: #14161C; border-color: #8B5CF6; } .cur { display: inline-block; width: 3px; height: 34px; background: #8B5CF6; margin-left: 6px; }
+.drop { margin-top: 8px; padding: 12px 20px; border-radius: 14px; background: #fff; border: 2px solid #E2DACD; } .drop b { display: block; font: 800 32px/1.2 "Manrope"; } .drop span { font: 600 24px/1.4 "Manrope"; color: #6A6878; }
+.drop.add { font: 800 28px/1 "Manrope"; color: #8B5CF6; border-style: dashed; border-color: #8B5CF6; }
+.btn { position: relative; margin-top: 14px; padding: 18px; border-radius: 999px; background: #14161C; color: #fff; text-align: center; font: 800 34px/1 "Manrope"; }
+.tap { position: absolute; left: 50%; top: 340px; width: 130px; height: 130px; margin-left: -65px; border-radius: 50%; background: rgba(139,92,246,.55); opacity: 0; }
+.opt { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding: 13px 20px; border-radius: 14px; background: #fff; border: 2px solid #E2DACD; font: 700 32px/1 "Manrope"; }
+.tk { width: 38px; height: 38px; } .vb { width: 34px; height: 34px; flex: none; }
+.note { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; } .note span { padding: 10px 18px; border-radius: 999px; background: #E7F7EC; color: #15803D; font: 800 26px/1 "Manrope"; }
+.idc { position: relative; margin: 20px auto 0; width: 600px; height: 250px; border-radius: 24px; background: #fff; border: 2px solid #E2DACD; overflow: hidden; }
+.idpic { position: absolute; left: 30px; top: 36px; width: 140px; height: 175px; border-radius: 14px; background: linear-gradient(180deg, #D9D1C4, #BFB4A4); }
+.idl { position: absolute; left: 200px; top: 56px; right: 30px; } .idl i { display: block; height: 20px; margin-bottom: 24px; border-radius: 10px; background: #E6DFD3; } .idl i.s { width: 60%; }
+.scan { position: absolute; left: 0; right: 0; top: 24px; height: 6px; background: #8B5CF6; box-shadow: 0 0 24px #8B5CF6; }
+.scrawl { position: absolute; left: 70px; top: 270px; font: italic 600 40px/1 "Garamond"; color: #E8735A; transform: rotate(-6deg); }
+.prof { display: flex; align-items: center; gap: 18px; margin-top: 70px; padding: 20px; border-radius: 20px; background: #fff; border: 2px solid #E2DACD; }
+.prof b { display: flex; align-items: center; gap: 12px; font: 800 40px/1.1 "Manrope"; } .prof span { font: 600 26px/1.4 "Manrope"; color: #6A6878; }
+.ph { flex: none; width: 70px; height: 70px; border-radius: 16px; } .p1 { background: linear-gradient(135deg, #7DBA6A, #1F7A4D); } .p4 { background: linear-gradient(135deg, #F2C94C, #1C2A4A); }
+.bar2 { font: 800 30px/1 "Manrope"; color: #6A6878; padding-bottom: 16px; border-bottom: 1px solid #E2DACD; margin-bottom: 18px; }
+.msg.me { margin-left: 190px; padding: 16px 22px; border-radius: 22px; background: #ECE6DB; font: 700 30px/1.3 "Manrope"; margin-bottom: 16px; }
+.biz { display: flex; gap: 16px; align-items: center; padding: 14px 16px; border-radius: 18px; background: #fff; border: 2px solid #E2DACD; margin-bottom: 12px; }
+.biz b { display: flex; align-items: center; gap: 10px; font: 800 32px/1.1 "Manrope"; } .biz span { font: 600 24px/1.4 "Manrope"; color: #6A6878; }
+.biz.top { border-color: #2F7BF6; box-shadow: 0 0 0 4px rgba(47,123,246,.15); } .biz.top { opacity: 0; }
+.stamp { position: absolute; left: 60px; right: 60px; bottom: 30px; padding: 16px; border: 5px solid #E8735A; border-radius: 16px; text-align: center; color: #E8735A; background: rgba(255,250,240,.92); transform: rotate(-5deg); }
+.stamp b { display: block; font: 900 40px/1 "Manrope"; letter-spacing: 2px; } .stamp span { display: block; margin-top: 8px; font: italic 600 30px/1 "Garamond"; color: #6A4A3A; }
+.cap { position: absolute; left: 50px; right: 50px; top: 1040px; text-align: center; font: 600 54px/1.15 "Garamond"; color: #FFF1D6; text-shadow: 0 3px 14px rgba(0,0,0,.85), 0 1px 3px rgba(0,0,0,.9); }
+.cap.sp-byte { color: #C9F7E4; }
+#endc { position: absolute; inset: 0; background: radial-gradient(700px 700px at 50% 32%, #4A3426, #1E1510 70%); text-align: center; color: #FFF1D6; }
+#endc .e0 { position: absolute; left: 50%; top: 380px; width: 230px; height: 230px; margin-left: -115px; border-radius: 50%; background: rgba(255,214,140,.12); display: flex; align-items: center; justify-content: center; }
+#endc .e0 svg { width: 120px; height: 120px; }
+#endc .e1 { position: absolute; left: 80px; right: 80px; top: 680px; font: 700 64px/1.15 "Garamond"; }
+#endc .e2 { position: absolute; left: 60px; right: 60px; top: 900px; font: 800 40px/1.4 "Manrope"; } #endc .e2 b { padding: 4px 14px; border-radius: 10px; background: #E8735A; color: #fff; }
+#endc .e3 { position: absolute; left: 60px; right: 60px; top: 990px; font: 700 32px/1.4 "Manrope"; color: #D9C9B0; }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="57.67" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="gl" class="clip" data-hold data-start="0" data-duration="57.67" data-track-index="0"></canvas>
+      <div id="ui" class="clip" data-start="0" data-duration="57.67" data-track-index="3" data-layout-allow-overflow><div id="cms"><div class="cm" id="cm0"><i>K</i><div><b>@k.tanaka</b><span>why does ChatGPT keep recommending my competitor??</span></div></div><div class="cm" id="cm1"><i>D</i><div><b>@devon.realty</b><span>how do I get my business on ChatGPT</span></div></div><div class="cm" id="cm2"><i>M</i><div><b>@mira.homes</b><span>is it free??</span></div></div></div><div id="panel"><div class="hd" id="hd0"><span class="pill">STEP 1/4</span><span class="prog"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span><b>Open Business Hub</b></div><div class="hd" id="hd1"><span class="pill">STEP 2/4</span><span class="prog"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span><b>Find your business</b></div><div class="hd" id="hd2"><span class="pill">STEP 3/4</span><span class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span><b>Prove it&rsquo;s yours</b></div><div class="hd" id="hd3"><span class="pill">STEP 4/4</span><span class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><b>ID check, blue check</b></div><div class="hd" id="hd4"><span class="pill done">DONE</span><span class="prog"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><b>Now ask ChatGPT</b></div><div class="win"><div class="chrome"><i></i><i></i><i></i></div><div class="wbody"><div class="scr" id="s0"><div class="url"><span class="lk"></span><span id="u0">chatgpt.com/business-hub</span></div>
+      <div class="hub"><b>Business Hub</b><p>Claim your business on ChatGPT</p><div class="box">Search your business name</div>
+      <div class="note" id="n0"><span>No paid plan</span><span>No ads account</span></div></div></div><div class="scr" id="s1"><div class="url"><span class="lk"></span><span>chatgpt.com/business-hub</span></div>
+      <div class="hub"><div class="box on"><span id="ty1">Keystone Realty</span><i class="cur"></i></div>
+      <div class="drop" id="dd1"><b>Keystone Realty</b><span>Real estate agency · 48 Oak Street</span></div>
+      <div class="drop add" id="ad1">+ Not listed? Add it yourself</div>
+      <div class="btn" id="go1">Get Started</div><div class="tap" id="tap1"></div></div></div><div class="scr" id="s2"><div class="hub"><b>Verify your business</b><p>Just one of these</p><div class="opt" id="o0"><span>Business phone</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="opt" id="o1"><span>Business email</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="opt" id="o2"><span>Website domain</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="opt" id="o3"><span>Shopify store</span><svg class="tk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="note" id="n2"><span>Use the email on your website</span></div></div></div><div class="scr" id="s3"><div class="idc"><div class="idpic"></div><div class="idl"><i></i><i></i><i class="s"></i></div><div class="scan" id="sc3"></div></div>
+      <div class="scrawl" id="sw3">not a headshot</div>
+      <div class="prof" id="pf3"><div class="ph p4"></div><div><b>Keystone Realty <span id="vb3"><svg class="vb" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#2F7BF6"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></b><span>Verified business</span></div></div></div><div class="scr" id="s4"><div class="bar2"><b>ChatGPT</b></div>
+      <div class="msg me">Best real estate agent near me?</div>
+      <div class="biz top" id="bz0"><div class="ph p4"></div><div><b>Keystone Realty <svg class="vb" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#2F7BF6"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></b><span>open now · showings today</span></div></div>
+      <div class="biz"><div class="ph p1"></div><div><b>Prime Nest Realty <svg class="vb" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#2F7BF6"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></b><span>open now · 4.6</span></div></div>
+      <div class="stamp" id="st4"><b>DOESN&rsquo;T BUY RANKING</b><span>it gives ChatGPT your real details</span></div></div></div></div></div></div>
+      <div id="caps" class="clip" data-start="0" data-duration="57.67" data-track-index="4"><div class="cap sp-marcus" id="c0_0">Hey Byte!</div><div class="cap sp-marcus" id="c0_1">Clients keep saying ChatGPT recommended Prime Nest.</div><div class="cap sp-marcus" id="c0_2">Not us!</div><div class="cap sp-byte" id="c1_0">Because Prime Nest claimed their business.</div><div class="cap sp-byte" id="c1_1">You didn't.</div><div class="cap sp-byte" id="c2_0">It's free.</div><div class="cap sp-byte" id="c2_1">Since November tenth. Watch.</div><div class="cap sp-byte" id="c3_0">Step one. Log in,</div><div class="cap sp-byte" id="c3_1">and open chatgpt.com/business-hub</div><div class="cap sp-marcus" id="c4_0">Do I need a paid plan?</div><div class="cap sp-byte" id="c5_0">Nope. No ads account either.</div><div class="cap sp-byte" id="c6_0">Step two. Search your agency.</div><div class="cap sp-byte" id="c6_1">Tap Get Started.</div><div class="cap sp-marcus" id="c7_0">What if we're not listed?</div><div class="cap sp-byte" id="c8_0">Type it in yourself.</div><div class="cap sp-byte" id="c9_0">Step three. Prove it's yours.</div><div class="cap sp-byte" id="c9_1">Business phone, email,</div><div class="cap sp-byte" id="c9_2">website, or Shopify.</div><div class="cap sp-marcus" id="c10_0">Can I use my personal email?</div><div class="cap sp-byte" id="c11_0">Use the one that matches your website.</div><div class="cap sp-byte" id="c12_0">Step four. A quick ID check,</div><div class="cap sp-byte" id="c12_1">and you get the blue check.</div><div class="cap sp-marcus" id="c13_0">I look terrible in ID photos.</div><div class="cap sp-byte" id="c14_0">It's a check. Not a headshot.</div><div class="cap sp-marcus" id="c15_0">So now we're number one?</div><div class="cap sp-byte" id="c16_0">It doesn't buy a ranking.</div><div class="cap sp-byte" id="c16_1">It gives ChatGPT your real details.</div><div class="cap sp-marcus" id="c17_0">Byte,</div><div class="cap sp-marcus" id="c17_1">you just saved me a fortune.</div><div class="cap sp-byte" id="c18_0">I'll send you my invoice.</div></div>
+      <div id="end" class="clip" data-start="0" data-duration="57.67" data-track-index="5"><div id="endc"><div class="e0"><svg viewBox="0 0 64 64"><path d="M8 30 L32 10 L56 30" stroke="#F2C94C" stroke-width="5" fill="none" stroke-linejoin="round"/><rect x="16" y="28" width="32" height="26" rx="3" fill="#F2C94C"/><circle cx="46" cy="44" r="12" fill="#2F7BF6"/><path d="M40 44.5l4 4 8-8" stroke="#fff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="e1">Send this to an agent who&rsquo;s invisible on ChatGPT</div><div class="e2">Comment <b>CHATGPT</b> for the full checklist</div><div class="e3">Follow @nxtlvlsocial.ai for the next one</div></div></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="57.67" data-track-index="10" data-volume="1"></audio>
+    </div>
+    <script>
+      window.CT = {"l": [0.5, 5.1, 8.19, 11.465, 16.755, 18.195, 20.41, 24.165, 25.44, 27.04, 32.225, 34.05, 36.34, 40.255, 42.65, 44.985, 46.58, 51.135, 53.335], "e": [4.9, 7.99, 10.915, 16.555, 17.995, 19.99, 23.965, 25.24, 26.62, 32.025, 33.85, 35.92, 40.055, 42.45, 44.435, 46.38, 50.685, 53.135, 54.925], "who": ["marcus", "byte", "byte", "byte", "marcus", "byte", "byte", "marcus", "byte", "byte", "marcus", "byte", "byte", "marcus", "byte", "marcus", "byte", "marcus", "byte"], "end": 57.67, "cuts": [], "stepLines": [3, 6, 9, 12], "tk": {"01": 0, "02": 1, "04": 2, "05": 3, "06": 4, "07": 5, "08": 6, "09": 7, "10": 8, "11": 9, "12": 10, "13": 11, "14": 12, "15": 13, "16": 14, "17": 15, "18": 16, "19": 17, "20": 18}, "panelIn": 11.015, "endIn": 55.375, "scr": [[11.115, 20.06], [20.06, 26.69], [26.69, 35.99], [35.99, 44.635]], "pay": [44.635, 55.375]};
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#cm0",{opacity:0,y:20,scale:.9},{opacity:1,y:0,scale:1,duration:0.3,ease:"back.out(1.8)",immediateRender:false},0.050);
+      tl.fromTo("#cm1",{opacity:0,y:20,scale:.9},{opacity:1,y:0,scale:1,duration:0.3,ease:"back.out(1.8)",immediateRender:false},0.500);
+      tl.fromTo("#cm2",{opacity:0,y:20,scale:.9},{opacity:1,y:0,scale:1,duration:0.3,ease:"back.out(1.8)",immediateRender:false},0.950);
+      tl.to("#cms",{opacity:0,y:-20,duration:0.25,ease:"power2.in"},10.915);
+      tl.fromTo("#s0",{opacity:0,x:50},{opacity:1,x:0,duration:0.3,ease:"power3.out",immediateRender:false},11.115);
+      tl.to("#s0",{opacity:0,x:-50,duration:0.18,ease:"power2.in"},19.940);
+      tl.fromTo("#u0",{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0% 0 0)",duration:1.1,ease:"steps(25)",immediateRender:false},11.615);
+      tl.fromTo("#n0",{opacity:0,scale:.8},{opacity:1,scale:1,duration:0.3,ease:"back.out(2)",immediateRender:false},18.145);
+      tl.fromTo("#s1",{opacity:0,x:50},{opacity:1,x:0,duration:0.3,ease:"power3.out",immediateRender:false},20.060);
+      tl.to("#s1",{opacity:0,x:-50,duration:0.18,ease:"power2.in"},26.570);
+      tl.fromTo("#ty1",{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0% 0 0)",duration:.8,ease:"steps(15)",immediateRender:false},20.460);
+      tl.fromTo("#dd1",{opacity:0,y:-10},{opacity:1,y:0,duration:0.22,ease:"power3.out",immediateRender:false},21.310);
+      tl.fromTo("#go1",{opacity:0,y:10},{opacity:1,y:0,duration:0.22,ease:"power3.out",immediateRender:false},21.660);
+      tl.fromTo("#tap1",{opacity:.7,scale:.2},{opacity:0,scale:1.6,duration:.45,ease:"power2.out",immediateRender:false},23.465);
+      tl.fromTo("#go1",{scale:1},{scale:.94,duration:.1,yoyo:true,repeat:1,immediateRender:false},23.465);
+      tl.fromTo("#ad1",{opacity:0,x:-20},{opacity:1,x:0,duration:0.25,ease:"power3.out",immediateRender:false},25.540);
+      tl.fromTo("#s2",{opacity:0,x:50},{opacity:1,x:0,duration:0.3,ease:"power3.out",immediateRender:false},26.690);
+      tl.to("#s2",{opacity:0,x:-50,duration:0.18,ease:"power2.in"},35.870);
+      tl.to("#o0",{borderColor:"#a75bfc",background:"#24174a",duration:.12,yoyo:true,repeat:1,repeatDelay:.22,immediateRender:false},29.435);
+      tl.to("#o1",{borderColor:"#a75bfc",background:"#24174a",duration:.12,yoyo:true,repeat:1,repeatDelay:.22,immediateRender:false},29.748);
+      tl.to("#o2",{borderColor:"#a75bfc",background:"#24174a",duration:.12,yoyo:true,repeat:1,repeatDelay:.22,immediateRender:false},30.293);
+      tl.to("#o3",{borderColor:"#a75bfc",background:"#24174a",duration:.12,yoyo:true,repeat:1,repeatDelay:.22,immediateRender:false},31.152);
+      tl.to("#o1",{borderColor:"#22C55E",duration:.2,immediateRender:false},34.050);
+      tl.fromTo("#o1 .tk",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.3,ease:"back.out(3)",immediateRender:false},34.050);
+      tl.fromTo("#n2",{opacity:0,scale:.8},{opacity:1,scale:1,duration:0.3,ease:"back.out(2)",immediateRender:false},34.150);
+      tl.fromTo("#s3",{opacity:0,x:50},{opacity:1,x:0,duration:0.3,ease:"power3.out",immediateRender:false},35.990);
+      tl.to("#s3",{opacity:0,x:-50,duration:0.18,ease:"power2.in"},44.515);
+      tl.fromTo("#sc3",{y:0},{y:200,duration:.55,yoyo:true,repeat:1,ease:"sine.inOut",immediateRender:false},36.390);
+      tl.fromTo("#pf3",{opacity:0,y:20},{opacity:1,y:0,duration:0.3,ease:"power3.out",immediateRender:false},39.155);
+      tl.fromTo("#vb3",{opacity:0,scale:0},{opacity:1,scale:1,duration:0.35,ease:"back.out(3)",immediateRender:false},39.605);
+      tl.fromTo("#sw3",{opacity:0,rotation:-10,scale:1.3},{opacity:1,rotation:-6,scale:1,duration:0.3,ease:"back.out(2)",immediateRender:false},42.650);
+      tl.fromTo("#s4",{opacity:0,x:50},{opacity:1,x:0,duration:0.3,ease:"power3.out",immediateRender:false},44.635);
+      tl.to("#s4",{opacity:0,x:-50,duration:0.18,ease:"power2.in"},55.255);
+      tl.fromTo("#bz0",{opacity:0,x:-30},{opacity:1,x:0,duration:0.35,ease:"power3.out",immediateRender:false},45.035);
+      tl.fromTo("#st4",{opacity:0,scale:1.5,rotation:-10},{opacity:1,scale:1,rotation:-5,duration:0.35,ease:"back.out(2)",immediateRender:false},46.780);
+      tl.fromTo("#hd0",{opacity:0},{opacity:1,duration:0.25,ease:"power3.out",immediateRender:false},11.115);
+      tl.to("#hd0",{opacity:0,duration:0.15,ease:"power2.in"},19.960);
+      tl.fromTo("#hd1",{opacity:0},{opacity:1,duration:0.25,ease:"power3.out",immediateRender:false},20.060);
+      tl.to("#hd1",{opacity:0,duration:0.15,ease:"power2.in"},26.590);
+      tl.fromTo("#hd2",{opacity:0},{opacity:1,duration:0.25,ease:"power3.out",immediateRender:false},26.690);
+      tl.to("#hd2",{opacity:0,duration:0.15,ease:"power2.in"},35.890);
+      tl.fromTo("#hd3",{opacity:0},{opacity:1,duration:0.25,ease:"power3.out",immediateRender:false},35.990);
+      tl.to("#hd3",{opacity:0,duration:0.15,ease:"power2.in"},44.535);
+      tl.fromTo("#hd4",{opacity:0},{opacity:1,duration:0.25,ease:"power3.out",immediateRender:false},44.635);
+      tl.fromTo("#panel",{opacity:0,y:-40,scale:.96},{opacity:1,y:0,scale:1,duration:0.4,ease:"power3.out",immediateRender:false},11.015);
+      tl.to("#panel",{opacity:0,y:-30,duration:0.3,ease:"power2.in"},55.325);
+      tl.fromTo("#endc",{opacity:0},{opacity:1,duration:0.45,ease:"power3.out",immediateRender:false},55.375);
+      tl.fromTo("#endc .e0",{opacity:0,y:14},{opacity:1,y:0,duration:0.35,ease:"power3.out",immediateRender:false},55.475);
+      tl.fromTo("#endc .e1",{opacity:0,y:14},{opacity:1,y:0,duration:0.35,ease:"power3.out",immediateRender:false},55.725);
+      tl.fromTo("#endc .e2",{opacity:0,y:14},{opacity:1,y:0,duration:0.35,ease:"power3.out",immediateRender:false},55.975);
+      tl.fromTo("#endc .e3",{opacity:0,y:14},{opacity:1,y:0,duration:0.35,ease:"power3.out",immediateRender:false},56.225);
+      tl.fromTo("#c0_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},0.440);
+      tl.to("#c0_0",{opacity:0,duration:.08},1.110);
+      tl.fromTo("#c0_1",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},1.090);
+      tl.to("#c0_1",{opacity:0,duration:.08},4.110);
+      tl.fromTo("#c0_2",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},4.090);
+      tl.to("#c0_2",{opacity:0,duration:.08},5.020);
+      tl.fromTo("#c1_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},5.090);
+      tl.to("#c1_0",{opacity:0,duration:.08},7.317);
+      tl.fromTo("#c1_1",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},7.297);
+      tl.to("#c1_1",{opacity:0,duration:.08},8.110);
+      tl.fromTo("#c2_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},8.180);
+      tl.to("#c2_0",{opacity:0,duration:.08},8.876);
+      tl.fromTo("#c2_1",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},8.856);
+      tl.to("#c2_1",{opacity:0,duration:.08},11.065);
+      tl.fromTo("#c3_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},11.455);
+      tl.to("#c3_0",{opacity:0,duration:.08},12.768);
+      tl.fromTo("#c3_1",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},12.748);
+      tl.to("#c3_1",{opacity:0,duration:.08},16.675);
+      tl.fromTo("#c4_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},16.745);
+      tl.to("#c4_0",{opacity:0,duration:.08},18.115);
+      tl.fromTo("#c5_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},18.185);
+      tl.to("#c5_0",{opacity:0,duration:.08},20.140);
+      tl.fromTo("#c6_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},20.400);
+      tl.to("#c6_0",{opacity:0,duration:.08},22.550);
+      tl.fromTo("#c6_1",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},22.530);
+      tl.to("#c6_1",{opacity:0,duration:.08},24.085);
+      tl.fromTo("#c7_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},24.155);
+      tl.to("#c7_0",{opacity:0,duration:.08},25.360);
+      tl.fromTo("#c8_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},25.430);
+      tl.to("#c8_0",{opacity:0,duration:.08},26.770);
+      tl.fromTo("#c9_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},27.030);
+      tl.to("#c9_0",{opacity:0,duration:.08},28.617);
+      tl.fromTo("#c9_1",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},28.597);
+      tl.to("#c9_1",{opacity:0,duration:.08},30.253);
+      tl.fromTo("#c9_2",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},30.233);
+      tl.to("#c9_2",{opacity:0,duration:.08},32.145);
+      tl.fromTo("#c10_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},32.215);
+      tl.to("#c10_0",{opacity:0,duration:.08},33.970);
+      tl.fromTo("#c11_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},34.040);
+      tl.to("#c11_0",{opacity:0,duration:.08},36.070);
+      tl.fromTo("#c12_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},36.340);
+      tl.to("#c12_0",{opacity:0,duration:.08},38.250);
+      tl.fromTo("#c12_1",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},38.230);
+      tl.to("#c12_1",{opacity:0,duration:.08},40.175);
+      tl.fromTo("#c13_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},40.245);
+      tl.to("#c13_0",{opacity:0,duration:.08},42.570);
+      tl.fromTo("#c14_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},42.640);
+      tl.to("#c14_0",{opacity:0,duration:.08},44.585);
+      tl.fromTo("#c15_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},44.965);
+      tl.to("#c15_0",{opacity:0,duration:.08},46.500);
+      tl.fromTo("#c16_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},46.570);
+      tl.to("#c16_0",{opacity:0,duration:.08},48.292);
+      tl.fromTo("#c16_1",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},48.272);
+      tl.to("#c16_1",{opacity:0,duration:.08},50.835);
+      tl.fromTo("#c17_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},51.125);
+      tl.to("#c17_0",{opacity:0,duration:.08},51.364);
+      tl.fromTo("#c17_1",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},51.344);
+      tl.to("#c17_1",{opacity:0,duration:.08},53.255);
+      tl.fromTo("#c18_0",{opacity:0,y:6},{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false},53.335);
+      tl.to("#c18_0",{opacity:0,duration:.08},55.075);
+      tl.set({}, {}, 57.67);
+      window.__timelines["main"] = tl;
+    </script>
+    <script type="module" src="assets/js/skit.js"></script>
+  </body>
+</html>

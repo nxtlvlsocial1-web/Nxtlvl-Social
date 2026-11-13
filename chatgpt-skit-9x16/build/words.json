@@ -1,0 +1,954 @@
+[
+{
+"line": 1,
+"speaker": "marcus",
+"w": "Hey",
+"s": 0.5,
+"e": 0.845
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "Byte!",
+"s": 0.825,
+"e": 1.17
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "Clients",
+"s": 1.15,
+"e": 1.496
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "keep",
+"s": 1.476,
+"e": 1.821
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "saying",
+"s": 1.801,
+"e": 2.146
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "ChatGPT",
+"s": 2.126,
+"e": 2.471
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "recommended",
+"s": 2.451,
+"e": 3.519
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "Prime",
+"s": 3.499,
+"e": 3.844
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "Nest.",
+"s": 3.824,
+"e": 4.17
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "Not",
+"s": 4.15,
+"e": 4.495
+},
+{
+"line": 1,
+"speaker": "marcus",
+"w": "us!",
+"s": 4.475,
+"e": 4.82
+},
+{
+"line": 2,
+"speaker": "byte",
+"w": "Because",
+"s": 5.15,
+"e": 5.599
+},
+{
+"line": 2,
+"speaker": "byte",
+"w": "Prime",
+"s": 5.579,
+"e": 5.845
+},
+{
+"line": 2,
+"speaker": "byte",
+"w": "Nest",
+"s": 5.825,
+"e": 6.091
+},
+{
+"line": 2,
+"speaker": "byte",
+"w": "claimed",
+"s": 6.071,
+"e": 6.52
+},
+{
+"line": 2,
+"speaker": "byte",
+"w": "their",
+"s": 6.5,
+"e": 6.766
+},
+{
+"line": 2,
+"speaker": "byte",
+"w": "business.",
+"s": 6.746,
+"e": 7.377
+},
+{
+"line": 2,
+"speaker": "byte",
+"w": "You",
+"s": 7.357,
+"e": 7.624
+},
+{
+"line": 2,
+"speaker": "byte",
+"w": "didn't.",
+"s": 7.604,
+"e": 7.87
+},
+{
+"line": 3,
+"speaker": "byte",
+"w": "It's",
+"s": 8.24,
+"e": 8.598
+},
+{
+"line": 3,
+"speaker": "byte",
+"w": "free.",
+"s": 8.578,
+"e": 8.936
+},
+{
+"line": 3,
+"speaker": "byte",
+"w": "Since",
+"s": 8.916,
+"e": 9.275
+},
+{
+"line": 3,
+"speaker": "byte",
+"w": "November",
+"s": 9.255,
+"e": 10.114
+},
+{
+"line": 3,
+"speaker": "byte",
+"w": "tenth.",
+"s": 10.094,
+"e": 10.452
+},
+{
+"line": 3,
+"speaker": "byte",
+"w": "Watch.",
+"s": 10.432,
+"e": 10.79
+},
+{
+"line": 4,
+"speaker": "byte",
+"w": "Step",
+"s": 11.515,
+"e": 11.808
+},
+{
+"line": 4,
+"speaker": "byte",
+"w": "one.",
+"s": 11.788,
+"e": 12.283
+},
+{
+"line": 4,
+"speaker": "byte",
+"w": "Log",
+"s": 12.263,
+"e": 12.555
+},
+{
+"line": 4,
+"speaker": "byte",
+"w": "in,",
+"s": 12.535,
+"e": 12.828
+},
+{
+"line": 4,
+"speaker": "byte",
+"w": "and",
+"s": 12.808,
+"e": 13.101
+},
+{
+"line": 4,
+"speaker": "byte",
+"w": "open",
+"s": 13.081,
+"e": 13.576
+},
+{
+"line": 4,
+"speaker": "byte",
+"w": "chatgpt.com/business-hub",
+"s": 13.556,
+"e": 16.435
+},
+{
+"line": 5,
+"speaker": "marcus",
+"w": "Do",
+"s": 16.805,
+"e": 17.0
+},
+{
+"line": 5,
+"speaker": "marcus",
+"w": "I",
+"s": 16.98,
+"e": 17.175
+},
+{
+"line": 5,
+"speaker": "marcus",
+"w": "need",
+"s": 17.155,
+"e": 17.35
+},
+{
+"line": 5,
+"speaker": "marcus",
+"w": "a",
+"s": 17.33,
+"e": 17.525
+},
+{
+"line": 5,
+"speaker": "marcus",
+"w": "paid",
+"s": 17.505,
+"e": 17.7
+},
+{
+"line": 5,
+"speaker": "marcus",
+"w": "plan?",
+"s": 17.68,
+"e": 17.875
+},
+{
+"line": 6,
+"speaker": "byte",
+"w": "Nope.",
+"s": 18.245,
+"e": 18.512
+},
+{
+"line": 6,
+"speaker": "byte",
+"w": "No",
+"s": 18.492,
+"e": 18.759
+},
+{
+"line": 6,
+"speaker": "byte",
+"w": "ads",
+"s": 18.739,
+"e": 19.006
+},
+{
+"line": 6,
+"speaker": "byte",
+"w": "account",
+"s": 18.986,
+"e": 19.435
+},
+{
+"line": 6,
+"speaker": "byte",
+"w": "either.",
+"s": 19.415,
+"e": 19.865
+},
+{
+"line": 7,
+"speaker": "byte",
+"w": "Step",
+"s": 20.46,
+"e": 20.809
+},
+{
+"line": 7,
+"speaker": "byte",
+"w": "two.",
+"s": 20.789,
+"e": 21.137
+},
+{
+"line": 7,
+"speaker": "byte",
+"w": "Search",
+"s": 21.117,
+"e": 21.466
+},
+{
+"line": 7,
+"speaker": "byte",
+"w": "your",
+"s": 21.446,
+"e": 21.795
+},
+{
+"line": 7,
+"speaker": "byte",
+"w": "agency.",
+"s": 21.775,
+"e": 22.61
+},
+{
+"line": 7,
+"speaker": "byte",
+"w": "Tap",
+"s": 22.59,
+"e": 22.939
+},
+{
+"line": 7,
+"speaker": "byte",
+"w": "Get",
+"s": 22.919,
+"e": 23.268
+},
+{
+"line": 7,
+"speaker": "byte",
+"w": "Started.",
+"s": 23.248,
+"e": 23.84
+},
+{
+"line": 8,
+"speaker": "marcus",
+"w": "What",
+"s": 24.215,
+"e": 24.383
+},
+{
+"line": 8,
+"speaker": "marcus",
+"w": "if",
+"s": 24.363,
+"e": 24.531
+},
+{
+"line": 8,
+"speaker": "marcus",
+"w": "we're",
+"s": 24.511,
+"e": 24.679
+},
+{
+"line": 8,
+"speaker": "marcus",
+"w": "not",
+"s": 24.659,
+"e": 24.827
+},
+{
+"line": 8,
+"speaker": "marcus",
+"w": "listed?",
+"s": 24.807,
+"e": 25.085
+},
+{
+"line": 9,
+"speaker": "byte",
+"w": "Type",
+"s": 25.49,
+"e": 25.717
+},
+{
+"line": 9,
+"speaker": "byte",
+"w": "it",
+"s": 25.697,
+"e": 25.923
+},
+{
+"line": 9,
+"speaker": "byte",
+"w": "in",
+"s": 25.903,
+"e": 26.13
+},
+{
+"line": 9,
+"speaker": "byte",
+"w": "yourself.",
+"s": 26.11,
+"e": 26.49
+},
+{
+"line": 10,
+"speaker": "byte",
+"w": "Step",
+"s": 27.09,
+"e": 27.423
+},
+{
+"line": 10,
+"speaker": "byte",
+"w": "three.",
+"s": 27.403,
+"e": 27.737
+},
+{
+"line": 10,
+"speaker": "byte",
+"w": "Prove",
+"s": 27.717,
+"e": 28.05
+},
+{
+"line": 10,
+"speaker": "byte",
+"w": "it's",
+"s": 28.03,
+"e": 28.364
+},
+{
+"line": 10,
+"speaker": "byte",
+"w": "yours.",
+"s": 28.344,
+"e": 28.677
+},
+{
+"line": 10,
+"speaker": "byte",
+"w": "Business",
+"s": 28.657,
+"e": 29.455
+},
+{
+"line": 10,
+"speaker": "byte",
+"w": "phone,",
+"s": 29.435,
+"e": 29.768
+},
+{
+"line": 10,
+"speaker": "byte",
+"w": "email,",
+"s": 29.748,
+"e": 30.313
+},
+{
+"line": 10,
+"speaker": "byte",
+"w": "website,",
+"s": 30.293,
+"e": 30.859
+},
+{
+"line": 10,
+"speaker": "byte",
+"w": "or",
+"s": 30.839,
+"e": 31.172
+},
+{
+"line": 10,
+"speaker": "byte",
+"w": "Shopify.",
+"s": 31.152,
+"e": 31.95
+},
+{
+"line": 11,
+"speaker": "marcus",
+"w": "Can",
+"s": 32.275,
+"e": 32.456
+},
+{
+"line": 11,
+"speaker": "marcus",
+"w": "I",
+"s": 32.436,
+"e": 32.616
+},
+{
+"line": 11,
+"speaker": "marcus",
+"w": "use",
+"s": 32.596,
+"e": 32.896
+},
+{
+"line": 11,
+"speaker": "marcus",
+"w": "my",
+"s": 32.876,
+"e": 33.057
+},
+{
+"line": 11,
+"speaker": "marcus",
+"w": "personal",
+"s": 33.037,
+"e": 33.455
+},
+{
+"line": 11,
+"speaker": "marcus",
+"w": "email?",
+"s": 33.435,
+"e": 33.735
+},
+{
+"line": 12,
+"speaker": "byte",
+"w": "Use",
+"s": 34.1,
+"e": 34.415
+},
+{
+"line": 12,
+"speaker": "byte",
+"w": "the",
+"s": 34.395,
+"e": 34.585
+},
+{
+"line": 12,
+"speaker": "byte",
+"w": "one",
+"s": 34.565,
+"e": 34.88
+},
+{
+"line": 12,
+"speaker": "byte",
+"w": "that",
+"s": 34.86,
+"e": 35.05
+},
+{
+"line": 12,
+"speaker": "byte",
+"w": "matches",
+"s": 35.03,
+"e": 35.345
+},
+{
+"line": 12,
+"speaker": "byte",
+"w": "your",
+"s": 35.325,
+"e": 35.515
+},
+{
+"line": 12,
+"speaker": "byte",
+"w": "website.",
+"s": 35.495,
+"e": 35.81
+},
+{
+"line": 13,
+"speaker": "byte",
+"w": "Step",
+"s": 36.4,
+"e": 36.69
+},
+{
+"line": 13,
+"speaker": "byte",
+"w": "four.",
+"s": 36.67,
+"e": 36.96
+},
+{
+"line": 13,
+"speaker": "byte",
+"w": "A",
+"s": 36.94,
+"e": 37.23
+},
+{
+"line": 13,
+"speaker": "byte",
+"w": "quick",
+"s": 37.21,
+"e": 37.5
+},
+{
+"line": 13,
+"speaker": "byte",
+"w": "ID",
+"s": 37.48,
+"e": 38.04
+},
+{
+"line": 13,
+"speaker": "byte",
+"w": "check,",
+"s": 38.02,
+"e": 38.31
+},
+{
+"line": 13,
+"speaker": "byte",
+"w": "and",
+"s": 38.29,
+"e": 38.58
+},
+{
+"line": 13,
+"speaker": "byte",
+"w": "you",
+"s": 38.56,
+"e": 38.85
+},
+{
+"line": 13,
+"speaker": "byte",
+"w": "get",
+"s": 38.83,
+"e": 39.12
+},
+{
+"line": 13,
+"speaker": "byte",
+"w": "the",
+"s": 39.1,
+"e": 39.39
+},
+{
+"line": 13,
+"speaker": "byte",
+"w": "blue",
+"s": 39.37,
+"e": 39.66
+},
+{
+"line": 13,
+"speaker": "byte",
+"w": "check.",
+"s": 39.64,
+"e": 39.93
+},
+{
+"line": 14,
+"speaker": "marcus",
+"w": "I",
+"s": 40.305,
+"e": 40.543
+},
+{
+"line": 14,
+"speaker": "marcus",
+"w": "look",
+"s": 40.523,
+"e": 40.761
+},
+{
+"line": 14,
+"speaker": "marcus",
+"w": "terrible",
+"s": 40.741,
+"e": 41.302
+},
+{
+"line": 14,
+"speaker": "marcus",
+"w": "in",
+"s": 41.282,
+"e": 41.52
+},
+{
+"line": 14,
+"speaker": "marcus",
+"w": "ID",
+"s": 41.5,
+"e": 41.956
+},
+{
+"line": 14,
+"speaker": "marcus",
+"w": "photos.",
+"s": 41.936,
+"e": 42.335
+},
+{
+"line": 15,
+"speaker": "byte",
+"w": "It's",
+"s": 42.7,
+"e": 42.956
+},
+{
+"line": 15,
+"speaker": "byte",
+"w": "a",
+"s": 42.936,
+"e": 43.192
+},
+{
+"line": 15,
+"speaker": "byte",
+"w": "check.",
+"s": 43.172,
+"e": 43.428
+},
+{
+"line": 15,
+"speaker": "byte",
+"w": "Not",
+"s": 43.408,
+"e": 43.664
+},
+{
+"line": 15,
+"speaker": "byte",
+"w": "a",
+"s": 43.644,
+"e": 43.899
+},
+{
+"line": 15,
+"speaker": "byte",
+"w": "headshot.",
+"s": 43.879,
+"e": 44.31
+},
+{
+"line": 16,
+"speaker": "marcus",
+"w": "So",
+"s": 45.025,
+"e": 45.233
+},
+{
+"line": 16,
+"speaker": "marcus",
+"w": "now",
+"s": 45.213,
+"e": 45.421
+},
+{
+"line": 16,
+"speaker": "marcus",
+"w": "we're",
+"s": 45.401,
+"e": 45.61
+},
+{
+"line": 16,
+"speaker": "marcus",
+"w": "number",
+"s": 45.59,
+"e": 45.937
+},
+{
+"line": 16,
+"speaker": "marcus",
+"w": "one?",
+"s": 45.917,
+"e": 46.265
+},
+{
+"line": 17,
+"speaker": "byte",
+"w": "It",
+"s": 46.63,
+"e": 46.946
+},
+{
+"line": 17,
+"speaker": "byte",
+"w": "doesn't",
+"s": 46.926,
+"e": 47.243
+},
+{
+"line": 17,
+"speaker": "byte",
+"w": "buy",
+"s": 47.223,
+"e": 47.539
+},
+{
+"line": 17,
+"speaker": "byte",
+"w": "a",
+"s": 47.519,
+"e": 47.836
+},
+{
+"line": 17,
+"speaker": "byte",
+"w": "ranking.",
+"s": 47.816,
+"e": 48.352
+},
+{
+"line": 17,
+"speaker": "byte",
+"w": "It",
+"s": 48.332,
+"e": 48.648
+},
+{
+"line": 17,
+"speaker": "byte",
+"w": "gives",
+"s": 48.628,
+"e": 49.165
+},
+{
+"line": 17,
+"speaker": "byte",
+"w": "ChatGPT",
+"s": 49.145,
+"e": 49.461
+},
+{
+"line": 17,
+"speaker": "byte",
+"w": "your",
+"s": 49.441,
+"e": 49.757
+},
+{
+"line": 17,
+"speaker": "byte",
+"w": "real",
+"s": 49.737,
+"e": 50.054
+},
+{
+"line": 17,
+"speaker": "byte",
+"w": "details.",
+"s": 50.034,
+"e": 50.57
+},
+{
+"line": 18,
+"speaker": "marcus",
+"w": "Byte,",
+"s": 51.185,
+"e": 51.424
+},
+{
+"line": 18,
+"speaker": "marcus",
+"w": "you",
+"s": 51.404,
+"e": 51.644
+},
+{
+"line": 18,
+"speaker": "marcus",
+"w": "just",
+"s": 51.624,
+"e": 51.863
+},
+{
+"line": 18,
+"speaker": "marcus",
+"w": "saved",
+"s": 51.843,
+"e": 52.245
+},
+{
+"line": 18,
+"speaker": "marcus",
+"w": "me",
+"s": 52.225,
+"e": 52.464
+},
+{
+"line": 18,
+"speaker": "marcus",
+"w": "a",
+"s": 52.444,
+"e": 52.683
+},
+{
+"line": 18,
+"speaker": "marcus",
+"w": "fortune.",
+"s": 52.663,
+"e": 53.065
+},
+{
+"line": 19,
+"speaker": "byte",
+"w": "I'll",
+"s": 53.395,
+"e": 53.657
+},
+{
+"line": 19,
+"speaker": "byte",
+"w": "send",
+"s": 53.637,
+"e": 53.899
+},
+{
+"line": 19,
+"speaker": "byte",
+"w": "you",
+"s": 53.879,
+"e": 54.141
+},
+{
+"line": 19,
+"speaker": "byte",
+"w": "my",
+"s": 54.121,
+"e": 54.384
+},
+{
+"line": 19,
+"speaker": "byte",
+"w": "invoice.",
+"s": 54.364,
+"e": 54.805
+}
+]

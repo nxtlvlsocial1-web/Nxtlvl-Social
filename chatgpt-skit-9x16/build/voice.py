@@ -28,8 +28,9 @@ CACHE = os.path.expanduser("~/.cache/hyperframes/tts")
 SR = 48000
 LEAD = .5
 LINE_GAP = .2
+TEMPO = 1.07         # Chatterbox delivers a little slowly; 7% faster keeps the reel under 60 s, pitch unchanged
 MUFFLE = set()
-GAP_AFTER = {"03": .1, "04": .55, "07": .35, "10": .35, "13": .35, "16": .45, "18": .3}   # .55 after "Watch." as the step panel slides in; a beat between steps
+GAP_AFTER = {"04": .35, "07": .22, "10": .22, "13": .22, "16": .35, "18": .25}   # a beat as the step panel slides in and between steps
 NOIR = set()
 VOICES = {"nar": "am_onyx"}
 # emotion -> (speed, semitones, gain dB)
@@ -109,7 +110,7 @@ def main():
         wi, t0 = 0, t
         elp = next((q for q in (os.path.join(V, "el", f"{take}.wav"), os.path.join(V, "el", "mp3", f"{take}.mp3")) if os.path.exists(q)), None)
         if elp:                     # an ElevenLabs take for the whole line
-            raw = subprocess.run(["ffmpeg", "-v", "error", "-i", elp, "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
+            raw = subprocess.run(["ffmpeg", "-v", "error", "-i", elp, "-af", f"atempo={TEMPO}", "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
             a = level(fade(np.frombuffer(raw, np.float32).astype(np.float64)))
             if take in NOIR:
                 from scipy.signal import butter, sosfilt, fftconvolve

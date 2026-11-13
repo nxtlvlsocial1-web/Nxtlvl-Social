@@ -414,9 +414,9 @@ const BYTE = new THREE.Group(); OF.add(BYTE);
 {
   const shell = new THREE.MeshPhysicalMaterial({ color: 0x8B5CF6, roughness: .3, clearcoat: .8, clearcoatRoughness: .2, envMap: ENV, envMapIntensity: .6 });
   const head = new THREE.Mesh(new RoundedBoxGeometry(.5, .42, .42, 4, .1), shell); head.castShadow = true; BYTE.add(head);
-  BYTE.faceM = new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false });
-  const face = new THREE.Mesh(new THREE.PlaneGeometry(.4, .3), BYTE.faceM); face.position.z = .213; BYTE.add(face);
   box(.42, .32, .01, mat(0x0B0D12, { roughness: .2 }), 0, 0, .209, { parent: BYTE });
+  BYTE.faceM = new THREE.MeshBasicMaterial({ color: 0xB8B8B8 });       // tone-mapped and a little dim, so the glow doesn't swallow the face
+  const face = new THREE.Mesh(new THREE.PlaneGeometry(.4, .3), BYTE.faceM); face.position.z = .222; BYTE.add(face);
   for (const s of [-1, 1]) { cyl(.07, .07, .05, mat(0xE9E4DA, { roughness: .4 }), s * .27, 0, 0, 16, { parent: BYTE }).rotation.z = Math.PI / 2; }
   cyl(.012, .012, .16, metal(0xD9D9DE, .3), 0, .29, 0, 8, { parent: BYTE });
   BYTE.tip = new THREE.Mesh(new THREE.SphereGeometry(.035, 12, 10), glow(0x5BE3B0)); BYTE.tip.position.y = .38; BYTE.add(BYTE.tip);
@@ -439,13 +439,12 @@ function updMarcus(t) {
   const k = lineAt(t), byteTalks = who(t, "byte"), meTalks = who(t, "marcus");
   const p = pose({ x: MSEAT.x, y: SITY, z: MSEAT.z, ry: .12, l: [[1.5, 1.5], [1.5, 1.5]], a: [[.95, .18, 1.25], [.95, .18, 1.25]], hp: .12 });
   let f = { eyes: "open", mouth: "flat", brows: "flat", talk: meTalks };
-  if (byteTalks || (k < 0 && t > L[3])) { p.hy = -.55; p.hp = .05; f = { eyes: "open", mouth: "flat", brows: "raise1" }; }   // listening to Byte
+  if (byteTalks || (k < 0 && t > L[C.tk["04"]])) { p.hy = -.55; p.hp = .05; f = { eyes: "open", mouth: "flat", brows: "raise1" }; }   // listening to Byte
   if (meTalks) { p.hy = -.35; p.hp = 0; }
   if (k === 0) { p.a = [[1.6, .55, 1.0 + .2 * Math.sin(t * 6)], [1.6, .55, 1.0 + .2 * Math.sin(t * 6 + 1)]]; f = { eyes: "wide", mouth: "o", brows: "angry", talk: true, noblink: true }; }
-  if (k === 2) f = { eyes: "wide", mouth: "o", brows: "up", talk: true, noblink: true };
-  if (k === 14) { p.a[1] = [2.0, .1, 2.2]; f = { eyes: "closed", mouth: "sad", brows: "worry", talk: true }; }   // a hand over his face
-  if (k === 16) f = { eyes: "open", mouth: "smile", brows: "up", talk: true };
-  if (k >= 18 || t > E[18]) { f = { eyes: "happy", mouth: "grin", brows: "up", talk: meTalks }; p.a[0] = [1.3, .3, .5]; }
+  if (k === C.tk["15"]) { p.a[1] = [2.0, .1, 2.2]; f = { eyes: "closed", mouth: "sad", brows: "worry", talk: true }; }   // a hand over his face
+  if (k === C.tk["17"]) f = { eyes: "open", mouth: "smile", brows: "up", talk: true };
+  if (k >= C.tk["19"] || t > E[C.tk["19"]]) { f = { eyes: "happy", mouth: "grin", brows: "up", talk: meTalks }; p.a[0] = [1.3, .3, .5]; }
   // typing while Byte walks through a step
   if (byteTalks && C.stepLines.includes(k)) { p.a = [[1.1, .12, 1.05 + .08 * Math.sin(t * 13)], [1.1, .12, 1.05 + .08 * Math.sin(t * 11 + 1)]]; p.hy = -.15; p.hp = .22; }
   placeChar(MARCUS, true, idle(p, t, MARCUS.seed), f);
@@ -458,13 +457,13 @@ function updByte(t) {
   BYTE.rotation.y = yaw + .04 * Math.sin(t * .9);
   BYTE.ring.rotation.z = t * 1.5; BYTE.ring.material.opacity = .4 + .2 * Math.sin(t * 4);
   BYTE.tip.scale.setScalar(1 + (talks ? .25 * Math.abs(Math.sin(t * 9)) : .08 * Math.sin(t * 3)));
-  const eyes = k === 19 || k === 15 ? "smug" : (k === 17 ? "open" : (listen ? "open" : "calm"));
+  const eyes = k === C.tk["20"] || k === C.tk["16"] ? "smug" : (k === C.tk["18"] ? "open" : (listen ? "open" : "calm"));
   const lv = talks ? Math.floor(t * 12) % 6 : -1;
   setMap(BYTE.faceM, DYN.byteFace(eyes, lv, Math.floor(t * 2.4 + 1) % 9 === 0 ? 1 : 0));
 }
 
 // ---------------------------------------------------------------- one camera, a slow push; tiny shake on the hook
-const CAM = { p0: v(.25, 1.75, 3.9), p1: v(.2, 1.68, 3.45), l0: v(.35, 2.2, -.5) };
+const CAM = { p0: v(.25, 1.8, 3.9), p1: v(.2, 1.74, 3.45), l0: v(.35, 2.38, -.5) };
 function renderAt(t) {
   if (!TEX.ready) return;
   NOW = t;

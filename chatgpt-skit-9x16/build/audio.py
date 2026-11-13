@@ -19,7 +19,7 @@ from scipy.signal import butter, sosfilt
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 T = json.load(open(os.path.join(ROOT, "build", "cues.json")))
 L, E = T["l"], T["e"]
-SCR, PAY, PIN, EIN = T["scr"], T["pay"], T["panelIn"], T["endIn"]
+SCR, PAY, PIN, EIN, TK = T["scr"], T["pay"], T["panelIn"], T["endIn"], T["tk"]
 SR = 48000
 DUR = T["end"]
 N = int(DUR * SR)
@@ -73,16 +73,16 @@ def sfx():
     for a, b in SCR[1:] + [PAY]:
         put(s, lib("whoosh-short"), a - .05, .22)
     put(s, lib("typing"), SCR[0][0] + .5, .28, 0, 1.1)                                    # the URL
-    put(s, lib("pop"), L[6] - .05, .3)                                                   # No paid plan
+    put(s, lib("pop"), L[TK["07"]] - .05, .3)                                                   # No paid plan
     put(s, lib("typing"), SCR[1][0] + .4, .28, 0, .8)                                     # the agency name
-    put(s, lib("click"), E[7] - .5, .5)                                                  # Get Started
-    put(s, lib("pop"), L[9] + .1, .3)
-    put(s, lib("ping"), L[12], .3)                                                       # the tick
+    put(s, lib("click"), E[TK["08"]] - .5, .5)                                                  # Get Started
+    put(s, lib("pop"), L[TK["10"]] + .1, .3)
+    put(s, lib("ping"), L[TK["13"]], .3)                                                       # the tick
     put(s, lib("riser"), SCR[3][0] + .3, .18, 0, 1.2)                                     # the ID scan
-    put(s, lib("sparkle"), E[13] - .45, .45)                                             # the blue check
-    put(s, lib("pop"), L[15], .3)                                                        # "not a headshot"
+    put(s, lib("sparkle"), E[TK["14"]] - .45, .45)                                             # the blue check
+    put(s, lib("pop"), L[TK["16"]], .3)                                                        # "not a headshot"
     put(s, lib("notification"), PAY[0] + .4, .3)
-    put(s, lib("impact-bass-1"), L[17] + .2, .35)                                        # DOESN'T BUY RANKING
+    put(s, lib("impact-bass-1"), L[TK["18"]] + .2, .35)                                        # DOESN'T BUY RANKING
     put(s, lib("chime"), EIN + .1, .3)
     return s
 
