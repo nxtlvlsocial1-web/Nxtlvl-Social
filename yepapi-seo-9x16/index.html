@@ -115,6 +115,10 @@
       <!-- Voiceover: DRAFT (Kokoro af_heart x1.12). Swap for the client's recording. -->
       <audio id="vo" class="clip" src="assets/voice/vo.wav" data-start="0" data-track-index="10" data-volume="1"></audio>
 
+      <!-- Music bed: HeyGen catalog, 120 BPM (beats land on every half second from 0.5 s). Low under the voice,
+           swells on the end card once the voice stops, fades out on the last bar. -->
+      <audio id="music" class="clip" src="assets/bgm/track.mp3" data-start="0" data-duration="35" data-track-index="9" data-volume="1" data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0.17},{"t":33.05,"v":0.17},{"t":33.45,"v":0.42},{"t":34.1,"v":0.42},{"t":35,"v":0}]}]}'></audio>
+
       <!-- Sound effects: each peak lands one frame after its picture -->
       <audio id="sfx-lens" class="clip" src="assets/sfx/whoosh-cinematic.mp3" data-start="2.38" data-media-start="1.9" data-duration="1.4" data-track-index="11" data-volume="0.32" data-fade-out="0.3"></audio>
       <audio id="sfx-row1" class="clip" src="assets/sfx/pop.mp3" data-start="3.15" data-duration="0.5" data-track-index="12" data-volume="0.38"></audio>

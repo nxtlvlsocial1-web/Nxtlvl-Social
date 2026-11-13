@@ -8,3 +8,6 @@ renders/
 node_modules/
 .hyperframes/video-state-lock
 .hyperframes/preview/
+
+# media-use download cache (originals; the trimmed track lives in assets/bgm)
+.media/audio/
