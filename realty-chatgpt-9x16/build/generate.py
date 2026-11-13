@@ -1,10 +1,10 @@
-"""Barbershop what-if ("What if ChatGPT sent all your customers to your competitor?"): writes index.html. 1080x1920, 30 fps,
-under 60 s. Account: @nxtlvlsocial.ai. Voxel what-if in full colour: Fade Factory is empty while every passer-by asks
-ChatGPT for a barber and a floating answer card says Blade Kings. Dev's niece Zara claims the shop in Business Hub
+"""Real estate what-if ("What if ChatGPT sent all your clients to your competitor?"): writes index.html. 1080x1920, 30 fps,
+under 60 s. Account: @nxtlvlsocial.ai. Voxel what-if in full colour: Keystone Realty is empty while every house hunter asks
+ChatGPT for an agent and a floating answer card says Prime Nest Realty. Junior agent Lena claims the agency in Business Hub
 (Businesses in ChatGPT, beta, launched 10 Nov 2026), a blue check snaps onto the sign and the crowd crosses back.
 Keyword CTA: comment CHATGPT (we DM the free "Get Your Business into ChatGPT" checklist PDF). The story's effect is
-illustrative: the end card and description say claiming doesn't guarantee a higher ranking, and that local shops can
-claim existing US listings for now.
+illustrative: the end card and description say claiming doesn't guarantee a higher ranking, and that local businesses may
+need an existing US listing for now.
 
 python3 build/generate.py      (from the project root, after build/voice.py)
 """
@@ -54,11 +54,11 @@ def clock_text(m):
     return f"{(h % 12) or 12}:{mi:02d}", ("AM" if h < 12 else "PM")
 
 
-NAMES = {"dev": "DEV", "zara": "ZARA"}
-IN0 = r3(L[3] - .35)            # inside the shop
+NAMES = {"marcus": "MARCUS", "lena": "LENA"}
+IN0 = r3(L[3] - .35)            # inside the office
 CK = r3(L[5] - .55)             # the blue check snaps on
 FL = r3(E[5] + .2)              # the cards flip, the crowd crosses back
-NX = r3(L[7] - .35)             # a full shop
+NX = r3(L[7] - .35)             # a full office
 w5 = [w for w in WORDS if w["line"] == 5]
 def wt(word):
     return next(w["s"] for w in w5 if w["w"].strip(".,").lower() == word.lower())
@@ -148,7 +148,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #BFD9F
 .cap .who { display: inline-block; margin-bottom: 10px; padding: 7px 16px; border-radius: 20px; font: 800 26px/1 "Manrope"; letter-spacing: 4px; color: #0B0D12; background: #F2C94C; }
 .cap .tx { display: inline; padding: 8px 18px; border-radius: 16px; font: 800 48px/1.5 "Manrope"; color: #FFFFFF; background: rgba(8,10,16,.82); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .cap .br { display: block; height: 0; }
-.cap.sp-zara .who { background: #E8735A; color: #fff; }
+.cap.sp-lena .who { background: #2F6F5E; color: #fff; }
 #endc { position: absolute; left: 60px; right: 60px; top: 300px; text-align: center; color: #FFFDF6; }
 #endc span { display: block; }
 #endc .e0 { font: italic 500 68px/1.1 "Garamond"; }
@@ -166,17 +166,17 @@ def main():
     mix = "mix.wav" if os.path.exists(os.path.join(ROOT, "assets", "audio", "mix.wav")) else "voice.wav"
     ct = {"l": L, "e": E, "cuts": [IN0, CK, FL, NX], **T}
     ui = ('<div id="title" class="shadow"><span class="t0">WHAT IF</span><span class="t1">ChatGPT sent all</span>'
-          '<span class="t2">your customers</span><span class="t3">to your competitor?</span></div>' + cards +
+          '<span class="t2">your clients</span><span class="t3">to your competitor?</span></div>' + cards +
           '<div id="endc" class="shadow"><span class="e0">Want the checklist?</span><span class="e1">CHATGPT</span>'
           '<span class="e2">Comment it and I\'ll DM you the setup checklist</span>'
           '<span class="e3">FOLLOW<b>@nxtlvlsocial.ai</b></span>'
-          '<span class="e4">Claiming doesn\'t guarantee a higher ranking. Local shops: existing US listings for now.</span></div>')
+          '<span class="e4">Claiming doesn\'t guarantee a higher ranking. Local businesses may need an existing US listing for now.</span></div>')
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>Barber ChatGPT 9x16</title>
+    <title>Realty ChatGPT 9x16</title>
     <script type="importmap">{{"imports":{{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}}}</script>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>{CSS}</style>
@@ -196,7 +196,7 @@ def main():
       tl.set({{}}, {{}}, {DUR});
       window.__timelines["main"] = tl;
     </script>
-    <script type="module" src="assets/js/barber.js"></script>
+    <script type="module" src="assets/js/realty.js"></script>
   </body>
 </html>
 """

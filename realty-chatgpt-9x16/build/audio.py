@@ -1,10 +1,10 @@
-"""Score, sound design and the mastered mix for the barbershop what-if.
+"""Score, sound design and the mastered mix for the real estate what-if.
 
 python3 build/audio.py      (from the project root, after build/voice.py and build/generate.py; needs numpy, scipy,
 soundfile, ffmpeg)
 
 Music: two instrumental Creative Commons tracks found through Openverse, CC BY 3.0 from Jamendo, credited in the post
-description (assets/music/CREDITS.json): "808" by Shipititez tha Viruz (the empty morning and the fix) and "Funk in my
+description (assets/music/CREDITS.json): "808" by Shipititez tha Viruz (the empty office and the fix) and "Funk in my
 Pocket" by OptiKill (from the blue check). Checked for vocals with faster-whisper: none. SFX: a city street, footsteps and a
 door generated with ElevenLabs for the owner's earlier reels (assets/sfx/), and HyperFrames' bundled library (Pixabay
 Content License). Music ducks under dialogue. Writes assets/audio/mix.wav at about -14 LUFS.

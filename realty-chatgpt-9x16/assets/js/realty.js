@@ -1,7 +1,7 @@
-// Barbershop what-if: "What if ChatGPT sent all your customers to your competitor?" A what-if in the house voxel style,
-// in full colour on a bright city morning. Fade Factory is empty while every passer-by asks ChatGPT for the best barber
-// and a floating answer card says Blade Kings. Dev's niece Zara claims the shop in Business Hub (the four steps float up as
-// holograms over the counter); a blue check snaps onto the sign, the answer cards flip, and the crowd crosses back.
+// Real estate what-if: "What if ChatGPT sent all your clients to your competitor?" A what-if in the house voxel style, in
+// full colour on a bright town morning. Keystone Realty is empty while every house hunter asks ChatGPT for an agent and a
+// floating answer card says Prime Nest. Junior agent Lena claims the agency in Business Hub (the four steps float up as
+// holograms over the front desk); a blue check snaps onto the sign, the answer cards flip, and the crowd crosses back.
 // Everything is a pure function of time t (seconds), drawn on HyperFrames' hf-seek; cue times come from window.CT.
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
@@ -371,9 +371,9 @@ const tileTex = pix(64, 64, (g) => { px(g, "#C4BFB6", 0, 0, 64, 64); for (let i 
 const groundMat = (t, x, y, o = {}) => new THREE.MeshStandardMaterial({ map: rep(t, x, y), roughness: .92, ...o });
 function flat(w, d, m, x, y, z, parent) { const p = add(new THREE.Mesh(new THREE.PlaneGeometry(w, d), m), false, true, parent); p.rotation.x = -Math.PI / 2; p.position.set(x, y, z); return p; }
 
-// ================================================================= THE STREET AND THE SHOP
-// The street runs along x. Fade Factory is on the north side (front at z = -4.3, facing +z) with a deep interior behind its
-// window (to z = -8.6); Blade Kings is across the road (front at z = 4.3, facing -z). Sidewalks at z = +-3.6.
+// ================================================================= THE STREET AND THE OFFICE
+// The street runs along x. Keystone Realty is on the north side (front at z = -4.3, facing +z) with a deep office behind its
+// window (to z = -8.6); Prime Nest Realty is across the road (front at z = 4.3, facing -z). Sidewalks at z = +-3.6.
 const SET = {};
 const mkSet = (k) => { const g = new THREE.Group(); g.visible = false; scene.add(g); SET[k] = g; PARENT = g; return g; };
 function v3(x, y, z) { return new THREE.Vector3(x, y, z); }
@@ -407,41 +407,41 @@ const ST = mkSet("street");
     box(9, 3.4, .2, inM, x0, 1.7, z - f * d); for (const dx of [-4.5, 4.5]) box(.2, 3.4, d, inM, x0 + dx, 1.7, z - f * d / 2); box(9, .1, d, mat(0xF4EFE6), x0, 3.4, z - f * d / 2);
     const tile = pix(32, 32, (g) => { for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) px(g, (i + j) % 2 ? "#1E1B18" : "#F4F1EA", i * 8, j * 8, 8, 8); });
     flat(9, d, new THREE.MeshStandardMaterial({ map: rep(tile, 9, d), roughness: .4 }), x0, .02, z - f * d / 2);
-    // the barber pole by the door
-    const pole = new THREE.Group(); pole.position.set(x0 - 3.45, 1.55, z + f * .25); ST.add(pole);
-    const poleTex = pix(32, 64, (g) => { for (let k = 0; k < 8; k++) { g.fillStyle = ["#E5484D", "#F4F1EA", "#2F5DA8", "#F4F1EA"][k % 4]; g.beginPath(); g.moveTo(0, k * 8); g.lineTo(32, k * 8 - 16); g.lineTo(32, k * 8 - 8); g.lineTo(0, k * 8 + 8); g.fill(); } }, false);
-    poleTex.wrapS = poleTex.wrapT = THREE.RepeatWrapping; poleTex.repeat.set(1, 2);
-    const pm = new THREE.MeshStandardMaterial({ map: poleTex, roughness: .3, emissive: 0x222222 });
-    cyl(.11, .11, .9, pm, 0, 0, 0, 20, { parent: pole }); cyl(.14, .14, .08, metal(0xD9D9DE, .2), 0, .49, 0, 20, { parent: pole }); cyl(.14, .14, .08, metal(0xD9D9DE, .2), 0, -.49, 0, 20, { parent: pole });
-    return { poleTex, sign };
+    // a FOR SALE yard sign by the door, and listing posters in the window
+    const ys = new THREE.Group(); ys.position.set(x0 - 3.45, 0, z + f * .55); ST.add(ys);
+    box(.07, 1.5, .07, mat(0xF4F1EA), 0, .75, 0, { parent: ys }); box(.8, .06, .06, mat(0xF4F1EA), .35, 1.45, 0, { parent: ys });
+    const sale = new THREE.Group(); sale.position.set(.4, 1.12, 0); ys.add(sale); const sm = paperMat(side < 0 ? "saleKey" : "salePrime");
+    const sp = new THREE.Mesh(new THREE.PlaneGeometry(.7, .5), sm); sp.rotation.y = side < 0 ? 0 : Math.PI; sale.add(sp);
+    for (let q = 0; q < 3; q++) { const pm = paperMat("listing" + ((q + (side < 0 ? 0 : 3)) % 6)); plane(.8, 1.0, pm, x0 - .9 + q * 1.5, 1.55, z - f * .06, side < 0 ? 0 : Math.PI); }
+    return { sale, sign };
   };
-  ST.f = front(-1, FX, brickA, "signFade", "awnFade", 4.3);
-  ST.b = front(1, BX, brickB, "signBlade", "awnBlade", 2.3);
-  // the blue check that snaps onto Fade Factory's sign
+  ST.f = front(-1, FX, brickA, "signKey", "awnKey", 4.3);
+  ST.b = front(1, BX, brickB, "signPrime", "awnPrime", 2.3);
+  // the blue check that snaps onto Keystone's sign
   ST.checkM = texMat("check"); ST.check = plane(.62, .62, ST.checkM, FX + 2.55, 2.78, -4.08, 0);
   ST.checkB = plane(.5, .5, texMat("check"), BX - 2.5, 2.78, 4.08, Math.PI);
   // neighbours, sky, trees, lamps
   for (const [x, z, s] of [[-14.5, -4.5, -1], [14, -4.5, -1], [-13.8, 4.5, 1], [14.5, 4.5, 1]]) box(19, 12, .3, s < 0 ? brickB : brickA, x, 6, z);
   for (const x of [-9, 6.5]) for (const s of [-1, 1]) { const zz = s * 3.15; cyl(.07, .09, 1.6, mat(0x5A4030), x, .8, zz, 8); box(1.1, 1.0, 1.1, mat(0x4E8C48), x, 2.0, zz); box(.8, .7, .8, mat(0x5E9C52), x + .1, 2.7, zz + .05); }
   ST.sky = new THREE.Mesh(new THREE.SphereGeometry(120, 24, 12), new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.BackSide, fog: false, toneMapped: false })); ST.add(ST.sky); LATE.push([ST.sky.material, "sky"]);
-  // inside Fade Factory: two barber chairs facing the mirrors on the back wall, the counter with Zara's laptop, a bench
+  // inside Keystone Realty: two agent desks with monitors, a wall of listings, the front desk with Lena's laptop, a sofa
   const BW = -8.5;
+  plane(4.6, 1.7, paperMat("wall"), FX - 1.3, 1.85, BW + .02, 0);                               // the listings wall
   for (let k = 0; k < 2; k++) {
-    const x = FX - 2.4 + k * 2.2;
-    box(1.5, 1.1, .05, metal(0xDCE6EE, .05), x, 1.75, BW + .08);                               // mirror
-    box(1.7, .06, .4, mat(0x1E1B18), x, 1.0, BW + .25);                                          // shelf
-    const ch = new THREE.Group(); ch.position.set(x, 0, BW + 1.5); ST.add(ch);
-    cyl(.28, .34, .1, metal(0x9A9EA6, .3), 0, .05, 0, 20, { parent: ch }); cyl(.06, .06, .38, metal(0x9A9EA6, .3), 0, .28, 0, 10, { parent: ch });
-    box(.62, .14, .6, mat(0x7A2E2E, { roughness: .4 }), 0, .52, 0, { parent: ch }); box(.62, .78, .14, mat(0x7A2E2E, { roughness: .4 }), 0, .96, -.26, { parent: ch });
-    for (const s of [-1, 1]) box(.1, .1, .5, metal(0xC9CDD4, .2), s * .35, .7, 0, { parent: ch });
+    const x = FX - 2.6 + k * 2.4, z = -6.6;
+    box(1.4, .06, .7, mat(0xF4F1EA, { roughness: .4 }), x, .76, z); for (const s of [-1, 1]) box(.06, .73, .6, mat(0x2A2622), x + s * .65, .37, z);
+    box(.6, .38, .04, mat(0x15171C), x, 1.08, z - .2); box(.08, .14, .08, mat(0x15171C), x, .85, z - .2); box(.54, .32, .01, glow(0x9FC4DE), x, 1.08, z - .177);
+    box(.5, .08, .5, mat(0x23345E), x, .5, z + .55); box(.5, .55, .08, mat(0x23345E), x, .8, z + .78);
   }
   box(1.6, 1.0, .7, mat(0x2A2622), COUNTER.x, .5, COUNTER.z); box(1.7, .06, .8, mat(0xD9CDB6, { roughness: .4 }), COUNTER.x, 1.03, COUNTER.z);
   const lap = new THREE.Group(); lap.position.copy(LAPP); lap.rotation.y = Math.PI - .5; ST.add(lap);
   box(.38, .018, .26, metal(0xB8BCC4, .35), 0, .009, .13, { parent: lap });
   const lid = new THREE.Group(); lid.rotation.x = -.3; lap.add(lid); box(.38, .25, .012, metal(0xB8BCC4, .35), 0, .125, -.007, { parent: lid });
   ST.lapM = new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false }); const ls = new THREE.Mesh(new THREE.PlaneGeometry(.35, .22), ST.lapM); ls.position.set(0, .128, 0); lid.add(ls);
-  box(2.4, .45, .5, mat(0x5A4030), FX - 1.0, .23, -5.1); box(2.4, .5, .08, mat(0x5A4030), FX - 1.0, .7, -5.33);   // waiting bench by the window
-  for (let k = 0; k < 3; k++) box(.3, .4, .25, mat(["#2F6F5E", "#E8735A", "#F2B33D"][k]), FX + 3.6, 1.2 + k * .45, BW + .3);
+  box(2.4, .45, .55, mat(0x2E4057), FX - 1.0, .23, -5.1); box(2.4, .5, .1, mat(0x2E4057), FX - 1.0, .7, -5.36);   // the sofa by the window
+  // a little model house on the front desk
+  { const h = new THREE.Group(); h.position.set(COUNTER.x - .5, 1.06, COUNTER.z + .1); ST.add(h); box(.3, .2, .26, mat(0xF4F1EA), 0, .1, 0, { parent: h }); box(.34, .05, .3, mat(0xB5654A), 0, .24, 0, { parent: h, rz: .0 }); box(.08, .1, .02, mat(0x23345E), 0, .05, .135, { parent: h }); }
+  for (let k = 0; k < 2; k++) cyl(.18, .14, .3, mat(0xC9644E), FX + 3.7 - k * 8.2, .15, -5.0, 12), box(.3, .6, .3, mat(0x4E8C48), FX + 3.7 - k * 8.2, .6, -5.0);
   ST.inL = new THREE.PointLight(0xFFF2DC, 0, 9, 1.4); ST.inL.position.set(FX, 3.0, -6.4); scene.add(ST.inL);
   ST.inL2 = new THREE.PointLight(0xFFF2DC, 0, 7, 1.4); ST.inL2.position.set(FX + 2.5, 2.6, -7.0); scene.add(ST.inL2);
   // the four steps as holograms over the counter
@@ -454,21 +454,21 @@ const ST = mkSet("street");
 PARENT = scene;
 
 // ---------------------------------------------------------------- the cast
-const DEV = makeChar({ id: "dev", skin: "#8E5E40", hair: "#1E1B18", style: "short", beard: "#1E1B18", top: "#2E3A55", topStyle: "apron", pants: "#3A3A3A", shoe: "#1E1B18" }, ST);
-DEV.seed = 2.4;
-const ZARA = makeChar({ id: "zara", skin: "#C68E68", hair: "#2A1A12", style: "puff", top: "#E8735A", topStyle: "hoodie", pants: "#2E3A55", shoe: "#FFFDF8", lash: true, earring: true }, ST);
-ZARA.seed = 4.1;
-const RIVAL = makeChar({ id: "rival", skin: "#F0C49C", hair: "#3B2A1E", style: "cap", cap: "#141414", top: "#7A2E2E", topStyle: "tee", pants: "#1E1B18", shoe: "#1E1B18" }, ST);
+const MARCUS = makeChar({ id: "marcus", skin: "#8E5E40", hair: "#1E1B18", style: "short", beard: "#1E1B18", top: "#23345E", topStyle: "blazer", pants: "#2E3A55", shoe: "#1E1B18" }, ST);
+MARCUS.seed = 2.4;
+const LENA = makeChar({ id: "lena", skin: "#C68E68", hair: "#2A1A12", style: "bob", top: "#2F6F5E", topStyle: "blazer", pants: "#3A3A3A", shoe: "#1E1B18", lash: true, earring: true }, ST);
+LENA.seed = 4.1;
+const RIVAL = makeChar({ id: "rival", skin: "#F0C49C", hair: "#B88A4A", style: "short", top: "#3A3A3A", topStyle: "blazer", pants: "#1E1B18", shoe: "#1E1B18", glasses: "#1E1B18" }, ST);
 RIVAL.seed = 6.6;
 const INS = [npc(140, ST), npc(147, ST)];                                         // two customers inside at the end
-const ZPHONE = new THREE.Group(); ST.add(ZPHONE); box(.075, .15, .012, mat(0x15171C), 0, 0, 0, { parent: ZPHONE });
+const LPHONE = new THREE.Group(); ST.add(LPHONE); box(.075, .15, .012, mat(0x15171C), 0, 0, 0, { parent: LPHONE });
 
 // ---------------------------------------------------------------- cue times (window.CT, from build/generate.py)
-// lines: 0 Dev "nobody's coming in" | 1 Zara "they're all asking ChatGPT" | 2 Dev "Blade Kings?!" | 3 Zara "you didn't. Watch."
-//        4 Zara the four steps | 5 Dev "a blue check?" | 6 Zara "launched Nov 10, free" | 7 Dev "who's next?" | 8 Zara CTA
+// lines: 0 Marcus "my phone is dead silent" | 1 Lena "they're all asking ChatGPT" | 2 Marcus "Prime Nest?!" | 3 Lena "we didn't. Watch."
+//        4 Lena the four steps | 5 Marcus "a blue check?" | 6 Lena "launched Nov 10, free" | 7 Marcus "who's buying?" | 8 Lena CTA
 const IN0 = C.inside, CK = C.check, FL = C.flip, NX = C.next;
 const who = (t, name) => C.who.some((w, k) => w === name && t > L[k] - .05 && t < E[k] + .02);
-// 0 the street, empty shop | 1 inside, the fix | 2 the blue check | 3 the crowd crosses back | 4 a full shop
+// 0 the street, an empty office | 1 inside, the fix | 2 the blue check | 3 the crowd crosses back | 4 a full office
 const sceneOf = (t) => (t < IN0 ? 0 : t < CK ? 1 : t < FL ? 2 : t < NX ? 3 : 4);
 const v = (x, y, z) => new THREE.Vector3(x, y, z);
 
@@ -485,8 +485,8 @@ function holdAt(P, k, obj, off = [0, -.1, .04]) {
 }
 const PHONEUP = [[1.45, .05, 1.55], [.15, .1, .25]];
 const CROSS = [[.9, .55, 2.1], [.9, .55, 2.1]];                // arms folded
-const BQ = (i) => [BDOOR.x + .7 + i * .72, 3.3];                // the queue outside Blade Kings
-const FQ = (i) => [FDOOR.x + .9 + i * .74, -3.3];               // the queue outside Fade Factory
+const BQ = (i) => [BDOOR.x + .7 + i * .72, 3.3];                // the queue outside Prime Nest
+const FQ = (i) => [FDOOR.x + .9 + i * .74, -3.3];               // the queue outside Keystone
 const CARDFLIP = (i) => FL + .25 + i * .07;
 function updCrowd(t, s, cam) {
   ST.crowd.forEach((P, i) => {
@@ -504,13 +504,13 @@ function updCrowd(t, s, cam) {
     if (walking) { const a0 = p.a; p = walk(p, t * 8.5 + i * 1.3, .9); if (phoneUp) p.a = [a0[0], p.a[1]]; }
     placeChar(P, true, idle(p, t, P.seed), { eyes: "open", mouth: s >= 3 && t > CARDFLIP(i) ? "smile" : "flat", brows: "flat" });
     ph.visible = phoneUp; if (phoneUp) holdAt(P, 0, ph, [0, -.06, .07]);
-    // the answer card floats over the phone and faces the camera; it flips from Blade Kings to Fade Factory
+    // the answer card floats over the phone and faces the camera; it flips from Prime Nest to Keystone
     const flip = CARDFLIP(i), fu = clamp((t - flip) / .3);
     card.visible = phoneUp && s !== 1;
     if (card.visible) {
       card.position.set(x, 2.45 + .03 * Math.sin(t * 2 + i), z); card.quaternion.copy(cam.quaternion);
       card.scale.set(Math.max(.02, Math.abs(Math.cos(fu * Math.PI))), 1, 1);
-      setMap(ST.cardMs[i], TEX[fu < .5 ? "cardBlade" : "cardFade"]);
+      setMap(ST.cardMs[i], TEX[fu < .5 ? "cardPrime" : "cardKey"]);
     }
   });
   INS.forEach((P, k) => {
@@ -519,23 +519,23 @@ function updCrowd(t, s, cam) {
   });
 }
 function updCast(t, s) {
-  ZPHONE.visible = false;
+  LPHONE.visible = false;
   // Dev
-  if (s === 0) placeChar(DEV, true, idle(pose({ x: FDOOR.x + .1, z: FDOOR.z + .55, ry: .35, a: t > L[2] - .1 && t < E[2] + .2 ? [[1.4, .5, 1.2], [1.4, .5, 1.2]] : CROSS }), t, DEV.seed),
-    t > L[2] - .2 && t < E[2] + .3 ? { eyes: "wide", mouth: "o", brows: "angry", talk: who(t, "dev"), noblink: true } : { eyes: "half", mouth: "flat", brows: "worry", talk: who(t, "dev") });
-  else if (s === 1) placeChar(DEV, true, idle(pose({ x: COUNTER.x - 2.7, z: COUNTER.z + .9, ry: 2.2, a: CROSS, hp: -.05 }), t, DEV.seed), { eyes: "open", mouth: "flat", brows: "raise1" });
-  else if (s === 2 || s === 3) placeChar(DEV, true, idle(pose({ x: FDOOR.x + .1, z: FDOOR.z + .55, ry: s === 2 ? -.4 : .2, hp: s === 2 ? -.35 : 0, a: s === 3 ? [[2.3, .2, .3], [.2, .1, .3]] : [[.3, .2, .5], [.3, .2, .5]] }), t, DEV.seed),
-    { eyes: s === 2 ? "wide" : "happy", mouth: s === 2 ? "o" : "grin", brows: "up", talk: who(t, "dev"), noblink: s === 2 });
-  else placeChar(DEV, true, idle(pose({ x: FX - 1.3, z: -7.0, ry: .45, a: t > L[7] - .1 ? [[1.3, .3, .2], [.3, .1, .4]] : [[.3, .1, .4], [.3, .1, .4]] }), t, DEV.seed), { eyes: "happy", mouth: "grin", brows: "up", talk: who(t, "dev") });
+  if (s === 0) placeChar(MARCUS, true, idle(pose({ x: FDOOR.x + .1, z: FDOOR.z + .55, ry: .35, a: t > L[2] - .1 && t < E[2] + .2 ? [[1.4, .5, 1.2], [1.4, .5, 1.2]] : CROSS }), t, MARCUS.seed),
+    t > L[2] - .2 && t < E[2] + .3 ? { eyes: "wide", mouth: "o", brows: "angry", talk: who(t, "marcus"), noblink: true } : { eyes: "half", mouth: "flat", brows: "worry", talk: who(t, "marcus") });
+  else if (s === 1) placeChar(MARCUS, true, idle(pose({ x: COUNTER.x - 1.5, z: COUNTER.z + 1.3, ry: 2.4, a: CROSS, hp: -.05 }), t, MARCUS.seed), { eyes: "open", mouth: "flat", brows: "raise1" });
+  else if (s === 2 || s === 3) placeChar(MARCUS, true, idle(pose({ x: FDOOR.x + .1, z: FDOOR.z + .55, ry: s === 2 ? -.4 : .2, hp: s === 2 ? -.35 : 0, a: s === 3 ? [[2.3, .2, .3], [.2, .1, .3]] : [[.3, .2, .5], [.3, .2, .5]] }), t, MARCUS.seed),
+    { eyes: s === 2 ? "wide" : "happy", mouth: s === 2 ? "o" : "grin", brows: "up", talk: who(t, "marcus"), noblink: s === 2 });
+  else placeChar(MARCUS, true, idle(pose({ x: FX - 1.3, z: -7.45, ry: .45, a: t > L[7] - .1 ? [[1.3, .3, .2], [.3, .1, .4]] : [[.3, .1, .4], [.3, .1, .4]] }), t, MARCUS.seed), { eyes: "happy", mouth: "grin", brows: "up", talk: who(t, "marcus") });
   // Zara
   if (s === 0) {
-    placeChar(ZARA, true, idle(pose({ x: FDOOR.x + 1.4, z: FDOOR.z + 1.0, ry: 1.1, a: PHONEUP, hp: .2 }), t, ZARA.seed), { eyes: "open", mouth: "flat", brows: "worry", talk: who(t, "zara") });
-    ZPHONE.visible = true; holdAt(ZARA, 0, ZPHONE, [0, -.06, .07]);
-  } else if (s === 1) placeChar(ZARA, true, idle(pose({ x: COUNTER.x, z: COUNTER.z - .58, ry: 0, a: t > L[4] ? [[1.2, .2, 1.1 + .1 * Math.sin(t * 12)], [1.2, .2, 1.1 + .1 * Math.sin(t * 11)]] : [[.5, .2, .8], [.5, .2, .8]] }), t, ZARA.seed),
-    { eyes: t < L[4] ? "half" : "open", mouth: "smirk", brows: t < L[4] ? "raise1" : "flat", talk: who(t, "zara") });
-  else if (s === 3) placeChar(ZARA, true, idle(pose({ x: FDOOR.x + 1.0, z: FDOOR.z + .95, ry: .1, a: [[.3, .1, .4], [.3, .1, .4]] }), t, ZARA.seed), { eyes: "happy", mouth: "grin", brows: "up", talk: who(t, "zara") });
-  else if (s === 4) placeChar(ZARA, true, idle(pose({ x: COUNTER.x, z: COUNTER.z - .58, ry: 0, a: t > C.endc + .3 ? [[.3, .1, .4], [2.2, .1 + .22 * Math.sin(t * 8), 1.5]] : [[.5, .2, .8], [.5, .2, .8]] }), t, ZARA.seed), { eyes: "happy", mouth: "smile", brows: "up", talk: who(t, "zara") });
-  else ZARA.root.visible = false;
+    placeChar(LENA, true, idle(pose({ x: FDOOR.x + 1.4, z: FDOOR.z + 1.0, ry: 1.1, a: PHONEUP, hp: .2 }), t, LENA.seed), { eyes: "open", mouth: "flat", brows: "worry", talk: who(t, "lena") });
+    LPHONE.visible = true; holdAt(LENA, 0, LPHONE, [0, -.06, .07]);
+  } else if (s === 1) placeChar(LENA, true, idle(pose({ x: COUNTER.x, z: COUNTER.z - .58, ry: 0, a: t > L[4] ? [[1.2, .2, 1.1 + .1 * Math.sin(t * 12)], [1.2, .2, 1.1 + .1 * Math.sin(t * 11)]] : [[.5, .2, .8], [.5, .2, .8]] }), t, LENA.seed),
+    { eyes: t < L[4] ? "half" : "open", mouth: "smirk", brows: t < L[4] ? "raise1" : "flat", talk: who(t, "lena") });
+  else if (s === 3) placeChar(LENA, true, idle(pose({ x: FDOOR.x + 1.0, z: FDOOR.z + .95, ry: .1, a: [[.3, .1, .4], [.3, .1, .4]] }), t, LENA.seed), { eyes: "happy", mouth: "grin", brows: "up", talk: who(t, "lena") });
+  else if (s === 4) placeChar(LENA, true, idle(pose({ x: COUNTER.x, z: COUNTER.z - .58, ry: 0, a: t > C.endc + .3 ? [[.3, .1, .4], [2.2, .1 + .22 * Math.sin(t * 8), 1.5]] : [[.5, .2, .8], [.5, .2, .8]] }), t, LENA.seed), { eyes: "happy", mouth: "smile", brows: "up", talk: who(t, "lena") });
+  else LENA.root.visible = false;
   // the rival: smug before, deflated after
   if (s === 0 || s === 3) placeChar(RIVAL, true, idle(pose({ x: BDOOR.x - .3, z: BDOOR.z - .6, ry: Math.PI - .3, a: s === 0 ? CROSS : [[.15, .1, .2], [.15, .1, .2]], hp: s === 3 ? .15 : -.05 }), t, RIVAL.seed),
     s === 0 ? { eyes: "half", mouth: "smirk", brows: "flat" } : { eyes: "open", mouth: "sad", brows: "worry" });
@@ -543,15 +543,15 @@ function updCast(t, s) {
 }
 
 // ---------------------------------------------------------------- shots: [start, {p0, p1, l0, l1, fov, ap, roll, track}]
-const DEVHEAD = v(FDOOR.x + .1, 1.55, FDOOR.z + .55), ZHEAD = v(COUNTER.x, 1.5, COUNTER.z - .58);
+const MARCUSHEAD = v(FDOOR.x + .1, 1.55, FDOOR.z + .55), LHEAD = v(COUNTER.x, 1.5, COUNTER.z - .58);
 const SHOTS = [
   [0, { p0: v(6.2, 4.4, 1.4), p1: v(3.6, 2.1, .7), l0: v(-1.8, 1.9, -3.6), l1: v(-2.6, 1.5, -3.8), fov: 56, ap: .01 }],
   [L[1] - .3, { track: 4, off: v(1.5, 2.0, 1.9), look: v(0, 2.15, 0), fov: 50, ap: .1 }],
-  [L[2] - .25, { p0: v(FDOOR.x + .75, 1.6, -1.65), p1: v(FDOOR.x + .65, 1.58, -1.85), l0: DEVHEAD, fov: 52, ap: .12 }],
-  [IN0, { p0: v(COUNTER.x + .5, 1.6, -5.2), p1: v(COUNTER.x + .3, 1.58, -5.45), l0: ZHEAD, fov: 52, ap: .12 }],
+  [L[2] - .25, { p0: v(FDOOR.x + .75, 1.6, -1.65), p1: v(FDOOR.x + .65, 1.58, -1.85), l0: MARCUSHEAD, fov: 52, ap: .12 }],
+  [IN0, { p0: v(COUNTER.x + .5, 1.6, -5.2), p1: v(COUNTER.x + .3, 1.58, -5.45), l0: LHEAD, fov: 52, ap: .12 }],
   [L[4] - .3, { p0: v(FX + .1, 1.8, -4.85), p1: v(FX + 1.0, 1.75, -5.1), l0: v(COUNTER.x - 1.0, 1.85, -7.5), fov: 58, ap: .03 }],
   [CK, { p0: v(FX + 2.0, 1.9, -1.3), p1: v(FX + 2.3, 2.25, -1.9), l0: v(FX + 2.2, 2.75, -4.2), fov: 46, ap: .05 }],
-  [L[5] - .2, { p0: v(FDOOR.x + .55, 1.1, -1.95), p1: v(FDOOR.x + .5, 1.15, -2.1), l0: DEVHEAD.clone().add(v(0, .1, 0)), fov: 54, ap: .12 }],
+  [L[5] - .2, { p0: v(FDOOR.x + .55, 1.1, -1.95), p1: v(FDOOR.x + .5, 1.15, -2.1), l0: MARCUSHEAD.clone().add(v(0, .1, 0)), fov: 54, ap: .12 }],
   [FL, { p0: v(8.2, 5.6, 1.2), p1: v(6.6, 4.7, .7), l0: v(-1, .9, -1.2), fov: 58, ap: .005 }],
   [FL + 2.7, { p0: v(BDOOR.x + .9, 1.6, 2.0), p1: v(BDOOR.x + .8, 1.58, 2.2), l0: v(BDOOR.x - .3, 1.5, BDOOR.z - .6), fov: 52, ap: .1 }],
   [NX, { p0: v(FX + 2.9, 1.85, -4.95), p1: v(FX + 2.6, 1.8, -5.1), l0: v(FX - 1.3, 1.45, -7.0), fov: 58, ap: .04 }],
@@ -569,7 +569,7 @@ function shotAt(t) {
 
 // ---------------------------------------------------------------- per frame
 function updShop(t, s) {
-  ST.f.poleTex.offset.y = -t * .6; ST.b.poleTex.offset.y = -t * .6;
+  ST.f.sale.rotation.x = .06 * Math.sin(t * 1.7); ST.b.sale.rotation.x = .06 * Math.sin(t * 1.5 + 1);   // the FOR SALE signs sway
   const cu = s >= 2 ? ss(t, CK + .35, CK + .7) : 0;
   ST.check.visible = cu > 0; ST.check.scale.setScalar(cu > 0 ? lerp(2.2, 1, cu) + .15 * pulse(t, CK + .8, .2) : .01);
   ST.inL.intensity = 6; ST.inL2.intensity = 4;
@@ -597,7 +597,7 @@ function renderAt(t) {
   updCast(t, s);
   updCrowd(t, s, camera);                 // first pass so the tracked walker has moved before the camera follows
   const sh = shotAt(t);
-  const cv = window.BB_COVER;
+  const cv = window.RE_COVER;
   camera.position.copy(sh.p).add(V.set(Math.sin(t * .9) * .004, Math.sin(t * 1.3 + 1) * .004, 0));
   camera.fov = sh.fov;
   if (cv && cv.cam) { camera.position.set(...cv.cam); sh.l.set(...cv.look); camera.fov = cv.fov ?? camera.fov; }
@@ -635,25 +635,33 @@ function dyn(key, w, h, draw) {
   DYN[key] = (...a) => { const k = a.join("|"); if (k !== last) { last = k; draw(g, w, h, ...a); tx.needsUpdate = true; } return tx; };
 }
 function buildTextures() {
-  TEX.signFade = text(920, 180, (g, w, h) => { g.clearRect(0, 0, w, h); block(g, 6, 14, w - 12, h - 28, "#1E1B18", 20); g.textAlign = "center"; g.fillStyle = "#F2C94C"; g.font = FT(800, 96); g.fillText("FADE FACTORY", w / 2 - 40, 124); });
-  TEX.signBlade = text(920, 180, (g, w, h) => { g.clearRect(0, 0, w, h); block(g, 6, 14, w - 12, h - 28, "#F4F1EA", 20); g.textAlign = "center"; g.fillStyle = "#141414"; g.font = FT(800, 96); g.fillText("BLADE KINGS", w / 2 + 40, 124); });
+  TEX.signKey = text(920, 180, (g, w, h) => { g.clearRect(0, 0, w, h); block(g, 6, 14, w - 12, h - 28, "#1C2A4A", 20); g.textAlign = "center"; g.fillStyle = "#F2C94C"; g.font = FT(800, 84); g.fillText("KEYSTONE REALTY", w / 2 - 40, 120); });
+  TEX.signPrime = text(920, 180, (g, w, h) => { g.clearRect(0, 0, w, h); block(g, 6, 14, w - 12, h - 28, "#F4F1EA", 20); g.textAlign = "center"; g.fillStyle = "#1F7A4D"; g.font = FT(800, 76); g.fillText("PRIME NEST REALTY", w / 2 + 40, 118); });
   const awn = (a, b) => text(256, 64, (g, w, h) => { for (let i = 0; i < 8; i++) { g.fillStyle = i % 2 ? a : b; g.fillRect(i * 32, 0, 32, h); } g.fillStyle = "rgba(0,0,0,.2)"; g.fillRect(0, h - 8, w, 8); });
-  TEX.awnFade = awn("#F4F1EA", "#D9483B"); TEX.awnBlade = awn("#141414", "#C9A227");
+  TEX.awnKey = awn("#F4F1EA", "#1C2A4A"); TEX.awnPrime = awn("#F4F1EA", "#1F7A4D");
+  const house = (g, x, y, w, h, k) => { const roof = ["#B5654A", "#5E6470", "#7A4A2A", "#2F6F5E", "#8C3B3B", "#4A5A7A"][k % 6], wall = ["#F4EFE6", "#E8D9BE", "#DCE6EE", "#F2E3C9", "#E9E4DA", "#F7F1E3"][k % 6];
+    g.fillStyle = "#BFE0F7"; g.fillRect(x, y, w, h * .62); g.fillStyle = "#7DBA6A"; g.fillRect(x, y + h * .62, w, h * .38);
+    g.fillStyle = wall; g.fillRect(x + w * .2, y + h * .34, w * .6, h * .38); g.fillStyle = roof; g.beginPath(); g.moveTo(x + w * .14, y + h * .36); g.lineTo(x + w * .5, y + h * .12); g.lineTo(x + w * .86, y + h * .36); g.fill();
+    g.fillStyle = "#3A3A3A"; g.fillRect(x + w * .45, y + h * .52, w * .1, h * .2); g.fillStyle = "#9FC4DE"; g.fillRect(x + w * .27, y + h * .44, w * .12, h * .1); g.fillRect(x + w * .61, y + h * .44, w * .12, h * .1); };
+  for (let k = 0; k < 6; k++) TEX["listing" + k] = text(320, 400, (g, w, h) => { g.fillStyle = "#FFFFFF"; g.fillRect(0, 0, w, h); house(g, 14, 14, w - 28, 250, k); label(g, ["$420,000", "$389,000", "$515,000", "$298,000", "$460,000", "$352,000"][k], 20, 316, 40, "#14161C"); label(g, ["3 bed · 2 bath", "2 bed · 2 bath", "4 bed · 3 bath", "2 bed · 1 bath", "3 bed · 3 bath", "3 bed · 2 bath"][k], 20, 360, 26, "#6A6878", "left", 700); });
+  TEX.wall = text(920, 340, (g, w, h) => { g.fillStyle = "#F4F1EA"; g.fillRect(0, 0, w, h); label(g, "OUR LISTINGS", 24, 44, 32, "#1C2A4A"); for (let k = 0; k < 8; k++) { const x = 24 + (k % 4) * 224, y = 64 + Math.floor(k / 4) * 136; g.fillStyle = "#FFFFFF"; g.fillRect(x, y, 208, 124); house(g, x + 6, y + 6, 196, 90, k); label(g, k % 3 ? "FOR SALE" : "SOLD", x + 10, y + 116, 18, k % 3 ? "#1C2A4A" : "#D9483B"); } });
+  const sale = (who, c) => text(280, 200, (g, w, h) => { g.fillStyle = "#FFFFFF"; g.fillRect(0, 0, w, h); g.fillStyle = c; g.fillRect(0, 0, w, 70); label(g, "FOR SALE", w / 2, 50, 40, "#FFFFFF", "center"); label(g, who, w / 2, 124, 30, c, "center"); label(g, "555-0142", w / 2, 172, 26, "#3A3A3A", "center", 700); });
+  TEX.saleKey = sale("KEYSTONE", "#1C2A4A"); TEX.salePrime = sale("PRIME NEST", "#1F7A4D");
   TEX.check = text(256, 256, (g, w, h) => { g.clearRect(0, 0, w, h); g.shadowColor = "rgba(47,123,246,.8)"; g.shadowBlur = 24; tick(g, 128, 128, 100); });
   TEX.sky = text(16, 512, (g, w, h) => { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, "#5FA6E8"); gr.addColorStop(.45, "#A9D2F2"); gr.addColorStop(.55, "#E4F1FA"); gr.addColorStop(1, "#E4F1FA"); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
   // the ChatGPT answer card over every phone
   const card = (name, sub, isFade) => text(560, 256, (g, w, h) => {
     g.clearRect(0, 0, w, h); block(g, 6, 6, w - 12, h - 12, "rgba(255,255,255,.96)", 28);
-    label(g, "ChatGPT · best barber near me?", 34, 56, 26, "#6A6878", "left", 700);
-    block(g, 28, 84, w - 56, 140, isFade ? "#FFF6D8" : "#F2F2F5", 20);
-    block(g, 44, 104, 100, 100, isFade ? "#1E1B18" : "#141414", 16); label(g, isFade ? "FF" : "BK", 94, 168, 40, isFade ? "#F2C94C" : "#F4F1EA", "center");
-    g.font = FT(800, 40); g.fillStyle = "#14161C"; g.fillText(name, 166, 148); tick(g, 166 + g.measureText(name).width + 30, 135, 20);
+    label(g, "ChatGPT · best real estate agent near me?", 34, 56, 24, "#6A6878", "left", 700);
+    block(g, 28, 84, w - 56, 140, isFade ? "#FFF6D8" : "#EEF7F1", 20);
+    block(g, 44, 104, 100, 100, isFade ? "#1C2A4A" : "#1F7A4D", 16); label(g, isFade ? "KR" : "PN", 94, 168, 40, isFade ? "#F2C94C" : "#F4F1EA", "center");
+    g.font = FT(800, name.length > 14 ? 34 : 40); g.fillStyle = "#14161C"; g.fillText(name, 166, 148); tick(g, 166 + g.measureText(name).width + 30, 135, 20);
     label(g, sub, 166, 194, 26, isFade ? "#B7791F" : "#6A6878", "left", 700);
   });
-  TEX.cardBlade = card("Blade Kings", "open now · 4.6", false);
-  TEX.cardFade = card("Fade Factory", "open now · walk-ins welcome", true);
+  TEX.cardPrime = card("Prime Nest Realty", "open now · 4.6", false);
+  TEX.cardKey = card("Keystone Realty", "open now · showings today", true);
   // the four steps as holograms
-  const STEPS = [["1", "Business Hub", "chatgpt.com/business-hub"], ["2", "Search + Get Started", "Fade Factory"], ["3", "Verify", "shop phone"], ["4", "ID check", "blue check"]];
+  const STEPS = [["1", "Business Hub", "chatgpt.com/business-hub"], ["2", "Search + Get Started", "Keystone Realty"], ["3", "Verify", "office phone"], ["4", "ID check", "blue check"]];
   STEPS.forEach(([n, a, b], k) => {
     TEX["holo" + k] = text(512, 320, (g, w, h) => {
       g.clearRect(0, 0, w, h); g.shadowColor = "rgba(120,200,255,.9)"; g.shadowBlur = 22; g.strokeStyle = "#8FE3FF"; g.lineWidth = 6; rr(g, 14, 14, w - 28, h - 28, 26); g.stroke();
@@ -666,12 +674,12 @@ function buildTextures() {
   // Zara's laptop: Business Hub at each step
   dyn("lap", 640, 400, (g, w, h, k) => {
     g.fillStyle = "#F7F7F9"; g.fillRect(0, 0, w, h); g.fillStyle = "#1E1B18"; g.fillRect(0, 0, w, 50); label(g, "chatgpt.com/business-hub", 24, 34, 24, "#E9E4DA", "left", 700);
-    label(g, ["Business Hub", "Business Hub", "Verify your business", "Identity check", "Fade Factory"][k], 30, 110, 38, "#14161C");
+    label(g, ["Business Hub", "Business Hub", "Verify your business", "Identity check", "Keystone Realty"][k], 30, 110, 38, "#14161C");
     if (k === 0) { block(g, 30, 140, w - 60, 64, "#FFFFFF", 12); g.strokeStyle = "#C9C9D2"; g.lineWidth = 2; rr(g, 30, 140, w - 60, 64, 12); g.stroke(); label(g, "Search your business", 50, 182, 26, "#9A9AA6", "left", 600); }
-    if (k === 1) { block(g, 30, 140, w - 60, 64, "#FFFFFF", 12); label(g, "Fade Factory", 50, 182, 28, "#14161C", "left", 700); block(g, 30, 230, w - 60, 70, "#14161C", 35); label(g, "Get Started", w / 2, 276, 30, "#FFFFFF", "center"); }
+    if (k === 1) { block(g, 30, 140, w - 60, 64, "#FFFFFF", 12); label(g, "Keystone Realty", 50, 182, 28, "#14161C", "left", 700); block(g, 30, 230, w - 60, 70, "#14161C", 35); label(g, "Get Started", w / 2, 276, 30, "#FFFFFF", "center"); }
     if (k === 2) ["Business phone", "Business email", "Website domain"].forEach((s, j) => { block(g, 30, 140 + j * 74, w - 60, 62, j === 0 ? "#E7F7EC" : "#FFFFFF", 12); label(g, s, 50, 180 + j * 74, 26, "#14161C", "left", 700); if (j === 0) tick(g, w - 70, 171, 20, "#22C55E"); });
     if (k === 3) { block(g, 30, 140, 180, 120, "#E5E7EB", 12); block(g, 230, 160, 300, 18, "#D1D5DB", 9); block(g, 230, 200, 220, 18, "#D1D5DB", 9); label(g, "Verified", 230, 250, 30, "#22C55E"); }
-    if (k === 4) { label(g, "Fade Factory", 30, 180, 44, "#14161C"); tick(g, 360, 165, 24); label(g, "Verified business", 30, 230, 26, "#6A6878", "left", 700); }
+    if (k === 4) { label(g, "Keystone Realty", 30, 180, 44, "#14161C"); tick(g, 420, 165, 24); label(g, "Verified business", 30, 230, 26, "#6A6878", "left", 700); }
   });
   for (const [m, key] of LATE) { if (TEX[key]) { m.map = TEX[key]; m.needsUpdate = true; } }
   TEX.ready = true;
@@ -684,10 +692,10 @@ const ready = (async () => {
   scene.traverse((o) => { if (o.isInstancedMesh) o.frustumCulled = false; if (o.isMesh && o.parent && o.parent !== scene) o.frustumCulled = false; });
   for (const k in SET) SET[k].visible = true;
   renderer.compile(scene, camera);
-  renderAt(window.BB_COVER ? window.BB_COVER.t : (window.__hfThreeTime || 0));
+  renderAt(window.RE_COVER ? window.RE_COVER.t : (window.__hfThreeTime || 0));
 })();
 window.__hf = window.__hf || {};
 window.__hf.buildReady = window.__hf.buildReady || {};
-window.__hf.buildReady["barber"] = ready;
-window.addEventListener("hf-seek", (e) => renderAt(window.BB_COVER ? window.BB_COVER.t : e.detail.time));
+window.__hf.buildReady["realty"] = ready;
+window.addEventListener("hf-seek", (e) => renderAt(window.RE_COVER ? window.RE_COVER.t : e.detail.time));
 window.STACK_DEBUG = { renderAt, SET, camera, C };

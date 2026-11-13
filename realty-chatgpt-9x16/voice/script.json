@@ -1,13 +1,13 @@
 {
- "note": "Barbershop what-if: Dev (barber, Kokoro am_liam ref) and Zara (his niece, Kokoro af_sky ref), performed by Chatterbox. [take, speaker, display text or null, [[spoken text, emotion, pause]]]",
+ "note": "Real estate what-if: Marcus (agent, Kokoro am_liam ref) and Lena (junior agent, Kokoro af_sky ref), performed by Chatterbox. [take, speaker, display text or null, [[spoken text, emotion, pause]]]",
  "lines": [
   [
    "01",
-   "dev",
-   "Monday. 8 AM. ~ Whole street's out... and nobody's coming in.",
+   "marcus",
+   "Monday. 9 AM. ~ Everyone in town is looking for a house... and my phone is dead silent.",
    [
     [
-     "Monday. Eight A M. Whole street's out... and nobody's coming in.",
+     "Monday. Nine A M. Everyone in town is looking for a house... and my phone is dead silent.",
      "neutral",
      0
     ]
@@ -15,11 +15,11 @@
   ],
   [
    "02",
-   "zara",
+   "lena",
    null,
    [
     [
-     "Uncle Dev, they're all asking ChatGPT. And it keeps saying Blade Kings.",
+     "Marcus, they're all asking ChatGPT. And it keeps saying Prime Nest.",
      "neutral",
      0
     ]
@@ -27,11 +27,11 @@
   ],
   [
    "03",
-   "dev",
+   "marcus",
    null,
    [
     [
-     "Blade Kings? They can't even cut a straight line!",
+     "Prime Nest? They spelled kitchen wrong on their last listing!",
      "neutral",
      0
     ]
@@ -39,11 +39,11 @@
   ],
   [
    "04",
-   "zara",
+   "lena",
    null,
    [
     [
-     "They claimed their business on ChatGPT. You didn't. Watch.",
+     "They claimed their business on ChatGPT. We didn't. Watch.",
      "neutral",
      0
     ]
@@ -51,11 +51,11 @@
   ],
   [
    "05",
-   "zara",
-   "Business Hub. Search Fade Factory. Get Started. Verify with the shop phone. Quick ID ~ check...",
+   "lena",
+   "Business Hub. Search Keystone Realty. Get Started. Verify with our office phone. Quick ID ~ check...",
    [
     [
-     "Business Hub. Search Fade Factory. Get Started. Verify with the shop phone. Quick I D check...",
+     "Business Hub. Search Keystone Realty. Get Started. Verify with our office phone. Quick I D check...",
      "neutral",
      0
     ]
@@ -63,11 +63,11 @@
   ],
   [
    "06",
-   "dev",
+   "marcus",
    null,
    [
     [
-     "Wait. Is that a blue check? On my sign?",
+     "Wait. Is that a blue check? On our sign?",
      "neutral",
      0
     ]
@@ -75,11 +75,11 @@
   ],
   [
    "07",
-   "zara",
+   "lena",
    null,
    [
     [
-     "It launched November tenth, and it's free. Most shops still haven't done it.",
+     "It launched November tenth, and it's free. Most agencies still haven't done it.",
      "neutral",
      0
     ]
@@ -87,11 +87,11 @@
   ],
   [
    "08",
-   "dev",
+   "marcus",
    null,
    [
     [
-     "Okay... who's next?",
+     "Okay... who's buying a house today?",
      "neutral",
      0
     ]
@@ -99,7 +99,7 @@
   ],
   [
    "09",
-   "zara",
+   "lena",
    "Want the checklist? Follow @nxtlvlsocial.ai ~ ~ and comment CHATGPT. ~ ~ ~",
    [
     [

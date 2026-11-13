@@ -1,4 +1,4 @@
-"""The barbershop what-if's dialogue (Dev, the barber; Zara, his niece): one open-source take per line (Kokoro voice + Chatterbox, see build/voices.py), laid out with the story's beats between lines, and its caption timing.
+"""The real estate what-if's dialogue (Marcus, the agent; Lena, his junior agent): one open-source take per line (Kokoro voice + Chatterbox, see build/voices.py), laid out with the story's beats between lines, and its caption timing.
 Kane's narration lines (01, 04) get a noir voice-over treatment: a little low-end warmth and a short, dark room tail.
 
 python3 build/voice.py      (from the project root; needs kokoro-onnx, numpy, soundfile, ffmpeg)
