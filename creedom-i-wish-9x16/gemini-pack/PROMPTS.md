@@ -27,7 +27,7 @@ file name shown, then upload them all to me when they're done.
 > simple friendly face with big expressive brown eyes and thick expressive eyebrows, messy dark wavy hair, a plain
 > oversized cream hoodie, grey joggers, white sneakers, no logos.
 
-**Style line** (in every prompt): premium stylised 3D animated short, like a feature-animation film: soft rounded
+**Style line** (already at the end of every prompt below): premium stylised 3D animated short, like a feature-animation film: soft rounded
 shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text,
 no labels, no logos, no watermark, no glow effects, no lens flares.
 
@@ -49,6 +49,7 @@ cream hoodie, grey joggers, white sneakers, no logos.
 Render him in the EXACT same art style as the first reference image (the pink mascot): premium stylised 3D animated
 short, soft rounded shapes, smooth matte designer-toy materials, warm soft studio lighting. Do not include the mascot.
 Match the shape of the last reference image (wide 16:9). No text, no labels, no logos, no watermark.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 If something's off, fix it with: `Edit the reference image (the character turnaround sheet). Keep EVERYTHING the same:
 same three views, same style, same face, same background, same lighting. Only this change: [one change]. No text, no
@@ -67,6 +68,7 @@ a deep blue night sky, stars and a crescent moon; warm fairy lights strung along
 in the back right corner; posters and a small shelf with plants; crumpled paper balls on the floor. Warm lamp light on
 the desk, cool blue moonlight from the window, soft violet shadows, shallow depth of field. Camera at seated eye level.
 Empty space in the top third. Plain, uncluttered bottom-right corner. No text, no logos, no watermark, no glow effects.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ### 03_wide_master.png
@@ -78,6 +80,7 @@ same style. Place ONE character in it, keeping his design exactly as in his char
 the young creator in the cream hoodie. He sits at the desk facing the camera, holding his phone, looking at it,
 shoulders slumped, sad. Wide shot, the whole room visible, camera at seated eye level. Empty space in the top third.
 Plain bottom-right corner. No text, no logos, no watermark.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 **This is the master reference for every shot after it.**
 
@@ -94,6 +97,7 @@ image (the wide shot). The young creator from the second reference sheet, medium
 phone up, its screen lighting his face, staring at it in over-dramatic disbelief: eyes huge and watery, eyebrows
 raised in despair, lip trembling, mouth closed. Empty space in the top third. Plain bottom-right corner. No text, no
 logos, no watermark, no glow effects.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ### 05_rant.png
@@ -101,6 +105,7 @@ logos, no watermark, no glow effects.
 Vertical 9:16 film still, same scene, same character, same style, same lighting and colours as the first reference image (the wide shot). The young creator from the second reference sheet, standing in the middle of the room, both arms flung up in exasperation, fingers spread,
 leaning back, frustrated over-the-top face, eyebrows angry, mouth open mid-shout. Medium shot, full upper body.
 Empty space in the top third. Plain bottom-right corner. No text, no logos, no watermark, no glow effects.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ### 06_head_on_desk.png
@@ -108,6 +113,7 @@ Empty space in the top third. Plain bottom-right corner. No text, no logos, no w
 Vertical 9:16 film still, same scene, same character, same style, same lighting and colours as the first reference image (the wide shot). The young creator from the second reference sheet, slumped over the desk with his cheek resting on his folded arms, face turned towards the camera,
 crying dramatically: eyes squeezed shut, tears running down his cheeks, mouth closed in a wobbly frown. A pen lies by
 his hand. Medium close-up at desk height. Empty space in the top third. Plain bottom-right corner. No text, no logos, no watermark, no glow effects.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ### 07_window_wish.png
@@ -115,12 +121,14 @@ his hand. Medium close-up at desk height. Empty space in the top third. Plain bo
 Vertical 9:16 film still, same scene, same character, same style, same lighting and colours as the first reference image (the wide shot). The young creator from the second reference sheet, standing at the big window in three-quarter view, looking up at the crescent moon, hands clasped
 together under his chin as if making a wish, hopeful teary eyes, mouth closed. Cool moonlight on his face, the night
 sky filling the top of the frame. Medium shot. Empty space in the top third. Plain bottom-right corner. No text, no logos, no watermark, no glow effects.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ### 08_bed_wish.png
 ```
 Vertical 9:16 film still, same scene, same character, same style, same lighting and colours as the first reference image (the wide shot). The young creator from the second reference sheet, sitting on the bed hugging his knees, chin on his knees, phone in one hand, sad puppy eyes looking
 towards the camera, eyebrows tilted up, mouth closed. Medium shot. Empty space in the top third. Plain bottom-right corner. No text, no logos, no watermark, no glow effects.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ### 09_pillow_wish.png
@@ -128,6 +136,7 @@ towards the camera, eyebrows tilted up, mouth closed. Medium shot. Empty space i
 Vertical 9:16 film still, same scene, same character, same style, same lighting and colours as the first reference image (the wide shot). The young creator from the second reference sheet, lying face down on the bed with his head lifted just above a pillow, peeking over it towards the
 camera with pleading teary eyes, mouth closed; his phone lies beside him, screen glowing. Camera low at the foot of
 the bed, close on his face and the pillow. Empty space in the top third. Plain bottom-right corner. No text, no logos, no watermark, no glow effects.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ---
@@ -145,6 +154,7 @@ at night: a dramatic deep blue sky with fast-moving clouds and stars, crescent m
 (the pink mascot from the second and third reference images, exactly on model: one soft egg-shaped body with no neck, hot magenta-pink #F343A2 smooth matte plush, big round glossy eyes with two white catchlights, small rounded yellow-orange beak, short rounded wing-arms, stubby yellow-orange feet, no feathers) flies past like a superhero, body stretched forward, one wing-arm pointed ahead, leaving a thin soft pink
 streak behind him. He is small in the frame, just a teaser. No people. Empty space in the top third. Plain
 bottom-right corner. No text, no logos, no watermark, no glow effects.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ### 11_teaser2_window.png
@@ -154,6 +164,7 @@ looking at the window: CREE (the pink mascot from the second and third reference
 window frame: one wing-arm, part of his pink body and the edge of one big eye, with soft motion streaks. The curtains
 blow inwards and a few papers lift off the desk. No people. Dramatic, mysterious. Empty space in the top third. Plain
 bottom-right corner. No text, no logos, no watermark, no glow effects.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ### 12_hero_flying_in.png
@@ -163,6 +174,7 @@ Vertical 9:16 film still, same scene, same style as the first reference image. T
 determined confident eyes, beak closed in a smile. Curtains and papers blasting inwards, moonlight behind him. Low
 angle, dynamic, cinematic. Cree large in the centre. Empty space in the top third. Plain bottom-right corner. No text,
 no logos, no watermark, no glow effects, no lens flares.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ### 13_hero_landing.png
@@ -172,6 +184,7 @@ just landed on the desk in a superhero landing: crouched low, one wing-arm press
 side, eyes looking up at the camera, confident. A few papers settling in the air around him. Low angle at desk height,
 Cree in the centre of the frame. Empty space in the top third. Plain bottom-right corner. No text, no logos, no
 watermark, no glow effects.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ### 14_creator_whoa.png
@@ -181,6 +194,7 @@ Vertical 9:16 film still, same scene, same character, same style, same lighting 
 young creator from the second reference sheet, sitting up on the bed and twisting towards the desk, jaw dropped in
 total shock, eyes huge, eyebrows high, leaning back. Medium close-up. Empty space in the top third. Plain bottom-right
 corner. No text, no logos, no watermark.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ---
@@ -194,6 +208,7 @@ on the desk in a proud pose like the PROUD pose in the third reference: chest ou
 satisfied smile, holding a magnifying glass with a thin gold rim and a wooden handle in one wing. Medium close-up at
 desk height, Cree in the lower middle of the frame. Empty space in the top third. Plain bottom-right corner. No text,
 no logos, no watermark, no glow effects.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ### 16_fix1_filmstrip.png
@@ -203,6 +218,7 @@ Vertical 9:16 film still, same scene, same style, same lighting as the first ref
 frames hanging in the air above the desk like a film strip, each frame a simple colourful thumbnail with no text. He
 points at the second frame from the left, which is outlined in coral. Behind the desk, the young creator from the fourth reference (the creator sheet) leans in, amazed. Medium shot. Empty space in the top third. Plain bottom-right corner. No text, no
 logos, no watermark, no glow effects.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ### 17_fix2_cards.png
@@ -212,6 +228,7 @@ Vertical 9:16 film still, same scene, same style, same lighting as the first ref
 text; the fourth card is warm gold. Behind him the young creator from the fourth reference (the creator sheet) points at the gold card,
 delighted, laughing with his mouth open. Medium shot. Empty space in the top third. Plain bottom-right corner. No
 text, no logos, no watermark, no glow effects.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ### 18_fix3_machine.png
@@ -221,6 +238,7 @@ Vertical 9:16 film still, same scene, same style, same lighting as the first ref
 out of the phone on its tripod towards the camera. Behind the desk the young creator from the fourth reference (the creator sheet) laughs
 with both hands on his head. Medium shot. Empty space in the top third. Plain bottom-right corner. No text, no logos,
 no watermark, no glow effects.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ### 19_hug.png
@@ -228,6 +246,7 @@ no watermark, no glow effects.
 Vertical 9:16 film still, same scene, same style, same lighting as the first reference image. The young creator from the fourth reference (the creator sheet) stands in front of the desk hugging CREE (the pink mascot from the second and third reference images, exactly on model: one soft egg-shaped body with no neck, hot magenta-pink #F343A2 smooth matte plush, big round glossy eyes with two white catchlights, small rounded yellow-orange beak, short rounded wing-arms, stubby yellow-orange feet, no feathers) to his chest with both arms, happy tears in
 his eyes, a big relieved smile with mouth closed; Cree pats his head gently with one wing-arm, eyes closed in happy
 arcs. Warm close two-shot. Empty space in the top third. Plain bottom-right corner. No text, no logos, no watermark.
+Style: premium stylised 3D animated short, like a feature-animation film: soft rounded shapes, smooth matte designer-toy materials, gentle cinematic lighting, shallow depth of field. Clean image: no text, no labels, no logos, no watermark, no glow effects, no lens flares.
 ```
 
 ---
