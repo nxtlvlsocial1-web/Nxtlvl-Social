@@ -1,0 +1,353 @@
+{
+ "01_0": {
+  "text": "My latest reel... got forty-two views.",
+  "exaggeration": 0.9,
+  "cfg_weight": 0.3,
+  "seed": 7,
+  "seconds": 2.68,
+  "heard": "My latest reel got 42 views.",
+  "match": 0.769
+ },
+ "01_1": {
+  "text": "My latest reel... got forty-two views.",
+  "exaggeration": 1.02,
+  "cfg_weight": 0.3,
+  "seed": 21,
+  "seconds": 3.16,
+  "heard": "My latest reel got 42 views.",
+  "match": 0.769,
+  "picked": true
+ },
+ "01_2": {
+  "text": "My latest reel... got forty-two views.",
+  "exaggeration": 0.78,
+  "cfg_weight": 0.3,
+  "seed": 53,
+  "seconds": 3.32,
+  "heard": "My latest reel got 42 views.",
+  "match": 0.769
+ },
+ "02_0": {
+  "text": "I used trending audio! I posted at seven A M! I even changed my hair!",
+  "exaggeration": 1.1,
+  "cfg_weight": 0.4,
+  "seed": 7,
+  "seconds": 5.44,
+  "heard": "I used trending audio, I posted at 7am, I even changed my hair.",
+  "match": 0.857
+ },
+ "02_1": {
+  "text": "I used trending audio! I posted at seven A M! I even changed my hair!",
+  "exaggeration": 1.2200000000000002,
+  "cfg_weight": 0.4,
+  "seed": 21,
+  "seconds": 5.76,
+  "heard": "I used trending audio. I posted at 7 a.m. I even changed my hair",
+  "match": 0.828,
+  "picked": true
+ },
+ "02_2": {
+  "text": "I used trending audio! I posted at seven A M! I even changed my hair!",
+  "exaggeration": 0.9800000000000001,
+  "cfg_weight": 0.4,
+  "seed": 53,
+  "seconds": 5.52,
+  "heard": "I used trending audio. I posted at 7 a.m. I even changed my hair.",
+  "match": 0.828
+ },
+ "03_0": {
+  "text": "And still... nothing.",
+  "exaggeration": 0.85,
+  "cfg_weight": 0.25,
+  "seed": 7,
+  "seconds": 1.64,
+  "heard": "and still nothing.",
+  "match": 1.0
+ },
+ "03_1": {
+  "text": "And still... nothing.",
+  "exaggeration": 0.97,
+  "cfg_weight": 0.25,
+  "seed": 21,
+  "seconds": 1.56,
+  "heard": "and still nothing.",
+  "match": 1.0,
+  "picked": true
+ },
+ "03_2": {
+  "text": "And still... nothing.",
+  "exaggeration": 0.73,
+  "cfg_weight": 0.25,
+  "seed": 53,
+  "seconds": 1.8,
+  "heard": "and still nothing.",
+  "match": 1.0
+ },
+ "04_0": {
+  "text": "I wish someone could review my reel... before I post it.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.3,
+  "seed": 7,
+  "seconds": 3.2,
+  "heard": "I wish someone could review my reel before I post it.",
+  "match": 1.0
+ },
+ "04_1": {
+  "text": "I wish someone could review my reel... before I post it.",
+  "exaggeration": 0.82,
+  "cfg_weight": 0.3,
+  "seed": 21,
+  "seconds": 3.52,
+  "heard": "I wish someone could review my reel before I post it.",
+  "match": 1.0,
+  "picked": true
+ },
+ "04_2": {
+  "text": "I wish someone could review my reel... before I post it.",
+  "exaggeration": 0.58,
+  "cfg_weight": 0.3,
+  "seed": 53,
+  "seconds": 3.76,
+  "heard": "I wish someone could review my reel before I post it.",
+  "match": 1.0
+ },
+ "05_0": {
+  "text": "I wish it could look at my old reels... and tell me what actually worked.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.3,
+  "seed": 7,
+  "seconds": 4.12,
+  "heard": "I wish it could look at my old reels, and tell me what actually worked.",
+  "match": 1.0
+ },
+ "05_1": {
+  "text": "I wish it could look at my old reels... and tell me what actually worked.",
+  "exaggeration": 0.82,
+  "cfg_weight": 0.3,
+  "seed": 21,
+  "seconds": 4.48,
+  "heard": "I wish it could look at my old reels and tell me what actually worked.",
+  "match": 1.0,
+  "picked": true
+ },
+ "05_2": {
+  "text": "I wish it could look at my old reels... and tell me what actually worked.",
+  "exaggeration": 0.58,
+  "cfg_weight": 0.3,
+  "seed": 53,
+  "seconds": 4.24,
+  "heard": "I wish it could look at my old reels and tell me what actually worked.",
+  "match": 1.0
+ },
+ "06_0": {
+  "text": "And I wish it could just set up my D M automation for me.",
+  "exaggeration": 0.8,
+  "cfg_weight": 0.35,
+  "seed": 7,
+  "seconds": 3.04,
+  "heard": "and I wish it could just set up my DM automation for me.",
+  "match": 0.889
+ },
+ "06_1": {
+  "text": "And I wish it could just set up my D M automation for me.",
+  "exaggeration": 0.92,
+  "cfg_weight": 0.35,
+  "seed": 21,
+  "seconds": 3.64,
+  "heard": "and I wish it could just set up my DM automation for me.",
+  "match": 0.889,
+  "picked": true
+ },
+ "06_2": {
+  "text": "And I wish it could just set up my D M automation for me.",
+  "exaggeration": 0.68,
+  "cfg_weight": 0.35,
+  "seed": 53,
+  "seconds": 3.48,
+  "heard": "and I wish it could just set up my DM automation for me.",
+  "match": 0.889
+ },
+ "07_0": {
+  "text": "Whoa!",
+  "exaggeration": 1.2,
+  "cfg_weight": 0.4,
+  "seed": 7,
+  "seconds": 0.96,
+  "heard": "Waddle.",
+  "match": 0.0
+ },
+ "07_1": {
+  "text": "Whoa!",
+  "exaggeration": 1.3,
+  "cfg_weight": 0.4,
+  "seed": 21,
+  "seconds": 0.84,
+  "heard": "Whoa, whoa.",
+  "match": 0.667
+ },
+ "07_2": {
+  "text": "Whoa!",
+  "exaggeration": 1.08,
+  "cfg_weight": 0.4,
+  "seed": 53,
+  "seconds": 0.72,
+  "heard": "Whoa",
+  "match": 1.0,
+  "picked": true
+ },
+ "08_0": {
+  "text": "That's... actually it.",
+  "exaggeration": 0.8,
+  "cfg_weight": 0.3,
+  "seed": 7,
+  "seconds": 1.88,
+  "heard": "That's actually it.",
+  "match": 1.0
+ },
+ "08_1": {
+  "text": "That's... actually it.",
+  "exaggeration": 0.92,
+  "cfg_weight": 0.3,
+  "seed": 21,
+  "seconds": 1.72,
+  "heard": "That's actually it.",
+  "match": 1.0,
+  "picked": true
+ },
+ "08_2": {
+  "text": "That's... actually it.",
+  "exaggeration": 0.68,
+  "cfg_weight": 0.3,
+  "seed": 53,
+  "seconds": 1.8,
+  "heard": "That's actually it.",
+  "match": 1.0
+ },
+ "09_0": {
+  "text": "I forgot I even made that!",
+  "exaggeration": 1.0,
+  "cfg_weight": 0.4,
+  "seed": 7,
+  "seconds": 1.92,
+  "heard": "I forgot I even made that.",
+  "match": 1.0
+ },
+ "09_1": {
+  "text": "I forgot I even made that!",
+  "exaggeration": 1.12,
+  "cfg_weight": 0.4,
+  "seed": 21,
+  "seconds": 2.48,
+  "heard": "I forgot, I even made that!",
+  "match": 1.0,
+  "picked": true
+ },
+ "09_2": {
+  "text": "I forgot I even made that!",
+  "exaggeration": 0.88,
+  "cfg_weight": 0.4,
+  "seed": 53,
+  "seconds": 1.96,
+  "heard": "I forgot I even made that.",
+  "match": 1.0
+ },
+ "10_0": {
+  "text": "Where have you been all my life?",
+  "exaggeration": 0.95,
+  "cfg_weight": 0.3,
+  "seed": 7,
+  "seconds": 1.96,
+  "heard": "Where have you been all my life?",
+  "match": 1.0
+ },
+ "10_1": {
+  "text": "Where have you been all my life?",
+  "exaggeration": 1.0699999999999998,
+  "cfg_weight": 0.3,
+  "seed": 21,
+  "seconds": 2.4,
+  "heard": "Where have you been all my life?",
+  "match": 1.0,
+  "picked": true
+ },
+ "10_2": {
+  "text": "Where have you been all my life?",
+  "exaggeration": 0.83,
+  "cfg_weight": 0.3,
+  "seed": 53,
+  "seconds": 2.04,
+  "heard": "Where have you been all my life?",
+  "match": 1.0
+ },
+ "11_0": {
+  "text": "Comment Creedom, and I'll send you the link.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 2.48,
+  "heard": "Comment, create them and I'll send you the link.",
+  "match": 0.824
+ },
+ "11_1": {
+  "text": "Comment Creedom, and I'll send you the link.",
+  "exaggeration": 0.82,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 2.8,
+  "heard": "Comment, create them, and I'll send you the link.",
+  "match": 0.824
+ },
+ "11_2": {
+  "text": "Comment Creedom, and I'll send you the link.",
+  "exaggeration": 0.58,
+  "cfg_weight": 0.45,
+  "seed": 53,
+  "seconds": 3.12,
+  "heard": "Comment. Create them, and I'll send you the link.",
+  "match": 0.824
+ },
+ "11b_00": {
+  "text": "Comment Cree-dom, and I'll send you the link.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 3.28
+ },
+ "11b_01": {
+  "text": "Comment Cree-dom, and I'll send you the link.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 2.8
+ },
+ "11b_10": {
+  "text": "Comment Kree dum, and I'll send you the link.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 2.48,
+  "picked": true,
+  "note": "spelled Kree dum so it is heard as Creedom"
+ },
+ "11b_11": {
+  "text": "Comment Kree dum, and I'll send you the link.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 2.8
+ },
+ "11b_20": {
+  "text": "Comment, Creedum, and I'll send you the link.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "seed": 7,
+  "seconds": 2.56
+ },
+ "11b_21": {
+  "text": "Comment, Creedum, and I'll send you the link.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "seed": 21,
+  "seconds": 2.48
+ }
+}

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Creedom I Wish 9x16</title>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "GSans"; font-weight: 400 800; src: url("assets/fonts/googlesans.ttf"); }
+@font-face { font-family: "Fraunces"; font-style: italic; font-weight: 400 800; src: url("assets/fonts/fraunces-italic.ttf"); }
+@font-face { font-family: "Manrope"; font-weight: 200 800; src: url("assets/fonts/manrope.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #1A1224; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #1A1224; font-family: "GSans"; }
+.clip { position: absolute; inset: 0; }
+#gl { width: 1080px; height: 1920px; display: block; }
+.pill, .wish, .tag, .cloud, .cap, #endc > * { opacity: 0; }
+.views { position: absolute; left: 610px; top: 980px; display: flex; align-items: center; gap: 12px; padding: 14px 26px; border-radius: 999px; background: rgba(20,14,24,.78); border: 2px solid rgba(255,255,255,.18); color: #fff; }
+.views svg { width: 38px; height: 38px; } .views b { font: 800 52px/1 "GSans"; } .views span { font: 600 34px/1 "GSans"; color: #D9CCE6; }
+.wish { position: absolute; left: 50%; top: 300px; width: 330px; margin-left: -165px; text-align: center; padding: 14px 0; border-radius: 999px; background: rgba(243,67,162,.92); color: #fff; font: 800 34px/1 "GSans"; letter-spacing: 1px; box-shadow: 0 10px 30px rgba(243,67,162,.45); }
+.wish i { font-style: normal; margin-right: 10px; color: #FFE7A8; }
+.tag { position: absolute; display: flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 20px; background: rgba(255,240,248,.82); border: 2px solid rgba(255,255,255,.9); box-shadow: 0 12px 34px rgba(60,10,40,.35); color: #2A1024; }
+.tag b { font: 800 40px/1 "GSans"; color: #E8395A; } .tag span { font: 700 36px/1 "GSans"; }
+#tg1 { left: 190px; top: 760px; } #tg2 { left: 610px; top: 700px; } #tg2 b { color: #E0A11A; } #tg2 { background: rgba(255,246,220,.9); }
+#tg3 { left: 250px; top: 680px; } #tg3 b { color: #2A1024; }
+#tg3 i { position: relative; width: 66px; height: 36px; border-radius: 18px; background: #B9AFC2; margin-left: 6px; } #tg3 em { position: absolute; left: 4px; top: 4px; width: 28px; height: 28px; border-radius: 50%; background: #fff; }
+.cloud { position: absolute; max-width: 520px; padding: 26px 34px; border-radius: 48px; background: #FFFFFF; box-shadow: 0 14px 40px rgba(40,0,30,.35), inset 0 -6px 0 rgba(243,67,162,.12); transform-origin: 50% 100%; }
+.cloud p { font: 800 46px/1.15 "GSans"; color: #2A1024; text-align: center; }
+.cloud i { position: absolute; border-radius: 50%; background: #fff; box-shadow: 0 6px 16px rgba(40,0,30,.25); }
+.cloud.t-down .b1 { width: 38px; height: 38px; left: 50%; bottom: -46px; margin-left: 10px; } .cloud.t-down .b2 { width: 22px; height: 22px; left: 50%; bottom: -80px; margin-left: 40px; }
+.cloud.t-right .b1 { width: 38px; height: 38px; right: -40px; bottom: 6px; } .cloud.t-right .b2 { width: 22px; height: 22px; right: -74px; bottom: -14px; }
+.cap { position: absolute; left: 40px; right: 40px; top: 1360px; text-align: center; }
+.cap span { display: inline; padding: 6px 20px; border-radius: 16px; background: rgba(20,12,22,.8); font: 800 54px/1.45 "GSans"; color: #fff; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.cap b { color: #FF7AC2; }
+#endc { position: absolute; inset: 0; }
+#endc .logo { position: absolute; left: 50%; top: 430px; width: 640px; margin-left: -320px; filter: drop-shadow(0 8px 30px rgba(243,67,162,.45)); }
+#endc .cbox { position: absolute; left: 110px; right: 110px; top: 640px; display: flex; align-items: center; gap: 18px; padding: 18px 22px; border-radius: 26px; background: rgba(255,255,255,.95); box-shadow: 0 16px 40px rgba(40,0,30,.4); }
+#endc .av { width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, #F343A2, #FF9A6A); flex: none; }
+#endc .ty { flex: 1; display: flex; align-items: center; } #endc .ty b { font: 800 50px/1 "GSans"; color: #2A1024; letter-spacing: 2px; } #endc .cur { display: inline-block; width: 4px; height: 50px; background: #F343A2; margin-left: 6px; }
+#endc .post { font: 800 36px/1 "GSans"; color: #fff; background: #F343A2; padding: 14px 24px; border-radius: 16px; }
+#endc .sub { position: absolute; left: 0; right: 0; top: 790px; text-align: center; font: italic 600 50px/1.2 "Fraunces"; color: #FFE3F1; text-shadow: 0 4px 18px rgba(0,0,0,.5); }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="51.73" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="gl" class="clip" data-hold data-start="0" data-duration="51.73" data-track-index="0"></canvas>
+      <div id="ui" class="clip" data-start="0" data-duration="51.73" data-track-index="3" data-layout-allow-overflow><div class="pill views" id="vw"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" fill="none" stroke="#fff" stroke-width="2.2"/><circle cx="12" cy="12" r="3.2" fill="#fff"/></svg><b>42</b><span>views</span></div><div class="wish" id="w0"><i>&#9733;</i>Wish 1 of 3</div><div class="wish" id="w1"><i>&#9733;</i>Wish 2 of 3</div><div class="wish" id="w2"><i>&#9733;</i>Wish 3 of 3</div><div class="tag" id="tg1"><b>0:03</b><span>Slow start</span></div><div class="tag gold" id="tg2"><b>&#9733;</b><span>Most saved</span></div><div class="tag rule" id="tg3"><span>Comments</span><b>&rarr;</b><span>DM</span><i id="sw"><em></em></i></div><div class="cloud t-down" id="k0" style="left:300px;top:470px"><p>Hmm...</p><i class="b1"></i><i class="b2"></i></div><div class="cloud t-right" id="k1" style="left:120px;top:560px"><p>Say no more.</p><i class="b1"></i><i class="b2"></i></div><div class="cloud t-down" id="k2" style="left:120px;top:400px"><p>Second three. That's where they swipe.</p><i class="b1"></i><i class="b2"></i></div><div class="cloud t-down" id="k3" style="left:470px;top:420px"><p>Your people saved these. Make more.</p><i class="b1"></i><i class="b2"></i></div><div class="cloud t-down" id="k4" style="left:120px;top:420px"><p>Comment comes in. DM goes out.</p><i class="b1"></i><i class="b2"></i></div><div class="cloud t-down" id="k5" style="left:470px;top:560px"><p>Waiting for you to ask.</p><i class="b1"></i><i class="b2"></i></div><div id="endc"><img class="logo" src="assets/img/creedom_logo.png" alt="Creedom"/><div class="cbox"><span class="av"></span><span class="ty"><b id="kw">CREEDOM</b><i class="cur"></i></span><span class="post">Post</span></div><div class="sub">I&rsquo;ll DM you the link</div></div></div>
+      <div id="caps" class="clip" data-start="0" data-duration="51.73" data-track-index="4"><div class="cap" id="c01_0"><span>My latest reel...</span></div><div class="cap" id="c01_1"><span>got 42 views.</span></div><div class="cap" id="c02_0"><span>I used trending audio!</span></div><div class="cap" id="c02_1"><span>I posted at 7 AM!</span></div><div class="cap" id="c02_2"><span>I even changed my hair!</span></div><div class="cap" id="c03_0"><span>And still...</span></div><div class="cap" id="c03_1"><span>nothing.</span></div><div class="cap" id="c04_0"><span>I wish someone could</span></div><div class="cap" id="c04_1"><span>review my reel...</span></div><div class="cap" id="c04_2"><span>before I post it.</span></div><div class="cap" id="c05_0"><span>I wish it could look</span></div><div class="cap" id="c05_1"><span>at my old reels...</span></div><div class="cap" id="c05_2"><span>and tell me what actually</span></div><div class="cap" id="c05_3"><span>worked.</span></div><div class="cap" id="c06_0"><span>And I wish it could</span></div><div class="cap" id="c06_1"><span>just set up my DM automation</span></div><div class="cap" id="c06_2"><span>for me.</span></div><div class="cap" id="c07_0"><span>Whoa!</span></div><div class="cap" id="c08_0"><span>That's... actually it.</span></div><div class="cap" id="c09_0"><span>I forgot I even made</span></div><div class="cap" id="c09_1"><span>that!</span></div><div class="cap" id="c10_0"><span>Where have you been</span></div><div class="cap" id="c10_1"><span>all my life?</span></div></div>
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="51.73" data-track-index="10" data-volume="1"></audio>
+    </div>
+    <script>
+      window.CT = {"lines": {"01": [0.35, 3.25], "02": [3.8, 9.105], "03": [9.655, 11.06], "04": [11.41, 14.61], "05": [17.31, 21.375], "06": [23.925, 27.245], "07": [29.545, 30.2], "08": [34.6, 36.04], "09": [38.59, 40.715], "10": [43.815, 45.92], "11": [47.87, 50.13]}, "beats": {"lead": [0.0, 0.35], "slide": [3.25, 3.8], "thud": [9.205, 9.655], "reveal1": [14.81, 17.31], "reveal2": [21.525, 23.925], "hero": [27.345, 29.545], "say": [30.2, 31.9], "fix1": [31.9, 34.6], "fix2": [36.19, 38.59], "fix3": [40.815, 43.815], "ask": [45.92, 47.62], "endin": [47.62, 47.87], "tail": [50.13, 51.73]}, "end": 51.73, "words": [{"take": "01", "w": "My", "s": 0.33, "e": 0.78}, {"take": "01", "w": "latest", "s": 0.76, "e": 1.529}, {"take": "01", "w": "reel...", "s": 1.509, "e": 1.959}, {"take": "01", "w": "got", "s": 1.939, "e": 2.39}, {"take": "01", "w": "42", "s": 2.37, "e": 2.82}, {"take": "01", "w": "views.", "s": 2.8, "e": 3.25}, {"take": "02", "w": "I", "s": 3.78, "e": 4.088}, {"take": "02", "w": "used", "s": 4.068, "e": 4.588}, {"take": "02", "w": "trending", "s": 4.568, "e": 5.089}, {"take": "02", "w": "audio!", "s": 5.069, "e": 5.59}, {"take": "02", "w": "I", "s": 5.57, "e": 5.877}, {"take": "02", "w": "posted", "s": 5.857, "e": 6.378}, {"take": "02", "w": "at", "s": 6.358, "e": 6.666}, {"take": "02", "w": "7", "s": 6.646, "e": 6.953}, {"take": "02", "w": "AM!", "s": 6.933, "e": 7.241}, {"take": "02", "w": "I", "s": 7.221, "e": 7.528}, {"take": "02", "w": "even", "s": 7.508, "e": 8.029}, {"take": "02", "w": "changed", "s": 8.009, "e": 8.53}, {"take": "02", "w": "my", "s": 8.51, "e": 8.817}, {"take": "02", "w": "hair!", "s": 8.797, "e": 9.105}, {"take": "03", "w": "And", "s": 9.635, "e": 10.031}, {"take": "03", "w": "still...", "s": 10.011, "e": 10.406}, {"take": "03", "w": "nothing.", "s": 10.386, "e": 11.06}, {"take": "04", "w": "I", "s": 11.39, "e": 11.652}, {"take": "04", "w": "wish", "s": 11.632, "e": 11.894}, {"take": "04", "w": "someone", "s": 11.874, "e": 12.315}, {"take": "04", "w": "could", "s": 12.295, "e": 12.557}, {"take": "04", "w": "review", "s": 12.537, "e": 12.979}, {"take": "04", "w": "my", "s": 12.959, "e": 13.221}, {"take": "04", "w": "reel...", "s": 13.201, "e": 13.463}, {"take": "04", "w": "before", "s": 13.443, "e": 13.884}, {"take": "04", "w": "I", "s": 13.864, "e": 14.126}, {"take": "04", "w": "post", "s": 14.106, "e": 14.368}, {"take": "04", "w": "it.", "s": 14.348, "e": 14.61}, {"take": "05", "w": "I", "s": 17.29, "e": 17.546}, {"take": "05", "w": "wish", "s": 17.526, "e": 17.782}, {"take": "05", "w": "it", "s": 17.762, "e": 18.018}, {"take": "05", "w": "could", "s": 17.998, "e": 18.254}, {"take": "05", "w": "look", "s": 18.234, "e": 18.49}, {"take": "05", "w": "at", "s": 18.47, "e": 18.726}, {"take": "05", "w": "my", "s": 18.706, "e": 18.962}, {"take": "05", "w": "old", "s": 18.942, "e": 19.198}, {"take": "05", "w": "reels...", "s": 19.178, "e": 19.434}, {"take": "05", "w": "and", "s": 19.414, "e": 19.67}, {"take": "05", "w": "tell", "s": 19.65, "e": 19.906}, {"take": "05", "w": "me", "s": 19.886, "e": 20.142}, {"take": "05", "w": "what", "s": 20.122, "e": 20.378}, {"take": "05", "w": "actually", "s": 20.358, "e": 20.964}, {"take": "05", "w": "worked.", "s": 20.944, "e": 21.375}, {"take": "06", "w": "And", "s": 23.905, "e": 24.143}, {"take": "06", "w": "I", "s": 24.123, "e": 24.361}, {"take": "06", "w": "wish", "s": 24.341, "e": 24.579}, {"take": "06", "w": "it", "s": 24.559, "e": 24.797}, {"take": "06", "w": "could", "s": 24.777, "e": 25.016}, {"take": "06", "w": "just", "s": 24.996, "e": 25.234}, {"take": "06", "w": "set", "s": 25.214, "e": 25.452}, {"take": "06", "w": "up", "s": 25.432, "e": 25.67}, {"take": "06", "w": "my", "s": 25.65, "e": 25.888}, {"take": "06", "w": "DM", "s": 25.868, "e": 26.106}, {"take": "06", "w": "automation", "s": 26.086, "e": 26.809}, {"take": "06", "w": "for", "s": 26.789, "e": 27.027}, {"take": "06", "w": "me.", "s": 27.007, "e": 27.245}, {"take": "07", "w": "Whoa!", "s": 29.525, "e": 30.2}, {"take": "08", "w": "That's...", "s": 34.58, "e": 34.921}, {"take": "08", "w": "actually", "s": 34.901, "e": 35.719}, {"take": "08", "w": "it.", "s": 35.699, "e": 36.04}, {"take": "09", "w": "I", "s": 38.57, "e": 38.874}, {"take": "09", "w": "forgot", "s": 38.854, "e": 39.368}, {"take": "09", "w": "I", "s": 39.348, "e": 39.652}, {"take": "09", "w": "even", "s": 39.632, "e": 40.147}, {"take": "09", "w": "made", "s": 40.127, "e": 40.431}, {"take": "09", "w": "that!", "s": 40.411, "e": 40.715}, {"take": "10", "w": "Where", "s": 43.795, "e": 44.116}, {"take": "10", "w": "have", "s": 44.096, "e": 44.416}, {"take": "10", "w": "you", "s": 44.396, "e": 44.717}, {"take": "10", "w": "been", "s": 44.697, "e": 45.018}, {"take": "10", "w": "all", "s": 44.998, "e": 45.319}, {"take": "10", "w": "my", "s": 45.299, "e": 45.619}, {"take": "10", "w": "life?", "s": 45.599, "e": 45.92}, {"take": "11", "w": "Comment", "s": 47.85, "e": 48.285}, {"take": "11", "w": "CREEDOM,", "s": 48.265, "e": 48.7}, {"take": "11", "w": "and", "s": 48.68, "e": 48.938}, {"take": "11", "w": "I'll", "s": 48.918, "e": 49.177}, {"take": "11", "w": "send", "s": 49.157, "e": 49.415}, {"take": "11", "w": "you", "s": 49.395, "e": 49.653}, {"take": "11", "w": "the", "s": 49.633, "e": 49.892}, {"take": "11", "w": "link.", "s": 49.872, "e": 50.13}], "chirps": [[22.725, 23.275], [30.3, 31.15], [32.25, 33.8], [36.49, 37.89], [41.065, 42.415], [46.0, 46.97], [50.38, 50.93]]};
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#vw",{opacity:0,scale:.6,y:20},{opacity:1,scale:1,y:0,duration:0.35,ease:"back.out(2.2)",immediateRender:false},0.450);
+      tl.fromTo("#vw",{rotation:0},{rotation:-4,duration:.08,yoyo:true,repeat:5,immediateRender:false},2.250);
+      tl.to("#vw",{opacity:0,y:30,duration:0.2,ease:"power2.in"},3.300);
+      tl.fromTo("#w0",{opacity:0,y:-20,scale:.9},{opacity:1,y:0,scale:1,duration:0.35,ease:"back.out(2)",immediateRender:false},11.360);
+      tl.to("#w0",{opacity:0,y:-16,duration:0.25,ease:"power2.in"},14.960);
+      tl.fromTo("#w1",{opacity:0,y:-20,scale:.9},{opacity:1,y:0,scale:1,duration:0.35,ease:"back.out(2)",immediateRender:false},17.260);
+      tl.to("#w1",{opacity:0,y:-16,duration:0.25,ease:"power2.in"},21.725);
+      tl.fromTo("#w2",{opacity:0,y:-20,scale:.9},{opacity:1,y:0,scale:1,duration:0.35,ease:"back.out(2)",immediateRender:false},23.875);
+      tl.to("#w2",{opacity:0,y:-16,duration:0.25,ease:"power2.in"},27.595);
+      tl.fromTo("#tg1",{opacity:0,scale:.6},{opacity:1,scale:1,duration:0.3,ease:"back.out(2.4)",immediateRender:false},33.750);
+      tl.to("#tg1",{opacity:0,duration:0.15,ease:"power2.in"},36.090);
+      tl.fromTo("#tg2",{opacity:0,scale:.6},{opacity:1,scale:1,duration:0.3,ease:"back.out(2.4)",immediateRender:false},37.740);
+      tl.to("#tg2",{opacity:0,duration:0.15,ease:"power2.in"},40.715);
+      tl.fromTo("#tg3",{opacity:0,scale:.6},{opacity:1,scale:1,duration:0.3,ease:"back.out(2.4)",immediateRender:false},41.315);
+      tl.to("#sw",{backgroundColor:"#22C55E",duration:.15,immediateRender:false},41.715);
+      tl.to("#sw em",{x:30,duration:.15,ease:"power2.out",immediateRender:false},41.715);
+      tl.to("#tg3",{opacity:0,duration:0.15,ease:"power2.in"},43.615);
+      tl.fromTo("#k0",{opacity:0,scale:.4},{opacity:1,scale:1,duration:0.32,ease:"back.out(2.6)",immediateRender:false},22.675);
+      tl.fromTo("#k0 p",{y:0},{y:-5,duration:.18,yoyo:true,repeat:3,ease:"sine.inOut",immediateRender:false},22.975);
+      tl.to("#k0",{opacity:0,scale:.85,duration:0.18,ease:"power2.in"},23.695);
+      tl.fromTo("#k1",{opacity:0,scale:.4},{opacity:1,scale:1,duration:0.32,ease:"back.out(2.6)",immediateRender:false},30.250);
+      tl.fromTo("#k1 p",{y:0},{y:-5,duration:.18,yoyo:true,repeat:3,ease:"sine.inOut",immediateRender:false},30.550);
+      tl.to("#k1",{opacity:0,scale:.85,duration:0.18,ease:"power2.in"},31.770);
+      tl.fromTo("#k2",{opacity:0,scale:.4},{opacity:1,scale:1,duration:0.32,ease:"back.out(2.6)",immediateRender:false},32.200);
+      tl.fromTo("#k2 p",{y:0},{y:-5,duration:.18,yoyo:true,repeat:3,ease:"sine.inOut",immediateRender:false},32.500);
+      tl.to("#k2",{opacity:0,scale:.85,duration:0.18,ease:"power2.in"},34.770);
+      tl.fromTo("#k3",{opacity:0,scale:.4},{opacity:1,scale:1,duration:0.32,ease:"back.out(2.6)",immediateRender:false},36.440);
+      tl.fromTo("#k3 p",{y:0},{y:-5,duration:.18,yoyo:true,repeat:3,ease:"sine.inOut",immediateRender:false},36.740);
+      tl.to("#k3",{opacity:0,scale:.85,duration:0.18,ease:"power2.in"},38.660);
+      tl.fromTo("#k4",{opacity:0,scale:.4},{opacity:1,scale:1,duration:0.32,ease:"back.out(2.6)",immediateRender:false},41.015);
+      tl.fromTo("#k4 p",{y:0},{y:-5,duration:.18,yoyo:true,repeat:3,ease:"sine.inOut",immediateRender:false},41.315);
+      tl.to("#k4",{opacity:0,scale:.85,duration:0.18,ease:"power2.in"},43.435);
+      tl.fromTo("#k5",{opacity:0,scale:.4},{opacity:1,scale:1,duration:0.32,ease:"back.out(2.6)",immediateRender:false},45.940);
+      tl.fromTo("#k5 p",{y:0},{y:-5,duration:.18,yoyo:true,repeat:3,ease:"sine.inOut",immediateRender:false},46.240);
+      tl.to("#k5",{opacity:0,scale:.85,duration:0.18,ease:"power2.in"},47.490);
+      tl.fromTo("#endc .logo",{opacity:0,y:-30,scale:.9},{opacity:1,y:0,scale:1,duration:0.5,ease:"back.out(1.8)",immediateRender:false},47.720);
+      tl.fromTo("#endc .cbox",{opacity:0,y:30},{opacity:1,y:0,duration:0.4,ease:"power3.out",immediateRender:false},48.120);
+      tl.fromTo("#kw",{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0% 0 0)",duration:.9,ease:"steps(7)",immediateRender:false},48.470);
+      tl.fromTo("#endc .post",{scale:1},{scale:.9,duration:.1,yoyo:true,repeat:1,immediateRender:false},49.570);
+      tl.fromTo("#endc .sub",{opacity:0,y:16},{opacity:1,y:0,duration:0.4,ease:"power3.out",immediateRender:false},48.820);
+      tl.fromTo("#c01_0",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},0.280);
+      tl.to("#c01_0",{opacity:0,duration:.08},1.889);
+      tl.fromTo("#c01_1",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},1.889);
+      tl.to("#c01_1",{opacity:0,duration:.08},3.450);
+      tl.fromTo("#c02_0",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},3.730);
+      tl.to("#c02_0",{opacity:0,duration:.08},5.520);
+      tl.fromTo("#c02_1",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},5.520);
+      tl.to("#c02_1",{opacity:0,duration:.08},7.171);
+      tl.fromTo("#c02_2",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},7.171);
+      tl.to("#c02_2",{opacity:0,duration:.08},9.305);
+      tl.fromTo("#c03_0",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},9.585);
+      tl.to("#c03_0",{opacity:0,duration:.08},10.336);
+      tl.fromTo("#c03_1",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},10.336);
+      tl.to("#c03_1",{opacity:0,duration:.08},11.260);
+      tl.fromTo("#c04_0",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},11.340);
+      tl.to("#c04_0",{opacity:0,duration:.08},12.487);
+      tl.fromTo("#c04_1",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},12.487);
+      tl.to("#c04_1",{opacity:0,duration:.08},13.393);
+      tl.fromTo("#c04_2",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},13.393);
+      tl.to("#c04_2",{opacity:0,duration:.08},14.810);
+      tl.fromTo("#c05_0",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},17.240);
+      tl.to("#c05_0",{opacity:0,duration:.08},18.420);
+      tl.fromTo("#c05_1",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},18.420);
+      tl.to("#c05_1",{opacity:0,duration:.08},19.364);
+      tl.fromTo("#c05_2",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},19.364);
+      tl.to("#c05_2",{opacity:0,duration:.08},20.894);
+      tl.fromTo("#c05_3",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},20.894);
+      tl.to("#c05_3",{opacity:0,duration:.08},21.575);
+      tl.fromTo("#c06_0",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},23.855);
+      tl.to("#c06_0",{opacity:0,duration:.08},24.946);
+      tl.fromTo("#c06_1",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},24.946);
+      tl.to("#c06_1",{opacity:0,duration:.08},26.739);
+      tl.fromTo("#c06_2",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},26.739);
+      tl.to("#c06_2",{opacity:0,duration:.08},27.445);
+      tl.fromTo("#c07_0",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},29.475);
+      tl.to("#c07_0",{opacity:0,duration:.08},30.400);
+      tl.fromTo("#c08_0",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},34.530);
+      tl.to("#c08_0",{opacity:0,duration:.08},36.240);
+      tl.fromTo("#c09_0",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},38.520);
+      tl.to("#c09_0",{opacity:0,duration:.08},40.361);
+      tl.fromTo("#c09_1",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},40.361);
+      tl.to("#c09_1",{opacity:0,duration:.08},40.915);
+      tl.fromTo("#c10_0",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},43.745);
+      tl.to("#c10_0",{opacity:0,duration:.08},44.948);
+      tl.fromTo("#c10_1",{opacity:0,scale:.9},{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false},44.948);
+      tl.to("#c10_1",{opacity:0,duration:.08},46.120);
+      tl.set({}, {}, 51.73);
+      window.__timelines["main"] = tl;
+    </script>
+    <script type="module" src="assets/js/cree.js"></script>
+  </body>
+</html>
