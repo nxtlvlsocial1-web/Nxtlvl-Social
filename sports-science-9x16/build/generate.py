@@ -1,4 +1,4 @@
-"""Sports Science & Technology: "Performance Has No Fixed Body Type" 9:16 explainer (1080x1920, 30 fps, 60 s).
+"""Sports Science Technology: "Performance Has No Fixed Body Type" 9:16 explainer (1080x1920, 30 fps, 60 s).
 
 Client brief (PDF, 10 pages): IG / FB Reels, 55-60 s, English VO + English subtitles (max 2 lines, inside safe zones),
 premium sports-documentary look: deep navy, matte black, white type, restrained royal-blue accents, Montserrat / Inter.
@@ -19,7 +19,7 @@ DUR = 60.0
 WORDS = json.load(open(os.path.join(ROOT, "plan", "words.json")))
 LINES = {l["id"]: l for l in json.load(open(os.path.join(ROOT, "plan", "lines.json")))}
 NAVY, INK, BLUE, BLUE_L, MIST = "#0A1632", "#06080E", "#2F5BFF", "#7E9BFF", "#C9D4F2"
-LOGO = os.environ.get("LOGO", "")            # the client's official logo file, when we have it (never recreated)
+LOGO = os.environ.get("LOGO", "assets/img/sst_logo.jpg")   # the client's official logo (owner-supplied), placed unmodified on a white card            # the client's official logo file, when we have it (never recreated)
 PREVIEW = os.environ.get("PREVIEW", "1") == "1"
 A, SFX, SHOTS, OVER, CAPS = [], [], [], [], []
 
@@ -230,10 +230,10 @@ def scene6():
     shot("s6d", one, t11 + .4, "8533122", at=14.0, pos="50% 50%", push=(1.04, 1.14))
     headline("h6", ["PERFORMANCE", "HAS NO FIXED", "BODY TYPE."], one, t11 + .3, 290, 98, accent=(2,))
     # end card: navy panel wipes up; the official logo goes in the slot (placed in post unless LOGO is set)
-    logo = (f'<img class="logo" src="{LOGO}">' if LOGO else
+    logo = (f'<div class="logo"><img src="{LOGO}"></div>' if LOGO else
             ('<div class="slot"><span>OFFICIAL LOGO</span></div>' if PREVIEW else '<div class="slot blank"></div>'))
     OVER.append(f'<div class="end" id="end"><i class="grid"></i><i class="glow"></i>{logo}'
-                f'<div class="en" id="en1">SPORTS SCIENCE<br>&amp; TECHNOLOGY</div><i class="rule" id="enr"></i>'
+                f'<div class="en" id="en1">SPORTS SCIENCE<br>TECHNOLOGY</div><i class="rule" id="enr"></i>'
                 f'<div class="et" id="en2">UNDERSTANDING THE ATHLETE<br>BEYOND PHYSIQUE.</div></div>')
     js(f'tl.fromTo("#end", {{opacity: 1, clipPath: "inset(100% 0 0 0)"}}, {{clipPath: "inset(0% 0 0 0)", duration: .6, ease: "expo.inOut", immediateRender: false}}, {t11 - .1:.3f});')
     js(f'tl.fromTo("#end .slot, #end .logo", {{opacity: 0, scale: .92}}, {{opacity: 1, scale: 1, duration: .6, ease: "expo.out", immediateRender: false}}, {t11 + .3:.3f});')
@@ -346,14 +346,16 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: {INK}
 .ring .dash {{ stroke-dasharray: 10 14; stroke: rgba(255,255,255,.55); stroke-width: 2; }}
 /* end card */
 .end {{ position: absolute; inset: 0; z-index: 8; opacity: 0; background: radial-gradient(80% 50% at 50% 42%, #15296a 0%, {NAVY} 60%, {INK} 100%); text-align: center; }}
-.end .glow {{ position: absolute; left: 140px; top: 450px; width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(47,91,255,.28), transparent 65%); }}
+.end .glow {{ position: absolute; left: 140px; top: 300px; width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(47,91,255,.28), transparent 65%); }}
 .slot {{ position: absolute; left: 290px; top: 560px; width: 500px; height: 260px; border-radius: 28px; border: 3px dashed rgba(201,212,242,.45); display: grid; place-items: center; }}
 .slot span {{ font-family: "Montserrat", sans-serif; font-weight: 600; font-size: 26px; letter-spacing: .22em; color: rgba(201,212,242,.6); }}
 .slot.blank {{ border-color: transparent; }}
-.logo {{ position: absolute; left: 290px; top: 560px; width: 500px; height: 260px; object-fit: contain; }}
-.en {{ position: absolute; left: 0; right: 0; top: 900px; font-family: "Montserrat", sans-serif; font-weight: 800; font-size: 74px; line-height: 1.06; letter-spacing: .04em; opacity: 0; }}
-.rule {{ position: absolute; left: 440px; top: 1090px; width: 200px; height: 6px; border-radius: 3px; background: {BLUE}; transform-origin: center; }}
-.et {{ position: absolute; left: 0; right: 0; top: 1140px; font-family: "Montserrat", sans-serif; font-weight: 600; font-size: 38px; line-height: 1.3; letter-spacing: .12em; color: {MIST}; opacity: 0; }}
+.logo {{ position: absolute; left: 150px; top: 430px; width: 780px; height: 450px; border-radius: 30px; background: #fff; padding: 22px 28px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.45), 0 0 0 3px rgba(126,155,255,.35); }}
+.logo img {{ display: block; width: 100%; height: 100%; object-fit: contain; }}
+.en {{ position: absolute; left: 0; right: 0; top: 960px; font-family: "Montserrat", sans-serif; font-weight: 800; font-size: 70px; line-height: 1.06; letter-spacing: .04em; opacity: 0; }}
+.rule {{ position: absolute; left: 440px; top: 1140px; width: 200px; height: 6px; border-radius: 3px; background: {BLUE}; transform-origin: center; }}
+.et {{ position: absolute; left: 0; right: 0; top: 1185px; font-family: "Montserrat", sans-serif; font-weight: 600; font-size: 38px; line-height: 1.3; letter-spacing: .12em; color: {MIST}; opacity: 0; }}
 /* subtitles: bottom, inside the Reels safe zone (above the caption / buttons area) */
 .cap {{ position: absolute; left: 70px; right: 70px; top: 1400px; text-align: center; z-index: 7; opacity: 0; }}
 .cap b {{ display: inline-block; padding: 12px 26px 14px; border-radius: 14px; background: rgba(6,8,14,.66); font-weight: 600; font-size: 46px; line-height: 1.22;
@@ -376,7 +378,7 @@ def main():
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width={FW}, height={FH}" />
-    <title>Sports Science and Technology: Performance has no fixed body type 9x16</title>
+    <title>Sports Science Technology: Performance has no fixed body type 9x16</title>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>{CSS}</style>
   </head>
