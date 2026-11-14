@@ -23,7 +23,7 @@ TEXT = {               # caption text per take (what the creator says)
     "06": "And I wish it could just set up my DM automation for me.",
     "07": "Whoa!",
     "08": "That's... actually it.",
-    "09": "I forgot I even made that!",
+    "09": "Wait... I forgot I even made that!",
     "10": "Where have you been all my life?",
     "11": "Comment CREEDOM, and I'll send you the link.",
 }

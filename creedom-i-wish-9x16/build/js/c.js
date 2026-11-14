@@ -128,7 +128,7 @@ const FX = {};
   for (let i = 0; i < 14; i++) { const p = new THREE.Mesh(pg, new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: .8, side: THREE.DoubleSide })); RM.add(p); FX.planes.push(p); }
   // loose papers that blow about on the teasers and the entrance
   FX.papers = [];
-  for (let i = 0; i < 8; i++) { const p = new THREE.Mesh(new THREE.PlaneGeometry(.16, .21), new THREE.MeshStandardMaterial({ color: 0xFBFAF6, roughness: .9, side: THREE.DoubleSide })); RM.add(p); FX.papers.push(p); }
+  for (let i = 0; i < 8; i++) { const p = new THREE.Mesh(new THREE.PlaneGeometry(.16, .21), new THREE.MeshStandardMaterial({ color: 0xFBFAF6, roughness: .9, side: THREE.DoubleSide, emissive: 0x8A8496, emissiveIntensity: .6 })); RM.add(p); FX.papers.push(p); }
   // speed lines behind Cree when he flies (thin, soft white, no glow)
   const slT = pix(16, 256, (g) => { const gr = g.createLinearGradient(0, 0, 0, 256); gr.addColorStop(0, "rgba(255,255,255,0)"); gr.addColorStop(.5, "rgba(255,255,255,.85)"); gr.addColorStop(1, "rgba(255,255,255,0)"); g.fillStyle = gr; g.fillRect(6, 0, 4, 256); }, false);
   FX.speed = new THREE.Group(); scene.add(FX.speed);

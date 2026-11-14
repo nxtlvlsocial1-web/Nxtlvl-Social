@@ -60,7 +60,7 @@ function shoot(t) {
     leoF = { eyes: "teary", mouth: "wavy", brows: "despair", talk: talking(t, "01"), look: [-.4, -.3] };
     LEO.phone.visible = true; LEO.scr.color.set(0xDDE8FF);
     cam.p.set(.32, 1.68, 2.4 - .2 * ss(u, 0, len)); cam.l.set(.02, 1.48, -.7); cam.fov = 34; cam.focus = 3.0;
-    RM.key.intensity = .9; phoneL.intensity = 1.4;
+    RM.key.intensity = 1.1; phoneL.intensity = .45;
   } else if (sh === "rantA" || sh === "rantB" || sh === "rantC") {   // 2. the rant, three angles: arms up, counting, hands in his hair
     const x = .3 + .35 * Math.sin(t * 1.2), walkA = sh === "rantC" ? 0 : .6;
     let p = walk(standing({ x, z: .95, ry: Math.cos(t * 1.2) * .45 }), t * 3.2, walkA);
@@ -85,7 +85,7 @@ function shoot(t) {
     cam.p.set(-.66, 1.55, -3.6 + .15 * ss(u, 0, len)); cam.l.set(-.68, 1.62, -1.3); cam.fov = 48; cam.focus = 2.25;
     RM.moon.intensity = 3.2; RM.key.intensity = .8;
   } else if (sh === "teaser1") {  // 5. TEASER 1: the sky turns dramatic; a pink streak shoots across, far away
-    const k = ramp(u, .3, 1.9), px = lerp(-3.2, 1.6, ease(k));
+    const k = ramp(u, .2, 2.1), px = lerp(-2.3, .3, k);
     cree = { x: px, y: 1.95 + .15 * Math.sin(k * 3), z: -3.4, ry: -Math.PI / 2, ...FLY, sc: .24 };
     FX.trail.visible = k > 0 && k < 1; FX.trail.position.set(px - .45, cree.y, -3.41); FX.trail.scale.set(.9, 1, 1); FX.trail.rotation.set(0, 0, .08);
     for (let i = 0; i < RM.clouds.length; i++) RM.clouds[i].position.x = -2.4 + i * 1.4 + u * .9;
@@ -223,7 +223,7 @@ function shoot(t) {
   LEO.root.updateMatrixWorld(true);
   if (cree && cree.attach) { LEO.torso.localToWorld(V.set(0, .32, .3)); cree.x = V.x; cree.y = V.y - .02; cree.z = V.z; }
   placeCree(!!cree, cree || {});
-  if (LEO.phone.visible) { LEO.phone.getWorldPosition(V); phoneL.position.copy(V).add(V2.set(0, .03, -.1)); }
+  if (LEO.phone.visible) { LEO.phone.getWorldPosition(V); phoneL.position.copy(V).add(V2.set(0, .05, .25)); }
   return { cam, bloomS, vig, dark };
 }
 

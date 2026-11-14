@@ -3,114 +3,498 @@
   "text": "My latest reel... got... forty-two views.",
   "exaggeration": 1.0,
   "cfg_weight": 0.3,
-  "seconds": 3.44
+  "seconds": 3.44,
+  "heard": "My latest reel got 42 views.",
+  "match": 0.769,
+  "spread": 3.06,
+  "lrange": 12.3,
+  "score": 4.91
  },
  "01_1": {
   "text": "My latest reel... got... forty-two views.",
   "exaggeration": 1.25,
   "cfg_weight": 0.3,
-  "seconds": 2.92
+  "seconds": 2.92,
+  "heard": "My latest reel got 42 views.",
+  "match": 0.769,
+  "spread": 4.6,
+  "lrange": 12.3,
+  "score": 6.45,
+  "picked": true,
+  "note": "more expressive than the auto pick; the number reads as 42 either way"
  },
  "01_2": {
   "text": "My latest reel... got... forty-two views.",
   "exaggeration": 1.5,
   "cfg_weight": 0.3,
-  "seconds": 3.2
+  "seconds": 3.2,
+  "heard": "My latest real got 42 views.",
+  "match": 0.615,
+  "spread": 5.57,
+  "lrange": 13.9,
+  "score": 7.65
  },
  "01_3": {
   "text": "My latest reel... got... forty-two views.",
   "exaggeration": 1.75,
   "cfg_weight": 0.3,
-  "seconds": 3.72
+  "seconds": 3.72,
+  "heard": "My latest reel. Got 42 views. Got why?",
+  "match": 0.667,
+  "spread": 6.52,
+  "lrange": 13.1,
+  "score": 8.48
  },
  "02_0": {
   "text": "I used trending audio! I posted at seven A M! I even changed my HAIR!",
   "exaggeration": 1.1,
   "cfg_weight": 0.35,
-  "seconds": 5.6
+  "seconds": 5.6,
+  "heard": "I used trending audio, I posted at 7am, I even changed my hair.",
+  "match": 0.857,
+  "spread": 4.69,
+  "lrange": 12.0,
+  "score": 6.49
  },
  "02_1": {
   "text": "I used trending audio! I posted at seven A M! I even changed my HAIR!",
   "exaggeration": 1.4,
   "cfg_weight": 0.35,
-  "seconds": 5.0
+  "seconds": 5.0,
+  "heard": "I used trending audio. I posted at 7 a.m. I even changed my hair.",
+  "match": 0.828,
+  "spread": 5.02,
+  "lrange": 13.6,
+  "score": 7.06
  },
  "02_2": {
   "text": "I used trending audio! I posted at seven A M! I even changed my HAIR!",
   "exaggeration": 1.7,
   "cfg_weight": 0.35,
-  "seconds": 5.0
+  "seconds": 5.0,
+  "heard": "I used trending audio. I posted at 7am. I even changed my hair.",
+  "match": 0.857,
+  "spread": 4.42,
+  "lrange": 14.2,
+  "score": 6.54,
+  "picked": true
  },
  "02_3": {
   "text": "I used trending audio! I posted at seven A M! I even changed my HAIR!",
   "exaggeration": 2.0,
   "cfg_weight": 0.35,
-  "seconds": 5.28
+  "seconds": 5.28,
+  "heard": "I used Trending Audio. I'd post it at 7 a.m. I even changed my air!",
+  "match": 0.6,
+  "spread": 3.06,
+  "lrange": 12.6,
+  "score": 4.96
  },
  "03_0": {
   "text": "And still... nothing...",
   "exaggeration": 1.0,
   "cfg_weight": 0.25,
-  "seconds": 1.88
+  "seconds": 1.88,
+  "heard": "And still, nothing.",
+  "match": 1.0,
+  "spread": 3.98,
+  "lrange": 12.4,
+  "score": 5.84
  },
  "03_1": {
   "text": "And still... nothing...",
   "exaggeration": 1.3,
   "cfg_weight": 0.25,
-  "seconds": 3.32
+  "seconds": 3.32,
+  "heard": "And still, nothing dotty war.",
+  "match": 0.75,
+  "spread": 11.36,
+  "lrange": 17.5,
+  "score": 13.99
  },
  "03_2": {
   "text": "And still... nothing...",
   "exaggeration": 1.6,
   "cfg_weight": 0.25,
-  "seconds": 1.72
+  "seconds": 1.72,
+  "heard": "And still, nothing!",
+  "match": 1.0,
+  "spread": 4.42,
+  "lrange": 13.1,
+  "score": 6.38,
+  "picked": true,
+  "note": "clean words (03_3 repeats nothing)"
  },
  "03_3": {
   "text": "And still... nothing...",
   "exaggeration": 1.9,
   "cfg_weight": 0.25,
-  "seconds": 2.32
+  "seconds": 2.32,
+  "heard": "And still, nothing, nothing!",
+  "match": 0.857,
+  "spread": 4.59,
+  "lrange": 13.6,
+  "score": 6.63
  },
  "04_0": {
   "text": "I wish... someone could review my reel... before I post it.",
   "exaggeration": 0.8,
   "cfg_weight": 0.3,
-  "seconds": 4.0
+  "seconds": 4.0,
+  "heard": "I wish someone could review my reel before I post it.",
+  "match": 1.0,
+  "spread": 4.9,
+  "lrange": 12.4,
+  "score": 6.75
  },
  "04_1": {
   "text": "I wish... someone could review my reel... before I post it.",
   "exaggeration": 1.0,
   "cfg_weight": 0.3,
-  "seconds": 4.04
+  "seconds": 4.04,
+  "heard": "I wish someone could review my reel before I post it.",
+  "match": 1.0,
+  "spread": 4.36,
+  "lrange": 12.5,
+  "score": 6.23
  },
  "04_2": {
   "text": "I wish... someone could review my reel... before I post it.",
   "exaggeration": 1.2,
   "cfg_weight": 0.3,
-  "seconds": 3.92
+  "seconds": 3.92,
+  "heard": "I wish someone could review my reel before I post it.",
+  "match": 1.0,
+  "spread": 5.41,
+  "lrange": 13.5,
+  "score": 7.43,
+  "picked": true
  },
  "04_3": {
   "text": "I wish... someone could review my reel... before I post it.",
   "exaggeration": 1.4,
   "cfg_weight": 0.3,
-  "seconds": 4.08
+  "seconds": 4.08,
+  "heard": "I wish someone could review my reel before I post it.",
+  "match": 1.0,
+  "spread": 3.6,
+  "lrange": 12.5,
+  "score": 5.47
  },
  "05_0": {
   "text": "I wish it could look at my old reels... and tell me what actually worked.",
   "exaggeration": 0.8,
   "cfg_weight": 0.3,
-  "seconds": 4.12
+  "seconds": 4.12,
+  "heard": "I wish it could look at my old reels and tell me what actually worked.",
+  "match": 1.0,
+  "spread": 5.26,
+  "lrange": 12.5,
+  "score": 7.13,
+  "picked": true
  },
  "05_1": {
   "text": "I wish it could look at my old reels... and tell me what actually worked.",
   "exaggeration": 1.0,
   "cfg_weight": 0.3,
-  "seconds": 3.84
+  "seconds": 3.84,
+  "heard": "I wish it could look at my old reels and tell me what actually worked.",
+  "match": 1.0,
+  "spread": 4.42,
+  "lrange": 12.5,
+  "score": 6.29
  },
  "05_2": {
   "text": "I wish it could look at my old reels... and tell me what actually worked.",
   "exaggeration": 1.2,
   "cfg_weight": 0.3,
-  "seconds": 3.6
+  "seconds": 3.6,
+  "heard": "I wish it could look at my old reels and tell me what actually worked.",
+  "match": 1.0,
+  "spread": 3.86,
+  "lrange": 11.9,
+  "score": 5.65
+ },
+ "05_3": {
+  "text": "I wish it could look at my old reels... and tell me what actually worked.",
+  "exaggeration": 1.4,
+  "cfg_weight": 0.3,
+  "seconds": 4.08,
+  "heard": "I wish you could look at my old reels and tell me what actually worked.",
+  "match": 0.933,
+  "spread": 2.92,
+  "lrange": 13.2,
+  "score": 4.91
+ },
+ "06_0": {
+  "text": "And I wish... it could just set up my D M automation... for me.",
+  "exaggeration": 0.9,
+  "cfg_weight": 0.3,
+  "seconds": 4.0,
+  "heard": "And I wish it could just set up my DM automation for me.",
+  "match": 0.889,
+  "spread": 5.98,
+  "lrange": 11.9,
+  "score": 7.77,
+  "picked": true
+ },
+ "06_1": {
+  "text": "And I wish... it could just set up my D M automation... for me.",
+  "exaggeration": 1.1,
+  "cfg_weight": 0.3,
+  "seconds": 3.32,
+  "heard": "And I wish it could just set up my DM automation for me.",
+  "match": 0.889,
+  "spread": 4.45,
+  "lrange": 10.3,
+  "score": 6.0
+ },
+ "06_2": {
+  "text": "And I wish... it could just set up my D M automation... for me.",
+  "exaggeration": 1.35,
+  "cfg_weight": 0.3,
+  "seconds": 4.6,
+  "heard": "And I wish it could just set up my DM automation for me.",
+  "match": 0.889,
+  "spread": 5.52,
+  "lrange": 10.6,
+  "score": 7.11
+ },
+ "06_3": {
+  "text": "And I wish... it could just set up my D M automation... for me.",
+  "exaggeration": 1.6,
+  "cfg_weight": 0.3,
+  "seconds": 4.92,
+  "heard": "And I wish it could just set up my DM automation for me!",
+  "match": 0.889,
+  "spread": 5.31,
+  "lrange": 13.7,
+  "score": 7.36
+ },
+ "07_0": {
+  "text": "Whoa!!",
+  "exaggeration": 1.2,
+  "cfg_weight": 0.4,
+  "seconds": 0.84,
+  "heard": "Whoa whoa whoa whoa whoa.",
+  "match": 0.333,
+  "spread": 7.63,
+  "lrange": 12.8,
+  "score": 9.54
+ },
+ "07_1": {
+  "text": "Whoa!!",
+  "exaggeration": 1.6,
+  "cfg_weight": 0.4,
+  "seconds": 0.84,
+  "heard": "Woohoo!",
+  "match": 0.0,
+  "spread": 2.66,
+  "lrange": 9.1,
+  "score": 4.03
+ },
+ "07_2": {
+  "text": "Whoa!!",
+  "exaggeration": 2.0,
+  "cfg_weight": 0.4,
+  "seconds": 0.48,
+  "heard": "Woohoo!",
+  "match": 0.0,
+  "spread": 3.51,
+  "lrange": 13.0,
+  "score": 5.46
+ },
+ "07_3": {
+  "text": "Whoa!!",
+  "exaggeration": 2.4,
+  "cfg_weight": 0.4,
+  "seconds": 0.88,
+  "heard": "Whoa.",
+  "match": 1.0,
+  "spread": 2.55,
+  "lrange": 16.4,
+  "score": 5.02,
+  "picked": true
+ },
+ "08_0": {
+  "text": "That's... actually it!",
+  "exaggeration": 1.0,
+  "cfg_weight": 0.3,
+  "seconds": 1.88,
+  "heard": "That's actually it.",
+  "match": 1.0,
+  "spread": 0.84,
+  "lrange": 12.3,
+  "score": 2.68
+ },
+ "08_1": {
+  "text": "That's... actually it!",
+  "exaggeration": 1.3,
+  "cfg_weight": 0.3,
+  "seconds": 1.32,
+  "heard": "That's actually it.",
+  "match": 1.0,
+  "spread": 2.36,
+  "lrange": 10.9,
+  "score": 3.99
+ },
+ "08_2": {
+  "text": "That's... actually it!",
+  "exaggeration": 1.6,
+  "cfg_weight": 0.3,
+  "seconds": 1.48,
+  "heard": "That's actually it.",
+  "match": 1.0,
+  "spread": 3.78,
+  "lrange": 14.9,
+  "score": 6.01,
+  "picked": true
+ },
+ "08_3": {
+  "text": "That's... actually it!",
+  "exaggeration": 1.9,
+  "cfg_weight": 0.3,
+  "seconds": 2.16,
+  "heard": "That's actually it.",
+  "match": 1.0,
+  "spread": 2.17,
+  "lrange": 14.0,
+  "score": 4.27
+ },
+ "09_0": {
+  "text": "Wait... I forgot I even made that!",
+  "exaggeration": 1.0,
+  "cfg_weight": 0.35,
+  "seconds": 2.48,
+  "heard": "Wait, I forgot I even made that!",
+  "match": 1.0,
+  "spread": 2.78,
+  "lrange": 14.5,
+  "score": 4.95
+ },
+ "09_1": {
+  "text": "Wait... I forgot I even made that!",
+  "exaggeration": 1.3,
+  "cfg_weight": 0.35,
+  "seconds": 2.88,
+  "heard": "Wait. I forgot. I even made that.",
+  "match": 1.0,
+  "spread": 7.76,
+  "lrange": 12.9,
+  "score": 9.69,
+  "picked": true
+ },
+ "09_2": {
+  "text": "Wait... I forgot I even made that!",
+  "exaggeration": 1.6,
+  "cfg_weight": 0.35,
+  "seconds": 2.2,
+  "heard": "Wait, I forgot I even made that!",
+  "match": 1.0,
+  "spread": 3.86,
+  "lrange": 13.4,
+  "score": 5.87
+ },
+ "09_3": {
+  "text": "Wait... I forgot I even made that!",
+  "exaggeration": 1.9,
+  "cfg_weight": 0.35,
+  "seconds": 2.16,
+  "heard": "Wait! I forgot! I even made that!",
+  "match": 1.0,
+  "spread": 3.02,
+  "lrange": 12.0,
+  "score": 4.82
+ },
+ "10_0": {
+  "text": "Where have you BEEN all my life?!",
+  "exaggeration": 1.0,
+  "cfg_weight": 0.3,
+  "seconds": 2.64,
+  "heard": "Where have you been all my life?",
+  "match": 1.0,
+  "spread": 4.15,
+  "lrange": 11.5,
+  "score": 5.87
+ },
+ "10_1": {
+  "text": "Where have you BEEN all my life?!",
+  "exaggeration": 1.3,
+  "cfg_weight": 0.3,
+  "seconds": 2.24,
+  "heard": "Where have you been all my life?",
+  "match": 1.0,
+  "spread": 4.62,
+  "lrange": 11.5,
+  "score": 6.34
+ },
+ "10_2": {
+  "text": "Where have you BEEN all my life?!",
+  "exaggeration": 1.6,
+  "cfg_weight": 0.3,
+  "seconds": 3.04,
+  "heard": "Where have you been all my life?",
+  "match": 1.0,
+  "spread": 5.85,
+  "lrange": 14.2,
+  "score": 7.98,
+  "picked": true,
+  "note": "clean words (10_3 adds a stray word)"
+ },
+ "10_3": {
+  "text": "Where have you BEEN all my life?!",
+  "exaggeration": 1.9,
+  "cfg_weight": 0.3,
+  "seconds": 3.2,
+  "heard": "Where have you been all my life? Ciao!",
+  "match": 0.933,
+  "spread": 6.07,
+  "lrange": 13.8,
+  "score": 8.13
+ },
+ "11_0": {
+  "text": "Comment Kree dum, and I'll send you the link!",
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "seconds": 3.24,
+  "heard": "Comment, create dumb, and I'll send you the link.",
+  "match": 0.824,
+  "spread": 8.82,
+  "lrange": 12.7,
+  "score": 10.73
+ },
+ "11_1": {
+  "text": "Comment Kree dum, and I'll send you the link!",
+  "exaggeration": 1.0,
+  "cfg_weight": 0.45,
+  "seconds": 2.16,
+  "heard": "I'm Encre Dumb and I'll send you the link.",
+  "match": 0.706,
+  "spread": 6.73,
+  "lrange": 10.1,
+  "score": 8.25
+ },
+ "11_2": {
+  "text": "Comment Kree dum, and I'll send you the link!",
+  "exaggeration": 1.2,
+  "cfg_weight": 0.45,
+  "seconds": 3.12,
+  "heard": "Comment. Create dumb and I'll send you the link.",
+  "match": 0.824,
+  "spread": 5.1,
+  "lrange": 14.9,
+  "score": 7.34
+ },
+ "11_3": {
+  "text": "Comment Kree dum, and I'll send you the link!",
+  "exaggeration": 1.4,
+  "cfg_weight": 0.45,
+  "seconds": 2.76,
+  "heard": "Comment, Creedom, and I'll send you the link.",
+  "match": 1.0,
+  "spread": 5.8,
+  "lrange": 15.0,
+  "score": 8.06,
+  "picked": true
  }
 }

@@ -138,7 +138,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #1A122
 .wish i { font-style: normal; margin-right: 10px; color: #FFE7A8; }
 .tag { position: absolute; display: flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 20px; background: rgba(255,240,248,.82); border: 2px solid rgba(255,255,255,.9); box-shadow: 0 12px 34px rgba(60,10,40,.35); color: #2A1024; }
 .tag b { font: 800 40px/1 "GSans"; color: #E8395A; } .tag span { font: 700 36px/1 "GSans"; }
-#tg1 { left: 190px; top: 760px; } #tg2 { left: 70px; top: 1240px; } #tg2 b { color: #E0A11A; } #tg2 { background: rgba(255,246,220,.9); }
+#tg1 { left: 70px; top: 760px; } #tg2 { left: 70px; top: 1240px; } #tg2 b { color: #E0A11A; } #tg2 { background: rgba(255,246,220,.9); }
 #tg3 { left: 70px; top: 1240px; } #tg3 b { color: #2A1024; }
 #tg3 i { position: relative; width: 66px; height: 36px; border-radius: 18px; background: #B9AFC2; margin-left: 6px; } #tg3 em { position: absolute; left: 4px; top: 4px; width: 28px; height: 28px; border-radius: 50%; background: #fff; }
 .cloud { position: absolute; max-width: 520px; padding: 26px 34px; border-radius: 48px; background: #FFFFFF; box-shadow: 0 14px 40px rgba(40,0,30,.35), inset 0 -6px 0 rgba(243,67,162,.12); transform-origin: 50% 100%; }
