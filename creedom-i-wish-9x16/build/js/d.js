@@ -27,8 +27,8 @@ function flyState(cv, k, o = {}) {
   const p = cv.getPointAt(clamp(k)), tg = cv.getTangentAt(clamp(k)), tg2 = cv.getTangentAt(clamp(k + .03));
   const hd = Math.atan2(tg.x, tg.z), el = Math.asin(clamp(tg.y, -1, 1));
   let dh = Math.atan2(tg2.x, tg2.z) - hd; dh = Math.atan2(Math.sin(dh), Math.cos(dh));
-  return { x: p.x, y: p.y, z: p.z, ry: hd, rx: 1.25 - el * .7, roll: clamp(-dh * 9, -1, 1), still: true, noblink: true, feetBack: 1,
-    wl: [1.15, .25], wr: [1.15, .25], flap: [.75, 4.2], eyes: "determined", look: [0, .6], jaw: .25, sq: -.08, ...o };
+  return { x: p.x, y: p.y, z: p.z, ry: hd, rx: .5 - el * .45, roll: clamp(-dh * 6, -.5, .5), still: true, noblink: true, feetBack: .6,
+    wl: [1.15, .15], wr: [1.15, .15], flap: [.75, 4.2], eyes: "joy", look: [0, .2], jaw: .6, sq: -.04, ...o };
 }
 function trail(cv, k, span, camP, w, sparkN = 46) {
   const pts = []; for (let j = 0; j <= 30; j++) { const kk = k - span * (1 - j / 30); if (kk >= 0) pts.push(cv.getPointAt(clamp(kk))); }
@@ -114,7 +114,7 @@ function shoot(t) {
   } else if (sh === "teaser1") {  // 5. TEASER 1: the sky turns dramatic; a tiny pink hero arcs across it, rolls, and is gone (sparkle trail)
     const k = ramp(u, .15, 2.1);
     cam.p.set(-.55, 1.5, .2); cam.l.set(-1.0, 1.95, -3.0); cam.fov = 38 - 3 * ss(u, 0, len); cam.focus = 3.4;
-    if (k > 0 && k < 1) { cree = flyState(PATH.t1, k, { sc: .2, eyes: "determined" }); cree.roll += Math.PI * 2 * ss(k, .45, .7); trail(PATH.t1, k, .22, cam.p, .035, 30); }
+    if (k > 0 && k < 1) { cree = flyState(PATH.t1, k, { sc: .2, eyes: "joy" }); trail(PATH.t1, k, .22, cam.p, .035, 30); }
     for (let i = 0; i < RM.clouds.length; i++) RM.clouds[i].position.x = -2.4 + i * 1.4 + u * .9;
     for (const c of RM.curt) c.rotation.z = .06 * Math.sin(u * 3);
     RM.lamp.intensity = 1.2; RM.key.intensity = .5; hemi.intensity = .35; RM.moon.intensity = 1.5;
@@ -126,7 +126,7 @@ function shoot(t) {
   } else if (sh === "teaser2") {  // 7. TEASER 2: closer: he streaks past the window in a blur of pink; curtains blow in, papers lift
     const k = ease(ramp(u, .25, 1.05));
     cam.p.set(.6, 1.35, 1.6); cam.l.set(-.8, 1.55, -2.3); cam.fov = 44; cam.focus = 3.4;
-    if (k > 0 && k < 1) { cree = flyState(PATH.t2, k, { sc: .42, eyes: "determined", flap: [.85, 5] }); trail(PATH.t2, k, .3, cam.p, .07, 26);
+    if (k > 0 && k < 1) { cree = flyState(PATH.t2, k, { sc: .42, eyes: "joy", flap: [.85, 5] }); trail(PATH.t2, k, .3, cam.p, .07, 26);
       FX.speed.visible = true; FX.speed.position.set(cree.x - .3, cree.y, cree.z); FX.speed.rotation.set(0, Math.PI / 2, 0); }
     const gust = ss(u, .5, .8) * (1 - ss(u, 1.6, 2.2));
     RM.curt[0].rotation.x = -.6 * gust; RM.curt[1].rotation.x = -.5 * gust; RM.curt[0].rotation.z = .15 * gust;
@@ -151,15 +151,15 @@ function shoot(t) {
   } else if (sh === "rise") {     // 10. his silhouette rises in the window against the moon, wings spread; his eyes glint; he tucks to launch
     for (const b of RM.fairy) b.visible = false;
     const up2 = ease(ramp(u, 0, .55)), tuck = ss(u, .62, .95);
-    cree = { x: -1.05, y: 1.05 + .8 * up2 + .03 * Math.sin(u * 7), z: -2.95, ry: 0, sc: .36, still: true, noblink: true, eyes: tuck > .3 ? "determined" : "open", look: [0, -.15],
+    cree = { x: -1.05, y: 1.05 + .8 * up2 + .03 * Math.sin(u * 7), z: -2.95, ry: 0, sc: .36, still: true, noblink: true, eyes: "joy", look: [0, -.15],
       wl: [lerp(1.35, -.15, tuck), lerp(0, .7, tuck)], wr: [lerp(1.35, -.15, tuck), lerp(0, .7, tuck)], flap: [.28 * (1 - tuck), 2.4], sq: .16 * tuck, rx: -.12 * tuck, jaw: .2 };
-    CREE.dark = true;
+    CREE.dark = false;
     FX.rays.visible = true; FX.rays.position.set(-1.05, cree.y + .15, -3.15); FX.rays.rotation.z = u * .25; FX.rays.children.forEach((r, i) => r.material.opacity = (.1 + .05 * Math.sin(u * 5 + i)) * ss(u, 0, .4));
     FX.halo.visible = true; FX.halo.position.set(-1.05, cree.y + .17, -3.05); FX.halo.scale.setScalar(.9 + .1 * Math.sin(u * 4)); FX.halo.material.opacity = .45 * ss(u, 0, .4);
     const gl = pulse(u, .5, .12);
     if (gl > .02) POST.push(() => { for (let k2 = 0; k2 < 2; k2++) { const sp = FX.sparks[k2]; CREE.eyes[k2].localToWorld(V.set(.03, .04, .16)); sp.visible = true; sp.position.copy(V); sp.scale.setScalar(.1 * gl); sp.material.opacity = gl; sp.material.rotation = u * 2; } });
     RM.bulb.visible = false; RM.lamp.intensity = 0; RM.key.intensity = 0; RM.fill.intensity = .3; hemi.intensity = .2; RM.moon.intensity = 2.6; RM.moon.position.set(-1.05, 2.2, -3.4);
-    RM.rim.intensity = 3.0; RM.rim.color.set(0xBFD0FF); RM.rim.position.set(-1.05, 2.3, -3.3);
+    RM.rim.intensity = 2.2; RM.rim.color.set(0xFFB8DC); RM.rim.position.set(-1.05, cree.y + .2, -2.55);
     cam.p.set(-1.6, 1.0 + .12 * u, .3 - .3 * ss(u, 0, len)); cam.l.set(-1.05, 1.75, -2.7); cam.fov = 40 - 4 * ss(u, 0, len); cam.focus = 3.3;
   } else if (sh === "burst") {    // 11. the window blows open (flash, glass glints) and he rockets through the room: a climb, a barrel roll, a turn
     const open = ease(ramp(u, 0, .12));
@@ -172,8 +172,8 @@ function shoot(t) {
       sh2.rotation.set(a * 9 * hash(i * 6), a * 7, a * 5); sh2.material.opacity = .9 * (1 - a / .7) * (.5 + .5 * Math.sin(a * 40 + i)); });
     const k = ease(ramp(u, .02, 1.0) * .92 + ramp(u, .02, 1.0) * .08);
     cam.p.set(.95 + .25 * u, 1.15 + .1 * u, 2.55); cam.fov = 52; cam.focus = 2.6;
-    cree = flyState(PATH.in, k, { sc: .3, eyes: "determined", flap: [.8, 4.6] });
-    cree.roll += Math.PI * 2 * ss(k, .42, .62);
+    cree = flyState(PATH.in, k, { sc: .3, eyes: "joy", flap: [.8, 4.6] });
+    cree.roll += .25 * Math.sin(k * 12);
     const lk = PATH.in.getPointAt(clamp(k - .05)); cam.l.set(lerp(-1.05, lk.x, ss(u, .05, .3)), lerp(1.8, lk.y - .35, ss(u, .05, .3)), lerp(-2.3, lk.z, ss(u, .05, .3)));
     trail(PATH.in, k, .2, cam.p, .06);
     papers(Bs("hero") + 1.7, t, v(-.3, DESKY + .02, -.1), v(.35, .45, .5), 8);
@@ -183,8 +183,8 @@ function shoot(t) {
     for (const b of RM.fairy) b.visible = false;
     const hang = ramp(u, 0, .3), drop = ramp(u, .3, .45), flip = ease(ramp(u, 0, .14));
     const top = v(.25, 2.0, .38), y = lerp(top.y + .05 * Math.sin(hang * Math.PI), DESKY + .55, drop * drop);
-    cree = { x: lerp(top.x, DESKC.x + .05, ease(drop)), y, z: lerp(top.z, DESKC.z, ease(drop)), ry: lerp(-.9, .1, flip), rx: lerp(1.0, .3, flip) + .1 * drop, roll: 0, sc: .32, still: true, noblink: true,
-      eyes: "determined", look: [0, -.8], wl: [lerp(.9, 2.0, flip), lerp(.2, -.3, flip)], wr: [lerp(.9, 2.0, flip), lerp(.2, -.3, flip)], flap: [.22 * (1 - drop), 3], feetBack: 1 - flip, sq: -.14 * drop, jaw: .2 };
+    cree = { x: lerp(top.x, DESKC.x + .05, ease(drop)), y, z: lerp(top.z, DESKC.z, ease(drop)), ry: lerp(-.9, .1, flip), rx: lerp(.5, .25, flip) + .1 * drop, roll: 0, sc: .32, still: true, noblink: true,
+      eyes: "joy", look: [0, -.8], wl: [lerp(.9, 2.0, flip), lerp(.2, -.3, flip)], wr: [lerp(.9, 2.0, flip), lerp(.2, -.3, flip)], flap: [.22 * (1 - drop), 3], feetBack: 1 - flip, sq: -.14 * drop, jaw: .2 };
     FX.speed.visible = drop > 0; FX.speed.position.set(cree.x, cree.y + .35, cree.z); FX.speed.rotation.set(-Math.PI / 2, 0, 0);
     const pts = []; for (let j = 0; j <= 16; j++) { const q = j / 16; pts.push(v(lerp(top.x, cree.x, q), lerp(top.y + .2, cree.y + .08, q), lerp(top.z, cree.z, q))); }
     if (drop > 0) ribbon(pts, v(.1, 1.2, 1.75), .045);
@@ -194,11 +194,11 @@ function shoot(t) {
   } else if (sh === "landing") {  // 13. the superhero landing: impact (flash, air blast, dust, shake), the lights come back in a wave; he rises proud
     const I = .13;                                                         // impact at Bs("hero") + 3.03, on the music's drop
     const fall = ramp(u, 0, I), crouch = u < I ? 0 : 1 - ss(u, .62, 1.0), rise = ss(u, .62, 1.0);
-    const sqI = u > I ? .2 * Math.exp(-(u - I) * 8) * Math.cos((u - I) * 16) : -.14;
+    const sqI = u > I ? .14 * Math.exp(-(u - I) * 8) * Math.cos((u - I) * 16) : -.1;
     cree = { x: DESKC.x + .05, y: lerp(DESKY + .55, DESKY, fall * fall), z: DESKC.z, ry: lerp(.1, -.08, rise), sc: .34, still: u < .9, noblink: u < .8,
-      sq: u < I ? -.14 : sqI + .08 * crouch, rx: .42 * crouch - .1 * rise, roll: .05 * crouch,
+      sq: u < I ? -.1 : sqI + .05 * crouch, rx: .22 * crouch - .08 * rise, roll: .05 * crouch,
       wl: [lerp(2.2, .5, rise), lerp(.75, .5, rise)], wr: [lerp(.15, .5, rise), lerp(-1.15, .5, rise)],
-      eyes: u < .55 ? "determined" : (u < .95 ? "proud" : "joy"), look: [lerp(0, .25, rise), lerp(-.5, .25, rise)], jaw: u < .62 ? .2 : .2 + .5 * pulse(u, 1.0, .15), feetSplay: .25 * crouch };
+      eyes: u < .95 ? "joy" : "happy", look: [lerp(0, .25, rise), lerp(-.5, .25, rise)], jaw: u < .62 ? .2 : .2 + .5 * pulse(u, 1.0, .15), feetSplay: .25 * crouch };
     if (u > I) { const r = ramp(u, I, I + .6);
       FX.ring.visible = r < 1; FX.ring.position.set(DESKC.x + .05, DESKY + .005, DESKC.z); FX.ring.scale.setScalar(.05 + .75 * ease(r)); FX.ring.material.opacity = .75 * (1 - r);
       const rb = ramp(u, I, I + .35); FX.blast.visible = rb < 1; FX.blast.position.set(DESKC.x + .05, DESKY + .14, DESKC.z + .05); FX.blast.lookAt(cam.p); FX.blast.scale.setScalar(.06 + .9 * ease(rb)); FX.blast.material.opacity = .7 * (1 - rb);
@@ -254,7 +254,7 @@ function shoot(t) {
     const pull = ss(u, .7, .95);
     FX.lever.rotation.z = .5 - 1.1 * pull; FX.machLight.material.color.set(pull > .5 ? 0x5BE3B0 : 0x3A3A3A);
     const cheer = ss(u, 1.3, 1.5); const hop3 = cheer * Math.max(0, Math.sin((u - 1.3) * 9)) * .04;
-    cree = { x: DESKC.x + .05, y: DESKY + hop3, z: .2, ry: .6 - .4 * cheer, sc: .3, eyes: cheer > .3 ? "happy" : (u < .95 ? "determined" : "joy"), flap: cheer > .3 ? [.3, 6] : null, wl: [lerp(.3, 2.6, cheer), 0], wr: [lerp(1.4 - .5 * pull, 2.6, cheer), lerp(.6 + .4 * pull, 0, cheer)], jaw: creeJaw(t), talk: true, look: [.6, .2], sq: .05 * Math.sin(u * 9) * (1 - pull) };
+    cree = { x: DESKC.x + .05, y: DESKY + hop3, z: .2, ry: .6 - .4 * cheer, sc: .3, eyes: cheer > .3 ? "happy" : (u < .95 ? "joy" : "joy"), flap: cheer > .3 ? [.3, 6] : null, wl: [lerp(.3, 2.6, cheer), 0], wr: [lerp(1.4 - .5 * pull, 2.6, cheer), lerp(.6 + .4 * pull, 0, cheer)], jaw: creeJaw(t), talk: true, look: [.6, .2], sq: .05 * Math.sin(u * 9) * (1 - pull) };
     RM.triScr.color.set(0xFFFFFF);
     for (let i = 0; i < FX.planes.length; i++) {
       const p = FX.planes[i], a = u - .95 - i * .13; p.visible = a > 0 && a < 1.6;
