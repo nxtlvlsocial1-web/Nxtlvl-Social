@@ -22,8 +22,8 @@ const soft = (c, o = {}) => new THREE.MeshPhysicalMaterial({ color: c, roughness
   box(9, .1, 8, mat(0xD6CCE6, { roughness: .95 }), 0, 3.2, 1.5, { cast: false });
   box(9, .1, .05, trim, 0, .05, -2.29); box(.05, .1, 8, trim, 3.39, .05, 1.5);
   // the window: two panes (they swing open for the entrance), frame, sill; the sky plane sits behind it
-  RM.skyM = texMat("sky", { transparent: false }); RM.sky = plane(4.2, 3.2, RM.skyM, -1.0, 1.9, -3.2, 0);
-  RM.clouds = []; for (let i = 0; i < 3; i++) { const m = texMat("cloud" + i); const p = plane(1.6, .5, m, -2 + i * 1.4, 2.4 - i * .25, -3.1 + i * .01, 0); p.material.opacity = .8; RM.clouds.push(p); }
+  RM.skyM = texMat("sky", { transparent: false }); RM.sky = plane(5.4, 4.0, RM.skyM, -1.0, 1.9, -3.9, 0);
+  RM.clouds = []; for (let i = 0; i < 3; i++) { const m = texMat("cloud" + i); const p = plane(1.6, .5, m, -2 + i * 1.4, 2.4 - i * .25, -3.8 + i * .01, 0); p.material.opacity = .8; RM.clouds.push(p); }
   RM.win = new THREE.Group(); RM.win.position.set(-1.05, 1.8, -2.3); RM.add(RM.win);
   const wf = mat(0xF4F0F8, { roughness: .5 });
   for (const [w, h, x, y] of [[1.9, .07, 0, .72], [1.9, .07, 0, -.72], [.07, 1.5, -.92, 0], [.07, 1.5, .92, 0]]) box(w, h, .12, wf, x, y, 0, { parent: RM.win });
@@ -135,6 +135,9 @@ const FX = {};
   for (let i = 0; i < 10; i++) { const s = new THREE.Mesh(new THREE.PlaneGeometry(.05, 1), new THREE.MeshBasicMaterial({ map: slT, transparent: true, depthWrite: false, opacity: .7 })); s.position.set((hash(i) - .5) * .6, (hash(i * 3) - .5) * .5, -.4 - hash(i * 5) * .6); s.rotation.x = Math.PI / 2; s.scale.y = .5 + hash(i * 7); FX.speed.add(s); }
   // a soft pink trail ribbon for the far-off flyby (thin, matte)
   FX.trail = new THREE.Mesh(new THREE.PlaneGeometry(1, .04), new THREE.MeshBasicMaterial({ color: 0xFF9BCF, transparent: true, opacity: .7, depthWrite: false })); scene.add(FX.trail);
+  // the landing shockwave: a thin ring of dust on the desk
+  FX.ring = new THREE.Mesh(new THREE.RingGeometry(.9, 1, 64), new THREE.MeshBasicMaterial({ color: 0xFFF4FA, transparent: true, opacity: .6, depthWrite: false, side: THREE.DoubleSide })); FX.ring.rotation.x = -Math.PI / 2; scene.add(FX.ring);
+  FX.puffs = []; for (let i = 0; i < 10; i++) { const p = new THREE.Mesh(new THREE.SphereGeometry(.03, 10, 8), new THREE.MeshStandardMaterial({ color: 0xF4ECF4, roughness: 1, transparent: true, opacity: .7 })); scene.add(p); FX.puffs.push(p); }
   // a soft shadow sweep (the flying shadow passing over the room)
   FX.shadow = new THREE.Mesh(new THREE.CircleGeometry(.6, 32), new THREE.MeshBasicMaterial({ color: 0x0A0614, transparent: true, opacity: .35, depthWrite: false })); FX.shadow.rotation.x = -Math.PI / 2; scene.add(FX.shadow);
 }
@@ -147,7 +150,10 @@ const CREE = { root: new THREE.Group() };
 scene.add(CREE.root);
 {
   const R = CREE.root;
-  const plush = CREE.plush = new THREE.MeshPhysicalMaterial({ color: 0xF343A2, roughness: .68, sheen: 1, sheenColor: new THREE.Color(0xFF8CC6), sheenRoughness: .45, envMap: ENV, envMapIntensity: .25 });
+  const plush = CREE.plush = new THREE.MeshPhysicalMaterial({ color: 0xF343A2, roughness: .62, sheen: .35, sheenColor: new THREE.Color(0xFF6FB8), sheenRoughness: .5, envMap: ENV, envMapIntensity: .15 });
+  // the model sheet's "light subsurface scattering so the pink glows at the edges": a soft view-angle rim on the plush
+  CREE.rimU = { value: .35 };
+  plush.onBeforeCompile = (sh) => { sh.uniforms.uRim = CREE.rimU; sh.fragmentShader = "uniform float uRim;\n" + sh.fragmentShader.replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\n  { float rimF = pow(1.0 - clamp(dot(normalize(vViewPosition), normal), 0.0, 1.0), 3.0); totalEmissiveRadiance += vec3(1.0, .3, .62) * rimF * uRim; }"); };
   const bod = new THREE.Group(); R.add(bod); CREE.bod = bod;
   const g = new THREE.SphereGeometry(.5, 80, 60); const pa = g.attributes.position;
   for (let i = 0; i < pa.count; i++) { const y = pa.getY(i) / .5; const w = .84 * (1 + .1 * (-y) - .05 * Math.max(0, y) ** 2); pa.setX(i, pa.getX(i) * w); pa.setZ(i, pa.getZ(i) * w * .95); pa.setY(i, pa.getY(i) * .94); }
@@ -203,7 +209,7 @@ function placeCree(vis, s) {
   if (!vis) return;
   const R = CREE.root, sc = s.sc ?? .34, sq = s.sq ?? 0;
   const dk = !!CREE.dark;
-  CREE.plush.envMapIntensity = dk ? 0 : .25; CREE.sclM.color.set(dk ? 0x2A1A26 : 0xFFFFFF); CREE.rimM.color.set(dk ? 0x2A1424 : 0xFFD3E6);
+  CREE.plush.envMapIntensity = dk ? 0 : .25; CREE.rimU.value = dk ? .25 : .35; CREE.sclM.color.set(dk ? 0x2A1A26 : 0xFFFFFF); CREE.rimM.color.set(dk ? 0x2A1424 : 0xFFD3E6);
   R.position.set(s.x, s.y, s.z); R.rotation.set(s.rx ?? 0, s.ry ?? 0, s.roll ?? 0, "YXZ"); R.scale.setScalar(sc);
   CREE.bod.scale.set(1 + sq * .5, 1 - sq, 1 + sq * .5);
   for (let k = 0; k < 2; k++) {
@@ -346,10 +352,16 @@ function setToyFace(P, f) {
   P.open.visible = !!os;
   if (os) { P.open.scale.set(os[0], os[1], 1); P.teeth.visible = mouth !== "o" && mouth !== "gasp"; }
 }
-function placeToy(P, vis, p, f) { P.root.visible = !!vis; if (!vis) return; applyPose(P, p); setToyFace(P, f || {}); }
-const LEO = makeToy(scene);
+// v4: the creator is back in the house blocky style (makeChar); his pixel mouth follows the loudness of his voice
+const LEO = makeChar({ id: "leo", skin: "#E2AE86", hair: "#2A1A12", style: "short", top: "#EFE6D6", topStyle: "hoodie", pants: "#6A6660", shoe: "#FFFDF8", brow: "#2A1A12" }, scene);
+LEO.seed = 1.7;
+function placeToy(P, vis, p, f) {
+  f = { ...(f || {}) };
+  if (f.talk) { const a = envAt(C.voiceEnv, NOW); f.talk = false; f.mouth = a < .08 ? (f.mouth || "flat") : (a < .4 ? "talk" : (f.big ? (a > .7 ? "wail" : "rant") : "o")); }
+  placeChar(P, vis, p, f);
+}
 // his phone (in the right hand)
-LEO.phone = new THREE.Group(); LEO.hand[1].add(LEO.phone); LEO.phone.position.set(0, -.04, .07);
+LEO.phone = new THREE.Group(); LEO.hand[1].add(LEO.phone); LEO.phone.position.set(0, -.02, .1);
 rbox(.075, .15, .01, mat(0x2A2A30, { roughness: .3 }), 0, 0, 0, .008, { parent: LEO.phone, cast: false });
 LEO.scr = new THREE.MeshBasicMaterial({ color: 0xDDE8FF, toneMapped: false }); { const sp = new THREE.Mesh(new THREE.PlaneGeometry(.066, .138), LEO.scr); sp.position.z = -.006; sp.rotation.y = Math.PI; LEO.phone.add(sp); }
 const PEN = cyl(.007, .007, .13, mat(0xF343A2), 0, 0, 0, 8); PEN.rotation.z = Math.PI / 2;

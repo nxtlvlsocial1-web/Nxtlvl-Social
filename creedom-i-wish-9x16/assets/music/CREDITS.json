@@ -1,8 +1,10 @@
 {
  "license_url": "https://creativecommons.org/licenses/by/3.0/",
- "note": "Instrumental (checked with faster-whisper). Found through Openverse. Credit both in the post description.",
+ "note": "All instrumental (checked with faster-whisper), found through Openverse, CC BY 3.0. Credit all four in the post description.",
  "tracks": [
-  {"file": "sad_piano.mp3", "title": "Sad Piano", "artist": "Alexander Blu", "license": "CC BY 3.0", "source": "https://www.jamendo.com/track/1476512", "found_via": "Openverse", "use": "0 s to Cree's hero entrance"},
-  {"file": "trip_world.mp3", "title": "Trip Around The World", "artist": "ANtarcticbreeze", "license": "CC BY 3.0", "source": "https://www.jamendo.com/track/1210830", "found_via": "Openverse", "use": "the hero entrance to the end"}
+  {"file": "s_emotional.mp3", "title": "Emotional - Piano Instrumental", "artist": "E. Erkut", "source": "https://www.jamendo.com/track/1320221", "use": "the breakdown"},
+  {"file": "t_susp5.mp3", "title": "Suspense and Tension (stem 5)", "artist": "3minutetunes", "source": "https://www.jamendo.com/track/1172853", "use": "the wishes and teasers, building"},
+  {"file": "h_helios.mp3", "title": "Helios Tilt", "artist": "CM ONNI", "source": "https://www.jamendo.com/track/1691780", "use": "Cree's entrance; the drop lands on the superhero landing"},
+  {"file": "u_progress.mp3", "title": "Inspiring Progress", "artist": "Soundrider/Dope", "source": "https://www.jamendo.com/track/1670591", "use": "the fixes, the hug, the end"}
  ]
 }

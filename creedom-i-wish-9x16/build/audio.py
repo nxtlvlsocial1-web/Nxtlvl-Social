@@ -1,7 +1,9 @@
 """Music, Cree's gibberish voice, sound design and the mastered mix for the Creedom "I Wish..." reel.
 
-Music (CC BY 3.0, Jamendo, found through Openverse; both instrumental, checked with faster-whisper): "Sad Piano" by
-Alexander Blu under the creator's breakdown, then "Trip Around The World" by ANtarcticbreeze from Cree's hero entrance.
+Score (CC BY 3.0, Jamendo, found through Openverse; all instrumental, checked with faster-whisper), cut as a cue sheet for
+tension and relief: "Emotional - Piano Instrumental" by E. Erkut under the breakdown; "Suspense and Tension" (stem 5) by
+3minutetunes building through the wishes and teasers; a hush (near silence) while the lights die; "Helios Tilt" by CM ONNI
+for the entrance, its drop placed on the superhero landing; "Inspiring Progress" by Soundrider/Dope for the fixes and hug.
 Cree never says real words: his voice is synthesised here (little pitched syllables with vowel formants, deterministic),
 timed to build/chirps.json, while the speech clouds on screen say what he means. SFX: HyperFrames' bundled library
 (Pixabay Content License) and an ElevenLabs room tone from the owner's earlier reels. Music ducks under the voice.
@@ -91,10 +93,15 @@ def buzz(dur):
 
 def music():
     m = np.zeros((N, 2))
-    hero = Bs("hero")
-    put(m, load(os.path.join(ROOT, "assets", "music", "sad_piano.mp3")), 0, 1.0, 1.5, 1.5 + hero + .2, fin=.4, fout=.35)
-    up = load(os.path.join(ROOT, "assets", "music", "trip_world.mp3"))
-    put(m, up * .55, hero + .05, 1.0, 0, DUR - hero + .2, fin=.05, fout=1.4)
+    L = lambda f: load(os.path.join(ROOT, "assets", "music", f))  # noqa: E731
+    hero = Bs("hero"); land = hero + 2.75 + .28; burst = hero + .8
+    w1 = Ls("04")
+    put(m, L("s_emotional.mp3"), 0, 1.0, 3.0, 3.0 + w1 + .3, fin=.3, fout=.9)                       # the breakdown
+    sus = L("t_susp5.mp3"); seg = hero - (w1 - .6)
+    put(m, sus * 1.1, w1 - .6, 1.0, 56.0 - seg, 56.0, fin=1.0, fout=.12)                            # building to the hush
+    put(m, L("h_helios.mp3") * .9, burst, 1.0, 12.0 - (land - burst), 12.0 - (land - burst) + (Bs("fix1") - burst) + .6, fin=.05, fout=.7)   # the drop lands on the landing
+    up = L("u_progress.mp3"); seg2 = DUR - Bs("fix1") + .3
+    put(m, up * .8, Bs("fix1") - .1, 1.0, 8.0, 8.0 + seg2, fin=.6, fout=1.5)                        # the fixes, the hug, the end
     return m
 
 
@@ -123,11 +130,14 @@ def sfx():
     put(s, lib("whoosh"), Bs("teaser2") + .25, .35)                                   # teaser 2: he whooshes past the window
     put(s, lib("whoosh-short"), Bs("teaser2") + .65, .2)                              # papers lift
     put(s, buzz(Le("06") - Ls("06") + .2), Ls("06") - .1, .12)                         # the phone buzzing on the bed
-    put(s, lib("riser"), Bs("hero") - 1.8, .3)                                        # the hero entrance
-    put(s, lib("impact-bass-2"), Bs("hero"), .4); put(s, lib("glitch-1"), Bs("hero") + .02, .08)   # the window bursts open
-    put(s, lib("whoosh-cinematic"), Bs("hero") + .2, .4)                              # he flies straight at us
-    put(s, lib("impact-bass-1"), Bs("hero") + 1.45 + .28, .5)                         # the superhero landing
-    put(s, lib("sparkle"), Bs("hero") + 2.4, .25)
+    put(s, lib("riser"), Bs("hero") - 1.6, .25)                                       # tension into the hush
+    for k in range(3):
+        put(s, lib("click-soft"), Bs("hero") + .1 + k * .13, .25)                         # the lights flicker out
+    put(s, lib("impact-bass-2"), Bs("hero") + .8, .45); put(s, lib("glitch-1"), Bs("hero") + .82, .08)   # the window bursts open
+    put(s, lib("whoosh-cinematic"), Bs("hero") + .85, .3)                              # wind, the hover
+    put(s, lib("whoosh"), Bs("hero") + 2.0, .45)                                       # he flies straight at us
+    put(s, lib("impact-bass-1"), Bs("hero") + 2.75 + .28, .6)                          # the superhero landing
+    put(s, lib("sparkle"), Bs("hero") + 3.6, .25)                                      # the lights come back
     put(s, lib("pop"), Bs("fix1") + 1.75, .3); put(s, lib("ping"), Bs("fix1") + 1.85, .3)                  # tap, the tag
     put(s, lib("whoosh-short"), Bs("fix2") + .1, .25); put(s, lib("chime"), Bs("fix2") + 1.5, .3)          # the cards, gold
     put(s, lib("click"), Bs("fix3") + .8, .45); put(s, lib("ping"), Bs("fix3") + .9, .25)                  # the lever, the switch

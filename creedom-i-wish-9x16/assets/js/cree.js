@@ -405,8 +405,8 @@ const soft = (c, o = {}) => new THREE.MeshPhysicalMaterial({ color: c, roughness
   box(9, .1, 8, mat(0xD6CCE6, { roughness: .95 }), 0, 3.2, 1.5, { cast: false });
   box(9, .1, .05, trim, 0, .05, -2.29); box(.05, .1, 8, trim, 3.39, .05, 1.5);
   // the window: two panes (they swing open for the entrance), frame, sill; the sky plane sits behind it
-  RM.skyM = texMat("sky", { transparent: false }); RM.sky = plane(4.2, 3.2, RM.skyM, -1.0, 1.9, -3.2, 0);
-  RM.clouds = []; for (let i = 0; i < 3; i++) { const m = texMat("cloud" + i); const p = plane(1.6, .5, m, -2 + i * 1.4, 2.4 - i * .25, -3.1 + i * .01, 0); p.material.opacity = .8; RM.clouds.push(p); }
+  RM.skyM = texMat("sky", { transparent: false }); RM.sky = plane(5.4, 4.0, RM.skyM, -1.0, 1.9, -3.9, 0);
+  RM.clouds = []; for (let i = 0; i < 3; i++) { const m = texMat("cloud" + i); const p = plane(1.6, .5, m, -2 + i * 1.4, 2.4 - i * .25, -3.8 + i * .01, 0); p.material.opacity = .8; RM.clouds.push(p); }
   RM.win = new THREE.Group(); RM.win.position.set(-1.05, 1.8, -2.3); RM.add(RM.win);
   const wf = mat(0xF4F0F8, { roughness: .5 });
   for (const [w, h, x, y] of [[1.9, .07, 0, .72], [1.9, .07, 0, -.72], [.07, 1.5, -.92, 0], [.07, 1.5, .92, 0]]) box(w, h, .12, wf, x, y, 0, { parent: RM.win });
@@ -518,6 +518,9 @@ const FX = {};
   for (let i = 0; i < 10; i++) { const s = new THREE.Mesh(new THREE.PlaneGeometry(.05, 1), new THREE.MeshBasicMaterial({ map: slT, transparent: true, depthWrite: false, opacity: .7 })); s.position.set((hash(i) - .5) * .6, (hash(i * 3) - .5) * .5, -.4 - hash(i * 5) * .6); s.rotation.x = Math.PI / 2; s.scale.y = .5 + hash(i * 7); FX.speed.add(s); }
   // a soft pink trail ribbon for the far-off flyby (thin, matte)
   FX.trail = new THREE.Mesh(new THREE.PlaneGeometry(1, .04), new THREE.MeshBasicMaterial({ color: 0xFF9BCF, transparent: true, opacity: .7, depthWrite: false })); scene.add(FX.trail);
+  // the landing shockwave: a thin ring of dust on the desk
+  FX.ring = new THREE.Mesh(new THREE.RingGeometry(.9, 1, 64), new THREE.MeshBasicMaterial({ color: 0xFFF4FA, transparent: true, opacity: .6, depthWrite: false, side: THREE.DoubleSide })); FX.ring.rotation.x = -Math.PI / 2; scene.add(FX.ring);
+  FX.puffs = []; for (let i = 0; i < 10; i++) { const p = new THREE.Mesh(new THREE.SphereGeometry(.03, 10, 8), new THREE.MeshStandardMaterial({ color: 0xF4ECF4, roughness: 1, transparent: true, opacity: .7 })); scene.add(p); FX.puffs.push(p); }
   // a soft shadow sweep (the flying shadow passing over the room)
   FX.shadow = new THREE.Mesh(new THREE.CircleGeometry(.6, 32), new THREE.MeshBasicMaterial({ color: 0x0A0614, transparent: true, opacity: .35, depthWrite: false })); FX.shadow.rotation.x = -Math.PI / 2; scene.add(FX.shadow);
 }
@@ -530,7 +533,10 @@ const CREE = { root: new THREE.Group() };
 scene.add(CREE.root);
 {
   const R = CREE.root;
-  const plush = CREE.plush = new THREE.MeshPhysicalMaterial({ color: 0xF343A2, roughness: .68, sheen: 1, sheenColor: new THREE.Color(0xFF8CC6), sheenRoughness: .45, envMap: ENV, envMapIntensity: .25 });
+  const plush = CREE.plush = new THREE.MeshPhysicalMaterial({ color: 0xF343A2, roughness: .62, sheen: .35, sheenColor: new THREE.Color(0xFF6FB8), sheenRoughness: .5, envMap: ENV, envMapIntensity: .15 });
+  // the model sheet's "light subsurface scattering so the pink glows at the edges": a soft view-angle rim on the plush
+  CREE.rimU = { value: .35 };
+  plush.onBeforeCompile = (sh) => { sh.uniforms.uRim = CREE.rimU; sh.fragmentShader = "uniform float uRim;\n" + sh.fragmentShader.replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\n  { float rimF = pow(1.0 - clamp(dot(normalize(vViewPosition), normal), 0.0, 1.0), 3.0); totalEmissiveRadiance += vec3(1.0, .3, .62) * rimF * uRim; }"); };
   const bod = new THREE.Group(); R.add(bod); CREE.bod = bod;
   const g = new THREE.SphereGeometry(.5, 80, 60); const pa = g.attributes.position;
   for (let i = 0; i < pa.count; i++) { const y = pa.getY(i) / .5; const w = .84 * (1 + .1 * (-y) - .05 * Math.max(0, y) ** 2); pa.setX(i, pa.getX(i) * w); pa.setZ(i, pa.getZ(i) * w * .95); pa.setY(i, pa.getY(i) * .94); }
@@ -586,7 +592,7 @@ function placeCree(vis, s) {
   if (!vis) return;
   const R = CREE.root, sc = s.sc ?? .34, sq = s.sq ?? 0;
   const dk = !!CREE.dark;
-  CREE.plush.envMapIntensity = dk ? 0 : .25; CREE.sclM.color.set(dk ? 0x2A1A26 : 0xFFFFFF); CREE.rimM.color.set(dk ? 0x2A1424 : 0xFFD3E6);
+  CREE.plush.envMapIntensity = dk ? 0 : .25; CREE.rimU.value = dk ? .25 : .35; CREE.sclM.color.set(dk ? 0x2A1A26 : 0xFFFFFF); CREE.rimM.color.set(dk ? 0x2A1424 : 0xFFD3E6);
   R.position.set(s.x, s.y, s.z); R.rotation.set(s.rx ?? 0, s.ry ?? 0, s.roll ?? 0, "YXZ"); R.scale.setScalar(sc);
   CREE.bod.scale.set(1 + sq * .5, 1 - sq, 1 + sq * .5);
   for (let k = 0; k < 2; k++) {
@@ -729,10 +735,16 @@ function setToyFace(P, f) {
   P.open.visible = !!os;
   if (os) { P.open.scale.set(os[0], os[1], 1); P.teeth.visible = mouth !== "o" && mouth !== "gasp"; }
 }
-function placeToy(P, vis, p, f) { P.root.visible = !!vis; if (!vis) return; applyPose(P, p); setToyFace(P, f || {}); }
-const LEO = makeToy(scene);
+// v4: the creator is back in the house blocky style (makeChar); his pixel mouth follows the loudness of his voice
+const LEO = makeChar({ id: "leo", skin: "#E2AE86", hair: "#2A1A12", style: "short", top: "#EFE6D6", topStyle: "hoodie", pants: "#6A6660", shoe: "#FFFDF8", brow: "#2A1A12" }, scene);
+LEO.seed = 1.7;
+function placeToy(P, vis, p, f) {
+  f = { ...(f || {}) };
+  if (f.talk) { const a = envAt(C.voiceEnv, NOW); f.talk = false; f.mouth = a < .08 ? (f.mouth || "flat") : (a < .4 ? "talk" : (f.big ? (a > .7 ? "wail" : "rant") : "o")); }
+  placeChar(P, vis, p, f);
+}
 // his phone (in the right hand)
-LEO.phone = new THREE.Group(); LEO.hand[1].add(LEO.phone); LEO.phone.position.set(0, -.04, .07);
+LEO.phone = new THREE.Group(); LEO.hand[1].add(LEO.phone); LEO.phone.position.set(0, -.02, .1);
 rbox(.075, .15, .01, mat(0x2A2A30, { roughness: .3 }), 0, 0, 0, .008, { parent: LEO.phone, cast: false });
 LEO.scr = new THREE.MeshBasicMaterial({ color: 0xDDE8FF, toneMapped: false }); { const sp = new THREE.Mesh(new THREE.PlaneGeometry(.066, .138), LEO.scr); sp.position.z = -.006; sp.rotation.y = Math.PI; LEO.phone.add(sp); }
 const PEN = cyl(.007, .007, .13, mat(0xF343A2), 0, 0, 0, 8); PEN.rotation.z = Math.PI / 2;
@@ -746,7 +758,7 @@ const wordT = (k, i) => { const ws = C.words.filter((w) => w.take === k); return
 const SHOTS = [
   ["phone", 0], ["rantA", Ls("02") - .1], ["rantB", wordT("02", 4) - .08], ["rantC", wordT("02", 9) - .08], ["thud", Bs("thud")],
   ["window", Ls("04") - .1], ["teaser1", Bs("teaser1")], ["bed", Ls("05") - .1], ["teaser2", Bs("teaser2")], ["pillow", Ls("06") - .1],
-  ["flyin", Bs("hero")], ["landing", Bs("hero") + 1.45], ["whoa", Ls("07") - .1], ["say", Bs("say")],
+  ["hush", Bs("hero")], ["burst", Bs("hero") + .8], ["flyin", Bs("hero") + 2.0], ["landing", Bs("hero") + 2.75], ["whoa", Ls("07") - .1], ["say", Bs("say")],
   ["fix1", Bs("fix1")], ["fix2", Bs("fix2")], ["fix3", Bs("fix3")], ["hug", Ls("10") - .15], ["end", Bs("endin")],
 ];
 const shotAt = (t) => { let k = 0; for (let i = 0; i < SHOTS.length; i++) if (t >= SHOTS[i][1]) k = i; return [SHOTS[k][0], t - SHOTS[k][1], (SHOTS[k + 1] ? SHOTS[k + 1][1] : DUR) - SHOTS[k][1]]; };
@@ -771,17 +783,21 @@ const CAM = { p: v(0, 1.5, 3), l: v(0, 1, 0), fov: 40, focus: 3, ap: .03 };
 function shoot(t) {
   const [sh, u, len] = shotAt(t);
   RM.visible = true; CREE.dark = false;
-  for (const k of ["strip", "cards", "mach", "speed", "trail", "shadow"]) FX[k].visible = false;
-  for (const p of FX.planes) p.visible = false; for (const p of FX.papers) p.visible = false;
+  for (const k of ["strip", "cards", "mach", "speed", "trail", "shadow", "ring"]) FX[k].visible = false;
+  for (const p of FX.planes) p.visible = false; for (const p of FX.papers) p.visible = false; for (const p of FX.puffs) p.visible = false;
   PEN.visible = false; LEO.phone.visible = false;
   for (const h of RM.panes) h.rotation.y = 0; for (const c of RM.curt) c.rotation.set(0, 0, 0);
   for (let i = 0; i < RM.clouds.length; i++) RM.clouds[i].position.x = -2.2 + i * 1.4 + ((t * .05 + i * .3) % 1.2);
   scene.background = tmpC.set(0x14102A).clone(); scene.fog.color.set(0x14102A); scene.fog.near = 30; scene.fog.far = 90;
   hemi.color.set(0xB8A8E8); hemi.groundColor.set(0x3A2A3A); hemi.intensity = .55;
   sun.color.set(0xA8C0FF); sun.intensity = .5; sun.target.position.set(0, 0, -.5); sun.position.set(-2.5, 5, 3);
-  RM.lamp.intensity = 2.6; RM.moon.intensity = 2.0; RM.fill.intensity = 1.3; RM.key.intensity = 1.8; RM.rim.intensity = 0; RM.rim2.intensity = 0;
+  const LAND = Bs("hero") + 2.75 + .3;
+  const dim = ss(t, Ls("04") - .5, Bs("hero")) * (1 - ss(t, LAND + .1, LAND + .6));        // tension: 0 -> 1 through the wishes
+  const warm = ss(t, LAND + .1, LAND + .6);                                                  // relief after the landing
+  RM.lamp.intensity = 2.6 - 1.4 * dim + .8 * warm; RM.moon.intensity = 2.0 + .4 * dim; RM.fill.intensity = 1.3 - .6 * dim + .3 * warm; RM.key.intensity = 1.8 - 1.0 * dim + .4 * warm;
+  hemi.intensity = .55 - .2 * dim + .1 * warm; RM.lamp.color.set(warm > .5 ? 0xFFD8B8 : 0xFFD2B0); RM.rim.intensity = 0; RM.rim2.intensity = 0;
   phoneL.intensity = 0; RM.triScr.color.set(0xFFE3F1); RM.lapScr.color.set(0x9FB2D8);
-  for (const b of RM.fairy) b.visible = true;
+  for (const b of RM.fairy) b.visible = true; RM.bulb.visible = true;
   // the fairy lights twinkle gently
   RM.fairy.forEach((b, i) => b.scale.setScalar(.85 + .25 * (.5 + .5 * Math.sin(t * 2.2 + i * 1.7))));
   let bloomS = .12, vig = .3, dark = 0;
@@ -814,14 +830,14 @@ function shoot(t) {
     PEN.position.set(.1 + .78 * pr + .2 * fall, Math.max(.008, DESKY + .008 - 2 * fall * fall), .28); PEN.rotation.set(u * 9, 0, Math.PI / 2);
     cam.p.set(.15, 1.3, 3.1); cam.l.set(-.2, .98, -.4); cam.fov = 30; cam.focus = 3.4;
   } else if (sh === "window") {   // 4. WISH 1: at the window, hands clasped, looking up at the moon
-    leo = standing({ x: -1.05, z: -1.3, ry: Math.PI + .15, hp: -.38, hy: -.1, a: [[1.45, -.25, 2.05], [1.45, -.25, 2.05]] });
+    leo = standing({ x: -.68, z: -1.35, ry: Math.PI, hp: -.3, hy: 0, a: [[1.45, -.25, 2.05], [1.45, -.25, 2.05]] });
     leoF = { eyes: "teary", mouth: talking(t, "04") ? "flat" : "smile", brows: "worry", talk: talking(t, "04"), look: [0, .8] };
-    cam.p.set(-.62, 1.42, -2.18); cam.l.set(-1.0, 1.82, -1.3); cam.fov = 48 - 3 * ss(u, 0, len); cam.focus = 1.0;
+    cam.p.set(-.66, 1.55, -3.6 + .15 * ss(u, 0, len)); cam.l.set(-.68, 1.62, -1.3); cam.fov = 48; cam.focus = 2.25;
     RM.moon.intensity = 3.2; RM.key.intensity = .8;
   } else if (sh === "teaser1") {  // 5. TEASER 1: the sky turns dramatic; a pink streak shoots across, far away
     const k = ramp(u, .3, 1.9), px = lerp(-3.2, 1.6, ease(k));
-    cree = { x: px, y: 1.95 + .15 * Math.sin(k * 3), z: -3.05, ry: -Math.PI / 2, ...FLY, sc: .22 };
-    FX.trail.visible = k > 0 && k < 1; FX.trail.position.set(px - .45, cree.y, -3.06); FX.trail.scale.set(.9, 1, 1); FX.trail.rotation.set(0, 0, .08);
+    cree = { x: px, y: 1.95 + .15 * Math.sin(k * 3), z: -3.4, ry: -Math.PI / 2, ...FLY, sc: .24 };
+    FX.trail.visible = k > 0 && k < 1; FX.trail.position.set(px - .45, cree.y, -3.41); FX.trail.scale.set(.9, 1, 1); FX.trail.rotation.set(0, 0, .08);
     for (let i = 0; i < RM.clouds.length; i++) RM.clouds[i].position.x = -2.4 + i * 1.4 + u * .9;
     for (const c of RM.curt) c.rotation.z = .06 * Math.sin(u * 3);
     RM.lamp.intensity = 1.2; RM.key.intensity = .5; hemi.intensity = .35; RM.moon.intensity = 1.5;
@@ -847,33 +863,57 @@ function shoot(t) {
     leoF = { eyes: "teary", mouth: talking(t, "06") ? "flat" : "sad", brows: "despair", talk: talking(t, "06") };
     RM.lamp.intensity = 3.0; RM.lamp.position.set(2.65, 1.25, .75);
     cam.p.set(2.6, 1.45, 2.3); cam.l.set(2.7, .82, -.6); cam.fov = 36; cam.focus = 2.7;
-  } else if (sh === "flyin") {    // 9. HERO ENTRANCE: the window bursts open and he flies straight at us
-    const open = ease(ramp(u, 0, .3));
+  } else if (sh === "hush") {     // 9. the hush: the lights flicker and die, one by one; silence
+    leo = pose({ x: 2.7, y: .72, z: -2.25, l: [[0, .1], [0, .1]], a: [[2.7, .35, .5], [2.7, .35, .5]], hp: -1.05 - .2 * ss(u, .2, .6), hy: .12 + .3 * ss(u, .3, .7) });
+    leoRot = [Math.PI / 2, 0, 0]; leoF = { eyes: "wide", mouth: "o", brows: "high", noblink: true };
+    const fl = u < .45 ? (Math.floor(u * 40) % 3 === 0 ? .3 : 1) : 0;
+    RM.lamp.intensity *= fl; RM.key.intensity *= fl * .6; RM.fill.intensity *= .5; hemi.intensity *= .5; RM.bulb.visible = fl > .5;
+    RM.fairy.forEach((b, i) => b.visible = u < .1 + (i % 7) * .07);
+    cam.p.set(.55, 1.85, 2.7); cam.l.set(2.4, .85, -1.0); cam.fov = 44; cam.focus = 3.6;
+    dark = .15 * ss(u, .4, .8);
+  } else if (sh === "burst") {    // 10. the window bursts open; he hovers in it, backlit by the moon (slow, heroic)
+    const open = ease(ramp(u, 0, .22));
     RM.panes[0].rotation.y = -1.75 * open; RM.panes[1].rotation.y = 1.75 * open;
-    for (const c of RM.curt) c.rotation.x = -.8 * open * (1 - .3 * Math.sin(u * 6));
-    const k = ease(ramp(u, .15, 1.4));
-    const P0 = v(-1.05, 1.85, -3.0), P1 = v(-.15, 1.4, .9);
-    cree = { x: lerp(P0.x, P1.x, k), y: lerp(P0.y, P1.y, k) + .08 * Math.sin(k * 3), z: lerp(P0.z, P1.z, k), ry: .25, ...FLY, rx: -1.0, sc: .34, look: [0, .4] };
-    FX.speed.visible = k > .02; FX.speed.position.set(cree.x, cree.y, cree.z - .3); FX.speed.rotation.set(0, .25, 0);
-    papers(Bs("hero") + .15, t, v(-.3, DESKY + .02, -.1), v(.5, .5, .9), 8);
-    RM.moon.intensity = 3.5; RM.lamp.intensity = 2.0;
-    cam.p.set(.1, 1.25, 1.75); cam.l.set(-.75, 1.62, -2.3); cam.fov = 44; cam.focus = 1.2 + 3 * (1 - k);
-  } else if (sh === "landing") {  // 10. the superhero landing on the desk, then he rises, proud
+    RM.curt[0].rotation.x = -.9 * open * (1 - .25 * Math.sin(u * 7)); RM.curt[1].rotation.x = -.8 * open * (1 - .25 * Math.sin(u * 6 + 1));
+    for (const b of RM.fairy) b.visible = false;
+    const rise = ease(ramp(u, .05, .7));
+    cree = { x: -1.05, y: 1.35 + .45 * rise + .02 * Math.sin(u * 4), z: -2.6, ry: 0, sc: .4, lean: -.08, eyes: "open", noblink: true, brow: -.25, browY: -.02, wl: [-.4, -.4], wr: [-.4, -.4], jaw: .15, look: [0, -.1] };
+    CREE.dark = u < .55;
+    RM.bulb.visible = false; RM.lamp.intensity = 0; RM.key.intensity = 0; RM.fill.intensity = .35; hemi.intensity = .2; RM.moon.intensity = 4.5 * open; RM.moon.position.set(-1.05, 2.2, -3.4);
+    RM.rim.intensity = 3.5; RM.rim.color.set(0xBFD0FF); RM.rim.position.set(-1.05, 2.5, -3.2);
+    cam.p.set(-1.55, 1.4, .55 - .25 * ss(u, 0, len)); cam.l.set(-1.05, 1.85, -2.6); cam.fov = 38 - 4 * ss(u, 0, len); cam.focus = 3.3;
+  } else if (sh === "flyin") {    // 11. he flies straight at us
+    for (const h of RM.panes) h.rotation.y = 0; RM.panes[0].rotation.y = -1.75; RM.panes[1].rotation.y = 1.75;
+    for (const c of RM.curt) c.rotation.x = -.7;
+    for (const b of RM.fairy) b.visible = false;
+    const k = ease(ramp(u, 0, .7));
+    const P0 = v(-1.05, 1.8, -2.6), P1 = v(-.05, 1.35, 1.0);
+    cree = { x: lerp(P0.x, P1.x, k), y: lerp(P0.y, P1.y, k), z: lerp(P0.z, P1.z, k), ry: .2, ...FLY, rx: -1.05, sc: .38, brow: -.25, look: [0, .3] };
+    FX.speed.visible = true; FX.speed.position.set(cree.x, cree.y, cree.z - .35); FX.speed.rotation.set(0, .2, 0);
+    papers(Bs("hero") + 1.6, t, v(-.6, DESKY + .02, -.2), v(.1, .25, .2), 3);
+    RM.bulb.visible = false; RM.lamp.intensity = 0; RM.key.intensity = 0; RM.moon.intensity = 4.0; RM.fill.intensity = .5; hemi.intensity = .3;
+    cam.p.set(.1, 1.3, 1.85); cam.l.set(-.7, 1.62, -2.2); cam.fov = 46; cam.focus = 1.2 + 3 * (1 - k);
+  } else if (sh === "landing") {  // 12. the superhero landing: impact, a dust ring, a shake; he rises; the lights come back warm
+    for (const b of RM.fairy) b.visible = u > .45;
     const k = ramp(u, 0, .28), y = DESKY + .9 * (1 - ease(k));
-    const crouch = ss(u, .26, .32) * (1 - ss(u, .9, 1.3));
+    const crouch = ss(u, .26, .32) * (1 - ss(u, 1.0, 1.4));
     const sq = u > .28 ? .25 * Math.exp(-(u - .28) * 6) * Math.cos((u - .28) * 18) : -.1;
-    cree = { x: DESKC.x - .25 * (1 - ease(k)), y, z: DESKC.z, ry: -.1, sc: .34, sq: sq + .15 * crouch, rx: .35 * crouch - .5 * (1 - k), eyes: "open", noblink: true, brow: -.18,
-      wl: [lerp(.9, -.35, ss(u, .9, 1.3)), lerp(.2, -.35, ss(u, .9, 1.3))], wr: [lerp(2.2, -.35, ss(u, .9, 1.3)), lerp(.9, -.35, ss(u, .9, 1.3))], look: [0, .3 + .3 * crouch] };
-    papers(Bs("hero") + 1.2, t, v(DESKC.x + .5, DESKY + .02, DESKC.z - .3), v(.5, .2, -.1), 4);
-    RM.rim.intensity = 2.5; RM.rim.position.set(DESKC.x, DESKY + .45, DESKC.z - .45); RM.rim2.intensity = 1.2; RM.rim2.position.set(DESKC.x + .4, DESKY + .3, DESKC.z + .3);
-    cam.p.set(.05, DESKY + .12 + .03 * ss(u, 0, len), 1.95 - .2 * ss(u, .3, len)); cam.l.set(.05, DESKY + .22, DESKC.z); cam.fov = 34; cam.focus = 1.75;
+    const rise = ss(u, 1.0, 1.4);
+    cree = { x: DESKC.x - .25 * (1 - ease(k)), y, z: DESKC.z, ry: -.1, sc: .34, sq: sq + .15 * crouch, rx: .35 * crouch - .5 * (1 - k), lean: -.08 * rise, eyes: "open", noblink: true, brow: -.25, browY: -.02,
+      wl: [lerp(.9, -.4, rise), lerp(.2, -.4, rise)], wr: [lerp(2.2, -.4, rise), lerp(.9, -.4, rise)], look: [0, .3 + .3 * crouch], jaw: .2 + .3 * rise };
+    if (u > .28) { const r = ramp(u, .28, .9); FX.ring.visible = r < 1; FX.ring.position.set(DESKC.x, DESKY + .005, DESKC.z); FX.ring.scale.setScalar(.05 + .6 * ease(r)); FX.ring.material.opacity = .7 * (1 - r);
+      FX.puffs.forEach((p, i) => { const a = i / FX.puffs.length * 6.283, rr2 = .08 + .45 * ease(r); p.visible = r < 1; p.position.set(DESKC.x + Math.cos(a) * rr2, DESKY + .02 + .06 * Math.sin(r * 3), DESKC.z + Math.sin(a) * rr2 * .7); p.scale.setScalar(1 + 2 * r); p.material.opacity = .7 * (1 - r); }); }
+    papers(Bs("hero") + 2.6, t, v(DESKC.x + .5, DESKY + .02, DESKC.z - .3), v(.5, .2, -.1), 4);
+    RM.rim.intensity = 2.5; RM.rim.color.set(0xFF8CC6); RM.rim.position.set(DESKC.x, DESKY + .45, DESKC.z - .45); RM.rim2.intensity = 1.2; RM.rim2.position.set(DESKC.x + .4, DESKY + .3, DESKC.z + .3);
+    const sh2 = u > .28 && u < .75 ? .018 * (1 - ramp(u, .28, .75)) : 0;
+    cam.p.set(.05 + sh2 * Math.sin(u * 90), DESKY + .12 + sh2 * Math.cos(u * 77), 1.95 - .2 * ss(u, .3, len)); cam.l.set(.05, DESKY + .22, DESKC.z); cam.fov = 34; cam.focus = 1.75;
   } else if (sh === "whoa") {     // 9b. the creator turns: jaw drop
     const turn = ss(u, 0, .3);
     leo = pose({ x: 2.3, y: -.17, z: -1.0, ry: -Math.PI / 2 - .25 + .3 * turn, l: [[1.5, 1.5], [1.5, 1.5]], a: [[.45, .55, .3], [.45, .55, .3]], lean: -.15 * turn, hp: -.1, hy: .35 * turn });
     leoF = { eyes: "wide", mouth: talking(t, "07") ? "wail" : "gasp", brows: "high", noblink: true };
     cam.p.set(.6, 1.62, .1); cam.l.set(2.3, 1.42, -1.0); cam.fov = 34 - 4 * ss(u, 0, len); cam.focus = 2.0;
   } else if (sh === "say") {      // 11. "Say no more."
-    cree = { x: DESKC.x, y: DESKY, z: DESKC.z, ry: .2, sc: .34, eyes: u > 1.0 ? "happy" : "open", wl: [-.35, -.35], wr: [.4 + .25 * Math.sin(u * 5), .9], jaw: creeJaw(t), brow: -.1, look: [.4, .15], mag: "hand", magRz: -.4 };
+    cree = { x: DESKC.x, y: DESKY, z: DESKC.z, ry: .2, sc: .34, lean: -.06 + .08 * pulse(u, .55, .12), eyes: u > 1.0 ? "happy" : "open", wl: [-.4, -.4], wr: [-.4, -.4], jaw: creeJaw(t), brow: -.18, look: [.4, .15], sq: .04 * pulse(u, .55, .1) };
     RM.rim.intensity = 2.0; RM.rim.position.set(DESKC.x, DESKY + .45, DESKC.z - .45);
     cam.p.set(-.4, DESKY + .42, 2.25); cam.l.set(DESKC.x, DESKY + .22, DESKC.z); cam.fov = 30; cam.focus = 2.25;
   } else if (sh === "fix1") {     // 12. the film strip: he walks it with his magnifier, taps second three
@@ -900,7 +940,8 @@ function shoot(t) {
     FX.mach.visible = true;
     const pull = ss(u, .7, .95);
     FX.lever.rotation.z = .5 - 1.1 * pull; FX.machLight.material.color.set(pull > .5 ? 0x5BE3B0 : 0x3A3A3A);
-    cree = { x: DESKC.x + .05, y: DESKY, z: .2, ry: .6, sc: .3, eyes: pull > .5 ? "happy" : "open", wl: [.3, 0], wr: [1.4 - .5 * pull, .6 + .4 * pull], jaw: creeJaw(t), look: [.6, .2], sq: .05 * Math.sin(u * 9) * (1 - pull) };
+    const cheer = ss(u, 1.3, 1.5); const hop3 = cheer * Math.max(0, Math.sin((u - 1.3) * 9)) * .04;
+    cree = { x: DESKC.x + .05, y: DESKY + hop3, z: .2, ry: .6 - .4 * cheer, sc: .3, eyes: pull > .5 ? "happy" : "open", wl: [lerp(.3, 2.6, cheer), 0], wr: [lerp(1.4 - .5 * pull, 2.6, cheer), lerp(.6 + .4 * pull, 0, cheer)], jaw: creeJaw(t), look: [.6, .2], sq: .05 * Math.sin(u * 9) * (1 - pull) };
     RM.triScr.color.set(0xFFFFFF);
     for (let i = 0; i < FX.planes.length; i++) {
       const p = FX.planes[i], a = u - .95 - i * .13; p.visible = a > 0 && a < 1.6;
@@ -922,7 +963,7 @@ function shoot(t) {
     scene.background = tmpC.set(0x3A1430).clone();
     const hop = Math.max(0, Math.sin(clamp((u - 1.2) / .45) * Math.PI)) * .06;
     cree = { x: 0, y: hop, z: 0, ry: -.15, sc: .34, eyes: u > 1.5 ? "happy" : "open", wl: [.2, 0], wr: [2.75, -.25], jaw: creeJaw(t), look: [.3, .9], sq: hop > 0 ? -.05 : .04 * pulse(u, 1.67, .08) };
-    hemi.color.set(0xFFC8E4); hemi.groundColor.set(0x6A2050); hemi.intensity = 1.0; sun.intensity = .9; sun.color.set(0xFFE8F2); sun.position.set(1.5, 4, 3); sun.target.position.set(0, 0, 0);
+    hemi.color.set(0xFFC8E4); hemi.groundColor.set(0x6A2050); hemi.intensity = .55; sun.intensity = .75; sun.color.set(0xFFF0F6); sun.position.set(1.5, 4, 3); sun.target.position.set(0, 0, 0);
     RM.lamp.intensity = 0; RM.moon.intensity = 0; RM.fill.intensity = 0; RM.key.intensity = 0; RM.rim.intensity = 3; RM.rim.position.set(0, .45, -.4);
     cam.p.set(0, .34, 2.1); cam.l.set(0, .5, 0); cam.fov = 32; cam.focus = 2.1;
   }
