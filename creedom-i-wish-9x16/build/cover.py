@@ -12,7 +12,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "renders", "nxtlvl_creedom-i-wish_reels_9x16_cover.png")
 PLATE = os.path.join(ROOT, "cover", "plate.png")
 import sys
-PLATE_T = float(sys.argv[1]) if len(sys.argv) > 1 else 32.6   # "say no more": Cree proud, Leo stunned
+PLATE_T = float(sys.argv[1]) if len(sys.argv) > 1 else 30.9   # the superhero landing (dust settled): Cree on the desk, moon in the window
 PLATE_CAM = {}
 
 GRAB = r"""
@@ -39,26 +39,33 @@ const { chromium } = require('playwright');
 """
 
 
+def plate(t, out):
+    subprocess.run(["node", "-e", GRAB, ROOT, out, str(t), json.dumps(PLATE_CAM)], check=True)
+
+
 def main():
     os.makedirs(os.path.dirname(PLATE), exist_ok=True); os.makedirs(os.path.dirname(OUT), exist_ok=True)
     subprocess.run(["node", "-e", GRAB, ROOT, PLATE, str(PLATE_T), json.dumps(PLATE_CAM)], check=True)
     img = "data:image/png;base64," + base64.b64encode(open(PLATE, "rb").read()).decode()
     fonts = os.path.join(ROOT, "assets", "fonts")
     doc = f"""<!doctype html><html><head><meta charset="utf-8"><style>
-@font-face {{ font-family: "Garamond"; font-weight: 400 800; src: url("file://{fonts}/EBGaramond.ttf"); }}
+@font-face {{ font-family: "GSans"; font-weight: 400 800; src: url("file://{fonts}/googlesans.ttf"); }}
 @font-face {{ font-family: "Manrope"; font-weight: 200 800; src: url("file://{fonts}/manrope.ttf"); }}
+@font-face {{ font-family: "Fraunces"; font-style: italic; font-weight: 400 900; src: url("file://{fonts}/fraunces-italic.ttf"); }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 body {{ width: 1080px; height: 1920px; overflow: hidden; background: #000 url({img}) center / cover; position: relative; }}
-.shade {{ position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,8,16,.82) 0%, rgba(5,8,16,.55) 24%, rgba(5,8,16,0) 38%, rgba(5,8,16,0) 70%, rgba(5,8,16,.75) 85%, rgba(5,8,16,.92) 100%); }}
-.top {{ position: absolute; left: 60px; right: 60px; top: 150px; text-align: center; color: #FFFDF6; text-shadow: 0 4px 24px rgba(0,0,0,.7); }}
-.chip {{ display: inline-block; padding: 10px 26px; border-radius: 40px; background: #F2C94C; color: #1E1B18; font: 800 36px/1 "Manrope"; letter-spacing: 6px; text-shadow: none; }}
-.l1, .l3 {{ display: block; margin-top: 18px; font: 500 76px/1.06 "Garamond"; }} .l3 {{ margin-top: 0; }}
-.l2 {{ display: block; font: 700 118px/1.0 "Garamond"; color: #F2C94C; }}
-.bot {{ position: absolute; left: 60px; right: 60px; bottom: 130px; text-align: center; color: #FFFDF6; text-shadow: 0 3px 16px rgba(0,0,0,.7); }}
-.bot b {{ display: block; font: 800 54px/1.2 "Manrope"; }} .bot span {{ display: block; margin-top: 14px; font: 800 30px/1 "Manrope"; letter-spacing: 5px; color: #F2C94C; }}
+.shade {{ position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,6,30,.80) 0%, rgba(10,6,30,.62) 22%, rgba(10,6,30,.10) 40%, rgba(10,6,30,0) 60%, rgba(10,6,30,.55) 74%, rgba(10,6,30,.88) 88%, rgba(10,6,30,.95) 100%); }}
+.top {{ position: absolute; left: 60px; right: 60px; top: 270px; text-align: center; color: #FFFFFF; text-shadow: 0 6px 30px rgba(0,0,0,.65); }}
+.chip {{ display: inline-block; padding: 12px 30px; border-radius: 44px; background: #FF2E93; color: #FFFFFF; font: 800 34px/1 "Manrope"; letter-spacing: 7px; text-shadow: none; box-shadow: 0 8px 30px rgba(255,46,147,.45); }}
+.l1 {{ display: block; margin-top: 30px; font: 700 112px/1.0 "GSans"; letter-spacing: -2px; }}
+.l1 b {{ color: #FFD84D; }}
+.l2 {{ display: block; margin-top: 8px; font: italic 800 128px/1.02 "Fraunces"; color: #FF5BAE; text-shadow: 0 6px 34px rgba(255,46,147,.55), 0 4px 18px rgba(0,0,0,.6); }}
+.bot {{ position: absolute; left: 70px; right: 70px; top: 1385px; text-align: center; color: #FFFFFF; text-shadow: 0 4px 18px rgba(0,0,0,.75); }}
+.bot b {{ display: block; font: 700 56px/1.15 "GSans"; }}
+.bot span {{ display: block; margin-top: 18px; font: 800 28px/1 "Manrope"; letter-spacing: 6px; color: #FFD84D; }}
 </style></head><body><div class="shade"></div>
-<div class="top"><span class="chip">FREE · 4 STEPS</span><span class="l1">ChatGPT keeps</span><span class="l2">recommending</span><span class="l3">your competitor?</span></div>
-<div class="bot"><b>Here's how to claim your business</b><span>REAL ESTATE · NEW FEATURE</span></div>
+<div class="top"><span class="chip">3 WISHES</span><span class="l1"><b>42</b> views?</span><span class="l2">Make a wish.</span></div>
+<div class="bot"><b>Then he flew in and fixed everything</b><span>REELS · VIEWS · DM AUTOMATION</span></div>
 </body></html>"""
     src = os.path.join(ROOT, "cover", "cover.html")
     open(src, "w").write(doc)
