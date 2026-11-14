@@ -1,0 +1,62 @@
+{
+ "01": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "Stop paying for Metricool."
+ },
+ "02": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "This one is free and it's open source."
+ },
+ "03": {
+  "take": 2,
+  "match": 1.0,
+  "heard": "It's called Post Clerk."
+ },
+ "04": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "Instagram, TikTok, LinkedIn, YouTube, and three more, all scheduled from one calendar."
+ },
+ "05": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "One Composer with a different caption for every platform."
+ },
+ "06": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "and a preview of your Instagram feed before anything goes live."
+ },
+ "07": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "But here's what Metricool doesn't give you."
+ },
+ "08": {
+  "take": 0,
+  "match": 1.0,
+  "heard": "It connects to your AI."
+ },
+ "09": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "Claude Code, Cursor, or Codex, draft your posts and schedule them for you."
+ },
+ "10": {
+  "take": 0,
+  "match": 1.0,
+  "heard": "I typed one sentence, plan my posts for next week, done."
+ },
+ "11": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "Want your own copy? It deploys free on Cloudflare in about two minutes."
+ },
+ "12": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "Comment post and I'll send you the link"
+ }
+}

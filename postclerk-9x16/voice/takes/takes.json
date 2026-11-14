@@ -1,0 +1,218 @@
+{
+ "01_0": {
+  "text": "Stop paying for Metri cool.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "seconds": 1.64
+ },
+ "01_1": {
+  "text": "Stop paying for Metri cool.",
+  "exaggeration": 0.87,
+  "cfg_weight": 0.45,
+  "seconds": 1.96
+ },
+ "01_2": {
+  "text": "Stop paying for Metri cool.",
+  "exaggeration": 0.65,
+  "cfg_weight": 0.45,
+  "seconds": 2.04
+ },
+ "02_0": {
+  "text": "This one is free, and it's open source.",
+  "exaggeration": 0.65,
+  "cfg_weight": 0.5,
+  "seconds": 2.76
+ },
+ "02_1": {
+  "text": "This one is free, and it's open source.",
+  "exaggeration": 0.77,
+  "cfg_weight": 0.5,
+  "seconds": 2.36
+ },
+ "02_2": {
+  "text": "This one is free, and it's open source.",
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "seconds": 2.56
+ },
+ "03_0": {
+  "text": "It's called Post clerk.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.5,
+  "seconds": 1.76
+ },
+ "03_1": {
+  "text": "It's called Post clerk.",
+  "exaggeration": 0.82,
+  "cfg_weight": 0.5,
+  "seconds": 1.64
+ },
+ "03_2": {
+  "text": "It's called Post clerk.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seconds": 1.36
+ },
+ "04_0": {
+  "text": "Instagram, TikTok, LinkedIn, YouTube, and three more. All scheduled from one calendar.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seconds": 5.68
+ },
+ "04_1": {
+  "text": "Instagram, TikTok, LinkedIn, YouTube, and three more. All scheduled from one calendar.",
+  "exaggeration": 0.72,
+  "cfg_weight": 0.5,
+  "seconds": 5.68
+ },
+ "04_2": {
+  "text": "Instagram, TikTok, LinkedIn, YouTube, and three more. All scheduled from one calendar.",
+  "exaggeration": 0.5,
+  "cfg_weight": 0.5,
+  "seconds": 5.32
+ },
+ "05_0": {
+  "text": "One composer, with a different caption for every platform.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seconds": 3.36
+ },
+ "05_1": {
+  "text": "One composer, with a different caption for every platform.",
+  "exaggeration": 0.72,
+  "cfg_weight": 0.5,
+  "seconds": 3.24
+ },
+ "05_2": {
+  "text": "One composer, with a different caption for every platform.",
+  "exaggeration": 0.5,
+  "cfg_weight": 0.5,
+  "seconds": 3.44
+ },
+ "06_0": {
+  "text": "And a preview of your Instagram feed, before anything goes live.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seconds": 3.72
+ },
+ "06_1": {
+  "text": "And a preview of your Instagram feed, before anything goes live.",
+  "exaggeration": 0.72,
+  "cfg_weight": 0.5,
+  "seconds": 4.08
+ },
+ "06_2": {
+  "text": "And a preview of your Instagram feed, before anything goes live.",
+  "exaggeration": 0.5,
+  "cfg_weight": 0.5,
+  "seconds": 4.12
+ },
+ "07_0": {
+  "text": "But here's what Metri cool doesn't give you.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "seconds": 2.24
+ },
+ "07_1": {
+  "text": "But here's what Metri cool doesn't give you.",
+  "exaggeration": 0.87,
+  "cfg_weight": 0.45,
+  "seconds": 2.0
+ },
+ "07_2": {
+  "text": "But here's what Metri cool doesn't give you.",
+  "exaggeration": 0.65,
+  "cfg_weight": 0.45,
+  "seconds": 2.44
+ },
+ "08_0": {
+  "text": "It connects to your AI.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.5,
+  "seconds": 1.76
+ },
+ "08_1": {
+  "text": "It connects to your AI.",
+  "exaggeration": 0.82,
+  "cfg_weight": 0.5,
+  "seconds": 2.56
+ },
+ "08_2": {
+  "text": "It connects to your AI.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seconds": 1.52
+ },
+ "09_0": {
+  "text": "Claude Code, Cursor, or Codex draft your posts, and schedule them for you.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seconds": 4.92
+ },
+ "09_1": {
+  "text": "Claude Code, Cursor, or Codex draft your posts, and schedule them for you.",
+  "exaggeration": 0.72,
+  "cfg_weight": 0.5,
+  "seconds": 4.56
+ },
+ "09_2": {
+  "text": "Claude Code, Cursor, or Codex draft your posts, and schedule them for you.",
+  "exaggeration": 0.5,
+  "cfg_weight": 0.5,
+  "seconds": 5.04
+ },
+ "10_0": {
+  "text": "I typed one sentence: plan my posts for next week. Done.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.45,
+  "seconds": 3.52
+ },
+ "10_1": {
+  "text": "I typed one sentence: plan my posts for next week. Done.",
+  "exaggeration": 0.82,
+  "cfg_weight": 0.45,
+  "seconds": 3.76
+ },
+ "10_2": {
+  "text": "I typed one sentence: plan my posts for next week. Done.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.45,
+  "seconds": 3.56
+ },
+ "11_0": {
+  "text": "Want your own copy? It deploys free on Cloudflare in about two minutes.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seconds": 4.44
+ },
+ "11_1": {
+  "text": "Want your own copy? It deploys free on Cloudflare in about two minutes.",
+  "exaggeration": 0.72,
+  "cfg_weight": 0.5,
+  "seconds": 4.4
+ },
+ "11_2": {
+  "text": "Want your own copy? It deploys free on Cloudflare in about two minutes.",
+  "exaggeration": 0.5,
+  "cfg_weight": 0.5,
+  "seconds": 4.68
+ },
+ "12_0": {
+  "text": "Comment Post, and I'll send you the link.",
+  "exaggeration": 0.65,
+  "cfg_weight": 0.5,
+  "seconds": 2.2
+ },
+ "12_1": {
+  "text": "Comment Post, and I'll send you the link.",
+  "exaggeration": 0.77,
+  "cfg_weight": 0.5,
+  "seconds": 2.08
+ },
+ "12_2": {
+  "text": "Comment Post, and I'll send you the link.",
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "seconds": 2.24
+ }
+}
