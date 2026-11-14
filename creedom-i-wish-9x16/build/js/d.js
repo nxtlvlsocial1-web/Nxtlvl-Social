@@ -27,7 +27,7 @@ function shoot(t) {
   scene.background = tmpC.set(0x1A1224).clone(); scene.fog.color.set(0x1A1224); scene.fog.near = 30; scene.fog.far = 80;
   hemi.color.set(0x9C88D6); hemi.groundColor.set(0x2E1E2E); hemi.intensity = .55;
   sun.color.set(0x9CC4FF); sun.intensity = .45; sun.target.position.set(0, 0, -.5); sun.position.set(-3.2, 5, 3.5);
-  RM.key.intensity = 3.2; RM.fill.intensity = 1.6; RM.lamp.intensity = 1.4; RM.moon.intensity = 0; RM.hallL.intensity = .6; RM.hero.intensity = 0; RM.gold.intensity = 0;
+  RM.key.intensity = 3.2; RM.fill.intensity = 1.6; RM.lamp.intensity = 1.4; RM.lamp.color.set(0xFFB8DA); RM.lamp.position.set(-.78, 1.3, -.1); RM.moon.intensity = 0; RM.hallL.intensity = .6; RM.hero.intensity = 0; RM.gold.intensity = 0;
   phoneL.intensity = 0; RM.triScr.color.set(0xFFE3F1); RM.bedScr.color.set(0xFFE3F1); RM.lampShade.emissiveIntensity = .8;
   for (const b of RM.fairy) b.visible = true;
   let bloomS = .42, sat = 1.06, vig = .42, dark = 0;
@@ -87,13 +87,14 @@ function shoot(t) {
     RM.key.intensity = 1.2; hemi.intensity = .3;
     cam.p.set(.22, DESKY + .01, 1.05); cam.l.set(.06, DESKY - .05, .12); cam.fov = 30; cam.focus = .93; cam.ap = .09;
   } else if (sh === "pillow") {   // 8. face-down in the pillow, the phone buzzing: the third wish
-    const lift = ss(t, wordT("06", 9) - .5, wordT("06", 9) + .1);
+    const lift = .7 + .3 * ss(t, Ls("06") + .1, Ls("06") + .6);
     leo = pose({ x: 2.7, y: .72, z: -2.25, l: [[0, .1], [0, .1]], a: [[2.7, .35, .5], [2.7, .35, .5]], hp: -1.05 * lift, hy: .15 * lift });
     leoRot = [Math.PI / 2, 0, 0];
     leoF = { eyes: lift > .5 ? "teary" : "closed", mouth: talking(t, "06") ? "talk" : "sad", brows: "despair", talk: talking(t, "06") };
     RM.bedPhone.rotation.y = .06 * Math.sin(t * 60) * (Math.floor(t * 1.5) % 2); RM.bedScr.color.set(0xFFF4FA);
     phoneL.intensity = .35; phoneL.position.set(2.25, .8, -1.35);
-    cam.p.set(2.62, 1.05, 1.15); cam.l.set(2.7, .78, -.45); cam.fov = 40; cam.focus = 1.4; cam.ap = .05;
+    RM.lamp.intensity = 3.2; RM.lamp.color.set(0xFFD6EA); RM.lamp.position.set(2.65, 1.25, .75);
+    cam.p.set(2.64, 1.3, 1.85); cam.l.set(2.7, .82, -.5); cam.fov = 38; cam.focus = 2.1; cam.ap = .05;
   } else if (sh === "hero") {     // 9. HERO REVEAL: Cree on the desk, light flooding in behind him
     const fl = ss(u, 0, .9);
     cree = { x: DESKC.x, y: DESKY, z: DESKC.z, ry: 0, sc: .34, lean: -.06, eyes: "open", wl: [-.35, -.35], wr: [2.5 * ss(u, .6, 1.2), -.1], jaw: .3, brow: -.18, browY: -.02, look: [0, .1], mag: "hand", magRz: -.1 };
