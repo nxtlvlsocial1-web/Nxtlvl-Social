@@ -30,8 +30,8 @@ TEXT = {               # caption text per take (what the creator says)
 # the reel, in order: ("L", take, gap after) for a creator line, ("B", name, seconds) for a beat without him talking
 EVENTS = [
     ("B", "lead", .35), ("L", "01", 0), ("B", "slide", .55), ("L", "02", .1), ("B", "thud", .45), ("L", "03", .35),
-    ("L", "04", .2), ("B", "reveal1", 2.5), ("L", "05", .15), ("B", "reveal2", 2.4), ("L", "06", .1),
-    ("B", "hero", 2.2), ("L", "07", 0), ("B", "say", 1.7),
+    ("L", "04", .15), ("B", "teaser1", 2.2), ("L", "05", .15), ("B", "teaser2", 2.2), ("L", "06", .1),
+    ("B", "hero", 3.2), ("L", "07", 0), ("B", "say", 1.6),
     ("B", "fix1", 2.7), ("L", "08", .15), ("B", "fix2", 2.4), ("L", "09", .1), ("B", "fix3", 3.0),
     ("L", "10", 0), ("B", "ask", 1.7), ("B", "endin", .25), ("L", "11", 0), ("B", "tail", 1.6),
 ]
