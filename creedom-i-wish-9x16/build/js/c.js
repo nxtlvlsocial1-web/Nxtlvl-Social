@@ -187,7 +187,7 @@ PARENT = scene;
 // big glossy eyes set INTO the body (slightly domed, a pale pink rim), a rounded yellow beak with a red mouth, short mitten
 // wings, big orange feet. Face rig: plush eyelids (upper and lower, tilting for emotion), pupils that look, dilate and dart,
 // a hinged lower beak, blush. Built 1 unit tall; CREE.root is scaled to his size in the room.
-const CREE = { root: new THREE.Group() };
+const CREE = { root: new THREE.Group(), style: "toon" };
 scene.add(CREE.root);
 {
   const R = CREE.root;
@@ -223,6 +223,15 @@ scene.add(CREE.root);
     const cap = new THREE.Mesh(new THREE.SphereGeometry(ER * 1.004, 40, 16, 0, Math.PI * 2, 0, .9), pupM); cap.rotation.x = Math.PI / 2; pg.add(cap);
     const capS = new THREE.Mesh(new THREE.SphereGeometry(ER * 1.005, 40, 16, 0, Math.PI * 2, 0, .7), pupM); capS.rotation.x = Math.PI / 2; capS.visible = false; pg.add(capS); pg.cap = cap; pg.capS = capS;
     const iris = new THREE.Mesh(new THREE.SphereGeometry(ER * 1.002, 40, 16, 0, Math.PI * 2, 0, .98), new THREE.MeshPhysicalMaterial({ color: 0x4A1A34, roughness: .1, clearcoat: 1 })); iris.rotation.x = Math.PI / 2; pg.add(iris); pg.iris = iris;
+    // alternative eye styles: "soft" (a smaller dark-brown iris, white all round) and "warm" (a big amber-brown iris)
+    const mkCap = (th, col, r) => { const m = new THREE.Mesh(new THREE.SphereGeometry(ER * r, 40, 16, 0, Math.PI * 2, 0, th), new THREE.MeshPhysicalMaterial({ color: col, roughness: .22, clearcoat: .6, clearcoatRoughness: .2 })); m.rotation.x = Math.PI / 2; m.visible = false; pg.add(m); return m; };
+    pg.soft = [mkCap(.6, 0x3A2216, 1.002), mkCap(.34, 0x0A0608, 1.004)];
+    pg.warm = [mkCap(.8, 0xA0592E, 1.002), mkCap(.4, 0x140A08, 1.004)];
+    // "toon": a solid glossy dark oval on the body with two shines (no white), blinks by squashing
+    const toon = new THREE.Group(); toon.position.copy(P).addScaledVector(n, -.002); toon.rotation.copy(eg.rotation); bod.add(toon);
+    const tE = new THREE.Mesh(new THREE.SphereGeometry(1, 40, 28), new THREE.MeshPhysicalMaterial({ color: 0x1C0B16, roughness: .2, clearcoat: .8, clearcoatRoughness: .12 })); tE.scale.set(.081, .107, .025); toon.add(tE);
+    for (const [x, y, r] of [[.027, .042, .027], [-.024, -.037, .013]]) { const h = new THREE.Mesh(new THREE.SphereGeometry(r, 16, 12), catM); h.position.set(x, y, .02); h.scale.z = .3; toon.add(h); }
+    toon.visible = false; eg.toon = toon;
     const cg = new THREE.Group(); ball.add(cg);
     const onEye = (dx, dy, r) => { const d = new THREE.Vector3(dx, dy, 1).normalize().multiplyScalar(ER * 1.012); const m = new THREE.Mesh(new THREE.SphereGeometry(r, 16, 12), catM); m.position.copy(d); m.lookAt(d.clone().multiplyScalar(2)); m.scale.z = .3; cg.add(m); return m; };
     const c1 = onEye(.3, .32, .036), c2 = onEye(-.28, -.3, .018); onEye(.05, .42, .01);
@@ -299,18 +308,26 @@ function placeCree(vis, s) {
   const dk = !!CREE.dark;
   CREE.plush.envMapIntensity = dk ? 0 : .22; CREE.rimU.value = dk ? .22 : (s.glow ?? .3); CREE.sclM.color.set(dk ? 0x2A1A26 : 0xFFFFFF); CREE.rimM.color.set(dk ? 0x2A1424 : 0xFFC7DF);
   // idle life: breathing, a little sway (unless he is mid-move)
-  const still = !!s.still, br = still ? 0 : Math.sin(t * 5.6) * .012, sway = still ? 0 : Math.sin(t * 1.3 + .7) * .025;
-  R.position.set(s.x, s.y, s.z); R.rotation.set(s.rx ?? 0, s.ry ?? 0, (s.roll ?? 0) + sway, "YXZ"); R.scale.setScalar(sc);
-  CREE.bod.scale.set(1 + sq * .5 - br * .5, 1 - sq + br, 1 + sq * .5 - br * .5);
+  const still = !!s.still, br = still ? 0 : Math.sin(t * 5.6) * .012, sway = still ? 0 : Math.sin(t * 1.3 + .7) * .03 + Math.sin(t * .55) * .02;
+  // the wingbeat: a fast downstroke, a slower recovery; the body lifts on each downstroke and squashes a touch
+  let fl = 0, lift = 0;
+  if (s.flap) { const ph = (t * s.flap[1]) % 1, f = ph < .38 ? Math.cos(Math.PI * ph / .38) : -Math.cos(Math.PI * (ph - .38) / .62); fl = f * s.flap[0]; lift = (ph < .38 ? Math.sin(Math.PI * ph / .38) : 0); }
+  // talking: he bounces, tilts his head and gestures with the loudness of his chirps
+  const ta = s.talk ? envAt(C.creeEnv, t) : 0;
+  const talkRoll = ta * .09 * Math.sin(t * 6.5), talkHop = ta * .02;
+  R.position.set(s.x, s.y + (lift * .035 + talkHop + (still ? 0 : Math.max(0, Math.sin(t * 2.2)) * .004)) * sc / .34, s.z);
+  R.rotation.set((s.rx ?? 0) - ta * .05, (s.ry ?? 0) + (still ? 0 : Math.sin(t * .8) * .04), (s.roll ?? 0) + sway + talkRoll, "YXZ"); R.scale.setScalar(sc);
+  const sq2 = sq + (s.flap ? -.05 * lift : 0) - ta * .06;
+  CREE.bod.scale.set(1 + sq2 * .5 - br * .5, 1 - sq2 + br, 1 + sq2 * .5 - br * .5);
   const ex = EXPR[s.eyes || "open"] || EXPR.open;
   const blink = (s.noblink || ex.arcs || ex.lu >= 1) ? 0 : creeBlink(t);
   // pupils dart a little when he is not looking at something on purpose
-  const dart = s.look ? [0, 0] : [(hash(Math.floor(t / .9)) - .5) * .5, (hash(Math.floor(t / .9) + 9) - .5) * .3];
+  const dart = [0, 0];                                   // steady eyes (darting read as shifty)
+  const style = s.eyeStyle || CREE.style || "big";
   const lk = s.look || [0, 0];
-  const fl = s.flap ? Math.sin(t * Math.PI * 2 * s.flap[1]) * s.flap[0] : 0;
   for (let k = 0; k < 2; k++) {
     const sgn = k ? 1 : -1, w = k ? s.wr : s.wl;
-    CREE.wings[k].rotation.set(w ? w[1] : 0, 0, sgn * ((w ? w[0] : .26) + fl + (still ? 0 : Math.sin(t * 5.6 + k) * .03)));
+    CREE.wings[k].rotation.set((w ? w[1] : 0) - ta * .2, 0, sgn * ((w ? w[0] : .26) + fl + ta * (k ? .55 : .3) * (.6 + .4 * Math.sin(t * 9 + k * 2)) + (still ? 0 : Math.sin(t * 5.6 + k) * .03)));
     const eg = CREE.eyes[k], [up, lo] = CREE.lids[k];
     const winkK = s.wink && k === 0 ? 1 : 0;
     let lu = ex.lu + (ex.asym ? (k ? ex.asym : -ex.asym * .3) : 0); lu = lerp(lu, 1, Math.max(blink, winkK)); lu = Math.min(1, lu);
@@ -319,9 +336,11 @@ function placeCree(vis, s) {
     lo.hinge.rotation.x = Math.PI / 2 - Math.PI * clamp(ll, 0, 1);                // 0: tucked .. .5: covers the lower half
     up.tilt.rotation.z = -sgn * ex.tilt; lo.tilt.rotation.z = sgn * ex.tilt * .4;
     eg.ball.scale.setScalar(ex.wide ? 1.08 : 1);
-    const pg = CREE.pupils[k]; pg.rotation.set(-(lk[1] + dart[1]) * .32, (lk[0] + dart[0]) * .38, 0); const small = (s.pup ?? ex.pup) < .9; pg.cap.visible = !small; pg.capS.visible = small; pg.iris.visible = !small;
+    const pg = CREE.pupils[k]; pg.rotation.set(-(lk[1] + dart[1]) * .32, (lk[0] + dart[0]) * .38, 0); const small = (s.pup ?? ex.pup) < .9, big = style === "big"; pg.cap.visible = big && !small; pg.capS.visible = big && small; pg.iris.visible = big && !small; for (const m of pg.soft) m.visible = style === "soft"; for (const m of pg.warm) m.visible = style === "warm";
     for (const c of CREE.cats[k]) c.visible = !dk;
-    const arcs = !!ex.arcs && !winkK; CREE.arcs[k].visible = arcs; for (const c of eg.children) if (c !== CREE.arcs[k]) c.visible = !arcs;
+    const arcs = !!ex.arcs && !winkK; CREE.arcs[k].visible = arcs; for (const c of eg.children) if (c !== CREE.arcs[k]) c.visible = !arcs && style !== "toon";
+    eg.toon.visible = style === "toon" && !arcs;
+    if (eg.toon.visible) { const cl = Math.max(blink, winkK); eg.toon.scale.set(ex.wide ? 1.1 : 1, clamp((ex.wide ? 1.12 : 1) - Math.max(0, ex.lu) * .3 - ex.ll * .28 - cl * .92, .07, 1.15), 1); eg.toon.rotation.z = eg.rotation.z - sgn * ex.tilt * .5; eg.toon.position.y = eg.position.y + .03 * (1 - eg.toon.scale.y) * 0; }
   }
   CREE.blM.opacity = dk ? 0 : (s.blush ?? ex.blush ?? 0);
   CREE.jaw.rotation.x = (s.jaw ?? .32) * .95;
