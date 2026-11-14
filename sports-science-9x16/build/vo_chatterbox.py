@@ -21,9 +21,11 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     m = ChatterboxTTS.from_pretrained(device="cpu")
     for ln in json.load(open(os.path.join(ROOT, "plan", "script.json"))):
+        if os.path.exists(os.path.join(OUT, f"{ln['id']}_t0.wav")):
+            continue                      # v3: only lines with no takes yet (the client's two rewritten lines)
         ex = EX.get(ln["id"], .6)
         m.prepare_conditionals(REF, exaggeration=ex)
-        for take, seed in enumerate((11, 29)):
+        for take, seed in enumerate((11, 29, 47)):
             p = os.path.join(OUT, f"{ln['id']}_t{take}.wav")
             if os.path.exists(p):
                 continue

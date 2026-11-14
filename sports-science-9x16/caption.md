@@ -1,5 +1,6 @@
 # Sports Science Technology: "Performance Has No Fixed Body Type" (IG / FB Reels, 9:16, 60 s)
 
+v3 (client): no "individually"; a different batter; "multiple factors" instead of the list of qualities (video and description).
 v2 (owner): quieter, more pleasant sporty music; a more expressive voice; "Sports Science Technology" (no "and" / "&") in VO and text; the SST logo on the end card.
 
 Client brief: `Sports_Science_Technology_Performance_Has_No_Fixed_Body_Type_Reel_Brief.pdf` (10 pages). VO = the brief's
@@ -14,7 +15,7 @@ Not necessarily.
 
 Athletes come in different shapes, sizes and physical builds. But sporting performance is about much more than appearance.
 
-Strength, speed, agility, endurance, mobility, functional fitness and sport-specific capabilities all play an important role.
+Multiple factors play an important role, from fitness to sport-specific capabilities.
 
 Unlike bodybuilding, where physique is a central goal, sports performance focuses on what an athlete can deliver in their game.
 

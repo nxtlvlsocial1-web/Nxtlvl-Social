@@ -15,9 +15,10 @@ import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FW, FH, FPS = 1080, 1920, 30
-DUR = 60.0
+DUR = 60.0                                  # replaced below once the VO lines are loaded
 WORDS = json.load(open(os.path.join(ROOT, "plan", "words.json")))
 LINES = {l["id"]: l for l in json.load(open(os.path.join(ROOT, "plan", "lines.json")))}
+DUR = round(min(60.0, max(55.0, LINES["s11"]["e"] + 2.6)), 1)   # v3: the end card holds ~2.6 s after the last word
 NAVY, INK, BLUE, BLUE_L, MIST = "#0A1632", "#06080E", "#2F5BFF", "#7E9BFF", "#C9D4F2"
 LOGO = os.environ.get("LOGO", "assets/img/sst_logo.jpg")   # the client's official logo (owner-supplied), placed unmodified on a white card            # the client's official logo file, when we have it (never recreated)
 PREVIEW = os.environ.get("PREVIEW", "1") == "1"
@@ -80,7 +81,7 @@ def tag(tid, text, t0, t1, top, left=None, cls=""):
 # ---------------------------------------------------------------- scene 1: the question (0 - s02)
 def scene1():
     t1 = L(2) - .05
-    panels = [("8459966", 2.0, "50% 40%"), ("7187114", 4.2, "46% 40%"), ("15172075", .6, "52% 40%")]
+    panels = [("8459966", 2.0, "50% 40%"), ("7187114", 4.2, "46% 40%"), ("4745804", 3.0, "82% 40%")]   # v3 (client): no white-shirt batsman
     html = ""
     for i, (vid, at, pos) in enumerate(panels):
         html += (f'<div class="pane" id="pn{i}" style="left:{i * 360}px"><video id="pn{i}v" src="assets/video/{vid}.mp4" data-start="0" '
@@ -131,22 +132,22 @@ def scene3():
     t0, t_its, t5, t1 = L(4) - .1, T("it's") - .1, L(5) - .1, L(6) - .1
     t_do = T("do.")
     shot("s3a", t0, T("how", t0) - .1, "8533122", at=12.6, pos="50% 50%")
-    shot("s3b", T("how", t0) - .1, t_its, "15172075", at=3.2, pos="50% 45%")
+    shot("s3b", T("how", t0) - .1, t_its, "6084027", at=8.0, pos="45% 50%")
     shot("s3c", t_its, t5, "6388432", at=2.5, pos="50% 50%", push=(1.06, 1.14))
     headline("h3a", ["PHYSIQUE IS ONE PART."], T("what", t0) - .1, t_its + .1, 280, 74)
     headline("h3b", ["PERFORMANCE", "IS THE FOCUS."], t_its, t5 + .05, 280, 90, accent=(0,))
-    # the qualities, one hard cut each on the word
-    q = [("strength,", "5837709", 6.0, "STRENGTH", "55% 50%"), ("speed,", "8533918", 3.0, "SPEED", "50% 50%"),
-         ("endurance,", "4468823", 5.0, "ENDURANCE", "50% 40%"), ("agility,", "6077692", 3.0, "AGILITY", "50% 50%"),
-         ("mobility", "8459966", 1.2, "MOBILITY", "50% 40%")]
-    times = [T(w, t5) - .06 for w, *_ in q] + [T("and,", t5) - .02]
-    for i, (w, vid, at, lab, pos) in enumerate(q):
-        a, b = (t5 if i == 0 else times[i]), times[i + 1]
-        shot(f"s3q{i}", a, b, vid, at=at, pos=pos, push=(1.1, 1.16))
-        tag(f"tq{i}", lab, a + .02, b, 820, cls="big")
+    # v3 (client: "just mention multiple factors, no need to mention details"): one fast montage under a single
+    # MULTIPLE FACTORS tag instead of a label per quality
+    t_but5 = T("but", t5) - .06
+    mont = [("5837709", 6.0, "55% 50%"), ("8533918", 3.0, "50% 50%"), ("6077692", 3.0, "50% 50%"), ("4468823", 5.0, "50% 40%"), ("8459966", 1.2, "50% 40%")]
+    step = (t_but5 - t5) / len(mont)
+    for i, (vid, at, pos) in enumerate(mont):
+        shot(f"s3q{i}", t5 + i * step, t5 + (i + 1) * step, vid, at=at, pos=pos, push=(1.1, 1.16))
+    tag("tq", "MULTIPLE FACTORS", t5 + .05, t_but5, 820, cls="big")
+    times = [t_but5]
     t_game = T("game", t5) - .08
     shot("s3d", times[-1], t_game, "6237084", at=1.6, pos="50% 60%", push=(1.04, 1.1))
-    shot("s3e", t_game, t1, "15172075", at=5.6, pos="50% 45%", push=(1.08, 1.0))
+    shot("s3e", t_game, t1, "12460911z", at=1.9, pos="50% 50%", push=(1.0, 1.08))   # v3: a different batter, mid-shot
     headline("h3c", ["GAME OUTPUT"], t_game, t1 + .02, 820, 104, accent=(0,), cls="mid")
     js(f'tl.fromTo("#h3c .in", {{textShadow: "0 0 0px rgba(47,91,255,0)"}}, {{textShadow: "0 0 40px rgba(47,91,255,.85)", duration: .5, yoyo: true, repeat: 1, immediateRender: false}}, {t_game + .3:.3f});')
     sfx("tick", t5, -16)
@@ -158,7 +159,7 @@ def scene4():
     t0, t_sp, t7, t1 = L(6) - .1, T("sports", L(6)) - .1, L(7) - .1, L(8) - .1
     top, bot = (0, 958), (962, 958)
     shot("s4top", t0, t7, "5319745", at=2.0, pos="50% 30%", push=(1.02, 1.08), box=top, z=2)
-    sp = [("12460907", 5.0, "50% 50%"), ("6084027", 2.0, "50% 50%"), ("10340699", 6.0, "50% 35%"), ("8456204", 7.0, "50% 75%"), ("15172075", 7.4, "50% 40%")]
+    sp = [("12460907", 5.0, "50% 50%"), ("6084027", 2.0, "50% 50%"), ("10340699", 6.0, "50% 35%"), ("8456204", 7.0, "50% 75%"), ("6237084", 4.0, "50% 60%")]
     span = (t7 - t0) / len(sp)
     for i, (vid, at, pos) in enumerate(sp):
         shot(f"s4b{i}", t0 + i * span, t0 + (i + 1) * span, vid, at=at, pos=pos, push=(1.04, 1.1), box=bot, z=2)
