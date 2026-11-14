@@ -891,11 +891,12 @@ const PATH = {
   t2: curve([[-2.7, 1.75, -2.75], [-1.5, 1.95, -2.7], [-.4, 1.8, -2.72], [.9, 2.0, -2.78]]),
   in: curve([[-1.05, 1.85, -2.95], [-.95, 1.95, -2.15], [-.35, 2.15, -1.3], [.75, 2.1, -.75], [1.35, 1.85, .05], [.95, 2.0, .7], [.28, 2.12, .42]]),
 };
-function flyState(cv, k, o = {}) {
+function flyState(cv, k, o = {}, camP = null) {
   const p = cv.getPointAt(clamp(k)), tg = cv.getTangentAt(clamp(k)), tg2 = cv.getTangentAt(clamp(k + .03));
   const hd = Math.atan2(tg.x, tg.z), el = Math.asin(clamp(tg.y, -1, 1));
   let dh = Math.atan2(tg2.x, tg2.z) - hd; dh = Math.atan2(Math.sin(dh), Math.cos(dh));
-  return { x: p.x, y: p.y, z: p.z, ry: hd, rx: .5 - el * .45, roll: clamp(-dh * 6, -.5, .5), still: true, noblink: true, feetBack: .6,
+  let ry = hd; if (camP) { const tc = Math.atan2(camP.x - p.x, camP.z - p.z); let d = tc - hd; d = Math.atan2(Math.sin(d), Math.cos(d)); ry = hd + clamp(d, -1.0, 1.0) * .75; }
+  return { x: p.x, y: p.y, z: p.z, ry, rx: .5 - el * .45, roll: clamp(-dh * 6, -.5, .5), still: true, noblink: true, feetBack: .6,
     wl: [1.15, .15], wr: [1.15, .15], flap: [.75, 4.2], eyes: "joy", look: [0, .2], jaw: .6, sq: -.04, ...o };
 }
 function trail(cv, k, span, camP, w, sparkN = 46) {
@@ -982,7 +983,7 @@ function shoot(t) {
   } else if (sh === "teaser1") {  // 5. TEASER 1: the sky turns dramatic; a tiny pink hero arcs across it, rolls, and is gone (sparkle trail)
     const k = ramp(u, .15, 2.1);
     cam.p.set(-.55, 1.5, .2); cam.l.set(-1.0, 1.95, -3.0); cam.fov = 38 - 3 * ss(u, 0, len); cam.focus = 3.4;
-    if (k > 0 && k < 1) { cree = flyState(PATH.t1, k, { sc: .2, eyes: "joy" }); trail(PATH.t1, k, .22, cam.p, .035, 30); }
+    if (k > 0 && k < 1) { cree = flyState(PATH.t1, k, { sc: .2, eyes: "joy" }, cam.p); trail(PATH.t1, k, .22, cam.p, .035, 30); }
     for (let i = 0; i < RM.clouds.length; i++) RM.clouds[i].position.x = -2.4 + i * 1.4 + u * .9;
     for (const c of RM.curt) c.rotation.z = .06 * Math.sin(u * 3);
     RM.lamp.intensity = 1.2; RM.key.intensity = .5; hemi.intensity = .35; RM.moon.intensity = 1.5;
@@ -994,7 +995,7 @@ function shoot(t) {
   } else if (sh === "teaser2") {  // 7. TEASER 2: closer: he streaks past the window in a blur of pink; curtains blow in, papers lift
     const k = ease(ramp(u, .25, 1.05));
     cam.p.set(.6, 1.35, 1.6); cam.l.set(-.8, 1.55, -2.3); cam.fov = 44; cam.focus = 3.4;
-    if (k > 0 && k < 1) { cree = flyState(PATH.t2, k, { sc: .42, eyes: "joy", flap: [.85, 5] }); trail(PATH.t2, k, .3, cam.p, .07, 26);
+    if (k > 0 && k < 1) { cree = flyState(PATH.t2, k, { sc: .42, eyes: "joy", flap: [.85, 5] }, cam.p); trail(PATH.t2, k, .3, cam.p, .07, 26);
       FX.speed.visible = true; FX.speed.position.set(cree.x - .3, cree.y, cree.z); FX.speed.rotation.set(0, Math.PI / 2, 0); }
     const gust = ss(u, .5, .8) * (1 - ss(u, 1.6, 2.2));
     RM.curt[0].rotation.x = -.6 * gust; RM.curt[1].rotation.x = -.5 * gust; RM.curt[0].rotation.z = .15 * gust;
@@ -1040,7 +1041,7 @@ function shoot(t) {
       sh2.rotation.set(a * 9 * hash(i * 6), a * 7, a * 5); sh2.material.opacity = .9 * (1 - a / .7) * (.5 + .5 * Math.sin(a * 40 + i)); });
     const k = ease(ramp(u, .02, 1.0) * .92 + ramp(u, .02, 1.0) * .08);
     cam.p.set(.95 + .25 * u, 1.15 + .1 * u, 2.55); cam.fov = 52; cam.focus = 2.6;
-    cree = flyState(PATH.in, k, { sc: .3, eyes: "joy", flap: [.8, 4.6] });
+    cree = flyState(PATH.in, k, { sc: .3, eyes: "joy", flap: [.8, 4.6] }, cam.p);
     cree.roll += .25 * Math.sin(k * 12);
     const lk = PATH.in.getPointAt(clamp(k - .05)); cam.l.set(lerp(-1.05, lk.x, ss(u, .05, .3)), lerp(1.8, lk.y - .35, ss(u, .05, .3)), lerp(-2.3, lk.z, ss(u, .05, .3)));
     trail(PATH.in, k, .2, cam.p, .06);
@@ -1058,7 +1059,7 @@ function shoot(t) {
     if (drop > 0) ribbon(pts, v(.1, 1.2, 1.75), .045);
     RM.bulb.visible = false; RM.lamp.intensity = 0; RM.key.intensity = .5; RM.moon.intensity = 3.6; RM.fill.intensity = .6; hemi.intensity = .32;
     RM.rim.intensity = .8; RM.rim.color.set(0xFF8CC6); RM.rim.position.set(cree.x, cree.y - .3, cree.z + .3);
-    cam.p.set(.1, lerp(1.55, DESKY + .3, ss(u, .28, .45)), 1.75); cam.l.set(lerp(.24, .08, ss(u, .28, .45)), lerp(1.95, DESKY + .3, ss(u, .28, .45)), lerp(.38, .1, ss(u, .28, .45))); cam.fov = 42; cam.focus = 1.5;
+    cam.p.set(.1, lerp(1.55, DESKY + .45, ss(u, .28, .45)), 1.75); cam.l.set(cree.x, Math.max(cree.y + .06, DESKY + .3), cree.z); cam.fov = 42; cam.focus = 1.5;
   } else if (sh === "landing") {  // 13. the superhero landing: impact (flash, air blast, dust, shake), the lights come back in a wave; he rises proud
     const I = .13;                                                         // impact at Bs("hero") + 3.03, on the music's drop
     const fall = ramp(u, 0, I), crouch = u < I ? 0 : 1 - ss(u, .62, 1.0), rise = ss(u, .62, 1.0);
@@ -1080,7 +1081,7 @@ function shoot(t) {
     if (u < I + .02) { RM.key.intensity = .2; hemi.intensity = .3; }
     const sh2 = u > I && u < .55 ? .022 * (1 - ramp(u, I, .55)) : 0;
     const orb = ss(u, .55, len);
-    cam.p.set(.05 + .25 * orb + sh2 * Math.sin(u * 90), DESKY + .1 - .02 * orb + sh2 * Math.cos(u * 77), 2.15 - .45 * ss(u, .45, len)); cam.l.set(.06, DESKY + .2 + .04 * rise, DESKC.z); cam.fov = 34; cam.focus = 1.6;
+    cam.p.set(.05 + .25 * orb + sh2 * Math.sin(u * 90), DESKY + .1 - .02 * orb + sh2 * Math.cos(u * 77), 2.15 - .45 * ss(u, .45, len)); cam.l.set(.06, lerp(DESKY + .42, DESKY + .2, ss(u, 0, .16)) + .04 * rise, DESKC.z); cam.fov = 34; cam.focus = 1.6;
     bloomS = .12 + .25 * Math.exp(-Math.max(0, u - I) * 6) * (u > I ? 1 : 0);
     const gl = pulse(u, 1.08, .09);
     if (gl > .02) POST.push(() => { CREE.eyes[1].localToWorld(V.set(.035, .045, .16)); FX.glint.visible = true; FX.glint.position.copy(V); FX.glint.scale.setScalar(.12 * gl); FX.glint.material.rotation = u * 1.5; FX.glint.material.opacity = gl; });
@@ -1127,9 +1128,9 @@ function shoot(t) {
     for (let i = 0; i < FX.planes.length; i++) {
       const p = FX.planes[i], a = u - .95 - i * .13; p.visible = a > 0 && a < 1.6;
       if (!p.visible) continue;
-      const k = a / 1.6, o = v(.25, DESKY + .2, .05);
-      p.position.set(o.x - .35 * k + .25 * Math.sin(i * 1.7) * k, o.y + .5 * k + .1 * Math.sin(k * 6 + i), o.z + 1.6 * k * (.7 + .3 * hash(i)));
-      p.lookAt(p.position.x - .35, p.position.y + .4, p.position.z + 1.6); p.scale.setScalar(1.5);
+      const k = a / 1.6, o = v(.5, DESKY + .2, .2);
+      p.position.set(o.x + .7 * k + .2 * Math.sin(i * 1.7) * k, o.y + .55 * k + .08 * Math.sin(k * 6 + i), o.z + 1.2 * k * (.7 + .3 * hash(i)));
+      p.lookAt(p.position.x + .7, p.position.y + .45, p.position.z + 1.2); p.scale.setScalar(1.5);
     }
     leo = standing({ x: -.4, z: -.8, ry: .1, lean: -.05, hp: -.1, a: u > 1.1 ? [[2.6, .75, 2.2], [2.6, .75, 2.2]] : [[.4, .4, .4], [.4, .4, .4]] });
     leoF = { eyes: u > 1.1 ? "happy" : "wide", mouth: u > 1.1 ? "laugh" : "gasp", brows: "high", noblink: true };
