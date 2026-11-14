@@ -43,7 +43,7 @@ renderer.setPixelRatio(1);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.NeutralToneMapping ?? THREE.ACESFilmicToneMapping;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
 const scene = new THREE.Scene();
 const pmrem = new THREE.PMREMGenerator(renderer);
 const ENV = pmrem.fromScene(new RoomEnvironment(), .04).texture;
@@ -86,7 +86,7 @@ const dofPass = new ShaderPass({
     }`,
 });
 composer.addPass(dofPass);
-const bloom = new UnrealBloomPass(new THREE.Vector2(W, H), .35, .55, .85);
+const bloom = new UnrealBloomPass(new THREE.Vector2(W, H), .12, .4, .92);
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
 const grade = new ShaderPass({
@@ -115,7 +115,6 @@ const grade = new ShaderPass({
       c *= 1. - uTop * smoothstep(.2, .75, vUv.y) * .55;        // darker upper half under the title and end card
       vec2 px = vUv * vec2(1080., 1920.);
       c += (h(floor(px * .5) + fract(uTime * 7.13) * 97.) - .5) * uGrain;
-      c *= 1. + .025 * sin(uTime * 23.) * sin(uTime * 7.1);        // a faint projector flicker
       c = mix(c, vec3(1., .99, .97), uFlash);
       c *= 1. - uDark;
       gl_FragColor = vec4(max(c, 0.), 1.);

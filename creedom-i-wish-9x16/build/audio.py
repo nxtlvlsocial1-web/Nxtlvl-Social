@@ -118,13 +118,16 @@ def sfx():
     put(s, lib("click-soft"), Bs("thud") + 1.65, .3)                                    # the pen hits the floor
     for k in ("04", "05", "06"):
         put(s, lib("chime"), Ls(k) - .05, .12)                                         # the wish chips
-    put(s, lp(lib("riser"), 1800), Bs("reveal1") - .8, .18)                            # reveal 1
-    put(s, lib("whoosh-cinematic"), Bs("reveal1") + .1, .2)
-    put(s, lib("impact-bass-2"), Bs("reveal2") + .35, .25)                             # reveal 2: feet land
-    put(s, lib("sparkle"), Bs("reveal2") + .95, .3)                                    # the magnifier glints
+    put(s, lib("whoosh-cinematic"), Bs("teaser1") + .4, .14)                          # teaser 1: a far-off streak
+    put(s, lib("sparkle"), Bs("teaser1") + .9, .12)
+    put(s, lib("whoosh"), Bs("teaser2") + .25, .35)                                   # teaser 2: he whooshes past the window
+    put(s, lib("whoosh-short"), Bs("teaser2") + .65, .2)                              # papers lift
     put(s, buzz(Le("06") - Ls("06") + .2), Ls("06") - .1, .12)                         # the phone buzzing on the bed
-    put(s, lib("riser"), Bs("hero") - 1.6, .3)                                         # the hero entrance
-    put(s, lib("impact-bass-1"), Bs("hero"), .5); put(s, lib("whoosh-cinematic"), Bs("hero") - .1, .35); put(s, lib("sparkle"), Bs("hero") + .3, .35)
+    put(s, lib("riser"), Bs("hero") - 1.8, .3)                                        # the hero entrance
+    put(s, lib("impact-bass-2"), Bs("hero"), .4); put(s, lib("glitch-1"), Bs("hero") + .02, .08)   # the window bursts open
+    put(s, lib("whoosh-cinematic"), Bs("hero") + .2, .4)                              # he flies straight at us
+    put(s, lib("impact-bass-1"), Bs("hero") + 1.45 + .28, .5)                         # the superhero landing
+    put(s, lib("sparkle"), Bs("hero") + 2.4, .25)
     put(s, lib("pop"), Bs("fix1") + 1.75, .3); put(s, lib("ping"), Bs("fix1") + 1.85, .3)                  # tap, the tag
     put(s, lib("whoosh-short"), Bs("fix2") + .1, .25); put(s, lib("chime"), Bs("fix2") + 1.5, .3)          # the cards, gold
     put(s, lib("click"), Bs("fix3") + .8, .45); put(s, lib("ping"), Bs("fix3") + .9, .25)                  # the lever, the switch
@@ -150,6 +153,12 @@ def main():
     for a, b in list(CU["lines"].values()) + CH:
         talk = np.maximum(talk, np.clip((tt - (a - .2)) / .2, 0, 1) * np.clip(((b + .3) - tt) / .3, 0, 1))
     m, c, s = music(), cree(), sfx()
+    def env(x):
+        hop = SR // 30; n = len(x) // hop
+        r = np.sqrt(np.mean(x[: n * hop].reshape(n, hop) ** 2, axis=1))
+        ref = np.percentile(r[r > 1e-4], 95) if np.any(r > 1e-4) else 1
+        return [round(float(min(1, v / ref)), 2) for v in r]
+    json.dump({"voice": env(v), "cree": env(c[:, 0])}, open(os.path.join(ROOT, "build", "env.json"), "w"))
     m = m * (.13 / rms(m)) * (1 - .6 * talk)[:, None]
     s = s * (.07 / rms(s))
     c = c * (.16 / rms(c[np.abs(c[:, 0]) > 1e-4]))

@@ -38,12 +38,11 @@ def hide(sel, t, d=.2, props="opacity:0"):
 
 # Cree's speech clouds: (id, text, appears, gone, chirp start, chirp end, left px, top px, tail side)
 CLOUDS = [
-    ("k0", "Hmm...", Bs("reveal2") + 1.15, Be("reveal2") - .05, Bs("reveal2") + 1.2, Bs("reveal2") + 1.75, 300, 470, "down"),
-    ("k1", "Say no more.", Bs("say") + .05, Be("say") + .05, Bs("say") + .1, Bs("say") + .95, 120, 560, "right"),
-    ("k2", "Second three. That's where they swipe.", Bs("fix1") + .3, Ls("08") + .35, Bs("fix1") + .35, Bs("fix1") + 1.9, 120, 400, "down"),
-    ("k3", "Your people saved these. Make more.", Bs("fix2") + .25, Ls("09") + .25, Bs("fix2") + .3, Bs("fix2") + 1.7, 470, 420, "down"),
-    ("k4", "Comment comes in. DM goes out.", Bs("fix3") + .2, Ls("10") - .2, Bs("fix3") + .25, Bs("fix3") + 1.6, 120, 420, "down"),
-    ("k5", "Waiting for you to ask.", Bs("ask") + .02, Be("ask") + .05, Bs("ask") + .08, Bs("ask") + 1.05, 470, 560, "down"),
+    ("k1", "Say no more.", Bs("say") + .05, Be("say") + .05, Bs("say") + .1, Bs("say") + .95, 110, 600, "right"),
+    ("k2", "Second three. That's where they swipe.", Bs("fix1") + .3, Ls("08") + .35, Bs("fix1") + .35, Bs("fix1") + 1.9, 470, 650, "down"),
+    ("k3", "Your people saved these. Make more.", Bs("fix2") + .25, Ls("09") + .25, Bs("fix2") + .3, Bs("fix2") + 1.7, 470, 650, "down"),
+    ("k4", "Comment comes in. DM goes out.", Bs("fix3") + .2, Ls("10") - .2, Bs("fix3") + .25, Bs("fix3") + 1.6, 460, 650, "down"),
+    ("k5", "Waiting for you to ask.", Bs("ask") + .02, Be("ask") + .05, Bs("ask") + .08, Bs("ask") + 1.05, 470, 700, "down"),
 ]
 CHIRPS = [[round(c[4], 3), round(c[5], 3)] for c in CLOUDS] + [[round(Bs("tail") + .25, 3), round(Bs("tail") + .8, 3)]]
 
@@ -55,11 +54,17 @@ def story():
     show("#vw", .45, .35, "opacity:0,scale:.6,y:20", "opacity:1,scale:1,y:0", "back.out(2.2)")
     add(f'tl.fromTo("#vw",{{rotation:0}},{{rotation:-4,duration:.08,yoyo:true,repeat:5,immediateRender:false}},{Ls("01") + 1.9:.3f});')
     hide("#vw", Le("01") + .05, .2, "opacity:0,y:30")
-    # 2. the wish chips
-    for j, k in enumerate(["04", "05", "06"]):
-        H.append(f'<div class="wish" id="w{j}"><i>&#9733;</i>Wish {j + 1} of 3</div>')
-        show(f"#w{j}", Ls(k) - .05, .35, "opacity:0,y:-20,scale:.9", "opacity:1,y:0,scale:1", "back.out(2)")
-        hide(f"#w{j}", Le(k) + .35, .25, "opacity:0,y:-16")
+    # 2. step cards (the guide's "step cards"): the three wishes, then the three fixes
+    CARDS = [("w0", "WISH 1", "Review my reel before I post", Ls("04") - .05, Le("04") + .3),
+             ("w1", "WISH 2", "Learn from my old reels", Ls("05") - .05, Le("05") + .3),
+             ("w2", "WISH 3", "Set up my DM automation", Ls("06") - .05, Le("06") + .3),
+             ("f0", "FIX 1", "Reel review, second by second", Bs("fix1") + .15, Bs("fix2") - .1),
+             ("f1", "FIX 2", "What your past reels say", Bs("fix2") + .15, Bs("fix3") - .1),
+             ("f2", "FIX 3", "Comments to DM, on autopilot", Bs("fix3") + .15, Ls("10") - .2)]
+    for cid, lab, txt, a, z in CARDS:
+        H.append(f'<div class="card" id="{cid}"><i>{lab}</i><b>{txt}</b></div>')
+        show(f"#{cid}", a, .35, "opacity:0,x:-40", "opacity:1,x:0")
+        hide(f"#{cid}", z, .2, "opacity:0,x:-30")
     # 3. glass tags on the fixes
     H.append('<div class="tag" id="tg1"><b>0:03</b><span>Slow start</span></div>')
     show("#tg1", Bs("fix1") + 1.85, .3, "opacity:0,scale:.6", "opacity:1,scale:1", "back.out(2.4)"); hide("#tg1", Bs("fix2") - .1, .15)
@@ -89,6 +94,9 @@ def story():
     return "".join(H)
 
 
+CAP_TOP = {"01": 470, "02": 300, "03": 1330, "04": 425, "05": 1360, "06": 425, "07": 420, "08": 1430, "09": 1430, "10": 1430}   # per line, never over his face
+
+
 def captions():
     html = []
     for k, (a, z) in LN.items():
@@ -98,17 +106,18 @@ def captions():
         chunks, cur = [], []
         for w in ws:
             cur.append(w)
-            if len(" ".join(x["w"] for x in cur)) > 18 or re.search(r"[.!?,]$", w["w"]) and len(cur) > 1:
+            if len(" ".join(x["w"] for x in cur)) > 16 or re.search(r"[.!?,]$", w["w"]) and len(cur) > 1:
                 chunks.append(cur); cur = []
         if cur:
             chunks.append(cur)
         for j, ch in enumerate(chunks):
-            t0 = ch[0]["s"] - .05
-            t1 = chunks[j + 1][0]["s"] - .05 if j + 1 < len(chunks) else z + .2
-            txt = " ".join(x["w"] for x in ch).replace("CREEDOM", "<b>CREEDOM</b>")
+            t1 = chunks[j + 1][0]["s"] - .04 if j + 1 < len(chunks) else z + .25
             pid = f"c{k}_{j}"
-            html.append(f'<div class="cap" id="{pid}"><span>{txt}</span></div>')
-            add(f'tl.fromTo("#{pid}",{{opacity:0,scale:.9}},{{opacity:1,scale:1,duration:.12,ease:"back.out(2)",immediateRender:false}},{t0:.3f});')
+            spans = "".join(f'<span id="{pid}w{i}">{x["w"].replace("CREEDOM", "<b>CREEDOM</b>")} </span>' for i, x in enumerate(ch))
+            html.append(f'<div class="cap" id="{pid}" style="top:{CAP_TOP.get(k, 470)}px">{spans}</div>')
+            add(f'tl.set("#{pid}",{{opacity:1}},{ch[0]["s"] - .05:.3f});')
+            for i, x in enumerate(ch):
+                add(f'tl.fromTo("#{pid}w{i}",{{opacity:0,y:10}},{{opacity:1,y:0,duration:.12,ease:"power2.out",immediateRender:false}},{x["s"] - .03:.3f});')
             add(f'tl.to("#{pid}",{{opacity:0,duration:.08}},{t1:.3f});')
     return "".join(html)
 
@@ -122,24 +131,25 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #1A122
 #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #1A1224; font-family: "GSans"; }
 .clip { position: absolute; inset: 0; }
 #gl { width: 1080px; height: 1920px; display: block; }
-.pill, .wish, .tag, .cloud, .cap, #endc > * { opacity: 0; }
+.pill, .wish, .tag, .cloud, #endc > * { opacity: 0; }
 .views { position: absolute; left: 610px; top: 980px; display: flex; align-items: center; gap: 12px; padding: 14px 26px; border-radius: 999px; background: rgba(20,14,24,.78); border: 2px solid rgba(255,255,255,.18); color: #fff; }
 .views svg { width: 38px; height: 38px; } .views b { font: 800 52px/1 "GSans"; } .views span { font: 600 34px/1 "GSans"; color: #D9CCE6; }
 .wish { position: absolute; left: 50%; top: 300px; width: 330px; margin-left: -165px; text-align: center; padding: 14px 0; border-radius: 999px; background: rgba(243,67,162,.92); color: #fff; font: 800 34px/1 "GSans"; letter-spacing: 1px; box-shadow: 0 10px 30px rgba(243,67,162,.45); }
 .wish i { font-style: normal; margin-right: 10px; color: #FFE7A8; }
 .tag { position: absolute; display: flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 20px; background: rgba(255,240,248,.82); border: 2px solid rgba(255,255,255,.9); box-shadow: 0 12px 34px rgba(60,10,40,.35); color: #2A1024; }
 .tag b { font: 800 40px/1 "GSans"; color: #E8395A; } .tag span { font: 700 36px/1 "GSans"; }
-#tg1 { left: 190px; top: 760px; } #tg2 { left: 610px; top: 700px; } #tg2 b { color: #E0A11A; } #tg2 { background: rgba(255,246,220,.9); }
-#tg3 { left: 250px; top: 680px; } #tg3 b { color: #2A1024; }
+#tg1 { left: 190px; top: 760px; } #tg2 { left: 70px; top: 1240px; } #tg2 b { color: #E0A11A; } #tg2 { background: rgba(255,246,220,.9); }
+#tg3 { left: 70px; top: 1240px; } #tg3 b { color: #2A1024; }
 #tg3 i { position: relative; width: 66px; height: 36px; border-radius: 18px; background: #B9AFC2; margin-left: 6px; } #tg3 em { position: absolute; left: 4px; top: 4px; width: 28px; height: 28px; border-radius: 50%; background: #fff; }
 .cloud { position: absolute; max-width: 520px; padding: 26px 34px; border-radius: 48px; background: #FFFFFF; box-shadow: 0 14px 40px rgba(40,0,30,.35), inset 0 -6px 0 rgba(243,67,162,.12); transform-origin: 50% 100%; }
 .cloud p { font: 800 46px/1.15 "GSans"; color: #2A1024; text-align: center; }
 .cloud i { position: absolute; border-radius: 50%; background: #fff; box-shadow: 0 6px 16px rgba(40,0,30,.25); }
 .cloud.t-down .b1 { width: 38px; height: 38px; left: 50%; bottom: -46px; margin-left: 10px; } .cloud.t-down .b2 { width: 22px; height: 22px; left: 50%; bottom: -80px; margin-left: 40px; }
 .cloud.t-right .b1 { width: 38px; height: 38px; right: -40px; bottom: 6px; } .cloud.t-right .b2 { width: 22px; height: 22px; right: -74px; bottom: -14px; }
-.cap { position: absolute; left: 40px; right: 40px; top: 1360px; text-align: center; }
-.cap span { display: inline; padding: 6px 20px; border-radius: 16px; background: rgba(20,12,22,.8); font: 800 54px/1.45 "GSans"; color: #fff; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-.cap b { color: #FF7AC2; }
+.cap { position: absolute; left: 70px; right: 90px; top: 470px; text-align: left; opacity: 0; font: 800 62px/1.15 "GSans"; color: #fff; text-shadow: 0 2px 14px rgba(10,4,24,.55), 0 1px 3px rgba(10,4,24,.6); }
+.cap span { opacity: 0; display: inline-block; white-space: pre; } .cap b { color: #FF8CC6; font-weight: 800; }
+.card { position: absolute; left: 70px; top: 290px; padding: 18px 26px 20px; border-radius: 22px; background: rgba(18,10,30,.72); border: 1px solid rgba(255,255,255,.14); opacity: 0; }
+.card i { display: block; font: 800 24px/1 "GSans"; font-style: normal; letter-spacing: 3px; color: #FF8CC6; } .card b { display: block; margin-top: 10px; font: 800 38px/1.15 "GSans"; color: #fff; }
 #endc { position: absolute; inset: 0; }
 #endc .logo { position: absolute; left: 50%; top: 430px; width: 640px; margin-left: -320px; filter: drop-shadow(0 8px 30px rgba(243,67,162,.45)); }
 #endc .cbox { position: absolute; left: 110px; right: 110px; top: 640px; display: flex; align-items: center; gap: 18px; padding: 18px 22px; border-radius: 26px; background: rgba(255,255,255,.95); box-shadow: 0 16px 40px rgba(40,0,30,.4); }
@@ -154,7 +164,8 @@ def main():
     ui = story()
     caps = captions()
     mix = "mix.wav" if os.path.exists(os.path.join(ROOT, "assets", "audio", "mix.wav")) else "voice.wav"
-    ct = {"lines": LN, "beats": BT, "end": DUR, "words": WORDS, "chirps": CHIRPS}
+    env = json.load(open(os.path.join(B, "env.json"))) if os.path.exists(os.path.join(B, "env.json")) else {}
+    ct = {"lines": LN, "beats": BT, "end": DUR, "words": WORDS, "chirps": CHIRPS, "voiceEnv": env.get("voice", []), "creeEnv": env.get("cree", [])}
     html = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
   <head>
