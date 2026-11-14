@@ -4,8 +4,9 @@ Score (CC BY 3.0, Jamendo, found through Openverse; all instrumental, checked wi
 tension and relief: "Emotional - Piano Instrumental" by E. Erkut under the breakdown; "Suspense and Tension" (stem 5) by
 3minutetunes building through the wishes and teasers; a hush (near silence) while the lights die; "Helios Tilt" by CM ONNI
 for the entrance, its drop placed on the superhero landing; "Inspiring Progress" by Soundrider/Dope for the fixes and hug.
-Cree never says real words: his voice is synthesised here (little pitched syllables with vowel formants, deterministic),
-timed to build/chirps.json, while the speech clouds on screen say what he means. SFX: HyperFrames' bundled library
+Cree never says real words: his voice is built here from real bird chirps (CC0 / CC BY recordings found through Openverse,
+cut into single chirps by build/cree_syllables.py; see assets/sfx/cree/CREDITS.md), strung into little "words" with a
+contour, timed to build/chirps.json, while the speech clouds on screen say what he means. SFX: HyperFrames' bundled library
 (Pixabay Content License) and an ElevenLabs room tone from the owner's earlier reels. Music ducks under the voice.
 python3 build/audio.py      (from the project root, after build/voice.py and build/generate.py)
 """
@@ -15,7 +16,7 @@ import subprocess
 
 import numpy as np
 import soundfile as sf
-from scipy.signal import butter, sosfilt
+from scipy.signal import butter, resample, sosfilt
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LIB = os.path.join(os.path.dirname(ROOT), ".claude", "skills", "media-use", "audio", "assets", "sfx")
@@ -53,33 +54,65 @@ def lp(x, f, kind="low"):
     return np.stack([sosfilt(butter(2, f, kind, fs=SR, output="sos"), x[:, c]) for c in (0, 1)], 1)
 
 
-def gibberish(dur, seed, base=640.0, happy=False):
-    """Cree's voice: a run of tiny pitched syllables (a soft consonant tick, then a vowel), with a bouncy contour."""
+SYL = json.load(open(os.path.join(ROOT, "assets", "sfx", "cree", "syllables.json")))
+_SYLC = {}
+
+
+def syl(name):
+    if name not in _SYLC:
+        _SYLC[name], _ = sf.read(os.path.join(ROOT, "assets", "sfx", "cree", "syl", name))
+    return _SYLC[name]
+
+
+def shift(x, semis):
+    """Pitch by resampling (pitch and length move together, as in a real bird's call)."""
+    r = 2 ** (semis / 12)
+    n = max(8, int(len(x) / r))
+    pad = np.concatenate([np.zeros(256), x, np.zeros(256)])
+    y = resample(pad, int(len(pad) / r))
+    return y[int(256 / r): int(256 / r) + n]
+
+
+def chirp_phrase(dur, seed, mood="talk"):
+    """Cree's voice from real chirps: little 'words' of 2-4 chirps, short pauses between them, a contour across the phrase.
+    mood: talk (falls at the end), happy (brighter, rises at the end), proud (one long confident trill), tiny (one or two)."""
     rng = np.random.default_rng(seed)
-    out, t = [], 0.0
-    VOW = [(800, 1200), (400, 2200), (300, 2600), (500, 900), (350, 800)]   # a e i o u formants
-    while t < dur - .06:
-        L = rng.uniform(.065, .12)
-        n = int(L * SR); tt = np.arange(n) / SR
-        f0 = base * (1 + rng.uniform(-.18, .22)) * (1.08 if happy else 1)
-        glide = rng.uniform(-.25, .35)
-        f = f0 * (1 + glide * tt / L)
-        ph = 2 * np.pi * np.cumsum(f) / SR
-        F1, F2 = VOW[rng.integers(0, 5)]
-        s = np.zeros(n)
-        for h in range(1, 14):
-            fh = f0 * h
-            w = np.exp(-((fh - F1) / 260) ** 2) + .7 * np.exp(-((fh - F2) / 420) ** 2) + .15 / h
-            s += w * np.sin(h * ph)
-        env = np.minimum(1, tt / .008) * np.exp(-tt / (L * .55)) * (1 - np.exp(-(L - tt) / .01))
-        tick = rng.standard_normal(n) * np.exp(-tt / .004) * .25
-        out.append((s / 6 + tick) * env)
-        gap = rng.uniform(.012, .04)
-        out.append(np.zeros(int(gap * SR)))
-        t += L + gap
-    y = np.concatenate(out)[: int(dur * SR)]
-    y = sosfilt(butter(2, 220, "high", fs=SR, output="sos"), y)
-    y = np.tanh(y * 1.6) / 1.6
+    peeps = [r for r in SYL if r["src"] == "src_003"]
+    sweet = [r for r in SYL if r["src"] in ("src_001", "src_006", "src_002")]
+    trill = [r for r in SYL if r["src"] == "src_005"]
+    y = np.zeros(int((dur + .4) * SR)); t = 0.0
+    base = {"talk": -2.0, "happy": -0.5, "proud": -2.5, "tiny": -1.0}[mood]
+    words = []
+    while t < dur - .08:
+        nw = int(rng.integers(2, 5)) if mood != "tiny" else int(rng.integers(1, 3))
+        words.append(nw); t += nw * .1 + .12
+    total = sum(words); k = 0; t = 0.0
+    for wi, nw in enumerate(words):
+        for j in range(nw):
+            u = k / max(1, total - 1)
+            if mood in ("happy",): contour = 1.6 * u + .8 * np.sin(u * 3.1)
+            elif mood == "proud": contour = 1.2 * np.sin(u * 3.1)
+            else: contour = 1.4 * np.sin(u * 2.6) - 1.8 * max(0, u - .75) / .25
+            pool = peeps if rng.random() < .62 else (sweet if rng.random() < .7 else trill)
+            if mood == "proud" and wi == len(words) - 1 and j == nw - 1: pool = trill
+            r = pool[int(rng.integers(0, len(pool)))]
+            x = syl(r["file"]) * (1.0 if j == 0 else .78) * 10 ** (rng.uniform(-2.5, 1.0) / 20)
+            # keep every chirp near 3.2 kHz before the contour, so the sources sit together as one voice
+            norm = 12 * np.log2(3200 / max(1500, r["dom"]))
+            x = shift(x, float(np.clip(norm, -7, 4)) + base + contour + rng.uniform(-.8, .8))
+            i = int(t * SR)
+            if i + len(x) > len(y): break
+            y[i:i + len(x)] += x
+            t += len(x) / SR + rng.uniform(.018, .05)
+            k += 1
+        t += rng.uniform(.08, .15)
+        if t > dur: break
+    y = y[: int(dur * SR) + int(.2 * SR)]
+    y = sosfilt(butter(4, [1500, 8500], "band", fs=SR, output="sos"), y)
+    # a touch of the room around him
+    ir = np.random.default_rng(3).standard_normal(int(.18 * SR)) * np.exp(-np.arange(int(.18 * SR)) / (.04 * SR))
+    wet = np.convolve(y, ir)[: len(y)]
+    y = y + .06 * wet / (np.max(np.abs(wet)) + 1e-9) * np.max(np.abs(y))
     return np.stack([y, y], 1)
 
 
@@ -94,7 +127,7 @@ def buzz(dur):
 def music():
     m = np.zeros((N, 2))
     L = lambda f: load(os.path.join(ROOT, "assets", "music", f))  # noqa: E731
-    hero = Bs("hero"); land = hero + 2.75 + .28; burst = hero + .8
+    hero = Bs("hero"); land = hero + 2.75 + .28; burst = hero + .7
     w1 = Ls("04")
     put(m, L("s_emotional.mp3"), 0, 1.0, 3.0, 3.0 + w1 + .3, fin=.3, fout=.9)                       # the breakdown
     sus = L("t_susp5.mp3"); seg = hero - (w1 - .6)
@@ -105,11 +138,23 @@ def music():
     return m
 
 
+MOODS = ["proud", "talk", "happy", "talk", "happy", "happy"]
+EXTRA = [                                                     # (time, mood, gain, seed): little reactions outside the clouds
+    (Bs("teaser2") + .55, "tiny", .35, 101),                 # a distant chirp as he streaks past
+    (Bs("hero") + 1.62, "tiny", .7, 103),                    # a heroic chirp through the window
+    (Bs("hero") + 3.85, "proud", .8, 105),                   # the proud chirp as he rises from the landing
+    (Bs("fix1") + 1.9, "tiny", .6, 107),                     # found it: second three
+    (Bs("fix2") + 1.65, "tiny", .65, 109),                   # the gold card
+    (Bs("fix3") + 1.35, "happy", .7, 111),                   # the cheer
+]   # say no more / second three / make more / DM goes out / waiting for you / end card
+
+
 def cree():
     c = np.zeros((N, 2))
     for k, (a, b) in enumerate(CH):
-        happy = k in (1, 5, 6)
-        put(c, gibberish(b - a, 11 + k * 7, base=700 if happy else 620, happy=happy), a, 1.0, fin=.01, fout=.04)
+        put(c, chirp_phrase(b - a, 11 + k * 7, MOODS[k] if k < len(MOODS) else "talk"), a, 1.0, fin=.002, fout=.03)
+    for t, mood, g, seed in EXTRA:                     # little reactions outside the speech clouds (also move his beak)
+        put(c, chirp_phrase(.3 if mood == "tiny" else .55, seed, mood), t, g, fin=.002, fout=.03)
     return c
 
 
@@ -133,11 +178,19 @@ def sfx():
     put(s, lib("riser"), Bs("hero") - 1.6, .25)                                       # tension into the hush
     for k in range(3):
         put(s, lib("click-soft"), Bs("hero") + .1 + k * .13, .25)                         # the lights flicker out
-    put(s, lib("impact-bass-2"), Bs("hero") + .8, .45); put(s, lib("glitch-1"), Bs("hero") + .82, .08)   # the window bursts open
-    put(s, lib("whoosh-cinematic"), Bs("hero") + .85, .3)                              # wind, the hover
-    put(s, lib("whoosh"), Bs("hero") + 2.0, .45)                                       # he flies straight at us
-    put(s, lib("impact-bass-1"), Bs("hero") + 2.75 + .28, .6)                          # the superhero landing
-    put(s, lib("sparkle"), Bs("hero") + 3.6, .25)                                      # the lights come back
+    put(s, lib("whoosh-cinematic"), Bs("hero") + .7, .3)                                  # the rise: wind, the silhouette in the window
+    put(s, lib("sparkle"), Bs("hero") + 1.12, .3)                                         # his eyes glint
+    put(s, lib("impact-bass-2"), Bs("hero") + 1.55, .5); put(s, lib("glitch-1"), Bs("hero") + 1.56, .1)   # the window blows open
+    put(s, lib("sparkle"), Bs("hero") + 1.6, .22)                                         # glass glints
+    put(s, lib("whoosh"), Bs("hero") + 1.7, .5)                                           # he rockets in
+    put(s, lib("whoosh-short"), Bs("hero") + 2.05, .35)                                   # the barrel roll
+    put(s, lib("whoosh-short"), Bs("hero") + 2.35, .3)                                    # the turn
+    put(s, lib("whoosh"), Bs("hero") + 2.72, .45)                                         # the drop
+    put(s, lib("impact-bass-1"), Bs("hero") + 2.75 + .28, .65)                            # the superhero landing (on the music's drop)
+    for k in range(5):
+        put(s, lib("click-soft"), Bs("hero") + 3.12 + k * .07, .12)                       # the lights come back, one by one
+    put(s, lib("sparkle"), Bs("hero") + 3.3, .25)
+    put(s, lib("ping"), Bs("hero") + 3.97, .18)                                           # the eye glint
     put(s, lib("pop"), Bs("fix1") + 1.75, .3); put(s, lib("ping"), Bs("fix1") + 1.85, .3)                  # tap, the tag
     put(s, lib("whoosh-short"), Bs("fix2") + .1, .25); put(s, lib("chime"), Bs("fix2") + 1.5, .3)          # the cards, gold
     put(s, lib("click"), Bs("fix3") + .8, .45); put(s, lib("ping"), Bs("fix3") + .9, .25)                  # the lever, the switch

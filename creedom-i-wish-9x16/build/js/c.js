@@ -141,61 +141,132 @@ const FX = {};
   // a soft shadow sweep (the flying shadow passing over the room)
   FX.shadow = new THREE.Mesh(new THREE.CircleGeometry(.6, 32), new THREE.MeshBasicMaterial({ color: 0x0A0614, transparent: true, opacity: .35, depthWrite: false })); FX.shadow.rotation.x = -Math.PI / 2; scene.add(FX.shadow);
 }
+// ---------------------------------------------------------------- the hero FX: a sparkle ribbon behind him in flight, sparks,
+// glass glints from the burst window, moon rays behind his silhouette, an air blast and dust on the landing, an eye glint
+{
+  const glowT = pix(64, 64, (g) => { const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(.3, "rgba(255,225,242,.75)"); gr.addColorStop(1, "rgba(255,150,205,0)"); g.fillStyle = gr; g.fillRect(0, 0, 64, 64); }, false);
+  const starT = pix(128, 128, (g) => { g.translate(64, 64); for (const [L, W, a] of [[62, 5, 0], [62, 5, Math.PI / 2], [30, 3, Math.PI / 4], [30, 3, -Math.PI / 4]]) { g.save(); g.rotate(a); const gr = g.createLinearGradient(-L, 0, L, 0); gr.addColorStop(0, "rgba(255,255,255,0)"); gr.addColorStop(.5, "rgba(255,255,255,1)"); gr.addColorStop(1, "rgba(255,255,255,0)"); g.fillStyle = gr; g.beginPath(); g.moveTo(-L, 0); g.lineTo(0, -W); g.lineTo(L, 0); g.lineTo(0, W); g.closePath(); g.fill(); g.restore(); } const gr = g.createRadialGradient(0, 0, 0, 0, 0, 16); gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(1, "rgba(255,255,255,0)"); g.fillStyle = gr; g.fillRect(-16, -16, 32, 32); }, false);
+  const add2 = (o) => { scene.add(o); o.visible = false; return o; };
+  // the ribbon: 48 segments, rebuilt every frame from his flight path (see ribbon() in the shots)
+  const RN = 48; const rg = new THREE.BufferGeometry();
+  rg.setAttribute("position", new THREE.Float32BufferAttribute(new Float32Array(RN * 2 * 3), 3));
+  rg.setAttribute("color", new THREE.Float32BufferAttribute(new Float32Array(RN * 2 * 4), 4));
+  const idx = []; for (let i = 0; i < RN - 1; i++) { const a = i * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); } rg.setIndex(idx);
+  FX.ribbon = add2(new THREE.Mesh(rg, new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, toneMapped: false })));
+  FX.ribbon.frustumCulled = false; FX.ribbonN = RN;
+  FX.sparks = []; for (let i = 0; i < 46; i++) { const m = new THREE.SpriteMaterial({ map: i % 5 ? glowT : starT, color: i % 3 ? 0xFFD6EC : 0xFFFFFF, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false }); FX.sparks.push(add2(new THREE.Sprite(m))); }
+  // glass glints: small bright flecks thrown in from the window
+  FX.shards = []; for (let i = 0; i < 26; i++) { const m = new THREE.Mesh(new THREE.PlaneGeometry(.035, .05), new THREE.MeshBasicMaterial({ color: 0xDDEBFF, transparent: true, opacity: .85, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, toneMapped: false })); FX.shards.push(add2(m)); }
+  // moon rays: long soft wedges fanning out from behind him
+  const rayT = pix(64, 256, (g) => { const gr = g.createLinearGradient(0, 256, 0, 0); gr.addColorStop(0, "rgba(220,230,255,.9)"); gr.addColorStop(1, "rgba(220,230,255,0)"); g.fillStyle = gr; g.beginPath(); g.moveTo(30, 256); g.lineTo(34, 256); g.lineTo(64, 0); g.lineTo(0, 0); g.closePath(); g.fill(); }, false);
+  FX.rays = add2(new THREE.Group()); for (let i = 0; i < 9; i++) { const p = new THREE.Mesh(new THREE.PlaneGeometry(.55, 2.6), new THREE.MeshBasicMaterial({ map: rayT, transparent: true, opacity: .35, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false })); p.geometry.translate(0, 1.3, 0); p.rotation.z = (i - 4) * .36 + (hash(i) - .5) * .15; p.scale.x = .35 + hash(i * 3) * .5; FX.rays.add(p); }
+  // the air blast: a bright ring that punches out from the landing, facing the camera
+  FX.blast = add2(new THREE.Mesh(new THREE.RingGeometry(.86, 1, 72), new THREE.MeshBasicMaterial({ color: 0xFFE6F3, transparent: true, opacity: .6, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, toneMapped: false })));
+  // the eye glint (a four-point star) and a soft halo for the silhouette
+  FX.glint = add2(new THREE.Sprite(new THREE.SpriteMaterial({ map: starT, color: 0xFFFFFF, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false })));
+  FX.halo = add2(new THREE.Sprite(new THREE.SpriteMaterial({ map: glowT, color: 0xFFB8DC, transparent: true, opacity: .5, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false })));
+  // bigger dust puffs for the landing (soft sprites)
+  FX.dust = []; for (let i = 0; i < 16; i++) FX.dust.push(add2(new THREE.Sprite(new THREE.SpriteMaterial({ map: glowT, color: 0xF8EEF6, transparent: true, opacity: .5, depthWrite: false }))));
+}
+// fill the ribbon from points (oldest first), facing the camera; width tapers to the tail
+function ribbon(pts, camP, w, col = [1, .42, .74]) {
+  const g = FX.ribbon.geometry, P = g.attributes.position.array, C = g.attributes.color.array, N = FX.ribbonN;
+  FX.ribbon.visible = pts.length > 1;
+  for (let i = 0; i < N; i++) {
+    const k = Math.min(pts.length - 1, Math.round(i / (N - 1) * (pts.length - 1))), p = pts[k], q = pts[Math.min(pts.length - 1, k + 1)], o = pts[Math.max(0, k - 1)];
+    V.copy(q).sub(o).normalize(); V2.copy(camP).sub(p).normalize(); const side = V.clone().cross(V2).normalize();
+    const u = i / (N - 1), ww = w * Math.pow(u, .7);
+    for (let s = 0; s < 2; s++) { const j = (i * 2 + s); P[j * 3] = p.x + side.x * ww * (s ? 1 : -1); P[j * 3 + 1] = p.y + side.y * ww * (s ? 1 : -1); P[j * 3 + 2] = p.z + side.z * ww * (s ? 1 : -1);
+      const a = Math.pow(u, 1.8) * .5 * (s ? 1 : 1); const wh = Math.pow(u, 6) * .6; C[j * 4] = lerp(col[0], 1, wh); C[j * 4 + 1] = lerp(col[1], 1, wh); C[j * 4 + 2] = lerp(col[2], 1, wh); C[j * 4 + 3] = a; }
+  }
+  g.attributes.position.needsUpdate = true; g.attributes.color.needsUpdate = true;
+}
 PARENT = scene;
 
-// ---------------------------------------------------------------- Cree, to his model sheet: as wide as tall (arms included), eyes 31% down,
-// each eye 23% of his width, centres 36% apart, beak just below the eye line, arms at two thirds of his height, stubby oval feet.
-// Built 1 unit tall; CREE.root is scaled to his size in the room.
+// ---------------------------------------------------------------- Cree, to his model sheet (refs/cree_reference.png): a soft pink egg,
+// big glossy eyes set INTO the body (slightly domed, a pale pink rim), a rounded yellow beak with a red mouth, short mitten
+// wings, big orange feet. Face rig: plush eyelids (upper and lower, tilting for emotion), pupils that look, dilate and dart,
+// a hinged lower beak, blush. Built 1 unit tall; CREE.root is scaled to his size in the room.
 const CREE = { root: new THREE.Group() };
 scene.add(CREE.root);
 {
   const R = CREE.root;
-  const plush = CREE.plush = new THREE.MeshPhysicalMaterial({ color: 0xF343A2, roughness: .62, sheen: .35, sheenColor: new THREE.Color(0xFF6FB8), sheenRoughness: .5, envMap: ENV, envMapIntensity: .15 });
+  const plush = CREE.plush = new THREE.MeshPhysicalMaterial({ color: 0xF75AAE, roughness: .62, sheen: .55, sheenColor: new THREE.Color(0xFFA6D4), sheenRoughness: .5, envMap: ENV, envMapIntensity: .15 });
   // the model sheet's "light subsurface scattering so the pink glows at the edges": a soft view-angle rim on the plush
-  CREE.rimU = { value: .35 };
+  CREE.rimU = { value: .3 };
   plush.onBeforeCompile = (sh) => { sh.uniforms.uRim = CREE.rimU; sh.fragmentShader = "uniform float uRim;\n" + sh.fragmentShader.replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\n  { float rimF = pow(1.0 - clamp(dot(normalize(vViewPosition), normal), 0.0, 1.0), 3.0); totalEmissiveRadiance += vec3(1.0, .3, .62) * rimF * uRim; }"); };
   const bod = new THREE.Group(); R.add(bod); CREE.bod = bod;
-  const g = new THREE.SphereGeometry(.5, 80, 60); const pa = g.attributes.position;
-  for (let i = 0; i < pa.count; i++) { const y = pa.getY(i) / .5; const w = .84 * (1 + .1 * (-y) - .05 * Math.max(0, y) ** 2); pa.setX(i, pa.getX(i) * w); pa.setZ(i, pa.getZ(i) * w * .95); pa.setY(i, pa.getY(i) * .94); }
+  // egg body: fuller at the bottom, a softly rounded crown
+  const BW = (y) => .94 * (1 + .08 * (-y) - .015 * Math.max(0, y) ** 2);
+  const g = new THREE.SphereGeometry(.5, 96, 72); const pa = g.attributes.position;
+  for (let i = 0; i < pa.count; i++) { const y = pa.getY(i) / .5; const w = BW(y); pa.setX(i, pa.getX(i) * w); pa.setZ(i, pa.getZ(i) * w * .95); pa.setY(i, pa.getY(i) * .92); }
   g.computeVertexNormals();
   const body = new THREE.Mesh(g, plush); body.position.y = .53; body.castShadow = true; body.receiveShadow = true; bod.add(body);
-  // eyes: white with a pale pink rim, big black pupils, a large catchlight upper right and a small one lower left
-  const sclM = CREE.sclM = new THREE.MeshPhysicalMaterial({ color: 0xFFFFFF, roughness: .12, clearcoat: 1, clearcoatRoughness: .04, envMap: ENV, envMapIntensity: .45 });
-  const pupM = CREE.pupM = new THREE.MeshPhysicalMaterial({ color: 0x0B0B0B, roughness: .06, clearcoat: 1, clearcoatRoughness: .03, envMap: ENV, envMapIntensity: .8 });
-  const catM = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
-  const rimM = CREE.rimM = new THREE.MeshStandardMaterial({ color: 0xFFD3E6, roughness: .6 });
-  CREE.eyes = []; CREE.pupils = []; CREE.cats = [];
+  // a point on the body's surface (local to bod) at height y, sideways x, and its outward normal
+  const surf = (x, y) => { const yr = (y - .53) / .47, w = BW(yr), ax = .5 * w * Math.sqrt(1 - yr * yr), az = ax * .95;
+    const z = az * Math.sqrt(Math.max(0, 1 - (x / ax) ** 2)); const n = new THREE.Vector3(x / (ax * ax), yr * .9, z / (az * az)).normalize(); return [new THREE.Vector3(x, y, z), n]; };
+  const sclM = CREE.sclM = new THREE.MeshPhysicalMaterial({ color: 0xFFFFFF, roughness: .3, clearcoat: .5, clearcoatRoughness: .2, envMap: ENV, envMapIntensity: .15 });
+  const pupM = CREE.pupM = new THREE.MeshPhysicalMaterial({ color: 0x0E080C, roughness: .25, clearcoat: .6, clearcoatRoughness: .2, envMap: ENV, envMapIntensity: .12 });
+  const catM = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, toneMapped: false });
+  const rimM = CREE.rimM = new THREE.MeshStandardMaterial({ color: 0xFFC7DF, roughness: .55 });
+  const lashM = new THREE.MeshStandardMaterial({ color: 0xC2287A, roughness: .6 }), lashLoM = new THREE.MeshStandardMaterial({ color: 0xE8479C, roughness: .6 });
+  const ER = .142;                                                  // eyeball radius: a sphere set into the body, the front domes out
+  CREE.eyes = []; CREE.pupils = []; CREE.cats = []; CREE.lids = []; CREE.arcs = [];
   for (const s of [-1, 1]) {
-    const eg = new THREE.Group(); eg.position.set(s * .18, .70, .355); eg.rotation.y = s * .36; eg.rotation.x = -.06; bod.add(eg);
-    const rim = new THREE.Mesh(new THREE.SphereGeometry(.12, 36, 28), rimM); rim.scale.set(1, 1.04, .42); eg.add(rim);
-    const scl = new THREE.Mesh(new THREE.SphereGeometry(.112, 36, 28), sclM); scl.scale.set(1, 1.04, .5); scl.position.z = .012; eg.add(scl);
-    const pg = new THREE.Group(); pg.position.z = .05; eg.add(pg);
-    const pup = new THREE.Mesh(new THREE.SphereGeometry(.078, 32, 24), pupM); pup.scale.set(1, 1.04, .45); pg.add(pup);
-    const c1 = new THREE.Mesh(new THREE.SphereGeometry(.024, 14, 10), catM); c1.position.set(.026, .032, .036); c1.scale.z = .4; pg.add(c1);
-    const c2 = new THREE.Mesh(new THREE.SphereGeometry(.011, 10, 8), catM); c2.position.set(-.028, -.03, .036); c2.scale.z = .4; pg.add(c2);
-    const arc = new THREE.Mesh(new THREE.TorusGeometry(.085, .022, 10, 28, Math.PI), new THREE.MeshStandardMaterial({ color: 0x14080F, roughness: .5 })); arc.position.set(s * .18, .7, .385); arc.rotation.y = s * .36; arc.visible = false; bod.add(arc); eg.arc = arc;
-    CREE.eyes.push(eg); CREE.pupils.push(pg); CREE.cats.push([c1, c2]);
+    const [P, n] = surf(s * .178, .665);
+    const eg = new THREE.Group(); eg.position.copy(P).addScaledVector(n, -(ER - .05)); eg.rotation.set(-Math.asin(n.y) * .8, Math.atan2(n.x, n.z), 0, "YXZ"); bod.add(eg);
+    const rim = new THREE.Mesh(new THREE.SphereGeometry(ER * 1.06, 40, 30), rimM); rim.position.z = -.022; eg.add(rim);
+    const ball = new THREE.Group(); eg.add(ball);                    // scaled up for "wide" (surprised)
+    ball.add(new THREE.Mesh(new THREE.SphereGeometry(ER, 48, 36), sclM));
+    // the pupil: a cap on the eyeball that turns with it (real eye rotation); catchlights stay put (they are reflections)
+    const pg = new THREE.Group(); ball.add(pg);
+    const cap = new THREE.Mesh(new THREE.SphereGeometry(ER * 1.004, 40, 16, 0, Math.PI * 2, 0, .9), pupM); cap.rotation.x = Math.PI / 2; pg.add(cap);
+    const capS = new THREE.Mesh(new THREE.SphereGeometry(ER * 1.005, 40, 16, 0, Math.PI * 2, 0, .7), pupM); capS.rotation.x = Math.PI / 2; capS.visible = false; pg.add(capS); pg.cap = cap; pg.capS = capS;
+    const iris = new THREE.Mesh(new THREE.SphereGeometry(ER * 1.002, 40, 16, 0, Math.PI * 2, 0, .98), new THREE.MeshPhysicalMaterial({ color: 0x4A1A34, roughness: .1, clearcoat: 1 })); iris.rotation.x = Math.PI / 2; pg.add(iris); pg.iris = iris;
+    const cg = new THREE.Group(); ball.add(cg);
+    const onEye = (dx, dy, r) => { const d = new THREE.Vector3(dx, dy, 1).normalize().multiplyScalar(ER * 1.012); const m = new THREE.Mesh(new THREE.SphereGeometry(r, 16, 12), catM); m.position.copy(d); m.lookAt(d.clone().multiplyScalar(2)); m.scale.z = .3; cg.add(m); return m; };
+    const c1 = onEye(.3, .32, .036), c2 = onEye(-.28, -.3, .018); onEye(.05, .42, .01);
+    // eyelids: plush shells just outside the eyeball; upper (top hemisphere) and lower, each on a tilt pivot, with a darker lash line
+    const mkLid = (upper) => {
+      const tilt = new THREE.Group(); eg.add(tilt);
+      const hinge = new THREE.Group(); tilt.add(hinge);
+      const sh = new THREE.Mesh(new THREE.SphereGeometry(ER * 1.075, 44, 22, 0, Math.PI * 2, upper ? 0 : Math.PI / 2, Math.PI / 2), plush); hinge.add(sh);
+      if (upper) { const lash = new THREE.Mesh(new THREE.TorusGeometry(ER * 1.075, .0045, 8, 56), lashM); lash.rotation.x = Math.PI / 2; hinge.add(lash); }
+      return { tilt, hinge };
+    };
+    const up = mkLid(true), lo = mkLid(false);
+    // the closed-happy arc (a curved line over shut lids)
+    const arc = new THREE.Mesh(new THREE.TorusGeometry(.08, .015, 10, 32, Math.PI), new THREE.MeshStandardMaterial({ color: 0x3A0A22, roughness: .5 }));
+    arc.position.set(0, -.035, ER - .03); arc.visible = false; eg.add(arc);
+    eg.ball = ball;
+    CREE.eyes.push(eg); CREE.pupils.push(pg); CREE.cats.push([c1, c2]); CREE.lids.push([up, lo]); CREE.arcs.push(arc);
   }
-  CREE.brows = [];
-  for (const s of [-1, 1]) { const b = new THREE.Mesh(new THREE.CapsuleGeometry(.007, .06, 4, 10), new THREE.MeshStandardMaterial({ color: 0xD0207E, roughness: .6 })); b.rotation.z = Math.PI / 2; const bg = new THREE.Group(); bg.position.set(s * .18, .845, .335); bg.rotation.y = s * .36; bg.add(b); bod.add(bg); CREE.brows.push(bg); }
-  // beak: upper and lower halves, yellow-orange, red inside (#D81F3C); the lower half hinges open
+  // blush: soft pink-red discs under the eyes (only for joy and the hug)
+  CREE.blush = [];
+  const blM = new THREE.MeshBasicMaterial({ color: 0xFF2E6E, transparent: true, opacity: 0, depthWrite: false });
+  for (const s of [-1, 1]) { const [P, n] = surf(s * .265, .55); const b = new THREE.Mesh(new THREE.CircleGeometry(.055, 24), blM); b.position.copy(P).addScaledVector(n, .004); b.lookAt(b.position.clone().add(n)); b.scale.y = .62; bod.add(b); CREE.blush.push(b); }
+  CREE.blM = blM;
+  // beak: a rounded upper half and a hinged lower half, a red mouth with a little tongue between them
   const beakM = new THREE.MeshPhysicalMaterial({ color: 0xFFC21A, roughness: .3, clearcoat: .5, clearcoatRoughness: .25, envMap: ENV, envMapIntensity: .3 });
   const beakM2 = CREE.beakM2 = new THREE.MeshPhysicalMaterial({ color: 0xF2A516, roughness: .35, clearcoat: .4, envMap: ENV, envMapIntensity: .25 });
-  const up = new THREE.Mesh(new THREE.SphereGeometry(.058, 28, 18, 0, Math.PI * 2, 0, Math.PI / 2), beakM); up.scale.set(1.05, .8, 1.25); up.position.set(0, .612, .42); up.rotation.x = .38; bod.add(up);
-  const mouth = new THREE.Mesh(new THREE.SphereGeometry(.042, 18, 12), new THREE.MeshStandardMaterial({ color: 0xD81F3C, roughness: .7 })); mouth.scale.set(1.05, .65, .6); mouth.position.set(0, .598, .405); bod.add(mouth);
-  const lowG = new THREE.Group(); lowG.position.set(0, .605, .405); bod.add(lowG);
-  const low = new THREE.Mesh(new THREE.SphereGeometry(.047, 24, 14, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), beakM2); low.scale.set(1.0, .8, 1.15); low.position.set(0, 0, .016); lowG.add(low);
+  const [BP] = surf(0, .565);
+  const bk = new THREE.Group(); bk.position.set(0, .565, BP.z); bk.scale.setScalar(1.12); bod.add(bk);
+  const up = new THREE.Mesh(new THREE.SphereGeometry(.072, 32, 20, 0, Math.PI * 2, 0, Math.PI / 2), beakM); up.scale.set(1.08, .8, 1.3); up.position.set(0, .004, .014); up.rotation.x = .42; bk.add(up);
+  const mouth = new THREE.Mesh(new THREE.SphereGeometry(.056, 22, 16), new THREE.MeshStandardMaterial({ color: 0xB80E2C, roughness: .75 })); mouth.scale.set(1.0, .78, .62); mouth.position.set(0, -.012, .006); bk.add(mouth);
+  const tongue = new THREE.Mesh(new THREE.SphereGeometry(.028, 16, 10), new THREE.MeshStandardMaterial({ color: 0xFF6A8A, roughness: .6 })); tongue.scale.set(1.15, .42, .95); tongue.position.set(0, -.024, .03); bk.add(tongue);
+  const lowG = new THREE.Group(); lowG.position.set(0, -.004, .006); bk.add(lowG);
+  const low = new THREE.Mesh(new THREE.SphereGeometry(.06, 28, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), beakM2); low.scale.set(1.0, .72, 1.2); low.position.set(0, 0, .016); lowG.add(low);
   CREE.jaw = lowG;
-  // wings: short rounded arms, the widest point of him (arms included) about a third of the way up
+  // wings: short rounded mittens from the sides, pivoting at the shoulder; the tip curls a little on the flap
   CREE.wings = [];
   for (const s of [-1, 1]) {
-    const pv = new THREE.Group(); pv.position.set(s * .4, .45, .02); bod.add(pv);
-    const w = new THREE.Mesh(new THREE.SphereGeometry(.12, 24, 18), plush); w.scale.set(.62, 1.2, .8); w.position.set(s * .04, -.1, 0); w.castShadow = true; pv.add(w);
-    const tip = new THREE.Group(); tip.position.set(s * .05, -.22, .02); pv.add(tip); pv.tip = tip;
+    const pv = new THREE.Group(); pv.position.set(s * .43, .5, .05); bod.add(pv);
+    const w = new THREE.Mesh(new THREE.SphereGeometry(.14, 28, 20), plush); w.scale.set(.62, 1.0, .85); w.position.set(s * .03, -.1, 0); w.castShadow = true; pv.add(w);
+    const tip = new THREE.Group(); tip.position.set(s * .06, -.24, .02); pv.add(tip); pv.tip = tip;
     CREE.wings.push(pv);
   }
   CREE.feet = [];
-  for (const s of [-1, 1]) { const f = new THREE.Mesh(new THREE.SphereGeometry(.1, 22, 14), beakM2); f.scale.set(1.0, .48, 1.45); const fg = new THREE.Group(); fg.position.set(s * .14, .045, .1); fg.add(f); f.castShadow = true; R.add(fg); CREE.feet.push(fg); }
+  for (const s of [-1, 1]) { const f = new THREE.Mesh(new THREE.SphereGeometry(.112, 26, 16), beakM2); f.scale.set(1.12, .56, 1.6); const fg = new THREE.Group(); fg.position.set(s * .165, .052, .12); fg.add(f); f.castShadow = true; R.add(fg); CREE.feet.push(fg); }
   const mg = new THREE.Group(); CREE.mag = mg;
   mg.add(new THREE.Mesh(new THREE.TorusGeometry(.11, .012, 10, 40), goldM));
   mg.add(new THREE.Mesh(new THREE.CircleGeometry(.105, 36), new THREE.MeshPhysicalMaterial({ color: 0xEAF6FF, roughness: 0, transparent: true, opacity: .2, envMap: ENV, envMapIntensity: 1.2, side: THREE.DoubleSide })));
@@ -203,35 +274,63 @@ scene.add(CREE.root);
   const fer = new THREE.Mesh(new THREE.CylinderGeometry(.019, .019, .025, 12), goldM); fer.position.y = -.115; mg.add(fer);
   scene.add(mg);
 }
-// state -> pose. s: {x, y, z, ry, rx (pitch: forward flight ~ -1.2), roll, sc, sq, wl/wr: [rz, rx], eyes, look, jaw, brow, browY, mag, magAt, step, feetBack}
+// expressions: upper lid (0 open .. 1 shut), lower lid, lid tilt (+ = inner corners down: determined; - = sad/soft), pupil size
+const EXPR = {
+  open:       { lu: -.04, ll: 0,   tilt: 0,    pup: 1, blush: .28 },
+  wide:       { lu: -.08, ll: 0,   tilt: 0,    pup: .85, wide: 1, blush: .2 },
+  joy:        { lu: .04, ll: .3,   tilt: -.1,  pup: 1, blush: .55 },
+  proud:      { lu: .14, ll: .26,  tilt: -.12, pup: 1, blush: .4 },
+  determined: { lu: .18, ll: .1,   tilt: .14,  pup: 1, blush: .25 },
+  focus:      { lu: .1,  ll: .14,  tilt: .06,  pup: 1, blush: .25 },
+  curious:    { lu: -.04, ll: .02, tilt: -.08, pup: 1, asym: .1, blush: .3 },
+  soft:       { lu: .12, ll: .18,  tilt: -.16, pup: 1, blush: .5 },
+  squint:     { lu: .3,  ll: .3,   tilt: 0,    pup: 1, blush: .4 },
+  closed:     { lu: 1.0, ll: .2,   tilt: 0,    pup: 1, blush: .3 },
+  happy:      { lu: 1.0, ll: .55,  tilt: 0,    pup: 1, arcs: 1, blush: .6 },
+};
+// a natural blink: about every 2.4-3.6 s, sometimes a double blink; 0..1 lid closure
+const creeBlink = (t) => { const P = 3.0, k = Math.floor(t / P), ph = t - k * P - hash(k * 1.3) * 1.2; const b = (x) => x > 0 && x < .17 ? Math.sin(x / .17 * Math.PI) : 0; return Math.max(b(ph), hash(k * 7.7) > .65 ? b(ph - .25) : 0); };
+// state -> pose. s: {x, y, z, ry, rx (pitch), roll, sc, sq (+ squash / - stretch), wl/wr: [rz, rx], flap: [amp, hz], eyes (an EXPR key),
+//   look: [x, y], jaw, mag, magAt, step, feetBack, wink (0/1: his left eye), still (no idle), noblink, glow}
 function placeCree(vis, s) {
   CREE.root.visible = !!vis; CREE.mag.visible = !!(vis && s.mag);
   if (!vis) return;
-  const R = CREE.root, sc = s.sc ?? .34, sq = s.sq ?? 0;
+  const R = CREE.root, sc = s.sc ?? .34, sq = s.sq ?? 0, t = NOW;
   const dk = !!CREE.dark;
-  CREE.plush.envMapIntensity = dk ? 0 : .25; CREE.rimU.value = dk ? .25 : .35; CREE.sclM.color.set(dk ? 0x2A1A26 : 0xFFFFFF); CREE.rimM.color.set(dk ? 0x2A1424 : 0xFFD3E6);
-  R.position.set(s.x, s.y, s.z); R.rotation.set(s.rx ?? 0, s.ry ?? 0, s.roll ?? 0, "YXZ"); R.scale.setScalar(sc);
-  CREE.bod.scale.set(1 + sq * .5, 1 - sq, 1 + sq * .5);
+  CREE.plush.envMapIntensity = dk ? 0 : .22; CREE.rimU.value = dk ? .22 : (s.glow ?? .3); CREE.sclM.color.set(dk ? 0x2A1A26 : 0xFFFFFF); CREE.rimM.color.set(dk ? 0x2A1424 : 0xFFC7DF);
+  // idle life: breathing, a little sway (unless he is mid-move)
+  const still = !!s.still, br = still ? 0 : Math.sin(t * 5.6) * .012, sway = still ? 0 : Math.sin(t * 1.3 + .7) * .025;
+  R.position.set(s.x, s.y, s.z); R.rotation.set(s.rx ?? 0, s.ry ?? 0, (s.roll ?? 0) + sway, "YXZ"); R.scale.setScalar(sc);
+  CREE.bod.scale.set(1 + sq * .5 - br * .5, 1 - sq + br, 1 + sq * .5 - br * .5);
+  const ex = EXPR[s.eyes || "open"] || EXPR.open;
+  const blink = (s.noblink || ex.arcs || ex.lu >= 1) ? 0 : creeBlink(t);
+  // pupils dart a little when he is not looking at something on purpose
+  const dart = s.look ? [0, 0] : [(hash(Math.floor(t / .9)) - .5) * .5, (hash(Math.floor(t / .9) + 9) - .5) * .3];
+  const lk = s.look || [0, 0];
+  const fl = s.flap ? Math.sin(t * Math.PI * 2 * s.flap[1]) * s.flap[0] : 0;
   for (let k = 0; k < 2; k++) {
-    const w = k ? s.wr : s.wl, sgn = k ? 1 : -1;
-    CREE.wings[k].rotation.set(w ? w[1] : 0, 0, sgn * (w ? w[0] : .12));
-    const e = s.eyes || "open", eg = CREE.eyes[k];
-    let ey = 1; if (e === "closed") ey = .08; else if (e === "squint") ey = .55; else if (e === "wide") ey = 1.1;
-    if (e === "open" && !s.noblink && blinkAt(3.3, NOW)) ey = .08;
-    eg.scale.set(e === "wide" ? 1.08 : 1, ey, 1);
-    const pg = CREE.pupils[k]; const lk = s.look || [0, 0];
-    pg.position.set(lk[0] * .03, lk[1] * .03, .05); pg.scale.setScalar(e === "wide" ? .85 : 1);
-    for (const c of CREE.cats[k]) c.visible = !(s.oneEye && k === 0);
-    const h = e === "happy"; eg.visible = !h; eg.arc.visible = h;
-    const b = CREE.brows[k]; b.rotation.z = sgn * (s.brow ?? 0); b.position.y = .86 + (s.browY ?? 0) + (e === "wide" ? .03 : 0);
+    const sgn = k ? 1 : -1, w = k ? s.wr : s.wl;
+    CREE.wings[k].rotation.set(w ? w[1] : 0, 0, sgn * ((w ? w[0] : .26) + fl + (still ? 0 : Math.sin(t * 5.6 + k) * .03)));
+    const eg = CREE.eyes[k], [up, lo] = CREE.lids[k];
+    const winkK = s.wink && k === 0 ? 1 : 0;
+    let lu = ex.lu + (ex.asym ? (k ? ex.asym : -ex.asym * .3) : 0); lu = lerp(lu, 1, Math.max(blink, winkK)); lu = Math.min(1, lu);
+    const ll = winkK ? .45 : ex.ll;
+    up.hinge.rotation.x = -Math.PI / 2 + Math.PI * 1.03 * clamp(lu, -.05, 1);     // 0: tucked behind the eye .. 1: shut
+    lo.hinge.rotation.x = Math.PI / 2 - Math.PI * clamp(ll, 0, 1);                // 0: tucked .. .5: covers the lower half
+    up.tilt.rotation.z = -sgn * ex.tilt; lo.tilt.rotation.z = sgn * ex.tilt * .4;
+    eg.ball.scale.setScalar(ex.wide ? 1.08 : 1);
+    const pg = CREE.pupils[k]; pg.rotation.set(-(lk[1] + dart[1]) * .32, (lk[0] + dart[0]) * .38, 0); const small = (s.pup ?? ex.pup) < .9; pg.cap.visible = !small; pg.capS.visible = small; pg.iris.visible = !small;
+    for (const c of CREE.cats[k]) c.visible = !dk;
+    const arcs = !!ex.arcs && !winkK; CREE.arcs[k].visible = arcs; for (const c of eg.children) if (c !== CREE.arcs[k]) c.visible = !arcs;
   }
-  CREE.jaw.rotation.x = (s.jaw ?? .35) * .9;
-  for (let k = 0; k < 2; k++) { const f = CREE.feet[k]; f.position.y = .045 + (s.step && (k ? s.step > 0 : s.step < 0) ? Math.abs(s.step) * .07 : 0); f.position.z = .1 - (s.feetBack ?? 0) * .12; f.rotation.x = (s.feetBack ?? 0) * 1.0; }
+  CREE.blM.opacity = dk ? 0 : (s.blush ?? ex.blush ?? 0);
+  CREE.jaw.rotation.x = (s.jaw ?? .32) * .95;
+  for (let k = 0; k < 2; k++) { const f = CREE.feet[k]; f.position.y = .048 + (s.step && (k ? s.step > 0 : s.step < 0) ? Math.abs(s.step) * .07 : 0); f.position.z = .11 - (s.feetBack ?? 0) * .12; f.rotation.x = (s.feetBack ?? 0) * 1.0; f.rotation.z = (k ? -1 : 1) * (s.feetSplay ?? 0); }
   R.updateMatrixWorld(true);
   if (s.mag === "hand") { CREE.wings[1].tip.getWorldPosition(V); CREE.mag.position.copy(V).add(V2.set(0, .04 * sc / .34, .02)); CREE.mag.rotation.set(s.magRx ?? 0, s.ry ?? 0, s.magRz ?? .25); CREE.mag.scale.setScalar(sc / .34 * .55); }
   if (s.mag === "desk") { CREE.mag.position.copy(s.magAt); CREE.mag.rotation.set(-Math.PI / 2 + .1, 0, .6); CREE.mag.scale.setScalar(.55); }
 }
-// Cree "talks" (gibberish): the beak follows the loudness of his chirps (CT.creeEnv, 30 values per second)
+// Cree "talks" in chirps: the beak follows the loudness of his chirps (CT.creeEnv, 30 values per second)
 const envAt = (arr, t) => { if (!arr) return 0; const i = t * 30, a = Math.floor(i), f = i - a; return lerp(arr[Math.min(arr.length - 1, Math.max(0, a))] || 0, arr[Math.min(arr.length - 1, Math.max(0, a + 1))] || 0, f); };
 const creeJaw = (t) => .18 + .85 * envAt(C.creeEnv, t);
 
