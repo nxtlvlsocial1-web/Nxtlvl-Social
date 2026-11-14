@@ -100,5 +100,17 @@
   "exaggeration": 0.8,
   "cfg_weight": 0.3,
   "seconds": 4.12
+ },
+ "05_1": {
+  "text": "I wish it could look at my old reels... and tell me what actually worked.",
+  "exaggeration": 1.0,
+  "cfg_weight": 0.3,
+  "seconds": 3.84
+ },
+ "05_2": {
+  "text": "I wish it could look at my old reels... and tell me what actually worked.",
+  "exaggeration": 1.2,
+  "cfg_weight": 0.3,
+  "seconds": 3.6
  }
 }
