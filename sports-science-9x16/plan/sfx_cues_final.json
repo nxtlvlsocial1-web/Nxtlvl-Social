@@ -1,0 +1,41 @@
+{
+"song": "Prologue - Hyperreal (CC BY 3.0)",
+"song_at": 30.737,
+"cues": [
+{
+"type": "whoosh_soft",
+"t": 0.0,
+"gain": -6
+},
+{
+"type": "impact_soft",
+"t": 3.618,
+"gain": -10
+},
+{
+"type": "tick",
+"t": 19.755,
+"gain": -16
+},
+{
+"type": "whoosh_soft",
+"t": 23.955,
+"gain": -10
+},
+{
+"type": "whoosh_soft",
+"t": 24.975,
+"gain": -8
+},
+{
+"type": "tick",
+"t": 41.571,
+"gain": -14
+},
+{
+"type": "impact_soft",
+"t": 55.163,
+"gain": -6
+}
+]
+}
