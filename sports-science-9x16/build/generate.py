@@ -217,7 +217,7 @@ def scene5():
     shot("s5g", T("physical", t_ath) - .1, t1, "8456207", at=4.0, pos="50% 60%")
     headline("h5a", ["ASSESS."], T("assessments,") - .1, t1 + .02, 270, 96)
     headline("h5b", ["UNDERSTAND."], T("fitness") - .05, t1 + .02, 380, 96)
-    headline("h5c", ["DEVELOP."], T("training,") - .05, t1 + .02, 490, 96, accent=(0,))
+    headline("h5c", ["DEVELOP."], T("training,", L(9)) - .05, t1 + .02, 490, 96, accent=(0,))
     sfx("tick", t9, -14)
 
 
