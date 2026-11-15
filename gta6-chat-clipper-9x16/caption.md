@@ -48,15 +48,20 @@ Not affiliated with Rockstar Games or Twitch.
 gta 6 clips, gta 6 stream highlights, how to find stream highlights, twitch clip finder, how to clip twitch streams, twitch chat highlights, free clipping tool, how to make money clipping, vertical clips for shorts and reels, claude code projects
 ```
 
-## Keyword auto-DM (automation for "CHAT"; fill the link once the tool and guide are hosted)
+## Keyword auto-DM (automation for "CHAT"; the link is the hosted setup PDF)
 
 ```
-Tool and setup guide: [LINK]
-1. Install Python, FFmpeg and TwitchDownloader (guide page 3).
-2. Download the stream's chat (.json) and VOD (.mp4) with TwitchDownloader (page 4).
-3. Put chat_clips.py in the same folder and run: python chat_clips.py chat.json stream.mp4 (page 5).
-4. Your vertical clips land in the clips folder, ready to post (page 7).
+GTA 6 Chat Clipper setup guide: [PDF LINK]
+1. Install Python, FFmpeg and TwitchDownloader (page 3).
+2. Get the tool: paste the box on page 4 into IDLE and run it once (page 4).
+3. Download the stream's chat and VOD with TwitchDownloader (page 5).
+4. Run: python chat_clips.py chat.json stream.mp4 (page 6).
 ```
+
+Setup PDF: `renders/ai-nxtlvl_gta6-chat-clipper-guide.pdf` (9 pages, AI.NXTLVL, build/guide.cjs). Page 4 carries the
+tool as a copy-paste installer (tool/get_chat_clips.py, built by build/make_installer.py): copying from a PDF drops
+leading spaces, so the installer has no indented lines and checks the copy with a checksum. That page is live text;
+the others are images. Tested: text copied out of the PDF installs a byte-identical chat_clips.py.
 
 ## Cover
 

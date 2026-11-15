@@ -13,7 +13,7 @@ const OUT = process.argv.find((a) => a.endsWith(".pdf")) || path.join(ROOT, "ren
 const A = (p) => "file://" + path.join(SRC, p);
 
 const PAGES = [];
-const TOTAL = 8;
+const TOTAL = 9;
 function page({ img, kicker, title, body }) {
   const n = PAGES.length + 1;
   PAGES.push(`<section class="pg"><header style="background-image:url('${A(img)}')"><div class="hs"></div>
@@ -53,11 +53,18 @@ page({ img: "cache/vc_14.5.png", kicker: "STEP 01 · SET UP ONCE", title: 'Insta
     ["1", "<b>Python 3:</b> download from python.org. On Windows, tick “Add Python to PATH” in the installer."],
     ["2", "<b>FFmpeg:</b> Windows: <b>winget install ffmpeg</b> in Terminal. Mac: <b>brew install ffmpeg</b>. Linux: <b>sudo apt install ffmpeg</b>."],
     ["3", "<b>TwitchDownloader:</b> get it from its GitHub page (lay295/TwitchDownloader). Windows has an app; the CLI works on Mac and Linux too."],
-    ["4", "Put <b>chat_clips.py</b> (the file I sent you) in a new folder, for example <b>Clips</b>."],
-  ]) + note("Check it works: open Terminal in that folder and run <b>python chat_clips.py --help</b> (on Mac: <b>python3</b>).") });
+    ["4", "Make a new folder for your clips, for example <b>Clips</b>. Next page: put the tool in it."],
+  ]) + note("Check it worked: open a new Terminal and run <b>python --version</b> (on Mac: <b>python3 --version</b>) and <b>ffmpeg -version</b>.") });
+
+// 4 get the tool: a copy-paste installer (no indented lines, so copying from a PDF can't break it)
+const INST = fs.readFileSync(path.join(ROOT, "tool", "get_chat_clips.py"), "utf8").trim().replace(/&/g, "&amp;").replace(/</g, "&lt;");
+PAGES.push(`<section class="pg code"><div class="ch"><div class="kick">STEP 02 · GET THE TOOL</div>
+  <p>Open <b>IDLE</b> (it comes with Python) &gt; File &gt; New File. Copy <b>only the dark box</b> below, paste, save as <b>get_chat_clips.py</b> in your Clips folder, then Run &gt; Run Module. It writes <b>chat_clips.py</b> and prints <b>Done</b>.</p></div>
+  <pre class="inst">${INST}</pre>
+  <footer><span>THE GTA 6 CHAT CLIPPER</span><span>${String(PAGES.length + 1).padStart(2, "0")} / ${String(TOTAL).padStart(2, "0")}</span></footer></section>`);
 
 // 4 download chat + video
-page({ img: "cache/vc_8.png", kicker: "STEP 02 · GET THE STREAM", title: 'Download the<br><span class="acc">chat and the VOD</span>',
+page({ img: "cache/vc_8.png", kicker: "STEP 03 · GET THE STREAM", title: 'Download the<br><span class="acc">chat and the VOD</span>',
   body: steps([
     ["1", "Copy the stream's VOD link from Twitch (the past broadcast, not the live page)."],
     ["2", "In TwitchDownloader, <b>Chat Download</b>: paste the link, format <b>JSON</b>, save as <b>chat.json</b> in your Clips folder."],
@@ -66,7 +73,7 @@ page({ img: "cache/vc_8.png", kicker: "STEP 02 · GET THE STREAM", title: 'Downl
   + note("<b>Only clip streams you own, or where the streamer allows clipping.</b> Many streamers run clip programs: ask first, credit them, and you stay safe.", "warn") });
 
 // 5 run
-page({ img: "cache/vc_23.5.png", kicker: "STEP 03 · ONE COMMAND", title: 'Find the moments,<br><span class="acc">cut the clips</span>',
+page({ img: "cache/vc_23.5.png", kicker: "STEP 04 · ONE COMMAND", title: 'Find the moments,<br><span class="acc">cut the clips</span>',
   body: prompt("FIRST, JUST LIST THE MOMENTS (FAST, NO VIDEO NEEDED)", "python chat_clips.py chat.json")
   + prompt("THEN CUT THEM", "python chat_clips.py chat.json stream.mp4")
   + steps([
@@ -85,7 +92,7 @@ page({ img: "cache/vc_28.5.png", kicker: "TUNE IT", title: 'Options for<br><span
   ], true).replace('class="steps wide"', 'class="steps wide opts"') + prompt("EXAMPLE", "python chat_clips.py chat.json stream.mp4 --top 15 --pre 25 --crop") });
 
 // 7 post
-page({ img: "cache/vc_14.5.png", kicker: "STEP 04 · POST", title: 'Make each clip<br><span class="acc">postable</span>',
+page({ img: "cache/vc_14.5.png", kicker: "STEP 05 · POST", title: 'Make each clip<br><span class="acc">postable</span>',
   body: steps([
     ["1", "<b>Watch the first 3 seconds</b> of each clip. Trim the start until the action begins in the first second."],
     ["2", "<b>Add captions:</b> CapCut's auto captions are free and quick. Big words, centred, short lines."],
@@ -105,6 +112,12 @@ page({ img: "cache/vc_8.png", kicker: "BEFORE YOU POST", title: 'The <span class
   ].map((t) => `<li><i></i><p>${t}</p></li>`).join("")}</ol>` + note("Questions? Comment on the reel. Not affiliated with Rockstar Games or Twitch.") });
 
 const CSS = `
+.pg.code { padding: 0; }
+.code .ch { flex: none; padding: 60px var(--m) 22px; }
+.code .ch p { margin-top: 18px; font-size: 25px; line-height: 1.38; color: #ece2ff; } .code .ch b { color: #fff; font-weight: 800; }
+.inst { flex: 1; min-height: 0; margin: 0 var(--m) 24px; padding: 20px 20px; border-radius: 16px; background: #05010f; border: 2px solid rgba(62,240,255,.35);
+  color: #e9fbff; font-family: J; font-size: 14px; line-height: 1.32; white-space: pre; overflow: hidden; font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+
 .steps.opts li { grid-template-columns: 210px 1fr !important; } .steps.opts .bd { width: 210px !important; font-size: 22px; white-space: nowrap; justify-content: center; }
 
 @font-face { font-family: M; src: url("${A("assets/fonts/montserrat.ttf")}"); font-weight: 100 900; }
@@ -204,10 +217,12 @@ h1 { font-weight: 900; font-size: 96px; line-height: 1.0; letter-spacing: -.035e
     imgs.push(out);
   }
   const ih = path.join(ROOT, "cache", "guide_img.html");
-  fs.writeFileSync(ih, `<!doctype html><html><head><style>@page { size: 1080px 1350px; margin: 0; } * { margin: 0; padding: 0; }
-    img { display: block; width: 1080px; height: 1350px; page-break-after: always; }</style></head><body>${imgs.map((x) => `<img src="file://${x}">`).join("")}</body></html>`);
+  // the installer page stays live text (copyable); every other page is the 2x image
+  fs.writeFileSync(ih, `<!doctype html><html><head><style>${CSS}</style><style>@page { size: 1080px 1350px; margin: 0; } * { margin: 0; padding: 0; }
+    img.pgi { display: block; width: 1080px; height: 1350px; page-break-after: always; }</style></head><body>${imgs.map((x, i) => (PAGES[i].includes('class="pg code"') ? PAGES[i] : `<img class="pgi" src="file://${x}">`)).join("")}</body></html>`);
   const p3 = await b.newPage();
   await p3.goto("file://" + ih);
+  await p3.evaluate(() => document.fonts.ready);
   await p3.waitForTimeout(300);
   fs.mkdirSync(path.dirname(OUT), { recursive: true });
   await p3.pdf({ path: OUT, width: "1080px", height: "1350px", printBackground: true });
