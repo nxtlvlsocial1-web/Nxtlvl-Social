@@ -89,7 +89,7 @@ html, body { background: #fdf4f4; font-family: Inter, sans-serif; color: #101111
 .pk { color: #fd0b68; }
 .bl { background: #ccfb79; border-radius: 10px; padding: 0 10px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 /* cover */
-.cover { display: flex; flex-direction: column; justify-content: center; padding: 90px; }
+.cover { display: flex; flex-direction: column; justify-content: center; padding: 250px 90px 90px; }   /* top padding keeps a long title clear of the logo */
 .clogo { position: absolute; left: 90px; top: 90px; width: 330px; }
 .ck { display: inline-block; align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #101111; color: #ccfb79; font-weight: 700; font-size: 30px; letter-spacing: .06em; text-transform: uppercase; }
 h1 { margin-top: 34px; font-weight: 800; font-size: 150px; line-height: .92; letter-spacing: -.045em; }

@@ -1,0 +1,115 @@
+{
+ "title": [
+  "10 PROMPTS",
+  "THAT SOUND",
+  "LIKE *YOU*"
+ ],
+ "kicker": "Free prompt pack",
+ "subtitle": "Copy, paste, fill in the blanks. Works in ChatGPT, Gemini or Claude.",
+ "tagline": "From the reel: stop typing 'write me a script'",
+ "blocks": [
+  {
+   "type": "text",
+   "heading": "The *4-part* formula",
+   "intro": "AI writes generic scripts when the prompt is generic. Give it these four things and it writes like you.",
+   "steps": [
+    [
+     "Who you are",
+     "Your niche and your size. [I'm a fitness creator with 3K followers.]"
+    ],
+    [
+     "Who it's for",
+     "One audience with one problem. [Write for busy beginners who keep skipping the gym.]"
+    ],
+    [
+     "The hook",
+     "How the first line should grab them. [Open with a mistake they're making.]"
+    ],
+    [
+     "The format",
+     "Length and shape. [30 seconds, 3 tips, one line each.]"
+    ]
+   ],
+   "note": "Same AI. Thirty more seconds of typing. A script that sounds like you."
+  },
+  {
+   "type": "cards",
+   "heading": "The prompts",
+   "per_page": 3,
+   "items": [
+    {
+     "tag": "Script",
+     "line": "I'm a [niche] creator with [follower count]. Write a [length] reel script for [audience] who [problem]. Open with [hook style]. Format: [format].",
+     "example": "I'm a cooking creator with 1K followers. Write a 30-second script for students who think cooking takes too long. Open with a surprising number. 3 recipes, one line each.",
+     "why": "All four parts in one prompt: voice, audience, hook and format."
+    },
+    {
+     "tag": "Hooks",
+     "line": "Give me 10 hooks for a reel about [topic] for [audience]. Mix these styles: a mistake, a surprising number, a bold opinion, a question. Max 10 words each.",
+     "example": "Give me 10 hooks for a reel about saving money for college students...",
+     "why": "Asking for several styles gives you real options instead of ten versions of one line."
+    },
+    {
+     "tag": "Your voice",
+     "line": "Here are 3 captions I wrote: [paste captions]. Describe my tone in 5 words. Then rewrite this script in that tone: [script].",
+     "example": "Paste three captions people liked, then the AI draft you want to fix.",
+     "why": "The AI copies your real writing instead of guessing."
+    },
+    {
+     "tag": "Ideas",
+     "line": "Here are comments from my audience: [paste comments]. Turn them into 10 reel ideas, each with a one-line hook.",
+     "example": "Paste 15 to 20 comments or DMs with real questions.",
+     "why": "Ideas from real questions already have an audience."
+    },
+    {
+     "tag": "Repurpose",
+     "line": "Turn this reel script into a 6-slide carousel, a caption and 3 story polls: [script].",
+     "example": "Use your best-performing script from last month.",
+     "why": "One idea, five posts, no extra filming."
+    },
+    {
+     "tag": "Caption",
+     "line": "Write an Instagram caption for this reel: [script]. Start with the hook, keep it under [word count] words, end with a question, no emojis, [number] hashtags.",
+     "example": "...keep it under 120 words, end with a question, no emojis, 5 hashtags.",
+     "why": "Clear limits stop the AI from writing a wall of filler."
+    },
+    {
+     "tag": "Shorter",
+     "line": "Cut this script to [seconds] seconds without losing the hook or the payoff: [script].",
+     "example": "Cut this script to 20 seconds without losing the hook or the payoff...",
+     "why": "Shorter reels get rewatched; this keeps the parts that matter."
+    },
+    {
+     "tag": "Content plan",
+     "line": "I make content about [niche] for [audience]. Give me 4 content pillars and 5 video ideas for each.",
+     "example": "I make content about budget travel for first-time solo travellers...",
+     "why": "Twenty ideas in one answer, all on-brand."
+    },
+    {
+     "tag": "Cover text",
+     "line": "Give me 10 cover texts for this reel, max 5 words each, that make [audience] curious: [script].",
+     "example": "...that make new freelancers curious.",
+     "why": "The cover decides whether people tap on your profile grid."
+    },
+    {
+     "tag": "Fix a flop",
+     "line": "This reel got [views] views. Script: [script]. Give me the 3 most likely reasons people scrolled past, then rewrite the first 3 seconds.",
+     "example": "This reel got 312 views. Script: ...",
+     "why": "Turns a flop into a better second version instead of a guess."
+    }
+   ]
+  },
+  {
+   "type": "checklist",
+   "heading": "Before you hit *send*",
+   "items": [
+    "Did I say who I am and how big my account is?",
+    "Did I name one audience with one problem?",
+    "Did I tell it how to open (the hook)?",
+    "Did I give a length and a format?",
+    "Did I read the answer out loud and cut what I would never say?"
+   ],
+   "closing": "AI gives you a draft. Your voice makes it a reel."
+  }
+ ]
+}
