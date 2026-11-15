@@ -1,6 +1,6 @@
 {
 "song": "Inspire Motivation - Soundrider/Dope (CC BY 3.0)",
-"song_at": 30.5,
+"song_at": 33.0,
 "cues": [
 {
 "type": "whoosh_soft",
@@ -19,22 +19,22 @@
 },
 {
 "type": "whoosh_soft",
-"t": 23.767,
+"t": 21.827,
 "gain": -10
 },
 {
 "type": "whoosh_soft",
-"t": 24.992,
+"t": 23.185,
 "gain": -8
 },
 {
 "type": "tick",
-"t": 40.473,
+"t": 37.712,
 "gain": -14
 },
 {
 "type": "impact_soft",
-"t": 53.733,
+"t": 50.971,
 "gain": -6
 }
 ]
