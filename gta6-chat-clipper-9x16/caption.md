@@ -48,14 +48,21 @@ Not affiliated with Rockstar Games or Twitch.
 gta 6 clips, gta 6 stream highlights, how to find stream highlights, twitch clip finder, how to clip twitch streams, twitch chat highlights, free clipping tool, how to make money clipping, vertical clips for shorts and reels, claude code projects
 ```
 
-## Keyword auto-DM (once the files are hosted)
+## Keyword auto-DM (automation for "CHAT"; fill the link once the tool and guide are hosted)
 
 ```
-Here's the tool and the guide: [LINK]
-1. Open the guide and install Python, FFmpeg and TwitchDownloader (page 3).
-2. Download a stream's chat and VOD with TwitchDownloader (page 4).
-3. Run: python chat_clips.py chat.json stream.mp4
+Tool and setup guide: [LINK]
+1. Install Python, FFmpeg and TwitchDownloader (guide page 3).
+2. Download the stream's chat (.json) and VOD (.mp4) with TwitchDownloader (page 4).
+3. Put chat_clips.py in the same folder and run: python chat_clips.py chat.json stream.mp4 (page 5).
+4. Your vertical clips land in the clips folder, ready to post (page 7).
 ```
+
+## Cover
+
+`renders/ai-nxtlvl_gta6-chat-clipper_reels_9x16_v3_cover.png` (1080x1920, build/cover.py): "CHAT FINDS YOUR GTA 6
+CLIPS" on torn paper, the skydive stream card (still from Rockstar's official clip), spike graph, FREE TOOL sticker,
+chat bubbles and the three viewers, over the Miami palms art. Headline and faces sit inside the 3:4 profile crop.
 
 ## Notes
 
