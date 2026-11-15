@@ -11,6 +11,6 @@ rm -f renders/master_draft.mp4
 npx --yes hyperframes@0.8.203 render --quality draft -w 3 -o renders/master_draft.mp4 >> $LOG 2>&1
 echo "RENDER EXIT $?" >> $LOG
 [ -s renders/master_draft.mp4 ] || { echo "MIX skipped (render failed)" >> $LOG; exit 1; }
-python3 build/sfx_mix.py renders/master_draft.mp4 renders/preview_ai-nxtlvl_gta6-chat-clipper_9x16_v2-vox.mp4 >> $LOG 2>&1
+python3 build/sfx_mix.py renders/master_draft.mp4 renders/preview_ai-nxtlvl_gta6-chat-clipper_9x16_v3-people.mp4 >> $LOG 2>&1
 echo "MIX EXIT $?" >> $LOG
 echo "ALL DONE" >> $LOG

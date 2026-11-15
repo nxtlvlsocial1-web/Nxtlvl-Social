@@ -3,7 +3,11 @@
 Owner: "recreate this reel and make it better" (a creator's "Part 2 of GTA 6 clipping": a mascot explains a chat-spike
 clip finder). v2 (owner: "looks like a reskin of the reference"): rebuilt as a Vox-style explainer, 30 s. Torn paper
 cards, halftone, stepped motion on twos, over Rockstar's official GTA VI Miami album art (muted footage, owner
-exception). Our mascot Nyx (the violet star-antenna robot) carries a prop or gag in every shot.
+exception). v3 (owner: "don't keep that single robot mascot, build people types as per the frame requirements"):
+Nyx is gone; each shot has its own paper cut-out people (build/people.py): the tired clipper and a chat viewer (hook),
+three viewers losing it (chat explodes), an analyst with a pointer and a viewer calling "clip it" (spike), the builder
+at a laptop (Claude), the editor with scissors (cuts), a late reactor and a clipper on the rewind dial (20 s early), the
+clipper off duty in a beach chair while chat watches from the couch (Thursday), and the host waving (CTA).
 CTA keyword: CHAT. Lead magnets: `tool/chat_clips.py` (one file, tested) and `renders/ai-nxtlvl_gta6-chat-clipper-guide.pdf`.
 v1 (40 s desk-and-monitor cut) is kept in `build/generate.py` and `plan/script_v1_40s.json`.
 
@@ -61,5 +65,5 @@ Here's the tool and the guide: [LINK]
 - Proportions: every piece of footage sits in an aspect-locked box (16:9 stream cards, 9:16 clip cards); the Miami art
   is native 1080x1920. Each shot was checked in snapshots for text running off-frame or under the subtitles.
 - Credits: music CC BY (above); SFX CC0 (Kenney "Interface Sounds" via OpenGameArt, because Freesound refused this
-  machine; plan/sfx_library.json); Nyx and every paper piece are our own drawings. GTA VI art and clips: Rockstar
+  machine; plan/sfx_library.json); every person and paper piece is our own drawing. GTA VI art and clips: Rockstar
   Games' official promo material, muted.
