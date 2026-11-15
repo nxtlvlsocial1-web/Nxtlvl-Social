@@ -58,7 +58,7 @@ def main():
         e["file"] = prepared[(e["type"], name)]
     bed = os.path.join(WORK, "music_bed.wav")
     run(["ffmpeg", "-y", "-loglevel", "error", "-ss", str(SONG_AT), "-t", f"{DUR + .2:.2f}", "-i", SONG, "-vn", "-af",
-         f"loudnorm=I=-28:TP=-12:LRA=11,afade=t=in:d=0.05,afade=t=out:st={DUR - 1.0:.2f}:d=1.0", "-ar", "48000", "-ac", "2", bed])
+         f"loudnorm=I=-28:TP=-9:LRA=11,afade=t=in:d=0.05,afade=t=out:st={DUR - 1.0:.2f}:d=1.0", "-ar", "48000", "-ac", "2", bed])
     inputs = ["-i", os.path.join(ROOT, "assets", "audio", "vo.wav"), "-i", bed]
     fc = [f"[0:a]aresample=48000,aformat=channel_layouts=stereo,apad=whole_dur={DUR},atrim=0:{DUR},asplit=2[vo][sc]",
           "[1:a][sc]sidechaincompress=threshold=0.015:ratio=8:attack=12:release=420:makeup=1[bg]"]
