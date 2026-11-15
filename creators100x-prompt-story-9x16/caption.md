@@ -17,27 +17,27 @@ and CTA as creators100x-prompt-9x16 (the 4-part prompt formula; comment PROMPT f
 > And her next reel didn't blend in.
 > Comment PROMPT, and I'll send you ten prompts like hers, ready to copy.
 
-## Post description (ready to paste)
+## Post description (ready to paste; v2: SEO pass, the search phrases in the first lines)
 
 ```
-Comment "PROMPT" and I'll send you 10 prompts that make AI sound like you, ready to copy.
+Comment "PROMPT" and I'll send you 10 ChatGPT prompts that make AI write reel scripts that sound like you.
 
-Riya kept getting 200 views. Her scripts were written by AI, and so was everyone else's, because she typed what every beginner types: "write me a reel script."
+Riya kept getting 200 views on her reels. Her AI scripts sounded exactly like everyone else's, because she typed what every beginner types into ChatGPT: "write me a reel script."
 
 So she gave the AI four pieces instead of one:
-1. Who she is: her niche and her size
+1. Who she is: her niche and her follower count
 2. Who it's for: one audience with one problem
 3. The hook: how the first line should grab them
-4. The format: length and shape
+4. The format: length and shape (30 seconds, 3 tips)
 
 Same AI. This time the script sounded like her, and her next reel didn't blend in.
 
-Save this for your next script.
+Save this for your next script and share it with a creator friend who uses AI.
 
 Music: "Inspiring Ambient Motivation" by Soundrider/Dope (CC BY 3.0)
 
 #chatgptprompts #aiforcreators #contentcreatortips #reelstips #aitools
-chatgpt prompts for content creators, how to write a reel script with ai, ai script writing, chatgpt for instagram reels, best chatgpt prompts, ai tools for beginners, how to use chatgpt for content creation, reel script ideas, content creation tips for beginners, how to get more views on reels
+chatgpt prompts for content creators, how to write a reel script with ai, ai script writer for reels, chatgpt prompts for instagram reels, how to get more views on instagram reels, reel script ideas, ai tools for content creators, content creation tips for beginners, how to grow on instagram with ai, best chatgpt prompts for social media
 ```
 
 ## Keyword auto-DM (once the PDF is hosted)
