@@ -222,15 +222,17 @@ def build():
     # ---------- S2: "When something crazy happens, chat explodes."   people: three viewers who lose it at once
     s2 = ts[2]
     plate(s1, s2, 2.0)
-    card("b_stream", f'<div class="vbox169"><video id="b_sv" src="assets/video/stream.mp4" data-start="{s1:.3f}" data-duration="{s2 - s1 + .1:.3f}" data-media-start="0" '
+    t_ex = T("explodes") - .12
+    leap = max(0.0, min(1.75 - (t_ex - .45 - s1), 5.0 - (s2 - s1 + .1)))   # she leaps off the ledge just before chat bursts
+    card("b_stream", f'<div class="vbox169"><video id="b_sv" src="assets/video/stream.mp4" data-start="{s1:.3f}" data-duration="{s2 - s1 + .1:.3f}" data-media-start="{leap:.3f}" '
                      f'data-track-index="1" muted playsinline></video><div class="live">LIVE</div></div><div class="cap2">GTA 6 stream · hour 4 of 6</div>',
-         "left:90px;top:280px;width:900px;transform:rotate(-1.5deg)")
-    card("b_cnt", '<div class="cnt"><b id="b_n">0</b><span>messages in 10 s</span></div>', "left:690px;top:800px;width:310px;transform:rotate(4deg)")
+         "left:90px;top:250px;width:900px;transform:rotate(-1.5deg)", "media")
+    card("b_cnt", '<div class="cnt"><b id="b_n">0</b><span>messages in 10 s</span></div>', "left:700px;top:880px;width:300px;transform:rotate(4deg)")
     bubs, k, tries = "", 0, 0
     while k < 14 and tries < 4000:
         tries += 1
-        x, y, r = R.randint(30, 800), R.randint(870, 1160), R.randint(-14, 14)
-        if x > 560 and y < 1010:
+        x, y, r = R.randint(30, 800), R.randint(880, 1160), R.randint(-14, 14)
+        if x > 520 and y < 1080:
             continue                                  # keep the counter card readable
         bubs += f'<div class="bub" id="b_b{k}" style="left:{x}px;top:{y}px;transform:rotate({r}deg)">{BUBS[k % len(BUBS)]}</div>'
         k += 1
@@ -328,8 +330,8 @@ def build():
     bars = "".join(f'<i class="bar{" hot" if k in hot else ""}" id="e_bar{k}" style="height:{(R.randint(150, 200) if k in hot else R.randint(26, 70))}px"></i>' for k in range(24))
     card("e_bars", f'<div class="bars">{bars}</div><div class="cap2">one bar = 10 seconds of chat</div>', "left:70px;top:300px;width:940px;transform:rotate(-1deg)")
     BODY.append(f'<svg class="mk" id="e_cut" viewBox="0 0 40 360" style="left:452px;top:280px;width:40px;height:360px"><path d="M20 0 V360" stroke="{RED}" stroke-width="6" stroke-dasharray="18 14"/></svg>')
-    card("e_h", f'<div class="vbox169"><video id="e_hv" src="assets/video/stream.mp4" data-start="{s4:.3f}" data-duration="{s5 - s4:.3f}" data-media-start="6" data-track-index="2" muted playsinline></video></div>',
-         "left:70px;top:800px;width:520px;transform:rotate(-3deg)")
+    card("e_h", f'<div class="vbox169"><video id="e_hv" src="assets/video/stream.mp4" data-start="{s4:.3f}" data-duration="{s5 - s4:.3f}" data-media-start="5.0" data-track-index="2" muted playsinline></video></div>',
+         "left:70px;top:790px;width:520px;transform:rotate(-3deg)", "media")
     card("e_v", f'<div class="vbox916"><video id="e_vv" src="assets/video/v_flip.mp4" data-start="{s4:.3f}" data-duration="{s5 - s4:.3f}" data-media-start="0" data-track-index="3" muted playsinline></video></div>'
                 '<div class="cap2">vertical clip</div>', "left:680px;top:700px;width:300px;transform:rotate(4deg)")
     who("e_ed", "editor", 250, 1250, 450, propL="scissors")
@@ -501,6 +503,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: {NAVY
 .st::after {{ content: ""; position: absolute; left: -6%; right: -6%; top: 48%; height: 12px; background: {RED}; transform: scaleX(var(--s)) rotate(-6deg); transform-origin: 0 50%; }}
 .card {{ position: absolute; z-index: 4; opacity: 0; filter: drop-shadow(9px 11px 0 rgba(20,33,61,.45)); }}
 .cin {{ position: relative; background: {CREAM}; padding: 22px; clip-path: {TORN}; height: 100%; }}
+.card.media .cin {{ padding: 52px 26px 58px; }}
 .card.dark .cin {{ background: #182544; color: {CREAM}; }}
 .card.cal .cin {{ background: {PAPER}; padding: 0; text-align: center; overflow: hidden; }}
 .mk {{ position: absolute; z-index: 6; opacity: 0; overflow: visible; }}
