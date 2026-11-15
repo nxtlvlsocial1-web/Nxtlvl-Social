@@ -1,11 +1,14 @@
 # Creators 100X: "Stop typing 'write me a script'" (Instagram Reels, 9:16, 30 s)
 
+v3 (owner): a sharper hook (STOP stamp on frame 0, everyone-else's-reels row), music down again (-28 LUFS bed).
+v2 (owner): more motion in every frame, quieter music.
+
 Topic 1 (the 4-part prompt formula) in visual style B (before / after split screen), for beginner creators using AI.
 CTA keyword: PROMPT. Lead magnet: `brands/creators-100x/pdf/creators100x_10-prompts-that-sound-like-you.pdf` (7 pages).
 
 ## Voiceover
 
-> You typed: write me a reel script. And AI gave you this. The same script everyone else got.
+> Stop typing this into ChatGPT. It's why your scripts sound exactly like everyone else's.
 > Same AI. One better prompt. Watch.
 > First, tell it who you are. A fitness creator with three thousand followers.
 > Then, who it's for. Busy beginners who keep skipping the gym.

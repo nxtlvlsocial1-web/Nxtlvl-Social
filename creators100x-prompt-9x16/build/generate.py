@@ -105,25 +105,41 @@ def build():
     miss = "".join(f'<div class="mc" id="mc{i}">{ic("x")}<span>{m}</span></div>' for i, m in enumerate(MISSING))
     BODY.append(f'<div class="panel" id="tp"><div class="lab grey" id="tpl">{ic("x")}WHAT BEGINNERS DO</div>'
                 f'<div class="gwrap" id="gw">{ghosts}</div>{win_a}<div class="same" id="same">Same script as everyone else</div>'
-                f'<div class="miss" id="miss">{miss}</div><div class="stamp grey" id="stA">GENERIC</div></div>')
+                f'<div class="miss" id="miss">{miss}</div><div class="stamp grey" id="stA">GENERIC</div>'
+                f'<div class="mq" id="mq"><div class="mqlab">Everyone else\'s reels</div><div class="mqrow" id="mqrow">'
+                + "".join(f'<div class="rc"><i class="rav"></i><b>Hey guys!</b><span>Level up your fitness journey...</span><i class="rl"></i><i class="rl s"></i><em>5 amazing tips</em></div>' for _ in range(8))
+                + '</div></div></div>')
     # hook line, readable on frame 0
-    BODY.append(f'<div class="hook" id="hook"><span>STOP TYPING</span><span class="pk">"WRITE ME A SCRIPT"</span></div>')
+    BODY.append(f'<div class="hook" id="hook"><span>STOP TYPING</span><span class="pk big">THIS</span></div>'
+                f'<svg class="harrow" id="harrow" viewBox="0 0 160 200"><path d="M40 10 C 130 40, 140 120, 70 180"/><path d="M48 160 L70 182 L96 160"/></svg>'
+                f'<div class="stop" id="stop">STOP</div>')
     # frame 0 is mid-story: the prompt is half typed already
-    t_send = T("script.") + .2
-    js(f'tl.fromTo("#ubA .wa1:nth-child(n+4)", {{opacity: 0}}, {{opacity: 1, duration: .01, stagger: {{amount: {t_send - .5:.3f}}}, immediateRender: false}}, .25);')
-    t = .25
-    while t < t_send:
-        sfx("key", t, -5 + R.uniform(-3, 2))
-        t += R.uniform(.07, .12)
+    # v3 (owner: "make the hook more engaging, people may skip"): the command lands on frame 0 with the prompt already
+    # on screen; on "Stop" a pink STOP stamp slams onto it (punch-in + shake), the arrow points at it, then it is sent
+    t_stop = T("stop") + .02
+    js(f'tl.fromTo("#stop", {{opacity: 0, scale: 3.2, rotation: -30}}, {{opacity: 1, scale: 1, rotation: -12, duration: .26, ease: "back.out(1.7)", immediateRender: false}}, {t_stop:.3f});')
+    js(f'tl.fromTo("#wa", {{scale: 1.07}}, {{scale: 1, duration: .35, ease: "power3.out", immediateRender: false}}, {t_stop + .2:.3f});')
+    js(f'tl.fromTo("#tp", {{x: 0}}, {{x: 12, duration: .04, yoyo: true, repeat: 5, ease: "steps(1)", immediateRender: false}}, {t_stop + .2:.3f});')
+    js(f'tl.fromTo("#hook .big", {{scale: 1.5, opacity: 0}}, {{scale: 1, opacity: 1, duration: .3, ease: "back.out(2.2)", immediateRender: false}}, {T("this") - .05:.3f});')
+    js(f'tl.fromTo("#harrow", {{opacity: 0, scale: .4}}, {{opacity: 1, scale: 1, duration: .3, ease: "back.out(2)", immediateRender: false}}, {T("this"):.3f});')
+    js(f'tl.fromTo("#harrow", {{y: 0}}, {{y: 14, duration: .25, yoyo: true, repeat: 5, ease: "sine.inOut", immediateRender: false}}, {T("this") + .3:.3f});')
+    js(f'tl.to("#stop, #harrow", {{opacity: 0, scale: .7, duration: .2}}, {T("it's") - .1:.3f});')
+    sfx("stamp", t_stop, 0)
+    sfx("whoosh", 0.0, -6)
+    t_send = T("chatgpt") + .1
     sfx("send", t_send)
-    js(f'tl.fromTo("#dotsA", {{opacity: 0}}, {{opacity: 1, duration: .15}}, {t_send + .05:.3f}); tl.set("#dotsA", {{opacity: 0}}, {T("ai") + .1:.3f});')
+    js(f'tl.fromTo("#dotsA", {{opacity: 0}}, {{opacity: 1, duration: .15}}, {t_send + .05:.3f}); tl.set("#dotsA", {{opacity: 0}}, {t_send + .4:.3f});')
     js(f'tl.fromTo("#dotsA i", {{y: 0}}, {{y: -10, duration: .18, yoyo: true, repeat: 3, stagger: .08, ease: "sine.inOut", immediateRender: false}}, {t_send + .05:.3f});')
-    t_r = T("ai") + .1
+    t_r = t_send + .4
     js(f'tl.set("#rbA", {{opacity: 1}}, {t_r:.3f});')
-    reveal("#rbA .wa2", t_r, T("this.") + .35, kind="stream")
+    reveal("#rbA .wa2", t_r, T("everyone") - .1, kind="stream")
     sfx("ding", t_r, -4)
     # "The same script everyone else got": copies fan out behind the window
-    t_same = T("same") - .05
+    t_same = T("everyone") - .3
+    # v3: identical "reels" scroll under the window from frame 0 (everyone posts the same script)
+    js(f'tl.fromTo("#mqrow", {{x: 0}}, {{x: -1140, duration: {t_split:.3f}, ease: "none", immediateRender: false}}, 0);')
+    js(f'tl.fromTo("#mq .rc", {{borderColor: "rgba(16,17,17,.08)"}}, {{borderColor: "{PINK}", duration: .2, stagger: .05, immediateRender: false}}, {T("everyone") - .1:.3f});')
+    js(f'tl.set("#gw", {{display: "none"}}, 0);')
     js(f'tl.fromTo("#gw .ghost", {{opacity: 0, x: 0, y: 0, rotation: 0}}, {{opacity: .55, x: (i, el) => +el.style.getPropertyValue("--x").replace("px",""), '
        f'y: (i, el) => +el.style.getPropertyValue("--y").replace("px",""), rotation: (i, el) => +el.style.getPropertyValue("--r").replace("deg",""), '
        f'duration: .45, stagger: .12, ease: "back.out(1.6)", immediateRender: false}}, {t_same:.3f});')
@@ -263,14 +279,14 @@ def extras(t_split, t_cta):
         js(f'tl.fromTo("#cam", {{scale: 1}}, {{scale: 1.035, duration: {b - a:.3f}, ease: "none", immediateRender: false}}, {a:.3f});')
     # ---- hook: a cursor clicks send; cliche stickers pop around the generic script
     BODY.append('<svg class="cursor" id="cursor" viewBox="0 0 24 24"><path d="M3 2l7.5 19 2.6-7.6L21 10.8z"/></svg>')
-    t_send = T("script.") + .2
+    t_send = T("chatgpt") + .1
     js(f'tl.fromTo("#cursor", {{x: 0, y: 0, opacity: 1}}, {{x: 120, y: -330, duration: {t_send - .15:.3f}, ease: "power2.inOut", immediateRender: false}}, 0);')
     js(f'tl.fromTo("#cursor", {{scale: 1}}, {{scale: .78, duration: .08, yoyo: true, repeat: 1, immediateRender: false}}, {t_send - .1:.3f});')
     js(f'tl.to("#cursor", {{x: 260, y: 300, opacity: 0, duration: .6, ease: "power2.in"}}, {t_send + .4:.3f});')
-    cl = [("Hey guys!", 60, 1300, -8), ("Level up", 640, 1270, 7), ("Game changer", 90, 1700, 5), ("Amazing tips", 600, 1720, -6),
-          ("Transform your body", 250, 1840, 3), ("Your journey", 700, 1150, -10)]
+    cl = [("Hey guys!", 50, 1630, -8), ("Level up", 700, 1620, 7), ("Game changer", 80, 1770, 5), ("Amazing tips", 640, 1770, -6),
+          ("Transform your body", 290, 1700, 3), ("Your journey", 380, 1850, -4)]
     BODY.append("".join(f'<div class="cliche" id="cl{i}" style="left:{x}px;top:{y}px;--r:{r}deg">{H.escape(w)}<i></i></div>' for i, (w, x, y, r) in enumerate(cl)))
-    t_same = T("same") - .05
+    t_same = T("everyone") - .3
     for i, (w, x, y, r) in enumerate(cl):
         a = t_same + i * .1
         js(f'tl.fromTo("#cl{i}", {{opacity: 0, scale: .2, rotation: 0}}, {{opacity: 1, scale: 1, rotation: {r}, duration: .35, ease: "back.out(2.6)", immediateRender: false}}, {a:.3f});')
@@ -326,7 +342,7 @@ def extras(t_split, t_cta):
 def caps(t_split, t_cta):
     """short captions (up to ~20 characters, one line): on the seam during the split, low otherwise; the keyword of each
     chunk in lime"""
-    KEY = {"prompt.", "prompt,", "same", "ai.", "who", "hook.", "format.", "you.", "watch.", "everyone", "comment", "prompt", "copy."}
+    KEY = {"stop", "chatgpt.", "prompt.", "prompt,", "same", "ai.", "who", "hook.", "format.", "you.", "watch.", "everyone", "comment", "prompt", "copy."}
     chunks, cur = [], []
     for i, w in enumerate(WORDS):
         cur.append(w)
@@ -381,7 +397,6 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: {PAGE
 .sp {{ width: 28px; height: 28px; fill: {LIME}; stroke: none; }}
 .wb {{ padding: 26px 28px 30px; display: flex; flex-direction: column; gap: 18px; }}
 .ub {{ align-self: flex-end; max-width: 86%; padding: 18px 26px; border-radius: 28px 28px 8px 28px; background: {INK}; color: #fff; font-weight: 700; font-size: 38px; line-height: 1.25; }}
-#ubA .wa1:nth-child(n+4) {{ opacity: 0; }}
 .ub.good {{ max-width: 100%; align-self: stretch; transform-origin: 100% 0%; font-size: 31px; padding: 18px 22px; display: flex; flex-direction: column; gap: 8px; }}
 .pl {{ display: none; align-items: flex-start; gap: 14px; }}
 #ubB {{ opacity: 0; }}
@@ -393,7 +408,17 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: {PAGE
 .dots i {{ width: 14px; height: 14px; border-radius: 50%; background: #b9b3b3; }}
 .ghost {{ position: absolute; left: 150px; top: 820px; width: 780px; padding: 22px 28px; border-radius: 26px; background: #ece8e8; color: #9a9393; font-weight: 600; font-size: 30px;
   line-height: 1.3; opacity: 0; box-shadow: 0 14px 30px rgba(16,17,17,.08); }}
-.same {{ position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; top: 1225px; padding: 14px 28px; border-radius: 999px; background: {INK}; color: #fff;
+.mq {{ position: absolute; left: 0; top: 1130px; width: {FW}px; }}
+.mqlab {{ margin-left: 60px; font-weight: 800; font-size: 28px; letter-spacing: .06em; color: #8d8686; text-transform: uppercase; }}
+.mqrow {{ display: flex; gap: 24px; margin-top: 14px; padding-left: 60px; }}
+.rc {{ flex: none; width: 260px; height: 300px; border-radius: 24px; background: #fff; border: 4px solid rgba(16,17,17,.08); padding: 20px 18px; display: flex; flex-direction: column;
+  gap: 10px; box-shadow: 0 12px 26px rgba(16,17,17,.08); }}
+.rav {{ width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, #d9d4d4, #bfb8b8); }}
+.rc b {{ font-weight: 800; font-size: 30px; color: #6f6969; }}
+.rc span {{ font-weight: 600; font-size: 22px; color: #9a9393; line-height: 1.25; }}
+.rl {{ height: 12px; border-radius: 6px; background: #eeeaea; width: 90%; }} .rl.s {{ width: 60%; }}
+.rc em {{ font-style: normal; font-weight: 700; font-size: 20px; color: #b0aaaa; margin-top: auto; }}
+.same {{ position: absolute; left: 0; right: 0; margin: 0 auto; width: max-content; top: 1080px; z-index: 3; padding: 14px 28px; border-radius: 999px; background: {INK}; color: #fff;
   font-weight: 800; font-size: 36px; opacity: 0; }}
 .miss {{ position: absolute; left: 60px; right: 60px; top: 735px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }}
 .mc {{ display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-radius: 18px; background: rgba(255,255,255,.6); color: {GREY}; font-weight: 800; font-size: 32px; opacity: 0; }}
@@ -408,7 +433,11 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: {PAGE
 /* hook */
 .hook {{ position: absolute; left: 50px; right: 50px; top: 250px; text-align: center; z-index: 6; }}
 .hook span {{ display: block; font-weight: 800; font-size: 104px; line-height: 1.0; letter-spacing: -.04em; }}
-.hook span.pk {{ font-size: 82px; margin-top: 10px; }}
+.hook span.big {{ font-size: 150px; margin-top: 6px; }}
+.harrow {{ position: absolute; left: 790px; top: 330px; width: 150px; height: 190px; fill: none; stroke: {PINK}; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0; z-index: 6; }}
+.stop {{ position: absolute; left: 640px; top: 560px; padding: 10px 34px 14px; border-radius: 26px; background: {PINK}; color: #fff; border: 7px solid #fff;
+  font-weight: 800; font-size: 92px; letter-spacing: .04em; opacity: 0; z-index: 6; box-shadow: 0 18px 40px rgba(253,11,104,.45); }}
 /* CTA */
 .cta {{ position: absolute; inset: 0; z-index: 7; opacity: 0; }}
 .ch1 {{ position: absolute; left: 0; right: 0; top: 250px; text-align: center; font-weight: 800; font-size: 104px; letter-spacing: -.04em; }}
