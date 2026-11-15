@@ -194,7 +194,7 @@ def build():
     card("a_vod", '<div class="vod"><span>STREAM VOD</span><i><b id="a_head"></b></i><span>00:00 / <em>6:00:00</em></span></div>', "left:60px;top:1010px;width:470px;transform:rotate(-2deg)")
     who("a_kai", "clipper", 0, 1150, 470, propR="mag")
     who("a_va", "viewer_a", 610, 1170, 430)
-    js(f'tl.set("[id^=a_]", {{opacity: 1}}, 0); tl.set("#a_x, #a_ring, #a_chat, #a_va", {{opacity: 0}}, 0);')
+    js(f'tl.set("#a_t1, #a_t2, #a_ai, #a_vod, #a_kai", {{opacity: 1}}, 0);')   # only the opening pieces; the rest stay hidden by CSS until their word
     js(f'tl.fromTo("#a_t1", {{scale: 1.15}}, {{scale: 1, duration: .5, ease: "{st(.5)}"}}, 0);')
     t_need = T("need") - .05
     t_chat = T("chat", L(0) + .5) - .05

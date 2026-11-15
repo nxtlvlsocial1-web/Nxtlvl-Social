@@ -98,7 +98,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #14213
       const tl = gsap.timeline({ paused: true });
       tl.set("#bg0w", {opacity: 1}, 0.000); tl.set("#bg0w", {opacity: 0}, 4.756);
       tl.fromTo("#bg0", {scale: 1.0}, {scale: 1.08, duration: 4.756, ease: "steps(57)", immediateRender: false}, 0.000);
-      tl.set("[id^=a_]", {opacity: 1}, 0); tl.set("#a_x, #a_ring, #a_chat, #a_va", {opacity: 0}, 0);
+      tl.set("#a_t1, #a_t2, #a_ai, #a_vod, #a_kai", {opacity: 1}, 0);
       tl.fromTo("#a_t1", {scale: 1.15}, {scale: 1, duration: .5, ease: "steps(6)"}, 0);
       tl.fromTo("#a_st", {"--s": 0}, {"--s": 1, duration: .25, ease: "steps(3)", immediateRender: false}, 0.510);
       tl.set("#a_x", {opacity: 1}, 0.810);
