@@ -1,7 +1,7 @@
 """Sound for the Creators 100X prompt reel.
   * Voice: assets/audio/vo.wav (Kokoro af_heart), the loudest layer.
   * Music: "Inspiring Ambient Motivation" by Soundrider/Dope (Jamendo 1670558 via Openverse, CC BY 3.0, credit in the
-    post), 117.45 bpm, from a beat (8.196 s, where the full groove is in), sidechain-ducked under the voice.
+    post), 117.45 bpm, from a beat (8.196 s, where the full groove is in), sidechain-ducked under the voice. v2 (owner: "reduce the background music"): bed at -24 LUFS (was -19), a deeper duck.
   * SFX: CC0 one-shots (plan/sfx_library.json): keystrokes (Kenney interface clicks, OpenGameArt CC0, because
     Freesound previews refused this machine), pops, whooshes, a ding, a glitch, stamps.
   * Master: two-pass loudnorm to -14 LUFS, -2 dBTP; muxed onto the picture with the video stream copied.
@@ -58,10 +58,10 @@ def main():
         e["file"] = prepared[(e["type"], name)]
     bed = os.path.join(WORK, "music_bed.wav")
     run(["ffmpeg", "-y", "-loglevel", "error", "-ss", str(SONG_AT), "-t", f"{DUR + .2:.2f}", "-i", SONG, "-vn", "-af",
-         f"loudnorm=I=-19:TP=-4:LRA=11,afade=t=in:d=0.05,afade=t=out:st={DUR - 1.0:.2f}:d=1.0", "-ar", "48000", "-ac", "2", bed])
+         f"loudnorm=I=-24:TP=-8:LRA=11,afade=t=in:d=0.05,afade=t=out:st={DUR - 1.0:.2f}:d=1.0", "-ar", "48000", "-ac", "2", bed])
     inputs = ["-i", os.path.join(ROOT, "assets", "audio", "vo.wav"), "-i", bed]
     fc = [f"[0:a]aresample=48000,aformat=channel_layouts=stereo,apad=whole_dur={DUR},atrim=0:{DUR},asplit=2[vo][sc]",
-          "[1:a][sc]sidechaincompress=threshold=0.02:ratio=6:attack=15:release=400:makeup=1[bg]"]
+          "[1:a][sc]sidechaincompress=threshold=0.015:ratio=8:attack=12:release=420:makeup=1[bg]"]
     labels = ["[vo]", "[bg]"]
     for i, e in enumerate(ev):
         inputs += ["-i", e["file"]]

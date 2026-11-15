@@ -192,7 +192,10 @@ def build():
     BODY.append(f'<div class="cta" id="cta"><div class="ch1" id="ch1">Comment <span class="pk">"PROMPT"</span></div>'
                 f'<div class="cbox" id="cbox"><i class="av"></i><span class="ct" id="ct">{"".join(f"<b>{c}</b>" for c in "PROMPT")}</span>'
                 f'<span class="cur2" id="cur2"></span><span class="snd" id="snd">{ic("send")}</span></div>'
-                f'<div class="cov" id="cov"><img src="assets/img/pdf_cover.png"><div class="free" id="free">FREE PDF</div></div></div>')
+                f'<img class="pg pg2" id="pg2" src="assets/img/pdf_p2.png"><img class="pg pg3" id="pg3" src="assets/img/pdf_p3.png">'
+                f'<div class="cov" id="cov"><img src="assets/img/pdf_cover.png"><div class="free" id="free">FREE PDF</div></div>'
+                f'<svg class="arrow" id="arrow" viewBox="0 0 120 120"><path d="M20 110 C 90 100, 100 60, 72 22"/><path d="M52 36 L72 18 L88 40"/></svg>'
+                + star("cspk", "cs0", 870, 560, 54, PINK) + star("cspk", "cs1", 180, 650, 40, INK) + star("cspk", "cs2", 900, 1330, 46, INK) + '</div>')
     js(f'tl.fromTo("#cta", {{opacity: 0}}, {{opacity: 1, duration: .25}}, {t_cta:.3f});')
     js(f'tl.fromTo("#ch1", {{y: 60, opacity: 0}}, {{y: 0, opacity: 1, duration: .45, ease: "back.out(1.8)", immediateRender: false}}, {t_cta + .05:.3f});')
     js(f'tl.fromTo("#cbox", {{y: 60, opacity: 0}}, {{y: 0, opacity: 1, duration: .45, ease: "back.out(1.8)", immediateRender: false}}, {t_cta + .15:.3f});')
@@ -208,7 +211,116 @@ def build():
     js(f'tl.to("#cov", {{y: -14, duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 1}}, {t_cov + .8:.3f});')
     sfx("whoosh", t_cov, -4)
     sfx("pop", T("ten", L(7)), -5)
+    for k, (r, x) in enumerate(((-14, -190), (12, 190))):
+        js(f'tl.fromTo("#pg{k + 2}", {{y: 700, x: 0, rotation: 0, opacity: 0}}, {{y: 30, x: {x}, rotation: {r}, opacity: 1, duration: .7, ease: "back.out(1.3)", immediateRender: false}}, {t_cov + .15:.3f});')
+    js(f'tl.fromTo("#arrow", {{opacity: 0, scale: .4}}, {{opacity: 1, scale: 1, duration: .35, ease: "back.out(2)", immediateRender: false}}, {t_cta + .35:.3f});')
+    js(f'tl.fromTo("#arrow", {{y: 0}}, {{y: -16, duration: .3, yoyo: true, repeat: 7, ease: "sine.inOut", immediateRender: false}}, {t_cta + .7:.3f});')
+    js(f'tl.fromTo(".cspk", {{scale: 0, rotation: 0}}, {{scale: 1, rotation: 120, duration: .6, stagger: .2, ease: "back.out(2.5)", immediateRender: false}}, {T("ten", L(7)):.3f});')
     return t_split, t_cta
+
+
+BEAT = 60 / 117.45                           # the music's grid; the bed starts on a beat, so beats fall on n * BEAT
+
+
+def star(cls, sid, x, y, size, color):
+    return (f'<svg class="{cls}" id="{sid}" style="left:{x}px;top:{y}px;width:{size}px;height:{size}px" viewBox="0 0 24 24">'
+            f'<path d="M12 0c.8 6.6 4.8 10.8 12 12-7.2 1.2-11.2 5.4-12 12-.8-6.6-4.8-10.8-12-12 7.2-1.2 11.2-5.4 12-12z" fill="{color}"/></svg>')
+
+
+def extras(t_split, t_cta):
+    """v2 (owner: "few visual elements, add more; not a single frame should feel dull"): a living background (drifting
+    lime / pink blobs, a moving dot grid, beat-timed sparkles), a camera that keeps pushing in, a cursor in the hook,
+    cliche stickers around the generic script, prompt-strength meters (0/4 above, filling to 4/4 below), shimmering
+    placeholder lines where the good reply will land, chip bursts, a flash on the split, confetti on the payoff, and in
+    the CTA a turning sunburst, fanned PDF pages, a bouncing arrow and sparkles"""
+    t6 = L(6) - .05
+    t_like = T("sounds", L(6)) - .05
+    # ---- background (behind everything)
+    blobs = [(-160, 380, 520, LIME), (720, 260, 460, "#FE70B3"), (640, 1250, 560, LIME), (-200, 1450, 480, "#FE70B3"), (300, 820, 380, LIME)]
+    bg = "".join(f'<i class="blob" id="bl{i}" style="left:{x}px;top:{y}px;width:{w}px;height:{w}px;--c:{c}"></i>' for i, (x, y, w, c) in enumerate(blobs))
+    sp = [(110, 520, 46), (930, 640, 38), (160, 1720, 40), (960, 1600, 52), (520, 140, 34), (60, 1180, 30), (1000, 1080, 34), (420, 1840, 30)]
+    bg += "".join(star("spk", f"sk{i}", x, y, w, PINK if i % 2 else INK) for i, (x, y, w) in enumerate(sp))
+    BODY.insert(0, f'<div class="bg" id="bg"><i class="dotgrid" id="dg"></i>{bg}</div>')
+    for i, (x, y, w, c) in enumerate(blobs):
+        dx, dy = (-1) ** i * (90 + 20 * i), (-1) ** (i + 1) * (70 + 15 * i)
+        js(f'tl.fromTo("#bl{i}", {{x: 0, y: 0}}, {{x: {dx}, y: {dy}, duration: {DUR / 2:.2f}, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false}}, 0);')
+    js(f'tl.fromTo("#dg", {{y: 0}}, {{y: -180, duration: {DUR:.2f}, ease: "none", immediateRender: false}}, 0);')
+    n = 0
+    t = BEAT * 2
+    while t < DUR - .6:
+        i = n % len(sp)
+        js(f'tl.fromTo("#sk{i}", {{scale: 0, rotation: 0, opacity: 0}}, {{scale: 1, rotation: 90, opacity: 1, duration: {BEAT * 1.2:.3f}, ease: "back.out(2)", immediateRender: false}}, {t:.3f});')
+        js(f'tl.to("#sk{i}", {{scale: 0, opacity: 0, duration: {BEAT:.3f}, ease: "power2.in"}}, {t + BEAT * 1.6:.3f});')
+        n += 1
+        t += BEAT * 2
+    # beat pulse on the blobs (every bar)
+    t = 0.0
+    while t < DUR - .5:
+        js(f'tl.fromTo(".blob", {{scale: 1.08}}, {{scale: 1, duration: {BEAT * 1.5:.3f}, ease: "power2.out", immediateRender: false}}, {t:.3f});')
+        t += BEAT * 4
+    # ---- camera: a slow push in every section, reset on each cut
+    for a, b in ((0, t_split), (t_split, t6), (t6, t_cta), (t_cta, DUR)):
+        js(f'tl.fromTo("#cam", {{scale: 1}}, {{scale: 1.035, duration: {b - a:.3f}, ease: "none", immediateRender: false}}, {a:.3f});')
+    # ---- hook: a cursor clicks send; cliche stickers pop around the generic script
+    BODY.append('<svg class="cursor" id="cursor" viewBox="0 0 24 24"><path d="M3 2l7.5 19 2.6-7.6L21 10.8z"/></svg>')
+    t_send = T("script.") + .2
+    js(f'tl.fromTo("#cursor", {{x: 0, y: 0, opacity: 1}}, {{x: 120, y: -330, duration: {t_send - .15:.3f}, ease: "power2.inOut", immediateRender: false}}, 0);')
+    js(f'tl.fromTo("#cursor", {{scale: 1}}, {{scale: .78, duration: .08, yoyo: true, repeat: 1, immediateRender: false}}, {t_send - .1:.3f});')
+    js(f'tl.to("#cursor", {{x: 260, y: 300, opacity: 0, duration: .6, ease: "power2.in"}}, {t_send + .4:.3f});')
+    cl = [("Hey guys!", 60, 1300, -8), ("Level up", 640, 1270, 7), ("Game changer", 90, 1700, 5), ("Amazing tips", 600, 1720, -6),
+          ("Transform your body", 250, 1840, 3), ("Your journey", 700, 1150, -10)]
+    BODY.append("".join(f'<div class="cliche" id="cl{i}" style="left:{x}px;top:{y}px;--r:{r}deg">{H.escape(w)}<i></i></div>' for i, (w, x, y, r) in enumerate(cl)))
+    t_same = T("same") - .05
+    for i, (w, x, y, r) in enumerate(cl):
+        a = t_same + i * .1
+        js(f'tl.fromTo("#cl{i}", {{opacity: 0, scale: .2, rotation: 0}}, {{opacity: 1, scale: 1, rotation: {r}, duration: .35, ease: "back.out(2.6)", immediateRender: false}}, {a:.3f});')
+        js(f'tl.fromTo("#cl{i} i", {{scaleX: 0}}, {{scaleX: 1, duration: .2, ease: "power2.out", immediateRender: false}}, {T("everyone") + .15 + i * .05:.3f});')
+        js(f'tl.to("#cl{i}", {{opacity: 0, scale: .6, duration: .2}}, {t_split - .25:.3f});')
+    # ---- split: a white flash
+    BODY.append('<i class="flash" id="flash"></i>')
+    js(f'tl.fromTo("#flash", {{opacity: .85}}, {{opacity: 0, duration: .35, ease: "power2.out", immediateRender: false}}, {t_split + .12:.3f});')
+    # ---- prompt-strength meters
+    seg = lambda cls: "".join(f'<i class="{cls}"></i>' for _ in range(4))
+    BODY.append(f'<div class="meter top" id="mtA"><span>PROMPT STRENGTH</span><div class="segs">{seg("sg")}</div><b>0/4</b></div>')
+    BODY.append(f'<div class="meter bot" id="mtB"><span>PROMPT STRENGTH</span><div class="segs">{seg("sg")}</div>'
+                + "".join(f'<b class="cnt" id="cn{k}">{k}/4</b>' for k in range(5)) + '</div>')
+    js(f'tl.fromTo("#mtA, #mtB", {{opacity: 0, y: -14}}, {{opacity: 1, y: 0, duration: .3, stagger: .08, immediateRender: false}}, {t_split + .5:.3f});')
+    js(f'tl.to("#mtA", {{y: -{SEAM}, duration: .5, ease: "expo.in"}}, {t_cta - .25:.3f}); tl.to("#mtB", {{y: {FH - SEAM}, duration: .5, ease: "expo.in"}}, {t_cta - .25:.3f});')
+    cues = [T("first"), T("then"), T("now"), T("and", L(5))]
+    js('tl.set("#cn0", {opacity: 1}, 0);')
+    for k, c in enumerate(cues, 1):
+        js(f'tl.fromTo("#mtB .sg:nth-child({k})", {{backgroundColor: "rgba(16,17,17,.12)", scaleY: 1}}, {{backgroundColor: "{LIME}", scaleY: 1.5, duration: .2, ease: "back.out(3)", immediateRender: false}}, {c:.3f});')
+        js(f'tl.to("#mtB .sg:nth-child({k})", {{scaleY: 1, duration: .2}}, {c + .25:.3f});')
+        js(f'tl.set("#cn{k - 1}", {{opacity: 0}}, {c:.3f}); tl.set("#cn{k}", {{opacity: 1}}, {c:.3f});')
+        # a burst from the chip
+        js(f'tl.fromTo("#bu{k - 1} i", {{x: 0, y: 0, opacity: 1, scale: 1}}, {{x: (j) => Math.cos(j * 1.047) * 70, y: (j) => Math.sin(j * 1.047) * 70, opacity: 0, scale: .3, '
+           f'duration: .45, ease: "power2.out", immediateRender: false}}, {c:.3f});')
+    for k in range(4):
+        BODY.append(f'<div class="burst" id="bu{k}" style="left:{60 + 120 + k * 243}px;top:{SEAM + 6 + 148}px">' + "".join(f'<i style="--c:{PINK if j % 2 else LIME}"></i>' for j in range(6)) + '</div>')
+    js(f'tl.to(".burst", {{y: {FH - SEAM}, duration: .01}}, {t_cta - .25:.3f});')
+    # ---- shimmering placeholder lines where the good reply will appear (until it streams in)
+    BODY.append('<div class="skel" id="skel">' + "".join(f'<i style="width:{w}%"><b></b></i>' for w in (88, 64, 76, 52)) + '</div>')
+    js(f'tl.fromTo("#skel", {{opacity: 0}}, {{opacity: 1, duration: .3, immediateRender: false}}, {T("a", L(2)) + .3:.3f}); tl.set("#skel", {{opacity: 0}}, {t6 + .55:.3f});')
+    js(f'tl.fromTo("#skel b", {{x: -260}}, {{x: 900, duration: 1.2, repeat: {int((t6 - T("a", L(2))) / 1.2) + 1}, ease: "sine.inOut", immediateRender: false}}, {T("a", L(2)) + .3:.3f});')
+    js(f'tl.fromTo("#skel", {{y: 0}}, {{y: 150, duration: .01, immediateRender: false}}, {T("busy") - .05:.3f});')
+    js(f'tl.to("#skel", {{y: 230, duration: .01}}, {T("open") - .05:.3f}); tl.to("#skel", {{y: 300, duration: .01}}, {T("thirty", L(5)) - .05:.3f});')
+    # ---- payoff: the good window punches, confetti
+    js(f'tl.fromTo("#wbw", {{scale: 1}}, {{scale: 1.035, duration: .14, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false}}, {t_like:.3f});')
+    conf = ""
+    for i in range(26):
+        x = R.randint(60, 1020)
+        conf += f'<i class="cf" id="cf{i}" style="left:{x}px;--c:{[LIME, PINK, INK][i % 3]};--w:{R.randint(14, 24)}px"></i>'
+    BODY.append(f'<div class="conf" id="conf">{conf}</div>')
+    js(f'tl.set("#conf", {{opacity: 1}}, {t_like:.3f}); tl.set("#conf", {{opacity: 0}}, {t_cta:.3f});')
+    for i in range(26):
+        d = R.uniform(.9, 1.5)
+        js(f'tl.fromTo("#cf{i}", {{y: {R.randint(900, 1000)}, x: 0, rotation: 0, opacity: 1}}, {{y: {R.randint(1500, 1900)}, x: {R.randint(-120, 120)}, rotation: {R.randint(-540, 540)}, '
+           f'opacity: 0, duration: {d:.2f}, ease: "power1.in", immediateRender: false}}, {t_like + R.uniform(0, .25):.3f});')
+    # ---- CTA: sunburst, fanned pages, arrow, sparkles
+    BODY.append(f'<div class="ctabg" id="ctabg"><i class="rays" id="rays"></i></div>')
+    js(f'tl.fromTo("#ctabg", {{opacity: 0}}, {{opacity: 1, duration: .4, immediateRender: false}}, {t_cta:.3f});')
+    js(f'tl.fromTo("#rays", {{rotation: 0}}, {{rotation: 40, duration: {DUR - t_cta:.3f}, ease: "none", immediateRender: false}}, {t_cta:.3f});')
+    return t6
 
 
 def caps(t_split, t_cta):
@@ -318,12 +430,48 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: {PAGE
 .cap b {{ display: inline-block; padding: 12px 30px 16px; border-radius: 22px; background: {INK}; color: #fff; font-weight: 800; font-size: 56px; letter-spacing: -.01em;
   box-shadow: 0 14px 34px rgba(16,17,17,.28); }}
 .cap em {{ font-style: normal; color: {LIME}; }}
+#cam {{ position: absolute; inset: 0; transform-origin: 50% 45%; }}
+.bg {{ position: absolute; inset: 0; overflow: hidden; }}
+.dotgrid {{ position: absolute; left: 0; top: 0; width: {FW}px; height: {FH + 200}px; opacity: .28;
+  background-image: radial-gradient(rgba(16,17,17,.35) 2px, transparent 2.5px); background-size: 46px 46px; }}
+.blob {{ position: absolute; border-radius: 50%; background: radial-gradient(circle, var(--c) 0%, transparent 68%); opacity: .55; }}
+.spk {{ position: absolute; opacity: 0; }}
+.cursor {{ position: absolute; left: 560px; top: 1050px; width: 74px; height: 74px; fill: {INK}; stroke: #fff; stroke-width: 1.6; z-index: 6;
+  filter: drop-shadow(0 8px 14px rgba(16,17,17,.3)); transform-origin: 20% 10%; }}
+.cliche {{ position: absolute; padding: 14px 26px; border-radius: 999px; background: #fff; border: 3px solid #c9c4c4; color: #8d8686; font-weight: 800; font-size: 38px;
+  white-space: nowrap; opacity: 0; box-shadow: 0 10px 24px rgba(16,17,17,.08); }}
+.cliche i {{ position: absolute; left: 14px; right: 14px; top: 50%; height: 6px; margin-top: -3px; border-radius: 3px; background: {PINK}; transform-origin: 0 50%; }}
+.flash {{ position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 7; }}
+.meter {{ position: absolute; right: 60px; display: flex; align-items: center; gap: 12px; font-weight: 800; opacity: 0; z-index: 4; }}
+.meter span {{ font-size: 20px; letter-spacing: .08em; color: #7a7474; }}
+.meter b {{ font-size: 30px; width: 54px; text-align: right; }}
+.meter.top {{ top: 230px; }} .meter.top b {{ color: {PINK}; }}
+.meter.bot {{ top: {SEAM + 6 + 62}px; }}
+.meter.bot .cnt {{ position: absolute; right: 0; opacity: 0; }}
+.meter.bot .segs {{ margin-right: 66px; }}
+.segs {{ display: flex; gap: 6px; }}
+.sg {{ width: 34px; height: 16px; border-radius: 5px; background: rgba(16,17,17,.12); }}
+.burst {{ position: absolute; width: 0; height: 0; z-index: 5; }}
+.burst i {{ position: absolute; left: -7px; top: -7px; width: 14px; height: 14px; border-radius: 50%; background: var(--c); opacity: 0; }}
+.skel {{ position: absolute; left: 100px; width: 880px; top: {SEAM + 6 + 205 + 210}px; display: flex; flex-direction: column; gap: 18px; opacity: 0; z-index: 3; }}
+.skel i {{ display: block; height: 30px; border-radius: 15px; background: #eeeaea; overflow: hidden; position: relative; }}
+.skel b {{ position: absolute; top: 0; left: 0; width: 220px; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.95), transparent); }}
+.conf {{ position: absolute; inset: 0; opacity: 0; z-index: 6; pointer-events: none; }}
+.cf {{ position: absolute; top: 0; width: var(--w); height: calc(var(--w) * .5); border-radius: 3px; background: var(--c); }}
+.ctabg {{ position: absolute; inset: 0; opacity: 0; z-index: 6; overflow: hidden; }}
+.rays {{ position: absolute; left: -460px; top: -40px; width: 2000px; height: 2000px; border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(204,251,121,.38) 0deg 9deg, rgba(253,244,244,0) 9deg 22deg); }}
+.pg {{ position: absolute; left: 290px; top: 640px; width: 500px; height: 625px; border-radius: 22px; box-shadow: 0 24px 60px rgba(16,17,17,.22), 0 0 0 3px {INK};
+  opacity: 0; transform-origin: 50% 100%; }}
+.arrow {{ position: absolute; left: 60px; top: 525px; width: 130px; height: 130px; z-index: 3; fill: none; stroke: {PINK}; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }}
+.cspk {{ position: absolute; z-index: 2; }}
 #grain {{ position: absolute; inset: 0; opacity: .045; background: url(assets/img/grain.png); mix-blend-mode: multiply; z-index: 9; pointer-events: none; }}
 """
 
 
 def main():
     t_split, t_cta = build()
+    extras(t_split, t_cta)
     n = caps(t_split, t_cta)
     page = f"""<!doctype html>
 <html lang="en" data-resolution="portrait">
@@ -336,7 +484,7 @@ def main():
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
-      {"".join(BODY)}
+      <div id="cam">{"".join(BODY)}</div>
       {"".join(CAPS)}
       <div id="grain"></div>
     </div>
