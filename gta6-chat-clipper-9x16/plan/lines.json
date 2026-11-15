@@ -9,64 +9,50 @@
  {
   "id": "g01",
   "beat": "first peak",
-  "s": 4.686,
-  "e": 9.821,
-  "heard": "When something crazy happens on stream, chat explodes, hundreds of messages in 10 seconds."
+  "s": 4.836,
+  "e": 7.431,
+  "heard": "When something crazy happens, chat explodes."
  },
  {
   "id": "g02",
   "beat": "reveal",
-  "s": 10.021,
-  "e": 11.894,
+  "s": 7.781,
+  "e": 9.653,
   "heard": "That spike is your clip."
  },
  {
   "id": "g03",
   "beat": "release: the build",
-  "s": 12.194,
-  "e": 15.873,
-  "heard": "So I had Claude build me a tiny tool, one file, free."
+  "s": 10.103,
+  "e": 12.368,
+  "heard": "So I had Claude build a tiny free tool."
  },
  {
   "id": "g04",
-  "beat": "how 1",
-  "s": 16.173,
-  "e": 20.494,
-  "heard": "A free app downloads the stream's chat. My tool counts it every 10 seconds."
+  "beat": "how",
+  "s": 12.768,
+  "e": 16.505,
+  "heard": "It counts the chat every 10 seconds and cuts each spike into a vertical clip."
  },
  {
   "id": "g05",
-  "beat": "how 2",
-  "s": 20.594,
-  "e": 23.801,
-  "heard": "finds the spikes, and cuts each one into a vertical clip."
+  "beat": "peak: the trick",
+  "s": 16.905,
+  "e": 20.009,
+  "heard": "Chat reacts late so each clip starts 20 seconds early."
  },
  {
   "id": "g06",
-  "beat": "peak: the trick",
-  "s": 24.101,
-  "e": 27.348,
-  "heard": "The trick, chat reacts late, so every clip starts 20 seconds early."
+  "beat": "urgency",
+  "s": 20.459,
+  "e": 24.189,
+  "heard": "GTA 6 drops Thursday. Let chat watch the streams for you."
  },
  {
   "id": "g07",
-  "beat": "release: payoff",
-  "s": 27.648,
-  "e": 29.794,
-  "heard": "One command, a whole folder of clips."
- },
- {
-  "id": "g08",
-  "beat": "peak: urgency",
-  "s": 30.094,
-  "e": 35.326,
-  "heard": "GTA 6 drops Thursday, 6-hour streams everywhere, you won't have to watch a single one."
- },
- {
-  "id": "g09",
   "beat": "CTA",
-  "s": 35.626,
-  "e": 38.495,
-  "heard": "comment, chat, and I'll send you the tool and the setup guide."
+  "s": 24.639,
+  "e": 27.3,
+  "heard": "Comment chat for the tool and the setup guide."
  }
 ]

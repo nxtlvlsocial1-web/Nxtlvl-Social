@@ -5,9 +5,9 @@ cd "$(dirname "$0")/.." || exit 1
 export HYPERFRAMES_NO_TELEMETRY=1
 mkdir -p renders
 LOG=renders/final.log
-OUT=renders/ai-nxtlvl_gta6-chat-clipper_reels_9x16_v1.mp4
+OUT=renders/ai-nxtlvl_gta6-chat-clipper_reels_9x16_v2.mp4
 : > $LOG
-PREVIEW=0 python3 build/generate.py >> $LOG 2>&1 || { echo "GEN FAILED" >> $LOG; exit 1; }
+python3 build/generate_vox.py >> $LOG 2>&1 || { echo "GEN FAILED" >> $LOG; exit 1; }
 rm -f renders/master_final.mp4
 npx --yes hyperframes@0.8.203 render --quality high --video-bitrate 11M --sdr -w 3 -o renders/master_final.mp4 >> $LOG 2>&1
 echo "RENDER EXIT $?" >> $LOG

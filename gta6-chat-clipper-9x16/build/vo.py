@@ -14,7 +14,7 @@ from chatterbox.tts import ChatterboxTTS
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REF = os.path.join(ROOT, "assets", "audio", "ref_am_puck.wav")
 OUT = os.path.join(ROOT, "assets", "audio", "vo_takes")
-EX = {"g00": .68, "g01": .66, "g02": .65, "g06": .64, "g08": .66, "g09": .64}
+EX = {"g00": .68, "g01": .66, "g02": .65, "g05": .64, "g06": .66, "g07": .64}   # v2: the 30 s script
 
 
 def main():

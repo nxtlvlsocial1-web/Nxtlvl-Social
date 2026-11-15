@@ -14,7 +14,7 @@ from faster_whisper import WhisperModel
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SR = 24000
 LEAD = .2
-GAP = {"g00": .3, "g01": .2, "g02": .3, "g03": .3, "g04": .1, "g05": .3, "g06": .3, "g07": .3, "g08": .3, "g09": 0}
+GAP = {"g00": .45, "g01": .35, "g02": .45, "g03": .4, "g04": .4, "g05": .45, "g06": .45, "g07": 0}
 
 
 def norm(w):

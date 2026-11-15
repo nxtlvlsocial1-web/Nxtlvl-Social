@@ -6,8 +6,8 @@
  },
  "g01": {
   "take": "g01_t1.wav",
-  "errors": 1,
-  "heard": "When something crazy happens on stream, chat explodes, hundreds of messages in 10 seconds."
+  "errors": 0,
+  "heard": "When something crazy happens, chat explodes."
  },
  "g02": {
   "take": "g02_t0.wav",
@@ -15,38 +15,28 @@
   "heard": "That spike is your clip."
  },
  "g03": {
-  "take": "g03_t0.wav",
+  "take": "g03_t2.wav",
   "errors": 0,
-  "heard": "So I had Claude build me a tiny tool, one file, free."
+  "heard": "So I had Claude build a tiny free tool."
  },
  "g04": {
   "take": "g04_t0.wav",
   "errors": 1,
-  "heard": "A free app downloads the stream's chat. My tool counts it every 10 seconds."
+  "heard": "It counts the chat every 10 seconds and cuts each spike into a vertical clip."
  },
  "g05": {
-  "take": "g05_t1.wav",
-  "errors": 0,
-  "heard": "finds the spikes, and cuts each one into a vertical clip."
+  "take": "g05_t2.wav",
+  "errors": 1,
+  "heard": "Chat reacts late, so each clip starts 20 seconds early."
  },
  "g06": {
-  "take": "g06_t0.wav",
-  "errors": 1,
-  "heard": "The trick, chat reacts late, so every clip starts 20 seconds early."
+  "take": "g06_t1.wav",
+  "errors": 0,
+  "heard": "GTA 6 drops Thursday. Let chat watch the streams for you."
  },
  "g07": {
-  "take": "g07_t1.wav",
+  "take": "g07_t0.wav",
   "errors": 0,
-  "heard": "One command, a whole folder of clips."
- },
- "g08": {
-  "take": "g08_t2.wav",
-  "errors": 1,
-  "heard": "GTA 6 drops Thursday, 6-hour streams everywhere, you won't have to watch a single one."
- },
- "g09": {
-  "take": "g09_t0.wav",
-  "errors": 0,
-  "heard": "Comment, chat, and I'll send you the tool and the setup guide."
+  "heard": "Comment chat for the tool and the setup guide."
  }
 }
