@@ -1,5 +1,6 @@
 # Sports Science Technology: "Performance Has No Fixed Body Type" (IG / FB Reels, 9:16, 60 s)
 
+v4 (client): "gym training" instead of "bodybuilding" in the VO, the label and the description (same footage).
 v3 (client): no "individually"; a different batter; "multiple factors" instead of the list of qualities (video and description).
 v2 (owner): quieter, more pleasant sporty music; a more expressive voice; "Sports Science Technology" (no "and" / "&") in VO and text; the SST logo on the end card.
 
@@ -17,7 +18,7 @@ Athletes come in different shapes, sizes and physical builds. But sporting perfo
 
 Multiple factors play an important role, from fitness to sport-specific capabilities.
 
-Unlike bodybuilding, where physique is a central goal, sports performance focuses on what an athlete can deliver in their game.
+Unlike gym training, where the focus is physique, sports performance focuses on what an athlete can deliver in their game.
 
 At Sports Science Technology, the focus is on understanding the individual athlete, assessing their capabilities and developing fitness around the demands of their sport.
 
@@ -28,7 +29,7 @@ Sports Science Technology - Understanding the Athlete Beyond Physique.
 Music: "Inspire Motivation" by Soundrider/Dope (CC BY 3.0)
 
 #SportsScience #SportsPerformance #AthleteDevelopment #CricketScience #SportsFitness
-sports science, athlete body types, ectomorph mesomorph endomorph, sports performance training, athlete fitness assessment, cricket fitness, strength and conditioning, athletic performance, sport specific training, bodybuilding vs sports training
+sports science, athlete body types, ectomorph mesomorph endomorph, sports performance training, athlete fitness assessment, cricket fitness, strength and conditioning, athletic performance, sport specific training, gym training vs sports training
 ```
 
 ## Credits

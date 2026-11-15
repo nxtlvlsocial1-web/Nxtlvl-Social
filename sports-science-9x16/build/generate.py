@@ -154,7 +154,7 @@ def scene3():
     sfx("whoosh_soft", t_game, -10)
 
 
-# ---------------------------------------------------------------- scene 4: bodybuilding vs sport (s06 - s08)
+# ---------------------------------------------------------------- scene 4: gym training vs sport (s06 - s08); v4 (client): no "bodybuilding", same footage
 def scene4():
     t0, t_sp, t7, t1 = L(6) - .1, T("sports", L(6)) - .1, L(7) - .1, L(8) - .1
     top, bot = (0, 958), (962, 958)
@@ -165,9 +165,9 @@ def scene4():
         shot(f"s4b{i}", t0 + i * span, t0 + (i + 1) * span, vid, at=at, pos=pos, push=(1.04, 1.1), box=bot, z=2)
     OVER.append('<i class="seam" id="seam"></i>')
     js(f'tl.fromTo("#seam", {{opacity: 1, scaleX: 0}}, {{scaleX: 1, duration: .5, ease: "expo.out", immediateRender: false}}, {t0:.3f}); tl.set("#seam", {{opacity: 0}}, {t7:.3f});')
-    OVER.append(f'<div class="duo" id="d_top" style="top:770px"><span>BODYBUILDING</span><b>PHYSIQUE</b></div>')
+    OVER.append(f'<div class="duo" id="d_top" style="top:770px"><span>GYM TRAINING</span><b>PHYSIQUE</b></div>')
     OVER.append(f'<div class="duo" id="d_bot" style="top:1000px"><span>SPORTS</span><b>GAME PERFORMANCE</b></div>')
-    for did, t in (("d_top", T("bodybuilding,") - .1), ("d_bot", t_sp)):
+    for did, t in (("d_top", T("gym", L(6)) - .1), ("d_bot", t_sp)):
         js(f'tl.fromTo("#{did}", {{opacity: 0, x: -60}}, {{opacity: 1, x: 0, duration: .45, ease: "expo.out", immediateRender: false}}, {t:.3f});')
         js(f'tl.to("#{did}", {{opacity: 0, duration: .2}}, {t7 - .2:.3f});')
     # "Every sport has different physical demands. Every athlete has different needs."
@@ -327,7 +327,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: {INK}
 .fig img {{ width: 300px; height: 780px; display: block; margin: 0 auto; filter: drop-shadow(0 0 26px rgba(47,91,255,.45)); }}
 .fig b {{ display: block; margin-top: 26px; font-family: "Montserrat", sans-serif; font-weight: 700; font-size: 34px; letter-spacing: .14em; color: #fff; }}
 .note {{ position: absolute; left: 0; right: 0; top: 1330px; text-align: center; font-size: 28px; font-weight: 500; color: {MIST}; opacity: 0; letter-spacing: .02em; }}
-/* bodybuilding vs sport */
+/* gym training vs sport */
 .seam {{ position: absolute; left: 0; top: 957px; width: {FW}px; height: 6px; background: {BLUE}; z-index: 5; opacity: 0; box-shadow: 0 0 24px rgba(47,91,255,.8); }}
 .duo {{ position: absolute; left: 60px; z-index: 6; opacity: 0; padding: 18px 28px 20px; border-left: 8px solid {BLUE}; background: rgba(6,8,14,.62); }}
 .duo span {{ display: block; font-family: "Montserrat", sans-serif; font-weight: 600; font-size: 30px; letter-spacing: .2em; color: {MIST}; }}
