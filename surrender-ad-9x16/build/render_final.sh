@@ -5,7 +5,7 @@
 cd "$(dirname "$0")/.." || exit 1
 export HYPERFRAMES_NO_TELEMETRY=1
 mkdir -p renders
-OUT=renders/nxtlvl_surrender-ad_reels_9x16_v4.mp4
+OUT=${OUT:-renders/nxtlvl_surrender-ad_reels_9x16_v4.mp4}
 npx --yes hyperframes@0.8.203 render --quality delivery -w 3 -o renders/master.mp4 > renders/final.log 2>&1
 ffmpeg -v error -y -i renders/master.mp4 -i assets/audio/voice.wav -i assets/audio/music_bed.wav -filter_complex \
   "[1:a]aformat=channel_layouts=stereo,loudnorm=I=-15:TP=-2:LRA=9,apad=whole_dur=107.5,asplit=2[v][sc];[2:a]volume=-19dB[m0];[m0][sc]sidechaincompress=threshold=0.04:ratio=5:attack=15:release=320[m];[v][m]amix=inputs=2:normalize=0:duration=first,atrim=0:107.5,afade=t=out:st=106.2:d=1.3[a]" \

@@ -92,6 +92,10 @@ def sec_times():
 
 
 SECS = sec_times()
+# v5 (client): a text hook on the opening screen, in two versions (HOOK=1 / HOOK=2; unset = none)
+HOOKS = {"1": ("For Coaches, Consultants, Experts", ["STOP LEARNING.", '<em>START EARNING.</em>']),
+         "2": ("Coaches, Consultants, Experts", ["GET YOUR NEXT 3", '<em>HIGH-PAYING CLIENTS</em>'])}
+HOOK = HOOKS.get(os.environ.get("HOOK", ""))
 # key words (indices) shown in red in full sections and as the big word
 RED = {99, 100, 137, 168, 170, 182, 213, 268, 273, 275, 318, 319, 329, 402, 456}
 
@@ -355,6 +359,10 @@ def layout():
             js(f'tl.to("#cbefore", {{y: -18, rotationY: 4, duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: 3}}, .6);')
             js(f'tl.to("#cafter", {{y: -24, rotationY: -2, duration: 1.7, ease: "sine.inOut", yoyo: true, repeat: 2}}, .78);')
             js(f'tl.to("#cards", {{scale: .9, x: -40, y: -40, filter: "blur(6px)", duration: .28, ease: "power2.in"}}, {tb - .28:.3f});')
+            if HOOK:   # on screen from frame 0 (it is the thumbnail too), settles in, leaves with the cards
+                js(f'tl.fromTo("#hook .hk", {{scale: 1.12}}, {{scale: 1, duration: .5, ease: "expo.out"}}, 0);')
+                js(f'tl.fromTo("#hook .hl", {{scale: 1.1, y: 10}}, {{scale: 1, y: 0, duration: .55, ease: "expo.out", stagger: .08}}, 0);')
+                js(f'tl.to("#hook", {{y: -40, opacity: 0, filter: "blur(6px)", duration: .26, ease: "power2.in"}}, {tb - .28:.3f});')
             intro_caps(a, b, tb)
             continue
         if kind == "split":
@@ -459,6 +467,12 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f7b7
 .tag {{ position: absolute; font: 800 54px/1 "Inter"; color: #1a0610; letter-spacing: -.01em; }}
 #tbefore {{ left: 140px; top: 680px; font-size: 62px; }}
 #tafter {{ left: 610px; top: 385px; font-size: 104px; }}
+#hook {{ position: absolute; left: 0; top: 96px; width: {FW}px; text-align: center; z-index: 3; }}
+#hook .hk {{ display: inline-block; padding: 12px 28px 14px; border-radius: 18px; background: #1a0610; color: #fff; font: 800 40px/1 "Inter";
+  letter-spacing: -.01em; box-shadow: 0 10px 26px rgba(140,20,60,.28); }}
+#hook .hl {{ font: 400 92px/.98 "Anton"; color: #160409; letter-spacing: .01em; text-transform: uppercase; text-shadow: 0 6px 18px rgba(255,255,255,.55); }}
+#hook .hk + .hl {{ margin-top: 22px; }}
+#hook .hl em {{ font-style: normal; color: #ff2d55; }}
 .icap {{ position: absolute; left: 480px; width: 530px; top: 1290px; text-align: center; opacity: 0; color: #fff; text-shadow: 0 3px 12px rgba(0,0,0,.45); }}
 .icap .s1 {{ font: 700 42px/1.1 "Inter"; }}
 .icap .s2 {{ font: 400 84px/1.05 "Kaushan"; color: #ffd0dc; }}
@@ -558,7 +572,15 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f7b7
 """
 
 
+def hook_markup():
+    if not HOOK:
+        return ""
+    kicker, lines = HOOK
+    return (f'<div id="hook"><div class="hk">{kicker}</div>' + "".join(f'<div class="hl">{l}</div>' for l in lines) + '</div>')
+
+
 def main():
+    hook_html = hook_markup()
     graphics()
     layout()
     i_end = SECS[0][2]
@@ -588,7 +610,7 @@ def main():
         <div class="tag" id="tbefore">Before</div><div class="tag" id="tafter">After</div>
         <div class="card" id="cbefore"><div class="scr"><video id="vbefore" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{i_end:.3f}" data-track-index="3" muted playsinline></video></div></div>
         <div class="card" id="cafter"><div class="scr"><video id="vafter" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{i_end:.3f}" data-track-index="4" muted playsinline></video></div></div>
-      </div></div>
+      </div>{hook_html}</div>
       {"".join(POST)}
       <div id="tint"></div><div id="leak"></div><div id="flash"></div><div id="grain"></div>
       <audio id="voice" src="assets/audio/voice.wav" data-start="0" data-duration="{VDUR}" data-track-index="10" data-volume="1"></audio>
