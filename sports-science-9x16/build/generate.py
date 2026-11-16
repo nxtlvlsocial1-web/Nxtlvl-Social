@@ -139,7 +139,8 @@ def scene3():
     # v3 (client: "just mention multiple factors, no need to mention details"): one fast montage under a single
     # MULTIPLE FACTORS tag instead of a label per quality
     t_but5 = T("but", t5) - .06
-    mont = [("5837709", 6.0, "55% 50%"), ("8533918", 3.0, "50% 50%"), ("6077692", 3.0, "50% 50%"), ("4468823", 5.0, "50% 40%"), ("8459966", 1.2, "50% 40%")]
+    # v5 (client): the weighted-belt squat (5837709) is out of the reel; the agility ladder (6077689) takes its slot
+    mont = [("6077689", 3.0, "50% 50%"), ("8533918", 3.0, "50% 50%"), ("4468823", 5.0, "50% 40%"), ("6077692", 3.0, "50% 50%"), ("8459966", 1.2, "50% 40%")]
     step = (t_but5 - t5) / len(mont)
     for i, (vid, at, pos) in enumerate(mont):
         shot(f"s3q{i}", t5 + i * step, t5 + (i + 1) * step, vid, at=at, pos=pos, push=(1.1, 1.16))
@@ -213,8 +214,10 @@ def scene5():
     hud("MOBILITY &amp; AGILITY SCREEN", t_sport, t_cont, 540, 1150)
     shot("s5e", t_cont, t_ath, "4468823", at=9.0, pos="50% 40%", push=(1.04, 1.1))
     hud("CONDITIONING", t_cont, t_ath, 540, 820)
-    shot("s5f", t_ath, T("physical", t_ath) - .1, "5837709", at=14.0, pos="55% 50%")
-    shot("s5g", T("physical", t_ath) - .1, t1, "8456207", at=4.0, pos="50% 60%")
+    # v5 (client): the weighted-belt squat glimpse (5837709) is out; the track run starts on "athletes" instead,
+    # lined up so the footage from "physical" on is unchanged
+    t_phys = T("physical", t_ath) - .1
+    shot("s5g", t_ath, t1, "8456207", at=4.0 - (t_phys - t_ath), pos="50% 60%")
     headline("h5a", ["ASSESS."], T("assessments,") - .1, t1 + .02, 270, 96)
     headline("h5b", ["UNDERSTAND."], T("fitness") - .05, t1 + .02, 380, 96)
     headline("h5c", ["DEVELOP."], T("training,", L(9)) - .05, t1 + .02, 490, 96, accent=(0,))

@@ -5,7 +5,7 @@ cd "$(dirname "$0")/.." || exit 1
 export HYPERFRAMES_NO_TELEMETRY=1
 mkdir -p renders
 LOG=renders/final.log
-OUT=renders/sports-science-technology_no-fixed-body-type_reels_9x16_v4.mp4
+OUT=renders/sports-science-technology_no-fixed-body-type_reels_9x16_v5.mp4
 : > $LOG
 PREVIEW=0 python3 build/generate.py >> $LOG 2>&1 || { echo "GEN FAILED" >> $LOG; exit 1; }
 rm -f renders/master_final.mp4
@@ -14,5 +14,5 @@ echo "RENDER EXIT $?" >> $LOG
 [ -s renders/master_final.mp4 ] || { echo "MIX skipped (render failed)" >> $LOG; exit 1; }
 python3 build/sfx_mix.py renders/master_final.mp4 "$OUT" >> $LOG 2>&1
 echo "MIX EXIT $?" >> $LOG
-python3 ~/.claude/skills/openverse-sfx/scripts/verify_mix.py "$OUT" --target -14 --outdir renders/verify_v4 >> $LOG 2>&1
+python3 ~/.claude/skills/openverse-sfx/scripts/verify_mix.py "$OUT" --target -14 --outdir renders/verify_v5 >> $LOG 2>&1
 echo "ALL DONE" >> $LOG
