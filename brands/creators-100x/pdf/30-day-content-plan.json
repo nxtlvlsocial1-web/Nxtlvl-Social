@@ -1,0 +1,103 @@
+{
+ "title": ["30 DAYS OF", "CONTENT IN", "*ONE* PROMPT"],
+ "kicker": "Free prompt",
+ "subtitle": "Fill in three blanks and get a month of posts, each day with a pillar, a hook and a format.",
+ "tagline": "From the reel: two weeks without posting",
+ "blocks": [
+  {
+   "type": "text",
+   "heading": "How to use *it*",
+   "intro": "One prompt plans the month. One afternoon films the week. That's the whole system.",
+   "steps": [
+    ["Copy the prompt", "Paste it into ChatGPT, Claude or Gemini. The next page has it, ready to copy."],
+    ["Fill in three blanks", "Your niche, who it's for and your goal. [Home workouts, busy moms, more clients.]"],
+    ["Get your 30 days", "Every day comes with a pillar, a hook and a format, laid out as a table."],
+    ["Batch it", "Film a whole week in one afternoon. A plan you don't batch is just a wish list."]
+   ],
+   "note": "Busy for one afternoon. Posting all week."
+  },
+  {
+   "type": "cards",
+   "heading": "The *prompt*",
+   "per_page": 1,
+   "items": [
+    {
+     "tag": "Copy this",
+     "line": "You are my content strategist. I make [niche] content for [who it's for]. My goal is [goal]. Build a 30-day content calendar with three pillars: teach (how-to tips), story (my journey and lessons) and proof (results, wins, behind the scenes). For each day give the pillar, a scroll-stopping hook under 12 words, the format (talking head, tutorial, carousel, trend or story) and one line on what to show. Never use the same pillar more than twice in a row. Show it as a table.",
+     "example": "I make home workout content for busy moms. My goal is more clients.",
+     "why": "Three blanks give the AI who you are, who it's for and what it's for, and the pillars stop the month from repeating itself."
+    }
+   ]
+  },
+  {
+   "type": "cards",
+   "heading": "The three *pillars*",
+   "per_page": 3,
+   "items": [
+    {
+     "tag": "Teach",
+     "line": "Quick how-to posts that solve one small problem for [who it's for].",
+     "example": "The 4-minute workout you can do while the kettle boils.",
+     "why": "Useful posts get saved and shared, which tells Instagram to show them to more people."
+    },
+    {
+     "tag": "Story",
+     "line": "Your journey: what you tried, what failed, what you learned about [niche].",
+     "example": "I skipped 3 months of workouts after my son was born. Here's what got me back.",
+     "why": "Stories make people follow you, not just your tips."
+    },
+    {
+     "tag": "Proof",
+     "line": "Results and behind the scenes: client wins, before and after, how you work.",
+     "example": "My client trained 15 minutes a day for 8 weeks. Here's what changed.",
+     "why": "Proof turns viewers into clients, which is the goal you gave the AI."
+    }
+   ]
+  },
+  {
+   "type": "cards",
+   "heading": "Follow-up *prompts*",
+   "per_page": 4,
+   "items": [
+    {
+     "tag": "Script it",
+     "line": "Turn day [number] into a 30-second script: the hook, 3 short points and a call to action.",
+     "example": "Turn day 9 into a 30-second script...",
+     "why": "From plan to filming in one message."
+    },
+    {
+     "tag": "More hooks",
+     "line": "Give me 5 different hooks for day [number]: a mistake, a number, a bold opinion, a question and a story.",
+     "example": "Give me 5 different hooks for day 9...",
+     "why": "Pick the strongest opener instead of settling for the first."
+    },
+    {
+     "tag": "Batch days",
+     "line": "Group the 30 days into 4 filming sessions by location and outfit, with a shot list for each.",
+     "example": "Kitchen day, living room day, gym day, outdoor day.",
+     "why": "Four afternoons film the whole month."
+    },
+    {
+     "tag": "Other platforms",
+     "line": "Rewrite week [number] for [platform]: same ideas, that platform's length and style.",
+     "example": "Rewrite week 1 for TikTok.",
+     "why": "One plan feeds every account you run."
+    }
+   ]
+  },
+  {
+   "type": "checklist",
+   "heading": "Batch day *checklist*",
+   "items": [
+    "Pick the 7 days you are filming and print their hooks",
+    "Group them by location and outfit",
+    "Charge your phone and clear 10 GB of space",
+    "Film the hook three ways for every post",
+    "Film all the B-roll for the week in one go",
+    "Write all 7 captions before you edit",
+    "Schedule the week and stop thinking about it"
+   ],
+   "closing": "One prompt plans the month. One afternoon films the week."
+  }
+ ]
+}

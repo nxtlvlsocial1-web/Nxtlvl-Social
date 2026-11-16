@@ -1,0 +1,317 @@
+{
+ "01_0": {
+  "speaker": "jules",
+  "text": "Two weeks without posting. Every morning I open my phone... and I've got nothing.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.4,
+  "seconds": 4.98
+ },
+ "01_1": {
+  "speaker": "jules",
+  "text": "Two weeks without posting. Every morning I open my phone... and I've got nothing.",
+  "exaggeration": 0.9,
+  "cfg_weight": 0.4,
+  "seconds": 5.18
+ },
+ "01_2": {
+  "speaker": "jules",
+  "text": "Two weeks without posting. Every morning I open my phone... and I've got nothing.",
+  "exaggeration": 0.65,
+  "cfg_weight": 0.4,
+  "seconds": 4.7
+ },
+ "02_0": {
+  "speaker": "volt",
+  "text": "What if one prompt planned your next thirty days?",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.45,
+  "seconds": 2.9
+ },
+ "02_1": {
+  "speaker": "volt",
+  "text": "What if one prompt planned your next thirty days?",
+  "exaggeration": 0.85,
+  "cfg_weight": 0.45,
+  "seconds": 2.9
+ },
+ "02_2": {
+  "speaker": "volt",
+  "text": "What if one prompt planned your next thirty days?",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.45,
+  "seconds": 2.82
+ },
+ "03_0": {
+  "speaker": "jules",
+  "text": "Thirty?! I can't even plan lunch.",
+  "exaggeration": 0.9,
+  "cfg_weight": 0.45,
+  "seconds": 2.34
+ },
+ "03_1": {
+  "speaker": "jules",
+  "text": "Thirty?! I can't even plan lunch.",
+  "exaggeration": 1.05,
+  "cfg_weight": 0.45,
+  "seconds": 1.94
+ },
+ "03_2": {
+  "speaker": "jules",
+  "text": "Thirty?! I can't even plan lunch.",
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "seconds": 2.7
+ },
+ "04_0": {
+  "speaker": "volt",
+  "text": "Step one. Tell me your niche, who it's for, and your goal.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seconds": 3.74
+ },
+ "04_1": {
+  "speaker": "volt",
+  "text": "Step one. Tell me your niche, who it's for, and your goal.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.5,
+  "seconds": 3.3
+ },
+ "04_2": {
+  "speaker": "volt",
+  "text": "Step one. Tell me your niche, who it's for, and your goal.",
+  "exaggeration": 0.5,
+  "cfg_weight": 0.5,
+  "seconds": 3.54
+ },
+ "05_0": {
+  "speaker": "jules",
+  "text": "Home workouts. Busy moms. More clients.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seconds": 2.9
+ },
+ "05_1": {
+  "speaker": "jules",
+  "text": "Home workouts. Busy moms. More clients.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.5,
+  "seconds": 3.02
+ },
+ "05_2": {
+  "speaker": "jules",
+  "text": "Home workouts. Busy moms. More clients.",
+  "exaggeration": 0.5,
+  "cfg_weight": 0.5,
+  "seconds": 2.98
+ },
+ "06_0": {
+  "speaker": "volt",
+  "text": "Step two. I split it into three pillars: teach, story, proof.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seconds": 4.62
+ },
+ "06_1": {
+  "speaker": "volt",
+  "text": "Step two. I split it into three pillars: teach, story, proof.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.5,
+  "seconds": 4.5
+ },
+ "06_2": {
+  "speaker": "volt",
+  "text": "Step two. I split it into three pillars: teach, story, proof.",
+  "exaggeration": 0.5,
+  "cfg_weight": 0.5,
+  "seconds": 4.66
+ },
+ "07_0": {
+  "speaker": "jules",
+  "text": "Pillars? Like... a temple?",
+  "exaggeration": 0.85,
+  "cfg_weight": 0.45,
+  "seconds": 2.06
+ },
+ "07_1": {
+  "speaker": "jules",
+  "text": "Pillars? Like... a temple?",
+  "exaggeration": 1.0,
+  "cfg_weight": 0.45,
+  "seconds": 1.98
+ },
+ "07_2": {
+  "speaker": "jules",
+  "text": "Pillars? Like... a temple?",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.45,
+  "seconds": 2.18
+ },
+ "08_0": {
+  "speaker": "volt",
+  "text": "Like a menu. You never run out of dishes.",
+  "exaggeration": 0.65,
+  "cfg_weight": 0.5,
+  "seconds": 2.46
+ },
+ "08_1": {
+  "speaker": "volt",
+  "text": "Like a menu. You never run out of dishes.",
+  "exaggeration": 0.8,
+  "cfg_weight": 0.5,
+  "seconds": 2.34
+ },
+ "08_2": {
+  "speaker": "volt",
+  "text": "Like a menu. You never run out of dishes.",
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "seconds": 2.1
+ },
+ "09_0": {
+  "speaker": "volt",
+  "text": "Step three. Thirty days, each with a hook and a format.",
+  "exaggeration": 0.65,
+  "cfg_weight": 0.5,
+  "seconds": 3.58
+ },
+ "09_1": {
+  "speaker": "volt",
+  "text": "Step three. Thirty days, each with a hook and a format.",
+  "exaggeration": 0.8,
+  "cfg_weight": 0.5,
+  "seconds": 3.22
+ },
+ "09_2": {
+  "speaker": "volt",
+  "text": "Step three. Thirty days, each with a hook and a format.",
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "seconds": 3.62
+ },
+ "10_0": {
+  "speaker": "jules",
+  "text": "Day nine: the four-minute workout while the kettle boils? I'd watch that!",
+  "exaggeration": 0.9,
+  "cfg_weight": 0.45,
+  "seconds": 4.18
+ },
+ "10_1": {
+  "speaker": "jules",
+  "text": "Day nine: the four-minute workout while the kettle boils? I'd watch that!",
+  "exaggeration": 1.05,
+  "cfg_weight": 0.45,
+  "seconds": 4.02
+ },
+ "10_2": {
+  "speaker": "jules",
+  "text": "Day nine: the four-minute workout while the kettle boils? I'd watch that!",
+  "exaggeration": 0.8,
+  "cfg_weight": 0.45,
+  "seconds": 3.7
+ },
+ "11_0": {
+  "speaker": "volt",
+  "text": "One rule: film the whole week in one afternoon.",
+  "exaggeration": 0.65,
+  "cfg_weight": 0.5,
+  "seconds": 2.74
+ },
+ "11_1": {
+  "speaker": "volt",
+  "text": "One rule: film the whole week in one afternoon.",
+  "exaggeration": 0.8,
+  "cfg_weight": 0.5,
+  "seconds": 2.62
+ },
+ "11_2": {
+  "speaker": "volt",
+  "text": "One rule: film the whole week in one afternoon.",
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "seconds": 3.3
+ },
+ "12_0": {
+  "speaker": "jules",
+  "text": "So I'm busy for one afternoon...",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.45,
+  "seconds": 2.22
+ },
+ "12_1": {
+  "speaker": "jules",
+  "text": "So I'm busy for one afternoon...",
+  "exaggeration": 0.85,
+  "cfg_weight": 0.45,
+  "seconds": 2.1
+ },
+ "12_2": {
+  "speaker": "jules",
+  "text": "So I'm busy for one afternoon...",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.45,
+  "seconds": 1.94
+ },
+ "13_0": {
+  "speaker": "volt",
+  "text": "...and posting all week.",
+  "exaggeration": 0.75,
+  "cfg_weight": 0.5,
+  "seconds": 1.58
+ },
+ "13_1": {
+  "speaker": "volt",
+  "text": "...and posting all week.",
+  "exaggeration": 0.9,
+  "cfg_weight": 0.5,
+  "seconds": 1.42
+ },
+ "13_2": {
+  "speaker": "volt",
+  "text": "...and posting all week.",
+  "exaggeration": 0.65,
+  "cfg_weight": 0.5,
+  "seconds": 1.42
+ },
+ "14_0": {
+  "speaker": "jules",
+  "text": "Send this to a friend who never knows what to post.",
+  "exaggeration": 0.7,
+  "cfg_weight": 0.5,
+  "seconds": 2.7
+ },
+ "14_1": {
+  "speaker": "jules",
+  "text": "Send this to a friend who never knows what to post.",
+  "exaggeration": 0.85,
+  "cfg_weight": 0.5,
+  "seconds": 2.5
+ },
+ "14_2": {
+  "speaker": "jules",
+  "text": "Send this to a friend who never knows what to post.",
+  "exaggeration": 0.6,
+  "cfg_weight": 0.5,
+  "seconds": 2.58
+ },
+ "15_0": {
+  "speaker": "volt",
+  "text": "Comment Plan, and I'll send you the prompt.",
+  "exaggeration": 0.65,
+  "cfg_weight": 0.5,
+  "seconds": 2.22
+ },
+ "15_1": {
+  "speaker": "volt",
+  "text": "Comment Plan, and I'll send you the prompt.",
+  "exaggeration": 0.8,
+  "cfg_weight": 0.5,
+  "seconds": 2.22
+ },
+ "15_2": {
+  "speaker": "volt",
+  "text": "Comment Plan, and I'll send you the prompt.",
+  "exaggeration": 0.55,
+  "cfg_weight": 0.5,
+  "seconds": 2.42
+ }
+}

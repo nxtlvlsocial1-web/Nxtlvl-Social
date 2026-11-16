@@ -1,0 +1,77 @@
+{
+ "01": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "two weeks without posting.  Every morning I open my phone, and I've got nothing."
+ },
+ "02": {
+  "take": 0,
+  "match": 0.89,
+  "heard": "What if one prompt planned your next 30 days?"
+ },
+ "03": {
+  "take": 0,
+  "match": 0.91,
+  "heard": "I can't even plan lunch"
+ },
+ "04": {
+  "take": 1,
+  "match": 0.92,
+  "heard": "Step 1. Tell me your niche, who it's for, and your goal."
+ },
+ "05": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "Home workouts, busy moms, more clients."
+ },
+ "06": {
+  "take": 1,
+  "match": 0.91,
+  "heard": "Step 2. I split it into three pillars. Teach. Story. Proof."
+ },
+ "07": {
+  "take": 0,
+  "match": 1.0,
+  "heard": "Pillars? Like a temple?"
+ },
+ "08": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "Like a menu. You never run out of dishes."
+ },
+ "09": {
+  "take": 1,
+  "match": 0.82,
+  "heard": "Step 3. 30 days, each with a hook and a format."
+ },
+ "10": {
+  "take": 0,
+  "match": 0.92,
+  "heard": "Day 9, the 4-minute workout while the kettle boils, I'd watch that."
+ },
+ "11": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "One rule, film the whole week in one afternoon."
+ },
+ "12": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "So I'm busy for one afternoon."
+ },
+ "13": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "and posting all week."
+ },
+ "14": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "Send this to a friend who never knows what to post."
+ },
+ "15": {
+  "take": 1,
+  "match": 1.0,
+  "heard": "comment plan, and I'll send you the prompt."
+ }
+}

@@ -1,0 +1,170 @@
+{
+  "kicker": "Free swipe file",
+  "title": [
+    "*20* HOOKS",
+    "THAT WORK"
+  ],
+  "subtitle": "Openers that stop the scroll in the first three seconds. Fill in the blanks, film it, post it.",
+  "tagline": "From the reel: \"This video already lost you\"",
+  "blocks": [
+    {
+      "type": "text",
+      "heading": "The first 3 seconds *decide everything*",
+      "intro": "Most reels don't flop because of the algorithm. They lose people before the hook even lands. Three rules before you use any hook in this file:",
+      "steps": [
+        [
+          "Open with the result, not a greeting",
+          "Nobody stays for \"Hey guys.\" Your first sentence is the hook. Say it in the first two seconds."
+        ],
+        [
+          "Make frame one move",
+          "A still first frame gets scrolled past. Start mid-action: a cut, a zoom, text popping in, your hand already moving."
+        ],
+        [
+          "Show it, then explain it",
+          "Put the payoff on screen first. The how comes after the viewer has a reason to stay."
+        ]
+      ],
+      "note": "How to use this file: pick one hook, swap the [highlighted blanks] for your own details, and put the hook on screen as text while you say it."
+    },
+    {
+      "type": "cards",
+      "heading": "The *20 hooks*",
+      "per_page": 3,
+      "items": [
+        {
+          "tag": "Result first",
+          "line": "I got [result] in [time] by changing one thing.",
+          "example": "I got 40,000 views in two days by changing my first frame.",
+          "why": "A concrete result plus \"one thing\" makes the fix feel easy to steal."
+        },
+        {
+          "tag": "Result first",
+          "line": "This is what [result] looks like. Here's how I made it.",
+          "example": "This is what a 1M-view reel looks like before the edit. Here's how I made it.",
+          "why": "The payoff is on screen before you ask for any attention."
+        },
+        {
+          "tag": "Mistake",
+          "line": "Stop [common habit] if you want [goal].",
+          "example": "Stop saying \"hey guys\" if you want people to stay.",
+          "why": "Viewers check whether they do it, and they stay to find out."
+        },
+        {
+          "tag": "Mistake",
+          "line": "You're losing [audience] at second [number]. Here's why.",
+          "example": "You're losing half your viewers at second two. Here's why.",
+          "why": "A precise number feels measured, and the loss is personal."
+        },
+        {
+          "tag": "Mistake",
+          "line": "The [thing] mistake every [audience] makes.",
+          "example": "The caption mistake every new creator makes.",
+          "why": "\"Every\" includes the viewer, so they need to know which one it is."
+        },
+        {
+          "tag": "Contrarian",
+          "line": "[Popular advice] is why your [thing] isn't working.",
+          "example": "Posting every day is why your reels aren't growing.",
+          "why": "It flips advice they already follow, and that demands an answer."
+        },
+        {
+          "tag": "Contrarian",
+          "line": "Everyone tells you to [advice]. Do [opposite] instead.",
+          "example": "Everyone tells you to use trending audio. Use your own voice instead.",
+          "why": "Disagreeing with the crowd signals you know something they don't."
+        },
+        {
+          "tag": "Curiosity",
+          "line": "I tried [thing] for [time]. Here's what happened.",
+          "example": "I posted at 6am for 30 days. Here's what happened.",
+          "why": "A real experiment with an unknown ending is hard to scroll past."
+        },
+        {
+          "tag": "Curiosity",
+          "line": "Nobody talks about this part of [topic].",
+          "example": "Nobody talks about this part of going viral.",
+          "why": "It promises information the viewer hasn't seen anywhere else."
+        },
+        {
+          "tag": "Curiosity",
+          "line": "Watch what happens when I [action].",
+          "example": "Watch what happens to my views when I cut the first two seconds.",
+          "why": "It sets up a visible before and after the viewer waits to see."
+        },
+        {
+          "tag": "Numbers",
+          "line": "[Number] [things] that [result], and number [x] surprised me.",
+          "example": "Three edits that doubled my watch time, and number two surprised me.",
+          "why": "A short list feels quick, and the surprise keeps them to the end."
+        },
+        {
+          "tag": "Numbers",
+          "line": "I've [done thing] [big number] times. Only one [thing] works every time.",
+          "example": "I've posted 400 reels. Only one hook works every time.",
+          "why": "Experience at scale earns trust in one sentence."
+        },
+        {
+          "tag": "Story",
+          "line": "[Time] ago I had [before]. Today I have [after].",
+          "example": "Six months ago I had 200 followers. Today I have 50,000.",
+          "why": "Before and after is the oldest story shape there is, and it still works."
+        },
+        {
+          "tag": "Story",
+          "line": "This [post / reel / email] changed everything for me.",
+          "example": "This one reel changed everything for my account.",
+          "why": "A turning point makes the viewer want the same moment."
+        },
+        {
+          "tag": "Callout",
+          "line": "If you [situation] and still [problem], watch this.",
+          "example": "If you post every day and still get 200 views, watch this.",
+          "why": "The right viewer feels seen and stops scrolling instantly."
+        },
+        {
+          "tag": "Callout",
+          "line": "Save this before your next [task].",
+          "example": "Save this before you film your next reel.",
+          "why": "It frames the reel as a tool, and saves push it to more people."
+        },
+        {
+          "tag": "Comparison",
+          "line": "[Option A] vs [Option B]. One of them gets [result].",
+          "example": "Talking head vs B-roll first. One of them gets ten times the views.",
+          "why": "People guess before the answer, and guessing keeps them watching."
+        },
+        {
+          "tag": "Insider",
+          "line": "Here's what [experts] do that nobody shows you.",
+          "example": "Here's what big creators do in the first frame that nobody shows you.",
+          "why": "Behind-the-scenes access feels exclusive."
+        },
+        {
+          "tag": "Pattern break",
+          "line": "Don't scroll. This takes [time] and fixes [problem].",
+          "example": "Don't scroll. This takes 20 seconds and fixes your hook.",
+          "why": "It names the scroll out loud and makes the cost of staying tiny."
+        },
+        {
+          "tag": "Challenge",
+          "line": "Try this in your next [thing] and tell me what happens.",
+          "example": "Try this in your next reel and tell me what happens to your views.",
+          "why": "It turns watching into doing, and the replies boost the post."
+        }
+      ]
+    },
+    {
+      "type": "checklist",
+      "heading": "Before you *post*",
+      "items": [
+        "The hook is said in the first two seconds, with no greeting before it.",
+        "The hook is on screen as text, big and readable.",
+        "Something moves in the very first frame.",
+        "The result is shown before it is explained.",
+        "The ending tells people exactly what to do next."
+      ],
+      "closing": "Pick one hook. Film it today. *Ship it.*"
+    }
+  ]
+}
