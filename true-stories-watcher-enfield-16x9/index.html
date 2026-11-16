@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape"
+  data-composition-variables='[{"id":"renderScale","type":"number","label":"3D render scale (0.5 = draft)","default":1}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>True Stories: The Watcher and Enfield</title>
+    <script>
+      // Hold the runtime until the 3D stage has built its world (fonts, textures, shader warm-up).
+      (function () {
+        let resolve;
+        const p = new Promise((r) => (resolve = r));
+        window.__counterReady = { promise: p, resolve };
+        window.__hf = window.__hf || {};
+        window.__hf.buildReady = window.__hf.buildReady || {};
+        window.__hf.buildReady["counter-stage"] = p;
+      })();
+    </script>
+    <script src="vendor/gsap-3.14.2/gsap.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three/three.module.js",
+          "three/addons/": "./vendor/three/addons/"
+        }
+      }
+    </script>
+    <style>
+      @font-face {
+        font-family: "Poppins";
+        src: url("assets/fonts/poppins-latin-800-normal.woff2") format("woff2");
+        font-weight: 800;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Poppins";
+        src: url("assets/fonts/poppins-latin-700-normal.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      :root {
+        --ground: #050608;
+        --ink: #ffffff;
+        --accent: #ffb020;
+        --red: #e5322d;
+        --font-display: "Poppins", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: var(--font-display); color: var(--ink); }
+      #stage-layer { position: absolute; inset: 0; }
+      #stage, #hud { position: absolute; inset: 0; width: 1920px; height: 1080px; display: block; }
+      #hud { pointer-events: none; }
+      /* subtitles: one phrase at a time, bottom centre, inside the title-safe area */
+      #subs { position: absolute; left: 240px; right: 240px; top: 900px; height: 110px; pointer-events: none; }
+      #subs .p { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center;
+        font-weight: 700; font-size: 44px; line-height: 1.12; opacity: 0;
+        text-shadow: 0 3px 0 rgba(0,0,0,0.6), 0 0 14px rgba(0,0,0,0.85);
+        -webkit-text-stroke: 7px rgba(8,8,10,0.9); paint-order: stroke fill; }
+      #subs .p.q { font-style: italic; color: #ffe2a8; }
+      /* cards */
+      .card { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; opacity: 0; }
+      .card .kicker { font-weight: 700; font-size: 34px; letter-spacing: 0.42em; color: var(--accent); margin-bottom: 18px; }
+      .card .big { font-weight: 800; font-size: 150px; line-height: 0.95; letter-spacing: -0.01em;
+        text-shadow: 0 8px 0 rgba(0,0,0,0.55), 0 0 50px rgba(0,0,0,0.7); }
+      .card .sub { font-weight: 700; font-size: 40px; margin-top: 26px; color: #d9dbe4; letter-spacing: 0.06em; }
+      .card .rule { width: 520px; height: 4px; background: var(--accent); margin: 30px auto 0; transform-origin: center; }
+      #title .big { font-size: 120px; }
+      #title .vs { font-weight: 800; font-size: 60px; color: var(--accent); margin: 10px 0; }
+      /* lower third */
+      .lt { position: absolute; left: 110px; top: 110px; opacity: 0; }
+      .lt .a { display: inline-block; background: var(--accent); color: #141414; font-weight: 800; font-size: 30px; letter-spacing: 0.16em; padding: 8px 18px; }
+      .lt .b { display: block; margin-top: 10px; font-weight: 800; font-size: 54px; text-shadow: 0 4px 0 rgba(0,0,0,0.6), 0 0 22px rgba(0,0,0,0.8); }
+      /* prompts */
+      .prompt { position: absolute; right: 110px; top: 120px; width: 640px; padding: 30px 34px; border-radius: 26px;
+        background: rgba(14,14,18,0.86); border: 3px solid rgba(255,255,255,0.14); box-shadow: 0 20px 60px rgba(0,0,0,0.5); opacity: 0; display: flex; gap: 26px; align-items: center; }
+      .prompt svg { flex: none; }
+      .prompt .tx .k { font-weight: 700; font-size: 28px; letter-spacing: 0.18em; color: var(--accent); }
+      .prompt .tx .m { font-weight: 800; font-size: 44px; line-height: 1.08; margin-top: 6px; }
+      #poll { position: absolute; left: 0; right: 0; top: 140px; display: flex; flex-direction: column; align-items: center; opacity: 0; }
+      #poll .q { font-weight: 800; font-size: 64px; text-shadow: 0 5px 0 rgba(0,0,0,0.6), 0 0 30px rgba(0,0,0,0.8); }
+      #poll .row { display: flex; gap: 60px; margin-top: 36px; }
+      #poll .opt { width: 420px; height: 120px; border-radius: 24px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 56px; letter-spacing: 0.04em; }
+      #poll .w { background: #2f6fe0; box-shadow: 0 10px 0 #1b47a0; }
+      #poll .e { background: #d9452f; box-shadow: 0 10px 0 #962a1b; }
+      #poll .c { margin-top: 34px; font-weight: 700; font-size: 34px; color: #e6e6ee; }
+      #subbtn { position: absolute; left: 50%; top: 760px; transform: translateX(-50%); display: flex; align-items: center; gap: 24px; opacity: 0; }
+      #subbtn .btn { background: var(--red); color: #fff; font-weight: 800; font-size: 52px; letter-spacing: 0.06em; padding: 22px 54px; border-radius: 16px; box-shadow: 0 10px 0 #8f1c19; }
+      #endscreen { position: absolute; inset: 0; opacity: 0; }
+      #endscreen .t { position: absolute; left: 0; right: 0; top: 110px; text-align: center; font-weight: 800; font-size: 72px; text-shadow: 0 5px 0 rgba(0,0,0,0.6), 0 0 30px rgba(0,0,0,0.8); }
+      #endscreen .slot { position: absolute; top: 330px; width: 700px; height: 394px; border: 4px solid rgba(255,255,255,0.55); border-radius: 18px; background: rgba(0,0,0,0.35); }
+      #endscreen .slot.l { left: 180px; } #endscreen .slot.r { right: 180px; }
+      #endscreen .cap { position: absolute; top: 760px; width: 700px; text-align: center; font-weight: 700; font-size: 34px; color: #e6e6ee; }
+      #endscreen .cap.l { left: 180px; } #endscreen .cap.r { right: 180px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="370" data-width="1920" data-height="1080">
+      <div id="stage-layer" class="clip" data-start="0" data-duration="370" data-track-index="0" data-layout-allow-overflow>
+        <canvas id="stage" width="1920" height="1080"></canvas>
+        <canvas id="hud" width="1920" height="1080"></canvas>
+      </div>
+      <div id="subs" class="clip" data-start="0" data-duration="356.2" data-track-index="2"></div>
+
+      <div id="title" class="card clip" data-start="31.6" data-duration="3.7" data-track-index="3">
+        <div class="kicker">2 TRUE STORIES</div>
+        <div class="big">THE WATCHER</div>
+        <div class="vs">&amp;</div>
+        <div class="big">THE ENFIELD POLTERGEIST</div>
+      </div>
+      <div id="chap1" class="card clip" data-start="35.2" data-duration="3.1" data-track-index="3">
+        <div class="kicker">CHAPTER ONE</div>
+        <div class="big">THE WATCHER</div>
+        <div class="rule"></div>
+        <div class="sub">WESTFIELD, NEW JERSEY · USA · 2014</div>
+      </div>
+      <div id="chap2" class="card clip" data-start="194.1" data-duration="4.15" data-track-index="3">
+        <div class="kicker">CHAPTER TWO</div>
+        <div class="big">THE ENFIELD<br />POLTERGEIST</div>
+        <div class="rule"></div>
+        <div class="sub">ENFIELD, LONDON · UK · 1977</div>
+      </div>
+
+      <div id="lt1" class="lt clip" data-start="38.6" data-duration="6.8" data-track-index="4"><span class="a">WESTFIELD, NEW JERSEY</span><span class="b">June 2014</span></div>
+      <div id="lt2" class="lt clip" data-start="49.0" data-duration="7.3" data-track-index="4"><span class="a">657 BOULEVARD</span><span class="b">6 bedrooms · about $1.3 million</span></div>
+      <div id="lt3" class="lt clip" data-start="198.4" data-duration="5.8" data-track-index="4"><span class="a">ENFIELD, NORTH LONDON</span><span class="b">284 Green Street · August 1977</span></div>
+      <div id="lt4" class="lt clip" data-start="263.2" data-duration="7.6" data-track-index="4"><span class="a">SOCIETY FOR PSYCHICAL RESEARCH</span><span class="b">Maurice Grosse &amp; Guy Lyon Playfair</span></div>
+
+      <div id="prompt1" class="prompt clip" data-start="128.3" data-duration="5.6" data-track-index="5">
+        <svg width="96" height="96" viewBox="0 0 96 96"><path d="M14 18h68a8 8 0 0 1 8 8v36a8 8 0 0 1-8 8H42L24 84V70H14a8 8 0 0 1-8-8V26a8 8 0 0 1 8-8z" fill="#ffb020"/><circle cx="32" cy="44" r="5" fill="#141414"/><circle cx="48" cy="44" r="5" fill="#141414"/><circle cx="64" cy="44" r="5" fill="#141414"/></svg>
+        <div class="tx"><div class="k">TELL ME IN THE COMMENTS</div><div class="m">Would you still move in?</div></div>
+      </div>
+      <div id="prompt2" class="prompt clip" data-start="188.4" data-duration="5.0" data-track-index="5">
+        <svg width="96" height="96" viewBox="0 0 96 96"><path d="M30 86H14V42h16zM36 42l16-30c8 0 12 6 10 14l-4 14h24a8 8 0 0 1 8 9l-6 30a8 8 0 0 1-8 7H36z" fill="#ffffff"/></svg>
+        <div class="tx"><div class="k">ENJOYING THIS?</div><div class="m">Hit like. It really helps.</div></div>
+      </div>
+      <div id="poll" class="clip" data-start="340.1" data-duration="10.4" data-track-index="5">
+        <div class="q">Which one would you spend a night in?</div>
+        <div class="row"><div class="opt w">WATCHER</div><div class="opt e">ENFIELD</div></div>
+        <div class="c">Comment your answer below</div>
+      </div>
+      <div id="subbtn" class="clip" data-start="350.6" data-duration="5.6" data-track-index="5">
+        <div class="btn">SUBSCRIBE</div>
+        <svg width="84" height="84" viewBox="0 0 84 84"><path d="M42 8c-12 0-20 9-20 21v15l-8 12h56l-8-12V29C62 17 54 8 42 8zM34 62a8 8 0 0 0 16 0z" fill="#ffffff"/></svg>
+      </div>
+      <div id="endscreen" class="clip" data-start="356.4" data-duration="13.6" data-track-index="6">
+        <div class="t">THANKS FOR WATCHING</div>
+        <div class="slot l"></div><div class="slot r"></div>
+        <div class="cap l">Watch next</div><div class="cap r">More true stories</div>
+      </div>
+
+      <audio id="vo" src="audio/vo.wav" data-start="0" data-duration="370" data-track-index="10" data-volume="1"></audio>
+      <audio id="music" src="audio/music.wav" data-start="0" data-duration="370" data-track-index="11" data-volume="0.5"></audio>
+      <audio id="sfx" src="audio/sfx.wav" data-start="0" data-duration="370" data-track-index="12" data-volume="0.7"></audio>
+    </div>
+
+    <script type="module">
+      import { SUBS } from "./src/subs-data.js";
+      const tl = gsap.timeline({ paused: true });
+      const holder = document.getElementById("subs");
+      SUBS.forEach((p) => {
+        const el = document.createElement("div");
+        el.className = "p" + (p.q ? " q" : "");
+        el.textContent = p.t;
+        holder.appendChild(el);
+        tl.set(el, { opacity: 1 }, p.s);
+        tl.set(el, { opacity: 0 }, Math.min(p.e, 356.15));
+      });
+      const card = (id, a, b) => {
+        tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.out" }, a);
+        tl.fromTo(id + " .big", { y: 30, scale: 0.96 }, { y: 0, scale: 1, duration: 0.6, ease: "power3.out" }, a);
+        tl.to(id, { opacity: 0, duration: 0.35, ease: "power2.in" }, b - 0.35);
+      };
+      card("#title", 31.6, 35.25);
+      card("#chap1", 35.2, 38.3);
+      tl.fromTo("#chap1 .rule", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.out" }, 35.5);
+      card("#chap2", 194.1, 198.25);
+      tl.fromTo("#chap2 .rule", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.out" }, 194.4);
+      const lt = (id, a, b) => {
+        tl.fromTo(id, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, a);
+        tl.to(id, { opacity: 0, x: -20, duration: 0.3, ease: "power2.in" }, b - 0.3);
+      };
+      lt("#lt1", 38.6, 45.4); lt("#lt2", 49.0, 56.3); lt("#lt3", 198.4, 204.2); lt("#lt4", 263.2, 270.8);
+      const pop = (id, a, b) => {
+        tl.fromTo(id, { opacity: 0, y: -30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: "back.out(2)" }, a);
+        tl.to(id, { opacity: 0, y: -16, duration: 0.3, ease: "power2.in" }, b - 0.3);
+      };
+      pop("#prompt1", 128.3, 133.9); pop("#prompt2", 188.4, 193.4);
+      tl.to("#prompt2 svg", { rotation: -14, scale: 1.18, duration: 0.18, yoyo: true, repeat: 3, ease: "sine.inOut", transformOrigin: "50% 60%" }, 189.4);
+      tl.fromTo("#poll", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 340.1);
+      tl.fromTo("#poll .opt", { scale: 0.6 }, { scale: 1, duration: 0.35, stagger: 0.15, ease: "back.out(2)" }, 340.3);
+      tl.to("#poll", { opacity: 0, duration: 0.3 }, 350.2);
+      tl.fromTo("#subbtn", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, 350.6);
+      tl.to("#subbtn .btn", { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, ease: "sine.inOut" }, 352.0);
+      tl.set("#subbtn .btn", { backgroundColor: "#3a3a40", boxShadow: "0 10px 0 #222226" }, 352.1);
+      tl.set("#subbtn .btn", { textContent: "SUBSCRIBED" }, 352.1);
+      tl.to("#subbtn svg", { rotation: 18, duration: 0.1, yoyo: true, repeat: 5, ease: "sine.inOut", transformOrigin: "50% 10%" }, 352.6);
+      tl.to("#subbtn", { opacity: 0, duration: 0.3 }, 355.9);
+      tl.fromTo("#endscreen", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 356.4);
+      window.__timelines["main"] = tl;
+      if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+    </script>
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
