@@ -44,23 +44,24 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1080" data-height="1920">
-      <video id="footage" class="clip" src="assets/base.mp4" muted playsinline data-start="0" data-duration="30" data-track-index="0"></video>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="35" data-width="1080" data-height="1920">
+      <video id="footage" class="clip" src="assets/base.mp4" muted playsinline data-start="0" data-duration="35" data-track-index="0"></video>
+      <audio id="voiceover" src="assets/voiceover.wav" data-start="0" data-duration="34.4" data-track-index="3" data-volume="1"></audio>
 
-      <div id="gunthe" class="layer clip" data-start="4.3" data-duration="3.7" data-track-index="1">
+      <div id="gunthe" class="layer clip" data-start="7.45" data-duration="2.85" data-track-index="1">
         <div class="card shadow"><div class="kicker">ओपन प्लॉट्स</div><div class="big">1 ते 50 गुंठे</div></div>
       </div>
 
-      <div id="midc" class="layer clip" data-start="14.3" data-duration="3.75" data-track-index="1">
+      <div id="midc" class="layer clip" data-start="16.55" data-duration="6.25" data-track-index="1">
         <div class="card shadow"><div class="big">MIDC <span>4 km</span></div><div class="sub">शिक्रापूर · तळेगाव · सणसवाडी</div></div>
       </div>
 
-      <div id="price" class="layer clip" data-start="24.2" data-duration="2.85" data-track-index="1">
+      <div id="price" class="layer clip" data-start="25.9" data-duration="3.1" data-track-index="1">
         <div class="scrim"></div>
         <div class="wrap shadow"><div class="kicker">किंमत फक्त</div><div class="big">₹5,49,000</div><div class="unit">प्रति गुंठा</div></div>
       </div>
 
-      <div id="call" class="layer clip" data-start="27.0" data-duration="3" data-track-index="2">
+      <div id="call" class="layer clip" data-start="29.0" data-duration="6" data-track-index="2">
         <div class="dim"></div>
         <div class="wrap shadow">
           <div class="small">अधिक माहितीसाठी</div>
@@ -75,26 +76,26 @@
       const tl = gsap.timeline({ paused: true });
       const ease = "power3.out";
       // 1-50 guntha: card slides in from left, out by fade
-      tl.fromTo("#gunthe .card", { x: -420, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease }, 4.3);
-      tl.fromTo("#gunthe .big", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease }, 4.5);
-      tl.to("#gunthe .card", { opacity: 0, x: -60, duration: 0.3, ease: "power2.in" }, 7.65);
+      tl.fromTo("#gunthe .card", { x: -420, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease }, 7.45);
+      tl.fromTo("#gunthe .big", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease }, 7.65);
+      tl.to("#gunthe .card", { opacity: 0, x: -60, duration: 0.3, ease: "power2.in" }, 10.0);
       // MIDC: from right
-      tl.fromTo("#midc .card", { x: 420, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease }, 14.3);
-      tl.fromTo("#midc .sub", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease }, 14.6);
-      tl.to("#midc .card", { opacity: 0, x: 60, duration: 0.3, ease: "power2.in" }, 17.7);
+      tl.fromTo("#midc .card", { x: 420, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease }, 16.55);
+      tl.fromTo("#midc .sub", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease }, 16.85);
+      tl.to("#midc .card", { opacity: 0, x: 60, duration: 0.3, ease: "power2.in" }, 22.5);
       // price: scrim fade, number punches in
-      tl.fromTo("#price .scrim", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 24.2);
-      tl.fromTo("#price .kicker", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease }, 24.3);
-      tl.fromTo("#price .big", { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "back.out(1.8)" }, 24.75);
-      tl.fromTo("#price .unit", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease }, 25.05);
-      tl.to("#price .wrap", { opacity: 0, duration: 0.25 }, 26.8);
+      tl.fromTo("#price .scrim", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 25.9);
+      tl.fromTo("#price .kicker", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease }, 26.0);
+      tl.fromTo("#price .big", { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "back.out(1.8)" }, 26.95);
+      tl.fromTo("#price .unit", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease }, 27.6);
+      tl.to("#price .wrap", { opacity: 0, duration: 0.25 }, 28.75);
       // call card, held to the end
-      tl.fromTo("#call .dim", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 27.0);
-      tl.fromTo("#call .small", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease }, 27.05);
-      tl.fromTo("#call .head", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease }, 27.15);
-      tl.fromTo("#call .num", { scale: 0.75, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" }, 27.4);
-      tl.fromTo("#call .sub", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 27.75);
-      tl.to("#call .num", { scale: 1.05, duration: 0.35, yoyo: true, repeat: 1, ease: "sine.inOut" }, 28.6);
+      tl.fromTo("#call .dim", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 29.0);
+      tl.fromTo("#call .small", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease }, 29.05);
+      tl.fromTo("#call .head", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease }, 29.25);
+      tl.fromTo("#call .num", { scale: 0.75, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" }, 30.85);
+      tl.fromTo("#call .sub", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 31.4);
+      tl.to("#call .num", { scale: 1.05, duration: 0.35, yoyo: true, repeat: 1, ease: "sine.inOut" }, 33.2);
       window.__timelines["main"] = tl;
     </script>
   </body>

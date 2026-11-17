@@ -8,3 +8,5 @@ renders/
 node_modules/
 .hyperframes/video-state-lock
 .hyperframes/preview/
+# client voiceover audio: deliver, do not commit
+assets/voiceover.*
