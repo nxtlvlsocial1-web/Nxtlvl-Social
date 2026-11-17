@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="mr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Mukta"; src: url("assets/fonts/Mukta-SemiBold.ttf") format("truetype"); font-weight: 600; }
+      @font-face { font-family: "Mukta"; src: url("assets/fonts/Mukta-Bold.ttf") format("truetype"); font-weight: 700; }
+      @font-face { font-family: "Mukta"; src: url("assets/fonts/Mukta-ExtraBold.ttf") format("truetype"); font-weight: 800; }
+      :root { --accent: #ffc531; --ink: #14110a; --white: #ffffff; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #000; font-family: "Mukta", sans-serif; color: var(--white); }
+      #footage { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      .layer { position: absolute; inset: 0; }
+      .shadow { text-shadow: 0 4px 24px rgba(0,0,0,.55), 0 2px 6px rgba(0,0,0,.5); }
+
+      /* 1 to 50 guntha */
+      #gunthe .card { position: absolute; left: 60px; top: 1170px; padding: 26px 44px 22px 40px; background: rgba(12,10,6,.62); border-left: 12px solid var(--accent); border-radius: 0 22px 22px 0; }
+      #gunthe .kicker { font-weight: 600; font-size: 44px; line-height: 1.1; color: var(--accent); }
+      #gunthe .big { font-weight: 800; font-size: 120px; line-height: 1.05; }
+
+      /* MIDC */
+      #midc .card { position: absolute; right: 60px; top: 1130px; padding: 26px 40px 24px 44px; text-align: right; background: rgba(12,10,6,.62); border-right: 12px solid var(--accent); border-radius: 22px 0 0 22px; }
+      #midc .big { font-weight: 800; font-size: 104px; line-height: 1.05; }
+      #midc .big span { color: var(--accent); }
+      #midc .sub { font-weight: 600; font-size: 40px; line-height: 1.2; opacity: .92; }
+
+      /* price */
+      #price .scrim { position: absolute; left: 0; right: 0; top: 820px; height: 1100px; background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.72) 40%, rgba(0,0,0,.8)); }
+      #price .wrap { position: absolute; left: 60px; right: 60px; top: 1060px; text-align: center; }
+      #price .kicker { font-weight: 700; font-size: 58px; line-height: 1.1; }
+      #price .big { font-weight: 800; font-size: 196px; line-height: 1; color: var(--accent); letter-spacing: -2px; }
+      #price .unit { font-weight: 700; font-size: 64px; line-height: 1.1; }
+
+      /* call */
+      #call .dim { position: absolute; inset: 0; background: rgba(0,0,0,.6); }
+      #call .wrap { position: absolute; left: 60px; right: 60px; top: 690px; text-align: center; }
+      #call .small { font-weight: 600; font-size: 52px; line-height: 1.2; opacity: .9; }
+      #call .head { font-weight: 800; font-size: 118px; line-height: 1.1; margin-top: 6px; }
+      #call .num { display: inline-block; margin-top: 44px; padding: 18px 56px 10px; background: var(--accent); color: var(--ink); border-radius: 999px; font-weight: 800; font-size: 108px; line-height: 1.1; letter-spacing: 2px; }
+      #call .sub { margin-top: 34px; font-weight: 600; font-size: 44px; line-height: 1.2; color: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1080" data-height="1920">
+      <video id="footage" class="clip" src="assets/base.mp4" muted playsinline data-start="0" data-duration="30" data-track-index="0"></video>
+
+      <div id="gunthe" class="layer clip" data-start="4.3" data-duration="3.7" data-track-index="1">
+        <div class="card shadow"><div class="kicker">ओपन प्लॉट्स</div><div class="big">1 ते 50 गुंठे</div></div>
+      </div>
+
+      <div id="midc" class="layer clip" data-start="14.3" data-duration="3.75" data-track-index="1">
+        <div class="card shadow"><div class="big">MIDC <span>4 km</span></div><div class="sub">शिक्रापूर · तळेगाव · सणसवाडी</div></div>
+      </div>
+
+      <div id="price" class="layer clip" data-start="24.2" data-duration="2.85" data-track-index="1">
+        <div class="scrim"></div>
+        <div class="wrap shadow"><div class="kicker">किंमत फक्त</div><div class="big">₹5,49,000</div><div class="unit">प्रति गुंठा</div></div>
+      </div>
+
+      <div id="call" class="layer clip" data-start="27.0" data-duration="3" data-track-index="2">
+        <div class="dim"></div>
+        <div class="wrap shadow">
+          <div class="small">अधिक माहितीसाठी</div>
+          <div class="head">आजच कॉल करा</div>
+          <div class="num">73852 48505</div>
+          <div class="sub">1 ते 50 गुंठे · ₹5,49,000 / गुंठा</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const ease = "power3.out";
+      // 1-50 guntha: card slides in from left, out by fade
+      tl.fromTo("#gunthe .card", { x: -420, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease }, 4.3);
+      tl.fromTo("#gunthe .big", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease }, 4.5);
+      tl.to("#gunthe .card", { opacity: 0, x: -60, duration: 0.3, ease: "power2.in" }, 7.65);
+      // MIDC: from right
+      tl.fromTo("#midc .card", { x: 420, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease }, 14.3);
+      tl.fromTo("#midc .sub", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease }, 14.6);
+      tl.to("#midc .card", { opacity: 0, x: 60, duration: 0.3, ease: "power2.in" }, 17.7);
+      // price: scrim fade, number punches in
+      tl.fromTo("#price .scrim", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 24.2);
+      tl.fromTo("#price .kicker", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease }, 24.3);
+      tl.fromTo("#price .big", { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "back.out(1.8)" }, 24.75);
+      tl.fromTo("#price .unit", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease }, 25.05);
+      tl.to("#price .wrap", { opacity: 0, duration: 0.25 }, 26.8);
+      // call card, held to the end
+      tl.fromTo("#call .dim", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 27.0);
+      tl.fromTo("#call .small", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease }, 27.05);
+      tl.fromTo("#call .head", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease }, 27.15);
+      tl.fromTo("#call .num", { scale: 0.75, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" }, 27.4);
+      tl.fromTo("#call .sub", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 27.75);
+      tl.to("#call .num", { scale: 1.05, duration: 0.35, yoyo: true, repeat: 1, ease: "sine.inOut" }, 28.6);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
