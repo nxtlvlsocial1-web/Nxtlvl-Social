@@ -1,4 +1,13 @@
-# Creators 100X x Creedom: "@write-script", v2 MADE TO MEASURE (Instagram Reels, 9:16, 35 s)
+# Creators 100X x Creedom: "@write-script", MADE TO MEASURE v3 (Instagram Reels, 9:16, 35 s)
+
+v3 (owner on v2: keep the Creedom pink background; animate a person in the hook and add the mascot; use Cree from time to
+time; show the exact UI of the screenshot and animate it with related context; more animation; change the sound
+effects; lower the music): Creedom's light and dark pink fluid worlds again; a cartoon person in the mirror tries on the
+scripts (faces, blinks, shrugs, cheers at the end) while Cree, the tailor, hands them over; Cree also types, reads with
+his magnifier, cheers and waves in scenes 3, 4, 6 and 7; the app scene is the screenshot's home screen, where
+"@write-script my 5am routine reel" is typed and sent and Cree answers that he will take your measurements first; new
+Openverse sounds (scissor snips, sewing machine, fabric, hanger, clothes rail, boing, tape measure, typing, chime,
+message; plan/sfx_library_v3.json); music about 5 dB lower. Build: build/generate3.py + style3.css.
 
 v1 (Option A, "The blank screen", 26 s) was rejected by the owner: "this looks like the rebranding or some kind of part 2
 of that earlier video... change the voiceover style, make it more expressive, add some different concepts, use a
@@ -38,6 +47,7 @@ Creedom's write-script works like a tailor:
 Save this for the next time a script sounds like everyone else.
 
 Music: "Swinging Around" by Daniel Bautista, CC BY 3.0
+Sounds: "Sewing machine" by Jagadamba, "Coathanger Clothes Hanger" by dersuperanton, "Sliding Clothes on Rail 2" by _MC5_ (CC BY 4.0, Freesound)
 
 #reelscript #contentcreator #instagramreels #aitools #creedom
 how to write reel scripts, ai script writer for reels, reel script in your own voice, instagram reel hooks, content ideas for creators, how to sound natural on camera, ai tools for content creators, script writing for instagram
@@ -62,5 +72,6 @@ Creedom: [CREEDOM LINK]
 - Voice: Chatterbox (Resemble AI, MIT) with a synthetic reference voice made with Kokoro-82M af_bella (Apache 2.0);
   nobody real is cloned. "Creedom" is spelled "Cree-dum" for the model.
 - Music: "Swinging Around" by Daniel Bautista (Jamendo 2126278 via Openverse, CC BY 3.0); the credit line above is
-  required. Sound effects: Openverse, CC0. The Creators 100X mark and the Creedom logo are the owners' own.
+  required. Sound effects: Openverse (Freesound previews), CC0 except the three CC BY 4.0 sounds credited above
+  (sfx/credits_v3.txt). The Creators 100X mark and the Creedom logo are the owners' own.
 - [CREEDOM LINK] is the same link as the CHECK reel's DM.

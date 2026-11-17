@@ -1,0 +1,52 @@
+#light { background: radial-gradient(120% 90% at 50% 30%, #ffffff 0%, #fbf3f6 55%, #f6e9ef 100%); }
+#dark { background: radial-gradient(110% 80% at 50% 70%, #1a0912 0%, #0a0609 55%, #050405 100%); opacity: 0; }
+.bl { position: absolute; border-radius: 50%; filter: blur(90px); }
+#panes { position: absolute; inset: 0; pointer-events: none; }
+.pane { position: absolute; border-radius: 70px; background: linear-gradient(135deg, rgba(255,255,255,.34), rgba(255,255,255,.06) 60%, rgba(255,255,255,.14));
+  backdrop-filter: blur(24px) saturate(1.5); -webkit-backdrop-filter: blur(24px) saturate(1.5); border: 1.5px solid rgba(255,255,255,.45);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.6), 0 30px 80px rgba(120,20,60,.10); }
+#cree { position: absolute; left: 0; top: 0; width: 820px; height: 820px; z-index: 30; opacity: 0; transform-origin: 410px 500px; pointer-events: none;
+  filter: drop-shadow(0 24px 30px rgba(200,40,120,.22)); }
+#cshadow { position: absolute; left: 210px; top: 770px; width: 400px; height: 60px; border-radius: 50%; background: radial-gradient(closest-side, rgba(226,53,160,.35), rgba(226,53,160,0)); }
+#creeb { position: absolute; inset: 0; transform-origin: 50% 97.5%; }
+#creef { position: absolute; inset: 0; transform-origin: 50% 60%; }
+#creep { position: absolute; inset: 0; transform-origin: 50% 97.5%; }
+.cpose { position: absolute; inset: 0; opacity: 0; }
+.cpose img, .clids, .csw { position: absolute; inset: 0; width: 820px; height: 820px; }
+.csw { overflow: visible; }
+.lidg { opacity: 0; }
+.sweat { opacity: 0; transform-box: fill-box; transform-origin: 50% 0; }
+.csp { position: absolute; opacity: 0; }
+#bub { position: absolute; left: 600px; top: 0; width: 210px; height: 190px; opacity: 0; border-radius: 50% 50% 50% 14px; display: grid; place-items: center;
+  transform-origin: 0 100%; background: linear-gradient(135deg, rgba(255,255,255,.8), rgba(255,255,255,.38)); backdrop-filter: blur(18px) saturate(1.7);
+  -webkit-backdrop-filter: blur(18px) saturate(1.7); border: 2px solid rgba(255,255,255,.95); box-shadow: inset 0 2px 0 #fff, 0 20px 40px rgba(160,20,90,.28); }
+#bubt { font: 800 120px/1 Inter; background: linear-gradient(180deg, $MAG, $PINK); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.ty i { font-style: normal; opacity: 0; }
+.appi { position: absolute; left: 0; top: 0; width: 1320px; height: 1734px; transform-origin: 0 0; background: #f5f4f1; font-family: Inter; color: #141414; }
+.ucirc { position: absolute; top: 45px; width: 130px; height: 130px; border-radius: 50%; background: #fbfaf8; border: 2px solid #e6e3dd; display: flex;
+  flex-direction: column; align-items: center; justify-content: center; gap: 9px; }
+.ucirc > i { display: block; width: 40px; height: 4px; border-radius: 2px; background: #1a1a1a; }
+.ucirc svg { width: 52px; height: 52px; fill: none; stroke: #1a1a1a; stroke-width: 2; stroke-linejoin: round; }
+.uacct { position: absolute; left: 414px; top: 60px; width: 492px; height: 98px; border-radius: 999px; background: #fbfaf8; border: 2px solid #e6e3dd;
+  display: flex; align-items: center; gap: 22px; padding: 0 30px 0 16px; font-weight: 500; font-size: 44px; }
+.uacct .ig { width: 70px; height: 70px; padding: 14px; border-radius: 50%; background: #fbe3ea; fill: none; stroke: #d6436e; stroke-width: 2; }
+.uacct .chev { width: 34px; height: 34px; margin-left: auto; fill: none; stroke: #444; stroke-width: 2.4; }
+.utitle { position: absolute; left: 0; right: 0; top: 190px; text-align: center; font: 700 66px/1.1 Lora; letter-spacing: .01em; }
+.uchip { position: absolute; left: 50%; height: 125px; border-radius: 999px; background: #fbfaf8; border: 2px solid #e6e3dd; display: flex; align-items: center;
+  justify-content: center; font-weight: 500; font-size: 44px; opacity: 0; }
+.ustart { position: absolute; left: 62px; top: 815px; font-weight: 600; font-size: 36px; letter-spacing: .2em; color: #6f6d68; }
+.uc { position: absolute; width: 578px; height: 290px; border-radius: 44px; background: #fbfaf8; border: 2px solid #e6e3dd; padding: 44px; opacity: 0;
+  font-weight: 500; font-size: 46px; line-height: 1.35; transform-origin: 50% 50%; }
+.uc .ic { display: block; width: 54px; height: 54px; margin-bottom: 34px; fill: none; stroke: #1a1a1a; stroke-width: 1.8; stroke-linejoin: round; }
+.uin { position: absolute; left: 44px; top: 1548px; width: 1232px; height: 174px; border-radius: 90px; background: #fff; border: 4px solid #e0708a; }
+.uplus { position: absolute; left: 30px; top: 30px; width: 108px; height: 108px; border-radius: 50%; background: #f0efec; font: 300 64px/104px Inter; text-align: center; color: #333; }
+.utext { position: absolute; left: 172px; top: 0; height: 166px; display: flex; align-items: center; font-weight: 500; font-size: 58px; }
+.cur2 { display: block; width: 5px; height: 66px; border-radius: 3px; background: #2f6fed; margin-right: 4px; }
+.wpill { position: absolute; left: 0; top: 34px; padding: 14px 34px; border-radius: 999px; white-space: nowrap; opacity: 0; color: #fff; font-weight: 700; font-size: 56px;
+  background: linear-gradient(135deg, $PINK, $MAG); box-shadow: 0 14px 36px rgba(243,67,162,.4); }
+.usend { position: absolute; right: 28px; top: 30px; width: 108px; height: 108px; border-radius: 50%; background: #111; display: grid; place-items: center; }
+.usend svg { width: 54px; height: 54px; fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+#ash { position: absolute; top: -10%; bottom: -10%; left: 0; width: 22%; opacity: 1; left: -40%; pointer-events: none;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.7) 50%, rgba(255,255,255,0)); }
+.app { position: absolute; left: 160px; top: 320px; width: 760px; height: 998px; border-radius: 56px; overflow: hidden; z-index: 12; opacity: 0;
+  border: 2px solid rgba(255,255,255,.9); box-shadow: 0 50px 120px rgba(120,20,60,.28), inset 0 2px 0 #fff; }

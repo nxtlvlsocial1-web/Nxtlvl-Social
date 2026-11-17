@@ -1,0 +1,29 @@
+/* v3 overrides: the mirror makes room for Cree, the person replaces the silhouette, the app turns into a chat */
+#light { background: radial-gradient(120% 90% at 50% 30%, #ffffff 0%, #fbf3f6 55%, #f6e9ef 100%); }
+#dark { background: radial-gradient(110% 80% at 50% 70%, #1a0912 0%, #0a0609 55%, #050405 100%); opacity: 0; }
+.mirror { left: 110px; width: 640px; border-radius: 320px 320px 30px 30px; }
+.psn { position: absolute; left: 240px; top: 858px; width: 380px; height: 608px; opacity: 0; overflow: visible; z-index: 3; }
+.try, .fit { left: 330px; top: 1110px; }
+.cnt { right: 46px; top: 520px; }
+.nope { left: 90px; width: 720px; font-size: 92px; }
+.ticket { height: 420px; }
+.trow { height: 98px; }
+.uhome { position: absolute; inset: 0; }
+.uchat { position: absolute; left: 0; right: 0; top: 280px; height: 1200px; }
+.umsg { position: absolute; opacity: 0; font-weight: 600; font-size: 50px; line-height: 1.35; }
+.umsg.me { right: 60px; top: 60px; max-width: 980px; padding: 30px 40px; border-radius: 50px 50px 12px 50px; color: #fff;
+  background: linear-gradient(135deg, #EE688B, #F343A2); box-shadow: 0 20px 50px rgba(243,67,162,.35); }
+.umsg.me .mp { display: inline-block; padding: 4px 22px; margin-right: 10px; border-radius: 999px; background: rgba(255,255,255,.25); font-weight: 800; }
+.umsg.cr { left: 60px; top: 330px; width: 1060px; min-height: 200px; padding: 40px 44px 40px 150px; border-radius: 50px 50px 50px 12px; background: #fbfaf8;
+  border: 2px solid #e6e3dd; color: #141414; }
+.umsg.cr img { position: absolute; left: 34px; top: 40px; width: 84px; height: 84px; object-fit: contain; padding: 10px; border-radius: 24px; background: #fff;
+  border: 2px solid #e6e3dd; }
+.udots { position: absolute; left: 150px; top: 70px; display: flex; gap: 14px; }
+.udots i { display: block; width: 22px; height: 22px; border-radius: 50%; background: #F343A2; }
+#um2t { display: block; opacity: 0; }
+.utext { overflow: hidden; width: 940px; }
+.utrack { display: flex; align-items: center; height: 166px; white-space: nowrap; }
+.wpill { top: 34px; }
+#ws2 { position: absolute; left: 470px; top: 0; height: 166px; display: flex; align-items: center; }
+.cbar .cav { background: linear-gradient(135deg, #EE688B, #F343A2); }
+.uav { position: absolute; left: 30px; top: 34px; width: 96px; height: 96px; border-radius: 50%; background: #ffe3ef url(assets/img/poses/wave.png) 50% 58% / 190% no-repeat; border: 3px solid #F343A2; }

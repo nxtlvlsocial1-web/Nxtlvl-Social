@@ -4,52 +4,68 @@
 "t": 0
 },
 {
+"type": "fabric",
+"t": 0.05
+},
+{
 "type": "swish",
-"t": 0.3
+"t": 0.05
 },
 {
-"type": "pop",
-"t": 0.56
+"type": "hanger",
+"t": 0.5
 },
 {
-"type": "whoosh",
+"type": "boing",
+"t": 0.58
+},
+{
+"type": "swish",
 "t": 0.701
 },
 {
+"type": "hanger",
+"t": 1.014
+},
+{
+"type": "cloth",
+"t": 1.094
+},
+{
 "type": "swish",
-"t": 0.814
-},
-{
-"type": "pop",
-"t": 1.074
-},
-{
-"type": "whoosh",
 "t": 1.215
 },
 {
+"type": "hanger",
+"t": 1.528
+},
+{
+"type": "cloth",
+"t": 1.609
+},
+{
 "type": "swish",
-"t": 1.329
-},
-{
-"type": "pop",
-"t": 1.589
-},
-{
-"type": "whoosh",
 "t": 1.73
 },
 {
+"type": "hanger",
+"t": 2.043
+},
+{
+"type": "boing",
+"t": 2.123
+},
+{
 "type": "swish",
-"t": 1.843
+"t": 2.244
 },
 {
 "type": "pop",
-"t": 2.103
+"t": 2.407
 },
 {
-"type": "whoosh",
-"t": 2.244
+"type": "pop",
+"t": 2.457
 },
 {
 "type": "stamp",
@@ -60,24 +76,36 @@
 "t": 2.667
 },
 {
-"type": "whoosh_big",
-"t": 3.256
+"type": "fabric",
+"t": 3.276
 },
 {
 "type": "swish",
 "t": 3.526
 },
 {
+"type": "rail",
+"t": 3.776
+},
+{
 "type": "whoosh",
 "t": 4.502
 },
 {
-"type": "thump",
+"type": "hanger",
 "t": 4.852
+},
+{
+"type": "boing",
+"t": 4.902
 },
 {
 "type": "pop",
 "t": 5.25
+},
+{
+"type": "rail",
+"t": 6.176
 },
 {
 "type": "pop",
@@ -92,15 +120,15 @@
 "t": 7.165
 },
 {
-"type": "whoosh_big",
+"type": "cloth",
 "t": 8.62
 },
 {
-"type": "click",
-"t": 8.92
+"type": "rail",
+"t": 8.84
 },
 {
-"type": "swish",
+"type": "fabric",
 "t": 9.04
 },
 {
@@ -120,88 +148,64 @@
 "t": 11.194
 },
 {
-"type": "pop",
-"t": 12.661
+"type": "swish",
+"t": 11.394
 },
 {
-"type": "tick",
+"type": "rail",
+"t": 11.744
+},
+{
+"type": "sparkle",
+"t": 12.611
+},
+{
+"type": "typing",
 "t": 13.963
 },
 {
-"type": "tick",
-"t": 14.07
-},
-{
-"type": "tick",
-"t": 14.177
-},
-{
-"type": "tick",
-"t": 14.284
-},
-{
-"type": "riser_short",
-"t": 14.359
-},
-{
-"type": "tick",
-"t": 14.391
-},
-{
-"type": "tick",
-"t": 14.498
-},
-{
-"type": "tick",
-"t": 14.605
+"type": "pop",
+"t": 14.463
 },
 {
 "type": "pop",
-"t": 14.739
+"t": 14.463
+},
+{
+"type": "typing",
+"t": 14.663
 },
 {
 "type": "click",
-"t": 14.959
+"t": 15.393
 },
 {
-"type": "tick",
-"t": 15.12
+"type": "msg",
+"t": 15.473
 },
 {
-"type": "tick",
-"t": 15.2
+"type": "msg",
+"t": 16.143
 },
 {
-"type": "tick",
-"t": 15.28
+"type": "tape",
+"t": 16.858
 },
 {
-"type": "tick",
-"t": 15.36
+"type": "pop",
+"t": 16.908
 },
 {
-"type": "tick",
-"t": 15.44
+"type": "cloth",
+"t": 16.988
 },
 {
-"type": "tick",
-"t": 15.52
-},
-{
-"type": "shutter",
-"t": 16.044
-},
-{
-"type": "shutter",
-"t": 16.124
-},
-{
-"type": "shutter",
-"t": 16.204
+"type": "pop",
+"t": 17.068
 },
 {
 "type": "swish",
-"t": 16.544
+"t": 17.408
 },
 {
 "type": "pop",
@@ -236,15 +240,15 @@
 "t": 22.448
 },
 {
-"type": "shutter",
+"type": "snip",
 "t": 22.498
 },
 {
-"type": "shutter",
+"type": "snip",
 "t": 22.608
 },
 {
-"type": "shutter",
+"type": "snip",
 "t": 22.718
 },
 {
@@ -252,39 +256,39 @@
 "t": 22.778
 },
 {
-"type": "shutter",
+"type": "snip",
 "t": 23.159
 },
 {
-"type": "click",
+"type": "snip",
 "t": 23.319
 },
 {
-"type": "shutter",
+"type": "snip",
 "t": 23.479
 },
 {
-"type": "click",
+"type": "snip",
 "t": 23.639
 },
 {
-"type": "shutter",
+"type": "snip",
 "t": 23.799
 },
 {
-"type": "click",
+"type": "snip",
 "t": 23.959
 },
 {
-"type": "shutter",
+"type": "snip",
 "t": 24.119
 },
 {
-"type": "click",
+"type": "snip",
 "t": 24.279
 },
 {
-"type": "shutter",
+"type": "snip",
 "t": 24.439
 },
 {
@@ -312,39 +316,15 @@
 "t": 25.839
 },
 {
-"type": "tick",
+"type": "sew",
 "t": 26.567
 },
 {
-"type": "tick",
-"t": 26.667
-},
-{
-"type": "tick",
-"t": 26.767
-},
-{
-"type": "tick",
-"t": 26.867
-},
-{
-"type": "tick",
+"type": "sew",
 "t": 26.887
 },
 {
-"type": "tick",
-"t": 26.987
-},
-{
-"type": "tick",
-"t": 27.087
-},
-{
-"type": "tick",
-"t": 27.187
-},
-{
-"type": "tick",
+"type": "sew",
 "t": 27.207
 },
 {
@@ -352,43 +332,35 @@
 "t": 27.276
 },
 {
-"type": "ding",
+"type": "sparkle",
 "t": 27.296
 },
 {
-"type": "tick",
-"t": 27.307
-},
-{
-"type": "tick",
-"t": 27.407
-},
-{
-"type": "tick",
-"t": 27.507
-},
-{
-"type": "whoosh_big",
+"type": "cloth",
 "t": 27.522
 },
 {
-"type": "click",
-"t": 27.822
+"type": "rail",
+"t": 27.742
 },
 {
-"type": "swish",
+"type": "fabric",
 "t": 27.942
 },
 {
-"type": "whoosh",
-"t": 28.03
+"type": "hanger",
+"t": 28.43
 },
 {
-"type": "success",
+"type": "cloth",
 "t": 28.48
 },
 {
-"type": "ding",
+"type": "sparkle",
+"t": 28.889
+},
+{
+"type": "pop",
 "t": 28.889
 },
 {
@@ -396,12 +368,16 @@
 "t": 30.721
 },
 {
-"type": "whoosh_big",
-"t": 31.098
+"type": "fabric",
+"t": 31.118
 },
 {
 "type": "swish",
 "t": 31.368
+},
+{
+"type": "pop",
+"t": 31.668
 },
 {
 "type": "impact",
@@ -416,35 +392,19 @@
 "t": 32.257
 },
 {
-"type": "tick",
+"type": "pop",
+"t": 32.257
+},
+{
+"type": "typing",
 "t": 32.807
-},
-{
-"type": "tick",
-"t": 32.877
-},
-{
-"type": "tick",
-"t": 32.947
-},
-{
-"type": "tick",
-"t": 33.017
-},
-{
-"type": "tick",
-"t": 33.087
-},
-{
-"type": "tick",
-"t": 33.157
 },
 {
 "type": "click",
 "t": 33.287
 },
 {
-"type": "notify",
+"type": "msg",
 "t": 33.713
 }
 ]

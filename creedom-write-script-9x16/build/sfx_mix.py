@@ -23,6 +23,8 @@ DUR = E["dur"]
 # starts on a beat (6.037 s) so the half-beat grid in generate.py lines up with reel t = 0
 SONG, SONG_AT = os.path.join(ROOT, "sfx", "music", os.environ.get("SONG", "music_swinging_around_bautista.mp3")), float(os.environ.get("SONG_AT", "0.58"))
 # v2: "Swinging Around" by Daniel Bautista (Jamendo 2126278 via Openverse, CC BY 3.0), 117.5 bpm, first beat at 0.58 s
+# v3 (owner: "reduce the volume of the background music"): the bed sits about 5 dB lower than v2 (-16.5)
+MUSIC_LUFS = float(os.environ.get("MUSIC_LUFS", "-21.5"))
 # kind -> (files, peak dBFS, max length s)
 KINDS = {
     "whoosh": (["whoosh_a", "whoosh_b"], -10, .6), "whoosh_big": (["whoosh_deep"], -9, 1.1), "swish": (["whoosh_b"], -13, .5),
@@ -31,6 +33,10 @@ KINDS = {
     "stamp": (["stamp"], -7, .6), "buzzer": (["buzzer"], -15, .5), "lock": (["lock"], -10, .9), "riser": (["riser"], -13, 1.0),
     "riser_short": (["riser"], -18, 1.0), "ding": (["notify"], -11, .4), "success": (["notify"], -10, .4),
     "thump": (["impact"], -17, .45),
+    # v3 (owner: "change the sound effects a little bit"): tailoring sounds from Openverse (plan/sfx_library_v3.json)
+    "snip": (["snip"], -11, .35), "sew": (["sew"], -15, .9), "fabric": (["fabric"], -12, .7), "cloth": (["cloth"], -13, .6),
+    "hanger": (["hanger"], -13, .5), "rail": (["rail"], -15, 1.2), "boing": (["boing"], -14, .7), "tape": (["tape"], -13, .9),
+    "typing": (["typing"], -16, .8), "sparkle": (["sparkle"], -14, 1.2), "msg": (["msg"], -12, .6),
 }
 
 
@@ -76,7 +82,7 @@ def main():
     if music:
         bed = os.path.join(WORK, "music_bed.wav")
         run(["ffmpeg", "-y", "-loglevel", "error", "-ss", str(SONG_AT), "-t", f"{DUR + .2:.2f}", "-i", SONG, "-vn", "-af",
-             f"afade=t=in:d=0.12,afade=t=out:st={DUR - 1.0:.2f}:d=1.0,loudnorm=I=-16.5:TP=-3:LRA=11", "-ar", "48000", "-ac", "2", bed])
+             f"afade=t=in:d=0.12,afade=t=out:st={DUR - 1.0:.2f}:d=1.0,loudnorm=I={MUSIC_LUFS}:TP=-3:LRA=11", "-ar", "48000", "-ac", "2", bed])
         inputs += ["-i", bed]
         fc.append("[1:a][sc]sidechaincompress=threshold=0.03:ratio=5:attack=15:release=300:makeup=1[bg]")
         labels.append("[bg]")
