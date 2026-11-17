@@ -1,4 +1,8 @@
-# Creators 100X x Creedom: "@write-script", MADE TO MEASURE v3 (Instagram Reels, 9:16, 35 s)
+# Creators 100X x Creedom: "@write-script", MADE TO MEASURE v4 (Instagram Reels, 9:16, 38.5 s)
+
+v4 (owner on v3): the scripts come in front of the person; "Not one worked"; "off the shelf" (rails became shelves);
+"@write-script" is typed on screen, not spoken. Voice: the owner's ElevenLabs take (Eleven v3, "Blondie -
+Conversational", plan/elevenlabs_vo.md), timed with build/vo_el.py.
 
 v3 (owner on v2: keep the Creedom pink background; animate a person in the hook and add the mascot; use Cree from time to
 time; show the exact UI of the screenshot and animate it with related context; more animation; change the sound
@@ -21,10 +25,10 @@ write-script is a tailor. Everything is animated in code on sewing-pattern paper
 
 ## Voiceover (v2)
 
-> I tried on forty AI scripts last week. Not one of them fit.
-> They're all off the rack. Same hook. Same "let's dive in." For every creator on earth.
+> I tried on forty AI scripts last week. Not one of them worked.
+> They're all off the shelf. Same hook. Same "let's dive in." For every creator on earth.
 > Because none of them have ever heard you talk.
-> So I opened Creedom, and typed: at write script.
+> So I opened Creedom, and typed this.
 > First, it takes your measurements. How you open. Where you pause. The words you can't stop saying.
 > Then it cuts a script to fit you. Hook, story, call to action, stitched in your voice.
 > It sounds like me... on a really good day.
@@ -35,9 +39,9 @@ write-script is a tailor. Everything is animated in code on sewing-pattern paper
 ```
 Comment "SCRIPT" and I'll send you the link.
 
-I tried on 40 AI scripts last week. Not one of them fit.
+I tried on 40 AI scripts last week. Not one of them worked.
 
-They're all off the rack. Same hook, same "let's dive in", for every creator on earth, because none of them have ever heard you talk.
+They're all off the shelf. Same hook, same "let's dive in", for every creator on earth, because none of them have ever heard you talk.
 
 Creedom's write-script works like a tailor:
 1. It takes your measurements: how you open, where you pause, the words you can't stop saying
