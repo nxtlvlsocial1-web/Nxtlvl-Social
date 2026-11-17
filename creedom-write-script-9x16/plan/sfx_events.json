@@ -1,0 +1,470 @@
+[
+{
+"type": "impact",
+"t": 0
+},
+{
+"type": "riser",
+"t": 1.011
+},
+{
+"type": "click",
+"t": 1.13
+},
+{
+"type": "thump",
+"t": 1.16
+},
+{
+"type": "whoosh",
+"t": 1.661
+},
+{
+"type": "swish",
+"t": 1.811
+},
+{
+"type": "thump",
+"t": 2.24
+},
+{
+"type": "pop",
+"t": 2.31
+},
+{
+"type": "riser_short",
+"t": 2.42
+},
+{
+"type": "swish",
+"t": 3.12
+},
+{
+"type": "whoosh",
+"t": 3.14
+},
+{
+"type": "pop",
+"t": 3.93
+},
+{
+"type": "tick",
+"t": 4.85
+},
+{
+"type": "tick",
+"t": 4.97
+},
+{
+"type": "tick",
+"t": 5.09
+},
+{
+"type": "tick",
+"t": 5.21
+},
+{
+"type": "tick",
+"t": 5.33
+},
+{
+"type": "tick",
+"t": 5.45
+},
+{
+"type": "tick",
+"t": 5.57
+},
+{
+"type": "tick",
+"t": 5.69
+},
+{
+"type": "tick",
+"t": 5.81
+},
+{
+"type": "tick",
+"t": 5.93
+},
+{
+"type": "stamp",
+"t": 6.35
+},
+{
+"type": "thump",
+"t": 6.35
+},
+{
+"type": "pop",
+"t": 6.37
+},
+{
+"type": "pop",
+"t": 6.42
+},
+{
+"type": "impact",
+"t": 6.945
+},
+{
+"type": "whoosh",
+"t": 7.195
+},
+{
+"type": "swish",
+"t": 7.445
+},
+{
+"type": "shutter",
+"t": 7.91
+},
+{
+"type": "tick",
+"t": 7.98
+},
+{
+"type": "shutter",
+"t": 8.05
+},
+{
+"type": "tick",
+"t": 8.12
+},
+{
+"type": "shutter",
+"t": 8.19
+},
+{
+"type": "tick",
+"t": 8.26
+},
+{
+"type": "buzzer",
+"t": 8.81
+},
+{
+"type": "riser_short",
+"t": 9.061
+},
+{
+"type": "pop",
+"t": 9.29
+},
+{
+"type": "whoosh",
+"t": 9.561
+},
+{
+"type": "swish",
+"t": 9.661
+},
+{
+"type": "swish",
+"t": 9.911
+},
+{
+"type": "swish",
+"t": 10.211
+},
+{
+"type": "click",
+"t": 10.52
+},
+{
+"type": "thump",
+"t": 11.32
+},
+{
+"type": "tick",
+"t": 12.04
+},
+{
+"type": "riser_short",
+"t": 12.08
+},
+{
+"type": "tick",
+"t": 12.117
+},
+{
+"type": "tick",
+"t": 12.194
+},
+{
+"type": "tick",
+"t": 12.271
+},
+{
+"type": "tick",
+"t": 12.348
+},
+{
+"type": "tick",
+"t": 12.425
+},
+{
+"type": "tick",
+"t": 12.502
+},
+{
+"type": "pop",
+"t": 12.66
+},
+{
+"type": "pop",
+"t": 12.66
+},
+{
+"type": "whoosh",
+"t": 12.8
+},
+{
+"type": "click",
+"t": 13.06
+},
+{
+"type": "whoosh",
+"t": 13.11
+},
+{
+"type": "shutter",
+"t": 13.26
+},
+{
+"type": "tick",
+"t": 13.32
+},
+{
+"type": "shutter",
+"t": 13.38
+},
+{
+"type": "tick",
+"t": 13.44
+},
+{
+"type": "shutter",
+"t": 13.5
+},
+{
+"type": "tick",
+"t": 13.56
+},
+{
+"type": "riser_short",
+"t": 13.71
+},
+{
+"type": "whoosh",
+"t": 14.72
+},
+{
+"type": "pop",
+"t": 15.12
+},
+{
+"type": "swish",
+"t": 15.28
+},
+{
+"type": "pop",
+"t": 15.68
+},
+{
+"type": "swish",
+"t": 15.98
+},
+{
+"type": "pop",
+"t": 16.38
+},
+{
+"type": "riser",
+"t": 16.708
+},
+{
+"type": "swish",
+"t": 16.72
+},
+{
+"type": "pop",
+"t": 17.12
+},
+{
+"type": "whoosh",
+"t": 17.358
+},
+{
+"type": "tick",
+"t": 18.07
+},
+{
+"type": "tick",
+"t": 18.17
+},
+{
+"type": "tick",
+"t": 18.27
+},
+{
+"type": "tick",
+"t": 18.37
+},
+{
+"type": "tick",
+"t": 18.47
+},
+{
+"type": "tick",
+"t": 18.57
+},
+{
+"type": "tick",
+"t": 18.67
+},
+{
+"type": "tick",
+"t": 18.77
+},
+{
+"type": "tick",
+"t": 18.87
+},
+{
+"type": "tick",
+"t": 18.97
+},
+{
+"type": "tick",
+"t": 19.07
+},
+{
+"type": "tick",
+"t": 19.17
+},
+{
+"type": "tick",
+"t": 19.27
+},
+{
+"type": "ding",
+"t": 19.31
+},
+{
+"type": "tick",
+"t": 19.37
+},
+{
+"type": "thump",
+"t": 19.73
+},
+{
+"type": "pop",
+"t": 19.75
+},
+{
+"type": "riser_short",
+"t": 19.928
+},
+{
+"type": "whoosh",
+"t": 20.428
+},
+{
+"type": "swish",
+"t": 20.778
+},
+{
+"type": "pop",
+"t": 20.79
+},
+{
+"type": "thump",
+"t": 20.79
+},
+{
+"type": "pop",
+"t": 21.17
+},
+{
+"type": "thump",
+"t": 21.17
+},
+{
+"type": "pop",
+"t": 21.43
+},
+{
+"type": "thump",
+"t": 21.43
+},
+{
+"type": "whoosh",
+"t": 22.17
+},
+{
+"type": "riser_short",
+"t": 22.343
+},
+{
+"type": "thump",
+"t": 22.54
+},
+{
+"type": "whoosh",
+"t": 23.063
+},
+{
+"type": "pop",
+"t": 23.393
+},
+{
+"type": "thump",
+"t": 23.98
+},
+{
+"type": "impact",
+"t": 24.0
+},
+{
+"type": "thump",
+"t": 24.0
+},
+{
+"type": "pop",
+"t": 24.0
+},
+{
+"type": "tick",
+"t": 24.55
+},
+{
+"type": "tick",
+"t": 24.625
+},
+{
+"type": "tick",
+"t": 24.7
+},
+{
+"type": "tick",
+"t": 24.775
+},
+{
+"type": "tick",
+"t": 24.85
+},
+{
+"type": "tick",
+"t": 24.925
+},
+{
+"type": "click",
+"t": 25.05
+},
+{
+"type": "notify",
+"t": 25.44
+}
+]
