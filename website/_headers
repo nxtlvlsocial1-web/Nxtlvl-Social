@@ -1,5 +1,5 @@
 # Response headers for Cloudflare (Workers static assets and Pages both read this file).
-# Security headers on every page; fonts and the versioned libraries are cached for a year.
+# Security headers on every page; fonts are cached for a year, the stylesheet and script for a week (pages load them with a ?v= version).
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
@@ -10,5 +10,8 @@
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
-/vendor/*
-  Cache-Control: public, max-age=31536000, immutable
+/site.css
+  Cache-Control: public, max-age=604800
+
+/site.js
+  Cache-Control: public, max-age=604800

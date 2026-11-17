@@ -79,7 +79,8 @@ deploy again. The Worker answers `www` with a permanent redirect to `nxtlvlsocia
 
 - [ ] `https://nxtlvlsocial.ai` loads, and the padlock shows.
 - [ ] `https://www.nxtlvlsocial.ai` redirects to it.
-- [ ] `/social-media-design`, `/reel-editing` and `/social-media-automation` load.
+- [ ] `/ai-marketing`, `/ai-automation`, `/creative-studio`, `/website-development`, `/about` and `/contact` load.
+- [ ] An old address like `/reel-editing` redirects to its new page.
 - [ ] A made-up address like `/abc` shows the "page not found" page.
 - [ ] `https://nxtlvlsocial.ai/api/health` shows `{"ok":true}`.
 - [ ] Sending the booking form delivers an email to connect@nxtlvlsocial.ai, and a confirmation to the sender.

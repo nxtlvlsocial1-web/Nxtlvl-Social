@@ -8,11 +8,15 @@
  */
 
 const NEEDS = {
+  marketing: 'AI Marketing',
+  automation: 'AI Automation',
+  creative: 'Creative Studio',
+  website: 'Website Development',
+  platform: 'Early access: growth platform',
+  unsure: 'Not sure yet',
+  // older form values, still accepted
   design: 'Content & Design',
   video: 'Video & Editing',
-  automation: 'Social + Automation',
-  website: 'Website Development',
-  unsure: 'Not sure yet',
 };
 const MAX = { name: 80, business: 120, email: 120, message: 2000 };
 
@@ -71,7 +75,7 @@ async function book(request, env, ctx) {
   ctx.waitUntil(resend(env, {
     from, to: [lead.email], reply_to: to,
     subject: 'Got it. Your free call with Nxtlvl Social',
-    text: `Hi ${lead.name},\n\nThanks for reaching out. We've got your request and a person will reply by email within one business day to set up your 15-minute call.\n\nWhat you told us:\n${summary(lead)}\n\nIf anything changes, just reply to this email.\n\nNxtlvl Social\n${to}`,
+    text: `Hi ${lead.name},\n\nThanks for reaching out. We've got your request and a person will reply by email within one business day to set up your free strategy call.\n\nWhat you told us:\n${summary(lead)}\n\nIf anything changes, just reply to this email.\n\nNxtlvl Social\n${to}`,
   }));
   return json({ ok: true }, 200, headers);
 }
