@@ -1,0 +1,10 @@
+# rendered video stays out of git (deliver it, don't commit it)
+renders/
+*.mp4
+# CLI working state and snapshot artifacts
+.hyperframes/artifacts/
+.hyperframes/video-state.json
+.hyperframes/cache/
+node_modules/
+.hyperframes/video-state-lock
+.hyperframes/preview/
