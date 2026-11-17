@@ -1,17 +1,17 @@
 # Creedom "@write-script", made to measure: ElevenLabs voiceover (female, Eleven v3 audio tags)
 
-Same lines as the v3 reel, with mood tags for Eleven v3. About 35 s.
+v4 lines (owner: "Not one worked", "off the shelf", "@write-script need not be spoken"), with mood tags for Eleven v3. About 34 s.
 
 ## Paste into ElevenLabs (model: Eleven v3)
 
 ```
-[frustrated sigh] I tried on forty AI scripts last week... [deadpan] Not one of them fit.
+[frustrated sigh] I tried on forty AI scripts last week... [deadpan] Not one of them worked.
 
-[sarcastic] They're all off the rack. Same hook. Same "let's dive in!" [exasperated] For every creator on earth.
+[sarcastic] They're all off the shelf. Same hook. Same "let's dive in!" [exasperated] For every creator on earth.
 
 [softly] Because none of them... have ever heard you talk.
 
-[curious] So I opened Cree-dum, and typed... [playful] at write script.
+[curious] So I opened Cree-dum... [playful] and typed this.
 
 [intrigued] First, it takes your measurements. [upbeat] How you open. Where you pause. [laughs] The words you can't stop saying.
 
@@ -35,10 +35,10 @@ Same lines as the v3 reel, with mood tags for Eleven v3. About 35 s.
 
 | Line | Beat |
 | --- | --- |
-| I tried on forty AI scripts... not one of them fit | hook 70 |
-| They're all off the rack... every creator on earth | peak 90 |
+| I tried on forty AI scripts... not one of them worked | hook 70 |
+| They're all off the shelf... every creator on earth | peak 90 |
 | None of them have ever heard you talk | release |
-| I opened Creedom and typed: at write script | turn |
+| I opened Creedom and typed this ("@write-script" shows on screen) | turn |
 | It takes your measurements... | peak |
 | It cuts a script to fit you... stitched in your voice | peak (twist) |
 | It sounds like me... on a really good day | release (smile) |

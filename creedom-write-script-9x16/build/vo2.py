@@ -16,10 +16,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REF = os.path.join(ROOT, "assets", "audio", "v2", "ref_af_bella.wav")
 OUT = os.path.join(ROOT, "assets", "audio", "v2", "takes")
 LINES = [
-    ("m00", "I tried on forty AI scripts last week. Not one of them fit.", "hook 70", .85),
-    ("m01", "They're all off the rack. Same hook. Same \"let's dive in.\" For every creator on earth.", "peak 90", 1.0),
+    ("m00", "I tried on forty AI scripts last week. Not one of them worked.", "hook 70", .85),
+    ("m01", "They're all off the shelf. Same hook. Same \"let's dive in.\" For every creator on earth.", "peak 90", 1.0),
     ("m02", "Because none of them have ever heard you talk.", "release", .6),
-    ("m03", "So I opened Creedom, and typed: at write script.", "turn", .75),
+    ("m03", "So I opened Creedom, and typed this.", "turn", .75),
     ("m04", "First, it takes your measurements. How you open. Where you pause. The words you can't stop saying.", "peak", .9),
     ("m05", "Then it cuts a script to fit you. Hook, story, call to action, stitched in your voice.", "peak (twist)", .9),
     ("m06", "It sounds like me... on a really good day.", "release (smile)", 1.0),

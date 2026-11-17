@@ -27,3 +27,10 @@
 #ws2 { position: absolute; left: 470px; top: 0; height: 166px; display: flex; align-items: center; }
 .cbar .cav { background: linear-gradient(135deg, #EE688B, #F343A2); }
 .uav { position: absolute; left: 30px; top: 34px; width: 96px; height: 96px; border-radius: 50%; background: #ffe3ef url(assets/img/poses/wave.png) 50% 58% / 190% no-repeat; border: 3px solid #F343A2; }
+/* v4: the scripts come in front of the person; the clothes rails are now shelves (cards stand on planks, no hangers) */
+.try { z-index: 6; }
+.rg .hgr { display: none; }
+.rg { transform-origin: 50% 100%; }
+.rg .gcard { margin-top: 12px; }
+.rail .bar { top: 252px; height: 24px; border-radius: 6px; background: linear-gradient(180deg, #3a2a33, #101111); box-shadow: 0 18px 30px rgba(120,20,60,.25); }
+.rail .bar::after { content: ""; position: absolute; left: 0; right: 0; top: 24px; height: 60px; background: linear-gradient(180deg, rgba(16,17,17,.12), rgba(16,17,17,0)); }

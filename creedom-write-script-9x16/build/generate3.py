@@ -1,4 +1,7 @@
-"""Creators 100X x Creedom "@write-script" reel, v2 "MADE TO MEASURE" (9:16): writes index.html, plan/sfx_events.json
+"""v4 (owner on v3: scripts come in FRONT of the person; "Not one fit" -> "Not one worked"; "off the rack" -> "off the
+shelf", so the rails became shelves; "@write-script" is typed on screen, not spoken: the line is now "...and typed this").
+
+Creators 100X x Creedom "@write-script" reel, v2 "MADE TO MEASURE" (9:16): writes index.html, plan/sfx_events.json
 and plan/edit.json from plan/words.json.
 
 Owner on v1: "it looks like the rebranding or part 2 of the earlier video... change the voiceover style, make it more
@@ -40,7 +43,7 @@ def snap(t):
 
 
 S = {k: (0.0 if k == "m00" else snap(L0[k] - .1)) for k in LINES}
-S["m04"] = snap(max(T("m04", "measurements") + .3, T("m03", "at") + 2.15))
+S["m04"] = snap(max(T("m04", "measurements") + .3, T("m03", "this") + 2.1))
 K = ["m00", "m01", "m02", "m03", "m04", "m05", "m06", "m07"]
 END = {k: (S[K[i + 1]] if i + 1 < len(K) else DUR) for i, k in enumerate(K)}
 
@@ -218,9 +221,9 @@ pile = "".join(f'<div class="pile" id="pl{k}" style="left:{150 + 95 * k}px;--r:{
 cnts = "".join(f'<b class="cn" id="cn{k}">{37 + k}</b>' for k in range(4))
 HTML.append(f'<div class="scn" id="s0"><div class="mirror" id="mir0"><i class="mshine" id="msh0"></i></div>{person("p0")}'
             f'{tries}{pile}<div class="cnt" id="cnt"><span>SCRIPT</span><span class="cns">{cnts}</span><span>/ 40</span></div>'
-            '<div class="nope" id="nope">DOESN\'T FIT</div></div>')
+            '<div class="nope" id="nope">DIDN\'T WORK</div></div>')
 head("h0a", [[("I", ""), ("tried", ""), ("on", ""), ("40", "pk hl", "forty|40")], [("AI", ""), ("scripts.", "")]], 130, "m00", 104)
-head("h0b", [[("Not", ""), ("one", "pk"), ("fit.", "hl")]], 130, "m00", 124, after=T("m00", "Not") - .2)
+head("h0b", [[("Not", ""), ("one", "pk"), ("worked.", "hl")]], 130, "m00", 116, after=T("m00", "Not") - .2)
 scene("s0", s0, e0)
 sfx("impact", 0)
 sfx("fabric", .05)
@@ -282,7 +285,7 @@ for r in range(5):
     rails += f'<div class="rail" style="top:{r * 420}px"><i class="bar"></i><div class="rtrack" id="rt{r}">{gs}</div></div>'
 HTML.append(f'<div class="scn" id="s1"><div id="rails">{rails}</div>'
             '<div class="bigtag" id="bigtag"><i class="hole"></i><span>ONE SIZE</span><b>FITS ALL</b></div></div>')
-head("h1a", [[("Off", ""), ("the", ""), ("rack.", "hl")]], 130, "m01", 120)
+head("h1a", [[("Off", ""), ("the", ""), ("shelf.", "hl")]], 130, "m01", 120)
 head("h1b", [[("Every", "pk"), ("creator.", "")], [("On", ""), ("earth.", "hl")]], 130, "m01", 104, after=T("m01", "every") - .2)
 scene("s1", s1, e1)
 fabric(s1)
@@ -293,8 +296,8 @@ for r in range(5):
     x0 = -260 - 90 * r
     d = 1 if r % 2 == 0 else -1
     ft(f"#rt{r}", s1, e1 - s1 + .2, f"{{x: {x0}}}", f"{{x: {x0 - 420 * d}}}", "none")
-js(f'tl.fromTo(".rg", {{rotation: -5}}, {{rotation: 5, duration: .5, yoyo: true, repeat: {int((e1 - s1) / .5)}, ease: "sine.inOut", stagger: {{each: .04, from: "random"}}, immediateRender: false}}, {s1:.3f});')
-t_rk = T("m01", "rack")
+js(f'tl.fromTo(".rg", {{rotation: -2}}, {{rotation: 2, duration: .5, yoyo: true, repeat: {int((e1 - s1) / .5)}, ease: "sine.inOut", stagger: {{each: .04, from: "random"}}, immediateRender: false}}, {s1:.3f});')
+t_rk = T("m01", "shelf")
 ft("#bigtag", t_rk - .1, 1.0, "{opacity: 1, y: -900, rotation: -40}", "{opacity: 1, y: 0, rotation: 0}", "elastic.out(1, .45)")
 sfx("whoosh", t_rk - .1)
 sfx("hanger", t_rk + .25)
@@ -359,7 +362,7 @@ REQ = " my 5am routine reel"
 c1 = "".join(f"<i>{c}</i>" for c in "@write-script")
 c2 = "".join(f'<i>{"&nbsp;" if c == " " else c}</i>' for c in REQ)
 HTML.append('<div class="scn" id="s3">')
-head("h3", [[("I", ""), ("opened", ""), ("Creedom,", "pk")], [("and", ""), ("typed:", "hl")]], 110, "m03", 84)
+head("h3", [[("I", ""), ("opened", ""), ("Creedom,", "pk")], [("and", ""), ("typed", "hl"), ("this:", "")]], 110, "m03", 84)
 HTML.append(f'<div class="app" id="app"><div class="appi" style="transform:scale({APP_S:.5f})">'
             '<div class="ucirc" style="left:50px"><i></i><i></i><i></i></div>'
             f'<div class="uacct">{I_IG}<span>creators.100x</span><svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>'
@@ -386,7 +389,7 @@ sfx("sparkle", t_cr)
 t_ty = T("m03", "typed")
 to("#uin", t_ty - .1, .3, "{boxShadow: '0 0 0 12px rgba(243,67,162,.18), 0 20px 50px rgba(243,67,162,.35)'}")
 js(f'tl.fromTo("#cur2", {{opacity: 1}}, {{opacity: 0, duration: .2, ease: "steps(1)", yoyo: true, repeat: 3, immediateRender: false}}, {t_ty - .1:.3f});')
-t_at = T("m03", "at")
+t_at = T("m03", "this") - .05      # v4: "@write-script" is typed on screen, not spoken
 st("#cur2", t_at, "{opacity: 0}")
 js(f'tl.fromTo("#ws1 i", {{opacity: 0}}, {{opacity: 1, duration: .01, stagger: {.45 / 13:.3f}, immediateRender: false}}, {t_at:.3f});')
 sfx("typing", t_at)
@@ -640,7 +643,7 @@ html = f"""<!doctype html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>Creedom: @write-script, made to measure v3 9x16</title>
+    <title>Creedom: @write-script, made to measure v4 9x16</title>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>{CSS}</style>
   </head>
