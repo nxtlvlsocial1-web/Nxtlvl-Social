@@ -120,6 +120,8 @@ website/              Our site: index.html, service pages (social-media-design, 
 backend/              Cloudflare Worker: serves website/ and the Book-a-call API (POST /api/book -> connect@nxtlvlsocial.ai
                       via Resend); npm test runs it locally, npm run deploy ships it. See backend/README.md
 nxtlvl-social-audit/  SEO audit of website/index.html: FULL-AUDIT-REPORT.md, ACTION-PLAN.md, PDF, findings/
+knowledge/            Client context exported from earlier sessions (briefs, scripts, brand rules, open items); index in
+                      knowledge/README.md. Read the client's files before starting work for them
 motion-canvas/        Motion Canvas project (code-driven animation in TypeScript): npm install, npm start
 <project>/            One HyperFrames project per video and aspect ratio, e.g. spring-drop-9x16/
 ```
