@@ -5,7 +5,7 @@ import json
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-W = json.load(open(os.path.join(ROOT, "plan", "words.json")))
+W = json.load(open(os.environ.get("WORDS", os.path.join(ROOT, "plan", "words.json"))))
 PINK, MAG, ROSE, INK = "#EE688B", "#F343A2", "#B1476B", "#0B0B0B"
 LINES = {}
 for w in W:

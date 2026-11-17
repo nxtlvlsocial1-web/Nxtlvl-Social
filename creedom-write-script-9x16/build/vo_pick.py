@@ -26,10 +26,10 @@ TEMPO = float(os.environ.get("VO_TEMPO", "1.04"))   # v4: Chatterbox at medium e
 GAP_SCALE = 1.0
 LEAD = .04          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast
-GAP = {"w00": .45, "w01": .4, "w02": .35, "w03": .35, "w04": .3, "w05": .35, "w06": .4, "w07": .0}
+GAP = {"m00": .35, "m01": .35, "m02": .3, "m03": .3, "m04": .3, "m05": .3, "m06": .35, "m07": .0}
 
 
-NUM = {"six": "6", "nineteenth": "19th", "fortysix": "46", "one": "1", "two": "2", "three": "3", "twenty": "20"}
+NUM = {"forty": "40", "six": "6", "nineteenth": "19th", "fortysix": "46", "one": "1", "two": "2", "three": "3", "twenty": "20"}
 
 
 def norm(w):

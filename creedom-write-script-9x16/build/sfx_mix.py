@@ -21,7 +21,8 @@ E = json.load(open(os.path.join(ROOT, "plan", "edit.json")))
 DUR = E["dur"]
 # v6: "Ruslan Latypov - Corporate Music" by Ruslan Latypov (Jamendo 1693123, CC BY 3.0, credit in the post), 99.4 bpm;
 # starts on a beat (6.037 s) so the half-beat grid in generate.py lines up with reel t = 0
-SONG, SONG_AT = os.path.join(ROOT, "sfx", "music", "music_corporate_latypov.mp3"), 6.037
+SONG, SONG_AT = os.path.join(ROOT, "sfx", "music", os.environ.get("SONG", "music_swinging_around_bautista.mp3")), float(os.environ.get("SONG_AT", "0.58"))
+# v2: "Swinging Around" by Daniel Bautista (Jamendo 2126278 via Openverse, CC BY 3.0), 117.5 bpm, first beat at 0.58 s
 # kind -> (files, peak dBFS, max length s)
 KINDS = {
     "whoosh": (["whoosh_a", "whoosh_b"], -10, .6), "whoosh_big": (["whoosh_deep"], -9, 1.1), "swish": (["whoosh_b"], -13, .5),
