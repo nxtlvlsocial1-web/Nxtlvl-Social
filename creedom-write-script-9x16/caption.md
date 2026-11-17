@@ -39,23 +39,29 @@ write-script is a tailor. Everything is animated in code on sewing-pattern paper
 ```
 Comment "SCRIPT" and I'll send you the link.
 
-I tried on 40 AI scripts last week. Not one of them worked.
+I tried 40 AI scripts last week. Not one of them worked.
 
-They're all off the shelf. Same hook, same "let's dive in", for every creator on earth, because none of them have ever heard you talk.
+They're all off the shelf. Same hook, same "let's dive in", for every creator on earth. Because none of them have ever heard you talk.
 
-Creedom's write-script works like a tailor:
+So I opened Creedom and used write-script. It works like a tailor for your reels:
 1. It takes your measurements: how you open, where you pause, the words you can't stop saying
-2. It cuts a script to fit you: hook, story, call to action
-3. It stitches it in your voice
+2. It cuts a script to fit you: hook, story and call to action
+3. It stitches it in your voice, so it sounds like you on a really good day
 
-Save this for the next time a script sounds like everyone else.
+Save this for the next time a script sounds like everyone else, and send it to a creator who's stuck on a blank page.
 
 Music: "Swinging Around" by Daniel Bautista, CC BY 3.0
 Sounds: "Sewing machine" by Jagadamba, "Coathanger Clothes Hanger" by dersuperanton, "Sliding Clothes on Rail 2" by _MC5_ (CC BY 4.0, Freesound)
 
-#reelscript #contentcreator #instagramreels #aitools #creedom
-how to write reel scripts, ai script writer for reels, reel script in your own voice, instagram reel hooks, content ideas for creators, how to sound natural on camera, ai tools for content creators, script writing for instagram
+#reelscript #contentcreator #aitools #instagramreels #creedom
+how to write reel scripts, ai script writer for reels, reel script in your own voice, how to write a hook for reels, instagram reel script template, content ideas for creators, how to sound natural on camera, ai tools for content creators, script writing for instagram, ai script generator for instagram
 ```
+
+## Cover
+
+`renders/creators100x_creedom-write-script_reels_9x16_v4_cover.png` (1080x1920, build/cover.cjs): "I TRIED 40 AI SCRIPTS /
+Not one worked." over the hook frame (the person in the mirror, the DIDN'T WORK stamp, Cree, the pile of rejected
+scripts) and a "Creedom @write-script fits you" badge. Everything sits inside the 3:4 profile-grid crop.
 
 ## Keyword auto-DM (automation for "SCRIPT")
 
