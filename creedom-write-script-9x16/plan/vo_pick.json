@@ -1,117 +1,173 @@
 {
- "duration": 26.04,
+ "duration": 37.05,
  "takes": [
   {
-   "line": "w00",
+   "line": "m00",
    "take": 0,
-   "heard": "Camera is set up, lights on, and I've got nothing to say.",
+   "heard": "I tried on 40 AI scripts last week, not one of them fit.",
+   "errors": 0,
+   "pitch_spread_hz": 131
+  },
+  {
+   "line": "m00",
+   "take": 1,
+   "heard": "I tried on 40 AI scripts last week, not one of them fit.",
+   "errors": 0,
+   "pitch_spread_hz": 176
+  },
+  {
+   "line": "m00",
+   "take": 2,
+   "heard": "I tried on 40 AI scripts last week, not one of them fit.",
+   "errors": 0,
+   "pitch_spread_hz": 177
+  },
+  {
+   "line": "m01",
+   "take": 0,
+   "heard": "They're all off the rack, same hook, same, let's dive in for every creator on earth!",
+   "errors": 0,
+   "pitch_spread_hz": 224
+  },
+  {
+   "line": "m01",
+   "take": 1,
+   "heard": "They're all off the rack. Same hook, same. Let's dive in. For every creator on earth.",
+   "errors": 0,
+   "pitch_spread_hz": 202
+  },
+  {
+   "line": "m01",
+   "take": 2,
+   "heard": "They're all off the rack, same hook, same, let's dive in, for every creator on Earth!",
+   "errors": 0,
+   "pitch_spread_hz": 192
+  },
+  {
+   "line": "m02",
+   "take": 0,
+   "heard": "Because none of them have ever heard you talk.",
+   "errors": 0,
+   "pitch_spread_hz": 100
+  },
+  {
+   "line": "m02",
+   "take": 1,
+   "heard": "Because none of them have ever heard you talk",
+   "errors": 0,
+   "pitch_spread_hz": 84
+  },
+  {
+   "line": "m02",
+   "take": 2,
+   "heard": "Because none of them have ever heard you talk",
+   "errors": 0,
+   "pitch_spread_hz": 70
+  },
+  {
+   "line": "m03",
+   "take": 0,
+   "heard": "So I opened Credum and typed, at right script.",
    "errors": 2,
-   "pitch_spread_hz": 132
+   "pitch_spread_hz": 121
   },
   {
-   "line": "w00",
+   "line": "m03",
    "take": 1,
-   "heard": "Camera is set up, lights on, and I've got nothing to say.",
-   "errors": 2,
-   "pitch_spread_hz": 110
+   "heard": "Cray, so I opened Craydum and typed at right script.",
+   "errors": 3,
+   "pitch_spread_hz": 171
   },
   {
-   "line": "w01",
+   "line": "m03",
+   "take": 2,
+   "heard": "I opened cree dumb and typed at right script",
+   "errors": 4,
+   "pitch_spread_hz": 128
+  },
+  {
+   "line": "m04",
    "take": 0,
-   "heard": "So I asked AI for a script, and it sounded like a LinkedIn post.",
+   "heard": "First, it takes your measurements, how you open, where you pause, the words you can't stop saying.",
    "errors": 0,
-   "pitch_spread_hz": 124
+   "pitch_spread_hz": 162
   },
   {
-   "line": "w01",
+   "line": "m04",
    "take": 1,
-   "heard": "So I asked AI for a script, and it sounded like a LinkedIn post.",
+   "heard": "First it takes your measurements how you open where you pause the words you can't stop saying",
    "errors": 0,
-   "pitch_spread_hz": 130
+   "pitch_spread_hz": 205
   },
   {
-   "line": "w02",
+   "line": "m04",
+   "take": 2,
+   "heard": "First, it takes your measurements, how you open, where you pause, the words you can't stop saying.",
+   "errors": 0,
+   "pitch_spread_hz": 191
+  },
+  {
+   "line": "m05",
    "take": 0,
-   "heard": "Because it's never seen a single one of my reels.",
-   "errors": 0,
-   "pitch_spread_hz": 98
+   "heard": "Then it cuts a script to fit you. Hook, story, call to action, stitched in your voice.",
+   "errors": 1,
+   "pitch_spread_hz": 300
   },
   {
-   "line": "w02",
+   "line": "m05",
    "take": 1,
-   "heard": "Because it's never seen a single one of my reels.",
+   "heard": "Then it cuts a script to fit you. Hook, story, call to action, stitched in your voice.",
+   "errors": 0,
+   "pitch_spread_hz": 187
+  },
+  {
+   "line": "m05",
+   "take": 2,
+   "heard": "Then it cuts a script to fit you. Hook, story, call to action, stitched in your voice.",
+   "errors": 0,
+   "pitch_spread_hz": 170
+  },
+  {
+   "line": "m06",
+   "take": 0,
+   "heard": "It sounds like me, on a really good day!",
+   "errors": 1,
+   "pitch_spread_hz": 300
+  },
+  {
+   "line": "m06",
+   "take": 1,
+   "heard": "It sounds like me on a really good day on a really good day",
+   "errors": 6,
+   "pitch_spread_hz": 300
+  },
+  {
+   "line": "m06",
+   "take": 2,
+   "heard": "It sounds like me on a really good day.",
+   "errors": 0,
+   "pitch_spread_hz": 196
+  },
+  {
+   "line": "m07",
+   "take": 0,
+   "heard": "comment script, and I'll send you the link.",
    "errors": 0,
    "pitch_spread_hz": 109
   },
   {
-   "line": "w03",
-   "take": 0,
-   "heard": "So I typed one thing into Credem, at right script.",
-   "errors": 2,
-   "pitch_spread_hz": 131
-  },
-  {
-   "line": "w03",
+   "line": "m07",
    "take": 1,
-   "heard": "So I typed one thing into Credem, at write script.",
-   "errors": 1,
-   "pitch_spread_hz": 213
+   "heard": "comment script, and I'll send you the link.",
+   "errors": 0,
+   "pitch_spread_hz": 259
   },
   {
-   "line": "w04",
-   "take": 0,
-   "heard": "It read my reels first, my openers my pauses, the words I actually use.",
+   "line": "m07",
+   "take": 2,
+   "heard": "comment script, and I'll send you the link.",
    "errors": 0,
-   "pitch_spread_hz": 104
-  },
-  {
-   "line": "w04",
-   "take": 1,
-   "heard": "It read my reels first, my openers my pauses, the words I actually use.",
-   "errors": 0,
-   "pitch_spread_hz": 111
-  },
-  {
-   "line": "w05",
-   "take": 0,
-   "heard": "Then it wrote the script, and it opened the way I always open.",
-   "errors": 0,
-   "pitch_spread_hz": 95
-  },
-  {
-   "line": "w05",
-   "take": 1,
-   "heard": "Then it wrote the script, and it opened the way I always open.",
-   "errors": 0,
-   "pitch_spread_hz": 119
-  },
-  {
-   "line": "w06",
-   "take": 0,
-   "heard": "Hook story call to action, in my words.",
-   "errors": 0,
-   "pitch_spread_hz": 188
-  },
-  {
-   "line": "w06",
-   "take": 1,
-   "heard": "Hook story call to action, in my words.",
-   "errors": 0,
-   "pitch_spread_hz": 188
-  },
-  {
-   "line": "w07",
-   "take": 0,
-   "heard": "Comment script and I'll DM you the link.",
-   "errors": 0,
-   "pitch_spread_hz": 130
-  },
-  {
-   "line": "w07",
-   "take": 1,
-   "heard": "Comment script and I'll DM you the link.",
-   "errors": 0,
-   "pitch_spread_hz": 118
+   "pitch_spread_hz": 185
   }
  ]
 }

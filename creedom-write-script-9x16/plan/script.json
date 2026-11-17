@@ -1,10 +1,50 @@
 [
- {"id": "w00", "text": "Camera's set up. Lights on. And I've got nothing to say.", "beat": "hook 70"},
- {"id": "w01", "text": "So I asked AI for a script, and it sounded like a LinkedIn post.", "beat": "peak 90"},
- {"id": "w02", "text": "Because it's never seen a single one of my reels.", "beat": "release"},
- {"id": "w03", "text": "So I typed one thing into Creedom. At write script.", "beat": "turn"},
- {"id": "w04", "text": "It read my reels first. My openers, my pauses, the words I actually use.", "beat": "peak"},
- {"id": "w05", "text": "Then it wrote the script, and it opened the way I always open.", "beat": "peak (twist)"},
- {"id": "w06", "text": "Hook, story, call to action. In my words.", "beat": "release"},
- {"id": "w07", "text": "Comment Script, and I'll DM you the link.", "beat": "CTA"}
+ {
+  "id": "m00",
+  "text": "I tried on forty AI scripts last week. Not one of them fit.",
+  "beat": "hook 70",
+  "exaggeration": 0.85
+ },
+ {
+  "id": "m01",
+  "text": "They're all off the rack. Same hook. Same \"let's dive in.\" For every creator on earth.",
+  "beat": "peak 90",
+  "exaggeration": 1.0
+ },
+ {
+  "id": "m02",
+  "text": "Because none of them have ever heard you talk.",
+  "beat": "release",
+  "exaggeration": 0.6
+ },
+ {
+  "id": "m03",
+  "text": "So I opened Creedom, and typed: at write script.",
+  "beat": "turn",
+  "exaggeration": 0.75
+ },
+ {
+  "id": "m04",
+  "text": "First, it takes your measurements. How you open. Where you pause. The words you can't stop saying.",
+  "beat": "peak",
+  "exaggeration": 0.9
+ },
+ {
+  "id": "m05",
+  "text": "Then it cuts a script to fit you. Hook, story, call to action, stitched in your voice.",
+  "beat": "peak (twist)",
+  "exaggeration": 0.9
+ },
+ {
+  "id": "m06",
+  "text": "It sounds like me... on a really good day.",
+  "beat": "release (smile)",
+  "exaggeration": 1.0
+ },
+ {
+  "id": "m07",
+  "text": "Comment Script, and I'll send you the link.",
+  "beat": "CTA",
+  "exaggeration": 0.75
+ }
 ]

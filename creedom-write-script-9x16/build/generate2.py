@@ -168,7 +168,8 @@ for k in range(4):
     t = .3 + gap * k
     ft(f"#try{k}", t, .26, "{opacity: 1, y: -1000, rotation: -10}", "{opacity: 1, y: 0, rotation: 0}", "back.out(1.3)")
     to(f"#try{k}", t + .26, .14, MISFIT[k], "back.out(2.5)")
-    to(f"#try{k}", t + gap * .78, .22, f"{{x: {(-1, 1)[k % 2] * 950}, y: 200, rotation: {(-1, 1)[k % 2] * 50}}}", "power2.in")
+    to(f"#try{k}", t + gap * .78, .22, f"{{x: {(-1, 1)[k % 2] * 1500}, y: 200, rotation: {(-1, 1)[k % 2] * 50}}}", "power2.in")
+    st(f"#try{k}", t + gap * .78 + .23, "{opacity: 0}")
     st(".cn", t, "{opacity: 0}")
     st(f"#cn{k}", t, "{opacity: 1}")
     ft(f"#cn{k}", t, .25, "{yPercent: 80}", "{yPercent: 0}", "back.out(2.5)")

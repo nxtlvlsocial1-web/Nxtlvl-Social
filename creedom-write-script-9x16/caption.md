@@ -1,37 +1,46 @@
-# Creators 100X x Creedom: "@write-script" (Instagram Reels, 9:16, 26 s)
+# Creators 100X x Creedom: "@write-script", v2 MADE TO MEASURE (Instagram Reels, 9:16, 35 s)
 
-Option A, "The blank screen" (owner: "go with option A and every single visual idea", and confirmed that write-script
-returns a script with a hook, a story and a call to action). Plan: `plan/script_options.md`. CTA keyword: SCRIPT.
+v1 (Option A, "The blank screen", 26 s) was rejected by the owner: "this looks like the rebranding or some kind of part 2
+of that earlier video... change the voiceover style, make it more expressive, add some different concepts, use a
+different video or don't use a video at all, explain with more animation elements... try something unique."
 
-## Voiceover (Kokoro af_heart, same voice as the CHECK reel)
+v2 shares nothing with the CHECK reel. The concept: AI scripts are off the rack (one size fits all), and Creedom's
+write-script is a tailor. Everything is animated in code on sewing-pattern paper in the Creators 100X colours
+(off-white, ink, hot pink, lime), with no footage, no glass and no mascot. The voice is new and more expressive
+(Chatterbox, emotion set per line), and so is the music. Build: `build/generate2.py`, `build/style2.css`,
+`build/vo2.py`. v1 is kept in `build/generate.py` and `plan/script_v1.json`. CTA keyword: SCRIPT.
 
-> Camera's set up. Lights on. And I've got nothing to say.
-> So I asked AI for a script, and it sounded like a LinkedIn post.
-> Because it's never seen a single one of my reels.
-> So I typed one thing into Creedom. At write script.
-> It read my reels first. My openers, my pauses, the words I actually use.
-> Then it wrote the script, and it opened the way I always open.
-> Hook, story, call to action. In my words.
-> Comment Script, and I'll DM you the link.
+## Voiceover (v2)
+
+> I tried on forty AI scripts last week. Not one of them fit.
+> They're all off the rack. Same hook. Same "let's dive in." For every creator on earth.
+> Because none of them have ever heard you talk.
+> So I opened Creedom, and typed: at write script.
+> First, it takes your measurements. How you open. Where you pause. The words you can't stop saying.
+> Then it cuts a script to fit you. Hook, story, call to action, stitched in your voice.
+> It sounds like me... on a really good day.
+> Comment Script, and I'll send you the link.
 
 ## Post description (ready to paste)
 
 ```
-Comment "SCRIPT" and I'll DM you the link.
+Comment "SCRIPT" and I'll send you the link.
 
-Camera set up, lights on, and nothing to say.
+I tried on 40 AI scripts last week. Not one of them fit.
 
-Most AI scripts sound the same because they've never seen a single one of your reels. Creedom's write-script reads your reels first, then writes the script the way you actually talk:
-1. An opener that sounds like yours
-2. The story in your words
-3. A call to action that sounds like you
+They're all off the rack. Same hook, same "let's dive in", for every creator on earth, because none of them have ever heard you talk.
 
-Save this for the next time you stare at a blank page.
+Creedom's write-script works like a tailor:
+1. It takes your measurements: how you open, where you pause, the words you can't stop saying
+2. It cuts a script to fit you: hook, story, call to action
+3. It stitches it in your voice
 
-Music: "Corporate Music" by Ruslan Latypov, CC BY 3.0
+Save this for the next time a script sounds like everyone else.
+
+Music: "Swinging Around" by Daniel Bautista, CC BY 3.0
 
 #reelscript #contentcreator #instagramreels #aitools #creedom
-how to write reel scripts, reel script ideas, ai script writer for reels, instagram reel hooks, content ideas for creators, how to sound natural on camera, ai tools for content creators, script writing for instagram
+how to write reel scripts, ai script writer for reels, reel script in your own voice, instagram reel hooks, content ideas for creators, how to sound natural on camera, ai tools for content creators, script writing for instagram
 ```
 
 ## Keyword auto-DM (automation for "SCRIPT")
@@ -45,12 +54,13 @@ Creedom: [CREEDOM LINK]
 
 ## Notes
 
-- "It read my reels first" (VO line 5, and the reels fanning out on screen) still needs the owner's confirmation of
-  how Cree learns your voice; change the line if it works differently.
-- The script on screen is an example and is labelled "EXAMPLE SCRIPT". The reel thumbnails are our own Creators 100X
-  reels. The Creedom home screen is rebuilt in code from the owner's screenshot.
-- The auto-DM steps assume the flow in the owner's screenshot (connected account, @write-script in the chat box).
-  [CREEDOM LINK] is the same link as the CHECK reel's DM.
-- Footage: Pexels 9384669 and 7234061 (Pexels licence, free for commercial use, no credit required;
-  `footage/pexels.json`). Music: "Ruslan Latypov - Corporate Music" (Jamendo 1693123 via Openverse, CC BY 3.0); the
-  credit line above is required. Sound effects: Openverse, CC0. Mascot: Cree, Creedom's own 3D mascot.
+- "It takes your measurements... how you open, where you pause" (and the tape measuring our reels) still assumes Cree
+  learns your voice from your reels; the owner has confirmed only that write-script returns a hook, a story and a call
+  to action.
+- The "40 scripts", the tailor's ticket ("Here's the thing...", "honestly", "low-key") and the stitched script are
+  illustrations, not real output; the reel thumbnails are our own Creators 100X reels.
+- Voice: Chatterbox (Resemble AI, MIT) with a synthetic reference voice made with Kokoro-82M af_bella (Apache 2.0);
+  nobody real is cloned. "Creedom" is spelled "Cree-dum" for the model.
+- Music: "Swinging Around" by Daniel Bautista (Jamendo 2126278 via Openverse, CC BY 3.0); the credit line above is
+  required. Sound effects: Openverse, CC0. The Creators 100X mark and the Creedom logo are the owners' own.
+- [CREEDOM LINK] is the same link as the CHECK reel's DM.

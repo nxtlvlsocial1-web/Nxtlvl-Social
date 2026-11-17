@@ -200,8 +200,8 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: $PAPER
 .dm2 b { display: block; font-weight: 800; font-size: 34px; }
 .dm2 span { display: block; font-weight: 600; font-size: 28px; color: #5d5f5f; }
 .dm2 em { margin-left: auto; font: 20px Mono; font-style: normal; color: #8a8c8c; }
-.cmt { position: absolute; left: 0; right: 0; top: 360px; text-align: center; font-weight: 800; font-size: 104px; letter-spacing: -.045em; opacity: 0; }
-.cstring { position: absolute; left: 538px; top: 300px; width: 6px; height: 200px; background: $INK; transform-origin: 50% 0; transform: scaleY(0); z-index: 4; }
+.cmt { position: absolute; left: 0; right: 0; top: 318px; text-align: center; font-weight: 800; font-size: 104px; letter-spacing: -.045em; opacity: 0; }
+.cstring { position: absolute; left: 538px; top: 446px; width: 6px; height: 56px; background: $INK; transform-origin: 50% 0; transform: scaleY(0); z-index: 4; }
 .ctag { position: absolute; left: 90px; top: 500px; width: 900px; height: 340px; z-index: 6; transform-origin: 50% -200px; opacity: 0;
   background: $INK; border-radius: 34px; box-shadow: 20px 20px 0 $PINK; display: flex; align-items: center; justify-content: center;
   clip-path: polygon(0 20%, 12% 0, 100% 0, 100% 100%, 12% 100%, 0 80%); }
