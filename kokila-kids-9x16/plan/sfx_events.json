@@ -1,110 +1,58 @@
 [
 {
-"t": 0.05,
+"t": 0.0,
 "type": "boom"
 },
 {
-"t": 4.74,
+"t": 2.308,
 "type": "swish"
 },
 {
-"t": 8.72,
-"type": "hit"
+"t": 3.18,
+"type": "swish"
 },
 {
-"t": 8.959,
-"type": "shimmer"
+"t": 4.401,
+"type": "swish"
 },
 {
-"t": 9.199,
-"type": "whoosh_big"
+"t": 6.586,
+"type": "swish"
+},
+{
+"t": 8.463,
+"type": "swish"
 },
 {
 "t": 9.259,
-"type": "boom"
+"type": "swish"
 },
 {
-"t": 12.127,
-"type": "whoosh"
-},
-{
-"t": 14.503,
-"type": "shimmer"
-},
-{
-"t": 14.743,
-"type": "whoosh_big"
+"t": 12.247,
+"type": "swish"
 },
 {
 "t": 14.803,
-"type": "boom"
+"type": "swish"
 },
 {
-"t": 16.651,
-"type": "whoosh"
-},
-{
-"t": 24.0,
-"type": "hit"
-},
-{
-"t": 24.38,
-"type": "whoosh"
-},
-{
-"t": 27.14,
-"type": "hit"
-},
-{
-"t": 27.831,
-"type": "whoosh"
-},
-{
-"t": 31.04,
-"type": "hit"
-},
-{
-"t": 31.836,
-"type": "shimmer"
-},
-{
-"t": 32.076,
+"t": 16.721,
 "type": "whoosh_big"
 },
 {
-"t": 32.136,
-"type": "boom"
-},
-{
-"t": 35.621,
+"t": 20.357,
 "type": "whoosh"
 },
 {
-"t": 36.48,
-"type": "hit"
-},
-{
-"t": 38.78,
-"type": "hit"
-},
-{
-"t": 39.323,
-"type": "shimmer"
-},
-{
-"t": 39.563,
-"type": "whoosh_big"
-},
-{
-"t": 39.623,
-"type": "boom"
-},
-{
-"t": 42.64,
+"t": 22.45,
 "type": "whoosh"
 },
 {
-"t": 43.7,
-"type": "hit"
+"t": 32.086,
+"type": "whoosh"
+},
+{
+"t": 40.41,
+"type": "whoosh"
 }
 ]

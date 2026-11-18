@@ -138,7 +138,7 @@ Their brief, verbatim feedback, scripts, footage list, hooks / CTAs and open ite
 
 | Client | Kit | Template project |
 | --- | --- | --- |
-| Dr S Kokila (English talking-head reels with reference footage) | `brands/dr-kokila/` | `kokila-peace-9x16/` |
+| Dr S Kokila (English talking-head reels with reference footage) | `brands/dr-kokila/` ("Edit template") | `kokila-kids-9x16/` |
 | Kanav Kesar / The Conscious Millionaire (Hinglish talking-head ads) | `brands/kanav-kesar/` | `surrender-ad-9x16/` |
 
 Media (footage, music, renders) is not in git; ask for the raw camera files again.

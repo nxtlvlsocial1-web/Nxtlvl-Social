@@ -3,6 +3,29 @@
 > Public part of this client's memory: look and workflow only. The brief, feedback, scripts, footage list,
 > hooks/CTAs, calendar and open items live in the private `nxtlvl-client-memory` account skill.
 
+## Edit template (current, owner 2026-11-18)
+
+The owner's reference reel (`kokila-kids-9x16/reference/template/`, not in git) is the template for Dr Kokila's
+edits. It replaces the earlier looks below (the royal-blue pill reel and the pink Kanav-style reel). Built in
+`kokila-kids-9x16/build/generate.py`; reuse that project as the starting point.
+
+- **Opening split** (until the story turns, ~15-20 s): reference footage edge to edge in the top 45 % (0-860 px), her
+  talking head below (face crop of the tight cut, 1080x1060), a 4 px white seam line at y 860. The top clip changes on
+  the words it illustrates.
+- **Hook on the seam for the whole split**: white rounded box (radius 22), Montserrat Black Italic 72 px, two lines,
+  the key word of each line red `#E3202B`, the rest near-black `#111`; no emojis. Style from the owner's screenshot
+  (`reference/template/hook_style.jpg`: "Manifest anything with this!!").
+- **Captions**: 2-3 words, never across two spoken lines, in a small white rounded box (radius 12) with black Fredoka
+  SemiBold 46 px; at y 1475 in the split, y 1170 (under her chin) on full frames. They cut on with the word, no animation.
+- **After the split**: mostly her full frame with a jump-cut punch-in (1.0 / 1.12) on alternate lines, and a few
+  full-screen reference shots (about one in four lines) on the lines that ask for them. Hard cuts, minimal motion.
+- **Footage**: literal to the script (owner: "whatever the script requires"); this replaces the earlier
+  "religion-neutral / Indian people only" rule for her reels unless she asks for it again.
+- **Sound**: her voice only, no music unless asked; light sound effects (whoosh into the full section, soft swishes on
+  the top-clip changes, a low boom under the hook). No transition-pack effects (house rule).
+- **End**: hold 1.4 s on her last frame so the last caption can be read.
+
+
 What her reels look and sound like, as built and approved in `kokila-peace-9x16` (v4 is the current look).
 
 **Index**
