@@ -89,6 +89,16 @@ for i in range(0, a.last + 1):
     al = np.clip(cv2.GaussianBlur(use, (0, 0), 5) * 2 - 1, 0, 1)[..., None]
     out = fill * al + fr.astype(np.float32) * (1 - al)
     subj = cv2.GaussianBlur(cv2.dilate(ms[si], np.ones((7, 7), np.uint8)).astype(np.float32) / 255, (0, 0), 1.5)[..., None]
+    # where the athlete's mask overlaps a removed person, the mask can swallow that person (they stand right behind him):
+    # there, pixels that clearly differ from the AI frame (which has the athlete but not the person) take the AI pixels
+    ov = ((hole > 0) & (ms[si] > 0) & (av > 0)).astype(np.float32)
+    if ov.any():
+        d = np.abs(fr.astype(np.float32) - fill).mean(2)
+        d = cv2.GaussianBlur(d, (0, 0), 3)
+        w = np.clip((d - 22) / 30, 0, 1) * cv2.GaussianBlur(ov, (0, 0), 2)
+        w = cv2.GaussianBlur(w, (0, 0), 3)[..., None]
+        subj = subj * (1 - w)
+        out = fill * w + out * (1 - w)
     out = (fr * subj + out * (1 - subj)).astype(np.uint8)
     cv2.imwrite(os.path.join(a.out, f"f{i:05d}.png"), out)
     print("out", i, len(mt), flush=True)
