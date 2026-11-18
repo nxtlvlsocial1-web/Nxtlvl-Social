@@ -39,10 +39,11 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b070
 .head { position: absolute; left: 60px; right: 60px; text-align: center; font-weight: 800; letter-spacing: -.045em; line-height: 1.04; z-index: 40; color: $INK; }
 .head.dk { color: #fff; }
 .hl { white-space: nowrap; }
-.hw { display: inline-block; opacity: 0; }
-.hw.it { font-family: Serif; font-weight: 400; letter-spacing: -.01em; font-size: 1.12em; padding: 0 .04em;
-  background: linear-gradient(90deg, #F515E8, #F54BA8 50%, #F5876C); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.hw.pk { color: #E0187E; }
+.hw { display: inline-block; opacity: 0; padding: .02em .02em .16em; margin-bottom: -.14em; vertical-align: baseline; }
+/* v2 (owner: text "half cut", "not aligned"): accent words stay in Inter 800 (same baseline and size as the rest), filled with the
+   Creedom gradient; the bottom padding keeps descenders (g, y, p) inside the clipped gradient box */
+.hw.it { background: linear-gradient(90deg, #F515E8, #F54BA8 50%, #F5876C); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hw.pk { color: #c2186f; }
 .head.dk .hw.pk { color: #ff6fbf; }
 .hw.gn { color: #15a05a; }
 .hw.rd { color: #e11d48; }
@@ -239,3 +240,40 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b070
   transform-origin: 0 100%; background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,255,255,.6)); border: 2px solid rgba(255,255,255,.95);
   box-shadow: inset 0 2px 0 #fff, 0 20px 40px rgba(160,20,90,.28); }
 #bubt { font: 800 120px/1 Inter; background: linear-gradient(180deg, #F343A2, #EE688B); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* ---- v2 additions ---- */
+/* drifting texture: redacted document scraps in the dark world, social icons in the light world */
+.scrap { position: absolute; width: 260px; height: 330px; border-radius: 10px; background: rgba(255,240,247,.07); border: 2px solid rgba(255,200,228,.1); padding: 34px 26px;
+  display: flex; flex-direction: column; gap: 16px; }
+.scrap i { display: block; height: 14px; border-radius: 3px; background: rgba(255,190,222,.16); }
+.scrap i.k { background: rgba(0,0,0,.55); height: 18px; }
+.ico { position: absolute; width: 84px; height: 84px; border-radius: 26px; background: rgba(255,255,255,.55); box-shadow: 0 10px 24px rgba(177,71,107,.16);
+  display: grid; place-items: center; }
+.ico svg { width: 46px; height: 46px; }
+/* pops: small icons that burst out of things */
+.popi { position: absolute; width: 74px; height: 74px; border-radius: 50%; background: #fff; display: grid; place-items: center; opacity: 0; z-index: 46;
+  box-shadow: 0 10px 24px rgba(177,71,107,.3); }
+.popi svg { width: 40px; height: 40px; }
+.conf { position: absolute; width: 16px; height: 26px; border-radius: 4px; opacity: 0; z-index: 47; }
+.rays { position: absolute; left: 40px; top: 360px; width: 1000px; height: 1000px; z-index: 15; opacity: 0; }
+.rays svg { width: 100%; height: 100%; }
+.typing { display: flex; gap: 12px; padding: 24px 30px; border-radius: 30px 30px 30px 8px; background: #38383f; width: 150px; margin-top: 28px; }
+.typing i { width: 18px; height: 18px; border-radius: 50%; background: #9b9ba3; }
+/* phone scrubber (weak hook at 0:01) */
+.scrub { position: absolute; left: 30px; right: 30px; bottom: 150px; height: 10px; border-radius: 5px; background: rgba(255,255,255,.35); }
+.scrub b { position: absolute; left: 0; top: 0; bottom: 0; width: 46%; border-radius: 5px; background: #fff; }
+.scrub em { position: absolute; left: 4%; top: -14px; width: 38px; height: 38px; border-radius: 50%; background: #e11d48; border: 5px solid #fff; opacity: 0; }
+/* the results chart (v2: bars instead of lines) */
+.chart { position: absolute; left: 50px; right: 50px; top: 130px; height: 400px; }
+.chart .gl { position: absolute; left: 0; right: 0; height: 2px; background: #f0e1e8; }
+.chart .base { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; border-radius: 2px; background: #d9c3ce; }
+.cbar { }
+.bar { position: absolute; bottom: 4px; width: 66px; border-radius: 14px 14px 4px 4px; transform-origin: 50% 100%; transform: scaleY(0); }
+.bar.b0 { background: linear-gradient(180deg, #c9bcc3, #a8979f); }
+.bar.b1 { background: linear-gradient(180deg, #ff8cc6, #F343A2 60%, #d81f86); box-shadow: 0 10px 24px rgba(243,67,162,.35); }
+.chart .mk { position: absolute; top: -10px; bottom: 0; width: 0; border-left: 5px dashed #0b0b0b; transform-origin: 50% 100%; }
+.chart .mlab2 { position: absolute; top: -66px; transform: translateX(-50%); white-space: nowrap; font: 26px Mono; letter-spacing: .12em; color: #fff; background: #0b0b0b;
+  padding: 10px 18px; border-radius: 10px; opacity: 0; }
+.chart .xl { position: absolute; bottom: -58px; transform: translateX(-50%); font: 28px Mono; letter-spacing: .2em; color: #6f5f68; }
+.chart .xl.af { color: #c2186f; }
+.chart .upa { position: absolute; width: 70px; height: 70px; opacity: 0; }

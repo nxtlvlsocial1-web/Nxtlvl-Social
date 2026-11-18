@@ -2,7 +2,7 @@
 
   * Voice: assets/audio/vo.wav, the owner's ElevenLabs take (Blondie - Conversational), loudnorm to -16 LUFS; the loudest layer.
   * Music: "Secret Agent 0814 Theme" by Sunsearcher (Jamendo 1990624 via Openverse, CC BY 3.0: credit in the post), from
-    43.84 s (a beat), about -22 LUFS, sidechain-ducked under the voice (plan/music.json).
+    83.68 s (a beat; v1 used 43.84 s), about -22 LUFS, sidechain-ducked under the voice (plan/music.json).
   * Sound effects: CC0 OpenGameArt packs (Freesound and Kenney's site refuse this machine): "100 CC0 SFX" (rubberduck),
     "75 CC0 breaking/falling/hit sfx" (rubberduck), Kenney "Interface Sounds" and "RPG Audio" (OGA mirrors), "swishes"
     (artisticdude), "Bell, dings and chimes"; plus three synthesised one-shots (build/synth_sfx.py: whoosh_big, riser, sub_hit).
@@ -22,7 +22,7 @@ LIB = os.path.join(ROOT, "assets", "sfx")
 E = json.load(open(os.path.join(ROOT, "plan", "edit.json")))
 DUR = E["dur"]
 SONG = os.path.join(ROOT, "sfx", "music", os.environ.get("SONG", "music_secret_agent_sunsearcher.mp3"))
-SONG_AT = float(os.environ.get("SONG_AT", "43.839"))
+SONG_AT = float(os.environ.get("SONG_AT", "83.68"))   # v2: the track's busiest stretch (84-112 s), on a beat
 MUSIC_LUFS = float(os.environ.get("MUSIC_LUFS", "-22.5"))
 # kind -> (files, peak dBFS, max length s)
 KINDS = {
