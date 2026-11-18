@@ -126,7 +126,7 @@ def seam_caps(a, b, tend):
         t0 = T(c[0]) - .02
         t1 = T(ch[k + 1][0]) - .02 if k + 1 < len(ch) else tend
         i = nid("sc")
-        low = ' style="top:1430px"' if t0 < HOOK_END else ""
+        low = ' style="top:1125px"' if t0 < HOOK_END else ""   # under the hook, over the wall above her head
         POST.append(f'<div class="seam" id="{i}"{low}><span>{" ".join(word(j) for j in c)}</span></div>')
         show(f"#{i}", t0, t1)
         js(f'tl.fromTo("#{i} span", {{scale: 1.12}}, {{scale: 1, duration: .16, ease: "power3.out", immediateRender: false}}, {t0:.3f});')
