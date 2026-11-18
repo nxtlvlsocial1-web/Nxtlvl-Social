@@ -1,7 +1,9 @@
 # Apoorva: AI true or false (Instagram Reels, 9:16, 36.6 s)
 
-Final: renders/apoorva_ai-true-or-false_reels_9x16_final.mp4 (2026-11-18). v2: no music (owner), overlays off her face,
-the mascot (lavender gumdrop after the owner's reference), confetti and edge flashes, CC0 OpenGameArt game sounds.
+Final: renders/apoorva_ai-true-or-false_reels_9x16_v5_final.mp4 (2026-11-18, 70 MB). v5 look (owner: "do this thing in the
+glass fluid style", then "reduce the size of below box"): a compact frosted liquid-glass question panel with fluid colour
+inside, glass TRUE / FALSE pills, a glass 3-2-1 ring, glass level boxes at the top; no music, no mascot, no name card.
+Earlier looks are kept in build/generate_v1.py to generate_v4.py.
 
 New client (2026-11-18). Footage: two phone takes from the owner's Drive (IMG_0764 = take 1, IMG_0765 = take 2, 4K HEVC,
 kept out of git in footage/). Structure agreed with the owner ("rest go with the best take you have in mind"):
@@ -47,7 +49,5 @@ ai true or false quiz, ai facts and myths, how ai models work, does nvidia make 
 
 ## Notes
 
-- Music: "Positive Backgroundl" by Soundrider/Dope (Jamendo 1671032 via Openverse, CC BY 3.0, plan/music.json), from
-  2.04 s, about -25 LUFS under the voice; the credit line above is required. SFX: Openverse CC0 one-shots (the house
-  library) plus CC0 typing, boing, chime and message sounds (creedom-write-script-9x16/plan/sfx_library_v3.json).
-- Unknown: the client's page, handle, brand colours and logo; the look is a neutral white / green / red quiz.
+- No music (owner). Sound effects: CC0 only (Openverse one-shots and the OpenGameArt CC0 packs), so no credit line is needed.
+- Unknown: the client's page, handle, brand colours and logo; the look is neutral glass with green / red answers.
