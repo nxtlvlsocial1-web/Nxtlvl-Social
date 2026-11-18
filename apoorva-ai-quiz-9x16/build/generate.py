@@ -276,7 +276,7 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #000;
 #crown {{ position: absolute; left: 50%; top: -24px; width: 40px; height: 22px; margin-left: {3 * 67 + 0}px; opacity: 0; }}
 /* v5 lower third: liquid glass with fluid colour inside */
 #bot {{ height: 560px !important; background: linear-gradient(0deg, rgba(8,6,14,.55) 0%, rgba(8,6,14,.3) 50%, rgba(8,6,14,0) 100%) !important; }}
-#sheet {{ position: absolute; left: 34px; right: 34px; top: 1370px; height: 352px; z-index: 12; }}
+#sheet {{ position: absolute; left: 64px; right: 64px; top: 1432px; height: 290px; z-index: 12; }}
 #gl {{ position: absolute; inset: 0; border-radius: 46px; overflow: hidden; opacity: 0;
   background: linear-gradient(140deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,.07) 45%, rgba(255,255,255,.13) 100%);
   backdrop-filter: blur(30px) saturate(1.8) brightness(.82); -webkit-backdrop-filter: blur(30px) saturate(1.8) brightness(.82);
@@ -291,41 +291,41 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #000;
   background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.38) 50%, rgba(255,255,255,0)); }}
 #glr {{ position: absolute; left: 50%; top: 50%; width: 700px; height: 700px; margin: -350px 0 0 -350px; border-radius: 50%; z-index: 2; opacity: 0;
   border: 3px solid rgba(255,255,255,.55); box-shadow: 0 0 40px rgba(255,255,255,.25), inset 0 0 40px rgba(255,255,255,.2); }}
-.lt {{ position: absolute; left: 82px; right: 236px; top: 1410px; opacity: 0; z-index: 15; color: #fff; }}
-.kick {{ display: inline-block; font-weight: 700; font-size: 23px; letter-spacing: .2em; color: rgba(255,255,255,.92); padding: 8px 18px 7px; border-radius: 999px;
+.lt {{ position: absolute; left: 102px; right: 250px; top: 1460px; opacity: 0; z-index: 15; color: #fff; }}
+.kick {{ display: inline-block; font-weight: 700; font-size: 20px; letter-spacing: .2em; color: rgba(255,255,255,.92); padding: 6px 15px 5px; border-radius: 999px;
   background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.35); box-shadow: inset 0 1px 0 rgba(255,255,255,.4); }}
 .kick i {{ font-style: normal; opacity: 0; }}
-.q {{ margin-top: 16px; font-weight: 700; font-size: 52px; line-height: 1.08; letter-spacing: -.028em; color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,.25); }}
+.q {{ margin-top: 12px; font-weight: 700; font-size: 44px; line-height: 1.08; letter-spacing: -.028em; color: #fff; text-shadow: 0 2px 18px rgba(0,0,0,.25); }}
 .q .w {{ display: inline-block; opacity: 0; transform-origin: 50% 70%; }}
 .red, .q .red {{ font-family: Serif; font-style: italic; font-weight: 400; font-size: 1.12em; letter-spacing: 0; color: #FFB3D6; }}
-.rule {{ position: relative; height: 1.5px; margin: 18px 0 12px; }}
+.rule {{ position: relative; height: 1.5px; margin: 14px 0 10px; }}
 .rule i {{ position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,255,255,.75), rgba(255,255,255,.08)); transform-origin: 0 50%; transform: scaleX(0); }}
-.tf {{ font-weight: 600; font-size: 21px; letter-spacing: .26em; color: rgba(255,255,255,.82); opacity: 0; }}
-.bar {{ position: relative; width: 200px; height: 10px; margin-top: 12px; border-radius: 999px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.3); overflow: hidden; }}
+.tf {{ font-weight: 600; font-size: 19px; letter-spacing: .26em; color: rgba(255,255,255,.82); opacity: 0; }}
+.bar {{ position: relative; width: 170px; height: 9px; margin-top: 10px; border-radius: 999px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.3); overflow: hidden; }}
 .bar i {{ position: absolute; inset: 0; border-radius: 999px; background: linear-gradient(90deg, #7B5CFF, #19C3D6, #FF5FA8); transform-origin: 0 50%; transform: scaleX(0);
   box-shadow: 0 0 14px rgba(140,190,255,.8); }}
-.why {{ position: absolute; left: 0; right: -150px; bottom: -58px; font-family: Serif; font-style: italic; font-size: 40px; line-height: 1.15; color: #fff; opacity: 0;
+.why {{ position: absolute; left: 0; right: -150px; bottom: -50px; font-family: Serif; font-style: italic; font-size: 34px; line-height: 1.15; color: #fff; opacity: 0;
   text-shadow: 0 2px 14px rgba(0,0,0,.3); }}
-.stp {{ position: absolute; right: 70px; top: 1556px; z-index: 18; opacity: 0; padding: 14px 34px 12px; border-radius: 999px; overflow: hidden;
+.stp {{ position: absolute; right: 94px; top: 1556px; z-index: 18; opacity: 0; padding: 11px 28px 10px; border-radius: 999px; overflow: hidden;
   backdrop-filter: blur(18px) saturate(1.8); -webkit-backdrop-filter: blur(18px) saturate(1.8); border: 1.5px solid rgba(255,255,255,.7); }}
-.stp b {{ position: relative; z-index: 2; font-weight: 800; font-size: 50px; letter-spacing: .06em; line-height: 1; color: #fff; }}
+.stp b {{ position: relative; z-index: 2; font-weight: 800; font-size: 42px; letter-spacing: .06em; line-height: 1; color: #fff; }}
 .sT {{ background: linear-gradient(140deg, rgba(64,230,150,.78), rgba(20,160,100,.55)); box-shadow: inset 0 2px 0 rgba(255,255,255,.6), 0 0 36px rgba(61,220,151,.65), 0 14px 30px rgba(0,0,0,.3); }}
 .sF {{ background: linear-gradient(140deg, rgba(255,100,110,.8), rgba(210,40,70,.58)); box-shadow: inset 0 2px 0 rgba(255,255,255,.6), 0 0 36px rgba(255,90,95,.65), 0 14px 30px rgba(0,0,0,.3); }}
 .stp .x {{ position: absolute; left: 14px; right: 14px; top: 50%; height: 6px; margin-top: -3px; z-index: 3; border-radius: 6px; background: #fff; transform: scaleX(0) rotate(-6deg); transform-origin: 0 50%; }}
-#wait {{ position: absolute; right: 86px; top: 1462px; z-index: 19; font-weight: 800; font-size: 32px; letter-spacing: .08em; color: #fff; padding: 8px 22px; border-radius: 999px;
+#wait {{ position: absolute; right: 108px; top: 1480px; z-index: 19; font-weight: 800; font-size: 27px; letter-spacing: .08em; color: #fff; padding: 8px 22px; border-radius: 999px;
   opacity: 0; background: linear-gradient(140deg, rgba(255,196,80,.85), rgba(240,150,40,.6)); border: 1.5px solid rgba(255,255,255,.7);
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 0 26px rgba(255,190,80,.6); }}
-#cring {{ position: absolute; right: 72px; top: 1430px; width: 140px; height: 140px; z-index: 17; opacity: 0; border-radius: 50%;
+#cring {{ position: absolute; right: 96px; top: 1470px; width: 116px; height: 116px; z-index: 17; opacity: 0; border-radius: 50%;
   background: rgba(255,255,255,.1); backdrop-filter: blur(16px) saturate(1.6); -webkit-backdrop-filter: blur(16px) saturate(1.6);
   box-shadow: inset 0 2px 0 rgba(255,255,255,.5), 0 0 30px rgba(140,170,255,.35); }}
 #cring svg {{ position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }}
 #cring .ct {{ fill: none; stroke: rgba(255,255,255,.22); stroke-width: 5; }}
 #cring .cf {{ fill: none; stroke: #fff; stroke-width: 6; stroke-linecap: round; stroke-dasharray: 377; filter: drop-shadow(0 0 6px rgba(160,200,255,.9)); }}
-.cnt {{ position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 76px; line-height: 1; color: #fff; opacity: 0;
+.cnt {{ position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 62px; line-height: 1; color: #fff; opacity: 0;
   text-shadow: 0 0 22px rgba(170,200,255,.8); }}
 .bosslt .kick {{ color: #FFE2A0; border-color: rgba(232,176,75,.7); background: rgba(232,176,75,.18); }}
-.cline {{ position: relative; margin-top: 4px; padding: 14px 24px; border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.4);
-  font-weight: 600; font-size: 30px; color: #fff; opacity: 0; box-shadow: inset 0 1px 0 rgba(255,255,255,.45); }}
+.cline {{ position: relative; margin-top: 4px; padding: 11px 20px; border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.4);
+  font-weight: 600; font-size: 26px; color: #fff; opacity: 0; box-shadow: inset 0 1px 0 rgba(255,255,255,.45); }}
 #cph {{ position: absolute; color: rgba(255,255,255,.5); }}
 #cty i {{ font-style: normal; opacity: 0; }}
 /* glass ladder boxes */
