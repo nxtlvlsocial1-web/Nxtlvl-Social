@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Kokila kids 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Inter"; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("assets/fonts/Inter-700.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2"); }
+@font-face { font-family: "Anton"; src: url("assets/fonts/Anton.ttf"); }
+@font-face { font-family: "Kaushan"; src: url("assets/fonts/KaushanScript.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f7b7c3; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Inter"; color: #3b0a1f; }
+#bg { position: absolute; inset: 0; background: radial-gradient(120% 75% at 50% 8%, #fff4f6 0%, #ffd6de 42%, #f7a2b4 100%); }
+#bg::after { content: ""; position: absolute; inset: 0; background-image: radial-gradient(rgba(190,40,80,.17) 1.7px, transparent 2.1px);
+  background-size: 26px 26px; -webkit-mask-image: linear-gradient(#000 20%, rgba(0,0,0,.35)); mask-image: linear-gradient(#000 20%, rgba(0,0,0,.35)); }
+.blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .3; }
+#split { position: absolute; inset: 0; opacity: 0; transform-origin: 50% 50%; }
+#top { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; overflow: hidden; }
+#topin { position: absolute; inset: 0; perspective: 1400px; transform-origin: 50% 50%; }
+#stage { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; transform-origin: 50% 45%; perspective: 1400px; }
+.card { position: absolute; left: 70px; width: 940px; border-radius: 46px; padding: 16px; opacity: 0;
+  background: linear-gradient(140deg, rgba(255,255,255,.62), rgba(255,255,255,.18) 50%, rgba(255,255,255,.38));
+  border: 1.5px solid rgba(255,255,255,.85); backdrop-filter: blur(24px) saturate(1.7); -webkit-backdrop-filter: blur(24px) saturate(1.7);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.95), inset 0 -18px 40px rgba(255,80,130,.18), 0 40px 80px rgba(140,20,60,.30), 0 8px 22px rgba(140,20,60,.16); }
+.card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(118deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 26%, rgba(255,255,255,0) 74%, rgba(255,255,255,.22) 100%); }
+.card .scr { position: relative; width: 100%; height: 100%; border-radius: 32px; overflow: hidden; box-shadow: 0 0 0 1px rgba(255,255,255,.5); }
+.card video { width: 100%; height: 100%; object-fit: cover; display: block; }
+#bot { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px; overflow: hidden; background: #2a0d14; }
+#botin { position: absolute; inset: 0; transform-origin: 50% 35%; }
+#botin video { width: 100%; height: 100%; object-fit: cover; display: block; }
+#seamline { position: absolute; left: 0; top: 957px; width: 1080px; height: 6px; background: linear-gradient(90deg, #ff2d55, #ff7aa0, #ff2d55); z-index: 6; }
+#full { position: absolute; inset: 0; opacity: 0; overflow: hidden; background: #2a0d14; }
+#fullin { position: absolute; inset: 0; transform-origin: 50% 35%; }
+#fullin video { width: 100%; height: 100%; object-fit: cover; display: block; }
+#hold { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; }
+#hook { position: absolute; left: 0; top: 800px; width: 1080px; text-align: center; z-index: 12; opacity: 0; }
+#hook .hb { display: inline-block; padding: 26px 46px 30px; border-radius: 30px; background: rgba(255,255,255,.96);
+  box-shadow: 0 24px 60px rgba(120,10,40,.35), inset 0 -10px 30px rgba(255,80,130,.12); }
+#hook .hl { font: 400 112px/1.02 "Anton"; color: #e0182d; letter-spacing: .01em; text-transform: uppercase; }
+.seam { position: absolute; left: 0; width: 1080px; top: 905px; text-align: center; opacity: 0; z-index: 9; }
+.seam span { display: inline-block; background: #000; color: #fff; font: 800 50px/1 "Inter"; padding: 12px 24px 14px; border-radius: 8px; letter-spacing: -.01em; }
+.fcap { position: absolute; left: 110px; right: 80px; top: 1250px; opacity: 0; z-index: 9; }
+.fcap .scr { font: 400 74px/1.1 "Kaushan"; color: #fff; text-shadow: 0 4px 14px rgba(0,0,0,.55); margin-left: 6px; }
+.fcap .bigw { font: 400 150px/1 "Anton"; color: #fff; letter-spacing: .01em; text-shadow: 0 8px 26px rgba(0,0,0,.45); transform-origin: 0 60%; }
+.fcap .bigw.red { display: inline-block; color: #e0182d; background: #fff; padding: 8px 26px 4px; border-radius: 18px; text-shadow: none;
+  box-shadow: 0 14px 34px rgba(0,0,0,.35); }   /* her kurta is red: the key word sits on white, like the hook */
+.tr { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: screen; z-index: 19; pointer-events: none; }
+#tint { position: absolute; inset: 0; z-index: 20; opacity: 0; background: #d23cff; mix-blend-mode: screen; }
+#leak { position: absolute; left: -400px; top: -200px; width: 1900px; height: 2400px; z-index: 21; opacity: 0; mix-blend-mode: screen;
+  background: radial-gradient(ellipse 40% 50% at 50% 50%, rgba(255,240,200,1), rgba(255,170,60,.85) 35%, rgba(255,120,40,0) 70%); }
+#flash { position: absolute; inset: 0; z-index: 22; opacity: 0; background: #fff8f0; }
+#grain { position: absolute; inset: 0; z-index: 23; pointer-events: none; opacity: .05; background: url(assets/img/grain.png); mix-blend-mode: overlay; }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="45.807" data-fps="30" data-width="1080" data-height="1920">
+      <div id="bg"></div>
+      <div id="split">
+        <div id="top"><div id="topin"><div id="blobs"><i class="blob" style="left:-120px;top:80px;width:520px;height:520px;background:#ff6f95"></i><i class="blob" style="left:620px;top:360px;width:560px;height:560px;background:#ffffff"></i><i class="blob" style="left:300px;top:620px;width:460px;height:460px;background:#ff3d6e"></i><i class="blob" style="left:760px;top:-80px;width:420px;height:420px;background:#ffb2c4"></i></div><div id="stage"><div class="card" id="rs1" style="top:110px;height:580px"><div class="scr"><video id="rs1v" class="clip" src="assets/video/ref_play.mp4" data-start="0.000" data-duration="6.586" data-media-start="0.000" data-track-index="3" muted playsinline></video></div></div><div class="card" id="rs13" style="top:130px;height:650px"><div class="scr"><video id="rs13v" class="clip" src="assets/video/ref_group.mp4" data-start="9.259" data-duration="2.988" data-media-start="0.400" data-track-index="5" muted playsinline></video></div></div><div class="card" id="rs19" style="top:130px;height:650px"><div class="scr"><video id="rs19v" class="clip" src="assets/video/ref_marbles.mp4" data-start="14.803" data-duration="1.968" data-media-start="1.000" data-track-index="4" muted playsinline></video></div></div><div class="card" id="rs34" style="top:130px;height:650px"><div class="scr"><video id="rs34v" class="clip" src="assets/video/ref_share.mp4" data-start="32.136" data-duration="3.605" data-media-start="1.200" data-track-index="5" muted playsinline></video></div></div><div class="card" id="rs41" style="top:130px;height:650px"><div class="scr"><video id="rs41v" class="clip" src="assets/video/ref_group.mp4" data-start="39.623" data-duration="3.137" data-media-start="9.000" data-track-index="4" muted playsinline></video></div></div></div></div></div>
+        <div id="bot"><div id="botin"><video id="vsplit" class="clip" src="assets/video/face_split.mp4" data-start="0" data-duration="44.407" data-track-index="2" muted playsinline></video></div></div>
+        <div id="seamline"></div>
+      </div>
+      <div id="full"><div id="fullin"><video id="vfull" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="44.407" data-track-index="1" muted playsinline></video><img id="hold" src="assets/img/last_full.png" alt=""></div></div>
+      <div id="hook"><div class="hb"><div class="hl">NO CHILD IS BORN</div><div class="hl">WITH PREJUDICE</div></div></div><div class="seam" id="sc2" style="top:1430px"><span>Have you seen</span></div><div class="seam" id="sc3" style="top:1430px"><span>two children playing</span></div><div class="seam" id="sc4" style="top:1430px"><span>together</span></div><div class="seam" id="sc5" style="top:1430px"><span>One is Hindu</span></div><div class="seam" id="sc6" style="top:1430px"><span>the other is Muslim</span></div><div class="seam" id="sc7" style="top:1430px"><span>One is black</span></div><div class="seam" id="sc8"><span>One is black</span></div><div class="seam" id="sc9"><span>the other is white</span></div><video id="trpolka" class="tr" src="assets/video/tr_polka.mp4" data-start="5.956" data-duration="1.5" data-track-index="8" muted playsinline></video><div class="fcap" id="fc10"><div class="scr">but do you</div><div class="bigw" style="font-size:150px">KNOW</div></div><div class="fcap" id="fc11"><div class="scr">what they</div><div class="bigw" style="font-size:150px">SEE</div></div><div class="fcap" id="fc12"><div class="scr">a</div><div class="bigw red" style="font-size:150px">FRIEND</div></div><div class="seam" id="sc14"><span>They don't ask</span></div><div class="seam" id="sc15"><span>which God the other</span></div><div class="seam" id="sc16"><span>child prays to</span></div><div class="fcap" id="fc17"><div class="scr">they don't ask which</div><div class="bigw" style="font-size:150px">COUNTRY</div></div><div class="fcap" id="fc18"><div class="scr">their parents are</div><div class="bigw" style="font-size:150px">FROM</div></div><div class="seam" id="sc20"><span>They just laugh</span></div><div class="seam" id="sc21"><span>enjoy</span></div><div class="seam" id="sc22"><span>share</span></div><div class="fcap" id="fc23"><div class="scr">but somewhere along the</div><div class="bigw" style="font-size:150px">WAY</div></div><div class="fcap" id="fc24"><div class="scr">we adults begin</div><div class="bigw" style="font-size:150px">TEACHING</div></div><div class="fcap" id="fc25"><div class="scr">them who is</div><div class="bigw" style="font-size:150px">DIFFERENT</div></div><div class="fcap" id="fc26"><div class="scr">who belongs and</div><div class="bigw" style="font-size:150px">SOMETIMES</div></div><div class="fcap" id="fc27"><div class="scr">who to</div><div class="bigw red" style="font-size:150px">FEAR</div></div><div class="fcap" id="fc28"><div class="scr">and that's how our</div><div class="bigw" style="font-size:150px">BRAIN</div></div><div class="fcap" id="fc29"><div class="scr">learns fear and</div><div class="bigw red" style="font-size:150px">PREJUDICE</div></div><div class="fcap" id="fc30"><div class="scr">but here's a</div><div class="bigw" style="font-size:150px">BEAUTIFUL</div></div><div class="fcap" id="fc31"><div class="bigw" style="font-size:150px">PART</div></div><div class="fcap" id="fc32"><div class="scr">our brain can</div><div class="bigw" style="font-size:150px">LEARN</div></div><div class="fcap" id="fc33"><div class="bigw red" style="font-size:150px">EMPATHY TOO</div></div><div class="seam" id="sc35"><span>Children can be taught</span></div><div class="seam" id="sc36"><span>compassion before</span></div><div class="seam" id="sc37"><span>discrimination</span></div><div class="fcap" id="fc38"><div class="scr">they can be</div><div class="bigw" style="font-size:150px">TAUGHT</div></div><div class="fcap" id="fc39"><div class="scr">a little more</div><div class="bigw red" style="font-size:150px">KINDNESS</div></div><div class="fcap" id="fc40"><div class="scr">and a little more</div><div class="bigw red" style="font-size:150px">COMPASSION</div></div><div class="seam" id="sc42"><span>And that's how when we</span></div><div class="seam" id="sc43"><span>begin healing ourselves</span></div><div class="fcap" id="fc44"><div class="scr">we begin healing</div><div class="bigw red" style="font-size:150px">HUMANITY</div></div>
+      <video id="trpixel" class="tr" src="assets/video/tr_pixel.mp4" data-start="0" data-duration="1.5" data-track-index="7" muted playsinline></video>
+      <div id="tint"></div><div id="leak"></div><div id="flash"></div><div id="grain"></div>
+      <audio id="voice" src="assets/audio/voice.wav" data-start="0" data-duration="44.407" data-track-index="10" data-volume="1"></audio>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      gsap.set(["#rs1", "#hook", "#sc2", "#sc3", "#sc4", "#sc5", "#sc6", "#sc7", "#sc8", "#sc9", "#fc10", "#fc11", "#fc12", "#rs13", "#sc14", "#sc15", "#sc16", "#fc17", "#fc18", "#rs19", "#sc20", "#sc21", "#sc22", "#fc23", "#fc24", "#fc25", "#fc26", "#fc27", "#fc28", "#fc29", "#fc30", "#fc31", "#fc32", "#fc33", "#rs34", "#sc35", "#sc36", "#sc37", "#fc38", "#fc39", "#fc40", "#rs41", "#sc42", "#sc43", "#fc44", "#split", "#full", "#tint", "#leak", "#flash", "#hold"], {opacity: 0});
+      tl.set("#rs1", {opacity: 1}, 0.000);
+      tl.set("#rs1", {opacity: 0}, 6.586);
+      tl.fromTo("#rs1", {y: 50, rotationX: 10, filter: "blur(12px)"}, {y: 0, rotationX: 2, filter: "blur(0px)", duration: .5, ease: "expo.out", immediateRender: false}, 0.000);
+      tl.to("#rs1", {y: -12, rotationX: 0, duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: 3}, 0.500);
+      tl.set("#split", {opacity: 1, scale: 1, filter: "blur(0px)"}, 0.000);
+      tl.fromTo("#stage", {scale: 1.0}, {scale: 1.05, duration: 6.59, ease: "none", immediateRender: false}, 0.000);
+      tl.set("#split", {opacity: 0}, 6.586);
+      tl.fromTo("#botin", {scale: 1.35, filter: "blur(14px)"}, {scale: 1, filter: "blur(0px)", duration: .7, ease: "expo.out", immediateRender: false}, 0);
+      tl.fromTo("#topin", {scale: 1.18, filter: "blur(16px)"}, {scale: 1, filter: "blur(0px)", duration: .75, ease: "expo.out", immediateRender: false}, 0);
+      tl.set("#hook", {opacity: 1}, 0.12);
+      tl.fromTo("#hook .hb", {scale: 1.25, filter: "blur(12px)"}, {scale: 1, filter: "blur(0px)", duration: .55, ease: "expo.out", immediateRender: false}, 0.12);
+      tl.fromTo("#hook .hl", {y: 24, opacity: 0}, {y: 0, opacity: 1, duration: .45, ease: "expo.out", stagger: .1, immediateRender: false}, 0.2);
+      tl.to("#hook", {y: -50, opacity: 0, filter: "blur(8px)", duration: .26, ease: "power2.in"}, 4.740);
+      tl.set("#sc2", {opacity: 1}, 0.000);
+      tl.set("#sc2", {opacity: 0}, 0.660);
+      tl.fromTo("#sc2 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, -0.020);
+      tl.set("#sc3", {opacity: 1}, 0.660);
+      tl.set("#sc3", {opacity: 0}, 1.640);
+      tl.fromTo("#sc3 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 0.660);
+      tl.set("#sc4", {opacity: 1}, 1.640);
+      tl.set("#sc4", {opacity: 0}, 2.320);
+      tl.fromTo("#sc4 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 1.640);
+      tl.set("#sc5", {opacity: 1}, 2.320);
+      tl.set("#sc5", {opacity: 0}, 3.200);
+      tl.fromTo("#sc5 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 2.320);
+      tl.set("#sc6", {opacity: 1}, 3.200);
+      tl.set("#sc6", {opacity: 0}, 4.420);
+      tl.fromTo("#sc6 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 3.200);
+      tl.set("#sc7", {opacity: 1}, 4.420);
+      tl.set("#sc7", {opacity: 0}, 5.380);
+      tl.fromTo("#sc7 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 4.420);
+      tl.set("#sc7", {opacity: 0}, 5.000);
+      tl.set("#sc8", {opacity: 1}, 5.000);
+      tl.set("#sc8", {opacity: 0}, 5.380);
+      tl.set("#sc9", {opacity: 1}, 5.380);
+      tl.set("#sc9", {opacity: 0}, 6.586);
+      tl.fromTo("#sc9 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 5.380);
+      tl.to("#split", {scale: 1.08, filter: "blur(6px)", duration: 0.63, ease: "power2.in"}, 5.956);
+      tl.set("#full", {opacity: 1}, 6.586);
+      tl.set("#full", {opacity: 0}, 9.259);
+      tl.fromTo("#fullin", {scale: 1.18, filter: "blur(12px)"}, {scale: 1, filter: "blur(0px)", duration: .3, ease: "expo.out", immediateRender: false}, 6.586);
+      tl.set("#fc10", {opacity: 1}, 6.620);
+      tl.set("#fc10", {opacity: 0}, 7.400);
+      tl.fromTo("#fc10 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 6.620);
+      tl.set("#fc10 .bigw", {opacity: 0}, 6.619);
+      tl.fromTo("#fc10 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 6.620);
+      tl.set("#fc11", {opacity: 1}, 7.400);
+      tl.set("#fc11", {opacity: 0}, 8.560);
+      tl.fromTo("#fc11 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 7.400);
+      tl.set("#fc11 .bigw", {opacity: 0}, 7.399);
+      tl.fromTo("#fc11 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 8.000);
+      tl.set("#fc12", {opacity: 1}, 8.560);
+      tl.set("#fc12", {opacity: 0}, 9.259);
+      tl.fromTo("#fc12 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 8.560);
+      tl.set("#fc12 .bigw", {opacity: 0}, 8.559);
+      tl.fromTo("#fc12 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 8.720);
+      tl.set("#tint", {opacity: .55}, 8.959);
+      tl.set("#tint", {opacity: 0}, 9.029);
+      tl.fromTo("#leak", {opacity: 0, x: -500}, {opacity: 1, x: 0, duration: .22, ease: "power2.in", immediateRender: false}, 9.059);
+      tl.to("#leak", {opacity: 0, x: 400, duration: .28, ease: "power2.out"}, 9.279);
+      tl.fromTo("#flash", {opacity: 0}, {opacity: .85, duration: .06, immediateRender: false}, 9.209);
+      tl.to("#flash", {opacity: 0, duration: .25, ease: "power2.out"}, 9.279);
+      tl.set("#rs13", {opacity: 1}, 9.259);
+      tl.set("#rs13", {opacity: 0}, 12.247);
+      tl.fromTo("#rs13", {y: 50, rotationX: 10, filter: "blur(12px)"}, {y: 0, rotationX: 2, filter: "blur(0px)", duration: .5, ease: "expo.out", immediateRender: false}, 9.259);
+      tl.to("#rs13", {y: -12, rotationX: 0, duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: 0}, 9.759);
+      tl.set("#split", {opacity: 1, scale: 1, filter: "blur(0px)"}, 9.259);
+      tl.fromTo("#stage", {scale: 1.0}, {scale: 1.05, duration: 2.99, ease: "none", immediateRender: false}, 9.259);
+      tl.set("#split", {opacity: 0}, 12.247);
+      tl.fromTo("#botin", {scale: 1.55, filter: "blur(10px)"}, {scale: 1, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 9.259);
+      tl.fromTo("#topin", {scale: 1.14, filter: "blur(14px)"}, {scale: 1, filter: "blur(0px)", duration: .42, ease: "expo.out", immediateRender: false}, 9.259);
+      tl.set("#sc14", {opacity: 1}, 9.400);
+      tl.set("#sc14", {opacity: 0}, 10.020);
+      tl.fromTo("#sc14 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 9.400);
+      tl.set("#sc15", {opacity: 1}, 10.020);
+      tl.set("#sc15", {opacity: 0}, 11.120);
+      tl.fromTo("#sc15 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 10.020);
+      tl.set("#sc16", {opacity: 1}, 11.120);
+      tl.set("#sc16", {opacity: 0}, 12.247);
+      tl.fromTo("#sc16 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 11.120);
+      tl.to("#split", {scale: 1.22, filter: "blur(16px)", duration: .2, ease: "power2.in"}, 12.047);
+      tl.set("#full", {opacity: 1}, 12.247);
+      tl.set("#full", {opacity: 0}, 14.803);
+      tl.fromTo("#fullin", {scale: 1.18, filter: "blur(12px)"}, {scale: 1, filter: "blur(0px)", duration: .3, ease: "expo.out", immediateRender: false}, 12.247);
+      tl.set("#fc17", {opacity: 1}, 12.227);
+      tl.set("#fc17", {opacity: 0}, 13.600);
+      tl.fromTo("#fc17 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 12.227);
+      tl.set("#fc17 .bigw", {opacity: 0}, 12.226);
+      tl.fromTo("#fc17 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 12.227);
+      tl.set("#fc18", {opacity: 1}, 13.600);
+      tl.set("#fc18", {opacity: 0}, 14.803);
+      tl.fromTo("#fc18 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 13.600);
+      tl.set("#fc18 .bigw", {opacity: 0}, 13.599);
+      tl.fromTo("#fc18 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 13.600);
+      tl.set("#tint", {opacity: .55}, 14.503);
+      tl.set("#tint", {opacity: 0}, 14.573);
+      tl.fromTo("#leak", {opacity: 0, x: -500}, {opacity: 1, x: 0, duration: .22, ease: "power2.in", immediateRender: false}, 14.603);
+      tl.to("#leak", {opacity: 0, x: 400, duration: .28, ease: "power2.out"}, 14.823);
+      tl.fromTo("#flash", {opacity: 0}, {opacity: .85, duration: .06, immediateRender: false}, 14.753);
+      tl.to("#flash", {opacity: 0, duration: .25, ease: "power2.out"}, 14.823);
+      tl.set("#rs19", {opacity: 1}, 14.803);
+      tl.set("#rs19", {opacity: 0}, 16.771);
+      tl.fromTo("#rs19", {y: 50, rotationX: 10, filter: "blur(12px)"}, {y: 0, rotationX: 2, filter: "blur(0px)", duration: .5, ease: "expo.out", immediateRender: false}, 14.803);
+      tl.to("#rs19", {y: -12, rotationX: 0, duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: 0}, 15.303);
+      tl.set("#split", {opacity: 1, scale: 1, filter: "blur(0px)"}, 14.803);
+      tl.fromTo("#stage", {scale: 1.0}, {scale: 1.05, duration: 1.97, ease: "none", immediateRender: false}, 14.803);
+      tl.set("#split", {opacity: 0}, 16.771);
+      tl.fromTo("#botin", {scale: 1.55, filter: "blur(10px)"}, {scale: 1, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 14.803);
+      tl.fromTo("#topin", {scale: 1.14, filter: "blur(14px)"}, {scale: 1, filter: "blur(0px)", duration: .42, ease: "expo.out", immediateRender: false}, 14.803);
+      tl.set("#sc20", {opacity: 1}, 14.820);
+      tl.set("#sc20", {opacity: 0}, 15.700);
+      tl.fromTo("#sc20 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 14.820);
+      tl.set("#sc21", {opacity: 1}, 15.700);
+      tl.set("#sc21", {opacity: 0}, 16.440);
+      tl.fromTo("#sc21 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 15.700);
+      tl.set("#sc22", {opacity: 1}, 16.440);
+      tl.set("#sc22", {opacity: 0}, 16.771);
+      tl.fromTo("#sc22 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 16.440);
+      tl.to("#split", {scale: 1.22, filter: "blur(16px)", duration: .2, ease: "power2.in"}, 16.571);
+      tl.set("#full", {opacity: 1}, 16.771);
+      tl.set("#full", {opacity: 0}, 24.500);
+      tl.fromTo("#fullin", {scale: 1.18, filter: "blur(12px)"}, {scale: 1, filter: "blur(0px)", duration: .3, ease: "expo.out", immediateRender: false}, 16.771);
+      tl.set("#fc23", {opacity: 1}, 16.800);
+      tl.set("#fc23", {opacity: 0}, 18.380);
+      tl.fromTo("#fc23 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 16.800);
+      tl.set("#fc23 .bigw", {opacity: 0}, 16.799);
+      tl.fromTo("#fc23 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 17.880);
+      tl.set("#fc24", {opacity: 1}, 18.380);
+      tl.set("#fc24", {opacity: 0}, 19.880);
+      tl.fromTo("#fc24 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 18.380);
+      tl.set("#fc24 .bigw", {opacity: 0}, 18.379);
+      tl.fromTo("#fc24 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 18.380);
+      tl.set("#fc25", {opacity: 1}, 19.880);
+      tl.set("#fc25", {opacity: 0}, 21.400);
+      tl.fromTo("#fc25 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 19.880);
+      tl.set("#fc25 .bigw", {opacity: 0}, 19.879);
+      tl.fromTo("#fc25 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 20.760);
+      tl.set("#fc26", {opacity: 1}, 21.400);
+      tl.set("#fc26", {opacity: 0}, 23.140);
+      tl.fromTo("#fc26 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 21.400);
+      tl.set("#fc26 .bigw", {opacity: 0}, 21.399);
+      tl.fromTo("#fc26 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 21.400);
+      tl.set("#fc27", {opacity: 1}, 23.140);
+      tl.set("#fc27", {opacity: 0}, 24.500);
+      tl.fromTo("#fc27 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 23.140);
+      tl.set("#fc27 .bigw", {opacity: 0}, 23.139);
+      tl.fromTo("#fc27 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 24.000);
+      tl.set("#full", {opacity: 1}, 24.500);
+      tl.set("#full", {opacity: 0}, 27.951);
+      tl.fromTo("#fullin", {scale: 1.12, filter: "blur(12px)"}, {scale: 1, filter: "blur(0px)", duration: .3, ease: "expo.out", immediateRender: false}, 24.500);
+      tl.set("#fc28", {opacity: 1}, 24.660);
+      tl.set("#fc28", {opacity: 0}, 26.100);
+      tl.fromTo("#fc28 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 24.660);
+      tl.set("#fc28 .bigw", {opacity: 0}, 24.659);
+      tl.fromTo("#fc28 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 24.660);
+      tl.set("#fc29", {opacity: 1}, 26.100);
+      tl.set("#fc29", {opacity: 0}, 27.951);
+      tl.fromTo("#fc29 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 26.100);
+      tl.set("#fc29 .bigw", {opacity: 0}, 26.099);
+      tl.fromTo("#fc29 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 27.140);
+      tl.set("#full", {opacity: 1}, 27.951);
+      tl.set("#full", {opacity: 0}, 32.136);
+      tl.fromTo("#fullin", {scale: 1.12, filter: "blur(12px)"}, {scale: 1, filter: "blur(0px)", duration: .3, ease: "expo.out", immediateRender: false}, 27.951);
+      tl.set("#fc30", {opacity: 1}, 27.940);
+      tl.set("#fc30", {opacity: 0}, 29.280);
+      tl.fromTo("#fc30 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 27.940);
+      tl.set("#fc30 .bigw", {opacity: 0}, 27.939);
+      tl.fromTo("#fc30 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 27.940);
+      tl.set("#fc31", {opacity: 1}, 29.280);
+      tl.set("#fc31", {opacity: 0}, 29.776);
+      tl.set("#fc31 .bigw", {opacity: 0}, 29.279);
+      tl.fromTo("#fc31 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 29.280);
+      tl.set("#fc32", {opacity: 1}, 29.776);
+      tl.set("#fc32", {opacity: 0}, 31.040);
+      tl.fromTo("#fc32 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 29.776);
+      tl.set("#fc32 .bigw", {opacity: 0}, 29.775);
+      tl.fromTo("#fc32 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 29.776);
+      tl.set("#fc33", {opacity: 1}, 31.040);
+      tl.set("#fc33", {opacity: 0}, 32.136);
+      tl.set("#fc33 .bigw", {opacity: 0}, 31.039);
+      tl.fromTo("#fc33 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 31.040);
+      tl.set("#tint", {opacity: .55}, 31.836);
+      tl.set("#tint", {opacity: 0}, 31.906);
+      tl.fromTo("#leak", {opacity: 0, x: -500}, {opacity: 1, x: 0, duration: .22, ease: "power2.in", immediateRender: false}, 31.936);
+      tl.to("#leak", {opacity: 0, x: 400, duration: .28, ease: "power2.out"}, 32.156);
+      tl.fromTo("#flash", {opacity: 0}, {opacity: .85, duration: .06, immediateRender: false}, 32.086);
+      tl.to("#flash", {opacity: 0, duration: .25, ease: "power2.out"}, 32.156);
+      tl.set("#rs34", {opacity: 1}, 32.136);
+      tl.set("#rs34", {opacity: 0}, 35.741);
+      tl.fromTo("#rs34", {y: 50, rotationX: 10, filter: "blur(12px)"}, {y: 0, rotationX: 2, filter: "blur(0px)", duration: .5, ease: "expo.out", immediateRender: false}, 32.136);
+      tl.to("#rs34", {y: -12, rotationX: 0, duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: 1}, 32.636);
+      tl.set("#split", {opacity: 1, scale: 1, filter: "blur(0px)"}, 32.136);
+      tl.fromTo("#stage", {scale: 1.0}, {scale: 1.05, duration: 3.60, ease: "none", immediateRender: false}, 32.136);
+      tl.set("#split", {opacity: 0}, 35.741);
+      tl.fromTo("#botin", {scale: 1.55, filter: "blur(10px)"}, {scale: 1, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 32.136);
+      tl.fromTo("#topin", {scale: 1.14, filter: "blur(14px)"}, {scale: 1, filter: "blur(0px)", duration: .42, ease: "expo.out", immediateRender: false}, 32.136);
+      tl.set("#sc35", {opacity: 1}, 32.240);
+      tl.set("#sc35", {opacity: 0}, 33.200);
+      tl.fromTo("#sc35 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 32.240);
+      tl.set("#sc36", {opacity: 1}, 33.200);
+      tl.set("#sc36", {opacity: 0}, 34.600);
+      tl.fromTo("#sc36 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 33.200);
+      tl.set("#sc37", {opacity: 1}, 34.600);
+      tl.set("#sc37", {opacity: 0}, 35.741);
+      tl.fromTo("#sc37 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 34.600);
+      tl.to("#split", {scale: 1.22, filter: "blur(16px)", duration: .2, ease: "power2.in"}, 35.541);
+      tl.set("#full", {opacity: 1}, 35.741);
+      tl.set("#full", {opacity: 0}, 39.623);
+      tl.fromTo("#fullin", {scale: 1.18, filter: "blur(12px)"}, {scale: 1, filter: "blur(0px)", duration: .3, ease: "expo.out", immediateRender: false}, 35.741);
+      tl.set("#fc38", {opacity: 1}, 35.840);
+      tl.set("#fc38", {opacity: 0}, 36.480);
+      tl.fromTo("#fc38 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 35.840);
+      tl.set("#fc38 .bigw", {opacity: 0}, 35.839);
+      tl.fromTo("#fc38 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 35.840);
+      tl.set("#fc39", {opacity: 1}, 36.480);
+      tl.set("#fc39", {opacity: 0}, 37.520);
+      tl.fromTo("#fc39 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 36.480);
+      tl.set("#fc39 .bigw", {opacity: 0}, 36.479);
+      tl.fromTo("#fc39 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 36.480);
+      tl.set("#fc40", {opacity: 1}, 37.520);
+      tl.set("#fc40", {opacity: 0}, 39.623);
+      tl.fromTo("#fc40 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 37.520);
+      tl.set("#fc40 .bigw", {opacity: 0}, 37.519);
+      tl.fromTo("#fc40 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 38.780);
+      tl.set("#tint", {opacity: .55}, 39.323);
+      tl.set("#tint", {opacity: 0}, 39.393);
+      tl.fromTo("#leak", {opacity: 0, x: -500}, {opacity: 1, x: 0, duration: .22, ease: "power2.in", immediateRender: false}, 39.423);
+      tl.to("#leak", {opacity: 0, x: 400, duration: .28, ease: "power2.out"}, 39.643);
+      tl.fromTo("#flash", {opacity: 0}, {opacity: .85, duration: .06, immediateRender: false}, 39.573);
+      tl.to("#flash", {opacity: 0, duration: .25, ease: "power2.out"}, 39.643);
+      tl.set("#rs41", {opacity: 1}, 39.623);
+      tl.set("#rs41", {opacity: 0}, 42.760);
+      tl.fromTo("#rs41", {y: 50, rotationX: 10, filter: "blur(12px)"}, {y: 0, rotationX: 2, filter: "blur(0px)", duration: .5, ease: "expo.out", immediateRender: false}, 39.623);
+      tl.to("#rs41", {y: -12, rotationX: 0, duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: 0}, 40.123);
+      tl.set("#split", {opacity: 1, scale: 1, filter: "blur(0px)"}, 39.623);
+      tl.fromTo("#stage", {scale: 1.0}, {scale: 1.05, duration: 3.14, ease: "none", immediateRender: false}, 39.623);
+      tl.set("#split", {opacity: 0}, 42.760);
+      tl.fromTo("#botin", {scale: 1.55, filter: "blur(10px)"}, {scale: 1, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}, 39.623);
+      tl.fromTo("#topin", {scale: 1.14, filter: "blur(14px)"}, {scale: 1, filter: "blur(0px)", duration: .42, ease: "expo.out", immediateRender: false}, 39.623);
+      tl.set("#sc42", {opacity: 1}, 39.700);
+      tl.set("#sc42", {opacity: 0}, 41.000);
+      tl.fromTo("#sc42 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 39.700);
+      tl.set("#sc43", {opacity: 1}, 41.000);
+      tl.set("#sc43", {opacity: 0}, 42.760);
+      tl.fromTo("#sc43 span", {scale: 1.12}, {scale: 1, duration: .16, ease: "power3.out", immediateRender: false}, 41.000);
+      tl.to("#split", {scale: 1.22, filter: "blur(16px)", duration: .2, ease: "power2.in"}, 42.560);
+      tl.set("#full", {opacity: 1}, 42.760);
+      tl.fromTo("#fullin", {scale: 1.18, filter: "blur(12px)"}, {scale: 1, filter: "blur(0px)", duration: .3, ease: "expo.out", immediateRender: false}, 42.760);
+      tl.set("#fc44", {opacity: 1}, 42.780);
+      tl.fromTo("#fc44 .scr", {opacity: 0, x: -20, filter: "blur(6px)"}, {opacity: 1, x: 0, filter: "blur(0px)", duration: .18, ease: "power3.out", immediateRender: false}, 42.780);
+      tl.set("#fc44 .bigw", {opacity: 0}, 42.779);
+      tl.fromTo("#fc44 .bigw", {opacity: 0, scale: 1.3, filter: "blur(10px)"}, {opacity: 1, scale: 1, filter: "blur(0px)", duration: .22, ease: "expo.out", immediateRender: false}, 43.700);
+      tl.set("#hold", {opacity: 1}, 44.367);
+      tl.to(".blob:nth-child(1)", {x: 160, y: 260, duration: 45.8, ease: "sine.inOut"}, 0);
+      tl.to(".blob:nth-child(2)", {x: -140, y: -120, duration: 45.8, ease: "sine.inOut"}, 0);
+      tl.to(".blob:nth-child(3)", {x: 120, y: -200, duration: 45.8, ease: "sine.inOut"}, 0);
+      tl.to(".blob:nth-child(4)", {x: -180, y: 180, duration: 45.8, ease: "sine.inOut"}, 0);
+      tl.set({}, {}, 45.807);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

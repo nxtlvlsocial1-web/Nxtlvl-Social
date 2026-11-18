@@ -13,8 +13,9 @@ import os
 import subprocess
 import sys
 
-SIZES = ["hd_1920_1080", "hd_1080_1920", "hd_2048_1080", "hd_1080_2048", "hd_1280_720", "hd_720_1280", "hd_1366_720", "hd_720_1366",
-         "uhd_2560_1440", "uhd_1440_2560", "uhd_3840_2160", "uhd_2160_3840", "uhd_4096_2160", "uhd_2160_4096", "sd_960_540", "sd_540_960"]
+SIZES = ["uhd_3840_2160", "uhd_2160_3840", "uhd_4096_2160", "uhd_2160_4096", "uhd_2560_1440", "uhd_1440_2560",
+         "hd_1920_1080", "hd_1080_1920", "hd_2048_1080", "hd_1080_2048", "hd_1280_720", "hd_720_1280", "hd_1366_720", "hd_720_1366",
+         "sd_960_540", "sd_540_960"]   # 4K first (an HD-first order once gave a 720p clip where 4K existed)
 FPS = ["25", "30", "24", "50", "60"]
 
 
@@ -46,7 +47,7 @@ def main():
         if not url:
             print(vid, "no file found")
             continue
-        subprocess.run(["curl", "-sS", "-L", "-o", dst, url], check=True)
+        subprocess.run(["curl", "-sS", "-L", "--http1.1", "--retry", "4", "--retry-all-errors", "-o", dst, url], check=True)
         info = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v", "-show_entries", "stream=width,height:format=duration",
                                "-of", "json", dst], capture_output=True, text=True).stdout
         j = json.loads(info)
