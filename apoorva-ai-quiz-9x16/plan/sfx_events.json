@@ -1,91 +1,95 @@
 [
 {
-"type": "impact",
+"type": "g_swish",
 "t": 0
 },
 {
-"type": "whoosh",
+"type": "g_tick",
 "t": 0.15
 },
 {
-"type": "tick",
+"type": "g_tick",
+"t": 0.2
+},
+{
+"type": "g_tick",
+"t": 0.25
+},
+{
+"type": "g_tick",
 "t": 0.3
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 0.35
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 0.4
 },
 {
-"type": "tick",
-"t": 0.45
+"type": "g_pickup",
+"t": 0.4
 },
 {
-"type": "tick",
-"t": 0.5
+"type": "g_question",
+"t": 1.98
 },
 {
-"type": "tick",
-"t": 0.55
-},
-{
-"type": "pop",
-"t": 0.9
-},
-{
-"type": "whoosh",
-"t": 1.93
-},
-{
-"type": "tick",
+"type": "g_tick",
 "t": 3.48
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 3.88
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 4.28
 },
 {
 "type": "stamp",
-"t": 4.93
+"t": 4.91
 },
 {
-"type": "buzzer",
-"t": 4.98
+"type": "g_wrong",
+"t": 4.95
 },
 {
-"type": "pop",
-"t": 5.18
+"type": "g_pickup",
+"t": 5.33
 },
 {
-"type": "whoosh",
-"t": 6.16
+"type": "g_question",
+"t": 6.21
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 8.78
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 9.18
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 9.58
 },
 {
-"type": "stamp",
-"t": 12.11
+"type": "boing",
+"t": 12.03
 },
 {
-"type": "ding",
-"t": 12.16
+"type": "g_pop",
+"t": 12.06
+},
+{
+"type": "stamp",
+"t": 12.09
+},
+{
+"type": "g_correct",
+"t": 12.13
 },
 {
 "type": "boing",
@@ -93,122 +97,130 @@
 },
 {
 "type": "stamp",
-"t": 13.35
+"t": 13.33
 },
 {
-"type": "buzzer",
-"t": 13.4
+"type": "g_wrong",
+"t": 13.37
 },
 {
-"type": "pop",
-"t": 13.6
+"type": "g_pickup",
+"t": 13.8
 },
 {
-"type": "whoosh",
-"t": 14.43
+"type": "g_question",
+"t": 14.48
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 16.84
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 17.24
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 17.64
 },
 {
+"type": "boing",
+"t": 18.21
+},
+{
+"type": "g_pop",
+"t": 18.24
+},
+{
 "type": "stamp",
-"t": 18.29
+"t": 18.27
 },
 {
-"type": "ding",
-"t": 18.34
+"type": "g_correct",
+"t": 18.31
 },
 {
-"type": "pop",
-"t": 18.54
+"type": "g_pickup",
+"t": 18.69
 },
 {
-"type": "whoosh",
-"t": 19.25
+"type": "g_question",
+"t": 19.3
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 20.84
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 21.24
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 21.64
 },
 {
 "type": "stamp",
-"t": 22.31
+"t": 22.29
 },
 {
-"type": "buzzer",
-"t": 22.36
+"type": "g_wrong",
+"t": 22.33
 },
 {
-"type": "pop",
-"t": 22.56
+"type": "g_pickup",
+"t": 22.71
 },
 {
-"type": "whoosh",
-"t": 23.51
+"type": "g_question",
+"t": 23.56
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 26.58
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 26.98
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 27.38
 },
 {
 "type": "stamp",
-"t": 28.05
+"t": 28.03
 },
 {
-"type": "buzzer",
-"t": 28.1
+"type": "g_wrong",
+"t": 28.07
 },
 {
-"type": "pop",
-"t": 28.3
+"type": "g_pickup",
+"t": 28.45
 },
 {
-"type": "riser",
-"t": 28.77
+"type": "g_levelup",
+"t": 28.82
 },
 {
-"type": "sparkle",
-"t": 29.02
+"type": "g_drop",
+"t": 29.37
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 31.8
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 32.2
 },
 {
-"type": "tick",
+"type": "g_tick",
 "t": 32.6
 },
 {
-"type": "impact",
+"type": "g_levelup",
 "t": 33.0
 },
 {
@@ -216,7 +228,11 @@
 "t": 33.86
 },
 {
-"type": "msg",
+"type": "g_complete",
+"t": 34.66
+},
+{
+"type": "boing",
 "t": 34.66
 }
 ]

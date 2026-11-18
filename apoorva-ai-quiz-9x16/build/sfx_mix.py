@@ -37,6 +37,11 @@ KINDS = {
     "snip": (["snip"], -11, .35), "sew": (["sew"], -15, .9), "fabric": (["fabric"], -12, .7), "cloth": (["cloth"], -13, .6),
     "hanger": (["hanger"], -13, .5), "rail": (["rail"], -15, 1.2), "boing": (["boing"], -14, .7), "tape": (["tape"], -13, .9),
     "typing": (["typing"], -16, .8), "sparkle": (["sparkle"], -14, 1.2), "msg": (["msg"], -12, .6),
+    # Apoorva quiz v2 (owner: "can you use better sfx for this context"): CC0 game sounds from the OpenGameArt packs
+    # (Kenney interface sounds, the menu / level-up pack, a firework pop, a completion ding)
+    "g_correct": (["g_correct"], -9, 1.0), "g_wrong": (["g_wrong"], -10, .8), "g_tick": (["g_tick"], -9, .25),
+    "g_question": (["g_question"], -12, .6), "g_levelup": (["g_levelup"], -10, 1.4), "g_pickup": (["g_pickup"], -15, .5),
+    "g_pop": (["g_pop"], -16, .6), "g_complete": (["g_complete"], -10, 1.4), "g_drop": (["g_drop"], -12, .5), "g_swish": (["g_swish"], -13, .6),
 }
 
 

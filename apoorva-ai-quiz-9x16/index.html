@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>Apoorva: AI true or false 9x16</title>
+    <title>Apoorva: AI true or false v2 9x16</title>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
 @font-face { font-family: Inter; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2"); }
@@ -15,65 +15,64 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; 
 #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter; color: #0E0F12; background: #000; }
 #punch, #cam { position: absolute; inset: 0; transform-origin: 50% 32%; }
 #ar { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
-#vig { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: radial-gradient(70% 55% at 50% 34%, rgba(0,0,0,0) 45%, rgba(0,0,0,.62) 100%); }
-#shade { position: absolute; left: 0; right: 0; top: 0; height: 520px; background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,0)); pointer-events: none; }
-#shadeb { position: absolute; left: 0; right: 0; bottom: 0; height: 900px; background: linear-gradient(0deg, rgba(0,0,0,.5), rgba(0,0,0,0)); pointer-events: none; }
-/* tracker */
-#trk { position: absolute; left: 0; right: 0; top: 196px; text-align: center; opacity: 0; z-index: 20; }
-#trk .tl { display: inline-block; font: 22px Mono; letter-spacing: .2em; color: #fff; padding: 8px 18px; border-radius: 999px; background: rgba(14,15,18,.72); margin-bottom: 14px; }
-#trk .row { display: flex; gap: 16px; justify-content: center; perspective: 600px; }
-.bx { position: relative; width: 116px; height: 116px; border-radius: 26px; border: 5px solid rgba(255,255,255,.75); background: rgba(14,15,18,.45);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); overflow: hidden; opacity: 0; }
+#vig { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: radial-gradient(70% 55% at 50% 34%, rgba(0,0,0,0) 45%, rgba(0,0,0,.6) 100%); }
+#shade { position: absolute; left: 0; right: 0; top: 0; height: 300px; background: linear-gradient(180deg, rgba(0,0,0,.4), rgba(0,0,0,0)); }
+#shadeb { position: absolute; left: 0; right: 0; bottom: 0; height: 640px; background: linear-gradient(0deg, rgba(0,0,0,.55), rgba(0,0,0,0)); }
+#edge { position: absolute; inset: 0; opacity: 0; pointer-events: none; z-index: 40; }
+/* slim tracker at the very top */
+#trk { position: absolute; left: 0; right: 0; top: 150px; display: flex; gap: 12px; justify-content: center; perspective: 600px; opacity: 0; z-index: 20; }
+.bx { position: relative; width: 84px; height: 84px; border-radius: 20px; border: 4px solid rgba(255,255,255,.8); background: rgba(14,15,18,.4);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); overflow: hidden; opacity: 0; }
 .bx.boss { border-color: #F5B400; }
-.bn { position: absolute; left: 10px; top: 6px; font: 18px Mono; color: rgba(255,255,255,.75); z-index: 3; }
+.bn { position: absolute; left: 7px; top: 3px; font: 15px Mono; color: rgba(255,255,255,.8); z-index: 3; }
 .bf { position: absolute; inset: 0; transform-origin: 50% 100%; transform: scaleY(0); }
-#bf1, #bf4, #bf5 { background: #E11D48; }
-#bf3 { background: #16A34A; }
-.bt { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 72px; color: #fff; z-index: 2; opacity: 0; }
+.bt { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 52px; color: #fff; z-index: 2; opacity: 0; }
 #bt6 { color: #F5B400; }
-/* difficulty tag */
-#tag { position: absolute; left: 50%; top: 420px; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; padding: 14px 28px; border-radius: 999px;
-  background: #0E0F12; color: #fff; font-weight: 800; font-size: 34px; letter-spacing: .06em; opacity: 0; z-index: 20; white-space: nowrap; }
-#tag i { width: 18px; height: 18px; border-radius: 50%; }
-#tag em { font-style: normal; font: 22px Mono; color: rgba(255,255,255,.6); letter-spacing: .1em; }
-/* question cards */
-.qc { position: absolute; left: 70px; right: 70px; top: 1170px; padding: 34px 40px 40px; border-radius: 38px; background: #FFFFFF; opacity: 0; z-index: 15;
-  box-shadow: 0 30px 80px rgba(0,0,0,.4); }
+/* the compact bottom card */
+.qc { position: absolute; left: 60px; right: 60px; top: 1420px; min-height: 196px; padding: 22px 30px 26px; border-radius: 30px; background: #fff; opacity: 0; z-index: 15;
+  box-shadow: 0 24px 60px rgba(0,0,0,.4); }
 .qc.bossc { background: linear-gradient(135deg, #1B1030, #2A1450); color: #fff; border: 4px solid #A855F7; }
-.qn { font: 22px Mono; letter-spacing: .18em; color: #6B7280; margin-bottom: 12px; }
+.qh { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+.qn { font: 22px Mono; letter-spacing: .14em; color: #6B7280; }
 .bossc .qn { color: #D8B4FE; }
-.qt { font-weight: 800; font-size: 60px; line-height: 1.08; letter-spacing: -.03em; }
+.qtag { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; background: #0E0F12; color: #fff; font-weight: 800; font-size: 22px; letter-spacing: .06em; }
+.qtag i { width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
+.bossc .qtag { background: #A855F7; }
+.lkt { margin-left: auto; margin-right: 120px; font: 20px Mono; letter-spacing: .16em; color: #E11D48; opacity: 0; }
+.qt { font-weight: 800; font-size: 46px; line-height: 1.1; letter-spacing: -.025em; padding-right: 210px; }
 .qw { display: inline-block; opacity: 0; }
-.stamp { position: absolute; right: 30px; top: -64px; padding: 10px 26px; border-radius: 18px; font-weight: 800; font-size: 76px; letter-spacing: .02em; opacity: 0;
-  background: #fff; z-index: 3; }
-.stamp.st { color: #16A34A; border: 8px solid #16A34A; }
-.stamp.sf { color: #E11D48; border: 8px solid #E11D48; }
-#sp2f { position: absolute; right: 100px; top: 1106px; z-index: 30; }
-.why { margin-top: 22px; display: inline-block; padding: 12px 22px; border-radius: 16px; background: #0E0F12; color: #fff; font-weight: 700; font-size: 34px; opacity: 0; }
-#plot { position: absolute; left: 90px; top: 1090px; padding: 10px 22px; border-radius: 14px; background: #F5B400; color: #0E0F12; font-weight: 800; font-size: 44px; opacity: 0; z-index: 31; }
-/* lock-in */
-#lk { position: absolute; left: 50%; top: 960px; width: 170px; height: 170px; margin-left: -85px; opacity: 0; z-index: 25; }
+.why { position: absolute; left: 30px; right: 30px; top: 70px; font-weight: 800; font-size: 40px; line-height: 1.12; letter-spacing: -.02em; opacity: 0; }
+.why::before { content: "WHY: "; color: #A855F7; }
+.stamp { position: absolute; right: 22px; top: 50%; margin-top: -38px; padding: 6px 16px; border-radius: 14px; font-weight: 800; font-size: 48px; opacity: 0; background: #fff; z-index: 3; }
+.stamp.st { color: #16A34A; border: 6px solid #16A34A; }
+.stamp.sf { color: #E11D48; border: 6px solid #E11D48; }
+#sp2f { position: absolute; right: 82px; top: 1480px; margin-top: 0; z-index: 30; }
+#plot { position: absolute; right: 80px; top: 1360px; padding: 8px 18px; border-radius: 12px; background: #F5B400; color: #0E0F12; font-weight: 800; font-size: 34px; opacity: 0; z-index: 31; }
+#lk { position: absolute; right: 82px; top: 1462px; width: 112px; height: 112px; opacity: 0; z-index: 25; }
 #lk svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
-#lk .rt { fill: rgba(14,15,18,.7); stroke: rgba(255,255,255,.25); stroke-width: 9; }
+#lk .rt { fill: #0E0F12; stroke: rgba(0,0,0,.15); stroke-width: 9; }
 #lk .rf { fill: none; stroke: #F5B400; stroke-width: 9; stroke-linecap: round; stroke-dasharray: 1000; }
-.ln { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 96px; color: #fff; opacity: 0; }
-#lkt { position: absolute; left: 0; right: 0; top: 1140px; text-align: center; font: 24px Mono; letter-spacing: .2em; color: #fff; opacity: 0; z-index: 25;
-  text-shadow: 0 2px 10px rgba(0,0,0,.7); }
-/* hook and CTA */
-#hk { position: absolute; left: 60px; right: 60px; top: 1120px; text-align: center; color: #fff; opacity: 0; z-index: 20; text-shadow: 0 4px 24px rgba(0,0,0,.6); }
-.hk1 { font-weight: 700; font-size: 50px; opacity: 0; }
-.hk2 { font-weight: 800; font-size: 112px; letter-spacing: -.04em; line-height: 1; margin: 8px 0 18px; opacity: 0; }
-.hk2 em, .c2 em { font-style: normal; font-weight: 600; font-size: .6em; color: #F5B400; }
-.hk3 { display: inline-block; padding: 12px 24px; border-radius: 999px; background: #fff; color: #0E0F12; font-weight: 800; font-size: 34px; text-shadow: none; opacity: 0; }
-#bosstz { position: absolute; right: 70px; top: 430px; padding: 10px 20px; border-radius: 14px; background: #A855F7; color: #fff; font-weight: 800; font-size: 30px; opacity: 0; z-index: 21; }
-#cta { position: absolute; left: 60px; right: 60px; top: 1060px; text-align: center; color: #fff; opacity: 0; z-index: 20; }
-#cta .c1 { display: inline-block; padding: 10px 22px; border-radius: 14px; background: #A855F7; font-weight: 800; font-size: 34px; letter-spacing: .08em; }
-#cta .c2 { font-weight: 800; font-size: 108px; letter-spacing: -.04em; line-height: 1.02; margin: 14px 0 22px; text-shadow: 0 4px 24px rgba(0,0,0,.6); }
-#cta .cbar { display: flex; align-items: center; gap: 18px; height: 110px; padding: 0 26px; border-radius: 60px; background: #fff; color: #0E0F12; font-weight: 800; font-size: 44px; text-align: left; }
-#cta .cbar > i { width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(135deg, #16A34A, #E11D48); flex: none; }
-#cph { position: absolute; margin-left: 86px; font-weight: 600; color: #9CA3AF; }
+.ln { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 60px; color: #fff; opacity: 0; }
+/* hook + CTA cards */
+.hookc .hkt { font-size: 52px; padding-right: 0; }
+.hookc .tt { color: #16A34A; } .hookc .ff { color: #E11D48; }
+.hk3 { margin-top: 8px; font-weight: 700; font-size: 28px; color: #6B7280; opacity: 0; }
+.ctac { background: linear-gradient(135deg, #1B1030, #2A1450); color: #fff; border: 4px solid #A855F7; }
+.ctac .qt { font-size: 48px; padding-right: 0; }
+.ctac .qt em { font-style: normal; color: #F5B400; }
+.cbar { display: flex; align-items: center; gap: 14px; height: 76px; margin-top: 14px; padding: 0 20px; border-radius: 40px; background: #fff; color: #0E0F12; font-weight: 800; font-size: 32px; }
+.cbar > i { width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, #16A34A, #E11D48); flex: none; }
+#cph { position: absolute; margin-left: 60px; font-weight: 600; color: #9CA3AF; }
 #cty i { font-style: normal; opacity: 0; }
-#cta .c3 { margin-top: 22px; font-weight: 700; font-size: 38px; opacity: 0; text-shadow: 0 2px 14px rgba(0,0,0,.7); }
+/* confetti from the card */
+#conf { position: absolute; left: 540px; top: 1440px; width: 0; height: 0; z-index: 35; }
+.cf { position: absolute; opacity: 0; }
+/* Bit */
+#bit { position: absolute; left: 56px; top: 1196px; width: 196px; height: 235px; z-index: 32; opacity: 0; }
+#bitb { position: absolute; inset: 0; transform-origin: 50% 100%; }
+#bitb svg { width: 100%; height: 100%; overflow: visible; }
+#bitbub { position: absolute; left: 160px; top: -40px; min-width: 70px; height: 62px; padding: 0 14px; border-radius: 31px 31px 31px 8px; background: #fff; display: grid; place-items: center;
+  font-weight: 800; font-size: 32px; color: #A855F7; opacity: 0; transform-origin: 0 100%; box-shadow: 0 8px 24px rgba(0,0,0,.3); white-space: nowrap; }
 </style>
   </head>
   <body>
@@ -82,285 +81,610 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; 
         <video id="ar" src="assets/video/aroll.mp4" data-start="0" data-duration="36.610" data-track-index="1" muted playsinline></video>
       </div></div>
       <div id="vig"></div><div id="shade"></div><div id="shadeb"></div>
-      <div id="trk"><div class="tl">AI: TRUE OR FALSE</div><div class="row"><div class="bx" id="bx1"><span class="bn">1</span><b class="bt" id="bt1"></b><i class="bf" id="bf1"></i></div><div class="bx" id="bx2"><span class="bn">2</span><b class="bt" id="bt2"></b><i class="bf" id="bf2"></i></div><div class="bx" id="bx3"><span class="bn">3</span><b class="bt" id="bt3"></b><i class="bf" id="bf3"></i></div><div class="bx" id="bx4"><span class="bn">4</span><b class="bt" id="bt4"></b><i class="bf" id="bf4"></i></div><div class="bx" id="bx5"><span class="bn">5</span><b class="bt" id="bt5"></b><i class="bf" id="bf5"></i></div><div class="bx boss" id="bx6"><span class="bn">6</span><b class="bt" id="bt6"></b><i class="bf" id="bf6"></i></div></div></div>
-<div id="tag"><i id="tagdot"></i><span id="tagtx"></span><em id="tagq"></em></div>
-<div class="qc" id="qc1"><div class="qn">QUESTION 1</div><div class="qt"><span class="qw">Does</span> <span class="qw">NVIDIA</span> <span class="qw">manufacture</span> <span class="qw">chips?</span></div><div class="stamp sf" id="sp1">FALSE</div><div class="why" id="why1">NVIDIA designs the chips. TSMC makes them.</div></div>
-<div class="qc" id="qc2"><div class="qn">QUESTION 2</div><div class="qt"><span class="qw">It's</span> <span class="qw">AI,</span> <span class="qw">so</span> <span class="qw">it</span> <span class="qw">gives</span> <span class="qw">the</span> <span class="qw">same</span> <span class="qw">answer</span> <span class="qw">every</span> <span class="qw">time.</span></div><div class="stamp st" id="sp2">TRUE</div><div class="why" id="why2">Same prompt, different answers: AI samples.</div></div>
-<div class="qc" id="qc3"><div class="qn">QUESTION 3</div><div class="qt"><span class="qw">A</span> <span class="qw">model</span> <span class="qw">on</span> <span class="qw">its</span> <span class="qw">own</span> <span class="qw">can't</span> <span class="qw">tell</span> <span class="qw">you</span> <span class="qw">today's</span> <span class="qw">news.</span></div><div class="stamp st" id="sp3">TRUE</div><div class="why" id="why3">Live news needs search or tools.</div></div>
-<div class="qc" id="qc4"><div class="qn">QUESTION 4</div><div class="qt"><span class="qw">Longer</span> <span class="qw">prompt,</span> <span class="qw">better</span> <span class="qw">answer.</span></div><div class="stamp sf" id="sp4">FALSE</div><div class="why" id="why4">Clear beats long.</div></div>
-<div class="qc" id="qc5"><div class="qn">QUESTION 5</div><div class="qt"><span class="qw">Ask</span> <span class="qw">AI</span> <span class="qw">to</span> <span class="qw">double-check</span> <span class="qw">itself</span> <span class="qw">and</span> <span class="qw">it</span> <span class="qw">catches</span> <span class="qw">every</span> <span class="qw">mistake.</span></div><div class="stamp sf" id="sp5">FALSE</div><div class="why" id="why5">AI can miss its own mistakes.</div></div>
-<div class="qc bossc" id="qc6"><div class="qn">QUESTION 6</div><div class="qt"><span class="qw">A</span> <span class="qw">model</span> <span class="qw">that's</span> <span class="qw">99%</span> <span class="qw">accurate</span> <span class="qw">can</span> <span class="qw">still</span> <span class="qw">be</span> <span class="qw">useless.</span></div></div>
-<div class="stamp sf" id="sp2f">FALSE</div>
-<div id="lk"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="rt"/><circle cx="60" cy="60" r="52" class="rf" id="rf" pathLength="1000"/></svg><b class="ln" id="ln3">3</b><b class="ln" id="ln2">2</b><b class="ln" id="ln1">1</b></div><div id="lkt">LOCK IN YOUR ANSWER</div>
-<div id="hk"><div class="hk1">Apoorva, quick:</div><div class="hk2">TRUE <em>or</em> FALSE?</div><div class="hk3">6 AI questions. Score yourself.</div></div><div id="bosstz">Q6 = BOSS LEVEL</div>
-<div id="cta"><div class="c1">BOSS LEVEL</div><div class="c2">TRUE <em>or</em> FALSE?</div><div class="cbar"><i></i><span id="cph">Add a comment…</span><span id="cty"><i>T</i><i>R</i><i>U</i><i>E</i><i> </i><i>o</i><i>r</i><i> </i><i>F</i><i>A</i><i>L</i><i>S</i><i>E</i></span></div><div class="c3">Comment your answer. How many did you get right?</div></div>
-<div id="plot">WAIT...</div>
+      <div id="trk"><div class="bx" id="bx1"><span class="bn">1</span><i class="bf" id="bf1"></i><b class="bt" id="bt1"></b></div><div class="bx" id="bx2"><span class="bn">2</span><i class="bf" id="bf2"></i><b class="bt" id="bt2"></b></div><div class="bx" id="bx3"><span class="bn">3</span><i class="bf" id="bf3"></i><b class="bt" id="bt3"></b></div><div class="bx" id="bx4"><span class="bn">4</span><i class="bf" id="bf4"></i><b class="bt" id="bt4"></b></div><div class="bx" id="bx5"><span class="bn">5</span><i class="bf" id="bf5"></i><b class="bt" id="bt5"></b></div><div class="bx boss" id="bx6"><span class="bn">6</span><i class="bf" id="bf6"></i><b class="bt" id="bt6"></b></div></div>
+<div class="qc" id="qc1"><div class="qh"><span class="qn">Q1</span><span class="qtag" style="--c:#22C55E"><i></i>WARM-UP</span><span class="lkt" id="lkt1">LOCK IN</span></div><div class="qt" id="qt1"><span class="qw">Does</span> <span class="qw">NVIDIA</span> <span class="qw">manufacture</span> <span class="qw">chips?</span></div><div class="why" id="why1">NVIDIA designs the chips. TSMC makes them.</div><div class="stamp sf" id="sp1">FALSE</div></div>
+<div class="qc" id="qc2"><div class="qh"><span class="qn">Q2</span><span class="qtag" style="--c:#84CC16"><i></i>EASY</span><span class="lkt" id="lkt2">LOCK IN</span></div><div class="qt" id="qt2"><span class="qw">It's</span> <span class="qw">AI,</span> <span class="qw">so</span> <span class="qw">it</span> <span class="qw">gives</span> <span class="qw">the</span> <span class="qw">same</span> <span class="qw">answer</span> <span class="qw">every</span> <span class="qw">time.</span></div><div class="why" id="why2">Same prompt, different answers: AI samples.</div><div class="stamp st" id="sp2">TRUE</div></div>
+<div class="qc" id="qc3"><div class="qh"><span class="qn">Q3</span><span class="qtag" style="--c:#F59E0B"><i></i>MEDIUM</span><span class="lkt" id="lkt3">LOCK IN</span></div><div class="qt" id="qt3"><span class="qw">A</span> <span class="qw">model</span> <span class="qw">on</span> <span class="qw">its</span> <span class="qw">own</span> <span class="qw">can't</span> <span class="qw">tell</span> <span class="qw">you</span> <span class="qw">today's</span> <span class="qw">news.</span></div><div class="why" id="why3">Live news needs search or tools.</div><div class="stamp st" id="sp3">TRUE</div></div>
+<div class="qc" id="qc4"><div class="qh"><span class="qn">Q4</span><span class="qtag" style="--c:#F59E0B"><i></i>MEDIUM</span><span class="lkt" id="lkt4">LOCK IN</span></div><div class="qt" id="qt4"><span class="qw">Longer</span> <span class="qw">prompt,</span> <span class="qw">better</span> <span class="qw">answer.</span></div><div class="why" id="why4">Clear beats long.</div><div class="stamp sf" id="sp4">FALSE</div></div>
+<div class="qc" id="qc5"><div class="qh"><span class="qn">Q5</span><span class="qtag" style="--c:#F97316"><i></i>HARD</span><span class="lkt" id="lkt5">LOCK IN</span></div><div class="qt" id="qt5"><span class="qw">Ask</span> <span class="qw">AI</span> <span class="qw">to</span> <span class="qw">double-check</span> <span class="qw">itself</span> <span class="qw">and</span> <span class="qw">it</span> <span class="qw">catches</span> <span class="qw">every</span> <span class="qw">mistake.</span></div><div class="why" id="why5">AI can miss its own mistakes.</div><div class="stamp sf" id="sp5">FALSE</div></div>
+<div class="qc bossc" id="qc6"><div class="qh"><span class="qn">Q6</span><span class="qtag" style="--c:#A855F7"><i></i>BOSS LEVEL</span><span class="lkt" id="lkt6">LOCK IN</span></div><div class="qt" id="qt6"><span class="qw">A</span> <span class="qw">model</span> <span class="qw">that's</span> <span class="qw">99%</span> <span class="qw">accurate</span> <span class="qw">can</span> <span class="qw">still</span> <span class="qw">be</span> <span class="qw">useless.</span></div></div>
+<div class="stamp sf" id="sp2f">FALSE</div><div id="plot">WAIT...</div>
+<div id="lk"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="rt"/><circle cx="60" cy="60" r="52" class="rf" id="rf" pathLength="1000"/></svg><b class="ln" id="ln3">3</b><b class="ln" id="ln2">2</b><b class="ln" id="ln1">1</b></div>
+<div class="qc hookc" id="hk"><div class="qh"><span class="qn">6 QUESTIONS</span><span class="qtag" style="--c:#A855F7"><i></i>Q6 = BOSS LEVEL</span></div><div class="qt hkt"><span class="qw">Apoorva,</span> <span class="qw">quick:</span> <span class="qw tt">TRUE</span> <span class="qw">or</span> <span class="qw ff">FALSE?</span></div><div class="hk3">Score yourself as you go.</div></div>
+<div class="qc ctac" id="cta"><div class="qh"><span class="qtag" style="--c:#A855F7"><i></i>BOSS LEVEL</span></div><div class="qt">TRUE <em>or</em> FALSE? Comment below.</div><div class="cbar"><i></i><span id="cph">Add a comment…</span><span id="cty"><i>T</i><i>R</i><i>U</i><i>E</i><i> </i><i>o</i><i>r</i><i> </i><i>F</i><i>A</i><i>L</i><i>S</i><i>E</i></span></div></div>
+<div id="conf"><i class="cf" style="background:#A855F7;width:14px;height:25px;border-radius:50%"></i><i class="cf" style="background:#FFFFFF;width:18px;height:14px;border-radius:50%"></i><i class="cf" style="background:#FACC15;width:10px;height:16px;border-radius:3px"></i><i class="cf" style="background:#38BDF8;width:17px;height:17px;border-radius:50%"></i><i class="cf" style="background:#A855F7;width:11px;height:23px;border-radius:3px"></i><i class="cf" style="background:#22C55E;width:13px;height:20px;border-radius:50%"></i><i class="cf" style="background:#FACC15;width:16px;height:16px;border-radius:3px"></i><i class="cf" style="background:#FACC15;width:17px;height:16px;border-radius:3px"></i><i class="cf" style="background:#22C55E;width:10px;height:17px;border-radius:3px"></i><i class="cf" style="background:#FACC15;width:12px;height:18px;border-radius:50%"></i><i class="cf" style="background:#FACC15;width:18px;height:24px;border-radius:3px"></i><i class="cf" style="background:#FACC15;width:13px;height:20px;border-radius:50%"></i><i class="cf" style="background:#22C55E;width:15px;height:20px;border-radius:3px"></i><i class="cf" style="background:#FACC15;width:14px;height:15px;border-radius:50%"></i><i class="cf" style="background:#38BDF8;width:10px;height:23px;border-radius:50%"></i><i class="cf" style="background:#22C55E;width:14px;height:19px;border-radius:50%"></i><i class="cf" style="background:#F472B6;width:15px;height:16px;border-radius:50%"></i><i class="cf" style="background:#F472B6;width:12px;height:14px;border-radius:50%"></i><i class="cf" style="background:#22C55E;width:15px;height:20px;border-radius:3px"></i><i class="cf" style="background:#A855F7;width:16px;height:19px;border-radius:50%"></i><i class="cf" style="background:#A855F7;width:10px;height:21px;border-radius:3px"></i><i class="cf" style="background:#FFFFFF;width:12px;height:23px;border-radius:3px"></i><i class="cf" style="background:#22C55E;width:13px;height:21px;border-radius:50%"></i><i class="cf" style="background:#A855F7;width:15px;height:22px;border-radius:50%"></i><i class="cf" style="background:#F472B6;width:11px;height:23px;border-radius:50%"></i><i class="cf" style="background:#38BDF8;width:10px;height:20px;border-radius:3px"></i><i class="cf" style="background:#FACC15;width:15px;height:22px;border-radius:50%"></i><i class="cf" style="background:#FACC15;width:15px;height:18px;border-radius:3px"></i></div><div id="edge"></div>
+<div id="bit"><div id="bitb"><svg viewBox="0 0 200 240" overflow="visible"><ellipse cx="100" cy="232" rx="54" ry="8" fill="rgba(0,0,0,.25)"/><rect x="74" y="200" width="18" height="30" rx="9" fill="#C9D3E3" stroke="#1E2433" stroke-width="4"/><rect x="108" y="200" width="18" height="30" rx="9" fill="#C9D3E3" stroke="#1E2433" stroke-width="4"/><g id="bitaL"><rect x="34" y="150" width="22" height="56" rx="11" fill="#C9D3E3" stroke="#1E2433" stroke-width="4"/></g><g id="bitaR"><rect x="144" y="150" width="22" height="56" rx="11" fill="#C9D3E3" stroke="#1E2433" stroke-width="4"/></g><rect x="58" y="140" width="84" height="70" rx="24" fill="#EEF2F8" stroke="#1E2433" stroke-width="4"/><circle cx="100" cy="174" r="10" fill="#A855F7"/><g id="bith"><line x1="100" y1="52" x2="100" y2="22" stroke="#1E2433" stroke-width="5"/><circle id="bitbulb" cx="100" cy="17" r="10" fill="#FACC15" stroke="#1E2433" stroke-width="4"/><rect x="28" y="50" width="144" height="100" rx="40" fill="#FFFFFF" stroke="#1E2433" stroke-width="4"/><rect x="46" y="68" width="108" height="66" rx="26" fill="#1E2433"/><circle cx="40" cy="112" r="7" fill="#FF8FB1"/><circle cx="160" cy="112" r="7" fill="#FF8FB1"/><g class="be" id="be_norm" opacity="1"><ellipse cx="80" cy="102" rx="9" ry="12" fill="#6EF0FF"/><ellipse cx="120" cy="102" rx="9" ry="12" fill="#6EF0FF"/></g><g class="be" id="be_up" opacity="0"><ellipse cx="82" cy="94" rx="8" ry="11" fill="#6EF0FF"/><ellipse cx="122" cy="94" rx="8" ry="11" fill="#6EF0FF"/></g><g class="be" id="be_happy" opacity="0"><path d="M70 106 Q80 90 90 106 M110 106 Q120 90 130 106" fill="none" stroke="#6EF0FF" stroke-width="7" stroke-linecap="round"/></g><g class="be" id="be_wide" opacity="0"><circle cx="80" cy="101" r="14" fill="#6EF0FF"/><circle cx="120" cy="101" r="14" fill="#6EF0FF"/><circle cx="80" cy="101" r="5" fill="#1E2433"/><circle cx="120" cy="101" r="5" fill="#1E2433"/></g><g class="be" id="be_squint" opacity="0"><path d="M70 102 L90 98 M110 98 L130 102" fill="none" stroke="#6EF0FF" stroke-width="7" stroke-linecap="round"/></g><g class="be" id="be_shut" opacity="0"><path d="M70 102 Q80 108 90 102 M110 102 Q120 108 130 102" fill="none" stroke="#6EF0FF" stroke-width="6" stroke-linecap="round"/></g><g class="bm" id="bm_smile" opacity="1"><path d="M88 120 Q100 128 112 120" fill="none" stroke="#6EF0FF" stroke-width="5" stroke-linecap="round"/></g><g class="bm" id="bm_grin" opacity="0"><path d="M84 117 Q100 134 116 117 Z" fill="#6EF0FF"/></g><g class="bm" id="bm_o" opacity="0"><ellipse cx="100" cy="122" rx="7" ry="8" fill="#6EF0FF"/></g><g class="bm" id="bm_flat" opacity="0"><path d="M90 122 L110 122" stroke="#6EF0FF" stroke-width="5" stroke-linecap="round"/></g><g class="bm" id="bm_wavy" opacity="0"><path d="M86 122 Q92 116 98 122 T110 122 T116 120" fill="none" stroke="#6EF0FF" stroke-width="4" stroke-linecap="round"/></g><g id="bitlid" opacity="0"><rect x="66" y="88" width="68" height="28" fill="#1E2433"/><path d="M70 102 Q80 108 90 102 M110 102 Q120 108 130 102" fill="none" stroke="#6EF0FF" stroke-width="6" stroke-linecap="round"/></g><g id="bitcrown" opacity="0"><path d="M58 52 L66 18 L84 40 L100 10 L116 40 L134 18 L142 52 Z" fill="#FACC15" stroke="#1E2433" stroke-width="4" stroke-linejoin="round"/><circle cx="100" cy="36" r="5" fill="#E11D48"/></g><path id="bitsweat" opacity="0" d="M170 70 C164 82 160 90 160 96 A10 10 0 0 0 180 96 C180 90 176 82 170 70 Z" fill="#7FD3FF" stroke="#2B8FD6" stroke-width="3"/></g></svg></div><div id="bitbub"><span id="bitbt">?</span></div></div>
     </div>
     <script>
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({paused: true});
-      tl.set("#hk", {opacity: 1}, 0.000);
-      tl.fromTo("#hk .hk1", {opacity: 0, y: 30}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 0.000);
-      tl.fromTo("#hk .hk2", {opacity: 0, scale: 1.6}, {...{opacity: 1, scale: 1}, duration: 0.45, ease: "back.out(1.8)", immediateRender: false}, 0.250);
-      tl.fromTo("#hk .hk3", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 0.700);
-      tl.fromTo("#trk", {opacity: 0, y: -120}, {...{opacity: 1, y: 0}, duration: 0.5, ease: "back.out(1.6)", immediateRender: false}, 0.150);
-      tl.fromTo(".bx", {opacity: 0, scale: .5}, {...{opacity: 1, scale: 1, stagger: .05}, duration: 0.35, ease: "back.out(2.4)", immediateRender: false}, 0.300);
-      tl.fromTo("#bosstz", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 0.900);
-      tl.fromTo("#bosstz", {scale: 1}, {scale: 1.08, duration: .18, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}, 1.2);
-      tl.to("#hk", {...{opacity: 0, y: -40}, duration: 0.25, ease: "power2.in"}, 1.930);
-      tl.to("#bosstz", {...{opacity: 0, scale: .6}, duration: 0.2, ease: "power2.in"}, 1.930);
-      tl.set("#tagtx", {textContent: "WARM-UP"}, 1.960);
-      tl.set("#tagq", {textContent: "1 / 6"}, 1.960);
-      tl.set("#tagdot", {background: '#22C55E', boxShadow: '0 0 14px #22C55E'}, 1.960);
-      tl.fromTo("#tag", {opacity: 0, scale: .7, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(2.6)", immediateRender: false}, 1.960);
-      tl.set("#bx1", {borderColor: '#FFFFFF', boxShadow: '0 0 0 5px rgba(255,255,255,.35), 0 10px 30px rgba(0,0,0,.35)'}, 1.980);
-      tl.fromTo("#qc1", {opacity: 0, y: 140, rotation: -3}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.4, ease: "back.out(1.5)", immediateRender: false}, 1.980);
-      tl.fromTo("#qc1 .qw:nth-child(1)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 2.040);
-      tl.fromTo("#qc1 .qw:nth-child(2)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 2.140);
-      tl.fromTo("#qc1 .qw:nth-child(3)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 2.440);
-      tl.fromTo("#qc1 .qw:nth-child(4)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 2.980);
-      tl.fromTo("#lk", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 3.480);
-      tl.fromTo("#lkt", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 3.480);
+      tl.fromTo("#trk", {opacity: 0, y: -80}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "back.out(1.6)", immediateRender: false}, 0.050);
+      tl.fromTo(".bx", {opacity: 0, scale: .4}, {...{opacity: 1, scale: 1, stagger: .05}, duration: 0.3, ease: "back.out(2.6)", immediateRender: false}, 0.150);
+      tl.fromTo("#hk", {opacity: 0, y: 120}, {...{opacity: 1, y: 0}, duration: 0.4, ease: "back.out(1.6)", immediateRender: false}, 0.000);
+      tl.fromTo("#hk .qw:nth-child(1)", {opacity: 0, y: 16}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 0.090);
+      tl.fromTo("#hk .qw:nth-child(2)", {opacity: 0, y: 16}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 0.630);
+      tl.fromTo("#hk .qw:nth-child(3)", {opacity: 0, y: 16}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 0.890);
+      tl.fromTo("#hk .qw:nth-child(4)", {opacity: 0, y: 16}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 1.070);
+      tl.fromTo("#hk .qw:nth-child(5)", {opacity: 0, y: 16}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 1.130);
+      tl.fromTo("#hk .hk3", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 1.200);
+      tl.to("#hk", {...{opacity: 0, y: 40}, duration: 0.2, ease: "power2.in"}, 1.860);
+      tl.fromTo("#bit", {opacity: 0, y: 120, scale: .4}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.4, ease: "back.out(2.2)", immediateRender: false}, 0.350);
+      tl.set(".be", {opacity: 0}, 0.350);
+      tl.set("#be_happy", {opacity: 1}, 0.350);
+      tl.set(".bm", {opacity: 0}, 0.350);
+      tl.set("#bm_grin", {opacity: 1}, 0.350);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.25, ease: "back.out(2)"}, 0.600);
+      tl.to("#bitaR", {rotation: -150, svgOrigin: "155 154", duration: 0.25, ease: "back.out(2)"}, 0.600);
+      tl.fromTo("#bitaR", {rotation: -150}, {rotation: -120, svgOrigin: "155 154", duration: .14, yoyo: true, repeat: 5, ease: "sine.inOut", immediateRender: false}, .85);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 1.750);
+      tl.to("#bitaR", {rotation: 0, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 1.750);
+      tl.fromTo("#bitb", {y: 0}, {y: -5, duration: .7, yoyo: true, repeat: 52, ease: "sine.inOut", immediateRender: false}, 0);
+      tl.fromTo("#bitbulb", {fill: "#FACC15"}, {fill: "#FFF5B0", duration: .5, yoyo: true, repeat: 73, ease: "sine.inOut", immediateRender: false}, 0);
+      tl.set("#bx1", {borderColor: '#FFFFFF', boxShadow: '0 0 0 4px rgba(255,255,255,.4), 0 0 24px rgba(255,255,255,.5)'}, 1.980);
+      tl.fromTo("#qc1", {opacity: 0, y: 120, rotation: -2}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.38, ease: "back.out(1.6)", immediateRender: false}, 1.980);
+      tl.fromTo("#qc1 .qw:nth-child(1)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 2.040);
+      tl.fromTo("#qc1 .qw:nth-child(2)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 2.140);
+      tl.fromTo("#qc1 .qw:nth-child(3)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 2.440);
+      tl.fromTo("#qc1 .qw:nth-child(4)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 2.980);
+      tl.set(".be", {opacity: 0}, 2.080);
+      tl.set("#be_up", {opacity: 1}, 2.080);
+      tl.set(".bm", {opacity: 0}, 2.080);
+      tl.set("#bm_flat", {opacity: 1}, 2.080);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.25, ease: "back.out(2)"}, 2.080);
+      tl.to("#bitaR", {rotation: -120, svgOrigin: "155 154", duration: 0.25, ease: "back.out(2)"}, 2.080);
+      tl.to("#bith", {rotation: -8, svgOrigin: "100 150", duration: 0.25, ease: "back.out(2)"}, 2.080);
+      tl.set("#bitbt", {textContent: "?"}, 2.220);
+      tl.fromTo("#bitbub", {opacity: 0, scale: .2, rotation: -30}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.3, ease: "back.out(2.6)", immediateRender: false}, 2.230);
+      tl.to("#bitbub", {...{opacity: 0, scale: .6}, duration: 0.18, ease: "power2.in"}, 3.030);
+      tl.fromTo("#lk", {opacity: 0, scale: .5}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 3.480);
+      tl.fromTo("#lkt1", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power2.out", immediateRender: false}, 3.480);
       tl.fromTo("#rf", {strokeDashoffset: 0}, {...{strokeDashoffset: 1000}, duration: 1.1999999999999997, ease: "none", immediateRender: false}, 3.480);
       tl.set(".ln", {opacity: 0}, 3.480);
-      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 3.480);
+      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 3.480);
       tl.set(".ln", {opacity: 0}, 3.880);
-      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 3.880);
+      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 3.880);
       tl.set(".ln", {opacity: 0}, 4.280);
-      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 4.280);
+      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 4.280);
       tl.set(".ln", {opacity: 0}, 4.680);
       tl.fromTo("#cam", {scale: 1}, {...{scale: 1.09}, duration: 1.1999999999999997, ease: "sine.inOut", immediateRender: false}, 3.480);
       tl.fromTo("#vig", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 3.480);
-      tl.to("#lk", {...{opacity: 0, scale: .6}, duration: 0.15, ease: "power2.in"}, 4.660);
-      tl.to("#lkt", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 4.660);
+      tl.to("#lk", {...{opacity: 0, scale: .5}, duration: 0.14, ease: "power2.in"}, 4.660);
+      tl.to("#lkt1", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 4.660);
       tl.to("#vig", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 4.680);
       tl.to("#cam", {...{scale: 1}, duration: 0.35, ease: "power3.out"}, 4.680);
-      tl.fromTo("#sp1", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.in", immediateRender: false}, 4.730);
+      tl.set(".be", {opacity: 0}, 3.480);
+      tl.set("#be_wide", {opacity: 1}, 3.480);
+      tl.set(".bm", {opacity: 0}, 3.480);
+      tl.set("#bm_wavy", {opacity: 1}, 3.480);
+      tl.to("#bitaL", {rotation: 20, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 3.480);
+      tl.to("#bitaR", {rotation: -20, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 3.480);
+      tl.to("#bith", {rotation: 0, svgOrigin: "100 150", duration: 0.15, ease: "back.out(2)"}, 3.480);
+      tl.fromTo("#bitsweat", {opacity: 0, y: -10}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "back.out(2)", immediateRender: false}, 3.580);
+      tl.to("#bitsweat", {...{y: 26}, duration: 0.8999999999999997, ease: "power1.in"}, 3.780);
+      tl.set("#bitsweat", {opacity: 0}, 4.680);
+      tl.fromTo("#bitb", {x: 0}, {x: 3, duration: .05, yoyo: true, repeat: 22, ease: "none", immediateRender: false}, 3.480);
+      tl.fromTo("#sp1", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.2, ease: "power4.in", immediateRender: false}, 4.730);
       tl.set("#bt1", {textContent: "F"}, 4.830);
-      tl.fromTo("#bf1", {scaleY: 0}, {...{scaleY: 1}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 4.830);
+      tl.set("#bf1", {background: '#E11D48'}, 4.830);
+      tl.fromTo("#bf1", {scaleY: 0}, {...{scaleY: 1}, duration: 0.28, ease: "back.out(2)", immediateRender: false}, 4.830);
       tl.set("#bx1", {borderColor: '#E11D48', boxShadow: 'none'}, 4.830);
-      tl.fromTo("#bt1", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 4.880);
-      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.04}, duration: 0.08, ease: "power2.out", immediateRender: false}, 4.930);
-      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 5.010);
-      tl.fromTo("#why1", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 5.180);
-      tl.set("#tagtx", {textContent: "EASY"}, 6.190);
-      tl.set("#tagq", {textContent: "2 / 6"}, 6.190);
-      tl.set("#tagdot", {background: '#84CC16', boxShadow: '0 0 14px #84CC16'}, 6.190);
-      tl.fromTo("#tag", {opacity: 0, scale: .7, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(2.6)", immediateRender: false}, 6.190);
-      tl.set("#bx2", {borderColor: '#FFFFFF', boxShadow: '0 0 0 5px rgba(255,255,255,.35), 0 10px 30px rgba(0,0,0,.35)'}, 6.210);
-      tl.fromTo("#qc2", {opacity: 0, y: 140, rotation: -3}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.4, ease: "back.out(1.5)", immediateRender: false}, 6.210);
-      tl.fromTo("#qc2 .qw:nth-child(1)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 6.280);
-      tl.fromTo("#qc2 .qw:nth-child(2)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 6.600);
-      tl.fromTo("#qc2 .qw:nth-child(3)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 7.040);
-      tl.fromTo("#qc2 .qw:nth-child(4)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 7.140);
-      tl.fromTo("#qc2 .qw:nth-child(5)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 7.260);
-      tl.fromTo("#qc2 .qw:nth-child(6)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 7.440);
-      tl.fromTo("#qc2 .qw:nth-child(7)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 7.680);
-      tl.fromTo("#qc2 .qw:nth-child(8)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 7.860);
-      tl.fromTo("#qc2 .qw:nth-child(9)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 8.180);
-      tl.fromTo("#qc2 .qw:nth-child(10)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 8.440);
-      tl.fromTo("#lk", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 8.780);
-      tl.fromTo("#lkt", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 8.780);
+      tl.fromTo("#bt1", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.28, ease: "back.out(3)", immediateRender: false}, 4.870);
+      tl.fromTo("#bx1", {scale: 1.35}, {...{scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 4.830);
+      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.035}, duration: 0.07, ease: "power2.out", immediateRender: false}, 4.910);
+      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 4.980);
+      tl.set("#edge", {opacity: 1, boxShadow: 'inset 0 0 140px 30px #E11D48'}, 4.880);
+      tl.to("#edge", {...{opacity: 0}, duration: 0.5, ease: "power2.out"}, 4.900);
+      tl.set(".be", {opacity: 0}, 4.830);
+      tl.set("#be_squint", {opacity: 1}, 4.830);
+      tl.set(".bm", {opacity: 0}, 4.830);
+      tl.set("#bm_smile", {opacity: 1}, 4.830);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 4.830);
+      tl.to("#bitaR", {rotation: -100, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 4.830);
+      tl.fromTo("#bitaR", {rotation: -100}, {rotation: -70, svgOrigin: "155 154", duration: .12, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}, 5.050);
+      tl.fromTo("#bith", {rotation: 0}, {rotation: 8, svgOrigin: "100 150", duration: .12, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}, 5.050);
+      tl.set("#bitbt", {textContent: "NOPE"}, 5.020);
+      tl.fromTo("#bitbub", {opacity: 0, scale: .2, rotation: -30}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.3, ease: "back.out(2.6)", immediateRender: false}, 5.030);
+      tl.to("#bitbub", {...{opacity: 0, scale: .6}, duration: 0.18, ease: "power2.in"}, 5.730);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 5.630);
+      tl.to("#bitaR", {rotation: 0, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 5.630);
+      tl.to("#qt1", {...{opacity: 0, y: -10}, duration: 0.2, ease: "power2.in"}, 5.230);
+      tl.to("#sp1", {...{opacity: 0, scale: .7}, duration: 0.2, ease: "power2.in"}, 5.230);
+      tl.fromTo("#why1", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 5.330);
+      tl.set(".be", {opacity: 0}, 5.630);
+      tl.set("#be_norm", {opacity: 1}, 5.630);
+      tl.set(".bm", {opacity: 0}, 5.630);
+      tl.set("#bm_smile", {opacity: 1}, 5.630);
+      tl.set("#bitlid", {opacity: 1}, 6.030);
+      tl.set("#bitlid", {opacity: 0}, 6.130);
+      tl.set("#bx2", {borderColor: '#FFFFFF', boxShadow: '0 0 0 4px rgba(255,255,255,.4), 0 0 24px rgba(255,255,255,.5)'}, 6.210);
+      tl.fromTo("#qc2", {opacity: 0, y: 120, rotation: -2}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.38, ease: "back.out(1.6)", immediateRender: false}, 6.210);
+      tl.fromTo("#qc2 .qw:nth-child(1)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 6.280);
+      tl.fromTo("#qc2 .qw:nth-child(2)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 6.600);
+      tl.fromTo("#qc2 .qw:nth-child(3)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 7.040);
+      tl.fromTo("#qc2 .qw:nth-child(4)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 7.140);
+      tl.fromTo("#qc2 .qw:nth-child(5)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 7.260);
+      tl.fromTo("#qc2 .qw:nth-child(6)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 7.440);
+      tl.fromTo("#qc2 .qw:nth-child(7)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 7.680);
+      tl.fromTo("#qc2 .qw:nth-child(8)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 7.860);
+      tl.fromTo("#qc2 .qw:nth-child(9)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 8.180);
+      tl.fromTo("#qc2 .qw:nth-child(10)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 8.440);
+      tl.set(".be", {opacity: 0}, 6.310);
+      tl.set("#be_up", {opacity: 1}, 6.310);
+      tl.set(".bm", {opacity: 0}, 6.310);
+      tl.set("#bm_flat", {opacity: 1}, 6.310);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.25, ease: "back.out(2)"}, 6.310);
+      tl.to("#bitaR", {rotation: -120, svgOrigin: "155 154", duration: 0.25, ease: "back.out(2)"}, 6.310);
+      tl.to("#bith", {rotation: -8, svgOrigin: "100 150", duration: 0.25, ease: "back.out(2)"}, 6.310);
+      tl.set("#bitbt", {textContent: "?"}, 6.450);
+      tl.fromTo("#bitbub", {opacity: 0, scale: .2, rotation: -30}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.3, ease: "back.out(2.6)", immediateRender: false}, 6.460);
+      tl.to("#bitbub", {...{opacity: 0, scale: .6}, duration: 0.18, ease: "power2.in"}, 7.260);
+      tl.fromTo("#lk", {opacity: 0, scale: .5}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 8.780);
+      tl.fromTo("#lkt2", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power2.out", immediateRender: false}, 8.780);
       tl.fromTo("#rf", {strokeDashoffset: 0}, {...{strokeDashoffset: 1000}, duration: 1.200000000000001, ease: "none", immediateRender: false}, 8.780);
       tl.set(".ln", {opacity: 0}, 8.780);
-      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 8.780);
+      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 8.780);
       tl.set(".ln", {opacity: 0}, 9.180);
-      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 9.180);
+      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 9.180);
       tl.set(".ln", {opacity: 0}, 9.580);
-      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 9.580);
+      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 9.580);
       tl.set(".ln", {opacity: 0}, 9.980);
       tl.fromTo("#cam", {scale: 1}, {...{scale: 1.09}, duration: 1.200000000000001, ease: "sine.inOut", immediateRender: false}, 8.780);
       tl.fromTo("#vig", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 8.780);
-      tl.to("#lk", {...{opacity: 0, scale: .6}, duration: 0.15, ease: "power2.in"}, 9.960);
-      tl.to("#lkt", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 9.960);
+      tl.to("#lk", {...{opacity: 0, scale: .5}, duration: 0.14, ease: "power2.in"}, 9.960);
+      tl.to("#lkt2", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 9.960);
       tl.to("#vig", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 9.980);
       tl.to("#cam", {...{scale: 1}, duration: 0.35, ease: "power3.out"}, 9.980);
-      tl.fromTo("#sp2", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.in", immediateRender: false}, 11.910);
+      tl.set(".be", {opacity: 0}, 8.780);
+      tl.set("#be_wide", {opacity: 1}, 8.780);
+      tl.set(".bm", {opacity: 0}, 8.780);
+      tl.set("#bm_wavy", {opacity: 1}, 8.780);
+      tl.to("#bitaL", {rotation: 20, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 8.780);
+      tl.to("#bitaR", {rotation: -20, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 8.780);
+      tl.to("#bith", {rotation: 0, svgOrigin: "100 150", duration: 0.15, ease: "back.out(2)"}, 8.780);
+      tl.fromTo("#bitsweat", {opacity: 0, y: -10}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "back.out(2)", immediateRender: false}, 8.880);
+      tl.to("#bitsweat", {...{y: 26}, duration: 0.900000000000001, ease: "power1.in"}, 9.080);
+      tl.set("#bitsweat", {opacity: 0}, 9.980);
+      tl.fromTo("#bitb", {x: 0}, {x: 3, duration: .05, yoyo: true, repeat: 23, ease: "none", immediateRender: false}, 8.780);
+      tl.fromTo("#sp2", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.2, ease: "power4.in", immediateRender: false}, 11.910);
       tl.set("#bt2", {textContent: "T"}, 12.010);
-      tl.fromTo("#bf2", {scaleY: 0}, {...{scaleY: 1}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 12.010);
+      tl.set("#bf2", {background: '#16A34A'}, 12.010);
+      tl.fromTo("#bf2", {scaleY: 0}, {...{scaleY: 1}, duration: 0.28, ease: "back.out(2)", immediateRender: false}, 12.010);
       tl.set("#bx2", {borderColor: '#16A34A', boxShadow: 'none'}, 12.010);
-      tl.fromTo("#bt2", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 12.060);
-      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.04}, duration: 0.08, ease: "power2.out", immediateRender: false}, 12.110);
-      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 12.190);
-      tl.set("#tagtx", {textContent: "MEDIUM"}, 14.460);
-      tl.set("#tagq", {textContent: "3 / 6"}, 14.460);
-      tl.set("#tagdot", {background: '#F59E0B', boxShadow: '0 0 14px #F59E0B'}, 14.460);
-      tl.fromTo("#tag", {opacity: 0, scale: .7, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(2.6)", immediateRender: false}, 14.460);
-      tl.set("#bx3", {borderColor: '#FFFFFF', boxShadow: '0 0 0 5px rgba(255,255,255,.35), 0 10px 30px rgba(0,0,0,.35)'}, 14.480);
-      tl.fromTo("#qc3", {opacity: 0, y: 140, rotation: -3}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.4, ease: "back.out(1.5)", immediateRender: false}, 14.480);
-      tl.fromTo("#qc3 .qw:nth-child(1)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 14.540);
-      tl.fromTo("#qc3 .qw:nth-child(2)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 14.620);
-      tl.fromTo("#qc3 .qw:nth-child(3)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 14.840);
-      tl.fromTo("#qc3 .qw:nth-child(4)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 15.140);
-      tl.fromTo("#qc3 .qw:nth-child(5)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 15.300);
-      tl.fromTo("#qc3 .qw:nth-child(6)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 15.540);
-      tl.fromTo("#qc3 .qw:nth-child(7)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 15.920);
-      tl.fromTo("#qc3 .qw:nth-child(8)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 16.060);
-      tl.fromTo("#qc3 .qw:nth-child(9)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 16.220);
-      tl.fromTo("#qc3 .qw:nth-child(10)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 16.540);
-      tl.fromTo("#lk", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 16.840);
-      tl.fromTo("#lkt", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 16.840);
+      tl.fromTo("#bt2", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.28, ease: "back.out(3)", immediateRender: false}, 12.050);
+      tl.fromTo("#bx2", {scale: 1.35}, {...{scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 12.010);
+      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.035}, duration: 0.07, ease: "power2.out", immediateRender: false}, 12.090);
+      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 12.160);
+      tl.set("#edge", {opacity: 1, boxShadow: 'inset 0 0 140px 30px #16A34A'}, 12.060);
+      tl.to("#edge", {...{opacity: 0}, duration: 0.5, ease: "power2.out"}, 12.080);
+      tl.fromTo("#conf .cf:nth-child(1)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -107, y: -217, rotation: -179, duration: .45, ease: "power3.out"}, {y: 43, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(2)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 215, y: -241, rotation: 345, duration: .45, ease: "power3.out"}, {y: 19, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(3)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -128, y: -255, rotation: -311, duration: .45, ease: "power3.out"}, {y: 5, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(4)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -270, y: -164, rotation: 55, duration: .45, ease: "power3.out"}, {y: 96, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(5)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -321, y: -146, rotation: -8, duration: .45, ease: "power3.out"}, {y: 114, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(6)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 199, y: -195, rotation: 71, duration: .45, ease: "power3.out"}, {y: 65, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(7)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -316, y: -269, rotation: 293, duration: .45, ease: "power3.out"}, {y: -9, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(8)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -262, y: -120, rotation: -148, duration: .45, ease: "power3.out"}, {y: 140, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(9)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -275, y: -217, rotation: -225, duration: .45, ease: "power3.out"}, {y: 43, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(10)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 114, y: -347, rotation: -251, duration: .45, ease: "power3.out"}, {y: -87, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(11)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -186, y: -177, rotation: -300, duration: .45, ease: "power3.out"}, {y: 83, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(12)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 177, y: -158, rotation: 104, duration: .45, ease: "power3.out"}, {y: 102, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(13)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 276, y: -165, rotation: -187, duration: .45, ease: "power3.out"}, {y: 95, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(14)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 255, y: -110, rotation: 139, duration: .45, ease: "power3.out"}, {y: 150, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(15)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 108, y: -217, rotation: -80, duration: .45, ease: "power3.out"}, {y: 43, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(16)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -130, y: -231, rotation: -210, duration: .45, ease: "power3.out"}, {y: 29, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(17)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -303, y: -218, rotation: 184, duration: .45, ease: "power3.out"}, {y: 42, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(18)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 291, y: -140, rotation: 151, duration: .45, ease: "power3.out"}, {y: 120, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(19)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 162, y: -129, rotation: 143, duration: .45, ease: "power3.out"}, {y: 131, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(20)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -192, y: -309, rotation: 154, duration: .45, ease: "power3.out"}, {y: -49, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(21)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -121, y: -344, rotation: 4, duration: .45, ease: "power3.out"}, {y: -84, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(22)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 152, y: -296, rotation: -47, duration: .45, ease: "power3.out"}, {y: -36, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(23)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -112, y: -324, rotation: -73, duration: .45, ease: "power3.out"}, {y: -64, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(24)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 167, y: -156, rotation: 347, duration: .45, ease: "power3.out"}, {y: 104, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(25)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 206, y: -353, rotation: -12, duration: .45, ease: "power3.out"}, {y: -93, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(26)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 111, y: -290, rotation: -349, duration: .45, ease: "power3.out"}, {y: -30, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(27)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -23, y: -360, rotation: -27, duration: .45, ease: "power3.out"}, {y: -100, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.fromTo("#conf .cf:nth-child(28)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 114, y: -256, rotation: 152, duration: .45, ease: "power3.out"}, {y: 4, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 12.060);
+      tl.set(".be", {opacity: 0}, 12.010);
+      tl.set("#be_happy", {opacity: 1}, 12.010);
+      tl.set(".bm", {opacity: 0}, 12.010);
+      tl.set("#bm_grin", {opacity: 1}, 12.010);
+      tl.to("#bitaL", {rotation: 150, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 12.010);
+      tl.to("#bitaR", {rotation: -150, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 12.010);
+      tl.fromTo("#bitb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 6, duration: .06}, {scaleY: 1.08, scaleX: .94, y: -50, duration: .13, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .12, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, duration: .03}, {scaleY: 1, scaleX: 1, duration: .05}], immediateRender: false}, 12.030);
+      tl.fromTo("#bitb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 6, duration: .06}, {scaleY: 1.08, scaleX: .94, y: -50, duration: .13, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .12, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, duration: .03}, {scaleY: 1, scaleX: 1, duration: .05}], immediateRender: false}, 12.370);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 12.810);
+      tl.to("#bitaR", {rotation: 0, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 12.810);
+      tl.set("#bx3", {borderColor: '#FFFFFF', boxShadow: '0 0 0 4px rgba(255,255,255,.4), 0 0 24px rgba(255,255,255,.5)'}, 14.480);
+      tl.fromTo("#qc3", {opacity: 0, y: 120, rotation: -2}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.38, ease: "back.out(1.6)", immediateRender: false}, 14.480);
+      tl.fromTo("#qc3 .qw:nth-child(1)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 14.540);
+      tl.fromTo("#qc3 .qw:nth-child(2)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 14.620);
+      tl.fromTo("#qc3 .qw:nth-child(3)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 14.840);
+      tl.fromTo("#qc3 .qw:nth-child(4)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 15.140);
+      tl.fromTo("#qc3 .qw:nth-child(5)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 15.300);
+      tl.fromTo("#qc3 .qw:nth-child(6)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 15.540);
+      tl.fromTo("#qc3 .qw:nth-child(7)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 15.920);
+      tl.fromTo("#qc3 .qw:nth-child(8)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 16.060);
+      tl.fromTo("#qc3 .qw:nth-child(9)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 16.220);
+      tl.fromTo("#qc3 .qw:nth-child(10)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 16.540);
+      tl.set(".be", {opacity: 0}, 14.580);
+      tl.set("#be_up", {opacity: 1}, 14.580);
+      tl.set(".bm", {opacity: 0}, 14.580);
+      tl.set("#bm_flat", {opacity: 1}, 14.580);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.25, ease: "back.out(2)"}, 14.580);
+      tl.to("#bitaR", {rotation: -120, svgOrigin: "155 154", duration: 0.25, ease: "back.out(2)"}, 14.580);
+      tl.to("#bith", {rotation: -8, svgOrigin: "100 150", duration: 0.25, ease: "back.out(2)"}, 14.580);
+      tl.set("#bitbt", {textContent: "?"}, 14.720);
+      tl.fromTo("#bitbub", {opacity: 0, scale: .2, rotation: -30}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.3, ease: "back.out(2.6)", immediateRender: false}, 14.730);
+      tl.to("#bitbub", {...{opacity: 0, scale: .6}, duration: 0.18, ease: "power2.in"}, 15.530);
+      tl.fromTo("#lk", {opacity: 0, scale: .5}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 16.840);
+      tl.fromTo("#lkt3", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power2.out", immediateRender: false}, 16.840);
       tl.fromTo("#rf", {strokeDashoffset: 0}, {...{strokeDashoffset: 1000}, duration: 1.1999999999999993, ease: "none", immediateRender: false}, 16.840);
       tl.set(".ln", {opacity: 0}, 16.840);
-      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 16.840);
+      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 16.840);
       tl.set(".ln", {opacity: 0}, 17.240);
-      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 17.240);
+      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 17.240);
       tl.set(".ln", {opacity: 0}, 17.640);
-      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 17.640);
+      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 17.640);
       tl.set(".ln", {opacity: 0}, 18.040);
       tl.fromTo("#cam", {scale: 1}, {...{scale: 1.09}, duration: 1.1999999999999993, ease: "sine.inOut", immediateRender: false}, 16.840);
       tl.fromTo("#vig", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 16.840);
-      tl.to("#lk", {...{opacity: 0, scale: .6}, duration: 0.15, ease: "power2.in"}, 18.020);
-      tl.to("#lkt", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 18.020);
+      tl.to("#lk", {...{opacity: 0, scale: .5}, duration: 0.14, ease: "power2.in"}, 18.020);
+      tl.to("#lkt3", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 18.020);
       tl.to("#vig", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 18.040);
       tl.to("#cam", {...{scale: 1}, duration: 0.35, ease: "power3.out"}, 18.040);
-      tl.fromTo("#sp3", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.in", immediateRender: false}, 18.090);
+      tl.set(".be", {opacity: 0}, 16.840);
+      tl.set("#be_wide", {opacity: 1}, 16.840);
+      tl.set(".bm", {opacity: 0}, 16.840);
+      tl.set("#bm_wavy", {opacity: 1}, 16.840);
+      tl.to("#bitaL", {rotation: 20, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 16.840);
+      tl.to("#bitaR", {rotation: -20, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 16.840);
+      tl.to("#bith", {rotation: 0, svgOrigin: "100 150", duration: 0.15, ease: "back.out(2)"}, 16.840);
+      tl.fromTo("#bitsweat", {opacity: 0, y: -10}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "back.out(2)", immediateRender: false}, 16.940);
+      tl.to("#bitsweat", {...{y: 26}, duration: 0.8999999999999992, ease: "power1.in"}, 17.140);
+      tl.set("#bitsweat", {opacity: 0}, 18.040);
+      tl.fromTo("#bitb", {x: 0}, {x: 3, duration: .05, yoyo: true, repeat: 22, ease: "none", immediateRender: false}, 16.840);
+      tl.fromTo("#sp3", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.2, ease: "power4.in", immediateRender: false}, 18.090);
       tl.set("#bt3", {textContent: "T"}, 18.190);
-      tl.fromTo("#bf3", {scaleY: 0}, {...{scaleY: 1}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 18.190);
+      tl.set("#bf3", {background: '#16A34A'}, 18.190);
+      tl.fromTo("#bf3", {scaleY: 0}, {...{scaleY: 1}, duration: 0.28, ease: "back.out(2)", immediateRender: false}, 18.190);
       tl.set("#bx3", {borderColor: '#16A34A', boxShadow: 'none'}, 18.190);
-      tl.fromTo("#bt3", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 18.240);
-      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.04}, duration: 0.08, ease: "power2.out", immediateRender: false}, 18.290);
-      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 18.370);
-      tl.fromTo("#why3", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 18.540);
-      tl.set("#tagtx", {textContent: "MEDIUM"}, 19.280);
-      tl.set("#tagq", {textContent: "4 / 6"}, 19.280);
-      tl.set("#tagdot", {background: '#F59E0B', boxShadow: '0 0 14px #F59E0B'}, 19.280);
-      tl.fromTo("#tag", {opacity: 0, scale: .7, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(2.6)", immediateRender: false}, 19.280);
-      tl.set("#bx4", {borderColor: '#FFFFFF', boxShadow: '0 0 0 5px rgba(255,255,255,.35), 0 10px 30px rgba(0,0,0,.35)'}, 19.300);
-      tl.fromTo("#qc4", {opacity: 0, y: 140, rotation: -3}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.4, ease: "back.out(1.5)", immediateRender: false}, 19.300);
-      tl.fromTo("#qc4 .qw:nth-child(1)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 19.360);
-      tl.fromTo("#qc4 .qw:nth-child(2)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 19.560);
-      tl.fromTo("#qc4 .qw:nth-child(3)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 20.180);
-      tl.fromTo("#qc4 .qw:nth-child(4)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 20.340);
-      tl.fromTo("#lk", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 20.840);
-      tl.fromTo("#lkt", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 20.840);
+      tl.fromTo("#bt3", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.28, ease: "back.out(3)", immediateRender: false}, 18.230);
+      tl.fromTo("#bx3", {scale: 1.35}, {...{scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 18.190);
+      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.035}, duration: 0.07, ease: "power2.out", immediateRender: false}, 18.270);
+      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 18.340);
+      tl.set("#edge", {opacity: 1, boxShadow: 'inset 0 0 140px 30px #16A34A'}, 18.240);
+      tl.to("#edge", {...{opacity: 0}, duration: 0.5, ease: "power2.out"}, 18.260);
+      tl.fromTo("#conf .cf:nth-child(1)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 130, y: -344, rotation: -4, duration: .45, ease: "power3.out"}, {y: -84, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(2)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -131, y: -213, rotation: 58, duration: .45, ease: "power3.out"}, {y: 47, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(3)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -136, y: -354, rotation: 344, duration: .45, ease: "power3.out"}, {y: -94, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(4)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -31, y: -253, rotation: -18, duration: .45, ease: "power3.out"}, {y: 7, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(5)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 13, y: -297, rotation: -190, duration: .45, ease: "power3.out"}, {y: -37, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(6)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -171, y: -188, rotation: 128, duration: .45, ease: "power3.out"}, {y: 72, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(7)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -91, y: -156, rotation: 326, duration: .45, ease: "power3.out"}, {y: 104, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(8)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 109, y: -173, rotation: 234, duration: .45, ease: "power3.out"}, {y: 87, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(9)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 16, y: -403, rotation: -51, duration: .45, ease: "power3.out"}, {y: -143, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(10)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 108, y: -345, rotation: 292, duration: .45, ease: "power3.out"}, {y: -85, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(11)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -223, y: -355, rotation: -160, duration: .45, ease: "power3.out"}, {y: -95, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(12)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -203, y: -185, rotation: 305, duration: .45, ease: "power3.out"}, {y: 75, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(13)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -251, y: -254, rotation: -176, duration: .45, ease: "power3.out"}, {y: 6, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(14)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 54, y: -162, rotation: 122, duration: .45, ease: "power3.out"}, {y: 98, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(15)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 187, y: -79, rotation: -224, duration: .45, ease: "power3.out"}, {y: 181, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(16)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -335, y: -239, rotation: 134, duration: .45, ease: "power3.out"}, {y: 21, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(17)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -115, y: -124, rotation: 116, duration: .45, ease: "power3.out"}, {y: 136, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(18)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -118, y: -311, rotation: -287, duration: .45, ease: "power3.out"}, {y: -51, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(19)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 48, y: -216, rotation: 22, duration: .45, ease: "power3.out"}, {y: 44, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(20)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -249, y: -91, rotation: -75, duration: .45, ease: "power3.out"}, {y: 169, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(21)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 294, y: -249, rotation: 345, duration: .45, ease: "power3.out"}, {y: 11, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(22)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 186, y: -177, rotation: -324, duration: .45, ease: "power3.out"}, {y: 83, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(23)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 29, y: -237, rotation: -58, duration: .45, ease: "power3.out"}, {y: 23, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(24)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 27, y: -247, rotation: 234, duration: .45, ease: "power3.out"}, {y: 13, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(25)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -122, y: -220, rotation: -228, duration: .45, ease: "power3.out"}, {y: 40, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(26)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: -73, y: -364, rotation: 297, duration: .45, ease: "power3.out"}, {y: -104, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(27)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 26, y: -280, rotation: -200, duration: .45, ease: "power3.out"}, {y: -20, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.fromTo("#conf .cf:nth-child(28)", {opacity: 1, x: 0, y: 0, rotation: 0}, {keyframes: [{x: 71, y: -298, rotation: -157, duration: .45, ease: "power3.out"}, {y: -38, opacity: 0, duration: .7, ease: "power1.in"}], immediateRender: false}, 18.240);
+      tl.set(".be", {opacity: 0}, 18.190);
+      tl.set("#be_happy", {opacity: 1}, 18.190);
+      tl.set(".bm", {opacity: 0}, 18.190);
+      tl.set("#bm_grin", {opacity: 1}, 18.190);
+      tl.to("#bitaL", {rotation: 150, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 18.190);
+      tl.to("#bitaR", {rotation: -150, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 18.190);
+      tl.fromTo("#bitb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 6, duration: .06}, {scaleY: 1.08, scaleX: .94, y: -50, duration: .13, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .12, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, duration: .03}, {scaleY: 1, scaleX: 1, duration: .05}], immediateRender: false}, 18.210);
+      tl.fromTo("#bitb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 6, duration: .06}, {scaleY: 1.08, scaleX: .94, y: -50, duration: .13, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .12, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, duration: .03}, {scaleY: 1, scaleX: 1, duration: .05}], immediateRender: false}, 18.550);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 18.990);
+      tl.to("#bitaR", {rotation: 0, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 18.990);
+      tl.to("#qt3", {...{opacity: 0, y: -10}, duration: 0.2, ease: "power2.in"}, 18.590);
+      tl.to("#sp3", {...{opacity: 0, scale: .7}, duration: 0.2, ease: "power2.in"}, 18.590);
+      tl.fromTo("#why3", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 18.690);
+      tl.set(".be", {opacity: 0}, 18.990);
+      tl.set("#be_norm", {opacity: 1}, 18.990);
+      tl.set(".bm", {opacity: 0}, 18.990);
+      tl.set("#bm_smile", {opacity: 1}, 18.990);
+      tl.set("#bitlid", {opacity: 1}, 19.390);
+      tl.set("#bitlid", {opacity: 0}, 19.490);
+      tl.set("#bx4", {borderColor: '#FFFFFF', boxShadow: '0 0 0 4px rgba(255,255,255,.4), 0 0 24px rgba(255,255,255,.5)'}, 19.300);
+      tl.fromTo("#qc4", {opacity: 0, y: 120, rotation: -2}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.38, ease: "back.out(1.6)", immediateRender: false}, 19.300);
+      tl.fromTo("#qc4 .qw:nth-child(1)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 19.360);
+      tl.fromTo("#qc4 .qw:nth-child(2)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 19.560);
+      tl.fromTo("#qc4 .qw:nth-child(3)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 20.180);
+      tl.fromTo("#qc4 .qw:nth-child(4)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 20.340);
+      tl.set(".be", {opacity: 0}, 19.400);
+      tl.set("#be_up", {opacity: 1}, 19.400);
+      tl.set(".bm", {opacity: 0}, 19.400);
+      tl.set("#bm_flat", {opacity: 1}, 19.400);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.25, ease: "back.out(2)"}, 19.400);
+      tl.to("#bitaR", {rotation: -120, svgOrigin: "155 154", duration: 0.25, ease: "back.out(2)"}, 19.400);
+      tl.to("#bith", {rotation: -8, svgOrigin: "100 150", duration: 0.25, ease: "back.out(2)"}, 19.400);
+      tl.set("#bitbt", {textContent: "?"}, 19.540);
+      tl.fromTo("#bitbub", {opacity: 0, scale: .2, rotation: -30}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.3, ease: "back.out(2.6)", immediateRender: false}, 19.550);
+      tl.to("#bitbub", {...{opacity: 0, scale: .6}, duration: 0.18, ease: "power2.in"}, 20.350);
+      tl.fromTo("#lk", {opacity: 0, scale: .5}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 20.840);
+      tl.fromTo("#lkt4", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power2.out", immediateRender: false}, 20.840);
       tl.fromTo("#rf", {strokeDashoffset: 0}, {...{strokeDashoffset: 1000}, duration: 1.1999999999999993, ease: "none", immediateRender: false}, 20.840);
       tl.set(".ln", {opacity: 0}, 20.840);
-      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 20.840);
+      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 20.840);
       tl.set(".ln", {opacity: 0}, 21.240);
-      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 21.240);
+      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 21.240);
       tl.set(".ln", {opacity: 0}, 21.640);
-      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 21.640);
+      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 21.640);
       tl.set(".ln", {opacity: 0}, 22.040);
       tl.fromTo("#cam", {scale: 1}, {...{scale: 1.09}, duration: 1.1999999999999993, ease: "sine.inOut", immediateRender: false}, 20.840);
       tl.fromTo("#vig", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 20.840);
-      tl.to("#lk", {...{opacity: 0, scale: .6}, duration: 0.15, ease: "power2.in"}, 22.020);
-      tl.to("#lkt", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 22.020);
+      tl.to("#lk", {...{opacity: 0, scale: .5}, duration: 0.14, ease: "power2.in"}, 22.020);
+      tl.to("#lkt4", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 22.020);
       tl.to("#vig", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 22.040);
       tl.to("#cam", {...{scale: 1}, duration: 0.35, ease: "power3.out"}, 22.040);
-      tl.fromTo("#sp4", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.in", immediateRender: false}, 22.110);
+      tl.set(".be", {opacity: 0}, 20.840);
+      tl.set("#be_wide", {opacity: 1}, 20.840);
+      tl.set(".bm", {opacity: 0}, 20.840);
+      tl.set("#bm_wavy", {opacity: 1}, 20.840);
+      tl.to("#bitaL", {rotation: 20, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 20.840);
+      tl.to("#bitaR", {rotation: -20, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 20.840);
+      tl.to("#bith", {rotation: 0, svgOrigin: "100 150", duration: 0.15, ease: "back.out(2)"}, 20.840);
+      tl.fromTo("#bitsweat", {opacity: 0, y: -10}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "back.out(2)", immediateRender: false}, 20.940);
+      tl.to("#bitsweat", {...{y: 26}, duration: 0.8999999999999992, ease: "power1.in"}, 21.140);
+      tl.set("#bitsweat", {opacity: 0}, 22.040);
+      tl.fromTo("#bitb", {x: 0}, {x: 3, duration: .05, yoyo: true, repeat: 22, ease: "none", immediateRender: false}, 20.840);
+      tl.fromTo("#sp4", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.2, ease: "power4.in", immediateRender: false}, 22.110);
       tl.set("#bt4", {textContent: "F"}, 22.210);
-      tl.fromTo("#bf4", {scaleY: 0}, {...{scaleY: 1}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 22.210);
+      tl.set("#bf4", {background: '#E11D48'}, 22.210);
+      tl.fromTo("#bf4", {scaleY: 0}, {...{scaleY: 1}, duration: 0.28, ease: "back.out(2)", immediateRender: false}, 22.210);
       tl.set("#bx4", {borderColor: '#E11D48', boxShadow: 'none'}, 22.210);
-      tl.fromTo("#bt4", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 22.260);
-      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.04}, duration: 0.08, ease: "power2.out", immediateRender: false}, 22.310);
-      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 22.390);
-      tl.fromTo("#why4", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 22.560);
-      tl.set("#tagtx", {textContent: "HARD"}, 23.540);
-      tl.set("#tagq", {textContent: "5 / 6"}, 23.540);
-      tl.set("#tagdot", {background: '#F97316', boxShadow: '0 0 14px #F97316'}, 23.540);
-      tl.fromTo("#tag", {opacity: 0, scale: .7, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(2.6)", immediateRender: false}, 23.540);
-      tl.set("#bx5", {borderColor: '#FFFFFF', boxShadow: '0 0 0 5px rgba(255,255,255,.35), 0 10px 30px rgba(0,0,0,.35)'}, 23.560);
-      tl.fromTo("#qc5", {opacity: 0, y: 140, rotation: -3}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.4, ease: "back.out(1.5)", immediateRender: false}, 23.560);
-      tl.fromTo("#qc5 .qw:nth-child(1)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 23.660);
-      tl.fromTo("#qc5 .qw:nth-child(2)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 23.660);
-      tl.fromTo("#qc5 .qw:nth-child(3)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 23.960);
-      tl.fromTo("#qc5 .qw:nth-child(4)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 24.180);
-      tl.fromTo("#qc5 .qw:nth-child(5)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 24.440);
-      tl.fromTo("#qc5 .qw:nth-child(6)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 24.640);
-      tl.fromTo("#qc5 .qw:nth-child(7)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 25.040);
-      tl.fromTo("#qc5 .qw:nth-child(8)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 25.400);
-      tl.fromTo("#qc5 .qw:nth-child(9)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 25.580);
-      tl.fromTo("#qc5 .qw:nth-child(10)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 25.840);
-      tl.fromTo("#lk", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 26.580);
-      tl.fromTo("#lkt", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 26.580);
+      tl.fromTo("#bt4", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.28, ease: "back.out(3)", immediateRender: false}, 22.250);
+      tl.fromTo("#bx4", {scale: 1.35}, {...{scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 22.210);
+      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.035}, duration: 0.07, ease: "power2.out", immediateRender: false}, 22.290);
+      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 22.360);
+      tl.set("#edge", {opacity: 1, boxShadow: 'inset 0 0 140px 30px #E11D48'}, 22.260);
+      tl.to("#edge", {...{opacity: 0}, duration: 0.5, ease: "power2.out"}, 22.280);
+      tl.set(".be", {opacity: 0}, 22.210);
+      tl.set("#be_squint", {opacity: 1}, 22.210);
+      tl.set(".bm", {opacity: 0}, 22.210);
+      tl.set("#bm_smile", {opacity: 1}, 22.210);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 22.210);
+      tl.to("#bitaR", {rotation: -100, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 22.210);
+      tl.fromTo("#bitaR", {rotation: -100}, {rotation: -70, svgOrigin: "155 154", duration: .12, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}, 22.430);
+      tl.fromTo("#bith", {rotation: 0}, {rotation: 8, svgOrigin: "100 150", duration: .12, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}, 22.430);
+      tl.set("#bitbt", {textContent: "NOPE"}, 22.400);
+      tl.fromTo("#bitbub", {opacity: 0, scale: .2, rotation: -30}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.3, ease: "back.out(2.6)", immediateRender: false}, 22.410);
+      tl.to("#bitbub", {...{opacity: 0, scale: .6}, duration: 0.18, ease: "power2.in"}, 23.110);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 23.010);
+      tl.to("#bitaR", {rotation: 0, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 23.010);
+      tl.to("#qt4", {...{opacity: 0, y: -10}, duration: 0.2, ease: "power2.in"}, 22.610);
+      tl.to("#sp4", {...{opacity: 0, scale: .7}, duration: 0.2, ease: "power2.in"}, 22.610);
+      tl.fromTo("#why4", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 22.710);
+      tl.set(".be", {opacity: 0}, 23.010);
+      tl.set("#be_norm", {opacity: 1}, 23.010);
+      tl.set(".bm", {opacity: 0}, 23.010);
+      tl.set("#bm_smile", {opacity: 1}, 23.010);
+      tl.set("#bitlid", {opacity: 1}, 23.410);
+      tl.set("#bitlid", {opacity: 0}, 23.510);
+      tl.set("#bx5", {borderColor: '#FFFFFF', boxShadow: '0 0 0 4px rgba(255,255,255,.4), 0 0 24px rgba(255,255,255,.5)'}, 23.560);
+      tl.fromTo("#qc5", {opacity: 0, y: 120, rotation: -2}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.38, ease: "back.out(1.6)", immediateRender: false}, 23.560);
+      tl.fromTo("#qc5 .qw:nth-child(1)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 23.660);
+      tl.fromTo("#qc5 .qw:nth-child(2)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 23.660);
+      tl.fromTo("#qc5 .qw:nth-child(3)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 23.960);
+      tl.fromTo("#qc5 .qw:nth-child(4)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 24.180);
+      tl.fromTo("#qc5 .qw:nth-child(5)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 24.440);
+      tl.fromTo("#qc5 .qw:nth-child(6)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 24.640);
+      tl.fromTo("#qc5 .qw:nth-child(7)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 25.040);
+      tl.fromTo("#qc5 .qw:nth-child(8)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 25.400);
+      tl.fromTo("#qc5 .qw:nth-child(9)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 25.580);
+      tl.fromTo("#qc5 .qw:nth-child(10)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 25.840);
+      tl.set(".be", {opacity: 0}, 23.660);
+      tl.set("#be_up", {opacity: 1}, 23.660);
+      tl.set(".bm", {opacity: 0}, 23.660);
+      tl.set("#bm_flat", {opacity: 1}, 23.660);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.25, ease: "back.out(2)"}, 23.660);
+      tl.to("#bitaR", {rotation: -120, svgOrigin: "155 154", duration: 0.25, ease: "back.out(2)"}, 23.660);
+      tl.to("#bith", {rotation: -8, svgOrigin: "100 150", duration: 0.25, ease: "back.out(2)"}, 23.660);
+      tl.set("#bitbt", {textContent: "?"}, 23.800);
+      tl.fromTo("#bitbub", {opacity: 0, scale: .2, rotation: -30}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.3, ease: "back.out(2.6)", immediateRender: false}, 23.810);
+      tl.to("#bitbub", {...{opacity: 0, scale: .6}, duration: 0.18, ease: "power2.in"}, 24.610);
+      tl.fromTo("#lk", {opacity: 0, scale: .5}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 26.580);
+      tl.fromTo("#lkt5", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power2.out", immediateRender: false}, 26.580);
       tl.fromTo("#rf", {strokeDashoffset: 0}, {...{strokeDashoffset: 1000}, duration: 1.2000000000000028, ease: "none", immediateRender: false}, 26.580);
       tl.set(".ln", {opacity: 0}, 26.580);
-      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 26.580);
+      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 26.580);
       tl.set(".ln", {opacity: 0}, 26.980);
-      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 26.980);
+      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 26.980);
       tl.set(".ln", {opacity: 0}, 27.380);
-      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 27.380);
+      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 27.380);
       tl.set(".ln", {opacity: 0}, 27.780);
       tl.fromTo("#cam", {scale: 1}, {...{scale: 1.09}, duration: 1.2000000000000028, ease: "sine.inOut", immediateRender: false}, 26.580);
       tl.fromTo("#vig", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 26.580);
-      tl.to("#lk", {...{opacity: 0, scale: .6}, duration: 0.15, ease: "power2.in"}, 27.760);
-      tl.to("#lkt", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 27.760);
+      tl.to("#lk", {...{opacity: 0, scale: .5}, duration: 0.14, ease: "power2.in"}, 27.760);
+      tl.to("#lkt5", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 27.760);
       tl.to("#vig", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 27.780);
       tl.to("#cam", {...{scale: 1}, duration: 0.35, ease: "power3.out"}, 27.780);
-      tl.fromTo("#sp5", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.in", immediateRender: false}, 27.850);
+      tl.set(".be", {opacity: 0}, 26.580);
+      tl.set("#be_wide", {opacity: 1}, 26.580);
+      tl.set(".bm", {opacity: 0}, 26.580);
+      tl.set("#bm_wavy", {opacity: 1}, 26.580);
+      tl.to("#bitaL", {rotation: 20, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 26.580);
+      tl.to("#bitaR", {rotation: -20, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 26.580);
+      tl.to("#bith", {rotation: 0, svgOrigin: "100 150", duration: 0.15, ease: "back.out(2)"}, 26.580);
+      tl.fromTo("#bitsweat", {opacity: 0, y: -10}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "back.out(2)", immediateRender: false}, 26.680);
+      tl.to("#bitsweat", {...{y: 26}, duration: 0.9000000000000028, ease: "power1.in"}, 26.880);
+      tl.set("#bitsweat", {opacity: 0}, 27.780);
+      tl.fromTo("#bitb", {x: 0}, {x: 3, duration: .05, yoyo: true, repeat: 23, ease: "none", immediateRender: false}, 26.580);
+      tl.fromTo("#sp5", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.2, ease: "power4.in", immediateRender: false}, 27.850);
       tl.set("#bt5", {textContent: "F"}, 27.950);
-      tl.fromTo("#bf5", {scaleY: 0}, {...{scaleY: 1}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 27.950);
+      tl.set("#bf5", {background: '#E11D48'}, 27.950);
+      tl.fromTo("#bf5", {scaleY: 0}, {...{scaleY: 1}, duration: 0.28, ease: "back.out(2)", immediateRender: false}, 27.950);
       tl.set("#bx5", {borderColor: '#E11D48', boxShadow: 'none'}, 27.950);
-      tl.fromTo("#bt5", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 28.000);
-      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.04}, duration: 0.08, ease: "power2.out", immediateRender: false}, 28.050);
-      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 28.130);
-      tl.fromTo("#why5", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 28.300);
-      tl.set("#tagtx", {textContent: "BOSS LEVEL"}, 28.800);
-      tl.set("#tagq", {textContent: "6 / 6"}, 28.800);
-      tl.set("#tagdot", {background: '#A855F7', boxShadow: '0 0 14px #A855F7'}, 28.800);
-      tl.fromTo("#tag", {opacity: 0, scale: .7, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(2.6)", immediateRender: false}, 28.800);
-      tl.set("#bx6", {borderColor: '#FFFFFF', boxShadow: '0 0 0 5px rgba(255,255,255,.35), 0 10px 30px rgba(0,0,0,.35)'}, 28.820);
-      tl.fromTo("#qc6", {opacity: 0, y: 140, rotation: -3}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.4, ease: "back.out(1.5)", immediateRender: false}, 28.820);
-      tl.fromTo("#qc6 .qw:nth-child(1)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 28.900);
-      tl.fromTo("#qc6 .qw:nth-child(2)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 29.000);
-      tl.fromTo("#qc6 .qw:nth-child(3)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 29.220);
-      tl.fromTo("#qc6 .qw:nth-child(4)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 29.620);
-      tl.fromTo("#qc6 .qw:nth-child(5)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 30.020);
-      tl.fromTo("#qc6 .qw:nth-child(6)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 30.340);
-      tl.fromTo("#qc6 .qw:nth-child(7)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 30.660);
-      tl.fromTo("#qc6 .qw:nth-child(8)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 30.940);
-      tl.fromTo("#qc6 .qw:nth-child(9)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 31.200);
-      tl.fromTo("#qc6", {boxShadow: '0 0 0 0 rgba(168,85,247,0)'}, {...{boxShadow: '0 0 0 10px rgba(168,85,247,.45)'}, duration: 0.3, ease: "power2.out", immediateRender: false}, 28.920);
-      tl.fromTo("#lk", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 31.800);
-      tl.fromTo("#lkt", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 31.800);
+      tl.fromTo("#bt5", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.28, ease: "back.out(3)", immediateRender: false}, 27.990);
+      tl.fromTo("#bx5", {scale: 1.35}, {...{scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 27.950);
+      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.035}, duration: 0.07, ease: "power2.out", immediateRender: false}, 28.030);
+      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 28.100);
+      tl.set("#edge", {opacity: 1, boxShadow: 'inset 0 0 140px 30px #E11D48'}, 28.000);
+      tl.to("#edge", {...{opacity: 0}, duration: 0.5, ease: "power2.out"}, 28.020);
+      tl.set(".be", {opacity: 0}, 27.950);
+      tl.set("#be_squint", {opacity: 1}, 27.950);
+      tl.set(".bm", {opacity: 0}, 27.950);
+      tl.set("#bm_smile", {opacity: 1}, 27.950);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 27.950);
+      tl.to("#bitaR", {rotation: -100, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 27.950);
+      tl.fromTo("#bitaR", {rotation: -100}, {rotation: -70, svgOrigin: "155 154", duration: .12, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}, 28.170);
+      tl.fromTo("#bith", {rotation: 0}, {rotation: 8, svgOrigin: "100 150", duration: .12, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}, 28.170);
+      tl.set("#bitbt", {textContent: "NOPE"}, 28.140);
+      tl.fromTo("#bitbub", {opacity: 0, scale: .2, rotation: -30}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.3, ease: "back.out(2.6)", immediateRender: false}, 28.150);
+      tl.to("#bitbub", {...{opacity: 0, scale: .6}, duration: 0.18, ease: "power2.in"}, 28.850);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 28.750);
+      tl.to("#bitaR", {rotation: 0, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 28.750);
+      tl.to("#qt5", {...{opacity: 0, y: -10}, duration: 0.2, ease: "power2.in"}, 28.350);
+      tl.to("#sp5", {...{opacity: 0, scale: .7}, duration: 0.2, ease: "power2.in"}, 28.350);
+      tl.fromTo("#why5", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 28.450);
+      tl.set(".be", {opacity: 0}, 28.750);
+      tl.set("#be_norm", {opacity: 1}, 28.750);
+      tl.set(".bm", {opacity: 0}, 28.750);
+      tl.set("#bm_smile", {opacity: 1}, 28.750);
+      tl.set("#bitlid", {opacity: 1}, 29.150);
+      tl.set("#bitlid", {opacity: 0}, 29.250);
+      tl.set("#bx6", {borderColor: '#FFFFFF', boxShadow: '0 0 0 4px rgba(255,255,255,.4), 0 0 24px rgba(255,255,255,.5)'}, 28.820);
+      tl.fromTo("#qc6", {opacity: 0, y: 120, rotation: -2}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.38, ease: "back.out(1.6)", immediateRender: false}, 28.820);
+      tl.fromTo("#qc6 .qw:nth-child(1)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 28.900);
+      tl.fromTo("#qc6 .qw:nth-child(2)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 29.000);
+      tl.fromTo("#qc6 .qw:nth-child(3)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 29.220);
+      tl.fromTo("#qc6 .qw:nth-child(4)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 29.620);
+      tl.fromTo("#qc6 .qw:nth-child(5)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 30.020);
+      tl.fromTo("#qc6 .qw:nth-child(6)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 30.340);
+      tl.fromTo("#qc6 .qw:nth-child(7)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 30.660);
+      tl.fromTo("#qc6 .qw:nth-child(8)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 30.940);
+      tl.fromTo("#qc6 .qw:nth-child(9)", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power3.out", immediateRender: false}, 31.200);
+      tl.set(".be", {opacity: 0}, 28.920);
+      tl.set("#be_up", {opacity: 1}, 28.920);
+      tl.set(".bm", {opacity: 0}, 28.920);
+      tl.set("#bm_flat", {opacity: 1}, 28.920);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.25, ease: "back.out(2)"}, 28.920);
+      tl.to("#bitaR", {rotation: -120, svgOrigin: "155 154", duration: 0.25, ease: "back.out(2)"}, 28.920);
+      tl.to("#bith", {rotation: -8, svgOrigin: "100 150", duration: 0.25, ease: "back.out(2)"}, 28.920);
+      tl.set("#bitbt", {textContent: "?"}, 29.060);
+      tl.fromTo("#bitbub", {opacity: 0, scale: .2, rotation: -30}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.3, ease: "back.out(2.6)", immediateRender: false}, 29.070);
+      tl.to("#bitbub", {...{opacity: 0, scale: .6}, duration: 0.18, ease: "power2.in"}, 29.870);
+      tl.fromTo("#qc6", {boxShadow: '0 0 0 0 rgba(168,85,247,0)'}, {...{boxShadow: '0 0 0 8px rgba(168,85,247,.55)'}, duration: 0.3, ease: "power2.out", immediateRender: false}, 28.920);
+      tl.set("#bitcrown", {opacity: 1}, 29.120);
+      tl.fromTo("#bitcrown", {y: -120}, {...{y: 0}, duration: 0.35, ease: "bounce.out", immediateRender: false}, 29.120);
+      tl.set(".be", {opacity: 0}, 29.120);
+      tl.set("#be_squint", {opacity: 1}, 29.120);
+      tl.set(".bm", {opacity: 0}, 29.120);
+      tl.set("#bm_grin", {opacity: 1}, 29.120);
+      tl.fromTo("#lk", {opacity: 0, scale: .5}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 31.800);
+      tl.fromTo("#lkt6", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power2.out", immediateRender: false}, 31.800);
       tl.fromTo("#rf", {strokeDashoffset: 0}, {...{strokeDashoffset: 1000}, duration: 1.1999999999999993, ease: "none", immediateRender: false}, 31.800);
       tl.set(".ln", {opacity: 0}, 31.800);
-      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 31.800);
+      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 31.800);
       tl.set(".ln", {opacity: 0}, 32.200);
-      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 32.200);
+      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 32.200);
       tl.set(".ln", {opacity: 0}, 32.600);
-      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 32.600);
+      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.16, ease: "back.out(3)", immediateRender: false}, 32.600);
       tl.set(".ln", {opacity: 0}, 33.000);
       tl.fromTo("#cam", {scale: 1}, {...{scale: 1.09}, duration: 1.1999999999999993, ease: "sine.inOut", immediateRender: false}, 31.800);
       tl.fromTo("#vig", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 31.800);
-      tl.to("#lk", {...{opacity: 0, scale: .6}, duration: 0.15, ease: "power2.in"}, 32.980);
-      tl.to("#lkt", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 32.980);
+      tl.to("#lk", {...{opacity: 0, scale: .5}, duration: 0.14, ease: "power2.in"}, 32.980);
+      tl.to("#lkt6", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 32.980);
       tl.to("#vig", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 33.000);
       tl.to("#cam", {...{scale: 1}, duration: 0.35, ease: "power3.out"}, 33.000);
-      tl.set("#bf2", {background: '#16A34A'}, 0.000);
-      tl.fromTo("#bx2", {x: 0}, {keyframes: [{x: -10, duration: .04}, {x: 9, duration: .04}, {x: -6, duration: .04}, {x: 4, duration: .04}, {x: 0, duration: .04}], immediateRender: false}, 12.730);
-      tl.fromTo("#qc2", {x: 0, filter: "none"}, {keyframes: [{x: -14, filter: "drop-shadow(6px 0 0 rgba(225,29,72,.8)) drop-shadow(-6px 0 0 rgba(0,180,255,.8))", duration: .05}, {x: 10, duration: .05}, {x: 0, filter: "none", duration: .06}], immediateRender: false}, 12.730);
+      tl.set(".be", {opacity: 0}, 31.800);
+      tl.set("#be_wide", {opacity: 1}, 31.800);
+      tl.set(".bm", {opacity: 0}, 31.800);
+      tl.set("#bm_wavy", {opacity: 1}, 31.800);
+      tl.to("#bitaL", {rotation: 20, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 31.800);
+      tl.to("#bitaR", {rotation: -20, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 31.800);
+      tl.to("#bith", {rotation: 0, svgOrigin: "100 150", duration: 0.15, ease: "back.out(2)"}, 31.800);
+      tl.fromTo("#bitsweat", {opacity: 0, y: -10}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "back.out(2)", immediateRender: false}, 31.900);
+      tl.to("#bitsweat", {...{y: 26}, duration: 0.8999999999999992, ease: "power1.in"}, 32.100);
+      tl.set("#bitsweat", {opacity: 0}, 33.000);
+      tl.fromTo("#bitb", {x: 0}, {x: 3, duration: .05, yoyo: true, repeat: 22, ease: "none", immediateRender: false}, 31.800);
+      tl.fromTo("#bx2", {x: 0}, {keyframes: [{x: -9, duration: .04}, {x: 8, duration: .04}, {x: -5, duration: .04}, {x: 0, duration: .04}], immediateRender: false}, 12.730);
+      tl.fromTo("#qc2", {x: 0, filter: "none"}, {keyframes: [{x: -12, filter: "drop-shadow(6px 0 0 rgba(225,29,72,.8)) drop-shadow(-6px 0 0 rgba(0,180,255,.8))", duration: .05}, {x: 9, duration: .05}, {x: 0, filter: "none", duration: .06}], immediateRender: false}, 12.730);
       tl.to("#sp2", {...{opacity: 0, scale: .6}, duration: 0.15, ease: "power2.in"}, 12.780);
-      tl.fromTo("#sp2f", {opacity: 0, scale: 2.4, rotation: 20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.in", immediateRender: false}, 13.150);
-      tl.to("#bx2", {rotationY: 180, duration: .28, ease: "power2.inOut"}, 13.150);
-      tl.set("#bt2", {textContent: "F", rotationY: 180}, 13.290);
-      tl.set("#bf2", {background: '#E11D48'}, 13.290);
-      tl.set("#bx2", {borderColor: '#E11D48'}, 13.290);
-      tl.fromTo("#why2", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 13.600);
-      tl.fromTo("#plot", {opacity: 0, scale: .5, rotation: -10}, {...{opacity: 1, scale: 1, rotation: 6}, duration: 0.25, ease: "back.out(3)", immediateRender: false}, 12.730);
-      tl.to("#plot", {...{opacity: 0}, duration: 0.2, ease: "power2.out"}, 13.650);
-      tl.to("#qc1", {...{opacity: 0, y: -60, scale: .94}, duration: 0.2, ease: "power2.in"}, 6.090);
-      tl.to("#tag", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 6.090);
-      tl.to("#qc2", {...{opacity: 0, y: -60, scale: .94}, duration: 0.2, ease: "power2.in"}, 14.360);
-      tl.to("#tag", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 14.360);
-      tl.to("#sp2f", {...{opacity: 0}, duration: 0.2, ease: "power2.out"}, 14.360);
-      tl.to("#qc3", {...{opacity: 0, y: -60, scale: .94}, duration: 0.2, ease: "power2.in"}, 19.180);
-      tl.to("#tag", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 19.180);
-      tl.to("#qc4", {...{opacity: 0, y: -60, scale: .94}, duration: 0.2, ease: "power2.in"}, 23.440);
-      tl.to("#tag", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 23.440);
-      tl.to("#qc5", {...{opacity: 0, y: -60, scale: .94}, duration: 0.2, ease: "power2.in"}, 28.700);
-      tl.to("#tag", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 28.700);
+      tl.fromTo("#plot", {opacity: 0, scale: .5, rotation: -10}, {...{opacity: 1, scale: 1, rotation: 6}, duration: 0.22, ease: "back.out(3)", immediateRender: false}, 12.730);
+      tl.set(".be", {opacity: 0}, 12.730);
+      tl.set("#be_wide", {opacity: 1}, 12.730);
+      tl.set(".bm", {opacity: 0}, 12.730);
+      tl.set("#bm_o", {opacity: 1}, 12.730);
+      tl.to("#bitaL", {rotation: -40, svgOrigin: "45 154", duration: 0.15, ease: "back.out(2)"}, 12.730);
+      tl.to("#bitaR", {rotation: 40, svgOrigin: "155 154", duration: 0.15, ease: "back.out(2)"}, 12.730);
+      tl.fromTo("#bitb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 6, duration: .06}, {scaleY: 1.08, scaleX: .94, y: -30, duration: .13, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .12, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, duration: .03}, {scaleY: 1, scaleX: 1, duration: .05}], immediateRender: false}, 12.730);
+      tl.set("#bitbt", {textContent: "!?"}, 12.770);
+      tl.fromTo("#bitbub", {opacity: 0, scale: .2, rotation: -30}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.3, ease: "back.out(2.6)", immediateRender: false}, 12.780);
+      tl.to("#bitbub", {...{opacity: 0, scale: .6}, duration: 0.18, ease: "power2.in"}, 13.380);
+      tl.fromTo("#sp2f", {opacity: 0, scale: 2.4, rotation: 20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.2, ease: "power4.in", immediateRender: false}, 13.150);
+      tl.to("#bx2", {rotationY: 180, duration: .26, ease: "power2.inOut"}, 13.150);
+      tl.set("#bt2", {textContent: "F", rotationY: 180}, 13.280);
+      tl.set("#bf2", {background: '#E11D48'}, 13.280);
+      tl.set("#bx2", {borderColor: '#E11D48'}, 13.280);
+      tl.set("#edge", {opacity: 1, boxShadow: 'inset 0 0 140px 30px #E11D48'}, 13.250);
+      tl.to("#edge", {...{opacity: 0}, duration: 0.5, ease: "power2.out"}, 13.270);
+      tl.to("#plot", {...{opacity: 0}, duration: 0.2, ease: "power2.out"}, 13.550);
+      tl.set(".be", {opacity: 0}, 13.250);
+      tl.set("#be_shut", {opacity: 1}, 13.250);
+      tl.set(".bm", {opacity: 0}, 13.250);
+      tl.set("#bm_flat", {opacity: 1}, 13.250);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 13.250);
+      tl.to("#bitaR", {rotation: -165, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 13.250);
+      tl.to("#qt2", {...{opacity: 0, y: -10}, duration: 0.2, ease: "power2.in"}, 13.700);
+      tl.to("#sp2f", {...{opacity: 0, scale: .7}, duration: 0.2, ease: "power2.in"}, 13.700);
+      tl.fromTo("#why2", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 13.800);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.2, ease: "back.out(2)"}, 14.150);
+      tl.to("#bitaR", {rotation: 0, svgOrigin: "155 154", duration: 0.2, ease: "back.out(2)"}, 14.150);
+      tl.set(".be", {opacity: 0}, 14.150);
+      tl.set("#be_norm", {opacity: 1}, 14.150);
+      tl.set(".bm", {opacity: 0}, 14.150);
+      tl.set("#bm_smile", {opacity: 1}, 14.150);
+      tl.to("#qc1", {...{opacity: 0, y: 60, scale: .95}, duration: 0.18, ease: "power2.in"}, 6.090);
+      tl.to("#qc2", {...{opacity: 0, y: 60, scale: .95}, duration: 0.18, ease: "power2.in"}, 14.360);
+      tl.to("#sp2f", {...{opacity: 0}, duration: 0.18, ease: "power2.out"}, 14.360);
+      tl.to("#qc3", {...{opacity: 0, y: 60, scale: .95}, duration: 0.18, ease: "power2.in"}, 19.180);
+      tl.to("#qc4", {...{opacity: 0, y: 60, scale: .95}, duration: 0.18, ease: "power2.in"}, 23.440);
+      tl.to("#qc5", {...{opacity: 0, y: 60, scale: .95}, duration: 0.18, ease: "power2.in"}, 28.700);
       tl.set("#bt6", {textContent: "?"}, 32.900);
       tl.fromTo("#bt6", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 32.900);
-      tl.fromTo("#bx6", {scale: 1}, {scale: 1.12, duration: .3, yoyo: true, repeat: 12, ease: "sine.inOut", immediateRender: false}, 33.000);
-      tl.to("#qc6", {...{opacity: 0, y: -60}, duration: 0.25, ease: "power2.in"}, 32.950);
-      tl.to("#tag", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 32.950);
-      tl.fromTo("#cta", {opacity: 0, y: 160}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "back.out(1.5)", immediateRender: false}, 33.000);
-      tl.fromTo("#cta .c2", {scale: 1.5}, {...{scale: 1}, duration: 0.4, ease: "back.out(2)", immediateRender: false}, 33.150);
+      tl.fromTo("#bx6", {scale: 1}, {scale: 1.14, duration: .3, yoyo: true, repeat: 12, ease: "sine.inOut", immediateRender: false}, 33.000);
+      tl.to("#qc6", {...{opacity: 0, y: 60}, duration: 0.2, ease: "power2.in"}, 32.950);
+      tl.fromTo("#cta", {opacity: 0, y: 120}, {...{opacity: 1, y: 0}, duration: 0.4, ease: "back.out(1.6)", immediateRender: false}, 33.000);
       tl.set("#cph", {opacity: 0}, 33.860);
       tl.fromTo("#cty i", {opacity: 0}, {opacity: 1, duration: .01, stagger: .05, immediateRender: false}, 33.860);
-      tl.fromTo("#cta .c3", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.4, ease: "power3.out", immediateRender: false}, 34.460);
+      tl.set(".be", {opacity: 0}, 33.000);
+      tl.set("#be_happy", {opacity: 1}, 33.000);
+      tl.set(".bm", {opacity: 0}, 33.000);
+      tl.set("#bm_grin", {opacity: 1}, 33.000);
+      tl.to("#bitaL", {rotation: 0, svgOrigin: "45 154", duration: 0.25, ease: "back.out(2)"}, 33.100);
+      tl.to("#bitaR", {rotation: -95, svgOrigin: "155 154", duration: 0.25, ease: "back.out(2)"}, 33.100);
+      tl.fromTo("#bitaR", {rotation: -95}, {rotation: -80, svgOrigin: "155 154", duration: .25, yoyo: true, repeat: 7, ease: "sine.inOut", immediateRender: false}, 33.400);
+      tl.fromTo("#bitb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 6, duration: .06}, {scaleY: 1.08, scaleX: .94, y: -40, duration: .13, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .12, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, duration: .03}, {scaleY: 1, scaleX: 1, duration: .05}], immediateRender: false}, 34.660);
+      tl.fromTo("#bitb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 6, duration: .06}, {scaleY: 1.08, scaleX: .94, y: -40, duration: .13, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .12, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, duration: .03}, {scaleY: 1, scaleX: 1, duration: .05}], immediateRender: false}, 35.000);
+      tl.set("#bitlid", {opacity: 1}, 2.600);
+      tl.set("#bitlid", {opacity: 0}, 2.700);
+      tl.set("#bitlid", {opacity: 1}, 7.800);
+      tl.set("#bitlid", {opacity: 0}, 7.900);
+      tl.set("#bitlid", {opacity: 1}, 15.600);
+      tl.set("#bitlid", {opacity: 0}, 15.700);
+      tl.set("#bitlid", {opacity: 1}, 20.900);
+      tl.set("#bitlid", {opacity: 0}, 21.000);
+      tl.set("#bitlid", {opacity: 1}, 26.900);
+      tl.set("#bitlid", {opacity: 0}, 27.000);
+      tl.set("#bitlid", {opacity: 1}, 33.500);
+      tl.set("#bitlid", {opacity: 0}, 33.600);
       tl.set({}, {}, 36.61);
       window.__timelines["main"] = tl;
     </script>

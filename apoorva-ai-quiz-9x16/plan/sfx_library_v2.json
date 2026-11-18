@@ -1,0 +1,34 @@
+{
+ "correct": {
+  "title": "Powerup/success.wav",
+  "creator": "GabrielAraujo",
+  "license": "cc0",
+  "license_version": null,
+  "audio_url": "https://cdn.freesound.org/previews/242/242501_4414128-hq.mp3",
+  "attribution": "\"Powerup/success.wav\" by GabrielAraujo is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/."
+ },
+ "bell": {
+  "title": "Winner Bell Game Show.aif",
+  "creator": "oldedgar",
+  "license": "cc0",
+  "license_version": null,
+  "audio_url": "https://cdn.freesound.org/previews/97/97980_1490788-hq.mp3",
+  "attribution": "\"Winner Bell Game Show.aif\" by oldedgar is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/."
+ },
+ "fail": {
+  "title": "Failure/wrong action.wav",
+  "creator": "GabrielAraujo",
+  "license": "cc0",
+  "license_version": null,
+  "audio_url": "https://cdn.freesound.org/previews/242/242503_4414128-hq.mp3",
+  "attribution": "\"Failure/wrong action.wav\" by GabrielAraujo is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/."
+ },
+ "wrong": {
+  "title": "Wrong Answer Buzzer",
+  "creator": "-Andreas",
+  "license": "cc0",
+  "license_version": null,
+  "audio_url": "https://cdn.freesound.org/previews/650/650842_11771918-hq.mp3",
+  "attribution": "\"Wrong Answer Buzzer\" by -Andreas is marked with CC0 1.0. To view the terms, visit https://creativecommons.org/publicdomain/zero/1.0/."
+ }
+}
