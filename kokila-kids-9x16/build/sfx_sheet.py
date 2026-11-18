@@ -4,7 +4,7 @@ House rule is Openverse first. Openverse was searched (whoosh, cinematic boom, i
 sub hit; CC0 picks in plan/sfx_library.json), but every result is a Freesound file and on 2026-11-18 Freesound's
 preview CDN answered this cloud machine with 403 (we never pose as a browser). So, as the rule says, the CC0
 OpenGameArt packs (../spin-bout-u-drake/assets/sfx/oga, spin-bout-u-drake/build/oga_sfx.py) are the fallback: all CC0,
-no credit. The owner's own "Granular Combo" (TRANSITION AND CLICK SAAS by LEWIS) plays on the two opening transitions.
+no credit.
 
 The Kanav "Surrender" ad's sound grammar, quieter for a calm doctor's reel (no music under it):
 - Into a split: a big whoosh with a soft sub. Into a full frame: a quick whoosh. Colour flash: a shimmer.
@@ -46,7 +46,6 @@ KINDS = {   # kind: (files to rotate, role, gain_db, extra)
     "shimmer": ([f("fantasy-magic-spell/fantasy_magic_button_1.mp3")], "chime", -15, {"max_dur": .7, "fade_out": .3}),
     "hit": ([f("sci-fi-sounds/Audio__lowFrequency_explosion_001.ogg"), f("sci-fi-sounds/Audio__lowFrequency_explosion_000.ogg")],
             "hit", -17, {"lowpass": 220, "max_dur": .45, "fade_out": .2}),
-    "granular": ([os.path.join(ROOT, "assets", "sfx", "granular_combo.wav")], "whoosh", -4, {"max_dur": 2.3, "anchor": "start", "fade_out": .4}),
     "pop": ([f("100-cc0-sfx/plop_02.ogg"), f("interface-sounds/Audio__click_002.ogg"), f("ui-sounds/button1.ogg"),
              f("100-cc0-sfx/plop_01.ogg"), f("interface-sounds/Audio__tick_001.ogg"), f("ui-sounds/button2.ogg")], "pop", -15, {"max_dur": .3}),
     "notify": ([f("interface-sounds/Audio__confirmation_001.ogg")], "ui", -12, {}),

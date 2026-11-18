@@ -155,3 +155,5 @@ Media (footage, music, renders) is not in git; ask for the raw camera files agai
   download from cloud sessions; never fake a browser. Only when downloads are refused, use the CC0 OpenGameArt packs
   (`spin-bout-u-drake/build/oga_sfx.py`) and say so.
 - No emojis in post descriptions, captions or hashtag blocks we write for clients. Plain text, lists numbered "1.".
+- Don't use the owner's "TRANSITION AND CLICK SAAS by LEWIS" pack (pixel / polka-dot ring transitions and its
+  "Granular Combo" sound) in any video until the owner says to use it again (owner, 2026-11-18).
