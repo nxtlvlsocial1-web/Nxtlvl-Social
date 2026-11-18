@@ -1,4 +1,7 @@
-# Apoorva: AI true or false (Instagram Reels, 9:16, 36 s)
+# Apoorva: AI true or false (Instagram Reels, 9:16, 36.6 s)
+
+Final: renders/apoorva_ai-true-or-false_reels_9x16_final.mp4 (2026-11-18). v2: no music (owner), overlays off her face,
+the mascot (lavender gumdrop after the owner's reference), confetti and edge flashes, CC0 OpenGameArt game sounds.
 
 New client (2026-11-18). Footage: two phone takes from the owner's Drive (IMG_0764 = take 1, IMG_0765 = take 2, 4K HEVC,
 kept out of git in footage/). Structure agreed with the owner ("rest go with the best take you have in mind"):
@@ -37,8 +40,6 @@ Comment TRUE or FALSE on the boss level question. Answer pinned soon.
 6. Boss level: a model that's 99% accurate can still be useless.
 
 Score yourself and drop your score below. Send this to the friend who thinks they know AI.
-
-Music: "Positive Backgroundl" by Soundrider/Dope, CC BY 3.0
 
 #aiquiz #artificialintelligence #chatgpt #aitools #techfacts
 ai true or false quiz, ai facts and myths, how ai models work, does nvidia make chips, can ai tell todays news, prompt engineering tips, is ai always accurate, ai model accuracy explained, ai quiz for beginners, tech quiz reels
