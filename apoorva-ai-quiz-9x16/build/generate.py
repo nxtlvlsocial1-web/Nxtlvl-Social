@@ -62,40 +62,46 @@ QS = [
 
 # ==== the mascot "Bit" (original, drawn here) =================================================================================
 EYES = {
-    "norm": '<ellipse cx="80" cy="102" rx="9" ry="12" fill="#6EF0FF"/><ellipse cx="120" cy="102" rx="9" ry="12" fill="#6EF0FF"/>',
-    "up": '<ellipse cx="82" cy="94" rx="8" ry="11" fill="#6EF0FF"/><ellipse cx="122" cy="94" rx="8" ry="11" fill="#6EF0FF"/>',
-    "happy": '<path d="M70 106 Q80 90 90 106 M110 106 Q120 90 130 106" fill="none" stroke="#6EF0FF" stroke-width="7" stroke-linecap="round"/>',
-    "wide": '<circle cx="80" cy="101" r="14" fill="#6EF0FF"/><circle cx="120" cy="101" r="14" fill="#6EF0FF"/><circle cx="80" cy="101" r="5" fill="#1E2433"/><circle cx="120" cy="101" r="5" fill="#1E2433"/>',
-    "squint": '<path d="M70 102 L90 98 M110 98 L130 102" fill="none" stroke="#6EF0FF" stroke-width="7" stroke-linecap="round"/>',
-    "shut": '<path d="M70 102 Q80 108 90 102 M110 102 Q120 108 130 102" fill="none" stroke="#6EF0FF" stroke-width="6" stroke-linecap="round"/>',
+    # v3 (owner: "make the mascot a little more cute, something like this"): a soft lavender gumdrop with a cream face
+    # window and big glossy black eyes, after the owner's reference image
+    "norm": '<ellipse cx="82" cy="110" rx="10" ry="13" fill="D"/><ellipse cx="118" cy="110" rx="10" ry="13" fill="D"/><circle cx="85" cy="105" r="3.5" fill="#fff"/><circle cx="121" cy="105" r="3.5" fill="#fff"/>',
+    "up": '<ellipse cx="84" cy="102" rx="10" ry="13" fill="D"/><ellipse cx="120" cy="102" rx="10" ry="13" fill="D"/><circle cx="87" cy="97" r="3.5" fill="#fff"/><circle cx="123" cy="97" r="3.5" fill="#fff"/>',
+    "happy": '<path d="M72 114 Q82 100 92 114 M108 114 Q118 100 128 114" fill="none" stroke="D" stroke-width="6" stroke-linecap="round"/>',
+    "wide": '<ellipse cx="82" cy="109" rx="13" ry="16" fill="D"/><ellipse cx="118" cy="109" rx="13" ry="16" fill="D"/><circle cx="86" cy="103" r="5" fill="#fff"/><circle cx="122" cy="103" r="5" fill="#fff"/>',
+    "squint": '<path d="M72 110 L92 106 M108 106 L128 110" fill="none" stroke="D" stroke-width="6" stroke-linecap="round"/>',
+    "shut": '<path d="M72 110 Q82 118 92 110 M108 110 Q118 118 128 110" fill="none" stroke="D" stroke-width="6" stroke-linecap="round"/>',
 }
 MOUTHS = {
-    "smile": '<path d="M88 120 Q100 128 112 120" fill="none" stroke="#6EF0FF" stroke-width="5" stroke-linecap="round"/>',
-    "grin": '<path d="M84 117 Q100 134 116 117 Z" fill="#6EF0FF"/>',
-    "o": '<ellipse cx="100" cy="122" rx="7" ry="8" fill="#6EF0FF"/>',
-    "flat": '<path d="M90 122 L110 122" stroke="#6EF0FF" stroke-width="5" stroke-linecap="round"/>',
-    "wavy": '<path d="M86 122 Q92 116 98 122 T110 122 T116 120" fill="none" stroke="#6EF0FF" stroke-width="4" stroke-linecap="round"/>',
+    "smile": '<path d="M94 128 Q100 132 106 128" fill="none" stroke="D" stroke-width="3.5" stroke-linecap="round"/>',
+    "grin": '<path d="M91 126 Q100 138 109 126 Z" fill="D"/>',
+    "o": '<ellipse cx="100" cy="130" rx="5" ry="6" fill="D"/>',
+    "flat": '<path d="M95 130 L105 130" stroke="D" stroke-width="3.5" stroke-linecap="round"/>',
+    "wavy": '<path d="M91 130 Q95 126 99 130 T107 130" fill="none" stroke="D" stroke-width="3" stroke-linecap="round"/>',
 }
-BIT = ('<div id="bit"><div id="bitb"><svg viewBox="0 0 200 240" overflow="visible">'
-       '<ellipse cx="100" cy="232" rx="54" ry="8" fill="rgba(0,0,0,.25)"/>'
-       '<rect x="74" y="200" width="18" height="30" rx="9" fill="#C9D3E3" stroke="#1E2433" stroke-width="4"/>'
-       '<rect x="108" y="200" width="18" height="30" rx="9" fill="#C9D3E3" stroke="#1E2433" stroke-width="4"/>'
-       '<g id="bitaL"><rect x="34" y="150" width="22" height="56" rx="11" fill="#C9D3E3" stroke="#1E2433" stroke-width="4"/></g>'
-       '<g id="bitaR"><rect x="144" y="150" width="22" height="56" rx="11" fill="#C9D3E3" stroke="#1E2433" stroke-width="4"/></g>'
-       '<rect x="58" y="140" width="84" height="70" rx="24" fill="#EEF2F8" stroke="#1E2433" stroke-width="4"/>'
-       '<circle cx="100" cy="174" r="10" fill="#A855F7"/>'
-       '<g id="bith"><line x1="100" y1="52" x2="100" y2="22" stroke="#1E2433" stroke-width="5"/>'
-       '<circle id="bitbulb" cx="100" cy="17" r="10" fill="#FACC15" stroke="#1E2433" stroke-width="4"/>'
-       '<rect x="28" y="50" width="144" height="100" rx="40" fill="#FFFFFF" stroke="#1E2433" stroke-width="4"/>'
-       '<rect x="46" y="68" width="108" height="66" rx="26" fill="#1E2433"/>'
-       '<circle cx="40" cy="112" r="7" fill="#FF8FB1"/><circle cx="160" cy="112" r="7" fill="#FF8FB1"/>'
+EYES = {k: v.replace('"D"', '"#231A2B"') for k, v in EYES.items()}
+MOUTHS = {k: v.replace('"D"', '"#231A2B"') for k, v in MOUTHS.items()}
+BODY = ("M40 218 L40 112 C40 62 68 36 100 36 C132 36 160 62 160 112 L160 218 Q160 228 150 228 L122 228 Q112 228 112 218 "
+        "L112 208 Q100 198 88 208 L88 218 Q88 228 78 228 L50 228 Q40 228 40 218 Z")
+BIT = ('<div id="bit"><div id="bitb"><svg viewBox="0 0 200 240" overflow="visible"><defs>'
+       '<radialGradient id="bg1" cx="38%" cy="28%" r="80%"><stop offset="0" stop-color="#E6D6FF"/><stop offset=".55" stop-color="#BFA0F2"/><stop offset="1" stop-color="#9E7FE0"/></radialGradient>'
+       '<radialGradient id="bg2" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#E2D1FF"/><stop offset="1" stop-color="#A787E6"/></radialGradient>'
+       '<radialGradient id="fc" cx="45%" cy="35%" r="70%"><stop offset="0" stop-color="#FFFDF8"/><stop offset="1" stop-color="#F3E9DA"/></radialGradient></defs>'
+       '<ellipse cx="100" cy="234" rx="58" ry="8" fill="rgba(60,30,90,.22)"/>'
+       '<g id="bith"><line x1="100" y1="40" x2="100" y2="14" stroke="#B597EE" stroke-width="9" stroke-linecap="round"/>'
+       '<circle id="bitbulb" cx="100" cy="11" r="12" fill="#C6A8F7"/><circle cx="96" cy="7" r="4" fill="#F1E8FF"/>'
+       f'<path d="{BODY}" fill="url(#bg1)"/>'
+       '<path d="M100 72 C130 72 152 88 152 112 C152 138 128 148 100 148 C72 148 48 138 48 112 C48 88 70 72 100 72 Z" fill="url(#fc)"/>'
+       '<ellipse cx="66" cy="128" rx="7" ry="4" fill="#FFB8CC" opacity=".7"/><ellipse cx="134" cy="128" rx="7" ry="4" fill="#FFB8CC" opacity=".7"/>'
        + "".join(f'<g class="be" id="be_{k}" opacity="{1 if k == "norm" else 0}">{v}</g>' for k, v in EYES.items())
        + "".join(f'<g class="bm" id="bm_{k}" opacity="{1 if k == "smile" else 0}">{v}</g>' for k, v in MOUTHS.items())
-       + '<g id="bitlid" opacity="0"><rect x="66" y="88" width="68" height="28" fill="#1E2433"/>' + EYES["shut"] + '</g>'
-       '<g id="bitcrown" opacity="0"><path d="M58 52 L66 18 L84 40 L100 10 L116 40 L134 18 L142 52 Z" fill="#FACC15" stroke="#1E2433" stroke-width="4" stroke-linejoin="round"/>'
-       '<circle cx="100" cy="36" r="5" fill="#E11D48"/></g>'
-       '<path id="bitsweat" opacity="0" d="M170 70 C164 82 160 90 160 96 A10 10 0 0 0 180 96 C180 90 176 82 170 70 Z" fill="#7FD3FF" stroke="#2B8FD6" stroke-width="3"/>'
-       '</g></svg></div><div id="bitbub"><span id="bitbt">?</span></div></div>')
+       + '<g id="bitlid" opacity="0"><rect x="68" y="94" width="64" height="32" fill="#FAF4EA"/>' + EYES["shut"] + '</g>'
+       '<g id="bitcrown" opacity="0"><path d="M62 46 L68 14 L84 34 L100 4 L116 34 L132 14 L138 46 Z" fill="#FACC15" stroke="#9E7FE0" stroke-width="3" stroke-linejoin="round"/>'
+       '<circle cx="100" cy="30" r="5" fill="#E11D48"/></g>'
+       '<path id="bitsweat" opacity="0" d="M160 70 C154 82 150 90 150 96 A10 10 0 0 0 170 96 C170 90 166 82 160 70 Z" fill="#9FDCFF" stroke="#5AAFE6" stroke-width="2.5"/>'
+       '</g>'
+       '<g id="bitaL"><ellipse cx="48" cy="160" rx="17" ry="24" fill="url(#bg2)"/></g>'
+       '<g id="bitaR"><ellipse cx="152" cy="160" rx="17" ry="24" fill="url(#bg2)"/></g>'
+       '</svg></div><div id="bitbub"><span id="bitbt">?</span></div></div>')
 
 
 def face(t, eyes, mouth):
@@ -106,8 +112,8 @@ def face(t, eyes, mouth):
 
 
 def arms(t, l, r, d=.25, ease="back.out(2)"):
-    js(f'tl.to("#bitaL", {{rotation: {l}, svgOrigin: "45 154", duration: {d}, ease: "{ease}"}}, {t:.3f});')
-    js(f'tl.to("#bitaR", {{rotation: {r}, svgOrigin: "155 154", duration: {d}, ease: "{ease}"}}, {t:.3f});')
+    js(f'tl.to("#bitaL", {{rotation: {l}, svgOrigin: "54 142", duration: {d}, ease: "{ease}"}}, {t:.3f});')
+    js(f'tl.to("#bitaR", {{rotation: {r}, svgOrigin: "146 142", duration: {d}, ease: "{ease}"}}, {t:.3f});')
 
 
 def hop(t, h=46, n=1):
@@ -181,10 +187,10 @@ ft("#bit", .35, .4, "{opacity: 0, y: 120, scale: .4}", "{opacity: 1, y: 0, scale
 sfx("g_pickup", .4)
 face(.35, "happy", "grin")
 arms(.6, 0, -150, .25)
-js('tl.fromTo("#bitaR", {rotation: -150}, {rotation: -120, svgOrigin: "155 154", duration: .14, yoyo: true, repeat: 5, ease: "sine.inOut", immediateRender: false}, .85);')
+js('tl.fromTo("#bitaR", {rotation: -150}, {rotation: -120, svgOrigin: "146 142", duration: .14, yoyo: true, repeat: 5, ease: "sine.inOut", immediateRender: false}, .85);')
 arms(1.75, 0, 0, .2)
 js(f'tl.fromTo("#bitb", {{y: 0}}, {{y: -5, duration: .7, yoyo: true, repeat: {int(DUR / .7)}, ease: "sine.inOut", immediateRender: false}}, 0);')
-js(f'tl.fromTo("#bitbulb", {{fill: "#FACC15"}}, {{fill: "#FFF5B0", duration: .5, yoyo: true, repeat: {int(DUR / .5)}, ease: "sine.inOut", immediateRender: false}}, 0);')
+js(f'tl.fromTo("#bitbulb", {{fill: "#C6A8F7"}}, {{fill: "#E9DCFF", duration: .5, yoyo: true, repeat: {int(DUR / .5)}, ease: "sine.inOut", immediateRender: false}}, 0);')
 
 # ---- questions ------------------------------------------------------------------------------------------------------------------
 for i, (n, tag, col, q, ql, ll, al, aw, tf, why) in enumerate(QS):
@@ -261,7 +267,7 @@ for i, (n, tag, col, q, ql, ll, al, aw, tf, why) in enumerate(QS):
     else:
         face(t_a + .1, "squint", "smile")
         arms(t_a + .1, 0, -100, .2)
-        js(f'tl.fromTo("#bitaR", {{rotation: -100}}, {{rotation: -70, svgOrigin: "155 154", duration: .12, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}}, {t_a + .32:.3f});')
+        js(f'tl.fromTo("#bitaR", {{rotation: -100}}, {{rotation: -70, svgOrigin: "146 142", duration: .12, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}}, {t_a + .32:.3f});')
         js(f'tl.fromTo("#bith", {{rotation: 0}}, {{rotation: 8, svgOrigin: "100 150", duration: .12, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}}, {t_a + .32:.3f});')
         bubble(t_a + .3, "NOPE", .7)
         arms(t_a + .9, 0, 0, .2)
@@ -327,7 +333,7 @@ sfx("typing", t_ty)
 sfx("g_complete", t_ty + .8)
 face(t_cta, "happy", "grin")
 arms(t_cta + .1, 0, -95, .25)                     # points along the comment bar
-js(f'tl.fromTo("#bitaR", {{rotation: -95}}, {{rotation: -80, svgOrigin: "155 154", duration: .25, yoyo: true, repeat: 7, ease: "sine.inOut", immediateRender: false}}, {t_cta + .4:.3f});')
+js(f'tl.fromTo("#bitaR", {{rotation: -95}}, {{rotation: -80, svgOrigin: "146 142", duration: .25, yoyo: true, repeat: 7, ease: "sine.inOut", immediateRender: false}}, {t_cta + .4:.3f});')
 hop(t_ty + .8, 40, 2)
 for tb in (2.6, 7.8, 15.6, 20.9, 26.9, 33.5):
     blink(tb)
