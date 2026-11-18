@@ -62,7 +62,8 @@ def show(sel, t0, t1):
         js(f'tl.set("{sel}", {{opacity: 0}}, {t1:.3f});')
 
 
-SPLIT_END = 54                       # the split runs to "But somewhere along the way" (the story turns)
+SPLIT_END = 40                       # v5: the split runs to the end of "...the other child prays to." (60/40 rule)
+REF_SHARE = .40                      # owner rule (2026-11-18): 60 % her full frame, 40 % reference footage
 # top half of the split: (first word, clip, in-point s)
 TOP_CLIPS = [(0, "t_play", .5),       # Have you seen two children playing together?
              (7, "t_hindu", 2.0),     # One is Hindu,
@@ -70,14 +71,11 @@ TOP_CLIPS = [(0, "t_play", .5),       # Have you seen two children playing toget
              (14, "t_hands", 1.0),    # One is black, the other is white.
              (21, "t_diverse", 6.0),  # But do you know what they see?
              (28, "t_hug", 2.0),      # A friend.
-             (30, "t_pray", 1.0),     # They don't ask which God the other child prays to.
-             (40, "t_rug", 2.0),      # They don't ask which country their parents are from.
-             (49, "t_party", 3.0)]    # They just laugh, enjoy, share.
+             (30, "t_pray", 1.0)]     # They don't ask which God the other child prays to.
 # full-screen reference shots after the split: (first word, end word, clip, in-point s)
-FULL_REFS = [(64, 69, "f_scold", 1.0),   # who is different, who belongs
+FULL_REFS = [(51, 54, "t_party_v", 3.0),  # (They just) laugh, enjoy, share.
              (69, 74, "f_ears", 1.0),    # and sometimes who to fear.
-             (94, 101, "f_share", .5),   # Children can be taught compassion before discrimination.
-             (117, 122, "f_stack", .5)]  # when we begin healing ourselves,
+             (98, 101, "f_share", .5)]   # (Children can be taught) compassion before discrimination.
 
 
 # ------------------------------------------------------------------------------------------------ captions
@@ -105,7 +103,7 @@ def captions():
     for k, c in enumerate(ch):
         t0 = T(c[0]) - .02
         t1 = T(ch[k + 1][0]) - .02 if k + 1 < len(ch) else DUR
-        top = 1475 if c[0] < SPLIT_END else 1170
+        top = 1560 if c[0] < SPLIT_END else 1310   # v5 (owner): lower, clear of her lips
         i = nid("cp")
         txt = " ".join(W[j]["text"].rstrip(",") for j in c)
         POST.append(f'<div class="cap" id="{i}" style="top:{top}px"><span>{txt}</span></div>')
@@ -213,6 +211,8 @@ def main():
     open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8").write(html)
     ev = sorted(({"t": round(t, 3), "type": k} for t, k in CUES if 0 <= t < DUR), key=lambda e: e["t"])
     json.dump(ev, open(os.path.join(ROOT, "plan", "sfx_events.json"), "w"), indent=0)
+    ref = CUT(SPLIT_END) + sum(CUT(b) - CUT(a) for a, b, _, _ in FULL_REFS)
+    print(f"reference footage {ref:.2f} s of {DUR:.2f} s = {ref / DUR:.0%} (target {REF_SHARE:.0%}); her full frame {1 - ref / DUR:.0%}")
     print(f"wrote index.html {len(html) // 1024} KB, {len(A)} timeline lines, split to {CUT(SPLIT_END):.2f} s, {len(ev)} sound moments")
 
 

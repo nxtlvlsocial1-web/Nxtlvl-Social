@@ -16,7 +16,7 @@ edits. It replaces the earlier looks below (the royal-blue pill reel and the pin
   the key word of each line red `#E3202B`, the rest near-black `#111`; no emojis. Style from the owner's screenshot
   (`reference/template/hook_style.jpg`: "Manifest anything with this!!").
 - **Captions**: 2-3 words, never across two spoken lines, in a small white rounded box (radius 12) with black Fredoka
-  SemiBold 46 px; at y 1475 in the split, y 1170 (under her chin) on full frames. They cut on with the word, no animation.
+  SemiBold 46 px; at y 1560 in the split, y 1310 (chest / mic) on full frames. They cut on with the word, no animation.
 - **After the split**: mostly her full frame with a jump-cut punch-in (1.0 / 1.12) on alternate lines, and a few
   full-screen reference shots (about one in four lines) on the lines that ask for them. Hard cuts, minimal motion.
 - **Footage**: literal to the script (owner: "whatever the script requires"); this replaces the earlier
@@ -24,6 +24,9 @@ edits. It replaces the earlier looks below (the royal-blue pill reel and the pin
 - **Sound**: her voice only, no music unless asked; light sound effects (whoosh into the full section, soft swishes on
   the top-clip changes, a low boom under the hook). No transition-pack effects (house rule).
 - **End**: hold 1.4 s on her last frame so the last caption can be read.
+- **Screen time (owner rule)**: by duration, 60 % her full frame and 40 % reference footage (the opening split counts
+  as reference). `generate.py` prints the measured share; trim or start reference shots on their key word to hit it.
+- **Caption height (owner)**: clear of her lips: y 1560 in the split, y 1310 on full frames.
 
 
 What her reels look and sound like, as built and approved in `kokila-peace-9x16` (v4 is the current look).
