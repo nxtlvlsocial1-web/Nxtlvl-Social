@@ -31,7 +31,7 @@ PIECES = [
     ("lock2", 1, 13.12, 14.12, 0.20),
     ("a2a",   1, 14.12, 15.98, 0.0),     # "Same answer every time."
     ("a2b",   1, 16.84, 17.38, 0.0),     # "True."
-    ("a2c",   1, 17.78, 19.26, 0.0),     # "Sorry, false, false."
+    ("a2c",   1, 17.78, 19.88, 0.0),     # "Sorry, false, false." + her reaction, so the flip reads
     ("q3",    2, 22.10, 24.46, 0.0),
     ("lock3", 2, 24.46, 25.34, 0.32),
     ("a3",    2, 25.34, 26.60, 0.0),

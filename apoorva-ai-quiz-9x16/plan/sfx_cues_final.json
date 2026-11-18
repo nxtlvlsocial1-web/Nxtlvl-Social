@@ -1,0 +1,257 @@
+[
+{
+"t": 0.0,
+"kind": "impact",
+"file": "impact_impact.wav"
+},
+{
+"t": 0.15,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 0.3,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 0.45,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 0.9,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 1.93,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 3.48,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 3.88,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 4.28,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 4.93,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 4.98,
+"kind": "buzzer",
+"file": "buzzer_buzzer.wav"
+},
+{
+"t": 5.18,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 6.16,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 8.78,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 9.18,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 9.58,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 12.11,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 12.16,
+"kind": "ding",
+"file": "ding_notify.wav"
+},
+{
+"t": 12.73,
+"kind": "boing",
+"file": "boing_boing.wav"
+},
+{
+"t": 13.35,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 13.4,
+"kind": "buzzer",
+"file": "buzzer_buzzer.wav"
+},
+{
+"t": 13.6,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 13.81,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 16.22,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 16.62,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 17.02,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 17.67,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 17.72,
+"kind": "ding",
+"file": "ding_notify.wav"
+},
+{
+"t": 17.92,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 18.63,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 20.22,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 20.62,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 21.02,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 21.69,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 21.74,
+"kind": "buzzer",
+"file": "buzzer_buzzer.wav"
+},
+{
+"t": 21.94,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 22.89,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 25.96,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 26.36,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 26.76,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 27.43,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 27.48,
+"kind": "buzzer",
+"file": "buzzer_buzzer.wav"
+},
+{
+"t": 27.68,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 28.15,
+"kind": "riser",
+"file": "riser_riser.wav"
+},
+{
+"t": 28.4,
+"kind": "sparkle",
+"file": "sparkle_sparkle.wav"
+},
+{
+"t": 31.18,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 31.58,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 31.98,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 32.38,
+"kind": "impact",
+"file": "impact_impact.wav"
+},
+{
+"t": 33.24,
+"kind": "typing",
+"file": "typing_typing.wav"
+},
+{
+"t": 34.04,
+"kind": "msg",
+"file": "msg_msg.wav"
+}
+]
