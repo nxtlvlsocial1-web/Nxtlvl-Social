@@ -353,59 +353,59 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #000;
 #shadeb {{ position: absolute; left: 0; right: 0; bottom: 0; height: 640px; background: linear-gradient(0deg, rgba(0,0,0,.55), rgba(0,0,0,0)); }}
 #edge {{ position: absolute; inset: 0; opacity: 0; pointer-events: none; z-index: 40; }}
 /* slim tracker at the very top */
-#trk {{ position: absolute; left: 0; right: 0; top: 150px; display: flex; gap: 12px; justify-content: center; perspective: 600px; opacity: 0; z-index: 20; }}
-.bx {{ position: relative; width: 84px; height: 84px; border-radius: 20px; border: 4px solid rgba(255,255,255,.8); background: rgba(14,15,18,.4);
+#trk {{ position: absolute; left: 0; right: 0; top: 262px; display: flex; gap: 10px; justify-content: center; perspective: 600px; opacity: 0; z-index: 20; }}
+.bx {{ position: relative; width: 66px; height: 66px; border-radius: 16px; border: 3px solid rgba(255,255,255,.8); background: rgba(14,15,18,.4);
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); overflow: hidden; opacity: 0; }}
 .bx.boss {{ border-color: {GOLD}; }}
-.bn {{ position: absolute; left: 7px; top: 3px; font: 15px Mono; color: rgba(255,255,255,.8); z-index: 3; }}
+.bn {{ position: absolute; left: 6px; top: 2px; font: 12px Mono; color: rgba(255,255,255,.8); z-index: 3; }}
 .bf {{ position: absolute; inset: 0; transform-origin: 50% 100%; transform: scaleY(0); }}
-.bt {{ position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 52px; color: #fff; z-index: 2; opacity: 0; }}
+.bt {{ position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 40px; color: #fff; z-index: 2; opacity: 0; }}
 #bt6 {{ color: {GOLD}; }}
 /* the compact bottom card */
-.qc {{ position: absolute; left: 60px; right: 60px; top: 1420px; min-height: 196px; padding: 22px 30px 26px; border-radius: 30px; background: #fff; opacity: 0; z-index: 15;
+.qc {{ position: absolute; left: 70px; right: 200px; top: 1460px; min-height: 160px; padding: 18px 24px 22px; border-radius: 26px; background: #fff; opacity: 0; z-index: 15;
   box-shadow: 0 24px 60px rgba(0,0,0,.4); }}
 .qc.bossc {{ background: linear-gradient(135deg, #1B1030, #2A1450); color: #fff; border: 4px solid #A855F7; }}
-.qh {{ display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }}
-.qn {{ font: 22px Mono; letter-spacing: .14em; color: #6B7280; }}
+.qh {{ display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }}
+.qn {{ font: 18px Mono; letter-spacing: .14em; color: #6B7280; }}
 .bossc .qn {{ color: #D8B4FE; }}
-.qtag {{ display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; background: {INK}; color: #fff; font-weight: 800; font-size: 22px; letter-spacing: .06em; }}
+.qtag {{ display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 999px; background: {INK}; color: #fff; font-weight: 800; font-size: 18px; letter-spacing: .06em; }}
 .qtag i {{ width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }}
 .bossc .qtag {{ background: #A855F7; }}
-.lkt {{ margin-left: auto; margin-right: 120px; font: 20px Mono; letter-spacing: .16em; color: {RED}; opacity: 0; }}
-.qt {{ font-weight: 800; font-size: 46px; line-height: 1.1; letter-spacing: -.025em; padding-right: 210px; }}
+.lkt {{ margin-left: auto; margin-right: 96px; font: 16px Mono; letter-spacing: .16em; color: {RED}; opacity: 0; }}
+.qt {{ font-weight: 800; font-size: 37px; line-height: 1.12; letter-spacing: -.02em; padding-right: 168px; }}
 .qw {{ display: inline-block; opacity: 0; }}
-.why {{ position: absolute; left: 30px; right: 30px; top: 70px; font-weight: 800; font-size: 40px; line-height: 1.12; letter-spacing: -.02em; opacity: 0; }}
+.why {{ position: absolute; left: 24px; right: 24px; top: 58px; font-weight: 800; font-size: 33px; line-height: 1.12; letter-spacing: -.02em; opacity: 0; }}
 .why::before {{ content: "WHY: "; color: #A855F7; }}
-.stamp {{ position: absolute; right: 22px; top: 50%; margin-top: -38px; padding: 6px 16px; border-radius: 14px; font-weight: 800; font-size: 48px; opacity: 0; background: #fff; z-index: 3; }}
+.stamp {{ position: absolute; right: 16px; top: 50%; margin-top: -30px; padding: 4px 12px; border-radius: 12px; font-weight: 800; font-size: 38px; opacity: 0; background: #fff; z-index: 3; }}
 .stamp.st {{ color: {GREEN}; border: 6px solid {GREEN}; }}
 .stamp.sf {{ color: {RED}; border: 6px solid {RED}; }}
-#sp2f {{ position: absolute; right: 82px; top: 1480px; margin-top: 0; z-index: 30; }}
-#plot {{ position: absolute; right: 80px; top: 1360px; padding: 8px 18px; border-radius: 12px; background: {GOLD}; color: {INK}; font-weight: 800; font-size: 34px; opacity: 0; z-index: 31; }}
-#lk {{ position: absolute; right: 82px; top: 1462px; width: 112px; height: 112px; opacity: 0; z-index: 25; }}
+#sp2f {{ position: absolute; right: 216px; top: 1500px; margin-top: 0; z-index: 30; }}
+#plot {{ position: absolute; right: 210px; top: 1400px; padding: 6px 14px; border-radius: 10px; background: {GOLD}; color: {INK}; font-weight: 800; font-size: 28px; opacity: 0; z-index: 31; }}
+#lk {{ position: absolute; right: 214px; top: 1494px; width: 88px; height: 88px; opacity: 0; z-index: 25; }}
 #lk svg {{ position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }}
 #lk .rt {{ fill: {INK}; stroke: rgba(0,0,0,.15); stroke-width: 9; }}
 #lk .rf {{ fill: none; stroke: {GOLD}; stroke-width: 9; stroke-linecap: round; stroke-dasharray: 1000; }}
-.ln {{ position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 60px; color: #fff; opacity: 0; }}
+.ln {{ position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 46px; color: #fff; opacity: 0; }}
 /* hook + CTA cards */
-.hookc .hkt {{ font-size: 52px; padding-right: 0; }}
+.hookc .hkt {{ font-size: 42px; padding-right: 0; }}
 .hookc .tt {{ color: {GREEN}; }} .hookc .ff {{ color: {RED}; }}
 .hk3 {{ margin-top: 8px; font-weight: 700; font-size: 28px; color: #6B7280; opacity: 0; }}
 .ctac {{ background: linear-gradient(135deg, #1B1030, #2A1450); color: #fff; border: 4px solid #A855F7; }}
-.ctac .qt {{ font-size: 48px; padding-right: 0; }}
+.ctac .qt {{ font-size: 38px; padding-right: 0; }}
 .ctac .qt em {{ font-style: normal; color: {GOLD}; }}
-.cbar {{ display: flex; align-items: center; gap: 14px; height: 76px; margin-top: 14px; padding: 0 20px; border-radius: 40px; background: #fff; color: {INK}; font-weight: 800; font-size: 32px; }}
+.cbar {{ display: flex; align-items: center; gap: 14px; height: 62px; margin-top: 12px; padding: 0 16px; border-radius: 34px; background: #fff; color: {INK}; font-weight: 800; font-size: 27px; }}
 .cbar > i {{ width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, {GREEN}, {RED}); flex: none; }}
 #cph {{ position: absolute; margin-left: 60px; font-weight: 600; color: #9CA3AF; }}
 #cty i {{ font-style: normal; opacity: 0; }}
 /* confetti from the card */
-#conf {{ position: absolute; left: 540px; top: 1440px; width: 0; height: 0; z-index: 35; }}
+#conf {{ position: absolute; left: 470px; top: 1470px; width: 0; height: 0; z-index: 35; }}
 .cf {{ position: absolute; opacity: 0; }}
 /* Bit */
-#bit {{ position: absolute; left: 56px; top: 1196px; width: 196px; height: 235px; z-index: 32; opacity: 0; }}
+#bit {{ position: absolute; left: 66px; top: 1314px; width: 140px; height: 168px; z-index: 32; opacity: 0; }}
 #bitb {{ position: absolute; inset: 0; transform-origin: 50% 100%; }}
 #bitb svg {{ width: 100%; height: 100%; overflow: visible; }}
-#bitbub {{ position: absolute; left: 160px; top: -40px; min-width: 70px; height: 62px; padding: 0 14px; border-radius: 31px 31px 31px 8px; background: #fff; display: grid; place-items: center;
-  font-weight: 800; font-size: 32px; color: #A855F7; opacity: 0; transform-origin: 0 100%; box-shadow: 0 8px 24px rgba(0,0,0,.3); white-space: nowrap; }}
+#bitbub {{ position: absolute; left: 116px; top: -34px; min-width: 56px; height: 50px; padding: 0 12px; border-radius: 25px 25px 25px 7px; background: #fff; display: grid; place-items: center;
+  font-weight: 800; font-size: 26px; color: #A855F7; opacity: 0; transform-origin: 0 100%; box-shadow: 0 8px 24px rgba(0,0,0,.3); white-space: nowrap; }}
 """
 
 html = f"""<!doctype html>
