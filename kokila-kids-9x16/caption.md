@@ -1,10 +1,10 @@
-# Post description: Dr S Kokila, "No child is born with prejudice" (Reels, 9:16)
+# Post description: Dr S Kokila, "Love is natural. Hate is learned." (Reels, 9:16)
 
 No CTA keyword was given for this reel, so the description opens on the hook (her rule: no CTA unless given).
 No music in the video. Sound effects are CC0 (no credit needed); stock clips are Pexels (no credit needed).
 
 ```
-No child is born with prejudice.
+Love is natural. Hate is learned.
 
 Watch two children play. One is Hindu, the other is Muslim. One is black, the other is white. They don't see any of that. They see a friend.
 
@@ -21,5 +21,5 @@ When we begin healing ourselves, we begin healing humanity.
 Dr S Kokila
 
 #parenting #empathy #mentalhealth #kindness #humanity
-parenting tips, teaching children empathy, how children learn prejudice, raising kind kids, compassion for children, child psychology, doctor advice on parenting
+parenting tips, teaching children empathy, how children learn prejudice, love is natural hate is learned, raising kind kids, compassion for children, child psychology, doctor advice on parenting
 ```
