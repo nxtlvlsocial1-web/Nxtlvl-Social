@@ -1,0 +1,260 @@
+<!doctype html><html><head><meta charset="UTF-8"><style>@font-face { font-family: Inter; font-weight: 500; src: url("../assets/fonts/inter-latin-500-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 600; src: url("../assets/fonts/inter-latin-600-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 700; src: url("../assets/fonts/inter-latin-700-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 800; src: url("../assets/fonts/inter-latin-800-normal.woff2"); }
+@font-face { font-family: Mono; src: url("../assets/fonts/JetBrainsMono-Bold.ttf"); }
+@font-face { font-family: Serif; src: url("../assets/fonts/InstrumentSerif-Italic.ttf"); }
+@font-face { font-family: Stencil; font-weight: 900; src: url("../assets/fonts/stencil-900.woff2"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0709; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter; color: #0B0B0B; background: #0b0709; }
+.world { position: absolute; inset: 0; overflow: hidden; }
+
+/* light world: Creedom's white-to-pink ground with drifting pink blobs */
+#light { background: linear-gradient(180deg, #fff6fa 0%, #ffe6f2 42%, #ffd0e6 78%, #ffc0dc 100%); opacity: 0; }
+.bl { position: absolute; border-radius: 50%; filter: blur(90px); }
+#lgrid { position: absolute; inset: 0; opacity: .5;
+  background-image: linear-gradient(rgba(177,71,107,.07) 2px, transparent 2px), linear-gradient(90deg, rgba(177,71,107,.07) 2px, transparent 2px);
+  background-size: 120px 120px; }
+
+/* dark world: the desk at night, one spotlight, dust in the beam */
+#dark { background: radial-gradient(120% 70% at 50% 110%, #2a0c1d 0%, #120810 45%, #0b0709 100%); }
+#felt { position: absolute; inset: 0; opacity: .35;
+  background-image: repeating-linear-gradient(115deg, rgba(255,255,255,.018) 0 2px, transparent 2px 9px); }
+#spot { position: absolute; left: -260px; top: 120px; width: 1600px; height: 1600px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255,226,240,.30) 0%, rgba(255,160,205,.16) 38%, rgba(243,67,162,.07) 62%, rgba(243,67,162,0) 100%); }
+#spot2 { position: absolute; left: 140px; top: 1100px; width: 900px; height: 900px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(245,135,108,.16), rgba(245,135,108,0)); }
+.dust { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: rgba(255,225,240,.5); box-shadow: 0 0 6px rgba(255,225,240,.5); }
+#vig { position: absolute; inset: 0; pointer-events: none; z-index: 70; background: radial-gradient(85% 60% at 50% 48%, rgba(0,0,0,0) 55%, rgba(0,0,0,.45) 100%); opacity: .0; }
+
+#grain { position: absolute; inset: 0; opacity: .07; background: url(../assets/img/grain.png); mix-blend-mode: overlay; pointer-events: none; z-index: 80; }
+#cam, #punch, #drift, #shake { position: absolute; inset: 0; transform-origin: 50% 45%; }
+#flash { position: absolute; inset: 0; z-index: 75; opacity: 0; background: #fff; mix-blend-mode: soft-light; pointer-events: none; }
+#wflash { position: absolute; inset: 0; z-index: 76; opacity: 0; background: #fff; pointer-events: none; }
+#blackout { position: absolute; inset: 0; z-index: 74; opacity: 0; background: #050304; pointer-events: none; }
+.scn { position: absolute; inset: 0; opacity: 0; }
+
+/* headlines: words blur into focus on their spoken time */
+.head { position: absolute; left: 60px; right: 60px; text-align: center; font-weight: 800; letter-spacing: -.045em; line-height: 1.04; z-index: 40; color: #0B0B0B; }
+.head.dk { color: #fff; }
+.hl { white-space: nowrap; }
+.hw { display: inline-block; opacity: 0; }
+.hw.it { font-family: Serif; font-weight: 400; letter-spacing: -.01em; font-size: 1.12em; padding: 0 .04em;
+  background: linear-gradient(90deg, #F515E8, #F54BA8 50%, #F5876C); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hw.pk { color: #E0187E; }
+.head.dk .hw.pk { color: #ff6fbf; }
+.hw.gn { color: #15a05a; }
+.hw.rd { color: #e11d48; }
+.head.dk .hw.rd { color: #ff4d6d; }
+.hw.sm { font-size: .62em; letter-spacing: -.02em; }
+.kick { position: absolute; left: 0; right: 0; text-align: center; font: 30px Mono; letter-spacing: .32em; color: #F343A2; z-index: 40; opacity: 0; }
+.kick.dk { color: #ff9cc8; }
+
+/* stamps */
+.stamp { position: absolute; z-index: 45; opacity: 0; font: 900 108px/1 Stencil; letter-spacing: .06em; white-space: nowrap; color: #e11d48; padding: 10px 34px 4px;
+  border: 12px solid #e11d48; border-radius: 18px; text-transform: uppercase; mix-blend-mode: normal; transform-origin: 50% 50%;
+  -webkit-mask-image: url(../assets/img/grain.png); mask-image: none; text-shadow: 0 0 1px rgba(225,29,72,.6); }
+.stamp.gn { color: #15a05a; border-color: #15a05a; }
+.stamp::after { content: ""; position: absolute; inset: 6px; border: 3px solid currentColor; border-radius: 10px; opacity: .55; }
+.splat { position: absolute; border-radius: 50%; background: #e11d48; opacity: 0; z-index: 44; }
+
+/* the folder */
+.fold { position: absolute; width: 800px; height: 640px; z-index: 20; transform-origin: 50% 100%; perspective: 2200px; }
+.fback { position: absolute; inset: 0; border-radius: 0 26px 26px 26px;
+  background: linear-gradient(160deg, #ff8fc4 0%, #F343A2 46%, #d81f86 100%); box-shadow: 0 50px 90px rgba(0,0,0,.55), inset 0 2px 0 rgba(255,255,255,.4); }
+.ftab { position: absolute; left: 0; top: -58px; width: 330px; height: 70px; border-radius: 22px 22px 0 0; background: #ff8fc4;
+  font: 26px/70px Mono; letter-spacing: .18em; color: rgba(60,6,34,.75); padding-left: 34px; }
+.fpage { position: absolute; left: 34px; right: 34px; top: 30px; bottom: 26px; border-radius: 14px; background: #FFF7FA; overflow: hidden;
+  box-shadow: 0 6px 18px rgba(80,0,40,.25); }
+.ffront { position: absolute; inset: 0; border-radius: 0 26px 26px 26px; transform-origin: 0 50%; backface-visibility: hidden;
+  background: linear-gradient(170deg, #ffa3cf 0%, #f25aac 50%, #e0187e 100%); box-shadow: inset 0 2px 0 rgba(255,255,255,.45), 0 30px 60px rgba(0,0,0,.35); }
+.ffront .flines { position: absolute; left: 70px; top: 330px; right: 70px; display: flex; flex-direction: column; gap: 22px; }
+.ffront .flines i { display: block; height: 26px; border-radius: 6px; background: #1a0b12; opacity: .9; transform-origin: 0 50%; }
+.ffront .flabel { position: absolute; left: 70px; top: 230px; font: 28px Mono; letter-spacing: .26em; color: rgba(60,6,34,.8); }
+.clip { position: absolute; top: -26px; width: 46px; height: 120px; border: 8px solid #d9d4d8; border-radius: 24px; z-index: 3; box-shadow: 0 4px 6px rgba(0,0,0,.25); }
+
+/* the blurred app inside the folder (hook) */
+.leak { position: absolute; inset: 0; }
+.leak .graph { position: absolute; left: 30px; right: 30px; bottom: 30px; height: 360px; }
+.leak svg { width: 100%; height: 100%; overflow: visible; }
+.leak .ln { fill: none; stroke: #F343A2; stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
+.leak .ar { fill: url(#gfill); }
+.leak .blurcard { position: absolute; left: 70px; top: 40px; width: 590px; height: 170px; border-radius: 26px; background: #fff; filter: blur(9px);
+  box-shadow: 0 10px 30px rgba(177,71,107,.25); display: flex; align-items: center; gap: 26px; padding: 0 30px; }
+.blurcard .av { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg, #F515E8, #F5876C); flex: none; }
+.blurcard .tx { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+.blurcard .tx i { display: block; height: 22px; border-radius: 11px; background: #e9d6df; }
+.leak .up { position: absolute; right: 70px; top: 230px; font: 800 74px/1 Inter; letter-spacing: -.04em; color: #15a05a; opacity: 0; }
+
+/* chat bubble (not ChatGPT) */
+.chat { position: absolute; left: 130px; top: 620px; width: 820px; height: 640px; border-radius: 40px; background: #2a2a2e; z-index: 20;
+  box-shadow: 0 40px 80px rgba(0,0,0,.5); padding: 40px; opacity: 0; }
+.chat .ch { display: flex; align-items: center; gap: 18px; font: 600 34px Inter; color: #d4d4d8; margin-bottom: 40px; }
+.chat .ch i { width: 54px; height: 54px; border-radius: 50%; background: #5b5b63; }
+.chat .b1 { margin-left: auto; width: 520px; padding: 26px 30px; border-radius: 30px 30px 8px 30px; background: #45454d; font: 500 34px/1.3 Inter; color: #f4f4f5; }
+.chat .b2 { margin-top: 34px; width: 640px; padding: 26px 30px; border-radius: 30px 30px 30px 8px; background: #38383f; display: flex; flex-direction: column; gap: 16px; }
+.chat .b2 i { display: block; height: 22px; border-radius: 11px; background: #5b5b63; }
+.xmark { position: absolute; left: 90px; top: 580px; width: 900px; height: 720px; z-index: 22; overflow: visible; pointer-events: none; }
+.xmark path { fill: none; stroke: #ff3d6e; stroke-width: 34; stroke-linecap: round; filter: drop-shadow(0 0 18px rgba(255,61,110,.6)); }
+
+/* dossier sheet: codename reveal */
+.doss { position: absolute; left: 110px; top: 600px; width: 860px; height: 520px; border-radius: 26px; background: #FFF7FA; z-index: 20; opacity: 0;
+  box-shadow: 0 40px 80px rgba(177,71,107,.28), 0 0 0 2px rgba(243,67,162,.18); padding: 56px 64px; }
+.doss .dk1 { font: 28px Mono; letter-spacing: .3em; color: #B1476B; }
+.doss .dlogo { position: relative; margin-top: 46px; width: 732px; height: 136px; }
+.doss .dlogo img { position: absolute; left: 0; top: 0; width: 732px; }
+.doss .bar { position: absolute; left: -16px; top: -10px; width: 764px; height: 160px; background: #0b0b0b; border-radius: 10px; transform-origin: 100% 50%; }
+.doss .tag { margin-top: 54px; font: 64px/1.1 Serif; color: #3a1a2a; opacity: 0; }
+.doss .tag em { font-style: normal; background: linear-gradient(90deg, #F515E8, #F54BA8 50%, #F5876C); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.doss .dl { position: absolute; right: 50px; top: 46px; font: 22px Mono; letter-spacing: .2em; color: #fff; background: #e11d48; padding: 8px 16px; border-radius: 8px; opacity: 0; }
+
+/* profile under the magnifier */
+.prof { position: absolute; left: 170px; top: 560px; width: 740px; z-index: 20; opacity: 0; }
+.prof .ph { display: flex; align-items: center; gap: 24px; margin-bottom: 26px; }
+.prof .ph .av { width: 96px; height: 96px; border-radius: 50%; background: linear-gradient(135deg, #F515E8, #F5876C); border: 5px solid #fff; box-shadow: 0 6px 16px rgba(177,71,107,.3); }
+.prof .ph b { font: 800 44px Inter; letter-spacing: -.03em; color: #0B0B0B; }
+.prof .ph span { display: block; font: 24px Mono; letter-spacing: .2em; color: #B1476B; margin-top: 6px; }
+.tiles { position: relative; display: grid; grid-template-columns: repeat(3, 230px); gap: 12px; }
+.tile { position: relative; height: 300px; border-radius: 18px; overflow: hidden; box-shadow: 0 10px 24px rgba(177,71,107,.22); }
+.tile .tbg { position: absolute; inset: 0; }
+.tile .pl { position: absolute; left: 16px; bottom: 14px; width: 0; height: 0; border-left: 24px solid rgba(255,255,255,.9); border-top: 15px solid transparent; border-bottom: 15px solid transparent; }
+.tile .ring { position: absolute; inset: 0; border-radius: 18px; border: 9px solid #15a05a; opacity: 0; box-shadow: inset 0 0 30px rgba(21,160,90,.5); }
+.tile .ring.bad { border-color: #e11d48; box-shadow: inset 0 0 40px rgba(225,29,72,.6); }
+.tile .tg { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); white-space: nowrap; font: 21px Mono; letter-spacing: .12em; color: #fff;
+  background: #15a05a; padding: 10px 14px; border-radius: 10px; opacity: 0; }
+.tile .tg.bad { background: #e11d48; }
+.scan { position: absolute; left: -20px; right: -20px; top: 0; height: 10px; border-radius: 5px; z-index: 5; opacity: 0;
+  background: linear-gradient(90deg, rgba(243,67,162,0), #F343A2 20%, #ffd0e6 50%, #F343A2 80%, rgba(243,67,162,0)); box-shadow: 0 0 40px 10px rgba(243,67,162,.45); }
+.evid { position: absolute; z-index: 25; opacity: 0; font: 900 64px/1 Stencil; letter-spacing: .04em; color: #fff; background: #e11d48; padding: 14px 26px 8px;
+  border-radius: 14px; box-shadow: 0 20px 40px rgba(225,29,72,.4); white-space: nowrap; }
+
+/* phone with Share (check before you post) */
+.phone { position: absolute; left: 300px; top: 560px; width: 480px; height: 900px; border-radius: 64px; background: #160b18; padding: 18px; z-index: 20; opacity: 0;
+  box-shadow: 0 50px 90px rgba(120,20,70,.35), inset 0 0 0 3px #3a2a3c; }
+.phone .scr { position: relative; width: 100%; height: 100%; border-radius: 48px; overflow: hidden; background: linear-gradient(170deg, #ffb7d8, #f25aac 55%, #8f1d6a); }
+.phone .scr .sky { position: absolute; inset: 0; background: radial-gradient(60% 40% at 40% 30%, rgba(255,255,255,.55), rgba(255,255,255,0)); }
+.phone .scr .subj { position: absolute; left: 110px; top: 300px; width: 220px; height: 300px; border-radius: 110px 110px 40px 40px; background: rgba(40,8,30,.55); }
+.phone .scr .cap { position: absolute; left: 30px; bottom: 150px; display: flex; flex-direction: column; gap: 12px; width: 300px; }
+.phone .scr .cap i { display: block; height: 16px; border-radius: 8px; background: rgba(255,255,255,.8); }
+.phone .share { position: absolute; left: 30px; right: 30px; bottom: 34px; height: 92px; border-radius: 46px; background: #0b0b0b; color: #fff;
+  font: 800 38px/92px Inter; text-align: center; letter-spacing: -.02em; }
+.phone .frz { position: absolute; inset: 0; background: rgba(20,10,18,.55); opacity: 0; backdrop-filter: grayscale(1); -webkit-backdrop-filter: grayscale(1); }
+.thumb { position: absolute; width: 150px; height: 150px; border-radius: 50%; z-index: 26; opacity: 0;
+  background: radial-gradient(circle at 40% 35%, rgba(255,255,255,.95), rgba(255,255,255,.55) 60%, rgba(255,255,255,.2)); border: 3px solid rgba(255,255,255,.9);
+  box-shadow: 0 16px 30px rgba(80,0,40,.3); }
+.flipc { position: absolute; left: 170px; top: 900px; width: 740px; height: 210px; z-index: 28; opacity: 0; perspective: 1600px; }
+.flipc .fi { position: absolute; inset: 0; transform-style: preserve-3d; }
+.flipc .fa, .flipc .fb { position: absolute; inset: 0; border-radius: 30px; display: flex; align-items: center; gap: 28px; padding: 0 40px; backface-visibility: hidden;
+  font: 800 52px Inter; letter-spacing: -.03em; box-shadow: 0 30px 60px rgba(80,0,40,.3); }
+.flipc .fa { background: #fff4e0; color: #8a4b00; border: 5px solid #F5B544; }
+.flipc .fb { background: #e8fbef; color: #0e7a45; border: 5px solid #2fbf71; transform: rotateY(180deg); }
+.flipc small { display: block; font: 24px Mono; letter-spacing: .14em; opacity: .8; margin-bottom: 6px; }
+.flipc svg { width: 96px; height: 96px; flex: none; }
+
+/* memos (what to post next) */
+.memo { position: absolute; left: 290px; top: 640px; width: 500px; height: 640px; border-radius: 18px; background: #FFF7FA; z-index: 20; opacity: 0;
+  box-shadow: 0 40px 70px rgba(0,0,0,.5); padding: 54px 44px; transform-origin: 50% 120%; }
+.memo .mk { font: 24px Mono; letter-spacing: .26em; color: #B1476B; }
+.memo .mt { margin-top: 26px; font: 800 50px/1.08 Inter; letter-spacing: -.035em; color: #0B0B0B; }
+.memo .mls { margin-top: 34px; display: flex; flex-direction: column; gap: 18px; }
+.memo .mls i { display: block; height: 18px; border-radius: 9px; background: #ead8e1; }
+.memo .mls i:nth-child(2) { width: 82%; } .memo .mls i:nth-child(3) { width: 64%; }
+.memo .saved { position: absolute; left: 44px; right: 44px; bottom: 44px; height: 84px; border-radius: 42px; background: linear-gradient(90deg, #F515E8, #F54BA8 50%, #F5876C);
+  display: flex; align-items: center; justify-content: center; gap: 14px; font: 700 28px Inter; color: #fff; opacity: 0; }
+.memo .saved svg { width: 30px; height: 36px; }
+.memo .pclip { position: absolute; left: 60px; top: -30px; width: 40px; height: 110px; border: 7px solid #cfc7cc; border-radius: 20px; }
+
+/* before / after graph (did the advice work) */
+.gcard { position: absolute; left: 100px; top: 640px; width: 880px; height: 700px; border-radius: 34px; background: #FFF7FA; z-index: 20; opacity: 0;
+  box-shadow: 0 40px 80px rgba(0,0,0,.45); padding: 50px; }
+.gcard .gk { font: 24px Mono; letter-spacing: .26em; color: #B1476B; }
+.gcard svg { position: absolute; left: 50px; top: 130px; width: 780px; height: 480px; overflow: visible; }
+.gcard .ax { stroke: #ead8e1; stroke-width: 4; }
+.gcard .gbefore { fill: none; stroke: #9a8a93; stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
+.gcard .gafter { fill: none; stroke: #F343A2; stroke-width: 14; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 6px 12px rgba(243,67,162,.4)); }
+.gcard .mark { stroke: #0b0b0b; stroke-width: 5; stroke-dasharray: 14 12; }
+.gcard .mlab { position: absolute; left: 340px; top: 112px; font: 22px Mono; letter-spacing: .14em; color: #fff; background: #0b0b0b; padding: 8px 14px; border-radius: 8px; opacity: 0; }
+.gcard .bl2 { position: absolute; font: 26px Mono; letter-spacing: .16em; color: #6f5f68; }
+
+/* social proof */
+.count { position: absolute; left: 0; right: 0; top: 560px; text-align: center; z-index: 30; opacity: 0; font: 800 200px/1 Inter; letter-spacing: -.06em;
+  background: linear-gradient(90deg, #F515E8, #F54BA8 50%, #F5876C); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.dots { position: absolute; left: 90px; top: 520px; width: 900px; height: 860px; z-index: 10; }
+.dot { position: absolute; width: 46px; height: 46px; border-radius: 50%; opacity: 0; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(177,71,107,.25); }
+.pill { position: absolute; left: 50%; z-index: 30; opacity: 0; white-space: nowrap; height: 104px; padding: 0 44px; border-radius: 52px; display: flex; align-items: center; gap: 18px;
+  font: 700 42px Inter; letter-spacing: -.02em; transform: translateX(-50%); }
+.pill.blk { background: #0b0b0b; color: #fff; }
+.pill.wht { background: #fff; color: #0B0B0B; box-shadow: 0 16px 34px rgba(177,71,107,.25); }
+.pill svg { width: 46px; height: 46px; }
+.pill .fr { background: linear-gradient(90deg, #F515E8, #F5876C); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* CTA */
+.cbar { position: absolute; left: 90px; right: 90px; top: 1060px; height: 130px; border-radius: 65px; background: rgba(255,255,255,.96); z-index: 40; opacity: 0;
+  display: flex; align-items: center; padding: 0 20px 0 40px; gap: 22px; box-shadow: 0 30px 60px rgba(0,0,0,.45); }
+.cbar .cav { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #F515E8, #F5876C); flex: none; }
+.cbar .cph { font: 500 40px Inter; color: #9b8f96; position: absolute; left: 150px; }
+.cbar .cty { font: 900 64px/1 Stencil; letter-spacing: .08em; color: #0b0b0b; }
+.cbar .cty i { font-style: normal; opacity: 0; }
+.cbar .csend { margin-left: auto; width: 92px; height: 92px; border-radius: 50%; background: #0b0b0b; display: grid; place-items: center; }
+.cbar .csend svg { width: 44px; height: 44px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.dm { position: absolute; left: 90px; right: 90px; top: 1250px; height: 150px; border-radius: 36px; background: rgba(255,255,255,.96); z-index: 41; opacity: 0;
+  display: flex; align-items: center; gap: 26px; padding: 0 34px; box-shadow: 0 30px 60px rgba(0,0,0,.45); }
+.dm img { width: 90px; height: 90px; border-radius: 22px; }
+.dm b { display: block; font: 700 36px Inter; color: #0B0B0B; letter-spacing: -.02em; }
+.dm span { display: flex; align-items: center; gap: 12px; font: 500 34px Inter; color: #5b4a55; }
+.dm span svg { width: 40px; height: 40px; }
+.dm em { margin-left: auto; font: 500 28px Inter; color: #5b4a55; font-style: normal; }
+.grow { position: absolute; left: 0; right: 0; top: 520px; text-align: center; z-index: 42; opacity: 0; font: 900 300px/1 Stencil; letter-spacing: .04em;
+  background: linear-gradient(180deg, #ffd0e6, #F343A2 55%, #d81f86); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 20px 40px rgba(243,67,162,.45)); }
+
+/* transitions */
+#redact { position: absolute; left: -400px; top: 760px; width: 1900px; height: 420px; z-index: 72; background: #050304; opacity: 0; pointer-events: none;
+  box-shadow: 0 0 0 6px #F343A2; }
+#sheet { position: absolute; left: -100px; top: -200px; width: 1280px; height: 2320px; z-index: 72; pointer-events: none; background: #FFF7FA; opacity: 0;
+  box-shadow: 0 0 90px rgba(80,0,40,.4); }
+#sheet b { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-14deg); font: 900 210px/1 Stencil; letter-spacing: .06em;
+  color: rgba(225,29,72,.16); border: 16px solid rgba(225,29,72,.16); padding: 20px 50px 10px; border-radius: 30px; white-space: nowrap; }
+#iris { position: absolute; left: 540px; top: 960px; width: 0; height: 0; z-index: 73; pointer-events: none; border-radius: 50%;
+  box-shadow: 0 0 0 3000px #050304; opacity: 0; }
+.stk { position: absolute; left: 0; width: 1080px; height: 30px; z-index: 71; opacity: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,208,230,.85), rgba(255,255,255,0)); filter: blur(4px); }
+#stk0 { top: 640px; } #stk1 { top: 980px; height: 18px; } #stk2 { top: 1300px; }
+
+/* Cree */
+#cree { position: absolute; left: 0; top: 0; width: 820px; height: 820px; z-index: 50; opacity: 0; transform-origin: 410px 500px; pointer-events: none;
+  filter: drop-shadow(0 24px 30px rgba(200,40,120,.28)); }
+#cshadow { position: absolute; left: 210px; top: 770px; width: 400px; height: 60px; border-radius: 50%; background: radial-gradient(closest-side, rgba(226,53,160,.4), rgba(226,53,160,0)); }
+#creeb { position: absolute; inset: 0; transform-origin: 50% 97.5%; }
+#creef { position: absolute; inset: 0; transform-origin: 50% 60%; }
+#creep { position: absolute; inset: 0; transform-origin: 50% 97.5%; }
+.cpose { position: absolute; inset: 0; opacity: 0; }
+.cpose img, .clids, .csw { position: absolute; inset: 0; width: 820px; height: 820px; }
+.csw { overflow: visible; }
+.lidg { opacity: 0; }
+.sweat { opacity: 0; transform-box: fill-box; transform-origin: 50% 0; }
+.csp { position: absolute; opacity: 0; }
+#bub { position: absolute; left: 600px; top: 0; width: 210px; height: 190px; opacity: 0; border-radius: 50% 50% 50% 14px; display: grid; place-items: center;
+  transform-origin: 0 100%; background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,255,255,.6)); border: 2px solid rgba(255,255,255,.95);
+  box-shadow: inset 0 2px 0 #fff, 0 20px 40px rgba(160,20,90,.28); }
+#bubt { font: 800 120px/1 Inter; background: linear-gradient(180deg, #F343A2, #EE688B); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+.cv-h { position:absolute; left:60px; right:60px; top:270px; text-align:center; color:#fff; font:800 150px/1 Inter; letter-spacing:-.05em; }
+.cv-h .s { font-family: Serif; font-weight:400; letter-spacing:-.01em; font-size:1.14em; background: linear-gradient(90deg,#F515E8,#F54BA8 50%,#F5876C); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.cv-k { position:absolute; left:0; right:0; top:580px; text-align:center; font:34px Mono; letter-spacing:.3em; color:#ff9cc8; }
+.cv-pill { position:absolute; left:50%; top:1500px; transform:translateX(-50%); height:120px; padding:0 54px; border-radius:60px; background:#fff; display:flex; align-items:center; gap:20px;
+  font:800 52px Inter; letter-spacing:-.02em; color:#0B0B0B; box-shadow:0 20px 50px rgba(243,67,162,.45); white-space:nowrap; }
+.cv-pill b { font:900 64px/1 Stencil; letter-spacing:.06em; color:#E0187E; }
+</style></head><body><div id="root">
+<div class="world" id="dark"><i id="felt"></i><i id="spot2"></i><i id="spot" style="transform:translate(0px,60px) scale(1.15)"></i></div>
+<div class="cv-h">The <span class="s">secret</span> AI</div>
+<div class="cv-h" style="top:430px;font-size:104px">growing accounts.</div>
+<div class="fold" style="left:140px;top:760px;transform:rotate(-3deg)"><div class="ftab">CASE FILE 0814</div><div class="fback"></div><div class="fpage"></div>
+<div class="ffront"><div class="flabel">SUBJECT: GROWTH</div><div class="flines"><i style="width:92%"></i><i style="width:70%"></i><i style="width:84%"></i><i style="width:58%"></i></div>
+<div class="stamp" style="left:120px;top:60px;opacity:1;transform:rotate(-12deg)">Top Secret</div></div></div>
+<div class="cv-k">AND NO, IT'S NOT CHATGPT</div>
+<div style="position:absolute;left:0;top:0;width:820px;height:820px;transform:translate(495px,975.0px) scale(.44);transform-origin:410px 500px">
+<img src="../assets/img/poses/mag.png" style="position:absolute;inset:0;width:820px;height:820px;filter:drop-shadow(0 24px 30px rgba(200,40,120,.4))"></div>
+<div class="cv-pill">Comment <b>GROW</b></div>
+<div id="grain"></div></div></body></html>

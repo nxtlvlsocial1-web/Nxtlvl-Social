@@ -1,0 +1,514 @@
+[
+{
+"type": "whoosh_big",
+"t": 0
+},
+{
+"type": "paper",
+"t": 0.12
+},
+{
+"type": "stamp",
+"t": 0.82
+},
+{
+"type": "sub",
+"t": 0.82
+},
+{
+"type": "thump",
+"t": 0.84
+},
+{
+"type": "open",
+"t": 2.36
+},
+{
+"type": "flip",
+"t": 2.41
+},
+{
+"type": "whoosh",
+"t": 2.46
+},
+{
+"type": "tick",
+"t": 2.81
+},
+{
+"type": "tick",
+"t": 3.09
+},
+{
+"type": "pop",
+"t": 3.14
+},
+{
+"type": "tick",
+"t": 3.37
+},
+{
+"type": "tick",
+"t": 3.65
+},
+{
+"type": "tick",
+"t": 3.93
+},
+{
+"type": "ding2",
+"t": 4.12
+},
+{
+"type": "tick",
+"t": 4.21
+},
+{
+"type": "riser_short",
+"t": 4.232
+},
+{
+"type": "whoosh",
+"t": 4.952
+},
+{
+"type": "whoosh",
+"t": 5.1
+},
+{
+"type": "scratch",
+"t": 6.44
+},
+{
+"type": "error",
+"t": 6.49
+},
+{
+"type": "pop",
+"t": 6.54
+},
+{
+"type": "scratch",
+"t": 6.59
+},
+{
+"type": "riser_short",
+"t": 7.25
+},
+{
+"type": "swish",
+"t": 7.7
+},
+{
+"type": "whoosh_big",
+"t": 7.83
+},
+{
+"type": "glitch",
+"t": 8.13
+},
+{
+"type": "glitch",
+"t": 8.54
+},
+{
+"type": "glitch",
+"t": 8.74
+},
+{
+"type": "sub",
+"t": 8.94
+},
+{
+"type": "thump",
+"t": 8.97
+},
+{
+"type": "ding",
+"t": 8.99
+},
+{
+"type": "pop",
+"t": 9.34
+},
+{
+"type": "stamp2",
+"t": 9.52
+},
+{
+"type": "riser_short",
+"t": 12.684
+},
+{
+"type": "flip",
+"t": 13.304
+},
+{
+"type": "whoosh",
+"t": 13.534
+},
+{
+"type": "paper",
+"t": 13.634
+},
+{
+"type": "swish",
+"t": 13.684
+},
+{
+"type": "flip",
+"t": 13.734
+},
+{
+"type": "riser_short",
+"t": 13.8
+},
+{
+"type": "ding2",
+"t": 14.5
+},
+{
+"type": "ding2",
+"t": 14.62
+},
+{
+"type": "ding2",
+"t": 14.74
+},
+{
+"type": "error",
+"t": 17.16
+},
+{
+"type": "thump",
+"t": 17.19
+},
+{
+"type": "pop",
+"t": 17.21
+},
+{
+"type": "stamp2",
+"t": 17.36
+},
+{
+"type": "riser_short",
+"t": 17.815
+},
+{
+"type": "whoosh",
+"t": 18.535
+},
+{
+"type": "pop",
+"t": 18.865
+},
+{
+"type": "click",
+"t": 19.54
+},
+{
+"type": "glitch",
+"t": 19.98
+},
+{
+"type": "switch",
+"t": 20.03
+},
+{
+"type": "error",
+"t": 20.47
+},
+{
+"type": "pop",
+"t": 20.52
+},
+{
+"type": "whoosh",
+"t": 21.42
+},
+{
+"type": "ding",
+"t": 21.67
+},
+{
+"type": "pop",
+"t": 21.72
+},
+{
+"type": "whoosh_big",
+"t": 23.205
+},
+{
+"type": "switch",
+"t": 23.535
+},
+{
+"type": "paper",
+"t": 23.665
+},
+{
+"type": "paper",
+"t": 23.805
+},
+{
+"type": "typing",
+"t": 23.845
+},
+{
+"type": "paper",
+"t": 23.945
+},
+{
+"type": "whoosh_big",
+"t": 25.48
+},
+{
+"type": "flip",
+"t": 25.58
+},
+{
+"type": "ding2",
+"t": 26.92
+},
+{
+"type": "ding2",
+"t": 27.06
+},
+{
+"type": "ding2",
+"t": 27.2
+},
+{
+"type": "pop",
+"t": 27.92
+},
+{
+"type": "switch",
+"t": 28.677
+},
+{
+"type": "sub",
+"t": 28.677
+},
+{
+"type": "riser",
+"t": 29.3
+},
+{
+"type": "pop",
+"t": 29.44
+},
+{
+"type": "whoosh",
+"t": 30.38
+},
+{
+"type": "click",
+"t": 31.62
+},
+{
+"type": "riser_short",
+"t": 31.9
+},
+{
+"type": "riser_short",
+"t": 33.21
+},
+{
+"type": "stamp",
+"t": 33.24
+},
+{
+"type": "sub",
+"t": 33.24
+},
+{
+"type": "thump",
+"t": 33.26
+},
+{
+"type": "pop",
+"t": 33.28
+},
+{
+"type": "ding",
+"t": 33.3
+},
+{
+"type": "flip",
+"t": 33.83
+},
+{
+"type": "whoosh",
+"t": 34.06
+},
+{
+"type": "paper",
+"t": 34.16
+},
+{
+"type": "tick",
+"t": 34.26
+},
+{
+"type": "pop",
+"t": 34.26
+},
+{
+"type": "tick",
+"t": 34.36
+},
+{
+"type": "pop",
+"t": 34.38
+},
+{
+"type": "tick",
+"t": 34.46
+},
+{
+"type": "pop",
+"t": 34.5
+},
+{
+"type": "tick",
+"t": 34.56
+},
+{
+"type": "pop",
+"t": 34.62
+},
+{
+"type": "tick",
+"t": 34.66
+},
+{
+"type": "pop",
+"t": 34.74
+},
+{
+"type": "tick",
+"t": 34.76
+},
+{
+"type": "tick",
+"t": 34.86
+},
+{
+"type": "pop",
+"t": 34.86
+},
+{
+"type": "tick",
+"t": 34.96
+},
+{
+"type": "tick",
+"t": 35.06
+},
+{
+"type": "tick",
+"t": 35.16
+},
+{
+"type": "tick",
+"t": 35.26
+},
+{
+"type": "tick",
+"t": 35.36
+},
+{
+"type": "tick",
+"t": 35.46
+},
+{
+"type": "coin",
+"t": 35.55
+},
+{
+"type": "thump",
+"t": 35.55
+},
+{
+"type": "swish",
+"t": 36.4
+},
+{
+"type": "pop",
+"t": 36.54
+},
+{
+"type": "pop",
+"t": 37.89
+},
+{
+"type": "riser_short",
+"t": 38.945
+},
+{
+"type": "ding2",
+"t": 39.22
+},
+{
+"type": "pop",
+"t": 39.22
+},
+{
+"type": "whoosh_big",
+"t": 39.525
+},
+{
+"type": "glitch",
+"t": 39.825
+},
+{
+"type": "paper",
+"t": 39.945
+},
+{
+"type": "stamp",
+"t": 40.62
+},
+{
+"type": "sub",
+"t": 40.62
+},
+{
+"type": "click",
+"t": 41.09
+},
+{
+"type": "click",
+"t": 41.17
+},
+{
+"type": "click",
+"t": 41.25
+},
+{
+"type": "click",
+"t": 41.33
+},
+{
+"type": "ding",
+"t": 41.42
+},
+{
+"type": "click",
+"t": 41.51
+},
+{
+"type": "stamp",
+"t": 42.0
+},
+{
+"type": "sub",
+"t": 42.0
+},
+{
+"type": "pop",
+"t": 42.1
+}
+]
