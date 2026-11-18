@@ -5,14 +5,19 @@
 "file": "whoosh_whoosh_a.wav"
 },
 {
-"t": 0.25,
+"t": 0.05,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 0.5,
 "kind": "thump",
 "file": "thump_impact.wav"
 },
 {
-"t": 1.95,
-"kind": "swish",
-"file": "swish_whoosh_b.wav"
+"t": 1.98,
+"kind": "typing",
+"file": "typing_typing.wav"
 },
 {
 "t": 3.48,
@@ -30,7 +35,12 @@
 "file": "tick_click.wav"
 },
 {
-"t": 4.79,
+"t": 4.77,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 4.77,
 "kind": "impact",
 "file": "impact_impact.wav"
 },
@@ -40,9 +50,14 @@
 "file": "click_click.wav"
 },
 {
-"t": 6.18,
-"kind": "swish",
-"file": "swish_whoosh_b.wav"
+"t": 5.23,
+"kind": "typing",
+"file": "typing_typing.wav"
+},
+{
+"t": 6.21,
+"kind": "typing",
+"file": "typing_typing.wav"
 },
 {
 "t": 8.78,
@@ -60,7 +75,12 @@
 "file": "tick_click.wav"
 },
 {
-"t": 11.97,
+"t": 11.95,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 11.95,
 "kind": "impact",
 "file": "impact_impact.wav"
 },
@@ -75,19 +95,24 @@
 "file": "swish_whoosh_b.wav"
 },
 {
-"t": 13.21,
+"t": 13.19,
 "kind": "impact",
 "file": "impact_impact.wav"
 },
 {
-"t": 13.29,
-"kind": "click",
-"file": "click_click.wav"
+"t": 13.21,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
 },
 {
-"t": 14.45,
-"kind": "swish",
-"file": "swish_whoosh_b.wav"
+"t": 13.7,
+"kind": "typing",
+"file": "typing_typing.wav"
+},
+{
+"t": 14.48,
+"kind": "typing",
+"file": "typing_typing.wav"
 },
 {
 "t": 16.84,
@@ -105,7 +130,12 @@
 "file": "tick_click.wav"
 },
 {
-"t": 18.15,
+"t": 18.13,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 18.13,
 "kind": "impact",
 "file": "impact_impact.wav"
 },
@@ -115,9 +145,14 @@
 "file": "click_click.wav"
 },
 {
-"t": 19.27,
-"kind": "swish",
-"file": "swish_whoosh_b.wav"
+"t": 18.59,
+"kind": "typing",
+"file": "typing_typing.wav"
+},
+{
+"t": 19.3,
+"kind": "typing",
+"file": "typing_typing.wav"
 },
 {
 "t": 20.84,
@@ -135,7 +170,12 @@
 "file": "tick_click.wav"
 },
 {
-"t": 22.17,
+"t": 22.15,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 22.15,
 "kind": "impact",
 "file": "impact_impact.wav"
 },
@@ -145,9 +185,14 @@
 "file": "click_click.wav"
 },
 {
-"t": 23.53,
-"kind": "swish",
-"file": "swish_whoosh_b.wav"
+"t": 22.61,
+"kind": "typing",
+"file": "typing_typing.wav"
+},
+{
+"t": 23.56,
+"kind": "typing",
+"file": "typing_typing.wav"
 },
 {
 "t": 26.58,
@@ -165,7 +210,12 @@
 "file": "tick_click.wav"
 },
 {
-"t": 27.91,
+"t": 27.89,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 27.89,
 "kind": "impact",
 "file": "impact_impact.wav"
 },
@@ -175,9 +225,19 @@
 "file": "click_click.wav"
 },
 {
-"t": 28.79,
+"t": 28.35,
+"kind": "typing",
+"file": "typing_typing.wav"
+},
+{
+"t": 28.72,
 "kind": "riser",
 "file": "riser_riser.wav"
+},
+{
+"t": 28.82,
+"kind": "typing",
+"file": "typing_typing.wav"
 },
 {
 "t": 28.92,
