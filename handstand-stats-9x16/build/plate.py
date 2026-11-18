@@ -140,20 +140,18 @@ for i in range(0, a.last + 1):
         Mi = np.linalg.inv(T @ Hm)
         bgw = cv2.warpPerspective(plate, Mi, (W, H), flags=cv2.INTER_LINEAR)
         hv = cv2.warpPerspective(have.astype(np.uint8) * 255, Mi, (W, H), flags=cv2.INTER_NEAREST)
-        # colour match per hole on a ring around it (exposure drifts a little across the clip)
-        n, lab = cv2.connectedComponents(hole)
-        bgc = bgw.astype(np.float32)
-        for c in range(1, n):
-            h1 = (lab == c).astype(np.uint8) * 255
-            ring = (cv2.dilate(h1, np.ones((61, 61), np.uint8)) > 0) & (h1 == 0) & (allm == 0) & (hv > 0)
-            if ring.sum() > 200:
-                g = (fr[ring].astype(np.float32).mean(0) + 1) / (bgw[ring].astype(np.float32).mean(0) + 1)
-                sel = h1 > 0
-                bgc[sel] = bgc[sel] * np.clip(g, .8, 1.25)
-        fill = np.clip(bgc, 0, 255).astype(np.uint8)
+        # smooth colour match: the frame-minus-plate difference measured on a ring of clean background around the holes,
+        # spread into the holes by a normalised blur (follows exposure drift and soft light gradients)
+        ring = (cv2.dilate(hole, np.ones((81, 81), np.uint8)) > 0) & (hole == 0) & (allm == 0) & (hv > 0)
+        rv = ring.astype(np.float32)
+        diff = (fr.astype(np.float32) - bgw.astype(np.float32)) * rv[..., None]
+        num = cv2.GaussianBlur(diff, (0, 0), 45)
+        den = cv2.GaussianBlur(rv, (0, 0), 45)[..., None]
+        corr = np.where(den > 1e-3, num / np.maximum(den, 1e-3), 0)
+        fill = np.clip(bgw.astype(np.float32) + np.clip(corr, -40, 40), 0, 255).astype(np.uint8)
+        # blend ramps INSIDE the hole only (its edge is ~15 px of plain background away from the person)
         use = ((hole > 0) & (hv > 0)).astype(np.float32)
-        al = cv2.GaussianBlur(use, (0, 0), 10)[..., None]
-        al = np.clip(al * 2, 0, 1) * (cv2.dilate(hole, np.ones((41, 41), np.uint8)) > 0)[..., None]
+        al = np.clip(cv2.GaussianBlur(use, (0, 0), 5) * 2 - 1, 0, 1)[..., None]
         out = (fill * al + fr * (1 - al)).astype(np.uint8)
         # spots the plate never saw clean (always behind the athlete): copy a nearby patch of the same ground sideways
         miss = ((hole > 0) & (hv == 0) & (ms[si] == 0)).astype(np.uint8) * 255
