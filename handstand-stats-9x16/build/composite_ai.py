@@ -17,6 +17,7 @@ ap.add_argument("orig")
 ap.add_argument("ai")
 ap.add_argument("out")
 ap.add_argument("--last", type=int, default=84)
+ap.add_argument("--patch", default="44-60")   # frames where the person stands right behind him: whole patch from the AI
 a = ap.parse_args()
 os.makedirs(a.out, exist_ok=True)
 yolo = YOLO(os.path.join(os.environ.get("HS_MODELS", "models"), "yolov8x-seg.pt"))
@@ -61,7 +62,7 @@ for i in range(0, a.last + 1):
                 cv2.fillPoly(hole, [cv2.convexHull(np.vstack(cs))], 255)
     hole = cv2.dilate(hole, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (31, 31)))
     # the AI frame nearest in time, upscaled and lightly sharpened
-    k = min(len(A) - 1, int(round(i / ofps * afps)))   # AI clip retimed to 30 fps first (minterpolate), so k == i
+    k = min(len(A) - 1, int(round(i / ofps * afps)))   # nearest AI frame (24 fps); inside a patch he comes whole from it
     ai = cv2.resize(A[k], (W, H), interpolation=cv2.INTER_LANCZOS4)
     bl = cv2.GaussianBlur(ai, (0, 0), 1.2)
     ai = cv2.addWeighted(ai, 1.5, bl, -.5, 0)
@@ -92,7 +93,8 @@ for i in range(0, a.last + 1):
     # where the athlete's mask overlaps a removed person, the mask can swallow that person (they stand right behind him):
     # there, pixels that clearly differ from the AI frame (which has the athlete but not the person) take the AI pixels
     ov = ((hole > 0) & (ms[si] > 0) & (av > 0)).astype(np.float32)
-    if ov.sum() > 1500:
+    p0, p1 = (int(x) for x in a.patch.split("-"))
+    if p0 <= i <= p1:
         # heavy overlap (the person stands right behind him): take the whole patch, athlete included, from the AI frame
         R = cv2.dilate(((hole > 0) | (ms[si] > 0)).astype(np.uint8) * 255, np.ones((25, 25), np.uint8))
         ring2 = (cv2.dilate(R, np.ones((81, 81), np.uint8)) > 0) & (R == 0) & (allm == 0) & (av > 0)
