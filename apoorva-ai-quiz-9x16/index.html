@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Apoorva: AI true or false 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: Inter; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2"); }
+@font-face { font-family: Mono; src: url("assets/fonts/JetBrainsMono-Bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter; color: #0E0F12; background: #000; }
+#punch, #cam { position: absolute; inset: 0; transform-origin: 50% 32%; }
+#ar { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
+#vig { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: radial-gradient(70% 55% at 50% 34%, rgba(0,0,0,0) 45%, rgba(0,0,0,.62) 100%); }
+#shade { position: absolute; left: 0; right: 0; top: 0; height: 520px; background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,0)); pointer-events: none; }
+#shadeb { position: absolute; left: 0; right: 0; bottom: 0; height: 900px; background: linear-gradient(0deg, rgba(0,0,0,.5), rgba(0,0,0,0)); pointer-events: none; }
+/* tracker */
+#trk { position: absolute; left: 0; right: 0; top: 196px; text-align: center; opacity: 0; z-index: 20; }
+#trk .tl { display: inline-block; font: 22px Mono; letter-spacing: .2em; color: #fff; padding: 8px 18px; border-radius: 999px; background: rgba(14,15,18,.72); margin-bottom: 14px; }
+#trk .row { display: flex; gap: 16px; justify-content: center; perspective: 600px; }
+.bx { position: relative; width: 116px; height: 116px; border-radius: 26px; border: 5px solid rgba(255,255,255,.75); background: rgba(14,15,18,.45);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); overflow: hidden; opacity: 0; }
+.bx.boss { border-color: #F5B400; }
+.bn { position: absolute; left: 10px; top: 6px; font: 18px Mono; color: rgba(255,255,255,.75); z-index: 3; }
+.bf { position: absolute; inset: 0; transform-origin: 50% 100%; transform: scaleY(0); }
+#bf1, #bf4, #bf5 { background: #E11D48; }
+#bf3 { background: #16A34A; }
+.bt { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 72px; color: #fff; z-index: 2; opacity: 0; }
+#bt6 { color: #F5B400; }
+/* difficulty tag */
+#tag { position: absolute; left: 50%; top: 420px; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; padding: 14px 28px; border-radius: 999px;
+  background: #0E0F12; color: #fff; font-weight: 800; font-size: 34px; letter-spacing: .06em; opacity: 0; z-index: 20; white-space: nowrap; }
+#tag i { width: 18px; height: 18px; border-radius: 50%; }
+#tag em { font-style: normal; font: 22px Mono; color: rgba(255,255,255,.6); letter-spacing: .1em; }
+/* question cards */
+.qc { position: absolute; left: 70px; right: 70px; top: 1170px; padding: 34px 40px 40px; border-radius: 38px; background: #FFFFFF; opacity: 0; z-index: 15;
+  box-shadow: 0 30px 80px rgba(0,0,0,.4); }
+.qc.bossc { background: linear-gradient(135deg, #1B1030, #2A1450); color: #fff; border: 4px solid #A855F7; }
+.qn { font: 22px Mono; letter-spacing: .18em; color: #6B7280; margin-bottom: 12px; }
+.bossc .qn { color: #D8B4FE; }
+.qt { font-weight: 800; font-size: 60px; line-height: 1.08; letter-spacing: -.03em; }
+.qw { display: inline-block; opacity: 0; }
+.stamp { position: absolute; right: 30px; top: -64px; padding: 10px 26px; border-radius: 18px; font-weight: 800; font-size: 76px; letter-spacing: .02em; opacity: 0;
+  background: #fff; z-index: 3; }
+.stamp.st { color: #16A34A; border: 8px solid #16A34A; }
+.stamp.sf { color: #E11D48; border: 8px solid #E11D48; }
+#sp2f { position: absolute; right: 100px; top: 1106px; z-index: 30; }
+.why { margin-top: 22px; display: inline-block; padding: 12px 22px; border-radius: 16px; background: #0E0F12; color: #fff; font-weight: 700; font-size: 34px; opacity: 0; }
+#plot { position: absolute; left: 90px; top: 1090px; padding: 10px 22px; border-radius: 14px; background: #F5B400; color: #0E0F12; font-weight: 800; font-size: 44px; opacity: 0; z-index: 31; }
+/* lock-in */
+#lk { position: absolute; left: 50%; top: 960px; width: 170px; height: 170px; margin-left: -85px; opacity: 0; z-index: 25; }
+#lk svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+#lk .rt { fill: rgba(14,15,18,.7); stroke: rgba(255,255,255,.25); stroke-width: 9; }
+#lk .rf { fill: none; stroke: #F5B400; stroke-width: 9; stroke-linecap: round; stroke-dasharray: 1000; }
+.ln { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 96px; color: #fff; opacity: 0; }
+#lkt { position: absolute; left: 0; right: 0; top: 1140px; text-align: center; font: 24px Mono; letter-spacing: .2em; color: #fff; opacity: 0; z-index: 25;
+  text-shadow: 0 2px 10px rgba(0,0,0,.7); }
+/* hook and CTA */
+#hk { position: absolute; left: 60px; right: 60px; top: 1120px; text-align: center; color: #fff; opacity: 0; z-index: 20; text-shadow: 0 4px 24px rgba(0,0,0,.6); }
+.hk1 { font-weight: 700; font-size: 50px; opacity: 0; }
+.hk2 { font-weight: 800; font-size: 112px; letter-spacing: -.04em; line-height: 1; margin: 8px 0 18px; opacity: 0; }
+.hk2 em, .c2 em { font-style: normal; font-weight: 600; font-size: .6em; color: #F5B400; }
+.hk3 { display: inline-block; padding: 12px 24px; border-radius: 999px; background: #fff; color: #0E0F12; font-weight: 800; font-size: 34px; text-shadow: none; opacity: 0; }
+#bosstz { position: absolute; right: 70px; top: 430px; padding: 10px 20px; border-radius: 14px; background: #A855F7; color: #fff; font-weight: 800; font-size: 30px; opacity: 0; z-index: 21; }
+#cta { position: absolute; left: 60px; right: 60px; top: 1060px; text-align: center; color: #fff; opacity: 0; z-index: 20; }
+#cta .c1 { display: inline-block; padding: 10px 22px; border-radius: 14px; background: #A855F7; font-weight: 800; font-size: 34px; letter-spacing: .08em; }
+#cta .c2 { font-weight: 800; font-size: 108px; letter-spacing: -.04em; line-height: 1.02; margin: 14px 0 22px; text-shadow: 0 4px 24px rgba(0,0,0,.6); }
+#cta .cbar { display: flex; align-items: center; gap: 18px; height: 110px; padding: 0 26px; border-radius: 60px; background: #fff; color: #0E0F12; font-weight: 800; font-size: 44px; text-align: left; }
+#cta .cbar > i { width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(135deg, #16A34A, #E11D48); flex: none; }
+#cph { position: absolute; margin-left: 86px; font-weight: 600; color: #9CA3AF; }
+#cty i { font-style: normal; opacity: 0; }
+#cta .c3 { margin-top: 22px; font-weight: 700; font-size: 38px; opacity: 0; text-shadow: 0 2px 14px rgba(0,0,0,.7); }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="35.99" data-fps="30" data-width="1080" data-height="1920">
+      <div id="punch"><div id="cam">
+        <video id="ar" src="assets/video/aroll.mp4" data-start="0" data-duration="35.990" data-track-index="1" muted playsinline></video>
+      </div></div>
+      <div id="vig"></div><div id="shade"></div><div id="shadeb"></div>
+      <div id="trk"><div class="tl">AI: TRUE OR FALSE</div><div class="row"><div class="bx" id="bx1"><span class="bn">1</span><b class="bt" id="bt1"></b><i class="bf" id="bf1"></i></div><div class="bx" id="bx2"><span class="bn">2</span><b class="bt" id="bt2"></b><i class="bf" id="bf2"></i></div><div class="bx" id="bx3"><span class="bn">3</span><b class="bt" id="bt3"></b><i class="bf" id="bf3"></i></div><div class="bx" id="bx4"><span class="bn">4</span><b class="bt" id="bt4"></b><i class="bf" id="bf4"></i></div><div class="bx" id="bx5"><span class="bn">5</span><b class="bt" id="bt5"></b><i class="bf" id="bf5"></i></div><div class="bx boss" id="bx6"><span class="bn">6</span><b class="bt" id="bt6"></b><i class="bf" id="bf6"></i></div></div></div>
+<div id="tag"><i id="tagdot"></i><span id="tagtx"></span><em id="tagq"></em></div>
+<div class="qc" id="qc1"><div class="qn">QUESTION 1</div><div class="qt"><span class="qw">Does</span> <span class="qw">NVIDIA</span> <span class="qw">manufacture</span> <span class="qw">chips?</span></div><div class="stamp sf" id="sp1">FALSE</div><div class="why" id="why1">NVIDIA designs the chips. TSMC makes them.</div></div>
+<div class="qc" id="qc2"><div class="qn">QUESTION 2</div><div class="qt"><span class="qw">It's</span> <span class="qw">AI,</span> <span class="qw">so</span> <span class="qw">it</span> <span class="qw">gives</span> <span class="qw">the</span> <span class="qw">same</span> <span class="qw">answer</span> <span class="qw">every</span> <span class="qw">time.</span></div><div class="stamp st" id="sp2">TRUE</div><div class="why" id="why2">Same prompt, different answers: AI samples.</div></div>
+<div class="qc" id="qc3"><div class="qn">QUESTION 3</div><div class="qt"><span class="qw">A</span> <span class="qw">model</span> <span class="qw">on</span> <span class="qw">its</span> <span class="qw">own</span> <span class="qw">can't</span> <span class="qw">tell</span> <span class="qw">you</span> <span class="qw">today's</span> <span class="qw">news.</span></div><div class="stamp st" id="sp3">TRUE</div><div class="why" id="why3">Live news needs search or tools.</div></div>
+<div class="qc" id="qc4"><div class="qn">QUESTION 4</div><div class="qt"><span class="qw">Longer</span> <span class="qw">prompt,</span> <span class="qw">better</span> <span class="qw">answer.</span></div><div class="stamp sf" id="sp4">FALSE</div><div class="why" id="why4">Clear beats long.</div></div>
+<div class="qc" id="qc5"><div class="qn">QUESTION 5</div><div class="qt"><span class="qw">Ask</span> <span class="qw">AI</span> <span class="qw">to</span> <span class="qw">double-check</span> <span class="qw">itself</span> <span class="qw">and</span> <span class="qw">it</span> <span class="qw">catches</span> <span class="qw">every</span> <span class="qw">mistake.</span></div><div class="stamp sf" id="sp5">FALSE</div><div class="why" id="why5">AI can miss its own mistakes.</div></div>
+<div class="qc bossc" id="qc6"><div class="qn">QUESTION 6</div><div class="qt"><span class="qw">A</span> <span class="qw">model</span> <span class="qw">that's</span> <span class="qw">99%</span> <span class="qw">accurate</span> <span class="qw">can</span> <span class="qw">still</span> <span class="qw">be</span> <span class="qw">useless.</span></div></div>
+<div class="stamp sf" id="sp2f">FALSE</div>
+<div id="lk"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="rt"/><circle cx="60" cy="60" r="52" class="rf" id="rf" pathLength="1000"/></svg><b class="ln" id="ln3">3</b><b class="ln" id="ln2">2</b><b class="ln" id="ln1">1</b></div><div id="lkt">LOCK IN YOUR ANSWER</div>
+<div id="hk"><div class="hk1">Apoorva, quick:</div><div class="hk2">TRUE <em>or</em> FALSE?</div><div class="hk3">6 AI questions. Score yourself.</div></div><div id="bosstz">Q6 = BOSS LEVEL</div>
+<div id="cta"><div class="c1">BOSS LEVEL</div><div class="c2">TRUE <em>or</em> FALSE?</div><div class="cbar"><i></i><span id="cph">Add a comment…</span><span id="cty"><i>T</i><i>R</i><i>U</i><i>E</i><i> </i><i>o</i><i>r</i><i> </i><i>F</i><i>A</i><i>L</i><i>S</i><i>E</i></span></div><div class="c3">Comment your answer. How many did you get right?</div></div>
+<div id="plot">WAIT...</div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({paused: true});
+      tl.set("#hk", {opacity: 1}, 0.000);
+      tl.fromTo("#hk .hk1", {opacity: 0, y: 30}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 0.000);
+      tl.fromTo("#hk .hk2", {opacity: 0, scale: 1.6}, {...{opacity: 1, scale: 1}, duration: 0.45, ease: "back.out(1.8)", immediateRender: false}, 0.250);
+      tl.fromTo("#hk .hk3", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 0.700);
+      tl.fromTo("#trk", {opacity: 0, y: -120}, {...{opacity: 1, y: 0}, duration: 0.5, ease: "back.out(1.6)", immediateRender: false}, 0.150);
+      tl.fromTo(".bx", {opacity: 0, scale: .5}, {...{opacity: 1, scale: 1, stagger: .05}, duration: 0.35, ease: "back.out(2.4)", immediateRender: false}, 0.300);
+      tl.fromTo("#bosstz", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 0.900);
+      tl.fromTo("#bosstz", {scale: 1}, {scale: 1.08, duration: .18, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}, 1.2);
+      tl.to("#hk", {...{opacity: 0, y: -40}, duration: 0.25, ease: "power2.in"}, 1.930);
+      tl.to("#bosstz", {...{opacity: 0, scale: .6}, duration: 0.2, ease: "power2.in"}, 1.930);
+      tl.set("#tagtx", {textContent: "WARM-UP"}, 1.960);
+      tl.set("#tagq", {textContent: "1 / 6"}, 1.960);
+      tl.set("#tagdot", {background: '#22C55E', boxShadow: '0 0 14px #22C55E'}, 1.960);
+      tl.fromTo("#tag", {opacity: 0, scale: .7, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(2.6)", immediateRender: false}, 1.960);
+      tl.set("#bx1", {borderColor: '#FFFFFF', boxShadow: '0 0 0 5px rgba(255,255,255,.35), 0 10px 30px rgba(0,0,0,.35)'}, 1.980);
+      tl.fromTo("#qc1", {opacity: 0, y: 140, rotation: -3}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.4, ease: "back.out(1.5)", immediateRender: false}, 1.980);
+      tl.fromTo("#qc1 .qw:nth-child(1)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 2.040);
+      tl.fromTo("#qc1 .qw:nth-child(2)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 2.140);
+      tl.fromTo("#qc1 .qw:nth-child(3)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 2.440);
+      tl.fromTo("#qc1 .qw:nth-child(4)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 2.980);
+      tl.fromTo("#lk", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 3.480);
+      tl.fromTo("#lkt", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 3.480);
+      tl.fromTo("#rf", {strokeDashoffset: 0}, {...{strokeDashoffset: 1000}, duration: 1.1999999999999997, ease: "none", immediateRender: false}, 3.480);
+      tl.set(".ln", {opacity: 0}, 3.480);
+      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 3.480);
+      tl.set(".ln", {opacity: 0}, 3.880);
+      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 3.880);
+      tl.set(".ln", {opacity: 0}, 4.280);
+      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 4.280);
+      tl.set(".ln", {opacity: 0}, 4.680);
+      tl.fromTo("#cam", {scale: 1}, {...{scale: 1.09}, duration: 1.1999999999999997, ease: "sine.inOut", immediateRender: false}, 3.480);
+      tl.fromTo("#vig", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 3.480);
+      tl.to("#lk", {...{opacity: 0, scale: .6}, duration: 0.15, ease: "power2.in"}, 4.660);
+      tl.to("#lkt", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 4.660);
+      tl.to("#vig", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 4.680);
+      tl.to("#cam", {...{scale: 1}, duration: 0.35, ease: "power3.out"}, 4.680);
+      tl.fromTo("#sp1", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.in", immediateRender: false}, 4.730);
+      tl.set("#bt1", {textContent: "F"}, 4.830);
+      tl.fromTo("#bf1", {scaleY: 0}, {...{scaleY: 1}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 4.830);
+      tl.set("#bx1", {borderColor: '#E11D48', boxShadow: 'none'}, 4.830);
+      tl.fromTo("#bt1", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 4.880);
+      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.04}, duration: 0.08, ease: "power2.out", immediateRender: false}, 4.930);
+      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 5.010);
+      tl.fromTo("#why1", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 5.180);
+      tl.set("#tagtx", {textContent: "EASY"}, 6.190);
+      tl.set("#tagq", {textContent: "2 / 6"}, 6.190);
+      tl.set("#tagdot", {background: '#84CC16', boxShadow: '0 0 14px #84CC16'}, 6.190);
+      tl.fromTo("#tag", {opacity: 0, scale: .7, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(2.6)", immediateRender: false}, 6.190);
+      tl.set("#bx2", {borderColor: '#FFFFFF', boxShadow: '0 0 0 5px rgba(255,255,255,.35), 0 10px 30px rgba(0,0,0,.35)'}, 6.210);
+      tl.fromTo("#qc2", {opacity: 0, y: 140, rotation: -3}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.4, ease: "back.out(1.5)", immediateRender: false}, 6.210);
+      tl.fromTo("#qc2 .qw:nth-child(1)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 6.280);
+      tl.fromTo("#qc2 .qw:nth-child(2)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 6.600);
+      tl.fromTo("#qc2 .qw:nth-child(3)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 7.040);
+      tl.fromTo("#qc2 .qw:nth-child(4)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 7.140);
+      tl.fromTo("#qc2 .qw:nth-child(5)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 7.260);
+      tl.fromTo("#qc2 .qw:nth-child(6)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 7.440);
+      tl.fromTo("#qc2 .qw:nth-child(7)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 7.680);
+      tl.fromTo("#qc2 .qw:nth-child(8)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 7.860);
+      tl.fromTo("#qc2 .qw:nth-child(9)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 8.180);
+      tl.fromTo("#qc2 .qw:nth-child(10)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 8.440);
+      tl.fromTo("#lk", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 8.780);
+      tl.fromTo("#lkt", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 8.780);
+      tl.fromTo("#rf", {strokeDashoffset: 0}, {...{strokeDashoffset: 1000}, duration: 1.200000000000001, ease: "none", immediateRender: false}, 8.780);
+      tl.set(".ln", {opacity: 0}, 8.780);
+      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 8.780);
+      tl.set(".ln", {opacity: 0}, 9.180);
+      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 9.180);
+      tl.set(".ln", {opacity: 0}, 9.580);
+      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 9.580);
+      tl.set(".ln", {opacity: 0}, 9.980);
+      tl.fromTo("#cam", {scale: 1}, {...{scale: 1.09}, duration: 1.200000000000001, ease: "sine.inOut", immediateRender: false}, 8.780);
+      tl.fromTo("#vig", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 8.780);
+      tl.to("#lk", {...{opacity: 0, scale: .6}, duration: 0.15, ease: "power2.in"}, 9.960);
+      tl.to("#lkt", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 9.960);
+      tl.to("#vig", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 9.980);
+      tl.to("#cam", {...{scale: 1}, duration: 0.35, ease: "power3.out"}, 9.980);
+      tl.fromTo("#sp2", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.in", immediateRender: false}, 11.910);
+      tl.set("#bt2", {textContent: "T"}, 12.010);
+      tl.fromTo("#bf2", {scaleY: 0}, {...{scaleY: 1}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 12.010);
+      tl.set("#bx2", {borderColor: '#16A34A', boxShadow: 'none'}, 12.010);
+      tl.fromTo("#bt2", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 12.060);
+      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.04}, duration: 0.08, ease: "power2.out", immediateRender: false}, 12.110);
+      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 12.190);
+      tl.set("#tagtx", {textContent: "MEDIUM"}, 13.840);
+      tl.set("#tagq", {textContent: "3 / 6"}, 13.840);
+      tl.set("#tagdot", {background: '#F59E0B', boxShadow: '0 0 14px #F59E0B'}, 13.840);
+      tl.fromTo("#tag", {opacity: 0, scale: .7, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(2.6)", immediateRender: false}, 13.840);
+      tl.set("#bx3", {borderColor: '#FFFFFF', boxShadow: '0 0 0 5px rgba(255,255,255,.35), 0 10px 30px rgba(0,0,0,.35)'}, 13.860);
+      tl.fromTo("#qc3", {opacity: 0, y: 140, rotation: -3}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.4, ease: "back.out(1.5)", immediateRender: false}, 13.860);
+      tl.fromTo("#qc3 .qw:nth-child(1)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 13.920);
+      tl.fromTo("#qc3 .qw:nth-child(2)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 14.000);
+      tl.fromTo("#qc3 .qw:nth-child(3)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 14.220);
+      tl.fromTo("#qc3 .qw:nth-child(4)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 14.520);
+      tl.fromTo("#qc3 .qw:nth-child(5)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 14.680);
+      tl.fromTo("#qc3 .qw:nth-child(6)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 14.920);
+      tl.fromTo("#qc3 .qw:nth-child(7)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 15.300);
+      tl.fromTo("#qc3 .qw:nth-child(8)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 15.440);
+      tl.fromTo("#qc3 .qw:nth-child(9)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 15.600);
+      tl.fromTo("#qc3 .qw:nth-child(10)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 15.920);
+      tl.fromTo("#lk", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 16.220);
+      tl.fromTo("#lkt", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 16.220);
+      tl.fromTo("#rf", {strokeDashoffset: 0}, {...{strokeDashoffset: 1000}, duration: 1.2000000000000028, ease: "none", immediateRender: false}, 16.220);
+      tl.set(".ln", {opacity: 0}, 16.220);
+      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 16.220);
+      tl.set(".ln", {opacity: 0}, 16.620);
+      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 16.620);
+      tl.set(".ln", {opacity: 0}, 17.020);
+      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 17.020);
+      tl.set(".ln", {opacity: 0}, 17.420);
+      tl.fromTo("#cam", {scale: 1}, {...{scale: 1.09}, duration: 1.2000000000000028, ease: "sine.inOut", immediateRender: false}, 16.220);
+      tl.fromTo("#vig", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 16.220);
+      tl.to("#lk", {...{opacity: 0, scale: .6}, duration: 0.15, ease: "power2.in"}, 17.400);
+      tl.to("#lkt", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 17.400);
+      tl.to("#vig", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 17.420);
+      tl.to("#cam", {...{scale: 1}, duration: 0.35, ease: "power3.out"}, 17.420);
+      tl.fromTo("#sp3", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.in", immediateRender: false}, 17.470);
+      tl.set("#bt3", {textContent: "T"}, 17.570);
+      tl.fromTo("#bf3", {scaleY: 0}, {...{scaleY: 1}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 17.570);
+      tl.set("#bx3", {borderColor: '#16A34A', boxShadow: 'none'}, 17.570);
+      tl.fromTo("#bt3", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 17.620);
+      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.04}, duration: 0.08, ease: "power2.out", immediateRender: false}, 17.670);
+      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 17.750);
+      tl.fromTo("#why3", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 17.920);
+      tl.set("#tagtx", {textContent: "MEDIUM"}, 18.660);
+      tl.set("#tagq", {textContent: "4 / 6"}, 18.660);
+      tl.set("#tagdot", {background: '#F59E0B', boxShadow: '0 0 14px #F59E0B'}, 18.660);
+      tl.fromTo("#tag", {opacity: 0, scale: .7, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(2.6)", immediateRender: false}, 18.660);
+      tl.set("#bx4", {borderColor: '#FFFFFF', boxShadow: '0 0 0 5px rgba(255,255,255,.35), 0 10px 30px rgba(0,0,0,.35)'}, 18.680);
+      tl.fromTo("#qc4", {opacity: 0, y: 140, rotation: -3}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.4, ease: "back.out(1.5)", immediateRender: false}, 18.680);
+      tl.fromTo("#qc4 .qw:nth-child(1)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 18.740);
+      tl.fromTo("#qc4 .qw:nth-child(2)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 18.940);
+      tl.fromTo("#qc4 .qw:nth-child(3)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 19.560);
+      tl.fromTo("#qc4 .qw:nth-child(4)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 19.720);
+      tl.fromTo("#lk", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 20.220);
+      tl.fromTo("#lkt", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 20.220);
+      tl.fromTo("#rf", {strokeDashoffset: 0}, {...{strokeDashoffset: 1000}, duration: 1.2000000000000028, ease: "none", immediateRender: false}, 20.220);
+      tl.set(".ln", {opacity: 0}, 20.220);
+      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 20.220);
+      tl.set(".ln", {opacity: 0}, 20.620);
+      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 20.620);
+      tl.set(".ln", {opacity: 0}, 21.020);
+      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 21.020);
+      tl.set(".ln", {opacity: 0}, 21.420);
+      tl.fromTo("#cam", {scale: 1}, {...{scale: 1.09}, duration: 1.2000000000000028, ease: "sine.inOut", immediateRender: false}, 20.220);
+      tl.fromTo("#vig", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 20.220);
+      tl.to("#lk", {...{opacity: 0, scale: .6}, duration: 0.15, ease: "power2.in"}, 21.400);
+      tl.to("#lkt", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 21.400);
+      tl.to("#vig", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 21.420);
+      tl.to("#cam", {...{scale: 1}, duration: 0.35, ease: "power3.out"}, 21.420);
+      tl.fromTo("#sp4", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.in", immediateRender: false}, 21.490);
+      tl.set("#bt4", {textContent: "F"}, 21.590);
+      tl.fromTo("#bf4", {scaleY: 0}, {...{scaleY: 1}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 21.590);
+      tl.set("#bx4", {borderColor: '#E11D48', boxShadow: 'none'}, 21.590);
+      tl.fromTo("#bt4", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 21.640);
+      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.04}, duration: 0.08, ease: "power2.out", immediateRender: false}, 21.690);
+      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 21.770);
+      tl.fromTo("#why4", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 21.940);
+      tl.set("#tagtx", {textContent: "HARD"}, 22.920);
+      tl.set("#tagq", {textContent: "5 / 6"}, 22.920);
+      tl.set("#tagdot", {background: '#F97316', boxShadow: '0 0 14px #F97316'}, 22.920);
+      tl.fromTo("#tag", {opacity: 0, scale: .7, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(2.6)", immediateRender: false}, 22.920);
+      tl.set("#bx5", {borderColor: '#FFFFFF', boxShadow: '0 0 0 5px rgba(255,255,255,.35), 0 10px 30px rgba(0,0,0,.35)'}, 22.940);
+      tl.fromTo("#qc5", {opacity: 0, y: 140, rotation: -3}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.4, ease: "back.out(1.5)", immediateRender: false}, 22.940);
+      tl.fromTo("#qc5 .qw:nth-child(1)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 23.040);
+      tl.fromTo("#qc5 .qw:nth-child(2)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 23.040);
+      tl.fromTo("#qc5 .qw:nth-child(3)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 23.340);
+      tl.fromTo("#qc5 .qw:nth-child(4)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 23.560);
+      tl.fromTo("#qc5 .qw:nth-child(5)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 23.820);
+      tl.fromTo("#qc5 .qw:nth-child(6)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 24.020);
+      tl.fromTo("#qc5 .qw:nth-child(7)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 24.420);
+      tl.fromTo("#qc5 .qw:nth-child(8)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 24.780);
+      tl.fromTo("#qc5 .qw:nth-child(9)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 24.960);
+      tl.fromTo("#qc5 .qw:nth-child(10)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 25.220);
+      tl.fromTo("#lk", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 25.960);
+      tl.fromTo("#lkt", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 25.960);
+      tl.fromTo("#rf", {strokeDashoffset: 0}, {...{strokeDashoffset: 1000}, duration: 1.1999999999999993, ease: "none", immediateRender: false}, 25.960);
+      tl.set(".ln", {opacity: 0}, 25.960);
+      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 25.960);
+      tl.set(".ln", {opacity: 0}, 26.360);
+      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 26.360);
+      tl.set(".ln", {opacity: 0}, 26.760);
+      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 26.760);
+      tl.set(".ln", {opacity: 0}, 27.160);
+      tl.fromTo("#cam", {scale: 1}, {...{scale: 1.09}, duration: 1.1999999999999993, ease: "sine.inOut", immediateRender: false}, 25.960);
+      tl.fromTo("#vig", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 25.960);
+      tl.to("#lk", {...{opacity: 0, scale: .6}, duration: 0.15, ease: "power2.in"}, 27.140);
+      tl.to("#lkt", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 27.140);
+      tl.to("#vig", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 27.160);
+      tl.to("#cam", {...{scale: 1}, duration: 0.35, ease: "power3.out"}, 27.160);
+      tl.fromTo("#sp5", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.in", immediateRender: false}, 27.230);
+      tl.set("#bt5", {textContent: "F"}, 27.330);
+      tl.fromTo("#bf5", {scaleY: 0}, {...{scaleY: 1}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 27.330);
+      tl.set("#bx5", {borderColor: '#E11D48', boxShadow: 'none'}, 27.330);
+      tl.fromTo("#bt5", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 27.380);
+      tl.fromTo("#punch", {scale: 1}, {...{scale: 1.04}, duration: 0.08, ease: "power2.out", immediateRender: false}, 27.430);
+      tl.to("#punch", {...{scale: 1}, duration: 0.3, ease: "power3.out"}, 27.510);
+      tl.fromTo("#why5", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 27.680);
+      tl.set("#tagtx", {textContent: "BOSS LEVEL"}, 28.180);
+      tl.set("#tagq", {textContent: "6 / 6"}, 28.180);
+      tl.set("#tagdot", {background: '#A855F7', boxShadow: '0 0 14px #A855F7'}, 28.180);
+      tl.fromTo("#tag", {opacity: 0, scale: .7, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(2.6)", immediateRender: false}, 28.180);
+      tl.set("#bx6", {borderColor: '#FFFFFF', boxShadow: '0 0 0 5px rgba(255,255,255,.35), 0 10px 30px rgba(0,0,0,.35)'}, 28.200);
+      tl.fromTo("#qc6", {opacity: 0, y: 140, rotation: -3}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.4, ease: "back.out(1.5)", immediateRender: false}, 28.200);
+      tl.fromTo("#qc6 .qw:nth-child(1)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 28.280);
+      tl.fromTo("#qc6 .qw:nth-child(2)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 28.380);
+      tl.fromTo("#qc6 .qw:nth-child(3)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 28.600);
+      tl.fromTo("#qc6 .qw:nth-child(4)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 29.000);
+      tl.fromTo("#qc6 .qw:nth-child(5)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 29.400);
+      tl.fromTo("#qc6 .qw:nth-child(6)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 29.720);
+      tl.fromTo("#qc6 .qw:nth-child(7)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 30.040);
+      tl.fromTo("#qc6 .qw:nth-child(8)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 30.320);
+      tl.fromTo("#qc6 .qw:nth-child(9)", {opacity: 0, y: 18}, {...{opacity: 1, y: 0}, duration: 0.22, ease: "power3.out", immediateRender: false}, 30.580);
+      tl.fromTo("#qc6", {boxShadow: '0 0 0 0 rgba(168,85,247,0)'}, {...{boxShadow: '0 0 0 10px rgba(168,85,247,.45)'}, duration: 0.3, ease: "power2.out", immediateRender: false}, 28.300);
+      tl.fromTo("#lk", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.2, ease: "back.out(2.5)", immediateRender: false}, 31.180);
+      tl.fromTo("#lkt", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 31.180);
+      tl.fromTo("#rf", {strokeDashoffset: 0}, {...{strokeDashoffset: 1000}, duration: 1.2000000000000028, ease: "none", immediateRender: false}, 31.180);
+      tl.set(".ln", {opacity: 0}, 31.180);
+      tl.fromTo("#ln3", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 31.180);
+      tl.set(".ln", {opacity: 0}, 31.580);
+      tl.fromTo("#ln2", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 31.580);
+      tl.set(".ln", {opacity: 0}, 31.980);
+      tl.fromTo("#ln1", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.18, ease: "back.out(3)", immediateRender: false}, 31.980);
+      tl.set(".ln", {opacity: 0}, 32.380);
+      tl.fromTo("#cam", {scale: 1}, {...{scale: 1.09}, duration: 1.2000000000000028, ease: "sine.inOut", immediateRender: false}, 31.180);
+      tl.fromTo("#vig", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 31.180);
+      tl.to("#lk", {...{opacity: 0, scale: .6}, duration: 0.15, ease: "power2.in"}, 32.360);
+      tl.to("#lkt", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 32.360);
+      tl.to("#vig", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 32.380);
+      tl.to("#cam", {...{scale: 1}, duration: 0.35, ease: "power3.out"}, 32.380);
+      tl.set("#bf2", {background: '#16A34A'}, 0.000);
+      tl.fromTo("#bx2", {x: 0}, {keyframes: [{x: -10, duration: .04}, {x: 9, duration: .04}, {x: -6, duration: .04}, {x: 4, duration: .04}, {x: 0, duration: .04}], immediateRender: false}, 12.730);
+      tl.fromTo("#qc2", {x: 0, filter: "none"}, {keyframes: [{x: -14, filter: "drop-shadow(6px 0 0 rgba(225,29,72,.8)) drop-shadow(-6px 0 0 rgba(0,180,255,.8))", duration: .05}, {x: 10, duration: .05}, {x: 0, filter: "none", duration: .06}], immediateRender: false}, 12.730);
+      tl.to("#sp2", {...{opacity: 0, scale: .6}, duration: 0.15, ease: "power2.in"}, 12.780);
+      tl.fromTo("#sp2f", {opacity: 0, scale: 2.4, rotation: 20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.in", immediateRender: false}, 13.150);
+      tl.to("#bx2", {rotationY: 180, duration: .28, ease: "power2.inOut"}, 13.150);
+      tl.set("#bt2", {textContent: "F", rotationY: 180}, 13.290);
+      tl.set("#bf2", {background: '#E11D48'}, 13.290);
+      tl.set("#bx2", {borderColor: '#E11D48'}, 13.290);
+      tl.fromTo("#why2", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 13.600);
+      tl.fromTo("#plot", {opacity: 0, scale: .5, rotation: -10}, {...{opacity: 1, scale: 1, rotation: 6}, duration: 0.25, ease: "back.out(3)", immediateRender: false}, 12.730);
+      tl.to("#plot", {...{opacity: 0}, duration: 0.2, ease: "power2.out"}, 13.650);
+      tl.to("#qc1", {...{opacity: 0, y: -60, scale: .94}, duration: 0.2, ease: "power2.in"}, 6.090);
+      tl.to("#tag", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 6.090);
+      tl.to("#qc2", {...{opacity: 0, y: -60, scale: .94}, duration: 0.2, ease: "power2.in"}, 13.740);
+      tl.to("#tag", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 13.740);
+      tl.to("#sp2f", {...{opacity: 0}, duration: 0.2, ease: "power2.out"}, 13.740);
+      tl.to("#qc3", {...{opacity: 0, y: -60, scale: .94}, duration: 0.2, ease: "power2.in"}, 18.560);
+      tl.to("#tag", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 18.560);
+      tl.to("#qc4", {...{opacity: 0, y: -60, scale: .94}, duration: 0.2, ease: "power2.in"}, 22.820);
+      tl.to("#tag", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 22.820);
+      tl.to("#qc5", {...{opacity: 0, y: -60, scale: .94}, duration: 0.2, ease: "power2.in"}, 28.080);
+      tl.to("#tag", {...{opacity: 0}, duration: 0.12, ease: "power2.out"}, 28.080);
+      tl.set("#bt6", {textContent: "?"}, 32.280);
+      tl.fromTo("#bt6", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 32.280);
+      tl.fromTo("#bx6", {scale: 1}, {scale: 1.12, duration: .3, yoyo: true, repeat: 12, ease: "sine.inOut", immediateRender: false}, 32.380);
+      tl.to("#qc6", {...{opacity: 0, y: -60}, duration: 0.25, ease: "power2.in"}, 32.330);
+      tl.to("#tag", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 32.330);
+      tl.fromTo("#cta", {opacity: 0, y: 160}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "back.out(1.5)", immediateRender: false}, 32.380);
+      tl.fromTo("#cta .c2", {scale: 1.5}, {...{scale: 1}, duration: 0.4, ease: "back.out(2)", immediateRender: false}, 32.530);
+      tl.set("#cph", {opacity: 0}, 33.240);
+      tl.fromTo("#cty i", {opacity: 0}, {opacity: 1, duration: .01, stagger: .05, immediateRender: false}, 33.240);
+      tl.fromTo("#cta .c3", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.4, ease: "power3.out", immediateRender: false}, 33.840);
+      tl.set({}, {}, 35.99);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
