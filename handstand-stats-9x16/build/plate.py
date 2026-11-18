@@ -22,6 +22,7 @@ ap.add_argument("out")
 ap.add_argument("--last", type=int, default=84)          # output frames 0..last; the freeze frame is the reference
 ap.add_argument("--step", type=int, default=6)
 ap.add_argument("--pad", type=int, default=500)
+ap.add_argument("--plate", default="")      # reuse a plate.png / plate_have.png pair from an earlier run
 a = ap.parse_args()
 os.makedirs(a.out, exist_ok=True)
 yolo = YOLO(os.path.join(os.environ.get("HS_MODELS", "models"), "yolov8x-seg.pt"))
@@ -78,7 +79,7 @@ def homog(fr, allm):
 # ---- 1-2: the clean plate ---------------------------------------------------------------------------------------------------
 CH, CW = H + 2 * P, W + 2 * P
 warps, valids = [], []
-for i in range(0, N, a.step):
+for i in (range(0, N, a.step) if not a.plate else []):
     fr = frames[i]
     ms, _ = people(fr)
     allm = np.zeros((H, W), np.uint8)
@@ -98,7 +99,10 @@ for i in range(0, N, a.step):
     print("plate", i, flush=True)
 plate = np.zeros((CH, CW, 3), np.uint8)
 have = np.zeros((CH, CW), bool)
-for y0 in range(0, CH, 160):
+if a.plate:
+    plate = cv2.imread(os.path.join(a.plate, "plate.png"))
+    have = cv2.imread(os.path.join(a.plate, "plate_have.png"), 0) > 0
+for y0 in (range(0, CH, 160) if not a.plate else []):
     st = np.stack([w[y0:y0 + 160] for w in warps]).astype(np.float32)
     vm = np.stack([v[y0:y0 + 160] for v in valids])
     st[~vm] = np.nan
@@ -148,11 +152,31 @@ for i in range(0, a.last + 1):
                 bgc[sel] = bgc[sel] * np.clip(g, .8, 1.25)
         fill = np.clip(bgc, 0, 255).astype(np.uint8)
         use = ((hole > 0) & (hv > 0)).astype(np.float32)
-        al = cv2.GaussianBlur(use, (0, 0), 4)[..., None]
+        al = cv2.GaussianBlur(use, (0, 0), 10)[..., None]
+        al = np.clip(al * 2, 0, 1) * (cv2.dilate(hole, np.ones((41, 41), np.uint8)) > 0)[..., None]
         out = (fill * al + fr * (1 - al)).astype(np.uint8)
-        missing = ((hole > 0) & (hv == 0)).sum()
-        if missing:
-            print(f"frame {i}: {missing} px with no clean background", flush=True)
+        # spots the plate never saw clean (always behind the athlete): copy a nearby patch of the same ground sideways
+        miss = ((hole > 0) & (hv == 0) & (ms[si] == 0)).astype(np.uint8) * 255
+        if miss.max():
+            n2, lab2, st2, _ = cv2.connectedComponentsWithStats(miss, 8)
+            avoid = cv2.dilate(((hole > 0) & (hv == 0)).astype(np.uint8) | (ms[si] > 0).astype(np.uint8), np.ones((15, 15), np.uint8))
+            for c in range(1, n2):
+                x, y, w, h, _ = st2[c]
+                comp = (lab2 == c).astype(np.uint8) * 255
+                grow = cv2.dilate(comp, np.ones((31, 31), np.uint8))
+                for dx in sorted(range(-400, 401, 20), key=abs):
+                    if dx == 0 or x + dx < 0 or x + w + dx + 15 >= W:
+                        continue
+                    sh = np.roll(grow, dx, axis=1)
+                    if (avoid[sh > 0]).any():
+                        continue
+                    src = np.roll(out, -dx, axis=1)
+                    al2 = cv2.GaussianBlur(grow.astype(np.float32) / 255, (0, 0), 6)[..., None]
+                    al2 = np.maximum(al2, (comp > 0)[..., None].astype(np.float32))
+                    out = (src * al2 + out * (1 - al2)).astype(np.uint8)
+                    break
+                else:
+                    print(f"frame {i}: no patch for a {w}x{h} spot", flush=True)
     subj = cv2.GaussianBlur(cv2.dilate(ms[si], np.ones((7, 7), np.uint8)).astype(np.float32) / 255, (0, 0), 1.5)[..., None]
     out = (fr * subj + out * (1 - subj)).astype(np.uint8)
     cv2.imwrite(os.path.join(a.out, f"f{i:05d}.png"), out)
