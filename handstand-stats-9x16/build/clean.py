@@ -1,4 +1,4 @@
-"""Remove the background people from the handstand clip: YOLOv8-seg finds every person, the athlete is tracked
+"""Remove the background people from the handstand clip: YOLOv8x-seg finds every person, the athlete is tracked
 (largest person at the start, then the best overlap frame to frame), everyone else is masked (dilated, minus the
 athlete) and filled with LaMa (ONNX) on a padded crop. Frames in, frames out.
 
@@ -23,10 +23,11 @@ ap.add_argument("--start", type=float, default=0)
 ap.add_argument("--end", type=float, default=1e9)
 ap.add_argument("--dil", type=int, default=31)
 ap.add_argument("--ctx", type=float, default=1.6)
+ap.add_argument("--model", default="yolov8x-seg.pt")
 ap.add_argument("--conf", type=float, default=.2)
 a = ap.parse_args()
 os.makedirs(a.out, exist_ok=True)
-yolo = YOLO(os.path.join(MOD, "yolov8s-seg.pt"))
+yolo = YOLO(os.path.join(MOD, a.model))
 so = ort.SessionOptions()
 so.intra_op_num_threads = 4
 lama = ort.InferenceSession(os.path.join(MOD, "lama_fp32.onnx"), so)
@@ -94,10 +95,8 @@ while True:
             ms.append((cv2.resize(m, (W, H)) > .5).astype(np.uint8) * 255)
             bs.append(b)
     if bs:
-        if prev is None:
-            si = int(np.argmax([(b[2] - b[0]) * (b[3] - b[1]) for b in bs]))
-        else:
-            si = int(np.argmax([iou(b, prev) + .3 * ((b[2] - b[0]) * (b[3] - b[1])) / (W * H) for b in bs]))
+        # the athlete: overlap with the last frame's athlete plus size (he is always the biggest person in shot)
+        si = int(np.argmax([(iou(b, prev) if prev is not None else 0) + 2 * ((b[2] - b[0]) * (b[3] - b[1])) / (W * H) for b in bs]))
         prev = bs[si]
         bg = np.zeros((H, W), np.uint8)
         for i, m in enumerate(ms):
