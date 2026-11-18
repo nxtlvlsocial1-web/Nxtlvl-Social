@@ -9,8 +9,11 @@ Owner's brief (2026-11-18):
 - Then minimal animation: no motion-graphic cards, only the captions and the cuts.
 - Real reference footage as the script asks, but the focus is her: mostly her full screen, the footage only on a few
   lines, and always with her face under it in the split.
-- The owner's transitions (reference/transitions, "TRANSITION AND CLICK SAAS by LEWIS") start the video: the pixel ring
-  over the first frames, the polka-dot ring on the cut from the opening to her first full frame (peak on the cut).
+- The owner's transition (reference/transitions, "TRANSITION AND CLICK SAAS by LEWIS", the pixel ring) opens the hook,
+  once (v3, owner: "blend it accordingly and dont use it twice only in the hook"): the opening scene is revealed inside
+  the ring as it grows (a circular clip that tracks the ring's inner edge, measured frame by frame), the ring is tinted
+  to the palette, and the hook grows out of the ring's centre. No polka-dot ring any more.
+- v3 reference footage is silhouettes only (owner: "keep it gender, race, skin neutral").
 - No music, sound effects only (build/sfx_sheet.py).
 Footage: assets/video/face_full.mp4 (the tight cut, build/tight.py) and face_split.mp4 (its 1080x960 crop).
 Captions run on plan/words_final.json (the words as heard in the tight cut).
@@ -58,17 +61,17 @@ def word(i):
 
 
 # (kind, first word, end word, reference clip, clip in-point s). A section starts at its first word's line.
-SECTIONS = [("open", 0, 21, "ref_play", 0.0),        # Have you seen two children playing together? ... the other is white.
+SECTIONS = [("open", 0, 21, "ref_kids", 0.3),        # Have you seen two children playing together? ... the other is white.
             ("full", 21, 30),                         # But do you know what they see? A friend.
-            ("split", 30, 40, "ref_group", 0.4),      # They don't ask which God the other child prays to.
+            ("split", 30, 40, "ref_plane", 0.8),      # They don't ask which God the other child prays to.
             ("full", 40, 49),                         # They don't ask which country their parents are from.
-            ("split", 49, 54, "ref_marbles", 1.0),    # They just laugh, enjoy, share.
+            ("split", 49, 54, "ref_jump", 6.0),    # They just laugh, enjoy, share.
             ("full", 54, 74),                         # But somewhere along the way ... and sometimes who to fear.
             ("full", 74, 83),                         # And that's how our brain learns fear and prejudice.
             ("full", 83, 94),                         # But here's a beautiful part: our brain can learn empathy too.
-            ("split", 94, 101, "ref_share", 1.2),     # Children can be taught compassion before discrimination.
+            ("split", 94, 101, "ref_family", 8.0),     # Children can be taught compassion before discrimination.
             ("full", 101, 114),                       # They can be taught a little more kindness and a little more compassion.
-            ("split", 114, 122, "ref_group", 9.0),    # And that's how, when we begin healing ourselves,
+            ("split", 114, 122, "ref_family", 0.3),    # And that's how, when we begin healing ourselves,
             ("full", 122, None)]                      # we begin healing humanity.
 RED = {"friend", "fear", "prejudice", "empathy", "compassion", "discrimination", "kindness", "humanity"}
 
@@ -193,23 +196,18 @@ def layout():
             js(f'tl.set("#split", {{opacity: 1, scale: 1, filter: "blur(0px)"}}, {ta:.3f});')
             js(f'tl.fromTo("#stage", {{scale: 1.0}}, {{scale: 1.05, duration: {tb - ta:.2f}, ease: "none", immediateRender: false}}, {ta:.3f});')
             js(f'tl.set("#split", {{opacity: 0}}, {tb:.3f});')
-            if kind == "open":                      # out of the owner's pixel ring: both halves settle from close and blurred
-                js(f'tl.fromTo("#botin", {{scale: 1.35, filter: "blur(14px)"}}, {{scale: 1, filter: "blur(0px)", duration: .7, ease: "expo.out", immediateRender: false}}, 0);')
-                js(f'tl.fromTo("#topin", {{scale: 1.18, filter: "blur(16px)"}}, {{scale: 1, filter: "blur(0px)", duration: .75, ease: "expo.out", immediateRender: false}}, 0);')
+            if kind == "open":                      # opened by the owner's pixel ring (reveal())
+                js(f'tl.fromTo("#botin", {{scale: 1.3, filter: "blur(12px)"}}, {{scale: 1, filter: "blur(0px)", duration: 1.0, ease: "expo.out", immediateRender: false}}, 0);')
+                js(f'tl.fromTo("#topin", {{scale: 1.2, filter: "blur(14px)"}}, {{scale: 1, filter: "blur(0px)", duration: 1.0, ease: "expo.out", immediateRender: false}}, 0);')
+                reveal()
                 hook()
             else:                                   # Kanav's cut into a split: the face lands close and blurred
                 js(f'tl.fromTo("#botin", {{scale: 1.55, filter: "blur(10px)"}}, {{scale: 1, filter: "blur(0px)", duration: .38, ease: "expo.out", immediateRender: false}}, {ta:.3f});')
                 js(f'tl.fromTo("#topin", {{scale: 1.14, filter: "blur(14px)"}}, {{scale: 1, filter: "blur(0px)", duration: .42, ease: "expo.out", immediateRender: false}}, {ta:.3f});')
                 CUES.extend([(ta - .06, "whoosh_big"), (ta, "boom")])
             seam_caps(a, b, tb)
-            if nxt == "full" and kind != "open":    # zoom-blur out of the split
+            if nxt == "full":                       # zoom-blur out of the split
                 js(f'tl.to("#split", {{scale: 1.22, filter: "blur(16px)", duration: .2, ease: "power2.in"}}, {tb - .2:.3f});')
-            if kind == "open":                      # the owner's polka-dot ring peaks on the cut to her full frame
-                t0 = tb - TR_PEAK
-                POST.append(f'<video id="trpolka" class="tr" src="assets/video/tr_polka.mp4" data-start="{t0:.3f}" data-duration="1.5" '
-                            f'data-track-index="8" muted playsinline></video>')
-                CUES.append((t0, "granular"))
-                js(f'tl.to("#split", {{scale: 1.08, filter: "blur(6px)", duration: {TR_PEAK:.2f}, ease: "power2.in"}}, {t0:.3f});')
             continue
         # full
         js(f'tl.set("#full", {{opacity: 1}}, {ta:.3f});')
@@ -232,15 +230,30 @@ def layout():
     js(f'tl.set("#hold", {{opacity: 1}}, {VDUR - .04:.3f});')
 
 
+# inner edge of the owner's pixel ring (px from the frame centre), per frame, measured from tr_pixel.mp4
+RING = [(0, 0), (1, 150), (3, 230), (5, 300), (7, 390), (9, 480), (12, 580), (16, 720), (20, 860), (25, 1000), (30, 1130)]
+
+
+def reveal():
+    """The opening scene appears inside the ring as it grows: a circular clip on #scene tracking the ring's inner edge.
+    Outside it the frame is the dark plum of the bottom half, so the tinted ring reads; then the clip is removed."""
+    js('tl.set("#scene", {clipPath: "circle(0px at 540px 960px)"}, 0);')
+    for (f0, r0), (f1, r1) in zip(RING, RING[1:]):
+        js(f'tl.fromTo("#scene", {{clipPath: "circle({r0}px at 540px 960px)"}}, {{clipPath: "circle({r1}px at 540px 960px)", '
+           f'duration: {(f1 - f0) / FPS:.4f}, ease: "none", immediateRender: false}}, {f0 / FPS:.4f});')
+    js(f'tl.set("#scene", {{clipPath: "none"}}, {RING[-1][0] / FPS + .02:.3f});')
+    js('tl.fromTo("#trpixel", {opacity: 1}, {opacity: 0, duration: .3, ease: "power1.in", immediateRender: false}, 1.0);')
+
+
 def hook():
     """Red title in the middle of the frame (over the seam), from the first frames to HOOK_END."""
     POST.append('<div id="hook"><div class="hb">' + "".join(f'<div class="hl">{l}</div>' for l in HOOK) + '</div></div>')
     HIDE.append("#hook")
-    js('tl.set("#hook", {opacity: 1}, 0.12);')
-    js('tl.fromTo("#hook .hb", {scale: 1.25, filter: "blur(12px)"}, {scale: 1, filter: "blur(0px)", duration: .55, ease: "expo.out", immediateRender: false}, 0.12);')
-    js('tl.fromTo("#hook .hl", {y: 24, opacity: 0}, {y: 0, opacity: 1, duration: .45, ease: "expo.out", stagger: .1, immediateRender: false}, 0.2);')
+    js('tl.set("#hook", {opacity: 1}, 0.04);')     # grows out of the ring's centre with the ring, lands as it passes
+    js('tl.fromTo("#hook .hb", {scale: .15, filter: "blur(14px)"}, {scale: 1, filter: "blur(0px)", duration: .5, ease: "expo.out", immediateRender: false}, 0.04);')
+    js('tl.fromTo("#hook .hl", {y: 18, opacity: 0}, {y: 0, opacity: 1, duration: .4, ease: "expo.out", stagger: .08, immediateRender: false}, 0.16);')
     js(f'tl.to("#hook", {{y: -50, opacity: 0, filter: "blur(8px)", duration: .26, ease: "power2.in"}}, {HOOK_END - .26:.3f});')
-    CUES.extend([(0.0, "granular"), (0.2, "boom"), (HOOK_END - .26, "swish")])
+    CUES.extend([(0.0, "granular"), (0.5, "boom"), (HOOK_END - .26, "swish")])
 
 
 CSS = f"""
@@ -276,7 +289,7 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f7b7
 #fullin {{ position: absolute; inset: 0; transform-origin: 50% 35%; }}
 #fullin video {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
 #hold {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; }}
-#hook {{ position: absolute; left: 0; top: 800px; width: {FW}px; text-align: center; z-index: 12; opacity: 0; }}
+#hook {{ position: absolute; left: 0; top: 806px; width: {FW}px; text-align: center; z-index: 12; opacity: 0; }}
 #hook .hb {{ display: inline-block; padding: 26px 46px 30px; border-radius: 30px; background: rgba(255,255,255,.96);
   box-shadow: 0 24px 60px rgba(120,10,40,.35), inset 0 -10px 30px rgba(255,80,130,.12); }}
 #hook .hl {{ font: 400 112px/1.02 "Anton"; color: #e0182d; letter-spacing: .01em; text-transform: uppercase; }}
@@ -287,7 +300,10 @@ html, body {{ width: {FW}px; height: {FH}px; overflow: hidden; background: #f7b7
 .fcap .bigw {{ font: 400 150px/1 "Anton"; color: #fff; letter-spacing: .01em; text-shadow: 0 8px 26px rgba(0,0,0,.45); transform-origin: 0 60%; }}
 .fcap .bigw.red {{ display: inline-block; color: #e0182d; background: #fff; padding: 8px 26px 4px; border-radius: 18px; text-shadow: none;
   box-shadow: 0 14px 34px rgba(0,0,0,.35); }}   /* her kurta is red: the key word sits on white, like the hook */
-.tr {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: screen; z-index: 19; pointer-events: none; }}
+.tr {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: screen; z-index: 19; pointer-events: none;
+  filter: sepia(1) saturate(3.2) hue-rotate(-38deg) brightness(1.15); }}   /* the owner's white ring, tinted to the pink palette */
+#scene {{ position: absolute; inset: 0; }}
+html, body, #root {{ background: #1a0610; }}
 #tint {{ position: absolute; inset: 0; z-index: 20; opacity: 0; background: #d23cff; mix-blend-mode: screen; }}
 #leak {{ position: absolute; left: -400px; top: -200px; width: 1900px; height: 2400px; z-index: 21; opacity: 0; mix-blend-mode: screen;
   background: radial-gradient(ellipse 40% 50% at 50% 50%, rgba(255,240,200,1), rgba(255,170,60,.85) 35%, rgba(255,120,40,0) 70%); }}
@@ -313,14 +329,14 @@ def main():
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR}" data-fps="{FPS}" data-width="{FW}" data-height="{FH}">
-      <div id="bg"></div>
+      <div id="scene"><div id="bg"></div>
       <div id="split">
         <div id="top"><div id="topin"><div id="blobs">{blobs}</div><div id="stage">{"".join(TOPV)}</div></div></div>
         <div id="bot"><div id="botin"><video id="vsplit" class="clip" src="assets/video/face_split.mp4" data-start="0" data-duration="{VDUR}" data-track-index="2" muted playsinline></video></div></div>
         <div id="seamline"></div>
       </div>
       <div id="full"><div id="fullin"><video id="vfull" class="clip" src="assets/video/face_full.mp4" data-start="0" data-duration="{VDUR}" data-track-index="1" muted playsinline></video><img id="hold" src="assets/img/last_full.png" alt=""></div></div>
-      {"".join(POST)}
+      {"".join(POST)}</div>
       <video id="trpixel" class="tr" src="assets/video/tr_pixel.mp4" data-start="0" data-duration="1.5" data-track-index="7" muted playsinline></video>
       <div id="tint"></div><div id="leak"></div><div id="flash"></div><div id="grain"></div>
       <audio id="voice" src="assets/audio/voice.wav" data-start="0" data-duration="{VDUR}" data-track-index="10" data-volume="1"></audio>
