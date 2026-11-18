@@ -108,7 +108,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b070
 .doss .bar { position: absolute; left: -16px; top: -10px; width: 764px; height: 160px; background: #0b0b0b; border-radius: 10px; transform-origin: 100% 50%; }
 .doss .tag { margin-top: 54px; font: 64px/1.1 Serif; color: #3a1a2a; opacity: 0; }
 .doss .tag em { font-style: normal; background: linear-gradient(90deg, #F515E8, #F54BA8 50%, #F5876C); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.doss .dl { position: absolute; right: 50px; top: 46px; font: 22px Mono; letter-spacing: .2em; color: #fff; background: #e11d48; padding: 8px 16px; border-radius: 8px; opacity: 0; }
+.doss .dl { position: absolute; right: 40px; top: -20px; font: 22px Mono; letter-spacing: .2em; color: #fff; background: #e11d48; padding: 8px 16px; border-radius: 8px; opacity: 0; }
 
 /* profile under the magnifier */
 .prof { position: absolute; left: 170px; top: 560px; width: 740px; z-index: 20; opacity: 0; }
