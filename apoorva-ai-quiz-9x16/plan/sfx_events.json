@@ -1,226 +1,166 @@
 [
 {
-"type": "g_swish",
+"type": "whoosh",
 "t": 0
 },
 {
-"type": "g_tick",
-"t": 0.15
-},
-{
-"type": "g_tick",
-"t": 0.2
-},
-{
-"type": "g_tick",
+"type": "thump",
 "t": 0.25
 },
 {
-"type": "g_tick",
-"t": 0.3
+"type": "swish",
+"t": 1.95
 },
 {
-"type": "g_tick",
-"t": 0.35
-},
-{
-"type": "g_tick",
-"t": 0.4
-},
-{
-"type": "g_pickup",
-"t": 0.4
-},
-{
-"type": "g_question",
-"t": 1.98
-},
-{
-"type": "g_tick",
+"type": "tick",
 "t": 3.48
 },
 {
-"type": "g_tick",
+"type": "tick",
 "t": 3.88
 },
 {
-"type": "g_tick",
+"type": "tick",
 "t": 4.28
 },
 {
-"type": "stamp",
-"t": 4.91
+"type": "impact",
+"t": 4.79
 },
 {
-"type": "g_wrong",
-"t": 4.95
+"type": "click",
+"t": 4.85
 },
 {
-"type": "g_pickup",
-"t": 5.33
+"type": "swish",
+"t": 6.18
 },
 {
-"type": "g_question",
-"t": 6.21
-},
-{
-"type": "g_tick",
+"type": "tick",
 "t": 8.78
 },
 {
-"type": "g_tick",
+"type": "tick",
 "t": 9.18
 },
 {
-"type": "g_tick",
+"type": "tick",
 "t": 9.58
 },
 {
-"type": "boing",
+"type": "impact",
+"t": 11.97
+},
+{
+"type": "click",
 "t": 12.03
 },
 {
-"type": "g_pop",
-"t": 12.06
-},
-{
-"type": "stamp",
-"t": 12.09
-},
-{
-"type": "g_correct",
-"t": 12.13
-},
-{
-"type": "boing",
+"type": "swish",
 "t": 12.73
 },
 {
-"type": "stamp",
-"t": 13.33
+"type": "impact",
+"t": 13.21
 },
 {
-"type": "g_wrong",
-"t": 13.37
+"type": "click",
+"t": 13.29
 },
 {
-"type": "g_pickup",
-"t": 13.8
+"type": "swish",
+"t": 14.45
 },
 {
-"type": "g_question",
-"t": 14.48
-},
-{
-"type": "g_tick",
+"type": "tick",
 "t": 16.84
 },
 {
-"type": "g_tick",
+"type": "tick",
 "t": 17.24
 },
 {
-"type": "g_tick",
+"type": "tick",
 "t": 17.64
 },
 {
-"type": "boing",
+"type": "impact",
+"t": 18.15
+},
+{
+"type": "click",
 "t": 18.21
 },
 {
-"type": "g_pop",
-"t": 18.24
+"type": "swish",
+"t": 19.27
 },
 {
-"type": "stamp",
-"t": 18.27
-},
-{
-"type": "g_correct",
-"t": 18.31
-},
-{
-"type": "g_pickup",
-"t": 18.69
-},
-{
-"type": "g_question",
-"t": 19.3
-},
-{
-"type": "g_tick",
+"type": "tick",
 "t": 20.84
 },
 {
-"type": "g_tick",
+"type": "tick",
 "t": 21.24
 },
 {
-"type": "g_tick",
+"type": "tick",
 "t": 21.64
 },
 {
-"type": "stamp",
-"t": 22.29
+"type": "impact",
+"t": 22.17
 },
 {
-"type": "g_wrong",
-"t": 22.33
+"type": "click",
+"t": 22.23
 },
 {
-"type": "g_pickup",
-"t": 22.71
+"type": "swish",
+"t": 23.53
 },
 {
-"type": "g_question",
-"t": 23.56
-},
-{
-"type": "g_tick",
+"type": "tick",
 "t": 26.58
 },
 {
-"type": "g_tick",
+"type": "tick",
 "t": 26.98
 },
 {
-"type": "g_tick",
+"type": "tick",
 "t": 27.38
 },
 {
-"type": "stamp",
-"t": 28.03
+"type": "impact",
+"t": 27.91
 },
 {
-"type": "g_wrong",
-"t": 28.07
+"type": "click",
+"t": 27.97
 },
 {
-"type": "g_pickup",
-"t": 28.45
+"type": "riser",
+"t": 28.79
 },
 {
-"type": "g_levelup",
-"t": 28.82
+"type": "thump",
+"t": 28.92
 },
 {
-"type": "g_drop",
-"t": 29.37
-},
-{
-"type": "g_tick",
+"type": "tick",
 "t": 31.8
 },
 {
-"type": "g_tick",
+"type": "tick",
 "t": 32.2
 },
 {
-"type": "g_tick",
+"type": "tick",
 "t": 32.6
 },
 {
-"type": "g_levelup",
+"type": "thump",
 "t": 33.0
 },
 {
@@ -228,11 +168,7 @@
 "t": 33.86
 },
 {
-"type": "g_complete",
-"t": 34.66
-},
-{
-"type": "boing",
-"t": 34.66
+"type": "click",
+"t": 34.61
 }
 ]
