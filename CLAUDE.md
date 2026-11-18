@@ -106,6 +106,10 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 - The `higgsfield-*` skills need the `higgsfield` CLI and a Higgsfield account (`higgsfield auth login`);
   each generation spends Higgsfield credits.
 - Telemetry: set `HYPERFRAMES_NO_TELEMETRY=1` to turn it off.
+- Seeing a reel from its link: `python3 tools/see_link.py URL --ears` (yt-dlp; frames, transcript, sound timeline).
+  Never use the owner's cookies or pose as a browser; for a refused link, ask for the file and run `--file VIDEO.mp4`.
+  Downloaded reels are references only, never reused.
+- Pexels stock clips by id without an API key: `python3 tools/pexels_fetch.py` (prefer UHD sources).
 
 ## Repo layout
 
@@ -121,11 +125,33 @@ backend/              Cloudflare Worker: serves website/ and the Book-a-call API
                       via Resend); npm test runs it locally, npm run deploy ships it. See backend/README.md
 nxtlvl-social-audit/  SEO audit of website/index.html: FULL-AUDIT-REPORT.md, ACTION-PLAN.md, PDF, findings/
 motion-canvas/        Motion Canvas project (code-driven animation in TypeScript): npm install, npm start
+tools/               see_link.py (see a reel from its link), pexels_fetch.py (stock clips by id)
 <project>/            One HyperFrames project per video and aspect ratio, e.g. spring-drop-9x16/
 ```
+
+## Repeat clients
+
+Before any video for these clients, read their kit in `brands/<client>/` (`brand.md` = look, `workflow.md` = process,
+settings, past mistakes and the checklist for the next video) and reuse their project code as the template.
+Their brief, verbatim feedback, scripts, footage list, hooks / CTAs and open items are private and live in the
+`nxtlvl-client-memory` account skill, not in this public repo; load it too when it is available.
+
+| Client | Kit | Template project |
+| --- | --- | --- |
+| Dr S Kokila (English talking-head reels with reference footage) | `brands/dr-kokila/` | `kokila-peace-9x16/` |
+| Kanav Kesar / The Conscious Millionaire (Hinglish talking-head ads) | `brands/kanav-kesar/` | `surrender-ad-9x16/` |
+
+Media (footage, music, renders) is not in git; ask for the raw camera files again.
 
 ## Rules
 
 - Never render a final until the person has approved the preview.
 - Never use music or images we don't have the rights to; source them through `media-use`.
 - Keep rendered MP4s out of git; deliver them, don't commit them.
+- Run every render detached (`setsid nohup bash <script> > /dev/null 2>&1 < /dev/null &`), never as a time-limited
+  background job; render scripts stop when the picture render fails, and check every final's frames before sending.
+- Sound effects: Openverse first (CC0 or CC BY only, never NC, ND or SA; record title, creator, licence and link; credit
+  CC BY in the post), mixed with the `real-sfx` skill. Freesound preview files (`cdn.freesound.org/previews/...`)
+  download from cloud sessions; never fake a browser. Only when downloads are refused, use the CC0 OpenGameArt packs
+  (`spin-bout-u-drake/build/oga_sfx.py`) and say so.
+- No emojis in post descriptions, captions or hashtag blocks we write for clients. Plain text, lists numbered "1.".
