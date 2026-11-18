@@ -1,0 +1,97 @@
+[
+{
+"t": 1.833,
+"kind": "riser",
+"file": "riser_riser.wav"
+},
+{
+"t": 2.613,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 2.833,
+"kind": "shutter",
+"file": "shutter_shutter.wav"
+},
+{
+"t": 2.853,
+"kind": "impact",
+"file": "impact_impact.wav"
+},
+{
+"t": 3.113,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 3.483,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 3.553,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 3.693,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 3.833,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 3.833,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 3.973,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 4.113,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 4.183,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 4.253,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 4.393,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 4.533,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 4.673,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 4.813,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 5.133,
+"kind": "notify",
+"file": "notify_notify.wav"
+}
+]
