@@ -61,7 +61,7 @@ for i in range(0, a.last + 1):
                 cv2.fillPoly(hole, [cv2.convexHull(np.vstack(cs))], 255)
     hole = cv2.dilate(hole, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (31, 31)))
     # the AI frame nearest in time, upscaled and lightly sharpened
-    k = min(len(A) - 1, int(round(i / ofps * afps)))
+    k = min(len(A) - 1, int(round(i / ofps * afps)))   # AI clip retimed to 30 fps first (minterpolate), so k == i
     ai = cv2.resize(A[k], (W, H), interpolation=cv2.INTER_LANCZOS4)
     bl = cv2.GaussianBlur(ai, (0, 0), 1.2)
     ai = cv2.addWeighted(ai, 1.5, bl, -.5, 0)
@@ -92,6 +92,19 @@ for i in range(0, a.last + 1):
     # where the athlete's mask overlaps a removed person, the mask can swallow that person (they stand right behind him):
     # there, pixels that clearly differ from the AI frame (which has the athlete but not the person) take the AI pixels
     ov = ((hole > 0) & (ms[si] > 0) & (av > 0)).astype(np.float32)
+    if ov.sum() > 1500:
+        # heavy overlap (the person stands right behind him): take the whole patch, athlete included, from the AI frame
+        R = cv2.dilate(((hole > 0) | (ms[si] > 0)).astype(np.uint8) * 255, np.ones((25, 25), np.uint8))
+        ring2 = (cv2.dilate(R, np.ones((81, 81), np.uint8)) > 0) & (R == 0) & (allm == 0) & (av > 0)
+        rv2 = ring2.astype(np.float32)
+        num2 = cv2.GaussianBlur((fr.astype(np.float32) - aw.astype(np.float32)) * rv2[..., None], (0, 0), 45)
+        den2 = cv2.GaussianBlur(rv2, (0, 0), 45)[..., None]
+        fill2 = np.clip(aw.astype(np.float32) + np.clip(np.where(den2 > 1e-3, num2 / np.maximum(den2, 1e-3), 0), -40, 40), 0, 255)
+        w2 = np.clip(cv2.GaussianBlur(((R > 0) & (av > 0)).astype(np.float32), (0, 0), 6) * 2 - 1, 0, 1)[..., None]
+        out = (fill2 * w2 + fr.astype(np.float32) * (1 - w2)).astype(np.uint8)
+        cv2.imwrite(os.path.join(a.out, f"f{i:05d}.png"), out)
+        print("out", i, len(mt), "patch", flush=True)
+        continue
     if ov.any():
         d = np.abs(fr.astype(np.float32) - fill).mean(2)
         d = cv2.GaussianBlur(d, (0, 0), 3)
