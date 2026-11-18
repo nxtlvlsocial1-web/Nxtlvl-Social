@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Handstand stats 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: Inter; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter; color: #fff; background: #000; }
+#cam { position: absolute; inset: 0; }
+#kick, #frz { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }
+#frz { opacity: 0; transform-origin: 60% 40%; }
+#shade { position: absolute; inset: 0; opacity: 0; background: linear-gradient(90deg, rgba(0,0,0,.6) 0%, rgba(0,0,0,.38) 26%, rgba(0,0,0,0) 40%); }
+#flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+#hook { position: absolute; left: 0; right: 0; top: 470px; text-align: center; font-weight: 600; font-size: 44px; line-height: 1.22; letter-spacing: -.01em;
+  opacity: 0; text-shadow: 0 2px 4px rgba(0,0,0,.55), 0 0 18px rgba(0,0,0,.45); }
+#card { position: absolute; left: 40px; top: 640px; width: 270px; }
+#brand { font-weight: 800; font-style: italic; font-size: 54px; letter-spacing: -.02em; opacity: 0; text-shadow: 0 2px 10px rgba(0,0,0,.35); }
+.row { display: flex; align-items: center; gap: 14px; margin-top: 34px; opacity: 0; }
+.ic { width: 62px; height: 62px; color: #FC5200; flex: none; filter: drop-shadow(0 2px 6px rgba(0,0,0,.35)); }
+.ic svg { width: 100%; height: 100%; overflow: visible; }
+.lb { font-weight: 600; font-size: 21px; text-shadow: 0 1px 6px rgba(0,0,0,.5); }
+.val { margin-top: 2px; font-weight: 800; font-size: 64px; line-height: 1; letter-spacing: -.02em; white-space: nowrap; text-shadow: 0 2px 12px rgba(0,0,0,.4); }
+.val b { font-weight: 800; }
+.val i { font-style: normal; font-weight: 700; font-size: 34px; margin-left: 2px; }
+#bar { position: absolute; left: 322px; top: 650px; width: 10px; height: 590px; border-radius: 6px; background: #FC5200; transform-origin: 50% 0;
+  transform: scaleY(0); box-shadow: 0 0 14px rgba(252,82,0,.45); }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8.23" data-fps="30" data-width="1080" data-height="1920">
+      
+<div id="cam">
+  <video id="kick" src="assets/video/kick.mp4" data-start="0" data-duration="2.833" data-track-index="1" muted playsinline></video>
+  <img id="frz" src="assets/img/freeze.png">
+</div>
+<div id="shade"></div>
+<div id="flash"></div>
+<div id="hook">Can I post my handstands<br>like runners?</div>
+<div id="card"><div id="brand">STRAVA</div><div class="row" id="row0"><div class="ic" id="ic0"><svg viewBox="0 0 48 48"><circle cx="24" cy="27" r="16" fill="none" stroke="currentColor" stroke-width="4"/><path d="M24 27 L24 17" stroke="currentColor" stroke-width="4" stroke-linecap="round" class="hand"/><path d="M18 5 H30 M24 5 V11 M37 12 L40 9" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg></div><div class="tx"><div class="lb">Hold Time</div><div class="val"><b id="v0a">0</b><i>m</i> <b id="v0b">00</b><i>s</i></div></div></div><div class="row" id="row1"><div class="ic" id="ic1"><svg viewBox="0 0 48 48"><path d="M10 5 H38 M10 43 H38 M24 9 V39 M17 15 L24 8 L31 15 M17 33 L24 40 L31 33" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="tx"><div class="lb">Handstand Height</div><div class="val"><b id="v1a">0</b><i>ft</i> <b id="v1b">0</b><i>in</i></div></div></div><div class="row" id="row2"><div class="ic" id="ic2"><svg viewBox="0 0 48 48"><path d="M40 24 A16 16 0 1 1 33 10.8" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/><path d="M26 6 L35 10 L31 19" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="tx"><div class="lb">Attempts</div><div class="val"><b id="v2a">0</b></div></div></div></div>
+<div id="bar"></div>
+
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({paused: true});
+      tl.fromTo("#hook", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 0.000);
+      tl.set("#frz", {opacity: 1}, 2.833);
+      tl.set("#flash", {opacity: .55}, 2.833);
+      tl.to("#flash", {...{opacity: 0}, duration: 0.4, ease: "power2.out"}, 2.853);
+      tl.fromTo("#frz", {scale: 1}, {...{scale: 1.06}, duration: 5.3966666666666665, ease: "sine.out", immediateRender: false}, 2.833);
+      tl.to("#hook", {...{opacity: 0, y: -10}, duration: 0.3, ease: "power2.in"}, 2.983);
+      tl.fromTo("#shade", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "power3.out", immediateRender: false}, 2.933);
+      tl.fromTo("#brand", {opacity: 0, x: -40}, {...{opacity: 1, x: 0}, duration: 0.4, ease: "power3.out", immediateRender: false}, 3.133);
+      tl.fromTo("#bar", {scaleY: 0}, {...{scaleY: 1}, duration: 0.7, ease: "power3.inOut", immediateRender: false}, 3.183);
+      tl.fromTo("#row0", {opacity: 0, x: -36}, {...{opacity: 1, x: 0}, duration: 0.4, ease: "power3.out", immediateRender: false}, 3.433);
+      tl.fromTo("#ic0", {scale: 0, rotation: -40}, {...{scale: 1, rotation: 0}, duration: 0.45, ease: "back.out(2.6)", immediateRender: false}, 3.483);
+      (() => { const o = {v: 0}; tl.to(o, {v: 67, duration: .9, ease: "power2.out", onUpdate: () => { const s = Math.round(o.v); document.querySelector("#v0a").textContent = Math.floor(s / 60); document.querySelector("#v0b").textContent = String(s % 60).padStart(2, "0"); }}, 3.533); })();
+      tl.fromTo("#row1", {opacity: 0, x: -36}, {...{opacity: 1, x: 0}, duration: 0.4, ease: "power3.out", immediateRender: false}, 3.783);
+      tl.fromTo("#ic1", {scale: 0, rotation: -40}, {...{scale: 1, rotation: 0}, duration: 0.45, ease: "back.out(2.6)", immediateRender: false}, 3.833);
+      (() => { const o = {v: 0}; tl.to(o, {v: 79, duration: .9, ease: "power2.out", onUpdate: () => { const s = Math.round(o.v); document.querySelector("#v1a").textContent = Math.floor(s / 12); document.querySelector("#v1b").textContent = s % 12; }}, 3.883); })();
+      tl.fromTo("#row2", {opacity: 0, x: -36}, {...{opacity: 1, x: 0}, duration: 0.4, ease: "power3.out", immediateRender: false}, 4.133);
+      tl.fromTo("#ic2", {scale: 0, rotation: -40}, {...{scale: 1, rotation: 0}, duration: 0.45, ease: "back.out(2.6)", immediateRender: false}, 4.183);
+      (() => { const o = {v: 0}; tl.to(o, {v: 67, duration: .9, ease: "power2.out", onUpdate: () => { document.querySelector("#v2a").textContent = Math.round(o.v); }}, 4.233); })();
+      tl.fromTo("#ic0 .hand", {rotation: 0}, {rotation: 720, svgOrigin: "24 27", duration: 4.70, ease: "none", immediateRender: false}, 3.483);
+      tl.set({}, {}, 8.23);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
