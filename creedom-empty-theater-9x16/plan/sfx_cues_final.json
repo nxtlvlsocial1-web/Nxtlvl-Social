@@ -50,6 +50,11 @@
 "file": "riser_riser.wav"
 },
 {
+"t": 13.42,
+"kind": "thump",
+"file": "thump_sub_hit.wav"
+},
+{
 "t": 13.44,
 "kind": "ding",
 "file": "ding_ding.wav"
@@ -118,6 +123,11 @@
 "t": 21.62,
 "kind": "applause",
 "file": "applause_applause.wav"
+},
+{
+"t": 21.62,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
 },
 {
 "t": 21.65,
