@@ -15,6 +15,9 @@ One theater, shot through three parallax camera rigs (hall walls, the stage-and-
   6 "and this time... they stayed": the house lights come up gold, the seats fill row by row towards the camera, phone
     lights glow like stars, applause swells;
   7 CTA: the curtain falls and the marquee lights COMMENT GROW.
+Cinema pass (owner's v1 notes, 2026-11-19): the sad half is letterboxed and cold; at "Creedom" the bars open, the grade warms,
+focus pulls from her to Cree's glow with an anamorphic flare, and the music hands over to an uplifting track; "they stayed" gets
+confetti, a second flare and sweeping spots; the followspot sways and the whole world drifts like a handheld camera.
 Claims stay within what Creedom does (reads the account, shows where viewers left, checks a reel before posting).
 python3 build/generate.py
 """
@@ -30,6 +33,7 @@ from fx import cree_html, cree_to, pose, cree_hop, cree_wiggle, blink, sparkle, 
 
 random.seed(7)
 DUR = round(L1["g7"] + 1.7, 2)
+CONF = 70
 
 # ---- headlines (screen space) --------------------------------------------------------------------------------------------
 HTMLS, OPEN, WID = [], [None], [0]
@@ -340,6 +344,43 @@ to("#cfL", t_an - .25, .8, "{x: 0}", "power3.inOut")
 to("#cfR", t_an - .25, .8, "{x: 0}", "power3.inOut")
 sfx("whoosh_big", t_an - .3)
 
+# ---- cinema pass: letterbox, grade, rack focus, followspot sway, flares, sweeping spots, confetti, handheld drift -----------------
+# the sad half plays in a cold, letterboxed frame; at "Creedom" the bars open, the grade warms and the music lifts
+st("#lbT", 0, "{scaleY: 1}")
+st("#lbB", 0, "{scaleY: 1}")
+to("#lbT", t_cr - .1, .9, "{scaleY: 0}", "power3.inOut")
+to("#lbB", t_cr - .1, .9, "{scaleY: 0}", "power3.inOut")
+to("#cold", t_cr, 1.2, "{opacity: .35}", "power1.inOut")
+to("#warmg", t_cr, 1.2, "{opacity: .45}", "power1.inOut")
+punch(t_cr, 1.03)
+# rack focus: the hall is soft in the close shots, sharp in the wide ones; at "Creedom" focus pulls from her to the front row
+ft("#rbg", 0, 1.6, "{filter: 'blur(6px)'}", "{filter: 'blur(0px)'}", "power2.inOut")
+to("#rbg", T0["g3"][0] - .3, .8, "{filter: 'blur(6px)'}", "power2.inOut")
+to("#rbg", T0["g4"][0] - .2, .8, "{filter: 'blur(0px)'}", "power2.inOut")
+ft("#star", t_cr - .15, .35, "{filter: 'blur(0px)'}", "{filter: 'blur(4px)'}", "power2.out")
+to("#star", t_rd + .1, .5, "{filter: 'blur(0px)'}", "power2.inOut")
+# the followspot breathes like a real operator is holding it
+js(f'tl.fromTo("#beam", {{rotation: -1.4}}, {{rotation: 1.4, duration: 2.6, yoyo: true, repeat: {int(t_cr // 2.6)}, ease: "sine.inOut", immediateRender: false}}, 0);')
+# anamorphic flares: Cree's glow, then the house lights
+ft("#flare1", t_cr - .05, .35, "{opacity: 0, scaleX: .1}", "{opacity: 1, scaleX: 1}", "power3.out")
+to("#flare1", t_cr + .5, 1.0, "{opacity: 0, scaleX: 1.4}", "power2.in")
+ft("#flare2", t_st - .05, .4, "{opacity: 0, scaleX: .1}", "{opacity: .9, scaleX: 1}", "power3.out")
+to("#flare2", t_st + .6, 1.2, "{opacity: 0, scaleX: 1.5}", "power2.in")
+# sweeping spots over the full house and across the falling curtain
+for i, (a0, a1) in enumerate(((-28, 18), (28, -18))):
+    ft(f"#sw{i}", t_and + .3, .6, "{opacity: 0}", "{opacity: .8}", "power1.out")
+    js(f'tl.fromTo("#sw{i}", {{rotation: {a0}}}, {{rotation: {a1}, duration: 1.6, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}}, {t_and + .3:.3f});')
+# confetti falls on "stayed"
+for i in range(CONF):
+    x0, dx = random.uniform(0, 1080), random.uniform(-160, 160)
+    t0 = t_st - .1 + random.uniform(0, 1.6)
+    d = random.uniform(2.6, 4.2)
+    js(f'tl.fromTo("#cf{i}", {{x: {x0:.0f}, y: -60, rotation: {random.randint(0, 180)}, rotationX: 0, opacity: 1}}, '
+       f'{{x: {x0 + dx:.0f}, y: 2000, rotation: {random.randint(360, 900)}, rotationX: {random.choice((540, 720, 900))}, opacity: 1, duration: {d:.2f}, ease: "none", immediateRender: false}}, {t0:.3f});')
+sfx("whoosh", t_st - .1)
+# handheld drift on everything in the world
+js(f'tl.fromTo("#hand", {{x: -6, y: 4}}, {{x: 6, y: -4, duration: 3.7, yoyo: true, repeat: {int(DUR / 3.7)}, ease: "sine.inOut", immediateRender: false}}, 0);')
+
 # ---- ambience: dust in the beam, sconce shimmer, Cree breathing ------------------------------------------------------------------
 for i in range(22):
     js(f'tl.fromTo("#mo{i}", {{x: 0, y: 0}}, {{x: {random.randint(-30, 30)}, y: {random.randint(-120, -40)}, duration: {random.uniform(3, 6):.2f}, yoyo: true, repeat: 5, '
@@ -347,6 +388,10 @@ for i in range(22):
 js(f'tl.fromTo("#creep", {{y: 0}}, {{y: -8, duration: .7, ease: "sine.inOut", yoyo: true, repeat: {int(DUR / .7)}, immediateRender: false}}, 0);')
 js(f'tl.fromTo("#punch", {{rotation: -.25}}, {{rotation: .25, duration: 3, yoyo: true, repeat: {int(DUR / 3)}, ease: "sine.inOut", immediateRender: false}}, 0);')
 
+COLS = ("#ffd27a", "#f5c062", "#F343A2", "#ff9fd0", "#ffffff", "#ff7a59")
+CONFH = "".join(f'<i class="cf" id="cf{i}" style="background:{random.choice(COLS)};width:{random.randint(12, 20)}px;height:{random.randint(22, 34)}px"></i>' for i in range(CONF))
+WORLD = WORLD.replace('<i id="crglow"', '<i class="flare" id="flare1" style="top:1080px"></i><i class="flare" id="flare2" style="top:320px"></i>'
+                      '<i class="sweep" id="sw0" style="left:60px"></i><i class="sweep" id="sw1" style="left:900px"></i><i id="crglow"')
 WORLD += cree_html()
 CSS = open(os.path.join(ROOT, "build", "style.css")).read()
 html = f"""<!doctype html>
@@ -360,11 +405,12 @@ html = f"""<!doctype html>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR:.2f}" data-fps="30" data-width="1080" data-height="1920">
-      <div id="punch">
+      <div id="punch"><div id="hand">
         <div class="rig" id="rbg" data-layout-allow-overflow>{BG}{HOUSE}</div>
         <div class="rig" id="rw" data-layout-allow-overflow data-layout-allow-overlap>{WORLD}</div>
         <div class="rig" id="rfg" data-layout-allow-overflow>{FG}</div>
-      </div>
+      </div></div>
+      <div id="conf">{CONFH}</div><div id="lbT"></div><div id="lbB"></div>
       <div id="cold"></div><div id="warmg"></div><div id="vig"></div><div id="black"></div>
       <div id="scrim"></div>
       {chr(10).join(HTMLS)}
@@ -385,5 +431,5 @@ html = f"""<!doctype html>
 open(os.path.join(ROOT, "index.html"), "w").write(html)
 SFX.sort(key=lambda e: e["t"])
 json.dump(SFX, open(os.path.join(ROOT, "plan", "sfx_events.json"), "w"), indent=0)
-json.dump({"dur": DUR, "lines": T0}, open(os.path.join(ROOT, "plan", "edit.json"), "w"), indent=1)
+json.dump({"dur": DUR, "music_switch": round(t_cr, 3), "lines": T0}, open(os.path.join(ROOT, "plan", "edit.json"), "w"), indent=1)
 print(f"wrote index.html: {DUR:.2f} s, {len(JS)} timeline lines, {len(SFX)} sfx, {pid} seats")

@@ -135,3 +135,17 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05030
 #cta1 { font-size: 76px; line-height: 1; color: #fff; text-shadow: 0 4px 24px rgba(0,0,0,.8); }
 #cta2 { font-size: 250px; line-height: 1.02; padding-bottom: .08em; color: #ffd27a;
   text-shadow: 0 0 18px rgba(255,200,100,.85), 0 0 60px rgba(255,150,40,.6), 0 8px 30px rgba(0,0,0,.6); }
+
+/* cinema pass */
+#hand { position: absolute; inset: 0; }
+#lbT, #lbB { position: absolute; left: 0; right: 0; height: 150px; background: #000; z-index: 39; pointer-events: none; }
+#lbT { top: 0; transform-origin: 50% 0; }
+#lbB { bottom: 0; transform-origin: 50% 100%; }
+#conf { position: absolute; inset: 0; z-index: 37; pointer-events: none; perspective: 800px; }
+.cf { position: absolute; left: 0; top: 0; border-radius: 3px; opacity: 0; }
+.flare { position: absolute; left: -260px; width: 1600px; height: 8px; margin-top: -4px; z-index: 8; opacity: 0; pointer-events: none; border-radius: 4px;
+  background: linear-gradient(90deg, rgba(255,120,200,0), rgba(255,190,230,.7) 35%, #fff 50%, rgba(255,190,230,.7) 65%, rgba(255,120,200,0));
+  box-shadow: 0 0 18px 6px rgba(255,120,200,.55), 0 0 60px 18px rgba(243,67,162,.25); }
+.sweep { position: absolute; top: -260px; width: 240px; height: 2000px; margin-left: -120px; z-index: 5; opacity: 0; pointer-events: none; transform-origin: 50% 0;
+  background: linear-gradient(90deg, rgba(255,235,190,0), rgba(255,235,190,.16) 30%, rgba(255,245,220,.3) 50%, rgba(255,235,190,.16) 70%, rgba(255,235,190,0));
+  mix-blend-mode: screen; }

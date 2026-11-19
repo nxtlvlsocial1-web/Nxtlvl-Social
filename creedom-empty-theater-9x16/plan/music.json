@@ -1,10 +1,24 @@
 {
- "title": "A forgotten promise",
- "creator": "zero-project",
- "license": "by",
- "license_version": "3.0",
- "landing_url": "https://www.jamendo.com/track/1640780",
- "audio_url": "https://prod-1.storage.jamendo.com/?trackid=1640780&format=mp32",
- "openverse_id": "3c80931d-71ef-4855-80e3-5a87a78f3050",
- "attribution": "\"A forgotten promise\" by zero-project is licensed under CC BY 3.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/3.0/."
+ "sad": {
+  "title": "A forgotten promise",
+  "creator": "zero-project",
+  "license": "by",
+  "license_version": "3.0",
+  "landing_url": "https://www.jamendo.com/track/1640780",
+  "audio_url": "https://prod-1.storage.jamendo.com/?trackid=1640780&format=mp32",
+  "openverse_id": "3c80931d-71ef-4855-80e3-5a87a78f3050",
+  "attribution": "\"A forgotten promise\" by zero-project is licensed under CC BY 3.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/3.0/.",
+  "use": "0 s to Cree's entrance: sparse and melancholic"
+ },
+ "happy": {
+  "title": "Learn to Fly (Instrumental Version)",
+  "creator": "Josh Woodward",
+  "license": "by",
+  "license_version": "3.0",
+  "landing_url": "https://www.jamendo.com/track/628971",
+  "audio_url": "https://prod-1.storage.jamendo.com/?trackid=628971&format=mp32",
+  "openverse_id": "4f188e84 (Openverse search: happy instrumental)",
+  "use": "from Cree's entrance: starts in the track's break (68.2 s) so its lift at 69.0 s lands on \"Creedom\"",
+  "attribution": "\"Learn to Fly (Instrumental Version)\" by Josh Woodward is licensed under CC BY 3.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/3.0/."
+ }
 }

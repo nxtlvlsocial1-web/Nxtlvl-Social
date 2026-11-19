@@ -2,7 +2,8 @@
 
   * Voice: assets/audio/vo.wav, ElevenLabs Eleven v3, built-in voice Jessica (take 3), pauses trimmed (build/vo_tight.py), -16 LUFS.
   * Music: "A forgotten promise" by zero-project (Jamendo 1640780 via Openverse, CC BY 3.0: credit in the post), from
-    103.79 s: sparse and melancholic, the strings swell at the turn; sidechain-ducked under the voice (plan/music.json).
+    103.79 s: sparse and melancholic; at Cree's entrance it hands over to "Learn to Fly (Instrumental Version)" by Josh Woodward
+    (Jamendo 628971, CC BY 3.0), whose lift lands on "Creedom"; sidechain-ducked under the voice (plan/music.json).
   * Sound effects: CC0 OpenGameArt packs plus one-shots made for this reel (build/synth_theater.py: applause, steps, clunk).
   * Master: two-pass loudnorm to -14 LUFS, -1.5 dBTP; muxed onto the picture with the video stream copied.
 python3 build/sfx_mix.py PICTURE.mp4 OUT.mp4 [--no-music]
@@ -22,6 +23,12 @@ DUR = E["dur"]
 SONG = os.path.join(ROOT, "sfx", "music", os.environ.get("SONG", "music_a_forgotten_promise_zero_project.mp3"))
 SONG_AT = float(os.environ.get("SONG_AT", "103.793"))
 MUSIC_LUFS = float(os.environ.get("MUSIC_LUFS", "-21"))
+# the turn: at Cree's entrance the sad bed fades out and "Learn to Fly (Instrumental)" by Josh Woodward (Jamendo 628971, CC BY 3.0)
+# comes in from its break, so the lift at 69.0 s lands on "Creedom"
+SONG2 = os.path.join(ROOT, "sfx", "music", "music_learn_to_fly_instrumental_josh_woodward.mp3")
+SONG2_HIT = 69.0
+MUSIC2_LUFS = float(os.environ.get("MUSIC2_LUFS", "-19"))
+T_HIT = E.get("music_switch")
 # kind -> (files, peak dBFS, max length s)
 KINDS = {
     "whoosh": (["whoosh_a", "whoosh_b", "whoosh_c"], -11, .5), "whoosh_big": (["whoosh_big"], -10, .8), "swish": (["whoosh_c", "whoosh_a"], -14, .4),
@@ -77,8 +84,19 @@ def main():
     labels = ["[vo]"]
     if music:
         bed = os.path.join(WORK, "music_bed.wav")
-        run(["ffmpeg", "-y", "-loglevel", "error", "-ss", str(SONG_AT), "-t", f"{DUR + .2:.2f}", "-i", SONG, "-vn", "-af",
-             f"afade=t=in:d=0.12,afade=t=out:st={DUR - 1.0:.2f}:d=1.0,loudnorm=I={MUSIC_LUFS}:TP=-3:LRA=11", "-ar", "48000", "-ac", "2", bed])
+        if T_HIT:
+            sad, happy = os.path.join(WORK, "music_sad.wav"), os.path.join(WORK, "music_happy.wav")
+            t_in = T_HIT - .85                                  # the happy track enters in its break, under the riser
+            run(["ffmpeg", "-y", "-loglevel", "error", "-ss", str(SONG_AT), "-t", f"{T_HIT + .1:.2f}", "-i", SONG, "-vn", "-af",
+                 f"loudnorm=I={MUSIC_LUFS}:TP=-3:LRA=11,afade=t=in:d=0.12,afade=t=out:st={t_in - .4:.2f}:d={1.3:.2f}", "-ar", "48000", "-ac", "2", sad])
+            run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{SONG2_HIT - (T_HIT - t_in):.3f}", "-t", f"{DUR - t_in + .2:.2f}", "-i", SONG2, "-vn", "-af",
+                 f"loudnorm=I={MUSIC2_LUFS}:TP=-3:LRA=11,afade=t=in:d=0.5,afade=t=out:st={DUR - t_in - 1.0:.2f}:d=1.0", "-ar", "48000", "-ac", "2", happy])
+            ms = int(round(t_in * 1000))
+            run(["ffmpeg", "-y", "-loglevel", "error", "-i", sad, "-i", happy, "-filter_complex",
+                 f"[1:a]adelay={ms}|{ms}[h];[0:a][h]amix=inputs=2:normalize=0:duration=longest,atrim=0:{DUR + .2:.2f}", "-ar", "48000", "-ac", "2", bed])
+        else:
+            run(["ffmpeg", "-y", "-loglevel", "error", "-ss", str(SONG_AT), "-t", f"{DUR + .2:.2f}", "-i", SONG, "-vn", "-af",
+                 f"afade=t=in:d=0.12,afade=t=out:st={DUR - 1.0:.2f}:d=1.0,loudnorm=I={MUSIC_LUFS}:TP=-3:LRA=11", "-ar", "48000", "-ac", "2", bed])
         inputs += ["-i", bed]
         fc.append("[1:a][sc]sidechaincompress=threshold=0.03:ratio=5:attack=15:release=300:makeup=1[bg]")
         labels.append("[bg]")

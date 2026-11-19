@@ -19,7 +19,7 @@ If your reels get views but nobody stays, start here. Your first account read is
 
 Save this for your next post and send it to a creator who's posting into an empty room.
 
-Music: "A forgotten promise" by zero-project, CC BY 3.0
+Music: "A forgotten promise" by zero-project and "Learn to Fly (Instrumental)" by Josh Woodward, both CC BY 3.0
 
 #instagramgrowth #creedomai #reelstips #contentcreator #aitools
 why nobody watches my reels, reel retention, viewers leave in the first 3 seconds, instagram reels hook, how to grow on instagram, instagram account audit, ai instagram coach, check reel before posting, low views on instagram reels, instagram growth tips for creators
