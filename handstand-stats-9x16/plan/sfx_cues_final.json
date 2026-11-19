@@ -93,5 +93,25 @@
 "t": 5.133,
 "kind": "notify",
 "file": "notify_notify.wav"
+},
+{
+"t": 5.713,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 6.383,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 23.75,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 24.2,
+"kind": "notify",
+"file": "notify_notify.wav"
 }
 ]
