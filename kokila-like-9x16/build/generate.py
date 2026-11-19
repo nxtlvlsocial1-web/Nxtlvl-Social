@@ -68,7 +68,8 @@ TOP_CLIPS = [(0, "t_care", 5.5),         # No matter how good you are (a woman h
              (28, "t_wrong", 2.0)]       # and find something wrong in everything you do. (a man jabbing at her work)
 # full-screen reference shots after the split: (first word, end word, clip, in-point s)
 FULL_REFS = [(60, 62, "f_tears", 2.0),   # their insecurities, (a woman wiping tears at the mirror)
-             (79, 87, "f_grow", 1.0)]    # (Keep) doing good, keep growing and let them talk. (seedlings growing)
+             (79, 83, "f_stairs", 2.0),   # (Keep) doing good, keep growing (climbing stairs, step by step)
+             (83, 87, "f_summit", 4.0)]  # and let them talk. (a hiker stepping up onto the summit)
 
 
 # ------------------------------------------------------------------------------------------------ captions
