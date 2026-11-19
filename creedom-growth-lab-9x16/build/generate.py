@@ -85,14 +85,14 @@ def cam(t, cx, cy, z, d=1.0, ease="power2.inOut"):
     for sel, f in RIGS:
         zf = 1 + (z - 1) * f
         cxf, cyf = 540 + (cx - 540) * f, 960 + (cy + OFS - 960) * f
-        js(f'tl.to("{sel}", {{x: {540 - cxf * zf:.1f}, y: {960 - cyf * zf:.1f}, scale: {zf:.4f}, duration: {d}, ease: "{ease}"}}, {t:.3f});')
+        js(f'tl.to("{sel}", {{x: {540 - cxf * zf:.1f}, y: {1080 - cyf * zf:.1f}, scale: {zf:.4f}, duration: {d}, ease: "{ease}"}}, {t:.3f});')
 
 
 def cam_set(cx, cy, z):
     for sel, f in RIGS:
         zf = 1 + (z - 1) * f
         cxf, cyf = 540 + (cx - 540) * f, 960 + (cy + OFS - 960) * f
-        js(f'tl.set("{sel}", {{x: {540 - cxf * zf:.1f}, y: {960 - cyf * zf:.1f}, scale: {zf:.4f}}}, 0);')
+        js(f'tl.set("{sel}", {{x: {540 - cxf * zf:.1f}, y: {1080 - cyf * zf:.1f}, scale: {zf:.4f}}}, 0);')
 
 
 # ---- icons ---------------------------------------------------------------------------------------------------------------
@@ -123,10 +123,13 @@ BG = (f'<div class="wall"></div><div class="winlight" id="win"><i style="left:18
 
 # the cloche: plant (stem + reel-thumbnail leaves), soil with roots, glass
 LEAVES = [  # (x, y, angle, left?)  cloche-local attachment points on the stem
-    (297, 530, -34, False), (284, 486, 36, True), (299, 405, -40, False), (282, 352, 40, True),
-    (300, 290, -36, False), (283, 236, 34, True), (295, 176, -26, False)]
+    (297, 468, -34, False), (284, 428, 36, True), (299, 360, -40, False), (282, 310, 40, True),
+    (300, 254, -36, False), (283, 204, 34, True), (295, 156, -26, False)]
+# v1.1 (owner: "everything is cluttered and hiding behind the mascot, spacing not done"): leaves lifted so the lowest
+# ones clear Cree, Cree moved to his own spot by the glass and made smaller, camera frames everything lower so the
+# headline band stays clean (soft scrim behind it), the extra COMMENT GROW tag dropped, the cloud moved off the shelf
 DRY = 2                                               # the right leaf at (299, 400)
-NEW_LEAVES = [(286, 150, 22, True), (293, 128, -16, False)]
+NEW_LEAVES = [(286, 128, 22, True), (293, 108, -16, False)]
 LCOL = ["linear-gradient(160deg,#ffd0e6,#F343A2)", "linear-gradient(160deg,#ffe3c8,#F5876C)", "linear-gradient(160deg,#ead9ff,#b14dff)",
         "linear-gradient(160deg,#ffe0ef,#ee688b)", "linear-gradient(160deg,#fff0c4,#f2b134)", "linear-gradient(160deg,#ffd6e8,#d81f86)",
         "linear-gradient(160deg,#f9d9c8,#e68b70)", "linear-gradient(160deg,#ffd0e6,#ff8cc6)", "linear-gradient(160deg,#ead9ff,#c58bff)"]
@@ -142,7 +145,7 @@ leaves = "".join(leaf_html(f"lv{i}", x, y, a, l, LCOL[i], "dry" if i == DRY else
 leaves += leaf_html("lvfresh", *LEAVES[DRY][:3], False, LCOL[0], "fresh")
 leaves += "".join(leaf_html(f"lvn{i}", x, y, a, l, LCOL[7 + i]) for i, (x, y, a, l) in enumerate(NEW_LEAVES))
 STEM = "M290 600 C 280 490 306 420 294 300 C 286 230 298 170 290 110"
-FLOWERS = [(290, 98), (226, 168), (362, 214)]
+FLOWERS = [(290, 86), (210, 150), (372, 196)]
 hearts = "".join(f'<i class="heart" id="hf{i}" style="left:{x}px;top:{y}px;transform:scale(0)">{HEART}</i>' for i, (x, y) in enumerate(FLOWERS))
 ROOTS = ["M290 0 C 280 40 230 60 180 90 C 150 110 120 120 90 140", "M290 0 C 300 50 360 70 410 100 C 440 120 470 130 500 146",
          "M290 0 C 288 60 270 110 250 150", "M290 0 C 296 60 320 110 340 150", "M290 0 C 270 26 230 36 190 40"]
@@ -193,12 +196,12 @@ cloud = ('<div class="cloud" id="cloud"><svg viewBox="0 0 300 150"><path d="M60 
 ctag = ('<div class="ctag" id="ctag" style="left:330px;top:1010px"><i class="str"></i><div class="card"><small>COMMENT</small><b>GROW</b></div></div>')
 drops = '<div class="drops">' + "".join(f'<i id="dr{i}" style="left:{JX + 160 + 50 * i}px;top:{JY + 40}px"></i>' for i in range(6)) + "</div>"
 dry_tag = f'<div class="tag red" id="tagdry" style="left:{JX + 110}px;top:{JY + 480}px">0:03 · WEAK HOOK</div>'
-kill_tag = f'<div class="tag red" id="tagkill" style="left:{JX + 130}px;top:{JY + 480}px">KILLING VIEWS</div>'
+kill_tag = f'<div class="tag red" id="tagkill" style="left:{JX + 90}px;top:{JY + 480}px">KILLING VIEWS</div>'
 ready_tag = f'<div class="tag grn" id="tagready" style="left:{JX + 100}px;top:{JY + 480}px">READY TO POST ✓</div>'
 snips = f'<div class="snips" id="snips" style="left:{JX + 330}px;top:{JY + 330}px">{SNIPS}</div>'
 ghearts = "".join(f'<i class="hrt" id="gh{i}" style="left:{200 + 30 * i}px;top:1000px">{HEART}</i>' for i in range(4))
 WORLD = (f'<div class="desk"></div><div class="deskgrain"></div><i class="shadow" style="left:200px;top:1300px;width:700px;height:80px"></i>'
-         f'<i class="shadow" style="left:-40px;top:1290px;width:360px;height:50px"></i>{GIRL}{ghearts}{JAR}{cloud}{vtag}{dry_tag}{kill_tag}{ready_tag}{snips}{ctag}{drops}')
+         f'<i class="shadow" style="left:-40px;top:1290px;width:360px;height:50px"></i>{GIRL}{ghearts}{JAR}{cloud}{vtag}{dry_tag}{kill_tag}{ready_tag}{snips}{drops}')
 bokeh = "".join(f'<i class="bokeh" id="bk{i}" style="left:{x}px;top:{y}px;width:{s}px;height:{s}px;opacity:{o}"></i>'
                 for i, (x, y, s, o) in enumerate([(-60, 120, 220, .5), (880, 260, 180, .45), (60, 1680, 260, .4), (900, 1720, 200, .35)]))
 FG = f'<div class="fgmug"></div><div class="fgpen"></div>{bokeh}'
@@ -262,7 +265,7 @@ t_cr = T("g2", "Creedom")
 to("#tagdry", t_cr - .3, .2, "{opacity: 0, y: -20}")
 head("h2a", [[("Creedom", "it"), ("read", ""), ("her", "")], [("whole", ""), ("account,", "")]], 250, "g2", size=118)
 cam(t_cr - .35, 540, 1030, 1.38, .8)
-CR = (700, JY + 594, .3)                           # Cree on the soil, right of the stem (world px; feet y)
+CR = (JX + 505, JY + 594, .26)                           # Cree on the soil, right of the stem (world px; feet y)
 cree_to(t_cr - .05, *P(*CR), d=.01)
 pose(t_cr, "wave", flip=False, squash=False)
 st("#cree", t_cr, "{opacity: 1}")
@@ -385,11 +388,8 @@ cree_hop(t_wo + .05, 70, 2)
 t_cm = T("g6", "Comment")
 head("h6", [[("Comment", "")], [("GROW", "it")]], 250, "g6", size=150)
 cam(t_cm - .2, 540, 1010, 1.1, .7)
-st("#ctag", t_cm, "{opacity: 1}")
-ft("#ctag", t_cm, 1.0, "{y: -600, rotation: -30}", "{y: 0, rotation: 0}", "elastic.out(1, .45)")
+js(f'tl.fromTo("#plaque", {{boxShadow: "0 0 0 0 rgba(243,67,162,0)"}}, {{boxShadow: "0 0 40px 12px rgba(243,67,162,.6)", duration: .4, yoyo: true, repeat: 3, immediateRender: false}}, {t_cm:.3f});')
 sfx("whoosh", t_cm)
-sfx("paper", t_cm + .3)
-js(f'tl.to("#ctag", {{rotation: 4, duration: .8, yoyo: true, repeat: 3, ease: "sine.inOut"}}, {t_cm + 1.0:.3f});')
 t_sd = T("g6", "send")
 HTMLS.append(f'<div class="dm" id="dm" style="top:660px"><img src="assets/img/c100x_mark.png" alt=""><div><b>creators.100x</b><span>{KEY}Here\'s the secret</span></div><em>now</em></div>')
 ft("#dm", t_sd - .15, .45, "{opacity: 0, y: -120}", "{opacity: 1, y: 0}", "back.out(1.6)")
@@ -431,6 +431,7 @@ html = f"""<!doctype html>
       </div>
       <div class="tilt" id="tiltT"></div><div class="tilt" id="tiltB"></div>
       <div id="grade"></div><div id="vig"></div>
+      <div id="scrim"></div>
       {chr(10).join(HTMLS)}
       <div id="grain"></div><div id="flash"></div>
     </div>
