@@ -60,15 +60,15 @@ def show(sel, t0, t1):
 SPLIT_END = 36                       # the split runs through line 2 ("...everything you do.")
 REF_SHARE = .40                      # owner rule (2026-11-18): 60 % her full frame, 40 % reference footage
 # top half of the split: (first word, clip, in-point s)
-TOP_CLIPS = [(0, "t_pack", .5),          # No matter how good you are
-             (6, "t_volunteer", 1.0),    # or how much good you do,
-             (12, "t_eyeroll", 29.5),    # there will always be people who won't like you.
-             (21, "t_complain", 2.5),    # They'll complain about you,
-             (25, "t_whisper", 1.0),     # talk about you
-             (28, "t_check", 5.0)]       # and find something wrong in everything you do.
+TOP_CLIPS = [(0, "t_care", 5.5),         # No matter how good you are (a woman helping an elderly man)
+             (6, "t_pack", .5),          # or how much good you do, (packing food donations)
+             (12, "t_bullied", .5),      # there will always be people who won't like you. (kids laughing at a girl)
+             (21, "t_complain2", 1.0),   # They'll complain about you, (coworkers complaining at a man at his desk)
+             (25, "t_talk", 3.0),        # talk about you (two coworkers talking about him)
+             (28, "t_wrong", 2.0)]       # and find something wrong in everything you do. (a man jabbing at her work)
 # full-screen reference shots after the split: (first word, end word, clip, in-point s)
-FULL_REFS = [(60, 62, "f_mirror", 5.0),  # their insecurities,
-             (79, 87, "f_walk", 7.0)]    # (Keep) doing good, keep growing and let them talk.
+FULL_REFS = [(60, 62, "f_tears", 2.0),   # their insecurities, (a woman wiping tears at the mirror)
+             (79, 87, "f_grow", 1.0)]    # (Keep) doing good, keep growing and let them talk. (seedlings growing)
 
 
 # ------------------------------------------------------------------------------------------------ captions
