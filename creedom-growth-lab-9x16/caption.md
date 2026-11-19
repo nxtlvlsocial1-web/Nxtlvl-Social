@@ -6,20 +6,22 @@ owner on 2026-11-19; send the reel and this description to Creedom for their app
 ```
 Comment "GROW" and I'll send you the secret.
 
-Her account was wilting. Same posts, fewer views, every single week. Turns out, it wasn't the algorithm. It was one dry leaf.
+Her Instagram account was wilting. Same posts, fewer views, every single week. Turns out, it wasn't the algorithm. It was one dry leaf: one reel with a weak hook that was quietly killing her reach.
 
-Creedom AI is an Instagram coach that:
+Creedom AI is an Instagram growth coach that:
 1. Reads your whole account and finds the reel killing your views
-2. Checks your hook before you post
-3. Tells you what to post next, from what your audience saved
-4. Shows you exactly what worked
+2. Checks your hook before you post, so it doesn't flop
+3. Tells you what to post next, based on what your audience saved
+4. Shows you exactly what worked after you post
 
-Your first account read is free.
+If your Instagram views dropped and you don't know why, start here. Your first account read is free.
+
+Save this for your next post and send it to a creator whose views are stuck.
 
 Music: "close to your target (instrumental)" by Spiral Island, CC BY 3.0
 
-#creedomai #instagramgrowth #aitools #contentcreator #reelstips
-how to grow on instagram, why my views dropped, instagram account audit, check reel before posting, what to post next on instagram, ai instagram coach, instagram growth tips, reel hook tips, ai tools for creators, content ideas for creators
+#instagramgrowth #creedomai #aitools #contentcreator #reelstips
+why my instagram views dropped, how to grow on instagram, instagram reach dropped, instagram account audit, ai instagram coach, check reel before posting, what to post next on instagram, reel hook tips, instagram growth tips for creators, ai tools for content creators
 ```
 
 Sound effects are CC0 (OpenGameArt) or made for this reel, so they need no credit line.
