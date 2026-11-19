@@ -1,0 +1,133 @@
+{
+ "close to your target (instrumental)": {
+  "id": "abf05150-bf35-48ec-8bf4-e85031bfaa05",
+  "title": "close to your target (instrumental)",
+  "indexed_on": "2022-08-01T21:56:38.264750Z",
+  "foreign_landing_url": "https://www.jamendo.com/track/1525483",
+  "url": "https://prod-1.storage.jamendo.com/?trackid=1525483&format=mp32",
+  "creator": "Spiral Island",
+  "creator_url": "https://www.jamendo.com/artist/507335/Spiral_Island",
+  "license": "by",
+  "license_version": "3.0",
+  "license_url": "https://creativecommons.org/licenses/by/3.0/",
+  "provider": "jamendo",
+  "source": "jamendo",
+  "category": "music",
+  "genres": [
+   "symphonic",
+   "waltz"
+  ],
+  "filesize": null,
+  "filetype": "mp32",
+  "tags": [
+   {
+    "name": "happy",
+    "accuracy": null,
+    "unstable__provider": "jamendo"
+   },
+   {
+    "name": "instrumental",
+    "accuracy": null,
+    "unstable__provider": "jamendo"
+   },
+   {
+    "name": "melodica",
+    "accuracy": null,
+    "unstable__provider": "jamendo"
+   },
+   {
+    "name": "speed_medium",
+    "accuracy": null,
+    "unstable__provider": "jamendo"
+   },
+   {
+    "name": "trumpet",
+    "accuracy": null,
+    "unstable__provider": "jamendo"
+   },
+   {
+    "name": "whimsical",
+    "accuracy": null,
+    "unstable__provider": "jamendo"
+   }
+  ],
+  "alt_files": null,
+  "attribution": "\"close to your target (instrumental)\" by Spiral Island is licensed under CC BY 3.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/3.0/.",
+  "fields_matched": [
+   "tags.name"
+  ],
+  "mature": false,
+  "audio_set": {
+   "title": "Spiral Island (instrumentals)",
+   "foreign_landing_url": "https://www.jamendo.com/album/175129/spiral-island-instrumentals",
+   "creator": "Spiral Island",
+   "creator_url": "https://www.jamendo.com/artist/507335/Spiral_Island",
+   "url": null,
+   "filesize": null,
+   "filetype": null
+  },
+  "duration": 208000,
+  "bit_rate": null,
+  "sample_rate": null,
+  "thumbnail": "https://api.openverse.org/v1/audio/abf05150-bf35-48ec-8bf4-e85031bfaa05/thumb/",
+  "detail_url": "https://api.openverse.org/v1/audio/abf05150-bf35-48ec-8bf4-e85031bfaa05/",
+  "related_url": "https://api.openverse.org/v1/audio/abf05150-bf35-48ec-8bf4-e85031bfaa05/related/",
+  "waveform": "https://api.openverse.org/v1/audio/abf05150-bf35-48ec-8bf4-e85031bfaa05/waveform/",
+  "unstable__sensitivity": []
+ },
+ "magic garden": {
+  "id": "17e8f109-f41a-4c21-8953-cde01ba1c543",
+  "title": "magic garden",
+  "indexed_on": "2022-04-01T07:25:28.481246Z",
+  "foreign_landing_url": "https://www.jamendo.com/track/209150",
+  "url": "https://prod-1.storage.jamendo.com/?trackid=209150&format=mp32",
+  "creator": "Krzysztof Leszczy\u0144ski",
+  "creator_url": "https://www.jamendo.com/artist/341402/Krzysztof_Leszczynski",
+  "license": "by",
+  "license_version": "3.0",
+  "license_url": "https://creativecommons.org/licenses/by/3.0/",
+  "provider": "jamendo",
+  "source": "jamendo",
+  "category": "music",
+  "genres": [
+   "electronic"
+  ],
+  "filesize": null,
+  "filetype": "mp32",
+  "tags": [
+   {
+    "name": "instrumental",
+    "accuracy": null,
+    "unstable__provider": "jamendo"
+   },
+   {
+    "name": "speed_medium",
+    "accuracy": null,
+    "unstable__provider": "jamendo"
+   }
+  ],
+  "alt_files": null,
+  "attribution": "\"magic garden\" by Krzysztof Leszczy\u0144ski is licensed under CC BY 3.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/3.0/.",
+  "fields_matched": [
+   "title"
+  ],
+  "mature": false,
+  "audio_set": {
+   "title": "Inversion scheme",
+   "foreign_landing_url": "https://www.jamendo.com/album/30947/inversion-scheme",
+   "creator": "Krzysztof Leszczy\u0144ski",
+   "creator_url": "https://www.jamendo.com/artist/341402/Krzysztof_Leszczynski",
+   "url": null,
+   "filesize": null,
+   "filetype": null
+  },
+  "duration": 451000,
+  "bit_rate": null,
+  "sample_rate": null,
+  "thumbnail": "https://api.openverse.org/v1/audio/17e8f109-f41a-4c21-8953-cde01ba1c543/thumb/",
+  "detail_url": "https://api.openverse.org/v1/audio/17e8f109-f41a-4c21-8953-cde01ba1c543/",
+  "related_url": "https://api.openverse.org/v1/audio/17e8f109-f41a-4c21-8953-cde01ba1c543/related/",
+  "waveform": "https://api.openverse.org/v1/audio/17e8f109-f41a-4c21-8953-cde01ba1c543/waveform/",
+  "unstable__sensitivity": []
+ }
+}
