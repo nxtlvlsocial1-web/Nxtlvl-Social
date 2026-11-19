@@ -1,7 +1,8 @@
 """Handstand "post it like runners" reel (9:16): writes index.html and plan/sfx_events.json + plan/edit.json.
 
 After the owner's reference (a handstand reel with a running-app stat card) and their notes: background people removed
-(build/clean.py), the clip plays through the kick-up and freezes on the first full handstand, then the stat card builds
+(Higgsfield FLUX 3 Video Edit on the whole clip, two runs), the clip plays through the kick-up and freezes 3 s on the first
+full handstand while the stat card builds, then plays on to the end with the card on screen;
 in with the owner's numbers: Hold Time 1m 07s, Handstand Height 6ft 7in, Attempts 67.
 python3 build/generate.py
 """
@@ -10,7 +11,9 @@ import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FZ = 85 / 30            # freeze on frame 84 (2.8 s), the first straight handstand
-DUR = round(FZ + 5.4, 2)
+HOLD = 3.0              # the freeze holds 3 s while the card builds, then the clip plays on
+RES = FZ + HOLD
+DUR = round(RES + (23.0 - FZ), 2)   # assets/video/full.mp4: kick-up + 3 s freeze + the rest of the 23 s clip
 OR = "#FC5200"
 JS, SFX = [], []
 
@@ -51,7 +54,7 @@ rows = "".join(f'<div class="row" id="row{i}"><div class="ic" id="ic{i}">{ICON[k
                f'<div class="val">{val}</div></div></div>' for i, (k, lab, val) in enumerate(ROWS))
 HTML = f"""
 <div id="cam">
-  <video id="kick" src="assets/video/kick.mp4" data-start="0" data-duration="{FZ:.3f}" data-track-index="1" muted playsinline></video>
+  <video id="kick" src="assets/video/full.mp4" data-start="0" data-duration="{DUR:.3f}" data-track-index="1" muted playsinline></video>
   <img id="frz" src="assets/img/freeze.png">
 </div>
 <div id="shade"></div>
@@ -66,10 +69,11 @@ ft("#hook", 0, .3, "{opacity: 0, y: 10}", "{opacity: 1, y: 0}")
 sfx("riser", FZ - 1.0)
 sfx("whoosh", FZ - .22)
 # the freeze: the still takes over from the video, a camera-flash pop, then a slow push-in
-st("#frz", FZ, "{opacity: 1}")
 st("#flash", FZ, "{opacity: .55}")
 to("#flash", FZ + .02, .4, "{opacity: 0}", "power2.out")
-ft("#frz", FZ, DUR - FZ, "{scale: 1}", "{scale: 1.06}", "sine.out")
+ft("#cam", FZ, HOLD, "{scale: 1}", "{scale: 1.05}", "sine.out")
+to("#cam", RES, .4, "{scale: 1}", "power3.out")
+sfx("whoosh", RES - .12)
 sfx("shutter", FZ)
 sfx("impact", FZ + .02)
 to("#hook", FZ + .15, .3, "{opacity: 0, y: -10}", "power2.in")
@@ -100,6 +104,18 @@ for i, (t, vals, k) in enumerate(COUNT):
     for j in range(5):
         sfx("click", t + .12 + j * .14)
     sfx("notify" if i == 2 else "click", t + 1.0)
+# after the freeze the camera pans and his legs cross the card: it slides out 1.5 s after the clip resumes and comes back
+# 300 px higher for the planche at the end (he is low in frame; sky and banner above him are clear)
+OUT_T, BACK_T = RES + .6, 23.8
+to("#card", OUT_T, .35, "{x: -420, opacity: 0}", "power2.in")
+to("#bar", OUT_T, .3, "{scaleY: 0}", "power2.in")
+sfx("whoosh", OUT_T - .05)
+ft("#card", BACK_T, .45, "{x: -420, y: -300, opacity: 0}", "{x: 0, y: -300, opacity: 1}", "power3.out")
+ft("#bar", BACK_T + .1, .5, "{scaleY: 0, y: -300}", "{scaleY: 1, y: -300}", "power3.out")
+to("#shade", OUT_T, .4, "{opacity: 0}")
+ft("#shade", BACK_T, .4, "{opacity: 0}", "{opacity: 1}")
+sfx("whoosh", BACK_T - .05)
+sfx("notify", BACK_T + .4)
 # stopwatch hand ticks round while the card is up
 js(f'tl.fromTo("#ic0 .hand", {{rotation: 0}}, {{rotation: 720, svgOrigin: "24 27", duration: {DUR - FZ - .7:.2f}, ease: "none", immediateRender: false}}, {FZ + .65:.3f});')
 
@@ -111,7 +127,7 @@ CSS = f"""
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #000; }}
 #root {{ position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter; color: #fff; background: #000; }}
-#cam {{ position: absolute; inset: 0; }}
+#cam {{ position: absolute; inset: 0; transform-origin: 60% 40%; }}
 #kick, #frz {{ position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; }}
 #frz {{ opacity: 0; transform-origin: 60% 40%; }}
 #shade {{ position: absolute; inset: 0; opacity: 0; background: linear-gradient(90deg, rgba(0,0,0,.6) 0%, rgba(0,0,0,.38) 26%, rgba(0,0,0,0) 40%); }}
