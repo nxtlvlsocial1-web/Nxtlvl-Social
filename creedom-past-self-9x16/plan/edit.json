@@ -1,0 +1,82 @@
+{
+ "dur": 33.39,
+ "msgs": {
+  "m0": {
+   "id": "m0",
+   "who": "P",
+   "text": "If you're reading this... you're about to quit.",
+   "t0": 0.05,
+   "t1": 2.498
+  },
+  "m1": {
+   "id": "m1",
+   "who": "Q",
+   "text": "how do you know",
+   "t0": 2.878,
+   "t1": 3.839
+  },
+  "m2": {
+   "id": "m2",
+   "who": "P",
+   "text": "Because I'm you. Six months from now.",
+   "t0": 3.979,
+   "t1": 6.069
+  },
+  "m3": {
+   "id": "m3",
+   "who": "Q",
+   "text": "47 views. again. I don't even know what I'm doing wrong",
+   "t0": 6.449,
+   "t1": 11.068
+  },
+  "m4": {
+   "id": "m4",
+   "who": "Q",
+   "text": "I think I'm done.",
+   "t0": 11.448,
+   "t1": 12.211
+  },
+  "m5": {
+   "id": "m5",
+   "who": "P",
+   "text": "Don't delete it. Stop guessing.",
+   "t0": 12.951,
+   "t1": 15.27
+  },
+  "m6": {
+   "id": "m6",
+   "who": "P",
+   "text": "Creedom read our whole account. It showed what's working, and what was killing our views.",
+   "t0": 15.41,
+   "t1": 22.255
+  },
+  "m7": {
+   "id": "m7",
+   "who": "Q",
+   "text": "wait... it tells you WHY?",
+   "t0": 22.635,
+   "t1": 24.49
+  },
+  "m8": {
+   "id": "m8",
+   "who": "P",
+   "text": "And it checks every reel before you post.",
+   "t0": 24.63,
+   "t1": 27.07
+  },
+  "m9": {
+   "id": "m9",
+   "who": "Q",
+   "text": "ok. I'm not deleting it.",
+   "t0": 27.45,
+   "t1": 29.491
+  },
+  "m10": {
+   "id": "m10",
+   "who": "P",
+   "text": "Comment GROW. I'll send you the secret.",
+   "t0": 29.631,
+   "t1": 31.989
+  }
+ }
+}
