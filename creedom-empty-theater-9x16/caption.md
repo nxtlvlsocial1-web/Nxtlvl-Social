@@ -40,4 +40,4 @@ Creedom: [CREEDOM LINK]
 ## Notes
 
 - Voice: ElevenLabs Eleven v3, built-in voice Jessica (take 3 of 3, pauses trimmed to a breath, natural speed).
-- The "47 views" on the screen and the 0:03 drop-off mark are an illustration, not a real account.
+- The "47 views" on the screen, the 0:03 drop-off mark and the 4.7 / 5 reel score (labelled "Example score" in the reel) are illustrations, not a real account.

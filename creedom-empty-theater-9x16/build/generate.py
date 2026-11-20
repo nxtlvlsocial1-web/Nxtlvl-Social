@@ -278,20 +278,58 @@ st("#sm_sad", T("g4", "left"), "{opacity: 0}")
 st("#sm_open", T("g4", "left"), "{opacity: 1}")
 js(f'tl.to("#shead", {{rotation: 0, svgOrigin: "95 140", duration: .5, ease: "sine.inOut"}}, {T("g4", "left"):.3f});')
 
-# ---- 5 her next reel, checked ------------------------------------------------------------------------------------------------
+# ---- 5 her next reel, checked: Cree projects the reel check (owner's note on the final, 2026-11-20) ----------------------------
+# the voice holds a 1.8 s breath after "posted." (build/vo_insert.py) so the check can play out: scan, score counts up to
+# 4.7 / 5, the six category chips tick, "Very good", then the panel folds into the stage screen and READY TO POST lights.
+# The score is an example (marked on the panel), never a promise.
 t_ck = T("g5", "checked")
+t_po = T("g5", "posted")
+t_nx = T0["g6"][0]                                            # "And this time"
 head("h5", [[("It", ""), ("checked", "it"), ("her", ""), ("next", ""), ("reel", "")], [("before", ""), ("she", ""), ("posted.", "")]], 250, "g5", size=92)
 to("#tc", T0["g5"][0] - .2, .2, "{opacity: 0}")
-cam(T0["g5"][0] - .2, 540, 600, 1.35, .9)
+cam(T0["g5"][0] - .2, 540, 470, 1.35, .9)
 to("#tbe", T0["g5"][0] - .2, .2, "{opacity: 0}")
 ft("#rnew", t_ck, .5, "{opacity: 0, scale: 1.1}", "{opacity: 1, scale: 1}", "power3.out")
-js(f'tl.fromTo("#tbb", {{width: "0%"}}, {{width: "100%", duration: {T0["g5"][1] - t_ck + .3:.2f}, ease: "none", immediateRender: false}}, {t_ck:.3f});')
-sfx("ding2", t_ck)
-ft("#rdy", T("g5", "posted") - .1, .35, "{opacity: 0, y: 30, scale: .6}", "{opacity: 1, y: 0, scale: 1}", "back.out(2.4)")
-sfx("ding", T("g5", "posted"))
+js(f'tl.fromTo("#tbb", {{width: "0%"}}, {{width: "100%", duration: {t_nx - t_ck:.2f}, ease: "none", immediateRender: false}}, {t_ck:.3f});')
 js(f'tl.to("#sarm", {{rotation: 0, svgOrigin: "136 176", duration: .6, ease: "back.out(1.6)"}}, {t_ck:.3f});')
 js(f'tl.to("#sscr", {{fill: "#ffd0e6", duration: .3}}, {t_ck:.3f});')
-pose(T("g5", "posted"), "proud")
+pose(t_ck - .15, "mag", flip=True)
+# the panel beams up out of Cree's magnifier
+ft("#abeam", t_ck, .3, "{opacity: 0}", "{opacity: 1}", "power2.out")
+ft("#ana", t_ck + .05, .5, "{opacity: 0, scale: .25, y: 260}", "{opacity: 1, scale: 1, y: 0}", "back.out(1.5)")
+sfx("whoosh", t_ck)
+sfx("riser_short", t_ck)
+# scan the reel twice
+for k in range(2):
+    ft("#scan", t_ck + .4 + .6 * k, .6, "{y: 0, opacity: 1}", "{y: 400, opacity: 1}", "sine.inOut")
+    sfx("glitch", t_ck + .45 + .6 * k)
+st("#scan", t_ck + 1.6, "{opacity: 0}")
+js(f'tl.fromTo("#adots", {{opacity: 1}}, {{opacity: .2, duration: .25, yoyo: true, repeat: 5, ease: "none", immediateRender: false}}, {t_ck + .2:.3f});')
+# the score counts up while the chips tick in
+T_SC = t_ck + 1.05
+js(f'(() => {{ const sc = {{v: 0}}; tl.to(sc, {{v: 4.7, duration: 1.3, ease: "power2.out", onUpdate: () => {{ document.getElementById("scn").textContent = sc.v.toFixed(1); }}}}, {T_SC:.3f}); }})();')
+for i in range(6):
+    tk = T_SC + .15 + .19 * i
+    ft(f"#ch{i}", tk, .3, "{opacity: 0, scale: .6, y: 16}", "{opacity: 1, scale: 1, y: 0}", "back.out(2.6)")
+    sfx("tick", tk)
+t_vg = T_SC + 1.35
+ft("#avg", t_vg, .3, "{opacity: 0, x: -20}", "{opacity: 1, x: 0}", "power3.out")
+js(f'tl.fromTo("#abar", {{width: "0%"}}, {{width: "94%", duration: .55, ease: "power3.out", immediateRender: false}}, {t_vg:.3f});')
+to("#ahd1", t_vg, .2, "{opacity: 0}")
+ft("#ahd2", t_vg + .05, .25, "{opacity: 0}", "{opacity: 1}", "power2.out")
+ft("#atk", t_vg + .05, .3, "{opacity: 0, scale: .4}", "{opacity: 1, scale: 1}", "back.out(3)")
+js(f'tl.fromTo("#ascore", {{scale: 1}}, {{scale: 1.12, duration: .16, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false}}, {t_vg:.3f});')
+sfx("ding2", t_vg)
+sparkle(t_vg + .05, .7)
+pose(t_vg, "cheer")
+# fold the panel into the stage screen: READY TO POST
+t_fd = t_nx - .75
+to("#ana", t_fd, .4, "{opacity: 0, scale: .3, y: 300}", "power3.in")
+to("#abeam", t_fd, .3, "{opacity: 0}")
+sfx("whoosh", t_fd)
+ft("#rdy", t_fd + .35, .35, "{opacity: 0, y: 30, scale: .6}", "{opacity: 1, y: 0, scale: 1}", "back.out(2.4)")
+sfx("ding", t_fd + .38)
+pose(t_fd + .35, "proud")
 
 # ---- 6 and this time they stayed: house lights, the seats fill, applause --------------------------------------------------------
 t_and = T0["g6"][0]
@@ -388,6 +426,15 @@ for i in range(22):
 js(f'tl.fromTo("#creep", {{y: 0}}, {{y: -8, duration: .7, ease: "sine.inOut", yoyo: true, repeat: {int(DUR / .7)}, immediateRender: false}}, 0);')
 js(f'tl.fromTo("#punch", {{rotation: -.25}}, {{rotation: .25, duration: 3, yoyo: true, repeat: {int(DUR / 3)}, ease: "sine.inOut", immediateRender: false}}, 0);')
 
+CHIPS = [("Hook", 5), ("Pacing", 4), ("Ending", 5), ("Visuals", 5), ("Audio", 4), ("CTA", 5)]
+ANAH = ('<div class="ahd"><img src="assets/img/poses/mag.png" alt=""><span id="ahd1">CREE · CHECKING YOUR REEL<b id="adots">…</b></span>'
+        f'<span id="ahd2">CREE · REEL CHECKED</span><i class="atick" id="atk">{TICK}</i></div>'
+        '<div class="athumb"><i class="asil"></i><b data-layout-ignore>Your best<br>moment,<br>first.</b><i id="scan"></i>'
+        '<i class="abr tl"></i><i class="abr tr"></i><i class="abr bl"></i><i class="abr br"></i></div>'
+        '<div class="aright"><div class="alab">REEL SCORE</div><div id="ascore"><span id="scn">0.0</span><small>/ 5</small></div>'
+        '<div id="avg">Very good</div><div class="atrack"><i id="abar"></i></div><div class="achips">'
+        + "".join(f'<span class="chip" id="ch{i}">{n} <b>{v}</b></span>' for i, (n, v) in enumerate(CHIPS))
+        + '</div><div class="aex">Example score</div></div>')
 COLS = ("#ffd27a", "#f5c062", "#F343A2", "#ff9fd0", "#ffffff", "#ff7a59")
 CONFH = "".join(f'<i class="cf" id="cf{i}" style="background:{random.choice(COLS)};width:{random.randint(12, 20)}px;height:{random.randint(22, 34)}px"></i>' for i in range(CONF))
 WORLD = WORLD.replace('<i id="crglow"', '<i class="flare" id="flare1" style="top:1080px"></i><i class="flare" id="flare2" style="top:320px"></i>'
@@ -410,6 +457,7 @@ html = f"""<!doctype html>
         <div class="rig" id="rw" data-layout-allow-overflow data-layout-allow-overlap>{WORLD}</div>
         <div class="rig" id="rfg" data-layout-allow-overflow>{FG}</div>
       </div></div>
+      <div id="abeam"></div><div id="ana" data-layout-allow-overlap>{ANAH}</div>
       <div id="conf">{CONFH}</div><div id="lbT"></div><div id="lbB"></div>
       <div id="cold"></div><div id="warmg"></div><div id="vig"></div><div id="black"></div>
       <div id="scrim"></div>
