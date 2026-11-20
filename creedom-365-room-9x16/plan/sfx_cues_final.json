@@ -1,0 +1,357 @@
+[
+{
+"t": 0.25,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 3.3,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_big.wav"
+},
+{
+"t": 3.45,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 3.81,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 4.17,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 4.53,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 4.89,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 5.25,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 5.61,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 5.76,
+"kind": "swish",
+"file": "swish_whoosh_c.wav"
+},
+{
+"t": 5.97,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 6.33,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 6.69,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 6.9,
+"kind": "swish",
+"file": "swish_whoosh_a.wav"
+},
+{
+"t": 7.05,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 7.41,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 7.75,
+"kind": "swish",
+"file": "swish_whoosh_c.wav"
+},
+{
+"t": 7.77,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 8.13,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 8.49,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 8.83,
+"kind": "swish",
+"file": "swish_whoosh_a.wav"
+},
+{
+"t": 8.85,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 11.04,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 11.49,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 11.8,
+"kind": "error",
+"file": "error_error.wav"
+},
+{
+"t": 11.9,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 16.36,
+"kind": "riser",
+"file": "riser_riser.wav"
+},
+{
+"t": 17.31,
+"kind": "sparkle",
+"file": "sparkle_sparkle.wav"
+},
+{
+"t": 17.34,
+"kind": "thump",
+"file": "thump_sub_hit.wav"
+},
+{
+"t": 17.89,
+"kind": "flip",
+"file": "flip_flip_a.wav"
+},
+{
+"t": 18.09,
+"kind": "flip",
+"file": "flip_flip_b.wav"
+},
+{
+"t": 18.29,
+"kind": "flip",
+"file": "flip_flip_a.wav"
+},
+{
+"t": 18.49,
+"kind": "flip",
+"file": "flip_flip_b.wav"
+},
+{
+"t": 18.69,
+"kind": "flip",
+"file": "flip_flip_a.wav"
+},
+{
+"t": 18.89,
+"kind": "flip",
+"file": "flip_flip_b.wav"
+},
+{
+"t": 19.09,
+"kind": "flip",
+"file": "flip_flip_a.wav"
+},
+{
+"t": 21.58,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 21.715,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 21.85,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 21.985,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 22.12,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 22.51,
+"kind": "error",
+"file": "error_error.wav"
+},
+{
+"t": 23.9,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 24.4,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 24.8,
+"kind": "glitch",
+"file": "glitch_glitch.wav"
+},
+{
+"t": 25.3,
+"kind": "glitch",
+"file": "glitch_glitch.wav"
+},
+{
+"t": 25.3,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 25.46,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 25.62,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 25.78,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 25.94,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 26.1,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 26.35,
+"kind": "ding2",
+"file": "ding2_ding2.wav"
+},
+{
+"t": 27.16,
+"kind": "whoosh",
+"file": "whoosh_whoosh_c.wav"
+},
+{
+"t": 27.46,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_big.wav"
+},
+{
+"t": 27.56,
+"kind": "ding",
+"file": "ding_ding.wav"
+},
+{
+"t": 27.56,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 29.42,
+"kind": "coin",
+"file": "coin_coin.wav"
+},
+{
+"t": 29.52,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 29.52,
+"kind": "ping",
+"file": "ping_ping.wav"
+},
+{
+"t": 30.48,
+"kind": "ping",
+"file": "ping_ping.wav"
+},
+{
+"t": 30.92,
+"kind": "applause",
+"file": "applause_applause.wav"
+},
+{
+"t": 31.0,
+"kind": "thump",
+"file": "thump_sub_hit.wav"
+},
+{
+"t": 31.02,
+"kind": "bell",
+"file": "bell_bell.wav"
+},
+{
+"t": 31.44,
+"kind": "ping",
+"file": "ping_ping.wav"
+},
+{
+"t": 32.4,
+"kind": "ping",
+"file": "ping_ping.wav"
+},
+{
+"t": 32.96,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 33.18,
+"kind": "thump",
+"file": "thump_sub_hit.wav"
+},
+{
+"t": 33.2,
+"kind": "ding",
+"file": "ding_ding.wav"
+},
+{
+"t": 33.36,
+"kind": "ping",
+"file": "ping_ping.wav"
+},
+{
+"t": 34.32,
+"kind": "ping",
+"file": "ping_ping.wav"
+}
+]
