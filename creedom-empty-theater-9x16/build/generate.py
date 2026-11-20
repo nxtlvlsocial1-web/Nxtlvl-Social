@@ -119,7 +119,68 @@ STAR = ('<div id="star"><svg viewBox="0 0 190 340"><defs>'
         '<rect id="sscr" x="131" y="79" width="20" height="38" rx="4" fill="#ffd9ea"/></g>'
         '<path d="M50 180 C34 210 40 240 52 250" fill="none" stroke="url(#sdr)" stroke-width="22" stroke-linecap="round"/></svg></div>')
 
-# seats: 9 rows from the stage towards the camera, bigger and lower as they come closer
+# the audience: chibi mascots (owner's note on the final, 2026-11-20). One SVG symbol set, coloured per character through CSS
+# variables (--hair, --skin, --shirt), so a hundred-odd chibis stay light: seated ones seen from behind (head over the seat
+# back, arms and a glowing phone up when they cheer), a front view for the ones who turn round to the camera, and a standing
+# walker with a sad or happy face for the four who leave and come back.
+HAIR = ("#3b2219", "#6b3b2a", "#1d1d2b", "#c47a3a", "#e8b04a", "#8a4bd6", "#ff6fae", "#4aa3df", "#2b2b3d")
+SKIN = ("#ffe0cc", "#f6c7a8", "#e0a37f", "#b9785a", "#8a553c")
+SHIRT = ("#ff6fae", "#4aa3df", "#ffd27a", "#7ed6a5", "#b48cff", "#ff8a5c", "#f2f2f2", "#5fd0d6")
+
+
+def look():
+    return (f"--hair:{random.choice(HAIR)};--skin:{random.choice(SKIN)};--shirt:{random.choice(SHIRT)};"
+            f"--bun:{1 if random.random() < .3 else 0}")
+
+
+ARMS = ('<path d="M24 84 L-4 16" style="stroke:var(--shirt)" stroke-width="13" stroke-linecap="round" fill="none"/>'
+        '<path d="M76 84 L104 16" style="stroke:var(--shirt)" stroke-width="13" stroke-linecap="round" fill="none"/>'
+        '<circle cx="-5" cy="13" r="8" style="fill:var(--skin)"/><circle cx="105" cy="13" r="8" style="fill:var(--skin)"/>')
+PHONE = ('<g transform="translate(14 -16)"><circle cx="92" cy="12" r="17" fill="#ffd9ee" opacity=".4"/><rect x="85" y="1" width="14" height="23" rx="3" fill="#2a1a24"/>'
+         '<rect x="87" y="3" width="10" height="19" rx="2" fill="#ffeef6"/></g>')
+HAIRF = ('<path d="M11 50 C9 18 30 4 50 4 C70 4 91 18 89 50 C84 38 76 31 66 30 C60 36 50 38 40 34 C30 32 18 38 11 50 Z" style="fill:var(--hair)"/>'
+         '<circle cx="50" cy="5" r="13" style="fill:var(--hair);opacity:var(--bun,0)"/>')
+HAPPY = ('<path d="M28 56 Q35 47 42 56" stroke="#2a1220" stroke-width="4.5" fill="none" stroke-linecap="round"/>'
+         '<path d="M58 56 Q65 47 72 56" stroke="#2a1220" stroke-width="4.5" fill="none" stroke-linecap="round"/>'
+         '<ellipse cx="27" cy="66" rx="7" ry="4" fill="#ff7fa8" opacity=".6"/><ellipse cx="73" cy="66" rx="7" ry="4" fill="#ff7fa8" opacity=".6"/>'
+         '<path d="M41 66 Q50 80 59 66 Z" fill="#9a3b4e"/>')
+CHIBI_DEFS = ('<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>'
+              # seated, from behind
+              '<symbol id="cbB" viewBox="0 0 100 120" overflow="visible">'
+              f'<g style="opacity:var(--arms,0)">{ARMS}</g><g style="opacity:calc(var(--ph,0) * var(--arms,0))">{PHONE}</g>'
+              '<ellipse cx="50" cy="106" rx="33" ry="24" style="fill:var(--shirt)"/>'
+              '<circle cx="12" cy="52" r="8" style="fill:var(--skin)"/><circle cx="88" cy="52" r="8" style="fill:var(--skin)"/>'
+              '<circle cx="50" cy="8" r="13" style="fill:var(--hair);opacity:var(--bun,0)"/><circle cx="50" cy="46" r="40" style="fill:var(--hair)"/>'
+              '<path d="M50 7 C45 -4 59 -7 57 3" style="stroke:var(--hair)" stroke-width="4" fill="none" stroke-linecap="round"/>'
+              '<ellipse cx="34" cy="26" rx="13" ry="7" fill="#fff" opacity=".22" transform="rotate(-25 34 26)"/></symbol>'
+              # seated, turned round to the camera, cheering
+              '<symbol id="cbF" viewBox="0 0 100 120" overflow="visible">'
+              f'{ARMS}<g style="opacity:var(--ph,0)">{PHONE}</g><ellipse cx="50" cy="106" rx="33" ry="24" style="fill:var(--shirt)"/>'
+              f'<circle cx="50" cy="48" r="39" style="fill:var(--skin)"/>{HAIRF}{HAPPY}</symbol>'
+              # standing walker: sad on the way out, happy on the way back
+              '<symbol id="cbW" viewBox="0 0 100 170" overflow="visible">'
+              '<rect x="34" y="136" width="13" height="30" rx="6" fill="#3a2a40"/><rect x="53" y="136" width="13" height="30" rx="6" fill="#3a2a40"/>'
+              '<path d="M27 104 L18 132" style="stroke:var(--shirt)" stroke-width="11" stroke-linecap="round" fill="none"/>'
+              '<path d="M73 104 L82 132" style="stroke:var(--shirt)" stroke-width="11" stroke-linecap="round" fill="none"/>'
+              '<circle cx="17" cy="135" r="6" style="fill:var(--skin)"/><circle cx="83" cy="135" r="6" style="fill:var(--skin)"/>'
+              '<path d="M26 104 Q26 92 50 92 Q74 92 74 104 L76 142 Q50 150 24 142 Z" style="fill:var(--shirt)"/>'
+              '<g transform="translate(0 4)"><circle cx="50" cy="48" r="39" style="fill:var(--skin)"/>' + HAIRF +
+              '<g style="opacity:calc(1 - var(--happy,0))"><ellipse cx="36" cy="56" rx="4" ry="5.5" fill="#2a1220"/><ellipse cx="64" cy="56" rx="4" ry="5.5" fill="#2a1220"/>'
+              '<path d="M28 49 L42 44" stroke="#2a1220" stroke-width="3.5" stroke-linecap="round"/><path d="M72 49 L58 44" stroke="#2a1220" stroke-width="3.5" stroke-linecap="round"/>'
+              '<path d="M42 75 Q50 67 58 75" stroke="#9a3b4e" stroke-width="4" fill="none" stroke-linecap="round"/>'
+              '<path d="M29 62 Q25 69 29 73 Q33 69 29 62 Z" fill="#8fd3ff"/></g>'
+              f'<g style="opacity:var(--happy,0)">{HAPPY}</g></g></symbol>'
+              '</defs></svg>')
+
+
+def chibi(cid, x, top, wd, cls="", turn=False, phone=False, style=""):
+    """a seated chibi from behind (optionally with a front view to turn round to, and a phone for the cheer)"""
+    front = '<use href="#cbF" style="opacity:var(--turn,0)"/>' if turn else ""
+    return (f'<div class="cb" id="{cid}" style="left:{x:.0f}px;top:{top:.0f}px;width:{wd:.0f}px;height:{wd * 1.2:.0f}px;{look()}{style}">'
+            f'<svg class="cbs{" tn" if turn else ""}{" hp" if phone else ""}" viewBox="0 0 100 120" overflow="visible">'
+            f'<use href="#cbB" style="opacity:calc(1 - var(--turn,0))"/>{front}</svg></div>')
+
+
 ROWS = []
 seats_html = ""
 pid = 0
@@ -131,28 +192,33 @@ for r in range(9):
     span = 760 + 130 * r
     n = int(span // (w + gap))
     x0 = 540 - (n * (w + gap) - gap) / 2
-    row = []
-    seats_html += f'<div class="row" style="top:{yb - h:.0f}px;height:{h:.0f}px">'
+    row, chibis, seats = [], "", ""
     for s in range(n):
         x = x0 + s * (w + gap)
-        hd, shw = w * .44, w * .86
-        ph = (f'<i class="ph" id="ph{pid}" style="left:{-w * .07:.0f}px;top:{-w * .16:.0f}px;width:{w * .14:.0f}px;height:{w * .22:.0f}px"></i>' if random.random() < .45 else "")
-        seats_html += (f'<i class="seat" style="left:{x:.0f}px;width:{w:.0f}px;height:{h:.0f}px"><i class="ppl" id="pp{pid}" style="width:0;height:0">'
-                       f'<i class="sh" style="left:{-shw / 2:.0f}px;top:{-w * .3:.0f}px;width:{shw:.0f}px;height:{w * .55:.0f}px"></i>'
-                       f'<i class="hd" style="left:{-hd / 2:.0f}px;top:{-w * .3 - hd * .9:.0f}px;width:{hd:.0f}px;height:{hd:.0f}px"></i>{ph}</i></i>')
-        row.append((pid, x + w / 2, yb, w, bool(ph)))
+        has_ph = random.random() < .45
+        turn = r >= 2 and random.random() < .6
+        cw = w * 1.1
+        chibis += chibi(f"pp{pid}", x + w / 2 - cw / 2, -.72 * w, cw, turn=turn, phone=has_ph, style=f"--ph:{1 if has_ph else 0}")
+        seats += f'<i class="seat" style="left:{x:.0f}px;width:{w:.0f}px;height:{h:.0f}px"></i>'
+        row.append((pid, x + w / 2, yb, w, has_ph))
         pid += 1
-    seats_html += "</div>"
     ROWS.append(row)
+    seats_html += f'<div class="row" id="row{r}" style="top:{yb - h:.0f}px;height:{h:.0f}px">{chibis}{seats}<!--W{r}--></div>'
 
-# the few who came: four walkers in rows 2-4
-WALK = [(ROWS[2][3], -40), (ROWS[3][len(ROWS[3]) - 4], 1120), (ROWS[4][5], -60), (ROWS[2][len(ROWS[2]) - 3], 1110)]
+# the few who came: four chibis in rows 2-4, each with a standing walker in front of their row's seats
+WALK = [(4, 4, -60), (5, len(ROWS[5]) - 4, 1130), (6, 6, -70), (4, len(ROWS[4]) - 3, 1120)]
+WPID = set()
+for i, (r, k, ex) in enumerate(WALK):
+    pid_, cx, yb, w, _ = ROWS[r][k]
+    WPID.add(pid_)
+    ww = w * 1.25
+    hh = ww * 1.7
+    h = w * 1.05
+    wk = (f'<div class="cbw" id="wk{i}" style="left:{cx - ww / 2:.0f}px;top:{h + .15 * w - hh:.0f}px;width:{ww:.0f}px;height:{hh:.0f}px;{look()};--happy:0">'
+          f'<svg viewBox="0 0 100 170" overflow="visible"><use href="#cbW"/></svg></div>')
+    seats_html = seats_html.replace(f"<!--W{r}-->", wk + f"<!--W{r}-->")
+WALK = [(ROWS[r][k], ex) for r, k, ex in WALK]
 walkers = ""
-for i, ((_, cx, yb, w, _), _) in enumerate(WALK):
-    s = w * 1.1
-    walkers += (f'<div class="walker" id="wk{i}" style="left:{cx - s / 2:.0f}px;top:{yb - s * 2.1:.0f}px;width:{s:.0f}px;height:{s * 2:.0f}px">'
-                f'<i class="hd" style="left:{s * .3:.0f}px;top:0;width:{s * .4:.0f}px;height:{s * .4:.0f}px"></i>'
-                f'<i class="sh" style="left:{s * .1:.0f}px;top:{s * .42:.0f}px;width:{s * .8:.0f}px;height:{s * 1.5:.0f}px"></i></div>')
 WORLD = (f'<div class="backwall"></div><div class="screen" id="screen"><div class="reelbg"><i></i></div>'
          f'<div class="reelnew" id="rnew"><i></i><b data-layout-ignore>Your best<br>moment,<br>first.</b></div><div class="rew" id="rew"></div>'
          f'<div class="tc" id="tc">0:03</div><div class="sign47" id="s47" style="left:0;top:190px;width:340px;font-size:84px;opacity:0">47<small>VIEWS</small></div>'
@@ -165,10 +231,10 @@ WORLD = (f'<div class="backwall"></div><div class="screen" id="screen"><div clas
          f'<div class="door" style="left:-90px;top:1180px"><i class="doorlight" id="dl0"></i></div><div class="exit" style="left:-70px;top:1120px">EXIT</div>'
          f'<div class="door" style="left:1040px;top:1180px"><i class="doorlight" id="dl1"></i></div><div class="exit" style="left:1050px;top:1120px">EXIT</div>'
          f'{seats_html}{walkers}<i id="crglow" style="left:540px;top:1080px"></i>')
-fgseats = "".join(f'<i class="fgseat" style="left:{x}px;width:{w}px;height:{h}px"><i class="ppl" id="fp{i}" style="width:0;height:0;bottom:62%">'
-                  f'<i class="sh" style="left:-130px;top:-90px;width:260px;height:170px"></i><i class="hd" style="left:-66px;top:-210px;width:132px;height:132px"></i></i></i>'
-                  for i, (x, w, h) in enumerate([(-120, 300, 360), (200, 300, 330), (520, 300, 340), (840, 300, 360)]))
-FG = f'<div style="position:absolute;left:0;right:0;top:1920px">{fgseats}</div>'
+FGS = [(-120, 300, 360), (200, 300, 330), (520, 300, 340), (840, 300, 360)]
+fgseats = ("".join(chibi(f"fp{i}", x + w / 2 - 138, 2040 - h - 1920 - 150, 276) for i, (x, w, h) in enumerate(FGS))
+           + "".join(f'<i class="fgseat" style="left:{x}px;width:{w}px;height:{h}px"></i>' for x, w, h in FGS))
+FG = f'<div id="fgl" style="position:absolute;left:0;right:0;top:1920px">{fgseats}</div>'
 HOUSE = '<div class="houselight" id="house"></div>'
 
 # =======================================================================================================================
@@ -202,16 +268,20 @@ for i in range(4):
 t_fw = T("g2", "few")
 head("h2a", [[("The", ""), ("few", ""), ("who", ""), ("came…", "")]], 250, "g2", size=110)
 cam(T0["g2"][0] - .2, 540, 1050, .86, 1.2)
-for i in range(4):
-    ft(f"#wk{i}", t_fw + .08 * i, .4, "{opacity: 0, y: 20}", "{opacity: 1, y: 0}", "power2.out")
+for i, ((pid_, cx, yb, w, _), _) in enumerate(WALK):
+    ft(f"#pp{pid_}", t_fw + .1 * i, .4, f"{{opacity: 0, y: {w * .4:.0f}, scaleY: .7}}", "{opacity: 1, y: 0, scaleY: 1}", "back.out(2.2)")
+    sfx("pop", t_fw + .1 * i)
 t_lf = T("g2", "left")
 head("h2b", [[("left", "rd"), ("in", ""), ("the", ""), ("first", "")], [("three", ""), ("seconds.", "")]], 250, "g2", size=104, after=t_lf)
-for i, (_, ex) in enumerate(WALK):
+for i, ((pid_, cx, yb, w, _), ex) in enumerate(WALK):
     tk = t_lf + .1 * i
-    js(f'tl.to("#wk{i}", {{scaleY: 1.12, duration: .25, ease: "power2.out"}}, {tk:.3f});')
-    cx = WALK[i][0][1]
+    st(f"#pp{pid_}", tk, "{opacity: 0}")
+    ft(f"#wk{i}", tk, .25, "{opacity: 1, scaleY: .7, y: 20}", "{opacity: 1, scaleY: 1, y: 0}", "back.out(2)")
+    dirn = -1 if ex < cx else 1
     js(f'tl.to("#wk{i}", {{x: {ex - cx:.0f}, duration: 1.5, ease: "power1.in"}}, {tk + .25:.3f});')
-    js(f'tl.fromTo("#wk{i}", {{rotation: -3}}, {{rotation: 3, duration: .18, yoyo: true, repeat: 7, ease: "sine.inOut", immediateRender: false}}, {tk + .25:.3f});')
+    js(f'tl.fromTo("#wk{i}", {{rotation: {-4 + 3 * dirn}, y: 0}}, {{keyframes: [' + ", ".join(
+        f'{{rotation: {(4 if k % 2 == 0 else -4) + 3 * dirn}, y: {-6 if k % 2 == 0 else 0}, duration: .18}}' for k in range(8))
+       + f'], immediateRender: false}}, {tk + .25:.3f});')
     to(f"#wk{i}", tk + 1.55, .2, "{opacity: 0}")
     sfx("seat", tk)
 sfx("steps", t_lf + .3)
@@ -338,16 +408,34 @@ head("h6a", [[("And", ""), ("this", ""), ("time…", "")]], 260, "g6", size=124)
 head("h6b", [[("they", ""), ("stayed.", "au")]], 250, "g6", size=170, after=T("g6", "they"))
 cam(t_and - .1, 540, 1260, .78, 1.6, "power2.inOut")
 sfx("whoosh_big", t_and - .1)
+# the four who left come back in through the doors, smiling
+for d in (0, 1):
+    js(f'tl.fromTo("#dl{d}", {{opacity: 0}}, {{opacity: .9, duration: .25, yoyo: true, repeat: 1, repeatDelay: .6, immediateRender: false}}, {t_and - .3 + .1 * d:.3f});')
+sfx("door", t_and - .25)
+sfx("steps", t_and)
+for i, ((pid_, cx, yb, w, _), ex) in enumerate(WALK):
+    tk = t_and - .15 + .08 * i
+    dirn = 1 if ex < cx else -1                               # walking back towards the seat
+    st(f"#wk{i}", tk, f'{{"--happy": 1, x: {ex - cx:.0f}, rotation: 0}}')
+    ft(f"#wk{i}", tk, .2, "{opacity: 0}", "{opacity: 1}", "power1.out")
+    js(f'tl.to("#wk{i}", {{x: 0, duration: 1.0, ease: "power1.out"}}, {tk:.3f});')
+    js(f'tl.fromTo("#wk{i}", {{rotation: {3 * dirn}, y: 0}}, {{keyframes: [' + ", ".join(
+        f'{{rotation: {(5 if k % 2 == 0 else -5) + 3 * dirn}, y: {-9 if k % 2 == 0 else 0}, duration: .15}}' for k in range(6))
+       + f', {{rotation: 0, y: 0, duration: .1}}], immediateRender: false}}, {tk:.3f});')
+    st(f"#wk{i}", tk + 1.0, "{opacity: 0}")
+    ft(f"#pp{pid_}", tk + 1.0, .3, f"{{opacity: 1, y: {-w * .2:.0f}}}", "{opacity: 1, y: 0}", "bounce.out")
+    sfx("pop", tk + 1.0)
+# then the whole house fills, row by row towards the camera
 FILL0 = T("g6", "they") - .25
 for r, row in enumerate(ROWS):
     for pid_, cx, yb, w, has_ph in row:
+        if pid_ in WPID:
+            continue
         tk = FILL0 + .14 * r + random.uniform(0, .18)
-        ft(f"#pp{pid_}", tk, .35, "{opacity: 0, y: 14}", "{opacity: 1, y: 0}", "power2.out")
-        if has_ph:
-            ft(f"#ph{pid_}", tk + .5 + random.uniform(0, .6), .25, "{opacity: 0}", "{opacity: 1}", "power2.out")
+        ft(f"#pp{pid_}", tk, .4, f"{{opacity: 0, y: {w * .45:.0f}, scaleY: .65}}", "{opacity: 1, y: 0, scaleY: 1}", "back.out(2.2)")
     sfx("seat", FILL0 + .14 * r)
 for i in range(4):
-    ft(f"#fp{i}", FILL0 + 1.3 + .08 * i, .4, "{opacity: 0, y: 30}", "{opacity: 1, y: 0}", "power2.out")
+    ft(f"#fp{i}", FILL0 + 1.3 + .08 * i, .45, "{opacity: 0, y: 120}", "{opacity: 1, y: 0}", "back.out(1.8)")
 ft("#house", t_and + .2, 2.0, "{opacity: 0}", "{opacity: 1}", "power1.inOut")
 for i in range(4):
     to(f"#sg{i}", t_and + .2, 1.6, "{opacity: .9}", "power1.inOut")
@@ -361,7 +449,14 @@ st("#sm_smile", t_st, "{opacity: 1}")
 js(f'tl.to("#shead", {{rotation: 5, svgOrigin: "95 140", duration: .4, ease: "back.out(2)"}}, {t_st:.3f});')
 pose(t_st, "cheer")
 cree_hop(t_st + .05, 70, 2)
-js(f'tl.to(".ph", {{opacity: .5, duration: .25, yoyo: true, repeat: 5, stagger: {{each: .01, from: "random"}}, ease: "sine.inOut"}}, {t_st + .9:.3f});')
+# everyone cheers: arms (and phones) up, bouncing; some of the nearer ones turn round to the camera
+cam(t_st + .1, 540, 1330, .92, 1.1, "power1.inOut")
+js(f'tl.to(".cbs", {{"--arms": 1, duration: .18, stagger: {{each: .004, from: "random"}}}}, {t_st - .1:.3f});')
+js(f'tl.fromTo("#rw .cbs", {{y: 0}}, {{y: -9, duration: .22, yoyo: true, repeat: 11, ease: "sine.inOut", stagger: {{each: .005, from: "random"}}, immediateRender: false}}, {t_st:.3f});')
+js(f'tl.fromTo("#fgl .cbs", {{y: 0}}, {{y: -26, duration: .24, yoyo: true, repeat: 9, ease: "sine.inOut", stagger: .06, immediateRender: false}}, {t_st + .2:.3f});')
+js(f'tl.to(".cbs.tn", {{"--turn": 1, duration: .14, stagger: {{each: .012, from: "random"}}}}, {t_st + .35:.3f});')
+js(f'tl.fromTo(".cbs.tn", {{scaleX: 1}}, {{keyframes: [{{scaleX: .6, duration: .07}}, {{scaleX: 1, duration: .12, ease: "back.out(3)"}}], stagger: {{each: .012, from: "random"}}, immediateRender: false}}, {t_st + .3:.3f});')
+js(f'tl.to(".cbs.hp", {{"--ph": .55, duration: .25, yoyo: true, repeat: 5, stagger: {{each: .01, from: "random"}}, ease: "sine.inOut"}}, {t_st + 1.0:.3f});')
 
 # ---- 7 CTA: COMMENT GROW lights over the full house, then the curtain falls ---------------------------------------------------
 t_cm = T("g7", "Comment")
@@ -439,6 +534,7 @@ COLS = ("#ffd27a", "#f5c062", "#F343A2", "#ff9fd0", "#ffffff", "#ff7a59")
 CONFH = "".join(f'<i class="cf" id="cf{i}" style="background:{random.choice(COLS)};width:{random.randint(12, 20)}px;height:{random.randint(22, 34)}px"></i>' for i in range(CONF))
 WORLD = WORLD.replace('<i id="crglow"', '<i class="flare" id="flare1" style="top:1080px"></i><i class="flare" id="flare2" style="top:320px"></i>'
                       '<i class="sweep" id="sw0" style="left:60px"></i><i class="sweep" id="sw1" style="left:900px"></i><i id="crglow"')
+WORLD = CHIBI_DEFS + WORLD
 WORLD += cree_html()
 CSS = open(os.path.join(ROOT, "build", "style.css")).read()
 html = f"""<!doctype html>
