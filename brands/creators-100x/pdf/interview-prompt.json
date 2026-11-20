@@ -1,0 +1,47 @@
+{
+  "title": ["LET AI", "*INTERVIEW*", "YOU"],
+  "kicker": "Free prompt pack",
+  "subtitle": "Stop asking AI for content ideas. Let it ask you the questions, then find the niche only you could own.",
+  "tagline": "From the reel: I asked ChatGPT what to post. It asked me ten questions back.",
+  "blocks": [
+    { "type": "text", "heading": "Why *flip* it",
+      "intro": "\"Give me content ideas\" gets you the same list every other beginner gets. AI knows nothing about you, so it guesses. Make it interview you first, and every idea comes from your own life.",
+      "steps": [
+        ["Paste prompt 01", "Use a fresh chat in ChatGPT, Gemini or Claude. It works the same in all three."],
+        ["Answer one question at a time", "Be specific and honest. Real stories beat polished answers: [the thing friends always ask you about] is gold."],
+        ["Push back", "If a niche sounds generic, reply: \"Too broad. Make it more specific to my answers.\""],
+        ["Keep going with 02 to 06", "Stay in the same chat, so the AI remembers everything you told it."]
+      ],
+      "note": "Tip: the best niches sit where [what you know], [what you love] and [who you can help] overlap." },
+    { "type": "cards", "heading": "The *6* prompts", "per_page": 3,
+      "items": [
+        { "tag": "Interview", "line": "Ask me 10 questions about my life, my skills and what I can't stop talking about. One question at a time, and wait for my answer. Then suggest [3] niches only I could own, with [5] reel ideas for each.",
+          "example": "Answers about cooking for hostel friends on a tight budget led to: budget meals for hostel students.",
+          "why": "Questions first means the ideas come from you, not from the internet's average." },
+        { "tag": "Bio", "line": "Turn my chosen niche, [niche], into a one-line Instagram bio that says who I help and what they get. Give me 5 options, under [12] words each.",
+          "example": "Cheap, fast hostel meals that actually taste good.",
+          "why": "A clear bio tells new visitors in one second why they should follow." },
+        { "tag": "Pillars", "line": "Give me [4] content pillars for [niche], based on my answers. For each pillar: what it covers and one example reel.",
+          "example": "Recipes under 100, kitchen hacks with one pan, grocery runs, cooking fails.",
+          "why": "Pillars stop you running out of ideas and keep the page focused." },
+        { "tag": "First 10 reels", "line": "Plan my first [10] reels for [niche]. For each: a hook under 10 words, the format, and what happens on screen.",
+          "example": "Hook: \"I ate well for a week on 500 rupees.\" Format: day-by-day montage.",
+          "why": "Ten planned reels gets you past the stage where most beginners quit." },
+        { "tag": "Why follow", "line": "Write the one sentence that tells a stranger why they should follow me for [niche], in my own words from my answers.",
+          "example": "I'm a broke student too, so every recipe here is one I actually cook.",
+          "why": "Use it in your first reel, your bio and your pinned post." },
+        { "tag": "2-week test", "line": "Make a [2]-week posting plan to test which of my [3] niches gets the best response. Tell me what to post each day and what to look at after.",
+          "example": "Alternate the three niches, then compare saves and shares, not just views.",
+          "why": "Testing beats guessing: the audience tells you which niche to keep." }
+      ] },
+    { "type": "checklist", "heading": "Before you *pick*",
+      "items": [
+        "Did I answer all 10 questions honestly, one at a time?",
+        "Could I make 30 reels about this niche without getting bored?",
+        "Does it use something I know or have lived through?",
+        "Is it specific enough that I could name the exact person it's for?",
+        "Did I test it for two weeks before deciding?"
+      ],
+      "closing": "AI asks the questions. Your answers make the niche." }
+  ]
+}
