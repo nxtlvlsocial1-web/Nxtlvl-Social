@@ -1,0 +1,93 @@
+/* ---- 365 Days in One Room: the diorama ---- */
+.backdrop { position: absolute; left: -700px; top: -600px; width: 2480px; height: 3400px;
+  background: radial-gradient(45% 28% at 50% 33%, #2a2340 0%, #161226 45%, #08060f 100%); }
+.table { position: absolute; left: -700px; top: 1500px; width: 2480px; height: 1400px; background: linear-gradient(180deg, #3a2a24, #1a120f 60%); }
+.dshadow { position: absolute; left: -40px; top: 1470px; width: 1160px; height: 130px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.65), rgba(0,0,0,0)); }
+.shell { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+
+/* window and the seasons outside it */
+.win { position: absolute; left: 600px; top: 640px; width: 280px; height: 240px; border: 12px solid #fbf4ea; border-radius: 10px; overflow: hidden;
+  box-shadow: 0 6px 0 #d8c3ae, inset 0 0 20px rgba(0,0,0,.25); background: #9cc7ef; }
+.win::before, .win::after { content: ""; position: absolute; background: #fbf4ea; z-index: 9; }
+.win::before { left: 50%; top: 0; bottom: 0; width: 10px; margin-left: -5px; }
+.win::after { top: 50%; left: 0; right: 0; height: 10px; margin-top: -5px; }
+.sill { position: absolute; left: 588px; top: 878px; width: 304px; height: 16px; border-radius: 4px; background: #fbf4ea; box-shadow: 0 5px 0 #d8c3ae; }
+.ssn { position: absolute; inset: 0; opacity: 0; }
+.sky { position: absolute; inset: 0; }
+.hill { position: absolute; left: -40px; right: -40px; bottom: -60px; height: 120px; border-radius: 50% 50% 0 0; }
+.hill2 { position: absolute; left: 120px; right: -120px; bottom: -70px; height: 110px; border-radius: 50% 50% 0 0; opacity: .85; }
+.trunk { position: absolute; left: 62px; bottom: 30px; width: 14px; height: 90px; border-radius: 6px; background: #6b4630; }
+.br { position: absolute; width: 6px; height: 40px; border-radius: 3px; background: #6b4630; transform-origin: 50% 100%; }
+.canopy { position: absolute; border-radius: 50%; }
+.ptc { position: absolute; left: 0; top: 0; border-radius: 50%; }
+.sun { position: absolute; left: 180px; top: 26px; width: 54px; height: 54px; border-radius: 50%; background: #fff3b0; box-shadow: 0 0 30px 12px rgba(255,230,120,.75); }
+.moon { position: absolute; left: 176px; top: 28px; width: 40px; height: 40px; border-radius: 50%; background: #fff6d8; box-shadow: 0 0 24px 8px rgba(255,246,200,.45); }
+.moon::after { content: ""; position: absolute; left: 12px; top: -4px; width: 40px; height: 40px; border-radius: 50%; background: #1a2148; }
+.stars i { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #fff; }
+.rain { position: absolute; left: 0; top: 0; width: 2px; height: 22px; background: rgba(200,220,255,.7); transform: rotate(12deg); }
+#fans { position: absolute; inset: 0; opacity: 0; }
+
+/* the views counter, the calendar, the corkboard */
+.ctr { position: absolute; left: 185px; top: 650px; width: 240px; height: 150px; border-radius: 16px; background: #1b1420; border: 6px solid #2c2232;
+  box-shadow: 0 8px 0 rgba(0,0,0,.18); text-align: center; overflow: hidden; }
+.ctr .lab { position: absolute; left: 0; right: 0; top: 14px; font: 20px Mono; letter-spacing: .3em; color: #ff9fca; }
+.ctr .num { position: absolute; left: 0; right: 0; top: 40px; font: 84px/1 Mono; color: #ff5fa8; text-shadow: 0 0 14px rgba(255,80,160,.8); white-space: nowrap; }
+#c48, #cspin, #cgrow, #clab2 { opacity: 0; }
+#cspin { font-size: 62px; top: 52px; }
+#cgrow { color: #ffd27a; text-shadow: 0 0 14px rgba(255,200,100,.9), 0 0 34px rgba(255,160,60,.6); font-size: 80px; }
+.cal { position: absolute; left: 450px; top: 650px; width: 120px; height: 150px; border-radius: 10px; background: #fffdf8; overflow: hidden; box-shadow: 0 8px 0 rgba(0,0,0,.15); }
+.cal .mon { position: absolute; left: 0; right: 0; top: 0; height: 36px; background: #e5484d; font: 20px/36px Mono; color: #fff; text-align: center; letter-spacing: .1em; }
+.cal .dl { position: absolute; left: 0; right: 0; top: 46px; font: 18px Mono; color: #9a8f86; text-align: center; letter-spacing: .2em; }
+.cal .dn { position: absolute; left: 0; right: 0; top: 70px; font: 800 56px/1 Inter; color: #2a2230; text-align: center; letter-spacing: -.04em; }
+.cork { position: absolute; left: 185px; top: 830px; width: 250px; height: 170px; border-radius: 8px; background: #c99a68; border: 8px solid #8a5a36; }
+.note { position: absolute; width: 96px; height: 80px; padding: 8px; font: 22px/1.05 Serif; color: #3a2a2a; box-shadow: 0 3px 4px rgba(0,0,0,.2); }
+
+/* the desk things */
+.cup { position: absolute; width: 30px; height: 34px; border-radius: 4px 4px 10px 10px; background: #fffaf2; opacity: 0; box-shadow: inset -5px 0 0 rgba(0,0,0,.08); }
+.cup::after { content: ""; position: absolute; right: -9px; top: 7px; width: 10px; height: 14px; border: 4px solid #fffaf2; border-left: 0; border-radius: 0 8px 8px 0; }
+.cup b { position: absolute; left: 0; right: 0; top: 10px; height: 8px; }
+.steam { position: absolute; width: 8px; height: 26px; border-radius: 4px; background: rgba(255,255,255,.55); opacity: 0; }
+.dphone { position: absolute; left: 418px; top: 1012px; width: 30px; height: 52px; border-radius: 6px; background: #1d1620; border: 3px solid #3a2e40; }
+.dphone i { position: absolute; inset: 3px; border-radius: 3px; background: #ffd0e6; opacity: .25; }
+.lamp { position: absolute; left: 470px; top: 960px; width: 56px; height: 100px; }
+.clock { position: absolute; left: 196px; top: 1036px; padding: 4px 8px; border-radius: 6px; background: #241b28; font: 20px Mono; color: #7dffb0; opacity: 0; }
+.plant { position: absolute; left: 60px; top: 1250px; width: 120px; height: 190px; transform-origin: 50% 100%; }
+.sl { position: absolute; width: 14px; height: 18px; border-radius: 50% 50% 45% 45%; background: #6b5a50; }
+
+/* light */
+#night { position: absolute; left: -700px; top: -600px; width: 2480px; height: 3400px; z-index: 7; pointer-events: none; mix-blend-mode: multiply; background: #2a3570; opacity: .72; }
+.glow { position: absolute; border-radius: 50%; pointer-events: none; z-index: 8; mix-blend-mode: screen; opacity: 0; }
+#ringglow { left: 600px; top: 800px; width: 320px; height: 320px; background: radial-gradient(closest-side, rgba(255,250,240,.95), rgba(255,240,230,.35) 45%, rgba(255,240,230,0)); }
+#ringwash { left: 380px; top: 860px; width: 560px; height: 560px; background: radial-gradient(closest-side, rgba(255,240,230,.35), rgba(255,240,230,0)); }
+#phglow { left: 353px; top: 958px; width: 160px; height: 160px; background: radial-gradient(closest-side, rgba(255,160,215,.9), rgba(243,67,162,.25) 50%, rgba(243,67,162,0)); }
+#lampglow { left: 410px; top: 950px; width: 220px; height: 220px; background: radial-gradient(closest-side, rgba(255,210,140,.8), rgba(255,190,110,0)); }
+#daylight { position: absolute; left: 520px; top: 640px; width: 440px; height: 760px; z-index: 8; pointer-events: none; mix-blend-mode: screen; opacity: 0;
+  background: linear-gradient(170deg, rgba(255,250,220,.5), rgba(255,250,220,0) 85%); clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%); }
+#burst { left: 133px; top: 738px; width: 600px; height: 600px; background: radial-gradient(closest-side, rgba(255,255,255,1), rgba(255,140,205,.8) 30%, rgba(243,67,162,0)); }
+.wglow { position: absolute; left: 560px; top: 600px; width: 360px; height: 320px; border-radius: 30px; z-index: 8; pointer-events: none; mix-blend-mode: screen; opacity: 0;
+  background: radial-gradient(closest-side, rgba(255,214,150,.55), rgba(255,214,150,0)); }
+.slglow { position: absolute; width: 60px; height: 60px; margin: -21px 0 0 -23px; border-radius: 50%; z-index: 8; mix-blend-mode: screen; opacity: 0; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(255,215,140,.95), rgba(255,215,140,0)); }
+
+/* her (standing and asleep) */
+#star { position: absolute; left: 0; top: 0; width: 190px; height: 340px; transform-origin: 50% 100%; z-index: 5;
+  --dress: #6f9cf0; --dress2: #3f68c8; }
+#star svg, #sleep svg { width: 100%; height: 100%; overflow: visible; }
+#sleep { position: absolute; left: 238px; top: 930px; width: 240px; height: 330px; z-index: 5; opacity: 0; }
+.zz { position: absolute; font: 800 34px Inter; color: #dfe6ff; opacity: 0; z-index: 9; }
+
+/* her year of reels, pinned across the wall */
+.card { position: absolute; width: 96px; height: 170px; margin: -85px 0 0 -48px; border-radius: 12px; opacity: 0; z-index: 6; overflow: hidden;
+  border: 4px solid #fff; box-shadow: 0 8px 14px rgba(0,0,0,.35); }
+.card i { position: absolute; left: 28px; top: 62px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,.55); }
+.card i::after { content: ""; position: absolute; left: 12px; top: 8px; border: 8px solid transparent; border-left: 12px solid rgba(60,20,50,.75); }
+.card u { position: absolute; left: 8px; right: 8px; bottom: 10px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.6); text-decoration: none; }
+.card em { position: absolute; left: 8px; bottom: 10px; width: 14px; height: 8px; border-radius: 4px; background: #ff2d55; opacity: 0; box-shadow: 0 0 8px #ff2d55; }
+.pin { position: absolute; width: 18px; height: 18px; margin: -94px 0 0 -9px; border-radius: 50%; background: #ff2d55; opacity: 0; z-index: 6; box-shadow: 0 3px 4px rgba(0,0,0,.35); }
+#callout { position: absolute; z-index: 38; left: 0; top: 0; padding: 14px 26px; border-radius: 40px; background: #ff2d55; color: #fff; font: 800 44px Inter;
+  letter-spacing: -.02em; opacity: 0; box-shadow: 0 10px 30px rgba(255,45,85,.55); white-space: nowrap; }
+
+/* the happy night */
+.hrt { position: absolute; left: 0; top: 0; z-index: 9; opacity: 0; }
+#fans .cb { opacity: 1; }
+#fans .cbs { --turn: 1; --arms: 1; }
