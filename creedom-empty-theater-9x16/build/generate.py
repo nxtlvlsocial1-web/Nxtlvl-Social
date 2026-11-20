@@ -119,67 +119,8 @@ STAR = ('<div id="star"><svg viewBox="0 0 190 340"><defs>'
         '<rect id="sscr" x="131" y="79" width="20" height="38" rx="4" fill="#ffd9ea"/></g>'
         '<path d="M50 180 C34 210 40 240 52 250" fill="none" stroke="url(#sdr)" stroke-width="22" stroke-linecap="round"/></svg></div>')
 
-# the audience: chibi mascots (owner's note on the final, 2026-11-20). One SVG symbol set, coloured per character through CSS
-# variables (--hair, --skin, --shirt), so a hundred-odd chibis stay light: seated ones seen from behind (head over the seat
-# back, arms and a glowing phone up when they cheer), a front view for the ones who turn round to the camera, and a standing
-# walker with a sad or happy face for the four who leave and come back.
-HAIR = ("#3b2219", "#6b3b2a", "#1d1d2b", "#c47a3a", "#e8b04a", "#8a4bd6", "#ff6fae", "#4aa3df", "#2b2b3d")
-SKIN = ("#ffe0cc", "#f6c7a8", "#e0a37f", "#b9785a", "#8a553c")
-SHIRT = ("#ff6fae", "#4aa3df", "#ffd27a", "#7ed6a5", "#b48cff", "#ff8a5c", "#f2f2f2", "#5fd0d6")
-
-
-def look():
-    return (f"--hair:{random.choice(HAIR)};--skin:{random.choice(SKIN)};--shirt:{random.choice(SHIRT)};"
-            f"--bun:{1 if random.random() < .3 else 0}")
-
-
-ARMS = ('<path d="M24 84 L-4 16" style="stroke:var(--shirt)" stroke-width="13" stroke-linecap="round" fill="none"/>'
-        '<path d="M76 84 L104 16" style="stroke:var(--shirt)" stroke-width="13" stroke-linecap="round" fill="none"/>'
-        '<circle cx="-5" cy="13" r="8" style="fill:var(--skin)"/><circle cx="105" cy="13" r="8" style="fill:var(--skin)"/>')
-PHONE = ('<g transform="translate(14 -16)"><circle cx="92" cy="12" r="17" fill="#ffd9ee" opacity=".4"/><rect x="85" y="1" width="14" height="23" rx="3" fill="#2a1a24"/>'
-         '<rect x="87" y="3" width="10" height="19" rx="2" fill="#ffeef6"/></g>')
-HAIRF = ('<path d="M11 50 C9 18 30 4 50 4 C70 4 91 18 89 50 C84 38 76 31 66 30 C60 36 50 38 40 34 C30 32 18 38 11 50 Z" style="fill:var(--hair)"/>'
-         '<circle cx="50" cy="5" r="13" style="fill:var(--hair);opacity:var(--bun,0)"/>')
-HAPPY = ('<path d="M28 56 Q35 47 42 56" stroke="#2a1220" stroke-width="4.5" fill="none" stroke-linecap="round"/>'
-         '<path d="M58 56 Q65 47 72 56" stroke="#2a1220" stroke-width="4.5" fill="none" stroke-linecap="round"/>'
-         '<ellipse cx="27" cy="66" rx="7" ry="4" fill="#ff7fa8" opacity=".6"/><ellipse cx="73" cy="66" rx="7" ry="4" fill="#ff7fa8" opacity=".6"/>'
-         '<path d="M41 66 Q50 80 59 66 Z" fill="#9a3b4e"/>')
-CHIBI_DEFS = ('<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>'
-              # seated, from behind
-              '<symbol id="cbB" viewBox="0 0 100 120" overflow="visible">'
-              f'<g style="opacity:var(--arms,0)">{ARMS}</g><g style="opacity:calc(var(--ph,0) * var(--arms,0))">{PHONE}</g>'
-              '<ellipse cx="50" cy="106" rx="33" ry="24" style="fill:var(--shirt)"/>'
-              '<circle cx="12" cy="52" r="8" style="fill:var(--skin)"/><circle cx="88" cy="52" r="8" style="fill:var(--skin)"/>'
-              '<circle cx="50" cy="8" r="13" style="fill:var(--hair);opacity:var(--bun,0)"/><circle cx="50" cy="46" r="40" style="fill:var(--hair)"/>'
-              '<path d="M50 7 C45 -4 59 -7 57 3" style="stroke:var(--hair)" stroke-width="4" fill="none" stroke-linecap="round"/>'
-              '<ellipse cx="34" cy="26" rx="13" ry="7" fill="#fff" opacity=".22" transform="rotate(-25 34 26)"/></symbol>'
-              # seated, turned round to the camera, cheering
-              '<symbol id="cbF" viewBox="0 0 100 120" overflow="visible">'
-              f'{ARMS}<g style="opacity:var(--ph,0)">{PHONE}</g><ellipse cx="50" cy="106" rx="33" ry="24" style="fill:var(--shirt)"/>'
-              f'<circle cx="50" cy="48" r="39" style="fill:var(--skin)"/>{HAIRF}{HAPPY}</symbol>'
-              # standing walker: sad on the way out, happy on the way back
-              '<symbol id="cbW" viewBox="0 0 100 170" overflow="visible">'
-              '<rect x="34" y="136" width="13" height="30" rx="6" fill="#3a2a40"/><rect x="53" y="136" width="13" height="30" rx="6" fill="#3a2a40"/>'
-              '<path d="M27 104 L18 132" style="stroke:var(--shirt)" stroke-width="11" stroke-linecap="round" fill="none"/>'
-              '<path d="M73 104 L82 132" style="stroke:var(--shirt)" stroke-width="11" stroke-linecap="round" fill="none"/>'
-              '<circle cx="17" cy="135" r="6" style="fill:var(--skin)"/><circle cx="83" cy="135" r="6" style="fill:var(--skin)"/>'
-              '<path d="M26 104 Q26 92 50 92 Q74 92 74 104 L76 142 Q50 150 24 142 Z" style="fill:var(--shirt)"/>'
-              '<g transform="translate(0 4)"><circle cx="50" cy="48" r="39" style="fill:var(--skin)"/>' + HAIRF +
-              '<g style="opacity:calc(1 - var(--happy,0))"><ellipse cx="36" cy="56" rx="4" ry="5.5" fill="#2a1220"/><ellipse cx="64" cy="56" rx="4" ry="5.5" fill="#2a1220"/>'
-              '<path d="M28 49 L42 44" stroke="#2a1220" stroke-width="3.5" stroke-linecap="round"/><path d="M72 49 L58 44" stroke="#2a1220" stroke-width="3.5" stroke-linecap="round"/>'
-              '<path d="M42 75 Q50 67 58 75" stroke="#9a3b4e" stroke-width="4" fill="none" stroke-linecap="round"/>'
-              '<path d="M29 62 Q25 69 29 73 Q33 69 29 62 Z" fill="#8fd3ff"/></g>'
-              f'<g style="opacity:var(--happy,0)">{HAPPY}</g></g></symbol>'
-              '</defs></svg>')
-
-
-def chibi(cid, x, top, wd, cls="", turn=False, phone=False, style=""):
-    """a seated chibi from behind (optionally with a front view to turn round to, and a phone for the cheer)"""
-    front = '<use href="#cbF" style="opacity:var(--turn,0)"/>' if turn else ""
-    return (f'<div class="cb" id="{cid}" style="left:{x:.0f}px;top:{top:.0f}px;width:{wd:.0f}px;height:{wd * 1.2:.0f}px;{look()}{style}">'
-            f'<svg class="cbs{" tn" if turn else ""}{" hp" if phone else ""}" viewBox="0 0 100 120" overflow="visible">'
-            f'<use href="#cbB" style="opacity:calc(1 - var(--turn,0))"/>{front}</svg></div>')
-
+# the audience: chibi mascots, each one assembled from parts (hairstyle, head shape, face, colours): see build/chibi.py
+from chibi import DEFS as CHIBI_DEFS, seated, walker  # noqa: E402
 
 ROWS = []
 seats_html = ""
@@ -198,7 +139,7 @@ for r in range(9):
         has_ph = random.random() < .45
         turn = r >= 2 and random.random() < .6
         cw = w * 1.1
-        chibis += chibi(f"pp{pid}", x + w / 2 - cw / 2, -.72 * w, cw, turn=turn, phone=has_ph, style=f"--ph:{1 if has_ph else 0}")
+        chibis += seated(f"pp{pid}", x + w / 2 - cw / 2, -.72 * w, cw, turn=turn, phone=has_ph, style=f"--ph:{1 if has_ph else 0}")
         seats += f'<i class="seat" style="left:{x:.0f}px;width:{w:.0f}px;height:{h:.0f}px"></i>'
         row.append((pid, x + w / 2, yb, w, has_ph))
         pid += 1
@@ -214,8 +155,7 @@ for i, (r, k, ex) in enumerate(WALK):
     ww = w * 1.25
     hh = ww * 1.7
     h = w * 1.05
-    wk = (f'<div class="cbw" id="wk{i}" style="left:{cx - ww / 2:.0f}px;top:{h + .15 * w - hh:.0f}px;width:{ww:.0f}px;height:{hh:.0f}px;{look()};--happy:0">'
-          f'<svg viewBox="0 0 100 170" overflow="visible"><use href="#cbW"/></svg></div>')
+    wk = walker(f"wk{i}", cx - ww / 2, h + .15 * w - hh, ww, hh)
     seats_html = seats_html.replace(f"<!--W{r}-->", wk + f"<!--W{r}-->")
 WALK = [(ROWS[r][k], ex) for r, k, ex in WALK]
 walkers = ""
@@ -232,7 +172,7 @@ WORLD = (f'<div class="backwall"></div><div class="screen" id="screen"><div clas
          f'<div class="door" style="left:1040px;top:1180px"><i class="doorlight" id="dl1"></i></div><div class="exit" style="left:1050px;top:1120px">EXIT</div>'
          f'{seats_html}{walkers}<i id="crglow" style="left:540px;top:1080px"></i>')
 FGS = [(-120, 300, 360), (200, 300, 330), (520, 300, 340), (840, 300, 360)]
-fgseats = ("".join(chibi(f"fp{i}", x + w / 2 - 138, 2040 - h - 1920 - 150, 276) for i, (x, w, h) in enumerate(FGS))
+fgseats = ("".join(seated(f"fp{i}", x + w / 2 - 138, 2040 - h - 1920 - 150, 276) for i, (x, w, h) in enumerate(FGS))
            + "".join(f'<i class="fgseat" style="left:{x}px;width:{w}px;height:{h}px"></i>' for x, w, h in FGS))
 FG = f'<div id="fgl" style="position:absolute;left:0;right:0;top:1920px">{fgseats}</div>'
 HOUSE = '<div class="houselight" id="house"></div>'
