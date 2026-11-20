@@ -12,7 +12,7 @@ She didn't need more effort. She needed to know why her viewers were leaving.
 
 Creedom AI is an Instagram growth coach that:
 1. Reads your whole account and shows you exactly where viewers drop off
-2. Checks your next reel's hook before you post it
+2. Scores your next reel before you post it, so you know where it stands
 3. Tells you what to post next, based on what your audience saved
 
 If your reels get views but nobody stays, start here. Your first account read is free.
