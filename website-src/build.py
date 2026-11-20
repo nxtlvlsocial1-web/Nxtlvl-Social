@@ -19,6 +19,9 @@ e = html.escape
 
 # ---------------------------------------------------------------- icons (24px line icons, stroke = currentColor)
 P = {
+    'bot': '<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4M9.5 13.5h.01M14.5 13.5h.01M9.5 17h5"/>',
+    'pen': '<path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/>',
+    'bolt': '<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>',
     'spark': '<path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="2.5"/>',
     'trend': '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
     'flow': '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><path d="M10 6.5h4a3 3 0 0 1 3 3V14"/>',
@@ -54,6 +57,17 @@ def star_svg(uid='s', dark=False):
             f'{g(uid + "c", "#7D18FC" if dark else "#B98AFF", 43.8, 122.2, 82.0, 84.0)}</defs><path d="{STAR["t0"]}" fill="url(#{uid}a)"/><path d="{STAR["t1"]}" fill="url(#{uid}b)"/>'
             f'<path d="{STAR["t2"]}" fill="url(#{uid}c)"/><path d="{STAR["s"]}" fill="{main}"/></svg>')
 
+
+LOGO = json.load(open(os.path.join(HERE, 'logo.json')))
+def logo_svg(uid='lg', grad=False, label=True):
+    """The exact Nxtlvl wordmark with its violet sparkle, transparent, traced from the brand file."""
+    fill = f'url(#{uid}g)' if grad else '#FFFFFF'
+    defs = (f'<defs><linearGradient id="{uid}g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".16"/>'
+            f'<stop offset="1" stop-color="#A95CFF" stop-opacity=".22"/></linearGradient></defs>') if grad else ''
+    lab = ' role="img" aria-label="Nxtlvl Social"' if label else ' aria-hidden="true"'
+    return (f'<svg viewBox="0 -16 {LOGO["w"] + 40:.0f} 116"{lab}>{defs}<path d="{LOGO["d"]}" fill="{fill}"/>'
+            f'<path d="{LOGO["spark"]}" transform="translate({LOGO["cx"]:.1f} {LOGO["cy"]}) scale({LOGO["r"]})" fill="#A95CFF"/></svg>')
+
 # ---------------------------------------------------------------- shared blocks
 NAV = [('/ai-marketing', 'Marketing'), ('/ai-automation', 'Automation'), ('/creative-studio', 'Creative'), ('/website-development', 'Websites'), ('/about', 'About')]
 SERVICES = [  # url, name, short, icon, need
@@ -67,9 +81,9 @@ def header(active):
     links = ''.join(f'<a href="{u}"' + (' aria-current="page"' if u == active else '') + f'>{t}</a>' for u, t in NAV)
     mlinks = ''.join(f'<a href="{u}">{t}</a>' for u, t in NAV + [('/contact', 'Contact')])
     return f'''<a class="skip" href="#main">Skip to content</a>
-<header class="bar frame">
+<header class="bar frame" style="max-width:none">
   <div class="in">
-    <a class="logo" href="/" aria-label="Nxtlvl Social home">{star_svg("lg", dark=True)}<b>nxtlvl<span>social</span></b></a>
+    <a class="logo" href="/" aria-label="Nxtlvl Social home">{logo_svg("lg")}</a>
     <nav class="menu" aria-label="Main">{links}</nav>
     <span class="sp"></span>
     <a class="btn btn-light hide-m" href="/contact">Contact</a>
@@ -82,21 +96,23 @@ def header(active):
 def footer():
     svc = ''.join(f'<li><a href="{u}">{n}</a></li>' for u, n, *_ in SERVICES)
     social = ''.join(f'<li><a href="{u}" rel="me noopener" target="_blank">{e(t.split(" · ")[1])}</a></li>' for t, u in INSTAGRAM)
-    return f'''<footer class="frame" data-sec>
-  <div class="bigmark" aria-hidden="true" data-rise>{star_svg("ft")}<b>nxtlvl<span>social</span></b></div>
+    return f'''<footer class="frame">
   <div class="fcols">
+    <div class="brand-f">{logo_svg("fl")}<p>An AI-driven growth company in India. Marketing, automation and creative production on one monthly subscription, made with AI and finished by people.</p></div>
     <div><h2>Services</h2><ul>{svc}</ul></div>
     <div><h2>Company</h2><ul><li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li><li><a href="/#faq">Questions</a></li></ul></div>
     <div><h2>Follow</h2><ul>{social}</ul></div>
     <div><h2>Write to us</h2><ul><li><a href="mailto:{EMAIL}">{EMAIL}</a></li></ul></div>
-    <div><p>Nxtlvl Social is an AI-driven growth company in India. Marketing, automation and creative production on one monthly subscription, made with AI and finished by people.</p></div>
   </div>
-  <div class="legal"><span>© 2026 Nxtlvl Social · AI-driven marketing, automation and creative services, India</span><a class="btn btn-white" href="/contact">Book a free call</a></div>
+  <div class="bigmark" aria-hidden="true">{logo_svg("fm", grad=True, label=False)}</div>
+  <div class="legal"><span>© 2026 Nxtlvl Social · AI-driven marketing, automation and creative services, India</span><span>Made with AI, finished by people.</span></div>
 </footer>'''
 
 def faq_block(items, title='Questions, answered'):
     bands = ''.join(f'<div class="band" data-rise><h3>{e(q)}</h3><div class="a">{"".join(f"<p>{x}</p>" for x in a)}</div></div>' for q, a in items)
-    return f'''<section class="faq" id="faq" data-sec aria-labelledby="faq-h"><div class="band head"><h2 id="faq-h">{title}</h2></div>{bands}</section>'''
+    return f'''<section class="faq frame" id="faq" aria-labelledby="faq-h" data-sec><div class="wrapq">
+  <div class="h" data-rise><h2 id="faq-h">{title}</h2><p class="soft">Straight answers about how an AI-driven growth company works. Anything else, just ask.</p><div class="btns"><a class="btn btn-light" href="/contact">Ask us anything</a></div></div>
+  <div class="list">{bands}</div></div></section>'''
 
 def faq_schema(items):
     strip = lambda s: html.unescape(__import__('re').sub(r'<[^>]+>', '', s))
@@ -117,12 +133,11 @@ def contact_form(heading_id='book-h'):
   <p class="form-note">We reply within one business day. Prefer email? Write to <a class="link" href="mailto:{EMAIL}">{EMAIL}</a>.</p>
 </form>'''
 
-def close_row(title='Let us plan your growth', sub='Leave your email and we will set up a free 20-minute strategy call. You get a written plan, whether or not you work with us.'):
-    return f'''<section class="sec frame" data-sec aria-labelledby="close-h"><div class="close">
-  <div class="side-a" data-rise></div>
-  <div class="main" data-rise><h2 id="close-h">{title}</h2><p>{sub}</p>
-    <form action="/contact" method="get" aria-label="Start with your email"><label class="sr" for="close-email">Work email</label><input id="close-email" name="email" type="email" placeholder="you@company.com" autocomplete="email"><input type="hidden" name="need" value="unsure"><button class="btn btn-dark" type="submit">Book a free call {icon("arrow")}</button></form></div>
-  <div class="side-b" data-rise>{star_svg("cl")}</div>
+def close_row(title='Ready to meet your AI growth team?', sub='Book a free 20-minute strategy call. We look at your brand, channels and goals, then send a plan you can keep, whether or not you work with us.'):
+    return f'''<section class="sec frame" data-sec aria-labelledby="close-h"><div class="close" data-rise>
+  <div class="mark-bg" aria-hidden="true">{star_svg("cl")}</div>
+  <h2 id="close-h">{title}</h2><p>{sub}</p>
+  <form action="/contact" method="get" aria-label="Start with your email"><label class="sr" for="close-email">Work email</label><input id="close-email" name="email" type="email" placeholder="you@company.com" autocomplete="email"><input type="hidden" name="need" value="unsure"><button class="btn btn-primary" type="submit">Book a free call {icon("arrow")}</button></form>
 </div></section>'''
 
 ORG = {
@@ -155,7 +170,7 @@ def page(path, title, desc, body, active='', crumbs=None, extra_schema=(), noind
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc)}">
 {'<meta name="robots" content="noindex">' if noindex else f'<link rel="canonical" href="{url}">'}
-<meta name="theme-color" content="#F7F6FB">
+<meta name="theme-color" content="#05030C">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Nxtlvl Social">
 <meta property="og:locale" content="en_IN">
@@ -171,7 +186,7 @@ def page(path, title, desc, body, active='', crumbs=None, extra_schema=(), noind
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/fonts/general-sans-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/general-sans-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/clash-display-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/site.css?v={UPDATED}">
 <script type="application/ld+json">{ld}</script>
 </head>
@@ -214,54 +229,102 @@ FRAG = {
 }
 
 def home():
-    a = icon('arrow'); ne = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>'
-    eng_bg = ['', 't2', 'pale', 't3']
-    engines = ''.join(f'<a class="tile engine {eng_bg[i]}" href="{u}" data-rise><b>{n}</b><span>{s}</span></a>' for i, (u, n, s, _, _) in enumerate(SERVICES))
-    star_sep = star_svg('mq', dark=True)
-    phrase = f'<span>AI for speed. People for judgement. {star_sep}</span>'
-    caps = [('Social media management', 'Instagram, Facebook, LinkedIn and YouTube'), ('Performance marketing', 'Meta and Google Ads, set up and optimised weekly'),
+    a = icon('arrow')
+    feed0 = [('pen', 'Content Agent', 'Drafted 3 hooks for the festive reel', 'now'), ('chat', 'Reply Agent', 'Answered "price?" on Instagram in 4 s', '1m'),
+             ('mega', 'Ads Agent', 'Shifted ₹2,000 to the better creative', '3m'), ('film', 'Edit Agent', 'Reel v2 ready: 0:28, captions on', '6m'), ('bolt', 'Automation', 'Hot lead sent to the owner on WhatsApp', '9m')]
+    feed = ''.join(f'<div class="row-f"><span class="av">{icon(i)}</span><div><b>{w}</b><small>{t}</small></div><em>{m}</em></div>' for i, w, t, m in feed0)
+    agents_nav = [('Content Agent', True), ('Reply Agent', False), ('Ads Agent', False), ('Edit Agent', True), ('SEO Agent', False), ('Report Agent', False)]
+    nav_ag = ''.join(f'<span class="ag">{n}<i class="{"busy" if b else ""}"></i></span>' for n, b in agents_nav)
+    tools = ['Instagram', 'WhatsApp', 'Meta Ads', 'Google Ads', 'YouTube', 'Google Search', 'Shopify', 'Google Sheets', 'Canva', 'ChatGPT', 'Gemini', 'Notion']
+    mq = ''.join(f'<span>{t}</span>' for t in tools)
+    biz = [('cafe', 'Café or restaurant'), ('clinic', 'Clinic or wellness'), ('d2c', 'D2C or e-commerce brand'), ('realestate', 'Real estate'), ('education', 'Education'), ('creator', 'Creator or personal brand')]
+    goals = [('leads', 'Leads'), ('sales', 'Sales'), ('bookings', 'Bookings'), ('awareness', 'Awareness')]
+    chans = [('ch_ig', 'Instagram', True), ('ch_wa', 'WhatsApp', True), ('ch_meta', 'Meta ads', True), ('ch_google', 'Google ads', False), ('ch_web', 'Website', True)]
+    seg = ''.join(f'<label><input type="radio" name="goal" value="{v}"' + (' checked' if v == 'leads' else '') + f'><span>{l}</span></label>' for v, l in goals)
+    chips = ''.join(f'<label><input type="checkbox" name="{n}"' + (' checked' if c else '') + f'><span>{l}</span></label>' for n, l, c in chans)
+    caps = [('Social media management', 'Instagram, Facebook, LinkedIn and YouTube'), ('Performance marketing', 'Meta and Google Ads, optimised weekly'),
             ('SEO and AEO', 'Rank on Google, get named by AI assistants'), ('Content strategy', 'A monthly calendar built on research'),
             ('Reels and short video', 'Hooks, subtitles, motion graphics, covers'), ('Product and brand shoots', 'Photo and video, on location'),
             ('Graphic design', 'Posts, carousels, ads, menus, print'), ('Brand identity', 'Logo, palette, templates, brand kit'),
             ('WhatsApp automation', 'Catalogue, FAQs, bookings, broadcasts'), ('Instagram DM automation', 'Instant replies to comments and messages'),
             ('Lead capture and CRM', 'Every enquiry logged and followed up'), ('Websites and landing pages', 'Fast, mobile-first, ready for search')]
     caps_html = ''.join(f'<div data-rise><b>{x}</b><span>{y}</span></div>' for x, y in caps)
-    biz = [('cafe', 'Café or restaurant'), ('clinic', 'Clinic or wellness'), ('d2c', 'D2C or e-commerce brand'), ('realestate', 'Real estate'), ('education', 'Education'), ('creator', 'Creator or personal brand')]
-    goals = [('leads', 'Leads'), ('sales', 'Sales'), ('bookings', 'Bookings'), ('awareness', 'Awareness')]
-    chans = [('ch_ig', 'Instagram', True), ('ch_wa', 'WhatsApp', True), ('ch_meta', 'Meta ads', True), ('ch_google', 'Google ads', False), ('ch_web', 'Website', True)]
-    seg = ''.join(f'<label><input type="radio" name="goal" value="{v}"' + (' checked' if v == 'leads' else '') + f'><span>{l}</span></label>' for v, l in goals)
-    chips = ''.join(f'<label><input type="checkbox" name="{n}"' + (' checked' if c else '') + f'><span>{l}</span></label>' for n, l, c in chans)
+    node = lambda ic, t, s, cls='': f'<div class="node {cls}" data-n><i>{icon(ic)}</i><div><b>{t}</b><small>{s}</small></div></div>'
     body = f'''
-<section class="hero frame" data-sec aria-labelledby="hero-h">
-  <div class="board">
-    <div class="tile h-main" data-rise>
-      <div><h1 id="hero-h">Your AI growth team</h1>
-        <p class="lead">Nxtlvl Social is an AI-driven growth company in India. We run your marketing, automation and creative production on one monthly subscription, and people check every result.</p></div>
-      <div class="btns"><a class="btn btn-primary" href="/contact">Book a free strategy call {a}</a><a class="btn btn-light" href="#planner">Build your month</a></div>
-    </div>
-    <div class="tile night h-live" data-rise>
-      <div class="cap"><b>A table booked while the owner slept</b><span data-ist>11:42 pm IST</span></div>
-      <div class="chat" data-ui role="img" aria-label="Example WhatsApp conversation: a customer asks for a table for four at 8 pm, the automation confirms the booking and logs the lead.">
-        <div class="chat-top"><span class="av">CA</span><div><b>Café Aroma · example</b><small>Auto-replies on</small></div></div>
-        <div class="chat-body">
-          <div class="msg in" data-step>Hi! Are you open tonight? Table for 4 at 8?<small data-time>11:42 pm</small></div>
-          <div class="msg out" data-step>Hi Priya, yes, we are open till 11. I can hold a table for 4 at 8:00 pm. Shall I book it?<small data-time>11:42 pm</small></div>
-          <div class="msg in" data-step>Yes please<small data-time>11:43 pm</small></div>
-          <div class="msg out" data-step>Booked: table for 4, tonight at 8:00 pm. See you soon!<small data-time>11:43 pm</small></div>
-          <div class="note" data-step>Lead saved · owner notified on WhatsApp</div>
-          <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
+<section class="hero" data-sec aria-labelledby="hero-h">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="frame hero-in">
+    <span class="kicker" data-rise><i>{icon("spark")}</i>AI agents plus human experts, on one subscription</span>
+    <h1 id="hero-h" data-rise>Your AI growth <em class="s">team</em></h1>
+    <p class="lead" data-rise>Nxtlvl Social is an AI-driven growth company in India. Our agents and experts run your marketing, automation and creative production every day, and a person checks every result.</p>
+    <div class="btns" data-rise><a class="btn btn-primary" href="/contact">Book a free strategy call {a}</a><a class="btn btn-light" href="#agents">Meet the agents</a></div>
+    <p class="hero-note" data-rise><span>Monthly plans</span><span>No lock-in</span><span>You own everything</span></p>
+    <div class="console" data-ui data-rise role="img" aria-label="Example Nxtlvl workspace: AI agents drafting hooks, replying to messages, optimising ads and editing reels, with live counters and a WhatsApp booking.">
+      <div class="c-top"><span class="dots"><i></i><i></i><i></i></span><b>Example workspace</b><span class="hide-s">· Café Aroma</span><span class="sp"></span><span class="live">Agents running</span></div>
+      <div class="c-body">
+        <div class="c-nav"><span class="on">{icon("chart")} Overview</span><span>{icon("pen")} Content</span><span>{icon("mega")} Campaigns</span><span>{icon("flow")} Automations</span><span>{icon("users")} Leads</span><small>Agents</small>{nav_ag}</div>
+        <div class="c-main">
+          <div class="stats"><div class="stat"><span>Tasks done today</span><b data-tick="128">128</b><small>by agents and team</small></div><div class="stat"><span>Messages answered</span><b data-tick="47">47</b><small>24/7, in seconds</small></div><div class="stat"><span>Leads this week</span><b data-tick="39">39</b><small>all logged</small></div></div>
+          <div class="feed"><h4>Live activity <span>reviewed by your strategist</span></h4><div data-feed>{feed}</div></div>
+          <svg class="spark" viewBox="0 0 600 64" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A95CFF" stop-opacity=".35"/><stop offset="1" stop-color="#A95CFF" stop-opacity="0"/></linearGradient></defs>
+            <path class="a" d="M0 52 C60 50 90 44 140 46 S230 34 280 36 S370 22 420 24 S520 10 600 6 L600 64 L0 64Z"/><path class="l" d="M0 52 C60 50 90 44 140 46 S230 34 280 36 S370 22 420 24 S520 10 600 6"/></svg>
         </div>
+        <div class="c-side"><h4>WhatsApp <span data-ist>11:42 pm IST</span></h4>
+          <div class="chat">
+            <div class="chat-top"><span class="av">CA</span><div><b>Café Aroma</b><small>Reply Agent on</small></div></div>
+            <div class="chat-body">
+              <div class="msg in" data-step>Hi! Are you open tonight? Table for 4 at 8?<small data-time>11:42 pm</small></div>
+              <div class="msg out" data-step>Hi Priya, yes, open till 11. I can hold a table for 4 at 8:00 pm. Shall I book it?<small data-time>11:42 pm</small></div>
+              <div class="msg in" data-step>Yes please<small data-time>11:43 pm</small></div>
+              <div class="msg out" data-step>Booked: table for 4, tonight at 8:00 pm. See you soon!<small data-time>11:43 pm</small></div>
+              <div class="note" data-step>Lead saved · owner notified</div>
+              <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
+            </div></div></div>
       </div>
     </div>
-    <div class="h-row">{engines}</div>
+  </div>
+  <div class="frame logos" data-rise><p>Works with the platforms your customers already use</p><div class="mq" aria-hidden="true"><div class="track">{mq}{mq}</div></div></div>
+</section>
+
+<section class="sec frame" id="agents" data-sec aria-labelledby="ag-h">
+  <div class="sec-head center"><span class="kicker" data-rise><i>{icon("bot")}</i>Your AI team</span><h2 id="ag-h" data-rise>Meet your <em class="s">agents</em></h2>
+    <p class="soft" data-rise>Six specialist AI agents work on your brand every day. A strategist directs them, and nothing goes live until a person and you approve it.</p></div>
+  <div class="agents">
+    <div class="tile agent glowline" data-rise><div class="top"><div class="who-a"><b><i>{icon("pen")}</i>Content Agent</b><span class="state">Writing</span></div><p>Researches trends and your best posts, then drafts hooks, scripts and captions.</p></div>
+      <div class="stage" data-ui><div class="lbl"><span>Hooks for Friday's reel</span><span>3 of 3</span></div><div class="hooks" data-hooks><div>The one mistake buyers make...</div><div>We tested 3 offers. Here is the winner.</div><div class="cur"><span data-type>60 seconds inside our kitchen</span><span class="caret"></span></div></div></div></div>
+    <div class="tile agent glowline" data-rise><div class="top"><div class="who-a"><b><i>{icon("chat")}</i>Reply Agent</b><span class="state">Online 24/7</span></div><p>Answers DMs, comments and WhatsApp messages in your voice, and books appointments.</p></div>
+      <div class="stage" data-ui><div class="lbl"><span>Instagram DM</span><span>4 s reply</span></div><div class="mini-chat"><div class="b i">Price for the facial?</div><div class="b o">₹1,499, 60 minutes. Want Saturday at 11?</div><div class="b i">Yes!</div><div class="b o">Booked. See you Saturday.</div></div></div></div>
+    <div class="tile agent glowline" data-rise><div class="top"><div class="who-a"><b><i>{icon("mega")}</i>Ads Agent</b><span class="state">Optimising</span></div><p>Watches Meta and Google campaigns daily and moves budget to what converts.</p></div>
+      <div class="stage" data-ui><div class="lbl"><span>Budget split, live</span><span>Example</span></div><div class="budget"><div>Creative A<span class="track2"><i></i></span><b>Winner</b></div><div>Creative B<span class="track2"><i></i></span><b>Testing</b></div><div>Creative C<span class="track2"><i></i></span><b>Paused</b></div></div>
+        <div class="lbl" style="margin-top:16px"><span>Cost per lead</span><span style="color:var(--green)">down this week</span></div></div></div>
+    <div class="tile agent glowline" data-rise><div class="top"><div class="who-a"><b><i>{icon("film")}</i>Edit Agent</b><span class="state">Rendering</span></div><p>Rough-cuts reels with captions and beats, so editors spend their time on the finish.</p></div>
+      <div class="stage" data-ui><div class="lbl"><span>Reel · festive offer</span><span>0:28</span></div><div class="edit"><div class="ln v"><i style="flex:3"></i><i style="flex:2"></i><i style="flex:4"></i><i style="flex:2"></i></div><div class="ln t"><i style="flex:2"></i><i style="flex:1;opacity:0"></i><i style="flex:3"></i><i style="flex:1;opacity:0"></i><i style="flex:4"></i></div><div class="ln a"><i style="flex:11"></i></div><span class="ph"></span></div>
+        <div class="edit"><div class="cap"><span>Hook B approved</span><span>Captions on</span></div></div></div></div>
+    <div class="tile agent glowline" data-rise><div class="top"><div class="who-a"><b><i>{icon("search")}</i>SEO Agent</b><span class="state">Climbing</span></div><p>Writes answers buyers search for, so you rank on Google and get named by AI assistants.</p></div>
+      <div class="stage" data-ui><div class="lbl"><span>"best café near me"</span><span>Example</span></div><div class="rank"><div class="you"><b>1</b>Your brand</div><div><b>2</b>Competitor café</div><div><b>3</b>Food blog list</div><div><b>4</b>Another café</div></div></div></div>
+    <div class="tile agent glowline" data-rise><div class="top"><div class="who-a"><b><i>{icon("chart")}</i>Report Agent</b><span class="state">Counting</span></div><p>Pulls every channel into one plain-language monthly report, with next month's plan.</p></div>
+      <div class="stage" data-ui><div class="lbl"><span>This month · example</span><span>Auto-updated</span></div><div class="nums"><div><span>Reach</span><b data-count="48200">48,200</b><small>up 31%</small></div><div><span>Enquiries</span><b data-count="114">114</b><small>up 22%</small></div><div><span>Bookings</span><b data-count="63">63</b><small>up 18%</small></div><div><span>Replies</span><b data-count="412">412</b><small>24/7</small></div></div></div></div>
   </div>
 </section>
 
-<div class="marquee" aria-hidden="true"><div class="track">{phrase * 6}</div></div>
+<section class="sec frame" data-sec aria-labelledby="fl-h">
+  <div class="sec-head"><span class="kicker" data-rise><i>{icon("bolt")}</i>Automations</span><h2 id="fl-h" data-rise>Every enquiry, handled in <em class="s">seconds</em></h2>
+    <p class="soft" data-rise>Messages from Instagram, WhatsApp, your website and ads flow to one agent. It answers, qualifies and books, logs the lead, and hands the important ones to your team.</p></div>
+  <div class="flowbox" data-flow data-rise>
+    <svg class="wires" aria-hidden="true"><defs><linearGradient id="wg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7D18FC"/><stop offset="1" stop-color="#D8BBFF"/></linearGradient></defs></svg>
+    <div class="nodes">
+      <div class="col c1">{node("chat", "Instagram DM", "Price? Timings?")}{node("chat", "WhatsApp", "Booking request")}{node("globe", "Website form", "Quote needed")}{node("mega", "Meta lead ad", "New lead")}</div>
+      <div class="col c2"><div class="node brain" data-n data-brain><i>{icon("bot")}</i><div><b>Nxtlvl Agent</b><small>Understands, answers, qualifies</small></div></div></div>
+      <div class="col c3">{node("chat", "Replied in your voice", "In seconds, 24/7")}{node("users", "Lead qualified", "Budget, area, timeline")}{node("calendar", "Booking created", "Reminder scheduled")}</div>
+      <div class="col c4">{node("layers", "Saved to CRM", "Nothing gets lost", "done")}{node("bolt", "Owner notified", "On WhatsApp", "done")}{node("refresh", "Follow-up in 24 h", "If no reply", "done")}</div>
+    </div>
+    <div class="flow-cap"><span><b>24/7</b> replies</span><span><b>100%</b> of leads logged</span><span><b>1 tap</b> human handover</span></div>
+  </div>
+</section>
 
 <section class="sec frame" id="build" data-sec aria-labelledby="plan-h">
-  <div class="sec-head"><h2 id="plan-h" data-rise>Build your month</h2>
-    <p class="soft" data-rise>Pick your business, goal and channels. This is the plan our team would start you on, and it changes as you do.</p></div>
+  <div class="sec-head"><span class="kicker" data-rise><i>{icon("calendar")}</i>Try it</span><h2 id="plan-h" data-rise>Build your month</h2>
+    <p class="soft" data-rise>Pick your business, goal and channels. This is the plan our agents and team would start you on, and it changes as you do.</p></div>
   <div class="demo" id="planner" data-rise>
     <div class="plan" data-ui data-plan aria-live="polite">
       <div class="plan-head"><div><h3>Your month as a café or restaurant</h3><p>Planned for more leads. AI drafts, your strategist approves.</p></div><span class="plan-count">26 deliverables</span></div>
@@ -282,65 +345,54 @@ def home():
 </section>
 
 <section class="sec frame" data-sec aria-labelledby="eng-h">
-  <div class="sec-head"><h2 id="eng-h" data-rise>Four engines, one team</h2>
-    <p class="soft" data-rise>Each engine runs on AI systems we built and tuned for Indian businesses. A strategist ties them together into one plan and one report.</p></div>
+  <div class="sec-head"><span class="kicker" data-rise><i>{icon("layers")}</i>Services</span><h2 id="eng-h" data-rise>Four engines, one team</h2>
+    <p class="soft" data-rise>Pick the engines your brand needs this quarter. They share one plan, one strategist and one report.</p></div>
   <div class="cells">
-    <a class="cell" href="/ai-marketing" data-rise><div class="txt"><b>AI Marketing</b><span>Social media, campaigns and ads, planned on research and optimised every week.</span></div>
-      {FRAG["ads"]}</a>
-    <a class="cell rev" href="/ai-automation" data-rise><div class="txt"><b>AI Automation</b><span>Replies, lead capture and follow-ups on WhatsApp and Instagram, around the clock.</span></div>
-      {FRAG["flow"]}</a>
-    <a class="cell" href="/creative-studio" data-rise><div class="txt"><b>Creative Studio</b><span>Shoots, reel and video editing, and design that look like your brand.</span></div>
-      {FRAG["reel"]}</a>
-    <a class="cell rev" href="/website-development" data-rise><div class="txt"><b>Websites</b><span>Fast landing pages and websites that rank and turn visitors into enquiries.</span></div>
-      {FRAG["web"]}</a>
-    <a class="cell" href="/ai-marketing#included" data-rise><div class="txt"><b>SEO and AEO</b><span>Be found on Google, and named when buyers ask ChatGPT, Gemini or Perplexity.</span></div>
-      {FRAG["seo"]}</a>
-    <a class="cell rev" href="/ai-marketing" data-rise><div class="txt"><b>One monthly report</b><span>What worked, what did not, and what we will change next month, in plain words.</span></div>
-      {FRAG["report"]}</a>
+    <a class="cell" href="/ai-marketing" data-rise><div class="txt"><b>AI Marketing</b><span>Social media, campaigns and ads, planned on research and optimised every week.</span></div>{FRAG["ads"]}</a>
+    <a class="cell rev" href="/ai-automation" data-rise><div class="txt"><b>AI Automation</b><span>Replies, lead capture and follow-ups on WhatsApp and Instagram, around the clock.</span></div>{FRAG["flow"]}</a>
+    <a class="cell" href="/creative-studio" data-rise><div class="txt"><b>Creative Studio</b><span>Shoots, reel and video editing, and design that look like your brand.</span></div>{FRAG["reel"]}</a>
+    <a class="cell rev" href="/website-development" data-rise><div class="txt"><b>Websites</b><span>Fast landing pages and websites that rank and turn visitors into enquiries.</span></div>{FRAG["web"]}</a>
+    <a class="cell" href="/ai-marketing#included" data-rise><div class="txt"><b>SEO and AEO</b><span>Be found on Google, and named when buyers ask ChatGPT, Gemini or Perplexity.</span></div>{FRAG["seo"]}</a>
+    <a class="cell rev" href="/ai-marketing" data-rise><div class="txt"><b>One monthly report</b><span>What worked, what did not, and what changes next month, in plain words.</span></div>{FRAG["report"]}</a>
   </div>
 </section>
 
-<section class="sec" data-sec aria-labelledby="how-h">
-  <div class="fields">
-    <div class="field" data-rise><h2 id="how-h">How it works</h2>
-      <div class="req" data-ui><span class="t">Festive offer campaign</span><div class="m"><span class="pillx">New</span><span class="pillx">From: owner</span></div><ul><li class="todo">Brief</li><li class="todo">Drafts</li><li class="todo">Approval</li></ul></div>
-      <div class="clause"><p>First it lands with us.</p><p>Send a goal, a photo or a voice note. We turn it into a brief.</p></div></div>
-    <div class="field" data-rise><span></span>
-      <div class="req" data-ui><span class="t">Festive offer campaign</span><div class="m"><span class="pillx">Strategist assigned</span><span class="pillx">Due Fri</span></div><ul><li class="done">Brief and research</li><li class="done">3 hook options</li><li class="todo">Edit and design</li></ul></div>
-      <div class="clause"><p>Then AI drafts it.</p><p>Research, hooks, scripts and designs in hours instead of weeks.</p></div></div>
-    <div class="field" data-rise><span></span>
-      <div class="req" data-ui><span class="t">Festive offer campaign</span><div class="m"><span class="pillx v">In review</span></div><ul><li class="done">Brief and research</li><li class="done">Hook B chosen</li><li class="done">Reel and 4 creatives</li><li class="todo">Your approval</li></ul></div>
-      <div class="clause"><p>Then people finish it.</p><p>Editors and designers polish it. Nothing ships without your yes.</p></div></div>
-    <div class="field" data-rise><span></span>
-      <div class="req" data-ui><span class="t">Festive offer campaign</span><div class="m"><span class="pillx ok">Live</span><span class="pillx">Ads running</span></div><div class="fig"><span>Enquiries, week 1</span><span>39</span></div></div>
-      <div class="clause"><p>Then it goes live.</p><p>We publish, run the ads, switch on replies and report back.</p></div></div>
+<section class="sec frame" data-sec aria-labelledby="how-h">
+  <div class="sec-head"><span class="kicker" data-rise><i>{icon("refresh")}</i>How it works</span><h2 id="how-h" data-rise>From first call to compounding growth</h2></div>
+  <div class="steps2" data-rise>
+    <div class="step2"><span class="dot">{icon("search")}</span><h3>Discover</h3><p>A free strategy call and an audit of your brand, channels, competitors and goals.</p></div>
+    <div class="step2"><span class="dot">{icon("bot")}</span><h3>Agents draft</h3><p>Research, calendars, scripts, creatives and automations, drafted in hours.</p></div>
+    <div class="step2"><span class="dot">{icon("users")}</span><h3>People finish</h3><p>Strategists, editors and designers polish everything. You approve.</p></div>
+    <div class="step2"><span class="dot">{icon("trend")}</span><h3>It compounds</h3><p>We publish, automate and report monthly, and each month gets sharper.</p></div>
   </div>
 </section>
 
 <section class="sec frame" data-sec aria-labelledby="proof-h">
-  <div class="sec-head"><h2 id="proof-h" data-rise>We grow our own page first</h2>
-    <p class="soft" data-rise>Our Instagram, @ai.nxtlvl, is where every format, hook and automation is tested before it reaches a client.</p></div>
+  <div class="sec-head"><span class="kicker" data-rise><i>{icon("trend")}</i>Proof</span><h2 id="proof-h" data-rise>We grow our own page first</h2>
+    <p class="soft" data-rise>Our Instagram, @ai.nxtlvl, is our lab: every format, hook and automation is tested there before it reaches a client.</p></div>
   <div class="proof">
     <div class="tile shot" data-rise><img src="/img/ai-nxtlvl-profile.jpg" width="1320" height="1245" alt="The @ai.nxtlvl Instagram profile by Nxtlvl Social: 31 posts, 9,924 followers and 1.0M views in the last 30 days" loading="lazy">
-      <p class="over">Nearly 10,000 followers and 1M views in 30 days from 31 posts, built with the same mix of AI research, fast editing and human taste we bring to every client. <a href="https://www.instagram.com/ai.nxtlvl/" rel="noopener" target="_blank">See the page</a></p></div>
+      <p class="over">Screenshot of @ai.nxtlvl. <a href="https://www.instagram.com/ai.nxtlvl/" rel="noopener" target="_blank">See the page</a></p></div>
     <div class="facts">
-      <div class="tile t2" data-rise><span>Where we work</span><b>Across India, remote-first, shoots on location</b></div>
-      <div class="tile pale" data-rise><span>How plans work</span><b>Monthly scope, no lock-in, pause any month</b></div>
-      <div class="tile" data-rise><span>What you own</span><b>Every file, account and system we set up</b></div>
+      <div class="tile bigstat" data-rise><b data-count="9924">9,924</b><span>followers on @ai.nxtlvl</span></div>
+      <div class="tile pale bigstat" data-rise><b data-count="1000000" data-fmt="m">1.0M</b><span>views in the last 30 days</span></div>
+      <div class="tile bigstat" data-rise><b data-count="31">31</b><span>posts to get there</span></div>
     </div>
   </div>
 </section>
 
 <section class="sec frame" data-sec aria-labelledby="caps-h">
-  <div class="sec-head"><h2 id="caps-h" data-rise>Everything a growth team does</h2>
-    <p class="soft" data-rise>One partner from being discovered to being chosen.</p></div>
+  <div class="sec-head"><span class="kicker" data-rise><i>{icon("spark")}</i>Capabilities</span><h2 id="caps-h" data-rise>Everything a growth team does</h2></div>
   <div class="caps">{caps_html}</div>
 </section>
+
 <section class="sec frame" data-sec aria-labelledby="plat-h">
-  <div class="tile night" style="display:grid;gap:18px;padding:clamp(28px,4vw,56px)" data-rise>
-    <h2 id="plat-h" style="max-width:18ch">Next: the Nxtlvl growth platform</h2>
-    <p class="soft" style="max-width:60ch">We are building an AI workspace that turns a short brief into content ideas, scripts and ready-to-post reels, with our team one message away. Subscribers get early access.</p>
-    <div class="btns"><a class="btn btn-white" href="/contact?need=platform">Ask about early access {a}</a></div>
+  <div class="tile night platform glowline" data-rise>
+    <div style="display:grid;gap:18px"><span class="kicker"><i>{icon("bolt")}</i>Coming next</span><h2 id="plat-h">The Nxtlvl growth platform</h2>
+      <p class="soft">An AI workspace that turns one line into ideas, scripts and ready-to-post reels, with our team one message away. Subscribers get early access.</p>
+      <div class="btns"><a class="btn btn-primary" href="/contact?need=platform">Ask about early access {a}</a></div></div>
+    <div class="prompt" data-ui aria-hidden="true"><div class="in-p"><b data-prompt>Make a Diwali offer reel for my café</b><i>{icon("arrow")}</i></div>
+      <div class="outs"><div><b>Idea</b>Behind the counter at 6 am, one sweet at a time</div><div><b>Script</b>0:00 hook · 0:04 offer · 0:22 call to action</div><div><b>Reel</b><i></i></div></div></div>
   </div>
 </section>
 
@@ -348,7 +400,7 @@ def home():
 {close_row()}
 '''
     return page('/index', 'AI-Driven Marketing, Automation & Creative | Nxtlvl Social',
-                'Nxtlvl Social is an AI-driven growth company in India. Marketing, WhatsApp and DM automation, shoots, edits, design and websites on one monthly plan.',
+                'Nxtlvl Social is an AI-driven growth company in India. AI agents and experts run your marketing, WhatsApp and DM automation, shoots, edits, design and websites.',
                 body, '/', extra_schema=[faq_schema(HOME_FAQ)])
 
 # ---------------------------------------------------------------- service pages

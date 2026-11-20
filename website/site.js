@@ -103,7 +103,7 @@
       }
       out.innerHTML = '<div class="plan-head"><div><h3>Your month as a ' + b.name + '</h3><p>Planned for ' + g.word + '. AI drafts, your strategist approves.</p></div><span class="plan-count">' + total + ' deliverables</span></div>' +
         '<div class="cal" aria-hidden="true">' + cells.map(function (c, i) { return '<div class="' + c + '">' + (i + 1) + '</div>'; }).join('') + '</div>' +
-        '<div class="legend"><span><i style="background:var(--violet)"></i>Reel</span><span><i style="background:var(--pale)"></i>Post or carousel</span>' + (shoot ? '<span><i style="background:var(--ink)"></i>Shoot day</span>' : '') + '</div>' +
+        '<div class="legend"><span><i style="background:var(--violet)"></i>Reel</span><span><i style="background:rgba(169,92,255,.32)"></i>Post or carousel</span>' + (shoot ? '<span><i style="background:#fff"></i>Shoot day</span>' : '') + '</div>' +
         '<div class="groups">' + grp('Creative Studio', creative) + grp('AI Marketing', marketing) + grp('AI Automation', autos) + grp('Websites', webs) + '</div>';
       var summary = 'Business: ' + b.name + '. Goal: ' + g.word + '. ' + [ig && 'Instagram', wa && 'WhatsApp', meta && 'Meta ads', goog && 'Google ads', web && 'Website'].filter(Boolean).join(', ') + '. ' + reels + ' reels a month, ' + shoot + ' shoot day(s).';
       var cta = $('[data-plan-cta]', demo);
@@ -138,6 +138,117 @@
         })
         .catch(function () { show('Could not send right now. Please email connect@nxtlvlsocial.ai instead.'); })
         .then(function () { btn.disabled = false; btn.textContent = label; });
+    });
+  }
+})();
+
+// live product surfaces: agent feed, counters, typing, automation wires, the platform prompt
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var whenSeen = function (el, fn) {
+    if (!el) return;
+    if (!('IntersectionObserver' in window)) { fn(); return; }
+    var o = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { o.disconnect(); fn(); } }, { threshold: 0.25 });
+    o.observe(el);
+  };
+  var visible = true;
+  document.addEventListener('visibilitychange', function () { visible = !document.hidden; });
+
+  // count up numbers when they come into view
+  var fmt = function (n, kind) { return kind === 'm' ? (n / 1e6).toFixed(1) + 'M' : Math.round(n).toLocaleString('en-IN'); };
+  $$('[data-count]').forEach(function (el) {
+    var target = +el.dataset.count, kind = el.dataset.fmt, final = el.textContent;
+    if (reduce || !target) return;
+    whenSeen(el, function () {
+      var t0 = performance.now(), dur = 1600;
+      var step = function (now) { var t = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - t, 4); el.textContent = t < 1 ? fmt(target * e, kind) : final; if (t < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+    });
+  });
+
+  if (reduce) return;
+
+  // agent activity feed
+  var feed = $('[data-feed]');
+  if (feed) {
+    var icons = {}; $$('.row-f .av', feed).forEach(function (a, i) { icons[i] = a.innerHTML; });
+    var items = [[3, 'Edit Agent', 'Captions synced on the menu reel'], [1, 'Reply Agent', 'Booked a table for 4 at 8 pm'], [0, 'Content Agent', 'Wrote 5 captions for next week'],
+      [2, 'Ads Agent', 'Paused the weakest creative'], [4, 'Automation', 'Follow-up sent to Saturday leads'], [1, 'Reply Agent', 'Answered "do you deliver?" on WhatsApp'],
+      [0, 'SEO Agent', 'Added 4 answers to the menu page'], [4, 'Report Agent', 'Weekly summary ready for review']];
+    var k = 0;
+    setInterval(function () {
+      if (!visible) return;
+      var it = items[k++ % items.length], row = document.createElement('div');
+      row.className = 'row-f new';
+      row.innerHTML = '<span class="av">' + icons[it[0]] + '</span><div><b>' + it[1] + '</b><small>' + it[2] + '</small></div><em>now</em>';
+      $$('em', feed).forEach(function (m, i) { m.textContent = (i + 1) * 2 + 'm'; });
+      feed.insertBefore(row, feed.firstChild);
+      while (feed.children.length > 5) feed.removeChild(feed.lastChild);
+    }, 2800);
+  }
+  // counters tick up now and then
+  $$('[data-tick]').forEach(function (el, i) {
+    var n = +el.dataset.tick;
+    setInterval(function () { if (visible && Math.random() < 0.6) { n += 1; el.textContent = n; } }, 2200 + i * 900);
+  });
+
+  // the content agent types its hook, then starts the next one
+  var typed = $('[data-type]');
+  if (typed) {
+    var lines = ['60 seconds inside our kitchen', 'Why regulars order this first', 'Rate our new menu, honestly'], li = 0;
+    var type = function () {
+      var text = lines[li++ % lines.length], j = 0;
+      var t = setInterval(function () { typed.textContent = text.slice(0, ++j); if (j >= text.length) { clearInterval(t); setTimeout(type, 2600); } }, 55);
+    };
+    whenSeen(typed, function () { typed.textContent = ''; type(); });
+  }
+
+  // report numbers drift upward
+  $$('.nums b[data-count]').forEach(function (el) {
+    var n = +el.dataset.count;
+    setTimeout(function () {
+      setInterval(function () { if (visible && Math.random() < 0.5) { n += Math.max(1, Math.round(n * 0.002)); el.textContent = n.toLocaleString('en-IN'); } }, 1800);
+    }, 2500);
+  });
+
+  // automation wires with travelling pulses
+  var box = $('[data-flow]');
+  if (box) {
+    var svg = $('svg.wires', box), NS = 'http://www.w3.org/2000/svg';
+    var clear = function () { $$('path, circle', svg).forEach(function (n) { n.parentNode.removeChild(n); }); };
+    var draw = function () {
+      clear();
+      if (window.innerWidth <= 860) return;
+      var b = box.getBoundingClientRect(), brain = $('[data-brain]', box);
+      var pt = function (el, side) { var r = el.getBoundingClientRect(); return { x: (side === 'r' ? r.right : r.left) - b.left, y: r.top + r.height / 2 - b.top }; };
+      var paths = [];
+      $$('.c1 [data-n]', box).forEach(function (n) { paths.push([pt(n, 'r'), pt(brain, 'l')]); });
+      $$('.c3 [data-n]', box).forEach(function (n) { paths.push([pt(brain, 'r'), pt(n, 'l')]); });
+      var c3 = $$('.c3 [data-n]', box), c4 = $$('.c4 [data-n]', box);
+      c3.forEach(function (n, i) { if (c4[i]) paths.push([pt(n, 'r'), pt(c4[i], 'l')]); });
+      paths.forEach(function (p, i) {
+        var a = p[0], z = p[1], mx = (a.x + z.x) / 2, d = 'M' + a.x + ' ' + a.y + ' C' + mx + ' ' + a.y + ' ' + mx + ' ' + z.y + ' ' + z.x + ' ' + z.y;
+        var base = document.createElementNS(NS, 'path'); base.setAttribute('d', d); base.setAttribute('id', 'w' + i); svg.appendChild(base);
+        var run = document.createElementNS(NS, 'path'); run.setAttribute('d', d); run.setAttribute('class', 'run'); svg.appendChild(run);
+        var c = document.createElementNS(NS, 'circle'); c.setAttribute('r', '3.5');
+        var m = document.createElementNS(NS, 'animateMotion'); m.setAttribute('dur', (2.2 + (i % 3) * 0.4) + 's'); m.setAttribute('repeatCount', 'indefinite'); m.setAttribute('begin', (i * 0.35) + 's');
+        var mp = document.createElementNS(NS, 'mpath'); mp.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#w' + i); mp.setAttribute('href', '#w' + i);
+        m.appendChild(mp); c.appendChild(m); svg.appendChild(c);
+      });
+    };
+    var to; window.addEventListener('resize', function () { clearTimeout(to); to = setTimeout(draw, 150); });
+    whenSeen(box, function () { setTimeout(draw, 900); });
+  }
+
+  // the platform prompt types itself, then the outputs appear
+  var plat = $('.platform'), prompt = $('[data-prompt]');
+  if (plat && prompt) {
+    var full = prompt.textContent;
+    whenSeen(plat, function () {
+      prompt.textContent = ''; var j = 0;
+      var t = setInterval(function () { prompt.textContent = full.slice(0, ++j); if (j >= full.length) clearInterval(t); }, 45);
     });
   }
 })();
