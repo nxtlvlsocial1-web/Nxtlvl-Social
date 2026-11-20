@@ -7,12 +7,14 @@ import html
 import json
 import os
 import shutil
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.abspath(os.path.join(HERE, '..', 'website'))
 SITE = 'https://nxtlvlsocial.ai'
 EMAIL = 'connect@nxtlvlsocial.ai'
-UPDATED = '2026-11-17'
+UPDATED = '2026-11-20'
 INSTAGRAM = [('Instagram · @ai.nxtlvl', 'https://www.instagram.com/ai.nxtlvl/'), ('Instagram · @nxtlvlledits', 'https://www.instagram.com/nxtlvlledits/')]
 STAR = json.load(open(os.path.join(HERE, 'star.json')))
 e = html.escape
@@ -58,18 +60,17 @@ def star_svg(uid='s', dark=False):
             f'<path d="{STAR["t2"]}" fill="url(#{uid}c)"/><path d="{STAR["s"]}" fill="{main}"/></svg>')
 
 
-LOGO = json.load(open(os.path.join(HERE, 'logo.json')))
-def logo_svg(uid='lg', grad=False, label=True):
-    """The exact Nxtlvl wordmark with its violet sparkle, transparent, traced from the brand file."""
-    fill = f'url(#{uid}g)' if grad else '#FFFFFF'
-    defs = (f'<defs><linearGradient id="{uid}g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".16"/>'
-            f'<stop offset="1" stop-color="#A95CFF" stop-opacity=".22"/></linearGradient></defs>') if grad else ''
+WORD = json.load(open(os.path.join(HERE, 'wordmark.json')))['paths']   # "nxtlvl social" from brands/nxtlvl/logo-white.svg
+def wordmark_svg(label=False):
     lab = ' role="img" aria-label="Nxtlvl Social"' if label else ' aria-hidden="true"'
-    return (f'<svg viewBox="0 -16 {LOGO["w"] + 40:.0f} 116"{lab}>{defs}<path d="{LOGO["d"]}" fill="{fill}"/>'
-            f'<path d="{LOGO["spark"]}" transform="translate({LOGO["cx"]:.1f} {LOGO["cy"]}) scale({LOGO["r"]})" fill="#A95CFF"/></svg>')
+    return f'<svg class="lg-word" viewBox="118 24 296 54"{lab}><path d="{WORD[0][0]}" fill="#FFFFFF"/><path d="{WORD[1][0]}" fill="#D8BBFF"/></svg>'
+
+def logo_html(uid='lg'):
+    """Nxtlvl Social logo: the shooting star on its violet gradient tile, then the wordmark."""
+    return f'<span class="lg-tile">{star_svg(uid)}</span>{wordmark_svg()}'
 
 # ---------------------------------------------------------------- shared blocks
-NAV = [('/ai-marketing', 'Marketing'), ('/ai-automation', 'Automation'), ('/creative-studio', 'Creative'), ('/website-development', 'Websites'), ('/about', 'About')]
+NAV = [('/ai-marketing', 'Marketing'), ('/ai-automation', 'Automation'), ('/creative-studio', 'Creative'), ('/website-development', 'Websites'), ('/guides', 'Guides'), ('/about', 'About')]
 SERVICES = [  # url, name, short, icon, need
     ('/ai-marketing', 'AI Marketing', 'Social media management, campaigns, ads and SEO, planned with AI and run by strategists.', 'trend', 'marketing'),
     ('/ai-automation', 'AI Automation', 'WhatsApp and Instagram replies, lead capture and follow-ups that work around the clock.', 'flow', 'automation'),
@@ -83,7 +84,7 @@ def header(active):
     return f'''<a class="skip" href="#main">Skip to content</a>
 <header class="bar frame" style="max-width:none">
   <div class="in">
-    <a class="logo" href="/" aria-label="Nxtlvl Social home">{logo_svg("lg")}</a>
+    <a class="logo" href="/" aria-label="Nxtlvl Social home">{logo_html("lg")}</a>
     <nav class="menu" aria-label="Main">{links}</nav>
     <span class="sp"></span>
     <a class="btn btn-light hide-m" href="/contact">Contact</a>
@@ -98,13 +99,13 @@ def footer():
     social = ''.join(f'<li><a href="{u}" rel="me noopener" target="_blank">{e(t.split(" · ")[1])}</a></li>' for t, u in INSTAGRAM)
     return f'''<footer class="frame">
   <div class="fcols">
-    <div class="brand-f">{logo_svg("fl")}<p>An AI-driven growth company in India. Marketing, automation and creative production on one monthly subscription, made with AI and finished by people.</p></div>
+    <div class="brand-f"><a class="logo" href="/" aria-label="Nxtlvl Social home">{logo_html("fl")}</a><p>An AI-driven growth company in India. Marketing, automation and creative production on one monthly subscription, made with AI and finished by people.</p></div>
     <div><h2>Services</h2><ul>{svc}</ul></div>
-    <div><h2>Company</h2><ul><li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li><li><a href="/#faq">Questions</a></li></ul></div>
+    <div><h2>Company</h2><ul><li><a href="/about">About</a></li><li><a href="/guides">Guides</a></li><li><a href="/contact">Contact</a></li><li><a href="/#faq">Questions</a></li></ul></div>
     <div><h2>Follow</h2><ul>{social}</ul></div>
     <div><h2>Write to us</h2><ul><li><a href="mailto:{EMAIL}">{EMAIL}</a></li></ul></div>
   </div>
-  <div class="bigmark" aria-hidden="true">{logo_svg("fm", grad=True, label=False)}</div>
+  <div class="bigmark" aria-hidden="true"><span class="rocket">{star_svg("fr")}</span><span class="word">{wordmark_svg()}</span></div>
   <div class="legal"><span>© 2026 Nxtlvl Social · AI-driven marketing, automation and creative services, India</span><span>Made with AI, finished by people.</span></div>
 </footer>'''
 
@@ -185,8 +186,8 @@ def page(path, title, desc, body, active='', crumbs=None, extra_schema=(), noind
 <link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="preload" href="/fonts/general-sans-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/clash-display-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/unbounded-variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/site.css?v={UPDATED}">
 <script type="application/ld+json">{ld}</script>
 </head>
@@ -230,6 +231,8 @@ FRAG = {
 
 def home():
     a = icon('arrow')
+    INDUSTRIES_HTML = ''.join(f'<a class="tile ind" href="{u}" data-rise><h3>{t}</h3><p>{d}</p><ul>' + ''.join(f'<li>{x}</li>' for x in tags) + '</ul></a>' for t, d, tags, u in INDUSTRIES)
+    GUIDE_CARDS = guide_cards()
     feed0 = [('pen', 'Content Agent', 'Drafted 3 hooks for the festive reel', 'now'), ('chat', 'Reply Agent', 'Answered "price?" on Instagram in 4 s', '1m'),
              ('mega', 'Ads Agent', 'Shifted ₹2,000 to the better creative', '3m'), ('film', 'Edit Agent', 'Reel v2 ready: 0:28, captions on', '6m'), ('bolt', 'Automation', 'Hot lead sent to the owner on WhatsApp', '9m')]
     feed = ''.join(f'<div class="row-f"><span class="av">{icon(i)}</span><div><b>{w}</b><small>{t}</small></div><em>{m}</em></div>' for i, w, t, m in feed0)
@@ -252,10 +255,11 @@ def home():
     node = lambda ic, t, s, cls='': f'<div class="node {cls}" data-n><i>{icon(ic)}</i><div><b>{t}</b><small>{s}</small></div></div>'
     body = f'''
 <section class="hero" data-sec aria-labelledby="hero-h">
-  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-bg" aria-hidden="true"><canvas class="sky" data-sky></canvas></div>
+  <div class="rocket-hero" aria-hidden="true">{star_svg("rh")}</div><div class="rocket-hero l" aria-hidden="true">{star_svg("rl")}</div>
   <div class="frame hero-in">
     <span class="kicker" data-rise><i>{icon("spark")}</i>AI agents plus human experts, on one subscription</span>
-    <h1 id="hero-h" data-rise>Your AI growth <em class="s">team</em></h1>
+    <h1 id="hero-h" data-rise>Your AI growth <span class="g">team</span></h1>
     <p class="lead" data-rise>Nxtlvl Social is an AI-driven growth company in India. Our agents and experts run your marketing, automation and creative production every day, and a person checks every result.</p>
     <div class="btns" data-rise><a class="btn btn-primary" href="/contact">Book a free strategy call {a}</a><a class="btn btn-light" href="#agents">Meet the agents</a></div>
     <p class="hero-note" data-rise><span>Monthly plans</span><span>No lock-in</span><span>You own everything</span></p>
@@ -287,7 +291,7 @@ def home():
 </section>
 
 <section class="sec frame" id="agents" data-sec aria-labelledby="ag-h">
-  <div class="sec-head center"><span class="kicker" data-rise><i>{icon("bot")}</i>Your AI team</span><h2 id="ag-h" data-rise>Meet your <em class="s">agents</em></h2>
+  <div class="sec-head center"><span class="kicker" data-rise><i>{icon("bot")}</i>Your AI team</span><h2 id="ag-h" data-rise>Meet your <span class="g">agents</span></h2>
     <p class="soft" data-rise>Six specialist AI agents work on your brand every day. A strategist directs them, and nothing goes live until a person and you approve it.</p></div>
   <div class="agents">
     <div class="tile agent glowline" data-rise><div class="top"><div class="who-a"><b><i>{icon("pen")}</i>Content Agent</b><span class="state">Writing</span></div><p>Researches trends and your best posts, then drafts hooks, scripts and captions.</p></div>
@@ -308,7 +312,7 @@ def home():
 </section>
 
 <section class="sec frame" data-sec aria-labelledby="fl-h">
-  <div class="sec-head"><span class="kicker" data-rise><i>{icon("bolt")}</i>Automations</span><h2 id="fl-h" data-rise>Every enquiry, handled in <em class="s">seconds</em></h2>
+  <div class="sec-head"><span class="kicker" data-rise><i>{icon("bolt")}</i>Automations</span><h2 id="fl-h" data-rise>Every enquiry, handled in <span class="g">seconds</span></h2>
     <p class="soft" data-rise>Messages from Instagram, WhatsApp, your website and ads flow to one agent. It answers, qualifies and books, logs the lead, and hands the important ones to your team.</p></div>
   <div class="flowbox" data-flow data-rise>
     <svg class="wires" aria-hidden="true"><defs><linearGradient id="wg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7D18FC"/><stop offset="1" stop-color="#D8BBFF"/></linearGradient></defs></svg>
@@ -320,6 +324,13 @@ def home():
     </div>
     <div class="flow-cap"><span><b>24/7</b> replies</span><span><b>100%</b> of leads logged</span><span><b>1 tap</b> human handover</span></div>
   </div>
+</section>
+
+<section class="sec frame" id="industries" data-sec aria-labelledby="ind-h">
+  <div class="sec-head"><span class="kicker" data-rise><i>{icon("users")}</i>Industries</span><h2 id="ind-h" data-rise>AI marketing for <span class="g">every</span> kind of business</h2>
+    <p class="soft" data-rise>The same agents and team, tuned to how your customers buy.</p></div>
+  <div class="inds">{INDUSTRIES_HTML}</div>
+  <p class="cities" data-rise>We work with brands anywhere in India, including Mumbai, Delhi NCR, Bengaluru, Pune, Hyderabad, Chennai, Kolkata, Ahmedabad, Jaipur, Chandigarh, Lucknow and Indore, and with clients abroad.</p>
 </section>
 
 <section class="sec frame" id="build" data-sec aria-labelledby="plan-h">
@@ -394,6 +405,12 @@ def home():
     <div class="prompt" data-ui aria-hidden="true"><div class="in-p"><b data-prompt>Make a Diwali offer reel for my café</b><i>{icon("arrow")}</i></div>
       <div class="outs"><div><b>Idea</b>Behind the counter at 6 am, one sweet at a time</div><div><b>Script</b>0:00 hook · 0:04 offer · 0:22 call to action</div><div><b>Reel</b><i></i></div></div></div>
   </div>
+</section>
+
+<section class="sec frame" data-sec aria-labelledby="gd-h">
+  <div class="sec-head"><span class="kicker" data-rise><i>{icon("pen")}</i>Guides</span><h2 id="gd-h" data-rise>Learn how AI-driven growth works</h2>
+    <p class="soft" data-rise>Practical guides from our team on automation, marketing and AI for Indian businesses.</p></div>
+  <div class="guides">{GUIDE_CARDS}</div>
 </section>
 
 {faq_block(HOME_FAQ)}
@@ -634,9 +651,67 @@ def not_found():
 <div class="btns"><a class="btn btn-primary" href="/">Go to the home page</a><a class="btn btn-light" href="/contact">Contact us</a></div></div></div></section>'''
     return page('/404', 'Page not found | Nxtlvl Social', 'This page could not be found.', body, noindex=True)
 
+# ---------------------------------------------------------------- industries and guides
+INDUSTRIES = [
+    ('Restaurants and cafés', 'Reels that fill tables, DM and WhatsApp replies for menus and bookings, festive campaigns.', ['Reels', 'Table booking', 'Festive offers'], '/creative-studio'),
+    ('Clinics and wellness', 'Appointment booking on WhatsApp, treatment questions answered 24/7, content that builds trust.', ['Bookings', 'Reminders', 'Trust content'], '/ai-automation'),
+    ('D2C and e-commerce', 'Product shoots, performance ads that scale, and order and delivery replies on autopilot.', ['Product shoots', 'Meta ads', 'Order replies'], '/ai-marketing'),
+    ('Real estate', 'Lead qualification by budget and area, site-visit booking, project walkthrough videos.', ['Lead scoring', 'Site visits', 'Walkthroughs'], '/ai-automation'),
+    ('Education and coaching', 'Admission enquiries answered instantly, demo-class bookings and student stories.', ['Admissions', 'Demo classes', 'Reels'], '/ai-marketing'),
+    ('Creators and personal brands', 'Editing, a weekly content system, comment-to-DM links and collab enquiry routing.', ['Editing', 'Content system', 'DM links'], '/creative-studio'),
+]
+from guides import GUIDES
+
+def guide_cards():
+    return ''.join(f'<a class="tile guide" href="/guides/{g["slug"]}" data-rise><span class="tag">{g["tag"]} · {g["read"]}</span><h3>{g["h1"]}</h3><p>{g["desc"]}</p><span class="go">Read the guide {icon("arrow")}</span></a>' for g in GUIDES)
+
+def guide_page(g):
+    path = f'/guides/{g["slug"]}'
+    crumbs = [('/', 'Home'), ('/guides', 'Guides'), (path, g['h1'])]
+    body_html = ''.join(f'<h2 id="s{i}">{t}</h2>' + ''.join(x if x.startswith('<') else f'<p>{x}</p>' for x in paras) for i, (t, paras) in enumerate(g['sections']))
+    toc = ''.join(f'<li><a href="#s{i}">{t}</a></li>' for i, (t, _) in enumerate(g['sections']))
+    art = {'@type': 'Article', '@id': SITE + path + '#article', 'headline': g['title'], 'description': g['desc'], 'image': f'{SITE}/og-image.png',
+           'author': {'@id': f'{SITE}/#org'}, 'publisher': {'@id': f'{SITE}/#org'}, 'datePublished': UPDATED, 'dateModified': UPDATED,
+           'mainEntityOfPage': SITE + path, 'inLanguage': 'en-IN', 'about': g['tag']}
+    body = f'''
+<section class="frame" data-sec aria-labelledby="ph-h"><div class="ph" style="grid-template-columns:1fr">
+  <div class="tile main" data-rise style="min-height:0">{crumbs_html(crumbs)}<h1 id="ph-h" style="max-width:20ch">{g["h1"]}</h1>
+    <p class="meta"><span>{g["tag"]}</span><span>{g["read"]}</span><span>By the Nxtlvl Social team</span><span>Updated 20 November 2026</span></p></div>
+</div></section>
+<section class="sec frame" style="padding-top:48px" data-sec><div class="article">
+  <article class="body" data-rise><p class="answer">{g["answer"]}</p>{body_html}</article>
+  <aside><div class="tile"><h2>On this page</h2><ol>{toc}</ol></div>
+    <div class="tile violet"><p style="font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-0.02em;line-height:1.2">Want this done for you?</p><p class="soft" style="margin:10px 0 16px;font-size:15px">Our agents and team set it up and run it, on one monthly plan.</p><a class="btn btn-white" href="/contact?need={g["need"]}">Book a free call</a></div>
+    <div class="tile t2"><p class="small soft">Related service</p><p style="margin-top:6px"><a href="{g["service"]}">{dict((u, n) for u, n, *_ in SERVICES)[g["service"]]}</a></p></div></aside>
+</div></section>
+{faq_block(g["faqs"], 'Questions, answered')}
+{close_row()}
+'''
+    return page(path, g['title'] + ' | Nxtlvl Social', g['desc'], body, '/guides', crumbs, [art, faq_schema(g['faqs'])])
+
+def guides_hub():
+    crumbs = [('/', 'Home'), ('/guides', 'Guides')]
+    body = f'''
+<section class="frame" data-sec aria-labelledby="ph-h"><div class="ph">
+  <div class="tile main" data-rise>{crumbs_html(crumbs)}<h1 id="ph-h">Guides to AI-driven growth</h1>
+    <p class="lead">Practical, plain-language guides on AI marketing, WhatsApp and Instagram automation and content for businesses in India.</p></div>
+  <aside class="tile night aside" data-rise><h2>Start here</h2><dl><div><dt>New to AI marketing?</dt><dd><a href="/guides/ai-marketing-for-small-business-india">AI marketing for small businesses</a></dd></div>
+    <div><dt>Drowning in WhatsApp messages?</dt><dd><a href="/guides/whatsapp-automation-for-business">WhatsApp automation for business</a></dd></div>
+    <div><dt>Too many DMs?</dt><dd><a href="/guides/instagram-dm-automation">Instagram DM automation</a></dd></div></dl></aside>
+</div></section>
+<section class="sec frame" data-sec aria-label="All guides"><div class="guides">{guide_cards()}</div></section>
+{close_row()}
+'''
+    coll = {'@type': 'CollectionPage', '@id': f'{SITE}/guides#list', 'name': 'Guides to AI-driven growth', 'hasPart': [{'@type': 'Article', 'headline': g['title'], 'url': f'{SITE}/guides/{g["slug"]}'} for g in GUIDES]}
+    return page('/guides', 'Guides: AI Marketing and Automation for Indian Businesses | Nxtlvl Social',
+                'Practical guides on AI marketing, WhatsApp automation, Instagram DM automation and content for small businesses and brands in India.', body, '/guides', crumbs, [coll])
+
 # ---------------------------------------------------------------- write
 def main():
-    pages = {'index.html': home(), 'about.html': about(), 'contact.html': contact(), '404.html': not_found()}
+    pages = {'index.html': home(), 'about.html': about(), 'contact.html': contact(), '404.html': not_found(), 'guides.html': guides_hub()}
+    os.makedirs(os.path.join(OUT, 'guides'), exist_ok=True)
+    for g in GUIDES:
+        pages[f'guides/{g["slug"]}.html'] = guide_page(g)
     for d in (MARKETING, AUTOMATION, CREATIVE, WEBSITES):
         pages[d['path'].strip('/') + '.html'] = service_page(**d)
     for name, content in pages.items():
@@ -644,7 +719,7 @@ def main():
             f.write(content)
     for asset in ('site.css', 'site.js'):
         shutil.copy(os.path.join(HERE, asset), os.path.join(OUT, asset))
-    urls = ['/', '/ai-marketing', '/ai-automation', '/creative-studio', '/website-development', '/about', '/contact']
+    urls = ['/', '/ai-marketing', '/ai-automation', '/creative-studio', '/website-development', '/guides'] + [f'/guides/{g["slug"]}' for g in GUIDES] + ['/about', '/contact']
     with open(os.path.join(OUT, 'sitemap.xml'), 'w') as f:
         f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
                 ''.join(f'  <url><loc>{SITE}{u}</loc><lastmod>{UPDATED}</lastmod></url>\n' for u in urls) + '</urlset>\n')
@@ -673,6 +748,12 @@ LLMS = f"""# Nxtlvl Social
 - Where: remote-first across India and internationally; shoots on location.
 - In development: the Nxtlvl growth platform, an AI workspace that turns a brief into ideas, scripts and reels; subscribers get early access.
 - Contact: {EMAIL}. Instagram: @ai.nxtlvl (AI and growth), @nxtlvlledits (editing work).
+
+## Guides
+
+- [WhatsApp automation for business]({SITE}/guides/whatsapp-automation-for-business)
+- [Instagram DM automation]({SITE}/guides/instagram-dm-automation)
+- [AI marketing for small businesses in India]({SITE}/guides/ai-marketing-for-small-business-india)
 
 ## Pages
 
