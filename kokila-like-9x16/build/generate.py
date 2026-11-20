@@ -61,7 +61,7 @@ SPLIT_END = 36                       # the split runs through line 2 ("...everyt
 REF_SHARE = .40                      # owner rule (2026-11-18): 60 % her full frame, 40 % reference footage
 # top half of the split: (first word, clip, in-point s)
 TOP_CLIPS = [(0, "t_care", 5.5),         # No matter how good you are (a woman helping an elderly man)
-             (6, "t_pack", .5),          # or how much good you do, (packing food donations)
+             (6, "t_helpup", 4.4),       # or how much good you do, (a man helping another up off the ground)
              (12, "t_bullied", .5),      # there will always be people who won't like you. (kids laughing at a girl)
              (21, "t_complain2", 1.0),   # They'll complain about you, (coworkers complaining at a man at his desk)
              (25, "t_talk", 3.0),        # talk about you (two coworkers talking about him)
