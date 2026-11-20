@@ -81,101 +81,156 @@
 },
 {
 "t": 18.1,
-"kind": "ding2",
-"file": "ding2_ding2.wav"
-},
-{
-"t": 19.56,
-"kind": "ding",
-"file": "ding_ding.wav"
-},
-{
-"t": 20.12,
-"kind": "whoosh_big",
-"file": "whoosh_big_whoosh_big.wav"
-},
-{
-"t": 20.95,
-"kind": "seat",
-"file": "seat_switch.wav"
-},
-{
-"t": 21.09,
-"kind": "seat",
-"file": "seat_switch.wav"
-},
-{
-"t": 21.23,
-"kind": "seat",
-"file": "seat_switch.wav"
-},
-{
-"t": 21.37,
-"kind": "seat",
-"file": "seat_switch.wav"
-},
-{
-"t": 21.51,
-"kind": "seat",
-"file": "seat_switch.wav"
-},
-{
-"t": 21.62,
-"kind": "applause",
-"file": "applause_applause.wav"
-},
-{
-"t": 21.62,
 "kind": "whoosh",
 "file": "whoosh_whoosh_b.wav"
 },
 {
+"t": 18.1,
+"kind": "riser_short",
+"file": "riser_short_riser.wav"
+},
+{
+"t": 18.55,
+"kind": "glitch",
+"file": "glitch_glitch.wav"
+},
+{
+"t": 19.15,
+"kind": "glitch",
+"file": "glitch_glitch.wav"
+},
+{
+"t": 19.3,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 19.49,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 19.68,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 19.87,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 20.06,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 20.25,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 20.5,
+"kind": "ding2",
+"file": "ding2_ding2.wav"
+},
+{
+"t": 21.27,
+"kind": "whoosh",
+"file": "whoosh_whoosh_c.wav"
+},
+{
 "t": 21.65,
-"kind": "seat",
-"file": "seat_switch.wav"
-},
-{
-"t": 21.72,
-"kind": "bell",
-"file": "bell_bell.wav"
-},
-{
-"t": 21.77,
-"kind": "pop",
-"file": "pop_pop.wav"
-},
-{
-"t": 21.79,
-"kind": "seat",
-"file": "seat_switch.wav"
-},
-{
-"t": 21.93,
-"kind": "seat",
-"file": "seat_switch.wav"
-},
-{
-"t": 22.07,
-"kind": "seat",
-"file": "seat_switch.wav"
-},
-{
-"t": 22.82,
-"kind": "click",
-"file": "click_click.wav"
-},
-{
-"t": 23.16,
-"kind": "thump",
-"file": "thump_sub_hit.wav"
-},
-{
-"t": 23.18,
 "kind": "ding",
 "file": "ding_ding.wav"
 },
 {
-"t": 23.7,
+"t": 21.92,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_big.wav"
+},
+{
+"t": 22.75,
+"kind": "seat",
+"file": "seat_switch.wav"
+},
+{
+"t": 22.89,
+"kind": "seat",
+"file": "seat_switch.wav"
+},
+{
+"t": 23.03,
+"kind": "seat",
+"file": "seat_switch.wav"
+},
+{
+"t": 23.17,
+"kind": "seat",
+"file": "seat_switch.wav"
+},
+{
+"t": 23.31,
+"kind": "seat",
+"file": "seat_switch.wav"
+},
+{
+"t": 23.42,
+"kind": "applause",
+"file": "applause_applause.wav"
+},
+{
+"t": 23.42,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 23.45,
+"kind": "seat",
+"file": "seat_switch.wav"
+},
+{
+"t": 23.52,
+"kind": "bell",
+"file": "bell_bell.wav"
+},
+{
+"t": 23.57,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 23.59,
+"kind": "seat",
+"file": "seat_switch.wav"
+},
+{
+"t": 23.73,
+"kind": "seat",
+"file": "seat_switch.wav"
+},
+{
+"t": 23.87,
+"kind": "seat",
+"file": "seat_switch.wav"
+},
+{
+"t": 24.62,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 24.96,
+"kind": "thump",
+"file": "thump_sub_hit.wav"
+},
+{
+"t": 24.98,
+"kind": "ding",
+"file": "ding_ding.wav"
+},
+{
+"t": 25.5,
 "kind": "whoosh_big",
 "file": "whoosh_big_whoosh_big.wav"
 }
