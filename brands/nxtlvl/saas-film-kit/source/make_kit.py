@@ -12,7 +12,7 @@ FONT = 'file://' + REPO + '/website/fonts/'
 os.makedirs(OUT, exist_ok=True)
 
 ROCKET = build.star_svg('k')
-WORD_DARK = build.wordmark_svg().replace('fill="#0B0816"', 'fill="#140B2E"')
+WORD_DARK = build.wordmark_svg().replace('fill="#FFFFFF"', 'fill="#140B2E"').replace('fill="#D8BBFF"', 'fill="#6B6391"')
 
 BASE_CSS = f'''
 @font-face {{ font-family: B; src: url({FONT}bricolage-variable.woff2); font-weight: 200 800; }}

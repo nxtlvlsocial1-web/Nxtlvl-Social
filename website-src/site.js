@@ -262,7 +262,7 @@
   var seed = 7; var rnd = function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
   var size = function () {
     var r = c.getBoundingClientRect(); W = r.width; H = r.height; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    stars = []; var n = Math.round(W * H / 16000);
+    stars = []; var n = Math.round(W * H / 9000);
     for (var i = 0; i < n; i++) stars.push({ x: rnd() * W, y: rnd() * H, r: rnd() * 1.2 + 0.2, p: rnd() * Math.PI * 2, s: 0.4 + rnd() * 1.2, v: rnd() < 0.15 });
   };
   var shoot = function () {
@@ -275,18 +275,18 @@
     ctx.clearRect(0, 0, W, H);
     for (var i = 0; i < stars.length; i++) {
       var s = stars[i], a = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t / 1000 * s.s + s.p));
-      ctx.globalAlpha = a * 0.55; ctx.fillStyle = s.v ? '#B46CFF' : '#7D18FC';
+      ctx.globalAlpha = a; ctx.fillStyle = s.v ? '#D8BBFF' : '#FFFFFF';
       ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
     }
-    nextShot -= dt; if (nextShot <= 0) { shoot(); nextShot = 5500 + Math.random() * 4500; }
+    nextShot -= dt; if (nextShot <= 0) { shoot(); nextShot = 3200 + Math.random() * 3200; }
     for (var j = shots.length - 1; j >= 0; j--) {
       var h = shots[j]; h.life += dt; h.x += h.dx * dt; h.y += h.dy * dt;
       var k = h.life / h.max, fade = k < 0.15 ? k / 0.15 : k > 0.75 ? Math.max(0, (1 - k) / 0.25) : 1;
       var n = Math.hypot(h.dx, h.dy), tx = h.x - h.dx / n * h.len, ty = h.y - h.dy / n * h.len;
-      var g = ctx.createLinearGradient(tx, ty, h.x, h.y); g.addColorStop(0, 'rgba(180,108,255,0)'); g.addColorStop(0.6, 'rgba(155,77,255,' + 0.35 * fade + ')'); g.addColorStop(1, 'rgba(125,24,252,' + 0.8 * fade + ')');
+      var g = ctx.createLinearGradient(tx, ty, h.x, h.y); g.addColorStop(0, 'rgba(169,92,255,0)'); g.addColorStop(0.6, 'rgba(216,187,255,' + 0.5 * fade + ')'); g.addColorStop(1, 'rgba(255,255,255,' + fade + ')');
       ctx.globalAlpha = 1; ctx.strokeStyle = g; ctx.lineWidth = 2; ctx.lineCap = 'round';
       ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(h.x, h.y); ctx.stroke();
-      ctx.globalAlpha = fade; ctx.fillStyle = '#7D18FC'; ctx.beginPath(); ctx.arc(h.x, h.y, 2.2, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = fade; ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.arc(h.x, h.y, 2.2, 0, Math.PI * 2); ctx.fill();
       ctx.globalAlpha = fade * 0.35; ctx.beginPath(); ctx.arc(h.x, h.y, 7, 0, Math.PI * 2); ctx.fill();
       if (h.life >= h.max) shots.splice(j, 1);
     }
@@ -399,4 +399,53 @@
   if (reduce || !('IntersectionObserver' in window)) { vids.forEach(function (v) { v.setAttribute('controls', ''); v.preload = 'metadata'; }); return; }
   var io = new IntersectionObserver(function (es) { es.forEach(function (e) { var v = e.target; if (e.isIntersecting) { v.preload = 'auto'; var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause(); }); }, { threshold: 0.25 });
   vids.forEach(function (v) { io.observe(v); });
+})();
+
+// ---------- dark theme motion: rising sparks, card spotlight and tilt, headings word by word ----------
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+  // sparks drifting up behind the page
+  var box = document.createElement('div'); box.className = 'sparks'; box.setAttribute('aria-hidden', 'true');
+  var n = window.innerWidth < 700 ? 14 : 28, html = '';
+  for (var i = 0; i < n; i++) {
+    var sz = (Math.random() * 2.5 + 1.5).toFixed(1);
+    html += '<i style="left:' + (Math.random() * 100).toFixed(1) + '%;width:' + sz + 'px;height:' + sz + 'px;animation-duration:' + (14 + Math.random() * 18).toFixed(1) + 's;animation-delay:-' + (Math.random() * 30).toFixed(1) + 's"></i>';
+  }
+  box.innerHTML = html; document.body.appendChild(box);
+  // spotlight follows the cursor; cards tilt a little
+  var fine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+  if (fine) document.querySelectorAll('.svc-c, .ind, .guide, .band').forEach(function (c) {
+    c.classList.add('tilt');
+    c.addEventListener('pointermove', function (e) {
+      var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      c.style.setProperty('--mx', (x * 100).toFixed(1) + '%'); c.style.setProperty('--my', (y * 100).toFixed(1) + '%');
+      if (!c.classList.contains('band')) { c.style.setProperty('--ry', ((x - 0.5) * 6).toFixed(2) + 'deg'); c.style.setProperty('--rx', ((0.5 - y) * 6).toFixed(2) + 'deg'); }
+    });
+    c.addEventListener('pointerleave', function () { c.style.setProperty('--rx', '0deg'); c.style.setProperty('--ry', '0deg'); });
+  });
+  // section headings rise word by word (text stays in the DOM for search)
+  var heads = document.querySelectorAll('.sec-head h2, .faq h2, .close h2');
+  heads.forEach(function (h) {
+    if (h.querySelector('.w')) return;
+    var k = 0;
+    var walk = function (node) {
+      [].slice.call(node.childNodes).forEach(function (ch) {
+        if (ch.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          ch.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+            var sp = document.createElement('span'); sp.className = 'w'; sp.style.setProperty('--i', k++); sp.textContent = part; frag.appendChild(sp);
+          });
+          node.replaceChild(frag, ch);
+        } else if (ch.nodeType === 1) walk(ch);
+      });
+    };
+    walk(h); h.classList.add('split');
+  });
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: 0.4 });
+    heads.forEach(function (h) { io.observe(h); });
+  } else heads.forEach(function (h) { h.classList.add('in'); });
 })();
