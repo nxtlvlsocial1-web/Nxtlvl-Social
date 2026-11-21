@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Clip Math 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* Clip Math: a 40 s reel on how one campaign's payout rules work.
+         Design: neon Miami night. Anton (heavy condensed) for numbers and headlines, Montserrat for labels and captions.
+         Safe text area: x 130-950, y 250-1500 (top 250, bottom 420, right 130 kept clear for Instagram's UI). */
+      @font-face { font-family: "Anton"; src: url("assets/fonts/anton.woff2") format("woff2"); font-weight: 400; font-style: normal; }
+      :root {
+        --bg0: #0A0612; --bg1: #2A0F4D; --violet: #8B5CF6; --pink: #FF3D9A; --orange: #FF8A3D;
+        --red: #FF2D46; --ink: #FFFFFF; --mute: #B9AEDB; --dead: #6E6488;
+        --display: "Anton", "League Gothic", sans-serif; --label: "Montserrat", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg0); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--bg0); color: var(--ink); }
+      .clip { position: absolute; inset: 0; }
+      .layer { position: absolute; inset: 0; }
+
+      /* ---------- background: gradient, drifting glows, neon floor, vignette ---------- */
+      .bg-base { position: absolute; inset: 0; background: linear-gradient(180deg, #0A0612 0%, #12082A 38%, #1E0B3C 70%, #2A0F4D 100%); }
+      .blob { position: absolute; border-radius: 50%; }
+      .b1 { left: -420px; top: -260px; width: 1500px; height: 1500px; background: radial-gradient(circle, rgba(139,92,246,.42) 0%, rgba(139,92,246,.12) 40%, rgba(139,92,246,0) 66%); }
+      .b2 { left: 120px; top: 980px; width: 1300px; height: 1300px; background: radial-gradient(circle, rgba(255,61,154,.26) 0%, rgba(255,61,154,.08) 42%, rgba(255,61,154,0) 66%); }
+      .b3 { left: -380px; top: 620px; width: 1100px; height: 1100px; background: radial-gradient(circle, rgba(255,138,61,.16) 0%, rgba(255,138,61,.05) 42%, rgba(255,138,61,0) 66%); }
+      .floor { position: absolute; left: -540px; width: 2160px; top: 1380px; height: 760px; perspective: 520px; perspective-origin: 50% 0%;
+        -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 45%, #000 100%); mask-image: linear-gradient(180deg, transparent 0%, #000 45%, #000 100%); opacity: .34; }
+      .floor-grid { position: absolute; left: 0; top: 0; width: 100%; height: 1600px; transform-origin: 50% 0%; transform: rotateX(72deg);
+        background-image: linear-gradient(rgba(255,61,154,.9) 2px, transparent 2px), linear-gradient(90deg, rgba(139,92,246,.9) 2px, transparent 2px);
+        background-size: 120px 120px; }
+      .vignette { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 62% at 50% 46%, rgba(0,0,0,0) 55%, rgba(5,2,10,.62) 100%); }
+
+      /* ---------- shared type ---------- */
+      .hl { position: absolute; left: 130px; right: 130px; text-align: center; font-family: var(--display); font-weight: 400; line-height: .95; text-transform: uppercase; color: var(--ink); }
+      .hl .ln { display: block; }
+      .ib { display: inline-block; }
+      .num { font-family: var(--display); font-weight: 400; line-height: 1; color: var(--ink); }
+      .gw { text-shadow: 0 0 18px rgba(139,92,246,.85), 0 0 54px rgba(139,92,246,.5); }
+      .gp { color: var(--pink); text-shadow: 0 0 18px rgba(255,61,154,.8), 0 0 56px rgba(255,61,154,.5); }
+      .go { color: var(--orange); text-shadow: 0 0 18px rgba(255,138,61,.8), 0 0 56px rgba(255,138,61,.45); }
+      .gr { color: var(--red); text-shadow: 0 0 16px rgba(255,45,70,.9), 0 0 50px rgba(255,45,70,.55); }
+      .lbl { font-family: var(--label); font-weight: 900; font-size: 28px; line-height: 1; letter-spacing: .24em; text-transform: uppercase; color: var(--mute); }
+
+      /* ---------- scene 1: the hook ---------- */
+      #s1-hook { top: 300px; font-size: 76px; }
+      .s1-block { position: absolute; left: 130px; right: 130px; text-align: center; }
+      #s1-vb { top: 520px; }
+      #s1-mb { top: 830px; }
+      #s1-v { font-size: 190px; margin-top: 18px; }
+      .s1-money { position: relative; height: 290px; margin-top: 14px; }
+      .s1-money .num { position: absolute; left: 0; right: 0; top: 0; font-size: 270px; }
+
+      /* ---------- scene 2: Not $1,000. ---------- */
+      #s2-not { top: 530px; font-size: 150px; }
+      #s2-big { position: absolute; left: 130px; right: 130px; top: 730px; text-align: center; }
+      #s2-num { position: relative; display: inline-block; font-size: 262px; }
+      #s2-strike { position: absolute; left: -3%; width: 106%; top: 47%; height: 28px; border-radius: 14px; background: var(--red);
+        box-shadow: 0 0 20px rgba(255,45,70,.9), 0 0 60px rgba(255,45,70,.6); transform-origin: 0% 50%; }
+
+      /* ---------- scene 3: receipt ---------- */
+      #s3-hl { top: 285px; }
+      #receipt { position: absolute; left: 260px; width: 560px; top: 610px; height: 610px; filter: drop-shadow(0 30px 50px rgba(0,0,0,.5)) drop-shadow(0 0 40px rgba(139,92,246,.45)); }
+      .paper { position: absolute; inset: 0; background: #F4EFFF; border-radius: 10px 10px 0 0; padding: 38px 42px 0; clip-path: polygon(0 0, 100% 0, 560px calc(100% - 18px), 540px 100%, 520px calc(100% - 18px), 500px 100%, 480px calc(100% - 18px), 460px 100%, 440px calc(100% - 18px), 420px 100%, 400px calc(100% - 18px), 380px 100%, 360px calc(100% - 18px), 340px 100%, 320px calc(100% - 18px), 300px 100%, 280px calc(100% - 18px), 260px 100%, 240px calc(100% - 18px), 220px 100%, 200px calc(100% - 18px), 180px 100%, 160px calc(100% - 18px), 140px 100%, 120px calc(100% - 18px), 100px 100%, 80px calc(100% - 18px), 60px 100%, 40px calc(100% - 18px), 20px 100%, 0px calc(100% - 18px));
+        color: #1B1030; }
+      .r-head { font: 900 34px/1 var(--label); letter-spacing: .2em; text-align: center; }
+      .r-sub { font: 700 22px/1 var(--label); letter-spacing: .3em; text-align: center; color: #7A6A9E; margin-top: 12px; }
+      .r-dash { border-top: 4px dashed #B9A9DD; margin: 26px 0 18px; }
+      .r-row { display: flex; align-items: baseline; height: 62px; }
+      .r-row .k { font: 800 30px/1 var(--label); letter-spacing: .08em; }
+      .r-row .dots { flex: 1; border-bottom: 4px dotted #B9A9DD; margin: 0 14px; transform: translateY(-6px); }
+      .r-row .v { font: 46px/1 var(--display); color: #8B5CF6; }
+      .r-total { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+      .r-total .k { font: 900 36px/1 var(--label); letter-spacing: .14em; }
+      .r-total .v { font: 104px/1 var(--display); color: var(--orange); }
+
+      /* ---------- scenes 4-6: the bar chart ---------- */
+      .s4-h { top: 270px; }
+      #s4-chip { position: absolute; left: 0; right: 0; top: 584px; text-align: center; }
+      #s4-chip span { display: inline-block; padding: 12px 26px; border-radius: 40px; border: 3px solid rgba(139,92,246,.95);
+        box-shadow: 0 0 18px rgba(139,92,246,.5); font: 900 26px/1 var(--label); letter-spacing: .2em; text-transform: uppercase; color: var(--ink); }
+      #s4-disc { position: absolute; left: 130px; right: 130px; top: 1250px; text-align: center; font: 600 24px/1.2 var(--label); color: rgba(255,255,255,.78); }
+      #ch-base { position: absolute; left: 150px; width: 780px; top: 1200px; height: 4px; background: rgba(255,255,255,.35); transform-origin: 0% 50%; }
+      #ch-bar, #ch-slice { position: absolute; left: 190px; width: 200px; }
+      #ch-bar { top: 760px; height: 440px; transform-origin: 50% 100%; border-radius: 6px 6px 0 0;
+        background: linear-gradient(0deg, #FF8A3D 0%, #FF5C6E 55%, #FF3D9A 100%); box-shadow: 0 0 30px rgba(255,61,154,.55), 0 0 80px rgba(255,138,61,.3); }
+      #ch-slice { top: 760px; height: 44px; border-radius: 6px 6px 0 0; background: linear-gradient(0deg, #FF4C8A, #FF3D9A); opacity: 0;
+        box-shadow: 0 0 26px rgba(255,61,154,.7); display: flex; align-items: center; justify-content: center; font: 900 30px/1 var(--label); color: #0A0612; }
+      #ch-blade { position: absolute; left: 150px; width: 280px; top: 801px; height: 6px; background: #fff; border-radius: 3px; transform-origin: 0% 50%;
+        box-shadow: 0 0 16px #fff, 0 0 40px rgba(255,61,154,.9); opacity: 0; }
+      #ch-cap { position: absolute; left: 150px; width: 780px; top: 754px; height: 10px; border-radius: 5px; background: var(--red);
+        box-shadow: 0 0 18px rgba(255,45,70,.95), 0 0 60px rgba(255,45,70,.6); }
+      #ch-caplbl { position: absolute; right: 150px; top: 704px; font: 900 32px/1 var(--label); letter-spacing: .12em; }
+      .spark { position: absolute; left: 286px; top: 754px; width: 10px; height: 10px; border-radius: 50%; background: #FFE3EE; box-shadow: 0 0 12px #FF3D9A, 0 0 24px #FF8A3D; opacity: 0; }
+      #ch-read { position: absolute; left: 460px; width: 470px; top: 800px; }
+      #ch-v { font-size: 110px; margin: 14px 0 26px; }
+      #ch-m { font-size: 170px; display: inline-block; transform-origin: 0% 60%; }
+      #ch-uline { width: 300px; height: 8px; border-radius: 4px; background: var(--pink); box-shadow: 0 0 18px rgba(255,61,154,.8); transform-origin: 0% 50%; margin-top: 6px; }
+      .plus0 { position: absolute; left: 356px; top: 236px; font: 900 42px/1 var(--label); color: var(--mute); opacity: 0; }
+
+      /* ---------- scene 7: clip timeline ---------- */
+      #s7-hl { top: 290px; }
+      #player { position: absolute; left: 130px; width: 820px; top: 690px; height: 480px; border-radius: 36px; background: rgba(255,255,255,.05);
+        border: 3px solid rgba(139,92,246,.55); box-shadow: 0 0 40px rgba(139,92,246,.25), inset 0 0 40px rgba(139,92,246,.12); }
+      #p-head { position: absolute; left: 170px; top: 728px; display: flex; align-items: center; gap: 16px; }
+      #p-head i { display: block; width: 0; height: 0; border-left: 26px solid var(--ink); border-top: 16px solid transparent; border-bottom: 16px solid transparent; }
+      #p-earn { position: absolute; left: 170px; width: 185px; top: 880px; text-align: center; font-size: 92px; }
+      #p-zero { position: absolute; left: 355px; width: 555px; top: 800px; text-align: center; font-size: 170px; color: #8C82A8; text-shadow: 0 0 30px rgba(140,130,168,.35); }
+      #p-track { position: absolute; left: 170px; width: 740px; top: 1010px; height: 34px; border-radius: 17px; background: rgba(255,255,255,.1); overflow: hidden; transform-origin: 0% 50%; }
+      #p-fill { position: absolute; left: 0; top: 0; width: 185px; height: 100%; background: linear-gradient(90deg, #FF8A3D, #FF3D9A); transform-origin: 0% 50%; }
+      #p-dead { position: absolute; left: 185px; top: 0; width: 555px; height: 100%; transform-origin: 0% 50%;
+        background: repeating-linear-gradient(45deg, rgba(150,140,180,.55) 0 12px, rgba(110,100,140,.55) 12px 24px); }
+      #p-mark { position: absolute; left: 353px; top: 968px; width: 5px; height: 88px; border-radius: 3px; background: var(--orange); box-shadow: 0 0 16px rgba(255,138,61,.9); transform-origin: 50% 100%; }
+      #p-head2 { position: absolute; left: 148px; top: 1005px; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 0 20px #fff, 0 0 40px rgba(139,92,246,.9); }
+      .p-tick { position: absolute; top: 1070px; font: 900 30px/1 var(--label); letter-spacing: .06em; color: var(--mute); }
+
+      /* ---------- scene 8: pattern break ---------- */
+      #s8 { background: var(--pink); overflow: hidden; }
+      #s8-stripes { position: absolute; left: -400px; top: -200px; width: 2400px; height: 2400px; transform: rotate(-24deg);
+        background: repeating-linear-gradient(90deg, rgba(10,6,18,.0) 0 90px, rgba(10,6,18,.07) 90px 180px); }
+      #s8-words { position: absolute; left: 150px; top: 560px; font-family: var(--display); font-size: 230px; line-height: .92; color: #0A0612; text-transform: uppercase; }
+      #s8-words span { display: block; }
+
+      /* ---------- scenes 9-11: five clips vs one ---------- */
+      .s9-h { top: 280px; }
+      .phone { position: absolute; top: 740px; width: 150px; height: 300px; border-radius: 28px; background: linear-gradient(180deg, #23103F, #140A26);
+        border: 3px solid rgba(139,92,246,.95); box-shadow: 0 0 24px rgba(139,92,246,.55), inset 0 0 22px rgba(139,92,246,.22); }
+      .phone .notch { position: absolute; top: 14px; left: 53px; width: 44px; height: 10px; border-radius: 6px; background: rgba(255,255,255,.28); }
+      .phone .pv { position: absolute; left: 0; right: 0; top: 46px; text-align: center; font: 56px/1 var(--display); color: var(--ink); }
+      .phone .pl { position: absolute; left: 0; right: 0; top: 110px; text-align: center; font: 900 28px/1 var(--label); letter-spacing: .03em; color: var(--mute); }
+      .phone .pm { position: absolute; left: 0; right: 0; top: 150px; text-align: center; font: 66px/1 var(--display); }
+      .phone .pbar { position: absolute; left: 20px; right: 20px; bottom: 34px; height: 14px; border-radius: 7px; background: rgba(255,255,255,.14); }
+      .phone .pfill { position: absolute; left: 0; top: 0; width: 100%; height: 100%; border-radius: 7px; background: linear-gradient(90deg, #FF8A3D, #FF3D9A); transform-origin: 0% 50%; }
+      .phone .pcap { position: absolute; right: -2px; top: -7px; width: 4px; height: 28px; border-radius: 2px; background: var(--red); box-shadow: 0 0 10px rgba(255,45,70,.9); }
+      .bigcard { position: absolute; top: 640px; width: 390px; height: 400px; border-radius: 40px; background: linear-gradient(180deg, #24113F, #150A28);
+        border: 4px solid rgba(139,92,246,.95); box-shadow: 0 0 34px rgba(139,92,246,.55), inset 0 0 30px rgba(139,92,246,.2); text-align: center; }
+      .bigcard .notch { position: absolute; top: 20px; left: 165px; width: 60px; height: 12px; border-radius: 6px; background: rgba(255,255,255,.28); }
+      .bigcard .lbl { position: absolute; left: 0; right: 0; top: 58px; color: var(--ink); font-size: 30px; }
+      .bigcard .bv { position: absolute; left: 0; right: 0; top: 106px; font: 76px/1 var(--display); }
+      .bigcard .bvl { position: absolute; left: 0; right: 0; top: 192px; }
+      .bigcard .bm { position: absolute; left: 0; right: 0; top: 242px; font: 124px/1 var(--display); }
+      #tot { left: 345px; }
+      #one { left: 130px; }
+      #fee { position: absolute; left: 250px; top: -30px; padding: 12px 22px; border-radius: 30px; background: var(--violet); box-shadow: 0 0 24px rgba(139,92,246,.8);
+        font: 52px/1 var(--display); color: var(--ink); }
+      #split-div { position: absolute; left: 539px; top: 630px; width: 3px; height: 470px; background: rgba(255,255,255,.35); transform-origin: 50% 0%; }
+      #stamp { position: absolute; left: 0; right: 0; top: 1112px; text-align: center; }
+      #stamp span { display: inline-block; padding: 4px 38px 8px; border-radius: 30px; background: var(--pink); color: #0A0612; font: 156px/1 var(--display);
+        box-shadow: 0 0 0 8px #0A0612, 0 0 0 14px var(--pink), 0 0 60px rgba(255,61,154,.8); }
+      .cap-under { position: absolute; top: 1060px; width: 390px; text-align: center; }
+
+      /* ---------- scene 12: warning card ---------- */
+      #s12-chip { position: absolute; left: 0; right: 0; top: 330px; text-align: center; }
+      #s12-chip span { display: inline-block; padding: 14px 30px; border-radius: 40px; background: var(--orange); color: #0A0612; font: 900 34px/1 var(--label); letter-spacing: .2em; text-transform: uppercase; }
+      #warn { position: absolute; left: 130px; width: 820px; top: 420px; height: 760px; border-radius: 34px; overflow: hidden; background: linear-gradient(180deg, #1E0D33, #130820);
+        border: 5px solid var(--orange); box-shadow: 0 0 40px rgba(255,138,61,.45), inset 0 0 40px rgba(255,138,61,.12); }
+      #hazard { position: absolute; left: -100px; right: -100px; top: 0; height: 56px; background: repeating-linear-gradient(-45deg, #FF8A3D 0 34px, #0A0612 34px 68px); }
+      #w-icon { position: absolute; left: 330px; top: 92px; width: 160px; height: 146px; }
+      #w-t1 { position: absolute; left: 0; right: 0; top: 280px; text-align: center; font: 112px/.95 var(--display); text-transform: uppercase; }
+      #w-t1 span { display: block; }
+      #w-t2 { position: absolute; left: 0; right: 0; top: 518px; text-align: center; font: 800 42px/1.1 var(--label); color: var(--orange); }
+      #w-meter { position: absolute; left: 70px; right: 70px; top: 632px; }
+      #w-track { margin-top: 16px; height: 30px; border-radius: 15px; background: rgba(255,255,255,.12); overflow: hidden; }
+      #w-fill { width: 100%; height: 100%; border-radius: 15px; background: linear-gradient(90deg, #FF3D9A, #FF8A3D); transform-origin: 0% 50%; }
+      #wipe4 { background: repeating-linear-gradient(-45deg, #FF8A3D 0 70px, #0A0612 70px 140px); }
+
+      /* ---------- scene 13: comment ---------- */
+      #s13-hl { top: 470px; }
+      #cbox { position: absolute; left: 130px; width: 820px; top: 710px; height: 220px; border-radius: 44px; background: rgba(255,255,255,.07);
+        border: 4px solid rgba(139,92,246,.95); box-shadow: 0 0 36px rgba(139,92,246,.55), inset 0 0 30px rgba(139,92,246,.18); }
+      #c-av { position: absolute; left: 34px; top: 62px; width: 96px; height: 96px; border-radius: 50%; background: linear-gradient(135deg, #8B5CF6, #FF3D9A 70%, #FF8A3D); }
+      #c-typed { position: absolute; left: 158px; top: 38px; height: 150px; display: flex; align-items: center; font: 150px/1 var(--display); }
+      #c-typed .ch { display: none; }
+      #caret { display: inline-block; width: 7px; height: 118px; margin-left: 10px; border-radius: 3px; background: var(--ink); box-shadow: 0 0 12px #fff; }
+      #send { position: absolute; right: 30px; top: 50px; width: 120px; height: 120px; border-radius: 50%; background: var(--violet); box-shadow: 0 0 30px rgba(139,92,246,.9); }
+      #send svg, #plane svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+      #plane { position: absolute; left: 800px; top: 760px; width: 120px; height: 120px; opacity: 0; }
+
+      /* ---------- global overlays ---------- */
+      .wipe { position: absolute; top: -200px; height: 2320px; width: 1500px; left: 0; }
+      #wipe1 { background: linear-gradient(90deg, #6D3FE0, #8B5CF6 60%, #B18CFF); }
+      #wipe2 { left: -200px; width: 1480px; top: 0; height: 2300px; background: linear-gradient(0deg, #FF3D9A, #FF6FB5); }
+      #wipe3 { background: linear-gradient(270deg, #FF8A3D, #FFA766); }
+      #flash { position: absolute; inset: 0; background: #FFF4FB; opacity: 0; }
+      #caps { position: absolute; left: 130px; right: 130px; top: 1300px; height: 172px; }
+      .cap { position: absolute; inset: 0; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; column-gap: 18px; opacity: 0; }
+      .cap .w { display: inline-block; font: 900 58px/1.12 var(--label); text-transform: uppercase; color: var(--ink);
+        text-shadow: 0 5px 0 #0A0612, 0 0 24px rgba(10,6,18,.9); }
+      .cap .w.ao { color: var(--orange); text-shadow: 0 5px 0 #0A0612, 0 0 26px rgba(255,138,61,.55); }
+      .cap .w.ap { color: var(--pink); text-shadow: 0 5px 0 #0A0612, 0 0 26px rgba(255,61,154,.55); }
+      #prog { position: absolute; left: 40px; right: 40px; top: 34px; height: 6px; border-radius: 3px; background: rgba(255,255,255,.16); overflow: hidden; }
+      #prog-fill { width: 100%; height: 100%; border-radius: 3px; background: linear-gradient(90deg, #8B5CF6, #FF3D9A 60%, #FF8A3D); transform-origin: 0% 50%; }
+      #grain { position: absolute; left: -80px; top: -80px; width: 1240px; height: 2080px; background: url("assets/img/grain.png"); opacity: .09; mix-blend-mode: overlay; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="40" data-width="1080" data-height="1920">
+      <!-- background (whole reel) -->
+      <div id="bg" class="clip" data-start="0" data-duration="40" data-track-index="0">
+        <div class="bg-base"></div>
+        <div class="blob b1" id="b1"></div>
+        <div class="blob b2" id="b2"></div>
+        <div class="blob b3" id="b3"></div>
+        <div class="floor"><div class="floor-grid" id="floor-grid"></div></div>
+        <div class="vignette"></div>
+      </div>
+
+      <div id="stage" class="layer">
+        <!-- 1 · 0-3 s · hook -->
+        <section id="s1" class="clip" data-start="0" data-duration="3" data-track-index="1">
+          <div class="hl" id="s1-hook"><span class="ln">1,000,000 views = <span class="gp">$225</span></span></div>
+          <div class="s1-block" id="s1-vb">
+            <div class="lbl">Views</div>
+            <div class="num gw" id="s1-v">0</div>
+          </div>
+          <div class="s1-block" id="s1-mb">
+            <div class="lbl">Pays</div>
+            <div class="s1-money">
+              <div class="num go" id="s1-m">$0</div>
+              <div class="num gp" id="s1-m2" style="opacity: 0">$225</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2 · 3-5 s · Not $1,000. -->
+        <section id="s2" class="clip" data-start="3" data-duration="2" data-track-index="1">
+          <div class="hl" id="s2-not"><span class="ln ib" id="s2-not-t">Not</span></div>
+          <div id="s2-big"><span class="num" id="s2-num">$1,000.<i id="s2-strike"></i></span></div>
+        </section>
+
+        <!-- 3 · 5-7 s · The math nobody shows you -->
+        <section id="s3" class="clip" data-start="5" data-duration="2" data-track-index="1">
+          <div class="hl" id="s3-hl">
+            <span class="ln" id="s3-l1" style="font-size: 150px">The math</span>
+            <span class="ln gp" id="s3-l2" style="font-size: 76px">nobody shows you</span>
+          </div>
+          <div id="receipt">
+            <div class="paper">
+              <div class="r-head">CLIP PAYOUT</div>
+              <div class="r-sub">THE FULL MATH</div>
+              <div class="r-dash"></div>
+              <div class="r-row" id="r1"><span class="k">VIEWS</span><span class="dots"></span><span class="v">?</span></div>
+              <div class="r-row" id="r2"><span class="k">RATE</span><span class="dots"></span><span class="v">?</span></div>
+              <div class="r-row" id="r3"><span class="k">CAP</span><span class="dots"></span><span class="v">?</span></div>
+              <div class="r-row" id="r4"><span class="k">FEE</span><span class="dots"></span><span class="v">?</span></div>
+              <div class="r-dash"></div>
+              <div class="r-total" id="r5"><span class="k">TOTAL</span><span class="v">$???</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4-6 · 7-18 s · $1 per 1,000 views → capped at $250 → -10% fee (one chart) -->
+        <section id="s4" class="clip" data-start="7" data-duration="11" data-track-index="1">
+          <div class="hl s4-h" id="s4-hA">
+            <span class="ln" id="s4-a1"><span class="ib go" style="font-size: 200px">$1</span></span>
+            <span class="ln" id="s4-a2" style="font-size: 84px">per 1,000 views</span>
+          </div>
+          <div class="hl s4-h" id="s4-hB">
+            <span class="ln" id="s4-b1" style="font-size: 84px">Capped at</span>
+            <span class="ln" id="s4-b2"><span class="gr" style="font-size: 190px">$250</span> <span style="font-size: 84px">per clip</span></span>
+          </div>
+          <div class="hl s4-h" id="s4-hC">
+            <span class="ln" id="s4-c1"><span class="ib gp" style="font-size: 200px">-10%</span></span>
+            <span class="ln" id="s4-c2" style="font-size: 84px">platform fee</span>
+          </div>
+          <div id="s4-chip"><span>Dylan Page campaign</span></div>
+          <div id="ch-base"></div>
+          <div id="ch-bar"></div>
+          <div id="ch-slice">-10%</div>
+          <div id="ch-cap"></div>
+          <div id="ch-caplbl" class="gr">CAP $250</div>
+          <div id="ch-blade"></div>
+          <div class="spark" id="sp0"></div><div class="spark" id="sp1"></div><div class="spark" id="sp2"></div><div class="spark" id="sp3"></div>
+          <div class="spark" id="sp4"></div><div class="spark" id="sp5"></div><div class="spark" id="sp6"></div><div class="spark" id="sp7"></div>
+          <div id="ch-read">
+            <div class="lbl">Views</div>
+            <div class="num gw" id="ch-v">0</div>
+            <div class="lbl">Earned</div>
+            <div class="num go" id="ch-m">$0</div>
+            <div id="ch-uline"></div>
+            <div class="plus0" id="pz0">+$0</div><div class="plus0" id="pz1">+$0</div><div class="plus0" id="pz2">+$0</div>
+          </div>
+          <div id="s4-disc">Rates as of 20 Nov 2026. Check the campaign page.</div>
+        </section>
+
+        <!-- 7 · 18-21 s · stops earning at 250K views -->
+        <section id="s7" class="clip" data-start="18" data-duration="3" data-track-index="1">
+          <div class="hl" id="s7-hl">
+            <span class="ln" id="s7-l1" style="font-size: 84px">Stops earning at</span>
+            <span class="ln" id="s7-l2"><span class="go" style="font-size: 200px">250K</span> <span style="font-size: 84px">views</span></span>
+          </div>
+          <div id="player"></div>
+          <div id="p-head"><i></i><span class="lbl" style="color: var(--ink)">Your clip</span></div>
+          <div class="num gp" id="p-earn">$225</div>
+          <div class="num" id="p-zero">$0</div>
+          <div id="p-track"><div id="p-fill"></div><div id="p-dead"></div></div>
+          <div id="p-mark"></div>
+          <div id="p-head2"></div>
+          <div class="p-tick" style="left: 160px">0</div>
+          <div class="p-tick" id="p-t250" style="left: 316px; color: var(--orange)">250K</div>
+          <div class="p-tick" style="left: 872px">1M</div>
+        </section>
+
+        <!-- 8 · 21-23 s · Now watch this. (clean frame, pattern break) -->
+        <section id="s8" class="clip" data-start="21" data-duration="2" data-track-index="1">
+          <div id="s8-stripes"></div>
+          <div id="s8-words"><span id="s8-w1">Now</span><span id="s8-w2">watch</span><span id="s8-w3">this.</span></div>
+        </section>
+
+        <!-- 9-11 · 23-34 s · 5 clips x 200K → same 1M = $900 → stop chasing one viral clip -->
+        <section id="s9" class="clip" data-start="23" data-duration="11" data-track-index="1">
+          <div class="hl s9-h" id="s9-hD">
+            <span class="ln" id="s9-d1"><span class="go" style="font-size: 170px">5</span> <span style="font-size: 90px">clips</span></span>
+            <span class="ln" id="s9-d2"><span style="font-size: 90px; text-transform: none">x</span> <span class="gp" style="font-size: 170px">200K</span> <span style="font-size: 90px">views</span></span>
+          </div>
+          <div class="hl s9-h" id="s9-hE">
+            <span class="ln" id="s9-e1" style="font-size: 100px">Same 1M views</span>
+            <span class="ln" id="s9-e2"><span style="font-size: 110px">=</span> <span class="gp" style="font-size: 190px">$900</span></span>
+          </div>
+          <div class="hl s9-h" id="s9-hF">
+            <span class="ln" id="s9-f1" style="font-size: 100px">Stop chasing</span>
+            <span class="ln" id="s9-f2" style="font-size: 104px"><span class="go">One</span> viral clip</span>
+          </div>
+
+          <div class="bigcard" id="one">
+            <div class="notch"></div>
+            <div class="lbl">1 clip</div>
+            <div class="bv">1M</div>
+            <div class="bvl lbl">views</div>
+            <div class="bm gp">$225</div>
+          </div>
+          <div id="split-div"></div>
+
+          <div class="phone" id="ph0" style="left: 130px"><div class="notch"></div><div class="pv">0</div><div class="pl">VIEWS</div><div class="pm go">$0</div><div class="pbar"><div class="pfill"></div><div class="pcap"></div></div></div>
+          <div class="phone" id="ph1" style="left: 297px"><div class="notch"></div><div class="pv">0</div><div class="pl">VIEWS</div><div class="pm go">$0</div><div class="pbar"><div class="pfill"></div><div class="pcap"></div></div></div>
+          <div class="phone" id="ph2" style="left: 465px"><div class="notch"></div><div class="pv">0</div><div class="pl">VIEWS</div><div class="pm go">$0</div><div class="pbar"><div class="pfill"></div><div class="pcap"></div></div></div>
+          <div class="phone" id="ph3" style="left: 633px"><div class="notch"></div><div class="pv">0</div><div class="pl">VIEWS</div><div class="pm go">$0</div><div class="pbar"><div class="pfill"></div><div class="pcap"></div></div></div>
+          <div class="phone" id="ph4" style="left: 800px"><div class="notch"></div><div class="pv">0</div><div class="pl">VIEWS</div><div class="pm go">$0</div><div class="pbar"><div class="pfill"></div><div class="pcap"></div></div></div>
+
+          <div class="bigcard" id="tot">
+            <div class="notch"></div>
+            <div class="lbl">5 clips</div>
+            <div class="bv">1M</div>
+            <div class="bvl lbl">views</div>
+            <div class="bm go" id="tot-m">$1,000</div>
+            <div id="fee">-10%</div>
+          </div>
+          <div class="cap-under lbl" id="u-one" style="left: 130px">Viral clip</div>
+          <div class="cap-under lbl" id="u-tot" style="left: 560px">Five clips</div>
+          <div id="stamp"><span id="stamp-t">4x</span></div>
+        </section>
+
+        <!-- 12 · 34-37 s · warning -->
+        <section id="s12" class="clip" data-start="34" data-duration="3" data-track-index="1">
+          <div id="s12-chip"><span>One catch</span></div>
+          <div id="warn">
+            <div id="hazard"></div>
+            <svg id="w-icon" viewBox="0 0 160 146" aria-hidden="true">
+              <path d="M80 8 L152 136 L8 136 Z" fill="none" stroke="#FF8A3D" stroke-width="12" stroke-linejoin="round" />
+              <rect x="73" y="48" width="14" height="50" rx="7" fill="#FF8A3D" />
+              <circle cx="80" cy="116" r="9" fill="#FF8A3D" />
+            </svg>
+            <div id="w-t1"><span>Budgets run</span><span>out fast.</span></div>
+            <div id="w-t2">Check the campaign page.</div>
+            <div id="w-meter"><div class="lbl">Campaign budget</div><div id="w-track"><div id="w-fill"></div></div></div>
+          </div>
+        </section>
+
+        <!-- 13 · 37-40 s · Comment MATH (ends on a clean frame that cuts back to scene 1) -->
+        <section id="s13" class="clip" data-start="37" data-duration="3" data-track-index="1">
+          <div class="hl" id="s13-hl"><span class="ln ib" id="s13-l1" style="font-size: 150px">Comment</span></div>
+          <div id="cbox">
+            <div id="c-av"></div>
+            <div id="c-typed" class="gp"><span class="ch" id="ty0">M</span><span class="ch" id="ty1">A</span><span class="ch" id="ty2">T</span><span class="ch" id="ty3">H</span><i id="caret"></i></div>
+            <div id="send"><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M36 60 L86 38 L72 88 L62 66 Z" fill="#fff" /><path d="M62 66 L86 38" stroke="#8B5CF6" stroke-width="4" /></svg></div>
+          </div>
+          <div id="plane"><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M20 62 L104 22 L80 102 L62 72 Z" fill="#FF3D9A" /><path d="M62 72 L104 22" stroke="#0A0612" stroke-width="5" /></svg></div>
+        </section>
+      </div>
+
+      <!-- transitions -->
+      <div id="wipes" class="layer">
+        <div class="wipe" id="wipe1"></div>
+        <div class="wipe" id="wipe2"></div>
+        <div class="wipe" id="wipe3"></div>
+        <div class="wipe" id="wipe4"></div>
+      </div>
+
+      <!-- captions: word by word, lower middle (y 1300-1472) -->
+      <div id="caps" class="clip" data-start="0" data-duration="40" data-track-index="5"></div>
+
+      <div id="flash" class="layer"></div>
+
+      <!-- progress bar fills over the whole reel -->
+      <div id="prog" class="clip" data-start="0" data-duration="40" data-track-index="6"><div id="prog-fill"></div></div>
+
+      <div id="grain-wrap" class="clip" data-start="0" data-duration="40" data-track-index="7"><div id="grain"></div></div>
+
+      <!-- sound: licence-free SFX (Pixabay Content License), pre-mixed by build/sfx.py; no voice, no music -->
+      <audio id="sfx" src="assets/audio/sfx.wav" data-start="0" data-duration="40" data-track-index="10" data-volume="1"></audio>
+    </div>
+
+    <script>
+      /* CAPTIONS:BEGIN (generated by build/captions.mjs from build/captions.json; edit there) */
+      const CAPTIONS = [{"s":0,"e":0.8,"screen":true,"words":[{"w":"A","a":"","t":0},{"w":"million-view","a":"p","t":0}]},{"s":0.8,"e":1.55,"screen":true,"words":[{"w":"GTA","a":"","t":0.8},{"w":"6","a":"","t":0.975},{"w":"clip","a":"","t":1.15}]},{"s":1.55,"e":2.95,"screen":true,"words":[{"w":"pays","a":"","t":1.55},{"w":"$225.","a":"o","t":1.95}]},{"s":3.05,"e":4.9,"screen":true,"words":[{"w":"Not","a":"","t":3.05},{"w":"a","a":"","t":3.35},{"w":"thousand.","a":"p","t":3.65}]},{"s":5.05,"e":5.95,"screen":true,"words":[{"w":"Here's","a":"","t":5.05},{"w":"the","a":"","t":5.26},{"w":"math","a":"p","t":5.47}]},{"s":5.95,"e":6.95,"screen":true,"words":[{"w":"nobody","a":"p","t":5.95},{"w":"shows","a":"","t":6.183},{"w":"you.","a":"","t":6.417}]},{"s":7.05,"e":8.3,"screen":true,"words":[{"w":"Dylan","a":"","t":7.05},{"w":"Page's","a":"","t":7.342},{"w":"campaign","a":"","t":7.633}]},{"s":8.3,"e":9.3,"screen":true,"words":[{"w":"pays","a":"","t":8.3},{"w":"$1","a":"o","t":8.6}]},{"s":9.3,"e":10.95,"screen":true,"words":[{"w":"per","a":"","t":9.3},{"w":"1,000","a":"o","t":9.6},{"w":"views.","a":"","t":9.9}]},{"s":11.05,"e":12.1,"screen":true,"words":[{"w":"But","a":"","t":11.05},{"w":"every","a":"","t":11.295},{"w":"clip","a":"","t":11.54}]},{"s":12.1,"e":13,"screen":true,"words":[{"w":"is","a":"","t":12.1},{"w":"capped","a":"p","t":12.22}]},{"s":13,"e":14.95,"screen":true,"words":[{"w":"at","a":"","t":13},{"w":"$250.","a":"o","t":13.3}]},{"s":15.05,"e":16.1,"screen":true,"words":[{"w":"Then","a":"","t":15.05},{"w":"the","a":"","t":15.295},{"w":"platform","a":"","t":15.54}]},{"s":16.1,"e":17.95,"screen":true,"words":[{"w":"takes","a":"","t":16.1},{"w":"10%.","a":"o","t":16.4}]},{"s":18.05,"e":18.9,"screen":true,"words":[{"w":"So","a":"","t":18.05},{"w":"your","a":"","t":18.248},{"w":"clip","a":"","t":18.447}]},{"s":18.9,"e":19.8,"screen":true,"words":[{"w":"stops","a":"p","t":18.9},{"w":"earning","a":"","t":19.2}]},{"s":19.8,"e":20.95,"screen":true,"words":[{"w":"at","a":"","t":19.8},{"w":"250K","a":"o","t":20.068},{"w":"views.","a":"","t":20.337}]},{"s":23.05,"e":24.2,"screen":true,"words":[{"w":"5","a":"o","t":23.05},{"w":"clips","a":"","t":23.35}]},{"s":24.2,"e":25.4,"screen":true,"words":[{"w":"at","a":"","t":24.2},{"w":"200K","a":"o","t":24.5}]},{"s":25.4,"e":27.95,"screen":true,"words":[{"w":"views","a":"","t":25.4},{"w":"each.","a":"p","t":25.7}]},{"s":28.05,"e":29.1,"screen":true,"words":[{"w":"Same","a":"","t":28.05},{"w":"million","a":"p","t":28.295},{"w":"views.","a":"","t":28.54}]},{"s":29.1,"e":30.6,"screen":true,"words":[{"w":"That","a":"","t":29.1},{"w":"pays","a":"","t":29.4},{"w":"$900.","a":"o","t":29.9}]},{"s":30.6,"e":31.95,"screen":true,"words":[{"w":"4","a":"o","t":30.6},{"w":"times","a":"o","t":30.85},{"w":"more.","a":"","t":31}]},{"s":32.05,"e":32.95,"screen":true,"words":[{"w":"So","a":"","t":32.05},{"w":"stop","a":"p","t":32.26},{"w":"chasing","a":"","t":32.47}]},{"s":32.95,"e":33.95,"screen":true,"words":[{"w":"one","a":"p","t":32.95},{"w":"viral","a":"","t":33.183},{"w":"clip.","a":"","t":33.417}]},{"s":34.05,"e":34.7,"screen":true,"words":[{"w":"One","a":"","t":34.05},{"w":"catch:","a":"p","t":34.277}]},{"s":34.7,"e":35.75,"screen":true,"words":[{"w":"budgets","a":"","t":34.7},{"w":"run","a":"","t":34.884},{"w":"out","a":"","t":35.068},{"w":"fast.","a":"p","t":35.251}]},{"s":35.75,"e":36.35,"screen":true,"words":[{"w":"Check","a":"","t":35.75},{"w":"the","a":"","t":35.89},{"w":"campaign","a":"","t":36.03}]},{"s":36.35,"e":36.95,"screen":true,"words":[{"w":"page","a":"","t":36.35},{"w":"first.","a":"p","t":36.56}]},{"s":37.05,"e":38.05,"screen":true,"words":[{"w":"Comment","a":"","t":37.05},{"w":"MATH","a":"p","t":37.35}]},{"s":38.05,"e":38.9,"screen":true,"words":[{"w":"and","a":"","t":38.05},{"w":"I'll","a":"","t":38.199},{"w":"send","a":"","t":38.347},{"w":"you","a":"","t":38.496}]},{"s":38.9,"e":39.75,"screen":true,"words":[{"w":"the","a":"","t":38.9},{"w":"full","a":"","t":39.049},{"w":"rate","a":"p","t":39.197},{"w":"list.","a":"p","t":39.346}]}];
+      /* CAPTIONS:END */
+
+      const tl = gsap.timeline({ paused: true });
+      const FPS = 30;
+      const $ = (s) => document.querySelector(s);
+
+      // ---------- helpers (all seek-safe: tweens and per-frame sets on the one paused timeline) ----------
+      const commas = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      const money = (n) => "$" + commas(n);
+      const kfmt = (n) => (n >= 1000 ? Math.round(n / 1000) + "K" : String(Math.round(n)));
+      function count(el, from, to, t0, dur, fmt, ease = "none") {
+        const e = gsap.parseEase(ease), n = Math.max(1, Math.round(dur * FPS));
+        for (let i = 0; i <= n; i++) {
+          const p = i / n;
+          tl.set(el, { textContent: fmt(from + (to - from) * e(p)) }, t0 + p * dur);
+        }
+      }
+      function shake(t, amp = 18, dur = 0.32) {
+        const k = [], steps = 8;
+        for (let i = 0; i < steps; i++) {
+          const f = 1 - i / steps, s = i % 2 ? -1 : 1;
+          k.push({ x: s * amp * f, y: -s * amp * 0.6 * f * (i % 3 ? 1 : -1), duration: dur / (steps + 1) });
+        }
+        k.push({ x: 0, y: 0, duration: dur / (steps + 1) });
+        tl.to("#stage", { keyframes: k, ease: "none" }, t);
+      }
+      function flash(t, a = 0.5) {
+        tl.fromTo("#flash", { opacity: a }, { opacity: 0, duration: 0.18, ease: "power2.out", immediateRender: false }, t);
+      }
+      function slam(sel, t, from = 1.7, dur = 0.34) {
+        tl.fromTo(sel, { scale: from, opacity: 0 }, { scale: 1, opacity: 1, duration: dur, ease: "back.out(2.2)" }, t);
+      }
+      function snapUp(sel, t, dist = 70, dur = 0.28) {
+        tl.fromTo(sel, { y: dist, opacity: 0 }, { y: 0, opacity: 1, duration: dur, ease: "back.out(1.8)" }, t);
+      }
+      function snapX(sel, t, dist = 300, dur = 0.3) {
+        tl.fromTo(sel, { x: dist, opacity: 0 }, { x: 0, opacity: 1, duration: dur, ease: "back.out(1.6)" }, t);
+      }
+      function out(sel, t, dur = 0.16) {
+        tl.to(sel, { y: -50, opacity: 0, duration: dur, ease: "power3.in" }, t);
+      }
+      function pop(sel, t, s = 1.12, dur = 0.24) {
+        tl.fromTo(sel, { scale: s }, { scale: 1, duration: dur, ease: "back.out(3)", immediateRender: false }, t);
+      }
+      // mulberry32: seeded PRNG for the grain jitter
+      function rng(a) { return function () { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+
+      // ---------- global: background drift (cycles fit 40 s exactly, so the last frame matches the first) ----------
+      tl.fromTo("#b1", { x: 0, y: 0 }, { x: 280, y: 200, duration: 10, ease: "sine.inOut", yoyo: true, repeat: 3 }, 0);
+      tl.fromTo("#b2", { x: 0, y: 0 }, { x: -300, y: -220, duration: 20, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0);
+      tl.fromTo("#b3", { x: 0, y: 0, scale: 1 }, { x: 260, y: -160, scale: 1.25, duration: 10, ease: "sine.inOut", yoyo: true, repeat: 3 }, 0);
+      tl.fromTo("#floor-grid", { backgroundPosition: "0px 0px" }, { backgroundPosition: "0px 120px", duration: 2.5, ease: "none", repeat: 15 }, 0);
+      tl.fromTo("#prog-fill", { scaleX: 0 }, { scaleX: 1, duration: 40, ease: "none" }, 0);
+      const r = rng(20261120);
+      for (let t = 0; t < 40; t += 1 / 15) tl.set("#grain", { x: Math.round(r() * 80 - 40), y: Math.round(r() * 80 - 40) }, +t.toFixed(4));
+
+      // ---------- 1 · hook (0-3) : full line on screen at frame 0 ----------
+      tl.fromTo("#s1-hook", { scale: 1 }, { scale: 1.04, duration: 3, ease: "none" }, 0);
+      count("#s1-v", 0, 1000000, 0.15, 1.7, commas, "power1.inOut");
+      count("#s1-m", 0, 1000, 0.15, 1.7, money, "power1.inOut");
+      tl.fromTo("#s1-v", { scale: 1 }, { scale: 1.06, duration: 1.7, ease: "power1.in" }, 0.15);
+      tl.set("#s1-m", { opacity: 0 }, 1.95);
+      tl.fromTo("#s1-m2", { opacity: 0, scale: 1.9 }, { opacity: 1, scale: 1, duration: 0.36, ease: "back.out(2.4)" }, 1.95);
+      tl.to("#s1-v", { scale: 0.94, duration: 0.2, ease: "power3.out" }, 1.95);
+      shake(1.95, 26, 0.38); flash(1.95, 0.55);
+      tl.to("#s1-m2", { scale: 1.06, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 1 }, 2.4);
+
+      // ---------- 2 · Not $1,000. (3-5) ----------
+      slam("#s2-num", 3.0, 1.6, 0.3);
+      tl.fromTo("#s2-not-t", { y: -90, opacity: 0 }, { y: 0, opacity: 1, duration: 0.26, ease: "back.out(2)" }, 3.08);
+      tl.fromTo("#s2-strike", { scaleX: 0, rotation: -7 }, { scaleX: 1, rotation: -7, duration: 0.22, ease: "power4.out" }, 3.55);
+      shake(3.6, 12, 0.24);
+      tl.to("#s2-num", { rotation: -4, scale: 0.92, opacity: 0.55, duration: 0.3, ease: "back.out(2)" }, 4.15);
+      tl.to("#s2-not-t", { scale: 1.1, duration: 0.3, ease: "back.out(2)" }, 4.15);
+
+      // ---------- 3 · the math nobody shows you (5-7) : wipe + receipt ----------
+      tl.fromTo("#wipe1", { x: -1800, skewX: -12 }, { x: 1380, skewX: -12, duration: 0.36, ease: "power2.inOut" }, 4.82);
+      snapX("#s3-l1", 5.1, -260, 0.3);
+      snapX("#s3-l2", 5.2, 260, 0.3);
+      tl.fromTo("#receipt", { y: 760, rotation: 6 }, { y: 0, rotation: -3, duration: 0.48, ease: "back.out(1.5)" }, 5.3);
+      ["#r1", "#r2", "#r3", "#r4"].forEach((s, i) => snapX(s, 5.75 + i * 0.2, -40, 0.16));
+      tl.fromTo("#r5", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.28, ease: "back.out(2.6)" }, 6.55);
+      tl.to("#receipt", { rotation: 1.5, duration: 0.25, ease: "back.out(2)" }, 6.55);
+
+      // ---------- 4 · $1 per 1,000 views (7-11) ----------
+      tl.fromTo("#wipe2", { y: 2000, skewY: -8 }, { y: -2400, skewY: -8, duration: 0.36, ease: "power2.inOut" }, 6.82);
+      tl.set(["#s4-hB", "#s4-hC"], { opacity: 0 }, 0);
+      slam("#s4-a1 .ib", 7.12, 1.8, 0.32);
+      snapUp("#s4-a2", 7.32);
+      tl.fromTo("#s4-chip span", { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.26, ease: "back.out(2.5)" }, 7.5);
+      snapUp("#s4-disc", 7.6, 24, 0.22);
+      tl.fromTo("#ch-base", { scaleX: 0 }, { scaleX: 1, duration: 0.26, ease: "power3.out" }, 7.66);
+      snapUp("#ch-read", 7.72, 40, 0.26);
+      tl.set(["#ch-cap", "#ch-caplbl", "#ch-uline"], { opacity: 0 }, 0);
+      tl.fromTo("#ch-bar", { scaleY: 0 }, { scaleY: 0.8, duration: 2.8, ease: "none" }, 8.0);
+      count("#ch-v", 0, 200000, 8.0, 2.8, commas);
+      count("#ch-m", 0, 200, 8.0, 2.8, money);
+      [8.7, 9.4, 10.1, 10.8].forEach((t) => pop("#ch-m", t, 1.1, 0.22));
+      tl.to("#s4-hA", { scale: 1.03, duration: 3.8, ease: "none" }, 7.2);
+
+      // ---------- 5 · capped at $250 per clip (11-15) ----------
+      out("#s4-hA", 11.0);
+      tl.set("#s4-hB", { opacity: 1 }, 11.04);
+      snapUp("#s4-b1", 11.04, 50, 0.24);
+      slam("#s4-b2", 11.12, 1.5, 0.3);
+      tl.fromTo("#ch-cap", { opacity: 1, y: -320 }, { opacity: 1, y: 0, duration: 0.3, ease: "back.out(1.6)", immediateRender: false }, 11.15);
+      tl.set("#ch-cap", { opacity: 1 }, 11.15);
+      tl.fromTo("#ch-caplbl", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.24, ease: "back.out(2.5)", immediateRender: false }, 11.4);
+      shake(11.42, 10, 0.22);
+      tl.to("#ch-bar", { scaleY: 1, duration: 0.7, ease: "none" }, 11.5);
+      count("#ch-v", 200000, 250000, 11.5, 0.7, commas);
+      count("#ch-m", 200, 250, 11.5, 0.7, money);
+      // the hit: bar squashes against the ceiling, sparks, flash
+      tl.fromTo("#ch-bar", { scaleX: 1 }, { scaleX: 1.14, duration: 0.08, ease: "power2.out", immediateRender: false }, 12.2);
+      tl.to("#ch-bar", { scaleX: 1, duration: 0.4, ease: "elastic.out(1.2, 0.35)" }, 12.28);
+      tl.fromTo("#ch-cap", { scaleY: 1 }, { scaleY: 2.2, duration: 0.08, immediateRender: false }, 12.2);
+      tl.to("#ch-cap", { scaleY: 1, duration: 0.3, ease: "power2.out" }, 12.28);
+      for (let i = 0; i < 8; i++) {
+        const a = (-160 + i * 20) * Math.PI / 180, d = 90 + (i % 3) * 40;
+        tl.fromTo(`#sp${i}`, { opacity: 1, x: 0, y: 0, scale: 1 }, { opacity: 0, x: Math.cos(a) * d * 1.6, y: Math.sin(a) * d, scale: 0.4, duration: 0.42, ease: "power3.out", immediateRender: false }, 12.2);
+      }
+      shake(12.2, 16, 0.3); flash(12.2, 0.35);
+      pop("#ch-m", 12.2, 1.18, 0.3);
+      count("#ch-v", 250000, 1000000, 12.4, 2.3, commas, "power1.in");
+      [12.75, 13.45, 14.15].forEach((t, i) => {
+        tl.fromTo(`#pz${i}`, { opacity: 0, y: 0, scale: 0.5 }, { opacity: 1, y: -40, scale: 1, duration: 0.2, ease: "back.out(2.5)", immediateRender: false }, t);
+        tl.to(`#pz${i}`, { opacity: 0, y: -80, duration: 0.14, ease: "power2.in" }, t + 0.62);
+      });
+      tl.fromTo("#s4-hB", { scale: 1 }, { scale: 1.03, duration: 3.8, ease: "none", immediateRender: false }, 11.2);
+
+      // ---------- 6 · -10% platform fee (15-18) ----------
+      out("#s4-hB", 15.0);
+      tl.set("#s4-hC", { opacity: 1 }, 15.04);
+      slam("#s4-c1 .ib", 15.06, 1.8, 0.32);
+      snapUp("#s4-c2", 15.22);
+      tl.fromTo("#ch-blade", { opacity: 1, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.14, ease: "power4.out", immediateRender: false }, 15.32);
+      tl.to("#ch-blade", { opacity: 0, duration: 0.12 }, 15.5);
+      tl.set("#ch-bar", { scaleY: 0.9 }, 15.46);
+      tl.set("#ch-slice", { opacity: 1 }, 15.46);
+      tl.fromTo("#ch-slice", { x: 0, y: 0, rotation: 0 }, { x: 250, y: -84, rotation: 14, duration: 0.42, ease: "back.out(1.6)", immediateRender: false }, 15.48);
+      tl.to("#ch-slice", { scale: 0, rotation: 40, opacity: 0, duration: 0.2, ease: "power3.in" }, 16.35);
+      count("#ch-m", 250, 225, 15.6, 0.5, money, "power2.out");
+      tl.set("#ch-m", { color: "#FF3D9A", textShadow: "0 0 18px rgba(255,61,154,.8), 0 0 56px rgba(255,61,154,.5)" }, 16.1);
+      pop("#ch-m", 16.1, 1.22, 0.3);
+      flash(16.1, 0.25);
+      tl.fromTo("#ch-uline", { opacity: 1, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.24, ease: "power3.out", immediateRender: false }, 16.8);
+      tl.to("#ch-cap", { opacity: 0.45, duration: 0.2 }, 16.8);
+      tl.fromTo("#s4-hC", { scale: 1 }, { scale: 1.03, duration: 2.8, ease: "none", immediateRender: false }, 15.2);
+
+      // ---------- 7 · stops earning at 250K views (18-21) ----------
+      tl.fromTo("#wipe3", { x: 1380, skewX: 12 }, { x: -1800, skewX: 12, duration: 0.36, ease: "power2.inOut" }, 17.82);
+      snapUp("#s7-l1", 18.1, 50, 0.24);
+      slam("#s7-l2", 18.2, 1.6, 0.3);
+      snapUp(["#player", "#p-head"], 18.3, 80, 0.3);
+      tl.fromTo("#p-track", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power3.out" }, 18.4);
+      tl.set(["#p-mark", "#p-earn", "#p-zero", "#p-t250"], { opacity: 0 }, 0);
+      tl.fromTo("#p-head2", { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.2, ease: "back.out(3)" }, 18.55);
+      tl.fromTo("#p-fill", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "none" }, 18.7);
+      tl.fromTo("#p-head2", { x: 0 }, { x: 185, duration: 0.7, ease: "none", immediateRender: false }, 18.7);
+      tl.fromTo("#p-mark", { opacity: 1, scaleY: 0 }, { opacity: 1, scaleY: 1, duration: 0.22, ease: "back.out(2.5)", immediateRender: false }, 19.4);
+      tl.fromTo("#p-t250", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.2, ease: "back.out(2)", immediateRender: false }, 19.42);
+      tl.fromTo("#p-earn", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.26, ease: "back.out(2.6)", immediateRender: false }, 19.42);
+      tl.fromTo("#p-dead", { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "none" }, 19.5);
+      tl.to("#p-head2", { x: 740, duration: 0.9, ease: "none" }, 19.5);
+      tl.fromTo("#p-zero", { opacity: 0, scale: 1.9 }, { opacity: 1, scale: 1, duration: 0.32, ease: "back.out(2.4)", immediateRender: false }, 20.0);
+      shake(20.0, 18, 0.3); flash(20.0, 0.3);
+      tl.to("#p-zero", { scale: 1.06, duration: 0.25, ease: "sine.inOut", yoyo: true, repeat: 1 }, 20.45);
+
+      // ---------- 8 · Now watch this. (21-23) : hard cut, pink, motion turns horizontal ----------
+      ["#s8-w1", "#s8-w2", "#s8-w3"].forEach((s, i) => tl.fromTo(s, { x: 900, opacity: 0 }, { x: 0, opacity: 1, duration: 0.3, ease: "back.out(1.15)" }, 21.05 + i * 0.35));
+      tl.fromTo("#s8-stripes", { x: 0 }, { x: -360, duration: 2, ease: "none" }, 21.0);
+      tl.to("#s8-words", { x: -40, duration: 1.0, ease: "none" }, 21.8);
+      tl.to("#s8-words", { x: -1150, duration: 0.18, ease: "power3.in" }, 22.82);
+
+      // ---------- 9 · 5 clips x 200K views (23-28) ----------
+      tl.set(["#s9-hE", "#s9-hF", "#one", "#tot", "#split-div", "#stamp", "#u-one", "#u-tot"], { opacity: 0 }, 0);
+      snapX("#s9-d1", 23.05, 320, 0.3);
+      snapX("#s9-d2", 23.25, 320, 0.3);
+      const CX = [205, 372, 540, 708, 875];
+      for (let i = 0; i < 5; i++) {
+        const t = 23.6 + i * 0.75, ph = `#ph${i}`;
+        tl.fromTo(ph, { scale: 0, opacity: 0, rotation: 10 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.32, ease: "back.out(2.2)" }, t);
+        count(`${ph} .pv`, 0, 200000, t + 0.12, 0.5, kfmt, "power2.out");
+        count(`${ph} .pm`, 0, 200, t + 0.12, 0.5, money, "power2.out");
+        tl.fromTo(`${ph} .pfill`, { scaleX: 0 }, { scaleX: 0.8, duration: 0.5, ease: "power2.out" }, t + 0.12);
+        pop(`${ph} .pm`, t + 0.62, 1.2, 0.22);
+      }
+      tl.to(".phone", { y: -22, duration: 0.18, ease: "power2.out", stagger: 0.08, yoyo: true, repeat: 1 }, 27.2);
+
+      // ---------- 10 · same 1M views = $900 (28-32) ----------
+      out("#s9-hD", 28.0);
+      tl.set("#s9-hE", { opacity: 1 }, 28.04);
+      snapUp("#s9-e1", 28.04, 50, 0.26);
+      tl.set("#s9-e2", { opacity: 0 }, 0);
+      for (let i = 0; i < 5; i++) {
+        tl.to(`#ph${i}`, { x: 540 - CX[i], y: -50, rotation: (i - 2) * 4, duration: 0.42, ease: "power3.inOut" }, 28.1 + i * 0.04);
+      }
+      tl.set(".phone", { opacity: 0 }, 28.7);
+      tl.fromTo("#tot", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.32, ease: "back.out(2)", immediateRender: false }, 28.62);
+      tl.set("#fee", { opacity: 0 }, 0);
+      tl.fromTo("#fee", { opacity: 0, scale: 2.2, rotation: -12 }, { opacity: 1, scale: 1, rotation: -6, duration: 0.26, ease: "back.out(2.4)", immediateRender: false }, 29.1);
+      shake(29.12, 10, 0.22);
+      count("#tot-m", 1000, 900, 29.3, 0.55, money, "power2.out");
+      tl.set("#tot-m", { color: "#FF3D9A", textShadow: "0 0 18px rgba(255,61,154,.8), 0 0 56px rgba(255,61,154,.5)" }, 29.9);
+      pop("#tot-m", 29.9, 1.25, 0.3);
+      tl.fromTo("#s9-e2", { opacity: 0, scale: 1.7 }, { opacity: 1, scale: 1, duration: 0.32, ease: "back.out(2.2)", immediateRender: false }, 29.9);
+      flash(29.9, 0.3);
+      // split screen: viral clip left, five clips right
+      tl.to("#tot", { x: 215, duration: 0.34, ease: "power3.inOut" }, 30.3);
+      tl.to("#fee", { opacity: 0, scale: 0.5, duration: 0.16 }, 30.3);
+      tl.fromTo("#one", { opacity: 0, x: -300 }, { opacity: 1, x: 0, duration: 0.34, ease: "back.out(1.4)", immediateRender: false }, 30.36);
+      tl.fromTo("#split-div", { opacity: 1, scaleY: 0 }, { opacity: 1, scaleY: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, 30.5);
+      tl.fromTo(["#u-one", "#u-tot"], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.22, ease: "back.out(2)", stagger: 0.06, immediateRender: false }, 30.6);
+      tl.fromTo("#stamp", { opacity: 0, scale: 2.6, rotation: -24 }, { opacity: 1, scale: 1, rotation: -10, duration: 0.3, ease: "back.out(2.6)", immediateRender: false }, 31.0);
+      shake(31.0, 28, 0.4); flash(31.0, 0.45);
+      tl.to("#one", { opacity: 0.6, duration: 0.2 }, 31.3);
+
+      // ---------- 11 · stop chasing one viral clip (32-34) ----------
+      out("#s9-hE", 32.0);
+      tl.set("#s9-hF", { opacity: 1 }, 32.04);
+      snapUp("#s9-f1", 32.04, 50, 0.24);
+      slam("#s9-f2", 32.12, 1.5, 0.3);
+      tl.to("#stamp", { scale: 0, opacity: 0, duration: 0.16, ease: "power3.in" }, 32.05);
+      tl.to(["#u-one", "#u-tot", "#split-div"], { opacity: 0, duration: 0.12 }, 32.1);
+      tl.to("#one", { scale: 0, rotation: 10, opacity: 0, duration: 0.4, ease: "power3.in" }, 32.25);
+      tl.to("#tot", { scale: 0.4, opacity: 0, duration: 0.2, ease: "power3.in" }, 32.55);
+      for (let i = 0; i < 5; i++) {
+        const ph = `#ph${i}`;
+        tl.set(ph, { opacity: 1, x: 755 - CX[i], y: -50, rotation: 0, scale: 0.3 }, 32.68);
+        tl.to(ph, { x: 0, y: 0, scale: 1, rotation: 0, duration: 0.42, ease: "back.out(1.6)" }, 32.7 + i * 0.05);
+      }
+      tl.to(".phone", { scale: 1.08, duration: 0.16, ease: "power2.out", stagger: 0.07, yoyo: true, repeat: 1 }, 33.35);
+
+      // ---------- 12 · budgets run out fast (34-37) ----------
+      tl.fromTo("#wipe4", { x: -1800, skewX: -12 }, { x: 1380, skewX: -12, duration: 0.36, ease: "power2.inOut" }, 33.82);
+      tl.fromTo("#warn", { scale: 1.25, opacity: 0, rotation: -3 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.34, ease: "back.out(2)" }, 34.08);
+      shake(34.12, 14, 0.26);
+      tl.fromTo("#s12-chip span", { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.26, ease: "back.out(2.6)" }, 34.2);
+      tl.fromTo("#hazard", { x: 0 }, { x: -96, duration: 3, ease: "none" }, 34.0);
+      tl.fromTo("#w-fill", { scaleX: 1 }, { scaleX: 0.1, duration: 1.9, ease: "power2.in" }, 34.55);
+      [35.0, 36.0].forEach((t) => pop("#w-icon", t, 1.25, 0.3));
+      tl.to("#w-fill", { opacity: 0.35, duration: 0.12, yoyo: true, repeat: 3 }, 36.45);
+
+      // ---------- 13 · Comment MATH (37-40) ----------
+      tl.fromTo("#s13-l1", { y: 120, opacity: 0, scale: 0.8 }, { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 37.02);
+      snapUp("#cbox", 37.1, 140, 0.32);
+      [37.3, 37.42, 37.54, 37.66].forEach((t, i) => {
+        tl.set(`#ty${i}`, { display: "inline-block" }, t);
+        tl.fromTo(`#ty${i}`, { scale: 1.5, y: -10 }, { scale: 1, y: 0, duration: 0.14, ease: "back.out(3)", immediateRender: false }, t);
+      });
+      for (let t = 37.1; t < 39.5; t += 0.25) tl.set("#caret", { opacity: Math.round((t - 37.1) / 0.25) % 2 ? 0 : 1 }, +t.toFixed(3));
+      tl.fromTo("#send", { scale: 1 }, { scale: 0.82, duration: 0.08, ease: "power2.in", immediateRender: false }, 38.35);
+      tl.to("#send", { scale: 1, duration: 0.3, ease: "back.out(3)" }, 38.43);
+      tl.to("#cbox", { borderColor: "#FF3D9A", boxShadow: "0 0 50px rgba(255,61,154,.8), inset 0 0 30px rgba(255,61,154,.25)", duration: 0.12 }, 38.45);
+      tl.fromTo("#plane", { opacity: 1, x: 0, y: 0, rotation: 0, scale: 0.6 }, { opacity: 1, x: 60, y: -260, rotation: -10, scale: 1, duration: 0.45, ease: "power2.out", immediateRender: false }, 38.5);
+      tl.to("#plane", { opacity: 0, duration: 0.12 }, 38.9);
+      tl.to("#c-typed", { scale: 1.06, transformOrigin: "0% 50%", duration: 0.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 38.6);
+      // loop out: everything clears upward so the last frame is the bare background that cuts back to scene 1
+      tl.to(["#s13-l1", "#cbox"], { y: -160, scale: 0.9, opacity: 0, duration: 0.2, ease: "power3.in", stagger: 0.03 }, 39.72);
+
+      // ---------- captions: chunk on/off, words pop in, key words get a bigger pop ----------
+      const capRoot = $("#caps");
+      CAPTIONS.forEach((c, i) => {
+        const d = document.createElement("div");
+        d.className = "cap"; d.id = "cap" + i;
+        c.words.forEach((w) => {
+          const s = document.createElement("span");
+          s.className = "w" + (w.a ? " a" + w.a : "");
+          s.textContent = w.w;
+          d.appendChild(s);
+        });
+        capRoot.appendChild(d);
+        if (c.s === 0) d.style.opacity = "1"; else tl.set(d, { opacity: 1 }, c.s);
+        tl.set(d, { opacity: 0 }, c.e);
+        [...d.children].forEach((s, j) => {
+          const w = c.words[j];
+          if (c.s === 0) return; // frame 0: first chunk already fully on screen
+          if (w.a) tl.fromTo(s, { opacity: 0, scale: 0.3, rotation: -6 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.2, ease: "back.out(4)" }, w.t);
+          else tl.fromTo(s, { opacity: 0, scale: 0.6, y: 16 }, { opacity: 1, scale: 1, y: 0, duration: 0.13, ease: "back.out(3)" }, w.t);
+        });
+      });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
