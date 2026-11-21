@@ -1,8 +1,8 @@
 """Sound for the Creators 100X "Make AI interview you" (NICHE) reel, carried over from the Creedom reels.
 
   * Voice: assets/audio/vo.wav, Kokoro af_heart (the Creators 100X house voice), -16 LUFS.
-  * Music: "The Spontaneous Elk Reunion" by The Fish Who Saved the Planet (Jamendo 1307441, CC BY 3.0: credit in the post), from
-    16.88 s (on a beat); kept low and sidechain-ducked under the voice (plan/music.json).
+  * Music: "Future Business" by Marco Margna (Jamendo 1128518, CC BY 3.0: credit in the post), from 13.94 s, so the track's build
+    runs under the hook and its drop (22.8 s in the track) lands on "So flip it"; sidechain-ducked under the voice (plan/music.json).
   * Sound effects: CC0 OpenGameArt packs plus game-show one-shots made for this reel (build/synth_show.py: buzzer, chime, quiz,
     drumroll, slotspin).
   * Master: two-pass loudnorm to -14 LUFS, -1.5 dBTP; muxed onto the picture with the video stream copied.
@@ -20,9 +20,9 @@ WORK = os.path.join(ROOT, "sfx", "work")
 LIB = os.path.join(ROOT, "assets", "sfx")
 E = json.load(open(os.path.join(ROOT, "plan", "edit.json")))
 DUR = E["dur"]
-SONG = os.path.join(ROOT, "sfx", "music", os.environ.get("SONG", "music_spontaneous_elk_reunion.mp3"))
-SONG_AT = float(os.environ.get("SONG_AT", "16.88"))
-MUSIC_LUFS = float(os.environ.get("MUSIC_LUFS", "-25"))
+SONG = os.path.join(ROOT, "sfx", "music", os.environ.get("SONG", "music_future_business_marco_margna.mp3"))
+SONG_AT = float(os.environ.get("SONG_AT", "13.94"))
+MUSIC_LUFS = float(os.environ.get("MUSIC_LUFS", "-23"))
 # the turn: at Cree's entrance the sad bed fades out and "Super Power Pop Rock" by Kara Square comes in from its breakdown,
 # so the full band (98.25 s) lands on "Creedom"
 SONG2 = os.path.join(ROOT, "sfx", "music", "music_super_power_pop_rock_kara_square.mp3")

@@ -18,7 +18,7 @@ Built from your answers, so nobody else can copy it. Works the same in ChatGPT, 
 
 Save this for when you're stuck on what to post, and send it to a friend who wants to start a page.
 
-Music: "The Spontaneous Elk Reunion" by The Fish Who Saved the Planet, CC BY 3.0
+Music: "Future Business" by Marco Margna, CC BY 3.0
 
 #chatgptprompts #aiforcreators #contentcreatortips #nicheideas #aitools
 how to find your niche, what should i post on instagram, content ideas for beginners, chatgpt prompts for content creators, how to start an instagram page, niche ideas for instagram, ai tools for content creators, how to use chatgpt for content ideas, find your niche with ai, content creation tips for beginners
@@ -40,5 +40,5 @@ Here's your prompt pack: [PDF LINK]
 ## Notes
 
 - Voice: Kokoro af_heart, the Creators 100X house voice (kokoro-onnx, run locally), natural pace (speed 1.15, no time-stretch).
-- The three niches on the slot machine and the example answers are illustrations (labelled EXAMPLES in the reel).
-- The AI host and the contestant are our own characters; the chat window is a generic "AI chat", not a copy of any app.
+- The three niches and the example answers are illustrations (labelled EXAMPLES in the reel).
+- v2 look "The Constellation of You" (v1 game show judged dull, 2026-11-21). The chat pills are generic, not a copy of any app.

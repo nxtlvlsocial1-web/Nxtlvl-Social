@@ -1,194 +1,242 @@
 [
 {
-"type": "clunk",
-"t": 0.04
+"type": "whoosh_big",
+"t": 0
 },
 {
-"type": "click",
+"type": "tick",
 "t": 1.24
 },
 {
-"type": "whoosh",
-"t": 2.72
+"type": "tick",
+"t": 1.41
 },
 {
-"type": "quiz",
+"type": "tick",
+"t": 1.58
+},
+{
+"type": "tick",
+"t": 1.75
+},
+{
+"type": "tick",
+"t": 1.92
+},
+{
+"type": "ping",
+"t": 2.82
+},
+{
+"type": "impact",
 "t": 3.26
 },
 {
-"type": "click",
-"t": 4.74
+"type": "riser",
+"t": 3.46
 },
 {
 "type": "pop",
-"t": 6.24
+"t": 4.79
 },
 {
 "type": "pop",
-"t": 6.42
+"t": 5.03
 },
 {
 "type": "pop",
-"t": 6.6
+"t": 5.27
+},
+{
+"type": "pop",
+"t": 5.51
+},
+{
+"type": "pop",
+"t": 5.75
+},
+{
+"type": "pop",
+"t": 5.99
 },
 {
 "type": "buzzer",
 "t": 7.62
 },
 {
+"type": "glitch",
+"t": 7.72
+},
+{
 "type": "whoosh_big",
-"t": 8.76
+"t": 8.61
+},
+{
+"type": "impact",
+"t": 8.88
 },
 {
 "type": "tick",
-"t": 9.36
+"t": 9.41
 },
 {
 "type": "tick",
-"t": 9.729
+"t": 9.7
 },
 {
 "type": "tick",
-"t": 10.098
+"t": 9.99
 },
 {
 "type": "tick",
-"t": 10.466
+"t": 10.28
 },
 {
 "type": "tick",
-"t": 10.835
+"t": 10.57
 },
 {
 "type": "tick",
-"t": 11.204
+"t": 10.86
 },
 {
 "type": "tick",
-"t": 11.572
+"t": 11.15
 },
 {
 "type": "tick",
-"t": 11.941
+"t": 11.44
 },
 {
-"type": "quiz",
-"t": 12.73
+"type": "tick",
+"t": 11.73
+},
+{
+"type": "tick",
+"t": 12.02
+},
+{
+"type": "whoosh",
+"t": 12.68
 },
 {
 "type": "click",
-"t": 12.98
+"t": 13.08
 },
 {
 "type": "chime",
-"t": 13.18
+"t": 13.1
+},
+{
+"type": "whoosh",
+"t": 13.34
 },
 {
 "type": "click",
-"t": 13.266
-},
-{
-"type": "flip",
-"t": 13.39
+"t": 13.361
 },
 {
 "type": "click",
-"t": 13.552
-},
-{
-"type": "click",
-"t": 13.838
+"t": 13.642
 },
 {
 "type": "chime",
-"t": 13.84
+"t": 13.76
 },
 {
 "type": "click",
-"t": 14.124
-},
-{
-"type": "flip",
-"t": 14.4
+"t": 13.923
 },
 {
 "type": "click",
-"t": 14.41
+"t": 14.204
+},
+{
+"type": "whoosh",
+"t": 14.35
 },
 {
 "type": "click",
-"t": 14.696
+"t": 14.485
+},
+{
+"type": "click",
+"t": 14.766
 },
 {
 "type": "chime",
-"t": 14.85
+"t": 14.77
 },
 {
 "type": "click",
-"t": 14.982
+"t": 15.047
 },
 {
 "type": "click",
-"t": 15.268
+"t": 15.328
 },
 {
 "type": "click",
-"t": 15.554
+"t": 15.609
 },
 {
 "type": "drumroll",
-"t": 15.98
+"t": 15.88
 },
 {
-"type": "slotspin",
-"t": 16.28
+"type": "impact",
+"t": 17.23
 },
 {
-"type": "clunk",
-"t": 17.28
+"type": "stamp2",
+"t": 17.41
 },
 {
-"type": "clunk",
-"t": 17.71
-},
-{
-"type": "clunk",
-"t": 18.11
+"type": "stamp2",
+"t": 17.63
 },
 {
 "type": "stamp",
-"t": 18.36
+"t": 17.85
 },
 {
 "type": "pop",
-"t": 18.63
+"t": 18.58
 },
 {
 "type": "pop",
-"t": 18.78
+"t": 18.7
 },
 {
 "type": "pop",
-"t": 18.93
+"t": 18.82
 },
 {
-"type": "applause",
-"t": 19.68
+"type": "riser_short",
+"t": 18.88
 },
 {
 "type": "chime",
-"t": 19.83
+"t": 19.88
 },
 {
-"type": "quiz",
-"t": 21.6
+"type": "whoosh_big",
+"t": 21.4
+},
+{
+"type": "ding",
+"t": 21.7
+},
+{
+"type": "applause",
+"t": 21.8
 },
 {
 "type": "whoosh",
 "t": 23.02
 },
 {
-"type": "ding",
+"type": "pop",
 "t": 23.42
 }
 ]
