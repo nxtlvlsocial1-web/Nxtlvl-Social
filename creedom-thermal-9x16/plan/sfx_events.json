@@ -1,0 +1,118 @@
+[
+{
+"type": "whoosh_big",
+"t": 0
+},
+{
+"type": "pop",
+"t": 0.25
+},
+{
+"type": "pop",
+"t": 0.46
+},
+{
+"type": "pop",
+"t": 0.67
+},
+{
+"type": "tick",
+"t": 3.2
+},
+{
+"type": "tick",
+"t": 3.32
+},
+{
+"type": "tick",
+"t": 3.44
+},
+{
+"type": "tick",
+"t": 3.56
+},
+{
+"type": "pop",
+"t": 6.84
+},
+{
+"type": "whoosh_big",
+"t": 7.63
+},
+{
+"type": "click",
+"t": 7.7
+},
+{
+"type": "impact",
+"t": 7.98
+},
+{
+"type": "glitch",
+"t": 9.16
+},
+{
+"type": "glitch",
+"t": 9.6
+},
+{
+"type": "glitch",
+"t": 10.44
+},
+{
+"type": "riser_short",
+"t": 11.44
+},
+{
+"type": "stamp2",
+"t": 11.54
+},
+{
+"type": "stamp2",
+"t": 11.69
+},
+{
+"type": "tick",
+"t": 14.0
+},
+{
+"type": "tick",
+"t": 14.2
+},
+{
+"type": "tick",
+"t": 14.4
+},
+{
+"type": "tick",
+"t": 14.6
+},
+{
+"type": "tick",
+"t": 14.8
+},
+{
+"type": "whoosh",
+"t": 15.96
+},
+{
+"type": "sparkle",
+"t": 16.38
+},
+{
+"type": "ding",
+"t": 17.83
+},
+{
+"type": "click",
+"t": 19.48
+},
+{
+"type": "ding",
+"t": 19.96
+},
+{
+"type": "pop",
+"t": 19.96
+}
+]

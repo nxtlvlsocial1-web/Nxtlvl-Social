@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Creedom: Thermal vision 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>@font-face { font-family: Inter; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2"); }
+@font-face { font-family: Mono; src: url("assets/fonts/JetBrainsMono-Bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fdf1f6; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter; color: #1a1020; background: #fdf1f6; }
+
+/* backdrops: normal and thermal */
+.bg { position: absolute; inset: 0; }
+#bgn { background: radial-gradient(60% 40% at 15% 10%, rgba(255,170,210,.6), rgba(255,170,210,0) 70%), radial-gradient(60% 40% at 90% 90%, rgba(243,67,162,.35), rgba(243,67,162,0) 70%), #fdf1f6; }
+#bgt { opacity: 0; background: radial-gradient(55% 35% at 85% 15%, rgba(255,90,40,.45), rgba(255,90,40,0) 70%), radial-gradient(60% 40% at 10% 85%, rgba(220,30,160,.45), rgba(220,30,160,0) 70%), #12061f; }
+.scanlines { position: absolute; inset: 0; opacity: 0; background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 2px, transparent 2px 6px); z-index: 27; pointer-events: none; }
+
+/* headlines */
+.head { position: absolute; left: 50px; right: 50px; top: 196px; text-align: center; font-weight: 800; letter-spacing: -.045em; line-height: 1.04; z-index: 40; color: #1a1020; }
+.head.lt { color: #fff; text-shadow: 0 6px 30px rgba(18,6,31,.9); }
+.hl { white-space: nowrap; }
+.hw { display: inline-block; opacity: 0; padding: .02em .04em .16em; margin-bottom: -.14em; vertical-align: baseline; }
+.hw.pk { color: #F343A2; }
+.hw.ht { background: linear-gradient(90deg, #fff6a0, #ffb020 40%, #ff3d6e 80%); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; }
+.hw.cd { color: #7fb4ff; }
+
+/* status pill */
+.stat { position: absolute; left: 0; right: 0; top: 486px; text-align: center; z-index: 41; opacity: 0; }
+.stat span { display: inline-block; padding: 12px 28px; border-radius: 40px; background: #1a1020; color: #fff; font: 700 30px Mono; letter-spacing: .1em; }
+.stat.hot span { background: linear-gradient(90deg, #ffb020, #ff3d6e); color: #12061f; }
+
+/* the phone and the grid */
+#stage { position: absolute; inset: 0; transform-origin: 540px 1150px; z-index: 20; }
+#ph { position: absolute; left: 200px; top: 560px; width: 680px; height: 1180px; border-radius: 72px; background: #0b0b0b; padding: 16px;
+  box-shadow: 0 50px 100px rgba(40,10,40,.35), 0 0 0 3px #2a2a2a; }
+#scr { position: absolute; left: 16px; top: 16px; width: 648px; height: 1148px; border-radius: 58px; background: #fff; overflow: hidden; }
+.isl { position: absolute; left: 249px; top: 16px; width: 150px; height: 40px; border-radius: 20px; background: #000; z-index: 9; }
+.prof { position: absolute; left: 0; right: 0; top: 70px; height: 170px; }
+.av { position: absolute; left: 36px; top: 10px; width: 130px; height: 130px; border-radius: 50%; padding: 6px; background: linear-gradient(135deg, #ffb020, #F343A2, #7a3cf0); }
+.av i { display: block; width: 100%; height: 100%; border-radius: 50%; background: #ffd9ea; border: 5px solid #fff; }
+.pname { position: absolute; left: 196px; top: 14px; font: 800 36px Inter; color: #111; letter-spacing: -.02em; }
+.pst { position: absolute; left: 196px; top: 70px; display: flex; gap: 34px; font: 500 24px Inter; color: #555; }
+.pst b { display: block; font: 800 32px Inter; color: #111; }
+.grid { position: absolute; left: 0; top: 250px; width: 648px; }
+.tile { position: absolute; width: 212px; height: 290px; overflow: hidden; opacity: 0; }
+.tile .tb { position: absolute; inset: 0; }
+.tile .tt { position: absolute; left: 14px; right: 14px; bottom: 16px; font: 800 30px/1.05 Inter; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,.45); letter-spacing: -.02em; }
+.tile .pl { position: absolute; right: 14px; top: 14px; width: 0; height: 0; border-left: 18px solid rgba(255,255,255,.9); border-top: 11px solid transparent; border-bottom: 11px solid transparent; }
+.tile .fc { position: absolute; left: 66px; top: 60px; width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,.35); }
+.th { position: absolute; inset: 0; opacity: 0; }
+.th.cold { background: linear-gradient(160deg, #1d1060 0%, #3a2ca6 55%, #24137a 100%); }
+.th.hot { background: radial-gradient(circle at 50% 46%, #ffffff 0%, #fff4a0 16%, #ffb020 36%, #ff3d6e 60%, #6a1b9a 92%); }
+.th .tp { position: absolute; left: 14px; top: 14px; font: 700 28px Mono; color: rgba(255,255,255,.9); }
+.th .tt2 { position: absolute; left: 14px; right: 14px; bottom: 16px; font: 800 28px/1.05 Inter; color: rgba(255,255,255,.55); letter-spacing: -.02em; }
+.th.hot .tt2 { color: #3a0a2a; }
+.qm { position: absolute; width: 74px; height: 74px; margin: -37px 0 0 -37px; border-radius: 50%; background: #1a1020; color: #fff; font: 800 48px/74px Inter; text-align: center; opacity: 0; z-index: 3; }
+#thhead { position: absolute; left: 0; right: 0; top: 0; height: 250px; opacity: 0; background: linear-gradient(180deg, #160a3e, #2a1a78); }
+#thhead i { position: absolute; left: 36px; top: 80px; width: 130px; height: 130px; border-radius: 50%; background: radial-gradient(circle, #ff8a3d, #b0247a 60%, #3a1a8a); }
+#scan { position: absolute; left: 0; right: 0; top: 0; height: 10px; z-index: 8; opacity: 0; background: #fff;
+  box-shadow: 0 0 20px 8px rgba(255,255,255,.85), 0 0 60px 24px rgba(255,61,110,.6); }
+.haze { position: absolute; width: 300px; height: 380px; margin: -190px 0 0 -150px; border-radius: 50%; opacity: 0; z-index: 4; mix-blend-mode: screen;
+  background: radial-gradient(closest-side, rgba(255,230,140,.85), rgba(255,90,60,.4) 55%, rgba(255,60,110,0)); }
+
+/* scale bar */
+#scale { position: absolute; left: 926px; top: 760px; width: 40px; height: 720px; border-radius: 20px; opacity: 0; z-index: 21;
+  background: linear-gradient(180deg, #ffffff 0%, #fff4a0 12%, #ffb020 30%, #ff3d6e 52%, #8a2be2 75%, #2a1a8a 100%); box-shadow: 0 0 0 3px rgba(255,255,255,.35); }
+#scale small { position: absolute; left: -6px; width: 52px; text-align: center; font: 700 22px Mono; color: #fff; }
+#needle { position: absolute; left: -26px; top: 600px; width: 0; height: 0; border-left: 22px solid #fff; border-top: 14px solid transparent; border-bottom: 14px solid transparent; }
+
+/* brackets */
+.brk { position: absolute; width: 240px; height: 318px; margin: -159px 0 0 -120px; z-index: 22; opacity: 0; }
+.brk i { position: absolute; width: 46px; height: 46px; border: 0 solid #fff; }
+.brk i:nth-child(1) { left: 0; top: 0; border-width: 7px 0 0 7px; }
+.brk i:nth-child(2) { right: 0; top: 0; border-width: 7px 7px 0 0; }
+.brk i:nth-child(3) { left: 0; bottom: 0; border-width: 0 0 7px 7px; }
+.brk i:nth-child(4) { right: 0; bottom: 0; border-width: 0 7px 7px 0; }
+.brk b { position: absolute; left: 50%; top: -58px; transform: translateX(-50%); padding: 6px 16px; border-radius: 10px; font: 700 28px Mono; letter-spacing: .1em; white-space: nowrap; }
+.brk.c b { background: #7fb4ff; color: #0c0630; }
+.brk.h i { border-color: #fff4a0; }
+.brk.h b { background: linear-gradient(90deg, #fff4a0, #ffb020); color: #2a0a20; }
+.sv { position: absolute; width: 44px; height: 56px; margin: -28px 0 0 -22px; z-index: 23; opacity: 0; }
+
+/* the next reel, poured */
+.streams { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 24; overflow: visible; pointer-events: none; }
+#dim { position: absolute; inset: 0; z-index: 23; background: #12061f; opacity: 0; pointer-events: none; }
+#next { position: absolute; left: 310px; top: 640px; width: 460px; height: 680px; border-radius: 40px; overflow: hidden; z-index: 25; opacity: 0;
+  box-shadow: 0 0 0 5px #fff4a0, 0 0 60px 20px rgba(255,140,40,.6), 0 40px 90px rgba(0,0,0,.5); }
+#next .nb { position: absolute; inset: 0; background: linear-gradient(160deg, #ff9a3d, #F343A2 60%, #7a3cf0); }
+#next .nh { position: absolute; inset: 0; opacity: 0; background: radial-gradient(circle at 50% 45%, #ffffff 0%, #fff4a0 18%, #ffb020 40%, #ff3d6e 66%, #6a1b9a 95%); }
+#next .tt { position: absolute; left: 30px; right: 30px; bottom: 40px; font: 800 64px/1.02 Inter; color: #fff; letter-spacing: -.035em; text-shadow: 0 4px 20px rgba(0,0,0,.4); }
+#next .fc { position: absolute; left: 160px; top: 150px; width: 140px; height: 140px; border-radius: 50%; background: rgba(255,255,255,.35); }
+.ptn { position: absolute; left: 0; right: 0; top: 1350px; text-align: center; z-index: 26; opacity: 0; }
+.ptn span { display: inline-block; padding: 18px 40px; border-radius: 50px; background: #fff; color: #12061f; font: 800 50px Inter; letter-spacing: .02em; box-shadow: 0 0 40px rgba(255,180,60,.6); }
+.exm { position: absolute; left: 0; right: 0; top: 1440px; text-align: center; z-index: 26; opacity: 0; font: 700 24px Mono; letter-spacing: .2em; color: rgba(255,255,255,.6); }
+
+/* CTA HUD */
+#hud { position: absolute; left: 90px; top: 700px; width: 900px; height: 520px; z-index: 30; opacity: 0; }
+#hud .brk { width: 900px; height: 520px; margin: 0; left: 0; top: 0; opacity: 1; }
+#hud .brk i { width: 90px; height: 90px; border-color: #fff4a0; }
+#hud .ln { position: absolute; left: 0; right: 0; text-align: center; font: 700 32px Mono; letter-spacing: .14em; color: rgba(255,255,255,.75); }
+#hud .big { position: absolute; left: 0; right: 0; top: 170px; text-align: center; font: 800 150px/1.02 Inter; letter-spacing: -.04em;
+  background: linear-gradient(90deg, #ffffff, #fff4a0 30%, #ffb020 60%, #ff3d6e 95%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+#flash { position: absolute; inset: 0; z-index: 39; background: #fff; opacity: 0; pointer-events: none; }
+#grain { position: absolute; inset: 0; opacity: .06; background: url(assets/img/grain.png); mix-blend-mode: overlay; pointer-events: none; z-index: 42; }
+#gog { position: absolute; left: 232px; top: 302px; width: 360px; height: 150px; opacity: 0; transform-origin: 50% 0; }
+/* Cree */
+#cree { position: absolute; left: 0; top: 0; width: 820px; height: 820px; z-index: 6; opacity: 0; transform-origin: 410px 500px; pointer-events: none;
+  filter: drop-shadow(0 0 30px rgba(255,90,180,.7)); }
+#cshadow { position: absolute; left: 210px; top: 770px; width: 400px; height: 60px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,120,190,.45), rgba(255,120,190,0)); }
+#creeb { position: absolute; inset: 0; transform-origin: 50% 97.5%; }
+#creef { position: absolute; inset: 0; transform-origin: 50% 60%; }
+#creep { position: absolute; inset: 0; transform-origin: 50% 97.5%; }
+.cpose { position: absolute; inset: 0; opacity: 0; }
+.cpose img, .clids, .csw { position: absolute; inset: 0; width: 820px; height: 820px; }
+.csw { overflow: visible; }
+.lidg { opacity: 0; }
+.sweat { opacity: 0; transform-box: fill-box; transform-origin: 50% 0; }
+.csp { position: absolute; opacity: 0; }
+#bub { position: absolute; left: 600px; top: 0; width: 210px; height: 190px; opacity: 0; border-radius: 50% 50% 50% 14px; display: grid; place-items: center;
+  transform-origin: 0 100%; background: rgba(255,255,255,.92); }
+#bubt { font: 800 120px/1 Inter; color: #F343A2; }
+#crglow { position: absolute; width: 520px; height: 520px; margin: -260px 0 0 -260px; border-radius: 50%; z-index: 5; opacity: 0;
+  background: radial-gradient(circle, rgba(255,110,190,.75), rgba(243,67,162,.25) 40%, rgba(243,67,162,0) 70%); }
+
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="23.40" data-fps="30" data-width="1080" data-height="1920">
+      <div class="bg" id="bgn"></div><div class="bg" id="bgt"></div>
+      <div id="stage"><div id="ph"><div id="scr"><i class="isl"></i><div class="prof"><div class="av"><i></i></div><div class="pname">your.page</div><div class="pst"><span><b>9</b>posts</span><span><b>1.2K</b>followers</span><span><b>210</b>following</span></div></div><div id="thhead"><i></i></div><div class="grid"><div class="tile" id="tl0" style="left:0px;top:0px"><div class="tb" style="background:linear-gradient(160deg,#ffb3c7,#ff6f91)"></div><i class="fc"></i><i class="pl"></i><div class="tt">Morning routine</div><div class="th cold" id="th0"><span class="tp">14°</span><div class="tt2">Morning routine</div></div></div><div class="tile" id="tl1" style="left:218px;top:0px"><div class="tb" style="background:linear-gradient(160deg,#b3d4ff,#5b8def)"></div><i class="fc"></i><i class="pl"></i><div class="tt">Q&amp;A</div><div class="th cold" id="th1"><span class="tp">11°</span><div class="tt2">Q&amp;A</div></div></div><div class="tile" id="tl2" style="left:436px;top:0px"><div class="tb" style="background:linear-gradient(160deg,#ffd27a,#ff8a3d)"></div><i class="fc"></i><i class="pl"></i><div class="tt">Budget meal #3</div><div class="th hot" id="th2"><span class="tp">97°</span><div class="tt2">Budget meal #3</div></div></div><div class="tile" id="tl3" style="left:0px;top:296px"><div class="tb" style="background:linear-gradient(160deg,#c9b3ff,#7a5cf0)"></div><i class="fc"></i><i class="pl"></i><div class="tt">Day in my life</div><div class="th cold" id="th3"><span class="tp">16°</span><div class="tt2">Day in my life</div></div></div><div class="tile" id="tl4" style="left:218px;top:296px"><div class="tb" style="background:linear-gradient(160deg,#a8f0d1,#2fb37f)"></div><i class="fc"></i><i class="pl"></i><div class="tt">Room tour</div><div class="th cold" id="th4"><span class="tp">12°</span><div class="tt2">Room tour</div></div></div><div class="tile" id="tl5" style="left:436px;top:296px"><div class="tb" style="background:linear-gradient(160deg,#ffc2e2,#e055a8)"></div><i class="fc"></i><i class="pl"></i><div class="tt">GRWM</div><div class="th cold" id="th5"><span class="tp">18°</span><div class="tt2">GRWM</div></div></div><div class="tile" id="tl6" style="left:0px;top:592px"><div class="tb" style="background:linear-gradient(160deg,#ffe08a,#f5a524)"></div><i class="fc"></i><i class="pl"></i><div class="tt">Hostel hack #1</div><div class="th hot" id="th6"><span class="tp">94°</span><div class="tt2">Hostel hack #1</div></div></div><div class="tile" id="tl7" style="left:218px;top:592px"><div class="tb" style="background:linear-gradient(160deg,#b3e5ff,#3aa0d8)"></div><i class="fc"></i><i class="pl"></i><div class="tt">Study vlog</div><div class="th cold" id="th7"><span class="tp">13°</span><div class="tt2">Study vlog</div></div></div><div class="tile" id="tl8" style="left:436px;top:592px"><div class="tb" style="background:linear-gradient(160deg,#ffb59e,#ef5d4a)"></div><i class="fc"></i><i class="pl"></i><div class="tt">Gym day</div><div class="th cold" id="th8"><span class="tp">15°</span><div class="tt2">Gym day</div></div></div><i class="qm" id="qm0" style="left:324px;top:145px">?</i><i class="qm" id="qm1" style="left:106px;top:441px">?</i><i class="qm" id="qm2" style="left:542px;top:441px">?</i><i class="qm" id="qm3" style="left:324px;top:737px">?</i></div><i id="scan"></i></div></div><div id="scale"><small style="top:-40px">HOT</small><small style="bottom:-40px">COLD</small><i id="needle"></i></div><div class="brk c" id="bc"><i></i><i></i><i></i><i></i><b>COLD</b></div><div class="brk h" id="bh0"><i></i><i></i><i></i><i></i><b>MOST SAVED</b></div><div class="brk h" id="bh1"><i></i><i></i><i></i><i></i><b>MOST SAVED</b></div><i class="haze" id="hz0" style="left:758px;top:971px"></i><i class="haze" id="hz1" style="left:322px;top:1563px"></i><i class="sv" id="sv0"><svg viewBox="0 0 44 56"><path d="M4 4 H40 V52 L22 40 L4 52 Z" fill="#fff4a0" stroke="#ffb020" stroke-width="3"/></svg></i><i class="sv" id="sv1"><svg viewBox="0 0 44 56"><path d="M4 4 H40 V52 L22 40 L4 52 Z" fill="#fff4a0" stroke="#ffb020" stroke-width="3"/></svg></i><i class="sv" id="sv2"><svg viewBox="0 0 44 56"><path d="M4 4 H40 V52 L22 40 L4 52 Z" fill="#fff4a0" stroke="#ffb020" stroke-width="3"/></svg></i><i class="sv" id="sv3"><svg viewBox="0 0 44 56"><path d="M4 4 H40 V52 L22 40 L4 52 Z" fill="#fff4a0" stroke="#ffb020" stroke-width="3"/></svg></i><i class="sv" id="sv4"><svg viewBox="0 0 44 56"><path d="M4 4 H40 V52 L22 40 L4 52 Z" fill="#fff4a0" stroke="#ffb020" stroke-width="3"/></svg></i><i class="sv" id="sv5"><svg viewBox="0 0 44 56"><path d="M4 4 H40 V52 L22 40 L4 52 Z" fill="#fff4a0" stroke="#ffb020" stroke-width="3"/></svg></i><i class="sv" id="sv6"><svg viewBox="0 0 44 56"><path d="M4 4 H40 V52 L22 40 L4 52 Z" fill="#fff4a0" stroke="#ffb020" stroke-width="3"/></svg></i><i class="sv" id="sv7"><svg viewBox="0 0 44 56"><path d="M4 4 H40 V52 L22 40 L4 52 Z" fill="#fff4a0" stroke="#ffb020" stroke-width="3"/></svg></i><i class="sv" id="sv8"><svg viewBox="0 0 44 56"><path d="M4 4 H40 V52 L22 40 L4 52 Z" fill="#fff4a0" stroke="#ffb020" stroke-width="3"/></svg></i><i class="sv" id="sv9"><svg viewBox="0 0 44 56"><path d="M4 4 H40 V52 L22 40 L4 52 Z" fill="#fff4a0" stroke="#ffb020" stroke-width="3"/></svg></i></div>
+      <div id="dim"></div><svg class="streams" viewBox="0 0 1080 1920"><defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#ffb020"/><stop offset="1" stop-color="#ff3d6e"/></linearGradient></defs><path id="str0" d="M758 971 Q 529.0 811 540 980" fill="none" stroke="url(#sg)" stroke-width="26" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" style="filter:drop-shadow(0 0 14px rgba(255,160,60,.9))"/><path id="str1" d="M322 1563 Q 551.0 820 540 980" fill="none" stroke="url(#sg)" stroke-width="26" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" style="filter:drop-shadow(0 0 14px rgba(255,160,60,.9))"/></svg><div id="next"><div class="nb"></div><i class="fc"></i><div class="nh" id="nexth"></div><div class="tt">Hostel meals under 100</div></div><div class="ptn" id="ptn"><span>POST THIS NEXT</span></div><div class="exm" id="exm">EXAMPLE</div><div id="hud"><div class="brk"><i></i><i></i><i></i><i></i></div><div class="ln" id="hl1" style="top:70px">TARGET LOCKED: YOUR NEXT REEL</div><div class="big" id="hbig">COMMENT<br>GROW</div></div>
+      <div class="scanlines"></div>
+      <div style="position:absolute;inset:0;z-index:28;pointer-events:none"><div id="cree"><i id="cshadow"></i><div id="creeb"><div id="creef"><div id="creep"><div class="cpose" id="cp-cheer"><img src="assets/img/poses/cheer.png" alt=""></div><div class="cpose" id="cp-mag"><img src="assets/img/poses/mag.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgmag0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fb6db1"/><stop offset="1" stop-color="#f953a2"/></linearGradient></defs><g class="lidg"><ellipse cx="508" cy="422" rx="74" ry="74" fill="url(#lgmag0)"/><path d="M 455 425 Q 508 458 561 425" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-pass"><img src="assets/img/poses/pass.png" alt=""></div><div class="cpose" id="cp-phone"><img src="assets/img/poses/phone.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgphone0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fd54a3"/><stop offset="1" stop-color="#fd559d"/></linearGradient><linearGradient id="lgphone1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fd62ae"/><stop offset="1" stop-color="#fc52a2"/></linearGradient></defs><g class="lidg"><ellipse cx="310" cy="400" rx="73" ry="70" fill="url(#lgphone0)"/><path d="M 258 403 Q 310 434 362 403" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="512" cy="391" rx="70" ry="70" fill="url(#lgphone1)"/><path d="M 462 394 Q 512 425 562 394" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-point"><img src="assets/img/poses/point.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgpoint0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fc6bb3"/><stop offset="1" stop-color="#fa5aa9"/></linearGradient><linearGradient id="lgpoint1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fa6eb5"/><stop offset="1" stop-color="#f95fae"/></linearGradient></defs><g class="lidg"><ellipse cx="264" cy="408" rx="74" ry="72" fill="url(#lgpoint0)"/><path d="M 211 411 Q 264 443 317 411" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="444" cy="361" rx="58" ry="66" fill="url(#lgpoint1)"/><path d="M 404 364 Q 444 393 484 364" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-present"><img src="assets/img/poses/present.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgpresent0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fb5ea9"/><stop offset="1" stop-color="#fa569f"/></linearGradient><linearGradient id="lgpresent1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fb6ab0"/><stop offset="1" stop-color="#f856a6"/></linearGradient></defs><g class="lidg"><ellipse cx="344" cy="394" rx="77" ry="76" fill="url(#lgpresent0)"/><path d="M 289 397 Q 344 431 399 397" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="553" cy="368" rx="75" ry="74" fill="url(#lgpresent1)"/><path d="M 499 371 Q 553 404 607 371" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-proud"><img src="assets/img/poses/proud.png" alt=""></div><div class="cpose" id="cp-sad"><img src="assets/img/poses/sad.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgsad0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f45da9"/><stop offset="1" stop-color="#f24995"/></linearGradient><linearGradient id="lgsad1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f665af"/><stop offset="1" stop-color="#f44aa0"/></linearGradient></defs><g class="lidg"><ellipse cx="266" cy="494" rx="63" ry="54" fill="url(#lgsad0)"/><path d="M 222 496 Q 266 519 310 496" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="469" cy="478" rx="74" ry="48" fill="url(#lgsad1)"/><path d="M 416 480 Q 469 500 522 480" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-shock"><img src="assets/img/poses/shock.png" alt=""></div><div class="cpose" id="cp-stand"><img src="assets/img/poses/stand.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgstand0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fe61ae"/><stop offset="1" stop-color="#fd53a2"/></linearGradient><linearGradient id="lgstand1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fd6ab5"/><stop offset="1" stop-color="#fc55ab"/></linearGradient></defs><g class="lidg"><ellipse cx="303" cy="386" rx="80" ry="78" fill="url(#lgstand0)"/><path d="M 245 390 Q 303 424 361 390" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="526" cy="382" rx="79" ry="78" fill="url(#lgstand1)"/><path d="M 469 386 Q 526 420 583 386" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-think"><img src="assets/img/poses/think.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgthink0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f85fa6"/><stop offset="1" stop-color="#f7569f"/></linearGradient><linearGradient id="lgthink1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f866ab"/><stop offset="1" stop-color="#f754a2"/></linearGradient></defs><g class="lidg"><ellipse cx="310" cy="414" rx="76" ry="71" fill="url(#lgthink0)"/><path d="M 256 417 Q 310 449 364 417" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="506" cy="365" rx="70" ry="70" fill="url(#lgthink1)"/><path d="M 456 368 Q 506 399 556 368" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-walk"><img src="assets/img/poses/walk.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgwalk0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fc6db3"/><stop offset="1" stop-color="#f953a2"/></linearGradient><linearGradient id="lgwalk1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fa68b0"/><stop offset="1" stop-color="#f855a6"/></linearGradient></defs><g class="lidg"><ellipse cx="346" cy="378" rx="80" ry="76" fill="url(#lgwalk0)"/><path d="M 288 381 Q 346 415 404 381" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="538" cy="340" rx="66" ry="72" fill="url(#lgwalk1)"/><path d="M 492 343 Q 538 375 584 343" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-wave"><img src="assets/img/poses/wave.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgwave0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fa5fa8"/><stop offset="1" stop-color="#f855a0"/></linearGradient><linearGradient id="lgwave1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f96db0"/><stop offset="1" stop-color="#f658a7"/></linearGradient></defs><g class="lidg"><ellipse cx="287" cy="382" rx="79" ry="78" fill="url(#lgwave0)"/><path d="M 230 386 Q 287 420 344 386" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="500" cy="344" rx="78" ry="75" fill="url(#lgwave1)"/><path d="M 444 347 Q 500 381 556 347" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><svg id="gog" viewBox="0 0 360 150"><rect x="0" y="52" width="360" height="30" rx="15" fill="#2a1430"/><defs><radialGradient id="gl" cx=".35" cy=".35" r=".8"><stop offset="0" stop-color="#ffd27a"/><stop offset=".35" stop-color="#ff3d6e"/><stop offset="1" stop-color="#3a0a5a"/></radialGradient></defs><circle cx="92" cy="72" r="66" fill="#1a0a20"/><circle cx="268" cy="72" r="66" fill="#1a0a20"/><circle cx="92" cy="72" r="54" fill="url(#gl)"/><circle cx="268" cy="72" r="54" fill="url(#gl)"/><ellipse cx="74" cy="52" rx="16" ry="10" fill="#fff" opacity=".6"/><ellipse cx="250" cy="52" rx="16" ry="10" fill="#fff" opacity=".6"/><rect x="150" y="62" width="60" height="18" rx="8" fill="#1a0a20"/></svg></div></div><svg viewBox="0 0 820 820" class="csw"><path class="sweat" d="M 690 190 C 675 220 665 240 665 255 A 25 25 0 0 0 715 255 C 715 240 705 220 690 190 Z" fill="#7fd3ff" stroke="#3aa6e6" stroke-width="5"/></svg></div><div class="csp" style="left:40px;top:170px"><svg viewBox="-50 -50 100 100" width="110" height="110"><path d="M0 -50 C6 -10 10 -6 50 0 C10 6 6 10 0 50 C-6 10 -10 6 -50 0 C-10 -6 -6 -10 0 -50 Z" fill="#EE688B"/></svg></div><div class="csp" style="left:680px;top:110px"><svg viewBox="-50 -50 100 100" width="90" height="90"><path d="M0 -50 C6 -10 10 -6 50 0 C10 6 6 10 0 50 C-6 10 -10 6 -50 0 C-10 -6 -6 -10 0 -50 Z" fill="#f2b134"/></svg></div><div class="csp" style="left:720px;top:440px"><svg viewBox="-50 -50 100 100" width="70" height="70"><path d="M0 -50 C6 -10 10 -6 50 0 C10 6 6 10 0 50 C-6 10 -10 6 -50 0 C-10 -6 -6 -10 0 -50 Z" fill="#EE688B"/></svg></div><div class="csp" style="left:60px;top:470px"><svg viewBox="-50 -50 100 100" width="64" height="64"><path d="M0 -50 C6 -10 10 -6 50 0 C10 6 6 10 0 50 C-6 10 -10 6 -50 0 C-10 -6 -6 -10 0 -50 Z" fill="#f2b134"/></svg></div><div id="bub"><span id="bubt">!</span></div></div></div>
+      <div class="stat" id="st0"><span>WHICH ONE WORKED?</span></div><div class="stat hot" id="st1"><span>THERMAL VIEW: ON</span></div><div class="stat hot" id="st2"><span>2 HOT REELS · EXAMPLE</span></div><div class="stat hot" id="st3"><span>POST THIS NEXT</span></div>
+      <div class="head" id="h0" style="font-size:82px"><div class="hl"><span class="hw " id="h1">Your</span> <span class="hw " id="h2">audience</span> <span class="hw " id="h3">already</span></div><div class="hl"><span class="hw " id="h4">told</span> <span class="hw " id="h5">you</span> <span class="hw " id="h6">what</span> <span class="hw " id="h7">to</span></div><div class="hl"><span class="hw pk" id="h8">post</span> <span class="hw " id="h9">next.</span></div></div>
+<div class="head" id="h1" style="font-size:110px"><div class="hl"><span class="hw " id="h10">You</span> <span class="hw " id="h11">just</span> <span class="hw " id="h12">can't</span></div><div class="hl"><span class="hw pk" id="h13">see</span> <span class="hw " id="h14">it.</span></div></div>
+<div class="head" id="h2" style="font-size:80px"><div class="hl"><span class="hw " id="h15">Every</span> <span class="hw " id="h16">reel</span> <span class="hw " id="h17">looks</span> <span class="hw " id="h18">the</span> <span class="hw " id="h19">same…</span></div><div class="hl"><span class="hw " id="h20">until</span> <span class="hw pk" id="h21">Creedom</span></div><div class="hl"><span class="hw " id="h22">turns</span> <span class="hw " id="h23">on</span> <span class="hw " id="h24">the</span> <span class="hw ht" id="h25">heat.</span></div></div>
+<div class="head lt" id="h3a" style="font-size:110px"><div class="hl"><span class="hw cd" id="h26">Cold.</span> <span class="hw cd" id="h27">Cold.</span> <span class="hw cd" id="h28">Cold.</span></div></div>
+<div class="head lt" id="h3b" style="font-size:80px"><div class="hl"><span class="hw " id="h29">And</span> <span class="hw " id="h30">these</span> <span class="hw ht" id="h31">two?</span></div><div class="hl"><span class="hw " id="h32">Your</span> <span class="hw " id="h33">viewers</span> <span class="hw ht" id="h34">saved</span> <span class="hw " id="h35">them.</span></div><div class="hl"><span class="hw " id="h36">Again</span> <span class="hw " id="h37">and</span> <span class="hw " id="h38">again.</span></div></div>
+<div class="head lt" id="h4" style="font-size:84px"><div class="hl"><span class="hw " id="h39">That's</span> <span class="hw " id="h40">your</span> <span class="hw " id="h41">next</span> <span class="hw ht" id="h42">reel,</span></div><div class="hl"><span class="hw " id="h43">hiding</span> <span class="hw " id="h44">in</span> <span class="hw " id="h45">plain</span> <span class="hw " id="h46">sight.</span></div></div>
+<div class="head lt" id="h5" style="font-size:92px"><div class="hl"><span class="hw " id="h47">and</span> <span class="hw " id="h48">I'll</span> <span class="hw " id="h49">send</span> <span class="hw " id="h50">you</span></div><div class="hl"><span class="hw " id="h51">the</span> <span class="hw ht" id="h52">secret.</span></div></div>
+      <div id="flash"></div><div id="grain"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({paused: true});
+      tl.fromTo("#ph", {y: 0, rotation: -.5}, {y: -8, rotation: .5, duration: 2.3, yoyo: true, repeat: 10, ease: "sine.inOut", immediateRender: false}, 0);
+      tl.fromTo("#ph", {y: 420, rotationX: 26, scale: .92, transformPerspective: 1600}, {...{y: 0, rotationX: 0, scale: 1}, duration: 0.6, ease: "back.out(1.3)", immediateRender: false}, 0.000);
+      tl.fromTo("#tl0", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 0.250);
+      tl.fromTo("#tl1", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 0.320);
+      tl.fromTo("#tl2", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 0.390);
+      tl.fromTo("#tl3", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 0.460);
+      tl.fromTo("#tl4", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 0.530);
+      tl.fromTo("#tl5", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 0.600);
+      tl.fromTo("#tl6", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 0.670);
+      tl.fromTo("#tl7", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 0.740);
+      tl.fromTo("#tl8", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 0.810);
+      tl.fromTo("#h1", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, -0.050);
+      tl.fromTo("#h2", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 0.090);
+      tl.fromTo("#h3", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 0.570);
+      tl.fromTo("#h4", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 1.130);
+      tl.fromTo("#h5", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 1.470);
+      tl.fromTo("#h6", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 1.790);
+      tl.fromTo("#h7", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 2.010);
+      tl.fromTo("#h8", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 2.150);
+      tl.fromTo("#h9", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 2.370);
+      tl.to("#stage", {scale: 1.05, duration: 2.6, ease: "sine.inOut"}, 0.400);
+      tl.fromTo("#h10", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 3.150);
+      tl.fromTo("#h11", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 3.330);
+      tl.fromTo("#h12", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 3.550);
+      tl.fromTo("#h13", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 3.830);
+      tl.fromTo("#h14", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 4.050);
+      tl.to("#h0", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.18, ease: "power2.in"}, 2.950);
+      tl.fromTo("#st0", {opacity: 0, y: 14, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 3.100);
+      tl.fromTo("#qm0", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 3.200);
+      tl.fromTo("#qm1", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 3.320);
+      tl.fromTo("#qm2", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 3.440);
+      tl.fromTo("#qm3", {opacity: 0, scale: .3}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 3.560);
+      tl.to("#stage", {scale: 1, duration: 0.6, ease: "power3.inOut"}, 3.200);
+      tl.fromTo("#h15", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 4.510);
+      tl.fromTo("#h16", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 4.850);
+      tl.fromTo("#h17", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 5.150);
+      tl.fromTo("#h18", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 5.410);
+      tl.fromTo("#h19", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 5.610);
+      tl.fromTo("#h20", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 6.210);
+      tl.fromTo("#h21", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 6.790);
+      tl.fromTo("#h22", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 7.350);
+      tl.fromTo("#h23", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 7.650);
+      tl.fromTo("#h24", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 7.910);
+      tl.fromTo("#h25", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 8.030);
+      tl.to("#h1", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.18, ease: "power2.in"}, 4.310);
+      tl.to("#qm0", {...{opacity: 0, scale: .5}, duration: 0.2, ease: "power2.in"}, 4.460);
+      tl.to("#qm1", {...{opacity: 0, scale: .5}, duration: 0.2, ease: "power2.in"}, 4.460);
+      tl.to("#qm2", {...{opacity: 0, scale: .5}, duration: 0.2, ease: "power2.in"}, 4.460);
+      tl.to("#qm3", {...{opacity: 0, scale: .5}, duration: 0.2, ease: "power2.in"}, 4.460);
+      tl.fromTo(".tile", {scale: 1}, {scale: .94, duration: .15, yoyo: true, repeat: 1, stagger: .02, immediateRender: false}, 5.660);
+      tl.to("#cree", {x: 545, y: 1508, scale: 0.34, duration: 0.01, ease: "power3.inOut"}, 6.740);
+      tl.set("#cree", {opacity: 1}, 6.740);
+      tl.set("#cree .cpose", {opacity: 0}, 6.740);
+      tl.set("#cp-stand", {opacity: 1}, 6.740);
+      tl.set("#creef", {scaleX: 1}, 6.740);
+      tl.to("#cree", {x: 545, y: 1248, scale: 0.34, duration: 0.45, ease: "back.out(1.8)"}, 6.790);
+      tl.fromTo("#cree .csp", {opacity: 0, scale: .3}, {opacity: 1, scale: 1, duration: .3, ease: "back.out(3)", stagger: .05, immediateRender: false}, 6.940);
+      tl.to("#cree .csp", {rotation: "+=120", duration: 0.6, ease: "none"}, 6.940);
+      tl.to("#cree .csp", {opacity: 0, scale: .5, duration: .2, ease: "power2.in"}, 7.540);
+      tl.fromTo("#gog", {opacity: 0, y: -160, rotation: -20}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 7.450);
+      tl.to("#st0", {...{opacity: 0, y: -14}, duration: 0.15, ease: "power2.in"}, 7.400);
+      tl.fromTo("#st1", {opacity: 0, y: 14, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 7.450);
+      tl.set("#scan", {opacity: 1}, 7.630);
+      tl.fromTo("#scan", {y: 0}, {...{y: 1140}, duration: 0.45, ease: "power1.inOut", immediateRender: false}, 7.630);
+      tl.set("#scan", {opacity: 0}, 8.100);
+      tl.set("#thhead", {opacity: 1}, 7.680);
+      tl.set("#th0", {opacity: 1}, 7.780);
+      tl.set("#th1", {opacity: 1}, 7.780);
+      tl.set("#th2", {opacity: 1}, 7.780);
+      tl.set("#th3", {opacity: 1}, 7.880);
+      tl.set("#th4", {opacity: 1}, 7.880);
+      tl.set("#th5", {opacity: 1}, 7.880);
+      tl.set("#th6", {opacity: 1}, 7.980);
+      tl.set("#th7", {opacity: 1}, 7.980);
+      tl.set("#th8", {opacity: 1}, 7.980);
+      tl.to("#bgt", {...{opacity: 1}, duration: 0.25, ease: "power2.out"}, 7.980);
+      tl.set(".scanlines", {opacity: 1}, 7.980);
+      tl.set("#flash", {opacity: 0.8}, 8.000);
+      tl.to("#flash", {...{opacity: 0}, duration: 0.35, ease: "power2.out"}, 8.020);
+      tl.fromTo("#stage", {scale: 1}, {keyframes: [{scale: 1.07, duration: .08}, {scale: 1, duration: .45, ease: "power3.out"}], immediateRender: false}, 7.980);
+      tl.fromTo("#scale", {opacity: 0, x: 60}, {...{opacity: 1, x: 0}, duration: 0.4, ease: "power3.out", immediateRender: false}, 8.130);
+      tl.to("#h2", {...{opacity: 0, y: -30}, duration: 0.2, ease: "power2.in"}, 8.330);
+      tl.fromTo("#hz0", {opacity: 0, scale: .9}, {opacity: .85, scale: 1.08, duration: .5, yoyo: true, repeat: 15, ease: "sine.inOut", immediateRender: false}, 8.280);
+      tl.fromTo("#hz1", {opacity: 0, scale: .9}, {opacity: .85, scale: 1.08, duration: .5, yoyo: true, repeat: 15, ease: "sine.inOut", immediateRender: false}, 8.280);
+      tl.fromTo("#h26", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 9.110);
+      tl.fromTo("#h27", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 9.550);
+      tl.fromTo("#h28", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 10.390);
+      tl.fromTo("#bc", {opacity: 0, left: 322, top: 971, scale: 1.4}, {...{opacity: 1, left: 322, top: 971, scale: 1}, duration: 0.2, ease: "back.out(2)", immediateRender: false}, 9.060);
+      tl.fromTo("#bc", {scale: 1.2}, {scale: 1, duration: .15, immediateRender: false}, 9.140);
+      tl.to("#needle", {top: 640, duration: .15}, 9.160);
+      tl.to("#bc", {...{left: 540, top: 1267}, duration: 0.18, ease: "power3.out"}, 9.480);
+      tl.fromTo("#bc", {scale: 1.2}, {scale: 1, duration: .15, immediateRender: false}, 9.580);
+      tl.to("#needle", {top: 628, duration: .15}, 9.600);
+      tl.to("#bc", {...{left: 758, top: 1563}, duration: 0.18, ease: "power3.out"}, 10.320);
+      tl.fromTo("#bc", {scale: 1.2}, {scale: 1, duration: .15, immediateRender: false}, 10.420);
+      tl.to("#needle", {top: 616, duration: .15}, 10.440);
+      tl.to("#bc", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 11.290);
+      tl.fromTo("#h29", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 11.270);
+      tl.fromTo("#h30", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 11.390);
+      tl.fromTo("#h31", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 11.630);
+      tl.fromTo("#h32", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 12.270);
+      tl.fromTo("#h33", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 12.490);
+      tl.fromTo("#h34", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 12.950);
+      tl.fromTo("#h35", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 13.390);
+      tl.fromTo("#h36", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 14.050);
+      tl.fromTo("#h37", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 14.610);
+      tl.fromTo("#h38", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 14.950);
+      tl.to("#h3a", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.18, ease: "power2.in"}, 11.070);
+      tl.fromTo("#bh0", {opacity: 0, left: 758, top: 971, scale: 1.5}, {...{opacity: 1, left: 758, top: 971, scale: 1}, duration: 0.25, ease: "back.out(2.4)", immediateRender: false}, 11.440);
+      tl.fromTo("#bh1", {opacity: 0, left: 322, top: 1563, scale: 1.5}, {...{opacity: 1, left: 322, top: 1563, scale: 1}, duration: 0.25, ease: "back.out(2.4)", immediateRender: false}, 11.590);
+      tl.to("#needle", {top: 30, duration: .5, ease: "back.out(1.6)"}, 11.440);
+      tl.to("#st1", {...{opacity: 0, y: -14}, duration: 0.15, ease: "power2.in"}, 11.390);
+      tl.fromTo("#st2", {opacity: 0, y: 14, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 11.440);
+      tl.to("#stage", {scale: 1.12, x: 0, duration: 0.8, ease: "power3.inOut"}, 11.640);
+      tl.fromTo("#sv0", {opacity: 0, left: 729, top: 971, scale: .4}, {keyframes: [{opacity: 1, scale: 1, top: 881, duration: .25}, {opacity: 0, top: 751, duration: .4}], immediateRender: false}, 14.000);
+      tl.fromTo("#sv1", {opacity: 0, left: 325, top: 1563, scale: .4}, {keyframes: [{opacity: 1, scale: 1, top: 1473, duration: .25}, {opacity: 0, top: 1343, duration: .4}], immediateRender: false}, 14.100);
+      tl.fromTo("#sv2", {opacity: 0, left: 796, top: 971, scale: .4}, {keyframes: [{opacity: 1, scale: 1, top: 881, duration: .25}, {opacity: 0, top: 751, duration: .4}], immediateRender: false}, 14.200);
+      tl.fromTo("#sv3", {opacity: 0, left: 325, top: 1563, scale: .4}, {keyframes: [{opacity: 1, scale: 1, top: 1473, duration: .25}, {opacity: 0, top: 1343, duration: .4}], immediateRender: false}, 14.300);
+      tl.fromTo("#sv4", {opacity: 0, left: 789, top: 971, scale: .4}, {keyframes: [{opacity: 1, scale: 1, top: 881, duration: .25}, {opacity: 0, top: 751, duration: .4}], immediateRender: false}, 14.400);
+      tl.fromTo("#sv5", {opacity: 0, left: 308, top: 1563, scale: .4}, {keyframes: [{opacity: 1, scale: 1, top: 1473, duration: .25}, {opacity: 0, top: 1343, duration: .4}], immediateRender: false}, 14.500);
+      tl.fromTo("#sv6", {opacity: 0, left: 769, top: 971, scale: .4}, {keyframes: [{opacity: 1, scale: 1, top: 881, duration: .25}, {opacity: 0, top: 751, duration: .4}], immediateRender: false}, 14.600);
+      tl.fromTo("#sv7", {opacity: 0, left: 299, top: 1563, scale: .4}, {keyframes: [{opacity: 1, scale: 1, top: 1473, duration: .25}, {opacity: 0, top: 1343, duration: .4}], immediateRender: false}, 14.700);
+      tl.fromTo("#sv8", {opacity: 0, left: 768, top: 971, scale: .4}, {keyframes: [{opacity: 1, scale: 1, top: 881, duration: .25}, {opacity: 0, top: 751, duration: .4}], immediateRender: false}, 14.800);
+      tl.fromTo("#sv9", {opacity: 0, left: 337, top: 1563, scale: .4}, {keyframes: [{opacity: 1, scale: 1, top: 1473, duration: .25}, {opacity: 0, top: 1343, duration: .4}], immediateRender: false}, 14.900);
+      tl.fromTo("#h39", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 15.910);
+      tl.fromTo("#h40", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 16.230);
+      tl.fromTo("#h41", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 16.330);
+      tl.fromTo("#h42", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 16.590);
+      tl.fromTo("#h43", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 17.330);
+      tl.fromTo("#h44", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 17.590);
+      tl.fromTo("#h45", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 17.930);
+      tl.fromTo("#h46", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 18.170);
+      tl.to("#h3b", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.18, ease: "power2.in"}, 15.710);
+      tl.to("#stage", {scale: 1, x: 0, duration: 0.5, ease: "power3.inOut"}, 15.710);
+      tl.to("#gog", {y: -120, rotation: -25, opacity: 0, duration: .35, ease: "power2.in"}, 15.760);
+      tl.set("#cree .cpose", {opacity: 0}, 15.910);
+      tl.set("#cp-present", {opacity: 1}, 15.910);
+      tl.set("#creef", {scaleX: -1}, 15.910);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 15.910);
+      tl.to("#bh0", {...{opacity: 0}, duration: 0.2, ease: "power2.out"}, 15.760);
+      tl.to("#bh1", {...{opacity: 0}, duration: 0.2, ease: "power2.out"}, 15.760);
+      tl.fromTo("#str0", {strokeDashoffset: 1}, {...{strokeDashoffset: 0}, duration: 0.55, ease: "power2.inOut", immediateRender: false}, 16.010);
+      tl.to("#str0", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 16.960);
+      tl.fromTo("#str1", {strokeDashoffset: 1}, {...{strokeDashoffset: 0}, duration: 0.55, ease: "power2.inOut", immediateRender: false}, 16.110);
+      tl.to("#str1", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 16.960);
+      tl.fromTo("#dim", {opacity: 0}, {...{opacity: .6}, duration: 0.3, ease: "power2.out", immediateRender: false}, 16.260);
+      tl.fromTo("#next", {opacity: 0, scale: .3, rotationY: -40, transformPerspective: 1400}, {...{opacity: 1, scale: 1, rotationY: 0}, duration: 0.5, ease: "back.out(1.6)", immediateRender: false}, 16.330);
+      tl.fromTo("#nexth", {opacity: 0}, {keyframes: [{opacity: 1, duration: .2}, {opacity: 0, duration: .6}], immediateRender: false}, 16.530);
+      tl.set("#flash", {opacity: 0.45}, 16.480);
+      tl.to("#flash", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 16.500);
+      tl.fromTo("#ptn", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(2.2)", immediateRender: false}, 17.780);
+      tl.fromTo("#exm", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 18.080);
+      tl.to("#st2", {...{opacity: 0, y: -14}, duration: 0.15, ease: "power2.in"}, 16.330);
+      tl.fromTo("#st3", {opacity: 0, y: 14, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 16.380);
+      tl.fromTo("#next", {rotation: -1.5}, {rotation: 1.5, duration: 1, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false}, 16.880);
+      tl.fromTo("#h47", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 20.650);
+      tl.fromTo("#h48", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 20.810);
+      tl.fromTo("#h49", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 20.990);
+      tl.fromTo("#h50", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 21.130);
+      tl.fromTo("#h51", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 21.330);
+      tl.fromTo("#h52", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 21.470);
+      tl.to("#h4", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.18, ease: "power2.in"}, 20.450);
+      tl.to("#st3", {...{opacity: 0}, duration: 0.2, ease: "power2.out"}, 19.280);
+      tl.to("#next", {...{opacity: 0, scale: .9}, duration: 0.25, ease: "power2.in"}, 19.230);
+      tl.to("#ptn", {...{opacity: 0, scale: .9}, duration: 0.25, ease: "power2.in"}, 19.230);
+      tl.to("#exm", {...{opacity: 0, scale: .9}, duration: 0.25, ease: "power2.in"}, 19.230);
+      tl.to("#stage", {opacity: .12, scale: .92, duration: .4, ease: "power2.inOut"}, 19.230);
+      tl.to("#dim", {...{opacity: .3}, duration: 0.3, ease: "power2.out"}, 19.280);
+      tl.fromTo("#hud", {opacity: 0, scale: 1.3}, {...{opacity: 1, scale: 1}, duration: 0.35, ease: "power3.out", immediateRender: false}, 19.430);
+      tl.fromTo("#hl1", {opacity: 0, x: -30}, {...{opacity: 1, x: 0}, duration: 0.3, ease: "power2.out", immediateRender: false}, 19.580);
+      tl.fromTo("#hbig", {opacity: 0, scale: 1.6, filter: 'blur(12px)'}, {...{opacity: 1, scale: 1, filter: 'blur(0px)'}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 19.860);
+      tl.fromTo("#hbig", {scale: 1}, {scale: 1.05, duration: .35, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}, 20.360);
+      tl.fromTo("#hud .brk", {scale: 1.08}, {scale: 1, duration: .25, ease: "back.out(3)", immediateRender: false}, 19.480);
+      tl.set("#cree .cpose", {opacity: 0}, 19.480);
+      tl.set("#cp-wave", {opacity: 1}, 19.480);
+      tl.set("#creef", {scaleX: 1}, 19.480);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 19.480);
+      tl.fromTo("#creeb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 10, duration: .07}, {scaleY: 1.08, scaleX: .94, y: -40, duration: .14, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .13, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, y: 0, duration: .04}, {scaleY: 1, scaleX: 1, duration: .06}], immediateRender: false}, 19.960);
+      tl.fromTo("#cshadow", {scale: 1, opacity: 1}, {scale: .7, opacity: .5, duration: .21, ease: "power2.out", yoyo: true, repeat: 1, immediateRender: false}, 20.030);
+      tl.fromTo("#creeb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 10, duration: .07}, {scaleY: 1.08, scaleX: .94, y: -40, duration: .14, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .13, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, y: 0, duration: .04}, {scaleY: 1, scaleX: 1, duration: .06}], immediateRender: false}, 20.320);
+      tl.fromTo("#cshadow", {scale: 1, opacity: 1}, {scale: .7, opacity: .5, duration: .21, ease: "power2.out", yoyo: true, repeat: 1, immediateRender: false}, 20.390);
+      tl.set({}, {}, 23.40);
+      tl.progress(1, true).progress(0, true);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
