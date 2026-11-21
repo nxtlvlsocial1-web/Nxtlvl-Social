@@ -145,7 +145,7 @@ def contact_form(heading_id='book-h'):
 
 def close_row(title='Ready to meet your AI growth team?', sub='Book a free 20-minute strategy call. We look at your brand, channels and goals, then send a plan you can keep, whether or not you work with us.'):
     return f'''<section class="sec frame" data-sec aria-labelledby="close-h"><div class="close" data-rise>
-  <img class="close-mascot" src="/img/mascot.webp" width="480" height="708" alt="" loading="lazy" decoding="async">
+  <img class="close-mascot" src="/img/mascot.webp" width="480" height="549" alt="" loading="lazy" decoding="async">
   <h2 id="close-h">{title}</h2><p>{sub}</p>
   <form action="/contact" method="get" aria-label="Start with your email"><label class="sr" for="close-email">Work email</label><input id="close-email" name="email" type="email" placeholder="you@company.com" autocomplete="email"><input type="hidden" name="need" value="unsure"><button class="btn btn-primary" type="submit">Book a free call {icon("arrow")}</button></form>
 </div></section>'''
@@ -286,7 +286,7 @@ def home():
    </div>
    <div class="hero-art" data-rise>
     <div class="orb" aria-hidden="true"></div><div class="ring" aria-hidden="true"></div><div class="ring r2" aria-hidden="true"><i></i></div>
-    <img class="mascot" src="/img/mascot.webp" width="480" height="708" alt="Lvl, the Nxtlvl Social AI assistant mascot, waving" fetchpriority="high">
+    <img class="mascot" src="/img/mascot.webp" width="480" height="549" alt="Nextyy, the Nxtlvl Social mascot, waving" fetchpriority="high">
     <div class="chip c1" aria-hidden="true">{brand("whatsapp")}<div><b>New booking</b><small>Table for 4, 8:00 pm</small></div></div>
     <div class="chip c2" aria-hidden="true">{brand("meta")}<div><b>+12 leads</b><small>Meta lead ads, today</small></div></div>
     <div class="chip c3" aria-hidden="true">{brand("instagram")}<div><b>Replied in 4 s</b><small>"Price?" answered</small></div></div>
@@ -319,25 +319,14 @@ def home():
   <div class="frame logos" data-rise><p>Works with the platforms your customers already use</p><div class="mq" role="img" aria-label="Platforms: {tools_txt}"><div class="track" aria-hidden="true">{mq}{mq}</div></div></div>
 </section>
 
+<section class="frame statement" data-sec aria-label="What Nxtlvl Social does">
+  <p class="words" data-words>Nxtlvl Social is your AI growth team. Six agents and real experts plan your content, reply to every customer, run your ads, edit your reels and report what worked, every single day, while you run the business.</p>
+</section>
+
 <section class="sec frame" id="agents" data-sec aria-labelledby="ag-h">
   <div class="sec-head center"><span class="kicker" data-rise><i>{icon("bot")}</i>Your AI team</span><h2 id="ag-h" data-rise>Meet your <span class="g">agents</span></h2>
     <p class="soft" data-rise>Six specialist AI agents work on your brand every day. A strategist directs them, and nothing goes live until a person and you approve it.</p></div>
-  <div class="agents">
-    <div class="tile agent glowline" data-rise><div class="top"><div class="who-a"><b><i>{icon("pen")}</i>Content Agent</b><span class="state">Writing</span></div><p>Researches trends and your best posts, then drafts hooks, scripts and captions.</p></div>
-      <div class="stage" data-ui><div class="lbl"><span>Hooks for Friday's reel</span><span>3 of 3</span></div><div class="hooks" data-hooks><div>The one mistake buyers make...</div><div>We tested 3 offers. Here is the winner.</div><div class="cur"><span data-type>60 seconds inside our kitchen</span><span class="caret"></span></div></div></div></div>
-    <div class="tile agent glowline" data-rise><div class="top"><div class="who-a"><b><i>{icon("chat")}</i>Reply Agent</b><span class="state">Online 24/7</span></div><p>Answers DMs, comments and WhatsApp messages in your voice, and books appointments.</p></div>
-      <div class="stage" data-ui><div class="lbl"><span>Instagram DM</span><span>4 s reply</span></div><div class="mini-chat"><div class="b i">Price for the facial?</div><div class="b o">₹1,499, 60 minutes. Want Saturday at 11?</div><div class="b i">Yes!</div><div class="b o">Booked. See you Saturday.</div></div></div></div>
-    <div class="tile agent glowline" data-rise><div class="top"><div class="who-a"><b><i>{icon("mega")}</i>Ads Agent</b><span class="state">Optimising</span></div><p>Watches Meta and Google campaigns daily and moves budget to what converts.</p></div>
-      <div class="stage" data-ui><div class="lbl"><span>Budget split, live</span><span>Example</span></div><div class="budget"><div>Creative A<span class="track2"><i></i></span><b>Winner</b></div><div>Creative B<span class="track2"><i></i></span><b>Testing</b></div><div>Creative C<span class="track2"><i></i></span><b>Paused</b></div></div>
-        <div class="lbl" style="margin-top:16px"><span>Cost per lead</span><span style="color:var(--green)">down this week</span></div></div></div>
-    <div class="tile agent glowline" data-rise><div class="top"><div class="who-a"><b><i>{icon("film")}</i>Edit Agent</b><span class="state">Rendering</span></div><p>Rough-cuts reels with captions and beats, so editors spend their time on the finish.</p></div>
-      <div class="stage" data-ui><div class="lbl"><span>Reel · festive offer</span><span>0:28</span></div><div class="edit"><div class="ln v"><i style="flex:3"></i><i style="flex:2"></i><i style="flex:4"></i><i style="flex:2"></i></div><div class="ln t"><i style="flex:2"></i><i style="flex:1;opacity:0"></i><i style="flex:3"></i><i style="flex:1;opacity:0"></i><i style="flex:4"></i></div><div class="ln a"><i style="flex:11"></i></div><span class="ph"></span></div>
-        <div class="edit"><div class="cap"><span>Hook B approved</span><span>Captions on</span></div></div></div></div>
-    <div class="tile agent glowline" data-rise><div class="top"><div class="who-a"><b><i>{icon("search")}</i>SEO Agent</b><span class="state">Climbing</span></div><p>Writes answers buyers search for, so you rank on Google and get named by AI assistants.</p></div>
-      <div class="stage" data-ui><div class="lbl"><span>"best café near me"</span><span>Example</span></div><div class="rank"><div class="you"><b>1</b>Your brand</div><div><b>2</b>Competitor café</div><div><b>3</b>Food blog list</div><div><b>4</b>Another café</div></div></div></div>
-    <div class="tile agent glowline" data-rise><div class="top"><div class="who-a"><b><i>{icon("chart")}</i>Report Agent</b><span class="state">Counting</span></div><p>Pulls every channel into one plain-language monthly report, with next month's plan.</p></div>
-      <div class="stage" data-ui><div class="lbl"><span>This month · example</span><span>Auto-updated</span></div><div class="nums"><div><span>Reach</span><b data-count="48200">48,200</b><small>up 31%</small></div><div><span>Enquiries</span><b data-count="114">114</b><small>up 22%</small></div><div><span>Bookings</span><b data-count="63">63</b><small>up 18%</small></div><div><span>Replies</span><b data-count="412">412</b><small>24/7</small></div></div></div></div>
-  </div>
+  {agent_app()}
 </section>
 
 <section class="sec frame" data-sec aria-labelledby="fl-h">
@@ -679,6 +668,45 @@ INDUSTRIES = [
 IND_IMG = [('cafe', 'Barista plating a latte while a phone films it for a reel'), ('clinic', 'Clinic receptionist checking appointments on a tablet'),
            ('d2c', 'Product shoot of skincare serum bottles in a studio'), ('realestate', 'Couple viewing a new apartment while an agent films a walkthrough'),
            ('coaching', 'Teacher explaining diagrams to students in a coaching class'), ('creator', 'Content creator reviewing a clip in her home studio')]
+
+AGENT_CHATS = [
+    ('violet', 'Content Agent', 'Writing', 'Researches trends and your best posts, then drafts hooks, scripts and captions.', '3 hooks ready for Friday\'s reel',
+     ['I studied your top 20 posts and this week\'s trends. Three hooks for Friday\'s reel:<ol><li>The one mistake people make when ordering coffee</li><li>60 seconds inside our kitchen at 7 am</li><li>We tested 3 brunch offers. Here is the winner.</li></ol>'],
+     'use hook 2', ['Done. The script, shot list and captions for hook 2 are in your calendar. Your strategist reviews them at 4 pm.']),
+    ('green', 'Reply Agent', 'Online 24/7', 'Answers DMs, comments and WhatsApp messages in your voice, and books appointments.', '47 messages answered overnight',
+     ['Overnight I answered 47 messages on Instagram and WhatsApp. 9 asked for prices, 6 booked a table, and 2 need you.'],
+     'show me the 2', ['Priya wants a cake for 20 people on Saturday, and Rahul asked about a corporate lunch for 40. I have drafted both replies, so you only need to tap send.']),
+    ('orange', 'Ads Agent', 'Optimising', 'Watches Meta and Google campaigns daily and moves budget to what converts.', 'Creative B is 38% cheaper per lead',
+     ['Creative B is bringing leads at ₹62, 38% cheaper than A. Shall I move ₹2,000 from A to B?'],
+     'yes, move it', ['Moved. I will check again tomorrow at 9 am and tell you if the cost per lead changes.']),
+    ('pink', 'Edit Agent', 'Rendering', 'Rough-cuts reels with captions and beats, so editors spend their time on the finish.', 'Reel v2 ready: 0:28',
+     ['Reel v2 is ready: 0:28, captions on, cuts on the beat. Your editor has finished the colour grade.'],
+     'send it to the client', ['Sent to Café Aroma on WhatsApp for approval. I will tell you the moment they reply.']),
+    ('blue', 'SEO Agent', 'Climbing', 'Writes answers buyers search for, so you rank on Google and get named by AI assistants.', 'Now #1 for "best café in Baner"',
+     ['You now rank #1 for "best café in Baner" and #3 for "brunch near me". I wrote two new FAQ answers for your website.'],
+     'publish them', ['Published and sent to Google for indexing. ChatGPT, Gemini and Perplexity can now quote them too.']),
+    ('teal', 'Report Agent', 'Counting', 'Pulls every channel into one plain-language monthly report, with next month\'s plan.', 'November report is ready',
+     ['November is done: reach up 31%, 114 enquiries and 63 bookings. Next month\'s plan focuses on weekday lunch offers.'],
+     'share it with the team', ['Shared with 3 people as a PDF and a one-page summary.']),
+]
+
+def agent_app():
+    tabs, panels = [], []
+    for i, (col, name, state, role, preview, first, ask, reply) in enumerate(AGENT_CHATS):
+        sel = 'true' if i == 0 else 'false'
+        tabs.append(f'<button class="aa-tab" role="tab" id="aa-t{i}" aria-controls="aa-p{i}" aria-selected="{sel}" tabindex="{0 if i == 0 else -1}">'
+                    f'<img src="/img/blob-{col}.webp" width="40" height="40" alt=""><span><b>{name}</b><small>{preview}</small></span></button>')
+        msgs = ''.join(f'<div class="am" data-m>{m}</div>' for m in first) + f'<div class="um" data-m>{ask}</div><div class="aa-new" data-m><span>New</span></div>' + ''.join(f'<div class="am" data-m>{m}</div>' for m in reply)
+        panels.append(f'<div class="aa-panel" role="tabpanel" id="aa-p{i}" aria-labelledby="aa-t{i}"{"" if i == 0 else " hidden"}>'
+                      f'<div class="aa-head"><img src="/img/blob-{col}.webp" width="44" height="44" alt=""><div><b>{name}</b><small>{role}</small></div><span class="state">{state}</span></div>'
+                      f'<div class="aa-msgs">{msgs}<div class="aa-typing" aria-hidden="true"><i></i><i></i><i></i></div></div></div>')
+    return f'''<div class="agentapp" data-agentapp data-rise>
+    <aside class="aa-side"><div class="aa-pins" aria-hidden="true"><span><img src="/img/blob-violet.webp" width="56" height="56" alt=""><small>Nextyy</small></span><span><img src="/img/blob-blue.webp" width="56" height="56" alt=""><small>Strategist</small></span></div>
+      <div class="aa-list" role="tablist" aria-label="Your AI agents">{"".join(tabs)}</div>
+      <div class="aa-me"><span>CA</span>Café Aroma · example</div></aside>
+    <div class="aa-main">{"".join(panels)}<div class="aa-input" aria-hidden="true"><span>+</span><em>Message your agents</em><i></i></div></div>
+  </div>'''
+
 from guides import GUIDES
 
 def guide_cards():

@@ -307,3 +307,87 @@
   var tick = false, set = function () { var d = document.documentElement, max = d.scrollHeight - d.clientHeight; bar.style.setProperty('--p', max > 0 ? (d.scrollTop / max).toFixed(4) : 0); tick = false; };
   window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(set); } }, { passive: true }); set();
 })();
+
+// ---------- agents chat app, scroll reveal, tilt and parallax ----------
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce) document.documentElement.classList.add('js-motion');
+
+  // agents: tabs that switch conversations; messages arrive one by one
+  var app = document.querySelector('[data-agentapp]');
+  if (app) {
+    var tabs = [].slice.call(app.querySelectorAll('[role="tab"]')), cur = 0, timers = [], auto = null, inView = false, held = false;
+    var clear = function () { timers.forEach(clearTimeout); timers = []; };
+    var play = function (panel) {
+      var box = panel.querySelector('.aa-msgs'), ms = [].slice.call(box.querySelectorAll('[data-m]'));
+      clear();
+      if (reduce) { ms.forEach(function (m) { m.classList.add('on'); }); return; }
+      ms.forEach(function (m) { m.classList.remove('on'); }); box.classList.remove('is-typing');
+      var t = 300;
+      ms.forEach(function (m) {
+        var isAgent = m.classList.contains('am');
+        if (isAgent) { timers.push(setTimeout(function () { box.classList.add('is-typing'); }, t)); t += 900; }
+        timers.push(setTimeout(function () { box.classList.remove('is-typing'); m.classList.add('on'); }, t));
+        t += isAgent ? 1100 : 700;
+      });
+    };
+    var select = function (i, focus) {
+      cur = (i + tabs.length) % tabs.length;
+      tabs.forEach(function (tb, k) {
+        var on = k === cur, pn = document.getElementById(tb.getAttribute('aria-controls'));
+        tb.setAttribute('aria-selected', on ? 'true' : 'false'); tb.tabIndex = on ? 0 : -1; pn.hidden = !on;
+        if (on) play(pn);
+      });
+      if (focus) tabs[cur].focus();
+    };
+    var loop = function () { clearInterval(auto); if (reduce) return; auto = setInterval(function () { if (inView && !held && !document.hidden) select(cur + 1); }, 9000); };
+    tabs.forEach(function (tb, k) {
+      tb.addEventListener('click', function () { select(k); loop(); });
+      tb.addEventListener('keydown', function (e) {
+        var d = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+        if (d) { e.preventDefault(); select(cur + d, true); loop(); }
+        if (e.key === 'Home') { e.preventDefault(); select(0, true); } if (e.key === 'End') { e.preventDefault(); select(tabs.length - 1, true); }
+      });
+    });
+    app.addEventListener('mouseenter', function () { held = true; }); app.addEventListener('mouseleave', function () { held = false; });
+    app.addEventListener('focusin', function () { held = true; }); app.addEventListener('focusout', function () { held = false; });
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { var was = inView; inView = es[0].isIntersecting; if (inView && !was) select(cur); }, { threshold: 0.35 }).observe(app);
+    else select(0);
+    loop();
+  }
+
+  // statement: words fill in as you scroll
+  var words = document.querySelector('[data-words]');
+  var spans = [];
+  if (words && !reduce) {
+    var hi = { agents: 1, experts: 1, every: 1, single: 1, day: 1 };
+    words.innerHTML = words.textContent.trim().split(/\s+/).map(function (w) {
+      var k = w.toLowerCase().replace(/[^a-z]/g, ''); return '<span' + (hi[k] ? ' data-hi' : '') + '>' + w + '</span>';
+    }).join(' ');
+    spans = [].slice.call(words.querySelectorAll('span'));
+    spans.forEach(function (s) { if (s.hasAttribute('data-hi')) s.classList.add('hi'); });
+  }
+
+  // the workspace panel tilts flat as it scrolls in; the mascot drifts slower than the page
+  var con = document.querySelector('.hero-in .console'), art = document.querySelector('.hero-art'), orb = art && art.querySelector('.orb'), mas = art && art.querySelector('.mascot');
+  var ticking = false;
+  var frame = function () {
+    ticking = false;
+    var vh = window.innerHeight, y = window.scrollY;
+    if (spans.length) {
+      var r = words.getBoundingClientRect(), p = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (r.height + vh * 0.35)));
+      var n = Math.round(p * spans.length);
+      for (var i = 0; i < spans.length; i++) spans[i].classList.toggle('on', i < n);
+    }
+    if (con && !reduce && window.innerWidth > 700) {
+      var rc = con.getBoundingClientRect(), q = Math.min(1, Math.max(0, (vh - rc.top) / (vh * 0.75)));
+      con.style.transform = 'perspective(1600px) rotateX(' + ((1 - q) * 14).toFixed(2) + 'deg) scale(' + (0.94 + 0.06 * q).toFixed(3) + ')';
+    }
+    if (art && !reduce && y < vh * 1.2) {
+      if (mas) mas.style.translate = '0 ' + (y * -0.12).toFixed(1) + 'px';
+      if (orb) orb.style.translate = '0 ' + (y * 0.08).toFixed(1) + 'px';
+    }
+  };
+  var onScroll = function () { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
+  window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', onScroll); frame();
+})();
