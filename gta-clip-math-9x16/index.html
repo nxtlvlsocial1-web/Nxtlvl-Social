@@ -6,6 +6,7 @@
     <title>GTA Clip Math 9x16</title>
     <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
     <script src="assets/vendor/gsap.min.js"></script>
+    <script src="assets/js/timing.js"></script>
     <script src="assets/js/captions.js"></script>
     <style>
 @font-face { font-family: "BC"; font-weight: 700; src: url("assets/fonts/barlow-condensed-latin-700-normal.woff2") format("woff2"); }
@@ -36,7 +37,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
 
 /* 3D layer and vignette (the studio itself is drawn in assets/js/scene3d.js) */
 #gl { width: 1080px; height: 1920px; display: block; }
-.vign { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 62% at 50% 44%, rgba(5,2,10,0) 55%, rgba(5,2,10,.7) 100%); }
+.vign { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 62% at 50% 44%, rgba(5,2,10,0) 58%, rgba(5,2,10,.55) 100%); }
 
 /* Scene 1 */
 
@@ -85,7 +86,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
 .flash { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(255,255,255,1) 0%, rgba(255,214,236,.85) 60%, rgba(255,160,200,.7) 100%); opacity: 0; }
 .wipe { position: absolute; left: 0; top: -100px; width: 2400px; height: 2120px; }
 .wipe div { position: absolute; inset: 0; transform: skewX(-12deg); background: linear-gradient(90deg, rgba(255,138,61,0) 0, #FF8A3D 60px, #FF3D9A 200px, #8B5CF6 1200px, #2A0F4D 2200px, rgba(42,15,77,0) 2400px); }
-#grain-in { position: absolute; left: -200px; top: -200px; width: 1480px; height: 2320px; background: url("assets/img/grain.png"); opacity: .3; mix-blend-mode: soft-light; }
+#grain-in { position: absolute; left: -200px; top: -200px; width: 1480px; height: 2320px; background: url("assets/img/grain.png"); opacity: .14; mix-blend-mode: soft-light; }
 .p-track { position: absolute; left: 0; top: 0; width: 1080px; height: 8px; background: rgba(255,255,255,.14); }
 .p-fill { position: absolute; left: 0; top: 0; width: 1080px; height: 8px; background: linear-gradient(90deg, #8B5CF6, #FF3D9A 60%, #FF8A3D); box-shadow: 0 0 14px rgba(255,61,154,.85); transform-origin: 0 50%; }
 
@@ -98,70 +99,70 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="40" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="38.7" data-fps="30" data-width="1080" data-height="1920">
       <!-- 3D layer (assets/js/scene3d.js) -->
-      <canvas id="gl" class="clip" data-hold data-start="0" data-duration="40" data-track-index="0"></canvas>
-      <div id="vg" class="clip" data-start="0" data-duration="40" data-track-index="0"><div class="vign"></div></div>
+      <canvas id="gl" class="clip" data-hold data-start="0" data-duration="38.7" data-track-index="0"></canvas>
+      <div id="vg" class="clip" data-start="0" data-duration="38.7" data-track-index="0"><div class="vign"></div></div>
 
       <div id="world">
         <!-- 1. 0-3 s: 1,000,000 views = $225 (whole line on screen at frame 0) -->
-        <section id="s1" class="clip" data-start="0" data-duration="3" data-track-index="1">
+        <section id="s1" class="clip" data-start="0" data-duration="4.428" data-track-index="1">
           <div class="col hl" style="top: 296px; font-size: 88px"><span id="s1h" class="ib">1,000,000 VIEWS = <span class="money">$225</span></span></div>
         </section>
 
         <!-- 2. 3-5 s: Not $1,000 -->
-        <section id="s2" class="clip" data-start="3" data-duration="2" data-track-index="1">
+        <section id="s2" class="clip" data-start="4.428" data-duration="1.6" data-track-index="1">
           <div class="col hl" style="top: 296px; font-size: 160px"><span id="s2n" class="ib">NOT</span></div>
           <div class="col" style="top: 812px"><span id="s2c" class="chip">IT'S <b class="money">$225</b></span></div>
         </section>
 
         <!-- 3. 5-7 s: The math nobody shows you -->
-        <section id="s3" class="clip" data-start="5" data-duration="2" data-track-index="1">
+        <section id="s3" class="clip" data-start="6.028" data-duration="1.822" data-track-index="1">
           <div class="col hl" style="top: 285px; font-size: 150px"><span id="s3a" class="money">THE MATH</span></div>
           <div class="col hl" style="top: 430px; font-size: 96px"><span id="s3b" class="ib">NOBODY SHOWS YOU</span></div>
         </section>
 
         <!-- 4-6. 7-18 s: the bar chart (rate, cap, fee) -->
-                <section id="s4" class="clip" data-start="7" data-duration="4" data-track-index="3">
+                <section id="s4" class="clip" data-start="7.85" data-duration="3.55" data-track-index="3">
           <div class="col num" style="top: 284px; font-size: 220px"><span id="s4a" class="money">$1</span></div>
           <div class="col hl" style="top: 494px; font-size: 92px"><span id="s4b" class="ib">PER 1,000 VIEWS</span></div>
           <div class="col" style="top: 1208px; font: 500 25px/1 'IN'; color: rgba(255,255,255,.72)"><span id="s4d" class="ib">Rates as of 20 Nov 2026. Check the campaign page.</span></div>
         </section>
-        <section id="s5" class="clip" data-start="11" data-duration="4" data-track-index="3">
+        <section id="s5" class="clip" data-start="11.4" data-duration="2.97" data-track-index="3">
           <div class="col hl" style="top: 292px; font-size: 124px"><span id="s5a" class="ib">CAPPED AT <span class="money">$250</span></span></div>
           <div class="col hl" style="top: 420px; font-size: 92px"><span id="s5b" class="ib">PER CLIP</span></div>
         </section>
-        <section id="s6" class="clip" data-start="15" data-duration="3" data-track-index="3">
+        <section id="s6" class="clip" data-start="14.37" data-duration="2.1" data-track-index="3">
           <div class="col num" style="top: 284px; font-size: 220px"><span id="s6a" class="money">&minus;10%</span></div>
           <div class="col hl" style="top: 494px; font-size: 92px"><span id="s6b" class="ib">PLATFORM FEE</span></div>
         </section>
 
         <!-- 7. 18-21 s: Stops earning at 250K views -->
-        <section id="s7" class="clip" data-start="18" data-duration="3" data-track-index="1">
+        <section id="s7" class="clip" data-start="16.47" data-duration="3.43" data-track-index="1">
           <div class="col hl" style="top: 286px; font-size: 96px"><span id="s7a" class="ib">STOPS EARNING AT</span></div>
           <div class="col hl" style="top: 392px; font-size: 210px"><span id="s7b" class="ib"><span class="money">250K</span><span style="font-size: 110px"> VIEWS</span></span></div>
         </section>
 
         <!-- 9. 23-28 s: 5 clips x 200K views -->
-        <section id="s9" class="clip" data-start="23" data-duration="5" data-track-index="1">
+        <section id="s9" class="clip" data-start="21.5" data-duration="3.5" data-track-index="1">
           <div class="col hl" style="top: 292px; font-size: 172px"><span id="s9a" class="ib"><span class="money">5</span> CLIPS</span></div>
           <div class="col hl" style="top: 456px; font-size: 104px"><span id="s9b" class="ib">&times; <span class="money">200K</span> VIEWS</span></div>
         </section>
 
         <!-- 10. 28-32 s: Same 1M views = $900, then the split screen and 4x -->
-        <section id="s10" class="clip" data-start="28" data-duration="4" data-track-index="1">
+        <section id="s10" class="clip" data-start="25" data-duration="4.239" data-track-index="1">
           <div class="col hl" style="top: 286px; font-size: 112px"><span id="s10h" class="ib">SAME <span class="money">1M</span> VIEWS</span></div>
           <div class="col num" style="top: 404px; font-size: 170px"><span id="s10e" class="ib">= <span class="money">$900</span></span></div>
         </section>
 
         <!-- 11. 32-34 s: Stop chasing one viral clip -->
-        <section id="s11" class="clip" data-start="32" data-duration="2" data-track-index="1">
+        <section id="s11" class="clip" data-start="29.239" data-duration="2.036" data-track-index="1">
           <div class="col hl" style="top: 286px; font-size: 140px"><span id="s11a" class="ib">STOP CHASING</span></div>
           <div class="col hl" style="top: 424px; font-size: 104px"><span id="s11b" class="ib"><span class="money">ONE</span> VIRAL CLIP</span></div>
         </section>
 
         <!-- 12. 34-37 s: one catch -->
-        <section id="s12" class="clip" data-start="34" data-duration="3" data-track-index="1">
+        <section id="s12" class="clip" data-start="31.275" data-duration="4.11" data-track-index="1">
           <div id="wc" class="warn">
             <div id="hz0" class="hz" style="top: 0"></div>
             <div class="w-lab">ONE CATCH</div>
@@ -174,7 +175,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
         </section>
 
         <!-- 13. 37-40 s: Comment MATH -->
-        <section id="s13" class="clip" data-start="37" data-duration="2.62" data-track-index="1">
+        <section id="s13" class="clip" data-start="35.385" data-duration="2.935" data-track-index="1">
           <div class="col hl" style="top: 286px; font-size: 132px"><span id="s13a" class="ib">COMMENT</span></div>
           <div id="cbx" class="cbox">
             <div class="av"></div>
@@ -190,27 +191,33 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
         </section>
 
         <!-- loop: the last frames are scene 1's first frame, so the reel cuts cleanly back to the start -->
-        <section id="le" class="clip" data-start="39.62" data-duration="0.38" data-track-index="1">
+        <section id="le" class="clip" data-start="38.32" data-duration="0.38" data-track-index="1">
           <div class="col hl" style="top: 296px; font-size: 88px"><span class="ib">1,000,000 VIEWS = <span class="money">$225</span></span></div>
         </section>
       </div>
 
-      <div id="caps" class="clip" data-start="0" data-duration="40" data-track-index="8"></div>
+      <div id="caps" class="clip" data-start="0" data-duration="38.7" data-track-index="8"></div>
 
-      <div id="fx" class="clip" data-start="0" data-duration="40" data-track-index="9">
+      <div id="fx" class="clip" data-start="0" data-duration="38.7" data-track-index="9">
         <div id="flash" class="flash"></div>
         <div id="wipe1" class="wipe"><div></div></div>
         <div id="wipe2" class="wipe"><div></div></div>
       </div>
-      <div id="grain" class="clip" data-start="0" data-duration="40" data-track-index="10"><div id="grain-in"></div></div>
-      <div id="prog" class="clip" data-start="0" data-duration="40" data-track-index="11"><div class="p-track"></div><div id="pfill" class="p-fill"></div></div>
+      <div id="grain" class="clip" data-start="0" data-duration="38.7" data-track-index="10"><div id="grain-in"></div></div>
+      <div id="prog" class="clip" data-start="0" data-duration="38.7" data-track-index="11"><div class="p-track"></div><div id="pfill" class="p-fill"></div></div>
 
-      <audio id="sfx" src="assets/audio/mix.wav" data-start="0" data-duration="40" data-track-index="12" data-volume="1"></audio>
+      <audio id="sfx" src="assets/audio/mix.wav" data-start="0" data-duration="38.7" data-track-index="12" data-volume="1"></audio>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {}; // the runtime makes this; kept so the page also loads standalone (cover script)
+      // Two clocks. tl holds the animation at its authored times (0-40 s, the owner's scene table). The voiceover
+      // re-times it: root (registered below) runs on the voice timeline and seeks tl through TIMING.warp
+      // (assets/js/timing.js, written by build/voice.py). Captions and the progress bar run on root, in voice time.
       const tl = gsap.timeline({ paused: true });
+      const root = gsap.timeline({ paused: true });
+      const NEW_END = window.TIMING.newEnd, WARP = window.TIMING.warp;
+      const newToOld = (t) => { for (let i = 1; i < WARP.length; i++) { const [a, an] = WARP[i - 1], [b, bn] = WARP[i]; if (t <= bn) return a + ((b - a) * (t - an)) / (bn - an); } return WARP[WARP.length - 1][0]; };
       const $ = (s) => document.querySelector(s);
       const $$ = (s) => Array.from(document.querySelectorAll(s));
 
@@ -221,7 +228,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
       const inY = (el, t, dy, d = 0.32) => tl.fromTo(el, { y: dy, opacity: 0 }, { y: 0, opacity: 1, duration: d, ease: "back.out(1.6)" }, t);
       const pulse = (el, t, s = 1.12, d = 0.13) => tl.to(el, { scale: s, duration: d, ease: "power2.out", yoyo: true, repeat: 1 }, t);
 
-      tl.fromTo("#pfill", { scaleX: 0 }, { scaleX: 1, duration: 40, ease: "none" }, 0);
+      root.fromTo("#pfill", { scaleX: 0 }, { scaleX: 1, duration: NEW_END, ease: "none" }, 0);
 
       // ---------- 1. 0-3 s ----------
       pulse("#s1h", 2.15, 1.06, 0.12);
@@ -295,12 +302,12 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
           s.className = "w" + (w.accent ? " acc" : "");
           s.textContent = w.w;
           d.appendChild(s);
-          if (w.accent) tl.fromTo(s, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.2, ease: "back.out(3.2)" }, w.s);
-          else tl.fromTo(s, { scale: 0.75, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.12, ease: "back.out(2)" }, w.s);
+          if (w.accent) root.fromTo(s, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.2, ease: "back.out(2.6)" }, w.s);
+          else root.fromTo(s, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.12, ease: "back.out(1.8)" }, w.s);
         });
         capsEl.appendChild(d);
-        tl.set(d, { opacity: 1 }, g.s);
-        tl.set(d, { opacity: 0 }, g.e);
+        root.set(d, { opacity: 1 }, g.s);
+        root.set(d, { opacity: 0 }, g.e);
       });
 
       // ---------- per-frame values: shake, flash, grain, the budget meter, typing (counters and objects are 3D) ----------
@@ -313,9 +320,9 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
       const usd = (n) => "$" + fmt(n);
 
       // [time, strength px, length s]
-      const SHAKES = [[1.73, 26, 0.45], [3.86, 9, 0.25], [11.34, 12, 0.3], [12.5, 16, 0.35], [19.4, 9, 0.25], [20.06, 13, 0.3], [21.0, 10, 0.25], [21.9, 18, 0.35], [29.82, 13, 0.3], [31.1, 24, 0.45], [34.02, 14, 0.3], [37.3, 12, 0.3]];
+      const SHAKES = [[1.73, 15, 0.4], [3.86, 5, 0.22], [11.34, 7, 0.26], [12.5, 9, 0.3], [19.4, 5, 0.22], [20.06, 7, 0.26], [21.0, 6, 0.22], [21.9, 10, 0.3], [29.82, 7, 0.26], [31.1, 14, 0.4], [34.02, 8, 0.26], [37.3, 7, 0.26]];
       window.HF_SHAKES = SHAKES;
-      const FLASHES = [[1.73, 0.55], [12.5, 0.3], [21.0, 0.35], [29.82, 0.3], [31.1, 0.45]];
+      const FLASHES = [[1.73, 0.32], [12.5, 0.16], [21.0, 0.2], [29.82, 0.16], [31.1, 0.26]];
 
       const world = $("#world"), flash = $("#flash"), grainIn = $("#grain-in");
       const E = { wfill: $("#wfill"), tx: [0, 1, 2, 3].map((i) => $("#t" + i)), caret: $("#caret"), cph: $("#cph") };
@@ -350,8 +357,11 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
       tl.fromTo(drive, { t: 0 }, { t: 40, duration: 40, ease: "none", onUpdate: () => frame(drive.t) }, 0);
       frame(0);
 
-      window.__timelines["main"] = tl;
       tl.seek(0);
+      const wp = { t: 0 };
+      root.fromTo(wp, { t: 0 }, { t: NEW_END, duration: NEW_END, ease: "none", onUpdate: () => tl.seek(newToOld(wp.t), false) }, 0);
+      window.__timelines["main"] = root;
+      root.seek(0);
     </script>
     <script type="module" src="assets/js/scene3d.js"></script>
   </body>

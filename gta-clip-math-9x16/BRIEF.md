@@ -6,7 +6,8 @@ message: "A million-view clip pays $225 on a capped campaign; five 200K clips pa
 destination: instagram-reels
 aspect: 1080x1920
 language: en
-length: 40s
+length: 38.7s
+voice: am_michael
 angle: concept
 ---
 
@@ -15,14 +16,20 @@ angle: concept
 A neon Miami-night motion-graphics reel that does the payout math for one creator campaign's rules
 (Dylan Page campaign, $1 per 1,000 views, $250 cap per clip, 10% platform fee). The numbers are
 examples of how the campaign's rules work, never a promise of earnings. Built to the owner's
-13-scene timing table, 0-40 s, no voiceover (none supplied, and no AI voice may be generated).
+13-scene timing table. The first cut had no voiceover; the owner then asked for one: Kokoro "Michael" (am_michael,
+picked from samples) reads the exact script, and the reel is retimed to the voice (38.7 s).
 
 ## Assets
 
 - assets/fonts/ - Barlow Condensed 700-900 (headlines, numbers) and Inter 500-800 (labels, captions), both SIL OFL.
 - assets/sfx/, assets/audio/mix.wav - whoosh, tick, pop and impact effects synthesised locally by build/sfx.py (no third-party audio).
+- assets/audio/voice.wav - the voiceover (local Kokoro TTS, voice am_michael), from build/voice.py.
 
 ## Customizations
+
+- Voiceover (owner's request, after the first cut): build/voice.py voices each line, transcribes it for word times,
+  and writes a time warp so scenes and key hits land on the spoken words; captions use the spoken word times.
+- "A little cleaner": softer camera moves, shake, flashes, bloom and grain; no glint light.
 
 - Owner asked for it "3D, clean and aesthetic, more engaging": a Three.js layer (assets/js/scene3d.js) with a neon
   studio, extruded 3D numbers in Barlow Condensed Black (build/font3d.cjs), 3D objects per beat and a moving camera

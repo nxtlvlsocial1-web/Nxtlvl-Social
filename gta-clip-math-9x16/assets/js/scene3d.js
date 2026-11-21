@@ -66,7 +66,7 @@ const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(W, H, 
 composer.setPixelRatio(1);
 composer.setSize(W, H);
 composer.addPass(new RenderPass(scene, camera));
-const bloomPass = new UnrealBloomPass(new THREE.Vector2(W, H), 0.45, 0.5, 0.9);
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(W, H), 0.36, 0.5, 0.9);
 composer.addPass(bloomPass);
 composer.addPass(new OutputPass());
 
@@ -96,7 +96,7 @@ const rimO = new THREE.PointLight(0xff8a3d, 80, 40, 2); rimO.position.set(6, -0.
 const fillV = new THREE.PointLight(0x8b5cf6, 90, 40, 2); fillV.position.set(0, -4, 7); scene.add(fillV);
 const capLight = new THREE.PointLight(0xff2b2b, 0, 6, 2); scene.add(capLight);
 const sweep = new THREE.PointLight(0xffffff, 0, 5, 2); scene.add(sweep); // a glint that runs across the type on each hit
-const SWEEPS = [[1.6, 770], [12.5, 900], [16.82, 1050], [19.86, 780], [21.68, 1084], [29.68, 925], [37.1, 545]];
+const SWEEPS = []; // glints off for the cleaner cut; add [time, y px] pairs to bring them back
 
 // ---------------------------------------------------------------- environment
 const FLOOR_Y = Y(1279);
@@ -104,14 +104,14 @@ const floor = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), new THREE.MeshSt
 floor.rotation.x = -Math.PI / 2; floor.position.y = FLOOR_Y; scene.add(floor);
 const GL = [
   { c: "rgba(139,92,246,A)", a: 0.55, s: 26, p: [-7, 9, -24], m: [2.6, 1.6], per: 20 },
-  { c: "rgba(255,61,154,A)", a: 0.2, s: 24, p: [7, -6, -26], m: [-2.8, 2.0], per: 10 },
+  { c: "rgba(255,61,154,A)", a: 0.15, s: 24, p: [7, -6, -26], m: [-2.8, 2.0], per: 10 },
   { c: "rgba(255,138,61,A)", a: 0.07, s: 20, p: [2, 3, -28], m: [1.8, 2.4], per: 40 },
 ].map((o) => {
   const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex(o.c, o.a), blending: THREE.AdditiveBlending, depthWrite: false, fog: false, transparent: true }));
   s.scale.set(o.s, o.s, 1); s.position.set(...o.p); scene.add(s); return { s, o };
 });
 const NB = 70;
-const bokeh = new THREE.Points(new THREE.BufferGeometry(), new THREE.PointsMaterial({ size: 0.22, map: glowTex("rgba(255,214,236,A)", 1), transparent: true, opacity: 0.5, depthWrite: false, blending: THREE.AdditiveBlending, fog: false }));
+const bokeh = new THREE.Points(new THREE.BufferGeometry(), new THREE.PointsMaterial({ size: 0.22, map: glowTex("rgba(255,214,236,A)", 1), transparent: true, opacity: 0.28, depthWrite: false, blending: THREE.AdditiveBlending, fog: false }));
 const BP = new Float32Array(NB * 3), BB = [];
 for (let i = 0; i < NB; i++) BB.push([(hash(i) - 0.5) * 30, (hash(i + 50) - 0.5) * 30, -6 - hash(i + 99) * 22, hash(i + 7) * TAU, 1 + Math.floor(hash(i + 3) * 3)]);
 bokeh.geometry.setAttribute("position", new THREE.BufferAttribute(BP, 3)); scene.add(bokeh);
@@ -135,7 +135,7 @@ const roseSide = new THREE.MeshStandardMaterial({ color: 0xffa585, metalness: 1,
 const roseFace = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 1, roughness: 0.24 });
 const podMat = physical({ color: 0x1c1036, metalness: 0.55, roughness: 0.25, clearcoatRoughness: 0.15 });
 const neonPink = new THREE.MeshBasicMaterial({ color: new THREE.Color(3.0, 0.6, 1.6), toneMapped: false });
-const neonVio = new THREE.MeshBasicMaterial({ color: new THREE.Color(0.85, 0.5, 1.9), toneMapped: false });
+const neonVio = new THREE.MeshBasicMaterial({ color: new THREE.Color(0.68, 0.4, 1.5), toneMapped: false });
 const neonWhite = new THREE.MeshBasicMaterial({ color: new THREE.Color(1.35, 1.25, 1.5), toneMapped: false });
 const neonOrange = new THREE.MeshBasicMaterial({ color: new THREE.Color(3.0, 1.3, 0.4), toneMapped: false });
 
@@ -622,7 +622,7 @@ const stMore = new T3({ size: 66, style: "white", tab: false }, stampG); stMore.
   const m = new THREE.Mesh(new THREE.ExtrudeGeometry(sh, { depth: L(10), bevelEnabled: false, curveSegments: 8 }), neonWhite); m.position.z = -L(5); stampG.add(m);
   const back = new THREE.Mesh(new THREE.PlaneGeometry(w - d, h - d), new THREE.MeshBasicMaterial({ color: 0x0a0612, transparent: true, opacity: 0.55 })); back.position.z = -L(8); stampG.add(back);
 }
-const burst = Array.from({ length: 16 }, (_, i) => { const m = new THREE.Mesh(coinGeo, [roseSide, roseFace, roseFace]); scene.add(m); return m; });
+const burst = Array.from({ length: 10 }, (_, i) => { const m = new THREE.Mesh(coinGeo, [roseSide, roseFace, roseFace]); scene.add(m); return m; });
 
 function phonesAt(t) {
   const on9 = t >= 23.0 && t < 28.74, on11 = t >= 32.0 && t < 34.0;
@@ -669,7 +669,7 @@ function phonesAt(t) {
     slabPay.g.position.z = sl ? lerp(L(28) + 3, L(28), i4(su)) : L(28);
     feeChip.visible = t >= 29.08;
     const fu = seg(t, 29.08, 29.28);
-    feeChip.position.set(L(250), L(205), L(40) + 3 * (1 - i4(fu)));
+    feeChip.position.set(L(268), L(262), L(40) + 3 * (1 - i4(fu)));
     feeChip.rotation.set(0, 0, lerp(-30, 8, i4(fu)) * DEG);
     feeChip.scale.setScalar(lerp(2.2, 1, i4(fu)));
   }
@@ -689,10 +689,10 @@ function phonesAt(t) {
     st4.g.position.set(-L(70), 0, 0); stMore.g.position.set(L(130), L(-20), 0);
   }
   burst.forEach((c, i) => {
-    const dt = t - 31.1; c.visible = dt >= 0 && dt < 0.9 && t < 32.0;
+    const dt = t - 31.1; c.visible = dt >= 0 && dt < 0.7 && t < 32.0;
     if (!c.visible) return;
     const a = Math.PI * (1.05 + 0.9 * (i / (burst.length - 1))) + (hash(i) - 0.5) * 0.2, sp = 4 + 3 * hash(i * 3);
-    c.position.set(X(505) + Math.cos(a) * sp * dt * 1.3, Y(1095) + Math.sin(a) * sp * dt * 0.7 + 1.2 * dt - 7 * dt * dt, -1.4 - hash(i * 7) * dt * 2);
+    c.position.set(X(505) + Math.cos(a) * sp * dt * 1.3, Y(1095) + Math.sin(a) * sp * dt * 0.7 + 1.2 * dt - 7 * dt * dt, -2.4 - hash(i * 7) * dt * 2);
     c.rotation.set(dt * (6 + 5 * hash(i)), dt * 3, dt * (5 + 4 * hash(i * 2)));
   });
   // scene 11: one viral clip shrinks away; the five stay
@@ -774,9 +774,9 @@ function endAt(t) {
 
 // ---------------------------------------------------------------- camera: a whip into each scene, slow push-ins, punch-ins on the hits
 // [start, end, whip yaw, whip pitch, roll]
-const SHOTS = [[0, 3, 0, 0], [3, 5, 0.34, 0.06], [5, 7, -0.28, -0.12], [7, 11, 0.36, 0.05], [11, 15, 0, 0], [15, 18, -0.16, 0],
-  [18, 21, 0.34, 0.08], [21, 23, -0.22, 0, 0.05], [23, 28, 0, 0.32], [28, 32, -0.32, 0], [32, 34, 0.34, 0.05], [34, 37, -0.26, -0.06], [37, LOOP_AT, 0.32, 0.06]];
-const PUNCH = [[1.73, 0.07], [3.86, 0.04], [12.5, 0.05], [16.82, 0.03], [19.86, 0.04], [21.68, 0.05], [29.68, 0.06], [31.1, 0.08], [34.02, 0.05], [37.3, 0.04]];
+const SHOTS = [[0, 3, 0, 0], [3, 5, 0.22, 0.04], [5, 7, -0.18, -0.08], [7, 11, 0.24, 0.03], [11, 15, 0, 0], [15, 18, -0.1, 0],
+  [18, 21, 0.22, 0.05], [21, 23, -0.15, 0, 0.035], [23, 28, 0, 0.22], [28, 32, -0.2, 0], [32, 34, 0.22, 0.03], [34, 37, -0.17, -0.04], [37, LOOP_AT, 0.2, 0.04]];
+const PUNCH = [[1.73, 0.045], [3.86, 0.025], [12.5, 0.03], [16.82, 0.02], [19.86, 0.025], [21.68, 0.03], [29.68, 0.035], [31.1, 0.05], [34.02, 0.03], [37.3, 0.025]];
 const SHAKES = window.HF_SHAKES || [];
 const TGT = new THREE.Vector3();
 function cameraAt(t, te) {
@@ -785,7 +785,7 @@ function cameraAt(t, te) {
   const s = SHOTS.find(([a, b]) => te >= a && te < b) || SHOTS[0];
   const [a, b, wy, wp, wr = 0] = s, w = 1 - eo(seg(te, a, a + 0.55));
   yaw += wy * w; pitch += wp * w; roll += wr * (0.6 + 0.4 * w);
-  dist *= (1 + (a === 0 ? 0 : 0.12 * w)) * (1 - 0.045 * ios(seg(te, a, b)));
+  dist *= (1 + (a === 0 ? 0 : 0.08 * w)) * (1 - 0.035 * ios(seg(te, a, b)));
   yaw += 0.03 * Math.sin((TAU * te) / 10); pitch += 0.015 * Math.sin((TAU * te) / 8);
   if (te >= 7 && te < 18) yaw += 0.05 * Math.sin(((te - 7) / 11) * Math.PI) * (te < 11 ? 1 : -0.6); // slow orbit around the chart
   for (const [tp, k] of PUNCH) dist *= 1 - k * bump(te, tp, 0.12);
@@ -799,8 +799,11 @@ function cameraAt(t, te) {
 }
 
 // ---------------------------------------------------------------- frame
+// the voice timeline (assets/js/timing.js): HyperFrames seeks voice time; the scene is authored in the original 0-40 s
+const WARP = window.TIMING ? window.TIMING.warp : [[0, 0], [END, END]];
+const newToOld = (t) => { for (let i = 1; i < WARP.length; i++) { const [a, an] = WARP[i - 1], [b, bn] = WARP[i]; if (t <= bn) return a + ((b - a) * (t - an)) / (bn - an); } return WARP[WARP.length - 1][0]; };
 function renderAt(time) {
-  const t = clamp(time, 0, END);
+  const t = clamp(COVER ? time : newToOld(time), 0, END);
   const te = t >= LOOP_AT ? 0 : t; // the last frames repeat frame 0, so the reel cuts cleanly back to the start
   cameraAt(t, te);
   GL.forEach(({ s, o }) => { const ph = (TAU * te) / o.per; s.position.set(o.p[0] + o.m[0] * Math.sin(ph), o.p[1] + o.m[1] * Math.sin(ph * 0.5 + 1), o.p[2]); });

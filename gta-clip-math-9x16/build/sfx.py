@@ -1,18 +1,30 @@
 """Sound effects for gta-clip-math-9x16, synthesised here (no third-party audio, nothing to license).
 
-python3 build/sfx.py      (from the project root; needs numpy)
-Writes assets/sfx/<name>.wav (each effect once, for reuse) and assets/audio/mix.wav (40 s, 48 kHz stereo),
-the track index.html plays. Cue times follow the animation events in index.html; keep them in sync when you
-retime a scene. There is no voice or music: the effects sit at a moderate level so a voiceover can go on top.
+python3 build/sfx.py      (from the project root, after build/voice.py; needs numpy)
+Writes assets/sfx/<name>.wav (each effect once, for reuse) and assets/audio/mix.wav (48 kHz stereo), the track
+index.html plays: the voiceover (assets/audio/voice.wav) with the effects under it. Cue times below are in the
+animation's authored time (0-40 s, as in index.html); they are moved onto the voice timeline with the warp in
+build/timing.json, like the animation itself. No music.
 """
+import json
 import os
 import wave
 
 import numpy as np
 
 SR = 48000
-DUR = 40.0
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TIMING = json.load(open(os.path.join(ROOT, "build", "timing.json")))
+DUR, WARP = TIMING["newEnd"], TIMING["warp"]
+SFX_GAIN = 0.42  # effects about 7.5 dB under where they sat without a voice
+
+
+def o2n(t):
+    """authored (old) time -> voice-timeline time"""
+    for (a, an), (b, bn) in zip(WARP, WARP[1:]):
+        if t <= b:
+            return an + (bn - an) * (t - a) / (b - a)
+    return WARP[-1][1]
 rng = np.random.default_rng(1234)
 
 
@@ -236,14 +248,21 @@ def main():
         write_wav(os.path.join(ROOT, "assets", "sfx", name + ".wav"), x)
     mix = np.zeros((int(DUR * SR), 2))
     for t, name, g, p in CUES:
-        x = FX[name] * 10 ** (g / 20)
-        i = int(round(t * SR))
+        x = FX[name] * 10 ** (g / 20) * SFX_GAIN
+        i = int(round(o2n(t) * SR))
         j = min(len(mix), i + len(x))
         l, r = np.sqrt((1 - p) / 2), np.sqrt((1 + p) / 2)
         mix[i:j, 0] += x[: j - i] * l * 1.414
         mix[i:j, 1] += x[: j - i] * r * 1.414
+    with wave.open(os.path.join(ROOT, "assets", "audio", "voice.wav")) as w:  # 24 kHz mono from Kokoro
+        vsr = w.getframerate()
+        v = np.frombuffer(w.readframes(w.getnframes()), dtype="<i2").astype(np.float64) / 32768
+    v = np.interp(np.arange(int(len(v) * SR / vsr)) / SR, np.arange(len(v)) / vsr, v)
+    n = min(len(v), len(mix))
+    mix[:n, 0] += v[:n]
+    mix[:n, 1] += v[:n]
     peak = np.max(np.abs(mix))
-    mix = mix / peak * 0.7 if peak > 0.7 else mix  # about -3 dBFS peaks
+    mix = mix / peak * 0.89 if peak > 0.89 else mix  # about -1 dBFS peaks
     write_wav(os.path.join(ROOT, "assets", "audio", "mix.wav"), mix)
     print(f"{len(CUES)} cues, peak {20 * np.log10(np.max(np.abs(mix))):.1f} dBFS")
 
