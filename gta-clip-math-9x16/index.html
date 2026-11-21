@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>GTA Clip Math 9x16</title>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script src="assets/js/captions.js"></script>
+    <style>
+@font-face { font-family: "BC"; font-weight: 700; src: url("assets/fonts/barlow-condensed-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "BC"; font-weight: 800; src: url("assets/fonts/barlow-condensed-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "BC"; font-weight: 900; src: url("assets/fonts/barlow-condensed-latin-900-normal.woff2") format("woff2"); }
+@font-face { font-family: "IN"; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "IN"; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "IN"; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "IN"; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2") format("woff2"); }
+
+/* Palette (owner's brief). Red is only for the strike-through and the cap. */
+:root { --bg0: #0A0612; --bg1: #2A0F4D; --vio: #8B5CF6; --pink: #FF3D9A; --org: #FF8A3D; --red: #FF2B2B; --lav: #CDBEFF; --ink: #FFFFFF; --grey: #8E88A3; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg0); }
+#root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--bg0); font-family: "IN", sans-serif; color: var(--ink); }
+.clip { position: absolute; inset: 0; }
+#world { position: absolute; inset: 0; }
+
+/* Text safe column: x 60-950 (Instagram right rail 130 px), y 250-1500. */
+.col { position: absolute; left: 60px; width: 890px; text-align: center; white-space: nowrap; }
+.ib { display: inline-block; }
+.hl { font-family: "BC"; font-weight: 800; text-transform: uppercase; line-height: .92; letter-spacing: .5px; color: var(--ink); text-shadow: 0 6px 30px rgba(10,6,18,.7); }
+.num { font-family: "BC"; font-weight: 900; line-height: .9; font-variant-numeric: tabular-nums; }
+.money { display: inline-block; background: linear-gradient(90deg, var(--pink) 0%, var(--org) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; filter: drop-shadow(0 0 22px rgba(255,61,154,.55)); }
+.wglow { display: inline-block; color: #fff; text-shadow: 0 0 26px rgba(139,92,246,.9), 0 0 70px rgba(139,92,246,.5); }
+.lab { font-family: "IN"; font-weight: 700; font-size: 28px; line-height: 1; letter-spacing: 7px; text-transform: uppercase; color: var(--lav); }
+.lab svg { width: 34px; height: 34px; vertical-align: -8px; margin-right: 10px; }
+
+/* 3D layer and vignette (the studio itself is drawn in assets/js/scene3d.js) */
+#gl { width: 1080px; height: 1920px; display: block; }
+.vign { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 62% at 50% 44%, rgba(5,2,10,0) 55%, rgba(5,2,10,.7) 100%); }
+
+/* Scene 1 */
+
+/* Scene 2 */
+.chip { display: inline-block; padding: 16px 38px 18px; border-radius: 70px; background: rgba(24,12,48,.82); border: 2px solid rgba(139,92,246,.75); box-shadow: 0 0 34px rgba(139,92,246,.45); font: 800 46px/1 "IN"; letter-spacing: 3px; color: #fff; }
+.chip b { font: 900 76px/1 "BC"; letter-spacing: 1px; vertical-align: -6px; margin-left: 8px; }
+
+/* Scenes 4-6: the bar chart */
+
+/* Scene 7: the clip timeline */
+
+/* Scene 8: the pattern break */
+
+/* Scene 10 */
+
+/* Scene 12: the warning card */
+.warn { position: absolute; left: 90px; top: 520px; width: 830px; height: 700px; border-radius: 36px; overflow: hidden; background: linear-gradient(180deg, rgba(42,20,70,.97), rgba(20,10,36,.97)); border: 4px solid var(--org); box-shadow: 0 0 60px rgba(255,138,61,.45); text-align: center; }
+.hz { position: absolute; left: -60px; width: 1000px; height: 30px; background: repeating-linear-gradient(-45deg, var(--org) 0 26px, #0A0612 26px 52px); }
+.w-lab { position: absolute; left: 0; right: 0; top: 66px; font: 800 34px/1 "IN"; letter-spacing: 10px; color: var(--org); }
+.w-big { position: absolute; left: 0; right: 0; top: 124px; font: 900 132px/.9 "BC"; text-transform: uppercase; color: #fff; }
+.w-big span { display: block; }
+.w-ml { position: absolute; left: 0; right: 0; top: 404px; font: 700 24px/1 "IN"; letter-spacing: 7px; color: var(--lav); }
+.w-bar { position: absolute; left: 90px; top: 444px; width: 650px; height: 44px; border-radius: 22px; background: rgba(255,255,255,.1); border: 2px solid rgba(255,255,255,.25); overflow: hidden; }
+.w-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; border-radius: 22px; background: linear-gradient(90deg, var(--pink), var(--org)); box-shadow: 0 0 20px rgba(255,138,61,.7); }
+.w-chk { position: absolute; left: 0; right: 0; top: 540px; font: 700 50px/1.1 "IN"; color: #fff; }
+.w-chk u { text-decoration: none; position: relative; }
+.w-chk u i { position: absolute; left: 0; right: 0; bottom: -8px; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--pink), var(--org)); transform-origin: 0 50%; }
+
+/* Scene 13: comment box */
+.cbox { position: absolute; left: 90px; top: 770px; width: 830px; height: 132px; border-radius: 66px; background: rgba(255,255,255,.08); border: 2px solid rgba(255,255,255,.28); box-shadow: 0 0 40px rgba(139,92,246,.3); }
+.av { position: absolute; border-radius: 50%; background: conic-gradient(from 200deg, #8B5CF6, #FF3D9A, #FF8A3D, #8B5CF6); }
+.av::after { content: ""; position: absolute; inset: 22%; border-radius: 50%; background: rgba(10,6,18,.55); }
+.cbox .av { left: 20px; top: 20px; width: 88px; height: 88px; }
+.cph { position: absolute; left: 156px; top: 44px; font: 500 40px/1 "IN"; color: rgba(255,255,255,.45); }
+.ctx { position: absolute; left: 136px; top: 34px; font: 800 58px/1 "IN"; letter-spacing: 2px; color: #fff; white-space: nowrap; }
+.ctx span { display: none; }
+.caret { display: inline-block; width: 5px; height: 58px; margin-left: 6px; vertical-align: -8px; background: var(--pink); box-shadow: 0 0 12px rgba(255,61,154,.9); }
+.send { position: absolute; right: 20px; top: 20px; width: 88px; height: 88px; border-radius: 50%; background: linear-gradient(135deg, #8B5CF6, #FF3D9A); box-shadow: 0 0 26px rgba(255,61,154,.6); }
+.send svg { position: absolute; left: 22px; top: 22px; width: 44px; height: 44px; }
+.cpost { position: absolute; left: 90px; top: 950px; width: 830px; height: 150px; border-radius: 34px; background: rgba(24,12,48,.85); border: 2px solid rgba(139,92,246,.6); box-shadow: 0 0 40px rgba(139,92,246,.35); }
+.cpost .av { left: 26px; top: 34px; width: 82px; height: 82px; }
+.cpost .who { position: absolute; left: 134px; top: 30px; font: 700 26px/1 "IN"; color: var(--lav); }
+.cpost .msg { position: absolute; left: 132px; top: 66px; font: 900 72px/1 "BC"; letter-spacing: 2px; color: #fff; }
+
+/* Effects */
+.flash { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(255,255,255,1) 0%, rgba(255,214,236,.85) 60%, rgba(255,160,200,.7) 100%); opacity: 0; }
+.wipe { position: absolute; left: 0; top: -100px; width: 2400px; height: 2120px; }
+.wipe div { position: absolute; inset: 0; transform: skewX(-12deg); background: linear-gradient(90deg, rgba(255,138,61,0) 0, #FF8A3D 60px, #FF3D9A 200px, #8B5CF6 1200px, #2A0F4D 2200px, rgba(42,15,77,0) 2400px); }
+#grain-in { position: absolute; left: -200px; top: -200px; width: 1480px; height: 2320px; background: url("assets/img/grain.png"); opacity: .3; mix-blend-mode: soft-light; }
+.p-track { position: absolute; left: 0; top: 0; width: 1080px; height: 8px; background: rgba(255,255,255,.14); }
+.p-fill { position: absolute; left: 0; top: 0; width: 1080px; height: 8px; background: linear-gradient(90deg, #8B5CF6, #FF3D9A 60%, #FF8A3D); box-shadow: 0 0 14px rgba(255,61,154,.85); transform-origin: 0 50%; }
+
+/* Captions: word by word, lower middle (inside the safe area, above Instagram's caption block) */
+.cap { position: absolute; left: 60px; width: 890px; top: 1312px; text-align: center; font: 800 68px/1.14 "IN"; letter-spacing: -.5px; color: #fff; opacity: 0; text-shadow: 0 4px 0 rgba(10,6,18,.95), 0 0 6px rgba(10,6,18,.95), 0 0 22px rgba(10,6,18,.8); }
+.cap .w { display: inline-block; white-space: nowrap; margin: 0 .14em; }
+.cap.hot .w.acc { color: #fff; }
+.cap.hot { text-shadow: 0 4px 0 rgba(42,15,77,.75), 0 0 8px rgba(42,15,77,.8), 0 0 22px rgba(42,15,77,.55); }
+.cap .w.acc { color: var(--pink); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="40" data-fps="30" data-width="1080" data-height="1920">
+      <!-- 3D layer (assets/js/scene3d.js) -->
+      <canvas id="gl" class="clip" data-hold data-start="0" data-duration="40" data-track-index="0"></canvas>
+      <div id="vg" class="clip" data-start="0" data-duration="40" data-track-index="0"><div class="vign"></div></div>
+
+      <div id="world">
+        <!-- 1. 0-3 s: 1,000,000 views = $225 (whole line on screen at frame 0) -->
+        <section id="s1" class="clip" data-start="0" data-duration="3" data-track-index="1">
+          <div class="col hl" style="top: 296px; font-size: 88px"><span id="s1h" class="ib">1,000,000 VIEWS = <span class="money">$225</span></span></div>
+        </section>
+
+        <!-- 2. 3-5 s: Not $1,000 -->
+        <section id="s2" class="clip" data-start="3" data-duration="2" data-track-index="1">
+          <div class="col hl" style="top: 296px; font-size: 160px"><span id="s2n" class="ib">NOT</span></div>
+          <div class="col" style="top: 812px"><span id="s2c" class="chip">IT'S <b class="money">$225</b></span></div>
+        </section>
+
+        <!-- 3. 5-7 s: The math nobody shows you -->
+        <section id="s3" class="clip" data-start="5" data-duration="2" data-track-index="1">
+          <div class="col hl" style="top: 285px; font-size: 150px"><span id="s3a" class="money">THE MATH</span></div>
+          <div class="col hl" style="top: 430px; font-size: 96px"><span id="s3b" class="ib">NOBODY SHOWS YOU</span></div>
+        </section>
+
+        <!-- 4-6. 7-18 s: the bar chart (rate, cap, fee) -->
+                <section id="s4" class="clip" data-start="7" data-duration="4" data-track-index="3">
+          <div class="col num" style="top: 284px; font-size: 220px"><span id="s4a" class="money">$1</span></div>
+          <div class="col hl" style="top: 494px; font-size: 92px"><span id="s4b" class="ib">PER 1,000 VIEWS</span></div>
+          <div class="col" style="top: 1208px; font: 500 25px/1 'IN'; color: rgba(255,255,255,.72)"><span id="s4d" class="ib">Rates as of 20 Nov 2026. Check the campaign page.</span></div>
+        </section>
+        <section id="s5" class="clip" data-start="11" data-duration="4" data-track-index="3">
+          <div class="col hl" style="top: 292px; font-size: 124px"><span id="s5a" class="ib">CAPPED AT <span class="money">$250</span></span></div>
+          <div class="col hl" style="top: 420px; font-size: 92px"><span id="s5b" class="ib">PER CLIP</span></div>
+        </section>
+        <section id="s6" class="clip" data-start="15" data-duration="3" data-track-index="3">
+          <div class="col num" style="top: 284px; font-size: 220px"><span id="s6a" class="money">&minus;10%</span></div>
+          <div class="col hl" style="top: 494px; font-size: 92px"><span id="s6b" class="ib">PLATFORM FEE</span></div>
+        </section>
+
+        <!-- 7. 18-21 s: Stops earning at 250K views -->
+        <section id="s7" class="clip" data-start="18" data-duration="3" data-track-index="1">
+          <div class="col hl" style="top: 286px; font-size: 96px"><span id="s7a" class="ib">STOPS EARNING AT</span></div>
+          <div class="col hl" style="top: 392px; font-size: 210px"><span id="s7b" class="ib"><span class="money">250K</span><span style="font-size: 110px"> VIEWS</span></span></div>
+        </section>
+
+        <!-- 9. 23-28 s: 5 clips x 200K views -->
+        <section id="s9" class="clip" data-start="23" data-duration="5" data-track-index="1">
+          <div class="col hl" style="top: 292px; font-size: 172px"><span id="s9a" class="ib"><span class="money">5</span> CLIPS</span></div>
+          <div class="col hl" style="top: 456px; font-size: 104px"><span id="s9b" class="ib">&times; <span class="money">200K</span> VIEWS</span></div>
+        </section>
+
+        <!-- 10. 28-32 s: Same 1M views = $900, then the split screen and 4x -->
+        <section id="s10" class="clip" data-start="28" data-duration="4" data-track-index="1">
+          <div class="col hl" style="top: 286px; font-size: 112px"><span id="s10h" class="ib">SAME <span class="money">1M</span> VIEWS</span></div>
+          <div class="col num" style="top: 404px; font-size: 170px"><span id="s10e" class="ib">= <span class="money">$900</span></span></div>
+        </section>
+
+        <!-- 11. 32-34 s: Stop chasing one viral clip -->
+        <section id="s11" class="clip" data-start="32" data-duration="2" data-track-index="1">
+          <div class="col hl" style="top: 286px; font-size: 140px"><span id="s11a" class="ib">STOP CHASING</span></div>
+          <div class="col hl" style="top: 424px; font-size: 104px"><span id="s11b" class="ib"><span class="money">ONE</span> VIRAL CLIP</span></div>
+        </section>
+
+        <!-- 12. 34-37 s: one catch -->
+        <section id="s12" class="clip" data-start="34" data-duration="3" data-track-index="1">
+          <div id="wc" class="warn">
+            <div id="hz0" class="hz" style="top: 0"></div>
+            <div class="w-lab">ONE CATCH</div>
+            <div class="w-big"><span id="wb0">BUDGETS RUN</span><span id="wb1">OUT FAST.</span></div>
+            <div class="w-ml">CAMPAIGN BUDGET</div>
+            <div class="w-bar"><div id="wfill" class="w-fill"></div></div>
+            <div class="w-chk"><span id="wchk" class="ib">Check the <u>campaign page<i id="wul"></i></u>.</span></div>
+            <div id="hz1" class="hz" style="top: 670px"></div>
+          </div>
+        </section>
+
+        <!-- 13. 37-40 s: Comment MATH -->
+        <section id="s13" class="clip" data-start="37" data-duration="2.62" data-track-index="1">
+          <div class="col hl" style="top: 286px; font-size: 132px"><span id="s13a" class="ib">COMMENT</span></div>
+          <div id="cbx" class="cbox">
+            <div class="av"></div>
+            <div id="cph" class="cph">Add a comment...</div>
+            <div class="ctx"><span id="t0">M</span><span id="t1">A</span><span id="t2">T</span><span id="t3">H</span><i id="caret" class="caret"></i></div>
+            <div id="send" class="send"><svg viewBox="0 0 44 44"><path d="M6 22 L38 8 L28 38 L22 25 Z" fill="#fff"/></svg></div>
+          </div>
+          <div id="cpost" class="cpost">
+            <div class="av"></div>
+            <div class="who">You &middot; now</div>
+            <div class="msg">MATH</div>
+          </div>
+        </section>
+
+        <!-- loop: the last frames are scene 1's first frame, so the reel cuts cleanly back to the start -->
+        <section id="le" class="clip" data-start="39.62" data-duration="0.38" data-track-index="1">
+          <div class="col hl" style="top: 296px; font-size: 88px"><span class="ib">1,000,000 VIEWS = <span class="money">$225</span></span></div>
+        </section>
+      </div>
+
+      <div id="caps" class="clip" data-start="0" data-duration="40" data-track-index="8"></div>
+
+      <div id="fx" class="clip" data-start="0" data-duration="40" data-track-index="9">
+        <div id="flash" class="flash"></div>
+        <div id="wipe1" class="wipe"><div></div></div>
+        <div id="wipe2" class="wipe"><div></div></div>
+      </div>
+      <div id="grain" class="clip" data-start="0" data-duration="40" data-track-index="10"><div id="grain-in"></div></div>
+      <div id="prog" class="clip" data-start="0" data-duration="40" data-track-index="11"><div class="p-track"></div><div id="pfill" class="p-fill"></div></div>
+
+      <audio id="sfx" src="assets/audio/mix.wav" data-start="0" data-duration="40" data-track-index="12" data-volume="1"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {}; // the runtime makes this; kept so the page also loads standalone (cover script)
+      const tl = gsap.timeline({ paused: true });
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+      // ---------- tween helpers (entrances use fromTo; later moves on the same element use .to) ----------
+      const slam = (el, t, from = 1.7, d = 0.24) => tl.fromTo(el, { scale: from, opacity: 0 }, { scale: 1, opacity: 1, duration: d, ease: "back.out(1.8)" }, t);
+      const pop = (el, t, d = 0.3, from = 0.4) => tl.fromTo(el, { scale: from, opacity: 0 }, { scale: 1, opacity: 1, duration: d, ease: "back.out(2.4)" }, t);
+      const inX = (el, t, dx, d = 0.32) => tl.fromTo(el, { x: dx, opacity: 0 }, { x: 0, opacity: 1, duration: d, ease: "back.out(1.5)" }, t);
+      const inY = (el, t, dy, d = 0.32) => tl.fromTo(el, { y: dy, opacity: 0 }, { y: 0, opacity: 1, duration: d, ease: "back.out(1.6)" }, t);
+      const pulse = (el, t, s = 1.12, d = 0.13) => tl.to(el, { scale: s, duration: d, ease: "power2.out", yoyo: true, repeat: 1 }, t);
+
+      tl.fromTo("#pfill", { scaleX: 0 }, { scaleX: 1, duration: 40, ease: "none" }, 0);
+
+      // ---------- 1. 0-3 s ----------
+      pulse("#s1h", 2.15, 1.06, 0.12);
+
+      // ---------- 2. 3-5 s ----------
+      slam("#s2n", 3.0, 1.5, 0.2);
+      pop("#s2c", 4.3, 0.3);
+
+      // ---------- 3. 5-7 s ----------
+      inX("#s3a", 5.0, -260, 0.3);
+      inX("#s3b", 5.08, 260, 0.3);
+
+      // ---------- 4-6. 7-18 s chart ----------
+      slam("#s4a", 7.0, 1.8, 0.24);
+      inX("#s4b", 7.08, 300, 0.3);
+      inY("#s4d", 7.55, 30, 0.25);
+      pulse("#s4a", 8.89, 1.07);
+      pulse("#s4b", 10.13, 1.08);
+      inY("#s5a", 11.0, -120, 0.28);
+      inY("#s5b", 11.06, -120, 0.28);
+      pulse("#s5a", 12.53, 1.07);
+      slam("#s6a", 15.0, 1.9, 0.24);
+      inX("#s6b", 15.08, -300, 0.3);
+      pulse("#s6a", 17.35, 1.05);
+
+      // ---------- 7. 18-21 s ----------
+      inY("#s7a", 18.0, -100, 0.26);
+      inY("#s7b", 18.05, -100, 0.28);
+      pulse("#s7b", 19.4, 1.08);
+
+      // ---------- 8. 21-23 s: the pattern break is drawn in 3D (hot studio, words fly in from the right) ----------
+
+      // ---------- 9. 23-28 s ----------
+      inY("#s9a", 23.0, -140, 0.26);
+      inY("#s9b", 23.06, -140, 0.26);
+      pulse("#s9b", 26.3, 1.06);
+
+      // ---------- 10. 28-32 s ----------
+      inY("#s10h", 28.0, -120, 0.26);
+      slam("#s10e", 29.68, 1.8, 0.2);
+
+      // ---------- 11. 32-34 s ----------
+      slam("#s11a", 32.0, 1.4, 0.2);
+      inX("#s11b", 32.05, 300, 0.26);
+
+      // ---------- 12. 34-37 s ----------
+      tl.fromTo("#wc", { scale: 1.25, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.18, ease: "power4.out" }, 34.0);
+      tl.fromTo(["#hz0", "#hz1"], { x: 0 }, { x: -74 * 4, duration: 3, ease: "none" }, 34.0);
+      inX("#wb0", 34.83, -200, 0.24);
+      inX("#wb1", 35.32, 200, 0.24);
+      tl.fromTo("#wchk", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.24, ease: "back.out(2)" }, 35.9);
+      tl.fromTo("#wul", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power3.out" }, 36.23);
+
+      // ---------- 13. 37-39.6 s ----------
+      inX("#s13a", 37.0, -300, 0.26);
+      inY("#cbx", 37.04, 260, 0.34);
+      tl.to("#send", { scale: 0.82, duration: 0.08, yoyo: true, repeat: 1 }, 38.25);
+      tl.fromTo("#cpost", { y: -110, scale: 0.85, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.28, ease: "back.out(2)" }, 38.38);
+
+      // ---------- wipes (each covers its cut point, then clears the frame within 0.15 s) ----------
+      tl.fromTo("#wipe1", { x: 1300 }, { x: -3700, duration: 0.36, ease: "none" }, 5.0 - 0.141);
+      tl.fromTo("#wipe2", { x: 1300 }, { x: -3700, duration: 0.36, ease: "none" }, 39.62 - 0.141);
+
+      // ---------- captions, word by word ----------
+      const capsEl = $("#caps");
+      (window.CAPS || []).forEach((g, gi) => {
+        const d = document.createElement("div");
+        d.className = "cap" + (g.s >= 21 && g.s < 23 ? " hot" : "");
+        g.words.forEach((w, wi) => {
+          const s = document.createElement("span");
+          s.className = "w" + (w.accent ? " acc" : "");
+          s.textContent = w.w;
+          d.appendChild(s);
+          if (w.accent) tl.fromTo(s, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.2, ease: "back.out(3.2)" }, w.s);
+          else tl.fromTo(s, { scale: 0.75, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.12, ease: "back.out(2)" }, w.s);
+        });
+        capsEl.appendChild(d);
+        tl.set(d, { opacity: 1 }, g.s);
+        tl.set(d, { opacity: 0 }, g.e);
+      });
+
+      // ---------- per-frame values: shake, flash, grain, the budget meter, typing (counters and objects are 3D) ----------
+      const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+      const seg = (t, a, b) => clamp((t - a) / (b - a), 0, 1);
+      const io3 = (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+      const o3 = (p) => 1 - Math.pow(1 - p, 3);
+      const ios = (p) => -(Math.cos(Math.PI * p) - 1) / 2;
+      const fmt = (n) => Math.round(n).toLocaleString("en-US");
+      const usd = (n) => "$" + fmt(n);
+
+      // [time, strength px, length s]
+      const SHAKES = [[1.73, 26, 0.45], [3.86, 9, 0.25], [11.34, 12, 0.3], [12.5, 16, 0.35], [19.4, 9, 0.25], [20.06, 13, 0.3], [21.0, 10, 0.25], [21.9, 18, 0.35], [29.82, 13, 0.3], [31.1, 24, 0.45], [34.02, 14, 0.3], [37.3, 12, 0.3]];
+      window.HF_SHAKES = SHAKES;
+      const FLASHES = [[1.73, 0.55], [12.5, 0.3], [21.0, 0.35], [29.82, 0.3], [31.1, 0.45]];
+
+      const world = $("#world"), flash = $("#flash"), grainIn = $("#grain-in");
+      const E = { wfill: $("#wfill"), tx: [0, 1, 2, 3].map((i) => $("#t" + i)), caret: $("#caret"), cph: $("#cph") };
+      const TYPE = [37.62, 37.76, 37.9, 38.04];
+
+      function frame(t) {
+        // camera shake on the scene layer
+        let sx = 0, sy = 0;
+        for (const [t0, a, d] of SHAKES) {
+          const dt = t - t0;
+          if (dt >= 0 && dt < d) { const k = Math.exp(-dt * 7) * (1 - dt / d); sx += a * k * Math.sin(dt * 90); sy += a * 0.7 * k * Math.cos(dt * 73); }
+        }
+        world.style.transform = `translate(${sx.toFixed(2)}px, ${sy.toFixed(2)}px)`;
+        let fo = 0;
+        for (const [t0, a] of FLASHES) { const dt = t - t0; if (dt >= 0 && dt < 0.28) fo = Math.max(fo, a * Math.pow(1 - dt / 0.28, 2)); }
+        flash.style.opacity = fo.toFixed(3);
+        // film grain, new pattern every frame
+        const n = Math.floor(t * 30), h = (n * 7919 + 13) % 997;
+        grainIn.style.transform = `translate(${(h % 200) - 100}px, ${((h * 31) % 200) - 100}px)`;
+
+        // 12. budget meter drains
+        if (t >= 33.9 && t < 37.1) E.wfill.style.transform = `translateX(${(-96 * Math.pow(seg(t, 34.55, 35.48), 2)).toFixed(2)}%)`;
+        // 13. typing MATH into the comment box
+        if (t >= 36.9) {
+          const sent = t >= 38.3;
+          E.tx.forEach((el, i) => { el.style.display = !sent && t >= TYPE[i] ? "inline" : "none"; });
+          E.cph.style.opacity = t < 37.55 || sent ? 1 : 0;
+          E.caret.style.opacity = Math.floor((t - 37) * 3.2) % 2 === 0 ? 1 : 0;
+        }
+      }
+      const drive = { t: 0 };
+      tl.fromTo(drive, { t: 0 }, { t: 40, duration: 40, ease: "none", onUpdate: () => frame(drive.t) }, 0);
+      frame(0);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+    <script type="module" src="assets/js/scene3d.js"></script>
+  </body>
+</html>

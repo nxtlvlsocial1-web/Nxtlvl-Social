@@ -1,0 +1,35 @@
+<!doctype html>
+<!-- Cover for gta-clip-math-9x16: the coin tower bursting under the hook title; "= $225" is 3D type (scene3d.js, COVER3D).
+     Rendered by build/cover.cjs. The title sits inside the centre 1080x1350 so it survives the 4:5 grid crop. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>GTA Clip Math cover</title>
+    <script type="importmap">{"imports":{"three":"../assets/vendor/three/three.module.min.js","three/addons/":"../assets/vendor/three/addons/"}}</script>
+    <style>
+@font-face { font-family: "BC"; font-weight: 800; src: url("../assets/fonts/barlow-condensed-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "BC"; font-weight: 900; src: url("../assets/fonts/barlow-condensed-latin-900-normal.woff2") format("woff2"); }
+@font-face { font-family: "IN"; font-weight: 800; src: url("../assets/fonts/inter-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "IN"; font-weight: 700; src: url("../assets/fonts/inter-latin-700-normal.woff2") format("woff2"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0A0612; }
+#gl { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; display: block; }
+.vign { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 62% at 50% 44%, rgba(5,2,10,0) 55%, rgba(5,2,10,.7) 100%); }
+#grain { position: absolute; inset: 0; background: url("../assets/img/grain.png"); opacity: .3; mix-blend-mode: soft-light; }
+.col { position: absolute; left: 60px; width: 890px; text-align: center; white-space: nowrap; }
+.pill { display: inline-block; padding: 14px 28px; border-radius: 50px; border: 2px solid rgba(139,92,246,.8); background: rgba(139,92,246,.18); font: 800 30px/1 "IN"; letter-spacing: 6px; color: #CDBEFF; }
+.t1 { font: 800 132px/.92 "BC"; color: #fff; text-shadow: 0 0 30px rgba(139,92,246,.8), 0 6px 30px rgba(10,6,18,.7); }
+.t2 { font: 900 320px/.9 "BC"; }
+.money { display: inline-block; background: linear-gradient(90deg, #FF3D9A 0%, #FF8A3D 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 26px rgba(255,61,154,.6)); }
+    </style>
+  </head>
+  <body>
+    <canvas id="gl"></canvas>
+    <div class="vign"></div>
+    <div class="col" style="top: 322px"><span class="pill">THE MATH NOBODY SHOWS YOU</span></div>
+    <div class="col t1" style="top: 410px">1,000,000 VIEWS</div>
+    <div id="grain"></div>
+    <script>window.COVER3D = true; // scene3d.js: still camera, 3D "= $225" title</script>
+    <script type="module" src="../assets/js/scene3d.js"></script>
+  </body>
+</html>
