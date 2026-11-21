@@ -391,3 +391,12 @@
   var onScroll = function () { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
   window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', onScroll); frame();
 })();
+
+// muted clips play only while on screen (and never under reduced motion)
+(function () {
+  var vids = document.querySelectorAll('video[data-autoplay]'); if (!vids.length) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) { vids.forEach(function (v) { v.setAttribute('controls', ''); v.preload = 'metadata'; }); return; }
+  var io = new IntersectionObserver(function (es) { es.forEach(function (e) { var v = e.target; if (e.isIntersecting) { v.preload = 'auto'; var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause(); }); }, { threshold: 0.25 });
+  vids.forEach(function (v) { io.observe(v); });
+})();

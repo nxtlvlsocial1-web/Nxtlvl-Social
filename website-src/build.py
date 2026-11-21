@@ -320,6 +320,7 @@ def home():
 </section>
 
 <section class="frame statement" data-sec aria-label="What Nxtlvl Social does">
+  {video_block("v-hero", "Animation of AI dashboard cards: chat replies, a rising chart and bookings")}
   <p class="words" data-words>Nxtlvl Social is your AI growth team. Six agents and real experts plan your content, reply to every customer, run your ads, edit your reels and report what worked, every single day, while you run the business.</p>
 </section>
 
@@ -329,7 +330,7 @@ def home():
   {agent_app()}
 </section>
 
-<section class="sec frame" data-sec aria-labelledby="fl-h">
+<section class="sec frame ink" id="automation" data-sec aria-labelledby="fl-h">
   <div class="sec-head has-m"><img class="sec-mascot" src="/img/pose-phone.webp" width="360" height="425" alt="" loading="lazy" decoding="async"><span class="kicker" data-rise><i>{icon("bolt")}</i>Automations</span><h2 id="fl-h" data-rise>Every enquiry, handled in <span class="g">seconds</span></h2>
     <p class="soft" data-rise>Messages from Instagram, WhatsApp, your website and ads flow to one agent. It answers, qualifies and books, logs the lead, and hands the important ones to your team.</p></div>
   <div class="flowbox" data-flow data-rise>
@@ -437,6 +438,11 @@ SERVICE_FRAGS = {
                              ('seo', 'Found on Google and by AI', 'Search readiness is checked monthly once the site is live.')],
 }
 
+SERVICE_VIDEO = {'/ai-automation': ('v-whatsapp', 'Animation of a WhatsApp message flowing to an AI agent that replies, books and saves the lead'),
+                 '/ai-marketing': ('v-leads', 'Animation of a lead form from an ad dropping into a lead inbox'),
+                 '/creative-studio': ('v-content', 'Animation of reels, captions and engagement rising around a phone'),
+                 '/website-development': ('v-website', 'Animation of a website assembling itself with a speed score reaching full')}
+
 def service_page(path, name, title, desc, h1, intro, facts, included, how, who, faqs, need, extra_html=''):
     crumbs = [('/', 'Home'), (path, name)]
     a = icon('arrow'); ne = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>'
@@ -459,6 +465,7 @@ def service_page(path, name, title, desc, h1, intro, facts, included, how, who, 
   <aside class="tile night aside" data-rise aria-labelledby="glance-h"><h2 id="glance-h">{name} at a glance</h2><dl>{facts_html}</dl></aside>
 </div></section>
 
+{('<section class="frame" data-sec aria-label="' + name + ' in motion" style="padding-top:clamp(20px,3vw,36px)">' + video_block(SERVICE_VIDEO[path][0], SERVICE_VIDEO[path][1]) + '</section>') if video_block(*SERVICE_VIDEO.get(path, ('none', ''))) else ''}
 <section class="sec frame" id="included" data-sec aria-labelledby="inc-h">
   <div class="sec-head"><h2 id="inc-h" data-rise>What we do for you</h2></div>
   <div class="items">{inc}</div>
@@ -706,6 +713,16 @@ def agent_app():
       <div class="aa-me"><span>CA</span>Café Aroma · example</div></aside>
     <div class="aa-main">{"".join(panels)}<div class="aa-input" aria-hidden="true"><span>+</span><em>Message your agents</em><i></i></div></div>
   </div>'''
+
+
+VIDEO_DIR = os.path.join(os.path.dirname(HERE), 'website', 'video')
+def video_block(name, label, ratio='16 / 9'):
+    """A muted looping clip that plays only on screen; empty until website/video/<name>.mp4 exists."""
+    if not os.path.exists(os.path.join(VIDEO_DIR, name + '.mp4')):
+        return ''
+    webm = f'<source src="/video/{name}.webm" type="video/webm">' if os.path.exists(os.path.join(VIDEO_DIR, name + '.webm')) else ''
+    return (f'<figure class="vframe" data-rise style="aspect-ratio:{ratio}"><video data-autoplay muted loop playsinline preload="none" poster="/video/{name}.jpg" aria-label="{label}">'
+            f'{webm}<source src="/video/{name}.mp4" type="video/mp4"></video></figure>')
 
 from guides import GUIDES
 
