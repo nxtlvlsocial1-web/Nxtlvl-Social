@@ -41,4 +41,4 @@ Here's your prompt pack: [PDF LINK]
 
 - Voice: Kokoro af_heart, the Creators 100X house voice (kokoro-onnx, run locally), natural pace (speed 1.15, no time-stretch).
 - The three niches and the example answers are illustrations (labelled EXAMPLES in the reel).
-- v2 look "The Constellation of You" (v1 game show judged dull, 2026-11-21). The chat pills are generic, not a copy of any app.
+- v3 look: the real conversation, a ChatGPT-style dark-mode chat on a phone (no logo), after v1 (game show) and v2 (space) were judged dull.
