@@ -121,7 +121,7 @@ def footer():
 def faq_block(items, title='Questions, answered'):
     bands = ''.join(f'<div class="band" data-rise><h3>{e(q)}</h3><div class="a">{"".join(f"<p>{x}</p>" for x in a)}</div></div>' for q, a in items)
     return f'''<section class="faq frame" id="faq" aria-labelledby="faq-h" data-sec><div class="wrapq">
-  <div class="h" data-rise><h2 id="faq-h">{title}</h2><p class="soft">Straight answers about how an AI-driven growth company works. Anything else, just ask.</p><div class="btns"><a class="btn btn-light" href="/contact">Ask us anything</a></div></div>
+  <div class="h" data-rise><img class="faq-mascot" src="/img/pose-think.webp" width="360" height="428" alt="" loading="lazy" decoding="async"><h2 id="faq-h">{title}</h2><p class="soft">Straight answers about how an AI-driven growth company works. Anything else, just ask.</p><div class="btns"><a class="btn btn-light" href="/contact">Ask us anything</a></div></div>
   <div class="list">{bands}</div></div></section>'''
 
 def faq_schema(items):
@@ -145,7 +145,7 @@ def contact_form(heading_id='book-h'):
 
 def close_row(title='Ready to meet your AI growth team?', sub='Book a free 20-minute strategy call. We look at your brand, channels and goals, then send a plan you can keep, whether or not you work with us.'):
     return f'''<section class="sec frame" data-sec aria-labelledby="close-h"><div class="close" data-rise>
-  <img class="close-mascot" src="/img/mascot.webp" width="480" height="549" alt="" loading="lazy" decoding="async">
+  <img class="close-mascot" src="/img/pose-celebrate.webp" width="360" height="382" alt="" loading="lazy" decoding="async">
   <h2 id="close-h">{title}</h2><p>{sub}</p>
   <form action="/contact" method="get" aria-label="Start with your email"><label class="sr" for="close-email">Work email</label><input id="close-email" name="email" type="email" placeholder="you@company.com" autocomplete="email"><input type="hidden" name="need" value="unsure"><button class="btn btn-primary" type="submit">Book a free call {icon("arrow")}</button></form>
 </div></section>'''
@@ -286,7 +286,7 @@ def home():
    </div>
    <div class="hero-art" data-rise>
     <div class="orb" aria-hidden="true"></div><div class="ring" aria-hidden="true"></div><div class="ring r2" aria-hidden="true"><i></i></div>
-    <img class="mascot" src="/img/mascot.webp" width="480" height="549" alt="Nextyy, the Nxtlvl Social mascot, waving" fetchpriority="high">
+    <img class="mascot" src="/img/mascot.webp" width="480" height="546" alt="Nextyy, the Nxtlvl Social mascot, waving" fetchpriority="high">
     <div class="chip c1" aria-hidden="true">{brand("whatsapp")}<div><b>New booking</b><small>Table for 4, 8:00 pm</small></div></div>
     <div class="chip c2" aria-hidden="true">{brand("meta")}<div><b>+12 leads</b><small>Meta lead ads, today</small></div></div>
     <div class="chip c3" aria-hidden="true">{brand("instagram")}<div><b>Replied in 4 s</b><small>"Price?" answered</small></div></div>
@@ -330,7 +330,7 @@ def home():
 </section>
 
 <section class="sec frame" data-sec aria-labelledby="fl-h">
-  <div class="sec-head"><span class="kicker" data-rise><i>{icon("bolt")}</i>Automations</span><h2 id="fl-h" data-rise>Every enquiry, handled in <span class="g">seconds</span></h2>
+  <div class="sec-head has-m"><img class="sec-mascot" src="/img/pose-phone.webp" width="360" height="425" alt="" loading="lazy" decoding="async"><span class="kicker" data-rise><i>{icon("bolt")}</i>Automations</span><h2 id="fl-h" data-rise>Every enquiry, handled in <span class="g">seconds</span></h2>
     <p class="soft" data-rise>Messages from Instagram, WhatsApp, your website and ads flow to one agent. It answers, qualifies and books, logs the lead, and hands the important ones to your team.</p></div>
   <div class="flowbox" data-flow data-rise>
     <svg class="wires" aria-hidden="true"><defs><linearGradient id="wg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7D18FC"/><stop offset="1" stop-color="#D8BBFF"/></linearGradient></defs></svg>
@@ -374,13 +374,13 @@ def home():
 </section>
 
 <section class="sec frame" id="services" data-sec aria-labelledby="eng-h">
-  <div class="sec-head"><span class="kicker" data-rise><i>{icon("layers")}</i>Services</span><h2 id="eng-h" data-rise>Four services, one team</h2>
+  <div class="sec-head has-m"><img class="sec-mascot" src="/img/pose-point.webp" width="360" height="398" alt="" loading="lazy" decoding="async"><span class="kicker" data-rise><i>{icon("layers")}</i>Services</span><h2 id="eng-h" data-rise>Four services, one team</h2>
     <p class="soft" data-rise>Pick what your brand needs this quarter. Everything shares one plan, one strategist and one monthly report.</p></div>
   <div class="svc">{SVC_HTML}</div>
 </section>
 
 <section class="sec frame" data-sec aria-labelledby="how-h">
-  <div class="sec-head"><span class="kicker" data-rise><i>{icon("refresh")}</i>How it works</span><h2 id="how-h" data-rise>From first call to compounding growth</h2></div>
+  <div class="sec-head has-m"><img class="sec-mascot" src="/img/pose-laptop.webp" width="360" height="442" alt="" loading="lazy" decoding="async"><span class="kicker" data-rise><i>{icon("refresh")}</i>How it works</span><h2 id="how-h" data-rise>From first call to compounding growth</h2></div>
   <div class="steps2" data-rise>
     <div class="step2"><span class="dot">{icon("search")}</span><h3>Discover</h3><p>A free strategy call and an audit of your brand, channels, competitors and goals.</p></div>
     <div class="step2"><span class="dot">{icon("bot")}</span><h3>Agents draft</h3><p>Research, calendars, scripts, creatives and automations, drafted in hours.</p></div>
@@ -695,13 +695,13 @@ def agent_app():
     for i, (col, name, state, role, preview, first, ask, reply) in enumerate(AGENT_CHATS):
         sel = 'true' if i == 0 else 'false'
         tabs.append(f'<button class="aa-tab" role="tab" id="aa-t{i}" aria-controls="aa-p{i}" aria-selected="{sel}" tabindex="{0 if i == 0 else -1}">'
-                    f'<img src="/img/blob-{col}.webp" width="40" height="40" alt=""><span><b>{name}</b><small>{preview}</small></span></button>')
+                    f'<img src="/img/agent-{name.split()[0].lower()}.webp" width="40" height="40" alt=""><span><b>{name}</b><small>{preview}</small></span></button>')
         msgs = ''.join(f'<div class="am" data-m>{m}</div>' for m in first) + f'<div class="um" data-m>{ask}</div><div class="aa-new" data-m><span>New</span></div>' + ''.join(f'<div class="am" data-m>{m}</div>' for m in reply)
         panels.append(f'<div class="aa-panel" role="tabpanel" id="aa-p{i}" aria-labelledby="aa-t{i}"{"" if i == 0 else " hidden"}>'
-                      f'<div class="aa-head"><img src="/img/blob-{col}.webp" width="44" height="44" alt=""><div><b>{name}</b><small>{role}</small></div><span class="state">{state}</span></div>'
+                      f'<div class="aa-head"><img src="/img/agent-{name.split()[0].lower()}.webp" width="44" height="44" alt=""><div><b>{name}</b><small>{role}</small></div><span class="state">{state}</span></div>'
                       f'<div class="aa-msgs">{msgs}<div class="aa-typing" aria-hidden="true"><i></i><i></i><i></i></div></div></div>')
     return f'''<div class="agentapp" data-agentapp data-rise>
-    <aside class="aa-side"><div class="aa-pins" aria-hidden="true"><span><img src="/img/blob-violet.webp" width="56" height="56" alt=""><small>Nextyy</small></span><span><img src="/img/blob-blue.webp" width="56" height="56" alt=""><small>Strategist</small></span></div>
+    <aside class="aa-side"><div class="aa-pins" aria-hidden="true"><span><img src="/img/pin-nextyy.webp" width="56" height="56" alt=""><small>Nextyy</small></span><span><img src="/img/pin-strategist.webp" width="56" height="56" alt=""><small>Strategist</small></span></div>
       <div class="aa-list" role="tablist" aria-label="Your AI agents">{"".join(tabs)}</div>
       <div class="aa-me"><span>CA</span>Café Aroma · example</div></aside>
     <div class="aa-main">{"".join(panels)}<div class="aa-input" aria-hidden="true"><span>+</span><em>Message your agents</em><i></i></div></div>
