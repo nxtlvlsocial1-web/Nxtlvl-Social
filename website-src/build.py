@@ -145,7 +145,6 @@ def contact_form(heading_id='book-h'):
 
 def close_row(title='Ready to meet your AI growth team?', sub='Book a free 20-minute strategy call. We look at your brand, channels and goals, then send a plan you can keep, whether or not you work with us.'):
     return f'''<section class="sec frame" data-sec aria-labelledby="close-h"><div class="close" data-rise>
-  <div class="mark-bg" aria-hidden="true">{star_svg("cl")}</div>
   <h2 id="close-h">{title}</h2><p>{sub}</p>
   <form action="/contact" method="get" aria-label="Start with your email"><label class="sr" for="close-email">Work email</label><input id="close-email" name="email" type="email" placeholder="you@company.com" autocomplete="email"><input type="hidden" name="need" value="unsure"><button class="btn btn-primary" type="submit">Book a free call {icon("arrow")}</button></form>
 </div></section>'''
@@ -164,7 +163,7 @@ ORG = {
 }
 WEBSITE = {'@type': 'WebSite', '@id': f'{SITE}/#website', 'url': f'{SITE}/', 'name': 'Nxtlvl Social', 'publisher': {'@id': f'{SITE}/#org'}, 'inLanguage': 'en-IN'}
 
-def page(path, title, desc, body, active='', crumbs=None, extra_schema=(), noindex=False, page_type='WebPage'):
+def page(path, title, desc, body, active='', crumbs=None, extra_schema=(), noindex=False, page_type='WebPage', og_image='/og-image.png'):
     url = SITE + (path if path != '/index' else '/')
     graph = [ORG, WEBSITE, {'@type': page_type, '@id': url + '#page', 'url': url, 'name': title, 'description': desc, 'isPartOf': {'@id': f'{SITE}/#website'},
              'about': {'@id': f'{SITE}/#org'}, 'inLanguage': 'en-IN', 'dateModified': UPDATED}]
@@ -187,7 +186,7 @@ def page(path, title, desc, body, active='', crumbs=None, extra_schema=(), noind
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(desc)}">
 <meta property="og:url" content="{url}">
-<meta property="og:image" content="{SITE}/og-image.png">
+<meta property="og:image" content="{SITE}{og_image}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -240,7 +239,7 @@ FRAG = {
 
 def home():
     a = icon('arrow')
-    INDUSTRIES_HTML = ''.join(f'<a class="tile ind" href="{u}" data-rise><h3>{t}</h3><p>{d}</p><ul>' + ''.join(f'<li>{x}</li>' for x in tags) + '</ul></a>' for t, d, tags, u in INDUSTRIES)
+    INDUSTRIES_HTML = ''.join(f'<a class="tile ind" href="{u}" data-rise><img src="/img/ind-{im}-480.webp" srcset="/img/ind-{im}-480.webp 480w, /img/ind-{im}-800.webp 800w" sizes="(max-width: 700px) 100vw, 33vw" width="480" height="360" loading="lazy" decoding="async" alt="{alt}"><h3>{t}</h3><p>{d}</p><ul>' + ''.join(f'<li>{x}</li>' for x in tags) + '</ul></a>' for (t, d, tags, u), (im, alt) in zip(INDUSTRIES, IND_IMG))
     GUIDE_CARDS = guide_cards()
     feed0 = [('pen', 'Content Agent', 'Drafted 3 hooks for the festive reel', 'now'), ('b:instagram', 'Reply Agent', 'Answered "price?" on Instagram in 4 s', '1m'),
              ('mega', 'Ads Agent', 'Shifted ₹2,000 to the better creative', '3m'), ('film', 'Edit Agent', 'Reel v2 ready: 0:28, captions on', '6m'), ('b:meta', 'Meta lead ad', 'New lead: Rahul, 2 BHK, Baner, call today', '8m'), ('b:whatsapp', 'Automation', 'Hot lead sent to the owner on WhatsApp', '9m')]
@@ -263,7 +262,15 @@ def home():
             ('Graphic design', 'Posts, carousels, ads, menus, print'), ('Brand identity', 'Logo, palette, templates, brand kit'),
             ('WhatsApp automation', 'Catalogue, FAQs, bookings, broadcasts'), ('Instagram DM automation', 'Instant replies to comments and messages'),
             ('Lead capture and CRM', 'Every enquiry logged and followed up'), ('Websites and landing pages', 'Fast, mobile-first, ready for search')]
-    caps_html = ''.join(f'<div data-rise><b>{x}</b><span>{y}</span></div>' for x, y in caps)
+    SVC = [('/ai-marketing', 'mega', 'AI Marketing', 'Campaigns and content planned on research and optimised every week.',
+            ['Social media management', 'Meta and Google Ads', 'SEO and AEO', 'Content strategy and calendar']),
+           ('/ai-automation', 'bolt', 'AI Automation', 'Replies, lead capture and follow-ups that run around the clock.',
+            ['WhatsApp automation', 'Instagram DM automation', 'Lead capture and CRM', 'Booking and reminder flows']),
+           ('/creative-studio', 'film', 'Creative Studio', 'Shoots, edits and design that look like your brand.',
+            ['Reels and short video editing', 'Product and brand shoots', 'Graphic design', 'Brand identity']),
+           ('/website-development', 'globe', 'Websites', 'Fast sites and landing pages that rank and turn visitors into enquiries.',
+            ['Websites and landing pages', 'Mobile-first and fast', 'Built for Google and AI search', 'Enquiry and WhatsApp forms'])]
+    SVC_HTML = ''.join(f'<a class="tile svc-c" href="{u}" data-rise><i>{icon(ic)}</i><h3>{t}</h3><p>{d}</p><ul>' + ''.join(f'<li>{x}</li>' for x in li) + f'</ul><span class="more">Explore {t} {icon("arrow")}</span></a>' for u, ic, t, d, li in SVC)
     node = lambda ic, t, s, cls='': f'<div class="node {cls}" data-n><i>{icon(ic)}</i><div><b>{t}</b><small>{s}</small></div></div>'
     body = f'''
 <section class="hero" data-sec aria-labelledby="hero-h">
@@ -366,17 +373,10 @@ def home():
   </div>
 </section>
 
-<section class="sec frame" data-sec aria-labelledby="eng-h">
-  <div class="sec-head"><span class="kicker" data-rise><i>{icon("layers")}</i>Services</span><h2 id="eng-h" data-rise>Four engines, one team</h2>
-    <p class="soft" data-rise>Pick the engines your brand needs this quarter. They share one plan, one strategist and one report.</p></div>
-  <div class="cells">
-    <a class="cell" href="/ai-marketing" data-rise><div class="txt"><b>AI Marketing</b><span>Social media, campaigns and ads, planned on research and optimised every week.</span></div>{FRAG["ads"]}</a>
-    <a class="cell rev" href="/ai-automation" data-rise><div class="txt"><b>AI Automation</b><span>Replies, lead capture and follow-ups on WhatsApp and Instagram, around the clock.</span></div>{FRAG["flow"]}</a>
-    <a class="cell" href="/creative-studio" data-rise><div class="txt"><b>Creative Studio</b><span>Shoots, reel and video editing, and design that look like your brand.</span></div>{FRAG["reel"]}</a>
-    <a class="cell rev" href="/website-development" data-rise><div class="txt"><b>Websites</b><span>Fast landing pages and websites that rank and turn visitors into enquiries.</span></div>{FRAG["web"]}</a>
-    <a class="cell" href="/ai-marketing#included" data-rise><div class="txt"><b>SEO and AEO</b><span>Be found on Google, and named when buyers ask ChatGPT, Gemini or Perplexity.</span></div>{FRAG["seo"]}</a>
-    <a class="cell rev" href="/ai-marketing" data-rise><div class="txt"><b>One monthly report</b><span>What worked, what did not, and what changes next month, in plain words.</span></div>{FRAG["report"]}</a>
-  </div>
+<section class="sec frame" id="services" data-sec aria-labelledby="eng-h">
+  <div class="sec-head"><span class="kicker" data-rise><i>{icon("layers")}</i>Services</span><h2 id="eng-h" data-rise>Four services, one team</h2>
+    <p class="soft" data-rise>Pick what your brand needs this quarter. Everything shares one plan, one strategist and one monthly report.</p></div>
+  <div class="svc">{SVC_HTML}</div>
 </section>
 
 <section class="sec frame" data-sec aria-labelledby="how-h">
@@ -402,12 +402,6 @@ def home():
     </div>
   </div>
 </section>
-
-<section class="sec frame" data-sec aria-labelledby="caps-h">
-  <div class="sec-head"><span class="kicker" data-rise><i>{icon("spark")}</i>Capabilities</span><h2 id="caps-h" data-rise>Everything a growth team does</h2></div>
-  <div class="caps">{caps_html}</div>
-</section>
-
 <section class="sec frame" data-sec aria-labelledby="plat-h">
   <div class="tile night platform glowline" data-rise>
     <div style="display:grid;gap:18px"><span class="kicker"><i>{icon("bolt")}</i>Coming next</span><h2 id="plat-h">The Nxtlvl growth platform</h2>
@@ -671,17 +665,20 @@ INDUSTRIES = [
     ('Education and coaching', 'Admission enquiries answered instantly, demo-class bookings and student stories.', ['Admissions', 'Demo classes', 'Reels'], '/ai-marketing'),
     ('Creators and personal brands', 'Editing, a weekly content system, comment-to-DM links and collab enquiry routing.', ['Editing', 'Content system', 'DM links'], '/creative-studio'),
 ]
+IND_IMG = [('cafe', 'Barista plating a latte while a phone films it for a reel'), ('clinic', 'Clinic receptionist checking appointments on a tablet'),
+           ('d2c', 'Product shoot of skincare serum bottles in a studio'), ('realestate', 'Couple viewing a new apartment while an agent films a walkthrough'),
+           ('coaching', 'Teacher explaining diagrams to students in a coaching class'), ('creator', 'Content creator reviewing a clip in her home studio')]
 from guides import GUIDES
 
 def guide_cards():
-    return ''.join(f'<a class="tile guide" href="/guides/{g["slug"]}" data-rise><span class="tag">{g["tag"]} · {g["read"]}</span><h3>{g["h1"]}</h3><p>{g["desc"]}</p><span class="go">Read the guide {icon("arrow")}</span></a>' for g in GUIDES)
+    return ''.join(f'<a class="tile guide" href="/guides/{g["slug"]}" data-rise><img src="/img/guide-{g["slug"]}-640.webp" width="640" height="360" loading="lazy" decoding="async" alt=""><span class="tag">{g["tag"]} · {g["read"]}</span><h3>{g["h1"]}</h3><p>{g["desc"]}</p><span class="go">Read the guide {icon("arrow")}</span></a>' for g in GUIDES)
 
 def guide_page(g):
     path = f'/guides/{g["slug"]}'
     crumbs = [('/', 'Home'), ('/guides', 'Guides'), (path, g['h1'])]
     body_html = ''.join(f'<h2 id="s{i}">{t}</h2>' + ''.join(x if x.startswith('<') else f'<p>{x}</p>' for x in paras) for i, (t, paras) in enumerate(g['sections']))
     toc = ''.join(f'<li><a href="#s{i}">{t}</a></li>' for i, (t, _) in enumerate(g['sections']))
-    art = {'@type': 'Article', '@id': SITE + path + '#article', 'headline': g['title'], 'description': g['desc'], 'image': f'{SITE}/og-image.png',
+    art = {'@type': 'Article', '@id': SITE + path + '#article', 'headline': g['title'], 'description': g['desc'], 'image': f'{SITE}/img/og-{g["slug"]}.jpg',
            'author': {'@id': f'{SITE}/#org'}, 'publisher': {'@id': f'{SITE}/#org'}, 'datePublished': UPDATED, 'dateModified': UPDATED,
            'mainEntityOfPage': SITE + path, 'inLanguage': 'en-IN', 'about': g['tag']}
     body = f'''
@@ -689,6 +686,7 @@ def guide_page(g):
   <div class="tile main" data-rise style="min-height:0">{crumbs_html(crumbs)}<h1 id="ph-h" style="max-width:20ch">{g["h1"]}</h1>
     <p class="meta"><span>{g["tag"]}</span><span>{g["read"]}</span><span>By the Nxtlvl Social team</span><span>Updated 20 November 2026</span></p></div>
 </div></section>
+<div class="frame cover" data-rise><img src="/img/guide-{g["slug"]}-1280.webp" srcset="/img/guide-{g["slug"]}-640.webp 640w, /img/guide-{g["slug"]}-1280.webp 1280w" sizes="(max-width: 1280px) 100vw, 1280px" width="1280" height="720" alt="{g["cover_alt"]}" fetchpriority="high"></div>
 <section class="sec frame" style="padding-top:48px" data-sec><div class="article">
   <article class="body" data-rise><p class="answer">{g["answer"]}</p>{body_html}</article>
   <aside><div class="tile"><h2>On this page</h2><ol>{toc}</ol></div>
@@ -698,7 +696,7 @@ def guide_page(g):
 {faq_block(g["faqs"], 'Questions, answered')}
 {close_row()}
 '''
-    return page(path, g['title'] + ' | Nxtlvl Social', g['desc'], body, '/guides', crumbs, [art, faq_schema(g['faqs'])])
+    return page(path, g['title'] + ' | Nxtlvl Social', g['desc'], body, '/guides', crumbs, [art, faq_schema(g['faqs'])], og_image=f'/img/og-{g["slug"]}.jpg')
 
 def guides_hub():
     crumbs = [('/', 'Home'), ('/guides', 'Guides')]

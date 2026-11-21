@@ -3,6 +3,7 @@
 GUIDES = [
     dict(
         slug='whatsapp-automation-for-business',
+        cover_alt='Chat bubbles linked to a gear, showing WhatsApp messages handled by an automation',
         tag='AI Automation',
         title='WhatsApp Automation for Business in India: A Practical Guide',
         h1='WhatsApp automation for business',
@@ -35,6 +36,7 @@ GUIDES = [
         service='/ai-automation', need='automation'),
     dict(
         slug='instagram-dm-automation',
+        cover_alt='A paper plane flying to a chat bubble with a heart, showing Instagram DM replies',
         tag='AI Automation',
         title='Instagram DM Automation: What Is Allowed and How to Set It Up',
         h1='Instagram DM automation',
@@ -61,6 +63,7 @@ GUIDES = [
         service='/ai-automation', need='automation'),
     dict(
         slug='ai-marketing-for-small-business-india',
+        cover_alt='A bar chart, calendar and video tile on a glass platform, showing AI-planned marketing',
         tag='AI Marketing',
         title='AI Marketing for Small Businesses in India: Where to Start',
         h1='AI marketing for small businesses in India',

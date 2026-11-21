@@ -278,7 +278,7 @@
       ctx.globalAlpha = a; ctx.fillStyle = s.v ? '#D8BBFF' : '#FFFFFF';
       ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
     }
-    nextShot -= dt; if (nextShot <= 0) { shoot(); nextShot = 2400 + Math.random() * 2600; }
+    nextShot -= dt; if (nextShot <= 0) { shoot(); nextShot = 5500 + Math.random() * 4500; }
     for (var j = shots.length - 1; j >= 0; j--) {
       var h = shots[j]; h.life += dt; h.x += h.dx * dt; h.y += h.dy * dt;
       var k = h.life / h.max, fade = k < 0.15 ? k / 0.15 : k > 0.75 ? Math.max(0, (1 - k) / 0.25) : 1;
