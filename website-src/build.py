@@ -48,7 +48,16 @@ P = {
     'mail': '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6l8.5 7 8.5-7"/>',
     'clock': '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
 }
+BRAND = json.load(open(os.path.join(HERE, 'brandicons.json')))   # Simple Icons (CC0) paths and official colours
+DARK_OK = {'notion': 'FFFFFF', 'razorpay': '3395FF'}               # brand marks too dark for a dark page
+
+def brand(slug, mono=False, cls='bi'):
+    b = BRAND[slug]; col = 'currentColor' if mono else '#' + DARK_OK.get(slug, b['hex'])
+    return f'<svg class="{cls}" viewBox="0 0 24 24" fill="{col}" aria-hidden="true"><path d="{b["d"]}"/></svg>'
+
 def icon(name, cls=''):
+    if name.startswith('b:'):
+        return brand(name[2:])
     return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"{(' class="' + cls + '"') if cls else ''}>{P[name]}</svg>'
 
 def star_svg(uid='s', dark=False):
@@ -105,7 +114,7 @@ def footer():
     <div><h2>Follow</h2><ul>{social}</ul></div>
     <div><h2>Write to us</h2><ul><li><a href="mailto:{EMAIL}">{EMAIL}</a></li></ul></div>
   </div>
-  <div class="bigmark" aria-hidden="true"><span class="rocket">{star_svg("fr")}</span><span class="word">{wordmark_svg()}</span></div>
+  <div class="bigmark" aria-hidden="true"><span class="word">{wordmark_svg()}</span></div>
   <div class="legal"><span>© 2026 Nxtlvl Social · AI-driven marketing, automation and creative services, India</span><span>Made with AI, finished by people.</span></div>
 </footer>'''
 
@@ -233,13 +242,16 @@ def home():
     a = icon('arrow')
     INDUSTRIES_HTML = ''.join(f'<a class="tile ind" href="{u}" data-rise><h3>{t}</h3><p>{d}</p><ul>' + ''.join(f'<li>{x}</li>' for x in tags) + '</ul></a>' for t, d, tags, u in INDUSTRIES)
     GUIDE_CARDS = guide_cards()
-    feed0 = [('pen', 'Content Agent', 'Drafted 3 hooks for the festive reel', 'now'), ('chat', 'Reply Agent', 'Answered "price?" on Instagram in 4 s', '1m'),
-             ('mega', 'Ads Agent', 'Shifted ₹2,000 to the better creative', '3m'), ('film', 'Edit Agent', 'Reel v2 ready: 0:28, captions on', '6m'), ('bolt', 'Automation', 'Hot lead sent to the owner on WhatsApp', '9m')]
+    feed0 = [('pen', 'Content Agent', 'Drafted 3 hooks for the festive reel', 'now'), ('b:instagram', 'Reply Agent', 'Answered "price?" on Instagram in 4 s', '1m'),
+             ('mega', 'Ads Agent', 'Shifted ₹2,000 to the better creative', '3m'), ('film', 'Edit Agent', 'Reel v2 ready: 0:28, captions on', '6m'), ('b:meta', 'Meta lead ad', 'New lead: Rahul, 2 BHK, Baner, call today', '8m'), ('b:whatsapp', 'Automation', 'Hot lead sent to the owner on WhatsApp', '9m')]
     feed = ''.join(f'<div class="row-f"><span class="av">{icon(i)}</span><div><b>{w}</b><small>{t}</small></div><em>{m}</em></div>' for i, w, t, m in feed0)
     agents_nav = [('Content Agent', True), ('Reply Agent', False), ('Ads Agent', False), ('Edit Agent', True), ('SEO Agent', False), ('Report Agent', False)]
     nav_ag = ''.join(f'<span class="ag">{n}<i class="{"busy" if b else ""}"></i></span>' for n, b in agents_nav)
-    tools = ['Instagram', 'WhatsApp', 'Meta Ads', 'Google Ads', 'YouTube', 'Google Search', 'Shopify', 'Google Sheets', 'Canva', 'ChatGPT', 'Gemini', 'Notion']
-    mq = ''.join(f'<span>{t}</span>' for t in tools)
+    tools = [('whatsapp', 'WhatsApp'), ('instagram', 'Instagram'), ('meta', 'Meta Ads'), ('facebook', 'Facebook'), ('googleads', 'Google Ads'), ('youtube', 'YouTube'),
+             ('google', 'Google Search'), ('googlemaps', 'Google Business'), ('shopify', 'Shopify'), ('googlesheets', 'Google Sheets'), ('hubspot', 'HubSpot'),
+             ('razorpay', 'Razorpay'), ('zapier', 'Zapier'), ('googlegemini', 'Gemini')]
+    mq = ''.join(f'<span>{brand(b, mono=True)}{t}</span>' for b, t in tools)
+    tools_txt = ', '.join(t for _, t in tools)
     biz = [('cafe', 'Café or restaurant'), ('clinic', 'Clinic or wellness'), ('d2c', 'D2C or e-commerce brand'), ('realestate', 'Real estate'), ('education', 'Education'), ('creator', 'Creator or personal brand')]
     goals = [('leads', 'Leads'), ('sales', 'Sales'), ('bookings', 'Bookings'), ('awareness', 'Awareness')]
     chans = [('ch_ig', 'Instagram', True), ('ch_wa', 'WhatsApp', True), ('ch_meta', 'Meta ads', True), ('ch_google', 'Google ads', False), ('ch_web', 'Website', True)]
@@ -256,7 +268,6 @@ def home():
     body = f'''
 <section class="hero" data-sec aria-labelledby="hero-h">
   <div class="hero-bg" aria-hidden="true"><canvas class="sky" data-sky></canvas></div>
-  <div class="rocket-hero" aria-hidden="true">{star_svg("rh")}</div><div class="rocket-hero l" aria-hidden="true">{star_svg("rl")}</div>
   <div class="frame hero-in">
     <span class="kicker" data-rise><i>{icon("spark")}</i>AI agents plus human experts, on one subscription</span>
     <h1 id="hero-h" data-rise>Your AI growth <span class="g">team</span></h1>
@@ -273,7 +284,7 @@ def home():
           <svg class="spark" viewBox="0 0 600 64" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A95CFF" stop-opacity=".35"/><stop offset="1" stop-color="#A95CFF" stop-opacity="0"/></linearGradient></defs>
             <path class="a" d="M0 52 C60 50 90 44 140 46 S230 34 280 36 S370 22 420 24 S520 10 600 6 L600 64 L0 64Z"/><path class="l" d="M0 52 C60 50 90 44 140 46 S230 34 280 36 S370 22 420 24 S520 10 600 6"/></svg>
         </div>
-        <div class="c-side"><h4>WhatsApp <span data-ist>11:42 pm IST</span></h4>
+        <div class="c-side"><h4><span class="h4b">{brand("whatsapp")}WhatsApp</span> <span data-ist>11:42 pm IST</span></h4>
           <div class="chat">
             <div class="chat-top"><span class="av">CA</span><div><b>Café Aroma</b><small>Reply Agent on</small></div></div>
             <div class="chat-body">
@@ -287,7 +298,7 @@ def home():
       </div>
     </div>
   </div>
-  <div class="frame logos" data-rise><p>Works with the platforms your customers already use</p><div class="mq" aria-hidden="true"><div class="track">{mq}{mq}</div></div></div>
+  <div class="frame logos" data-rise><p>Works with the platforms your customers already use</p><div class="mq" role="img" aria-label="Platforms: {tools_txt}"><div class="track" aria-hidden="true">{mq}{mq}</div></div></div>
 </section>
 
 <section class="sec frame" id="agents" data-sec aria-labelledby="ag-h">
@@ -317,10 +328,10 @@ def home():
   <div class="flowbox" data-flow data-rise>
     <svg class="wires" aria-hidden="true"><defs><linearGradient id="wg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7D18FC"/><stop offset="1" stop-color="#D8BBFF"/></linearGradient></defs></svg>
     <div class="nodes">
-      <div class="col c1">{node("chat", "Instagram DM", "Price? Timings?")}{node("chat", "WhatsApp", "Booking request")}{node("globe", "Website form", "Quote needed")}{node("mega", "Meta lead ad", "New lead")}</div>
+      <div class="col c1">{node("b:instagram", "Instagram DM", "Price? Timings?", "br")}{node("b:whatsapp", "WhatsApp", "Booking request", "br")}{node("globe", "Website form", "Quote needed")}{node("b:meta", "Meta lead ad", "New lead", "br")}</div>
       <div class="col c2"><div class="node brain" data-n data-brain><i>{icon("bot")}</i><div><b>Nxtlvl Agent</b><small>Understands, answers, qualifies</small></div></div></div>
       <div class="col c3">{node("chat", "Replied in your voice", "In seconds, 24/7")}{node("users", "Lead qualified", "Budget, area, timeline")}{node("calendar", "Booking created", "Reminder scheduled")}</div>
-      <div class="col c4">{node("layers", "Saved to CRM", "Nothing gets lost", "done")}{node("bolt", "Owner notified", "On WhatsApp", "done")}{node("refresh", "Follow-up in 24 h", "If no reply", "done")}</div>
+      <div class="col c4">{node("b:googlesheets", "Saved to CRM", "Sheets, HubSpot or Zoho", "done br")}{node("b:whatsapp", "Owner notified", "On WhatsApp", "done br")}{node("refresh", "Follow-up in 24 h", "If no reply", "done")}</div>
     </div>
     <div class="flow-cap"><span><b>24/7</b> replies</span><span><b>100%</b> of leads logged</span><span><b>1 tap</b> human handover</span></div>
   </div>
