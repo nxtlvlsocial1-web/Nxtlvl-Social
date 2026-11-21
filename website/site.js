@@ -262,7 +262,7 @@
   var seed = 7; var rnd = function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
   var size = function () {
     var r = c.getBoundingClientRect(); W = r.width; H = r.height; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    stars = []; var n = Math.round(W * H / 9000);
+    stars = []; var n = Math.round(W * H / 16000);
     for (var i = 0; i < n; i++) stars.push({ x: rnd() * W, y: rnd() * H, r: rnd() * 1.2 + 0.2, p: rnd() * Math.PI * 2, s: 0.4 + rnd() * 1.2, v: rnd() < 0.15 });
   };
   var shoot = function () {
@@ -275,7 +275,7 @@
     ctx.clearRect(0, 0, W, H);
     for (var i = 0; i < stars.length; i++) {
       var s = stars[i], a = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t / 1000 * s.s + s.p));
-      ctx.globalAlpha = a; ctx.fillStyle = s.v ? '#D8BBFF' : '#FFFFFF';
+      ctx.globalAlpha = a * 0.55; ctx.fillStyle = s.v ? '#B46CFF' : '#7D18FC';
       ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
     }
     nextShot -= dt; if (nextShot <= 0) { shoot(); nextShot = 5500 + Math.random() * 4500; }
@@ -283,10 +283,10 @@
       var h = shots[j]; h.life += dt; h.x += h.dx * dt; h.y += h.dy * dt;
       var k = h.life / h.max, fade = k < 0.15 ? k / 0.15 : k > 0.75 ? Math.max(0, (1 - k) / 0.25) : 1;
       var n = Math.hypot(h.dx, h.dy), tx = h.x - h.dx / n * h.len, ty = h.y - h.dy / n * h.len;
-      var g = ctx.createLinearGradient(tx, ty, h.x, h.y); g.addColorStop(0, 'rgba(169,92,255,0)'); g.addColorStop(0.6, 'rgba(216,187,255,' + 0.5 * fade + ')'); g.addColorStop(1, 'rgba(255,255,255,' + fade + ')');
+      var g = ctx.createLinearGradient(tx, ty, h.x, h.y); g.addColorStop(0, 'rgba(180,108,255,0)'); g.addColorStop(0.6, 'rgba(155,77,255,' + 0.35 * fade + ')'); g.addColorStop(1, 'rgba(125,24,252,' + 0.8 * fade + ')');
       ctx.globalAlpha = 1; ctx.strokeStyle = g; ctx.lineWidth = 2; ctx.lineCap = 'round';
       ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(h.x, h.y); ctx.stroke();
-      ctx.globalAlpha = fade; ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.arc(h.x, h.y, 2.2, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = fade; ctx.fillStyle = '#7D18FC'; ctx.beginPath(); ctx.arc(h.x, h.y, 2.2, 0, Math.PI * 2); ctx.fill();
       ctx.globalAlpha = fade * 0.35; ctx.beginPath(); ctx.arc(h.x, h.y, 7, 0, Math.PI * 2); ctx.fill();
       if (h.life >= h.max) shots.splice(j, 1);
     }
@@ -299,4 +299,11 @@
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { var vis = es[0].isIntersecting; if (vis && !running) { running = true; last = 0; requestAnimationFrame(frame); } else if (!vis) running = false; }).observe(c);
   document.addEventListener('visibilitychange', function () { if (document.hidden) running = false; else if (!running) { running = true; last = 0; requestAnimationFrame(frame); } });
   requestAnimationFrame(frame);
+})();
+
+// scroll progress bar in the logo gradient
+(function () {
+  var bar = document.createElement('div'); bar.className = 'progress'; bar.setAttribute('aria-hidden', 'true'); document.body.appendChild(bar);
+  var tick = false, set = function () { var d = document.documentElement, max = d.scrollHeight - d.clientHeight; bar.style.setProperty('--p', max > 0 ? (d.scrollTop / max).toFixed(4) : 0); tick = false; };
+  window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(set); } }, { passive: true }); set();
 })();

@@ -72,7 +72,7 @@ def star_svg(uid='s', dark=False):
 WORD = json.load(open(os.path.join(HERE, 'wordmark.json')))['paths']   # "nxtlvl social" from brands/nxtlvl/logo-white.svg
 def wordmark_svg(label=False):
     lab = ' role="img" aria-label="Nxtlvl Social"' if label else ' aria-hidden="true"'
-    return f'<svg class="lg-word" viewBox="118 24 296 54"{lab}><path d="{WORD[0][0]}" fill="#FFFFFF"/><path d="{WORD[1][0]}" fill="#D8BBFF"/></svg>'
+    return f'<svg class="lg-word" viewBox="118 24 296 54"{lab}><path d="{WORD[0][0]}" fill="#0B0816"/><path d="{WORD[1][0]}" fill="#6B6391"/></svg>'
 
 def logo_html(uid='lg'):
     """Nxtlvl Social logo: the shooting star on its violet gradient tile, then the wordmark."""
@@ -145,6 +145,7 @@ def contact_form(heading_id='book-h'):
 
 def close_row(title='Ready to meet your AI growth team?', sub='Book a free 20-minute strategy call. We look at your brand, channels and goals, then send a plan you can keep, whether or not you work with us.'):
     return f'''<section class="sec frame" data-sec aria-labelledby="close-h"><div class="close" data-rise>
+  <img class="close-mascot" src="/img/mascot.webp" width="480" height="708" alt="" loading="lazy" decoding="async">
   <h2 id="close-h">{title}</h2><p>{sub}</p>
   <form action="/contact" method="get" aria-label="Start with your email"><label class="sr" for="close-email">Work email</label><input id="close-email" name="email" type="email" placeholder="you@company.com" autocomplete="email"><input type="hidden" name="need" value="unsure"><button class="btn btn-primary" type="submit">Book a free call {icon("arrow")}</button></form>
 </div></section>'''
@@ -179,7 +180,7 @@ def page(path, title, desc, body, active='', crumbs=None, extra_schema=(), noind
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc)}">
 {'<meta name="robots" content="noindex">' if noindex else f'<link rel="canonical" href="{url}">'}
-<meta name="theme-color" content="#05030C">
+<meta name="theme-color" content="#FFFFFF">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Nxtlvl Social">
 <meta property="og:locale" content="en_IN">
@@ -195,7 +196,7 @@ def page(path, title, desc, body, active='', crumbs=None, extra_schema=(), noind
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/unbounded-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/bricolage-variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/site.css?v={UPDATED}">
 <script type="application/ld+json">{ld}</script>
 </head>
@@ -276,11 +277,21 @@ def home():
 <section class="hero" data-sec aria-labelledby="hero-h">
   <div class="hero-bg" aria-hidden="true"><canvas class="sky" data-sky></canvas></div>
   <div class="frame hero-in">
+   <div class="hero-copy">
     <span class="kicker" data-rise><i>{icon("spark")}</i>AI agents plus human experts, on one subscription</span>
     <h1 id="hero-h" data-rise>Your AI growth <span class="g">team</span></h1>
     <p class="lead" data-rise>Nxtlvl Social is an AI-driven growth company in India. Our agents and experts run your marketing, automation and creative production every day, and a person checks every result.</p>
     <div class="btns" data-rise><a class="btn btn-primary" href="/contact">Book a free strategy call {a}</a><a class="btn btn-light" href="#agents">Meet the agents</a></div>
     <p class="hero-note" data-rise><span>Monthly plans</span><span>No lock-in</span><span>You own everything</span></p>
+   </div>
+   <div class="hero-art" data-rise>
+    <div class="orb" aria-hidden="true"></div><div class="ring" aria-hidden="true"></div><div class="ring r2" aria-hidden="true"><i></i></div>
+    <img class="mascot" src="/img/mascot.webp" width="480" height="708" alt="Lvl, the Nxtlvl Social AI assistant mascot, waving" fetchpriority="high">
+    <div class="chip c1" aria-hidden="true">{brand("whatsapp")}<div><b>New booking</b><small>Table for 4, 8:00 pm</small></div></div>
+    <div class="chip c2" aria-hidden="true">{brand("meta")}<div><b>+12 leads</b><small>Meta lead ads, today</small></div></div>
+    <div class="chip c3" aria-hidden="true">{brand("instagram")}<div><b>Replied in 4 s</b><small>"Price?" answered</small></div></div>
+    <div class="chip c4" aria-hidden="true"><span class="up">{icon("chart")}</span><div><b>Reach up 31%</b><small>This month</small></div></div>
+   </div>
     <div class="console" data-ui data-rise role="img" aria-label="Example Nxtlvl workspace: AI agents drafting hooks, replying to messages, optimising ads and editing reels, with live counters and a WhatsApp booking.">
       <div class="c-top"><span class="dots"><i></i><i></i><i></i></span><b>Example workspace</b><span class="hide-s">· Café Aroma</span><span class="sp"></span><span class="live">Agents running</span></div>
       <div class="c-body">
