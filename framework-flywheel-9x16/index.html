@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>samarpit.ai Funnel vs flywheel 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <style>
+@font-face { font-family: Mont; font-weight: 800; src: url("assets/fonts/montserrat.ttf"); }
+@font-face { font-family: Serif; font-style: italic; src: url("assets/fonts/InstrumentSerif-Italic.ttf"); }
+@font-face { font-family: Mono; font-weight: 700; src: url("assets/fonts/JetBrainsMono-Bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07090d; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Mont; color: #f4f1ea; background: #07090d; }
+#gl { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+#vig { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(90% 60% at 50% 55%, rgba(0,0,0,0) 55%, rgba(0,0,0,.55) 100%); }
+#flash { position: absolute; inset: 0; background: #ffb020; mix-blend-mode: screen; opacity: 0; pointer-events: none; }
+#bar { position: absolute; left: 70px; right: 70px; top: 262px; display: flex; justify-content: space-between; align-items: center; opacity: 0;
+  font-family: Mono; font-weight: 700; font-size: 24px; letter-spacing: .14em; color: #8a93a6; }
+#bar b { color: #ffb020; font-weight: 700; }
+.hl { position: absolute; left: 70px; right: 70px; top: 330px; text-align: center; font-weight: 800; font-size: 84px; line-height: 1.04;
+  letter-spacing: -.035em; text-shadow: 0 6px 30px rgba(0,0,0,.6); }
+.hl .w { display: inline-block; opacity: 0; }
+.st { color: #5b8cff; } .am { color: #ffb020; } .co { color: #ff5a36; }
+.it { font-family: Serif; font-style: italic; font-weight: 400; letter-spacing: -.01em; font-size: 1.15em; }
+.hl-end { top: 320px; font-size: 80px; }
+.big { font-size: 1.3em; }
+.chip { position: absolute; left: 0; top: 0; opacity: 0; padding: 12px 24px 11px; border-radius: 999px; font-family: Mono; font-weight: 700; font-size: 30px;
+  letter-spacing: .1em; white-space: nowrap; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.fchip { color: #dfe7ff; background: rgba(20,32,60,.72); border: 2px solid #5b8cff; box-shadow: 0 0 24px rgba(91,140,255,.45); }
+.wchip { color: #1a1206; background: #ffb020; box-shadow: 0 0 30px rgba(255,176,32,.6); }
+.tip { position: absolute; left: 70px; right: 70px; top: 330px; padding: 34px 38px 36px; border-radius: 34px; opacity: 0; transform-origin: 50% 100%;
+  background: linear-gradient(160deg, rgba(28,34,46,.92), rgba(16,20,28,.92)); border: 2px solid rgba(255,176,32,.35);
+  box-shadow: 0 30px 70px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.08); }
+.tip .num { position: absolute; left: -16px; top: -26px; width: 84px; height: 84px; border-radius: 50%; background: #ffb020; color: #1a1206;
+  display: grid; place-items: center; font-size: 50px; font-weight: 800; box-shadow: 0 0 34px rgba(255,176,32,.6); }
+.tb { padding-left: 54px; font-weight: 800; font-size: 60px; line-height: 1.08; letter-spacing: -.03em; }
+.tw { opacity: .25; }
+.ui { margin: 26px 0 0 54px; opacity: 0; display: flex; align-items: center; gap: 18px; }
+.cal { width: 96px; height: 96px; border-radius: 18px; background: #f4f1ea; color: #111; display: flex; flex-direction: column; align-items: center; overflow: hidden; flex: none; }
+.cal b { width: 100%; text-align: center; background: #ff5a36; color: #fff; font-family: Mono; font-size: 20px; padding: 4px 0; }
+.cal i { font-style: normal; font-size: 50px; font-weight: 800; line-height: 1.25; }
+.bub { padding: 18px 24px; border-radius: 26px 26px 26px 6px; background: #2b6bff; color: #fff; font-family: Mont; font-weight: 800; font-size: 30px; letter-spacing: -.01em; opacity: 0; }
+.stars { gap: 10px; }
+.star { font-size: 76px; color: #3a4252; display: inline-block; text-shadow: 0 0 20px rgba(255,176,32,.35); }
+.friend .av { width: 92px; height: 92px; border-radius: 50%; display: inline-block; border: 4px solid #141922; }
+.a1 { background: radial-gradient(circle at 50% 36%, #ffd9a0 0 22%, transparent 23%), radial-gradient(circle at 50% 105%, #ffb020 0 45%, transparent 46%), #2a3342; }
+.a2 { margin-left: -30px; opacity: 0; background: radial-gradient(circle at 50% 36%, #c9d8ff 0 22%, transparent 23%), radial-gradient(circle at 50% 105%, #5b8cff 0 45%, transparent 46%), #2a3342; }
+#plus1 { font-size: 64px; font-weight: 800; color: #ffb020; opacity: 0; }
+#handle { position: absolute; left: 0; right: 0; top: 1440px; text-align: center; font-family: Mono; font-weight: 700; font-size: 40px; letter-spacing: .08em; opacity: 0; color: #f4f1ea; }
+#handle span { color: #ffb020; }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="22.88" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="gl" width="1080" height="1920"></canvas>
+      <div id="vig"></div>
+      <div class="chip fchip" id="lab-ads">ADS</div><div class="chip fchip" id="lab-visit">VISIT</div><div class="chip fchip" id="lab-buy">BUY</div><div class="chip wchip" id="lab-attract">ATTRACT</div><div class="chip wchip" id="lab-sell">SELL</div><div class="chip wchip" id="lab-delight">DELIGHT</div><div class="chip wchip" id="lab-refer">REFER</div>
+      <div id="bar"><span><b>TUE</b> &#183; FRAMEWORK IN 30</span><span>FUNNEL VS FLYWHEEL</span></div>
+      <div class="hl" id="hl-f00"><span class="w " id="f00w0">Why</span> <span class="w " id="f00w1">do</span> <span class="w " id="f00w2">customers</span> <span class="w " id="f00w3">buy</span> <span class="w " id="f00w4">once,</span> <span class="w " id="f00w5">and</span> <span class="w co it" id="f00w6">vanish?</span></div>
+<div class="hl" id="hl-f01"><span class="w " id="f01w0">Because</span> <span class="w " id="f01w1">you</span> <span class="w " id="f01w2">built</span> <span class="w " id="f01w3">a</span> <span class="w st" id="f01w4">funnel.</span> <br> <span class="w " id="f01w5">Then...</span> <span class="w co it" id="f01w6">nothing.</span></div>
+<div class="hl" id="hl-f02"><span class="w " id="f02w0">A</span> <span class="w am" id="f02w1">flywheel</span> <span class="w " id="f02w2">puts</span> <span class="w " id="f02w3">them</span> <span class="w am it" id="f02w4">back</span> <span class="w am it" id="f02w5">in.</span></div>
+<div class="hl hl-end" id="hl-f06"><span class="w " id="f06w0">Stop</span> <span class="w " id="f06w1">refilling</span> <span class="w " id="f06w2">the</span> <span class="w st" id="f06w3">funnel.</span> <br> <span class="w am big" id="f06w4">Spin</span> <span class="w am big" id="f06w5">the</span> <span class="w am big it" id="f06w6">wheel.</span></div>
+<div class="tip" id="tip-f03"><div class="num">1</div><div class="tb"><span class="tw" id="f03t0">Message</span> <span class="tw" id="f03t1">every</span> <span class="tw" id="f03t2">buyer</span> <span class="tw" id="f03t3">on</span> <span class="tw" id="f03t4">day</span> <span class="tw" id="f03t5">3.</span></div><div class="ui msg" id="ui-msg"><div class="cal"><b>DAY</b><i>3</i></div><div class="bub" id="bub">Hey! How are you finding it so far?</div></div></div>
+<div class="tip" id="tip-f04"><div class="num">2</div><div class="tb"><span class="tw" id="f04t0">Ask</span> <span class="tw" id="f04t1">the</span> <span class="tw" id="f04t2">happy</span> <span class="tw" id="f04t3">ones</span> <span class="tw" id="f04t4">for</span> <span class="tw" id="f04t5">a</span> <span class="tw" id="f04t6">review.</span></div><div class="ui stars" id="ui-stars"><span class="star" id="star0">&#9733;</span><span class="star" id="star1">&#9733;</span><span class="star" id="star2">&#9733;</span><span class="star" id="star3">&#9733;</span><span class="star" id="star4">&#9733;</span></div></div>
+<div class="tip" id="tip-f05"><div class="num">3</div><div class="tb"><span class="tw" id="f05t0">Give</span> <span class="tw" id="f05t1">them</span> <span class="tw" id="f05t2">a</span> <span class="tw" id="f05t3">reason</span> <span class="tw" id="f05t4">to</span> <span class="tw" id="f05t5">bring</span> <span class="tw" id="f05t6">a</span> <span class="tw" id="f05t7">friend.</span></div><div class="ui friend" id="ui-friend"><span class="av a1"></span><span class="av a2" id="av2"></span><b id="plus1">+1</b></div></div>
+      <div id="handle"><span>@</span>samarpit.ai</div>
+      <div id="flash"></div>
+    </div>
+    <script>window.FF_T = {"vanish": 1.92, "funnel": 2.48, "ads": 4.04, "visit": 4.68, "buy": 4.9, "nothing": 6.06, "wheel": 6.6, "attract": 8.42, "sell": 9.3, "delight": 9.66, "refer": 10.32, "tip1": 10.96, "tip2": 14.02, "tip3": 16.28, "friend": 18.36, "cta": 18.92, "funnelWord": 19.92, "spin": 20.6, "end": 22.88};</script>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({paused: true});
+      tl.fromTo("#f00w0", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, -0.010);
+      tl.fromTo("#f00w1", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 0.350);
+      tl.fromTo("#f00w2", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 0.470);
+      tl.fromTo("#f00w3", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 0.850);
+      tl.fromTo("#f00w4", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 1.090);
+      tl.fromTo("#f00w5", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 1.430);
+      tl.fromTo("#f00w6", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 1.870);
+      tl.fromTo("#f01w0", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 2.430);
+      tl.fromTo("#f01w1", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 2.770);
+      tl.fromTo("#f01w2", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 2.910);
+      tl.fromTo("#f01w3", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 3.090);
+      tl.fromTo("#f01w4", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 3.270);
+      tl.fromTo("#lab-ads", {opacity: 0, scale: .4}, {...{opacity: 1, scale: 1}, duration: 0.32, ease: "back.out(2.6)", immediateRender: false}, 4.000);
+      tl.fromTo("#lab-visit", {opacity: 0, scale: .4}, {...{opacity: 1, scale: 1}, duration: 0.32, ease: "back.out(2.6)", immediateRender: false}, 4.640);
+      tl.fromTo("#lab-buy", {opacity: 0, scale: .4}, {...{opacity: 1, scale: 1}, duration: 0.32, ease: "back.out(2.6)", immediateRender: false}, 4.860);
+      tl.fromTo("#f01w5", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 5.410);
+      tl.fromTo("#f01w6", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 6.010);
+      tl.fromTo("#f02w0", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 6.550);
+      tl.fromTo("#f02w1", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 6.850);
+      tl.fromTo("#f02w2", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 7.210);
+      tl.fromTo("#f02w3", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 7.430);
+      tl.fromTo("#f02w4", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 7.590);
+      tl.fromTo("#f02w5", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 7.770);
+      tl.fromTo("#lab-attract", {opacity: 0, scale: .4}, {...{opacity: 1, scale: 1}, duration: 0.32, ease: "back.out(2.6)", immediateRender: false}, 8.380);
+      tl.fromTo("#lab-sell", {opacity: 0, scale: .4}, {...{opacity: 1, scale: 1}, duration: 0.32, ease: "back.out(2.6)", immediateRender: false}, 9.260);
+      tl.fromTo("#lab-delight", {opacity: 0, scale: .4}, {...{opacity: 1, scale: 1}, duration: 0.32, ease: "back.out(2.6)", immediateRender: false}, 9.620);
+      tl.fromTo("#lab-refer", {opacity: 0, scale: .4}, {...{opacity: 1, scale: 1}, duration: 0.32, ease: "back.out(2.6)", immediateRender: false}, 10.280);
+      tl.fromTo("#f06w0", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 18.870);
+      tl.fromTo("#f06w1", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 19.290);
+      tl.fromTo("#f06w2", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 19.670);
+      tl.fromTo("#f06w3", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 19.870);
+      tl.fromTo("#f06w4", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 20.550);
+      tl.fromTo("#f06w5", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 20.670);
+      tl.fromTo("#f06w6", {opacity: 0, y: 26, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.22, ease: "back.out(2)", immediateRender: false}, 20.810);
+      tl.to("#hl-f00", {...{opacity: 0, y: -30, filter: 'blur(8px)'}, duration: 0.14, ease: "power2.in"}, 2.340);
+      tl.to("#hl-f01", {...{opacity: 0, y: -30, filter: 'blur(8px)'}, duration: 0.14, ease: "power2.in"}, 6.460);
+      tl.to("#hl-f02", {...{opacity: 0, y: -30, filter: 'blur(8px)'}, duration: 0.14, ease: "power2.in"}, 10.820);
+      tl.to("#tip-f03", {...{opacity: 0, y: -40, filter: 'blur(8px)'}, duration: 0.16, ease: "power2.in"}, 13.860);
+      tl.to("#tip-f04", {...{opacity: 0, y: -40, filter: 'blur(8px)'}, duration: 0.16, ease: "power2.in"}, 16.120);
+      tl.to("#tip-f05", {...{opacity: 0, y: -40, filter: 'blur(8px)'}, duration: 0.16, ease: "power2.in"}, 18.760);
+      tl.to(".fchip", {...{opacity: 0, scale: .5}, duration: 0.2, ease: "power2.in"}, 6.400);
+      tl.fromTo("#tip-f03", {opacity: 0, y: 60, rotationX: -35}, {...{opacity: 1, y: 0, rotationX: 0}, duration: 0.4, ease: "back.out(1.6)", immediateRender: false}, 10.840);
+      tl.fromTo("#f03t0", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 12.100);
+      tl.fromTo("#f03t1", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 12.100);
+      tl.fromTo("#f03t2", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 12.520);
+      tl.fromTo("#f03t3", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 12.840);
+      tl.fromTo("#f03t4", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 13.140);
+      tl.fromTo("#f03t5", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 13.340);
+      tl.fromTo("#ui-msg", {opacity: 0, x: -30}, {...{opacity: 1, x: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 11.160);
+      tl.fromTo("#bub", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(2.4)", immediateRender: false}, 13.080);
+      tl.fromTo("#tip-f04", {opacity: 0, y: 60, rotationX: -35}, {...{opacity: 1, y: 0, rotationX: 0}, duration: 0.4, ease: "back.out(1.6)", immediateRender: false}, 13.900);
+      tl.fromTo("#f04t0", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 14.700);
+      tl.fromTo("#f04t1", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 14.840);
+      tl.fromTo("#f04t2", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 14.980);
+      tl.fromTo("#f04t3", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 15.180);
+      tl.fromTo("#f04t4", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 15.440);
+      tl.fromTo("#f04t5", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 15.600);
+      tl.fromTo("#f04t6", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 15.700);
+      tl.fromTo("#ui-stars", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power3.out", immediateRender: false}, 14.220);
+      tl.fromTo("#star0", {color: '#3a4252', scale: .6}, {...{color: '#ffb020', scale: 1}, duration: 0.25, ease: "back.out(3)", immediateRender: false}, 15.490);
+      tl.fromTo("#star1", {color: '#3a4252', scale: .6}, {...{color: '#ffb020', scale: 1}, duration: 0.25, ease: "back.out(3)", immediateRender: false}, 15.580);
+      tl.fromTo("#star2", {color: '#3a4252', scale: .6}, {...{color: '#ffb020', scale: 1}, duration: 0.25, ease: "back.out(3)", immediateRender: false}, 15.670);
+      tl.fromTo("#star3", {color: '#3a4252', scale: .6}, {...{color: '#ffb020', scale: 1}, duration: 0.25, ease: "back.out(3)", immediateRender: false}, 15.760);
+      tl.fromTo("#star4", {color: '#3a4252', scale: .6}, {...{color: '#ffb020', scale: 1}, duration: 0.25, ease: "back.out(3)", immediateRender: false}, 15.850);
+      tl.fromTo("#tip-f05", {opacity: 0, y: 60, rotationX: -35}, {...{opacity: 1, y: 0, rotationX: 0}, duration: 0.4, ease: "back.out(1.6)", immediateRender: false}, 16.160);
+      tl.fromTo("#f05t0", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 16.980);
+      tl.fromTo("#f05t1", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 17.100);
+      tl.fromTo("#f05t2", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 17.260);
+      tl.fromTo("#f05t3", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 17.400);
+      tl.fromTo("#f05t4", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 17.620);
+      tl.fromTo("#f05t5", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 17.940);
+      tl.fromTo("#f05t6", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 18.160);
+      tl.fromTo("#f05t7", {opacity: .25}, {...{opacity: 1}, duration: 0.18, ease: "power2.out", immediateRender: false}, 18.320);
+      tl.fromTo("#ui-friend", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power3.out", immediateRender: false}, 16.480);
+      tl.fromTo("#av2", {opacity: 0, x: -44, scale: .4}, {...{opacity: 1, x: 0, scale: 1}, duration: 0.4, ease: "back.out(2.2)", immediateRender: false}, 18.310);
+      tl.fromTo("#plus1", {opacity: 0, scale: .4}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 18.460);
+      tl.fromTo("#bar", {opacity: 0, y: -20}, {...{opacity: 1, y: 0}, duration: 0.4, ease: "power3.out", immediateRender: false}, 0.000);
+      tl.fromTo("#handle", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.5, ease: "power3.out", immediateRender: false}, 20.800);
+      tl.set("#flash", {opacity: .55}, 20.580);
+      tl.to("#flash", {...{opacity: 0}, duration: 0.5, ease: "power2.out"}, 20.600);
+      tl.set({}, {}, 22.88);
+      window.__timelines["main"] = tl;
+    </script>
+    <script type="module" src="assets/js/scene.js"></script>
+  </body>
+</html>

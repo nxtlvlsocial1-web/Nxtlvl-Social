@@ -1,0 +1,150 @@
+[
+{
+"type": "g_drop",
+"t": 0.5
+},
+{
+"type": "g_drop",
+"t": 0.6
+},
+{
+"type": "g_drop",
+"t": 0.7
+},
+{
+"type": "g_drop",
+"t": 0.8
+},
+{
+"type": "g_drop",
+"t": 0.9
+},
+{
+"type": "g_wrong",
+"t": 1.97
+},
+{
+"type": "whoosh_big",
+"t": 2.23
+},
+{
+"type": "tick",
+"t": 2.88
+},
+{
+"type": "tick",
+"t": 3.38
+},
+{
+"type": "tick",
+"t": 3.88
+},
+{
+"type": "pop",
+"t": 4.02
+},
+{
+"type": "tick",
+"t": 4.38
+},
+{
+"type": "pop",
+"t": 4.66
+},
+{
+"type": "pop",
+"t": 4.88
+},
+{
+"type": "tick",
+"t": 4.88
+},
+{
+"type": "riser",
+"t": 5.6
+},
+{
+"type": "impact",
+"t": 6.11
+},
+{
+"type": "whoosh_big",
+"t": 6.5
+},
+{
+"type": "pop",
+"t": 8.4
+},
+{
+"type": "pop",
+"t": 9.28
+},
+{
+"type": "pop",
+"t": 9.64
+},
+{
+"type": "pop",
+"t": 10.3
+},
+{
+"type": "g_complete",
+"t": 10.62
+},
+{
+"type": "whoosh",
+"t": 10.82
+},
+{
+"type": "g_pickup",
+"t": 10.98
+},
+{
+"type": "msg",
+"t": 13.13
+},
+{
+"type": "whoosh",
+"t": 13.88
+},
+{
+"type": "g_pickup",
+"t": 14.04
+},
+{
+"type": "sparkle",
+"t": 15.54
+},
+{
+"type": "whoosh",
+"t": 16.14
+},
+{
+"type": "g_pickup",
+"t": 16.3
+},
+{
+"type": "g_levelup",
+"t": 18.36
+},
+{
+"type": "whoosh",
+"t": 18.82
+},
+{
+"type": "riser_short",
+"t": 19.8
+},
+{
+"type": "swish",
+"t": 20.17
+},
+{
+"type": "impact",
+"t": 20.6
+},
+{
+"type": "sparkle",
+"t": 20.75
+}
+]
