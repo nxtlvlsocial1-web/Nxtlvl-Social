@@ -1,0 +1,177 @@
+[
+{
+"t": 0.5,
+"kind": "g_drop",
+"file": "g_drop_g_drop.wav"
+},
+{
+"t": 0.7,
+"kind": "g_drop",
+"file": "g_drop_g_drop.wav"
+},
+{
+"t": 0.9,
+"kind": "g_drop",
+"file": "g_drop_g_drop.wav"
+},
+{
+"t": 1.97,
+"kind": "g_wrong",
+"file": "g_wrong_g_wrong.wav"
+},
+{
+"t": 2.23,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_deep.wav"
+},
+{
+"t": 2.88,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 3.38,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 3.88,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 4.02,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 4.38,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 4.66,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 4.88,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 4.88,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 5.6,
+"kind": "riser",
+"file": "riser_riser.wav"
+},
+{
+"t": 6.11,
+"kind": "impact",
+"file": "impact_impact.wav"
+},
+{
+"t": 6.5,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_deep.wav"
+},
+{
+"t": 8.4,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 9.28,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 9.64,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 10.3,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 10.62,
+"kind": "g_complete",
+"file": "g_complete_g_complete.wav"
+},
+{
+"t": 10.82,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 10.98,
+"kind": "g_pickup",
+"file": "g_pickup_g_pickup.wav"
+},
+{
+"t": 13.13,
+"kind": "msg",
+"file": "msg_msg.wav"
+},
+{
+"t": 13.88,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 14.04,
+"kind": "g_pickup",
+"file": "g_pickup_g_pickup.wav"
+},
+{
+"t": 15.54,
+"kind": "sparkle",
+"file": "sparkle_sparkle.wav"
+},
+{
+"t": 16.14,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 16.3,
+"kind": "g_pickup",
+"file": "g_pickup_g_pickup.wav"
+},
+{
+"t": 18.36,
+"kind": "g_levelup",
+"file": "g_levelup_g_levelup.wav"
+},
+{
+"t": 18.82,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 19.8,
+"kind": "riser_short",
+"file": "riser_short_riser.wav"
+},
+{
+"t": 20.17,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 20.6,
+"kind": "impact",
+"file": "impact_impact.wav"
+},
+{
+"t": 20.75,
+"kind": "sparkle",
+"file": "sparkle_sparkle.wav"
+}
+]
