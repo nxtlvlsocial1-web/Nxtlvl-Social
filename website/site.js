@@ -321,10 +321,16 @@
     var play = function (panel) {
       var box = panel.querySelector('.aa-msgs'), ms = [].slice.call(box.querySelectorAll('[data-m]'));
       clear();
-      if (reduce) { ms.forEach(function (m) { m.classList.add('on'); }); return; }
-      ms.forEach(function (m) { m.classList.remove('on'); }); box.classList.remove('is-typing');
+      var chips = [].slice.call(box.querySelectorAll('.stp'));
+      if (reduce) { ms.forEach(function (m) { m.classList.add('on'); }); chips.forEach(function (c) { c.classList.add('done'); }); return; }
+      ms.forEach(function (m) { m.classList.remove('on'); }); chips.forEach(function (c) { c.classList.remove('done'); }); box.classList.remove('is-typing');
       var t = 300;
       ms.forEach(function (m) {
+        if (m.hasAttribute('data-steps')) {
+          timers.push(setTimeout(function () { m.classList.add('on'); }, t)); t += 350;
+          chips.forEach(function (c) { t += 520; timers.push(setTimeout(function () { c.classList.add('done'); }, t)); });
+          t += 300; return;
+        }
         var isAgent = m.classList.contains('am');
         if (isAgent) { timers.push(setTimeout(function () { box.classList.add('is-typing'); }, t)); t += 900; }
         timers.push(setTimeout(function () { box.classList.remove('is-typing'); m.classList.add('on'); }, t));
@@ -337,10 +343,12 @@
         var on = k === cur, pn = document.getElementById(tb.getAttribute('aria-controls'));
         tb.setAttribute('aria-selected', on ? 'true' : 'false'); tb.tabIndex = on ? 0 : -1; pn.hidden = !on;
         if (on) play(pn);
+        var bar = tb.querySelector('.aa-prog');
+        if (bar) { bar.classList.remove('run'); if (on && !reduce) { void bar.offsetWidth; bar.classList.add('run'); } }
       });
       if (focus) tabs[cur].focus();
     };
-    var loop = function () { clearInterval(auto); if (reduce) return; auto = setInterval(function () { if (inView && !held && !document.hidden) select(cur + 1); }, 9000); };
+    var loop = function () { clearInterval(auto); if (reduce) return; auto = setInterval(function () { if (inView && !held && !document.hidden) select(cur + 1); }, 11000); };
     tabs.forEach(function (tb, k) {
       tb.addEventListener('click', function () { select(k); loop(); });
       tb.addEventListener('keydown', function (e) {
@@ -448,4 +456,61 @@
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: 0.4 });
     heads.forEach(function (h) { io.observe(h); });
   } else heads.forEach(function (h) { h.classList.add('in'); });
+})();
+
+// ---------- product UI motion: stat bumps, nav glide, read ticks, typed suggestions, sequenced automation flow ----------
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+  var $$ = function (sel, r) { return [].slice.call((r || document).querySelectorAll(sel)); };
+  // stat numbers glow when they tick
+  $$('[data-tick]').forEach(function (b) { new MutationObserver(function () { b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }).observe(b, { childList: true, characterData: true, subtree: true }); });
+  // sidebar: the active item moves through the workspace like someone is using it
+  var nav = $$('.c-nav > span');
+  if (nav.length) { var ni = 0; setInterval(function () { if (document.hidden) return; nav[ni].classList.remove('on'); ni = (ni + 1) % nav.length; nav[ni].classList.add('on'); }, 3200); }
+  // whatsapp: outgoing messages turn "read" a moment after the chat plays
+  setTimeout(function () { $$('.msg.out').forEach(function (m, i) { setTimeout(function () { m.classList.add('on'); }, i * 900); }); }, 2500);
+  // message box types suggestions
+  var ph = document.querySelector('[data-ph]');
+  if (ph) {
+    var tips = ['Plan next week\'s reels for the café', 'Reply to new WhatsApp leads', 'Move budget to the best ad', 'Write 3 FAQ answers for Google', 'Send me this month\'s report'], ti = 0;
+    var typeTip = function () {
+      var text = tips[ti++ % tips.length], j = 0;
+      var t = setInterval(function () {
+        ph.textContent = text.slice(0, ++j);
+        if (j >= text.length) {
+          clearInterval(t);
+          setTimeout(function () { var k = text.length; var d = setInterval(function () { ph.textContent = text.slice(0, --k); if (k <= 0) { clearInterval(d); setTimeout(typeTip, 300); } }, 22); }, 1800);
+        }
+      }, 45);
+    };
+    setTimeout(typeTip, 1200);
+  }
+  // automation flow: a message comes in, the agent thinks, the outputs light up in order
+  var box = document.querySelector('[data-flow]');
+  if (box) {
+    var ins = $$('.c1 [data-n]', box), outs = $$('.c3 [data-n]', box), ends = $$('.c4 [data-n]', box), brain = box.querySelector('[data-brain]'), say = box.querySelector('[data-brain-say]');
+    var lines = ['Reading the message', 'Answering in your voice', 'Qualifying the lead', 'Booking and saving'], step = 0, timers = [];
+    var later = function (fn, ms) { timers.push(setTimeout(fn, ms)); };
+    var off = function () { $$('.live', box).forEach(function (n) { n.classList.remove('live'); }); };
+    var cycle = function () {
+      timers.forEach(clearTimeout); timers = [];
+      var src = ins[step++ % ins.length]; off();
+      src.classList.add('live');
+      later(function () { brain.classList.add('think'); if (say) say.textContent = lines[0]; }, 700);
+      later(function () { if (say) say.textContent = lines[1]; if (outs[0]) outs[0].classList.add('live'); }, 1500);
+      later(function () { if (say) say.textContent = lines[2]; if (outs[1]) outs[1].classList.add('live'); }, 2200);
+      later(function () { if (say) say.textContent = lines[3]; if (outs[2]) outs[2].classList.add('live'); src.classList.remove('live'); }, 2900);
+      ends.forEach(function (n, i) { later(function () { n.classList.add('live'); }, 3500 + i * 450); });
+      later(function () { brain.classList.remove('think'); if (say) say.textContent = 'Understands, answers, qualifies'; }, 5000);
+      later(off, 5900);
+    };
+    var handled = box.querySelector('[data-handled]'), hn = 1284, running = false, loop;
+    var start = function () {
+      if (running) return; running = true; cycle();
+      loop = setInterval(function () { if (!document.hidden) { cycle(); if (handled) { hn += 1 + Math.floor(Math.random() * 3); handled.textContent = hn.toLocaleString('en-IN'); } } }, 6400);
+    };
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { if (es[0].isIntersecting) start(); else { running = false; clearInterval(loop); } }, { threshold: 0.3 }).observe(box);
+    else start();
+  }
 })();

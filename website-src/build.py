@@ -293,23 +293,25 @@ def home():
     <div class="chip c4" aria-hidden="true"><span class="up">{icon("chart")}</span><div><b>Reach up 31%</b><small>This month</small></div></div>
    </div>
     <div class="console" data-ui data-rise role="img" aria-label="Example Nxtlvl workspace: AI agents drafting hooks, replying to messages, optimising ads and editing reels, with live counters and a WhatsApp booking.">
-      <div class="c-top"><span class="dots"><i></i><i></i><i></i></span><b>Example workspace</b><span class="hide-s">· Café Aroma</span><span class="sp"></span><span class="live">Agents running</span></div>
+      <div class="c-top"><span class="dots"><i></i><i></i><i></i></span><b>Example workspace</b><span class="hide-s">· Café Aroma</span><span class="sp"></span><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="live">Agents running</span></div>
       <div class="c-body">
         <div class="c-nav"><span class="on">{icon("chart")} Overview</span><span>{icon("pen")} Content</span><span>{icon("mega")} Campaigns</span><span>{icon("flow")} Automations</span><span>{icon("users")} Leads</span><small>Agents</small>{nav_ag}</div>
         <div class="c-main">
-          <div class="stats"><div class="stat"><span>Tasks done today</span><b data-tick="128">128</b><small>by agents and team</small></div><div class="stat"><span>Messages answered</span><b data-tick="47">47</b><small>24/7, in seconds</small></div><div class="stat"><span>Leads this week</span><b data-tick="39">39</b><small>all logged</small></div></div>
+          <div class="stats"><div class="stat"><span>Tasks done today <em class="delta">+18%</em></span><b data-tick="128">128</b><svg class="mini" viewBox="0 0 80 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0 20 C10 18 16 14 26 15 S42 8 52 9 S70 3 80 2"/></svg><small>by agents and team</small></div><div class="stat"><span>Messages answered <em class="delta">+9%</em></span><b data-tick="47">47</b><svg class="mini" viewBox="0 0 80 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0 18 C12 19 18 12 28 13 S44 15 54 9 S72 6 80 4"/></svg><small>24/7, in seconds</small></div><div class="stat"><span>Leads this week <em class="delta">+24%</em></span><b data-tick="39">39</b><svg class="mini" viewBox="0 0 80 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0 21 C10 20 18 17 28 16 S46 10 56 8 S72 5 80 1"/></svg><small>all logged</small></div></div>
           <div class="feed"><h4>Live activity <span>reviewed by your strategist</span></h4><div data-feed>{feed}</div></div>
           <svg class="spark" viewBox="0 0 600 64" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A95CFF" stop-opacity=".35"/><stop offset="1" stop-color="#A95CFF" stop-opacity="0"/></linearGradient></defs>
-            <path class="a" d="M0 52 C60 50 90 44 140 46 S230 34 280 36 S370 22 420 24 S520 10 600 6 L600 64 L0 64Z"/><path class="l" d="M0 52 C60 50 90 44 140 46 S230 34 280 36 S370 22 420 24 S520 10 600 6"/></svg>
+            <g class="grid"><path d="M0 16H600M0 32H600M0 48H600"/></g><path class="a" d="M0 52 C60 50 90 44 140 46 S230 34 280 36 S370 22 420 24 S520 10 600 6 L600 64 L0 64Z"/><path class="l" id="sparkline" d="M0 52 C60 50 90 44 140 46 S230 34 280 36 S370 22 420 24 S520 10 600 6"/>
+            <circle class="dot" r="4.5"><animateMotion dur="7s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;.85;1" calcMode="linear"><mpath href="#sparkline"/></animateMotion></circle></svg>
+          <span class="spark-tip" aria-hidden="true">Leads <b>+24%</b> this week</span>
         </div>
         <div class="c-side"><h4><span class="h4b">{brand("whatsapp")}WhatsApp</span> <span data-ist>11:42 pm IST</span></h4>
           <div class="chat">
             <div class="chat-top"><span class="av">CA</span><div><b>Café Aroma</b><small>Reply Agent on</small></div></div>
             <div class="chat-body">
               <div class="msg in" data-step>Hi! Are you open tonight? Table for 4 at 8?<small data-time>11:42 pm</small></div>
-              <div class="msg out" data-step>Hi Priya, yes, open till 11. I can hold a table for 4 at 8:00 pm. Shall I book it?<small data-time>11:42 pm</small></div>
+              <div class="msg out" data-step>Hi Priya, yes, open till 11. I can hold a table for 4 at 8:00 pm. Shall I book it?<small data-time>11:42 pm</small><i class="tk" aria-hidden="true"><svg viewBox="0 0 18 12"><path d="M1 6.5l3 3L10 2.5M7 9.5l1 1L16.5 2"/></svg></i></div>
               <div class="msg in" data-step>Yes please<small data-time>11:43 pm</small></div>
-              <div class="msg out" data-step>Booked: table for 4, tonight at 8:00 pm. See you soon!<small data-time>11:43 pm</small></div>
+              <div class="msg out" data-step>Booked: table for 4, tonight at 8:00 pm. See you soon!<small data-time>11:43 pm</small><i class="tk" aria-hidden="true"><svg viewBox="0 0 18 12"><path d="M1 6.5l3 3L10 2.5M7 9.5l1 1L16.5 2"/></svg></i></div>
               <div class="note" data-step>Lead saved · owner notified</div>
               <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
             </div></div></div>
@@ -337,10 +339,11 @@ def home():
     <svg class="wires" aria-hidden="true"><defs><linearGradient id="wg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7D18FC"/><stop offset="1" stop-color="#D8BBFF"/></linearGradient></defs></svg>
     <div class="nodes">
       <div class="col c1">{node("b:instagram", "Instagram DM", "Price? Timings?", "br")}{node("b:whatsapp", "WhatsApp", "Booking request", "br")}{node("globe", "Website form", "Quote needed")}{node("b:meta", "Meta lead ad", "New lead", "br")}</div>
-      <div class="col c2"><div class="node brain" data-n data-brain><i>{icon("bot")}</i><div><b>Nxtlvl Agent</b><small>Understands, answers, qualifies</small></div></div></div>
+      <div class="col c2"><div class="node brain" data-n data-brain><span class="ring" aria-hidden="true"></span><i>{icon("bot")}</i><div><b>Nxtlvl Agent</b><small data-brain-say>Understands, answers, qualifies</small></div><span class="lat" aria-hidden="true">avg reply <b>0.8 s</b></span></div></div>
       <div class="col c3">{node("chat", "Replied in your voice", "In seconds, 24/7")}{node("users", "Lead qualified", "Budget, area, timeline")}{node("calendar", "Booking created", "Reminder scheduled")}</div>
       <div class="col c4">{node("b:googlesheets", "Saved to CRM", "Sheets, HubSpot or Zoho", "done br")}{node("b:whatsapp", "Owner notified", "On WhatsApp", "done br")}{node("refresh", "Follow-up in 24 h", "If no reply", "done")}</div>
     </div>
+    <div class="flow-live" aria-hidden="true"><span class="dotp"></span>Live · handled today <b data-handled>1,284</b></div>
     <div class="flow-cap"><span><b>24/7</b> replies</span><span><b>100%</b> of leads logged</span><span><b>1 tap</b> human handover</span></div>
   </div>
 </section>
@@ -697,21 +700,35 @@ AGENT_CHATS = [
      'share it with the team', ['Shared with 3 people as a PDF and a one-page summary.']),
 ]
 
+AGENT_STEPS = {
+    'Content Agent': (['Scanned your top 20 posts', 'Checked this week\'s trends', 'Drafted 3 hooks'], 'Added to calendar · Friday 6 pm'),
+    'Reply Agent': (['Read 47 new messages', 'Answered FAQs in your voice', 'Flagged 2 for you'], '2 replies drafted · tap to send'),
+    'Ads Agent': (['Pulled Meta ads data', 'Compared cost per lead', 'Found a winner'], '₹2,000 moved · Creative A → B'),
+    'Edit Agent': (['Cut to the beat', 'Burned in captions', 'Colour graded'], 'Sent on WhatsApp · awaiting approval'),
+    'SEO Agent': (['Checked 40 keywords', 'Found 2 missing answers', 'Wrote FAQ answers'], '2 answers live · indexed by Google'),
+    'Report Agent': (['Pulled 5 channels', 'Compared with October', 'Wrote next month\'s plan'], 'PDF shared · 3 people'),
+}
+SPIN = '<span class="sp-i" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><path d="M4.5 8.2l2.3 2.3 4.7-4.9"/></svg></span>'
+
 def agent_app():
     tabs, panels = [], []
     for i, (col, name, state, role, preview, first, ask, reply) in enumerate(AGENT_CHATS):
         sel = 'true' if i == 0 else 'false'
         tabs.append(f'<button class="aa-tab" role="tab" id="aa-t{i}" aria-controls="aa-p{i}" aria-selected="{sel}" tabindex="{0 if i == 0 else -1}">'
-                    f'<img src="/img/agent-{name.split()[0].lower()}.webp" width="40" height="40" alt=""><span><b>{name}</b><small>{preview}</small></span></button>')
-        msgs = ''.join(f'<div class="am" data-m>{m}</div>' for m in first) + f'<div class="um" data-m>{ask}</div><div class="aa-new" data-m><span>New</span></div>' + ''.join(f'<div class="am" data-m>{m}</div>' for m in reply)
+                    f'<img src="/img/agent-{name.split()[0].lower()}.webp" width="40" height="40" alt=""><span><b>{name}</b><small>{preview}</small></span><i class="aa-prog" aria-hidden="true"></i></button>')
+        steps, receipt = AGENT_STEPS[name]
+        chips = ''.join(f'<span class="stp">{SPIN}{x}</span>' for x in steps)
+        msgs = (f'<div class="steps" data-m data-steps>{chips}</div>' + ''.join(f'<div class="am" data-m>{m}</div>' for m in first) +
+                f'<div class="um" data-m>{ask}</div><div class="aa-new" data-m><span>New</span></div>' +
+                ''.join(f'<div class="am" data-m>{m}<span class="rcpt"><i aria-hidden="true">✓</i>{receipt}</span></div>' for m in reply))
         panels.append(f'<div class="aa-panel" role="tabpanel" id="aa-p{i}" aria-labelledby="aa-t{i}"{"" if i == 0 else " hidden"}>'
                       f'<div class="aa-head"><img src="/img/agent-{name.split()[0].lower()}.webp" width="44" height="44" alt=""><div><b>{name}</b><small>{role}</small></div><span class="state">{state}</span></div>'
-                      f'<div class="aa-msgs">{msgs}<div class="aa-typing" aria-hidden="true"><i></i><i></i><i></i></div></div></div>')
+                      f'<div class="aa-msgs">{msgs}<div class="aa-typing" aria-hidden="true"><span class="think">{name.split()[0]} Agent is thinking</span><i></i><i></i><i></i></div></div></div>')
     return f'''<div class="agentapp" data-agentapp data-rise>
     <aside class="aa-side"><div class="aa-pins" aria-hidden="true"><span><img src="/img/pin-nextyy.webp" width="56" height="56" alt=""><small>Nextyy</small></span><span><img src="/img/pin-strategist.webp" width="56" height="56" alt=""><small>Strategist</small></span></div>
       <div class="aa-list" role="tablist" aria-label="Your AI agents">{"".join(tabs)}</div>
       <div class="aa-me"><span>CA</span>Café Aroma · example</div></aside>
-    <div class="aa-main">{"".join(panels)}<div class="aa-input" aria-hidden="true"><span>+</span><em>Message your agents</em><i></i></div></div>
+    <div class="aa-main">{"".join(panels)}<div class="aa-input" aria-hidden="true"><span>+</span><em data-ph>Message your agents</em><span class="mic"><b></b><b></b><b></b><b></b><b></b></span><i></i></div></div>
   </div>'''
 
 
