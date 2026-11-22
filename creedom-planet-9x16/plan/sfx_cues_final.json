@@ -1,0 +1,117 @@
+[
+{
+"t": 0.05,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_big.wav"
+},
+{
+"t": 5.12,
+"kind": "riser_short",
+"file": "riser_short_riser.wav"
+},
+{
+"t": 6.75,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 7.52,
+"kind": "riser",
+"file": "riser_riser.wav"
+},
+{
+"t": 9.58,
+"kind": "glitch",
+"file": "glitch_glitch.wav"
+},
+{
+"t": 10.02,
+"kind": "glitch",
+"file": "glitch_glitch.wav"
+},
+{
+"t": 10.38,
+"kind": "glitch",
+"file": "glitch_glitch.wav"
+},
+{
+"t": 14.41,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 14.63,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 14.76,
+"kind": "sparkle",
+"file": "sparkle_sparkle.wav"
+},
+{
+"t": 17.4,
+"kind": "impact",
+"file": "impact_sub_hit.wav"
+},
+{
+"t": 17.45,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 17.465,
+"kind": "ping",
+"file": "ping_ping.wav"
+},
+{
+"t": 17.595,
+"kind": "ping",
+"file": "ping_ping.wav"
+},
+{
+"t": 17.725,
+"kind": "ping",
+"file": "ping_ping.wav"
+},
+{
+"t": 17.77,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 17.855,
+"kind": "ping",
+"file": "ping_ping.wav"
+},
+{
+"t": 17.985,
+"kind": "ping",
+"file": "ping_ping.wav"
+},
+{
+"t": 17.99,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 18.115,
+"kind": "ping",
+"file": "ping_ping.wav"
+},
+{
+"t": 18.21,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 18.7,
+"kind": "whoosh",
+"file": "whoosh_whoosh_c.wav"
+},
+{
+"t": 19.06,
+"kind": "ding",
+"file": "ding_ding.wav"
+}
+]
