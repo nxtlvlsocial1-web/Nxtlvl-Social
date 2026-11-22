@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root { --ground: #0B0618; --ink: #F4EFFF; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--ground); }
+      #root { width: 100%; height: 100%; position: relative; }
+      #ground { position: absolute; inset: 0;
+        background: radial-gradient(48% 60% at 8% 0%, rgba(126, 26, 246, .26), transparent 70%), radial-gradient(45% 60% at 100% 100%, rgba(94, 6, 242, .2), transparent 70%), var(--ground); }
+      #texture { position: absolute; inset: 0; opacity: .5; background-image: radial-gradient(rgba(216, 187, 255, .07) 1.4px, transparent 1.4px); background-size: 34px 34px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1920" data-height="1080">
+      <div id="ground" class="clip" data-start="0" data-duration="20" data-track-index="0"></div>
+      <div id="texture" class="clip" data-start="0" data-duration="20" data-track-index="0" data-layout-ignore></div>
+      <div id="hook" data-composition-id="hook" data-composition-src="compositions/hook.html" data-start="0" data-duration="4.2" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="agents" data-composition-id="agents" data-composition-src="compositions/agents.html" data-start="4.2" data-duration="5.3" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="automation" data-composition-id="automation" data-composition-src="compositions/automation.html" data-start="9.5" data-duration="4.5" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="proof" data-composition-id="proof" data-composition-src="compositions/proof.html" data-start="14.0" data-duration="3.0" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="endcard" data-composition-id="endcard" data-composition-src="compositions/endcard.html" data-start="17.0" data-duration="3.0" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
