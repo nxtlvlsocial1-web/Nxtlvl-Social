@@ -1,0 +1,194 @@
+{
+ "duration": 45.5,
+ "takes": [
+  {
+   "line": "f00",
+   "take": 0,
+   "heard": "These 6 free GitHub projects could each be a business.",
+   "errors": 0,
+   "pitch_spread_hz": 87
+  },
+  {
+   "line": "f00",
+   "take": 1,
+   "heard": "These six free GitHub projects could each be a business.",
+   "errors": 0,
+   "pitch_spread_hz": 105
+  },
+  {
+   "line": "f00",
+   "take": 2,
+   "heard": "These six free GitHub projects could each be a business.",
+   "errors": 0,
+   "pitch_spread_hz": 54
+  },
+  {
+   "line": "f01",
+   "take": 0,
+   "heard": "1. Autoclip cuts long videos into short clips. Sell clipping to podcasters and streamers.",
+   "errors": 0,
+   "pitch_spread_hz": 52
+  },
+  {
+   "line": "f01",
+   "take": 1,
+   "heard": "1. Autoclip cuts long videos into short clips. Sell clipping to podcasters and streamers.",
+   "errors": 0,
+   "pitch_spread_hz": 56
+  },
+  {
+   "line": "f01",
+   "take": 2,
+   "heard": "1. Autoclip cuts long videos into short clips, so clipping to podcasters and streamers.",
+   "errors": 1,
+   "pitch_spread_hz": 69
+  },
+  {
+   "line": "f02",
+   "take": 0,
+   "heard": "2. Remotion make to videos with code. Run a video factory for agencies.",
+   "errors": 2,
+   "pitch_spread_hz": 113
+  },
+  {
+   "line": "f02",
+   "take": 1,
+   "heard": "2. Remotion makes videos with code. Run a video factory for agencies.",
+   "errors": 0,
+   "pitch_spread_hz": 66
+  },
+  {
+   "line": "f02",
+   "take": 2,
+   "heard": "2. Remotion makes videos with code. Run a video factory for agencies.",
+   "errors": 0,
+   "pitch_spread_hz": 75
+  },
+  {
+   "line": "f03",
+   "take": 0,
+   "heard": "3. Open Hands is an AI agent that writes code. Build small apps for local businesses.",
+   "errors": 2,
+   "pitch_spread_hz": 59
+  },
+  {
+   "line": "f03",
+   "take": 1,
+   "heard": "3. OpenHands is an AI agent that writes code. Build small apps for local businesses.",
+   "errors": 0,
+   "pitch_spread_hz": 79
+  },
+  {
+   "line": "f03",
+   "take": 2,
+   "heard": "3. OpenHands is an AI agent that writes code. Build small apps for local businesses.",
+   "errors": 0,
+   "pitch_spread_hz": 85
+  },
+  {
+   "line": "f04",
+   "take": 0,
+   "heard": "4. Persona Live turns one photo into a live AI avatar. Launch a virtual influencer.",
+   "errors": 3,
+   "pitch_spread_hz": 80
+  },
+  {
+   "line": "f04",
+   "take": 1,
+   "heard": "4. Persona Live turns one photo into a live AI avatar. Launch a virtual influencer.",
+   "errors": 3,
+   "pitch_spread_hz": 77
+  },
+  {
+   "line": "f04",
+   "take": 2,
+   "heard": "4. Persona Live turns one photo into a live AI avatar. Launch a virtual influencer.",
+   "errors": 3,
+   "pitch_spread_hz": 62
+  },
+  {
+   "line": "f05",
+   "take": 0,
+   "heard": "5. Red Ink writes a full red note post, text and images, from one prompt. Sell it to brands.",
+   "errors": 3,
+   "pitch_spread_hz": 57
+  },
+  {
+   "line": "f05",
+   "take": 1,
+   "heard": "5. Red ink writes a full red note post, text, and images from one prompt. Sell it to brands.",
+   "errors": 3,
+   "pitch_spread_hz": 71
+  },
+  {
+   "line": "f05",
+   "take": 2,
+   "heard": "5. Red ink writes a full red note post, text, and images from one prompt. Sell it to brands.",
+   "errors": 3,
+   "pitch_spread_hz": 76
+  },
+  {
+   "line": "f06",
+   "take": 0,
+   "heard": "6. MooMoo. A. I. Novel plans and dress novels with AI. Start a publishing studio.",
+   "errors": 4,
+   "pitch_spread_hz": 71
+  },
+  {
+   "line": "f06",
+   "take": 1,
+   "heard": "6. MooMoo A. I. Novel plans and drafts novels with AI. Start a publishing studio.",
+   "errors": 3,
+   "pitch_spread_hz": 71
+  },
+  {
+   "line": "f06",
+   "take": 2,
+   "heard": "6. MooMoo. A .I. novel plans and drafts novels with A .I. start a publishing studio.",
+   "errors": 5,
+   "pitch_spread_hz": 76
+  },
+  {
+   "line": "f07",
+   "take": 0,
+   "heard": "The code is free. The money isn't packaging it for one customer.",
+   "errors": 2,
+   "pitch_spread_hz": 83
+  },
+  {
+   "line": "f07",
+   "take": 1,
+   "heard": "The code is free. The money is in packaging it for one customer.",
+   "errors": 0,
+   "pitch_spread_hz": 68
+  },
+  {
+   "line": "f07",
+   "take": 2,
+   "heard": "The code is free. The money is in packaging it for one customer.",
+   "errors": 0,
+   "pitch_spread_hz": 79
+  },
+  {
+   "line": "f08",
+   "take": 0,
+   "heard": "Comment repos, and I'll send you all six links.",
+   "errors": 0,
+   "pitch_spread_hz": 74
+  },
+  {
+   "line": "f08",
+   "take": 1,
+   "heard": "Comment repos and I'll send you all six links.",
+   "errors": 0,
+   "pitch_spread_hz": 126
+  },
+  {
+   "line": "f08",
+   "take": 2,
+   "heard": "comment repose, and I'll send you all six links.",
+   "errors": 1,
+   "pitch_spread_hz": 63
+  }
+ ]
+}

@@ -1,0 +1,314 @@
+[
+{
+"type": "g_drop",
+"t": 0.5
+},
+{
+"type": "g_drop",
+"t": 0.59
+},
+{
+"type": "g_drop",
+"t": 0.68
+},
+{
+"type": "g_drop",
+"t": 0.77
+},
+{
+"type": "g_drop",
+"t": 0.86
+},
+{
+"type": "g_drop",
+"t": 0.95
+},
+{
+"type": "riser",
+"t": 2.4
+},
+{
+"type": "whoosh",
+"t": 3.08
+},
+{
+"type": "riser_short",
+"t": 3.35
+},
+{
+"type": "thump",
+"t": 3.62
+},
+{
+"type": "g_pickup",
+"t": 3.7
+},
+{
+"type": "pop",
+"t": 4.5
+},
+{
+"type": "click",
+"t": 4.52
+},
+{
+"type": "pop",
+"t": 4.95
+},
+{
+"type": "pop",
+"t": 5.4
+},
+{
+"type": "ding",
+"t": 6.74
+},
+{
+"type": "swish",
+"t": 8.57
+},
+{
+"type": "whoosh",
+"t": 8.7
+},
+{
+"type": "riser_short",
+"t": 8.97
+},
+{
+"type": "thump",
+"t": 9.24
+},
+{
+"type": "g_pickup",
+"t": 9.32
+},
+{
+"type": "click",
+"t": 10.14
+},
+{
+"type": "tick",
+"t": 10.42
+},
+{
+"type": "tick",
+"t": 10.97
+},
+{
+"type": "tick",
+"t": 11.52
+},
+{
+"type": "ding",
+"t": 11.88
+},
+{
+"type": "tick",
+"t": 12.07
+},
+{
+"type": "tick",
+"t": 12.62
+},
+{
+"type": "swish",
+"t": 13.31
+},
+{
+"type": "whoosh",
+"t": 13.44
+},
+{
+"type": "riser_short",
+"t": 13.71
+},
+{
+"type": "thump",
+"t": 13.98
+},
+{
+"type": "g_pickup",
+"t": 14.06
+},
+{
+"type": "typing",
+"t": 14.86
+},
+{
+"type": "click",
+"t": 14.88
+},
+{
+"type": "ding",
+"t": 17.14
+},
+{
+"type": "pop",
+"t": 17.16
+},
+{
+"type": "pop",
+"t": 17.31
+},
+{
+"type": "pop",
+"t": 17.46
+},
+{
+"type": "swish",
+"t": 18.75
+},
+{
+"type": "whoosh",
+"t": 18.88
+},
+{
+"type": "riser_short",
+"t": 19.15
+},
+{
+"type": "thump",
+"t": 19.42
+},
+{
+"type": "g_pickup",
+"t": 19.5
+},
+{
+"type": "click",
+"t": 20.32
+},
+{
+"type": "notify",
+"t": 20.4
+},
+{
+"type": "ding",
+"t": 23.82
+},
+{
+"type": "swish",
+"t": 24.99
+},
+{
+"type": "whoosh",
+"t": 25.12
+},
+{
+"type": "riser_short",
+"t": 25.39
+},
+{
+"type": "thump",
+"t": 25.66
+},
+{
+"type": "g_pickup",
+"t": 25.74
+},
+{
+"type": "click",
+"t": 26.56
+},
+{
+"type": "g_drop",
+"t": 26.66
+},
+{
+"type": "sparkle",
+"t": 26.84
+},
+{
+"type": "ding",
+"t": 31.14
+},
+{
+"type": "swish",
+"t": 31.75
+},
+{
+"type": "whoosh",
+"t": 31.88
+},
+{
+"type": "riser_short",
+"t": 32.15
+},
+{
+"type": "thump",
+"t": 32.42
+},
+{
+"type": "g_pickup",
+"t": 32.5
+},
+{
+"type": "g_swish",
+"t": 33.0
+},
+{
+"type": "click",
+"t": 33.32
+},
+{
+"type": "g_swish",
+"t": 33.55
+},
+{
+"type": "ding",
+"t": 37.0
+},
+{
+"type": "swish",
+"t": 37.95
+},
+{
+"type": "whoosh_big",
+"t": 38.15
+},
+{
+"type": "g_drop",
+"t": 38.95
+},
+{
+"type": "g_drop",
+"t": 39.09
+},
+{
+"type": "g_drop",
+"t": 39.23
+},
+{
+"type": "g_drop",
+"t": 39.37
+},
+{
+"type": "g_drop",
+"t": 39.51
+},
+{
+"type": "g_drop",
+"t": 39.65
+},
+{
+"type": "impact",
+"t": 41.24
+},
+{
+"type": "cash",
+"t": 41.24
+},
+{
+"type": "typing",
+"t": 42.79
+},
+{
+"type": "click",
+"t": 43.39
+},
+{
+"type": "notify",
+"t": 43.59
+}
+]

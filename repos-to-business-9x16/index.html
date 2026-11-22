@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>AI.NXTLVL 6 free repos to businesses 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <style>
+@font-face { font-family: Mont; font-weight: 800; src: url("assets/fonts/montserrat.ttf"); }
+@font-face { font-family: Serif; font-style: italic; src: url("assets/fonts/InstrumentSerif-Italic.ttf"); }
+@font-face { font-family: Mono; font-weight: 700; src: url("assets/fonts/JetBrainsMono-Bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07050f; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Mont; color: #fff; background: #07050f; }
+#gl { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+#bar { position: absolute; left: 66px; right: 66px; top: 258px; height: 40px; display: flex; align-items: center; justify-content: space-between; opacity: 0;
+  font-family: Mono; font-weight: 700; font-size: 22px; letter-spacing: .12em; color: #b687f9; }
+#bar img { height: 34px; }
+#shelf { position: absolute; left: 66px; right: 66px; top: 318px; display: flex; gap: 10px; align-items: center; opacity: 0; }
+.slot { flex: 1; height: 58px; border-radius: 14px; border: 2px dashed rgba(182,135,249,.35); display: flex; flex-direction: column; align-items: center;
+  justify-content: center; font-family: Mono; font-weight: 700; color: rgba(182,135,249,.5); background: rgba(16,2,44,.45); }
+.slot b { font-size: 20px; line-height: 1; }
+.slot i { font-style: normal; font-size: 11px; letter-spacing: .02em; opacity: 0; max-width: 100%; overflow: hidden; white-space: nowrap; }
+.slot.on { border: 2px solid var(--c); background: color-mix(in srgb, var(--c) 30%, #10022c); color: #fff; box-shadow: 0 0 18px color-mix(in srgb, var(--c) 60%, transparent); }
+.slot.on i { opacity: .95; }
+#cnt { width: 86px; text-align: right; font-family: Mono; font-weight: 700; font-size: 30px; color: #fff; }
+.ttl { position: absolute; left: 66px; right: 66px; top: 410px; text-align: center; perspective: 900px; }
+.ttl .big { font-weight: 800; font-size: 84px; line-height: 1.02; letter-spacing: -.035em; opacity: 0; text-shadow: 0 6px 30px rgba(0,0,0,.6); }
+.ttl .sub { margin-top: 10px; font-weight: 800; font-size: 62px; letter-spacing: -.03em; opacity: 0; color: #e9dcff; }
+.ttl i, .ttl .sub i { font-family: Serif; font-style: italic; font-weight: 400; color: #b687f9; font-size: 1.18em; letter-spacing: -.01em; }
+.v { color: #b687f9; }
+.repo .num { font-family: Mono; font-weight: 700; font-size: 28px; letter-spacing: .2em; color: var(--c); opacity: 0; }
+.repo .name { margin-top: 6px; font-weight: 800; font-size: 104px; line-height: 1; letter-spacing: -.045em; color: #fff; opacity: 0;
+  text-shadow: 0 0 40px color-mix(in srgb, var(--c) 55%, transparent), 0 6px 26px rgba(0,0,0,.6); }
+.repo .lic { display: inline-block; margin-top: 18px; padding: 8px 18px; border-radius: 999px; border: 2px solid var(--c); color: var(--c); font-family: Mono;
+  font-weight: 700; font-size: 22px; letter-spacing: .12em; opacity: 0; background: rgba(7,5,15,.55); }
+.note { margin-top: 12px; font-family: Mono; font-weight: 700; font-size: 20px; color: rgba(255,255,255,.7); opacity: 0; }
+.biz { position: absolute; left: 50%; top: 1222px; transform: translateX(-50%); min-width: 620px; padding: 16px 30px 18px; border-radius: 26px; text-align: center; opacity: 0;
+  background: linear-gradient(160deg, rgba(26,14,52,.94), rgba(14,6,30,.94)); border: 2px solid var(--c); box-shadow: 0 0 34px color-mix(in srgb, var(--c) 45%, transparent); }
+.biz span { display: block; font-family: Mono; font-weight: 700; font-size: 20px; letter-spacing: .2em; color: var(--c); }
+.biz b { display: block; margin-top: 4px; font-weight: 800; font-size: 44px; letter-spacing: -.02em; white-space: nowrap; }
+.cap { position: absolute; left: 70px; right: 70px; top: 1374px; text-align: center; font-weight: 800; font-size: 54px; line-height: 1.12; letter-spacing: -.02em;
+  opacity: 0; text-shadow: 0 4px 18px rgba(0,0,0,.85); }
+.cw { display: inline-block; color: rgba(255,255,255,.42); }
+#cta { position: absolute; left: 66px; right: 66px; top: 1190px; text-align: center; opacity: 0; }
+.ct1 { font-weight: 800; font-size: 70px; letter-spacing: -.03em; }
+.ct1 b { color: #b687f9; }
+.ct2 { margin-top: 4px; font-family: Serif; font-style: italic; font-size: 46px; color: #e9dcff; }
+.cbox { margin: 22px auto 0; width: 820px; height: 92px; border-radius: 46px; background: rgba(255,255,255,.08); border: 2px solid rgba(182,135,249,.5);
+  display: flex; align-items: center; gap: 18px; padding: 0 22px; font-weight: 800; font-size: 36px; text-align: left; position: relative; }
+.cbox .av { width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(135deg, #7f1bf8, #6008f2); flex: none; }
+#cph { position: absolute; left: 96px; color: rgba(255,255,255,.45); font-weight: 600; }
+#cty { color: #fff; }
+.send { margin-left: auto; color: #b687f9; font-size: 40px; display: inline-block; }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="46.68" data-fps="30" data-width="1080" data-height="1920">
+      <canvas id="gl" width="1080" height="1920"></canvas>
+      <div id="bar"><img src="assets/img/logo-wordmark.png" alt=""><span>6 FREE REPOS &#8594; 6 BUSINESSES</span></div>
+<div id="shelf"><div class="slot" id="slot0" style="--c:#ff4d6d"><b>01</b><i>AutoClip</i></div><div class="slot" id="slot1" style="--c:#3d8bff"><b>02</b><i>Remotion</i></div><div class="slot" id="slot2" style="--c:#9b5cff"><b>03</b><i>OpenHands</i></div><div class="slot" id="slot3" style="--c:#22d3ee"><b>04</b><i>PersonaLive</i></div><div class="slot" id="slot4" style="--c:#ff3b30"><b>05</b><i>RedInk</i></div><div class="slot" id="slot5" style="--c:#f5b941"><b>06</b><i>MuMuAINovel</i></div><div id="cnt"><span id="cntn">0</span>/6</div></div>
+<div class="ttl" id="t-hook"><div class="big">6 free GitHub projects</div><div class="sub">you can turn into a <i>business</i></div></div>
+<div class="ttl repo" id="t0" style="--c:#ff4d6d"><div class="num">01 / 06</div><div class="name">AutoClip</div><div class="lic">MIT LICENCE</div></div>
+<div class="biz" id="b0" style="--c:#ff4d6d"><span>BUSINESS IDEA</span><b>Clipping service for creators</b></div>
+<div class="ttl repo" id="t1" style="--c:#3d8bff"><div class="num">02 / 06</div><div class="name">Remotion</div><div class="lic">FREE: SOLO & TEAMS OF 3</div><div class="note">Free for individuals and teams up to 3. Companies need a licence.</div></div>
+<div class="biz" id="b1" style="--c:#3d8bff"><span>BUSINESS IDEA</span><b>Video factory for agencies</b></div>
+<div class="ttl repo" id="t2" style="--c:#9b5cff"><div class="num">03 / 06</div><div class="name">OpenHands</div><div class="lic">MIT LICENCE</div></div>
+<div class="biz" id="b2" style="--c:#9b5cff"><span>BUSINESS IDEA</span><b>Apps for local businesses</b></div>
+<div class="ttl repo" id="t3" style="--c:#22d3ee"><div class="num">04 / 06</div><div class="name">PersonaLive</div><div class="lic">APACHE-2.0</div></div>
+<div class="biz" id="b3" style="--c:#22d3ee"><span>BUSINESS IDEA</span><b>Your own virtual influencer</b></div>
+<div class="ttl repo" id="t4" style="--c:#ff3b30"><div class="num">05 / 06</div><div class="name">RedInk</div><div class="lic">FREE ON GITHUB</div></div>
+<div class="biz" id="b4" style="--c:#ff3b30"><span>BUSINESS IDEA</span><b>Post-writing service for brands</b></div>
+<div class="ttl repo" id="t5" style="--c:#f5b941"><div class="num">06 / 06</div><div class="name">MuMuAINovel</div><div class="lic">FREE ON GITHUB</div></div>
+<div class="biz" id="b5" style="--c:#f5b941"><span>BUSINESS IDEA</span><b>AI publishing studio</b></div>
+<div class="ttl" id="t-close"><div class="big">The code is <span class="v">free.</span></div><div class="sub" id="t-close2">The money is in <i>packaging.</i></div></div>
+<div id="cta"><div class="ct1">Comment <b>REPOS</b></div><div class="ct2">and I'll send you all six links</div><div class="cbox"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div></div>
+<div class="cap" id="cap0"><span class="cw" id="c0_0">These</span> <span class="cw" id="c0_1">six</span> <span class="cw" id="c0_2">free</span> <span class="cw" id="c0_3">GitHub</span> <span class="cw" id="c0_4">projects</span></div>
+<div class="cap" id="cap1"><span class="cw" id="c1_0">could</span> <span class="cw" id="c1_1">each</span> <span class="cw" id="c1_2">be</span> <span class="cw" id="c1_3">a</span> <span class="cw" id="c1_4">business.</span></div>
+<div class="cap" id="cap2"><span class="cw" id="c2_0">One.</span> <span class="cw" id="c2_1">AutoClip</span> <span class="cw" id="c2_2">cuts</span> <span class="cw" id="c2_3">long</span> <span class="cw" id="c2_4">videos</span></div>
+<div class="cap" id="cap3"><span class="cw" id="c3_0">into</span> <span class="cw" id="c3_1">short</span> <span class="cw" id="c3_2">clips.</span></div>
+<div class="cap" id="cap4"><span class="cw" id="c4_0">Sell</span> <span class="cw" id="c4_1">clipping</span> <span class="cw" id="c4_2">to</span> <span class="cw" id="c4_3">podcasters</span> <span class="cw" id="c4_4">and</span></div>
+<div class="cap" id="cap5"><span class="cw" id="c5_0">streamers.</span></div>
+<div class="cap" id="cap6"><span class="cw" id="c6_0">Two.</span> <span class="cw" id="c6_1">Remotion</span> <span class="cw" id="c6_2">makes</span> <span class="cw" id="c6_3">videos</span> <span class="cw" id="c6_4">with</span></div>
+<div class="cap" id="cap7"><span class="cw" id="c7_0">code.</span> <span class="cw" id="c7_1">Run</span> <span class="cw" id="c7_2">a</span> <span class="cw" id="c7_3">video</span> <span class="cw" id="c7_4">factory</span></div>
+<div class="cap" id="cap8"><span class="cw" id="c8_0">for</span> <span class="cw" id="c8_1">agencies.</span></div>
+<div class="cap" id="cap9"><span class="cw" id="c9_0">Three.</span> <span class="cw" id="c9_1">OpenHands</span> <span class="cw" id="c9_2">is</span> <span class="cw" id="c9_3">an</span> <span class="cw" id="c9_4">AI</span></div>
+<div class="cap" id="cap10"><span class="cw" id="c10_0">agent</span> <span class="cw" id="c10_1">that</span> <span class="cw" id="c10_2">writes</span> <span class="cw" id="c10_3">code.</span></div>
+<div class="cap" id="cap11"><span class="cw" id="c11_0">Build</span> <span class="cw" id="c11_1">small</span> <span class="cw" id="c11_2">apps</span> <span class="cw" id="c11_3">for</span> <span class="cw" id="c11_4">local</span></div>
+<div class="cap" id="cap12"><span class="cw" id="c12_0">businesses.</span></div>
+<div class="cap" id="cap13"><span class="cw" id="c13_0">Four.</span> <span class="cw" id="c13_1">PersonaLive</span> <span class="cw" id="c13_2">turns</span> <span class="cw" id="c13_3">one</span> <span class="cw" id="c13_4">photo</span></div>
+<div class="cap" id="cap14"><span class="cw" id="c14_0">into</span> <span class="cw" id="c14_1">a</span> <span class="cw" id="c14_2">live</span> <span class="cw" id="c14_3">AI</span> <span class="cw" id="c14_4">avatar.</span></div>
+<div class="cap" id="cap15"><span class="cw" id="c15_0">Launch</span> <span class="cw" id="c15_1">a</span> <span class="cw" id="c15_2">virtual</span> <span class="cw" id="c15_3">influencer.</span></div>
+<div class="cap" id="cap16"><span class="cw" id="c16_0">Five.</span> <span class="cw" id="c16_1">RedInk</span> <span class="cw" id="c16_2">writes</span> <span class="cw" id="c16_3">a</span> <span class="cw" id="c16_4">full</span></div>
+<div class="cap" id="cap17"><span class="cw" id="c17_0">RedNote</span> <span class="cw" id="c17_1">post,</span></div>
+<div class="cap" id="cap18"><span class="cw" id="c18_0">text</span> <span class="cw" id="c18_1">and</span> <span class="cw" id="c18_2">images,</span></div>
+<div class="cap" id="cap19"><span class="cw" id="c19_0">from</span> <span class="cw" id="c19_1">one</span> <span class="cw" id="c19_2">prompt.</span></div>
+<div class="cap" id="cap20"><span class="cw" id="c20_0">Sell</span> <span class="cw" id="c20_1">it</span> <span class="cw" id="c20_2">to</span> <span class="cw" id="c20_3">brands.</span></div>
+<div class="cap" id="cap21"><span class="cw" id="c21_0">Six.</span> <span class="cw" id="c21_1">MuMuAINovel</span> <span class="cw" id="c21_2">plans</span> <span class="cw" id="c21_3">and</span> <span class="cw" id="c21_4">drafts</span></div>
+<div class="cap" id="cap22"><span class="cw" id="c22_0">novels</span> <span class="cw" id="c22_1">with</span> <span class="cw" id="c22_2">AI.</span></div>
+<div class="cap" id="cap23"><span class="cw" id="c23_0">Start</span> <span class="cw" id="c23_1">a</span> <span class="cw" id="c23_2">publishing</span> <span class="cw" id="c23_3">studio.</span></div>
+<div class="cap" id="cap24"><span class="cw" id="c24_0">The</span> <span class="cw" id="c24_1">code</span> <span class="cw" id="c24_2">is</span> <span class="cw" id="c24_3">free.</span></div>
+<div class="cap" id="cap25"><span class="cw" id="c25_0">The</span> <span class="cw" id="c25_1">money</span> <span class="cw" id="c25_2">is</span> <span class="cw" id="c25_3">in</span> <span class="cw" id="c25_4">packaging</span></div>
+<div class="cap" id="cap26"><span class="cw" id="c26_0">it</span> <span class="cw" id="c26_1">for</span> <span class="cw" id="c26_2">one</span> <span class="cw" id="c26_3">customer.</span></div>
+    </div>
+    <script>window.RB_T = {"lines": [[0.04, 3.1], [3.4, 8.7], [9.02, 13.44], [13.76, 18.88], [19.2, 25.12], [25.44, 31.88], [32.2, 38.06], [38.4, 42.1], [42.42, 45.08], [46.68, 46.68]], "biz": [6.76, 11.9, 17.16, 23.84, 31.16, 37.02], "close": 38.4, "pack": 40.64, "cta": 42.42, "end": 46.68};</script>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({paused: true});
+      tl.fromTo("#bar", {opacity: 0, y: -20}, {...{opacity: 1, y: 0}, duration: 0.4, ease: "power3.out", immediateRender: false}, 0.000);
+      tl.fromTo("#shelf", {opacity: 0, y: -20}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power3.out", immediateRender: false}, 0.200);
+      tl.fromTo("#slot0", {scale: 1}, {...{keyframes: [{scale: 1.25, duration: .12}, {scale: 1, duration: .23}]}, duration: 0.35, ease: "none", immediateRender: false}, 4.520);
+      tl.set("#slot0", {className: 'slot on'}, 4.520);
+      tl.set("#cntn", {textContent: "1"}, 4.520);
+      tl.fromTo("#slot1", {scale: 1}, {...{keyframes: [{scale: 1.25, duration: .12}, {scale: 1, duration: .23}]}, duration: 0.35, ease: "none", immediateRender: false}, 10.140);
+      tl.set("#slot1", {className: 'slot on'}, 10.140);
+      tl.set("#cntn", {textContent: "2"}, 10.140);
+      tl.fromTo("#slot2", {scale: 1}, {...{keyframes: [{scale: 1.25, duration: .12}, {scale: 1, duration: .23}]}, duration: 0.35, ease: "none", immediateRender: false}, 14.880);
+      tl.set("#slot2", {className: 'slot on'}, 14.880);
+      tl.set("#cntn", {textContent: "3"}, 14.880);
+      tl.fromTo("#slot3", {scale: 1}, {...{keyframes: [{scale: 1.25, duration: .12}, {scale: 1, duration: .23}]}, duration: 0.35, ease: "none", immediateRender: false}, 20.320);
+      tl.set("#slot3", {className: 'slot on'}, 20.320);
+      tl.set("#cntn", {textContent: "4"}, 20.320);
+      tl.fromTo("#slot4", {scale: 1}, {...{keyframes: [{scale: 1.25, duration: .12}, {scale: 1, duration: .23}]}, duration: 0.35, ease: "none", immediateRender: false}, 26.560);
+      tl.set("#slot4", {className: 'slot on'}, 26.560);
+      tl.set("#cntn", {textContent: "5"}, 26.560);
+      tl.fromTo("#slot5", {scale: 1}, {...{keyframes: [{scale: 1.25, duration: .12}, {scale: 1, duration: .23}]}, duration: 0.35, ease: "none", immediateRender: false}, 33.320);
+      tl.set("#slot5", {className: 'slot on'}, 33.320);
+      tl.set("#cntn", {textContent: "6"}, 33.320);
+      tl.fromTo("#t-hook .big", {opacity: 0, y: 30, scale: .92}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.4, ease: "back.out(1.8)", immediateRender: false}, 0.000);
+      tl.fromTo("#t-hook .sub", {opacity: 0, y: 24}, {...{opacity: 1, y: 0}, duration: 0.4, ease: "back.out(1.8)", immediateRender: false}, 1.840);
+      tl.to("#t-hook", {...{opacity: 0, y: -30, filter: 'blur(8px)'}, duration: 0.15, ease: "power2.in"}, 3.250);
+      tl.fromTo("#t0 .num", {opacity: 0, x: -30}, {...{opacity: 1, x: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 3.250);
+      tl.fromTo("#t0 .name", {opacity: 0, y: 40, scale: .85, rotationX: -60}, {...{opacity: 1, y: 0, scale: 1, rotationX: 0}, duration: 0.45, ease: "back.out(1.7)", immediateRender: false}, 3.300);
+      tl.fromTo("#t0 .lic", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(2.5)", immediateRender: false}, 3.750);
+      tl.fromTo("#b0", {opacity: 0, y: 30, scale: .8}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.4, ease: "back.out(2)", immediateRender: false}, 6.680);
+      tl.to("#t0", {...{opacity: 0, y: -30, filter: 'blur(8px)'}, duration: 0.18, ease: "power2.in"}, 8.820);
+      tl.to("#b0", {...{opacity: 0, y: 20}, duration: 0.18, ease: "power2.in"}, 8.820);
+      tl.fromTo("#t1 .num", {opacity: 0, x: -30}, {...{opacity: 1, x: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 8.870);
+      tl.fromTo("#t1 .name", {opacity: 0, y: 40, scale: .85, rotationX: -60}, {...{opacity: 1, y: 0, scale: 1, rotationX: 0}, duration: 0.45, ease: "back.out(1.7)", immediateRender: false}, 8.920);
+      tl.fromTo("#t1 .lic", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(2.5)", immediateRender: false}, 9.370);
+      tl.fromTo("#t1 .note", {opacity: 0}, {...{opacity: 1}, duration: 0.35, ease: "power3.out", immediateRender: false}, 9.620);
+      tl.fromTo("#b1", {opacity: 0, y: 30, scale: .8}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.4, ease: "back.out(2)", immediateRender: false}, 11.820);
+      tl.to("#t1", {...{opacity: 0, y: -30, filter: 'blur(8px)'}, duration: 0.18, ease: "power2.in"}, 13.560);
+      tl.to("#b1", {...{opacity: 0, y: 20}, duration: 0.18, ease: "power2.in"}, 13.560);
+      tl.fromTo("#t2 .num", {opacity: 0, x: -30}, {...{opacity: 1, x: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 13.610);
+      tl.fromTo("#t2 .name", {opacity: 0, y: 40, scale: .85, rotationX: -60}, {...{opacity: 1, y: 0, scale: 1, rotationX: 0}, duration: 0.45, ease: "back.out(1.7)", immediateRender: false}, 13.660);
+      tl.fromTo("#t2 .lic", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(2.5)", immediateRender: false}, 14.110);
+      tl.fromTo("#b2", {opacity: 0, y: 30, scale: .8}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.4, ease: "back.out(2)", immediateRender: false}, 17.080);
+      tl.to("#t2", {...{opacity: 0, y: -30, filter: 'blur(8px)'}, duration: 0.18, ease: "power2.in"}, 19.000);
+      tl.to("#b2", {...{opacity: 0, y: 20}, duration: 0.18, ease: "power2.in"}, 19.000);
+      tl.fromTo("#t3 .num", {opacity: 0, x: -30}, {...{opacity: 1, x: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 19.050);
+      tl.fromTo("#t3 .name", {opacity: 0, y: 40, scale: .85, rotationX: -60}, {...{opacity: 1, y: 0, scale: 1, rotationX: 0}, duration: 0.45, ease: "back.out(1.7)", immediateRender: false}, 19.100);
+      tl.fromTo("#t3 .lic", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(2.5)", immediateRender: false}, 19.550);
+      tl.fromTo("#b3", {opacity: 0, y: 30, scale: .8}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.4, ease: "back.out(2)", immediateRender: false}, 23.760);
+      tl.to("#t3", {...{opacity: 0, y: -30, filter: 'blur(8px)'}, duration: 0.18, ease: "power2.in"}, 25.240);
+      tl.to("#b3", {...{opacity: 0, y: 20}, duration: 0.18, ease: "power2.in"}, 25.240);
+      tl.fromTo("#t4 .num", {opacity: 0, x: -30}, {...{opacity: 1, x: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 25.290);
+      tl.fromTo("#t4 .name", {opacity: 0, y: 40, scale: .85, rotationX: -60}, {...{opacity: 1, y: 0, scale: 1, rotationX: 0}, duration: 0.45, ease: "back.out(1.7)", immediateRender: false}, 25.340);
+      tl.fromTo("#t4 .lic", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(2.5)", immediateRender: false}, 25.790);
+      tl.fromTo("#b4", {opacity: 0, y: 30, scale: .8}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.4, ease: "back.out(2)", immediateRender: false}, 31.080);
+      tl.to("#t4", {...{opacity: 0, y: -30, filter: 'blur(8px)'}, duration: 0.18, ease: "power2.in"}, 32.000);
+      tl.to("#b4", {...{opacity: 0, y: 20}, duration: 0.18, ease: "power2.in"}, 32.000);
+      tl.fromTo("#t5 .num", {opacity: 0, x: -30}, {...{opacity: 1, x: 0}, duration: 0.3, ease: "power3.out", immediateRender: false}, 32.050);
+      tl.fromTo("#t5 .name", {opacity: 0, y: 40, scale: .85, rotationX: -60}, {...{opacity: 1, y: 0, scale: 1, rotationX: 0}, duration: 0.45, ease: "back.out(1.7)", immediateRender: false}, 32.100);
+      tl.fromTo("#t5 .lic", {opacity: 0, scale: .6}, {...{opacity: 1, scale: 1}, duration: 0.3, ease: "back.out(2.5)", immediateRender: false}, 32.550);
+      tl.fromTo("#b5", {opacity: 0, y: 30, scale: .8}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.4, ease: "back.out(2)", immediateRender: false}, 36.940);
+      tl.to("#t5", {...{opacity: 0, y: -30, filter: 'blur(8px)'}, duration: 0.18, ease: "power2.in"}, 38.200);
+      tl.to("#b5", {...{opacity: 0, y: 20}, duration: 0.18, ease: "power2.in"}, 38.200);
+      tl.fromTo("#t-close .big", {opacity: 0, y: 30, scale: .92}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.4, ease: "back.out(1.8)", immediateRender: false}, 38.300);
+      tl.fromTo("#t-close2", {opacity: 0, y: 24}, {...{opacity: 1, y: 0}, duration: 0.4, ease: "back.out(1.8)", immediateRender: false}, 39.880);
+      tl.to("#t-close", {...{opacity: 0, y: -30, filter: 'blur(8px)'}, duration: 0.15, ease: "power2.in"}, 42.270);
+      tl.fromTo("#cta", {opacity: 0, y: 40}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "back.out(1.6)", immediateRender: false}, 42.320);
+      tl.set("#cph", {opacity: 0}, 42.790);
+      (() => { const o = {n: 0}; tl.to(o, {n: 5, duration: .5, ease: "steps(5)", onUpdate: () => { document.getElementById("cty").textContent = "REPOS".slice(0, Math.round(o.n)); }}, 42.790); })();
+      tl.fromTo(".send", {scale: 1}, {...{keyframes: [{scale: 1.4, duration: .12}, {scale: 1, duration: .18}]}, duration: 0.3, ease: "none", immediateRender: false}, 43.390);
+      tl.set("#cap0", {opacity: 1}, -0.020);
+      tl.fromTo("#cap0", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, -0.020);
+      tl.set("#cap0", {opacity: 0}, 1.900);
+      tl.set("#c0_0", {color: '#ffffff', scale: 1.08}, 0.010);
+      tl.to("#c0_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 0.120);
+      tl.set("#c0_1", {color: '#ffffff', scale: 1.08}, 0.390);
+      tl.to("#c0_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 0.500);
+      tl.set("#c0_2", {color: '#ffffff', scale: 1.08}, 0.710);
+      tl.to("#c0_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 0.820);
+      tl.set("#c0_3", {color: '#ffffff', scale: 1.08}, 1.090);
+      tl.to("#c0_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 1.200);
+      tl.set("#c0_4", {color: '#ffffff', scale: 1.08}, 1.350);
+      tl.to("#c0_4", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 1.460);
+      tl.set("#cap1", {opacity: 1}, 1.880);
+      tl.fromTo("#cap1", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 1.880);
+      tl.set("#cap1", {opacity: 0}, 3.360);
+      tl.set("#c1_0", {color: '#ffffff', scale: 1.08}, 1.910);
+      tl.to("#c1_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 2.020);
+      tl.set("#c1_1", {color: '#ffffff', scale: 1.08}, 2.150);
+      tl.to("#c1_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 2.260);
+      tl.set("#c1_2", {color: '#ffffff', scale: 1.08}, 2.390);
+      tl.to("#c1_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 2.500);
+      tl.set("#c1_3", {color: '#ffffff', scale: 1.08}, 2.630);
+      tl.to("#c1_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 2.740);
+      tl.set("#c1_4", {color: '#ffffff', scale: 1.08}, 2.750);
+      tl.to("#c1_4", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 2.860);
+      tl.set("#cap2", {opacity: 1}, 3.340);
+      tl.fromTo("#cap2", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 3.340);
+      tl.set("#cap2", {opacity: 0}, 5.360);
+      tl.set("#c2_0", {color: '#ffffff', scale: 1.08}, 3.370);
+      tl.to("#c2_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 3.480);
+      tl.set("#c2_1", {color: '#ffffff', scale: 1.08}, 4.290);
+      tl.to("#c2_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 4.400);
+      tl.set("#c2_2", {color: '#ffffff', scale: 1.08}, 4.610);
+      tl.to("#c2_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 4.720);
+      tl.set("#c2_3", {color: '#ffffff', scale: 1.08}, 4.770);
+      tl.to("#c2_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 4.880);
+      tl.set("#c2_4", {color: '#ffffff', scale: 1.08}, 5.030);
+      tl.to("#c2_4", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 5.140);
+      tl.set("#cap3", {opacity: 1}, 5.340);
+      tl.fromTo("#cap3", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 5.340);
+      tl.set("#cap3", {opacity: 0}, 6.720);
+      tl.set("#c3_0", {color: '#ffffff', scale: 1.08}, 5.370);
+      tl.to("#c3_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 5.480);
+      tl.set("#c3_1", {color: '#ffffff', scale: 1.08}, 5.710);
+      tl.to("#c3_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 5.820);
+      tl.set("#c3_2", {color: '#ffffff', scale: 1.08}, 5.990);
+      tl.to("#c3_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 6.100);
+      tl.set("#cap4", {opacity: 1}, 6.700);
+      tl.fromTo("#cap4", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 6.700);
+      tl.set("#cap4", {opacity: 0}, 8.120);
+      tl.set("#c4_0", {color: '#ffffff', scale: 1.08}, 6.730);
+      tl.to("#c4_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 6.840);
+      tl.set("#c4_1", {color: '#ffffff', scale: 1.08}, 6.750);
+      tl.to("#c4_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 6.860);
+      tl.set("#c4_2", {color: '#ffffff', scale: 1.08}, 6.950);
+      tl.to("#c4_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 7.060);
+      tl.set("#c4_3", {color: '#ffffff', scale: 1.08}, 7.190);
+      tl.to("#c4_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 7.300);
+      tl.set("#c4_4", {color: '#ffffff', scale: 1.08}, 7.750);
+      tl.to("#c4_4", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 7.860);
+      tl.set("#cap5", {opacity: 1}, 8.100);
+      tl.fromTo("#cap5", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 8.100);
+      tl.set("#cap5", {opacity: 0}, 8.980);
+      tl.set("#c5_0", {color: '#ffffff', scale: 1.08}, 8.130);
+      tl.to("#c5_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 8.240);
+      tl.set("#cap6", {opacity: 1}, 8.960);
+      tl.fromTo("#cap6", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 8.960);
+      tl.set("#cap6", {opacity: 0}, 11.040);
+      tl.set("#c6_0", {color: '#ffffff', scale: 1.08}, 8.990);
+      tl.to("#c6_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 9.100);
+      tl.set("#c6_1", {color: '#ffffff', scale: 1.08}, 9.830);
+      tl.to("#c6_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 9.940);
+      tl.set("#c6_2", {color: '#ffffff', scale: 1.08}, 10.150);
+      tl.to("#c6_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 10.260);
+      tl.set("#c6_3", {color: '#ffffff', scale: 1.08}, 10.430);
+      tl.to("#c6_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 10.540);
+      tl.set("#c6_4", {color: '#ffffff', scale: 1.08}, 10.770);
+      tl.to("#c6_4", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 10.880);
+      tl.set("#cap7", {opacity: 1}, 11.020);
+      tl.fromTo("#cap7", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 11.020);
+      tl.set("#cap7", {opacity: 0}, 12.640);
+      tl.set("#c7_0", {color: '#ffffff', scale: 1.08}, 11.050);
+      tl.to("#c7_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 11.160);
+      tl.set("#c7_1", {color: '#ffffff', scale: 1.08}, 11.870);
+      tl.to("#c7_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 11.980);
+      tl.set("#c7_2", {color: '#ffffff', scale: 1.08}, 11.930);
+      tl.to("#c7_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 12.040);
+      tl.set("#c7_3", {color: '#ffffff', scale: 1.08}, 12.090);
+      tl.to("#c7_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 12.200);
+      tl.set("#c7_4", {color: '#ffffff', scale: 1.08}, 12.290);
+      tl.to("#c7_4", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 12.400);
+      tl.set("#cap8", {opacity: 1}, 12.620);
+      tl.fromTo("#cap8", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 12.620);
+      tl.set("#cap8", {opacity: 0}, 13.720);
+      tl.set("#c8_0", {color: '#ffffff', scale: 1.08}, 12.650);
+      tl.to("#c8_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 12.760);
+      tl.set("#c8_1", {color: '#ffffff', scale: 1.08}, 12.970);
+      tl.to("#c8_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 13.080);
+      tl.set("#cap9", {opacity: 1}, 13.700);
+      tl.fromTo("#cap9", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 13.700);
+      tl.set("#cap9", {opacity: 0}, 15.560);
+      tl.set("#c9_0", {color: '#ffffff', scale: 1.08}, 13.730);
+      tl.to("#c9_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 13.840);
+      tl.set("#c9_1", {color: '#ffffff', scale: 1.08}, 14.370);
+      tl.to("#c9_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 14.480);
+      tl.set("#c9_2", {color: '#ffffff', scale: 1.08}, 14.950);
+      tl.to("#c9_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 15.060);
+      tl.set("#c9_3", {color: '#ffffff', scale: 1.08}, 15.110);
+      tl.to("#c9_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 15.220);
+      tl.set("#c9_4", {color: '#ffffff', scale: 1.08}, 15.290);
+      tl.to("#c9_4", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 15.400);
+      tl.set("#cap10", {opacity: 1}, 15.540);
+      tl.fromTo("#cap10", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 15.540);
+      tl.set("#cap10", {opacity: 0}, 17.120);
+      tl.set("#c10_0", {color: '#ffffff', scale: 1.08}, 15.570);
+      tl.to("#c10_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 15.680);
+      tl.set("#c10_1", {color: '#ffffff', scale: 1.08}, 15.890);
+      tl.to("#c10_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 16.000);
+      tl.set("#c10_2", {color: '#ffffff', scale: 1.08}, 16.110);
+      tl.to("#c10_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 16.220);
+      tl.set("#c10_3", {color: '#ffffff', scale: 1.08}, 16.310);
+      tl.to("#c10_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 16.420);
+      tl.set("#cap11", {opacity: 1}, 17.100);
+      tl.fromTo("#cap11", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 17.100);
+      tl.set("#cap11", {opacity: 0}, 18.400);
+      tl.set("#c11_0", {color: '#ffffff', scale: 1.08}, 17.130);
+      tl.to("#c11_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 17.240);
+      tl.set("#c11_1", {color: '#ffffff', scale: 1.08}, 17.250);
+      tl.to("#c11_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 17.360);
+      tl.set("#c11_2", {color: '#ffffff', scale: 1.08}, 17.590);
+      tl.to("#c11_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 17.700);
+      tl.set("#c11_3", {color: '#ffffff', scale: 1.08}, 17.890);
+      tl.to("#c11_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 18.000);
+      tl.set("#c11_4", {color: '#ffffff', scale: 1.08}, 18.130);
+      tl.to("#c11_4", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 18.240);
+      tl.set("#cap12", {opacity: 1}, 18.380);
+      tl.fromTo("#cap12", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 18.380);
+      tl.set("#cap12", {opacity: 0}, 19.160);
+      tl.set("#c12_0", {color: '#ffffff', scale: 1.08}, 18.410);
+      tl.to("#c12_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 18.520);
+      tl.set("#cap13", {opacity: 1}, 19.140);
+      tl.fromTo("#cap13", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 19.140);
+      tl.set("#cap13", {opacity: 0}, 21.160);
+      tl.set("#c13_0", {color: '#ffffff', scale: 1.08}, 19.170);
+      tl.to("#c13_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 19.280);
+      tl.set("#c13_1", {color: '#ffffff', scale: 1.08}, 20.230);
+      tl.to("#c13_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 20.340);
+      tl.set("#c13_2", {color: '#ffffff', scale: 1.08}, 20.230);
+      tl.to("#c13_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 20.340);
+      tl.set("#c13_3", {color: '#ffffff', scale: 1.08}, 20.570);
+      tl.to("#c13_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 20.680);
+      tl.set("#c13_4", {color: '#ffffff', scale: 1.08}, 20.850);
+      tl.to("#c13_4", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 20.960);
+      tl.set("#cap14", {opacity: 1}, 21.140);
+      tl.fromTo("#cap14", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 21.140);
+      tl.set("#cap14", {opacity: 0}, 23.800);
+      tl.set("#c14_0", {color: '#ffffff', scale: 1.08}, 21.170);
+      tl.to("#c14_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 21.280);
+      tl.set("#c14_1", {color: '#ffffff', scale: 1.08}, 21.510);
+      tl.to("#c14_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 21.620);
+      tl.set("#c14_2", {color: '#ffffff', scale: 1.08}, 22.030);
+      tl.to("#c14_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 22.140);
+      tl.set("#c14_3", {color: '#ffffff', scale: 1.08}, 22.350);
+      tl.to("#c14_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 22.460);
+      tl.set("#c14_4", {color: '#ffffff', scale: 1.08}, 22.870);
+      tl.to("#c14_4", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 22.980);
+      tl.set("#cap15", {opacity: 1}, 23.780);
+      tl.fromTo("#cap15", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 23.780);
+      tl.set("#cap15", {opacity: 0}, 25.400);
+      tl.set("#c15_0", {color: '#ffffff', scale: 1.08}, 23.810);
+      tl.to("#c15_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 23.920);
+      tl.set("#c15_1", {color: '#ffffff', scale: 1.08}, 23.890);
+      tl.to("#c15_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 24.000);
+      tl.set("#c15_2", {color: '#ffffff', scale: 1.08}, 24.070);
+      tl.to("#c15_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 24.180);
+      tl.set("#c15_3", {color: '#ffffff', scale: 1.08}, 24.450);
+      tl.to("#c15_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 24.560);
+      tl.set("#cap16", {opacity: 1}, 25.380);
+      tl.fromTo("#cap16", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 25.380);
+      tl.set("#cap16", {opacity: 0}, 27.880);
+      tl.set("#c16_0", {color: '#ffffff', scale: 1.08}, 25.410);
+      tl.to("#c16_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 25.520);
+      tl.set("#c16_1", {color: '#ffffff', scale: 1.08}, 26.590);
+      tl.to("#c16_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 26.700);
+      tl.set("#c16_2", {color: '#ffffff', scale: 1.08}, 26.830);
+      tl.to("#c16_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 26.940);
+      tl.set("#c16_3", {color: '#ffffff', scale: 1.08}, 27.070);
+      tl.to("#c16_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 27.180);
+      tl.set("#c16_4", {color: '#ffffff', scale: 1.08}, 27.390);
+      tl.to("#c16_4", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 27.500);
+      tl.set("#cap17", {opacity: 1}, 27.860);
+      tl.fromTo("#cap17", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 27.860);
+      tl.set("#cap17", {opacity: 0}, 28.440);
+      tl.set("#c17_0", {color: '#ffffff', scale: 1.08}, 27.890);
+      tl.to("#c17_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 28.000);
+      tl.set("#c17_1", {color: '#ffffff', scale: 1.08}, 28.150);
+      tl.to("#c17_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 28.260);
+      tl.set("#cap18", {opacity: 1}, 28.420);
+      tl.fromTo("#cap18", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 28.420);
+      tl.set("#cap18", {opacity: 0}, 29.360);
+      tl.set("#c18_0", {color: '#ffffff', scale: 1.08}, 28.450);
+      tl.to("#c18_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 28.560);
+      tl.set("#c18_1", {color: '#ffffff', scale: 1.08}, 28.910);
+      tl.to("#c18_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 29.020);
+      tl.set("#c18_2", {color: '#ffffff', scale: 1.08}, 29.330);
+      tl.to("#c18_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 29.440);
+      tl.set("#cap19", {opacity: 1}, 29.340);
+      tl.fromTo("#cap19", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 29.340);
+      tl.set("#cap19", {opacity: 0}, 31.120);
+      tl.set("#c19_0", {color: '#ffffff', scale: 1.08}, 29.370);
+      tl.to("#c19_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 29.480);
+      tl.set("#c19_1", {color: '#ffffff', scale: 1.08}, 29.750);
+      tl.to("#c19_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 29.860);
+      tl.set("#c19_2", {color: '#ffffff', scale: 1.08}, 30.370);
+      tl.to("#c19_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 30.480);
+      tl.set("#cap20", {opacity: 1}, 31.100);
+      tl.fromTo("#cap20", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 31.100);
+      tl.set("#cap20", {opacity: 0}, 32.160);
+      tl.set("#c20_0", {color: '#ffffff', scale: 1.08}, 31.130);
+      tl.to("#c20_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 31.240);
+      tl.set("#c20_1", {color: '#ffffff', scale: 1.08}, 31.310);
+      tl.to("#c20_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 31.420);
+      tl.set("#c20_2", {color: '#ffffff', scale: 1.08}, 31.470);
+      tl.to("#c20_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 31.580);
+      tl.set("#c20_3", {color: '#ffffff', scale: 1.08}, 31.570);
+      tl.to("#c20_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 31.680);
+      tl.set("#cap21", {opacity: 1}, 32.140);
+      tl.fromTo("#cap21", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 32.140);
+      tl.set("#cap21", {opacity: 0}, 35.080);
+      tl.set("#c21_0", {color: '#ffffff', scale: 1.08}, 32.170);
+      tl.to("#c21_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 32.280);
+      tl.set("#c21_1", {color: '#ffffff', scale: 1.08}, 33.090);
+      tl.to("#c21_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 33.200);
+      tl.set("#c21_2", {color: '#ffffff', scale: 1.08}, 34.270);
+      tl.to("#c21_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 34.380);
+      tl.set("#c21_3", {color: '#ffffff', scale: 1.08}, 34.730);
+      tl.to("#c21_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 34.840);
+      tl.set("#c21_4", {color: '#ffffff', scale: 1.08}, 34.730);
+      tl.to("#c21_4", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 34.840);
+      tl.set("#cap22", {opacity: 1}, 35.060);
+      tl.fromTo("#cap22", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 35.060);
+      tl.set("#cap22", {opacity: 0}, 36.080);
+      tl.set("#c22_0", {color: '#ffffff', scale: 1.08}, 35.090);
+      tl.to("#c22_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 35.200);
+      tl.set("#c22_1", {color: '#ffffff', scale: 1.08}, 35.550);
+      tl.to("#c22_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 35.660);
+      tl.set("#c22_2", {color: '#ffffff', scale: 1.08}, 35.850);
+      tl.to("#c22_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 35.960);
+      tl.set("#cap23", {opacity: 1}, 36.060);
+      tl.fromTo("#cap23", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 36.060);
+      tl.set("#cap23", {opacity: 0}, 38.360);
+      tl.set("#c23_0", {color: '#ffffff', scale: 1.08}, 36.090);
+      tl.to("#c23_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 36.200);
+      tl.set("#c23_1", {color: '#ffffff', scale: 1.08}, 36.990);
+      tl.to("#c23_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 37.100);
+      tl.set("#c23_2", {color: '#ffffff', scale: 1.08}, 37.290);
+      tl.to("#c23_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 37.400);
+      tl.set("#c23_3", {color: '#ffffff', scale: 1.08}, 37.590);
+      tl.to("#c23_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 37.700);
+      tl.set("#cap24", {opacity: 1}, 38.340);
+      tl.fromTo("#cap24", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 38.340);
+      tl.set("#cap24", {opacity: 0}, 39.820);
+      tl.set("#c24_0", {color: '#ffffff', scale: 1.08}, 38.370);
+      tl.to("#c24_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 38.480);
+      tl.set("#c24_1", {color: '#ffffff', scale: 1.08}, 38.590);
+      tl.to("#c24_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 38.700);
+      tl.set("#c24_2", {color: '#ffffff', scale: 1.08}, 38.890);
+      tl.to("#c24_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 39.000);
+      tl.set("#c24_3", {color: '#ffffff', scale: 1.08}, 39.150);
+      tl.to("#c24_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 39.260);
+      tl.set("#cap25", {opacity: 1}, 39.800);
+      tl.fromTo("#cap25", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 39.800);
+      tl.set("#cap25", {opacity: 0}, 40.960);
+      tl.set("#c25_0", {color: '#ffffff', scale: 1.08}, 39.830);
+      tl.to("#c25_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 39.940);
+      tl.set("#c25_1", {color: '#ffffff', scale: 1.08}, 39.950);
+      tl.to("#c25_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 40.060);
+      tl.set("#c25_2", {color: '#ffffff', scale: 1.08}, 40.190);
+      tl.to("#c25_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 40.300);
+      tl.set("#c25_3", {color: '#ffffff', scale: 1.08}, 40.470);
+      tl.to("#c25_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 40.580);
+      tl.set("#c25_4", {color: '#ffffff', scale: 1.08}, 40.610);
+      tl.to("#c25_4", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 40.720);
+      tl.set("#cap26", {opacity: 1}, 40.940);
+      tl.fromTo("#cap26", {y: 14, scale: .96}, {...{y: 0, scale: 1}, duration: 0.16, ease: "power2.out", immediateRender: false}, 40.940);
+      tl.set("#cap26", {opacity: 0}, 43.000);
+      tl.set("#c26_0", {color: '#ffffff', scale: 1.08}, 40.970);
+      tl.to("#c26_0", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 41.080);
+      tl.set("#c26_1", {color: '#ffffff', scale: 1.08}, 41.230);
+      tl.to("#c26_1", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 41.340);
+      tl.set("#c26_2", {color: '#ffffff', scale: 1.08}, 41.390);
+      tl.to("#c26_2", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 41.500);
+      tl.set("#c26_3", {color: '#ffffff', scale: 1.08}, 41.650);
+      tl.to("#c26_3", {...{scale: 1}, duration: 0.15, ease: "power2.out"}, 41.760);
+      tl.set({}, {}, 46.68);
+      window.__timelines["main"] = tl;
+    </script>
+    <script type="module" src="assets/js/scene.js"></script>
+  </body>
+</html>
