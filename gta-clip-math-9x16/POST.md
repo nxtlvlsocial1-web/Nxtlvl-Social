@@ -39,13 +39,14 @@ Would you post one viral clip or five 200K clips?
 
 ## Auto-DM for "MATH" (set up before the reel goes live)
 
-**Before you switch it on:** replace `[RATE LIST LINK]` with the real rate list (the campaign page, or your own sheet of
-current rates). I can't make the list up, so the DM ships with a placeholder.
+**The link:** https://claude.ai/artifact/4X4Ab7rwB2YxTrFH5Zyhrv, the rate list and payout calculator built for this reel (source: `post/rate-list.html`).
+**Before you switch it on, make it public:** open the link, Share, and set it so anyone with the link can view.
+Until then only you can open it, and people who comment would get a link that doesn't work.
 
 DM message:
 
 ```
-Here's the full rate list: [RATE LIST LINK]
+Here's the full rate list and a payout calculator: https://claude.ai/artifact/4X4Ab7rwB2YxTrFH5Zyhrv
 
 How to check any clipping campaign before you post:
 
@@ -75,8 +76,8 @@ In your inbox now. Check the campaign page before you post.
 1. New automation on **this Reel only** (pick the post once it's live, or "next post" if your tool allows it).
 2. Trigger: a comment that **contains** `math`, not case-sensitive. Add `maths` too, as people type both.
 3. Action 1: public reply, rotating the three replies above.
-4. Action 2: send the DM above, with the real link in place of `[RATE LIST LINK]`.
-5. Test it from a second account (comment "math") and check the reply and the DM, link included, before you post.
+4. Action 2: send the DM above (the link is already in it).
+5. Test it from a second account (comment "math"): check the reply, the DM, and that the link opens while logged out.
 6. Leave it on for as long as the Reel gets comments; when the campaign's rates change, update the link and the date.
 
 ## Alt text (Advanced settings, Accessibility)
