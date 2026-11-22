@@ -20,7 +20,7 @@ BASE = FONTS + '''
 .title { position: absolute; left: 150px; margin: 0; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 84px; line-height: 1.02; letter-spacing: -0.03em; white-space: nowrap; }
 .ln { display: block; overflow: hidden; padding: 0 0.04em 0.12em; margin-bottom: -0.12em; }
 .ln > span { display: inline-block; will-change: transform; }
-.acc { background: linear-gradient(100deg, #D8BBFF, #A95CFF 55%, #FF8BD1); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.acc { color: #B98AFF; }
 .panel { position: absolute; background: #130C28; border: 1px solid rgba(216, 187, 255, .16); border-radius: 30px; box-shadow: 0 50px 120px -40px rgba(94, 6, 242, .65), 0 0 0 1px rgba(0, 0, 0, .3); }
 .mono { font-family: "Geist Mono", monospace; }
 .cursor { position: absolute; left: 0; top: 0; width: 70px; height: 70px; z-index: 50; filter: drop-shadow(0 10px 16px rgba(0, 0, 0, .55)); }
@@ -65,8 +65,10 @@ toasts = ''.join(f'''<div class="toast" id="hk-n{i}" style="top:{y}px"><span cla
   <span class="st mono"><em class="w8">now</em><em class="ok">{CHK.replace('width="28" height="28"', 'width="20" height="20"')} Replied</em></span></div>''' for i, (k, src, msg, y) in enumerate(TOASTS))
 burst = ''.join(f'<i class="ray" style="transform:rotate({a}deg)"></i>' for a in range(0, 360, 30))
 hook_css = '''
-#hk-clock { position: absolute; left: 150px; top: 150px; font-family: "Geist Mono", monospace; font-size: 34px; color: #BDB2DC; display: flex; align-items: center; gap: 14px; }
+#hk-clock { position: absolute; left: 150px; top: 150px; z-index: 2; font-family: "Geist Mono", monospace; font-size: 34px; color: #BDB2DC; display: flex; align-items: center; gap: 14px; }
 #hk-clock i { width: 12px; height: 12px; border-radius: 50%; background: #FF5A7A; box-shadow: 0 0 0 6px rgba(255, 90, 122, .18); }
+#hk-unread { margin-left: 10px; padding: 4px 14px; border-radius: 99px; background: #FF5A7A; color: #fff; font-size: 26px; font-weight: 600; }
+#hk-unread.zero { background: #4ADE9E; color: #052b1c; }
 #hk-t1 { top: 220px; } #hk-t2 { top: 220px; }
 .digit { display: inline-block; height: 0.98em; overflow: hidden; vertical-align: top; } .digit > span { display: flex; flex-direction: column; } .digit b { display: block; height: 0.98em; font-weight: 800; color: #C9A4FF; -webkit-text-fill-color: #C9A4FF; }
 .toast { position: absolute; left: 1080px; width: 690px; height: 132px; display: flex; align-items: center; gap: 20px; padding: 0 26px; border-radius: 26px; background: rgba(26, 17, 53, .92); border: 1px solid rgba(216, 187, 255, .18);
@@ -82,9 +84,9 @@ hook_css = '''
 #hk-ring { position: absolute; left: 810px; top: 760px; width: 300px; height: 300px; margin: -150px 0 0 -150px; border-radius: 50%; border: 3px solid #B98AFF; z-index: 4; opacity: 0; }
 '''
 d4 = '<span class="digit"><span>' + ''.join(f'<b>{n}</b>' for n in [9, 8, 7, 6, 5, 4]) + '</span></span>'
-hook_body = f'''    <div id="hk-clock"><i></i><span>11:42 pm · Café Aroma</span></div>
-    <h1 id="hk-t1" class="title">{lines([[("Customers", False)], [("are", False), ("waiting.", True)]])}</h1>
-    <h1 id="hk-t2" class="title"><span class="ln"><span>Answered</span></span><span class="ln"><span>in</span> <span>{d4}</span> <span class="acc">seconds.</span></span></h1>
+hook_body = f'''    <div id="hk-clock" data-motion-blur="off"><i></i><span>11:42 pm · Café Aroma</span><span id="hk-unread"><b id="hk-un">1</b> unread</span></div>
+    <h1 id="hk-t1" class="title" data-motion-blur="off">{lines([[("Customers", False)], [("are", False), ("waiting.", True)]])}</h1>
+    <h1 id="hk-t2" class="title" data-motion-blur="off"><span class="ln"><span>Answered</span></span><span class="ln"><span>in</span> <span>{d4}</span> <span class="acc">seconds.</span></span></h1>
     <p id="hk-sub">Your AI team replies day and night.</p>
     {toasts}
     <div id="hk-ring"></div><div id="hk-burst">{burst}</div>
@@ -96,6 +98,12 @@ hook_js = '''
     const T = ["#hk-n0", "#hk-n1", "#hk-n2", "#hk-n3"];
     tl.fromTo(T[0], { x: 0, opacity: 1 }, { x: 0, opacity: 1, duration: 0.01 }, 0);
     T.slice(1).forEach((t, i) => tl.fromTo(t, { x: 820, rotation: 6, opacity: 0 }, { x: 0, rotation: 0, opacity: 1, duration: 0.55, ease: "back.out(1.4)" }, 0.35 + i * 0.28));
+    // the unread count climbs with every message, then drops to zero as they are answered
+    const un = { v: 1 }, unEl = document.querySelector("#hk-un");
+    tl.fromTo(un, { v: 1 }, { v: 4, duration: 0.9, ease: "steps(3)", onUpdate: () => { unEl.textContent = Math.round(un.v); } }, 0.4);
+    const un2 = { v: 4 };
+    tl.fromTo(un2, { v: 4 }, { v: 0, duration: 0.75, ease: "steps(4)", immediateRender: false, onUpdate: () => { unEl.textContent = Math.round(un2.v); } }, 1.95);
+    tl.fromTo("#hk-unread", { backgroundColor: "#FF5A7A", color: "#ffffff" }, { backgroundColor: "#4ADE9E", color: "#052b1c", duration: 0.2, ease: "none" }, 2.7);
     // the stack buzzes like a phone
     tl.fromTo(".toast", { y: 0 }, { y: -6, duration: 0.05, ease: "none", yoyo: true, repeat: 7 }, 1.25);
     // Nextyy bursts in
@@ -115,7 +123,7 @@ hook_js = '''
     tl.fromTo("#hk-t2 .digit > span", { yPercent: 0 }, { yPercent: -83.333, duration: 0.9, ease: "power3.out" }, 2.55);
     tl.fromTo("#hk-sub", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.25, ease: "power2.out" }, 2.55);
     // hand-off: Nextyy flies (with motion blur) into the agent app's pin; the rest pushes away
-    tl.to("#hk-nx", { x: -580, y: -460, scale: 0.25, rotation: -10, duration: 0.55, ease: "power3.inOut" }, 3.95);
+    tl.to("#hk-nx", { x: -580, y: -425, scale: 0.25, rotation: -10, duration: 0.55, ease: "power3.inOut" }, 3.95);
     tl.to(".toast", { x: 900, opacity: 0, duration: 0.4, stagger: 0.04, ease: "power3.in" }, 3.95);
     fall("#hk-t2 .ln > span", 4.0);
     tl.to(["#hk-sub", "#hk-clock"], { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in" }, 4.05);
@@ -124,21 +132,23 @@ hook_js = '''
 # ================================================================ 2. agents (4.6-10.4 s, 5.8 s)
 AG = [('content', 'Content Agent', '3 hooks ready for Friday'), ('reply', 'Reply Agent', '47 messages answered'), ('ads', 'Ads Agent', 'Creative B is 38% cheaper'),
       ('edit', 'Edit Agent', 'Reel v2 ready: 0:28'), ('seo', 'SEO Agent', '#1 for "best café in Baner"'), ('report', 'Report Agent', 'November report ready')]
-rows = ''.join(f'<div class="row" id="ag-r{i}"><img src="assets/img/agent-{k}.webp" alt=""><div><b>{n}</b><small>{p}</small></div><i class="dot"></i></div>' for i, (k, n, p) in enumerate(AG))
+rows = ''.join(f'<div class="row" id="ag-r{i}"><img src="assets/img/agent-{k}.webp" alt=""><div><b>{n}</b><small>{p}</small><span class="bar"><i></i></span></div><i class="dot"></i></div>' for i, (k, n, p) in enumerate(AG))
 SP = '<svg viewBox="0 0 16 16" width="26" height="26"><circle class="ring" cx="8" cy="8" r="6" fill="none" stroke="#4ADE9E" stroke-width="1.6"/><path class="ck" d="M4.5 8.2l2.3 2.3 4.7-4.9" fill="none" stroke="#4ADE9E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 chips = ''.join(f'<span class="stp" id="ag-s{i}">{SP}{t}</span>' for i, t in enumerate(['Pulled Meta ads data', 'Compared cost per lead', 'Found the winner']))
 ag_css = '''
 #ag-cam { position: absolute; inset: 0; transform-origin: 50% 60%; }
 #ag-t { top: 92px; }
 #ag-app { left: 160px; top: 236px; width: 1600px; height: 790px; overflow: hidden; display: grid; grid-template-columns: 480px 1fr; transform-origin: 50% 0; }
-.side { position: relative; background: linear-gradient(180deg, #160E2E, #0F0920); border-right: 1px solid rgba(216, 187, 255, .1); padding: 24px 18px; }
+.side { position: relative; background: linear-gradient(180deg, #160E2E, #0F0920); border-right: 1px solid rgba(216, 187, 255, .1); padding: 16px 18px 24px; }
+.exl { display: block; padding: 0 10px 10px; font-size: 22px; color: #8E84B4; }
+.row .bar { display: block; width: 210px; height: 5px; margin-top: 7px; border-radius: 5px; background: rgba(216, 187, 255, .1); overflow: hidden; } .row .bar i { display: block; height: 100%; width: 100%; border-radius: 5px; background: linear-gradient(90deg, #7D18FC, #B46CFF); transform-origin: 0 50%; }
 .pin { display: flex; align-items: center; gap: 16px; padding: 4px 10px 22px; } .pin span { width: 84px; height: 84px; }
 .pin b { font-size: 30px; font-weight: 650; } .pin small { display: block; font-size: 23px; color: #8E84B4; }
-.row { position: relative; display: flex; align-items: center; gap: 18px; padding: 12px 14px; border-radius: 18px; margin-bottom: 4px; z-index: 1; }
+.row { position: relative; display: flex; align-items: center; gap: 18px; padding: 8px 14px; border-radius: 18px; margin-bottom: 4px; height: 96px; z-index: 1; }
 .row img { width: 66px; height: 66px; border-radius: 16px; background: #1A1135; }
 .row b { display: block; font-size: 29px; font-weight: 600; } .row small { font-size: 23px; color: #8E84B4; white-space: nowrap; }
 .row .dot { position: absolute; right: 16px; top: 50%; width: 11px; height: 11px; margin-top: -5px; border-radius: 50%; background: #4ADE9E; }
-#ag-hi { position: absolute; left: 18px; top: 134px; width: 444px; height: 92px; border-radius: 18px; background: #2A1B55; box-shadow: inset 0 0 0 2px rgba(169, 92, 255, .6), 0 10px 30px -10px rgba(125, 24, 252, .8); }
+#ag-hi { position: absolute; left: 18px; top: 169px; width: 444px; height: 96px; border-radius: 18px; background: #2A1B55; box-shadow: inset 0 0 0 2px rgba(169, 92, 255, .6), 0 10px 30px -10px rgba(125, 24, 252, .8); }
 .main { position: relative; padding: 30px 40px; }
 .mh { display: flex; align-items: center; gap: 18px; padding-bottom: 24px; border-bottom: 1px solid rgba(216, 187, 255, .1); }
 .mh img { width: 72px; height: 72px; } .mh b { font-size: 34px; font-weight: 650; } .mh small { display: block; font-size: 23px; color: #8E84B4; }
@@ -149,12 +159,12 @@ ag_css = '''
 #ag-you { position: absolute; right: 40px; top: 476px; padding: 18px 34px; border-radius: 99px; background: linear-gradient(100deg, #5E06F2, #7D18FC 45%, #B46CFF); font-size: 30px; font-weight: 600; color: #fff; box-shadow: 0 18px 40px -16px rgba(125, 24, 252, .9); }
 #ag-rc { position: absolute; left: 40px; top: 580px; display: flex; align-items: center; gap: 18px; padding: 22px 28px; border-radius: 22px; background: rgba(74, 222, 158, .1); border: 1.5px solid rgba(74, 222, 158, .4); color: #B8F5D6; font-size: 32px; font-weight: 650; transform-origin: 20% 50%; }
 #ag-rc i { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: #4ADE9E; font-style: normal; }
-#ag-nx { position: absolute; left: 188px; top: 264px; width: 84px; height: 84px; z-index: 3; }
+#ag-nx { position: absolute; left: 188px; top: 299px; width: 84px; height: 84px; z-index: 3; }
 '''
 ag_body = f'''    <div id="ag-cam">
-    <h1 id="ag-t" class="title">{lines([[("Six", True), ("AI", True), ("agents", True), ("work", False), ("your", False), ("brand", False), ("every", False), ("day.", False)]])}</h1>
+    <h1 id="ag-t" class="title" data-motion-blur="off">{lines([[("Six", True), ("AI", True), ("agents", True), ("work", False), ("your", False), ("brand", False), ("every", False), ("day.", False)]])}</h1>
     <div id="ag-app" class="panel">
-      <div class="side"><div class="pin"><span></span><div><b>Nextyy</b><small>your team lead</small></div></div><div id="ag-hi"></div>{rows}</div>
+      <div class="side"><span class="exl mono">Example workspace · Café Aroma</span><div class="pin"><span></span><div><b>Nextyy</b><small>your team lead</small></div></div><div id="ag-hi"></div>{rows}</div>
       <div class="main"><div class="mh"><img src="assets/img/agent-ads.webp" alt=""><div><b>Ads Agent</b><small>Watches Meta and Google campaigns daily</small></div><span class="state mono">Optimising</span></div>
         <div class="steps">{chips}</div>
         <div id="ag-msg">Creative B gets leads 38% cheaper. Move ₹2,000 to it?</div>
@@ -171,11 +181,12 @@ ag_js = '''
     rise("#ag-t .ln > span", 0.15);
     tl.fromTo(".row", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.5, stagger: 0.05, ease: "expo.out" }, 0.3);
     tl.fromTo(".row .dot", { scale: 0 }, { scale: 1, duration: 0.3, stagger: 0.05, ease: "back.out(3)" }, 0.6);
+    [0.35, 0.8, 0.55, 0.9, 0.45, 0.7].forEach((v, i) => tl.fromTo("#ag-r" + i + " .bar i", { scaleX: 0 }, { scaleX: v, duration: 1.4 + i * 0.15, ease: "power2.out" }, 0.7 + i * 0.05));
     tl.fromTo(".main > *", { opacity: 0 }, { opacity: 0, duration: 0.01 }, 0);
     // the cursor clicks the Ads Agent, which causes the selection
     tl.fromTo("#ag-cur", { x: 1500, y: 1150 }, { x: 330, y: 470, duration: 0.8, ease: "power3.inOut" }, 0.7);
     tl.to("#ag-cur", { scale: 0.82, duration: 0.08, ease: "power2.in", yoyo: true, repeat: 1 }, 1.5);
-    tl.to("#ag-hi", { y: 192, duration: 0.35, ease: "power3.out" }, 1.56);
+    tl.to("#ag-hi", { y: 200, duration: 0.35, ease: "power3.out" }, 1.56);
     tl.to("#ag-r2", { scale: 1.03, duration: 0.12, ease: "power2.out", yoyo: true, repeat: 1 }, 1.56);
     tl.fromTo(".main .mh", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.5, ease: "expo.out" }, 1.7);
     [0, 1, 2].forEach(i => { tl.fromTo("#ag-s" + i, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.8)" }, 1.95 + i * 0.28);
@@ -228,16 +239,20 @@ fl_css = '''
 #fl-wires path { fill: none; stroke: rgba(216, 187, 255, .32); stroke-width: 3; stroke-linecap: round; }
 #fl-wires .pulse { fill: #FFFFFF; filter: drop-shadow(0 0 8px #B98AFF); opacity: 0; }
 #fl-lead { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-radius: 16px; background: #7D18FC; color: #fff; font-size: 28px; font-weight: 600; box-shadow: 0 18px 40px -12px rgba(125, 24, 252, 1); white-space: nowrap; z-index: 6; }
+.tag { position: absolute; padding: 8px 16px; border-radius: 12px; background: rgba(125, 24, 252, .18); border: 1px solid rgba(169, 92, 255, .45); font-size: 24px; color: #E4D3FF; white-space: nowrap; }
+.wt { position: absolute; font-size: 22px; color: #8E84B4; }
 #fl-count { position: absolute; left: 1320px; top: 240px; display: flex; align-items: center; gap: 14px; font-size: 26px; color: #BDB2DC; padding: 12px 24px; border-radius: 99px; background: rgba(19, 12, 40, .85); border: 1px solid rgba(216, 187, 255, .18); }
 #fl-count b { color: #fff; font-size: 32px; font-weight: 600; font-variant-numeric: tabular-nums; } #fl-count i { width: 12px; height: 12px; border-radius: 50%; background: #4ADE9E; }
 '''
 fl_body = f'''    <div id="fl-cam">
-    <h1 id="fl-t" class="title">{lines([[("Every", False), ("lead", True), ("answered,", False), ("qualified", False), ("and", False), ("saved.", False)]])}</h1>
+    <h1 id="fl-t" class="title" data-motion-blur="off">{lines([[("Every", False), ("lead", True), ("answered,", False), ("qualified", False), ("and", False), ("saved.", False)]])}</h1>
     <svg id="fl-wires" viewBox="0 0 1920 1080">{wires}{pulses}</svg>
     {src_html}
     <div id="fl-cring"></div>
     <div id="fl-core"><img src="assets/img/pin-nextyy.webp" alt=""><b>Nxtlvl Agent</b><small class="mono">avg reply 0.8 s</small></div>
     {out_html}
+    <div class="tag mono" id="fl-tg0" style="left:742px;top:800px">Intent: booking</div><div class="tag mono" id="fl-tg1" style="left:1016px;top:800px">Party: 4</div><div class="tag mono" id="fl-tg2" style="left:858px;top:858px">Tonight · 8 pm</div>
+    <div class="wt mono" style="left:640px;top:520px">0.2 s</div><div class="wt mono" style="left:1196px;top:520px">0.6 s</div>
     <div id="fl-count" class="mono"><i></i>Handled today <b id="fl-n">1,284</b></div>
     <div id="fl-lead">{icon("whatsapp", 30, "#fff")}New lead · table for 4</div>
     </div>'''
@@ -261,6 +276,8 @@ fl_js = '''
     tl.to("#fl-lead", { x: 800, y: 592, duration: 0.55, ease: "power3.inOut" }, 1.45);
     tl.to("#fl-lead", { opacity: 0, scale: 0.5, duration: 0.15, ease: "power3.in" }, 1.95);
     tl.to("#fl-s1 .glow", { opacity: 0, duration: 0.3, ease: "none" }, 2.0);
+    [0, 1, 2].forEach(i => tl.fromTo("#fl-tg" + i, { opacity: 0, y: 14, scale: 0.85 }, { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: "back.out(2)" }, 2.1 + i * 0.12));
+    tl.fromTo(".wt", { opacity: 0 }, { opacity: 1, duration: 0.4, stagger: 0.2, ease: "none" }, 0.9);
     tl.fromTo("#fl-cring", { scale: 0.6, opacity: 0.9 }, { scale: 1.6, opacity: 0, duration: 0.8, ease: "expo.out" }, 1.98);
     tl.to("#fl-core", { scale: 1.07, duration: 0.16, ease: "power2.out", yoyo: true, repeat: 1 }, 1.98);
     [0, 1, 2].forEach(i => { const t = 2.6 + i * 0.28;
@@ -280,7 +297,7 @@ pr_css = '''
 #pr-t { top: 130px; }
 #pr-big { position: absolute; left: 140px; top: 290px; height: 340px; overflow: hidden; }
 #pr-n { display: block; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 330px; line-height: 1; letter-spacing: -0.045em; font-variant-numeric: tabular-nums;
-  background: linear-gradient(100deg, #FFFFFF 0%, #D8BBFF 45%, #A95CFF 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  color: #FFFFFF; }
 #pr-l { position: absolute; left: 156px; top: 650px; font-size: 46px; font-weight: 650; }
 #pr-f { position: absolute; left: 156px; top: 722px; font-size: 34px; color: #BDB2DC; } #pr-f b { color: #fff; font-variant-numeric: tabular-nums; }
 #pr-s { position: absolute; left: 158px; top: 790px; font-size: 30px; color: #8E84B4; display: flex; align-items: center; gap: 12px; }
@@ -288,9 +305,10 @@ pr_css = '''
 #pr-chart .ln2 { fill: none; stroke: url(#prs); stroke-width: 8; stroke-linecap: round; }
 #pr-chart .ar { fill: url(#prg); } #pr-chart .gd { stroke: rgba(216, 187, 255, .1); stroke-width: 1.5; }
 #pr-head { fill: #fff; filter: drop-shadow(0 0 10px #B98AFF); }
+.ax { position: absolute; font-size: 24px; color: #8E84B4; }
 '''
-pr_body = f'''    <h1 id="pr-t" class="title">{lines([[("We", False), ("grow", False), ("our", False), ("own", True), ("page", True), ("first.", False)]])}</h1>
-    <div id="pr-big"><span id="pr-n">0</span></div>
+pr_body = f'''    <h1 id="pr-t" class="title" data-motion-blur="off">{lines([[("We", False), ("grow", False), ("our", False), ("own", True), ("page", True), ("first.", False)]])}</h1>
+    <div id="pr-big" data-motion-blur="off"><span id="pr-n">0</span></div>
     <div id="pr-l">views in 30 days</div>
     <div id="pr-f"><b id="pr-fn">0</b> followers and counting</div>
     <div id="pr-s" class="mono">{icon("instagram", 32)}@ai.nxtlvl · our own Instagram</div>
@@ -299,9 +317,10 @@ pr_body = f'''    <h1 id="pr-t" class="title">{lines([[("We", False), ("grow", F
       <path class="gd" d="M0 125H780M0 250H780M0 375H780"/>
       <path class="ar" id="pr-ar" d="M0 470 C120 465 180 440 260 430 S400 380 470 330 S620 170 780 40 L780 500 L0 500Z"/>
       <path class="ln2" id="pr-ln" d="M0 470 C120 465 180 440 260 430 S400 380 470 330 S620 170 780 40"/>
-      <circle id="pr-head" r="13" cx="0" cy="470"/></svg>'''
+      <circle id="pr-head" r="13" cx="0" cy="470"/></svg>
+    <div class="ax mono" style="left:980px;top:836px">Day 1</div><div class="ax mono" style="left:1660px;top:836px">Day 30</div>'''
 pr_js = '''
-    tl.fromTo(["#pr-chart", "#pr-l", "#pr-f", "#pr-s"], { opacity: 0, x: 160, filter: "blur(18px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.4, stagger: 0.04, ease: "expo.out" }, 0);
+    tl.fromTo(["#pr-chart", "#pr-l", "#pr-f", "#pr-s", ".ax"], { opacity: 0, x: 160, filter: "blur(18px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.4, stagger: 0.04, ease: "expo.out" }, 0);
     rise("#pr-t .ln > span", 0.0, 0.05);
     tl.fromTo("#pr-n", { yPercent: 105 }, { yPercent: 0, duration: 0.7, ease: "expo.out" }, 0.1);
     const ln = document.querySelector("#pr-ln"), L = ln.getTotalLength(), head = document.querySelector("#pr-head"), hp = { t: 0 };
@@ -334,12 +353,14 @@ ec_css = '''
 #ec-btn { position: relative; overflow: hidden; padding: 26px 52px; border-radius: 99px; background: linear-gradient(100deg, #5E06F2, #7D18FC 45%, #B46CFF); font-size: 40px; font-weight: 650; color: #fff; box-shadow: 0 26px 56px -20px rgba(125, 24, 252, 1); }
 #ec-shine { position: absolute; top: 0; bottom: 0; left: -40%; width: 30%; background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .55), transparent); transform: skewX(-20deg); }
 #ec-url { font-size: 36px; color: #BDB2DC; }
-#ec-nx { position: absolute; left: 1360px; top: 560px; width: 290px; height: auto; filter: drop-shadow(0 30px 30px rgba(94, 6, 242, .5)); }
+#ec-trust { position: absolute; left: 0; right: 0; top: 760px; text-align: center; font-size: 28px; color: #8E84B4; letter-spacing: .02em; }
+#ec-nx { position: absolute; left: 1470px; top: 540px; width: 290px; height: auto; filter: drop-shadow(0 30px 30px rgba(94, 6, 242, .5)); }
 '''
 ec_body = f'''    <svg id="ec-trail" viewBox="0 0 1920 1080"><defs><linearGradient id="ect" gradientUnits="userSpaceOnUse" x1="160" y1="980" x2="660" y2="440"><stop offset="0" stop-color="#7D18FC" stop-opacity="0"/><stop offset=".7" stop-color="#D8BBFF" stop-opacity=".8"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient></defs>
       <path id="ec-path" d="M160 980 C300 900 420 640 658 438"/></svg>
     <div id="ec-lock"><div id="ec-tile"></div><div id="ec-mark">{ROCKET}</div><div id="ec-word">{WORD.replace('class="lg-word"', 'role="img" aria-label="nxtlvl social"')}</div></div>
     <div id="ec-cta"><span id="ec-btn">Book a free call<i id="ec-shine"></i></span><span id="ec-url" class="mono">nxtlvlsocial.ai</span></div>
+    <div id="ec-trust" class="mono">Monthly plans · No lock-in · You own everything</div>
     <img id="ec-nx" src="assets/img/pose-celebrate.webp" alt="Nextyy celebrating">'''
 ec_js = '''
     // the rocket flies in on its own trail and lands in the tile; the tile pops; the wordmark wipes in
@@ -353,6 +374,7 @@ ec_js = '''
     tl.fromTo("#ec-word", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.5, ease: "power3.inOut" }, 0.75);
     tl.fromTo("#ec-btn", { opacity: 0, y: 30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "back.out(1.6)" }, 0.95);
     tl.fromTo("#ec-url", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.25, ease: "power2.out" }, 1.05);
+    tl.fromTo("#ec-trust", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "expo.out" }, 1.25);
     tl.fromTo("#ec-shine", { xPercent: 0 }, { xPercent: 520, duration: 0.7, ease: "power2.inOut" }, 1.5);
     tl.fromTo("#ec-nx", { opacity: 0, y: 300, rotation: 12 }, { opacity: 1, y: 0, rotation: 0, duration: 0.7, ease: "back.out(1.7)" }, 0.9);
 '''
@@ -388,7 +410,7 @@ index = f'''<!doctype html>
       #texture {{ position: absolute; inset: 0; opacity: .55; background-image: radial-gradient(rgba(216, 187, 255, .08) 1.4px, transparent 1.4px); background-size: 34px 34px; }}
       #vignette {{ position: absolute; inset: 0; background: radial-gradient(120% 90% at 50% 45%, transparent 60%, rgba(0, 0, 0, .45)); pointer-events: none; z-index: 20; }}
       .flash {{ position: absolute; inset: 0; z-index: 30; pointer-events: none; }}
-      .flash i {{ position: absolute; inset: 0; background: radial-gradient(60% 70% at 50% 50%, rgba(216, 187, 255, .5), rgba(125, 24, 252, .22) 45%, transparent 75%); opacity: 0; }}
+      .flash i {{ position: absolute; inset: 0; background: radial-gradient(60% 70% at 50% 50%, rgba(216, 187, 255, .2), rgba(125, 24, 252, .12) 45%, transparent 75%); opacity: 0; }}
       .star {{ position: absolute; inset: 0; z-index: 31; pointer-events: none; overflow: hidden; }}
       .star i {{ position: absolute; left: 0; top: 0; width: 520px; height: 6px; border-radius: 6px; background: linear-gradient(90deg, rgba(169, 92, 255, 0), rgba(216, 187, 255, .8) 70%, #fff); box-shadow: 0 0 20px rgba(216, 187, 255, .8); transform-origin: 100% 50%; }}
     </style>
