@@ -4,47 +4,61 @@
 @font-face { font-family: "Geist"; src: url("assets/fonts/geist-variable.woff2") format("woff2"); font-weight: 100 900; }
 @font-face { font-family: "Geist Mono"; src: url("assets/fonts/geist-mono-variable.woff2") format("woff2"); font-weight: 100 900; }
 #root { position: absolute; inset: 0; overflow: hidden; font-family: "Geist", sans-serif; color: #F4EFFF; }
-.title { position: absolute; left: 160px; margin: 0; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 76px; line-height: 1.02; letter-spacing: -0.025em; white-space: nowrap; }
-.title .w { display: inline-block; }
-.acc { color: #B98AFF; }
-.panel { position: absolute; background: #130C28; border: 1px solid rgba(216, 187, 255, .14); border-radius: 28px; box-shadow: 0 40px 100px -40px rgba(94, 6, 242, .55); }
+.title { position: absolute; left: 150px; margin: 0; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 84px; line-height: 1.02; letter-spacing: -0.03em; white-space: nowrap; }
+.ln { display: block; overflow: hidden; padding: 0 0.04em 0.12em; margin-bottom: -0.12em; }
+.ln > span { display: inline-block; will-change: transform; }
+.acc { background: linear-gradient(100deg, #D8BBFF, #A95CFF 55%, #FF8BD1); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.panel { position: absolute; background: #130C28; border: 1px solid rgba(216, 187, 255, .16); border-radius: 30px; box-shadow: 0 50px 120px -40px rgba(94, 6, 242, .65), 0 0 0 1px rgba(0, 0, 0, .3); }
 .mono { font-family: "Geist Mono", monospace; }
+.cursor { position: absolute; left: 0; top: 0; width: 70px; height: 70px; z-index: 50; filter: drop-shadow(0 10px 16px rgba(0, 0, 0, .55)); }
+.spark { position: absolute; width: 26px; height: 26px; background: #D8BBFF; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
 
 
-#pr-t { top: 150px; }
-#pr-n { position: absolute; left: 150px; top: 300px; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 330px; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums;
+#pr-t { top: 130px; }
+#pr-big { position: absolute; left: 140px; top: 290px; height: 340px; overflow: hidden; }
+#pr-n { display: block; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 330px; line-height: 1; letter-spacing: -0.045em; font-variant-numeric: tabular-nums;
   background: linear-gradient(100deg, #FFFFFF 0%, #D8BBFF 45%, #A95CFF 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-#pr-l { position: absolute; left: 164px; top: 660px; font-size: 44px; font-weight: 600; }
-#pr-s { position: absolute; left: 166px; top: 730px; font-size: 30px; color: #8E84B4; display: flex; align-items: center; gap: 12px; }
-#pr-chart { position: absolute; left: 980px; top: 330px; width: 780px; height: 500px; }
-#pr-chart .ln { fill: none; stroke: #A95CFF; stroke-width: 7; stroke-linecap: round; }
-#pr-chart .ar { fill: url(#prg); }
-#pr-chart .gd { stroke: rgba(216, 187, 255, .1); stroke-width: 1.5; }
-#pr-dot { fill: #4ADE9E; }
+#pr-l { position: absolute; left: 156px; top: 650px; font-size: 46px; font-weight: 650; }
+#pr-f { position: absolute; left: 156px; top: 722px; font-size: 34px; color: #BDB2DC; } #pr-f b { color: #fff; font-variant-numeric: tabular-nums; }
+#pr-s { position: absolute; left: 158px; top: 790px; font-size: 30px; color: #8E84B4; display: flex; align-items: center; gap: 12px; }
+#pr-chart { position: absolute; left: 980px; top: 320px; width: 780px; height: 500px; }
+#pr-chart .ln2 { fill: none; stroke: url(#prs); stroke-width: 8; stroke-linecap: round; }
+#pr-chart .ar { fill: url(#prg); } #pr-chart .gd { stroke: rgba(216, 187, 255, .1); stroke-width: 1.5; }
+#pr-head { fill: #fff; filter: drop-shadow(0 0 10px #B98AFF); }
 
   </style>
   <div id="root" data-composition-id="proof" data-width="1920" data-height="1080">
-    <h1 id="pr-t" class="title"><span class="w">We</span> <span class="w">grow</span> <span class="w">our</span> <span class="w acc">own</span> <span class="w acc">page</span> <span class="w">first.</span></h1>
-    <div id="pr-n">0</div>
+    <h1 id="pr-t" class="title"><span class="ln"><span class="">We</span> <span class="">grow</span> <span class="">our</span> <span class="acc">own</span> <span class="acc">page</span> <span class="">first.</span></span></h1>
+    <div id="pr-big"><span id="pr-n">0</span></div>
     <div id="pr-l">views in 30 days</div>
-    <div id="pr-s" class="mono"><svg viewBox="0 0 24 24" width="30" height="30" fill="#FF0069" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg>@ai.nxtlvl · our own Instagram</div>
-    <svg id="pr-chart" viewBox="0 0 780 500"><defs><linearGradient id="prg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A95CFF" stop-opacity=".35"/><stop offset="1" stop-color="#A95CFF" stop-opacity="0"/></linearGradient></defs>
+    <div id="pr-f"><b id="pr-fn">0</b> followers and counting</div>
+    <div id="pr-s" class="mono"><svg viewBox="0 0 24 24" width="32" height="32" fill="#FF0069" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg>@ai.nxtlvl · our own Instagram</div>
+    <svg id="pr-chart" viewBox="0 0 780 500"><defs><linearGradient id="prg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A95CFF" stop-opacity=".4"/><stop offset="1" stop-color="#A95CFF" stop-opacity="0"/></linearGradient>
+      <linearGradient id="prs" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7D18FC"/><stop offset=".6" stop-color="#B46CFF"/><stop offset="1" stop-color="#FF8BD1"/></linearGradient></defs>
       <path class="gd" d="M0 125H780M0 250H780M0 375H780"/>
       <path class="ar" id="pr-ar" d="M0 470 C120 465 180 440 260 430 S400 380 470 330 S620 170 780 40 L780 500 L0 500Z"/>
-      <path class="ln" id="pr-ln" d="M0 470 C120 465 180 440 260 430 S400 380 470 330 S620 170 780 40"/>
-      <circle id="pr-dot" cx="780" cy="40" r="14"/></svg>
+      <path class="ln2" id="pr-ln" d="M0 470 C120 465 180 440 260 430 S400 380 470 330 S620 170 780 40"/>
+      <circle id="pr-head" r="13" cx="0" cy="470"/></svg>
   </div>
   <script>
     const tl = gsap.timeline({ paused: true });
+    const rise = (sel, at, each = 0.06) => tl.fromTo(sel, { yPercent: 115, rotation: 4 }, { yPercent: 0, rotation: 0, duration: 0.7, stagger: each, ease: "expo.out" }, at);
+    const fall = (sel, at) => tl.to(sel, { yPercent: -115, duration: 0.32, stagger: 0.03, ease: "power3.in" }, at);
 
-    tl.fromTo(["#pr-t", "#pr-n", "#pr-l", "#pr-s", "#pr-chart"], { opacity: 0, x: 120, filter: "blur(16px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.35, stagger: 0.04, ease: "expo.out" }, 0);
-    const ln = document.querySelector("#pr-ln"), L = ln.getTotalLength();
-    tl.fromTo(ln, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1.2, ease: "power3.out" }, 0.3);
-    tl.fromTo("#pr-ar", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "none" }, 0.9);
-    tl.fromTo("#pr-dot", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.4, ease: "back.out(2)" }, 1.4);
+    tl.fromTo(["#pr-chart", "#pr-l", "#pr-f", "#pr-s"], { opacity: 0, x: 160, filter: "blur(18px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.4, stagger: 0.04, ease: "expo.out" }, 0);
+    rise("#pr-t .ln > span", 0.0, 0.05);
+    tl.fromTo("#pr-n", { yPercent: 105 }, { yPercent: 0, duration: 0.7, ease: "expo.out" }, 0.1);
+    const ln = document.querySelector("#pr-ln"), L = ln.getTotalLength(), head = document.querySelector("#pr-head"), hp = { t: 0 };
+    tl.fromTo(ln, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1.3, ease: "power3.out" }, 0.3);
+    tl.fromTo(hp, { t: 0 }, { t: 1, duration: 1.3, ease: "power3.out", onUpdate: () => { const p = ln.getPointAtLength(hp.t * L); head.setAttribute("cx", p.x); head.setAttribute("cy", p.y); } }, 0.3);
+    tl.fromTo("#pr-ar", { opacity: 0 }, { opacity: 1, duration: 0.7, ease: "none" }, 0.9);
     const c = { v: 0 }, el = document.querySelector("#pr-n");
-    tl.fromTo(c, { v: 0 }, { v: 1000000, duration: 1.2, ease: "power3.out", onUpdate: () => { el.textContent = c.v >= 995000 ? "1.0M" : Math.round(c.v / 1000) + "K"; } }, 0.3);
-    tl.to("#root > *", { opacity: 0, filter: "blur(10px)", duration: 0.2, ease: "power3.in" }, 2.78);
+    tl.fromTo(c, { v: 0 }, { v: 1000000, duration: 1.3, ease: "power3.out", onUpdate: () => { el.textContent = c.v >= 995000 ? "1.0M" : Math.round(c.v / 1000) + "K"; } }, 0.25);
+    const f = { v: 0 }, fe = document.querySelector("#pr-fn");
+    tl.fromTo(f, { v: 0 }, { v: 9924, duration: 1.3, ease: "power3.out", onUpdate: () => { fe.textContent = Math.round(f.v).toLocaleString("en-IN"); } }, 0.35);
+    tl.to("#pr-n", { scale: 1.04, transformOrigin: "0% 60%", duration: 0.14, ease: "power2.out", yoyo: true, repeat: 1 }, 1.55);
+    // hand-off: everything streaks out to the upper right after the shooting star
+    tl.to("#root > *", { x: 260, y: -120, opacity: 0, filter: "blur(14px)", duration: 0.26, ease: "power3.in" }, 2.94);
 
     window.__timelines["proof"] = tl;
   </script>

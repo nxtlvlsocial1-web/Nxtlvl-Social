@@ -4,66 +4,88 @@
 @font-face { font-family: "Geist"; src: url("assets/fonts/geist-variable.woff2") format("woff2"); font-weight: 100 900; }
 @font-face { font-family: "Geist Mono"; src: url("assets/fonts/geist-mono-variable.woff2") format("woff2"); font-weight: 100 900; }
 #root { position: absolute; inset: 0; overflow: hidden; font-family: "Geist", sans-serif; color: #F4EFFF; }
-.title { position: absolute; left: 160px; margin: 0; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 76px; line-height: 1.02; letter-spacing: -0.025em; white-space: nowrap; }
-.title .w { display: inline-block; }
-.acc { color: #B98AFF; }
-.panel { position: absolute; background: #130C28; border: 1px solid rgba(216, 187, 255, .14); border-radius: 28px; box-shadow: 0 40px 100px -40px rgba(94, 6, 242, .55); }
+.title { position: absolute; left: 150px; margin: 0; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 84px; line-height: 1.02; letter-spacing: -0.03em; white-space: nowrap; }
+.ln { display: block; overflow: hidden; padding: 0 0.04em 0.12em; margin-bottom: -0.12em; }
+.ln > span { display: inline-block; will-change: transform; }
+.acc { background: linear-gradient(100deg, #D8BBFF, #A95CFF 55%, #FF8BD1); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.panel { position: absolute; background: #130C28; border: 1px solid rgba(216, 187, 255, .16); border-radius: 30px; box-shadow: 0 50px 120px -40px rgba(94, 6, 242, .65), 0 0 0 1px rgba(0, 0, 0, .3); }
 .mono { font-family: "Geist Mono", monospace; }
+.cursor { position: absolute; left: 0; top: 0; width: 70px; height: 70px; z-index: 50; filter: drop-shadow(0 10px 16px rgba(0, 0, 0, .55)); }
+.spark { position: absolute; width: 26px; height: 26px; background: #D8BBFF; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
 
 
-#ag-t { top: 96px; }
-#ag-app { left: 160px; top: 232px; width: 1600px; height: 790px; overflow: hidden; display: grid; grid-template-columns: 480px 1fr; }
-.side { background: linear-gradient(180deg, #160E2E, #0F0920); border-right: 1px solid rgba(216, 187, 255, .1); padding: 24px 18px; }
-.pin { display: flex; align-items: center; gap: 16px; padding: 4px 10px 22px; }
-.pin span { width: 84px; height: 84px; } .pin b { font-size: 30px; font-weight: 650; } .pin small { display: block; font-size: 22px; color: #8E84B4; }
-.row { display: flex; align-items: center; gap: 18px; padding: 12px 14px; border-radius: 18px; margin-bottom: 4px; }
+#ag-cam { position: absolute; inset: 0; transform-origin: 50% 60%; }
+#ag-t { top: 92px; }
+#ag-app { left: 160px; top: 236px; width: 1600px; height: 790px; overflow: hidden; display: grid; grid-template-columns: 480px 1fr; transform-origin: 50% 0; }
+.side { position: relative; background: linear-gradient(180deg, #160E2E, #0F0920); border-right: 1px solid rgba(216, 187, 255, .1); padding: 24px 18px; }
+.pin { display: flex; align-items: center; gap: 16px; padding: 4px 10px 22px; } .pin span { width: 84px; height: 84px; }
+.pin b { font-size: 30px; font-weight: 650; } .pin small { display: block; font-size: 23px; color: #8E84B4; }
+.row { position: relative; display: flex; align-items: center; gap: 18px; padding: 12px 14px; border-radius: 18px; margin-bottom: 4px; z-index: 1; }
 .row img { width: 66px; height: 66px; border-radius: 16px; background: #1A1135; }
-.row b { display: block; font-size: 29px; font-weight: 600; } .row small { font-size: 24px; color: #8E84B4; white-space: nowrap; }
-#ag-hi { position: absolute; left: 18px; top: 134px; width: 444px; height: 92px; border-radius: 18px; background: #231745; box-shadow: inset 0 0 0 1.5px rgba(169, 92, 255, .5); }
+.row b { display: block; font-size: 29px; font-weight: 600; } .row small { font-size: 23px; color: #8E84B4; white-space: nowrap; }
+.row .dot { position: absolute; right: 16px; top: 50%; width: 11px; height: 11px; margin-top: -5px; border-radius: 50%; background: #4ADE9E; }
+#ag-hi { position: absolute; left: 18px; top: 134px; width: 444px; height: 92px; border-radius: 18px; background: #2A1B55; box-shadow: inset 0 0 0 2px rgba(169, 92, 255, .6), 0 10px 30px -10px rgba(125, 24, 252, .8); }
 .main { position: relative; padding: 30px 40px; }
 .mh { display: flex; align-items: center; gap: 18px; padding-bottom: 24px; border-bottom: 1px solid rgba(216, 187, 255, .1); }
-.mh img { width: 72px; height: 72px; } .mh b { font-size: 34px; font-weight: 650; } .mh small { display: block; font-size: 22px; color: #8E84B4; }
-.mh .state { margin-left: auto; padding: 8px 18px; border-radius: 99px; background: rgba(74, 222, 158, .12); color: #4ADE9E; font-size: 22px; }
-.steps { position: absolute; left: 40px; top: 190px; display: flex; gap: 12px; flex-wrap: wrap; width: 1000px; }
-.stp { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px 12px 14px; border-radius: 99px; border: 1px solid rgba(74, 222, 158, .25); background: rgba(74, 222, 158, .06); font-size: 24px; color: #BDB2DC; }
-#ag-msg { position: absolute; left: 40px; top: 290px; width: 860px; padding: 26px 30px; border-radius: 28px; border-top-left-radius: 8px; background: #231745; font-size: 32px; line-height: 1.4; }
-#ag-you { position: absolute; right: 40px; top: 470px; padding: 16px 30px; border-radius: 99px; background: linear-gradient(100deg, #5E06F2, #7D18FC 45%, #B46CFF); font-size: 30px; font-weight: 600; color: #fff; }
-#ag-rc { position: absolute; left: 40px; top: 570px; display: flex; align-items: center; gap: 16px; padding: 20px 26px; border-radius: 20px; background: rgba(74, 222, 158, .1); border: 1.5px solid rgba(74, 222, 158, .35); color: #A7F3CF; font-size: 30px; font-weight: 600; transform-origin: 30% 50%; }
-#ag-rc i { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: #4ADE9E; color: #052b1c; font-style: normal; font-weight: 800; font-size: 24px; }
-#ag-nx { position: absolute; left: 188px; top: 260px; width: 84px; height: 84px; }
+.mh img { width: 72px; height: 72px; } .mh b { font-size: 34px; font-weight: 650; } .mh small { display: block; font-size: 23px; color: #8E84B4; }
+.mh .state { margin-left: auto; padding: 8px 18px; border-radius: 99px; background: rgba(74, 222, 158, .12); color: #4ADE9E; font-size: 23px; }
+.steps { position: absolute; left: 40px; top: 190px; display: flex; gap: 12px; flex-wrap: wrap; width: 1010px; }
+.stp { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px 12px 14px; border-radius: 99px; border: 1px solid rgba(74, 222, 158, .28); background: rgba(74, 222, 158, .06); font-size: 25px; color: #D6CEF0; }
+#ag-msg { position: absolute; left: 40px; top: 290px; width: 880px; padding: 26px 30px; border-radius: 28px; border-top-left-radius: 8px; background: #231745; font-size: 33px; line-height: 1.4; }
+#ag-you { position: absolute; right: 40px; top: 476px; padding: 18px 34px; border-radius: 99px; background: linear-gradient(100deg, #5E06F2, #7D18FC 45%, #B46CFF); font-size: 30px; font-weight: 600; color: #fff; box-shadow: 0 18px 40px -16px rgba(125, 24, 252, .9); }
+#ag-rc { position: absolute; left: 40px; top: 580px; display: flex; align-items: center; gap: 18px; padding: 22px 28px; border-radius: 22px; background: rgba(74, 222, 158, .1); border: 1.5px solid rgba(74, 222, 158, .4); color: #B8F5D6; font-size: 32px; font-weight: 650; transform-origin: 20% 50%; }
+#ag-rc i { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: #4ADE9E; font-style: normal; }
+#ag-nx { position: absolute; left: 188px; top: 264px; width: 84px; height: 84px; z-index: 3; }
 
   </style>
   <div id="root" data-composition-id="agents" data-width="1920" data-height="1080">
-    <h1 id="ag-t" class="title"><span class="w acc">Six</span> <span class="w acc">AI</span> <span class="w acc">agents</span> <span class="w">work</span> <span class="w">your</span> <span class="w">brand</span> <span class="w">every</span> <span class="w">day.</span></h1>
+    <div id="ag-cam">
+    <h1 id="ag-t" class="title"><span class="ln"><span class="acc">Six</span> <span class="acc">AI</span> <span class="acc">agents</span> <span class="">work</span> <span class="">your</span> <span class="">brand</span> <span class="">every</span> <span class="">day.</span></span></h1>
     <div id="ag-app" class="panel">
-      <div class="side"><div class="pin"><span></span><div><b>Nextyy</b><small>your team lead</small></div></div>
-        <div id="ag-hi"></div><div class="row" id="ag-r0"><img src="assets/img/agent-content.webp" alt=""><div><b>Content Agent</b><small>3 hooks ready for Friday</small></div></div><div class="row" id="ag-r1"><img src="assets/img/agent-reply.webp" alt=""><div><b>Reply Agent</b><small>47 messages answered</small></div></div><div class="row" id="ag-r2"><img src="assets/img/agent-ads.webp" alt=""><div><b>Ads Agent</b><small>Creative B is 38% cheaper</small></div></div><div class="row" id="ag-r3"><img src="assets/img/agent-edit.webp" alt=""><div><b>Edit Agent</b><small>Reel v2 ready: 0:28</small></div></div><div class="row" id="ag-r4"><img src="assets/img/agent-seo.webp" alt=""><div><b>SEO Agent</b><small>#1 for "best café in Baner"</small></div></div><div class="row" id="ag-r5"><img src="assets/img/agent-report.webp" alt=""><div><b>Report Agent</b><small>November report ready</small></div></div></div>
+      <div class="side"><div class="pin"><span></span><div><b>Nextyy</b><small>your team lead</small></div></div><div id="ag-hi"></div><div class="row" id="ag-r0"><img src="assets/img/agent-content.webp" alt=""><div><b>Content Agent</b><small>3 hooks ready for Friday</small></div><i class="dot"></i></div><div class="row" id="ag-r1"><img src="assets/img/agent-reply.webp" alt=""><div><b>Reply Agent</b><small>47 messages answered</small></div><i class="dot"></i></div><div class="row" id="ag-r2"><img src="assets/img/agent-ads.webp" alt=""><div><b>Ads Agent</b><small>Creative B is 38% cheaper</small></div><i class="dot"></i></div><div class="row" id="ag-r3"><img src="assets/img/agent-edit.webp" alt=""><div><b>Edit Agent</b><small>Reel v2 ready: 0:28</small></div><i class="dot"></i></div><div class="row" id="ag-r4"><img src="assets/img/agent-seo.webp" alt=""><div><b>SEO Agent</b><small>#1 for "best café in Baner"</small></div><i class="dot"></i></div><div class="row" id="ag-r5"><img src="assets/img/agent-report.webp" alt=""><div><b>Report Agent</b><small>November report ready</small></div><i class="dot"></i></div></div>
       <div class="main"><div class="mh"><img src="assets/img/agent-ads.webp" alt=""><div><b>Ads Agent</b><small>Watches Meta and Google campaigns daily</small></div><span class="state mono">Optimising</span></div>
-        <div class="steps"><span class="stp" id="ag-s0"><svg viewBox="0 0 16 16" width="26" height="26"><circle cx="8" cy="8" r="6" fill="none" stroke="#4ADE9E" stroke-width="1.6" opacity=".5"/><path d="M4.5 8.2l2.3 2.3 4.7-4.9" fill="none" stroke="#4ADE9E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Pulled Meta ads data</span><span class="stp" id="ag-s1"><svg viewBox="0 0 16 16" width="26" height="26"><circle cx="8" cy="8" r="6" fill="none" stroke="#4ADE9E" stroke-width="1.6" opacity=".5"/><path d="M4.5 8.2l2.3 2.3 4.7-4.9" fill="none" stroke="#4ADE9E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Compared cost per lead</span><span class="stp" id="ag-s2"><svg viewBox="0 0 16 16" width="26" height="26"><circle cx="8" cy="8" r="6" fill="none" stroke="#4ADE9E" stroke-width="1.6" opacity=".5"/><path d="M4.5 8.2l2.3 2.3 4.7-4.9" fill="none" stroke="#4ADE9E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Found the winner</span></div>
+        <div class="steps"><span class="stp" id="ag-s0"><svg viewBox="0 0 16 16" width="26" height="26"><circle class="ring" cx="8" cy="8" r="6" fill="none" stroke="#4ADE9E" stroke-width="1.6"/><path class="ck" d="M4.5 8.2l2.3 2.3 4.7-4.9" fill="none" stroke="#4ADE9E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Pulled Meta ads data</span><span class="stp" id="ag-s1"><svg viewBox="0 0 16 16" width="26" height="26"><circle class="ring" cx="8" cy="8" r="6" fill="none" stroke="#4ADE9E" stroke-width="1.6"/><path class="ck" d="M4.5 8.2l2.3 2.3 4.7-4.9" fill="none" stroke="#4ADE9E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Compared cost per lead</span><span class="stp" id="ag-s2"><svg viewBox="0 0 16 16" width="26" height="26"><circle class="ring" cx="8" cy="8" r="6" fill="none" stroke="#4ADE9E" stroke-width="1.6"/><path class="ck" d="M4.5 8.2l2.3 2.3 4.7-4.9" fill="none" stroke="#4ADE9E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Found the winner</span></div>
         <div id="ag-msg">Creative B gets leads 38% cheaper. Move ₹2,000 to it?</div>
         <div id="ag-you">Yes, move it</div>
-        <div id="ag-rc"><i>✓</i>₹2,000 moved · Creative A → B</div></div>
+        <div id="ag-rc"><i><svg viewBox="0 0 24 24" width="28" height="28"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#052b1c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>₹<b id="ag-amt">0</b> moved · Creative A → B</span></div></div>
     </div>
     <img id="ag-nx" src="assets/img/pin-nextyy.webp" alt="">
+    </div>
+    <svg class="cursor" id="ag-cur" viewBox="0 0 24 24"><path d="M4 2.5l15 8.6-6.4 1.6 3.9 6.9-2.9 1.6-3.9-6.9L4.6 18.9z" fill="#fff" stroke="#140B2E" stroke-width="1.2" stroke-linejoin="round"/></svg>
   </div>
   <script>
     const tl = gsap.timeline({ paused: true });
+    const rise = (sel, at, each = 0.06) => tl.fromTo(sel, { yPercent: 115, rotation: 4 }, { yPercent: 0, rotation: 0, duration: 0.7, stagger: each, ease: "expo.out" }, at);
+    const fall = (sel, at) => tl.to(sel, { yPercent: -115, duration: 0.32, stagger: 0.03, ease: "power3.in" }, at);
 
-    tl.fromTo("#ag-app", { opacity: 0, scale: 0.96, filter: "blur(8px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 0);
-    tl.fromTo("#ag-t .w", { opacity: 0.12 }, { opacity: 1, duration: 0.2, stagger: 0.08, ease: "none" }, 0.2);
-    tl.fromTo(".row", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.5, stagger: 0.06, ease: "expo.out" }, 0.25);
-    // the selection walks the agents, then settles on Ads
-    const ys = [134, 230, 326, 422, 518, 614];
-    [0, 1, 2, 3, 4, 5, 2].forEach((r, i) => tl.to("#ag-hi", { y: ys[r] - 134, duration: 0.22, ease: "power2.inOut" }, 0.8 + i * 0.24));
-    tl.fromTo(".main .mh", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 2.2);
-    [0, 1, 2].forEach(i => tl.fromTo("#ag-s" + i, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.7)" }, 2.45 + i * 0.3));
-    tl.fromTo("#ag-msg", { opacity: 0, y: 24, filter: "blur(4px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" }, 3.2);
-    tl.fromTo("#ag-you", { opacity: 0, y: 18, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 3.55);
-    tl.fromTo("#ag-rc", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: "expo.out" }, 3.8);
-    // hand-off: zoom through the receipt into the automation flow
-    tl.to("#ag-rc", { scale: 2.6, x: 300, duration: 0.35, ease: "power3.in" }, 4.92);
-    tl.to(["#ag-app", "#ag-t", "#ag-nx"], { opacity: 0, filter: "blur(14px)", duration: 0.3, ease: "power3.in" }, 4.95);
-    tl.to("#ag-rc", { opacity: 0, duration: 0.12, ease: "none" }, 5.16);
+    // 3D layer entrance and a slow camera push through the scene
+    tl.fromTo("#ag-app", { opacity: 0, rotationX: 22, y: 120, scale: 0.9, transformPerspective: 1600, filter: "blur(10px)" }, { opacity: 1, rotationX: 0, y: 0, scale: 1, filter: "blur(0px)", duration: 0.9, ease: "expo.out" }, 0);
+    tl.fromTo("#ag-cam", { scale: 1 }, { scale: 1.035, duration: 5.8, ease: "none" }, 0);
+    rise("#ag-t .ln > span", 0.15);
+    tl.fromTo(".row", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.5, stagger: 0.05, ease: "expo.out" }, 0.3);
+    tl.fromTo(".row .dot", { scale: 0 }, { scale: 1, duration: 0.3, stagger: 0.05, ease: "back.out(3)" }, 0.6);
+    tl.fromTo(".main > *", { opacity: 0 }, { opacity: 0, duration: 0.01 }, 0);
+    // the cursor clicks the Ads Agent, which causes the selection
+    tl.fromTo("#ag-cur", { x: 1500, y: 1150 }, { x: 330, y: 470, duration: 0.8, ease: "power3.inOut" }, 0.7);
+    tl.to("#ag-cur", { scale: 0.82, duration: 0.08, ease: "power2.in", yoyo: true, repeat: 1 }, 1.5);
+    tl.to("#ag-hi", { y: 192, duration: 0.35, ease: "power3.out" }, 1.56);
+    tl.to("#ag-r2", { scale: 1.03, duration: 0.12, ease: "power2.out", yoyo: true, repeat: 1 }, 1.56);
+    tl.fromTo(".main .mh", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.5, ease: "expo.out" }, 1.7);
+    [0, 1, 2].forEach(i => { tl.fromTo("#ag-s" + i, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.8)" }, 1.95 + i * 0.28);
+      tl.fromTo("#ag-s" + i + " .ck", { strokeDasharray: 12, strokeDashoffset: 12 }, { strokeDashoffset: 0, duration: 0.25, ease: "power2.out" }, 2.15 + i * 0.28); });
+    tl.fromTo("#ag-msg", { opacity: 0, y: 26, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "expo.out" }, 2.8);
+    tl.fromTo("#ag-you", { opacity: 0, y: 20, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 3.1);
+    tl.to("#ag-cur", { x: 1600, y: 760, duration: 0.6, ease: "power3.inOut" }, 3.2);
+    tl.to("#ag-cur", { scale: 0.82, duration: 0.08, ease: "power2.in", yoyo: true, repeat: 1 }, 3.85);
+    tl.to("#ag-you", { scale: 0.94, duration: 0.08, ease: "power2.in", yoyo: true, repeat: 1 }, 3.85);
+    tl.fromTo("#ag-rc", { opacity: 0, y: 30, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "back.out(1.7)" }, 4.0);
+    const amt = { v: 0 }, el = document.querySelector("#ag-amt");
+    tl.fromTo(amt, { v: 0 }, { v: 2000, duration: 0.7, ease: "power3.out", onUpdate: () => { el.textContent = Math.round(amt.v).toLocaleString("en-IN"); } }, 4.05);
+    tl.to("#ag-cur", { x: 1900, y: 1200, duration: 0.5, ease: "power3.in" }, 4.4);
+    // hand-off: zoom through the receipt
+    tl.to("#ag-rc", { scale: 3.2, x: 420, y: -40, duration: 0.4, ease: "power3.in" }, 5.4);
+    tl.to(["#ag-app", "#ag-t", "#ag-nx"], { opacity: 0, filter: "blur(16px)", duration: 0.3, ease: "power3.in" }, 5.45);
+    tl.to("#ag-rc", { opacity: 0, duration: 0.1, ease: "none" }, 5.7);
 
     window.__timelines["agents"] = tl;
   </script>
