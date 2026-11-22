@@ -39,7 +39,7 @@ KINDS = {
     "riser_short": (["riser"], -21, 1.3), "switch": (["switch"], -13, .6), "scratch": (["scratch"], -11, .25), "coin": (["coin"], -13, .9),
     "bell": (["bell"], -14, 1.6), "applause": (["applause"], -10, 5.0), "steps": (["steps"], -16, 1.6), "clunk": (["clunk"], -9, .5),
     "seat": (["switch"], -17, .3), "door": (["close"], -15, .3),
-    "sparkle": (["sparkle"], -9, 1.4), "ping": (["ping"], -15, .7),
+    "sparkle": (["sparkle"], -9, 1.4), "ping": (["ping"], -15, .7), "chime": (["chime"], -14, .8),
 }
 
 
