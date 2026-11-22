@@ -322,7 +322,7 @@ def home():
 </section>
 
 <section class="frame statement" data-sec aria-label="What Nxtlvl Social does">
-  {video_block("v-hero", "Animation of AI dashboard cards: chat replies, a rising chart and bookings")}
+  {video_block("v-hero", "Watch: Nextyy and our AI agents answer customers in seconds, run ads, capture every lead and grow our own page to 1.0M views in 30 days.")}
   <p class="words" data-words>Nxtlvl Social is your AI growth team. Six agents and real experts plan your content, reply to every customer, run your ads, edit your reels and report what worked, every single day, while you run the business.</p>
 </section>
 
@@ -427,7 +427,7 @@ def home():
 '''
     return page('/index', 'AI-Driven Marketing, Automation & Creative | Nxtlvl Social',
                 'Nxtlvl Social is an AI-driven growth company in India. AI agents and experts run your marketing, WhatsApp and DM automation, shoots, edits, design and websites.',
-                body, '/', extra_schema=[faq_schema(HOME_FAQ)])
+                body, '/', extra_schema=[faq_schema(HOME_FAQ)] + video_schema('v-hero'))
 
 # ---------------------------------------------------------------- service pages
 SERVICE_FRAGS = {
@@ -739,7 +739,22 @@ def video_block(name, label, ratio='16 / 9'):
         return ''
     webm = f'<source src="/video/{name}.webm" type="video/webm">' if os.path.exists(os.path.join(VIDEO_DIR, name + '.webm')) else ''
     return (f'<figure class="vframe" data-rise style="aspect-ratio:{ratio}"><video data-autoplay muted loop playsinline preload="none" poster="/video/{name}.jpg" aria-label="{label}">'
-            f'{webm}<source src="/video/{name}.mp4" type="video/mp4"></video></figure>')
+            f'{webm}<source src="/video/{name}.mp4" type="video/mp4"></video></figure><p class="vcap">{label}</p>')
+
+VIDEO_META = {
+    'v-hero': dict(name='Nxtlvl Social: your AI growth team in 22 seconds',
+                   description='How Nxtlvl Social works: AI agents answer customer messages on WhatsApp and Instagram in seconds, plan content, run ads, '
+                               'capture every lead into your CRM, and a person checks every result. Ends with our own Instagram growth: 1.0M views in 30 days.',
+                   duration='PT22S', upload='2026-11-22'),
+}
+def video_schema(name):
+    """VideoObject for Google video results; only once website/video/<name>.mp4 and its poster exist."""
+    m = VIDEO_META.get(name)
+    if not m or not os.path.exists(os.path.join(VIDEO_DIR, name + '.mp4')):
+        return []
+    return [{'@type': 'VideoObject', '@id': f'{SITE}/#video-{name}', 'name': m['name'], 'description': m['description'],
+             'thumbnailUrl': f'{SITE}/video/{name}.jpg', 'contentUrl': f'{SITE}/video/{name}.mp4', 'uploadDate': m['upload'],
+             'duration': m['duration'], 'publisher': {'@id': f'{SITE}/#org'}, 'inLanguage': 'en-IN', 'isFamilyFriendly': True}]
 
 from guides import GUIDES
 

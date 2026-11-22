@@ -896,3 +896,5 @@ body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-event
 .wires circle { r: 4; }
 @media (max-width: 860px) { .flow-live { position: relative; left: auto; transform: none; margin: 16px 16px 0; } .node.brain .ring { inset: 0; } }
 @media (prefers-reduced-motion: reduce) { .eq i, .mic b, .stat::after, .spark-tip, .think, .aa-pins img, .aa-tab img, .node.brain .ring { animation: none !important; } .spark-tip { opacity: 1; } }
+
+.vcap { max-width: 760px; margin: -48px auto 56px; text-align: center; font-size: 14.5px; color: var(--text-3); }
