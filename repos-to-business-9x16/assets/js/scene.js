@@ -234,7 +234,7 @@ function renderAt(t) {
     const fly = easeIO(win(t, a + .65, a + 1.15));                 // the opened cube flies up into its shelf slot
     const bizGlow = Math.exp(-Math.pow((t - T.biz[k] - .2) / .35, 2)) + (t > T.biz[k] ? .35 : 0);
     const slotX = -1.62 + k * .58;
-    if (fly < 1) cubeAt(c, lerp(0, slotX, fly), lerp(lerp(5, -.45, drop), 4.15, fly * fly), lerp(0, 1.5, fly), lerp(.95, .18, fly), lidOpen, Math.sin(u * .9) * .35 + (1 - drop) * 3, .3);
+    if (fly < 1) cubeAt(c, lerp(0, slotX, fly), lerp(lerp(5, -.45, drop), 2.05, fly), lerp(0, 1.5, fly), lerp(.95, .02, fly), lidOpen, Math.sin(u * .9) * .35 + (1 - drop) * 3, .3);
     accLight.intensity = 26 * (1 - out) * (.6 + .4 * clamp(bizGlow)); accLight.color.setHex(ACC[k]);
     // diorama grows out of the open cube, then shrinks away before the next repo
     const grow = back(win(t, a + .5, a + 1.05)) * (1 - out) * .95;

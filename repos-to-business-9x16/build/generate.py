@@ -171,7 +171,7 @@ for ci, chunk in enumerate(CAP):
     nxt = CAP[ci + 1][0][1] if ci + 1 < len(CAP) else DUR
     st(f"#cap{ci}", t0 - .06, "{opacity: 1}")
     ft(f"#cap{ci}", t0 - .06, .16, "{y: 14, scale: .96}", "{y: 0, scale: 1}", "power2.out")
-    st(f"#cap{ci}", min(nxt - .04, t1 + .9), "{opacity: 0}")
+    st(f"#cap{ci}", min(nxt - .08, t1 + .9, L[8][0] - .15), "{opacity: 0}")
     for k, (_, a, _) in enumerate(chunk):
         st(f"#c{ci}_{k}", a - .03, "{color: '#ffffff', scale: 1.08}")
         to(f"#c{ci}_{k}", a + .08, .15, "{scale: 1}")

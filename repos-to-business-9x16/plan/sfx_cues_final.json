@@ -1,0 +1,377 @@
+[
+{
+"t": 0.5,
+"kind": "g_drop",
+"file": "g_drop_g_drop.wav"
+},
+{
+"t": 0.68,
+"kind": "g_drop",
+"file": "g_drop_g_drop.wav"
+},
+{
+"t": 0.86,
+"kind": "g_drop",
+"file": "g_drop_g_drop.wav"
+},
+{
+"t": 2.4,
+"kind": "riser",
+"file": "riser_riser.wav"
+},
+{
+"t": 3.08,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 3.35,
+"kind": "riser_short",
+"file": "riser_short_riser.wav"
+},
+{
+"t": 3.62,
+"kind": "thump",
+"file": "thump_impact.wav"
+},
+{
+"t": 3.7,
+"kind": "g_pickup",
+"file": "g_pickup_g_pickup.wav"
+},
+{
+"t": 4.5,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 4.52,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 4.95,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 5.4,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 6.74,
+"kind": "ding",
+"file": "ding_notify.wav"
+},
+{
+"t": 8.57,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 8.7,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 8.97,
+"kind": "riser_short",
+"file": "riser_short_riser.wav"
+},
+{
+"t": 9.24,
+"kind": "thump",
+"file": "thump_impact.wav"
+},
+{
+"t": 9.32,
+"kind": "g_pickup",
+"file": "g_pickup_g_pickup.wav"
+},
+{
+"t": 10.14,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 10.42,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 10.97,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 11.52,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 11.88,
+"kind": "ding",
+"file": "ding_notify.wav"
+},
+{
+"t": 12.07,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 12.62,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 13.31,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 13.44,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 13.71,
+"kind": "riser_short",
+"file": "riser_short_riser.wav"
+},
+{
+"t": 13.98,
+"kind": "thump",
+"file": "thump_impact.wav"
+},
+{
+"t": 14.06,
+"kind": "g_pickup",
+"file": "g_pickup_g_pickup.wav"
+},
+{
+"t": 14.86,
+"kind": "typing",
+"file": "typing_typing.wav"
+},
+{
+"t": 14.88,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 17.14,
+"kind": "ding",
+"file": "ding_notify.wav"
+},
+{
+"t": 17.16,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 17.31,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 17.46,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 18.75,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 18.88,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 19.15,
+"kind": "riser_short",
+"file": "riser_short_riser.wav"
+},
+{
+"t": 19.42,
+"kind": "thump",
+"file": "thump_impact.wav"
+},
+{
+"t": 19.5,
+"kind": "g_pickup",
+"file": "g_pickup_g_pickup.wav"
+},
+{
+"t": 20.32,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 20.4,
+"kind": "notify",
+"file": "notify_notify.wav"
+},
+{
+"t": 23.82,
+"kind": "ding",
+"file": "ding_notify.wav"
+},
+{
+"t": 24.99,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 25.12,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 25.39,
+"kind": "riser_short",
+"file": "riser_short_riser.wav"
+},
+{
+"t": 25.66,
+"kind": "thump",
+"file": "thump_impact.wav"
+},
+{
+"t": 25.74,
+"kind": "g_pickup",
+"file": "g_pickup_g_pickup.wav"
+},
+{
+"t": 26.56,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 26.66,
+"kind": "g_drop",
+"file": "g_drop_g_drop.wav"
+},
+{
+"t": 26.84,
+"kind": "sparkle",
+"file": "sparkle_sparkle.wav"
+},
+{
+"t": 31.14,
+"kind": "ding",
+"file": "ding_notify.wav"
+},
+{
+"t": 31.75,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 31.88,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 32.15,
+"kind": "riser_short",
+"file": "riser_short_riser.wav"
+},
+{
+"t": 32.42,
+"kind": "thump",
+"file": "thump_impact.wav"
+},
+{
+"t": 32.5,
+"kind": "g_pickup",
+"file": "g_pickup_g_pickup.wav"
+},
+{
+"t": 33.0,
+"kind": "g_swish",
+"file": "g_swish_g_swish.wav"
+},
+{
+"t": 33.32,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 33.55,
+"kind": "g_swish",
+"file": "g_swish_g_swish.wav"
+},
+{
+"t": 37.0,
+"kind": "ding",
+"file": "ding_notify.wav"
+},
+{
+"t": 37.95,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 38.15,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_deep.wav"
+},
+{
+"t": 38.95,
+"kind": "g_drop",
+"file": "g_drop_g_drop.wav"
+},
+{
+"t": 39.09,
+"kind": "g_drop",
+"file": "g_drop_g_drop.wav"
+},
+{
+"t": 39.23,
+"kind": "g_drop",
+"file": "g_drop_g_drop.wav"
+},
+{
+"t": 39.37,
+"kind": "g_drop",
+"file": "g_drop_g_drop.wav"
+},
+{
+"t": 39.51,
+"kind": "g_drop",
+"file": "g_drop_g_drop.wav"
+},
+{
+"t": 39.65,
+"kind": "g_drop",
+"file": "g_drop_g_drop.wav"
+},
+{
+"t": 41.24,
+"kind": "impact",
+"file": "impact_impact.wav"
+},
+{
+"t": 41.24,
+"kind": "cash",
+"file": "cash_cash.wav"
+},
+{
+"t": 42.79,
+"kind": "typing",
+"file": "typing_typing.wav"
+},
+{
+"t": 43.39,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 43.59,
+"kind": "notify",
+"file": "notify_notify.wav"
+}
+]
