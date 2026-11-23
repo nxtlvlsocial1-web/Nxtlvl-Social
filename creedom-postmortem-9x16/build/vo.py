@@ -17,7 +17,7 @@ LINES = [
     ("f02", "On average, people gave it five seconds.", 0.6),
     ("f03", "That's how long my first sentence took. This AI told me...", 0.65),
     ("f04", "Nobody cares about the tool. They care about their reel. Problem first, tool last.", 0.6),
-    ("f05", "Like this video. Sixteen seconds in, and I still haven't named the app.", 0.65),
+    ("f05", "Like this video. Seventeen seconds in, and I still haven't named the app.", 0.65),
     ("f06", "It's Cree-dum. It shows you the exact second people leave, and why.", 0.6),
     ("f07", "Send this to the friend whose reels keep flopping. Comment Cree, and I'll send you the app.", 0.65),
 ]

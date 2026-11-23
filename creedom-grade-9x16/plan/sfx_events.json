@@ -1,0 +1,82 @@
+[
+{
+"type": "riser_short",
+"t": 0
+},
+{
+"type": "buzzer",
+"t": 0.62
+},
+{
+"type": "impact",
+"t": 0.64
+},
+{
+"type": "pop",
+"t": 4.383
+},
+{
+"type": "pop",
+"t": 4.563
+},
+{
+"type": "pop",
+"t": 4.743
+},
+{
+"type": "g_wrong",
+"t": 6.233
+},
+{
+"type": "g_wrong",
+"t": 8.25
+},
+{
+"type": "thump",
+"t": 10.567
+},
+{
+"type": "click",
+"t": 12.45
+},
+{
+"type": "click",
+"t": 12.67
+},
+{
+"type": "click",
+"t": 12.89
+},
+{
+"type": "g_levelup",
+"t": 14.783
+},
+{
+"type": "sparkle",
+"t": 14.883
+},
+{
+"type": "whoosh_big",
+"t": 15.75
+},
+{
+"type": "sparkle",
+"t": 16.05
+},
+{
+"type": "whoosh",
+"t": 21.6
+},
+{
+"type": "typing",
+"t": 24.3
+},
+{
+"type": "click",
+"t": 24.9
+},
+{
+"type": "notify",
+"t": 25.1
+}
+]

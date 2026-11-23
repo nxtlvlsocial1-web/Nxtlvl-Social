@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Creedom remake: graded before anyone saw it 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: Inter; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2"); }
+@font-face { font-family: Serif; font-style: italic; src: url("assets/fonts/InstrumentSerif-Italic.ttf"); }
+@font-face { font-family: Mono; font-weight: 700; src: url("assets/fonts/JetBrainsMono-Bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f4f1ec; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter; color: #16121a;
+  background: radial-gradient(70% 40% at 80% 20%, rgba(255,61,139,.10), rgba(0,0,0,0)), radial-gradient(60% 40% at 10% 85%, rgba(140,90,255,.08), rgba(0,0,0,0)), #f4f1ec; }
+#grain { position: absolute; inset: 0; background: url(assets/img/grain.png); opacity: .05; mix-blend-mode: multiply; pointer-events: none; z-index: 60; }
+.pill { position: absolute; left: 0; right: 0; top: 300px; text-align: center; opacity: 0; z-index: 30; }
+.pill span { display: inline; background: #fff; padding: 10px 22px; border-radius: 18px; font-weight: 800; font-size: 54px; line-height: 1.5;
+  letter-spacing: -.02em; box-decoration-break: clone; -webkit-box-decoration-break: clone; box-shadow: 0 8px 24px rgba(22,18,26,.10); }
+.pill.big span { font-size: 96px; padding: 8px 30px; }
+.pill b { color: #ff3d8b; }
+#phone { position: absolute; left: 100px; top: 560px; width: 428px; height: 760px; border-radius: 44px; overflow: hidden; background: #000; opacity: 0;
+  border: 10px solid #16121a; box-shadow: 0 40px 90px rgba(22,18,26,.35); z-index: 12; transform: rotate(-3deg); }
+#phone img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ex { position: absolute; left: 18px; top: 18px; background: rgba(22,18,26,.75); color: #fff; font-family: Mono; font-weight: 700; font-size: 22px; letter-spacing: .14em;
+  padding: 6px 14px; border-radius: 10px; }
+#dial { position: absolute; left: 520px; top: 700px; width: 460px; height: 460px; opacity: 0; z-index: 14; }
+#dial svg { width: 100%; height: 100%; transform: rotate(-90deg); filter: drop-shadow(0 24px 40px rgba(22,18,26,.22)); }
+.trk { fill: #fff; stroke: #ece6de; stroke-width: 16; }
+.arc { fill: none; stroke: #ff2d55; stroke-width: 16; stroke-linecap: round; stroke-dasharray: 540.35; }
+.sc { position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 160px; gap: 10px; }
+.sc b { font-weight: 800; font-size: 150px; letter-spacing: -.04em; line-height: 1; }
+.sc span { font-weight: 700; font-size: 44px; color: #8a8290; white-space: nowrap; }
+#tline { position: absolute; left: 90px; right: 90px; top: 1322px; height: 70px; opacity: 0; z-index: 13; }
+#tline .bar { position: absolute; left: 0; right: 0; top: 44px; height: 10px; border-radius: 6px; background: #e3ddd4; }
+.flag { position: absolute; top: 0; width: 26px; height: 60px; margin-left: -13px; opacity: 0; }
+.flag::before { content: ""; position: absolute; left: 11px; top: 0; width: 5px; height: 60px; background: #ff2d55; border-radius: 3px; }
+.flag em { position: absolute; left: 20px; top: -6px; font-style: normal; font-family: Mono; font-weight: 700; font-size: 26px; color: #fff; background: #ff2d55;
+  padding: 3px 10px; border-radius: 8px; white-space: nowrap; }
+.flag.fixed::before, .flag.fixed em { background: #20c070; }
+#notes { position: absolute; left: 590px; right: 60px; top: 720px; display: flex; flex-direction: column; gap: 22px; z-index: 15; }
+.note { position: relative; background: #fff; border-radius: 24px; padding: 18px 22px 20px; border-left: 10px solid #ff2d55; box-shadow: 0 16px 36px rgba(22,18,26,.12); opacity: 0; }
+.note b { display: block; font-family: Mono; font-weight: 700; font-size: 30px; color: #ff2d55; }
+.note span { display: block; font-weight: 800; font-size: 38px; line-height: 1.1; letter-spacing: -.02em; }
+.note .ok { position: absolute; right: 16px; top: 16px; width: 50px; height: 50px; border-radius: 50%; background: #20c070; color: #fff; display: grid; place-items: center;
+  font-style: normal; font-weight: 800; font-size: 32px; transform: scale(0); }
+.note.fixed { border-left-color: #20c070; } .note.fixed b { color: #20c070; }
+#world { position: absolute; inset: 0; opacity: 0; z-index: 18; overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 30%, #ffffff 0%, #fbf0f6 55%, #f6e3ee 100%); }
+.bl { position: absolute; border-radius: 50%; filter: blur(90px); }
+.b1 { left: -160px; top: 200px; width: 620px; height: 620px; background: rgba(255,61,139,.35); }
+.b2 { right: -200px; top: 900px; width: 700px; height: 700px; background: rgba(160,100,255,.28); }
+.b3 { left: 200px; bottom: -200px; width: 600px; height: 500px; background: rgba(255,170,210,.4); }
+#app { position: absolute; left: 70px; right: 70px; top: 560px; opacity: 0; z-index: 20; border-radius: 40px; padding: 34px 36px 38px;
+  background: linear-gradient(135deg, rgba(255,255,255,.88), rgba(255,255,255,.62)); border: 2px solid rgba(255,255,255,.95);
+  box-shadow: 0 30px 80px rgba(160,20,90,.18); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+#app img { height: 70px; display: block; }
+.q { margin: 26px 0 22px; font-family: Serif; font-style: italic; font-size: 64px; }
+.tile { display: flex; gap: 20px; align-items: center; background: #fff; border-radius: 26px; padding: 22px 24px; margin-top: 16px; border: 4px solid #ff3d8b;
+  box-shadow: 0 14px 30px rgba(255,61,139,.18); }
+.tile i { width: 74px; height: 74px; border-radius: 20px; background: #ff3d8b; color: #fff; display: grid; place-items: center; font-style: normal; font-size: 34px; flex: none; }
+.tile b { display: block; font-weight: 800; font-size: 38px; letter-spacing: -.02em; }
+.tile span { display: block; font-weight: 600; font-size: 28px; color: #6b6470; }
+.tile.dim { border-color: transparent; opacity: .55; box-shadow: none; }
+.tile.dim i { background: #d9d2c8; }
+#cree { position: absolute; right: 30px; top: 1080px; width: 300px; opacity: 0; z-index: 22; filter: drop-shadow(0 20px 30px rgba(160,20,90,.25)); }
+#cta { position: absolute; left: 70px; right: 70px; top: 1150px; opacity: 0; z-index: 24; display: flex; flex-direction: column; gap: 22px; align-items: flex-start; }
+.share { display: flex; align-items: center; gap: 14px; background: #16121a; color: #fff; padding: 14px 26px; border-radius: 999px; font-weight: 700; font-size: 34px; }
+.share b { color: #ff3d8b; font-size: 36px; }
+.cbox { position: relative; width: 640px; height: 96px; border-radius: 48px; background: #fff; border: 2px solid rgba(22,18,26,.12); display: flex; align-items: center;
+  gap: 18px; padding: 0 24px; font-weight: 800; font-size: 40px; box-shadow: 0 14px 34px rgba(22,18,26,.12); }
+.cbox .av { width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, #ff3d8b, #a064ff); flex: none; }
+#cph { position: absolute; left: 100px; color: rgba(22,18,26,.4); font-weight: 600; }
+.send { margin-left: auto; color: #ff3d8b; }
+.cap { position: absolute; left: 70px; right: 70px; top: 1418px; text-align: center; font-weight: 800; font-size: 50px; line-height: 1.15; letter-spacing: -.02em;
+  opacity: 0; z-index: 40; text-shadow: 0 0 18px rgba(255,255,255,.9), 0 0 4px rgba(255,255,255,.9); }
+.cw { color: rgba(22,18,26,.32); }
+#loop { position: absolute; inset: 0; opacity: 0; z-index: 58; background: #f4f1ec; }
+#loop .lp { position: absolute; left: 100px; top: 560px; width: 428px; height: 760px; border-radius: 44px; overflow: hidden; border: 10px solid #16121a; transform: rotate(-3deg); }
+#loop .lp img { width: 100%; height: 100%; object-fit: cover; }
+#loop .ld { position: absolute; left: 520px; top: 700px; width: 460px; height: 460px; border-radius: 50%; background: #fff; display: flex; align-items: baseline;
+  justify-content: center; padding-top: 160px; gap: 10px; border: 16px solid #ff2d55; }
+#loop .ld b { font-weight: 800; font-size: 150px; letter-spacing: -.04em; line-height: 1; } #loop .ld span { font-weight: 700; font-size: 52px; color: #8a8290; }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="26.75" data-fps="30" data-width="1080" data-height="1920">
+      <div class="pill" id="p0"><span>Scored <b>before</b><br>anyone saw it.</span></div>
+<div class="pill" id="p1"><span>Look where it<br>lost points.</span></div>
+<div class="pill" id="p2"><span>3 seconds cost it.</span></div>
+<div class="pill" id="p3"><span>Fix 3 seconds.</span></div>
+<div class="pill" id="p4"><span>It's <b>Creedom</b>.</span></div>
+<div class="pill" id="p5"><span>Comment <b>CHECK</b></span></div>
+<div id="phone"><img id="frame" src="assets/img/demo_f01.jpg" alt=""><b class="ex">EXAMPLE</b></div>
+<div id="dial"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="86" class="trk"/><circle cx="100" cy="100" r="86" class="arc" id="arc"/></svg><div class="sc"><b id="score">0.0</b><span>/ 5</span></div></div>
+<div id="tline"><i class="bar"></i><i class="flag" id="fl0" style="left:5%"><em>0:01</em></i><i class="flag" id="fl1" style="left:35%"><em>0:07</em></i><i class="flag" id="fl2" style="left:70%"><em>0:14</em></i></div>
+<div id="notes"><div class="note" id="n0"><b>0:01</b><span>Hook too slow</span><i class="ok">&#10003;</i></div><div class="note" id="n1"><b>0:07</b><span>A claim, no proof</span><i class="ok">&#10003;</i></div><div class="note" id="n2"><b>0:14</b><span>Loses trust</span><i class="ok">&#10003;</i></div></div>
+<div id="world"><i class="bl b1"></i><i class="bl b2"></i><i class="bl b3"></i></div>
+<div id="app"><img src="assets/img/creedom_logo.png" alt=""><div class="q">How can Cree help?</div><div class="tile"><i>&#9654;</i><div><b>Check a reel before you post</b><span>Score out of 5, the exact second, and the fix</span></div></div><div class="tile dim"><i>&#9998;</i><div><b>Get a script in your voice</b></div></div></div>
+<img id="cree" src="assets/img/poses/proud.png" alt="">
+<div id="cta"><div class="share"><b>&#10148;</b><span>send to the friend who posts and prays</span></div><div class="cbox"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div></div>
+<div id="loop"><div class="lp"><img src="assets/img/demo_f01.jpg" alt=""></div><div class="ld"><b>2.9</b><span>/ 5</span></div></div>
+<div class="cap" id="cap0"><span class="cw" id="c0_0">This</span> <span class="cw" id="c0_1">reel</span> <span class="cw" id="c0_2">scored</span> <span class="cw" id="c0_3">2.9</span> <span class="cw" id="c0_4">out</span></div>
+<div class="cap" id="cap1"><span class="cw" id="c1_0">of</span> <span class="cw" id="c1_1">5.</span></div>
+<div class="cap" id="cap2"><span class="cw" id="c2_0">Before</span> <span class="cw" id="c2_1">anyone</span> <span class="cw" id="c2_2">saw</span> <span class="cw" id="c2_3">it.</span></div>
+<div class="cap" id="cap3"><span class="cw" id="c3_0">Harsh.</span> <span class="cw" id="c3_1">But</span> <span class="cw" id="c3_2">look</span> <span class="cw" id="c3_3">where</span> <span class="cw" id="c3_4">it</span></div>
+<div class="cap" id="cap4"><span class="cw" id="c4_0">lost</span> <span class="cw" id="c4_1">points.</span></div>
+<div class="cap" id="cap5"><span class="cw" id="c5_0">Second</span> <span class="cw" id="c5_1">one,</span></div>
+<div class="cap" id="cap6"><span class="cw" id="c6_0">the</span> <span class="cw" id="c6_1">hook</span> <span class="cw" id="c6_2">is</span> <span class="cw" id="c6_3">too</span> <span class="cw" id="c6_4">slow.</span></div>
+<div class="cap" id="cap7"><span class="cw" id="c7_0">Second</span> <span class="cw" id="c7_1">seven,</span></div>
+<div class="cap" id="cap8"><span class="cw" id="c8_0">a</span> <span class="cw" id="c8_1">claim</span> <span class="cw" id="c8_2">with</span> <span class="cw" id="c8_3">no</span> <span class="cw" id="c8_4">proof.</span></div>
+<div class="cap" id="cap9"><span class="cw" id="c9_0">Second</span> <span class="cw" id="c9_1">fourteen,</span></div>
+<div class="cap" id="cap10"><span class="cw" id="c10_0">it</span> <span class="cw" id="c10_1">loses</span> <span class="cw" id="c10_2">trust.</span></div>
+<div class="cap" id="cap11"><span class="cw" id="c11_0">Fix</span> <span class="cw" id="c11_1">just</span> <span class="cw" id="c11_2">those</span> <span class="cw" id="c11_3">three</span> <span class="cw" id="c11_4">seconds,</span></div>
+<div class="cap" id="cap12"><span class="cw" id="c12_0">and</span> <span class="cw" id="c12_1">it</span> <span class="cw" id="c12_2">scores</span> <span class="cw" id="c12_3">4.4.</span></div>
+<div class="cap" id="cap13"><span class="cw" id="c13_0">That's</span> <span class="cw" id="c13_1">Creedom.</span></div>
+<div class="cap" id="cap14"><span class="cw" id="c14_0">Upload</span> <span class="cw" id="c14_1">your</span> <span class="cw" id="c14_2">reel</span> <span class="cw" id="c14_3">before</span> <span class="cw" id="c14_4">you</span></div>
+<div class="cap" id="cap15"><span class="cw" id="c15_0">post,</span> <span class="cw" id="c15_1">and</span> <span class="cw" id="c15_2">it</span> <span class="cw" id="c15_3">shows</span> <span class="cw" id="c15_4">you</span></div>
+<div class="cap" id="cap16"><span class="cw" id="c16_0">the</span> <span class="cw" id="c16_1">exact</span> <span class="cw" id="c16_2">second,</span></div>
+<div class="cap" id="cap17"><span class="cw" id="c17_0">and</span> <span class="cw" id="c17_1">the</span> <span class="cw" id="c17_2">fix.</span></div>
+<div class="cap" id="cap18"><span class="cw" id="c18_0">Send</span> <span class="cw" id="c18_1">this</span> <span class="cw" id="c18_2">to</span> <span class="cw" id="c18_3">the</span> <span class="cw" id="c18_4">friend</span></div>
+<div class="cap" id="cap19"><span class="cw" id="c19_0">who</span> <span class="cw" id="c19_1">posts</span> <span class="cw" id="c19_2">and</span> <span class="cw" id="c19_3">prays.</span></div>
+<div class="cap" id="cap20"><span class="cw" id="c20_0">Comment</span> <span class="cw" id="c20_1">CHECK,</span></div>
+<div class="cap" id="cap21"><span class="cw" id="c21_0">and</span> <span class="cw" id="c21_1">I'll</span> <span class="cw" id="c21_2">send</span> <span class="cw" id="c21_3">you</span> <span class="cw" id="c21_4">the</span></div>
+<div class="cap" id="cap22"><span class="cw" id="c22_0">link.</span></div>
+      <div id="grain"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({paused: true});
+      tl.fromTo("#p0", {opacity: 0, y: 24, scale: .92}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.3, ease: "back.out(2.2)", immediateRender: false}, -0.027);
+      tl.to("#p0", {...{opacity: 0, y: -16}, duration: 0.12, ease: "power2.in"}, 3.813);
+      tl.fromTo("#p1", {opacity: 0, y: 24, scale: .92}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.3, ease: "back.out(2.2)", immediateRender: false}, 3.873);
+      tl.to("#p1", {...{opacity: 0, y: -16}, duration: 0.12, ease: "power2.in"}, 5.680);
+      tl.fromTo("#p2", {opacity: 0, y: 24, scale: .92}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.3, ease: "back.out(2.2)", immediateRender: false}, 5.740);
+      tl.to("#p2", {...{opacity: 0, y: -16}, duration: 0.12, ease: "power2.in"}, 12.080);
+      tl.fromTo("#p3", {opacity: 0, y: 24, scale: .92}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.3, ease: "back.out(2.2)", immediateRender: false}, 12.140);
+      tl.to("#p3", {...{opacity: 0, y: -16}, duration: 0.12, ease: "power2.in"}, 15.830);
+      tl.fromTo("#p4", {opacity: 0, y: 24, scale: .92}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.3, ease: "back.out(2.2)", immediateRender: false}, 15.890);
+      tl.to("#p4", {...{opacity: 0, y: -16}, duration: 0.12, ease: "power2.in"}, 21.580);
+      tl.fromTo("#p5", {opacity: 0, y: 24, scale: .92}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.3, ease: "back.out(2.2)", immediateRender: false}, 21.640);
+      tl.set("#phone", {opacity: 1}, 0.000);
+      tl.set("#dial", {opacity: 1}, 0.000);
+      tl.fromTo("#phone", {scale: 1.06, rotation: -4}, {...{scale: 1, rotation: -3}, duration: 0.45, ease: "power3.out", immediateRender: false}, 0.000);
+      tl.fromTo("#dial", {scale: .6}, {...{scale: 1}, duration: 0.4, ease: "back.out(2)", immediateRender: false}, 0.000);
+      tl.set("#arc", {strokeDashoffset: 540.4}, 0);
+      tl.to("#arc", {strokeDashoffset: 226.9, stroke: "#ff2d55", duration: 0.55, ease: "power3.out"}, 0.120);
+      (() => { const o = {v: 0}; tl.to(o, {v: 2.9, duration: 0.55, ease: "power3.out", onUpdate: () => { document.getElementById("score").textContent = o.v.toFixed(1); }}, 0.120); })();
+      tl.fromTo("#dial", {x: 0}, {...{keyframes: [{x: -14, duration: .05}, {x: 12, duration: .05}, {x: -6, duration: .05}, {x: 0, duration: .1}]}, duration: 0.3, ease: "none", immediateRender: false}, 0.660);
+      tl.fromTo("#tline", {opacity: 0, y: 30}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 4.033);
+      tl.fromTo("#fl0", {opacity: 0, y: -30, scale: .5}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 4.383);
+      tl.fromTo("#fl1", {opacity: 0, y: -30, scale: .5}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 4.563);
+      tl.fromTo("#fl2", {opacity: 0, y: -30, scale: .5}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 4.743);
+      tl.to("#dial", {...{x: 140, y: -330, scale: .42}, duration: 0.4, ease: "power3.inOut"}, 5.700);
+      tl.set("#frame", {attr: {src: "assets/img/demo_f01.jpg"}}, 6.183);
+      tl.fromTo("#phone", {scale: 1.05}, {...{scale: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 6.183);
+      tl.fromTo("#n0", {opacity: 0, x: 60}, {...{opacity: 1, x: 0}, duration: 0.35, ease: "back.out(1.8)", immediateRender: false}, 6.183);
+      tl.fromTo("#fl0", {scale: 1.5}, {...{scale: 1}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 6.183);
+      tl.set("#frame", {attr: {src: "assets/img/demo_f07.jpg"}}, 8.200);
+      tl.fromTo("#phone", {scale: 1.05}, {...{scale: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 8.200);
+      tl.fromTo("#n1", {opacity: 0, x: 60}, {...{opacity: 1, x: 0}, duration: 0.35, ease: "back.out(1.8)", immediateRender: false}, 8.200);
+      tl.fromTo("#fl1", {scale: 1.5}, {...{scale: 1}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 8.200);
+      tl.set("#frame", {attr: {src: "assets/img/demo_f14.jpg"}}, 10.517);
+      tl.fromTo("#phone", {scale: 1.05}, {...{scale: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 10.517);
+      tl.fromTo("#n2", {opacity: 0, x: 60}, {...{opacity: 1, x: 0}, duration: 0.35, ease: "back.out(1.8)", immediateRender: false}, 10.517);
+      tl.fromTo("#fl2", {scale: 1.5}, {...{scale: 1}, duration: 0.35, ease: "back.out(2)", immediateRender: false}, 10.517);
+      tl.set("#n0", {className: 'note fixed'}, 12.450);
+      tl.fromTo("#n0 .ok", {scale: 0}, {...{scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 12.450);
+      tl.set("#fl0", {className: 'flag fixed'}, 12.450);
+      tl.set("#n1", {className: 'note fixed'}, 12.670);
+      tl.fromTo("#n1 .ok", {scale: 0}, {...{scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 12.670);
+      tl.set("#fl1", {className: 'flag fixed'}, 12.670);
+      tl.set("#n2", {className: 'note fixed'}, 12.890);
+      tl.fromTo("#n2 .ok", {scale: 0}, {...{scale: 1}, duration: 0.3, ease: "back.out(3)", immediateRender: false}, 12.890);
+      tl.set("#fl2", {className: 'flag fixed'}, 12.890);
+      tl.to("#dial", {...{x: 140, y: -330, scale: .52}, duration: 0.35, ease: "back.out(2)"}, 14.433);
+      tl.to("#arc", {strokeDashoffset: 64.8, stroke: "#20c070", duration: 0.7, ease: "power3.out"}, 14.733);
+      (() => { const o = {v: 2.9}; tl.to(o, {v: 4.4, duration: 0.7, ease: "power3.out", onUpdate: () => { document.getElementById("score").textContent = o.v.toFixed(1); }}, 14.733); })();
+      tl.fromTo("#world", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "power3.out", immediateRender: false}, 15.750);
+      tl.to("#phone", {...{opacity: 0, x: -300}, duration: 0.4, ease: "power2.in"}, 15.750);
+      tl.to("#tline", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 15.750);
+      tl.to("#notes", {...{opacity: 0, x: 200}, duration: 0.3, ease: "power2.in"}, 15.750);
+      tl.to("#dial", {...{opacity: 0, scale: .3}, duration: 0.3, ease: "power2.in"}, 15.750);
+      tl.fromTo("#app", {opacity: 0, y: 80, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.5, ease: "back.out(1.5)", immediateRender: false}, 15.950);
+      tl.fromTo("#cree", {opacity: 0, x: 200, rotation: 12}, {...{opacity: 1, x: 0, rotation: 0}, duration: 0.5, ease: "back.out(1.6)", immediateRender: false}, 16.250);
+      tl.to("#app", {...{y: -60, scale: .9}, duration: 0.3, ease: "power2.out"}, 21.600);
+      tl.fromTo("#cta", {opacity: 0, y: 40}, {...{opacity: 1, y: 0}, duration: 0.4, ease: "back.out(1.6)", immediateRender: false}, 21.700);
+      tl.set("#cree", {attr: {src: "assets/img/poses/wave.png"}}, 21.700);
+      tl.set("#cph", {opacity: 0}, 24.300);
+      (() => { const o = {n: 0}; tl.to(o, {n: 5, duration: .5, ease: "steps(5)", onUpdate: () => { document.getElementById("cty").textContent = "CHECK".slice(0, Math.round(o.n)); }}, 24.300); })();
+      tl.set("#loop", {opacity: 1}, 26.350);
+      tl.set("#cap0", {opacity: 1}, -0.027);
+      tl.set("#cap0", {opacity: 0}, 1.903);
+      tl.set("#c0_0", {color: '#16121a'}, 0.003);
+      tl.set("#c0_1", {color: '#16121a'}, 0.370);
+      tl.set("#c0_2", {color: '#16121a'}, 0.620);
+      tl.set("#c0_3", {color: '#16121a'}, 0.987);
+      tl.set("#c0_4", {color: '#16121a'}, 1.270);
+      tl.set("#cap1", {opacity: 1}, 1.923);
+      tl.set("#cap1", {opacity: 0}, 2.587);
+      tl.set("#c1_0", {color: '#16121a'}, 1.953);
+      tl.set("#c1_1", {color: '#16121a'}, 2.053);
+      tl.set("#cap2", {opacity: 1}, 2.607);
+      tl.set("#cap2", {opacity: 0}, 3.853);
+      tl.set("#c2_0", {color: '#16121a'}, 2.637);
+      tl.set("#c2_1", {color: '#16121a'}, 2.937);
+      tl.set("#c2_2", {color: '#16121a'}, 3.153);
+      tl.set("#c2_3", {color: '#16121a'}, 3.470);
+      tl.set("#cap3", {opacity: 1}, 3.873);
+      tl.set("#cap3", {opacity: 0}, 5.003);
+      tl.set("#c3_0", {color: '#16121a'}, 3.903);
+      tl.set("#c3_1", {color: '#16121a'}, 4.537);
+      tl.set("#c3_2", {color: '#16121a'}, 4.687);
+      tl.set("#c3_3", {color: '#16121a'}, 4.820);
+      tl.set("#c3_4", {color: '#16121a'}, 4.970);
+      tl.set("#cap4", {opacity: 1}, 5.023);
+      tl.set("#cap4", {opacity: 0}, 5.720);
+      tl.set("#c4_0", {color: '#16121a'}, 5.053);
+      tl.set("#c4_1", {color: '#16121a'}, 5.203);
+      tl.set("#cap5", {opacity: 1}, 5.740);
+      tl.set("#cap5", {opacity: 0}, 6.670);
+      tl.set("#c5_0", {color: '#16121a'}, 5.770);
+      tl.set("#c5_1", {color: '#16121a'}, 6.203);
+      tl.set("#cap6", {opacity: 1}, 6.690);
+      tl.set("#cap6", {opacity: 0}, 8.153);
+      tl.set("#c6_0", {color: '#16121a'}, 6.720);
+      tl.set("#c6_1", {color: '#16121a'}, 6.787);
+      tl.set("#c6_2", {color: '#16121a'}, 6.937);
+      tl.set("#c6_3", {color: '#16121a'}, 7.103);
+      tl.set("#c6_4", {color: '#16121a'}, 7.270);
+      tl.set("#cap7", {opacity: 1}, 8.173);
+      tl.set("#cap7", {opacity: 0}, 8.870);
+      tl.set("#c7_0", {color: '#16121a'}, 8.203);
+      tl.set("#c7_1", {color: '#16121a'}, 8.220);
+      tl.set("#cap8", {opacity: 1}, 8.890);
+      tl.set("#cap8", {opacity: 0}, 10.370);
+      tl.set("#c8_0", {color: '#16121a'}, 8.920);
+      tl.set("#c8_1", {color: '#16121a'}, 8.953);
+      tl.set("#c8_2", {color: '#16121a'}, 9.137);
+      tl.set("#c8_3", {color: '#16121a'}, 9.320);
+      tl.set("#c8_4", {color: '#16121a'}, 9.520);
+      tl.set("#cap9", {opacity: 1}, 10.390);
+      tl.set("#cap9", {opacity: 0}, 11.153);
+      tl.set("#c9_0", {color: '#16121a'}, 10.420);
+      tl.set("#c9_1", {color: '#16121a'}, 10.537);
+      tl.set("#cap10", {opacity: 1}, 11.173);
+      tl.set("#cap10", {opacity: 0}, 12.120);
+      tl.set("#c10_0", {color: '#16121a'}, 11.203);
+      tl.set("#c10_1", {color: '#16121a'}, 11.303);
+      tl.set("#c10_2", {color: '#16121a'}, 11.553);
+      tl.set("#cap11", {opacity: 1}, 12.140);
+      tl.set("#cap11", {opacity: 0}, 14.237);
+      tl.set("#c11_0", {color: '#16121a'}, 12.170);
+      tl.set("#c11_1", {color: '#16121a'}, 12.603);
+      tl.set("#c11_2", {color: '#16121a'}, 12.920);
+      tl.set("#c11_3", {color: '#16121a'}, 13.187);
+      tl.set("#c11_4", {color: '#16121a'}, 13.453);
+      tl.set("#cap12", {opacity: 1}, 14.257);
+      tl.set("#cap12", {opacity: 0}, 15.870);
+      tl.set("#c12_0", {color: '#16121a'}, 14.287);
+      tl.set("#c12_1", {color: '#16121a'}, 14.403);
+      tl.set("#c12_2", {color: '#16121a'}, 14.670);
+      tl.set("#c12_3", {color: '#16121a'}, 15.087);
+      tl.set("#cap13", {opacity: 1}, 15.890);
+      tl.set("#cap13", {opacity: 0}, 17.303);
+      tl.set("#c13_0", {color: '#16121a'}, 15.920);
+      tl.set("#c13_1", {color: '#16121a'}, 16.453);
+      tl.set("#cap14", {opacity: 1}, 17.323);
+      tl.set("#cap14", {opacity: 0}, 18.370);
+      tl.set("#c14_0", {color: '#16121a'}, 17.353);
+      tl.set("#c14_1", {color: '#16121a'}, 17.570);
+      tl.set("#c14_2", {color: '#16121a'}, 17.787);
+      tl.set("#c14_3", {color: '#16121a'}, 17.987);
+      tl.set("#c14_4", {color: '#16121a'}, 18.253);
+      tl.set("#cap15", {opacity: 1}, 18.390);
+      tl.set("#cap15", {opacity: 0}, 19.570);
+      tl.set("#c15_0", {color: '#16121a'}, 18.420);
+      tl.set("#c15_1", {color: '#16121a'}, 19.053);
+      tl.set("#c15_2", {color: '#16121a'}, 19.153);
+      tl.set("#c15_3", {color: '#16121a'}, 19.253);
+      tl.set("#c15_4", {color: '#16121a'}, 19.420);
+      tl.set("#cap16", {opacity: 1}, 19.590);
+      tl.set("#cap16", {opacity: 0}, 20.820);
+      tl.set("#c16_0", {color: '#16121a'}, 19.620);
+      tl.set("#c16_1", {color: '#16121a'}, 19.737);
+      tl.set("#c16_2", {color: '#16121a'}, 20.037);
+      tl.set("#cap17", {opacity: 1}, 20.840);
+      tl.set("#cap17", {opacity: 0}, 21.620);
+      tl.set("#c17_0", {color: '#16121a'}, 20.870);
+      tl.set("#c17_1", {color: '#16121a'}, 21.120);
+      tl.set("#c17_2", {color: '#16121a'}, 21.237);
+      tl.set("#cap18", {opacity: 1}, 21.640);
+      tl.set("#cap18", {opacity: 0}, 22.603);
+      tl.set("#c18_0", {color: '#16121a'}, 21.670);
+      tl.set("#c18_1", {color: '#16121a'}, 22.037);
+      tl.set("#c18_2", {color: '#16121a'}, 22.203);
+      tl.set("#c18_3", {color: '#16121a'}, 22.370);
+      tl.set("#c18_4", {color: '#16121a'}, 22.487);
+      tl.set("#cap19", {opacity: 1}, 22.623);
+      tl.set("#cap19", {opacity: 0}, 24.120);
+      tl.set("#c19_0", {color: '#16121a'}, 22.653);
+      tl.set("#c19_1", {color: '#16121a'}, 22.870);
+      tl.set("#c19_2", {color: '#16121a'}, 23.170);
+      tl.set("#c19_3", {color: '#16121a'}, 23.403);
+      tl.set("#cap20", {opacity: 1}, 24.140);
+      tl.set("#cap20", {opacity: 0}, 24.753);
+      tl.set("#c20_0", {color: '#16121a'}, 24.170);
+      tl.set("#c20_1", {color: '#16121a'}, 24.320);
+      tl.set("#cap21", {opacity: 1}, 24.773);
+      tl.set("#cap21", {opacity: 0}, 25.303);
+      tl.set("#c21_0", {color: '#16121a'}, 24.803);
+      tl.set("#c21_1", {color: '#16121a'}, 24.853);
+      tl.set("#c21_2", {color: '#16121a'}, 25.020);
+      tl.set("#c21_3", {color: '#16121a'}, 25.137);
+      tl.set("#c21_4", {color: '#16121a'}, 25.287);
+      tl.set("#cap22", {opacity: 1}, 25.323);
+      tl.set("#cap22", {opacity: 0}, 26.350);
+      tl.set("#c22_0", {color: '#16121a'}, 25.353);
+      tl.set({}, {}, 26.75);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

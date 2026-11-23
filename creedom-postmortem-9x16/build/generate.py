@@ -69,7 +69,7 @@ js(f'(() => {{ const o = {{v: {S[5]:.3f}}}; tl.to(o, {{v: {S[6]:.3f}, duration: 
 
 # ---- scene 1-3: the real insights card, the old cover, the 5 s ring
 HTML.append('<div id="ins"><img src="assets/img/insights_cards.jpg" alt=""><i class="ring" id="r304"></i><i class="ring" id="r5"></i></div>')
-HTML.append('<div id="old"><img src="assets/img/old_cover.png" alt=""><b class="tape" id="irony">the irony</b></div>')
+HTML.append('<div id="old"><img src="assets/img/old_cover.png" alt=""><i class="hide"></i><b class="tape" id="irony">the irony</b></div>')   # the old wordmark is blurred: no product name before the reveal
 HTML.append('<div id="t5"><b id="t5n">0</b><span>s</span></div>')
 st("#ins", 0, "{opacity: 1}")
 ft("#ins", 0, .5, "{scale: 1.08, y: 20}", "{scale: 1, y: 0}", "power3.out")
@@ -229,13 +229,14 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #f4f1
 #r5 {{ left: 22px; top: 204px; width: 440px; height: 196px; }}
 #old {{ position: absolute; left: 470px; top: 560px; width: 480px; opacity: 0; z-index: 12; }}
 #old img {{ width: 100%; border-radius: 30px; box-shadow: 0 30px 70px rgba(22,18,26,.3); display: block; }}
+.hide {{ position: absolute; left: 22%; right: 22%; top: 83%; height: 8%; border-radius: 16px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); background: rgba(255,220,236,.55); }}
 .tape {{ position: absolute; left: -90px; top: 60px; background: #ffd23f; color: {INK}; font-weight: 800; font-size: 46px; padding: 10px 26px; opacity: 0;
   box-shadow: 0 10px 24px rgba(0,0,0,.18); font-family: Serif; font-style: italic; font-weight: 400; font-size: 60px; }}
 #t5 {{ position: absolute; right: 90px; top: 1130px; width: 220px; height: 220px; border-radius: 50%; background: {PINK}; color: #fff; display: grid;
   place-items: center; grid-auto-flow: column; justify-content: center; align-items: baseline; padding-top: 52px; opacity: 0; z-index: 14;
   box-shadow: 0 20px 50px rgba(255,61,139,.45); font-weight: 800; }}
 #t5 b {{ font-size: 110px; line-height: 1; }} #t5 span {{ font-size: 54px; }}
-#phone {{ position: absolute; left: 280px; top: 520px; width: 520px; height: 924px; border-radius: 46px; overflow: hidden; background: #000; opacity: 0;
+#phone {{ position: absolute; left: 310px; top: 500px; width: 460px; height: 818px; border-radius: 46px; overflow: hidden; background: #000; opacity: 0;
   border: 10px solid #16121a; box-shadow: 0 40px 90px rgba(22,18,26,.35); z-index: 16; }}
 #ov, #ofz {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }}
 #ofz {{ opacity: 0; filter: grayscale(.6) brightness(.8); }}
@@ -280,7 +281,7 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #f4f1
 .why {{ margin-top: 24px; display: flex; gap: 18px; align-items: baseline; opacity: 0; }}
 .why b {{ font-family: Mono; font-weight: 700; font-size: 26px; letter-spacing: .14em; color: {PINK}; }}
 .why span {{ font-weight: 700; font-size: 36px; line-height: 1.2; }}
-#cree {{ position: absolute; right: 30px; top: 1060px; width: 320px; opacity: 0; z-index: 22; filter: drop-shadow(0 20px 30px rgba(160,20,90,.25)); }}
+#cree {{ position: absolute; right: 30px; top: 1010px; width: 300px; opacity: 0; z-index: 22; filter: drop-shadow(0 20px 30px rgba(160,20,90,.25)); }}
 #cta {{ position: absolute; left: 70px; right: 70px; top: 1150px; opacity: 0; z-index: 24; display: flex; flex-direction: column; gap: 22px; align-items: flex-start; }}
 .share {{ display: flex; align-items: center; gap: 14px; background: {INK}; color: #fff; padding: 14px 26px; border-radius: 999px; font-weight: 700; font-size: 34px; }}
 .share b {{ color: {PINK}; font-size: 36px; }}

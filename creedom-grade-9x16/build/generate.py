@@ -96,7 +96,7 @@ for k in range(3):
 a2 = S[2]
 NOTES = [("one", "demo_f01.jpg", "0:01", "Hook too slow"), ("seven", "demo_f07.jpg", "0:07", "A claim, no proof"), ("fourteen", "demo_f14.jpg", "0:14", "Loses trust")]
 HTML.append('<div id="notes">' + "".join(f'<div class="note" id="n{k}"><b>{ts}</b><span>{txt}</span><i class="ok">&#10003;</i></div>' for k, (_, _, ts, txt) in enumerate(NOTES)) + '</div>')
-to("#dial", a2 - .1, .4, "{x: 250, y: -330, scale: .55}", "power3.inOut")
+to("#dial", a2 - .1, .4, "{x: 140, y: -330, scale: .42}", "power3.inOut")
 for k, (word, img, ts, txt) in enumerate(NOTES):
     tw = wt("f02", word)
     st("#frame", tw - .05, f'{{attr: {{src: "assets/img/{img}"}}}}')
@@ -113,8 +113,8 @@ for k in range(3):
     ft(f"#n{k} .ok", tfix + .25 + k * .22, .3, "{scale: 0}", "{scale: 1}", "back.out(3)")
     st(f"#fl{k}", tfix + .25 + k * .22, "{className: 'flag fixed'}")
     sfx("click", tfix + .25 + k * .22)
-t44 = wt("f03", "four")
-to("#dial", t44 - .35, .35, "{x: 0, y: 0, scale: 1}", "power3.out")
+t44 = wt("f03", "scores") + .35          # "four point four" (Whisper writes "4 .4.")
+to("#dial", t44 - .35, .35, "{x: 140, y: -330, scale: .52}", "back.out(2)")
 dial_to(t44 - .05, 2.9, 4.4, .7, "#20c070")
 sfx("g_levelup", t44)
 sfx("sparkle", t44 + .1)
@@ -130,7 +130,7 @@ ft("#world", a4 - .2, .5, "{opacity: 0}", "{opacity: 1}")
 to("#phone", a4 - .2, .4, "{opacity: 0, x: -300}", "power2.in")
 to("#tline", a4 - .2, .3, "{opacity: 0}")
 to("#notes", a4 - .2, .3, "{opacity: 0, x: 200}", "power2.in")
-to("#dial", a4 - .2, .5, "{x: 270, y: 640, scale: .5}", "power3.inOut")
+to("#dial", a4 - .2, .3, "{opacity: 0, scale: .3}", "power2.in")
 ft("#app", a4, .5, "{opacity: 0, y: 80, scale: .9}", "{opacity: 1, y: 0, scale: 1}", "back.out(1.5)")
 ft("#cree", a4 + .3, .5, "{opacity: 0, x: 200, rotation: 12}", "{opacity: 1, x: 0, rotation: 0}", "back.out(1.6)")
 sfx("whoosh_big", a4 - .2)
@@ -204,7 +204,7 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #f4f1
 .arc {{ fill: none; stroke: #ff2d55; stroke-width: 16; stroke-linecap: round; stroke-dasharray: 540.35; }}
 .sc {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 160px; gap: 10px; }}
 .sc b {{ font-weight: 800; font-size: 150px; letter-spacing: -.04em; line-height: 1; }}
-.sc span {{ font-weight: 700; font-size: 52px; color: #8a8290; }}
+.sc span {{ font-weight: 700; font-size: 44px; color: #8a8290; white-space: nowrap; }}
 #tline {{ position: absolute; left: 90px; right: 90px; top: 1322px; height: 70px; opacity: 0; z-index: 13; }}
 #tline .bar {{ position: absolute; left: 0; right: 0; top: 44px; height: 10px; border-radius: 6px; background: #e3ddd4; }}
 .flag {{ position: absolute; top: 0; width: 26px; height: 60px; margin-left: -13px; opacity: 0; }}

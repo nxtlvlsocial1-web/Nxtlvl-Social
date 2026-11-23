@@ -1,0 +1,131 @@
+{
+ "duration": 31.08,
+ "takes": [
+  {
+   "line": "f00",
+   "take": 0,
+   "heard": "This reel scored 2 .9 out of 5, before anyone saw it.",
+   "errors": 3,
+   "pitch_spread_hz": 95
+  },
+  {
+   "line": "f00",
+   "take": 1,
+   "heard": "This reel scored 2 .9 out of 5, before anyone saw it.",
+   "errors": 4,
+   "pitch_spread_hz": 300
+  },
+  {
+   "line": "f00",
+   "take": 2,
+   "heard": "This reel scored 2 .9 out of 5, before anyone saw it.",
+   "errors": 3,
+   "pitch_spread_hz": 82
+  },
+  {
+   "line": "f01",
+   "take": 0,
+   "heard": "Harsh, but look where it lost points.",
+   "errors": 0,
+   "pitch_spread_hz": 123
+  },
+  {
+   "line": "f01",
+   "take": 1,
+   "heard": "Arsh, but look where it lost points.",
+   "errors": 1,
+   "pitch_spread_hz": 75
+  },
+  {
+   "line": "f01",
+   "take": 2,
+   "heard": "Harsh, but look where it lost points.",
+   "errors": 0,
+   "pitch_spread_hz": 145
+  },
+  {
+   "line": "f02",
+   "take": 0,
+   "heard": "Second one, the hook is too slow. Second seven, a claim with no proof. Second 14, it loses trust.",
+   "errors": 1,
+   "pitch_spread_hz": 159
+  },
+  {
+   "line": "f02",
+   "take": 1,
+   "heard": "Second one, the hook is too slow. Second seven, a claim with no proof. Second 14, it loses trust.",
+   "errors": 1,
+   "pitch_spread_hz": 132
+  },
+  {
+   "line": "f02",
+   "take": 2,
+   "heard": "Second one, the hook is too slow. Second seven, a claim with no proof. Second 14, it loses trust.",
+   "errors": 1,
+   "pitch_spread_hz": 115
+  },
+  {
+   "line": "f03",
+   "take": 0,
+   "heard": "Fix just those three seconds, and it scores 4 .4.",
+   "errors": 3,
+   "pitch_spread_hz": 71
+  },
+  {
+   "line": "f03",
+   "take": 1,
+   "heard": "Fix just those three seconds, and it scores 4 .4.",
+   "errors": 3,
+   "pitch_spread_hz": 180
+  },
+  {
+   "line": "f03",
+   "take": 2,
+   "heard": "Fix just those three seconds and it scores 4 .4.",
+   "errors": 3,
+   "pitch_spread_hz": 83
+  },
+  {
+   "line": "f04",
+   "take": 0,
+   "heard": "That's cray -dumb. Upload your reel before you post and it shows you the exact second, and the fix.",
+   "errors": 2,
+   "pitch_spread_hz": 132
+  },
+  {
+   "line": "f04",
+   "take": 1,
+   "heard": "That's Kree dumb. Upload your reel before you post, and it shows you the exact second, and the fix.",
+   "errors": 2,
+   "pitch_spread_hz": 87
+  },
+  {
+   "line": "f04",
+   "take": 2,
+   "heard": "That's Creedum. Upload your reel before you post, and it shows you the exact second, and the fix.",
+   "errors": 1,
+   "pitch_spread_hz": 93
+  },
+  {
+   "line": "f05",
+   "take": 0,
+   "heard": "Send this to the friend who posts and prays. Comment check, and I'll send you the link.",
+   "errors": 0,
+   "pitch_spread_hz": 142
+  },
+  {
+   "line": "f05",
+   "take": 1,
+   "heard": "Send this to the friend who posts and prays, comment, check, and I'll send you the link.",
+   "errors": 0,
+   "pitch_spread_hz": 72
+  },
+  {
+   "line": "f05",
+   "take": 2,
+   "heard": "Send this to the friend who posts and prays. Comment check and I'll send you the link.",
+   "errors": 0,
+   "pitch_spread_hz": 112
+  }
+ ]
+}
