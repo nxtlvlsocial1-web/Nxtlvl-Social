@@ -20,7 +20,9 @@ captions, a comment-keyword CTA that loops back to the hook.
 ## Assets
 
 - assets/audio/voice.wav - voiceover (local Kokoro, am_michael), from build/voice.py.
-- assets/sfx/, assets/audio/mix.wav - synthesised effects (build/sfx.py), no third-party audio.
+- assets/audio/music.wav - background music generated locally with MusicGen (build/music.py, fixed prompt and seed),
+  the owner's choice over the HeyGen library or a CC track; ours, nothing to credit. Ducked under the voice in the mix.
+- assets/sfx/, assets/audio/mix.wav - synthesised effects and the final mix (build/sfx.py), no third-party audio.
 
 ## Notes
 
