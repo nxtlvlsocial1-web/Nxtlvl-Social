@@ -1,0 +1,36 @@
+@font-face { font-family: Inter; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2"); }
+@font-face { font-family: Mono; src: url("assets/fonts/JetBrainsMono-Bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #121417; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter; color: #101111; background: #121417; }
+
+/* backdrops: the robot room (cold grey, scanlines) -> the Creators 100X studio (off-white, lime and pink glows) */
+.bg { position: absolute; inset: 0; }
+#bgA { background: radial-gradient(70% 45% at 50% 50%, #2b2e34 0%, #16181c 60%, #0e0f12 100%); }
+#scan { background: repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 2px, rgba(0,0,0,0) 2px 6px); }
+#bgB { background: #fdf4f4; overflow: hidden; }
+.glo { position: absolute; width: 900px; height: 900px; border-radius: 50%; }
+#gl3d { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 10; }
+
+/* captions */
+.head { position: absolute; left: 40px; right: 40px; top: 150px; text-align: center; font-weight: 800; letter-spacing: -.045em; line-height: 1.05; z-index: 40; color: #101111;
+  text-shadow: 0 0 18px #fdf4f4, 0 0 36px #fdf4f4, 0 0 60px rgba(253,244,244,.9); }
+.head.rb { font-family: Mono; font-weight: 400; letter-spacing: -.02em; color: #c9ccd2; text-shadow: none; }
+.hl { white-space: nowrap; }
+.hw { display: inline-block; opacity: 0; padding: .02em .05em .14em; margin-bottom: -.12em; }
+.hw.pk { color: #fd0b68; }
+.head.rb .hw.pk { color: #ffffff; background: #3a3d44; border-radius: 10px; padding: 0 .18em; }
+.stat { position: absolute; left: 0; right: 0; top: 468px; text-align: center; z-index: 41; opacity: 0; }
+.stat span { display: inline-block; padding: 12px 28px; border-radius: 40px; background: #101111; color: #ccfb79; font: 700 28px Mono; letter-spacing: .1em; }
+.stat.rb span { background: rgba(255,255,255,.08); border: 2px solid rgba(255,255,255,.18); color: #9da1aa; }
+.stat.pk span { background: #fd0b68; color: #fff; }
+.stat.lm span { background: #ccfb79; color: #101111; }
+#h4b { top: 1590px; left: 40px; right: 270px; font-size: 56px !important; }
+
+/* the glitch */
+.gl { position: absolute; left: -100px; right: -100px; opacity: 0; z-index: 45; mix-blend-mode: difference; }
+#flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 60; pointer-events: none; }
+#grain { position: absolute; inset: 0; background: url("assets/img/grain.png"); opacity: .06; z-index: 61; pointer-events: none; mix-blend-mode: multiply; }
