@@ -8,5 +8,5 @@ npx --yes hyperframes@0.8.203 render -w 3 -o renders/master_draft.mp4 > renders/
 RC=$?
 echo "EXIT $RC" >> renders/draft.log
 if [ $RC -ne 0 ] || [ ! -s renders/master_draft.mp4 ]; then echo "SFX EXIT skipped (render failed)" >> renders/draft.log; exit 1; fi
-python3 build/sfx_mix.py renders/master_draft.mp4 renders/creators100x_creedom-grade_reels_9x16_v1_draft.mp4 >> renders/draft.log 2>&1
+python3 build/sfx_mix.py renders/master_draft.mp4 renders/creators100x_creedom-grade_reels_9x16_v2_draft.mp4 >> renders/draft.log 2>&1
 echo "SFX EXIT $?" >> renders/draft.log

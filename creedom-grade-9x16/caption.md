@@ -28,5 +28,5 @@ Notes:
   EXAMPLE tag and the script says "This reel", not "my reel".
 - Music: "Upbeat Corporate" by Soundrider/Dope (Jamendo 1670486 via Openverse, CC BY 3.0); credit line required.
 - Sound effects: Openverse CC0 plus OpenGameArt CC0 packs (no credit needed).
-- Voice: Chatterbox with a Kokoro af_bella reference (free, local).
+- Voice: Kokoro-82M af_heart (Apache 2.0, free, local), read directly with no cloning; "Creedom" said as CREE-dum.
 - Mascot: Cree, Creedom's own 3D mascot.

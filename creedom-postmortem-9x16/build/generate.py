@@ -230,7 +230,7 @@ R.write(f"""
 #phone {{ position: absolute; left: 270px; top: 330px; width: 540px; height: 960px; border-radius: 54px; overflow: hidden; background: #000; opacity: 0;
   border: 12px solid {INK}; box-shadow: 0 22px 0 rgba(22,18,26,.45), 0 50px 100px rgba(70,0,35,.45); z-index: 16; }}
 #ov, #ofz {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }}
-#x2 {{ position: absolute; right: 22px; bottom: 22px; background: rgba(22,18,26,.8); color: #fff; font-family: Mono; font-weight: 700; font-size: 34px; padding: 6px 16px; border-radius: 12px; }}
+#x2 {{ position: absolute; right: 22px; bottom: 22px; background: {INK}; color: #fff; font-family: Mono; font-weight: 700; font-size: 34px; padding: 6px 16px; border-radius: 12px; }}
 #ofz {{ opacity: 0; filter: grayscale(.8) brightness(.75); }}
 #otm {{ position: absolute; left: 50%; top: 26px; transform: translateX(-50%); background: {PINK}; color: #fff; font-family: Mono; font-weight: 700;
   font-size: 50px; padding: 8px 26px; border-radius: 999px; border: 4px solid #fff; }}
