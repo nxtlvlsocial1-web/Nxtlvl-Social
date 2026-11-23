@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Find Skills 9x16</title>
+    <script type="importmap">{"imports":{"three":"./assets/vendor/three/three.module.min.js","three/addons/":"./assets/vendor/three/addons/"}}</script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script src="assets/js/timing.js"></script>
+    <script src="assets/js/captions.js"></script>
+    <style>
+@font-face { font-family: "BC"; font-weight: 800; src: url("assets/fonts/barlow-condensed-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "BC"; font-weight: 900; src: url("assets/fonts/barlow-condensed-latin-900-normal.woff2") format("woff2"); }
+@font-face { font-family: "IN"; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "IN"; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "IN"; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "IN"; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2") format("woff2"); }
+
+/* Palette: night charcoal, warm orange (the subject's Claude-adjacent warmth, no logos), amber, install green. */
+:root { --bg: #06070C; --orange: #FF7A2F; --amber: #FFB547; --green: #3DDC84; --ink: #F6F3EE; --muted: #9AA0B4; --panel: #141824; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+#root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--bg); font-family: "IN", sans-serif; color: var(--ink); }
+.clip { position: absolute; inset: 0; }
+#gl { width: 1080px; height: 1920px; display: block; }
+.vign { position: absolute; inset: 0; background: radial-gradient(ellipse 82% 62% at 50% 44%, rgba(3,4,8,0) 58%, rgba(3,4,8,.55) 100%); }
+#world { position: absolute; inset: 0; }
+.scene { position: absolute; inset: 0; opacity: 0; }
+
+/* text safe column: x 60-950, y 250-1500 */
+.col { position: absolute; left: 60px; width: 890px; text-align: center; white-space: nowrap; }
+.ib { display: inline-block; }
+.hl { font-family: "BC"; font-weight: 800; text-transform: uppercase; line-height: .92; letter-spacing: .5px; color: var(--ink); text-shadow: 0 6px 30px rgba(3,4,8,.75); }
+.hot { display: inline-block; background: linear-gradient(90deg, var(--orange), var(--amber)); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; filter: drop-shadow(0 0 20px rgba(255,122,47,.45)); }
+.lab { font: 700 26px/1 "IN"; letter-spacing: 6px; text-transform: uppercase; color: #C3C7D4; }
+.muted { color: var(--muted); }
+.tally { font: 800 34px/1 "IN"; letter-spacing: 4px; color: #C3C7D4; text-shadow: 0 3px 14px rgba(3,4,8,.8); }
+.tally b { display: inline-block; min-width: 1.2em; color: var(--green); font-size: 44px; vertical-align: -3px; }
+
+/* scene 5 steps */
+.steps { position: absolute; left: 60px; width: 890px; top: 300px; display: flex; justify-content: center; align-items: center; gap: 18px; }
+.step { font: 800 36px/1 "IN"; letter-spacing: 3px; color: #C3C7D4; padding: 18px 28px; border-radius: 60px; border: 2px solid rgba(255,255,255,.18); background: rgba(20,24,36,.8); }
+.arrow { font: 800 34px/1 "IN"; color: rgba(255,255,255,.35); }
+
+/* scene 7: comment box, posted comment, link toast */
+.cbox { position: absolute; left: 90px; top: 770px; width: 830px; height: 132px; border-radius: 66px; background: rgba(255,255,255,.07); border: 2px solid rgba(255,255,255,.26); box-shadow: 0 0 40px rgba(255,122,47,.18); }
+.av { position: absolute; border-radius: 50%; background: conic-gradient(from 200deg, #FF7A2F, #FFB547, #4F7CFF, #FF7A2F); }
+.av::after { content: ""; position: absolute; inset: 22%; border-radius: 50%; background: rgba(6,7,12,.6); }
+.cbox .av { left: 20px; top: 20px; width: 88px; height: 88px; }
+.cph { position: absolute; left: 156px; top: 44px; font: 500 40px/1 "IN"; color: rgba(255,255,255,.42); }
+.ctx { position: absolute; left: 136px; top: 34px; font: 800 58px/1 "IN"; letter-spacing: 2px; color: #fff; white-space: nowrap; }
+.ctx span { display: none; }
+.caret { display: inline-block; width: 5px; height: 58px; margin-left: 6px; vertical-align: -8px; background: var(--orange); }
+.send { position: absolute; right: 20px; top: 20px; width: 88px; height: 88px; border-radius: 50%; background: linear-gradient(135deg, #FF7A2F, #FFB547); }
+.send svg { position: absolute; left: 22px; top: 22px; width: 44px; height: 44px; }
+.cpost { position: absolute; left: 90px; top: 950px; width: 830px; height: 150px; border-radius: 34px; background: rgba(20,24,36,.9); border: 2px solid rgba(255,122,47,.5); }
+.cpost .av { left: 26px; top: 34px; width: 82px; height: 82px; }
+.cpost .who { position: absolute; left: 134px; top: 30px; font: 700 26px/1 "IN"; color: var(--muted); }
+.cpost .msg { position: absolute; left: 132px; top: 66px; font: 900 72px/1 "BC"; letter-spacing: 2px; color: #fff; }
+.toast { position: absolute; left: 230px; top: 1130px; width: 520px; height: 84px; border-radius: 42px; background: rgba(61,220,132,.14); border: 2px solid var(--green); display: flex; align-items: center; justify-content: center; gap: 14px; font: 800 32px/1 "IN"; color: var(--green); }
+.toast i { width: 40px; height: 40px; border-radius: 50%; background: var(--green); position: relative; flex: none; }
+.toast i::after { content: ""; position: absolute; left: 12px; top: 8px; width: 10px; height: 18px; border: solid #06070C; border-width: 0 5px 5px 0; transform: rotate(45deg); }
+
+/* effects */
+.flash { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(255,255,255,1) 0%, rgba(255,226,200,.8) 60%, rgba(255,190,150,.6) 100%); opacity: 0; }
+#grain-in { position: absolute; left: -200px; top: -200px; width: 1480px; height: 2320px; background: url("assets/img/grain.png"); opacity: .12; mix-blend-mode: soft-light; }
+.p-track { position: absolute; left: 0; top: 0; width: 1080px; height: 8px; background: rgba(255,255,255,.12); }
+.p-fill { position: absolute; left: 0; top: 0; width: 1080px; height: 8px; background: linear-gradient(90deg, #FF7A2F, #FFB547); box-shadow: 0 0 14px rgba(255,122,47,.8); transform-origin: 0 50%; }
+
+/* captions: 2-4 words, the spoken word lit in an orange pill (lower middle, inside the safe area) */
+.cap { position: absolute; left: 60px; width: 890px; top: 1306px; text-align: center; font: 800 64px/1.2 "IN"; letter-spacing: -.5px; color: #fff; opacity: 0;
+  text-shadow: 0 4px 0 rgba(3,4,8,.9), 0 0 18px rgba(3,4,8,.8); }
+.cap .w { display: inline-block; white-space: nowrap; margin: 0 .06em; padding: .02em .16em .06em; border-radius: .22em; }
+.cap .w.acc { color: var(--amber); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="27.738" data-fps="30" data-width="1080" data-height="1920">
+      <!-- 3D layer (assets/js/scene3d.js) -->
+      <canvas id="gl" class="clip" data-hold data-start="0" data-duration="27.738" data-track-index="0"></canvas>
+      <div id="vg" class="clip" data-start="0" data-duration="27.738" data-track-index="0"><div class="vign"></div></div>
+
+      <!-- headlines and UI per scene; each scene group is shown and hidden on the voice timeline -->
+      <div id="hud" class="clip" data-start="0" data-duration="27.738" data-track-index="1">
+        <div id="world">
+          <div class="scene" id="h0" style="opacity: 1">
+            <div class="col hl" style="top: 288px; font-size: 120px"><span id="h0a" class="ib">Stop installing</span></div>
+            <div class="col hl" style="top: 404px; font-size: 104px"><span id="h0b" class="hot">skills one by one</span></div>
+            <div class="col tally" style="top: 1150px">INSTALLED <b id="tn">3</b> OF 1,528,982</div>
+          </div>
+          <div class="scene" id="h1">
+            <div class="col hl" style="top: 300px; font-size: 112px"><span id="h1a" class="ib">Over <span class="hot">1.5 million</span></span></div>
+            <div class="col lab" style="top: 884px"><span id="h1b" class="ib">skills on skills.sh &middot; 23 Nov 2026</span></div>
+          </div>
+          <div class="scene" id="h2">
+            <div class="col hl" style="top: 290px; font-size: 112px"><span id="h2a" class="ib">This <span class="hot">free</span> skill</span></div>
+            <div class="col hl" style="top: 404px; font-size: 96px"><span id="h2b" class="ib">finds the right ones</span></div>
+          </div>
+          <div class="scene" id="h3">
+            <div class="col hl muted" style="top: 330px; font-size: 92px"><span id="h3a" class="ib">It's called</span></div>
+          </div>
+          <div class="scene" id="h4">
+            <div class="col hl" style="top: 290px; font-size: 104px"><span id="h4a" class="ib">Tell it what</span></div>
+            <div class="col hl" style="top: 398px; font-size: 104px"><span id="h4b" class="hot">you're working on</span></div>
+          </div>
+          <div class="scene" id="h5">
+            <div class="steps"><span class="step" id="st0">SEARCH</span><span class="arrow">&rarr;</span><span class="step" id="st1">PICK</span><span class="arrow">&rarr;</span><span class="step" id="st2">INSTALL</span></div>
+          </div>
+          <div class="scene" id="h6">
+            <div class="col hl" style="top: 290px; font-size: 112px"><span id="h6a" class="ib"><span class="hot">#1</span> on skills.sh</span></div>
+          </div>
+          <div class="scene" id="h7">
+            <div class="col hl" style="top: 290px; font-size: 104px"><span id="h7a" class="ib">Comment the word</span></div>
+            <div id="cbx" class="cbox">
+              <div class="av"></div>
+              <div id="cph" class="cph">Add a comment...</div>
+              <div class="ctx"><span id="t0">S</span><span id="t1">K</span><span id="t2">I</span><span id="t3">L</span><span id="t4">L</span><span id="t5">S</span><i id="caret" class="caret"></i></div>
+              <div id="send" class="send"><svg viewBox="0 0 44 44"><path d="M6 22 L38 8 L28 38 L22 25 Z" fill="#06070C"/></svg></div>
+            </div>
+            <div id="cpost" class="cpost"><div class="av"></div><div class="who">You &middot; now</div><div class="msg">SKILLS</div></div>
+            <div id="toast" class="toast"><i></i>Link sent: find-skills</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="caps" class="clip" data-start="0" data-duration="27.738" data-track-index="2"></div>
+      <div id="fx" class="clip" data-start="0" data-duration="27.738" data-track-index="3"><div id="flash" class="flash"></div></div>
+      <div id="grain" class="clip" data-start="0" data-duration="27.738" data-track-index="4"><div id="grain-in"></div></div>
+      <div id="prog" class="clip" data-start="0" data-duration="27.738" data-track-index="5"><div class="p-track"></div><div id="pfill" class="p-fill"></div></div>
+
+      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="27.738" data-track-index="6" data-volume="1"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {}; // the runtime makes this; kept so the page also loads standalone
+      const TM = window.TIMING, SC = TM.scenes, END = TM.end, LOOP_AT = SC[SC.length - 1];
+      // the time a spoken word starts (build/voice.py writes every word): W(line, "word", occurrence)
+      const W = (line, word, occ = 0) => { const ws = TM.lines[line].words.filter((w) => w.w === word); return (ws[occ] || ws[ws.length - 1] || { s: TM.lines[line].start }).s; };
+      const tl = gsap.timeline({ paused: true });
+      const $ = (s) => document.querySelector(s);
+      const slam = (el, t, from = 1.6, d = 0.22) => tl.fromTo(el, { scale: from, opacity: 0 }, { scale: 1, opacity: 1, duration: d, ease: "back.out(1.8)" }, t);
+      const inX = (el, t, dx, d = 0.3) => tl.fromTo(el, { x: dx, opacity: 0 }, { x: 0, opacity: 1, duration: d, ease: "back.out(1.5)" }, t);
+      const inY = (el, t, dy, d = 0.3) => tl.fromTo(el, { y: dy, opacity: 0 }, { y: 0, opacity: 1, duration: d, ease: "back.out(1.6)" }, t);
+      const pulse = (el, t, s = 1.08, d = 0.12) => tl.to(el, { scale: s, duration: d, ease: "power2.out", yoyo: true, repeat: 1 }, t);
+
+      tl.fromTo("#pfill", { scaleX: 0 }, { scaleX: 1, duration: END, ease: "none" }, 0);
+
+      // scene groups on the voice timeline (h0 is up at frame 0 and again for the loop frames)
+      for (let i = 0; i < 8; i++) {
+        const el = "#h" + i;
+        if (i > 0) tl.set(el, { opacity: 1 }, SC[i]);
+        tl.set(el, { opacity: 0 }, SC[i + 1]);
+      }
+      tl.set("#h0", { opacity: 1 }, LOOP_AT);
+
+      // 0: the hook is on screen at frame 0
+      pulse("#h0b", W(0, "one"), 1.06);
+      // 1
+      inY("#h1a", SC[1], -100, 0.28);
+      tl.fromTo("#h1b", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25 }, W(1, "million") + 0.35);
+      // 2
+      inY("#h2a", SC[2], -100, 0.28);
+      inX("#h2b", W(2, "finds"), 280, 0.28);
+      // 3
+      slam("#h3a", SC[3], 1.4, 0.2);
+      // 4
+      inX("#h4a", SC[4], -280, 0.28);
+      inX("#h4b", W(4, "you're"), 280, 0.28);
+      // 5: the three steps light up on their words
+      [["#st0", W(5, "searches")], ["#st1", W(5, "picks")], ["#st2", W(5, "installs")]].forEach(([el, t], i) => {
+        tl.fromTo(el, { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25, ease: "back.out(2)" }, SC[5] + i * 0.06);
+        tl.to(el, { backgroundColor: i === 2 ? "#3DDC84" : "#FF7A2F", borderColor: i === 2 ? "#3DDC84" : "#FF7A2F", color: "#06070C", scale: 1.08, duration: 0.14, ease: "back.out(3)" }, t);
+      });
+      // 6
+      slam("#h6a", SC[6], 1.5, 0.22);
+      pulse("#h6a", W(6, "number"), 1.08);
+      // 7
+      inY("#h7a", SC[7], -100, 0.26);
+      inY("#cbx", SC[7] + 0.05, 240, 0.32);
+      const TYPE = [0, 1, 2, 3, 4, 5].map((i) => W(7, "skills") - 0.12 + i * 0.07);
+      tl.to("#send", { scale: 0.82, duration: 0.08, yoyo: true, repeat: 1 }, TYPE[5] + 0.22);
+      tl.fromTo("#cpost", { y: -110, scale: 0.85, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.28, ease: "back.out(2)" }, TYPE[5] + 0.32);
+      tl.fromTo("#toast", { y: 40, scale: 0.8, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.26, ease: "back.out(2.4)" }, W(7, "link") - 0.05);
+
+      // captions: words pop in as they're spoken; the spoken word sits in an orange pill
+      const capsEl = $("#caps");
+      (window.CAPS || []).forEach((g) => {
+        const d = document.createElement("div");
+        d.className = "cap";
+        g.words.forEach((w, wi) => {
+          const s = document.createElement("span");
+          s.className = "w" + (w.accent ? " acc" : "");
+          s.textContent = w.w;
+          d.appendChild(s);
+          tl.fromTo(s, { scale: 0.78, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.12, ease: "back.out(2)" }, w.s);
+          const off = wi + 1 < g.words.length ? g.words[wi + 1].s : g.e;
+          tl.set(s, { backgroundColor: "#FF7A2F", color: "#06070C", textShadow: "none" }, w.s);
+          tl.set(s, { backgroundColor: "rgba(255,122,47,0)", color: w.accent ? "#FFB547" : "#FFFFFF", textShadow: "0 4px 0 rgba(3,4,8,.9), 0 0 18px rgba(3,4,8,.8)" }, off);
+        });
+        capsEl.appendChild(d);
+        tl.set(d, { opacity: 1 }, g.s);
+        tl.set(d, { opacity: 0 }, g.e);
+      });
+
+      // per-frame: shake, flash, grain, typing
+      const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+      // [time, strength px, length s] (also read by the 3D camera)
+      const SHAKES = [[W(1, "million") + 0.3, 8, 0.28], [W(3, "find"), 6, 0.24], [W(5, "installs"), 5, 0.22], [W(6, "number"), 6, 0.24], [W(6, "four") + 0.75, 9, 0.3], [W(7, "skills"), 6, 0.24]];
+      window.HF_SHAKES = SHAKES;
+      const FLASHES = [[SC[1], 0.22], [W(1, "million") + 0.3, 0.16], [W(6, "four") + 0.75, 0.18]];
+      const world = $("#world"), flash = $("#flash"), grainIn = $("#grain-in");
+      const E = { tx: [0, 1, 2, 3, 4, 5].map((i) => $("#t" + i)), caret: $("#caret"), cph: $("#cph"), tn: $("#tn") };
+      const LANDS = Array.from({ length: 9 }, (_, k) => -0.66 + k * 0.27); // same landings as the 3D grid (scene3d.js)
+      function frame(t) {
+        let sx = 0, sy = 0;
+        for (const [t0, a, d] of SHAKES) { const dt = t - t0; if (dt >= 0 && dt < d) { const k = Math.exp(-dt * 7) * (1 - dt / d); sx += a * k * Math.sin(dt * 90); sy += a * 0.7 * k * Math.cos(dt * 73); } }
+        world.style.transform = `translate(${sx.toFixed(2)}px, ${sy.toFixed(2)}px)`;
+        let fo = 0;
+        for (const [t0, a] of FLASHES) { const dt = t - t0; if (dt >= 0 && dt < 0.26) fo = Math.max(fo, a * Math.pow(1 - dt / 0.26, 2)); }
+        flash.style.opacity = fo.toFixed(3);
+        const n = Math.floor(t * 30), h = (n * 7919 + 13) % 997;
+        grainIn.style.transform = `translate(${(h % 200) - 100}px, ${((h * 31) % 200) - 100}px)`;
+        if (t < SC[1] || t >= LOOP_AT) { const tt = t >= LOOP_AT ? 0 : t; E.tn.textContent = LANDS.filter((l) => tt >= l + 0.04).length; }
+        if (t >= SC[7] - 0.1) {
+          const sent = t >= TYPE[5] + 0.3;
+          E.tx.forEach((el, i) => { el.style.display = !sent && t >= TYPE[i] ? "inline" : "none"; });
+          E.cph.style.opacity = t < TYPE[0] || sent ? 1 : 0;
+          E.caret.style.opacity = Math.floor((t - SC[7]) * 3.2) % 2 === 0 ? 1 : 0;
+        }
+      }
+      const drive = { t: 0 };
+      tl.fromTo(drive, { t: 0 }, { t: END, duration: END, ease: "none", onUpdate: () => frame(drive.t) }, 0);
+      frame(0);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+    <script type="module" src="assets/js/scene3d.js"></script>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- Cover for find-skills-9x16: the hook frame, the grid full of installed skills (3D, scene3d.js in COVER3D mode)
+     under the title and the tally. Rendered by build/cover.cjs; the title sits inside the centre 1080x1350. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Find Skills cover</title>
+    <script type="importmap">{"imports":{"three":"../assets/vendor/three/three.module.min.js","three/addons/":"../assets/vendor/three/addons/"}}</script>
+    <script src="../assets/js/timing.js"></script>
+    <style>
+@font-face { font-family: "BC"; font-weight: 800; src: url("../assets/fonts/barlow-condensed-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "BC"; font-weight: 900; src: url("../assets/fonts/barlow-condensed-latin-900-normal.woff2") format("woff2"); }
+@font-face { font-family: "IN"; font-weight: 500; src: url("../assets/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "IN"; font-weight: 600; src: url("../assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "IN"; font-weight: 700; src: url("../assets/fonts/inter-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "IN"; font-weight: 800; src: url("../assets/fonts/inter-latin-800-normal.woff2") format("woff2"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #06070C; }
+#gl { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; display: block; }
+.vign { position: absolute; inset: 0; background: radial-gradient(ellipse 82% 62% at 50% 44%, rgba(3,4,8,0) 58%, rgba(3,4,8,.55) 100%); }
+#grain { position: absolute; inset: 0; background: url("../assets/img/grain.png"); opacity: .12; mix-blend-mode: soft-light; }
+.col { position: absolute; left: 60px; width: 890px; text-align: center; white-space: nowrap; }
+.hl { font-family: "BC"; font-weight: 900; text-transform: uppercase; line-height: .92; color: #F6F3EE; text-shadow: 0 6px 30px rgba(3,4,8,.75); }
+.hot { display: inline-block; background: linear-gradient(90deg, #FF7A2F, #FFB547); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; filter: drop-shadow(0 0 22px rgba(255,122,47,.5)); }
+.tally { font: 800 36px/1 "IN"; letter-spacing: 4px; color: #C3C7D4; }
+.tally b { color: #3DDC84; font-size: 48px; vertical-align: -3px; }
+    </style>
+  </head>
+  <body>
+    <canvas id="gl"></canvas>
+    <div class="vign"></div>
+    <div class="col hl" style="top: 300px; font-size: 128px">Stop installing</div>
+    <div class="col hl" style="top: 420px; font-size: 110px"><span class="hot">skills one by one</span></div>
+    <div class="col tally" style="top: 1150px">INSTALLED <b>9</b> OF 1,528,982</div>
+    <div id="grain"></div>
+    <script>window.COVER3D = true;</script>
+    <script type="module" src="../assets/js/scene3d.js"></script>
+  </body>
+</html>
