@@ -57,7 +57,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
 .cpost .av { left: 26px; top: 34px; width: 82px; height: 82px; }
 .cpost .who { position: absolute; left: 134px; top: 30px; font: 700 26px/1 "IN"; color: var(--muted); }
 .cpost .msg { position: absolute; left: 132px; top: 66px; font: 900 72px/1 "BC"; letter-spacing: 2px; color: #fff; }
-.toast { position: absolute; left: 230px; top: 1130px; width: 520px; height: 84px; border-radius: 42px; background: rgba(61,220,132,.14); border: 2px solid var(--green); display: flex; align-items: center; justify-content: center; gap: 14px; font: 800 32px/1 "IN"; color: var(--green); }
+.toast { position: absolute; left: 245px; top: 650px; width: 520px; height: 84px; border-radius: 42px; background: rgba(61,220,132,.14); border: 2px solid var(--green); display: flex; align-items: center; justify-content: center; gap: 14px; font: 800 32px/1 "IN"; color: var(--green); }
 .toast i { width: 40px; height: 40px; border-radius: 50%; background: var(--green); position: relative; flex: none; }
 .toast i::after { content: ""; position: absolute; left: 12px; top: 8px; width: 10px; height: 18px; border: solid #06070C; border-width: 0 5px 5px 0; transform: rotate(45deg); }
 
@@ -86,11 +86,11 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
           <div class="scene" id="h0" style="opacity: 1">
             <div class="col hl" style="top: 288px; font-size: 120px"><span id="h0a" class="ib">Stop installing</span></div>
             <div class="col hl" style="top: 404px; font-size: 104px"><span id="h0b" class="hot">skills one by one</span></div>
-            <div class="col tally" style="top: 1150px">INSTALLED <b id="tn">3</b> OF 1,528,982</div>
+            <div class="col tally" style="top: 520px">INSTALLED <b id="tn">3</b> OF 1,528,982</div>
           </div>
           <div class="scene" id="h1">
             <div class="col hl" style="top: 300px; font-size: 112px"><span id="h1a" class="ib">Over <span class="hot">1.5 million</span></span></div>
-            <div class="col lab" style="top: 884px"><span id="h1b" class="ib">skills on skills.sh &middot; 23 Nov 2026</span></div>
+            <div class="col lab" style="top: 828px"><span id="h1b" class="ib">skills on skills.sh &middot; 23 Nov 2026</span></div>
           </div>
           <div class="scene" id="h2">
             <div class="col hl" style="top: 290px; font-size: 112px"><span id="h2a" class="ib">This <span class="hot">free</span> skill</span></div>
@@ -117,7 +117,6 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
               <div class="ctx"><span id="t0">S</span><span id="t1">K</span><span id="t2">I</span><span id="t3">L</span><span id="t4">L</span><span id="t5">S</span><i id="caret" class="caret"></i></div>
               <div id="send" class="send"><svg viewBox="0 0 44 44"><path d="M6 22 L38 8 L28 38 L22 25 Z" fill="#06070C"/></svg></div>
             </div>
-            <div id="cpost" class="cpost"><div class="av"></div><div class="who">You &middot; now</div><div class="msg">SKILLS</div></div>
             <div id="toast" class="toast"><i></i>Link sent: find-skills</div>
           </div>
         </div>
@@ -179,7 +178,6 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
       inY("#cbx", SC[7] + 0.05, 240, 0.32);
       const TYPE = [0, 1, 2, 3, 4, 5].map((i) => W(7, "skills") - 0.12 + i * 0.07);
       tl.to("#send", { scale: 0.82, duration: 0.08, yoyo: true, repeat: 1 }, TYPE[5] + 0.22);
-      tl.fromTo("#cpost", { y: -110, scale: 0.85, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.28, ease: "back.out(2)" }, TYPE[5] + 0.32);
       tl.fromTo("#toast", { y: 40, scale: 0.8, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.26, ease: "back.out(2.4)" }, W(7, "link") - 0.05);
 
       // captions: words pop in as they're spoken; the spoken word sits in an orange pill

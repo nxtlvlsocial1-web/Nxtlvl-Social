@@ -188,6 +188,15 @@ for k in range(6):
     add(W(7, "skills") - 0.12 + k * 0.07, "key", -10, 0.2)
 add(W(7, "send"), "pop_hi", -9)
 add(W(7, "link") - 0.05, "ding", -11)
+# the characters
+add(W(2, "this") + 0.3, "impact_small", -6, 0.4)   # the Skill Finder crash-lands (poof)
+add(W(2, "this") + 0.05, "whoosh_short", -12, 0.5)
+add(W(3, "find"), "pop_hi", -13, 0.4)                # it jumps on "find-skills"
+add(SC[5] + 0.1, "whoosh_long", -9, 0.4)             # jetpack lifts off
+add(W(5, "picks") + 0.55, "whoosh_long", -14, -0.2)  # flies back with the cards
+add(W(7, "send"), "impact_small", -8)                 # high five
+for k in range(6):
+    add(W(6, "four") + 0.8 + k * 0.07, "ding", -20, -0.6 + 0.24 * k)  # confetti on 4.5M
 add(SC[-1] - 0.25, "whoosh", -9, -0.3)  # into the loop
 
 
