@@ -15,16 +15,17 @@ times). Literal on purpose: a phone in your hand, the views you refresh, the mom
 python3 build/generate.py
 """
 import json
+import math
 import os
 import random
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fx import T, js, sfx, ft, to, st, LINES, L0, L1, JS, SFX, ROOT  # noqa: E402
-from fx import cree_html, cree_to, pose, cree_hop, sparkle, P  # noqa: E402
+from fx import cree_html, cree_to, pose, cree_hop, sparkle, P, sweat, say, cree_wiggle, blink  # noqa: E402
 
 random.seed(5)
-DUR = round(L1["r6"] + 1.6, 2)
+DUR = round(L1["r6"] + 1.15, 2)
 T0 = {k: (L0[k], L1[k]) for k in LINES}
 
 HTMLS, OPEN, WID = [], [None], [0]
@@ -97,7 +98,7 @@ BOK = "".join(f'<i class="bok" style="left:{x}px;top:{y}px;width:{r}px;height:{r
 THUMB = '<div class="thumb" style="{}"><i></i><b>My budget meal hack</b></div>'
 S1 = ('<div class="scrn" id="s1" style="opacity:1"><div class="s1top">New reel</div>' + THUMB.format("left:36px;top:150px;width:190px;height:330px")
       + '<div class="cap">My budget meal hack that changed everything... #foodie #budget</div><div class="share">Share</div></div>')
-COUNTS = [("0", 0), ("4", 2.0), ("6", T("r0", "Every")), ("7", T("r0", "five") + .3), ("9", T("r0", "minutes")),
+COUNTS = [("0", 0), ("4", T("r0", "refresh") + .1), ("6", T("r0", "Every")), ("7", T("r0", "five") + .3), ("9", T("r0", "minutes")),
           ("12", T("r1", "12")), ("19", T("r1", "19")), ("23", T("r1", "23") + .25)]
 CLOCKS = ["9:00 PM", "9:05 PM", "9:10 PM", "9:15 PM", "9:20 PM", "9:40 PM", "10:15 PM", "11:30 PM"]
 S2 = ('<div class="scrn" id="s2">' + THUMB.format("left:214px;top:110px;width:200px;height:200px;border-radius:24px")
@@ -136,7 +137,7 @@ CTA = '<div class="cta" id="cta"><b>COMMENT <em>GROW</em></b><small id="ctas">an
 
 # =======================================================================================================================
 # TIMELINE
-CF = (900, 1760, .3)
+CF = (930, 1810, .32)
 js(f'tl.fromTo("#ph", {{y: 0, rotation: -.6}}, {{y: -8, rotation: .6, duration: 2.1, yoyo: true, repeat: {int(DUR / 2.1)}, ease: "sine.inOut", immediateRender: false}}, 0);')
 
 # ---- r0 relatable: share, refresh, refresh ------------------------------------------------------------------------------------------
@@ -146,10 +147,10 @@ head("h0", [[("You", ""), ("post", ""), ("a", ""), ("reel…", "")], [("and", ""
 stat(.1, "POV: 9:00 PM")
 tap(T("r0", "post") + .1, 330, 1080)
 ft("#toast", T("r0", "post") + .2, .25, "{opacity: 0, y: -30}", "{opacity: 1, y: 0}", "back.out(2)")
-to("#toast", 1.4, .2, "{opacity: 0, y: -30}")
-screen("s2", 1.45)
-st("#vn0", 1.45, "{opacity: 1}")
-st("#ck0", 1.45, "{opacity: 1}")
+to("#toast", 1.1, .2, "{opacity: 0, y: -30}")
+screen("s2", 1.2)
+st("#vn0", 1.2, "{opacity: 1}")
+st("#ck0", 1.2, "{opacity: 1}")
 for i in range(1, len(COUNTS)):
     t = COUNTS[i][1]
     js(f'tl.fromTo("#spin", {{opacity: 1, rotation: 0}}, {{rotation: 540, opacity: 0, duration: .45, ease: "power2.out", immediateRender: false}}, {t - .4:.3f});')
@@ -162,7 +163,7 @@ for i in range(1, len(COUNTS)):
     sfx("swish", t - .4)
     sfx("tick", t)
 head("h0b", [[("Every.", ""), ("Five.", "pk"), ("Minutes.", "")]], "r0", size=108, after=T("r0", "Every") - .05)
-stat(2.0, "REFRESHING…")
+stat(T("r0", "refresh"), "REFRESHING…")
 
 # ---- r1: 12 views. 19. 23. -----------------------------------------------------------------------------------------------------------
 head("h1", [[("12", ""), ("views…", "dim")], [("19…", ""), ("23.", "")]], "r1", size=120)
@@ -262,12 +263,133 @@ ft("#cta", t6 - .05, .35, "{opacity: 0, scale: .6}", "{opacity: 1, scale: 1}", "
 js(f'tl.fromTo("#cta b", {{scale: 1}}, {{scale: 1.05, duration: .35, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}}, {T("r6", "GROW") + .3:.3f});')
 sfx("pop", t6)
 sfx("ding2", T("r6", "GROW"))
-cree_to(t6 - .1, *P(CF[0], CF[1] + 300, CF[2]), d=.01)
-st("#cree", t6 - .1, "{opacity: 1}")
-pose(t6 - .1, "wave", flip=False, squash=False)
-cree_to(t6 - .05, *P(*CF), d=.45, ease="back.out(1.8)")
+cree_to(t6 - .1, *P(*CF), d=.4, ease="power3.inOut")
+pose(t6 - .05, "wave", flip=False)
 cree_hop(T("r6", "GROW") + .1, 40, 2)
 sparkle(t6 + .2, .6)
+
+
+# ---- Cree all the way through (owner: "add the Creedom mascot like we do") -----------------------------------------------------------
+CR = (930, 1810, .3)               # bottom right, beside the phone
+CL = (150, 1810, .3)               # bottom left (while the phone pushes right in r4)
+cree_to(.6, *P(CR[0] + 260, CR[1], CR[2]), d=.01)
+st("#cree", .6, "{opacity: 1}")
+pose(.6, "phone", flip=False, squash=False)
+cree_to(.65, *P(*CR), d=.45, ease="back.out(1.6)")
+sfx("pop", .7)
+js(f'tl.fromTo("#creep", {{y: 0}}, {{y: -7, duration: .6, ease: "sine.inOut", yoyo: true, repeat: {int(DUR / .6)}, immediateRender: false}}, 0);')
+for k in range(int(DUR / 2.4)):
+    blink(1.4 + k * 2.4)
+pose(T("r0", "Every"), "think")
+cree_wiggle(T("r0", "minutes"), 2, 6)
+pose(T("r1", "12"), "stand")
+pose(T("r1", "23"), "sad")
+sweat(T("r1", "23"), .9)
+pose(T("r2", "hates") - .05, "shock")
+cree_hop(T("r2", "hates"), 50, 1)
+say(T("r2", "hates") + .1, "!", .6, left=True)
+pose(T0["r3"][0] + .1, "stand")
+pose(T("r3", "People") - .1, "mag", flip=True)
+cree_wiggle(T("r3", "two"), 2, 5)
+cree_to(T0["r4"][0] - .1, *P(*CL), d=.5)
+pose(T0["r4"][0] + .2, "point", flip=False)
+say(T("r4", "why"), "?", .8)
+cree_to(T0["r5"][0] - .2, *P(*CR), d=.45)
+pose(T0["r5"][0] - .1, "present", flip=True)
+pose(T("r5", "fix") + .1, "proud")
+cree_hop(T("r5", "fix") + .15, 45, 2)
+sparkle(T("r5", "fix") + .1, .7)
+
+# =======================================================================================================================
+# ENERGY PASS (owner, 2026-11-23: "very dull animations, make it more attractive and fast pace with so many animations")
+ICON_REF = ('<svg viewBox="0 0 100 100"><path d="M78 30 A36 36 0 1 0 84 62" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>'
+            '<path d="M70 14 L82 32 L62 38 Z" fill="currentColor"/></svg>')
+ICON_EYE = ('<svg viewBox="0 0 100 60"><path d="M4 30 Q50 -14 96 30 Q50 74 4 30 Z" fill="none" stroke="currentColor" stroke-width="8"/>'
+            '<circle cx="50" cy="30" r="13" fill="currentColor"/></svg>')
+ICON_HEART = '<svg viewBox="0 0 40 36"><path d="M20 34 C4 22 0 14 4 8 C8 1 17 2 20 9 C23 2 32 1 36 8 C40 14 36 22 20 34 Z" fill="currentColor"/></svg>'
+ICON_BOLT = '<svg viewBox="0 0 60 100"><path d="M36 0 L4 58 H28 L20 100 L56 38 H32 Z" fill="#ffd23f"/></svg>'
+ICON_CHECK = '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#2fbf71"/><path d="M13 25 L21 33 L36 16" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+FXB, FXF = "", ""
+# giant outlined words behind the phone
+BIG = [("REFRESH", T("r0", "refresh"), 0), ("REFRESH", T("r0", "Every"), 1), ("REFRESH", T("r0", "minutes"), 2),
+       ("12", T("r1", "12"), 3), ("19", T("r1", "19"), 4), ("23", T("r1", "23"), 5), ("0:02", T("r3", "two"), 6), ("FIX IT", T("r5", "fix"), 7)]
+for i, (w, t, k) in enumerate(BIG):
+    big = w in ("REFRESH", "FIX IT")
+    FXB += f'<div class="giant{" g2" if big else ""}" id="gt{i}">{w}</div>'
+    ys = (700, 980, 1260, 880, 880, 880, 900, 1000)[k]
+    fr = -1 if k % 2 else 1
+    js(f'tl.fromTo("#gt{i}", {{opacity: 0, x: {fr * 700}, y: {ys}, scale: 1.3, rotation: {fr * -8}}}, {{keyframes: [{{opacity: .9, x: 0, y: {ys}, scale: 1, rotation: {fr * -4}, duration: .22, ease: "power4.out"}}, '
+       f'{{x: {fr * -60}, duration: .9, ease: "none"}}, {{opacity: 0, x: {fr * -700}, duration: .25, ease: "power3.in"}}], immediateRender: false}}, {t - .05:.3f});')
+# refresh arrows orbiting the phone, sad notifications
+for k in range(3):
+    FXF += f'<i class="orb" id="ob{k}">{ICON_REF}</i>'
+    js(f'tl.fromTo("#ob{k}", {{opacity: 0, rotation: {k * 120}, scale: .4}}, {{keyframes: [{{opacity: 1, scale: 1, duration: .25}}, {{rotation: {k * 120 + 720}, duration: {T0["r1"][1] - 1.6:.2f}, ease: "none"}}, '
+       f'{{opacity: 0, scale: .4, duration: .2}}], immediateRender: false}}, {T("r0", "refresh") - .1 + k * .25:.3f});')
+NOTIFS = [("eye", "Seen by 4", 120, 760), ("heart", "0 new likes", 640, 900), ("eye", "No new views", 90, 1180), ("heart", "1 like · from mom", 600, 1330)]
+for k, (ic, txt, x, y) in enumerate(NOTIFS):
+    FXF += f'<div class="nt" id="nt{k}" style="left:{x}px;top:{y}px"><i>{ICON_EYE if ic == "eye" else ICON_HEART}</i>{txt}</div>'
+    tk = (T("r1", "12"), T("r1", "views") + .3, T("r1", "19"), T("r1", "23"))[k]
+    ft(f"#nt{k}", tk, .3, "{opacity: 0, scale: .5, y: 30}", "{opacity: 1, scale: 1, y: 0}", "back.out(2.6)")
+    js(f'tl.to("#nt{k}", {{y: -40, opacity: 0, duration: .5, ease: "power2.in"}}, {T0["r2"][0] - .25:.3f});')
+    sfx("pop", tk)
+# little "+n" pops from the counter
+for i in range(1, len(COUNTS)):
+    d = int(COUNTS[i][0]) - int(COUNTS[i - 1][0])
+    FXF += f'<b class="plus" id="pl{i}">+{d}</b>'
+    js(f'tl.fromTo("#pl{i}", {{opacity: 0, y: 0, scale: .5}}, {{keyframes: [{{opacity: 1, y: -40, scale: 1, duration: .25, ease: "back.out(3)"}}, {{opacity: 0, y: -110, duration: .45}}], '
+       f'immediateRender: false}}, {COUNTS[i][1]:.3f});')
+# the phone never sits still: a 3D sway, and a punch on every beat
+js(f'tl.fromTo("#ph", {{rotationY: -6, rotationX: 3, transformPerspective: 1600}}, {{rotationY: 6, rotationX: -3, duration: 1.3, yoyo: true, repeat: {int(DUR / 1.3)}, '
+   f'ease: "sine.inOut", immediateRender: false}}, 0);')
+BEATS = [T("r0", "post"), T("r0", "refresh"), T("r0", "Every"), T("r0", "five"), T("r0", "minutes"), T("r1", "12"), T("r1", "19"), T("r1", "23"),
+         T("r2", "algorithm"), T("r2", "hates"), T("r3", "But"), T("r3", "People"), T("r3", "two"), T("r4", "why"), T("r5", "check"), T("r5", "Creedom"),
+         T("r5", "where"), T("r5", "fix"), T("r6", "GROW")]
+for t in BEATS:
+    js(f'tl.fromTo("#punch", {{scale: 1}}, {{keyframes: [{{scale: 1.045, duration: .06, ease: "power2.out"}}, {{scale: 1, duration: .3, ease: "power3.out"}}], immediateRender: false}}, {t - .02:.3f});')
+# conflict: lightning, red alarm, shake
+for k, (x, y, r) in enumerate(((90, 560, -15), (860, 620, 18), (130, 1180, 10), (840, 1240, -12))):
+    FXF += f'<i class="bolt" id="bt{k}" style="left:{x}px;top:{y}px;transform:rotate({r}deg)">{ICON_BOLT}</i>'
+    js(f'tl.fromTo("#bt{k}", {{opacity: 0, scale: .3}}, {{keyframes: [{{opacity: 1, scale: 1.1, duration: .1}}, {{opacity: .2, duration: .08}}, {{opacity: 1, duration: .08}}, '
+       f'{{opacity: 0, scale: .8, duration: .4}}], immediateRender: false}}, {T("r2", "hates") + k * .06:.3f});')
+js(f'tl.fromTo("#alarm", {{opacity: 0}}, {{opacity: .55, duration: .18, yoyo: true, repeat: 5, ease: "sine.inOut", immediateRender: false}}, {T("r2", "algorithm"):.3f});')
+js(f'tl.fromTo("#punch", {{x: 0, y: 0}}, {{keyframes: [{{x: -16, y: 6, duration: .04}}, {{x: 14, y: -6, duration: .04}}, {{x: -10, y: 4, duration: .04}}, {{x: 8, duration: .04}}, '
+   f'{{x: 0, y: 0, duration: .04}}], immediateRender: false}}, {T("r2", "hates") + .05:.3f});')
+# realisation: glitch hit, siren, viewers leave with trails
+for k in range(6):
+    FXF += f'<i class="gl" id="gl{k}" style="top:{random.randint(300, 1600)}px;height:{random.randint(16, 70)}px;background:{random.choice(("#ff3b4e", "#00e5ff", "#ffffff"))}"></i>'
+    js(f'tl.fromTo("#gl{k}", {{opacity: 0, x: 0}}, {{keyframes: [{{opacity: .8, x: {random.choice((-80, 80))}, duration: .05}}, {{opacity: 0, duration: .05}}, '
+       f'{{opacity: .6, x: {random.choice((-40, 40))}, duration: .05}}, {{opacity: 0, duration: .05}}], immediateRender: false}}, {T0["r3"][0] - .05 + k * .03:.3f});')
+sfx("glitch", T0["r3"][0])
+js(f'tl.fromTo("#siren", {{opacity: 0}}, {{opacity: .5, duration: .3, yoyo: true, repeat: 9, ease: "sine.inOut", immediateRender: false}}, {T("r3", "People"):.3f});')
+for k in range(8):
+    FXF += f'<i class="walk" id="wk{k}" style="left:{250 + (k % 4) * 30}px;top:{820 + (k // 4) * 60}px"></i>'
+    js(f'tl.fromTo("#wk{k}", {{opacity: 0, x: 0, y: 0}}, {{keyframes: [{{opacity: 1, duration: .1}}, {{x: {random.randint(520, 760)}, y: {random.randint(-160, 120)}, opacity: 0, '
+       f'duration: .7, ease: "power2.in"}}], immediateRender: false}}, {T("r3", "People") + k * .05:.3f});')
+# action: spin into Creedom, burst rings, checkmark confetti, FIXED stamp
+js(f'tl.fromTo("#pw", {{rotationY: 0, transformPerspective: 1600}}, {{rotationY: 360, duration: .55, ease: "power3.inOut", immediateRender: false}}, {T0["r5"][0] - .25:.3f});')
+for k in range(3):
+    FXF += f'<i class="ring" id="rg{k}"></i>'
+    js(f'tl.fromTo("#rg{k}", {{opacity: .9, scale: .2}}, {{opacity: 0, scale: {3 + k}, duration: .7, ease: "power2.out", immediateRender: false}}, {T0["r5"][0] + k * .1:.3f});')
+for k in range(14):
+    FXF += f'<i class="ck" id="ck_{k}">{ICON_CHECK}</i>'
+    a = random.uniform(0, 6.28)
+    js(f'tl.fromTo("#ck_{k}", {{opacity: 0, x: 0, y: 0, scale: .3, rotation: 0}}, {{keyframes: [{{opacity: 1, scale: 1, x: {math.cos(a) * 300:.0f}, y: {math.sin(a) * 300 - 80:.0f}, '
+       f'rotation: {random.randint(-90, 90)}, duration: .45, ease: "power3.out"}}, {{opacity: 0, y: {math.sin(a) * 300 + 120:.0f}, duration: .5, ease: "power2.in"}}], '
+       f'immediateRender: false}}, {T("r5", "fix") + k * .015:.3f});')
+FXF += '<div class="fixed" id="fixed">FIXED</div>'
+ft("#fixed", T("r5", "fix") + .15, .22, "{opacity: 0, scale: 2.6, rotation: -20}", "{opacity: 1, scale: 1, rotation: -10}", "power4.in")
+to("#fixed", T0["r6"][0] - .3, .2, "{opacity: 0}")
+sfx("stamp", T("r5", "fix") + .3)
+js(f'tl.fromTo("#post", {{scale: 1}}, {{scale: 1.06, duration: .2, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false}}, {T("r5", "fix") + .5:.3f});')
+# CTA confetti
+for k in range(50):
+    FXF += f'<i class="cf" id="cf{k}" style="background:{random.choice(("#ff5fb7", "#F343A2", "#ffd27a", "#1a1020", "#ffffff"))};width:{random.randint(12, 20)}px;height:{random.randint(22, 32)}px"></i>'
+    x0 = random.uniform(0, 1080)
+    js(f'tl.fromTo("#cf{k}", {{x: {x0:.0f}, y: -60, rotation: {random.randint(0, 180)}, opacity: 1}}, {{x: {x0 + random.uniform(-160, 160):.0f}, y: 2000, rotation: {random.randint(360, 900)}, '
+       f'rotationX: 720, opacity: 1, duration: {random.uniform(2.2, 3.2):.2f}, ease: "none", immediateRender: false}}, {T0["r6"][0] + random.uniform(0, .8):.3f});')
+# backdrop drift
+js(f'tl.fromTo("#bgn .bok", {{x: 0, y: 0}}, {{x: (i) => [60, -80, 70, -60, 50][i], y: (i) => [-90, 70, -60, 80, -40][i], duration: {DUR / 2:.2f}, yoyo: true, repeat: 1, '
+   f'ease: "sine.inOut", immediateRender: false}}, 0);')
 
 CSS = open(os.path.join(ROOT, "build", "style.css")).read()
 html = f"""<!doctype html>
@@ -282,7 +404,8 @@ html = f"""<!doctype html>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR:.2f}" data-fps="30" data-width="1080" data-height="1920">
       <div class="bg" id="bgn">{BOK}</div><div class="bg" id="bgr"></div><div class="bg" id="bgl"></div>
-      {PHONE}{VILLAIN}{CTA}
+      <div id="punch">
+      <div class="fxb">{FXB}</div>{PHONE}{VILLAIN}<div class="fxf">{FXF}</div></div><div id="alarm"></div><div id="siren"></div>{CTA}
       <div style="position:absolute;inset:0;z-index:33;pointer-events:none">{cree_html()}</div>
       {"".join(STAT)}
       {chr(10).join(HTMLS)}

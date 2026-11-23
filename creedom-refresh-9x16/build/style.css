@@ -105,6 +105,32 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0a1
 .cta small { display: block; margin-top: 28px; font: 700 40px Inter; color: #1a1020; }
 #flash { position: absolute; inset: 0; z-index: 39; background: #fff; opacity: 0; pointer-events: none; }
 #grain { position: absolute; inset: 0; opacity: .06; background: url(assets/img/grain.png); mix-blend-mode: overlay; pointer-events: none; z-index: 42; }
+
+/* energy pass */
+#punch { position: absolute; inset: 0; transform-origin: 50% 55%; }
+.fxb, .fxf { position: absolute; inset: 0; pointer-events: none; }
+.fxb { z-index: 5; } .fxf { z-index: 31; }
+.giant { position: absolute; left: 0; right: 0; top: 0; text-align: center; font: 800 380px/1 Inter; letter-spacing: -.06em; color: transparent; opacity: 0;
+  -webkit-text-stroke: 4px rgba(255,255,255,.55); white-space: nowrap; }
+.giant.g2 { font-size: 230px; -webkit-text-stroke: 4px rgba(255,95,183,.7); }
+.orb { position: absolute; left: 495px; top: 620px; width: 90px; height: 90px; color: #ff5fb7; opacity: 0; transform-origin: 45px 575px; filter: drop-shadow(0 0 12px rgba(255,95,183,.8)); }
+.orb svg { width: 100%; height: 100%; }
+.nt { position: absolute; display: flex; align-items: center; gap: 14px; padding: 16px 26px; border-radius: 40px; background: rgba(40,40,52,.92); border: 2px solid rgba(255,255,255,.18);
+  font: 700 32px Inter; color: #cfcfe0; opacity: 0; white-space: nowrap; box-shadow: 0 14px 30px rgba(0,0,0,.4); }
+.nt i { width: 40px; height: 34px; color: #8d8aa8; display: flex; } .nt i svg { width: 100%; height: 100%; }
+.plus { position: absolute; left: 640px; top: 930px; font: 800 64px Inter; color: #7dffb0; opacity: 0; text-shadow: 0 4px 20px rgba(0,0,0,.6); }
+.bolt { position: absolute; width: 90px; height: 150px; opacity: 0; filter: drop-shadow(0 0 16px rgba(255,210,60,.9)); } .bolt svg { width: 100%; height: 100%; }
+#alarm { position: absolute; inset: 0; z-index: 34; pointer-events: none; opacity: 0; background: radial-gradient(70% 55% at 50% 50%, rgba(255,40,60,0) 50%, rgba(255,40,60,.75) 100%); }
+#siren { position: absolute; inset: 0; z-index: 34; pointer-events: none; opacity: 0; background: radial-gradient(80% 60% at 50% 50%, rgba(255,20,40,0) 45%, rgba(255,20,40,.65) 100%); }
+.gl { position: absolute; left: 0; width: 1080px; opacity: 0; mix-blend-mode: screen; }
+.walk { position: absolute; width: 34px; height: 56px; opacity: 0; filter: drop-shadow(-30px 0 0 rgba(255,255,255,.18)) drop-shadow(-60px 0 0 rgba(255,255,255,.08)); }
+.walk::before { content: ""; position: absolute; left: 7px; top: 0; width: 20px; height: 20px; border-radius: 50%; background: #e7e3ff; }
+.walk::after { content: ""; position: absolute; left: 0; top: 24px; width: 34px; height: 32px; border-radius: 16px 16px 6px 6px; background: #e7e3ff; }
+.ring { position: absolute; left: 390px; top: 1000px; width: 300px; height: 300px; border-radius: 50%; border: 10px solid #F343A2; opacity: 0; }
+.ck { position: absolute; left: 516px; top: 1100px; width: 54px; height: 54px; opacity: 0; } .ck svg { width: 100%; height: 100%; }
+.fixed { position: absolute; left: 600px; top: 640px; padding: 10px 30px; border: 10px solid #2fbf71; border-radius: 22px; font: 800 96px/1 Inter; color: #2fbf71; opacity: 0;
+  background: rgba(255,255,255,.9); letter-spacing: .02em; }
+.cf { position: absolute; left: 0; top: 0; border-radius: 3px; opacity: 0; }
 /* Cree */
 #cree { position: absolute; left: 0; top: 0; width: 820px; height: 820px; z-index: 33; opacity: 0; transform-origin: 410px 500px; pointer-events: none;
   filter: drop-shadow(0 0 30px rgba(255,90,180,.7)); }

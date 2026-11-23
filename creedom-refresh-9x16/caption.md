@@ -42,6 +42,6 @@ Creedom: [CREEDOM LINK]
 
 ## Notes
 
-- Voice: the owner's ElevenLabs take (Blondie, "Intense Woman", Eleven v4), pauses trimmed to a breath, natural speed.
+- Voice: the owner's ElevenLabs take (Blondie, "Intense Woman", Eleven v4), pauses trimmed to a breath and sped up 12% (pitch kept) to land near 28 s.
 - The view counts, the retention line, the "4.6 / 5" score and the flagged moments are illustrations (the check screen is
   labelled EXAMPLE), not a real account.
