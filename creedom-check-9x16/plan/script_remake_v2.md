@@ -22,3 +22,5 @@ D. "Stop posting reels you haven't graded." (contrarian)
 
 Needs before building: run one real reel through Creedom CHECK, then the fixed version: the two real scores, the three
 real flags with timestamps, and a screen recording. Optional: the real views of the fixed reel once posted.
+
+Owner, 2026-11-23: these remakes are posted once, with no re-cuts, Story polls or collabs. Hook A is the one we build.

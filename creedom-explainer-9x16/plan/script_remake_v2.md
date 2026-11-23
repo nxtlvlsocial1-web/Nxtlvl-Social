@@ -22,3 +22,5 @@ C. "I said two words at second 3 and lost [X] % of my viewers." (stakes; needs t
 
 Needs before building: the owner's retention graph screenshot (Engagement tab) for the real [DROP] second and %, a screen
 recording of the Reel Analyzer run on this reel, and OK to show the 304-view numbers.
+
+Owner, 2026-11-23: these remakes are posted once, with no re-cuts, Story polls or collabs. Hook A is the one we build.
