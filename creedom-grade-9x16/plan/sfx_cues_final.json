@@ -1,0 +1,102 @@
+[
+{
+"t": 0.0,
+"kind": "riser_short",
+"file": "riser_short_riser.wav"
+},
+{
+"t": 0.62,
+"kind": "buzzer",
+"file": "buzzer_buzzer.wav"
+},
+{
+"t": 0.64,
+"kind": "impact",
+"file": "impact_impact.wav"
+},
+{
+"t": 4.383,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 4.563,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 4.743,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 6.233,
+"kind": "g_wrong",
+"file": "g_wrong_g_wrong.wav"
+},
+{
+"t": 8.25,
+"kind": "g_wrong",
+"file": "g_wrong_g_wrong.wav"
+},
+{
+"t": 10.567,
+"kind": "thump",
+"file": "thump_impact.wav"
+},
+{
+"t": 12.45,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 12.67,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 12.89,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 14.783,
+"kind": "g_levelup",
+"file": "g_levelup_g_levelup.wav"
+},
+{
+"t": 14.883,
+"kind": "sparkle",
+"file": "sparkle_sparkle.wav"
+},
+{
+"t": 15.75,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_deep.wav"
+},
+{
+"t": 16.05,
+"kind": "sparkle",
+"file": "sparkle_sparkle.wav"
+},
+{
+"t": 21.6,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 24.3,
+"kind": "typing",
+"file": "typing_typing.wav"
+},
+{
+"t": 24.9,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 25.1,
+"kind": "notify",
+"file": "notify_notify.wav"
+}
+]

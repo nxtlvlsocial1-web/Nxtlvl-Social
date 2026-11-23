@@ -1,0 +1,132 @@
+[
+{
+"t": 0.02,
+"kind": "impact",
+"file": "impact_impact.wav"
+},
+{
+"t": 0.3,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 2.367,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 4.45,
+"kind": "screech",
+"file": "screech_screech.wav"
+},
+{
+"t": 4.55,
+"kind": "thump",
+"file": "thump_impact.wav"
+},
+{
+"t": 6.95,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 6.95,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 7.07,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 7.19,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 7.43,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 7.733,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 10.15,
+"kind": "typing",
+"file": "typing_typing.wav"
+},
+{
+"t": 13.983,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 14.433,
+"kind": "ding",
+"file": "ding_notify.wav"
+},
+{
+"t": 14.63,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 16.153,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 17.153,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 18.153,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 19.153,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 20.25,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_deep.wav"
+},
+{
+"t": 20.55,
+"kind": "sparkle",
+"file": "sparkle_sparkle.wav"
+},
+{
+"t": 22.55,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 25.0,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 27.383,
+"kind": "typing",
+"file": "typing_typing.wav"
+},
+{
+"t": 27.933,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 28.133,
+"kind": "notify",
+"file": "notify_notify.wav"
+}
+]
