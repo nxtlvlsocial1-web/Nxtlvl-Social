@@ -5,192 +5,242 @@
 "file": "whoosh_whoosh_a.wav"
 },
 {
-"t": 0.26,
+"t": 0.24,
 "kind": "click",
 "file": "click_click.wav"
 },
 {
-"t": 1.6,
-"kind": "swish",
-"file": "swish_whoosh_c.wav"
-},
-{
-"t": 2.0,
-"kind": "tick",
-"file": "tick_tick.wav"
-},
-{
-"t": 2.98,
-"kind": "swish",
-"file": "swish_whoosh_a.wav"
-},
-{
-"t": 3.34,
-"kind": "swish",
-"file": "swish_whoosh_c.wav"
-},
-{
-"t": 3.38,
-"kind": "tick",
-"file": "tick_tick.wav"
-},
-{
-"t": 3.74,
-"kind": "tick",
-"file": "tick_tick.wav"
-},
-{
-"t": 3.96,
-"kind": "swish",
-"file": "swish_whoosh_a.wav"
-},
-{
-"t": 4.36,
-"kind": "tick",
-"file": "tick_tick.wav"
-},
-{
-"t": 5.52,
-"kind": "swish",
-"file": "swish_whoosh_c.wav"
-},
-{
-"t": 5.92,
-"kind": "tick",
-"file": "tick_tick.wav"
-},
-{
-"t": 8.06,
-"kind": "swish",
-"file": "swish_whoosh_a.wav"
-},
-{
-"t": 8.46,
-"kind": "tick",
-"file": "tick_tick.wav"
-},
-{
-"t": 8.95,
-"kind": "swish",
-"file": "swish_whoosh_c.wav"
-},
-{
-"t": 9.35,
-"kind": "tick",
-"file": "tick_tick.wav"
-},
-{
-"t": 9.4,
-"kind": "error",
-"file": "error_error.wav"
-},
-{
-"t": 10.69,
-"kind": "tick",
-"file": "tick_tick.wav"
-},
-{
-"t": 10.93,
-"kind": "tick",
-"file": "tick_tick.wav"
-},
-{
-"t": 11.17,
-"kind": "tick",
-"file": "tick_tick.wav"
-},
-{
-"t": 11.41,
-"kind": "tick",
-"file": "tick_tick.wav"
-},
-{
-"t": 11.65,
-"kind": "tick",
-"file": "tick_tick.wav"
-},
-{
-"t": 11.89,
-"kind": "tick",
-"file": "tick_tick.wav"
-},
-{
-"t": 12.2,
-"kind": "buzzer",
-"file": "buzzer_buzzer.wav"
-},
-{
-"t": 13.44,
-"kind": "impact",
-"file": "impact_sub_hit.wav"
-},
-{
-"t": 14.5,
-"kind": "stamp",
-"file": "stamp_stamp.wav"
-},
-{
-"t": 16.2,
-"kind": "steps",
-"file": "steps_steps.wav"
-},
-{
-"t": 17.74,
-"kind": "error",
-"file": "error_error.wav"
-},
-{
-"t": 20.2,
-"kind": "riser",
-"file": "riser_riser.wav"
-},
-{
-"t": 22.26,
-"kind": "whoosh_big",
-"file": "whoosh_big_whoosh_big.wav"
-},
-{
-"t": 23.4,
-"kind": "glitch",
-"file": "glitch_glitch.wav"
-},
-{
-"t": 26.82,
-"kind": "error",
-"file": "error_error.wav"
-},
-{
-"t": 27.76,
-"kind": "error",
-"file": "error_error.wav"
-},
-{
-"t": 29.58,
-"kind": "chime",
-"file": "chime_chime.wav"
-},
-{
-"t": 30.57,
-"kind": "click",
-"file": "click_click.wav"
-},
-{
-"t": 30.62,
-"kind": "ding",
-"file": "ding_ding.wav"
-},
-{
-"t": 30.88,
+"t": 0.7,
 "kind": "pop",
 "file": "pop_pop.wav"
 },
 {
-"t": 31.06,
+"t": 1.48,
+"kind": "swish",
+"file": "swish_whoosh_c.wav"
+},
+{
+"t": 1.88,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 2.3,
+"kind": "swish",
+"file": "swish_whoosh_a.wav"
+},
+{
+"t": 2.7,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 2.84,
+"kind": "swish",
+"file": "swish_whoosh_c.wav"
+},
+{
+"t": 3.24,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 3.36,
+"kind": "swish",
+"file": "swish_whoosh_a.wav"
+},
+{
+"t": 3.76,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 4.58,
+"kind": "swish",
+"file": "swish_whoosh_c.wav"
+},
+{
+"t": 4.98,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 4.98,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 5.46,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 6.68,
+"kind": "swish",
+"file": "swish_whoosh_a.wav"
+},
+{
+"t": 7.08,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 7.08,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 7.41,
+"kind": "swish",
+"file": "swish_whoosh_c.wav"
+},
+{
+"t": 7.56,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 7.81,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 7.86,
+"kind": "error",
+"file": "error_error.wav"
+},
+{
+"t": 8.83,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 9.07,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 9.31,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 9.55,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 9.79,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 10.03,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 10.14,
+"kind": "buzzer",
+"file": "buzzer_buzzer.wav"
+},
+{
+"t": 10.14,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 11.12,
+"kind": "impact",
+"file": "impact_sub_hit.wav"
+},
+{
+"t": 11.12,
+"kind": "glitch",
+"file": "glitch_glitch.wav"
+},
+{
+"t": 12.08,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 13.48,
+"kind": "steps",
+"file": "steps_steps.wav"
+},
+{
+"t": 14.72,
+"kind": "error",
+"file": "error_error.wav"
+},
+{
+"t": 16.66,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 16.76,
+"kind": "riser",
+"file": "riser_riser.wav"
+},
+{
+"t": 18.4,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_big.wav"
+},
+{
+"t": 19.4,
+"kind": "glitch",
+"file": "glitch_glitch.wav"
+},
+{
+"t": 22.2,
+"kind": "error",
+"file": "error_error.wav"
+},
+{
+"t": 23.04,
+"kind": "error",
+"file": "error_error.wav"
+},
+{
+"t": 24.58,
+"kind": "chime",
+"file": "chime_chime.wav"
+},
+{
+"t": 25.09,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 25.24,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 25.41,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 25.46,
+"kind": "ding",
+"file": "ding_ding.wav"
+},
+{
+"t": 25.58,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 25.7,
 "kind": "ding2",
 "file": "ding2_ding2.wav"
 },
 {
-"t": 31.16,
+"t": 25.8,
 "kind": "pop",
 "file": "pop_pop.wav"
 }
