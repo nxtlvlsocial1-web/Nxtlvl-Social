@@ -104,7 +104,8 @@ CLOCKS = ["9:00 PM", "9:05 PM", "9:10 PM", "9:15 PM", "9:20 PM", "9:40 PM", "10:
 S2 = ('<div class="scrn" id="s2">' + THUMB.format("left:214px;top:110px;width:200px;height:200px;border-radius:24px")
       + '<div class="ins"><small>Views</small><div class="vnum">' + "".join(f'<b id="vn{i}">{c}</b>' for i, (c, _) in enumerate(COUNTS))
       + '</div><div class="vsub">in the last hour</div></div><i class="spin" id="spin"></i><div class="clock">'
-      + "".join(f'<b id="ck{i}">{c}</b>' for i, c in enumerate(CLOCKS)) + '</div></div>')
+      + "".join(f'<b id="ck{i}">{c}</b>' for i, c in enumerate(CLOCKS)) + '</div>'
+      '<div class="goal"><span>GOAL: 10,000 VIEWS</span><div class="gtrack"><i id="gfill"></i></div><b id="gpct">0%</b></div></div>')
 NOTE = "why does the algorithm hate me".split()
 S3 = ('<div class="scrn" id="s3"><div class="notes"><small>Notes · 11:42 PM</small>' + " ".join(f'<span id="nw{i}" style="opacity:0">{w}</span>' for i, w in enumerate(NOTE))
       + '</div></div>')
@@ -120,7 +121,7 @@ S4 = ('<div class="scrn" id="s4"><div class="rlab">YOUR REEL · WHO KEPT WATCHIN
       '<text x="520" y="640" fill="#6a6a74" font-family="Mono" font-size="24">0:30</text></svg>'
       f'<i class="mark" id="mark"></i><div class="ppl">{PEOPLE}</div><div class="left" id="leftl">PEOPLE LEFT HERE<br>0:02</div><div class="qq" id="qq">?</div></div>')
 S5 = ('<div class="scrn" id="s5"><div class="cr"><i class="dot"></i>Creedom</div>'
-      '<div class="chk">' + THUMB.format("") + '<i class="scanl" id="scanl"></i><div class="meta" id="meta">Checking your reel<small id="mts">BEFORE YOU POST</small></div>'
+      '<div class="chk">' + THUMB.format("") + '<div class="aft" id="aft"><i class="dish"></i><b>Hostel budget meal: 3 steps</b></div><span class="ba" id="ba">AFTER</span>' + '<i class="scanl" id="scanl"></i><div class="meta" id="meta">Checking your reel<small id="mts">BEFORE YOU POST</small></div>'
       '<div class="score" id="score">4.6<span> / 5</span></div></div>'
       '<div class="row bad" id="rw0" style="top:500px"><small>0:01 · WEAK HOOK</small>You\'re talking. Nothing on screen moves.</div>'
       '<div class="row bad" id="rw1" style="top:660px"><small>0:02 · PEOPLE LEAVE HERE</small>Most viewers would scroll past.</div>'
@@ -162,7 +163,7 @@ for i in range(1, len(COUNTS)):
     st("#sbt", t, f'{{textContent: "{CLOCKS[i].split()[0]}"}}')
     sfx("swish", t - .4)
     sfx("tick", t)
-head("h0b", [[("Every.", ""), ("Five.", "pk"), ("Minutes.", "")]], "r0", size=108, after=T("r0", "Every") - .05)
+head("h0b", [[("Every.", ""), ("Five.", "pk"), ("Minutes.", "")]], "r0", size=94, after=T("r0", "Every") - .05)
 stat(T("r0", "refresh"), "REFRESHING…")
 
 # ---- r1: 12 views. 19. 23. -----------------------------------------------------------------------------------------------------------
@@ -272,11 +273,9 @@ sparkle(t6 + .2, .6)
 # ---- Cree all the way through (owner: "add the Creedom mascot like we do") -----------------------------------------------------------
 CR = (930, 1810, .3)               # bottom right, beside the phone
 CL = (150, 1810, .3)               # bottom left (while the phone pushes right in r4)
-cree_to(.6, *P(CR[0] + 260, CR[1], CR[2]), d=.01)
-st("#cree", .6, "{opacity: 1}")
-pose(.6, "phone", flip=False, squash=False)
-cree_to(.65, *P(*CR), d=.45, ease="back.out(1.6)")
-sfx("pop", .7)
+_x, _y, _s = P(*CR)                 # on screen from the first frame (set outside the timeline so the start state sticks)
+js(f'gsap.set("#cree", {{x: {_x - 410:.0f}, y: {_y - 500:.0f}, scale: {_s}, opacity: 1}});')
+js('gsap.set("#cree .cpose", {opacity: 0}); gsap.set("#cp-phone", {opacity: 1});')
 js(f'tl.fromTo("#creep", {{y: 0}}, {{y: -7, duration: .6, ease: "sine.inOut", yoyo: true, repeat: {int(DUR / .6)}, immediateRender: false}}, 0);')
 for k in range(int(DUR / 2.4)):
     blink(1.4 + k * 2.4)
@@ -310,16 +309,6 @@ ICON_HEART = '<svg viewBox="0 0 40 36"><path d="M20 34 C4 22 0 14 4 8 C8 1 17 2 
 ICON_BOLT = '<svg viewBox="0 0 60 100"><path d="M36 0 L4 58 H28 L20 100 L56 38 H32 Z" fill="#ffd23f"/></svg>'
 ICON_CHECK = '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#2fbf71"/><path d="M13 25 L21 33 L36 16" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 FXB, FXF = "", ""
-# giant outlined words behind the phone
-BIG = [("REFRESH", T("r0", "refresh"), 0), ("REFRESH", T("r0", "Every"), 1), ("REFRESH", T("r0", "minutes"), 2),
-       ("12", T("r1", "12"), 3), ("19", T("r1", "19"), 4), ("23", T("r1", "23"), 5), ("0:02", T("r3", "two"), 6), ("FIX IT", T("r5", "fix"), 7)]
-for i, (w, t, k) in enumerate(BIG):
-    big = w in ("REFRESH", "FIX IT")
-    FXB += f'<div class="giant{" g2" if big else ""}" id="gt{i}">{w}</div>'
-    ys = (700, 980, 1260, 880, 880, 880, 900, 1000)[k]
-    fr = -1 if k % 2 else 1
-    js(f'tl.fromTo("#gt{i}", {{opacity: 0, x: {fr * 700}, y: {ys}, scale: 1.3, rotation: {fr * -8}}}, {{keyframes: [{{opacity: .9, x: 0, y: {ys}, scale: 1, rotation: {fr * -4}, duration: .22, ease: "power4.out"}}, '
-       f'{{x: {fr * -60}, duration: .9, ease: "none"}}, {{opacity: 0, x: {fr * -700}, duration: .25, ease: "power3.in"}}], immediateRender: false}}, {t - .05:.3f});')
 # refresh arrows orbiting the phone, sad notifications
 for k in range(3):
     FXF += f'<i class="orb" id="ob{k}">{ICON_REF}</i>'
@@ -387,6 +376,52 @@ for k in range(50):
     x0 = random.uniform(0, 1080)
     js(f'tl.fromTo("#cf{k}", {{x: {x0:.0f}, y: -60, rotation: {random.randint(0, 180)}, opacity: 1}}, {{x: {x0 + random.uniform(-160, 160):.0f}, y: 2000, rotation: {random.randint(360, 900)}, '
        f'rotationX: 720, opacity: 1, duration: {random.uniform(2.2, 3.2):.2f}, ease: "none", immediateRender: false}}, {T0["r6"][0] + random.uniform(0, .8):.3f});')
+
+# ---- more visual concepts -------------------------------------------------------------------------------------------------------
+# a finger pulls to refresh on every refresh
+FINGER = ('<svg viewBox="0 0 80 120"><path d="M30 8 Q30 0 38 0 Q46 0 46 8 V54 L60 50 Q72 48 74 60 L70 96 Q66 116 46 118 H34 Q20 116 16 100 L8 70 Q6 60 16 60 '
+          'Q24 60 30 70 Z" fill="#ffd9c2" stroke="#c98d74" stroke-width="3"/></svg>')
+FXF += f'<i class="finger" id="fing">{FINGER}</i>'
+for i in range(1, len(COUNTS)):
+    t = COUNTS[i][1]
+    js(f'tl.fromTo("#fing", {{opacity: 0, y: 0, x: 0}}, {{keyframes: [{{opacity: 1, duration: .08}}, {{y: 170, duration: .3, ease: "power2.inOut"}}, {{opacity: 0, duration: .1}}], '
+       f'immediateRender: false}}, {t - .5:.3f});')
+# the goal bar crawls
+for i, (c, t) in enumerate(COUNTS):
+    pct = int(c) / 10000 * 100
+    js(f'tl.to("#gfill", {{width: "{max(pct * 4, .6):.2f}%", duration: .3, ease: "power2.out"}}, {t:.3f});')
+    st("#gpct", t, f'{{textContent: "{pct:.2f}%"}}')
+# "People did": three viewers' phones swipe her reel away
+for k, (x, y, r) in enumerate(((22, 860, -6), (884, 960, 6), (40, 1320, 4))):
+    FXF += (f'<div class="mini" id="mi{k}" style="left:{x}px;top:{y}px;transform:rotate({r}deg)"><div class="ms"><div class="mr" id="mr{k}"><i></i><b>My budget meal hack</b></div>'
+            f'<div class="mn" id="mn{k}"></div></div><i class="mt" id="mt{k}"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="rgba(255,255,255,.85)"/></svg></i></div>')
+    tk = T("r3", "People") + k * .18
+    ft(f"#mi{k}", tk - .15, .3, "{opacity: 0, scale: .5}", "{opacity: 1, scale: 1}", "back.out(2)")
+    js(f'tl.fromTo("#mt{k}", {{opacity: 0, y: 0}}, {{keyframes: [{{opacity: 1, duration: .08}}, {{y: -120, duration: .25, ease: "power2.in"}}, {{opacity: 0, duration: .08}}], '
+       f'immediateRender: false}}, {tk + .3:.3f});')
+    js(f'tl.to("#mr{k}", {{y: -300, duration: .25, ease: "power2.in"}}, {tk + .38:.3f});')
+    ft(f"#mn{k}", tk + .38, .25, "{y: 300}", "{y: 0}", "power2.out")
+    sfx("swish", tk + .38)
+    to(f"#mi{k}", T0["r4"][0] - .2, .25, "{opacity: 0, scale: .6}", "power2.in")
+# the fix flips the first frame: before -> after
+t_fx2 = T("r5", "fix")
+js(f'tl.fromTo("#s5 .chk .thumb", {{rotationY: 0, transformPerspective: 800}}, {{rotationY: 90, duration: .15, ease: "power2.in", immediateRender: false}}, {t_fx2 - .1:.3f});')
+ft("#aft", t_fx2 + .05, .2, "{opacity: 0, rotationY: -90, transformPerspective: 800}", "{opacity: 1, rotationY: 0}", "power2.out")
+ft("#ba", t_fx2 + .2, .25, "{opacity: 0, scale: 1.6}", "{opacity: 1, scale: 1}", "back.out(2.5)")
+# CTA: a comment box types GROW and sends
+FXF += ('<div class="cbox" id="cbox"><i class="cav"></i><span id="cbt"><span id="cg0" style="opacity:0">G</span><span id="cg1" style="opacity:0">R</span>'
+        '<span id="cg2" style="opacity:0">O</span><span id="cg3" style="opacity:0">W</span></span><b class="csend" id="csend">Post</b></div>'
+        '<div class="sent" id="sent">Sent! Now check your DMs</div>')
+t_cm = T0["r6"][0]
+ft("#cbox", t_cm + .2, .35, "{opacity: 0, y: 60}", "{opacity: 1, y: 0}", "back.out(1.8)")
+for k in range(4):
+    st(f"#cg{k}", t_cm + .5 + k * .12, "{opacity: 1}")
+    sfx("tick", t_cm + .5 + k * .12)
+js(f'tl.fromTo("#csend", {{scale: 1}}, {{keyframes: [{{scale: .85, duration: .08}}, {{scale: 1, duration: .15}}], immediateRender: false}}, {t_cm + 1.05:.3f});')
+sfx("click", t_cm + 1.05)
+ft("#sent", t_cm + 1.2, .3, "{opacity: 0, y: 20}", "{opacity: 1, y: 0}", "back.out(2)")
+sfx("ding", t_cm + 1.25)
+
 # backdrop drift
 js(f'tl.fromTo("#bgn .bok", {{x: 0, y: 0}}, {{x: (i) => [60, -80, 70, -60, 50][i], y: (i) => [-90, 70, -60, 80, -40][i], duration: {DUR / 2:.2f}, yoyo: true, repeat: 1, '
    f'ease: "sine.inOut", immediateRender: false}}, 0);')
