@@ -20,6 +20,11 @@ vendor or blog data (directional only, conflicting numbers). Sources at the end.
 4. **Trial Reels** [IG, Dec 2024; public accounts with 1,000+ followers from Jul 2025 per [V]]: a reel shown to
    non-followers only, ranked separately, with no effect on normal reels. Use it to A/B test hooks: post 2-3 hook
    variants of the same reel as trials, keep the winner, share it to everyone.
+   **Pages without Trial Reels** (e.g. under 1,000 followers; Creators 100X as of 2026-11-23) test hooks this way:
+   (a) post the strongest variant; (b) after 5-7 days, if it flatlined, re-cut the same reel with the next hook (new
+   first 3 s, new cover text) and post it as a new reel, then compare skip rate and average watch; (c) pre-test hook
+   lines as Story text polls ("Would you watch: A or B?") and as the cover text of a carousel; (d) post as a Collab with
+   a partner account (e.g. Creedom's) so the reel reaches their followers too, which gives a bigger first test group.
 5. **Originality is rewarded, reposts and aggregator content are down-ranked** for non-follower reach [IG/V]. Our own
    footage, our own data and our own UI beat stock and reposted clips.
 6. **Length:** reels up to 3 minutes can be recommended [V], but watch time is relative: a 15 s reel watched 12 s beats
@@ -82,7 +87,8 @@ Avoid as openers: "This AI...", "There's an app that...", "Here are X tips", "Di
 7. CTA last: the keyword line (house rule), straight after the final peak; end abruptly or loop to frame 1.
 8. Every number must be real (the owner's insights, the app's real output). If we don't have it yet, write a
    [PLACEHOLDER] and ask; never invent a stat.
-9. Write 2-3 hook variants for every reel so the owner can test them as Trial Reels.
+9. Write 2-3 hook variants for every reel: as Trial Reels where the page has them, otherwise as re-cuts posted 5-7 days
+   apart, Story polls or a Collab post (§ 1.4).
 10. After posting, read skip rate and the retention chart: high skip = change the hook; drop at 3-10 s = fix the payoff.
 
 ## Sources

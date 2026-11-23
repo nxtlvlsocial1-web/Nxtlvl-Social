@@ -81,7 +81,7 @@ In short: Instagram ranks on watch time, likes per reach and sends per reach, an
 the hook is about the viewer or a specific real result (a number, a timestamp, an own flop), shows proof on frame 1,
 opens a question it answers late, and never opens on the product or a logo. The product comes in around 60 % of the
 runtime as the answer. 12-25 s per idea, one share trigger (a specific person to send it to), real numbers only, and 2-3
-hook variants per reel for Trial Reels. When presenting a script, name the hook formula used next to the hook line.
+hook variants per reel (Trial Reels where the page has them, otherwise re-cuts, Story polls or a Collab post). When presenting a script, name the hook formula used next to the hook line.
 
 ## 4. Brand kits
 
