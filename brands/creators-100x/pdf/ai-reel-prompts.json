@@ -1,0 +1,116 @@
+{
+  "title": [
+    "10 AI PROMPTS",
+    "THAT *WRITE*",
+    "YOUR REELS"
+  ],
+  "kicker": "Free prompt pack",
+  "subtitle": "Give AI direction, not a task.",
+  "tagline": "Prompt 01 wrote our reel, word for word.",
+  "blocks": [
+    {
+      "type": "text",
+      "heading": "How to *use* these",
+      "intro": "A lazy prompt gets you \"Hey guys, in today's video...\", the same script everyone else is posting. Each prompt here gives the AI a role, an audience, a hook rule, a format and a tone, so it knows who it's writing for, what to say and how to say it.",
+      "steps": [
+        [
+          "Copy a prompt",
+          "Open a fresh chat in ChatGPT. They also work in Gemini and Claude."
+        ],
+        [
+          "Fill the blanks",
+          "Replace everything in [brackets] with your own details. The more specific, the better: [creators under 10K who post but don't grow] beats [creators]."
+        ],
+        [
+          "Push back",
+          "If it sounds generic, reply: \"Too generic. No greetings. Make the first line a surprising claim.\""
+        ],
+        [
+          "Read it out loud",
+          "Cut any line you wouldn't say to a friend, then film."
+        ]
+      ],
+      "note": "Tip: stay in the same chat for prompts 02 to 10, so the AI remembers your niche, audience and tone from prompt 01."
+    },
+    {
+      "type": "cards",
+      "heading": "The *10* prompts",
+      "per_page": 2,
+      "items": [
+        {
+          "tag": "The 5-part prompt",
+          "line": "Role: You're a short-form scriptwriter for [type of creator]. Audience: [who you help]. Hook rule: The first line must stop the scroll. No greetings. Format: [28] seconds, [problem, mistake, fix, call to action]. Tone: [Talk like a friend, not a teacher]. Task: Write the voiceover for a reel about [topic]. Only the spoken lines, no emojis.",
+          "example": "\"This reel was written by ChatGPT. And honestly, that's the point.\" The exact prompt behind our reel.",
+          "why": "Five parts turn a task into direction: the AI knows who it is, who it's talking to and what to say."
+        },
+        {
+          "tag": "Hooks",
+          "line": "Write [10] opening lines for a reel about [topic] for [audience]. Each under [12] words. No greetings, no \"in today's video\". Mix a surprising claim, a mistake they make, a result and a question. Rank them by how hard they'd stop the scroll.",
+          "example": "\"You're not bad at Instagram. Your first two seconds are.\"",
+          "why": "The hook decides if anyone hears the rest. Ten options beat one guess."
+        },
+        {
+          "tag": "Story script",
+          "line": "Write a [30]-second reel script about [my experience] using this structure: something relatable, then the conflict, then the realisation, then what I do now. End with: Comment [KEYWORD] and I'll send you [free resource].",
+          "example": "\"You post a reel, and then you refresh. Every five minutes.\"",
+          "why": "Story structure keeps people watching to find out how it ends."
+        },
+        {
+          "tag": "Your voice",
+          "line": "Here are [3] captions I wrote: [paste captions]. Describe my tone in 5 words. Then rewrite this script so it sounds like me: [paste script]. Keep my slang, cut anything I'd never say.",
+          "example": "Tone: blunt, funny, short sentences, a bit sarcastic, no fluff.",
+          "why": "AI scripts sound like AI until you show it how you actually talk."
+        },
+        {
+          "tag": "Listicle",
+          "line": "Write a [25]-second reel: \"[number] [things] that [result] for [audience]\". One line per item, each with a quick why. Put the strongest item first and save a surprising one for last.",
+          "example": "\"3 openers that kill your reel in two seconds.\"",
+          "why": "Lists are easy to follow, save and share."
+        },
+        {
+          "tag": "On-screen text",
+          "line": "For this script: [paste script], write the on-screen text for each line. Max [6] words per screen, one key word to highlight per line, and a first-frame title that makes sense with the sound off.",
+          "example": "First frame: \"AI wrote this reel\". Highlight: AI.",
+          "why": "Most people watch muted at first. The text has to hook them alone."
+        },
+        {
+          "tag": "Fix my script",
+          "line": "Act as a viewer who scrolls fast. Read this script: [paste script]. Tell me the exact line where you'd scroll away and why. Then rewrite only that part so you'd keep watching.",
+          "example": "\"I'd leave at line 2: it explains before it shows. Lead with the result instead.\"",
+          "why": "Catch the boring part before you film, not after it flops."
+        },
+        {
+          "tag": "Repurpose",
+          "line": "Here's the transcript of my long video: [paste transcript]. Pull out [3] moments that work as standalone reels. For each: a hook, a [20]-second script and on-screen text.",
+          "example": "One podcast episode, three reels: a hot take, a story and a quick tip.",
+          "why": "You already have the content. AI finds the clips worth posting."
+        },
+        {
+          "tag": "Caption and keyword",
+          "line": "Write an Instagram caption for this reel: [paste script]. Start with: Comment [KEYWORD] and I'll send you [resource]. Then 3 short lines that use the phrases people search for, like [search phrases]. No emojis, 5 hashtags at the end.",
+          "example": "\"Comment PROMPT and I'll send you the exact ChatGPT prompt that wrote this reel.\"",
+          "why": "The first line drives comments; the search phrases help new people find you."
+        },
+        {
+          "tag": "30 days of ideas",
+          "line": "My niche is [niche] and my audience is [audience]. Give me [30] reel ideas: 10 mistakes, 10 quick wins and 10 stories or opinions. For each, one hook line and the format (talking head, list, demo or story).",
+          "example": "Mistake: \"Stop opening with 'hey guys'.\" Format: list.",
+          "why": "A month planned in one chat means you never stare at a blank screen at 9 PM."
+        }
+      ]
+    },
+    {
+      "type": "checklist",
+      "heading": "Before you *post*",
+      "items": [
+        "The first line works without a greeting",
+        "The first frame makes sense with the sound off",
+        "Every line sounds like you said it out loud",
+        "One idea per reel, not three",
+        "It ends with one clear action: comment, save or follow",
+        "Your caption starts with the keyword and uses search phrases"
+      ],
+      "closing": "Follow @creators.100x for more free prompt packs."
+    }
+  ]
+}
