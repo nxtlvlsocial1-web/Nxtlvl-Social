@@ -56,11 +56,12 @@ R.sfx("whoosh_big", a2 - .14)
 R.pop_in("#avg", a2, .3, .5, -3)
 R.pop_in("#five", a2 + .05, .38, .3, 0, "back.out(1.8)")
 tf = wt("f02", "five")
-R.js(f'tl.fromTo("#farc", {{strokeDashoffset: 553}}, {{strokeDashoffset: 0, duration: .9, ease: "steps(5)", immediateRender: false}}, {tf - .3:.3f});')
-R.counter("fn", tf - .3, .9, 0, 5, "Math.round(o.v)", "steps(5)")
-for k in range(5):
-    R.sfx("tick", tf - .3 + k * .18)
-    R.punch(tf - .3 + k * .18, .025, .15)
+t5a, t5d = a2 + .3, max(.9, tf + .5 - a2 - .3)      # the timer runs the whole line and lands 5 on "five"
+R.js(f'tl.fromTo("#farc", {{strokeDashoffset: 553}}, {{strokeDashoffset: 0, duration: {t5d:.3f}, ease: "steps(5)", immediateRender: false}}, {t5a:.3f});')
+R.counter("fn", t5a, t5d, 0, 5, "Math.round(o.v)", "steps(5)")
+for k in range(1, 6):
+    R.sfx("tick", t5a + k * t5d / 5 - .02)
+    R.punch(t5a + k * t5d / 5 - .02, .03, .15)
 R.slam("5 <em>seconds.</em>", tf + .62, max(.35, S[3] - tf - 1.0), top=1170, size=150, rot=3, sfx="impact")
 
 # ---- f03: the old opening plays on a phone under a timer, then freezes where they left
@@ -69,7 +70,7 @@ a3 = S[3]
 # says so) and freezes just after the line ends, in the pause build/vo_pick.py leaves after f03
 OLD_LEN = 2.2
 tq = max(a3 + .25, R.L["f03"][1] + .12 - OLD_LEN + .1)
-H(f'<div id="phone"><video id="ov" src="assets/video/old_open_2x.mp4" data-start="{tq - .1:.3f}" data-duration="{OLD_LEN:.2f}" data-track-index="1" muted playsinline></video>'
+H(f'<div id="phone"><img id="opre" src="assets/img/old_first.jpg" alt=""><video id="ov" src="assets/video/old_open_2x.mp4" data-start="{tq - .1:.3f}" data-duration="{OLD_LEN:.2f}" data-track-index="1" muted playsinline></video>'
   '<img id="ofz" src="assets/img/old_freeze.jpg" alt=""><div id="otm"><span id="otn">0.0</span>s</div><b id="x2">2x</b><b class="stamp" id="left">THEY LEFT<br>HERE</b></div>')
 H('<div id="mini"><b>5s</b><span>avg watch</span></div>')
 R.to("#avg", a3 - .12, .15, "{opacity: 0, y: -60}", "power2.in")
@@ -229,7 +230,7 @@ R.write(f"""
 #five b small {{ font-size: 140px; color: {INK}; }}
 #phone {{ position: absolute; left: 270px; top: 330px; width: 540px; height: 960px; border-radius: 54px; overflow: hidden; background: #000; opacity: 0;
   border: 12px solid {INK}; box-shadow: 0 22px 0 rgba(22,18,26,.45), 0 50px 100px rgba(70,0,35,.45); z-index: 16; }}
-#ov, #ofz {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }}
+#opre, #ov, #ofz {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }}
 #x2 {{ position: absolute; right: 22px; bottom: 22px; background: {INK}; color: #fff; font-family: Mono; font-weight: 700; font-size: 34px; padding: 6px 16px; border-radius: 12px; }}
 #ofz {{ opacity: 0; filter: grayscale(.8) brightness(.75); }}
 #otm {{ position: absolute; left: 50%; top: 26px; transform: translateX(-50%); background: {PINK}; color: #fff; font-family: Mono; font-weight: 700;
