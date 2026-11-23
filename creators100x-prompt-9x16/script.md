@@ -19,9 +19,15 @@ Task: Write a reel script showing why a structured prompt beats a lazy one.
 The prompt above was pasted into ChatGPT with a task line asking for a voiceover that admits ChatGPT wrote it and ends on
 "Comment PROMPT". Its reply is used unedited; only the ElevenLabs mood tags are added.
 
-1. [confident, a little smug] This reel was written by ChatGPT. [short pause] And honestly, that's the point.
+1. [flat, monotone, robotic] This reel was written by ChatGPT. [short pause] [warm, amused] And honestly, that's the point.
 2. [mocking, flat] If you type, "Write me a reel script," don't expect magic. [beat] You'll get the same generic content everyone else is posting.
 3. [matter-of-fact] The mistake? [beat] You're giving AI a task, not direction.
 4. [energetic, counting] Give it five things: its role, your audience, your hook rule, your format, and your tone.
 5. [lifting, satisfied] Now ChatGPT knows who it's writing for, what to say, and how to say it.
 6. [warm, direct] Comment PROMPT and I'll send you the full prompt plus nine more.
+
+## Voice: the AI-to-human switch (owner's pick, 2026-11-23)
+
+One ElevenLabs take, voice Jessica (Eleven v3/v4). Line 1 is read flat; in post it is processed to sound synthetic
+(pitch flattened, vocoder-like, a little bitcrush), then a glitch (visual and audio) cuts to Jessica's natural voice on
+"And honestly, that's the point." Same voice both sides: the AI voice "becomes human".
