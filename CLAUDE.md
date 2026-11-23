@@ -197,6 +197,9 @@ brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-
   emoji digits). Plain text only.
 - Write every video script on the modern story arc (`nxtlvl-social-video` § 3a): hook at 70 dropped mid-story, first
   peak (contrast, contrarian take or shocking stat) by 5-15 s, then peak, release, peak, release, ending on the CTA.
+- Apply `nxtlvl-social-video` § 3b and `references/reach-psychology.md` to every script: viewer-first hook with proof on
+  frame 1 (no product name or logo in the opening), product around 60 % in, 12-25 s per idea, a share trigger, real
+  numbers only, and 2-3 hook variants for Trial Reels.
 - Start every post description with the video's CTA keyword line (e.g. `Comment "AGENT" and I'll DM you my whole
   setup.`), then the hook and the body; don't repeat the CTA further down.
 - End every post description with up to 5 hashtags and then one plain line of relevant SEO keywords (the phrases

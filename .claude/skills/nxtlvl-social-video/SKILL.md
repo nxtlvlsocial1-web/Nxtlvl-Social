@@ -74,6 +74,15 @@ attention scale:
 When presenting a script, label each line with its arc beat (hook 70, peak, release, CTA) so the
 person can see the shape.
 
+## 3b. Reach and hook psychology (every script)
+
+Before writing any script, read `references/reach-psychology.md` and apply its § 3 hook formulas and § 4 script rules.
+In short: Instagram ranks on watch time, likes per reach and sends per reach, and skip rate measures the first 3 s; so
+the hook is about the viewer or a specific real result (a number, a timestamp, an own flop), shows proof on frame 1,
+opens a question it answers late, and never opens on the product or a logo. The product comes in around 60 % of the
+runtime as the answer. 12-25 s per idea, one share trigger (a specific person to send it to), real numbers only, and 2-3
+hook variants per reel for Trial Reels. When presenting a script, name the hook formula used next to the hook line.
+
 ## 4. Brand kits
 
 Brand kits live in `brands/<client-slug>/` at the repo root:
