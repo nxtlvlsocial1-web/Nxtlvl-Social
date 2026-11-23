@@ -126,7 +126,10 @@ S5 = ('<div class="scrn" id="s5"><div class="cr"><i class="dot"></i>Creedom</div
       '<div class="row bad" id="rw0" style="top:500px"><small>0:01 · WEAK HOOK</small>You\'re talking. Nothing on screen moves.</div>'
       '<div class="row bad" id="rw1" style="top:660px"><small>0:02 · PEOPLE LEAVE HERE</small>Most viewers would scroll past.</div>'
       '<div class="row fix" id="rw2" style="top:820px"><small>→ FIX</small>Open on the finished dish. Then explain.</div>'
-      '<div class="ex5" id="ex5">EXAMPLE</div><div class="post" id="post">Post reel</div></div>')
+      '<div class="ex5" id="ex5">EXAMPLE</div><div class="post" id="post">Post reel</div>'
+      '<div class="ana5" id="ana5"><small>WATCHING YOUR REEL, SECOND BY SECOND</small><b id="apct">0%</b><div class="tlin">'
+      + "".join(f'<i id="seg{k}" style="background:{"#ff3b4e" if k < 2 else "#2fbf71"}"></i>' for k in range(15)) + '<u id="phd"></u></div>'
+      '<div class="tlab"><span>0:00</span><span>0:15</span><span>0:30</span></div></div></div>')
 PHONE = (f'<div id="pw"><div id="ph"><div id="scr"><i class="isl"></i><div class="sbar" id="sbar"><span id="sbt">9:00</span><span>5G</span></div>'
          f'{S1}{S2}{S3}{S4}{S5}<div class="toast" id="toast">Your reel is live</div></div></div><i class="tap" id="tap"></i></div>')
 VILLAIN = ('<div class="villain" id="vil"><svg class="face" viewBox="0 0 320 240"><rect x="20" y="20" width="280" height="200" rx="60" fill="#ff3b4e"/>'
@@ -179,8 +182,8 @@ pw(t2 - .2, "scale: 1", .4)
 screen("s3", t2 - .1)
 st("#sbt", t2 - .1, '{textContent: "11:42"}')
 for i in range(len(NOTE)):
-    st(f"#nw{i}", t2 + .35 + i * .24, "{opacity: 1}")
-    sfx("tick", t2 + .35 + i * .24)
+    st(f"#nw{i}", t2 + .02 + i * .26, "{opacity: 1}")
+    sfx("tick", t2 + .02 + i * .26)
 t_ht = T("r2", "hates")
 ft("#vil", t_ht - .1, .35, "{opacity: 0, scale: .3, rotation: -12}", "{opacity: 1, scale: 1, rotation: 0}", "back.out(2.2)")
 js(f'tl.fromTo("#vil", {{x: 0}}, {{keyframes: [{{x: -10, duration: .05}}, {{x: 10, duration: .05}}, {{x: -6, duration: .05}}, {{x: 0, duration: .05}}], repeat: 2, '
@@ -314,12 +317,12 @@ for k in range(3):
     FXF += f'<i class="orb" id="ob{k}">{ICON_REF}</i>'
     js(f'tl.fromTo("#ob{k}", {{opacity: 0, rotation: {k * 120}, scale: .4}}, {{keyframes: [{{opacity: 1, scale: 1, duration: .25}}, {{rotation: {k * 120 + 720}, duration: {T0["r1"][1] - 1.6:.2f}, ease: "none"}}, '
        f'{{opacity: 0, scale: .4, duration: .2}}], immediateRender: false}}, {T("r0", "refresh") - .1 + k * .25:.3f});')
-NOTIFS = [("eye", "Seen by 4", 120, 760), ("heart", "0 new likes", 640, 900), ("eye", "No new views", 90, 1180), ("heart", "1 like · from mom", 600, 1330)]
+NOTIFS = [("eye", "Seen by 4", 120, 760), ("heart", "0 new likes", 660, 1060), ("eye", "No new views", 90, 1180), ("heart", "1 like · from mom", 600, 1330)]
 for k, (ic, txt, x, y) in enumerate(NOTIFS):
     FXF += f'<div class="nt" id="nt{k}" style="left:{x}px;top:{y}px"><i>{ICON_EYE if ic == "eye" else ICON_HEART}</i>{txt}</div>'
     tk = (T("r1", "12"), T("r1", "views") + .3, T("r1", "19"), T("r1", "23"))[k]
     ft(f"#nt{k}", tk, .3, "{opacity: 0, scale: .5, y: 30}", "{opacity: 1, scale: 1, y: 0}", "back.out(2.6)")
-    js(f'tl.to("#nt{k}", {{y: -40, opacity: 0, duration: .5, ease: "power2.in"}}, {T0["r2"][0] - .25:.3f});')
+    js(f'tl.to("#nt{k}", {{y: -40, opacity: 0, duration: .25, ease: "power2.in"}}, {T0["r2"][0] - .4:.3f});')
     sfx("pop", tk)
 # little "+n" pops from the counter
 for i in range(1, len(COUNTS)):
@@ -376,6 +379,20 @@ for k in range(50):
     x0 = random.uniform(0, 1080)
     js(f'tl.fromTo("#cf{k}", {{x: {x0:.0f}, y: -60, rotation: {random.randint(0, 180)}, opacity: 1}}, {{x: {x0 + random.uniform(-160, 160):.0f}, y: 2000, rotation: {random.randint(360, 900)}, '
        f'rotationX: 720, opacity: 1, duration: {random.uniform(2.2, 3.2):.2f}, ease: "none", immediateRender: false}}, {T0["r6"][0] + random.uniform(0, .8):.3f});')
+
+# the check is live: % counts up, the timeline fills second by second, 0:00-0:02 lights red
+t_a0, t_a1 = T0["r5"][0] + .35, T("r5", "shows") - .3
+ft("#ana5", t_a0 - .1, .3, "{opacity: 0, y: 30}", "{opacity: 1, y: 0}", "power3.out")
+js(f'(() => {{ const o = {{v: 0}}; tl.to(o, {{v: 100, duration: {t_a1 - t_a0:.2f}, ease: "none", onUpdate: () => {{ document.getElementById("apct").textContent = Math.round(o.v) + "%"; }}}}, {t_a0:.3f}); }})();')
+js(f'tl.fromTo("#phd", {{left: "0%"}}, {{left: "100%", duration: {t_a1 - t_a0:.2f}, ease: "none", immediateRender: false}}, {t_a0:.3f});')
+for k in range(15):
+    tk = t_a0 + (t_a1 - t_a0) * (k + .5) / 15
+    ft(f"#seg{k}", tk, .15, "{opacity: .15, scaleY: .4}", "{opacity: 1, scaleY: 1}", "back.out(3)")
+    if k < 2:
+        sfx("error", tk)
+    elif k % 3 == 0:
+        sfx("tick", tk)
+to("#ana5", t_a1 + .1, .2, "{opacity: 0, y: -20}", "power2.in")
 
 # ---- more visual concepts -------------------------------------------------------------------------------------------------------
 # a finger pulls to refresh on every refresh

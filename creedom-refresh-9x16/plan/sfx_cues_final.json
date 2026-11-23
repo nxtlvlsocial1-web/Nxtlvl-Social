@@ -10,11 +10,6 @@
 "file": "click_click.wav"
 },
 {
-"t": 0.7,
-"kind": "pop",
-"file": "pop_pop.wav"
-},
-{
 "t": 1.48,
 "kind": "swish",
 "file": "swish_whoosh_c.wav"
@@ -170,6 +165,21 @@
 "file": "steps_steps.wav"
 },
 {
+"t": 13.86,
+"kind": "swish",
+"file": "swish_whoosh_a.wav"
+},
+{
+"t": 14.04,
+"kind": "swish",
+"file": "swish_whoosh_c.wav"
+},
+{
+"t": 14.22,
+"kind": "swish",
+"file": "swish_whoosh_a.wav"
+},
+{
 "t": 14.72,
 "kind": "error",
 "file": "error_error.wav"
@@ -243,5 +253,35 @@
 "t": 25.8,
 "kind": "pop",
 "file": "pop_pop.wav"
+},
+{
+"t": 26.08,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 26.2,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 26.32,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 26.44,
+"kind": "tick",
+"file": "tick_tick.wav"
+},
+{
+"t": 26.63,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 26.83,
+"kind": "ding",
+"file": "ding_ding.wav"
 }
 ]

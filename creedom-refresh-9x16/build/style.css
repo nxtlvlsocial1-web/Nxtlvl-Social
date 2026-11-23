@@ -158,6 +158,14 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0a1
 .cbox #cbt { flex: 1; }
 .csend { font: 800 38px Inter; color: #F343A2; }
 .sent { position: absolute; left: 0; right: 0; top: 1210px; text-align: center; font: 800 40px Inter; color: #138a43; opacity: 0; }
+
+.ana5 { position: absolute; left: 36px; right: 36px; top: 520px; opacity: 0; }
+.ana5 small { display: block; font: 700 22px Mono; color: #b06a90; letter-spacing: .08em; }
+.ana5 b { display: block; margin-top: 14px; font: 800 120px/1 Inter; color: #1a1020; letter-spacing: -.04em; }
+.tlin { position: relative; margin-top: 28px; height: 70px; display: flex; gap: 6px; }
+.tlin i { flex: 1; border-radius: 8px; opacity: .15; transform-origin: 50% 100%; }
+.tlin u { position: absolute; top: -14px; bottom: -14px; width: 5px; margin-left: -2px; border-radius: 3px; background: #1a1020; text-decoration: none; }
+.tlab { display: flex; justify-content: space-between; margin-top: 12px; font: 700 22px Mono; color: #9a8a96; }
 /* Cree */
 #cree { position: absolute; left: 0; top: 0; width: 820px; height: 820px; z-index: 33; opacity: 0; transform-origin: 410px 500px; pointer-events: none;
   filter: drop-shadow(0 0 30px rgba(255,90,180,.7)); }
