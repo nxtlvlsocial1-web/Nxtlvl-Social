@@ -14,11 +14,14 @@ lightning-bolt tile from the logo is the brand element.
 5. Tone: Talk like a friend, not a teacher.
 Task: Write a reel script showing why a structured prompt beats a lazy one.
 
-## Voiceover (with ElevenLabs mood tags), 75 words
+## Voiceover: ChatGPT's reply, word for word (owner chose "ChatGPT", 2026-11-23), 83 words
 
-1. [confident, a little smug] AI wrote the script you're hearing right now. [short pause] Here's the exact prompt.
-2. [mocking, flat] Most people type: "write me a reel script." [beat] And get: "Hey guys, in today's video..."
-3. [matter-of-fact] That's why it sounds like everyone else.
-4. [energetic, counting] Give it five things instead. Who it is. Who it's for. A hook with no greeting. The format. And the tone.
-5. [slower, satisfied] That's the prompt that wrote this.
-6. [warm, direct] Comment PROMPT and I'll send you all five blocks, plus nine more prompts.
+The prompt above was pasted into ChatGPT with a task line asking for a voiceover that admits ChatGPT wrote it and ends on
+"Comment PROMPT". Its reply is used unedited; only the ElevenLabs mood tags are added.
+
+1. [confident, a little smug] This reel was written by ChatGPT. [short pause] And honestly, that's the point.
+2. [mocking, flat] If you type, "Write me a reel script," don't expect magic. [beat] You'll get the same generic content everyone else is posting.
+3. [matter-of-fact] The mistake? [beat] You're giving AI a task, not direction.
+4. [energetic, counting] Give it five things: its role, your audience, your hook rule, your format, and your tone.
+5. [lifting, satisfied] Now ChatGPT knows who it's writing for, what to say, and how to say it.
+6. [warm, direct] Comment PROMPT and I'll send you the full prompt plus nine more.
