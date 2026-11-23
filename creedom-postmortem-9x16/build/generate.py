@@ -1,5 +1,8 @@
 """Creedom remake 1 v2, "The 304-view post-mortem" (Creators 100X, 9:16): writes index.html, plan/sfx_events.json, plan/edit.json.
 
+v3 (owner: "change music ... the yellow looks much worse ... psychological colours ... as many motion elements as
+possible"): LOSS red on the bad numbers, WIN green on the fix, HOOK cyan on the open questions (see build/kit.py), new
+music, and a motion beat (pulse, scribble, arrow, sparkle, glint, bob) on top of every hit.
 v2 (owner: "very dull and slow animated feel"): bright pink and fast. The moving pink world sits behind every frame; a
 camera punch, a whip, a slam or a pop lands about every 0.7-1 s; giant words on the key beats; punchy 1-3 word captions.
 Story unchanged (reach-psychology.md): real 304 card on frame 1, the irony, 5 s, the old opening freezing where the
@@ -10,7 +13,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from kit import INK, PINK, SUN, Reel  # noqa: E402
+from kit import HOOK, INK, LOSS, PINK, SUN, WIN, Reel  # noqa: E402
 
 R = Reel(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Creedom remake: 304-view post-mortem v2 9x16")
 S, wt, H = R.S, R.wt, R.HTML.append
@@ -22,9 +25,14 @@ H('<div id="ins" class="card0"><img src="assets/img/insights_cards.jpg" alt=""><
 R.st("#ins", 0, "{opacity: 1}")
 R.ft("#ins", 0, .45, "{scale: 1.3, rotation: -8, y: 60}", "{scale: 1, rotation: -2.5, y: 0}", "expo.out")
 R.pop_in("#r304", .2, .3, 1.4)
-sl = R.slam('<b id="n304">0</b> views.', .06, S[1] - .5, top=300, size=190, rot=-3, sfx="impact")
+sl = R.slam('<em class="l"><b id="n304">0</b></em> views.', .06, S[1] - .5, top=300, size=190, rot=-3, sfx="impact")
 R.counter("n304", .06, .5, 0, 304, ease="power3.out")
-R.burst(.06, 540, 400, 1.1)
+R.burst(.06, 540, 400, 1.1, LOSS)
+R.pulse(.5, 540, 395, LOSS, 380)
+R.scribble(.55, 60, 615, 470, 240, LOSS, -3, hold=max(.4, S[1] - 1.3))
+R.sparkle(.3, 930, 300, "#fff", 70)
+R.sparkle(.6, 150, 250, HOOK, 50)
+R.bob("#ins", .5, S[1] - .25)
 R.sfx("riser_short", 0)
 tg = wt("f00", "views")
 R.to("#ins", tg, .25, "{rotation: 2, scale: 1.04}", "back.out(2)")
@@ -41,9 +49,12 @@ R.to("#old", tr, .3, "{rotation: -4, scale: 1.05}", "back.out(2.5)")
 R.punch(tr, .05)
 R.sfx("swish", tr)
 tsw = wt("f01", "stop")
-R.slam("the <em>irony.</em>", tsw - .02, max(.4, S[2] - tsw - .45), top=290, size=170, rot=-6, sfx="thump")
+R.slam("the <em class=h>irony.</em>", tsw - .02, max(.4, S[2] - tsw - .45), top=290, size=170, rot=-6, sfx="thump")
 R.sfx("screech", tsw - .15)
-R.burst(tsw, 540, 380, 1.0, SUN)
+R.burst(tsw, 540, 380, 1.0, HOOK)
+R.arrow(tsw + .15, 60, 640, -10, HOOK, hold=max(.3, S[2] - tsw - .7))
+R.sparkle(tsw + .1, 880, 560, "#fff", 64)
+R.bob("#old", a1 + .4, S[2] - .25)
 
 # ---- f02: average watch, a giant 5 s timer ticking
 a2 = S[2]
@@ -62,7 +73,10 @@ R.counter("fn", t5a, t5d, 0, 5, "Math.round(o.v)", "steps(5)")
 for k in range(1, 6):
     R.sfx("tick", t5a + k * t5d / 5 - .02)
     R.punch(t5a + k * t5d / 5 - .02, .03, .15)
-R.slam("5 <em>seconds.</em>", tf + .62, max(.35, S[3] - tf - 1.0), top=1170, size=150, rot=3, sfx="impact")
+R.pulse(tf + .5, 540, 870, LOSS, 640)
+R.sparkle(tf + .55, 860, 560, "#fff", 70)
+R.sparkle(tf + .7, 210, 1120, HOOK, 54)
+R.slam("5 <em class=l>seconds.</em>", tf + .62, max(.35, S[3] - tf - 1.0), top=1170, size=150, rot=3, sfx="impact")
 
 # ---- f03: the old opening plays on a phone under a timer, then freezes where they left
 a3 = S[3]
@@ -78,6 +92,7 @@ R.zoom_out("#five", a3 - .12)
 R.ft("#phone", a3 - .02, .36, '{opacity: 1, y: 1300, rotation: 8, filter: "blur(20px)"}', '{y: 0, rotation: -2, filter: "blur(0px)"}', "expo.out")
 R.sfx("whoosh", a3 - .1)
 R.pop_in("#mini", a3 + .3, .3, .4, 6)
+R.bob("#phone", a3 + .45, R.S[4] - .3, 8, .8)
 R.sfx("pop", a3 + .3)
 tsen = wt("f03", "sentence")
 R.to("#phone", tsen, .3, "{rotation: 2, scale: 1.04}", "back.out(2)")
@@ -93,6 +108,8 @@ R.sfx("stamp", tfz + .05)
 R.shake(tfz + .06, 22, 2)
 R.punch(tfz + .04, .12)
 R.ft("#mini", tfz + .05, .3, "{scale: 1.5}", "{scale: 1}", "back.out(3)")
+R.pulse(tfz + .02, 540, 760, LOSS, 520)
+R.scribble(tfz + .1, 720, 1080, 290, 290, "#fff", 6, hold=.3)
 
 # ---- f04: nobody cares about the TOOL (struck out); THEIR REEL; problem first, tool last (cards swap)
 a4 = S[4]
@@ -106,13 +123,16 @@ R.sfx("whoosh", a4 - .14)
 tno = wt("f04", "tool")
 R.ft("#strike", tno - .02, .2, "{scaleX: 0}", "{scaleX: 1}", "power4.out")
 R.sfx("g_wrong", tno)
+R.pulse(tno, 540, 820, LOSS, 420)
 R.shake(tno + .05, 12, 1)
 R.punch(tno + .02, .06)
 tth = wt("f04", "they")
 R.zoom_out("#tool", tth - .1)
 tpr = wt("f04", "problem")
-R.slam("their <em>reel.</em>", tth, max(.35, tpr - tth - .4), top=640, size=210, rot=-4, sfx="impact")
-R.burst(tth, 540, 760, 1.2, SUN)
+R.slam("their <em class=h>reel.</em>", tth, max(.35, tpr - tth - .4), top=640, size=210, rot=-4, sfx="impact")
+R.burst(tth, 540, 760, 1.2, HOOK)
+R.sparkle(tth + .1, 900, 600, "#fff", 70)
+R.sparkle(tth + .25, 170, 900, HOOK, 56)
 R.pop_in("#swap", tpr - .06, .3, .7, 0, "back.out(2)")
 R.sfx("pop", tpr - .06)
 tfi = wt("f04", "first")
@@ -123,6 +143,9 @@ R.st("#cProb i", tfi + .15, '{textContent: "1"}')
 R.sfx("whoosh", tfi - .05)
 R.sfx("ding", tfi + .3)
 R.punch(tfi + .25, .06)
+R.arrow(tfi + .3, 790, 330, 70, "#fff", hold=max(.3, S[5] - tfi - .8), size=180)
+R.pulse(tfi + .3, 540, 710, WIN, 360)
+R.bob("#swap", tpr + .3, S[5] - .25, 8)
 
 # ---- f05: this reel's own clock, and still no app name
 a5 = S[5]
@@ -140,9 +163,13 @@ tse = wt("f05", "seventeen")
 R.ft(".dial", tse, .3, "{scale: 1.18}", "{scale: 1}", "back.out(3)")
 R.punch(tse, .07)
 R.sfx("thump", tse)
+R.pulse(tse, 540, 770, "#fff", 640)
+R.sparkle(tse + .05, 880, 520, HOOK, 64)
+R.bob("#bigclock", a5 + .4, S[6] - .25, 8)
 tna = wt("f05", "named")
 R.ft("#nope", tna, .3, "{x: 0}", "{keyframes: [{x: -18, duration: .05}, {x: 16, duration: .05}, {x: -10, duration: .05}, {x: 6, duration: .05}, {x: 0, duration: .1}]}", "none")
 R.sfx("buzzer", tna)
+R.scribble(tna + .05, 300, 1100, 480, 160, HOOK, -2, hold=max(.3, S[6] - tna - .6))
 
 # ---- f06: Creedom (about 65 % in): flash, logo slam, confetti, the analyser card, Cree with the magnifier
 a6 = S[6]
@@ -155,7 +182,9 @@ H('<img id="cree" src="assets/img/poses/mag.png" alt="">')
 R.zoom_out("#bigclock", a6 - .14)
 R.flash(a6 - .06, .95, .25)
 R.ft("#logo", a6 - .04, .3, "{opacity: 0, scale: 3, rotation: -12}", "{opacity: 1, scale: 1, rotation: -3}", "power4.out")
-R.burst(a6, 540, 800, 1.4, SUN)
+R.burst(a6, 540, 800, 1.4, HOOK)
+for k, (x, y, c) in enumerate([(160, 600, "#fff"), (930, 620, HOOK), (220, 1000, HOOK), (880, 1020, "#fff")]):
+    R.sparkle(a6 + .08 + k * .08, x, y, c, 70)
 R.confetti(a6, 40, 3, 540, 800)
 R.shake(a6 + .05, 16, 1.4)
 R.punch(a6 + .02, .1)
@@ -169,6 +198,9 @@ R.sfx("whoosh", tsh - .12)
 R.js(f'tl.fromTo("#ret", {{strokeDasharray: 900, strokeDashoffset: 900}}, {{strokeDashoffset: 0, duration: .7, ease: "power2.out", immediateRender: false}}, {tsh + .2:.3f});')
 tex = wt("f06", "exact")
 R.pop_in("#drop", tex - .05, .3, 0, 0, "back.out(4)")
+R.pulse(tex, 384, 680, LOSS, 200)
+R.scribble(tex + .05, 300, 610, 180, 150, LOSS, -6, hold=max(.3, S[7] - tex - .6))
+R.bob("#an", tsh + .45, S[7] - .25, 7)
 R.pop_in("#dropl", tex + .05, .28, .5, -2)
 R.sfx("pop", tex - .05)
 R.punch(tex, .05)
@@ -202,6 +234,11 @@ R.ft("#cbox", tc + .6, .3, "{scale: 1.12}", "{scale: 1}", "back.out(3)")
 R.sfx("click", tc + .6)
 R.sfx("notify", tc + .8)
 R.punch(tc + .6, .06)
+R.pulse(tc + .6, 440, 935, HOOK, 300)
+R.arrow(tc + .05, 820, 640, 75, HOOK, hold=max(.3, R.DUR - tc - .9), size=190)
+R.sparkle(tc + .65, 860, 860, "#fff", 66)
+R.sparkle(tfr + .1, 950, 450, HOOK, 60)
+R.bob("#share", a7 + .4, R.DUR - .5, 6)
 H('<div id="loop"><img src="assets/img/insights_cards.jpg" alt=""></div>')
 R.flash(R.DUR - .36, .9, .2)
 R.st("#loop", R.DUR - .3, "{opacity: 1}")
@@ -212,7 +249,7 @@ R.write(f"""
 .card0 {{ position: absolute; left: 70px; right: 70px; top: 640px; opacity: 0; border-radius: 38px; overflow: hidden; background: #0d0f14;
   border: 8px solid #fff; box-shadow: 0 18px 0 {INK}, 0 40px 80px rgba(70,0,35,.4); z-index: 10; }}
 .card0 img {{ display: block; width: 100%; }}
-.ring {{ position: absolute; border: 8px solid {SUN}; border-radius: 26px; opacity: 0; box-shadow: 0 0 34px rgba(255,225,77,.7); }}
+.ring {{ position: absolute; border: 8px solid {LOSS}; border-radius: 26px; opacity: 0; box-shadow: 0 0 34px rgba(255,67,33,.7); }}
 #r304 {{ left: 18px; top: -2px; width: 440px; height: 196px; }}
 #r5 {{ left: 18px; top: 200px; width: 440px; height: 196px; }}
 #old {{ position: absolute; left: 250px; top: 520px; width: 580px; opacity: 0; z-index: 12; }}
@@ -225,7 +262,7 @@ R.write(f"""
 #five svg {{ width: 100%; height: 100%; transform: rotate(-90deg); }}
 #five .trk {{ fill: #fff; stroke: rgba(22,18,26,.12); stroke-width: 16; }}
 #five .arc {{ fill: none; stroke: {INK}; stroke-width: 16; stroke-linecap: round; stroke-dasharray: 553; }}
-#five b {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 170px; font-weight: 800; color: {PINK}; }}
+#five b {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 170px; font-weight: 800; color: {LOSS}; }}
 #five b i {{ font-style: normal; font-size: 360px; line-height: 1; letter-spacing: -.06em; }}
 #five b small {{ font-size: 140px; color: {INK}; }}
 #phone {{ position: absolute; left: 270px; top: 330px; width: 540px; height: 960px; border-radius: 54px; overflow: hidden; background: #000; opacity: 0;
@@ -237,7 +274,7 @@ R.write(f"""
   font-size: 50px; padding: 8px 26px; border-radius: 999px; border: 4px solid #fff; }}
 .stamp {{ position: absolute; left: 30px; right: 30px; top: 360px; text-align: center; border: 10px solid #ff2d55; color: #ff2d55; background: rgba(255,255,255,.94);
   font-weight: 800; font-size: 76px; line-height: 1; letter-spacing: .02em; padding: 18px 0; border-radius: 22px; opacity: 0; }}
-#mini {{ position: absolute; left: 740px; top: 1100px; width: 250px; height: 250px; border-radius: 50%; background: {SUN}; border: 8px solid {INK}; opacity: 0; z-index: 18;
+#mini {{ position: absolute; left: 740px; top: 1100px; width: 250px; height: 250px; border-radius: 50%; background: {LOSS}; color: #fff; border: 8px solid {INK}; opacity: 0; z-index: 18;
   display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 12px 0 {INK}; }}
 #mini b {{ font-size: 110px; font-weight: 800; line-height: .9; letter-spacing: -.05em; }}
 #mini span {{ font-family: Mono; font-weight: 700; font-size: 24px; letter-spacing: .08em; }}
@@ -253,7 +290,7 @@ R.write(f"""
 .card b {{ font-weight: 800; font-size: 84px; letter-spacing: -.03em; line-height: 1; }}
 .card span {{ font-family: Serif; font-style: italic; font-size: 46px; color: #6b6470; margin-top: 8px; }}
 #cTool {{ top: 60px; }} #cProb {{ top: 360px; }}
-.card.hot {{ background: {SUN}; }} .card.hot i {{ background: {INK}; color: #fff; }}
+.card.hot {{ background: {WIN}; }} .card.hot i {{ background: {INK}; color: #fff; }}
 #bigclock {{ position: absolute; left: 0; right: 0; top: 470px; display: flex; flex-direction: column; align-items: center; gap: 44px; opacity: 0; z-index: 16; }}
 .dial {{ position: relative; width: 600px; height: 600px; }}
 .dial svg {{ width: 100%; height: 100%; transform: rotate(-90deg); }}
@@ -262,7 +299,7 @@ R.write(f"""
 .dial b {{ position: absolute; inset: 0; display: grid; place-items: center; font-family: Mono; font-weight: 700; font-size: 180px; color: {PINK}; }}
 .nope {{ display: flex; align-items: center; gap: 20px; background: {INK}; padding: 20px 40px; border-radius: 26px; box-shadow: 0 12px 0 rgba(22,18,26,.35); }}
 .nope span {{ font-family: Mono; font-weight: 700; font-size: 46px; letter-spacing: .14em; color: #fff; filter: blur(3px); }}
-.nope i {{ font-style: normal; font-weight: 800; font-size: 76px; color: {SUN}; }}
+.nope i {{ font-style: normal; font-weight: 800; font-size: 76px; color: {HOOK}; }}
 #logo {{ position: absolute; left: 90px; right: 90px; top: 640px; height: 300px; border-radius: 50px; background: #fff; opacity: 0; z-index: 30; display: grid; place-items: center;
   box-shadow: 0 18px 0 {INK}, 0 40px 90px rgba(70,0,35,.4); }}
 #logo img {{ width: 78%; }}
@@ -273,7 +310,7 @@ R.write(f"""
 .anh span {{ font-family: Mono; font-weight: 700; font-size: 28px; letter-spacing: .16em; color: {PINK}; }}
 .chart {{ position: relative; margin-top: 26px; height: 320px; border-radius: 26px; background: #fff3f8; padding: 20px; }}
 .chart svg {{ width: 100%; height: 100%; }}
-#drop {{ position: absolute; left: 31%; top: 34%; width: 40px; height: 40px; border-radius: 50%; background: {PINK}; box-shadow: 0 0 0 12px rgba(255,61,139,.25); opacity: 0; }}
+#drop {{ position: absolute; left: 31%; top: 34%; width: 40px; height: 40px; border-radius: 50%; background: {LOSS}; box-shadow: 0 0 0 12px rgba(255,67,33,.25); opacity: 0; }}
 #dropl {{ position: absolute; left: 38%; top: 10%; background: {INK}; color: #fff; font-weight: 800; font-size: 38px; padding: 10px 20px; border-radius: 16px; opacity: 0; }}
 .why {{ margin-top: 26px; display: flex; gap: 20px; align-items: baseline; opacity: 0; }}
 .why b {{ font-family: Mono; font-weight: 700; font-size: 30px; letter-spacing: .14em; color: {PINK}; }}
@@ -282,7 +319,7 @@ R.write(f"""
 #cree2 {{ top: 1000px; }}
 #share {{ position: absolute; left: 70px; right: 70px; top: 470px; opacity: 0; z-index: 24; display: flex; align-items: center; gap: 26px; background: {INK}; color: #fff;
   padding: 30px 40px; border-radius: 40px; font-weight: 800; font-size: 54px; line-height: 1.1; box-shadow: 0 14px 0 rgba(22,18,26,.35); }}
-#share b {{ color: {SUN}; font-size: 80px; }}
+#share b {{ color: {HOOK}; font-size: 80px; }}
 #cbox {{ position: absolute; left: 60px; width: 760px; top: 860px; height: 150px; border-radius: 75px; background: #fff; display: flex; align-items: center; opacity: 0; z-index: 24;
   gap: 24px; padding: 0 34px; font-weight: 800; font-size: 72px; letter-spacing: .02em; box-shadow: 0 16px 0 {INK}, 0 36px 70px rgba(70,0,35,.3); }}
 #cbox .av {{ width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, {PINK}, #a064ff); flex: none; }}

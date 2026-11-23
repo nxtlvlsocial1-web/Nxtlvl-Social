@@ -1,16 +1,26 @@
-"""Kinetic kit for the Creedom remakes v2 (bright pink, fast). Shared by creedom-postmortem-9x16 and creedom-grade-9x16
+"""Kinetic kit for the Creedom remakes v2/v3 (bright pink, fast). Shared by creedom-postmortem-9x16 and creedom-grade-9x16
 (the grade project keeps an identical copy in its own build/ folder).
 
 Layers, back to front:  #bg (moving pink gradient, blobs, dots)  >  #shk (shake)  >  #cam (punch-ins)  >  #drift (slow
 per-scene push)  >  scene content  >  .burst / #flash  >  captions  >  grain.
 Everything is a pure function of the one paused GSAP timeline.
+
+v3 (owner: "the yellow looks much worse ... use psychological colours ... add as many motion elements as possible"):
+  colour carries meaning, never decoration: LOSS red-orange = the bad number, the drop, the mistake (loss aversion,
+  urgency); WIN green = the fix, the better score (reward); HOOK cyan = the open question, the thing to watch
+  (curiosity; cyan is the complement of the brand pink, so it is the strongest pop on it). Captions: white with an ink
+  outline, the spoken word turns cyan and lifts (no yellow block). The pink world fades to violet at the bottom for depth.
+  Always-on motion: drifting shapes and twinkles in the background, a reel progress bar, a light glint on every scene
+  change, pulse rings on numbers, hand-drawn scribbles and arrows that draw themselves, idle bob on cards.
 """
 import json
 import os
 import random
 import re
 
-PINK, HOT, INK, SUN = "#ff3d8b", "#ff1f74", "#16121a", "#ffe14d"
+PINK, HOT, INK = "#ff3d8b", "#ff1f74", "#16121a"
+LOSS, WIN, HOOK, VIOLET = "#ff4321", "#19e38b", "#35e8ff", "#8b4dff"
+SUN = HOOK          # v2 name kept for old call sites; v3 has no yellow
 
 
 class Reel:
@@ -27,6 +37,7 @@ class Reel:
         self.S = [self.L[i][0] for i in self.IDS] + [self.L[self.IDS[-1]][1] + .9]
         self.DUR = round(self.S[-1], 2)
         self.n_slam = 0
+        self.n_fx = 0
 
     # ---- timeline primitives
     def js(self, s):
@@ -116,10 +127,93 @@ class Reel:
         self.to(f"#sl{k}", t + .18 + hold, .12, "{opacity: 0, scale: .7}", "power2.in")
         if sfx:
             self.sfx(sfx, t - .02)
+        self.burst(t, 540, top + size * .5, .75, col if col != "#fff" else HOOK)
         self.punch(t + .02, .07)
         if shake:
             self.shake(t + .04, 10, .8)
         return f"#sl{k}"
+
+    # ---- v3 motion layers
+    def _id(self, p):
+        self.n_fx += 1
+        return f"{p}{self.n_fx}"
+
+    def pulse(self, t, x, y, col="#fff", size=300):
+        """two rings that ripple out from a number or a hit"""
+        for k in range(2):
+            i = self._id("pu")
+            self.TOP.append(f'<i class="pulse" id="{i}" style="left:{x - size / 2:.0f}px;top:{y - size / 2:.0f}px;width:{size}px;height:{size}px;border-color:{col}"></i>')
+            self.ft(f"#{i}", t + k * .12, .6, "{opacity: .95, scale: .35}", "{opacity: 0, scale: 2.2}", "power2.out")
+
+    def scribble(self, t, x, y, w, h, col=HOOK, rot=-4, hold=1.0, d=.35):
+        """a hand-drawn loop that draws itself around something"""
+        i = self._id("sc")
+        path = (f"M {w * .52:.0f} {h * .04:.0f} C {w * .95:.0f} {h * .02:.0f} {w * 1.0:.0f} {h * .9:.0f} {w * .5:.0f} {h * .96:.0f} "
+                f"C {w * .02:.0f} {h * 1.0:.0f} {w * -.02:.0f} {h * .1:.0f} {w * .45:.0f} {h * .06:.0f} C {w * .7:.0f} {h * .02:.0f} {w * .8:.0f} {h * .1:.0f} {w * .86:.0f} {h * .18:.0f}")
+        self.HTML.append(f'<svg class="scrib" id="{i}" style="left:{x:.0f}px;top:{y:.0f}px;width:{w}px;height:{h}px;transform:rotate({rot}deg)" viewBox="{-20} {-20} {w + 40} {h + 40}">'
+                         f'<path d="{path}" fill="none" stroke="{col}" stroke-width="12" stroke-linecap="round" pathLength="1" stroke-dasharray="1"/></svg>')
+        self.st(f"#{i}", t, "{opacity: 1}")
+        self.ft(f"#{i} path", t, d, "{strokeDashoffset: 1}", "{strokeDashoffset: 0}", "power2.out")
+        self.to(f"#{i}", t + d + hold, .15, "{opacity: 0}", "none")
+
+    def arrow(self, t, x, y, rot=0, col="#fff", hold=1.2, size=200):
+        """a hand-drawn arrow that draws in, then nudges towards its target"""
+        i = self._id("ar")
+        self.HTML.append(f'<svg class="arrow" id="{i}" style="left:{x:.0f}px;top:{y:.0f}px;width:{size}px;height:{size}px;transform:rotate({rot}deg)" viewBox="0 0 200 200">'
+                         f'<path d="M 20 30 C 70 20 130 50 160 150" fill="none" stroke="{col}" stroke-width="14" stroke-linecap="round" pathLength="1" stroke-dasharray="1"/>'
+                         f'<path d="M 118 132 L 162 158 L 176 108" fill="none" stroke="{col}" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1"/></svg>')
+        self.st(f"#{i}", t, "{opacity: 1}")
+        self.ft(f"#{i} path:nth-child(1)", t, .25, "{strokeDashoffset: 1}", "{strokeDashoffset: 0}", "power2.out")
+        self.ft(f"#{i} path:nth-child(2)", t + .22, .12, "{strokeDashoffset: 1}", "{strokeDashoffset: 0}", "power2.out")
+        n = max(1, int(hold / .3))
+        self.js(f'tl.to("#{i}", {{x: 14, y: 14, duration: .15, repeat: {n * 2 - 1}, yoyo: true, ease: "sine.inOut"}}, {t + .35:.3f});')
+        self.to(f"#{i}", t + .35 + n * .3, .15, "{opacity: 0}", "none")
+
+    def glint(self, t):
+        """a light sweep across the frame on a scene change"""
+        self.ft("#glint", t, .45, "{opacity: 1, x: -1500}", "{opacity: 1, x: 1500}", "power2.inOut")
+        self.st("#glint", t + .46, "{opacity: 0}")
+
+    def bob(self, sel, t0, t1, amp=10, per=.7):
+        """idle float on a card while it is on screen (y only: entrances and exits use x, scale, rotation)"""
+        n = int((t1 - t0) / per)
+        if n >= 2:
+            self.js(f'tl.to("{sel}", {{y: "-={amp}", duration: {per / 2:.3f}, repeat: {n * 2 - 1}, yoyo: true, ease: "sine.inOut"}}, {t0:.3f});')
+
+    def sparkle(self, t, x, y, col="#fff", size=60, hold=.8):
+        """a four-point star that pops, spins and goes"""
+        i = self._id("sp")
+        self.TOP.append(f'<svg class="spark" id="{i}" style="left:{x - size / 2:.0f}px;top:{y - size / 2:.0f}px;width:{size}px;height:{size}px" viewBox="0 0 100 100">'
+                        f'<path d="M50 0 C54 38 62 46 100 50 C62 54 54 62 50 100 C46 62 38 54 0 50 C38 46 46 38 50 0Z" fill="{col}"/></svg>')
+        self.ft(f"#{i}", t, .3, "{opacity: 1, scale: 0, rotation: -90}", "{scale: 1, rotation: 0}", "back.out(3)")
+        self.to(f"#{i}", t + .3, hold, "{rotation: 90}", "none")
+        self.to(f"#{i}", t + .3 + hold, .2, "{opacity: 0, scale: 0}", "power2.in")
+
+    def floaters(self, n=26, seed=11):
+        """drifting shapes behind everything, for the whole reel"""
+        rnd = random.Random(seed)
+        shapes = []
+        D = self.DUR
+        for k in range(n):
+            kind = k % 6
+            col = rnd.choice(["rgba(255,255,255,.55)", "rgba(255,255,255,.35)", "rgba(53,232,255,.55)", "rgba(139,77,255,.5)", "rgba(255,255,255,.45)"])
+            sz = rnd.randint(40, 120)
+            x, y = rnd.uniform(0, 1280), rnd.uniform(0, 2300)
+            svg = {
+                0: f'<circle cx="50" cy="50" r="38" fill="none" stroke="{col}" stroke-width="10"/>',
+                1: f'<path d="M50 14 V86 M14 50 H86" stroke="{col}" stroke-width="14" stroke-linecap="round"/>',
+                2: f'<path d="M50 12 L88 82 H12 Z" fill="none" stroke="{col}" stroke-width="10" stroke-linejoin="round"/>',
+                3: f'<path d="M6 50 C20 20 34 20 48 50 S76 80 94 50" fill="none" stroke="{col}" stroke-width="10" stroke-linecap="round"/>',
+                4: f'<path d="M50 0 C54 38 62 46 100 50 C62 54 54 62 50 100 C46 62 38 54 0 50 C38 46 46 38 50 0Z" fill="{col}"/>',
+                5: f'<circle cx="50" cy="50" r="22" fill="{col}"/>',
+            }[kind]
+            shapes.append(f'<svg class="fl" id="fl_{k}" style="left:{x:.0f}px;top:{y:.0f}px;width:{sz}px;height:{sz}px" viewBox="0 0 100 100">{svg}</svg>')
+            dy, dx, r = rnd.uniform(-900, -300), rnd.uniform(-160, 160), rnd.uniform(-540, 540)
+            self.js(f'tl.fromTo("#fl_{k}", {{x: 0, y: 0, rotation: 0}}, {{x: {dx:.0f}, y: {dy:.0f}, rotation: {r:.0f}, duration: {D:.2f}, ease: "none", immediateRender: true}}, 0);')
+            if kind == 4:                                   # stars twinkle
+                per = rnd.uniform(.5, .9)
+                self.js(f'tl.fromTo("#fl_{k}", {{scale: .5}}, {{scale: 1.3, duration: {per:.2f}, repeat: {int(D / per)}, yoyo: true, ease: "sine.inOut", immediateRender: true}}, {rnd.uniform(0, .5):.2f});')
+        self.FLOAT = "".join(shapes)
 
     def confetti(self, t, n=36, seed=3, x=540, y=760):
         rnd = random.Random(seed)
@@ -173,6 +267,11 @@ class Reel:
         self.js(f'tl.fromTo("#b1", {{x: -120, y: 0}}, {{x: 260, y: 420, duration: {D:.2f}, ease: "sine.inOut", immediateRender: true}}, 0);')
         self.js(f'tl.fromTo("#b2", {{x: 120, y: 0}}, {{x: -300, y: -380, duration: {D:.2f}, ease: "sine.inOut", immediateRender: true}}, 0);')
         self.js(f'tl.fromTo("#b3", {{x: 0, y: 0, scale: 1}}, {{x: 200, y: -200, scale: 1.3, duration: {D:.2f}, ease: "sine.inOut", immediateRender: true}}, 0);')
+        self.js(f'tl.fromTo("#prog i", {{scaleX: 0}}, {{scaleX: 1, duration: {D:.2f}, ease: "none", immediateRender: true}}, 0);')
+        if not hasattr(self, "FLOAT"):
+            self.floaters()
+        for k in range(1, len(self.IDS)):
+            self.glint(self.S[k] - .1)
         self.js(f'tl.fromTo("#dots", {{backgroundPosition: "0px 0px"}}, {{backgroundPosition: "{int(D * 40)}px {int(D * 80)}px", duration: {D:.2f}, ease: "none", immediateRender: true}}, 0);')
 
     BASE_CSS = f"""
@@ -184,17 +283,18 @@ class Reel:
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: {PINK}; }}
 #root {{ position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter; color: {INK}; background: {PINK}; }}
-#bg {{ position: absolute; inset: -200px; background: linear-gradient(165deg, #ff2f7f 0%, #ff4f97 45%, #ff7ab3 75%, #ff3d8b 100%); overflow: hidden; }}
+#bg {{ position: absolute; inset: -200px; background: linear-gradient(170deg, #ff2f7f 0%, #ff4b95 38%, #f04aa8 64%, #b048f0 88%, {VIOLET} 100%); overflow: hidden; }}
 .bb {{ position: absolute; border-radius: 50%; filter: blur(110px); }}
 #b1 {{ left: 0; top: 100px; width: 760px; height: 760px; background: rgba(255,214,234,.75); }}
 #b2 {{ right: 0; top: 1100px; width: 820px; height: 820px; background: rgba(150,80,255,.45); }}
-#b3 {{ left: 300px; top: 700px; width: 600px; height: 600px; background: rgba(255,120,80,.35); }}
+#b3 {{ left: 300px; top: 700px; width: 600px; height: 600px; background: rgba(53,232,255,.22); }}
 #dots {{ position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.22) 3px, transparent 3.5px); background-size: 46px 46px; }}
 #shk, #cam, #drift {{ position: absolute; inset: 0; transform-origin: 540px 900px; }}
 #shk {{ z-index: 10; }}
 .slam {{ position: absolute; left: 0; right: 0; text-align: center; font-weight: 800; letter-spacing: -.045em; line-height: .92; opacity: 0; z-index: 45; pointer-events: none; }}
 .slam .st {{ -webkit-text-stroke: 16px {INK}; paint-order: stroke fill; text-shadow: 0 14px 0 {INK}, 0 26px 50px rgba(60,0,30,.35); }}
-.slam em {{ font-style: normal; color: {SUN}; }}
+.slam em {{ font-style: normal; color: {HOOK}; }}
+.slam em.l {{ color: {LOSS}; }} .slam em.w {{ color: {WIN}; }} .slam em.h {{ color: {HOOK}; }}
 #burst {{ position: absolute; left: 40px; top: 460px; width: 1000px; height: 1000px; opacity: 0; z-index: 5; pointer-events: none; stroke: #fff; }}
 #flash {{ position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 70; pointer-events: none; }}
 .cfw {{ position: absolute; inset: 0; z-index: 48; pointer-events: none; }}
@@ -203,7 +303,15 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: {PINK
   opacity: 0; z-index: 50; color: #fff; }}
 .cw {{ display: inline-block; padding: 2px 14px; border-radius: 16px; -webkit-text-stroke: 12px {INK}; paint-order: stroke fill;
   text-shadow: 0 8px 0 {INK}; }}
-.cw.on {{ background: {SUN}; color: {INK}; -webkit-text-stroke: 0; text-shadow: none; transform: scale(1.08) rotate(-2deg); box-shadow: 0 8px 0 {INK}; }}
+.cw.on {{ color: {HOOK}; transform: translateY(-6px) scale(1.12) rotate(-2deg); }}
+.fl {{ position: absolute; overflow: visible; }}
+.pulse {{ position: absolute; border: 10px solid #fff; border-radius: 50%; opacity: 0; z-index: 47; pointer-events: none; }}
+.scrib, .arrow {{ position: absolute; opacity: 0; z-index: 44; overflow: visible; pointer-events: none; filter: drop-shadow(0 6px 0 rgba(22,18,26,.35)); }}
+.spark {{ position: absolute; opacity: 0; z-index: 49; pointer-events: none; filter: drop-shadow(0 0 12px rgba(255,255,255,.8)); }}
+#glint {{ position: absolute; left: 0; top: -400px; width: 420px; height: 2800px; opacity: 0; z-index: 66; pointer-events: none; transform: rotate(20deg);
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.28), rgba(255,255,255,0)); mix-blend-mode: screen; }}
+#prog {{ position: absolute; left: 0; top: 0; width: 1080px; height: 10px; background: rgba(255,255,255,.25); z-index: 75; }}
+#prog i {{ position: absolute; inset: 0; background: #fff; transform-origin: left center; transform: scaleX(0); box-shadow: 0 0 14px rgba(255,255,255,.8); }}
 #grain {{ position: absolute; inset: 0; background: url(assets/img/grain.png); opacity: .06; mix-blend-mode: multiply; pointer-events: none; z-index: 80; }}
 """
 
@@ -222,13 +330,15 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: {PINK
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{self.DUR:.2f}" data-fps="30" data-width="1080" data-height="1920">
-      <div id="bg"><i class="bb" id="b1"></i><i class="bb" id="b2"></i><i class="bb" id="b3"></i><i id="dots"></i></div>
+      <div id="bg"><i class="bb" id="b1"></i><i class="bb" id="b2"></i><i class="bb" id="b3"></i><i id="dots"></i>{self.FLOAT}</div>
       <svg id="burst" viewBox="0 0 1000 1000" fill="none" stroke-width="14" stroke-linecap="round">{burst}</svg>
       <div id="shk"><div id="cam"><div id="drift">
       {chr(10).join(self.HTML)}
       </div></div></div>
       {chr(10).join(self.TOP)}
+      <div id="glint"></div>
       <div id="flash"></div>
+      <div id="prog"><i></i></div>
       <div id="grain"></div>
     </div>
     <script>

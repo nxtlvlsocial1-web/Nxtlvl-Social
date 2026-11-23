@@ -16,7 +16,7 @@ The app shows you the exact second viewers leave and why, before you post.
 
 Send this to the friend whose reels keep flopping.
 
-Music: "Upbeat Corporate" by Soundrider/Dope, CC BY 3.0
+Music: "05. Hip-Hop Jazz" by Prospect Of Idiots, CC BY 3.0
 
 #reelstips #contentcreator #instagramgrowth #aitools #creedom
 why did my reel flop, instagram reel retention, reel hook tips, average watch time instagram, how to get more views on reels, reel analyzer app, ai tools for content creators, instagram growth tips, why people stop watching my reels, video hook examples
@@ -25,7 +25,7 @@ why did my reel flop, instagram reel retention, reel hook tips, average watch ti
 Notes:
 - CREE keyword DM sends the Creedom link (still needed from the owner).
 - Numbers are the owner's real insights for the original reel: 304 views, 247 viewers, 5 s average watch.
-- Music: "Upbeat Corporate" by Soundrider/Dope (Jamendo 1670486 via Openverse, CC BY 3.0); credit line required.
+- Music: "05. Hip-Hop Jazz" by Prospect Of Idiots (Jamendo 1199610 via Openverse, CC BY 3.0, instrumental); credit line required.
 - Sound effects: Openverse CC0 plus OpenGameArt CC0 packs (no credit needed).
 - Voice: Kokoro-82M af_heart (Apache 2.0, free, local), read directly with no cloning; "Creedom" said as CREE-dum.
 - Mascot: Cree, Creedom's own 3D mascot.

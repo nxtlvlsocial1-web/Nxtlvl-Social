@@ -1,5 +1,8 @@
 """Creedom remake 2 v2, "Graded before anyone saw it" (Creators 100X, 9:16): writes index.html, plan/sfx_events.json, plan/edit.json.
 
+v3 (owner: "change music ... the yellow looks much worse ... psychological colours ... as many motion elements as
+possible"): LOSS red on the low score, HARSH and the flagged seconds, WIN green on the fixes and 4.4, HOOK cyan on the open
+questions (see build/kit.py), new music, and a motion beat (pulse, scribble, arrow, sparkle, glint, bob) on every hit.
 v2 (owner: "very dull and slow animated feel"): bright pink and fast, on the shared kinetic kit (build/kit.py, same as
 creedom-postmortem-9x16). The scores are an example (owner: make them), shown with an EXAMPLE tag: 2.9 / 5 -> 4.4 / 5,
 flags at 0:01, 0:07, 0:14. Frame 1: a reel on a phone and the dial slamming to 2.9; HARSH; each flagged second with a
@@ -10,11 +13,11 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from kit import INK, PINK, SUN, Reel  # noqa: E402
+from kit import HOOK, INK, LOSS, PINK, SUN, WIN, Reel  # noqa: E402
 
 R = Reel(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Creedom remake: graded before anyone saw it v2 9x16")
 S, wt, H = R.S, R.wt, R.HTML.append
-RED, GREEN = "#ff2d55", "#14c27a"
+RED, GREEN = LOSS, WIN          # v3: the kit's loss / reward colours
 for k in range(len(R.IDS)):
     R.drift(S[k] - .05, S[k + 1] - S[k] + .05, rot=1.6 if k % 2 else -1.6, z=.06)
 
@@ -40,14 +43,20 @@ R.sfx("impact", .6)
 R.shake(.62, 20, 1.6)
 R.punch(.6, .1)
 R.burst(.6, 760, 880, 1.0, RED)
+R.pulse(.62, 785, 885, LOSS, 520)
+R.sparkle(.7, 980, 610, "#fff", 66)
+R.sparkle(.85, 600, 1180, HOOK, 52)
+R.bob("#phone", .5, S[1] - .1, 8, .8)
 tb = wt("f00", "before")
-R.slam("before anyone<br><em>saw it.</em>", tb, max(.35, S[1] - tb - .45), top=250, size=120, rot=-3, sfx="thump")
+R.slam("before anyone<br><em class=h>saw it.</em>", tb, max(.35, S[1] - tb - .45), top=250, size=120, rot=-3, sfx="thump")
 
 # ---- f01: HARSH, then the timeline with three flags
 a1 = S[1]
 H('<div id="tline"><i class="bar"></i>' + "".join(f'<i class="flag" id="fl{k}" style="left:{x}%"><em>{lab}</em></i>' for k, (x, lab) in enumerate([(6, "0:01"), (40, "0:07"), (78, "0:14")])) + '</div>')
-R.slam("HARSH.", a1, max(.3, wt("f01", "look") - a1 - .35), top=720, size=280, rot=-5, col=SUN, sfx="impact")
-R.burst(a1, 540, 860, 1.3, SUN)
+R.slam("HARSH.", a1, max(.3, wt("f01", "look") - a1 - .35), top=720, size=280, rot=-5, col=LOSS, sfx="impact")
+R.burst(a1, 540, 860, 1.3, LOSS)
+R.pulse(a1 + .05, 540, 850, LOSS, 600)
+R.sparkle(a1 + .1, 920, 640, "#fff", 70)
 R.sfx("g_wrong", a1 + .05)
 tl_ = wt("f01", "look")
 R.to("#phone, #dial", a1 - .04, .2, "{opacity: .25, scale: .9}", "power2.out")      # HARSH sits on top: the scene steps back
@@ -71,7 +80,9 @@ for k, (word, img, ts, txt) in enumerate(NOTES):
     R.st("#frame", tw - .05, f'{{attr: {{src: "assets/img/{img}"}}}}')
     R.ft("#phone", tw - .05, .3, "{scale: 1.12}", "{scale: 1}", "expo.out")
     R.flash(tw - .05, .35, .12)
-    R.slam(ts, tw - .02, .3, top=250, size=170, rot=-4 + 4 * k, col=SUN, sfx="g_wrong" if k < 2 else "thump", shake=False)
+    R.slam(ts, tw - .02, .3, top=250, size=170, rot=-4 + 4 * k, col=LOSS, sfx="g_wrong" if k < 2 else "thump", shake=False)
+    R.pulse(tw + .1, 770, 622 + k * 151, LOSS, 260)
+    R.scribble(tw + .15, 500, 548 + k * 151, 520, 150, LOSS, -2 + 2 * k, hold=.5)
     R.ft(f"#n{k}", tw + .08, .3, "{opacity: 0, x: 400, rotation: 8}", "{opacity: 1, x: 0, rotation: 0}", "back.out(2)")
     R.ft(f"#fl{k}", tw, .3, "{scale: 1.8}", "{scale: 1}", "back.out(3)")
     R.sfx("swish", tw + .08)
@@ -88,6 +99,7 @@ for k in range(3):
     R.ft(f"#n{k}", tk, .25, "{scale: 1.12}", "{scale: 1}", "back.out(3)")
     R.st(f"#fl{k}", tk, "{className: 'flag fixed'}")
     R.sfx("g_correct" if k == 2 else "click", tk)
+    R.pulse(tk, 960, 622 + k * 151, WIN, 160)
 t44 = wt("f03", "scores") + .35          # "four point four" (Whisper writes "4 .4.")
 R.to("#notes", t44 - .5, .22, '{x: 700, opacity: 0, filter: "blur(16px)"}', "power3.in")
 R.to("#phone", t44 - .5, .22, '{x: -700, opacity: 0, filter: "blur(16px)"}', "power3.in")
@@ -98,6 +110,9 @@ dial_to(t44 - .05, 2.9, 4.4, .6, GREEN)
 R.flash(t44 + .5, .6, .2)
 R.burst(t44 + .5, 540, 880, 1.5, SUN)
 R.confetti(t44 + .5, 40, 5, 540, 860)
+R.pulse(t44 + .5, 540, 880, WIN, 700)
+for k, (x, y, c) in enumerate([(160, 560, "#fff"), (930, 600, WIN), (200, 1180, WIN), (900, 1160, "#fff")]):
+    R.sparkle(t44 + .55 + k * .07, x, y, c, 72)
 R.shake(t44 + .52, 14, 1.2)
 R.punch(t44 + .5, .1)
 R.sfx("g_levelup", t44 + .45)
@@ -124,7 +139,11 @@ R.ft("#app", tup - .04, .36, '{opacity: 1, y: 1200, rotation: 6, filter: "blur(2
 R.sfx("whoosh", tup - .12)
 R.ft("#cree", tup + .15, .4, "{opacity: 0, x: 300, rotation: 20}", "{opacity: 1, x: 0, rotation: 0}", "back.out(2)")
 R.sfx("g_pop", tup + .15)
+R.bob("#app", tup + .45, S[5] - .25, 7)
+for k, (x, y, c) in enumerate([(150, 590, "#fff"), (940, 610, HOOK), (900, 980, "#fff")]):
+    R.sparkle(a4 + .08 + k * .08, x, y, c, 66)
 tex = wt("f04", "exact")
+R.arrow(tex - .1, 820, 520, 80, HOOK, hold=max(.3, S[5] - tex - .7), size=170)
 R.ft("#t1", tex - .05, .3, "{scale: 1.1}", "{scale: 1}", "back.out(3)")
 R.punch(tex, .06)
 R.sfx("pop", tex - .05)
@@ -157,6 +176,11 @@ R.ft("#cbox", tc + .65, .3, "{scale: 1.12}", "{scale: 1}", "back.out(3)")
 R.sfx("click", tc + .65)
 R.sfx("notify", tc + .85)
 R.punch(tc + .65, .06)
+R.pulse(tc + .65, 440, 935, HOOK, 300)
+R.arrow(tc + .05, 820, 640, 75, HOOK, hold=max(.3, R.DUR - tc - .9), size=190)
+R.sparkle(tc + .7, 860, 860, "#fff", 66)
+R.sparkle(tpr + .1, 950, 450, HOOK, 60)
+R.bob("#share", a5 + .4, R.DUR - .5, 6)
 H('<div id="loop" data-layout-allow-overlap><div class="lp"><img src="assets/img/demo_f01.jpg" alt=""></div><div class="ld"><b>2.9</b><span>/ 5</span></div></div>')
 R.flash(R.DUR - .36, .9, .2)
 R.st("#loop", R.DUR - .3, "{opacity: 1}")
@@ -196,17 +220,18 @@ R.write(f"""
 #app {{ position: absolute; left: 60px; right: 60px; top: 480px; opacity: 0; z-index: 20; border-radius: 44px; padding: 36px 38px 40px; background: #fff; box-shadow: {SHADOW}; }}
 #app img {{ height: 74px; display: block; }}
 .q {{ margin: 26px 0 22px; font-family: Serif; font-style: italic; font-size: 72px; }}
-.tile {{ display: flex; gap: 22px; align-items: center; background: {SUN}; border-radius: 28px; padding: 24px 26px; margin-top: 16px; box-shadow: 0 10px 0 {INK}; }}
+.tile {{ display: flex; gap: 22px; align-items: center; background: {INK}; color: #fff; border-radius: 28px; padding: 24px 26px; margin-top: 16px; box-shadow: 0 10px 0 rgba(22,18,26,.3); }}
+.tile i {{ background: {WIN} !important; color: {INK} !important; }}
 .tile i {{ width: 82px; height: 82px; border-radius: 22px; background: {INK}; color: #fff; display: grid; place-items: center; font-style: normal; font-size: 38px; flex: none; }}
 .tile b {{ display: block; font-weight: 800; font-size: 44px; letter-spacing: -.02em; line-height: 1.05; }}
-.tile span {{ display: block; font-weight: 600; font-size: 30px; color: #4b4450; margin-top: 4px; }}
-.tile.dim {{ background: #f3eef2; box-shadow: none; opacity: .6; }}
-.tile.dim i {{ background: #cfc6cc; color: {INK}; }}
+.tile span {{ display: block; font-weight: 600; font-size: 30px; color: #d9d2dc; margin-top: 4px; }}
+.tile.dim {{ background: #f3eef2; color: {INK}; box-shadow: none; opacity: .6; }}
+.tile.dim i {{ background: #cfc6cc !important; color: {INK} !important; }}
 #cree, #cree2 {{ position: absolute; right: 20px; top: 1060px; width: 330px; opacity: 0; z-index: 24; filter: drop-shadow(0 16px 0 rgba(22,18,26,.25)); }}
 #cree2 {{ top: 1000px; }}
 #share {{ position: absolute; left: 70px; right: 70px; top: 470px; opacity: 0; z-index: 24; display: flex; align-items: center; gap: 26px; background: {INK}; color: #fff;
   padding: 30px 40px; border-radius: 40px; font-weight: 800; font-size: 54px; line-height: 1.1; box-shadow: 0 14px 0 rgba(22,18,26,.35); }}
-#share b {{ color: {SUN}; font-size: 80px; }}
+#share b {{ color: {HOOK}; font-size: 80px; }}
 #cbox {{ position: absolute; left: 60px; width: 760px; top: 860px; height: 150px; border-radius: 75px; background: #fff; display: flex; align-items: center; opacity: 0; z-index: 24;
   gap: 24px; padding: 0 34px; font-weight: 800; font-size: 72px; letter-spacing: .02em; box-shadow: {SHADOW}; }}
 #cbox .av {{ width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, {PINK}, #a064ff); flex: none; }}
