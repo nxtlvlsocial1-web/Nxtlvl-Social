@@ -186,7 +186,7 @@ function poseChat(t) {
   chatBodyMat.color.copy(bodyGrey).lerp(bodyWhite, k);
   chatBodyMat.metalness = lerp(0.35, 0, k); chatBodyMat.roughness = lerp(0.35, 0.28, k);
   const enter = p(t, -0.05, 0.6, "back");
-  const out = p(t, C.r2 - 0.05, 0.4, "in");
+  const out = p(t, C.r2 - 0.12, 0.3, "in");
   // glitch jitter around the switch
   const gl = t > C.sw - 0.32 && t < C.sw + 0.08 ? (rng(Math.floor(t * 30))() - 0.5) * 0.5 : 0;
   chat.position.set(gl + out * -9, Y0 + 0.2 + wob(t, 1.6, 0.06) + (1 - enter) * -1.5, 0);
@@ -245,11 +245,11 @@ const wallFace = new THREE.InstancedMesh(genFace.mesh.geometry, genFace.mesh.mat
 lazy.add(wallBody, wallFace);
 const _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _e = new THREE.Euler(), _v = new THREE.Vector3(), _s = new THREE.Vector3();
 function poseLazy(t) {
-  const vis = t > C.r2 - 0.2 && t < C.task + 0.6;
+  const vis = t > C.r2 + 0.1 && t < C.task + 0.6;
   lazy.visible = vis;
   if (!vis) return;
   drawPill(t);
-  const inP = p(t, C.r2 - 0.15, 0.5, "back");
+  const inP = p(t, C.r2 + 0.12, 0.45, "back");
   const pillUp = p(t, C.dont - 0.2, 0.4, "io");
   pillG.visible = t < C.wall + 0.6;
   pillG.position.set(lerp(7, 0, inP), Y0 + lerp(0.2, 2.25, pillUp), 0.3);
