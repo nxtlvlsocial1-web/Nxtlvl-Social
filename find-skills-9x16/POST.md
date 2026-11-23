@@ -70,7 +70,7 @@ In your inbox now. Tell me what you find with it.
 ## Alt text (Advanced settings, Accessibility)
 
 ```
-3D motion-graphics explainer. Skill cards fill a grid one at a time while a counter reads installed 9 of 1,528,982. A galaxy of skill cards appears with the count of skills on skills.sh. A card reading find-skills by Vercel Labs spins in, a prompt types find a skill for my content reel, and four skills are found and installed. A leaderboard shows find-skills at number one with 4.5 million installs. Ends with Comment SKILLS.
+3D voxel animation. A blocky creator in a yellow hoodie types frantically as skill cards pop out of his laptop one at a time while a counter reads installed 9 of 1,528,982. He stares up at a galaxy of skill cards. An orange cube robot with a magnifier, the Skill Finder, crash-lands and points out four skills, a card reading find-skills by Vercel Labs spins in, the robot jetpacks through the cards and drops captions, video editing, thumbnails and hook writing into his laptop. It stands on a number 1 podium with a trophy as 4.5 million installs counts up, then the two high-five. Ends with Comment SKILLS.
 ```
 
 ## Extra hashtags (optional, first comment)
