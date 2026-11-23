@@ -1,287 +1,221 @@
-"""Creedom remake 2, "Graded before anyone saw it" (Creators 100X, 9:16): writes index.html, plan/sfx_events.json, plan/edit.json.
+"""Creedom remake 2 v2, "Graded before anyone saw it" (Creators 100X, 9:16): writes index.html, plan/sfx_events.json, plan/edit.json.
 
-Built on .claude/skills/nxtlvl-social-video/references/reach-psychology.md after CHECK v1 flatlined (270 views, 4 s
-average watch, 0 shares). Script: creedom-check-9x16/plan/script_remake_v2.md. The scores are an example (owner: make
-them), shown with an EXAMPLE tag: 2.9 / 5 -> 4.4 / 5, flags at 0:01, 0:07, 0:14.
-Frame 1: a reel on a phone and a score dial slamming to 2.9 (result-first hook); the three flagged seconds; the fix and
-the climb to 4.4; Creedom only at about 65 %, in its pink world; the CTA (CHECK) and a cut back to the dial (loop).
+v2 (owner: "very dull and slow animated feel"): bright pink and fast, on the shared kinetic kit (build/kit.py, same as
+creedom-postmortem-9x16). The scores are an example (owner: make them), shown with an EXAMPLE tag: 2.9 / 5 -> 4.4 / 5,
+flags at 0:01, 0:07, 0:14. Frame 1: a reel on a phone and the dial slamming to 2.9; HARSH; each flagged second with a
+giant timestamp; the fix and the climb to 4.4 with confetti; Creedom at about 60 %; CTA CHECK; loop back to the 2.9 dial.
 python3 build/generate.py
 """
-import json
 import os
-import re
+import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-W = json.load(open(os.path.join(ROOT, "plan", "words.json")))
-SCRIPT = json.load(open(os.path.join(ROOT, "plan", "script.json")))
-LW = {}
-for w in W:
-    LW.setdefault(w["line"], []).append(w)
-JS, SFX, HTML = [], [], []
-PINK, INK = "#ff3d8b", "#16121a"
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from kit import INK, PINK, SUN, Reel  # noqa: E402
 
-
-def js(s):
-    JS.append(s)
-
-
-def sfx(kind, t):
-    SFX.append({"type": kind, "t": round(max(0, t), 3)})
-
-
-def ft(sel, t, d, frm, to_, ease="power3.out"):
-    js(f'tl.fromTo("{sel}", {frm}, {{...{to_}, duration: {d}, ease: "{ease}", immediateRender: false}}, {t:.3f});')
-
-
-def to(sel, t, d, props, ease="power2.out"):
-    js(f'tl.to("{sel}", {{...{props}, duration: {d}, ease: "{ease}"}}, {t:.3f});')
-
-
-def st(sel, t, props):
-    js(f'tl.set("{sel}", {props}, {t:.3f});')
-
-
-def wt(line, word, n=0):
-    hits = [w for w in LW[line] if re.sub(r"[^a-z0-9]", "", w["w"].lower()).startswith(word.lower())]
-    if not hits:
-        raise SystemExit(f"{line}: no word starting {word!r}")
-    return hits[min(n, len(hits) - 1)]["t0"]
-
-
-IDS = [ln["id"] for ln in SCRIPT]
-L = {i: (LW[i][0]["t0"], LW[i][-1]["t1"]) for i in IDS}
-S = [L[i][0] for i in IDS] + [L[IDS[-1]][1] + 1.2]
-DUR = round(S[-1], 2)
-
-
-# ---- top caption pills
-PILLS = ["Scored <b>before</b><br>anyone saw it.", "Look where it<br>lost points.", "3 seconds cost it.", "Fix 3 seconds.",
-         "It's <b>Creedom</b>.", 'Comment <b>CHECK</b>']
-for k, (lid, txt) in enumerate(zip(IDS, PILLS)):
-    HTML.append(f'<div class="pill" id="p{k}"><span>{txt}</span></div>')
-    a, b = S[k], S[k + 1]
-    ft(f"#p{k}", a - .06, .3, "{opacity: 0, y: 24, scale: .92}", "{opacity: 1, y: 0, scale: 1}", "back.out(2.2)")
-    if k < len(IDS) - 1:
-        to(f"#p{k}", b - .12, .12, "{opacity: 0, y: -16}", "power2.in")
+R = Reel(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Creedom remake: graded before anyone saw it v2 9x16")
+S, wt, H = R.S, R.wt, R.HTML.append
+RED, GREEN = "#ff2d55", "#14c27a"
+for k in range(len(R.IDS)):
+    R.drift(S[k] - .05, S[k + 1] - S[k] + .05, rot=1.6 if k % 2 else -1.6, z=.06)
 
 C = 540.35                                     # dial circumference (r = 86)
-def dial_to(t, frm, score, d=.7, col="#ff2d55"):
+def dial_to(t, frm, score, d=.6, col=RED):
     """the arc and the number move together; both are pure functions of the timeline position"""
-    js(f'tl.to("#arc", {{strokeDashoffset: {C * (1 - score / 5):.1f}, stroke: "{col}", duration: {d}, ease: "power3.out"}}, {t:.3f});')
-    js(f'(() => {{ const o = {{v: {frm}}}; tl.to(o, {{v: {score}, duration: {d}, ease: "power3.out", '
-       f'onUpdate: () => {{ document.getElementById("score").textContent = o.v.toFixed(1); }}}}, {t:.3f}); }})();')
+    R.js(f'tl.to("#arc", {{strokeDashoffset: {C * (1 - score / 5):.1f}, stroke: "{col}", duration: {d}, ease: "power3.out"}}, {t:.3f});')
+    R.counter("score", t, d, frm, score, "o.v.toFixed(1)", "power3.out")
 
-# ---- scene 1-2: phone + dial (result first), flags on the timeline
-HTML.append('<div id="phone"><img id="frame" src="assets/img/demo_f01.jpg" alt=""><b class="ex">EXAMPLE</b></div>')
-HTML.append('<div id="dial"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="86" class="trk"/><circle cx="100" cy="100" r="86" class="arc" id="arc"/></svg>'
-            '<div class="sc"><b id="score">0.0</b><span>/ 5</span></div></div>')
-HTML.append('<div id="tline"><i class="bar"></i>' + "".join(f'<i class="flag" id="fl{k}" style="left:{x}%"><em>{lab}</em></i>' for k, (x, lab) in enumerate([(5, "0:01"), (35, "0:07"), (70, "0:14")])) + '</div>')
-st("#phone", 0, "{opacity: 1}")
-st("#dial", 0, "{opacity: 1}")
-ft("#phone", 0, .45, "{scale: 1.06, rotation: -4}", "{scale: 1, rotation: -3}", "power3.out")
-ft("#dial", 0, .4, "{scale: .6}", "{scale: 1}", "back.out(2)")
-js(f'tl.set("#arc", {{strokeDashoffset: {C:.1f}}}, 0);')
-dial_to(.12, 0, 2.9, .55)
-sfx("riser_short", 0)
-sfx("buzzer", .62)
-sfx("impact", .64)
-ft("#dial", .66, .3, "{x: 0}", "{keyframes: [{x: -14, duration: .05}, {x: 12, duration: .05}, {x: -6, duration: .05}, {x: 0, duration: .1}]}", "none")
+# ---- f00: phone + dial at frame 1, the dial slams to 2.9
+H('<div id="phone"><img id="frame" src="assets/img/demo_f01.jpg" alt=""><b class="ex">EXAMPLE</b></div>')
+H('<div id="dial"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="86" class="trk"/><circle cx="100" cy="100" r="86" class="arc" id="arc"/></svg>'
+  '<div class="sc"><b id="score">0.0</b><span>/ 5</span></div></div>')
+R.st("#phone", 0, "{opacity: 1}")
+R.st("#dial", 0, "{opacity: 1}")
+R.ft("#phone", 0, .4, "{scale: 1.25, rotation: -10, x: -80}", "{scale: 1, rotation: -4, x: 0}", "expo.out")
+R.ft("#dial", 0, .4, "{scale: .3, rotation: 30}", "{scale: 1, rotation: 0}", "back.out(1.8)")
+R.js(f'tl.set("#arc", {{strokeDashoffset: {C:.1f}}}, 0);')
+dial_to(.1, 0, 2.9, .5)
+R.sfx("riser_short", 0)
+R.sfx("buzzer", .58)
+R.sfx("impact", .6)
+R.shake(.62, 20, 1.6)
+R.punch(.6, .1)
+R.burst(.6, 760, 880, 1.0, RED)
+tb = wt("f00", "before")
+R.slam("before anyone<br><em>saw it.</em>", tb, max(.35, S[1] - tb - .45), top=250, size=120, rot=-3, sfx="thump")
+
+# ---- f01: HARSH, then the timeline with three flags
 a1 = S[1]
-ft("#tline", a1 + .1, .35, "{opacity: 0, y: 30}", "{opacity: 1, y: 0}")
+H('<div id="tline"><i class="bar"></i>' + "".join(f'<i class="flag" id="fl{k}" style="left:{x}%"><em>{lab}</em></i>' for k, (x, lab) in enumerate([(6, "0:01"), (40, "0:07"), (78, "0:14")])) + '</div>')
+R.slam("HARSH.", a1, max(.3, wt("f01", "look") - a1 - .35), top=720, size=280, rot=-5, col=SUN, sfx="impact")
+R.burst(a1, 540, 860, 1.3, SUN)
+R.sfx("g_wrong", a1 + .05)
+tl_ = wt("f01", "look")
+R.to("#phone, #dial", a1 - .04, .2, "{opacity: .25, scale: .9}", "power2.out")      # HARSH sits on top: the scene steps back
+R.to("#phone, #dial", tl_ - .1, .25, "{opacity: 1, scale: 1}", "back.out(2)")
+R.pop_in("#tline", tl_ - .05, .3, .6, 0, "back.out(2)")
+R.sfx("whoosh", tl_ - .1)
 for k in range(3):
-    ft(f"#fl{k}", a1 + .45 + k * .18, .3, "{opacity: 0, y: -30, scale: .5}", "{opacity: 1, y: 0, scale: 1}", "back.out(3)")
-    sfx("pop", a1 + .45 + k * .18)
+    R.ft(f"#fl{k}", tl_ + .2 + k * .14, .28, "{opacity: 0, y: -60, scale: .3}", "{opacity: 1, y: 0, scale: 1}", "back.out(3.5)")
+    R.sfx("pop", tl_ + .2 + k * .14)
+R.punch(wt("f01", "points"), .06)
 
-# ---- scene 3: each flagged second, frame + note
+# ---- f02: each flagged second: phone frame cuts, giant timestamp, a note card
 a2 = S[2]
 NOTES = [("one", "demo_f01.jpg", "0:01", "Hook too slow"), ("seven", "demo_f07.jpg", "0:07", "A claim, no proof"), ("fourteen", "demo_f14.jpg", "0:14", "Loses trust")]
-HTML.append('<div id="notes">' + "".join(f'<div class="note" id="n{k}"><b>{ts}</b><span>{txt}</span><i class="ok">&#10003;</i></div>' for k, (_, _, ts, txt) in enumerate(NOTES)) + '</div>')
-to("#dial", a2 - .1, .4, "{x: 140, y: -330, scale: .42}", "power3.inOut")
+H('<div id="notes">' + "".join(f'<div class="note" id="n{k}"><b>{ts}</b><span>{txt}</span><i class="ok">&#10003;</i></div>' for k, (_, _, ts, txt) in enumerate(NOTES)) + '</div>')
+R.to("#dial", a2 - .12, .3, "{x: 150, y: -380, scale: .44}", "power3.inOut")
+R.to("#phone", a2 - .12, .3, "{x: -20, y: -60, rotation: -3}", "power3.inOut")
+R.sfx("swish", a2 - .12)
 for k, (word, img, ts, txt) in enumerate(NOTES):
     tw = wt("f02", word)
-    st("#frame", tw - .05, f'{{attr: {{src: "assets/img/{img}"}}}}')
-    ft("#phone", tw - .05, .3, "{scale: 1.05}", "{scale: 1}", "power2.out")
-    ft(f"#n{k}", tw - .05, .35, "{opacity: 0, x: 60}", "{opacity: 1, x: 0}", "back.out(1.8)")
-    ft(f"#fl{k}", tw - .05, .35, "{scale: 1.5}", "{scale: 1}", "back.out(2)")
-    sfx("g_wrong" if k < 2 else "thump", tw)
+    R.st("#frame", tw - .05, f'{{attr: {{src: "assets/img/{img}"}}}}')
+    R.ft("#phone", tw - .05, .3, "{scale: 1.12}", "{scale: 1}", "expo.out")
+    R.flash(tw - .05, .35, .12)
+    R.slam(ts, tw - .02, .3, top=250, size=170, rot=-4 + 4 * k, col=SUN, sfx="g_wrong" if k < 2 else "thump", shake=False)
+    R.ft(f"#n{k}", tw + .08, .3, "{opacity: 0, x: 400, rotation: 8}", "{opacity: 1, x: 0, rotation: 0}", "back.out(2)")
+    R.ft(f"#fl{k}", tw, .3, "{scale: 1.8}", "{scale: 1}", "back.out(3)")
+    R.sfx("swish", tw + .08)
+    twd = R.LW["f02"][[w["t0"] for w in R.LW["f02"]].index(tw) + 2]["t0"] if k < 2 else wt("f02", "trust")
+    R.punch(twd, .05)
 
-# ---- scene 4: fix the three seconds, the dial climbs to 4.4
+# ---- f03: fix the three seconds: checks pop green, the dial flies back big and climbs to 4.4
 a3 = S[3]
-tfix = wt("f03", "fix")
+tfix = wt("f03", "three")
 for k in range(3):
-    st(f"#n{k}", tfix + .25 + k * .22, "{className: 'note fixed'}")
-    ft(f"#n{k} .ok", tfix + .25 + k * .22, .3, "{scale: 0}", "{scale: 1}", "back.out(3)")
-    st(f"#fl{k}", tfix + .25 + k * .22, "{className: 'flag fixed'}")
-    sfx("click", tfix + .25 + k * .22)
+    tk = tfix + k * .16
+    R.st(f"#n{k}", tk, "{className: 'note fixed'}")
+    R.ft(f"#n{k} .ok", tk, .3, "{scale: 0, rotation: -90}", "{scale: 1, rotation: 0}", "back.out(3.5)")
+    R.ft(f"#n{k}", tk, .25, "{scale: 1.12}", "{scale: 1}", "back.out(3)")
+    R.st(f"#fl{k}", tk, "{className: 'flag fixed'}")
+    R.sfx("g_correct" if k == 2 else "click", tk)
 t44 = wt("f03", "scores") + .35          # "four point four" (Whisper writes "4 .4.")
-to("#dial", t44 - .35, .35, "{x: 140, y: -330, scale: .52}", "back.out(2)")
-dial_to(t44 - .05, 2.9, 4.4, .7, "#20c070")
-sfx("g_levelup", t44)
-sfx("sparkle", t44 + .1)
+R.to("#notes", t44 - .5, .22, '{x: 700, opacity: 0, filter: "blur(16px)"}', "power3.in")
+R.to("#phone", t44 - .5, .22, '{x: -700, opacity: 0, filter: "blur(16px)"}', "power3.in")
+R.to("#tline", t44 - .5, .18, "{opacity: 0, y: 80}", "power2.in")
+R.to("#dial", t44 - .42, .35, "{x: -230, y: -60, scale: 1.3}", "back.out(1.6)")
+R.sfx("whoosh", t44 - .5)
+dial_to(t44 - .05, 2.9, 4.4, .6, GREEN)
+R.flash(t44 + .5, .6, .2)
+R.burst(t44 + .5, 540, 880, 1.5, SUN)
+R.confetti(t44 + .5, 40, 5, 540, 860)
+R.shake(t44 + .52, 14, 1.2)
+R.punch(t44 + .5, .1)
+R.sfx("g_levelup", t44 + .45)
+R.sfx("sparkle", t44 + .55)
 
-# ---- scene 5: Creedom reveal (pink world), CHECK card, Cree
+# ---- f04: Creedom (about 60 % in): flash, logo slam, the app card, Cree
 a4 = S[4]
-HTML.append('<div id="world"><i class="bl b1"></i><i class="bl b2"></i><i class="bl b3"></i></div>')
-HTML.append('<div id="app"><img src="assets/img/creedom_logo.png" alt=""><div class="q">How can Cree help?</div>'
-            '<div class="tile"><i>&#9654;</i><div><b>Check a reel before you post</b><span>Score out of 5, the exact second, and the fix</span></div></div>'
-            '<div class="tile dim"><i>&#9998;</i><div><b>Get a script in your voice</b></div></div></div>')
-HTML.append('<img id="cree" src="assets/img/poses/proud.png" alt="">')
-ft("#world", a4 - .2, .5, "{opacity: 0}", "{opacity: 1}")
-to("#phone", a4 - .2, .4, "{opacity: 0, x: -300}", "power2.in")
-to("#tline", a4 - .2, .3, "{opacity: 0}")
-to("#notes", a4 - .2, .3, "{opacity: 0, x: 200}", "power2.in")
-to("#dial", a4 - .2, .3, "{opacity: 0, scale: .3}", "power2.in")
-ft("#app", a4, .5, "{opacity: 0, y: 80, scale: .9}", "{opacity: 1, y: 0, scale: 1}", "back.out(1.5)")
-ft("#cree", a4 + .3, .5, "{opacity: 0, x: 200, rotation: 12}", "{opacity: 1, x: 0, rotation: 0}", "back.out(1.6)")
-sfx("whoosh_big", a4 - .2)
-sfx("sparkle", a4 + .1)
+H('<div id="logo"><img src="assets/img/creedom_logo.png" alt=""></div>')
+H('<div id="app"><img src="assets/img/creedom_logo.png" alt=""><div class="q">How can Cree help?</div>'
+  '<div class="tile" id="t1"><i>&#9654;</i><div><b>Check a reel before you post</b><span>Score out of 5, the exact second, and the fix</span></div></div>'
+  '<div class="tile dim"><i>&#9998;</i><div><b>Get a script in your voice</b></div></div></div>')
+H('<img id="cree" src="assets/img/poses/proud.png" alt="">')
+R.zoom_out("#dial", a4 - .14)
+R.flash(a4 - .06, .95, .25)
+R.ft("#logo", a4 - .04, .3, "{opacity: 0, scale: 3, rotation: -12}", "{opacity: 1, scale: 1, rotation: -3}", "power4.out")
+R.burst(a4, 540, 800, 1.3)
+R.shake(a4 + .05, 16, 1.4)
+R.punch(a4 + .02, .1)
+R.sfx("whoosh_big", a4 - .2)
+R.sfx("impact", a4 - .02)
+tup = wt("f04", "upload")
+R.to("#logo", tup - .12, .18, "{y: -900, scale: .5, opacity: 0}", "power3.in")
+R.ft("#app", tup - .04, .36, '{opacity: 1, y: 1200, rotation: 6, filter: "blur(20px)"}', '{y: 0, rotation: -1.5, filter: "blur(0px)"}', "expo.out")
+R.sfx("whoosh", tup - .12)
+R.ft("#cree", tup + .15, .4, "{opacity: 0, x: 300, rotation: 20}", "{opacity: 1, x: 0, rotation: 0}", "back.out(2)")
+R.sfx("g_pop", tup + .15)
+tex = wt("f04", "exact")
+R.ft("#t1", tex - .05, .3, "{scale: 1.1}", "{scale: 1}", "back.out(3)")
+R.punch(tex, .06)
+R.sfx("pop", tex - .05)
+tfx = wt("f04", "fix")
+R.ft("#t1", tfx - .05, .3, "{scale: 1.1}", "{scale: 1}", "back.out(3)")
+R.punch(tfx, .05)
+R.sfx("ding", tfx)
 
-# ---- scene 6: CTA (CHECK), share sticker, loop back to the 2.9 dial
+# ---- f05: CTA (CHECK): share sticker, giant comment box, Cree waves; flash cut back to the 2.9 dial (loop)
 a5 = S[5]
-HTML.append('<div id="cta"><div class="share"><b>&#10148;</b><span>send to the friend who posts and prays</span></div>'
-            '<div class="cbox"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div></div>')
-to("#app", a5 - .1, .3, "{y: -60, scale: .9}", "power2.out")
-ft("#cta", a5, .4, "{opacity: 0, y: 40}", "{opacity: 1, y: 0}", "back.out(1.6)")
-st("#cree", a5, '{attr: {src: "assets/img/poses/wave.png"}}')
+H('<div id="share"><b>&#10148;</b><span>send this to the friend<br>who posts and prays</span></div>'
+  '<div id="cbox"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div>'
+  '<img id="cree2" src="assets/img/poses/wave.png" alt="">')
+R.whip_out("#app", a5 - .14, -1)
+R.to("#cree", a5 - .14, .15, "{opacity: 0, x: 300}", "power2.in")
+R.pop_in("#share", a5 - .02, .32, .4, -3)
+R.burst(a5, 540, 640, 1.0)
+R.sfx("whoosh", a5 - .14)
+R.sfx("pop", a5)
+tpr = wt("f05", "prays")
+R.ft("#share", tpr, .3, "{scale: 1.12}", "{scale: 1}", "back.out(3)")
+R.punch(tpr, .05)
 tc = wt("f05", "comment")
-st("#cph", tc + .1, "{opacity: 0}")
-js(f'(() => {{ const o = {{n: 0}}; tl.to(o, {{n: 5, duration: .5, ease: "steps(5)", onUpdate: () => {{ document.getElementById("cty").textContent = "CHECK".slice(0, Math.round(o.n)); }}}}, {tc + .1:.3f}); }})();')
-sfx("whoosh", a5 - .1)
-sfx("typing", tc + .1)
-sfx("click", tc + .7)
-sfx("notify", tc + .9)
-HTML.append('<div id="loop"><div class="lp"><img src="assets/img/demo_f01.jpg" alt=""></div><div class="ld"><b>2.9</b><span>/ 5</span></div></div>')
-st("#loop", DUR - .4, "{opacity: 1}")
+R.pop_in("#cbox", tc - .08, .32, .5, 0, "back.out(2.2)")
+R.ft("#cree2", tc - .02, .4, "{opacity: 0, x: 300, rotation: 20}", "{opacity: 1, x: 0, rotation: 0}", "back.out(2)")
+R.st("#cph", tc + .12, "{opacity: 0}")
+R.typer("cty", tc + .12, "CHECK", .45)
+R.sfx("typing", tc + .12)
+R.ft("#cbox", tc + .65, .3, "{scale: 1.12}", "{scale: 1}", "back.out(3)")
+R.sfx("click", tc + .65)
+R.sfx("notify", tc + .85)
+R.punch(tc + .65, .06)
+H('<div id="loop" data-layout-allow-overlap><div class="lp"><img src="assets/img/demo_f01.jpg" alt=""></div><div class="ld"><b>2.9</b><span>/ 5</span></div></div>')
+R.flash(R.DUR - .36, .9, .2)
+R.st("#loop", R.DUR - .3, "{opacity: 1}")
 
-# ---- karaoke captions
-CAP = []
-for ln in SCRIPT:
-    disp, ws = ln["display"].replace('"', "").split(), LW[ln["id"]]
-    n, m = len(disp), len(ws)
-    timed = []
-    for i, dw in enumerate(disp):
-        j = i if n == m else round(i * (m - 1) / max(1, n - 1))
-        timed.append((dw, ws[j]["t0"], ws[min(m - 1, j)]["t1"]))
-    chunk = []
-    for i, x in enumerate(timed):
-        chunk.append(x)
-        if len(chunk) >= 5 or x[0][-1] in ".,?!" and len(chunk) >= 2 or i == len(timed) - 1:
-            CAP.append(chunk); chunk = []
-for ci, chunk in enumerate(CAP):
-    spans = " ".join(f'<span class="cw" id="c{ci}_{k}">{w}</span>' for k, (w, _, _) in enumerate(chunk))
-    HTML.append(f'<div class="cap" id="cap{ci}">{spans}</div>')
-    t0, t1 = chunk[0][1], chunk[-1][2]
-    nxt = CAP[ci + 1][0][1] if ci + 1 < len(CAP) else DUR
-    st(f"#cap{ci}", t0 - .06, "{opacity: 1}")
-    st(f"#cap{ci}", min(nxt - .08, t1 + .8), "{opacity: 0}")
-    for k, (_, a, _) in enumerate(chunk):
-        st(f"#c{ci}_{k}", a - .03, f"{{color: '{INK}'}}")
+R.captions(top=1440, max_words=3)
 
-CSS = f"""
-@font-face {{ font-family: Inter; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2"); }}
-@font-face {{ font-family: Inter; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2"); }}
-@font-face {{ font-family: Inter; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2"); }}
-@font-face {{ font-family: Serif; font-style: italic; src: url("assets/fonts/InstrumentSerif-Italic.ttf"); }}
-@font-face {{ font-family: Mono; font-weight: 700; src: url("assets/fonts/JetBrainsMono-Bold.ttf"); }}
-* {{ margin: 0; padding: 0; box-sizing: border-box; }}
-html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #f4f1ec; }}
-#root {{ position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter; color: {INK};
-  background: radial-gradient(70% 40% at 80% 20%, rgba(255,61,139,.10), rgba(0,0,0,0)), radial-gradient(60% 40% at 10% 85%, rgba(140,90,255,.08), rgba(0,0,0,0)), #f4f1ec; }}
-#grain {{ position: absolute; inset: 0; background: url(assets/img/grain.png); opacity: .05; mix-blend-mode: multiply; pointer-events: none; z-index: 60; }}
-.pill {{ position: absolute; left: 0; right: 0; top: 300px; text-align: center; opacity: 0; z-index: 30; }}
-.pill span {{ display: inline; background: #fff; padding: 10px 22px; border-radius: 18px; font-weight: 800; font-size: 54px; line-height: 1.5;
-  letter-spacing: -.02em; box-decoration-break: clone; -webkit-box-decoration-break: clone; box-shadow: 0 8px 24px rgba(22,18,26,.10); }}
-.pill.big span {{ font-size: 96px; padding: 8px 30px; }}
-.pill b {{ color: {PINK}; }}
-#phone {{ position: absolute; left: 100px; top: 560px; width: 428px; height: 760px; border-radius: 44px; overflow: hidden; background: #000; opacity: 0;
-  border: 10px solid #16121a; box-shadow: 0 40px 90px rgba(22,18,26,.35); z-index: 12; transform: rotate(-3deg); }}
+SHADOW = f"0 18px 0 {INK}, 0 40px 80px rgba(70,0,35,.4)"
+R.write(f"""
+#phone {{ position: absolute; left: 60px; top: 500px; width: 450px; height: 800px; border-radius: 50px; overflow: hidden; background: #000; opacity: 0;
+  border: 12px solid {INK}; box-shadow: 0 22px 0 rgba(22,18,26,.45), 0 50px 100px rgba(70,0,35,.45); z-index: 12; }}
 #phone img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
-.ex {{ position: absolute; left: 18px; top: 18px; background: rgba(22,18,26,.75); color: #fff; font-family: Mono; font-weight: 700; font-size: 22px; letter-spacing: .14em;
+.ex {{ position: absolute; left: 18px; top: 18px; background: rgba(22,18,26,.8); color: #fff; font-family: Mono; font-weight: 700; font-size: 24px; letter-spacing: .14em;
   padding: 6px 14px; border-radius: 10px; }}
-#dial {{ position: absolute; left: 520px; top: 700px; width: 460px; height: 460px; opacity: 0; z-index: 14; }}
-#dial svg {{ width: 100%; height: 100%; transform: rotate(-90deg); filter: drop-shadow(0 24px 40px rgba(22,18,26,.22)); }}
-.trk {{ fill: #fff; stroke: #ece6de; stroke-width: 16; }}
-.arc {{ fill: none; stroke: #ff2d55; stroke-width: 16; stroke-linecap: round; stroke-dasharray: 540.35; }}
-.sc {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 160px; gap: 10px; }}
-.sc b {{ font-weight: 800; font-size: 150px; letter-spacing: -.04em; line-height: 1; }}
-.sc span {{ font-weight: 700; font-size: 44px; color: #8a8290; white-space: nowrap; }}
-#tline {{ position: absolute; left: 90px; right: 90px; top: 1322px; height: 70px; opacity: 0; z-index: 13; }}
-#tline .bar {{ position: absolute; left: 0; right: 0; top: 44px; height: 10px; border-radius: 6px; background: #e3ddd4; }}
-.flag {{ position: absolute; top: 0; width: 26px; height: 60px; margin-left: -13px; opacity: 0; }}
-.flag::before {{ content: ""; position: absolute; left: 11px; top: 0; width: 5px; height: 60px; background: #ff2d55; border-radius: 3px; }}
-.flag em {{ position: absolute; left: 20px; top: -6px; font-style: normal; font-family: Mono; font-weight: 700; font-size: 26px; color: #fff; background: #ff2d55;
-  padding: 3px 10px; border-radius: 8px; white-space: nowrap; }}
-.flag.fixed::before, .flag.fixed em {{ background: #20c070; }}
-#notes {{ position: absolute; left: 590px; right: 60px; top: 720px; display: flex; flex-direction: column; gap: 22px; z-index: 15; }}
-.note {{ position: relative; background: #fff; border-radius: 24px; padding: 18px 22px 20px; border-left: 10px solid #ff2d55; box-shadow: 0 16px 36px rgba(22,18,26,.12); opacity: 0; }}
-.note b {{ display: block; font-family: Mono; font-weight: 700; font-size: 30px; color: #ff2d55; }}
-.note span {{ display: block; font-weight: 800; font-size: 38px; line-height: 1.1; letter-spacing: -.02em; }}
-.note .ok {{ position: absolute; right: 16px; top: 16px; width: 50px; height: 50px; border-radius: 50%; background: #20c070; color: #fff; display: grid; place-items: center;
-  font-style: normal; font-weight: 800; font-size: 32px; transform: scale(0); }}
-.note.fixed {{ border-left-color: #20c070; }} .note.fixed b {{ color: #20c070; }}
-#world {{ position: absolute; inset: 0; opacity: 0; z-index: 18; overflow: hidden;
-  background: radial-gradient(120% 90% at 50% 30%, #ffffff 0%, #fbf0f6 55%, #f6e3ee 100%); }}
-.bl {{ position: absolute; border-radius: 50%; filter: blur(90px); }}
-.b1 {{ left: -160px; top: 200px; width: 620px; height: 620px; background: rgba(255,61,139,.35); }}
-.b2 {{ right: -200px; top: 900px; width: 700px; height: 700px; background: rgba(160,100,255,.28); }}
-.b3 {{ left: 200px; bottom: -200px; width: 600px; height: 500px; background: rgba(255,170,210,.4); }}
-#app {{ position: absolute; left: 70px; right: 70px; top: 560px; opacity: 0; z-index: 20; border-radius: 40px; padding: 34px 36px 38px;
-  background: linear-gradient(135deg, rgba(255,255,255,.88), rgba(255,255,255,.62)); border: 2px solid rgba(255,255,255,.95);
-  box-shadow: 0 30px 80px rgba(160,20,90,.18); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }}
-#app img {{ height: 70px; display: block; }}
-.q {{ margin: 26px 0 22px; font-family: Serif; font-style: italic; font-size: 64px; }}
-.tile {{ display: flex; gap: 20px; align-items: center; background: #fff; border-radius: 26px; padding: 22px 24px; margin-top: 16px; border: 4px solid #ff3d8b;
-  box-shadow: 0 14px 30px rgba(255,61,139,.18); }}
-.tile i {{ width: 74px; height: 74px; border-radius: 20px; background: #ff3d8b; color: #fff; display: grid; place-items: center; font-style: normal; font-size: 34px; flex: none; }}
-.tile b {{ display: block; font-weight: 800; font-size: 38px; letter-spacing: -.02em; }}
-.tile span {{ display: block; font-weight: 600; font-size: 28px; color: #6b6470; }}
-.tile.dim {{ border-color: transparent; opacity: .55; box-shadow: none; }}
-.tile.dim i {{ background: #d9d2c8; }}
-#cree {{ position: absolute; right: 30px; top: 1080px; width: 300px; opacity: 0; z-index: 22; filter: drop-shadow(0 20px 30px rgba(160,20,90,.25)); }}
-#cta {{ position: absolute; left: 70px; right: 70px; top: 1150px; opacity: 0; z-index: 24; display: flex; flex-direction: column; gap: 22px; align-items: flex-start; }}
-.share {{ display: flex; align-items: center; gap: 14px; background: {INK}; color: #fff; padding: 14px 26px; border-radius: 999px; font-weight: 700; font-size: 34px; }}
-.share b {{ color: {PINK}; font-size: 36px; }}
-.cbox {{ position: relative; width: 640px; height: 96px; border-radius: 48px; background: #fff; border: 2px solid rgba(22,18,26,.12); display: flex; align-items: center;
-  gap: 18px; padding: 0 24px; font-weight: 800; font-size: 40px; box-shadow: 0 14px 34px rgba(22,18,26,.12); }}
-.cbox .av {{ width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, #ff3d8b, #a064ff); flex: none; }}
-#cph {{ position: absolute; left: 100px; color: rgba(22,18,26,.4); font-weight: 600; }}
-.send {{ margin-left: auto; color: {PINK}; }}
-.cap {{ position: absolute; left: 70px; right: 70px; top: 1418px; text-align: center; font-weight: 800; font-size: 50px; line-height: 1.15; letter-spacing: -.02em;
-  opacity: 0; z-index: 40; text-shadow: 0 0 18px rgba(255,255,255,.9), 0 0 4px rgba(255,255,255,.9); }}
-.cw {{ color: rgba(22,18,26,.32); }}
-#loop {{ position: absolute; inset: 0; opacity: 0; z-index: 58; background: #f4f1ec; }}
-#loop .lp {{ position: absolute; left: 100px; top: 560px; width: 428px; height: 760px; border-radius: 44px; overflow: hidden; border: 10px solid #16121a; transform: rotate(-3deg); }}
+#dial {{ position: absolute; left: 540px; top: 640px; width: 490px; height: 490px; opacity: 0; z-index: 14; }}
+#dial svg {{ width: 100%; height: 100%; transform: rotate(-90deg); filter: drop-shadow(0 16px 0 {INK}); }}
+#dial .trk {{ fill: #fff; stroke: rgba(22,18,26,.1); stroke-width: 16; }}
+#dial .arc {{ fill: none; stroke: {RED}; stroke-width: 16; stroke-linecap: round; stroke-dasharray: {C}; }}
+#dial .sc {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 165px; gap: 8px; }}
+#dial .sc b {{ font-weight: 800; font-size: 170px; letter-spacing: -.05em; line-height: 1; }}
+#dial .sc span {{ font-weight: 800; font-size: 54px; color: #8a8290; }}
+#tline {{ position: absolute; left: 70px; right: 70px; top: 1340px; height: 60px; opacity: 0; z-index: 16; }}
+#tline .bar {{ position: absolute; left: 0; right: 0; top: 24px; height: 14px; border-radius: 7px; background: #fff; box-shadow: 0 6px 0 {INK}; }}
+.flag {{ position: absolute; top: -34px; width: 0; opacity: 0; }}
+.flag em {{ position: absolute; left: -62px; width: 124px; text-align: center; font-style: normal; font-family: Mono; font-weight: 700; font-size: 32px; color: #fff;
+  background: {RED}; padding: 6px 0; border-radius: 12px; box-shadow: 0 6px 0 {INK}; }}
+.flag.fixed em {{ background: {GREEN}; }}
+#notes {{ position: absolute; left: 525px; top: 560px; width: 470px; z-index: 18; display: flex; flex-direction: column; gap: 26px; }}
+.note {{ position: relative; opacity: 0; background: #fff; border-radius: 28px; padding: 20px 26px; box-shadow: 0 12px 0 {INK}; border-left: 16px solid {RED}; }}
+.note b {{ display: block; font-family: Mono; font-weight: 700; font-size: 34px; color: {RED}; }}
+.note span {{ display: block; font-weight: 800; font-size: 46px; letter-spacing: -.02em; line-height: 1.05; }}
+.note .ok {{ position: absolute; right: 18px; top: 50%; margin-top: -34px; width: 68px; height: 68px; border-radius: 50%; background: {GREEN}; color: #fff; display: grid;
+  place-items: center; font-style: normal; font-weight: 800; font-size: 40px; transform: scale(0); }}
+.note.fixed {{ border-left-color: {GREEN}; }} .note.fixed b {{ color: {GREEN}; }}
+#logo {{ position: absolute; left: 90px; right: 90px; top: 640px; height: 300px; border-radius: 50px; background: #fff; opacity: 0; z-index: 30; display: grid; place-items: center;
+  box-shadow: {SHADOW}; }}
+#logo img {{ width: 78%; }}
+#app {{ position: absolute; left: 60px; right: 60px; top: 480px; opacity: 0; z-index: 20; border-radius: 44px; padding: 36px 38px 40px; background: #fff; box-shadow: {SHADOW}; }}
+#app img {{ height: 74px; display: block; }}
+.q {{ margin: 26px 0 22px; font-family: Serif; font-style: italic; font-size: 72px; }}
+.tile {{ display: flex; gap: 22px; align-items: center; background: {SUN}; border-radius: 28px; padding: 24px 26px; margin-top: 16px; box-shadow: 0 10px 0 {INK}; }}
+.tile i {{ width: 82px; height: 82px; border-radius: 22px; background: {INK}; color: #fff; display: grid; place-items: center; font-style: normal; font-size: 38px; flex: none; }}
+.tile b {{ display: block; font-weight: 800; font-size: 44px; letter-spacing: -.02em; line-height: 1.05; }}
+.tile span {{ display: block; font-weight: 600; font-size: 30px; color: #4b4450; margin-top: 4px; }}
+.tile.dim {{ background: #f3eef2; box-shadow: none; opacity: .6; }}
+.tile.dim i {{ background: #cfc6cc; color: {INK}; }}
+#cree, #cree2 {{ position: absolute; right: 20px; top: 1060px; width: 330px; opacity: 0; z-index: 24; filter: drop-shadow(0 16px 0 rgba(22,18,26,.25)); }}
+#cree2 {{ top: 1000px; }}
+#share {{ position: absolute; left: 70px; right: 70px; top: 470px; opacity: 0; z-index: 24; display: flex; align-items: center; gap: 26px; background: {INK}; color: #fff;
+  padding: 30px 40px; border-radius: 40px; font-weight: 800; font-size: 54px; line-height: 1.1; box-shadow: 0 14px 0 rgba(22,18,26,.35); }}
+#share b {{ color: {SUN}; font-size: 80px; }}
+#cbox {{ position: absolute; left: 60px; width: 760px; top: 860px; height: 150px; border-radius: 75px; background: #fff; display: flex; align-items: center; opacity: 0; z-index: 24;
+  gap: 24px; padding: 0 34px; font-weight: 800; font-size: 72px; letter-spacing: .02em; box-shadow: {SHADOW}; }}
+#cbox .av {{ width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, {PINK}, #a064ff); flex: none; }}
+#cph {{ position: absolute; left: 150px; color: rgba(22,18,26,.35); font-weight: 600; font-size: 52px; }}
+#cbox .send {{ margin-left: auto; color: {PINK}; }}
+#loop {{ position: absolute; inset: 0; opacity: 0; z-index: 46; background: {PINK}; }}
+#loop .lp {{ position: absolute; left: 60px; top: 500px; width: 450px; height: 800px; border-radius: 50px; overflow: hidden; border: 12px solid {INK}; transform: rotate(-10deg) scale(1.25); }}
 #loop .lp img {{ width: 100%; height: 100%; object-fit: cover; }}
-#loop .ld {{ position: absolute; left: 520px; top: 700px; width: 460px; height: 460px; border-radius: 50%; background: #fff; display: flex; align-items: baseline;
-  justify-content: center; padding-top: 160px; gap: 10px; border: 16px solid #ff2d55; }}
-#loop .ld b {{ font-weight: 800; font-size: 150px; letter-spacing: -.04em; line-height: 1; }} #loop .ld span {{ font-weight: 700; font-size: 52px; color: #8a8290; }}
-"""
-html = f"""<!doctype html>
-<html lang="en" data-resolution="portrait">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1080, height=1920" />
-    <title>Creedom remake: graded before anyone saw it 9x16</title>
-    <script src="assets/vendor/gsap.min.js"></script>
-    <style>{CSS}</style>
-  </head>
-  <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR:.2f}" data-fps="30" data-width="1080" data-height="1920">
-      {chr(10).join(HTML)}
-      <div id="grain"></div>
-    </div>
-    <script>
-      window.__timelines = window.__timelines || {{}};
-      const tl = gsap.timeline({{paused: true}});
-      {chr(10).join("      " + j for j in JS).strip()}
-      tl.set({{}}, {{}}, {DUR:.2f});
-      window.__timelines["main"] = tl;
-    </script>
-  </body>
-</html>
-"""
-open(os.path.join(ROOT, "index.html"), "w").write(html)
-SFX.sort(key=lambda e: e["t"])
-json.dump(SFX, open(os.path.join(ROOT, "plan", "sfx_events.json"), "w"), indent=0)
-json.dump({"dur": DUR, "scenes": {}}, open(os.path.join(ROOT, "plan", "edit.json"), "w"), indent=1)
-print(f"wrote index.html: {DUR:.2f} s, {len(JS)} timeline lines, {len(SFX)} sfx, {len(CAP)} caption cards; line starts {[round(x, 2) for x in S]}")
+#loop .ld {{ position: absolute; left: 540px; top: 640px; width: 490px; height: 490px; border-radius: 50%; background: #fff; display: flex; align-items: baseline;
+  justify-content: center; padding-top: 165px; gap: 8px; border: 16px solid {RED}; }}
+#loop .ld b {{ font-weight: 800; font-size: 170px; letter-spacing: -.05em; line-height: 1; }} #loop .ld span {{ font-weight: 800; font-size: 54px; color: #8a8290; }}
+""")
