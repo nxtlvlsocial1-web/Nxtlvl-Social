@@ -1,0 +1,158 @@
+[
+{
+"type": "whoosh",
+"t": 0
+},
+{
+"type": "click",
+"t": 0.26
+},
+{
+"type": "swish",
+"t": 1.6
+},
+{
+"type": "tick",
+"t": 2.0
+},
+{
+"type": "swish",
+"t": 2.98
+},
+{
+"type": "swish",
+"t": 3.34
+},
+{
+"type": "tick",
+"t": 3.38
+},
+{
+"type": "tick",
+"t": 3.74
+},
+{
+"type": "swish",
+"t": 3.96
+},
+{
+"type": "tick",
+"t": 4.36
+},
+{
+"type": "swish",
+"t": 5.52
+},
+{
+"type": "tick",
+"t": 5.92
+},
+{
+"type": "swish",
+"t": 8.06
+},
+{
+"type": "tick",
+"t": 8.46
+},
+{
+"type": "swish",
+"t": 8.95
+},
+{
+"type": "tick",
+"t": 9.35
+},
+{
+"type": "error",
+"t": 9.4
+},
+{
+"type": "tick",
+"t": 10.69
+},
+{
+"type": "tick",
+"t": 10.93
+},
+{
+"type": "tick",
+"t": 11.17
+},
+{
+"type": "tick",
+"t": 11.41
+},
+{
+"type": "tick",
+"t": 11.65
+},
+{
+"type": "tick",
+"t": 11.89
+},
+{
+"type": "buzzer",
+"t": 12.2
+},
+{
+"type": "impact",
+"t": 13.44
+},
+{
+"type": "stamp",
+"t": 14.5
+},
+{
+"type": "steps",
+"t": 16.2
+},
+{
+"type": "error",
+"t": 17.74
+},
+{
+"type": "riser",
+"t": 20.2
+},
+{
+"type": "whoosh_big",
+"t": 22.26
+},
+{
+"type": "glitch",
+"t": 23.4
+},
+{
+"type": "error",
+"t": 26.82
+},
+{
+"type": "error",
+"t": 27.76
+},
+{
+"type": "chime",
+"t": 29.58
+},
+{
+"type": "click",
+"t": 30.57
+},
+{
+"type": "ding",
+"t": 30.62
+},
+{
+"type": "pop",
+"t": 30.88
+},
+{
+"type": "ding2",
+"t": 31.06
+},
+{
+"type": "pop",
+"t": 31.16
+}
+]
