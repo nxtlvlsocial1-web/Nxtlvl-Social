@@ -3,7 +3,7 @@
 ```
 Comment "OFFLINE" and I'll send you the link.
 
-Your phone can run its own AI. No internet, no subscription.
+Your phone can run its own AI. No internet needed, and the app is free.
 
 It's called Off Grid, and it's free and open source on GitHub:
 1. It sets itself up for your phone
