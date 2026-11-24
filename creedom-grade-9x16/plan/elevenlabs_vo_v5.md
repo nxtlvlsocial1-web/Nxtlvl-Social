@@ -4,7 +4,7 @@ Why v5 (owner: "not engaging in the first 7 seconds, boring after"): v4 took 5.3
 about 5 s over 30 s. v5 opens on the number itself, opens a loop in the second line ("three seconds cost it"), reads
 the three flags as a fast list, and names Creedom as the answer. The scores stay an example (EXAMPLE tag on screen).
 
-Model: Eleven v3. Voice: Blondie - Intense Woman (same as v4). Stability: Natural. A brisk, conversational read.
+Model: Eleven v4 (v3 also works). Voice: Blondie - Intense Woman (same as v4). Stability: Natural. A brisk, conversational read.
 
 ```
 [dramatic] Two point nine out of five. [short pause] Before anyone even saw it.

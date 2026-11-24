@@ -1,6 +1,6 @@
 # ElevenLabs voiceover: "What went wrong" (304 views), CTA CREE
 
-Model: Eleven v3 (the only model that reads [tags] as direction; older models speak them aloud).
+Model: Eleven v4 (what the owner uses; it reads the [tags] as direction, as v3 does). Older v2-era models speak them aloud.
 Stability: Natural (Creative if the delivery is too flat). Voice: young female creator voice, the owner's pick.
 If "Creedom" comes out wrong, write it as "Cree-dum".
 

@@ -1,6 +1,6 @@
 # ElevenLabs voiceover: graded reel (2.9 -> 4.4), CTA CHECK
 
-Model: Eleven v3 (the only model that reads [tags] as direction; older models speak them aloud).
+Model: Eleven v4 (what the owner uses; it reads the [tags] as direction, as v3 does). Older v2-era models speak them aloud.
 Stability: Natural (Creative if the delivery is too flat). Same voice as the "What went wrong" reel.
 If "Creedom" comes out wrong, write it as "Cree-dum".
 

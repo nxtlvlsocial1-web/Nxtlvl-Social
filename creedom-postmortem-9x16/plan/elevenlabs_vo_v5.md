@@ -5,7 +5,7 @@ about 6 s, ran 34 s for one idea, and held each scene about 4 s. v5 merges the h
 opens a loop at once ("watch what they saw"), cuts the "21 seconds in" line and the spoken share line (the share line
 moves on screen), and keeps every number real (304 views, 5 s average watch, the "This AI told me" opening).
 
-Model: Eleven v3. Voice: Blondie - Intense Woman (same as v4). Stability: Natural. A brisk, conversational read.
+Model: Eleven v4 (v3 also works). Voice: Blondie - Intense Woman (same as v4). Stability: Natural. A brisk, conversational read.
 
 ```
 [dry, deadpan] My reel about why people stop watching... got three hundred and four views.
