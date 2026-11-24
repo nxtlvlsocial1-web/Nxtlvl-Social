@@ -16,7 +16,7 @@ import os
 import subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-RAW = os.path.join(ROOT, "assets", "audio", "el", "el_raw.mp3")
+RAW = next(p for p in (os.path.join(ROOT, "assets", "audio", "el", f) for f in ("el_raw.wav", "el_raw.mp3")) if os.path.exists(p))   # el_raw.wav: a take with a regenerated line spliced in
 CFG = json.load(open(os.path.join(ROOT, "plan", "vo_el2.json")))      # {"gap_line": .45, "gap_in": .7, "gap": {"f03": .9}}
 LEAD, TAIL, SR = .06, .5, 48000
 

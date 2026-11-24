@@ -12,11 +12,11 @@ If "Creedom" comes out wrong, write it as "Cree-dum".
 [dry] That's how long my first sentence took. [slower, mimicking] "This AI told me..."
 [serious, leaning in] Nobody cares about the tool. They care about their reel.
 [confident] Problem first. Tool last.
-[playful] Like this video. Seventeen seconds in... and I still haven't named the app.
+[playful] Like this video. Twenty-one seconds in... and I still haven't named the app.
 [warm] It's Creedom. It shows you the exact second people leave, and why.
 [friendly] Send this to the friend whose reels keep flopping.
 [upbeat] Comment "Cree", and I'll send you the app.
 ```
 
-Note: "Seventeen seconds in" has to stay true. After the take is in, the line's real start time is checked; if it lands
+Note: the line was regenerated as "Twenty-one seconds in" (it lands at 21.8 s after the 1.08x speed-up) and spliced into the take (build/vo_el2.py reads assets/audio/el/el_raw.wav). It has to stay true. After the take is in, the line's real start time is checked; if it lands
 on another second, regenerate that line with the right number.

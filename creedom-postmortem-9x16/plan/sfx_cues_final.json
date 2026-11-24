@@ -1,211 +1,136 @@
 [
 {
-"t": 0.0,
-"kind": "riser_short",
-"file": "riser_short_riser.wav"
+"t": 0.5,
+"kind": "tick",
+"file": "tick_click.wav"
 },
 {
-"t": 0.04,
-"kind": "impact",
-"file": "impact_impact.wav"
-},
-{
-"t": 2.32,
-"kind": "whoosh",
-"file": "whoosh_whoosh_a.wav"
-},
-{
-"t": 3.14,
+"t": 2.796,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
 },
 {
-"t": 3.97,
-"kind": "screech",
-"file": "screech_screech.wav"
+"t": 5.114,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
 },
 {
-"t": 4.08,
-"kind": "thump",
-"file": "thump_impact.wav"
+"t": 6.315,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
 },
 {
-"t": 5.02,
-"kind": "whoosh_big",
-"file": "whoosh_big_whoosh_deep.wav"
-},
-{
-"t": 5.784,
+"t": 7.135,
 "kind": "tick",
 "file": "tick_click.wav"
 },
 {
-"t": 6.128,
+"t": 7.464,
 "kind": "tick",
 "file": "tick_click.wav"
 },
 {
-"t": 6.472,
+"t": 7.794,
 "kind": "tick",
 "file": "tick_click.wav"
 },
 {
-"t": 6.816,
+"t": 8.123,
 "kind": "tick",
 "file": "tick_click.wav"
 },
 {
-"t": 7.16,
+"t": 8.453,
 "kind": "tick",
 "file": "tick_click.wav"
 },
 {
-"t": 7.28,
-"kind": "impact",
-"file": "impact_impact.wav"
+"t": 9.362,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
 },
 {
-"t": 7.48,
-"kind": "whoosh",
-"file": "whoosh_whoosh_b.wav"
-},
-{
-"t": 7.88,
-"kind": "pop",
-"file": "pop_pop.wav"
-},
-{
-"t": 8.66,
-"kind": "typing",
-"file": "typing_typing.wav"
-},
-{
-"t": 10.81,
-"kind": "stamp",
-"file": "stamp_stamp.wav"
-},
-{
-"t": 11.26,
-"kind": "whoosh",
-"file": "whoosh_whoosh_a.wav"
-},
-{
-"t": 12.66,
-"kind": "g_wrong",
-"file": "g_wrong_g_wrong.wav"
-},
-{
-"t": 13.24,
-"kind": "impact",
-"file": "impact_impact.wav"
-},
-{
-"t": 14.74,
-"kind": "pop",
-"file": "pop_pop.wav"
-},
-{
-"t": 14.75,
-"kind": "whoosh",
-"file": "whoosh_whoosh_b.wav"
-},
-{
-"t": 15.1,
-"kind": "ding",
-"file": "ding_notify.wav"
-},
-{
-"t": 16.04,
-"kind": "whoosh",
-"file": "whoosh_whoosh_a.wav"
-},
-{
-"t": 16.2,
-"kind": "tick",
-"file": "tick_click.wav"
-},
-{
-"t": 17.2,
-"kind": "tick",
-"file": "tick_click.wav"
-},
-{
-"t": 17.72,
-"kind": "thump",
-"file": "thump_impact.wav"
-},
-{
-"t": 18.2,
-"kind": "tick",
-"file": "tick_click.wav"
-},
-{
-"t": 19.2,
-"kind": "tick",
-"file": "tick_click.wav"
-},
-{
-"t": 19.66,
-"kind": "buzzer",
-"file": "buzzer_buzzer.wav"
-},
-{
-"t": 20.2,
-"kind": "tick",
-"file": "tick_click.wav"
-},
-{
-"t": 20.36,
-"kind": "whoosh_big",
-"file": "whoosh_big_whoosh_deep.wav"
-},
-{
-"t": 20.54,
-"kind": "impact",
-"file": "impact_impact.wav"
-},
-{
-"t": 20.61,
-"kind": "sparkle",
-"file": "sparkle_sparkle.wav"
-},
-{
-"t": 21.76,
-"kind": "whoosh",
-"file": "whoosh_whoosh_b.wav"
-},
-{
-"t": 21.98,
-"kind": "g_pop",
-"file": "g_pop_g_pop.wav"
-},
-{
-"t": 22.31,
-"kind": "pop",
-"file": "pop_pop.wav"
-},
-{
-"t": 24.36,
-"kind": "whoosh",
-"file": "whoosh_whoosh_a.wav"
-},
-{
-"t": 24.5,
-"kind": "pop",
-"file": "pop_pop.wav"
-},
-{
-"t": 27.68,
-"kind": "typing",
-"file": "typing_typing.wav"
-},
-{
-"t": 28.16,
+"t": 14.114,
 "kind": "click",
 "file": "click_click.wav"
 },
 {
-"t": 28.36,
+"t": 14.419,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 15.704,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 18.315,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 18.765,
+"kind": "ding",
+"file": "ding_notify.wav"
+},
+{
+"t": 20.145,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 20.325,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 21.325,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 22.325,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 23.325,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 24.325,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 24.523,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 24.683,
+"kind": "sparkle",
+"file": "sparkle_sparkle.wav"
+},
+{
+"t": 26.437,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 28.74,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 31.578,
+"kind": "typing",
+"file": "typing_typing.wav"
+},
+{
+"t": 32.178,
 "kind": "notify",
 "file": "notify_notify.wav"
 }
