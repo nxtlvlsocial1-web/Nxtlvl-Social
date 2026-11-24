@@ -14,7 +14,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 B = json.load(open(os.path.join(ROOT, "plan", "beats.json")))["beats"]
 BAR = [B[i] for i in range(0, len(B), 4)]                  # downbeats
-DUR = round(BAR[8] + 2.8, 2)
+DUR = round(BAR[8] + 3.8, 2)                                 # the logo animation forms over ~3 s, then holds with the CTA
 BK, CARD, WHITE, MUTE, LIME = "#0a0a0b", "#141416", "#ffffff", "#a9a9b0", "#ccff4d"
 JS, SFX, HTML, TOP, HIDDEN = [], [], [], [], []
 
@@ -205,6 +205,7 @@ HTML.append('<i id="blob"></i>')
 hide("#blob")
 ft("#blob", b(6) - .25, .6, "{opacity: 1, scale: 0}", "{scale: 1}", "expo.inOut")
 sfx("whoosh_big", b(6) - .3)
+to("#bgwm", b(6) - .3, .4, "{opacity: 0}", "power2.in")             # the background wordmark goes with the wipe (no ghost behind the logo)
 HTML.append('<div class="big" data-layout-allow-overlap id="alone"><span class="ln"><span>You\'re not</span></span><span class="ln"><span>doing DU</span></span><span class="ln"><span><em>alone.</em></span></span></div>')
 hide("#alone")
 st("#alone", b(6) + .1, "{opacity: 1}")
