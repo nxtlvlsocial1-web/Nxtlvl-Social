@@ -4,24 +4,28 @@
 "t": 0.02
 },
 {
-"type": "click",
-"t": 1.95
+"type": "tick",
+"t": 1.73
 },
 {
 "type": "swish",
-"t": 2.41
+"t": 2.63
 },
 {
-"type": "tick",
-"t": 4.0
+"type": "pop",
+"t": 2.69
 },
 {
 "type": "thump",
-"t": 4.79
+"t": 3.53
 },
 {
 "type": "swish",
-"t": 6.45
+"t": 5.03
+},
+{
+"type": "click",
+"t": 5.71
 },
 {
 "type": "click",
@@ -29,58 +33,46 @@
 },
 {
 "type": "click",
-"t": 8.55
+"t": 8.67
 },
 {
-"type": "click",
+"type": "swish",
 "t": 10.09
 },
 {
-"type": "swish",
-"t": 11.49
+"type": "click",
+"t": 10.81
 },
 {
 "type": "click",
-"t": 12.21
+"t": 10.95
 },
 {
 "type": "click",
-"t": 12.35
-},
-{
-"type": "click",
-"t": 12.49
+"t": 11.09
 },
 {
 "type": "thump",
-"t": 13.21
+"t": 11.81
 },
 {
 "type": "g_correct",
-"t": 13.36
+"t": 11.96
 },
 {
 "type": "swish",
-"t": 14.52
+"t": 13.05
 },
 {
 "type": "sparkle",
-"t": 14.68
-},
-{
-"type": "click",
-"t": 16.72
-},
-{
-"type": "swish",
-"t": 17.58
+"t": 13.93
 },
 {
 "type": "typing",
-"t": 18.24
+"t": 14.83
 },
 {
 "type": "notify",
-"t": 18.89
+"t": 15.48
 }
 ]

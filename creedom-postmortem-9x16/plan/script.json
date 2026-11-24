@@ -1,23 +1,23 @@
 [
  {
   "id": "f00",
-  "display": "The only video you need to stop the scroll.",
-  "text": "The only video you need to stop the scroll.",
-  "speed": 1.12,
-  "beat": "hook: the only reel you need"
+  "display": "This tool shows the exact second people leave your reel.",
+  "text": "This tool shows the exact second people leave your reel.",
+  "speed": 1.1,
+  "beat": "hook: what Creedom does (its screen on frame 1)"
  },
  {
   "id": "f01",
-  "display": "Mine got 304 views, on a reel about why people stop watching.",
-  "text": "Mine got three hundred and four views, on a reel about why people stop watching.",
-  "speed": 1.15,
-  "beat": "proof + irony (first peak)"
+  "display": "Mine got 304 views. People gave it five seconds.",
+  "text": "Mine got three hundred and four views. People gave it five seconds.",
+  "speed": 1.12,
+  "beat": "proof"
  },
  {
   "id": "f02",
-  "display": "My first line? \"This AI told me.\" They gave it five seconds.",
-  "text": "My first line? This AI told me. They gave it five seconds.",
-  "speed": 1.1,
+  "display": "Right after my first line: \"This AI told me.\"",
+  "text": "Right after my first line: This AI told me.",
+  "speed": 1.08,
   "beat": "the cause, the old opening freezes"
  },
  {
@@ -29,16 +29,9 @@
  },
  {
   "id": "f04",
-  "display": "Creedom shows you the exact second people leave.",
-  "text": "Creedom shows you the exact second people leave.",
-  "speed": 1.1,
-  "beat": "the product as the answer"
- },
- {
-  "id": "f05",
-  "display": "Comment CREE and I'll send it.",
-  "text": "Comment Cree, and I'll send it.",
+  "display": "It's called Creedom. Comment CREE and I'll send it.",
+  "text": "It's called Creedom. Comment Cree, and I'll send it.",
   "speed": 1.08,
-  "beat": "CTA"
+  "beat": "name + CTA"
  }
 ]

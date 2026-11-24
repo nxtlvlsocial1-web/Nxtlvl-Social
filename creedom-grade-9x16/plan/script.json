@@ -1,16 +1,16 @@
 [
  {
   "id": "f00",
-  "display": "The only video you need before you hit post.",
-  "text": "The only video you need before you hit post.",
-  "speed": 1.12,
-  "beat": "hook: the only reel you need"
+  "display": "This tool scores your reel before you post it.",
+  "text": "This tool scores your reel before you post it.",
+  "speed": 1.1,
+  "beat": "hook: what Creedom does (its score on frame 1)"
  },
  {
   "id": "f01",
-  "display": "This one scored 2.9 out of 5, before anyone saw it.",
-  "text": "This one scored two point nine out of five, before anyone saw it.",
-  "speed": 1.12,
+  "display": "This one got 2.9 out of 5.",
+  "text": "This one got two point nine out of five.",
+  "speed": 1.1,
   "beat": "proof (example score)"
  },
  {
@@ -29,16 +29,9 @@
  },
  {
   "id": "f04",
-  "display": "That's Creedom. It scores your reel before you post.",
-  "text": "That's Creedom. It scores your reel before you post.",
-  "speed": 1.1,
-  "beat": "the product as the answer"
- },
- {
-  "id": "f05",
-  "display": "Comment CHECK for the link.",
-  "text": "Comment Check, for the link.",
+  "display": "It's called Creedom. Comment CHECK for the link.",
+  "text": "It's called Creedom. Comment Check, for the link.",
   "speed": 1.08,
-  "beat": "CTA"
+  "beat": "name + CTA"
  }
 ]

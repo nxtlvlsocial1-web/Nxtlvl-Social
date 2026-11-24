@@ -1,67 +1,67 @@
 {
- "duration": 19.27,
+ "duration": 17.06,
  "takes": [
   {
    "line": "f00",
    "take": 0,
-   "speed": 1.07,
-   "heard": "The only video you need to stop the scroll.",
+   "speed": 1.05,
+   "heard": "This tool shows the exact second people leave your reel.",
    "slips": 0
   },
   {
    "line": "f00",
    "take": 1,
-   "speed": 1.12,
-   "heard": "The only video you need to stop the scroll.",
+   "speed": 1.1,
+   "heard": "This tool shows the exact second people leave your reel.",
    "slips": 0
   },
   {
    "line": "f00",
    "take": 2,
-   "speed": 1.17,
-   "heard": "The only video you need to stop the scroll.",
+   "speed": 1.15,
+   "heard": "This tool shows the exact second people leave your reel.",
    "slips": 0
   },
   {
    "line": "f01",
    "take": 0,
-   "speed": 1.1,
-   "heard": "Mine got three hundred and four views on a reel about why people stop watching",
+   "speed": 1.07,
+   "heard": "Mine got three hundred and four views people gave it five seconds",
    "slips": 4
   },
   {
    "line": "f01",
    "take": 1,
-   "speed": 1.15,
-   "heard": "Mine got 304 views, on a reel about why people stop watching.",
-   "slips": 0
+   "speed": 1.12,
+   "heard": "Mine got three hundred and four views. People gave it five seconds.",
+   "slips": 4
   },
   {
    "line": "f01",
    "take": 2,
-   "speed": 1.2,
-   "heard": "Mine got 304 views, on a reel about why people stop watching.",
-   "slips": 0
+   "speed": 1.17,
+   "heard": "Mine got 304 views. People gave it 5 seconds.",
+   "slips": 1
   },
   {
    "line": "f02",
    "take": 0,
-   "speed": 1.05,
-   "heard": "My first line, this AI told me. They gave it five seconds.",
+   "speed": 1.03,
+   "heard": "Right after my first line, this AI told me.",
    "slips": 0
   },
   {
    "line": "f02",
    "take": 1,
-   "speed": 1.1,
-   "heard": "My first line, this AI told me. They gave it five seconds.",
+   "speed": 1.08,
+   "heard": "Right after my first line, this AI told me.",
    "slips": 0
   },
   {
    "line": "f02",
    "take": 2,
-   "speed": 1.15,
-   "heard": "My first line, this AI told me, they gave it five seconds.",
+   "speed": 1.13,
+   "heard": "Right after my first line, this AI told me.",
    "slips": 0
   },
   {
@@ -88,44 +88,23 @@
   {
    "line": "f04",
    "take": 0,
-   "speed": 1.05,
-   "heard": "Credoem shows you the exact second people leave.",
-   "slips": 1
-  },
-  {
-   "line": "f04",
-   "take": 1,
-   "speed": 1.1,
-   "heard": "Credoem shows you the exact second people leave.",
-   "slips": 1
-  },
-  {
-   "line": "f04",
-   "take": 2,
-   "speed": 1.15,
-   "heard": "Cretum shows you the exact second people leave.",
-   "slips": 1
-  },
-  {
-   "line": "f05",
-   "take": 0,
    "speed": 1.03,
-   "heard": "Comment Cree and I'll send it.",
-   "slips": 0
+   "heard": "It's called Cretum. Comment Cree and I'll send it.",
+   "slips": 1
   },
   {
-   "line": "f05",
+   "line": "f04",
    "take": 1,
    "speed": 1.08,
-   "heard": "Comment Cree and I'll send it.",
-   "slips": 0
+   "heard": "It's called Creedum. Comment Cree and I'll send it.",
+   "slips": 1
   },
   {
-   "line": "f05",
+   "line": "f04",
    "take": 2,
    "speed": 1.13,
-   "heard": "Comment cree and I'll send it.",
-   "slips": 0
+   "heard": "It's called Creedum, comment Creed and I'll send it.",
+   "slips": 2
   }
  ]
 }

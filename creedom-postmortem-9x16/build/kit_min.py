@@ -29,6 +29,7 @@ class Reel:
         self.S = [self.L[i][0] for i in self.IDS] + [self.L[self.IDS[-1]][1] + .8]
         self.DUR = round(self.S[-1], 2)
         self.n = 0
+        self.HIDDEN = []          # v6: hidden from frame 0 in CSS (a set at time 0 does not render on the very first frame)
 
     # ---- primitives
     def js(self, s):
@@ -51,6 +52,8 @@ class Reel:
         self.js(f'tl.to("{sel}", {self._join(props, f"duration: {d}, ease: \"{ease}\"")}, {t:.3f});')
 
     def st(self, sel, t, props):
+        if t <= .0001 and props.replace(" ", "") == "{opacity:0}":
+            self.HIDDEN.append(sel)
         self.js(f'tl.set("{sel}", {props}, {t:.3f});')
 
     def wt(self, line, word, n=0, end=False):
@@ -99,6 +102,13 @@ class Reel:
     def float3d(self, sel, t0, t1, rx=(10, 4), ry=(-14, -6), rz=(1.5, -.5)):
         self.ft(sel, t0, max(.1, t1 - t0), f"{{rotationX: {rx[0]}, rotationY: {ry[0]}, rotation: {rz[0]}}}",
                 f"{{rotationX: {rx[1]}, rotationY: {ry[1]}, rotation: {rz[1]}}}", "sine.inOut")
+
+    def topbar(self, keyword, t_kw, logo="assets/img/creedom_logo.png"):
+        """v6 (owner: viewers who leave early should still get the tool): the Creedom logo is on screen from frame 1 for
+        the whole reel, and the comment keyword joins it early, so anyone who leaves still saw what to comment"""
+        self.TOP.append(f'<div id="tbar"><img src="{logo}" alt=""><span>REEL ANALYZER</span><b id="kw">Comment <i>{keyword}</i></b></div>')
+        self.ft("#kw", t_kw, .6, '{opacity: 1, x: 30, filter: "blur(6px)"}', '{x: 0, filter: "blur(0px)"}', "expo.out")
+        self.st("#kw", 0, "{opacity: 0}")
 
     def kicker(self, text, t, t_out=None, dot=RED):
         self.n += 1
@@ -164,7 +174,13 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #f3f5
 .cw {{ display: inline-block; color: {INK}; }}
 .stage {{ position: absolute; left: 0; right: 0; perspective: 1900px; z-index: 15; }}
 .soft {{ box-shadow: 0 50px 100px rgba(40,50,90,.22), 0 12px 28px rgba(40,50,90,.12); }}
-#prog {{ position: absolute; left: 90px; right: 90px; top: 180px; height: 3px; background: rgba(16,19,28,.08); z-index: 70; border-radius: 2px; }}
+#tbar {{ position: absolute; left: 90px; right: 90px; top: 214px; height: 64px; display: flex; align-items: center; gap: 18px; z-index: 72; }}
+#tbar img {{ height: 44px; }}
+#tbar span {{ font-family: Mono; font-size: 22px; letter-spacing: .2em; color: rgba(16,19,28,.74); }}
+#tbar b {{ margin-left: auto; font-family: Sat; font-weight: 700; font-size: 34px; color: {INK}; background: #fff; padding: 12px 24px; border-radius: 999px;
+  box-shadow: 0 12px 30px rgba(40,50,90,.14); border: 2px solid {PINK}; }}
+#tbar b i {{ font-style: normal; font-weight: 900; color: {PINK}; }}
+#prog {{ position: absolute; left: 90px; right: 90px; top: 190px; height: 3px; background: rgba(16,19,28,.08); z-index: 70; border-radius: 2px; }}
 #prog i {{ position: absolute; inset: 0; background: {INK}; transform-origin: left center; transform: scaleX(0); border-radius: 2px; }}
 """
 
@@ -181,7 +197,7 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #f3f5
     <meta name="viewport" content="width=1080, height=1920" />
     <title>{self.title}</title>
     <script src="assets/vendor/gsap.min.js"></script>
-    <style>{self.CSS}{extra_css}</style>
+    <style>{self.CSS}{extra_css}{"".join(f"{sel} {{ opacity: 0; }}" for sel in dict.fromkeys(self.HIDDEN))}</style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{D:.2f}" data-fps="30" data-width="1080" data-height="1920">

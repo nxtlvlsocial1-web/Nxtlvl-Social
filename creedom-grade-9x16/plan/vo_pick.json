@@ -1,54 +1,54 @@
 {
- "duration": 19.84,
+ "duration": 16.37,
  "takes": [
   {
    "line": "f00",
    "take": 0,
-   "speed": 1.07,
-   "heard": "The only video you need before you hit post.",
+   "speed": 1.05,
+   "heard": "This tool scores your reel before you post it.",
    "slips": 0
   },
   {
    "line": "f00",
    "take": 1,
-   "speed": 1.12,
-   "heard": "The only video you need before you hit post.",
+   "speed": 1.1,
+   "heard": "This tool scores your reel before you post it.",
    "slips": 0
   },
   {
    "line": "f00",
    "take": 2,
-   "speed": 1.17,
-   "heard": "The only video you need before you hit post.",
+   "speed": 1.15,
+   "heard": "This tool scores your reel before you post it.",
    "slips": 0
   },
   {
    "line": "f01",
    "take": 0,
-   "speed": 1.07,
-   "heard": "This one scored 2.9 out of 5 before anyone saw it.",
+   "speed": 1.05,
+   "heard": "This one got 2.9 out of 5.",
    "slips": 0
   },
   {
    "line": "f01",
    "take": 1,
-   "speed": 1.12,
-   "heard": "This one scored 2.9 out of 5 before anyone saw it.",
+   "speed": 1.1,
+   "heard": "This one got 2.9 out of 5.",
    "slips": 0
   },
   {
    "line": "f01",
    "take": 2,
-   "speed": 1.17,
-   "heard": "This one scored 2.9 out of 5 before anyone saw it.",
+   "speed": 1.15,
+   "heard": "This one got 2.9 out of 5.",
    "slips": 0
   },
   {
    "line": "f02",
    "take": 0,
    "speed": 1.07,
-   "heard": "Second one, slow hook. Second seven, no proof. Second 14, lost trust.",
-   "slips": 1
+   "heard": "2nd 1 Slow Hook 2nd 7 No Proof 2nd 14 Lost Trust",
+   "slips": 6
   },
   {
    "line": "f02",
@@ -82,50 +82,29 @@
    "line": "f03",
    "take": 2,
    "speed": 1.13,
-   "heard": "Fix those three and it scores 4.4.",
+   "heard": "Fix those three, and it scores 4.4.",
    "slips": 0
   },
   {
    "line": "f04",
-   "take": 0,
-   "speed": 1.05,
-   "heard": "That's Cretum. It scores your reel before you post.",
-   "slips": 1
-  },
-  {
-   "line": "f04",
-   "take": 1,
-   "speed": 1.1,
-   "heard": "That's Credem. It scores your reel before you post.",
-   "slips": 1
-  },
-  {
-   "line": "f04",
-   "take": 2,
-   "speed": 1.15,
-   "heard": "That's Credem. It scores your reel before you post.",
-   "slips": 1
-  },
-  {
-   "line": "f05",
    "take": 0,
    "speed": 1.03,
-   "heard": "Comment check for the link.",
-   "slips": 0
+   "heard": "It's called Cretum. Comment check for the link.",
+   "slips": 1
   },
   {
-   "line": "f05",
+   "line": "f04",
    "take": 1,
    "speed": 1.08,
-   "heard": "Comment check for the link.",
-   "slips": 0
+   "heard": "It's called Cretum. Comment check for the link.",
+   "slips": 1
   },
   {
-   "line": "f05",
+   "line": "f04",
    "take": 2,
    "speed": 1.13,
-   "heard": "Comment check for the link.",
-   "slips": 0
+   "heard": "It's called Cretum. Comment check for the link.",
+   "slips": 1
   }
  ]
 }
