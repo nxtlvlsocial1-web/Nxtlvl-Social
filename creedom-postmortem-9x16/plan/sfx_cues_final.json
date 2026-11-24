@@ -5,9 +5,34 @@
 "file": "thump_impact.wav"
 },
 {
+"t": 0.03,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 0.69,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 1.25,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
 "t": 1.27,
 "kind": "click",
 "file": "click_click.wav"
+},
+{
+"t": 1.27,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 1.95,
+"kind": "tick",
+"file": "tick_click.wav"
 },
 {
 "t": 2.25,
@@ -15,9 +40,24 @@
 "file": "swish_whoosh_b.wav"
 },
 {
+"t": 2.55,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 3.05,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_deep.wav"
+},
+{
 "t": 3.19,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
+},
+{
+"t": 3.2,
+"kind": "boing",
+"file": "boing_boing.wav"
 },
 {
 "t": 3.25,
@@ -25,7 +65,37 @@
 "file": "pop_pop.wav"
 },
 {
-"t": 4.41,
+"t": 3.25,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 3.435,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 3.62,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 3.73,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 3.805,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 3.99,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 4.175,
 "kind": "tick",
 "file": "tick_click.wav"
 },
@@ -35,19 +105,54 @@
 "file": "thump_impact.wav"
 },
 {
+"t": 6.24,
+"kind": "g_drop",
+"file": "g_drop_g_drop.wav"
+},
+{
 "t": 6.99,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
 },
 {
+"t": 7.1,
+"kind": "boing",
+"file": "boing_boing.wav"
+},
+{
+"t": 7.63,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
 "t": 10.04,
-"kind": "click",
-"file": "click_click.wav"
+"kind": "shutter",
+"file": "shutter_shutter.wav"
+},
+{
+"t": 10.09,
+"kind": "g_wrong",
+"file": "g_wrong_g_wrong.wav"
+},
+{
+"t": 10.14,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
 },
 {
 "t": 10.28,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
+},
+{
+"t": 10.39,
+"kind": "boing",
+"file": "boing_boing.wav"
+},
+{
+"t": 10.92,
+"kind": "pop",
+"file": "pop_pop.wav"
 },
 {
 "t": 11.64,
@@ -60,14 +165,39 @@
 "file": "swish_whoosh_b.wav"
 },
 {
+"t": 12.6,
+"kind": "riser_short",
+"file": "riser_short_riser.wav"
+},
+{
+"t": 12.84,
+"kind": "g_pickup",
+"file": "g_pickup_g_pickup.wav"
+},
+{
 "t": 12.89,
 "kind": "ding",
 "file": "ding_notify.wav"
 },
 {
+"t": 13.2,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_deep.wav"
+},
+{
 "t": 13.34,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
+},
+{
+"t": 13.4,
+"kind": "boing",
+"file": "boing_boing.wav"
+},
+{
+"t": 13.93,
+"kind": "pop",
+"file": "pop_pop.wav"
 },
 {
 "t": 14.1,
@@ -83,5 +213,25 @@
 "t": 14.7,
 "kind": "notify",
 "file": "notify_notify.wav"
+},
+{
+"t": 14.85,
+"kind": "boing",
+"file": "boing_boing.wav"
+},
+{
+"t": 15.38,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 16.75,
+"kind": "boing",
+"file": "boing_boing.wav"
+},
+{
+"t": 17.13,
+"kind": "pop",
+"file": "pop_pop.wav"
 }
 ]
