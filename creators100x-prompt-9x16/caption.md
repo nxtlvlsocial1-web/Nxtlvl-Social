@@ -6,7 +6,7 @@ and an on-screen "Sounds robotic?" beat (see script.md); voiceover by the owner 
 ```
 Comment "PROMPT" and I'll send you the exact ChatGPT prompt that wrote this reel, plus 9 more prompts for your reel scripts.
 
-Yes, this reel script was written by ChatGPT. Not with "write me a reel script", because that gets you the same generic "Hey guys, in today's video" content everyone else is posting.
+Yes, this reel script was written by ChatGPT. Sounds robotic? That's what "write me a reel script" gets you: the same generic "Hey guys, in today's video" content everyone else is posting.
 
 The mistake is giving AI a task instead of direction. The best ChatGPT prompt for reels gives it five things:
 1. Its role: who it's writing as
