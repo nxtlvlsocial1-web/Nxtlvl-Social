@@ -1,4 +1,4 @@
-# Post description (Creators 100X, Instagram Reels)
+# Post description, final (Creators 100X, Instagram Reels)
 
 ```
 Comment "CHECK" and I'll send you the link.
@@ -7,17 +7,17 @@ This tool scores your reel before you post it.
 
 This one got 2.9 out of 5. It flagged three seconds:
 1. Second 1: slow hook
-2. Second 7: no proof
+2. Second 7: a claim with no proof
 3. Second 14: lost trust
 
-Fix those three and the same reel scores 4.4.
+Fix those three seconds and the same reel scores 4.4.
 
-It's called Creedom. Upload your reel, get the score, the exact seconds and the fix.
+It's called Creedom. Upload a reel and get a score out of 5, the exact seconds that lose people, and the fix for each one.
 
-Send this to the friend who posts and prays.
+Save this before your next post, and send it to the friend who posts and prays.
 
-#reelstips #contentcreator #instagramgrowth #aitools #creedom
-how to check a reel before posting, why did my reel flop, reel hook tips, reel analyzer app, ai tools for content creators, how to improve reels, instagram reel score, instagram growth tips, viral reel checklist, video editing tips for creators
+#reelstips #instagramgrowth #contentcreator #aitools #creedom
+how to check a reel before posting, reel score app, why did my reel flop, how to improve instagram reels, reel hook tips, ai tool for content creators, instagram reel analyzer, how to get more views on reels, viral reel checklist, instagram algorithm tips
 ```
 
 Notes:

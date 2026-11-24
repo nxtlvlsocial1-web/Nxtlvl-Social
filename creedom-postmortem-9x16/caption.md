@@ -1,23 +1,23 @@
-# Post description (Creators 100X, Instagram Reels)
+# Post description, final (Creators 100X, Instagram Reels)
 
 ```
 Comment "CREE" and I'll send you Creedom.
 
 This tool shows the exact second people leave your reel, and why.
 
-Mine got 304 views. People gave it 5 seconds. Right after my first line: "This AI told me..."
+My reel got 304 views. On average, people watched 5 seconds, right after my first line: "This AI told me..."
 
-The lesson:
-1. Nobody cares about your tool
-2. Say their problem first
-3. Tool last
+The mistake:
+1. I opened with the tool
+2. Nobody cares about your tool
+3. Say their problem first, tool last
 
-Creedom watches your reel like a viewer and shows you where they drop off before you post.
+Creedom watches your reel like a viewer would and shows you where people drop off, before you post.
 
-Send this to the friend whose reels keep flopping.
+Save this for your next hook, and send it to the friend whose reels keep flopping.
 
-#reelstips #contentcreator #instagramgrowth #aitools #creedom
-why did my reel flop, instagram reel retention, reel hook tips, average watch time instagram, how to get more views on reels, reel analyzer app, ai tools for content creators, instagram growth tips, why people stop watching my reels, video hook examples
+#reelstips #instagramgrowth #contentcreator #aitools #creedom
+why did my reel flop, why people stop watching my reels, instagram reel retention, reel hook tips, how to get more views on instagram reels, average watch time instagram, reel analyzer app, ai tool for content creators, instagram algorithm tips, first 3 seconds hook
 ```
 
 Notes:
