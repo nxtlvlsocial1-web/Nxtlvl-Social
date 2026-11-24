@@ -1,0 +1,17 @@
+@font-face { font-family: Inter; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2"); }
+@font-face { font-family: Kalam; font-weight: 700; src: url("assets/fonts/kalam-latin-700-normal.woff2"); }
+@font-face { font-family: Caveat; font-weight: 700; src: url("assets/fonts/caveat-latin-700-normal.woff2"); }
+@font-face { font-family: Mono; src: url("assets/fonts/JetBrainsMono-Bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fdf8f4; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter; color: #101111; background: #fdf8f4; }
+#dd { position: absolute; inset: 0; }
+.head { position: absolute; left: 40px; right: 40px; top: 140px; text-align: center; font-weight: 800; letter-spacing: -.045em; line-height: 1.05; z-index: 40;
+  color: #101111; text-shadow: 0 0 16px #fdf8f4, 0 0 32px #fdf8f4, 0 0 50px #fdf8f4; }
+.hl { white-space: nowrap; }
+.hw { display: inline-block; opacity: 0; padding: .02em .05em .14em; margin-bottom: -.12em; }
+.hw.pk { color: #fd0b68; }
+.stat { position: absolute; left: 0; right: 0; top: 478px; text-align: center; z-index: 41; opacity: 0; }
+.stat span { display: inline-block; padding: 10px 26px; border-radius: 40px; background: #101111; color: #ccfb79; font: 700 26px Mono; letter-spacing: .1em; }
+#grain { position: absolute; inset: 0; background: url("assets/img/grain.png"); opacity: .07; z-index: 61; pointer-events: none; mix-blend-mode: multiply; }

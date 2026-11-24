@@ -1,0 +1,230 @@
+[
+{
+"type": "swish",
+"t": 0.02
+},
+{
+"type": "steps",
+"t": 0.14
+},
+{
+"type": "pop",
+"t": 0.2
+},
+{
+"type": "swish",
+"t": 0.45
+},
+{
+"type": "tick",
+"t": 0.55
+},
+{
+"type": "tick",
+"t": 0.65
+},
+{
+"type": "tick",
+"t": 0.75
+},
+{
+"type": "tick",
+"t": 1.87
+},
+{
+"type": "tick",
+"t": 2.2
+},
+{
+"type": "tick",
+"t": 2.68
+},
+{
+"type": "whoosh",
+"t": 2.78
+},
+{
+"type": "pop",
+"t": 2.8
+},
+{
+"type": "paper",
+"t": 3.64
+},
+{
+"type": "swish",
+"t": 3.84
+},
+{
+"type": "ding2",
+"t": 4.32
+},
+{
+"type": "pop",
+"t": 6.88
+},
+{
+"type": "steps",
+"t": 8.2
+},
+{
+"type": "swish",
+"t": 8.3
+},
+{
+"type": "error",
+"t": 8.78
+},
+{
+"type": "paper",
+"t": 9.82
+},
+{
+"type": "scratch",
+"t": 10.72
+},
+{
+"type": "pop",
+"t": 11.28
+},
+{
+"type": "swish",
+"t": 13.34
+},
+{
+"type": "pop",
+"t": 14.92
+},
+{
+"type": "swish",
+"t": 15.02
+},
+{
+"type": "typing",
+"t": 15.07
+},
+{
+"type": "typing",
+"t": 15.19
+},
+{
+"type": "typing",
+"t": 15.31
+},
+{
+"type": "pop",
+"t": 15.7
+},
+{
+"type": "swish",
+"t": 15.8
+},
+{
+"type": "typing",
+"t": 15.85
+},
+{
+"type": "typing",
+"t": 15.97
+},
+{
+"type": "typing",
+"t": 16.09
+},
+{
+"type": "pop",
+"t": 16.74
+},
+{
+"type": "swish",
+"t": 16.84
+},
+{
+"type": "typing",
+"t": 16.89
+},
+{
+"type": "typing",
+"t": 17.01
+},
+{
+"type": "typing",
+"t": 17.13
+},
+{
+"type": "pop",
+"t": 17.14
+},
+{
+"type": "swish",
+"t": 17.24
+},
+{
+"type": "typing",
+"t": 17.29
+},
+{
+"type": "typing",
+"t": 17.41
+},
+{
+"type": "typing",
+"t": 17.53
+},
+{
+"type": "swish",
+"t": 17.79
+},
+{
+"type": "pop",
+"t": 18.92
+},
+{
+"type": "click",
+"t": 20.48
+},
+{
+"type": "ding",
+"t": 20.53
+},
+{
+"type": "sparkle",
+"t": 20.58
+},
+{
+"type": "whoosh",
+"t": 21.31
+},
+{
+"type": "pop",
+"t": 21.51
+},
+{
+"type": "typing",
+"t": 21.88
+},
+{
+"type": "typing",
+"t": 21.97
+},
+{
+"type": "typing",
+"t": 22.06
+},
+{
+"type": "click",
+"t": 22.38
+},
+{
+"type": "whoosh",
+"t": 22.87
+},
+{
+"type": "paper",
+"t": 24.37
+},
+{
+"type": "chime",
+"t": 24.62
+}
+]
