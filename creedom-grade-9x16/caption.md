@@ -29,5 +29,5 @@ Notes:
 - Music: "Funky Nurykabe (Spinningmerkaba Mix)" by ccMixter (Jamendo 1468789 via Openverse, CC BY 3.0, instrumental); credit line required.
 - Sound effects: Openverse CC0 plus OpenGameArt CC0 packs (no credit needed).
 - Fonts: Unbounded (OFL) and Satoshi (Fontshare ITF Free Font License; video and social use allowed).
-- Voice: the owner's ElevenLabs take ("Blondie - Intense Woman", plan/elevenlabs_vo.md), timed with build/vo_el2.py (1.06x).
+- Voice: Kokoro-82M af_heart (Apache 2.0, free, local; owner's pick "D"), build/vo_kok.py; "Creedom" said as CREE-dum.
 - Mascot: Cree, Creedom's own 3D mascot.

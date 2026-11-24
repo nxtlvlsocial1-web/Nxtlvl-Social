@@ -1,10 +1,10 @@
-"""Creedom remake 1 v4, "What went wrong" (304 views), Creators 100X 9:16: writes index.html, plan/sfx_events.json, plan/edit.json.
+"""Creedom remake 1 v5, "What went wrong" (304 views), Creators 100X 9:16: writes index.html, plan/sfx_events.json, plan/edit.json.
 
-v4 (owner, after v1-v3 "dull", "generic"): clean premium minimal on the Glacier background, Unbounded + Satoshi
-(build/kit_min.py), the owner's ElevenLabs take ("Blondie - Intense Woman", build/vo_el2.py). The label says WHAT WENT
-WRONG (owner: no death wording). Story (reach-psychology.md): the real 304 card on frame 1, the irony, 5 s of a 37.5 s
-reel, the old opening freezing where most viewers left, problem first / tool last, this reel's own clock, Creedom at
-about 70 %, CTA CREE, a cut back to frame 1 so it loops. v1-v3 (pink kinetic) are in git history.
+v5 (owner: v4 "perfect except not engaging in the first 7 seconds and boring after"; "can't use ElevenLabs anymore"):
+the v6 script ("The only video you need to stop the scroll", about 19 s, plan/elevenlabs_vo_v6.md wording with "video"
+in the hook), voiced with Kokoro af_heart (build/vo_kok.py). Same clean premium minimal look (Glacier, Unbounded +
+Satoshi, build/kit_min.py), but the hook text and the real 304 card are on frame 1, the irony lands by 6 s, and inside
+every scene the lens moves in on a detail or a new element lands every 1-2 s, with sound hits on the beats.
 python3 build/generate.py
 """
 import os
@@ -13,191 +13,172 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from kit_min import GREEN, INK, MUTE, PINK, RED, Reel  # noqa: E402
 
-R = Reel(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Creedom remake: what went wrong v4 9x16")
+R = Reel(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Creedom remake: what went wrong v5 9x16")
 S, wt, H = R.S, R.wt, R.HTML.append
 for k in range(len(R.IDS)):
-    R.push(S[k] - .1, S[k + 1], .04)
+    R.push(S[k] - .1, S[k + 1], .035)
     if k:
         R.sfx("swish", S[k] - .16)
+R.sfx("thump", .02)
 
-# ---- f00: the real insights card and 304 are on screen at frame 1
-H('<div class="num" id="n304" style="top:300px;font-size:300px;color:' + RED + '">304</div>')
-H('<div class="hd" id="vw" style="top:640px">views.</div>')
-H('<div class="stage" style="top:830px"><div class="card soft" id="ins"><img src="assets/img/insights_cards.jpg" alt="">'
+# ---- f00: the hook line and the real 304 card, both on frame 1; the lens moves in on 304 at "stop the scroll"
+H('<div class="hd" id="hk" style="top:300px;font-size:100px"><span class="ln"><span>The only video</span></span><span class="ln"><span>you need to</span></span>'
+  f'<span class="ln"><span style="color:{RED}">stop the scroll.</span></span></div>')
+H('<div class="stage" style="top:800px"><div class="card soft" id="ins"><img src="assets/img/insights_cards.jpg" alt="">'
   '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><rect id="o304" x="1.4" y="1" width="47" height="46.5" rx="4" pathLength="1" /></svg></div></div>')
-R.kicker("WHAT WENT WRONG", .1, S[6] - .2)
-R.st("#n304, #ins", 0, "{opacity: 1}")
-R.counter("n304", 0, .3, 299, 304)
-R.ft("#n304", 0, .7, "{y: 24}", "{y: 0}")
-R.ft("#ins", 0, 1.1, "{y: 50, rotationX: 24, rotationY: -18}", "{y: 0, rotationX: 12, rotationY: -10}")
-R.float3d("#ins", 1.1, S[1], (12, 7), (-10, -4), (1.2, 0))
-R.rise("#vw", .3, .8, 40, 8)
-R.draw("#o304", .7, .8)
-R.sfx("tick", .5)
-for sel in ("#n304", "#vw", "#ins"):
-    R.leave(sel, S[1] - .18)
+R.kicker("WHAT WENT WRONG", .1, S[3] - .2)
+R.js('tl.fromTo("#hk .ln > span", {y: 12, filter: "blur(3px)"}, {y: 0, filter: "blur(0px)", duration: .45, ease: "expo.out", stagger: .06, immediateRender: true}, 0);')   # readable on frame 1
+R.st("#ins", 0, "{opacity: 1}")
+R.ft("#ins", 0, 1.0, "{y: 40, rotationX: 22, rotationY: -16}", "{y: 0, rotationX: 10, rotationY: -8}")
+R.draw("#o304", .5, .7)
+R.sfx("tick", .55)
+tst = wt("f00", "stop")
+R.to("#ins", tst - .1, .7, "{scale: 1.28, x: 120, y: -10}", "expo.inOut")      # the card (not the hook) moves in on 304
+R.sfx("swish", tst - .1)
+R.leave("#hk", S[1] - .25, .3)
+R.leave("#ins", S[1] - .25, .3)
 
-# ---- f01: the irony, the old cover on a phone
-H(R.lines_html("h1", ["It was a reel", "<em>about why people</em>", f'<b style="color:{RED}">stop watching.</b>'], "hd") .replace('id="h1"', 'id="h1" style="top:300px"'))
-H('<div class="stage" style="top:740px"><div class="phone soft" id="oldp"><img src="assets/img/old_cover.png" alt=""><i class="hide"></i></div></div>')
-R.mask_lines("#h1", S[1] - .02)
-R.rise("#oldp", S[1] + .25, 1.0, 120, 14)
-R.float3d("#oldp", S[1] + .25, S[2], (8, 4), (16, 8), (-2, 0))
-for sel in ("#h1", "#oldp"):
-    R.leave(sel, S[2] - .18)
-R.sfx("swish", wt("f01", "stop") - .05)
+# ---- f01: 304 counts in, views; the old cover slides in; "stop watching." lands red (the irony, by 6 s)
+H(f'<div class="num" id="n304" style="top:310px;font-size:200px;color:{RED}">0</div>')
+H('<div class="hd" id="vw" style="top:530px">views,</div>')
+H('<div class="stage" style="top:330px"><div class="phone soft" id="oldp" style="left:330px"><img src="assets/img/old_cover.png" alt=""><i class="hide"></i></div></div>')
+H('<div class="hd" id="irony" style="top:960px;font-size:84px"><span class="ln"><span><em>on a reel about</em></span></span><span class="ln"><span><em>why people</em></span></span>'
+  f'<span class="ln"><span style="color:{RED}">stop watching.</span></span></div>')
+t304 = wt("f01", "304")
+R.rise("#n304", t304 - .05, .6, 40, 8)
+R.counter("n304", t304 - .05, .55, 0, 304)
+R.sfx("tick", t304 + .4)
+R.rise("#vw", wt("f01", "views") - .05, .6, 30, 6)
+ton = wt("f01", "on")
+R.rise("#oldp", ton - .1, .9, 120, 12)
+R.float3d("#oldp", ton - .1, S[2], (6, 3), (-16, -8), (3, 1))
+R.sfx("swish", ton - .1)
+tsw = wt("f01", "stop")
+R.mask_lines("#irony", wt("f01", "about") - .1)
+R.ft("#irony .ln:nth-child(3) > span", tsw, .45, "{scale: 1.12}", "{scale: 1}", "back.out(2.5)")
+R.sfx("thump", tsw)
+R.focus(tsw - .05, 1.06, 0, -30, .5, "expo.out")
+for sel in ("#n304", "#vw", "#oldp", "#irony"):
+    R.leave(sel, S[2] - .22, .3)
+R.focus(S[2] - .2, 1.0, 0, 0, .4)
 
-# ---- f02: 5 seconds of a 37.5 s reel
-H('<div class="lab" id="avl" style="top:420px">AVERAGE WATCH TIME</div>')
-H('<div id="five"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" class="trk"/><circle cx="100" cy="100" r="96" class="arc" id="farc" pathLength="1"/></svg>'
-  '<b><i id="fn">0</i><small>s</small></b></div>')
-H('<div class="sub" id="of375" style="top:1260px">of a <b>37.5 s</b> reel.</div>')
-tf = wt("f02", "five")
-R.rise("#avl", S[2] + .05, .7, 20, 6)
-R.rise("#five", S[2] + .1, .9, 50, 10)
-t5a, t5d = S[2] + .35, max(1.0, tf + .3 - S[2] - .35)
-R.js(f'tl.fromTo("#farc", {{strokeDashoffset: 1}}, {{strokeDashoffset: {1 - 5 / 37.5:.4f}, duration: {t5d:.3f}, ease: "steps(5)", immediateRender: false}}, {t5a:.3f});')
-R.counter("fn", t5a, t5d, 0, 5, "Math.round(o.v)", "steps(5)")
-for k in range(1, 6):
-    R.sfx("tick", t5a + k * t5d / 5 - .02)
-R.rise("#of375", tf + .35, .8, 30, 8)
-for sel in ("#avl", "#five", "#of375"):
-    R.leave(sel, S[3] - .18)
-
-# ---- f03: the old first sentence plays on a phone (2x, the timer counts its real seconds) and freezes where most left
-a3 = S[3]
+# ---- f02: the old first line plays on a phone (2x, the timer counts its real seconds), freezes on "They"; 5 s lands
+tthey, tfive = wt("f02", "they"), wt("f02", "five")
 OLD_LEN = 2.2
-tq = max(a3 + .25, R.L["f03"][1] + .12 - OLD_LEN + .1)
-H('<div class="lab" id="fsl" style="top:380px">YOUR FIRST SENTENCE</div>')
-H(f'<div class="stage" style="top:450px"><div class="phone big soft" id="ph"><img id="opre" src="assets/img/old_first.jpg" alt="">'
-  f'<video id="ov" src="assets/video/old_open_2x.mp4" data-start="{tq - .1:.3f}" data-duration="{OLD_LEN:.2f}" data-track-index="1" muted playsinline></video>'
+tv = max(S[2] - .1, tthey - OLD_LEN)
+H('<div class="lab" id="fsl" style="top:330px">YOUR FIRST LINE</div>')
+H(f'<div class="stage" style="top:400px"><div class="phone big soft" id="ph"><img id="opre" src="assets/img/old_first.jpg" alt="">'
+  f'<video id="ov" src="assets/video/old_open_2x.mp4" data-start="{tv:.3f}" data-duration="{OLD_LEN:.2f}" data-track-index="1" muted playsinline></video>'
   '<img id="ofz" src="assets/img/old_freeze.jpg" alt=""><div id="otm"><span id="otn">0.0</span> s</div><b id="x2">2x</b></div></div>')
-H(f'<div class="pill" id="left" style="top:1270px"><i style="background:{RED}"></i>Most viewers left here</div>')
-R.rise("#fsl", a3 + .05, .7, 20, 6)
-R.rise("#ph", a3 + .05, 1.0, 140, 14)
-R.float3d("#ph", a3 + .05, S[4], (6, 3), (-12, -5), (1, -.5))
-R.counter("otn", tq - .1, OLD_LEN - .05, 0, 4.3, "o.v.toFixed(1)", "none")
-tfz = tq - .1 + OLD_LEN
-R.st("#ofz", tfz - .05, "{opacity: 1}")
-R.ft("#ofz", tfz - .05, .6, '{filter: "grayscale(0) brightness(1)"}', '{filter: "grayscale(.9) brightness(.8)"}', "power2.out")
-R.rise("#left", tfz, .7, 30, 8)
-R.sfx("click", tfz)
-for sel in ("#fsl", "#ph", "#left"):
-    R.leave(sel, S[4] - .18)
+H(f'<div id="five"><b><i id="fn">0</i><small>s</small></b><span>average watch</span></div>')
+R.rise("#fsl", S[2] + .02, .6, 20, 6)
+R.rise("#ph", S[2] - .02, .8, 140, 12)
+R.float3d("#ph", S[2], S[3], (5, 2), (-10, -4), (1, -.5))
+R.counter("otn", tv, OLD_LEN - .05, 0, 4.3, "o.v.toFixed(1)", "none")
+R.focus(S[2] + .5, 1.22, 0, 150, .8)                         # in on the timer while the old line plays
+R.ft("#otm", wt("f02", "this") - .05, .4, "{scale: 1.25}", "{scale: 1}", "back.out(2.5)")
+R.st("#ofz", tthey - .03, "{opacity: 1}")
+R.ft("#ofz", tthey - .03, .5, '{filter: "grayscale(0) brightness(1)"}', '{filter: "grayscale(.9) brightness(.8)"}', "power2.out")
+R.focus(tthey - .05, 1.0, 0, 0, .5)
+R.sfx("click", tthey)
+R.rise("#five", tfive - .15, .5, 30, 8)
+R.counter("fn", tfive - .1, .5, 0, 5, "Math.round(o.v)", "steps(5)")
+R.sfx("thump", tfive)
+for sel in ("#fsl", "#ph", "#five"):
+    R.leave(sel, S[3] - .22, .3)
 
-# ---- f04: nobody cares about the tool (struck through); their reel; problem first, tool last (the rows swap)
+# ---- f03: nobody cares about your tool (struck through); say their problem first (rows swap); save this
 H(f'<div class="num" id="tool" style="top:360px;font-size:210px;color:rgba(16,19,28,.3)">Tool<i id="strike"></i></div>')
-H('<div class="num" id="their" style="top:360px;font-size:190px;line-height:.98">Their<br>reel.</div>')
-H('<div id="rows" style="top:880px"><div class="row" id="rT"><b>1</b><span>Tool</span><em>"This AI told me..."</em></div>'
-  f'<div class="row" id="rP"><b>2</b><span>Problem</span><em>"Your reel lost them at 0:05"</em></div></div>')
-ttool = wt("f04", "tool")
-R.rise("#tool", S[4] + .02, .8, 40, 10)
-R.ft("#strike", ttool + .05, .5, "{scaleX: 0}", "{scaleX: 1}", "power3.inOut")
-R.sfx("click", ttool + .05)
-tth = wt("f04", "they")
-R.leave("#tool", tth - .12, .3)
-R.rise("#their", tth, .8, 40, 10)
-tpr, tfi = wt("f04", "problem"), wt("f04", "first")
-R.rise("#rows", tpr - .3, .8, 40, 8)
-R.to("#rT", tfi + .05, .7, "{y: 170}", "expo.inOut")
-R.to("#rP", tfi + .05, .7, "{y: -170}", "expo.inOut")
-R.st("#rT b", tfi + .4, '{textContent: "2"}')
-R.st("#rP b", tfi + .4, '{textContent: "1"}')
-R.st("#rP", tfi + .4, "{className: 'row on'}")
-R.sfx("swish", tfi)
-R.sfx("ding", tfi + .45)
-for sel in ("#their", "#rows"):
-    R.leave(sel, S[5] - .18)
+H('<div id="rows" style="top:700px"><div class="row" id="rT"><b>1</b><span>Tool</span><em>"This AI told me..."</em></div>'
+  f'<div class="row" id="rP"><b>2</b><span>Problem</span><em>"Your reel loses people at 0:05"</em></div></div>')
+H(f'<div class="save" id="save" style="top:1090px"><i></i>SAVE THIS</div>')
+R.rise("#tool", S[3] - .02, .6, 40, 8)
+ttool = wt("f03", "tool")
+R.ft("#strike", ttool - .05, .4, "{scaleX: 0}", "{scaleX: 1}", "power3.inOut")
+R.sfx("click", ttool)
+tsay, tprob = wt("f03", "say"), wt("f03", "problem")
+R.rise("#rows", tsay - .25, .6, 30, 6)
+R.to("#rT", tprob, .6, "{y: 170}", "expo.inOut")
+R.to("#rP", tprob, .6, "{y: -170}", "expo.inOut")
+R.st("#rT b", tprob + .3, '{textContent: "2"}')
+R.st("#rP b", tprob + .3, '{textContent: "1"}')
+R.st("#rP", tprob + .3, "{className: 'row on'}")
+R.sfx("swish", tprob)
+R.sfx("ding", tprob + .35)
+R.rise("#save", tprob + .4, .5, 16, 6)
+for sel in ("#tool", "#rows", "#save"):
+    R.leave(sel, S[4] - .22, .3)
 
-# ---- f05: this reel's own clock; still no app name
-H('<div class="lab" id="thl" style="top:400px">THIS REEL</div>')
-H('<div class="num" id="clk" style="top:470px;font-size:280px">0:00</div>')
-H('<div id="bar" style="top:830px"><i id="barf"></i></div>')
-H('<div class="pill" id="noname" style="top:930px">App name <span class="blur">Cxxxxxx</span></div>')
-a5, a6 = S[5], S[6]
-R.rise("#thl", a5 + .02, .7, 20, 6)
-R.rise("#clk", a5 + .02, .8, 40, 10)
-R.rise("#bar", a5 + .1, .7, 20, 6)
-R.counter("clk", a5, a6 - a5, a5, a6, '"0:" + String(Math.floor(o.v)).padStart(2, "0")', "none")
-R.ft("#barf", a5, a6 - a5, f"{{scaleX: {a5 / R.DUR:.3f}}}", f"{{scaleX: {a6 / R.DUR:.3f}}}", "none")
-R.rise("#noname", wt("f05", "named") - .1, .7, 30, 8)
-for k in range(int(a6 - a5) + 1):
-    R.sfx("tick", a5 + k + .02)
-for sel in ("#thl", "#clk", "#bar", "#noname"):
-    R.leave(sel, a6 - .18)
-
-# ---- f06: Creedom (about 70 % in): the logo, then the analyser card on the old reel
+# ---- f04: Creedom (about 72 % in): the logo, the analyser card, the drop point
+a4 = S[4]
 H('<div id="logo"><img src="assets/img/creedom_logo.png" alt=""></div>')
-H('<div class="stage" style="top:470px"><div class="an soft" id="an"><div class="anh"><img src="assets/img/creedom_logo.png" alt=""><span>REEL ANALYZER</span></div>'
+H('<div class="stage" style="top:420px"><div class="an soft" id="an"><div class="anh"><img src="assets/img/creedom_logo.png" alt=""><span>REEL ANALYZER</span></div>'
   '<div class="chart"><svg viewBox="0 0 600 260" preserveAspectRatio="none"><path id="ret" d="M0,30 C60,32 90,36 110,44 C130,54 140,160 160,190 C200,215 300,222 600,230" pathLength="1"/></svg>'
   '<i id="drop"></i><b id="dropl">Viewers leave at 0:05</b></div>'
   '<div class="why" id="why"><b>WHY</b><span>The hook names a tool, not the viewer\'s problem.</span></div></div></div>')
 H('<img id="cree" src="assets/img/poses/mag.png" alt="">')
-R.kicker("CREEDOM", a6 - .05, S[7] - .2, PINK)
-R.ft("#logo", a6 - .02, 1.0, '{opacity: 1, scale: .9, filter: "blur(14px)"}', '{scale: 1, filter: "blur(0px)"}', "expo.out")
+R.kicker("CREEDOM", a4 - .05, S[5] - .2, PINK)
 R.st("#logo", 0, "{opacity: 0}")
-R.sfx("sparkle", a6)
-tsh = wt("f06", "shows")
-R.leave("#logo", tsh - .1, .35, -60)
-R.rise("#an", tsh, 1.0, 120, 12)
-R.float3d("#an", tsh, S[7], (8, 4), (-10, -4), (1, 0))
-R.draw("#ret", tsh + .35, .9)
-tex = wt("f06", "exact")
-R.ft("#drop", tex - .05, .5, "{opacity: 1, scale: 0}", "{scale: 1}", "back.out(3)")
+R.ft("#logo", a4 - .05, .8, '{opacity: 1, scale: .9, filter: "blur(14px)"}', '{scale: 1, filter: "blur(0px)"}', "expo.out")
+R.sfx("sparkle", a4)
+tsh = wt("f04", "shows")
+R.leave("#logo", tsh - .12, .3, -60)
+R.rise("#an", tsh - .05, .8, 120, 12)
+R.float3d("#an", tsh, S[5], (8, 4), (-10, -4), (1, 0))
+R.draw("#ret", tsh + .2, .7)
+tex = wt("f04", "exact")
+R.ft("#drop", tex - .05, .45, "{opacity: 1, scale: 0}", "{scale: 1}", "back.out(3)")
 R.st("#drop", 0, "{opacity: 0}")
-R.rise("#dropl", tex + .05, .6, 16, 6)
+R.focus(tex - .05, 1.14, 110, 40, .6)                         # in on the drop point
 R.sfx("click", tex)
-R.rise("#why", wt("f06", "why") - .15, .7, 20, 6)
-R.rise("#cree", wt("f06", "why") - .05, .9, 60, 10)
+R.rise("#dropl", wt("f04", "people") - .1, .5, 16, 6)
+R.focus(wt("f04", "leave") + .05, 1.0, 0, 0, .5)
+R.rise("#why", wt("f04", "leave") + .1, .5, 20, 6)
+R.rise("#cree", wt("f04", "leave"), .7, 60, 10)
 for sel in ("#an", "#cree"):
-    R.leave(sel, S[7] - .18)
+    R.leave(sel, S[5] - .22, .3)
 
-# ---- f07: CTA (CREE), the comment field types it; cut back to frame 1 so it loops
-a7 = S[7]
-H(R.lines_html("h7", ["Send this to the friend", "<em>whose reels keep flopping.</em>"], "hd").replace('id="h7"', 'id="h7" style="top:330px"'))
-H('<div class="cbox soft" id="cbox" style="top:760px"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div>')
+# ---- f05: CTA (CREE) + the share line on screen; the comment field types it; cut back to frame 1 so it loops
+a5 = S[5]
+H(R.lines_html("h5", ["Send this to the friend", "<em>whose reels keep flopping.</em>"], "hd").replace('id="h5"', 'id="h5" style="top:330px;font-size:84px"'))
+H('<div class="cbox soft" id="cbox" style="top:720px"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div>')
 H('<img id="cree2" src="assets/img/poses/wave.png" alt="">')
-R.mask_lines("#h7", a7 - .02)
-tc = wt("f07", "comment")
-R.rise("#cbox", tc - .4, .8, 40, 8)
-R.rise("#cree2", tc - .2, .9, 60, 10)
-R.st("#cph", tc + .15, "{opacity: 0}")
-R.typer("cty", tc + .15, "CREE", .4)
-R.sfx("typing", tc + .15)
-R.ft("#cbox .send", tc + .7, .5, "{scale: 1.5}", "{scale: 1}", "back.out(3)")
-R.sfx("notify", tc + .75)
-H('<div id="loop"><div class="num" style="top:300px;font-size:300px;color:' + RED + '">304</div><div class="hd" style="top:640px">views.</div>'
-  '<div class="stage" style="top:830px"><div class="card soft" style="transform:rotateX(24deg) rotateY(-18deg) translateY(50px)"><img src="assets/img/insights_cards.jpg" alt=""></div></div></div>')
-R.ft("#loop", R.DUR - .45, .4, "{opacity: 0}", "{opacity: 1}", "power2.inOut")
+R.mask_lines("#h5", a5 - .1)
+R.rise("#cbox", a5 + .05, .6, 40, 8)
+R.rise("#cree2", a5 + .3, .7, 60, 10)
+tcr = wt("f05", "cree")
+R.st("#cph", tcr - .1, "{opacity: 0}")
+R.typer("cty", tcr - .1, "CREE", .35)
+R.sfx("typing", tcr - .1)
+R.ft("#cbox .send", tcr + .45, .5, "{scale: 1.5}", "{scale: 1}", "back.out(3)")
+R.sfx("notify", tcr + .5)
+H('<div id="loop"><div class="hd" style="top:300px;font-size:100px">The only video<br>you need to<br><span style="color:' + RED + '">stop the scroll.</span></div>'
+  '<div class="stage" style="top:800px"><div class="card" style="opacity:1;transform:rotateX(22deg) rotateY(-16deg) translateY(40px)"><img src="assets/img/insights_cards.jpg" alt=""></div></div></div>')
+R.ft("#loop", R.DUR - .4, .35, "{opacity: 0}", "{opacity: 1}", "power2.inOut")
 
 R.captions(top=1470)
 
 R.write(f"""
 .lab {{ position: absolute; left: 90px; font-family: Mono; font-size: 28px; letter-spacing: .24em; color: {MUTE}; z-index: 20; }}
-.sub {{ position: absolute; left: 90px; right: 90px; font-family: Sat; font-weight: 500; font-size: 64px; letter-spacing: -.02em; color: {MUTE}; z-index: 20; }}
-.sub b {{ font-weight: 900; color: {INK}; }}
 .card {{ position: relative; margin: 0 auto; width: 880px; border-radius: 34px; overflow: hidden; opacity: 0; transform-style: preserve-3d; }}
 .card img {{ display: block; width: 100%; }}
 .card svg {{ position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }}
-#o304 {{ fill: none; stroke: {RED}; stroke-width: .6; stroke-dasharray: 1; stroke-dashoffset: 1; vector-effect: non-scaling-stroke; stroke-width: 5; }}
-.phone {{ position: relative; margin: 0 auto; width: 340px; height: 604px; border-radius: 48px; overflow: hidden; background: #000; border: 10px solid {INK}; opacity: 0; }}
+#o304 {{ fill: none; stroke: {RED}; stroke-dasharray: 1; stroke-dashoffset: 1; vector-effect: non-scaling-stroke; stroke-width: 5; }}
+.phone {{ position: relative; margin: 0 auto; width: 320px; height: 569px; border-radius: 46px; overflow: hidden; background: #000; border: 10px solid {INK}; opacity: 0; }}
+#oldp {{ margin: 0 0 0 auto; right: 80px; left: auto !important; }}
 .phone.big {{ width: 420px; height: 746px; border-radius: 56px; }}
 .phone img, .phone video {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }}
 .hide {{ position: absolute; left: 22%; right: 22%; top: 83%; height: 8%; border-radius: 12px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); background: rgba(255,220,236,.55); }}
 #ofz {{ opacity: 0; }}
 #otm {{ position: absolute; left: 50%; top: 24px; transform: translateX(-50%); background: rgba(16,19,28,.82); color: #fff; font-family: Mono; font-size: 38px; padding: 8px 22px; border-radius: 999px; }}
 #x2 {{ position: absolute; right: 20px; bottom: 20px; background: rgba(16,19,28,.82); color: #fff; font-family: Mono; font-size: 28px; padding: 6px 14px; border-radius: 10px; }}
-.pill {{ position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; display: flex; align-items: center; gap: 18px; background: #fff; padding: 22px 36px;
-  border-radius: 999px; font-family: Sat; font-weight: 700; font-size: 46px; box-shadow: 0 20px 50px rgba(40,50,90,.16); z-index: 22; }}
-.pill i {{ width: 16px; height: 16px; border-radius: 50%; }}
-.pill .blur {{ font-family: Mono; color: {MUTE}; filter: blur(8px); }}
-#five {{ position: absolute; left: 190px; top: 500px; width: 700px; height: 700px; z-index: 20; }}
-#five svg {{ width: 100%; height: 100%; transform: rotate(-90deg); }}
-#five .trk {{ fill: none; stroke: rgba(16,19,28,.1); stroke-width: 2; }}
-#five .arc {{ fill: none; stroke: {RED}; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }}
-#five b {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 175px; font-family: Unb; font-weight: 900; color: {INK}; }}
-#five b i {{ font-style: normal; font-size: 330px; line-height: 1; letter-spacing: -.06em; }}
-#five b small {{ font-size: 110px; color: {MUTE}; }}
+.quote {{ position: absolute; left: 0; right: 0; text-align: center; font-family: Sat; font-weight: 700; font-size: 54px; letter-spacing: -.02em; color: {INK}; z-index: 22; }}
+#five {{ position: absolute; left: 730px; top: 380px; width: 270px; height: 270px; border-radius: 50%; background: #fff; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; z-index: 24; box-shadow: 0 30px 60px rgba(40,50,90,.18); opacity: 0; }}
+#five b {{ font-family: Unb; font-weight: 900; color: {RED}; line-height: 1; }}
+#five b i {{ font-style: normal; font-size: 120px; letter-spacing: -.06em; }}
+#five b small {{ font-size: 50px; }}
+#five span {{ font-family: Mono; font-size: 20px; letter-spacing: .14em; color: {MUTE}; margin-top: 8px; text-transform: uppercase; }}
 #strike {{ position: absolute; left: -10px; right: -10px; top: 52%; height: 10px; background: {RED}; border-radius: 5px; transform-origin: left center; transform: scaleX(0); }}
 #rows {{ position: absolute; left: 90px; right: 90px; z-index: 20; height: 340px; }}
 .row {{ position: absolute; left: 0; right: 0; height: 150px; display: flex; align-items: center; gap: 30px; border-top: 2px solid rgba(16,19,28,.1); }}
@@ -206,8 +187,8 @@ R.write(f"""
 .row span {{ font-family: Sat; font-weight: 900; font-size: 72px; letter-spacing: -.03em; }}
 .row em {{ margin-left: auto; font-style: normal; font-family: Sat; font-weight: 500; font-size: 34px; color: {MUTE}; max-width: 360px; text-align: right; line-height: 1.15; }}
 .row.on b {{ color: {GREEN}; }}
-#bar {{ position: absolute; left: 90px; right: 90px; height: 6px; background: rgba(16,19,28,.1); border-radius: 3px; z-index: 20; }}
-#barf {{ position: absolute; inset: 0; background: {INK}; transform-origin: left center; border-radius: 3px; }}
+.save {{ position: absolute; left: 90px; font-family: Mono; font-size: 36px; letter-spacing: .24em; color: {GREEN}; z-index: 20; display: flex; align-items: center; gap: 16px; }}
+.save i {{ width: 28px; height: 34px; border: 4px solid {GREEN}; border-bottom: none; border-radius: 4px 4px 0 0; position: relative; }}
 #logo {{ position: absolute; left: 140px; right: 140px; top: 640px; height: 280px; display: grid; place-items: center; z-index: 25; }}
 #logo img {{ width: 100%; }}
 .an {{ position: relative; margin: 0 auto; width: 900px; border-radius: 40px; padding: 38px 40px 44px; background: rgba(255,255,255,.92); opacity: 0; }}
@@ -222,15 +203,14 @@ R.write(f"""
 .why {{ margin-top: 28px; display: flex; gap: 22px; align-items: baseline; }}
 .why b {{ font-family: Mono; font-size: 26px; letter-spacing: .16em; color: {PINK}; }}
 .why span {{ font-family: Sat; font-weight: 700; font-size: 44px; line-height: 1.15; letter-spacing: -.02em; }}
-#cree {{ position: absolute; right: 70px; top: 1150px; width: 230px; z-index: 26; filter: drop-shadow(0 20px 30px rgba(40,50,90,.2)); }}
-#cree2 {{ position: absolute; right: 90px; top: 960px; width: 260px; z-index: 26; filter: drop-shadow(0 20px 30px rgba(40,50,90,.2)); }}
+#cree {{ position: absolute; right: 70px; top: 1120px; width: 230px; z-index: 26; filter: drop-shadow(0 20px 30px rgba(40,50,90,.2)); }}
+#cree2 {{ position: absolute; right: 90px; top: 920px; width: 260px; z-index: 26; filter: drop-shadow(0 20px 30px rgba(40,50,90,.2)); }}
 .cbox {{ position: absolute; left: 90px; width: 820px; height: 140px; border-radius: 70px; background: #fff; display: flex; align-items: center; gap: 24px; padding: 0 34px;
   font-family: Sat; font-weight: 900; font-size: 64px; letter-spacing: .02em; z-index: 22; }}
 .cbox .av {{ width: 84px; height: 84px; border-radius: 50%; background: linear-gradient(135deg, {PINK}, #a064ff); flex: none; }}
 #cph {{ position: absolute; left: 142px; color: rgba(16,19,28,.35); font-weight: 500; font-size: 48px; letter-spacing: 0; }}
 .cbox .send {{ margin-left: auto; color: {PINK}; font-size: 54px; }}
 #loop {{ position: absolute; inset: -60px; opacity: 0; z-index: 50; background: linear-gradient(180deg, #f7f8fc, #eceff7); }}
-#loop > * {{ margin-left: 0; }}
-#loop .num, #loop .hd {{ transform: translate(60px, 60px); }}
+#loop .hd {{ transform: translate(60px, 60px); }}
 #loop .stage {{ transform: translateY(60px); }}
 """)

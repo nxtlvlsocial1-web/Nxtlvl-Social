@@ -1,86 +1,86 @@
 [
 {
-"type": "tick",
-"t": 0.6
+"type": "thump",
+"t": 0.02
+},
+{
+"type": "click",
+"t": 1.95
 },
 {
 "type": "swish",
-"t": 5.523
-},
-{
-"type": "click",
-"t": 5.683
+"t": 2.41
 },
 {
 "type": "tick",
-"t": 6.895
+"t": 4.0
 },
 {
-"type": "tick",
-"t": 7.035
-},
-{
-"type": "tick",
-"t": 7.175
+"type": "thump",
+"t": 4.79
 },
 {
 "type": "swish",
-"t": 8.287
+"t": 6.45
 },
 {
 "type": "click",
-"t": 8.579
+"t": 7.13
 },
 {
 "type": "click",
-"t": 11.032
+"t": 8.55
 },
 {
 "type": "click",
-"t": 13.73
+"t": 10.09
 },
 {
 "type": "swish",
-"t": 16.051
+"t": 11.49
 },
 {
 "type": "click",
-"t": 16.966
+"t": 12.21
 },
 {
 "type": "click",
-"t": 17.146
+"t": 12.35
 },
 {
 "type": "click",
-"t": 17.326
+"t": 12.49
+},
+{
+"type": "thump",
+"t": 13.21
 },
 {
 "type": "g_correct",
-"t": 18.575
+"t": 13.36
 },
 {
 "type": "swish",
-"t": 19.73
+"t": 14.52
 },
 {
 "type": "sparkle",
-"t": 19.89
+"t": 14.68
 },
 {
 "type": "click",
-"t": 23.777
+"t": 16.72
 },
 {
 "type": "swish",
-"t": 25.777
+"t": 17.58
 },
 {
 "type": "typing",
-"t": 28.597
+"t": 18.24
 },
 {
 "type": "notify",
-"t": 29.247
+"t": 18.89
 }
 ]

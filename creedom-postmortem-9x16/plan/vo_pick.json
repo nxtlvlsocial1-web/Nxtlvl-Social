@@ -1,173 +1,131 @@
 {
- "duration": 29.56,
+ "duration": 19.27,
  "takes": [
   {
    "line": "f00",
    "take": 0,
-   "heard": "This reel got 304 views.",
-   "errors": 4,
-   "pitch_spread_hz": 201
+   "speed": 1.07,
+   "heard": "The only video you need to stop the scroll.",
+   "slips": 0
   },
   {
    "line": "f00",
    "take": 1,
-   "heard": "This reel got 304 views.",
-   "errors": 4,
-   "pitch_spread_hz": 126
+   "speed": 1.12,
+   "heard": "The only video you need to stop the scroll.",
+   "slips": 0
   },
   {
    "line": "f00",
    "take": 2,
-   "heard": "This reel got 304 views.",
-   "errors": 4,
-   "pitch_spread_hz": 123
+   "speed": 1.17,
+   "heard": "The only video you need to stop the scroll.",
+   "slips": 0
   },
   {
    "line": "f01",
    "take": 0,
-   "heard": "And it was a reel about why people stop watching.",
-   "errors": 0,
-   "pitch_spread_hz": 110
+   "speed": 1.1,
+   "heard": "Mine got three hundred and four views on a reel about why people stop watching",
+   "slips": 4
   },
   {
    "line": "f01",
    "take": 1,
-   "heard": "And it was a reel about why people stop watching.",
-   "errors": 0,
-   "pitch_spread_hz": 183
+   "speed": 1.15,
+   "heard": "Mine got 304 views, on a reel about why people stop watching.",
+   "slips": 0
   },
   {
    "line": "f01",
    "take": 2,
-   "heard": "And it was a reel about why people stop watching.",
-   "errors": 0,
-   "pitch_spread_hz": 103
+   "speed": 1.2,
+   "heard": "Mine got 304 views, on a reel about why people stop watching.",
+   "slips": 0
   },
   {
    "line": "f02",
    "take": 0,
-   "heard": "On average, people gave it five seconds.",
-   "errors": 0,
-   "pitch_spread_hz": 207
+   "speed": 1.05,
+   "heard": "My first line, this AI told me. They gave it five seconds.",
+   "slips": 0
   },
   {
    "line": "f02",
    "take": 1,
-   "heard": "On average, people gave it five seconds.",
-   "errors": 0,
-   "pitch_spread_hz": 219
+   "speed": 1.1,
+   "heard": "My first line, this AI told me. They gave it five seconds.",
+   "slips": 0
   },
   {
    "line": "f02",
    "take": 2,
-   "heard": "On average, people gave it five seconds.",
-   "errors": 0,
-   "pitch_spread_hz": 204
+   "speed": 1.15,
+   "heard": "My first line, this AI told me, they gave it five seconds.",
+   "slips": 0
   },
   {
    "line": "f03",
    "take": 0,
-   "heard": "That's how long my first sentence took. This AI told me.",
-   "errors": 0,
-   "pitch_spread_hz": 121
+   "speed": 1.07,
+   "heard": "Nobody cares about your tool. Say their problem first.",
+   "slips": 0
   },
   {
    "line": "f03",
    "take": 1,
-   "heard": "That's how long my first sentence took. This AI told me.",
-   "errors": 0,
-   "pitch_spread_hz": 133
+   "speed": 1.12,
+   "heard": "Nobody cares about your tool. Say their problem first.",
+   "slips": 0
   },
   {
    "line": "f03",
    "take": 2,
-   "heard": "That's how long my first sentence took. This AI told me.",
-   "errors": 0,
-   "pitch_spread_hz": 140
+   "speed": 1.17,
+   "heard": "Nobody cares about your tool. Say their problem first.",
+   "slips": 0
   },
   {
    "line": "f04",
    "take": 0,
-   "heard": "Nobody cares about the tool. They care about their reel. Problem first, tool last.",
-   "errors": 0,
-   "pitch_spread_hz": 140
+   "speed": 1.05,
+   "heard": "Credoem shows you the exact second people leave.",
+   "slips": 1
   },
   {
    "line": "f04",
    "take": 1,
-   "heard": "Nobody cares about the tool, they care about their reel. Problem first, tool last.",
-   "errors": 0,
-   "pitch_spread_hz": 140
+   "speed": 1.1,
+   "heard": "Credoem shows you the exact second people leave.",
+   "slips": 1
   },
   {
    "line": "f04",
    "take": 2,
-   "heard": "Nobody cares about the tool. They care about their reel. Problem first, tool last.",
-   "errors": 0,
-   "pitch_spread_hz": 116
+   "speed": 1.15,
+   "heard": "Cretum shows you the exact second people leave.",
+   "slips": 1
   },
   {
    "line": "f05",
    "take": 0,
-   "heard": "Like this video, 17 seconds in and I still haven't named the app.",
-   "errors": 1,
-   "pitch_spread_hz": 126
+   "speed": 1.03,
+   "heard": "Comment Cree and I'll send it.",
+   "slips": 0
   },
   {
    "line": "f05",
    "take": 1,
-   "heard": "Like this video, 17 seconds in and I still haven't named the app.",
-   "errors": 1,
-   "pitch_spread_hz": 103
+   "speed": 1.08,
+   "heard": "Comment Cree and I'll send it.",
+   "slips": 0
   },
   {
    "line": "f05",
    "take": 2,
-   "heard": "Like this video, 17 seconds in and I still haven't named the app.",
-   "errors": 1,
-   "pitch_spread_hz": 121
-  },
-  {
-   "line": "f06",
-   "take": 0,
-   "heard": "It's Cretum. It shows you the exact second people leave and why.",
-   "errors": 1,
-   "pitch_spread_hz": 142
-  },
-  {
-   "line": "f06",
-   "take": 1,
-   "heard": "It's Cretum. It shows you the exact second people leave and why.",
-   "errors": 1,
-   "pitch_spread_hz": 138
-  },
-  {
-   "line": "f06",
-   "take": 2,
-   "heard": "It's Cretum. It shows you the exact second people leave and why.",
-   "errors": 1,
-   "pitch_spread_hz": 139
-  },
-  {
-   "line": "f07",
-   "take": 0,
-   "heard": "Send this to the friend whose reels keep flopping. Comment Cree, and I'll send you the app.",
-   "errors": 0,
-   "pitch_spread_hz": 161
-  },
-  {
-   "line": "f07",
-   "take": 1,
-   "heard": "Send this to the friend whose reels keep flopping. Comment Cree, and I'll send you the app.",
-   "errors": 0,
-   "pitch_spread_hz": 146
-  },
-  {
-   "line": "f07",
-   "take": 2,
-   "heard": "Send this to the friend whose reels keep flopping. Comment Cree, and I'll send you the app.",
-   "errors": 0,
-   "pitch_spread_hz": 160
+   "speed": 1.13,
+   "heard": "Comment cree and I'll send it.",
+   "slips": 0
   }
  ]
 }

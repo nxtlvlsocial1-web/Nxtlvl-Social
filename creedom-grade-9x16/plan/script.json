@@ -1,38 +1,44 @@
 [
  {
   "id": "f00",
-  "display": "This reel scored 2.9 out of 5. Before anyone saw it.",
-  "text": "This reel scored two point nine out of five. Before anyone saw it.",
-  "beat": "hook 70: result first"
+  "display": "The only video you need before you hit post.",
+  "text": "The only video you need before you hit post.",
+  "speed": 1.12,
+  "beat": "hook: the only reel you need"
  },
  {
   "id": "f01",
-  "display": "Harsh. But look where it lost points.",
-  "text": "Harsh. But look where it lost points.",
-  "beat": "peak"
+  "display": "This one scored 2.9 out of 5, before anyone saw it.",
+  "text": "This one scored two point nine out of five, before anyone saw it.",
+  "speed": 1.12,
+  "beat": "proof (example score)"
  },
  {
   "id": "f02",
-  "display": "Second one, the hook is too slow. Second seven, a claim with no proof. Second fourteen, it loses trust.",
-  "text": "Second one, the hook is too slow. Second seven, a claim with no proof. Second fourteen, it loses trust.",
-  "beat": "release"
+  "display": "Second one: slow hook. Second seven: no proof. Second fourteen: lost trust.",
+  "text": "Second one: slow hook. Second seven: no proof. Second fourteen: lost trust.",
+  "speed": 1.12,
+  "beat": "the three flags"
  },
  {
   "id": "f03",
-  "display": "Fix just those three seconds, and it scores 4.4.",
-  "text": "Fix just those three seconds, and it scores four point four.",
-  "beat": "peak"
+  "display": "Fix those three, and it scores 4.4.",
+  "text": "Fix those three, and it scores four point four.",
+  "speed": 1.08,
+  "beat": "the fix (peak)"
  },
  {
   "id": "f04",
-  "display": "That's Creedom. Upload your reel before you post, and it shows you the exact second, and the fix.",
-  "text": "That's Creedom. Upload your reel before you post, and it shows you the exact second, and the fix.",
-  "beat": "release: the tool"
+  "display": "That's Creedom. It scores your reel before you post.",
+  "text": "That's Creedom. It scores your reel before you post.",
+  "speed": 1.1,
+  "beat": "the product as the answer"
  },
  {
   "id": "f05",
-  "display": "Send this to the friend who posts and prays. Comment CHECK, and I'll send you the link.",
-  "text": "Send this to the friend who posts and prays. Comment Check, and I'll send you the link.",
+  "display": "Comment CHECK for the link.",
+  "text": "Comment Check, for the link.",
+  "speed": 1.08,
   "beat": "CTA"
  }
 ]

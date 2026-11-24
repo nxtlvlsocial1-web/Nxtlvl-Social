@@ -92,6 +92,10 @@ class Reel:
         """slow camera push for one scene (pure function of time)"""
         self.ft("#cam", t0, max(.1, t1 - t0), "{scale: 1}", f"{{scale: {1 + z:.3f}}}", "none")
 
+    def focus(self, t, scale=1.0, x=0, y=0, d=.7, ease="expo.inOut"):
+        """the lens moves in on a detail (a cut-like move inside a scene); focus(t) with defaults goes back to wide"""
+        self.to("#lens", t, d, f"{{scale: {scale}, x: {x}, y: {y}}}", ease)
+
     def float3d(self, sel, t0, t1, rx=(10, 4), ry=(-14, -6), rz=(1.5, -.5)):
         self.ft(sel, t0, max(.1, t1 - t0), f"{{rotationX: {rx[0]}, rotationY: {ry[0]}, rotation: {rz[0]}}}",
                 f"{{rotationX: {rx[1]}, rotationY: {ry[1]}, rotation: {rz[1]}}}", "sine.inOut")
@@ -148,7 +152,7 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #f3f5
 #g2 {{ left: -160px; top: 1260px; width: 900px; height: 900px; background: rgba(214,190,255,.8); }}
 #g3 {{ left: 380px; top: 900px; width: 560px; height: 560px; background: rgba(200,230,255,.55); }}
 #grain {{ position: absolute; inset: 0; background: url(assets/img/noise.png); opacity: .09; mix-blend-mode: multiply; pointer-events: none; z-index: 90; }}
-#cam {{ position: absolute; inset: 0; transform-origin: 540px 860px; z-index: 10; }}
+#cam, #lens {{ position: absolute; inset: 0; transform-origin: 540px 860px; z-index: 10; }}
 .kick {{ position: absolute; left: 90px; top: 250px; font-family: Mono; font-size: 26px; letter-spacing: .26em; color: {MUTE}; opacity: 0; z-index: 30; }}
 .kick i {{ display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 18px; vertical-align: 3px; }}
 .ln {{ display: block; overflow: hidden; padding-bottom: .06em; }}
@@ -182,9 +186,9 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #f3f5
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{D:.2f}" data-fps="30" data-width="1080" data-height="1920">
       <div id="bg"><i class="gl" id="g1"></i><i class="gl" id="g2"></i><i class="gl" id="g3"></i></div>
-      <div id="cam">
+      <div id="cam"><div id="lens">
       {chr(10).join(self.HTML)}
-      </div>
+      </div></div>
       {chr(10).join(self.TOP)}
       <div id="prog"><i></i></div>
       <div id="grain"></div>

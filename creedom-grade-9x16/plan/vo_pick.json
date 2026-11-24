@@ -1,131 +1,131 @@
 {
- "duration": 25.5,
+ "duration": 19.84,
  "takes": [
   {
    "line": "f00",
    "take": 0,
-   "heard": "This reel scored 2 .9 out of 5, before anyone saw it.",
-   "errors": 3,
-   "pitch_spread_hz": 100
+   "speed": 1.07,
+   "heard": "The only video you need before you hit post.",
+   "slips": 0
   },
   {
    "line": "f00",
    "take": 1,
-   "heard": "This reel scored 2 .9 out of 5, before anyone saw it.",
-   "errors": 3,
-   "pitch_spread_hz": 102
+   "speed": 1.12,
+   "heard": "The only video you need before you hit post.",
+   "slips": 0
   },
   {
    "line": "f00",
    "take": 2,
-   "heard": "This reel scored 2 .9 out of 5, before anyone saw it.",
-   "errors": 3,
-   "pitch_spread_hz": 101
+   "speed": 1.17,
+   "heard": "The only video you need before you hit post.",
+   "slips": 0
   },
   {
    "line": "f01",
    "take": 0,
-   "heard": "Harsh, but look where it lost points.",
-   "errors": 0,
-   "pitch_spread_hz": 137
+   "speed": 1.07,
+   "heard": "This one scored 2.9 out of 5 before anyone saw it.",
+   "slips": 0
   },
   {
    "line": "f01",
    "take": 1,
-   "heard": "Harsh, but look where it lost points.",
-   "errors": 0,
-   "pitch_spread_hz": 99
+   "speed": 1.12,
+   "heard": "This one scored 2.9 out of 5 before anyone saw it.",
+   "slips": 0
   },
   {
    "line": "f01",
    "take": 2,
-   "heard": "Harsh, but look where it lost points.",
-   "errors": 0,
-   "pitch_spread_hz": 112
+   "speed": 1.17,
+   "heard": "This one scored 2.9 out of 5 before anyone saw it.",
+   "slips": 0
   },
   {
    "line": "f02",
    "take": 0,
-   "heard": "Second one, the hook is too slow. Second seven, a claim with no proof. Second fourteen, it loses trust.",
-   "errors": 0,
-   "pitch_spread_hz": 123
+   "speed": 1.07,
+   "heard": "Second one, slow hook. Second seven, no proof. Second 14, lost trust.",
+   "slips": 1
   },
   {
    "line": "f02",
    "take": 1,
-   "heard": "Second one, the hook is too slow. Second seven, a claim with no proof. Second fourteen, it loses trust.",
-   "errors": 0,
-   "pitch_spread_hz": 114
+   "speed": 1.12,
+   "heard": "Second one, slow hook. Second seven, no proof. Second 14, lost trust.",
+   "slips": 1
   },
   {
    "line": "f02",
    "take": 2,
-   "heard": "Second one, the hook is too slow. Second seven, a claim with no proof. Second fourteen, it loses trust.",
-   "errors": 0,
-   "pitch_spread_hz": 136
+   "speed": 1.17,
+   "heard": "2nd 1 slow hook 2nd 7 no proof 2nd 14 lost trust",
+   "slips": 6
   },
   {
    "line": "f03",
    "take": 0,
-   "heard": "Fix just those three seconds, and it scores 4 .4.",
-   "errors": 3,
-   "pitch_spread_hz": 134
+   "speed": 1.03,
+   "heard": "Fix those three and it scores 4.4.",
+   "slips": 0
   },
   {
    "line": "f03",
    "take": 1,
-   "heard": "Fix just those three seconds, and it scores 4 .4.",
-   "errors": 3,
-   "pitch_spread_hz": 133
+   "speed": 1.08,
+   "heard": "Fix those three and it scores 4.4.",
+   "slips": 0
   },
   {
    "line": "f03",
    "take": 2,
-   "heard": "Fix just those three seconds, and it scores 4 .4.",
-   "errors": 3,
-   "pitch_spread_hz": 137
+   "speed": 1.13,
+   "heard": "Fix those three and it scores 4.4.",
+   "slips": 0
   },
   {
    "line": "f04",
    "take": 0,
-   "heard": "That's Credem. Upload your reel before you post, and it shows you the exact second and the fix.",
-   "errors": 1,
-   "pitch_spread_hz": 108
+   "speed": 1.05,
+   "heard": "That's Cretum. It scores your reel before you post.",
+   "slips": 1
   },
   {
    "line": "f04",
    "take": 1,
-   "heard": "That's Kritum. Upload your reel before you post, and it shows you the exact second and the fix.",
-   "errors": 1,
-   "pitch_spread_hz": 111
+   "speed": 1.1,
+   "heard": "That's Credem. It scores your reel before you post.",
+   "slips": 1
   },
   {
    "line": "f04",
    "take": 2,
-   "heard": "That's Cretem. Upload your reel before you post, and it shows you the exact second and the fix.",
-   "errors": 1,
-   "pitch_spread_hz": 113
+   "speed": 1.15,
+   "heard": "That's Credem. It scores your reel before you post.",
+   "slips": 1
   },
   {
    "line": "f05",
    "take": 0,
-   "heard": "Send this to the friend who posts and prays, comment check, and I'll send you the link.",
-   "errors": 0,
-   "pitch_spread_hz": 116
+   "speed": 1.03,
+   "heard": "Comment check for the link.",
+   "slips": 0
   },
   {
    "line": "f05",
    "take": 1,
-   "heard": "Send this to the friend who posts and prays, comment check, and I'll send you the link.",
-   "errors": 0,
-   "pitch_spread_hz": 116
+   "speed": 1.08,
+   "heard": "Comment check for the link.",
+   "slips": 0
   },
   {
    "line": "f05",
    "take": 2,
-   "heard": "Send this to the friend who posts and prays. Comment check and I'll send you the link.",
-   "errors": 0,
-   "pitch_spread_hz": 118
+   "speed": 1.13,
+   "heard": "Comment check for the link.",
+   "slips": 0
   }
  ]
 }

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>Creedom remake: graded before anyone saw it v4 9x16</title>
+    <title>Creedom remake: graded before anyone saw it v5 9x16</title>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
 @font-face { font-family: Unb; font-weight: 900; src: url("assets/fonts/unbounded-latin-900-normal.woff2"); }
@@ -21,7 +21,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
 #g2 { left: -160px; top: 1260px; width: 900px; height: 900px; background: rgba(214,190,255,.8); }
 #g3 { left: 380px; top: 900px; width: 560px; height: 560px; background: rgba(200,230,255,.55); }
 #grain { position: absolute; inset: 0; background: url(assets/img/noise.png); opacity: .09; mix-blend-mode: multiply; pointer-events: none; z-index: 90; }
-#cam { position: absolute; inset: 0; transform-origin: 540px 860px; z-index: 10; }
+#cam, #lens { position: absolute; inset: 0; transform-origin: 540px 860px; z-index: 10; }
 .kick { position: absolute; left: 90px; top: 250px; font-family: Mono; font-size: 26px; letter-spacing: .26em; color: rgba(16,19,28,.6); opacity: 0; z-index: 30; }
 .kick i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 18px; vertical-align: 3px; }
 .ln { display: block; overflow: hidden; padding-bottom: .06em; }
@@ -36,17 +36,22 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
 #prog { position: absolute; left: 90px; right: 90px; top: 180px; height: 3px; background: rgba(16,19,28,.08); z-index: 70; border-radius: 2px; }
 #prog i { position: absolute; inset: 0; background: #10131c; transform-origin: left center; transform: scaleX(0); border-radius: 2px; }
 
-.phone { position: relative; left: 100px; width: 400px; height: 711px; border-radius: 54px; overflow: hidden; background: #000; border: 10px solid #10131c; opacity: 0; }
+.phone { position: relative; left: 100px; width: 380px; height: 676px; border-radius: 52px; overflow: hidden; background: #000; border: 10px solid #10131c; opacity: 0; }
 .phone img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .ex { position: absolute; left: 22px; top: 22px; background: rgba(16,19,28,.72); color: #fff; font-family: Mono; font-size: 22px; letter-spacing: .18em; padding: 6px 12px; border-radius: 8px; }
-#sc { position: absolute; left: 560px; top: 440px; width: 440px; height: 440px; opacity: 0; z-index: 20; transform-origin: 50% 50%; }
+.post { position: absolute; left: 560px; display: flex; align-items: center; gap: 18px; background: #10131c; color: #fff; padding: 26px 44px; border-radius: 999px; font-family: Sat;
+  font-weight: 700; font-size: 46px; opacity: 0; z-index: 22; box-shadow: 0 20px 50px rgba(40,50,90,.2); }
+.post i { width: 18px; height: 18px; border-radius: 50%; background: #8ea2ff; }
+.post.hold { background: #2a2f3d; }
+.post.hold i { background: #d22b22; }
+#sc { position: absolute; left: 560px; top: 660px; width: 420px; height: 420px; opacity: 0; z-index: 20; transform-origin: 50% 50%; }
 #sc svg { width: 100%; height: 100%; transform: rotate(-90deg); }
 #sc .trk { fill: none; stroke: rgba(16,19,28,.1); stroke-width: 2; }
 #sc .arc { fill: none; stroke: #d22b22; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1; }
 #sc .n { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-#sc .n b { font-family: Unb; font-weight: 900; font-size: 150px; letter-spacing: -.06em; line-height: 1; }
+#sc .n b { font-family: Unb; font-weight: 900; font-size: 140px; letter-spacing: -.06em; line-height: 1; }
 #sc .n span { font-family: Sat; font-weight: 500; font-size: 40px; color: rgba(16,19,28,.6); margin-top: 10px; }
-#tline { position: absolute; left: 100px; width: 400px; height: 70px; opacity: 0; z-index: 20; }
+#tline { position: absolute; left: 100px; width: 380px; height: 70px; opacity: 0; z-index: 20; }
 #tline .bar { position: absolute; left: 0; right: 0; top: 30px; height: 3px; background: rgba(16,19,28,.14); border-radius: 2px; }
 .tk { position: absolute; top: 18px; width: 0; }
 .tk::before { content: ""; position: absolute; left: -9px; top: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 3px solid rgba(16,19,28,.3); }
@@ -54,10 +59,10 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
 .tk.on::before { background: #d22b22; border-color: #d22b22; }
 .tk.fixed::before { background: #0f8f5c; border-color: #0f8f5c; }
 #list { position: absolute; left: 560px; right: 70px; z-index: 20; }
-.row { position: relative; display: flex; flex-direction: column; padding: 22px 60px 22px 0; border-top: 2px solid rgba(16,19,28,.1); opacity: 0; }
+.row { position: relative; display: flex; flex-direction: column; padding: 24px 60px 24px 0; border-top: 2px solid rgba(16,19,28,.1); opacity: 0; }
 .row:last-child { border-bottom: 2px solid rgba(16,19,28,.1); }
-.row b { font-family: Mono; font-size: 28px; color: #d22b22; }
-.row span { font-family: Sat; font-weight: 900; font-size: 46px; letter-spacing: -.02em; line-height: 1.1; margin-top: 4px; }
+.row b { font-family: Mono; font-size: 30px; color: #d22b22; }
+.row span { font-family: Sat; font-weight: 900; font-size: 56px; letter-spacing: -.02em; line-height: 1.05; margin-top: 4px; }
 .row .dot { position: absolute; right: 8px; top: 50%; margin-top: -8px; width: 16px; height: 16px; border-radius: 50%; background: #d22b22; }
 .row .ok { position: absolute; right: 0; top: 50%; margin-top: -22px; width: 44px; height: 44px; border-radius: 50%; background: #0f8f5c; color: #fff; display: grid; place-items: center;
   font-style: normal; font-weight: 900; font-size: 26px; opacity: 0; }
@@ -74,374 +79,292 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
 .tile.dim { border-color: transparent; opacity: .55; }
 .tile.dim i { background: #cfd4e0; color: #10131c; }
 #cree { position: absolute; right: 70px; top: 1130px; width: 240px; z-index: 26; filter: drop-shadow(0 20px 30px rgba(40,50,90,.2)); }
-#cree2 { position: absolute; right: 90px; top: 960px; width: 260px; z-index: 26; filter: drop-shadow(0 20px 30px rgba(40,50,90,.2)); }
+#cree2 { position: absolute; right: 90px; top: 920px; width: 260px; z-index: 26; filter: drop-shadow(0 20px 30px rgba(40,50,90,.2)); }
 .cbox { position: absolute; left: 90px; width: 820px; height: 140px; border-radius: 70px; background: #fff; display: flex; align-items: center; gap: 24px; padding: 0 34px;
   font-family: Sat; font-weight: 900; font-size: 64px; letter-spacing: .02em; z-index: 22; }
 .cbox .av { width: 84px; height: 84px; border-radius: 50%; background: linear-gradient(135deg, #e8307d, #a064ff); flex: none; }
 #cph { position: absolute; left: 142px; color: rgba(16,19,28,.35); font-weight: 500; font-size: 48px; letter-spacing: 0; }
 .cbox .send { margin-left: auto; color: #e8307d; font-size: 54px; }
 #loop { position: absolute; inset: -60px; opacity: 0; z-index: 50; background: linear-gradient(180deg, #f7f8fc, #eceff7); }
-#loop .lp { position: absolute; left: 160px; top: 490px; width: 400px; height: 711px; border-radius: 54px; overflow: hidden; border: 10px solid #10131c;
-  transform: perspective(1900px) rotateY(26deg) rotateX(8deg) translateY(60px); }
+#loop .hd { transform: translate(60px, 60px); }
+#loop .lp { position: absolute; left: 160px; top: 680px; width: 380px; height: 676px; border-radius: 52px; overflow: hidden; border: 10px solid #10131c;
+  transform: perspective(1900px) rotateY(26deg) rotateX(8deg) translateY(50px); }
 #loop .lp img { width: 100%; height: 100%; object-fit: cover; }
-#loop .ln2 { position: absolute; left: 620px; top: 500px; width: 440px; height: 440px; border-radius: 50%; border: 4px solid #d22b22; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-#loop .ln2 b { font-family: Unb; font-weight: 900; font-size: 150px; letter-spacing: -.06em; line-height: 1; }
-#loop .ln2 span { font-family: Sat; font-weight: 500; font-size: 40px; color: rgba(16,19,28,.6); margin-top: 10px; }
 </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="30.95" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="20.00" data-fps="30" data-width="1080" data-height="1920">
       <div id="bg"><i class="gl" id="g1"></i><i class="gl" id="g2"></i><i class="gl" id="g3"></i></div>
-      <div id="cam">
-      <div class="stage" style="top:430px"><div class="phone soft" id="ph"><img id="frame" src="assets/img/demo_f01.jpg" alt=""><b class="ex">EXAMPLE</b></div></div>
-<div id="sc"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" class="trk"/><circle cx="100" cy="100" r="96" class="arc" id="arc" pathLength="1"/></svg><div class="n"><b id="score">2.6</b><span>out of 5</span></div></div>
-<div class="kick" id="kk1"><i style="background:#d22b22"></i>REEL SCORE  /  EXAMPLE</div>
-<div class="hd" id="hb" style="top:1190px"><span class="ln"><span>Before anyone</span></span><span class="ln"><span><em>saw it.</em></span></span></div>
-<div class="num" id="harsh" style="top:1190px;font-size:150px;color:#d22b22">Harsh.</div>
-<div id="tline" style="top:1190px"><i class="bar"></i><i class="tk" id="tk0" style="left:6%"><em>0:01</em></i><i class="tk" id="tk1" style="left:40%"><em>0:07</em></i><i class="tk" id="tk2" style="left:78%"><em>0:14</em></i></div>
-<div id="list" style="top:760px"><div class="row" id="r0"><b>0:01</b><span>Hook too slow</span><i class="dot"></i><i class="ok">&#10003;</i></div><div class="row" id="r1"><b>0:07</b><span>A claim, no proof</span><i class="dot"></i><i class="ok">&#10003;</i></div><div class="row" id="r2"><b>0:14</b><span>Loses trust</span><i class="dot"></i><i class="ok">&#10003;</i></div></div>
+      <div id="cam"><div id="lens">
+      <div class="hd" id="hk" style="top:280px;font-size:92px"><span class="ln"><span>The only video</span></span><span class="ln"><span>you need before</span></span><span class="ln"><span style="color:#d22b22">you hit post.</span></span></div>
+<div class="stage" style="top:620px"><div class="phone soft" id="ph"><img id="frame" src="assets/img/demo_f01.jpg" alt=""><b class="ex">EXAMPLE</b></div></div>
+<div class="post" id="post" style="top:1130px"><i></i>Post reel</div>
+<div id="sc"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" class="trk"/><circle cx="100" cy="100" r="96" class="arc" id="arc" pathLength="1"/></svg><div class="n"><b id="score">0.0</b><span>out of 5</span></div></div>
+<div class="hd" id="hb" style="top:300px;font-size:92px"><span class="ln"><span>Before anyone</span></span><span class="ln"><span><em>saw it.</em></span></span></div>
+<div id="tline" style="top:1330px"><i class="bar"></i><i class="tk" id="tk0" style="left:6%"><em>0:01</em></i><i class="tk" id="tk1" style="left:40%"><em>0:07</em></i><i class="tk" id="tk2" style="left:78%"><em>0:14</em></i></div>
+<div id="list" style="top:700px"><div class="row" id="r0"><b>0:01</b><span>Slow hook</span><i class="dot"></i><i class="ok">&#10003;</i></div><div class="row" id="r1"><b>0:07</b><span>No proof</span><i class="dot"></i><i class="ok">&#10003;</i></div><div class="row" id="r2"><b>0:14</b><span>Lost trust</span><i class="dot"></i><i class="ok">&#10003;</i></div></div>
 <div id="logo"><img src="assets/img/creedom_logo.png" alt=""></div>
-<div class="stage" style="top:500px"><div class="app soft" id="app"><img src="assets/img/creedom_logo.png" alt=""><div class="q">How can Cree help?</div><div class="tile" id="t1"><i>&#10003;</i><div><b>Check a reel before you post</b><span>Score out of 5, the exact second, and the fix</span></div></div><div class="tile dim"><i>&#9998;</i><div><b>Get a script in your voice</b></div></div></div></div>
+<div class="stage" style="top:480px"><div class="app soft" id="app"><img src="assets/img/creedom_logo.png" alt=""><div class="q">How can Cree help?</div><div class="tile" id="t1"><i>&#10003;</i><div><b>Check a reel before you post</b><span>Score out of 5, the exact second, and the fix</span></div></div><div class="tile dim"><i>&#9998;</i><div><b>Get a script in your voice</b></div></div></div></div>
 <img id="cree" src="assets/img/poses/proud.png" alt="">
-<div class="kick" id="kk2"><i style="background:#e8307d"></i>CREEDOM</div>
-<div class="hd" id="h5" style="top:330px"><span class="ln"><span>Send this to the friend</span></span><span class="ln"><span><em>who posts and prays.</em></span></span></div>
-<div class="cbox soft" id="cbox" style="top:760px"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div>
+<div class="kick" id="kk1"><i style="background:#e8307d"></i>CREEDOM</div>
+<div class="hd" id="h5" style="top:330px;font-size:84px"><span class="ln"><span>Send this to the friend</span></span><span class="ln"><span><em>who posts and prays.</em></span></span></div>
+<div class="cbox soft" id="cbox" style="top:720px"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div>
 <img id="cree2" src="assets/img/poses/wave.png" alt="">
-<div id="loop"><div class="lp"><img src="assets/img/demo_f01.jpg" alt=""></div><div class="ln2"><b>2.9</b><span>out of 5</span></div></div>
-      </div>
-      <div class="cap" id="cap0" style="top:1470px"><span class="cw" id="c0_0">This</span> <span class="cw" id="c0_1">reel</span> <span class="cw" id="c0_2">scored</span> <span class="cw" id="c0_3">2.9</span> <span class="cw" id="c0_4">out</span></div>
-<div class="cap" id="cap1" style="top:1470px"><span class="cw" id="c1_0">of</span> <span class="cw" id="c1_1">5.</span></div>
-<div class="cap" id="cap2" style="top:1470px"><span class="cw" id="c2_0">Before</span> <span class="cw" id="c2_1">anyone</span> <span class="cw" id="c2_2">saw</span> <span class="cw" id="c2_3">it.</span></div>
-<div class="cap" id="cap3" style="top:1470px"><span class="cw" id="c3_0">Harsh.</span> <span class="cw" id="c3_1">But</span> <span class="cw" id="c3_2">look</span> <span class="cw" id="c3_3">where</span> <span class="cw" id="c3_4">it</span></div>
-<div class="cap" id="cap4" style="top:1470px"><span class="cw" id="c4_0">lost</span> <span class="cw" id="c4_1">points.</span></div>
-<div class="cap" id="cap5" style="top:1470px"><span class="cw" id="c5_0">Second</span> <span class="cw" id="c5_1">one,</span></div>
-<div class="cap" id="cap6" style="top:1470px"><span class="cw" id="c6_0">the</span> <span class="cw" id="c6_1">hook</span> <span class="cw" id="c6_2">is</span> <span class="cw" id="c6_3">too</span> <span class="cw" id="c6_4">slow.</span></div>
-<div class="cap" id="cap7" style="top:1470px"><span class="cw" id="c7_0">Second</span> <span class="cw" id="c7_1">seven,</span></div>
-<div class="cap" id="cap8" style="top:1470px"><span class="cw" id="c8_0">a</span> <span class="cw" id="c8_1">claim</span> <span class="cw" id="c8_2">with</span> <span class="cw" id="c8_3">no</span> <span class="cw" id="c8_4">proof.</span></div>
-<div class="cap" id="cap9" style="top:1470px"><span class="cw" id="c9_0">Second</span> <span class="cw" id="c9_1">fourteen,</span></div>
-<div class="cap" id="cap10" style="top:1470px"><span class="cw" id="c10_0">it</span> <span class="cw" id="c10_1">loses</span> <span class="cw" id="c10_2">trust.</span></div>
-<div class="cap" id="cap11" style="top:1470px"><span class="cw" id="c11_0">Fix</span> <span class="cw" id="c11_1">just</span> <span class="cw" id="c11_2">those</span> <span class="cw" id="c11_3">three</span> <span class="cw" id="c11_4">seconds,</span></div>
-<div class="cap" id="cap12" style="top:1470px"><span class="cw" id="c12_0">and</span> <span class="cw" id="c12_1">it</span> <span class="cw" id="c12_2">scores</span> <span class="cw" id="c12_3">4.4.</span></div>
-<div class="cap" id="cap13" style="top:1470px"><span class="cw" id="c13_0">That's</span> <span class="cw" id="c13_1">Creedom.</span></div>
-<div class="cap" id="cap14" style="top:1470px"><span class="cw" id="c14_0">Upload</span> <span class="cw" id="c14_1">your</span> <span class="cw" id="c14_2">reel</span> <span class="cw" id="c14_3">before</span> <span class="cw" id="c14_4">you</span></div>
-<div class="cap" id="cap15" style="top:1470px"><span class="cw" id="c15_0">post,</span> <span class="cw" id="c15_1">and</span> <span class="cw" id="c15_2">it</span> <span class="cw" id="c15_3">shows</span> <span class="cw" id="c15_4">you</span></div>
-<div class="cap" id="cap16" style="top:1470px"><span class="cw" id="c16_0">the</span> <span class="cw" id="c16_1">exact</span> <span class="cw" id="c16_2">second,</span></div>
-<div class="cap" id="cap17" style="top:1470px"><span class="cw" id="c17_0">and</span> <span class="cw" id="c17_1">the</span> <span class="cw" id="c17_2">fix.</span></div>
-<div class="cap" id="cap18" style="top:1470px"><span class="cw" id="c18_0">Send</span> <span class="cw" id="c18_1">this</span> <span class="cw" id="c18_2">to</span> <span class="cw" id="c18_3">the</span> <span class="cw" id="c18_4">friend</span></div>
-<div class="cap" id="cap19" style="top:1470px"><span class="cw" id="c19_0">who</span> <span class="cw" id="c19_1">posts</span> <span class="cw" id="c19_2">and</span> <span class="cw" id="c19_3">prays.</span></div>
-<div class="cap" id="cap20" style="top:1470px"><span class="cw" id="c20_0">Comment</span> <span class="cw" id="c20_1">CHECK,</span></div>
-<div class="cap" id="cap21" style="top:1470px"><span class="cw" id="c21_0">and</span> <span class="cw" id="c21_1">I'll</span> <span class="cw" id="c21_2">send</span> <span class="cw" id="c21_3">you</span> <span class="cw" id="c21_4">the</span></div>
-<div class="cap" id="cap22" style="top:1470px"><span class="cw" id="c22_0">link.</span></div>
+<div id="loop"><div class="hd" style="top:280px;font-size:92px">The only video<br>you need before<br><span style="color:#d22b22">you hit post.</span></div><div class="lp"><img src="assets/img/demo_f01.jpg" alt=""></div></div>
+      </div></div>
+      <div class="cap" id="cap0" style="top:1470px"><span class="cw" id="c0_0">The</span> <span class="cw" id="c0_1">only</span> <span class="cw" id="c0_2">video</span> <span class="cw" id="c0_3">you</span> <span class="cw" id="c0_4">need</span></div>
+<div class="cap" id="cap1" style="top:1470px"><span class="cw" id="c1_0">before</span> <span class="cw" id="c1_1">you</span> <span class="cw" id="c1_2">hit</span> <span class="cw" id="c1_3">post.</span></div>
+<div class="cap" id="cap2" style="top:1470px"><span class="cw" id="c2_0">This</span> <span class="cw" id="c2_1">one</span> <span class="cw" id="c2_2">scored</span> <span class="cw" id="c2_3">2.9</span> <span class="cw" id="c2_4">out</span></div>
+<div class="cap" id="cap3" style="top:1470px"><span class="cw" id="c3_0">of</span> <span class="cw" id="c3_1">5,</span></div>
+<div class="cap" id="cap4" style="top:1470px"><span class="cw" id="c4_0">before</span> <span class="cw" id="c4_1">anyone</span> <span class="cw" id="c4_2">saw</span> <span class="cw" id="c4_3">it.</span></div>
+<div class="cap" id="cap5" style="top:1470px"><span class="cw" id="c5_0">Second</span> <span class="cw" id="c5_1">one:</span> <span class="cw" id="c5_2">slow</span> <span class="cw" id="c5_3">hook.</span></div>
+<div class="cap" id="cap6" style="top:1470px"><span class="cw" id="c6_0">Second</span> <span class="cw" id="c6_1">seven:</span> <span class="cw" id="c6_2">no</span> <span class="cw" id="c6_3">proof.</span></div>
+<div class="cap" id="cap7" style="top:1470px"><span class="cw" id="c7_0">Second</span> <span class="cw" id="c7_1">fourteen:</span> <span class="cw" id="c7_2">lost</span> <span class="cw" id="c7_3">trust.</span></div>
+<div class="cap" id="cap8" style="top:1470px"><span class="cw" id="c8_0">Fix</span> <span class="cw" id="c8_1">those</span> <span class="cw" id="c8_2">three,</span></div>
+<div class="cap" id="cap9" style="top:1470px"><span class="cw" id="c9_0">and</span> <span class="cw" id="c9_1">it</span> <span class="cw" id="c9_2">scores</span> <span class="cw" id="c9_3">4.4.</span></div>
+<div class="cap" id="cap10" style="top:1470px"><span class="cw" id="c10_0">That's</span> <span class="cw" id="c10_1">Creedom.</span></div>
+<div class="cap" id="cap11" style="top:1470px"><span class="cw" id="c11_0">It</span> <span class="cw" id="c11_1">scores</span> <span class="cw" id="c11_2">your</span> <span class="cw" id="c11_3">reel</span> <span class="cw" id="c11_4">before</span></div>
+<div class="cap" id="cap12" style="top:1470px"><span class="cw" id="c12_0">you</span> <span class="cw" id="c12_1">post.</span></div>
+<div class="cap" id="cap13" style="top:1470px"><span class="cw" id="c13_0">Comment</span> <span class="cw" id="c13_1">CHECK</span> <span class="cw" id="c13_2">for</span> <span class="cw" id="c13_3">the</span> <span class="cw" id="c13_4">link.</span></div>
       <div id="prog"><i></i></div>
       <div id="grain"></div>
     </div>
     <script>
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({paused: true});
-      tl.fromTo("#cam", {scale: 1}, {scale: 1.040, duration: 5.723, ease: "none", immediateRender: false}, -0.040);
-      tl.fromTo("#cam", {scale: 1}, {scale: 1.040, duration: 2.863999999999999, ease: "none", immediateRender: false}, 5.583);
-      tl.fromTo("#cam", {scale: 1}, {scale: 1.040, duration: 7.863999999999999, ease: "none", immediateRender: false}, 8.347);
-      tl.fromTo("#cam", {scale: 1}, {scale: 1.040, duration: 3.7790000000000035, ease: "none", immediateRender: false}, 16.111);
-      tl.fromTo("#cam", {scale: 1}, {scale: 1.040, duration: 6.147000000000002, ease: "none", immediateRender: false}, 19.790);
-      tl.fromTo("#cam", {scale: 1}, {scale: 1.040, duration: 5.1080000000000005, ease: "none", immediateRender: false}, 25.837);
-      tl.set("#kk1", {opacity: 0}, 0.000);
-      tl.fromTo("#kk1", {opacity: 1, y: 20, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false}, 0.100);
-      tl.to("#kk1", {opacity: 0, y: -14, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 19.690);
-      tl.set("#ph, #sc", {opacity: 1}, 0.000);
-      tl.fromTo("#ph", {y: 60, rotationY: 26, rotationX: 8}, {y: 0, rotationY: 16, rotationX: 4, duration: 1.1, ease: "expo.out", immediateRender: false}, 0.000);
-      tl.fromTo("#ph", {rotationX: 4, rotationY: 16, rotation: -1}, {rotationX: 2, rotationY: 10, rotation: 0, duration: 7.3469999999999995, ease: "sine.inOut", immediateRender: false}, 1.100);
-      tl.fromTo("#sc", {y: 30}, {y: 0, duration: 0.9, ease: "expo.out", immediateRender: false}, 0.000);
-      tl.set("#arc", {strokeDashoffset: 0.480}, 0);
-      tl.to("#arc", {strokeDashoffset: 0.4200, stroke: "#d22b22", duration: 0.6, ease: "power3.out"}, 0.050);
-      (() => { const o = {v: 2.6}; tl.to(o, {v: 2.9, duration: 0.6, ease: "power3.out", onUpdate: () => { document.getElementById("score").textContent = o.v.toFixed(1); }}, 0.050); })();
+      tl.fromTo("#cam", {scale: 1}, {scale: 1.035, duration: 2.6199999999999997, ease: "none", immediateRender: false}, -0.050);
+      tl.fromTo("#cam", {scale: 1}, {scale: 1.035, duration: 4.140000000000001, ease: "none", immediateRender: false}, 2.470);
+      tl.fromTo("#cam", {scale: 1}, {scale: 1.035, duration: 5.14, ease: "none", immediateRender: false}, 6.510);
+      tl.fromTo("#cam", {scale: 1}, {scale: 1.035, duration: 3.129999999999999, ease: "none", immediateRender: false}, 11.550);
+      tl.fromTo("#cam", {scale: 1}, {scale: 1.035, duration: 3.1599999999999984, ease: "none", immediateRender: false}, 14.580);
+      tl.fromTo("#cam", {scale: 1}, {scale: 1.035, duration: 2.360000000000003, ease: "none", immediateRender: false}, 17.640);
+      tl.fromTo("#hk .ln > span", {y: 12, filter: "blur(3px)"}, {y: 0, filter: "blur(0px)", duration: .45, ease: "expo.out", stagger: .06, immediateRender: true}, 0);
+      tl.set("#ph, #post", {opacity: 1}, 0.000);
+      tl.fromTo("#ph", {y: 50, rotationY: 26, rotationX: 8}, {y: 0, rotationY: 16, rotationX: 4, duration: 1.0, ease: "expo.out", immediateRender: false}, 0.000);
+      tl.fromTo("#ph", {rotationX: 4, rotationY: 16, rotation: -1}, {rotationX: 2, rotationY: 10, rotation: 0, duration: 10.65, ease: "sine.inOut", immediateRender: false}, 1.000);
+      tl.fromTo("#post", {x: 60}, {x: 0, duration: 0.6, ease: "expo.out", immediateRender: false}, 0.100);
+      tl.fromTo("#post", {scale: .9}, {scale: 1, duration: 0.35, ease: "back.out(3)", immediateRender: false}, 1.900);
+      tl.set("#post", {className: 'post hold'}, 1.950);
+      tl.to("#hk", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 2.320);
+      tl.set("#sc", {opacity: 0}, 0.000);
+      tl.fromTo("#sc", {opacity: 1, y: 40, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 3.000);
+      tl.set("#arc", {strokeDashoffset: 1}, 0);
+      tl.to("#arc", {strokeDashoffset: 0.4200, stroke: "#d22b22", duration: 0.9, ease: "power3.out"}, 3.150);
+      (() => { const o = {v: 0}; tl.to(o, {v: 2.9, duration: 0.9, ease: "power3.out", onUpdate: () => { document.getElementById("score").textContent = o.v.toFixed(1); }}, 3.150); })();
+      tl.to("#sc", {scale: 1.12, duration: 0.6, ease: "expo.out"}, 4.130);
       tl.set("#hb", {opacity: 0}, 0.000);
-      tl.set("#hb", {opacity: 1}, 3.386);
-      tl.fromTo("#hb .ln > span", {yPercent: 112}, {yPercent: 0, duration: 0.85, ease: "expo.out", stagger: 0.09, immediateRender: true}, 3.387);
-      tl.to("#hb", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.4, ease: "power2.in"}, 5.503);
-      tl.set("#harsh", {opacity: 0}, 0.000);
-      tl.fromTo("#harsh", {opacity: 1, y: 40, filter: "blur(10px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false}, 5.663);
-      tl.to("#harsh", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 6.525);
+      tl.set("#hb", {opacity: 1}, 4.689);
+      tl.fromTo("#hb .ln > span", {yPercent: 112}, {yPercent: 0, duration: 0.85, ease: "expo.out", stagger: 0.09, immediateRender: true}, 4.690);
+      tl.fromTo("#post", {x: 0}, {keyframes: [{x: -10, duration: .06}, {x: 9, duration: .06}, {x: -5, duration: .06}, {x: 0, duration: .1}], duration: 0.4, ease: "none", immediateRender: false}, 4.790);
+      tl.to("#hb", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 6.390);
+      tl.to("#post", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 6.390);
+      tl.to("#sc", {x: 80, y: -330, scale: .62, duration: 0.6, ease: "expo.inOut"}, 6.410);
       tl.set("#tline", {opacity: 0}, 0.000);
-      tl.fromTo("#tline", {opacity: 1, y: 20, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false}, 6.645);
-      tl.fromTo("#tk0", {opacity: 1, y: -24}, {y: 0, opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 6.895);
-      tl.set("#tk0", {opacity: 0}, 0.000);
-      tl.fromTo("#tk1", {opacity: 1, y: -24}, {y: 0, opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 7.035);
-      tl.set("#tk1", {opacity: 0}, 0.000);
-      tl.fromTo("#tk2", {opacity: 1, y: -24}, {y: 0, opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 7.175);
-      tl.set("#tk2", {opacity: 0}, 0.000);
-      tl.to("#sc", {x: 80, y: -170, scale: .66, duration: 0.7, ease: "expo.inOut"}, 8.297);
-      tl.set("#frame", {attr: {src: "assets/img/demo_f01.jpg"}}, 8.529);
-      tl.fromTo("#frame", {scale: 1.08}, {scale: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 8.529);
+      tl.fromTo("#tline", {opacity: 1, y: 16, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 6.560);
+      tl.set("#frame", {attr: {src: "assets/img/demo_f01.jpg"}}, 7.080);
+      tl.fromTo("#frame", {scale: 1.1}, {scale: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 7.080);
       tl.set("#r0", {opacity: 0}, 0.000);
-      tl.fromTo("#r0", {opacity: 1, y: 30, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false}, 8.529);
-      tl.fromTo("#tk0", {scale: 1.35}, {scale: 1, duration: 0.5, ease: "back.out(2.5)", immediateRender: false}, 8.529);
-      tl.set("#tk0", {className: 'tk on'}, 8.529);
-      tl.set("#frame", {attr: {src: "assets/img/demo_f07.jpg"}}, 10.982);
-      tl.fromTo("#frame", {scale: 1.08}, {scale: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 10.982);
+      tl.fromTo("#r0", {opacity: 1, y: 30, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 7.080);
+      tl.fromTo("#tk0", {scale: 1.5}, {scale: 1, duration: 0.45, ease: "back.out(2.5)", immediateRender: false}, 7.080);
+      tl.set("#tk0", {className: 'tk on'}, 7.080);
+      tl.to("#lens", {scale: 1.06, x: 0, y: 0, duration: 0.45, ease: "expo.out"}, 7.080);
+      tl.set("#frame", {attr: {src: "assets/img/demo_f07.jpg"}}, 8.500);
+      tl.fromTo("#frame", {scale: 1.1}, {scale: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 8.500);
       tl.set("#r1", {opacity: 0}, 0.000);
-      tl.fromTo("#r1", {opacity: 1, y: 30, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false}, 10.982);
-      tl.fromTo("#tk1", {scale: 1.35}, {scale: 1, duration: 0.5, ease: "back.out(2.5)", immediateRender: false}, 10.982);
-      tl.set("#tk1", {className: 'tk on'}, 10.982);
-      tl.set("#frame", {attr: {src: "assets/img/demo_f14.jpg"}}, 13.680);
-      tl.fromTo("#frame", {scale: 1.08}, {scale: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 13.680);
+      tl.fromTo("#r1", {opacity: 1, y: 30, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 8.500);
+      tl.fromTo("#tk1", {scale: 1.5}, {scale: 1, duration: 0.45, ease: "back.out(2.5)", immediateRender: false}, 8.500);
+      tl.set("#tk1", {className: 'tk on'}, 8.500);
+      tl.to("#lens", {scale: 1.08, x: 0, y: -10, duration: 0.45, ease: "expo.out"}, 8.500);
+      tl.set("#frame", {attr: {src: "assets/img/demo_f14.jpg"}}, 10.040);
+      tl.fromTo("#frame", {scale: 1.1}, {scale: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 10.040);
       tl.set("#r2", {opacity: 0}, 0.000);
-      tl.fromTo("#r2", {opacity: 1, y: 30, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false}, 13.680);
-      tl.fromTo("#tk2", {scale: 1.35}, {scale: 1, duration: 0.5, ease: "back.out(2.5)", immediateRender: false}, 13.680);
-      tl.set("#tk2", {className: 'tk on'}, 13.680);
-      tl.set("#r0", {className: 'row fixed'}, 16.966);
-      tl.fromTo("#r0 .ok", {opacity: 1, scale: 0}, {scale: 1, opacity: 1, duration: 0.45, ease: "back.out(3)", immediateRender: false}, 16.966);
-      tl.set("#tk0", {className: 'tk fixed'}, 16.966);
-      tl.set("#r1", {className: 'row fixed'}, 17.146);
-      tl.fromTo("#r1 .ok", {opacity: 1, scale: 0}, {scale: 1, opacity: 1, duration: 0.45, ease: "back.out(3)", immediateRender: false}, 17.146);
-      tl.set("#tk1", {className: 'tk fixed'}, 17.146);
-      tl.set("#r2", {className: 'row fixed'}, 17.326);
-      tl.fromTo("#r2 .ok", {opacity: 1, scale: 0}, {scale: 1, opacity: 1, duration: 0.45, ease: "back.out(3)", immediateRender: false}, 17.326);
-      tl.set("#tk2", {className: 'tk fixed'}, 17.326);
-      tl.to("#sc", {x: 80, y: -170, scale: .8, duration: 0.6, ease: "expo.inOut"}, 18.025);
-      tl.to("#arc", {strokeDashoffset: 0.1200, stroke: "#0f8f5c", duration: 0.9, ease: "power3.out"}, 18.425);
-      (() => { const o = {v: 2.9}; tl.to(o, {v: 4.4, duration: 0.9, ease: "power3.out", onUpdate: () => { document.getElementById("score").textContent = o.v.toFixed(1); }}, 18.425); })();
-      tl.to("#ph", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.4, ease: "power2.in"}, 19.690);
-      tl.to("#sc", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.4, ease: "power2.in"}, 19.690);
-      tl.to("#list", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.4, ease: "power2.in"}, 19.690);
-      tl.to("#tline", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.4, ease: "power2.in"}, 19.690);
-      tl.set("#kk2", {opacity: 0}, 0.000);
-      tl.fromTo("#kk2", {opacity: 1, y: 20, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false}, 19.840);
-      tl.to("#kk2", {opacity: 0, y: -14, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 25.737);
+      tl.fromTo("#r2", {opacity: 1, y: 30, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 10.040);
+      tl.fromTo("#tk2", {scale: 1.5}, {scale: 1, duration: 0.45, ease: "back.out(2.5)", immediateRender: false}, 10.040);
+      tl.set("#tk2", {className: 'tk on'}, 10.040);
+      tl.to("#lens", {scale: 1.1, x: 0, y: -20, duration: 0.45, ease: "expo.out"}, 10.040);
+      tl.to("#lens", {scale: 1.0, x: 0, y: 0, duration: 0.4, ease: "expo.inOut"}, 11.550);
+      tl.set("#r0", {className: 'row fixed'}, 12.210);
+      tl.fromTo("#r0 .ok", {opacity: 1, scale: 0}, {scale: 1, opacity: 1, duration: 0.4, ease: "back.out(3)", immediateRender: false}, 12.210);
+      tl.set("#tk0", {className: 'tk fixed'}, 12.210);
+      tl.set("#r1", {className: 'row fixed'}, 12.350);
+      tl.fromTo("#r1 .ok", {opacity: 1, scale: 0}, {scale: 1, opacity: 1, duration: 0.4, ease: "back.out(3)", immediateRender: false}, 12.350);
+      tl.set("#tk1", {className: 'tk fixed'}, 12.350);
+      tl.set("#r2", {className: 'row fixed'}, 12.490);
+      tl.fromTo("#r2 .ok", {opacity: 1, scale: 0}, {scale: 1, opacity: 1, duration: 0.4, ease: "back.out(3)", immediateRender: false}, 12.490);
+      tl.set("#tk2", {className: 'tk fixed'}, 12.490);
+      tl.to("#sc", {x: 80, y: -330, scale: .78, duration: 0.5, ease: "expo.inOut"}, 12.710);
+      tl.to("#arc", {strokeDashoffset: 0.1200, stroke: "#0f8f5c", duration: 0.8, ease: "power3.out"}, 13.110);
+      (() => { const o = {v: 2.9}; tl.to(o, {v: 4.4, duration: 0.8, ease: "power3.out", onUpdate: () => { document.getElementById("score").textContent = o.v.toFixed(1); }}, 13.110); })();
+      tl.to("#ph", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 14.460);
+      tl.to("#sc", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 14.460);
+      tl.to("#list", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 14.460);
+      tl.to("#tline", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 14.460);
+      tl.set("#kk1", {opacity: 0}, 0.000);
+      tl.fromTo("#kk1", {opacity: 1, y: 20, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false}, 14.630);
+      tl.to("#kk1", {opacity: 0, y: -14, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 17.540);
       tl.set("#logo", {opacity: 0}, 0.000);
-      tl.fromTo("#logo", {opacity: 1, scale: .9, filter: "blur(14px)"}, {scale: 1, filter: "blur(0px)", opacity: 1, duration: 1.0, ease: "expo.out", immediateRender: false}, 19.870);
-      tl.to("#logo", {opacity: 0, y: -60, filter: "blur(10px)", duration: 0.35, ease: "power2.in"}, 21.224);
+      tl.fromTo("#logo", {opacity: 1, scale: .9, filter: "blur(14px)"}, {scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.8, ease: "expo.out", immediateRender: false}, 14.630);
+      tl.to("#logo", {opacity: 0, y: -60, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 15.880);
       tl.set("#app", {opacity: 0}, 0.000);
-      tl.fromTo("#app", {opacity: 1, y: 120, filter: "blur(12px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 1.0, ease: "expo.out", immediateRender: false}, 21.324);
-      tl.fromTo("#app", {rotationX: 8, rotationY: -10, rotation: 1}, {rotationX: 4, rotationY: -4, rotation: 0, duration: 4.6129999999999995, ease: "sine.inOut", immediateRender: false}, 21.324);
+      tl.fromTo("#app", {opacity: 1, y: 120, filter: "blur(12px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.8, ease: "expo.out", immediateRender: false}, 15.950);
+      tl.fromTo("#app", {rotationX: 8, rotationY: -10, rotation: 1}, {rotationX: 4, rotationY: -4, rotation: 0, duration: 1.7399999999999984, ease: "sine.inOut", immediateRender: false}, 16.000);
       tl.set("#cree", {opacity: 0}, 0.000);
-      tl.fromTo("#cree", {opacity: 1, y: 60, filter: "blur(10px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.9, ease: "expo.out", immediateRender: false}, 21.724);
-      tl.fromTo("#t1", {scale: 1.04}, {scale: 1, duration: 0.5, ease: "back.out(2)", immediateRender: false}, 23.727);
-      tl.to("#app", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.4, ease: "power2.in"}, 25.757);
-      tl.to("#cree", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.4, ease: "power2.in"}, 25.757);
+      tl.fromTo("#cree", {opacity: 1, y: 60, filter: "blur(10px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false}, 16.300);
+      tl.fromTo("#t1", {scale: 1.05}, {scale: 1, duration: 0.45, ease: "back.out(2)", immediateRender: false}, 16.670);
+      tl.to("#lens", {scale: 1.1, x: 0, y: 40, duration: 0.5, ease: "expo.out"}, 16.670);
+      tl.to("#app", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 17.520);
+      tl.to("#cree", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 17.520);
+      tl.to("#lens", {scale: 1.0, x: 0, y: 0, duration: 0.4, ease: "expo.inOut"}, 17.540);
       tl.set("#h5", {opacity: 0}, 0.000);
-      tl.set("#h5", {opacity: 1}, 25.916);
-      tl.fromTo("#h5 .ln > span", {yPercent: 112}, {yPercent: 0, duration: 0.85, ease: "expo.out", stagger: 0.09, immediateRender: true}, 25.917);
+      tl.set("#h5", {opacity: 1}, 17.639);
+      tl.fromTo("#h5 .ln > span", {yPercent: 112}, {yPercent: 0, duration: 0.85, ease: "expo.out", stagger: 0.09, immediateRender: true}, 17.640);
       tl.set("#cbox", {opacity: 0}, 0.000);
-      tl.fromTo("#cbox", {opacity: 1, y: 40, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.8, ease: "expo.out", immediateRender: false}, 28.047);
+      tl.fromTo("#cbox", {opacity: 1, y: 40, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 17.790);
       tl.set("#cree2", {opacity: 0}, 0.000);
-      tl.fromTo("#cree2", {opacity: 1, y: 60, filter: "blur(10px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.9, ease: "expo.out", immediateRender: false}, 28.247);
-      tl.set("#cph", {opacity: 0}, 28.597);
-      (() => { const o = {n: 0}; tl.to(o, {n: 5, duration: 0.45, ease: "steps(5)", onUpdate: () => { document.getElementById("cty").textContent = "CHECK".slice(0, Math.round(o.n)); }}, 28.597); })();
-      tl.fromTo("#cbox .send", {scale: 1.5}, {scale: 1, duration: 0.5, ease: "back.out(3)", immediateRender: false}, 29.197);
-      tl.fromTo("#loop", {opacity: 0}, {opacity: 1, duration: 0.4, ease: "power2.inOut", immediateRender: false}, 30.500);
-      tl.fromTo("#cap0", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, -0.020);
-      tl.set("#cap0", {opacity: 0}, 2.321);
-      tl.fromTo("#c0_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 0.020);
+      tl.fromTo("#cree2", {opacity: 1, y: 60, filter: "blur(10px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false}, 18.040);
+      tl.set("#cph", {opacity: 0}, 18.240);
+      (() => { const o = {n: 0}; tl.to(o, {n: 5, duration: 0.4, ease: "steps(5)", onUpdate: () => { document.getElementById("cty").textContent = "CHECK".slice(0, Math.round(o.n)); }}, 18.240); })();
+      tl.fromTo("#cbox .send", {scale: 1.5}, {scale: 1, duration: 0.5, ease: "back.out(3)", immediateRender: false}, 18.840);
+      tl.fromTo("#loop", {opacity: 0}, {opacity: 1, duration: 0.35, ease: "power2.inOut", immediateRender: false}, 19.600);
+      tl.fromTo("#cap0", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, -0.030);
+      tl.set("#cap0", {opacity: 0}, 1.310);
+      tl.fromTo("#c0_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 0.010);
       tl.set("#c0_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c0_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 0.341);
+      tl.fromTo("#c0_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 0.390);
       tl.set("#c0_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c0_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 0.586);
+      tl.fromTo("#c0_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 0.610);
       tl.set("#c0_2", {opacity: 0}, 0.000);
-      tl.fromTo("#c0_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 0.963);
+      tl.fromTo("#c0_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 0.910);
       tl.set("#c0_3", {opacity: 0}, 0.000);
-      tl.fromTo("#c0_4", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 2.133);
+      tl.fromTo("#c0_4", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 1.110);
       tl.set("#c0_4", {opacity: 0}, 0.000);
-      tl.fromTo("#cap1", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 2.301);
-      tl.set("#cap1", {opacity: 0}, 3.377);
-      tl.fromTo("#c1_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 2.341);
+      tl.fromTo("#cap1", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 1.290);
+      tl.set("#cap1", {opacity: 0}, 2.510);
+      tl.fromTo("#c1_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 1.330);
       tl.set("#c1_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c1_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 2.529);
+      tl.fromTo("#c1_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 1.630);
       tl.set("#c1_1", {opacity: 0}, 0.000);
-      tl.fromTo("#cap2", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 3.357);
-      tl.set("#cap2", {opacity: 0}, 5.623);
-      tl.fromTo("#c2_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 3.397);
+      tl.fromTo("#c1_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 1.770);
+      tl.set("#c1_2", {opacity: 0}, 0.000);
+      tl.fromTo("#c1_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 1.910);
+      tl.set("#c1_3", {opacity: 0}, 0.000);
+      tl.fromTo("#cap2", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 2.490);
+      tl.set("#cap2", {opacity: 0}, 4.310);
+      tl.fromTo("#c2_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 2.530);
       tl.set("#c2_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c2_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 3.869);
+      tl.fromTo("#c2_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 2.950);
       tl.set("#c2_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c2_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 4.303);
+      tl.fromTo("#c2_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 3.110);
       tl.set("#c2_2", {opacity: 0}, 0.000);
-      tl.fromTo("#c2_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 4.775);
+      tl.fromTo("#c2_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 3.350);
       tl.set("#c2_3", {opacity: 0}, 0.000);
-      tl.fromTo("#cap3", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 5.603);
-      tl.set("#cap3", {opacity: 0}, 7.170);
-      tl.fromTo("#c3_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 5.643);
+      tl.fromTo("#c2_4", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 4.190);
+      tl.set("#c2_4", {opacity: 0}, 0.000);
+      tl.fromTo("#cap3", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 4.290);
+      tl.set("#cap3", {opacity: 0}, 4.730);
+      tl.fromTo("#c3_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 4.330);
       tl.set("#c3_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c3_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 6.511);
+      tl.fromTo("#c3_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 4.450);
       tl.set("#c3_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c3_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 6.605);
-      tl.set("#c3_2", {opacity: 0}, 0.000);
-      tl.fromTo("#c3_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 6.869);
-      tl.set("#c3_3", {opacity: 0}, 0.000);
-      tl.fromTo("#c3_4", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 7.077);
-      tl.set("#c3_4", {opacity: 0}, 0.000);
-      tl.fromTo("#cap4", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 7.150);
-      tl.set("#cap4", {opacity: 0}, 8.387);
-      tl.fromTo("#c4_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 7.190);
+      tl.fromTo("#cap4", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 4.710);
+      tl.set("#cap4", {opacity: 0}, 6.550);
+      tl.fromTo("#c4_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 4.750);
       tl.set("#c4_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c4_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 7.454);
+      tl.fromTo("#c4_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 5.310);
       tl.set("#c4_1", {opacity: 0}, 0.000);
-      tl.fromTo("#cap5", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 8.367);
-      tl.set("#cap5", {opacity: 0}, 9.123);
-      tl.fromTo("#c5_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 8.407);
+      tl.fromTo("#c4_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 5.570);
+      tl.set("#c4_2", {opacity: 0}, 0.000);
+      tl.fromTo("#c4_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 5.950);
+      tl.set("#c4_3", {opacity: 0}, 0.000);
+      tl.fromTo("#cap5", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 6.530);
+      tl.set("#cap5", {opacity: 0}, 8.490);
+      tl.fromTo("#c5_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 6.570);
       tl.set("#c5_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c5_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 8.539);
+      tl.fromTo("#c5_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 7.090);
       tl.set("#c5_1", {opacity: 0}, 0.000);
-      tl.fromTo("#cap6", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 9.103);
-      tl.set("#cap6", {opacity: 0}, 10.821);
-      tl.fromTo("#c6_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 9.143);
+      tl.fromTo("#c5_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 7.510);
+      tl.set("#c5_2", {opacity: 0}, 0.000);
+      tl.fromTo("#c5_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 7.590);
+      tl.set("#c5_3", {opacity: 0}, 0.000);
+      tl.fromTo("#cap6", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 8.470);
+      tl.set("#cap6", {opacity: 0}, 9.910);
+      tl.fromTo("#c6_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 8.510);
       tl.set("#c6_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c6_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 9.237);
+      tl.fromTo("#c6_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 8.510);
       tl.set("#c6_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c6_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 9.463);
+      tl.fromTo("#c6_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 8.990);
       tl.set("#c6_2", {opacity: 0}, 0.000);
-      tl.fromTo("#c6_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 9.728);
+      tl.fromTo("#c6_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 9.110);
       tl.set("#c6_3", {opacity: 0}, 0.000);
-      tl.fromTo("#c6_4", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 10.011);
-      tl.set("#c6_4", {opacity: 0}, 0.000);
-      tl.fromTo("#cap7", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 10.801);
-      tl.set("#cap7", {opacity: 0}, 11.726);
-      tl.fromTo("#c7_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 10.841);
+      tl.fromTo("#cap7", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 9.890);
+      tl.set("#cap7", {opacity: 0}, 11.590);
+      tl.fromTo("#c7_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 9.930);
       tl.set("#c7_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c7_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 10.992);
+      tl.fromTo("#c7_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 10.050);
       tl.set("#c7_1", {opacity: 0}, 0.000);
-      tl.fromTo("#cap8", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 11.706);
-      tl.set("#cap8", {opacity: 0}, 13.500);
-      tl.fromTo("#c8_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 11.746);
+      tl.fromTo("#c7_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 10.870);
+      tl.set("#c7_2", {opacity: 0}, 0.000);
+      tl.fromTo("#c7_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 10.930);
+      tl.set("#c7_3", {opacity: 0}, 0.000);
+      tl.fromTo("#cap8", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 11.570);
+      tl.set("#cap8", {opacity: 0}, 12.550);
+      tl.fromTo("#c8_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 11.610);
       tl.set("#c8_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c8_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 11.784);
+      tl.fromTo("#c8_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 12.050);
       tl.set("#c8_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c8_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 12.086);
+      tl.fromTo("#c8_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 12.270);
       tl.set("#c8_2", {opacity: 0}, 0.000);
-      tl.fromTo("#c8_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 12.331);
-      tl.set("#c8_3", {opacity: 0}, 0.000);
-      tl.fromTo("#c8_4", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 12.614);
-      tl.set("#c8_4", {opacity: 0}, 0.000);
-      tl.fromTo("#cap9", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 13.480);
-      tl.set("#cap9", {opacity: 0}, 14.613);
-      tl.fromTo("#c9_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 13.520);
+      tl.fromTo("#cap9", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 12.530);
+      tl.set("#cap9", {opacity: 0}, 14.620);
+      tl.fromTo("#c9_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 12.570);
       tl.set("#c9_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c9_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 13.690);
+      tl.fromTo("#c9_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 12.890);
       tl.set("#c9_1", {opacity: 0}, 0.000);
-      tl.fromTo("#cap10", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 14.593);
-      tl.set("#cap10", {opacity: 0}, 16.151);
-      tl.fromTo("#c10_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 14.633);
+      tl.fromTo("#c9_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 12.970);
+      tl.set("#c9_2", {opacity: 0}, 0.000);
+      tl.fromTo("#c9_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 13.170);
+      tl.set("#c9_3", {opacity: 0}, 0.000);
+      tl.fromTo("#cap10", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 14.600);
+      tl.set("#cap10", {opacity: 0}, 15.940);
+      tl.fromTo("#c10_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 14.640);
       tl.set("#c10_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c10_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 14.860);
+      tl.fromTo("#c10_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 15.240);
       tl.set("#c10_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c10_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 15.162);
-      tl.set("#c10_2", {opacity: 0}, 0.000);
-      tl.fromTo("#cap11", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 16.131);
-      tl.set("#cap11", {opacity: 0}, 17.604);
-      tl.fromTo("#c11_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 16.171);
+      tl.fromTo("#cap11", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 15.920);
+      tl.set("#cap11", {opacity: 0}, 16.940);
+      tl.fromTo("#c11_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 15.960);
       tl.set("#c11_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c11_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 16.265);
+      tl.fromTo("#c11_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 16.040);
       tl.set("#c11_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c11_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 16.643);
+      tl.fromTo("#c11_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 16.260);
       tl.set("#c11_2", {opacity: 0}, 0.000);
-      tl.fromTo("#c11_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 16.926);
+      tl.fromTo("#c11_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 16.480);
       tl.set("#c11_3", {opacity: 0}, 0.000);
-      tl.fromTo("#c11_4", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 17.171);
+      tl.fromTo("#c11_4", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 16.680);
       tl.set("#c11_4", {opacity: 0}, 0.000);
-      tl.fromTo("#cap12", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 17.584);
-      tl.set("#cap12", {opacity: 0}, 19.830);
-      tl.fromTo("#c12_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 17.624);
+      tl.fromTo("#cap12", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 16.920);
+      tl.set("#cap12", {opacity: 0}, 17.680);
+      tl.fromTo("#c12_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 16.960);
       tl.set("#c12_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c12_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 18.020);
+      tl.fromTo("#c12_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 17.140);
       tl.set("#c12_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c12_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 18.171);
-      tl.set("#c12_2", {opacity: 0}, 0.000);
-      tl.fromTo("#c12_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 18.435);
-      tl.set("#c12_3", {opacity: 0}, 0.000);
-      tl.fromTo("#cap13", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 19.810);
-      tl.set("#cap13", {opacity: 0}, 21.264);
-      tl.fromTo("#c13_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 19.850);
+      tl.fromTo("#cap13", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 17.660);
+      tl.set("#cap13", {opacity: 0}, 19.800);
+      tl.fromTo("#c13_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 17.700);
       tl.set("#c13_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c13_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 20.454);
+      tl.fromTo("#c13_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 18.300);
       tl.set("#c13_1", {opacity: 0}, 0.000);
-      tl.fromTo("#cap14", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 21.244);
-      tl.set("#cap14", {opacity: 0}, 22.528);
-      tl.fromTo("#c14_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 21.284);
-      tl.set("#c14_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c14_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 21.492);
-      tl.set("#c14_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c14_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 21.756);
-      tl.set("#c14_2", {opacity: 0}, 0.000);
-      tl.fromTo("#c14_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 21.982);
-      tl.set("#c14_3", {opacity: 0}, 0.000);
-      tl.fromTo("#c14_4", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 22.341);
-      tl.set("#c14_4", {opacity: 0}, 0.000);
-      tl.fromTo("#cap15", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 22.508);
-      tl.set("#cap15", {opacity: 0}, 23.585);
-      tl.fromTo("#c15_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 22.548);
-      tl.set("#c15_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c15_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 22.812);
-      tl.set("#c15_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c15_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 23.114);
-      tl.set("#c15_2", {opacity: 0}, 0.000);
-      tl.fromTo("#c15_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 23.228);
-      tl.set("#c15_3", {opacity: 0}, 0.000);
-      tl.fromTo("#c15_4", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 23.416);
-      tl.set("#c15_4", {opacity: 0}, 0.000);
-      tl.fromTo("#cap16", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 23.565);
-      tl.set("#cap16", {opacity: 0}, 24.491);
-      tl.fromTo("#c16_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 23.605);
-      tl.set("#c16_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c16_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 23.737);
-      tl.set("#c16_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c16_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 24.095);
-      tl.set("#c16_2", {opacity: 0}, 0.000);
-      tl.fromTo("#cap17", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 24.471);
-      tl.set("#cap17", {opacity: 0}, 25.877);
-      tl.fromTo("#c17_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 24.511);
-      tl.set("#c17_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c17_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 24.963);
-      tl.set("#c17_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c17_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 25.190);
-      tl.set("#c17_2", {opacity: 0}, 0.000);
-      tl.fromTo("#cap18", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 25.857);
-      tl.set("#cap18", {opacity: 0}, 26.632);
-      tl.fromTo("#c18_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 25.897);
-      tl.set("#c18_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c18_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 25.954);
-      tl.set("#c18_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c18_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 26.162);
-      tl.set("#c18_2", {opacity: 0}, 0.000);
-      tl.fromTo("#c18_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 26.331);
-      tl.set("#c18_3", {opacity: 0}, 0.000);
-      tl.fromTo("#c18_4", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 26.445);
-      tl.set("#c18_4", {opacity: 0}, 0.000);
-      tl.fromTo("#cap19", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 26.612);
-      tl.set("#cap19", {opacity: 0}, 28.387);
-      tl.fromTo("#c19_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 26.652);
-      tl.set("#c19_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c19_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 26.935);
-      tl.set("#c19_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c19_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 27.294);
-      tl.set("#c19_2", {opacity: 0}, 0.000);
-      tl.fromTo("#c19_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 27.558);
-      tl.set("#c19_3", {opacity: 0}, 0.000);
-      tl.fromTo("#cap20", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 28.367);
-      tl.set("#cap20", {opacity: 0}, 28.972);
-      tl.fromTo("#c20_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 28.407);
-      tl.set("#c20_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c20_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 28.746);
-      tl.set("#c20_1", {opacity: 0}, 0.000);
-      tl.fromTo("#cap21", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 28.952);
-      tl.set("#cap21", {opacity: 0}, 29.915);
-      tl.fromTo("#c21_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 28.992);
-      tl.set("#c21_0", {opacity: 0}, 0.000);
-      tl.fromTo("#c21_1", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 29.388);
-      tl.set("#c21_1", {opacity: 0}, 0.000);
-      tl.fromTo("#c21_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 29.520);
-      tl.set("#c21_2", {opacity: 0}, 0.000);
-      tl.fromTo("#c21_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 29.671);
-      tl.set("#c21_3", {opacity: 0}, 0.000);
-      tl.fromTo("#c21_4", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 29.822);
-      tl.set("#c21_4", {opacity: 0}, 0.000);
-      tl.fromTo("#cap22", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, 29.895);
-      tl.set("#cap22", {opacity: 0}, 30.745);
-      tl.fromTo("#c22_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 29.935);
-      tl.set("#c22_0", {opacity: 0}, 0.000);
-      tl.fromTo("#g1", {x: 0, y: 0}, {x: -260, y: 300, duration: 30.95, ease: "sine.inOut", immediateRender: true}, 0);
-      tl.fromTo("#g2", {x: 0, y: 0}, {x: 300, y: -340, duration: 30.95, ease: "sine.inOut", immediateRender: true}, 0);
-      tl.fromTo("#g3", {x: 0, y: 0, scale: 1}, {x: -180, y: 160, scale: 1.25, duration: 30.95, ease: "sine.inOut", immediateRender: true}, 0);
-      tl.fromTo("#prog i", {scaleX: 0}, {scaleX: 1, duration: 30.95, ease: "none", immediateRender: true}, 0);
-      tl.set({}, {}, 30.95);
+      tl.fromTo("#c13_2", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 18.560);
+      tl.set("#c13_2", {opacity: 0}, 0.000);
+      tl.fromTo("#c13_3", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 18.840);
+      tl.set("#c13_3", {opacity: 0}, 0.000);
+      tl.fromTo("#c13_4", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 18.960);
+      tl.set("#c13_4", {opacity: 0}, 0.000);
+      tl.fromTo("#g1", {x: 0, y: 0}, {x: -260, y: 300, duration: 20.00, ease: "sine.inOut", immediateRender: true}, 0);
+      tl.fromTo("#g2", {x: 0, y: 0}, {x: 300, y: -340, duration: 20.00, ease: "sine.inOut", immediateRender: true}, 0);
+      tl.fromTo("#g3", {x: 0, y: 0, scale: 1}, {x: -180, y: 160, scale: 1.25, duration: 20.00, ease: "sine.inOut", immediateRender: true}, 0);
+      tl.fromTo("#prog i", {scaleX: 0}, {scaleX: 1, duration: 20.00, ease: "none", immediateRender: true}, 0);
+      tl.set({}, {}, 20.00);
       window.__timelines["main"] = tl;
     </script>
   </body>
