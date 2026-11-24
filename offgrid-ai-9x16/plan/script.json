@@ -1,0 +1,58 @@
+[
+ {
+  "id": "f00",
+  "display": "Your phone can run its own AI, with no internet at all.",
+  "text": "Your phone can run its own AI, with no internet at all.",
+  "speed": 1.24,
+  "beat": "hook: viewer-first claim, proof on frame 1 (airplane mode + a live chat)"
+ },
+ {
+  "id": "f01",
+  "display": "It's called Off Grid. Free, and open source on GitHub.",
+  "text": "It's called Off Grid. Free, and open source on GitHub.",
+  "speed": 1.24,
+  "beat": "the name early (owner: get the tool fast)"
+ },
+ {
+  "id": "f02",
+  "display": "Install it, and it sets itself up for your phone.",
+  "text": "Install it, and it sets itself up for your phone.",
+  "speed": 1.26,
+  "beat": "setup"
+ },
+ {
+  "id": "f03",
+  "display": "Then chat with models like Qwen, Llama or Gemma, completely offline.",
+  "text": "Then chat with models like Kwen, Llama, or Gemma, completely offline.",
+  "speed": 1.26,
+  "beat": "chat"
+ },
+ {
+  "id": "f04",
+  "display": "It can even make images, right on your phone.",
+  "text": "It can even make images, right on your phone.",
+  "speed": 1.24,
+  "beat": "peak: image generation"
+ },
+ {
+  "id": "f05",
+  "display": "And it reads your photos and documents too.",
+  "text": "And it reads your photos and documents too.",
+  "speed": 1.26,
+  "beat": "vision + docs"
+ },
+ {
+  "id": "f06",
+  "display": "Your chats never leave your device.",
+  "text": "Your chats never leave your device.",
+  "speed": 1.19,
+  "beat": "privacy (share trigger on screen)"
+ },
+ {
+  "id": "f07",
+  "display": "Comment OFFLINE and I'll send you the link.",
+  "text": "Comment offline, and I'll send you the link.",
+  "speed": 1.22,
+  "beat": "CTA"
+ }
+]

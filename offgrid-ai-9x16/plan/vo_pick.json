@@ -1,0 +1,173 @@
+{
+ "duration": 24.57,
+ "takes": [
+  {
+   "line": "f00",
+   "take": 0,
+   "speed": 1.19,
+   "heard": "Your phone can run its own AI with no internet at all.",
+   "slips": 0
+  },
+  {
+   "line": "f00",
+   "take": 1,
+   "speed": 1.24,
+   "heard": "Your phone can run its own AI with no internet at all.",
+   "slips": 0
+  },
+  {
+   "line": "f00",
+   "take": 2,
+   "speed": 1.29,
+   "heard": "Your phone can run its own AI with no internet at all.",
+   "slips": 0
+  },
+  {
+   "line": "f01",
+   "take": 0,
+   "speed": 1.19,
+   "heard": "It's called off -grid, free and open source on GitHub.",
+   "slips": 0
+  },
+  {
+   "line": "f01",
+   "take": 1,
+   "speed": 1.24,
+   "heard": "It's called off -grid, free and open source on GitHub.",
+   "slips": 0
+  },
+  {
+   "line": "f01",
+   "take": 2,
+   "speed": 1.29,
+   "heard": "It's called off Grid, free and open source on GitHub.",
+   "slips": 0
+  },
+  {
+   "line": "f02",
+   "take": 0,
+   "speed": 1.21,
+   "heard": "Install it and it sets itself up for your phone.",
+   "slips": 0
+  },
+  {
+   "line": "f02",
+   "take": 1,
+   "speed": 1.26,
+   "heard": "Install it and it sets itself up for your phone.",
+   "slips": 0
+  },
+  {
+   "line": "f02",
+   "take": 2,
+   "speed": 1.31,
+   "heard": "Install it and it sets itself up for your phone.",
+   "slips": 0
+  },
+  {
+   "line": "f03",
+   "take": 0,
+   "speed": 1.21,
+   "heard": "Then chat with models like QUEN, LAMA, or JEMMA, completely offline.",
+   "slips": 3
+  },
+  {
+   "line": "f03",
+   "take": 1,
+   "speed": 1.26,
+   "heard": "Then chat with models like QUEN, LAMA, or JEMMA, completely offline.",
+   "slips": 3
+  },
+  {
+   "line": "f03",
+   "take": 2,
+   "speed": 1.31,
+   "heard": "and chat with models like Quinn, Llama, or Gemma, completely offline.",
+   "slips": 2
+  },
+  {
+   "line": "f04",
+   "take": 0,
+   "speed": 1.19,
+   "heard": "It can even make images right on your phone.",
+   "slips": 0
+  },
+  {
+   "line": "f04",
+   "take": 1,
+   "speed": 1.24,
+   "heard": "It can even make images right on your phone.",
+   "slips": 0
+  },
+  {
+   "line": "f04",
+   "take": 2,
+   "speed": 1.29,
+   "heard": "It can even make images right on your phone.",
+   "slips": 0
+  },
+  {
+   "line": "f05",
+   "take": 0,
+   "speed": 1.21,
+   "heard": "and it reads your photos and documents too.",
+   "slips": 0
+  },
+  {
+   "line": "f05",
+   "take": 1,
+   "speed": 1.26,
+   "heard": "and it reads your photos and documents too.",
+   "slips": 0
+  },
+  {
+   "line": "f05",
+   "take": 2,
+   "speed": 1.31,
+   "heard": "and it reads your photos and documents too.",
+   "slips": 0
+  },
+  {
+   "line": "f06",
+   "take": 0,
+   "speed": 1.14,
+   "heard": "Your chats never leave your device.",
+   "slips": 0
+  },
+  {
+   "line": "f06",
+   "take": 1,
+   "speed": 1.19,
+   "heard": "Your chats never leave your device.",
+   "slips": 0
+  },
+  {
+   "line": "f06",
+   "take": 2,
+   "speed": 1.24,
+   "heard": "Your chats never leave your device.",
+   "slips": 0
+  },
+  {
+   "line": "f07",
+   "take": 0,
+   "speed": 1.17,
+   "heard": "Comment offline, and I'll send you the link.",
+   "slips": 0
+  },
+  {
+   "line": "f07",
+   "take": 1,
+   "speed": 1.22,
+   "heard": "Comment offline, and I'll send you the link.",
+   "slips": 0
+  },
+  {
+   "line": "f07",
+   "take": 2,
+   "speed": 1.27,
+   "heard": "Comment offline, and I'll send you the link.",
+   "slips": 0
+  }
+ ]
+}

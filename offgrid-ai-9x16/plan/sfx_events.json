@@ -1,0 +1,110 @@
+[
+{
+"type": "thump",
+"t": 0.02
+},
+{
+"type": "click",
+"t": 0.3
+},
+{
+"type": "g_pop",
+"t": 2.45
+},
+{
+"type": "swish",
+"t": 3.67
+},
+{
+"type": "pop",
+"t": 3.73
+},
+{
+"type": "pop",
+"t": 5.37
+},
+{
+"type": "pop",
+"t": 5.95
+},
+{
+"type": "pop",
+"t": 6.75
+},
+{
+"type": "swish",
+"t": 7.17
+},
+{
+"type": "g_tick",
+"t": 8.56
+},
+{
+"type": "g_tick",
+"t": 9.08
+},
+{
+"type": "g_tick",
+"t": 9.6
+},
+{
+"type": "swish",
+"t": 10.07
+},
+{
+"type": "pop",
+"t": 11.58
+},
+{
+"type": "pop",
+"t": 12.16
+},
+{
+"type": "pop",
+"t": 12.46
+},
+{
+"type": "swish",
+"t": 14.03
+},
+{
+"type": "sparkle",
+"t": 16.39
+},
+{
+"type": "pop",
+"t": 16.44
+},
+{
+"type": "swish",
+"t": 16.63
+},
+{
+"type": "g_pop",
+"t": 17.73
+},
+{
+"type": "g_pop",
+"t": 18.37
+},
+{
+"type": "swish",
+"t": 19.27
+},
+{
+"type": "lock",
+"t": 19.53
+},
+{
+"type": "swish",
+"t": 21.61
+},
+{
+"type": "typing",
+"t": 22.23
+},
+{
+"type": "notify",
+"t": 22.93
+}
+]
