@@ -39,6 +39,12 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
 #tbar b { margin-left: auto; font-family: Sat; font-weight: 700; font-size: 34px; color: #10131c; background: #fff; padding: 12px 24px; border-radius: 999px;
   box-shadow: 0 12px 30px rgba(40,50,90,.14); border: 2px solid #e8307d; }
 #tbar b i { font-style: normal; font-weight: 900; color: #e8307d; }
+#creew { position: absolute; z-index: 58; pointer-events: none; }
+#creeb, #creei { position: absolute; inset: 0; }
+#creei { width: 100%; height: 100%; object-fit: contain; transform-origin: 50% 95%; filter: drop-shadow(0 18px 24px rgba(40,50,90,.22)); }
+.beam { position: absolute; left: 340px; top: -400px; width: 420px; height: 2800px; transform: rotate(22deg); z-index: 74; pointer-events: none; mix-blend-mode: screen; }
+#wash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 73; pointer-events: none; }
+.hw { display: inline-block; }
 #prog { position: absolute; left: 90px; right: 90px; top: 190px; height: 3px; background: rgba(16,19,28,.08); z-index: 70; border-radius: 2px; }
 #prog i { position: absolute; inset: 0; background: #10131c; transform-origin: left center; transform: scaleX(0); border-radius: 2px; }
 
@@ -69,6 +75,12 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
 .row .ok { position: absolute; right: 0; top: 50%; margin-top: -22px; width: 44px; height: 44px; border-radius: 50%; background: #0f8f5c; color: #fff; display: grid; place-items: center;
   font-style: normal; font-weight: 900; font-size: 26px; opacity: 0; }
 .row.fixed b { color: #0f8f5c; } .row.fixed .dot { opacity: 0; }
+#fixc { position: absolute; left: 560px; width: 450px; display: flex; align-items: center; gap: 16px; z-index: 20; font-family: Mono; font-size: 26px; letter-spacing: .16em;
+  color: rgba(16,19,28,.75); }
+#fixc b { font-family: Unb; font-weight: 900; font-size: 34px; letter-spacing: -.02em; color: #d22b22; }
+#fixc i { position: relative; flex: 1; height: 8px; border-radius: 4px; background: rgba(16,19,28,.1); overflow: hidden; }
+#fixc em { position: absolute; inset: 0; background: #0f8f5c; transform-origin: left center; transform: scaleX(0); }
+#fixc.done b { color: #0f8f5c; }
 #logo { position: absolute; left: 140px; right: 140px; top: 560px; height: 280px; display: grid; place-items: center; z-index: 25; }
 #logo img { width: 100%; }
 #cree2 { position: absolute; right: 90px; top: 1060px; width: 250px; z-index: 26; filter: drop-shadow(0 20px 30px rgba(40,50,90,.2)); }
@@ -82,25 +94,27 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
 #loop .lp { position: absolute; left: 160px; top: 700px; width: 380px; height: 676px; border-radius: 52px; overflow: hidden; border: 10px solid #10131c;
   transform: perspective(1900px) rotateY(26deg) rotateX(8deg) translateY(50px); }
 #loop .lp img { width: 100%; height: 100%; object-fit: cover; }
-#kw { opacity: 0; }#hb { opacity: 0; }#tline { opacity: 0; }#r0 { opacity: 0; }#r1 { opacity: 0; }#r2 { opacity: 0; }#logo { opacity: 0; }#cbox { opacity: 0; }#cree2 { opacity: 0; }#share { opacity: 0; }#c0_0 { opacity: 0; }#c0_1 { opacity: 0; }#c0_2 { opacity: 0; }#c0_3 { opacity: 0; }#c0_4 { opacity: 0; }#c1_0 { opacity: 0; }#c1_1 { opacity: 0; }#c1_2 { opacity: 0; }#c1_3 { opacity: 0; }#c2_0 { opacity: 0; }#c2_1 { opacity: 0; }#c2_2 { opacity: 0; }#c2_3 { opacity: 0; }#c2_4 { opacity: 0; }#c3_0 { opacity: 0; }#c3_1 { opacity: 0; }#c4_0 { opacity: 0; }#c4_1 { opacity: 0; }#c4_2 { opacity: 0; }#c4_3 { opacity: 0; }#c5_0 { opacity: 0; }#c5_1 { opacity: 0; }#c5_2 { opacity: 0; }#c5_3 { opacity: 0; }#c6_0 { opacity: 0; }#c6_1 { opacity: 0; }#c6_2 { opacity: 0; }#c6_3 { opacity: 0; }#c7_0 { opacity: 0; }#c7_1 { opacity: 0; }#c7_2 { opacity: 0; }#c8_0 { opacity: 0; }#c8_1 { opacity: 0; }#c8_2 { opacity: 0; }#c8_3 { opacity: 0; }#c9_0 { opacity: 0; }#c9_1 { opacity: 0; }#c9_2 { opacity: 0; }#c10_0 { opacity: 0; }#c10_1 { opacity: 0; }#c10_2 { opacity: 0; }#c10_3 { opacity: 0; }#c10_4 { opacity: 0; }</style>
+#kw { opacity: 0; }#hb { opacity: 0; }#tline { opacity: 0; }#fixc { opacity: 0; }#r0 { opacity: 0; }#r1 { opacity: 0; }#r2 { opacity: 0; }#bm1 { opacity: 0; }#logo { opacity: 0; }#cbox { opacity: 0; }#share { opacity: 0; }#c0_0 { opacity: 0; }#c0_1 { opacity: 0; }#c0_2 { opacity: 0; }#c0_3 { opacity: 0; }#c0_4 { opacity: 0; }#c1_0 { opacity: 0; }#c1_1 { opacity: 0; }#c1_2 { opacity: 0; }#c1_3 { opacity: 0; }#c2_0 { opacity: 0; }#c2_1 { opacity: 0; }#c2_2 { opacity: 0; }#c2_3 { opacity: 0; }#c2_4 { opacity: 0; }#c3_0 { opacity: 0; }#c3_1 { opacity: 0; }#c4_0 { opacity: 0; }#c4_1 { opacity: 0; }#c4_2 { opacity: 0; }#c4_3 { opacity: 0; }#c5_0 { opacity: 0; }#c5_1 { opacity: 0; }#c5_2 { opacity: 0; }#c5_3 { opacity: 0; }#c6_0 { opacity: 0; }#c6_1 { opacity: 0; }#c6_2 { opacity: 0; }#c6_3 { opacity: 0; }#c7_0 { opacity: 0; }#c7_1 { opacity: 0; }#c7_2 { opacity: 0; }#c8_0 { opacity: 0; }#c8_1 { opacity: 0; }#c8_2 { opacity: 0; }#c8_3 { opacity: 0; }#c9_0 { opacity: 0; }#c9_1 { opacity: 0; }#c9_2 { opacity: 0; }#c10_0 { opacity: 0; }#c10_1 { opacity: 0; }#c10_2 { opacity: 0; }#c10_3 { opacity: 0; }#c10_4 { opacity: 0; }</style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="16.51" data-fps="30" data-width="1080" data-height="1920">
       <div id="bg"><i class="gl" id="g1"></i><i class="gl" id="g2"></i><i class="gl" id="g3"></i></div>
       <div id="cam"><div id="lens">
-      <div class="hd" id="hk" style="top:330px;font-size:88px"><span class="ln"><span>This tool scores</span></span><span class="ln"><span>your reel before</span></span><span class="ln"><span style="color:#d22b22">you post it.</span></span></div>
+      <div class="hd" id="hk" style="top:330px;font-size:88px"><span class="ln"><span><span class="hw" id="hk_0">This</span> <span class="hw" id="hk_1">tool</span> <span class="hw" id="hk_2">scores</span></span></span><span class="ln"><span><span class="hw" id="hk_3">your</span> <span class="hw" id="hk_4">reel</span> <span class="hw" id="hk_5">before</span></span></span><span class="ln"><span><span class="hw" id="hk_6" style="color:#d22b22">you</span> <span class="hw" id="hk_7" style="color:#d22b22">post</span> <span class="hw" id="hk_8" style="color:#d22b22">it.</span></span></span></div>
 <div class="stage" style="top:640px"><div class="phone soft" id="ph"><img id="frame" src="assets/img/demo_f01.jpg" alt=""><b class="ex">EXAMPLE</b></div></div>
 <div id="sc"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" class="trk"/><circle cx="100" cy="100" r="96" class="arc" id="arc" pathLength="1"/></svg><div class="n"><b id="score">?</b><span>out of 5</span></div></div>
 <div class="hd" id="hb" style="top:330px;font-size:88px"><span class="ln"><span>Scored before</span></span><span class="ln"><span><span style="color:#d22b22">anyone saw it.</span></span></span></div>
 <div id="tline" style="top:1350px"><i class="bar"></i><i class="tk" id="tk0" style="left:6%"><em>0:01</em></i><i class="tk" id="tk1" style="left:40%"><em>0:07</em></i><i class="tk" id="tk2" style="left:78%"><em>0:14</em></i></div>
+<div id="fixc" style="top:1330px"><span>FIXED</span><b id="fixn">0/3</b><i><em id="fixb"></em></i></div>
 <div id="list" style="top:860px"><div class="row" id="r0"><b>0:01</b><span>Slow hook</span><i class="dot"></i><i class="ok">&#10003;</i></div><div class="row" id="r1"><b>0:07</b><span>No proof</span><i class="dot"></i><i class="ok">&#10003;</i></div><div class="row" id="r2"><b>0:14</b><span>Lost trust</span><i class="dot"></i><i class="ok">&#10003;</i></div></div>
 <div id="logo"><img src="assets/img/creedom_logo.png" alt=""></div>
 <div class="cbox soft" id="cbox" style="top:800px"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div>
 <div class="sub" id="share" style="top:1000px">Send this to the friend<br>who posts and prays.</div>
-<img id="cree2" src="assets/img/poses/wave.png" alt="">
 <div id="loop"><div class="hd" style="top:330px;font-size:88px">This tool scores<br>your reel before<br><span style="color:#d22b22">you post it.</span></div><div class="lp"><img src="assets/img/demo_f01.jpg" alt=""></div></div>
       </div></div>
       <div id="tbar"><img src="assets/img/creedom_logo.png" alt=""><span>REEL ANALYZER</span><b id="kw">Comment <i>CHECK</i></b></div>
+<div id="creew" style="left:790px;top:1150px;width:230px;height:230px"><div id="creeb"><img id="creei" src="assets/img/poses/phone.png" alt=""></div></div>
+<i class="beam" id="bm1" style="background:linear-gradient(90deg, rgba(255,255,255,0), rgba(232,48,125,.55) 45%, #fff 50%, rgba(232,48,125,.55) 55%, rgba(255,255,255,0))"></i>
 <div class="cap" id="cap0" style="top:1470px"><span class="cw" id="c0_0">This</span> <span class="cw" id="c0_1">tool</span> <span class="cw" id="c0_2">scores</span> <span class="cw" id="c0_3">your</span> <span class="cw" id="c0_4">reel</span></div>
 <div class="cap" id="cap1" style="top:1470px"><span class="cw" id="c1_0">before</span> <span class="cw" id="c1_1">you</span> <span class="cw" id="c1_2">post</span> <span class="cw" id="c1_3">it.</span></div>
 <div class="cap" id="cap2" style="top:1470px"><span class="cw" id="c2_0">This</span> <span class="cw" id="c2_1">one</span> <span class="cw" id="c2_2">got</span> <span class="cw" id="c2_3">2.9</span> <span class="cw" id="c2_4">out</span></div>
@@ -112,6 +126,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
 <div class="cap" id="cap8" style="top:1470px"><span class="cw" id="c8_0">and</span> <span class="cw" id="c8_1">it</span> <span class="cw" id="c8_2">scores</span> <span class="cw" id="c8_3">4.4.</span></div>
 <div class="cap" id="cap9" style="top:1470px"><span class="cw" id="c9_0">It's</span> <span class="cw" id="c9_1">called</span> <span class="cw" id="c9_2">Creedom.</span></div>
 <div class="cap" id="cap10" style="top:1470px"><span class="cw" id="c10_0">Comment</span> <span class="cw" id="c10_1">CHECK</span> <span class="cw" id="c10_2">for</span> <span class="cw" id="c10_3">the</span> <span class="cw" id="c10_4">link.</span></div>
+      <div id="wash"></div>
       <div id="prog"><i></i></div>
       <div id="grain"></div>
     </div>
@@ -125,68 +140,128 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
       tl.fromTo("#cam", {scale: 1}, {scale: 1.035, duration: 3.4000000000000004, ease: "none", immediateRender: false}, 13.110);
       tl.fromTo("#kw", {opacity: 1, x: 30, filter: "blur(6px)"}, {x: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 2.690);
       tl.set("#kw", {opacity: 0}, 0.000);
-      tl.fromTo("#hk .ln > span", {y: 10}, {y: 0, duration: .45, ease: "expo.out", stagger: .06, immediateRender: true}, 0);
+      tl.fromTo("#creeb", {y: 0}, {y: -12, duration: .55, repeat: 30, yoyo: true, ease: "sine.inOut", immediateRender: true}, 0);
+      tl.set("#hk_0", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_0", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 0.020);
+      tl.set("#hk_1", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_1", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 0.460);
+      tl.set("#hk_2", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_2", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 0.700);
+      tl.set("#hk_3", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_3", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 1.040);
+      tl.set("#hk_4", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_4", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 1.220);
+      tl.set("#hk_5", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_5", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 1.440);
+      tl.set("#hk_6", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_6", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 1.700);
+      tl.set("#hk_7", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_7", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 1.860);
+      tl.set("#hk_8", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_8", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 2.060);
       tl.fromTo("#ph", {y: 50, rotationY: 26, rotationX: 8}, {y: 0, rotationY: 16, rotationX: 4, duration: 1.0, ease: "expo.out", immediateRender: false}, 0.000);
       tl.fromTo("#ph", {rotationX: 4, rotationY: 16, rotation: -1}, {rotationX: 2, rotationY: 10, rotation: 0, duration: 9.25, ease: "sine.inOut", immediateRender: false}, 1.000);
       tl.to("#arc", {strokeDashoffset: 0.4200, stroke: "#d22b22", duration: 1.1, ease: "power3.out"}, 0.730);
       (() => { const o = {v: 0}; tl.to(o, {v: 2.9, duration: 1.1, ease: "power3.out", onUpdate: () => { document.getElementById("score").textContent = o.v.toFixed(1); }}, 0.730); })();
+      tl.fromTo("#creei", {scaleX: .82, scaleY: 1.2}, {scaleX: 1, scaleY: 1, duration: 0.5, ease: "elastic.out(1, .4)", immediateRender: false}, 0.730);
+      tl.set("#creei", {attr: {src: "assets/img/poses/mag.png"}}, 0.770);
       tl.to("#sc", {scale: 1.1, duration: 0.5, ease: "expo.out"}, 1.790);
-      tl.to("#hk", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 2.540);
+      tl.to("#hk", {opacity: 0, x: -320, filter: "blur(22px)", duration: 0.3, ease: "power2.in"}, 2.510);
       tl.set("#hb", {opacity: 0}, 0.000);
       tl.set("#hb", {opacity: 1}, 2.739);
       tl.fromTo("#hb .ln > span", {yPercent: 112}, {yPercent: 0, duration: 0.85, ease: "expo.out", stagger: 0.09, immediateRender: true}, 2.740);
       tl.fromTo("#sc", {scale: 1.24}, {scale: 1.1, duration: 0.5, ease: "back.out(2.5)", immediateRender: false}, 3.480);
-      tl.to("#hb", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 4.970);
+      tl.fromTo("#creei", {scaleX: .82, scaleY: 1.2}, {scaleX: 1, scaleY: 1, duration: 0.5, ease: "elastic.out(1, .4)", immediateRender: false}, 3.580);
+      tl.set("#creei", {attr: {src: "assets/img/poses/shock.png"}}, 3.620);
+      tl.to("#hb", {opacity: 0, x: -320, filter: "blur(22px)", duration: 0.3, ease: "power2.in"}, 4.910);
+      tl.to("#creew", {x: -670, duration: 0.55, ease: "power1.inOut"}, 4.990);
+      tl.to("#creew", {keyframes: [{y: -900, duration: 0.275, ease: "power2.out"}, {y: -750, duration: 0.275, ease: "power2.in"}]}, 4.990);
+      tl.set("#creei", {attr: {src: "assets/img/poses/mag.png"}}, 5.237);
+      tl.fromTo("#creei", {scaleX: 1.18, scaleY: .78}, {scaleX: 1, scaleY: 1, duration: 0.45, ease: "elastic.out(1, .45)", immediateRender: false}, 5.520);
       tl.to("#sc", {x: 80, y: -170, scale: .62, duration: 0.6, ease: "expo.inOut"}, 4.990);
       tl.set("#tline", {opacity: 0}, 0.000);
       tl.fromTo("#tline", {opacity: 1, y: 16, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 5.140);
+      tl.set("#fixc", {opacity: 0}, 0.000);
+      tl.fromTo("#fixc", {opacity: 1, y: 16, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 5.390);
       tl.set("#frame", {attr: {src: "assets/img/demo_f01.jpg"}}, 5.660);
       tl.fromTo("#frame", {scale: 1.1}, {scale: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 5.660);
       tl.set("#r0", {opacity: 0}, 0.000);
       tl.fromTo("#r0", {opacity: 1, y: 30, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 5.660);
       tl.fromTo("#tk0", {scale: 1.5}, {scale: 1, duration: 0.45, ease: "back.out(2.5)", immediateRender: false}, 5.660);
       tl.set("#tk0", {className: 'tk on'}, 5.660);
+      tl.fromTo("#creei", {scaleX: .82, scaleY: 1.2}, {scaleX: 1, scaleY: 1, duration: 0.5, ease: "elastic.out(1, .4)", immediateRender: false}, 5.760);
+      tl.set("#creei", {attr: {src: "assets/img/poses/mag.png"}}, 5.800);
       tl.set("#frame", {attr: {src: "assets/img/demo_f07.jpg"}}, 7.080);
       tl.fromTo("#frame", {scale: 1.1}, {scale: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 7.080);
       tl.set("#r1", {opacity: 0}, 0.000);
       tl.fromTo("#r1", {opacity: 1, y: 30, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 7.080);
       tl.fromTo("#tk1", {scale: 1.5}, {scale: 1, duration: 0.45, ease: "back.out(2.5)", immediateRender: false}, 7.080);
       tl.set("#tk1", {className: 'tk on'}, 7.080);
+      tl.fromTo("#creei", {scaleX: .82, scaleY: 1.2}, {scaleX: 1, scaleY: 1, duration: 0.5, ease: "elastic.out(1, .4)", immediateRender: false}, 7.180);
+      tl.set("#creei", {attr: {src: "assets/img/poses/think.png"}}, 7.220);
       tl.set("#frame", {attr: {src: "assets/img/demo_f14.jpg"}}, 8.620);
       tl.fromTo("#frame", {scale: 1.1}, {scale: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 8.620);
       tl.set("#r2", {opacity: 0}, 0.000);
       tl.fromTo("#r2", {opacity: 1, y: 30, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 8.620);
       tl.fromTo("#tk2", {scale: 1.5}, {scale: 1, duration: 0.45, ease: "back.out(2.5)", immediateRender: false}, 8.620);
       tl.set("#tk2", {className: 'tk on'}, 8.620);
+      tl.fromTo("#creei", {scaleX: .82, scaleY: 1.2}, {scaleX: 1, scaleY: 1, duration: 0.5, ease: "elastic.out(1, .4)", immediateRender: false}, 8.720);
+      tl.set("#creei", {attr: {src: "assets/img/poses/sad.png"}}, 8.760);
       tl.set("#r0", {className: 'row fixed'}, 10.810);
       tl.fromTo("#r0 .ok", {opacity: 1, scale: 0}, {scale: 1, opacity: 1, duration: 0.4, ease: "back.out(3)", immediateRender: false}, 10.810);
       tl.set("#tk0", {className: 'tk fixed'}, 10.810);
+      tl.set("#fixn", {textContent: "1/3"}, 10.810);
+      tl.to("#fixb", {scaleX: 0.333, duration: 0.3, ease: "power2.out"}, 10.810);
       tl.set("#r1", {className: 'row fixed'}, 10.950);
       tl.fromTo("#r1 .ok", {opacity: 1, scale: 0}, {scale: 1, opacity: 1, duration: 0.4, ease: "back.out(3)", immediateRender: false}, 10.950);
       tl.set("#tk1", {className: 'tk fixed'}, 10.950);
+      tl.set("#fixn", {textContent: "2/3"}, 10.950);
+      tl.to("#fixb", {scaleX: 0.667, duration: 0.3, ease: "power2.out"}, 10.950);
       tl.set("#r2", {className: 'row fixed'}, 11.090);
       tl.fromTo("#r2 .ok", {opacity: 1, scale: 0}, {scale: 1, opacity: 1, duration: 0.4, ease: "back.out(3)", immediateRender: false}, 11.090);
       tl.set("#tk2", {className: 'tk fixed'}, 11.090);
+      tl.set("#fixn", {textContent: "3/3"}, 11.090);
+      tl.to("#fixb", {scaleX: 1.000, duration: 0.3, ease: "power2.out"}, 11.090);
+      tl.set("#fixc", {className: 'done'}, 11.110);
       tl.to("#sc", {x: 80, y: -170, scale: .8, duration: 0.5, ease: "expo.inOut"}, 11.310);
       tl.to("#arc", {strokeDashoffset: 0.1200, stroke: "#0f8f5c", duration: 0.8, ease: "power3.out"}, 11.710);
       (() => { const o = {v: 2.9}; tl.to(o, {v: 4.4, duration: 0.8, ease: "power3.out", onUpdate: () => { document.getElementById("score").textContent = o.v.toFixed(1); }}, 11.710); })();
+      tl.to("#creew", {x: -670, duration: 0.5, ease: "power1.inOut"}, 11.760);
+      tl.to("#creew", {keyframes: [{y: -860, duration: 0.250, ease: "power2.out"}, {y: -750, duration: 0.250, ease: "power2.in"}]}, 11.760);
+      tl.set("#creei", {attr: {src: "assets/img/poses/cheer.png"}}, 11.985);
+      tl.fromTo("#creei", {scaleX: 1.18, scaleY: .78}, {scaleX: 1, scaleY: 1, duration: 0.45, ease: "elastic.out(1, .45)", immediateRender: false}, 12.240);
       tl.to("#ph", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 12.990);
       tl.to("#sc", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 12.990);
       tl.to("#list", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 12.990);
       tl.to("#tline", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 12.990);
+      tl.to("#fixc", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 12.990);
+      tl.fromTo("#bm1", {opacity: 1, x: -1700}, {x: 1700, opacity: 1, duration: 0.5, ease: "power2.inOut", immediateRender: false}, 12.910);
+      tl.set("#bm1", {opacity: 0}, 0.000);
+      tl.to("#bm1", {opacity: 0, duration: 0.01, ease: "none"}, 13.410);
+      tl.fromTo("#wash", {opacity: .5}, {opacity: 0, duration: 0.4, ease: "power2.out", immediateRender: false}, 13.090);
+      tl.to("#creew", {x: -370, duration: 0.55, ease: "power1.inOut"}, 13.110);
+      tl.to("#creew", {keyframes: [{y: -900, duration: 0.275, ease: "power2.out"}, {y: -250, duration: 0.275, ease: "power2.in"}]}, 13.110);
+      tl.set("#creei", {attr: {src: "assets/img/poses/present.png"}}, 13.358);
+      tl.fromTo("#creei", {scaleX: 1.18, scaleY: .78}, {scaleX: 1, scaleY: 1, duration: 0.45, ease: "elastic.out(1, .45)", immediateRender: false}, 13.640);
       tl.fromTo("#logo", {opacity: 1, scale: .9, filter: "blur(14px)"}, {scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.8, ease: "expo.out", immediateRender: false}, 13.160);
       tl.set("#logo", {opacity: 0}, 0.000);
       tl.to("#logo", {y: -230, scale: .7, duration: 0.5, ease: "expo.inOut"}, 14.490);
       tl.set("#cbox", {opacity: 0}, 0.000);
       tl.fromTo("#cbox", {opacity: 1, y: 40, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 14.590);
-      tl.set("#cree2", {opacity: 0}, 0.000);
-      tl.fromTo("#cree2", {opacity: 1, y: 60, filter: "blur(10px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false}, 14.790);
+      tl.to("#creew", {x: 10, duration: 0.55, ease: "power1.inOut"}, 14.540);
+      tl.to("#creew", {keyframes: [{y: -400, duration: 0.275, ease: "power2.out"}, {y: -160, duration: 0.275, ease: "power2.in"}]}, 14.540);
+      tl.set("#creei", {attr: {src: "assets/img/poses/wave.png"}}, 14.787);
+      tl.fromTo("#creei", {scaleX: 1.18, scaleY: .78}, {scaleX: 1, scaleY: 1, duration: 0.45, ease: "elastic.out(1, .45)", immediateRender: false}, 15.070);
       tl.set("#cph", {opacity: 0}, 14.830);
       (() => { const o = {n: 0}; tl.to(o, {n: 5, duration: 0.4, ease: "steps(5)", onUpdate: () => { document.getElementById("cty").textContent = "CHECK".slice(0, Math.round(o.n)); }}, 14.830); })();
       tl.fromTo("#cbox .send", {scale: 1.5}, {scale: 1, duration: 0.5, ease: "back.out(3)", immediateRender: false}, 15.430);
       tl.set("#share", {opacity: 0}, 0.000);
       tl.fromTo("#share", {opacity: 1, y: 20, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 15.230);
       tl.fromTo("#loop", {opacity: 0}, {opacity: 1, duration: 0.35, ease: "power2.inOut", immediateRender: false}, 16.110);
+      tl.to("#creew", {x: 0, duration: 0.4, ease: "power1.inOut"}, 16.060);
+      tl.to("#creew", {keyframes: [{y: -250, duration: 0.200, ease: "power2.out"}, {y: 0, duration: 0.200, ease: "power2.in"}]}, 16.060);
+      tl.set("#creei", {attr: {src: "assets/img/poses/phone.png"}}, 16.240);
+      tl.fromTo("#creei", {scaleX: 1.18, scaleY: .78}, {scaleX: 1, scaleY: 1, duration: 0.45, ease: "elastic.out(1, .45)", immediateRender: false}, 16.440);
       tl.fromTo("#cap0", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, -0.030);
       tl.set("#cap0", {opacity: 0}, 1.410);
       tl.fromTo("#c0_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 0.010);

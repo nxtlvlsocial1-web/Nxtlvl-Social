@@ -5,6 +5,10 @@ possible, even if they don't watch the whole video"): tool first. Line 1 says wh
 screen is on frame 1; the Creedom logo bar with the comment keyword stays at the top the whole reel; the 304 story is
 the proof; the name and CTA close it (about 17 s). Elements that appear later are hidden in CSS from frame 0
 (build/kit_min.py). Voice: Kokoro af_heart (build/vo_kok.py). Look: Glacier, Unbounded + Satoshi.
+v7 (owner: "add the Creedom mascot at the side so people stay to see what he is doing, more animations and transitions,
+see how the reference plays out, its sound effects are much better"): Cree is a companion for the whole reel (he hops
+between spots and reacts to each beat), the hook lights up word by word, scene changes use a pink light-beam wipe, a
+smear cut or a zoom-through, and the sound is dense UI foley (no music).
 python3 build/generate.py
 """
 import os
@@ -21,25 +25,35 @@ for k in range(len(R.IDS)):
         R.sfx("swish", S[k] - .16)
 R.sfx("thump", .02)
 R.topbar("CREE", S[1] - .1)
+R.cree_init(790, 1180, "mag")
 R.sfx("pop", S[1] - .1)
 
 # ---- f00: what Creedom does, said in line 1, with its analyser screen on frame 1 (visible in CSS from frame 0)
-H('<div class="hd" id="hk" style="top:330px;font-size:88px"><span class="ln"><span>This tool shows the</span></span><span class="ln"><span>exact second people</span></span>'
-  f'<span class="ln"><span style="color:{RED}">leave your reel.</span></span></div>')
+HOOK = [["This", "tool", "shows", "the"], ["exact", "second", "people"], ["leave", "your", "reel."]]
+_k, _lines = 0, []
+for li, ws in enumerate(HOOK):
+    spans = []
+    for w in ws:
+        spans.append(f'<span class="hw" id="hk_{_k}"{f" style={chr(34)}color:{RED}{chr(34)}" if li == 2 else ""}>{w}</span>')
+        _k += 1
+    _lines.append('<span class="ln"><span>' + " ".join(spans) + '</span></span>')
+H('<div class="hd" id="hk" style="top:330px;font-size:88px">' + "".join(_lines) + '</div>')
 H('<div class="stage" style="top:720px"><div class="an soft" id="an0"><div class="anh"><img src="assets/img/creedom_logo.png" alt=""><span>REEL ANALYZER</span></div>'
   '<div class="chart"><svg viewBox="0 0 600 260" preserveAspectRatio="none"><path id="ret0" d="M0,30 C60,32 90,36 110,44 C130,54 140,160 160,190 C200,215 300,222 600,230" pathLength="1"/></svg>'
   '<i id="drop0"></i><b id="dl0">Viewers leave at 0:05</b></div></div></div>')
-R.js('tl.fromTo("#hk .ln > span", {y: 10}, {y: 0, duration: .45, ease: "expo.out", stagger: .06, immediateRender: true}, 0);')
+R.highlight_words("hk", [w for ws in HOOK for w in ws], [w["t0"] for w in R.LW["f00"]])
 R.ft("#an0", 0, 1.0, "{y: 40, rotationX: 20, rotationY: -14}", "{y: 0, rotationX: 9, rotationY: -6}")
 tex = wt("f00", "exact")
 R.ft("#drop0", tex - .05, .45, "{opacity: 1, scale: 0}", "{scale: 1}", "back.out(3)")
 R.st("#drop0", 0, "{opacity: 0}")
 R.sfx("click", tex)
+R.cree_react(tex, "point")
 R.rise("#dl0", wt("f00", "second") + .05, .45, 16, 6)
 R.to("#an0", wt("f00", "leave") - .1, .6, "{scale: 1.18, x: 90, y: -20}", "expo.inOut")      # in on the drop point
 R.sfx("swish", wt("f00", "leave") - .1)
 R.leave("#hk", S[1] - .25, .3)
 R.leave("#an0", S[1] - .25, .3)
+R.beam(S[1] - .3)
 
 # ---- f01: the proof: the real insights card, 304 counts up, then 5 s average watch is outlined
 H(f'<div class="num" id="n304" style="top:330px;font-size:200px;color:{RED}">0</div>')
@@ -48,19 +62,22 @@ H('<div class="stage" style="top:760px"><div class="card soft" id="ins"><img src
   '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><rect id="o304" x="1.4" y="1" width="47" height="46.5" rx="4" pathLength="1" />'
   '<rect id="o5" x="1.4" y="51.5" width="47" height="46.5" rx="4" pathLength="1" /></svg></div></div>')
 t304 = wt("f01", "304")
+R.cree_hop(S[1] - .15, -700, 0, "shock")
 R.rise("#n304", S[1] - .2, .6, 40, 8)
 R.counter("n304", S[1] - .2, t304 + .45 - (S[1] - .2), 0, 304, "Math.round(o.v)", "power2.inOut")
 R.rise("#ins", S[1] - .1, .8, 80, 10)
 R.float3d("#ins", S[1], S[2], (10, 5), (-8, -3), (1, 0))
 R.draw("#o304", t304, .6)
-R.sfx("tick", t304 + .4)
+for k in range(6):
+    R.sfx("tick", S[1] - .1 + k * (t304 + .45 - S[1]) / 6)
 R.rise("#vw", wt("f01", "views") - .05, .5, 30, 6)
 tfv = wt("f01", "five")
 R.draw("#o5", tfv - .1, .6)
 R.to("#ins", tfv - .15, .6, "{scale: 1.16, x: 130, y: -70}", "expo.inOut")                 # in on "5s"
 R.sfx("thump", tfv)
+R.cree_react(tfv + .05, "sad", "g_drop")
 for sel in ("#n304", "#vw", "#ins"):
-    R.leave(sel, S[2] - .22, .3)
+    R.smear_out(sel, S[2] - .28, .3)
 
 # ---- f02: the old first line plays on a phone (2x, the timer counts its real seconds) and freezes after "told me"
 OLD_LEN = 2.2
@@ -72,7 +89,8 @@ H(f'<div class="stage" style="top:410px"><div class="phone big soft" id="ph"><im
   '<img id="ofz" src="assets/img/old_freeze.jpg" alt=""><div id="otm"><span id="otn">0.0</span> s</div><b id="x2">2x</b></div></div>')
 H(f'<div class="pill" id="left" style="top:1200px"><i style="background:{RED}"></i>Most viewers left here</div>')
 R.rise("#fsl", S[2] + .02, .6, 20, 6)
-R.rise("#ph", S[2] - .02, .8, 140, 12)
+R.smear_in("#ph", S[2] - .05, .55)
+R.cree_hop(S[2] - .05, -30, -250, "point")
 R.float3d("#ph", S[2], S[3], (5, 2), (-10, -4), (1, -.5))
 R.counter("otn", tv, OLD_LEN - .05, 0, 4.3, "o.v.toFixed(1)", "none")
 R.to("#ph", tv, .7, "{scale: 1.12, y: 40}", "expo.inOut")                 # the phone (not the lens) moves in
@@ -81,9 +99,13 @@ R.st("#ofz", tfz - .03, "{opacity: 1}")
 R.ft("#ofz", tfz - .03, .5, '{filter: "grayscale(0) brightness(1)"}', '{filter: "grayscale(.9) brightness(.8)"}', "power2.out")
 R.to("#ph", tfz - .05, .45, "{scale: 1, y: 0}", "expo.inOut")
 R.rise("#left", tfz - .1, .3, 20, 6)
-R.sfx("click", tfz)
-for sel in ("#fsl", "#ph", "#left"):
+R.sfx("shutter", tfz)
+R.cree_react(tfz + .05, "shock", "g_wrong")
+for sel in ("#fsl", "#left"):
     R.leave(sel, S[3] - .22, .3)
+R.to("#ph", max(S[3] - .3, R.RISE_END.get("#ph", 0) + .02), .32, '{scale: 2.4, opacity: 0, filter: "blur(18px)"}', "power3.in")   # zoom-through
+R.ft("#wash", S[3] - .05, .35, "{opacity: .45}", "{opacity: 0}", "power2.out")
+R.sfx("whoosh", S[3] - .3)
 
 # ---- f03: nobody cares about your tool (struck through); say their problem first (rows swap); save this
 H(f'<div class="num" id="tool" style="top:360px;font-size:210px;color:rgba(16,19,28,.3)">Tool<i id="strike"></i></div>')
@@ -91,6 +113,7 @@ H('<div id="rows" style="top:700px"><div class="row" id="rT"><b>1</b><span>Tool<
   f'<div class="row" id="rP"><b>2</b><span>Problem</span><em>"Your reel loses people at 0:05"</em></div></div>')
 H('<div class="save" id="save" style="top:1090px"><i></i>SAVE THIS</div>')
 R.rise("#tool", S[3] - .02, .6, 40, 8)
+R.cree_hop(S[3] - .05, 0, -60, "think")
 ttool = wt("f03", "tool")
 R.ft("#strike", ttool - .05, .4, "{scaleX: 0}", "{scaleX: 1}", "power3.inOut")
 R.sfx("click", ttool)
@@ -103,23 +126,26 @@ R.st("#rP b", tprob + .3, '{textContent: "1"}')
 R.st("#rP", tprob + .3, "{className: 'row on'}")
 R.sfx("swish", tprob)
 R.sfx("ding", tprob + .35)
-R.rise("#save", tprob + .35, .5, 16, 6)
+R.rise("#save", tprob + .3, .4, 16, 6)
+R.cree_react(tprob + .3, "proud", "g_pickup")
 for sel in ("#tool", "#rows", "#save"):
     R.leave(sel, S[4] - .22, .3)
+R.beam(S[4] - .3)
+R.sfx("riser_short", S[4] - .9)
 
 # ---- f04: the name, the comment field types CREE, the share line; cut back to frame 1 so it loops
 a4 = S[4]
 H('<div id="logo"><img src="assets/img/creedom_logo.png" alt=""></div>')
 H('<div class="cbox soft" id="cbox" style="top:800px"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div>')
 H('<div class="sub" id="share" style="top:1000px">Send this to the friend<br>whose reels keep flopping.</div>')
-H('<img id="cree2" src="assets/img/poses/wave.png" alt="">')
 R.ft("#logo", a4 - .05, .8, '{opacity: 1, scale: .9, filter: "blur(14px)"}', '{scale: 1, filter: "blur(0px)"}', "expo.out")
 R.st("#logo", 0, "{opacity: 0}")
 R.sfx("sparkle", wt("f04", "creedom"))
+R.cree_hop(S[4] - .1, -370, -280, "present")
 tcm = wt("f04", "comment")
 R.to("#logo", tcm - .3, .5, "{y: -230, scale: .7}", "expo.inOut")
 R.rise("#cbox", tcm - .2, .6, 40, 8)
-R.rise("#cree2", tcm, .7, 60, 10)
+R.cree_hop(tcm - .25, 10, -190, "wave")
 tcr = wt("f04", "cree")
 R.st("#cph", tcr - .1, "{opacity: 0}")
 R.typer("cty", tcr - .1, "CREE", .35)
@@ -129,6 +155,7 @@ R.sfx("notify", tcr + .5)
 R.rise("#share", tcr + .3, .6, 20, 6)
 H('<div id="loop"><div class="hd" style="top:330px;font-size:88px">This tool shows the<br>exact second people<br><span style="color:' + RED + '">leave your reel.</span></div></div>')
 R.ft("#loop", R.DUR - .4, .35, "{opacity: 0}", "{opacity: 1}", "power2.inOut")
+R.cree_hop(R.DUR - .45, 0, 0, "mag", .4, 90)                 # back to the frame-1 spot so the loop is seamless
 
 R.captions(top=1470)
 

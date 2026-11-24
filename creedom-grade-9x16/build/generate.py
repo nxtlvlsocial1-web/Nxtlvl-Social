@@ -6,6 +6,10 @@ score are on frame 1; the Creedom logo bar with the comment keyword stays at the
 the fix are the proof; the name and CTA close it (about 16.5 s). Elements that appear later are hidden in CSS from
 frame 0 (build/kit_min.py). The scores are an example (EXAMPLE tag): 2.9 / 5 -> 4.4 / 5, flags at 0:01, 0:07, 0:14.
 Voice: Kokoro af_heart (build/vo_kok.py). Look: Glacier, Unbounded + Satoshi.
+v7 (owner: "add the Creedom mascot at the side so people stay to see what he is doing, more animations and transitions,
+see how the reference plays out, its sound effects are much better"): Cree is a companion for the whole reel (he hops
+between spots and reacts to each beat), the hook lights up word by word, a FIXED 0/3 counter unlocks with the checks,
+scene changes use a pink light-beam wipe or a smear cut, and the sound is dense UI foley (no music).
 python3 build/generate.py
 """
 import os
@@ -22,6 +26,7 @@ for k in range(len(R.IDS)):
         R.sfx("swish", S[k] - .16)
 R.sfx("thump", .02)
 R.topbar("CHECK", S[1] - .1)
+R.cree_init(790, 1150, "phone")
 R.sfx("pop", S[1] - .1)
 
 
@@ -31,19 +36,28 @@ def ring_to(t, frm, score, d=.7, col=RED):
 
 
 # ---- f00: what Creedom does, said in line 1, with a reel and its score ring on frame 1 (visible in CSS from frame 0)
-H('<div class="hd" id="hk" style="top:330px;font-size:88px"><span class="ln"><span>This tool scores</span></span><span class="ln"><span>your reel before</span></span>'
-  f'<span class="ln"><span style="color:{RED}">you post it.</span></span></div>')
+HOOK = [["This", "tool", "scores"], ["your", "reel", "before"], ["you", "post", "it."]]
+_k, _lines = 0, []
+for li, ws in enumerate(HOOK):
+    spans = []
+    for w in ws:
+        spans.append(f'<span class="hw" id="hk_{_k}"{f" style={chr(34)}color:{RED}{chr(34)}" if li == 2 else ""}>{w}</span>')
+        _k += 1
+    _lines.append('<span class="ln"><span>' + " ".join(spans) + '</span></span>')
+H('<div class="hd" id="hk" style="top:330px;font-size:88px">' + "".join(_lines) + '</div>')
 H('<div class="stage" style="top:640px"><div class="phone soft" id="ph"><img id="frame" src="assets/img/demo_f01.jpg" alt=""><b class="ex">EXAMPLE</b></div></div>')
 H('<div id="sc"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" class="trk"/><circle cx="100" cy="100" r="96" class="arc" id="arc" pathLength="1"/></svg>'
   '<div class="n"><b id="score">?</b><span>out of 5</span></div></div>')
-R.js('tl.fromTo("#hk .ln > span", {y: 10}, {y: 0, duration: .45, ease: "expo.out", stagger: .06, immediateRender: true}, 0);')
+R.highlight_words("hk", [w for ws in HOOK for w in ws], [w["t0"] for w in R.LW["f00"]])
 R.ft("#ph", 0, 1.0, "{y: 50, rotationY: 26, rotationX: 8}", "{y: 0, rotationY: 16, rotationX: 4}")
 R.float3d("#ph", 1.0, S[3], (4, 2), (16, 10), (-1, 0))
 tsc = wt("f00", "scores")
 ring_to(tsc, 0, 2.9, 1.1)                                        # the tool scores it while the line says so
-R.sfx("tick", tsc + 1.0)
+for k in range(5):
+    R.sfx("tick", tsc + k * .2)
+R.cree_react(tsc, "mag")
 R.to("#sc", wt("f00", "post") - .1, .5, "{scale: 1.1}", "expo.out")
-R.leave("#hk", S[1] - .25, .3)
+R.smear_out("#hk", S[1] - .28, .3)
 
 # ---- f01: "this one got 2.9 out of 5": the score pulses, "before posting" takes the hook's place
 H(R.lines_html("hb", ["Scored before", f'<span style="color:{RED}">anyone saw it.</span>'], "hd").replace('id="hb"', 'id="hb" style="top:330px;font-size:88px"'))
@@ -51,7 +65,9 @@ R.mask_lines("#hb", S[1] - .05)
 t29 = wt("f01", "2.9")
 R.ft("#sc", t29 - .05, .5, "{scale: 1.24}", "{scale: 1.1}", "back.out(2.5)")
 R.sfx("thump", t29)
-R.leave("#hb", S[2] - .22, .3)
+R.cree_react(t29 + .05, "shock", "g_wrong")
+R.smear_out("#hb", S[2] - .28, .3)
+R.cree_hop(S[2] - .2, -670, -750, "mag")                       # up above the phone, peeking down at the flags
 
 # ---- f02: each flagged second: the phone cuts to it, a row and a tick on the timeline land
 a2 = S[2]
@@ -59,9 +75,11 @@ R.to("#sc", a2 - .2, .6, "{x: 80, y: -170, scale: .62}", "expo.inOut")
 H('<div id="tline" style="top:1350px"><i class="bar"></i>' + "".join(
     f'<i class="tk" id="tk{k}" style="left:{x}%"><em>{lab}</em></i>' for k, (x, lab) in enumerate([(6, "0:01"), (40, "0:07"), (78, "0:14")])) + '</div>')
 NOTES = [("one", "demo_f01.jpg", "0:01", "Slow hook"), ("seven", "demo_f07.jpg", "0:07", "No proof"), ("fourteen", "demo_f14.jpg", "0:14", "Lost trust")]
+H('<div id="fixc" style="top:1330px"><span>FIXED</span><b id="fixn">0/3</b><i><em id="fixb"></em></i></div>')
 H('<div id="list" style="top:860px">' + "".join(
     f'<div class="row" id="r{k}"><b>{ts}</b><span>{txt}</span><i class="dot"></i><i class="ok">&#10003;</i></div>' for k, (_, _, ts, txt) in enumerate(NOTES)) + '</div>')
 R.rise("#tline", a2 - .05, .5, 16, 6)
+R.rise("#fixc", a2 + .2, .5, 16, 6)
 for k, (word, img, ts, txt) in enumerate(NOTES):
     tw = wt("f02", word)
     R.st("#frame", tw - .05, f'{{attr: {{src: "assets/img/{img}"}}}}')
@@ -70,6 +88,7 @@ for k, (word, img, ts, txt) in enumerate(NOTES):
     R.ft(f"#tk{k}", tw - .05, .45, "{scale: 1.5}", "{scale: 1}", "back.out(2.5)")
     R.st(f"#tk{k}", tw - .05, "{className: 'tk on'}")
     R.sfx("click", tw)
+    R.cree_react(tw + .05, ["mag", "think", "sad"][k], "g_tick" if k < 2 else "g_drop")
 
 # ---- f03: fix those three: the dots turn into green checks, the score climbs to 4.4
 tfx = wt("f03", "three")
@@ -78,28 +97,34 @@ for k in range(3):
     R.st(f"#r{k}", tk, "{className: 'row fixed'}")
     R.ft(f"#r{k} .ok", tk, .4, "{opacity: 1, scale: 0}", "{scale: 1}", "back.out(3)")
     R.st(f"#tk{k}", tk, "{className: 'tk fixed'}")
-    R.sfx("click", tk)
+    R.sfx("lock", tk)
+    R.st("#fixn", tk, f'{{textContent: "{k + 1}/3"}}')
+    R.to("#fixb", tk, .3, f"{{scaleX: {(k + 1) / 3:.3f}}}", "power2.out")
+R.st("#fixc", tfx - .1 + .3, "{className: 'done'}")
 t44 = wt("f03", "4.4")
 R.to("#sc", wt("f03", "scores") - .3, .5, "{x: 80, y: -170, scale: .8}", "expo.inOut")
 ring_to(t44 - .1, 2.9, 4.4, .8, GREEN)
 R.sfx("thump", t44)
-R.sfx("g_correct", t44 + .15)
+R.sfx("g_levelup", t44 + .15)
+R.cree_hop(t44 - .05, -670, -750, "cheer", .5, 110)
 
 # ---- f04: the name, the comment field types CHECK, the share line; cut back to frame 1 so it loops
 a4 = S[4]
-for sel in ("#ph", "#sc", "#list", "#tline"):
+for sel in ("#ph", "#sc", "#list", "#tline", "#fixc"):
     R.leave(sel, a4 - .22, .3)
+R.beam(a4 - .3)
+R.sfx("riser_short", a4 - .9)
+R.cree_hop(a4 - .1, -370, -250, "present")
 H('<div id="logo"><img src="assets/img/creedom_logo.png" alt=""></div>')
 H('<div class="cbox soft" id="cbox" style="top:800px"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div>')
 H('<div class="sub" id="share" style="top:1000px">Send this to the friend<br>who posts and prays.</div>')
-H('<img id="cree2" src="assets/img/poses/wave.png" alt="">')
 R.ft("#logo", a4 - .05, .8, '{opacity: 1, scale: .9, filter: "blur(14px)"}', '{scale: 1, filter: "blur(0px)"}', "expo.out")
 R.st("#logo", 0, "{opacity: 0}")
 R.sfx("sparkle", wt("f04", "creedom"))
 tcm = wt("f04", "comment")
 R.to("#logo", tcm - .3, .5, "{y: -230, scale: .7}", "expo.inOut")
 R.rise("#cbox", tcm - .2, .6, 40, 8)
-R.rise("#cree2", tcm, .7, 60, 10)
+R.cree_hop(tcm - .25, 10, -160, "wave")
 tck = wt("f04", "check")
 R.st("#cph", tck - .1, "{opacity: 0}")
 R.typer("cty", tck - .1, "CHECK", .4)
@@ -110,6 +135,7 @@ R.rise("#share", tck + .3, .6, 20, 6)
 H('<div id="loop"><div class="hd" style="top:330px;font-size:88px">This tool scores<br>your reel before<br><span style="color:' + RED + '">you post it.</span></div>'
   '<div class="lp"><img src="assets/img/demo_f01.jpg" alt=""></div></div>')
 R.ft("#loop", R.DUR - .4, .35, "{opacity: 0}", "{opacity: 1}", "power2.inOut")
+R.cree_hop(R.DUR - .45, 0, 0, "phone", .4, 90)                 # back to the frame-1 spot so the loop is seamless
 
 R.captions(top=1470)
 
@@ -141,6 +167,12 @@ R.write(f"""
 .row .ok {{ position: absolute; right: 0; top: 50%; margin-top: -22px; width: 44px; height: 44px; border-radius: 50%; background: {GREEN}; color: #fff; display: grid; place-items: center;
   font-style: normal; font-weight: 900; font-size: 26px; opacity: 0; }}
 .row.fixed b {{ color: {GREEN}; }} .row.fixed .dot {{ opacity: 0; }}
+#fixc {{ position: absolute; left: 560px; width: 450px; display: flex; align-items: center; gap: 16px; z-index: 20; font-family: Mono; font-size: 26px; letter-spacing: .16em;
+  color: rgba(16,19,28,.75); }}
+#fixc b {{ font-family: Unb; font-weight: 900; font-size: 34px; letter-spacing: -.02em; color: {RED}; }}
+#fixc i {{ position: relative; flex: 1; height: 8px; border-radius: 4px; background: rgba(16,19,28,.1); overflow: hidden; }}
+#fixc em {{ position: absolute; inset: 0; background: {GREEN}; transform-origin: left center; transform: scaleX(0); }}
+#fixc.done b {{ color: {GREEN}; }}
 #logo {{ position: absolute; left: 140px; right: 140px; top: 560px; height: 280px; display: grid; place-items: center; z-index: 25; }}
 #logo img {{ width: 100%; }}
 #cree2 {{ position: absolute; right: 90px; top: 1060px; width: 250px; z-index: 26; filter: drop-shadow(0 20px 30px rgba(40,50,90,.2)); }}

@@ -39,6 +39,12 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
 #tbar b { margin-left: auto; font-family: Sat; font-weight: 700; font-size: 34px; color: #10131c; background: #fff; padding: 12px 24px; border-radius: 999px;
   box-shadow: 0 12px 30px rgba(40,50,90,.14); border: 2px solid #e8307d; }
 #tbar b i { font-style: normal; font-weight: 900; color: #e8307d; }
+#creew { position: absolute; z-index: 58; pointer-events: none; }
+#creeb, #creei { position: absolute; inset: 0; }
+#creei { width: 100%; height: 100%; object-fit: contain; transform-origin: 50% 95%; filter: drop-shadow(0 18px 24px rgba(40,50,90,.22)); }
+.beam { position: absolute; left: 340px; top: -400px; width: 420px; height: 2800px; transform: rotate(22deg); z-index: 74; pointer-events: none; mix-blend-mode: screen; }
+#wash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 73; pointer-events: none; }
+.hw { display: inline-block; }
 #prog { position: absolute; left: 90px; right: 90px; top: 190px; height: 3px; background: rgba(16,19,28,.08); z-index: 70; border-radius: 2px; }
 #prog i { position: absolute; inset: 0; background: #10131c; transform-origin: left center; transform: scaleX(0); border-radius: 2px; }
 
@@ -85,13 +91,13 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
 .cbox .send { margin-left: auto; color: #e8307d; font-size: 54px; }
 #loop { position: absolute; inset: -60px; opacity: 0; z-index: 50; background: linear-gradient(180deg, #f7f8fc, #eceff7); }
 #loop .hd { transform: translate(60px, 60px); }
-#kw { opacity: 0; }#drop0 { opacity: 0; }#dl0 { opacity: 0; }#n304 { opacity: 0; }#ins { opacity: 0; }#vw { opacity: 0; }#fsl { opacity: 0; }#ph { opacity: 0; }#left { opacity: 0; }#tool { opacity: 0; }#rows { opacity: 0; }#save { opacity: 0; }#logo { opacity: 0; }#cbox { opacity: 0; }#cree2 { opacity: 0; }#share { opacity: 0; }#c0_0 { opacity: 0; }#c0_1 { opacity: 0; }#c0_2 { opacity: 0; }#c0_3 { opacity: 0; }#c0_4 { opacity: 0; }#c1_0 { opacity: 0; }#c1_1 { opacity: 0; }#c1_2 { opacity: 0; }#c1_3 { opacity: 0; }#c1_4 { opacity: 0; }#c2_0 { opacity: 0; }#c2_1 { opacity: 0; }#c2_2 { opacity: 0; }#c2_3 { opacity: 0; }#c3_0 { opacity: 0; }#c3_1 { opacity: 0; }#c3_2 { opacity: 0; }#c3_3 { opacity: 0; }#c3_4 { opacity: 0; }#c4_0 { opacity: 0; }#c4_1 { opacity: 0; }#c4_2 { opacity: 0; }#c4_3 { opacity: 0; }#c4_4 { opacity: 0; }#c5_0 { opacity: 0; }#c5_1 { opacity: 0; }#c5_2 { opacity: 0; }#c5_3 { opacity: 0; }#c6_0 { opacity: 0; }#c6_1 { opacity: 0; }#c6_2 { opacity: 0; }#c6_3 { opacity: 0; }#c6_4 { opacity: 0; }#c7_0 { opacity: 0; }#c7_1 { opacity: 0; }#c7_2 { opacity: 0; }#c7_3 { opacity: 0; }#c8_0 { opacity: 0; }#c8_1 { opacity: 0; }#c8_2 { opacity: 0; }#c9_0 { opacity: 0; }#c9_1 { opacity: 0; }#c9_2 { opacity: 0; }#c9_3 { opacity: 0; }#c9_4 { opacity: 0; }#c10_0 { opacity: 0; }</style>
+#kw { opacity: 0; }#drop0 { opacity: 0; }#dl0 { opacity: 0; }#bm1 { opacity: 0; }#n304 { opacity: 0; }#ins { opacity: 0; }#vw { opacity: 0; }#fsl { opacity: 0; }#ph { opacity: 0; }#left { opacity: 0; }#tool { opacity: 0; }#rows { opacity: 0; }#save { opacity: 0; }#bm2 { opacity: 0; }#logo { opacity: 0; }#cbox { opacity: 0; }#share { opacity: 0; }#c0_0 { opacity: 0; }#c0_1 { opacity: 0; }#c0_2 { opacity: 0; }#c0_3 { opacity: 0; }#c0_4 { opacity: 0; }#c1_0 { opacity: 0; }#c1_1 { opacity: 0; }#c1_2 { opacity: 0; }#c1_3 { opacity: 0; }#c1_4 { opacity: 0; }#c2_0 { opacity: 0; }#c2_1 { opacity: 0; }#c2_2 { opacity: 0; }#c2_3 { opacity: 0; }#c3_0 { opacity: 0; }#c3_1 { opacity: 0; }#c3_2 { opacity: 0; }#c3_3 { opacity: 0; }#c3_4 { opacity: 0; }#c4_0 { opacity: 0; }#c4_1 { opacity: 0; }#c4_2 { opacity: 0; }#c4_3 { opacity: 0; }#c4_4 { opacity: 0; }#c5_0 { opacity: 0; }#c5_1 { opacity: 0; }#c5_2 { opacity: 0; }#c5_3 { opacity: 0; }#c6_0 { opacity: 0; }#c6_1 { opacity: 0; }#c6_2 { opacity: 0; }#c6_3 { opacity: 0; }#c6_4 { opacity: 0; }#c7_0 { opacity: 0; }#c7_1 { opacity: 0; }#c7_2 { opacity: 0; }#c7_3 { opacity: 0; }#c8_0 { opacity: 0; }#c8_1 { opacity: 0; }#c8_2 { opacity: 0; }#c9_0 { opacity: 0; }#c9_1 { opacity: 0; }#c9_2 { opacity: 0; }#c9_3 { opacity: 0; }#c9_4 { opacity: 0; }#c10_0 { opacity: 0; }</style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="17.20" data-fps="30" data-width="1080" data-height="1920">
       <div id="bg"><i class="gl" id="g1"></i><i class="gl" id="g2"></i><i class="gl" id="g3"></i></div>
       <div id="cam"><div id="lens">
-      <div class="hd" id="hk" style="top:330px;font-size:88px"><span class="ln"><span>This tool shows the</span></span><span class="ln"><span>exact second people</span></span><span class="ln"><span style="color:#d22b22">leave your reel.</span></span></div>
+      <div class="hd" id="hk" style="top:330px;font-size:88px"><span class="ln"><span><span class="hw" id="hk_0">This</span> <span class="hw" id="hk_1">tool</span> <span class="hw" id="hk_2">shows</span> <span class="hw" id="hk_3">the</span></span></span><span class="ln"><span><span class="hw" id="hk_4">exact</span> <span class="hw" id="hk_5">second</span> <span class="hw" id="hk_6">people</span></span></span><span class="ln"><span><span class="hw" id="hk_7" style="color:#d22b22">leave</span> <span class="hw" id="hk_8" style="color:#d22b22">your</span> <span class="hw" id="hk_9" style="color:#d22b22">reel.</span></span></span></div>
 <div class="stage" style="top:720px"><div class="an soft" id="an0"><div class="anh"><img src="assets/img/creedom_logo.png" alt=""><span>REEL ANALYZER</span></div><div class="chart"><svg viewBox="0 0 600 260" preserveAspectRatio="none"><path id="ret0" d="M0,30 C60,32 90,36 110,44 C130,54 140,160 160,190 C200,215 300,222 600,230" pathLength="1"/></svg><i id="drop0"></i><b id="dl0">Viewers leave at 0:05</b></div></div></div>
 <div class="num" id="n304" style="top:330px;font-size:200px;color:#d22b22">0</div>
 <div class="hd" id="vw" style="top:550px">views.</div>
@@ -105,10 +111,12 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
 <div id="logo"><img src="assets/img/creedom_logo.png" alt=""></div>
 <div class="cbox soft" id="cbox" style="top:800px"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div>
 <div class="sub" id="share" style="top:1000px">Send this to the friend<br>whose reels keep flopping.</div>
-<img id="cree2" src="assets/img/poses/wave.png" alt="">
 <div id="loop"><div class="hd" style="top:330px;font-size:88px">This tool shows the<br>exact second people<br><span style="color:#d22b22">leave your reel.</span></div></div>
       </div></div>
       <div id="tbar"><img src="assets/img/creedom_logo.png" alt=""><span>REEL ANALYZER</span><b id="kw">Comment <i>CREE</i></b></div>
+<div id="creew" style="left:790px;top:1180px;width:230px;height:230px"><div id="creeb"><img id="creei" src="assets/img/poses/mag.png" alt=""></div></div>
+<i class="beam" id="bm1" style="background:linear-gradient(90deg, rgba(255,255,255,0), rgba(232,48,125,.55) 45%, #fff 50%, rgba(232,48,125,.55) 55%, rgba(255,255,255,0))"></i>
+<i class="beam" id="bm2" style="background:linear-gradient(90deg, rgba(255,255,255,0), rgba(232,48,125,.55) 45%, #fff 50%, rgba(232,48,125,.55) 55%, rgba(255,255,255,0))"></i>
 <div class="cap" id="cap0" style="top:1470px"><span class="cw" id="c0_0">This</span> <span class="cw" id="c0_1">tool</span> <span class="cw" id="c0_2">shows</span> <span class="cw" id="c0_3">the</span> <span class="cw" id="c0_4">exact</span></div>
 <div class="cap" id="cap1" style="top:1470px"><span class="cw" id="c1_0">second</span> <span class="cw" id="c1_1">people</span> <span class="cw" id="c1_2">leave</span> <span class="cw" id="c1_3">your</span> <span class="cw" id="c1_4">reel.</span></div>
 <div class="cap" id="cap2" style="top:1470px"><span class="cw" id="c2_0">Mine</span> <span class="cw" id="c2_1">got</span> <span class="cw" id="c2_2">304</span> <span class="cw" id="c2_3">views.</span></div>
@@ -120,6 +128,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
 <div class="cap" id="cap8" style="top:1470px"><span class="cw" id="c8_0">It's</span> <span class="cw" id="c8_1">called</span> <span class="cw" id="c8_2">Creedom.</span></div>
 <div class="cap" id="cap9" style="top:1470px"><span class="cw" id="c9_0">Comment</span> <span class="cw" id="c9_1">CREE</span> <span class="cw" id="c9_2">and</span> <span class="cw" id="c9_3">I'll</span> <span class="cw" id="c9_4">send</span></div>
 <div class="cap" id="cap10" style="top:1470px"><span class="cw" id="c10_0">it.</span></div>
+      <div id="wash"></div>
       <div id="prog"><i></i></div>
       <div id="grain"></div>
     </div>
@@ -133,15 +142,45 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
       tl.fromTo("#cam", {scale: 1}, {scale: 1.035, duration: 3.799999999999999, ease: "none", immediateRender: false}, 13.400);
       tl.fromTo("#kw", {opacity: 1, x: 30, filter: "blur(6px)"}, {x: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 3.250);
       tl.set("#kw", {opacity: 0}, 0.000);
-      tl.fromTo("#hk .ln > span", {y: 10}, {y: 0, duration: .45, ease: "expo.out", stagger: .06, immediateRender: true}, 0);
+      tl.fromTo("#creeb", {y: 0}, {y: -12, duration: .55, repeat: 31, yoyo: true, ease: "sine.inOut", immediateRender: true}, 0);
+      tl.set("#hk_0", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_0", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 0.020);
+      tl.set("#hk_1", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_1", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 0.440);
+      tl.set("#hk_2", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_2", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 0.680);
+      tl.set("#hk_3", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_3", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 1.000);
+      tl.set("#hk_4", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_4", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 1.240);
+      tl.set("#hk_5", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_5", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 1.580);
+      tl.set("#hk_6", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_6", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 1.940);
+      tl.set("#hk_7", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_7", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 2.320);
+      tl.set("#hk_8", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_8", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 2.540);
+      tl.set("#hk_9", {opacity: .22}, 0.040);
+      tl.fromTo("#hk_9", {opacity: 1, y: 10, scale: .9}, {y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)", immediateRender: false}, 2.700);
       tl.fromTo("#an0", {y: 40, rotationX: 20, rotationY: -14}, {y: 0, rotationX: 9, rotationY: -6, duration: 1.0, ease: "expo.out", immediateRender: false}, 0.000);
       tl.fromTo("#drop0", {opacity: 1, scale: 0}, {scale: 1, opacity: 1, duration: 0.45, ease: "back.out(3)", immediateRender: false}, 1.220);
       tl.set("#drop0", {opacity: 0}, 0.000);
+      tl.fromTo("#creei", {scaleX: .82, scaleY: 1.2}, {scaleX: 1, scaleY: 1, duration: 0.5, ease: "elastic.out(1, .4)", immediateRender: false}, 1.270);
+      tl.set("#creei", {attr: {src: "assets/img/poses/point.png"}}, 1.310);
       tl.set("#dl0", {opacity: 0}, 0.000);
       tl.fromTo("#dl0", {opacity: 1, y: 16, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.45, ease: "expo.out", immediateRender: false}, 1.660);
       tl.to("#an0", {scale: 1.18, x: 90, y: -20, duration: 0.6, ease: "expo.inOut"}, 2.250);
       tl.to("#hk", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 3.100);
       tl.to("#an0", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 3.100);
+      tl.fromTo("#bm1", {opacity: 1, x: -1700}, {x: 1700, opacity: 1, duration: 0.5, ease: "power2.inOut", immediateRender: false}, 3.050);
+      tl.set("#bm1", {opacity: 0}, 0.000);
+      tl.to("#bm1", {opacity: 0, duration: 0.01, ease: "none"}, 3.550);
+      tl.fromTo("#wash", {opacity: .5}, {opacity: 0, duration: 0.4, ease: "power2.out", immediateRender: false}, 3.230);
+      tl.to("#creew", {x: -700, duration: 0.55, ease: "power1.inOut"}, 3.200);
+      tl.to("#creew", {keyframes: [{y: -150, duration: 0.275, ease: "power2.out"}, {y: 0, duration: 0.275, ease: "power2.in"}]}, 3.200);
+      tl.set("#creei", {attr: {src: "assets/img/poses/shock.png"}}, 3.448);
+      tl.fromTo("#creei", {scaleX: 1.18, scaleY: .78}, {scaleX: 1, scaleY: 1, duration: 0.45, ease: "elastic.out(1, .45)", immediateRender: false}, 3.730);
       tl.set("#n304", {opacity: 0}, 0.000);
       tl.fromTo("#n304", {opacity: 1, y: 40, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 3.150);
       (() => { const o = {v: 0}; tl.to(o, {v: 304, duration: 1.31, ease: "power2.inOut", onUpdate: () => { document.getElementById("n304").textContent = Math.round(o.v); }}, 3.150); })();
@@ -153,13 +192,19 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
       tl.fromTo("#vw", {opacity: 1, y: 30, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 4.520);
       tl.fromTo("#o5", {strokeDashoffset: 1}, {strokeDashoffset: 0, duration: 0.6, ease: "power2.inOut", immediateRender: false}, 6.090);
       tl.to("#ins", {scale: 1.16, x: 130, y: -70, duration: 0.6, ease: "expo.inOut"}, 6.040);
-      tl.to("#n304", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 6.930);
-      tl.to("#vw", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 6.930);
-      tl.to("#ins", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 6.930);
+      tl.fromTo("#creei", {scaleX: .82, scaleY: 1.2}, {scaleX: 1, scaleY: 1, duration: 0.5, ease: "elastic.out(1, .4)", immediateRender: false}, 6.240);
+      tl.set("#creei", {attr: {src: "assets/img/poses/sad.png"}}, 6.280);
+      tl.to("#n304", {opacity: 0, x: -320, filter: "blur(22px)", duration: 0.3, ease: "power2.in"}, 6.870);
+      tl.to("#vw", {opacity: 0, x: -320, filter: "blur(22px)", duration: 0.3, ease: "power2.in"}, 6.870);
+      tl.to("#ins", {opacity: 0, x: -320, filter: "blur(22px)", duration: 0.3, ease: "power2.in"}, 6.870);
       tl.set("#fsl", {opacity: 0}, 0.000);
       tl.fromTo("#fsl", {opacity: 1, y: 20, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 7.170);
+      tl.fromTo("#ph", {opacity: 1, x: 340, filter: "blur(22px)"}, {x: 0, filter: "blur(0px)", opacity: 1, duration: 0.55, ease: "expo.out", immediateRender: false}, 7.100);
       tl.set("#ph", {opacity: 0}, 0.000);
-      tl.fromTo("#ph", {opacity: 1, y: 140, filter: "blur(12px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.8, ease: "expo.out", immediateRender: false}, 7.130);
+      tl.to("#creew", {x: -30, duration: 0.55, ease: "power1.inOut"}, 7.100);
+      tl.to("#creew", {keyframes: [{y: -400, duration: 0.275, ease: "power2.out"}, {y: -250, duration: 0.275, ease: "power2.in"}]}, 7.100);
+      tl.set("#creei", {attr: {src: "assets/img/poses/point.png"}}, 7.348);
+      tl.fromTo("#creei", {scaleX: 1.18, scaleY: .78}, {scaleX: 1, scaleY: 1, duration: 0.45, ease: "elastic.out(1, .45)", immediateRender: false}, 7.630);
       tl.fromTo("#ph", {rotationX: 5, rotationY: -10, rotation: 1}, {rotationX: 2, rotationY: -4, rotation: -0.5, duration: 3.289999999999999, ease: "sine.inOut", immediateRender: false}, 7.150);
       (() => { const o = {v: 0}; tl.to(o, {v: 4.3, duration: 2.1500000000000004, ease: "none", onUpdate: () => { document.getElementById("otn").textContent = o.v.toFixed(1); }}, 7.840); })();
       tl.to("#ph", {scale: 1.12, y: 40, duration: 0.7, ease: "expo.inOut"}, 7.840);
@@ -168,11 +213,18 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
       tl.to("#ph", {scale: 1, y: 0, duration: 0.45, ease: "expo.inOut"}, 9.990);
       tl.set("#left", {opacity: 0}, 0.000);
       tl.fromTo("#left", {opacity: 1, y: 20, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.3, ease: "expo.out", immediateRender: false}, 9.940);
+      tl.fromTo("#creei", {scaleX: .82, scaleY: 1.2}, {scaleX: 1, scaleY: 1, duration: 0.5, ease: "elastic.out(1, .4)", immediateRender: false}, 10.090);
+      tl.set("#creei", {attr: {src: "assets/img/poses/shock.png"}}, 10.130);
       tl.to("#fsl", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 10.220);
-      tl.to("#ph", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 10.220);
       tl.to("#left", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 10.260);
+      tl.to("#ph", {scale: 2.4, opacity: 0, filter: "blur(18px)", duration: 0.32, ease: "power3.in"}, 10.140);
+      tl.fromTo("#wash", {opacity: .45}, {opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false}, 10.390);
       tl.set("#tool", {opacity: 0}, 0.000);
       tl.fromTo("#tool", {opacity: 1, y: 40, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 10.420);
+      tl.to("#creew", {x: 0, duration: 0.55, ease: "power1.inOut"}, 10.390);
+      tl.to("#creew", {keyframes: [{y: -400, duration: 0.275, ease: "power2.out"}, {y: -60, duration: 0.275, ease: "power2.in"}]}, 10.390);
+      tl.set("#creei", {attr: {src: "assets/img/poses/think.png"}}, 10.637);
+      tl.fromTo("#creei", {scaleX: 1.18, scaleY: .78}, {scaleX: 1, scaleY: 1, duration: 0.45, ease: "elastic.out(1, .45)", immediateRender: false}, 10.920);
       tl.fromTo("#strike", {scaleX: 0}, {scaleX: 1, duration: 0.4, ease: "power3.inOut", immediateRender: false}, 11.590);
       tl.set("#rows", {opacity: 0}, 0.000);
       tl.fromTo("#rows", {opacity: 1, y: 30, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 12.070);
@@ -182,23 +234,39 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
       tl.set("#rP b", {textContent: "1"}, 12.840);
       tl.set("#rP", {className: 'row on'}, 12.840);
       tl.set("#save", {opacity: 0}, 0.000);
-      tl.fromTo("#save", {opacity: 1, y: 16, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 12.890);
+      tl.fromTo("#save", {opacity: 1, y: 16, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.4, ease: "expo.out", immediateRender: false}, 12.840);
+      tl.fromTo("#creei", {scaleX: .82, scaleY: 1.2}, {scaleX: 1, scaleY: 1, duration: 0.5, ease: "elastic.out(1, .4)", immediateRender: false}, 12.840);
+      tl.set("#creei", {attr: {src: "assets/img/poses/proud.png"}}, 12.880);
       tl.to("#tool", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 13.280);
       tl.to("#rows", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 13.280);
-      tl.to("#save", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 13.410);
+      tl.to("#save", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 13.280);
+      tl.fromTo("#bm2", {opacity: 1, x: -1700}, {x: 1700, opacity: 1, duration: 0.5, ease: "power2.inOut", immediateRender: false}, 13.200);
+      tl.set("#bm2", {opacity: 0}, 0.000);
+      tl.to("#bm2", {opacity: 0, duration: 0.01, ease: "none"}, 13.700);
+      tl.fromTo("#wash", {opacity: .5}, {opacity: 0, duration: 0.4, ease: "power2.out", immediateRender: false}, 13.380);
       tl.fromTo("#logo", {opacity: 1, scale: .9, filter: "blur(14px)"}, {scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.8, ease: "expo.out", immediateRender: false}, 13.450);
       tl.set("#logo", {opacity: 0}, 0.000);
+      tl.to("#creew", {x: -370, duration: 0.55, ease: "power1.inOut"}, 13.400);
+      tl.to("#creew", {keyframes: [{y: -430, duration: 0.275, ease: "power2.out"}, {y: -280, duration: 0.275, ease: "power2.in"}]}, 13.400);
+      tl.set("#creei", {attr: {src: "assets/img/poses/present.png"}}, 13.648);
+      tl.fromTo("#creei", {scaleX: 1.18, scaleY: .78}, {scaleX: 1, scaleY: 1, duration: 0.45, ease: "elastic.out(1, .45)", immediateRender: false}, 13.930);
       tl.to("#logo", {y: -230, scale: .7, duration: 0.5, ease: "expo.inOut"}, 14.800);
       tl.set("#cbox", {opacity: 0}, 0.000);
       tl.fromTo("#cbox", {opacity: 1, y: 40, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 14.900);
-      tl.set("#cree2", {opacity: 0}, 0.000);
-      tl.fromTo("#cree2", {opacity: 1, y: 60, filter: "blur(10px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false}, 15.100);
+      tl.to("#creew", {x: 10, duration: 0.55, ease: "power1.inOut"}, 14.850);
+      tl.to("#creew", {keyframes: [{y: -430, duration: 0.275, ease: "power2.out"}, {y: -190, duration: 0.275, ease: "power2.in"}]}, 14.850);
+      tl.set("#creei", {attr: {src: "assets/img/poses/wave.png"}}, 15.098);
+      tl.fromTo("#creei", {scaleX: 1.18, scaleY: .78}, {scaleX: 1, scaleY: 1, duration: 0.45, ease: "elastic.out(1, .45)", immediateRender: false}, 15.380);
       tl.set("#cph", {opacity: 0}, 14.100);
       (() => { const o = {n: 0}; tl.to(o, {n: 4, duration: 0.35, ease: "steps(4)", onUpdate: () => { document.getElementById("cty").textContent = "CREE".slice(0, Math.round(o.n)); }}, 14.100); })();
       tl.fromTo("#cbox .send", {scale: 1.5}, {scale: 1, duration: 0.5, ease: "back.out(3)", immediateRender: false}, 14.650);
       tl.set("#share", {opacity: 0}, 0.000);
       tl.fromTo("#share", {opacity: 1, y: 20, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 14.500);
       tl.fromTo("#loop", {opacity: 0}, {opacity: 1, duration: 0.35, ease: "power2.inOut", immediateRender: false}, 16.800);
+      tl.to("#creew", {x: 0, duration: 0.4, ease: "power1.inOut"}, 16.750);
+      tl.to("#creew", {keyframes: [{y: -280, duration: 0.200, ease: "power2.out"}, {y: 0, duration: 0.200, ease: "power2.in"}]}, 16.750);
+      tl.set("#creei", {attr: {src: "assets/img/poses/mag.png"}}, 16.930);
+      tl.fromTo("#creei", {scaleX: 1.18, scaleY: .78}, {scaleX: 1, scaleY: 1, duration: 0.45, ease: "elastic.out(1, .45)", immediateRender: false}, 17.130);
       tl.fromTo("#cap0", {opacity: 1, y: 14}, {y: 0, opacity: 1, duration: 0.35, ease: "expo.out", immediateRender: false}, -0.030);
       tl.set("#cap0", {opacity: 0}, 1.550);
       tl.fromTo("#c0_0", {opacity: 1, y: 12}, {y: 0, opacity: 1, duration: 0.28, ease: "power3.out", immediateRender: false}, 0.010);

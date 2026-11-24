@@ -106,6 +106,65 @@ class Reel:
         self.ft(sel, t0, max(.1, t1 - t0), f"{{rotationX: {rx[0]}, rotationY: {ry[0]}, rotation: {rz[0]}}}",
                 f"{{rotationX: {rx[1]}, rotationY: {ry[1]}, rotation: {rz[1]}}}", "sine.inOut")
 
+    # ---- v7 (owner's reference video): a mascot companion, light-beam wipes, smear cuts, word highlights, dense UI sound
+    def cree_init(self, x, y, pose, size=230):
+        """Cree lives in the top layer for the whole reel (visible from frame 0): #creew hops (x, y), #creeb bobs, the img
+        squashes and changes pose"""
+        self.cree_size = size
+        self.TOP.append(f'<div id="creew" style="left:{x}px;top:{y}px;width:{size}px;height:{size}px"><div id="creeb">'
+                        f'<img id="creei" src="assets/img/poses/{pose}.png" alt=""></div></div>')
+        D = self.DUR
+        self.js(f'tl.fromTo("#creeb", {{y: 0}}, {{y: -12, duration: .55, repeat: {int(D / .55)}, yoyo: true, ease: "sine.inOut", immediateRender: true}}, 0);')
+        self.cree_xy = (0, 0)
+
+    def cree_hop(self, t, dx, dy, pose=None, d=.55, peak=150):
+        """hop to a new spot (offset from the start spot), turn into a new pose in the air, squash on landing"""
+        x0, y0 = self.cree_xy
+        self.to("#creew", t, d, f"{{x: {dx}}}", "power1.inOut")
+        top = min(y0, dy) - peak
+        self.js(f'tl.to("#creew", {{keyframes: [{{y: {top}, duration: {d / 2:.3f}, ease: "power2.out"}}, {{y: {dy}, duration: {d / 2:.3f}, ease: "power2.in"}}]}}, {t:.3f});')
+        if pose:
+            self.st("#creei", t + d * .45, f'{{attr: {{src: "assets/img/poses/{pose}.png"}}}}')
+        self.ft("#creei", t + d - .02, .45, "{scaleX: 1.18, scaleY: .78}", "{scaleX: 1, scaleY: 1}", "elastic.out(1, .45)")
+        self.sfx("boing", t)
+        self.sfx("pop", t + d - .02)
+        self.cree_xy = (dx, dy)
+
+    def cree_react(self, t, pose, sound="g_pop"):
+        """a quick squash-and-stretch with a new pose, in place"""
+        self.ft("#creei", t, .5, "{scaleX: .82, scaleY: 1.2}", "{scaleX: 1, scaleY: 1}", "elastic.out(1, .4)")
+        self.st("#creei", t + .04, f'{{attr: {{src: "assets/img/poses/{pose}.png"}}}}')
+        if sound:
+            self.sfx(sound, t)
+
+    def beam(self, t, col="rgba(232,48,125,.55)"):
+        """a diagonal light beam sweeps across on a scene change (the reference's neon wipe, in the brand pink)"""
+        self.n += 1
+        i = f"bm{self.n}"
+        self.TOP.append(f'<i class="beam" id="{i}" style="background:linear-gradient(90deg, rgba(255,255,255,0), {col} 45%, #fff 50%, {col} 55%, rgba(255,255,255,0))"></i>')
+        self.ft(f"#{i}", t, .5, "{opacity: 1, x: -1700}", "{x: 1700}", "power2.inOut")
+        self.st(f"#{i}", 0, "{opacity: 0}")
+        self.to(f"#{i}", t + .5, .01, "{opacity: 0}", "none")
+        self.ft("#wash", t + .18, .4, "{opacity: .5}", "{opacity: 0}", "power2.out")
+        self.sfx("whoosh_big", t)
+
+    def smear_out(self, sel, t, d=.3, dx=-320):
+        self.to(sel, max(t, self.RISE_END.get(sel, 0) + .02), d, f'{{opacity: 0, x: {dx}, filter: "blur(22px)"}}', "power2.in")
+
+    def smear_in(self, sel, t, d=.55, dx=340):
+        self.ft(sel, t, d, f'{{opacity: 1, x: {dx}, filter: "blur(22px)"}}', '{x: 0, filter: "blur(0px)"}', "expo.out")
+        self.st(sel, 0, "{opacity: 0}")
+        self.RISE_END[sel] = t + d
+
+    def highlight_words(self, el_id, words, times, hot=(), sound="tick"):
+        """hook words light up as they are spoken (frame 0 keeps the full line for the cover, then it dims and fills)"""
+        for k, (w, t) in enumerate(zip(words, times)):
+            sel = f"#{el_id}_{k}"
+            self.st(sel, .04, "{opacity: .22}")
+            self.ft(sel, t - .03, .35, "{opacity: 1, y: 10, scale: .9}", "{y: 0, scale: 1}", "back.out(2.5)")
+            if sound and k % 2 == 0:
+                self.sfx(sound, t - .02)
+
     def topbar(self, keyword, t_kw, logo="assets/img/creedom_logo.png"):
         """v6 (owner: viewers who leave early should still get the tool): the Creedom logo is on screen from frame 1 for
         the whole reel, and the comment keyword joins it early, so anyone who leaves still saw what to comment"""
@@ -183,6 +242,12 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #f3f5
 #tbar b {{ margin-left: auto; font-family: Sat; font-weight: 700; font-size: 34px; color: {INK}; background: #fff; padding: 12px 24px; border-radius: 999px;
   box-shadow: 0 12px 30px rgba(40,50,90,.14); border: 2px solid {PINK}; }}
 #tbar b i {{ font-style: normal; font-weight: 900; color: {PINK}; }}
+#creew {{ position: absolute; z-index: 58; pointer-events: none; }}
+#creeb, #creei {{ position: absolute; inset: 0; }}
+#creei {{ width: 100%; height: 100%; object-fit: contain; transform-origin: 50% 95%; filter: drop-shadow(0 18px 24px rgba(40,50,90,.22)); }}
+.beam {{ position: absolute; left: 340px; top: -400px; width: 420px; height: 2800px; transform: rotate(22deg); z-index: 74; pointer-events: none; mix-blend-mode: screen; }}
+#wash {{ position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 73; pointer-events: none; }}
+.hw {{ display: inline-block; }}
 #prog {{ position: absolute; left: 90px; right: 90px; top: 190px; height: 3px; background: rgba(16,19,28,.08); z-index: 70; border-radius: 2px; }}
 #prog i {{ position: absolute; inset: 0; background: {INK}; transform-origin: left center; transform: scaleX(0); border-radius: 2px; }}
 """
@@ -209,6 +274,7 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #f3f5
       {chr(10).join(self.HTML)}
       </div></div>
       {chr(10).join(self.TOP)}
+      <div id="wash"></div>
       <div id="prog"><i></i></div>
       <div id="grain"></div>
     </div>
