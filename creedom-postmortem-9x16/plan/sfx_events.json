@@ -1,170 +1,110 @@
 [
 {
-"type": "riser_short",
-"t": 0
-},
-{
-"type": "impact",
-"t": 0.04
-},
-{
-"type": "whoosh",
-"t": 2.32
+"type": "tick",
+"t": 0.5
 },
 {
 "type": "swish",
-"t": 3.14
+"t": 2.796
 },
 {
-"type": "screech",
-"t": 3.97
+"type": "swish",
+"t": 5.114
 },
 {
-"type": "thump",
-"t": 4.08
-},
-{
-"type": "whoosh_big",
-"t": 5.02
+"type": "swish",
+"t": 6.315
 },
 {
 "type": "tick",
-"t": 5.784
+"t": 7.135
 },
 {
 "type": "tick",
-"t": 6.128
+"t": 7.464
 },
 {
 "type": "tick",
-"t": 6.472
+"t": 7.794
 },
 {
 "type": "tick",
-"t": 6.816
+"t": 8.123
 },
 {
 "type": "tick",
-"t": 7.16
+"t": 8.453
 },
 {
-"type": "impact",
-"t": 7.28
-},
-{
-"type": "whoosh",
-"t": 7.48
-},
-{
-"type": "pop",
-"t": 7.88
-},
-{
-"type": "typing",
-"t": 8.66
-},
-{
-"type": "stamp",
-"t": 10.81
-},
-{
-"type": "whoosh",
-"t": 11.26
-},
-{
-"type": "g_wrong",
-"t": 12.66
-},
-{
-"type": "impact",
-"t": 13.24
-},
-{
-"type": "pop",
-"t": 14.74
-},
-{
-"type": "whoosh",
-"t": 14.75
-},
-{
-"type": "ding",
-"t": 15.1
-},
-{
-"type": "whoosh",
-"t": 16.04
-},
-{
-"type": "tick",
-"t": 16.2
-},
-{
-"type": "tick",
-"t": 17.2
-},
-{
-"type": "thump",
-"t": 17.72
-},
-{
-"type": "tick",
-"t": 18.2
-},
-{
-"type": "tick",
-"t": 19.2
-},
-{
-"type": "buzzer",
-"t": 19.66
-},
-{
-"type": "tick",
-"t": 20.2
-},
-{
-"type": "whoosh_big",
-"t": 20.36
-},
-{
-"type": "impact",
-"t": 20.54
-},
-{
-"type": "sparkle",
-"t": 20.61
-},
-{
-"type": "whoosh",
-"t": 21.76
-},
-{
-"type": "g_pop",
-"t": 21.98
-},
-{
-"type": "pop",
-"t": 22.31
-},
-{
-"type": "whoosh",
-"t": 24.36
-},
-{
-"type": "pop",
-"t": 24.5
-},
-{
-"type": "typing",
-"t": 27.68
+"type": "swish",
+"t": 9.362
 },
 {
 "type": "click",
-"t": 28.16
+"t": 14.114
+},
+{
+"type": "swish",
+"t": 14.419
+},
+{
+"type": "click",
+"t": 15.704
+},
+{
+"type": "swish",
+"t": 18.315
+},
+{
+"type": "ding",
+"t": 18.765
+},
+{
+"type": "swish",
+"t": 20.145
+},
+{
+"type": "tick",
+"t": 20.325
+},
+{
+"type": "tick",
+"t": 21.325
+},
+{
+"type": "tick",
+"t": 22.325
+},
+{
+"type": "tick",
+"t": 23.325
+},
+{
+"type": "tick",
+"t": 24.325
+},
+{
+"type": "swish",
+"t": 24.523
+},
+{
+"type": "sparkle",
+"t": 24.683
+},
+{
+"type": "click",
+"t": 26.437
+},
+{
+"type": "swish",
+"t": 28.74
+},
+{
+"type": "typing",
+"t": 31.578
 },
 {
 "type": "notify",
-"t": 28.36
+"t": 32.178
 }
 ]

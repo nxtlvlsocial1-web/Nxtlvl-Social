@@ -1,246 +1,185 @@
-"""Creedom remake 2 v2, "Graded before anyone saw it" (Creators 100X, 9:16): writes index.html, plan/sfx_events.json, plan/edit.json.
+"""Creedom remake 2 v4, "Graded before anyone saw it" (Creators 100X, 9:16): writes index.html, plan/sfx_events.json, plan/edit.json.
 
-v3 (owner: "change music ... the yellow looks much worse ... psychological colours ... as many motion elements as
-possible"): LOSS red on the low score, HARSH and the flagged seconds, WIN green on the fixes and 4.4, HOOK cyan on the open
-questions (see build/kit.py), new music, and a motion beat (pulse, scribble, arrow, sparkle, glint, bob) on every hit.
-v2 (owner: "very dull and slow animated feel"): bright pink and fast, on the shared kinetic kit (build/kit.py, same as
-creedom-postmortem-9x16). The scores are an example (owner: make them), shown with an EXAMPLE tag: 2.9 / 5 -> 4.4 / 5,
-flags at 0:01, 0:07, 0:14. Frame 1: a reel on a phone and the dial slamming to 2.9; HARSH; each flagged second with a
-giant timestamp; the fix and the climb to 4.4 with confetti; Creedom at about 60 %; CTA CHECK; loop back to the 2.9 dial.
+v4 (owner, after v1-v3 "dull", "generic"): clean premium minimal on the Glacier background, Unbounded + Satoshi
+(build/kit_min.py, same as creedom-postmortem-9x16), the owner's ElevenLabs take ("Blondie - Intense Woman",
+build/vo_el2.py). The scores are an example (owner: make them), shown with an EXAMPLE tag: 2.9 / 5 -> 4.4 / 5, flags at
+0:01, 0:07, 0:14. Frame 1: the reel on a phone and its score; Harsh; each flagged second as a clean list; the fix and the
+climb to 4.4; Creedom at about 65 %; CTA CHECK; a cut back to frame 1 so it loops. v1-v3 (pink kinetic) are in git history.
 python3 build/generate.py
 """
 import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from kit import HOOK, INK, LOSS, PINK, SUN, WIN, Reel  # noqa: E402
+from kit_min import GREEN, INK, MUTE, PINK, RED, Reel  # noqa: E402
 
-R = Reel(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Creedom remake: graded before anyone saw it v2 9x16")
+R = Reel(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Creedom remake: graded before anyone saw it v4 9x16")
 S, wt, H = R.S, R.wt, R.HTML.append
-RED, GREEN = LOSS, WIN          # v3: the kit's loss / reward colours
 for k in range(len(R.IDS)):
-    R.drift(S[k] - .05, S[k + 1] - S[k] + .05, rot=1.6 if k % 2 else -1.6, z=.06)
+    R.push(S[k] - .1, S[k + 1], .04)
+    if k:
+        R.sfx("swish", S[k] - .16)
 
-C = 540.35                                     # dial circumference (r = 86)
-def dial_to(t, frm, score, d=.6, col=RED):
-    """the arc and the number move together; both are pure functions of the timeline position"""
-    R.js(f'tl.to("#arc", {{strokeDashoffset: {C * (1 - score / 5):.1f}, stroke: "{col}", duration: {d}, ease: "power3.out"}}, {t:.3f});')
+
+def ring_to(t, frm, score, d=.8, col=RED):
+    """the ring and the number move together, pure functions of the timeline"""
+    R.js(f'tl.to("#arc", {{strokeDashoffset: {1 - score / 5:.4f}, stroke: "{col}", duration: {d}, ease: "power3.out"}}, {t:.3f});')
     R.counter("score", t, d, frm, score, "o.v.toFixed(1)", "power3.out")
 
-# ---- f00: phone + dial at frame 1, the dial slams to 2.9
-H('<div id="phone"><img id="frame" src="assets/img/demo_f01.jpg" alt=""><b class="ex">EXAMPLE</b></div>')
-H('<div id="dial"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="86" class="trk"/><circle cx="100" cy="100" r="86" class="arc" id="arc"/></svg>'
-  '<div class="sc"><b id="score">0.0</b><span>/ 5</span></div></div>')
-R.st("#phone", 0, "{opacity: 1}")
-R.st("#dial", 0, "{opacity: 1}")
-R.ft("#phone", 0, .4, "{scale: 1.25, rotation: -10, x: -80}", "{scale: 1, rotation: -4, x: 0}", "expo.out")
-R.ft("#dial", 0, .4, "{scale: .3, rotation: 30}", "{scale: 1, rotation: 0}", "back.out(1.8)")
-R.js(f'tl.set("#arc", {{strokeDashoffset: {C:.1f}}}, 0);')
-dial_to(.1, 0, 2.9, .5)
-R.sfx("riser_short", 0)
-R.sfx("buzzer", .58)
-R.sfx("impact", .6)
-R.shake(.62, 20, 1.6)
-R.punch(.6, .1)
-R.burst(.6, 760, 880, 1.0, RED)
-R.pulse(.62, 785, 885, LOSS, 520)
-R.sparkle(.7, 980, 610, "#fff", 66)
-R.sparkle(.85, 600, 1180, HOOK, 52)
-R.bob("#phone", .5, S[1] - .1, 8, .8)
+
+# ---- f00: phone + score at frame 1
+H('<div class="stage" style="top:430px"><div class="phone soft" id="ph"><img id="frame" src="assets/img/demo_f01.jpg" alt=""><b class="ex">EXAMPLE</b></div></div>')
+H('<div id="sc"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" class="trk"/><circle cx="100" cy="100" r="96" class="arc" id="arc" pathLength="1"/></svg>'
+  '<div class="n"><b id="score">2.6</b><span>out of 5</span></div></div>')
+R.kicker("REEL SCORE  /  EXAMPLE", .1, S[4] - .2)
+R.st("#ph, #sc", 0, "{opacity: 1}")
+R.ft("#ph", 0, 1.1, "{y: 60, rotationY: 26, rotationX: 8}", "{y: 0, rotationY: 16, rotationX: 4}")
+R.float3d("#ph", 1.1, S[2], (4, 2), (16, 10), (-1, 0))
+R.ft("#sc", 0, .9, "{y: 30}", "{y: 0}")
+R.js(f'tl.set("#arc", {{strokeDashoffset: {1 - 2.6 / 5:.3f}}}, 0);')
+ring_to(.05, 2.6, 2.9, .6)
+R.sfx("tick", .6)
 tb = wt("f00", "before")
-R.slam("before anyone<br><em class=h>saw it.</em>", tb, max(.35, S[1] - tb - .45), top=250, size=120, rot=-3, sfx="thump")
+H(R.lines_html("hb", ["Before anyone", "<em>saw it.</em>"], "hd").replace('id="hb"', 'id="hb" style="top:1190px"'))
+R.mask_lines("#hb", tb - .05)
+R.leave("#hb", S[1] - .18)
 
-# ---- f01: HARSH, then the timeline with three flags
-a1 = S[1]
-H('<div id="tline"><i class="bar"></i>' + "".join(f'<i class="flag" id="fl{k}" style="left:{x}%"><em>{lab}</em></i>' for k, (x, lab) in enumerate([(6, "0:01"), (40, "0:07"), (78, "0:14")])) + '</div>')
-R.slam("HARSH.", a1, max(.3, wt("f01", "look") - a1 - .35), top=720, size=280, rot=-5, col=LOSS, sfx="impact")
-R.burst(a1, 540, 860, 1.3, LOSS)
-R.pulse(a1 + .05, 540, 850, LOSS, 600)
-R.sparkle(a1 + .1, 920, 640, "#fff", 70)
-R.sfx("g_wrong", a1 + .05)
-tl_ = wt("f01", "look")
-R.to("#phone, #dial", a1 - .04, .2, "{opacity: .25, scale: .9}", "power2.out")      # HARSH sits on top: the scene steps back
-R.to("#phone, #dial", tl_ - .1, .25, "{opacity: 1, scale: 1}", "back.out(2)")
-R.pop_in("#tline", tl_ - .05, .3, .6, 0, "back.out(2)")
-R.sfx("whoosh", tl_ - .1)
+# ---- f01: Harsh. Then where it lost points: a timeline under the phone
+H(f'<div class="num" id="harsh" style="top:1190px;font-size:150px;color:{RED}">Harsh.</div>')
+H('<div id="tline" style="top:1190px"><i class="bar"></i>' + "".join(
+    f'<i class="tk" id="tk{k}" style="left:{x}%"><em>{lab}</em></i>' for k, (x, lab) in enumerate([(6, "0:01"), (40, "0:07"), (78, "0:14")])) + '</div>')
+R.rise("#harsh", S[1] - .02, .7, 40, 10)
+R.sfx("click", S[1])
+tlk = wt("f01", "look")
+R.leave("#harsh", tlk - .12, .3)
+R.rise("#tline", tlk, .7, 20, 6)
 for k in range(3):
-    R.ft(f"#fl{k}", tl_ + .2 + k * .14, .28, "{opacity: 0, y: -60, scale: .3}", "{opacity: 1, y: 0, scale: 1}", "back.out(3.5)")
-    R.sfx("pop", tl_ + .2 + k * .14)
-R.punch(wt("f01", "points"), .06)
+    R.ft(f"#tk{k}", tlk + .25 + k * .14, .5, "{opacity: 1, y: -24}", "{y: 0}", "expo.out")
+    R.st(f"#tk{k}", 0, "{opacity: 0}")
+    R.sfx("tick", tlk + .25 + k * .14)
 
-# ---- f02: each flagged second: phone frame cuts, giant timestamp, a note card
+# ---- f02: each flagged second: the phone cuts to it, a row appears
 a2 = S[2]
+R.to("#sc", a2 - .15, .7, "{x: 80, y: -170, scale: .66}", "expo.inOut")
 NOTES = [("one", "demo_f01.jpg", "0:01", "Hook too slow"), ("seven", "demo_f07.jpg", "0:07", "A claim, no proof"), ("fourteen", "demo_f14.jpg", "0:14", "Loses trust")]
-H('<div id="notes">' + "".join(f'<div class="note" id="n{k}"><b>{ts}</b><span>{txt}</span><i class="ok">&#10003;</i></div>' for k, (_, _, ts, txt) in enumerate(NOTES)) + '</div>')
-R.to("#dial", a2 - .12, .3, "{x: 150, y: -380, scale: .44}", "power3.inOut")
-R.to("#phone", a2 - .12, .3, "{x: -20, y: -60, rotation: -3}", "power3.inOut")
-R.sfx("swish", a2 - .12)
+H('<div id="list" style="top:760px">' + "".join(
+    f'<div class="row" id="r{k}"><b>{ts}</b><span>{txt}</span><i class="dot"></i><i class="ok">&#10003;</i></div>' for k, (_, _, ts, txt) in enumerate(NOTES)) + '</div>')
 for k, (word, img, ts, txt) in enumerate(NOTES):
     tw = wt("f02", word)
     R.st("#frame", tw - .05, f'{{attr: {{src: "assets/img/{img}"}}}}')
-    R.ft("#phone", tw - .05, .3, "{scale: 1.12}", "{scale: 1}", "expo.out")
-    R.flash(tw - .05, .35, .12)
-    R.slam(ts, tw - .02, .3, top=250, size=170, rot=-4 + 4 * k, col=LOSS, sfx="g_wrong" if k < 2 else "thump", shake=False)
-    R.pulse(tw + .1, 770, 622 + k * 151, LOSS, 260)
-    R.scribble(tw + .15, 500, 548 + k * 151, 520, 150, LOSS, -2 + 2 * k, hold=.5)
-    R.ft(f"#n{k}", tw + .08, .3, "{opacity: 0, x: 400, rotation: 8}", "{opacity: 1, x: 0, rotation: 0}", "back.out(2)")
-    R.ft(f"#fl{k}", tw, .3, "{scale: 1.8}", "{scale: 1}", "back.out(3)")
-    R.sfx("swish", tw + .08)
-    twd = R.LW["f02"][[w["t0"] for w in R.LW["f02"]].index(tw) + 2]["t0"] if k < 2 else wt("f02", "trust")
-    R.punch(twd, .05)
+    R.ft("#frame", tw - .05, .6, "{scale: 1.08}", "{scale: 1}", "expo.out")
+    R.rise(f"#r{k}", tw - .05, .7, 30, 8)
+    R.ft(f"#tk{k}", tw - .05, .5, "{scale: 1.35}", "{scale: 1}", "back.out(2.5)")
+    R.st(f"#tk{k}", tw - .05, "{className: 'tk on'}")
+    R.sfx("click", tw)
 
-# ---- f03: fix the three seconds: checks pop green, the dial flies back big and climbs to 4.4
+# ---- f03: fix those three seconds: the dots turn into green checks, the score climbs to 4.4
 a3 = S[3]
-tfix = wt("f03", "three")
+tfx = wt("f03", "three")
 for k in range(3):
-    tk = tfix + k * .16
-    R.st(f"#n{k}", tk, "{className: 'note fixed'}")
-    R.ft(f"#n{k} .ok", tk, .3, "{scale: 0, rotation: -90}", "{scale: 1, rotation: 0}", "back.out(3.5)")
-    R.ft(f"#n{k}", tk, .25, "{scale: 1.12}", "{scale: 1}", "back.out(3)")
-    R.st(f"#fl{k}", tk, "{className: 'flag fixed'}")
-    R.sfx("g_correct" if k == 2 else "click", tk)
-    R.pulse(tk, 960, 622 + k * 151, WIN, 160)
-t44 = wt("f03", "scores") + .35          # "four point four" (Whisper writes "4 .4.")
-R.to("#notes", t44 - .5, .22, '{x: 700, opacity: 0, filter: "blur(16px)"}', "power3.in")
-R.to("#phone", t44 - .5, .22, '{x: -700, opacity: 0, filter: "blur(16px)"}', "power3.in")
-R.to("#tline", t44 - .5, .18, "{opacity: 0, y: 80}", "power2.in")
-R.to("#dial", t44 - .42, .35, "{x: -230, y: -60, scale: 1.3}", "back.out(1.6)")
-R.sfx("whoosh", t44 - .5)
-dial_to(t44 - .05, 2.9, 4.4, .6, GREEN)
-R.flash(t44 + .5, .6, .2)
-R.burst(t44 + .5, 540, 880, 1.5, SUN)
-R.confetti(t44 + .5, 40, 5, 540, 860)
-R.pulse(t44 + .5, 540, 880, WIN, 700)
-for k, (x, y, c) in enumerate([(160, 560, "#fff"), (930, 600, WIN), (200, 1180, WIN), (900, 1160, "#fff")]):
-    R.sparkle(t44 + .55 + k * .07, x, y, c, 72)
-R.shake(t44 + .52, 14, 1.2)
-R.punch(t44 + .5, .1)
-R.sfx("g_levelup", t44 + .45)
-R.sfx("sparkle", t44 + .55)
+    tk = tfx + k * .18
+    R.st(f"#r{k}", tk, "{className: 'row fixed'}")
+    R.ft(f"#r{k} .ok", tk, .45, "{opacity: 1, scale: 0}", "{scale: 1}", "back.out(3)")
+    R.st(f"#tk{k}", tk, "{className: 'tk fixed'}")
+    R.sfx("click", tk)
+t44 = wt("f03", "4.4")
+R.to("#sc", t44 - .45, .6, "{x: 80, y: -170, scale: .8}", "expo.inOut")
+ring_to(t44 - .05, 2.9, 4.4, .9, GREEN)
+R.sfx("g_correct", t44 + .1)
 
-# ---- f04: Creedom (about 60 % in): flash, logo slam, the app card, Cree
+# ---- f04: Creedom (about 65 % in): the logo, then the app card
 a4 = S[4]
+for sel in ("#ph", "#sc", "#list", "#tline"):
+    R.leave(sel, a4 - .2)
 H('<div id="logo"><img src="assets/img/creedom_logo.png" alt=""></div>')
-H('<div id="app"><img src="assets/img/creedom_logo.png" alt=""><div class="q">How can Cree help?</div>'
-  '<div class="tile" id="t1"><i>&#9654;</i><div><b>Check a reel before you post</b><span>Score out of 5, the exact second, and the fix</span></div></div>'
-  '<div class="tile dim"><i>&#9998;</i><div><b>Get a script in your voice</b></div></div></div>')
+H('<div class="stage" style="top:500px"><div class="app soft" id="app"><img src="assets/img/creedom_logo.png" alt=""><div class="q">How can Cree help?</div>'
+  '<div class="tile" id="t1"><i>&#10003;</i><div><b>Check a reel before you post</b><span>Score out of 5, the exact second, and the fix</span></div></div>'
+  '<div class="tile dim"><i>&#9998;</i><div><b>Get a script in your voice</b></div></div></div></div>')
 H('<img id="cree" src="assets/img/poses/proud.png" alt="">')
-R.zoom_out("#dial", a4 - .14)
-R.flash(a4 - .06, .95, .25)
-R.ft("#logo", a4 - .04, .3, "{opacity: 0, scale: 3, rotation: -12}", "{opacity: 1, scale: 1, rotation: -3}", "power4.out")
-R.burst(a4, 540, 800, 1.3)
-R.shake(a4 + .05, 16, 1.4)
-R.punch(a4 + .02, .1)
-R.sfx("whoosh_big", a4 - .2)
-R.sfx("impact", a4 - .02)
+R.kicker("CREEDOM", a4 - .05, S[5] - .2, PINK)
+R.st("#logo", 0, "{opacity: 0}")
+R.ft("#logo", a4 - .02, 1.0, '{opacity: 1, scale: .9, filter: "blur(14px)"}', '{scale: 1, filter: "blur(0px)"}', "expo.out")
+R.sfx("sparkle", a4)
 tup = wt("f04", "upload")
-R.to("#logo", tup - .12, .18, "{y: -900, scale: .5, opacity: 0}", "power3.in")
-R.ft("#app", tup - .04, .36, '{opacity: 1, y: 1200, rotation: 6, filter: "blur(20px)"}', '{y: 0, rotation: -1.5, filter: "blur(0px)"}', "expo.out")
-R.sfx("whoosh", tup - .12)
-R.ft("#cree", tup + .15, .4, "{opacity: 0, x: 300, rotation: 20}", "{opacity: 1, x: 0, rotation: 0}", "back.out(2)")
-R.sfx("g_pop", tup + .15)
-R.bob("#app", tup + .45, S[5] - .25, 7)
-for k, (x, y, c) in enumerate([(150, 590, "#fff"), (940, 610, HOOK), (900, 980, "#fff")]):
-    R.sparkle(a4 + .08 + k * .08, x, y, c, 66)
+R.leave("#logo", tup - .1, .35, -60)
+R.rise("#app", tup, 1.0, 120, 12)
+R.float3d("#app", tup, S[5], (8, 4), (-10, -4), (1, 0))
+R.rise("#cree", tup + .4, .9, 60, 10)
 tex = wt("f04", "exact")
-R.arrow(tex - .1, 820, 520, 80, HOOK, hold=max(.3, S[5] - tex - .7), size=170)
-R.ft("#t1", tex - .05, .3, "{scale: 1.1}", "{scale: 1}", "back.out(3)")
-R.punch(tex, .06)
-R.sfx("pop", tex - .05)
-tfx = wt("f04", "fix")
-R.ft("#t1", tfx - .05, .3, "{scale: 1.1}", "{scale: 1}", "back.out(3)")
-R.punch(tfx, .05)
-R.sfx("ding", tfx)
+R.ft("#t1", tex - .05, .5, "{scale: 1.04}", "{scale: 1}", "back.out(2)")
+R.sfx("click", tex)
+for sel in ("#app", "#cree"):
+    R.leave(sel, S[5] - .18)
 
-# ---- f05: CTA (CHECK): share sticker, giant comment box, Cree waves; flash cut back to the 2.9 dial (loop)
+# ---- f05: CTA (CHECK), the comment field types it; cut back to frame 1 so it loops
 a5 = S[5]
-H('<div id="share"><b>&#10148;</b><span>send this to the friend<br>who posts and prays</span></div>'
-  '<div id="cbox"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div>'
-  '<img id="cree2" src="assets/img/poses/wave.png" alt="">')
-R.whip_out("#app", a5 - .14, -1)
-R.to("#cree", a5 - .14, .15, "{opacity: 0, x: 300}", "power2.in")
-R.pop_in("#share", a5 - .02, .32, .4, -3)
-R.burst(a5, 540, 640, 1.0)
-R.sfx("whoosh", a5 - .14)
-R.sfx("pop", a5)
-tpr = wt("f05", "prays")
-R.ft("#share", tpr, .3, "{scale: 1.12}", "{scale: 1}", "back.out(3)")
-R.punch(tpr, .05)
+H(R.lines_html("h5", ["Send this to the friend", "<em>who posts and prays.</em>"], "hd").replace('id="h5"', 'id="h5" style="top:330px"'))
+H('<div class="cbox soft" id="cbox" style="top:760px"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div>')
+H('<img id="cree2" src="assets/img/poses/wave.png" alt="">')
+R.mask_lines("#h5", a5 - .02)
 tc = wt("f05", "comment")
-R.pop_in("#cbox", tc - .08, .32, .5, 0, "back.out(2.2)")
-R.ft("#cree2", tc - .02, .4, "{opacity: 0, x: 300, rotation: 20}", "{opacity: 1, x: 0, rotation: 0}", "back.out(2)")
-R.st("#cph", tc + .12, "{opacity: 0}")
-R.typer("cty", tc + .12, "CHECK", .45)
-R.sfx("typing", tc + .12)
-R.ft("#cbox", tc + .65, .3, "{scale: 1.12}", "{scale: 1}", "back.out(3)")
-R.sfx("click", tc + .65)
-R.sfx("notify", tc + .85)
-R.punch(tc + .65, .06)
-R.pulse(tc + .65, 440, 935, HOOK, 300)
-R.arrow(tc + .05, 820, 640, 75, HOOK, hold=max(.3, R.DUR - tc - .9), size=190)
-R.sparkle(tc + .7, 860, 860, "#fff", 66)
-R.sparkle(tpr + .1, 950, 450, HOOK, 60)
-R.bob("#share", a5 + .4, R.DUR - .5, 6)
-H('<div id="loop" data-layout-allow-overlap><div class="lp"><img src="assets/img/demo_f01.jpg" alt=""></div><div class="ld"><b>2.9</b><span>/ 5</span></div></div>')
-R.flash(R.DUR - .36, .9, .2)
-R.st("#loop", R.DUR - .3, "{opacity: 1}")
+R.rise("#cbox", tc - .4, .8, 40, 8)
+R.rise("#cree2", tc - .2, .9, 60, 10)
+R.st("#cph", tc + .15, "{opacity: 0}")
+R.typer("cty", tc + .15, "CHECK", .45)
+R.sfx("typing", tc + .15)
+R.ft("#cbox .send", tc + .75, .5, "{scale: 1.5}", "{scale: 1}", "back.out(3)")
+R.sfx("notify", tc + .8)
+H('<div id="loop"><div class="lp"><img src="assets/img/demo_f01.jpg" alt=""></div><div class="ln2"><b>2.9</b><span>out of 5</span></div></div>')
+R.ft("#loop", R.DUR - .45, .4, "{opacity: 0}", "{opacity: 1}", "power2.inOut")
 
-R.captions(top=1440, max_words=3)
+R.captions(top=1470)
 
-SHADOW = f"0 18px 0 {INK}, 0 40px 80px rgba(70,0,35,.4)"
 R.write(f"""
-#phone {{ position: absolute; left: 60px; top: 500px; width: 450px; height: 800px; border-radius: 50px; overflow: hidden; background: #000; opacity: 0;
-  border: 12px solid {INK}; box-shadow: 0 22px 0 rgba(22,18,26,.45), 0 50px 100px rgba(70,0,35,.45); z-index: 12; }}
-#phone img {{ width: 100%; height: 100%; object-fit: cover; display: block; }}
-.ex {{ position: absolute; left: 18px; top: 18px; background: rgba(22,18,26,.8); color: #fff; font-family: Mono; font-weight: 700; font-size: 24px; letter-spacing: .14em;
-  padding: 6px 14px; border-radius: 10px; }}
-#dial {{ position: absolute; left: 540px; top: 640px; width: 490px; height: 490px; opacity: 0; z-index: 14; }}
-#dial svg {{ width: 100%; height: 100%; transform: rotate(-90deg); filter: drop-shadow(0 16px 0 {INK}); }}
-#dial .trk {{ fill: #fff; stroke: rgba(22,18,26,.1); stroke-width: 16; }}
-#dial .arc {{ fill: none; stroke: {RED}; stroke-width: 16; stroke-linecap: round; stroke-dasharray: {C}; }}
-#dial .sc {{ position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 165px; gap: 8px; }}
-#dial .sc b {{ font-weight: 800; font-size: 170px; letter-spacing: -.05em; line-height: 1; }}
-#dial .sc span {{ font-weight: 800; font-size: 54px; color: #8a8290; }}
-#tline {{ position: absolute; left: 70px; right: 70px; top: 1340px; height: 60px; opacity: 0; z-index: 16; }}
-#tline .bar {{ position: absolute; left: 0; right: 0; top: 24px; height: 14px; border-radius: 7px; background: #fff; box-shadow: 0 6px 0 {INK}; }}
-.flag {{ position: absolute; top: -34px; width: 0; opacity: 0; }}
-.flag em {{ position: absolute; left: -62px; width: 124px; text-align: center; font-style: normal; font-family: Mono; font-weight: 700; font-size: 32px; color: #fff;
-  background: {RED}; padding: 6px 0; border-radius: 12px; box-shadow: 0 6px 0 {INK}; }}
-.flag.fixed em {{ background: {GREEN}; }}
-#notes {{ position: absolute; left: 525px; top: 560px; width: 470px; z-index: 18; display: flex; flex-direction: column; gap: 26px; }}
-.note {{ position: relative; opacity: 0; background: #fff; border-radius: 28px; padding: 20px 26px; box-shadow: 0 12px 0 {INK}; border-left: 16px solid {RED}; }}
-.note b {{ display: block; font-family: Mono; font-weight: 700; font-size: 34px; color: {RED}; }}
-.note span {{ display: block; font-weight: 800; font-size: 46px; letter-spacing: -.02em; line-height: 1.05; }}
-.note .ok {{ position: absolute; right: 18px; top: 50%; margin-top: -34px; width: 68px; height: 68px; border-radius: 50%; background: {GREEN}; color: #fff; display: grid;
-  place-items: center; font-style: normal; font-weight: 800; font-size: 40px; transform: scale(0); }}
-.note.fixed {{ border-left-color: {GREEN}; }} .note.fixed b {{ color: {GREEN}; }}
-#logo {{ position: absolute; left: 90px; right: 90px; top: 640px; height: 300px; border-radius: 50px; background: #fff; opacity: 0; z-index: 30; display: grid; place-items: center;
-  box-shadow: {SHADOW}; }}
-#logo img {{ width: 78%; }}
-#app {{ position: absolute; left: 60px; right: 60px; top: 480px; opacity: 0; z-index: 20; border-radius: 44px; padding: 36px 38px 40px; background: #fff; box-shadow: {SHADOW}; }}
-#app img {{ height: 74px; display: block; }}
-.q {{ margin: 26px 0 22px; font-family: Serif; font-style: italic; font-size: 72px; }}
-.tile {{ display: flex; gap: 22px; align-items: center; background: {INK}; color: #fff; border-radius: 28px; padding: 24px 26px; margin-top: 16px; box-shadow: 0 10px 0 rgba(22,18,26,.3); }}
-.tile i {{ background: {WIN} !important; color: {INK} !important; }}
-.tile i {{ width: 82px; height: 82px; border-radius: 22px; background: {INK}; color: #fff; display: grid; place-items: center; font-style: normal; font-size: 38px; flex: none; }}
-.tile b {{ display: block; font-weight: 800; font-size: 44px; letter-spacing: -.02em; line-height: 1.05; }}
-.tile span {{ display: block; font-weight: 600; font-size: 30px; color: #d9d2dc; margin-top: 4px; }}
-.tile.dim {{ background: #f3eef2; color: {INK}; box-shadow: none; opacity: .6; }}
-.tile.dim i {{ background: #cfc6cc !important; color: {INK} !important; }}
-#cree, #cree2 {{ position: absolute; right: 20px; top: 1060px; width: 330px; opacity: 0; z-index: 24; filter: drop-shadow(0 16px 0 rgba(22,18,26,.25)); }}
-#cree2 {{ top: 1000px; }}
-#share {{ position: absolute; left: 70px; right: 70px; top: 470px; opacity: 0; z-index: 24; display: flex; align-items: center; gap: 26px; background: {INK}; color: #fff;
-  padding: 30px 40px; border-radius: 40px; font-weight: 800; font-size: 54px; line-height: 1.1; box-shadow: 0 14px 0 rgba(22,18,26,.35); }}
-#share b {{ color: {HOOK}; font-size: 80px; }}
-#cbox {{ position: absolute; left: 60px; width: 760px; top: 860px; height: 150px; border-radius: 75px; background: #fff; display: flex; align-items: center; opacity: 0; z-index: 24;
-  gap: 24px; padding: 0 34px; font-weight: 800; font-size: 72px; letter-spacing: .02em; box-shadow: {SHADOW}; }}
-#cbox .av {{ width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, {PINK}, #a064ff); flex: none; }}
-#cph {{ position: absolute; left: 150px; color: rgba(22,18,26,.35); font-weight: 600; font-size: 52px; }}
-#cbox .send {{ margin-left: auto; color: {PINK}; }}
-#loop {{ position: absolute; inset: 0; opacity: 0; z-index: 46; background: {PINK}; }}
-#loop .lp {{ position: absolute; left: 60px; top: 500px; width: 450px; height: 800px; border-radius: 50px; overflow: hidden; border: 12px solid {INK}; transform: rotate(-10deg) scale(1.25); }}
+.phone {{ position: relative; left: 100px; width: 400px; height: 711px; border-radius: 54px; overflow: hidden; background: #000; border: 10px solid {INK}; opacity: 0; }}
+.phone img {{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }}
+.ex {{ position: absolute; left: 22px; top: 22px; background: rgba(16,19,28,.72); color: #fff; font-family: Mono; font-size: 22px; letter-spacing: .18em; padding: 6px 12px; border-radius: 8px; }}
+#sc {{ position: absolute; left: 560px; top: 440px; width: 440px; height: 440px; opacity: 0; z-index: 20; transform-origin: 50% 50%; }}
+#sc svg {{ width: 100%; height: 100%; transform: rotate(-90deg); }}
+#sc .trk {{ fill: none; stroke: rgba(16,19,28,.1); stroke-width: 2; }}
+#sc .arc {{ fill: none; stroke: {RED}; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1; }}
+#sc .n {{ position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }}
+#sc .n b {{ font-family: Unb; font-weight: 900; font-size: 150px; letter-spacing: -.06em; line-height: 1; }}
+#sc .n span {{ font-family: Sat; font-weight: 500; font-size: 40px; color: {MUTE}; margin-top: 10px; }}
+#tline {{ position: absolute; left: 100px; width: 400px; height: 70px; opacity: 0; z-index: 20; }}
+#tline .bar {{ position: absolute; left: 0; right: 0; top: 30px; height: 3px; background: rgba(16,19,28,.14); border-radius: 2px; }}
+.tk {{ position: absolute; top: 18px; width: 0; }}
+.tk::before {{ content: ""; position: absolute; left: -9px; top: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 3px solid rgba(16,19,28,.3); }}
+.tk em {{ position: absolute; left: -40px; top: 36px; width: 80px; text-align: center; font-style: normal; font-family: Mono; font-size: 24px; color: rgba(16,19,28,.78); }}
+.tk.on::before {{ background: {RED}; border-color: {RED}; }}
+.tk.fixed::before {{ background: {GREEN}; border-color: {GREEN}; }}
+#list {{ position: absolute; left: 560px; right: 70px; z-index: 20; }}
+.row {{ position: relative; display: flex; flex-direction: column; padding: 22px 60px 22px 0; border-top: 2px solid rgba(16,19,28,.1); opacity: 0; }}
+.row:last-child {{ border-bottom: 2px solid rgba(16,19,28,.1); }}
+.row b {{ font-family: Mono; font-size: 28px; color: {RED}; }}
+.row span {{ font-family: Sat; font-weight: 900; font-size: 46px; letter-spacing: -.02em; line-height: 1.1; margin-top: 4px; }}
+.row .dot {{ position: absolute; right: 8px; top: 50%; margin-top: -8px; width: 16px; height: 16px; border-radius: 50%; background: {RED}; }}
+.row .ok {{ position: absolute; right: 0; top: 50%; margin-top: -22px; width: 44px; height: 44px; border-radius: 50%; background: {GREEN}; color: #fff; display: grid; place-items: center;
+  font-style: normal; font-weight: 900; font-size: 26px; opacity: 0; }}
+.row.fixed b {{ color: {GREEN}; }} .row.fixed .dot {{ opacity: 0; }}
+#logo {{ position: absolute; left: 140px; right: 140px; top: 640px; height: 280px; display: grid; place-items: center; z-index: 25; }}
+#logo img {{ width: 100%; }}
+.app {{ position: relative; margin: 0 auto; width: 900px; border-radius: 40px; padding: 40px 40px 44px; background: rgba(255,255,255,.92); opacity: 0; }}
+.app img {{ height: 70px; display: block; }}
+.q {{ margin: 26px 0 24px; font-family: Sat; font-weight: 900; font-size: 64px; letter-spacing: -.03em; }}
+.tile {{ display: flex; gap: 24px; align-items: center; background: #f4f6fb; border-radius: 28px; padding: 26px 28px; margin-top: 16px; border: 2px solid {GREEN}; }}
+.tile i {{ width: 80px; height: 80px; border-radius: 22px; background: {GREEN}; color: #fff; display: grid; place-items: center; font-style: normal; font-size: 38px; flex: none; }}
+.tile b {{ display: block; font-family: Sat; font-weight: 900; font-size: 44px; letter-spacing: -.02em; line-height: 1.08; }}
+.tile span {{ display: block; font-family: Sat; font-weight: 500; font-size: 32px; color: {MUTE}; margin-top: 6px; }}
+.tile.dim {{ border-color: transparent; opacity: .55; }}
+.tile.dim i {{ background: #cfd4e0; color: {INK}; }}
+#cree {{ position: absolute; right: 70px; top: 1130px; width: 240px; z-index: 26; filter: drop-shadow(0 20px 30px rgba(40,50,90,.2)); }}
+#cree2 {{ position: absolute; right: 90px; top: 960px; width: 260px; z-index: 26; filter: drop-shadow(0 20px 30px rgba(40,50,90,.2)); }}
+.cbox {{ position: absolute; left: 90px; width: 820px; height: 140px; border-radius: 70px; background: #fff; display: flex; align-items: center; gap: 24px; padding: 0 34px;
+  font-family: Sat; font-weight: 900; font-size: 64px; letter-spacing: .02em; z-index: 22; }}
+.cbox .av {{ width: 84px; height: 84px; border-radius: 50%; background: linear-gradient(135deg, {PINK}, #a064ff); flex: none; }}
+#cph {{ position: absolute; left: 142px; color: rgba(16,19,28,.35); font-weight: 500; font-size: 48px; letter-spacing: 0; }}
+.cbox .send {{ margin-left: auto; color: {PINK}; font-size: 54px; }}
+#loop {{ position: absolute; inset: -60px; opacity: 0; z-index: 50; background: linear-gradient(180deg, #f7f8fc, #eceff7); }}
+#loop .lp {{ position: absolute; left: 160px; top: 490px; width: 400px; height: 711px; border-radius: 54px; overflow: hidden; border: 10px solid {INK};
+  transform: perspective(1900px) rotateY(26deg) rotateX(8deg) translateY(60px); }}
 #loop .lp img {{ width: 100%; height: 100%; object-fit: cover; }}
-#loop .ld {{ position: absolute; left: 540px; top: 640px; width: 490px; height: 490px; border-radius: 50%; background: #fff; display: flex; align-items: baseline;
-  justify-content: center; padding-top: 165px; gap: 8px; border: 16px solid {RED}; }}
-#loop .ld b {{ font-weight: 800; font-size: 170px; letter-spacing: -.05em; line-height: 1; }} #loop .ld span {{ font-weight: 800; font-size: 54px; color: #8a8290; }}
+#loop .ln2 {{ position: absolute; left: 620px; top: 500px; width: 440px; height: 440px; border-radius: 50%; border: 4px solid {RED}; display: flex; flex-direction: column; align-items: center; justify-content: center; }}
+#loop .ln2 b {{ font-family: Unb; font-weight: 900; font-size: 150px; letter-spacing: -.06em; line-height: 1; }}
+#loop .ln2 span {{ font-family: Sat; font-weight: 500; font-size: 40px; color: {MUTE}; margin-top: 10px; }}
 """)

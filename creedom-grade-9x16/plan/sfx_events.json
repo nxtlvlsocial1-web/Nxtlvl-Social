@@ -1,138 +1,86 @@
 [
 {
-"type": "riser_short",
-"t": 0
-},
-{
-"type": "buzzer",
-"t": 0.58
-},
-{
-"type": "impact",
+"type": "tick",
 "t": 0.6
 },
 {
-"type": "thump",
-"t": 2.62
-},
-{
-"type": "impact",
-"t": 4.0
-},
-{
-"type": "g_wrong",
-"t": 4.07
-},
-{
-"type": "whoosh",
-"t": 4.78
-},
-{
-"type": "pop",
-"t": 5.08
-},
-{
-"type": "pop",
-"t": 5.22
-},
-{
-"type": "pop",
-"t": 5.36
-},
-{
 "type": "swish",
-"t": 5.96
-},
-{
-"type": "g_wrong",
-"t": 6.54
-},
-{
-"type": "swish",
-"t": 6.66
-},
-{
-"type": "g_wrong",
-"t": 8.36
-},
-{
-"type": "swish",
-"t": 8.48
-},
-{
-"type": "thump",
-"t": 10.56
-},
-{
-"type": "swish",
-"t": 10.68
+"t": 5.523
 },
 {
 "type": "click",
-"t": 13.02
+"t": 5.683
+},
+{
+"type": "tick",
+"t": 6.895
+},
+{
+"type": "tick",
+"t": 7.035
+},
+{
+"type": "tick",
+"t": 7.175
+},
+{
+"type": "swish",
+"t": 8.287
 },
 {
 "type": "click",
-"t": 13.18
+"t": 8.579
+},
+{
+"type": "click",
+"t": 11.032
+},
+{
+"type": "click",
+"t": 13.73
+},
+{
+"type": "swish",
+"t": 16.051
+},
+{
+"type": "click",
+"t": 16.966
+},
+{
+"type": "click",
+"t": 17.146
+},
+{
+"type": "click",
+"t": 17.326
 },
 {
 "type": "g_correct",
-"t": 13.34
+"t": 18.575
 },
 {
-"type": "whoosh",
-"t": 14.01
-},
-{
-"type": "g_levelup",
-"t": 14.96
+"type": "swish",
+"t": 19.73
 },
 {
 "type": "sparkle",
-"t": 15.06
-},
-{
-"type": "whoosh_big",
-"t": 15.66
-},
-{
-"type": "impact",
-"t": 15.84
-},
-{
-"type": "whoosh",
-"t": 17.02
-},
-{
-"type": "g_pop",
-"t": 17.29
-},
-{
-"type": "pop",
-"t": 19.31
-},
-{
-"type": "ding",
-"t": 20.38
-},
-{
-"type": "whoosh",
-"t": 20.76
-},
-{
-"type": "pop",
-"t": 20.9
-},
-{
-"type": "typing",
-"t": 23.66
+"t": 19.89
 },
 {
 "type": "click",
-"t": 24.19
+"t": 23.777
+},
+{
+"type": "swish",
+"t": 25.777
+},
+{
+"type": "typing",
+"t": 28.597
 },
 {
 "type": "notify",
-"t": 24.39
+"t": 29.247
 }
 ]

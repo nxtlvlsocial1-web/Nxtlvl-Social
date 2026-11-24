@@ -27,5 +27,6 @@ Notes:
 - Numbers are the owner's real insights for the original reel: 304 views, 247 viewers, 5 s average watch.
 - Music: "05. Hip-Hop Jazz" by Prospect Of Idiots (Jamendo 1199610 via Openverse, CC BY 3.0, instrumental); credit line required.
 - Sound effects: Openverse CC0 plus OpenGameArt CC0 packs (no credit needed).
-- Voice: Kokoro-82M af_heart (Apache 2.0, free, local), read directly with no cloning; "Creedom" said as CREE-dum.
+- Fonts: Unbounded (OFL) and Satoshi (Fontshare ITF Free Font License; video and social use allowed).
+- Voice: the owner's ElevenLabs take ("Blondie - Intense Woman", plan/elevenlabs_vo.md), timed with build/vo_el2.py (1.06x).
 - Mascot: Cree, Creedom's own 3D mascot.
