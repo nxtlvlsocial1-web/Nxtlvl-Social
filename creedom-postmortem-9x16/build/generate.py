@@ -80,7 +80,7 @@ tfz = tv + OLD_LEN
 R.st("#ofz", tfz - .03, "{opacity: 1}")
 R.ft("#ofz", tfz - .03, .5, '{filter: "grayscale(0) brightness(1)"}', '{filter: "grayscale(.9) brightness(.8)"}', "power2.out")
 R.to("#ph", tfz - .05, .45, "{scale: 1, y: 0}", "expo.inOut")
-R.rise("#left", tfz, .5, 20, 6)
+R.rise("#left", tfz - .1, .3, 20, 6)
 R.sfx("click", tfz)
 for sel in ("#fsl", "#ph", "#left"):
     R.leave(sel, S[3] - .22, .3)

@@ -29,7 +29,8 @@ class Reel:
         self.S = [self.L[i][0] for i in self.IDS] + [self.L[self.IDS[-1]][1] + .8]
         self.DUR = round(self.S[-1], 2)
         self.n = 0
-        self.HIDDEN = []          # v6: hidden from frame 0 in CSS (a set at time 0 does not render on the very first frame)
+        self.HIDDEN = []
+        self.RISE_END = {}        # an exit never starts before the element's entrance has finished (it would be overridden)          # v6: hidden from frame 0 in CSS (a set at time 0 does not render on the very first frame)
 
     # ---- primitives
     def js(self, s):
@@ -77,8 +78,10 @@ class Reel:
         if t + delay > .02:                       # hidden until it rises (frame-1 elements are set visible by the scene)
             self.st(sel, 0, "{opacity: 0}")
         self.ft(sel, t + delay, d, f'{{opacity: 1, y: {y}, filter: "blur({blur}px)"}}', '{y: 0, filter: "blur(0px)"}', "expo.out")
+        self.RISE_END[sel] = t + delay + d
 
     def leave(self, sel, t, d=.4, y=-40):
+        t = max(t, self.RISE_END.get(sel, 0) + .02)
         self.to(sel, t, d, f'{{opacity: 0, y: {y}, filter: "blur(10px)"}}', "power2.in")
 
     def mask_lines(self, sel, t, stagger=.09, d=.85):
