@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Unrest promo 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: Ser; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2"); }
+@font-face { font-family: Ser; font-style: italic; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2"); }
+@font-face { font-family: Sat; font-weight: 500; src: url("assets/fonts/fontshare/Satoshi-Medium.woff2"); }
+@font-face { font-family: Sat; font-weight: 700; src: url("assets/fonts/fontshare/Satoshi-Bold.woff2"); }
+@font-face { font-family: Sat; font-weight: 900; src: url("assets/fonts/fontshare/Satoshi-Black.woff2"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0a0a0b; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Sat; color: #ffffff;
+  background: radial-gradient(60% 40% at 50% 62%, rgba(204,255,77,.10), rgba(0,0,0,0) 70%), #0a0a0b; }
+#grain { position: absolute; inset: 0; background: url(assets/img/noise.png); opacity: .07; mix-blend-mode: overlay; pointer-events: none; z-index: 90; }
+#bgwm { position: absolute; left: 220px; top: 860px; width: 640px; opacity: .07; z-index: 1; }
+.hd { position: absolute; left: 80px; right: 70px; font-family: Ser; line-height: .98; letter-spacing: -.01em; z-index: 30; }
+.hd em, .big em { font-style: italic; color: #ccff4d; }
+.ln { display: block; overflow: hidden; padding-bottom: .08em; }
+.ln > span { display: inline-block; }
+#stage { position: absolute; left: 0; right: 0; top: 600px; height: 900px; perspective: 1800px; z-index: 10; }
+#phone { position: relative; margin: 0 auto; width: 430px; height: 880px; border-radius: 66px; background: #1b1b1f; padding: 14px;
+  box-shadow: 0 0 0 2px #2a2a30, 0 60px 120px rgba(0,0,0,.7), 0 0 120px rgba(204,255,77,.10); transform-style: preserve-3d; }
+.notch { position: absolute; left: 50%; top: 26px; width: 120px; height: 34px; margin-left: -60px; border-radius: 20px; background: #000; z-index: 5; }
+.glass { position: relative; width: 100%; height: 100%; border-radius: 54px; overflow: hidden; background: #0e0e10; }
+.scr { position: absolute; inset: 0; padding: 80px 26px 30px; }
+.ah { display: flex; align-items: center; justify-content: space-between; margin-bottom: 26px; }
+.ah img { height: 34px; }
+.vd { font-style: normal; font-size: 18px; font-weight: 700; color: #0a0a0b; background: #ccff4d; padding: 6px 12px; border-radius: 999px; }
+.btn { display: block; background: #ccff4d; color: #0a0a0b; text-align: center; font-weight: 900; font-size: 26px; padding: 22px; border-radius: 22px; }
+.ghost { display: block; background: #222227; color: #ffffff; text-align: center; font-weight: 700; font-size: 26px; padding: 22px; border-radius: 22px; }
+h3 { font-family: Ser; font-weight: 400; font-size: 52px; line-height: 1; margin-bottom: 22px; }
+h3 em, .post em { font-style: normal; font-family: Sat; font-weight: 900; font-size: 16px; color: #0a0a0b; background: #ccff4d; padding: 4px 10px; border-radius: 999px; vertical-align: middle; }
+.sA { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; }
+.sA .wm { width: 300px; }
+.sA p { margin: 18px 0 40px; font-size: 24px; color: #a9a9b0; font-weight: 500; }
+.avs { display: flex; margin-bottom: 70px; }
+.avs i { width: 62px; height: 62px; border-radius: 50%; margin-left: -14px; border: 3px solid #0e0e10; display: grid; place-items: center; font-style: normal; font-weight: 900;
+  font-size: 24px; color: #0a0a0b; background: linear-gradient(135deg, #e6e6ea, #ccff4d); }
+.sA .btn { position: absolute; left: 26px; right: 26px; bottom: 60px; }
+.fld { background: #141416; border: 2px solid #2a2a30; border-radius: 18px; padding: 22px; font-size: 22px; color: #a9a9b0; margin-bottom: 24px; }
+.chk { display: flex; align-items: center; gap: 14px; font-size: 24px; font-weight: 700; margin-bottom: 18px; color: #a9a9b0; }
+.chk i { width: 30px; height: 30px; border-radius: 8px; border: 2px solid #3a3a40; }
+.chk.on { color: #ffffff; } .chk.on i { background: #ccff4d; border-color: #ccff4d; }
+.sB .btn { margin-top: 260px; }
+.live { display: flex; align-items: center; gap: 12px; font-family: Ser; font-size: 46px; margin-bottom: 20px; }
+.live i { width: 16px; height: 16px; border-radius: 50%; background: #ccff4d; box-shadow: 0 0 0 8px rgba(204,255,77,.2); }
+.live span { font-family: Sat; font-weight: 900; font-size: 16px; letter-spacing: .1em; color: #0a0a0b; background: #ccff4d; padding: 4px 10px; border-radius: 6px; }
+.pc { background: #141416; border-radius: 30px; padding: 30px 24px; text-align: center; margin-bottom: 26px; }
+.pav { width: 140px; height: 140px; border-radius: 50%; margin: 0 auto 16px; display: grid; place-items: center; font-family: Ser; font-size: 80px; color: #0a0a0b;
+  background: linear-gradient(135deg, #f0f0f3, #ccff4d); }
+.pc b { display: block; font-size: 34px; }
+.pc span { display: block; font-size: 20px; color: #a9a9b0; margin-top: 6px; }
+.tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; }
+.tags i { font-style: normal; font-size: 18px; font-weight: 700; padding: 6px 12px; border-radius: 999px; background: #222227; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ev { background: #141416; border-radius: 22px; padding: 20px 22px; margin-bottom: 14px; border-left: 6px solid #ccff4d; }
+.ev b { display: block; font-size: 28px; }
+.ev span { font-size: 20px; color: #a9a9b0; }
+.sD .btn { margin-top: 40px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid i { font-style: normal; height: 150px; border-radius: 24px; background: #141416; display: flex; align-items: flex-end; padding: 18px; font-weight: 900; font-size: 24px; }
+.grid i.nw { background: #ccff4d; color: #0a0a0b; }
+.post { background: #141416; border-radius: 22px; padding: 22px; margin-bottom: 16px; }
+.post b { display: block; font-size: 26px; }
+.post span { display: block; font-size: 22px; color: #c9c9cf; margin: 8px 0 12px; }
+.post i { font-style: normal; font-size: 18px; color: #a9a9b0; }
+.post i.lk { display: inline-block; color: #0a0a0b; background: #ccff4d; font-weight: 900; padding: 8px 16px; border-radius: 999px; }
+.tap { position: absolute; width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,.35); border: 4px solid #fff; z-index: 9; }
+.pop { position: absolute; z-index: 40; box-shadow: 0 40px 80px rgba(0,0,0,.55); }
+.badge { left: 230px; top: 1000px; display: flex; align-items: center; gap: 18px; background: #ccff4d; color: #0a0a0b; font-weight: 900; font-size: 46px; padding: 26px 40px; border-radius: 999px; }
+.badge i { width: 60px; height: 60px; border-radius: 50%; background: #0a0a0b; color: #ccff4d; display: grid; place-items: center; font-style: normal; font-size: 34px; }
+.match { left: 150px; top: 1080px; width: 780px; display: flex; align-items: center; gap: 24px; background: #ffffff; color: #0a0a0b; padding: 26px 32px; border-radius: 40px; }
+.match .pav { width: 110px; height: 110px; font-size: 64px; margin: 0; flex: none; }
+.match b { display: block; font-size: 44px; } .match span { font-size: 28px; color: #55555c; }
+.ticket { left: 190px; top: 1050px; width: 700px; background: #ffffff; color: #0a0a0b; padding: 30px 36px; border-radius: 34px; border-left: 16px solid #ccff4d; }
+.ticket b { display: block; font-family: Ser; font-weight: 400; font-size: 64px; line-height: 1; }
+.ticket span { display: block; font-size: 28px; color: #55555c; margin: 8px 0 16px; }
+.ticket i { font-style: normal; font-weight: 900; font-size: 30px; background: #ccff4d; padding: 10px 20px; border-radius: 999px; }
+.tile { left: 400px; top: 960px; width: 280px; height: 110px; display: grid; place-items: center; background: #ffffff; color: #0a0a0b; font-weight: 900; font-size: 32px; border-radius: 28px; }
+.newp { left: 160px; top: 1090px; width: 760px; display: flex; align-items: center; gap: 18px; background: #ffffff; color: #0a0a0b; font-weight: 900; font-size: 38px; padding: 28px 34px; border-radius: 34px; }
+.newp em { font-style: normal; font-size: 22px; background: #ccff4d; padding: 8px 14px; border-radius: 999px; }
+.ring { position: absolute; left: 140px; top: 640px; width: 800px; height: 800px; border-radius: 50%; border: 4px solid #ccff4d; z-index: 5; }
+#arc { position: absolute; left: 0; top: 720px; width: 1080px; height: 1080px; z-index: 4; }
+#arc path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+#blob { position: absolute; left: -600px; top: -100px; width: 2300px; height: 2300px; border-radius: 50%; background: #ccff4d; z-index: 50; transform-origin: 50% 100%; }
+.big { position: absolute; left: 80px; right: 70px; top: 640px; font-family: Ser; font-size: 170px; line-height: .92; color: #0a0a0b; z-index: 55; }
+.big em { color: #0a0a0b; }
+.big.w { color: #ffffff; top: 720px; font-size: 150px; }
+.big.w em { color: #ccff4d; }
+#logo { position: absolute; left: 0; top: 420px; width: 1080px; height: 1080px; object-fit: cover; z-index: 45; mix-blend-mode: screen; }
+.cbox { position: absolute; left: 110px; width: 860px; top: 1300px; height: 130px; border-radius: 65px; background: #141416; border: 2px solid #2a2a30; display: flex; align-items: center;
+  gap: 22px; padding: 0 30px; font-weight: 900; font-size: 56px; letter-spacing: .04em; z-index: 60; }
+.cbox .av { width: 76px; height: 76px; border-radius: 50%; background: linear-gradient(135deg, #f0f0f3, #ccff4d); flex: none; }
+#cph { position: absolute; left: 130px; color: #a9a9b0; font-weight: 500; font-size: 44px; letter-spacing: 0; }
+.cbox .send { margin-left: auto; color: #ccff4d; }
+.ctal { position: absolute; left: 0; right: 0; top: 1460px; text-align: center; font-size: 40px; font-weight: 700; color: #d8d8dc; z-index: 60; }
+.ctal b { color: #ccff4d; font-weight: 900; }
+#scrB { opacity: 0; }#scrC { opacity: 0; }#scrD { opacity: 0; }#scrE { opacity: 0; }#scrF { opacity: 0; }#tp6_A { opacity: 0; }#h1 { opacity: 0; }#tp7_B { opacity: 0; }#pbadge { opacity: 0; }#h2 { opacity: 0; }#tp11_C { opacity: 0; }#pmatch { opacity: 0; }#h3 { opacity: 0; }#arc { opacity: 0; }#tp15_D { opacity: 0; }#pticket { opacity: 0; }#h4 { opacity: 0; }#rg0 { opacity: 0; }#rg1 { opacity: 0; }#rg2 { opacity: 0; }#tl0 { opacity: 0; }#tl1 { opacity: 0; }#tl2 { opacity: 0; }#tl3 { opacity: 0; }#tl4 { opacity: 0; }#h5 { opacity: 0; }#tp23_F { opacity: 0; }#pnew { opacity: 0; }#blob { opacity: 0; }#alone { opacity: 0; }#tag { opacity: 0; }#logo { opacity: 0; }#cbox { opacity: 0; }#ctal { opacity: 0; }</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="17.34" data-fps="30" data-width="1080" data-height="1920">
+      <div id="stage"><div id="phone" data-layout-allow-overlap><div class="notch"></div><div class="glass"><div class="scr" id="scrA"><div class="sA"><img class="wm" src="assets/img/unrest_wordmark.png" alt=""><p>Only for Delhi University students</p><div class="avs"><i>A</i><i>R</i><i>K</i><i>S</i><i>+</i></div><b class="btn">Continue with DU email</b></div><i class="tap" id="tp6_A" style="left:160px;top:720px"></i></div><div class="scr" id="scrB"><div class="ah"><img src="assets/img/unrest_wordmark.png" alt=""><i class="vd">DU verified</i></div><div class="sB"><h3>Verify you're at DU</h3><div class="fld">your.name@college email</div><div class="chk"><i></i>College email</div><div class="chk"><i></i>Student ID</div><b class="btn" id="vbtn">Verify</b></div><i class="tap" id="tp7_B" style="left:160px;top:680px"></i></div><div class="scr" id="scrC"><div class="ah"><img src="assets/img/unrest_wordmark.png" alt=""><i class="vd">DU verified</i></div><div class="sC"><div class="live"><i></i>Corridor <span>LIVE</span></div><div class="pc"><div class="pav">A</div><b>Aanya</b><span>2nd year &middot; B.Com &middot; North Campus</span><div class="tags"><i>open mics</i><i>football</i><i>startups</i></div></div><div class="two"><b class="ghost">Skip</b><b class="btn">Say hi</b></div></div><i class="tap" id="tp11_C" style="left:240px;top:740px"></i></div><div class="scr" id="scrD"><div class="ah"><img src="assets/img/unrest_wordmark.png" alt=""><i class="vd">DU verified</i></div><div class="sD"><h3>Events near you</h3><div class="ev"><b>Open mic night</b><span>North Campus &middot; Fri 6 PM</span></div><div class="ev"><b>Freshers meetup</b><span>South Campus &middot; Sat 4 PM</span></div><div class="ev"><b>Startup talk</b><span>Arts Faculty &middot; Mon 2 PM</span></div><b class="btn">I'm going</b></div><i class="tap" id="tp15_D" style="left:160px;top:720px"></i></div><div class="scr" id="scrE"><div class="ah"><img src="assets/img/unrest_wordmark.png" alt=""><i class="vd">DU verified</i></div><div class="sE"><h3>Everything DU</h3><div class="grid"><i>Flatmates</i><i>Part-time</i><i>Internships</i><i>Events</i><i class="nw">Course feed</i><i class="nw">Library rooms</i></div></div></div><div class="scr" id="scrF"><div class="ah"><img src="assets/img/unrest_wordmark.png" alt=""><i class="vd">DU verified</i></div><div class="sF"><h3>Course feed <em>NEW</em></h3><div class="post"><b>Eco (H), 2nd year</b><span>Anyone has notes for Unit 3?</span><i>12 replies</i></div><div class="post"><b>Library rooms <em>NEW</em></b><span>Room 4 &middot; 3 seats free &middot; till 6 PM</span><i class="lk">Join room</i></div></div><i class="tap" id="tp23_F" style="left:250px;top:720px"></i></div></div></div></div>
+      <img id="bgwm" src="assets/img/unrest_wordmark.png" alt="">
+<div class="hd" id="h0" style="top:300px;font-size:100px"><span class="ln"><span>Everyone here is</span></span><span class="ln"><span>a <em>DU student.</em></span></span></div>
+<div class="hd" id="h1" style="top:300px;font-size:96px"><span class="ln"><span>Verified.</span></span><span class="ln"><span><em>Every single person.</em></span></span></div>
+<div data-layout-allow-overlap class="pop badge" id="pbadge"><i>&#10003;</i>Verified DU student</div>
+<div class="hd" id="h2" style="top:300px;font-size:96px"><span class="ln"><span>Meet people</span></span><span class="ln"><span><em>live, on Corridor.</em></span></span></div>
+<div data-layout-allow-overlap class="pop match" id="pmatch"><div class="pav">A</div><div><b>You and Aanya</b><span>both into open mics &middot; say hi</span></div></div>
+<div class="hd" id="h3" style="top:300px;font-size:96px"><span class="ln"><span>On-ground</span></span><span class="ln"><span><em>events.</em></span></span></div>
+<svg id="arc" viewBox="0 0 1000 1000"><path d="M -100 900 C 200 300 800 300 1100 900" fill="none" stroke="#ccff4d" stroke-width="150" stroke-linecap="round" pathLength="1"/></svg>
+<div data-layout-allow-overlap class="pop ticket" id="pticket"><b>Open mic night</b><span>North Campus &middot; Fri 6 PM</span><i>&#10003; Going</i></div>
+<div class="hd" id="h4" style="top:300px;font-size:96px"><span class="ln"><span>Flatmates. Work.</span></span><span class="ln"><span><em>Internships.</em></span></span></div>
+<i class="ring" id="rg0"></i>
+<i class="ring" id="rg1"></i>
+<i class="ring" id="rg2"></i>
+<div data-layout-allow-overlap class="pop tile" id="tl0">Flatmates</div>
+<div data-layout-allow-overlap class="pop tile" id="tl1">Part-time work</div>
+<div data-layout-allow-overlap class="pop tile" id="tl2">Internships</div>
+<div data-layout-allow-overlap class="pop tile" id="tl3">Course feed</div>
+<div data-layout-allow-overlap class="pop tile" id="tl4">Library rooms</div>
+<div class="hd" id="h5" style="top:300px;font-size:96px"><span class="ln"><span>New: course feed</span></span><span class="ln"><span><em>+ library rooms.</em></span></span></div>
+<div data-layout-allow-overlap class="pop newp" id="pnew"><em>NEW</em>Library rooms &middot; 3 seats free</div>
+<i id="blob"></i>
+<div class="big" data-layout-allow-overlap id="alone"><span class="ln"><span>You're not</span></span><span class="ln"><span>doing DU</span></span><span class="ln"><span><em>alone.</em></span></span></div>
+<div class="big w" id="tag"><span class="ln"><span>Your Campus.</span></span><span class="ln"><span><em>Your Network.</em></span></span></div>
+<video id="logo" src="assets/video/unrest_logo.mp4" data-start="14.436" data-duration="2.90" data-track-index="1" muted playsinline></video>
+<div class="cbox" id="cbox"><span class="av"></span><span id="cph">Add a comment&#8230;</span><span id="cty"></span><span class="send">&#10148;</span></div><div class="ctal" id="ctal">Comment <b>UNREST</b> and get the link in DM</div>
+      
+      <div id="grain"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({paused: true});
+      tl.fromTo("#bgwm", {x: 120, y: 0, scale: 2.6}, {x: -260, y: 0, scale: 2.9, duration: 17.34, ease: "none", immediateRender: true}, 0);
+      tl.fromTo("#h0 .ln > span", {y: 10}, {y: 0, duration: .4, ease: "expo.out", stagger: .06, immediateRender: true}, 0);
+      tl.fromTo("#phone", {rotationY: -24, rotationX: 16, rotation: -6, y: 80}, {rotationY: -14, rotationX: 8, rotation: -3, y: 0, duration: 0.9, ease: "expo.out", immediateRender: false}, 0.000);
+      tl.to("#phone", {rotationY: 16, rotationX: 6, rotation: 3, y: -10, duration: 0.55, ease: "expo.inOut"}, 1.561);
+      tl.to("#scrA", {xPercent: -100, duration: 0.45, ease: "expo.inOut"}, 1.591);
+      tl.set("#scrA", {opacity: 0}, 2.051);
+      tl.fromTo("#scrB", {opacity: 1, xPercent: 100}, {xPercent: 0, opacity: 1, duration: 0.45, ease: "expo.inOut", immediateRender: false}, 1.591);
+      tl.to("#phone", {rotationY: -18, rotationX: 10, rotation: -4, y: 0, duration: 0.55, ease: "expo.inOut"}, 3.396);
+      tl.to("#scrB", {xPercent: -100, duration: 0.45, ease: "expo.inOut"}, 3.426);
+      tl.set("#scrB", {opacity: 0}, 3.886);
+      tl.fromTo("#scrC", {opacity: 1, xPercent: 100}, {xPercent: 0, opacity: 1, duration: 0.45, ease: "expo.inOut", immediateRender: false}, 3.426);
+      tl.to("#phone", {rotationY: 14, rotationX: 6, rotation: 2, y: -10, duration: 0.55, ease: "expo.inOut"}, 5.207);
+      tl.to("#scrC", {xPercent: -100, duration: 0.45, ease: "expo.inOut"}, 5.237);
+      tl.set("#scrC", {opacity: 0}, 5.697);
+      tl.fromTo("#scrD", {opacity: 1, xPercent: 100}, {xPercent: 0, opacity: 1, duration: 0.45, ease: "expo.inOut", immediateRender: false}, 5.237);
+      tl.to("#phone", {rotationY: 0, rotationX: 4, rotation: 0, y: 0, duration: 0.55, ease: "expo.inOut"}, 7.018);
+      tl.to("#scrD", {xPercent: -100, duration: 0.45, ease: "expo.inOut"}, 7.048);
+      tl.set("#scrD", {opacity: 0}, 7.508);
+      tl.fromTo("#scrE", {opacity: 1, xPercent: 100}, {xPercent: 0, opacity: 1, duration: 0.45, ease: "expo.inOut", immediateRender: false}, 7.048);
+      tl.to("#phone", {rotationY: -12, rotationX: 8, rotation: -2, y: -10, duration: 0.55, ease: "expo.inOut"}, 8.829);
+      tl.to("#scrE", {xPercent: -100, duration: 0.45, ease: "expo.inOut"}, 8.859);
+      tl.set("#scrE", {opacity: 0}, 9.319);
+      tl.fromTo("#scrF", {opacity: 1, xPercent: 100}, {xPercent: 0, opacity: 1, duration: 0.45, ease: "expo.inOut", immediateRender: false}, 8.859);
+      tl.set("#scrB", {xPercent: 100}, 0.000);
+      tl.set("#scrC", {xPercent: 100}, 0.000);
+      tl.set("#scrD", {xPercent: 100}, 0.000);
+      tl.set("#scrE", {xPercent: 100}, 0.000);
+      tl.set("#scrF", {xPercent: 100}, 0.000);
+      tl.fromTo("#tp6_A", {opacity: 1, scale: .4}, {scale: 1, opacity: 1, duration: 0.14, ease: "power2.out", immediateRender: false}, 0.786);
+      tl.to("#tp6_A", {scale: .8, duration: 0.08, ease: "power2.in"}, 0.926);
+      tl.to("#tp6_A", {scale: 1.8, opacity: 0, duration: 0.35, ease: "power2.out"}, 1.006);
+      tl.to("#h0", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 1.561);
+      tl.set("#h1", {opacity: 1}, 1.791);
+      tl.fromTo("#h1 .ln > span", {yPercent: 110}, {yPercent: 0, duration: .55, ease: "expo.out", stagger: .07, immediateRender: false}, 1.791);
+      tl.fromTo("#tp7_B", {opacity: 1, scale: .4}, {scale: 1, opacity: 1, duration: 0.14, ease: "power2.out", immediateRender: false}, 2.156);
+      tl.to("#tp7_B", {scale: .8, duration: 0.08, ease: "power2.in"}, 2.296);
+      tl.to("#tp7_B", {scale: 1.8, opacity: 0, duration: 0.35, ease: "power2.out"}, 2.376);
+      tl.set(".chk", {className: 'chk on'}, 2.376);
+      tl.fromTo("#pbadge", {opacity: 1, scale: .3, y: 160, rotation: -8}, {scale: 1, y: 0, rotation: -4, opacity: 1, duration: 0.6, ease: "back.out(2.2)", immediateRender: false}, 2.740);
+      tl.to("#pbadge", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 3.346);
+      tl.to("#h1", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 3.396);
+      tl.set("#h2", {opacity: 1}, 3.626);
+      tl.fromTo("#h2 .ln > span", {yPercent: 110}, {yPercent: 0, duration: .55, ease: "expo.out", stagger: .07, immediateRender: false}, 3.626);
+      tl.fromTo("#tp11_C", {opacity: 1, scale: .4}, {scale: 1, opacity: 1, duration: 0.14, ease: "power2.out", immediateRender: false}, 4.431);
+      tl.to("#tp11_C", {scale: .8, duration: 0.08, ease: "power2.in"}, 4.571);
+      tl.to("#tp11_C", {scale: 1.8, opacity: 0, duration: 0.35, ease: "power2.out"}, 4.651);
+      tl.fromTo("#pmatch", {opacity: 1, scale: .3, y: 120, rotation: 8}, {scale: 1, y: 0, rotation: 3, opacity: 1, duration: 0.6, ease: "back.out(2.2)", immediateRender: false}, 4.631);
+      tl.to("#pmatch", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 5.157);
+      tl.to("#h2", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 5.207);
+      tl.set("#h3", {opacity: 1}, 5.437);
+      tl.fromTo("#h3 .ln > span", {yPercent: 110}, {yPercent: 0, duration: .55, ease: "expo.out", stagger: .07, immediateRender: false}, 5.437);
+      tl.set("#arc", {opacity: 1}, 5.157);
+      tl.fromTo("#arc path", {strokeDashoffset: 1}, {strokeDashoffset: 0, duration: 0.7, ease: "expo.inOut", immediateRender: false}, 5.157);
+      tl.to("#arc", {opacity: 0, duration: 0.4, ease: "power2.in"}, 6.918);
+      tl.fromTo("#tp15_D", {opacity: 1, scale: .4}, {scale: 1, opacity: 1, duration: 0.14, ease: "power2.out", immediateRender: false}, 6.242);
+      tl.to("#tp15_D", {scale: .8, duration: 0.08, ease: "power2.in"}, 6.382);
+      tl.to("#tp15_D", {scale: 1.8, opacity: 0, duration: 0.35, ease: "power2.out"}, 6.462);
+      tl.fromTo("#pticket", {opacity: 1, scale: .3, y: 140, rotation: -10}, {scale: 1, y: 0, rotation: -5, opacity: 1, duration: 0.6, ease: "back.out(2.2)", immediateRender: false}, 6.442);
+      tl.to("#pticket", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 6.968);
+      tl.to("#h3", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 7.018);
+      tl.set("#h4", {opacity: 1}, 7.248);
+      tl.fromTo("#h4 .ln > span", {yPercent: 110}, {yPercent: 0, duration: .55, ease: "expo.out", stagger: .07, immediateRender: false}, 7.248);
+      tl.fromTo("#rg0", {opacity: .6, scale: .3}, {opacity: 0, scale: 1.6, duration: 1.1, ease: "power2.out", immediateRender: false}, 7.268);
+      tl.fromTo("#rg1", {opacity: .6, scale: .3}, {opacity: 0, scale: 1.6, duration: 1.1, ease: "power2.out", immediateRender: false}, 7.418);
+      tl.fromTo("#rg2", {opacity: .6, scale: .3}, {opacity: 0, scale: 1.6, duration: 1.1, ease: "power2.out", immediateRender: false}, 7.568);
+      tl.fromTo("#tl0", {opacity: 1, x: 0, y: 0, scale: .2, rotation: 0}, {x: -330, y: -330, scale: 1, rotation: -8, opacity: 1, duration: 0.5, ease: "back.out(1.8)", immediateRender: false}, 7.318);
+      tl.fromTo("#tl1", {opacity: 1, x: 0, y: 0, scale: .2, rotation: 0}, {x: 330, y: -250, scale: 1, rotation: 6, opacity: 1, duration: 0.5, ease: "back.out(1.8)", immediateRender: false}, 7.544);
+      tl.fromTo("#tl2", {opacity: 1, x: 0, y: 0, scale: .2, rotation: 0}, {x: -340, y: 170, scale: 1, rotation: 5, opacity: 1, duration: 0.5, ease: "back.out(1.8)", immediateRender: false}, 7.771);
+      tl.fromTo("#tl3", {opacity: 1, x: 0, y: 0, scale: .2, rotation: 0}, {x: 340, y: 250, scale: 1, rotation: -6, opacity: 1, duration: 0.5, ease: "back.out(1.8)", immediateRender: false}, 7.997);
+      tl.fromTo("#tl4", {opacity: 1, x: 0, y: 0, scale: .2, rotation: 0}, {x: 0, y: 470, scale: 1, rotation: 2, opacity: 1, duration: 0.5, ease: "back.out(1.8)", immediateRender: false}, 8.223);
+      tl.to("#tl0", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 8.779);
+      tl.to("#tl1", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 8.779);
+      tl.to("#tl2", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 8.779);
+      tl.to("#tl3", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 8.779);
+      tl.to("#tl4", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 8.779);
+      tl.to("#h4", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 8.829);
+      tl.set("#h5", {opacity: 1}, 9.059);
+      tl.fromTo("#h5 .ln > span", {yPercent: 110}, {yPercent: 0, duration: .55, ease: "expo.out", stagger: .07, immediateRender: false}, 9.059);
+      tl.fromTo("#tp23_F", {opacity: 1, scale: .4}, {scale: 1, opacity: 1, duration: 0.14, ease: "power2.out", immediateRender: false}, 9.888);
+      tl.to("#tp23_F", {scale: .8, duration: 0.08, ease: "power2.in"}, 10.028);
+      tl.to("#tp23_F", {scale: 1.8, opacity: 0, duration: 0.35, ease: "power2.out"}, 10.108);
+      tl.fromTo("#pnew", {opacity: 1, scale: .3, y: 120}, {scale: 1, y: 0, opacity: 1, duration: 0.55, ease: "back.out(2.2)", immediateRender: false}, 10.088);
+      tl.to("#pnew", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 10.613);
+      tl.to("#h5", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 10.663);
+      tl.to("#phone", {opacity: 0, scale: .8, y: 200, filter: "blur(12px)", duration: 0.35, ease: "power2.in"}, 10.613);
+      tl.fromTo("#blob", {opacity: 1, scale: 0}, {scale: 1, opacity: 1, duration: 0.6, ease: "expo.inOut", immediateRender: false}, 10.663);
+      tl.set("#alone", {opacity: 1}, 11.013);
+      tl.fromTo("#alone .ln > span", {yPercent: 110}, {yPercent: 0, duration: .6, ease: "expo.out", stagger: .09, immediateRender: false}, 11.013);
+      tl.to("#blob", {scale: 0, duration: 0.55, ease: "expo.inOut"}, 12.475);
+      tl.to("#alone", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 12.425);
+      tl.set("#tag", {opacity: 1}, 12.775);
+      tl.fromTo("#tag .ln > span", {yPercent: 110}, {yPercent: 0, duration: .6, ease: "expo.out", stagger: .25, immediateRender: false}, 12.775);
+      tl.to("#tag", {opacity: 0, scale: .9, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 14.236);
+      tl.set("#logo", {opacity: 1}, 14.436);
+      tl.fromTo("#cbox", {opacity: 1, y: 40}, {y: 0, opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 15.441);
+      tl.fromTo("#ctal", {opacity: 1, y: 20}, {y: 0, opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 15.591);
+      (() => { const o = {n: 0}; tl.to(o, {n: 6, duration: .5, ease: "steps(6)", onUpdate: () => { document.getElementById("cty").textContent = "UNREST".slice(0, Math.round(o.n)); }}, 15.882); })();
+      tl.set("#cph", {opacity: 0}, 15.882);
+      tl.set({}, {}, 17.34);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

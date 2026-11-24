@@ -1,0 +1,142 @@
+[
+{
+"type": "thump",
+"t": 0.02
+},
+{
+"type": "click",
+"t": 0.906
+},
+{
+"type": "whoosh",
+"t": 1.591
+},
+{
+"type": "click",
+"t": 2.276
+},
+{
+"type": "g_tick",
+"t": 2.376
+},
+{
+"type": "pop",
+"t": 2.74
+},
+{
+"type": "sparkle",
+"t": 2.79
+},
+{
+"type": "whoosh",
+"t": 3.426
+},
+{
+"type": "click",
+"t": 4.551
+},
+{
+"type": "pop",
+"t": 4.631
+},
+{
+"type": "msg",
+"t": 4.992
+},
+{
+"type": "whoosh_big",
+"t": 5.157
+},
+{
+"type": "whoosh",
+"t": 5.237
+},
+{
+"type": "click",
+"t": 6.362
+},
+{
+"type": "pop",
+"t": 6.442
+},
+{
+"type": "cash",
+"t": 6.803
+},
+{
+"type": "whoosh",
+"t": 7.048
+},
+{
+"type": "g_pickup",
+"t": 7.318
+},
+{
+"type": "pop",
+"t": 7.544
+},
+{
+"type": "g_pickup",
+"t": 7.771
+},
+{
+"type": "pop",
+"t": 7.997
+},
+{
+"type": "g_pickup",
+"t": 8.223
+},
+{
+"type": "whoosh",
+"t": 8.859
+},
+{
+"type": "click",
+"t": 10.008
+},
+{
+"type": "pop",
+"t": 10.088
+},
+{
+"type": "ding",
+"t": 10.449
+},
+{
+"type": "whoosh_big",
+"t": 10.613
+},
+{
+"type": "thump",
+"t": 11.355
+},
+{
+"type": "whoosh",
+"t": 12.475
+},
+{
+"type": "thump",
+"t": 12.725
+},
+{
+"type": "thump",
+"t": 13.289
+},
+{
+"type": "riser_short",
+"t": 13.936
+},
+{
+"type": "sparkle",
+"t": 15.136
+},
+{
+"type": "typing",
+"t": 15.882
+},
+{
+"type": "notify",
+"t": 16.582
+}
+]
