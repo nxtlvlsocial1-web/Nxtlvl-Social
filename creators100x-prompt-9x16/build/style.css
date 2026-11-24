@@ -34,3 +34,4 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #12141
 .gl { position: absolute; left: -100px; right: -100px; opacity: 0; z-index: 45; mix-blend-mode: difference; }
 #flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 60; pointer-events: none; }
 #grain { position: absolute; inset: 0; background: url("assets/img/grain.png"); opacity: .06; z-index: 61; pointer-events: none; mix-blend-mode: multiply; }
+.head.big { top: 190px; font-size: 128px; letter-spacing: -.05em; }

@@ -1,7 +1,7 @@
 # Post description (Creators 100X, Instagram Reels)
 
-Creators 100X's own reel (no paid partner). The script is ChatGPT's reply to the five-part prompt, word for word
-(see script.md); voiceover by the owner in ElevenLabs (Jessica), line 1 made robotic in post.
+Creators 100X's own reel (no paid partner). The script is ChatGPT's reply to the five-part prompt, with one line cut
+and an on-screen "Sounds robotic?" beat (see script.md); voiceover by the owner in ElevenLabs (Jessica), line 1 made robotic in post.
 
 ```
 Comment "PROMPT" and I'll send you the exact ChatGPT prompt that wrote this reel, plus 9 more prompts for your reel scripts.
@@ -37,5 +37,6 @@ Start with prompt 01, the 5-part prompt that wrote the reel: fill in the blanks 
 - PDF: `brands/creators-100x/pdf/creators100x_ai-reel-prompts.pdf` (8 pages; content in `ai-reel-prompts.json`). Host it
   (Google Drive "anyone with the link", or a link-in-bio tool) and put its link in place of [PDF LINK].
 - Final has no background music (owner, 2026-11-23): voice and sound effects only, so no music credit.
-- Cover: `renders/creators100x_ai-wrote-this_reels_9x16_v1_cover.png` ("ChatGPT wrote this reel. Here's the exact prompt.").
-- Voice: Jessica (Eleven v4), pauses trimmed to a breath, 6% faster (pitch kept); line 1 robotised (build/vo_robot.py).
+- Cover: `renders/creators100x_ai-wrote-this_reels_9x16_v1_cover.png (still valid for v2)` ("ChatGPT wrote this reel. Here's the exact prompt.").
+- Voice: Jessica (Eleven v4), pauses trimmed to a breath, 6% faster (pitch kept); line 1 robotised (build/vo_robot.py);
+  v2 cuts line 2 for an on-screen "Sounds robotic?" beat (build/vo_edit.py).

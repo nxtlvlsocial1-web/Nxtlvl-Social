@@ -5,9 +5,9 @@ import json, os, shutil, subprocess
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W = json.load(open(os.path.join(ROOT, "plan", "words.json")))
 r0_end = max(w["t1"] for w in W if w["line"] == "r0") + .12
-r1_start = min(w["t0"] for w in W if w["line"] == "r1")
+r1_start = min(w["t0"] for w in W if w["line"] != "r0")
 cut = round(min(r0_end, r1_start - .1), 3)
-vo = os.path.join(ROOT, "assets", "audio", "vo.wav"); nat = os.path.join(ROOT, "assets", "audio", "vo_natural.wav")
+vo = os.path.join(ROOT, "assets", "audio", "vo.wav"); nat = os.path.join(ROOT, "assets", "audio", os.environ.get("VO_NAT", "vo_natural.wav"))
 if not os.path.exists(nat):
     shutil.copy(vo, nat)
 robot = ("afftfilt=real='hypot(re,im)*sin(0)':imag='hypot(re,im)*cos(0)':win_size=1024:overlap=0.75,"

@@ -6,7 +6,7 @@
   ],
   "kicker": "Free prompt pack",
   "subtitle": "Give AI direction, not a task.",
-  "tagline": "Prompt 01 wrote our reel, word for word.",
+  "tagline": "Prompt 01 wrote the script for our reel.",
   "blocks": [
     {
       "type": "text",
@@ -40,7 +40,7 @@
         {
           "tag": "The 5-part prompt",
           "line": "Role: You're a short-form scriptwriter for [type of creator]. Audience: [who you help]. Hook rule: The first line must stop the scroll. No greetings. Format: [28] seconds, [problem, mistake, fix, call to action]. Tone: [Talk like a friend, not a teacher]. Task: Write the voiceover for a reel about [topic]. Only the spoken lines, no emojis.",
-          "example": "\"This reel was written by ChatGPT. And honestly, that's the point.\" The exact prompt behind our reel.",
+          "example": "\"This reel was written by ChatGPT.\" The opening line of our reel, from this exact prompt.",
           "why": "Five parts turn a task into direction: the AI knows who it is, who it's talking to and what to say."
         },
         {

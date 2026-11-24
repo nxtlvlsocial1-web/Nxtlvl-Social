@@ -13,14 +13,14 @@ from fx import ROOT, LINES, L0, L1, T, JS, SFX, js, sfx, ft, to, st  # noqa: E40
 
 random.seed(100)
 DUR = round(L1["r6"] + 1.3, 2)
-SW = round(L1["r0"] + .3, 3)                     # the AI-to-human switch (before "And honestly")
-SW = min(SW, L0["r1"] - .08)
+SW = round(min(L1["r0"] + .3, 2.15), 3)          # the AI-to-human switch, right after the robot line
+SR = round(SW + .1, 3)                           # v2: the silent "Sounds robotic?" beat (on screen only; line 2 was cut)
 HTMLS = []
 
 # ---------- word times for the 3D layer ----------
 C = {
     "sw": SW, "r2": L0["r2"], "r3": L0["r3"], "r4": L0["r4"], "r5": L0["r5"], "r6": L0["r6"], "end": DUR,
-    "point": T("r1", "point"), "write": T("r2", "Write"), "scriptEnd": T("r2", "script") + .4, "send": T("r2", "script") + .5,
+    "point": SR + .3, "write": T("r2", "Write"), "scriptEnd": T("r2", "script") + .4, "send": T("r2", "script") + .5,
     "dont": T("r2", "don't"), "magic": T("r2", "magic"), "wall": T("r2", "You'll"), "posting": T("r2", "posting"),
     "mistake": T("r3", "mistake"), "task": T("r3", "giving") - .1, "not": T("r3", "not"), "direction": T("r3", "direction") + .08,
     "five": T("r4", "five"), "items": [T("r4", "role"), T("r4", "audience"), T("r4", "hook"), T("r4", "format"), T("r4", "tone")],
@@ -28,7 +28,7 @@ C = {
     "promptW": T("r6", "PROMPT"), "post": T("r6", "PROMPT") + .5, "dmIn": T("r6", "send") - .05, "nine": T("r6", "nine"),
 }
 C["hi"] = [[T("r5", "what")], [T("r5", "who")], [], [T("r5", "what") + .15], [T("r5", "how")]]
-C["reply1"] = [[w["w"], w["t0"]] for w in LINES["r0"] + LINES["r1"]]
+C["reply1"] = [[w["w"], w["t0"]] for w in LINES["r0"]]
 C["hops"] = [C["point"], C["magic"] + .1, C["mistake"], *C["items"], C["post"], C["nine"]]
 C["spins"] = [SW + .02, C["knows"], C["r6"] - .1]
 C["bumps"] = [C["dont"], C["direction"], *C["items"], C["post"], C["dmIn"] + .25]
@@ -65,7 +65,12 @@ def head(hid, rows, line, size=80, after=0.0, robot=False, until=None):
 
 
 head("h0", [["This", "reel", "was"], ["written", "by", "*ChatGPT."]], "r0", 84, robot=True, until=SW + .05)
-head("h1", [["And", "honestly,"], ["that's", "the", "*point."]], "r1", 92, until=L0["r2"])
+# v2: "Sounds robotic?" -- a silent beat between the robot line and "If you type" (the voice's line 2 was cut)
+HTMLS.append('<div class="head big" id="h1"><div class="hl"><span class="hw" id="h1w0">Sounds</span> <span class="hw pk" id="h1w1">robotic?</span></div></div>')
+ft("#h1w0", SR, .3, "{opacity: 0, y: 40, scale: 1.4, filter: 'blur(12px)'}", "{opacity: 1, y: 0, scale: 1, filter: 'blur(0px)'}", "back.out(2.4)")
+ft("#h1w1", SR + .28, .34, "{opacity: 0, scale: 2.2, rotation: -6, filter: 'blur(14px)'}", "{opacity: 1, scale: 1, rotation: 0, filter: 'blur(0px)'}", "back.out(2.6)")
+js(f'tl.fromTo("#h1w1", {{x: 0}}, {{keyframes: [{{x: -10, duration: .04}}, {{x: 9, duration: .04}}, {{x: -6, duration: .04}}, {{x: 0, duration: .05}}], immediateRender: false}}, {SR + .62:.3f});')
+to("#h1", L0["r2"] - .18, .18, "{opacity: 0, y: -30, filter: 'blur(10px)'}", "power2.in")
 head("h2a", [["If", "you", "type,"], ['"Write', "me", "a", "reel", 'script,"'], ["don't", "expect", "*magic."]], "r2", 76, until=C["wall"])
 head("h2b", [["You'll", "get", "the", "same"], ["*generic", "content"], ["everyone", "else", "is", "posting."]], "r2", 78, after=C["wall"], until=L0["r3"])
 head("h3", [["The", "*mistake?"], ["You're", "giving", "AI", "a", "task,"], ["not", "*direction."]], "r3", 80, until=L0["r4"])
@@ -121,7 +126,9 @@ sfx("glitch", SW - .3)
 sfx("glitch", SW - .1)
 sfx("impact", SW)
 sfx("whoosh_big", SW + .02)
-sfx("sparkle", C["point"])
+sfx("pop", SR)
+sfx("scratch", C["point"])
+sfx("error", C["point"] + .3)
 sfx("whoosh", L0["r2"] - .1)
 for k in range(0, len("Write me a reel script"), 3):
     sfx("typing", C["write"] + k * (C["scriptEnd"] - C["write"]) / 22)

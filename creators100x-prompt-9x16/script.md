@@ -31,3 +31,9 @@ The prompt above was pasted into ChatGPT with a task line asking for a voiceover
 One ElevenLabs take, voice Jessica (Eleven v3/v4). Line 1 is read flat; in post it is processed to sound synthetic
 (pitch flattened, vocoder-like, a little bitcrush), then a glitch (visual and audio) cuts to Jessica's natural voice on
 "And honestly, that's the point." Same voice both sides: the AI voice "becomes human".
+
+## v2 (owner, 2026-11-24): line 2 cut
+
+"And honestly, that's the point." made the point unclear. It is cut from the voice (build/vo_edit.py); a silent beat after
+the robot line carries the on-screen text "Sounds robotic?" instead (ElevenLabs no longer available, so no new
+recording). The voice is now ChatGPT's script minus that one line; every spoken word is still ChatGPT's.
