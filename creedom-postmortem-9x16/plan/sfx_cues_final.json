@@ -1,136 +1,101 @@
 [
 {
-"t": 0.5,
+"t": 0.02,
+"kind": "thump",
+"file": "thump_impact.wav"
+},
+{
+"t": 0.55,
 "kind": "tick",
 "file": "tick_click.wav"
 },
 {
-"t": 2.724,
+"t": 1.35,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
 },
 {
-"t": 4.982,
+"t": 2.33,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
 },
 {
-"t": 6.159,
+"t": 3.57,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 4.59,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
 },
 {
-"t": 7.054,
-"kind": "tick",
-"file": "tick_click.wav"
+"t": 5.77,
+"kind": "thump",
+"file": "thump_impact.wav"
 },
 {
-"t": 7.459,
-"kind": "tick",
-"file": "tick_click.wav"
-},
-{
-"t": 7.863,
-"kind": "tick",
-"file": "tick_click.wav"
-},
-{
-"t": 8.268,
-"kind": "tick",
-"file": "tick_click.wav"
-},
-{
-"t": 8.673,
-"kind": "tick",
-"file": "tick_click.wav"
-},
-{
-"t": 9.567,
+"t": 6.71,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
 },
 {
-"t": 14.273,
+"t": 9.31,
 "kind": "click",
 "file": "click_click.wav"
 },
 {
-"t": 14.567,
+"t": 9.71,
+"kind": "thump",
+"file": "thump_impact.wav"
+},
+{
+"t": 10.69,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
 },
 {
-"t": 15.814,
+"t": 12.07,
 "kind": "click",
 "file": "click_click.wav"
 },
 {
-"t": 18.356,
+"t": 12.99,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
 },
 {
-"t": 18.806,
+"t": 13.34,
 "kind": "ding",
 "file": "ding_notify.wav"
 },
 {
-"t": 20.169,
+"t": 13.79,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
 },
 {
-"t": 20.349,
-"kind": "tick",
-"file": "tick_click.wav"
-},
-{
-"t": 21.349,
-"kind": "tick",
-"file": "tick_click.wav"
-},
-{
-"t": 22.349,
-"kind": "tick",
-"file": "tick_click.wav"
-},
-{
-"t": 23.349,
-"kind": "tick",
-"file": "tick_click.wav"
-},
-{
-"t": 24.349,
-"kind": "tick",
-"file": "tick_click.wav"
-},
-{
-"t": 24.817,
-"kind": "swish",
-"file": "swish_whoosh_b.wav"
-},
-{
-"t": 24.977,
+"t": 13.95,
 "kind": "sparkle",
 "file": "sparkle_sparkle.wav"
 },
 {
-"t": 27.106,
+"t": 15.13,
 "kind": "click",
 "file": "click_click.wav"
 },
 {
-"t": 29.363,
+"t": 16.73,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
 },
 {
-"t": 32.062,
+"t": 17.35,
 "kind": "typing",
 "file": "typing_typing.wav"
 },
 {
-"t": 32.662,
+"t": 17.95,
 "kind": "notify",
 "file": "notify_notify.wav"
 }

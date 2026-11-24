@@ -155,8 +155,8 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
       tl.to("#hk", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 2.240);
       tl.to("#ins", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 2.240);
       tl.set("#n304", {opacity: 0}, 0.000);
-      tl.fromTo("#n304", {opacity: 1, y: 40, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 3.120);
-      (() => { const o = {v: 0}; tl.to(o, {v: 304, duration: 0.55, ease: "power3.out", onUpdate: () => { document.getElementById("n304").textContent = Math.round(o.v); }}, 3.120); })();
+      tl.fromTo("#n304", {opacity: 1, y: 40, filter: "blur(8px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 2.290);
+      (() => { const o = {v: 0}; tl.to(o, {v: 304, duration: 1.33, ease: "power2.inOut", onUpdate: () => { document.getElementById("n304").textContent = Math.round(o.v); }}, 2.290); })();
       tl.set("#vw", {opacity: 0}, 0.000);
       tl.fromTo("#vw", {opacity: 1, y: 30, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.6, ease: "expo.out", immediateRender: false}, 3.660);
       tl.set("#oldp", {opacity: 0}, 0.000);
@@ -223,9 +223,11 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3f5f
       tl.set("#why", {opacity: 0}, 0.000);
       tl.fromTo("#why", {opacity: 1, y: 20, filter: "blur(6px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "expo.out", immediateRender: false}, 16.310);
       tl.set("#cree", {opacity: 0}, 0.000);
-      tl.fromTo("#cree", {opacity: 1, y: 60, filter: "blur(10px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false}, 16.210);
-      tl.to("#an", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 16.670);
-      tl.to("#cree", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.3, ease: "power2.in"}, 16.670);
+      tl.fromTo("#cree", {opacity: 1, y: 60, filter: "blur(10px)"}, {y: 0, filter: "blur(0px)", opacity: 1, duration: 0.7, ease: "expo.out", immediateRender: false}, 15.230);
+      tl.to("#an", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.25, ease: "power2.in"}, 16.510);
+      tl.to("#cree", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.25, ease: "power2.in"}, 16.510);
+      tl.to("#why", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.25, ease: "power2.in"}, 16.510);
+      tl.to("#dropl", {opacity: 0, y: -40, filter: "blur(10px)", duration: 0.25, ease: "power2.in"}, 16.510);
       tl.set("#h5", {opacity: 0}, 0.000);
       tl.set("#h5", {opacity: 1}, 16.789);
       tl.fromTo("#h5 .ln > span", {yPercent: 112}, {yPercent: 0, duration: 0.85, ease: "expo.out", stagger: 0.09, immediateRender: true}, 16.790);

@@ -45,8 +45,8 @@ H('<div class="stage" style="top:330px"><div class="phone soft" id="oldp" style=
 H('<div class="hd" id="irony" style="top:960px;font-size:84px"><span class="ln"><span><em>on a reel about</em></span></span><span class="ln"><span><em>why people</em></span></span>'
   f'<span class="ln"><span style="color:{RED}">stop watching.</span></span></div>')
 t304 = wt("f01", "304")
-R.rise("#n304", t304 - .05, .6, 40, 8)
-R.counter("n304", t304 - .05, .55, 0, 304)
+R.rise("#n304", S[1] - .2, .6, 40, 8)                               # no dead air after the hook: 304 counts up from the line start
+R.counter("n304", S[1] - .2, t304 + .45 - (S[1] - .2), 0, 304, "Math.round(o.v)", "power2.inOut")
 R.sfx("tick", t304 + .4)
 R.rise("#vw", wt("f01", "views") - .05, .6, 30, 6)
 ton = wt("f01", "on")
@@ -134,9 +134,9 @@ R.sfx("click", tex)
 R.rise("#dropl", wt("f04", "people") - .1, .5, 16, 6)
 R.focus(wt("f04", "leave") + .05, 1.0, 0, 0, .5)
 R.rise("#why", wt("f04", "leave") + .1, .5, 20, 6)
-R.rise("#cree", wt("f04", "leave"), .7, 60, 10)
-for sel in ("#an", "#cree"):
-    R.leave(sel, S[5] - .22, .3)
+R.rise("#cree", tex + .1, .7, 60, 10)                               # in early enough to finish before it leaves
+for sel in ("#an", "#cree", "#why", "#dropl"):
+    R.leave(sel, S[5] - .38, .25)
 
 # ---- f05: CTA (CREE) + the share line on screen; the comment field types it; cut back to frame 1 so it loops
 a5 = S[5]
