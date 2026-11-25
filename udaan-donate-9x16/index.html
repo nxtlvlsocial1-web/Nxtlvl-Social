@@ -3,8 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>UDAAN donate 9x16</title>
+    <title>UDAAN donate 9x16 v2 (3D)</title>
     <script src="assets/vendor/gsap.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./assets/vendor/three/build/three.module.js",
+          "three/addons/": "./assets/vendor/three/examples/jsm/"
+        }
+      }
+    </script>
     <style>
 @font-face { font-family: "Baloo 2"; font-weight: 400 800; src: url("assets/fonts/Baloo2.ttf"); }
 @font-face { font-family: "Mukta"; font-weight: 500; src: url("assets/fonts/Mukta-Medium.ttf"); }
@@ -12,350 +20,198 @@
 @font-face { font-family: "Mukta"; font-weight: 800; src: url("assets/fonts/Mukta-ExtraBold.ttf"); }
 @font-face { font-family: "Playfair"; font-style: italic; font-weight: 400 900; src: url("assets/fonts/PlayfairItalic.ttf"); }
 @font-face { font-family: "Inter"; font-weight: 100 900; src: url("assets/fonts/Inter.ttf"); }
-:root {
-  --plum: #2a0f3d; --night: #0b0720; --rose: #ff3d7f; --gold: #ffb627; --saffron: #ff7a1a;
-  --cream: #fff3e2; --teal: #23b5a6; --ink: #2a0f3d;
-}
+:root { --plum: #2a0f3d; --rose: #ff3d7f; --gold: #ffb627; --cream: #fff3e2; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--night); }
-#root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Mukta"; color: var(--cream); background: var(--night); }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0b0720; }
+#root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: "Mukta"; color: var(--cream); background: #0b0720; }
 .full { position: absolute; inset: 0; }
 .abs { position: absolute; }
-/* skies, crossfaded */
-#skyDawn { background: linear-gradient(180deg, #4b2a86 0%, #a2458f 34%, #ff7a8f 58%, #ffb27a 78%, #ffd59a 100%); }
-#skyDusk { background: linear-gradient(180deg, #170f3a 0%, #3f2462 40%, #7a3c6e 66%, #b0606f 100%); opacity: 0; }
-#skyNight { background: radial-gradient(90% 50% at 50% 70%, #1f1645 0%, #0e0a26 55%, #07051a 100%); opacity: 0; }
-#skyHope { background: linear-gradient(180deg, #0e0a26 0%, #26184d 55%, #5a2f5e 84%, #8a4a5c 100%); opacity: 0; }
-#skyRise { background: linear-gradient(180deg, #3b1f73 0%, #8e3a8c 30%, #ff5f86 56%, #ff9a5a 76%, #ffd27a 100%); opacity: 0; }
-#stars { opacity: 0; }
-.star { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #fff; }
-#sun { left: 600px; top: 1010px; width: 460px; height: 460px; border-radius: 50%;
-  background: radial-gradient(circle, #fff6d6 0%, #ffd27a 30%, rgba(255,170,90,.55) 52%, rgba(255,120,120,0) 72%); }
-#rays { left: -460px; top: -10px; width: 2000px; height: 2000px; opacity: 0;
-  background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,240,200,.20) 0deg 6deg, rgba(255,240,200,0) 6deg 18deg);
-  -webkit-mask-image: radial-gradient(circle, #000 0%, rgba(0,0,0,.6) 35%, transparent 62%); mask-image: radial-gradient(circle, #000 0%, rgba(0,0,0,.6) 35%, transparent 62%); }
-#hillBack { left: 0; top: 0; width: 1080px; height: 1920px; }
-#hillFront { left: 0; top: 0; width: 1080px; height: 1920px; }
-#girl { left: 104px; top: 812px; width: 260px; height: 450px; }
-#rig { left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 330px 852px; }
-#birds { left: 0; top: 0; width: 1080px; height: 1920px; }
-#grain { opacity: .07; mix-blend-mode: overlay; pointer-events: none; }
-#vignette { background: radial-gradient(120% 80% at 50% 45%, rgba(0,0,0,0) 55%, rgba(5,2,15,.55) 100%); pointer-events: none; }
-
-/* type */
-.hl { position: absolute; left: 60px; width: 960px; text-align: center; font-family: "Baloo 2"; font-weight: 800; line-height: 1.12; white-space: nowrap; }
-.shadow { text-shadow: 0 6px 30px rgba(20,5,40,.55), 0 2px 6px rgba(20,5,40,.4); }
-.w { display: inline-block; }
-.gold { color: var(--gold); }
-.rose { color: var(--rose); }
-.sm { font-size: 70px; font-weight: 700; }
-.md { font-size: 108px; }
-.lg { font-size: 150px; }
-.xl { font-size: 230px; line-height: 1.05; }
-.line { display: block; }
-
-/* captions */
-.cap { position: absolute; left: 70px; width: 940px; top: 1336px; text-align: center; opacity: 0; }
-.cap span { display: inline-block; padding: 14px 30px 12px; border-radius: 22px; background: rgba(14,6,30,.72);
-  font: 700 46px/1.3 "Mukta"; color: #fff; white-space: normal; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
-.cap em { font-style: normal; color: var(--gold); }
-
-/* scene 1 bubbles */
-.bub { position: absolute; width: 178px; height: 178px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.95), rgba(255,236,214,.88) 60%, rgba(255,200,170,.8));
-  box-shadow: 0 18px 40px rgba(60,10,60,.35), inset 0 -8px 18px rgba(255,140,120,.35); opacity: 0; }
-.bub svg { width: 78px; height: 78px; }
-.bub b { font: 800 30px/1.1 "Mukta"; color: var(--plum); margin-top: 4px; }
-
-/* scene 3 */
-#rings { left: 0; top: 0; width: 1080px; height: 1920px; }
-/* scene 5 walls */
-.slab { position: absolute; left: 100px; width: 880px; height: 156px; opacity: 0; }
-.piece { position: absolute; top: 0; height: 156px; overflow: hidden; }
-.piece .face { position: absolute; top: 0; width: 880px; height: 156px; border-radius: 26px;
-  background: linear-gradient(180deg, #4a3a5e 0%, #2e2242 55%, #231833 100%);
-  box-shadow: inset 0 3px 0 rgba(255,255,255,.18), inset 0 -10px 20px rgba(0,0,0,.35), 0 20px 40px rgba(0,0,0,.45);
-  display: flex; align-items: center; justify-content: center; font: 800 76px/1 "Baloo 2"; color: #e9dcf2; letter-spacing: .01em; }
-.crack { position: absolute; left: 0; top: 0; width: 880px; height: 156px; }
-#leak { left: 60px; top: 380px; width: 960px; height: 700px; opacity: 0;
-  background: radial-gradient(60% 50% at 50% 50%, rgba(255,214,120,.85), rgba(255,140,80,.35) 50%, rgba(255,120,80,0) 75%); }
+#gl { width: 1080px; height: 1920px; display: block; }
+#vignette { background: radial-gradient(120% 80% at 50% 45%, rgba(0,0,0,0) 58%, rgba(8,3,20,.5) 100%); }
+#grain { opacity: .06; mix-blend-mode: overlay; }
+#topShade { background: linear-gradient(180deg, rgba(10,4,24,.42) 0%, rgba(10,4,24,0) 36%); }
 #flash { background: #fff3cf; opacity: 0; }
 
-/* reveal */
-#bigKite { left: 380px; top: 300px; width: 320px; height: 420px; }
-#wm { left: 60px; width: 960px; top: 750px; text-align: center; }
-#wm .hi { font: 800 250px/1 "Baloo 2"; color: #fff; text-shadow: 0 10px 50px rgba(255,120,60,.6), 0 4px 0 rgba(120,30,60,.25); display: block; }
-#wm .en { font: 800 64px/1 "Inter"; letter-spacing: .42em; color: var(--plum); display: block; margin-top: 10px; padding-left: .42em; }
-#wm .tag { font: italic 700 52px/1.2 "Playfair"; color: #fff; display: block; margin-top: 26px; text-shadow: 0 4px 18px rgba(80,10,40,.5); }
+.hl { position: absolute; left: 60px; width: 960px; text-align: center; font-family: "Baloo 2"; font-weight: 800; line-height: 1.14; white-space: nowrap; }
+.shadow { text-shadow: 0 6px 30px rgba(20,5,40,.6), 0 2px 6px rgba(20,5,40,.45); }
+.gold { color: var(--gold); }
+.rose { color: var(--rose); }
+.sm { font-size: 66px; font-weight: 700; }
+.md { font-size: 104px; }
+.lg { font-size: 146px; }
+.xl { font-size: 220px; line-height: 1.05; }
+.line { display: block; }
 
-/* stages */
-#stageBg { background: linear-gradient(180deg, #fff1df 0%, #ffe2cf 55%, #ffd0c4 100%); }
-#stageBg::after { content: ""; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,61,127,.14) 2px, transparent 2.6px); background-size: 34px 34px;
-  -webkit-mask-image: linear-gradient(#000, rgba(0,0,0,.2)); mask-image: linear-gradient(#000, rgba(0,0,0,.2)); }
-#miniWm { left: 60px; width: 960px; top: 270px; text-align: center; color: var(--plum); }
-#miniWm b { font: 800 84px/1 "Baloo 2"; }
-#miniWm i { font: italic 700 36px/1 "Playfair"; color: var(--rose); display: block; margin-top: 4px; }
-#path { left: 0; top: 0; width: 1080px; height: 1920px; }
-.card { position: absolute; left: 150px; top: 500px; width: 850px; height: 640px; border-radius: 48px; padding: 50px 54px; opacity: 0;
-  background: #fff; box-shadow: 0 40px 80px rgba(120,30,70,.22), 0 6px 18px rgba(120,30,70,.12); color: var(--plum); }
-.card .age { font: 800 190px/1 "Baloo 2"; letter-spacing: -.02em; }
-.card .age small { font: 700 54px/1 "Mukta"; letter-spacing: 0; margin-left: 12px; color: #7a5a86; }
-.card .ttl { font: 800 74px/1.15 "Baloo 2"; margin-top: 4px; }
-.card .chips { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 34px; }
-.chip { padding: 14px 28px 12px; border-radius: 999px; font: 700 40px/1.2 "Mukta"; color: #fff; opacity: 0; }
-.chip.en { font-family: "Inter"; font-weight: 700; font-size: 34px; padding: 18px 28px; }
+.cap { position: absolute; left: 70px; width: 940px; top: 1340px; text-align: center; opacity: 0; }
+.cap span { display: inline-block; padding: 14px 30px 12px; border-radius: 22px; background: rgba(14,6,30,.72);
+  font: 700 46px/1.3 "Mukta"; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+.cap em { font-style: normal; color: var(--gold); }
+
+/* labels that follow 3D objects (position set by scene3d.js) */
+.fl { position: absolute; left: -999px; top: -999px; width: 0; height: 0; visibility: hidden; }
+.fl b { position: absolute; left: -150px; width: 300px; bottom: 0; text-align: center; opacity: 0; }
+.fl i { display: inline-block; font-style: normal; padding: 10px 24px 8px; border-radius: 999px; background: rgba(255,255,255,.94); color: var(--plum);
+  font: 800 36px/1.1 "Mukta"; box-shadow: 0 10px 26px rgba(40,10,40,.3); white-space: nowrap; }
+.fl.you i { background: var(--plum); color: var(--gold); }
+
+/* reveal wordmark, becomes the header during the stages */
+#wm { left: 60px; width: 960px; top: 300px; text-align: center; }
+#wm .hi { font: 800 230px/1 "Baloo 2"; color: #fff; display: block; text-shadow: 0 10px 50px rgba(255,120,60,.65), 0 4px 0 rgba(120,30,60,.25); }
+#wm .en { font: 800 62px/1 "Inter"; letter-spacing: .42em; padding-left: .42em; color: #fff; display: block; margin-top: 8px; text-shadow: 0 4px 18px rgba(80,10,40,.5); }
+#wm .tag { font: italic 700 50px/1.2 "Playfair"; color: #fff; display: block; margin-top: 22px; text-shadow: 0 4px 18px rgba(80,10,40,.6); }
+
+/* stage cards */
+.card { position: absolute; left: 70px; top: 890px; width: 940px; height: 410px; border-radius: 44px; padding: 34px 44px; opacity: 0;
+  background: linear-gradient(150deg, rgba(255,255,255,.93), rgba(255,246,238,.86)); color: var(--plum);
+  box-shadow: 0 30px 70px rgba(40,10,60,.35), inset 0 2px 0 #fff; }
+.card .row { display: flex; align-items: baseline; gap: 20px; }
+.card .age { font: 800 150px/1 "Baloo 2"; letter-spacing: -.02em; }
+.card .age small { font: 700 46px/1 "Mukta"; letter-spacing: 0; margin-left: 10px; color: #7a5a86; }
+.card .ttl { font: 800 64px/1.1 "Baloo 2"; }
+.card .chips { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 22px; }
+.chip { padding: 12px 24px 10px; border-radius: 999px; font: 700 36px/1.2 "Mukta"; color: #fff; opacity: 0; }
+.chip.en { font-family: "Inter"; font-size: 30px; padding: 15px 24px; }
 #c1 .age, #c1 .ttl { color: #e0245e; } #c1 .chip { background: linear-gradient(135deg, #ff5a8f, #e0245e); }
 #c2 .age, #c2 .ttl { color: #12968a; } #c2 .chip { background: linear-gradient(135deg, #2cc7b6, #12968a); }
 #c3 .age, #c3 .ttl { color: #e5780a; } #c3 .chip { background: linear-gradient(135deg, #ffb627, #f07a10); }
-.dot { position: absolute; left: 66px; width: 44px; height: 44px; border-radius: 50%; background: #fff; border: 6px solid #e8c9d4; }
-#miniKite { left: 52px; width: 72px; height: 92px; }
 
-/* community */
-#commBg { background: radial-gradient(80% 50% at 50% 52%, #ffe7b8 0%, #ffbf86 45%, #ff8a7a 100%); }
-#ring { left: 0; top: 0; width: 1080px; height: 1920px; }
-.node { position: absolute; width: 230px; height: 96px; border-radius: 999px; background: #fff; color: var(--plum); display: flex; align-items: center; justify-content: center;
-  font: 800 40px/1 "Mukta"; box-shadow: 0 16px 34px rgba(140,40,40,.25); opacity: 0; }
-.node.you { background: var(--plum); color: var(--gold); }
-#core { left: 400px; top: 710px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff, #ffe2a8); box-shadow: 0 0 0 14px rgba(255,255,255,.45), 0 30px 70px rgba(160,50,40,.3); opacity: 0; }
-
-/* cta */
-#ctaBg { background: radial-gradient(90% 60% at 50% 38%, #4a1d63 0%, #2a0f3d 55%, #150722 100%); }
-#ctaRays { left: -460px; top: -400px; width: 2000px; height: 2000px;
-  background: repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,182,39,.10) 0deg 5deg, rgba(255,182,39,0) 5deg 15deg);
-  -webkit-mask-image: radial-gradient(circle, #000 0%, transparent 60%); mask-image: radial-gradient(circle, #000 0%, transparent 60%); }
-#ctaKite { left: 440px; top: 300px; width: 200px; height: 262px; }
-#ctaWm { left: 60px; width: 960px; top: 580px; text-align: center; }
+/* CTA */
+#ctaBg { background: radial-gradient(90% 62% at 50% 40%, rgba(74,29,99,.80) 0%, rgba(42,15,61,.90) 55%, rgba(21,7,34,.96) 100%); opacity: 0; }
+#ctaKite { left: 445px; top: 300px; width: 190px; height: 250px; }
+#ctaWm { left: 60px; width: 960px; top: 570px; text-align: center; }
 #ctaWm .hi { font: 800 190px/1 "Baloo 2"; color: #fff; display: block; text-shadow: 0 8px 40px rgba(255,120,60,.45); }
 #ctaWm .en { font: 800 50px/1 "Inter"; letter-spacing: .42em; padding-left: .42em; color: var(--gold); display: block; margin-top: 6px; }
-#ctaSub { left: 60px; width: 960px; top: 900px; text-align: center; font: italic 700 50px/1.3 "Playfair"; color: #ffe9d6; }
-#btn { left: 190px; top: 1080px; width: 700px; height: 150px; border-radius: 999px; display: flex; align-items: center; justify-content: center;
+#ctaSub { left: 60px; width: 960px; top: 895px; text-align: center; font: italic 700 50px/1.3 "Playfair"; color: #ffe9d6; }
+#btn { left: 190px; top: 1075px; width: 700px; height: 150px; border-radius: 999px; display: flex; align-items: center; justify-content: center;
   background: linear-gradient(135deg, #ffd25a 0%, #ffb627 45%, #ff8a1a 100%); color: var(--plum); font: 800 74px/1 "Inter"; letter-spacing: -.01em;
   box-shadow: 0 24px 60px rgba(255,150,40,.45), inset 0 3px 0 rgba(255,255,255,.6); }
-#bio { left: 60px; width: 960px; top: 1272px; text-align: center; font: 700 46px/1.2 "Inter"; color: #fff; }
+#bio { left: 60px; width: 960px; top: 1268px; text-align: center; font: 700 46px/1.2 "Inter"; color: #fff; }
 #bio svg { width: 40px; height: 40px; vertical-align: -6px; margin-left: 10px; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="66.5" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="74" data-width="1080" data-height="1920">
 
-      <!-- ============ WORLD (full length) ============ -->
-      <div id="world" class="clip full" data-start="0" data-duration="66.5" data-track-index="0">
-        <div id="skyDawn" class="full"></div>
-        <div id="skyDusk" class="full"></div>
-        <div id="skyNight" class="full"></div>
-        <div id="skyHope" class="full"></div>
-        <div id="skyRise" class="full"></div>
-        <div id="stars" class="full"></div>
-        <div id="rays" class="abs"></div>
-        <div id="sun" class="abs"></div>
-        <svg id="hillBack" class="abs" viewBox="0 0 1080 1920"><path id="hb" fill="#5a2160" d="M0,1180 C180,1120 360,1150 520,1210 C690,1270 880,1190 1080,1150 L1080,1920 L0,1920 Z"/></svg>
-        <svg id="birds" class="abs" viewBox="0 0 1080 1920">
-          <g id="flock" fill="none" stroke="#2a0f3d" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity="0">
-            <path class="bird" d="M700,560 q22,-20 44,0 q22,-20 44,0"/>
-            <path class="bird" d="M800,500 q16,-15 32,0 q16,-15 32,0"/>
-            <path class="bird" d="M620,620 q14,-13 28,0 q14,-13 28,0"/>
-            <path class="bird" d="M880,600 q12,-11 24,0 q12,-11 24,0"/>
-            <path class="bird" d="M760,660 q10,-9 20,0 q10,-9 20,0"/>
-          </g>
-        </svg>
-        <!-- kite + string, pivots around the girl's hand -->
-        <svg id="rig" class="abs" viewBox="0 0 1080 1920">
-          <path id="string" d="M330,852 Q620,960 818,912" fill="none" stroke="#fff3e2" stroke-width="3" opacity=".85"/>
-          <g id="kite" transform="translate(818 760)">
-            <path d="M0,-118 L82,0 L0,152 L-82,0 Z" fill="#ff3d7f"/>
-            <path d="M0,-118 L82,0 L0,0 Z" fill="#ffb627"/>
-            <path d="M0,0 L-82,0 L0,152 Z" fill="#ff7a1a"/>
-            <path d="M0,-118 L0,152 M-82,0 L82,0" stroke="#2a0f3d" stroke-width="5" opacity=".55"/>
-            <path d="M0,152 C-24,200 30,230 4,280 C-20,320 26,350 6,392" fill="none" stroke="#fff3e2" stroke-width="4"/>
-            <path d="M-14,214 l28,-10 l-6,22 z M-12,300 l26,-12 l-4,22 z M-6,370 l24,-10 l-4,20 z" fill="#ffb627"/>
-          </g>
-        </svg>
-        <svg id="girl" class="abs" viewBox="0 0 300 520">
-          <g id="girlFill" fill="#2a0f3d">
-            <!-- dupatta blowing back -->
-            <path id="dupatta" d="M118,150 C80,170 40,175 8,160 C30,190 70,205 112,196 Z" opacity=".9"/>
-            <circle cx="150" cy="92" r="40"/>
-            <path d="M118,78 C116,44 150,36 170,46 C190,56 194,84 186,100 C178,70 150,62 118,78 Z"/>
-            <!-- braid -->
-            <ellipse cx="114" cy="112" rx="13" ry="16"/><ellipse cx="108" cy="138" rx="12" ry="15"/><ellipse cx="104" cy="162" rx="10" ry="13"/>
-            <path d="M100,172 l6,18 l-12,-2 z"/>
-            <rect x="138" y="124" width="24" height="24" rx="8"/>
-            <path d="M116,146 C130,140 170,140 186,146 L236,392 C200,404 100,404 64,392 Z"/>
-            <path d="M178,154 L262,38" stroke="#2a0f3d" stroke-width="24" stroke-linecap="round"/>
-            <path d="M122,156 L84,286" stroke="#2a0f3d" stroke-width="22" stroke-linecap="round"/>
-            <rect x="118" y="388" width="24" height="124" rx="10"/><rect x="160" y="388" width="24" height="124" rx="10"/>
-          </g>
-        </svg>
-        <svg id="hillFront" class="abs" viewBox="0 0 1080 1920"><path id="hf" fill="#2a0f3d" d="M0,1290 C250,1215 520,1240 700,1290 C860,1335 980,1300 1080,1270 L1080,1920 L0,1920 Z"/></svg>
-        <svg id="rings" class="abs" viewBox="0 0 1080 1920" opacity="0">
-          <g fill="none" stroke="#c9b6ff" stroke-width="4">
-            <circle class="rg" cx="240" cy="900" r="120"/><circle class="rg" cx="240" cy="900" r="200"/><circle class="rg" cx="240" cy="900" r="290"/>
-          </g>
-          <path id="flatline" d="M60,1200 L1020,1200" stroke="#c9b6ff" stroke-width="5" fill="none" opacity="0"/>
-          <circle id="shield" cx="234" cy="1040" r="250" fill="none" stroke="#ffb627" stroke-width="9" stroke-linecap="round" opacity="0"/>
-        </svg>
+      <!-- the 3D world (scene3d.js) -->
+      <div id="world" class="clip full" data-start="0" data-duration="74" data-track-index="0">
+        <canvas id="gl" width="1080" height="1920"></canvas>
+      </div>
+      <div id="topShade" class="clip full" data-start="0" data-duration="74" data-track-index="1"></div>
+
+      <!-- labels that follow 3D objects -->
+      <div id="follow" class="clip full" data-start="0" data-duration="74" data-track-index="2" data-layout-ignore>
+        <div class="fl" data-follow="dream:0"><b id="fd0"><i>पढ़ना</i></b></div>
+        <div class="fl" data-follow="dream:1"><b id="fd1"><i>खेलना</i></b></div>
+        <div class="fl" data-follow="dream:2"><b id="fd2"><i>आगे बढ़ना</i></b></div>
+        <div class="fl" data-follow="community:0"><b id="fc0"><i>परिवार</i></b></div>
+        <div class="fl" data-follow="community:1"><b id="fc1"><i>शिक्षक</i></b></div>
+        <div class="fl" data-follow="community:2"><b id="fc2"><i>पंचायत</i></b></div>
+        <div class="fl" data-follow="community:3"><b id="fc3"><i>लड़के व पुरुष</i></b></div>
+        <div class="fl" data-follow="community:4"><b id="fc4"><i>समुदाय</i></b></div>
+        <div class="fl you" data-follow="community:5"><b id="fc5"><i>और आप</i></b></div>
       </div>
 
-      <!-- ============ S1 hook: dreams 0 - 6.4 ============ -->
-      <div id="s1" class="clip full" data-start="0" data-duration="6.45" data-track-index="2">
-        <div id="h1" class="hl shadow" style="top:300px">
+      <!-- S1 hook 0 - 7 -->
+      <div id="s1" class="clip full" data-start="0" data-duration="7.0" data-track-index="3">
+        <div id="h1" class="hl shadow" style="top:290px">
           <span class="line sm">हर बच्ची के मन में</span>
-          <span class="line xl gold" id="h1big" style="margin-top:28px">सपने</span>
+          <span class="line xl gold" id="h1big" style="margin-top:24px">सपने</span>
           <span class="line sm">होते हैं...</span>
         </div>
-        <div class="bub" id="b1" style="left:440px; top:930px">
-          <svg viewBox="0 0 68 68"><path fill="#e0245e" d="M6 14h20a7 7 0 0 1 7 7v33a6 6 0 0 0-6-6H6z"/><path fill="#ff7a1a" d="M62 14H42a7 7 0 0 0-7 7v33a6 6 0 0 1 6-6h21z"/></svg><b>पढ़ना</b>
-        </div>
-        <div class="bub" id="b2" style="left:650px; top:1010px">
-          <svg viewBox="0 0 68 68"><circle cx="34" cy="34" r="26" fill="#23b5a6"/><path d="M34 8v52M8 34h52M15 15c10 10 10 28 0 38M53 15c-10 10-10 28 0 38" stroke="#fff" stroke-width="4" fill="none"/></svg><b>खेलना</b>
-        </div>
-        <div class="bub" id="b3" style="left:560px; top:740px">
-          <svg viewBox="0 0 68 68"><path fill="#2a0f3d" d="M34 12 L66 26 L34 40 L2 26 Z"/><path fill="#2a0f3d" d="M16 33v12c0 6 36 6 36 0V33l-18 8z"/><path d="M60 28v16" stroke="#ffb627" stroke-width="4"/><circle cx="60" cy="46" r="4" fill="#ffb627"/></svg><b>आगे बढ़ना</b>
-        </div>
       </div>
-
-      <!-- ============ S2 question 6.3 - 9.9 ============ -->
-      <div id="s2" class="clip full" data-start="6.3" data-duration="3.6" data-track-index="2">
-        <div id="h2" class="hl shadow" style="top:300px">
+      <!-- S2 question 7 - 10.9 -->
+      <div id="s2" class="clip full" data-start="6.9" data-duration="4.0" data-track-index="3">
+        <div id="h2" class="hl shadow" style="top:290px">
           <span class="line sm" id="h2a">लेकिन क्या</span>
           <span class="line md" id="h2b">हर बच्ची</span>
           <span class="line lg rose" id="h2c">सुरक्षित है?</span>
         </div>
       </div>
-
-      <!-- ============ S3 hidden truth / silence 9.8 - 17.7 ============ -->
-      <div id="s3" class="clip full" data-start="9.8" data-duration="7.9" data-track-index="2">
-        <div id="h3a" class="hl shadow" style="top:330px">
+      <!-- S3 truth / silence 10.9 - 20 -->
+      <div id="s3" class="clip full" data-start="10.85" data-duration="9.2" data-track-index="3">
+        <div id="h3a" class="hl shadow" style="top:300px">
           <span class="line md" id="h3a1">बाल यौन शोषण</span>
-          <span class="line sm" id="h3a2" style="margin-top:20px">हमारे समाज की</span>
+          <span class="line sm" id="h3a2" style="margin-top:16px">हमारे समाज की</span>
           <span class="line md gold" id="h3a3">छिपी हुई सच्चाई</span>
         </div>
-        <div id="h3b" class="hl" style="top:380px">
+        <div id="h3b" class="hl shadow" style="top:320px">
           <span class="line md" id="h3b1" style="color:#ff8fb0">डर...</span>
-          <span class="line xl" id="h3b2" style="color:#d9cdf0">चुप्पी</span>
+          <span class="line xl" id="h3b2" style="color:#ded2f5">चुप्पी</span>
         </div>
       </div>
-
-      <!-- ============ S4 not their fault 17.6 - 23.1 ============ -->
-      <div id="s4" class="clip full" data-start="17.6" data-duration="5.5" data-track-index="2">
-        <div id="h4a" class="hl shadow" style="top:300px">
+      <!-- S4 not her fault 20 - 26 -->
+      <div id="s4" class="clip full" data-start="20.0" data-duration="5.95" data-track-index="3">
+        <div id="h4a" class="hl shadow" style="top:290px">
           <span class="line sm">यह चुप्पी</span>
-          <span class="line md" id="faultWrap" style="position:relative">
-            <span class="w" id="fault">उनकी गलती</span>
-            <svg id="strike" class="abs" style="left:170px; top:58px; width:620px; height:30px" viewBox="0 0 620 30"><path id="strikeP" d="M6,18 C160,8 420,26 614,10" stroke="#ff3d7f" stroke-width="14" stroke-linecap="round" fill="none"/></svg>
+          <span class="line md" style="position:relative">
+            <span id="fault" style="display:inline-block">उनकी गलती</span>
+            <svg class="abs" style="left:170px; top:56px; width:620px; height:30px" viewBox="0 0 620 30"><path id="strikeP" d="M6,18 C160,8 420,26 614,10" stroke="#ff3d7f" stroke-width="14" stroke-linecap="round" fill="none"/></svg>
           </span>
           <span class="line lg rose" id="nahi">नहीं है</span>
         </div>
-        <div id="h4b" class="hl shadow" style="top:330px">
+        <div id="h4b" class="hl shadow" style="top:300px">
           <span class="line sm" id="h4b1">उनकी सुरक्षा</span>
           <span class="line lg gold" id="h4b2">हमारी</span>
           <span class="line md gold" id="h4b3">ज़िम्मेदारी</span>
         </div>
       </div>
-
-      <!-- ============ S5 barriers 23.0 - 32.2 ============ -->
-      <div id="s5" class="clip full" data-start="23.0" data-duration="9.2" data-track-index="2">
-        <div id="leak" class="abs"></div>
-        <div class="slab" id="w1" style="top:430px" data-layout-ignore></div>
-        <div class="slab" id="w2" style="top:612px" data-layout-ignore></div>
-        <div class="slab" id="w3" style="top:794px" data-layout-ignore></div>
-        <div class="bub" id="b4" style="left:451px; top:1100px; width:178px; height:178px">
-          <svg viewBox="0 0 68 68"><path fill="#e0245e" d="M6 14h20a7 7 0 0 1 7 7v33a6 6 0 0 0-6-6H6z"/><path fill="#ff7a1a" d="M62 14H42a7 7 0 0 0-7 7v33a6 6 0 0 1 6-6h21z"/></svg><b style="font-size:40px">सपने</b>
-        </div>
-        <div id="h5" class="hl shadow" style="top:270px; font-size:66px; font-weight:700">इसी बदलाव की शुरुआत है...</div>
+      <!-- S5 walls 26 - 35.4 -->
+      <div id="s5" class="clip full" data-start="25.9" data-duration="9.6" data-track-index="3">
+        <div id="h5" class="hl shadow" style="top:290px; font-size:64px; font-weight:700">इसी बदलाव की शुरुआत है...</div>
         <div id="flash" class="full"></div>
       </div>
-
-      <!-- ============ S6 reveal 31.9 - 34.2 ============ -->
-      <div id="s6" class="clip full" data-start="31.9" data-duration="2.6" data-track-index="2">
-        <svg id="bigKite" class="abs" viewBox="-110 -150 220 290">
-          <path d="M0,-140 L100,0 L0,130 L-100,0 Z" fill="#ff3d7f"/>
-          <path d="M0,-140 L100,0 L0,0 Z" fill="#ffb627"/>
-          <path d="M0,0 L-100,0 L0,130 Z" fill="#ff7a1a"/>
-          <path d="M0,-140 L0,130 M-100,0 L100,0" stroke="#2a0f3d" stroke-width="5" opacity=".5"/>
-        </svg>
+      <!-- S6+S7 reveal wordmark -> header, stage cards 35.4 - 52.2 -->
+      <div id="s7" class="clip full" data-start="35.4" data-duration="16.8" data-track-index="3">
         <div id="wm" class="abs">
           <span class="hi" id="wmHi">उड़ान</span>
           <span class="en" id="wmEn">UDAAN</span>
           <span class="tag" id="wmTag">Let Her Be Safe. Let Her Rise.</span>
         </div>
-      </div>
-
-      <!-- ============ S7 three stages 33.9 - 47.3 ============ -->
-      <div id="s7" class="clip full" data-start="33.9" data-duration="13.4" data-track-index="3">
-        <div id="stageBg" class="full"></div>
-        <div id="miniWm" class="abs"><b>उड़ान</b><i>हर पड़ाव पर, उसके साथ</i></div>
-        <svg id="path" class="abs" viewBox="0 0 1080 1920"><path id="pathLine" d="M88,1250 L88,520" stroke="#e8a9bf" stroke-width="6" stroke-dasharray="4 18" stroke-linecap="round" fill="none"/></svg>
-        <div class="dot" id="d1" style="top:1150px"></div>
-        <div class="dot" id="d2" style="top:880px"></div>
-        <div class="dot" id="d3" style="top:610px"></div>
-        <svg id="miniKite" class="abs" viewBox="-50 -64 100 128" style="top:1100px">
-          <path d="M0,-60 L44,0 L0,62 L-44,0 Z" fill="#ff3d7f"/><path d="M0,-60 L44,0 L0,0 Z" fill="#ffb627"/><path d="M0,0 L-44,0 L0,62 Z" fill="#ff7a1a"/>
-        </svg>
         <div class="card" id="c1">
-          <div class="age">10–14<small>वर्ष</small></div>
-          <div class="ttl">जागरूक बनें</div>
+          <div class="row"><div class="age">10–14<small>वर्ष</small></div><div class="ttl">जागरूक बनें</div></div>
           <div class="chips"><span class="chip">अधिकार</span><span class="chip">शरीर की समझ</span><span class="chip">सुरक्षा</span><span class="chip">स्वास्थ्य</span><span class="chip">शिक्षा</span></div>
         </div>
         <div class="card" id="c2">
-          <div class="age">15–17<small>वर्ष</small></div>
-          <div class="ttl">सक्षम बनें</div>
+          <div class="row"><div class="age">15–17<small>वर्ष</small></div><div class="ttl">सक्षम बनें</div></div>
           <div class="chips"><span class="chip en">Life Skills</span><span class="chip en">Digital Safety</span><span class="chip en">Gender Equality</span><span class="chip en">Consent</span><span class="chip en">Leadership</span></div>
         </div>
         <div class="card" id="c3">
-          <div class="age">18–19<small>वर्ष</small></div>
-          <div class="ttl">आत्मनिर्भर बनें</div>
+          <div class="row"><div class="age">18–19<small>वर्ष</small></div><div class="ttl">आत्मनिर्भर बनें</div></div>
           <div class="chips"><span class="chip">उच्च शिक्षा</span><span class="chip">कौशल</span><span class="chip">रोज़गार</span><span class="chip">वित्तीय स्वतंत्रता</span><span class="chip">अपने फ़ैसले</span></div>
         </div>
       </div>
-
-      <!-- ============ S8 community 47.2 - 51.5 ============ -->
-      <div id="s8" class="clip full" data-start="47.2" data-duration="4.3" data-track-index="3">
-        <div id="commBg" class="full"></div>
-        <div id="h8" class="hl" style="top:280px; color:#2a0f3d">
+      <!-- S8 community 52.2 - 57.4 -->
+      <div id="s8" class="clip full" data-start="52.2" data-duration="5.2" data-track-index="4">
+        <div id="h8" class="hl shadow" style="top:280px">
           <span class="line sm">मिलकर बनाएं</span>
           <span class="line md">सुरक्षित समाज</span>
         </div>
-        <svg id="ring" class="abs" viewBox="0 0 1080 1920"><circle id="ringC" cx="540" cy="850" r="330" fill="none" stroke="#2a0f3d" stroke-width="6" stroke-dasharray="2 16" stroke-linecap="round" opacity=".55"/></svg>
-        <div id="core" class="abs">
-          <svg viewBox="0 0 300 520" style="position:absolute; left:92px; top:40px; width:96px; height:166px"><g fill="#2a0f3d"><circle cx="150" cy="92" r="40"/><path d="M116,146 C130,140 170,140 186,146 L236,392 C200,404 100,404 64,392 Z"/><path d="M178,154 L262,38" stroke="#2a0f3d" stroke-width="24" stroke-linecap="round"/><path d="M122,156 L84,286" stroke="#2a0f3d" stroke-width="22" stroke-linecap="round"/><rect x="118" y="388" width="24" height="124" rx="10"/><rect x="160" y="388" width="24" height="124" rx="10"/><ellipse cx="114" cy="112" rx="13" ry="16"/><ellipse cx="108" cy="138" rx="12" ry="15"/></g></svg>
-        </div>
-        <div class="node" style="left:425px; top:470px">परिवार</div>
-        <div class="node" style="left:745px; top:630px">शिक्षक</div>
-        <div class="node" style="left:745px; top:975px">पंचायत</div>
-        <div class="node" style="left:425px; top:1135px">समुदाय</div>
-        <div class="node" style="left:105px; top:975px">लड़के व पुरुष</div>
-        <div class="node you" style="left:105px; top:630px">और आप</div>
       </div>
-
-      <!-- ============ S9 better future 51.4 - 57.2 ============ -->
-      <div id="s9" class="clip full" data-start="51.4" data-duration="5.8" data-track-index="2">
+      <!-- S9 future 57.4 - 63 -->
+      <div id="s9" class="clip full" data-start="57.35" data-duration="5.65" data-track-index="3">
         <div id="h9" class="hl shadow" style="top:290px">
           <span class="line sm" id="h9a">क्योंकि हर बच्ची को</span>
-          <span class="line" id="h9b" style="font-size:98px">सिर्फ़ बचपन नहीं,</span>
+          <span class="line" id="h9b" style="font-size:96px">सिर्फ़ बचपन नहीं,</span>
           <span class="line gold" id="h9c" style="font-size:134px">बेहतर भविष्य</span>
           <span class="line sm" id="h9d">भी मिलना चाहिए</span>
         </div>
       </div>
-
-      <!-- ============ S10 be part / rise 57.1 - 63.0 ============ -->
-      <div id="s10" class="clip full" data-start="57.1" data-duration="5.95" data-track-index="2">
-        <div id="h10a" class="hl shadow" style="top:330px">
+      <!-- S10 be part / rise 63 - 70 -->
+      <div id="s10" class="clip full" data-start="62.95" data-duration="7.1" data-track-index="3">
+        <div id="h10a" class="hl shadow" style="top:300px">
           <span class="line lg gold" id="aaj">आज</span>
           <span class="line md" id="h10a2">उड़ान का हिस्सा</span>
           <span class="line md" id="h10a3">बनिए</span>
         </div>
-        <div id="h10b" class="hl shadow" style="top:330px; font-family:'Playfair'; font-style:italic; font-weight:800">
-          <span class="line" id="l1" style="font-size:104px">Let Her Be Safe.</span>
-          <span class="line" id="l2" style="font-size:104px; margin-top:14px">Let Her Be Heard.</span>
-          <span class="line gold" id="l3" style="font-size:150px; margin-top:20px">Let Her Rise.</span>
+        <div id="h10b" class="hl shadow" style="top:300px; font-family:'Playfair'; font-style:italic; font-weight:800">
+          <span class="line" id="l1" style="font-size:100px">Let Her Be Safe.</span>
+          <span class="line" id="l2" style="font-size:100px; margin-top:12px">Let Her Be Heard.</span>
+          <span class="line gold" id="l3" style="font-size:146px; margin-top:18px">Let Her Rise.</span>
         </div>
       </div>
-
-      <!-- ============ S11 CTA 62.6 - 66.5 ============ -->
-      <div id="s11" class="clip full" data-start="62.9" data-duration="3.6" data-track-index="3">
+      <!-- S11 CTA 70 - 74 -->
+      <div id="s11" class="clip full" data-start="69.95" data-duration="4.05" data-track-index="4">
         <div id="ctaBg" class="full"></div>
-        <div id="ctaRays" class="abs"></div>
         <svg id="ctaKite" class="abs" viewBox="-110 -150 220 290">
           <path d="M0,-140 L100,0 L0,130 L-100,0 Z" fill="#ff3d7f"/><path d="M0,-140 L100,0 L0,0 Z" fill="#ffb627"/><path d="M0,0 L-100,0 L0,130 Z" fill="#ff7a1a"/>
           <path d="M0,-140 L0,130 M-100,0 L100,0" stroke="#2a0f3d" stroke-width="5" opacity=".5"/>
@@ -366,273 +222,153 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--
         <div id="bio" class="abs">Link in bio<svg viewBox="0 0 40 40"><path d="M20 6v26M8 21l12 12 12-12" stroke="#ffb627" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       </div>
 
-      <!-- ============ captions ============ -->
-      <div id="caps" class="clip full" data-start="0" data-duration="66.5" data-track-index="5">
-        <div class="cap" data-t="0.30,2.84"><span>हर बच्ची के मन में <em>सपने</em> होते हैं...</span></div>
-        <div class="cap" data-t="3.09,5.82"><span>पढ़ने के, खेलने के, आगे बढ़ने के।</span></div>
-        <div class="cap" data-t="6.47,9.31"><span>लेकिन क्या हर बच्ची सच में <em>सुरक्षित</em> है?</span></div>
-        <div class="cap" data-t="10.06,11.30"><span>बाल यौन शोषण,</span></div>
-        <div class="cap" data-t="11.48,14.10"><span>हमारे समाज की एक <em>छिपी हुई सच्चाई</em> है।</span></div>
-        <div class="cap" data-t="14.26,17.25"><span>डर के कारण, बच्चे अक्सर <em>चुप</em> रह जाते हैं।</span></div>
-        <div class="cap" data-t="17.80,19.95"><span>यह चुप्पी उनकी गलती <em>नहीं</em> है।</span></div>
-        <div class="cap" data-t="20.09,22.60"><span>उनकी सुरक्षा, <em>हमारी ज़िम्मेदारी</em> है।</span></div>
-        <div class="cap" data-t="23.25,26.85"><span>लैंगिक भेदभाव, बाल विवाह, और शिक्षा से दूरी</span></div>
-        <div class="cap" data-t="27.00,28.81"><span>उनके सपनों को रोक देते हैं।</span></div>
-        <div class="cap" data-t="29.81,31.57"><span>इसी बदलाव की शुरुआत है...</span></div>
-        <div class="cap" data-t="33.57,37.58"><span><em>10 से 14 साल:</em> अधिकार, सुरक्षा, स्वास्थ्य और शिक्षा</span></div>
-        <div class="cap" data-t="37.98,42.18"><span><em>15 से 17:</em> लाइफ़ स्किल्स, डिजिटल सेफ़्टी और लीडरशिप</span></div>
-        <div class="cap" data-t="42.58,46.96"><span><em>18 से 19:</em> उच्च शिक्षा, रोज़गार और आर्थिक आज़ादी</span></div>
-        <div class="cap" data-t="47.51,51.11"><span>परिवार, शिक्षक, पंचायत... पूरा समुदाय, <em>एक साथ</em>।</span></div>
-        <div class="cap" data-t="51.66,54.25"><span>क्योंकि हर बच्ची को सिर्फ़ बचपन नहीं,</span></div>
-        <div class="cap" data-t="54.40,56.83"><span>एक <em>बेहतर भविष्य</em> भी मिलना चाहिए।</span></div>
-        <div class="cap" data-t="57.33,59.31"><span>आज, <em>उड़ान</em> का हिस्सा बनिए।</span></div>
+      <!-- captions (from the voice track's word timings) -->
+      <div id="caps" class="clip full" data-start="0" data-duration="74" data-track-index="6">
+        <div class="cap" data-t="0.08,2.80"><span>हर बच्ची के मन में <em>सपने</em> होते हैं...</span></div>
+        <div class="cap" data-t="3.12,6.90"><span>पढ़ने के, खेलने के, आगे बढ़ने के।</span></div>
+        <div class="cap" data-t="7.08,10.75"><span>लेकिन क्या हर बच्ची सच में <em>सुरक्षित</em> है?</span></div>
+        <div class="cap" data-t="10.96,12.40"><span>बाल यौन शोषण,</span></div>
+        <div class="cap" data-t="12.56,15.90"><span>हमारे समाज की एक <em>छिपी हुई सच्चाई</em> है।</span></div>
+        <div class="cap" data-t="16.00,19.85"><span>डर के कारण, बच्चे अक्सर <em>चुप</em> रह जाते हैं।</span></div>
+        <div class="cap" data-t="20.19,22.90"><span>यह चुप्पी उनकी गलती <em>नहीं</em> है।</span></div>
+        <div class="cap" data-t="23.02,25.85"><span>उनकी सुरक्षा, <em>हमारी ज़िम्मेदारी</em> है।</span></div>
+        <div class="cap" data-t="25.96,29.95"><span>लैंगिक भेदभाव, बाल विवाह, और शिक्षा से दूरी</span></div>
+        <div class="cap" data-t="30.01,32.35"><span>उनके सपनों को रोक देते हैं।</span></div>
+        <div class="cap" data-t="32.52,34.60"><span>इसी बदलाव की शुरुआत है...</span></div>
+        <div class="cap" data-t="36.51,41.80"><span><em>10 से 14 साल:</em> अधिकार, सुरक्षा, स्वास्थ्य और शिक्षा</span></div>
+        <div class="cap" data-t="41.95,46.85"><span><em>15 से 17:</em> लाइफ़ स्किल्स, डिजिटल सेफ़्टी और लीडरशिप</span></div>
+        <div class="cap" data-t="46.97,52.05"><span><em>18 से 19:</em> उच्च शिक्षा, रोज़गार और आर्थिक आज़ादी</span></div>
+        <div class="cap" data-t="52.27,57.30"><span>परिवार, शिक्षक, पंचायत... पूरा समुदाय, <em>एक साथ</em>।</span></div>
+        <div class="cap" data-t="57.42,60.25"><span>क्योंकि हर बच्ची को सिर्फ़ बचपन नहीं,</span></div>
+        <div class="cap" data-t="60.30,62.80"><span>एक <em>बेहतर भविष्य</em> भी मिलना चाहिए।</span></div>
+        <div class="cap" data-t="63.02,64.90"><span>आज, <em>उड़ान</em> का हिस्सा बनिए।</span></div>
       </div>
 
-      <svg id="grain" class="clip full" data-start="0" data-duration="66.5" data-track-index="6" viewBox="0 0 1080 1920">
+      <svg id="grain" class="clip full" data-start="0" data-duration="74" data-track-index="7" viewBox="0 0 1080 1920">
         <filter id="nz"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
         <rect width="1080" height="1920" filter="url(#nz)"/>
       </svg>
-      <div id="vignette" class="clip full" data-start="0" data-duration="66.5" data-track-index="7"></div>
+      <div id="vignette" class="clip full" data-start="0" data-duration="74" data-track-index="8"></div>
 
-      <audio id="mix" src="assets/audio/mix.wav" data-start="0" data-duration="66.5" data-track-index="8" data-volume="1"></audio>
+      <audio id="mix" src="assets/audio/mix_v2.wav" data-start="0" data-duration="74" data-track-index="9" data-volume="1"></audio>
     </div>
 
+    <script type="module" src="scene3d.js"></script>
     <script>
-      // ---- deterministic decor ----
-      let seed = 11;
-      const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-      const starBox = document.getElementById("stars");
-      for (let i = 0; i < 70; i++) {
-        const s = document.createElement("div");
-        s.className = "star";
-        const sz = 2 + rnd() * 4;
-        s.style.cssText = `left:${rnd() * 1080}px; top:${rnd() * 1150}px; width:${sz}px; height:${sz}px; opacity:${0.35 + rnd() * 0.6}`;
-        starBox.appendChild(s);
-      }
-      // wall slabs: 4 pieces each, cracks drawn on top
-      const WALLS = ["लैंगिक भेदभाव", "बाल विवाह", "शिक्षा से दूरी"];
-      const CUTS = [0, 230, 470, 660, 880];
-      WALLS.forEach((txt, k) => {
-        const slab = document.getElementById("w" + (k + 1));
-        for (let p = 0; p < 4; p++) {
-          const pc = document.createElement("div");
-          pc.className = "piece";
-          pc.style.left = CUTS[p] + "px";
-          pc.style.width = CUTS[p + 1] - CUTS[p] + "px";
-          const f = document.createElement("div");
-          f.className = "face";
-          f.style.left = -CUTS[p] + "px";
-          f.textContent = txt;
-          pc.appendChild(f);
-          slab.appendChild(pc);
-        }
-        const ns = "http://www.w3.org/2000/svg";
-        const cr = document.createElementNS(ns, "svg");
-        cr.setAttribute("class", "crack");
-        cr.setAttribute("viewBox", "0 0 880 156");
-        cr.innerHTML = CUTS.slice(1, 4).map((x, j) =>
-          `<path class="ck" d="M${x},0 l${-14 + j * 9},34 l${18 - j * 6},28 l-16,30 l${12 + j * 4},34 l-8,30" fill="none" stroke="#ffd27a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0"/>`).join("");
-        slab.appendChild(cr);
-      });
-
       const tl = gsap.timeline({ paused: true });
       const E = "power3.out";
 
-      // ---------- captions ----------
-      document.querySelectorAll(".cap").forEach((c) => {
+      // captions
+      const capEls = Array.from(document.querySelectorAll(".cap"));
+      capEls.forEach((c, i) => {
         const [a, b] = c.dataset.t.split(",").map(Number);
+        const next = capEls[i + 1] ? Number(capEls[i + 1].dataset.t.split(",")[0]) : 99;
         tl.fromTo(c, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.22, ease: E }, a - 0.05);
-        tl.to(c, { opacity: 0, duration: 0.14, ease: "power1.in" }, b + 0.05);
+        tl.to(c, { opacity: 0, duration: 0.12, ease: "power1.in" }, Math.min(b + 0.05, next - 0.2));
       });
+      const pop = (sel, t, out) => {
+        tl.fromTo(sel, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.2)", transformOrigin: "50% 100%" }, t);
+        if (out) tl.to(sel, { opacity: 0, duration: 0.25 }, out);
+      };
 
-      // ---------- WORLD ----------
-      // gentle kite sway for the whole film (finite repeats)
-      tl.fromTo("#rig", { rotation: -2.2 }, { rotation: 2.2, duration: 1.6, ease: "sine.inOut", repeat: 3, yoyo: true }, 0);
-      tl.fromTo("#dupatta", { scaleX: 1 }, { scaleX: 0.86, transformOrigin: "100% 50%", duration: 0.9, ease: "sine.inOut", repeat: 7, yoyo: true }, 0);
-      tl.fromTo("#sun", { y: 0, scale: 1 }, { y: -40, scale: 1.05, duration: 6.3, ease: "sine.out" }, 0);
-      // dusk
-      tl.to("#skyDusk", { opacity: 1, duration: 1.4, ease: "power1.inOut" }, 6.2);
-      tl.to("#sun", { y: 220, opacity: 0.35, duration: 2.6, ease: "power2.in" }, 6.3);
-      tl.to("#rig", { rotation: 7, duration: 2.6, ease: "sine.inOut" }, 9.6 - 2.6);
-      // night: kite falls behind the hill
-      tl.to("#skyNight", { opacity: 1, duration: 1.0 }, 9.6);
-      tl.to("#stars", { opacity: 1, duration: 1.5 }, 9.8);
-      tl.to("#sun", { opacity: 0, duration: 0.6 }, 9.6);
-      tl.to("#rig", { rotation: 44, duration: 1.4, ease: "power2.in" }, 9.95);
-      tl.to("#rig", { opacity: 0, duration: 0.4 }, 11.1);
-      tl.to(["#hf", "#girlFill"], { fill: "#120a24", duration: 1.0 }, 9.7);
-      tl.to("#girlFill [stroke]", { stroke: "#120a24", duration: 1.0 }, 9.7);
-      tl.to("#hb", { fill: "#1b1235", duration: 1.0 }, 9.7);
-      tl.to("#girl", { scale: 0.96, transformOrigin: "50% 100%", duration: 1, ease: "sine.inOut" }, 9.8);
-      // silence rings collapse to a flat line
-      tl.to("#rings", { opacity: 1, duration: 0.3 }, 14.2);
-      tl.fromTo(".rg", { scale: 1.25, opacity: 0, transformOrigin: "240px 900px" }, { scale: 1, opacity: 0.8, duration: 0.6, stagger: 0.12, ease: E }, 14.25);
-      tl.to(".rg", { scale: 0.05, opacity: 0, duration: 0.9, stagger: 0.08, ease: "power3.in", transformOrigin: "240px 900px" }, 15.4);
-      tl.fromTo("#flatline", { opacity: 0, scaleX: 0, transformOrigin: "50% 50%" }, { opacity: 0.8, scaleX: 1, duration: 0.6, ease: E }, 16.2);
-      tl.to("#flatline", { opacity: 0, duration: 0.4 }, 17.5);
-      // hope: protective ring around her
-      tl.to("#skyHope", { opacity: 1, duration: 1.4 }, 20.0);
-      tl.set("#shield", { opacity: 1 }, 21.1);
-      tl.fromTo("#shield", { strokeDasharray: 1571, strokeDashoffset: 1571 }, { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut" }, 21.1);
-      tl.to("#shield", { opacity: 0, duration: 0.4 }, 22.9);
-      tl.to("#girl", { opacity: 0.35, duration: 0.5 }, 23.0);
-      // sunrise at the reveal
-      tl.set("#rays", { opacity: 0 }, 0);
-      tl.to("#skyRise", { opacity: 1, duration: 0.5, ease: "power2.out" }, 31.95);
-      tl.to("#stars", { opacity: 0, duration: 0.4 }, 31.95);
-      tl.to("#rays", { opacity: 1, duration: 0.6 }, 31.95);
-      tl.fromTo("#rays", { rotation: 0 }, { rotation: 40, duration: 25, ease: "none" }, 31.95);
-      tl.fromTo("#sun", { y: 260, opacity: 0 }, { y: -80, opacity: 1, duration: 1.4, ease: E, immediateRender: false }, 31.95);
-      tl.to("#hf", { fill: "#3a1248", duration: 0.5 }, 31.95);
-      tl.to("#girlFill", { fill: "#2a0f3d", duration: 0.5 }, 31.95);
-      tl.to("#girlFill [stroke]", { stroke: "#2a0f3d", duration: 0.5 }, 31.95);
-      tl.to("#hb", { fill: "#7a2c6c", duration: 0.5 }, 31.95);
-      tl.to("#girl", { opacity: 0, duration: 0.15 }, 31.9);
-      tl.set("#girl", { scale: 1 }, 32.1);
-      tl.fromTo("#girl", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.7, ease: E, immediateRender: false }, 51.4);
-      tl.set("#rig", { rotation: 40, opacity: 1 }, 51.4);
-      tl.to("#rig", { rotation: 11, duration: 1.5, ease: "back.out(1.3)" }, 51.5);
-      tl.fromTo("#rig", { rotation: 11 }, { rotation: 8, duration: 1.6, ease: "sine.inOut", repeat: 4, yoyo: true, immediateRender: false }, 53.0);
-      tl.set("#flock", { opacity: 1 }, 32.1);
-      tl.fromTo("#flock", { x: -700, y: 160 }, { x: 260, y: -120, duration: 3.2, ease: "sine.out", immediateRender: false }, 32.1);
-      tl.fromTo("#flock", { x: -760, y: 260 }, { x: 140, y: -40, duration: 4.0, ease: "sine.out", immediateRender: false }, 51.6);
-      tl.to("#flock", { x: 900, y: -360, duration: 1.4, ease: "power2.in" }, 61.8);
-      // final ascent: kite flies up and out on "Let Her Rise"
-      tl.to("#rig", { rotation: -24, duration: 1.2, ease: "power2.inOut" }, 61.7);
-      tl.to("#kite", { attr: { transform: "translate(860 300)" }, duration: 1.2, ease: "power2.inOut" }, 61.7);
-
-      // ---------- S1 hook ----------
+      // S1 hook (headline on screen from frame 0)
       tl.fromTo("#h1big", { scale: 1.08 }, { scale: 1, duration: 1.4, ease: "power2.out" }, 0);
       tl.fromTo("#h1big", { textShadow: "0 0 0px rgba(255,182,39,0)" }, { textShadow: "0 0 60px rgba(255,182,39,.75)", duration: 1.2, ease: "sine.inOut", repeat: 3, yoyo: true }, 0);
       tl.fromTo("#h1 .sm", { y: 10 }, { y: 0, duration: 0.8, ease: E }, 0);
-      [["#b1", 3.09], ["#b2", 3.95], ["#b3", 4.85]].forEach(([s, t]) => {
-        tl.fromTo(s, { opacity: 0, scale: 0.3, y: 120 }, { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: "back.out(1.8)" }, t);
-        tl.to(s, { y: -26, duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: 1 }, t + 0.55);
-      });
-      tl.to("#h1", { opacity: 0, y: -30, duration: 0.3, ease: "power2.in" }, 6.15);
-      tl.to([".bub#b1", ".bub#b2", ".bub#b3"], { scale: 1.3, opacity: 0, duration: 0.3, stagger: 0.05, ease: "power2.in" }, 6.0);
+      pop("#fd0", 3.3, 8.7); pop("#fd1", 4.4, 8.75); pop("#fd2", 5.5, 8.8);
+      tl.to("#h1", { opacity: 0, y: -30, duration: 0.3, ease: "power2.in" }, 6.65);
 
-      // ---------- S2 ----------
-      tl.fromTo("#h2a", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: E }, 6.4);
-      tl.fromTo("#h2b", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: E }, 6.9);
-      tl.fromTo("#h2c", { opacity: 0, scale: 1.4, filter: "blur(10px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.45, ease: "power4.out" }, 7.75);
-      tl.fromTo("#h2c", { x: 0 }, { x: 8, duration: 0.06, repeat: 5, yoyo: true, ease: "none", immediateRender: false }, 8.25);
-      tl.to("#h2", { opacity: 0, duration: 0.3 }, 9.55);
+      // S2
+      tl.fromTo("#h2a", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: E }, 7.05);
+      tl.fromTo("#h2b", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: E }, 7.6);
+      tl.fromTo("#h2c", { opacity: 0, scale: 1.4, filter: "blur(10px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.45, ease: "power4.out" }, 9.2);
+      tl.fromTo("#h2c", { x: 0 }, { x: 8, duration: 0.06, repeat: 5, yoyo: true, ease: "none", immediateRender: false }, 9.7);
+      tl.to("#h2", { opacity: 0, duration: 0.3 }, 10.55);
 
-      // ---------- S3 ----------
-      tl.fromTo("#h3a1", { opacity: 0, filter: "blur(22px)", scaleX: 1.15 }, { opacity: 1, filter: "blur(0px)", scaleX: 1, duration: 1.0, ease: "power2.out" }, 10.0);
-      tl.fromTo("#h3a2", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 11.45);
-      tl.fromTo("#h3a3", { opacity: 0, filter: "blur(16px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.9, ease: "power2.out" }, 12.4);
-      tl.to("#h3a", { opacity: 0, y: -20, duration: 0.35 }, 13.95);
-      tl.fromTo("#h3b1", { opacity: 0, x: 0 }, { opacity: 1, duration: 0.25 }, 14.25);
-      tl.fromTo("#h3b1", { x: -5 }, { x: 5, duration: 0.05, repeat: 9, yoyo: true, ease: "none", immediateRender: false }, 14.3);
-      tl.fromTo("#h3b2", { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: 0.9, ease: "power3.out" }, 15.3);
-      tl.to("#h3b2", { opacity: 0.35, scale: 0.92, duration: 1.2, ease: "power2.in" }, 16.2);
-      tl.to("#h3b", { opacity: 0, duration: 0.3 }, 17.4);
+      // S3
+      tl.fromTo("#h3a1", { opacity: 0, filter: "blur(22px)", scaleX: 1.15 }, { opacity: 1, filter: "blur(0px)", scaleX: 1, duration: 1.0, ease: "power2.out" }, 10.96);
+      tl.fromTo("#h3a2", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 12.5);
+      tl.fromTo("#h3a3", { opacity: 0, filter: "blur(16px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.9, ease: "power2.out" }, 14.15);
+      tl.to("#h3a", { opacity: 0, y: -20, duration: 0.35 }, 15.75);
+      tl.fromTo("#h3b1", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 16.0);
+      tl.fromTo("#h3b1", { x: -5 }, { x: 5, duration: 0.05, repeat: 9, yoyo: true, ease: "none", immediateRender: false }, 16.05);
+      tl.fromTo("#h3b2", { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: 0.9, ease: "power3.out" }, 17.95);
+      tl.to("#h3b2", { opacity: 0.35, scale: 0.92, duration: 0.85, ease: "power2.in" }, 18.85);
+      tl.to("#h3b", { opacity: 0, duration: 0.3 }, 19.7);
 
-      // ---------- S4 ----------
-      tl.fromTo("#h4a", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 17.75);
-      tl.fromTo("#strikeP", { strokeDasharray: 640, strokeDashoffset: 640 }, { strokeDashoffset: 0, duration: 0.35, ease: "power2.inOut" }, 19.1);
-      tl.to("#fault", { opacity: 0.45, duration: 0.3 }, 19.2);
-      tl.fromTo("#nahi", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.2)" }, 19.2);
-      tl.to("#h4a", { opacity: 0, y: -24, duration: 0.3 }, 19.95);
-      tl.fromTo("#h4b1", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.35, ease: E }, 20.1);
-      tl.fromTo("#h4b2", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.6)" }, 21.15);
-      tl.fromTo("#h4b3", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.6)" }, 21.45);
-      tl.to("#h4b", { opacity: 0, duration: 0.3 }, 22.75);
+      // S4
+      tl.fromTo("#h4a", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 20.15);
+      tl.fromTo("#strikeP", { strokeDasharray: 640, strokeDashoffset: 640 }, { strokeDashoffset: 0, duration: 0.35, ease: "power2.inOut" }, 22.0);
+      tl.to("#fault", { opacity: 0.45, duration: 0.3 }, 22.1);
+      tl.fromTo("#nahi", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.2)" }, 22.1);
+      tl.to("#h4a", { opacity: 0, y: -24, duration: 0.3 }, 22.75);
+      tl.fromTo("#h4b1", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.35, ease: E }, 23.0);
+      tl.fromTo("#h4b2", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.6)" }, 24.1);
+      tl.fromTo("#h4b3", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.6)" }, 24.4);
+      tl.to("#h4b", { opacity: 0, duration: 0.3 }, 25.6);
 
-      // ---------- S5 walls ----------
-      [["#w1", 23.25], ["#w2", 24.6], ["#w3", 25.6]].forEach(([s, t], k) => {
-        tl.fromTo(s, { opacity: 0, y: -260 }, { opacity: 1, y: 0, duration: 0.42, ease: "bounce.out" }, t);
-        tl.fromTo("#world", { y: 0 }, { y: 10, duration: 0.05, repeat: 3, yoyo: true, ease: "none", immediateRender: false }, t + 0.18);
-      });
-      // the dream tries to rise and is blocked
-      tl.fromTo("#b4", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 0.8, duration: 0.4, ease: "back.out(1.8)" }, 27.0);
-      tl.to("#b4", { y: -132, duration: 0.5, ease: "power2.in" }, 27.45);
-      tl.to("#b4", { y: 0, duration: 0.7, ease: "bounce.out" }, 27.95);
-      tl.to("#b4", { opacity: 0.4, scale: 0.7, duration: 0.6 }, 28.6);
-      // light begins to break through
-      tl.fromTo("#h5", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 29.8);
-      tl.to("#leak", { opacity: 1, duration: 1.8, ease: "power2.in" }, 30.0);
-      tl.to(".ck", { opacity: 1, duration: 0.2, stagger: 0.12 }, 30.2);
-      tl.fromTo([".slab"], { x: 0 }, { x: 6, duration: 0.04, repeat: 15, yoyo: true, ease: "none", immediateRender: false }, 31.25);
-      // shatter
-      document.querySelectorAll(".piece").forEach((pc, i) => {
-        const dir = (i % 4) - 1.5;
-        tl.to(pc, { x: dir * (260 + (i % 3) * 90), y: -200 - (i % 5) * 120 + (i > 7 ? 300 : 0), rotation: dir * 28 + (i % 2 ? 20 : -20), opacity: 0, duration: 0.8, ease: "power2.out" }, 31.95);
-      });
-      tl.to(".crack", { opacity: 0, duration: 0.1 }, 31.95);
-      tl.to(["#h5", "#b4"], { opacity: 0, duration: 0.2 }, 31.9);
-      tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.9, duration: 0.08 }, 31.92);
-      tl.to("#flash", { opacity: 0, duration: 0.5 }, 32.0);
+      // S5 (walls are 3D)
+      tl.fromTo("#h5", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 32.5);
+      tl.to("#h5", { opacity: 0, duration: 0.2 }, 35.2);
+      tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.85, duration: 0.07 }, 35.38);
+      tl.to("#flash", { opacity: 0, duration: 0.55 }, 35.45);
 
-      // ---------- S6 reveal ----------
-      tl.fromTo("#bigKite", { y: 700, scale: 0.4, rotation: -20 }, { y: 0, scale: 1, rotation: 0, duration: 0.9, ease: "back.out(1.4)" }, 31.95);
-      tl.fromTo("#bigKite", { rotation: 0 }, { rotation: 4, duration: 0.7, ease: "sine.inOut", repeat: 3, yoyo: true, immediateRender: false }, 32.85);
-      tl.fromTo("#wmHi", { opacity: 0, scale: 0.6, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.7)" }, 32.12);
-      tl.fromTo("#wmEn", { opacity: 0, scaleX: 1.5 }, { opacity: 1, scaleX: 1, duration: 0.6, ease: E }, 32.4);
-      tl.fromTo("#wmTag", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: E }, 32.5);
+      // S6 reveal -> header
+      tl.fromTo("#wmHi", { opacity: 0, scale: 0.6, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.7)" }, 35.45);
+      tl.fromTo("#wmEn", { opacity: 0, scaleX: 1.5 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: E }, 35.7);
+      tl.fromTo("#wmTag", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 35.75);
+      tl.to(["#wmTag", "#wmEn"], { opacity: 0, duration: 0.25 }, 37.6);
+      tl.fromTo("#wm", { y: 0, scale: 1 }, { y: -40, scale: 0.36, transformOrigin: "50% 0%", duration: 0.6, ease: "power3.inOut", immediateRender: false }, 37.7);
+      tl.to("#wm", { opacity: 0, duration: 0.3 }, 51.85);
 
-      // ---------- S7 stages ----------
-      tl.fromTo("#stageBg", { clipPath: "circle(0% at 50% 40%)" }, { clipPath: "circle(150% at 50% 40%)", duration: 0.6, ease: "power2.inOut" }, 33.9);
-      tl.fromTo("#miniWm", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 34.2);
-      tl.fromTo("#pathLine", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 34.3);
-      const CARDS = [["#c1", 33.57, 37.58, "#d1", 1100], ["#c2", 37.98, 42.18, "#d2", 830], ["#c3", 42.58, 46.96, "#d3", 560]];
-      CARDS.forEach(([c, a, b, d, ky], k) => {
-        const inT = Math.max(a + 0.12, 34.2);
-        tl.fromTo(c, { opacity: 0, y: 220, rotation: 3 }, { opacity: 1, y: 0, rotation: 0, duration: 0.55, ease: "power3.out" }, inT);
-        tl.fromTo(c + " .age", { scale: 0.7, transformOrigin: "0% 60%" }, { scale: 1, duration: 0.5, ease: "back.out(2)" }, inT + 0.05);
-        const chips = document.querySelectorAll(c + " .chip");
-        const span = b - 0.5 - (a + 1.0);
-        chips.forEach((ch, j) => {
-          tl.fromTo(ch, { opacity: 0, scale: 0.5, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.3, ease: "back.out(2.2)" }, a + 1.0 + (span * j) / chips.length);
+      // S7 stage cards (chips land on the spoken words)
+      const CARDS = [
+        ["#c1", 36.55, 41.75, [38.10, 38.50, 38.93, 39.85, 41.04]],
+        ["#c2", 41.95, 46.80, [42.84, 43.97, 44.40, 44.95, 45.55]],
+        ["#c3", 46.97, 51.90, [47.98, 48.40, 49.50, 50.64, 51.34]],
+      ];
+      CARDS.forEach(([c, a, b, chipT]) => {
+        tl.fromTo(c, { opacity: 0, y: 160 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, a);
+        tl.fromTo(c + " .age", { scale: 0.7, transformOrigin: "0% 60%" }, { scale: 1, duration: 0.5, ease: "back.out(2)" }, a + 0.05);
+        document.querySelectorAll(c + " .chip").forEach((ch, j) => {
+          tl.fromTo(ch, { opacity: 0, scale: 0.5, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.3, ease: "back.out(2.2)" }, chipT[j] - 0.1);
         });
-        tl.to(d, { backgroundColor: ["#ff3d7f", "#23b5a6", "#ffb627"][k], borderColor: "#ffffff", scale: 1.25, duration: 0.3, ease: "back.out(2)" }, inT);
-        tl.to("#miniKite", { y: ky - 1100, duration: 0.6, ease: "power2.inOut" }, inT);
-        if (k < 2) tl.to(c, { opacity: 0, y: -260, rotation: -2, duration: 0.32, ease: "power2.in" }, b - 0.02);
+        tl.to(c, { opacity: 0, y: -120, duration: 0.3, ease: "power2.in" }, b - 0.1);
       });
-      tl.to("#c3", { opacity: 0, y: -200, duration: 0.35, ease: "power2.in" }, 47.0);
 
-      // ---------- S8 community ----------
-      tl.fromTo("#commBg", { clipPath: "circle(0% at 50% 40%)" }, { clipPath: "circle(150% at 50% 40%)", duration: 0.5, ease: "power2.inOut" }, 47.2);
-      tl.fromTo("#h8", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 47.4);
-      tl.fromTo("#core", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.8)" }, 47.45);
-      tl.fromTo("#ringC", { strokeDashoffset: 0, rotation: -90, transformOrigin: "540px 850px", opacity: 0 }, { opacity: 0.55, rotation: 0, duration: 3.0, ease: "power2.out" }, 47.6);
-      document.querySelectorAll(".node").forEach((n, j) => {
-        const t = [47.55, 48.05, 48.85, 50.45, 50.0, 50.85][j];
-        tl.fromTo(n, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.2)" }, t);
-      });
-      tl.to("#core", { boxShadow: "0 0 0 40px rgba(255,255,255,.35), 0 30px 70px rgba(160,50,40,.3)", duration: 0.5, yoyo: true, repeat: 1 }, 50.6);
+      // S8 community labels pop with the words
+      tl.fromTo("#h8", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 52.4);
+      [52.4, 53.25, 54.2, 54.8, 55.9, 56.7].forEach((t, i) => pop("#fc" + i, t, 57.25));
+      tl.to("#h8", { opacity: 0, duration: 0.25 }, 57.2);
 
-      // ---------- S9 future ----------
-      tl.fromTo("#h9a", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 51.6);
-      tl.fromTo("#h9b", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 53.35);
-      tl.fromTo("#h9c", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(1.6)" }, 54.4);
-      tl.fromTo("#h9c", { textShadow: "0 0 0px rgba(255,182,39,0)" }, { textShadow: "0 0 70px rgba(255,200,90,.9)", duration: 1.0, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false }, 54.9);
-      tl.fromTo("#h9d", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 55.5);
-      tl.to("#h9", { opacity: 0, y: -24, duration: 0.3 }, 56.95);
+      // S9
+      tl.fromTo("#h9a", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 57.45);
+      tl.fromTo("#h9b", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 58.7);
+      tl.fromTo("#h9c", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(1.6)" }, 60.3);
+      tl.fromTo("#h9c", { textShadow: "0 0 0px rgba(255,182,39,0)" }, { textShadow: "0 0 70px rgba(255,200,90,.9)", duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false }, 60.85);
+      tl.fromTo("#h9d", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 61.1);
+      tl.to("#h9", { opacity: 0, y: -24, duration: 0.3 }, 62.65);
 
-      // ---------- S10 ----------
-      tl.fromTo("#aaj", { opacity: 0, scale: 1.5 }, { opacity: 1, scale: 1, duration: 0.4, ease: "power4.out" }, 57.3);
-      tl.fromTo("#h10a2", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.35, ease: E }, 57.75);
-      tl.fromTo("#h10a3", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.35, ease: E }, 58.6);
-      tl.to("#h10a", { opacity: 0, y: -24, duration: 0.3 }, 59.35);
-      tl.fromTo("#l1", { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.4, ease: E }, 59.65);
-      tl.fromTo("#l2", { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.4, ease: E }, 60.9);
-      tl.fromTo("#l3", { opacity: 0, scale: 0.6, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.8)" }, 61.85);
-      tl.to("#h10b", { opacity: 0, scale: 1.04, duration: 0.15, ease: "power1.in" }, 62.8);
+      // S10
+      tl.fromTo("#aaj", { opacity: 0, scale: 1.5 }, { opacity: 1, scale: 1, duration: 0.4, ease: "power4.out" }, 63.0);
+      tl.fromTo("#h10a2", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.35, ease: E }, 63.45);
+      tl.fromTo("#h10a3", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.35, ease: E }, 64.15);
+      tl.to("#h10a", { opacity: 0, y: -24, duration: 0.3 }, 65.15);
+      tl.fromTo("#l1", { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.4, ease: E }, 65.45);
+      tl.fromTo("#l2", { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.4, ease: E }, 66.9);
+      tl.fromTo("#l3", { opacity: 0, scale: 0.6, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.8)" }, 68.55);
+      tl.to("#h10b", { opacity: 0, scale: 1.04, duration: 0.2, ease: "power1.in" }, 69.85);
 
-      // ---------- S11 CTA ----------
-      tl.fromTo("#ctaBg", { clipPath: "circle(0% at 50% 30%)" }, { clipPath: "circle(150% at 50% 30%)", duration: 0.55, ease: "power2.inOut" }, 62.90);
-      tl.fromTo("#ctaRays", { rotation: 0, opacity: 0 }, { rotation: 25, opacity: 1, duration: 3.6, ease: "none" }, 62.90);
-      tl.fromTo("#ctaKite", { opacity: 0, y: 120, scale: 0.6 }, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "back.out(1.6)" }, 63.15);
-      tl.fromTo("#ctaKite", { rotation: -4 }, { rotation: 4, duration: 0.8, ease: "sine.inOut", repeat: 3, yoyo: true, immediateRender: false }, 63.70);
-      tl.fromTo("#ctaWm", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: E }, 63.30);
-      tl.fromTo("#ctaSub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 63.60);
-      tl.fromTo("#btn", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2)" }, 63.85);
-      tl.fromTo("#btn", { scale: 1 }, { scale: 1.06, duration: 0.45, ease: "sine.inOut", repeat: 4, yoyo: true, immediateRender: false }, 64.35);
-      tl.fromTo("#bio", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 64.15);
-      tl.fromTo("#bio svg", { y: 0 }, { y: 10, duration: 0.4, ease: "sine.inOut", repeat: 4, yoyo: true }, 64.50);
+      // S11 CTA over the sky of kites
+      tl.to("#ctaBg", { opacity: 1, duration: 0.6, ease: "power2.out" }, 69.95);
+      tl.fromTo("#ctaKite", { opacity: 0, y: 120, scale: 0.6 }, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "back.out(1.6)" }, 70.15);
+      tl.fromTo("#ctaKite", { rotation: -4 }, { rotation: 4, duration: 0.8, ease: "sine.inOut", repeat: 3, yoyo: true, immediateRender: false }, 70.75);
+      tl.fromTo("#ctaWm", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: E }, 70.3);
+      tl.fromTo("#ctaSub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 70.6);
+      tl.fromTo("#btn", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2)" }, 70.85);
+      tl.fromTo("#btn", { scale: 1 }, { scale: 1.06, duration: 0.45, ease: "sine.inOut", repeat: 4, yoyo: true, immediateRender: false }, 71.35);
+      tl.fromTo("#bio", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 71.15);
+      tl.fromTo("#bio svg", { y: 0 }, { y: 10, duration: 0.4, ease: "sine.inOut", repeat: 4, yoyo: true }, 71.5);
 
       window.__timelines["main"] = tl;
       tl.seek(0);

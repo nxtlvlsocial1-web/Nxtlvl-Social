@@ -11,5 +11,6 @@ Sound effects (all CC0, Freesound via Openverse)
 5. "Riser Hit sfx 044.wav" by AudioPapkin, https://freesound.org/people/AudioPapkin/sounds/649826
 
 Fonts (SIL OFL, from google/fonts): Baloo 2, Mukta, Playfair Display, Inter
-Voice: Kokoro-82M (Apache 2.0), voice hf_alpha, generated locally
-Illustration: original SVG (girl, kite, hills), no stock imagery
+Voice (v2): client-supplied ElevenLabs recording, voice "Vikram S - Gripping Documentary Host"
+Voice (v1): Kokoro-82M (Apache 2.0), voice hf_alpha, generated locally
+Visuals: original 3D scene built in code with three.js (MIT), v1 original SVG; no stock imagery
