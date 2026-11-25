@@ -1,0 +1,12 @@
+[
+ {"id": "l00", "text": "A customer messaged you at eleven p.m. You replied at ten a.m. They'd already booked someone else.", "beat": "hook 70: the lost lead, dropped mid-story", "ex": 0.7},
+ {"id": "l01", "text": "This replies in seconds. While you sleep. And there's no code.", "beat": "first peak: the contrast", "ex": 0.68},
+ {"id": "l02", "text": "It's just four boxes.", "beat": "reveal", "ex": 0.62},
+ {"id": "l03", "text": "One. A new form entry starts the flow.", "beat": "release: step 1", "ex": 0.6},
+ {"id": "l04", "text": "Two. The lead saves to a sheet.", "beat": "release: step 2", "ex": 0.6},
+ {"id": "l05", "text": "Three. They get an instant reply. Their name, a thank-you, your price list, and a booking link.", "beat": "peak: step 3", "ex": 0.62},
+ {"id": "l06", "text": "Four. Your phone buzzes with the lead.", "beat": "release: step 4", "ex": 0.6},
+ {"id": "l07", "text": "Live test. Form in... and the reply's already there.", "beat": "peak: live test", "ex": 0.68},
+ {"id": "l08", "text": "Four boxes. It runs all night. Tag someone who still replies at ten a.m.", "beat": "release + share trigger", "ex": 0.65},
+ {"id": "l09", "text": "Comment FLOW, and I'll send you the template.", "beat": "CTA", "ex": 0.68}
+]

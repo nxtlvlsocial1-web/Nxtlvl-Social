@@ -1,0 +1,215 @@
+{
+ "duration": 32.92,
+ "takes": [
+  {
+   "line": "l00",
+   "take": 0,
+   "heard": "A customer messaged you at 11 p .m. You replied at 10 a .m. They'd already booked someone else.",
+   "errors": 4,
+   "pitch_spread_hz": 102
+  },
+  {
+   "line": "l00",
+   "take": 1,
+   "heard": "A customer messaged you at 11 p .m. You replied at 10 a .m. They'd already booked someone else",
+   "errors": 4,
+   "pitch_spread_hz": 97
+  },
+  {
+   "line": "l00",
+   "take": 2,
+   "heard": "A customer messaged you at 11 p .m. You replied at 10 a .m. They'd already booked someone else",
+   "errors": 4,
+   "pitch_spread_hz": 80
+  },
+  {
+   "line": "l01",
+   "take": 0,
+   "heard": "This replies in seconds, while you sleep, and there's no code.",
+   "errors": 0,
+   "pitch_spread_hz": 59
+  },
+  {
+   "line": "l01",
+   "take": 1,
+   "heard": "This replies in seconds, while you sleep, and there's no code.",
+   "errors": 0,
+   "pitch_spread_hz": 96
+  },
+  {
+   "line": "l01",
+   "take": 2,
+   "heard": "This replies in seconds, while you sleep, and there's no code.",
+   "errors": 0,
+   "pitch_spread_hz": 73
+  },
+  {
+   "line": "l02",
+   "take": 0,
+   "heard": "It's just four boxes.",
+   "errors": 0,
+   "pitch_spread_hz": 39
+  },
+  {
+   "line": "l02",
+   "take": 1,
+   "heard": "It's just four boxes.",
+   "errors": 0,
+   "pitch_spread_hz": 53
+  },
+  {
+   "line": "l02",
+   "take": 2,
+   "heard": "It's just four boxes.",
+   "errors": 0,
+   "pitch_spread_hz": 73
+  },
+  {
+   "line": "l03",
+   "take": 0,
+   "heard": "1. A new form entry starts the flow.",
+   "errors": 0,
+   "pitch_spread_hz": 124
+  },
+  {
+   "line": "l03",
+   "take": 1,
+   "heard": "1. A new form entry starts the flow.",
+   "errors": 0,
+   "pitch_spread_hz": 103
+  },
+  {
+   "line": "l03",
+   "take": 2,
+   "heard": "1. A new form entry starts the flow.",
+   "errors": 0,
+   "pitch_spread_hz": 86
+  },
+  {
+   "line": "l04",
+   "take": 0,
+   "heard": "2. The lead saves to a sheet.",
+   "errors": 0,
+   "pitch_spread_hz": 47
+  },
+  {
+   "line": "l04",
+   "take": 1,
+   "heard": "2. The lead saves to a sheet.",
+   "errors": 0,
+   "pitch_spread_hz": 73
+  },
+  {
+   "line": "l04",
+   "take": 2,
+   "heard": "2. The lead saves to a sheet.",
+   "errors": 0,
+   "pitch_spread_hz": 58
+  },
+  {
+   "line": "l05",
+   "take": 0,
+   "heard": "3. They get an instant reply, their name, a thank you, your price list, and a booking link.",
+   "errors": 0,
+   "pitch_spread_hz": 65
+  },
+  {
+   "line": "l05",
+   "take": 1,
+   "heard": "Three, they get an instant reply, their name, a thank you, your price list, and a booking link.",
+   "errors": 0,
+   "pitch_spread_hz": 68
+  },
+  {
+   "line": "l05",
+   "take": 2,
+   "heard": "3. They get an instant reply, their name, a thank you, your price list, and a booking link.",
+   "errors": 0,
+   "pitch_spread_hz": 80
+  },
+  {
+   "line": "l06",
+   "take": 0,
+   "heard": "4. Your phone buzzes with the lead.",
+   "errors": 0,
+   "pitch_spread_hz": 59
+  },
+  {
+   "line": "l06",
+   "take": 1,
+   "heard": "4. Your phone buzzes with a lead.",
+   "errors": 1,
+   "pitch_spread_hz": 82
+  },
+  {
+   "line": "l06",
+   "take": 2,
+   "heard": "4. Your phone buzzes with the lead.",
+   "errors": 0,
+   "pitch_spread_hz": 51
+  },
+  {
+   "line": "l07",
+   "take": 0,
+   "heard": "Live test, form in, and the reply is already there.",
+   "errors": 2,
+   "pitch_spread_hz": 53
+  },
+  {
+   "line": "l07",
+   "take": 1,
+   "heard": "Live test. Form in and the reply is already there.",
+   "errors": 2,
+   "pitch_spread_hz": 70
+  },
+  {
+   "line": "l07",
+   "take": 2,
+   "heard": "form in and the reply is already there.",
+   "errors": 4,
+   "pitch_spread_hz": 97
+  },
+  {
+   "line": "l08",
+   "take": 0,
+   "heard": "Four boxes. It runs all night. Tag someone who still replies at 10 a .m.",
+   "errors": 2,
+   "pitch_spread_hz": 69
+  },
+  {
+   "line": "l08",
+   "take": 1,
+   "heard": "It's four boxes. It runs all night. Tag someone who still replies at 10 a .m.",
+   "errors": 3,
+   "pitch_spread_hz": 90
+  },
+  {
+   "line": "l08",
+   "take": 2,
+   "heard": "Four boxes. It runs all night. Tag someone who still replies at 10 a .m.",
+   "errors": 2,
+   "pitch_spread_hz": 74
+  },
+  {
+   "line": "l09",
+   "take": 0,
+   "heard": "comment, flow, and I'll send you the template.",
+   "errors": 0,
+   "pitch_spread_hz": 90
+  },
+  {
+   "line": "l09",
+   "take": 1,
+   "heard": "Comet Flu, and I'll send you the template.",
+   "errors": 2,
+   "pitch_spread_hz": 49
+  },
+  {
+   "line": "l09",
+   "take": 2,
+   "heard": "Comment flow and I'll send you the template",
+   "errors": 0,
+   "pitch_spread_hz": 83
+  }
+ ]
+}

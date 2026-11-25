@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Voice takes, then the pick. Run detached: setsid nohup bash build/vo_run.sh > /dev/null 2>&1 < /dev/null &
+cd "$(dirname "$0")/.." || exit 1
+export HF_HOME=/root/tts/hf
+/root/tts/.venv/bin/python build/vo.py > cache/vo.log 2>&1
+echo "VO EXIT $?" >> cache/vo.log
+/root/tts/.venv/bin/python build/vo_pick.py >> cache/vo.log 2>&1
+echo "PICK EXIT $?" >> cache/vo.log
