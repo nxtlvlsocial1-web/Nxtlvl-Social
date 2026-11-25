@@ -101,7 +101,7 @@
       for (var p = 0; p < slots; p++) {   // exactly `reels` reels, spread evenly among the posts
         cells[free[Math.floor(p * free.length / slots)]] = Math.floor((p + 1) * reels / slots) > Math.floor(p * reels / slots) ? 'reel' : 'post';
       }
-      out.innerHTML = '<div class="plan-head"><div><h3>Your month as a ' + b.name + '</h3><p>Planned for ' + g.word + '. AI drafts, your strategist approves.</p></div><span class="plan-count">' + total + ' deliverables</span></div>' +
+      out.innerHTML = '<div class="plan-head"><div><h3>Your month as a ' + b.name + '</h3><p>Planned for ' + g.word + '. Your strategist approves every AI draft.</p></div><span class="plan-count">' + total + ' deliverables</span></div>' +
         '<div class="cal" aria-hidden="true">' + cells.map(function (c, i) { return '<div class="' + c + '">' + (i + 1) + '</div>'; }).join('') + '</div>' +
         '<div class="legend"><span><i style="background:var(--violet)"></i>Reel</span><span><i style="background:rgba(169,92,255,.32)"></i>Post or carousel</span>' + (shoot ? '<span><i style="background:#fff"></i>Shoot day</span>' : '') + '</div>' +
         '<div class="groups">' + grp('Creative Studio', creative) + grp('AI Marketing', marketing) + grp('AI Automation', autos) + grp('Websites', webs) + '</div>';
@@ -368,7 +368,7 @@
   var words = document.querySelector('[data-words]');
   var spans = [];
   if (words && !reduce) {
-    var hi = { agents: 1, experts: 1, every: 1, single: 1, day: 1 };
+    var hi = { agents: 1, experts: 1, business: 1 };
     words.innerHTML = words.textContent.trim().split(/\s+/).map(function (w) {
       var k = w.toLowerCase().replace(/[^a-z]/g, ''); return '<span' + (hi[k] ? ' data-hi' : '') + '>' + w + '</span>';
     }).join(' ');

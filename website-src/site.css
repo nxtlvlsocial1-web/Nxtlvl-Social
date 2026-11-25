@@ -578,7 +578,8 @@ form.book .btn { width: 100%; }
 .guide .go { margin-top: auto; font-size: var(--step-small); font-weight: 500; color: var(--text); display: inline-flex; gap: 8px; align-items: center; }
 .guide .go svg { width: 15px; height: 15px; transition: transform .25s var(--ease); }
 .guide:hover .go svg { transform: translateX(3px); }
-@media (max-width: 960px) { .guides { grid-template-columns: 1fr; } }
+@media (max-width: 960px) { .guides { grid-template-columns: minmax(0, 1fr); } }
+.guide { min-width: 0; }
 .article { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: clamp(28px, 4vw, 64px); align-items: start; }
 .article .body { display: grid; gap: 20px; font-size: 18px; line-height: 1.75; color: var(--text-2); max-width: 72ch; }
 .article .body h2 { font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.1rem); color: var(--text); margin-top: 26px; }

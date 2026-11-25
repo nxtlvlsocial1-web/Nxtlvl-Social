@@ -220,10 +220,10 @@ def crumbs_html(crumbs):
 # ---------------------------------------------------------------- home
 HOME_FAQ = [
     ('What is Nxtlvl Social?', ['Nxtlvl Social is an AI-driven growth company in India. We run marketing, business automation and creative production for brands on a monthly subscription. AI systems handle research, first drafts and repetitive work; our team handles strategy, creative direction and quality, and reviews everything before it goes live.']),
-    ('How is this different from a marketing agency?', ['A traditional agency staffs every task by hand, which makes it slow and expensive. We use AI for research, ideas, variations, scheduling and automated replies, so a small senior team delivers more in less time and spends its hours on decisions that move the business. You get the output of a full marketing team without hiring one.']),
+    ('How is this different from a marketing agency?', ['A traditional agency staffs every task by hand, which makes it slow and expensive. We use AI for research, ideas, variations, scheduling and automated replies, so a small senior team delivers more in less time and spends its hours on strategy and creative decisions. You get the output of a full marketing team without hiring one.']),
     ('What services are included in a subscription?', ['Plans are built from four parts: <a href="/ai-marketing">AI marketing</a> (social media management, campaigns, ads, SEO and AEO), <a href="/ai-automation">AI automation</a> (WhatsApp and Instagram DM flows, lead capture, CRM and follow-ups), the <a href="/creative-studio">creative studio</a> (shoots, reel and video editing, graphic design) and <a href="/website-development">website development</a>. You choose what you need, and we scope it with you on a free call.']),
     ('How does the subscription work?', ['Each plan has a clear monthly scope and one point of contact. There is no long contract: you can change the scope, pause or stop at the end of any month. Pricing depends on the scope, so we share a written quote after a free strategy call, before any work starts.']),
-    ('Do you work with businesses across India?', ['Yes. We work remotely with brands across India, from metros to smaller cities, and with international clients. Photo and video shoots are arranged on location when a project needs them.']),
+    ('Do you work with businesses across India?', ['Yes. We work remotely with brands anywhere in India and abroad. Photo and video shoots are arranged on location when a project needs them.']),
     ('Will our content look AI-generated?', ['No. AI speeds up research and drafting, but strategists, designers and editors finish every piece in your brand style. Nothing is published until you approve it.']),
     ('Who owns the content and accounts?', ['You do. Final files, source files, ad accounts and any systems we set up belong to your business.']),
     ('How do we get started?', ['Book a free call through the <a href="/contact">contact page</a>. We review your brand and goals, send a scope and plan, and once you approve it we begin onboarding: brand kit, account access and a first-month plan.']),
@@ -323,12 +323,12 @@ def home():
 
 <section class="frame statement" data-sec aria-label="What Nxtlvl Social does">
   {video_block("v-hero", "Watch: Nextyy and our AI agents answer customers in seconds, run ads, capture every lead and grow our own page to 1.0M views in 30 days.")}
-  <p class="words" data-words>Nxtlvl Social is your AI growth team. Six agents and real experts plan your content, reply to every customer, run your ads, edit your reels and report what worked, every single day, while you run the business.</p>
+  <p class="words" data-words>Nxtlvl Social is your AI growth team. Six agents and our experts plan your content, reply to your customers, run your ads, edit your reels and report what worked, while you run the business.</p>
 </section>
 
 <section class="sec frame" id="agents" data-sec aria-labelledby="ag-h">
   <div class="sec-head center"><span class="kicker" data-rise><i>{icon("bot")}</i>Your AI team</span><h2 id="ag-h" data-rise>Meet your <span class="g">agents</span></h2>
-    <p class="soft" data-rise>Six specialist AI agents work on your brand every day. A strategist directs them, and nothing goes live until a person and you approve it.</p></div>
+    <p class="soft" data-rise>Six specialist AI agents work on your brand daily. A strategist directs them, and nothing goes live until you approve it.</p></div>
   {agent_app()}
 </section>
 
@@ -360,7 +360,7 @@ def home():
     <p class="soft" data-rise>Pick your business, goal and channels. This is the plan our agents and team would start you on, and it changes as you do.</p></div>
   <div class="demo" id="planner" data-rise>
     <div class="plan" data-ui data-plan aria-live="polite">
-      <div class="plan-head"><div><h3>Your month as a café or restaurant</h3><p>Planned for more leads. AI drafts, your strategist approves.</p></div><span class="plan-count">26 deliverables</span></div>
+      <div class="plan-head"><div><h3>Your month as a café or restaurant</h3><p>Planned for more leads. Your strategist approves every AI draft.</p></div><span class="plan-count">26 deliverables</span></div>
       <div class="groups"><div class="group"><b>Creative Studio</b><ul><li>8 reels with hooks, captions and covers</li><li>6 carousels and posts</li><li>4 story sets</li><li>1 shoot day: food and space shoot</li></ul></div>
         <div class="group"><b>AI Marketing</b><ul><li>Instagram calendar, posting and replies</li><li>Meta lead ads</li><li>Monthly report on more leads</li></ul></div>
         <div class="group"><b>AI Automation</b><ul><li>Menu, timings and offers on DM</li><li>Table booking on WhatsApp</li><li>Every lead logged and sent to your WhatsApp</li></ul></div>
@@ -378,24 +378,24 @@ def home():
 </section>
 
 <section class="sec frame" id="services" data-sec aria-labelledby="eng-h">
-  <div class="sec-head has-m"><img class="sec-mascot" src="/img/pose-point.webp" width="360" height="423" alt="" loading="lazy" decoding="async"><span class="kicker" data-rise><i>{icon("layers")}</i>Services</span><h2 id="eng-h" data-rise>Four services, one team</h2>
+  <div class="sec-head has-m"><img class="sec-mascot" src="/img/pose-point.webp" width="360" height="423" alt="" loading="lazy" decoding="async"><span class="kicker" data-rise><i>{icon("layers")}</i>Services</span><h2 id="eng-h" data-rise>Marketing, automation, creative and websites</h2>
     <p class="soft" data-rise>Pick what your brand needs this quarter. Everything shares one plan, one strategist and one monthly report.</p></div>
   <div class="svc">{SVC_HTML}</div>
 </section>
 
 <section class="sec frame" data-sec aria-labelledby="how-h">
-  <div class="sec-head has-m"><img class="sec-mascot" src="/img/pose-laptop.webp" width="360" height="474" alt="" loading="lazy" decoding="async"><span class="kicker" data-rise><i>{icon("refresh")}</i>How it works</span><h2 id="how-h" data-rise>From first call to compounding growth</h2></div>
+  <div class="sec-head has-m"><img class="sec-mascot" src="/img/pose-laptop.webp" width="360" height="474" alt="" loading="lazy" decoding="async"><span class="kicker" data-rise><i>{icon("refresh")}</i>How it works</span><h2 id="how-h" data-rise>From the first call to your monthly report</h2></div>
   <div class="steps2" data-rise>
     <div class="step2"><span class="dot">{icon("search")}</span><h3>Discover</h3><p>A free strategy call and an audit of your brand, channels, competitors and goals.</p></div>
     <div class="step2"><span class="dot">{icon("bot")}</span><h3>Agents draft</h3><p>Research, calendars, scripts, creatives and automations, drafted in hours.</p></div>
-    <div class="step2"><span class="dot">{icon("users")}</span><h3>People finish</h3><p>Strategists, editors and designers polish everything. You approve.</p></div>
-    <div class="step2"><span class="dot">{icon("trend")}</span><h3>It compounds</h3><p>We publish, automate and report monthly, and each month gets sharper.</p></div>
+    <div class="step2"><span class="dot">{icon("users")}</span><h3>People finish</h3><p>Strategists, editors and designers finish every piece, and nothing goes out until you approve it.</p></div>
+    <div class="step2"><span class="dot">{icon("trend")}</span><h3>It compounds</h3><p>We publish, run the automations and report every month, then adjust the plan from what worked.</p></div>
   </div>
 </section>
 
 <section class="sec frame" data-sec aria-labelledby="proof-h">
   <div class="sec-head"><span class="kicker" data-rise><i>{icon("trend")}</i>Proof</span><h2 id="proof-h" data-rise>We grow our own page first</h2>
-    <p class="soft" data-rise>Our Instagram, @ai.nxtlvl, is our lab: every format, hook and automation is tested there before it reaches a client.</p></div>
+    <p class="soft" data-rise>We test every format, hook and automation on our own Instagram, @ai.nxtlvl, before we use it for a client.</p></div>
   <div class="proof">
     <div class="tile shot" data-rise><img src="/img/ai-nxtlvl-profile.jpg" width="1320" height="1245" alt="The @ai.nxtlvl Instagram profile by Nxtlvl Social: 31 posts, 9,924 followers and 1.0M views in the last 30 days" loading="lazy">
       <p class="over">Screenshot of @ai.nxtlvl. <a href="https://www.instagram.com/ai.nxtlvl/" rel="noopener" target="_blank">See the page</a></p></div>
@@ -500,7 +500,7 @@ MARKETING = dict(
     title='AI Marketing & Social Media Management in India | Nxtlvl',
     desc='AI-driven social media management, marketing campaigns, Meta and Google Ads, SEO and AEO for brands in India. Planned with AI, run by strategists.',
     h1='AI marketing for growing brands',
-    intro='We plan, create and run your marketing with AI-powered research and a senior team behind it: social media, campaigns, paid ads and search, all on one monthly plan, measured against the numbers that matter to your business.',
+    intro='We plan, create and run your marketing with AI-powered research and a senior team behind it: social media, campaigns, paid ads and search, all on one monthly plan, measured against the results we agree on with you, such as leads, bookings or sales.',
     facts=[('What it is', 'Done-for-you marketing: social media management, campaigns, paid ads, SEO and AEO'), ('Channels', 'Instagram, Facebook, LinkedIn, YouTube, Google Search and AI assistants'),
            ('How AI is used', 'Trend and competitor research, content ideas, copy variations, audience insights, reporting'), ('Who does the work', 'A strategist owns your account and reviews everything before it goes live'),
            ('Reporting', 'A monthly report with results and next month\'s plan'), ('Commitment', 'Monthly subscription, no long contract')],
@@ -550,7 +550,7 @@ CREATIVE = dict(
     title='Shoots, Reel Editing & Graphic Design Studio | Nxtlvl Social',
     desc='Product and brand shoots, reel and video editing, and graphic design for brands in India. AI-assisted production, finished by editors and designers.',
     h1='Shoots, edits and design',
-    intro='Great growth needs great creative. Our studio plans, shoots, edits and designs the content your brand runs on, using AI to move faster and editors and designers to make every frame look like you.',
+    intro='Our studio plans, shoots, edits and designs the photos, reels and graphics your brand posts. AI speeds up the work, and our editors and designers make every frame look like you.',
     facts=[('What it is', 'Creative production: photo and video shoots, reel and video editing, graphic design, brand identity'), ('Formats', 'Reels, YouTube Shorts and long-form, product photos, carousels, ads, posters and print'),
            ('How AI is used', 'Concepts and scripts, rough cuts, captions, background clean-up and design variations'), ('Who does the work', 'Editors and designers finish every piece by hand in your brand style'),
            ('Footage', 'We shoot on location, or edit the raw footage you send'), ('Commitment', 'Monthly subscription or a defined monthly batch')],
@@ -604,20 +604,20 @@ def about():
     <p class="lead soft">Nxtlvl Social (Next Level Social) gives businesses the marketing, automation and creative capacity of a full team, on one monthly subscription.</p></div>
   <aside class="tile night aside" data-rise aria-labelledby="glance-h"><h2 id="glance-h">In short</h2><dl>
     <div><dt>What we are</dt><dd>An AI-driven growth company in India</dd></div><div><dt>What we do</dt><dd>Marketing, automation, creative production and websites</dd></div>
-    <div><dt>How we work</dt><dd>AI for speed, people for judgement</dd></div><div><dt>How you pay</dt><dd>A monthly subscription, no lock-in</dd></div></dl></aside>
+    <div><dt>How we work</dt><dd>AI with human review</dd></div><div><dt>How you pay</dt><dd>A monthly subscription, no lock-in</dd></div></dl></aside>
 </div></section>
 <section class="sec frame" data-sec aria-labelledby="ab-h"><div class="about">
   <div class="prose" data-rise>
     <h2 id="ab-h" style="margin-top:0">Growth should not need a big team</h2>
-    <p>Most growing businesses face the same choice: hire an expensive agency, build an in-house team they cannot yet afford, or try to do everything themselves. We started Nxtlvl Social to offer a better option.</p>
+    <p>Most growing businesses face the same choice: hire an expensive agency, build an in-house team they cannot yet afford, or try to do everything themselves. We started Nxtlvl Social to give them another option: the output of a full team on one monthly plan.</p>
     <p>We work like a technology company. AI systems handle research, first drafts, repetitive tasks and round-the-clock customer replies. A small, senior team sets the strategy, directs the creative and checks every result. You get a partner that moves fast, costs less than a traditional agency and still feels personal.</p>
     <h2>What we do</h2>
-    <ul><li><strong>Marketing:</strong> <a href="/ai-marketing">social media management, campaigns, paid ads, SEO and AEO</a>, for growth on social and beyond it.</li>
+    <ul><li><strong>Marketing:</strong> <a href="/ai-marketing">social media management, campaigns, paid ads, SEO and AEO</a>.</li>
       <li><strong>Automation:</strong> <a href="/ai-automation">WhatsApp and Instagram automation, lead capture, CRM and follow-ups</a>.</li>
       <li><strong>Creativity:</strong> <a href="/creative-studio">shoots, reel and video editing, graphic design and brand identity</a>, plus <a href="/website-development">websites and landing pages</a>.</li></ul>
     <h2>How we work</h2>
-    <ul><li><strong>AI for speed, people for judgement.</strong> Every output is reviewed by a person, and nothing goes live without your approval.</li>
-      <li><strong>Subscriptions, not one-off projects.</strong> Growth compounds when the same team learns your business month after month.</li>
+    <ul><li><strong>A person checks every output.</strong> AI writes the first draft, and nothing goes live without your approval.</li>
+      <li><strong>Monthly subscriptions.</strong> The same team works on your business every month, so each plan builds on the last.</li>
       <li><strong>Clear numbers.</strong> We agree on the metrics that matter and report on them every month.</li>
       <li><strong>You own everything.</strong> Files, accounts and systems belong to your business.</li></ul>
     <h2>What is next</h2>
@@ -668,9 +668,9 @@ def not_found():
 
 # ---------------------------------------------------------------- industries and guides
 INDUSTRIES = [
-    ('Restaurants and cafés', 'Reels that fill tables, DM and WhatsApp replies for menus and bookings, festive campaigns.', ['Reels', 'Table booking', 'Festive offers'], '/creative-studio'),
-    ('Clinics and wellness', 'Appointment booking on WhatsApp, treatment questions answered 24/7, content that builds trust.', ['Bookings', 'Reminders', 'Trust content'], '/ai-automation'),
-    ('D2C and e-commerce', 'Product shoots, performance ads that scale, and order and delivery replies on autopilot.', ['Product shoots', 'Meta ads', 'Order replies'], '/ai-marketing'),
+    ('Restaurants and cafés', 'Reels of your food and space, DM and WhatsApp replies for menus and bookings, festive campaigns.', ['Reels', 'Table booking', 'Festive offers'], '/creative-studio'),
+    ('Clinics and wellness', 'Appointment booking on WhatsApp, treatment questions answered 24/7, posts that explain your treatments.', ['Bookings', 'Reminders', 'Trust content'], '/ai-automation'),
+    ('D2C and e-commerce', 'Product shoots, Meta and Google ads, and automatic replies to order and delivery questions.', ['Product shoots', 'Meta ads', 'Order replies'], '/ai-marketing'),
     ('Real estate', 'Lead qualification by budget and area, site-visit booking, project walkthrough videos.', ['Lead scoring', 'Site visits', 'Walkthroughs'], '/ai-automation'),
     ('Education and coaching', 'Admission enquiries answered instantly, demo-class bookings and student stories.', ['Admissions', 'Demo classes', 'Reels'], '/ai-marketing'),
     ('Creators and personal brands', 'Editing, a weekly content system, comment-to-DM links and collab enquiry routing.', ['Editing', 'Content system', 'DM links'], '/creative-studio'),
@@ -840,7 +840,7 @@ LLMS = f"""# Nxtlvl Social
 - Model: monthly subscription with a written scope; no long contract; change scope, pause or stop at the end of any month.
 - Pricing: custom, quoted in writing after a free 20-minute strategy call.
 - Ownership: clients own all final files, source files, accounts and systems.
-- Approach: AI for speed, people for judgement; nothing is published without client approval.
+- Approach: AI does the first draft, a person checks every result; nothing is published without client approval.
 - Who it serves: D2C and e-commerce, restaurants and cafés, clinics and wellness, real estate, education, startups, creators and personal brands.
 - Where: remote-first across India and internationally; shoots on location.
 - In development: the Nxtlvl growth platform, an AI workspace that turns a brief into ideas, scripts and reels; subscribers get early access.
