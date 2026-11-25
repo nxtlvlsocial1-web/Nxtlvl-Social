@@ -11,7 +11,7 @@
   {
    "line": "g1",
    "take": 1,
-   "heard": "Some journeys are about more than progress. They are about what happens behind the scenes.",
+   "heard": "Some journeys are about more than progress. They are about what happens behind the scenes",
    "errors": 0,
    "pitch_spread_hz": 47
   },
@@ -67,23 +67,23 @@
   {
    "line": "g4",
    "take": 0,
-   "heard": "A published account describes alleged hacking, tracking, harassment, and attempts to disrupt the progress of sports science technology.",
+   "heard": "A published account describes alleged hacking, tracking, and stalking, and accidents it says were deliberately engineered, all aimed at stopping the progress of sports science technology.",
    "errors": 0,
-   "pitch_spread_hz": 78
+   "pitch_spread_hz": 70
   },
   {
    "line": "g4",
    "take": 1,
-   "heard": "A published account describes alleged hacking, tracking, harassment, and attempts to disrupt the progress of sports science technology.",
+   "heard": "A published account describes alleged hacking, tracking and stalking and accidents it says were deliberately engineered, all aimed at stopping the progress of sports science technology.",
    "errors": 0,
-   "pitch_spread_hz": 72
+   "pitch_spread_hz": 71
   },
   {
    "line": "g4",
    "take": 2,
-   "heard": "A published account describes alleged hacking, tracking, harassment, and attempts to disrupt the progress of sports science technology.",
+   "heard": "A published account describes alleged hacking, tracking, and stalking, and accidents it says were deliberately engineered, all aimed at stopping the progress of sports science technology.",
    "errors": 0,
-   "pitch_spread_hz": 68
+   "pitch_spread_hz": 84
   },
   {
    "line": "g5",
@@ -179,7 +179,7 @@
   {
    "line": "g9",
    "take": 1,
-   "heard": "Sports science technology. The journey is far from over.",
+   "heard": "Sports Science Technology. The journey is far from over.",
    "errors": 0,
    "pitch_spread_hz": 104
   },

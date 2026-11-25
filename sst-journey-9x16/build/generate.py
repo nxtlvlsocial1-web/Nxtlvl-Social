@@ -52,20 +52,26 @@ DUR = 59.3
 clips = []
 for k, s in enumerate(EDL["shots"]):
     t, d = s["t"], s["d"]
-    vis = d + (EDL["handle"] if k < len(EDL["shots"]) - 1 else .0)
+    nxt_cut = k + 1 < len(EDL["shots"]) and EDL["shots"][k + 1].get("cut")
+    vis = d + (.08 if nxt_cut else EDL["handle"] if k < len(EDL["shots"]) - 1 else .0)
     clips.append(f'<div class="shot" id="w{s["id"]}"><video id="{s["id"]}" class="clip" src="assets/video/{s["id"]}.mp4" muted playsinline '
                  f'data-start="{t:.3f}" data-duration="{vis:.3f}" data-track-index="{1 + k % 2}"></video></div>')
-    fade = 1.2 if k == 0 else .5
+    fade = 1.2 if k == 0 else (.05 if s.get("cut") else .5)          # the allegation montage cuts hard
     ft(f"#w{s['id']}", t, fade, "{opacity: 0}", "{opacity: 1}", "sine.inOut")
     ft(f"#w{s['id']}", t, vis, "{scale: 1.0}", "{scale: 1.055}", "none")       # slow push-in
     to(f"#w{s['id']}", t + vis - .02, .01, "{opacity: 0}")
+for o in EDL.get("overlays", []):
+    clips.append(f'<div class="shot ovl" id="w{o["id"]}"><video id="{o["id"]}" class="clip" src="assets/video/{o["id"]}.mp4" muted playsinline '
+                 f'data-start="{o["t"]:.3f}" data-duration="{o["d"]:.3f}" data-track-index="3"></video></div>')
+    st(f"#w{o['id']}", o["t"], "{opacity: .85}")
+    to(f"#w{o['id']}", o["t"] + o["d"] - .02, .01, "{opacity: 0}")
 # the band hands over to the end card under the closing lines
 to("#band", start["j15"] - .5, .9, "{opacity: 0}", "sine.inOut")
 
 # ---- the brief's on-screen text, per scene (white with royal-blue emphasis)
 SCENES = [("EVERY VISION HAS A JOURNEY.", "", "", 0.0, start["j02"] - .3),
           ("YEARS OF WORK.", "A VISION WITH PURPOSE.", "", start["j02"], start["j05"] - .3),
-          ("CHALLENGES BEHIND THE SCENES.", "", "ALLEGATIONS DESCRIBED IN A PUBLISHED ACCOUNT", start["j05"], start["j07"] - .3),
+          ("CHALLENGES BEHIND THE SCENES.", "", "", start["j05"], start["j06"] + 1.6),
           ("THE JOURNEY IS TESTED.", "THE VISION REMAINS.", "", start["j07"], start["j11"] - .3),
           ("THE WORK CONTINUES.", "THE VISION MOVES FORWARD.", "", start["j11"], start["j13"] - .3)]
 for k, (a, b, note, t0, t1) in enumerate(SCENES):
@@ -83,8 +89,20 @@ for k, (a, b, note, t0, t1) in enumerate(SCENES):
         ft(f"#hd{k}n", start["j06"] - .2, .6, "{opacity: 0}", "{opacity: 1}", "power1.out")
     to(f"#hd{k}", t1, .4, "{opacity: 0}", "power1.in")
 
+# ---- the allegations, as the account describes them: a 2x2 list that lights word by word, the attribution always under it
+J6 = {w["w"].lower().strip(",."): w["t0"] for w in LW["j06"]}
+ALG = [("HACKING.", J6["hacking"]), ("TRACKING.", J6["tracking"]), ("STALKING.", J6["stalking"]), ("ENGINEERED ACCIDENTS.", J6["accidents"])]
+items = "".join(f'<span class="al" id="al{k}">{w}</span>' for k, (w, _) in enumerate(ALG))
+HTML.append(f'<div class="head" id="alg"><div class="algrid">{items}</div><div class="note" id="algn">ALLEGATIONS DESCRIBED IN A PUBLISHED ACCOUNT</div></div>')
+ft("#alg", start["j06"] + 1.6, .4, "{opacity: 0}", "{opacity: 1}", "power1.out")
+st("#algn", start["j06"] + 1.6, "{opacity: 1}")
+for k, (w, at) in enumerate(ALG):
+    ft(f"#al{k}", at - .06, .25, "{opacity: .22, y: 8}", "{opacity: 1, y: 0}", "power2.out")
+    ft(f"#al{k}", at - .06, .5, "{'--u': 0}", "{'--u': 1}", "power2.out")
+to("#alg", start["j07"] - .3, .4, "{opacity: 0}", "power1.in")
+
 # ---- subtitles: the script's words, max two lines; long lines split at a natural pause
-SPLIT = {"j06": "harassment"}
+SPLIT = {"j06": [9, 16]}          # "...tracking and stalking," / "and accidents it says were deliberately engineered," / "all aimed at..."
 subs = []
 for lid in sorted(LW):
     if lid in ("j15", "j16"):                     # the end card carries these (logo = SST, the closing line)
@@ -93,10 +111,8 @@ for lid in sorted(LW):
     words = SCRIPT[lid].split()
     if len(words) != len(ws):
         words = [w["w"] for w in ws]
-    cut = None
-    if lid in SPLIT:
-        cut = next(i for i, w in enumerate(words) if w.lower().startswith(SPLIT[lid]))
-    parts = [(words[:cut], ws[:cut]), (words[cut:], ws[cut:])] if cut else [(words, ws)]
+    cuts = [0] + SPLIT.get(lid, []) + [len(words)]
+    parts = [(words[a:b], ws[a:b]) for a, b in zip(cuts, cuts[1:])]
     for txt, tw in parts:
         subs.append((" ".join(txt), tw[0]["t0"], tw[-1]["t1"]))
 for k, (txt, t0, t1) in enumerate(subs):
@@ -112,17 +128,23 @@ ft("#scan", gl0, 1.0, "{opacity: 0}", "{opacity: 1}", "sine.inOut")
 to("#scan", gl1, 1.0, "{opacity: 0}", "sine.inOut")
 ft("#cool", gl0 - .5, 1.5, "{opacity: 0}", "{opacity: 1}", "sine.inOut")
 to("#cool", start["j10"], 2.0, "{opacity: 0}", "sine.inOut")
-for k, at in enumerate([gl0 + .05, start["j06"] + .1, start["j06"] + 2.6, 21.62, 24.62, 27.4]):
+HITS = [gl0 + .05] + [s["t"] for s in EDL["shots"] if s.get("cut")] + [s["t"] for s in EDL["shots"] if s["id"] in ("sh20", "sh09")]
+for k, at in enumerate(HITS):
     js(f'tl.set("#band", {{filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: {6 if k % 2 else -6}}}, {at:.3f});')
-    js(f'tl.set("#slice", {{opacity: .9, y: {[120, 460, 820, 300, 640, 980][k]}}}, {at:.3f});')
+    js(f'tl.set("#slice", {{opacity: .9, y: {[120, 460, 820, 300, 640, 980, 220, 760][k % 8]}}}, {at:.3f});')
     js(f'tl.set("#band", {{filter: "none", x: 0}}, {at + .09:.3f});')
     js(f'tl.set("#slice", {{opacity: 0}}, {at + .09:.3f});')
     sfx("glitch", at)
 sh07 = next(s for s in EDL["shots"] if s["id"] == "sh07")
 for k in range(3):
-    ft(f"#nt{k}", sh07["t"] + .4 + k * .7, .5, "{opacity: 0, y: 30}", "{opacity: 1, y: 0}", "power2.out")
-    to(f"#nt{k}", sh07["t"] + sh07["d"] - .2, .4, "{opacity: 0}")
-    sfx("notify_soft", sh07["t"] + .4 + k * .7)
+    ft(f"#nt{k}", sh07["t"] + .02 + k * .1, .2, "{opacity: 0, y: 30}", "{opacity: 1, y: 0}", "power2.out")
+    to(f"#nt{k}", sh07["t"] + sh07["d"] - .05, .1, "{opacity: 0}")
+sfx("notify_soft", sh07["t"] + .02)
+# TRACKING: location rings pulse over the phone (symbolic, no map, no data)
+ft("#track", sh07["t"], .12, "{opacity: 0}", "{opacity: 1}", "none")
+js(f'tl.fromTo("#track circle", {{attr: {{r: 10}}, opacity: .9}}, {{attr: {{r: 260}}, opacity: 0, duration: .9, stagger: .18, ease: "power1.out", immediateRender: false}}, {sh07["t"]:.3f});')
+to("#track", sh07["t"] + sh07["d"] - .02, .05, "{opacity: 0}")
+sfx("thump", J6["accidents"] - .04)
 js(f'tl.fromTo("#net path", {{strokeDashoffset: 900}}, {{strokeDashoffset: 0, duration: 4.5, ease: "power1.inOut", stagger: .4, immediateRender: false}}, {gl0 + .5:.3f});')
 ft("#net", gl0 + .5, 1.0, "{opacity: 0}", "{opacity: 1}")
 to("#net", gl1 - 1.0, 1.0, "{opacity: 0}")
@@ -162,6 +184,13 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: {INK}
 #cool {{ position: absolute; inset: 0; opacity: 0; background: radial-gradient(90% 70% at 50% 50%, rgba(10,25,60,0) 30%, rgba(4,10,28,.55) 100%); mix-blend-mode: multiply; }}
 #warm {{ position: absolute; inset: 0; opacity: 0; background: radial-gradient(80% 60% at 70% 20%, rgba(255,196,140,.22), rgba(255,196,140,0) 70%); mix-blend-mode: soft-light; }}
 #scan {{ position: absolute; inset: 0; opacity: 0; background: repeating-linear-gradient(0deg, rgba(120,160,255,.05) 0 2px, rgba(0,0,0,0) 2px 5px); mix-blend-mode: screen; }}
+.algrid {{ display: grid; grid-template-columns: auto auto; gap: 8px 34px; justify-content: center; }}
+.al {{ --u: 0; position: relative; font-weight: 800; font-size: 40px; letter-spacing: .05em; white-space: nowrap; opacity: .22; }}
+.al::after {{ content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 4px; background: {BLUE}; transform: scaleX(var(--u)); transform-origin: 0 50%; }}
+#algn {{ margin-top: 20px; }}
+#track {{ position: absolute; inset: 0; opacity: 0; }}
+#track circle {{ fill: none; stroke: rgba(130,180,255,.8); stroke-width: 3; }}
+.ovl {{ mix-blend-mode: screen; }}
 #slice {{ position: absolute; left: 0; right: 0; height: 26px; opacity: 0; background: linear-gradient(90deg, rgba(60,150,255,0), rgba(120,190,255,.35), rgba(255,60,90,.25), rgba(60,150,255,0)); mix-blend-mode: screen; }}
 .nt {{ position: absolute; left: 330px; width: 420px; height: 96px; border-radius: 26px; opacity: 0; background: rgba(150,185,255,.28); filter: blur(14px); }}
 #net {{ position: absolute; inset: 0; opacity: 0; mix-blend-mode: screen; }}
@@ -206,6 +235,8 @@ html = f"""<!doctype html>
         <div id="warm"></div>
         {net}
         <div class="nt" id="nt0" style="top:330px"></div><div class="nt" id="nt1" style="top:450px"></div><div class="nt" id="nt2" style="top:570px"></div>
+        <svg id="track" viewBox="0 0 1080 1160"><circle cx="540" cy="560" r="10"/><circle cx="540" cy="560" r="10"/><circle cx="540" cy="560" r="10"/>
+          <path d="M540 470 V650 M450 560 H630" stroke="rgba(130,180,255,.7)" stroke-width="2"/></svg>
         <div id="scan"></div>
         <div id="slice"></div>
       </div>

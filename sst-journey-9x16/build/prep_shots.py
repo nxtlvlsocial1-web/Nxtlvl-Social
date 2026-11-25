@@ -17,6 +17,7 @@ GRADE = {
     "dark": "eq=contrast=1.12:saturation=0.5:brightness=-0.05:gamma=0.93,colorbalance=rs=-0.07:gs=-0.02:bs=0.12:rm=-0.04:bm=0.07:bh=0.02",
     "turn": "eq=contrast=1.06:saturation=0.68:brightness=-0.01,colorbalance=rs=-0.03:bs=0.06:rm=-0.01:bm=0.03:rh=0.02",
     "warm": "eq=contrast=1.05:saturation=0.82:brightness=0.0,colorbalance=rs=-0.01:bs=0.04:rh=0.03:bh=-0.02",
+    "none": "eq=contrast=1.0",
     "dawn": "eq=contrast=1.05:saturation=0.85:brightness=0.0,colorbalance=rs=-0.02:bs=0.05:rh=0.02",
 }
 
@@ -30,7 +31,7 @@ def probe(p):
 def main():
     os.makedirs(os.path.join(ROOT, "assets", "video"), exist_ok=True)
     only = set(sys.argv[1:])
-    for s in E["shots"]:
+    for s in E["shots"] + E.get("overlays", []):
         if only and s["id"] not in only:
             continue
         src = os.path.join(ROOT, "footage", "pexels", s["src"] + ".mp4")

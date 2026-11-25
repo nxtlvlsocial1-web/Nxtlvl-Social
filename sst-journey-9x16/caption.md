@@ -1,6 +1,7 @@
 # SST: "The Journey Continues" (Instagram + Facebook Reels, 9:16, 59.3 s)
 
-Client brief: `SST_The_Journey_Continues_Editor_Production_Brief.pdf` (8 pages). VO = the brief's master script, verbatim except one owner change (v2: "SST." is spoken as "Sports Science Technology.",
+Client brief: `SST_The_Journey_Continues_Editor_Production_Brief.pdf` (8 pages). VO = the brief's master script, verbatim except two owner changes (v3: the allegation line names hacking, tracking, stalking and
+accidents the account says were deliberately engineered, owner-confirmed as in the published account; v2: "SST." is spoken as "Sports Science Technology.",
 no "and", as the client asked on the earlier reel),
 each line placed on the brief's time codes (Scene 02 at 0:07, 03 at 0:15, 04 at 0:29, 05 at 0:41, 06 at 0:51), with the
 pauses it asks for after "behind the scenes", "whether you continue" and "the vision moves forward". On-screen text is
@@ -20,7 +21,7 @@ Behind every vision, there is a journey the world may never see.
 
 Years of work. A purpose-driven initiative. And challenges that test the determination to keep moving forward.
 
-A published account describes alleged digital interference, tracking and harassment connected to the journey of Sports Science Technology.
+A published account describes alleged hacking, tracking and stalking, and accidents it says were deliberately engineered, all aimed at stopping the progress of Sports Science Technology.
 
 This is not just a story about obstacles. It is a reminder that meaningful progress demands resilience, patience and the courage to continue.
 
@@ -43,6 +44,13 @@ sports science technology, SST, sports technology, resilience, innovation in spo
   phone, sunrise. No identifiable alleged perpetrator, no fake evidence, messages, documents, police or news graphics,
   no readable screens (the phone shot is blurred past reading), no product or research details.
 - The official SST logo is used exactly as supplied (brands/sports-science-technology/logo.jpg), unaltered, on a white card.
+
+## v3 challenge section
+
+A hard-cut montage on the spoken words, each allegation lighting up in a 2x2 list with the attribution under it:
+HACKING (blue-lit laptop + a real glitch clip), TRACKING (blurred phone + location rings), STALKING (a figure walking
+away in fog, from behind), ENGINEERED ACCIDENTS (headlights coming at the camera on a wet night road, shop sign cropped out).
+All symbolic stock; nothing shown as evidence; no identifiable person presented as a perpetrator.
 
 ## Credits
 
