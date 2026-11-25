@@ -1,19 +1,19 @@
 [
 {
 "type": "whoosh",
-"t": 1.337
+"t": 1.239
 },
 {
 "type": "thump",
-"t": 1.397
+"t": 1.299
 },
 {
 "type": "swish",
-"t": 2.289
+"t": 2.167
 },
 {
 "type": "thump",
-"t": 2.349
+"t": 2.227
 },
 {
 "type": "whoosh_big",
@@ -96,20 +96,20 @@
 "t": 16.183
 },
 {
-"type": "whoosh_big",
-"t": 17.099
-},
-{
 "type": "impact",
-"t": 17.349
+"t": 17.715
 },
 {
-"type": "sparkle",
-"t": 17.649
+"type": "whoosh_big",
+"t": 17.735
 },
 {
 "type": "whoosh",
 "t": 17.903
+},
+{
+"type": "sparkle",
+"t": 18.015
 },
 {
 "type": "click",

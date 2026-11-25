@@ -1,0 +1,302 @@
+[
+{
+"t": 1.337,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 1.397,
+"kind": "thump",
+"file": "thump_impact.wav"
+},
+{
+"t": 2.289,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 2.349,
+"kind": "thump",
+"file": "thump_impact.wav"
+},
+{
+"t": 2.808,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_deep.wav"
+},
+{
+"t": 3.887,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 4.453,
+"kind": "cash",
+"file": "cash_cash.wav"
+},
+{
+"t": 4.673,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 4.893,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 5.101,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 5.113,
+"kind": "cash",
+"file": "cash_cash.wav"
+},
+{
+"t": 5.333,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 5.381,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 5.553,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 5.773,
+"kind": "cash",
+"file": "cash_cash.wav"
+},
+{
+"t": 6.513,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 8.575,
+"kind": "impact",
+"file": "impact_impact.wav"
+},
+{
+"t": 8.675,
+"kind": "cash",
+"file": "cash_cash.wav"
+},
+{
+"t": 10.661,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 12.934,
+"kind": "stamp",
+"file": "stamp_stamp.wav"
+},
+{
+"t": 14.349,
+"kind": "screech",
+"file": "screech_screech.wav"
+},
+{
+"t": 14.664,
+"kind": "impact",
+"file": "impact_impact.wav"
+},
+{
+"t": 15.583,
+"kind": "riser_short",
+"file": "riser_short_riser.wav"
+},
+{
+"t": 16.183,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 17.099,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_deep.wav"
+},
+{
+"t": 17.349,
+"kind": "impact",
+"file": "impact_impact.wav"
+},
+{
+"t": 17.649,
+"kind": "sparkle",
+"file": "sparkle_sparkle.wav"
+},
+{
+"t": 17.903,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 18.283,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 18.353,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 19.085,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 19.168,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 19.415,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 19.535,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 19.655,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 20.585,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 20.725,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 20.865,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 21.015,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 21.165,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 21.736,
+"kind": "g_levelup",
+"file": "g_levelup_g_levelup.wav"
+},
+{
+"t": 22.878,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 23.573,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 24.023,
+"kind": "shutter",
+"file": "shutter_shutter.wav"
+},
+{
+"t": 24.604,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 25.396,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 27.0,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 27.17,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 27.34,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 27.51,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 27.68,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 27.85,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 27.934,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 32.019,
+"kind": "notify",
+"file": "notify_notify.wav"
+},
+{
+"t": 32.119,
+"kind": "g_complete",
+"file": "g_complete_g_complete.wav"
+},
+{
+"t": 32.384,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 33.06,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 33.2,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 33.51,
+"kind": "pop",
+"file": "pop_pop.wav"
+},
+{
+"t": 35.5,
+"kind": "ding",
+"file": "ding_notify.wav"
+}
+]

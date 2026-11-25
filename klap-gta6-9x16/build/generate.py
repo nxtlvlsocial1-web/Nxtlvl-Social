@@ -72,7 +72,7 @@ T = {}
 T["clips"] = wt("clips"); T["feed"] = wt("feed"); T["clippers"] = wt("clippers"); T["paid"] = wt("paid"); T["views1"] = wt("views")
 T["beast"] = wt(["mrbeast", "mr"]); T["speed"] = wt(["ishowspeed", "ishow", "i"], after=T["beast"] + .2); T["dollar"] = wt("dollar")
 T["thousand"] = wt("thousand"); T["hard"] = wt("hard"); T["moment"] = wt("moment"); T["three"] = wt(["three", "3"], after=T["hard"])
-T["crazy"] = wt("crazy"); T["chase"] = wt("chase"); T["tool"] = wt("tool"); T["klap"] = wt(["klap", "clap"])
+T["crazy"] = wt("crazy"); T["chase"] = wt("chase"); T["tool"] = wt("tool"); T["klap"] = wt(["klap", "clap"]); T["klaphit"] = wt(["klap", "clap"], end=True) - .03   # the boom lands after the name, never on its K
 T["paste"] = wt("paste"); T["link"] = wt("link"); T["picks"] = wt("picks"); T["scores"] = wt("scores"); T["viral"] = wt("viral")
 T["cuts"] = wt("cuts"); T["vertical"] = wt("vertical"); T["gameplay"] = wt("gameplay"); T["streamer"] = wt("streamer")
 T["captions"] = wt("captions"); T["pop"] = wt("pop", after=T["captions"]); T["so"] = wt("so", after=T["pop"])
@@ -85,11 +85,11 @@ T["end"] = DUR
 BEATS = json.load(open(os.path.join(ROOT, "sfx", "music", "beats_miami.json")))
 BI = BEATS["beat_interval_s"]
 DROP = 120.024
-o2 = DROP - T["klap"]
+o2 = DROP - T["klaphit"]
 b_break = min(BEATS["beats_s"], key=lambda b: abs(b - 60.0))      # first beat of the breakdown
 n = round((o2 - (b_break - T["hard"] + .05)) / BI)
 o1 = o2 - n * BI
-CUT = T["klap"] - 4 * BI
+CUT = T["klaphit"] - 4 * BI
 grid = [b - o1 for b in BEATS["beats_s"] if 0 <= b - o1 < CUT] + [b - o2 for b in BEATS["beats_s"] if CUT <= b - o2 < DUR]
 json.dump({"track": "sfx/music/m3_miami.mp3", "o1": round(o1, 4), "o2": round(o2, 4), "cut": round(CUT, 4), "dur": DUR},
           open(os.path.join(ROOT, "plan", "music_plan.json"), "w"), indent=1)
@@ -104,7 +104,7 @@ S = {}
 S["A"] = (0, T["feed"] - .3)
 S["B"] = (S["A"][1], T["beast"] - .3)
 S["D"] = (S["B"][1], T["hard"] - .25)
-S["E"] = (S["D"][1], T["klap"] - .1)
+S["E"] = (S["D"][1], T["klaphit"] - .1)
 S["F"] = (S["E"][1], T["paste"] - .3)
 S["G"] = (S["F"][1], T["picks"] - .25)
 S["H"] = (S["G"][1], T["cuts"] - .25)
@@ -136,7 +136,7 @@ HEADS = [("GTA 6 is out.", "Clips are everywhere.", 0.0),
          ("The hard part:", "finding the moment.", T["hard"] - .1),
          ("3-hour stream.", "One crazy chase.", T["three"] - .1),
          ("This tool", "finds it for you.", T["tool"] - .1),
-         (None, None, T["klap"] - .25),
+         (None, None, T["klaphit"] - .25),
          ("Paste the", "stream link.", T["paste"] - .15),
          ("It picks the moments", "and scores each one.", T["picks"] - .15),
          ("Cut vertical,", "streamer in frame.", T["cuts"] - .15),
@@ -246,7 +246,7 @@ ft("#lift", T["tool"] + .45, .6, "{opacity: 0, y: 330, scale: .3}", "{opacity: 1
 sfx("whoosh", T["tool"] + .4)
 to("#player2, #tline2", T["tool"] + .4, .4, "{opacity: .18, filter: 'blur(6px)'}")
 # the reveal on the drop
-tk = T["klap"]
+tk = T["klaphit"]
 to("#fstage", tk - .3, .25, "{opacity: 0, scale: .85, filter: 'blur(12px)'}", "power2.in")
 st("#kring", tk - .03, "{opacity: .9, scale: .2}"); to("#kring", tk - .02, .9, "{opacity: 0, scale: 2.6}", "power2.out")
 ft("#kicon", tk - .05, .6, "{opacity: 0, scale: .2, rotation: -25}", "{opacity: 1, scale: 1, rotation: 0}", "back.out(2.2)")
@@ -255,7 +255,7 @@ ft("#ktag", tk + .5, .45, "{opacity: 0, y: 24}", "{opacity: 1, y: 0}", "power3.o
 js(f'tl.set("#flash", {{opacity: .55}}, {tk - .03:.3f});'); to("#flash", tk - .02, .5, "{opacity: 0}")
 for i, (dx, dy) in enumerate(((10, -8), (-8, 6), (6, -4), (-3, 2), (0, 0))):
     st("#shake", tk + i * .035, f"{{x: {dx}, y: {dy}}}")
-sfx("impact", tk); sfx("whoosh_big", tk - .25); sfx("sparkle", tk + .3)
+sfx("impact", tk); sfx("whoosh_big", tk + .02); sfx("sparkle", tk + .3)
 whip_out("F")
 
 # ================= scene G: paste the stream link, Generate
@@ -540,7 +540,7 @@ SC = f"""
     <div class="tmpl"><div class="sel">NO WAY <b>HE</b> DID</div><div>NO <b>WAY</b> HE DID</div><div>No way he did</div></div>
     <div id="prog"><div class="t">Finding the best moments...</div><div class="bar"><div id="progbar"></div></div></div></div></div>
   <div class="scn" id="sH"><div id="moments">
-    {''.join(f'<div class="mc" id="mc{i}"><div class="glow"></div><div class="in">{vid(f"hv{i}", s, S["H"][0], S["H"][1] + .25, m)}</div><div class="vb" id="vb{i}">{FLAME}<span id="vs{i}">0</span><small>/100</small></div><div class="rk">#{r}</div></div>' for i, (s, m, r) in enumerate((("t_cops", .3, 2), ("t_flip", .1, 1), ("t_heli", .6, 3))))}
+    {''.join(f'<div class="mc" id="mc{i}"><div class="glow"></div><div class="in">{vid(f"hv{i}", s, S["H"][0], S["H"][1] + .25, m)}</div><div class="vb" id="vb{i}">{FLAME}<span id="vs{i}">0</span><small>/100</small></div><div class="rk">#{r}</div></div>' for i, (s, m, r) in enumerate((("t_cops", .3, 2), ("t_flip", .75, 1), ("t_heli", .6, 3))))}
     </div><div id="rankpill"><span>Ranked by virality score</span></div></div>
   <div class="scn" id="sI">
     <div id="land">{vid("iv0", "stream_cops_l", S["I"][0], T["vertical"] + .6, .3, "fill")}<div id="fcam1">{vid("iv1", "facecam", S["I"][0], T["vertical"] + .6, .0, "fill")}</div></div>
