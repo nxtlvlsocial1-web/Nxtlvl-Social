@@ -85,6 +85,11 @@ https://github.com/slavingia/skills
 ```
 
 Notes:
+- When posting: turn on the "AI label" toggle (Advanced settings). The voiceover is synthetic but sounds real, and Meta
+  requires the label for realistic AI-made audio. It does not hurt reach.
+- Instagram guideline check (2026-11-25): no Community Guidelines issues (no real person's likeness or voice, no
+  impersonation, licensed music credited, original 3D build). The keyword CTA is fine per Instagram's own clarification;
+  the "send this to the friend" line is a mild share prompt, low risk.
 - The stars count is from shields.io on 2026-11-25; recheck it on the day you post.
 - The reference reel was used only as a reference: no face, footage or audio from it is in this video.
 - Music: "Funky Nurykabe (Spinningmerkaba Mix)" by ccMixter (Jamendo 1468789, CC BY 3.0), the AI.NXTLVL bed.
