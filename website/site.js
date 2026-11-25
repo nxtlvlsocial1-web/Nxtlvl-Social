@@ -103,7 +103,7 @@
       }
       out.innerHTML = '<div class="plan-head"><div><h3>Your month as a ' + b.name + '</h3><p>Planned for ' + g.word + '. Your strategist approves every AI draft.</p></div><span class="plan-count">' + total + ' deliverables</span></div>' +
         '<div class="cal" aria-hidden="true">' + cells.map(function (c, i) { return '<div class="' + c + '">' + (i + 1) + '</div>'; }).join('') + '</div>' +
-        '<div class="legend"><span><i style="background:var(--violet)"></i>Reel</span><span><i style="background:rgba(169,92,255,.32)"></i>Post or carousel</span>' + (shoot ? '<span><i style="background:#fff"></i>Shoot day</span>' : '') + '</div>' +
+        '<div class="legend"><span><i style="background:var(--accent)"></i>Reel</span><span><i style="background:var(--post)"></i>Post or carousel</span>' + (shoot ? '<span><i style="background:#fff"></i>Shoot day</span>' : '') + '</div>' +
         '<div class="groups">' + grp('Creative Studio', creative) + grp('AI Marketing', marketing) + grp('AI Automation', autos) + grp('Websites', webs) + '</div>';
       var summary = 'Business: ' + b.name + '. Goal: ' + g.word + '. ' + [ig && 'Instagram', wa && 'WhatsApp', meta && 'Meta ads', goog && 'Google ads', web && 'Website'].filter(Boolean).join(', ') + '. ' + reels + ' reels a month, ' + shoot + ' shoot day(s).';
       var cta = $('[data-plan-cta]', demo);
@@ -253,61 +253,6 @@
   }
 })();
 
-// hero sky: twinkling stars and shooting stars that rise like the logo's rocket
-(function () {
-  var c = document.querySelector('[data-sky]');
-  if (!c || !c.getContext) return;
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var ctx = c.getContext('2d'), dpr = Math.min(2, window.devicePixelRatio || 1), W = 0, H = 0, stars = [], shots = [], last = 0, nextShot = 1200, running = true;
-  var seed = 7; var rnd = function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
-  var size = function () {
-    var r = c.getBoundingClientRect(); W = r.width; H = r.height; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    stars = []; var n = Math.round(W * H / 9000);
-    for (var i = 0; i < n; i++) stars.push({ x: rnd() * W, y: rnd() * H, r: rnd() * 1.2 + 0.2, p: rnd() * Math.PI * 2, s: 0.4 + rnd() * 1.2, v: rnd() < 0.15 });
-  };
-  var shoot = function () {
-    var x = W * (0.05 + Math.random() * 0.6), y = H * (0.45 + Math.random() * 0.5), sp = 0.55 + Math.random() * 0.35, len = 120 + Math.random() * 120;
-    shots.push({ x: x, y: y, dx: sp, dy: -sp * 0.78, len: len, life: 0, max: 1600 + Math.random() * 700 });
-  };
-  var frame = function (t) {
-    if (!running) return;
-    var dt = Math.min(48, t - (last || t)); last = t;
-    ctx.clearRect(0, 0, W, H);
-    for (var i = 0; i < stars.length; i++) {
-      var s = stars[i], a = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t / 1000 * s.s + s.p));
-      ctx.globalAlpha = a; ctx.fillStyle = s.v ? '#D8BBFF' : '#FFFFFF';
-      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
-    }
-    nextShot -= dt; if (nextShot <= 0) { shoot(); nextShot = 3200 + Math.random() * 3200; }
-    for (var j = shots.length - 1; j >= 0; j--) {
-      var h = shots[j]; h.life += dt; h.x += h.dx * dt; h.y += h.dy * dt;
-      var k = h.life / h.max, fade = k < 0.15 ? k / 0.15 : k > 0.75 ? Math.max(0, (1 - k) / 0.25) : 1;
-      var n = Math.hypot(h.dx, h.dy), tx = h.x - h.dx / n * h.len, ty = h.y - h.dy / n * h.len;
-      var g = ctx.createLinearGradient(tx, ty, h.x, h.y); g.addColorStop(0, 'rgba(169,92,255,0)'); g.addColorStop(0.6, 'rgba(216,187,255,' + 0.5 * fade + ')'); g.addColorStop(1, 'rgba(255,255,255,' + fade + ')');
-      ctx.globalAlpha = 1; ctx.strokeStyle = g; ctx.lineWidth = 2; ctx.lineCap = 'round';
-      ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(h.x, h.y); ctx.stroke();
-      ctx.globalAlpha = fade; ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.arc(h.x, h.y, 2.2, 0, Math.PI * 2); ctx.fill();
-      ctx.globalAlpha = fade * 0.35; ctx.beginPath(); ctx.arc(h.x, h.y, 7, 0, Math.PI * 2); ctx.fill();
-      if (h.life >= h.max) shots.splice(j, 1);
-    }
-    ctx.globalAlpha = 1;
-    requestAnimationFrame(frame);
-  };
-  size();
-  var to; window.addEventListener('resize', function () { clearTimeout(to); to = setTimeout(size, 200); });
-  if (reduce) { frame(0); running = false; return; }
-  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { var vis = es[0].isIntersecting; if (vis && !running) { running = true; last = 0; requestAnimationFrame(frame); } else if (!vis) running = false; }).observe(c);
-  document.addEventListener('visibilitychange', function () { if (document.hidden) running = false; else if (!running) { running = true; last = 0; requestAnimationFrame(frame); } });
-  requestAnimationFrame(frame);
-})();
-
-// scroll progress bar in the logo gradient
-(function () {
-  var bar = document.createElement('div'); bar.className = 'progress'; bar.setAttribute('aria-hidden', 'true'); document.body.appendChild(bar);
-  var tick = false, set = function () { var d = document.documentElement, max = d.scrollHeight - d.clientHeight; bar.style.setProperty('--p', max > 0 ? (d.scrollTop / max).toFixed(4) : 0); tick = false; };
-  window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(set); } }, { passive: true }); set();
-})();
-
 // ---------- agents chat app, scroll reveal, tilt and parallax ----------
 (function () {
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -376,7 +321,7 @@
     spans.forEach(function (s) { if (s.hasAttribute('data-hi')) s.classList.add('hi'); });
   }
 
-  // the workspace panel tilts flat as it scrolls in; the mascot drifts slower than the page
+  // the workspace panel settles flat as it scrolls in
   var con = document.querySelector('.hero-in .console'), art = document.querySelector('.hero-art'), orb = art && art.querySelector('.orb'), mas = art && art.querySelector('.mascot');
   var ticking = false;
   var frame = function () {
@@ -389,7 +334,7 @@
     }
     if (con && !reduce && window.innerWidth > 700) {
       var rc = con.getBoundingClientRect(), q = Math.min(1, Math.max(0, (vh - rc.top) / (vh * 0.75)));
-      con.style.transform = 'perspective(1600px) rotateX(' + ((1 - q) * 14).toFixed(2) + 'deg) scale(' + (0.94 + 0.06 * q).toFixed(3) + ')';
+      con.style.transform = 'perspective(1800px) rotateX(' + ((1 - q) * 8).toFixed(2) + 'deg) scale(' + (0.97 + 0.03 * q).toFixed(3) + ')';
     }
     if (art && !reduce && y < vh * 1.2) {
       if (mas) mas.style.translate = '0 ' + (y * -0.12).toFixed(1) + 'px';
@@ -409,29 +354,10 @@
   vids.forEach(function (v) { io.observe(v); });
 })();
 
-// ---------- dark theme motion: rising sparks, card spotlight and tilt, headings word by word ----------
+// ---------- section headings rise word by word ----------
 (function () {
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce) return;
-  // sparks drifting up behind the page
-  var box = document.createElement('div'); box.className = 'sparks'; box.setAttribute('aria-hidden', 'true');
-  var n = window.innerWidth < 700 ? 14 : 28, html = '';
-  for (var i = 0; i < n; i++) {
-    var sz = (Math.random() * 2.5 + 1.5).toFixed(1);
-    html += '<i style="left:' + (Math.random() * 100).toFixed(1) + '%;width:' + sz + 'px;height:' + sz + 'px;animation-duration:' + (14 + Math.random() * 18).toFixed(1) + 's;animation-delay:-' + (Math.random() * 30).toFixed(1) + 's"></i>';
-  }
-  box.innerHTML = html; document.body.appendChild(box);
-  // spotlight follows the cursor; cards tilt a little
-  var fine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
-  if (fine) document.querySelectorAll('.svc-c, .ind, .guide, .band').forEach(function (c) {
-    c.classList.add('tilt');
-    c.addEventListener('pointermove', function (e) {
-      var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
-      c.style.setProperty('--mx', (x * 100).toFixed(1) + '%'); c.style.setProperty('--my', (y * 100).toFixed(1) + '%');
-      if (!c.classList.contains('band')) { c.style.setProperty('--ry', ((x - 0.5) * 6).toFixed(2) + 'deg'); c.style.setProperty('--rx', ((0.5 - y) * 6).toFixed(2) + 'deg'); }
-    });
-    c.addEventListener('pointerleave', function () { c.style.setProperty('--rx', '0deg'); c.style.setProperty('--ry', '0deg'); });
-  });
   // section headings rise word by word (text stays in the DOM for search)
   var heads = document.querySelectorAll('.sec-head h2, .faq h2, .close h2');
   heads.forEach(function (h) {
