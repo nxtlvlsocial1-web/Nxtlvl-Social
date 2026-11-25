@@ -54,6 +54,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | ------------------------------------------------------- | --------------------------------------------- |
 | Carousel structure, slide-by-slide copy, post captions  | `social`                                      |
 | Website and landing-page copy, headlines, CTAs         | `copywriting`                                 |
+| Remove AI slop from captions, scripts, emails, site copy | `zero-slop`                                 |
 | Content pillars, calendars, what to post and where      | `content-strategy`                            |
 | Designing posters, slides and graphics as PNG / PDF     | `canvas-design`                               |
 | Still images: social graphics, banners, mockups, OG     | `image`                                       |
@@ -75,6 +76,9 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `dockkit`: `dpearson2699/swift-ios-skills`
 - `fal-lip-sync`, `remotion`, `frame-*`, `video-hyperframes`: `nexu-io/open-design`
 - `video-motion-graphics`: `dylantarre/animation-principles`
+- `zero-slop`: `manavmishra/ZeroSlop`, the portable skill only. Install or update it with
+  `npx skills add https://github.com/manavmishra/ZeroSlop/tree/main/skills/zero-slop --agent claude-code -y`; the repo root brings
+  the author's development files (including their own CLAUDE.md). Its scripts are local; never run its remote `deslop` service unasked.
 - fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`,
   `model-routing`): `fal-ai-community/skills`
 
