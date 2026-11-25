@@ -1,0 +1,100 @@
+[
+ {
+  "id": "l00",
+  "display": "You don't speak Japanese. Your client just heard you in Japanese.",
+  "text": "You don't speak Japanese. Your client just heard you, in Japanese.",
+  "speed": 1.17,
+  "beat": "hook: viewer-first, proof on frame 1 (the call, your English line, the Japanese out)"
+ },
+ {
+  "id": "l01",
+  "display": "Someone open-sourced a live interpreter for any call on your computer.",
+  "text": "Someone open-sourced a live interpreter, for any call on your computer.",
+  "speed": 1.25,
+  "beat": "first peak: what it is"
+ },
+ {
+  "id": "l02",
+  "display": "And no bot joins the meeting.",
+  "text": "And no bot joins the meeting.",
+  "speed": 1.2,
+  "beat": "contrast"
+ },
+ {
+  "id": "l03",
+  "display": "It's called Cicada.",
+  "text": "It's called Cicada.",
+  "speed": 1.15,
+  "beat": "name"
+ },
+ {
+  "id": "l04",
+  "display": "Your client in Tokyo asks: can you send the price list by Friday?",
+  "text": "Your client in Tokyo asks: can you send the price list by Friday?",
+  "speed": 1.25,
+  "beat": "story: the ask"
+ },
+ {
+  "id": "l05",
+  "display": "You read it in English, live, as they say it.",
+  "text": "You read it in English, live, as they say it.",
+  "speed": 1.25,
+  "beat": "release: subtitles"
+ },
+ {
+  "id": "l06",
+  "display": "Hold one key, and answer in English. Yes, I'll send it Thursday.",
+  "text": "Hold one key, and answer in English. Yes, I'll send it Thursday.",
+  "speed": 1.23,
+  "beat": "peak: push to talk"
+ },
+ {
+  "id": "l07",
+  "display": "Let go, and they hear it in Japanese, right in the call.",
+  "text": "Let go, and they hear it in Japanese, right in the call.",
+  "speed": 1.23,
+  "beat": "peak: the payoff"
+ },
+ {
+  "id": "l08",
+  "display": "When the call ends, the notes are already written.",
+  "text": "When the call ends, the notes are already written.",
+  "speed": 1.25,
+  "beat": "release: notes"
+ },
+ {
+  "id": "l09",
+  "display": "A summary, and a to-do. Send the price list by Thursday.",
+  "text": "A summary, and a to-do. Send the price list by Thursday.",
+  "speed": 1.25,
+  "beat": "release"
+ },
+ {
+  "id": "l10",
+  "display": "Click it, and it jumps back to the exact line they said it.",
+  "text": "Click it, and it jumps back to the exact line they said it.",
+  "speed": 1.25,
+  "beat": "peak: jump back"
+ },
+ {
+  "id": "l11",
+  "display": "Open source, with over 3,000 stars on GitHub.",
+  "text": "Open source, with over three thousand stars on GitHub.",
+  "speed": 1.23,
+  "beat": "proof"
+ },
+ {
+  "id": "l12",
+  "display": "Send this to someone with clients abroad.",
+  "text": "Send this to someone with clients abroad.",
+  "speed": 1.2,
+  "beat": "share trigger"
+ },
+ {
+  "id": "l13",
+  "display": "Comment CALL, and I'll send you the link.",
+  "text": "Comment CALL, and I'll send you the link.",
+  "speed": 1.17,
+  "beat": "CTA"
+ }
+]

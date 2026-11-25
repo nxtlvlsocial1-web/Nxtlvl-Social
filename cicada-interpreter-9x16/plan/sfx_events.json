@@ -1,0 +1,202 @@
+[
+{
+"type": "whoosh",
+"t": 0
+},
+{
+"type": "ja_reply_soft",
+"t": 0.05
+},
+{
+"type": "whoosh_big",
+"t": 3.94
+},
+{
+"type": "pop",
+"t": 7.05
+},
+{
+"type": "pop",
+"t": 7.12
+},
+{
+"type": "pop",
+"t": 7.19
+},
+{
+"type": "pop",
+"t": 7.26
+},
+{
+"type": "pop",
+"t": 7.33
+},
+{
+"type": "whoosh",
+"t": 8.64
+},
+{
+"type": "g_correct",
+"t": 9.19
+},
+{
+"type": "whoosh",
+"t": 10.11
+},
+{
+"type": "impact",
+"t": 11.19
+},
+{
+"type": "sparkle",
+"t": 11.24
+},
+{
+"type": "whoosh_big",
+"t": 11.92
+},
+{
+"type": "riser_short",
+"t": 12.43
+},
+{
+"type": "whoosh",
+"t": 13.01
+},
+{
+"type": "ding",
+"t": 13.28
+},
+{
+"type": "ja_client",
+"t": 13.36
+},
+{
+"type": "msg",
+"t": 14.13
+},
+{
+"type": "whoosh",
+"t": 15.61
+},
+{
+"type": "whoosh",
+"t": 18.03
+},
+{
+"type": "click",
+"t": 18.33
+},
+{
+"type": "thump",
+"t": 18.35
+},
+{
+"type": "g_pickup",
+"t": 20.93
+},
+{
+"type": "pop",
+"t": 22.27
+},
+{
+"type": "whoosh_big",
+"t": 22.32
+},
+{
+"type": "g_complete",
+"t": 25.39
+},
+{
+"type": "ja_reply",
+"t": 25.49
+},
+{
+"type": "whoosh",
+"t": 27.54
+},
+{
+"type": "g_pop",
+"t": 30.98
+},
+{
+"type": "g_pickup",
+"t": 31.68
+},
+{
+"type": "click",
+"t": 33.96
+},
+{
+"type": "g_swish",
+"t": 34.92
+},
+{
+"type": "ding",
+"t": 35.86
+},
+{
+"type": "whoosh",
+"t": 37.12
+},
+{
+"type": "pop",
+"t": 37.42
+},
+{
+"type": "sparkle",
+"t": 39.74
+},
+{
+"type": "whoosh_big",
+"t": 40.52
+},
+{
+"type": "g_tick",
+"t": 41.07
+},
+{
+"type": "g_tick",
+"t": 41.23
+},
+{
+"type": "g_tick",
+"t": 41.39
+},
+{
+"type": "g_tick",
+"t": 41.55
+},
+{
+"type": "g_tick",
+"t": 41.71
+},
+{
+"type": "whoosh",
+"t": 43.18
+},
+{
+"type": "click",
+"t": 43.76
+},
+{
+"type": "click",
+"t": 43.83
+},
+{
+"type": "click",
+"t": 43.9
+},
+{
+"type": "click",
+"t": 43.97
+},
+{
+"type": "impact",
+"t": 44.26
+},
+{
+"type": "g_complete",
+"t": 44.36
+}
+]

@@ -1,0 +1,299 @@
+{
+ "duration": 45.88,
+ "takes": [
+  {
+   "line": "l00",
+   "take": 0,
+   "speed": 1.12,
+   "heard": "You don't speak Japanese. Your client just heard you in Japanese.",
+   "slips": 0
+  },
+  {
+   "line": "l00",
+   "take": 1,
+   "speed": 1.17,
+   "heard": "You don't speak Japanese. Your client just heard you in Japanese.",
+   "slips": 0
+  },
+  {
+   "line": "l00",
+   "take": 2,
+   "speed": 1.22,
+   "heard": "You don't speak Japanese. Your client just heard you in Japanese.",
+   "slips": 0
+  },
+  {
+   "line": "l01",
+   "take": 0,
+   "speed": 1.2,
+   "heard": "Someone open-sourced a live interpreter for any call on your computer.",
+   "slips": 0
+  },
+  {
+   "line": "l01",
+   "take": 1,
+   "speed": 1.25,
+   "heard": "Someone open sourced a live interpreter for any call on your computer.",
+   "slips": 2
+  },
+  {
+   "line": "l01",
+   "take": 2,
+   "speed": 1.3,
+   "heard": "Someone open-sourced a live interpreter for any call on your computer.",
+   "slips": 0
+  },
+  {
+   "line": "l02",
+   "take": 0,
+   "speed": 1.15,
+   "heard": "And no bot joins the meeting.",
+   "slips": 0
+  },
+  {
+   "line": "l02",
+   "take": 1,
+   "speed": 1.2,
+   "heard": "And no bot joins the meeting.",
+   "slips": 0
+  },
+  {
+   "line": "l02",
+   "take": 2,
+   "speed": 1.25,
+   "heard": "And no bot joins the meeting.",
+   "slips": 0
+  },
+  {
+   "line": "l03",
+   "take": 0,
+   "speed": 1.1,
+   "heard": "It's called cicada.",
+   "slips": 0
+  },
+  {
+   "line": "l03",
+   "take": 1,
+   "speed": 1.15,
+   "heard": "It's called cicada.",
+   "slips": 0
+  },
+  {
+   "line": "l03",
+   "take": 2,
+   "speed": 1.2,
+   "heard": "It's called cicada.",
+   "slips": 0
+  },
+  {
+   "line": "l04",
+   "take": 0,
+   "speed": 1.2,
+   "heard": "Your client in Tokyo asks, Can you send the price list by Friday?",
+   "slips": 0
+  },
+  {
+   "line": "l04",
+   "take": 1,
+   "speed": 1.25,
+   "heard": "Your client in Tokyo asks, Can you send the price list by Friday?",
+   "slips": 0
+  },
+  {
+   "line": "l04",
+   "take": 2,
+   "speed": 1.3,
+   "heard": "Your client in Tokyo asks, can you send the price list by Friday?",
+   "slips": 0
+  },
+  {
+   "line": "l05",
+   "take": 0,
+   "speed": 1.2,
+   "heard": "You read it in English, live, as they say it.",
+   "slips": 0
+  },
+  {
+   "line": "l05",
+   "take": 1,
+   "speed": 1.25,
+   "heard": "You read it in English, live, as they say it.",
+   "slips": 0
+  },
+  {
+   "line": "l05",
+   "take": 2,
+   "speed": 1.3,
+   "heard": "You read it in English live as they say it.",
+   "slips": 0
+  },
+  {
+   "line": "l06",
+   "take": 0,
+   "speed": 1.18,
+   "heard": "Hold one key and answer in English. Yes, I'll send it Thursday",
+   "slips": 0
+  },
+  {
+   "line": "l06",
+   "take": 1,
+   "speed": 1.23,
+   "heard": "Hold one key and answer in English. Yes, I'll send it Thursday.",
+   "slips": 0
+  },
+  {
+   "line": "l06",
+   "take": 2,
+   "speed": 1.28,
+   "heard": "Hold one key and answer in English. Yes, I'll send it Thursday.",
+   "slips": 0
+  },
+  {
+   "line": "l07",
+   "take": 0,
+   "speed": 1.18,
+   "heard": "Let go and they hear it in Japanese, right in the call.",
+   "slips": 0
+  },
+  {
+   "line": "l07",
+   "take": 1,
+   "speed": 1.23,
+   "heard": "Let go and they hear it in Japanese, right in the call.",
+   "slips": 0
+  },
+  {
+   "line": "l07",
+   "take": 2,
+   "speed": 1.28,
+   "heard": "Let go and they hear it in Japanese, right in the call.",
+   "slips": 0
+  },
+  {
+   "line": "l08",
+   "take": 0,
+   "speed": 1.2,
+   "heard": "When the call ends, the notes are already written.",
+   "slips": 0
+  },
+  {
+   "line": "l08",
+   "take": 1,
+   "speed": 1.25,
+   "heard": "When the call ends, the notes are already written.",
+   "slips": 0
+  },
+  {
+   "line": "l08",
+   "take": 2,
+   "speed": 1.3,
+   "heard": "When the call ends, the notes are already written.",
+   "slips": 0
+  },
+  {
+   "line": "l09",
+   "take": 0,
+   "speed": 1.2,
+   "heard": "A summary and a to-do. Send the price list by Thursday.",
+   "slips": 0
+  },
+  {
+   "line": "l09",
+   "take": 1,
+   "speed": 1.25,
+   "heard": "A summary and a to-do, send the price list by Thursday.",
+   "slips": 0
+  },
+  {
+   "line": "l09",
+   "take": 2,
+   "speed": 1.3,
+   "heard": "A summary and a to-do. Send the price list by Thursday.",
+   "slips": 0
+  },
+  {
+   "line": "l10",
+   "take": 0,
+   "speed": 1.2,
+   "heard": "Click it and it jumps back to the exact line they set it.",
+   "slips": 1
+  },
+  {
+   "line": "l10",
+   "take": 1,
+   "speed": 1.25,
+   "heard": "Click it and it jumps back to the exact line they set it.",
+   "slips": 1
+  },
+  {
+   "line": "l10",
+   "take": 2,
+   "speed": 1.3,
+   "heard": "Click it and it jumps back to the exact line they set it.",
+   "slips": 1
+  },
+  {
+   "line": "l11",
+   "take": 0,
+   "speed": 1.18,
+   "heard": "Open source with over 3,000 stars on GitHub.",
+   "slips": 0
+  },
+  {
+   "line": "l11",
+   "take": 1,
+   "speed": 1.23,
+   "heard": "Open source with over 3,000 stars on GitHub.",
+   "slips": 0
+  },
+  {
+   "line": "l11",
+   "take": 2,
+   "speed": 1.28,
+   "heard": "Open source with over 3,000 stars on GitHub.",
+   "slips": 0
+  },
+  {
+   "line": "l12",
+   "take": 0,
+   "speed": 1.15,
+   "heard": "Send this to someone with clients abroad.",
+   "slips": 0
+  },
+  {
+   "line": "l12",
+   "take": 1,
+   "speed": 1.2,
+   "heard": "Send this to someone with clients abroad.",
+   "slips": 0
+  },
+  {
+   "line": "l12",
+   "take": 2,
+   "speed": 1.25,
+   "heard": "Send this to someone with clients abroad.",
+   "slips": 0
+  },
+  {
+   "line": "l13",
+   "take": 0,
+   "speed": 1.12,
+   "heard": "Comment, call, and I'll send you the link.",
+   "slips": 0
+  },
+  {
+   "line": "l13",
+   "take": 1,
+   "speed": 1.17,
+   "heard": "Comment, call, and I'll send you the link.",
+   "slips": 0
+  },
+  {
+   "line": "l13",
+   "take": 2,
+   "speed": 1.22,
+   "heard": "Comment, call, and I'll send you the link.",
+   "slips": 0
+  }
+ ]
+}
