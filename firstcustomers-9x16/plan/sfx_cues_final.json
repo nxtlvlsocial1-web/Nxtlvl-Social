@@ -1,0 +1,317 @@
+[
+{
+"t": 0.0,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 0.1,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 0.24,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 0.38,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 0.52,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 0.66,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 0.8,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 0.94,
+"kind": "g_pop",
+"file": "g_pop_g_pop.wav"
+},
+{
+"t": 1.25,
+"kind": "impact",
+"file": "impact_impact.wav"
+},
+{
+"t": 4.346,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 4.566,
+"kind": "sparkle",
+"file": "sparkle_sparkle.wav"
+},
+{
+"t": 6.927,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 6.947,
+"kind": "riser_short",
+"file": "riser_short_riser.wav"
+},
+{
+"t": 7.547,
+"kind": "impact",
+"file": "impact_impact.wav"
+},
+{
+"t": 8.536,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_deep.wav"
+},
+{
+"t": 8.616,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 10.925,
+"kind": "g_swish",
+"file": "g_swish_g_swish.wav"
+},
+{
+"t": 11.962,
+"kind": "g_pickup",
+"file": "g_pickup_g_pickup.wav"
+},
+{
+"t": 12.112,
+"kind": "g_pickup",
+"file": "g_pickup_g_pickup.wav"
+},
+{
+"t": 12.262,
+"kind": "g_pickup",
+"file": "g_pickup_g_pickup.wav"
+},
+{
+"t": 15.702,
+"kind": "msg",
+"file": "msg_msg.wav"
+},
+{
+"t": 15.782,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 17.962,
+"kind": "buzzer",
+"file": "buzzer_buzzer.wav"
+},
+{
+"t": 18.465,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 18.585,
+"kind": "g_tick",
+"file": "g_tick_g_tick.wav"
+},
+{
+"t": 20.019,
+"kind": "g_tick",
+"file": "g_tick_g_tick.wav"
+},
+{
+"t": 20.736,
+"kind": "g_tick",
+"file": "g_tick_g_tick.wav"
+},
+{
+"t": 21.368,
+"kind": "msg",
+"file": "msg_msg.wav"
+},
+{
+"t": 21.508,
+"kind": "msg",
+"file": "msg_msg.wav"
+},
+{
+"t": 21.648,
+"kind": "msg",
+"file": "msg_msg.wav"
+},
+{
+"t": 21.788,
+"kind": "msg",
+"file": "msg_msg.wav"
+},
+{
+"t": 21.928,
+"kind": "msg",
+"file": "msg_msg.wav"
+},
+{
+"t": 22.068,
+"kind": "msg",
+"file": "msg_msg.wav"
+},
+{
+"t": 23.298,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 23.868,
+"kind": "g_levelup",
+"file": "g_levelup_g_levelup.wav"
+},
+{
+"t": 24.733,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 25.053,
+"kind": "cash",
+"file": "cash_cash.wav"
+},
+{
+"t": 25.303,
+"kind": "cash",
+"file": "cash_cash.wav"
+},
+{
+"t": 25.553,
+"kind": "cash",
+"file": "cash_cash.wav"
+},
+{
+"t": 25.803,
+"kind": "cash",
+"file": "cash_cash.wav"
+},
+{
+"t": 26.053,
+"kind": "cash",
+"file": "cash_cash.wav"
+},
+{
+"t": 29.671,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 29.791,
+"kind": "lock",
+"file": "lock_lock.wav"
+},
+{
+"t": 29.891,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 30.059,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 30.228,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 30.396,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 30.564,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 30.733,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 30.901,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 31.069,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 31.237,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 31.274,
+"kind": "riser",
+"file": "riser_riser.wav"
+},
+{
+"t": 31.406,
+"kind": "tick",
+"file": "tick_click.wav"
+},
+{
+"t": 31.774,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_deep.wav"
+},
+{
+"t": 31.842,
+"kind": "whoosh",
+"file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 31.874,
+"kind": "g_complete",
+"file": "g_complete_g_complete.wav"
+},
+{
+"t": 35.267,
+"kind": "swish",
+"file": "swish_whoosh_b.wav"
+},
+{
+"t": 35.287,
+"kind": "whoosh",
+"file": "whoosh_whoosh_b.wav"
+},
+{
+"t": 35.602,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 35.737,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 35.872,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 36.252,
+"kind": "impact",
+"file": "impact_impact.wav"
+}
+]
