@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>SST The Journey Continues 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+@font-face { font-family: Mont; font-weight: 100 900; src: url("assets/fonts/montserrat.ttf"); }
+@font-face { font-family: Inter; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05080f; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: linear-gradient(180deg, #0b1526 0%, #08101d 45%, #05080f 100%); font-family: Mont; color: #fff; }
+#band { position: absolute; left: 0px; top: 380px; width: 1080px; height: 1160px; overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 110px, #000 calc(100% - 140px), transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 110px, #000 calc(100% - 140px), transparent 100%); }
+.shot { position: absolute; inset: 0; opacity: 0; transform-origin: 50% 45%; }
+.clip { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+#cool { position: absolute; inset: 0; opacity: 0; background: radial-gradient(90% 70% at 50% 50%, rgba(10,25,60,0) 30%, rgba(4,10,28,.55) 100%); mix-blend-mode: multiply; }
+#warm { position: absolute; inset: 0; opacity: 0; background: radial-gradient(80% 60% at 70% 20%, rgba(255,196,140,.22), rgba(255,196,140,0) 70%); mix-blend-mode: soft-light; }
+#scan { position: absolute; inset: 0; opacity: 0; background: repeating-linear-gradient(0deg, rgba(120,160,255,.05) 0 2px, rgba(0,0,0,0) 2px 5px); mix-blend-mode: screen; }
+#slice { position: absolute; left: 0; right: 0; height: 26px; opacity: 0; background: linear-gradient(90deg, rgba(60,150,255,0), rgba(120,190,255,.35), rgba(255,60,90,.25), rgba(60,150,255,0)); mix-blend-mode: screen; }
+.nt { position: absolute; left: 330px; width: 420px; height: 96px; border-radius: 26px; opacity: 0; background: rgba(150,185,255,.28); filter: blur(14px); }
+#net { position: absolute; inset: 0; opacity: 0; mix-blend-mode: screen; }
+#net path { fill: none; stroke: rgba(110,160,255,.2); stroke-width: 2; stroke-dasharray: 900; }
+#net circle { fill: rgba(140,185,255,.35); }
+#vig { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(110% 70% at 50% 52%, rgba(0,0,0,0) 55%, rgba(0,0,0,.55) 100%); }
+#grain { position: absolute; inset: -50%; pointer-events: none; opacity: .06; background-image: repeating-radial-gradient(circle at 23% 41%, rgba(255,255,255,.55) 0 1px, transparent 1px 3px); mix-blend-mode: overlay; }
+.head { position: absolute; left: 40px; right: 40px; top: 222px; text-align: center; opacity: 0; }
+#hd0 { opacity: 1; }
+.h1 { font-weight: 800; font-size: 43px; letter-spacing: .05em; white-space: nowrap; line-height: 1.15; }
+.h2 { font-weight: 800; font-size: 43px; letter-spacing: .05em; white-space: nowrap; line-height: 1.15; color: #6f9bff; opacity: 0; }
+.note { margin-top: 12px; font-family: Inter; font-weight: 600; font-size: 24px; letter-spacing: .14em; color: rgba(255,255,255,.78); opacity: 0; }
+.sub { position: absolute; left: 90px; right: 90px; top: 1418px; text-align: center; font-family: Inter; font-weight: 600; font-size: 40px; line-height: 1.28;
+  color: #fff; opacity: 0; text-shadow: 0 2px 4px rgba(0,0,0,.9), 0 0 24px rgba(0,0,0,.8); }
+#endbg { position: absolute; inset: 0; opacity: 0; background: radial-gradient(70% 45% at 50% 46%, #13254a 0%, #0b1526 55%, #05080f 100%); }
+#sweep { position: absolute; top: 0; bottom: 0; left: 0; width: 900px; opacity: 0; transform: skewX(-18deg);
+  background: linear-gradient(90deg, rgba(47,107,220,0), rgba(80,140,255,.28), rgba(47,107,220,0)); filter: blur(20px); }
+#logo { position: absolute; left: 190px; width: 700px; top: 700px; padding: 34px 40px; border-radius: 28px; background: #fff; opacity: 0;
+  box-shadow: 0 40px 100px rgba(0,0,0,.55), 0 0 60px rgba(47,107,220,.25); }
+#logo img { display: block; width: 100%; }
+#tag { position: absolute; left: 60px; right: 60px; top: 1150px; text-align: center; }
+#tag1 { font-weight: 800; font-size: 44px; letter-spacing: .08em; color: #fff; opacity: 0; }
+#tagrule { width: 220px; height: 4px; margin: 26px auto 0; background: #2f6bdc; transform: scaleX(0); }
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="59.30" data-fps="30" data-width="1080" data-height="1920">
+      <div id="band" data-layout-allow-overlap>
+        <div class="shot" id="wsh01"><video id="sh01" class="clip" src="assets/video/sh01.mp4" muted playsinline data-start="0.000" data-duration="4.000" data-track-index="1"></video></div>
+        <div class="shot" id="wsh02"><video id="sh02" class="clip" src="assets/video/sh02.mp4" muted playsinline data-start="3.400" data-duration="4.200" data-track-index="2"></video></div>
+        <div class="shot" id="wsh03"><video id="sh03" class="clip" src="assets/video/sh03.mp4" muted playsinline data-start="7.000" data-duration="3.200" data-track-index="1"></video></div>
+        <div class="shot" id="wsh04"><video id="sh04" class="clip" src="assets/video/sh04.mp4" muted playsinline data-start="9.600" data-duration="3.300" data-track-index="2"></video></div>
+        <div class="shot" id="wsh05"><video id="sh05" class="clip" src="assets/video/sh05.mp4" muted playsinline data-start="12.300" data-duration="3.300" data-track-index="1"></video></div>
+        <div class="shot" id="wsh06"><video id="sh06" class="clip" src="assets/video/sh06.mp4" muted playsinline data-start="15.000" data-duration="4.000" data-track-index="2"></video></div>
+        <div class="shot" id="wsh07"><video id="sh07" class="clip" src="assets/video/sh07.mp4" muted playsinline data-start="18.400" data-duration="3.800" data-track-index="1"></video></div>
+        <div class="shot" id="wsh08"><video id="sh08" class="clip" src="assets/video/sh08.mp4" muted playsinline data-start="21.600" data-duration="3.600" data-track-index="2"></video></div>
+        <div class="shot" id="wsh09"><video id="sh09" class="clip" src="assets/video/sh09.mp4" muted playsinline data-start="24.600" data-duration="5.000" data-track-index="1"></video></div>
+        <div class="shot" id="wsh10"><video id="sh10" class="clip" src="assets/video/sh10.mp4" muted playsinline data-start="29.000" data-duration="4.000" data-track-index="2"></video></div>
+        <div class="shot" id="wsh11"><video id="sh11" class="clip" src="assets/video/sh11.mp4" muted playsinline data-start="32.400" data-duration="4.200" data-track-index="1"></video></div>
+        <div class="shot" id="wsh12"><video id="sh12" class="clip" src="assets/video/sh12.mp4" muted playsinline data-start="36.000" data-duration="5.600" data-track-index="2"></video></div>
+        <div class="shot" id="wsh13"><video id="sh13" class="clip" src="assets/video/sh13.mp4" muted playsinline data-start="41.000" data-duration="3.600" data-track-index="1"></video></div>
+        <div class="shot" id="wsh14"><video id="sh14" class="clip" src="assets/video/sh14.mp4" muted playsinline data-start="44.000" data-duration="2.800" data-track-index="2"></video></div>
+        <div class="shot" id="wsh15"><video id="sh15" class="clip" src="assets/video/sh15.mp4" muted playsinline data-start="46.200" data-duration="3.000" data-track-index="1"></video></div>
+        <div class="shot" id="wsh16"><video id="sh16" class="clip" src="assets/video/sh16.mp4" muted playsinline data-start="48.600" data-duration="3.200" data-track-index="2"></video></div>
+        <div class="shot" id="wsh17"><video id="sh17" class="clip" src="assets/video/sh17.mp4" muted playsinline data-start="51.200" data-duration="3.400" data-track-index="1"></video></div>
+        <div id="cool"></div>
+        <div id="warm"></div>
+        <svg id="net" viewBox="0 0 1080 1160"><path d="M60 900 L300 640 L520 760 L760 420 L1020 560"/><path d="M120 200 L360 360 L600 240 L860 330"/><path d="M300 640 L360 360 M760 420 L600 240 M520 760 L700 980"/><circle cx="60" cy="900" r="5"/><circle cx="300" cy="640" r="5"/><circle cx="520" cy="760" r="5"/><circle cx="760" cy="420" r="5"/><circle cx="1020" cy="560" r="5"/><circle cx="120" cy="200" r="5"/><circle cx="360" cy="360" r="5"/><circle cx="600" cy="240" r="5"/><circle cx="860" cy="330" r="5"/><circle cx="700" cy="980" r="5"/></svg>
+        <div class="nt" id="nt0" style="top:330px"></div><div class="nt" id="nt1" style="top:450px"></div><div class="nt" id="nt2" style="top:570px"></div>
+        <div id="scan"></div>
+        <div id="slice"></div>
+      </div>
+      <div id="endbg"><div id="sweep"></div></div>
+      <div id="logo"><img src="assets/img/sst_logo.jpg" alt="SST"></div>
+      <div id="tag"><div id="tag1">THE JOURNEY IS FAR FROM OVER.</div><div id="tagrule"></div></div>
+      <div class="head" id="hd0"><div class="h1" id="hd0a">EVERY VISION HAS A JOURNEY.</div></div>
+<div class="head" id="hd1"><div class="h1" id="hd1a">YEARS OF WORK.</div><div class="h2" id="hd1b">A VISION WITH PURPOSE.</div></div>
+<div class="head" id="hd2"><div class="h1" id="hd2a">CHALLENGES BEHIND THE SCENES.</div><div class="note" id="hd2n">ALLEGATIONS DESCRIBED IN A PUBLISHED ACCOUNT</div></div>
+<div class="head" id="hd3"><div class="h1" id="hd3a">THE JOURNEY IS TESTED.</div><div class="h2" id="hd3b">THE VISION REMAINS.</div></div>
+<div class="head" id="hd4"><div class="h1" id="hd4a">THE WORK CONTINUES.</div><div class="h2" id="hd4b">THE VISION MOVES FORWARD.</div></div>
+<div class="sub" id="sb0">Some journeys are about more than progress.</div>
+<div class="sub" id="sb1">They are about what happens behind the scenes.</div>
+<div class="sub" id="sb2">Years of work.</div>
+<div class="sub" id="sb3">Ideas built with purpose.</div>
+<div class="sub" id="sb4">A vision that deserves to move forward.</div>
+<div class="sub" id="sb5">But sometimes, the journey faces challenges no one sees.</div>
+<div class="sub" id="sb6">A published account describes alleged hacking, tracking,</div>
+<div class="sub" id="sb7">harassment and attempts to disrupt the progress of Sports Science Technology.</div>
+<div class="sub" id="sb8">When the work is challenged...</div>
+<div class="sub" id="sb9">when the journey is tested...</div>
+<div class="sub" id="sb10">the question is not just how far you have come.</div>
+<div class="sub" id="sb11">It is whether you continue.</div>
+<div class="sub" id="sb12">Because progress is not defined by the obstacles placed in its path.</div>
+<div class="sub" id="sb13">It is defined by the determination to keep moving.</div>
+<div class="sub" id="sb14">The work continues.</div>
+<div class="sub" id="sb15">The vision moves forward.</div>
+      <div id="vig"></div>
+      <div id="grain"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({paused: true});
+      tl.fromTo("#wsh01", {opacity: 0}, {...{opacity: 1}, duration: 1.2, ease: "sine.inOut", immediateRender: false}, 0.000);
+      tl.fromTo("#wsh01", {scale: 1.0}, {...{scale: 1.055}, duration: 4.0, ease: "none", immediateRender: false}, 0.000);
+      tl.to("#wsh01", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 3.980);
+      tl.fromTo("#wsh02", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 3.400);
+      tl.fromTo("#wsh02", {scale: 1.0}, {...{scale: 1.055}, duration: 4.2, ease: "none", immediateRender: false}, 3.400);
+      tl.to("#wsh02", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 7.580);
+      tl.fromTo("#wsh03", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 7.000);
+      tl.fromTo("#wsh03", {scale: 1.0}, {...{scale: 1.055}, duration: 3.2, ease: "none", immediateRender: false}, 7.000);
+      tl.to("#wsh03", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 10.180);
+      tl.fromTo("#wsh04", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 9.600);
+      tl.fromTo("#wsh04", {scale: 1.0}, {...{scale: 1.055}, duration: 3.3000000000000003, ease: "none", immediateRender: false}, 9.600);
+      tl.to("#wsh04", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 12.880);
+      tl.fromTo("#wsh05", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 12.300);
+      tl.fromTo("#wsh05", {scale: 1.0}, {...{scale: 1.055}, duration: 3.3000000000000003, ease: "none", immediateRender: false}, 12.300);
+      tl.to("#wsh05", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 15.580);
+      tl.fromTo("#wsh06", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 15.000);
+      tl.fromTo("#wsh06", {scale: 1.0}, {...{scale: 1.055}, duration: 4.0, ease: "none", immediateRender: false}, 15.000);
+      tl.to("#wsh06", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 18.980);
+      tl.fromTo("#wsh07", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 18.400);
+      tl.fromTo("#wsh07", {scale: 1.0}, {...{scale: 1.055}, duration: 3.8000000000000003, ease: "none", immediateRender: false}, 18.400);
+      tl.to("#wsh07", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 22.180);
+      tl.fromTo("#wsh08", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 21.600);
+      tl.fromTo("#wsh08", {scale: 1.0}, {...{scale: 1.055}, duration: 3.6, ease: "none", immediateRender: false}, 21.600);
+      tl.to("#wsh08", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 25.180);
+      tl.fromTo("#wsh09", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 24.600);
+      tl.fromTo("#wsh09", {scale: 1.0}, {...{scale: 1.055}, duration: 5.0, ease: "none", immediateRender: false}, 24.600);
+      tl.to("#wsh09", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 29.580);
+      tl.fromTo("#wsh10", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 29.000);
+      tl.fromTo("#wsh10", {scale: 1.0}, {...{scale: 1.055}, duration: 4.0, ease: "none", immediateRender: false}, 29.000);
+      tl.to("#wsh10", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 32.980);
+      tl.fromTo("#wsh11", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 32.400);
+      tl.fromTo("#wsh11", {scale: 1.0}, {...{scale: 1.055}, duration: 4.2, ease: "none", immediateRender: false}, 32.400);
+      tl.to("#wsh11", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 36.580);
+      tl.fromTo("#wsh12", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 36.000);
+      tl.fromTo("#wsh12", {scale: 1.0}, {...{scale: 1.055}, duration: 5.6, ease: "none", immediateRender: false}, 36.000);
+      tl.to("#wsh12", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 41.580);
+      tl.fromTo("#wsh13", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 41.000);
+      tl.fromTo("#wsh13", {scale: 1.0}, {...{scale: 1.055}, duration: 3.6, ease: "none", immediateRender: false}, 41.000);
+      tl.to("#wsh13", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 44.580);
+      tl.fromTo("#wsh14", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 44.000);
+      tl.fromTo("#wsh14", {scale: 1.0}, {...{scale: 1.055}, duration: 2.8000000000000003, ease: "none", immediateRender: false}, 44.000);
+      tl.to("#wsh14", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 46.780);
+      tl.fromTo("#wsh15", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 46.200);
+      tl.fromTo("#wsh15", {scale: 1.0}, {...{scale: 1.055}, duration: 3.0, ease: "none", immediateRender: false}, 46.200);
+      tl.to("#wsh15", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 49.180);
+      tl.fromTo("#wsh16", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 48.600);
+      tl.fromTo("#wsh16", {scale: 1.0}, {...{scale: 1.055}, duration: 3.2, ease: "none", immediateRender: false}, 48.600);
+      tl.to("#wsh16", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 51.780);
+      tl.fromTo("#wsh17", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 51.200);
+      tl.fromTo("#wsh17", {scale: 1.0}, {...{scale: 1.055}, duration: 3.4, ease: "none", immediateRender: false}, 51.200);
+      tl.to("#wsh17", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 54.580);
+      tl.to("#band", {...{opacity: 0}, duration: 0.9, ease: "sine.inOut"}, 54.180);
+      tl.to("#hd0", {...{opacity: 0}, duration: 0.4, ease: "power1.in"}, 6.700);
+      tl.fromTo("#hd1", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.6, ease: "power2.out", immediateRender: false}, 7.000);
+      tl.fromTo("#hd1b", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.6, ease: "power2.out", immediateRender: false}, 8.550);
+      tl.to("#hd1", {...{opacity: 0}, duration: 0.4, ease: "power1.in"}, 14.700);
+      tl.fromTo("#hd2", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.6, ease: "power2.out", immediateRender: false}, 15.000);
+      tl.fromTo("#hd2n", {opacity: 0}, {...{opacity: 1}, duration: 0.6, ease: "power1.out", immediateRender: false}, 18.880);
+      tl.to("#hd2", {...{opacity: 0}, duration: 0.4, ease: "power1.in"}, 28.700);
+      tl.fromTo("#hd3", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.6, ease: "power2.out", immediateRender: false}, 29.000);
+      tl.fromTo("#hd3b", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.6, ease: "power2.out", immediateRender: false}, 32.500);
+      tl.to("#hd3", {...{opacity: 0}, duration: 0.4, ease: "power1.in"}, 40.700);
+      tl.fromTo("#hd4", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.6, ease: "power2.out", immediateRender: false}, 41.000);
+      tl.fromTo("#hd4b", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.6, ease: "power2.out", immediateRender: false}, 45.400);
+      tl.to("#hd4", {...{opacity: 0}, duration: 0.4, ease: "power1.in"}, 50.700);
+      tl.fromTo("#sb0", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 0.520);
+      tl.to("#sb0", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 3.220);
+      tl.fromTo("#sb1", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 3.260);
+      tl.to("#sb1", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 6.160);
+      tl.fromTo("#sb2", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 6.920);
+      tl.to("#sb2", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 8.380);
+      tl.fromTo("#sb3", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 8.470);
+      tl.to("#sb3", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 10.410);
+      tl.fromTo("#sb4", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 10.550);
+      tl.to("#sb4", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 13.110);
+      tl.fromTo("#sb5", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 14.920);
+      tl.to("#sb5", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 18.560);
+      tl.fromTo("#sb6", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 19.000);
+      tl.to("#sb6", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 22.260);
+      tl.fromTo("#sb7", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 22.240);
+      tl.to("#sb7", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 26.400);
+      tl.fromTo("#sb8", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 28.920);
+      tl.to("#sb8", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 30.700);
+      tl.fromTo("#sb9", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 30.840);
+      tl.to("#sb9", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 32.580);
+      tl.fromTo("#sb10", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 32.620);
+      tl.to("#sb10", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 35.800);
+      tl.fromTo("#sb11", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 36.240);
+      tl.to("#sb11", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 38.020);
+      tl.fromTo("#sb12", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 40.920);
+      tl.to("#sb12", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 45.180);
+      tl.fromTo("#sb13", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 45.320);
+      tl.to("#sb13", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 48.600);
+      tl.fromTo("#sb14", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 50.920);
+      tl.to("#sb14", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 52.340);
+      tl.fromTo("#sb15", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 52.380);
+      tl.to("#sb15", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 54.260);
+      tl.fromTo("#scan", {opacity: 0}, {...{opacity: 1}, duration: 1.0, ease: "sine.inOut", immediateRender: false}, 15.000);
+      tl.to("#scan", {...{opacity: 0}, duration: 1.0, ease: "sine.inOut"}, 28.800);
+      tl.fromTo("#cool", {opacity: 0}, {...{opacity: 1}, duration: 1.5, ease: "sine.inOut", immediateRender: false}, 14.500);
+      tl.to("#cool", {...{opacity: 0}, duration: 2.0, ease: "sine.inOut"}, 36.320);
+      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: -6}, 15.050);
+      tl.set("#slice", {opacity: .9, y: 120}, 15.050);
+      tl.set("#band", {filter: "none", x: 0}, 15.140);
+      tl.set("#slice", {opacity: 0}, 15.140);
+      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: 6}, 19.180);
+      tl.set("#slice", {opacity: .9, y: 460}, 19.180);
+      tl.set("#band", {filter: "none", x: 0}, 19.270);
+      tl.set("#slice", {opacity: 0}, 19.270);
+      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: -6}, 21.680);
+      tl.set("#slice", {opacity: .9, y: 820}, 21.680);
+      tl.set("#band", {filter: "none", x: 0}, 21.770);
+      tl.set("#slice", {opacity: 0}, 21.770);
+      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: 6}, 21.620);
+      tl.set("#slice", {opacity: .9, y: 300}, 21.620);
+      tl.set("#band", {filter: "none", x: 0}, 21.710);
+      tl.set("#slice", {opacity: 0}, 21.710);
+      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: -6}, 24.620);
+      tl.set("#slice", {opacity: .9, y: 640}, 24.620);
+      tl.set("#band", {filter: "none", x: 0}, 24.710);
+      tl.set("#slice", {opacity: 0}, 24.710);
+      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: 6}, 27.400);
+      tl.set("#slice", {opacity: .9, y: 980}, 27.400);
+      tl.set("#band", {filter: "none", x: 0}, 27.490);
+      tl.set("#slice", {opacity: 0}, 27.490);
+      tl.fromTo("#nt0", {opacity: 0, y: 30}, {...{opacity: 1, y: 0}, duration: 0.5, ease: "power2.out", immediateRender: false}, 18.800);
+      tl.to("#nt0", {...{opacity: 0}, duration: 0.4, ease: "power2.out"}, 21.400);
+      tl.fromTo("#nt1", {opacity: 0, y: 30}, {...{opacity: 1, y: 0}, duration: 0.5, ease: "power2.out", immediateRender: false}, 19.500);
+      tl.to("#nt1", {...{opacity: 0}, duration: 0.4, ease: "power2.out"}, 21.400);
+      tl.fromTo("#nt2", {opacity: 0, y: 30}, {...{opacity: 1, y: 0}, duration: 0.5, ease: "power2.out", immediateRender: false}, 20.200);
+      tl.to("#nt2", {...{opacity: 0}, duration: 0.4, ease: "power2.out"}, 21.400);
+      tl.fromTo("#net path", {strokeDashoffset: 900}, {strokeDashoffset: 0, duration: 4.5, ease: "power1.inOut", stagger: .4, immediateRender: false}, 15.500);
+      tl.fromTo("#net", {opacity: 0}, {...{opacity: 1}, duration: 1.0, ease: "power2.out", immediateRender: false}, 15.500);
+      tl.to("#net", {...{opacity: 0}, duration: 1.0, ease: "power2.out"}, 27.800);
+      tl.fromTo("#warm", {opacity: 0}, {...{opacity: 1}, duration: 6.0, ease: "sine.inOut", immediateRender: false}, 36.720);
+      tl.to("#warm", {...{opacity: 0}, duration: 0.9, ease: "power2.out"}, 54.180);
+      tl.fromTo("#endbg", {opacity: 0}, {...{opacity: 1}, duration: 0.9, ease: "sine.inOut", immediateRender: false}, 54.180);
+      tl.fromTo("#sweep", {x: -1400, opacity: 0}, {...{x: 1400, opacity: 1}, duration: 1.6, ease: "power2.inOut", immediateRender: false}, 54.380);
+      tl.fromTo("#logo", {opacity: 0, scale: .96}, {...{opacity: 1, scale: 1}, duration: 0.9, ease: "power2.out", immediateRender: false}, 54.630);
+      tl.fromTo("#tag1", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.8, ease: "power2.out", immediateRender: false}, 55.970);
+      tl.fromTo("#tagrule", {scaleX: 0}, {...{scaleX: 1}, duration: 0.9, ease: "power2.inOut", immediateRender: false}, 56.220);
+      tl.set({}, {}, 59.30);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

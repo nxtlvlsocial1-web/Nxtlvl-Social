@@ -24,9 +24,9 @@ TAKES = os.path.join(ROOT, os.environ.get("VO_TAKES", os.path.join("assets", "au
 SR = 48000
 TEMPO = float(os.environ.get("VO_TEMPO", "1.0"))
 GAP_SCALE = 1.0
-LEAD = .04          # silence before the first word of the reel (v3: the cold open hits at once)
+LEAD = .6          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast
-GAP = {"j00": .35, "j01": .9, "j02": .45, "j03": .45, "j04": .8, "j05": .6, "j06": 1.0, "j07": .45, "j08": .45, "j09": .6, "j10": 1.1, "j11": .5, "j12": .9, "j13": .5, "j14": 1.0, "j15": .45, "j16": .0}
+GAP = {"j00": .5, "j01": 1.22, "j02": .55, "j03": .6, "j04": 2.27, "j05": .9, "j06": 2.98, "j07": .6, "j08": .5, "j09": .9, "j10": 3.36, "j11": .6, "j12": 2.78, "j13": .5, "j14": .8, "j15": .4, "j16": .0}
 
 
 NUM = {"sst": "s",  "six": "6", "nineteenth": "19th", "fortysix": "46", "one": "1", "two": "2", "three": "3", "twenty": "20"}

@@ -1,0 +1,181 @@
+{
+ "band": [
+  1080,
+  1160
+ ],
+ "handle": 0.6,
+ "shots": [
+  {
+   "id": "sh01",
+   "src": "7062991",
+   "t": 0.0,
+   "d": 3.4,
+   "in": 2.0,
+   "focus": 0.42,
+   "grade": "night",
+   "what": "hands, book and mug under the lamp"
+  },
+  {
+   "id": "sh02",
+   "src": "7062990",
+   "t": 3.4,
+   "d": 3.6,
+   "in": 1.5,
+   "focus": 0.6,
+   "grade": "night",
+   "what": "writing in the dark, side"
+  },
+  {
+   "id": "sh03",
+   "src": "7062984",
+   "t": 7.0,
+   "d": 2.6,
+   "in": 2.0,
+   "focus": 0.55,
+   "grade": "night",
+   "what": "filing papers into a box"
+  },
+  {
+   "id": "sh04",
+   "src": "7062992",
+   "t": 9.6,
+   "d": 2.7,
+   "in": 2.0,
+   "focus": 0.6,
+   "grade": "night",
+   "what": "turning pages"
+  },
+  {
+   "id": "sh05",
+   "src": "7062988",
+   "t": 12.3,
+   "d": 2.7,
+   "in": 2.0,
+   "focus": 0.5,
+   "grade": "night",
+   "what": "at the desk with papers"
+  },
+  {
+   "id": "sh06",
+   "src": "20563164",
+   "t": 15.0,
+   "d": 3.4,
+   "in": 1.0,
+   "focus": 0.5,
+   "grade": "night",
+   "what": "silhouette in a dark room"
+  },
+  {
+   "id": "sh07",
+   "src": "19162466",
+   "t": 18.4,
+   "d": 3.2,
+   "in": 4.0,
+   "focus": 0.5,
+   "grade": "night",
+   "what": "phone on a stand, dark",
+   "extra": "gblur=sigma=32"
+  },
+  {
+   "id": "sh08",
+   "src": "7942762",
+   "t": 21.6,
+   "d": 3.0,
+   "in": 2.0,
+   "focus": 0.42,
+   "grade": "night",
+   "what": "face lit by a laptop, blue",
+   "extra": "eq=brightness=0.06:gamma=1.25"
+  },
+  {
+   "id": "sh09",
+   "src": "12377242",
+   "t": 24.6,
+   "d": 4.4,
+   "in": 1.0,
+   "focus": 0.38,
+   "grade": "dark",
+   "what": "face in darkness"
+  },
+  {
+   "id": "sh10",
+   "src": "7062986",
+   "t": 29.0,
+   "d": 3.4,
+   "in": 1.0,
+   "focus": 0.62,
+   "grade": "night",
+   "what": "hand to the head, thinking"
+  },
+  {
+   "id": "sh11",
+   "src": "7062996",
+   "t": 32.4,
+   "d": 3.6,
+   "in": 2.0,
+   "focus": 0.45,
+   "grade": "night",
+   "what": "standing, stepping back from the desk"
+  },
+  {
+   "id": "sh12",
+   "src": "7062993",
+   "t": 36.0,
+   "d": 5.0,
+   "in": 2.0,
+   "focus": 0.62,
+   "grade": "turn",
+   "what": "stillness, hand on chin"
+  },
+  {
+   "id": "sh13",
+   "src": "7062985",
+   "t": 41.0,
+   "d": 3.0,
+   "in": 2.0,
+   "focus": 0.6,
+   "grade": "warm",
+   "what": "back to writing"
+  },
+  {
+   "id": "sh14",
+   "src": "7062989",
+   "t": 44.0,
+   "d": 2.2,
+   "in": 3.0,
+   "focus": 0.5,
+   "grade": "warm",
+   "what": "under the lamp, working"
+  },
+  {
+   "id": "sh15",
+   "src": "8939334",
+   "t": 46.2,
+   "d": 2.4,
+   "in": 1.0,
+   "focus": 0.45,
+   "grade": "warm",
+   "what": "opening the laptop, morning light"
+  },
+  {
+   "id": "sh16",
+   "src": "7066743",
+   "t": 48.6,
+   "d": 2.6,
+   "in": 1.0,
+   "focus": 0.5,
+   "grade": "dawn",
+   "what": "city at sunrise, moving forward"
+  },
+  {
+   "id": "sh17",
+   "src": "12976938",
+   "t": 51.2,
+   "d": 3.4,
+   "in": 0.0,
+   "focus": 0.5,
+   "grade": "dawn",
+   "what": "sunrise over the city, under the closing lines"
+  }
+ ]
+}
