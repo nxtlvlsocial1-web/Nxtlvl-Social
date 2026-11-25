@@ -1,7 +1,8 @@
 # AI.NXTLVL: Cicada, a live interpreter for any call (Instagram Reels, 9:16, ~47 s)
 
-Recreated from a reference reel with a new hook and our own 3D build. Build: build/vo_kok.py (voice: Kokoro am_michael,
-the AI.NXTLVL voice; Japanese lines Kokoro jf_alpha / jm_kumo), build/generate.py (type, timing, SFX cues),
+Recreated from a reference reel with a new hook and our own 3D build. Build: build/vo_cb.py + build/vo_pick.py (v2 voice: Chatterbox with the
+synthetic Kokoro am_puck reference, the AI.NXTLVL page voice, 3 takes per line, slip-free and most expressive picked;
+v1 was Kokoro am_michael; Japanese lines Kokoro jf_alpha / jm_kumo), build/generate.py (type, timing, SFX cues),
 assets/js/scene.js (Three.js: laptop, call UI, globe from Natural Earth land data, notes), build/sfx_mix.py (mix).
 Facts and sources: plan/facts.md.
 
@@ -9,13 +10,13 @@ Facts and sources: plan/facts.md.
 
 | Line | Beat |
 |---|---|
-| You don't speak Japanese. Your client just heard you in Japanese. | hook: viewer-first, proof on frame 1 (the call with your line going out in Japanese) |
-| Someone open-sourced a live interpreter for any call on your computer. And no bot joins the meeting. | first peak |
-| It's called Cicada. | name |
+| You don't speak Japanese... but your client just heard you in Japanese. | hook: viewer-first, proof on frame 1 (the call with your line going out in Japanese) |
+| Someone just open-sourced a live interpreter, for any call on your computer. And no bot joins the meeting. | first peak |
+| It's called... Cicada. | name |
 | Your client in Tokyo asks: can you send the price list by Friday? / You read it in English, live, as they say it. | story |
 | Hold one key, and answer in English. Yes, I'll send it Thursday. / Let go, and they hear it in Japanese, right in the call. | peak (the Japanese reply plays in the clear) |
-| When the call ends, the notes are already written. A summary, and a to-do. / Click it, and it jumps back to the exact line. | release, peak |
-| Open source, with over 3,000 stars on GitHub. Send this to someone with clients abroad. | proof + share trigger |
+| And when the call ends? The notes are already written. A summary. And a to-do. / Click it, and it jumps back to the exact moment they asked. | release, peak |
+| It's open source, with over 3,000 stars on GitHub. Send this to someone with clients abroad. | proof + share trigger |
 | Comment CALL, and I'll send you the link. | CTA |
 
 Hook variants to test:

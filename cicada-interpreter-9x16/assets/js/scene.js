@@ -142,6 +142,12 @@ const parts = [];
 for (let i = 0; i < PN; i++) { const m = new THREE.Mesh(partGeo, new THREE.MeshBasicMaterial({ color: LAV, transparent: true })); m.visible = false; scene.add(m); parts.push(m); }
 const voiceCurve = new THREE.CatmullRomCurve3([new THREE.Vector3(.62, .16, .38), new THREE.Vector3(1.55, .9, .7), new THREE.Vector3(1.35, 1.7, .1), new THREE.Vector3(.55, 1.45, -.75)]);
 
+const rings = [0, 1, 2].map(() => {
+  const m = new THREE.Mesh(new THREE.RingGeometry(.98, 1, 96), new THREE.MeshBasicMaterial({ color: CYAN, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false }));
+  m.position.set(0, LH / 2 + .15, .05); lid.add(m); return m;
+});
+const GREET = ["Good morning", "おはようございます", "Buenos días", "Bonjour", "こんにちは", "Guten Morgen", "Buongiorno", "Bom dia", "Hola", "Ciao"];
+
 // ---------------------------------------------------------------- the screen UI (drawn every frame)
 const JP = "NotoJP", MO = "Mont";
 const ASK_JA = "金曜日までに価格表を送っていただけますか？";
@@ -344,7 +350,11 @@ const G1 = new THREE.Vector3(10, 3.0, -3);
 // ---------------------------------------------------------------- camera shots
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 const S = {
+  hook0: { p: V(3.4, 3.3, 11.9), t: V(.2, 1.15, -.6) },
   hook: { p: V(2.6, 2.7, 9.4), t: V(.2, 1.2, -.6) },
+  hookClose: { p: V(1.5, 1.9, 6.9), t: V(.15, 1.0, -.7) },
+  notesSum: { p: V(-.5, 1.25, 5.1), t: V(-.55, 1.32, -.85) },
+  heroUp: { p: V(.6, 4.3, 12.2), t: V(0, 2.5, -.4) },
   b: { p: V(-4.6, 3.2, 11.0), t: V(0, 1.25, -.3) },
   bot: { p: V(2.3, 1.6, 3.6), t: V(1.2, 1.45, -.95) },
   name: { p: V(0, 3.6, 11.5), t: V(0, 2.2, -.3) },
@@ -359,9 +369,10 @@ const S = {
   world: { p: G1.clone().add(V(0, .8, 15.5)), t: G1.clone().add(V(0, 2.3, 0)) },
 };
 function shotAt(t) {
-  const K = [[-1, 0, S.hook], [T.l01 - .25, T.l01 + .45, S.b], [T.bot - .45, T.bot + .1, S.bot], [T.l03 - .3, T.l03 + .3, S.name],
+  const K = [[-1, 0, S.hook0], [0, 2.2, S.hook], [T.jp2 - .25, T.jp2 + .5, S.hookClose], [T.l01 - .25, T.l01 + .45, S.b], [T.bot - .45, T.bot + .1, S.bot], [T.l03 - .3, T.l03 + .3, S.name],
     [T.l04 - .2, T.l04 + .35, S.globe], [T.can - .35, T.can + .1, S.ask], [T.l05 - .2, T.l05 + .4, S.live], [T.l06 - .3, T.l06 + .15, S.key],
-    [T.let - .1, T.let + .45, S.out], [T.l08 - .3, T.l08 + .3, S.notes], [T.l10 - .3, T.l10 + .3, S.click], [T.l11 - .3, T.l11 + .45, S.hero],
+    [T.let - .1, T.let + .45, S.out], [T.l08 - .3, T.l08 + .3, S.notes], [T.summary - .25, T.summary + .35, S.notesSum], [T.todo - .2, T.todo + .35, S.notes],
+    [T.l10 - .3, T.l10 + .3, S.click], [T.l11 - .3, T.l11 + .45, S.hero], [T.stars - .4, T.stars + .6, S.heroUp],
     [T.l12 - .3, T.l12 + .35, S.world]];
   let p = K[0][2].p.clone(), q = K[0][2].t.clone();
   for (let i = 1; i < K.length; i++) {
@@ -377,7 +388,8 @@ function renderAt(t) {
   // a slow orbit drift around the target keeps every shot alive
   const d = p.clone().sub(q), a = Math.sin(t * .4) * .045;
   d.applyAxisAngle(V(0, 1, 0), a);
-  camera.position.copy(q).add(d); camera.lookAt(q);
+  const hit = pulse(t, T.cicada + .05, .22) + pulse(t, T.let + .15, .22) + pulse(t, T.callkw + .35, .22) + pulse(t, T.boxhit || -9, .2);
+  camera.position.copy(q).add(d).add(V(Math.sin(t * 53) * hit * .06, Math.cos(t * 47) * hit * .06, 0)); camera.lookAt(q);
   camera.updateMatrixWorld(true);
 
   // laptop + screen
@@ -427,6 +439,15 @@ function renderAt(t) {
   project(laptop, V(optR, .3, -.88 + 5 * KP), $("keyTip"), back(win(t, T.hold - .05, T.hold + .3)) * (1 - win(t, T.let, T.let + .3)), -10, -120);
   project(lid, V(-.55, 2.4, .3), $("jaOut"), back(win(t, T.let + .2, T.let + .55)) * (1 - win(t, T.l08 - .45, T.l08 - .2)));
 
+  // sound rings + greetings in many languages streaming out of the laptop (hook, and after you let go)
+  const talk = Math.max(1 - win(t, T.l01 - .6, T.l01 - .1), win(t, T.let + .05, T.let + .4) * (1 - win(t, T.l08 - .7, T.l08 - .3)));
+  rings.forEach((m, i) => { const u = ((t * .7 + i / 3) % 1); m.scale.setScalar(.25 + u * 1.5); m.material.opacity = talk * (1 - u) * .55; });
+  GREET.forEach((_, i) => {
+    const el = $("gr" + i); if (!el) return;
+    const u = ((t * .23 + i / GREET.length) % 1), side = i % 2 ? 1 : -1;
+    const local = V(side * (1.15 + u * 1.3) + Math.sin(u * 5 + i) * .15, LH * .35 + u * 1.15, .3 + u * 1.2);
+    project(lid, local, el, talk * Math.sin(u * Math.PI) * .8, 0, 0, .5 + u * .6);
+  });
   bloom.strength = .55 + held * .25 + pulse(t, T.let + .2, .3) * .3;
   composer.render();
 }

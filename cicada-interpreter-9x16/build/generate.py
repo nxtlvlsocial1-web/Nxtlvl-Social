@@ -11,7 +11,18 @@ import os
 import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-W = json.load(open(os.path.join(ROOT, "plan", "words.json")))
+def key(w):
+    return re.sub(r"[^a-z0-9]", "", w.lower())
+
+
+W = []
+for w in json.load(open(os.path.join(ROOT, "plan", "words.json"))):
+    if W and w["w"][:1] in ".,-" and W[-1]["line"] == w["line"]:       # Whisper splits "3,000" / "to-do": one word again
+        W[-1]["w"] += w["w"]; W[-1]["t1"] = w["t1"]
+    elif W and key(w["w"]) == "thousand" and key(W[-1]["w"]) == "three":   # captions show the number
+        W[-1]["w"] = "3,000"; W[-1]["t1"] = w["t1"]
+    else:
+        W.append(dict(w))
 LW = {}
 for w in W:
     LW.setdefault(w["line"], []).append(w)
@@ -53,7 +64,7 @@ endl = {k: v[-1]["t1"] for k, v in LW.items()}
 END = max(w["t1"] for w in W)
 DUR = round(END + 1.5, 2)
 T = {
-    "l00": start["l00"], "l01": start["l01"], "call": wt("l01", "call"), "bot": wt("l02", "bot"), "l03": start["l03"],
+    "l00": start["l00"], "jp2": wt("l00", "japanese", 1), "l01": start["l01"], "call": wt("l01", "call"), "bot": wt("l02", "bot"), "l03": start["l03"],
     "cicada": wt("l03", "cicada"), "l04": start["l04"], "tokyo": wt("l04", "tokyo"), "asks": wt("l04", "asks"),
     "can": wt("l04", "can"), "friday": wt("l04", "friday"), "l05": start["l05"], "l06": start["l06"], "hold": wt("l06", "hold"),
     "yes": wt("l06", "yes"), "thursday": wt("l06", "thursday"), "l07": start["l07"], "let": wt("l07", "let"), "l07end": endl["l07"],
@@ -68,7 +79,7 @@ STYLE = {
     "l02": {"no": "hb", "bot": "hb"}, "l03": {"cicada": "hb big"}, "l04": {"tokyo": "hb", "price": "it", "list": "it", "friday": "it"},
     "l05": {"english": "hb", "live": "it"}, "l06": {"one": "hb", "key": "hb", "thursday": "it"}, "l07": {"japanese": "hb", "right": "it", "in": "", "call": "it"},
     "l08": {"already": "hb it", "written": "hb it"}, "l09": {"todo": "hb", "to": "hb", "do": "hb", "thursday": "it"},
-    "l10": {"exact": "hb", "line": "hb"}, "l11": {"3000": "hb", "3": "hb", "000": "hb", "stars": "hb", "github": "it"},
+    "l10": {"exact": "hb", "moment": "hb"}, "l11": {"3000": "hb", "3": "hb", "000": "hb", "stars": "hb", "github": "it"},
     "l12": {"clients": "it", "abroad": "it"}, "l13": {"call": "hb", "link": "it"},
 }
 ORDER = [f"l{k:02d}" for k in range(14)]
@@ -87,6 +98,8 @@ def groups(ws):
 
 
 for lid in ORDER:
+    if lid == "l03":                                       # the name card says it
+        continue
     st = STYLE.get(lid, {})
     for gi, g in enumerate(groups(LW[lid])):
         gid = f"hl-{lid}-{gi}"
@@ -138,6 +151,13 @@ ft("#cpost", T["callkw"] + .15, .25, "{color: '#6b6585'}", "{color: '#7a2ffb'}",
 for at, op in ((T["cicada"], .35), (T["let"] + .2, .3), (T["callkw"] + .3, .3)):
     js(f'tl.set("#flash", {{opacity: {op}}}, {at - .02:.3f});')
     to("#flash", at, .45, "{opacity: 0}", "power2.out")
+
+# ---- whip streaks on the shot changes (the camera moves are in scene.js)
+for k, at in enumerate([T["jp2"] - .2, T["l01"] - .2, T["bot"] - .4, T["l03"] - .25, T["l04"] - .15, T["can"] - .3, T["l05"] - .15, T["l06"] - .25,
+                        T["let"] - .05, T["l08"] - .25, T["summary"] - .2, T["l10"] - .25, T["l11"] - .25, T["l12"] - .25]):
+    d = 1 if k % 2 else -1
+    js(f'tl.fromTo("#whip", {{opacity: 0, x: {-900 * d}}}, {{opacity: .55, x: 0, duration: .12, ease: "power2.in", immediateRender: false}}, {at:.3f});')
+    js(f'tl.to("#whip", {{opacity: 0, x: {900 * d}, duration: .14, ease: "power2.out"}}, {at + .12:.3f});')
 
 # ---- sound design
 sfx("whoosh", .0)
@@ -193,6 +213,11 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: {NIGH
 #vig {{ position: absolute; inset: 0; pointer-events: none; background: radial-gradient(100% 64% at 50% 56%, rgba(0,0,0,0) 52%, rgba(3,2,8,.62) 100%); }}
 #topfade {{ position: absolute; left: 0; right: 0; top: 0; height: 720px; pointer-events: none; background: linear-gradient(180deg, rgba(7,5,15,.78) 0%, rgba(7,5,15,.45) 45%, rgba(7,5,15,0) 100%); }}
 #grain {{ position: absolute; inset: -50%; pointer-events: none; opacity: .07; background-image: repeating-radial-gradient(circle at 17% 32%, rgba(255,255,255,.5) 0 1px, transparent 1px 3px); mix-blend-mode: overlay; }}
+#whip {{ position: absolute; left: -10%; right: -10%; top: 0; bottom: 0; opacity: 0; pointer-events: none; mix-blend-mode: screen;
+  background: linear-gradient(90deg, rgba(122,47,251,0) 0%, rgba(182,135,249,.35) 38%, rgba(255,255,255,.55) 50%, rgba(182,135,249,.35) 62%, rgba(122,47,251,0) 100%); filter: blur(30px); }}
+.gr {{ position: absolute; left: 0; top: 0; opacity: 0; white-space: nowrap; font-weight: 800; font-size: 40px; color: #efe9ff;
+  text-shadow: 0 0 18px rgba(122,47,251,.9), 0 0 4px rgba(182,135,249,.8); }}
+.gr.ja {{ font-family: NotoJP; font-weight: 700; }}
 #flash {{ position: absolute; inset: 0; background: {VIOLET}; mix-blend-mode: screen; opacity: 0; pointer-events: none; }}
 #bar {{ position: absolute; left: 70px; right: 70px; top: 258px; display: flex; justify-content: space-between; align-items: center;
   font-family: Mono; font-weight: 700; font-size: 24px; letter-spacing: .16em; color: rgba(255,255,255,.62); }}
@@ -247,6 +272,8 @@ html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: {NIGH
 """
 apps = ["Zoom", "Teams", "Google Meet", "Discord", "Telegram"]
 chips = "".join(f'<div class="chip" id="app{i}">{a}</div>' for i, a in enumerate(apps))
+greet = ["Good morning", "おはようございます", "Buenos días", "Bonjour", "こんにちは", "Guten Morgen", "Buongiorno", "Bom dia", "Hola", "Ciao"]
+chips += "".join(f'<div class="gr{" ja" if ord(g[0]) > 0x3000 else ""}" id="gr{i}">{g}</div>' for i, g in enumerate(greet))
 chips += '<div class="chip" id="nobot"><s>Meeting bot</s> &nbsp;not needed</div>'
 chips += '<div class="chip pin" id="pinYou">YOU</div><div class="chip pin" id="pinTokyo">TOKYO</div>'
 chips += '<div class="chip" id="keyTip"><b>&#8997;</b>hold to talk</div>'
@@ -274,6 +301,7 @@ html = f"""<!doctype html>
       <div id="gh"><div class="rp">wquguru / <b>cicada</b></div><div class="ds">Live subtitles, interpreting and meeting notes for any call. Mac, Windows, Linux, Android.</div>
         <div class="mt"><span class="st">&#9733; <span id="ghn">0</span></span><span>Apache-2.0</span><span>open source</span></div></div>
       <div id="cbox"><div class="av"></div><div class="tx">{"".join(f'<span id="ck{k}">{c}</span>' for k, c in enumerate("CALL"))}</div><b id="cpost">Post</b></div>
+      <div id="whip"></div>
       <div id="grain"></div>
       <div id="flash"></div>
     </div>
