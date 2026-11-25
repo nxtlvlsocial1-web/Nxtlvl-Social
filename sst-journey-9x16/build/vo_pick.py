@@ -26,7 +26,7 @@ TEMPO = float(os.environ.get("VO_TEMPO", "1.0"))
 GAP_SCALE = 1.0
 LEAD = .6          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast
-GAP = {"j00": .5, "j01": 1.22, "j02": .55, "j03": .6, "j04": 2.27, "j05": .9, "j06": 2.98, "j07": .6, "j08": .5, "j09": .9, "j10": 3.36, "j11": .6, "j12": 2.78, "j13": .5, "j14": .8, "j15": .4, "j16": .0}
+GAP = {"g5": .9}          # pause before "It is whether you continue." (the others are placed on the brief's time codes: "at")
 
 
 NUM = {"sst": "s",  "six": "6", "nineteenth": "19th", "fortysix": "46", "one": "1", "two": "2", "three": "3", "twenty": "20"}
@@ -96,7 +96,8 @@ def main():
             words.append({"line": ln["id"], "w": txt, "t0": round(t + w.start - a / SR, 3), "t1": round(t + w.end - a / SR, 3)})
         out.append(seg.astype(np.float32))
         t += len(seg) / SR
-        g = GAP[ln["id"]] * GAP_SCALE
+        nxt = next((x for x in script[script.index(ln) + 1:]), None)
+        g = (max(.35, nxt["at"] - t) if nxt and nxt.get("at") is not None else GAP.get(ln["id"], .4)) if nxt else 0.0
         out.append(np.zeros(int(g * SR), dtype=np.float32))
         t += g
         print(f"{ln['id']} take {k} errors {score[0]} spread {-score[1]:.0f} Hz  {len(seg) / SR:.2f}s", flush=True)

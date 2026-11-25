@@ -1,12 +1,14 @@
 # SST: "The Journey Continues" (Instagram + Facebook Reels, 9:16, 59.3 s)
 
-Client brief: `SST_The_Journey_Continues_Editor_Production_Brief.pdf` (8 pages). VO = the brief's master script, verbatim,
+Client brief: `SST_The_Journey_Continues_Editor_Production_Brief.pdf` (8 pages). VO = the brief's master script, verbatim except one owner change (v2: "SST." is spoken as "Sports Science Technology.",
+no "and", as the client asked on the earlier reel),
 each line placed on the brief's time codes (Scene 02 at 0:07, 03 at 0:15, 04 at 0:29, 05 at 0:41, 06 at 0:51), with the
 pauses it asks for after "behind the scenes", "whether you continue" and "the vision moves forward". On-screen text is
 the brief's, scene by scene; English subtitles use the script's wording (the end card carries the last two lines).
 
-Build: build/vo_cb.py + build/vo_pick.py (voice: Chatterbox with the synthetic Kokoro am_puck reference, the voice of the
-earlier SST reel; 3 takes per line, slip-free picked), build/prep_shots.py (Pexels footage cut, cropped to the band and
+Build: build/vo_cb.py + build/vo_pick.py + build/relabel.py (v2 voice: Chatterbox with the synthetic Kokoro am_puck
+reference and the approved SST reel's emotion settings, recorded as whole passages per scene for a natural read, 3 takes
+each, slip-free picked, then split back into sentences for timing), build/prep_shots.py (Pexels footage cut, cropped to the band and
 graded: plan/edl.json), build/generate.py (composition), build/sfx_mix.py (mix).
 
 ## Post description (ready to paste)

@@ -15,7 +15,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W = json.load(open(os.path.join(ROOT, "plan", "words.json")))
 EDL = json.load(open(os.path.join(ROOT, "plan", "edl.json")))
-SCRIPT = {l["id"]: l["text"] for l in json.load(open(os.path.join(ROOT, "plan", "script.json")))}
+SCRIPT = json.load(open(os.path.join(ROOT, "plan", "sentences.json")))    # sentence id -> the script's text (build/relabel.py)
 LW = {}
 for w in W:
     LW.setdefault(w["line"], []).append(w)
@@ -98,7 +98,7 @@ for lid in sorted(LW):
         cut = next(i for i, w in enumerate(words) if w.lower().startswith(SPLIT[lid]))
     parts = [(words[:cut], ws[:cut]), (words[cut:], ws[cut:])] if cut else [(words, ws)]
     for txt, tw in parts:
-        subs.append((" ".join(txt).replace("S. S. T.", "SST."), tw[0]["t0"], tw[-1]["t1"]))
+        subs.append((" ".join(txt), tw[0]["t0"], tw[-1]["t1"]))
 for k, (txt, t0, t1) in enumerate(subs):
     nxt = subs[k + 1][1] if k + 1 < len(subs) else DUR
     off = min(t1 + .5, nxt - .06)
