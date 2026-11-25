@@ -1,0 +1,131 @@
+{
+ "duration": 39.99,
+ "takes": [
+  {
+   "line": "g1",
+   "take": 0,
+   "heard": "The guy who built Gumroad just turned his whole startup playbook into a Claude coach. 11 ,000 people have started and it has one job, your first 100 customers.",
+   "errors": 2,
+   "pitch_spread_hz": 78
+  },
+  {
+   "line": "g1",
+   "take": 1,
+   "heard": "The guy who built Gumroad just turned his whole startup playbook into a Claude coach. 11 ,000 people have started, and it has one job. Your first hundred customers.",
+   "errors": 2,
+   "pitch_spread_hz": 67
+  },
+  {
+   "line": "g1",
+   "take": 2,
+   "heard": "The guy who built Gumroad just turned his whole startup playbook into a Claude coach. 11 ,000 people have starred it and it has one job, your first 100 customers.",
+   "errors": 0,
+   "pitch_spread_hz": 68
+  },
+  {
+   "line": "g2",
+   "take": 0,
+   "heard": "Describe what you want to sell, and Claude maps out the exact places online where those buyers spend their time. Then it makes you deliver it by hand, before a single line of code.",
+   "errors": 0,
+   "pitch_spread_hz": 62
+  },
+  {
+   "line": "g2",
+   "take": 1,
+   "heard": "Describe what you want to sell, and Claude maps out the exact places online where those buyers spend their time. Then, it makes you deliver it by hand before a single line of code.",
+   "errors": 0,
+   "pitch_spread_hz": 71
+  },
+  {
+   "line": "g2",
+   "take": 2,
+   "heard": "Describe what you want to sell, and Claude maps out the exact places online where those buyers spend their time. Then, it makes you deliver it by hand before a single line of code.",
+   "errors": 0,
+   "pitch_spread_hz": 59
+  },
+  {
+   "line": "g3",
+   "take": 0,
+   "heard": "Sell to friends first, then your community, then strangers, one personal email at a time. That's exactly how Gumroad grew.",
+   "errors": 0,
+   "pitch_spread_hz": 71
+  },
+  {
+   "line": "g3",
+   "take": 1,
+   "heard": "Tell two friends first, then your community, then strangers, one personal email at a time. That's exactly how Gumroad grew.",
+   "errors": 2,
+   "pitch_spread_hz": 95
+  },
+  {
+   "line": "g3",
+   "take": 2,
+   "heard": "Sell to friends first, then your community, then strangers, one personal email at a time. That's exactly how Gumroad grew.",
+   "errors": 0,
+   "pitch_spread_hz": 79
+  },
+  {
+   "line": "g4",
+   "take": 0,
+   "heard": "At $10 a month, 200 customers is $2 ,000 a month, and its rule is simple, don't launch until a hundred people have paid.",
+   "errors": 4,
+   "pitch_spread_hz": 84
+  },
+  {
+   "line": "g4",
+   "take": 1,
+   "heard": "At $10 a month, 200 customers is $2 ,000 a month. And its rule is simple, don't launch until 100 people have paid.",
+   "errors": 5,
+   "pitch_spread_hz": 85
+  },
+  {
+   "line": "g4",
+   "take": 2,
+   "heard": "At $10 a month, 200 customers is $2 ,000 a month, and its rule is simple, don't launch until 100 people have paid.",
+   "errors": 5,
+   "pitch_spread_hz": 71
+  },
+  {
+   "line": "g5",
+   "take": 0,
+   "heard": "Send this to the friend who's been building for a year with zero customers.",
+   "errors": 0,
+   "pitch_spread_hz": 61
+  },
+  {
+   "line": "g5",
+   "take": 1,
+   "heard": "Send this to the friend who's been building for a year with zero customers.",
+   "errors": 0,
+   "pitch_spread_hz": 111
+  },
+  {
+   "line": "g5",
+   "take": 2,
+   "heard": "Send this to the friend who's been billing for a year with zero customers.",
+   "errors": 1,
+   "pitch_spread_hz": 39
+  },
+  {
+   "line": "g6",
+   "take": 0,
+   "heard": "Comment, Customers, and I'll send you the link.",
+   "errors": 0,
+   "pitch_spread_hz": 72
+  },
+  {
+   "line": "g6",
+   "take": 1,
+   "heard": "Comment, Q -Stimmers, and I'll send you the link.",
+   "errors": 2,
+   "pitch_spread_hz": 72
+  },
+  {
+   "line": "g6",
+   "take": 2,
+   "heard": "Comment Customers, and I'll send you the link.",
+   "errors": 0,
+   "pitch_spread_hz": 98
+  }
+ ]
+}

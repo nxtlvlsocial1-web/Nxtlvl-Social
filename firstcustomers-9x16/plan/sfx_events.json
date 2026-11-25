@@ -1,0 +1,306 @@
+[
+{
+"type": "swish",
+"t": 0
+},
+{
+"type": "g_pop",
+"t": 0.1
+},
+{
+"type": "g_pop",
+"t": 0.17
+},
+{
+"type": "g_pop",
+"t": 0.24
+},
+{
+"type": "g_pop",
+"t": 0.31
+},
+{
+"type": "g_pop",
+"t": 0.38
+},
+{
+"type": "g_pop",
+"t": 0.45
+},
+{
+"type": "g_pop",
+"t": 0.52
+},
+{
+"type": "g_pop",
+"t": 0.59
+},
+{
+"type": "g_pop",
+"t": 0.66
+},
+{
+"type": "g_pop",
+"t": 0.73
+},
+{
+"type": "g_pop",
+"t": 0.8
+},
+{
+"type": "g_pop",
+"t": 0.87
+},
+{
+"type": "g_pop",
+"t": 0.94
+},
+{
+"type": "g_pop",
+"t": 1.01
+},
+{
+"type": "impact",
+"t": 1.25
+},
+{
+"type": "whoosh",
+"t": 4.346
+},
+{
+"type": "sparkle",
+"t": 4.566
+},
+{
+"type": "swish",
+"t": 6.927
+},
+{
+"type": "riser_short",
+"t": 6.947
+},
+{
+"type": "impact",
+"t": 7.547
+},
+{
+"type": "whoosh_big",
+"t": 8.536
+},
+{
+"type": "whoosh",
+"t": 8.616
+},
+{
+"type": "g_swish",
+"t": 10.925
+},
+{
+"type": "g_pickup",
+"t": 11.962
+},
+{
+"type": "g_pickup",
+"t": 12.112
+},
+{
+"type": "g_pickup",
+"t": 12.262
+},
+{
+"type": "msg",
+"t": 15.702
+},
+{
+"type": "swish",
+"t": 15.782
+},
+{
+"type": "buzzer",
+"t": 17.962
+},
+{
+"type": "whoosh",
+"t": 18.465
+},
+{
+"type": "g_tick",
+"t": 18.585
+},
+{
+"type": "g_tick",
+"t": 20.019
+},
+{
+"type": "g_tick",
+"t": 20.736
+},
+{
+"type": "msg",
+"t": 21.368
+},
+{
+"type": "msg",
+"t": 21.508
+},
+{
+"type": "msg",
+"t": 21.648
+},
+{
+"type": "msg",
+"t": 21.788
+},
+{
+"type": "msg",
+"t": 21.928
+},
+{
+"type": "msg",
+"t": 22.068
+},
+{
+"type": "swish",
+"t": 23.298
+},
+{
+"type": "g_levelup",
+"t": 23.868
+},
+{
+"type": "whoosh",
+"t": 24.733
+},
+{
+"type": "cash",
+"t": 25.053
+},
+{
+"type": "cash",
+"t": 25.303
+},
+{
+"type": "cash",
+"t": 25.553
+},
+{
+"type": "cash",
+"t": 25.803
+},
+{
+"type": "cash",
+"t": 26.053
+},
+{
+"type": "swish",
+"t": 29.671
+},
+{
+"type": "lock",
+"t": 29.791
+},
+{
+"type": "tick",
+"t": 29.891
+},
+{
+"type": "tick",
+"t": 30.059
+},
+{
+"type": "tick",
+"t": 30.228
+},
+{
+"type": "tick",
+"t": 30.396
+},
+{
+"type": "tick",
+"t": 30.564
+},
+{
+"type": "tick",
+"t": 30.733
+},
+{
+"type": "tick",
+"t": 30.901
+},
+{
+"type": "tick",
+"t": 31.069
+},
+{
+"type": "tick",
+"t": 31.237
+},
+{
+"type": "riser",
+"t": 31.274
+},
+{
+"type": "tick",
+"t": 31.406
+},
+{
+"type": "whoosh_big",
+"t": 31.774
+},
+{
+"type": "whoosh",
+"t": 31.842
+},
+{
+"type": "g_complete",
+"t": 31.874
+},
+{
+"type": "swish",
+"t": 35.267
+},
+{
+"type": "whoosh",
+"t": 35.287
+},
+{
+"type": "click",
+"t": 35.602
+},
+{
+"type": "click",
+"t": 35.647
+},
+{
+"type": "click",
+"t": 35.692
+},
+{
+"type": "click",
+"t": 35.737
+},
+{
+"type": "click",
+"t": 35.782
+},
+{
+"type": "click",
+"t": 35.827
+},
+{
+"type": "click",
+"t": 35.872
+},
+{
+"type": "click",
+"t": 35.917
+},
+{
+"type": "click",
+"t": 35.962
+},
+{
+"type": "impact",
+"t": 36.252
+}
+]
