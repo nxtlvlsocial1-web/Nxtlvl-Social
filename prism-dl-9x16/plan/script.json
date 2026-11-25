@@ -1,0 +1,68 @@
+[
+ {
+  "id": "p00",
+  "text": "A one gigabyte file, in seventeen seconds. On the same server, one connection took over four minutes.",
+  "ex": 0.7,
+  "beat": "hook: the proof first (Prism's own benchmark)"
+ },
+ {
+  "id": "p01",
+  "text": "It's called Prism. A free, open source alternative to Internet Download Manager.",
+  "ex": 0.66,
+  "beat": "name"
+ },
+ {
+  "id": "p02",
+  "text": "Your browser pulls a file through one single connection. And a lot of servers cap the speed of each one.",
+  "ex": 0.62,
+  "beat": "the problem"
+ },
+ {
+  "id": "p03",
+  "text": "So Prism splits that same file into up to thirty two parts, and pulls them all at once.",
+  "ex": 0.68,
+  "beat": "peak: the split"
+ },
+ {
+  "id": "p04",
+  "text": "When one part finishes early, it takes over half of the biggest part still left. Nothing sits idle.",
+  "ex": 0.64,
+  "beat": "how"
+ },
+ {
+  "id": "p05",
+  "text": "It grabs videos too. YouTube and eighteen hundred other sites, up to 8K, or just the MP3.",
+  "ex": 0.66,
+  "beat": "feature"
+ },
+ {
+  "id": "p06",
+  "text": "Laptop dies halfway? It picks up exactly where it stopped.",
+  "ex": 0.68,
+  "beat": "feature"
+ },
+ {
+  "id": "p07",
+  "text": "It even does torrents, and Hugging Face models.",
+  "ex": 0.66,
+  "beat": "feature"
+ },
+ {
+  "id": "p08",
+  "text": "One honest catch. If your own internet is the slow part, no app can fix that.",
+  "ex": 0.62,
+  "beat": "trust"
+ },
+ {
+  "id": "p09",
+  "text": "Send this to the friend who's still waiting on a download.",
+  "ex": 0.64,
+  "beat": "share trigger"
+ },
+ {
+  "id": "p10",
+  "text": "Comment PRISM, and I'll send you the link.",
+  "ex": 0.68,
+  "beat": "CTA"
+ }
+]

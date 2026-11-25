@@ -1,0 +1,238 @@
+[
+{
+"type": "swish",
+"t": 0
+},
+{
+"type": "riser_short",
+"t": 0.891
+},
+{
+"type": "ding",
+"t": 1.991
+},
+{
+"type": "tick",
+"t": 4.292
+},
+{
+"type": "tick",
+"t": 4.432
+},
+{
+"type": "tick",
+"t": 4.572
+},
+{
+"type": "tick",
+"t": 4.712
+},
+{
+"type": "tick",
+"t": 4.852
+},
+{
+"type": "tick",
+"t": 4.992
+},
+{
+"type": "tick",
+"t": 5.132
+},
+{
+"type": "tick",
+"t": 5.272
+},
+{
+"type": "whoosh",
+"t": 5.635
+},
+{
+"type": "impact",
+"t": 5.755
+},
+{
+"type": "sparkle",
+"t": 5.905
+},
+{
+"type": "swish",
+"t": 8.044
+},
+{
+"type": "pop",
+"t": 8.264
+},
+{
+"type": "whoosh",
+"t": 10.295
+},
+{
+"type": "swish",
+"t": 13.422
+},
+{
+"type": "thump",
+"t": 13.692
+},
+{
+"type": "whoosh",
+"t": 14.993
+},
+{
+"type": "riser_short",
+"t": 15.079
+},
+{
+"type": "g_tick",
+"t": 15.679
+},
+{
+"type": "g_tick",
+"t": 15.799
+},
+{
+"type": "g_tick",
+"t": 15.919
+},
+{
+"type": "g_tick",
+"t": 16.039
+},
+{
+"type": "g_tick",
+"t": 16.159
+},
+{
+"type": "g_tick",
+"t": 16.279
+},
+{
+"type": "impact",
+"t": 17.472
+},
+{
+"type": "sparkle",
+"t": 17.572
+},
+{
+"type": "swish",
+"t": 19.861
+},
+{
+"type": "g_correct",
+"t": 21.658
+},
+{
+"type": "g_swish",
+"t": 22.208
+},
+{
+"type": "whoosh",
+"t": 24.629
+},
+{
+"type": "g_complete",
+"t": 25.049
+},
+{
+"type": "swish",
+"t": 25.38
+},
+{
+"type": "pop",
+"t": 27.745
+},
+{
+"type": "stamp",
+"t": 29.425
+},
+{
+"type": "whoosh",
+"t": 30.431
+},
+{
+"type": "g_pop",
+"t": 30.651
+},
+{
+"type": "swish",
+"t": 31.323
+},
+{
+"type": "buzzer",
+"t": 31.991
+},
+{
+"type": "thump",
+"t": 32.341
+},
+{
+"type": "g_levelup",
+"t": 33.455
+},
+{
+"type": "whoosh",
+"t": 34.776
+},
+{
+"type": "lock",
+"t": 34.896
+},
+{
+"type": "g_pickup",
+"t": 36.406
+},
+{
+"type": "swish",
+"t": 37.55
+},
+{
+"type": "whoosh",
+"t": 39.318
+},
+{
+"type": "thump",
+"t": 39.538
+},
+{
+"type": "swish",
+"t": 42.163
+},
+{
+"type": "whoosh",
+"t": 44.71
+},
+{
+"type": "whoosh",
+"t": 44.73
+},
+{
+"type": "click",
+"t": 45.555
+},
+{
+"type": "click",
+"t": 45.615
+},
+{
+"type": "click",
+"t": 45.675
+},
+{
+"type": "click",
+"t": 45.735
+},
+{
+"type": "click",
+"t": 45.795
+},
+{
+"type": "impact",
+"t": 46.055
+},
+{
+"type": "g_complete",
+"t": 46.155
+}
+]

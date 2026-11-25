@@ -1,0 +1,236 @@
+{
+ "duration": 50.3,
+ "takes": [
+  {
+   "line": "p00",
+   "take": 0,
+   "heard": "a one gigabyte file in 17 seconds. On the same server, one connection took over four minutes",
+   "errors": 0,
+   "pitch_spread_hz": 70
+  },
+  {
+   "line": "p00",
+   "take": 1,
+   "heard": "A 1 gigabyte file in 17 seconds. On the same server, one connection took over 4 minutes.",
+   "errors": 1,
+   "pitch_spread_hz": 73
+  },
+  {
+   "line": "p00",
+   "take": 2,
+   "heard": "a one gigabyte file in 17 seconds. On the same server, one connection took over four minutes.",
+   "errors": 0,
+   "pitch_spread_hz": 53
+  },
+  {
+   "line": "p01",
+   "take": 0,
+   "heard": "It's called Prism, a free, open -source alternative to internet download manager.",
+   "errors": 0,
+   "pitch_spread_hz": 83
+  },
+  {
+   "line": "p01",
+   "take": 1,
+   "heard": "It's called Prism, a free, open -source alternative to Internet Download Manager.",
+   "errors": 0,
+   "pitch_spread_hz": 81
+  },
+  {
+   "line": "p01",
+   "take": 2,
+   "heard": "It's called Prism, a free, open -source alternative to Internet Download Manager.",
+   "errors": 0,
+   "pitch_spread_hz": 96
+  },
+  {
+   "line": "p02",
+   "take": 0,
+   "heard": "Your browser pulls a file through one single connection, and a lot of servers cap the speed of each one.",
+   "errors": 0,
+   "pitch_spread_hz": 67
+  },
+  {
+   "line": "p02",
+   "take": 1,
+   "heard": "Your browser pulls a file through one single connection, and a lot of servers cap the speed of each one.",
+   "errors": 0,
+   "pitch_spread_hz": 67
+  },
+  {
+   "line": "p02",
+   "take": 2,
+   "heard": "Your browser pulls a file through one single connection, and a lot of servers cap the speed of each one.",
+   "errors": 0,
+   "pitch_spread_hz": 69
+  },
+  {
+   "line": "p03",
+   "take": 0,
+   "heard": "The prism splits that same file into up to 32 parts and pulls them all at once.",
+   "errors": 3,
+   "pitch_spread_hz": 61
+  },
+  {
+   "line": "p03",
+   "take": 1,
+   "heard": "So Prism splits that same file into up to 32 parts and pulls them all at once.",
+   "errors": 2,
+   "pitch_spread_hz": 71
+  },
+  {
+   "line": "p03",
+   "take": 2,
+   "heard": "So Prism splits that same file into up to 32 parts and pulls them all at once.",
+   "errors": 2,
+   "pitch_spread_hz": 71
+  },
+  {
+   "line": "p04",
+   "take": 0,
+   "heard": "When one part finishes early, it takes over half of the biggest part still left. Nothing sits idle.",
+   "errors": 0,
+   "pitch_spread_hz": 82
+  },
+  {
+   "line": "p04",
+   "take": 1,
+   "heard": "When one part finishes early, it takes over half of the biggest part still left. Nothing sits idle.",
+   "errors": 0,
+   "pitch_spread_hz": 50
+  },
+  {
+   "line": "p04",
+   "take": 2,
+   "heard": "When one part finishes early, it takes over half of the biggest part still left. Nothing sits idle.",
+   "errors": 0,
+   "pitch_spread_hz": 58
+  },
+  {
+   "line": "p05",
+   "take": 0,
+   "heard": "It grabs videos too, YouTube and 1800 other sites, up to 8K, or just the MP3.",
+   "errors": 2,
+   "pitch_spread_hz": 62
+  },
+  {
+   "line": "p05",
+   "take": 1,
+   "heard": "It grabs videos too, YouTube and 1800 other sites up to 8K or just the MP3.",
+   "errors": 2,
+   "pitch_spread_hz": 80
+  },
+  {
+   "line": "p05",
+   "take": 2,
+   "heard": "It grabs videos too, YouTube and 1800 other sites, up to 8K, or just the MP3.",
+   "errors": 2,
+   "pitch_spread_hz": 66
+  },
+  {
+   "line": "p06",
+   "take": 0,
+   "heard": "Laptop dies halfway, it picks up exactly where it stopped.",
+   "errors": 0,
+   "pitch_spread_hz": 85
+  },
+  {
+   "line": "p06",
+   "take": 1,
+   "heard": "Laptop dies halfway, it picks up exactly where it stopped.",
+   "errors": 0,
+   "pitch_spread_hz": 56
+  },
+  {
+   "line": "p06",
+   "take": 2,
+   "heard": "Laptop dies halfway, it picks up exactly where it stopped.",
+   "errors": 0,
+   "pitch_spread_hz": 59
+  },
+  {
+   "line": "p07",
+   "take": 0,
+   "heard": "It even does torrents and hugging face models.",
+   "errors": 0,
+   "pitch_spread_hz": 120
+  },
+  {
+   "line": "p07",
+   "take": 1,
+   "heard": "It even does torrents and hugging face models.",
+   "errors": 0,
+   "pitch_spread_hz": 131
+  },
+  {
+   "line": "p07",
+   "take": 2,
+   "heard": "It even does torrents and hugging face models.",
+   "errors": 0,
+   "pitch_spread_hz": 106
+  },
+  {
+   "line": "p08",
+   "take": 0,
+   "heard": "One honest catch, if your own internet is the slow part, no app can fix that.",
+   "errors": 0,
+   "pitch_spread_hz": 47
+  },
+  {
+   "line": "p08",
+   "take": 1,
+   "heard": "One honest catch. If your own internet is the slow part, no app can fix that.",
+   "errors": 0,
+   "pitch_spread_hz": 63
+  },
+  {
+   "line": "p08",
+   "take": 2,
+   "heard": "One honest catch. If your own internet is the slow part, no app can fix that.",
+   "errors": 0,
+   "pitch_spread_hz": 80
+  },
+  {
+   "line": "p09",
+   "take": 0,
+   "heard": "Send this to the friend who's still waiting on a download.",
+   "errors": 0,
+   "pitch_spread_hz": 80
+  },
+  {
+   "line": "p09",
+   "take": 1,
+   "heard": "Send this to the friend who's still waiting on a download.",
+   "errors": 0,
+   "pitch_spread_hz": 60
+  },
+  {
+   "line": "p09",
+   "take": 2,
+   "heard": "Send this to the friend who's still waiting on a download.",
+   "errors": 0,
+   "pitch_spread_hz": 61
+  },
+  {
+   "line": "p10",
+   "take": 0,
+   "heard": "Comment, Prism, and I'll send you the link.",
+   "errors": 0,
+   "pitch_spread_hz": 96
+  },
+  {
+   "line": "p10",
+   "take": 1,
+   "heard": "comment PRISM and I'll send you the link.",
+   "errors": 0,
+   "pitch_spread_hz": 90
+  },
+  {
+   "line": "p10",
+   "take": 2,
+   "heard": "Comment Prism, and I'll send you the link.",
+   "errors": 0,
+   "pitch_spread_hz": 62
+  }
+ ]
+}
