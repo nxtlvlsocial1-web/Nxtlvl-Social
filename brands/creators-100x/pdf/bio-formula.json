@@ -1,0 +1,45 @@
+{
+  "title": ["THE 4-LINE", "*BIO*", "FORMULA"],
+  "kicker": "Free swipe file",
+  "subtitle": "Turn profile visits into follows, with 15 examples.",
+  "tagline": "From the reel: same profile, new bio, now they follow.",
+  "blocks": [
+    { "type": "text", "heading": "Why your bio *loses* follows",
+      "intro": "People land on your profile from a reel, read one line and decide in about three seconds. \"Living my best life. DM for collabs.\" tells them nothing about what they get. They don't follow you for you. They follow for what they get.",
+      "steps": [
+        ["Line 1: who you help", "Name the person, not yourself: [cheap meals for busy students] beats [foodie and dreamer]."],
+        ["Line 2: what they get", "The result or the format they can expect: [15-minute, one-pan recipes]."],
+        ["Line 3: proof", "One honest reason to trust you: a number, a result or your story. Only use numbers you can back up."],
+        ["Line 4: what to do next", "One clear action: [new recipe every Tuesday], [free guide below], [comment GROW on any reel]."]
+      ],
+      "note": "Tip: keep every line under [40] characters so it doesn't wrap on a phone, and put your keyword or niche word in your name field so search can find you." },
+    { "type": "cards", "heading": "*15* bios to copy", "per_page": 3,
+      "items": [
+        { "tag": "Food", "line": "[Cheap meals] for [busy students]. [15-minute, one-pan] recipes. [40K] students cook with me. [New recipe every Tuesday].", "example": "Cheap meals for busy students / 15-minute, one-pan recipes / 40K students cook with me / New recipe every Tuesday", "why": "Who, what, proof and when to come back, in four short lines." },
+        { "tag": "Fitness", "line": "[Home workouts] for [busy moms]. [20 minutes], [no equipment]. [Lost 18 kg] after [2 kids]. [Free 7-day plan] below.", "example": "Home workouts for busy moms / 20 minutes, no equipment / Lost 18 kg after 2 kids / Free 7-day plan below", "why": "A personal result is the strongest proof in fitness." },
+        { "tag": "Personal finance", "line": "Money tips for [your first job]. [Saving, budgeting, investing] made simple. [Debt-free at 26]. [Comment SAVE for my budget sheet].", "example": "Money tips for your first job / Saving, budgeting, investing made simple / Debt-free at 26 / Comment SAVE for my budget sheet", "why": "The keyword in line 4 turns followers into leads." },
+        { "tag": "Creator coach", "line": "I help [creators under 10K] grow. [Hooks, scripts and editing] that work. [Grew 3 pages past 100K]. [Free hook pack below].", "example": "I help creators under 10K grow / Hooks, scripts and editing that work / Grew 3 pages past 100K / Free hook pack below", "why": "Specific audience plus specific skills reads as an expert, not a dreamer." },
+        { "tag": "Fashion", "line": "[Outfit ideas] for [petite women]. [Affordable finds under 50]. [Styling 120K petites]. [New try-on every Friday].", "example": "Outfit ideas for petite women / Affordable finds under 50 / Styling 120K petites / New try-on every Friday", "why": "A narrow audience makes the right person feel seen instantly." },
+        { "tag": "Travel", "line": "[Budget travel] for [first-time solo travellers]. [Itineraries, costs and safety tips]. [32 countries on a budget]. [Guides at the link].", "example": "Budget travel for first-time solo travellers / Itineraries, costs and safety tips / 32 countries on a budget / Guides at the link", "why": "Tells them exactly what kind of posts they'll get." },
+        { "tag": "Skincare", "line": "Skincare for [acne-prone skin]. [Simple routines], [no 10-step nonsense]. [Esthetician, 8 years]. [Ask me anything in DMs].", "example": "Skincare for acne-prone skin / Simple routines, no 10-step nonsense / Esthetician, 8 years / Ask me anything in DMs", "why": "A credential is proof when you don't have big numbers yet." },
+        { "tag": "Photography", "line": "[Phone photography] tips for [beginners]. [Settings, angles and edits]. [Shot for 20+ brands]. [Free preset below].", "example": "Phone photography tips for beginners / Settings, angles and edits / Shot for 20+ brands / Free preset below", "why": "Free resource in line 4 gives a reason to click, not just follow." },
+        { "tag": "Small business", "line": "Marketing for [local cafes]. [Reels, offers and menus that sell]. [Helped 60 cafes fill tables]. [Book a free call below].", "example": "Marketing for local cafes / Reels, offers and menus that sell / Helped 60 cafes fill tables / Book a free call below", "why": "Clients see their exact business in line 1." },
+        { "tag": "Study / education", "line": "Study tips for [exam season]. [Notes, timetables and focus hacks]. [Topped my state boards]. [Free timetable template below].", "example": "Study tips for exam season / Notes, timetables and focus hacks / Topped my state boards / Free timetable template below", "why": "Students trust someone who just did what they're trying to do." },
+        { "tag": "Tech / AI", "line": "[AI tools] for [content creators]. [Prompts and workflows] that save hours. [Tested 200+ tools]. [Comment PROMPT on any reel].", "example": "AI tools for content creators / Prompts and workflows that save hours / Tested 200+ tools / Comment PROMPT on any reel", "why": "Promise of time saved is a clear benefit." },
+        { "tag": "Home and decor", "line": "[Renter-friendly] decor for [small apartments]. [Under-50 makeovers]. [Before and afters every week]. [Shop my finds at the link].", "example": "Renter-friendly decor for small apartments / Under-50 makeovers / Before and afters every week / Shop my finds at the link", "why": "Constraints like renter-friendly and under-50 make it instantly relevant." },
+        { "tag": "Parenting", "line": "[Calm parenting] for [toddler meltdowns]. [Scripts you can say today]. [Mom of 3, child psychologist]. [Free script guide below].", "example": "Calm parenting for toddler meltdowns / Scripts you can say today / Mom of 3, child psychologist / Free script guide below", "why": "A specific pain point plus a credential builds trust fast." },
+        { "tag": "Music", "line": "[Guitar lessons] for [adult beginners]. [Songs you can play in a week]. [Taught 5,000 students]. [Start with my free chord chart].", "example": "Guitar lessons for adult beginners / Songs you can play in a week / Taught 5,000 students / Start with my free chord chart", "why": "Fast, believable result in line 2 lowers the barrier." },
+        { "tag": "Gaming", "line": "[Pro tips] for [ranked Valorant]. [Aim drills and game sense]. [Radiant, top 500]. [Live every Wed and Sat].", "example": "Pro tips for ranked Valorant / Aim drills and game sense / Radiant, top 500 / Live every Wed and Sat", "why": "Rank is proof gamers understand instantly; the schedule brings them back." }
+      ] },
+    { "type": "checklist", "heading": "Before you *save* it",
+      "items": [
+        "Line 1 names who you help, not just who you are",
+        "Line 2 says what they get from following",
+        "Line 3 has proof you can back up",
+        "Line 4 gives one clear next step",
+        "Every line fits on a phone without wrapping",
+        "No vague lines like \"living my best life\" or \"DM for collabs\""
+      ],
+      "closing": "Follow @creators.100x for more free growth guides." }
+  ]
+}
