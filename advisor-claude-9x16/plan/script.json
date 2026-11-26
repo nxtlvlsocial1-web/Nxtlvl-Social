@@ -1,0 +1,74 @@
+[
+ {
+  "id": "g1",
+  "beat": "hook 70 (before/after) + first peak",
+  "text": "The cheapest model scored 19.7% on a hard research test. Give it an advisor, and it jumps to 41.2%.",
+  "say": "The cheapest model... scored nineteen point seven percent on a hard research test. Give it an advisor... and it jumps to forty-one point two percent.",
+  "ex": 0.8,
+  "cfg": 0.3,
+  "at": null
+ },
+ {
+  "id": "g2",
+  "beat": "peak 90 (contrast)",
+  "text": "Same cheap model. It just knows when to ask for help.",
+  "say": "Same cheap model. It just knows... when to ask for help.",
+  "ex": 0.78,
+  "cfg": 0.33,
+  "at": null
+ },
+ {
+  "id": "g3",
+  "beat": "release (the how)",
+  "text": "Here's the trick. The small, fast model does all the work: it writes the code, runs it, and reads the files.",
+  "say": "Here's the trick. The small, fast model does all the work. It writes the code, runs it, and reads the files.",
+  "ex": 0.66,
+  "cfg": 0.4,
+  "at": null
+ },
+ {
+  "id": "g4",
+  "beat": "peak (the twist)",
+  "text": "The big model never touches the keyboard. It only steps in at the hard parts: before picking a plan, when the same error keeps coming back, and before calling the job done.",
+  "say": "The big model never touches the keyboard. It only steps in at the hard parts. Before picking a plan. When the same error keeps coming back. And before calling the job done.",
+  "ex": 0.72,
+  "cfg": 0.35,
+  "at": null
+ },
+ {
+  "id": "g5",
+  "beat": "release, product at ~60 %",
+  "text": "It's Anthropic's advisor strategy, and it's built right into Claude Code. One command: /advisor opus.",
+  "say": "It's Anthropic's advisor strategy. And it's built right into Claude Code. One command. Slash advisor, opus.",
+  "ex": 0.74,
+  "cfg": 0.35,
+  "at": null
+ },
+ {
+  "id": "g6",
+  "beat": "peak (real number)",
+  "text": "In Anthropic's own tests, Sonnet with an Opus advisor scored higher, and cost 11.9% less per task.",
+  "say": "In Anthropic's own tests, Sonnet with an Opus advisor scored higher... and cost eleven point nine percent less, per task.",
+  "ex": 0.76,
+  "cfg": 0.33,
+  "at": null
+ },
+ {
+  "id": "g7",
+  "beat": "share trigger",
+  "text": "Send this to the friend who runs Opus on everything.",
+  "say": "Send this to the friend who runs Opus... on everything.",
+  "ex": 0.72,
+  "cfg": 0.38,
+  "at": null
+ },
+ {
+  "id": "g8",
+  "beat": "CTA",
+  "text": "Comment ADVISOR, and I'll send you the setup.",
+  "say": "Comment advisor, and I'll send you the setup.",
+  "ex": 0.75,
+  "cfg": 0.35,
+  "at": null
+ }
+]

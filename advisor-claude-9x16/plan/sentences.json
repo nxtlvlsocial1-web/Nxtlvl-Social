@@ -1,0 +1,15 @@
+{
+ "j00": "The cheapest model scored 19.7% on a hard research test.",
+ "j01": "Give it an advisor, and it jumps to 41.2%.",
+ "j02": "Same cheap model.",
+ "j03": "It just knows when to ask for help.",
+ "j04": "Here's the trick.",
+ "j05": "The small, fast model does all the work: it writes the code, runs it, and reads the files.",
+ "j06": "The big model never touches the keyboard.",
+ "j07": "It only steps in at the hard parts: before picking a plan, when the same error keeps coming back, and before calling the job done.",
+ "j08": "It's Anthropic's advisor strategy, and it's built right into Claude Code.",
+ "j09": "One command: /advisor opus.",
+ "j10": "In Anthropic's own tests, Sonnet with an Opus advisor scored higher, and cost 11.9% less per task.",
+ "j11": "Send this to the friend who runs Opus on everything.",
+ "j12": "Comment ADVISOR, and I'll send you the setup."
+}

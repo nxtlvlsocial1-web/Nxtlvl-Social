@@ -1,0 +1,261 @@
+{
+ "duration": 50.4,
+ "takes": [
+  {
+   "line": "g1",
+   "take": 0,
+   "heard": "The cheapest model scored 19 .7 % on a hard research test, given an advisor, and it jumps to 41 .2%.",
+   "errors": 10,
+   "pitch_spread_hz": 107,
+   "dynamics": 0.55
+  },
+  {
+   "line": "g1",
+   "take": 1,
+   "heard": "The cheapest model scored 19 .7 % on a hard research test, give it an advisor, and adjust to 41 .2%.",
+   "errors": 10,
+   "pitch_spread_hz": 127,
+   "dynamics": 0.566
+  },
+  {
+   "line": "g1",
+   "take": 2,
+   "heard": "The cheapest model scored 19 .7 % on a hard research test. Give it an advisor and it jumps to 41 .2%.",
+   "errors": 8,
+   "pitch_spread_hz": 90,
+   "dynamics": 0.539
+  },
+  {
+   "line": "g1",
+   "take": 3,
+   "heard": "The cheapest model, scored 19 .7 % on a hard research test, give it an advisor, and it jumps to 41 .2%.",
+   "errors": 8,
+   "pitch_spread_hz": 113,
+   "dynamics": 0.543
+  },
+  {
+   "line": "g2",
+   "take": 0,
+   "heard": "Same cheap model. It just knows when to ask for help.",
+   "errors": 0,
+   "pitch_spread_hz": 54,
+   "dynamics": 0.534
+  },
+  {
+   "line": "g2",
+   "take": 1,
+   "heard": "Shame. Sheep model. It just knows when to ask for help.",
+   "errors": 2,
+   "pitch_spread_hz": 118,
+   "dynamics": 0.575
+  },
+  {
+   "line": "g2",
+   "take": 2,
+   "heard": "It just knows when to ask for help.",
+   "errors": 3,
+   "pitch_spread_hz": 88,
+   "dynamics": 0.541
+  },
+  {
+   "line": "g2",
+   "take": 3,
+   "heard": "Same cheap model. It just knows when to ask for help.",
+   "errors": 0,
+   "pitch_spread_hz": 119,
+   "dynamics": 0.586
+  },
+  {
+   "line": "g3",
+   "take": 0,
+   "heard": "Here's the trick. The small fast model does all the work. It writes the code, runs it, and reads the files.",
+   "errors": 0,
+   "pitch_spread_hz": 62,
+   "dynamics": 0.553
+  },
+  {
+   "line": "g3",
+   "take": 1,
+   "heard": "Here's the trick the small fast model does all the work it writes the code runs it and reads the files",
+   "errors": 0,
+   "pitch_spread_hz": 57,
+   "dynamics": 0.565
+  },
+  {
+   "line": "g3",
+   "take": 2,
+   "heard": "Here's the trick. The small, fast model does all the work. It writes the code, runs it, and reads the files.",
+   "errors": 0,
+   "pitch_spread_hz": 55,
+   "dynamics": 0.536
+  },
+  {
+   "line": "g3",
+   "take": 3,
+   "heard": "Here's the trick. The small, fast model does all the work, it writes the code, runs it, and reads the files.",
+   "errors": 0,
+   "pitch_spread_hz": 75,
+   "dynamics": 0.52
+  },
+  {
+   "line": "g4",
+   "take": 0,
+   "heard": "The big model never touches the keyboard, it only steps in at the hard parts, before picking a plan, when the same error keeps coming back, and before calling the job done.",
+   "errors": 0,
+   "pitch_spread_hz": 74,
+   "dynamics": 0.537
+  },
+  {
+   "line": "g4",
+   "take": 1,
+   "heard": "The big model never touches the keyboard, it only steps in at the hard parts. Before picking a plan, when the same error keeps coming back, and before calling the job done,",
+   "errors": 0,
+   "pitch_spread_hz": 94,
+   "dynamics": 0.503
+  },
+  {
+   "line": "g4",
+   "take": 2,
+   "heard": "The big model never touches the keyboard, it only steps in at the hard parts, before picking a plan, when the same error keeps coming back, and before calling the job done.",
+   "errors": 0,
+   "pitch_spread_hz": 75,
+   "dynamics": 0.5
+  },
+  {
+   "line": "g4",
+   "take": 3,
+   "heard": "The big model never touches the keyboard, it only steps in at the hard parts, before picking a plan, when the same error keeps coming back, and before calling the job done.",
+   "errors": 0,
+   "pitch_spread_hz": 81,
+   "dynamics": 0.534
+  },
+  {
+   "line": "g5",
+   "take": 0,
+   "heard": "It's Anthropic's advisor strategy, and it's built right into ClodCode, one command, slash advisor, opus.",
+   "errors": 2,
+   "pitch_spread_hz": 72,
+   "dynamics": 0.612
+  },
+  {
+   "line": "g5",
+   "take": 1,
+   "heard": "It's Anthropics Advisor Strategy, and it's built right into cloud code, one -command -slash -advisor, opus.",
+   "errors": 1,
+   "pitch_spread_hz": 70,
+   "dynamics": 0.599
+  },
+  {
+   "line": "g5",
+   "take": 2,
+   "heard": "It's Anthropic's advisor strategy, and it's built right into Cloud Code, one command, slash advisor, opus.",
+   "errors": 1,
+   "pitch_spread_hz": 64,
+   "dynamics": 0.584
+  },
+  {
+   "line": "g5",
+   "take": 3,
+   "heard": "It's Anthropic's advisor strategy, and it's built right into CLOD code, one -command -slash -advisor -opis.",
+   "errors": 2,
+   "pitch_spread_hz": 75,
+   "dynamics": 0.598
+  },
+  {
+   "line": "g6",
+   "take": 0,
+   "heard": "In Anthropic's own tests, Sonnet with an Opus Advisor scored higher and cost 11 .9 % less per task.",
+   "errors": 4,
+   "pitch_spread_hz": 71,
+   "dynamics": 0.552
+  },
+  {
+   "line": "g6",
+   "take": 1,
+   "heard": "In Anthropic's own tests, Sonnet with an Opus Advisor scored higher and cost 11 .9 % less per task.",
+   "errors": 4,
+   "pitch_spread_hz": 74,
+   "dynamics": 0.55
+  },
+  {
+   "line": "g6",
+   "take": 2,
+   "heard": "In Anthropics' own tests, Sonnet with an Opus Advisor scored higher and cost 11 .9 % less per task.",
+   "errors": 4,
+   "pitch_spread_hz": 43,
+   "dynamics": 0.57
+  },
+  {
+   "line": "g6",
+   "take": 3,
+   "heard": "In Anthropic's own tests, Sonnet with an Opus Advisor scored higher and cost 11 .9 % less per task.",
+   "errors": 4,
+   "pitch_spread_hz": 66,
+   "dynamics": 0.603
+  },
+  {
+   "line": "g7",
+   "take": 0,
+   "heard": "Send this to the friend who runs Opus on everything.",
+   "errors": 0,
+   "pitch_spread_hz": 81,
+   "dynamics": 0.463
+  },
+  {
+   "line": "g7",
+   "take": 1,
+   "heard": "Send this to the friend who runs Opus, on everything.",
+   "errors": 0,
+   "pitch_spread_hz": 62,
+   "dynamics": 0.59
+  },
+  {
+   "line": "g7",
+   "take": 2,
+   "heard": "Send this to the friend who runs Opus, on EVERYTHING.",
+   "errors": 0,
+   "pitch_spread_hz": 72,
+   "dynamics": 0.561
+  },
+  {
+   "line": "g7",
+   "take": 3,
+   "heard": "Send this to the friend who runs Opus, on everything.",
+   "errors": 0,
+   "pitch_spread_hz": 80,
+   "dynamics": 0.473
+  },
+  {
+   "line": "g8",
+   "take": 0,
+   "heard": "Come in, Advisor, and I'll send you the setup.",
+   "errors": 2,
+   "pitch_spread_hz": 61,
+   "dynamics": 0.444
+  },
+  {
+   "line": "g8",
+   "take": 1,
+   "heard": "Come in advisor and I'll send you the setup",
+   "errors": 2,
+   "pitch_spread_hz": 123,
+   "dynamics": 0.593
+  },
+  {
+   "line": "g8",
+   "take": 2,
+   "heard": "common advisor, and I'll send you the setup.",
+   "errors": 1,
+   "pitch_spread_hz": 77,
+   "dynamics": 0.487
+  },
+  {
+   "line": "g8",
+   "take": 3,
+   "heard": "Comment Advisor, and I'll send you the setup.",
+   "errors": 0,
+   "pitch_spread_hz": 98,
+   "dynamics": 0.525
+  }
+ ]
+}
