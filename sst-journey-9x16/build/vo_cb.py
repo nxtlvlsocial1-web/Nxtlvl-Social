@@ -21,12 +21,14 @@ def main():
     m = ChatterboxTTS.from_pretrained(device="cpu")
     for ln in lines:
         m.prepare_conditionals(REF, exaggeration=ln["ex"])
-        for take, seed in enumerate((11, 29, 47)):
+        for take, seed in enumerate((11, 29, 47, 83)):
             p = os.path.join(OUT, f"{ln['id']}_t{take}.wav")
             if os.path.exists(p):
                 continue
             torch.manual_seed(seed)
-            wav = m.generate(ln["text"], exaggeration=ln["ex"], cfg_weight=.5)
+            # v5 (owner: "he feels like he is just reading the script"): performed, not read. The "say" text carries the
+            # phrasing (pauses before the hits); higher exaggeration and a lower cfg weight give a slower, more acted delivery
+            wav = m.generate(ln.get("say", ln["text"]), exaggeration=ln["ex"], cfg_weight=ln.get("cfg", .5), temperature=.8)
             ta.save(p, wav, m.sr)
             print(ln["id"], take, round(wav.shape[-1] / m.sr, 2), flush=True)
     print("done", flush=True)

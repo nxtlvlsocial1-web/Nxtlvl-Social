@@ -1,11 +1,74 @@
 [
- {"id": "g1", "text": "Two iPhones, hacked. A hard disk, hacked twice, and the source code stolen. For months, and years.", "ex": 0.66, "at": null},
- {"id": "g2", "text": "This is what the founder of Sports Science Technology has faced, according to a published account.", "ex": 0.6, "at": null},
- {"id": "g3", "text": "Instagram. Facebook. Gmail. WhatsApp. Even the bank. All broken into, and used to track and to message.", "ex": 0.62, "at": null},
- {"id": "g4", "text": "Google login codes, five times, from numbers registered to strangers. And four fake profiles, made with A.I., in the founder's name.", "ex": 0.62, "at": null},
- {"id": "g5", "text": "Then it moved offline.", "ex": 0.7, "at": null},
- {"id": "g6", "text": "People watching the neighbourhood. Seven times, strangers tried to start a fight. Fifteen to twenty times, the vehicle was punctured and damaged, on purpose.", "ex": 0.64, "at": null},
- {"id": "g7", "text": "The police were told. Three letters went to the Prime Minister's portal. No action yet.", "ex": 0.64, "at": null},
- {"id": "g8", "text": "The ask is simple. Let this invention reach people, without interference.", "ex": 0.66, "at": null},
- {"id": "g9", "text": "Sports Science Technology.", "ex": 0.7, "at": null}
+ {
+  "id": "g1",
+  "text": "Two iPhones, hacked. A hard disk, hacked twice, and the source code stolen. For months, and years.",
+  "ex": 0.85,
+  "at": null,
+  "say": "Two iPhones... hacked. A hard disk... hacked twice. And the source code? Stolen. For months... and years.",
+  "cfg": 0.3
+ },
+ {
+  "id": "g2",
+  "text": "This is what the founder of Sports Science Technology has faced, according to a published account.",
+  "ex": 0.7,
+  "at": null,
+  "say": "This is what the founder of Sports Science Technology has faced... according to a published account.",
+  "cfg": 0.35
+ },
+ {
+  "id": "g3",
+  "text": "Instagram. Facebook. Gmail. WhatsApp. Even the bank. All broken into, and used to track and to message.",
+  "ex": 0.8,
+  "at": null,
+  "say": "Instagram. Facebook. Gmail. WhatsApp. Even... the bank. All broken into, and used to track, and to message.",
+  "cfg": 0.3
+ },
+ {
+  "id": "g4",
+  "text": "Google login codes, five times, from numbers registered to strangers. And four fake profiles, made with A.I., in the founder's name.",
+  "ex": 0.8,
+  "at": null,
+  "say": "Google login codes. Five times. From numbers registered to strangers. And four fake profiles, made with A.I., in the founder's name.",
+  "cfg": 0.3
+ },
+ {
+  "id": "g5",
+  "text": "Then it moved offline.",
+  "ex": 0.9,
+  "at": null,
+  "say": "Then... it moved offline.",
+  "cfg": 0.25
+ },
+ {
+  "id": "g6",
+  "text": "People watching the neighbourhood. Seven times, strangers tried to start a fight. Fifteen to twenty times, the vehicle was punctured and damaged, on purpose.",
+  "ex": 0.85,
+  "at": null,
+  "say": "People... watching the neighbourhood. Seven times, strangers tried to start a fight. Fifteen to twenty times, the vehicle was punctured, and damaged. On purpose.",
+  "cfg": 0.3
+ },
+ {
+  "id": "g7",
+  "text": "The police were told. Three letters went to the Prime Minister's portal. No action yet.",
+  "ex": 0.8,
+  "at": null,
+  "say": "The police were told. Three letters went to the Prime Minister's portal. No action... yet.",
+  "cfg": 0.3
+ },
+ {
+  "id": "g8",
+  "text": "The ask is simple. Let this invention reach people, without interference.",
+  "ex": 0.75,
+  "at": null,
+  "say": "The ask is simple. Let this invention reach people... without interference.",
+  "cfg": 0.35
+ },
+ {
+  "id": "g9",
+  "text": "Sports Science Technology.",
+  "ex": 0.7,
+  "at": null,
+  "say": "Sports Science Technology.",
+  "cfg": 0.4
+ }
 ]

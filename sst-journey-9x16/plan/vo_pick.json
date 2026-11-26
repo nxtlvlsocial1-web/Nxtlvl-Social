@@ -1,194 +1,293 @@
 {
- "duration": 51.73,
+ "duration": 55.67,
  "takes": [
   {
    "line": "g1",
    "take": 0,
-   "heard": "Two iPhones hacked, a hard disk hacked twice and the source code stolen for months and years.",
+   "heard": "Two iPhones hacked, a hard disk hacked twice, and the source code stolen for months and years.",
    "errors": 0,
-   "pitch_spread_hz": 57
+   "pitch_spread_hz": 103,
+   "dynamics": 0.645
   },
   {
    "line": "g1",
    "take": 1,
    "heard": "two iPhones hacked, a hard disk hacked twice, and the source code stolen for months and years.",
    "errors": 0,
-   "pitch_spread_hz": 83
+   "pitch_spread_hz": 90,
+   "dynamics": 0.607
   },
   {
    "line": "g1",
    "take": 2,
-   "heard": "2 iPhones hacked, a hard disk hacked twice and the source code stolen for months and",
-   "errors": 1,
-   "pitch_spread_hz": 62
+   "heard": "two iPhones hacked, a hard disk hacked twice, and the source code stolen for months and years.",
+   "errors": 0,
+   "pitch_spread_hz": 113,
+   "dynamics": 0.619
+  },
+  {
+   "line": "g1",
+   "take": 3,
+   "heard": "Two iPhones hacked, a hard disk hacked twice, and the source code, and the source code, for months and years.",
+   "errors": 4,
+   "pitch_spread_hz": 86,
+   "dynamics": 0.606
   },
   {
    "line": "g2",
    "take": 0,
-   "heard": "This is what the founder of sports science technology has faced, according to a published account.",
+   "heard": "This is what the founder of Sports Science Technology has faced, according to a published account.",
    "errors": 0,
-   "pitch_spread_hz": 54
+   "pitch_spread_hz": 65,
+   "dynamics": 0.573
   },
   {
    "line": "g2",
    "take": 1,
-   "heard": "This is what the founder of sports science technology has faced, according to a published account.",
+   "heard": "This is what the founder of Sports Science Technology has faced, according to a published account.",
    "errors": 0,
-   "pitch_spread_hz": 96
+   "pitch_spread_hz": 48,
+   "dynamics": 0.576
   },
   {
    "line": "g2",
    "take": 2,
    "heard": "This is what the founder of Sports Science Technology has faced, according to a published account.",
    "errors": 0,
-   "pitch_spread_hz": 65
+   "pitch_spread_hz": 65,
+   "dynamics": 0.595
+  },
+  {
+   "line": "g2",
+   "take": 3,
+   "heard": "This is what the founder of sports science technology has faced, according to a published account.",
+   "errors": 0,
+   "pitch_spread_hz": 87,
+   "dynamics": 0.54
   },
   {
    "line": "g3",
    "take": 0,
    "heard": "Instagram, Facebook, Gmail, WhatsApp, even the bank, all broken into and used to track and to message.",
    "errors": 0,
-   "pitch_spread_hz": 74
+   "pitch_spread_hz": 110,
+   "dynamics": 0.527
   },
   {
    "line": "g3",
    "take": 1,
    "heard": "Instagram, Facebook, Gmail, WhatsApp, even the bank, all broken into and used to track and to message.",
    "errors": 0,
-   "pitch_spread_hz": 72
+   "pitch_spread_hz": 131,
+   "dynamics": 0.566
   },
   {
    "line": "g3",
    "take": 2,
    "heard": "Instagram, Facebook, Gmail, WhatsApp, even the bank, all broken into and used to track and to message.",
    "errors": 0,
-   "pitch_spread_hz": 74
+   "pitch_spread_hz": 101,
+   "dynamics": 0.539
+  },
+  {
+   "line": "g3",
+   "take": 3,
+   "heard": "Instagram, Facebook, Gmail, WhatsApp, even the bank, all broken into and used to track and to message.",
+   "errors": 0,
+   "pitch_spread_hz": 107,
+   "dynamics": 0.543
   },
   {
    "line": "g4",
    "take": 0,
    "heard": "Google login codes five times from numbers registered to strangers and four fake profiles made with AI in the founders name",
    "errors": 0,
-   "pitch_spread_hz": 71
+   "pitch_spread_hz": 119,
+   "dynamics": 0.512
   },
   {
    "line": "g4",
    "take": 1,
-   "heard": "Google login codes five times from numbers registered to strangers and four fake profiles made with AI in the founders name",
+   "heard": "Google login codes five times from numbers registered to strangers and four fake profiles made with AI in the founder's name",
    "errors": 0,
-   "pitch_spread_hz": 66
+   "pitch_spread_hz": 98,
+   "dynamics": 0.549
   },
   {
    "line": "g4",
    "take": 2,
-   "heard": "Google login codes five times from numbers registered to strangers, and four fake profiles made with AI in the founder's name.",
+   "heard": "Google login codes five times from numbers registered to strangers and four fake profiles made with AI in the founder's name",
    "errors": 0,
-   "pitch_spread_hz": 75
+   "pitch_spread_hz": 82,
+   "dynamics": 0.532
+  },
+  {
+   "line": "g4",
+   "take": 3,
+   "heard": "Google login codes five times from numbers registered to strangers and four fake profiles made with AI in the founders name",
+   "errors": 0,
+   "pitch_spread_hz": 98,
+   "dynamics": 0.546
   },
   {
    "line": "g5",
    "take": 0,
-   "heard": "Then it moved offline.",
+   "heard": "Then, it moved offline.",
    "errors": 0,
-   "pitch_spread_hz": 53
+   "pitch_spread_hz": 68,
+   "dynamics": 0.587
   },
   {
    "line": "g5",
    "take": 1,
-   "heard": "Then I moved offline.",
+   "heard": "Then, it moved offline.",
+   "errors": 0,
+   "pitch_spread_hz": 67,
+   "dynamics": 0.42
+  },
+  {
+   "line": "g5",
+   "take": 2,
+   "heard": "Hey, hey, then it moved offline. E!",
+   "errors": 3,
+   "pitch_spread_hz": 56,
+   "dynamics": 0.548
+  },
+  {
+   "line": "g5",
+   "take": 3,
+   "heard": "and it moved offline.",
    "errors": 1,
-   "pitch_spread_hz": 45
-  },
-  {
-   "line": "g5",
-   "take": 2,
-   "heard": "Then it moved offline.",
-   "errors": 0,
-   "pitch_spread_hz": 50
+   "pitch_spread_hz": 46,
+   "dynamics": 0.469
   },
   {
    "line": "g6",
    "take": 0,
-   "heard": "People watching the neighborhood seven times strangers tried to start a fight 15 to 20 times The vehicle was punctured and damaged on purpose",
-   "errors": 0,
-   "pitch_spread_hz": 84
+   "heard": "People, watching the neighborhood, seven times strangers tried to start a fight, 15 -20 times the vehicle was punctured and damaged, on purpose.",
+   "errors": 1,
+   "pitch_spread_hz": 83,
+   "dynamics": 0.46
   },
   {
    "line": "g6",
    "take": 1,
+   "heard": "People watching the neighborhood, seven times, strangers tried to start a fight. Fifteen to twenty times the vehicle was punctured and damaged, on purpose.",
+   "errors": 0,
+   "pitch_spread_hz": 106,
+   "dynamics": 0.586
+  },
+  {
+   "line": "g6",
+   "take": 2,
    "heard": "People watching the neighborhood seven times strangers tried to start a fight 15 to 20 times the vehicle was punctured and damaged on purpose",
    "errors": 0,
-   "pitch_spread_hz": 75
+   "pitch_spread_hz": 112,
+   "dynamics": 0.555
   },
   {
    "line": "g6",
-   "take": 2,
-   "heard": "People watching the neighborhood, seven times, strangers tried to start a fight. Fifteen to twenty times, the vehicle was punctured and damaged, on purpose.",
+   "take": 3,
+   "heard": "People watching the neighborhood seven times strangers tried to start a fight 15 to 20 times the vehicle was punctured and damaged on purpose",
    "errors": 0,
-   "pitch_spread_hz": 113
+   "pitch_spread_hz": 98,
+   "dynamics": 0.543
   },
   {
    "line": "g7",
    "take": 0,
    "heard": "The police were told three letters went to the prime minister's portal no action yet",
    "errors": 0,
-   "pitch_spread_hz": 87
+   "pitch_spread_hz": 117,
+   "dynamics": 0.501
   },
   {
    "line": "g7",
    "take": 1,
-   "heard": "The police were told. Three letters went to the prime minister's portal. No action yet.",
+   "heard": "The police were told, three letters went to the prime minister's portal, no action yet.",
    "errors": 0,
-   "pitch_spread_hz": 71
+   "pitch_spread_hz": 93,
+   "dynamics": 0.558
   },
   {
    "line": "g7",
    "take": 2,
    "heard": "The police were told. Three letters went to the Prime Minister's portal. No action yet.",
    "errors": 0,
-   "pitch_spread_hz": 81
+   "pitch_spread_hz": 79,
+   "dynamics": 0.556
+  },
+  {
+   "line": "g7",
+   "take": 3,
+   "heard": "The police were told. Three letters went to the Prime Minister's portal. No action yet.",
+   "errors": 0,
+   "pitch_spread_hz": 134,
+   "dynamics": 0.549
   },
   {
    "line": "g8",
    "take": 0,
    "heard": "The ask is simple. Let this invention reach people without interference.",
    "errors": 0,
-   "pitch_spread_hz": 79
+   "pitch_spread_hz": 108,
+   "dynamics": 0.527
   },
   {
    "line": "g8",
    "take": 1,
    "heard": "The ask is simple. Let this invention reach people without interference.",
    "errors": 0,
-   "pitch_spread_hz": 76
+   "pitch_spread_hz": 162,
+   "dynamics": 0.536
   },
   {
    "line": "g8",
    "take": 2,
    "heard": "The ask is simple. Let this invention reach people without interference.",
    "errors": 0,
-   "pitch_spread_hz": 104
+   "pitch_spread_hz": 121,
+   "dynamics": 0.572
+  },
+  {
+   "line": "g8",
+   "take": 3,
+   "heard": "The ask is simple. Let this invention reach people without interference.",
+   "errors": 0,
+   "pitch_spread_hz": 89,
+   "dynamics": 0.523
   },
   {
    "line": "g9",
    "take": 0,
    "heard": "Sports Science Technology",
    "errors": 0,
-   "pitch_spread_hz": 82
+   "pitch_spread_hz": 84,
+   "dynamics": 0.669
   },
   {
    "line": "g9",
    "take": 1,
-   "heard": "Sports Science Technology",
+   "heard": "Sports science technology",
    "errors": 0,
-   "pitch_spread_hz": 58
+   "pitch_spread_hz": 61,
+   "dynamics": 0.739
   },
   {
    "line": "g9",
    "take": 2,
    "heard": "Sports science technology",
    "errors": 0,
-   "pitch_spread_hz": 66
+   "pitch_spread_hz": 66,
+   "dynamics": 0.614
+  },
+  {
+   "line": "g9",
+   "take": 3,
+   "heard": "Sports science technology",
+   "errors": 0,
+   "pitch_spread_hz": 84,
+   "dynamics": 0.654
   }
  ]
 }

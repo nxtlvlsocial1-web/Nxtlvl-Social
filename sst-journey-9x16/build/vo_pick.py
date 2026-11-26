@@ -76,9 +76,14 @@ def main():
             hyp = " ".join(w.word.strip() for w in ws)
             y, sr = librosa.load(path, sr=SR, mono=True)
             sp = spread(y, sr)
-            # a pitch range far beyond speech (> 300 Hz) is a glitch (a squeak), counted as a slip
-            score = (wer(ln["text"], hyp) + (1 if sp > 300 else 0), -min(sp, 300))
-            log.append({"line": ln["id"], "take": k, "heard": hyp, "errors": score[0], "pitch_spread_hz": round(-score[1])})
+            f = int(.05 * sr)
+            r = np.array([np.sqrt(np.mean(y[i:i + f] ** 2)) for i in range(0, len(y) - f, f)])
+            r = r[r > r.max() * .08]
+            dy = float(r.std() / (r.mean() + 1e-9)) if len(r) > 4 else 0.0
+            # a pitch range far beyond speech (> 300 Hz) is a glitch (a squeak), counted as a slip; then the liveliest take
+            # wins: pitch movement plus loudness movement (v5: the owner heard a flat, read-out delivery)
+            score = (wer(ln["text"], hyp) + (1 if sp > 300 else 0), -(min(sp, 300) / 300 + dy))
+            log.append({"line": ln["id"], "take": k, "heard": hyp, "errors": score[0], "pitch_spread_hz": round(sp), "dynamics": round(dy, 3)})
             if best is None or score < best[0]:
                 best = (score, k, y, ws)
         score, k, y, ws = best
@@ -100,7 +105,7 @@ def main():
         g = (max(.35, nxt["at"] - t) if nxt and nxt.get("at") is not None else GAP.get(ln["id"], .4)) if nxt else 0.0
         out.append(np.zeros(int(g * SR), dtype=np.float32))
         t += g
-        print(f"{ln['id']} take {k} errors {score[0]} spread {-score[1]:.0f} Hz  {len(seg) / SR:.2f}s", flush=True)
+        print(f"{ln['id']} take {k} errors {score[0]} expr {-score[1]:.2f}  {len(seg) / SR:.2f}s", flush=True)
     vo = np.concatenate(out + [np.zeros(int(.3 * SR), dtype=np.float32)])
     raw = os.path.join(ROOT, "assets", "audio", "vo_raw.wav")
     sf.write(raw, vo, SR)
