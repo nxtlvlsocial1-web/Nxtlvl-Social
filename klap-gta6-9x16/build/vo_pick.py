@@ -21,12 +21,13 @@ from faster_whisper import WhisperModel
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TAKES = os.path.join(ROOT, os.environ.get("VO_TAKES", os.path.join("assets", "audio", "vo_takes")))
+TAG = os.environ.get("VO_TAG", "")   # v2: one pick per reference voice (vo_<tag>.wav, words_<tag>.json)
 SR = 48000
-TEMPO = float(os.environ.get("VO_TEMPO", "1.06"))
+TEMPO = float(os.environ.get("VO_TEMPO", "1.0"))
 GAP_SCALE = 1.0
 LEAD = .04          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast
-GAP = {"g1": .25, "g2": .3, "g3": .3, "g4": .25, "g5": .22, "g6": .3, "g7": .35, "g8": .0}
+GAP = {"g1": .24, "g2": .3, "g3": .28, "g4": .4, "g5": .22, "g6": .3, "g7": .36, "g8": .0}
 
 
 NUM = {"eleven": "11", "ten": "10", "two": "2", "hundred": "100", "thousand": "000", "one": "1", "six": "6", "nineteenth": "19th", "fortysix": "46", "one": "1", "two": "2", "three": "3", "twenty": "20", "1": "one", "3": "three"}
@@ -61,6 +62,14 @@ def wer(ref, hyp):
     return int(d[len(h)])
 
 
+def dynamics(y, sr):
+    """v2: loudness movement inside the take (std / mean of 50 ms RMS over the louder frames): flat reads as generic"""
+    f = int(.05 * sr)
+    r = np.array([np.sqrt(np.mean(y[i:i + f] ** 2)) for i in range(0, len(y) - f, f)])
+    r = r[r > r.max() * .08]
+    return float(r.std() / (r.mean() + 1e-9)) if len(r) > 4 else 0.0
+
+
 def spread(y, sr):
     f0, _, _ = librosa.pyin(librosa.resample(y, orig_sr=sr, target_sr=16000), fmin=80, fmax=600, sr=16000)
     f0 = f0[~np.isnan(f0)]
@@ -81,10 +90,12 @@ def main():
             ws = [w for s in segs for w in s.words]
             hyp = " ".join(w.word.strip() for w in ws)
             y, sr = librosa.load(path, sr=SR, mono=True)
-            sp = spread(y, sr)
-            # a pitch range far beyond speech (> 300 Hz) is a glitch (a squeak), counted as a slip
-            score = (wer(ln["text"], hyp) + (1 if sp > 300 else 0), -min(sp, 300))
-            log.append({"line": ln["id"], "take": k, "heard": hyp, "errors": score[0], "pitch_spread_hz": round(-score[1])})
+            sp, dy = spread(y, sr), dynamics(y, sr)
+            # a pitch range far beyond speech (> 300 Hz) is a glitch (a squeak), counted as a slip; a take much longer than
+            # its siblings usually holds a stall or a repeat, counted as one too
+            expr = min(sp, 300) / 300 + dy
+            score = (wer(ln["text"], hyp) + (1 if sp > 300 else 0), -round(expr, 3))
+            log.append({"line": ln["id"], "take": k, "heard": hyp, "errors": score[0], "pitch_spread_hz": round(sp), "dynamics": round(dy, 3), "dur": round(len(y) / sr, 2)})
             if best is None or score < best[0]:
                 best = (score, k, y, ws)
         score, k, y, ws = best
@@ -105,19 +116,23 @@ def main():
         g = GAP[ln["id"]] * GAP_SCALE
         out.append(np.zeros(int(g * SR), dtype=np.float32))
         t += g
-        print(f"{ln['id']} take {k} errors {score[0]} spread {-score[1]:.0f} Hz  {len(seg) / SR:.2f}s", flush=True)
+        print(f"{ln['id']} take {k} errors {score[0]} expr {-score[1]:.2f}  {len(seg) / SR:.2f}s", flush=True)
     vo = np.concatenate(out + [np.zeros(int(.3 * SR), dtype=np.float32)])
-    raw = os.path.join(ROOT, "assets", "audio", "vo_raw.wav")
+    sfx = f"_{TAG}" if TAG else ""
+    raw = os.path.join(ROOT, "assets", "audio", f"vo_raw{sfx}.wav")
     sf.write(raw, vo, SR)
-    # gentle polish: high-pass, a little compression, then -16 LUFS for the voice on its own
+    # v2 mastering: high-pass, de-ess, a broadcast compressor, a little less mud at 250 Hz, presence at 3.2 kHz and air at
+    # 9 kHz, a limiter, then -16 LUFS for the voice on its own
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", raw, "-af",
-                    f"atempo={TEMPO},highpass=f=80,acompressor=threshold=-20dB:ratio=3:attack=5:release=80:makeup=2,loudnorm=I=-16:TP=-2:LRA=9",
-                    "-ar", str(SR), "-ac", "1", os.path.join(ROOT, "assets", "audio", "vo.wav")], check=True)
+                    f"atempo={TEMPO},highpass=f=85,deesser=i=0.4,acompressor=threshold=-18dB:ratio=3:attack=8:release=110:makeup=3,"
+                    "equalizer=f=250:t=q:w=1.2:g=-1.5,equalizer=f=3200:t=q:w=1:g=2,equalizer=f=9000:t=h:w=2000:g=1,alimiter=limit=0.95,"
+                    "loudnorm=I=-16:TP=-2:LRA=9",
+                    "-ar", str(SR), "-ac", "1", os.path.join(ROOT, "assets", "audio", f"vo{sfx}.wav")], check=True)
     for w in words:                       # atempo scales time linearly
         w["t0"], w["t1"] = round(w["t0"] / TEMPO, 3), round(w["t1"] / TEMPO, 3)
-    json.dump(words, open(os.path.join(ROOT, "plan", "words.json"), "w"), indent=0)
-    json.dump({"duration": round(len(vo) / SR, 3), "takes": log}, open(os.path.join(ROOT, "plan", "vo_pick.json"), "w"), indent=1)
-    print(f"vo.wav {len(vo) / SR:.2f}s, {len(words)} words")
+    json.dump(words, open(os.path.join(ROOT, "plan", f"words{sfx}.json"), "w"), indent=0)
+    json.dump({"duration": round(len(vo) / SR, 3), "takes": log}, open(os.path.join(ROOT, "plan", f"vo_pick{sfx}.json"), "w"), indent=1)
+    print(f"vo{sfx}.wav {len(vo) / SR:.2f}s, {len(words)} words")
 
 
 if __name__ == "__main__":
