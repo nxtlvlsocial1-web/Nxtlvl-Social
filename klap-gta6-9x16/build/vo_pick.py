@@ -22,6 +22,7 @@ from faster_whisper import WhisperModel
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TAKES = os.path.join(ROOT, os.environ.get("VO_TAKES", os.path.join("assets", "audio", "vo_takes")))
 TAG = os.environ.get("VO_TAG", "")   # v2: one pick per reference voice (vo_<tag>.wav, words_<tag>.json)
+FORCE = json.loads(os.environ.get("VO_FORCE", "{}"))   # {"g5": 1}: take forced by ear (a slur the scorer let through)
 SR = 48000
 TEMPO = float(os.environ.get("VO_TEMPO", "1.0"))
 GAP_SCALE = 1.0
@@ -96,6 +97,8 @@ def main():
             expr = min(sp, 300) / 300 + dy
             score = (wer(ln["text"], hyp) + (1 if sp > 300 else 0), -round(expr, 3))
             log.append({"line": ln["id"], "take": k, "heard": hyp, "errors": score[0], "pitch_spread_hz": round(sp), "dynamics": round(dy, 3), "dur": round(len(y) / sr, 2)})
+            if ln["id"] in FORCE:
+                score = (0 if k == FORCE[ln["id"]] else 9, score[1])
             if best is None or score < best[0]:
                 best = (score, k, y, ws)
         score, k, y, ws = best
