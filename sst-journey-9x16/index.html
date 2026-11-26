@@ -3,293 +3,390 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>SST The Journey Continues 9x16</title>
+    <title>SST The Journey Continues v4 9x16</title>
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
 @font-face { font-family: Mont; font-weight: 100 900; src: url("assets/fonts/montserrat.ttf"); }
 @font-face { font-family: Inter; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2"); }
 @font-face { font-family: Inter; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2"); }
 @font-face { font-family: Inter; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2"); }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: 1080px; height: 1920px; overflow: hidden; background: #05080f; }
 #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: linear-gradient(180deg, #0b1526 0%, #08101d 45%, #05080f 100%); font-family: Mont; color: #fff; }
-#band { position: absolute; left: 0px; top: 380px; width: 1080px; height: 1160px; overflow: hidden;
+#band { position: absolute; left: 0; top: 380px; width: 1080px; height: 1160px; overflow: hidden;
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 110px, #000 calc(100% - 140px), transparent 100%);
   mask-image: linear-gradient(180deg, transparent 0, #000 110px, #000 calc(100% - 140px), transparent 100%); }
 .shot { position: absolute; inset: 0; opacity: 0; transform-origin: 50% 45%; }
 .clip { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+#dim { position: absolute; inset: 0; background: #05080f; opacity: 0; }
 #cool { position: absolute; inset: 0; opacity: 0; background: radial-gradient(90% 70% at 50% 50%, rgba(10,25,60,0) 30%, rgba(4,10,28,.55) 100%); mix-blend-mode: multiply; }
-#warm { position: absolute; inset: 0; opacity: 0; background: radial-gradient(80% 60% at 70% 20%, rgba(255,196,140,.22), rgba(255,196,140,0) 70%); mix-blend-mode: soft-light; }
+#warm { position: absolute; inset: 0; opacity: 0; background: radial-gradient(80% 60% at 70% 20%, rgba(255,196,140,.18), rgba(255,196,140,0) 70%); mix-blend-mode: soft-light; }
 #scan { position: absolute; inset: 0; opacity: 0; background: repeating-linear-gradient(0deg, rgba(120,160,255,.05) 0 2px, rgba(0,0,0,0) 2px 5px); mix-blend-mode: screen; }
-.algrid { display: grid; grid-template-columns: auto auto; gap: 8px 34px; justify-content: center; }
-.al { --u: 0; position: relative; font-weight: 800; font-size: 40px; letter-spacing: .05em; white-space: nowrap; opacity: .22; }
-.al::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 4px; background: #2f6bdc; transform: scaleX(var(--u)); transform-origin: 0 50%; }
-#algn { margin-top: 20px; }
+#slice { position: absolute; left: 0; right: 0; height: 26px; opacity: 0; background: linear-gradient(90deg, rgba(60,150,255,0), rgba(120,190,255,.35), rgba(255,60,90,.25), rgba(60,150,255,0)); mix-blend-mode: screen; }
 #track { position: absolute; inset: 0; opacity: 0; }
 #track circle { fill: none; stroke: rgba(130,180,255,.8); stroke-width: 3; }
-.ovl { mix-blend-mode: screen; }
-#slice { position: absolute; left: 0; right: 0; height: 26px; opacity: 0; background: linear-gradient(90deg, rgba(60,150,255,0), rgba(120,190,255,.35), rgba(255,60,90,.25), rgba(60,150,255,0)); mix-blend-mode: screen; }
-.nt { position: absolute; left: 330px; width: 420px; height: 96px; border-radius: 26px; opacity: 0; background: rgba(150,185,255,.28); filter: blur(14px); }
-#net { position: absolute; inset: 0; opacity: 0; mix-blend-mode: screen; }
-#net path { fill: none; stroke: rgba(110,160,255,.2); stroke-width: 2; stroke-dasharray: 900; }
-#net circle { fill: rgba(140,185,255,.35); }
+#blk { position: absolute; inset: 0; background: #000; opacity: 0; }
 #vig { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(110% 70% at 50% 52%, rgba(0,0,0,0) 55%, rgba(0,0,0,.55) 100%); }
-#grain { position: absolute; inset: -50%; pointer-events: none; opacity: .06; background-image: repeating-radial-gradient(circle at 23% 41%, rgba(255,255,255,.55) 0 1px, transparent 1px 3px); mix-blend-mode: overlay; }
 .head { position: absolute; left: 40px; right: 40px; top: 222px; text-align: center; opacity: 0; }
 #hd0 { opacity: 1; }
-.h1 { font-weight: 800; font-size: 43px; letter-spacing: .05em; white-space: nowrap; line-height: 1.15; }
-.h2 { font-weight: 800; font-size: 43px; letter-spacing: .05em; white-space: nowrap; line-height: 1.15; color: #6f9bff; opacity: 0; }
-.note { margin-top: 12px; font-family: Inter; font-weight: 600; font-size: 24px; letter-spacing: .14em; color: rgba(255,255,255,.78); opacity: 0; }
+.h1 { font-weight: 800; font-size: 46px; letter-spacing: .05em; white-space: nowrap; line-height: 1.15; }
+.h2 { font-weight: 800; font-size: 46px; letter-spacing: .05em; white-space: nowrap; line-height: 1.15; color: #6f9bff; opacity: 0; }
+.note { margin-top: 12px; font-family: Inter; font-weight: 600; font-size: 24px; letter-spacing: .12em; color: rgba(255,255,255,.78); opacity: 0; }
+.panel { position: absolute; left: 0; right: 0; top: 380px; height: 1160px; opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.row { width: 720px; height: 92px; margin: 7px 0; padding: 0 28px; border-radius: 18px; display: flex; align-items: center; justify-content: space-between; opacity: 0;
+  background: rgba(15,28,52,.85); border: 2px solid rgba(111,155,255,.25); font-family: Inter; font-weight: 700; font-size: 34px; letter-spacing: .06em; }
+.row b { font-size: 22px; letter-spacing: .14em; padding: 8px 14px; border-radius: 10px; color: #fff; background: #e5484d; opacity: 0; }
+.ntf { width: 800px; margin: 8px 0; padding: 20px 24px; border-radius: 26px; display: flex; align-items: center; gap: 18px; opacity: 0;
+  background: rgba(235,240,250,.94); color: #0b1526; font-family: Inter; }
+.ntf i { width: 56px; height: 56px; border-radius: 14px; background: #fff; border: 2px solid #d7deea; display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 30px; color: #2f6bdc; flex: none; }
+.ntf b { display: block; font-weight: 700; font-size: 26px; } .ntf span { font-weight: 500; font-size: 24px; color: #334; }
+.ntf em { margin-left: auto; font-style: normal; font-weight: 600; font-size: 20px; color: #667; white-space: nowrap; }
+.cnt { position: relative; width: 300px; height: 110px; margin-top: 18px; font-weight: 800; font-size: 96px; color: #e5484d; text-align: center; }
+.cnt span { position: absolute; left: 0; right: 0; top: 0; opacity: 0; }
+.pgrid { display: grid; grid-template-columns: 400px 400px; gap: 22px; }
+.pf { position: relative; height: 230px; border-radius: 24px; padding: 26px; opacity: 0; background: rgba(15,28,52,.9); border: 2px solid rgba(111,155,255,.25);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-family: Inter; }
+.pf .av { width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle at 50% 38%, #8aa0c8 0 22%, transparent 23%), radial-gradient(ellipse at 50% 100%, #8aa0c8 0 45%, transparent 46%), #1d2c4a; }
+.pf b { font-weight: 700; font-size: 26px; } .pf span { font-weight: 500; font-size: 20px; color: rgba(255,255,255,.65); }
+.pf em { position: absolute; right: 16px; top: 16px; font-style: normal; font-weight: 800; font-size: 22px; letter-spacing: .14em; padding: 6px 12px; border-radius: 8px; background: #e5484d; opacity: 0; }
+.pnote { margin-top: 26px; font-family: Inter; font-weight: 700; font-size: 28px; letter-spacing: .12em; color: rgba(255,255,255,.85); opacity: 0; }
+.big { position: absolute; left: 0; right: 0; top: 760px; text-align: center; opacity: 0; }
+.big b { display: block; font-weight: 800; font-size: 220px; line-height: 1; color: #fff; text-shadow: 0 8px 40px rgba(0,0,0,.8); }
+.big b.mid { font-size: 170px; }
+.big span { display: block; margin-top: 18px; font-family: Inter; font-weight: 700; font-size: 34px; letter-spacing: .3em; color: #6f9bff; }
+.chip { font-family: Inter; font-weight: 700; font-size: 28px; letter-spacing: .14em; padding: 12px 24px; border-radius: 999px; border: 2px solid #6f9bff; color: #dbe6ff; opacity: 0; margin-bottom: 30px; }
+.lt { position: relative; width: 640px; height: 150px; margin: -20px 0 0; padding: 24px 30px; border-radius: 12px; background: #eef2f8; color: #0b1526; opacity: 0;
+  box-shadow: 0 20px 50px rgba(0,0,0,.5); font-family: Inter; }
+.lt b { display: block; font-weight: 800; font-size: 26px; letter-spacing: .1em; } .lt span { display: block; font-weight: 600; font-size: 22px; color: #445; margin-bottom: 10px; }
+.lt i { display: block; height: 8px; border-radius: 4px; background: #cbd3e1; margin-top: 8px; width: 90%; } .lt i.s { width: 55%; }
+.stamp { margin-top: 34px; font-weight: 800; font-size: 54px; letter-spacing: .08em; padding: 10px 26px; border: 6px solid #e5484d; border-radius: 12px; color: #e5484d; background: rgba(5,8,15,.6); opacity: 0; }
+#attr { position: absolute; left: 0; right: 0; top: 1556px; text-align: center; font-family: Inter; font-weight: 600; font-size: 22px; letter-spacing: .12em; color: rgba(255,255,255,.62); opacity: 0; }
 .sub { position: absolute; left: 90px; right: 90px; top: 1418px; text-align: center; font-family: Inter; font-weight: 600; font-size: 40px; line-height: 1.28;
   color: #fff; opacity: 0; text-shadow: 0 2px 4px rgba(0,0,0,.9), 0 0 24px rgba(0,0,0,.8); }
 #endbg { position: absolute; inset: 0; opacity: 0; background: radial-gradient(70% 45% at 50% 46%, #13254a 0%, #0b1526 55%, #05080f 100%); }
 #sweep { position: absolute; top: 0; bottom: 0; left: 0; width: 900px; opacity: 0; transform: skewX(-18deg);
   background: linear-gradient(90deg, rgba(47,107,220,0), rgba(80,140,255,.28), rgba(47,107,220,0)); filter: blur(20px); }
-#logo { position: absolute; left: 190px; width: 700px; top: 700px; padding: 34px 40px; border-radius: 28px; background: #fff; opacity: 0;
-  box-shadow: 0 40px 100px rgba(0,0,0,.55), 0 0 60px rgba(47,107,220,.25); }
+#logo { position: absolute; left: 190px; width: 700px; top: 660px; padding: 34px 40px; border-radius: 28px; background: #fff; opacity: 0;
+  box-shadow: 0 40px 100px rgba(0,0,0,.55); }
 #logo img { display: block; width: 100%; }
-#tag { position: absolute; left: 60px; right: 60px; top: 1150px; text-align: center; }
-#tag1 { font-weight: 800; font-size: 44px; letter-spacing: .08em; color: #fff; opacity: 0; }
+#tag { position: absolute; left: 60px; right: 60px; top: 1110px; text-align: center; }
+#tag1 { font-weight: 800; font-size: 42px; letter-spacing: .08em; color: #fff; opacity: 0; }
 #tagrule { width: 220px; height: 4px; margin: 26px auto 0; background: #2f6bdc; transform: scaleX(0); }
+#disc { position: absolute; left: 110px; right: 110px; top: 1300px; text-align: center; font-family: Inter; font-weight: 500; font-size: 24px; line-height: 1.45; color: rgba(255,255,255,.62); opacity: 0; }
 </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="59.30" data-fps="30" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="53.91" data-fps="30" data-width="1080" data-height="1920">
       <div id="band" data-layout-allow-overlap>
-        <div class="shot" id="wsh01"><video id="sh01" class="clip" src="assets/video/sh01.mp4" muted playsinline data-start="0.000" data-duration="4.000" data-track-index="1"></video></div>
-        <div class="shot" id="wsh02"><video id="sh02" class="clip" src="assets/video/sh02.mp4" muted playsinline data-start="3.400" data-duration="4.200" data-track-index="2"></video></div>
-        <div class="shot" id="wsh03"><video id="sh03" class="clip" src="assets/video/sh03.mp4" muted playsinline data-start="7.000" data-duration="3.200" data-track-index="1"></video></div>
-        <div class="shot" id="wsh04"><video id="sh04" class="clip" src="assets/video/sh04.mp4" muted playsinline data-start="9.600" data-duration="3.300" data-track-index="2"></video></div>
-        <div class="shot" id="wsh05"><video id="sh05" class="clip" src="assets/video/sh05.mp4" muted playsinline data-start="12.300" data-duration="3.300" data-track-index="1"></video></div>
-        <div class="shot" id="wsh06"><video id="sh06" class="clip" src="assets/video/sh06.mp4" muted playsinline data-start="15.000" data-duration="5.780" data-track-index="2"></video></div>
-        <div class="shot" id="wsh08"><video id="sh08" class="clip" src="assets/video/sh08.mp4" muted playsinline data-start="20.700" data-duration="0.830" data-track-index="1"></video></div>
-        <div class="shot" id="wsh07"><video id="sh07" class="clip" src="assets/video/sh07.mp4" muted playsinline data-start="21.450" data-duration="0.580" data-track-index="2"></video></div>
-        <div class="shot" id="wsh18"><video id="sh18" class="clip" src="assets/video/sh18.mp4" muted playsinline data-start="21.950" data-duration="0.960" data-track-index="1"></video></div>
-        <div class="shot" id="wsh19"><video id="sh19" class="clip" src="assets/video/sh19.mp4" muted playsinline data-start="22.830" data-duration="3.200" data-track-index="2"></video></div>
-        <div class="shot" id="wsh20"><video id="sh20" class="clip" src="assets/video/sh20.mp4" muted playsinline data-start="25.430" data-duration="2.550" data-track-index="1"></video></div>
-        <div class="shot" id="wsh09"><video id="sh09" class="clip" src="assets/video/sh09.mp4" muted playsinline data-start="27.380" data-duration="2.220" data-track-index="2"></video></div>
-        <div class="shot" id="wsh10"><video id="sh10" class="clip" src="assets/video/sh10.mp4" muted playsinline data-start="29.000" data-duration="4.000" data-track-index="1"></video></div>
-        <div class="shot" id="wsh11"><video id="sh11" class="clip" src="assets/video/sh11.mp4" muted playsinline data-start="32.400" data-duration="4.200" data-track-index="2"></video></div>
-        <div class="shot" id="wsh12"><video id="sh12" class="clip" src="assets/video/sh12.mp4" muted playsinline data-start="36.000" data-duration="5.600" data-track-index="1"></video></div>
-        <div class="shot" id="wsh13"><video id="sh13" class="clip" src="assets/video/sh13.mp4" muted playsinline data-start="41.000" data-duration="3.600" data-track-index="2"></video></div>
-        <div class="shot" id="wsh14"><video id="sh14" class="clip" src="assets/video/sh14.mp4" muted playsinline data-start="44.000" data-duration="2.800" data-track-index="1"></video></div>
-        <div class="shot" id="wsh15"><video id="sh15" class="clip" src="assets/video/sh15.mp4" muted playsinline data-start="46.200" data-duration="3.000" data-track-index="2"></video></div>
-        <div class="shot" id="wsh16"><video id="sh16" class="clip" src="assets/video/sh16.mp4" muted playsinline data-start="48.600" data-duration="3.200" data-track-index="1"></video></div>
-        <div class="shot" id="wsh17"><video id="sh17" class="clip" src="assets/video/sh17.mp4" muted playsinline data-start="51.200" data-duration="3.400" data-track-index="2"></video></div>
-        <div class="shot ovl" id="wglx"><video id="glx" class="clip" src="assets/video/glx.mp4" muted playsinline data-start="20.700" data-duration="0.750" data-track-index="3"></video></div>
+        <div class="shot" id="ws01"><video id="s01" class="clip" src="assets/video/s01.mp4" muted playsinline data-start="0.000" data-duration="2.300" data-track-index="1"></video></div>
+        <div class="shot" id="ws02"><video id="s02" class="clip" src="assets/video/s02.mp4" muted playsinline data-start="2.220" data-duration="5.830" data-track-index="2"></video></div>
+        <div class="shot" id="ws03"><video id="s03" class="clip" src="assets/video/s03.mp4" muted playsinline data-start="7.450" data-duration="5.670" data-track-index="1"></video></div>
+        <div class="shot" id="ws04"><video id="s04" class="clip" src="assets/video/s04.mp4" muted playsinline data-start="12.520" data-duration="7.890" data-track-index="2"></video></div>
+        <div class="shot" id="ws05"><video id="s05" class="clip" src="assets/video/s05.mp4" muted playsinline data-start="19.810" data-duration="4.720" data-track-index="1"></video></div>
+        <div class="shot" id="ws06"><video id="s06" class="clip" src="assets/video/s06.mp4" muted playsinline data-start="23.930" data-duration="3.870" data-track-index="2"></video></div>
+        <div class="shot" id="ws07"><video id="s07" class="clip" src="assets/video/s07.mp4" muted playsinline data-start="27.720" data-duration="2.050" data-track-index="1"></video></div>
+        <div class="shot" id="ws08"><video id="s08" class="clip" src="assets/video/s08.mp4" muted playsinline data-start="29.690" data-duration="1.800" data-track-index="2"></video></div>
+        <div class="shot" id="ws09"><video id="s09" class="clip" src="assets/video/s09.mp4" muted playsinline data-start="31.410" data-duration="2.980" data-track-index="1"></video></div>
+        <div class="shot" id="ws10"><video id="s10" class="clip" src="assets/video/s10.mp4" muted playsinline data-start="34.310" data-duration="2.030" data-track-index="2"></video></div>
+        <div class="shot" id="ws11"><video id="s11" class="clip" src="assets/video/s11.mp4" muted playsinline data-start="36.260" data-duration="2.970" data-track-index="1"></video></div>
+        <div class="shot" id="ws12"><video id="s12" class="clip" src="assets/video/s12.mp4" muted playsinline data-start="38.630" data-duration="4.360" data-track-index="2"></video></div>
+        <div class="shot" id="ws13"><video id="s13" class="clip" src="assets/video/s13.mp4" muted playsinline data-start="42.390" data-duration="2.460" data-track-index="1"></video></div>
+        <div class="shot" id="ws14"><video id="s14" class="clip" src="assets/video/s14.mp4" muted playsinline data-start="44.250" data-duration="2.660" data-track-index="2"></video></div>
+        <div class="shot" id="ws15"><video id="s15" class="clip" src="assets/video/s15.mp4" muted playsinline data-start="46.310" data-duration="3.480" data-track-index="1"></video></div>
         <div id="cool"></div>
         <div id="warm"></div>
-        <svg id="net" viewBox="0 0 1080 1160"><path d="M60 900 L300 640 L520 760 L760 420 L1020 560"/><path d="M120 200 L360 360 L600 240 L860 330"/><path d="M300 640 L360 360 M760 420 L600 240 M520 760 L700 980"/><circle cx="60" cy="900" r="5"/><circle cx="300" cy="640" r="5"/><circle cx="520" cy="760" r="5"/><circle cx="760" cy="420" r="5"/><circle cx="1020" cy="560" r="5"/><circle cx="120" cy="200" r="5"/><circle cx="360" cy="360" r="5"/><circle cx="600" cy="240" r="5"/><circle cx="860" cy="330" r="5"/><circle cx="700" cy="980" r="5"/></svg>
-        <div class="nt" id="nt0" style="top:330px"></div><div class="nt" id="nt1" style="top:450px"></div><div class="nt" id="nt2" style="top:570px"></div>
-        <svg id="track" viewBox="0 0 1080 1160"><circle cx="540" cy="560" r="10"/><circle cx="540" cy="560" r="10"/><circle cx="540" cy="560" r="10"/>
-          <path d="M540 470 V650 M450 560 H630" stroke="rgba(130,180,255,.7)" stroke-width="2"/></svg>
+        <div id="dim"></div>
+        <svg id="track" viewBox="0 0 1080 1160"><circle cx="540" cy="580" r="10"/><circle cx="540" cy="580" r="10"/><circle cx="540" cy="580" r="10"/></svg>
         <div id="scan"></div>
         <div id="slice"></div>
+        <div id="blk"></div>
       </div>
       <div id="endbg"><div id="sweep"></div></div>
       <div id="logo"><img src="assets/img/sst_logo.jpg" alt="SST"></div>
-      <div id="tag"><div id="tag1">THE JOURNEY IS FAR FROM OVER.</div><div id="tagrule"></div></div>
-      <div class="head" id="hd0"><div class="h1" id="hd0a">EVERY VISION HAS A JOURNEY.</div></div>
-<div class="head" id="hd1"><div class="h1" id="hd1a">YEARS OF WORK.</div><div class="h2" id="hd1b">A VISION WITH PURPOSE.</div></div>
-<div class="head" id="hd2"><div class="h1" id="hd2a">CHALLENGES BEHIND THE SCENES.</div></div>
-<div class="head" id="hd3"><div class="h1" id="hd3a">THE JOURNEY IS TESTED.</div><div class="h2" id="hd3b">THE VISION REMAINS.</div></div>
-<div class="head" id="hd4"><div class="h1" id="hd4a">THE WORK CONTINUES.</div><div class="h2" id="hd4b">THE VISION MOVES FORWARD.</div></div>
-<div class="head" id="alg"><div class="algrid"><span class="al" id="al0">HACKING.</span><span class="al" id="al1">TRACKING.</span><span class="al" id="al2">STALKING.</span><span class="al" id="al3">ENGINEERED ACCIDENTS.</span></div><div class="note" id="algn">ALLEGATIONS DESCRIBED IN A PUBLISHED ACCOUNT</div></div>
-<div class="sub" id="sb0">Some journeys are about more than progress.</div>
-<div class="sub" id="sb1">They are about what happens behind the scenes.</div>
-<div class="sub" id="sb2">Years of work.</div>
-<div class="sub" id="sb3">Ideas built with purpose.</div>
-<div class="sub" id="sb4">A vision that deserves to move forward.</div>
-<div class="sub" id="sb5">But sometimes, the journey faces challenges no one sees.</div>
-<div class="sub" id="sb6">A published account describes alleged hacking, tracking and stalking,</div>
-<div class="sub" id="sb7">and accidents it says were deliberately engineered,</div>
-<div class="sub" id="sb8">all aimed at stopping the progress of Sports Science Technology.</div>
-<div class="sub" id="sb9">When the work is challenged...</div>
-<div class="sub" id="sb10">when the journey is tested...</div>
-<div class="sub" id="sb11">the question is not just how far you have come.</div>
-<div class="sub" id="sb12">It is whether you continue.</div>
-<div class="sub" id="sb13">Because progress is not defined by the obstacles placed in its path.</div>
-<div class="sub" id="sb14">It is defined by the determination to keep moving.</div>
-<div class="sub" id="sb15">The work continues.</div>
-<div class="sub" id="sb16">The vision moves forward.</div>
+      <div id="tag"><div id="tag1">WITHOUT INTERFERENCE.</div><div id="tagrule"></div></div>
+      <div id="disc">Allegations as described in a published account (A Reporter Live).<br>The founder is not against any nation or profession.</div>
+      <div class="head" id="hd0"><div class="h1">TWO IPHONES. HACKED.</div><div class="h2" id="hd0b">HARD DISK HACKED TWICE.</div></div>
+<div class="head" id="hd1"><div class="h1">FOR MONTHS.</div><div class="h2" id="hd1b">AND YEARS.</div></div>
+<div class="head" id="hd2"><div class="h1">WHAT THE FOUNDER HAS FACED</div><div class="note" id="hd2n">AS DESCRIBED IN A PUBLISHED ACCOUNT</div></div>
+<div class="head" id="hd3"><div class="h1">ACCOUNTS BROKEN INTO.</div><div class="h2" id="hd3b">USED TO TRACK AND MESSAGE.</div></div>
+<div class="head" id="hd4"><div class="h1">LOGIN CODES. 5 TIMES.</div><div class="note" id="hd4n">FROM NUMBERS IN OTHER PEOPLE'S NAMES</div></div>
+<div class="head" id="hd5"><div class="h1">4 FAKE PROFILES.</div><div class="note" id="hd5n">MADE WITH AI, IN THE FOUNDER'S NAME</div></div>
+<div class="head" id="hd6"><div class="h1">THEN IT MOVED OFFLINE.</div></div>
+<div class="head" id="hd7"><div class="h1">WATCHED.</div><div class="note" id="hd7n">PEOPLE AROUND THE NEIGHBOURHOOD</div></div>
+<div class="head" id="hd8"><div class="h1">7 ATTEMPTS</div><div class="h2" id="hd8b">TO START A FIGHT.</div></div>
+<div class="head" id="hd9"><div class="h1">15-20 TIMES</div><div class="h2" id="hd9b">THE VEHICLE DAMAGED.</div></div>
+<div class="head" id="hd10"><div class="h1">THE POLICE WERE TOLD.</div><div class="h2" id="hd10b">NO ACTION YET.</div></div>
+<div class="head" id="hd11"><div class="h1">THE ASK IS SIMPLE.</div><div class="h2" id="hd11b">LET IT REACH PEOPLE.</div></div>
+<div class="panel" id="acc"><div class="row" id="ac0"><span>INSTAGRAM</span><b>BREACHED</b></div><div class="row" id="ac1"><span>FACEBOOK</span><b>BREACHED</b></div><div class="row" id="ac2"><span>GMAIL</span><b>BREACHED</b></div><div class="row" id="ac3"><span>WHATSAPP</span><b>BREACHED</b></div><div class="row" id="ac4"><span>BANK ACCOUNT</span><b>BREACHED</b></div><div class="row" id="ac5"><span>PROTON MAIL</span><b>BREACHED</b></div><div class="row" id="ac6"><span>DOMAIN ACCOUNT</span><b>BREACHED</b></div><div class="row" id="ac7"><span>INTERNET PROVIDER</span><b>BREACHED</b></div></div>
+<div class="panel" id="otp"><div class="ntf" id="ot0"><i>G</i><div><b>Google</b><span>Your verification code is &#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span></div><em>+91 &#8226;&#8226;&#8226;&#8226;&#8226; &#8226;&#8226;&#8226;&#8226;&#8226;</em></div><div class="ntf" id="ot1"><i>G</i><div><b>Google</b><span>Your verification code is &#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span></div><em>+91 &#8226;&#8226;&#8226;&#8226;&#8226; &#8226;&#8226;&#8226;&#8226;&#8226;</em></div><div class="ntf" id="ot2"><i>G</i><div><b>Google</b><span>Your verification code is &#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span></div><em>+91 &#8226;&#8226;&#8226;&#8226;&#8226; &#8226;&#8226;&#8226;&#8226;&#8226;</em></div><div class="ntf" id="ot3"><i>G</i><div><b>Google</b><span>Your verification code is &#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span></div><em>+91 &#8226;&#8226;&#8226;&#8226;&#8226; &#8226;&#8226;&#8226;&#8226;&#8226;</em></div><div class="ntf" id="ot4"><i>G</i><div><b>Google</b><span>Your verification code is &#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span></div><em>+91 &#8226;&#8226;&#8226;&#8226;&#8226; &#8226;&#8226;&#8226;&#8226;&#8226;</em></div><div class="cnt"><span id="oc0">1x</span><span id="oc1">2x</span><span id="oc2">3x</span><span id="oc3">4x</span><span id="oc4">5x</span></div></div>
+<div class="panel" id="prof"><div class="pgrid"><div class="pf" id="pf0"><div class="av"></div><b>@founder.official</b><span>ID 4471 0923</span><em>FAKE</em></div><div class="pf" id="pf1"><div class="av"></div><b>@founder.official</b><span>ID 4471 0923</span><em>FAKE</em></div><div class="pf" id="pf2"><div class="av"></div><b>@founder.official</b><span>ID 4471 0923</span><em>FAKE</em></div><div class="pf" id="pf3"><div class="av"></div><b>@founder.official</b><span>ID 4471 0923</span><em>FAKE</em></div></div><div class="pnote">SAME USERNAME. SAME USER ID.</div></div>
+<div class="big" id="c7"><b>7</b><span>TIMES</span></div><div class="big" id="c15"><b class="mid">15-20</b><span>TIMES</span></div>
+<div class="panel" id="lets"><div class="lt" id="lt0"><b>LETTER 1</b><span>Prime Minister's portal</span><i></i><i></i><i class="s"></i></div><div class="lt" id="lt1"><b>LETTER 2</b><span>Prime Minister's portal</span><i></i><i></i><i class="s"></i></div><div class="lt" id="lt2"><b>LETTER 3</b><span>Prime Minister's portal</span><i></i><i></i><i class="s"></i></div><div class="stamp" id="noact">NO ACTION YET</div></div>
+<div class="sub" id="sb0">Two iPhones, hacked.</div>
+<div class="sub" id="sb1">A hard disk, hacked twice, and the source code stolen.</div>
+<div class="sub" id="sb2">For months, and years.</div>
+<div class="sub" id="sb3">This is what the founder of Sports Science</div>
+<div class="sub" id="sb4">Technology has faced, according to a published account.</div>
+<div class="sub" id="sb5">Instagram.</div>
+<div class="sub" id="sb6">Facebook.</div>
+<div class="sub" id="sb7">Gmail.</div>
+<div class="sub" id="sb8">WhatsApp.</div>
+<div class="sub" id="sb9">Even the bank.</div>
+<div class="sub" id="sb10">All broken into, and used to track and to message.</div>
+<div class="sub" id="sb11">Google login codes, five times, from numbers registered to strangers.</div>
+<div class="sub" id="sb12">And four fake profiles, made</div>
+<div class="sub" id="sb13">with A.I., in the founder's name.</div>
+<div class="sub" id="sb14">Then it moved offline.</div>
+<div class="sub" id="sb15">People watching the neighbourhood.</div>
+<div class="sub" id="sb16">Seven times, strangers tried to start a fight.</div>
+<div class="sub" id="sb17">Fifteen to twenty times, the vehicle</div>
+<div class="sub" id="sb18">was punctured and damaged, on purpose.</div>
+<div class="sub" id="sb19">The police were told.</div>
+<div class="sub" id="sb20">Three letters went to the Prime Minister's portal.</div>
+<div class="sub" id="sb21">No action yet.</div>
+<div class="sub" id="sb22">The ask is simple.</div>
+<div class="sub" id="sb23">Let this invention reach people, without interference.</div>
+      <div id="attr">AS DESCRIBED IN A PUBLISHED ACCOUNT</div>
       <div id="vig"></div>
-      <div id="grain"></div>
     </div>
     <script>
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({paused: true});
-      tl.fromTo("#wsh01", {opacity: 0}, {...{opacity: 1}, duration: 1.2, ease: "sine.inOut", immediateRender: false}, 0.000);
-      tl.fromTo("#wsh01", {scale: 1.0}, {...{scale: 1.055}, duration: 4.0, ease: "none", immediateRender: false}, 0.000);
-      tl.to("#wsh01", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 3.980);
-      tl.fromTo("#wsh02", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 3.400);
-      tl.fromTo("#wsh02", {scale: 1.0}, {...{scale: 1.055}, duration: 4.2, ease: "none", immediateRender: false}, 3.400);
-      tl.to("#wsh02", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 7.580);
-      tl.fromTo("#wsh03", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 7.000);
-      tl.fromTo("#wsh03", {scale: 1.0}, {...{scale: 1.055}, duration: 3.2, ease: "none", immediateRender: false}, 7.000);
-      tl.to("#wsh03", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 10.180);
-      tl.fromTo("#wsh04", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 9.600);
-      tl.fromTo("#wsh04", {scale: 1.0}, {...{scale: 1.055}, duration: 3.3000000000000003, ease: "none", immediateRender: false}, 9.600);
-      tl.to("#wsh04", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 12.880);
-      tl.fromTo("#wsh05", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 12.300);
-      tl.fromTo("#wsh05", {scale: 1.0}, {...{scale: 1.055}, duration: 3.3000000000000003, ease: "none", immediateRender: false}, 12.300);
-      tl.to("#wsh05", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 15.580);
-      tl.fromTo("#wsh06", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 15.000);
-      tl.fromTo("#wsh06", {scale: 1.0}, {...{scale: 1.055}, duration: 5.78, ease: "none", immediateRender: false}, 15.000);
-      tl.to("#wsh06", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 20.760);
-      tl.fromTo("#wsh08", {opacity: 0}, {...{opacity: 1}, duration: 0.05, ease: "sine.inOut", immediateRender: false}, 20.700);
-      tl.fromTo("#wsh08", {scale: 1.0}, {...{scale: 1.055}, duration: 0.83, ease: "none", immediateRender: false}, 20.700);
-      tl.to("#wsh08", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 21.510);
-      tl.fromTo("#wsh07", {opacity: 0}, {...{opacity: 1}, duration: 0.05, ease: "sine.inOut", immediateRender: false}, 21.450);
-      tl.fromTo("#wsh07", {scale: 1.0}, {...{scale: 1.055}, duration: 0.58, ease: "none", immediateRender: false}, 21.450);
-      tl.to("#wsh07", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 22.010);
-      tl.fromTo("#wsh18", {opacity: 0}, {...{opacity: 1}, duration: 0.05, ease: "sine.inOut", immediateRender: false}, 21.950);
-      tl.fromTo("#wsh18", {scale: 1.0}, {...{scale: 1.055}, duration: 0.96, ease: "none", immediateRender: false}, 21.950);
-      tl.to("#wsh18", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 22.890);
-      tl.fromTo("#wsh19", {opacity: 0}, {...{opacity: 1}, duration: 0.05, ease: "sine.inOut", immediateRender: false}, 22.830);
-      tl.fromTo("#wsh19", {scale: 1.0}, {...{scale: 1.055}, duration: 3.2, ease: "none", immediateRender: false}, 22.830);
-      tl.to("#wsh19", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 26.010);
-      tl.fromTo("#wsh20", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 25.430);
-      tl.fromTo("#wsh20", {scale: 1.0}, {...{scale: 1.055}, duration: 2.55, ease: "none", immediateRender: false}, 25.430);
-      tl.to("#wsh20", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 27.960);
-      tl.fromTo("#wsh09", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 27.380);
-      tl.fromTo("#wsh09", {scale: 1.0}, {...{scale: 1.055}, duration: 2.22, ease: "none", immediateRender: false}, 27.380);
-      tl.to("#wsh09", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 29.580);
-      tl.fromTo("#wsh10", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 29.000);
-      tl.fromTo("#wsh10", {scale: 1.0}, {...{scale: 1.055}, duration: 4.0, ease: "none", immediateRender: false}, 29.000);
-      tl.to("#wsh10", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 32.980);
-      tl.fromTo("#wsh11", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 32.400);
-      tl.fromTo("#wsh11", {scale: 1.0}, {...{scale: 1.055}, duration: 4.2, ease: "none", immediateRender: false}, 32.400);
-      tl.to("#wsh11", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 36.580);
-      tl.fromTo("#wsh12", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 36.000);
-      tl.fromTo("#wsh12", {scale: 1.0}, {...{scale: 1.055}, duration: 5.6, ease: "none", immediateRender: false}, 36.000);
-      tl.to("#wsh12", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 41.580);
-      tl.fromTo("#wsh13", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 41.000);
-      tl.fromTo("#wsh13", {scale: 1.0}, {...{scale: 1.055}, duration: 3.6, ease: "none", immediateRender: false}, 41.000);
-      tl.to("#wsh13", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 44.580);
-      tl.fromTo("#wsh14", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 44.000);
-      tl.fromTo("#wsh14", {scale: 1.0}, {...{scale: 1.055}, duration: 2.8000000000000003, ease: "none", immediateRender: false}, 44.000);
-      tl.to("#wsh14", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 46.780);
-      tl.fromTo("#wsh15", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 46.200);
-      tl.fromTo("#wsh15", {scale: 1.0}, {...{scale: 1.055}, duration: 3.0, ease: "none", immediateRender: false}, 46.200);
-      tl.to("#wsh15", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 49.180);
-      tl.fromTo("#wsh16", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 48.600);
-      tl.fromTo("#wsh16", {scale: 1.0}, {...{scale: 1.055}, duration: 3.2, ease: "none", immediateRender: false}, 48.600);
-      tl.to("#wsh16", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 51.780);
-      tl.fromTo("#wsh17", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 51.200);
-      tl.fromTo("#wsh17", {scale: 1.0}, {...{scale: 1.055}, duration: 3.4, ease: "none", immediateRender: false}, 51.200);
-      tl.to("#wsh17", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 54.580);
-      tl.set("#wglx", {opacity: .85}, 20.700);
-      tl.to("#wglx", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 21.430);
-      tl.to("#band", {...{opacity: 0}, duration: 0.9, ease: "sine.inOut"}, 53.900);
-      tl.to("#hd0", {...{opacity: 0}, duration: 0.4, ease: "power1.in"}, 6.700);
-      tl.fromTo("#hd1", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.6, ease: "power2.out", immediateRender: false}, 7.000);
-      tl.fromTo("#hd1b", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.6, ease: "power2.out", immediateRender: false}, 8.380);
-      tl.to("#hd1", {...{opacity: 0}, duration: 0.4, ease: "power1.in"}, 14.700);
-      tl.fromTo("#hd2", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.6, ease: "power2.out", immediateRender: false}, 15.000);
-      tl.to("#hd2", {...{opacity: 0}, duration: 0.4, ease: "power1.in"}, 20.600);
-      tl.fromTo("#hd3", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.6, ease: "power2.out", immediateRender: false}, 29.030);
-      tl.fromTo("#hd3b", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.6, ease: "power2.out", immediateRender: false}, 31.590);
-      tl.to("#hd3", {...{opacity: 0}, duration: 0.4, ease: "power1.in"}, 40.700);
-      tl.fromTo("#hd4", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.6, ease: "power2.out", immediateRender: false}, 41.000);
-      tl.fromTo("#hd4b", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.6, ease: "power2.out", immediateRender: false}, 45.000);
-      tl.to("#hd4", {...{opacity: 0}, duration: 0.4, ease: "power1.in"}, 50.700);
-      tl.fromTo("#alg", {opacity: 0}, {...{opacity: 1}, duration: 0.4, ease: "power1.out", immediateRender: false}, 20.600);
-      tl.set("#algn", {opacity: 1}, 20.600);
-      tl.fromTo("#al0", {opacity: .22, y: 8}, {...{opacity: 1, y: 0}, duration: 0.25, ease: "power2.out", immediateRender: false}, 20.740);
-      tl.fromTo("#al0", {'--u': 0}, {...{'--u': 1}, duration: 0.5, ease: "power2.out", immediateRender: false}, 20.740);
-      tl.fromTo("#al1", {opacity: .22, y: 8}, {...{opacity: 1, y: 0}, duration: 0.25, ease: "power2.out", immediateRender: false}, 21.440);
-      tl.fromTo("#al1", {'--u': 0}, {...{'--u': 1}, duration: 0.5, ease: "power2.out", immediateRender: false}, 21.440);
-      tl.fromTo("#al2", {opacity: .22, y: 8}, {...{opacity: 1, y: 0}, duration: 0.25, ease: "power2.out", immediateRender: false}, 21.940);
-      tl.fromTo("#al2", {'--u': 0}, {...{'--u': 1}, duration: 0.5, ease: "power2.out", immediateRender: false}, 21.940);
-      tl.fromTo("#al3", {opacity: .22, y: 8}, {...{opacity: 1, y: 0}, duration: 0.25, ease: "power2.out", immediateRender: false}, 22.820);
-      tl.fromTo("#al3", {'--u': 0}, {...{'--u': 1}, duration: 0.5, ease: "power2.out", immediateRender: false}, 22.820);
-      tl.to("#alg", {...{opacity: 0}, duration: 0.4, ease: "power1.in"}, 28.730);
-      tl.fromTo("#sb0", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 0.520);
-      tl.to("#sb0", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 3.220);
-      tl.fromTo("#sb1", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 3.200);
-      tl.to("#sb1", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 5.540);
-      tl.fromTo("#sb2", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 6.920);
-      tl.to("#sb2", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 8.320);
-      tl.fromTo("#sb3", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 8.300);
-      tl.to("#sb3", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 9.780);
-      tl.fromTo("#sb4", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 9.760);
-      tl.to("#sb4", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 12.100);
-      tl.fromTo("#sb5", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 14.920);
-      tl.to("#sb5", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 18.760);
-      tl.fromTo("#sb6", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 18.920);
-      tl.to("#sb6", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 22.720);
-      tl.fromTo("#sb7", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 22.700);
-      tl.to("#sb7", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 25.460);
-      tl.fromTo("#sb8", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 25.440);
-      tl.to("#sb8", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 28.970);
-      tl.fromTo("#sb9", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 28.950);
-      tl.to("#sb9", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 30.390);
-      tl.fromTo("#sb10", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 30.370);
-      tl.to("#sb10", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 31.730);
-      tl.fromTo("#sb11", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 31.710);
-      tl.to("#sb11", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 34.450);
-      tl.fromTo("#sb12", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 34.890);
-      tl.to("#sb12", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 37.290);
-      tl.fromTo("#sb13", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 40.920);
-      tl.to("#sb13", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 44.940);
-      tl.fromTo("#sb14", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 44.920);
-      tl.to("#sb14", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 48.100);
-      tl.fromTo("#sb15", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 50.920);
-      tl.to("#sb15", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 52.160);
-      tl.fromTo("#sb16", {opacity: 0}, {...{opacity: 1}, duration: 0.22, ease: "power1.out", immediateRender: false}, 52.140);
-      tl.to("#sb16", {...{opacity: 0}, duration: 0.18, ease: "power1.in"}, 54.080);
-      tl.fromTo("#scan", {opacity: 0}, {...{opacity: 1}, duration: 1.0, ease: "sine.inOut", immediateRender: false}, 15.000);
-      tl.to("#scan", {...{opacity: 0}, duration: 1.0, ease: "sine.inOut"}, 28.830);
-      tl.fromTo("#cool", {opacity: 0}, {...{opacity: 1}, duration: 1.5, ease: "sine.inOut", immediateRender: false}, 14.500);
-      tl.to("#cool", {...{opacity: 0}, duration: 2.0, ease: "sine.inOut"}, 34.970);
-      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: -6}, 15.050);
-      tl.set("#slice", {opacity: .9, y: 120}, 15.050);
-      tl.set("#band", {filter: "none", x: 0}, 15.140);
-      tl.set("#slice", {opacity: 0}, 15.140);
-      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: 6}, 20.700);
-      tl.set("#slice", {opacity: .9, y: 460}, 20.700);
-      tl.set("#band", {filter: "none", x: 0}, 20.790);
-      tl.set("#slice", {opacity: 0}, 20.790);
-      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: -6}, 21.450);
-      tl.set("#slice", {opacity: .9, y: 820}, 21.450);
-      tl.set("#band", {filter: "none", x: 0}, 21.540);
-      tl.set("#slice", {opacity: 0}, 21.540);
-      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: 6}, 21.950);
-      tl.set("#slice", {opacity: .9, y: 300}, 21.950);
-      tl.set("#band", {filter: "none", x: 0}, 22.040);
-      tl.set("#slice", {opacity: 0}, 22.040);
-      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: -6}, 22.830);
-      tl.set("#slice", {opacity: .9, y: 640}, 22.830);
-      tl.set("#band", {filter: "none", x: 0}, 22.920);
-      tl.set("#slice", {opacity: 0}, 22.920);
-      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: 6}, 25.430);
-      tl.set("#slice", {opacity: .9, y: 980}, 25.430);
-      tl.set("#band", {filter: "none", x: 0}, 25.520);
-      tl.set("#slice", {opacity: 0}, 25.520);
-      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: -6}, 27.380);
-      tl.set("#slice", {opacity: .9, y: 220}, 27.380);
-      tl.set("#band", {filter: "none", x: 0}, 27.470);
-      tl.set("#slice", {opacity: 0}, 27.470);
-      tl.fromTo("#nt0", {opacity: 0, y: 30}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 21.470);
-      tl.to("#nt0", {...{opacity: 0}, duration: 0.1, ease: "power2.out"}, 21.900);
-      tl.fromTo("#nt1", {opacity: 0, y: 30}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 21.570);
-      tl.to("#nt1", {...{opacity: 0}, duration: 0.1, ease: "power2.out"}, 21.900);
-      tl.fromTo("#nt2", {opacity: 0, y: 30}, {...{opacity: 1, y: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 21.670);
-      tl.to("#nt2", {...{opacity: 0}, duration: 0.1, ease: "power2.out"}, 21.900);
-      tl.fromTo("#track", {opacity: 0}, {...{opacity: 1}, duration: 0.12, ease: "none", immediateRender: false}, 21.450);
-      tl.fromTo("#track circle", {attr: {r: 10}, opacity: .9}, {attr: {r: 260}, opacity: 0, duration: .9, stagger: .18, ease: "power1.out", immediateRender: false}, 21.450);
-      tl.to("#track", {...{opacity: 0}, duration: 0.05, ease: "power2.out"}, 21.930);
-      tl.fromTo("#net path", {strokeDashoffset: 900}, {strokeDashoffset: 0, duration: 4.5, ease: "power1.inOut", stagger: .4, immediateRender: false}, 15.500);
-      tl.fromTo("#net", {opacity: 0}, {...{opacity: 1}, duration: 1.0, ease: "power2.out", immediateRender: false}, 15.500);
-      tl.to("#net", {...{opacity: 0}, duration: 1.0, ease: "power2.out"}, 27.830);
-      tl.fromTo("#warm", {opacity: 0}, {...{opacity: 1}, duration: 6.0, ease: "sine.inOut", immediateRender: false}, 35.370);
-      tl.to("#warm", {...{opacity: 0}, duration: 0.9, ease: "power2.out"}, 53.900);
-      tl.fromTo("#endbg", {opacity: 0}, {...{opacity: 1}, duration: 0.9, ease: "sine.inOut", immediateRender: false}, 53.900);
-      tl.fromTo("#sweep", {x: -1400, opacity: 0}, {...{x: 1400, opacity: 1}, duration: 1.6, ease: "power2.inOut", immediateRender: false}, 54.100);
-      tl.fromTo("#logo", {opacity: 0, scale: .96}, {...{opacity: 1, scale: 1}, duration: 0.9, ease: "power2.out", immediateRender: false}, 54.350);
-      tl.fromTo("#tag1", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.8, ease: "power2.out", immediateRender: false}, 56.450);
-      tl.fromTo("#tagrule", {scaleX: 0}, {...{scaleX: 1}, duration: 0.9, ease: "power2.inOut", immediateRender: false}, 56.700);
-      tl.set({}, {}, 59.30);
+      tl.fromTo("#ws01", {opacity: 0}, {...{opacity: 1}, duration: 0.01, ease: "sine.inOut", immediateRender: false}, 0.000);
+      tl.fromTo("#ws01", {scale: 1.0}, {...{scale: 1.06}, duration: 2.3000000000000003, ease: "none", immediateRender: false}, 0.000);
+      tl.to("#ws01", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 2.280);
+      tl.fromTo("#ws02", {opacity: 0}, {...{opacity: 1}, duration: 0.05, ease: "sine.inOut", immediateRender: false}, 2.220);
+      tl.fromTo("#ws02", {scale: 1.0}, {...{scale: 1.06}, duration: 5.83, ease: "none", immediateRender: false}, 2.220);
+      tl.to("#ws02", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 8.030);
+      tl.fromTo("#ws03", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 7.450);
+      tl.fromTo("#ws03", {scale: 1.0}, {...{scale: 1.06}, duration: 5.67, ease: "none", immediateRender: false}, 7.450);
+      tl.to("#ws03", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 13.100);
+      tl.fromTo("#ws04", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 12.520);
+      tl.fromTo("#ws04", {scale: 1.0}, {...{scale: 1.06}, duration: 7.89, ease: "none", immediateRender: false}, 12.520);
+      tl.to("#ws04", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 20.390);
+      tl.fromTo("#ws05", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 19.810);
+      tl.fromTo("#ws05", {scale: 1.0}, {...{scale: 1.06}, duration: 4.72, ease: "none", immediateRender: false}, 19.810);
+      tl.to("#ws05", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 24.510);
+      tl.fromTo("#ws06", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 23.930);
+      tl.fromTo("#ws06", {scale: 1.0}, {...{scale: 1.06}, duration: 3.87, ease: "none", immediateRender: false}, 23.930);
+      tl.to("#ws06", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 27.780);
+      tl.fromTo("#ws07", {opacity: 0}, {...{opacity: 1}, duration: 0.05, ease: "sine.inOut", immediateRender: false}, 27.720);
+      tl.fromTo("#ws07", {scale: 1.0}, {...{scale: 1.06}, duration: 2.05, ease: "none", immediateRender: false}, 27.720);
+      tl.to("#ws07", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 29.750);
+      tl.fromTo("#ws08", {opacity: 0}, {...{opacity: 1}, duration: 0.05, ease: "sine.inOut", immediateRender: false}, 29.690);
+      tl.fromTo("#ws08", {scale: 1.0}, {...{scale: 1.06}, duration: 1.8, ease: "none", immediateRender: false}, 29.690);
+      tl.to("#ws08", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 31.470);
+      tl.fromTo("#ws09", {opacity: 0}, {...{opacity: 1}, duration: 0.05, ease: "sine.inOut", immediateRender: false}, 31.410);
+      tl.fromTo("#ws09", {scale: 1.0}, {...{scale: 1.06}, duration: 2.98, ease: "none", immediateRender: false}, 31.410);
+      tl.to("#ws09", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 34.370);
+      tl.fromTo("#ws10", {opacity: 0}, {...{opacity: 1}, duration: 0.05, ease: "sine.inOut", immediateRender: false}, 34.310);
+      tl.fromTo("#ws10", {scale: 1.0}, {...{scale: 1.06}, duration: 2.03, ease: "none", immediateRender: false}, 34.310);
+      tl.to("#ws10", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 36.320);
+      tl.fromTo("#ws11", {opacity: 0}, {...{opacity: 1}, duration: 0.05, ease: "sine.inOut", immediateRender: false}, 36.260);
+      tl.fromTo("#ws11", {scale: 1.0}, {...{scale: 1.06}, duration: 2.97, ease: "none", immediateRender: false}, 36.260);
+      tl.to("#ws11", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 39.210);
+      tl.fromTo("#ws12", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 38.630);
+      tl.fromTo("#ws12", {scale: 1.0}, {...{scale: 1.06}, duration: 4.359999999999999, ease: "none", immediateRender: false}, 38.630);
+      tl.to("#ws12", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 42.970);
+      tl.fromTo("#ws13", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 42.390);
+      tl.fromTo("#ws13", {scale: 1.0}, {...{scale: 1.06}, duration: 2.46, ease: "none", immediateRender: false}, 42.390);
+      tl.to("#ws13", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 44.830);
+      tl.fromTo("#ws14", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 44.250);
+      tl.fromTo("#ws14", {scale: 1.0}, {...{scale: 1.06}, duration: 2.66, ease: "none", immediateRender: false}, 44.250);
+      tl.to("#ws14", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 46.890);
+      tl.fromTo("#ws15", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "sine.inOut", immediateRender: false}, 46.310);
+      tl.fromTo("#ws15", {scale: 1.0}, {...{scale: 1.06}, duration: 3.48, ease: "none", immediateRender: false}, 46.310);
+      tl.to("#ws15", {...{opacity: 0}, duration: 0.01, ease: "power2.out"}, 49.770);
+      tl.to("#band", {...{opacity: 0}, duration: 0.9, ease: "sine.inOut"}, 49.290);
+      tl.fromTo("#hd0b", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 2.320);
+      tl.to("#hd0", {...{opacity: 0}, duration: 0.3, ease: "power1.in"}, 4.800);
+      tl.fromTo("#hd1", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 5.100);
+      tl.fromTo("#hd1b", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 6.060);
+      tl.to("#hd1", {...{opacity: 0}, duration: 0.3, ease: "power1.in"}, 7.250);
+      tl.fromTo("#hd2", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 7.550);
+      tl.fromTo("#hd2n", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "power1.out", immediateRender: false}, 7.850);
+      tl.to("#hd2", {...{opacity: 0}, duration: 0.3, ease: "power1.in"}, 12.320);
+      tl.fromTo("#hd3", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 12.620);
+      tl.fromTo("#hd3b", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 17.960);
+      tl.to("#hd3", {...{opacity: 0}, duration: 0.3, ease: "power1.in"}, 19.610);
+      tl.fromTo("#hd4", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 19.910);
+      tl.fromTo("#hd4n", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "power1.out", immediateRender: false}, 20.210);
+      tl.to("#hd4", {...{opacity: 0}, duration: 0.3, ease: "power1.in"}, 23.730);
+      tl.fromTo("#hd5", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 24.030);
+      tl.fromTo("#hd5n", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "power1.out", immediateRender: false}, 24.330);
+      tl.to("#hd5", {...{opacity: 0}, duration: 0.3, ease: "power1.in"}, 27.570);
+      tl.fromTo("#hd6", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 27.870);
+      tl.to("#hd6", {...{opacity: 0}, duration: 0.3, ease: "power1.in"}, 29.490);
+      tl.fromTo("#hd7", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 29.790);
+      tl.fromTo("#hd7n", {opacity: 0}, {...{opacity: 1}, duration: 0.5, ease: "power1.out", immediateRender: false}, 30.090);
+      tl.to("#hd7", {...{opacity: 0}, duration: 0.3, ease: "power1.in"}, 31.210);
+      tl.fromTo("#hd8", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 31.510);
+      tl.fromTo("#hd8b", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 32.610);
+      tl.to("#hd8", {...{opacity: 0}, duration: 0.3, ease: "power1.in"}, 34.110);
+      tl.fromTo("#hd9", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 34.410);
+      tl.fromTo("#hd9b", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 35.670);
+      tl.to("#hd9", {...{opacity: 0}, duration: 0.3, ease: "power1.in"}, 38.430);
+      tl.fromTo("#hd10", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 38.730);
+      tl.fromTo("#hd10b", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 42.590);
+      tl.to("#hd10", {...{opacity: 0}, duration: 0.3, ease: "power1.in"}, 44.150);
+      tl.fromTo("#hd11", {opacity: 0, y: 14}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 44.450);
+      tl.fromTo("#hd11b", {opacity: 0, y: 10}, {...{opacity: 1, y: 0}, duration: 0.45, ease: "power2.out", immediateRender: false}, 46.410);
+      tl.to("#hd11", {...{opacity: 0}, duration: 0.3, ease: "power1.in"}, 49.190);
+      tl.fromTo("#attr", {opacity: 0}, {...{opacity: 1}, duration: 0.6, ease: "power1.out", immediateRender: false}, 7.950);
+      tl.to("#attr", {...{opacity: 0}, duration: 0.4, ease: "power2.out"}, 49.190);
+      tl.to("#dim", {opacity: 0.62, duration: .4, ease: "power1.out"}, 12.520);
+      tl.to("#dim", {opacity: 0, duration: .4, ease: "power1.in"}, 19.510);
+      tl.fromTo("#acc", {opacity: 0}, {...{opacity: 1}, duration: 0.4, ease: "power2.out", immediateRender: false}, 12.520);
+      tl.fromTo("#ac0", {opacity: 0, x: -40}, {...{opacity: 1, x: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 12.570);
+      tl.fromTo("#ac0 b", {opacity: 0, scale: 1.6}, {...{opacity: 1, scale: 1}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 12.770);
+      tl.fromTo("#ac1", {opacity: 0, x: -40}, {...{opacity: 1, x: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 13.970);
+      tl.fromTo("#ac1 b", {opacity: 0, scale: 1.6}, {...{opacity: 1, scale: 1}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 14.170);
+      tl.fromTo("#ac2", {opacity: 0, x: -40}, {...{opacity: 1, x: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 14.330);
+      tl.fromTo("#ac2 b", {opacity: 0, scale: 1.6}, {...{opacity: 1, scale: 1}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 14.530);
+      tl.fromTo("#ac3", {opacity: 0, x: -40}, {...{opacity: 1, x: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 15.090);
+      tl.fromTo("#ac3 b", {opacity: 0, scale: 1.6}, {...{opacity: 1, scale: 1}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 15.290);
+      tl.fromTo("#ac4", {opacity: 0, x: -40}, {...{opacity: 1, x: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 15.990);
+      tl.fromTo("#ac4 b", {opacity: 0, scale: 1.6}, {...{opacity: 1, scale: 1}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 16.190);
+      tl.fromTo("#ac5", {opacity: 0, x: -40}, {...{opacity: 1, x: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 16.700);
+      tl.fromTo("#ac5 b", {opacity: 0, scale: 1.6}, {...{opacity: 1, scale: 1}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 16.900);
+      tl.fromTo("#ac6", {opacity: 0, x: -40}, {...{opacity: 1, x: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 16.850);
+      tl.fromTo("#ac6 b", {opacity: 0, scale: 1.6}, {...{opacity: 1, scale: 1}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 17.050);
+      tl.fromTo("#ac7", {opacity: 0, x: -40}, {...{opacity: 1, x: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 17.000);
+      tl.fromTo("#ac7 b", {opacity: 0, scale: 1.6}, {...{opacity: 1, scale: 1}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 17.200);
+      tl.to("#acc", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 19.560);
+      tl.fromTo("#track", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "none", immediateRender: false}, 18.260);
+      tl.fromTo("#track circle", {attr: {r: 10}, opacity: .9}, {attr: {r: 300}, opacity: 0, duration: 1.1, stagger: .22, ease: "power1.out", immediateRender: false}, 18.260);
+      tl.to("#track", {...{opacity: 0}, duration: 0.2, ease: "power2.out"}, 19.610);
+      tl.to("#dim", {opacity: 0.62, duration: .4, ease: "power1.out"}, 19.810);
+      tl.to("#dim", {opacity: 0, duration: .4, ease: "power1.in"}, 23.630);
+      tl.fromTo("#otp", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 19.810);
+      tl.fromTo("#ot0", {opacity: 0, y: -30}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 20.610);
+      tl.set("#oc0", {opacity: 1}, 20.610);
+      tl.fromTo("#ot1", {opacity: 0, y: -30}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 20.930);
+      tl.set("#oc1", {opacity: 1}, 20.930);
+      tl.set("#oc0", {opacity: 0}, 20.930);
+      tl.fromTo("#ot2", {opacity: 0, y: -30}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 21.250);
+      tl.set("#oc2", {opacity: 1}, 21.250);
+      tl.set("#oc1", {opacity: 0}, 21.250);
+      tl.fromTo("#ot3", {opacity: 0, y: -30}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 21.570);
+      tl.set("#oc3", {opacity: 1}, 21.570);
+      tl.set("#oc2", {opacity: 0}, 21.570);
+      tl.fromTo("#ot4", {opacity: 0, y: -30}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "power3.out", immediateRender: false}, 21.890);
+      tl.set("#oc4", {opacity: 1}, 21.890);
+      tl.set("#oc3", {opacity: 0}, 21.890);
+      tl.to("#otp", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 23.730);
+      tl.to("#dim", {opacity: 0.7, duration: .4, ease: "power1.out"}, 23.930);
+      tl.to("#dim", {opacity: 0, duration: .4, ease: "power1.in"}, 27.470);
+      tl.fromTo("#prof", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 23.930);
+      tl.fromTo("#pf0", {opacity: 0, scale: .85}, {...{opacity: 1, scale: 1}, duration: 0.4, ease: "back.out(1.6)", immediateRender: false}, 24.170);
+      tl.fromTo("#pf0 em", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 25.270);
+      tl.fromTo("#pf1", {opacity: 0, scale: .85}, {...{opacity: 1, scale: 1}, duration: 0.4, ease: "back.out(1.6)", immediateRender: false}, 24.370);
+      tl.fromTo("#pf1 em", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 25.390);
+      tl.fromTo("#pf2", {opacity: 0, scale: .85}, {...{opacity: 1, scale: 1}, duration: 0.4, ease: "back.out(1.6)", immediateRender: false}, 24.570);
+      tl.fromTo("#pf2 em", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 25.510);
+      tl.fromTo("#pf3", {opacity: 0, scale: .85}, {...{opacity: 1, scale: 1}, duration: 0.4, ease: "back.out(1.6)", immediateRender: false}, 24.770);
+      tl.fromTo("#pf3 em", {opacity: 0, scale: 1.8}, {...{opacity: 1, scale: 1}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 25.630);
+      tl.fromTo("#prof .pnote", {opacity: 0}, {...{opacity: 1}, duration: 0.4, ease: "power2.out", immediateRender: false}, 25.770);
+      tl.to("#prof", {...{opacity: 0}, duration: 0.25, ease: "power2.out"}, 27.570);
+      tl.fromTo("#c7", {opacity: 0, scale: .7}, {...{opacity: 1, scale: 1}, duration: 0.45, ease: "back.out(1.8)", immediateRender: false}, 31.460);
+      tl.to("#c7", {...{opacity: 0}, duration: 0.25, ease: "power2.out"}, 34.110);
+      tl.fromTo("#c15", {opacity: 0, scale: .7}, {...{opacity: 1, scale: 1}, duration: 0.45, ease: "back.out(1.8)", immediateRender: false}, 34.360);
+      tl.to("#c15", {...{opacity: 0}, duration: 0.25, ease: "power2.out"}, 38.430);
+      tl.to("#dim", {opacity: 0.62, duration: .4, ease: "power1.out"}, 38.630);
+      tl.to("#dim", {opacity: 0, duration: .4, ease: "power1.in"}, 44.050);
+      tl.fromTo("#lets", {opacity: 0}, {...{opacity: 1}, duration: 0.3, ease: "power2.out", immediateRender: false}, 38.630);
+      tl.fromTo("#lt0", {opacity: 0, y: 60, rotation: 0}, {...{opacity: 1, y: 0, rotation: -3}, duration: 0.45, ease: "power3.out", immediateRender: false}, 40.050);
+      tl.fromTo("#lt1", {opacity: 0, y: 60, rotation: 0}, {...{opacity: 1, y: 0, rotation: 2}, duration: 0.45, ease: "power3.out", immediateRender: false}, 40.330);
+      tl.fromTo("#lt2", {opacity: 0, y: 60, rotation: 0}, {...{opacity: 1, y: 0, rotation: -1}, duration: 0.45, ease: "power3.out", immediateRender: false}, 40.610);
+      tl.fromTo("#noact", {opacity: 0, scale: 1.8, rotation: -8}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.35, ease: "back.out(1.6)", immediateRender: false}, 42.540);
+      tl.to("#lets", {...{opacity: 0}, duration: 0.3, ease: "power2.out"}, 44.100);
+      tl.fromTo("#sb0", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 0.520);
+      tl.to("#sb0", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 2.100);
+      tl.fromTo("#sb1", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 2.240);
+      tl.to("#sb1", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 4.880);
+      tl.fromTo("#sb2", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 5.020);
+      tl.to("#sb2", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 7.280);
+      tl.fromTo("#sb3", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 7.470);
+      tl.to("#sb3", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 9.190);
+      tl.fromTo("#sb4", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 9.330);
+      tl.to("#sb4", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 12.400);
+      tl.fromTo("#sb5", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 12.540);
+      tl.to("#sb5", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 13.620);
+      tl.fromTo("#sb6", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 13.940);
+      tl.to("#sb6", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 14.160);
+      tl.fromTo("#sb7", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 14.300);
+      tl.to("#sb7", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 14.920);
+      tl.fromTo("#sb8", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 15.060);
+      tl.to("#sb8", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 15.540);
+      tl.fromTo("#sb9", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 15.680);
+      tl.to("#sb9", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 16.480);
+      tl.fromTo("#sb10", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 16.620);
+      tl.to("#sb10", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 19.690);
+      tl.fromTo("#sb11", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 19.830);
+      tl.to("#sb11", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 23.810);
+      tl.fromTo("#sb12", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 23.950);
+      tl.to("#sb12", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 25.250);
+      tl.fromTo("#sb13", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 25.390);
+      tl.to("#sb13", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 27.350);
+      tl.fromTo("#sb14", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 27.790);
+      tl.to("#sb14", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 29.370);
+      tl.fromTo("#sb15", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 29.710);
+      tl.to("#sb15", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 31.290);
+      tl.fromTo("#sb16", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 31.430);
+      tl.to("#sb16", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 34.190);
+      tl.fromTo("#sb17", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 34.330);
+      tl.to("#sb17", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 35.730);
+      tl.fromTo("#sb18", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 35.870);
+      tl.to("#sb18", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 38.510);
+      tl.fromTo("#sb19", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 38.650);
+      tl.to("#sb19", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 39.830);
+      tl.fromTo("#sb20", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 39.970);
+      tl.to("#sb20", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 42.370);
+      tl.fromTo("#sb21", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 42.510);
+      tl.to("#sb21", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 44.030);
+      tl.fromTo("#sb22", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 44.370);
+      tl.to("#sb22", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 46.190);
+      tl.fromTo("#sb23", {opacity: 0}, {...{opacity: 1}, duration: 0.2, ease: "power1.out", immediateRender: false}, 46.330);
+      tl.to("#sb23", {...{opacity: 0}, duration: 0.16, ease: "power1.in"}, 49.470);
+      tl.fromTo("#scan", {opacity: 0}, {...{opacity: 1}, duration: 0.8, ease: "sine.inOut", immediateRender: false}, 0.100);
+      tl.to("#scan", {...{opacity: 0}, duration: 0.4, ease: "power2.out"}, 27.670);
+      tl.fromTo("#cool", {opacity: 0}, {...{opacity: 1}, duration: 1.0, ease: "power2.out", immediateRender: false}, 0.000);
+      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: -6}, 1.380);
+      tl.set("#slice", {opacity: .9, y: 160}, 1.380);
+      tl.set("#band", {filter: "none", x: 0}, 1.470);
+      tl.set("#slice", {opacity: 0}, 1.470);
+      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: 6}, 3.040);
+      tl.set("#slice", {opacity: .9, y: 520}, 3.040);
+      tl.set("#band", {filter: "none", x: 0}, 3.130);
+      tl.set("#slice", {opacity: 0}, 3.130);
+      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: -6}, 4.720);
+      tl.set("#slice", {opacity: .9, y: 860}, 4.720);
+      tl.set("#band", {filter: "none", x: 0}, 4.810);
+      tl.set("#slice", {opacity: 0}, 4.810);
+      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: 6}, 16.920);
+      tl.set("#slice", {opacity: .9, y: 300}, 16.920);
+      tl.set("#band", {filter: "none", x: 0}, 17.010);
+      tl.set("#slice", {opacity: 0}, 17.010);
+      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: -6}, 19.910);
+      tl.set("#slice", {opacity: .9, y: 700}, 19.910);
+      tl.set("#band", {filter: "none", x: 0}, 20.000);
+      tl.set("#slice", {opacity: 0}, 20.000);
+      tl.set("#band", {filter: "drop-shadow(5px 0 0 rgba(255,40,70,.55)) drop-shadow(-5px 0 0 rgba(60,170,255,.55))", x: 6}, 24.410);
+      tl.set("#slice", {opacity: .9, y: 980}, 24.410);
+      tl.set("#band", {filter: "none", x: 0}, 24.500);
+      tl.set("#slice", {opacity: 0}, 24.500);
+      tl.set("#blk", {opacity: 1}, 27.670);
+      tl.to("#blk", {...{opacity: 0}, duration: 0.5, ease: "power1.out"}, 28.020);
+      tl.fromTo("#warm", {opacity: 0}, {...{opacity: 1}, duration: 3.0, ease: "sine.inOut", immediateRender: false}, 44.450);
+      tl.to("#warm", {...{opacity: 0}, duration: 0.9, ease: "power2.out"}, 49.290);
+      tl.fromTo("#endbg", {opacity: 0}, {...{opacity: 1}, duration: 0.9, ease: "sine.inOut", immediateRender: false}, 49.290);
+      tl.fromTo("#sweep", {x: -1400, opacity: 0}, {...{x: 1400, opacity: 1}, duration: 1.6, ease: "power2.inOut", immediateRender: false}, 49.490);
+      tl.fromTo("#logo", {opacity: 0, scale: .96}, {...{opacity: 1, scale: 1}, duration: 0.9, ease: "power2.out", immediateRender: false}, 49.740);
+      tl.fromTo("#tag1", {opacity: 0, y: 12}, {...{opacity: 1, y: 0}, duration: 0.8, ease: "power2.out", immediateRender: false}, 50.490);
+      tl.fromTo("#tagrule", {scaleX: 0}, {...{scaleX: 1}, duration: 0.9, ease: "power2.inOut", immediateRender: false}, 50.690);
+      tl.fromTo("#disc", {opacity: 0}, {...{opacity: 1}, duration: 0.8, ease: "power1.out", immediateRender: false}, 50.790);
+      tl.set({}, {}, 53.91);
       window.__timelines["main"] = tl;
     </script>
   </body>

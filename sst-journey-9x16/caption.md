@@ -1,59 +1,72 @@
-# SST: "The Journey Continues" (Instagram + Facebook Reels, 9:16, 59.3 s)
+# SST: the problems faced (Instagram + Facebook Reels, 9:16, ~54 s), v4
 
-Client brief: `SST_The_Journey_Continues_Editor_Production_Brief.pdf` (8 pages). VO = the brief's master script, verbatim except two owner changes (v3: the allegation line names hacking, tracking, stalking and
-accidents the account says were deliberately engineered, owner-confirmed as in the published account; v2: "SST." is spoken as "Sports Science Technology.",
-no "and", as the client asked on the earlier reel),
-each line placed on the brief's time codes (Scene 02 at 0:07, 03 at 0:15, 04 at 0:29, 05 at 0:41, 06 at 0:51), with the
-pauses it asks for after "behind the scenes", "whether you continue" and "the vision moves forward". On-screen text is
-the brief's, scene by scene; English subtitles use the script's wording (the end card carries the last two lines).
+Owner on v3: "Highlight the issues faced. Let it only be about the problems in most of the video. No need to mention
+things like we are working on vision. Go through the article and mention the problems faced honestly." Source: A Reporter
+Live, "Hacking tracking and stalking just to stop the progress of sports science technology for months and years"
+(https://areporterlive.com/hacking-tracking-and-stalking-just-to-stop-the-progress-of-sports-science-technology-for-months-and-years/,
+posted 2024-12-19, updated 2026-09-17). The owner approved going straight to the final.
 
-Build: build/vo_cb.py + build/vo_pick.py + build/relabel.py (v2 voice: Chatterbox with the synthetic Kokoro am_puck
-reference and the approved SST reel's emotion settings, recorded as whole passages per scene for a natural read, 3 takes
-each, slip-free picked, then split back into sentences for timing), build/prep_shots.py (Pexels footage cut, cropped to the band and
-graded: plan/edl.json), build/generate.py (composition), build/sfx_mix.py (mix).
+Build: build/vo_cb.py + build/vo_pick.py + build/relabel.py (the approved SST voice: Chatterbox with the synthetic Kokoro
+am_puck reference, whole passages, 3 takes each, 0 slips), build/plan_v4.py (footage plan, timed to the voice),
+build/prep_shots.py (Pexels cut and graded), build/generate.py (composition), build/sfx_mix.py (mix). v3 kept as
+build/generate_v3.py, plan/edl_v3.json, plan/script_v3.json.
+
+## Script (every fact from the article)
+
+| Voiceover | On screen |
+|---|---|
+| Two iPhones, hacked. A hard disk, hacked twice, and the source code stolen. For months, and years. | TWO IPHONES. HACKED. / HARD DISK HACKED TWICE. |
+| This is what the founder of Sports Science Technology has faced, according to a published account. | attribution |
+| Instagram. Facebook. Gmail. WhatsApp. Even the bank. All broken into, and used to track and to message. | 8 accounts stamped BREACHED, tracking rings |
+| Google login codes, five times, from numbers registered to strangers. | 5 code notifications (masked), 5x |
+| And four fake profiles, made with A.I., in the founder's name. | 4 identical profiles stamped FAKE |
+| Then it moved offline. | a beat of black, the glitch stops |
+| People watching the neighbourhood. Seven times, strangers tried to start a fight. | WATCHED. / 7 TIMES |
+| Fifteen to twenty times, the vehicle was punctured and damaged, on purpose. | 15-20 TIMES |
+| The police were told. Three letters went to the Prime Minister's portal. No action yet. | 3 letters, NO ACTION YET stamp |
+| The ask is simple. Let this invention reach people, without interference. | THE ASK IS SIMPLE. |
+| Sports Science Technology. | SST logo, "Without interference.", the article's disclaimer |
+
+"As described in a published account" stays on screen from the attribution line to the end card.
 
 ## Post description (ready to paste)
 
-The brief gives the social caption and the hashtags (section 07) and no CTA keyword, so it is used as written.
-
 ```
-Behind every vision, there is a journey the world may never see.
+Two iPhones hacked. A hard disk hacked twice, and the source code stolen. For months, and years.
 
-Years of work. A purpose-driven initiative. And challenges that test the determination to keep moving forward.
+This is what the founder of Sports Science Technology has faced, according to a published account:
+1. Instagram, Facebook, Gmail, WhatsApp and even the bank account broken into, and used to track and message
+2. Google login codes sent five times, from numbers registered to other people
+3. Four fake profiles made with AI in the founder's name
+4. People watching the neighbourhood, and seven attempts by strangers to start a fight
+5. The vehicle punctured and damaged 15 to 20 times, on purpose
 
-A published account describes alleged hacking, tracking and stalking, and accidents it says were deliberately engineered, all aimed at stopping the progress of Sports Science Technology.
+The police were told. Three letters went to the Prime Minister's portal. No action yet.
 
-This is not just a story about obstacles. It is a reminder that meaningful progress demands resilience, patience and the courage to continue.
+The ask is simple: let this invention reach people, without interference.
 
-The work continues. The vision moves forward.
-
-SST - The journey is far from over.
+Allegations as described in a published account (A Reporter Live). The founder is not against any nation or profession.
 
 Music: "A Good Dream" by Jesse Keller, CC BY 3.0
 
-#SportsScienceTechnology #SST #SportsTechnology #Innovation #Resilience
-sports science technology, SST, sports technology, resilience, innovation in sport, sports science, perseverance, the journey continues, sports research, athlete performance technology
+#sportssciencetechnology #sst #cybercrime #harassment #justice
+sports science technology, sst, phone hacked, cyber harassment, stalking and harassment, fake profiles, account hacked, cyber crime complaint, police no action, innovation under attack
 ```
 
-## For the client before publishing (the brief's own checklist)
+No comment-keyword CTA: there is nothing to DM, so the description opens on the hook.
 
-- Confirm the VO and the allegation wording with SST before edit lock. The film keeps the brief's attribution exactly ("A
-  published account describes alleged ..."), and the on-screen label reads "ALLEGATIONS DESCRIBED IN A PUBLISHED ACCOUNT".
-  Nothing in the film presents them as verified findings. SST should check accuracy, attribution and legal suitability.
-- Footage is symbolic stock (Pexels licence), not actual event footage: a performer at a desk, dark rooms, a blurred
-  phone, sunrise. No identifiable alleged perpetrator, no fake evidence, messages, documents, police or news graphics,
-  no readable screens (the phone shot is blurred past reading), no product or research details.
-- The official SST logo is used exactly as supplied (brands/sports-science-technology/logo.jpg), unaltered, on a white card.
+## For the client before publishing
 
-## v3 challenge section
-
-A hard-cut montage on the spoken words, each allegation lighting up in a 2x2 list with the attribution under it:
-HACKING (blue-lit laptop + a real glitch clip), TRACKING (blurred phone + location rings), STALKING (a figure walking
-away in fog, from behind), ENGINEERED ACCIDENTS (headlights coming at the camera on a wet night road, shop sign cropped out).
-All symbolic stock; nothing shown as evidence; no identifiable person presented as a perpetrator.
+- SST must confirm the wording with their lawyer. Every claim is attributed to the published account and none is shown as
+  a verified finding. The article's list of the people it accuses (a former trainer, a law-firm director, an HR, a
+  secretary, NRIs in Germany, a political party worker) and its "anti-national agenda" line are left out on purpose: they
+  point at identifiable people with unproven accusations, a defamation risk. Add them only with legal sign-off.
+- Footage is symbolic stock (Pexels licence), not event footage: no identifiable person shown as a perpetrator, no
+  readable screens (the phone is blurred), the code notifications are masked, the fake profiles are generic.
+- The official SST logo is used exactly as supplied, unaltered, on a white card.
 
 ## Credits
 
-- Footage: Pexels licence (footage/pexels/pexels.json lists every clip's page and file).
-- Music: "A Good Dream" by Jesse Keller, Jamendo 1540856 via Openverse, CC BY 3.0 (credit line in the description).
-- Sound effects: Openverse CC0 + OpenGameArt CC0 set, at low level (glitch ticks, soft notifications, one bass impact).
+- Footage: Pexels licence (footage/pexels/pexels.json lists every clip).
+- Music: "A Good Dream" by Jesse Keller, Jamendo 1540856, CC BY 3.0 (credit line in the description).
+- Sound effects: Openverse CC0 one-shots at low level.

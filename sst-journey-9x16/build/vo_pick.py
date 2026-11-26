@@ -26,10 +26,10 @@ TEMPO = float(os.environ.get("VO_TEMPO", "1.0"))
 GAP_SCALE = 1.0
 LEAD = .6          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast
-GAP = {"g5": .9}          # pause before "It is whether you continue." (the others are placed on the brief's time codes: "at")
+GAP = {"g1": .55, "g2": .45, "g3": .35, "g4": .8, "g5": .7, "g6": .5, "g7": .7, "g8": .6}   # v4: the hard turn after "offline" and before the ask get room
 
 
-NUM = {"sst": "s",  "six": "6", "nineteenth": "19th", "fortysix": "46", "one": "1", "two": "2", "three": "3", "twenty": "20"}
+NUM = {"neighbourhood": "neighborhood", "five": "5", "seven": "7", "fifteen": "15", "four": "4", "sst": "s",  "six": "6", "nineteenth": "19th", "fortysix": "46", "one": "1", "two": "2", "three": "3", "twenty": "20"}
 
 
 def norm(w):
@@ -71,7 +71,7 @@ def main():
             path = os.path.join(TAKES, f"{ln['id']}_t{k}.wav")
             if not os.path.exists(path):
                 continue
-            segs, _ = wm.transcribe(path, word_timestamps=True, language="en", beam_size=5, vad_filter=False)
+            segs, _ = wm.transcribe(librosa.load(path, sr=16000, mono=True)[0], word_timestamps=True, language="en", beam_size=5, vad_filter=False)
             ws = [w for s in segs for w in s.words]
             hyp = " ".join(w.word.strip() for w in ws)
             y, sr = librosa.load(path, sr=SR, mono=True)

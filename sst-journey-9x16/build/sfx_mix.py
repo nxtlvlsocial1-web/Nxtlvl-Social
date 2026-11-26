@@ -44,7 +44,7 @@ KINDS = {
     "g_correct": (["g_correct"], -9, 1.0), "g_wrong": (["g_wrong"], -10, .8), "g_tick": (["g_tick"], -9, .25),
     "g_question": (["g_question"], -12, .6), "g_levelup": (["g_levelup"], -10, 1.4), "g_pickup": (["g_pickup"], -15, .5),
     # SST Journey: restrained cues
-    "glitch": (["click"], -27, .12), "notify_soft": (["notify"], -25, .4), "whoosh_soft": (["whoosh_b"], -21, .6), "riser_low": (["riser"], -23, 1.1),
+    "glitch": (["click"], -27, .12), "stamp_soft": (["stamp"], -14, .6), "notify_soft": (["notify"], -25, .4), "whoosh_soft": (["whoosh_b"], -21, .6), "riser_low": (["riser"], -23, 1.1),
     "g_pop": (["g_pop"], -16, .6), "g_complete": (["g_complete"], -10, 1.4), "g_drop": (["g_drop"], -12, .5), "g_swish": (["g_swish"], -13, .6),
 }
 

@@ -1,194 +1,194 @@
 {
- "duration": 58.56,
+ "duration": 51.73,
  "takes": [
   {
    "line": "g1",
    "take": 0,
-   "heard": "Some journeys are about more than progress. They are about what happens behind the scenes.",
+   "heard": "Two iPhones hacked, a hard disk hacked twice and the source code stolen for months and years.",
    "errors": 0,
-   "pitch_spread_hz": 76
+   "pitch_spread_hz": 57
   },
   {
    "line": "g1",
    "take": 1,
-   "heard": "Some journeys are about more than progress. They are about what happens behind the scenes",
-   "errors": 0,
-   "pitch_spread_hz": 47
-  },
-  {
-   "line": "g1",
-   "take": 2,
-   "heard": "Some journeys are about more than progress. They are about what happens behind the scenes",
-   "errors": 0,
-   "pitch_spread_hz": 104
-  },
-  {
-   "line": "g2",
-   "take": 0,
-   "heard": "Years of work, ideas built with purpose, a vision that deserves to move forward.",
-   "errors": 0,
-   "pitch_spread_hz": 91
-  },
-  {
-   "line": "g2",
-   "take": 1,
-   "heard": "Years of work, ideas built with purpose, a vision that deserves to move forward.",
+   "heard": "two iPhones hacked, a hard disk hacked twice, and the source code stolen for months and years.",
    "errors": 0,
    "pitch_spread_hz": 83
   },
   {
+   "line": "g1",
+   "take": 2,
+   "heard": "2 iPhones hacked, a hard disk hacked twice and the source code stolen for months and",
+   "errors": 1,
+   "pitch_spread_hz": 62
+  },
+  {
+   "line": "g2",
+   "take": 0,
+   "heard": "This is what the founder of sports science technology has faced, according to a published account.",
+   "errors": 0,
+   "pitch_spread_hz": 54
+  },
+  {
+   "line": "g2",
+   "take": 1,
+   "heard": "This is what the founder of sports science technology has faced, according to a published account.",
+   "errors": 0,
+   "pitch_spread_hz": 96
+  },
+  {
    "line": "g2",
    "take": 2,
-   "heard": "Years of work, ideas built with purpose, a vision that deserves to move forward.",
+   "heard": "This is what the founder of Sports Science Technology has faced, according to a published account.",
    "errors": 0,
-   "pitch_spread_hz": 76
+   "pitch_spread_hz": 65
   },
   {
    "line": "g3",
    "take": 0,
-   "heard": "But sometimes, the journey faces challenges no one sees.",
+   "heard": "Instagram, Facebook, Gmail, WhatsApp, even the bank, all broken into and used to track and to message.",
    "errors": 0,
-   "pitch_spread_hz": 133
+   "pitch_spread_hz": 74
   },
   {
    "line": "g3",
    "take": 1,
-   "heard": "But sometimes, the journey faces challenges no one sees.",
+   "heard": "Instagram, Facebook, Gmail, WhatsApp, even the bank, all broken into and used to track and to message.",
    "errors": 0,
-   "pitch_spread_hz": 60
+   "pitch_spread_hz": 72
   },
   {
    "line": "g3",
    "take": 2,
-   "heard": "But sometimes, the journey faces challenges no one sees.",
+   "heard": "Instagram, Facebook, Gmail, WhatsApp, even the bank, all broken into and used to track and to message.",
    "errors": 0,
-   "pitch_spread_hz": 126
+   "pitch_spread_hz": 74
   },
   {
    "line": "g4",
    "take": 0,
-   "heard": "A published account describes alleged hacking, tracking, and stalking, and accidents it says were deliberately engineered, all aimed at stopping the progress of sports science technology.",
-   "errors": 0,
-   "pitch_spread_hz": 70
-  },
-  {
-   "line": "g4",
-   "take": 1,
-   "heard": "A published account describes alleged hacking, tracking and stalking and accidents it says were deliberately engineered, all aimed at stopping the progress of sports science technology.",
+   "heard": "Google login codes five times from numbers registered to strangers and four fake profiles made with AI in the founders name",
    "errors": 0,
    "pitch_spread_hz": 71
   },
   {
    "line": "g4",
-   "take": 2,
-   "heard": "A published account describes alleged hacking, tracking, and stalking, and accidents it says were deliberately engineered, all aimed at stopping the progress of sports science technology.",
+   "take": 1,
+   "heard": "Google login codes five times from numbers registered to strangers and four fake profiles made with AI in the founders name",
    "errors": 0,
-   "pitch_spread_hz": 84
+   "pitch_spread_hz": 66
+  },
+  {
+   "line": "g4",
+   "take": 2,
+   "heard": "Google login codes five times from numbers registered to strangers, and four fake profiles made with AI in the founder's name.",
+   "errors": 0,
+   "pitch_spread_hz": 75
   },
   {
    "line": "g5",
    "take": 0,
-   "heard": "When the work is challenged, when the journey is tested, the question is not just how far you have come.",
+   "heard": "Then it moved offline.",
    "errors": 0,
-   "pitch_spread_hz": 102
+   "pitch_spread_hz": 53
   },
   {
    "line": "g5",
    "take": 1,
-   "heard": "When the work is challenged, when the journey is tested, the question is not just how far you have come.",
-   "errors": 0,
-   "pitch_spread_hz": 58
+   "heard": "Then I moved offline.",
+   "errors": 1,
+   "pitch_spread_hz": 45
   },
   {
    "line": "g5",
    "take": 2,
-   "heard": "When the work is challenged, when the journey is tested, the question is not just how far you have come.",
-   "errors": 0,
-   "pitch_spread_hz": 92
-  },
-  {
-   "line": "g6",
-   "take": 0,
-   "heard": "It is whether you continue.",
-   "errors": 0,
-   "pitch_spread_hz": 112
-  },
-  {
-   "line": "g6",
-   "take": 1,
-   "heard": "It is whether you continue.",
+   "heard": "Then it moved offline.",
    "errors": 0,
    "pitch_spread_hz": 50
   },
   {
    "line": "g6",
-   "take": 2,
-   "heard": "It is, whether you continue.",
+   "take": 0,
+   "heard": "People watching the neighborhood seven times strangers tried to start a fight 15 to 20 times The vehicle was punctured and damaged on purpose",
    "errors": 0,
-   "pitch_spread_hz": 118
+   "pitch_spread_hz": 84
+  },
+  {
+   "line": "g6",
+   "take": 1,
+   "heard": "People watching the neighborhood seven times strangers tried to start a fight 15 to 20 times the vehicle was punctured and damaged on purpose",
+   "errors": 0,
+   "pitch_spread_hz": 75
+  },
+  {
+   "line": "g6",
+   "take": 2,
+   "heard": "People watching the neighborhood, seven times, strangers tried to start a fight. Fifteen to twenty times, the vehicle was punctured and damaged, on purpose.",
+   "errors": 0,
+   "pitch_spread_hz": 113
   },
   {
    "line": "g7",
    "take": 0,
-   "heard": "because progress is not defined by the obstacles placed in its path. It is defined by the determination to keep moving.",
+   "heard": "The police were told three letters went to the prime minister's portal no action yet",
    "errors": 0,
-   "pitch_spread_hz": 65
+   "pitch_spread_hz": 87
   },
   {
    "line": "g7",
    "take": 1,
-   "heard": "Because progress is not defined by the obstacles placed in its path. It is defined by the determination to keep moving.",
+   "heard": "The police were told. Three letters went to the prime minister's portal. No action yet.",
    "errors": 0,
-   "pitch_spread_hz": 59
+   "pitch_spread_hz": 71
   },
   {
    "line": "g7",
    "take": 2,
-   "heard": "Because progress is not defined by the obstacles placed in its path, it is defined by the determination to keep moving.",
-   "errors": 0,
-   "pitch_spread_hz": 63
-  },
-  {
-   "line": "g8",
-   "take": 0,
-   "heard": "The work continues. The vision moves forward.",
+   "heard": "The police were told. Three letters went to the Prime Minister's portal. No action yet.",
    "errors": 0,
    "pitch_spread_hz": 81
   },
   {
    "line": "g8",
-   "take": 1,
-   "heard": "The work continues. The vision moves forward.",
+   "take": 0,
+   "heard": "The ask is simple. Let this invention reach people without interference.",
    "errors": 0,
-   "pitch_spread_hz": 87
+   "pitch_spread_hz": 79
   },
   {
    "line": "g8",
-   "take": 2,
-   "heard": "The work continues, the vision moves forward.",
+   "take": 1,
+   "heard": "The ask is simple. Let this invention reach people without interference.",
    "errors": 0,
    "pitch_spread_hz": 76
   },
   {
-   "line": "g9",
-   "take": 0,
-   "heard": "Sports science technology, the journey is far from over.",
-   "errors": 0,
-   "pitch_spread_hz": 72
-  },
-  {
-   "line": "g9",
-   "take": 1,
-   "heard": "Sports Science Technology. The journey is far from over.",
+   "line": "g8",
+   "take": 2,
+   "heard": "The ask is simple. Let this invention reach people without interference.",
    "errors": 0,
    "pitch_spread_hz": 104
   },
   {
    "line": "g9",
-   "take": 2,
-   "heard": "Sports science technology, the journey is far from over.",
+   "take": 0,
+   "heard": "Sports Science Technology",
    "errors": 0,
-   "pitch_spread_hz": 108
+   "pitch_spread_hz": 82
+  },
+  {
+   "line": "g9",
+   "take": 1,
+   "heard": "Sports Science Technology",
+   "errors": 0,
+   "pitch_spread_hz": 58
+  },
+  {
+   "line": "g9",
+   "take": 2,
+   "heard": "Sports science technology",
+   "errors": 0,
+   "pitch_spread_hz": 66
   }
  ]
 }

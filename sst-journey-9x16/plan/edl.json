@@ -6,222 +6,164 @@
  "handle": 0.6,
  "shots": [
   {
-   "id": "sh01",
-   "src": "7062991",
+   "id": "s01",
+   "src": "19162466",
    "t": 0.0,
-   "d": 3.4,
-   "in": 2.0,
-   "focus": 0.42,
-   "grade": "night",
-   "what": "hands, book and mug under the lamp"
-  },
-  {
-   "id": "sh02",
-   "src": "7062990",
-   "t": 3.4,
-   "d": 3.6,
-   "in": 1.5,
-   "focus": 0.6,
-   "grade": "night",
-   "what": "writing in the dark, side"
-  },
-  {
-   "id": "sh03",
-   "src": "7062984",
-   "t": 7.0,
-   "d": 2.6,
-   "in": 2.0,
-   "focus": 0.55,
-   "grade": "night",
-   "what": "filing papers into a box"
-  },
-  {
-   "id": "sh04",
-   "src": "7062992",
-   "t": 9.6,
-   "d": 2.7,
-   "in": 2.0,
-   "focus": 0.6,
-   "grade": "night",
-   "what": "turning pages"
-  },
-  {
-   "id": "sh05",
-   "src": "7062988",
-   "t": 12.3,
-   "d": 2.7,
-   "in": 2.0,
+   "d": 2.22,
+   "in": 3.0,
    "focus": 0.5,
    "grade": "night",
-   "what": "at the desk with papers"
+   "what": "a phone in the dark, the screen unreadable",
+   "extra": "gblur=sigma=20,eq=brightness=0.06:gamma=1.25"
   },
   {
-   "id": "sh06",
+   "id": "s02",
+   "src": "7942762",
+   "t": 2.22,
+   "d": 5.23,
+   "in": 2.0,
+   "focus": 0.45,
+   "grade": "night",
+   "what": "a face lit by a laptop",
+   "extra": "eq=brightness=0.05:gamma=1.2",
+   "cut": true
+  },
+  {
+   "id": "s03",
    "src": "20563164",
-   "t": 15.0,
-   "d": 5.7,
+   "t": 7.45,
+   "d": 5.07,
    "in": 1.0,
    "focus": 0.5,
    "grade": "night",
    "what": "silhouette in a dark room"
   },
   {
-   "id": "sh08",
-   "src": "7942762",
-   "t": 20.7,
-   "d": 0.75,
-   "in": 2.0,
-   "focus": 0.42,
+   "id": "s04",
+   "src": "7942761",
+   "t": 12.52,
+   "d": 7.29,
+   "in": 1.5,
+   "focus": 0.5,
    "grade": "night",
-   "what": "HACKING: face lit by a laptop, a real glitch layered over",
-   "extra": "eq=brightness=0.06:gamma=1.25",
-   "cut": true
+   "what": "a man lit by his phone"
   },
   {
-   "id": "sh07",
+   "id": "s05",
    "src": "19162466",
-   "t": 21.45,
-   "d": 0.5,
-   "in": 4.0,
+   "t": 19.81,
+   "d": 4.12,
+   "in": 9.0,
    "focus": 0.5,
    "grade": "night",
-   "what": "TRACKING: blurred phone, location rings over it",
-   "extra": "gblur=sigma=32",
-   "cut": true
+   "what": "the phone again: codes arriving",
+   "extra": "gblur=sigma=14,eq=brightness=0.04:gamma=1.15"
   },
   {
-   "id": "sh18",
-   "src": "11792115",
-   "t": 21.95,
-   "d": 0.88,
-   "in": 4.0,
+   "id": "s06",
+   "src": "7062988",
+   "t": 23.93,
+   "d": 3.79,
+   "in": 2.0,
    "focus": 0.5,
-   "grade": "dark",
-   "cut": true,
-   "what": "STALKING: a figure walking away in fog, filmed from behind"
+   "grade": "night",
+   "what": "at the desk, papers"
   },
   {
-   "id": "sh19",
-   "src": "13643105",
-   "t": 22.83,
-   "d": 2.6,
-   "in": 1.0,
-   "focus": 0.5,
-   "grade": "dark",
-   "cut": true,
-   "what": "ENGINEERED ACCIDENTS: headlights coming straight at the camera, wet night road",
-   "extra": "crop=iw:ih*0.84:0:ih*0.16,scale=-2:1160,crop=1080:1160"
-  },
-  {
-   "id": "sh20",
+   "id": "s07",
    "src": "16538871",
-   "t": 25.43,
-   "d": 1.95,
+   "t": 27.72,
+   "d": 1.97,
    "in": 3.0,
    "focus": 0.5,
    "grade": "dark",
-   "what": "a lone figure on a rainy street at night"
+   "what": "a lone figure on a rainy street at night",
+   "cut": true
   },
   {
-   "id": "sh09",
-   "src": "12377242",
-   "t": 27.38,
-   "d": 1.62,
-   "in": 1.0,
-   "focus": 0.38,
+   "id": "s08",
+   "src": "9531459",
+   "t": 29.69,
+   "d": 1.72,
+   "in": 6.0,
+   "focus": 0.55,
    "grade": "dark",
-   "what": "face in darkness"
+   "what": "a man watching from a parked car",
+   "cut": true
   },
   {
-   "id": "sh10",
+   "id": "s09",
+   "src": "11792115",
+   "t": 31.41,
+   "d": 2.9,
+   "in": 4.0,
+   "focus": 0.5,
+   "grade": "dark",
+   "what": "a figure in the fog",
+   "cut": true
+  },
+  {
+   "id": "s10",
+   "src": "13891268",
+   "t": 34.31,
+   "d": 1.95,
+   "in": 2.0,
+   "focus": 0.45,
+   "grade": "dark",
+   "what": "a tyre in the rain",
+   "cut": true
+  },
+  {
+   "id": "s11",
+   "src": "14514406",
+   "t": 36.26,
+   "d": 2.37,
+   "in": 3.0,
+   "focus": 0.4,
+   "grade": "dark",
+   "what": "a damaged wheel being changed",
+   "cut": true
+  },
+  {
+   "id": "s12",
+   "src": "7062984",
+   "t": 38.63,
+   "d": 3.76,
+   "in": 2.0,
+   "focus": 0.55,
+   "grade": "night",
+   "what": "filing papers into a box"
+  },
+  {
+   "id": "s13",
+   "src": "7062990",
+   "t": 42.39,
+   "d": 1.86,
+   "in": 1.5,
+   "focus": 0.6,
+   "grade": "night",
+   "what": "writing in the dark"
+  },
+  {
+   "id": "s14",
    "src": "7062986",
-   "t": 29.0,
-   "d": 3.4,
+   "t": 44.25,
+   "d": 2.06,
    "in": 1.0,
    "focus": 0.62,
-   "grade": "night",
+   "grade": "turn",
    "what": "hand to the head, thinking"
   },
   {
-   "id": "sh11",
-   "src": "7062996",
-   "t": 32.4,
-   "d": 3.6,
-   "in": 2.0,
-   "focus": 0.45,
-   "grade": "night",
-   "what": "standing, stepping back from the desk"
-  },
-  {
-   "id": "sh12",
+   "id": "s15",
    "src": "7062993",
-   "t": 36.0,
-   "d": 5.0,
+   "t": 46.31,
+   "d": 3.48,
    "in": 2.0,
    "focus": 0.62,
    "grade": "turn",
    "what": "stillness, hand on chin"
-  },
-  {
-   "id": "sh13",
-   "src": "7062985",
-   "t": 41.0,
-   "d": 3.0,
-   "in": 2.0,
-   "focus": 0.6,
-   "grade": "warm",
-   "what": "back to writing"
-  },
-  {
-   "id": "sh14",
-   "src": "7062989",
-   "t": 44.0,
-   "d": 2.2,
-   "in": 3.0,
-   "focus": 0.5,
-   "grade": "warm",
-   "what": "under the lamp, working"
-  },
-  {
-   "id": "sh15",
-   "src": "8939334",
-   "t": 46.2,
-   "d": 2.4,
-   "in": 1.0,
-   "focus": 0.45,
-   "grade": "warm",
-   "what": "opening the laptop, morning light"
-  },
-  {
-   "id": "sh16",
-   "src": "7066743",
-   "t": 48.6,
-   "d": 2.6,
-   "in": 1.0,
-   "focus": 0.5,
-   "grade": "dawn",
-   "what": "city at sunrise, moving forward"
-  },
-  {
-   "id": "sh17",
-   "src": "12976938",
-   "t": 51.2,
-   "d": 3.4,
-   "in": 0.0,
-   "focus": 0.5,
-   "grade": "dawn",
-   "what": "sunrise over the city, under the closing lines"
   }
  ],
- "overlays": [
-  {
-   "id": "glx",
-   "src": "8478590",
-   "t": 20.7,
-   "d": 0.75,
-   "in": 1.0,
-   "focus": 0.5,
-   "grade": "none"
-  }
- ]
+ "overlays": []
 }
