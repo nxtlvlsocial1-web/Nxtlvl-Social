@@ -196,8 +196,9 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fdf1f
 /* s6 gauge */
 .gauge { position: absolute; left: 240px; top: 690px; width: 600px; height: 520px; }
 .gauge svg { width: 600px; height: 340px; }
-.gauge b { position: absolute; left: 0; right: 0; top: 350px; text-align: center; font: 800 130px/1 Inter; color: #1a1020; letter-spacing: -.04em; }
-.gauge small { position: absolute; left: 380px; top: 420px; font: 700 40px Inter; color: #9a8a96; }
+.gnw { position: absolute; left: 0; right: 0; top: 345px; display: flex; justify-content: center; align-items: baseline; gap: 14px; }
+.gnw b { font: 800 130px/1 Inter; color: #1a1020; letter-spacing: -.03em; }
+.gnw small { font: 700 46px Inter; color: #9a8a96; }
 .chips { position: absolute; left: 60px; right: 60px; top: 1230px; display: flex; justify-content: center; gap: 16px; }
 .chips span { padding: 14px 22px; border-radius: 30px; background: #fff; font: 800 36px Inter; color: #F343A2; box-shadow: 0 10px 24px rgba(80,10,50,.1); opacity: 0; }
 .chips span b { color: #1a1020; margin-right: 10px; }

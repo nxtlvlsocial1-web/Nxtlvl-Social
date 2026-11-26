@@ -164,16 +164,18 @@ for k, tip in enumerate(TIPS):
     a0, a1 = math.radians(k * 60 - 90), math.radians(k * 60 - 30)
     x0, y0, x1, y1 = 300 + 290 * math.cos(a0), 300 + 290 * math.sin(a0), 300 + 290 * math.cos(a1), 300 + 290 * math.sin(a1)
     segs += f'<path d="M300,300 L{x0:.1f},{y0:.1f} A290,290 0 0 1 {x1:.1f},{y1:.1f} Z" fill="{("#d9dae0", "#c6c7cf", "#e6e7ec")[k % 3]}" stroke="#fff" stroke-width="6"/>'
-    am = math.radians(k * 60 - 60)
-    labels += (f'<text x="{300 + 180 * math.cos(am):.1f}" y="{300 + 180 * math.sin(am):.1f}" transform="rotate({k * 60 + 30} {300 + 180 * math.cos(am):.1f} {300 + 180 * math.sin(am):.1f})" '
-               f'text-anchor="middle" dominant-baseline="middle" font-family="Inter" font-weight="800" font-size="30" fill="#4a4a55">{tip}</text>')
+    am = k * 60 - 60                                   # the segment's centre line
+    rot = am + (180 if math.cos(math.radians(am - 90)) < 0 else 0)   # radial text, kept upright where the wheel stops
+    cx, cy = 300 + 172 * math.cos(math.radians(am)), 300 + 172 * math.sin(math.radians(am))
+    labels += (f'<text x="{cx:.1f}" y="{cy:.1f}" transform="rotate({rot} {cx:.1f} {cy:.1f})" text-anchor="middle" dominant-baseline="middle" '
+               f'font-family="Inter" font-weight="800" font-size="28" fill="#4a4a55">{tip}</text>')
 S1 = (f'<div class="scene" id="s1">{GBADGE}<div class="wheelw"><svg id="wheel" viewBox="0 0 600 600">{segs}{labels}<circle cx="300" cy="300" r="46" fill="#fff" stroke="#c6c7cf" stroke-width="6"/></svg>'
       '<i class="pin"></i></div><div class="gtag" id="gtag">A GUESS</div>'
       '<div class="rcard" id="rc1"><div class="thumb"><i></i><b>Your reel</b></div><div class="curt" id="curt"><span>NOT SEEN</span></div></div></div>')
 scene("s1", r1["t"] - .1, "g")
 js('gsap.set("#wheel", {transformOrigin: "50% 50%"});')
-# lands so that "Trending audio" (segment 1, centre at -60 deg + 60) sits under the pin at the top: rotate -> 360*4 - 60
-js(f'tl.fromTo("#wheel", {{rotation: 0}}, {{rotation: {360 * 4 - 60}, duration: {r1["guess"] - r1["t"] + .25:.2f}, ease: "power3.out", immediateRender: false}}, {r1["t"] + .05:.3f});')
+# lands with "Trending audio" (segment 1, centre line at 0 deg) right under the pin at the top: rotate -> 360*4 - 90
+js(f'tl.fromTo("#wheel", {{rotation: 0}}, {{rotation: {360 * 4 - 90}, duration: {r1["guess"] - r1["t"] + .25:.2f}, ease: "power3.out", immediateRender: false}}, {r1["t"] + .05:.3f});')
 for k in range(10):
     sfx("tick", r1["t"] + .05 + k * .07 * (1 + k * .18))
 pop("#gtag", r1["guess"] + .2, .35, "{opacity: 0, scale: .4, rotation: 10}")
@@ -264,7 +266,7 @@ TICKS = "".join(f'<line x1="{300 + 230 * math.cos(math.radians(180 + k * 18)):.1
 S6 = (f'<div class="scene" id="s6">{CBADGE}<div class="gauge"><svg viewBox="0 0 600 340"><path d="M60,300 A240,240 0 0 1 540,300" fill="none" stroke="#f6d9e8" stroke-width="44" stroke-linecap="round"/>'
       '<path id="garc" d="M60,300 A240,240 0 0 1 540,300" fill="none" stroke="#F343A2" stroke-width="44" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>'
       f'{TICKS}<g id="needle"><path d="M300,300 L300,96" stroke="#1a1020" stroke-width="14" stroke-linecap="round"/><circle cx="300" cy="300" r="26" fill="#1a1020"/></g></svg>'
-      '<b id="gnum">0.0</b><small>/ 5</small></div>'
+      '<div class="gnw"><b id="gnum">0.0</b><small>/ 5</small></div></div>'
       '<div class="chips">' + "".join(f'<span id="ch{k}"><b>{n}</b>{v}</span>' for k, (n, v) in enumerate((("Hook", 3), ("Pacing", 4), ("Visuals", 4), ("CTA", 4)))) + '</div>'
       '<div class="fixc small" id="fix3"><small>FIX AT 0:14</small>Show the tool\'s name on screen.</div><div class="postb" id="postb">POST</div></div>')
 scene("s6", c3["t"] - .05, "c")
