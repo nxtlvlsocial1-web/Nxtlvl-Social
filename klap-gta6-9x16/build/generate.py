@@ -73,7 +73,7 @@ def vid(i, src, t0, t1, media=0.0, cls="fill", extra=""):
 
 
 END = max(w["t1"] for w in W)
-DUR = round(END + 1.6, 2)
+DUR = round(END + 2.8, 2)   # the closing line holds ~2.8 s (v4: "too fast")
 T = {}
 T["clips"] = wt("clips"); T["feed"] = wt("feed"); T["clippers"] = wt("clippers"); T["paid"] = wt("paid"); T["views1"] = wt("views")
 T["beast"] = wt(["mrbeast", "mr"]); T["speed"] = wt(["ishowspeed", "ishow", "i"], after=T["beast"] + .2); T["dollar"] = wt("dollar")
@@ -460,7 +460,7 @@ ft("#cpost", T["kw"] + .3, .3, "{color: '#8a8f9c', scale: 1}", f"{{color: '{VIOL
 sfx("pop", T["kw"] + .35)
 ft("#bio", T["bio"] - .25, .45, "{opacity: 0, y: 26}", "{opacity: 1, y: 0}", "expo.out")
 sfx("ding", T["bio"])
-ft("#free", T["bio"] + .5, .5, "{opacity: 0}", "{opacity: 1}", "none")
+ft("#free", T["bio"] + .25, .4, "{opacity: 0}", "{opacity: 1}", "none")
 ft("#brand", T["cuts"] - .1, .5, "{opacity: 0, y: -10}", "{opacity: .85, y: 0}", "expo.out")
 to("#brand", m0, .3, "{opacity: 0}")
 
