@@ -88,7 +88,7 @@ T["cta"] = wt("comment"); T["kw"] = wt(["klap", "clap"], after=T["cta"]); T["bio
 
 # ---- music plan: "Miami" by Lyvo. Full energy under the hook, its breakdown from "the hard part", the kick slams back
 # (track 120.024 s) right after the name "Klap". Two segments on one beat grid (offsets differ by whole beats).
-BEATS = json.load(open(os.path.join(ROOT, "sfx", "music", "beats_miami.json")))
+BEATS = json.load(open(os.path.join(ROOT, "plan", "beats_miami.json")))
 BI = BEATS["beat_interval_s"]
 DROP = 120.024
 o2 = DROP - T["klaphit"]
