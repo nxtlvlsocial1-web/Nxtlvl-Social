@@ -14,7 +14,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.abspath(os.path.join(HERE, '..', 'website'))
 SITE = 'https://nxtlvlsocial.ai'
 EMAIL = 'connect@nxtlvlsocial.ai'
-UPDATED = '2026-11-25'
+UPDATED = '2026-11-26'
 INSTAGRAM = [('Instagram · @ai.nxtlvl', 'https://www.instagram.com/ai.nxtlvl/'), ('Instagram · @nxtlvlledits', 'https://www.instagram.com/nxtlvlledits/')]
 STAR = json.load(open(os.path.join(HERE, 'star.json')))
 e = html.escape
@@ -96,7 +96,8 @@ def header(active):
     <a class="logo" href="/" aria-label="Nxtlvl Social home">{logo_html("lg")}</a>
     <nav class="menu" aria-label="Main">{links}</nav>
     <span class="sp"></span>
-    <a class="btn btn-primary hide-m" href="/contact">Book a free call</a>
+    <a class="btn btn-light hide-m" href="/contact">Contact</a>
+    <a class="btn btn-primary hide-m" href="/contact">Book a call</a>
     <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mob">{icon("menu")}</button>
   </div>
   <div class="mob" id="mob" hidden><nav aria-label="Mobile">{mlinks}<a class="btn btn-primary" href="/contact">Book a free call</a></nav></div>
@@ -120,7 +121,7 @@ def footer():
 def faq_block(items, title='Questions, answered'):
     bands = ''.join(f'<div class="band" data-rise><h3>{e(q)}</h3><div class="a">{"".join(f"<p>{x}</p>" for x in a)}</div></div>' for q, a in items)
     return f'''<section class="faq frame" id="faq" aria-labelledby="faq-h" data-sec><div class="wrapq">
-  <div class="h" data-rise><h2 id="faq-h">{title}</h2><p class="soft">Straight answers about how an AI-driven growth company works. Anything else, just ask.</p><div class="btns"><a class="btn btn-light" href="/contact">Ask us anything</a></div></div>
+  <div class="h" data-rise><img class="faq-mascot" src="/img/pose-think.webp" width="360" height="549" alt="" loading="lazy" decoding="async"><h2 id="faq-h">{title}</h2><p class="soft">Straight answers about how an AI-driven growth company works. Anything else, just ask.</p><div class="btns"><a class="btn btn-light" href="/contact">Ask us anything</a></div></div>
   <div class="list">{bands}</div></div></section>'''
 
 def faq_schema(items):
@@ -144,6 +145,7 @@ def contact_form(heading_id='book-h'):
 
 def close_row(title='Ready to meet your AI growth team?', sub='Book a free 20-minute strategy call. We look at your brand, channels and goals, then send a plan you can keep, whether or not you work with us.'):
     return f'''<section class="sec frame" data-sec aria-labelledby="close-h"><div class="close" data-rise>
+  <img class="close-mascot" src="/img/pose-celebrate.webp" width="360" height="432" alt="" loading="lazy" decoding="async">
   <h2 id="close-h">{title}</h2><p>{sub}</p>
   <form action="/contact" method="get" aria-label="Start with your email"><label class="sr" for="close-email">Work email</label><input id="close-email" name="email" type="email" placeholder="you@company.com" autocomplete="email"><input type="hidden" name="need" value="unsure"><button class="btn btn-primary" type="submit">Book a free call {icon("arrow")}</button></form>
 </div></section>'''
@@ -178,7 +180,7 @@ def page(path, title, desc, body, active='', crumbs=None, extra_schema=(), noind
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc)}">
 {'<meta name="robots" content="noindex">' if noindex else f'<link rel="canonical" href="{url}">'}
-<meta name="theme-color" content="#0A0A0C">
+<meta name="theme-color" content="#0B0618">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Nxtlvl Social">
 <meta property="og:locale" content="en_IN">
@@ -193,7 +195,8 @@ def page(path, title, desc, body, active='', crumbs=None, extra_schema=(), noind
 <link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="preload" href="/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/bricolage-variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/site.css?v={UPDATED}">
 <script type="application/ld+json">{ld}</script>
 </head>
@@ -268,16 +271,26 @@ def home():
             ['Reels and short video editing', 'Product and brand shoots', 'Graphic design', 'Brand identity']),
            ('/website-development', 'globe', 'Websites', 'Fast sites and landing pages that rank and turn visitors into enquiries.',
             ['Websites and landing pages', 'Mobile-first and fast', 'Built for Google and AI search', 'Enquiry and WhatsApp forms'])]
-    SVC_HTML = ''.join(f'<a class="svc-c" href="{u}" data-rise><h3>{t}</h3><p>{d}</p><ul>' + ''.join(f'<li>{x}</li>' for x in li) + f'</ul><span class="more" aria-hidden="true"></span></a>' for u, ic, t, d, li in SVC)
+    SVC_HTML = ''.join(f'<a class="tile svc-c" href="{u}" data-rise><i>{icon(ic)}</i><h3>{t}</h3><p>{d}</p><ul>' + ''.join(f'<li>{x}</li>' for x in li) + f'</ul><span class="more">Explore {t} {icon("arrow")}</span></a>' for u, ic, t, d, li in SVC)
     node = lambda ic, t, s, cls='': f'<div class="node {cls}" data-n><i>{icon(ic)}</i><div><b>{t}</b><small>{s}</small></div></div>'
     body = f'''
 <section class="hero" data-sec aria-labelledby="hero-h">
+  <div class="hero-bg" aria-hidden="true"><canvas class="sky" data-sky></canvas></div>
   <div class="frame hero-in">
-   <h1 id="hero-h" data-rise>Your AI growth team</h1>
    <div class="hero-copy">
-    <p class="lead" data-rise>Nxtlvl Social is an AI marketing and automation agency in India. Our AI agents and experts run your social media, ads, WhatsApp and Instagram automation and creative production, and a person checks every result.</p>
-    <div class="hero-act" data-rise><div class="btns"><a class="btn btn-primary" href="/contact">Book a free strategy call {a}</a><a class="btn btn-light" href="#agents">Meet the agents</a></div>
-    <p class="hero-note"><span>Monthly plans</span><span>No lock-in</span><span>You own everything</span></p></div>
+    <span class="kicker" data-rise><i>{icon("spark")}</i>AI agents plus human experts, on one subscription</span>
+    <h1 id="hero-h" data-rise>Your AI growth <span class="g">team</span></h1>
+    <p class="lead" data-rise>Nxtlvl Social is an AI marketing and automation agency in India. Our agents and experts run your marketing, automation and creative production every day, and a person checks every result.</p>
+    <div class="btns" data-rise><a class="btn btn-primary" href="/contact">Book a free strategy call {a}</a><a class="btn btn-light" href="#agents">Meet the agents</a></div>
+    <p class="hero-note" data-rise><span>Monthly plans</span><span>No lock-in</span><span>You own everything</span></p>
+   </div>
+   <div class="hero-art" data-rise>
+    <div class="orb" aria-hidden="true"></div><div class="ring" aria-hidden="true"></div><div class="ring r2" aria-hidden="true"><i></i></div>
+    <img class="mascot" src="/img/mascot.webp" width="480" height="582" alt="Nextyy, the Nxtlvl Social mascot, waving" fetchpriority="high">
+    <div class="chip c1" aria-hidden="true">{brand("whatsapp")}<div><b>New booking</b><small>Table for 4, 8:00 pm</small></div></div>
+    <div class="chip c2" aria-hidden="true">{brand("meta")}<div><b>+12 leads</b><small>Meta lead ads, today</small></div></div>
+    <div class="chip c3" aria-hidden="true">{brand("instagram")}<div><b>Replied in 4 s</b><small>"Price?" answered</small></div></div>
+    <div class="chip c4" aria-hidden="true"><span class="up">{icon("chart")}</span><div><b>Reach up 31%</b><small>This month</small></div></div>
    </div>
     <div class="console" data-ui data-rise role="img" aria-label="Example Nxtlvl workspace: AI agents drafting hooks, replying to messages, optimising ads and editing reels, with live counters and a WhatsApp booking.">
       <div class="c-top"><span class="dots"><i></i><i></i><i></i></span><b>Example workspace</b><span class="hide-s">· Café Aroma</span><span class="sp"></span><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="live">Agents running</span></div>
@@ -310,19 +323,19 @@ def home():
 
 <section class="frame statement" data-sec aria-label="What Nxtlvl Social does">
   {video_block("v-hero", "Watch: Nextyy and our AI agents answer customers in seconds, run ads, capture every lead and grow our own page to 1.0M views in 30 days.")}
-  <p class="words" data-words>Six AI agents and our experts plan your content, reply to your customers, run your ads, edit your reels and report what worked, while you run the business.</p>
+  <p class="words" data-words>Nxtlvl Social is your AI growth team. Six agents and our experts plan your content, reply to your customers, run your ads, edit your reels and report what worked, while you run the business.</p>
 </section>
 
 <section class="sec frame" id="agents" data-sec aria-labelledby="ag-h">
-  <div class="sec-head center"><h2 id="ag-h" data-rise>Meet your agents</h2>
+  <div class="sec-head center"><span class="kicker" data-rise><i>{icon("bot")}</i>Your AI team</span><h2 id="ag-h" data-rise>Meet your <span class="g">agents</span></h2>
     <p class="soft" data-rise>Six specialist AI agents work on your brand daily. A strategist directs them, and nothing goes live until you approve it.</p></div>
   {agent_app()}
 </section>
 
 <section class="sec frame ink" id="automation" data-sec aria-labelledby="fl-h">
-  <div class="sec-head"><h2 id="fl-h" data-rise>Every enquiry, handled in seconds</h2>
+  <div class="sec-head has-m"><img class="sec-mascot" src="/img/pose-phone.webp" width="360" height="456" alt="" loading="lazy" decoding="async"><span class="kicker" data-rise><i>{icon("bolt")}</i>Automations</span><h2 id="fl-h" data-rise>Every enquiry, handled in <span class="g">seconds</span></h2>
     <p class="soft" data-rise>Messages from Instagram, WhatsApp, your website and ads flow to one agent. It answers, qualifies and books, logs the lead, and hands the important ones to your team.</p></div>
-  <div class="flowbox" data-ui data-flow data-rise>
+  <div class="flowbox" data-flow data-rise>
     <svg class="wires" aria-hidden="true"><defs><linearGradient id="wg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7D18FC"/><stop offset="1" stop-color="#D8BBFF"/></linearGradient></defs></svg>
     <div class="nodes">
       <div class="col c1">{node("b:instagram", "Instagram DM", "Price? Timings?", "br")}{node("b:whatsapp", "WhatsApp", "Booking request", "br")}{node("globe", "Website form", "Quote needed")}{node("b:meta", "Meta lead ad", "New lead", "br")}</div>
@@ -336,17 +349,17 @@ def home():
 </section>
 
 <section class="sec frame" id="industries" data-sec aria-labelledby="ind-h">
-  <div class="sec-head"><h2 id="ind-h" data-rise>AI marketing for every kind of business</h2>
+  <div class="sec-head"><span class="kicker" data-rise><i>{icon("users")}</i>Industries</span><h2 id="ind-h" data-rise>AI marketing for <span class="g">every</span> kind of business</h2>
     <p class="soft" data-rise>The same agents and team, tuned to how your customers buy.</p></div>
   <div class="inds">{INDUSTRIES_HTML}</div>
   <p class="cities" data-rise>We work with brands anywhere in India, including Mumbai, Delhi NCR, Bengaluru, Pune, Hyderabad, Chennai, Kolkata, Ahmedabad, Jaipur, Chandigarh, Lucknow and Indore, and with clients abroad.</p>
 </section>
 
 <section class="sec frame" id="build" data-sec aria-labelledby="plan-h">
-  <div class="sec-head"><h2 id="plan-h" data-rise>Build your month</h2>
+  <div class="sec-head"><span class="kicker" data-rise><i>{icon("calendar")}</i>Try it</span><h2 id="plan-h" data-rise>Build your month</h2>
     <p class="soft" data-rise>Pick your business, goal and channels. This is the plan our agents and team would start you on, and it changes as you do.</p></div>
   <div class="demo" id="planner" data-rise>
-    <div class="plan" data-plan aria-live="polite">
+    <div class="plan" data-ui data-plan aria-live="polite">
       <div class="plan-head"><div><h3>Your month as a café or restaurant</h3><p>Planned for more leads. Your strategist approves every AI draft.</p></div><span class="plan-count">26 deliverables</span></div>
       <div class="groups"><div class="group"><b>Creative Studio</b><ul><li>8 reels with hooks, captions and covers</li><li>6 carousels and posts</li><li>4 story sets</li><li>1 shoot day: food and space shoot</li></ul></div>
         <div class="group"><b>AI Marketing</b><ul><li>Instagram calendar, posting and replies</li><li>Meta lead ads</li><li>Monthly report on more leads</li></ul></div>
@@ -365,38 +378,38 @@ def home():
 </section>
 
 <section class="sec frame" id="services" data-sec aria-labelledby="eng-h">
-  <div class="sec-head"><h2 id="eng-h" data-rise>Marketing, automation, creative and websites</h2>
+  <div class="sec-head has-m"><img class="sec-mascot" src="/img/pose-point.webp" width="360" height="423" alt="" loading="lazy" decoding="async"><span class="kicker" data-rise><i>{icon("layers")}</i>Services</span><h2 id="eng-h" data-rise>Marketing, automation, creative and websites</h2>
     <p class="soft" data-rise>Pick what your brand needs this quarter. Everything shares one plan, one strategist and one monthly report.</p></div>
   <div class="svc">{SVC_HTML}</div>
 </section>
 
 <section class="sec frame" data-sec aria-labelledby="how-h">
-  <div class="sec-head"><h2 id="how-h" data-rise>From the first call to your monthly report</h2></div>
+  <div class="sec-head has-m"><img class="sec-mascot" src="/img/pose-laptop.webp" width="360" height="474" alt="" loading="lazy" decoding="async"><span class="kicker" data-rise><i>{icon("refresh")}</i>How it works</span><h2 id="how-h" data-rise>From the first call to your monthly report</h2></div>
   <div class="steps2" data-rise>
-    <div class="step2"><span class="dot" aria-hidden="true"></span><h3>Discover</h3><p>A free strategy call and an audit of your brand, channels, competitors and goals.</p></div>
-    <div class="step2"><span class="dot" aria-hidden="true"></span><h3>Agents draft</h3><p>Research, calendars, scripts, creatives and automations, drafted in hours.</p></div>
-    <div class="step2"><span class="dot" aria-hidden="true"></span><h3>People finish</h3><p>Strategists, editors and designers finish every piece, and nothing goes out until you approve it.</p></div>
-    <div class="step2"><span class="dot" aria-hidden="true"></span><h3>Report and improve</h3><p>We publish, run the automations and report every month, then adjust the plan from what worked.</p></div>
+    <div class="step2"><span class="dot">{icon("search")}</span><h3>Discover</h3><p>A free strategy call and an audit of your brand, channels, competitors and goals.</p></div>
+    <div class="step2"><span class="dot">{icon("bot")}</span><h3>Agents draft</h3><p>Research, calendars, scripts, creatives and automations, drafted in hours.</p></div>
+    <div class="step2"><span class="dot">{icon("users")}</span><h3>People finish</h3><p>Strategists, editors and designers finish every piece, and nothing goes out until you approve it.</p></div>
+    <div class="step2"><span class="dot">{icon("trend")}</span><h3>It compounds</h3><p>We publish, run the automations and report every month, then adjust the plan from what worked.</p></div>
   </div>
 </section>
 
 <section class="sec frame" data-sec aria-labelledby="proof-h">
-  <div class="sec-head"><h2 id="proof-h" data-rise>We grow our own page first</h2>
+  <div class="sec-head"><span class="kicker" data-rise><i>{icon("trend")}</i>Proof</span><h2 id="proof-h" data-rise>We grow our own page first</h2>
     <p class="soft" data-rise>We test every format, hook and automation on our own Instagram, @ai.nxtlvl, before we use it for a client.</p></div>
   <div class="proof">
     <div class="tile shot" data-rise><img src="/img/ai-nxtlvl-profile.jpg" width="1320" height="1245" alt="The @ai.nxtlvl Instagram profile by Nxtlvl Social: 31 posts, 9,924 followers and 1.0M views in the last 30 days" loading="lazy">
       <p class="over">Screenshot of @ai.nxtlvl. <a href="https://www.instagram.com/ai.nxtlvl/" rel="noopener" target="_blank">See the page</a></p></div>
     <div class="facts">
       <div class="tile bigstat" data-rise><b data-count="9924">9,924</b><span>followers on @ai.nxtlvl</span></div>
-      <div class="tile bigstat" data-rise><b data-count="1000000" data-fmt="m">1.0M</b><span>views in the last 30 days</span></div>
+      <div class="tile pale bigstat" data-rise><b data-count="1000000" data-fmt="m">1.0M</b><span>views in the last 30 days</span></div>
       <div class="tile bigstat" data-rise><b data-count="31">31</b><span>posts to get there</span></div>
     </div>
   </div>
 </section>
 <section class="sec frame" data-sec aria-labelledby="plat-h">
-  <div class="tile platform" data-rise>
-    <div style="display:grid;gap:18px"><h2 id="plat-h">The Nxtlvl growth platform</h2>
-      <p class="soft">Coming next: an AI workspace that turns one line into ideas, scripts and ready-to-post reels, with our team one message away. Subscribers get early access.</p>
+  <div class="tile night platform glowline" data-rise>
+    <div style="display:grid;gap:18px"><span class="kicker"><i>{icon("bolt")}</i>Coming next</span><h2 id="plat-h">The Nxtlvl growth platform</h2>
+      <p class="soft">An AI workspace that turns one line into ideas, scripts and ready-to-post reels, with our team one message away. Subscribers get early access.</p>
       <div class="btns"><a class="btn btn-primary" href="/contact?need=platform">Ask about early access {a}</a></div></div>
     <div class="prompt" data-ui aria-hidden="true"><div class="in-p"><b data-prompt>Make a Diwali offer reel for my café</b><i>{icon("arrow")}</i></div>
       <div class="outs"><div><b>Idea</b>Behind the counter at 6 am, one sweet at a time</div><div><b>Script</b>0:00 hook · 0:04 offer · 0:22 call to action</div><div><b>Reel</b><i></i></div></div></div>
@@ -404,7 +417,7 @@ def home():
 </section>
 
 <section class="sec frame" data-sec aria-labelledby="gd-h">
-  <div class="sec-head"><h2 id="gd-h" data-rise>Learn how AI-driven growth works</h2>
+  <div class="sec-head"><span class="kicker" data-rise><i>{icon("pen")}</i>Guides</span><h2 id="gd-h" data-rise>Learn how AI-driven growth works</h2>
     <p class="soft" data-rise>Practical guides from our team on automation, marketing and AI for Indian businesses.</p></div>
   <div class="guides">{GUIDE_CARDS}</div>
 </section>
@@ -707,11 +720,11 @@ def agent_app():
         chips = ''.join(f'<span class="stp">{SPIN}{x}</span>' for x in steps)
         msgs = (f'<div class="steps" data-m data-steps>{chips}</div>' + ''.join(f'<div class="am" data-m>{m}</div>' for m in first) +
                 f'<div class="um" data-m>{ask}</div><div class="aa-new" data-m><span>New</span></div>' +
-                ''.join(f'<div class="am" data-m>{m}<span class="rcpt"><i aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2l2.3 2.3 4.7-5"/></svg></i>{receipt}</span></div>' for m in reply))
+                ''.join(f'<div class="am" data-m>{m}<span class="rcpt"><i aria-hidden="true">✓</i>{receipt}</span></div>' for m in reply))
         panels.append(f'<div class="aa-panel" role="tabpanel" id="aa-p{i}" aria-labelledby="aa-t{i}"{"" if i == 0 else " hidden"}>'
                       f'<div class="aa-head"><img src="/img/agent-{name.split()[0].lower()}.webp" width="44" height="44" alt=""><div><b>{name}</b><small>{role}</small></div><span class="state">{state}</span></div>'
                       f'<div class="aa-msgs">{msgs}<div class="aa-typing" aria-hidden="true"><span class="think">{name.split()[0]} Agent is thinking</span><i></i><i></i><i></i></div></div></div>')
-    return f'''<div class="agentapp" data-ui data-agentapp data-rise>
+    return f'''<div class="agentapp" data-agentapp data-rise>
     <aside class="aa-side"><div class="aa-pins" aria-hidden="true"><span><img src="/img/pin-nextyy.webp" width="56" height="56" alt=""><small>Nextyy</small></span><span><img src="/img/pin-strategist.webp" width="56" height="56" alt=""><small>Strategist</small></span></div>
       <div class="aa-list" role="tablist" aria-label="Your AI agents">{"".join(tabs)}</div>
       <div class="aa-me"><span>CA</span>Café Aroma · example</div></aside>
