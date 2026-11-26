@@ -1,13 +1,13 @@
 {
- "duration": 42.1,
+ "duration": 42.12,
  "takes": [
   {
    "line": "g1",
    "take": 0,
    "heard": "GTS6 is out and GTA clips are taking over every feed, and clippers are getting paid for views.",
    "errors": 2,
-   "pitch_spread_hz": 117,
-   "dynamics": 0.533,
+   "pitch_spread_hz": 116,
+   "dynamics": 0.525,
    "dur": 7.28
   },
   {
@@ -16,7 +16,7 @@
    "heard": "Mr. Beast and I show speed campaigns, pay around a dollar for every thousand views.",
    "errors": 0,
    "pitch_spread_hz": 118,
-   "dynamics": 0.521,
+   "dynamics": 0.52,
    "dur": 5.6
   },
   {
@@ -25,7 +25,7 @@
    "heard": "But the hard part is finding the moment, a three -hour stream, one crazy chase.",
    "errors": 0,
    "pitch_spread_hz": 114,
-   "dynamics": 0.534,
+   "dynamics": 0.536,
    "dur": 5.38
   },
   {
@@ -34,7 +34,7 @@
    "heard": "This tool finds it for you. It's called Clap.",
    "errors": 0,
    "pitch_spread_hz": 207,
-   "dynamics": 0.587,
+   "dynamics": 0.588,
    "dur": 3.15
   },
   {
@@ -43,7 +43,7 @@
    "heard": "You paste the stream link, it picks the best moments and scores each one for how viral it could go.",
    "errors": 0,
    "pitch_spread_hz": 114,
-   "dynamics": 0.516,
+   "dynamics": 0.514,
    "dur": 5.9
   },
   {
@@ -51,8 +51,8 @@
    "take": 0,
    "heard": "It cuts them vertical, keeps the gameplay and the streamer in frame, and adds captions that pop.",
    "errors": 0,
-   "pitch_spread_hz": 110,
-   "dynamics": 0.497,
+   "pitch_spread_hz": 109,
+   "dynamics": 0.495,
    "dur": 6.12
   },
   {
@@ -60,8 +60,8 @@
    "take": 0,
    "heard": "So while other clippers are still scrubbing our two, your clip is already up.",
    "errors": 1,
-   "pitch_spread_hz": 125,
-   "dynamics": 0.501,
+   "pitch_spread_hz": 119,
+   "dynamics": 0.513,
    "dur": 4.7
   },
   {

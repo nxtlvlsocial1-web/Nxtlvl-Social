@@ -87,7 +87,8 @@ def main():
             path = os.path.join(TAKES, f"{ln['id']}_t{k}.wav")
             if not os.path.exists(path):
                 continue
-            segs, _ = wm.transcribe(path, word_timestamps=True, language="en", beam_size=5, vad_filter=False)
+            # the audio goes in as samples (librosa), so Whisper never touches PyAV (its versions drift)
+            segs, _ = wm.transcribe(librosa.load(path, sr=16000, mono=True)[0], word_timestamps=True, language="en", beam_size=5, vad_filter=False)
             ws = [w for s in segs for w in s.words]
             hyp = " ".join(w.word.strip() for w in ws)
             y, sr = librosa.load(path, sr=SR, mono=True)
