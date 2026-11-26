@@ -1,0 +1,126 @@
+<template>
+  <style>
+    @font-face { font-family: "Inter"; src: url("assets/fonts/inter-variable.woff2") format("woff2"); font-weight: 100 900; }
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-400.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "Serif Italic"; src: url("assets/fonts/instrument-serif-italic-400.woff2") format("woff2"); }
+    #root { position: absolute; inset: 0; overflow: hidden; background: #0C0F14; }
+    #g-glow { position: absolute; left: -200px; top: 1000px; width: 1480px; height: 1100px; border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(125,24,252,.35), rgba(125,24,252,0)); opacity: 0; }
+    /* the camera, the beat pulse, then the screenshot at 1080 wide (1320 x 1245 source, scale 0.81818) */
+    #g-cam { position: absolute; left: 0; top: 470px; width: 1080px; height: 1019px; }
+    #g-pulse { position: absolute; inset: 0; }
+    #g-pf { position: absolute; left: 0; top: 0; width: 1320px; height: 1245px; transform: scale(0.818182); transform-origin: 0 0;
+      background: url("assets/img/profile.jpg") 0 0 / 1320px 1245px no-repeat; }
+    .cover { position: absolute; }
+    .num { position: absolute; font-family: "Inter", sans-serif; font-weight: 700; font-size: 54px; line-height: 1; letter-spacing: -.012em;
+      color: #FFFFFF; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    #g-views { position: absolute; left: 141px; top: 1149px; font-family: "Inter", sans-serif; font-weight: 400; font-size: 41px; line-height: 1;
+      letter-spacing: -.008em; color: #A6AAB3; white-space: nowrap; }
+    #g-views b { font-weight: 400; color: #A6AAB3; }
+    /* the profile picture, redrawn without the tooltip */
+    #g-ring { position: absolute; left: 29px; top: 223px; width: 296px; height: 296px; border-radius: 50%; border: 7px solid #3B3F47; }
+    #g-av { position: absolute; left: 49px; top: 243px; width: 256px; height: 256px; border-radius: 50%; overflow: hidden;
+      background: radial-gradient(150px 150px at 20% 15%, rgba(126,26,246,.9), rgba(126,26,246,0)), radial-gradient(160px 160px at 85% 95%, rgba(94,6,242,.8), rgba(94,6,242,0)), #05030C; }
+    #g-av img { position: absolute; left: 43px; top: 117px; width: 172px; }
+    #g-avstar { position: absolute; left: 254px; top: 334px; width: 28px; height: 28px; overflow: visible; }
+    #g-plus { position: absolute; left: 235px; top: 429px; width: 76px; height: 76px; border-radius: 50%; background: #FFFFFF; border: 6px solid #0C0F14; }
+    #g-plus i { position: absolute; left: 50%; top: 50%; background: #0C0F14; border-radius: 2px; }
+    /* the hook above the profile */
+    #g-hook { position: absolute; left: 0; right: 0; top: 214px; text-align: center; white-space: nowrap; }
+    .h1 { font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 115%; font-size: 104px; line-height: 1; letter-spacing: -.04em; color: #FFFFFF; }
+    .h1 em { font-family: "Serif Italic", serif; font-style: normal; font-weight: 400; letter-spacing: 0;
+      background: linear-gradient(95deg, #FFFFFF, #D8BBFF 40%, #A95CFF); -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: .08em; }
+    #g-h2 { position: absolute; left: 0; right: 0; top: 214px; text-align: center; white-space: nowrap; opacity: 0; }
+    #g-pill { position: absolute; left: 540px; top: 352px; height: 72px; padding: 0 30px; border-radius: 36px; display: flex; align-items: center; gap: 10px;
+      background: rgba(59,227,143,.14); border: 2px solid rgba(59,227,143,.75); color: #3BE38F; font-family: "Inter", sans-serif; font-weight: 700; font-size: 34px; white-space: nowrap; opacity: 0; }
+    #g-flash { position: absolute; inset: 0; background: #FFFFFF; }
+    /* the brand first: the Shooting Star lockup, 0 to 1.9 s */
+    #g-intro { position: absolute; inset: 0; }
+    #g-ibg { position: absolute; inset: 0;
+      background: radial-gradient(760px 620px at 0% 0%, rgba(126,26,246,.7), rgba(126,26,246,0)), radial-gradient(760px 620px at 100% 100%, rgba(94,6,242,.6), rgba(94,6,242,0)), #05030C; }
+    #g-lock { position: absolute; inset: 0; }
+    #g-star { position: absolute; left: 380px; top: 560px; width: 320px; height: 320px; }
+    #g-word { position: absolute; left: 211px; top: 930px; width: 440px; height: 101px; clip-path: inset(0 100% 0 0); }
+    #g-social { position: absolute; left: 669px; top: 948px; font-family: "Instrument Sans", sans-serif; font-weight: 400; font-size: 82px; line-height: 1; color: #D8BBFF; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="growth" data-width="1080" data-height="1920" data-duration="13">
+    <div id="g-wrap" class="clip" data-start="0" data-duration="13" data-track-index="0" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <div id="g-glow"></div>
+      <div id="g-cam" data-layout-allow-overflow>
+        <div id="g-pulse" data-layout-allow-overflow>
+          <div id="g-pf" data-layout-allow-overflow>
+            <!-- cover the numbers that move, and the tooltip over the profile picture -->
+            <div class="cover" style="left:360px;top:320px;width:210px;height:64px;background:#0C0F14"></div>
+            <div class="cover" style="left:620px;top:320px;width:280px;height:66px;background:#0C0F14"></div>
+            <div class="cover" style="left:136px;top:1144px;width:640px;height:54px;background:#2B3036"></div>
+            <div class="cover" style="left:14px;top:160px;width:332px;height:372px;background:#0C0F14"></div>
+            <div id="g-ring"></div>
+            <div id="g-av"><img src="assets/img/nxtlvl-wordmark.png" alt=""></div>
+            <svg id="g-avstar" viewBox="-1 -1 2 2"><path d="M0-1C.06-.34.34-.06 1 0 .34.06.06.34 0 1-.06.34-.34.06-1 0-.34-.06-.06-.34 0-1Z" fill="#8B3DFF"/></svg>
+            <div id="g-plus"><i style="width:30px;height:6px;margin:-3px 0 0 -15px"></i><i style="width:6px;height:30px;margin:-15px 0 0 -3px"></i></div>
+            <div id="g-posts" class="num" style="left:373px;top:321px">0</div>
+            <div id="g-fol" class="num" style="left:632px;top:321px">0</div>
+            <div id="g-views"><b id="g-vn">0</b> views in the last 30 days.</div>
+          </div>
+        </div>
+      </div>
+      <div id="g-hook" class="h1">From <em>zero.</em></div>
+      <div id="g-h2" class="h1">To <em>10K.</em></div>
+      <div id="g-pill">↗ 1M views</div>
+      <div id="g-flash" class="clip" data-start="11.66" data-duration="0.4" data-track-index="1"></div>
+      <div id="g-intro" class="clip" data-start="0" data-duration="2.0" data-track-index="2" data-layout-allow-overflow>
+        <div id="g-ibg"></div>
+        <div id="g-lock" data-layout-allow-overflow>
+          <img id="g-star" src="assets/logo/shooting-star.svg" alt="">
+          <img id="g-word" src="assets/img/nxtlvl-wordmark.png" alt="nxtlvl">
+          <div id="g-social">social</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var T0 = 1.91, TICK = 0.2222;                         // counting starts on the hit at 1.91 s (after the logo); hats every 0.222 s
+      var NF = 45, NV = 49;                                  // tick NF lands at 11.69 s (the hit), tick NV at 12.58 s
+      function grow(i, n, a) { if (i >= n) return 1; return (Math.exp(a * i / n) - 1) / (Math.exp(a) - 1); }
+      function fmtViews(v) {
+        if (v >= 1000000) return "1.0M";
+        if (v >= 10000) return (Math.floor(v / 100) / 10).toFixed(1) + "K";
+        return v.toLocaleString("en-US");
+      }
+      var elP = document.querySelector("#g-posts"), elF = document.querySelector("#g-fol"), elV = document.querySelector("#g-vn");
+      function render(t) {
+        var i = t < T0 ? 0 : Math.floor((t - T0) / TICK) + 1;
+        var f = i === NF - 1 ? 9924 : Math.round(10000 * grow(i, NF, 3.2));      // the screenshot's 9,924, then 10K on the hit
+        elF.textContent = f >= 10000 ? "10K" : f.toLocaleString("en-US");
+        elP.textContent = String(i >= NF ? 31 : Math.floor(31 * Math.pow(Math.min(i / NF, 1), 1.1)));
+        elV.textContent = fmtViews(Math.round(1000000 * grow(i, NV, 4.2)));
+      }
+
+      var tl = gsap.timeline({ paused: true });
+      var clock = { t: 0 };
+      tl.fromTo(clock, { t: 0 }, { t: 13, duration: 13, ease: "none", onUpdate: function () { render(clock.t); } }, 0);
+      // a slow push in while it climbs
+      tl.fromTo("#g-cam", { scale: 1, transformOrigin: "50% 40%" }, { scale: 1.045, duration: 9.79, ease: "power1.in" }, 1.91);
+      tl.fromTo("#g-glow", { opacity: 0 }, { opacity: 1, duration: 11.5, ease: "power2.in" }, 0.2);
+      // 11.70: followers land: flash, the hook flips to "To 10K."
+      // the brand first: the star streaks in on the first hit, the wordmark wipes on, then it clears into the profile on the hit at 1.91 s
+      tl.fromTo("#g-star", { x: -700, y: 700, scale: 0.35, filter: "blur(14px)" }, { x: 0, y: 0, scale: 1, filter: "blur(0px)", duration: 0.55, ease: "expo.out" }, 0.13);
+      tl.to("#g-word", { clipPath: "inset(0 0% 0 0)", duration: 0.45, ease: "power3.inOut" }, 0.5);
+      tl.fromTo("#g-social", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.85);
+      tl.to("#g-lock", { scale: 1.04, duration: 0.67, ease: "sine.inOut" }, 0.95);
+      tl.to("#g-lock", { scale: 0.6, y: -560, opacity: 0, duration: 0.28, ease: "power3.in" }, 1.62);
+      tl.to("#g-ibg", { opacity: 0, duration: 0.21, ease: "power2.in" }, 1.70);
+      tl.fromTo("#g-hook", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.3, ease: "expo.out" }, 1.95);
+      tl.fromTo("#g-flash", { opacity: 0.55 }, { opacity: 0, duration: 0.38, ease: "power2.out" }, 11.66);
+      tl.to("#g-hook", { opacity: 0, y: -30, duration: 0.12, ease: "power2.in", immediateRender: false }, 11.6);
+      tl.fromTo("#g-h2", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "expo.out" }, 11.7);
+      // 12.59: a million views
+      tl.fromTo("#g-pill", { opacity: 0, xPercent: -50, scale: 0.6, y: 20 }, { opacity: 1, xPercent: -50, scale: 1, y: 0, duration: 0.3, ease: "back.out(2.2)" }, 12.59);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["growth"] = tl;
+    })();
+  </script>
+</template>

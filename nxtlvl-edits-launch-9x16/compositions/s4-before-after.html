@@ -1,0 +1,58 @@
+<template>
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #b-card { position: absolute; left: 280px; top: 236px; width: 520px; height: 924px; clip-path: inset(0px 0px 0px 0px round 40px); background: #05030C; }
+    #b-glow { position: absolute; left: 260px; top: 216px; width: 560px; height: 964px; border-radius: 56px;
+      box-shadow: 0 0 0 2px rgba(216,187,255,.5), 0 0 60px rgba(169,92,255,.55), 0 40px 90px rgba(0,0,0,.6); }
+    .b-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    #b-editwrap { position: absolute; inset: 0; clip-path: inset(0 100% 0 0); }
+    #b-pearl { position: absolute; inset: 0; opacity: 0;
+      background: linear-gradient(45deg, #C9AEFF 0%, #FFFFFF 28%, #E4D3FF 50%, #FFFFFF 68%, #B794F6 100%); }
+    #b-div { position: absolute; left: 280px; top: 216px; width: 8px; height: 964px; margin-left: -4px; border-radius: 4px; background: #FFFFFF;
+      box-shadow: 0 0 24px #A95CFF, 0 0 60px #7D18FC; opacity: 0; }
+    .b-chip { position: absolute; top: 270px; height: 58px; padding: 0 22px; border-radius: 29px; display: flex; align-items: center;
+      font-family: "Archivo", sans-serif; font-weight: 800; font-stretch: 112%; font-size: 28px; letter-spacing: .06em; }
+    #b-raw { left: 310px; background: rgba(5,3,12,.75); color: rgba(245,242,255,.85); border: 2px solid rgba(245,242,255,.3); }
+    #b-edit { left: 310px; background: #F5F2FF; color: #05030C; opacity: 0; box-shadow: 0 10px 30px rgba(125,24,252,.5); }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="s4-before-after" data-width="1080" data-height="1920" data-duration="5.75">
+    <div id="b-wrap" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <div id="b-glow"></div>
+      <div id="b-card">
+        <video id="b-rawv" class="b-vid clip" src="assets/video/raw.mp4" muted playsinline data-start="0" data-duration="3.6" data-track-index="1"></video>
+        <div id="b-editwrap">
+          <video id="b-editv" class="b-vid clip" src="assets/video/edit.mp4" muted playsinline data-start="1.9" data-duration="3.85" data-track-index="2"></video>
+        </div>
+        <div id="b-pearl"></div>
+      </div>
+      <div id="b-div"></div>
+      <div id="b-raw" class="b-chip">RAW</div>
+      <div id="b-edit" class="b-chip">✦ NXTLVL EDIT</div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      // the raw take swings up into frame
+      tl.fromTo(["#b-card", "#b-glow"], { y: 700, scale: 0.8 }, { y: 0, scale: 1, duration: 0.45, ease: "expo.out" }, 0);
+      tl.fromTo("#b-raw", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.25, ease: "power3.out" }, 0.3);
+      // "Next level reels out.": the edit wipes across the raw
+      tl.fromTo("#b-div", { opacity: 0, x: 0 }, { opacity: 1, x: 0, duration: 0.02 }, 1.98);
+      tl.to("#b-div", { x: 520, duration: 0.5, ease: "power2.inOut" }, 2.0);
+      tl.to("#b-div", { opacity: 0, duration: 0.15 }, 2.5);
+      tl.to("#b-editwrap", { clipPath: "inset(0 0% 0 0)", duration: 0.5, ease: "power2.inOut" }, 2.0);
+      tl.to("#b-raw", { opacity: 0, duration: 0.15 }, 2.05);
+      tl.fromTo("#b-edit", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 2.25);
+      tl.fromTo(["#b-card", "#b-glow"], { scale: 1 }, { scale: 1.04, duration: 0.25, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 2.1);
+      // the card closes into a pearl disc: the logo is next
+      tl.to("#b-edit", { opacity: 0, duration: 0.15 }, 4.75);
+      tl.to("#b-glow", { opacity: 0, duration: 0.25 }, 4.8);
+      tl.to("#b-card", { clipPath: "inset(252px 50px 252px 50px round 210px)", duration: 0.6, ease: "power3.inOut" }, 4.85);
+      tl.to("#b-pearl", { opacity: 1, duration: 0.4, ease: "power2.in" }, 5.05);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["s4-before-after"] = tl;
+    })();
+  </script>
+</template>

@@ -79,7 +79,8 @@ deploy again. The Worker answers `www` with a permanent redirect to `nxtlvlsocia
 
 - [ ] `https://nxtlvlsocial.ai` loads, and the padlock shows.
 - [ ] `https://www.nxtlvlsocial.ai` redirects to it.
-- [ ] `/social-media-design`, `/reel-editing` and `/social-media-automation` load.
+- [ ] `/ai-marketing`, `/ai-automation`, `/creative-studio`, `/website-development`, `/about` and `/contact` load.
+- [ ] An old address like `/reel-editing` redirects to its new page.
 - [ ] A made-up address like `/abc` shows the "page not found" page.
 - [ ] `https://nxtlvlsocial.ai/api/health` shows `{"ok":true}`.
 - [ ] Sending the booking form delivers an email to connect@nxtlvlsocial.ai, and a confirmation to the sender.
@@ -93,6 +94,21 @@ deploy again. The Worker answers `www` with a permanent redirect to `nxtlvlsocia
 2. **Bing Webmaster Tools** (bing.com/webmasters): sign in and **import from Google Search Console**. Bing also feeds
    ChatGPT search and Copilot answers.
 3. Check the structured data at **search.google.com/test/rich-results** and **validator.schema.org**.
+
+## 8. Visitor stats (Cloudflare Web Analytics)
+
+Free, no cookies, so no cookie banner is needed. The deploy adds the tracking snippet to every page when the
+`CF_WEB_ANALYTICS_TOKEN` secret exists (`backend/scripts/add-web-analytics.mjs`).
+
+1. In Cloudflare: **Analytics & Logs → Web Analytics → Add a site**, enter `nxtlvlsocial.ai`, and choose the
+   **manual (JS snippet)** option, not automatic, so visits are not counted twice.
+2. The snippet contains `"token": "…"`: copy the 32-character code between the quotes.
+3. In GitHub: **Settings → Secrets and variables → Actions → New repository secret**, name `CF_WEB_ANALYTICS_TOKEN`,
+   paste the code.
+4. Deploy: merge any change into `main`, or **Actions → Deploy to Cloudflare → Run workflow**.
+
+Visits, top pages, referrers (Instagram, Google), countries and devices then show under **Web Analytics**.
+Raw request counts, bots included, are always under the domain's **Analytics & Logs → Traffic**.
 
 ## Updating the site later
 

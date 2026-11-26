@@ -54,6 +54,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | ------------------------------------------------------- | --------------------------------------------- |
 | Carousel structure, slide-by-slide copy, post captions  | `social`                                      |
 | Website and landing-page copy, headlines, CTAs         | `copywriting`                                 |
+| Remove AI slop from captions, scripts, emails, site copy | `zero-slop`                                 |
 | Content pillars, calendars, what to post and where      | `content-strategy`                            |
 | Designing posters, slides and graphics as PNG / PDF     | `canvas-design`                               |
 | Still images: social graphics, banners, mockups, OG     | `image`                                       |
@@ -75,6 +76,9 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `dockkit`: `dpearson2699/swift-ios-skills`
 - `fal-lip-sync`, `remotion`, `frame-*`, `video-hyperframes`: `nexu-io/open-design`
 - `video-motion-graphics`: `dylantarre/animation-principles`
+- `zero-slop`: `manavmishra/ZeroSlop`, the portable skill only. Install or update it with
+  `npx skills add https://github.com/manavmishra/ZeroSlop/tree/main/skills/zero-slop --agent claude-code -y`; the repo root brings
+  the author's development files (including their own CLAUDE.md). Its scripts are local; never run its remote `deslop` service unasked.
 - fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`,
   `model-routing`): `fal-ai-community/skills`
 
@@ -115,12 +119,14 @@ Our own skills (currently `nxtlvl-social-video`) are ours to edit.
 
 ```
 .claude/skills/       Claude Code skills
-brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-video § 4); brands/nxtlvl/ is our own logo kit
-website/              Our site: index.html, service pages (social-media-design, reel-editing, social-media-automation,
-                      website-development .html, built
-                      from one template with shared pages.css), 404.html, fonts/, vendor/ (GSAP, three.js), icons, og-image.png,
-                      manifest, robots.txt, sitemap.xml, llms.txt, _headers (cache and security headers);
+brands/<client>/      Brand kits: brand.md, logo.svg, fonts/ (see nxtlvl-social-video § 4); brands/nxtlvl/ is our own logo kit,
+                      brands/nxtlvl-edits/ the editing account's logo kit (the N Disc, brand.md) and concepts
+website/              Our site (generated: don't hand-edit the .html): home, service pages (ai-marketing, ai-automation,
+                      creative-studio, website-development), about, contact, 404, site.css, site.js, fonts/, icons,
+                      og-image.png, manifest, robots.txt, sitemap.xml, llms.txt, _headers, _redirects (old URLs);
                       deployed by the Worker in backend/, step by step in DEPLOY.md
+website-src/          Source of the site: build.py holds all page copy and schema; edit there, then
+                      `python3 website-src/build.py`. SEO-GROWTH-PLAN.md is the ranking roadmap
 backend/              Cloudflare Worker: serves website/ and the Book-a-call API (POST /api/book -> connect@nxtlvlsocial.ai
                       via Resend); npm test runs it locally, npm run deploy ships it. See backend/README.md
 nxtlvl-social-audit/  SEO audit of website/index.html: FULL-AUDIT-REPORT.md, ACTION-PLAN.md, PDF, findings/

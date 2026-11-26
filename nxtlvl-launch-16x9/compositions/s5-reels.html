@@ -1,0 +1,57 @@
+<template>
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    @font-face { font-family: "Serif Italic"; src: url("assets/fonts/instrument-serif-italic-400.woff2") format("woff2"); }
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #r-ground { position: absolute; inset: 0; background: radial-gradient(800px 700px at 25% 50%, #2A0E62, #05030C 70%); }
+    #r-vidwrap { position: absolute; left: 252px; top: 162px; width: 400px; height: 711px; border-radius: 40px; overflow: hidden; }
+    #r-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    #r-phone { position: absolute; left: 240px; top: 150px; width: 424px; height: 735px; border-radius: 52px; border: 12px solid #140A2C;
+      box-shadow: 0 0 0 2px rgba(216,187,255,.45), 0 40px 90px rgba(0,0,0,.6), 0 0 80px rgba(125,24,252,.45); }
+    .kick { position: absolute; left: 820px; top: 190px; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 30px; letter-spacing: .3em; color: #A95CFF; white-space: nowrap; }
+    .title { position: absolute; left: 814px; top: 240px; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 112%; font-size: 108px; line-height: 1.02;
+      letter-spacing: -.04em; color: #F5F2FF; white-space: nowrap; }
+    .title em { font-family: "Serif Italic", serif; font-style: normal; font-weight: 400; color: #D8BBFF; letter-spacing: 0; }
+    .price { position: absolute; left: 814px; top: 510px; display: flex; align-items: baseline; gap: 18px; white-space: nowrap; color: #F5F2FF; }
+    .price .f { font-family: "Serif Italic", serif; font-size: 86px; }
+    .price .n { font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 125%; font-size: 260px; line-height: .9; letter-spacing: -.05em;
+      background: linear-gradient(100deg, #FFFFFF, #D8BBFF 45%, #A95CFF 75%, #FFFFFF); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: 10px; }
+    .price .m { font-family: "Serif Italic", serif; font-size: 96px; }
+    #r-tl { position: absolute; left: 820px; top: 840px; width: 840px; height: 54px; border-radius: 14px; background: linear-gradient(90deg, #5E0FC4, #A95CFF); overflow: hidden; }
+    .r-cut { position: absolute; top: 0; width: 10px; height: 54px; margin-left: -5px; background: #05030C; transform-origin: 50% 50%; }
+    #r-head { position: absolute; left: 820px; top: 822px; width: 4px; height: 90px; background: #FFFFFF; box-shadow: 0 0 14px #D8BBFF; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="s5-reels" data-width="1920" data-height="1080" data-duration="2.65">
+    <div id="r-cam" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <div id="r-wrap" class="clip" data-start="0" data-duration="2.65" data-track-index="0" style="position:absolute;inset:0" data-layout-allow-overflow>
+        <div id="r-ground"></div>
+        <div id="r-kick" class="kick">02 — REEL EDITING</div>
+        <div id="r-title" class="title">Every cut, <em>on the beat.</em></div>
+        <div id="r-price" class="price"><span class="f">from</span><span id="r-n" class="n">$15</span><span class="m">/month</span></div>
+        <div id="r-tl"><div id="r-c0" class="r-cut" style="left:240px"></div><div id="r-c1" class="r-cut" style="left:480px"></div><div id="r-c2" class="r-cut" style="left:720px"></div></div>
+        <div id="r-head"></div>
+        <div id="r-phone"></div>
+      </div>
+      <div id="r-vidwrap"><video id="r-vid" class="clip" src="assets/video/edit.mp4" muted playsinline data-start="0" data-duration="2.65" data-track-index="1"></video></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      // in: the whip pan lands from the right
+      tl.fromTo("#r-cam", { x: 1920, filter: "blur(24px)" }, { x: 0, filter: "blur(0px)", duration: 0.22, ease: "power3.out" }, 0);
+      tl.fromTo("#r-kick", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, 0.2);
+      tl.fromTo("#r-title", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 0.25);
+      tl.fromTo("#r-tl", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 0.3);
+      tl.fromTo("#r-head", { x: 0 }, { x: 840, duration: 2.3, ease: "none" }, 0.3);
+      for (var c = 0; c < 3; c++) tl.fromTo("#r-c" + c, { scaleY: 0 }, { scaleY: 1, duration: 0.08, ease: "power3.out" }, 0.7 + c * 0.5);
+      // "From fifteen dollars"
+      tl.fromTo("#r-price", { opacity: 0, scale: 1.3, transformOrigin: "0% 70%" }, { opacity: 1, scale: 1, duration: 0.35, ease: "expo.out" }, 1.15);
+      tl.fromTo("#r-n", { backgroundPosition: "0% 0" }, { backgroundPosition: "100% 0", duration: 1.3, ease: "sine.inOut" }, 1.2);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["s5-reels"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,51 @@
+<template>
+  <style>
+    @font-face { font-family: "Archivo"; src: url("assets/fonts/archivo-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-400.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "Instrument Sans"; src: url("assets/fonts/instrument-sans-600.woff2") format("woff2"); font-weight: 600; }
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #g-ground { position: absolute; inset: 0; background: radial-gradient(900px 600px at 50% 42%, #1D0B45, #05030C 70%); }
+    .g-back { position: absolute; left: -200px; white-space: nowrap; font-family: "Archivo", sans-serif; font-weight: 900; font-stretch: 125%; font-size: 300px;
+      line-height: 1; letter-spacing: -.04em; color: transparent; -webkit-text-stroke: 2px rgba(216,187,255,.1); }
+    #g-eyebrow { position: absolute; left: 0; right: 0; top: 250px; text-align: center; font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 30px;
+      letter-spacing: .5em; color: #A95CFF; }
+    #g-star { position: absolute; left: 380px; top: 330px; width: 260px; height: 260px; }
+    #g-word { position: absolute; left: 660px; top: 405px; width: 600px; height: 137px; clip-path: inset(0 100% 0 0); }
+    #g-social { position: absolute; left: 1290px; top: 436px; font-family: "Instrument Sans", sans-serif; font-weight: 400; font-size: 100px; line-height: 1; color: #D8BBFF; }
+    #g-line { position: absolute; left: 660px; top: 600px; width: 880px; height: 3px; background: linear-gradient(90deg, #A95CFF, rgba(169,92,255,0)); transform-origin: 0 50%; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="s2-logo" data-width="1920" data-height="1080" data-duration="2.3">
+    <div id="g-wrap" class="clip" data-start="0" data-duration="2.3" data-track-index="0" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <div id="g-ground"></div>
+      <div id="g-b0" class="g-back" style="top:20px">NXTLVL NXTLVL NXTLVL</div>
+      <div id="g-b1" class="g-back" style="top:760px">SOCIAL SOCIAL SOCIAL</div>
+      <div id="g-eyebrow">THIS IS</div>
+      <div id="g-lock" style="position:absolute;inset:0" data-layout-allow-overflow>
+        <img id="g-star" src="assets/logo/shooting-star.svg" alt="">
+        <img id="g-word" src="assets/logo/nxtlvl-wordmark.png" alt="nxtlvl">
+        <div id="g-social">social</div>
+        <div id="g-line"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      tl.fromTo("#g-b0", { x: 0 }, { x: -500, duration: 2.3, ease: "none" }, 0);
+      tl.fromTo("#g-b1", { x: -500 }, { x: 0, duration: 2.3, ease: "none" }, 0);
+      tl.fromTo("#g-eyebrow", { opacity: 0, scaleX: 1.6 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: "expo.out" }, 0.15);
+      // the drop: the shooting star streaks in from the bottom left
+      tl.fromTo("#g-star", { x: -1000, y: 700, scale: 0.3, filter: "blur(16px)" }, { x: 0, y: 0, scale: 1, filter: "blur(0px)", duration: 0.5, ease: "expo.out" }, 0);
+      tl.to("#g-word", { clipPath: "inset(0 0% 0 0)", duration: 0.45, ease: "power3.inOut" }, 0.35);
+      tl.fromTo("#g-social", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.7);
+      tl.fromTo("#g-line", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 0.8);
+      tl.to("#g-lock", { scale: 1.04, duration: 0.95, ease: "sine.inOut" }, 1.0);
+      // out: we dive into the star's head and an iris opens to light
+      tl.to("#g-lock", { scale: 9, transformOrigin: "590px 380px", duration: 0.32, ease: "power3.in" }, 1.98);
+      tl.to(["#g-eyebrow", "#g-b0", "#g-b1"], { opacity: 0, duration: 0.2 }, 1.98);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["s2-logo"] = tl;
+    })();
+  </script>
+</template>

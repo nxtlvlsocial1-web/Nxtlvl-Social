@@ -1,0 +1,70 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .x-slice { position: absolute; top: -600px; width: 520px; height: 2300px; transform-origin: 50% 50%; }
+    .x-iris { position: absolute; border-radius: 50%; }
+    .x-blind { position: absolute; top: 0; width: 241px; height: 1080px; background: #05030C; }
+    .x-tile { position: absolute; width: 241px; height: 271px; background: #7D18FC; }
+    .x-flash { position: absolute; inset: 0; background: #FFFFFF; }
+  </style>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <div id="root" data-composition-id="fx" data-width="1920" data-height="1080" data-duration="32">
+    <!-- T1 3.7-4.35: diagonal slices into the drop -->
+    <div id="x-t1" class="clip" data-start="3.7" data-duration="0.65" data-track-index="0" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <div id="x-s0" class="x-slice" style="background:#7D18FC"></div><div id="x-s1" class="x-slice" style="background:#A95CFF"></div>
+      <div id="x-s2" class="x-slice" style="background:#F5F2FF"></div><div id="x-s3" class="x-slice" style="background:#7D18FC"></div>
+      <div id="x-s4" class="x-slice" style="background:#05030C"></div>
+    </div>
+    <!-- T2 6.05-6.36: an iris opens from the star's head -->
+    <div id="x-t2" class="clip" data-start="6.05" data-duration="0.31" data-track-index="1" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <div id="x-iris1" class="x-iris" style="left:-960px;top:-1170px;width:3100px;height:3100px;background:#F5F2FF"></div>
+    </div>
+    <!-- T3 9.2-9.8: venetian blinds -->
+    <div id="x-t3" class="clip" data-start="9.2" data-duration="0.6" data-track-index="2" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <div id="x-b0" class="x-blind" style="left:0px"></div><div id="x-b1" class="x-blind" style="left:240px"></div><div id="x-b2" class="x-blind" style="left:480px"></div>
+      <div id="x-b3" class="x-blind" style="left:720px"></div><div id="x-b4" class="x-blind" style="left:960px"></div><div id="x-b5" class="x-blind" style="left:1200px"></div>
+      <div id="x-b6" class="x-blind" style="left:1440px"></div><div id="x-b7" class="x-blind" style="left:1680px"></div>
+    </div>
+    <!-- T6 19.15-19.75: a tile wipe -->
+    <div id="x-t6" class="clip" data-start="19.15" data-duration="0.6" data-track-index="3" style="position:absolute;inset:0" data-layout-allow-overflow></div>
+    <!-- T7 22.0: the impact flash -->
+    <div id="x-t7" class="clip x-flash" data-start="22.0" data-duration="0.35" data-track-index="4"></div>
+    <!-- T8 24.0-24.35: an iris closes to ink -->
+    <div id="x-t8" class="clip" data-start="24.0" data-duration="0.35" data-track-index="5" style="position:absolute;inset:0" data-layout-allow-overflow>
+      <div id="x-iris2" class="x-iris" style="left:-240px;top:-660px;width:2400px;height:2400px;background:#05030C"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var t6 = document.querySelector("#x-t6"), html = "";
+      for (var r = 0; r < 4; r++) for (var c = 0; c < 8; c++)
+        html += '<div id="x-g' + r + '-' + c + '" class="x-tile" style="left:' + (c * 240) + 'px;top:' + (r * 270) + 'px"></div>';
+      t6.innerHTML = html;
+
+      var tl = gsap.timeline({ paused: true });
+      // T1: five slanted bars sweep across, covering the cut at 4.0
+      for (var i = 0; i < 5; i++) {
+        tl.fromTo("#x-s" + i, { x: -900, rotation: 22 }, { x: 2500, rotation: 22, duration: 0.55, ease: "power2.inOut" }, 3.72 + i * 0.03);
+      }
+      // T2: the iris
+      tl.fromTo("#x-iris1", { scale: 0, transformOrigin: "1550px 1550px" }, { scale: 1, duration: 0.26, ease: "power3.in" }, 6.05);
+      // T3: blinds drop, then lift
+      for (var b = 0; b < 8; b++) {
+        tl.fromTo("#x-b" + b, { scaleY: 0, transformOrigin: "50% 0%" }, { scaleY: 1, duration: 0.22, ease: "power3.in" }, 9.2 + b * 0.025);
+        tl.to("#x-b" + b, { scaleY: 0, transformOrigin: "50% 100%", duration: 0.22, ease: "power3.out" }, 9.52 + b * 0.025);
+      }
+      // T6: tiles grow on a diagonal, then shrink away
+      for (var rr = 0; rr < 4; rr++) for (var cc = 0; cc < 8; cc++) {
+        var d = (rr + cc) * 0.018;
+        tl.fromTo("#x-g" + rr + "-" + cc, { scale: 0 }, { scale: 1.02, duration: 0.16, ease: "power2.in" }, 19.15 + d);
+        tl.to("#x-g" + rr + "-" + cc, { scale: 0, duration: 0.16, ease: "power2.out" }, 19.42 + d);
+      }
+      // T7: impact flash
+      tl.fromTo("#x-t7", { opacity: 0.85 }, { opacity: 0, duration: 0.33, ease: "power2.out" }, 22.0);
+      // T8: iris closes
+      tl.fromTo("#x-iris2", { scale: 0 }, { scale: 1, duration: 0.3, ease: "power3.in" }, 24.0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["fx"] = tl;
+    })();
+  </script>
+</template>
