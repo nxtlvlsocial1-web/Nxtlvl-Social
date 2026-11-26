@@ -57,8 +57,12 @@ def run(cmd):
     return r
 
 
+GAIN = float(os.environ.get("SFX_GAIN", "3.5"))   # v3 (owner: "add sfx"): every effect sits this much louder
+
+
 def prep(kind, name):
     _, peak, md = KINDS[kind]
+    peak = peak + GAIN
     raw, out = os.path.join(WORK, f"{kind}_{name}_raw.wav"), os.path.join(WORK, f"{kind}_{name}.wav")
     fo = min(.12, md / 3)
     run(["ffmpeg", "-y", "-loglevel", "error", "-i", os.path.join(LIB, name + ".mp3"), "-af",

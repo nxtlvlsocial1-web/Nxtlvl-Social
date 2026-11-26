@@ -108,10 +108,11 @@ S["B"] = (S["A"][1], T["beast"] - .3)          # the feed wall, with the payouts
 S["D"] = (S["B"][1], T["hard"] - .25)
 S["E"] = (S["D"][1], T["klaphit"])
 S["G"] = (S["E"][1], T["paste"] - .3)
-S["H"] = (S["G"][1], T["picks"] - .25)
-S["I"] = (S["H"][1], T["cuts"] - .25)
-S["J"] = (S["I"][1], T["so"] - .25)             # reframe, then the captions
-S["J"] = (S["J"][0], T["so"] - .1); S["L"] = (T["so"] - .1, T["cta"] + .35)
+S["H"] = (S["G"][1], T["viral"] - .35)         # Klap's recording: paste the link, then Create shorts -> Generate
+S["I"] = (S["H"][1], T["cuts"] - .25)           # the three moments with virality rings
+S["J"] = (S["I"][1], T["captions"] - .15)       # the reframe into the Gaming layout
+S["K"] = (S["J"][1], T["so"] - .25)             # Klap's recording: the editor, animated captions
+S["K"] = (S["K"][0], T["so"] - .1); S["L"] = (T["so"] - .1, T["cta"] + .35)
 S["M"] = (S["L"][1], DUR)   # the CTA scene lands as "Comment" finishes; its headline rides in with it
 for k, (a, b) in S.items():
     if k != "A":
@@ -120,7 +121,7 @@ for k, (a, b) in S.items():
         st(f"#s{k}", b + .12, "{opacity: 0}")
 
 
-def zoom_in(k, d=.6):
+def zoom_in(k, d=.75):
     a = S[k][0] - .18
     ft(f"#s{k}", a, d, "{scale: .84, opacity: 0, filter: 'blur(10px)'}", "{scale: 1, opacity: 1, filter: 'blur(0px)'}", "expo.out")
     sfx("whoosh", a)
@@ -133,7 +134,7 @@ def zoom_out(k):
 
 def whip_in(k, d=1):
     a = S[k][0] - .18
-    ft(f"#s{k}", a, .55, f"{{x: {1100 * d}, opacity: 1, filter: 'blur(12px)'}}", "{x: 0, opacity: 1, filter: 'blur(0px)'}", "expo.out")
+    ft(f"#s{k}", a, .65, f"{{x: {1100 * d}, opacity: 1, filter: 'blur(12px)'}}", "{x: 0, opacity: 1, filter: 'blur(0px)'}", "expo.out")
     sfx("whoosh_big", a)
 
 
@@ -223,7 +224,11 @@ for i in range(0, len(W), 3):
     HTML.append(f'<div class="cap" id="cp{k}">{spans}</div>')
     ft(f"#cp{k}", chunk[0]["t0"] - .06, .14, "{opacity: 0, y: 10}", "{opacity: 1, y: 0}", "power2.out")
     for j, w in enumerate(chunk):
-        ft(f"#cw{k}_{j}", w["t0"] - .04, .12, "{color: 'rgba(255,255,255,.4)'}", "{color: '#ffffff'}", "none")
+        tw = w["t0"] - .03
+        st(f"#cw{k}_{j}", tw, f"{{color: '#ffffff', backgroundColor: '{VIOLET}'}}")
+        ft(f"#cw{k}_{j}", tw, .32, "{scale: 1.22}", "{scale: 1}", "back.out(2.2)")
+        off = W[i + j + 1]["t0"] - .03 if i + j + 1 < len(W) else w["t1"] + .2
+        st(f"#cw{k}_{j}", max(tw + .08, min(off, w["t1"] + .35)), "{backgroundColor: 'rgba(0,0,0,0)'}")
     to(f"#cp{k}", nxt - .06, .06, "{opacity: 0}", "none")
     k += 1
 
@@ -232,7 +237,7 @@ a0, a1 = S["A"]
 CLIPS = {"h_flip": 1.6, "h_heli": 2.0, "h_cops": 1.9, "h_truck": 2.3, "h_shoot": 1.2}
 SEQ = ["h_flip", "h_heli", "h_cops", "h_truck", "h_shoot"]
 beats_a = [b for b in grid if .45 < b < a1 - .3]
-cuts = [0.0] + beats_a[1::2]
+cuts = [0.0] + beats_a[3::4]
 A_HTML = []
 for j, c in enumerate(cuts):
     c1 = cuts[j + 1] if j + 1 < len(cuts) else a1 + .4
@@ -351,31 +356,23 @@ for i in range(24):
     dx, dy = math.cos(math.radians(ang)) * (420 + (i % 3) * 90), math.sin(math.radians(ang)) * (420 + (i % 3) * 90)
     ft(f"#pt{i}", tk, .9 + (i % 4) * .15, "{opacity: 1, x: 0, y: 0, scale: 1}", f"{{opacity: 0, x: {dx:.0f}, y: {dy:.0f}, scale: .2}}", "power3.out")
 ft("#ktag", tk + .55, .5, "{opacity: 0, y: 24}", "{opacity: 1, y: 0}", "expo.out")
-st("#kglow", tk - .01, "{opacity: 1, scale: .6}"); to("#kglow", tk, 1.4, "{opacity: .55, scale: 1.1}", "power2.out")
 sfx("impact", tk); sfx("whoosh_big", tk + .02); sfx("sparkle", tk + .25)
 zoom_out("G")
 
-# ================= H: paste the stream link, Generate
+# ================= H: Klap's own recording: paste the link, Create shorts, Generate
 zoom_in("H")
 h0 = S["H"][0]
-ft(".app", h0 - .18, .9, "{y: 60, rotateX: 8}", "{y: 0, rotateX: 0}", "expo.out")
-ft("#cursor", h0, .7, "{x: 420, y: 260, opacity: 0}", "{x: 0, y: 0, opacity: 1}", "power3.inOut")
-tpa = T["paste"]
-ft("#kv", tpa - .05, .3, "{opacity: 0, scale: .6, y: 10}", "{opacity: 1, scale: 1, y: 0}", "back.out(2.4)")
-to("#kv", T["link"] + .5, .2, "{opacity: 0}")
-st("#ph", tpa + .04, "{opacity: 0}")
-URL = "twitch.tv/videos/2290158741"
-for i, ch in enumerate(URL):
-    st(f"#u{i}", tpa + .04 + i * .018, "{opacity: 1}")
-sfx("click", tpa); sfx("typing", tpa + .05)
-tg = T["link"] + .45
-ft("#cursor", tg - .35, .35, "{x: 0, y: 0}", "{x: 300, y: 0}", "power2.inOut")
-ft("#gen", tg, .1, "{scale: 1}", "{scale: .92}", "power2.out"); to("#gen", tg + .1, .35, "{scale: 1}", "back.out(3)")
-st("#ripple", tg, "{opacity: .5, scale: .3}"); to("#ripple", tg + .02, .6, "{opacity: 0, scale: 2.2}", "power2.out")
-sfx("click", tg); sfx("pop", tg + .05)
-ft("#prog", tg + .2, .4, "{opacity: 0, y: 16}", "{opacity: 1, y: 0}", "expo.out")
-ft("#progbar", tg + .25, max(.6, S["H"][1] - tg - .2), "{scaleX: 0}", "{scaleX: 1}", "power1.inOut")
-ft("#shim", tg + .25, 1.2, "{x: -400}", "{x: 1000}", "none")
+ft("#winH", h0 - .18, 1.0, "{y: 70, rotateX: 6}", "{y: 0, rotateX: 0}", "expo.out")
+ft("#winH", h0 + .8, T["picks"] - .1 - (h0 + .8), "{scale: 1}", "{scale: 1.06}", "sine.inOut")
+ft("#wl0", h0 + .3, .5, "{opacity: 0, y: 16}", "{opacity: 1, y: 0}", "expo.out")
+sfx("click", h0 + 1.0); sfx("pop", h0 + 1.15)
+tg = T["picks"] - .1
+st("#rp", tg, "{opacity: 0}"); st("#rg", tg, "{opacity: 1}")
+ft("#winH", tg, .5, "{scale: 1.06}", "{scale: 1}", "expo.out")
+ft("#winH", tg + .5, S["H"][1] - tg - .5, "{scale: 1}", "{scale: 1.05}", "sine.inOut")
+to("#wl0", tg - .05, .2, "{opacity: 0, y: -10}", "power2.in")
+ft("#wl1", tg + .2, .5, "{opacity: 0, y: 16}", "{opacity: 1, y: 0}", "expo.out")
+sfx("swish", tg); sfx("click", tg + 2.35); sfx("notify", tg + 2.6)
 zoom_out("H")
 
 # ================= I: best moments, virality rings
@@ -383,19 +380,19 @@ zoom_in("I")
 CIRC = round(2 * math.pi * 40, 1)
 SCORES = (94, 99, 87)
 for i, (dx, rot, dl) in enumerate(((-300, 16, .14), (0, 0, 0), (300, -16, .26))):
-    ft(f"#mc{i}", T["picks"] - .1 + dl, .7, f"{{opacity: 0, y: 220, rotateY: {rot * 2.5}, scale: .8}}", f"{{opacity: 1, y: 0, rotateY: {rot}, scale: 1}}", "back.out(1.3)")
-    sfx("g_pop", T["picks"] - .1 + dl)
+    ft(f"#mc{i}", T["viral"] - .3 + dl, .7, f"{{opacity: 0, y: 220, rotateY: {rot * 2.5}, scale: .8}}", f"{{opacity: 1, y: 0, rotateY: {rot}, scale: 1}}", "back.out(1.3)")
+    sfx("g_pop", T["viral"] - .3 + dl)
 for i in range(3):
-    ts = T["scores"] + i * .14
+    ts = T["viral"] + .1 + i * .14
     ft(f"#vb{i}", ts, .35, "{opacity: 0, scale: .5}", "{opacity: 1, scale: 1}", "back.out(2.4)")
     ft(f"#ring{i}", ts + .05, .9, f"{{attr: {{'stroke-dashoffset': {CIRC}}}}}", f"{{attr: {{'stroke-dashoffset': {CIRC * (1 - SCORES[i] / 100):.1f}}}}}", "power2.out")
     for q in range(6):
         sfx("tick", ts + q * .08)
-ft("#top", T["viral"] - .1, .5, "{opacity: 0, y: 20, scale: .7}", "{opacity: 1, y: 0, scale: 1}", "back.out(2.2)")
-ft("#mc1 .glow", T["viral"] - .1, .6, "{opacity: 0}", "{opacity: 1}")
-ft("#mc1", T["viral"] - .1, .6, "{scale: 1}", "{scale: 1.06}", "back.out(2)")
-ft("#rankpill", T["viral"] + .1, .5, "{opacity: 0, y: 24}", "{opacity: 1, y: 0}", "expo.out")
-sfx("g_levelup", T["viral"])
+ft("#top", T["viral"] + .7, .5, "{opacity: 0, y: 20, scale: .7}", "{opacity: 1, y: 0, scale: 1}", "back.out(2.2)")
+ft("#mc1 .glow", T["viral"] + .7, .6, "{opacity: 0}", "{opacity: 1}")
+ft("#mc1", T["viral"] + .7, .6, "{scale: 1}", "{scale: 1.06}", "back.out(2)")
+ft("#rankpill", T["viral"] + .9, .5, "{opacity: 0, y: 24}", "{opacity: 1, y: 0}", "expo.out")
+sfx("g_levelup", T["viral"] + .7)
 zoom_out("I")
 
 # ================= J: reframe 16:9 -> 9:16 (Gaming layout), then captions that pop
@@ -417,18 +414,17 @@ ft("#lyt", tv + .6, .4, "{opacity: 0, scale: .7}", "{opacity: 1, scale: 1}", "ba
 ft("#lg", T["gameplay"] - .05, .4, "{opacity: 0, x: -30}", "{opacity: 1, x: 0}", "back.out(2)")
 ft("#ls", T["streamer"] - .05, .4, "{opacity: 0, x: -30}", "{opacity: 1, x: 0}", "back.out(2)")
 sfx("pop", T["gameplay"]); sfx("pop", T["streamer"])
-to("#lg, #ls, #lyt", T["captions"] - .25, .2, "{opacity: 0}")
-CAPW = ["NO", "WAY", "HE", "MADE", "THAT"]
-tcap = T["captions"]
-for i, w in enumerate(CAPW):
-    tw = tcap + i * .17
-    ft(f"#kc{i}", tw, .25, "{opacity: 0, scale: 1.9, rotateZ: -6}", "{opacity: 1, scale: 1, rotateZ: 0}", "back.out(2.6)")
-    st(f"#kc{i}", tw, f"{{color: '{VIOLET}'}}"); st(f"#kc{i}", tw + .17, "{color: '#ffffff'}")
-    sfx("g_pop", tw)
-ft("#styles", T["pop"], .5, "{opacity: 0, y: 24}", "{opacity: 1, y: 0}", "expo.out")
-for i in range(3):
-    ft(f"#sty{i}", T["pop"] + .05 + i * .08, .4, "{opacity: 0, scale: .7}", "{opacity: 1, scale: 1}", "back.out(2)")
-whip_out("J")
+zoom_out("J")
+
+# ================= K: Klap's own recording: the editor with its animated captions
+zoom_in("K")
+k0 = S["K"][0]
+ft("#winK", k0 - .18, 1.0, "{y: 70, rotateX: 6}", "{y: 0, rotateX: 0}", "expo.out")
+ft("#winK", k0 + .5, S["K"][1] - k0 - .5, "{scale: 1, transformOrigin: '50% 60%'}", "{scale: 1.12, transformOrigin: '50% 60%'}", "sine.inOut")
+ft("#wl2", T["captions"] + .2, .5, "{opacity: 0, y: 16}", "{opacity: 1, y: 0}", "expo.out")
+for i in range(4):
+    sfx("g_pop", T["captions"] + .1 + i * .22)
+whip_out("K")
 
 # ================= L: they scrub, you post
 whip_in("L")
@@ -465,7 +461,7 @@ sfx("pop", T["kw"] + .35)
 ft("#bio", T["bio"] - .25, .45, "{opacity: 0, y: 26}", "{opacity: 1, y: 0}", "expo.out")
 sfx("ding", T["bio"])
 ft("#free", T["bio"] + .5, .5, "{opacity: 0}", "{opacity: 1}", "none")
-ft("#brand", T["paste"] - .1, .5, "{opacity: 0, y: -10}", "{opacity: .85, y: 0}", "expo.out")
+ft("#brand", T["cuts"] - .1, .5, "{opacity: 0, y: -10}", "{opacity: .85, y: 0}", "expo.out")
 to("#brand", m0, .3, "{opacity: 0}")
 
 # ---- counters (pure functions of time)
@@ -514,8 +510,7 @@ CSS = """
 @font-face { font-family: Mono; font-weight: 700; src: url("assets/fonts/JetBrainsMono-Bold.ttf"); }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: 1080px; height: 1920px; overflow: hidden; background: $INK; }
-#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Pop; font-weight: 600; color: #fff; background: $INK; }
-#bgglow { position: absolute; inset: 0; background: radial-gradient(60% 36% at 20% 12%, rgba(139,92,246,.28), rgba(0,0,0,0) 70%), radial-gradient(60% 36% at 85% 90%, rgba(109,61,240,.22), rgba(0,0,0,0) 70%); }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Pop; font-weight: 600; color: #fff; background: linear-gradient(#0a0c1f, $INK 45%, $INK); }
 #shake { position: absolute; inset: 0; }
 .scn { position: absolute; inset: 0; opacity: 0; transform-origin: 50% 50%; }
 #sA { opacity: 1; transform-origin: 50% 48%; overflow: hidden; }
@@ -532,13 +527,13 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: $INK; 
 .hd.on { opacity: 1; }
 .hd.big { top: 330px; font-size: 124px; letter-spacing: -.025em; }
 .ln { display: flex; justify-content: center; gap: .22em; white-space: nowrap; margin: 6px 0; }
-.w { display: inline-block; opacity: 0; transform-origin: 50% 100%; text-shadow: 0 8px 36px rgba(0,0,0,.75); }
+.w { display: inline-block; opacity: 0; transform-origin: 50% 100%; text-shadow: 0 2px 6px rgba(0,0,0,.55); }
 .hd.on .w { opacity: 1; }
 .pw { position: relative; padding: 0 .16em; margin: 0 -.02em; text-shadow: none; }
-.pw i { position: absolute; inset: .04em 0 -.02em 0; background: $VIOLET; border-radius: 22px; transform: scaleX(0); transform-origin: 0 50%; box-shadow: 0 12px 40px rgba(139,92,246,.4); }
+.pw i { position: absolute; inset: .04em 0 -.02em 0; background: $VIOLET; border-radius: 22px; transform: scaleX(0); transform-origin: 0 50%; }
 .pw b { position: relative; font-weight: 700; }
-.cap { position: absolute; left: 60px; right: 60px; top: 1470px; text-align: center; font-family: Pop; font-weight: 700; font-size: 46px; opacity: 0;
-  color: rgba(255,255,255,.4); text-shadow: 0 3px 16px rgba(0,0,0,.9); }
+.cap { position: absolute; left: 40px; right: 40px; top: 1462px; text-align: center; font-family: Pop; font-weight: 800; font-size: 48px; opacity: 0; color: rgba(255,255,255,.58); text-shadow: 0 2px 6px rgba(0,0,0,.6); }
+.cap span { display: inline-block; padding: 4px 14px; border-radius: 14px; margin: 0 -2px; background: rgba(0,0,0,0); transform-origin: 50% 60%; }
 /* B: the wall */
 #wallw { position: absolute; inset: 0; perspective: 1500px; overflow: hidden; }
 #wall { position: absolute; left: 50%; top: 50%; width: 1200px; height: 2800px; margin: -1400px 0 0 -600px; display: flex; gap: 26px; justify-content: center;
@@ -554,7 +549,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: $INK; 
 #earn { position: absolute; left: 140px; right: 140px; top: 620px; height: 190px; border-radius: 36px; opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
   background: rgba(10,14,32,.72); border: 2px solid rgba(255,255,255,.12); box-shadow: 0 30px 80px rgba(0,0,0,.6); backdrop-filter: blur(14px); }
 #earn .k { font-family: Mono; font-size: 22px; letter-spacing: .18em; color: rgba(255,255,255,.6); }
-#earnN { font-family: Clash; font-weight: 700; font-size: 104px; line-height: 1; color: $GREEN; text-shadow: 0 0 40px rgba(34,197,94,.45); font-variant-numeric: tabular-nums; }
+#earnN { font-family: Clash; font-weight: 700; font-size: 104px; line-height: 1; color: $GREEN; font-variant-numeric: tabular-nums; }
 .pay { position: absolute; left: 140px; right: 140px; height: 132px; border-radius: 30px; opacity: 0; display: flex; align-items: center; gap: 22px; padding: 0 30px;
   background: rgba(255,255,255,.96); color: $INK; box-shadow: 0 26px 60px rgba(0,0,0,.55); }
 #pay0 { top: 850px; } #pay1 { top: 1004px; } #pay2 { top: 1158px; }
@@ -573,7 +568,7 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: $INK; 
 .card .nm { font-family: Clash; font-weight: 700; font-size: 54px; letter-spacing: -.01em; line-height: 1.05; }
 .card .chip { margin-left: auto; font-size: 24px; font-weight: 700; padding: 10px 18px; border-radius: 999px; color: #0f2d1a; background: $GREEN; opacity: 0; white-space: nowrap; }
 #rate { position: absolute; left: 0; right: 0; top: 980px; text-align: center; opacity: 0; }
-#rate b { font-family: Clash; font-weight: 700; font-size: 250px; line-height: .9; letter-spacing: -.02em; text-shadow: 0 0 70px rgba(139,92,246,.35); }
+#rate b { font-family: Clash; font-weight: 700; font-size: 250px; line-height: .9; letter-spacing: -.02em; }
 #rate .per { display: inline-block; font-family: Clash; font-weight: 700; font-size: 86px; color: $VIOLET; margin-left: 18px; opacity: 0; vertical-align: baseline; }
 #vbar { position: absolute; left: 190px; right: 190px; top: 1290px; height: 20px; border-radius: 10px; background: rgba(255,255,255,.14); opacity: 0; }
 #vfill { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(90deg, $VIOLET2, $VIOLET); transform-origin: 0 50%; transform: scaleX(0); }
@@ -586,49 +581,41 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: $INK; 
 .fr { position: relative; width: 360px; height: 203px; border-radius: 16px; overflow: hidden; flex: none; filter: grayscale(1) brightness(.55); background: #111; box-shadow: 0 18px 40px rgba(0,0,0,.6), 0 0 0 2px rgba(255,255,255,.1); }
 .fr img, .fr video { width: 100%; height: 100%; object-fit: cover; display: block; }
 #fr11 { transform-origin: 50% 50%; }
-#spike { position: absolute; left: 50%; width: 10px; height: 60px; margin-left: -5px; border-radius: 5px; background: $RED; box-shadow: 0 0 24px $RED; transform-origin: 50% 0; opacity: 0; }
-#pin { position: absolute; left: 50%; top: 1178px; transform: translateX(-50%); white-space: nowrap; opacity: 0; font-size: 28px; font-weight: 700; padding: 10px 22px; border-radius: 14px; background: $RED; box-shadow: 0 10px 30px rgba(255,59,92,.5); }
+#spike { position: absolute; left: 50%; width: 10px; height: 60px; margin-left: -5px; border-radius: 5px; background: $RED; transform-origin: 50% 0; opacity: 0; }
+#pin { position: absolute; left: 50%; top: 1178px; transform: translateX(-50%); white-space: nowrap; opacity: 0; font-size: 28px; font-weight: 700; padding: 10px 22px; border-radius: 14px; background: $RED; }
 #scrub { position: absolute; left: 60px; width: 960px; top: 1256px; height: 14px; border-radius: 7px; background: rgba(255,255,255,.14); }
 #scrubf { position: absolute; inset: 0; border-radius: 7px; background: linear-gradient(90deg, $VIOLET2, $VIOLET); transform-origin: 0 50%; transform: scaleX(0); }
 #scrubh { position: absolute; left: -16px; top: -9px; width: 32px; height: 32px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 6px rgba(255,255,255,.18); }
 .tl0, #tl3 { position: absolute; top: 1290px; font-family: Mono; font-size: 26px; color: rgba(255,255,255,.7); } .tl0 { left: 60px; } #tl3 { right: 60px; transform-origin: 100% 50%; }
-#scan { position: absolute; left: 50%; top: 620px; width: 12px; height: 720px; margin-left: -6px; opacity: 0; background: linear-gradient(rgba(139,92,246,0), $VIOLET 30%, #fff 50%, $VIOLET 70%, rgba(139,92,246,0)); box-shadow: 0 0 40px $VIOLET; }
+#scan { position: absolute; left: 50%; top: 620px; width: 6px; height: 720px; margin-left: -3px; opacity: 0; background: linear-gradient(rgba(139,92,246,0), $VIOLET 25%, #fff 50%, $VIOLET 75%, rgba(139,92,246,0)); }
 #selsvg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; pointer-events: none; }
-#selbox { fill: none; stroke: $VIOLET; stroke-width: 6; stroke-dasharray: 2600; stroke-dashoffset: 2600; opacity: 0; filter: drop-shadow(0 0 16px rgba(139,92,246,.8)); }
+#selbox { fill: none; stroke: $VIOLET; stroke-width: 6; stroke-dasharray: 2600; stroke-dashoffset: 2600; opacity: 0; }
 #foundTag { position: absolute; left: 50%; top: 1178px; transform: translateX(-50%); opacity: 0; white-space: nowrap; font-size: 26px; font-weight: 700; padding: 10px 22px; border-radius: 999px; background: $VIOLET; }
 /* G: reveal */
-#kglow { position: absolute; left: 50%; top: 50%; width: 900px; height: 900px; margin: -450px 0 0 -450px; border-radius: 50%; opacity: 0; background: radial-gradient(circle, rgba(139,92,246,.5), rgba(139,92,246,0) 65%); }
-.kring { position: absolute; left: 50%; top: 925px; width: 500px; height: 500px; margin: -250px 0 0 -250px; border-radius: 50%; border: 8px solid #fff; opacity: 0; }
+.kring { position: absolute; left: 50%; top: 925px; width: 500px; height: 500px; margin: -250px 0 0 -250px; border-radius: 50%; border: 6px solid rgba(255,255,255,.8); opacity: 0; }
 #klogo { position: absolute; left: 50%; top: 925px; width: 760px; height: 300px; margin: -150px 0 0 -380px; perspective: 900px; }
-#kicon { position: absolute; left: 0; top: 0; height: 300px; opacity: 0; filter: drop-shadow(0 0 40px rgba(255,255,255,.3)); }
+#kicon { position: absolute; left: 0; top: 0; height: 300px; opacity: 0; }
 .kl { position: absolute; left: 330px; top: 46px; width: 430px; height: 198px; opacity: 0; transform-origin: 50% 100%; }
 #ktag { position: absolute; left: 0; right: 0; top: 1130px; text-align: center; font-family: Pop; font-weight: 500; font-size: 44px; color: rgba(255,255,255,.8); opacity: 0; letter-spacing: -.01em; }
 .pt { position: absolute; left: 536px; top: 921px; width: 10px; height: 10px; border-radius: 50%; background: #fff; opacity: 0; }
 .pt:nth-child(3n) { background: $VIOLET; width: 14px; height: 14px; }
-/* H: the app */
-.app { position: absolute; left: 50px; right: 50px; top: 600px; border-radius: 44px; background: #fff; color: $INK; font-family: Pop; font-weight: 500; box-shadow: 0 50px 110px rgba(0,0,0,.65); padding: 36px 46px 46px; transform-origin: 50% 0; }
-.nav { display: flex; align-items: center; gap: 26px; font-size: 25px; color: #475569; } .nav img { height: 48px; } .nav .sp { flex: 1; }
-.app h3 { font-family: Pop; font-weight: 700; font-size: 62px; margin: 36px 0 24px; letter-spacing: -.01em; }
-.inp { position: relative; height: 122px; border-radius: 30px; border: 2px solid #e2e8f0; display: flex; align-items: center; padding: 0 16px 0 30px; box-shadow: 0 16px 44px rgba(15,23,42,.08); font-size: 29px; color: #94a3b8; }
-.inp .ico { width: 40px; height: 40px; flex: none; margin-right: 22px; }
-#ph, #url { position: absolute; left: 92px; top: 50%; transform: translateY(-50%); white-space: nowrap; } #url { color: $INK; font-weight: 600; } #url span { opacity: 0; }
-#gen { position: relative; margin-left: auto; height: 88px; padding: 0 30px; border-radius: 22px; background: $INK; color: #fff; display: flex; align-items: center; gap: 12px; font-size: 30px; font-weight: 600; overflow: visible; }
-#ripple { position: absolute; left: 50%; top: 50%; width: 160px; height: 160px; margin: -80px 0 0 -80px; border-radius: 50%; border: 4px solid $VIOLET; opacity: 0; }
-#kv { position: absolute; right: 250px; top: -70px; font-family: Pop; font-weight: 700; font-size: 26px; padding: 8px 16px; border-radius: 12px; background: $INK; color: #fff; opacity: 0; }
-#cursor { position: absolute; right: 86px; top: 72px; width: 58px; filter: drop-shadow(0 4px 8px rgba(0,0,0,.4)); opacity: 0; }
-.tmpl { display: flex; gap: 18px; margin-top: 30px; }
-.tmpl div { flex: 1; height: 96px; border-radius: 18px; background: linear-gradient(135deg, #1e293b, #312e81); display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Pop; font-weight: 800; font-size: 22px; color: #fff; white-space: nowrap; }
-.tmpl div.sel { box-shadow: 0 0 0 4px $VIOLET; } .tmpl b { color: #fde047; }
-#prog { margin-top: 30px; opacity: 0; } #prog .t { font-size: 27px; color: #475569; margin-bottom: 14px; display: flex; justify-content: space-between; }
-#prog .bar { position: relative; height: 16px; border-radius: 8px; background: #eef2f7; overflow: hidden; }
-#progbar { height: 100%; background: linear-gradient(90deg, $VIOLET2, $VIOLET); transform-origin: 0 50%; }
-#shim { position: absolute; top: 0; bottom: 0; width: 240px; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.55), rgba(255,255,255,0)); }
+/* H, K: Klap's recording in a browser window */
+.win { position: absolute; left: 50px; width: 980px; top: 690px; border-radius: 28px; overflow: hidden; background: #0f172a; box-shadow: 0 40px 100px rgba(0,0,0,.6), 0 0 0 2px rgba(255,255,255,.12); transform-origin: 50% 50%; }
+.win .tb { height: 46px; display: flex; align-items: center; gap: 10px; padding: 0 20px; background: #111a2e; }
+.win .tb i { width: 14px; height: 14px; border-radius: 50%; background: #334155; } .win .tb i:nth-child(1) { background: #ff5f57; } .win .tb i:nth-child(2) { background: #febc2e; } .win .tb i:nth-child(3) { background: #28c840; }
+.win .tb span { margin-left: auto; margin-right: auto; font-family: Pop; font-weight: 500; font-size: 20px; color: #94a3b8; background: #0b1326; padding: 4px 18px; border-radius: 8px; }
+.win .scr { position: relative; width: 980px; height: 463px; overflow: hidden; background: #fff; }
+.win .scr video { position: absolute; left: 0; top: 0; width: 980px; height: 463px; object-fit: cover; }
+.win.tall { top: 614px; } .win.tall .scr, .win.tall .scr video { height: 700px; } .win.tall .scr video { object-fit: fill; }
+.wlab { position: absolute; left: 0; right: 0; top: 1240px; text-align: center; opacity: 0; } #wl2 { top: 1382px; }
+.wlab span { display: inline-flex; align-items: center; gap: 12px; font-size: 28px; font-weight: 600; padding: 12px 26px; border-radius: 999px; background: rgba(255,255,255,.08); border: 2px solid rgba(255,255,255,.18); }
+.wlab b { width: 12px; height: 12px; border-radius: 50%; background: $VIOLET; }
 /* I: moments */
 #moments { position: absolute; left: 0; right: 0; top: 640px; height: 640px; perspective: 1600px; }
 .mc { position: absolute; left: 50%; top: 40px; width: 300px; height: 533px; margin-left: -150px; border-radius: 30px; opacity: 0; transform-style: preserve-3d; }
 .mc .in { position: absolute; inset: 0; border-radius: 30px; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,.6), 0 0 0 3px rgba(255,255,255,.12); }
 #mc0 { margin-left: -480px; } #mc2 { margin-left: 180px; } #mc1 { top: -14px; width: 330px; height: 587px; margin-left: -165px; z-index: 2; }
-.mc .glow { position: absolute; inset: -8px; border-radius: 38px; border: 5px solid $VIOLET; box-shadow: 0 0 50px rgba(139,92,246,.8); opacity: 0; }
+.mc .glow { position: absolute; inset: -8px; border-radius: 38px; border: 5px solid $VIOLET; opacity: 0; }
 .vb { position: absolute; left: 16px; top: 16px; display: flex; align-items: center; gap: 10px; padding: 8px 18px 8px 10px; border-radius: 999px; background: rgba(255,255,255,.96); color: $INK; opacity: 0; box-shadow: 0 8px 24px rgba(0,0,0,.4); }
 .vb svg { width: 60px; height: 60px; transform: rotate(-90deg); } .vb circle { fill: none; stroke-width: 7; } .vb .bg { stroke: #e2e8f0; } .vb .fg { stroke: $VIOLET; stroke-linecap: round; stroke-dasharray: 251.3; stroke-dashoffset: 251.3; }
 .vb b { font-family: Clash; font-weight: 700; font-size: 38px; line-height: 1; } .vb small { font-size: 18px; color: #64748b; font-weight: 600; }
@@ -646,13 +633,9 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: $INK; 
 #phone { position: absolute; left: 315px; top: 600px; width: 450px; height: 800px; border-radius: 44px; overflow: hidden; opacity: 0; background: #000; box-shadow: 0 40px 100px rgba(0,0,0,.7), 0 0 0 10px #0f172a, 0 0 0 12px rgba(255,255,255,.16); }
 #fc2 { position: absolute; left: 0; top: 0; width: 450px; height: 285px; overflow: hidden; opacity: 0; }
 #game2 { position: absolute; left: 0; top: 285px; width: 450px; height: 515px; overflow: hidden; }
-#lyt { position: absolute; left: 50%; top: 262px; transform: translateX(-50%); opacity: 0; white-space: nowrap; font-family: Mono; font-size: 20px; letter-spacing: .14em; padding: 8px 16px; border-radius: 999px; background: $VIOLET; }
+#lyt { position: absolute; left: 50%; top: 262px; transform: translateX(-50%); opacity: 0; white-space: nowrap; font-family: Mono; font-size: 20px; letter-spacing: .14em; padding: 8px 16px; border-radius: 999px; background: $VIOLET2; }
 .lbl2 { position: absolute; font-size: 24px; font-weight: 700; padding: 6px 14px; border-radius: 10px; opacity: 0; white-space: nowrap; }
 #ls { left: 16px; top: 16px; background: #fff; color: $INK; } #lg { left: 16px; bottom: 16px; background: #fff; color: $INK; }
-#kcap { position: absolute; left: 10px; right: 10px; top: 470px; text-align: center; font-family: Pop; font-weight: 800; font-size: 50px; line-height: 1.1; -webkit-text-stroke: 3px #000; paint-order: stroke fill; text-shadow: 0 6px 0 #000; }
-#kcap span { display: inline-block; opacity: 0; margin: 0 7px; }
-#styles { position: absolute; left: 0; right: 0; top: 1330px; display: flex; justify-content: center; gap: 14px; opacity: 0; }
-#styles div { padding: 10px 18px; border-radius: 12px; background: rgba(255,255,255,.1); border: 2px solid rgba(255,255,255,.18); font-family: Pop; font-weight: 800; font-size: 20px; white-space: nowrap; opacity: 0; } #styles b { color: #fde047; }
 /* L: split */
 .half { position: absolute; top: 610px; width: 470px; height: 780px; border-radius: 36px; overflow: hidden; opacity: 0; }
 #jl { left: 50px; background: rgba(255,255,255,.05); border: 2px solid rgba(255,255,255,.12); }
@@ -670,14 +653,14 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: $INK; 
 #jphone { position: absolute; left: 50%; top: 86px; width: 290px; height: 516px; margin-left: -145px; border-radius: 34px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 0 6px #0f172a; }
 #upl { position: absolute; left: 60px; right: 60px; top: 626px; opacity: 0; font-size: 24px; color: rgba(255,255,255,.75); text-align: center; }
 #upl .b { height: 10px; border-radius: 5px; background: rgba(255,255,255,.12); margin-top: 10px; overflow: hidden; } #uplbar { height: 100%; background: $VIOLET; transform-origin: 0 50%; }
-#posted { position: absolute; left: 50%; top: 622px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; white-space: nowrap; opacity: 0; font-size: 30px; font-weight: 700; padding: 10px 22px; border-radius: 999px; background: $GREEN; color: #04210f; box-shadow: 0 10px 30px rgba(34,197,94,.5); }
+#posted { position: absolute; left: 50%; top: 622px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; white-space: nowrap; opacity: 0; font-size: 30px; font-weight: 700; padding: 10px 22px; border-radius: 999px; background: $GREEN; color: #04210f; }
 #pv { position: absolute; left: 0; right: 0; top: 690px; text-align: center; font-family: Clash; font-weight: 700; font-size: 44px; color: #fff; font-variant-numeric: tabular-nums; }
 .ht { position: absolute; left: 336px; top: 560px; width: 44px; height: 44px; opacity: 0; fill: #ff4d79; }
 #live { position: absolute; left: 0; right: 0; top: 1412px; text-align: center; opacity: 0; }
 #live span { font-size: 26px; font-weight: 600; padding: 10px 22px; border-radius: 999px; background: rgba(139,92,246,.14); border: 2px solid $VIOLET; color: #e9d5ff; }
 /* M: CTA */
 #kbgv, #kbgv2 { transform: scale(1.1); }
-#klogo2 { position: absolute; left: 50%; top: 690px; width: 620px; margin-left: -310px; opacity: 0; filter: drop-shadow(0 0 40px rgba(255,255,255,.22)); }
+#klogo2 { position: absolute; left: 50%; top: 690px; width: 620px; margin-left: -310px; opacity: 0; }
 #cbox { position: absolute; left: 110px; right: 110px; top: 1010px; height: 132px; border-radius: 66px; opacity: 0; display: flex; align-items: center; gap: 24px; padding: 0 38px 0 26px; background: rgba(250,250,252,.98); color: $INK; box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 0 3px rgba(139,92,246,.85); }
 #cbox .av { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient($VIOLET, #ff5fa2, #ffa24c, #47e5ff, $VIOLET); flex: none; }
 #cbox .tx { flex: 1; font-family: Clash; font-weight: 700; font-size: 58px; letter-spacing: .04em; display: flex; align-items: center; } #cbox .tx span { opacity: 0; }
@@ -722,17 +705,13 @@ SC = f"""
     <div id="spike" style="top: 1236px"></div><div id="pin">1 crazy chase</div>
     <svg id="selsvg"><rect id="selbox" x="268" y="794" width="544" height="312" rx="22" ry="22"/></svg>
     <div id="foundTag">Moment found · 0:14</div><div id="scan"></div></div>
-  <div class="scn" id="sG"><div id="kglow"></div><div class="kring" id="kring0"></div><div class="kring" id="kring1"></div>
+  <div class="scn" id="sG"><div class="kring" id="kring0"></div><div class="kring" id="kring1"></div>
     {''.join(f'<div class="pt" id="pt{i}"></div>' for i in range(24))}
     <div id="klogo"><img id="kicon" src="assets/img/klap_icon_white.svg" alt="">{''.join(f'<img class="kl" id="kl_{L}" src="assets/img/kl_{L}.svg" alt="">' for L in "Klap")}</div>
     <div id="ktag">Turn videos into viral shorts</div></div>
-  <div class="scn" id="sH"><div class="app">
-    <div class="nav"><img src="assets/img/klap_logo_ink.svg" alt=""><span class="sp"></span><span>Videos</span><span>Calendar</span><span>Analytics</span></div>
-    <h3>Videos</h3>
-    <div class="inp">{UP}<span id="ph">Drop a file or paste a link</span><span id="url">{''.join(f'<span id="u{i}">{c}</span>' for i, c in enumerate(URL))}</span>
-      <div id="gen"><div id="ripple"></div>{SPARK}Generate</div><div id="kv">Ctrl + V</div>{CURSOR}</div>
-    <div class="tmpl"><div class="sel">NO WAY <b>HE</b> DID</div><div>NO <b>WAY</b> HE DID</div><div>No way he did</div></div>
-    <div id="prog"><div class="t"><span>Finding the best moments</span><span>virality score</span></div><div class="bar"><div id="progbar"></div><div id="shim"></div></div></div></div></div>
+  <div class="scn" id="sH"><div class="win" id="winH"><div class="tb"><i></i><i></i><i></i><span>klap.app</span></div>
+    <div class="scr">{vid("rp", "rec_paste", S["H"][0] - .2, T["picks"] + .1, .0, "")}{vid("rg", "rec_gen", T["picks"] - .1, S["H"][1] + .3, .0, "", 'style="opacity:0"')}</div></div>
+    <div class="wlab" id="wl0"><span><b></b>Paste a YouTube, Twitch or Kick link</span></div><div class="wlab" id="wl1"><span><b></b>Create shorts, then Generate</span></div></div>
   <div class="scn" id="sI"><div id="moments">
     {''.join(f'<div class="mc" id="mc{i}"><div class="glow"></div><div class="in">{vid(f"hv{i}", s, i0 - .2, i1 + .3, m)}</div><div class="vb" id="vb{i}"><svg viewBox="0 0 90 90"><circle class="bg" cx="45" cy="45" r="40"/><circle class="fg" id="ring{i}" cx="45" cy="45" r="40"/></svg><div><b id="vs{i}">0</b><small>/100</small></div></div><div class="rk">#{r}</div></div>' for i, (s, m, r) in enumerate((("t_cops", .3, 2), ("t_flip", .75, 1), ("t_heli", .6, 3))))}
     <div id="top">TOP PICK</div></div><div id="rankpill"><span>Ranked by virality score</span></div></div>
@@ -740,9 +719,10 @@ SC = f"""
     <div id="land"><div class="in">{vid("iv0", "stream_cops_l", jj0 - .2, T["vertical"] + .7, .3)}</div><div id="fc1">{vid("iv1", "facecam", jj0 - .2, T["vertical"] + .7, .0)}</div>
       <svg id="trksvg"><rect id="trk" x="656" y="348" width="316" height="204" rx="20"/></svg><div id="trkl">ACTIVE SPEAKER</div></div>
     <div id="phone"><div id="game2">{vid("iv2", "game_l", T["vertical"] - .2, jj1 + .3, .0)}</div><div id="fc2">{vid("iv4", "facecam", T["vertical"] - .2, jj1 + .3, 1.0)}</div>
-      <div id="lyt">GAMING LAYOUT</div><div class="lbl2" id="ls">streamer</div><div class="lbl2" id="lg">gameplay</div>
-      <div id="kcap">{''.join(f'<span id="kc{i}">{w}</span>' for i, w in enumerate(CAPW))}</div></div>
-    <div id="styles"><div id="sty0">NO WAY <b>HE</b></div><div id="sty1"><b>NO</b> WAY HE</div><div id="sty2">No way he</div></div></div>
+      <div id="lyt">GAMING LAYOUT</div><div class="lbl2" id="ls">streamer</div><div class="lbl2" id="lg">gameplay</div></div></div>
+  <div class="scn" id="sK"><div class="win tall" id="winK"><div class="tb"><i></i><i></i><i></i><span>klap.app</span></div>
+    <div class="scr">{vid("re", "rec_edit2", S["K"][0] - .2, S["K"][1] + .3, .0, "")}</div></div>
+    <div class="wlab" id="wl2"><span><b></b>Animated captions, word by word</span></div></div>
   <div class="scn" id="sL">
     <div class="half" id="jl"><div class="lab">OTHER CLIPPERS</div><div id="jmon">{vid("jv0", "stream", l0 - .2, S["L"][1] + .3, 2.0)}</div>
       <div id="jtl">{''.join(f'<i style="width:{w}px"></i>' for w in (38, 62, 24, 80, 44, 30, 70, 26, 52, 40, 66, 28, 48, 36, 58, 44))}</div><div id="jhead"></div>
@@ -770,7 +750,6 @@ html = f"""<!doctype html>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="{DUR:.2f}" data-fps="30" data-width="1080" data-height="1920">
-      <div id="bgglow"></div>
       <div id="shake" data-layout-allow-overflow>
       {SC}
       </div>

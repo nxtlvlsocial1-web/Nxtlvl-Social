@@ -1,4 +1,18 @@
-# Klap brand reel: GTA 6 clippers (Instagram Reels, 9:16, ~43 s)
+# Klap brand reel: GTA 6 clippers (Instagram Reels, 9:16, ~46 s)
+
+v3 (owner on v2: "too fast, not properly showing visuals", "remove glow effects", "caption animation synced to the
+voiceover", "add sfx", "use the attached screen recording for showcasing"):
+
+- Pacing: the voice is re-spaced with a pause after every passage (1.35 s after "It's called... Klap" so the logo
+  reveal holds), the hook cuts every four beats instead of two, transitions are longer, and each scene holds.
+- No glow anywhere: no radial haze, no text or box glows; shadows are tight drop shadows only.
+- Captions: the spoken word pops (scale) and carries a violet marker exactly on its timestamp; three words per line.
+- Sound: every effect sits 3.5 dB louder (SFX_GAIN in build/sfx_mix.py); new cues on the paste, Generate, the
+  Verifying state and the caption pops.
+- Product: Klap's own screen recording (the brand's file) in a browser window: the paste (recording 3.3-5.4 s), Create
+  shorts -> Generate -> Verifying (5.4-9.9 s, at 1.5x), and the editor with its word-by-word captions (the zoomed frame
+  at 14.7 s, with a slow push-in). The virality-ring cards and the Gaming-layout phone stay as concept visuals, since
+  the recording shows neither. Clips: build/prep_footage.sh notes, assets/video/rec_*.mp4.
 
 v2 (owner on v1: "remove that next level logo completely", "fonts are very bad", "animation, style and smoothness not up
 to match", "no alignment", "voiceover looks very generic"):
