@@ -111,9 +111,25 @@ def main():
         seg[-fade:] *= np.linspace(1, 0, fade)
         # word times in the reel; the script's own words (same count when the take is clean, else Whisper's)
         sw = ln["text"].split()
-        use = sw if len(sw) == len(ws) else [w.word.strip() for w in ws]
-        for w, txt in zip(ws, use):
-            words.append({"line": ln["id"], "w": txt, "t0": round(t + w.start - a / SR, 3), "t1": round(t + w.end - a / SR, 3)})
+        if len(sw) == len(ws):
+            pairs = [(txt, w.start, w.end) for w, txt in zip(ws, sw)]
+        else:
+            # v4: Whisper split or merged a word ("GTS6" for "GTA 6"): align to the script and keep the script's spelling
+            import difflib
+            hw = [norm(w.word) for w in ws]
+            nw = [norm(x) for x in sw]
+            pairs = []
+            for tag, i1, i2, j1, j2 in difflib.SequenceMatcher(None, nw, hw, autojunk=False).get_opcodes():
+                if tag == "equal":
+                    pairs += [(sw[i1 + q], ws[j1 + q].start, ws[j1 + q].end) for q in range(i2 - i1)]
+                elif i2 > i1:
+                    j_a, j_b = (j1, j2) if j2 > j1 else (max(0, j1 - 1), min(len(ws), j1 + 1))
+                    t_a = ws[j_a].start if j_a < len(ws) else ws[-1].end
+                    t_b = ws[j_b - 1].end if j_b - 1 < len(ws) and j_b > j_a else t_a + .3 * (i2 - i1)
+                    step = (t_b - t_a) / (i2 - i1)
+                    pairs += [(sw[i1 + q], t_a + q * step, t_a + (q + 1) * step) for q in range(i2 - i1)]
+        for txt, ws0, ws1 in pairs:
+            words.append({"line": ln["id"], "w": txt, "t0": round(t + ws0 - a / SR, 3), "t1": round(t + ws1 - a / SR, 3)})
         out.append(seg.astype(np.float32))
         t += len(seg) / SR
         g = GAP[ln["id"]] * GAP_SCALE
