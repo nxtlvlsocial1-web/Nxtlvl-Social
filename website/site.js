@@ -505,3 +505,15 @@
     else start();
   }
 })();
+
+// ---------- thin section lines that draw in as each section arrives ----------
+(function () {
+  var secs = document.querySelectorAll('section.sec:not(.ink)');
+  if (!secs.length) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var beams = [];
+  secs.forEach(function (s) { var b = document.createElement('div'); b.className = 'beam'; b.setAttribute('aria-hidden', 'true'); s.insertBefore(b, s.firstChild); beams.push(b); });
+  if (reduce || !('IntersectionObserver' in window)) { beams.forEach(function (b) { b.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -15% 0px' });
+  beams.forEach(function (b) { io.observe(b); });
+})();

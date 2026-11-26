@@ -251,6 +251,7 @@ def home():
              ('google', 'Google Search'), ('googlemaps', 'Google Business'), ('shopify', 'Shopify'), ('googlesheets', 'Google Sheets'), ('hubspot', 'HubSpot'),
              ('razorpay', 'Razorpay'), ('zapier', 'Zapier'), ('googlegemini', 'Gemini')]
     mq = ''.join(f'<span>{brand(b, mono=True)}{t}</span>' for b, t in tools)
+    mq_r = ''.join(f'<span>{brand(b, mono=True)}{t}</span>' for b, t in reversed(tools))
     tools_txt = ', '.join(t for _, t in tools)
     biz = [('cafe', 'Café or restaurant'), ('clinic', 'Clinic or wellness'), ('d2c', 'D2C or e-commerce brand'), ('realestate', 'Real estate'), ('education', 'Education'), ('creator', 'Creator or personal brand')]
     goals = [('leads', 'Leads'), ('sales', 'Sales'), ('bookings', 'Bookings'), ('awareness', 'Awareness')]
@@ -318,7 +319,7 @@ def home():
       </div>
     </div>
   </div>
-  <div class="frame logos" data-rise><p>Works with the platforms your customers already use</p><div class="mq" role="img" aria-label="Platforms: {tools_txt}"><div class="track" aria-hidden="true">{mq}{mq}</div></div></div>
+  <div class="frame logos" data-rise><p>Works with the platforms your customers already use</p><div class="mq" role="img" aria-label="Platforms: {tools_txt}"><div class="track" aria-hidden="true">{mq}{mq}</div></div><div class="mq mq-rev" aria-hidden="true"><div class="track">{mq_r}{mq_r}</div></div></div>
 </section>
 
 <section class="frame statement" data-sec aria-label="What Nxtlvl Social does">

@@ -917,3 +917,46 @@ body::before, .sparks, .hero-art .orb, #agents::before, #services::before, .glow
 .tile.night { background: var(--bg-2) !important; }
 .ph .main { background: var(--panel) !important; }
 .sec.ink::before { background: linear-gradient(160deg, #150833 0%, #23095A 55%, #2E0B80 100%) !important; }
+
+/* ---------- clean details: platform chips, statement underline, card tags, pill labels, section lines ---------- */
+/* platforms: two rows of chips sliding in opposite directions */
+.mq .track { gap: 12px; animation-duration: 46s; }
+.mq + .mq { margin-top: 12px; }
+.mq-rev .track { animation-direction: reverse; animation-duration: 54s; }
+.mq span { font-size: 15px; color: rgba(244, 239, 255, .74); gap: 10px; padding: 10px 18px 10px 14px; border-radius: 999px;
+  background: rgba(216, 187, 255, .04); border: 1px solid rgba(216, 187, 255, .10); transition: color .3s, background .3s, border-color .3s, transform .4s var(--ease); }
+.mq span .bi { width: 18px; height: 18px; }
+.mq span:hover { color: var(--text); background: rgba(216, 187, 255, .08); border-color: rgba(216, 187, 255, .24); transform: translateY(-2px); }
+
+/* statement: words settle in smoothly; the key words get a clean underline instead of a gradient */
+.js-motion .words span { display: inline-block; color: rgba(244, 239, 255, .14); transform: translateY(.08em); transition: color .6s var(--ease), transform .6s var(--ease); }
+.js-motion .words span.on { color: var(--text); transform: none; }
+.js-motion .words span.hi { position: relative; }
+.js-motion .words span.on.hi { background: none !important; -webkit-background-clip: border-box !important; background-clip: border-box !important; color: #D8BBFF !important; }
+.js-motion .words span.hi::after { content: ""; position: absolute; left: 0; right: .12em; bottom: .02em; height: .07em; border-radius: 99px; background: #A95CFF; transform: scaleX(0); transform-origin: left; transition: transform .8s var(--ease) .15s; }
+.js-motion .words span.hi.on::after { transform: scaleX(1); }
+
+/* card tags: soft filled chips with a dot, popping in one by one */
+.ind li { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; padding: 5px 11px 5px 9px; border: 0; background: rgba(216, 187, 255, .07); color: var(--text-2); transition: background .3s, color .3s; }
+.ind li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--lift); flex: none; }
+.ind:hover li { background: rgba(216, 187, 255, .11); color: var(--text); }
+.js .ind li { opacity: 0; transform: translateY(6px); transition: opacity .5s var(--ease), transform .5s var(--ease), background .3s, color .3s; }
+.js .ind.in li { opacity: 1; transform: none; }
+.js .ind.in li:nth-child(1) { transition-delay: .35s, .35s, 0s, 0s; } .js .ind.in li:nth-child(2) { transition-delay: .45s, .45s, 0s, 0s; } .js .ind.in li:nth-child(3) { transition-delay: .55s, .55s, 0s, 0s; } .js .ind.in li:nth-child(4) { transition-delay: .65s, .65s, 0s, 0s; }
+
+/* pill labels: lighter, with one soft sweep of light as they appear */
+.kicker { position: relative; overflow: hidden; gap: 8px; padding: 5px 13px 5px 6px; font-size: 13px; letter-spacing: .01em; color: #E6DAFF; background: rgba(216, 187, 255, .06); border-color: rgba(216, 187, 255, .13); }
+.kicker i { width: 18px; height: 18px; }
+.kicker i svg { width: 10px; height: 10px; }
+.kicker::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .14) 50%, transparent 65%); transform: translateX(-110%); pointer-events: none; }
+.kicker.in::after, .in .kicker::after { animation: sweep1 1.4s var(--ease) .5s 1 both; }
+@keyframes sweep1 { to { transform: translateX(110%); } }
+
+/* a thin line draws across the top of each section as it comes into view */
+.beam { position: absolute; left: 50%; top: 0; width: min(var(--wrap), calc(100% - 2 * var(--m))); height: 1px; transform: translateX(-50%) scaleX(0); transform-origin: left;
+  background: linear-gradient(90deg, transparent, rgba(216, 187, 255, .28) 20%, rgba(216, 187, 255, .28) 80%, transparent); transition: transform 1.6s var(--ease); pointer-events: none; }
+.beam.in { transform: translateX(-50%) scaleX(1); }
+
+/* small lift on buttons */
+.btn:hover { transform: translateY(-1px); } .btn:active { transform: scale(.97); }
+@media (prefers-reduced-motion: reduce) { .js .ind li { opacity: 1; transform: none; } .beam { transform: translateX(-50%) scaleX(1); } .js-motion .words span { transform: none; } }
