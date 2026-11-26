@@ -28,7 +28,7 @@ TEMPO = float(os.environ.get("VO_TEMPO", "1.0"))
 GAP_SCALE = 1.0
 LEAD = .04          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast
-GAP = {"g1": .55, "g2": .5, "g3": .45, "g4": 1.35, "g5": .5, "g6": .55, "g7": .8, "g8": .0}   # v3 (owner: "too fast"): room for the visuals to land
+GAP = {"g1": .32, "g2": .34, "g3": .3, "g4": 1.1, "g5": .3, "g6": .34, "g7": .5, "g8": .0}   # v4: one flowing read; the reveal still gets its hold
 
 
 NUM = {"eleven": "11", "ten": "10", "two": "2", "hundred": "100", "thousand": "000", "one": "1", "six": "6", "nineteenth": "19th", "fortysix": "46", "one": "1", "two": "2", "three": "3", "twenty": "20", "1": "one", "3": "three"}

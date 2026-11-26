@@ -1,4 +1,9 @@
-# Klap brand reel: GTA 6 clippers (Instagram Reels, 9:16, ~46 s)
+# Klap brand reel: GTA 6 clippers (Instagram Reels, 9:16, ~44 s)
+
+v4 (owner on v3: "voiceover still looks off ... use better voiceover with better flow, switching styles"): the voice
+is now one continuous Kokoro-82M read (voice af_heart, picked by the owner from four samples; Apache 2.0, local, no
+cloning), one setting for every line, short natural pauses (the reveal keeps its hold). build/vo_kok.py +
+build/vo_pick.py. The Chatterbox and ElevenLabs paths stay in build/ for reference.
 
 v3 (owner on v2: "too fast, not properly showing visuals", "remove glow effects", "caption animation synced to the
 voiceover", "add sfx", "use the attached screen recording for showcasing"):
