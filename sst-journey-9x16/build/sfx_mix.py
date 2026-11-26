@@ -21,6 +21,9 @@ WORK = os.path.join(ROOT, "sfx", "work")
 LIB = os.path.join(ROOT, "assets", "sfx")
 E = json.load(open(os.path.join(ROOT, "plan", "edit.json")))
 DUR = E["dur"]
+# v5: the piano dips under "without interference" (its soft ending was masked); the v3 dip (37.4-41.3 s) no longer fits
+_W = [w for w in json.load(open(os.path.join(ROOT, "plan", "words.json"))) if w["line"] == "j20"]
+DIP = (_W[-2]["t0"] - .3, _W[-1]["t1"] + .4)
 # v6: "Ruslan Latypov - Corporate Music" by Ruslan Latypov (Jamendo 1693123, CC BY 3.0, credit in the post), 99.4 bpm;
 # starts on a beat (6.037 s) so the half-beat grid in generate.py lines up with reel t = 0
 SONG, SONG_AT = os.path.join(ROOT, "sfx", "music", os.environ.get("SONG", "a_good_dream_jesse_keller.mp3")), float(os.environ.get("SONG_AT", "40.0"))
@@ -92,7 +95,7 @@ def main():
         bed = os.path.join(WORK, "music_bed.wav")
         run(["ffmpeg", "-y", "-loglevel", "error", "-ss", str(SONG_AT), "-t", f"{DUR + .2:.2f}", "-i", SONG, "-vn", "-af",
              f"afade=t=in:d=2.0,afade=t=out:st={DUR - 1.8:.2f}:d=1.8,loudnorm=I={MUSIC_LUFS}:TP=-3:LRA=11,"
-             f"volume='1-0.55*clip((t-37.4)/0.8,0,1)*clip((41.3-t)/0.8,0,1)':eval=frame", "-ar", "48000", "-ac", "2", bed])
+             f"volume='1-0.7*clip((t-{DIP[0]:.2f})/0.3,0,1)*clip(({DIP[1]:.2f}-t)/0.3,0,1)':eval=frame", "-ar", "48000", "-ac", "2", bed])
         inputs += ["-i", bed]
         fc.append("[1:a][sc]sidechaincompress=threshold=0.03:ratio=5:attack=15:release=300:makeup=1[bg]")
         labels.append("[bg]")

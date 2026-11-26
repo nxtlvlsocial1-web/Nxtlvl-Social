@@ -1,10 +1,13 @@
-# SST: the problems faced (Instagram + Facebook Reels, 9:16, ~54 s), v4
+# SST: the problems faced (Instagram + Facebook Reels, 9:16, ~58 s), v5
 
 Owner on v3: "Highlight the issues faced. Let it only be about the problems in most of the video. No need to mention
 things like we are working on vision. Go through the article and mention the problems faced honestly." Source: A Reporter
 Live, "Hacking tracking and stalking just to stop the progress of sports science technology for months and years"
 (https://areporterlive.com/hacking-tracking-and-stalking-just-to-stop-the-progress-of-sports-science-technology-for-months-and-years/,
 posted 2024-12-19, updated 2026-09-17). The owner approved going straight to the final.
+
+v5 (owner: "he feels he is just reading the script"): same script, performed read (pauses, emphasis, livelier
+exaggeration per passage, `say` lines in plan/script.json); v4 voice kept in assets/audio/v4/.
 
 Build: build/vo_cb.py + build/vo_pick.py + build/relabel.py (the approved SST voice: Chatterbox with the synthetic Kokoro
 am_puck reference, whole passages, 3 takes each, 0 slips), build/plan_v4.py (footage plan, timed to the voice),

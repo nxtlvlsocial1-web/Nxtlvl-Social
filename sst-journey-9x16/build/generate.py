@@ -233,7 +233,7 @@ ft("#disc", te + 1.0, .8, "{opacity: 0}", "{opacity: 1}", "power1.out")
 sfx("whoosh_soft", start["j03"] - .3)
 sfx("whoosh_soft", start["j13"] - .3)
 sfx("whoosh_soft", start["j19"] - .4)
-sfx("riser_low", te - 1.1)
+sfx("riser_low", max(te - 1.1, endl["j20"] + .4))   # never under "interference"
 sfx("impact", te - .02)
 
 CSS = f"""
