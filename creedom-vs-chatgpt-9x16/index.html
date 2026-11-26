@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Creedom: Stop using ChatGPT for your reels 9x16</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>@font-face { font-family: Inter; font-weight: 500; src: url("assets/fonts/inter-latin-500-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 600; src: url("assets/fonts/inter-latin-600-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 700; src: url("assets/fonts/inter-latin-700-normal.woff2"); }
+@font-face { font-family: Inter; font-weight: 800; src: url("assets/fonts/inter-latin-800-normal.woff2"); }
+@font-face { font-family: Mono; src: url("assets/fonts/JetBrainsMono-Bold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fdf1f6; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Inter; color: #1a1020; background: #fdf1f6; }
+.bg { position: absolute; inset: 0; }
+#bgl { background: radial-gradient(60% 40% at 15% 10%, rgba(255,170,210,.75), rgba(255,170,210,0) 70%), radial-gradient(60% 40% at 90% 90%, rgba(243,67,162,.35), rgba(243,67,162,0) 70%), #fdf1f6; }
+#stage { position: absolute; inset: 0; }
+
+/* captions */
+.head { position: absolute; left: 40px; right: 40px; top: 150px; text-align: center; font-weight: 800; letter-spacing: -.045em; line-height: 1.04; z-index: 40; color: #1a1020;
+  text-shadow: 0 0 18px #fdf1f6, 0 0 36px #fdf1f6; }
+.hl { white-space: nowrap; }
+.hw { display: inline-block; opacity: 0; padding: .02em .04em .14em; margin-bottom: -.12em; }
+.hw.pk { color: #F343A2; }
+.hw.gr { color: #6e6e78; }
+
+/* scoreboard */
+#score { position: absolute; left: 0; right: 0; top: 462px; display: flex; justify-content: center; align-items: center; gap: 18px; z-index: 41; opacity: 0; }
+#score > span { display: flex; align-items: center; gap: 12px; padding: 10px 24px; border-radius: 44px; font: 800 36px Inter; }
+#score .sg { background: #fff; color: #444; border: 3px solid #d9d9df; }
+#score .sg .glogo { width: 46px; height: 46px; }
+#score .scc { background: #1a1020; color: #fff; }
+#score em { font: 800 40px Inter; font-style: normal; position: relative; display: inline-block; min-width: 28px; text-align: center; }
+#score .sg em { color: #8a8a94; }
+#score .scc em { color: #ff5fb7; height: 48px; }
+#score .scc em u { position: absolute; left: 0; right: 0; top: 0; text-decoration: none; opacity: 0; }
+#score .scc em u#sn0 { opacity: 1; }
+#score > i { font: 800 40px Inter; font-style: normal; color: #1a1020; }
+
+/* the phone */
+#pw { position: absolute; left: 210px; top: 566px; width: 660px; height: 1180px; z-index: 20; }
+#ph { position: absolute; inset: 0; border-radius: 74px; background: #0b0b0b; box-shadow: 0 50px 100px rgba(80,10,50,.35), 0 0 0 3px #2a2a2a; }
+#scr { position: absolute; left: 16px; top: 16px; width: 628px; height: 1148px; border-radius: 60px; background: #fff; overflow: hidden; }
+.isl { position: absolute; left: 239px; top: 16px; width: 150px; height: 40px; border-radius: 20px; background: #000; z-index: 30; }
+.sbar { position: absolute; left: 44px; right: 44px; top: 22px; z-index: 29; display: flex; justify-content: space-between; font: 700 27px Inter; color: #111; }
+.scrn { position: absolute; inset: 0; opacity: 0; }
+
+/* ChatGPT side: plain white chat, the logo as its label */
+.glogo { display: block; width: 56px; height: 56px; }
+#sg { background: #ffffff; }
+.ghead { position: absolute; left: 0; right: 0; top: 80px; display: flex; align-items: center; justify-content: center; gap: 14px; padding-bottom: 22px; border-bottom: 2px solid #ececf0; }
+.ghead b { font: 700 36px Inter; color: #202123; }
+.ground { position: absolute; left: 0; right: 0; top: 190px; bottom: 140px; opacity: 0; }
+.ubub { position: absolute; right: 30px; top: 20px; max-width: 470px; padding: 22px 30px; border-radius: 34px; background: #f0f0f3; font: 600 36px/1.3 Inter; color: #202123; opacity: 0; }
+.dots { position: absolute; left: 110px; top: 230px; display: flex; gap: 10px; opacity: 0; }
+.dots i { width: 16px; height: 16px; border-radius: 50%; background: #9a9aa3; }
+.abub { position: absolute; left: 30px; right: 40px; top: 215px; display: flex; gap: 18px; opacity: 0; }
+.abub .av { flex: none; width: 62px; height: 62px; border-radius: 50%; border: 2px solid #e2e2e8; display: grid; place-items: center; background: #fff; }
+.abub .av .glogo { width: 40px; height: 40px; }
+.abub p { font: 500 38px/1.4 Inter; color: #343541; }
+.abub em { position: absolute; left: 80px; top: -36px; font: 700 20px Mono; letter-spacing: .1em; color: #a0a0aa; font-style: normal; }
+.abub.ok { opacity: 1; top: 150px; }
+.good { position: absolute; left: 40px; right: 40px; bottom: 30px; text-align: center; padding: 18px; border-radius: 30px; background: #ccfb79; color: #101111; font: 800 36px Inter; letter-spacing: .04em; opacity: 0; }
+.gin { position: absolute; left: 30px; right: 30px; bottom: 34px; height: 86px; border-radius: 43px; border: 2px solid #e2e2e8; display: flex; align-items: center; padding: 0 34px; font: 500 32px Inter; color: #9a9aa3; }
+
+/* Creedom side */
+#sc { background: linear-gradient(180deg, #fff 0%, #fff4fa 100%); }
+.chead { position: absolute; left: 36px; right: 36px; top: 84px; display: flex; align-items: center; gap: 14px; }
+.chead img { height: 50px; }
+.chead b { font: 800 38px Inter; color: #1a1020; }
+.chead .ex { margin-left: auto; padding: 6px 16px; border-radius: 20px; background: #1a1020; color: #fff; font: 700 20px Mono; letter-spacing: .08em; }
+.cans { position: absolute; left: 36px; right: 36px; top: 180px; bottom: 40px; opacity: 0; }
+.thumb { position: relative; width: 200px; height: 300px; border-radius: 26px; overflow: hidden; background: linear-gradient(160deg, #ff8ac2, #F343A2 60%, #8a4dff); }
+.thumb i { position: absolute; left: 60px; top: 90px; width: 80px; height: 56px; border-radius: 50%; background: rgba(255,255,255,.55); }
+.thumb b { position: absolute; left: 16px; right: 16px; bottom: 16px; font: 800 26px/1.1 Inter; color: #fff; }
+.clab { position: absolute; left: 230px; top: 20px; font: 700 26px/1.3 Mono; color: #b06a90; letter-spacing: .06em; }
+.clab span { color: #1a1020; }
+#ca1 .clab { left: 0; top: 0; }
+.tline { position: absolute; left: 0; right: 0; top: 340px; height: 80px; display: flex; gap: 6px; }
+.tline i { flex: 1; border-radius: 8px; background: #2fbf71; opacity: .15; transform-origin: 50% 100%; }
+.tline i.bad { background: #ff3b4e; }
+.tline u { position: absolute; top: -14px; bottom: -14px; width: 6px; margin-left: -3px; border-radius: 3px; background: #1a1020; text-decoration: none; }
+.tlab { position: absolute; left: 0; right: 0; top: 436px; display: flex; justify-content: space-between; font: 700 22px Mono; color: #9a8a96; }
+.leave, .fix, .next { position: absolute; left: 0; right: 0; padding: 22px 26px; border-radius: 26px; font: 700 34px/1.25 Inter; opacity: 0; }
+.leave { top: 500px; background: #ffe3e7; color: #1a1020; }
+.leave small, .fix small, .next small { display: block; font: 700 22px Mono; letter-spacing: .08em; margin-bottom: 8px; }
+.leave small { color: #e0283e; }
+.fix { top: 690px; background: #e3f9eb; color: #1a1020; }
+.fix small { color: #138a43; }
+#fix2 { top: 640px; }
+.top { position: absolute; left: 0; right: 0; height: 120px; display: flex; align-items: center; gap: 22px; padding: 0 20px; border-radius: 24px; background: #fff; border: 3px solid #f0dce8; opacity: 0; }
+.top i { width: 80px; height: 80px; border-radius: 16px; flex: none; }
+.top b { font: 700 32px Inter; color: #1a1020; flex: 1; }
+.top small { font: 800 28px Inter; color: #F343A2; }
+#tp0 { top: 70px; } #tp1 { top: 210px; } #tp2 { top: 350px; }
+#tp2 small { color: #9a9aa3; }
+.next { top: 520px; background: #1a1020; color: #fff; font-size: 42px; }
+.next small { color: #ff8ac2; }
+.next em { display: block; margin-top: 10px; font: 600 26px Inter; color: #d7c3cf; font-style: normal; }
+.ring { position: absolute; left: 150px; top: 330px; width: 260px; height: 260px; }
+.ring svg { width: 100%; height: 100%; }
+.ring b { position: absolute; left: 0; right: 0; top: 70px; text-align: center; font: 800 96px/1 Inter; color: #1a1020; letter-spacing: -.04em; }
+.ring small { position: absolute; left: 0; right: 0; top: 172px; text-align: center; font: 700 30px Inter; color: #9a8a96; }
+#ca2 .clab { top: 40px; }
+.post { position: absolute; left: 100px; right: 100px; top: 860px; padding: 24px; border-radius: 40px; background: #F343A2; color: #fff; text-align: center; font: 800 40px Inter; opacity: 0; }
+.coach { position: absolute; left: 0; right: 0; top: 200px; padding: 50px 30px; border-radius: 40px; background: #1a1020; color: #ff8ac2; text-align: center; font: 700 30px Mono; letter-spacing: .1em; opacity: 0; }
+.coach b { display: block; margin: 16px 0 22px; font: 800 82px/1 Inter; color: #fff; letter-spacing: -.03em; }
+.coach span { display: block; font: 600 30px/1.4 Inter; color: #d7c3cf; letter-spacing: 0; }
+
+/* the stamp and the flicking thumb */
+.stamp { position: absolute; left: 0; right: 0; top: 1060px; text-align: center; z-index: 25; opacity: 0; pointer-events: none; }
+.stamp span { display: inline-block; max-width: 640px; padding: 16px 30px; border: 9px solid #e0283e; border-radius: 22px; color: #e0283e; font: 800 50px/1.1 Inter; letter-spacing: .02em;
+  background: rgba(255,255,255,.88); }
+#flick { position: absolute; left: 0; top: 0; z-index: 26; opacity: 0; }
+
+/* CTA */
+.cbox { position: absolute; left: 90px; right: 90px; top: 760px; height: 130px; border-radius: 65px; background: #fff; display: flex; align-items: center; gap: 24px; padding: 0 30px;
+  box-shadow: 0 30px 60px rgba(80,10,50,.18); font: 800 70px Inter; color: #1a1020; opacity: 0; z-index: 30; }
+.cbox .cav { width: 76px; height: 76px; border-radius: 50%; background: linear-gradient(135deg, #ffb020, #F343A2); flex: none; }
+.cbox #cbt { flex: 1; letter-spacing: .04em; }
+.csend { font: 800 40px Inter; color: #F343A2; }
+.sent { position: absolute; left: 0; right: 0; top: 930px; text-align: center; font: 800 44px Inter; color: #138a43; opacity: 0; z-index: 30; }
+.cf { position: absolute; left: 0; top: 0; border-radius: 4px; opacity: 0; z-index: 45; }
+#flash { position: absolute; inset: 0; z-index: 39; background: #fff; opacity: 0; pointer-events: none; }
+#grain { position: absolute; inset: 0; background: url("assets/img/grain.png"); opacity: .05; z-index: 61; pointer-events: none; mix-blend-mode: multiply; }
+.stamp.big { top: 1000px; }
+.stamp.big span { font-size: 190px; padding: 6px 50px; border-width: 14px; }
+/* Cree */
+#cree { position: absolute; left: 0; top: 0; width: 820px; height: 820px; z-index: 33; opacity: 0; transform-origin: 410px 500px; pointer-events: none;
+  filter: drop-shadow(0 0 30px rgba(255,90,180,.7)); }
+#cshadow { position: absolute; left: 210px; top: 770px; width: 400px; height: 60px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,120,190,.45), rgba(255,120,190,0)); }
+#creeb { position: absolute; inset: 0; transform-origin: 50% 97.5%; }
+#creef { position: absolute; inset: 0; transform-origin: 50% 60%; }
+#creep { position: absolute; inset: 0; transform-origin: 50% 97.5%; }
+.cpose { position: absolute; inset: 0; opacity: 0; }
+.cpose img, .clids, .csw { position: absolute; inset: 0; width: 820px; height: 820px; }
+.csw { overflow: visible; }
+.lidg { opacity: 0; }
+.sweat { opacity: 0; transform-box: fill-box; transform-origin: 50% 0; }
+.csp { position: absolute; opacity: 0; }
+#bub { position: absolute; left: 600px; top: 0; width: 210px; height: 190px; opacity: 0; border-radius: 50% 50% 50% 14px; display: grid; place-items: center;
+  transform-origin: 0 100%; background: rgba(255,255,255,.92); }
+#bubt { font: 800 120px/1 Inter; color: #F343A2; }
+#crglow { position: absolute; width: 520px; height: 520px; margin: -260px 0 0 -260px; border-radius: 50%; z-index: 5; opacity: 0;
+  background: radial-gradient(circle, rgba(255,110,190,.75), rgba(243,67,162,.25) 40%, rgba(243,67,162,0) 70%); }
+
+</style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30.22" data-fps="30" data-width="1080" data-height="1920">
+      <div class="bg" id="bgl"></div>
+      <div id="stage"><div id="pw"><div id="ph"><div id="scr"><i class="isl"></i><div class="sbar"><span>9:41</span><span>5G</span></div><div class="scrn" id="sg" style="opacity:1"><div class="ghead"><img class="glogo" src="assets/img/chatgpt_logo.png" alt=""><b>ChatGPT</b></div><div class="ground" id="gr0"><div class="ubub" id="gq0"><span id="gq0c0" style="opacity:0">W</span><span id="gq0c1" style="opacity:0">h</span><span id="gq0c2" style="opacity:0">y</span><span id="gq0c3" style="opacity:0"> </span><span id="gq0c4" style="opacity:0">d</span><span id="gq0c5" style="opacity:0">i</span><span id="gq0c6" style="opacity:0">d</span><span id="gq0c7" style="opacity:0"> </span><span id="gq0c8" style="opacity:0">m</span><span id="gq0c9" style="opacity:0">y</span><span id="gq0c10" style="opacity:0"> </span><span id="gq0c11" style="opacity:0">r</span><span id="gq0c12" style="opacity:0">e</span><span id="gq0c13" style="opacity:0">e</span><span id="gq0c14" style="opacity:0">l</span><span id="gq0c15" style="opacity:0"> </span><span id="gq0c16" style="opacity:0">f</span><span id="gq0c17" style="opacity:0">l</span><span id="gq0c18" style="opacity:0">o</span><span id="gq0c19" style="opacity:0">p</span><span id="gq0c20" style="opacity:0">?</span></div><div class="dots" id="gd0"><i></i><i></i><i></i></div><div class="abub" id="ga0"><span class="av"><img class="glogo" src="assets/img/chatgpt_logo.png" alt=""></span><p>Reels can underperform for many reasons! Try a stronger hook, trending audio and posting at peak times.</p><em>EXAMPLE REPLY</em></div></div><div class="ground" id="gr1"><div class="ubub" id="gq1"><span id="gq1c0" style="opacity:0">W</span><span id="gq1c1" style="opacity:0">h</span><span id="gq1c2" style="opacity:0">a</span><span id="gq1c3" style="opacity:0">t</span><span id="gq1c4" style="opacity:0"> </span><span id="gq1c5" style="opacity:0">s</span><span id="gq1c6" style="opacity:0">h</span><span id="gq1c7" style="opacity:0">o</span><span id="gq1c8" style="opacity:0">u</span><span id="gq1c9" style="opacity:0">l</span><span id="gq1c10" style="opacity:0">d</span><span id="gq1c11" style="opacity:0"> </span><span id="gq1c12" style="opacity:0">I</span><span id="gq1c13" style="opacity:0"> </span><span id="gq1c14" style="opacity:0">p</span><span id="gq1c15" style="opacity:0">o</span><span id="gq1c16" style="opacity:0">s</span><span id="gq1c17" style="opacity:0">t</span><span id="gq1c18" style="opacity:0"> </span><span id="gq1c19" style="opacity:0">n</span><span id="gq1c20" style="opacity:0">e</span><span id="gq1c21" style="opacity:0">x</span><span id="gq1c22" style="opacity:0">t</span><span id="gq1c23" style="opacity:0">?</span></div><div class="dots" id="gd1"><i></i><i></i><i></i></div><div class="abub" id="ga1"><span class="av"><img class="glogo" src="assets/img/chatgpt_logo.png" alt=""></span><p>Here are some ideas that do well: a day in my life, a morning routine, GRWM, and top 5 tips in your niche.</p><em>EXAMPLE REPLY</em></div></div><div class="ground" id="gr2"><div class="ubub" id="gq2"><span id="gq2c0" style="opacity:0">I</span><span id="gq2c1" style="opacity:0">s</span><span id="gq2c2" style="opacity:0"> </span><span id="gq2c3" style="opacity:0">m</span><span id="gq2c4" style="opacity:0">y</span><span id="gq2c5" style="opacity:0"> </span><span id="gq2c6" style="opacity:0">r</span><span id="gq2c7" style="opacity:0">e</span><span id="gq2c8" style="opacity:0">e</span><span id="gq2c9" style="opacity:0">l</span><span id="gq2c10" style="opacity:0"> </span><span id="gq2c11" style="opacity:0">r</span><span id="gq2c12" style="opacity:0">e</span><span id="gq2c13" style="opacity:0">a</span><span id="gq2c14" style="opacity:0">d</span><span id="gq2c15" style="opacity:0">y</span><span id="gq2c16" style="opacity:0"> </span><span id="gq2c17" style="opacity:0">t</span><span id="gq2c18" style="opacity:0">o</span><span id="gq2c19" style="opacity:0"> </span><span id="gq2c20" style="opacity:0">p</span><span id="gq2c21" style="opacity:0">o</span><span id="gq2c22" style="opacity:0">s</span><span id="gq2c23" style="opacity:0">t</span><span id="gq2c24" style="opacity:0">?</span></div><div class="dots" id="gd2"><i></i><i></i><i></i></div><div class="abub" id="ga2"><span class="av"><img class="glogo" src="assets/img/chatgpt_logo.png" alt=""></span><p>Looks great! Just make sure your hook is strong and your caption is engaging.</p><em>EXAMPLE REPLY</em></div></div><div class="ground" id="gr3"><div class="ubub" style="opacity:1">Write my reel script</div><div class="abub ok" id="ga3"><span class="av"><img class="glogo" src="assets/img/chatgpt_logo.png" alt=""></span><p id="gw"><span id="gw0" style="opacity:0">Hook:</span> <span id="gw1" style="opacity:0">Stop</span> <span id="gw2" style="opacity:0">scrolling,</span> <span id="gw3" style="opacity:0">this</span> <span id="gw4" style="opacity:0">one</span> <span id="gw5" style="opacity:0">is</span> <span id="gw6" style="opacity:0">for</span> <span id="gw7" style="opacity:0">you.</span> <span id="gw8" style="opacity:0">Problem:</span> <span id="gw9" style="opacity:0">you</span> <span id="gw10" style="opacity:0">post</span> <span id="gw11" style="opacity:0">every</span> <span id="gw12" style="opacity:0">day</span> <span id="gw13" style="opacity:0">and</span> <span id="gw14" style="opacity:0">nothing</span> <span id="gw15" style="opacity:0">grows.</span> <span id="gw16" style="opacity:0">Fix:</span> <span id="gw17" style="opacity:0">...</span></p></div><div class="good" id="good">GREAT FOR: WRITING</div></div><div class="gin">Message ChatGPT</div></div><div class="scrn" id="sc"><div class="chead"><img src="assets/img/creedom_logo.png" alt=""><span class="ex">EXAMPLE</span></div><div class="cans" id="ca0"><div class="thumb"><i></i><b>My budget meal hack</b></div><div class="clab" id="c0l">WATCHING YOUR REEL<br><span>SECOND BY SECOND</span></div><div class="tline"><i id="sg0" class=""></i><i id="sg1" class="bad"></i><i id="sg2" class=""></i><i id="sg3" class=""></i><i id="sg4" class=""></i><i id="sg5" class=""></i><i id="sg6" class=""></i><i id="sg7" class=""></i><i id="sg8" class=""></i><i id="sg9" class=""></i><i id="sg10" class=""></i><i id="sg11" class=""></i><i id="sg12" class=""></i><i id="sg13" class=""></i><i id="sg14" class=""></i><u id="phd"></u></div><div class="tlab"><span>0:00</span><span>0:15</span><span>0:30</span></div><div class="leave" id="leave"><small>0:03 · PEOPLE LEAVE HERE</small>Your hook shows the result too late.</div><div class="fix" id="fix0"><small>FIX</small>Open on the finished dish.</div></div><div class="cans" id="ca1"><div class="clab">READING <span>@YOUR.PAGE</span></div><div class="top" id="tp0"><i style="background:#ffd08a"></i><b>Hostel pasta, 1 pan</b><small>2.1K saves</small></div><div class="top" id="tp1"><i style="background:#ff9ec9"></i><b>5 meals under 100</b><small>1.8K saves</small></div><div class="top" id="tp2"><i style="background:#cfd3da"></i><b>Grocery haul</b><small>240 saves</small></div><div class="next" id="next"><small>POST THIS NEXT</small>One-pan dinners, part 2<em>Your saves say this is what they want</em></div></div><div class="cans" id="ca2"><div class="thumb"><i></i><b>My budget meal hack</b></div><div class="clab">CHECKING BEFORE<br><span>YOU POST</span></div><div class="ring"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84" stroke="#f3d6e6" stroke-width="18" fill="none"/><circle id="rarc" cx="100" cy="100" r="84" stroke="#F343A2" stroke-width="18" fill="none" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 100 100)"/></svg><b id="rnum">0.0</b><small>/ 5</small></div><div class="fix" id="fix2"><small>FIX AT 0:14</small>Show the tool's name on screen.</div><div class="post" id="post">Then post it</div></div><div class="cans" id="ca3"><div class="coach" id="coach">BUILT FOR:<b>YOUR REELS</b><span>watches them · reads your page · scores before you post</span></div></div></div></div></div></div><div class="stamp big" id="stopst"><span>STOP</span></div><div class="stamp" id="stamp0"><span>NEVER SAW YOUR REEL</span></div><div class="stamp" id="stamp1"><span>DOESN'T KNOW YOUR ACCOUNT</span></div><div class="stamp" id="stamp2"><span>HASN'T WATCHED IT</span></div><svg id="flick" viewBox="0 0 120 160" width="150" height="200"><path d="M40 150 L40 60 Q40 40 55 40 Q70 40 70 60 L70 90 L96 96 Q112 100 110 118 L104 150 Z" fill="#ffd9c2" stroke="#1a1020" stroke-width="6" stroke-linejoin="round"/></svg><div class="cbox" id="cbox"><i class="cav"></i><span id="cbt"><span id="cg0" style="opacity:0">G</span><span id="cg1" style="opacity:0">R</span><span id="cg2" style="opacity:0">O</span><span id="cg3" style="opacity:0">W</span></span><b class="csend" id="csend">Post</b></div><div class="sent" id="sent">Sent! Now check your DMs</div></div>
+      <div id="score"><span class="sg"><img class="glogo" src="assets/img/chatgpt_logo.png" alt=""><b>ChatGPT</b><em id="sgn">0</em></span><i>:</i><span class="scc"><em id="scn"><u id="sn0">0</u><u id="sn1">1</u><u id="sn2">2</u><u id="sn3">3</u></em><b>Creedom</b></span></div>
+      <div style="position:absolute;inset:0;z-index:33;pointer-events:none"><div id="cree"><i id="cshadow"></i><div id="creeb"><div id="creef"><div id="creep"><div class="cpose" id="cp-cheer"><img src="assets/img/poses/cheer.png" alt=""></div><div class="cpose" id="cp-mag"><img src="assets/img/poses/mag.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgmag0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fb6db1"/><stop offset="1" stop-color="#f953a2"/></linearGradient></defs><g class="lidg"><ellipse cx="508" cy="422" rx="74" ry="74" fill="url(#lgmag0)"/><path d="M 455 425 Q 508 458 561 425" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-pass"><img src="assets/img/poses/pass.png" alt=""></div><div class="cpose" id="cp-phone"><img src="assets/img/poses/phone.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgphone0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fd54a3"/><stop offset="1" stop-color="#fd559d"/></linearGradient><linearGradient id="lgphone1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fd62ae"/><stop offset="1" stop-color="#fc52a2"/></linearGradient></defs><g class="lidg"><ellipse cx="310" cy="400" rx="73" ry="70" fill="url(#lgphone0)"/><path d="M 258 403 Q 310 434 362 403" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="512" cy="391" rx="70" ry="70" fill="url(#lgphone1)"/><path d="M 462 394 Q 512 425 562 394" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-point"><img src="assets/img/poses/point.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgpoint0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fc6bb3"/><stop offset="1" stop-color="#fa5aa9"/></linearGradient><linearGradient id="lgpoint1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fa6eb5"/><stop offset="1" stop-color="#f95fae"/></linearGradient></defs><g class="lidg"><ellipse cx="264" cy="408" rx="74" ry="72" fill="url(#lgpoint0)"/><path d="M 211 411 Q 264 443 317 411" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="444" cy="361" rx="58" ry="66" fill="url(#lgpoint1)"/><path d="M 404 364 Q 444 393 484 364" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-present"><img src="assets/img/poses/present.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgpresent0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fb5ea9"/><stop offset="1" stop-color="#fa569f"/></linearGradient><linearGradient id="lgpresent1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fb6ab0"/><stop offset="1" stop-color="#f856a6"/></linearGradient></defs><g class="lidg"><ellipse cx="344" cy="394" rx="77" ry="76" fill="url(#lgpresent0)"/><path d="M 289 397 Q 344 431 399 397" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="553" cy="368" rx="75" ry="74" fill="url(#lgpresent1)"/><path d="M 499 371 Q 553 404 607 371" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-proud"><img src="assets/img/poses/proud.png" alt=""></div><div class="cpose" id="cp-sad"><img src="assets/img/poses/sad.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgsad0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f45da9"/><stop offset="1" stop-color="#f24995"/></linearGradient><linearGradient id="lgsad1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f665af"/><stop offset="1" stop-color="#f44aa0"/></linearGradient></defs><g class="lidg"><ellipse cx="266" cy="494" rx="63" ry="54" fill="url(#lgsad0)"/><path d="M 222 496 Q 266 519 310 496" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="469" cy="478" rx="74" ry="48" fill="url(#lgsad1)"/><path d="M 416 480 Q 469 500 522 480" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-shock"><img src="assets/img/poses/shock.png" alt=""></div><div class="cpose" id="cp-stand"><img src="assets/img/poses/stand.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgstand0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fe61ae"/><stop offset="1" stop-color="#fd53a2"/></linearGradient><linearGradient id="lgstand1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fd6ab5"/><stop offset="1" stop-color="#fc55ab"/></linearGradient></defs><g class="lidg"><ellipse cx="303" cy="386" rx="80" ry="78" fill="url(#lgstand0)"/><path d="M 245 390 Q 303 424 361 390" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="526" cy="382" rx="79" ry="78" fill="url(#lgstand1)"/><path d="M 469 386 Q 526 420 583 386" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-think"><img src="assets/img/poses/think.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgthink0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f85fa6"/><stop offset="1" stop-color="#f7569f"/></linearGradient><linearGradient id="lgthink1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f866ab"/><stop offset="1" stop-color="#f754a2"/></linearGradient></defs><g class="lidg"><ellipse cx="310" cy="414" rx="76" ry="71" fill="url(#lgthink0)"/><path d="M 256 417 Q 310 449 364 417" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="506" cy="365" rx="70" ry="70" fill="url(#lgthink1)"/><path d="M 456 368 Q 506 399 556 368" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-walk"><img src="assets/img/poses/walk.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgwalk0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fc6db3"/><stop offset="1" stop-color="#f953a2"/></linearGradient><linearGradient id="lgwalk1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fa68b0"/><stop offset="1" stop-color="#f855a6"/></linearGradient></defs><g class="lidg"><ellipse cx="346" cy="378" rx="80" ry="76" fill="url(#lgwalk0)"/><path d="M 288 381 Q 346 415 404 381" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="538" cy="340" rx="66" ry="72" fill="url(#lgwalk1)"/><path d="M 492 343 Q 538 375 584 343" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div><div class="cpose" id="cp-wave"><img src="assets/img/poses/wave.png" alt=""><svg viewBox="0 0 820 820" class="clids"><defs><linearGradient id="lgwave0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fa5fa8"/><stop offset="1" stop-color="#f855a0"/></linearGradient><linearGradient id="lgwave1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f96db0"/><stop offset="1" stop-color="#f658a7"/></linearGradient></defs><g class="lidg"><ellipse cx="287" cy="382" rx="79" ry="78" fill="url(#lgwave0)"/><path d="M 230 386 Q 287 420 344 386" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/><ellipse cx="500" cy="344" rx="78" ry="75" fill="url(#lgwave1)"/><path d="M 444 347 Q 500 381 556 347" fill="none" stroke="#2a0c22" stroke-width="9" stroke-linecap="round"/></g></svg></div></div></div><svg viewBox="0 0 820 820" class="csw"><path class="sweat" d="M 690 190 C 675 220 665 240 665 255 A 25 25 0 0 0 715 255 C 715 240 705 220 690 190 Z" fill="#7fd3ff" stroke="#3aa6e6" stroke-width="5"/></svg></div><div class="csp" style="left:40px;top:170px"><svg viewBox="-50 -50 100 100" width="110" height="110"><path d="M0 -50 C6 -10 10 -6 50 0 C10 6 6 10 0 50 C-6 10 -10 6 -50 0 C-10 -6 -6 -10 0 -50 Z" fill="#EE688B"/></svg></div><div class="csp" style="left:680px;top:110px"><svg viewBox="-50 -50 100 100" width="90" height="90"><path d="M0 -50 C6 -10 10 -6 50 0 C10 6 6 10 0 50 C-6 10 -10 6 -50 0 C-10 -6 -6 -10 0 -50 Z" fill="#f2b134"/></svg></div><div class="csp" style="left:720px;top:440px"><svg viewBox="-50 -50 100 100" width="70" height="70"><path d="M0 -50 C6 -10 10 -6 50 0 C10 6 6 10 0 50 C-6 10 -10 6 -50 0 C-10 -6 -6 -10 0 -50 Z" fill="#EE688B"/></svg></div><div class="csp" style="left:60px;top:470px"><svg viewBox="-50 -50 100 100" width="64" height="64"><path d="M0 -50 C6 -10 10 -6 50 0 C10 6 6 10 0 50 C-6 10 -10 6 -50 0 C-10 -6 -6 -10 0 -50 Z" fill="#f2b134"/></svg></div><div id="bub"><span id="bubt">!</span></div></div></div>
+      <div class="head" id="h0" style="font-size:92px"><div class="hl"><span class="hw pk" id="h1">Stop</span> <span class="hw " id="h2">using</span> <span class="hw gr" id="h3">ChatGPT</span></div><div class="hl"><span class="hw " id="h4">for</span> <span class="hw " id="h5">your</span> <span class="hw " id="h6">reels.</span></div></div>
+<div class="head" id="h0b" style="font-size:110px"><div class="hl"><span class="hw " id="h7">Here's</span> <span class="hw pk" id="h8">why.</span></div></div>
+<div class="head" id="h1" style="font-size:80px"><div class="hl"><span class="hw " id="h9">Ask</span> <span class="hw " id="h10">it</span> <span class="hw " id="h11">why</span> <span class="hw " id="h12">your</span></div><div class="hl"><span class="hw " id="h13">reel</span> <span class="hw " id="h14">flopped,</span> <span class="hw " id="h15">and</span> <span class="hw " id="h16">it</span></div><div class="hl"><span class="hw pk" id="h17">guesses.</span></div></div>
+<div class="head" id="h1b" style="font-size:92px"><div class="hl"><span class="hw " id="h18">It's</span> <span class="hw pk" id="h19">never</span> <span class="hw pk" id="h20">seen</span></div><div class="hl"><span class="hw " id="h21">your</span> <span class="hw " id="h22">reel.</span></div></div>
+<div class="head" id="h2" style="font-size:84px"><div class="hl"><span class="hw pk" id="h23">Creedom</span> <span class="hw " id="h24">watches</span> <span class="hw " id="h25">it,</span></div><div class="hl"><span class="hw " id="h26">second</span> <span class="hw " id="h27">by</span> <span class="hw " id="h28">second,</span></div></div>
+<div class="head" id="h2b" style="font-size:84px"><div class="hl"><span class="hw " id="h29">and</span> <span class="hw " id="h30">shows</span> <span class="hw " id="h31">you</span> <span class="hw " id="h32">where</span></div><div class="hl"><span class="hw " id="h33">people</span> <span class="hw pk" id="h34">leave.</span></div></div>
+<div class="head" id="h3" style="font-size:76px"><div class="hl"><span class="hw " id="h35">Ask</span> <span class="hw " id="h36">it</span> <span class="hw " id="h37">what</span> <span class="hw " id="h38">to</span> <span class="hw " id="h39">post</span> <span class="hw " id="h40">next.</span></div><div class="hl"><span class="hw " id="h41">It</span> <span class="hw " id="h42">doesn't</span> <span class="hw " id="h43">know</span></div><div class="hl"><span class="hw " id="h44">your</span> <span class="hw pk" id="h45">account.</span></div></div>
+<div class="head" id="h3b" style="font-size:84px"><div class="hl"><span class="hw pk" id="h46">Creedom</span> <span class="hw " id="h47">reads</span> <span class="hw " id="h48">your</span> <span class="hw " id="h49">page,</span></div><div class="hl"><span class="hw " id="h50">and</span> <span class="hw " id="h51">tells</span> <span class="hw " id="h52">you.</span></div></div>
+<div class="head" id="h4" style="font-size:76px"><div class="hl"><span class="hw " id="h53">Ask</span> <span class="hw " id="h54">if</span> <span class="hw " id="h55">your</span> <span class="hw " id="h56">reel</span></div><div class="hl"><span class="hw " id="h57">is</span> <span class="hw " id="h58">ready</span> <span class="hw " id="h59">to</span> <span class="hw " id="h60">post.</span></div><div class="hl"><span class="hw " id="h61">It</span> <span class="hw pk" id="h62">hasn't</span> <span class="hw pk" id="h63">watched</span> <span class="hw " id="h64">it.</span></div></div>
+<div class="head" id="h4b" style="font-size:84px"><div class="hl"><span class="hw pk" id="h65">Creedom</span> <span class="hw " id="h66">scores</span> <span class="hw " id="h67">it,</span></div><div class="hl"><span class="hw " id="h68">before</span> <span class="hw " id="h69">you</span> <span class="hw " id="h70">hit</span> <span class="hw " id="h71">post.</span></div></div>
+<div class="head" id="h5" style="font-size:88px"><div class="hl"><span class="hw gr" id="h72">ChatGPT</span> <span class="hw " id="h73">is</span> <span class="hw " id="h74">a</span></div><div class="hl"><span class="hw " id="h75">great</span> <span class="hw " id="h76">writer.</span></div></div>
+<div class="head" id="h5b" style="font-size:92px"><div class="hl"><span class="hw pk" id="h77">Creedom</span> <span class="hw " id="h78">is</span> <span class="hw " id="h79">your</span></div><div class="hl"><span class="hw " id="h80">Instagram</span> <span class="hw pk" id="h81">coach.</span></div></div>
+<div class="head" id="h6" style="font-size:84px"><div class="hl"><span class="hw " id="h82">Comment</span> <span class="hw pk" id="h83">GROW</span></div><div class="hl"><span class="hw " id="h84">and</span> <span class="hw " id="h85">I'll</span> <span class="hw " id="h86">send</span> <span class="hw " id="h87">you</span> <span class="hw " id="h88">Creedom.</span></div></div>
+<i class="cf" id="cf0" style="background:#1a1020;width:18px;height:32px"></i>
+<i class="cf" id="cf1" style="background:#F343A2;width:20px;height:30px"></i>
+<i class="cf" id="cf2" style="background:#F343A2;width:15px;height:25px"></i>
+<i class="cf" id="cf3" style="background:#ffffff;width:19px;height:23px"></i>
+<i class="cf" id="cf4" style="background:#ff5fb7;width:12px;height:29px"></i>
+<i class="cf" id="cf5" style="background:#ff5fb7;width:19px;height:25px"></i>
+<i class="cf" id="cf6" style="background:#ffffff;width:13px;height:23px"></i>
+<i class="cf" id="cf7" style="background:#ffffff;width:18px;height:26px"></i>
+<i class="cf" id="cf8" style="background:#ffd27a;width:12px;height:23px"></i>
+<i class="cf" id="cf9" style="background:#ffffff;width:15px;height:31px"></i>
+<i class="cf" id="cf10" style="background:#ffd27a;width:17px;height:31px"></i>
+<i class="cf" id="cf11" style="background:#1a1020;width:17px;height:24px"></i>
+<i class="cf" id="cf12" style="background:#F343A2;width:12px;height:27px"></i>
+<i class="cf" id="cf13" style="background:#ff5fb7;width:19px;height:28px"></i>
+<i class="cf" id="cf14" style="background:#ff5fb7;width:18px;height:25px"></i>
+<i class="cf" id="cf15" style="background:#1a1020;width:12px;height:26px"></i>
+<i class="cf" id="cf16" style="background:#ffd27a;width:14px;height:27px"></i>
+<i class="cf" id="cf17" style="background:#F343A2;width:20px;height:31px"></i>
+<i class="cf" id="cf18" style="background:#ff5fb7;width:16px;height:31px"></i>
+<i class="cf" id="cf19" style="background:#F343A2;width:14px;height:24px"></i>
+<i class="cf" id="cf20" style="background:#ff5fb7;width:13px;height:32px"></i>
+<i class="cf" id="cf21" style="background:#F343A2;width:14px;height:24px"></i>
+<i class="cf" id="cf22" style="background:#ff5fb7;width:12px;height:28px"></i>
+<i class="cf" id="cf23" style="background:#F343A2;width:16px;height:31px"></i>
+      <div id="flash"></div><div id="grain"></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({paused: true});
+      tl.fromTo("#h1", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, -0.050);
+      tl.fromTo("#h2", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 0.450);
+      tl.fromTo("#h3", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 0.770);
+      tl.fromTo("#h4", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 1.430);
+      tl.fromTo("#h5", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 1.690);
+      tl.fromTo("#h6", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 1.850);
+      tl.fromTo("#h7", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 2.550);
+      tl.fromTo("#h8", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 2.770);
+      tl.to("#h0", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.15, ease: "power2.in"}, 2.400);
+      tl.fromTo("#h9", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 3.690);
+      tl.fromTo("#h10", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 3.830);
+      tl.fromTo("#h11", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 3.950);
+      tl.fromTo("#h12", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 4.090);
+      tl.fromTo("#h13", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 4.250);
+      tl.fromTo("#h14", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 4.450);
+      tl.fromTo("#h15", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 4.930);
+      tl.fromTo("#h16", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 5.050);
+      tl.fromTo("#h17", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 5.190);
+      tl.to("#h0b", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.15, ease: "power2.in"}, 3.540);
+      tl.fromTo("#h18", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 5.970);
+      tl.fromTo("#h19", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 6.170);
+      tl.fromTo("#h20", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 6.370);
+      tl.fromTo("#h21", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 6.630);
+      tl.fromTo("#h22", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 6.770);
+      tl.to("#h1", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.15, ease: "power2.in"}, 5.820);
+      tl.fromTo("#h23", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 7.590);
+      tl.fromTo("#h24", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 7.770);
+      tl.fromTo("#h25", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 8.130);
+      tl.fromTo("#h26", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 8.710);
+      tl.fromTo("#h27", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 8.970);
+      tl.fromTo("#h28", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 9.170);
+      tl.to("#h1b", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.15, ease: "power2.in"}, 7.440);
+      tl.fromTo("#h29", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 9.770);
+      tl.fromTo("#h30", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 9.930);
+      tl.fromTo("#h31", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 10.110);
+      tl.fromTo("#h32", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 10.310);
+      tl.fromTo("#h33", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 10.430);
+      tl.fromTo("#h34", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 10.690);
+      tl.to("#h2", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.15, ease: "power2.in"}, 9.620);
+      tl.fromTo("#h35", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 11.630);
+      tl.fromTo("#h36", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 11.830);
+      tl.fromTo("#h37", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 11.950);
+      tl.fromTo("#h38", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 12.050);
+      tl.fromTo("#h39", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 12.170);
+      tl.fromTo("#h40", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 12.370);
+      tl.fromTo("#h41", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 13.110);
+      tl.fromTo("#h42", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 13.250);
+      tl.fromTo("#h43", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 13.470);
+      tl.fromTo("#h44", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 13.590);
+      tl.fromTo("#h45", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 13.710);
+      tl.to("#h2b", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.15, ease: "power2.in"}, 11.480);
+      tl.fromTo("#h46", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 14.730);
+      tl.fromTo("#h47", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 14.930);
+      tl.fromTo("#h48", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 15.190);
+      tl.fromTo("#h49", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 15.390);
+      tl.fromTo("#h50", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 15.670);
+      tl.fromTo("#h51", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 15.930);
+      tl.fromTo("#h52", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 16.110);
+      tl.to("#h3", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.15, ease: "power2.in"}, 14.580);
+      tl.fromTo("#h53", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 16.950);
+      tl.fromTo("#h54", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 17.170);
+      tl.fromTo("#h55", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 17.330);
+      tl.fromTo("#h56", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 17.470);
+      tl.fromTo("#h57", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 17.690);
+      tl.fromTo("#h58", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 17.870);
+      tl.fromTo("#h59", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 18.010);
+      tl.fromTo("#h60", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 18.230);
+      tl.fromTo("#h61", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 18.850);
+      tl.fromTo("#h62", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 18.990);
+      tl.fromTo("#h63", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 19.250);
+      tl.fromTo("#h64", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 19.470);
+      tl.to("#h3b", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.15, ease: "power2.in"}, 16.800);
+      tl.fromTo("#h65", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 20.310);
+      tl.fromTo("#h66", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 20.510);
+      tl.fromTo("#h67", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 20.850);
+      tl.fromTo("#h68", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 21.150);
+      tl.fromTo("#h69", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 21.410);
+      tl.fromTo("#h70", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 21.570);
+      tl.fromTo("#h71", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 21.750);
+      tl.to("#h4", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.15, ease: "power2.in"}, 20.160);
+      tl.fromTo("#h72", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 22.705);
+      tl.fromTo("#h73", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 23.530);
+      tl.fromTo("#h74", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 23.810);
+      tl.fromTo("#h75", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 23.930);
+      tl.fromTo("#h76", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 24.090);
+      tl.to("#h4b", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.15, ease: "power2.in"}, 22.555);
+      tl.fromTo("#h77", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 25.090);
+      tl.fromTo("#h78", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 25.310);
+      tl.fromTo("#h79", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 25.550);
+      tl.fromTo("#h80", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 25.690);
+      tl.fromTo("#h81", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 26.110);
+      tl.to("#h5", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.15, ease: "power2.in"}, 24.940);
+      tl.fromTo("#h82", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 27.350);
+      tl.fromTo("#h83", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 27.430);
+      tl.fromTo("#h84", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 27.710);
+      tl.fromTo("#h85", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 28.090);
+      tl.fromTo("#h86", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 28.210);
+      tl.fromTo("#h87", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 28.350);
+      tl.fromTo("#h88", {opacity: 0, filter: 'blur(10px)', y: 24}, {...{opacity: 1, filter: 'blur(0px)', y: 0}, duration: 0.28, ease: "power3.out", immediateRender: false}, 28.510);
+      tl.to("#h5b", {...{opacity: 0, filter: 'blur(12px)', y: -30}, duration: 0.15, ease: "power2.in"}, 27.200);
+      gsap.set("#pw", {transformPerspective: 1800, transformOrigin: "50% 50%"}); gsap.set("#stage", {transformOrigin: "540px 1100px"});
+      tl.fromTo("#pw", {opacity: 0, y: 260, rotation: -8}, {...{opacity: 1, y: 0, rotation: 0}, duration: 0.5, ease: "back.out(1.5)", immediateRender: false}, 0.000);
+      tl.fromTo("#ph", {rotation: -.6}, {rotation: .6, duration: 1.9, yoyo: true, repeat: 15, ease: "sine.inOut", immediateRender: false}, 0);
+      tl.fromTo("#stage", {scale: 1}, {scale: 1.05, duration: .1, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false}, 0.000);
+      tl.fromTo("#stopst", {opacity: 0, scale: 2.6, rotation: -24}, {...{opacity: 1, scale: 1, rotation: -10}, duration: 0.22, ease: "power4.out", immediateRender: false}, 0.050);
+      tl.to("#stopst", {...{opacity: 0, scale: .8}, duration: 0.2, ease: "power2.in"}, 2.350);
+      tl.fromTo("#score", {opacity: 0, scale: .5, y: -20}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.35, ease: "back.out(2.4)", immediateRender: false}, 2.600);
+      tl.set("#gr0", {opacity: 1}, 0.000);
+      tl.fromTo("#gq0", {opacity: 0, y: 30}, {...{opacity: 1, y: 0}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 3.740);
+      tl.set("#gq0c0", {opacity: 1}, 3.740);
+      tl.set("#gq0c1", {opacity: 1}, 3.788);
+      tl.set("#gq0c2", {opacity: 1}, 3.836);
+      tl.set("#gq0c3", {opacity: 1}, 3.884);
+      tl.set("#gq0c4", {opacity: 1}, 3.932);
+      tl.set("#gq0c5", {opacity: 1}, 3.980);
+      tl.set("#gq0c6", {opacity: 1}, 4.029);
+      tl.set("#gq0c7", {opacity: 1}, 4.077);
+      tl.set("#gq0c8", {opacity: 1}, 4.125);
+      tl.set("#gq0c9", {opacity: 1}, 4.173);
+      tl.set("#gq0c10", {opacity: 1}, 4.221);
+      tl.set("#gq0c11", {opacity: 1}, 4.269);
+      tl.set("#gq0c12", {opacity: 1}, 4.317);
+      tl.set("#gq0c13", {opacity: 1}, 4.365);
+      tl.set("#gq0c14", {opacity: 1}, 4.413);
+      tl.set("#gq0c15", {opacity: 1}, 4.461);
+      tl.set("#gq0c16", {opacity: 1}, 4.510);
+      tl.set("#gq0c17", {opacity: 1}, 4.558);
+      tl.set("#gq0c18", {opacity: 1}, 4.606);
+      tl.set("#gq0c19", {opacity: 1}, 4.654);
+      tl.set("#gq0c20", {opacity: 1}, 4.702);
+      tl.fromTo("#gd0", {opacity: 0, scale: .4}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.2, ease: "back.out(2.4)", immediateRender: false}, 4.770);
+      tl.to("#gd0", {...{opacity: 0}, duration: 0.1, ease: "power2.out"}, 5.160);
+      tl.fromTo("#gd0 i", {y: 0}, {y: -10, duration: .16, yoyo: true, repeat: 3, stagger: .08, immediateRender: false}, 4.750);
+      tl.fromTo("#ga0", {opacity: 0, y: 40, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.35, ease: "back.out(1.8)", immediateRender: false}, 5.240);
+      tl.fromTo("#flick", {opacity: 0, x: 760, y: 1240, rotation: 20}, {...{opacity: 1, x: 640, y: 1130, rotation: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 5.920);
+      tl.to("#flick", {x: 300, y: 1060, rotation: -30, duration: .16, ease: "power3.in"}, 6.140);
+      tl.to("#flick", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 6.320);
+      tl.to("#ga0", {x: -760, rotation: -14, opacity: 0, duration: .32, ease: "power3.in"}, 6.200);
+      tl.fromTo("#stamp0", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.out", immediateRender: false}, 6.320);
+      tl.fromTo("#stage", {scale: 1}, {scale: 1.035, duration: .1, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false}, 6.360);
+      tl.to("#stamp0", {...{opacity: 0, scale: .8}, duration: 0.15, ease: "power2.in"}, 7.440);
+      tl.to("#pw", {rotationY: 90, duration: .14, ease: "power2.in"}, 11.480);
+      tl.set("#sg", {opacity: 1}, 11.620);
+      tl.set("#sc", {opacity: 0}, 11.620);
+      tl.fromTo("#pw", {rotationY: -90}, {rotationY: 0, duration: .22, ease: "back.out(1.6)", immediateRender: false}, 11.620);
+      tl.set("#gr0", {opacity: 0}, 11.620);
+      tl.set("#gr1", {opacity: 1}, 11.620);
+      tl.fromTo("#gq1", {opacity: 0, y: 30}, {...{opacity: 1, y: 0}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 11.680);
+      tl.set("#gq1c0", {opacity: 1}, 11.680);
+      tl.set("#gq1c1", {opacity: 1}, 11.721);
+      tl.set("#gq1c2", {opacity: 1}, 11.762);
+      tl.set("#gq1c3", {opacity: 1}, 11.804);
+      tl.set("#gq1c4", {opacity: 1}, 11.845);
+      tl.set("#gq1c5", {opacity: 1}, 11.886);
+      tl.set("#gq1c6", {opacity: 1}, 11.928);
+      tl.set("#gq1c7", {opacity: 1}, 11.969);
+      tl.set("#gq1c8", {opacity: 1}, 12.010);
+      tl.set("#gq1c9", {opacity: 1}, 12.051);
+      tl.set("#gq1c10", {opacity: 1}, 12.092);
+      tl.set("#gq1c11", {opacity: 1}, 12.134);
+      tl.set("#gq1c12", {opacity: 1}, 12.175);
+      tl.set("#gq1c13", {opacity: 1}, 12.216);
+      tl.set("#gq1c14", {opacity: 1}, 12.258);
+      tl.set("#gq1c15", {opacity: 1}, 12.299);
+      tl.set("#gq1c16", {opacity: 1}, 12.340);
+      tl.set("#gq1c17", {opacity: 1}, 12.381);
+      tl.set("#gq1c18", {opacity: 1}, 12.422);
+      tl.set("#gq1c19", {opacity: 1}, 12.464);
+      tl.set("#gq1c20", {opacity: 1}, 12.505);
+      tl.set("#gq1c21", {opacity: 1}, 12.546);
+      tl.set("#gq1c22", {opacity: 1}, 12.588);
+      tl.set("#gq1c23", {opacity: 1}, 12.629);
+      tl.fromTo("#gd1", {opacity: 0, scale: .4}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.2, ease: "back.out(2.4)", immediateRender: false}, 12.690);
+      tl.to("#gd1", {...{opacity: 0}, duration: 0.1, ease: "power2.out"}, 12.790);
+      tl.fromTo("#gd1 i", {y: 0}, {y: -10, duration: .16, yoyo: true, repeat: 3, stagger: .08, immediateRender: false}, 12.670);
+      tl.fromTo("#ga1", {opacity: 0, y: 40, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.35, ease: "back.out(1.8)", immediateRender: false}, 12.870);
+      tl.fromTo("#flick", {opacity: 0, x: 760, y: 1240, rotation: 20}, {...{opacity: 1, x: 640, y: 1130, rotation: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 13.460);
+      tl.to("#flick", {x: 300, y: 1060, rotation: -30, duration: .16, ease: "power3.in"}, 13.680);
+      tl.to("#flick", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 13.860);
+      tl.to("#ga1", {x: -760, rotation: -14, opacity: 0, duration: .32, ease: "power3.in"}, 13.740);
+      tl.fromTo("#stamp1", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.out", immediateRender: false}, 13.860);
+      tl.fromTo("#stage", {scale: 1}, {scale: 1.035, duration: .1, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false}, 13.900);
+      tl.to("#stamp1", {...{opacity: 0, scale: .8}, duration: 0.15, ease: "power2.in"}, 14.580);
+      tl.to("#pw", {rotationY: 90, duration: .14, ease: "power2.in"}, 16.800);
+      tl.set("#sg", {opacity: 1}, 16.940);
+      tl.set("#sc", {opacity: 0}, 16.940);
+      tl.fromTo("#pw", {rotationY: -90}, {rotationY: 0, duration: .22, ease: "back.out(1.6)", immediateRender: false}, 16.940);
+      tl.set("#gr1", {opacity: 0}, 16.940);
+      tl.set("#gr2", {opacity: 1}, 16.940);
+      tl.fromTo("#gq2", {opacity: 0, y: 30}, {...{opacity: 1, y: 0}, duration: 0.25, ease: "back.out(2)", immediateRender: false}, 17.000);
+      tl.set("#gq2c0", {opacity: 1}, 17.000);
+      tl.set("#gq2c1", {opacity: 1}, 17.061);
+      tl.set("#gq2c2", {opacity: 1}, 17.122);
+      tl.set("#gq2c3", {opacity: 1}, 17.184);
+      tl.set("#gq2c4", {opacity: 1}, 17.245);
+      tl.set("#gq2c5", {opacity: 1}, 17.306);
+      tl.set("#gq2c6", {opacity: 1}, 17.367);
+      tl.set("#gq2c7", {opacity: 1}, 17.428);
+      tl.set("#gq2c8", {opacity: 1}, 17.490);
+      tl.set("#gq2c9", {opacity: 1}, 17.551);
+      tl.set("#gq2c10", {opacity: 1}, 17.612);
+      tl.set("#gq2c11", {opacity: 1}, 17.673);
+      tl.set("#gq2c12", {opacity: 1}, 17.734);
+      tl.set("#gq2c13", {opacity: 1}, 17.796);
+      tl.set("#gq2c14", {opacity: 1}, 17.857);
+      tl.set("#gq2c15", {opacity: 1}, 17.918);
+      tl.set("#gq2c16", {opacity: 1}, 17.979);
+      tl.set("#gq2c17", {opacity: 1}, 18.040);
+      tl.set("#gq2c18", {opacity: 1}, 18.102);
+      tl.set("#gq2c19", {opacity: 1}, 18.163);
+      tl.set("#gq2c20", {opacity: 1}, 18.224);
+      tl.set("#gq2c21", {opacity: 1}, 18.285);
+      tl.set("#gq2c22", {opacity: 1}, 18.346);
+      tl.set("#gq2c23", {opacity: 1}, 18.408);
+      tl.set("#gq2c24", {opacity: 1}, 18.469);
+      tl.fromTo("#gd2", {opacity: 0, scale: .4}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.2, ease: "back.out(2.4)", immediateRender: false}, 18.550);
+      tl.to("#gd2", {...{opacity: 0}, duration: 0.1, ease: "power2.out"}, 18.650);
+      tl.fromTo("#gd2 i", {y: 0}, {y: -10, duration: .16, yoyo: true, repeat: 3, stagger: .08, immediateRender: false}, 18.530);
+      tl.fromTo("#ga2", {opacity: 0, y: 40, scale: .9}, {...{opacity: 1, y: 0, scale: 1}, duration: 0.35, ease: "back.out(1.8)", immediateRender: false}, 18.730);
+      tl.fromTo("#flick", {opacity: 0, x: 760, y: 1240, rotation: 20}, {...{opacity: 1, x: 640, y: 1130, rotation: 0}, duration: 0.2, ease: "power2.out", immediateRender: false}, 19.000);
+      tl.to("#flick", {x: 300, y: 1060, rotation: -30, duration: .16, ease: "power3.in"}, 19.220);
+      tl.to("#flick", {...{opacity: 0}, duration: 0.15, ease: "power2.out"}, 19.400);
+      tl.to("#ga2", {x: -760, rotation: -14, opacity: 0, duration: .32, ease: "power3.in"}, 19.280);
+      tl.fromTo("#stamp2", {opacity: 0, scale: 2.4, rotation: -20}, {...{opacity: 1, scale: 1, rotation: -8}, duration: 0.22, ease: "power4.out", immediateRender: false}, 19.400);
+      tl.fromTo("#stage", {scale: 1}, {scale: 1.035, duration: .1, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false}, 19.440);
+      tl.to("#stamp2", {...{opacity: 0, scale: .8}, duration: 0.15, ease: "power2.in"}, 20.160);
+      tl.to("#pw", {rotationY: 90, duration: .14, ease: "power2.in"}, 7.490);
+      tl.set("#sg", {opacity: 0}, 7.630);
+      tl.set("#sc", {opacity: 1}, 7.630);
+      tl.fromTo("#pw", {rotationY: -90}, {rotationY: 0, duration: .22, ease: "back.out(1.6)", immediateRender: false}, 7.630);
+      tl.set("#flash", {opacity: 0.35}, 7.630);
+      tl.to("#flash", {...{opacity: 0}, duration: 0.25, ease: "power2.out"}, 7.650);
+      tl.set("#ca0", {opacity: 1}, 7.640);
+      tl.fromTo("#phd", {left: "0%"}, {left: "100%", duration: 1.60, ease: "none", immediateRender: false}, 8.760);
+      tl.fromTo("#sg0", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 8.813);
+      tl.fromTo("#sg1", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 8.920);
+      tl.fromTo("#sg2", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 9.027);
+      tl.fromTo("#sg3", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 9.133);
+      tl.fromTo("#sg4", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 9.240);
+      tl.fromTo("#sg5", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 9.347);
+      tl.fromTo("#sg6", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 9.453);
+      tl.fromTo("#sg7", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 9.560);
+      tl.fromTo("#sg8", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 9.667);
+      tl.fromTo("#sg9", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 9.773);
+      tl.fromTo("#sg10", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 9.880);
+      tl.fromTo("#sg11", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 9.987);
+      tl.fromTo("#sg12", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 10.093);
+      tl.fromTo("#sg13", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 10.200);
+      tl.fromTo("#sg14", {opacity: .15, scaleY: .4}, {...{opacity: 1, scaleY: 1}, duration: 0.15, ease: "back.out(3)", immediateRender: false}, 10.307);
+      tl.fromTo("#leave", {opacity: 0, scale: .6, y: 30}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.35, ease: "back.out(2.4)", immediateRender: false}, 10.360);
+      tl.fromTo("#fix0", {opacity: 0, scale: .6, y: 30}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.35, ease: "back.out(2.4)", immediateRender: false}, 10.740);
+      tl.to("#pw", {rotationY: 90, duration: .14, ease: "power2.in"}, 14.630);
+      tl.set("#sg", {opacity: 0}, 14.770);
+      tl.set("#sc", {opacity: 1}, 14.770);
+      tl.fromTo("#pw", {rotationY: -90}, {rotationY: 0, duration: .22, ease: "back.out(1.6)", immediateRender: false}, 14.770);
+      tl.set("#flash", {opacity: 0.35}, 14.770);
+      tl.to("#flash", {...{opacity: 0}, duration: 0.25, ease: "power2.out"}, 14.790);
+      tl.set("#ca0", {opacity: 0}, 14.780);
+      tl.set("#ca1", {opacity: 1}, 14.780);
+      tl.fromTo("#tp0", {opacity: 0, x: 80}, {...{opacity: 1, x: 0}, duration: 0.3, ease: "back.out(1.8)", immediateRender: false}, 14.980);
+      tl.fromTo("#tp1", {opacity: 0, x: 80}, {...{opacity: 1, x: 0}, duration: 0.3, ease: "back.out(1.8)", immediateRender: false}, 15.120);
+      tl.fromTo("#tp2", {opacity: 0, x: 80}, {...{opacity: 1, x: 0}, duration: 0.3, ease: "back.out(1.8)", immediateRender: false}, 15.260);
+      tl.to("#tp0, #tp1", {borderColor: "#F343A2", duration: .2}, 15.680);
+      tl.fromTo("#next", {opacity: 0, scale: .6, y: 40}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.4, ease: "back.out(2.4)", immediateRender: false}, 15.980);
+      tl.to("#pw", {rotationY: 90, duration: .14, ease: "power2.in"}, 20.210);
+      tl.set("#sg", {opacity: 0}, 20.350);
+      tl.set("#sc", {opacity: 1}, 20.350);
+      tl.fromTo("#pw", {rotationY: -90}, {rotationY: 0, duration: .22, ease: "back.out(1.6)", immediateRender: false}, 20.350);
+      tl.set("#flash", {opacity: 0.35}, 20.350);
+      tl.to("#flash", {...{opacity: 0}, duration: 0.25, ease: "power2.out"}, 20.370);
+      tl.set("#ca1", {opacity: 0}, 20.360);
+      tl.set("#ca2", {opacity: 1}, 20.360);
+      tl.fromTo("#rarc", {strokeDashoffset: 1, opacity: 0}, {...{strokeDashoffset: .24, opacity: 1}, duration: 0.8, ease: "power2.out", immediateRender: false}, 20.560);
+      (() => { const o = {v: 0}; tl.to(o, {v: 3.8, duration: .8, ease: "power2.out", onUpdate: () => { document.getElementById("rnum").textContent = o.v.toFixed(1); }}, 20.560); })();
+      tl.fromTo("#fix2", {opacity: 0, scale: .6, y: 30}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.35, ease: "back.out(2.4)", immediateRender: false}, 21.260);
+      tl.fromTo("#post", {opacity: 0, scale: .4}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.35, ease: "back.out(2.4)", immediateRender: false}, 21.200);
+      tl.fromTo("#post", {scale: 1}, {scale: 1.08, duration: .2, yoyo: true, repeat: 3, immediateRender: false}, 21.550);
+      tl.set("#sn0", {opacity: 0}, 10.560);
+      tl.fromTo("#sn1", {opacity: 0, scale: 2.2, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(3)", immediateRender: false}, 10.560);
+      tl.fromTo(".scc", {scale: 1}, {scale: 1.12, duration: .12, yoyo: true, repeat: 1, immediateRender: false}, 10.560);
+      tl.set("#sn1", {opacity: 0}, 16.180);
+      tl.fromTo("#sn2", {opacity: 0, scale: 2.2, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(3)", immediateRender: false}, 16.180);
+      tl.fromTo(".scc", {scale: 1}, {scale: 1.12, duration: .12, yoyo: true, repeat: 1, immediateRender: false}, 16.180);
+      tl.set("#sn2", {opacity: 0}, 21.400);
+      tl.fromTo("#sn3", {opacity: 0, scale: 2.2, y: -20}, {...{opacity: 1, scale: 1, y: 0}, duration: 0.35, ease: "back.out(3)", immediateRender: false}, 21.400);
+      tl.fromTo(".scc", {scale: 1}, {scale: 1.12, duration: .12, yoyo: true, repeat: 1, immediateRender: false}, 21.400);
+      tl.to("#pw", {rotationY: 90, duration: .14, ease: "power2.in"}, 22.505);
+      tl.set("#sg", {opacity: 1}, 22.645);
+      tl.set("#sc", {opacity: 0}, 22.645);
+      tl.fromTo("#pw", {rotationY: -90}, {rotationY: 0, duration: .22, ease: "back.out(1.6)", immediateRender: false}, 22.645);
+      tl.set("#gr2", {opacity: 0}, 22.655);
+      tl.set("#gr3", {opacity: 1}, 22.655);
+      tl.set("#gw0", {opacity: 1}, 22.855);
+      tl.set("#gw1", {opacity: 1}, 22.955);
+      tl.set("#gw2", {opacity: 1}, 23.055);
+      tl.set("#gw3", {opacity: 1}, 23.155);
+      tl.set("#gw4", {opacity: 1}, 23.255);
+      tl.set("#gw5", {opacity: 1}, 23.355);
+      tl.set("#gw6", {opacity: 1}, 23.455);
+      tl.set("#gw7", {opacity: 1}, 23.555);
+      tl.set("#gw8", {opacity: 1}, 23.655);
+      tl.set("#gw9", {opacity: 1}, 23.755);
+      tl.set("#gw10", {opacity: 1}, 23.855);
+      tl.set("#gw11", {opacity: 1}, 23.955);
+      tl.set("#gw12", {opacity: 1}, 24.055);
+      tl.set("#gw13", {opacity: 1}, 24.155);
+      tl.set("#gw14", {opacity: 1}, 24.255);
+      tl.set("#gw15", {opacity: 1}, 24.355);
+      tl.set("#gw16", {opacity: 1}, 24.455);
+      tl.set("#gw17", {opacity: 1}, 24.555);
+      tl.fromTo("#good", {opacity: 0, scale: .5, rotation: 6}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.35, ease: "back.out(2.4)", immediateRender: false}, 24.140);
+      tl.to("#pw", {rotationY: 90, duration: .14, ease: "power2.in"}, 24.940);
+      tl.set("#sg", {opacity: 0}, 25.080);
+      tl.set("#sc", {opacity: 1}, 25.080);
+      tl.fromTo("#pw", {rotationY: -90}, {rotationY: 0, duration: .22, ease: "back.out(1.6)", immediateRender: false}, 25.080);
+      tl.set("#flash", {opacity: 0.35}, 25.080);
+      tl.to("#flash", {...{opacity: 0}, duration: 0.25, ease: "power2.out"}, 25.100);
+      tl.set("#ca2", {opacity: 0}, 25.140);
+      tl.set("#ca3", {opacity: 1}, 25.140);
+      tl.fromTo("#coach", {opacity: 0, scale: .5}, {...{opacity: 1, scale: 1, rotation: 0}, duration: 0.45, ease: "back.out(2.4)", immediateRender: false}, 25.190);
+      tl.fromTo("#stage", {scale: 1}, {scale: 1.05, duration: .1, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false}, 26.160);
+      tl.to("#pw", {...{y: 1500, rotation: 10, opacity: 0}, duration: 0.45, ease: "power3.in"}, 27.150);
+      tl.to("#score", {...{opacity: 0, y: -30}, duration: 0.3, ease: "power2.in"}, 27.150);
+      tl.fromTo("#cbox", {opacity: 0, y: 60}, {...{opacity: 1, y: 0}, duration: 0.35, ease: "back.out(1.8)", immediateRender: false}, 27.500);
+      tl.set("#cg0", {opacity: 1}, 27.480);
+      tl.set("#cg1", {opacity: 1}, 27.580);
+      tl.set("#cg2", {opacity: 1}, 27.680);
+      tl.set("#cg3", {opacity: 1}, 27.780);
+      tl.fromTo("#csend", {scale: 1}, {keyframes: [{scale: .85, duration: .08}, {scale: 1, duration: .15}], immediateRender: false}, 28.030);
+      tl.fromTo("#sent", {opacity: 0, y: 20}, {...{opacity: 1, y: 0}, duration: 0.3, ease: "back.out(2)", immediateRender: false}, 28.180);
+      tl.fromTo("#cf0", {x: 228, y: -60, rotation: 72, opacity: 1}, {x: 221, y: 2000, rotation: 581, duration: 2.39, ease: "power1.in", immediateRender: false}, 28.372);
+      tl.fromTo("#cf1", {x: 584, y: -60, rotation: 60, opacity: 1}, {x: 676, y: 2000, rotation: 374, duration: 1.90, ease: "power1.in", immediateRender: false}, 28.406);
+      tl.fromTo("#cf2", {x: 130, y: -60, rotation: 177, opacity: 1}, {x: -16, y: 2000, rotation: 776, duration: 2.09, ease: "power1.in", immediateRender: false}, 28.240);
+      tl.fromTo("#cf3", {x: 396, y: -60, rotation: 166, opacity: 1}, {x: 541, y: 2000, rotation: 737, duration: 1.62, ease: "power1.in", immediateRender: false}, 28.452);
+      tl.fromTo("#cf4", {x: 150, y: -60, rotation: 41, opacity: 1}, {x: 167, y: 2000, rotation: 711, duration: 1.92, ease: "power1.in", immediateRender: false}, 28.275);
+      tl.fromTo("#cf5", {x: 741, y: -60, rotation: 19, opacity: 1}, {x: 831, y: 2000, rotation: 573, duration: 2.14, ease: "power1.in", immediateRender: false}, 28.471);
+      tl.fromTo("#cf6", {x: 733, y: -60, rotation: 143, opacity: 1}, {x: 725, y: 2000, rotation: 757, duration: 1.76, ease: "power1.in", immediateRender: false}, 28.507);
+      tl.fromTo("#cf7", {x: 968, y: -60, rotation: 93, opacity: 1}, {x: 1113, y: 2000, rotation: 873, duration: 1.91, ease: "power1.in", immediateRender: false}, 28.528);
+      tl.fromTo("#cf8", {x: 455, y: -60, rotation: 40, opacity: 1}, {x: 525, y: 2000, rotation: 867, duration: 1.60, ease: "power1.in", immediateRender: false}, 28.251);
+      tl.fromTo("#cf9", {x: 673, y: -60, rotation: 155, opacity: 1}, {x: 615, y: 2000, rotation: 475, duration: 1.74, ease: "power1.in", immediateRender: false}, 28.281);
+      tl.fromTo("#cf10", {x: 416, y: -60, rotation: 78, opacity: 1}, {x: 335, y: 2000, rotation: 532, duration: 1.65, ease: "power1.in", immediateRender: false}, 28.474);
+      tl.fromTo("#cf11", {x: 855, y: -60, rotation: 174, opacity: 1}, {x: 707, y: 2000, rotation: 892, duration: 2.32, ease: "power1.in", immediateRender: false}, 28.517);
+      tl.fromTo("#cf12", {x: 476, y: -60, rotation: 125, opacity: 1}, {x: 478, y: 2000, rotation: 613, duration: 2.35, ease: "power1.in", immediateRender: false}, 28.304);
+      tl.fromTo("#cf13", {x: 635, y: -60, rotation: 123, opacity: 1}, {x: 493, y: 2000, rotation: 654, duration: 1.64, ease: "power1.in", immediateRender: false}, 28.307);
+      tl.fromTo("#cf14", {x: 356, y: -60, rotation: 43, opacity: 1}, {x: 322, y: 2000, rotation: 706, duration: 2.12, ease: "power1.in", immediateRender: false}, 28.274);
+      tl.fromTo("#cf15", {x: 214, y: -60, rotation: 35, opacity: 1}, {x: 361, y: 2000, rotation: 898, duration: 2.33, ease: "power1.in", immediateRender: false}, 28.374);
+      tl.fromTo("#cf16", {x: 277, y: -60, rotation: 153, opacity: 1}, {x: 364, y: 2000, rotation: 856, duration: 2.06, ease: "power1.in", immediateRender: false}, 28.485);
+      tl.fromTo("#cf17", {x: 375, y: -60, rotation: 70, opacity: 1}, {x: 260, y: 2000, rotation: 370, duration: 1.91, ease: "power1.in", immediateRender: false}, 28.268);
+      tl.fromTo("#cf18", {x: 792, y: -60, rotation: 83, opacity: 1}, {x: 838, y: 2000, rotation: 791, duration: 1.81, ease: "power1.in", immediateRender: false}, 28.352);
+      tl.fromTo("#cf19", {x: 891, y: -60, rotation: 24, opacity: 1}, {x: 858, y: 2000, rotation: 551, duration: 1.62, ease: "power1.in", immediateRender: false}, 28.364);
+      tl.fromTo("#cf20", {x: 204, y: -60, rotation: 72, opacity: 1}, {x: 84, y: 2000, rotation: 692, duration: 1.92, ease: "power1.in", immediateRender: false}, 28.496);
+      tl.fromTo("#cf21", {x: 696, y: -60, rotation: 96, opacity: 1}, {x: 601, y: 2000, rotation: 407, duration: 2.08, ease: "power1.in", immediateRender: false}, 28.381);
+      tl.fromTo("#cf22", {x: 823, y: -60, rotation: 118, opacity: 1}, {x: 940, y: 2000, rotation: 767, duration: 2.21, ease: "power1.in", immediateRender: false}, 28.283);
+      tl.fromTo("#cf23", {x: 788, y: -60, rotation: 80, opacity: 1}, {x: 867, y: 2000, rotation: 610, duration: 1.91, ease: "power1.in", immediateRender: false}, 28.323);
+      gsap.set("#cree", {x: 525, y: 1225, scale: 0.3, opacity: 1});
+      gsap.set("#cree .cpose", {opacity: 0}); gsap.set("#cp-shock", {opacity: 1});
+      tl.fromTo("#creep", {y: 0}, {y: -7, duration: .6, ease: "sine.inOut", yoyo: true, repeat: 50, immediateRender: false}, 0);
+      tl.set("#cree .lidg", {opacity: 1}, 1.300);
+      tl.set("#cree .lidg", {opacity: 0}, 1.410);
+      tl.set("#cree .lidg", {opacity: 1}, 3.900);
+      tl.set("#cree .lidg", {opacity: 0}, 4.010);
+      tl.set("#cree .lidg", {opacity: 1}, 6.500);
+      tl.set("#cree .lidg", {opacity: 0}, 6.610);
+      tl.set("#cree .lidg", {opacity: 1}, 9.100);
+      tl.set("#cree .lidg", {opacity: 0}, 9.210);
+      tl.set("#cree .lidg", {opacity: 1}, 11.700);
+      tl.set("#cree .lidg", {opacity: 0}, 11.810);
+      tl.set("#cree .lidg", {opacity: 1}, 14.300);
+      tl.set("#cree .lidg", {opacity: 0}, 14.410);
+      tl.set("#cree .lidg", {opacity: 1}, 16.900);
+      tl.set("#cree .lidg", {opacity: 0}, 17.010);
+      tl.set("#cree .lidg", {opacity: 1}, 19.500);
+      tl.set("#cree .lidg", {opacity: 0}, 19.610);
+      tl.set("#cree .lidg", {opacity: 1}, 22.100);
+      tl.set("#cree .lidg", {opacity: 0}, 22.210);
+      tl.set("#cree .lidg", {opacity: 1}, 24.700);
+      tl.set("#cree .lidg", {opacity: 0}, 24.810);
+      tl.set("#cree .lidg", {opacity: 1}, 27.300);
+      tl.set("#cree .lidg", {opacity: 0}, 27.410);
+      tl.set("#cree .cpose", {opacity: 0}, 0.820);
+      tl.set("#cp-point", {opacity: 1}, 0.820);
+      tl.set("#creef", {scaleX: -1}, 0.820);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 0.820);
+      tl.set("#bubt", {textContent: "?"}, 2.590);
+      tl.set("#bub", {x: -560}, 2.590);
+      tl.fromTo("#bub", {opacity: 0, scale: .2, rotation: -30}, {opacity: 1, scale: 1, rotation: 0, duration: .35, ease: "back.out(2.4)", immediateRender: false}, 2.600);
+      tl.to("#bub", {opacity: 0, scale: .6, duration: .2, ease: "power2.in"}, 3.400);
+      tl.set("#cree .cpose", {opacity: 0}, 5.240);
+      tl.set("#cp-think", {opacity: 1}, 5.240);
+      tl.set("#creef", {scaleX: -1}, 5.240);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 5.240);
+      tl.set("#cree .cpose", {opacity: 0}, 6.320);
+      tl.set("#cp-shock", {opacity: 1}, 6.320);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 6.320);
+      tl.fromTo("#creeb", {rotation: 0}, {keyframes: [{rotation: 6, duration: 0.11}, {rotation: -6, duration: 0.11}, {rotation: 6, duration: 0.11}, {rotation: -6, duration: 0.11}, {rotation: 0, duration: .1}], immediateRender: false}, 6.320);
+      tl.set("#cree .cpose", {opacity: 0}, 7.640);
+      tl.set("#cp-present", {opacity: 1}, 7.640);
+      tl.set("#creef", {scaleX: -1}, 7.640);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 7.640);
+      tl.set("#cree .cpose", {opacity: 0}, 10.460);
+      tl.set("#cp-proud", {opacity: 1}, 10.460);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 10.460);
+      tl.fromTo("#creeb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 10, duration: .07}, {scaleY: 1.08, scaleX: .94, y: -60, duration: .14, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .13, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, y: 0, duration: .04}, {scaleY: 1, scaleX: 1, duration: .06}], immediateRender: false}, 10.510);
+      tl.fromTo("#cshadow", {scale: 1, opacity: 1}, {scale: .7, opacity: .5, duration: .21, ease: "power2.out", yoyo: true, repeat: 1, immediateRender: false}, 10.580);
+      tl.set("#bubt", {textContent: "!"}, 10.600);
+      tl.set("#bub", {x: -560}, 10.600);
+      tl.fromTo("#bub", {opacity: 0, scale: .2, rotation: -30}, {opacity: 1, scale: 1, rotation: 0, duration: .35, ease: "back.out(2.4)", immediateRender: false}, 10.610);
+      tl.to("#bub", {opacity: 0, scale: .6, duration: .2, ease: "power2.in"}, 11.310);
+      tl.set("#cree .cpose", {opacity: 0}, 12.870);
+      tl.set("#cp-mag", {opacity: 1}, 12.870);
+      tl.set("#creef", {scaleX: -1}, 12.870);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 12.870);
+      tl.set("#cree .cpose", {opacity: 0}, 13.860);
+      tl.set("#cp-shock", {opacity: 1}, 13.860);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 13.860);
+      tl.fromTo("#creeb", {rotation: 0}, {keyframes: [{rotation: 6, duration: 0.11}, {rotation: -6, duration: 0.11}, {rotation: 6, duration: 0.11}, {rotation: -6, duration: 0.11}, {rotation: 0, duration: .1}], immediateRender: false}, 13.860);
+      tl.set("#cree .cpose", {opacity: 0}, 14.780);
+      tl.set("#cp-present", {opacity: 1}, 14.780);
+      tl.set("#creef", {scaleX: -1}, 14.780);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 14.780);
+      tl.set("#cree .cpose", {opacity: 0}, 16.080);
+      tl.set("#cp-proud", {opacity: 1}, 16.080);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 16.080);
+      tl.fromTo("#creeb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 10, duration: .07}, {scaleY: 1.08, scaleX: .94, y: -60, duration: .14, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .13, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, y: 0, duration: .04}, {scaleY: 1, scaleX: 1, duration: .06}], immediateRender: false}, 16.130);
+      tl.fromTo("#cshadow", {scale: 1, opacity: 1}, {scale: .7, opacity: .5, duration: .21, ease: "power2.out", yoyo: true, repeat: 1, immediateRender: false}, 16.200);
+      tl.set("#bubt", {textContent: "!"}, 16.220);
+      tl.set("#bub", {x: -560}, 16.220);
+      tl.fromTo("#bub", {opacity: 0, scale: .2, rotation: -30}, {opacity: 1, scale: 1, rotation: 0, duration: .35, ease: "back.out(2.4)", immediateRender: false}, 16.230);
+      tl.to("#bub", {opacity: 0, scale: .6, duration: .2, ease: "power2.in"}, 16.930);
+      tl.set("#cree .cpose", {opacity: 0}, 18.730);
+      tl.set("#cp-think", {opacity: 1}, 18.730);
+      tl.set("#creef", {scaleX: -1}, 18.730);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 18.730);
+      tl.set("#cree .cpose", {opacity: 0}, 19.400);
+      tl.set("#cp-shock", {opacity: 1}, 19.400);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 19.400);
+      tl.fromTo("#creeb", {rotation: 0}, {keyframes: [{rotation: 6, duration: 0.11}, {rotation: -6, duration: 0.11}, {rotation: 6, duration: 0.11}, {rotation: -6, duration: 0.11}, {rotation: 0, duration: .1}], immediateRender: false}, 19.400);
+      tl.set("#cree .cpose", {opacity: 0}, 20.360);
+      tl.set("#cp-present", {opacity: 1}, 20.360);
+      tl.set("#creef", {scaleX: -1}, 20.360);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 20.360);
+      tl.set("#cree .cpose", {opacity: 0}, 21.300);
+      tl.set("#cp-proud", {opacity: 1}, 21.300);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 21.300);
+      tl.fromTo("#creeb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 10, duration: .07}, {scaleY: 1.08, scaleX: .94, y: -60, duration: .14, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .13, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, y: 0, duration: .04}, {scaleY: 1, scaleX: 1, duration: .06}], immediateRender: false}, 21.350);
+      tl.fromTo("#cshadow", {scale: 1, opacity: 1}, {scale: .7, opacity: .5, duration: .21, ease: "power2.out", yoyo: true, repeat: 1, immediateRender: false}, 21.420);
+      tl.set("#bubt", {textContent: "!"}, 21.440);
+      tl.set("#bub", {x: -560}, 21.440);
+      tl.fromTo("#bub", {opacity: 0, scale: .2, rotation: -30}, {opacity: 1, scale: 1, rotation: 0, duration: .35, ease: "back.out(2.4)", immediateRender: false}, 21.450);
+      tl.to("#bub", {opacity: 0, scale: .6, duration: .2, ease: "power2.in"}, 22.150);
+      tl.fromTo("#cree .sweat", {opacity: 0, y: -20, scale: .4}, {opacity: 1, y: 0, scale: 1, duration: .25, ease: "back.out(2)", immediateRender: false}, 6.420);
+      tl.to("#cree .sweat", {y: 40, duration: 0.70, ease: "power1.in"}, 6.670);
+      tl.to("#cree .sweat", {opacity: 0, duration: .1}, 7.320);
+      tl.set("#cree .cpose", {opacity: 0}, 22.755);
+      tl.set("#cp-stand", {opacity: 1}, 22.755);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 22.755);
+      tl.set("#cree .cpose", {opacity: 0}, 25.140);
+      tl.set("#cp-cheer", {opacity: 1}, 25.140);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 25.140);
+      tl.fromTo("#creeb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 10, duration: .07}, {scaleY: 1.08, scaleX: .94, y: -80, duration: .14, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .13, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, y: 0, duration: .04}, {scaleY: 1, scaleX: 1, duration: .06}], immediateRender: false}, 25.240);
+      tl.fromTo("#cshadow", {scale: 1, opacity: 1}, {scale: .7, opacity: .5, duration: .21, ease: "power2.out", yoyo: true, repeat: 1, immediateRender: false}, 25.310);
+      tl.fromTo("#creeb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 10, duration: .07}, {scaleY: 1.08, scaleX: .94, y: -80, duration: .14, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .13, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, y: 0, duration: .04}, {scaleY: 1, scaleX: 1, duration: .06}], immediateRender: false}, 25.600);
+      tl.fromTo("#cshadow", {scale: 1, opacity: 1}, {scale: .7, opacity: .5, duration: .21, ease: "power2.out", yoyo: true, repeat: 1, immediateRender: false}, 25.670);
+      tl.fromTo("#cree .csp", {opacity: 0, scale: .3}, {opacity: 1, scale: 1, duration: .3, ease: "back.out(3)", stagger: .05, immediateRender: false}, 26.160);
+      tl.to("#cree .csp", {rotation: "+=120", duration: 1.0, ease: "none"}, 26.160);
+      tl.to("#cree .csp", {opacity: 0, scale: .5, duration: .2, ease: "power2.in"}, 27.160);
+      tl.set("#cree .cpose", {opacity: 0}, 27.400);
+      tl.set("#cp-wave", {opacity: 1}, 27.400);
+      tl.set("#creef", {scaleX: 1}, 27.400);
+      tl.fromTo("#creep", {scaleX: 1.07, scaleY: .9}, {scaleX: 1, scaleY: 1, duration: .28, ease: "back.out(3)", immediateRender: false}, 27.400);
+      tl.to("#cree", {x: 130, y: 990, scale: 0.5, duration: 0.5, ease: "back.out(1.4)"}, 27.300);
+      tl.fromTo("#creeb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 10, duration: .07}, {scaleY: 1.08, scaleX: .94, y: -70, duration: .14, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .13, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, y: 0, duration: .04}, {scaleY: 1, scaleX: 1, duration: .06}], immediateRender: false}, 28.230);
+      tl.fromTo("#cshadow", {scale: 1, opacity: 1}, {scale: .7, opacity: .5, duration: .21, ease: "power2.out", yoyo: true, repeat: 1, immediateRender: false}, 28.300);
+      tl.fromTo("#creeb", {y: 0, scaleY: 1, scaleX: 1}, {keyframes: [{scaleY: .86, scaleX: 1.1, y: 10, duration: .07}, {scaleY: 1.08, scaleX: .94, y: -70, duration: .14, ease: "power2.out"}, {scaleY: 1, scaleX: 1, y: 0, duration: .13, ease: "power2.in"}, {scaleY: .92, scaleX: 1.06, y: 0, duration: .04}, {scaleY: 1, scaleX: 1, duration: .06}], immediateRender: false}, 28.590);
+      tl.fromTo("#cshadow", {scale: 1, opacity: 1}, {scale: .7, opacity: .5, duration: .21, ease: "power2.out", yoyo: true, repeat: 1, immediateRender: false}, 28.660);
+      tl.set({}, {}, 30.22);
+      tl.progress(1, true).progress(0, true);
+      gsap.set("#stopst", {opacity: 0, scale: 2.6, rotation: -24}); gsap.set("#h2", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h3", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h4", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h5", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h6", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h7", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#score", {opacity: 0, scale: .5, y: -20}); gsap.set("#h8", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h9", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#gq0", {opacity: 0, y: 30}); gsap.set("#h10", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h11", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h12", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h13", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h14", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#gd0", {opacity: 0, scale: .4}); gsap.set("#h15", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h16", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h17", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#ga0", {opacity: 0, y: 40, scale: .9}); gsap.set("#flick", {opacity: 0, x: 760, y: 1240, rotation: 20}); gsap.set("#h18", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h19", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#stamp0", {opacity: 0, scale: 2.4, rotation: -20}); gsap.set("#h20", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h21", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h22", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h23", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h24", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h25", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h26", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h27", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h28", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h29", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h30", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h31", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h32", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#leave", {opacity: 0, scale: .6, y: 30}); gsap.set("#h33", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#sn1", {opacity: 0, scale: 2.2, y: -20}); gsap.set("#h34", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#fix0", {opacity: 0, scale: .6, y: 30}); gsap.set("#h35", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#gq1", {opacity: 0, y: 30}); gsap.set("#h36", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h37", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h38", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h39", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h40", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#gd1", {opacity: 0, scale: .4}); gsap.set("#ga1", {opacity: 0, y: 40, scale: .9}); gsap.set("#h41", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h42", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h43", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h44", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h45", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#stamp1", {opacity: 0, scale: 2.4, rotation: -20}); gsap.set("#h46", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h47", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#tp0", {opacity: 0, x: 80}); gsap.set("#tp1", {opacity: 0, x: 80}); gsap.set("#h48", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#tp2", {opacity: 0, x: 80}); gsap.set("#h49", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h50", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h51", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#next", {opacity: 0, scale: .6, y: 40}); gsap.set("#h52", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#sn2", {opacity: 0, scale: 2.2, y: -20}); gsap.set("#h53", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#gq2", {opacity: 0, y: 30}); gsap.set("#h54", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h55", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h56", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h57", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h58", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h59", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h60", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#gd2", {opacity: 0, scale: .4}); gsap.set("#ga2", {opacity: 0, y: 40, scale: .9}); gsap.set("#h61", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h62", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h63", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#stamp2", {opacity: 0, scale: 2.4, rotation: -20}); gsap.set("#h64", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h65", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h66", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#rarc", {strokeDashoffset: 1, opacity: 0}); gsap.set("#h67", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h68", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#post", {opacity: 0, scale: .4}); gsap.set("#fix2", {opacity: 0, scale: .6, y: 30}); gsap.set("#sn3", {opacity: 0, scale: 2.2, y: -20}); gsap.set("#h69", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h70", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h71", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h72", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h73", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h74", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h75", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h76", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#good", {opacity: 0, scale: .5, rotation: 6}); gsap.set("#h77", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#coach", {opacity: 0, scale: .5}); gsap.set("#h78", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h79", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h80", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h81", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h82", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h83", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#cbox", {opacity: 0, y: 60}); gsap.set("#h84", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h85", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#sent", {opacity: 0, y: 20}); gsap.set("#h86", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h87", {opacity: 0, filter: 'blur(10px)', y: 24}); gsap.set("#h88", {opacity: 0, filter: 'blur(10px)', y: 24});
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+/* Cree */
+#cree { position: absolute; left: 0; top: 0; width: 820px; height: 820px; z-index: 6; opacity: 0; transform-origin: 410px 500px; pointer-events: none;
+  filter: drop-shadow(0 0 30px rgba(255,90,180,.7)); }
+#cshadow { position: absolute; left: 210px; top: 770px; width: 400px; height: 60px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,120,190,.45), rgba(255,120,190,0)); }
+#creeb { position: absolute; inset: 0; transform-origin: 50% 97.5%; }
+#creef { position: absolute; inset: 0; transform-origin: 50% 60%; }
+#creep { position: absolute; inset: 0; transform-origin: 50% 97.5%; }
+.cpose { position: absolute; inset: 0; opacity: 0; }
+.cpose img, .clids, .csw { position: absolute; inset: 0; width: 820px; height: 820px; }
+.csw { overflow: visible; }
+.lidg { opacity: 0; }
+.sweat { opacity: 0; transform-box: fill-box; transform-origin: 50% 0; }
+.csp { position: absolute; opacity: 0; }
+#bub { position: absolute; left: 600px; top: 0; width: 210px; height: 190px; opacity: 0; border-radius: 50% 50% 50% 14px; display: grid; place-items: center;
+  transform-origin: 0 100%; background: rgba(255,255,255,.92); }
+#bubt { font: 800 120px/1 Inter; color: #F343A2; }
+#crglow { position: absolute; width: 520px; height: 520px; margin: -260px 0 0 -260px; border-radius: 50%; z-index: 5; opacity: 0;
+  background: radial-gradient(circle, rgba(255,110,190,.75), rgba(243,67,162,.25) 40%, rgba(243,67,162,0) 70%); }
+

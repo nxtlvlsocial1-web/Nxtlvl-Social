@@ -1,0 +1,14 @@
+# renders and sound work files
+renders/
+*.mp4
+sfx/work/
+sfx/music/*.mp3
+sfx/music/search.jsonl
+# client media (the repo is public): Cree's poses, the Creedom wordmark, the owner's voiceover
+assets/img/poses/
+assets/img/creedom_logo.png
+assets/audio/
+__pycache__/
+.hyperframes/
+# third-party trademark (OpenAI logo), not ours to publish in the repo
+assets/img/chatgpt_logo.png
