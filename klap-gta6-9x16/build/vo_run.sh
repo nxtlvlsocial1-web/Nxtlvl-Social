@@ -5,3 +5,4 @@ export HF_HOME=/root/tts/hf
 echo "VO EXIT $?" >> cache/vo.log
 /root/tts/.venv/bin/python build/vo_pick.py >> cache/vo.log 2>&1
 echo "PICK EXIT $?" >> cache/vo.log
+/root/tts/.venv/bin/python build/vo_gap.py >> cache/vo.log 2>&1

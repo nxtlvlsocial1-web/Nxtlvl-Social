@@ -1,21 +1,21 @@
 [
 {
-"t": 1.337,
+"t": 1.239,
 "kind": "whoosh",
 "file": "whoosh_whoosh_a.wav"
 },
 {
-"t": 1.397,
+"t": 1.299,
 "kind": "thump",
 "file": "thump_impact.wav"
 },
 {
-"t": 2.289,
+"t": 2.167,
 "kind": "swish",
 "file": "swish_whoosh_b.wav"
 },
 {
-"t": 2.349,
+"t": 2.227,
 "kind": "thump",
 "file": "thump_impact.wav"
 },
@@ -120,24 +120,24 @@
 "file": "whoosh_whoosh_b.wav"
 },
 {
-"t": 17.099,
-"kind": "whoosh_big",
-"file": "whoosh_big_whoosh_deep.wav"
-},
-{
-"t": 17.349,
+"t": 17.715,
 "kind": "impact",
 "file": "impact_impact.wav"
 },
 {
-"t": 17.649,
-"kind": "sparkle",
-"file": "sparkle_sparkle.wav"
+"t": 17.735,
+"kind": "whoosh_big",
+"file": "whoosh_big_whoosh_deep.wav"
 },
 {
 "t": 17.903,
 "kind": "whoosh",
 "file": "whoosh_whoosh_a.wav"
+},
+{
+"t": 18.015,
+"kind": "sparkle",
+"file": "sparkle_sparkle.wav"
 },
 {
 "t": 18.283,

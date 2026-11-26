@@ -91,7 +91,8 @@ n = round((o2 - (b_break - T["hard"] + .05)) / BI)
 o1 = o2 - n * BI
 CUT = T["klaphit"] - 4 * BI
 grid = [b - o1 for b in BEATS["beats_s"] if 0 <= b - o1 < CUT] + [b - o2 for b in BEATS["beats_s"] if CUT <= b - o2 < DUR]
-json.dump({"track": "sfx/music/m3_miami.mp3", "o1": round(o1, 4), "o2": round(o2, 4), "cut": round(CUT, 4), "dur": DUR},
+GAP = [wt("called", after=T["tool"]) - .08, T["klaphit"] - .01]   # the music drops out under "called Klap" so the name reads clean
+json.dump({"track": "sfx/music/m3_miami.mp3", "o1": round(o1, 4), "o2": round(o2, 4), "cut": round(CUT, 4), "dur": DUR, "gap": [round(g, 3) for g in GAP]},
           open(os.path.join(ROOT, "plan", "music_plan.json"), "w"), indent=1)
 
 
