@@ -1,0 +1,129 @@
+
+/* ===== DM reel ===== */
+.tc { font-size: 24px; padding: 9px 16px 9px 10px; }
+.av { display: inline-block; width: 56px; height: 56px; border-radius: 50%; flex: none; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,.08); }
+.clogo2 { height: 40px; }
+/* s0 */
+.post { position: absolute; left: 140px; top: 600px; width: 800px; height: 1080px; border-radius: 40px; overflow: hidden; background: #fff; box-shadow: 0 40px 80px rgba(80,10,50,.25); }
+.post .rthumb { position: absolute; left: 0; right: 0; top: 0; height: 560px; inset: auto; width: 100%; }
+.post .rthumb b { font-size: 46px; }
+.csheet { position: absolute; left: 0; right: 0; top: 560px; bottom: 0; padding: 26px 34px; background: #fff; }
+.csheet small { font: 700 26px Poppins; color: #9a8a96; letter-spacing: .04em; }
+.cmt { display: flex; align-items: center; gap: 16px; margin-top: 22px; font: 600 34px Poppins; color: #1a1020; opacity: 0; }
+.cmt b { font-weight: 800; }
+.cin { position: absolute; left: 30px; right: 30px; bottom: 30px; height: 100px; border-radius: 50px; border: 3px solid #eadbe4; display: flex; align-items: center; gap: 18px; padding: 0 22px;
+  font: 800 48px Poppins; color: #1a1020; }
+.cin span { flex: 1; } .cin u { text-decoration: none; }
+.cin em { font: 800 36px Poppins; color: #F343A2; font-style: normal; }
+.notif { position: absolute; left: 80px; right: 80px; top: 560px; z-index: 12; display: flex; align-items: center; gap: 20px; padding: 24px 28px; border-radius: 34px;
+  background: rgba(255,255,255,.96); box-shadow: 0 30px 60px rgba(80,10,50,.3); opacity: 0; }
+.notif .clogo2 { height: 46px; }
+.notif b { display: block; font: 800 34px Poppins; color: #1a1020; } .notif span { font: 600 30px Poppins; color: #5a4a56; }
+.notif small { margin-left: auto; font: 600 24px Poppins; color: #9a8a96; align-self: flex-start; }
+.ring10 { position: absolute; left: 70px; top: 1160px; width: 240px; height: 240px; z-index: 12; opacity: 0; }
+.ring10 svg { width: 100%; height: 100%; filter: drop-shadow(0 14px 24px rgba(80,10,50,.25)); }
+.ring10 b { position: absolute; left: 0; right: 0; top: 52px; text-align: center; font: 900 104px/1 Poppins; color: #1a1020; }
+.ring10 small { position: absolute; left: 0; right: 0; top: 160px; text-align: center; font: 700 24px Poppins; color: #9a8a96; letter-spacing: .1em; }
+.sender { position: absolute; right: 70px; top: 1180px; z-index: 12; width: 280px; padding: 22px; border-radius: 30px; background: #1a1020; color: #fff; text-align: center; opacity: 0; }
+.sender small { font: 700 24px Mono; color: #ff8ac2; letter-spacing: .12em; } .sender b { display: block; font: 900 120px/1 Poppins; color: #ffd23f; }
+.notme { position: absolute; left: 0; right: 0; top: 1440px; text-align: center; z-index: 13; opacity: 0; }
+.notme span { display: inline-block; padding: 18px 50px 6px; border: 12px solid #e0283e; border-radius: 26px; color: #e0283e; font: 400 170px/1 Bebas; background: rgba(255,255,255,.92); letter-spacing: .04em; }
+/* s1 */
+.crhero { position: absolute; left: 0; right: 0; top: 700px; text-align: center; opacity: 0; }
+.crhero .glow { position: absolute; left: 50%; top: 50%; width: 700px; height: 700px; margin: -350px 0 0 -350px; border-radius: 50%; background: radial-gradient(circle, rgba(243,67,162,.35), rgba(243,67,162,0) 65%); }
+.crhero img { position: relative; height: 150px; }
+.crhero span { position: relative; display: block; margin-top: 10px; font: 800 52px Poppins; color: #1a1020; }
+.rule { position: absolute; left: 90px; right: 90px; top: 1000px; padding: 36px; border-radius: 40px; background: #1a1020; box-shadow: 0 30px 60px rgba(80,10,50,.3); opacity: 0; }
+.rule small { font: 700 26px Mono; color: #ff8ac2; letter-spacing: .12em; }
+.rrow { display: flex; gap: 16px; margin-top: 22px; }
+.blk { padding: 20px 28px; border-radius: 22px; font: 800 44px Poppins; opacity: 0; }
+.b0, .b2 { background: #3a2a44; color: #fff; } .b1 { background: #F343A2; color: #fff; } .b3 { background: #2fbf71; color: #fff; }
+.rarr { display: block; margin: 18px 0 0 60px; width: 0; height: 0; border-left: 30px solid transparent; border-right: 30px solid transparent; border-top: 44px solid #ffd23f; opacity: 0; }
+.once { position: absolute; right: -20px; top: -40px; padding: 10px 30px 2px; border: 8px solid #ffd23f; border-radius: 20px; background: #1a1020; color: #ffd23f; font: 400 80px/1 Bebas; opacity: 0; }
+/* s2 hub */
+.spokes { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+.spokes line { opacity: 0; }
+.pulse { position: absolute; left: -16px; top: -16px; width: 32px; height: 32px; border-radius: 50%; background: #F343A2; box-shadow: 0 0 20px #F343A2; opacity: 0; }
+.hub { position: absolute; left: 400px; top: 1060px; width: 280px; height: 140px; border-radius: 70px; background: #fff; display: grid; place-items: center; box-shadow: 0 20px 50px rgba(243,67,162,.35); opacity: 0; }
+.hub .clogo2 { height: 56px; }
+.node { position: absolute; width: 190px; height: 190px; border-radius: 50%; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  box-shadow: 0 20px 40px rgba(80,10,50,.15); opacity: 0; }
+.node svg { width: 80px; height: 80px; } .node b { font: 800 24px Poppins; color: #1a1020; letter-spacing: .04em; }
+.node em { position: absolute; right: -6px; top: -6px; width: 56px; height: 56px; border-radius: 50%; background: #1a1020; color: #fff; font: 900 30px/56px Poppins; text-align: center; font-style: normal; }
+/* s3 */
+.cpost { position: absolute; left: 70px; top: 760px; width: 380px; height: 560px; border-radius: 30px; overflow: hidden; background: #fff; box-shadow: 0 30px 60px rgba(80,10,50,.2); opacity: 0; }
+.cpost .rthumb { position: absolute; inset: 0; }
+.cb { position: absolute; left: 20px; bottom: 20px; display: flex; align-items: center; gap: 12px; padding: 10px 22px 10px 10px; border-radius: 40px; background: #fff; font: 800 40px Poppins; opacity: 0; }
+.path3 { position: absolute; inset: 0; width: 1080px; height: 1920px; pointer-events: none; }
+#pa3 { opacity: 0; }
+.fly { position: absolute; left: 0; top: 0; z-index: 9; padding: 12px 26px; border-radius: 30px; background: #F343A2; color: #fff; font: 900 48px Poppins; opacity: 0; }
+.inbox { position: absolute; left: 650px; top: 980px; width: 300px; padding: 26px; border-radius: 34px; background: #fff; text-align: center; box-shadow: 0 30px 60px rgba(80,10,50,.2); opacity: 0; }
+.inbox .env { width: 150px; } .inbox b { display: block; margin-top: 8px; font: 800 30px Poppins; letter-spacing: .1em; color: #1a1020; }
+.dmb { position: absolute; left: 110px; right: 110px; top: 1380px; padding: 28px 32px; border-radius: 34px 34px 34px 10px; background: #fff; box-shadow: 0 30px 60px rgba(80,10,50,.2); opacity: 0; }
+.dmb p { margin-top: 10px; font: 700 40px Poppins; color: #1a1020; }
+.lnk { display: inline-block; margin-top: 14px; padding: 12px 24px; border-radius: 20px; background: #ffe0ef; color: #c81d7e; font: 800 34px Poppins; }
+.dmb.sm { top: 1420px; }
+/* s4 */
+.chat { position: absolute; left: 110px; right: 110px; top: 640px; height: 900px; border-radius: 40px; background: #fff; box-shadow: 0 40px 80px rgba(80,10,50,.22); overflow: hidden; opacity: 0; }
+.chd { display: flex; align-items: center; gap: 16px; padding: 26px 30px; border-bottom: 3px solid #f6e3ee; font: 800 36px Poppins; color: #1a1020; }
+.chd em { margin-left: auto; padding: 6px 14px; border-radius: 18px; background: #1a1020; color: #fff; font: 700 20px Mono; letter-spacing: .08em; font-style: normal; }
+.ub { position: absolute; right: 34px; top: 180px; padding: 22px 34px; border-radius: 34px 34px 10px 34px; background: #F343A2; color: #fff; font: 900 56px Poppins; opacity: 0; }
+.typ { position: absolute; left: 40px; top: 340px; display: flex; gap: 10px; padding: 22px 26px; border-radius: 30px; background: #f3eef2; opacity: 0; }
+.typ i { width: 16px; height: 16px; border-radius: 50%; background: #9a8a96; }
+.ab { position: absolute; left: 34px; right: 120px; top: 330px; padding: 24px 30px; border-radius: 34px 34px 34px 10px; background: #f3eef2; opacity: 0; }
+.ab p { margin-top: 10px; font: 700 40px Poppins; color: #1a1020; }
+.ub.small { top: 520px; font-size: 40px; } .ab.small { top: 650px; }
+.bolt { position: absolute; left: 760px; top: 1180px; width: 200px; text-align: center; opacity: 0; z-index: 4; }
+.bolt svg { width: 120px; height: 200px; filter: drop-shadow(0 10px 20px rgba(0,0,0,.2)); }
+.bolt b { display: block; font: 400 64px/1 Bebas; color: #1a1020; letter-spacing: .06em; }
+/* s5 */
+.story { position: absolute; left: 230px; top: 640px; width: 620px; height: 760px; border-radius: 36px; overflow: hidden; background: linear-gradient(160deg, #ffb3d6, #F343A2 55%, #8a4dff);
+  box-shadow: 0 40px 80px rgba(80,10,50,.3); opacity: 0; }
+.story .sbar { position: absolute; left: 24px; right: 24px; top: 20px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.4); }
+.story .sbar i { display: block; height: 100%; width: 0; border-radius: 4px; background: #fff; }
+.sav { position: absolute; left: 24px; top: 44px; display: flex; align-items: center; gap: 14px; font: 800 30px Poppins; color: #fff; }
+.sbody { position: absolute; left: 0; right: 0; top: 240px; text-align: center; font: 400 96px/0.95 Bebas; color: #fff; letter-spacing: .02em; }
+.srep { position: absolute; left: 24px; right: 24px; bottom: 26px; height: 90px; border-radius: 45px; border: 3px solid rgba(255,255,255,.8); padding: 0 30px; display: flex; align-items: center;
+  font: 700 38px Poppins; color: #fff; }
+.srep u { text-decoration: none; white-space: pre; }
+.sarr { position: absolute; left: 520px; top: 1360px; width: 0; height: 0; border-left: 30px solid transparent; border-right: 30px solid transparent; border-top: 50px solid #1a1020; opacity: 0; }
+/* s6 */
+.live { position: absolute; left: 70px; top: 640px; width: 560px; height: 900px; border-radius: 36px; overflow: hidden; background: linear-gradient(180deg, #2a1a33, #4a2347); box-shadow: 0 40px 80px rgba(80,10,50,.3); opacity: 0; }
+.lv { position: absolute; left: 24px; top: 24px; padding: 6px 18px; border-radius: 12px; background: #ff3b4e; color: #fff; font: 900 32px Poppins; letter-spacing: .06em; }
+.lbody { position: absolute; left: 50%; top: 160px; margin-left: -90px; } .lbody .av { width: 180px; height: 180px; }
+.lc { position: absolute; left: 24px; display: flex; align-items: center; gap: 12px; font: 700 32px Poppins; color: #fff; opacity: 0; }
+.lc .av { width: 46px; height: 46px; }
+#lc0 { top: 420px; } #lc1 { top: 480px; } #lc2 { top: 540px; } #lc3 { top: 600px; } #lc4 { top: 660px; } #lc5 { top: 720px; } #lc6 { top: 780px; } #lc7 { top: 840px; }
+.envf { position: absolute; left: 0; top: 0; width: 90px; z-index: 9; opacity: 0; } .envf .env { width: 90px; }
+.ctr { position: absolute; left: 680px; top: 900px; width: 330px; padding: 30px; border-radius: 36px; background: #fff; text-align: center; box-shadow: 0 30px 60px rgba(80,10,50,.2); opacity: 0; }
+.ctr .env { width: 110px; } .ctr b { display: block; font: 900 130px/1 Poppins; color: #F343A2; } .ctr small { font: 800 26px Poppins; color: #1a1020; letter-spacing: .08em; }
+/* s7 */
+.chat.empty { top: 640px; }
+.tap2 { display: block; margin: 30px 34px 0; font: 700 24px Mono; color: #b06a90; letter-spacing: .1em; }
+.chip { margin: 20px 34px 0; padding: 22px 30px; border-radius: 30px; border: 3px solid #f0dce8; font: 800 40px Poppins; color: #1a1020; background: #fff; opacity: 0; }
+#fing { position: absolute; left: 0; top: 0; z-index: 14; opacity: 0; }
+/* s8 */
+.log { position: absolute; left: 80px; right: 80px; top: 610px; border-radius: 36px; background: #fff; box-shadow: 0 30px 60px rgba(80,10,50,.18); overflow: hidden; opacity: 0; }
+.lh { display: flex; align-items: center; padding: 24px 30px; border-bottom: 3px solid #f6e3ee; font: 800 36px Poppins; color: #1a1020; }
+.lh em { margin-left: auto; padding: 6px 14px; border-radius: 18px; background: #1a1020; color: #fff; font: 700 20px Mono; letter-spacing: .08em; font-style: normal; }
+.lrows { padding: 10px 30px 20px; }
+.lr { display: grid; grid-template-columns: 90px 160px 1fr 100px; align-items: center; gap: 10px; padding: 16px 0; border-bottom: 2px solid #f8edf3; font: 700 28px Poppins; color: #1a1020; opacity: 0; }
+.lr small { font: 700 24px Mono; color: #9a8a96; } .lr span { color: #6a5a66; }
+.lr i { padding: 6px 0; border-radius: 16px; background: #2fbf71; color: #fff; text-align: center; font: 800 22px Poppins; font-style: normal; }
+.tog { position: absolute; left: 160px; right: 160px; top: 1250px; display: flex; align-items: center; gap: 24px; padding: 26px 34px; border-radius: 40px; background: #1a1020; color: #fff; font: 800 40px Poppins; opacity: 0; }
+.tog b { flex: 1; } .tog span { font: 900 32px Poppins; width: 130px; text-align: right; color: #ffd23f; }
+.sw { position: relative; width: 190px; height: 90px; border-radius: 45px; background: #2fbf71; }
+.sw i { position: absolute; right: 8px; top: 8px; width: 74px; height: 74px; border-radius: 50%; background: #fff; }
+.meta { position: absolute; left: 100px; right: 100px; top: 1440px; display: flex; align-items: center; gap: 22px; padding: 26px 30px; border-radius: 34px; background: #e3f9eb; opacity: 0; }
+.meta svg { width: 70px; height: 70px; flex: none; } .meta b { display: block; font: 800 36px Poppins; color: #1a1020; } .meta span { font: 600 30px Poppins; color: #2b7a4b; }
+/* s9 */
+.bigcta { position: absolute; left: 0; right: 0; top: 590px; text-align: center; opacity: 0; }
+.bigcta span { display: block; font: 400 120px/1 Bebas; color: #1a1020; letter-spacing: .1em; }
+.bigcta b { display: block; font: 900 420px/0.85 Morganite; background: linear-gradient(180deg, #ff8ac2, #F343A2 60%, #b4127a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+#s9 .cbox { top: 1100px; opacity: 0; }
+.ibx { position: absolute; left: 390px; top: 1280px; width: 300px; text-align: center; opacity: 0; }
+.ibx .env { width: 200px; filter: drop-shadow(0 14px 24px rgba(80,10,50,.25)); }
+.badge9 { position: absolute; right: 40px; top: -20px; width: 84px; height: 84px; border-radius: 50%; background: #ff3b4e; display: grid; place-items: center; opacity: 0; }
+.badge9 b { font: 900 46px Poppins; color: #fff; }
+.ibx small { display: block; margin-top: 14px; font: 800 30px Poppins; color: #1a1020; letter-spacing: .08em; white-space: nowrap; }
+.ttl span { white-space: nowrap; font-size: 180px; }
