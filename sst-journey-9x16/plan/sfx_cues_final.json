@@ -1,6 +1,6 @@
 [
 {
-"t": 1.6,
+"t": 1.58,
 "kind": "glitch",
 "file": "glitch_click.wav"
 },
@@ -10,44 +10,49 @@
 "file": "glitch_click.wav"
 },
 {
-"t": 5.54,
+"t": 5.52,
 "kind": "glitch",
 "file": "glitch_click.wav"
 },
 {
-"t": 7.81,
+"t": 7.71,
 "kind": "whoosh_soft",
 "file": "whoosh_soft_whoosh_b.wav"
 },
 {
-"t": 13.61,
+"t": 13.46,
 "kind": "tick",
 "file": "tick_click.wav"
 },
 {
-"t": 15.19,
+"t": 15.04,
 "kind": "tick",
 "file": "tick_click.wav"
 },
 {
-"t": 15.61,
+"t": 15.46,
 "kind": "tick",
 "file": "tick_click.wav"
 },
 {
-"t": 16.29,
+"t": 16.2,
 "kind": "tick",
 "file": "tick_click.wav"
 },
 {
-"t": 17.45,
+"t": 17.32,
 "kind": "tick",
 "file": "tick_click.wav"
 },
 {
-"t": 18.06,
+"t": 17.91,
 "kind": "glitch",
 "file": "glitch_click.wav"
+},
+{
+"t": 17.93,
+"kind": "click",
+"file": "click_click.wav"
 },
 {
 "t": 18.08,
@@ -60,112 +65,97 @@
 "file": "click_click.wav"
 },
 {
-"t": 18.38,
-"kind": "click",
-"file": "click_click.wav"
-},
-{
-"t": 21.19,
+"t": 21.04,
 "kind": "glitch",
 "file": "glitch_click.wav"
 },
 {
-"t": 21.97,
+"t": 21.82,
 "kind": "notify_soft",
 "file": "notify_soft_notify.wav"
 },
 {
-"t": 22.29,
+"t": 22.14,
 "kind": "notify_soft",
 "file": "notify_soft_notify.wav"
 },
 {
-"t": 22.61,
+"t": 22.46,
 "kind": "notify_soft",
 "file": "notify_soft_notify.wav"
 },
 {
-"t": 22.93,
+"t": 22.78,
 "kind": "notify_soft",
 "file": "notify_soft_notify.wav"
 },
 {
-"t": 23.25,
+"t": 23.1,
 "kind": "notify_soft",
 "file": "notify_soft_notify.wav"
 },
 {
-"t": 26.43,
+"t": 26.28,
 "kind": "glitch",
 "file": "glitch_click.wav"
 },
 {
-"t": 27.13,
+"t": 26.98,
 "kind": "thump",
 "file": "thump_impact.wav"
 },
 {
-"t": 27.25,
+"t": 27.1,
 "kind": "thump",
 "file": "thump_impact.wav"
 },
 {
-"t": 27.37,
+"t": 27.34,
 "kind": "thump",
 "file": "thump_impact.wav"
 },
 {
-"t": 30.3,
+"t": 30.0,
 "kind": "thump",
 "file": "thump_impact.wav"
 },
 {
-"t": 32.41,
+"t": 32.01,
 "kind": "whoosh_soft",
 "file": "whoosh_soft_whoosh_b.wav"
 },
 {
-"t": 35.05,
+"t": 34.65,
 "kind": "thump",
 "file": "thump_impact.wav"
 },
 {
-"t": 38.41,
+"t": 38.01,
 "kind": "thump",
 "file": "thump_impact.wav"
 },
 {
-"t": 45.11,
-"kind": "whoosh_soft",
-"file": "whoosh_soft_whoosh_b.wav"
+"t": 43.42,
+"kind": "impact",
+"file": "impact_impact.wav"
 },
 {
-"t": 45.39,
-"kind": "whoosh_soft",
-"file": "whoosh_soft_whoosh_b.wav"
-},
-{
-"t": 45.67,
-"kind": "whoosh_soft",
-"file": "whoosh_soft_whoosh_b.wav"
-},
-{
-"t": 47.19,
+"t": 49.31,
 "kind": "stamp_soft",
 "file": "stamp_soft_stamp.wav"
 },
 {
-"t": 48.35,
+"t": 50.81,
 "kind": "whoosh_soft",
 "file": "whoosh_soft_whoosh_b.wav"
 },
 {
-"t": 53.17,
+"t": 55.63,
 "kind": "riser_low",
 "file": "riser_low_riser.wav"
 },
 {
-"t": 53.47,
+"t": 55.83,
 "kind": "impact",
 "file": "impact_impact.wav"
 }

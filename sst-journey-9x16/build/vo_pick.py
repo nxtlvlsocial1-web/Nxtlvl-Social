@@ -26,10 +26,10 @@ TEMPO = float(os.environ.get("VO_TEMPO", "1.0"))
 GAP_SCALE = 1.0
 LEAD = .6          # silence before the first word of the reel (v3: the cold open hits at once)
 # pause after each line (s): peaks get room to land, the list moves fast
-GAP = {"g1": .55, "g2": .45, "g3": .35, "g4": .8, "g5": .7, "g6": .5, "g7": .7, "g8": .6}   # v4: the hard turn after "offline" and before the ask get room
+GAP = {"g1": .45, "g2": .4, "g3": .35, "g4": .65, "g5": .6, "g6": .4, "g6b": .6, "g7": .6, "g8": .5}   # v6: the accidents line added; pauses trimmed to stay under 60 s
 
 
-NUM = {"neighbourhood": "neighborhood", "five": "5", "seven": "7", "fifteen": "15", "four": "4", "sst": "s",  "six": "6", "nineteenth": "19th", "fortysix": "46", "one": "1", "two": "2", "three": "3", "twenty": "20"}
+NUM = {"deliberately": "deliberately", "neighbourhood": "neighborhood", "five": "5", "seven": "7", "fifteen": "15", "four": "4", "sst": "s",  "six": "6", "nineteenth": "19th", "fortysix": "46", "one": "1", "two": "2", "three": "3", "twenty": "20"}
 
 
 def norm(w):

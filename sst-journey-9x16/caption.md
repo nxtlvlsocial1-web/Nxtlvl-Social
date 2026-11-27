@@ -1,10 +1,15 @@
-# SST: the problems faced (Instagram + Facebook Reels, 9:16, ~58 s), v5
+# SST: the problems faced (Instagram + Facebook Reels, 9:16, 59.8 s), v6
 
 Owner on v3: "Highlight the issues faced. Let it only be about the problems in most of the video. No need to mention
 things like we are working on vision. Go through the article and mention the problems faced honestly." Source: A Reporter
 Live, "Hacking tracking and stalking just to stop the progress of sports science technology for months and years"
 (https://areporterlive.com/hacking-tracking-and-stalking-just-to-stop-the-progress-of-sports-science-technology-for-months-and-years/,
 posted 2024-12-19, updated 2026-09-17). The owner approved going straight to the final.
+
+v6 (owner: "only remove letters written to prime minister, add intentional accidents"): the Prime Minister's portal
+letters are gone (voice, headline and the letters graphic); a new line, "And accidents, the account says, were caused
+deliberately.", on a wrecked-car shot (Pexels 3974558) with the headline ACCIDENTS. / CAUSED DELIBERATELY. Pauses trimmed
+to stay under 60 s. v5 voice and plan kept in assets/audio/v5/ and plan/v5/.
 
 v5 (owner: "he feels he is just reading the script"): same script, performed read (pauses, emphasis, livelier
 exaggeration per passage, `say` lines in plan/script.json); v4 voice kept in assets/audio/v4/.
@@ -26,7 +31,8 @@ build/generate_v3.py, plan/edl_v3.json, plan/script_v3.json.
 | Then it moved offline. | a beat of black, the glitch stops |
 | People watching the neighbourhood. Seven times, strangers tried to start a fight. | WATCHED. / 7 TIMES |
 | Fifteen to twenty times, the vehicle was punctured and damaged, on purpose. | 15-20 TIMES |
-| The police were told. Three letters went to the Prime Minister's portal. No action yet. | 3 letters, NO ACTION YET stamp |
+| And accidents, the account says, were caused deliberately. | ACCIDENTS. / CAUSED DELIBERATELY. (wrecked car) |
+| The police were told. No action yet. | NO ACTION YET stamp |
 | The ask is simple. Let this invention reach people, without interference. | THE ASK IS SIMPLE. |
 | Sports Science Technology. | SST logo, "Without interference.", the article's disclaimer |
 
@@ -43,8 +49,9 @@ This is what the founder of Sports Science Technology has faced, according to a 
 3. Four fake profiles made with AI in the founder's name
 4. People watching the neighbourhood, and seven attempts by strangers to start a fight
 5. The vehicle punctured and damaged 15 to 20 times, on purpose
+6. Accidents caused deliberately
 
-The police were told. Three letters went to the Prime Minister's portal. No action yet.
+The police were told. No action yet.
 
 The ask is simple: let this invention reach people, without interference.
 
@@ -53,7 +60,7 @@ Allegations as described in a published account (A Reporter Live). The founder i
 Music: "A Good Dream" by Jesse Keller, CC BY 3.0
 
 #sportssciencetechnology #sst #cybercrime #harassment #justice
-sports science technology, sst, phone hacked, cyber harassment, stalking and harassment, fake profiles, account hacked, cyber crime complaint, police no action, innovation under attack
+sports science technology, sst, phone hacked, cyber harassment, stalking and harassment, fake profiles, account hacked, deliberate accidents, cyber crime complaint, police no action, innovation under attack
 ```
 
 No comment-keyword CTA: there is nothing to DM, so the description opens on the hook.

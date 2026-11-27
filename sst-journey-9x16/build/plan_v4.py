@@ -29,7 +29,8 @@ PLAN = [
     ("s09", "11792115", 4.0, .5, "dark", "", start["j14"] - .1, "a figure in the fog"),
     ("s10", "13891268", 2.0, .45, "dark", "", start["j15"] - .1, "a tyre in the rain"),
     ("s11", "14514406", 3.0, .4, "dark", "", (start["j15"] + end["j15"]) / 2, "a damaged wheel being changed"),
-    ("s12", "7062984", 2.0, .55, "night", "", start["j16"] - .1, "filing papers into a box"),
+    ("s11b", "3974558", 9.0, .55, "dark", "eq=brightness=-0.09:gamma=0.85:saturation=0.8", start["j16"] - .1, "a wrecked car, the front end crushed (v6: the accidents line)"),
+    ("s12", "7062984", 2.0, .55, "night", "", start["j17"] - .1, "filing papers into a box"),
     ("s13", "7062990", 1.5, .6, "night", "", start["j18"] - .2, "writing in the dark"),
     ("s14", "7062986", 1.0, .62, "turn", "", start["j19"] - .2, "hand to the head, thinking"),
     ("s15", "7062993", 2.0, .62, "turn", "", start["j20"] - .1, "stillness, hand on chin"),
@@ -40,7 +41,7 @@ for k, (i, src, inn, focus, grade, extra, t, what) in enumerate(PLAN):
     s = {"id": i, "src": src, "t": round(t, 3), "d": round(t1 - t, 3), "in": inn, "focus": focus, "grade": grade, "what": what}
     if extra:
         s["extra"] = extra
-    if i in ("s02", "s07", "s08", "s09", "s10", "s11"):
+    if i in ("s02", "s07", "s08", "s09", "s10", "s11", "s11b"):
         s["cut"] = True                  # the problems cut hard; the quiet beats dissolve
     shots.append(s)
 json.dump({"band": [1080, 1160], "handle": .6, "shots": shots, "overlays": []}, open(os.path.join(ROOT, "plan", "edl.json"), "w"), indent=1)

@@ -48,11 +48,19 @@
   "cfg": 0.3
  },
  {
+  "id": "g6b",
+  "text": "And accidents, the account says, were caused deliberately.",
+  "say": "And accidents... the account says... were caused, deliberately.",
+  "ex": 0.85,
+  "cfg": 0.3,
+  "at": null
+ },
+ {
   "id": "g7",
-  "text": "The police were told. Three letters went to the Prime Minister's portal. No action yet.",
+  "text": "The police were told. No action yet.",
   "ex": 0.8,
   "at": null,
-  "say": "The police were told. Three letters went to the Prime Minister's portal. No action... yet.",
+  "say": "The police were told. No action... yet.",
   "cfg": 0.3
  },
  {

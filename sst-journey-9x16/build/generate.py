@@ -6,7 +6,7 @@ progress of sports science technology", updated 2026-09-17). Every on-screen fac
 the hard disk hacked twice with data and source code stolen, Instagram / Facebook / Gmail / WhatsApp / Proton Mail /
 domain / internet provider / bank accounts hacked and used to track and message, Google OTPs 5 times from numbers
 registered to other people, 4 fake profiles made with AI, people watching the neighbourhood, 7 attempts to start a fight,
-the vehicle punctured or damaged 15-20 times, the police informed, 3 letters via the Prime Minister's portal, no action
+the vehicle punctured or damaged 15-20 times, accidents caused deliberately, the police informed, no action
 yet. Attributed throughout ("as described in a published account"); the people the article accuses are not shown (no
 proven finding). Kept from v3: the navy grade, the footage band, Montserrat / Inter type, the restrained glitch, subtitles,
 the exact SST logo on its white card.
@@ -57,7 +57,7 @@ def wt(lid, word, n=0):
     return hits[min(n, len(hits) - 1)]["t0"]
 
 
-DUR = round(endl[LAST] + 2.6, 2)
+DUR = round(endl[LAST] + 2.2, 2)   # v6: 2.2 s end card keeps the reel under 60 s
 
 # ---- footage: one video per shot, alternating tracks so dissolves can overlap
 clips = []
@@ -97,7 +97,8 @@ HEADS = [("TWO IPHONES. HACKED.", "HARD DISK HACKED TWICE.", "", 0.0, start["j02
          ("WATCHED.", "", "PEOPLE AROUND THE NEIGHBOURHOOD", start["j13"], start["j14"], None),
          ("7 ATTEMPTS", "TO START A FIGHT.", "", start["j14"], start["j15"], wt("j14", "strangers")),
          ("15-20 TIMES", "THE VEHICLE DAMAGED.", "", start["j15"], start["j16"], wt("j15", "the")),
-         ("THE POLICE WERE TOLD.", "NO ACTION YET.", "", start["j16"], start["j19"], start["j18"]),
+         ("ACCIDENTS.", "CAUSED DELIBERATELY.", "", start["j16"], start["j17"], wt("j16", "were")),
+         ("THE POLICE WERE TOLD.", "NO ACTION YET.", "", start["j17"], start["j19"], start["j18"]),
          ("THE ASK IS SIMPLE.", "LET IT REACH PEOPLE.", "", start["j19"], start[LAST] - .3, start["j20"])]
 for k, (a, b, note, t0, t1, tb) in enumerate(HEADS):
     head(k, a, b, note, t0, t1, tb)
@@ -165,15 +166,12 @@ for cid, lid, word in (("c7", "j14", "seven"), ("c15", "j15", "fifteen")):
     to(f"#{cid}", nxt - .3, .25, "{opacity: 0}")
 HTML.append('<div class="big" id="c7"><b>7</b><span>TIMES</span></div><div class="big" id="c15"><b class="mid">15-20</b><span>TIMES</span></div>')
 
-# letters: three letters stack, then NO ACTION YET
-let = "".join(f'<div class="lt" id="lt{k}"><b>LETTER {k + 1}</b><span>Prime Minister\'s portal</span><i></i><i></i><i class="s"></i></div>' for k in range(3))
-HTML.append(f'<div class="panel" id="lets">{let}<div class="stamp" id="noact">NO ACTION YET</div></div>')
-dim(start["j16"] - .1, start["j19"])
-ft("#lets", start["j16"] - .1, .3, "{opacity: 0}", "{opacity: 1}")
-t_l = wt("j17", "three")
-for k in range(3):
-    ft(f"#lt{k}", t_l + k * .28, .45, "{opacity: 0, y: 60, rotation: 0}", f"{{opacity: 1, y: 0, rotation: {(-3, 2, -1)[k]}}}", "power3.out")
-    sfx("whoosh_soft", t_l + k * .28)
+# v6 (owner: "remove letters written to prime minister, add intentional accidents"): accidents get their own beat on the
+# wrecked-car shot (an impact on the word); the police beat keeps only the NO ACTION YET stamp, no letters
+sfx("impact", wt("j16", "accidents") - .05)
+HTML.append('<div class="panel" id="lets"><div class="stamp" id="noact">NO ACTION YET</div></div>')
+dim(start["j17"] - .1, start["j19"], .5)
+ft("#lets", start["j17"] - .1, .3, "{opacity: 0}", "{opacity: 1}")
 ft("#noact", start["j18"] - .05, .35, "{opacity: 0, scale: 1.8, rotation: -8}", "{opacity: 1, scale: 1, rotation: -8}", "back.out(1.6)")
 sfx("stamp_soft", start["j18"])
 to("#lets", start["j19"] - .35, .3, "{opacity: 0}")

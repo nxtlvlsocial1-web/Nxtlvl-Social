@@ -1,5 +1,5 @@
 {
- "duration": 55.67,
+ "duration": 58.03,
  "takes": [
   {
    "line": "g1",
@@ -20,7 +20,7 @@
   {
    "line": "g1",
    "take": 2,
-   "heard": "two iPhones hacked, a hard disk hacked twice, and the source code stolen for months and years.",
+   "heard": "2 iPhones hacked, a hard disk hacked twice and the source code stolen for months and years.",
    "errors": 0,
    "pitch_spread_hz": 113,
    "dynamics": 0.619
@@ -124,7 +124,7 @@
   {
    "line": "g4",
    "take": 3,
-   "heard": "Google login codes five times from numbers registered to strangers and four fake profiles made with AI in the founders name",
+   "heard": "Google login codes five times from numbers registered to strangers and four fake profiles made with AI in the founder's name",
    "errors": 0,
    "pitch_spread_hz": 98,
    "dynamics": 0.546
@@ -164,7 +164,7 @@
   {
    "line": "g6",
    "take": 0,
-   "heard": "People, watching the neighborhood, seven times strangers tried to start a fight, 15 -20 times the vehicle was punctured and damaged, on purpose.",
+   "heard": "People, watching the neighborhood, 7 times strangers tried to start a fight, 15 -20 times the vehicle was punctured and damaged, on purpose.",
    "errors": 1,
    "pitch_spread_hz": 83,
    "dynamics": 0.46
@@ -194,36 +194,68 @@
    "dynamics": 0.543
   },
   {
+   "line": "g6b",
+   "take": 0,
+   "heard": "and accidents,\" the account says, were caused deliberately.",
+   "errors": 0,
+   "pitch_spread_hz": 187,
+   "dynamics": 0.693
+  },
+  {
+   "line": "g6b",
+   "take": 1,
+   "heard": "and accidents, the account says, were caused deliberately.",
+   "errors": 0,
+   "pitch_spread_hz": 133,
+   "dynamics": 0.596
+  },
+  {
+   "line": "g6b",
+   "take": 2,
+   "heard": "and accidents, the account says, were caused deliberately.",
+   "errors": 0,
+   "pitch_spread_hz": 133,
+   "dynamics": 0.618
+  },
+  {
+   "line": "g6b",
+   "take": 3,
+   "heard": "and accidents, the account says, were caused deliberately.",
+   "errors": 0,
+   "pitch_spread_hz": 124,
+   "dynamics": 0.584
+  },
+  {
    "line": "g7",
    "take": 0,
-   "heard": "The police were told three letters went to the prime minister's portal no action yet",
+   "heard": "The police were told, no action yet.",
    "errors": 0,
-   "pitch_spread_hz": 117,
-   "dynamics": 0.501
+   "pitch_spread_hz": 84,
+   "dynamics": 0.658
   },
   {
    "line": "g7",
    "take": 1,
-   "heard": "The police were told, three letters went to the prime minister's portal, no action yet.",
+   "heard": "The police were told no action yet.",
    "errors": 0,
-   "pitch_spread_hz": 93,
-   "dynamics": 0.558
+   "pitch_spread_hz": 70,
+   "dynamics": 0.605
   },
   {
    "line": "g7",
    "take": 2,
-   "heard": "The police were told. Three letters went to the Prime Minister's portal. No action yet.",
+   "heard": "The police were told, no action yet.",
    "errors": 0,
-   "pitch_spread_hz": 79,
-   "dynamics": 0.556
+   "pitch_spread_hz": 47,
+   "dynamics": 0.632
   },
   {
    "line": "g7",
    "take": 3,
-   "heard": "The police were told. Three letters went to the Prime Minister's portal. No action yet.",
+   "heard": "The police were told, no action yet.",
    "errors": 0,
-   "pitch_spread_hz": 134,
-   "dynamics": 0.549
+   "pitch_spread_hz": 70,
+   "dynamics": 0.617
   },
   {
    "line": "g8",
@@ -276,7 +308,7 @@
   {
    "line": "g9",
    "take": 2,
-   "heard": "Sports science technology",
+   "heard": "Sports Science Technology",
    "errors": 0,
    "pitch_spread_hz": 66,
    "dynamics": 0.614
