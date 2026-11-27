@@ -31,17 +31,13 @@ SONG2_HIT = 34.68
 MUSIC2_LUFS = float(os.environ.get("MUSIC2_LUFS", "-19"))
 T_HIT = E.get("music_switch")
 # kind -> (files, peak dBFS, max length s)
-KINDS = {
-    "whoosh": (["whoosh_a", "whoosh_b", "whoosh_c"], -11, .5), "whoosh_big": (["whoosh_big"], -10, .8), "swish": (["whoosh_c", "whoosh_a"], -14, .4),
-    "stamp": (["stamp"], -5, .6), "stamp2": (["stamp2"], -9, .4), "sub": (["sub_hit"], -7, .7), "impact": (["sub_hit"], -8, .7),
-    "thump": (["sub_hit"], -17, .45), "paper": (["paper_a", "paper_b"], -12, .6), "flip": (["flip_a", "flip_b"], -11, .8),
-    "open": (["open"], -10, .3), "close": (["close"], -10, .3), "latch": (["latch"], -11, .3), "click": (["click"], -12, .1),
-    "tick": (["tick"], -19, .1), "typing": (["click"], -16, .1), "pop": (["pop"], -12, .3), "glitch": (["glitch"], -12, .15),
-    "error": (["error"], -11, .3), "ding": (["ding"], -11, .6), "ding2": (["ding2"], -14, .5), "riser": (["riser"], -15, 1.3),
-    "riser_short": (["riser"], -21, 1.3), "switch": (["switch"], -13, .6), "scratch": (["scratch"], -11, .25), "coin": (["coin"], -13, .9),
-    "bell": (["bell"], -14, 1.6), "applause": (["applause"], -10, 5.0), "steps": (["steps"], -16, 1.6), "clunk": (["clunk"], -9, .5),
-    "seat": (["switch"], -17, .3), "door": (["close"], -15, .3),
-    "sparkle": (["sparkle"], -9, 1.4), "ping": (["ping"], -15, .7), "chime": (["chime"], -14, .8), "buzzer": (["buzzer"], -12, .6),
+KINDS = {   # v2: Epidemic Sound effects (assets/sfx_es, via the Higgsfield library) for the main hits
+    "whoosh": (["es_whoosh_tech", "es_swish"], -12, .9), "whoosh_big": (["es_whoosh_tech"], -9, 1.2), "swish": (["es_swish"], -15, .6),
+    "impact": (["es_boom"], -7, 1.8), "sub": (["es_boom"], -9, 1.4), "ding": (["es_success"], -11, 1.2), "ding2": (["es_notif"], -13, .9),
+    "error": (["es_buzzer"], -15, .7), "pop": (["es_bubble", "es_glasspop"], -14, .5), "tick": (["es_bubble"], -21, .2),
+    "click": (["click"], -12, .1), "stamp": (["es_stamp"], -6, .3), "riser_short": (["es_riser"], -15, 1.4), "scanner": (["es_scanner"], -19, 1.8),
+    "powerdown": (["es_powerdown"], -10, 1.3), "typing": (["es_typing"], -16, .6), "sparkle": (["es_sparkle"], -13, 1.4),
+    "coin": (["es_notif"], -14, .8), "shutter": (["es_shutter"], -13, .5), "chime": (["es_success"], -12, 1.2), "scratch": (["scratch"], -11, .25),
 }
 
 
@@ -56,7 +52,7 @@ def prep(kind, name):
     _, peak, md = KINDS[kind]
     raw, out = os.path.join(WORK, f"{kind}_{name}_raw.wav"), os.path.join(WORK, f"{kind}_{name}.wav")
     fo = min(.12, md / 3)
-    run(["ffmpeg", "-y", "-loglevel", "error", "-i", os.path.join(LIB, name + ".mp3"), "-af",
+    run(["ffmpeg", "-y", "-loglevel", "error", "-i", os.path.join(ROOT, "assets", "sfx_es" if name.startswith("es_") else "sfx", name + ".mp3"), "-af",
          f"silenceremove=start_periods=1:start_threshold=-50dB,atrim=0:{md},afade=t=out:st={md - fo:.3f}:d={fo:.3f},aresample=48000",
          "-ac", "2", "-c:a", "pcm_f32le", raw])
     mx = float(re.findall(r"max_volume: (-?[\d.]+) dB", run(["ffmpeg", "-i", raw, "-af", "volumedetect", "-f", "null", "-"]).stderr)[-1])

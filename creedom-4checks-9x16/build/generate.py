@@ -76,9 +76,39 @@ def scene(sid, t, frm="{opacity: 0, scale: 1.06}"):
     ft2(f"#{sid}", t, .3, frm, "{opacity: 1, scale: 1, x: 0, y: 0}", "power3.out")
 
 
+BURST = [0]
+
+
+def burst(t, x, y, cols=("#2fbf71", "#F343A2", "#ffd23f", "#ffffff"), n=14, r=(90, 190)):
+    """a ring of particles exploding out from (x, y)"""
+    BURST[0] += 1
+    b = BURST[0]
+    for k in range(n):
+        a = 2 * math.pi * k / n + random.uniform(-.2, .2)
+        d = random.uniform(*r)
+        sz = random.randint(10, 20)
+        HTMLS.append(f'<i class="pt" id="pt{b}_{k}" style="left:{x - sz / 2:.0f}px;top:{y - sz / 2:.0f}px;width:{sz}px;height:{sz}px;'
+                     f'background:{random.choice(cols)};border-radius:{random.choice(("50%", "4px"))}"></i>')
+        js(f'tl.fromTo("#pt{b}_{k}", {{opacity: 1, x: 0, y: 0, scale: 1.2, rotation: 0}}, {{opacity: 0, x: {math.cos(a) * d:.0f}, y: {math.sin(a) * d:.0f}, scale: .3, '
+           f'rotation: {random.randint(-180, 180)}, duration: .6, ease: "power3.out", immediateRender: false}}, {t:.3f});')
+    HTMLS.append(f'<i class="rip" id="rip{b}" style="left:{x - 60}px;top:{y - 60}px"></i>')
+    js(f'tl.fromTo("#rip{b}", {{opacity: .9, scale: .2}}, {{opacity: 0, scale: 2.2, duration: .55, ease: "power2.out", immediateRender: false}}, {t:.3f});')
+
+
+def shake(t, a=14):
+    js(f'tl.fromTo("#stage", {{x: 0}}, {{keyframes: [{{x: {-a}, duration: .04}}, {{x: {a}, duration: .05}}, {{x: {-a * .6:.0f}, duration: .05}}, {{x: {a * .4:.0f}, duration: .05}}, {{x: 0, duration: .05}}], immediateRender: false}}, {t:.3f});')
+
+
+BADGE_XY = {"ob0": (1000, 742), "ob1": (1022, 1168), "ob2": (948, 658), "ob3": (788, 658)}
+
+
 def badge(bid, ok, t):
     pop(f"#{bid}", t, .32, "{opacity: 0, scale: 2.2, rotation: -25}")
     sfx("ding" if ok else "error", t)
+    if ok and bid in BADGE_XY:
+        burst(t + .05, *BADGE_XY[bid])
+    if not ok:
+        shake(t)
 
 
 CHECK_SVG = '<svg viewBox="0 0 48 48"><path d="M12 25 L21 34 L37 15" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>'
@@ -112,7 +142,7 @@ head("h6", [["Does", "it", "give", "people", "a"], ["reason", "to", "*rewatch"],
 head("h6b", [["Or", "does", "it", "just"], ["*stop?"]], "k6", 104, after=E["orr"])
 head("h7", [["Check", "all", "*four", "yourself."]], "k7", 84)
 head("h7b", [["Or", "upload", "your", "cut", "to"], ["*Creedom's", "Reel", "Analyzer"]], "k7", 78, after=T("k7", "Or"))
-head("h7c", [["and", "get", "a", "*score", "for"], ["each", "one,", "second", "by", "second."]], "k7", 76, after=T("k7", "and"))
+head("h7c", [["and", "get", "a", "*score"], ["for", "each", "one,"], ["second", "by", "second."]], "k7", 76, after=T("k7", "and"))
 head("h8", [["Comment", "*CHECK"], ["and", "I'll", "DM", "you", "the"], ["*checklist."]], "k8", 84)
 
 # ---------------------------------------------------------------- the tracker (always on, ticks per check)
@@ -128,18 +158,21 @@ for i, tn in enumerate((H["n"], Pc["n"], A["n"], E["n"])):
     js(f'tl.to("#tc{i}", {{scale: 1, backgroundColor: "#2fbf71", color: "#ffffff", duration: .25}}, {TICK[i]:.3f});')
     js(f'tl.to("#tb{i}", {{backgroundColor: "#ffffff", borderColor: "#ffffff", duration: .2}}, {TICK[i]:.3f});')
     sfx("coin", TICK[i])
+    burst(TICK[i] + .05, (260, 436, 608, 784)[i], 489, n=10, r=(50, 110))
 js(f'tl.fromTo("#tc3", {{boxShadow: "0 0 0 0 rgba(243,67,162,0)"}}, {{boxShadow: "0 0 0 14px rgba(243,67,162,.35)", duration: .35, yoyo: true, repeat: 5, immediateRender: false}}, {t_num4 + .2:.3f});')
 to("#trk", t_cm - .2, .25, "{opacity: 0, y: -30}", "power2.in")
 
 # =====================================================================================================================
 # s0: the editor, the Post button, NOT YET, the giant 4
 CLIPS = "".join(f'<i style="width:{w}px;background:{c}"></i>' for w, c in ((150, "#ff8ac2"), (90, "#ffb86b"), (180, "#8a6bff"), (120, "#2fbf71"), (140, "#ff5fb7")))
-S0 = ('<div class="scene" id="s0" style="opacity:1"><div class="ed" id="ed"><div class="edtop"><i></i><i></i><i></i><span>my_reel_final_v3.mp4</span></div>'
+S0 = ('<div class="scene" id="s0" style="opacity:1"><div class="ed" id="ed"><i class="sheen"></i><div class="edtop"><i></i><i></i><i></i><span>my_reel_final_v3.mp4</span></div>'
       '<div class="prev"><div class="rthumb"><i class="dish"></i><b>3 meals under 100</b></div><u class="rec">● 0:12 / 0:30</u></div>'
       f'<div class="tlw"><div class="tlclips">{CLIPS}</div><div class="tlclips aud">{"".join("<i></i>" for _ in range(28))}</div><i class="edph" id="edph"></i></div>'
       '<div class="postbtn" id="postbtn">Post</div></div>'
       '<svg id="cursor" viewBox="0 0 60 80" width="90" height="120"><path d="M8 4 L8 64 L22 50 L32 74 L42 70 L32 46 L52 46 Z" fill="#fff" stroke="#1a1020" stroke-width="5" stroke-linejoin="round"/></svg>'
       '<div class="notyet" id="notyet"><span>NOT YET</span></div>'
+      '<svg class="ring4" id="ring4" viewBox="0 0 400 400"><circle cx="200" cy="200" r="180" fill="none" stroke="#F343A2" stroke-width="10" stroke-dasharray="26 22"/>'
+      '<circle cx="200" cy="200" r="150" fill="none" stroke="#ffd23f" stroke-width="4" stroke-dasharray="4 14"/></svg>'
       '<div class="big4" id="big4"><b>4</b><span>CHECKS</span></div></div>')
 SC.append("s0")
 js(f'tl.fromTo("#edph", {{left: "6%"}}, {{left: "88%", duration: {t_four:.2f}, ease: "none", immediateRender: false}}, 0);')
@@ -147,17 +180,20 @@ js(f'tl.fromTo(".tlclips.aud i", {{scaleY: .3}}, {{scaleY: 1, duration: .18, yoy
 ft2("#cursor", t_post - .2, .5, "{opacity: 0, x: 980, y: 1700}", "{opacity: 1, x: 770, y: 1400}", "power2.out")
 js(f'tl.to("#postbtn", {{scale: 1.08, boxShadow: "0 0 0 14px rgba(243,67,162,.35)", duration: .2, yoyo: true, repeat: 1}}, {t_post + .15:.3f});')
 ft2("#notyet", t_until - .05, .22, "{opacity: 0, scale: 2.6, rotation: -24}", "{opacity: 1, scale: 1, rotation: -9}", "power4.out")
-sfx("stamp", t_until); punch(t_until, 1.04)
+sfx("stamp", t_until); punch(t_until, 1.04); sfx("whoosh", t_post - .2)
 js(f'tl.to("#cursor", {{x: 1000, y: 1800, opacity: 0, duration: .3, ease: "power2.in"}}, {t_until + .05:.3f});')
 js(f'tl.to("#ed", {{scale: .9, opacity: .25, filter: "blur(6px)", duration: .35}}, {t_four - .1:.3f});')
 to("#notyet", t_four - .1, .2, "{opacity: 0, scale: .8}")
 ft2("#big4", t_four, .4, "{opacity: 0, scale: 3.5, rotation: -12}", "{opacity: 1, scale: 1, rotation: 0}", "back.out(1.7)")
-sfx("impact", t_four + .02); sfx("whoosh_big", t_four - .1); punch(t_four + .05, 1.06); flash(t_four, .5)
+sfx("impact", t_four + .02); sfx("shutter", t_four); sfx("whoosh_big", t_four - .1); punch(t_four + .05, 1.06); flash(t_four, .5)
+ft2("#ring4", t_four + .05, .5, "{opacity: 0, scale: .2, rotation: -90}", "{opacity: 1, scale: 1, rotation: 0}", "back.out(1.6)")
+js(f'tl.to("#ring4", {{rotation: 200, duration: 3, ease: "none"}}, {t_four + .55:.3f});')
+burst(t_four + .1, 540, 960, n=22, r=(220, 420))
 js(f'tl.fromTo("#big4 b", {{rotation: -4}}, {{rotation: 4, duration: .3, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false}}, {t_four + .4:.3f});')
 
 # =====================================================================================================================
 # s1: the analyzer scans the reel; four meters with "?"; s2 meter four in the spotlight
-METERS = "".join(f'<div class="mt" id="mt{i}"><b>{n}</b><div class="mbar"><i class="shim"></i></div><span>?</span></div>' for i, n in enumerate(NAMES))
+METERS = "".join(f'<div class="mt" id="mt{i}"><i class="sheen"></i><b>{n}</b><div class="mbar"><i class="shim"></i></div><span>?</span></div>' for i, n in enumerate(NAMES))
 S1 = ('<div class="scene" id="s1"><div class="aichip" id="aichip">AI REEL ANALYZER</div><div class="vf"><div class="rthumb"><i class="dish"></i><b>3 meals under 100</b></div>'
       '<i class="cor c1"></i><i class="cor c2"></i><i class="cor c3"></i><i class="cor c4"></i><i class="laser" id="laser"></i></div>'
       f'<div class="meters">{METERS}</div><i class="spot" id="spot"></i><div class="skip" id="skip"><i></i>most creators skip this</div></div>')
@@ -165,7 +201,7 @@ SC.append("s1")
 scene("s1", t_ai - .05)
 pop("#aichip", t_ai + .1, .3)
 js(f'tl.fromTo("#laser", {{y: 0}}, {{y: 600, duration: .9, yoyo: true, repeat: 2, ease: "sine.inOut", immediateRender: false}}, {t_ai + .2:.3f});')
-sfx("riser_short", t_ai + .2)
+sfx("scanner", t_ai + .2)
 for i in range(4):
     ft2(f"#mt{i}", t_scores + i * .12, .35, "{opacity: 0, x: 120}", "{opacity: 1, x: 0}", "back.out(1.8)")
     sfx("pop", t_scores + i * .12)
@@ -181,7 +217,9 @@ sfx("ding2", t_num4 + .1); sfx("swish", t_nobody)
 # =====================================================================================================================
 # title cards for each check
 def title(i, t, name):
-    HTMLS.append(f'<div class="ttl" id="tt{i}"><i class="band"></i><b>{i + 1}</b><span>{name}</span></div>')
+    HTMLS.append(f'<div class="ttl" id="tt{i}"><i class="band"></i>' + "".join(f'<i class="stk" style="top:{20 + k * 52}px;width:{random.randint(180, 420)}px"></i>' for k in range(5))
+                 + f'<b>{i + 1}</b><span>{name}</span></div>')
+    js(f'tl.fromTo("#tt{i} .stk", {{x: -500}}, {{x: 1400, duration: .55, stagger: .04, ease: "power2.in", immediateRender: false}}, {t - .05:.3f});')
     js(f'tl.fromTo("#tt{i} .band", {{scaleX: 0}}, {{scaleX: 1, duration: .25, ease: "power3.out", immediateRender: false}}, {t - .05:.3f});')
     ft2(f"#tt{i}", t - .05, .25, "{opacity: 0}", "{opacity: 1}", "power2.out")
     js(f'tl.fromTo("#tt{i} b", {{scale: 3, rotation: -15}}, {{scale: 1, rotation: 0, duration: .35, ease: "back.out(2)", immediateRender: false}}, {t:.3f});')
@@ -194,7 +232,7 @@ def title(i, t, name):
 
 
 # s3 HOOK: muted first frame, bad vs good
-S3 = ('<div class="scene" id="s3"><div class="mute" id="mute"><svg viewBox="0 0 64 64"><path d="M10 24 H22 L36 12 V52 L22 40 H10 Z" fill="#1a1020"/>'
+S3 = ('<div class="scene" id="s3"><b class="ghost">1</b><div class="mute" id="mute"><svg viewBox="0 0 64 64"><path d="M10 24 H22 L36 12 V52 L22 40 H10 Z" fill="#1a1020"/>'
       '<path d="M44 24 L58 40 M58 24 L44 40" stroke="#e0283e" stroke-width="6" stroke-linecap="round"/></svg>SOUND OFF</div>'
       f'<div class="fr2 l" id="fr0">{AVATAR}<div class="huh" id="huh">huh?</div>{NO("nb0")}<small>talking, nothing on screen</small></div>'
       f'<div class="fr2 r" id="fr1">{AVATAR}<div class="hook" id="hookt">3 MEALS<br>UNDER 100</div><i class="arr" id="arr"></i>{OK("ob0")}<small>the payoff, in text</small></div></div>')
@@ -213,7 +251,7 @@ badge("ob0", True, H["mute"] + .25)
 
 # s4 PACING: one long clip vs a cut every two seconds
 CUTS = "".join(f'<i style="background:{c}"><u id="cut{k}">CUT</u></i>' for k, c in enumerate(("#ff8ac2", "#ffb86b", "#8a6bff", "#2fbf71")))
-S4 = ('<div class="scene" id="s4">'
+S4 = ('<div class="scene" id="s4"><b class="ghost">2</b>'
       f'<div class="row bad" id="rw0">{NO("nb1")}<small>one 8-second shot</small><div class="lane"><i class="long"><span>zzz</span></i><u class="ph" id="ph0"></u></div><div class="lab"><span>0s</span><span>8s</span></div></div>'
       '<div class="watch" id="watch"><svg viewBox="0 0 100 100"><circle cx="50" cy="55" r="38" fill="#fff" stroke="#1a1020" stroke-width="6"/><rect x="42" y="6" width="16" height="10" rx="3" fill="#1a1020"/>'
       '<path id="whand" d="M50 55 L50 26" stroke="#F343A2" stroke-width="6" stroke-linecap="round"/></svg><b>every 2s</b></div>'
@@ -241,7 +279,7 @@ badge("ob1", True, Pc["two"] + .1)
 # s5 AUDIO: the mixer -- music down, voice up
 WAVE = lambda n, cls: "".join(f'<i class="{cls}" style="height:{random.randint(30, 100)}%"></i>' for _ in range(n))
 LEDS = "".join(f'<i class="led" id="led{k}"></i>' for k in range(10))
-S5 = ('<div class="scene" id="s5"><div class="mixer" id="mixer"><div class="fad"><div class="slot"><i class="knob" id="kv"></i></div><b>VOICE</b></div>'
+S5 = ('<div class="scene" id="s5"><b class="ghost">3</b><div class="mixer" id="mixer"><div class="fad"><div class="slot"><i class="knob" id="kv"></i></div><b>VOICE</b></div>'
       '<div class="fad"><div class="slot"><i class="knob pk" id="km"></i></div><b>MUSIC</b></div><div class="leds">' + LEDS + '</div></div>'
       f'<div class="waves"><div class="wv"><b>VOICE</b><div class="bars v" id="wvv">{WAVE(26, "v")}</div></div>'
       f'<div class="wv"><b>MUSIC</b><div class="bars m" id="wvm">{WAVE(26, "m")}</div></div></div>'
@@ -267,7 +305,7 @@ sfx("swish", t_mix)
 badge("ob2", True, A["music"])
 
 # s6 ENDING: loop + comments (good) vs a hard stop (bad)
-S6 = ('<div class="scene" id="s6"><i class="spot sp6" id="spot6"></i><div class="endreel" id="endreel"><div class="rthumb"><i class="dish"></i><b>3 meals under 100</b></div>'
+S6 = ('<div class="scene" id="s6"><b class="ghost">4</b><i class="spot sp6" id="spot6"></i><div class="endreel" id="endreel"><i class="sheen"></i><div class="rthumb"><i class="dish"></i><b>3 meals under 100</b></div>'
       '<div class="prog"><i id="pfill"></i></div><svg class="loop" id="loop" viewBox="0 0 200 200"><path d="M160 100 A60 60 0 1 1 130 48" fill="none" stroke="#2fbf71" stroke-width="14" stroke-linecap="round"/>'
       '<path d="M118 28 L140 50 L112 62 Z" fill="#2fbf71"/></svg><div class="x2" id="x2">x2</div></div>'
       '<div class="cm" id="cm0">wait, again?</div><div class="cm" id="cm1">part 2??</div><div class="cm" id="cm2">saving this</div>' + OK("ob3") + NO("nb3") +
@@ -290,14 +328,14 @@ badge("ob3", True, E["comment"] + .45)
 ft2("#theend", E["stop"] - .05, .05, "{opacity: 0}", "{opacity: 1}", "none")
 js(f'tl.fromTo("#theend b", {{scale: 1.4, opacity: 0}}, {{scale: 1, opacity: 1, duration: .25, ease: "power3.out", immediateRender: false}}, {E["stop"]:.3f});')
 js(f'tl.fromTo("#theend .swipe", {{y: 120, opacity: 0}}, {{y: -60, opacity: 1, duration: .45, ease: "power2.out", immediateRender: false}}, {E["stop"] + .2:.3f});')
-sfx("scratch", E["stop"] - .05)
+sfx("powerdown", E["stop"] - .05)
 js(f'tl.set("#h6b", {{color: "#ffffff", textShadow: "0 0 24px rgba(0,0,0,.6)"}}, {E["stop"] - .06:.3f});')
 badge("nb3", False, E["stop"] + .2)
 to("#theend", E["stop"] + .75, .2, "{opacity: 0}")
 
 # =====================================================================================================================
 # s7 check all four: the clipboard
-S7 = ('<div class="scene" id="s7"><div class="clip" id="clipb"><i class="clamp"></i><small>BEFORE YOU POST</small>'
+S7 = ('<div class="scene" id="s7"><div class="clip" id="clipb"><i class="sheen"></i><i class="clamp"></i><small>BEFORE YOU POST</small>'
       + "".join(f'<div class="crow"><i class="box" id="cb{i}"><u id="ck{i}">{CHECK_SVG}</u></i><b>{n}</b></div>' for i, n in enumerate(NAMES))
       + '</div><div class="save" id="save"><svg viewBox="0 0 40 52"><path d="M4 4 H36 V48 L20 36 L4 48 Z" fill="#fff"/></svg>SAVE THIS</div></div>')
 SC.append("s7")
@@ -308,12 +346,12 @@ for i in range(4):
     js(f'tl.to("#cb{i}", {{backgroundColor: "#2fbf71", borderColor: "#2fbf71", duration: .15}}, {tk:.3f});')
     sfx("tick", tk)
 pop("#save", T("k7", "yourself"), .35, "{opacity: 0, scale: .4, rotation: -10}")
-sfx("ding", T("k7", "yourself"))
+sfx("ding", T("k7", "yourself")); sfx("sparkle", T("k7", "yourself") + .1)
 
 # s8 Creedom's Reel Analyzer (recreated, EXAMPLE)
 CATS = [("Hook", 4), ("Pacing", 3), ("Audio", 4), ("Ending", 2)]
 SEGS = "".join(f'<i id="sg{k}" style="background:{"#ff3b4e" if k in (6, 13) else "#2fbf71"}"></i>' for k in range(15))
-S8 = ('<div class="scene" id="s8"><div class="cz"><div class="czh"><img src="assets/img/creedom_logo.png" alt=""><b>Reel Analyzer</b><em>EXAMPLE</em></div>'
+S8 = ('<div class="scene" id="s8"><div class="cz"><i class="sheen"></i><div class="czh"><img src="assets/img/creedom_logo.png" alt=""><b>Reel Analyzer</b><em>EXAMPLE</em></div>'
       '<div class="up" id="up"><small>UPLOADING YOUR CUT</small><div class="upbar"><i id="upf"></i></div><b id="upp">0%</b></div>'
       '<div class="res" id="res"><div class="rthumb sm"><i class="dish"></i></div><div class="sc"><b id="scn">0.0</b><small>/ 5</small></div>'
       '<div class="cats">' + "".join(f'<div class="cat" id="ct{i}"><b>{n}</b><div class="cbar"><i id="cf{i}" style="background:{"#ff3b4e" if v <= 2 else "#F343A2"}"></i></div><span>{v}</span></div>' for i, (n, v) in enumerate(CATS)) + '</div></div>'
@@ -342,7 +380,7 @@ sfx("error", Y["sec"] + (t_cm - Y["sec"]) * 6 / 15)
 # s9 CTA: CHECK typed, the checklist PDF
 S9 = ('<div class="scene" id="s9"><div class="cbox" id="cbox"><i class="cav"></i><span id="cbt">' + "".join(f'<span id="cg{k}" style="opacity:0">{c}</span>' for k, c in enumerate("CHECK"))
       + '</span><b class="csend" id="csend">Post</b></div><div class="sent" id="sent">Sent! Now check your DMs</div>'
-      '<div class="pdf" id="pdf"><small>FREE CHECKLIST</small><b>4 checks<br>before you<br><em>post</em></b>'
+      '<div class="pdf" id="pdf"><i class="sheen"></i><small>FREE CHECKLIST</small><b>4 checks<br>before you<br><em>post</em></b>'
       + "".join(f'<div class="prow"><i>{CHECK_SVG}</i>{n.title()}</div>' for n in NAMES) + '<span>Creedom</span></div></div>')
 SC.append("s9")
 scene("s9", t_cm - .1, "{opacity: 0, y: 200}")
@@ -389,6 +427,18 @@ BG = "".join(f'<i class="blob" style="left:{x}px;top:{y}px;width:{r}px;height:{r
              for x, y, r, c in ((-120, 200, 520, "rgba(255,150,200,.35)"), (700, 1300, 600, "rgba(243,67,162,.22)"), (680, -100, 420, "rgba(255,210,120,.25)")))
 js(f'tl.fromTo(".blob", {{x: 0, y: 0}}, {{x: (i) => [80, -90, 60][i], y: (i) => [-60, 80, 70][i], duration: {DUR / 2:.2f}, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false}}, 0);')
 js(f'tl.fromTo("#dots", {{backgroundPosition: "0px 0px"}}, {{backgroundPosition: "0px 240px", duration: {DUR:.2f}, ease: "none", immediateRender: false}}, 0);')
+
+SH = ["M0,-22 V22 M-22,0 H22", "M-20,0 A20,20 0 1,0 20,0 A20,20 0 1,0 -20,0", "M-24,8 Q-12,-12 0,8 T24,8", "M0,-22 L19,11 L-19,11 Z"]
+for k in range(12):
+    x, y = random.randint(40, 1040), random.randint(560, 1820)
+    HTMLS.append(f'<svg class="fsh" id="fs{k}" style="left:{x}px;top:{y}px" viewBox="-30 -30 60 60"><path d="{SH[k % 4]}" fill="none" '
+                 f'stroke="{random.choice(("#F343A2", "#ffb3d6", "#ffd23f", "#c9b3ff"))}" stroke-width="5" stroke-linecap="round"/></svg>')
+    js(f'tl.fromTo("#fs{k}", {{y: 0, rotation: 0}}, {{y: {random.randint(-160, -60)}, rotation: {random.choice((-1, 1)) * random.randint(90, 270)}, '
+       f'duration: {DUR:.2f}, ease: "none", immediateRender: false}}, 0);')
+for sel, t in ((".ed .sheen", .3), ("#mt3 .sheen", t_num4 + .1), (".cz .sheen", Y["score"] - .3), (".clip .sheen", Y["t"] + .9), (".pdf .sheen", T("k8", "DM") + .4), (".endreel .sheen", E["rewatch"])):
+    js(f'tl.fromTo("{sel}", {{x: -700}}, {{x: 1400, duration: .8, ease: "power2.inOut", immediateRender: false}}, {t:.3f});')
+for sid, t0 in (("s3", H["n"]), ("s4", Pc["n"]), ("s5", A["n"]), ("s6", E["n"])):
+    js(f'tl.fromTo("#{sid} .ghost", {{y: 80, opacity: 0}}, {{y: -60, opacity: 1, duration: 3.5, ease: "power1.out", immediateRender: false}}, {t0 + .5:.3f});')
 
 POST = " ".join(f'gsap.set("{sel}", {frm});' for sel, (t, frm) in sorted(FIRST.items(), key=lambda kv: kv[1][0]) if t > 0.0)
 POST += (' gsap.set(".tc", {backgroundColor: "#ffffff", color: "#1a1020", scale: 1}); gsap.set(".tc .box", {backgroundColor: "rgba(0,0,0,0)", borderColor: "#d9c4d0"});'

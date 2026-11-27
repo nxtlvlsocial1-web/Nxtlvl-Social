@@ -172,3 +172,37 @@
 .prow i { width: 44px; height: 44px; border-radius: 12px; background: #2fbf71; display: grid; place-items: center; }
 .prow i svg { width: 34px; height: 34px; }
 .pdf > span { display: block; margin-top: 26px; font: 800 28px Inter; color: #b06a90; }
+
+/* ===== v2: fonts from the pack (Poppins, Morganite, Bebas Neue: commercial-safe) + more motion ===== */
+@font-face { font-family: Poppins; font-weight: 600; src: url("assets/fonts/Poppins-SemiBold.ttf"); }
+@font-face { font-family: Poppins; font-weight: 700; src: url("assets/fonts/Poppins-Bold.ttf"); }
+@font-face { font-family: Poppins; font-weight: 800; src: url("assets/fonts/Poppins-ExtraBold.ttf"); }
+@font-face { font-family: Poppins; font-weight: 900; src: url("assets/fonts/Poppins-Black.ttf"); }
+@font-face { font-family: Morganite; font-weight: 700; src: url("assets/fonts/Morganite-Bold.ttf"); }
+@font-face { font-family: Morganite; font-weight: 800; src: url("assets/fonts/Morganite-ExtraBold.ttf"); }
+@font-face { font-family: Morganite; font-weight: 900; src: url("assets/fonts/Morganite-Black.ttf"); }
+@font-face { font-family: Bebas; font-weight: 400; src: url("assets/fonts/BebasNeue.otf"); }
+.head { letter-spacing: -.035em; line-height: 1.08; }
+.big4 b { font: 900 820px/0.82 Morganite; letter-spacing: 0; }
+.big4 span { font: 400 92px/1 Bebas; letter-spacing: .14em; padding: 16px 46px 10px; }
+.ttl span { font: 900 250px/0.9 Morganite; letter-spacing: .02em; padding-top: 18px; }
+.ttl b { font: 900 140px/1 Poppins; }
+.notyet span { font: 400 160px/1 Bebas; letter-spacing: .04em; padding: 22px 44px 8px; }
+.hook { font: 400 78px/0.95 Bebas; letter-spacing: .02em; }
+.theend b { font: 900 300px/0.9 Morganite; letter-spacing: .04em; }
+.x2 { font: 400 64px/1 Bebas; padding: 12px 22px 4px; }
+.sc b { font: 900 170px/0.9 Morganite; } .up b { font: 900 120px/1 Morganite; }
+.watch b { font: 400 64px/1 Bebas; letter-spacing: .03em; }
+.lane .long span { font: 400 80px/1 Bebas; }
+.save, .aichip, .skip { letter-spacing: .06em; }
+.ghost { position: absolute; left: -30px; bottom: 140px; font: 900 1100px/0.8 Morganite; color: rgba(243,67,162,.09); pointer-events: none; opacity: 0; }
+.stk { position: absolute; left: 0; height: 10px; border-radius: 5px; background: rgba(255,255,255,.55); }
+.ring4 { position: absolute; left: 140px; top: 560px; width: 800px; height: 800px; z-index: 8; opacity: 0; }
+.pt { position: absolute; z-index: 46; opacity: 0; pointer-events: none; }
+.rip { position: absolute; width: 120px; height: 120px; border-radius: 50%; border: 8px solid #2fbf71; z-index: 45; opacity: 0; pointer-events: none; }
+.fsh { position: absolute; width: 56px; height: 56px; z-index: 1; opacity: .55; pointer-events: none; }
+.sheen { position: absolute; top: -40%; bottom: -40%; left: 0; width: 160px; z-index: 6; pointer-events: none; transform: translateX(-700px) rotate(18deg);
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.55), rgba(255,255,255,0)); }
+.mt, .cz, .clip, .pdf, .endreel, .ed { overflow: hidden; }
+.clip { overflow: visible; }
+.sc b { font: 900 124px/1 Poppins; letter-spacing: -.03em; } .up b { font: 900 84px/1 Poppins; }

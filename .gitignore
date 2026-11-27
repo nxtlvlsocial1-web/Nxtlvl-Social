@@ -12,3 +12,6 @@ node_modules/
 .claude/skills/seo/.venv.*
 .claude/skills/seo/ms-playwright/
 __pycache__/
+
+# third-party font pack (many fonts are personal-use only); see brands/_fonts/FONTS.md
+brands/_fonts/mrgraphiz-50/
