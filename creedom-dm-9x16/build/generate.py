@@ -79,7 +79,7 @@ def scene(sid, t, frm="{opacity: 0, scale: 1.06}"):
 BURST = [0]
 
 
-def burst(t, x, y, cols=("#2fbf71", "#F343A2", "#ffd23f", "#ffffff"), n=14, r=(90, 190)):
+def burst(t, x, y, cols=("#2fbf71", "#F343A2", "#ffd23f", "#ffffff"), n=14, r=(90, 190), ring=True):
     """a ring of particles exploding out from (x, y)"""
     BURST[0] += 1
     b = BURST[0]
@@ -91,6 +91,8 @@ def burst(t, x, y, cols=("#2fbf71", "#F343A2", "#ffd23f", "#ffffff"), n=14, r=(9
                      f'background:{random.choice(cols)};border-radius:{random.choice(("50%", "4px"))}"></i>')
         js(f'tl.fromTo("#pt{b}_{k}", {{opacity: 1, x: 0, y: 0, scale: 1.2, rotation: 0}}, {{opacity: 0, x: {math.cos(a) * d:.0f}, y: {math.sin(a) * d:.0f}, scale: .3, '
            f'rotation: {random.randint(-180, 180)}, duration: .6, ease: "power3.out", immediateRender: false}}, {t:.3f});')
+    if not ring:
+        return
     HTMLS.append(f'<i class="rip" id="rip{b}" style="left:{x - 60}px;top:{y - 60}px"></i>')
     js(f'tl.fromTo("#rip{b}", {{opacity: .9, scale: .2}}, {{opacity: 0, scale: 2.2, duration: .55, ease: "power2.out", immediateRender: false}}, {t:.3f});')
 
@@ -162,7 +164,7 @@ for i in range(5):
     js(f'tl.to("#tc{i}", {{scale: 1, backgroundColor: "#2fbf71", color: "#ffffff", duration: .25}}, {TICK[i]:.3f});')
     js(f'tl.to("#tb{i}", {{backgroundColor: "#ffffff", borderColor: "#ffffff", duration: .2}}, {TICK[i]:.3f});')
     sfx("coin", TICK[i])
-    burst(TICK[i] + .05, (190, 362, 520, 668, 852)[i], 489, n=10, r=(50, 110))
+    burst(TICK[i] + .05, (190, 362, 520, 668, 852)[i], 520, n=10, r=(40, 90), ring=False)
 to("#trk", t9["t"] - .2, .25, "{opacity: 0, y: -30}", "power2.in")
 
 ENV = '<svg viewBox="0 0 64 48" class="env"><rect x="2" y="2" width="60" height="44" rx="8" fill="#fff" stroke="#1a1020" stroke-width="4"/><path d="M4 6 L32 28 L60 6" fill="none" stroke="#1a1020" stroke-width="4"/></svg>'
@@ -175,7 +177,7 @@ AV = lambda c="#ffb3d6": f'<i class="av" style="background:{c}"></i>'
 S0 = ('<div class="scene" id="s0" style="opacity:1"><div class="post" id="post0"><div class="rthumb"><i class="dish"></i><b>3 meals under 100</b></div>'
       '<div class="csheet"><small>Comments</small><div class="cmt" id="cmt0">' + AV("#c9b3ff") + '<b>you</b><span>DM</span></div>'
       '<div class="cin">' + AV("#c9b3ff") + '<span id="cin">' + "".join(f'<u id="ct{k}" style="opacity:0">{c}</u>' for k, c in enumerate("DM")) + '</span><em id="cpost">Post</em></div></div></div>'
-      '<div class="notif" id="notif">' + LOGO + '<div><b>creedom.ai</b><span>Here\'s your link. Tap to open.</span></div><small>now</small></div>'
+      '<div class="notif" id="notif"><i class="nicon">C</i><div><b>Creedom</b><span>Here\'s your link. Tap to open.</span></div><small>now</small></div>'
       '<div class="ring10" id="ring10"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="86" fill="#fff" stroke="#f3d6e6" stroke-width="16"/>'
       '<circle id="r10" cx="100" cy="100" r="86" fill="none" stroke="#F343A2" stroke-width="16" stroke-linecap="round" pathLength="1" stroke-dasharray="1" transform="rotate(-90 100 100)"/></svg>'
       '<b id="r10n">10</b><small>SEC</small></div>'
@@ -254,9 +256,7 @@ sfx("riser_short", t2["places"] - .1)
 
 # check title cards (1 COMMENT -> DM ...)
 def title(i, t, name):
-    HTMLS.append(f'<div class="ttl" id="tt{i}"><i class="band"></i>' + "".join(f'<i class="stk" style="top:{20 + k * 52}px;width:{random.randint(180, 420)}px"></i>' for k in range(5))
-                 + f'<b>{i + 1}</b><span>{name}</span></div>')
-    js(f'tl.fromTo("#tt{i} .stk", {{x: -500}}, {{x: 1400, duration: .55, stagger: .04, ease: "power2.in", immediateRender: false}}, {t - .05:.3f});')
+    HTMLS.append(f'<div class="ttl" id="tt{i}"><i class="band"></i><b>{i + 1}</b><span>{name}</span></div>')
     js(f'tl.fromTo("#tt{i} .band", {{scaleX: 0}}, {{scaleX: 1, duration: .25, ease: "power3.out", immediateRender: false}}, {t - .05:.3f});')
     ft2(f"#tt{i}", t - .05, .25, "{opacity: 0}", "{opacity: 1}", "power2.out")
     js(f'tl.fromTo("#tt{i} b", {{scale: 3, rotation: -15}}, {{scale: 1, rotation: 0, duration: .35, ease: "back.out(2)", immediateRender: false}}, {t:.3f});')
@@ -288,7 +288,7 @@ js(f'tl.fromTo("#ib3", {{scale: 1}}, {{scale: 1.15, duration: .12, yoyo: true, r
 ft2("#dm3", W("d3", "get") - .1, .4, "{opacity: 0, y: 80, scale: .8}", "{opacity: 1, y: 0, scale: 1}", "back.out(1.8)")
 sfx("msg", W("d3", "get"))
 pop("#lk3", TR[0]["b"] - .05, .3, "{opacity: 0, scale: 1.8}")
-burst(TR[0]["b"] + .1, 540, 1500)
+burst(TR[0]["b"] + .1, 975, 1390)
 
 # s4 DM -> DM: keyword in, instant reply out, a lightning "0.4s"
 S4 = ('<div class="scene" id="s4"><b class="ghost">2</b><div class="chat" id="chat4"><div class="chd">' + AV("#ffd27a") + '<b>maya</b><em>EXAMPLE</em></div>'
@@ -324,11 +324,11 @@ for k in range(10):
     st(f"#sr{k}", TR[2]["a"] + k * .07, "{opacity: 1}")
     if k % 3 == 0:
         sfx("typing", TR[2]["a"] + k * .07)
-pop("#sarr", W("d5", "story") - .05, .3, "{opacity: 0, scale: .3, rotation: -40}")
-sfx("sent", W("d5", "story"))
+pop("#sarr", W("d5", "story", 1) - .05, .3, "{opacity: 0, scale: .3, rotation: -40}")
+sfx("sent", W("d5", "story", 1))
 ft2("#dm5", TR[2]["b"] - .1, .4, "{opacity: 0, y: 120, scale: .7}", "{opacity: 1, y: 0, scale: 1}", "back.out(1.8)")
 sfx("msg", TR[2]["b"])
-burst(TR[2]["b"] + .1, 560, 1520)
+burst(TR[2]["b"] + .1, 975, 1420)
 
 # s6 LIVE -> DM: comments rain, each becomes an envelope, the counter climbs
 LCM = ["DM", "link pls", "me!", "DM", "want it", "DM", "how?", "DM"]
@@ -350,7 +350,7 @@ for k in range(8):
     js(f'tl.fromTo("#ctr6", {{scale: 1}}, {{scale: 1.1, duration: .08, yoyo: true, repeat: 1, immediateRender: false}}, {tk + .6:.3f});')
     sfx("tick", tk + .6) if k % 2 else sfx("pop", tk)
 js(f'gsap.set(".envf", {{opacity: 0}});')
-burst(TR[3]["b"] + .1, 830, 1040)
+burst(TR[3]["b"] + .1, 1010, 905)
 
 # s7 inbox starters: four chips, one gets tapped
 CH = ["What do you do?", "Is it free?", "Get my audit", "Talk to a human"]
@@ -369,9 +369,9 @@ ft2("#fing", W("d7", "tap") - .3, .35, "{opacity: 0, x: 900, y: 1700}", "{opacit
 js(f'tl.to("#ch2", {{scale: .92, backgroundColor: "#F343A2", color: "#ffffff", duration: .1, yoyo: true, repeat: 1}}, {W("d7", "tap"):.3f});')
 sfx("click", W("d7", "tap"))
 to("#fing", W("d7", "tap") + .35, .2, "{opacity: 0}")
-to("#ch0, #ch1, #ch2, #ch3", W("d7", "start") - .1, .2, "{opacity: 0, x: -60}", "power2.in")
-ft2("#ub7", W("d7", "start"), .3, "{opacity: 0, x: 200}", "{opacity: 1, x: 0}", "back.out(2)")
-sfx("sent", W("d7", "start"))
+to("#ch0, #ch1, #ch2, #ch3", W("d7", "start", 1) - .1, .2, "{opacity: 0, x: -60}", "power2.in")
+ft2("#ub7", W("d7", "start", 1), .3, "{opacity: 0, x: 200}", "{opacity: 1, x: 0}", "back.out(2)")
+sfx("sent", W("d7", "start", 1))
 ft2("#ab7", W("d7", "chat") + .05, .3, "{opacity: 0, x: -200}", "{opacity: 1, x: 0}", "back.out(2)")
 sfx("msg", W("d7", "chat") + .05)
 
@@ -403,7 +403,7 @@ js(f'tl.to(".lr i", {{backgroundColor: "#2fbf71", duration: .2}}, {t8["runs"] - 
 sfx("toggle", t8["runs"] - .2)
 ft2("#meta8", t8["meta"] - .1, .4, "{opacity: 0, y: 80, scale: .8}", "{opacity: 1, y: 0, scale: 1}", "back.out(1.8)")
 sfx("ding", t8["meta"])
-burst(t8["meta"] + .2, 540, 1560, cols=("#2fbf71", "#ffffff", "#F343A2"))
+burst(t8["meta"] + .2, 1000, 1450, cols=("#2fbf71", "#ffffff", "#F343A2"))
 
 # s9 CTA: COMMENT DM, the inbox counter
 S9 = ('<div class="scene" id="s9"><div class="bigcta" id="bigcta"><span>COMMENT</span><b>DM</b></div>'

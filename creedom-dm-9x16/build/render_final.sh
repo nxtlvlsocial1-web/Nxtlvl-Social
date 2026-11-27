@@ -5,9 +5,9 @@ cd "$(dirname "$0")/.." || exit 1
 export HYPERFRAMES_NO_TELEMETRY=1
 mkdir -p renders
 rm -f renders/master.mp4
-npx --yes hyperframes@0.8.203 render --quality delivery -w 3 -o renders/master.mp4 > renders/final.log 2>&1
+npx --yes hyperframes@0.8.203 render --quality delivery --fps 42 -w 3 -o renders/master.mp4 > renders/final.log 2>&1
 RC=$?
 echo "EXIT $RC" >> renders/final.log
 if [ $RC -ne 0 ] || [ ! -s renders/master.mp4 ]; then echo "SFX EXIT skipped (render failed)" >> renders/final.log; exit 1; fi
-python3 build/sfx_mix.py renders/master.mp4 renders/creedom_dm_reels_9x16_v1.mp4 --no-music >> renders/final.log 2>&1
+python3 build/sfx_mix.py renders/master.mp4 renders/creedom_dm_reels_9x16_v2_42fps.mp4 --no-music >> renders/final.log 2>&1
 echo "SFX EXIT $?" >> renders/final.log

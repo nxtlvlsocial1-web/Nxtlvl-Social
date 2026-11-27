@@ -556,6 +556,20 @@ html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fdf1f
 .badge9 b { font: 900 46px Poppins; color: #fff; }
 .ibx small { display: block; margin-top: 14px; font: 800 30px Poppins; color: #1a1020; letter-spacing: .08em; white-space: nowrap; }
 .ttl span { white-space: nowrap; font-size: 180px; }
+
+/* ===== v2 fixes: layering and text spacing ===== */
+#stage { z-index: 2; }
+.fsh { z-index: 1; opacity: .4; }
+.ring10 { left: 170px; top: 630px; width: 210px; height: 210px; }
+.ring10 b { top: 44px; font-size: 92px; } .ring10 small { top: 140px; }
+.nicon { width: 70px; height: 70px; border-radius: 18px; background: linear-gradient(150deg, #ff8ac2, #F343A2); color: #fff; display: grid; place-items: center;
+  font: 900 44px Poppins; font-style: normal; flex: none; }
+.head { letter-spacing: -.02em; word-spacing: .04em; }
+.hw { padding: .02em .07em .14em; }
+.ttl span { letter-spacing: .05em; word-spacing: .18em; font-size: 170px; }
+.notyet span, .once, .bigcta span, .bolt b, .stamp span { letter-spacing: .06em; word-spacing: .1em; }
+.ab.small { top: 690px; }
+.ring10 { left: 700px; top: 690px; }
 /* Cree */
 #cree { position: absolute; left: 0; top: 0; width: 820px; height: 820px; z-index: 33; opacity: 0; transform-origin: 410px 500px; pointer-events: none;
   filter: drop-shadow(0 0 30px rgba(255,90,180,.7)); }
