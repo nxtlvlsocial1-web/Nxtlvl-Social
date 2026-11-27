@@ -1,0 +1,41 @@
+{
+  "title": ["4 CHECKS", "BEFORE YOU", "*POST*"],
+  "kicker": "Free checklist",
+  "subtitle": "Run these on every reel before you hit post.",
+  "tagline": "From the reel: don't post until it passes all four.",
+  "blocks": [
+    { "type": "text", "heading": "How to *use* this",
+      "intro": "Watch your finished cut once per check. Each check takes about ten seconds, and each one is something an AI reel analyzer scores before you post.",
+      "steps": [
+        ["Open your final cut", "Watch it on your phone, the way your audience will."],
+        ["Run the 4 checks", "Hook, pacing, audio, ending. Fix anything that fails before moving on."],
+        ["Fix the weakest one first", "One fixed problem beats four half-fixed ones."],
+        ["Want a score?", "Upload the cut to Creedom's Reel Analyzer for a score on each check, second by second."]
+      ],
+      "note": "Tip: check number 4, the ending, is the one almost nobody checks." },
+    { "type": "cards", "heading": "The *4* checks", "per_page": 2,
+      "items": [
+        { "tag": "1 · Hook", "line": "Watch your first frame with the sound off. Can a stranger tell what this reel is about in [1 second]?",
+          "example": "A talking head with no text on screen. Fix: add a short title on the first frame, like \"3 meals under 100\".",
+          "why": "Many people scroll with the sound off, so the first frame has to make sense on its own." },
+        { "tag": "2 · Pacing", "line": "Scrub through it. Does something change every [2 seconds]: a cut, a zoom, new text or a new angle?",
+          "example": "One 8-second shot. Fix: cut it into four shots, or add a text pop every two seconds.",
+          "why": "A frame that never changes gives the thumb a reason to keep scrolling." },
+        { "tag": "3 · Audio", "line": "Play it on your phone speaker at [half volume]. Is every word clear over the music?",
+          "example": "Music as loud as your voice. Fix: turn the music down well under your voice, or drop it while you talk.",
+          "why": "If people can't hear the point, they won't wait for it." },
+        { "tag": "4 · Ending", "line": "Does the last second give people a reason to [rewatch], [comment] or [save]?",
+          "example": "It just stops. Fix: end on a question, loop back to the first frame, or say \"save this for your next post\".",
+          "why": "A reel that just stops gives people nothing to do next." }
+      ] },
+    { "type": "checklist", "heading": "Before you *post*",
+      "items": [
+        "Hook: the first frame makes sense on mute",
+        "Pacing: something changes every 2 seconds",
+        "Audio: every word is clear over the music",
+        "Ending: there's a reason to rewatch, comment or save",
+        "Optional: score it in Creedom's Reel Analyzer"
+      ],
+      "closing": "Follow @creedom.ai for more." }
+  ]
+}
