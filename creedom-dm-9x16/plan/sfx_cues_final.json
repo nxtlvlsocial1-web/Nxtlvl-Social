@@ -190,11 +190,6 @@
 "file": "impact_es_boom.wav"
 },
 {
-"t": 21.38,
-"kind": "sent",
-"file": "sent_es_sent.wav"
-},
-{
 "t": 22.68,
 "kind": "typing",
 "file": "typing_es_typing.wav"
@@ -213,6 +208,11 @@
 "t": 23.31,
 "kind": "typing",
 "file": "typing_es_typing.wav"
+},
+{
+"t": 23.4,
+"kind": "sent",
+"file": "sent_es_sent.wav"
 },
 {
 "t": 24.22,
@@ -300,11 +300,6 @@
 "file": "impact_es_boom.wav"
 },
 {
-"t": 29.94,
-"kind": "sent",
-"file": "sent_es_sent.wav"
-},
-{
 "t": 31.2,
 "kind": "pop",
 "file": "pop_es_glasspop.wav"
@@ -323,6 +318,11 @@
 "t": 31.52,
 "kind": "click",
 "file": "click_click.wav"
+},
+{
+"t": 32.16,
+"kind": "sent",
+"file": "sent_es_sent.wav"
 },
 {
 "t": 32.61,
