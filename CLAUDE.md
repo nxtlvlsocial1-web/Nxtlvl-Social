@@ -32,6 +32,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Design direction: palette, type, pacing                 | `hyperframes-creative`                        |
 | Working with a person in Studio, storyboards            | `hyperframes-studio`                          |
 | CLI: init, check, preview, render, troubleshooting      | `hyperframes-cli`                             |
+| Local business leads, emails, reviews from Google Maps  | `lead-generation`                             |
 | Titles, cover text and video openings (Chinese)         | `dbs-title-cover-intro`                       |
 | Polish/tune existing UI motion: durations, easing, stagger | `transitions-polish`                 |
 | Visual style for music videos and moody edits (angelcore / hyperpop) | `taste`                    |
@@ -117,6 +118,7 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `higgsfield-*`: `higgsfield-ai/skills`
 - `canvas-design`: `anthropics/skills`
 - `dbs-*`: `dontbesilent2025/dbskill`
+- `lead-generation` (installed from `google-maps-scraper`, renamed): `gosom/google-maps-scraper`
 - `transitions-polish`: `jakubantalik/transitions.dev`
 - `taste`: `affaan-m/ecc`
 - `dockkit`: `dpearson2699/swift-ios-skills`
