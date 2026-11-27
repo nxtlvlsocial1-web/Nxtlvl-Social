@@ -5,338 +5,368 @@
 "file": "whoosh_es_whoosh_tech.wav"
 },
 {
-"t": 1.4,
+"t": 1.48,
 "kind": "stamp",
 "file": "stamp_es_stamp.wav"
 },
 {
-"t": 2.58,
+"t": 2.66,
 "kind": "whoosh_big",
 "file": "whoosh_big_es_whoosh_tech.wav"
 },
 {
-"t": 2.68,
+"t": 2.76,
 "kind": "shutter",
 "file": "shutter_es_shutter.wav"
 },
 {
-"t": 2.7,
+"t": 2.78,
 "kind": "impact",
 "file": "impact_es_boom.wav"
 },
 {
-"t": 2.73,
+"t": 2.81,
 "kind": "pop",
 "file": "pop_es_bubble.wav"
 },
 {
-"t": 3.18,
+"t": 3.16,
 "kind": "pop",
 "file": "pop_es_glasspop.wav"
 },
 {
-"t": 3.38,
+"t": 3.36,
 "kind": "pop",
 "file": "pop_es_bubble.wav"
 },
 {
-"t": 4.06,
+"t": 4.1,
+"kind": "pop",
+"file": "pop_es_glasspop.wav"
+},
+{
+"t": 4.15,
 "kind": "scanner",
 "file": "scanner_es_scanner.wav"
 },
 {
-"t": 5.6,
-"kind": "pop",
-"file": "pop_es_glasspop.wav"
-},
-{
-"t": 5.72,
+"t": 4.22,
 "kind": "pop",
 "file": "pop_es_bubble.wav"
 },
 {
-"t": 5.84,
+"t": 4.34,
 "kind": "pop",
 "file": "pop_es_glasspop.wav"
 },
 {
-"t": 5.96,
-"kind": "pop",
-"file": "pop_es_bubble.wav"
-},
-{
-"t": 7.9,
+"t": 4.38,
 "kind": "ding2",
 "file": "ding2_es_notif.wav"
 },
 {
-"t": 9.58,
-"kind": "swish",
-"file": "swish_es_swish.wav"
-},
-{
-"t": 9.58,
-"kind": "pop",
-"file": "pop_es_glasspop.wav"
-},
-{
-"t": 11.37,
-"kind": "whoosh",
-"file": "whoosh_es_swish.wav"
-},
-{
-"t": 11.42,
-"kind": "impact",
-"file": "impact_es_boom.wav"
-},
-{
-"t": 14.02,
-"kind": "error",
-"file": "error_es_buzzer.wav"
-},
-{
-"t": 14.89,
-"kind": "ding",
-"file": "ding_es_success.wav"
-},
-{
-"t": 15.19,
-"kind": "coin",
-"file": "coin_es_notif.wav"
-},
-{
-"t": 15.19,
+"t": 4.46,
 "kind": "pop",
 "file": "pop_es_bubble.wav"
 },
 {
-"t": 15.35,
+"t": 5.74,
+"kind": "swish",
+"file": "swish_es_swish.wav"
+},
+{
+"t": 5.74,
+"kind": "pop",
+"file": "pop_es_glasspop.wav"
+},
+{
+"t": 7.65,
+"kind": "whoosh",
+"file": "whoosh_es_swish.wav"
+},
+{
+"t": 7.7,
+"kind": "impact",
+"file": "impact_es_boom.wav"
+},
+{
+"t": 10.6,
+"kind": "error",
+"file": "error_es_buzzer.wav"
+},
+{
+"t": 11.54,
+"kind": "stamp",
+"file": "stamp_es_stamp.wav"
+},
+{
+"t": 13.27,
+"kind": "ding",
+"file": "ding_es_success.wav"
+},
+{
+"t": 13.57,
+"kind": "coin",
+"file": "coin_es_notif.wav"
+},
+{
+"t": 13.57,
+"kind": "pop",
+"file": "pop_es_bubble.wav"
+},
+{
+"t": 14.17,
 "kind": "whoosh",
 "file": "whoosh_es_whoosh_tech.wav"
 },
 {
-"t": 15.4,
+"t": 14.22,
 "kind": "impact",
 "file": "impact_es_boom.wav"
+},
+{
+"t": 14.32,
+"kind": "ding",
+"file": "ding_es_success.wav"
+},
+{
+"t": 14.77,
+"kind": "coin",
+"file": "coin_es_notif.wav"
+},
+{
+"t": 14.77,
+"kind": "pop",
+"file": "pop_es_glasspop.wav"
+},
+{
+"t": 14.98,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 15.24,
+"kind": "click",
+"file": "click_click.wav"
 },
 {
 "t": 15.5,
-"kind": "ding",
-"file": "ding_es_success.wav"
-},
-{
-"t": 15.95,
-"kind": "coin",
-"file": "coin_es_notif.wav"
-},
-{
-"t": 15.95,
-"kind": "pop",
-"file": "pop_es_glasspop.wav"
-},
-{
-"t": 16.185,
 "kind": "click",
 "file": "click_click.wav"
 },
 {
-"t": 16.47,
-"kind": "click",
-"file": "click_click.wav"
-},
-{
-"t": 16.755,
-"kind": "click",
-"file": "click_click.wav"
-},
-{
-"t": 17.4,
+"t": 16.12,
 "kind": "error",
 "file": "error_es_buzzer.wav"
 },
 {
-"t": 19.19,
+"t": 18.03,
 "kind": "whoosh",
 "file": "whoosh_es_swish.wav"
 },
 {
-"t": 19.24,
+"t": 18.08,
 "kind": "impact",
 "file": "impact_es_boom.wav"
 },
 {
-"t": 21.12,
+"t": 19.98,
 "kind": "error",
 "file": "error_es_buzzer.wav"
 },
 {
-"t": 22.38,
+"t": 21.18,
 "kind": "swish",
 "file": "swish_es_swish.wav"
 },
 {
-"t": 23.16,
+"t": 21.94,
 "kind": "ding",
 "file": "ding_es_success.wav"
 },
 {
-"t": 23.61,
+"t": 22.39,
 "kind": "coin",
 "file": "coin_es_notif.wav"
 },
 {
-"t": 23.61,
+"t": 22.39,
 "kind": "pop",
 "file": "pop_es_bubble.wav"
 },
 {
-"t": 23.91,
+"t": 22.69,
 "kind": "whoosh",
 "file": "whoosh_es_whoosh_tech.wav"
 },
 {
-"t": 23.96,
+"t": 22.74,
 "kind": "impact",
 "file": "impact_es_boom.wav"
 },
 {
-"t": 27.14,
+"t": 26.04,
 "kind": "swish",
 "file": "swish_es_swish.wav"
 },
 {
-"t": 27.44,
+"t": 26.34,
 "kind": "coin",
 "file": "coin_es_notif.wav"
 },
 {
-"t": 27.98,
+"t": 26.64,
 "kind": "pop",
 "file": "pop_es_glasspop.wav"
 },
 {
-"t": 28.13,
+"t": 26.79,
 "kind": "pop",
 "file": "pop_es_bubble.wav"
 },
 {
-"t": 28.28,
+"t": 26.94,
 "kind": "pop",
 "file": "pop_es_glasspop.wav"
 },
 {
-"t": 28.43,
+"t": 27.09,
+"kind": "pop",
+"file": "pop_es_bubble.wav"
+},
+{
+"t": 28.12,
 "kind": "ding",
 "file": "ding_es_success.wav"
 },
 {
-"t": 28.43,
-"kind": "pop",
-"file": "pop_es_bubble.wav"
+"t": 28.12,
+"kind": "click",
+"file": "click_click.wav"
 },
 {
-"t": 29.79,
+"t": 29.47,
 "kind": "powerdown",
 "file": "powerdown_es_powerdown.wav"
 },
 {
-"t": 30.04,
+"t": 29.72,
 "kind": "error",
 "file": "error_es_buzzer.wav"
 },
 {
-"t": 30.29,
+"t": 29.97,
 "kind": "coin",
 "file": "coin_es_notif.wav"
 },
 {
-"t": 31.26,
+"t": 31.3,
 "kind": "tick",
 "file": "tick_es_bubble.wav"
 },
 {
-"t": 31.42,
+"t": 31.46,
 "kind": "tick",
 "file": "tick_es_bubble.wav"
 },
 {
-"t": 31.58,
+"t": 31.62,
 "kind": "tick",
 "file": "tick_es_bubble.wav"
 },
 {
-"t": 31.58,
+"t": 31.78,
+"kind": "tick",
+"file": "tick_es_bubble.wav"
+},
+{
+"t": 31.82,
 "kind": "ding",
 "file": "ding_es_success.wav"
 },
 {
-"t": 31.58,
+"t": 31.82,
 "kind": "pop",
 "file": "pop_es_glasspop.wav"
 },
 {
-"t": 31.68,
+"t": 31.92,
 "kind": "sparkle",
 "file": "sparkle_es_sparkle.wav"
 },
 {
-"t": 31.74,
-"kind": "tick",
-"file": "tick_es_bubble.wav"
-},
-{
-"t": 32.78,
+"t": 33.04,
 "kind": "riser_short",
 "file": "riser_short_es_riser.wav"
 },
 {
-"t": 36.08,
+"t": 36.36,
 "kind": "pop",
 "file": "pop_es_bubble.wav"
 },
 {
-"t": 36.28,
+"t": 36.56,
 "kind": "pop",
 "file": "pop_es_glasspop.wav"
 },
 {
-"t": 37.652,
+"t": 37.89,
 "kind": "error",
 "file": "error_es_buzzer.wav"
 },
 {
-"t": 38.72,
-"kind": "tick",
-"file": "tick_es_bubble.wav"
+"t": 37.94,
+"kind": "stamp",
+"file": "stamp_es_stamp.wav"
 },
 {
-"t": 38.88,
-"kind": "tick",
-"file": "tick_es_bubble.wav"
-},
-{
-"t": 39.04,
-"kind": "tick",
-"file": "tick_es_bubble.wav"
-},
-{
-"t": 39.22,
-"kind": "click",
-"file": "click_click.wav"
-},
-{
-"t": 39.34,
-"kind": "pop",
-"file": "pop_es_bubble.wav"
-},
-{
-"t": 39.61,
+"t": 39.56,
 "kind": "whoosh",
 "file": "whoosh_es_swish.wav"
 },
 {
-"t": 40.2,
-"kind": "chime",
-"file": "chime_es_success.wav"
+"t": 40.01,
+"kind": "click",
+"file": "click_click.wav"
+},
+{
+"t": 40.06,
+"kind": "riser_short",
+"file": "riser_short_es_riser.wav"
+},
+{
+"t": 40.28,
+"kind": "pop",
+"file": "pop_es_bubble.wav"
+},
+{
+"t": 40.88,
+"kind": "ding",
+"file": "ding_es_success.wav"
+},
+{
+"t": 41.11,
+"kind": "tick",
+"file": "tick_es_bubble.wav"
+},
+{
+"t": 41.27,
+"kind": "tick",
+"file": "tick_es_bubble.wav"
+},
+{
+"t": 41.43,
+"kind": "tick",
+"file": "tick_es_bubble.wav"
+},
+{
+"t": 41.59,
+"kind": "tick",
+"file": "tick_es_bubble.wav"
+},
+{
+"t": 41.82,
+"kind": "stamp",
+"file": "stamp_es_stamp.wav"
 }
 ]
