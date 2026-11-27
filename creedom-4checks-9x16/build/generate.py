@@ -10,6 +10,8 @@ import random
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+VERSION = os.environ.get("VERSION", "A")        # v3: A = "Comment CHECK" CTA, B = "Install Creedom" CTA (owner, 27 Nov)
+os.environ.setdefault("WORDS", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "plan", f"words_{VERSION}.json"))
 from fx import ROOT, LINES, L0, L1, T, JS, SFX, js, sfx, ft, to, st  # noqa: E402
 from fx import cree_html, pose, cree_hop, sparkle, P, sweat, say, cree_wiggle, blink, PCX, PCY, cree_to  # noqa: E402
 
@@ -121,29 +123,33 @@ AVATAR = ('<svg class="avs" viewBox="0 0 200 260"><circle cx="100" cy="92" r="52
 
 # ---------------------------------------------------------------- times
 t_dont, t_post, t_until, t_four, t_chk = L0["k0"], T("k0", "post"), T("k0", "until"), T("k0", "four"), T("k0", "checks")
-t_ai, t_scores, t_hit = L0["k1"], T("k1", "scores"), T("k1", "hit")
-t_num4, t_nobody = L0["k2"], T("k2", "nobody")
-H = dict(n=L0["k3"], q=T("k3", "Does"), sense=T("k3", "sense"), mute=T("k3", "mute"))
+t_ai, t_scores, t_hit = L0["k2"] - .05, L0["k2"] + .1, T("k2", "nobody")     # v3: line 2 ("AI reel analyzer scores") was cut
+t_num4, t_nobody = T("k2", "four"), T("k2", "nobody")
+H = dict(n=L0["k3"], q=T("k3", "Does"), sense=T("k3", "scrolling"), mute=T("k3", "sound"), andd=T("k3", "And"))
 Pc = dict(n=L0["k4"], q=T("k4", "Does"), change=T("k4", "change"), two=T("k4", "two"))
 A = dict(n=L0["k5"], q=T("k5", "Can"), hear=T("k5", "hear"), voice=T("k5", "voice"), music=T("k5", "music"))
-E = dict(n=L0["k6"], q=T("k6", "Does"), rewatch=T("k6", "rewatch"), comment=T("k6", "comment"), orr=T("k6", "Or"), stop=T("k6", "stop"))
-Y = dict(t=L0["k7"], upload=T("k7", "upload"), creedom=T("k7", "Creedom"), score=T("k7", "score"), each=T("k7", "each"), sec=T("k7", "second"))
-t_cm, t_check = L0["k8"], T("k8", "CHECK")
+E = dict(n=L0["k6"], q=T("k6", "Does"), rewatch=T("k6", "rewatch"), comment=T("k6", "engage"), follow=T("k6", "follow"), orr=T("k6", "Or", 1), stop=T("k6", "stop"))
+Y = dict(t=L0["k7"], upload=T("k7", "upload"), creedom=T("k7", "Creedom"), score=T("k7", "score"), each=T("k7", "each"), sec=T("k7", "each") + .25, before=T("k7", "before"))
+t_cm, t_check = L0["k8"], T("k8", "CHECK" if VERSION == "A" else "Install")
 TICK = [H["mute"] + .55, Pc["two"] + .55, A["music"] + .45, E["stop"] + .45]
 
 # ---------------------------------------------------------------- captions
 head("h0", [["Don't", "*post", "your", "next", "reel"], ["until", "it", "passes"], ["these", "*4", "*checks."]], "k0", 84)
-head("h1", [["They're", "what", "an", "AI", "reel"], ["analyzer", "*scores"], ["before", "you", "hit", "post."]], "k1", 80)
 head("h2", [["And", "number", "*four"], ["is", "the", "one", "almost"], ["*nobody", "checks."]], "k2", 84)
-head("h3", [["Does", "your", "first", "frame"], ["make", "sense", "on", "*mute?"]], "k3", 84, after=H["q"])
+head("h3", [["Does", "your", "hook", "*stop"], ["people", "from", "*scrolling?"]], "k3", 84, after=H["q"])
+head("h3b", [["*AND", "do", "that"], ["when", "watching"], ["without", "*sound?"]], "k3", 84, after=H["andd"])
 head("h4", [["Does", "something", "*change"], ["every", "*two", "*seconds?"]], "k4", 84, after=Pc["q"])
-head("h5", [["Can", "anyone", "actually"], ["*hear", "your", "*voice"], ["over", "the", "music?"]], "k5", 80, after=A["q"])
-head("h6", [["Does", "it", "give", "people", "a"], ["reason", "to", "*rewatch"], ["or", "*comment?"]], "k6", 78, after=E["q"])
-head("h6b", [["Or", "does", "it", "just"], ["*stop?"]], "k6", 104, after=E["orr"])
+head("h5", [["Can", "people", "actually"], ["*hear", "your", "*voice"], ["over", "the", "music?"]], "k5", 80, after=A["q"])
+head("h6", [["Does", "it", "give", "people", "a"], ["reason", "to", "*rewatch,"], ["*engage", "or", "*follow?"]], "k6", 78, after=E["q"])
+head("h6b", [["Or", "does", "it", "just"], ["stop", "*abruptly?"]], "k6", 96, after=E["orr"])
 head("h7", [["Check", "all", "*four", "yourself."]], "k7", 84)
-head("h7b", [["Or", "upload", "your", "cut", "to"], ["*Creedom's", "Reel", "Analyzer"]], "k7", 78, after=T("k7", "Or"))
-head("h7c", [["and", "get", "a", "*score"], ["for", "each", "one,"], ["second", "by", "second."]], "k7", 76, after=T("k7", "and"))
-head("h8", [["Comment", "*CHECK"], ["and", "I'll", "DM", "you", "the"], ["*checklist."]], "k8", 84)
+head("h7b", [["Or", "upload", "your", "video", "to"], ["*Creedom's", "Reel", "Analyzer"]], "k7", 78, after=T("k7", "Or"))
+head("h7c", [["and", "get", "a", "*score"], ["for", "each", "check."]], "k7", 80, after=T("k7", "and"))
+head("h7d", [["Do", "this"], ["*before", "*posting."]], "k7", 104, after=T("k7", "Do"))
+if VERSION == "A":
+    head("h8", [["Comment", "*CHECK"], ["and", "I'll", "DM", "you", "the"], ["*checklist."]], "k8", 84)
+else:
+    head("h8", [["*Install", "Creedom", "and"], ["check", "your", "next", "reel"], ["*before", "*posting."]], "k8", 80)
 
 # ---------------------------------------------------------------- the tracker (always on, ticks per check)
 NAMES = ["HOOK", "PACING", "AUDIO", "ENDING"]
@@ -248,6 +254,11 @@ badge("nb0", False, H["sense"])
 ft2("#hookt", H["mute"] - .15, .3, "{opacity: 0, scale: 2, y: -20}", "{opacity: 1, scale: 1, y: 0}", "back.out(2)")
 pop("#arr", H["mute"] + .1, .25)
 badge("ob0", True, H["mute"] + .25)
+HTMLS.append('<div class="andst" id="andst"><span>AND</span></div>')
+ft2("#andst", H["andd"] - .05, .25, "{opacity: 0, scale: 2.6, rotation: -20}", "{opacity: 1, scale: 1, rotation: -8}", "back.out(2.4)")
+to("#andst", H["andd"] + .9, .2, "{opacity: 0, scale: .8}")
+sfx("stamp", H["andd"])
+js(f'tl.fromTo("#mute", {{scale: 1}}, {{scale: 1.25, duration: .18, yoyo: true, repeat: 3, immediateRender: false}}, {T("k3", "without"):.3f});')
 
 # s4 PACING: one long clip vs a cut every two seconds
 CUTS = "".join(f'<i style="background:{c}"><u id="cut{k}">CUT</u></i>' for k, c in enumerate(("#ff8ac2", "#ffb86b", "#8a6bff", "#2fbf71")))
@@ -323,7 +334,13 @@ sfx("swish", E["rewatch"]); sfx("coin", E["rewatch"] + .3)
 for k in range(3):
     ft2(f"#cm{k}", E["comment"] + k * .15, .3, "{opacity: 0, y: 40, scale: .6}", "{opacity: 1, y: 0, scale: 1}", "back.out(2.2)")
     sfx("pop", E["comment"] + k * .15)
-badge("ob3", True, E["comment"] + .45)
+badge("ob3", True, E["follow"] + .3)
+HTMLS.append('<div class="folb" id="folb"><span id="folt">Follow</span></div>')
+pop("#folb", E["follow"] - .05, .3, "{opacity: 0, scale: .4, y: 40}")
+js(f'tl.set("#folt", {{textContent: "Following"}}, {E["follow"] + .3:.3f});')
+js(f'tl.to("#folb", {{backgroundColor: "#ffffff", color: "#1a1020", duration: .15}}, {E["follow"] + .3:.3f});')
+sfx("click", E["follow"] + .3)
+to("#folb", E["stop"] - .1, .1, "{opacity: 0}")
 # "or does it just stop?": a hard cut to black
 ft2("#theend", E["stop"] - .05, .05, "{opacity: 0}", "{opacity: 1}", "none")
 js(f'tl.fromTo("#theend b", {{scale: 1.4, opacity: 0}}, {{scale: 1, opacity: 1, duration: .25, ease: "power3.out", immediateRender: false}}, {E["stop"]:.3f});')
@@ -376,29 +393,67 @@ for k in range(15):
 pop("#fl0", Y["sec"] + (t_cm - Y["sec"]) * 6 / 15, .3, "{opacity: 0, scale: .5, y: 20}")
 pop("#fl1", Y["sec"] + (t_cm - Y["sec"]) * 13 / 15, .3, "{opacity: 0, scale: .5, y: 20}")
 sfx("error", Y["sec"] + (t_cm - Y["sec"]) * 6 / 15)
+HTMLS.append('<div class="stamp bypost" id="bypost"><span>BEFORE YOU POST</span></div>')
+ft2("#bypost", Y["before"] - .05, .22, "{opacity: 0, scale: 2.4, rotation: -20}", "{opacity: 1, scale: 1, rotation: -7}", "power4.out")
+sfx("stamp", Y["before"]); punch(Y["before"], 1.035)
+to("#bypost", t_cm - .2, .15, "{opacity: 0}")
 
-# s9 CTA: CHECK typed, the checklist PDF
-S9 = ('<div class="scene" id="s9"><div class="cbox" id="cbox"><i class="cav"></i><span id="cbt">' + "".join(f'<span id="cg{k}" style="opacity:0">{c}</span>' for k, c in enumerate("CHECK"))
-      + '</span><b class="csend" id="csend">Post</b></div><div class="sent" id="sent">Sent! Now check your DMs</div>'
-      '<div class="pdf" id="pdf"><i class="sheen"></i><small>FREE CHECKLIST</small><b>4 checks<br>before you<br><em>post</em></b>'
-      + "".join(f'<div class="prow"><i>{CHECK_SVG}</i>{n.title()}</div>' for n in NAMES) + '<span>Creedom</span></div></div>')
-SC.append("s9")
-scene("s9", t_cm - .1, "{opacity: 0, y: 200}")
-ft2("#cbox", t_cm, .35, "{opacity: 0, y: 60}", "{opacity: 1, y: 0}", "back.out(1.8)")
-for k in range(5):
-    st(f"#cg{k}", t_check + k * .08, "{opacity: 1}")
-    sfx("tick", t_check + k * .08)
-js(f'tl.fromTo("#csend", {{scale: 1}}, {{keyframes: [{{scale: .85, duration: .08}}, {{scale: 1, duration: .15}}], immediateRender: false}}, {t_check + .5:.3f});')
-sfx("click", t_check + .5)
-ft2("#sent", t_check + .62, .3, "{opacity: 0, y: 20}", "{opacity: 1, y: 0}", "back.out(2)")
-ft2("#pdf", T("k8", "DM") - .05, .5, "{opacity: 0, y: 500, rotation: 12}", "{opacity: 1, y: 0, rotation: -3}", "back.out(1.5)")
-sfx("whoosh", T("k8", "DM") - .05); sfx("chime", T("k8", "checklist"))
+if VERSION == "A":
+    # s9 CTA: CHECK typed, the checklist PDF
+    S9 = ('<div class="scene" id="s9"><div class="cbox" id="cbox"><i class="cav"></i><span id="cbt">' + "".join(f'<span id="cg{k}" style="opacity:0">{c}</span>' for k, c in enumerate("CHECK"))
+          + '</span><b class="csend" id="csend">Post</b></div><div class="sent" id="sent">Sent! Now check your DMs</div>'
+          '<div class="pdf" id="pdf"><i class="sheen"></i><small>FREE CHECKLIST</small><b>4 checks<br>before you<br><em>post</em></b>'
+          + "".join(f'<div class="prow"><i>{CHECK_SVG}</i>{n.title()}</div>' for n in NAMES) + '<span>Creedom</span></div></div>')
+    SC.append("s9")
+    scene("s9", t_cm - .1, "{opacity: 0, y: 200}")
+    ft2("#cbox", t_cm, .35, "{opacity: 0, y: 60}", "{opacity: 1, y: 0}", "back.out(1.8)")
+    for k in range(5):
+        st(f"#cg{k}", t_check + k * .08, "{opacity: 1}")
+        sfx("tick", t_check + k * .08)
+    js(f'tl.fromTo("#csend", {{scale: 1}}, {{keyframes: [{{scale: .85, duration: .08}}, {{scale: 1, duration: .15}}], immediateRender: false}}, {t_check + .5:.3f});')
+    sfx("click", t_check + .5)
+    ft2("#sent", t_check + .62, .3, "{opacity: 0, y: 20}", "{opacity: 1, y: 0}", "back.out(2)")
+    ft2("#pdf", T("k8", "DM") - .05, .5, "{opacity: 0, y: 500, rotation: 12}", "{opacity: 1, y: 0, rotation: -3}", "back.out(1.5)")
+    sfx("whoosh", T("k8", "DM") - .05); sfx("chime", T("k8", "checklist"))
+else:
+    # s9 (version B): the Creedom app card, Install tapped, a download ring, Open; then a check before posting
+    S9 = ('<div class="scene" id="s9"><div class="appc" id="appc"><div class="atile"><img src="assets/img/creedom_logo.png" alt=""></div>'
+          '<div class="ainfo"><b>Creedom</b><span>AI coach for creators</span><small>Reel Analyzer · free to start</small></div>'
+          '<div class="inst" id="inst"><span id="instt">Install</span><svg class="iring" id="iring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="none" stroke="#f6d9e8" stroke-width="10"/>'
+          '<circle id="iarc" cx="50" cy="50" r="38" fill="none" stroke="#F343A2" stroke-width="10" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 50 50)"/></svg></div></div>'
+          '<svg id="fing9" viewBox="0 0 60 80" width="100" height="134"><path d="M20 76 L20 30 Q20 20 28 20 Q36 20 36 30 L36 44 L50 47 Q58 49 57 58 L54 76 Z" fill="#ffd9c2" stroke="#1a1020" stroke-width="4" stroke-linejoin="round"/></svg>'
+          '<div class="nxt" id="nxt"><div class="rthumb sm2"><i class="dish"></i></div><div class="nxi"><small>YOUR NEXT REEL</small>'
+          + "".join(f'<div class="nrow" id="nr{i}"><i>{CHECK_SVG}</i>{n.title()}</div>' for i, n in enumerate(NAMES)) + '</div></div>'
+          '<div class="stamp bypost2" id="bypost2"><span>BEFORE POSTING</span></div></div>')
+    SC.append("s9")
+    scene("s9", t_cm - .1, "{opacity: 0, y: 200}")
+    t_inst, t_chk2, t_bef = T("k8", "Install"), T("k8", "check"), T("k8", "before")
+    ft2("#appc", t_cm - .05, .45, "{opacity: 0, y: 160, scale: .8}", "{opacity: 1, y: 0, scale: 1}", "back.out(1.6)")
+    sfx("whoosh", t_cm - .1)
+    ft2("#fing9", t_inst + .05, .3, "{opacity: 0, x: 980, y: 1500}", "{opacity: 1, x: 760, y: 1010}", "power2.out")
+    js(f'tl.to("#inst", {{scale: .9, duration: .08, yoyo: true, repeat: 1}}, {t_inst + .35:.3f});')
+    sfx("click", t_inst + .35)
+    to("#fing9", t_inst + .6, .2, "{opacity: 0}")
+    js(f'tl.set("#instt", {{opacity: 0}}, {t_inst + .45:.3f}); tl.set("#iring", {{opacity: 1}}, {t_inst + .45:.3f});')
+    js(f'tl.to("#inst", {{backgroundColor: "#ffffff", duration: .1}}, {t_inst + .45:.3f});')
+    js(f'tl.fromTo("#iarc", {{strokeDashoffset: 1}}, {{strokeDashoffset: 0, duration: .75, ease: "power1.inOut", immediateRender: false}}, {t_inst + .45:.3f});')
+    sfx("riser_short", t_inst + .4)
+    js(f'tl.set("#iring", {{opacity: 0}}, {t_inst + 1.22:.3f}); tl.set("#instt", {{opacity: 1, textContent: "Open"}}, {t_inst + 1.22:.3f});')
+    js(f'tl.to("#inst", {{backgroundColor: "#2fbf71", duration: .2}}, {t_inst + 1.22:.3f});')
+    sfx("ding", t_inst + 1.22); burst(t_inst + 1.25, 820, 960)
+    js(f'tl.to("#appc", {{y: -150, scale: .82, duration: .4, ease: "power3.inOut"}}, {t_chk2 - .1:.3f});')
+    ft2("#nxt", t_chk2, .4, "{opacity: 0, y: 200}", "{opacity: 1, y: 0}", "back.out(1.6)")
+    for i in range(4):
+        pop(f"#nr{i} i", t_chk2 + .35 + i * .16, .25, "{opacity: 0, scale: 2.2}")
+        sfx("tick", t_chk2 + .35 + i * .16)
+    ft2("#bypost2", t_bef - .05, .22, "{opacity: 0, scale: 2.4, rotation: -20}", "{opacity: 1, scale: 1, rotation: -7}", "power4.out")
+    sfx("stamp", t_bef); punch(t_bef, 1.04)
 for k in range(26):
     x0 = random.randint(60, 1020)
     HTMLS.append(f'<i class="cf" id="cfx{k}" style="background:{random.choice(("#ff5fb7", "#F343A2", "#ffd27a", "#2fbf71", "#ffffff"))};'
                  f'width:{random.randint(12, 20)}px;height:{random.randint(22, 32)}px"></i>')
     js(f'tl.fromTo("#cfx{k}", {{x: {x0}, y: -60, rotation: {random.randint(0, 180)}, opacity: 1}}, {{x: {x0 + random.uniform(-160, 160):.0f}, y: 2000, '
-       f'rotation: {random.randint(360, 900)}, duration: {random.uniform(1.6, 2.4):.2f}, ease: "power1.in", immediateRender: false}}, {T("k8", "checklist") + random.uniform(0, .3):.3f});')
+       f'rotation: {random.randint(360, 900)}, duration: {random.uniform(1.6, 2.4):.2f}, ease: "power1.in", immediateRender: false}}, {(T("k8", "checklist") if VERSION == "A" else T("k8", "before") + .2) + random.uniform(0, .3):.3f});')
 
 # =====================================================================================================================
 # Cree, the host: bottom right, reacting; centre for the CTA
@@ -435,7 +490,7 @@ for k in range(12):
                  f'stroke="{random.choice(("#F343A2", "#ffb3d6", "#ffd23f", "#c9b3ff"))}" stroke-width="5" stroke-linecap="round"/></svg>')
     js(f'tl.fromTo("#fs{k}", {{y: 0, rotation: 0}}, {{y: {random.randint(-160, -60)}, rotation: {random.choice((-1, 1)) * random.randint(90, 270)}, '
        f'duration: {DUR:.2f}, ease: "none", immediateRender: false}}, 0);')
-for sel, t in ((".ed .sheen", .3), ("#mt3 .sheen", t_num4 + .1), (".cz .sheen", Y["score"] - .3), (".clip .sheen", Y["t"] + .9), (".pdf .sheen", T("k8", "DM") + .4), (".endreel .sheen", E["rewatch"])):
+for sel, t in ((".ed .sheen", .3), ("#mt3 .sheen", t_num4 + .1), (".cz .sheen", Y["score"] - .3), (".clip .sheen", Y["t"] + .9), *(((".pdf .sheen", T("k8", "DM") + .4),) if VERSION == "A" else ()), (".endreel .sheen", E["rewatch"])):
     js(f'tl.fromTo("{sel}", {{x: -700}}, {{x: 1400, duration: .8, ease: "power2.inOut", immediateRender: false}}, {t:.3f});')
 for sid, t0 in (("s3", H["n"]), ("s4", Pc["n"]), ("s5", A["n"]), ("s6", E["n"])):
     js(f'tl.fromTo("#{sid} .ghost", {{y: 80, opacity: 0}}, {{y: -60, opacity: 1, duration: 3.5, ease: "power1.out", immediateRender: false}}, {t0 + .5:.3f});')

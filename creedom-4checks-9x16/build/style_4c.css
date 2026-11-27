@@ -206,3 +206,24 @@
 .mt, .cz, .clip, .pdf, .endreel, .ed { overflow: hidden; }
 .clip { overflow: visible; }
 .sc b { font: 900 124px/1 Poppins; letter-spacing: -.03em; } .up b { font: 900 84px/1 Poppins; }
+
+/* ===== v3 additions ===== */
+.andst { position: absolute; left: 0; right: 0; top: 1430px; text-align: center; z-index: 30; opacity: 0; }
+.andst span { display: inline-block; padding: 14px 48px 2px; border-radius: 26px; background: #1a1020; color: #ffd23f; font: 400 150px/1 Bebas; letter-spacing: .06em; box-shadow: 0 20px 40px rgba(0,0,0,.25); }
+.folb { position: absolute; left: 380px; top: 1520px; z-index: 12; padding: 18px 60px; border-radius: 40px; background: #F343A2; color: #fff; font: 800 44px Poppins; border: 4px solid #F343A2; opacity: 0; }
+.stamp.bypost { top: 1520px; z-index: 30; } .stamp.bypost span { font: 400 92px/1 Bebas; padding: 16px 36px 6px; letter-spacing: .04em; }
+.appc { position: absolute; left: 80px; right: 80px; top: 820px; display: flex; align-items: center; gap: 26px; padding: 30px; border-radius: 40px; background: #fff; box-shadow: 0 30px 70px rgba(80,10,50,.25); opacity: 0; }
+.atile { width: 170px; height: 170px; border-radius: 40px; flex: none; display: grid; place-items: center; background: linear-gradient(150deg, #ffe0ef, #fff); border: 4px solid #f6d9e8; }
+.atile img { width: 150px; }
+.ainfo { flex: 1; } .ainfo b { display: block; font: 900 50px Poppins; color: #1a1020; } .ainfo span { display: block; font: 600 30px Poppins; color: #6a5a66; }
+.ainfo small { display: block; margin-top: 6px; font: 700 22px Mono; color: #b06a90; letter-spacing: .06em; }
+.inst { position: relative; width: 190px; height: 90px; border-radius: 45px; background: #F343A2; color: #fff; display: grid; place-items: center; font: 800 38px Poppins; }
+.iring { position: absolute; left: 50%; top: 50%; width: 86px; height: 86px; margin: -43px 0 0 -43px; opacity: 0; }
+#fing9 { position: absolute; left: 0; top: 0; z-index: 14; opacity: 0; }
+.nxt { position: absolute; left: 120px; right: 120px; top: 1040px; display: flex; gap: 30px; padding: 30px; border-radius: 40px; background: #1a1020; color: #fff; opacity: 0; box-shadow: 0 30px 70px rgba(80,10,50,.3); }
+.rthumb.sm2 { position: relative; inset: auto; width: 220px; height: 340px; border-radius: 22px; flex: none; }
+.rthumb.sm2 .dish { width: 120px; height: 80px; margin-left: -60px; }
+.nxi small { font: 700 24px Mono; color: #ff8ac2; letter-spacing: .1em; }
+.nrow { display: flex; align-items: center; gap: 16px; margin-top: 18px; font: 800 42px Poppins; }
+.nrow i { width: 52px; height: 52px; border-radius: 14px; background: #2fbf71; display: grid; place-items: center; opacity: 0; } .nrow i svg { width: 40px; height: 40px; }
+.stamp.bypost2 { top: 1470px; z-index: 30; } .stamp.bypost2 span { font: 400 110px/1 Bebas; padding: 16px 40px 6px; letter-spacing: .04em; }
