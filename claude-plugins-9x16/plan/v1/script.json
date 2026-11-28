@@ -1,0 +1,17 @@
+[
+ {"id": "g1", "beat": "hook 70 (number on frame 1)", "text": "Five free Claude Code plugins, and the first one has 200,000 stars on GitHub.",
+  "say": "Five free Claude Code plugins... and the first one has two hundred thousand stars on GitHub.", "ex": 0.72, "cfg": 0.4, "at": null},
+ {"id": "g2", "beat": "first peak", "text": "Number one, Ponytail. It makes Claude code like the laziest senior dev in the room. In its own tests: about half the code, a quarter cheaper, same accuracy.",
+  "say": "Number one. Ponytail. It makes Claude code like the laziest senior dev in the room. In its own tests... about half the code, a quarter cheaper, same accuracy.", "ex": 0.72, "cfg": 0.4, "at": null},
+ {"id": "g3", "beat": "release", "text": "Two, Unslop. It strips the purple gradients and emoji labels out of vibe-coded apps, and makes them look designed.",
+  "say": "Two. Unslop. It strips the purple gradients and emoji labels out of vibe-coded apps... and makes them look designed.", "ex": 0.7, "cfg": 0.42, "at": null},
+ {"id": "g4", "beat": "peak", "text": "Three, Elephant-Goldfish, open-sourced by Google. Fresh reviewers check the plan before any code gets written. Google says thousands of its engineers use it every day.",
+  "say": "Three. Elephant Goldfish, open-sourced by Google. Fresh reviewers check the plan, before any code gets written. Google says thousands of its engineers use it... every day.", "ex": 0.74, "cfg": 0.4, "at": null},
+ {"id": "g5", "beat": "release", "text": "Four, Agent Reach. It lets your agent read YouTube, GitHub and Reddit through your own logins, and it never posts.",
+  "say": "Four. Agent Reach. It lets your agent read YouTube, GitHub and Reddit, through your own logins. And it never posts.", "ex": 0.7, "cfg": 0.42, "at": null},
+ {"id": "g6", "beat": "peak (official plugin)", "text": "And five, Claude Code Setup, from Anthropic. It scans your codebase and recommends the hooks, skills and MCP servers that fit.",
+  "say": "And five. Claude Code Setup, from Anthropic. It scans your codebase, and recommends the hooks, skills and M C P servers that fit.", "ex": 0.74, "cfg": 0.4, "at": null},
+ {"id": "g7", "beat": "share trigger", "text": "Send this to the friend still running Claude Code with zero plugins.",
+  "say": "Send this to the friend still running Claude Code... with zero plugins.", "ex": 0.72, "cfg": 0.4, "at": null},
+ {"id": "g8", "beat": "CTA", "text": "Comment PLUGINS, and I'll send you all five.", "say": "Comment plugins, and I'll send you all five.", "ex": 0.74, "cfg": 0.38, "at": null}
+]

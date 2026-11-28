@@ -28,7 +28,10 @@ KINDS = {
     "pop": (["pop"], -12, .35), "click": (["click"], -16, .15), "riser": (["riser"], -15, 1.0), "wake": (["robot_wake"], -16, 1.2),
     "impact": (["impact"], -8, 1.6), "impact_soft": (["impact"], -14, 1.2), "upgrade": (["upgrade"], -12, 1.4),
     "beep": (["beep"], -14, .6), "beep_soft": (["beep"], -20, .4), "chime": (["chime"], -13, 1.0), "chime_short": (["chime"], -15, .55), "notify": (["notify"], -14, .8),
-    "typing": (["typing"], -17, 1.6), "typing_soft": (["typing"], -21, 1.4), "thump": (["impact"], -18, .45), "coin": (["chime"], -17, .6),
+    "typing": (["typing"], -17, 1.6), "typing_soft": (["typing"], -21, 1.4), "thump": (["impact"], -18, .45),
+    # v2 (owner: "better SFX"): Openverse CC0 additions
+    "coin": (["coin"], -15, .3), "flip": (["whoosh_deep"], -13, .7), "whoosh_soft": (["whoosh_a"], -18, .5), "scan": (["scan"], -19, 1.0),
+    "shimmer": (["shimmer"], -18, 1.6), "shimmer_soft": (["shimmer"], -22, 1.2), "bass": (["bass"], -11, .4), "revbass": (["revbass"], -22, 1.25),
 }
 
 

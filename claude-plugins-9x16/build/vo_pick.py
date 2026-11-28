@@ -26,7 +26,7 @@ TEMPO = float(os.environ.get("VO_TEMPO", "1.05"))
 GAP_SCALE = 1.0
 LEAD = .05         # the cold open hits at once
 # pause after each line (s): peaks get room to land, the list moves fast
-GAP = {"g1": .4, "g2": .4, "g3": .35, "g4": .4, "g5": .35, "g6": .45, "g7": .3}
+GAP = {"g1": .35, "g2": .35, "g3": .3, "g4": .35, "g5": .3, "g6": .4, "g7": .25}
 
 
 NUM = {"one": "1", "two": "2", "three": "3", "four": "4", "five": "5", "mcp": "m c p", "unslop": "unslop", "anthropics": "anthropic"}

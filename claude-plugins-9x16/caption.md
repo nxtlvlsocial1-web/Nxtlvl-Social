@@ -1,4 +1,4 @@
-# NXTLVLSOCIAL.AI: 5 free Claude Code plugins (Instagram Reels, 9:16, 52.5 s), v1
+# NXTLVLSOCIAL.AI: 5 free Claude Code plugins (Instagram Reels, 9:16, 55.8 s), v2
 
 Owner: "Audit this reel and recreate this reel like this, take visuals from this reel for nxtlvl." Reference:
 refs/ref_34964.mp4 (48 s, a creator's talking head over GitHub screenshots, "25 best Claude Code plugins", comment
@@ -8,8 +8,14 @@ build/capture_targets.cjs), a light grid-paper page, browser-window cards with t
 proves each line with a selection frame and handles, keyword chips, word-by-word captions. In NXTLVLSOCIAL.AI colours
 (brands/nxtlvl: violet, ink, the comet-star mark on a dark chip).
 
-Build: build/vo_cb.py + vo_pick.py + relabel.py (voice: Chatterbox with the synthetic Kokoro am_puck reference, performed
-`say` lines, 4 takes per passage, clean livelier take picked, 1.1x), build/generate.py, build/sfx_mix.py.
+v2 (owner: "make it 3D, add more motion graphics, better SFX and voiceover for better understanding"): the window is a 3D
+slab on a receding grid floor (assets/js/scene.js) that flips between plugins and pushes in onto each proof line; desk props
+animate each claim (a gold star, a code bar and coins shrinking, slop blobs snapping into tiles, reviewer orbs scanning a
+plan, a globe with platform tiles, a codebase scan, a carousel of all five pages). Voice: Kokoro af_heart (the clear,
+natural voice the owner picked for Klap; build/vo_kok.py), a plainer script. New CC0 sounds from Openverse (a scanner, coins,
+a shimmer, a bass hit and a reverse swell into each number). v1 kept as build/generate_v1.py, plan/v1/.
+
+Build: build/vo_kok.py + vo_pick.py + relabel.py, build/generate.py, build/sfx_mix.py.
 
 ## Audit of the reference
 
@@ -34,17 +40,17 @@ Build: build/vo_cb.py + vo_pick.py + relabel.py (voice: Chatterbox with the synt
 
 | Voiceover | Beat |
 |---|---|
-| Five free Claude Code plugins, and the first one has 200,000 stars on GitHub. | hook 70 (number on frame 1: "200.3k stars" framed) |
-| Number one, Ponytail. It makes Claude code like the laziest senior dev in the room. In its own tests: about half the code, a quarter cheaper, same accuracy. | first peak |
-| Two, Unslop. It strips the purple gradients and emoji labels out of vibe-coded apps, and makes them look designed. | release |
-| Three, Elephant-Goldfish, open-sourced by Google. Fresh reviewers check the plan before any code gets written. Google says thousands of its engineers use it every day. | peak |
-| Four, Agent Reach. It lets your agent read YouTube, GitHub and Reddit through your own logins, and it never posts. | release |
-| And five, Claude Code Setup, from Anthropic. It scans your codebase and recommends the hooks, skills and MCP servers that fit. | peak (official plugin) |
-| Send this to the friend still running Claude Code with zero plugins. | share trigger |
+| Five free Claude Code plugins. The first one has 200,000 stars on GitHub. | hook 70 (number on frame 1: "200.3k stars" framed) |
+| Number one: Ponytail. It makes Claude write only the code you need. In its own tests: about half the code, a quarter cheaper, same accuracy. | first peak |
+| Number two: Unslop. It strips the purple gradients and emoji labels from vibe-coded apps, so they look designed. | release |
+| Number three: Elephant-Goldfish, open-sourced by Google. Fresh reviewers check your plan before any code is written. Google says thousands of its engineers use it every day. | peak |
+| Number four: Agent Reach. Your agent can read YouTube, GitHub and Reddit through your own logins. It never posts. | release |
+| Number five: Claude Code Setup, from Anthropic. It scans your project and recommends the hooks, skills and MCP servers that fit. | peak (official plugin) |
+| Send this to the friend still using Claude Code with zero plugins. | share trigger |
 | Comment PLUGINS, and I'll send you all five. | CTA |
 
 Hook variants to test:
-- A (built): "Five free Claude Code plugins, and the first one has 200,000 stars on GitHub."
+- A (built): "Five free Claude Code plugins. The first one has 200,000 stars on GitHub."
 - B: "This one prompt makes Claude write half the code. It's the first of five free plugins."
 - C: "Thousands of Google engineers use plugin number three every day."
 
@@ -55,13 +61,13 @@ Comment "PLUGINS" and I'll send you all five links.
 
 Five free Claude Code plugins, and the first one has 200,000 stars on GitHub.
 
-1. Ponytail: makes Claude code like the laziest senior dev in the room. In its own benchmark: 53% less code, 26% lower cost, same accuracy
+1. Ponytail: makes Claude write only the code you need. In its own benchmark: 53% less code, 26% lower cost, same accuracy
 2. Unslop: strips the purple gradients and emoji labels out of vibe-coded apps and makes them look designed
 3. Elephant-Goldfish: open-sourced by Google. Fresh reviewers check your plan before any code is written. Google says thousands of its engineers use it every day
 4. Agent Reach: lets your agent read YouTube, GitHub and Reddit through your own logins. Read-only, it never posts
 5. Claude Code Setup: an official Anthropic plugin that scans your codebase and recommends the hooks, skills and MCP servers that fit
 
-Send this to the friend still running Claude Code with zero plugins.
+Send this to the friend still using Claude Code with zero plugins.
 
 Music: "Funky Nurykabe (Spinningmerkaba Mix)" by ccMixter, CC BY 3.0
 Sounds: "Bubble Pop - High Pitched Short" by elmasmalo1, CC BY 3.0; "Upgrade" by mokasza, CC BY 4.0

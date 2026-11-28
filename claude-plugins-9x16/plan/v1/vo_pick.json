@@ -1,0 +1,261 @@
+{
+ "duration": 56.42,
+ "takes": [
+  {
+   "line": "g1",
+   "take": 0,
+   "heard": "5 free clodcode plugins and the first one has 200 ,000 stars on github.",
+   "errors": 5,
+   "pitch_spread_hz": 129,
+   "dynamics": 0.552
+  },
+  {
+   "line": "g1",
+   "take": 1,
+   "heard": "5 free Clodcode plugins, and the first one has 200 ,000 stars on GitHub.",
+   "errors": 5,
+   "pitch_spread_hz": 91,
+   "dynamics": 0.528
+  },
+  {
+   "line": "g1",
+   "take": 2,
+   "heard": "5 free Clodcode plugins, and the first one has 200 ,000 stars on GitHub.",
+   "errors": 5,
+   "pitch_spread_hz": 125,
+   "dynamics": 0.588
+  },
+  {
+   "line": "g1",
+   "take": 3,
+   "heard": "5 free Claude Code plugins, and the first one has 200 ,000 stars on GitHub.",
+   "errors": 3,
+   "pitch_spread_hz": 97,
+   "dynamics": 0.589
+  },
+  {
+   "line": "g2",
+   "take": 0,
+   "heard": "Number one, Ponytail. It makes Claude code like the laziest senior dev in the room. In its own tests, about half the code, a quarter cheaper, same accuracy.",
+   "errors": 0,
+   "pitch_spread_hz": 76,
+   "dynamics": 0.548
+  },
+  {
+   "line": "g2",
+   "take": 1,
+   "heard": "Number one, Ponytail, it makes clod code like the laziest senior dev in the room in its own tests about half the code a quarter cheaper same accuracy",
+   "errors": 1,
+   "pitch_spread_hz": 77,
+   "dynamics": 0.557
+  },
+  {
+   "line": "g2",
+   "take": 2,
+   "heard": "Number 1, Ponytail. It makes Claude code like the laziest senior dev in the room. In its own tests, about half the code, a quarter cheaper, same accuracy.",
+   "errors": 0,
+   "pitch_spread_hz": 88,
+   "dynamics": 0.538
+  },
+  {
+   "line": "g2",
+   "take": 3,
+   "heard": "Number one, Ponytail. It makes Claude code like the laziest senior dev in the room. In its own tests, about half the code, a quarter cheaper, same accuracy.",
+   "errors": 0,
+   "pitch_spread_hz": 85,
+   "dynamics": 0.557
+  },
+  {
+   "line": "g3",
+   "take": 0,
+   "heard": "2. Unslop It strips the purple gradients and emoji labels out of vibe -coded apps and makes them look designed.",
+   "errors": 0,
+   "pitch_spread_hz": 100,
+   "dynamics": 0.557
+  },
+  {
+   "line": "g3",
+   "take": 1,
+   "heard": "2. Unslop It strips the purple gradients and emoji labels out of vibe -coded apps and makes them look designed.",
+   "errors": 0,
+   "pitch_spread_hz": 97,
+   "dynamics": 0.532
+  },
+  {
+   "line": "g3",
+   "take": 2,
+   "heard": "2. On Slop, it strips the purple gradients and emoji labels out of vibe -coded apps and makes them look designed.",
+   "errors": 2,
+   "pitch_spread_hz": 83,
+   "dynamics": 0.542
+  },
+  {
+   "line": "g3",
+   "take": 3,
+   "heard": "2. Unslop It strips the purple gradients and emoji labels out of vibe -coded apps and makes them look designed.",
+   "errors": 0,
+   "pitch_spread_hz": 55,
+   "dynamics": 0.553
+  },
+  {
+   "line": "g4",
+   "take": 0,
+   "heard": "3. Elephant Goldfish, open sourced by Google. Fresh reviewers check the plan before any code gets written. Google says thousands of its engineers use it every day.",
+   "errors": 0,
+   "pitch_spread_hz": 102,
+   "dynamics": 0.517
+  },
+  {
+   "line": "g4",
+   "take": 1,
+   "heard": "3. Elephant Goldfish, open sourced by Google. Fresh reviewers check the plan before any code gets written. Google says thousands of its engineers use it every day.",
+   "errors": 0,
+   "pitch_spread_hz": 87,
+   "dynamics": 0.52
+  },
+  {
+   "line": "g4",
+   "take": 2,
+   "heard": "3. Elephant Goldfish, open source by Google. Fresh reviewers check the plan before any code gets written. Google says thousands of its engineers use it every day.",
+   "errors": 1,
+   "pitch_spread_hz": 86,
+   "dynamics": 0.561
+  },
+  {
+   "line": "g4",
+   "take": 3,
+   "heard": "Three, Elephant Goldfish, open source by Google. Fresh reviewers check the plan before any code gets written. Google says thousands of its engineers use it every day.",
+   "errors": 1,
+   "pitch_spread_hz": 98,
+   "dynamics": 0.55
+  },
+  {
+   "line": "g5",
+   "take": 0,
+   "heard": "4. Agent Reach. It lets your agent read YouTube, GitHub and Reddit through your own logins and it never posts.",
+   "errors": 0,
+   "pitch_spread_hz": 93,
+   "dynamics": 0.542
+  },
+  {
+   "line": "g5",
+   "take": 1,
+   "heard": "4. Agent Reach. It lets your agent read YouTube, GitHub, and Reddit through your own logins, and it never posts.",
+   "errors": 0,
+   "pitch_spread_hz": 87,
+   "dynamics": 0.554
+  },
+  {
+   "line": "g5",
+   "take": 2,
+   "heard": "4. Agent Reach. It lets your agent read YouTube, GitHub, and Reddit through your own logins, and it never posts.",
+   "errors": 0,
+   "pitch_spread_hz": 71,
+   "dynamics": 0.535
+  },
+  {
+   "line": "g5",
+   "take": 3,
+   "heard": "4. Agent Reach It lets your agent read YouTube, GitHub, and Reddit through your own logins, and it never posts.",
+   "errors": 0,
+   "pitch_spread_hz": 115,
+   "dynamics": 0.52
+  },
+  {
+   "line": "g6",
+   "take": 0,
+   "heard": "and 5, Claude Code Setup from Anthropic. It scans your codebase and recommends the hooks, skills, and MCP servers that fit.",
+   "errors": 0,
+   "pitch_spread_hz": 71,
+   "dynamics": 0.587
+  },
+  {
+   "line": "g6",
+   "take": 1,
+   "heard": "And 5, Claude Code Setup from Anthropic. It scans your codebase and recommends the hooks, skills, and MCP servers that fit.",
+   "errors": 0,
+   "pitch_spread_hz": 64,
+   "dynamics": 0.554
+  },
+  {
+   "line": "g6",
+   "take": 2,
+   "heard": "And 5. Claude Code Setup from Anthropic. It scans your codebase and recommends the hooks, skills, and MCP servers that fit.",
+   "errors": 0,
+   "pitch_spread_hz": 55,
+   "dynamics": 0.582
+  },
+  {
+   "line": "g6",
+   "take": 3,
+   "heard": "5. Clawed Code Setup from Anthropic. It scans your codebase and recommends the hooks, skills, and MCP servers that fit.",
+   "errors": 2,
+   "pitch_spread_hz": 80,
+   "dynamics": 0.571
+  },
+  {
+   "line": "g7",
+   "take": 0,
+   "heard": "Send this to the friends still running clod code with zero plugins",
+   "errors": 2,
+   "pitch_spread_hz": 67,
+   "dynamics": 0.563
+  },
+  {
+   "line": "g7",
+   "take": 1,
+   "heard": "Send this to the friend still running Cloud Code with zero plugins.",
+   "errors": 1,
+   "pitch_spread_hz": 42,
+   "dynamics": 0.533
+  },
+  {
+   "line": "g7",
+   "take": 2,
+   "heard": "Send this to the friend still running Cloud Code with zero plugins.",
+   "errors": 1,
+   "pitch_spread_hz": 58,
+   "dynamics": 0.655
+  },
+  {
+   "line": "g7",
+   "take": 3,
+   "heard": "Send this to the friend still running clod code with zero plugins",
+   "errors": 1,
+   "pitch_spread_hz": 83,
+   "dynamics": 0.538
+  },
+  {
+   "line": "g8",
+   "take": 0,
+   "heard": "Comment plugins, and I'll send you all five.",
+   "errors": 0,
+   "pitch_spread_hz": 43,
+   "dynamics": 0.465
+  },
+  {
+   "line": "g8",
+   "take": 1,
+   "heard": "comment plugins, and I'll send you all five.",
+   "errors": 0,
+   "pitch_spread_hz": 63,
+   "dynamics": 0.503
+  },
+  {
+   "line": "g8",
+   "take": 2,
+   "heard": "Comment plug -ins, and I'll send you all five.",
+   "errors": 2,
+   "pitch_spread_hz": 82,
+   "dynamics": 0.568
+  },
+  {
+   "line": "g8",
+   "take": 3,
+   "heard": "comment plugins, and I'll send you all five.",
+   "errors": 0,
+   "pitch_spread_hz": 54,
+   "dynamics": 0.443
+  }
+ ]
+}
