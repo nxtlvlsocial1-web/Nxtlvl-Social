@@ -29,6 +29,10 @@ for c in cues:
         ev.append(("es_clock.mp3", t, -6, 2.0, 1.0, 0.3))
     elif typ == "ding":
         ev.append(("es_success.mp3", t, -8, 0, None, 0))
+    elif typ == "static":
+        ev.append(("es_static.mp3", t, -12, 3.0, 0.6, 0.2))
+    elif typ == "scan":
+        ev.append(("es_scanner.mp3", t, -10, 0, 2.2, 0.4))
     elif typ == "impact":
         ev.append(("es_boom.mp3", t, -12, 0, 0.7, 0.3))
 # period beds

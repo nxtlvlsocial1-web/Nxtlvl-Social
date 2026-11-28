@@ -1,5 +1,5 @@
 {
- "duration": 39.189,
+ "duration": 44.14,
  "cues": [
   {
    "type": "stamp",
@@ -12,9 +12,19 @@
    "gain": 0.8
   },
   {
+   "type": "ticks",
+   "t": 4.63,
+   "gain": 0.7
+  },
+  {
    "type": "pop",
    "t": 4.83,
    "gain": 0.8
+  },
+  {
+   "type": "whoosh",
+   "t": 5.74,
+   "gain": 0.3
   },
   {
    "type": "marker",
@@ -43,6 +53,12 @@
    "dur": 0.5
   },
   {
+   "type": "pencil",
+   "t": 11.75,
+   "gain": 0.6,
+   "dur": 0.45
+  },
+  {
    "type": "pop",
    "t": 16.39,
    "gain": 0.7
@@ -64,9 +80,19 @@
    "gain": 0.8
   },
   {
+   "type": "ticks",
+   "t": 18.65,
+   "gain": 0.7
+  },
+  {
    "type": "pop",
    "t": 18.85,
    "gain": 0.8
+  },
+  {
+   "type": "static",
+   "t": 20.11,
+   "gain": 0.6
   },
   {
    "type": "ticks",
@@ -115,47 +141,52 @@
   },
   {
    "type": "stamp",
-   "t": 30.27,
+   "t": 30.33,
    "gain": 1.0
   },
   {
    "type": "stamp",
-   "t": 31.05,
+   "t": 31.17,
    "gain": 1.0
   },
   {
    "type": "stamp",
-   "t": 31.29,
+   "t": 31.49,
    "gain": 1.0
   },
   {
    "type": "whoosh",
-   "t": 31.805,
+   "t": 32.138,
    "gain": 0.8
   },
   {
    "type": "stamp",
-   "t": 32.55,
+   "t": 32.97,
    "gain": 1.0
   },
   {
-   "type": "pop",
-   "t": 34.03,
+   "type": "scan",
+   "t": 34.08,
    "gain": 0.7
   },
   {
    "type": "pop",
-   "t": 35.09,
+   "t": 38.95,
+   "gain": 0.7
+  },
+  {
+   "type": "pop",
+   "t": 40.11,
    "gain": 0.5
   },
   {
    "type": "ticks",
-   "t": 35.24,
+   "t": 40.24,
    "gain": 0.6
   },
   {
    "type": "ding",
-   "t": 36.24,
+   "t": 41.24,
    "gain": 0.6
   }
  ],

@@ -191,7 +191,7 @@ class Phone(Item):
             ptext(c, "wait for it...", cx, y0 + h * 0.385, w * 0.085, "ExtraBold", INKD, a, "center")
         else:
             c.drawRRect(rrect(cx - w * 0.36, y0 + h * 0.30, w * 0.72, h * 0.13, 30), paint(WHITE, 0.95 * a))
-            ptext(c, "next reel", cx, y0 + h * 0.385, w * 0.085, "ExtraBold", INKD, a, "center")
+            ptext(c, "your next reel", cx, y0 + h * 0.383, w * 0.068, "ExtraBold", INKD, a, "center")
         for k in range(3):                       # like / comment / share column
             c.drawCircle(x0 + w * 0.88, y0 + h * (0.58 + 0.08 * k), w * 0.045, paint(WHITE, 0.9 * a))
         c.drawCircle(x0 + w * 0.10, y0 + h * 0.86, w * 0.05, paint(WHITE, 0.9 * a))
@@ -315,6 +315,256 @@ class EndLine(Item):
         ptext(c, "creedom.ai", self.x, self.y + self.size * 0.95 + dy, self.size, "ExtraBold", PINK, a, "center")
 
 
+# ---------------------------------------------------------------- engagement layer (v2)
+import random as _random
+
+
+class Flash(Item):
+    """A white documentary flash-cut: peaks at t_in and decays in 0.2 s."""
+    z = 300
+
+    def __init__(self, t_in, peak=0.55):
+        super().__init__(t_in, t_in + 0.25, sfx=False)
+        self.peak = peak
+
+    def visible(self, t):
+        return self.t_in - 0.02 <= t <= self.t_in + 0.3
+
+    def draw(self, c, res, t):
+        u = (t - self.t_in) / 0.22
+        if not 0 <= u <= 1:
+            return
+        c.drawRect(skia.Rect.MakeXYWH(-200000, -200000, 400000, 400000), paint((255, 248, 232), self.peak * (1 - u) ** 2))
+
+
+class YearRoll(Item):
+    """A year that rolls from y0 to y1 like an odometer, dark ink on a yellow block."""
+    z = 70
+
+    def __init__(self, x, y, size, y0, y1, t_in, dur=0.7, rgb=DARK, bar=HILITE):
+        super().__init__(t_in, None)
+        self.x, self.y, self.size, self.y0, self.y1, self.dur, self.rgb, self.bar = x, y, size, y0, y1, dur, rgb, bar
+
+    def bounds(self, res):
+        r = self.size * 4
+        return skia.Rect.MakeLTRB(self.x - r, self.y - r, self.x + r, self.y + r)
+
+    def cues(self):
+        return [("ticks", self.t_in, 0.7, {})]
+
+    def draw(self, c, res, t):
+        a = ramp(t, self.t_in, 0.2)
+        if a <= 0:
+            return
+        u = ease_out_cubic(ramp(t, self.t_in, self.dur))
+        v = self.y0 + (self.y1 - self.y0) * u
+        tw = text_width(res, "8888", self.size, "cond", 0.04)
+        bw = ease_out_cubic(ramp(t, self.t_in - 0.05, 0.3))
+        c.drawRect(skia.Rect.MakeXYWH(self.x - tw / 2 - self.size * 0.15, self.y + self.size * 0.063 - self.size * 0.92,
+                                      (tw + self.size * 0.3) * bw, self.size * 0.92), paint(self.bar, 0.95 * a))
+        c.save()
+        c.clipRect(skia.Rect.MakeXYWH(self.x - tw, self.y - self.size * 0.86, tw * 2, self.size * 0.92))
+        n, frac = int(v), v - int(v)
+        off = frac * self.size * 1.05 if u < 1 else 0
+        draw_text(c, res, str(n), self.x, self.y - off, self.size, "cond", self.rgb, a, 0.04, "center")
+        if u < 1:
+            draw_text(c, res, str(n + 1), self.x, self.y - off + self.size * 1.05, self.size, "cond", self.rgb, a, 0.04, "center")
+        c.restore()
+
+
+class Magnifier(Item):
+    """A brass-rimmed lens that slides along a line of a print, showing it magnified."""
+    z = 55
+
+    def __init__(self, pr, a, b, r, mag, t_in, dur, t_out):
+        super().__init__(t_in, t_out)
+        self.pr, self.a, self.b, self.r, self.mag, self.dur = pr, a, b, r, mag, dur
+
+    def bounds(self, res):
+        x0, x1 = sorted((self.a[0], self.b[0])); y0, y1 = sorted((self.a[1], self.b[1]))
+        return skia.Rect.MakeLTRB(x0 - 2 * self.r, y0 - 2 * self.r, x1 + 2 * self.r, y1 + 3 * self.r)
+
+    def cues(self):
+        return [("whoosh", self.t_in, 0.3, {})]
+
+    def draw(self, c, res, t):
+        al = ramp(t, self.t_in, 0.2) * self.fade(t)
+        if al <= 0:
+            return
+        u = ease_in_out(ramp(t, self.t_in, self.dur))
+        lx = self.a[0] + (self.b[0] - self.a[0]) * u; ly = self.a[1] + (self.b[1] - self.a[1]) * u
+        r = self.r * (0.6 + 0.4 * ease_out_back(ramp(t, self.t_in, 0.35), 1.4))
+        pr = self.pr; w, h = pr.size(res)
+        c.save(); c.translate(20, 40); c.drawCircle(lx, ly, r * 1.1, paint((0, 0, 0), 0.45 * al, blur=40)); c.restore()
+        hx, hy = lx + r * 0.8, ly + r * 0.8           # handle
+        c.drawLine(hx, hy, hx + r * 0.9, hy + r * 0.9, paint((60, 40, 22), al, stroke=r * 0.22))
+        c.save()
+        path = skia.Path(); path.addCircle(lx, ly, r)
+        c.clipPath(path, skia.ClipOp.kIntersect, True)
+        c.drawCircle(lx, ly, r, paint((236, 228, 210), al))
+        c.translate(lx, ly); c.scale(self.mag, self.mag); c.translate(-lx, -ly)
+        c.translate(pr.x, pr.y); c.rotate(pr.rot)
+        p = skia.Paint(AntiAlias=True); p.setAlphaf(al)
+        c.drawImageRect(res.image(pr.key), skia.Rect.MakeXYWH(-w / 2, -h / 2, w, h), SAMPLING, p)
+        c.restore()
+        c.drawCircle(lx - r * 0.3, ly - r * 0.35, r * 0.45, paint((255, 255, 255), 0.12 * al, blur=30))
+        c.drawCircle(lx, ly, r, paint((182, 140, 70), al, stroke=r * 0.1))
+        c.drawCircle(lx, ly, r * 1.05, paint((90, 62, 30), al, stroke=r * 0.03))
+
+
+class FilmDamage(Item):
+    """Old-film texture over a region: flickering exposure, vertical scratches and dust, re-drawn 12 times a second."""
+    z = 250
+
+    def __init__(self, rect, t_in, t_out, strength=1.0):
+        super().__init__(t_in, t_out, sfx=False)
+        self.rect, self.k = rect, strength
+
+    def bounds(self, res):
+        x, y, w, h = self.rect
+        return skia.Rect.MakeXYWH(x, y, w, h)
+
+    def draw(self, c, res, t):
+        a = ramp(t, self.t_in, 0.3) * self.fade(t) * self.k
+        if a <= 0:
+            return
+        x, y, w, h = self.rect
+        rng = _random.Random(int(t * 12))
+        c.drawRect(skia.Rect.MakeXYWH(x, y, w, h), paint((255, 236, 200), a * rng.uniform(0.0, 0.07)))
+        for _ in range(rng.randint(1, 3)):
+            sx = x + rng.uniform(0, w)
+            c.drawLine(sx, y, sx + rng.uniform(-40, 40), y + h, paint((250, 240, 220), a * rng.uniform(0.08, 0.22), stroke=rng.uniform(3, 9)))
+        for _ in range(rng.randint(5, 12)):
+            c.drawCircle(x + rng.uniform(0, w), y + rng.uniform(0, h), rng.uniform(6, 22), paint((20, 14, 10), a * rng.uniform(0.25, 0.6)))
+
+
+class TVScreen(Item):
+    """Switches the 1939 set on: static noise, then a glowing picture with a small clock and ON AIR."""
+    z = 15
+
+    def __init__(self, pr, doc, t_static, t_on):
+        super().__init__(t_static, None)
+        self.pr, self.t_on = pr, t_on
+        self.c = doc.on(pr, 0.5, 0.125)
+        w, h = pr.size_from(doc.meta)
+        self.w, self.h = w * 0.33, h * 0.085
+
+    def bounds(self, res):
+        return skia.Rect.MakeLTRB(self.c[0] - 800, self.c[1] - 500, self.c[0] + 800, self.c[1] + 500)
+
+    def cues(self):
+        return [("static", self.t_in, 0.6, {})]
+
+    def draw(self, c, res, t):
+        if t < self.t_in:
+            return
+        cx, cy = self.c; w, h = self.w, self.h
+        c.save(); c.translate(cx, cy); c.rotate(self.pr.rot)
+        rr = skia.RRect.MakeRectXY(skia.Rect.MakeXYWH(-w / 2, -h / 2, w, h), 40, 40)
+        c.clipRRect(rr, skia.ClipOp.kIntersect, True)
+        if t < self.t_on:
+            rng = _random.Random(int(t * 30))
+            c.drawRect(skia.Rect.MakeXYWH(-w / 2, -h / 2, w, h), paint((40, 40, 40), 1))
+            for _ in range(160):
+                g = rng.randint(80, 255)
+                c.drawRect(skia.Rect.MakeXYWH(-w / 2 + rng.uniform(0, w), -h / 2 + rng.uniform(0, h), rng.uniform(8, 40), rng.uniform(4, 10)), paint((g, g, g), 0.9))
+        else:
+            u = ramp(t, self.t_on, 0.25)
+            c.drawRect(skia.Rect.MakeXYWH(-w / 2, -h / 2, w, h), paint((214, 222, 214), u))
+            r = h * 0.32
+            c.drawCircle(-w * 0.18, 0, r, paint((40, 40, 40), u, stroke=10))
+            ang = math.radians(-90 + 360 * ((t - self.t_on) / 10.0))
+            c.drawLine(-w * 0.18, 0, -w * 0.18 + math.cos(ang) * r * 0.8, math.sin(ang) * r * 0.8, paint((40, 40, 40), u, stroke=10))
+            draw_text(c, res, "ON AIR", w * 0.17, h * 0.12, h * 0.34, "cond", (176, 26, 22), u, 0.1, "center")
+            c.drawRect(skia.Rect.MakeXYWH(-w / 2, -h / 2, w, h), paint((255, 255, 255), 0.25 * (1 - u)))
+        c.restore()
+        c.save(); c.translate(cx, cy); c.rotate(self.pr.rot)
+        glow = ramp(t, self.t_on, 0.3)
+        if glow > 0:
+            c.drawRRect(skia.RRect.MakeRectXY(skia.Rect.MakeXYWH(-w / 2 - 30, -h / 2 - 30, w + 60, h + 60), 60, 60),
+                        paint((210, 230, 255), 0.18 * glow, blur=60))
+        c.restore()
+
+
+class FeedScroll(Item):
+    """An endless feed: two dim columns of reel cards scrolling up behind the phone, faster after the swipe."""
+    z = 17
+
+    def __init__(self, x, y, t_in, t_fast, t_out):
+        super().__init__(t_in, t_out, sfx=False)
+        self.x, self.y, self.t_fast = x, y, t_fast
+        self.cols = [((243, 67, 162), (255, 140, 80)), ((70, 110, 230), (40, 200, 190)), ((150, 80, 220), (243, 67, 162)), ((255, 170, 60), (240, 80, 90))]
+
+    def bounds(self, res):
+        return skia.Rect.MakeLTRB(self.x - 3000, self.y - 5000, self.x + 3000, self.y + 5000)
+
+    def draw(self, c, res, t):
+        a = ramp(t, self.t_in, 0.4) * self.fade(t)
+        if a <= 0:
+            return
+        dt = t - self.t_in
+        fast = max(0.0, t - self.t_fast)
+        off = dt * 700 + fast * 2600
+        cw, ch, gap = 640, 1140, 220
+        for side, xs in ((-1, self.x - 1560), (1, self.x + 1560)):
+            for k in range(-4, 6):
+                yy = self.y + k * (ch + gap) - (off * (1 if side < 0 else 1.15)) % (ch + gap)
+                ca, cb = self.cols[(k + (2 if side > 0 else 0)) % 4]
+                sh = skia.GradientShader.MakeLinear([skia.Point(xs, yy), skia.Point(xs + cw, yy + ch)],
+                                                    [skia.Color(*ca), skia.Color(*cb)])
+                p = skia.Paint(AntiAlias=True, Shader=sh); p.setAlphaf(0.42 * a)
+                c.drawRRect(rrect(xs - cw / 2, yy - ch / 2, cw, ch, 60), p)
+                c.drawRRect(rrect(xs - cw * 0.35, yy - ch * 0.1, cw * 0.7, ch * 0.09, 20), paint(WHITE, 0.4 * a))
+
+
+class HookScan(Item):
+    """Line 13: a pink scan sweeps the phone screen; three segments 0:01 0:02 0:03 tick on; label above."""
+    z = 30
+
+    def __init__(self, phone, t_in, t_out, t_end):
+        super().__init__(t_in, t_out)
+        self.ph, self.t_end = phone, t_end
+
+    def bounds(self, res):
+        return skia.Rect.MakeLTRB(self.ph.x - 3000, self.ph.y - self.ph.h, self.ph.x + 3000, self.ph.y + self.ph.h)
+
+    def cues(self):
+        return [("scan", self.t_in, 0.7, {})]
+
+    def draw(self, c, res, t):
+        a = ramp(t, self.t_in, 0.25) * self.fade(t)
+        if a <= 0:
+            return
+        ph = self.ph; W, H = ph.w * 0.92, ph.h * 0.94
+        x0, y0 = ph.x - W / 2, ph.y - H / 2
+        per = 0.9
+        u = ((t - self.t_in) % per) / per
+        sy = y0 + H * u
+        g = skia.GradientShader.MakeLinear([skia.Point(0, sy - 260), skia.Point(0, sy)],
+                                           [skia.Color(243, 67, 162, 0), skia.Color(243, 67, 162, int(150 * a))])
+        p = skia.Paint(AntiAlias=True, Shader=g)
+        c.save(); c.clipRRect(rrect(x0, y0, W, H, ph.w * 0.1), skia.ClipOp.kIntersect, True)
+        c.drawRect(skia.Rect.MakeXYWH(x0, sy - 260, W, 260), p)
+        c.drawRect(skia.Rect.MakeXYWH(x0, sy - 6, W, 12), paint((255, 230, 245), a))
+        c.restore()
+        for k in range(4):                                  # corner brackets
+            cx = x0 - 60 if k % 2 == 0 else x0 + W + 60
+            cy = y0 - 60 if k < 2 else y0 + H + 60
+            dx = 1 if k % 2 == 0 else -1; dy = 1 if k < 2 else -1
+            pk = paint(PINK, a, stroke=22)
+            c.drawLine(cx, cy, cx + dx * 260, cy, pk); c.drawLine(cx, cy, cx, cy + dy * 260, pk)
+        ptext(c, "SCANNING THE FIRST 3 SECONDS", ph.x, y0 - 700, 185, "ExtraBold", WHITE, a, "center")
+        segw, gap = 560, 50
+        tot = 3 * segw + 2 * gap
+        for k in range(3):
+            fill = clamp((t - self.t_in - 0.25 - k * 0.55) / 0.5)
+            sx = ph.x - tot / 2 + k * (segw + gap)
+            c.drawRRect(rrect(sx, y0 - 330, segw, 80, 40), paint((255, 255, 255), 0.25 * a))
+            if fill > 0:
+                c.drawRRect(rrect(sx, y0 - 330, segw * fill, 80, 40), paint(PINK, a))
+            ptext(c, f"0:0{k + 1}", sx + segw / 2, y0 - 400, 140, "Bold", WHITE, a * (0.5 + 0.5 * (fill >= 1)), "center")
+
+
 # ---------------------------------------------------------------- the film
 def build_film(doc):
     L, E = doc.L, doc.E
@@ -346,12 +596,16 @@ def build_film(doc):
     shot(T(2, "hard") + 0.25, 0, 900, 1.05, -0.4)
 
     # ================================================= NEWS (3): 1918 front page, the headline
-    film.add(BigText("1918", 0, Y_NEWS - 2300, 520, L(3) - 0.15, rgb=DARK, bar=HILITE, bar_h=0.92, shadow=False))
+    film.add(YearRoll(0, Y_NEWS - 2300, 520, 1890, 1918, L(3) - 0.15, dur=0.8))
+    film.add(Flash(L(3) - 0.05, 0.45))
     news = film.add(Print("P01", 0, Y_NEWS, 2800, rot=-1.2, t_in=L(3) + 0.05, label="THE NEW YORK TIMES · NOV 11, 1918",
                           label_t=L(3) + 0.6))
     hx, hy = doc.on(news, 0.5, 0.118)
     film.add(PenMark("highlight", hx, hy, 2500, 0, t_in=T(3, "headline") - 0.2, dur=0.5, width=150, rot=-1.2, rgb=HILITE))
     film.add(Stamp("HEADLINE", 650, Y_NEWS + 900, size=300, rot=-10, t_in=T(3, "biggest")))
+    a = doc.on(news, 0.22, 0.118); b = doc.on(news, 0.78, 0.118)
+    film.add(Magnifier(news, (a[0], a[1] + 40), (b[0], b[1] + 40), 470, 1.9, T(3, "whole") - 0.1, T(3, "biggest") - T(3, "whole") + 0.2, T(3, "biggest") + 0.2))
+    film.add(FilmDamage((-2600, Y_NEWS - 3000, 5200, 5600), L(3), E(3) + 0.2, 0.7))
 
     shot(L(3) - 0.3, 0, Y_NEWS - 1700, 0.95, 0.4)
     shot(L(3) + 0.6, 0, Y_NEWS - 900, 1.08, -0.5)
@@ -364,6 +618,9 @@ def build_film(doc):
     top = Y_FILM - 2100
     film.add(BigText("THE SILENT ERA", 0, top - 800, 360, L(4) - 0.2, rgb=(244, 238, 226)))
     strip = film.add(FilmStrip(sx, top, L(4), T(6, "front") - 0.25))
+    film.add(Flash(L(4) - 0.08, 0.4))
+    film.add(FilmDamage((-2700, top - 1600, 5400, 7400), L(4) - 0.1, E(6) + 0.2, 1.0))
+    film.add(PenMark("ellipse", sx, top + 3 * 1050, 1700, 1150, t_in=T(4, "film") - 0.15, dur=0.45, width=24, rgb=(236, 230, 220), t_out=L(6)))
     film.add(PenMark("arrow", sx + 760, top + 3.5 * 1050, 950, 260, t_in=T(4, "after") - 0.1, dur=0.5, width=26, rot=90, rgb=(244, 238, 226), t_out=L(6)))
     film.add(BigText("AFTER", sx + 1750, top + 3 * 1050 + 140, 300, T(4, "after"), rgb=(244, 238, 226), t_out=L(6)))
     film.add(BigText("TRAILER", sx + 1750, top + 4 * 1050 + 120, 330, T(5, "trailers") - 0.15, rgb=DARK, bar=HILITE, bar_h=0.92,
@@ -382,10 +639,13 @@ def build_film(doc):
     shot(E(6) - 0.1, 300, top + 1700, 0.9, 0.0)
 
     # ================================================= TV (7-8): 1941, ten seconds
-    film.add(BigText("1941", 0, Y_TV - 2400, 700, T(7, "1941") - 0.1, rgb=DARK, bar=HILITE, bar_h=0.92, shadow=False))
+    film.add(YearRoll(0, Y_TV - 2400, 700, 1918, 1941, L(7) - 0.05, dur=T(7, "1941") - L(7) + 0.45))
+    film.add(Flash(L(7) - 0.06, 0.4))
+    film.add(BigText("JULY 1, 1941  ·  NEW YORK", 0, Y_TV - 1450, 150, T(7, "america") - 0.1, font="mono", rgb=(236, 228, 210), type_on=0.6, grunge=False))
     film.add(BigText("FIRST TV AD IN AMERICA", 0, Y_TV - 1750, 215, T(7, "first") - 0.05, rgb=(244, 238, 226), type_on=0.5))
     film.add(Print("P05", 1150, Y_TV + 2150, 1250, rot=4, t_in=T(7, "america"), sfx=False))
     tv = film.add(Print("P04", -620, Y_TV + 150, 1900, rot=-1.5, t_in=L(7) + 0.15, label="RCA TELEVISION, 1939", label_t=T(7, "america")))
+    film.add(TVScreen(tv, doc, T(7, "tv") - 0.15, T(7, "ad") + 0.25))
     watch = film.add(WatchFace(1150, Y_TV - 550, 470, T(7, "ran") - 0.2, T(7, "10"), E(8) - T(7, "10")))
     film.add(Counter(1150, Y_TV + 750, 700, 10, T(7, "10") - 0.1, dur=0.5, caption="SECONDS", rgb=(244, 238, 226)))
     film.add(Stamp("10 SECONDS", -620, Y_TV + 900, size=290, rot=-8, t_in=T(8, "watch") - 0.05))
@@ -400,6 +660,8 @@ def build_film(doc):
     # ================================================= TODAY (9-10): about three seconds, then the thumb
     film.add(BigText("TODAY", 0, Y_NOW - 2600, 760, T(9, "today") - 0.1, rgb=WHITE, bar=PINK, bar_h=0.92, shadow=False, t_out=L(11)))
     phone = film.add(Phone(0, Y_NOW + 200, 1650, T(9, "today") + 0.1, T(10, "moves") - 0.1))
+    film.add(Flash(L(9) - 0.05, 0.5))
+    film.add(FeedScroll(0, Y_NOW + 200, T(9, "today") + 0.3, T(10, "moves") - 0.1, L(11) + 0.4))
     t3 = T(9, "three")
     for k, (n, tt) in enumerate((("3", t3), ("2", t3 + 0.5), ("1", T(10, "before")))):
         film.add(BigText(n, 1450, Y_NOW - 900, 1100, tt - 0.05, t_out=tt + 0.35 if k < 2 else T(10, "moves") + 0.2,
@@ -419,14 +681,19 @@ def build_film(doc):
     shot(E(11) + 0.15, 0, 1250, 1.04, 0.3, strength=0.35)
 
     # ================================================= TEST FIRST (12) + CREEDOM (13) + sign-off
-    film.add(Stamp("TEST FIRST", 0, Y_NOW - 2700, size=420, rot=-8, rgb=PINK, t_in=T(12, "have") - 0.05))
-    film.add(AnalyzerCard(0, Y_NOW + 1500, 3100, T(13, "cred") - 0.15, T(13, "scored") - 0.1, T(13, "hook") - 0.05, T(13, "post") - 0.1))
-    film.add(EndLine(0, Y_NOW + 3700, 330, E(13) + 0.15))
+    film.add(Stamp("TEST FIRST", 0, Y_NOW - 2700, size=420, rot=-8, rgb=PINK, t_in=T(12, "have") - 0.05, t_out=L(13) + 0.1))
+    film.add(HookScan(phone, L(13) + 0.2, L(14) + 0.1, E(13)))
+    film.add(Flash(L(14) - 0.05, 0.35))
+    film.add(AnalyzerCard(0, Y_NOW + 1500, 3100, T(14, "cred") - 0.15, T(14, "scored") - 0.1, T(14, "hook") - 0.05, T(14, "post") - 0.1))
+    film.add(EndLine(0, Y_NOW + 3700, 330, E(14) + 0.15))
 
     shot(L(12) + 0.15, 0, Y_NOW - 1500, 0.95, -0.3)
     shot(T(12, "have") + 0.25, 0, Y_NOW - 700, 1.0, 0.2)
-    shot(T(13, "cred") + 0.3, 0, Y_NOW + 1700, 0.98, -0.2)
-    shot(T(13, "scored") + 0.2, 0, Y_NOW + 1850, 1.04, 0.2)
-    shot(E(13), 0, Y_NOW + 2200, 0.95, 0.0)
+    shot(L(13) + 0.35, 0, Y_NOW - 150, 0.92, -0.3)
+    shot(T(13, "tested") + 0.1, 0, Y_NOW - 50, 0.97, 0.3)
+    shot(E(13) - 0.1, 0, Y_NOW + 50, 1.0, -0.2)
+    shot(T(14, "cred") + 0.3, 0, Y_NOW + 1700, 0.98, -0.2)
+    shot(T(14, "scored") + 0.2, 0, Y_NOW + 1850, 1.04, 0.2)
+    shot(E(14), 0, Y_NOW + 2200, 0.95, 0.0)
     shot(film.duration, 0, Y_NOW + 2350, 0.93, 0.0)
     return film
