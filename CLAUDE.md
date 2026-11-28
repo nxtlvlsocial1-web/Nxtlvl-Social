@@ -46,6 +46,7 @@ rules, then hands off to `/hyperframes`, which picks the right workflow.
 | Prompting a specific fal model / choosing a default one | `fal-prompting`, `model-routing`              |
 | Title and outro frames: glitch, light-leak, logo outro  | `frame-glitch-title`, `frame-light-leak-cinema`, `frame-logo-outro` |
 | Frame-sequence video (HyperFrames / Remotion style)     | `video-hyperframes`                           |
+| Narrated cinematic film / documentary (Python + Skia)   | `cinematic-film`                              |
 | Old opening-hook diagnosis, only when asked by name (Chinese) | `dbs-hook` (deprecated)                 |
 
 **Carousels and static graphics:**
@@ -75,6 +76,7 @@ All skills except our own are third-party, and their versions are pinned in `ski
 - `dockkit`: `dpearson2699/swift-ios-skills`
 - `fal-lip-sync`, `remotion`, `frame-*`, `video-hyperframes`: `nexu-io/open-design`
 - `video-motion-graphics`: `dylantarre/animation-principles`
+- `cinematic-film`: `Moh4696/cinematic-skill`
 - fal skills (`commercial`, `ugc`, `marketing`, `storytelling`, `cinematography`, `fal-prompting`,
   `model-routing`): `fal-ai-community/skills`
 
