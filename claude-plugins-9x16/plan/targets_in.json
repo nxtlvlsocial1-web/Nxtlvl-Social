@@ -1,0 +1,58 @@
+[
+ {
+  "id": "t_pony_stars",
+  "url": "https://github.com/DietrichGebert/ponytail",
+  "find": "^[0-9.]+k stars$"
+ },
+ {
+  "id": "t_pony_bench",
+  "url": "https://github.com/DietrichGebert/ponytail",
+  "find": "-53% code"
+ },
+ {
+  "id": "t_unslop_about",
+  "url": "https://github.com/heydamir/unslop",
+  "find": "turns vibecoded"
+ },
+ {
+  "id": "t_unslop_slop",
+  "url": "https://github.com/heydamir/unslop",
+  "find": "purple gradients"
+ },
+ {
+  "id": "t_egm_hero",
+  "url": "https://egm.dev",
+  "find": "Reviewers that do not see the conversation",
+  "click": "text=OK, got it"
+ },
+ {
+  "id": "t_google",
+  "url": "https://opensource.googleblog.com/2026/10/introducing-elephant-goldfish-model-plugin.html",
+  "find": "Thousands of Googlers"
+ },
+ {
+  "id": "t_reach_about",
+  "url": "https://github.com/Panniantong/Agent-Reach/blob/main/docs/README_en.md",
+  "find": "reach the parts of the internet"
+ },
+ {
+  "id": "t_reach_li",
+  "url": "https://github.com/Panniantong/Agent-Reach/blob/main/docs/README_en.md",
+  "find": "search jobs"
+ },
+ {
+  "id": "t_reach_ro",
+  "url": "https://github.com/Panniantong/Agent-Reach/blob/main/docs/README_en.md",
+  "find": "never posts"
+ },
+ {
+  "id": "t_setup",
+  "url": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-code-setup",
+  "find": "recommend tailored Claude Code automations"
+ },
+ {
+  "id": "t_setup_cat",
+  "url": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-code-setup",
+  "find": "top 1-2 automations"
+ }
+]

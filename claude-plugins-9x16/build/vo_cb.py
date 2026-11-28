@@ -1,4 +1,4 @@
-"""AI.NXTLVL advisor reel (9:16): voiceover, the AI.NXTLVL page voice (Chatterbox, Resemble AI, MIT,
+"""NXTLVLSOCIAL.AI Claude plugins reel (9:16): voiceover (Chatterbox, Resemble AI, MIT,
 with a synthetic Kokoro-82M am_puck reference: nobody real is cloned). Lines come from plan/script.json. Three takes per
 line; build/vo_pick.py picks and joins them.
 HF_HOME=/root/tts/hf /root/tts/.venv/bin/python build/vo.py

@@ -22,14 +22,14 @@ from faster_whisper import WhisperModel
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TAKES = os.path.join(ROOT, os.environ.get("VO_TAKES", os.path.join("assets", "audio", "vo_takes")))
 SR = 48000
-TEMPO = float(os.environ.get("VO_TEMPO", "1.0"))
+TEMPO = float(os.environ.get("VO_TEMPO", "1.05"))
 GAP_SCALE = 1.0
 LEAD = .05         # the cold open hits at once
 # pause after each line (s): peaks get room to land, the list moves fast
-GAP = {"g1": .35, "g2": .3, "g3": .25, "g4": .35, "g5": .35, "g6": .35, "g7": .3}
+GAP = {"g1": .4, "g2": .4, "g3": .35, "g4": .4, "g5": .35, "g6": .45, "g7": .3}
 
 
-NUM = {"one": "1", "two": "2", "three": "3", "anthropics": "anthropic", "claude": "claude"}
+NUM = {"one": "1", "two": "2", "three": "3", "four": "4", "five": "5", "mcp": "m c p", "unslop": "unslop", "anthropics": "anthropic"}
 
 
 def norm(w):
@@ -40,8 +40,8 @@ def norm(w):
 def spoken(text):
     """Whisper writes numbers and names its own way ("GTA6", "8 -hour", "10"): compare in spoken words"""
     t = text
-    for a, b in (("19.7%", "nineteen point seven percent"), ("41.2%", "forty one point two percent"), ("41.2", "forty one point two"),
-                 ("11.9%", "eleven point nine percent"), ("11.9", "eleven point nine"), ("19.7", "nineteen point seven"), ("/", "slash ")):
+    for a, b in (("200,000", "two hundred thousand"), ("200000", "two hundred thousand"), ("MCP", "m c p"), ("Elephant-Goldfish", "elephant goldfish"),
+                 ("Un-slop", "unslop"), ("Unslop", "unslop"), ("vibe-coded", "vibe coded"), ("open-sourced", "open sourced"), ("/", "slash ")):
         t = t.replace(a, b)
     t = t.replace("-", " ")
     return t.split()

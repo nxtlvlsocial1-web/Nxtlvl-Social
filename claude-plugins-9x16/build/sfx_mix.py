@@ -1,4 +1,4 @@
-"""Sound for the AI.NXTLVL advisor reel: the voice (assets/audio/vo.wav, -16 LUFS) on top; the AI.NXTLVL bed "Funky Nurykabe
+"""Sound for the NXTLVLSOCIAL.AI Claude plugins reel (from the advisor reel): the voice (assets/audio/vo.wav, -16 LUFS) on top; the bed "Funky Nurykabe
 (Spinningmerkaba Mix)" by ccMixter (Jamendo 1468789, CC BY 3.0, credit in the post) sidechained under it; sound effects
 fetched fresh from Openverse for this reel (plan/sfx_library.json, plan/sfx_credits.txt: CC0, plus two CC BY credited
 in the post), peak-normalised per kind. Master: two-pass loudnorm to -14 LUFS, -1.5 dBTP.
@@ -20,8 +20,8 @@ SONG, SONG_AT = os.path.join(ROOT, "sfx", "music", "funky_nurykabe.mp3"), float(
 MUSIC_LUFS = float(os.environ.get("MUSIC_LUFS", "-24"))   # an upbeat bed well under the voice
 # short dips under words the bed masks (soft onsets: "Here's" landed on a hit and read as "Use"; the name "Claude")
 _W = json.load(open(os.path.join(ROOT, "plan", "words.json")))
-DIPS = [(w["t0"] - .3, w["t1"] + .15) for w in _W if w["w"].lower().strip(".,:") in ("here's", "claude")]
-DIP_EXPR = "1" + "".join(f"-0.8*clip((t-{a:.2f})/0.12,0,1)*clip(({b:.2f}-t)/0.12,0,1)" for a, b in DIPS)
+DIPS = [(w["t0"] - .3, w["t1"] + .3) for w in _W if w["w"].lower().strip(".,:") in ("here's", "claude", "plugins")]
+DIP_EXPR = "1" + "".join(f"-0.95*clip((t-{a:.2f})/0.12,0,1)*clip(({b:.2f}-t)/0.2,0,1)" for a, b in DIPS)
 # kind -> (files, peak dBFS, max length s)
 KINDS = {
     "whoosh_big": (["whoosh_deep"], -9, 1.1), "whoosh": (["whoosh_a"], -11, .6), "swish": (["whoosh_a"], -19, .45),

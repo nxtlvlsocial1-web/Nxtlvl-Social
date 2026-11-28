@@ -1,7 +1,6 @@
 [
- {"name": "ponytail", "url": "https://github.com/DietrichGebert/ponytail"},
- {"name": "egm", "url": "https://github.com/google/elephant-goldfish-model"},
- {"name": "egmsite", "url": "https://egm.dev"},
- {"name": "agentreach", "url": "https://github.com/Panniantong/Agent-Reach"},
- {"name": "setup", "url": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-code-setup"}
+ {"name": "unslop", "url": "https://github.com/heydamir/unslop"},
+ {"name": "googleblog", "url": "https://opensource.googleblog.com/2026/10/introducing-elephant-goldfish-model-plugin.html"},
+ {"name": "agentreach_en", "url": "https://github.com/Panniantong/Agent-Reach/blob/main/docs/README_en.md"},
+ {"name": "egmsite", "url": "https://egm.dev", "click": "text=OK, got it"}
 ]

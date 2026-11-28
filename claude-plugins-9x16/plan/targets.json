@@ -1,0 +1,110 @@
+{
+ "t_pony_bench": {
+  "x": 402.90625,
+  "y": 1040.84375,
+  "w": 770.1875,
+  "h": 40,
+  "W": 2200,
+  "H": 2600,
+  "url": "https://github.com/DietrichGebert/ponytail"
+ },
+ "t_unslop_slop": {
+  "x": 130,
+  "y": 1039.1875,
+  "w": 1316,
+  "h": 336,
+  "W": 2200,
+  "H": 2600,
+  "url": "https://github.com/heydamir/unslop"
+ },
+ "t_egm_hero": {
+  "x": 48,
+  "y": 379.875,
+  "w": 1026.65625,
+  "h": 244.75,
+  "W": 2200,
+  "H": 2600,
+  "url": "https://egm.dev"
+ },
+ "t_google": {
+  "x": 30,
+  "y": 1039.59375,
+  "w": 1300,
+  "h": 336,
+  "W": 2200,
+  "H": 2600,
+  "url": "https://opensource.googleblog.com/2026/10/introducing-elephant-goldfish-model-plugin.html"
+ },
+ "t_reach_about": {
+  "x": 867.25,
+  "y": 961.1875,
+  "w": 1107.5,
+  "h": 40,
+  "W": 2200,
+  "H": 2600,
+  "url": "https://github.com/Panniantong/Agent-Reach/blob/main/docs/README_en.md"
+ },
+ "t_reach_li": {
+  "x": 1238.65625,
+  "y": 1039.53125,
+  "w": 502.0625,
+  "h": 218,
+  "W": 2200,
+  "H": 2600,
+  "url": "https://github.com/Panniantong/Agent-Reach/blob/main/docs/README_en.md"
+ },
+ "t_reach_ro": {
+  "x": 804,
+  "y": 1039,
+  "w": 1298,
+  "h": 96,
+  "W": 2200,
+  "H": 2600,
+  "url": "https://github.com/Panniantong/Agent-Reach/blob/main/docs/README_en.md"
+ },
+ "t_setup": {
+  "x": 740,
+  "y": 1039.1875,
+  "w": 1362,
+  "h": 96,
+  "W": 2200,
+  "H": 2600,
+  "url": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-code-setup"
+ },
+ "t_setup_cat": {
+  "x": 740,
+  "y": 1129.5625,
+  "w": 1362,
+  "h": 96,
+  "W": 2200,
+  "H": 2600,
+  "url": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-code-setup"
+ },
+ "t_pony_stars": {
+  "x": 1592,
+  "y": 1040,
+  "w": 216.625,
+  "h": 34,
+  "W": 2200,
+  "H": 2600,
+  "url": "https://github.com/DietrichGebert/ponytail"
+ },
+ "t_unslop_about": {
+  "x": 130,
+  "y": 1039.1875,
+  "w": 1316,
+  "h": 336,
+  "W": 2200,
+  "H": 2600,
+  "url": "https://github.com/heydamir/unslop"
+ },
+ "t_reach_stars": {
+  "x": 1592,
+  "y": 1039,
+  "w": 205.125,
+  "h": 34,
+  "W": 2200,
+  "H": 2600,
+  "url": "https://github.com/Panniantong/Agent-Reach"
+ }
+}
