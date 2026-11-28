@@ -1,0 +1,64 @@
+{
+ "grade": "sepia",
+ "photos": [
+  {
+   "id": "P01",
+   "what": "New York Times front page, 11 Nov 1918 (Armistice)",
+   "kind": "paper",
+   "commons": "File:NYTimes-Page1-11-11-1918.jpg",
+   "file": "P01_NYTimes_Page1_11_11_1918.jpg",
+   "credit": "Charles Ransom Miller (The New York Times)",
+   "license": "Public domain",
+   "license_ok": true,
+   "source": "https://commons.wikimedia.org/wiki/File:NYTimes-Page1-11-11-1918.jpg"
+  },
+  {
+   "id": "P02",
+   "what": "Cabiria (1914) film poster",
+   "kind": "color",
+   "commons": "File:Cabiria 1914 poster restored.jpg",
+   "file": "P02_Cabiria_1914_poster_restored.jpg",
+   "credit": "N. Morgello",
+   "license": "Public domain",
+   "license_ok": true,
+   "source": "https://commons.wikimedia.org/wiki/File:Cabiria_1914_poster_restored.jpg"
+  },
+  {
+   "id": "P03",
+   "what": "Egyptian Theatre, Hollywood, 1926",
+   "kind": "photo",
+   "commons": "File:EgyptianTheater-ext-1926.jpg",
+   "file": "P03_EgyptianTheater_ext_1926.jpg",
+   "credit": "Unknown author",
+   "license": "Public domain",
+   "license_ok": true,
+   "source": "https://commons.wikimedia.org/wiki/File:EgyptianTheater-ext-1926.jpg"
+  },
+  {
+   "id": "P04",
+   "what": "RCA Victor TRK-12 television, 1939 (Wolfsonian-FIU Museum)",
+   "kind": "photo",
+   "commons": "File:Television, RCA Victor TRK 12, 1939, Wolfsonian-FIU Museum.JPG",
+   "file": "P04_RCA_TRK12_1939.jpg",
+   "credit": "Wmpearl",
+   "license": "CC0",
+   "license_ok": true,
+   "source": "https://commons.wikimedia.org/wiki/File:Television,_RCA_Victor_TRK_12,_1939,_Wolfsonian-FIU_Museum.JPG"
+  },
+  {
+   "id": "P05",
+   "what": "RCA television advertisement, June 1939",
+   "kind": "paper",
+   "commons": "File:1939 RCA Television Advertisement.jpg",
+   "file": "P05_1939_RCA_Television_Advertisement.jpg",
+   "credit": "Radio Corporation of America",
+   "license": "Public domain",
+   "license_ok": true,
+   "source": "https://commons.wikimedia.org/wiki/File:1939_RCA_Television_Advertisement.jpg"
+  }
+ ],
+ "recreations": [
+  "The film strip, the 1941 clock card and the phone are drawn in code (illustrations, not archive footage). The 1941 Bulova broadcast itself is not shown.",
+  "The Creedom analyzer card is an illustration; its score is labelled EXAMPLE."
+ ]
+}

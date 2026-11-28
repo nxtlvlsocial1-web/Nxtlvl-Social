@@ -1,0 +1,163 @@
+{
+ "duration": 39.189,
+ "cues": [
+  {
+   "type": "stamp",
+   "t": 3.66,
+   "gain": 1.0
+  },
+  {
+   "type": "whoosh",
+   "t": 3.829,
+   "gain": 0.8
+  },
+  {
+   "type": "pop",
+   "t": 4.83,
+   "gain": 0.8
+  },
+  {
+   "type": "marker",
+   "t": 6.82,
+   "gain": 0.8
+  },
+  {
+   "type": "stamp",
+   "t": 7.96,
+   "gain": 1.0
+  },
+  {
+   "type": "whoosh",
+   "t": 9.138,
+   "gain": 0.8
+  },
+  {
+   "type": "whoosh",
+   "t": 9.86,
+   "gain": 0.35
+  },
+  {
+   "type": "pencil",
+   "t": 11.1,
+   "gain": 0.6,
+   "dur": 0.5
+  },
+  {
+   "type": "pop",
+   "t": 16.39,
+   "gain": 0.7
+  },
+  {
+   "type": "pencil",
+   "t": 16.39,
+   "gain": 0.6,
+   "dur": 0.6
+  },
+  {
+   "type": "pop",
+   "t": 17.18,
+   "gain": 0.8
+  },
+  {
+   "type": "whoosh",
+   "t": 17.995,
+   "gain": 0.8
+  },
+  {
+   "type": "pop",
+   "t": 18.85,
+   "gain": 0.8
+  },
+  {
+   "type": "ticks",
+   "t": 21.84,
+   "gain": 0.6
+  },
+  {
+   "type": "stamp",
+   "t": 24.47,
+   "gain": 1.0
+  },
+  {
+   "type": "whoosh",
+   "t": 24.614,
+   "gain": 0.8
+  },
+  {
+   "type": "pop",
+   "t": 24.96,
+   "gain": 0.6
+  },
+  {
+   "type": "impact",
+   "t": 26.65,
+   "gain": 0.5
+  },
+  {
+   "type": "impact",
+   "t": 27.15,
+   "gain": 0.5
+  },
+  {
+   "type": "impact",
+   "t": 27.59,
+   "gain": 0.5
+  },
+  {
+   "type": "whoosh",
+   "t": 28.82,
+   "gain": 0.5
+  },
+  {
+   "type": "whoosh",
+   "t": 29.233,
+   "gain": 0.8
+  },
+  {
+   "type": "stamp",
+   "t": 30.27,
+   "gain": 1.0
+  },
+  {
+   "type": "stamp",
+   "t": 31.05,
+   "gain": 1.0
+  },
+  {
+   "type": "stamp",
+   "t": 31.29,
+   "gain": 1.0
+  },
+  {
+   "type": "whoosh",
+   "t": 31.805,
+   "gain": 0.8
+  },
+  {
+   "type": "stamp",
+   "t": 32.55,
+   "gain": 1.0
+  },
+  {
+   "type": "pop",
+   "t": 34.03,
+   "gain": 0.7
+  },
+  {
+   "type": "pop",
+   "t": 35.09,
+   "gain": 0.5
+  },
+  {
+   "type": "ticks",
+   "t": 35.24,
+   "gain": 0.6
+  },
+  {
+   "type": "ding",
+   "t": 36.24,
+   "gain": 0.6
+  }
+ ],
+ "room_tone": []
+}
