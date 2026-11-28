@@ -1,0 +1,113 @@
+{
+ "title": "The First Three Seconds",
+ "takes": [
+  {
+   "take": "T01",
+   "lines": [
+    {
+     "id": 1,
+     "text": "Every screen in history learned the same rule.",
+     "spoken": "Every screen in history learned the same rule.",
+     "hero": "eras stacked + title",
+     "typed": "THE FIRST 3 SECONDS"
+    },
+    {
+     "id": 2,
+     "text": "The hard way.",
+     "spoken": "The hard way.",
+     "hero": "stamp",
+     "typed": "THE HARD WAY"
+    },
+    {
+     "id": 3,
+     "text": "Newspapers sold the whole story in one headline, in the biggest letters on the page.",
+     "spoken": "Newspapers sold the whole story in one headline, in the biggest letters on the page.",
+     "hero": "1918 front page, headline highlighted",
+     "typed": "HEADLINE"
+    },
+    {
+     "id": 4,
+     "text": "The first movie trailers played after the film.",
+     "spoken": "The first movie trailers played after the film.",
+     "hero": "film strip with THE END, trailer after",
+     "typed": ""
+    },
+    {
+     "id": 5,
+     "text": "That's why they're called trailers.",
+     "spoken": "That's why they're called trailers.",
+     "hero": "TRAILER underlined",
+     "typed": "TRAILER"
+    },
+    {
+     "id": 6,
+     "text": "By the 1930s, studios moved them to the front, where more people saw them.",
+     "spoken": "By the nineteen thirties, studios moved them to the front, where more people saw them.",
+     "hero": "trailer jumps to the front",
+     "typed": "1930s"
+    },
+    {
+     "id": 7,
+     "text": "In 1941, the first TV ad in America ran for 10 seconds.",
+     "spoken": "In nineteen forty-one, the first TV ad in America ran for ten seconds.",
+     "hero": "1939 TV set + counter",
+     "typed": "1941"
+    },
+    {
+     "id": 8,
+     "text": "10 seconds to sell a watch.",
+     "spoken": "Ten seconds to sell a watch.",
+     "hero": "clock card, counter to 0",
+     "typed": "10 SECONDS"
+    },
+    {
+     "id": 9,
+     "text": "Today, you get about three seconds.",
+     "spoken": "Today, you get about three seconds.",
+     "hero": "phone, colour",
+     "typed": "3"
+    },
+    {
+     "id": 10,
+     "text": "Before a thumb moves.",
+     "spoken": "Before a thumb moves.",
+     "hero": "thumb swipe",
+     "typed": ""
+    },
+    {
+     "id": 11,
+     "text": "They all tested on a live audience.",
+     "spoken": "They all tested on a live audience.",
+     "hero": "pull back, TESTED LIVE stamps",
+     "typed": "TESTED LIVE"
+    },
+    {
+     "id": 12,
+     "text": "You don't have to.",
+     "spoken": "You don't have to.",
+     "hero": "TEST FIRST",
+     "typed": "TEST FIRST"
+    },
+    {
+     "id": 13,
+     "text": "Now your first three seconds can be tested before anyone scrolls past them.",
+     "spoken": "Now your first three seconds can be tested before anyone scrolls past them.",
+     "hero": "scan over the phone's first 3 seconds",
+     "typed": "0:00-0:03"
+    },
+    {
+     "id": 14,
+     "text": "Upload your reel to Creedom, and get your hook scored before you post.",
+     "spoken": "Upload your reel to Creedom, and get your hook scored before you post.",
+     "hero": "Creedom analyzer card",
+     "typed": "HOOK SCORE"
+    }
+   ]
+  }
+ ],
+ "fact_notes": [
+  "Trailers first ran after the feature and moved before it by the 1930s (mentalfloss.com/article/83734; worldwidewords.org/qa-tra2.html).",
+  "First legal paid US TV ad: Bulova, 1 July 1941, WNBT New York, about 10 s (emmys.com; guinnessworldrecords.com).",
+  "'About three seconds' is industry guidance, not a platform rule."
+ ]
+}
